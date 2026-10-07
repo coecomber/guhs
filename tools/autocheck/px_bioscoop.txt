@@ -1,0 +1,91 @@
+# Guhbioscoop (guhpixel slice "bioscoop") AutoCheck: a little cinema, a film on the screen, guhs in the seats, the projector
+# screen in Dutch and English, the Guhdex section. Run (the merge step, not the slice):
+#   bash guhs_workpx/gradle_slot.sh <worktree> runAutocheckClient -PautocheckScript=tools/autocheck/px_bioscoop.txt -PautocheckTimeout=15
+# (commands: see autocheck.txt; /guhs px bioscoop ...: BioscoopCommando.java)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3040 3040
+wait 80
+/fill 2970 139 2970 3040 139 3040 minecraft:pink_concrete
+/fill 2975 140 2975 3035 143 3035 minecraft:air
+/fill 2975 144 2975 3035 147 3035 minecraft:air
+/fill 2975 148 2975 3035 152 3035 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3000 -90 0
+wait 20
+
+section the cinema: /guhs px bioscoop zaal builds it in front of the player (looking east)
+/guhs px ontgrendel aan
+/guhs px film alles
+/guhs px bioscoop zaal
+/summon guhs:guh 3003 140 2998 {Owner:"@s"}
+wait 20
+/gamemode spectator
+camera 2998.5 143.5 3006.5 -125 12
+waitrender 300
+shot guhbioscoop_zaal
+
+section a film: the title card, a scene with a subtitle, the guhs in their seats
+/gamemode creative
+/tp @s 3001 140 3001 -90 0
+/guhs px bioscoop speel skyblok
+wait 40
+/gamemode spectator
+camera 3003.5 142.5 3000.5 -90 0
+waitrender 200
+shot guhbioscoop_film_titel
+/guhs px bioscoop spoel 8
+wait 40
+shot guhbioscoop_film_scene
+/guhs px bioscoop spoel 20
+wait 30
+shot guhbioscoop_film_einde
+camera 3009.5 141.6 3003.5 150 5
+wait 10
+shot guhbioscoop_stoeltjes
+
+section the projector screen (NL, EN) and a smaller screen with black bars
+/gamemode creative
+/tp @s 3002.5 142 3001.5 180 20
+wait 20
+guhstaal nl
+gui keep
+use 3002 142 3000
+wait 30
+shot guhbioscoop_scherm_nl gui
+widgets
+gui close
+guhstaal en
+gui keep
+use 3002 142 3000
+wait 30
+shot guhbioscoop_scherm_en gui
+gui close
+/guhs px bioscoop stop
+/fill 3011 144 2997 3011 144 3003 minecraft:air
+/fill 3011 141 2997 3011 143 2998 minecraft:air
+/guhs px bioscoop speel among
+/guhs px bioscoop spoel 12
+wait 30
+/gamemode spectator
+camera 3003.5 142.5 3000.5 -90 0
+waitrender 100
+shot guhbioscoop_klein_scherm_en
+guhstaal nl
+
+section the Guhdex section
+/gamemode creative
+gui dexopen guhpixel
+wait 30
+scroll 320 240 -12
+wait 10
+shot guhbioscoop_guhdex gui
+gui close
+quit

@@ -1460,6 +1460,38 @@ public final class AutoCheck {
                     return true;
                 };
             }
+            case "anderevadsjes": {
+                // gui anderevadsjes [leeg]: (1.2.10) the Guhdex tab Mijn andere vadsjes with example critters (or none)
+                boolean leeg = a.length > 2 && a[2].equals("leeg");
+                return mc -> {
+                    java.util.List<nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vadsje> vadsjes = new ArrayList<>();
+                    if (!leeg) {
+                        String[][] vb = {{"guh_konijntje", ""}, {"pieppiepmuisje", "Piepje"}, {"pieppiepmuisje", ""}, {"pieppiepmuisje", "Kaasje"},
+                                {"pluiseekhoorntje", "Nootje"}, {"poepschilly", ""}, {"schilly", "Schilly de Tweede"}, {"guhxolotl", "Blub"}};
+                        String[] plek = {"wereld", "zit", "schouder", "item_kist", "wereld", "in_guh", "item_speler", "wereld"};
+                        for (int i = 0; i < vb.length; i++) {
+                            vadsjes.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vadsje(java.util.UUID.randomUUID(),
+                                    Component.literal(vb[i][1]), vb[i][0], Component.translatable("gui.guhs.band.plek." + plek[i], "Coecomber",
+                                    Component.translatable("gui.guhs.band.dim.guhs.guhmension"), -10998 + i * 37, 72, 1510 - i * 11), plek[i]));
+                        }
+                    }
+                    opened = true;
+                    parkMouse(mc);
+                    List<String> ids = nl.juiced.guhs.quest.GuhDex.ENTRIES.stream().map(nl.juiced.guhs.entity.GuhVariant::id).toList();
+                    var dex = new nl.juiced.guhs.client.screen.GuhDexScreen(new nl.juiced.guhs.network.MaagPayloads.GuhDexData(ids, List.of(), List.of()));
+                    mc.setScreen(dex);
+                    dex.showTab(nl.juiced.guhs.client.screen.GuhDexScreen.Tab.ANDERE_VADSJES);
+                    // (the tab asks the server for the real ones; its answer lands a few ticks later: put the examples back after it)
+                    queue.addFirst(mc3 -> {
+                        nl.juiced.guhs.feature.band.client.MijnGuhsCache.zetVadsjes(vadsjes);
+                        dex.mijnGuhsVernieuwd();
+                        return true;
+                    });
+                    queue.addFirst(waitTicks(8));
+                    note("  opened the Guhdex Mijn andere vadsjes tab (" + vadsjes.size() + " example critters)");
+                    return true;
+                };
+            }
             case "mijnguhs": {
                 // gui mijnguhs [list|<n>]: (2.10) the Guhdex tab Mijn guhs with example guhs (one per hearts level, filled
                 // dagboekjes) without a server; "list" (default) the list, a number opens that guh's page

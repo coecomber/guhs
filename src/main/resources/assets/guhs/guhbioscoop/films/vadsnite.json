@@ -1,0 +1,1581 @@
+{
+  "formaat": 1,
+  "id": "vadsnite",
+  "duur": 930,
+  "atlas": {
+    "textuur": "guhs:textures/guhbioscoop/vadsnite.png",
+    "breedte": 256,
+    "hoogte": 128
+  },
+  "sprites": {
+    "beker": {
+      "uv": [
+        151,
+        87,
+        9,
+        9
+      ]
+    },
+    "guh_choco_dicht_rond": {
+      "uv": [
+        28,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_choco_open_rond": {
+      "uv": [
+        51,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_goud_dicht_rond": {
+      "uv": [
+        74,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_goud_open_rond": {
+      "uv": [
+        97,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_blij_rond_rugzak": {
+      "uv": [
+        120,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_dicht_rond_rugzak": {
+      "uv": [
+        143,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_half_rond_rugzak": {
+      "uv": [
+        166,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_open_rond": {
+      "uv": [
+        189,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_open_rond_rugzak": {
+      "uv": [
+        212,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_schrik_rond_rugzak": {
+      "uv": [
+        1,
+        87,
+        22,
+        18
+      ]
+    },
+    "guh_mint_dicht_rond": {
+      "uv": [
+        24,
+        87,
+        22,
+        18
+      ]
+    },
+    "guh_mint_open_rond": {
+      "uv": [
+        47,
+        87,
+        22,
+        18
+      ]
+    },
+    "guh_sneeuw_dicht_rond": {
+      "uv": [
+        70,
+        87,
+        22,
+        18
+      ]
+    },
+    "guh_sneeuw_open_rond": {
+      "uv": [
+        93,
+        87,
+        22,
+        18
+      ]
+    },
+    "parachute": {
+      "uv": [
+        183,
+        1,
+        26,
+        20
+      ]
+    },
+    "parachute_blauw": {
+      "uv": [
+        210,
+        1,
+        26,
+        20
+      ]
+    },
+    "parachute_geel": {
+      "uv": [
+        1,
+        66,
+        26,
+        20
+      ]
+    },
+    "sterren": {
+      "uv": [
+        1,
+        1,
+        112,
+        64
+      ]
+    },
+    "vadsbus": {
+      "uv": [
+        136,
+        1,
+        46,
+        32
+      ]
+    },
+    "wit": {
+      "uv": [
+        199,
+        87,
+        4,
+        4
+      ]
+    },
+    "wolk": {
+      "uv": [
+        161,
+        87,
+        22,
+        8
+      ]
+    },
+    "wolk_groot": {
+      "uv": [
+        116,
+        87,
+        34,
+        11
+      ]
+    },
+    "wolkrand": {
+      "uv": [
+        114,
+        1,
+        10,
+        64
+      ]
+    },
+    "wolkrand_r": {
+      "uv": [
+        125,
+        1,
+        10,
+        64
+      ]
+    },
+    "zzz": {
+      "uv": [
+        184,
+        87,
+        7,
+        7
+      ],
+      "frames": 2,
+      "per": 12
+    }
+  },
+  "scenes": [
+    {
+      "naam": "titel",
+      "duur": 70,
+      "lagen": [
+        {
+          "vlak": "#3a2a6a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "vadsbus",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -50,
+              "y": 34
+            },
+            {
+              "t": 70,
+              "x": 116,
+              "y": 30
+            }
+          ],
+          "golf": {
+            "ax": 0,
+            "ay": 1.5,
+            "per": 30
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t1",
+          "schaal": 2.0,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": -18
+            },
+            {
+              "t": 14,
+              "x": 56,
+              "y": 10,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t2",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 32,
+          "van": 18
+        }
+      ]
+    },
+    {
+      "naam": "bus",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 80,
+              "y": 8
+            },
+            {
+              "t": 150,
+              "x": 60,
+              "y": 8
+            }
+          ]
+        },
+        {
+          "sprite": "wolk_groot",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 20,
+              "y": 34
+            },
+            {
+              "t": 150,
+              "x": -4,
+              "y": 34
+            }
+          ]
+        },
+        {
+          "sprite": "wolk",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 96,
+              "y": 46
+            },
+            {
+              "t": 150,
+              "x": 70,
+              "y": 46
+            }
+          ]
+        },
+        {
+          "sprite": "guh_mint_open_rond",
+          "sleutels": [
+            {
+              "t": 64,
+              "x": 30,
+              "y": 22,
+              "s": 0.6
+            },
+            {
+              "t": 94,
+              "x": 24,
+              "y": 70,
+              "e": "in"
+            }
+          ],
+          "van": 64
+        },
+        {
+          "sprite": "guh_choco_open_rond",
+          "sleutels": [
+            {
+              "t": 78,
+              "x": 44,
+              "y": 22,
+              "s": 0.6
+            },
+            {
+              "t": 108,
+              "x": 38,
+              "y": 70,
+              "e": "in"
+            }
+          ],
+          "van": 78
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond",
+          "sleutels": [
+            {
+              "t": 92,
+              "x": 58,
+              "y": 22,
+              "s": 0.6
+            },
+            {
+              "t": 122,
+              "x": 52,
+              "y": 70,
+              "e": "in"
+            }
+          ],
+          "van": 92
+        },
+        {
+          "sprite": "guh_goud_open_rond",
+          "sleutels": [
+            {
+              "t": 106,
+              "x": 72,
+              "y": 22,
+              "s": 0.6
+            },
+            {
+              "t": 136,
+              "x": 66,
+              "y": 70,
+              "e": "in"
+            }
+          ],
+          "van": 106
+        },
+        {
+          "sprite": "guh_lila_open_rond",
+          "sleutels": [
+            {
+              "t": 120,
+              "x": 86,
+              "y": 22,
+              "s": 0.6
+            },
+            {
+              "t": 150,
+              "x": 80,
+              "y": 70,
+              "e": "in"
+            }
+          ],
+          "van": 120
+        },
+        {
+          "sprite": "vadsbus",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -46,
+              "y": 4
+            },
+            {
+              "t": 150,
+              "x": 100,
+              "y": 6
+            }
+          ],
+          "golf": {
+            "ax": 0,
+            "ay": 1.5,
+            "per": 30
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t3",
+          "schaal": 0.75,
+          "uitlijn": "rechts",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "teller": {
+            "van": 100,
+            "naar": 100,
+            "t0": 0,
+            "t1": 1
+          },
+          "x": 109,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "naam": "val",
+      "duur": 130,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 8,
+              "y": 50
+            },
+            {
+              "t": 130,
+              "x": 8,
+              "y": -12
+            }
+          ]
+        },
+        {
+          "sprite": "wolk_groot",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 70,
+              "y": 70
+            },
+            {
+              "t": 130,
+              "x": 70,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "vlak": "#6cc070",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": 70,
+              "w": 112,
+              "h": 14
+            },
+            {
+              "t": 80,
+              "x": 0,
+              "y": 70,
+              "w": 112,
+              "h": 14
+            },
+            {
+              "t": 118,
+              "x": 0,
+              "y": 50,
+              "w": 112,
+              "h": 14,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "sprite": "parachute_geel",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 10,
+              "y": -40
+            },
+            {
+              "t": 118,
+              "x": 10,
+              "y": 14,
+              "e": "uit"
+            }
+          ],
+          "tot": 120,
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 0
+          }
+        },
+        {
+          "sprite": "guh_mint_open_rond",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 12,
+              "y": -22
+            },
+            {
+              "t": 118,
+              "x": 12,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 0
+          }
+        },
+        {
+          "sprite": "parachute",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 43,
+              "y": -40
+            },
+            {
+              "t": 118,
+              "x": 43,
+              "y": 14,
+              "e": "uit"
+            }
+          ],
+          "tot": 120,
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 9
+          }
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 45,
+              "y": -22
+            },
+            {
+              "t": 118,
+              "x": 45,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 9
+          }
+        },
+        {
+          "sprite": "parachute_blauw",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 78,
+              "y": -40
+            },
+            {
+              "t": 118,
+              "x": 78,
+              "y": 14,
+              "e": "uit"
+            }
+          ],
+          "tot": 120,
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 17
+          }
+        },
+        {
+          "sprite": "guh_choco_open_rond",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 80,
+              "y": -22
+            },
+            {
+              "t": 118,
+              "x": 80,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "golf": {
+            "ax": 3,
+            "ay": 1,
+            "per": 34,
+            "fase": 17
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t3",
+          "schaal": 0.75,
+          "uitlijn": "rechts",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "teller": {
+            "van": 100,
+            "naar": 100,
+            "t0": 0,
+            "t1": 1
+          },
+          "x": 109,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "naam": "landing",
+      "duur": 160,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 10,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 70,
+          "y": 10
+        },
+        {
+          "vlak": "#6cc070",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#58aa5e",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "guh_mint_open_rond",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 2,
+              "y": -20
+            },
+            {
+              "t": 14,
+              "x": 2,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "van": 0,
+          "tot": 22
+        },
+        {
+          "sprite": "guh_mint_dicht_rond",
+          "x": 2,
+          "y": 32,
+          "van": 22
+        },
+        {
+          "sprite": "zzz",
+          "x": 18,
+          "y": 24,
+          "van": 30
+        },
+        {
+          "sprite": "guh_choco_open_rond",
+          "sleutels": [
+            {
+              "t": 14,
+              "x": 24,
+              "y": -20
+            },
+            {
+              "t": 28,
+              "x": 24,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "van": 14,
+          "tot": 36
+        },
+        {
+          "sprite": "guh_choco_dicht_rond",
+          "x": 24,
+          "y": 32,
+          "van": 36
+        },
+        {
+          "sprite": "zzz",
+          "x": 40,
+          "y": 24,
+          "van": 44
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond",
+          "sleutels": [
+            {
+              "t": 6,
+              "x": 68,
+              "y": -20
+            },
+            {
+              "t": 20,
+              "x": 68,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "van": 6,
+          "tot": 28
+        },
+        {
+          "sprite": "guh_sneeuw_dicht_rond",
+          "x": 68,
+          "y": 32,
+          "van": 28
+        },
+        {
+          "sprite": "zzz",
+          "x": 84,
+          "y": 24,
+          "van": 36
+        },
+        {
+          "sprite": "guh_goud_open_rond",
+          "sleutels": [
+            {
+              "t": 20,
+              "x": 90,
+              "y": -20
+            },
+            {
+              "t": 34,
+              "x": 90,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "van": 20,
+          "tot": 42
+        },
+        {
+          "sprite": "guh_goud_dicht_rond",
+          "x": 90,
+          "y": 32,
+          "van": 42
+        },
+        {
+          "sprite": "zzz",
+          "x": 106,
+          "y": 24,
+          "van": 50
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "tot": 110
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "spiegel": true,
+          "van": 110,
+          "tot": 130
+        },
+        {
+          "sprite": "guh_lila_schrik_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 130
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t3",
+          "schaal": 0.75,
+          "uitlijn": "rechts",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "teller": {
+            "van": 100,
+            "naar": 1,
+            "t0": 26,
+            "t1": 124
+          },
+          "x": 109,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "naam": "slaapwolk",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 10,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 70,
+          "y": 10
+        },
+        {
+          "vlak": "#6cc070",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#58aa5e",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "guh_mint_dicht_rond",
+          "x": 2,
+          "y": 32
+        },
+        {
+          "sprite": "guh_choco_dicht_rond",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "guh_sneeuw_dicht_rond",
+          "x": 68,
+          "y": 32
+        },
+        {
+          "sprite": "guh_goud_dicht_rond",
+          "x": 90,
+          "y": 32
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "tot": 30
+        },
+        {
+          "sprite": "guh_lila_schrik_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 30,
+          "tot": 60
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "spiegel": true,
+          "van": 60,
+          "tot": 84
+        },
+        {
+          "sprite": "guh_lila_open_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 84,
+          "tot": 108
+        },
+        {
+          "sprite": "guh_lila_half_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 108
+        },
+        {
+          "vlak": "#fab0d6",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -40,
+              "y": 0,
+              "w": 40,
+              "h": 64
+            },
+            {
+              "t": 136,
+              "x": 0,
+              "y": 0,
+              "w": 40,
+              "h": 64
+            }
+          ]
+        },
+        {
+          "sprite": "wolkrand_r",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -4,
+              "y": 0
+            },
+            {
+              "t": 136,
+              "x": 36,
+              "y": 0
+            }
+          ],
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 40
+          }
+        },
+        {
+          "vlak": "#fab0d6",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 112,
+              "y": 0,
+              "w": 40,
+              "h": 64
+            },
+            {
+              "t": 136,
+              "x": 72,
+              "y": 0,
+              "w": 40,
+              "h": 64
+            }
+          ]
+        },
+        {
+          "sprite": "wolkrand",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 106,
+              "y": 0
+            },
+            {
+              "t": 136,
+              "x": 66,
+              "y": 0
+            }
+          ],
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 40,
+            "fase": 20
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t4",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "naam": "winst",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 10,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 70,
+          "y": 10
+        },
+        {
+          "vlak": "#6cc070",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#58aa5e",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "guh_mint_dicht_rond",
+          "x": 2,
+          "y": 32
+        },
+        {
+          "sprite": "guh_choco_dicht_rond",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "guh_sneeuw_dicht_rond",
+          "x": 68,
+          "y": 32
+        },
+        {
+          "sprite": "guh_goud_dicht_rond",
+          "x": 90,
+          "y": 32
+        },
+        {
+          "vlak": "#fab0d6",
+          "x": 0,
+          "y": 0,
+          "w": 40,
+          "h": 64
+        },
+        {
+          "sprite": "wolkrand_r",
+          "x": 36,
+          "y": 0,
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 40
+          }
+        },
+        {
+          "vlak": "#fab0d6",
+          "x": 72,
+          "y": 0,
+          "w": 40,
+          "h": 64
+        },
+        {
+          "sprite": "wolkrand",
+          "x": 66,
+          "y": 0,
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 40,
+            "fase": 20
+          }
+        },
+        {
+          "sprite": "guh_lila_blij_rond_rugzak",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 46,
+              "y": 32
+            },
+            {
+              "t": 10,
+              "x": 46,
+              "y": 24,
+              "e": "uit"
+            },
+            {
+              "t": 20,
+              "x": 46,
+              "y": 32,
+              "e": "in"
+            },
+            {
+              "t": 30,
+              "x": 46,
+              "y": 24,
+              "e": "uit"
+            },
+            {
+              "t": 40,
+              "x": 46,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "tot": 92
+        },
+        {
+          "sprite": "guh_lila_half_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 92,
+          "tot": 118
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_rugzak",
+          "x": 46,
+          "y": 32,
+          "van": 118
+        },
+        {
+          "sprite": "zzz",
+          "x": 62,
+          "y": 24,
+          "van": 124
+        },
+        {
+          "vlak": "#ffd27a",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": -14,
+              "w": 112,
+              "h": 13
+            },
+            {
+              "t": 12,
+              "x": 0,
+              "y": 4,
+              "w": 112,
+              "h": 13,
+              "e": "uit"
+            }
+          ],
+          "tot": 118
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t5",
+          "schaal": 0.9,
+          "uitlijn": "midden",
+          "kleur": "#5a1e3a",
+          "x": 56,
+          "y": 7,
+          "van": 12,
+          "tot": 118
+        },
+        {
+          "sprite": "beker",
+          "x": 51,
+          "y": 18,
+          "van": 16,
+          "tot": 92,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 20
+          }
+        },
+        {
+          "vlak": "#2a1238",
+          "x": 0,
+          "y": 4,
+          "w": 112,
+          "h": 13,
+          "van": 118
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t6",
+          "schaal": 0.9,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "schaduw": true,
+          "x": 56,
+          "y": 7,
+          "van": 118
+        }
+      ]
+    },
+    {
+      "naam": "aftiteling",
+      "duur": 100,
+      "lagen": [
+        {
+          "vlak": "#140c1c",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t7",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 66
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 16
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t8",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 77
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 27
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t9",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 88
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 38
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t10",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 99
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 49
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.vadsnite.t11",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 4,
+          "van": 72
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_rugzak",
+          "x": 86,
+          "y": 44,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 30
+          }
+        },
+        {
+          "sprite": "zzz",
+          "x": 100,
+          "y": 34,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 24
+          }
+        }
+      ]
+    }
+  ],
+  "ondertitels": [
+    {
+      "van": 78,
+      "tot": 150,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o1"
+    },
+    {
+      "van": 158,
+      "tot": 216,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o2"
+    },
+    {
+      "van": 225,
+      "tot": 296,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o3"
+    },
+    {
+      "van": 358,
+      "tot": 426,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o4"
+    },
+    {
+      "van": 434,
+      "tot": 506,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o5"
+    },
+    {
+      "van": 515,
+      "tot": 580,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o6"
+    },
+    {
+      "van": 588,
+      "tot": 656,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o7"
+    },
+    {
+      "van": 666,
+      "tot": 742,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o8"
+    },
+    {
+      "van": 752,
+      "tot": 826,
+      "tekst": "gui.guhs.guhbioscoop.film.vadsnite.o9"
+    }
+  ],
+  "geluiden": [
+    {
+      "t": 2,
+      "geluid": "guhs:guhbioscoop.film.titel",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 74,
+      "geluid": "guhs:guhbioscoop.film.wind",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 134,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 162,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 224,
+      "geluid": "guhs:guhbioscoop.film.wind",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 338,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 364,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 378,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 392,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 400,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 446,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 480,
+      "geluid": "guhs:guhbioscoop.film.oeh",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 516,
+      "geluid": "guhs:guhbioscoop.film.spanning",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 570,
+      "geluid": "guhs:guhbioscoop.film.spanning",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 620,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 668,
+      "geluid": "guhs:guhbioscoop.film.fanfare",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 754,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 784,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 842,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    }
+  ],
+  "cues": [
+    {
+      "t": 394,
+      "soort": "lach"
+    },
+    {
+      "t": 482,
+      "soort": "schrik"
+    },
+    {
+      "t": 542,
+      "soort": "schrik"
+    },
+    {
+      "t": 670,
+      "soort": "juich"
+    },
+    {
+      "t": 780,
+      "soort": "lach"
+    },
+    {
+      "t": 810,
+      "soort": "slaap"
+    },
+    {
+      "t": 846,
+      "soort": "slaap"
+    }
+  ]
+}

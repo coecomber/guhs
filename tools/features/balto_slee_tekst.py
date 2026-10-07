@@ -45,6 +45,10 @@ LANG = {
     "gui.guhs.baltoslee.gestopt": "Je bent gestopt. De sledehondjes brengen je terug naar de stal. Njeg, een andere keer!",
     "gui.guhs.baltoslee.weer_los": "Uitgegraven! Hup, verder!",
     "gui.guhs.baltoslee.rust.hint": "Een vuurkorf! Rem af (S) en sta even stil om de pootjes op te warmen.",
+    # 1.3.1: the paws really get cold: one stop per trek
+    "gui.guhs.baltoslee.koud.uitleg": "Let op de warmtebalk: onderweg worden de pootjes koud. Stop minstens één keer bij een vuurkorf (S), anders gaan de sledehondjes sloom lopen. En stuur tegen de windvlagen in!",
+    "gui.guhs.baltoslee.koud.bijna": "De pootjes worden koud! Warm ze bij een vuurkorf, njeg.",
+    "gui.guhs.baltoslee.koud.traag": "Brr, koude pootjes! De sledehondjes lopen sloom. Stop bij de volgende vuurkorf (S), njeg!",
     "gui.guhs.baltoslee.rust.tocht": "Baltoguh en de sledehondjes warmen hun pootjes bij de vuurkorf. Iedereen krijgt een knuffel en een warme kaasknabbel. Njeg!",
     "gui.guhs.baltoslee.rust.sprint": "Even opwarmen bij de vuurkorf... warme pootjes zijn snelle pootjes!",
     "gui.guhs.baltoslee.rust.verder": "Warm en blij! Hup, verder!",
@@ -87,7 +91,7 @@ LANG = {
     "gui.guhs.baltoslee.steele.geen_route": "Njeg... de route is helemaal ondergesneeuwd. Kom straks maar terug.",
     "gui.guhs.baltoslee.steele.nog_niet": "Jij? Racen tegen MIJ? Njeh-heh-heh! Eerst maar eens echt door de storm, net als die Baltoguh. Daarna praten we verder. (Mijn winkeltje is wel open, hoor.)",
     "gui.guhs.baltoslee.steele.welkom": "Zo, zo. Durf je het aan tegen de kampioen? Naar de berghut, eromheen en terug. Jouw beste tijden: makkelijk %1$s · medium %2$s · lastig %3$s.",
-    "gui.guhs.baltoslee.steele.uitleg": "Luister goed, want ik zeg het maar één keer. Hup-hup (W) is sneller, remmen (S), sturen (A/D). Windvlaagjes duwen je opzij. Rommelt er een lawine? Stuur naar de ANDERE kant van de route! De ijsbrug is glad: rustig aan. En koude pootjes zijn trage pootjes: rust even bij een vuurkorf. Niet dat het helpt, want IK win toch. Njeh-heh!",
+    "gui.guhs.baltoslee.steele.uitleg": "Luister goed, want ik zeg het maar één keer. Hup-hup (W) is sneller, remmen (S), sturen (A/D). Windvlagen duwen je van de route af: stuur ertegenin. Rommelt er een lawine? Stuur naar de ANDERE kant van de route! De ijsbrug is glad: rustig aan. En koude pootjes zijn trage pootjes: je moet onderweg minstens één keer stoppen bij een vuurkorf. Niet dat het helpt, want IK win toch. Njeh-heh!",
     "gui.guhs.baltoslee.optie.makkelijk": "Racen: makkelijk",
     "gui.guhs.baltoslee.optie.medium": "Racen: medium",
     "gui.guhs.baltoslee.optie.lastig": "Racen: lastig",
@@ -117,7 +121,8 @@ LANG = {
     "gui.guhs.baltoslee.hud.vlaag_rechts": "⇦ Windvlaag van rechts!",
     "gui.guhs.baltoslee.hud.vuurkorf": "Vuurkorf! Rem af (S) om op te warmen",
     "gui.guhs.baltoslee.hud.diep": "Diepe sneeuw! Terug naar het midden",
-    "gui.guhs.baltoslee.hud.koud": "Koude pootjes... rust bij een vuurkorf",
+    "gui.guhs.baltoslee.hud.koud": "Koude pootjes: de hondjes lopen sloom! Stop bij een vuurkorf (S)",
+    "gui.guhs.baltoslee.hud.koud_bijna": "De pootjes worden koud! Warm ze bij een vuurkorf, njeg",
     "gui.guhs.baltoslee.hud.toetsen": "W: hup hup · S: remmen · A/D: sturen · Shift vasthouden: stoppen",
 
     # --- your own sneeuwslee ---

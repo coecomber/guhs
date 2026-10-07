@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Minigames;
+import net.minecraft.util.Mth;
 import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.quest.GuhQuests;
@@ -320,6 +321,142 @@ public class BaltoSleeGameTests {
         } finally {
             weg(helper, p);
         }
+        helper.succeed();
+    }
+
+    /**
+     * 1.3.1: the cold builds up while you ride (about one stop per trek), a warm-up at a vuurkorf resets it, and without
+     * one the dogs are slowed well before the finish of a trek as long as the real one (two legs of 304 blocks).
+     */
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    public static void baltosleeKoudePootjes(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper);
+        try {
+            // the numbers: how long until the warning, the slow-down and the crawl, against a trek of about 1400 ticks
+            for (float storm : new float[]{SleeRit.SPRINT_STORM[0], SleeRit.SPRINT_STORM[2], SleeRit.TOCHT_STORM_HEEN, SleeRit.TOCHT_STORM_TERUG}) {
+                float kou = SleeRijden.kou(storm);
+                double totWaarschuwing = (100 - SleeRijden.WARMTE_WAARSCHUWING) / kou, totKoud = (100 - SleeRijden.WARMTE_KOUD) / kou,
+                        totIjskoud = (100 - SleeRijden.WARMTE_IJSKOUD) / kou;
+                double trek = 2 * 304 / SleeRijden.TOP;                       // (about 1320 ticks flat out, without ice, slopes or stops)
+                helper.assertTrue(totWaarschuwing > 450 && totWaarschuwing < totKoud && totKoud < totIjskoud, "warning, then slow, then crawling: " + totKoud);
+                helper.assertTrue(totKoud < trek * 0.7 && totIjskoud < trek * 0.85, "no stop: slow well before the finish (storm " + storm + "): " + totKoud + " of " + trek);
+                helper.assertTrue(totKoud > trek * 0.52, "one stop about halfway and the dogs stay warm to the finish (storm " + storm + "): " + totKoud);
+            }
+            helper.assertTrue(SleeRijden.warmteFactor(100) == 1.0 && SleeRijden.warmteFactor(SleeRijden.WARMTE_KOUD) == 1.0
+                    && SleeRijden.warmteFactor(SleeRijden.WARMTE_KOUD - 1) == SleeRijden.TRAAG_KOUD
+                    && SleeRijden.warmteFactor(SleeRijden.WARMTE_IJSKOUD - 1) == SleeRijden.TRAAG_IJSKOUD && SleeRijden.TRAAG_IJSKOUD < SleeRijden.TRAAG_KOUD
+                    && SleeRijden.TRAAG_KOUD <= 0.75, "cold dogs are clearly slower");
+            // a ride: the cold builds up tick by tick while riding, not while waiting
+            SleeTocht.startMet(p, route(helper), null);
+            SleeRit rit = SleeRit.van(p);
+            helper.assertTrue(rit.warmte() == 100f, "warm at the start");
+            rit.slaAftellenOver(level);
+            helper.assertTrue(rit.warmte() > 99.8f, "the countdown costs (almost) nothing: " + rit.warmte());
+            rit.autopiloot = 1;
+            float voor = rit.warmte();
+            rijd(rit, level, 20, () -> false);
+            float per = (voor - rit.warmte()) / 20;
+            helper.assertTrue(Math.abs(per - SleeRijden.kou(rit.storm())) < 0.004f && rit.koudGemeld() == 0, "the cold per tick: " + per);
+            // getting cold: told once; slow: told once
+            rit.zetWarmte(SleeRijden.WARMTE_WAARSCHUWING + 0.05f);
+            rit.tick(level);
+            helper.assertTrue(rit.koudGemeld() == 1 && rit.warmte() < SleeRijden.WARMTE_WAARSCHUWING, "the paws are getting cold: " + rit.koudGemeld());
+            rit.zetWarmte(SleeRijden.WARMTE_KOUD + 0.05f);
+            rit.tick(level);
+            helper.assertTrue(rit.koudGemeld() == 2 && rit.warmte() < SleeRijden.WARMTE_KOUD, "cold paws: " + rit.koudGemeld());
+            // ... and the sled really is slower: flat out, ice-cold dogs fall back to a crawl
+            SleeRijden.Stand top = new SleeRijden.Stand(2, 0, SleeRijden.TOP, 0), topKoud = new SleeRijden.Stand(2, 0, SleeRijden.TOP, 0);
+            SleeRijden.stap(top, new SleeRijden.Invoer(1, 0), rit.route, 0, 0f, 100, 1);
+            for (int i = 0; i < 30; i++) {
+                SleeRijden.stap(topKoud, new SleeRijden.Invoer(1, 0), rit.route, 0, 0f, 0, 1);
+                topKoud.s = 2;
+            }
+            helper.assertTrue(top.v > SleeRijden.TOP * 0.9 && topKoud.v < SleeRijden.TOP * SleeRijden.TRAAG_IJSKOUD + 0.02, "ice-cold dogs crawl: " + topKoud.v);
+            // a warm-up at the vuurkorf: completely warm again, and the warnings start over
+            rit.zetWarmte(20);
+            rit.autoRust = true;
+            rijd(rit, level, 400, () -> rit.fase() == SleeEntity.PAUZE);
+            helper.assertTrue(rit.pauze() == SleeEntity.RUST && rit.warmte() < SleeRijden.WARMTE_KOUD, "resting, still cold: " + rit.warmte());
+            for (int i = 0; i < SleeRit.RUST_TICKS + 2; i++) {
+                rit.tick(level);
+            }
+            helper.assertTrue(rit.fase() == SleeEntity.RIJDT && rit.warmte() >= 99f && rit.koudGemeld() == 0 && rit.gerust() == 1,
+                    "one short stop (" + SleeRit.RUST_TICKS + " ticks) and they are warm: " + rit.warmte());
+            helper.assertTrue(SleeRit.RUST_TICKS <= 100, "the stop is short");
+        } finally {
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /** 1.3.1: the gusts are stronger and a bit more frequent, always announced, and Steele-Mika stays beatable. */
+    @GuhTest(template = BAAN, batch = BATCH)
+    public static void baltosleeWindvlagenSterker(GameTestHelper helper) {
+        // strength: in the medicine ride the peak beats full steering (0.11 a tick); in the lightest race it is clearly less
+        double tocht = SleeRijden.windKracht(1, SleeRit.TOCHT_STORM_TERUG), licht = SleeRijden.windKracht(1, SleeRit.SPRINT_STORM[0]);
+        helper.assertTrue(tocht > 0.11 && tocht < 0.17 && licht > 0.05 && licht < 0.11 && SleeRijden.windKracht(-1, 0.5f) == -SleeRijden.windKracht(1, 0.5f)
+                && SleeRijden.windKracht(0, 1f) == 0, "the push of a gust: " + tocht + " / " + licht);
+        helper.assertTrue(tocht > 0.85f * 0.05 * 2.5, "at least two and a half times the push it had before 1.3.1");
+        // every gust is announced, with its own direction, at least a second before it starts at full speed
+        helper.assertTrue(SleeRijden.VLAAG_WAARSCHUWING / SleeRijden.TOP >= 20, "a warning of at least a second");
+        int seed = 4711, vlagen = 0, aangekondigd = 0;
+        boolean in = false;
+        for (double s = 0; s < 304; s += 0.25) {
+            double g = SleeRijden.windvlaag(seed, 0, s, 304);
+            if (g != 0 && !in) {
+                vlagen++;
+                int komt = SleeRijden.windKomt(seed, 0, s - 0.5, 304);
+                aangekondigd += komt != 0 && Math.signum(komt) == Math.signum(g) ? 1 : 0;
+            }
+            in = g != 0;
+        }
+        helper.assertTrue(vlagen >= 6 && vlagen <= 13 && aangekondigd == vlagen, "gusts on one leg of the real length, all announced: " + vlagen + " / " + aangekondigd);
+        // unopposed, a gust in the storm blows a sled well off the middle (half width 2.5 here, 3 on the real track); steering against it holds it
+        ServerLevel level = helper.getLevel();
+        RitRoute r = RitRoute.maak(level, route(helper));
+        SleeBaan baan = r.baan(0);
+        double ergste = 0, gehouden = 0;
+        int met = 0;
+        for (int sd = 1; sd <= 60; sd++) {
+            boolean vlaag = false;
+            for (double s = 0; s < baan.lengte; s += 0.5) {
+                vlaag |= SleeRijden.windvlaag(sd, 0, s, baan.lengte) != 0 && r.zone(0, RitRoute.Soort.IJSBRUG, s) == null;
+            }
+            if (!vlaag) {
+                continue;
+            }
+            met++;
+            for (int tegen = 0; tegen <= 1; tegen++) {
+                SleeRijden.Stand st = new SleeRijden.Stand(0, 0, SleeRijden.TOP, 0);
+                double max = 0;
+                for (int i = 0; i < 300 && st.s < baan.lengte - 1; i++) {
+                    double g = SleeRijden.windvlaag(sd, 0, st.s, baan.lengte);
+                    boolean ijs = r.zone(0, RitRoute.Soort.IJSBRUG, st.s) != null;
+                    double stuur = ijs ? Mth.clamp(-st.lat * 3 - st.latV * 25, -1, 1) : tegen == 0 ? 0 : g != 0 ? -Math.signum(g) * Math.min(1, Math.abs(g) * 1.3 + 0.1)
+                            : Mth.clamp(-st.lat * 2, -1, 1);
+                    SleeRijden.stap(st, new SleeRijden.Invoer(1, stuur), r, 0, SleeRit.TOCHT_STORM_TERUG, 100, sd);
+                    if (!ijs) {
+                        max = Math.max(max, Math.abs(st.lat));
+                    }
+                }
+                if (tegen == 0) {
+                    ergste = Math.max(ergste, max);
+                } else {
+                    gehouden = Math.max(gehouden, max);
+                }
+            }
+        }
+        helper.assertTrue(met > 5, "test rides with a gust: " + met);
+        helper.assertTrue(ergste > 1.5, "without steering a gust blows you well off the middle: " + ergste);
+        helper.assertTrue(gehouden < 1.0 && gehouden < ergste, "steering against it keeps you near the middle: " + gehouden);
+        // Steele-Mika: slower than a rider who warms up once, on every level (two legs of 304 blocks; a stop costs about 120 ticks)
+        double jij = 2 * 304 / SleeRijden.TOP + 120 + 80;
+        for (Niveau n : Niveau.values()) {
+            double hij = 2 * 304 / SleeRit.STEELE_SNELHEID[n.ordinal()];
+            helper.assertTrue(hij > jij + 100, "Steele-Mika stays beatable on " + n.id() + ": " + hij + " against about " + jij);
+        }
+        helper.assertTrue(SleeRit.STEELE_SNELHEID[0] < SleeRit.STEELE_SNELHEID[1] && SleeRit.STEELE_SNELHEID[1] < SleeRit.STEELE_SNELHEID[2], "faster by level");
         helper.succeed();
     }
 

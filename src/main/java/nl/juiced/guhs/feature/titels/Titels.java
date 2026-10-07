@@ -65,10 +65,10 @@ public final class Titels {
             HUISJESBOUWER = "huisjesbouwer", OPPER_VADSER = "opper_vadser", GUHKENNER = "guhkenner";
 
     /**
-     * Every title, in the order of the Guhdex tab (the two old ones first: see the class comment). bbq2: a feature adds its
-     * own with {@link #registreer} (they come after these).
+     * Every title, in the order of the Guhdex tab (the two old ones first: see the class comment), then the titles of the
+     * guhpixel slices ({@code GuhpixelTitels}). bbq2: a feature adds its own with {@link #registreer} (they come after these).
      */
-    public static final List<Titel> ALLE = new java.util.concurrent.CopyOnWriteArrayList<>(List.of(
+    public static final List<Titel> ALLE = new java.util.concurrent.CopyOnWriteArrayList<>(java.util.stream.Stream.concat(java.util.stream.Stream.of(
             new Titel(HELD_VAN_NOMGUH, "gui.guhs.balto.titel", ChatFormatting.AQUA, "guhs:baltoguh_beeldje", BaltoVerhaal::isHeld),
             new Titel(KNUFFELBURGEMEESTER, "gui.guhs.knuffeldal.titel", ChatFormatting.LIGHT_PURPLE, "guhs:knus_oorkonde",
                     Burgemeester::isKnuffelburgemeester),
@@ -82,7 +82,8 @@ public final class Titels {
             new Titel(OPPER_VADSER, "gui.guhs.titels.naam." + OPPER_VADSER, ChatFormatting.RED, "guhs:knabbelkroon",
                     p -> GuhQuests.saved(p).getIntOr(GuheindeGevecht.WINS, 0) > 0),
             new Titel(GUHKENNER, "gui.guhs.titels.naam." + GUHKENNER, ChatFormatting.GREEN, "guhs:guhdex",
-                    GuhDex::kenner)));
+                    GuhDex::kenner)),
+            nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream()).toList());   // (guhpixel: the titles of its slices come after the eight)
 
     /**
      * bbq2: adds a title (from your Feature.register; common code, both sides): lang {@code gui.guhs.titels.naam.<id>} and
@@ -129,7 +130,8 @@ public final class Titels {
 
     /**
      * The title this player shows (null: none): the chosen one when it is earned; nothing when they chose "geen titel";
-     * else (never chosen, or the chosen one isn't theirs any more) the first earned one.
+     * (1.3.1) nothing either when the chosen title doesn't exist any more; else (never chosen, or the chosen one isn't theirs
+     * any more) the first earned one.
      */
     @Nullable
     public static Titel actief(ServerPlayer p) {
@@ -140,6 +142,9 @@ public final class Titels {
         Titel gekozen = van(keuze);
         if (gekozen != null && heeft(p, gekozen)) {
             return gekozen;
+        }
+        if (gekozen == null && !keuze.isEmpty()) {
+            return null;   // (1.3.1) the chosen title doesn't exist any more (it was removed): no title, not some other one
         }
         for (Titel t : ALLE) {
             if (heeft(p, t)) {

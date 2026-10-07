@@ -139,6 +139,7 @@ SUPERKOMPAS = {
     "gui.guhs.superkompas.kopje.knuffeldal": "Knuffeldal",
     "gui.guhs.superkompas.kopje.grote_guhspelen": "De Grote Guhspelen",
     "gui.guhs.superkompas.kopje.verhalen": "Guhverhalen",
+    "gui.guhs.superkompas.kopje.guhpixel": "Guhpixel",
     "gui.guhs.superkompas.zoekt_al": "Hier wijst je superkompas nu naartoe",
     "gui.guhs.superkompas.pick": "Klik een plek aan: je superkompas wijst de weg!",
 }

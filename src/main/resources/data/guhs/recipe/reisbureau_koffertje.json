@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LSL",
+    "PPP"
+  ],
+  "key": {
+    "L": "minecraft:leather",
+    "S": "minecraft:stick",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:reisbureau_koffertje"
+  }
+}

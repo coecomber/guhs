@@ -259,6 +259,10 @@ public final class Guhkamer {
     /** Calls a guest back to the player (from the room, wherever the player is). Returns the guh, or null. */
     @Nullable
     public static Entity roep(ServerPlayer speler, UUID id) {
+        if (nl.juiced.guhs.feature.guhpixel.Guhpixel.in(speler)) {   // (no guhs in guhpixel)
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.guhpixel.roep.niet_hier", Component.empty()).withStyle(ChatFormatting.GOLD));
+            return null;
+        }
         MinecraftServer s = speler.level().getServer();
         GuhkamerData data = GuhkamerData.get(s);
         GuhkamerData.Kamer k = data.vind(speler.getUUID());

@@ -86,7 +86,8 @@ public class SuperkompasItem extends GuhCompassItem {
                             "guh_beauty_theater", "guh_racebaan", "guh_golfbaan")),
                     new Kopje("knuffeldal", List.of("knuffeldal_stadje", "knuffelbad")),
                     new Kopje("grote_guhspelen", List.of("sjoelhuisje", "guhdoolhof", "knabbelkatapult", "knabbelspelen", "elfguhjestocht", "guh_circuit")),
-                    new Kopje("verhalen", List.of("nomguh", "guhwaii_surfstrand")))),   // 3.0 (Guhverhalen)
+                    new Kopje("verhalen", List.of("nomguh", "guhwaii_surfstrand")),   // 3.0 (Guhverhalen)
+                    new Kopje("guhpixel", List.of("internetcafe", "reisbureau")))),   // guhpixel: the Guh-internetcafe; 1.3.1: + the Reisbureau
             cat("wonderen", "guhs:guh_kristal", net.minecraft.world.item.Items.AMETHYST_SHARD, "guh_kasteel", "zwevende_eilanden",
                     "hamster_house_extra_extra_large", "guhramid", "guhbibliotheek", "onderwater"),
             cat("wonen", "guhs:knuffelsteen_gezicht", net.minecraft.world.item.Items.OAK_DOOR, "guh_village", "hamster_house", "hamster_house_medium",
@@ -96,10 +97,10 @@ public class SuperkompasItem extends GuhCompassItem {
             cat("barbecue", "guhs:grillspies", net.minecraft.world.item.Items.CAMPFIRE, "barbecueput", "spiesburcht", "mika_grillpaleis"),
             // 2.8 (Knuffeldal): the cozy places
             cat("knus", "guhs:knuffel_normal", net.minecraft.world.item.Items.PINK_BED, "knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht",
-                    "ballonfestival", "kampeerplekje", "knuffelbad"),
+                    "ballonfestival", "kampeerplekje", "knuffelbad", "reisbureau"),   // (guhpixel: the Reisbureau)
             // 3.0 (Guhverhalen): the story places
             cat("verhalen", "guhs:baltoguh_beeldje", net.minecraft.world.item.Items.BOOK, "nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
-                    "guhwaii_capsule", "guhwaii_surfstrand", "knuffeldal_stadje"));
+                    "guhwaii_surfstrand", "knuffeldal_stadje"));   // (1.3.1: the capsule is part of the Ohana questline, no place of its own)
     /**
      * The tabs of the menu (bbq2: {@link #voegToe} adds structures to a tab; the fixed list above keeps its shape, the
      * self-check of tools/features/gids.py reads it).

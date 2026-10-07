@@ -478,7 +478,8 @@ public class VerhaalGameTests {
             }
         }
         for (GuhNpcEntity.Kind kind : GuhNpcEntity.Kind.values()) {
-            // (bbq2: the kinds after TIKIGUH have no Guhdex page: no spoilers, and "compleet" stays reachable)
+            // (bbq2: the kinds after TIKIGUH have no Guhdex page: no spoilers, and "compleet" stays reachable; guhpixel: its NPC
+            // kinds, which stand after bbq2's, have none either: the Guhdex tab "Guhpixel & uitjes" is their place)
             if (NpcRollen.isVerhaalKind(kind) && kind.ordinal() <= GuhNpcEntity.Kind.TIKIGUH.ordinal()) {
                 GuhVariant page = GuhVariant.ofCharacter(kind);
                 helper.assertTrue(page != null && page.npcKind() == kind && GuhDex.ENTRIES.contains(page), kind + ": its character page");

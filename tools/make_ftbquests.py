@@ -1,5 +1,5 @@
 """
-Builds the "Guhs" chapter group for FTB Quests: sixteen themed chapters in src/main/resources/ftbquests/
+Builds the "Guhs" chapter group for FTB Quests: seventeen themed chapters in src/main/resources/ftbquests/
 (chapters/<file>.json5, lang/nl_nl/<file>.json5 and lang/en_us/<file>.json5, index.txt for the installer), plus their pictures
 (textures/ftbquests, drawn by tools/make_ftbquests_art.py). The mod copies them into config/ftbquests/quests when FTB Quests
 is installed (see compat/FtbQuestsChapter.java). Bump CHAPTER_VERSION when you change the chapters, so packs get them.
@@ -34,7 +34,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 27   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved
+CHAPTER_VERSION = 31   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -100,10 +100,16 @@ q("frying", "Frituurvads", "Vul de guh-koekenpan met Mika's vet en frituur kaask
 # --- de Guhmensie: biomen ----------------------------------------------------------------------------------------------
 BIOMES = [("guh_fields", "Guhvelden"), ("knabbel_crumbs", "Knabbelkruimels"), ("pink_puffs", "Roze pluisjes"), ("kaas_flats", "Kaasvlakte"),
           ("guh_meadows", "Guhweides"), ("guh_peaks", "Guhpieken"), ("vads_cliffs", "Vadskliffen"), ("mikas_biome", "Mika's bioom"),
-          ("guh_sea", "Guhzee"), ("guh_kristalmijn", "Guhkristalmijn")]
+          ("guh_sea", "Guhzee"), ("guh_kristalmijn", "Guhkristalmijn"),
+          # guhpixel: the nine biomes of dimension/guhmension.json that were missing here (new ids only; the ten above keep theirs)
+          ("bleekwoud", "Bleekwoud"), ("gatenkaasgrotten", "Gatenkaasgrotten"), ("kaasmoeras", "Kaasmoeras"), ("vadswoud", "Vadswoud"),
+          ("diepe_guhzee", "Diepe Guhzee"), ("knuffeldal", "Knuffeldal"), ("guhpolder", "Guhpolder"),
+          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i")]
 for i, (b, name) in enumerate(BIOMES):
+    # (the first ten in one row at y=6 as always; the new ones in a second row, clear of the fish at 6,7 and the slime block at 8,5.5)
     q(f"biome_{b}", name, f"Bezoek het bioom &d{name}&r in de Guhmensie.", "minecraft:filled_map", [biome(b)],
-      rewards=(("guhs:kaas_knabbels", 4),), deps=["guhmension"], x=-6 + i * 1.5, y=6, shape="circle")
+      rewards=(("guhs:kaas_knabbels", 4),), deps=["guhmension"], x=-6 + i * 1.5 if i < 10 else -21 + (i - 10) * 1.5, y=6 if i < 10 else 4.75,
+      shape="circle")
 q("pink_moon", "Roze maan", "Blijf een nacht in de Guhmensie en kijk omhoog: een roze maan en roze sterren!", "minecraft:clock",
   [dim("guhs:guhmension")], deps=["guhmension"], x=2, y=4, shape="circle")
 
@@ -255,6 +261,9 @@ EXTRAS = [
     ("wheel", "Guhrad", "Zet je tamme guh in een &dGuhrad&r: hij rent &dvadskracht&r bij elkaar voor je guhmachines, en moe wordt hij "
      "nooit. Een blij guhtje rent extra hard! &dGuhdraad&r brengt de vadskracht naar je machines. Kijk naar het rad of de draad en je "
      "leest hoeveel vadskracht je opstelling gebruikt. Njeg!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
+    # 1.3.1 (appended: the quests above keep their places)
+    ("schaar", "Vadsschaar", "Twee vahoege vads schuin boven elkaar, net als een gewone schaar. Hij knipt alles wat een schaar knipt en hij gaat nooit kapot.",
+     "guhs:vahoege_vads_shears", [item("guhs:vahoege_vads_shears")]),
 ]
 for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
     q(key, title, desc, icon, tasks, deps=["guhmension"] if key not in ("wheel", "furniture", "taart") else ["start"],
@@ -293,7 +302,7 @@ for _name, _module in zip(_features.FEATURES, _features.modules()):
 GROUP_TITLE = "&dGuhs"
 READING = ("&dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > "
            "&5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
-           " > &dGuhverhalen&r > &aDiertjes&r > &bGuh-technologie&r > &6In de ban van de Knabbelring&r > &cSuper Guhrio&r")
+           " > &dGuhverhalen&r > &aDiertjes&r > &dGuhpixel&r > &bGuh-technologie&r > &6In de ban van de Knabbelring&r > &cSuper Guhrio&r")
 NIKS_OP_SLOT = ("Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. "
                 "De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!")
 # file: title, subtitle, ribbon colour, icon, banner renders (left, right), welcome picture (renders, structure behind them),
@@ -419,6 +428,19 @@ CHAPTERS = {
                "heel guh-achtig! En ergens, heel traag... Sjokkel.",
                "Kom dichtbij om ze in je &dGuhdex&r te zetten: ze tellen allemaal mee voor &6alles verzameld&r. Sommige kun je zelfs temmen "
                "en oppakken. " + NIKS_OP_SLOT]),
+    # guhpixel: the minigame-server parody, and the home things, the Reisbureau and the Guh-parkour that came with it
+    "guhs_guhpixel": dict(
+        title="&dGuhpixel", sub="De minigame-server van de guhs. /lobby, njeg!", colour="magenta", icon="guh:rainbow",
+        banner=("guh:golden", "guh:starry"),
+        welcome=(["guh:rainbow", "guh:golden", "guh:ghost", "guh:starry"], None),
+        links=["superkompas"],
+        intro=["Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar in de tab &dMinigames&r het "
+               "&dGuh-internetcafé \"De Trage Verbinding\"&r.",
+               "In het café slapen guhs achter oude beige computers. Loop door het grote beeldscherm en je staat in de lobby van "
+               "&dGuhpixel&r: de minigame-server van de guhs. Daarna werken &6/lobby&r, &6/hub&r en &6/l&r overal.",
+               "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis "
+               "mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de "
+               "Guhmensie. " + NIKS_OP_SLOT]),
     # bbq2 (CONTRACT_130 5.5): Guh-technologie (written by features/tech_quests.py), the Knabbelring (features/ring*.py, the one
     # chapter whose quests really depend on each other: FTB_LINEAIR) and Super Guhrio (features/guhrio*.py)
     "guhs_techniek": dict(
@@ -481,6 +503,10 @@ MODULE_CHAPTER = {
     "vogels": "guhs_diertjes", "waterdiertjes": "guhs_diertjes", "landdiertjes": "guhs_diertjes",
     # 1.2.5: the Guhoven (its quest sits next to the Guhrad, in the section "thuis")
     "guhoven": "guhs_basis",
+    # guhpixel: the kern and its nine slices
+    "guhpixel": "guhs_guhpixel", "guhpixel_lobby": "guhs_guhpixel", "guhpixel_grap1": "guhs_guhpixel", "guhpixel_grap2": "guhs_guhpixel",
+    "guhpixel_among": "guhs_guhpixel", "guhpixel_guhkade": "guhs_guhpixel", "guhpixel_kantoor": "guhs_guhpixel",
+    "guhpixel_bioscoop": "guhs_guhpixel", "guhpixel_reisbureau": "guhs_guhpixel", "guhpixel_parkour": "guhs_guhpixel",
     # bbq2 (CONTRACT_130 5.5; vadskracht: its quests stay next to the Guhrad in guhs_basis, the section "thuis")
     "bank": "guhs_guhmensie", "vadskracht": "guhs_basis",
     "tech_bronnen": "guhs_techniek", "tech_buizen": "guhs_techniek", "tech_machines": "guhs_techniek", "tech_vloeistof": "guhs_techniek",
@@ -525,7 +551,7 @@ SECTIONS = {
         sec("bouwwerken", "Bouwwerken", "wiki:structure_hamster_house", keys=[f"struct_{s}" for s, _ in STRUCTS]),
         sec("hongerige_guh", "De Hongerige Guh & de Bank Guh", "item:guhs:bank_guh", keys=["bank", "bank_plaatsen"]),
         sec("spullen", "Knabbels, kristal & vads", "item:guhs:guh_kristal",
-            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel"]),
+            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "schaar"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
     ],
     "guhs_minigames": [
@@ -625,6 +651,16 @@ SECTIONS = {
         sec("waterdiertjes", "Water & insectjes", "item:minecraft:axolotl_bucket", module="waterdiertjes", upstream="intro"),
         sec("landdiertjes", "Egeltjes, konijntjes, eekhoorntjes & Sjokkel", "item:minecraft:sweet_berries", module="landdiertjes", upstream="intro"),
     ],
+    # guhpixel (a section may take the quests of several modules: module=(a, b, ...))
+    "guhs_guhpixel": [
+        sec("px_lobby", "De lobby van Guhpixel", "guh:rainbow", module=("guhpixel", "guhpixel_lobby"), upstream="intro"),
+        sec("px_grapjes", "Grapspelletjes", "guh:golden", module=("guhpixel_grap1", "guhpixel_grap2"), upstream="intro"),
+        sec("px_among", "Among Guhs", "guh:ghost", module="guhpixel_among", upstream="intro"),
+        sec("px_thuis", "Voor thuis: Guhkade, Guhkantoor & Guhbioscoop", "guh:starry",
+            module=("guhpixel_guhkade", "guhpixel_kantoor", "guhpixel_bioscoop"), upstream="intro"),
+        sec("px_reisbureau", "Reisbureau De Vadsvakantie", "guh:mint", module="guhpixel_reisbureau", upstream="intro"),
+        sec("px_parkour", "Guh-parkour", "guh:choco", module="guhpixel_parkour", upstream="intro"),
+    ],
 }
 COLUMNS = {"guhs_onderwater": 1, "guhs_maag": 1, "guhs_guheinde": 1}
 
@@ -668,15 +704,16 @@ def assign():
                 ks = [k for k in s["keys"] if k in known and k not in done]
             else:
                 ks = []
-                for k in by_module.get(s["module"], []):
-                    if k == s["until"]:
-                        break
-                    if k not in done:
-                        ks.append(k)
+                for m in (s["module"] if isinstance(s["module"], (list, tuple)) else [s["module"]]):   # (guhpixel: several modules)
+                    for k in by_module.get(m, []):
+                        if k == s["until"]:
+                            break
+                        if k not in done:
+                            ks.append(k)
             done.update(ks)
             if ks:
                 # 3.0: a module may give its section another picture (FTB_PORTRAIT = "<spec>")
-                portret = getattr(MODULES.get(s["module"]), "FTB_PORTRAIT", None) if s["module"] else None
+                portret = getattr(MODULES.get(s["module"]), "FTB_PORTRAIT", None) if isinstance(s["module"], str) else None
                 out[c].append(dict(s, quests=ks, **({"portrait": portret} if portret else {})))
     # bbq2: the sections a module declares itself (FTB_SECTIES), appended to its chapter in FEATURES order
     for name, mod in MODULES.items():

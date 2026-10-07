@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "FWF",
+    "SSS"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "F": "#minecraft:wooden_fences",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "guhs:guhparkour_slalompaaltjes"
+  }
+}

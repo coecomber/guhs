@@ -624,11 +624,11 @@ def barbecuether_section():
               wide=True) + \
         h3("The Knabbelbaken", "Het Knabbelbaken") + \
         entry(img("knabbelbaken", "Knabbelbaken"), "The Knabbelbaken", "Het Knabbelbaken",
-              p("The beacon of the guhs, made with the <b>gloeister</b>. Put it on a pyramid of 1&ndash;4 layers of <b>blocks of kaasknabbels</b>, compressed super vahoege vads "
-                "or gatenkaas. Every 4 seconds <b>players and tamed guhs</b> within 10 + 10&times;layers blocks get the chosen effect (wild guhs don't). Right-click to pick the "
+              p("The beacon of the guhs, made with the <b>gloeister</b>. Put it on a pyramid of 1&ndash;4 layers (3&times;3, 5&times;5, 7&times;7, 9&times;9) of <b>blocks of vahoege vads</b> "
+                "(nine vads ingots each; since 1.3.1 no other block counts). Every 4 seconds <b>players and tamed guhs</b> within 10 + 10&times;layers blocks get the chosen effect (wild guhs don't). Right-click to pick the "
                 "effect; the beam takes its colour and shoots all the way up to the sky (you see it from far away). With 4 layers VAHOEG and Guhsprong get stronger.",
-                "Het baken van de guhs, gemaakt met de <b>gloeister</b>. Zet het op een piramide van 1&ndash;4 lagen <b>blokken kaasknabbels</b>, compressed super vahoege vads "
-                "of gatenkaas. Elke 4 seconden krijgen <b>spelers en getemde guhs</b> binnen 10 + 10&times;lagen blokken het gekozen effect (wilde guhs niet). Rechtsklik om "
+                "Het baken van de guhs, gemaakt met de <b>gloeister</b>. Zet het op een piramide van 1&ndash;4 lagen (3&times;3, 5&times;5, 7&times;7, 9&times;9) <b>blokken vahoege vads</b> "
+                "(negen vadsstaven per blok; sinds 1.3.1 telt geen ander blok meer). Elke 4 seconden krijgen <b>spelers en getemde guhs</b> binnen 10 + 10&times;lagen blokken het gekozen effect (wilde guhs niet). Rechtsklik om "
                 "het effect te kiezen; de straal krijgt zijn kleur en schiet helemaal tot in de hemel (die zie je van ver). Met 4 lagen worden VAHOEG en Guhsprong sterker.") +
               table([("Effect", "Effect"), ("What", "Wat"), ("From", "Vanaf")], [
                   ["<b>VAHOEG</b>", t("Speed + saturation", "Snelheid + verzadiging"), t("1 layer", "1 laag")],
@@ -725,9 +725,9 @@ def barbecuether_section():
                 "Een piepklein Mika-motje (paars donsje, rode oogjes, duivelsstaartje, gatenkaas-vleugels). Fladdert rond kaas en lampjes en pikt kaasknabbels die op de grond "
                 "liggen (een Mika, hè). Ongevaarlijk voor jou, en soms laat hij een knabbel vallen."), stats=[(("Health", "Levens"), "3")]) + \
         entry(img("guh_variant_kaasmoerasguh", "Kaasmoerasguh"), "Kaasmoerasguh", "Kaasmoerasguh",
-              p("A new guh variant: green-yellow spotted, as if it rolled through the mud (it did). Only in the Kaasmoeras: 40% of the wild grown-up guhs born there. Tame it "
+              p("A new guh variant: green-yellow spotted, as if it rolled through the mud (it did). Only in the Kaasmoeras: about a quarter of the wild grown-up guhs born there. Tame it "
                 "with kaasknabbels; its babies inherit the spots. Guhdex page with a star.",
-                "Een nieuwe guhvariant: groen-geel gevlekt, alsof hij door de modder heeft gerold (heeft hij ook). Alleen in het Kaasmoeras: 40% van de wilde volwassen guhs die "
+                "Een nieuwe guhvariant: groen-geel gevlekt, alsof hij door de modder heeft gerold (heeft hij ook). Alleen in het Kaasmoeras: ongeveer een kwart van de wilde volwassen guhs die "
                 "daar geboren worden. Tem hem met kaasknabbels; zijn baby's erven de vlekken. Guhdex-pagina met ster.")) + \
         entry(img("moerasheks_mika", "Moerasheks-Mika"), "Moerasheks-Mika", "Moerasheks-Mika",
               p("The witch of the Mikas: a green Mika with a big purple pointed hat (with a cheese-yellow band and a glowing star), a hooked nose with a wart and a scarf. "
@@ -1796,13 +1796,13 @@ def grote_guhspelen_section():
         '<div class="recipes">' + recipe_card("guh_molentje", "Guh-molentje", "Guh-molentje") + recipe_card("polderijs", "Polderijs (&times;2)", "Polderijs (&times;2)") + \
         recipe_card("guh_ijsbloempje_kleurstof", "Light blue dye", "Lichtblauwe kleurstof") + recipe_card("knotwilg_planken", "Spruce planks (&times;4)", "Sparrenplanken (&times;4)") + '</div>' + \
         wentry(img("pinguhs", "Pinguhs: klassiek, keizer and a chick"), "The Pinguh", "De Pinguh",
-               p("A guh in a penguin suit! About <b>half of the wild guhs</b> in the Guhpolder are a Pinguh (a new variant after the Pluisguh). There are "
+               p("A guh in a penguin suit! About <b>a third of the wild guhs</b> in the Guhpolder are a Pinguh (a new variant after the Pluisguh). There are "
                  "<b>klassieke</b> Pinguhs (a black back and head, a white tummy and face around the big guh eyes, an orange beak with pink blush, flippers and "
                  "orange feet), stately <b>Keizerpinguhs</b> (a bit bigger once grown, with golden cheek patches beside the eyes, a thin golden brow and golden patches by the ears, so you know them from the front too) and now and then a grey, fluffy "
                  "<b>Pinguh chick</b>: every baby looks like that. It waddles vadsig about and <b>slides on its tummy</b> over the ice. Tame one with "
                  "kaasknabbels for its Guhdex star; it wears clothes like any guh, and during the Elf-Guhjestocht it slides along behind you. There is a "
                  "<b>Pinguhknuffel</b> in the grijpmachine too (now 22 plushies).",
-                 "Een guh in een pinguinpakje! Ongeveer <b>de helft van de wilde guhs</b> in de Guhpolder is een Pinguh (een nieuwe variant na de Pluisguh). Er zijn "
+                 "Een guh in een pinguinpakje! Ongeveer <b>een derde van de wilde guhs</b> in de Guhpolder is een Pinguh (een nieuwe variant na de Pluisguh). Er zijn "
                  "<b>klassieke</b> Pinguhs (zwarte rug en kop, een wit buikje en een wit gezicht rond de grote guhogen, een oranje snaveltje met roze blosjes, "
                  "flippers en oranje pootjes), deftige <b>Keizerpinguhs</b> (als ze groot zijn een beetje groter, met gouden wangvlekjes naast de ogen, een dun gouden wenkbrauwtje en gouden vlekjes bij de oren, dus je herkent ze ook van voren) en heel soms een "
                  "grijs pluizig <b>Pinguh-kuikentje</b>: alle baby's zien er zo uit. Hij waggelt vadsig rond en <b>glijdt op zijn buik</b> over het ijs. Tem er een "
@@ -2384,6 +2384,22 @@ def lieve_vadsjes_section():
              "<b>Waar de buit heen gaat</b>: een <b>Bank Guh</b> in de buurt sorteert alles; anders een kist naast het huisje; anders komt het voor de deur te liggen."),
             ("Babies and sitting guhs don't do chores; they just live there and play. Break the huisje and the residents are free again (nothing is lost).",
              "Baby's en zittende guhs doen geen klusjes; ze wonen er gewoon gezellig en spelen. Breek je het huisje af, dan zijn de bewoners weer vrij (er gaat niks verloren).")]) + \
+        p("<b>Going inside</b>: press <i>Naar binnen</i> in the huisje screen (your own huisje or somebody else's). Ding-dong, and you stand on the doormat of a "
+          "snug little room on guh scale, where you are suddenly very big. Every resident has its own little bed with a name sign, its favourite thing on the "
+          "bedside table and its clothes on a hook. At night they lie asleep in their beds, and now and then somebody is home by day too (a midday nap, or "
+          "sheltering from the rain); an empty bed has a note that says where its guh is. In your own huisje you can <b>tuck a sleeper in</b> (once a night, a "
+          "few hearts for the real guh), pet it softly, click a bed for its dagboekje and read the <b>prikbord</b> with everybody's chores; visitors may only "
+          "look. The pink <b>logeerbedje</b> is for you: sleeping there counts as sleeping in the world outside (the night is skipped, your spawn point "
+          "stays). The door brings you back in front of the huisje. Nothing can be broken, hurt or lost inside, and the guhs you see there are sleepy "
+          "stand-ins: your real guhs stay where they are.",
+          "<b>Naar binnen</b>: druk in het huisjesscherm op <i>Naar binnen</i> (bij je eigen huisje of dat van een ander). Ding-dong, en je staat op de deurmat "
+          "van een knus kamertje op guhmaat, waar jij ineens heel groot bent. Elke bewoner heeft een eigen bedje met een naambordje, zijn lievelingsding op het "
+          "kastje en zijn kleren aan een haakje. 's Nachts liggen ze in hun bedje te slapen, en overdag is er af en toe ook iemand thuis (een middagdutje, of "
+          "schuilen voor de regen); op een leeg bedje ligt een briefje waar die guh is. In je eigen huisje kun je een slaper <b>instoppen</b> (een keer per "
+          "nacht, een paar hartjes voor de echte guh), zachtjes aaien, op een bedje klikken voor het dagboekje en het <b>prikbord</b> lezen met ieders klusjes; "
+          "bezoekers mogen alleen kijken. Het roze <b>logeerbedje</b> is voor jou: daar slapen telt als slapen in de wereld buiten (de nacht gaat voorbij, je "
+          "spawnpunt blijft). De deur brengt je terug voor het huisje. Binnen kan niks stuk, pijn doen of kwijtraken, en de guhs die je er ziet zijn slaperige "
+          "dubbelgangers: je echte guhs blijven waar ze zijn.") + \
         gallery(fig("shot210_huisje_groot", "Groot, with residents", "Groot, met bewoners", "A resident walks home.", "Een bewoner loopt naar huis."),
                 fig("shot210_huisje_groot_nacht", "At night", "'s Nachts", "Everyone inside, lights in the eyes. Zzz...", "Iedereen binnen, licht in de oogjes. Zzz..."),
                 fig("shot210_huisjes_voor", "Three sizes", "Drie maten", "Klein, medium and groot in a row.", "Klein, medium en groot op een rij."))
@@ -2725,6 +2741,22 @@ def fixes210_section():
           "De nieuwe indeling komt in nieuw gemaakte Elf-Guhjestochten; een oude houdt zijn 2.9-indeling, maar de schaatsfix werkt daar ook.")
     body = intro + grond + circuit + golf + doolhof + namen + elftocht
     return section("fixes210", "Fixes in 2.10", "Fixes in 2.10", body)
+
+
+def guhpixel_sections():
+    """guhpixel: three sections, each the joined bodies of tools/wiki_px/<slice>.py (body(w): w is this module). A slice that
+    has not written its part yet returns "", and a section without any text is left out. -> [(sid, en, nl, html)]"""
+    import importlib
+    import types
+    w = types.SimpleNamespace(**globals())   # (this module, however it was loaded: the wiki site loads it under another name)
+    out = []
+    for sid, en, nl, slices in (("guhpixel", "Guhpixel", "Guhpixel", ["lobby", "grap1", "grap2", "among", "guhkade", "kantoor", "bioscoop"]),
+                                ("reisbureau", "The Travel Agency", "Het Reisbureau", ["reisbureau"]),
+                                ("guhparkour", "Guh Parkour", "Guh-parkour", ["parkour"])):
+        body = "".join(importlib.import_module(f"wiki_px.{x}").body(w) for x in slices)
+        if body:
+            out.append((sid, en, nl, section(sid, en, nl, body)))
+    return out
 
 
 def bleekwoud_section():
@@ -3329,7 +3361,8 @@ def verhalen30_section():
                  "rood-witte <b>routepaaltjes</b> met gloeiende guhoortjes. Het paneel bovenin laat de route zien (stal, rustpunten, ijsbrug, lawine, berghut), de "
                  "klok en hoe warm de hondjes zijn; onder je vizier staat wat er aankomt.") +
                table([("On the way", "Onderweg"), ("What to do", "Wat moet je doen")], [
-                   [("<b>Windvlagen</b>", "<b>Windvlagen</b>"), ("push you sideways; a whoosh warns you just before", "duwen je opzij; een woesj waarschuwt je vlak ervoor")],
+                   [("<b>Windvlagen</b>", "<b>Windvlagen</b>"), ("push you off the track into the deep snow (since 1.3.1 harder and a bit more often): an arrow and a whoosh warn you just before, steer against them",
+                                                               "duwen je van de route de diepe sneeuw in (sinds 1.3.1 harder en iets vaker): een pijl en een woesj waarschuwen je vlak ervoor, stuur ertegenin")],
                    [("<b>Diepe sneeuw</b>", "<b>Diepe sneeuw</b>"), ("next to the track: slow", "naast het spoor: langzaam")],
                    [("<b>De ijsbrug</b>", "<b>De ijsbrug</b>"), ("narrow and slippery: steer carefully, or plof into the soft snow and try the bridge again",
                                                               "smal en glad: stuur voorzichtig, anders plof je in de zachte sneeuw en probeer je de brug opnieuw")],
@@ -3337,8 +3370,10 @@ def verhalen30_section():
                                                             "BOEF, buried and dug out a little way back",
                                                             "rolt van de Lawineberg: zorg dat je aan de andere kant van het spoor bent (<i>LAWINE van links! Stuur naar "
                                                             "rechts</i>), anders BOEF, bedolven en een stukje terug weer uitgegraven")],
-                   [("<b>Rustpuntjes</b>", "<b>Rustpuntjes</b>"), ("4 shelters with a vuurkorf: stop there and the dogs warm up (cold paws run slower)",
-                                                                  "4 schuilhutjes met een vuurkorf: stop daar en de hondjes warmen op (koude pootjes lopen langzamer)")],
+                   [("<b>Rustpuntjes</b>", "<b>Rustpuntjes</b>"), ("4 shelters with a vuurkorf: stop there (brake with S, a few seconds) and the dogs warm up. Since 1.3.1 the paws really get cold: "
+                                                                  "stop at least once per trek, best about halfway, or the dogs get slow",
+                                                                  "4 schuilhutjes met een vuurkorf: stop daar (rem met S, een paar tellen) en de hondjes warmen op. Sinds 1.3.1 worden de pootjes echt "
+                                                                  "koud: stop minstens één keer per tocht, het liefst ongeveer halverwege, anders worden de hondjes sloom")],
                    [("<b>Baltoguh's nose</b>", "<b>De neus van Baltoguh</b>"), ("in a white-out, glowing sniff sparkles show the middle of the track",
                                                                               "in een witte storm laten gloeiende snuffelsterretjes het midden van het spoor zien")]]) +
                p("At the berghut the ride pauses while the kist is loaded. The way back is timed (4 minutes). At the dieptepunt the clock stops for the wolf "
@@ -3916,16 +3951,19 @@ def build():
       "Nederlands is, anders Engels). Zelf kiezen kan met de knop <b>Taal</b> in het guhmenu, of met <i>Taal van Guhs</i> in de instellingen van de mod "
       "(<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in het bestand: <code>language</code> in <code>config/guhs-client.toml</code>): "
       "Auto, NL of EN. Elke speler kiest voor zichzelf, ook op een server."),
-     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: thirteen chapters with "
+     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: fourteen chapters with "
       + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen and the critters...). "
       "Each chapter starts with a <i>Hoe kom je hier?</i> quest that links to where it begins.",
-      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: dertien hoofdstukken met " + str(quest_count()) + " quests "
+      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: veertien hoofdstukken met " + str(quest_count()) + " quests "
       "(elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, het Guheinde, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de Guhverhalen en de diertjes...). Elk hoofdstuk begint met een "
       "<i>Hoe kom je hier?</i>-quest met een linkje naar waar het begint.")])}
 """))
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------
     # --- new in 1.2.8: het Bleekwoud ------------------------------------------------------------------------------------------
+    _px = guhpixel_sections()                # guhpixel, the Reisbureau, the Guh-parkour (built once: the contents list below reuses it)
+    for _sid, _en, _nl, _html in _px:
+        S.append(_html)
     S.append(bleekwoud_section())
 
     S.append(verhalen30_section())
@@ -4330,10 +4368,10 @@ def build():
         f'<div class="card"><figure class="stage">{img("guh_variant_" + key, en)}</figure><h3>{t(en, nl)}<span class="rarity">{t(ren, rnl)}</span></h3>'
         f'<p>{t(den, dnl)}</p></div>' for key, en, nl, den, dnl, ren, rnl in VARIANTS) + "</div>"
     variants = f'''<h3 style="margin-top:18px">{t("Guh variants", "Guhvarianten")}</h3>
-{p("In the Guhmension, about 1 in 11 wild guhs is a variant: another fur colour, or another shape. They only turn up there, "
+{p("In the Guhmension, about 1 in 14 wild guhs is a variant: another fur colour, or another shape. They only turn up there, "
    "keep their look when tamed, and their babies usually look like one of their parents. About 1 in 25 wild Guhmension guhs "
    "also already wears clothes (see <i>Guh clothes</i>). (Some say there's one more, very secret variant...)",
-   "In de Guhmensie is ongeveer 1 op de 11 wilde guhs een variant: een andere vachtkleur of een andere vorm. Ze komen alleen "
+   "In de Guhmensie is ongeveer 1 op de 14 wilde guhs een variant: een andere vachtkleur of een andere vorm. Ze komen alleen "
    "daar voor, houden hun uiterlijk als je ze temt, en hun baby's lijken meestal op een van hun ouders. Ongeveer 1 op de 25 "
    "wilde guhs in de Guhmensie draagt ook al kleertjes (zie <i>Guhkleertjes</i>). (Er schijnt nog een heel geheime variant te zijn...)")}
 {variant_cards}'''
@@ -4422,8 +4460,8 @@ def build():
     new_mobs281 = f'''<h3 style="margin-top:18px">{t("New in 2.8.1 (see <a href='#new281'>New in 2.8.1</a>)", "Nieuw in 2.8.1 (zie <a href='#new281'>Nieuw in 2.8.1</a>)")}</h3>''' + \
         '<div class="cards">' + "".join(f'<div class="card"><figure class="stage">{img(n, nm)}</figure><h3>{nm}</h3><p>{t(den, dnl)}</p></div>'
                                         for n, nm, den, dnl in MOBS281) + "</div>"
-    MOBS29 = [("guh_variant_pinguh_klassiek", "Pinguh", "A guh in a penguin suit, in the Guhpolder (half of the wild guhs there). Klassiek, keizer or a grey fluffy chick. Slides on its tummy.",
-                "Een guh in een pinguinpakje, in de Guhpolder (de helft van de wilde guhs daar). Klassiek, keizer of een grijs pluizig kuikentje. Glijdt op zijn buik."),
+    MOBS29 = [("guh_variant_pinguh_klassiek", "Pinguh", "A guh in a penguin suit, in the Guhpolder (a third of the wild guhs there). Klassiek, keizer or a grey fluffy chick. Slides on its tummy.",
+                "Een guh in een pinguinpakje, in de Guhpolder (een derde van de wilde guhs daar). Klassiek, keizer of een grijs pluizig kuikentje. Glijdt op zijn buik."),
                ("doolhof_mika", "Heg-Mika", "Chases you in the Guhdoolhof and pinches one knabbel back. Never damage.", "Zit je achterna in het Guhdoolhof en pikt één knabbel terug. Nooit schade."),
                ("circuit_mikapikker", "Mika-pikker", "Pinches your VAHOEG boost on the Guh-Circuit, giggles and pops back.", "Pikt je VAHOEG-zet in op het Guh-Circuit, giechelt en springt terug."),
                ("knabbeldief_mika", "Knabbeldief", "The Mika of the Knabbeldief-zaak at the Politiebureautje. Runs off giggling.", "De Mika van de Knabbeldief-zaak bij het Politiebureautje. Rent giechelend weg.")]
@@ -4873,7 +4911,7 @@ def build():
 
     # --- vahoege vads ---------------------------------------------------------------------------------------------------
     gear_icons = "".join(icon(f"vahoege_vads_{g}", g) for g in ("sword", "pickaxe", "axe", "shovel", "hoe", "paxel",
-                                                                "helmet", "chestplate", "leggings", "boots"))
+                                                                "helmet", "chestplate", "leggings", "boots", "shears"))
     vads = entry(img("compressed_super_vahoege_vads", "Compressed super vahoege vads"),
                  "Compressed Super Vahoege Vads", "Samengeperste supervahoege vads",
                  p("A glossy guh-pink ore hidden in the Guhmension's ground (never on the surface), from the bottom up to y90 "
@@ -4896,6 +4934,10 @@ def build():
                    "Craft it from a vads pickaxe, axe and shovel.",
                    "<b>Paxel</b>: houweel, bijl en schep in een. Hakt steen, hout en aarde op volle snelheid, schilt stammen en maakt "
                    "paadjes. Maak hem van een vadshouweel, -bijl en -schep."),
+                  ("<b>Shears</b> (1.3.1): they shear, cut and carve everything ordinary shears do (also in a dispenser) and never break. "
+                   "Craft them like shears, from two <b>Vahoege Vads</b> (the raw vads, not the ingot).",
+                   "<b>Schaar</b> (1.3.1): hij scheert, knipt en snijdt alles wat een gewone schaar doet (ook in een dispenser) en gaat nooit "
+                   "kapot. Maak hem als een schaar, van twee <b>vahoege vads</b> (de ruwe vads, niet de staaf)."),
                   ("Enchant them like any tool or armour.", "Betover ze zoals elk gereedschap of pantser.")]))
     S.append(section("vads", "Vahoege Vads", "Vahoege vads", vads))
 
@@ -5196,6 +5238,9 @@ def build():
         rcard("Vads Hoe", "Vadsschoffel", grid([V, V, None, None, S_, None, None, S_, None], "vahoege_vads_hoe")),
         rcard("Vads Paxel", "Vadspaxel", grid(["vahoege_vads_pickaxe", "vahoege_vads_axe", "vahoege_vads_shovel"] + [None] * 6,
                                               "vahoege_vads_paxel", shapeless=True)),
+        rcard("Block of Vahoege Vads (and back: 1 block gives 9 ingots)", "Blok vahoege vads (en terug: 1 blok geeft 9 staven)",
+              grid([V] * 9, "block_of_vahoege_vads")),
+        rcard("Vads Shears", "Vadsschaar", grid([None, "vahoege_vads", None, "vahoege_vads", None, None, None, None, None], "vahoege_vads_shears")),
         rcard("Vads Helmet", "Vadshelm", grid([V, V, V, V, None, V, None, None, None], "vahoege_vads_helmet")),
         rcard("Vads Chestplate", "Vadsborstplaat", grid([V, None, V, V, V, V, V, V, V], "vahoege_vads_chestplate")),
         rcard("Vads Leggings", "Vadsbeenbescherming", grid([V, V, V, V, None, V, V, None, V], "vahoege_vads_leggings")),
@@ -5282,7 +5327,7 @@ def build():
     S.append(section("more", "Advancements and commands", "Vooruitgangen en commando's", adv))
 
     toc = "".join(f'<a href="#{sid}">{t(en, nl)}</a>' for sid, en, nl in [
-        ("start", "Getting started", "Aan de slag"), ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
+        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in _px], ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),

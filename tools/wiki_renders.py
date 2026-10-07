@@ -544,7 +544,7 @@ def main(out):
                 "item/iron_ingot", "item/stick", "item/redstone", "item/pink_dye", "item/saddle", "item/name_tag", "item/bucket",
                 "guhs:item/vahoege_vads", "guhs:item/vahoege_vads_ingot", "guhs:item/vahoege_vads_sword",
                 "guhs:item/vahoege_vads_pickaxe", "guhs:item/vahoege_vads_axe", "guhs:item/vahoege_vads_shovel",
-                "guhs:item/vahoege_vads_hoe", "guhs:item/vahoege_vads_paxel", "guhs:item/vahoege_vads_helmet",
+                "guhs:item/vahoege_vads_hoe", "guhs:item/vahoege_vads_paxel", "guhs:item/vahoege_vads_shears", "guhs:item/vahoege_vads_helmet",
                 "guhs:item/vahoege_vads_chestplate", "guhs:item/vahoege_vads_leggings", "guhs:item/vahoege_vads_boots",
                 "guhs:item/guh_cave_compass_00", "guhs:item/challenge_compass_00", "item/compass_00",
                 "guhs:item/pink_onesie", "guhs:item/striped_sweater", "guhs:item/raincoat", "guhs:item/chef_jacket",
@@ -2955,9 +2955,44 @@ def main_v128(out):
     shots_128(out)
 
 
+def main_px(out):
+    """guhpixel: the kern's own pictures (the Guhpixel-poort, the Netwerkkabeltje) and those of every slice
+    (tools/wiki_px/<slice>.py renders(r): r is this module, r.OUT the folder; pictures are named <namespace>_*.png)."""
+    import importlib
+    sys.path.insert(0, "tools")
+    os.makedirs(out, exist_ok=True)
+    r = sys.modules[__name__]
+    r.OUT = out
+    try:
+        poort = render(model_quads("guhs:block/guhpixel_poort"), 30, -25, 320)
+        poort.save(os.path.join(out, "guhpixel_poort.png"))
+        poort.resize((64, 64), Image.LANCZOS).save(os.path.join(out, "icon_guhpixel_poort.png"))
+        item_icon("guhs:item/guhpixel_netwerkkabeltje").save(os.path.join(out, "icon_guhpixel_netwerkkabeltje.png"))
+        print("rendered guhpixel_poort, icon_guhpixel_netwerkkabeltje")
+    except Exception as e:
+        print("no render for the guhpixel kern", e)
+    # the NPC pages of the wiki site look for npc_<kind>.png (own model when the kind has one, else the sitting guh)
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
+    for kind in ("lobby_welkomstguh", "lobby_verkoper_guh", "lobby_chatguh", "internetcafe_beheerder", "internetcafe_slaper", "skyblok_guh",
+                 "bedwars_guh", "vadsnite_guh", "guhmon_gymleider", "bzg_presentatrice", "bzg_boer", "among_kapitein", "among_logboekguh",
+                 "reisbureau_agent"):
+        try:
+            model = geo(f"guh_npc_{kind}") if os.path.exists(geo(f"guh_npc_{kind}")) else geo("guh_sitting")
+            render(geo_quads(model, f"guhs:entity/npc_{kind}"), 28, -12, 360).save(os.path.join(out, f"npc_{kind}.png"))
+        except Exception as e:  # noqa: BLE001
+            print("no render for npc", kind, e)
+    print("rendered the guhpixel npc pictures")
+    import wiki_px
+    for x in wiki_px.SLICES:
+        importlib.import_module(f"wiki_px.{x}").renders(r)
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] in (["-h"], ["--help"]):
         print(__doc__)
+    elif "--only-px" in sys.argv:      # (just the guhpixel pictures, into an existing img folder)
+        sys.argv.remove("--only-px")
+        main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
     elif "--only-128" in sys.argv:     # (just the 1.2.8 pictures, into an existing img folder)
         sys.argv.remove("--only-128")
         main_v128(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
@@ -2972,3 +3007,4 @@ if __name__ == "__main__":
         main_v29(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
     else:
         main(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+        main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))

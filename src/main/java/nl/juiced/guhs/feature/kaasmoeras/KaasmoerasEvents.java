@@ -42,7 +42,7 @@ import nl.juiced.guhs.world.ModDimensions;
  */
 public final class KaasmoerasEvents {
     /** Out of the wild guhs born in the kaasmoeras, this many are a Kaasmoerasguh. */
-    public static final float MOERASGUH_CHANCE = 0.4f;
+    public static final float MOERASGUH_CHANCE = 0.27f;   // 1.3.1: was 0.4
     /** How close you have to be to a kikkerguh, kaasmot or Moerasheks-Mika for its Guhdex page. */
     public static final double SEE_RANGE = 3.0;
     static final String CHECKED = "guhs_kaasmoeras_checked";

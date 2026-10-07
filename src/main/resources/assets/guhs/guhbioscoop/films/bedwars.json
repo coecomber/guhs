@@ -1,0 +1,1240 @@
+{
+  "formaat": 1,
+  "id": "bedwars",
+  "duur": 940,
+  "atlas": {
+    "textuur": "guhs:textures/guhbioscoop/bedwars.png",
+    "breedte": 256,
+    "hoogte": 64
+  },
+  "sprites": {
+    "bed": {
+      "uv": [
+        204,
+        20,
+        30,
+        10
+      ]
+    },
+    "bed_breed": {
+      "uv": [
+        1,
+        37,
+        72,
+        10
+      ]
+    },
+    "eiland_blauw": {
+      "uv": [
+        82,
+        20,
+        28,
+        12
+      ]
+    },
+    "eiland_geel": {
+      "uv": [
+        1,
+        20,
+        80,
+        16
+      ]
+    },
+    "eiland_groen": {
+      "uv": [
+        111,
+        20,
+        28,
+        12
+      ]
+    },
+    "eiland_rood": {
+      "uv": [
+        140,
+        20,
+        28,
+        12
+      ]
+    },
+    "guh_choco_dicht_rond_muts-blauw": {
+      "uv": [
+        1,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_choco_open_rond_muts-blauw": {
+      "uv": [
+        24,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_dicht_rond_kussen": {
+      "uv": [
+        47,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_open_rond_kussen": {
+      "uv": [
+        70,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_dicht_rond_muts-rood": {
+      "uv": [
+        93,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_open_rond_muts-rood": {
+      "uv": [
+        116,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_sneeuw_dicht_rond_muts-groen": {
+      "uv": [
+        139,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_sneeuw_open_rond_muts-groen": {
+      "uv": [
+        162,
+        1,
+        22,
+        18
+      ]
+    },
+    "wit": {
+      "uv": [
+        112,
+        37,
+        4,
+        4
+      ]
+    },
+    "wolk": {
+      "uv": [
+        74,
+        37,
+        22,
+        8
+      ]
+    },
+    "wolk_groot": {
+      "uv": [
+        169,
+        20,
+        34,
+        11
+      ]
+    },
+    "zzz": {
+      "uv": [
+        97,
+        37,
+        7,
+        7
+      ],
+      "frames": 2,
+      "per": 12
+    }
+  },
+  "scenes": [
+    {
+      "naam": "titel",
+      "duur": 70,
+      "lagen": [
+        {
+          "vlak": "#5a1e3a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "bed",
+          "x": 41,
+          "y": 48
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t1",
+          "schaal": 2.0,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": -18
+            },
+            {
+              "t": 14,
+              "x": 56,
+              "y": 10,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t2",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 32,
+          "van": 18
+        }
+      ]
+    },
+    {
+      "naam": "eilanden",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 60,
+          "y": 30
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 2,
+          "y": 36
+        },
+        {
+          "sprite": "eiland_rood",
+          "x": 2,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_groen",
+          "x": 42,
+          "y": 12
+        },
+        {
+          "sprite": "eiland_blauw",
+          "x": 82,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_geel",
+          "x": 16,
+          "y": 46
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-rood",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_muts-groen",
+          "x": 45,
+          "y": -6
+        },
+        {
+          "sprite": "guh_choco_open_rond_muts-blauw",
+          "x": 85,
+          "y": 0
+        },
+        {
+          "sprite": "bed_breed",
+          "x": 20,
+          "y": 35
+        },
+        {
+          "sprite": "guh_lila_open_rond_kussen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 20,
+              "y": 28
+            },
+            {
+              "t": 30,
+              "x": 20,
+              "y": 22,
+              "e": "uit"
+            },
+            {
+              "t": 40,
+              "x": 20,
+              "y": 28,
+              "e": "in"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "verdedigen",
+      "duur": 130,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 60,
+          "y": 30
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 2,
+          "y": 36
+        },
+        {
+          "sprite": "eiland_rood",
+          "x": 2,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_groen",
+          "x": 42,
+          "y": 12
+        },
+        {
+          "sprite": "eiland_blauw",
+          "x": 82,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_geel",
+          "x": 16,
+          "y": 46
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-rood",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_muts-groen",
+          "x": 45,
+          "y": -6
+        },
+        {
+          "sprite": "guh_choco_open_rond_muts-blauw",
+          "x": 85,
+          "y": 0
+        },
+        {
+          "sprite": "guh_lila_open_rond_kussen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 20,
+              "y": 28
+            },
+            {
+              "t": 40,
+              "x": 46,
+              "y": 28,
+              "e": "zacht"
+            },
+            {
+              "t": 52,
+              "x": 46,
+              "y": 19,
+              "e": "uit"
+            },
+            {
+              "t": 62,
+              "x": 46,
+              "y": 24,
+              "e": "in"
+            }
+          ],
+          "tot": 62,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_kussen",
+          "x": 46,
+          "y": 24,
+          "van": 62
+        },
+        {
+          "sprite": "bed_breed",
+          "x": 20,
+          "y": 35
+        },
+        {
+          "sprite": "zzz",
+          "x": 66,
+          "y": 14,
+          "van": 74
+        }
+      ]
+    },
+    {
+      "naam": "brug",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 60,
+          "y": 30
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 2,
+          "y": 36
+        },
+        {
+          "sprite": "eiland_rood",
+          "x": 2,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_groen",
+          "x": 42,
+          "y": 12
+        },
+        {
+          "sprite": "eiland_blauw",
+          "x": 82,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_geel",
+          "x": 16,
+          "y": 46
+        },
+        {
+          "vlak": "#d63c3c",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 14,
+              "y": 30,
+              "w": 4,
+              "h": 0
+            },
+            {
+              "t": 150,
+              "x": 14,
+              "y": 30,
+              "w": 4,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "vlak": "#50b45a",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 54,
+              "y": 24,
+              "w": 4,
+              "h": 0
+            },
+            {
+              "t": 150,
+              "x": 54,
+              "y": 24,
+              "w": 4,
+              "h": 22
+            }
+          ]
+        },
+        {
+          "vlak": "#466edc",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 94,
+              "y": 30,
+              "w": 4,
+              "h": 0
+            },
+            {
+              "t": 150,
+              "x": 94,
+              "y": 30,
+              "w": 4,
+              "h": 16
+            }
+          ]
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-rood",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 5,
+              "y": 0
+            },
+            {
+              "t": 20,
+              "x": 5,
+              "y": 12
+            },
+            {
+              "t": 150,
+              "x": 5,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_muts-groen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 45,
+              "y": -6
+            },
+            {
+              "t": 20,
+              "x": 45,
+              "y": 6
+            },
+            {
+              "t": 150,
+              "x": 45,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "sprite": "guh_choco_open_rond_muts-blauw",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 85,
+              "y": 0
+            },
+            {
+              "t": 20,
+              "x": 85,
+              "y": 12
+            },
+            {
+              "t": 150,
+              "x": 85,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_kussen",
+          "x": 46,
+          "y": 24
+        },
+        {
+          "sprite": "bed_breed",
+          "x": 20,
+          "y": 35
+        },
+        {
+          "sprite": "zzz",
+          "x": 66,
+          "y": 14
+        }
+      ]
+    },
+    {
+      "naam": "aankomst",
+      "duur": 160,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 60,
+          "y": 30
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 2,
+          "y": 36
+        },
+        {
+          "sprite": "eiland_rood",
+          "x": 2,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_groen",
+          "x": 42,
+          "y": 12
+        },
+        {
+          "sprite": "eiland_blauw",
+          "x": 82,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_geel",
+          "x": 16,
+          "y": 46
+        },
+        {
+          "vlak": "#d63c3c",
+          "x": 14,
+          "y": 30,
+          "w": 4,
+          "h": 16
+        },
+        {
+          "vlak": "#50b45a",
+          "x": 54,
+          "y": 24,
+          "w": 4,
+          "h": 22
+        },
+        {
+          "vlak": "#466edc",
+          "x": 94,
+          "y": 30,
+          "w": 4,
+          "h": 16
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t3",
+          "schaal": 1.25,
+          "uitlijn": "midden",
+          "kleur": "#ff5a5a",
+          "schaduw": true,
+          "x": 56,
+          "y": 2,
+          "tot": 56
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-rood",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 5,
+              "y": 28
+            },
+            {
+              "t": 52,
+              "x": 22,
+              "y": 28,
+              "e": "zacht"
+            },
+            {
+              "t": 59,
+              "x": 22,
+              "y": 19,
+              "e": "uit"
+            },
+            {
+              "t": 64,
+              "x": 22,
+              "y": 24,
+              "e": "in"
+            }
+          ],
+          "tot": 64,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_mint_dicht_rond_muts-rood",
+          "x": 22,
+          "y": 24,
+          "van": 64
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_muts-groen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 45,
+              "y": 28
+            },
+            {
+              "t": 72,
+              "x": 64,
+              "y": 28,
+              "e": "zacht"
+            },
+            {
+              "t": 79,
+              "x": 64,
+              "y": 19,
+              "e": "uit"
+            },
+            {
+              "t": 84,
+              "x": 64,
+              "y": 24,
+              "e": "in"
+            }
+          ],
+          "tot": 84,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_sneeuw_dicht_rond_muts-groen",
+          "x": 64,
+          "y": 24,
+          "van": 84
+        },
+        {
+          "sprite": "guh_choco_open_rond_muts-blauw",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 85,
+              "y": 28
+            },
+            {
+              "t": 92,
+              "x": 76,
+              "y": 28,
+              "e": "zacht"
+            },
+            {
+              "t": 99,
+              "x": 76,
+              "y": 19,
+              "e": "uit"
+            },
+            {
+              "t": 104,
+              "x": 76,
+              "y": 24,
+              "e": "in"
+            }
+          ],
+          "spiegel": true,
+          "tot": 104,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_choco_dicht_rond_muts-blauw",
+          "x": 76,
+          "y": 24,
+          "van": 104
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_kussen",
+          "x": 44,
+          "y": 24
+        },
+        {
+          "sprite": "bed_breed",
+          "x": 20,
+          "y": 35
+        },
+        {
+          "sprite": "zzz",
+          "x": 34,
+          "y": 12,
+          "van": 70
+        },
+        {
+          "sprite": "zzz",
+          "x": 60,
+          "y": 10,
+          "van": 40
+        },
+        {
+          "sprite": "zzz",
+          "x": 88,
+          "y": 12,
+          "van": 110
+        }
+      ]
+    },
+    {
+      "naam": "eindscherm",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#9ad0f5",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "wolk",
+          "x": 60,
+          "y": 30
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 2,
+          "y": 36
+        },
+        {
+          "sprite": "eiland_rood",
+          "x": 2,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_groen",
+          "x": 42,
+          "y": 12
+        },
+        {
+          "sprite": "eiland_blauw",
+          "x": 82,
+          "y": 18
+        },
+        {
+          "sprite": "eiland_geel",
+          "x": 16,
+          "y": 46
+        },
+        {
+          "sprite": "guh_mint_dicht_rond_muts-rood",
+          "x": 22,
+          "y": 24
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_kussen",
+          "x": 44,
+          "y": 24
+        },
+        {
+          "sprite": "guh_sneeuw_dicht_rond_muts-groen",
+          "x": 64,
+          "y": 24
+        },
+        {
+          "sprite": "guh_choco_dicht_rond_muts-blauw",
+          "x": 76,
+          "y": 24
+        },
+        {
+          "sprite": "bed_breed",
+          "x": 20,
+          "y": 35
+        },
+        {
+          "vlak": "#2a1238",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 24
+        },
+        {
+          "vlak": "#ffd27a",
+          "x": 0,
+          "y": 23,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t4",
+          "schaal": 1.25,
+          "uitlijn": "midden",
+          "kleur": "#ffe27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 2
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t5",
+          "schaal": 0.6,
+          "uitlijn": "links",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 6,
+          "y": 14,
+          "van": 20
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t6",
+          "schaal": 0.6,
+          "uitlijn": "rechts",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 106,
+          "y": 14,
+          "van": 40
+        }
+      ]
+    },
+    {
+      "naam": "aftiteling",
+      "duur": 110,
+      "lagen": [
+        {
+          "vlak": "#140c1c",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t7",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 66
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 16
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t8",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 77
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 27
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t9",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 88
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 38
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t10",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 99
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 49
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.bedwars.t11",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 4,
+          "van": 82
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_kussen",
+          "x": 86,
+          "y": 44,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 30
+          }
+        },
+        {
+          "sprite": "zzz",
+          "x": 100,
+          "y": 34,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 24
+          }
+        }
+      ]
+    }
+  ],
+  "ondertitels": [
+    {
+      "van": 78,
+      "tot": 148,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o1"
+    },
+    {
+      "van": 154,
+      "tot": 216,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o2"
+    },
+    {
+      "van": 225,
+      "tot": 282,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o3"
+    },
+    {
+      "van": 290,
+      "tot": 346,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o4"
+    },
+    {
+      "van": 355,
+      "tot": 426,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o5"
+    },
+    {
+      "van": 436,
+      "tot": 516,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o6"
+    },
+    {
+      "van": 525,
+      "tot": 580,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o7"
+    },
+    {
+      "van": 588,
+      "tot": 676,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o8"
+    },
+    {
+      "van": 688,
+      "tot": 760,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o9"
+    },
+    {
+      "van": 768,
+      "tot": 826,
+      "tekst": "gui.guhs.guhbioscoop.film.bedwars.o10"
+    }
+  ],
+  "geluiden": [
+    {
+      "t": 2,
+      "geluid": "guhs:guhbioscoop.film.titel",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 80,
+      "geluid": "guhs:guhbioscoop.film.guh",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 100,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 282,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 304,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 356,
+      "geluid": "guhs:guhbioscoop.film.spanning",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 380,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 410,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 440,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 450,
+      "geluid": "guhs:guhbioscoop.film.spanning",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 470,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 500,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 524,
+      "geluid": "guhs:guhbioscoop.film.oeh",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 584,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 604,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 610,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 624,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 644,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 684,
+      "geluid": "guhs:guhbioscoop.film.fanfare",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 772,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 842,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    }
+  ],
+  "cues": [
+    {
+      "t": 286,
+      "soort": "lach"
+    },
+    {
+      "t": 502,
+      "soort": "schrik"
+    },
+    {
+      "t": 528,
+      "soort": "schrik"
+    },
+    {
+      "t": 606,
+      "soort": "lach"
+    },
+    {
+      "t": 646,
+      "soort": "snik"
+    },
+    {
+      "t": 690,
+      "soort": "juich"
+    },
+    {
+      "t": 776,
+      "soort": "lach"
+    },
+    {
+      "t": 846,
+      "soort": "slaap"
+    }
+  ]
+}

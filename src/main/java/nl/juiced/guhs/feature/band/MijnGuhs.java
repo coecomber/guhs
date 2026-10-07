@@ -124,11 +124,33 @@ public final class MijnGuhs {
             guhs.add(t);
         }
         root.put("Guhs", guhs);
+        root.put("Vadsjes", vadsjes(data, player, registries));
         root.putLong("Dag", Band.dag(s));
         if (focus != null) {
             root.putString("Focus", focus.toString());
         }
         return root;
+    }
+
+    /**
+     * 1.2.10, the tab "Mijn andere vadsjes": every tamed maatje of this owner (muisjes, Schilly, Poepschilly, landdiertjes...)
+     * with its kind, name and place, sorted by kind. One that died (place unknown) is left out.
+     */
+    private static ListTag vadsjes(BandData data, ServerPlayer player, net.minecraft.core.HolderLookup.Provider registries) {
+        List<BandData.Rec> recs = new java.util.ArrayList<>(data.van(player.getUUID()));
+        recs.removeIf(r -> r.guh || r.plek == null || r.plek.soort() == PlekSoort.ONBEKEND);
+        recs.sort(java.util.Comparator.comparing(r -> r.soort));
+        ListTag out = new ListTag();
+        for (BandData.Rec r : recs) {
+            CompoundTag t = new CompoundTag();
+            t.putString("Id", r.id.toString());
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", r.naam);
+            t.putString("Soort", r.soort);
+            t.putString("Plek", json(GuhVolger.tekst(r.plek), registries));
+            t.putString("PlekSoort", r.plek.soort().id());
+            out.add(t);
+        }
+        return out;
     }
 
     private static String json(Component c, net.minecraft.core.HolderLookup.Provider registries) {

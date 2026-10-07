@@ -15,9 +15,10 @@ import nl.juiced.guhs.Guhs;
  */
 public enum GuhVariant {
     NORMAL(0),
-    MINT(25),
-    CHOCO(25),
-    SNOW(20),
+    // 1.3.1: the three common colours are a third rarer (were 25, 25 and 20 out of 1000); the rest was under 1% already
+    MINT(17),
+    CHOCO(17),
+    SNOW(13),
     BRONTOSAURUS(6, "neck"),
     GOLDEN(2),
     /** Its fur slowly runs through all the colours. */

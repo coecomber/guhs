@@ -144,6 +144,7 @@ public final class CrecheFeature {
         NeoForge.EVENT_BUS.addListener(CrecheGame::onChangeDimension);
         NeoForge.EVENT_BUS.addListener(CrecheGame::onServerStopped);
         GuhHooks.klik(CrecheFeature::klikOpGuh);
+        GuhHooks.item((guh, stack) -> stack.is(BABYFLESJE.get()) || stack.is(SCHONE_LUIER.get()));
         CrecheVoortgang.register();
     }
 

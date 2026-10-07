@@ -544,7 +544,7 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Vahoege vads | Wahoog Chonk | the pink ore material |
 | Samengeperste super vahoege vads | Compressed Super Wahoog Chonk | |
 | Vahoege-vadsstaaf | Wahoog Chonk Ingot | |
-| Vahoege-vads(zwaard/houweel/bijl/schep/schoffel/paxel) | Wahoog Chonk (Sword/Pickaxe/Axe/Shovel/Hoe/Paxel) | |
+| Vahoege-vads(zwaard/houweel/bijl/schep/schoffel/paxel/schaar) | Wahoog Chonk (Sword/Pickaxe/Axe/Shovel/Hoe/Paxel/Shears) | |
 | Vahoege-vads(helm/borstplaat/beenstukken/laarzen) | Wahoog Chonk (Helmet/Chestplate/Leggings/Boots) | |
 | guhpantser (IJzeren/Diamanten/Netherieten) | Guh Armor (Iron/Diamond/Netherite) | |
 | Bankguh / Bank Guh | Bank Guh | infinite storage; *het buikje* = *the tummy* |
@@ -888,3 +888,290 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Oogbloempje (dicht/open) | Guh Eyeblossom (Closed/Open) | "guh eyeblossom" in running text |
 | Bleke open plek / De Bleke Open Plek | Pale Clearing / The Pale Clearing | |
 | Houthakkershutje / Houthakkerguh | Woodcutter's Hut / Woodcutter Guh | |
+
+## 22b. Inside the Guh House
+
+| Dutch | English | Note |
+|---|---|---|
+| Naar binnen | Go inside | the button in the Guh House screen |
+| Kijk eens binnen | Have a Look Inside | the quest and the advancement |
+| guhbedje / bedje | Guh Bed / little bed | one per resident |
+| logeerbedje | guest bed | the pink bed the player sleeps in |
+| prikbord | notice board | who does which chore |
+| instoppen | tuck in | once per guh per night |
+| briefje | note | on the bed of a guh that is away |
+| deurmat | doormat | |
+| snoetdeurtje | snoot door | as in the other Guh House texts |
+| het baasje | my human | on a guh's note |
+| Huisjesraampje | Little House Window | the painted window |
+
+## 23. Guhpixel (lobby, minigames, things for home, Reisbureau, Guh-parkour)
+
+### kern
+
+| Dutch | English | note |
+|---|---|---|
+| Guhpixel | Guhpixel | never translated |
+| Guhpixel-muntjes / muntje / muntjes | Guhpixel Coins / coin / coins | not an item |
+| Guh-internetcafé "De Trage Verbinding" | Guh Internet Café "The Slow Connection" | |
+| Beheerder-guh / Welkomstguh / Verkoper-guh | Admin Guh / Welcome Guh / Shopkeeper Guh | |
+| Netwerkkabeltje / Guhpixel-poort / Guhpixel-portaal | Network Cable / Guhpixel Gate / Guhpixel Portal | |
+| Guhpixel-winkel | Guhpixel Shop | |
+| [GUH] [VADS] [VADS+] [MVG] [MVG++] | [GUH] [CHONK] [CHONK+] [MVG] [MVG++] | the rank prefixes |
+| Guhpixel & uitjes (Guhdex tab) | Guhpixel & Outings | |
+| grapspelletjes | joke games | |
+| aandenken | keepsake | |
+| Skyblok / Bedwars / Vadsnite / Vadsbus | Skyblok / Bedwars / Chonknite / Chonk Bus | |
+| Guhmon-gevecht / Gymleider Dutjes | Guhmon Battle / Gym Leader Naps | |
+| Boer zoekt Guh / Presentatrice Guhvon / Boer Guhrrit | Farmer Wants a Guh / Host Guhvon / Farmer Guhrrit | |
+| Among Guhs / De Vadsvaarder / Kapitein-guh / droomguh | Among Guhs / The Chonkfarer / Captain Guh / dream guh | |
+| Guhkade / Flappy Guh / Mika-Pong | Guhcade / Flappy Guh / Mika Pong | |
+| Guhkantoor / Prikklok / Bureautje / loonstrookje / kwartaalrapport | Guh Office / Time Clock / Little Desk / payslip / quarterly report | |
+| Guhbioscoop / Bioscoopdoek / Bioscoopstoeltje / film | Guh Cinema / Cinema Screen / Cinema Seat / movie | |
+| Reisbureau "De Vadsvakantie" / Reisagent-guh / Reisbalie / Reisstempel / reispas / ansichtkaart | Travel Agency "The Chonk Vacation" / Travel Agent Guh / Travel Desk / Travel Stamp / travel pass / postcard | |
+| Vadsen bij huize Lingsesdijk 86 / Huize Lingsesdijk 86 | Chonking at Lingsesdijk 86 / The House at Lingsesdijk 86 | keep "Lingsesdijk 86" exactly |
+| Guh-parkour / Startpaaltje / Finishpaaltje | Guh Parkour / Start Post / Finish Post | |
+
+### lobby
+
+| Dutch | English | note |
+|---|---|---|
+| Lobbyguh | Lobby Guh | the six little guhs with gamer names that "chat" |
+| Slapende surfer | Sleeping Surfer | a guh asleep behind a computer in the café |
+| Oude beige computer | Old Beige Computer | decoration block |
+| Gouden lobbyknabbel / gouden knabbel | Golden Lobby Nibble / golden nibble | ten hidden in the lobby |
+| Lobby-parkour | lobby parkour | for players; not the Guh Parkour for guhs |
+| Parkour-startplaat / -tussenpunt / -finishplaat | Parkour Start Plate / Checkpoint / Finish Plate | |
+| tussenpunt | checkpoint | |
+| AFK-hoek | AFK Corner | "afk (slaap)" = "afk (sleeping)" |
+| De winkel / Guhpixel-winkel | The Shop / Guhpixel Shop | |
+| kraampje | stall | the game stalls in the lobby |
+| Knabbelspeurder | Nibble Sleuth | title |
+| Meest Vadsige Guh | Most Valuable Guh | what MVG stands for (Dutch: Meest Vadsige Guh); no title since 1.3.1 |
+| Spelers online: n (en 47 guhs) | Players online: n (and 47 guhs) | |
+| TERUG NAAR HUIS | BACK HOME | the exit door |
+| BINNENKORT, njeg | COMING SOON, Nyeg | the empty stall |
+| xX_Vadsje_Xx / Knabbel2009 / NjegMaster / SlaapKopGuh / GuhGamer_NL / KaasKoning77 | xX_Chonky_Xx / Nibble2009 / NyegMaster / SleepyHeadGuh / GuhGamer_NL / CheeseKing77 | gamer names of the lobby guhs |
+| Heb je hem al uit en weer aan gezet, njeg? | Have you tried turning it off and on again, Nyeg? | the Admin Guh |
+| daklopers | roof runners | |
+
+### grap1
+
+| Dutch | English | note |
+|---|---|---|
+| Skyblok-guh / Bedwars-guh / Vadsnite-guh | Skyblok Guh / Bedwars Guh / Chonknite Guh | the three game guhs in the lobby |
+| spelguh | game guh | a lobby NPC that starts a game |
+| grapspelletje / Grapspelletjes (FTB section) | joke game / Joke Games | |
+| hét eiland | THE island | Skyblok; the Dutch stress accent becomes capitals |
+| handleiding (Stap 1 van 4.812) | manual (Step 1 of 4,812) | English thousands separator is a comma: 4,812 and 2,406 |
+| cobblestone generator | cobblestone generator | kept in both languages (the players' own word) |
+| SKYBLOK UITGESPEELD! | SKYBLOK COMPLETED! | |
+| aftiteling / Regie / Met dank aan | credits / Director / Special thanks to | |
+| decorguhs | set guhs | the guhs who painted the sky |
+| ALLEEN PERSONEEL / ZON (40 watt) | STAFF ONLY / SUN (40 watts) | floating labels in the Skyblok box |
+| Eilandje-in-een-fles | Island in a Bottle | Skyblok keepsake (decoration block) |
+| Team Rood / Blauw / Groen / Geel | Team Red / Blue / Green / Yellow | |
+| Teamguh | Team Guh | the stand-in entity |
+| Teamslaapmuts Rood (...) | Team Nightcap Red (...) | Bedwars keepsake; slaapmuts = nightcap |
+| VERDEDIG JE BED! / BED VERDEDIGD! | DEFEND YOUR BED! / BED DEFENDED! | |
+| bedden vernield / dutjes | beds destroyed / naps | end screen |
+| bruggen (met wol) | to bridge (with wool) | |
+| KUSSEN-GENERATOR | PILLOW GENERATOR | |
+| Sloopwars | Breakwars | "Dit is Bedwars, geen Sloopwars" = "This is Bedwars, not Breakwars" |
+| luik | hatch | in the floor of the Chonk Bus |
+| Nog wakker: %s | Still awake: %s | the counter |
+| slaapwolk | sleep cloud | the pink "storm" of Chonknite |
+| #1 VADSOVERWINNING / Vadsoverwinning | #1 CHONK ROYALE / Chonk Royale | parody of "#1 Victory Royale" |
+| GELIJKSPEL / Iedereen slaapt. Gelijkspel, njeg. | DRAW / Everyone is asleep. It's a draw, Nyeg. | |
+| Parachuterugzakje | Parachute Pack | Chonknite keepsake (outfit, back) |
+| slaapplekje | sleeping spot | the beds on the Chonknite island |
+| Aandenken van Bedwars (Guhpixel) | Keepsake from Bedwars (Guhpixel) | clothing source |
+
+### grap2
+
+| Dutch | English | note |
+|---|---|---|
+| Guhmon-gevecht / Guhmon | Guhmon Battle / Guhmon | Cobblemon parody; "Guhmon" never translated |
+| Gymleider Dutjes / de Dutjesgym | Gym Leader Naps / the Nap Gym | core glossary |
+| Snurkel | Snorkel | the gym leader's guh |
+| Leenguh | Loaner Guh | the gym's own guh for players without tamed guhs |
+| SLAAP (balk) | SLEEP (bar) | instead of HP; caps as in the Dutch |
+| Vadsen / Njeg / Knabbel eten / Dutje (zetten) | Chonk / Nyeg / Eat Nibble / Nap (moves) | Title Case, like move names |
+| "Het is super vadsig!" / "Het is niet erg effectief..." | "It's super chonky!" / "It's not very effective..." | battle lines |
+| vol buikje | full tummy | the after-effect of Eat Nibble |
+| Badgedoosje / gymbadge | Badge Case / gym badge | |
+| Dutjesbadge / Njegbadge / Knabbelbadge | Nap Badge / Nyeg Badge / Nibble Badge | |
+| Guhmon-trainerspet | Guhmon Trainer Cap | outfit; not the Mewtwo "Trainerpetje" |
+| "dicht wegens dutje" | "closed for a nap" | the other five gyms |
+| Boer zoekt Guh | Farmer Wants a Guh | core glossary |
+| Presentatrice Guhvon / Boer Guhrrit | Host Guhvon / Farmer Guhrrit | core glossary |
+| Tukkie / Dommelien / Snurkbert | Snoozie / Dozeline / Snorebert | the three candidates |
+| logeerweek | stay-over week | |
+| instoppen / ingestopt | tuck in / tucked in | |
+| slaapvrienden | nap friends | |
+| aftiteling | credits | |
+| Brievenbus / Ingelijste brief | Mailbox / Framed Letter | |
+| Strohoed van Boer Guhrrit / Overall van Boer Guhrrit | Farmer Guhrrit's Straw Hat / Farmer Guhrrit's Overalls | outfit; not the old Straw Hat / Overalls |
+| kijkbuisguhtjes | dear viewers | Guhvon's greeting |
+| Guhpixel TV | Guhpixel TV | |
+
+### among
+
+| Dutch | English | note |
+|---|---|---|
+| Among Guhs / De Vadsvaarder | Among Guhs / The Chonkfarer | the game and its ship (kern glossary) |
+| Kapitein-guh / Logboek-guh | Captain Guh / Logbook Guh | the queue; the personal numbers |
+| Ruimteguh / ruimtepakje | Space Guh / space suit | the guh NPCs of a round |
+| crew / Mika / Mika's | crew / Mika / Mikas | roles; never "impostor" |
+| in slaap duwen / slaper / droomguh | to push asleep / sleeper / dream guh | nobody is hurt: never "kill", "dead", "body" |
+| Mika-kussentje / Saboteerkaart / Stembriefje | Mika Pillow / Sabotage Map / Voting Slip | the game items |
+| Taakjes-paneel / Noodknop / Ventilatieluik (luik) | Task Panel / Emergency Button / Vent Hatch (vent) | the ship blocks |
+| vergadering / uitspraak / stemmen / overslaan / wegstemmen | meeting / statement / to vote / to skip / to vote out | |
+| wachtrij / klaar / leider | queue / ready / leader | |
+| Normaal / Lastig | Normal / Hard | difficulty |
+| Licht uit / Knabbelalarm / Deuren dicht | Lights Out / Nibble Alarm / Doors Shut | the three sabotages |
+| de Slaapzaal / de Kantine / de Navigatie / de Reactor | the Dorm / the Cafeteria / Navigation / the Reactor | room names, with their article inside sentences |
+| de Ziekenboeg / Elektra / de Machinekamer | the Sick Bay / Electrical / the Engine Room | |
+| de Voorraadkamer / de Schildkamer / de gang | the Storage Room / the Shield Room / the corridor | |
+| Worstjes knopen / Pasje door de lezer / Kruimelbak legen | Tying Sausages / Card Through the Reader / Emptying the Crumb Tray | task names |
+| Pindasaus tanken / Knabbels sorteren / Dromen downloaden | Fuelling Peanut Sauce / Sorting Nibbles / Downloading Dreams | |
+| Wegen ("Resultaat: vads") / Schakelaars goedzetten | Weighing ("Result: chonk") / Setting the Switches | |
+| Rood, Blauw, Groen, Geel, Roze, Oranje, Paars, Wit, Bruin, Mint | Red, Blue, Green, Yellow, Pink, Orange, Purple, White, Brown, Mint | a guh NPC is called by its color |
+| sus | sus | stays "sus" |
+| tellen (10 tellen) | seconds | |
+| Sus | Sus | title (the only Among Guhs title since 1.3.1) |
+| Onterecht weggestemd | Wrongly Voted Out | a number on the stats board |
+| oefenrondje | practice round | the one-time parody round at Captain Guh (joke game "among") |
+| SUS-stickerbord | SUS Sticker Board | the keepsake of the practice round |
+| (kleur) ruimtepakje / luchttank | (color) Space Suit / air tank | shop clothes: "Red Space Suit" |
+| Plantjeshoedje / Eihoedje / Wc-rolhoedje | Little Plant Hat / Fried Egg Hat / Toilet Roll Hat | shop hats |
+| Kaaspunthoedje / Sus-briefje / Knabbelhoedje | Cheese Wedge Hat / Sus Note / Nibble Hat | |
+| hendel / streep / bak / schakelaar / lampje / briefje | lever / line / bin / switch / little lamp / note | words of the task panels |
+| kaasknabbel / knabbel / kruimel (the three bins) | Cheese / Nibble / Crumb | short labels on the bins |
+| noodvergadering / agendapunt / besluit | emergency meeting / (agenda) item / decision | the Emergency Button at home |
+| gluren (uit het luik) | to peek out (of the vent) | the Vent Hatch at home |
+| cijferbord / logboek | stats board / logbook | the Logbook Guh's screen |
+
+### guhkade
+
+| Dutch | English | note |
+|---|---|---|
+| Guhkade | Guhcade | "arcade" + guh |
+| Guhkade-kast / speelkast | Guhcade Cabinet / arcade cabinet | block names: *Guhcade Cabinet: Flappy Guh*, *Guhcade Cabinet: Mika Pong* |
+| Flappy Guh | Flappy Guh | never translated |
+| Mika-Pong | Mika Pong | no hyphen in English; on the cabinet's screen *MIKA PONG* |
+| kaasknabbelpilaren | cheese nibble pillars | |
+| fladderen | flap | the one button of Flappy Guh |
+| batje | paddle | |
+| potje | game | *een potje doen* = *play a game* |
+| top 5 van deze kast | this cabinet's top 5 | |
+| plafond (van een guh) | ceiling | the best score a kind of guh can ever get |
+| sip kijken | look glum | the beaten guh; never "cry" |
+| extra oefenen | practice extra | |
+| NJEG! / VAHOEG! / TIJD! (op het scherm) | NYEG! / WAHOOG! / TIME! | capitals only: the cabinet's pixel font knows A-Z, digits and - ! ? . : + |
+
+### kantoor
+
+| Dutch | English | note |
+|---|---|---|
+| Guhkantoor | Guh Office | |
+| Guhkantoor-set | Guh Office Set | shop offer: a Time Clock and one Little Desk |
+| Guhkantoor B.V. (Besloten Vadsschap) | Guh Office Ltd. (Limited Chonkability) | the company name on every paper |
+| Prikklok | Time Clock | |
+| Bureautje | Little Desk | *bureau* in the screen = *desk* |
+| loonstrookje | payslip | |
+| kwartaalrapport | quarterly report | *boekjaar* = *fiscal year* |
+| Oorkonde Werknemer van de maand | Employee of the Month Certificate | *oorkonde* = *certificate* |
+| Werknemer van de maand | Employee of the Month | Title Case, also in running text |
+| inklokken / uitklokken | clock in / clock out | buttons: *Aan het werk* = *Put to Work*, *Naar huis* = *Go Home* |
+| dienst | shift | 8 real hours |
+| postvakje | pigeonhole | holds 3 payslips per guh |
+| bruto / netto / ingehouden / toeslag | gross / net / withheld / bonus | payslip lines |
+| de baas / de directie | the boss / management | |
+| Vadstoeslag | Chonk bonus | |
+| Vakbond Vads Verenigd | Union Chonks United | |
+
+### bioscoop
+
+| Dutch | English | note |
+|---|---|---|
+| Guhbioscoop | Guh Cinema | core glossary; "theater" for the room (American) |
+| film | movie | American; "Skyblok: De Film" = "Skyblok: The Movie" |
+| Guhbioscoop-projector | Guh Cinema Projector | block |
+| Bioscoopdoek | Cinema Screen | block; "a piece of Cinema Screen" |
+| Bioscoopstoeltje | Cinema Seat | block |
+| Popcornmachine | Popcorn Machine | block |
+| Bakje popcorn | Tub of Popcorn | item |
+| Guhbioscoop-set | Guh Cinema Set | shop offer |
+| Filmavond / Filmkenner | Movie Night / Movie Buff | FTB quests |
+| UITGESPEELD! | COMPLETED! | on the screen in the Skyblok movie |
+| #1 VADSOVERWINNING | #1 CHONK ROYALE | the Chonknite win banner |
+| slaapwolk | sleep cloud | Chonknite |
+| Slaap ze allemaal! | Gotta nap 'em all! | Guhmon tagline |
+| Vadsen / Njeg / Knabbel eten / Dutje (Guhmon moves) | Chonk / Nyeg / Eat Nibble / Nap | "Guh used Chonk!" |
+| Het is super vadsig! | It's super chonky! | |
+| logeerweek | sleepover week | Farmer Wants a Guh |
+| Noodvergadering | Emergency meeting | Among Guhs |
+| Rood is sus | Red is sus | never translated further |
+| ventilatieluik | vent | |
+| EINDE | THE END | credits |
+
+### reisbureau
+
+| Dutch | English | note |
+|---|---|---|
+| Reisbureau "De Vadsvakantie" | Travel Agency "The Chonk Vacation" | structure; on signs: Travel / Agency: The / Chonk Vacation |
+| Reisagent-guh | Travel Agent Guh | NPC |
+| Reisbalie / balie | Travel Desk / desk | block; the counter in the structure is the same block |
+| Reisstempel | Travel Stamp | item, used in the Travel Desk recipe |
+| reispas / stempel | travel pass / stamp | per player, not an item |
+| ansichtkaart | postcard | item names: *Postcard: <trip>* |
+| baas (a guh about its owner) | boss | postcards: *Hi boss!* |
+| Veel vadsjes van | Lots of chonks from | the postcard's closing line |
+| 1 knabbel (postage stamp) | 1 nibble | |
+| Proefreisje om de hoek | Trial Trip Around the Corner | the questline's five-minute trip |
+| Gouden koffertje / Koffertje | Golden Suitcase / Little Suitcase | deco blocks |
+| Vadsen bij huize Lingsesdijk 86 | Chonking at House Lingsesdijk 86 | the user's inside joke: "Lingsesdijk 86" is never translated |
+| Schilderij "Huize Lingsesdijk 86" | Painting "House Lingsesdijk 86" | wall block |
+| Dagje Kaasmarkt | Day at the Cheese Market | |
+| Middagdutje in het Vadswoud | Afternoon Nap in Chonkwood Forest | |
+| Kinderboerderij Knuffeldal | Snuggledale Petting Farm | |
+| Strandmiddag op Guhwai'i | Beach Afternoon on Guhwai'i | |
+| Wellness in de Barbecuether | Wellness in the Barbecuether | |
+| Pretpark de Efteguh | Efteguh Theme Park | Efteling pun, keep "Efteguh" |
+| Holle Bolle Guh | Hungry Bulgy Guh | "Papier hier, njeg!" = "Paper here, nyeg!" |
+| Guhkenhof | Guhkenhof | Keukenhof pun, keep |
+| Wintersport in Nomguh | Winter Sports in Nomguh | |
+| Stedentrip Guhrijs / Guhrijs | City Trip to Guhris / Guhris | Paris pun |
+| Eiffelknabbeltoren(tje) | (Little) Eiffel Nibble Tower | |
+| Camping De Vadsige Tent | Camp Chonky Tent | |
+| Guhnetië | Guhnice | Venice pun |
+| Reis naar de Kaasmaan / Kaasmaan | Trip to the Cheese Moon / Cheese Moon | |
+| Wereldreis in 80 dutjes | Around the World in 80 Naps | |
+| Cruise over de Guhzee | Cruise on the Guh Sea | |
+| Thuisblijfvakantie "Balkonië" / Balkonië | Staycation "Balconia" / Balconia | |
+| Thuis is het ook vads | Home Is Chonk Too | painting title |
+| glimguhtjes-lantaarn | Glowguh Lantern | |
+| Op vakantie | On vacation | American spelling: vacation, not holiday |
+
+### parkour
+
+| Dutch | English | note |
+|---|---|---|
+| Guh-parkour / parkour | Guh Parkour / parkour | the course for guhs; not the lobby parkour for players |
+| Startpaaltje / Finishpaaltje | Start Post / Finish Post | core glossary |
+| Guh-horde | Guh Hurdle | |
+| Guh-springplank | Guh Springboard | |
+| Kruiptunnel | Crawl Tunnel | not the Fluffy Tunnel (Pluizige tunnel) |
+| Slalompaaltjes | Slalom Poles | |
+| Evenwichtsbalk | Balance Beam | |
+| Knabbeltafeltje | Nibble Table | |
+| Parkour-scorebord / scorebord | Parkour Scoreboard / scoreboard | |
+| stuk (van een route) / hindernis | piece (of a route) / obstacle | |
+| route uitzetten / stukken aanklikken | laying out a route / click pieces | |
+| rondje / rondetijd / record | lap / lap time / record | |
+| op de route zetten / van de route halen | put on the route / take off the route | |
+| bobbel | bump | the guh inside the Crawl Tunnel |
+| verplichte pitstop | mandatory pit stop | |
+| Hup! / Boing! / Oeps! | Hup! / Boing! / Oops! | |
+| vadsje | little chonk | |

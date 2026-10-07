@@ -1,0 +1,115 @@
+# guhpixel slice "guhkade" (visual QA, dev only; run by the merge step): the two Guhkade cabinets in the world (their
+# screens move), the game screen of both games (title, a game, game over with the server's score), a guh that walks up
+# and plays, and the Guhdex section. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_guhkade.txt -PautocheckTimeout=15
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/execute in minecraft:overworld run tp @s 3000 150 3000
+/forceload add 2984 2984 3016 3016
+wait 20
+/fill 2990 139 2990 3010 139 3010 minecraft:smooth_stone
+/fill 2990 140 2990 3010 146 3010 minecraft:air
+/fill 2996 140 2996 3006 143 2996 minecraft:pink_concrete
+/setblock 3000 140 2997 guhs:guhkade_kast_flappy[facing=south,half=lower]
+/setblock 3000 141 2997 guhs:guhkade_kast_flappy[facing=south,half=upper]
+/setblock 3003 140 2997 guhs:guhkade_kast_pong[facing=south,half=lower]
+/setblock 3003 141 2997 guhs:guhkade_kast_pong[facing=south,half=upper]
+/tp @s 3001.5 140 3001.5 180 5
+wait 60
+
+section the cabinets in the world: the attract demo on both screens (two shots a few seconds apart: the picture moves)
+/gamemode spectator
+camera 3001.5 141.4 3000.6 180 2
+waitrender 200
+shot 1_guhkade_kasten
+wait 100
+shot 2_guhkade_kasten_later
+camera 3000.5 141.5 2998.9 180 0
+wait 10
+shot 3_guhkade_flappy_scherm_dichtbij
+camera 3003.5 141.5 2998.9 180 0
+wait 10
+shot 4_guhkade_pong_scherm_dichtbij
+/gamemode creative
+/tp @s 3000.5 140 2999.5 180 0
+wait 10
+
+section Flappy Guh: the title with the top 5, a game (nobody flaps: plop), the score the server counted
+/guhs px guhkade wis
+gui keep
+use 3000 140 2997
+wait 30
+shot 5_flappy_titel gui
+press Start!
+wait 12
+shot 6_flappy_spel gui
+wait 80
+shot 7_flappy_af gui
+gui close
+wait 10
+
+section a score by command (what the server does after a real game), and the list afterwards
+/guhs px guhkade score 23
+gui keep
+use 3000 140 2997
+wait 30
+shot 8_flappy_top5_met_naam gui
+gui close
+wait 10
+
+section Mika-Pong: the title, a game on its way
+/tp @s 3003.5 140 2999.5 180 0
+wait 10
+gui keep
+/guhs px guhkade open pong
+wait 30
+shot 9_pong_titel gui
+press Start!
+wait 70
+shot 10_pong_spel gui
+wait 400
+shot 11_pong_verder gui
+gui close
+wait 10
+
+section a guh plays: tame one, send it to a cabinet (/guhs px guhkade guh), watch it stand at the screen
+/summon guhs:guh 3001.5 140 3001.5
+wait 10
+guhmenu 3001.5 140 3001.5
+wait 10
+gui close
+/tp @s 3001.5 140 3004.5 180 5
+/guhs px guhkade guh
+wait 260
+/gamemode spectator
+camera 3001.5 141.6 3001.2 180 8
+shot 12_guh_speelt
+wait 120
+shot 13_guh_speelt_later
+wait 600
+shot 14_guh_klaar
+/gamemode creative
+/guhs px guhkade lijst
+wait 10
+
+section beating the guh: it looks sad (Verdrietje) and wants to practise
+/tp @s 3001.5 140 3003.5 180 5
+/guhs px guhkade score 99
+wait 15
+/gamemode spectator
+camera 3001.5 141.2 3002.2 180 10
+shot 15_guh_verslagen_sip
+/gamemode creative
+wait 20
+
+section the Guhdex section (tab Guhpixel & uitjes)
+/guhs px ontgrendel aan
+wait 10
+gui dexopen guhpixel
+wait 30
+shot 16_guhdex_guhkade gui
+gui close

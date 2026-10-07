@@ -28,7 +28,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * The super compass menu (2.9, the gids slice): a row of icon tabs on top (one per category, like the creative
  * inventory; the name on hover), under it the chosen category's name and what it's about, and a scrolling list of its
  * places in two columns, with subheadings where a category has them (Minigames: Klassiekers, Knuffeldal, De Grote
- * Guhspelen). A minigame place shows its game's icon and a green tick once you've been there. Click a place: that's what
+ * Guhspelen). A minigame place shows its game's icon; every place shows a green tick once you've been there (1.3.1). Click a place: that's what
  * the compass looks for.
  */
 public class SuperkompasScreen extends Screen {
@@ -202,6 +202,11 @@ public class SuperkompasScreen extends Screen {
 
     // --- the rows ---------------------------------------------------------------------------------------------------------
 
+    /** (1.3.1) Been there: the place itself was found, or (saves from before 1.3.1) its minigame building was. */
+    private static boolean isBezocht(String id, @Nullable SpelGroepen.Groep groep) {
+        return SpelGroepen.Client.structuurBezocht(id) || groep != null && SpelGroepen.Client.bezocht(groep.id());
+    }
+
     /** A subheading (gold, with a line). */
     private record Kopje(Component naam) implements GidsLijst.Regel {
         @Override
@@ -336,7 +341,7 @@ public class SuperkompasScreen extends Screen {
                 tx = x + 20;
             }
             int rechtsRuimte = 4;
-            if (groep != null && SpelGroepen.Client.bezocht(groep.id())) {
+            if (isBezocht(id, groep)) {
                 GidsTekst.schaal(g, Component.literal("✔"), x + w - 4, y + 6, 1f, 0xFF68D88A, true);
                 rechtsRuimte = 14;
             }
@@ -368,11 +373,10 @@ public class SuperkompasScreen extends Screen {
             out.add(Component.translatable("structure.guhs." + id).withStyle(ChatFormatting.BOLD));
             out.add(Component.translatable("structure.guhs." + id + ".tooltip").withStyle(ChatFormatting.GRAY));
             SpelGroepen.Groep groep = GidsData.groepVanStructuur(id);
-            if (groep != null) {
-                boolean bezocht = SpelGroepen.Client.bezocht(groep.id());
-                out.add(Component.translatable(bezocht ? "gui.guhs.spelgroep.bezocht" : "gui.guhs.spelgroep.niet_bezocht")
-                        .withStyle(bezocht ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
-            }
+            // (1.3.1) every place tells whether you have been there, not only the minigame buildings
+            boolean bezocht = isBezocht(id, groep);
+            out.add(Component.translatable(bezocht ? "gui.guhs.spelgroep.bezocht" : "gui.guhs.spelgroep.niet_bezocht")
+                    .withStyle(bezocht ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
             if (id.equals(chosen)) {
                 out.add(Component.translatable("gui.guhs.superkompas.zoekt_al").withStyle(ChatFormatting.GOLD));
             }

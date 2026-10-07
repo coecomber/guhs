@@ -461,11 +461,30 @@ public class SpiesburchtGameTests {
         BlockPos baken = new BlockPos(8, 2, 8);
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
-                helper.setBlock(baken.offset(dx, -1, dz), ModBlocks.BLOCK_OF_KAASKNABBELS.get());
+                helper.setBlock(baken.offset(dx, -1, dz), Blocks.IRON_BLOCK);
             }
         }
         helper.setBlock(baken, SpiesburchtFeature.KNABBELBAKEN.get());
         KnabbelbakenBlockEntity be = helper.getBlockEntity(baken, KnabbelbakenBlockEntity.class);
+        // 1.3.1: only blocks of vahoege vads count. Iron, and what counted before (knabbel blocks, the vads ore, gatenkaas), give nothing
+        be.refresh();
+        helper.assertTrue(be.levels() == 0, "a pyramid of iron blocks: no level");
+        for (var oud : List.of(ModBlocks.BLOCK_OF_KAASKNABBELS.get(), ModBlocks.COMPRESSED_SUPER_VAHOEGE_VADS.get(), Blocks.GOLD_BLOCK, Blocks.DIAMOND_BLOCK)) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    helper.setBlock(baken.offset(dx, -1, dz), oud);
+                }
+            }
+            be.refresh();
+            helper.assertTrue(be.levels() == 0 && !oud.defaultBlockState().is(SpiesburchtFeature.BAKEN_BASIS), "no level on " + oud);
+        }
+        var basis = helper.getLevel().registryAccess().lookupOrThrow(Registries.BLOCK).get(SpiesburchtFeature.BAKEN_BASIS).orElseThrow();
+        helper.assertTrue(basis.size() == 1 && basis.get(0).value() == ModBlocks.BLOCK_OF_VAHOEGE_VADS.get(), "the base tag holds only the block of vahoege vads");
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                helper.setBlock(baken.offset(dx, -1, dz), ModBlocks.BLOCK_OF_VAHOEGE_VADS.get());
+            }
+        }
         GuhEntity tame = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 8));
         tame.tame(player);
         GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(12, 1, 8));
@@ -477,12 +496,15 @@ public class SpiesburchtGameTests {
         helper.assertTrue(player.hasEffect(MobEffects.SPEED), "you get VAHOEG");
         helper.assertTrue(tame.hasEffect(MobEffects.SPEED), "your guh too");
         helper.assertFalse(wild.hasEffect(MobEffects.SPEED), "not a wild guh");
-        // a second layer (5x5 of vads and knabbels) under the first
+        // a second layer (5x5) under the first: one wrong block in it and it does not count
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
-                helper.setBlock(baken.offset(dx, -2, dz), (dx + dz) % 2 == 0 ? ModBlocks.COMPRESSED_SUPER_VAHOEGE_VADS.get() : ModBlocks.BLOCK_OF_KAASKNABBELS.get());
+                helper.setBlock(baken.offset(dx, -2, dz), dx == 2 && dz == 2 ? Blocks.IRON_BLOCK : ModBlocks.BLOCK_OF_VAHOEGE_VADS.get());
             }
         }
+        be.refresh();
+        helper.assertTrue(be.levels() == 1, "an iron block in the second layer: still one level");
+        helper.setBlock(baken.offset(2, -2, 2), ModBlocks.BLOCK_OF_VAHOEGE_VADS.get());
         be.cycle(player);
         helper.assertTrue(be.levels() == 2 && be.gunst() == KnabbelbakenBlockEntity.Gunst.GUHSPRONG, "two layers: Guhsprong");
         be.pulse();
@@ -490,6 +512,47 @@ public class SpiesburchtGameTests {
         helper.setBlock(baken.offset(1, -1, 1), Blocks.DIRT);
         be.refresh();
         helper.assertTrue(be.levels() == 0, "a hole in the pyramid: off");
+        // the level logic itself is unchanged: up to four full layers (3x3, 5x5, 7x7, 9x9), counted from the top
+        net.minecraft.server.level.ServerLevel wereld = helper.getLevel();
+        BlockPos hoog = helper.absolutePos(new BlockPos(8, 9, 8));
+        for (int laag = 1; laag <= KnabbelbakenBlockEntity.MAX_LEVELS; laag++) {
+            for (int dx = -laag; dx <= laag; dx++) {
+                for (int dz = -laag; dz <= laag; dz++) {
+                    wereld.setBlock(hoog.offset(dx, -laag, dz), ModBlocks.BLOCK_OF_VAHOEGE_VADS.get().defaultBlockState(), 2);
+                }
+            }
+            helper.assertTrue(KnabbelbakenBlockEntity.countLevels(wereld, hoog) == laag, laag + " layers of blocks of vahoege vads: level " + laag);
+        }
+        for (int laag = 1; laag <= KnabbelbakenBlockEntity.MAX_LEVELS; laag++) {
+            for (int dx = -laag; dx <= laag; dx++) {
+                for (int dz = -laag; dz <= laag; dz++) {
+                    wereld.setBlock(hoog.offset(dx, -laag, dz), Blocks.IRON_BLOCK.defaultBlockState(), 2);
+                }
+            }
+        }
+        helper.assertTrue(KnabbelbakenBlockEntity.countLevels(wereld, hoog) == 0, "four layers of iron blocks: nothing");
+        for (int laag = 1; laag <= KnabbelbakenBlockEntity.MAX_LEVELS; laag++) {
+            for (int dx = -laag; dx <= laag; dx++) {
+                for (int dz = -laag; dz <= laag; dz++) {
+                    wereld.setBlock(hoog.offset(dx, -laag, dz), Blocks.AIR.defaultBlockState(), 2);
+                }
+            }
+        }
+        // the block itself: nine ingots <-> one block, a pickaxe of iron or better, drops itself
+        var vads = ModBlocks.BLOCK_OF_VAHOEGE_VADS.get().defaultBlockState();
+        helper.assertTrue(vads.is(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE) && vads.is(net.minecraft.tags.BlockTags.NEEDS_IRON_TOOL)
+                && vads.requiresCorrectToolForDrops() && vads.is(net.neoforged.neoforge.common.Tags.Blocks.STORAGE_BLOCKS)
+                && new ItemStack(ModBlocks.BLOCK_OF_VAHOEGE_VADS.get()).is(net.neoforged.neoforge.common.Tags.Items.STORAGE_BLOCKS), "pickaxe, iron tier, storage block");
+        ItemStack staaf = new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get());
+        var negen = net.minecraft.world.item.crafting.CraftingInput.of(3, 3, java.util.Collections.nCopies(9, staaf));
+        var blokRecept = wereld.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, negen, wereld);
+        helper.assertTrue(blokRecept.isPresent() && blokRecept.get().value().assemble(negen).is(ModBlocks.BLOCK_OF_VAHOEGE_VADS.get().asItem()), "nine ingots: one block");
+        var een = net.minecraft.world.item.crafting.CraftingInput.of(1, 1, List.of(new ItemStack(ModBlocks.BLOCK_OF_VAHOEGE_VADS.get())));
+        var terug = wereld.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, een, wereld);
+        helper.assertTrue(terug.isPresent() && terug.get().value().assemble(een).is(ModItems.VAHOEGE_VADS_INGOT.get())
+                && terug.get().value().assemble(een).getCount() == 9, "one block: nine ingots back");
+        helper.assertTrue(wereld.getServer().reloadableRegistries().getLootTable(ModBlocks.BLOCK_OF_VAHOEGE_VADS.get().getLootTable().orElseThrow())
+                != net.minecraft.world.level.storage.loot.LootTable.EMPTY, "it has a loot table (drops itself)");
         tame.discard();
         wild.discard();
         remove(helper, player);

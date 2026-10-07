@@ -3,6 +3,66 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.3.2 — Minecraft 26.1.2
+
+One new thing: you can go inside your Guh Houses. Same requirements as 1.3.1 and no worldgen changes. The rooms are in a new hidden dimension that the game adds by itself: players do not have to do anything, and existing worlds and servers keep everything (no world reset). Every Guh House that already stands gets its room the first time somebody goes in.
+
+- **New: go inside a Guhhuisje (Guh House).** The house screen has a new button, **Naar binnen (Go inside)**, for the owner and for visitors. Ding-dong, a short fade, and you stand on the doormat of a snug little room on guh scale: the ceiling is low, the beds are tiny and you are suddenly very big. The door inside brings you back to just in front of the house. Small, medium and large houses each have their own room with three, five or eight beds.
+- **Everybody has a bed.** Each resident has its own little bed with a name sign, its favourite thing on the bedside table (a favourite you have discovered; a kaasknabbel until then) and a hook for its clothes. At night the residents lie asleep in their beds, softly snoring. Is somebody away? Then the bed is empty and a little note says where your guh is: playing outside, doing a chore (and which one), on holiday, along with you, at the Guhkantoor, in the Guhkamer or on the Guh-parkour. The beds follow when residents move in or out.
+- **Somebody is home by day now and then.** Babies take a midday nap in the house and stay in when it rains; of the grown-up residents one in six takes the nap and one in four shelters from the rain (a different few every day). They never drop a chore for it and come out again afterwards.
+- **For the owner:** tuck a sleeping guh in (the blanket goes up, a heart, and it sleeps on; once per guh per night), pet it softly, click a bed or name sign to open that guh's dagboekje (Diary) with its hearts and favourites, and read the prikbord (notice board) to see who does which chore. The hearts go to your real guh, also when it is far away at that moment. Visitors may walk around and look; the rest is for the owner.
+- **Sleep among your guhs.** The pink logeerbedje (guest bed) is for you. Sleeping in it counts as sleeping in the world the house stands in: the night is skipped with the usual sleeping rule there, the phantom timer is reset, and your spawn point does not change.
+- **Safe, as always.** Nothing can be broken, placed, hurt or lost in a room, you do not get hungry there, and if you ever end up outside the room you are put back on the doormat. If the house is picked up while you are inside, you simply stand where it stood. The guhs you see inside are sleepy stand-ins: your real guhs stay exactly where they are.
+
+## 1.3.1 — Minecraft 26.1.2
+
+A small follow-up to the Guhpixel update. Same requirements as 1.3.0, no worldgen changes.
+
+- **New: the Vahoege-vadsschaar (Wahoog Chonk Shears).** Shears that never break: no durability at all. Craft them like ordinary shears, but with two **Vahoege vads** (Wahoog Chonk, the raw vads, not the ingot) instead of iron ingots. They do everything shears do: shear sheep and other shearable animals, cut leaves, cobwebs, wool and vines, carve pumpkins, disarm tripwire, empty beehives and the knabbelkorf, and work in a dispenser. Like the other vads gear you keep them when you die. There is a small quest for them next to the Vadspaxel.
+- **New: the Blok vahoege vads (Block of Wahoog Chonk).** A deep purple storage block: nine Vahoege-vadsstaven (Wahoog Chonk Ingots) in a 3x3 make one block, and one block gives the nine ingots back. Mine it with an iron pickaxe or better.
+- **The Knabbelbaken (Nibble Beacon) now needs blocks of vahoege vads.** Its pyramid counts only Blokken vahoege vads, for all four layers (3x3, 5x5, 7x7 and 9x9 under the beacon). Blocks of kaasknabbels, the vads ore and gatenkaas no longer count. **A Knabbelbaken that stands on one of those old blocks goes out: rebuild the pyramid with blocks of vahoege vads.** The effects, the range and what each layer unlocks are unchanged.
+- **The Nomguh sled trek is a little harder** (the medicine ride and the Sled Sprint against Steele-Mika). The pawsies really get cold now: stop at a fire basket at least once on the way (brake with S, it takes a few seconds), or the sled pups get slower and slower. The warmth bar, a message and a line under the crosshair tell you when. The gusts of wind are stronger and come a bit more often, with a warning arrow and a whoosh from their side: steer against them or you end up in the deep snow. Nothing can hurt you and you lose nothing, as before. Steele-Mika is a little slower on Medium and Hard to keep the race fair. Records on the Sled Sprint boards from before this version were set without the warm-up stop and will be hard to beat.
+- **Guh variants are a little rarer**, so a special guh is special again. Mint, choco and snow guhs each turn up about a third less often (about 1 in 14 wild Guhmension guhs is a variant now, it was 1 in 11); the really rare ones (brontosaurus, golden, rainbow, ghost and teckel guhs) are unchanged. The biome guhs are rarer too: about a third of the wild guhs in the Guhpolder is a Pinguh (was half), about a quarter in the Kaasmoeras a Kaasmoerasguh (was 40%) and about a quarter in the Knuffeldal a Pluisguh (was 35%). The guh with the secret note now is 1 in 500 (was 1 in 200). Guhs that are already in your world do not change.
+- **The Superkompas remembers where you have been.** Every place you have found now gets the green check mark and a "visited" line in its tooltip, not only the minigame buildings. Places you found before this version get their mark the next time you walk in.
+- **The travel agency is easier to find in the Superkompas.** Reisbureau "De Vadsvakantie" is now also listed under Minigames, below the heading Guhpixel, next to the internet café. It stays in the Knus tab as well.
+- **One Superkompas entry for the Guhwai'i story.** The crashed capsule is gone from the Verhalen tab: the story is one questline and it starts at the stilt house, so that is where the compass sends you. The capsule itself is still on its hill, and a compass that was already set to it keeps pointing there.
+- **Six titles are gone:** Dakhaas (Rooftop Runner), Meest Vadsige Guh (Most Valuable Guh), Onterecht weggestemd (Wrongly Voted Out), Kussenkampioen (Pillow Champion), Speurguh (Sleuth Guh) and Taakjesguh (Task Guh). The `[MVG++]` rank, the parkour reward and the Among Guhs numbers on your stats board are unchanged. If you were wearing one of these titles you now show no title; pick another one in the Guhdex.
+
+## 1.3.0 — the Guhpixel update — Minecraft 26.1.2
+
+A big update. New structures (the Guh internet café and the travel agency) only appear in chunks that were not generated yet.
+
+- **Guhpixel**, a minigame-server parody in its own dimension. Find the **Guh internet café "De Trage Verbinding"** in the Guhmension (it is in the Superkompas) and walk through the giant monitor. After that `/lobby`, `/hub` and `/l` work, and you can craft a **Guhpixel-poort** for home with the Netwerkkabeltje the lobby greeter gives you. In Guhpixel nothing can hurt you, nothing can be broken, and you can never lose an item: during a game your inventory is put away and comes back exactly as it was.
+- **The lobby**: a floating plaza with game stalls, ranks (`[GUH]` to `[MVG++]`), guhs that "chat", a parkour over the roofs with a personal best and a world top 3, ten hidden golden knabbels, personal stats boards and the shop of the Verkoper-guh.
+- **Six joke games**, each a short questline with a punchline, 100 Guhpixel-muntjes and a keepsake the first time: **Skyblok**, **Bedwars**, **Vadsnite**, the **Guhmon battle**, **Boer zoekt Guh** and the **Among Guhs practice round**.
+- **Among Guhs**, the real game: 10 to 15 minutes on the ship De Vadsvaarder, alone with guh crew mates or with friends from the queue. Eight task mini-games, a Mika (or two on Lastig) who pushes guhs asleep, vents, three sabotages, meetings with statements and votes, droomguhs, a logbook and titles. Other players' name tags are hidden behind the ship's walls during a round. Rounds pay muntjes with a daily cap.
+- **For home, from the shop**: the **Guhkade** (arcade cabinets with Flappy Guh and Mika-Pong, a top 5 with names on the cabinet, and your guhs come to play), the **Guhkantoor** (a time clock and desks where guhs "work", payslips and quarterly reports) and the **Guhbioscoop** (projector, a screen up to 7x4, seats, popcorn; nine films to unlock).
+- **Reisbureau "De Vadsvakantie"**: a second new structure with its own short questline. Send one guh at a time on a trip of 1, 2, 8 or 24 real hours (16 destinations, 4 on offer every day) and collect it at any Reisbalie with a postcard and a souvenir. A guh on holiday is stored safely and can never be lost.
+- **Guh-parkour**: Startpaaltje, Finishpaaltje, obstacles (hurdle, springboard, crawl tunnel, slalom posts, seesaw, balance beam, knabbel table) and a scoreboard. Click toys and obstacles into a route and up to four of your guhs run laps.
+- **Guhmensie quest book**: the section "De biomen" now has all 19 biomes of the Guhmension (Bleekwoud, Gatenkaasgrotten, Kaasmoeras, Vadswoud, Diepe Guhzee, Knuffeldal, Guhpolder, Sneeuwguhtoendra and Guhwai'i were missing). Progress on the existing quests is kept.
+- Everything is in the Guhdex (new tab **Guhpixel**), the FTB quest book (new chapter **Guhpixel**) and the wiki, in Dutch and English.
+
+## 1.2.11 — Minecraft 26.1.2
+
+A small change. Same requirements as 1.2.10, no worldgen changes.
+
+- **Captain Cloudy (Kapitein Wolkje) now asks first.** Clicking him used to put you in the balloon straight away, and his shop was hidden behind sneak + click. Now he opens a little menu: he tells you which loop he flies today and how full your Balloon Stamp Card is, and you choose **All aboard!**, **Your shop (Balloon Coins)** or **How does it work?**. Sneak + click still opens the shop directly.
+
+## 1.2.10 — Minecraft 26.1.2
+
+A small addition. Same requirements as 1.2.9, no worldgen changes.
+
+- **New Guhdex tab: My Other Chonkies (Mijn andere vadsjes).** Next to "My Guhs" there is now a list of all your other tamed critters (Squeaksqueak Mice, Poopshelly, Shelly, the little land animals, the Guhxolotl...), grouped by kind: its name and where it is right now (walking around, sitting, on your shoulder, as an item in a chest or in someone's pockets...). Hover a row for the full place with coordinates. A critter shows up once the game has seen it after this update (it is nearby and loaded, or you carry it as an item).
+- **More on the tooltip of a picked-up guh**: its variant and personality, and its hearts with you (the level and how many hearts until the next one; for guhs picked up from this version on), next to the size, HP and saddle that were already there. A picked-up critter (mouse, Shelly, land animals...) now shows what it is when it has a name of its own, and its HP.
+
+## 1.2.9 — Minecraft 26.1.2
+
+A small fix release. Same requirements as 1.2.8, no worldgen changes.
+
+- **Fixed: right-clicking your own tamed guh with an item only petted it.** The client treated almost every item as "a tap is a pet", so the click never reached the guh. Now every item that does something on a guh goes through: tea and cake for a guest at Mrs. Teaspoon's tea party (this made 100 cosiness impossible to reach by serving), the baby bottle and clean diaper for a baby guh, a golden dandelion on a baby guh (vanilla: it stays small), guh armor and a clothing piece you already unlocked. With anything else in your hand a tap is still a pet and holding still opens the Guh menu.
+- **Tea party: there is always a guest who asks for tea** until you have poured your first cup, so the plain Nibble Tea you get from the house can always be served.
+- **The Great Snug Party: where do you get the six party items?** In Mayor Chonkworth's screen, point at a task to read where to get it and how far you are. The Snug Party List (right-click) now prints the same explanation under every task you still have to do.
+
 ## 1.2.8 — Minecraft 26.1.2
 
 A new rare biome, a wood set for the guh palm, an overview in the Guh House and a round of balance changes. Same

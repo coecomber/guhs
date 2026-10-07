@@ -97,6 +97,8 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.register(modBus);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.register(modBus);
+        // --- guhpixel: the kern and its nine slices ---
+        nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.register(modBus);
         // --- bbq2 ---
         nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.register(modBus);
         nl.juiced.guhs.feature.wereld.WereldFeature.register(modBus);
@@ -199,6 +201,8 @@ public final class Features {
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.payloads(registrar);
         // --- 1.2.0 ---
         nl.juiced.guhs.feature.weerder.WeerderFeature.payloads(registrar);
+        // --- guhpixel ---
+        nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.payloads(registrar);
         // --- bbq2 ---
         nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.payloads(registrar);
         nl.juiced.guhs.feature.wereld.WereldFeature.payloads(registrar);
@@ -303,6 +307,8 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.creative(output);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
+        // --- guhpixel ---
+        nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.creative(output);
         // --- bbq2 ---
         nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.creative(output);
         nl.juiced.guhs.feature.wereld.WereldFeature.creative(output);

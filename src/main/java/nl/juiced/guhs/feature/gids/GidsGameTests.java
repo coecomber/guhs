@@ -63,16 +63,26 @@ public class GidsGameTests {
         // the ids the other features rely on stay, Knus exactly as 2.8 made it
         SuperkompasItem.Category knus = cats.stream().filter(c -> c.id().equals("knus")).findFirst().orElseThrow();
         helper.assertTrue(knus.structures().equals(List.of("knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht", "ballonfestival", "kampeerplekje",
-                "knuffelbad")), "knus unchanged: " + knus.structures());
+                "knuffelbad", "reisbureau")), "knus as 2.8 made it, plus the Reisbureau (guhpixel): " + knus.structures());
         helper.assertTrue(ids.contains("barbecue") && cats.stream().filter(c -> c.id().equals("avontuur")).findFirst().orElseThrow().structures()
                 .contains("kaasknabbel_nest"), "barbecue stays, the nest stays in avontuur");
         // one Minigames tab with the subheadings, and every minigame building of the Guhdex in it
         SuperkompasItem.Category mg = cats.stream().filter(c -> c.id().equals("minigames")).findFirst().orElseThrow();
         helper.assertTrue(mg.kopjes().stream().map(SuperkompasItem.Kopje::id).toList().equals(List.of("klassiekers", "knuffeldal", "grote_guhspelen",
-                "verhalen")), "the subheadings (3.0: + verhalen): " + mg.kopjes());
+                "verhalen", "guhpixel")), "the subheadings (3.0: + verhalen; guhpixel: + guhpixel): " + mg.kopjes());
         SuperkompasItem.Category verhalen = cats.stream().filter(c -> c.id().equals("verhalen")).findFirst().orElseThrow();
-        helper.assertTrue(verhalen.structures().equals(List.of("nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana", "guhwaii_capsule",
-                "guhwaii_surfstrand", "knuffeldal_stadje")), "3.0: the Verhalen tab: " + verhalen.structures());
+        helper.assertTrue(verhalen.structures().equals(List.of("nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
+                "guhwaii_surfstrand", "knuffeldal_stadje")), "3.0: the Verhalen tab (1.3.1: without the capsule): " + verhalen.structures());
+        // 1.3.1: the capsule is only a stop of the Ohana questline; the structure and its name stay, a compass that still looks for it keeps working
+        helper.assertTrue(!SuperkompasItem.allowed("guhwaii_capsule") && SuperkompasItem.categoryOf("guhwaii_capsule") == -1
+                && structures.containsKey(Guhs.id("guhwaii_capsule")) && net.minecraft.locale.Language.getInstance().has("structure.guhs.guhwaii_capsule"),
+                "the capsule is no compass place any more, but still exists");
+        net.minecraft.world.item.ItemStack oud = new net.minecraft.world.item.ItemStack(nl.juiced.guhs.registry.ModItems.SUPERKOMPAS.get());
+        SuperkompasItem.choose(oud, "guhwaii_capsule");
+        helper.assertTrue("guhwaii_capsule".equals(SuperkompasItem.chosen(oud)) && !oud.getHoverName().getString().isEmpty(), "an old compass set to the capsule");
+        // 1.3.1: the Reisbureau is also under Minigames > Guhpixel (its first tab is then Minigames)
+        helper.assertTrue(mg.kopjes().get(4).structures().equals(List.of("internetcafe", "reisbureau"))
+                && SuperkompasItem.categoryOf("reisbureau") == cats.indexOf(mg), "Guhpixel: " + mg.kopjes().get(4).structures());
         for (SpelGroepen.Groep g : SpelGroepen.alle()) {
             if (g.structuur() != null) {
                 helper.assertTrue(mg.structures().contains(g.structuur()), "the Minigames tab has " + g.structuur() + " (" + g.id() + ")");

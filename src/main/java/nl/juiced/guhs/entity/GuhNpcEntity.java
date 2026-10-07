@@ -117,6 +117,44 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </guhwaii>
         // <guhwaiispellen>
         // </guhwaiispellen>
+        // guhpixel: one block per slice; a slice adds its kinds ONLY between its own two markers (names N_..., one per line, each ending in a comma)
+        // <px_lobby>
+        LOBBY_WELKOMSTGUH(1.0f),
+        LOBBY_VERKOPER_GUH(1.0f),
+        LOBBY_CHATGUH(0.8f),
+        INTERNETCAFE_BEHEERDER(1.0f),
+        INTERNETCAFE_SLAPER(0.85f),
+        // </px_lobby>
+        // <px_grap1>
+        /** Guhpixel: the Skyblok-guh (a deadly serious pro with a headset) at the lobby anchor SPEL_SKYBLOK. */
+        SKYBLOK_GUH(1.0f),
+        /** Guhpixel: the Bedwars-guh (armour made of pillows) at the lobby anchor SPEL_BEDWARS. */
+        BEDWARS_GUH(1.0f),
+        /** Guhpixel: the Vadsnite-guh (a parachute backpack) at the lobby anchor SPEL_VADSNITE. */
+        VADSNITE_GUH(1.0f),
+        // </px_grap1>
+        // <px_grap2>
+        GUHMON_GYMLEIDER(1.05f),
+        BZG_PRESENTATRICE(1.0f),
+        BZG_BOER(1.1f),
+        // </px_grap2>
+        // <px_among>
+        /** Among Guhs: the Kapitein-guh of De Vadsvaarder (the queue of the real game). */
+        AMONG_KAPITEIN(1.0f),
+        /** Among Guhs: the Logboek-guh beside the Kapitein: your personal numbers. */
+        AMONG_LOGBOEKGUH(1.0f),
+        // </px_among>
+        // <px_guhkade>
+        // </px_guhkade>
+        // <px_kantoor>
+        // </px_kantoor>
+        // <px_bioscoop>
+        // </px_bioscoop>
+        // <px_reisbureau>
+        REISBUREAU_AGENT(1.0f),
+        // </px_reisbureau>
+        // <px_parkour>
+        // </px_parkour>
         ;
 
         public final float scale;

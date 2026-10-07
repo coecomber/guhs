@@ -7,6 +7,31 @@ old history for the curious; it is not needed to play. Player-facing changes fro
 
 Worlds from the internal versions were never meant to carry over; start a new world for 1.0.0.
 
+## guhpixel (released as 1.3.0)
+Build notes of the Guhpixel update; the player-facing text is the "1.3.0" section of [CHANGELOG.md](CHANGELOG.md).
+- Built as a kern plus nine slices (lobby, grap1, grap2, among, guhkade, kantoor, bioscoop, reisbureau, parkour) in
+  `feature/guhpixel/*` and `tools/features/guhpixel_*.py`; game test batches `px_*`.
+- FTB chapter "De Guhmensie", section "De biomen": the nine missing Guhmensie biomes added (bleekwoud, gatenkaasgrotten,
+  kaasmoeras, vadswoud, diepe_guhzee, knuffeldal, guhpolder, sneeuwguhtoendra, guhwaii) with new quest ids; the ten
+  existing ids are unchanged. `CHAPTER_VERSION` 28 covers it.
+- Review fixes: a collected holiday guh is no longer written out of the trip record ahead of its chunk; a death in Guhpixel
+  (only `/kill`) can be respawned from and never restores onto a dead body; cursor and crafting-grid stacks that do not fit
+  wait for a free slot instead of being dropped in an arena; the lobby parkour ends on potion effects and teleports and
+  blocks item use during a run; a parkour guh that stays away from its post for five minutes is free again; name tags of
+  real players are hidden during an Among Guhs round; the lobby template (version 3) has a nap corner instead of a
+  "coming soon" stall.
+- Finishing pass (docs): seven more quests in the FTB chapter "Guhpixel" for features that had none (the Verkoper-guh's
+  shop with a new hidden advancement `quest/lobby_winkel` granted on the first purchase, the Beheerder-guh, the red
+  ruimtepakje, the three ship things for home, the Oorkonde Werknemer van de maand, the Popcornmachine, the full
+  Reisbureau album); new quest ids only, 49 quests in the chapter, `CHAPTER_VERSION` stays 28 (one bump for the whole
+  update). English for all of them; `check_en.py`: 0 keys without English.
+- Wiki site (`tools/make_wiki_site.py`): the Guhpixel texts no longer sit on one long dimension page. New pages for
+  Skyblok, Bedwars, Vadsnite, the Guhmon-gevecht, Boer zoekt Guh and Among Guhs (minigames, group "Guhpixel") and for the
+  Guhkade, the Guhkantoor and the Guhbioscoop (systemen); the Guhpixel NPCs link to their game or building and have
+  their own picture (`npc_<kind>.png`, rendered by `wiki_renders.py --only-px`). Fixed: the Guhpixel, Reisbureau and
+  Guh-parkour texts were on the site twice (`make_wiki.py` built those sections a second time for its contents list).
+- Final check (full suite, dedicated server, dev client): two old assertions know the Reisbureau in the Superkompas and that Guhpixel NPCs have no Guhdex character page; the Skyblok box is lit evenly and Guhpixel grass and leaves are fresh green; the Among Guhs meeting shows its statements and rooms three beside each other (the texts were cut off); the trip screen's "new trips in" line no longer runs into the heading; the O of the Guhkade pixel font is square (it read as a smudge); autocheck scripts keep the screens they open and use cameras that stay put.
+
 ## Public 1.0.0 fix round (on top of internal 3.0.0)
 - Overworld guh spawns made much rarer (a bit rarer than sheep/cows, still in every biome).
 - Crash fix: the story sled no longer sends a vanilla-reserved entity event (it was read as a sniffer event by clients).

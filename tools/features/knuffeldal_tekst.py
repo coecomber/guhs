@@ -127,7 +127,7 @@ LANG = {
     "gui.guhs.knusfeest.lijst_kop_seizoen": "Het seizoensfeest - feesttaakjes:",
     "gui.guhs.knusfeest.lijst_klaar": "Er zijn nu geen feesttaakjes. Kom volgend seizoen terug bij Burgemeester Vadsema!",
     "gui.guhs.knusfeest.lijst_leeg": "Het lijstje is nog leeg. Praat eerst met Burgemeester Vadsema op het plein van het Knuffeldal.",
-    "gui.guhs.knusfeest.hint": "! = heb je bij je, ? = gestolen: volg de kruimels",
+    "gui.guhs.knusfeest.hint": "Wijs een taakje aan: waar haal je het?  ! = bij je  ? = gestolen",
     # --- Burgemeester Vadsema ---
     "quest.guhs.burgemeester.start": "Ahum! Welkom, welkom in het Knuffeldal! Ik ben Burgemeester Vadsema. Straks is het Grote Knusfeest... en er is NIETS klaar! Geen taart, geen thee, geen slingers, njeg! Wil jij helpen? Hier is mijn lijstje met zes feesttaakjes. En pas op voor de Kruimel-Mika's: die pikken alles!",
     "quest.guhs.burgemeester.lijst": "Kijk, dit staat er nog op het lijstje. Breng alles hier, dan tik ik het af. Ahum, VAHOEG!",

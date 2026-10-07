@@ -1,0 +1,116 @@
+# Guhpixel slice "grap2" AutoCheck: the Guhmon-gevecht (gym, guh picker, battle screen) and Boer zoekt Guh (studio, farm
+# set, the letters, the credits), the keepsake blocks and the Guhdex section. Run (the merge step does):
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_grap2.txt
+# (commands: see autocheck.txt; the dev commands used here: /guhs px ..., /guhs px grap2 ...)
+# The cameras in the arenas assume a fresh world: the gym is arena cell 0 (origin 4096 64 0), the studio cell 1 (4608 64 0).
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+wait 40
+
+section the keepsake blocks at home: badge case (empty, full), mailbox, framed letter
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2990 139 2990 3010 139 3010 minecraft:smooth_stone
+/fill 2990 140 2990 3010 150 3010 minecraft:air
+/fill 2994 140 2998 3006 143 2998 minecraft:white_concrete
+/setblock 2996 140 3000 guhs:guhmon_badgedoos[facing=south]
+/setblock 2998 140 3000 guhs:guhmon_badgedoos[facing=south,dutjes=true,njeg=true,knabbel=true]
+/setblock 3001 140 3000 guhs:bzg_brievenbus[facing=south]
+/setblock 3003 141 2999 guhs:bzg_ingelijste_brief[facing=south]
+/gamemode spectator
+camera 2999.5 142.2 3004.5 180 22
+waitrender 300
+shot guhmon_bzg_blokken
+/gamemode creative
+/tp @s 3003.5 140 3001.5 180 10
+wait 20
+gui keep
+use 3003 141 2999
+wait 30
+shot bzg_ingelijste_brief gui
+gui close
+
+section Guhmon: the lobby NPC, the gym, the picker, the battle screen
+/guhs px lobby
+wait 100
+/tp @s 8 100 -20 180 10
+waitrender 300
+shot guhmon_lobby_npc
+/gamemode survival
+/guhs px speel guhmon
+wait 100
+waitrender 300
+shot guhmon_gym_binnen
+gui keep
+/guhs px grap2 guhmon kies
+wait 30
+shot guhmon_kies gui
+widgets
+gui close
+gui keep
+/guhs px grap2 guhmon scherm
+wait 120
+shot guhmon_gevecht gui
+widgets
+gui close
+/guhs px grap2 guhmon win
+wait 20
+gui close
+/gamemode spectator
+camera 4109.5 70 34 180 20
+waitrender 200
+shot guhmon_gym_gewonnen
+/gamemode survival
+/guhs px stop
+wait 40
+
+section Boer zoekt Guh: the studio, the letters, the farm set, the credits
+/guhs px speel bzg
+wait 100
+waitrender 300
+shot bzg_studio_binnen
+gui keep
+/guhs px grap2 bzg brieven
+wait 30
+shot bzg_brieven gui
+widgets
+gui close
+/guhs px grap2 bzg stap 3
+wait 40
+/gamemode spectator
+camera 4630.5 69 20.5 -127 25
+waitrender 300
+shot bzg_logeerweek
+/gamemode survival
+/guhs px grap2 bzg stap 4
+wait 40
+/gamemode spectator
+camera 4634.5 68 16.5 -150 24
+waitrender 200
+shot bzg_ingestopt
+/gamemode survival
+gui keep
+/guhs px grap2 bzg aftiteling
+wait 160
+shot bzg_aftiteling gui
+gui close
+/guhs px stop
+wait 40
+
+section the Guhdex section (both games, the badges)
+/guhs px grap guhmon klaar
+/guhs px grap bzg klaar
+/guhs px grap2 guhmon badges 5
+gui dexopen guhpixel
+wait 40
+shot guhmon_bzg_gids gui
+gui close
+/guhs px huis
+quit

@@ -342,10 +342,10 @@ public class KnusGameTests {
         for (var tag : List.of(KnusTags.KAASMELK, KnusTags.OOGST, KnusTags.GEBAK, KnusTags.THEE, KnusTags.MARSHMALLOW, KnusTags.PLUISWOL)) {
             helper.assertTrue(BuiltInRegistries.ITEM.get(tag).isPresent(), "the tag exists: " + tag.location());
         }
-        // the superkompas: category knus with the six cosy places, all real structures
+        // the superkompas: category knus with the six cosy places (plus the Reisbureau of guhpixel), all real structures
         var knus = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("knus")).findFirst().orElse(null);
         helper.assertTrue(knus != null && knus.structures().equals(List.of("knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht", "ballonfestival",
-                "kampeerplekje", "knuffelbad")), "the knus category: " + knus);
+                "kampeerplekje", "knuffelbad", "reisbureau")), "the knus category: " + knus);
         var structures = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
         for (String s : knus.structures()) {
             helper.assertTrue(structures.containsKey(Guhs.id(s)), "structure " + s);

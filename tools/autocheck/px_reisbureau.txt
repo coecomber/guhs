@@ -1,0 +1,192 @@
+# Reisbureau "De Vadsvakantie" (guhpixel slice reisbureau) AutoCheck: the souvenirs, the Reisbalie and its screens, an
+# ansichtkaart, the Guhdex section, the building. Run (the merge step does; a slice never opens a client):
+#   bash guhs_workpx/gradle_slot.sh <worktree> runAutocheckClient -PautocheckScript=tools/autocheck/px_reisbureau.txt -PautocheckTimeout=15
+# (commands: see autocheck.txt; dev commands: /guhs px reisbureau ..., /guhs px klok <uren>)
+
+section setup
+guiscale 2
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:pink_concrete
+/fill 2975 140 2975 3025 145 3025 minecraft:air
+/fill 2975 146 2975 3025 152 3025 minecraft:air
+/fill 2984 140 2994 3016 144 2994 minecraft:white_concrete
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section the 32 souvenirs and the two koffertjes: the floor ones in two rows, the wall ones on the wall behind them
+/setblock 2986 140 2998 guhs:reisbureau_souvenir_kaasmarkt[facing=south]
+/setblock 2988 140 2998 guhs:reisbureau_zeldzaam_kaasmarkt[facing=south]
+/setblock 2990 140 2998 guhs:reisbureau_souvenir_vadswoud[facing=south]
+/setblock 2992 140 2998 guhs:reisbureau_zeldzaam_vadswoud[facing=south]
+/setblock 2994 140 2998 guhs:reisbureau_souvenir_knuffeldal[facing=south]
+/setblock 2996 140 2998 guhs:reisbureau_zeldzaam_knuffeldal[facing=south]
+/setblock 2998 140 2998 guhs:reisbureau_souvenir_guhwaii[facing=south]
+/setblock 3000 140 2998 guhs:reisbureau_zeldzaam_guhwaii[facing=south]
+/setblock 3002 140 2998 guhs:reisbureau_souvenir_barbecuether[facing=south]
+/setblock 3004 140 2998 guhs:reisbureau_zeldzaam_barbecuether[facing=south]
+/setblock 3006 140 2998 guhs:reisbureau_souvenir_efteguh[facing=south]
+/setblock 3008 140 2998 guhs:reisbureau_zeldzaam_efteguh[facing=south]
+/setblock 3010 140 2998 guhs:reisbureau_souvenir_guhkenhof[facing=south]
+/setblock 3012 140 2998 guhs:reisbureau_zeldzaam_guhkenhof[facing=south]
+/setblock 2986 140 3001 guhs:reisbureau_souvenir_nomguh[facing=south]
+/setblock 2988 140 3001 guhs:reisbureau_zeldzaam_nomguh[facing=south]
+/setblock 2990 140 3001 guhs:reisbureau_souvenir_guhrijs[facing=south]
+/setblock 2992 140 3001 guhs:reisbureau_zeldzaam_guhrijs[facing=south]
+/setblock 2994 140 3001 guhs:reisbureau_souvenir_camping[facing=south]
+/setblock 2996 140 3001 guhs:reisbureau_zeldzaam_camping[facing=south]
+/setblock 2998 140 3001 guhs:reisbureau_souvenir_guhnetie[facing=south]
+/setblock 3000 140 3001 guhs:reisbureau_souvenir_kaasmaan[facing=south]
+/setblock 3002 140 3001 guhs:reisbureau_zeldzaam_kaasmaan[facing=south]
+/setblock 3004 140 3001 guhs:reisbureau_souvenir_wereldreis[facing=south]
+/setblock 3006 140 3001 guhs:reisbureau_zeldzaam_wereldreis[facing=south]
+/setblock 3008 140 3001 guhs:reisbureau_souvenir_cruise[facing=south]
+/setblock 3010 140 3001 guhs:reisbureau_gouden_koffertje[facing=south]
+/setblock 3012 140 3001 guhs:reisbureau_koffertje[facing=south]
+/setblock 2987 142 2995 guhs:reisbureau_souvenir_lingsesdijk[facing=south]
+/setblock 2990 142 2995 guhs:reisbureau_zeldzaam_lingsesdijk[facing=south]
+/setblock 2993 142 2995 guhs:reisbureau_zeldzaam_guhnetie[facing=south]
+/setblock 2996 142 2995 guhs:reisbureau_zeldzaam_cruise[facing=south]
+/setblock 2999 142 2995 guhs:reisbureau_souvenir_balkonie[facing=south]
+/setblock 3002 142 2995 guhs:reisbureau_zeldzaam_balkonie[facing=south]
+wait 60
+/gamemode spectator
+camera 3000.5 144.5 3009.5 180 22
+waitrender 300
+shot 1_reisbureau_souvenirs
+camera 2992.5 141.6 3001.2 200 14
+waitrender 120
+shot 2_reisbureau_souvenirs_dichtbij
+camera 3006.5 141.6 3004.2 160 14
+waitrender 120
+shot 3_reisbureau_souvenirs_rechts
+camera 2996.5 142.6 2998.5 180 4
+waitrender 120
+shot 4_reisbureau_schilderijen
+
+section the Reisbalie: locked (before the Reisagent), the proefreisje, the offer with a guh to pick, a guh away, a guh back
+/gamemode creative
+/setblock 3000 140 3004 guhs:reisbureau_balie[facing=south]
+/tp @s 3000.5 140 3006.5 180 20
+/guhs px klok herstel
+/guhs px reisbureau souvenirs wis
+/guhs px reisbureau stap 0
+wait 20
+gui keep
+use 3000 140 3004
+wait 30
+shot 5_reisbureau_scherm_slot gui
+gui close
+/guhs px reisbureau stap 2
+/guhs px reisbureau guh
+wait 20
+gui keep
+use 3000 140 3004
+wait 30
+shot 6_reisbureau_scherm_proef gui
+widgets
+gui close
+/guhs px reisbureau stap 3
+gui keep
+use 3000 140 3004
+wait 30
+mouse 200 110
+wait 5
+shot 7_reisbureau_scherm_aanbod gui
+mouse 315 110
+wait 5
+shot 8_reisbureau_scherm_tip_zeldzaam gui
+widgets
+gui close
+guhstaal en
+gui keep
+use 3000 140 3004
+wait 30
+shot 9_reisbureau_scherm_en gui
+widgets
+gui close
+guhstaal nl
+/gamemode spectator
+camera 3003.5 141.4 3009.5 150 12
+waitrender 60
+/guhs px reisbureau stuur
+wait 22
+shot 10_reisbureau_koffertje
+wait 90
+/gamemode creative
+/tp @s 3000.5 140 3006.5 180 20
+gui keep
+use 3000 140 3004
+wait 30
+shot 11_reisbureau_scherm_weg gui
+widgets
+gui close
+/guhs px reisbureau terug
+wait 10
+gui keep
+use 3000 140 3004
+wait 30
+shot 12_reisbureau_scherm_klaar gui
+press Ophalen
+wait 30
+shot 13_reisbureau_scherm_opgehaald gui
+gui close
+/gamemode spectator
+camera 3002.5 141.2 3008.0 160 10
+waitrender 60
+shot 14_reisbureau_zonnebril
+/gamemode creative
+/tp @s 3000.5 140 3006.5 180 20
+
+section an ansichtkaart, read (NL and EN)
+/guhs px reisbureau kaart lingsesdijk
+wait 10
+gui keep
+useitem 5
+wait 30
+shot 15_reisbureau_kaart gui
+gui close
+guhstaal en
+gui keep
+useitem 5
+wait 30
+shot 16_reisbureau_kaart_en gui
+gui close
+guhstaal nl
+
+section the Guhdex: the Reisbureau's section and album
+/guhs px reisbureau souvenirs alles
+gui dexopen guhpixel
+wait 30
+shot 17_reisbureau_gids gui
+scroll 320 180 -8
+wait 10
+shot 18_reisbureau_gids_album gui
+gui close
+/guhs px reisbureau souvenirs wis
+gui creative guhs
+wait 20
+gui close
+
+section the building in the Guhmensie
+/gamemode spectator
+tplocate auto reisbureau
+waitrender 400
+# (template coordinates: the building is x 3..13, z 5..13 with its door at 8, 5 and the ground at y 4; spectator, a
+# creative player that is put in the air falls)
+/gamemode spectator
+looktpl 8.5 11 -9 8.5 6 9
+waitrender 200
+shot 19_reisbureau_gebouw
+looktpl 8.5 6.7 6.6 8.5 6 12
+waitrender 200
+shot 20_reisbureau_binnen
+quit

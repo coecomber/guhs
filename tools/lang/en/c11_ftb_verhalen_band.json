@@ -237,7 +237,7 @@
   "ftb.guhs_verhalen.q.balto_slee_tocht.title": "Through the Snowstorm",
   "ftb.guhs_verhalen.q.balto_slee_tocht.desc": "Rosy and the baby guhs in Nomguh need the medicine! Steer the &bsled&r yourself, with &fBaltoguh&r in the lead: through the snowstorm to the mountain hut and then back to the little hospital in time. &6W&r = hup hup, &6S&r = brake, &6A/D&r = steer. Can't see a thing? Follow Baltoguh's glowing sniff stars.",
   "ftb.guhs_verhalen.q.balto_slee_rustpunt.title": "Warm Pawsies",
-  "ftb.guhs_verhalen.q.balto_slee_rustpunt.desc": "Along the way there are &6fire baskets&r. Slow down and stop there for a moment: the sled pups warm their paws. Cold paws are slow paws!",
+  "ftb.guhs_verhalen.q.balto_slee_rustpunt.desc": "Along the way there are &6fire baskets&r. Slow down and stop there for a moment: the sled pups warm their paws. Cold paws are slow paws: stop at least once every trek, or they start to dawdle!",
   "ftb.guhs_verhalen.q.balto_slee_ijsbrug.title": "Over the Ice Bridge",
   "ftb.guhs_verhalen.q.balto_slee_ijsbrug.desc": "The &bIce Bridge&r is narrow and slippery: the sled keeps sliding when you steer. Easy does it, and stay in the middle. Fall off? You land in soft snow and get to try again.",
   "ftb.guhs_verhalen.q.balto_slee_lawine.title": "Avalanche, Look Out!",
@@ -452,5 +452,7 @@
   "ftb.guhs_diertjes.q.landdiertjes_alle.title": "A House Full of Critters",
   "ftb.guhs_diertjes.q.landdiertjes_alle.desc": "Tame them all: a fluffhog, a guh bunny, a fluff squirrel and a Shuckly. WAHOOG!",
   "ftb.guhs_band.q.wilde_guhweerder.title": "A Chonky Lives Here Already",
-  "ftb.guhs_band.q.wilde_guhweerder.desc": "Put a &dWild Guh Shoo-Sign&r in your house or base (pink wool, a cheese nibble and a stick). Wild guhs see the sign and know: a chonky lives here already! So they sweetly go cuddle somewhere else. Right-click the sign to choose the area and show it as a &9blue dome&r. Your own guhs are welcome to stay."
+  "ftb.guhs_band.q.wilde_guhweerder.desc": "Put a &dWild Guh Shoo-Sign&r in your house or base (pink wool, a cheese nibble and a stick). Wild guhs see the sign and know: a chonky lives here already! So they sweetly go cuddle somewhere else. Right-click the sign to choose the area and show it as a &9blue dome&r. Your own guhs are welcome to stay.",
+  "ftb.guhs_band.q.huisje_binnen.title": "Have a Look Inside",
+  "ftb.guhs_band.q.huisje_binnen.desc": "Right-click a Guh House and click &dGo inside&r. Ding-dong! Inside, everything is guh-sized, so you are suddenly very big. Every resident has its own little bed with a name sign, its favourite thing on the bedside table and its clothes on the hook. At night they lie there snoring; if a bed is empty, a note says where your guh is. In your own house you can &dtuck sleepers in&r and pet them softly, click a bed for the diary and read the notice board. In the &dguest bed&r you sleep through the night yourself. The door takes you back outside."
 }

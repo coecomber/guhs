@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhpixel_poort_kast",
+    "kast": "guhs:block/guhpixel_poort_kast",
+    "scherm": "guhs:block/guhpixel_poort_scherm"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#scherm",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "down": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        2,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        },
+        "down": {
+          "texture": "#kast"
+        }
+      }
+    }
+  ]
+}

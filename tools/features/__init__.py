@@ -37,7 +37,12 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhoven',
             # 1.2.8: het Bleekwoud
             'bleekwoud',
-            # bbq2 (CONTRACT_130 5.1): the skelet and its helper library, the three foundations, then the 27 slices (append only, see above)
+            # guhpixel: the kern, then its nine slices (each a stub until its slice fills it in)
+            'guhpixel', 'guhpixel_lobby', 'guhpixel_grap1', 'guhpixel_grap2', 'guhpixel_among', 'guhpixel_guhkade', 'guhpixel_kantoor',
+            'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour',
+            # bbq2 (CONTRACT_130 5.1): the skelet and its helper library, the three foundations, then the 27 slices (append only, see above).
+            # They stand AFTER guhpixel (released in 1.3.0, before bbq2): the index seeds a module's variant and clothes textures
+            # (make_guh_variants.py: 2000 + i, 1000 + i), and textures that are out in the world must not change
             'bbq2', 'vadskracht', 'verhaal_motor', 'wereld', 'bank', 'tech_bronnen', 'tech_buizen', 'tech_machines', 'tech_vloeistof', 'tech_bezorg',
             'tech_klusjes', 'tech_quests', 'paleizen', 'bestaand', 'fossiel_mijn', 'sausdieren', 'camping_markt', 'toren_peper', 'ring', 'ring_h1',
             'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',

@@ -1,0 +1,104 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhpixel_poort_kast",
+    "kast": "guhs:block/guhpixel_poort_kast",
+    "scherm": "guhs:block/internetcafe_scherm",
+    "toetsen": "guhs:block/internetcafe_toetsen"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        6
+      ],
+      "to": [
+        14,
+        13,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#scherm"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        0,
+        8
+      ],
+      "to": [
+        11,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        },
+        "down": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        0,
+        1
+      ],
+      "to": [
+        14,
+        1,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#toetsen"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      }
+    }
+  ]
+}

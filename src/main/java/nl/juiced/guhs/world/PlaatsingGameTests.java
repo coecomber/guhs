@@ -41,6 +41,8 @@ public class PlaatsingGameTests {
             "vadsig_eetfestijn", "guh_beauty_theater", "guh_disco", "guh_kermis", "verstopguh_huis", "guhvis_vijver", "sjoelhuisje",
             "knabbelkatapult", "guh_sterrenwacht", "ballonfestival", "knuffelbad");
     static final List<String> LANDMARKS = List.of("guh_kasteel", "guh_village", "guhbibliotheek", "kaasmijn", "hemelkapelletje", "zwevende_eilanden");
+    /** guhpixel: the Guh-internetcafe and the Reisbureau, in a ring outside the old ones (tools/features/guhpixel_lib.py gegarandeerd). */
+    static final List<String> GUHPIXEL = List.of("internetcafe", "reisbureau");
 
     private static StructureSet set(GameTestHelper helper, String name) {
         StructureSet set = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id(name));
@@ -63,6 +65,10 @@ public class PlaatsingGameTests {
         for (String name : LANDMARKS) {
             helper.assertTrue(set(helper, name + "_gegarandeerd").placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 1500
                     && g.maxAfstand() == 2500, name + ": a guaranteed copy 1500-2500 blocks from spawn");
+        }
+        for (String name : GUHPIXEL) {
+            helper.assertTrue(set(helper, name + "_gegarandeerd").placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 4300
+                    && g.maxAfstand() == 5600, name + ": a guaranteed copy 4300-5600 blocks from spawn (new chunks on a pregenerated server)");
         }
         Map<String, Integer> halved = Map.of("guh_caves", 10, "gatenkaas_mijnschacht", 14, "challenging_guh_caves", 24, "mini_picnic", 22, "quartz_statue", 24);
         halved.forEach((name, s) -> helper.assertTrue(spacing(helper, name) == s, name + ": spacing " + s + ", was " + spacing(helper, name)));
@@ -165,8 +171,9 @@ public class PlaatsingGameTests {
             }
         }
         LOGGER.info("Plaatsing: {} guaranteed ({}), {} story starts within 900 blocks, problems: {}", found, report, stories, fouten);
-        // (bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie that is no minigame or landmark)
-        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + 1, "every guaranteed set is in the Guhmension: " + found);
+        // (guhpixel: + the Guh-internetcafe and the Reisbureau; bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie
+        // that is no minigame, landmark or guhpixel building)
+        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + GUHPIXEL.size() + 1, "every guaranteed set is in the Guhmension: " + found);
         helper.assertTrue(fouten.isEmpty(), "guaranteed copies in their ring, no story near spawn: " + fouten);
         helper.succeed();
     }

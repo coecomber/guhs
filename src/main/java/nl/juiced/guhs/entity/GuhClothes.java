@@ -407,6 +407,68 @@ public enum GuhClothes {
     GUHRIOBELONING_GOUDEN_PET(Slot.HEAD, "outfit_guhriobeloning_pet"),
     // </guhrio_beloning>
     //
+    // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
+    // <px_lobby>
+    // </px_lobby>
+    // <px_grap1>
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Rood (the nightcap bones, in the team colour). */
+    BEDWARS_SLAAPMUTS_ROOD(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Blauw. */
+    BEDWARS_SLAAPMUTS_BLAUW(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Groen. */
+    BEDWARS_SLAAPMUTS_GROEN(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Geel. */
+    BEDWARS_SLAAPMUTS_GEEL(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Vadsnite keepsake: the Parachuterugzakje (a pack with a rolled-up pink parachute and a pull cord, BACK). */
+    VADSNITE_PARACHUTERUGZAKJE(Slot.BACK, "outfit_vadsnite_rugzak"),
+    // </px_grap1>
+    // <px_grap2>
+    /** Guhmon-gevecht (guhpixel, the keepsake of the gym of Gymleider Dutjes): a red and white trainer cap with a little knabbel on the front. */
+    GUHMON_TRAINERSPET(Slot.HEAD, "outfit_cap"),
+    /** Boer zoekt Guh (guhpixel, the keepsake of the show): the straw hat of Boer Guhrrit with a red checkered band, and his blue overall. */
+    BZG_STROHOED(Slot.HEAD, "outfit_rain_hat"),
+    BZG_OVERALL(Slot.BODY, "outfit_suit"),
+    // </px_grap2>
+    // <px_among>
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in rood (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ROOD(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in blauw (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_BLAUW(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in groen (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_GROEN(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in geel (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_GEEL(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in roze (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ROZE(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in oranje (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ORANJE(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in paars (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_PAARS(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in wit (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_WIT(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the hoedje "plantje" (a little plant in a pot on the head). */
+    AMONG_HOEDJE_PLANTJE(Slot.HEAD, "outfit_among_plantje"),
+    /** Guhpixel, Among Guhs shop: the hoedje "ei" (a fried egg on the head). */
+    AMONG_HOEDJE_EI(Slot.HEAD, "outfit_among_ei"),
+    /** Guhpixel, Among Guhs shop: the hoedje "wc_rol" (a roll of toilet paper on the head). */
+    AMONG_HOEDJE_WC_ROL(Slot.HEAD, "outfit_among_wcrol"),
+    /** Guhpixel, Among Guhs shop: the hoedje "kaaspunt" (a wedge of cheese on the head). */
+    AMONG_HOEDJE_KAASPUNT(Slot.HEAD, "outfit_among_kaaspunt"),
+    /** Guhpixel, Among Guhs shop: the hoedje "briefje" (a sticky note that says 'sus' on the head). */
+    AMONG_HOEDJE_BRIEFJE(Slot.HEAD, "outfit_among_briefje"),
+    /** Guhpixel, Among Guhs shop: the hoedje "knabbel" (a big kaasknabbel on the head). */
+    AMONG_HOEDJE_KNABBEL(Slot.HEAD, "outfit_among_knabbel"),
+    // </px_among>
+    // <px_guhkade>
+    // </px_guhkade>
+    // <px_kantoor>
+    // </px_kantoor>
+    // <px_bioscoop>
+    // </px_bioscoop>
+    // <px_reisbureau>
+    // </px_reisbureau>
+    // <px_parkour>
+    // </px_parkour>
     ;
 
     /**

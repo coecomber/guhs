@@ -70,6 +70,12 @@ public final class Huisjes extends SavedData {
             Huisjes::new, t -> load(t, null), h -> h.save(new CompoundTag(), null));
 
     private final Map<String, Huisje> huisjes = new LinkedHashMap<>();
+    /** 1.3.2 ({@link Binnen}): the next free room cell (a counter: a cell is never given out twice). */
+    private int volgendeCel;
+    /** 1.3.2: per resident (band id) the day ({@link Band#dag}) it was last tucked in: once per night. */
+    final Map<UUID, Long> ingestopt = new java.util.HashMap<>();
+    /** 1.3.2: hearts a resident still gets (tucked in or petted in its room while it was not loaded): {knuffel, aai}. */
+    final Map<UUID, int[]> teGoed = new java.util.HashMap<>();
     @Nullable
     private static Huisjes laatste;
 
@@ -232,6 +238,16 @@ public final class Huisjes extends SavedData {
         }
     }
 
+    /** 1.3.2: a new room cell for this huisje (the counter only goes up, so two huisjes never share a cell). */
+    static int nieuweCel(MinecraftServer s) {
+        Huisjes data = get(s);
+        for (Huisje h : data.huisjes.values()) {
+            data.volgendeCel = Math.max(data.volgendeCel, h.cel + 1);   // (never below a cell that is in use)
+        }
+        data.setDirty();
+        return data.volgendeCel++;
+    }
+
     /** A huisje is gone: its residents come out and live freely again. */
     static void verwijder(ServerLevel level, BlockPos pos) {
         Huisjes data = get(level.getServer());
@@ -240,6 +256,11 @@ public final class Huisjes extends SavedData {
             return;
         }
         data.setDirty();
+        try {
+            Binnen.huisjeWeg(level.getServer(), h);   // (1.3.2: whoever is inside stands outside again, the room is cleared)
+        } catch (RuntimeException e) {
+            com.mojang.logging.LogUtils.getLogger().error("Guhs: emptying the room of huisje {} failed", h.naam, e);
+        }
         for (UUID id : h.bewoners) {
             Entity e = zoekBewoner(level, h, id);
             if (e != null) {
@@ -487,6 +508,13 @@ public final class Huisjes extends SavedData {
         ListTag list = new ListTag();
         huisjes.values().forEach(h -> list.add(h.save()));
         tag.put("Huisjes", list);
+        tag.putInt("VolgendeCel", volgendeCel);
+        CompoundTag stop = new CompoundTag();
+        ingestopt.forEach((id, dag) -> stop.putLong(id.toString(), dag));
+        tag.put("Ingestopt", stop);
+        CompoundTag goed = new CompoundTag();
+        teGoed.forEach((id, n) -> goed.putIntArray(id.toString(), n));
+        tag.put("TeGoed", goed);
         return tag;
     }
 
@@ -497,6 +525,25 @@ public final class Huisjes extends SavedData {
             Huisje h = Huisje.load(list.getCompoundOrEmpty(i));
             if (h != null) {
                 d.huisjes.put(sleutel(h.dim, h.pos), h);
+                d.volgendeCel = Math.max(d.volgendeCel, h.cel + 1);
+            }
+        }
+        d.volgendeCel = Math.max(d.volgendeCel, tag.getIntOr("VolgendeCel", 0));
+        CompoundTag stop = tag.getCompoundOrEmpty("Ingestopt");
+        for (String k : stop.keySet()) {
+            try {
+                d.ingestopt.put(UUID.fromString(k), stop.getLongOr(k, -1L));
+            } catch (IllegalArgumentException ignored) {
+                // (not a band id)
+            }
+        }
+        CompoundTag goed = tag.getCompoundOrEmpty("TeGoed");
+        for (String k : goed.keySet()) {
+            try {
+                int[] n = goed.getIntArray(k).orElse(new int[0]);
+                d.teGoed.put(UUID.fromString(k), new int[] {n.length > 0 ? n[0] : 0, n.length > 1 ? n[1] : 0});
+            } catch (IllegalArgumentException ignored) {
+                // (not a band id)
             }
         }
         return d;
