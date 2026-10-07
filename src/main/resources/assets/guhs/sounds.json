@@ -2706,33 +2706,34 @@
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
   },
-  "wolkenblok.stap": {
+  "koi.hap": {
     "sounds": [
-      "guhs:wolkenblok/stap1",
-      "guhs:wolkenblok/stap2",
-      "guhs:wolkenblok/stap3",
-      "guhs:wolkenblok/stap4"
+      "guhs:bio_dieren/koi_hap1",
+      "guhs:bio_dieren/koi_hap2",
+      "guhs:bio_dieren/koi_hap3"
     ],
-    "subtitle": "subtitles.guhs.wolkenblok.stap"
+    "subtitle": "subtitles.guhs.koi.hap"
   },
-  "wolkenblok.plaats": {
+  "koi.strooi": {
     "sounds": [
-      "guhs:wolkenblok/plaats1",
-      "guhs:wolkenblok/plaats2"
+      "guhs:bio_dieren/koi_strooi1",
+      "guhs:bio_dieren/koi_strooi2"
     ],
-    "subtitle": "subtitles.guhs.wolkenblok.plaats"
+    "subtitle": "subtitles.guhs.koi.strooi"
   },
-  "wolkenblok.breek": {
+  "wolkenschaapje.bleh": {
     "sounds": [
-      "guhs:wolkenblok/breek1",
-      "guhs:wolkenblok/breek2"
+      "guhs:bio_dieren/schaapje_bleh1",
+      "guhs:bio_dieren/schaapje_bleh2",
+      "guhs:bio_dieren/schaapje_bleh3"
     ],
-    "subtitle": "subtitles.guhs.wolkenblok.breek"
+    "subtitle": "subtitles.guhs.wolkenschaapje.bleh"
   },
-  "waterval.ruis": {
+  "wolkenschaapje.pluis": {
     "sounds": [
-      "guhs:waterval/ruis"
+      "guhs:bio_dieren/schaapje_pluis1",
+      "guhs:bio_dieren/schaapje_pluis2"
     ],
-    "subtitle": "subtitles.guhs.waterval.ruis"
+    "subtitle": "subtitles.guhs.wolkenschaapje.pluis"
   }
 }

@@ -31,6 +31,7 @@ public final class GuhDex {
             GuhVariant.KAASMOERASGUH, GuhVariant.KIKKERGUH, GuhVariant.KAASMOT, GuhVariant.MOERASHEKS_MIKA,
             GuhVariant.BOSWACHTERGUH, GuhVariant.KNABBELPLUKKER,
             GuhVariant.GRILLGUH, GuhVariant.ASGUH, GuhVariant.ROOKGUH,   // (2.10.1: the Rookguh, with your saved-Rookguh count)
+            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH,   // biomes3
             // 2.8 (Knuffeldal)
             GuhVariant.PLUISGUH, GuhVariant.PINGUH, GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
             GuhVariant.THEEGUH, GuhVariant.KAPPERGUH, GuhVariant.BOERINNEGUH, GuhVariant.GUHSCHAAPJE, GuhVariant.KNABBELKIPPETJE,
@@ -58,7 +59,8 @@ public final class GuhDex {
      * that needs a full Guhdex, the seen counter), so "alles verzameld" is exactly what it was in 2.10.0.
      */
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
-            GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA);   // (1.2.8: the Bleekwoud is rare and they only come at night)
+            GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,   // (1.2.8: the Bleekwoud is rare and they only come at night)
+            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE);   // biomes3: the new biomes only exist in new chunks, far out
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
@@ -85,7 +87,8 @@ public final class GuhDex {
             new Milestone(5, 0, () -> ModItems.clothingItem(GuhClothes.HEART_GLASSES)),
             new Milestone(8, 3, () -> ModItems.clothingItem(GuhClothes.MONOCLE)),
             new Milestone(TELLEND.size(), 0, () -> ModItems.GUH_KRISTAL_VERREKIJKER.get()),
-            new Milestone(TELLEND.size(), TAMEABLE.size(), () -> ModItems.clothingItem(GuhClothes.ROYAL_CROWN)));
+            // biomes3: a tameable bonus page (Bloesemguh, Tanukiguh) is not needed for the crown either
+            new Milestone(TELLEND.size(), (int) TAMEABLE.stream().filter(v -> !EXTRA.contains(v)).count(), () -> ModItems.clothingItem(GuhClothes.ROYAL_CROWN)));
 
     /** Creature pages (2.8): a page that isn't a guh or a guh character, filled in by standing near that entity. */
     private static final java.util.Map<GuhVariant, java.util.function.Supplier<? extends net.minecraft.world.entity.EntityType<?>>> CREATURES =
