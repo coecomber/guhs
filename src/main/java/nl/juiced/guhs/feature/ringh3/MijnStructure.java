@@ -55,7 +55,8 @@ public class MijnStructure extends BarbecuePutStructure {
 
     public MijnStructure(StructureSettings settings, Holder<StructureTemplatePool> pool, Identifier jigsaw, int straal, int verschil, int ruimte,
                          int keepClear, Optional<Integer> voorrang) {
-        super(settings, pool, jigsaw, straal, verschil, ruimte, keepClear, voorrang);
+        // (the last argument is ring-h1's surface pool of the barbecueput: the mine only stands under a ceiling)
+        super(settings, pool, jigsaw, straal, verschil, ruimte, keepClear, voorrang, Optional.empty());
         this.pool = pool;
         this.jigsaw = jigsaw;
         this.straal = straal;

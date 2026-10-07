@@ -62,9 +62,8 @@ VASTE_IDS = {
     # (the rows of bank, tech-bronnen, tech-buizen, tech-machines, tech-vloeistof, tech-bezorg, fossiel-mijn, sausdieren,
     # paleizen and tech-quests went at their merge: those slices write every file of their ids themselves)
     # (ring-kern's rows went at its merge too: the Knabbelring, the three gifts, the Elfentouwhaak, Smikagol and the rider)
-    # ring-h3, ring-h5
-    "barbecuerog": ("entity", "De Barbecuerog", None), "oog_van_sausron": ("entity", "Het Oog van Sausron", None),
-    "oog_van_sausron_beeldje": ("block", "Beeldje van het Oog van Sausron", (240, 130, 50)),
+    # (the last three went at the merge of the ring chapters: the Barbecuerog of ring-h3, the Oog van Sausron and its
+    # statuette of ring-h5. Nothing is left: every fixed id of the contract is written by its owner)
 }
 # the reserved Brouwsels (Brouwsel.java): id -> the name of what bubbles in the pan
 BROUWSELS = {"blubroom": "Blubroomdrankje", "pepervuur": "Pepervuurdrankje", "peperzoet": "Peperzoetdrankje"}
