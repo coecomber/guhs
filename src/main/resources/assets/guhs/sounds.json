@@ -2705,5 +2705,79 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
+  },
+  "einde2_appa.jip_jip": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.camel.dash",
+        "type": "event",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:entity.polar_bear.ambient",
+        "type": "event",
+        "pitch": 0.75,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_appa.jip_jip"
+  },
+  "einde2_appa.brul": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.polar_bear.ambient",
+        "type": "event",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:entity.camel.ambient",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.panda.ambient",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_appa.brul"
+  },
+  "einde2_appa.momo": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.parrot.ambient",
+        "type": "event",
+        "pitch": 1.7
+      },
+      {
+        "name": "minecraft:entity.fox.ambient",
+        "type": "event",
+        "pitch": 1.9,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:entity.bat.ambient",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_appa.momo"
+  },
+  "einde2_appa.fluitje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 2.0
+      },
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_appa.fluitje"
   }
 }
