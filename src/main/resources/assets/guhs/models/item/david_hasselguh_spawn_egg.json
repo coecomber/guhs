@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/david_hasselguh_spawn_egg"
+  }
+}

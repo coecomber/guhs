@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/krokante_grill_zij",
+    "zij": "guhs:block/krokante_grill_zij",
+    "voor": "guhs:block/krokante_grill_voor",
+    "boven": "guhs:block/krokante_grill_boven_bakt"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#boven"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        14,
+        14
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}

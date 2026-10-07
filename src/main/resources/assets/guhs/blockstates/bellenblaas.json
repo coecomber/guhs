@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "guhs:block/bellenblaas"
+    },
+    "facing=east": {
+      "model": "guhs:block/bellenblaas",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/bellenblaas",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/bellenblaas",
+      "y": 270
     }
   }
 }

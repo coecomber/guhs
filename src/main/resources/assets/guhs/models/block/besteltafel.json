@@ -1,6 +1,171 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "guhs:block/besteltafel"
-  }
+    "particle": "guhs:block/besteltafel",
+    "hout": "guhs:block/besteltafel",
+    "kleed": "guhs:block/besteltafel_kleed",
+    "bel": "guhs:block/besteltafel_bel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kleed"
+        },
+        "south": {
+          "texture": "#kleed"
+        },
+        "east": {
+          "texture": "#kleed"
+        },
+        "west": {
+          "texture": "#kleed"
+        },
+        "up": {
+          "texture": "#kleed"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        12,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        14,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bel"
+        },
+        "south": {
+          "texture": "#bel"
+        },
+        "east": {
+          "texture": "#bel"
+        },
+        "west": {
+          "texture": "#bel"
+        },
+        "up": {
+          "texture": "#bel"
+        },
+        "down": {
+          "texture": "#bel"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        16,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16.6,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
 }

@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "hanging=false": {
       "model": "guhs:block/spooklantaarn"
+    },
+    "hanging=true": {
+      "model": "guhs:block/spooklantaarn_hanging"
     }
   }
 }

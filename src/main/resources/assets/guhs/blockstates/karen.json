@@ -1,7 +1,64 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/karen"
+    "gezicht=0,facing=north": {
+      "model": "guhs:block/karen_0"
+    },
+    "gezicht=0,facing=east": {
+      "model": "guhs:block/karen_0",
+      "y": 90
+    },
+    "gezicht=0,facing=south": {
+      "model": "guhs:block/karen_0",
+      "y": 180
+    },
+    "gezicht=0,facing=west": {
+      "model": "guhs:block/karen_0",
+      "y": 270
+    },
+    "gezicht=1,facing=north": {
+      "model": "guhs:block/karen_1"
+    },
+    "gezicht=1,facing=east": {
+      "model": "guhs:block/karen_1",
+      "y": 90
+    },
+    "gezicht=1,facing=south": {
+      "model": "guhs:block/karen_1",
+      "y": 180
+    },
+    "gezicht=1,facing=west": {
+      "model": "guhs:block/karen_1",
+      "y": 270
+    },
+    "gezicht=2,facing=north": {
+      "model": "guhs:block/karen_2"
+    },
+    "gezicht=2,facing=east": {
+      "model": "guhs:block/karen_2",
+      "y": 90
+    },
+    "gezicht=2,facing=south": {
+      "model": "guhs:block/karen_2",
+      "y": 180
+    },
+    "gezicht=2,facing=west": {
+      "model": "guhs:block/karen_2",
+      "y": 270
+    },
+    "gezicht=3,facing=north": {
+      "model": "guhs:block/karen_3"
+    },
+    "gezicht=3,facing=east": {
+      "model": "guhs:block/karen_3",
+      "y": 90
+    },
+    "gezicht=3,facing=south": {
+      "model": "guhs:block/karen_3",
+      "y": 180
+    },
+    "gezicht=3,facing=west": {
+      "model": "guhs:block/karen_3",
+      "y": 270
     }
   }
 }

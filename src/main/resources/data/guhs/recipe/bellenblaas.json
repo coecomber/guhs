@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    " S ",
+    "ZBZ"
+  ],
+  "key": {
+    "R": "minecraft:pink_dye",
+    "S": "minecraft:stick",
+    "Z": "minecraft:slime_ball",
+    "B": "minecraft:bowl"
+  },
+  "result": {
+    "id": "guhs:bellenblaas"
+  }
+}

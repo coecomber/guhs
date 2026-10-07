@@ -2705,5 +2705,210 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
+  },
+  "einde2_sponsguh_wezens.guh_babbel": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient2",
+        "pitch": 1.0,
+        "volume": 0.8
+      },
+      {
+        "name": "guhs:guh_ambient5",
+        "pitch": 1.0,
+        "volume": 0.8
+      },
+      {
+        "name": "guhs:guh_ambient9",
+        "pitch": 1.0,
+        "volume": 0.8
+      },
+      {
+        "name": "guhs:guh_ambient12",
+        "pitch": 1.0,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.guh_babbel"
+  },
+  "einde2_sponsguh_wezens.mika_brom": {
+    "sounds": [
+      {
+        "name": "guhs:mika_ambient1",
+        "pitch": 0.8,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:mika_ambient4",
+        "pitch": 0.8,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:mika_ambient8",
+        "pitch": 0.8,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:mika_ambient11",
+        "pitch": 0.8,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.mika_brom"
+  },
+  "einde2_sponsguh_wezens.sponsguh_lach": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.dolphin.play",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "minecraft:entity.dolphin.ambient",
+        "type": "event",
+        "pitch": 1.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.sponsguh_lach"
+  },
+  "einde2_sponsguh_wezens.gerrit_njeg": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.cat.ambient",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.gerrit_njeg"
+  },
+  "einde2_sponsguh_wezens.octo_klarinet": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:block.note_block.didgeridoo",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.octo_klarinet"
+  },
+  "einde2_sponsguh_wezens.monster_brul": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ravager.roar",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.monster_brul"
+  },
+  "einde2_sponsguh_wezens.monster_zing": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bass",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:block.note_block.cow_bell",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.monster_zing"
+  },
+  "einde2_sponsguh_wezens.hasselguh_plons": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.dolphin.splash",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.hasselguh_plons"
+  },
+  "einde2_sponsguh_wezens.mobiel_motor": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.minecart.riding",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.mobiel_motor"
+  },
+  "einde2_sponsguh_wezens.mobiel_toet": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.goat.horn_break",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.mobiel_toet"
+  },
+  "einde2_sponsguh_wezens.grill_sis": {
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.grill_sis"
+  },
+  "einde2_sponsguh_wezens.bestelbel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.bestelbel"
+  },
+  "einde2_sponsguh_wezens.karen_piep": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.karen_piep"
+  },
+  "einde2_sponsguh_wezens.bellen": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:entity.puffer_fish.blow_out",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.bellen"
   }
 }

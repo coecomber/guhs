@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left_open",
+  "textures": {
+    "bottom": "guhs:block/vruchthuis_deur_bottom",
+    "top": "guhs:block/vruchthuis_deur_top"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "F",
+    "W"
+  ],
+  "key": {
+    "W": "guhs:vruchthuis_wand",
+    "F": "guhs:gepofte_knabbelkoorvrucht"
+  },
+  "result": {
+    "id": "guhs:vruchthuis_dak",
+    "count": 2
+  }
+}

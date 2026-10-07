@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WGW"
+  ],
+  "key": {
+    "W": "guhs:vruchthuis_wand",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "guhs:vruchthuis_raam",
+    "count": 2
+  }
+}
