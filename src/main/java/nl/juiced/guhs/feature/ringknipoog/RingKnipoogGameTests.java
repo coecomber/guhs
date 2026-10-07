@@ -733,16 +733,19 @@ public final class RingKnipoogGameTests {
         helper.assertTrue(NlTekst.has("quest.guhs.ringknipoog.sjokkel.brug") && NlTekst.has("quest.guhs.ringknipoog.sjokkel.klik"), "the two lines about him exist");
         Knipogen.seconde(p);
         helper.assertTrue(sjokkel.position().distanceTo(van) < 1e-6, "one shuffle a game tick, however many look");
-        int[] tel = {0};
+        // (a look in the very tick of the one before moves nothing: count the shuffles themselves)
+        int[] geschuifeld = {0};
         helper.onEachTick(() -> {
-            if (++tel[0] <= 12) {
+            if (geschuifeld[0] < 12 && !sjokkel.isRemoved()) {
+                double x = sjokkel.getX();
                 Knipogen.seconde(p);
+                geschuifeld[0] += sjokkel.getX() != x ? 1 : 0;
             }
         });
-        helper.runAfterDelay(13, () -> {
+        helper.runAfterDelay(20, () -> {
             double ver = sjokkel.position().distanceTo(van);
-            helper.assertTrue(Math.abs(ver - 12 * Sjokkel.STAP) < 1e-3 && Math.abs(sjokkel.getZ() - van.z) < 1e-6 && sjokkel.getX() > van.x && sjokkel.getX() < naar.x,
-                    "twelve shuffles east along his line: " + ver);
+            helper.assertTrue(geschuifeld[0] == 12 && Math.abs(ver - 12 * Sjokkel.STAP) < 1e-3 && Math.abs(sjokkel.getZ() - van.z) < 1e-6 && sjokkel.getX() > van.x
+                    && sjokkel.getX() < naar.x, "twelve shuffles east along his line, " + Sjokkel.STAP + " each: " + geschuifeld[0] + " / " + ver);
             // a click: nothing but a line (no feeding, no taming, no picking up)
             PlayerInteractEvent.EntityInteractSpecific klik = new PlayerInteractEvent.EntityInteractSpecific(p, InteractionHand.MAIN_HAND, sjokkel, Vec3.ZERO);
             helper.assertTrue(NeoForge.EVENT_BUS.post(klik).isCanceled() && !sjokkel.isTame(), "a click on him is swallowed");
