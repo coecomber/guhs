@@ -1,4 +1,4 @@
-version 27
+version 31
 group 475548DB0F6F37EB
 chapter guhs_basis
 chapter guhs_guhmensie
@@ -13,6 +13,7 @@ chapter guhs_piep
 chapter guhs_band
 chapter guhs_verhalen
 chapter guhs_diertjes
+chapter guhs_guhpixel
 chapter guhs_techniek
 chapter guhs_knabbelring
 chapter guhs_guhrio
