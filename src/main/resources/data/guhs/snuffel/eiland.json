@@ -1,137 +1,513 @@
 {
-  "versie": 1,
+  "versie": 3,
   "oorsprong": [
-    -30,
+    -84,
     44,
-    -30
+    -98
   ],
   "maat": [
-    61,
-    34,
-    61
+    168,
+    62,
+    192
   ],
   "stukken": [
     {
-      "template": "guhs:snuffel/eiland",
+      "template": "guhs:snuffeldorp/eiland_0_0",
       "plek": [
         0,
         0,
         0
       ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_0_1",
+      "plek": [
+        0,
+        0,
+        48
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_0_2",
+      "plek": [
+        0,
+        0,
+        96
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_0_3",
+      "plek": [
+        0,
+        0,
+        144
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_1_0",
+      "plek": [
+        48,
+        0,
+        0
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_1_1",
+      "plek": [
+        48,
+        0,
+        48
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_1_2",
+      "plek": [
+        48,
+        0,
+        96
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_1_3",
+      "plek": [
+        48,
+        0,
+        144
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_2_0",
+      "plek": [
+        96,
+        0,
+        0
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_2_1",
+      "plek": [
+        96,
+        0,
+        48
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_2_2",
+      "plek": [
+        96,
+        0,
+        96
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_2_3",
+      "plek": [
+        96,
+        0,
+        144
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_3_1",
+      "plek": [
+        144,
+        0,
+        48
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_3_2",
+      "plek": [
+        144,
+        0,
+        96
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_3_3",
+      "plek": [
+        144,
+        0,
+        144
+      ]
     }
   ],
   "strand": {
     "plek": [
-      30.5,
+      56.5,
       20,
-      43.5
+      160.5
     ],
     "yaw": 180.0
   },
   "haven": {
     "plek": [
-      51.5,
+      131.5,
       20,
-      30.5
+      114.5
     ],
     "yaw": 90.0
   },
   "boom": [
-    30,
-    20,
-    23
+    97,
+    22,
+    80
   ],
-  "boom_draai": 0,
-  "grens": 10,
+  "boom_draai": 2,
+  "grens": 12,
   "bewoners": [
-    {
-      "sleutel": "kapitein",
-      "bewoner": "kapitein",
-      "plek": [
-        46.5,
-        20,
-        31.5
-      ],
-      "yaw": -90.0
-    },
     {
       "sleutel": "redder",
       "bewoner": "redder",
       "plek": [
-        33.5,
-        20,
-        41.5
+        71.5,
+        20.0,
+        132.5
       ],
-      "yaw": 160.0,
+      "yaw": 20.0,
       "houding": "kwispel"
     },
     {
-      "sleutel": "proef_pup",
-      "ras": "corgi",
-      "kleur": "sable",
-      "pup": true,
+      "sleutel": "dokter",
+      "bewoner": "dokter",
       "plek": [
-        25.5,
-        20,
-        30.5
+        69.5,
+        20.0,
+        102.5
+      ],
+      "yaw": 0.0
+    },
+    {
+      "sleutel": "trainer",
+      "bewoner": "trainer",
+      "plek": [
+        71.5,
+        20.0,
+        78.5
+      ],
+      "yaw": -70.0,
+      "houding": "zit"
+    },
+    {
+      "sleutel": "bakker",
+      "bewoner": "bakker",
+      "plek": [
+        79.5,
+        20.0,
+        114.5
+      ],
+      "yaw": -90.0
+    },
+    {
+      "sleutel": "visser",
+      "bewoner": "visser",
+      "plek": [
+        123.5,
+        20.0,
+        114.5
+      ],
+      "yaw": 180.0,
+      "houding": "zit"
+    },
+    {
+      "sleutel": "juf",
+      "bewoner": "juf",
+      "plek": [
+        100.5,
+        20.0,
+        108.5
+      ],
+      "yaw": 90.0
+    },
+    {
+      "sleutel": "oma",
+      "bewoner": "oma",
+      "plek": [
+        72.5,
+        20.0,
+        125.5
+      ],
+      "yaw": -90.0,
+      "houding": "zit"
+    },
+    {
+      "sleutel": "tuinder",
+      "bewoner": "tuinder",
+      "plek": [
+        104.5,
+        20.0,
+        133.5
+      ],
+      "yaw": 90.0
+    },
+    {
+      "sleutel": "pup",
+      "bewoner": "pup",
+      "plek": [
+        87.5,
+        20.0,
+        117.5
       ],
       "yaw": 135.0,
-      "houding": "zit"
+      "houding": "kwispel"
+    },
+    {
+      "sleutel": "havenkapitein",
+      "bewoner": "kapitein",
+      "plek": [
+        134.5,
+        20.0,
+        114.5
+      ],
+      "yaw": 90.0
     }
   ],
   "geuren": [
     {
-      "id": "proef_botje",
+      "id": "kluifje",
       "soort": "eten",
       "rang": 1,
       "icoon": "minecraft:bone"
     },
     {
-      "id": "proef_bal",
+      "id": "fluitje",
+      "soort": "voorwerp",
+      "rang": 1,
+      "icoon": "minecraft:goat_horn"
+    },
+    {
+      "id": "bijen",
+      "soort": "dier",
+      "rang": 1,
+      "icoon": "minecraft:honeycomb"
+    },
+    {
+      "id": "bosgeestje",
+      "soort": "vreemd",
+      "rang": 1,
+      "icoon": "minecraft:moss_block"
+    },
+    {
+      "id": "deegroller",
+      "soort": "eten",
+      "rang": 1,
+      "icoon": "minecraft:stick"
+    },
+    {
+      "id": "dobber",
+      "soort": "dier",
+      "rang": 1,
+      "icoon": "minecraft:fishing_rod"
+    },
+    {
+      "id": "schoolbel",
+      "soort": "voorwerp",
+      "rang": 1,
+      "icoon": "minecraft:bell"
+    },
+    {
+      "id": "bolwol",
+      "soort": "dier",
+      "rang": 1,
+      "icoon": "minecraft:purple_wool"
+    },
+    {
+      "id": "gietertje",
+      "soort": "voorwerp",
+      "rang": 1,
+      "icoon": "minecraft:bucket"
+    },
+    {
+      "id": "stuiterbal",
       "soort": "voorwerp",
       "rang": 1,
       "icoon": "minecraft:slime_ball"
     },
     {
-      "id": "proef_zeelucht",
+      "id": "kaasknabbel",
+      "soort": "eten",
+      "rang": 1,
+      "icoon": "guhs:kaas_knabbels"
+    },
+    {
+      "id": "tweedpet",
+      "soort": "voorwerp",
+      "rang": 1,
+      "icoon": "minecraft:leather_helmet"
+    },
+    {
+      "id": "kippen",
+      "soort": "dier",
+      "rang": 1,
+      "icoon": "minecraft:egg"
+    },
+    {
+      "id": "paddenstoel",
       "soort": "vreemd",
       "rang": 1,
-      "icoon": "minecraft:nautilus_shell"
+      "icoon": "minecraft:red_mushroom"
+    },
+    {
+      "id": "papa_sjaal",
+      "soort": "vreemd",
+      "rang": 1,
+      "icoon": "minecraft:blue_wool"
     }
   ],
   "geurbronnen": [
     {
-      "id": "proef_botje",
-      "geur": "proef_botje",
+      "id": "dorp_les_kluifje",
+      "geur": "kluifje",
       "plek": [
-        26,
+        78,
         20,
-        42
+        83
       ],
       "graven": true,
-      "bereik": 22
+      "bereik": 16
     },
     {
-      "id": "proef_bal",
-      "geur": "proef_bal",
+      "id": "dorp_les_fluitje",
+      "geur": "fluitje",
       "plek": [
-        37,
+        62,
         20,
-        26
+        88
       ],
       "graven": true,
-      "bereik": 22
+      "bereik": 34
     },
     {
-      "id": "proef_zeelucht",
-      "geur": "proef_zeelucht",
+      "id": "dorp_les_bijen",
+      "geur": "bijen",
       "plek": [
-        45,
+        58,
         20,
-        30
+        72
       ],
       "graven": false,
-      "bereik": 14
+      "bereik": 30
+    },
+    {
+      "id": "dorp_deegroller",
+      "geur": "deegroller",
+      "plek": [
+        106,
+        20,
+        99
+      ],
+      "graven": true,
+      "bereik": 44
+    },
+    {
+      "id": "dorp_dobber",
+      "geur": "dobber",
+      "plek": [
+        135,
+        20,
+        130
+      ],
+      "graven": true,
+      "bereik": 44
+    },
+    {
+      "id": "dorp_schoolbel",
+      "geur": "schoolbel",
+      "plek": [
+        70,
+        20,
+        60
+      ],
+      "graven": true,
+      "bereik": 52
+    },
+    {
+      "id": "dorp_bolwol",
+      "geur": "bolwol",
+      "plek": [
+        50,
+        20,
+        146
+      ],
+      "graven": true,
+      "bereik": 44
+    },
+    {
+      "id": "dorp_gietertje",
+      "geur": "gietertje",
+      "plek": [
+        108,
+        20,
+        84
+      ],
+      "graven": true,
+      "bereik": 48
+    },
+    {
+      "id": "dorp_stuiterbal",
+      "geur": "stuiterbal",
+      "plek": [
+        66,
+        20,
+        142
+      ],
+      "graven": true,
+      "bereik": 40
+    },
+    {
+      "id": "dorp_examen_kaasknabbel",
+      "geur": "kaasknabbel",
+      "plek": [
+        102,
+        20,
+        62
+      ],
+      "graven": true,
+      "bereik": 40
+    },
+    {
+      "id": "dorp_examen_tweedpet",
+      "geur": "tweedpet",
+      "plek": [
+        74,
+        20,
+        91
+      ],
+      "graven": true,
+      "bereik": 40
+    },
+    {
+      "id": "dorp_examen_kippen",
+      "geur": "kippen",
+      "plek": [
+        108,
+        20,
+        137
+      ],
+      "graven": false,
+      "bereik": 40
+    },
+    {
+      "id": "dorp_examen_paddenstoel",
+      "geur": "paddenstoel",
+      "plek": [
+        91,
+        20,
+        56
+      ],
+      "graven": false,
+      "bereik": 40
+    },
+    {
+      "id": "dorp_papa_sjaal",
+      "geur": "papa_sjaal",
+      "plek": [
+        97,
+        22,
+        78
+      ],
+      "graven": true,
+      "bereik": 30
     }
   ]
 }

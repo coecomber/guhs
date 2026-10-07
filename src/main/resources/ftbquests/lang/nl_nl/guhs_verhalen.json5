@@ -445,7 +445,7 @@
   ],
   "quest.4755488745704E72.title": "Goede daden",
   "quest.4755488745704E72.quest_desc": [
-    "De bakker, de visser, de juf, oma en de tuinder zijn iets kwijt. Snuffel het terug! Van elke goede daad leer je een geur en groeit het &aboompje&r van je maatje een stukje.",
+    "De bakker, de visser, de juf, oma, de tuinder en Kleine Kwijlebal zijn iets kwijt. Vraag ernaar, snuffel het op en breng het terug! Van elke goede daad leer je een geur en groeit het &aboompje&r van je maatje een stukje. Vier is genoeg.",
   ],
   "quest.475548189E89A494.title": "Het snuffelexamen",
   "quest.475548189E89A494.quest_desc": [
@@ -454,5 +454,57 @@
   "quest.47554894D344E0BD.title": "Een spoor van papa",
   "quest.47554894D344E0BD.quest_desc": [
     "Bij het boompje ruik je iets bekends... papa is hier geweest! Het lost nog niets op, maar je weet nu waar je moet zoeken. Je krijgt het &8Guhstation&r: daarmee ga je terug naar het eiland wanneer je wilt. Wordt vervolgd, njeg!",
+  ],
+  "quest.4755481D5724F8E0.title": "Neus omlaag, staart omhoog",
+  "quest.4755481D5724F8E0.quest_desc": [
+    "Je eerste geur! Houd de &fsnuffeltoets&r ingedrukt en loop naar waar de &fgeurmeter&r het hardst uitslaat. Oranje is iets lekkers, blauw een ding, groen een dier en paars iets vreemds. Alles wat je neus leert, staat in je &fsnuffelboekje&r.",
+  ],
+  "quest.475548C4F8FCAB3B.title": "Alleen jij ziet het",
+  "quest.475548C4F8FCAB3B.quest_desc": [
+    "Het ondeugende &abosgeestje&r heeft de halve inboedel van Snuffeldorp verstopt. Nu jij het kunt zien, wil het alles goedmaken: het wijst de kant op als je iets ruikt, en van elke goede daad groeit zijn boompje.",
+  ],
+  "quest.4755487B4B1EBC52.title": "Bolletjes, bolletjes, bolletjes",
+  "quest.4755487B4B1EBC52.quest_desc": [
+    "&6Bakker Kruimelsnuit&r is zijn deegroller kwijt en bakt al dagen alleen maar bolletjes. Vraag hem ernaar, snuffel de deegroller op (oranje: iets lekkers) en breng hem terug.",
+  ],
+  "quest.4755485AE67999A0.title": "Beet of geen beet?",
+  "quest.4755485AE67999A0.quest_desc": [
+    "&6Visser Natneus&r mist zijn lievelingsdobber. Die dreef weg met het tij. Snuffel langs de kust ten zuiden van de haven (groen: hij ruikt naar vis).",
+  ],
+  "quest.4755484143B2AFD0.title": "Eeuwige pauze",
+  "quest.4755484143B2AFD0.quest_desc": [
+    "Zonder schoolbel is de pauze nooit voorbij. &6Juf Blaffetje&r vindt dat minder leuk dan de pups. Zoek de bel achter in de wei (blauw: een ding).",
+  ],
+  "quest.475548D392880ED4.title": "Een trui met één mouw",
+  "quest.475548D392880ED4.quest_desc": [
+    "De lila bol wol van &6Oma Wolletje&r is weggerold, het strandpoortje door. Snuffel in het zand aan de westkant van het strand (groen: wol ruikt naar schaap).",
+  ],
+  "quest.475548A933E77E3D.title": "Dorstige knollen",
+  "quest.475548A933E77E3D.quest_desc": [
+    "&6Tuinder Knolletje&r geeft zijn knollen water met zijn hoed, en die lekt. Zijn gietertje ligt ergens aan de oostkant van de wei (blauw: een ding).",
+  ],
+  "quest.4755484C0C6D6655.title": "Kef! Bal! Kef!",
+  "quest.4755484C0C6D6655.quest_desc": [
+    "De stuiterbal van &6Kleine Kwijlebal&r stuiterde het strandpoortje uit. Hij zit vol kwijl, dus je ruikt hem zo (blauw: een ding).",
+  ],
+  "quest.4755487151437CA9.title": "Een jong boompje",
+  "quest.4755487151437CA9.quest_desc": [
+    "Vier goede daden: het boompje van je maatje is van &akiem&r via &ascheutje&r en &astruikje&r een &ajong boompje&r geworden. Bij elke stap zie je het groeien, hoog boven het dorp. Meester Truffelneus vindt je nu klaar voor het examen.",
+  ],
+  "quest.4755488A9783254C.title": "Het hele dorp geholpen",
+  "quest.4755488A9783254C.quest_desc": [
+    "Alle zes de dorpelingen hebben hun spullen terug. Het is weer rustig in Snuffeldorp. Nou ja: de schoolbel luidt, de pup stuitert en de bakker zingt. Njeg!",
+  ],
+  "quest.47554829F0432F06.title": "Snuffelpup met diploma",
+  "quest.47554829F0432F06.quest_desc": [
+    "Geslaagd voor het snuffelexamen van Meester Truffelneus: vier verstopte geuren, van elke kleur één. Je bent officieel &6Snuffelpup&r, rang 1 (de laagste) van 5 (de hoogste). De andere rangen komen in een later verhaal.",
+  ],
+  "quest.475548887B999389.title": "Hier mag je pas door als Snuffelneus",
+  "quest.475548887B999389.quest_desc": [
+    "Achter de wei loopt de weg verder, het eiland op: een bos, een heuvel met staande stenen, een vuurtoren. Maar er staat een vriendelijke &cwegversperring&r. Een Snuffelpup komt er niet langs, ook niet zwemmend. Wordt vervolgd!",
+  ],
+  "quest.4755488100662CF9.title": "Het Guhstation",
+  "quest.4755488100662CF9.quest_desc": [
+    "Je maatje had nog iets in zijn verstopplek: een &8Guhstation&r. Zet het thuis neer, klik erop en druk op start: je staat weer op het eiland, op de plek waar je was. Kwijt? &6Kapitein Zoutsnoet&r in de haven heeft er nog een paar.",
   ],
 }
