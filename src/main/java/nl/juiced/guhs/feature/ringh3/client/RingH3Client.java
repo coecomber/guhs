@@ -9,10 +9,13 @@ import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import com.geckolib.renderer.base.RenderPassInfo;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -39,8 +42,8 @@ import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
  * Client side of bbq2 (ring-h3): the Barbecuerog as you see, hear and feel him, and the two things the bridge scene needs
  * that the verhaal engine does not have.
  * <ul>
- *   <li>His renderer: the GeckoLib model with its glow mask (cracks, eyes, embers and every flame shine in the dark), drawn
- *       from far away (he is ten blocks tall).</li>
+ *   <li>His renderer: the GeckoLib model, drawn from far away (he is ten blocks tall): at full brightness while he burns,
+ *       with its glow mask while he is dark (cracks and eyes shine in the dark).</li>
  *   <li>{@link #vuur}: while his flames burn he sheds fire, ash and embers, black smoke wreathes him from his feet to his
  *       wings, and he CARRIES LIGHT: a light block that only exists in this game walks along with him, so a dark hall lights
  *       up as he comes (and the first thing you see of him, before that, is two eyes and the fire in his seams).</li>
@@ -48,6 +51,7 @@ import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
  *       by its own script).</li>
  *   <li>The white flashes of the bridge scene ({@link Scenes#FLITSEN}: the blade on Guhdalf's shield of light, the staff on
  *       the bridge), drawn over the picture between the scene's black bars (the bars and the subtitle stay as they are).</li>
+ *   <li>The lens of the bridge scene ({@link Scenes#LENZEN}) and its made-to-measure fire and light ({@link SceneVuur}).</li>
  *   <li>{@link BrugBreuk}: the span that breaks, in this game only.</li>
  * </ul>
  * Model, textures and animations: tools/features/ring_h3_modellen.py.
@@ -55,6 +59,8 @@ import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
 public final class RingH3Client {
     /** The light blocks that walk along with a burning Barbecuerog: entity id -> where its light is now. */
     private static final Map<Integer, BlockPos> LICHT = new HashMap<>();
+    /** The colour of his smoke (it dyes the pale smoke of a campfire): soot, a little warm. */
+    private static final int ROOK = 0x1A1210;
     private static float schud;
     private static int schudTicks;
     /** Ticks the bars of a scene take to slide in and out (the engine's CutsceneSpeler.BALK_TICKS). */
@@ -63,6 +69,7 @@ public final class RingH3Client {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(RingH3Feature.BARBECUEROG.get(), RogRenderer::new));
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
+            SceneVuur.tick();
             BrugBreuk.tick();
             lichtTick();
             if (schudTicks > 0) {
@@ -72,10 +79,12 @@ public final class RingH3Client {
             }
         });
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeCameraAngles event) -> camera(event));
+        NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeFov event) -> lens(event));
         NeoForge.EVENT_BUS.addListener((RenderGuiEvent.Post event) -> flits(event));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
             LICHT.clear();
             BrugBreuk.wis();
+            SceneVuur.wis();
             schud = 0;
         });
     }
@@ -84,16 +93,38 @@ public final class RingH3Client {
         RogRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<BarbecuerogEntity>(Guhs.id("barbecuerog")));
             this.shadowRadius = 3.0f;
-            withRenderLayer(new AutoGlowingGeoLayer<>(this));
+            withRenderLayer(new AutoGlowingGeoLayer<BarbecuerogEntity, Void, LivingEntityRenderState>(this) {
+                @Override
+                public void submitRenderTask(RenderPassInfo<LivingEntityRenderState> info, SubmitNodeCollector collector) {
+                    // (only while he is dark: see extractRenderState)
+                    if (info.renderState().lightCoords != LightCoordsUtil.FULL_BRIGHT) {
+                        super.submitRenderTask(info, collector);
+                    }
+                }
+            });
         }
 
         /**
-         * He is far bigger than the box he stands in (a wing reaches eleven blocks to a side, his fire thirteen blocks up): with
+         * While his flames burn he is drawn ONCE, at full brightness: he is his own light (his skin is charcoal: black stays
+         * black, the seams, the eyes and every flame shine as they do through the glow mask). The glow layer, which draws all
+         * 370 cubes of him a second time, is only used while he is a shape in the dark (asleep in the Diepe Poort): measured,
+         * that second pass was a tenth to a third of what he costs a frame.
+         */
+        @Override
+        public void extractRenderState(BarbecuerogEntity rog, LivingEntityRenderState state, float partialTick) {
+            super.extractRenderState(rog, state, partialTick);
+            if (rog.brandt()) {
+                state.lightCoords = LightCoordsUtil.FULL_BRIGHT;
+            }
+        }
+
+        /**
+         * He is far bigger than the box he stands in (a wing reaches eleven blocks to a side, his fire sixteen blocks up): with
          * the game's own rule he would vanish, wings and all, the moment that box leaves the picture.
          */
         @Override
         protected AABB getBoundingBoxForCulling(BarbecuerogEntity rog) {
-            return rog.getBoundingBox().inflate(10.0, 5.0, 10.0);
+            return rog.getBoundingBox().inflate(12.0, 7.0, 12.0);
         }
     }
 
@@ -118,34 +149,47 @@ public final class RingH3Client {
             doof(level, rog.getId());
             return;
         }
-        // the mane: flames from his crown and down his back (the model's own fire stands up to thirteen blocks high)
+        // He is WREATHED: what he is made of is fire and shadow, and both come off him all the time. Every particle is made to
+        // measure (SceneVuur.deeltje: scaled, aimed, dyed, with a life of its own): the game's own smoke puff is a hand wide,
+        // on a demon of ten blocks that is dust. About five a tick; only the smoke is translucent (some 70 soft puffs at
+        // a time: it is what costs frames), the embers are cut-out grains.
+        double m = SceneVuur.maat();
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gameRenderer.getMainCamera().position().distanceToSqr(x, y + 5, z) > 56 * 56) {
+            m *= 0.5;                                          // (far away: half of it)
+        }
+        if (rog.tickCount % 2 == 0 && r.nextDouble() < m) {
+            // shadow: black smoke wells up round his feet and rolls up his legs ... (the soft smoke of a campfire, dyed black:
+            // the game's own smoke puff is eight pixels, at this size it is a heap of squares)
+            double hoek = r.nextDouble() * Math.PI * 2, straal = 1.6 + r.nextDouble() * 2.8;
+            SceneVuur.deeltje(ParticleTypes.CAMPFIRE_COSY_SMOKE, x + Math.cos(hoek) * straal, y + 0.3 + r.nextDouble() * 1.4, z + Math.sin(hoek) * straal,
+                    Math.cos(hoek) * 0.015, 0.03 + r.nextDouble() * 0.035, Math.sin(hoek) * 0.015, 0.9f + r.nextFloat() * 0.7f, 46 + r.nextInt(24), ROOK);
+        } else if (r.nextDouble() < m) {
+            // ... and pours off his back and his wings, up past his horns: the cloak of darkness he stands in (behind him:
+            // his face and his fire stay clear)
+            double kant = (r.nextBoolean() ? 1 : -1) * (0.5 + r.nextDouble() * 8.5), terug = 2.4 + r.nextDouble() * 2.4;
+            SceneVuur.deeltje(ParticleTypes.CAMPFIRE_COSY_SMOKE, x + opzij.x * kant - voor.x * terug, y + 4.5 + r.nextDouble() * 8.0,
+                    z + opzij.z * kant - voor.z * terug, -voor.x * 0.02, 0.04 + r.nextDouble() * 0.05, -voor.z * 0.02, 1.0f + r.nextFloat() * 0.9f, 50 + r.nextInt(30), ROOK);
+        }
         for (int i = 0; i < 3; i++) {
-            double hoog = 9.0 + r.nextDouble() * 3.6, terug = -2.2 + r.nextDouble() * 3.4;
-            level.addAlwaysVisibleParticle(i == 0 ? ParticleTypes.FLAME : ParticleTypes.SMALL_FLAME, true, x + voor.x * terug + (r.nextDouble() - 0.5) * 2.4,
-                    y + hoog, z + voor.z * terug + (r.nextDouble() - 0.5) * 2.4, 0, 0.03 + r.nextDouble() * 0.05, 0);
+            if (r.nextDouble() >= m) {
+                continue;
+            }
+            // fire: sparks stream up out of his mane, and embers drift up from all of him, far over his head (grains of fire:
+            // the game's flame at its own size is a candle, and a demon hung with candles is a birthday cake)
+            boolean manen = i < 2;
+            double kant = (r.nextDouble() - 0.5) * (manen ? 3.4 : 17.0), ver = manen ? -3.0 + r.nextDouble() * 4.0 : -r.nextDouble() * 2.5;
+            SceneVuur.deeltje(ParticleTypes.SMALL_FLAME, x + opzij.x * kant + voor.x * ver, y + (manen ? 10.0 + r.nextDouble() * 4.0 : 2.0 + r.nextDouble() * 9.0),
+                    z + opzij.z * kant + voor.z * ver, (r.nextDouble() - 0.5) * 0.06, (manen ? 0.16 : 0.07) + r.nextDouble() * 0.14, (r.nextDouble() - 0.5) * 0.06,
+                    0.3f + r.nextFloat() * 0.35f, 24 + r.nextInt(36), 0);
         }
-        // black smoke wreathes him: it wells up round his feet, rolls off his back and his wings and climbs past his head
-        // (he never stands clean against a wall: there is always his own darkness round him)
-        double hoek = r.nextDouble() * Math.PI * 2, straal = 2.0 + r.nextDouble() * 2.4;
-        level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, true, x + Math.cos(hoek) * straal, y + 0.2 + r.nextDouble() * 1.2, z + Math.sin(hoek) * straal,
-                0, 0.03 + r.nextDouble() * 0.04, 0);
-        double kant = (r.nextBoolean() ? 1 : -1) * (1.5 + r.nextDouble() * 7.5), terug = 1.2 + r.nextDouble() * 1.6;
-        level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, true, x + opzij.x * kant - voor.x * terug, y + 4.0 + r.nextDouble() * 7.5,
-                z + opzij.z * kant - voor.z * terug, 0, 0.04 + r.nextDouble() * 0.04, 0);
-        if (rog.tickCount % 2 == 0) {
-            level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, true, x - voor.x * 1.8 + (r.nextDouble() - 0.5) * 3.0, y + 10.0 + r.nextDouble() * 3.0,
-                    z - voor.z * 1.8 + (r.nextDouble() - 0.5) * 3.0, 0, 0.07, 0);
-            level.addParticle(ParticleTypes.ASH, x + (r.nextDouble() - 0.5) * 12, y + r.nextDouble() * 11, z + (r.nextDouble() - 0.5) * 12, 0, 0, 0);
-            level.addParticle(ParticleTypes.WHITE_ASH, x + (r.nextDouble() - 0.5) * 12, y + r.nextDouble() * 11, z + (r.nextDouble() - 0.5) * 12, 0, 0, 0);
+        if (rog.tickCount % 4 == 0 && r.nextDouble() < m) {
+            SceneVuur.deeltje(ParticleTypes.CAMPFIRE_COSY_SMOKE, x - voor.x * 2.4 + (r.nextDouble() - 0.5) * 4.0, y + 11.5 + r.nextDouble() * 3.0,
+                    z - voor.z * 2.4 + (r.nextDouble() - 0.5) * 4.0, 0, 0.08 + r.nextDouble() * 0.05, 0, 0.9f + r.nextFloat() * 0.8f, 44 + r.nextInt(26), ROOK);
+            level.addParticle(ParticleTypes.ASH, x + (r.nextDouble() - 0.5) * 14, y + r.nextDouble() * 12, z + (r.nextDouble() - 0.5) * 14, 0, 0, 0);
+            level.addParticle(ParticleTypes.WHITE_ASH, x + (r.nextDouble() - 0.5) * 14, y + r.nextDouble() * 12, z + (r.nextDouble() - 0.5) * 14, 0, 0, 0);
         }
-        if (rog.tickCount % 5 == 0) {
-            // the blade of fire (in his right hand, reaching forward) and the lash (left) drip fire
-            double ver = 2.0 + r.nextDouble() * 5.0;
-            level.addParticle(ParticleTypes.FLAME, x - opzij.x * 3.0 + voor.x * ver, y + 2.6 + r.nextDouble() * 0.8, z - opzij.z * 3.0 + voor.z * ver, 0, 0.02, 0);
-            level.addParticle(ParticleTypes.SMALL_FLAME, x + opzij.x * 3.0 + voor.x * (r.nextDouble() * 3.0), y + 0.4 + r.nextDouble() * 2.4,
-                    z + opzij.z * 3.0 + voor.z * (r.nextDouble() * 3.0), 0, 0.01, 0);
-        }
-        if (r.nextInt(14) == 0) {
+        if (r.nextInt(12) == 0) {
             level.addParticle(ParticleTypes.LAVA, x + (r.nextDouble() - 0.5) * 3, y + 4.5 + r.nextDouble() * 2, z + (r.nextDouble() - 0.5) * 3, 0, 0, 0);
         }
         licht(level, rog);
@@ -240,6 +284,20 @@ public final class RingH3Client {
     // the flashes of the bridge scene
     // =====================================================================================================================
 
+    /** The lens of the bridge scene: a wide one where all of him must fit in the picture, a long one for a face ({@link Scenes#LENZEN}). */
+    private static void lens(ViewportEvent.ComputeFov event) {
+        if (CutsceneSpeler.scene() != Scenes.BRUG) {
+            return;
+        }
+        float tijd = CutsceneSpeler.tijd() + (float) event.getPartialTick();
+        for (float[] l : Scenes.LENZEN) {
+            if (tijd >= l[0] && tijd < l[1]) {
+                event.setFOV(l[2] + (l[3] - l[2]) * (tijd - l[0]) / Math.max(1f, l[1] - l[0]));
+                return;
+            }
+        }
+    }
+
     private static void flits(RenderGuiEvent.Post event) {
         Cutscene scene = CutsceneSpeler.scene();
         if (scene != Scenes.BRUG) {
@@ -249,11 +307,11 @@ public final class RingH3Client {
         float sterkst = 0;
         for (int[] f : Scenes.FLITSEN) {
             float dt = tijd - f[0];
-            if (dt < 0 || dt > f[1] * 2.5f) {
+            if (dt < 0 || dt > f[1]) {
                 continue;
             }
-            // up in a tick, down slowly
-            float a = dt < 1 ? dt : (float) Math.pow(1.0 - (dt - 1) / (f[1] * 2.5f - 1), 1.6);
+            // up within a tick, then down fast (a flash of lightning: a veil of white that hangs for seconds is fog, not light)
+            float a = dt < 1 ? dt : (float) Math.pow(1.0 - (dt - 1) / Math.max(1f, f[1] - 1f), 3.0);
             sterkst = Math.max(sterkst, a * f[2] / 100f);
         }
         if (sterkst > 0.01f) {

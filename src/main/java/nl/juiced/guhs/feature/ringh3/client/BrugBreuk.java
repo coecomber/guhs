@@ -22,9 +22,6 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.phys.Vec3;
-import nl.juiced.guhs.entity.GuhNpcEntity;
-import nl.juiced.guhs.feature.ringh3.BarbecuerogEntity;
 import nl.juiced.guhs.feature.ringh3.Plekken;
 import nl.juiced.guhs.feature.ringh3.Scenes;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
@@ -43,9 +40,9 @@ import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
  * While it is broken the stones are taken out again once a second (the server may show the real ones again after a chunk
  * reload). A break that no server message confirms (a replay) heals by itself a few seconds after the scene.
  * <p>
- * When it breaks before your eyes the stones FALL: every stone of the span becomes a falling block of this game alone
- * ({@link #PUIN}: the server never hears of them, they place nothing and drop nothing) that tumbles into the chasm and goes up
- * in dust where it lands.
+ * When it breaks before your eyes the stones FALL: the span gives way under his feet first and then outwards to both ends
+ * ({@link #STRAKS}), and every stone becomes a falling block of this game alone ({@link #PUIN}: the server never hears of
+ * them, they place nothing and drop nothing) that tumbles into the chasm and goes up in dust where it lands.
  */
 public final class BrugBreuk {
     /** The stones that are gone, with what they were. */
@@ -56,6 +53,8 @@ public final class BrugBreuk {
     private static int heelOver = -1, tik;
     /** The stones on their way down (entities of this client only; ids far below the cutscene actors' own). */
     private static final List<FallingBlockEntity> PUIN = new ArrayList<>();
+    /** The stones that are about to let go: {where, what, ticks until it does}. */
+    private static final List<Object[]> STRAKS = new ArrayList<>();
     private static int puinId = -5_000_000;
     /** A falling stone lives at most this many ticks (the chasm is ten deep: a second and a half). */
     private static final int PUIN_TICKS = 70;
@@ -79,6 +78,7 @@ public final class BrugBreuk {
     static void wis() {
         WEG.clear();
         PUIN.clear();
+        STRAKS.clear();
         waar = null;
         server = false;
         sceneBrak = false;
@@ -113,8 +113,9 @@ public final class BrugBreuk {
                 heel(true);
             }
         }
+        straks(level);
         puinTick(level);
-        if (!WEG.isEmpty() && ++tik % 20 == 0) {
+        if (!WEG.isEmpty() && STRAKS.isEmpty() && ++tik % 20 == 0) {
             for (BlockPos pos : WEG.keySet()) {
                 if (!level.getBlockState(pos).isAir()) {
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
@@ -123,34 +124,14 @@ public final class BrugBreuk {
         }
     }
 
-    /** In the scene: find the copy from the actors (the Barbecuerog and Guhdalf are where the script put them), then break. */
+    /** In the scene: where the copy is comes from the scene's own actors ({@link SceneVuur#anker}), then break. */
     private static void breekInScene(ClientLevel level) {
-        Entity rog = null, guhdalf = null;
-        for (Entity e : level.entitiesForRendering()) {
-            if (!CutsceneSpeler.isActeur(e)) {
-                continue;
-            }
-            if (e instanceof BarbecuerogEntity) {
-                rog = e;
-            } else if (e instanceof GuhNpcEntity npc && npc.getKind() == GuhNpcEntity.Kind.GUHDALF) {
-                guhdalf = e;
-            }
-        }
-        if (rog == null || guhdalf == null) {
+        BlockPos anker = SceneVuur.anker();
+        if (anker == null) {
             return;
         }
-        int t = Scenes.BRUG_BREEKT;
-        Vec3 relRog = Scenes.BRUG.plek("rog", t), relGuhdalf = Scenes.BRUG.plek("guhdalf", t);
-        for (Rotation draai : Rotation.values()) {
-            Vec3 anker = rog.position().subtract(Cutscene.wereld(BlockPos.ZERO, draai, relRog));
-            BlockPos ankerBlok = BlockPos.containing(anker.x + 0.5, anker.y + 0.5, anker.z + 0.5);
-            Vec3 verwacht = Cutscene.wereld(ankerBlok, draai, relGuhdalf);
-            if (verwacht.distanceToSqr(guhdalf.position()) < 1.5 * 1.5) {
-                BlockPos nul = ankerBlok.subtract(StructureTemplate.transform(Plekken.BRUG_ANKER, Mirror.NONE, draai, BlockPos.ZERO));
-                breek(nul, draai, true);
-                return;
-            }
-        }
+        Rotation draai = SceneVuur.draai();
+        breek(anker.subtract(StructureTemplate.transform(Plekken.BRUG_ANKER, Mirror.NONE, draai, BlockPos.ZERO)), draai, true);
     }
 
     private static void breek(BlockPos nul, Rotation draai, boolean stof) {
@@ -170,20 +151,43 @@ public final class BrugBreuk {
                         continue;
                     }
                     WEG.putIfAbsent(pos.immutable(), state);
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
                     if (stof) {
-                        // the stones fall: every one of them drops into the chasm, splinters fly, dust hangs where the span was
-                        val(level, pos, state, r);
-                        for (int i = 0; i < 3; i++) {
-                            level.addAlwaysVisibleParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), true, pos.getX() + r.nextDouble(),
-                                    pos.getY() + r.nextDouble(), pos.getZ() + r.nextDouble(), (r.nextDouble() - 0.5) * 0.3, -0.2 - r.nextDouble() * 0.4,
-                                    (r.nextDouble() - 0.5) * 0.3);
-                        }
-                        if (r.nextInt(3) == 0) {
-                            level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, true, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, -0.05, 0);
-                        }
+                        // (under his feet first, then outwards to both ends: the span gives way, it does not blink out)
+                        STRAKS.add(new Object[] {pos.immutable(), state, Math.abs(x - (d.x0() + d.x1()) / 2) * 2 + r.nextInt(2)});
+                        continue;
                     }
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
                 }
+            }
+        }
+    }
+
+    /** (every tick) the stones whose moment has come let go: each becomes a falling stone, splinters fly, dust rolls off it. */
+    private static void straks(ClientLevel level) {
+        RandomSource r = level.getRandom();
+        for (Iterator<Object[]> it = STRAKS.iterator(); it.hasNext(); ) {
+            Object[] s = it.next();
+            int over = (Integer) s[2] - 1;
+            s[2] = over;
+            if (over >= 0) {
+                continue;
+            }
+            it.remove();
+            BlockPos pos = (BlockPos) s[0];
+            BlockState state = (BlockState) s[1];
+            if (level.getBlockState(pos).isAir()) {
+                continue;
+            }
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
+            val(level, pos, state, r);
+            for (int i = 0; i < 3; i++) {
+                level.addAlwaysVisibleParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), true, pos.getX() + r.nextDouble(),
+                        pos.getY() + r.nextDouble(), pos.getZ() + r.nextDouble(), (r.nextDouble() - 0.5) * 0.3, -0.2 - r.nextDouble() * 0.4,
+                        (r.nextDouble() - 0.5) * 0.3);
+            }
+            if (r.nextInt(3) == 0) {
+                SceneVuur.deeltje(ParticleTypes.CAMPFIRE_COSY_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, (r.nextDouble() - 0.5) * 0.08,
+                        0.01 + r.nextDouble() * 0.05, (r.nextDouble() - 0.5) * 0.08, 0.8f + r.nextFloat() * 0.7f, 44 + r.nextInt(30), 0x4A4038);
             }
         }
     }
@@ -199,7 +203,7 @@ public final class BrugBreuk {
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
         steen.dropItem = false;
         steen.setId(puinId--);
-        steen.setDeltaMovement((r.nextDouble() - 0.5) * 0.16, -r.nextDouble() * 0.22, (r.nextDouble() - 0.5) * 0.16);
+        steen.setDeltaMovement((r.nextDouble() - 0.5) * 0.22, 0.06 - r.nextDouble() * 0.3, (r.nextDouble() - 0.5) * 0.3);
         level.addEntity(steen);
         PUIN.add(steen);
     }
@@ -235,6 +239,7 @@ public final class BrugBreuk {
 
     private static void heel(boolean puf) {
         ClientLevel level = Minecraft.getInstance().level;
+        STRAKS.clear();
         if (level != null && level == waar) {
             weg(level);
             for (Map.Entry<BlockPos, BlockState> e : WEG.entrySet()) {

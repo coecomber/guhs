@@ -131,6 +131,10 @@ def scenes():
     from features import ring_h3_scene as S
     emmer, brug = S.emmer(), S.brug()
     flitsen = ", ".join(f"{{{t}, {ticks}, {int(round(sterkte * 100))}}}" for t, ticks, sterkte in sorted(brug.flitsen))
+    lenzen = ", ".join(f"{{{t0}, {t1}, {_f(g0)}f, {_f(g1)}f}}" for t0, t1, g0, g1 in sorted(brug.lenzen))
+    ax, ay, az = brug.anker
+    stoten = ",\n            ".join(f"{{{t}, {soort}, {_f(pos[0] - ax)}, {_f(pos[1] - ay)}, {_f(pos[2] - az)}, {_f(kracht)}}}"
+                                     for t, soort, pos, kracht in sorted(brug.stoten))
     r = [KOP, "package nl.juiced.guhs.feature.ringh3;\n",
          "import net.minecraft.core.particles.ColorParticleOption;", "import net.minecraft.core.particles.ParticleTypes;",
          "import net.minecraft.sounds.SoundEvents;", "import net.minecraft.world.phys.Vec3;",
@@ -144,7 +148,14 @@ def scenes():
          f"    /** The tick of {{@link #BRUG}} at which the span breaks (the viewer's own game takes the stones away: client.BrugBreuk). */",
          f"    public static final int BRUG_BREEKT = {S.BREEKT};",
          "    /** The white flashes of {@link #BRUG}: {tick, ticks, strength in percent} (drawn by client.RingH3Client). */",
-         f"    public static final int[][] FLITSEN = {{{flitsen}}};\n",
+         f"    public static final int[][] FLITSEN = {{{flitsen}}};",
+         "    /** The lens of {@link #BRUG}, shot by shot: {from tick, up to tick, degrees at the start, degrees at the end} (client.RingH3Client). */",
+         f"    public static final float[][] LENZEN = {{{lenzen}}};",
+         "    /**",
+         "     * What only this slice's client can draw in {@link #BRUG}: {tick, kind, x, y, z relative to the scene's anchor, strength}; kind",
+         "     * 1 a burst of light, 2 a ring of sparks over the stone, 3 the lash out of the chasm, 4 a column of fire (client.SceneVuur).",
+         "     */",
+         f"    public static final double[][] STOTEN = {{\n            {stoten}}};\n",
          _scene(emmer, "EMMER"), "", _scene(brug, "BRUG"), "",
          "    /** (called from RingH3Feature.register: the fields above register the scenes when this class loads) */",
          "    static void registreer() {\n    }\n",

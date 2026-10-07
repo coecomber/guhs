@@ -19,7 +19,28 @@ public final class Scenes {
     /** The tick of {@link #BRUG} at which the span breaks (the viewer's own game takes the stones away: client.BrugBreuk). */
     public static final int BRUG_BREEKT = 1300;
     /** The white flashes of {@link #BRUG}: {tick, ticks, strength in percent} (drawn by client.RingH3Client). */
-    public static final int[][] FLITSEN = {{298, 6, 35}, {1029, 9, 75}, {1172, 18, 100}, {1300, 4, 30}};
+    public static final int[][] FLITSEN = {{298, 6, 30}, {1029, 9, 70}, {1172, 18, 100}, {1300, 4, 30}};
+    /** The lens of {@link #BRUG}, shot by shot: {from tick, up to tick, degrees at the start, degrees at the end} (client.RingH3Client). */
+    public static final float[][] LENZEN = {{200, 350, 76.0f, 76.0f}, {705, 816, 78.0f, 78.0f}, {816, 934, 74.0f, 74.0f}, {934, 1004, 58.0f, 58.0f}, {1004, 1075, 76.0f, 76.0f}, {1075, 1142, 86.0f, 82.0f}, {1142, 1170, 68.0f, 62.0f}, {1170, 1254, 78.0f, 78.0f}, {1254, 1396, 84.0f, 84.0f}, {1396, 1436, 60.0f, 60.0f}, {1436, 1458, 78.0f, 78.0f}, {1458, 1552, 62.0f, 52.0f}, {1552, 1586, 72.0f, 56.0f}, {1586, 1660, 56.0f, 50.0f}, {1660, 1770, 64.0f, 64.0f}};
+    /**
+     * What only this slice's client can draw in {@link #BRUG}: {tick, kind, x, y, z relative to the scene's anchor, strength}; kind
+     * 1 a burst of light, 2 a ring of sparks over the stone, 3 the lash out of the chasm, 4 a column of fire (client.SceneVuur).
+     */
+    public static final double[][] STOTEN = {
+            {300, 2, -57.5, 0.2, 0.5, 1.6},
+            {792, 2, -7.5, 0.2, 0.5, 1.6},
+            {1029, 1, 0.6, 3.0, 0.5, 1.0},
+            {1086, 1, 2.0, 2.3, 0.9, 0.3},
+            {1114, 1, 2.0, 2.3, 0.9, 0.4},
+            {1142, 1, 2.0, 2.3, 0.9, 0.5},
+            {1172, 1, 1.8, 0.8, 0.5, 1.6},
+            {1173, 2, 1.8, 0.15, 0.5, 1.2},
+            {1178, 2, -1.0, 0.15, 0.5, 0.8},
+            {1184, 2, -3.5, 0.15, 0.5, 0.6},
+            {1388, 4, -2.0, -9.5, 0.5, 1.0},
+            {1434, 3, 2.3, 0.2, 0.5, 1.0},
+            {1550, 3, 1.6, -0.6, 0.5, 0.7},
+            {1584, 2, 1.3, -8.8, 0.5, 0.7}};
 
     public static final Cutscene EMMER = Cutscene.maak("ringh3_emmer").duur(470).bij("ring_h3").kaart("ring_h3").verbergEcht(14.0)
             .speler(new Vec3(6.5, 0.0, 0.5), 90.0f)
@@ -100,32 +121,37 @@ public final class Scenes {
             .camera(520, new Vec3(-11.0, 10.5, -9.2), new Vec3(-14.0, 0.5, 0.0))
             .cameraKnip(524, new Vec3(-11.5, 1.2, 7.4), new Vec3(-25.0, 5.0, 0.5))
             .camera(600, new Vec3(-10.5, 1.3, 7.6), new Vec3(-27.0, 6.5, 0.5))
-            .cameraKnip(604, new Vec3(7.6, 2.4, 4.8), new Vec3(-3.0, 1.0, 0.2))
-            .camera(700, new Vec3(7.0, 2.4, 4.4), new Vec3(-1.5, 1.3, 0.4))
-            .cameraKnip(705, new Vec3(0.5, 0.4, 3.0), new Vec3(-17.0, 7.0, 0.5))
-            .camera(792, new Vec3(0.8, 0.45, 3.1), new Vec3(-7.5, 6.0, 0.5))
-            .camera(812, new Vec3(0.8, 0.45, 3.1), new Vec3(-7.5, 6.5, 0.5))
-            .cameraKnip(816, new Vec3(-2.5, -3.0, -10.1), new Vec3(-3.2, 5.0, 0.5))
-            .camera(930, new Vec3(-2.1, -2.4, -9.6), new Vec3(-3.0, 4.8, 0.5))
+            .cameraKnip(604, new Vec3(7.2, 3.3, 5.4), new Vec3(-4.0, 1.6, 0.2))
+            .camera(700, new Vec3(6.6, 3.3, 5.0), new Vec3(-3.5, 2.6, 0.4))
+            .cameraKnip(705, new Vec3(1.4, 2.6, 4.6), new Vec3(-17.0, 7.0, 0.5))
+            .camera(792, new Vec3(1.8, 2.4, 4.8), new Vec3(-7.5, 6.0, 0.5))
+            .camera(812, new Vec3(1.8, 2.4, 4.8), new Vec3(-7.5, 6.5, 0.5))
+            .cameraKnip(816, new Vec3(8.0, 0.7, 8.6), new Vec3(-2.8, 5.2, 0.2))
+            .camera(930, new Vec3(7.4, 0.8, 8.0), new Vec3(-2.4, 5.6, 0.2))
             .cameraKnip(934, new Vec3(0.2, 0.8, 1.7), new Vec3(2.5, 1.45, 0.5))
             .camera(1000, new Vec3(-0.1, 0.8, 1.5), new Vec3(2.5, 1.5, 0.5))
-            .cameraKnip(1004, new Vec3(5.2, 2.6, 2.6), new Vec3(-5.0, 5.2, 0.0))
-            .camera(1070, new Vec3(5.5, 2.7, 2.7), new Vec3(-4.7, 5.0, 0.0))
-            .cameraKnip(1075, new Vec3(5.6, 0.35, -1.4), new Vec3(-0.5, 4.2, 1.2))
-            .camera(1166, new Vec3(5.2, 0.35, -1.6), new Vec3(-0.7, 4.4, 1.2))
-            .cameraKnip(1170, new Vec3(7.0, 2.4, 2.4), new Vec3(-4.5, 5.5, 0.8))
-            .camera(1250, new Vec3(6.6, 2.4, 2.3), new Vec3(-4.5, 6.0, 0.8))
-            .cameraKnip(1254, new Vec3(7.5, 7.0, -9.5), new Vec3(-2.0, 5.0, 0.5))
-            .camera(1296, new Vec3(7.5, 6.8, -9.4), new Vec3(-2.0, 4.0, 0.5))
-            .camera(1384, new Vec3(7.2, 5.0, -9.2), new Vec3(-2.0, -8.0, 0.5))
-            .cameraKnip(1396, new Vec3(5.3, 1.4, 1.6), new Vec3(2.5, 1.3, 0.5))
-            .camera(1430, new Vec3(5.5, 1.4, 1.7), new Vec3(2.5, 1.3, 0.5))
-            .cameraKnip(1436, new Vec3(6.4, 0.55, 1.9), new Vec3(1.9, 0.3, 0.5))
-            .camera(1548, new Vec3(5.6, 0.5, 1.6), new Vec3(1.8, 0.2, 0.5))
-            .cameraKnip(1552, new Vec3(1.8, 2.2, 2.7), new Vec3(1.3, -9.0, 0.6))
-            .camera(1640, new Vec3(1.9, 1.9, 2.9), new Vec3(1.3, -10.0, 0.6))
-            .cameraKnip(1660, new Vec3(14.2, 2.2, 6.0), new Vec3(9.5, 1.0, 0.5))
-            .camera(1760, new Vec3(13.6, 2.0, 5.4), new Vec3(9.5, 1.0, 0.5))
+            .cameraKnip(1004, new Vec3(6.0, 2.9, 3.6), new Vec3(-3.4, 5.4, 0.3))
+            .camera(1070, new Vec3(6.3, 3.0, 3.7), new Vec3(-3.0, 5.2, 0.4))
+            .cameraKnip(1075, new Vec3(6.5, 1.4, -2.5), new Vec3(-0.4, 4.4, 1.1))
+            .camera(1140, new Vec3(6.0, 1.4, -2.2), new Vec3(-0.3, 4.5, 1.0))
+            .cameraKnip(1142, new Vec3(3.9, 3.5, 1.6), new Vec3(0.4, 5.7, 0.5))
+            .camera(1168, new Vec3(3.4, 3.6, 1.4), new Vec3(0.5, 5.6, 0.5))
+            .cameraKnip(1170, new Vec3(7.8, 3.4, 4.6), new Vec3(-4.0, 5.0, 0.6))
+            .camera(1250, new Vec3(7.4, 3.3, 4.3), new Vec3(-4.0, 5.6, 0.6))
+            .cameraKnip(1254, new Vec3(5.8, 7.4, -8.6), new Vec3(-2.0, 5.0, 0.5))
+            .camera(1296, new Vec3(5.8, 7.2, -8.5), new Vec3(-2.0, 4.0, 0.5))
+            .camera(1384, new Vec3(5.6, 5.4, -8.3), new Vec3(-2.0, -8.0, 0.5))
+            .cameraKnip(1396, new Vec3(5.2, 1.4, -0.8), new Vec3(2.5, 1.35, 0.5))
+            .camera(1430, new Vec3(5.4, 1.4, -0.9), new Vec3(2.5, 1.35, 0.5))
+            .cameraKnip(1436, new Vec3(4.8, 1.3, 5.4), new Vec3(0.9, 0.1, 0.5))
+            .camera(1456, new Vec3(4.6, 1.3, 5.2), new Vec3(1.1, 0.2, 0.5))
+            .cameraKnip(1458, new Vec3(5.9, 1.9, 0.0), new Vec3(1.8, 0.5, 0.5))
+            .camera(1548, new Vec3(4.9, 1.5, 0.1), new Vec3(1.7, 0.35, 0.5))
+            .cameraKnip(1552, new Vec3(1.9, 2.4, 3.0), new Vec3(1.6, -0.6, 0.5))
+            .camera(1586, new Vec3(1.95, 2.3, 3.05), new Vec3(1.3, -9.4, 0.5))
+            .camera(1640, new Vec3(2.0, 2.2, 3.1), new Vec3(1.3, -9.4, 0.5))
+            .cameraKnip(1660, new Vec3(4.6, 2.6, 1.6), new Vec3(11.6, 0.9, 0.9))
+            .camera(1760, new Vec3(5.4, 2.3, 1.4), new Vec3(11.6, 0.9, 0.9))
             .loop("araguh", 396, 422, new Vec3(-25.5, 0.0, 0.0))
             .loop("leguhlas", 405, 435, new Vec3(-25.5, 0.0, 0.0))
             .loop("speler", 414, 437, new Vec3(-25.5, 0.0, 0.0))
@@ -229,7 +255,7 @@ public final class Scenes {
             .loop("rog", 1004, 1030, new Vec3(-4.5, 0.0, 0.5))
             .loop("rog", 1270, 1298, new Vec3(-2.0, 0.0, 0.5))
             .loop("rog", 1304, 1392, new Vec3(-2.0, -22.0, 0.5))
-            .loop("guhdalf", 1438, 1452, new Vec3(1.55, -0.75, 0.5))
+            .loop("guhdalf", 1438, 1452, new Vec3(1.62, -0.9, 0.5))
             .loop("guhdalf", 1550, 1612, new Vec3(1.3, -18.0, 0.5))
             .kijk("araguh", 0, new Vec3(-59.5, 0.0, 0.5))
             .kijk("boromika", 0, new Vec3(-59.5, 0.0, 0.5))
@@ -251,7 +277,7 @@ public final class Scenes {
             .kijk("merrie", 683, new Vec3(2.5, 0.0, 0.5))
             .kijk("pippguh", 700, new Vec3(2.5, 0.0, 0.5))
             .kijk("guhdalf", 1398, new Vec3(9.0, 0.0, 0.5))
-            .kijk("guhdalf", 1454, new Vec3(9.0, 0.0, 0.5))
+            .kijk("guhdalf", 1453, new Vec3(9.0, 0.0, 0.5))
             .kijk("araguh", 1660, new Vec3(12.0, 0.0, 11.0))
             .animatie("rog", 1, "slaap")
             .animatie("rog", 106, "donker")
@@ -264,10 +290,14 @@ public final class Scenes {
             .animatie("rog", 800, "")
             .animatie("rog", 824, "zwaard")
             .animatie("guhdalf", 836, "praat")
+            .animatie("rog", 866, "dreig")
+            .animatie("rog", 1004, "")
             .animatie("rog", 1008, "zwaard")
             .animatie("guhdalf", 1016, "toover")
+            .animatie("rog", 1076, "dreig")
             .animatie("guhdalf", 1078, "toover")
             .animatie("guhdalf", 1168, "toover")
+            .animatie("rog", 1176, "")
             .animatie("rog", 1236, "brul")
             .animatie("merrie", 1240, "schrik")
             .animatie("pippguh", 1244, "schrik")
@@ -282,7 +312,7 @@ public final class Scenes {
             .animatie("boromika", 1336, "knik")
             .animatie("leguhlas", 1340, "juich")
             .animatie("guhdalf", 1394, "")
-            .animatie("guhdalf", 1438, "val")
+            .animatie("guhdalf", 1438, "schrik")
             .animatie("araguh", 1444, "schrik")
             .animatie("boromika", 1444, "schrik")
             .animatie("gimguh", 1444, "schrik")
@@ -291,6 +321,7 @@ public final class Scenes {
             .animatie("pippguh", 1444, "schrik")
             .animatie("sam", 1444, "schrik")
             .animatie("speler", 1444, "schrik")
+            .animatie("guhdalf", 1550, "val")
             .animatie("pippguh", 1662, "huil")
             .animatie("merrie", 1664, "huil")
             .animatie("araguh", 1666, "wijs")
@@ -359,29 +390,11 @@ public final class Scenes {
             .deeltjes(300, ParticleTypes.LAVA, new Vec3(-58.0, 4.0, 0.5), 40, 2.6)
             .deeltjes(792, ParticleTypes.LARGE_SMOKE, new Vec3(-7.5, 0.4, 0.5), 90, 2.6)
             .deeltjes(792, ParticleTypes.LAVA, new Vec3(-7.5, 0.4, 0.5), 36, 2.2)
-            .deeltjes(1029, ParticleTypes.ELECTRIC_SPARK, new Vec3(0.6, 3.0, 0.5), 70, 1.1)
-            .deeltjes(1029, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(0.6, 3.0, 0.5), 2, 0.5)
-            .deeltjes(1031, ParticleTypes.FLAME, new Vec3(-0.5, 3.5, 0.5), 60, 1.4)
-            .deeltjes(1031, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(0.6, 3.0, 0.5), 2, 0.5)
-            .deeltjes(1034, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(0.6, 3.0, 0.5), 2, 0.5)
-            .deeltjes(1172, ParticleTypes.ELECTRIC_SPARK, new Vec3(1.6, 0.5, 0.5), 120, 1.5)
-            .deeltjes(1172, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(1.6, 0.6, 0.5), 3, 0.7)
-            .deeltjes(1174, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(1.6, 0.6, 0.5), 3, 0.7)
-            .deeltjes(1176, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(1.6, 0.6, 0.5), 3, 0.7)
-            .deeltjes(1178, ParticleTypes.ELECTRIC_SPARK, new Vec3(-1.0, 0.3, 0.5), 60, 2.0)
-            .deeltjes(1178, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(-1.0, 0.3, 0.5), 1, 0.4)
-            .deeltjes(1179, ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0), new Vec3(1.6, 0.6, 0.5), 3, 0.7)
+            .deeltjes(1031, ParticleTypes.FLAME, new Vec3(-0.5, 3.5, 0.5), 40, 1.2)
             .deeltjes(1300, ParticleTypes.CAMPFIRE_COSY_SMOKE, new Vec3(-2.0, -1.0, 0.5), 40, 2.0)
             .deeltjes(1300, ParticleTypes.LARGE_SMOKE, new Vec3(-2.0, -0.5, 0.5), 120, 2.4)
             .deeltjes(1302, ParticleTypes.LAVA, new Vec3(-2.0, -1.0, 0.5), 50, 2.4)
-            .deeltjes(1388, ParticleTypes.FLAME, new Vec3(-2.0, -8.5, 0.5), 160, 3.0)
             .deeltjes(1390, ParticleTypes.LAVA, new Vec3(-2.0, -8.5, 0.5), 60, 3.0)
-            .deeltjes(1434, ParticleTypes.FLAME, new Vec3(0.0, -8.0, 0.5), 14, 0.25)
-            .deeltjes(1435, ParticleTypes.FLAME, new Vec3(0.45, -6.6, 0.5), 14, 0.25)
-            .deeltjes(1436, ParticleTypes.FLAME, new Vec3(0.9, -5.2, 0.5), 14, 0.25)
-            .deeltjes(1437, ParticleTypes.FLAME, new Vec3(1.35, -3.8, 0.5), 14, 0.25)
-            .deeltjes(1438, ParticleTypes.FLAME, new Vec3(1.8, -2.4, 0.5), 14, 0.25)
-            .deeltjes(1439, ParticleTypes.FLAME, new Vec3(2.25, -1.0, 0.5), 14, 0.25)
             .deeltjes(1440, ParticleTypes.LAVA, new Vec3(2.2, 0.3, 0.5), 14, 0.4)
             .schud(12, 0.5f, 5)
             .schud(44, 0.5f, 5)
