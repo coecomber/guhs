@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:ba_sing_guh",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401108,
+    "min_afstand": 2000,
+    "max_afstand": 3200,
+    "sector": 8,
+    "sectoren": 16
+  }
+}

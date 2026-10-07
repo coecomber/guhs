@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:kristalkaas",
+    "minecraft:green_dye",
+    "minecraft:glass"
+  ],
+  "result": {
+    "id": "guhs:einde2_bouw_aarde_groen_kristal",
+    "count": 2
+  }
+}

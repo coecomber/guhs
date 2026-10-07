@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:moss_block",
+    "minecraft:lime_dye"
+  ],
+  "result": {
+    "id": "guhs:einde2_bouw_aarde_kool",
+    "count": 2
+  }
+}

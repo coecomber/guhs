@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " M ",
+    "MGM",
+    " M "
+  ],
+  "key": {
+    "M": "guhs:einde2_bouw_aarde_stadssteen",
+    "G": "minecraft:green_dye"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_aarde_aardemunt",
+    "count": 4
+  }
+}
