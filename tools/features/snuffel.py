@@ -330,7 +330,6 @@ LANG = {
     G + "toets.blaf": "[%s] blaffen. Njeg!",
     G + "toets.boekje": "[%s] snuffelboekje",
     G + "toets.kaart": "Geheugenkaart: opslaan en naar huis",
-    G + "toets.kort": "%s snuffelen, %s graven, %s zitten, %s kwispelen, %s blaffen",
     # the choice screen
     G + "keuze.titel": "Kies je hond",
     G + "keuze.kop_hond": "Welke hond ben jij?",

@@ -74,9 +74,9 @@ public final class SnuffelKluis {
     }
 
     /**
-     * Gives the stored inventory back, every stack in its own slot. Whatever the player carries NOW (a dog's pockets: only
-     * the memory card, which is simply dropped from existence) is not thrown away but goes to the {@link #post}. False when
-     * there is no snapshot.
+     * Gives the stored inventory back, every stack in its own slot. Whatever the player carries NOW is not thrown away but
+     * goes to the {@link #post} (a dog's pockets normally hold only the memory card, which exists on the island only and is
+     * never posted). False when there is no snapshot.
      */
     public static boolean herstel(ServerPlayer p) {
         CompoundTag saved = GuhQuests.saved(p);

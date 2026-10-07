@@ -454,7 +454,7 @@ public final class Hondvorm {
         BLAF_TOT.clear();
     }
 
-    /** (Tests, dev) the level a dog would be drawn in is the server's: the pose map is the server's too. */
+    /** (Tests) forgets what the server keeps in memory about this player's poses. */
     static void vergeet(ServerPlayer p) {
         HOUDING.remove(p.getUUID());
         BLAF_TOT.remove(p.getUUID());

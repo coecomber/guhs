@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.InputEvent;
@@ -23,8 +24,9 @@ import nl.juiced.guhs.feature.snuffel.Honden;
 import nl.juiced.guhs.feature.snuffel.Hondvorm;
 import nl.juiced.guhs.feature.snuffel.SnuffelFeature;
 import nl.juiced.guhs.feature.snuffel.SnuffelPayloads;
-import nl.juiced.guhs.feature.snuffel.Snuffelen;
+import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
+import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
 
 /**
  * Client: the DOG FORM as you see and steer it.
@@ -245,6 +247,32 @@ public final class HondClient {
     // drawing
     // =====================================================================================================================
 
+    private static String sceneId = "";
+    private static boolean sceneHeeftIk;
+
+    /**
+     * Does the cutscene that plays have an actor that IS the viewer's dog (a {@code guhs:snuffel_hond} with {@code Speler}
+     * and without {@code Pup})? Then the real dog of the viewer is not drawn while it plays, or there would be two.
+     */
+    private static boolean ikSpeeltMee() {
+        Cutscene s = CutsceneSpeler.scene();
+        if (s == null) {
+            return false;
+        }
+        if (!s.id().equals(sceneId)) {
+            sceneId = s.id();
+            sceneHeeftIk = false;
+            for (Cutscene.Acteur a : s.acteurs()) {
+                if (a.type() != null && a.type().get() == SnuffelFeature.SNUFFEL_HOND.get() && a.nbt() != null) {
+                    CompoundTag t = new CompoundTag();
+                    a.nbt().accept(t);
+                    sceneHeeftIk |= t.getBooleanOr("Speler", false) && !t.getBooleanOr("Pup", false);
+                }
+            }
+        }
+        return sceneHeeftIk;
+    }
+
     /** The stand-in of this player (made when needed; a new one when the level changed). */
     @Nullable
     private static HondEntity kopie(Player p, Hond h) {
@@ -275,7 +303,7 @@ public final class HondClient {
         }
         event.setCanceled(true);
         event.getRenderState().shadowPieces.clear();   // (a player's shadow under a dog is too big; the dog brings its own)
-        if (p.isInvisible() || p.isSpectator()) {
+        if (p.isInvisible() || p.isSpectator() || p == mc.player && ikSpeeltMee()) {
             return;
         }
         HondEntity k = kopie(p, h);
@@ -329,10 +357,5 @@ public final class HondClient {
             e.zetHond(ras, kleur, pup);
         }
         return e;
-    }
-
-    /** How long a dig locks the dog (the server's number). */
-    static int graafTicks() {
-        return Snuffelen.GRAAF_TICKS;
     }
 }

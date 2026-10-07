@@ -116,11 +116,4 @@ public final class SnuffelHud {
             g.centeredText(font, tekst, sw / 2, 7, 0xFFFFD86B);
         }
     }
-
-    /** (For the snuffelboekje) the keys as one line. */
-    static Component toetsen() {
-        return Component.translatable("gui.guhs.snuffel.toets.kort", SnuffelKeys.SNUFFEL.getTranslatedKeyMessage(),
-                Minecraft.getInstance().options.keyAttack.getTranslatedKeyMessage(), SnuffelKeys.ZIT.getTranslatedKeyMessage(),
-                SnuffelKeys.KWISPEL.getTranslatedKeyMessage(), SnuffelKeys.BLAF.getTranslatedKeyMessage());
-    }
 }

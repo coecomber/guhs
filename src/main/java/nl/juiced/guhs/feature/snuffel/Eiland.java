@@ -150,6 +150,7 @@ public final class Eiland {
     private static final List<Plaats> TEST = new CopyOnWriteArrayList<>();
     /** How often in a row a resident was not found on its spot (it is made at the second miss). */
     private static final Map<String, Integer> GEMIST = new HashMap<>();
+    private static boolean gemeld;
 
     private Eiland() {
     }
@@ -343,7 +344,10 @@ public final class Eiland {
         ServerLevel level = p.level();
         for (Stuk s : p.opzet().stukken()) {
             if (Stempel.maat(level, s.template()) == null) {
-                LOG.error("Snuffeleiland: template {} is missing, the island is not built", s.template());
+                if (!gemeld) {
+                    gemeld = true;   // (asked every second while somebody is there: say it once)
+                    LOG.error("Snuffeleiland: template {} is missing, the island is not built", s.template());
+                }
                 return false;
             }
         }
@@ -516,6 +520,7 @@ public final class Eiland {
         echt = null;
         TEST.clear();
         GEMIST.clear();
+        gemeld = false;
     }
 
     /** Everybody who is on this island now. */
