@@ -398,7 +398,7 @@ def ijssalon(b):
     # wink 8: Baltoguh behind a towering sundae, the medicine chest next to him
     k.set(5, V, 14, "smooth_quartz")
     k.set(4, V, 14, "light_blue_wool")
-    k.plek("knipoog_ijs_balto", 4, V + 1, 14, yaw=-90.0, wie="Baltoguh achter een torenhoge ijscoupe: ijs, sneeuw, bijna hetzelfde", kind="BALTOGUH")
+    k.plek("knipoog_ijs_balto", 4, V + 1, 14, yaw=-90.0, wie="Baltoguh (de guh-variant BALTOGUH) achter een torenhoge ijscoupe", wezen="guhs:guh")
     k.prop("knipoog_ijs_coupe", 5, V, 14, wie="het tafeltje voor hem: hier komt de torenhoge ijscoupe (3 vrij erboven)")
     k.prop("knipoog_ijs_kistje", 4, V, 15, wie="op de vloer naast zijn kruk: het medicijnkistje dat hij niet ziet")
     k.camera("knipoog_ijs", (11, V + 2, 18), (5, V + 2, 14), zicht=["knipoog_ijs_balto", "knipoog_ijs_kistje"])
