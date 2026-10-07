@@ -53,6 +53,8 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     /** This bank's id; given the first time the bank stands in a world (banks from before bbq2 get one then). */
     @Nullable
     private UUID bankId;
+    /** Set when the chunk unloads: the {@link #setRemoved} that follows is then no removal of the block. */
+    private boolean ontladen;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public BankGuhBlockEntity(BlockPos pos, BlockState state) {
@@ -129,6 +131,34 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
         }
         boek.zet(bankId(), hier);
         toonUpgrade();
+    }
+
+    /**
+     * The bank's chunk unloads: the address book remembers what it holds, so a Hapluikje can say what still fits without
+     * loading this chunk again ({@link BankAdressen.Schaduw}).
+     */
+    @Override
+    public void onChunkUnloaded() {
+        super.onChunkUnloaded();
+        ontladen = true;
+        if (level instanceof ServerLevel server && bankId != null) {
+            BankAdressen.van(server.getServer()).onthoud(bankId, GlobalPos.of(server.dimension(), worldPosition), storage);
+        }
+    }
+
+    /** Removed while its chunk stays loaded (broken or replaced, also without side effects): a shadow of it would lie. */
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (!ontladen && level instanceof ServerLevel server && bankId != null) {
+            BankAdressen.van(server.getServer()).vergeet(bankId);
+        }
+    }
+
+    @Override
+    public void clearRemoved() {
+        super.clearRemoved();
+        ontladen = false;
     }
 
     /** The block is really gone (broken, replaced): this bank stands nowhere until it is placed again. */

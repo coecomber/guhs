@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.bank;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -12,18 +14,22 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.TransferPreconditions;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.RootCommitJournal;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.Features;
@@ -36,8 +42,16 @@ import nl.juiced.guhs.storage.BankStorage;
 /**
  * The Hapluikje's block entity: a guh machine without an inventory of its own. Its item handler ({@link #handler}) is a
  * mouth: whatever is put in goes straight on into the Bank Guh it is linked to ({@link #bank}, set with a Banksleutel),
- * inside the giver's own transaction, however far away that bank stands and in whatever dimension
- * ({@link BankAdressen#zoek} loads the bank's chunk when needed and keeps it loaded for a little while).
+ * inside the giver's own transaction, however far away that bank stands and in whatever dimension.
+ * <p>
+ * <b>A bank whose chunk is not loaded.</b> Asking the luikje what fits never loads anything: an insert may be a mere
+ * question (a transaction that is thrown away), and the ones who ask do so all day (a Richtingstuk every few ticks, a
+ * hopper, a Haltepaaltje, the chore scan). So for an unloaded bank the luikje answers from what the address book
+ * remembers of it ({@link BankAdressen.Schaduw}, exact: nothing changes in an unloaded chunk) and only notes what it
+ * accepted ({@link #wacht}); when the giver's transaction is really committed the bank's chunk is loaded, the noted
+ * items go in and the chunk stays loaded for a little while ({@link #lever}). A bank the book has no shadow of (after
+ * a server start) is asked for in the background and the luikje refuses until it is there, a few ticks later. A bank
+ * that IS loaded is only kept loaded by a delivery that really went through, never by a question.
  * <p>
  * It takes nothing, and so the giver keeps the items (a hopper stays full, a Knabbelbuis holds on to it, a hand keeps the
  * stack), when: it has no vadskracht ({@link VadsGetallen#HAPLUIKJE} VK), it is not linked, its bank stands nowhere (it
@@ -66,6 +80,35 @@ public class HapluikjeBlockEntity extends MachineBlockEntity {
     private UUID bank;
     private long verrastTot;
     private final Bek bek = new Bek();
+    /**
+     * Accepted for a bank whose chunk is not loaded, inside a transaction that is still open: kind -> how many. Rolled
+     * back with the transaction; delivered by {@link #lever} when it is committed.
+     */
+    private final Map<ItemResource, Integer> wacht = new LinkedHashMap<>();
+    private final SnapshotJournal<Map<ItemResource, Integer>> wachtboek = new SnapshotJournal<>() {
+        @Override
+        protected Map<ItemResource, Integer> createSnapshot() {
+            return new LinkedHashMap<>(wacht);
+        }
+
+        @Override
+        protected void revertToSnapshot(Map<ItemResource, Integer> snapshot) {
+            wacht.clear();
+            wacht.putAll(snapshot);
+        }
+
+        @Override
+        protected void onRootCommit(Map<ItemResource, Integer> originalState) {
+            lever();
+        }
+    };
+    /** A delivery into a LOADED bank that was really committed keeps that bank's chunk a little longer. */
+    private final RootCommitJournal wakker = new RootCommitJournal(() -> {
+        BankGuhBlockEntity doel = bank != null && level instanceof ServerLevel server ? BankAdressen.zoek(server.getServer(), bank, false) : null;
+        if (doel != null) {
+            BankAdressen.houdWakker(doel);
+        }
+    });
 
     public HapluikjeBlockEntity(BlockPos pos, BlockState state) {
         super(BankFeature.HAPLUIKJE_BE.get(), pos, state, VadsGetallen.HAPLUIKJE, 0);
@@ -103,7 +146,10 @@ public class HapluikjeBlockEntity extends MachineBlockEntity {
         return bank != null && level instanceof ServerLevel server ? BankAdressen.van(server.getServer()).plek(bank) : null;
     }
 
-    /** The linked Bank Guh itself, its chunk loaded if need be; null when not linked or when it stands nowhere. */
+    /**
+     * The linked Bank Guh itself, its chunk LOADED NOW if need be (and kept for a little while); null when not linked or
+     * when it stands nowhere. For a player's click and a real delivery only: never for a question.
+     */
     @Nullable
     public BankGuhBlockEntity doel() {
         return bank != null && level instanceof ServerLevel server ? BankAdressen.zoek(server.getServer(), bank, true) : null;
@@ -113,22 +159,72 @@ public class HapluikjeBlockEntity extends MachineBlockEntity {
     // the mouth
     // =====================================================================================================================
 
-    /** Passes up to this many on to the bank; returns how many it took (the giver keeps the rest). */
+    /**
+     * Passes up to this many on to the bank; returns how many it took (the giver keeps the rest). Loads nothing: the
+     * transaction may be thrown away (see the class comment).
+     */
     private int hap(ItemResource wat, int aantal, TransactionContext transaction) {
-        if (aantal <= 0 || !heeftKracht() || bank == null || wat.test(Features::isLoaned)) {
+        if (aantal <= 0 || !heeftKracht() || bank == null || wat.test(Features::isLoaned) || !(level instanceof ServerLevel hier)) {
             return 0;
         }
-        BankGuhBlockEntity doel = doel();
-        if (doel == null) {
-            verrast();
+        MinecraftServer server = hier.getServer();
+        BankGuhBlockEntity doel = BankAdressen.zoek(server, bank, false);
+        if (doel != null) {
+            // the bank's chunk is there: straight in
+            int erin = doel.handler().insert(wat, aantal, transaction);
+            if (erin > 0) {
+                wakker.updateSnapshots(transaction);
+            }
+            if (erin < aantal) {
+                verrast();   // (the bank is full of it)
+            }
+            return erin;
+        }
+        BankAdressen boek = BankAdressen.van(server);
+        if (boek.plek(bank) == null) {
+            verrast();       // (the bank stands nowhere)
             return 0;
         }
-        BankAdressen.houdWakker(doel);
-        int erin = doel.handler().insert(wat, aantal, transaction);
+        BankAdressen.Schaduw schaduw = boek.schaduw(bank);
+        if (schaduw == null) {
+            BankAdressen.wek(server, bank);   // (not known what it holds: fetch its chunk in the background, try again later)
+            return 0;
+        }
+        Integer al = wacht.get(wat);
+        int erin = (int) Math.max(0, Math.min(aantal, schaduw.ruimte(wat) - (al == null ? 0 : al)));
+        if (erin > 0) {
+            wachtboek.updateSnapshots(transaction);
+            wacht.merge(wat, erin, Integer::sum);
+        }
         if (erin < aantal) {
-            verrast();   // (the bank is full of it)
+            verrast();       // (the bank is full of it)
         }
         return erin;
+    }
+
+    /**
+     * The giver's transaction was committed: what was accepted for the unloaded bank really goes in now. This is the one
+     * place where a luikje loads its bank's chunk by itself. Should the bank turn out to be gone or fuller than was
+     * remembered (it cannot, but nothing may ever be lost), what does not go in pops out of the luikje.
+     */
+    private void lever() {
+        if (wacht.isEmpty() || !(level instanceof ServerLevel server)) {
+            return;
+        }
+        Map<ItemResource, Integer> nu = new LinkedHashMap<>(wacht);
+        wacht.clear();
+        BankGuhBlockEntity doel = doel();
+        if (doel != null) {
+            BankAdressen.houdWakker(doel);
+        }
+        nu.forEach((soort, aantal) -> {
+            int over = aantal - (doel == null ? 0 : (int) doel.getStorage().insert(soort.toStack(), aantal));
+            while (over > 0) {
+                int stapel = Math.min(over, soort.getMaxStackSize());
+                Block.popResource(server, worldPosition, soort.toStack(stapel));
+                over -= stapel;
+            }
+        });
     }
 
     private void verrast() {
@@ -216,6 +312,7 @@ public class HapluikjeBlockEntity extends MachineBlockEntity {
             return;
         }
         Component naam = stack.getHoverName();
+        doel();   // (a player's click is a real delivery: fetch the bank now, so the answer below is the bank's own)
         ItemStack rest = Kisten.stop(bek, stack);
         int erin = stack.getCount() - rest.getCount();
         if (erin > 0) {

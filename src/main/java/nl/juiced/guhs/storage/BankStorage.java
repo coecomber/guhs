@@ -142,6 +142,11 @@ public class BankStorage {
         return version;
     }
 
+    /** A copy of how many there are of every kind (the shadow that {@code BankAdressen} keeps of an unloaded bank). */
+    public Map<ItemResource, Long> aantallen() {
+        return new java.util.HashMap<>(items);
+    }
+
     public BankContents snapshot() {
         List<BankContents.Entry> list = new ArrayList<>(items.size());
         items.forEach((k, v) -> list.add(new BankContents.Entry(k.toStack(), v)));
