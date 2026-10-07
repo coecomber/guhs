@@ -75,12 +75,12 @@ import nl.juiced.guhs.registry.ModItems;
  */
 public class KlusjesGameTests {
     private static final String TUIN = "klusjes_test_tuin";
-    private static final BlockPos HUISJE = new BlockPos(11, 2, 11);
+    public static final BlockPos HUISJE = new BlockPos(11, 2, 11);
     /** Right next to the huisje (east side). */
-    private static final BlockPos KIST = new BlockPos(12, 2, 11);
+    public static final BlockPos KIST = new BlockPos(12, 2, 11);
 
     @SuppressWarnings("removal")
-    static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
+    public static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
         ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
@@ -89,7 +89,7 @@ public class KlusjesGameTests {
         return p;
     }
 
-    static void weg(GameTestHelper helper, Huisje h, ServerPlayer... players) {
+    public static void weg(GameTestHelper helper, Huisje h, ServerPlayer... players) {
         HuisjeGoal.TEST_DAGDEEL.remove(h.pos());
         KlusGebied.TEST_GRENS.remove(h.pos());
         for (ServerPlayer p : players) {
@@ -97,7 +97,7 @@ public class KlusjesGameTests {
         }
     }
 
-    static Huisje huisje(GameTestHelper helper, ServerPlayer owner) {
+    public static Huisje huisje(GameTestHelper helper, ServerPlayer owner) {
         Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(HUISJE), Direction.SOUTH, HuisjeMaat.KLEIN, owner.getUUID());
         HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.DAG);
         KlusGebied.TEST_GRENS.put(h.pos(), helper.getBounds());   // (only chores inside this test, not in the neighbours')
@@ -105,14 +105,14 @@ public class KlusjesGameTests {
     }
 
     /** A tamed guh that moves in and only does this one chore (and never waits long between two tries). */
-    static GuhEntity bewoner(GameTestHelper helper, Huisje h, ServerPlayer owner, BlockPos at, String klus) {
+    public static GuhEntity bewoner(GameTestHelper helper, Huisje h, ServerPlayer owner, BlockPos at, String klus) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), at);
         guh.tame(owner);
         alleen(helper, h, guh, klus);
         return guh;
     }
 
-    static void alleen(GameTestHelper helper, Huisje h, Mob mob, String klus) {
+    public static void alleen(GameTestHelper helper, Huisje h, Mob mob, String klus) {
         helper.assertTrue(Huisjes.trekIn(h, mob), "moves in");
         for (Klus k : Klusjes.alle()) {
             h.zetKlus(Band.id(mob), k.id(), k.id().equals(klus));
@@ -120,12 +120,12 @@ public class KlusjesGameTests {
         helper.onEachTick(() -> mob.getPersistentData().remove("guhs_huisje_klus"));
     }
 
-    static ChestBlockEntity kist(GameTestHelper helper) {
+    public static ChestBlockEntity kist(GameTestHelper helper) {
         helper.setBlock(KIST, Blocks.CHEST);
         return (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(KIST));
     }
 
-    static int telKist(ChestBlockEntity kist, java.util.function.Predicate<ItemStack> wat) {
+    public static int telKist(ChestBlockEntity kist, java.util.function.Predicate<ItemStack> wat) {
         int n = 0;
         for (int i = 0; i < kist.getContainerSize(); i++) {
             ItemStack s = kist.getItem(i);
@@ -137,7 +137,7 @@ public class KlusjesGameTests {
     }
 
     /** Where it is and what it does (for the failure messages). */
-    static String staat(GameTestHelper helper, Mob mob) {
+    public static String staat(GameTestHelper helper, Mob mob) {
         String taak = "-";
         for (var w : mob.goalSelector.getAvailableGoals()) {
             if (w.getGoal() instanceof HuisjeGoal g) {

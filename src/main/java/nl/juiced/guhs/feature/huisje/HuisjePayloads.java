@@ -207,6 +207,8 @@ public final class HuisjePayloads {
         t.put("Klusjes", klusjes);
         t.putBoolean("Bank", level != null && HuisjeOpslag.heeftBankGuh(level, h));
         t.putBoolean("Kist", level != null && HuisjeOpslag.kist(level, h) != null);
+        // bbq2: a working Hapluikje in the home base (chore output goes there when no Bank Guh stands in it)
+        t.putBoolean("Luikje", level != null && !nl.juiced.guhs.feature.klusjes.Voorraad.luikjes(level, h).isEmpty());
         return t;
     }
 

@@ -18,7 +18,9 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.bank.BankFeature;
 import nl.juiced.guhs.feature.klusjes.KlusGebied;
+import nl.juiced.guhs.feature.klusjes.Voorraad;
 import nl.juiced.guhs.network.ModNetworking;
 
 /**
@@ -29,7 +31,8 @@ import nl.juiced.guhs.network.ModNetworking;
  *       huisje can (and have it switched on);</li>
  *   <li>per thing residents play with at random ({@link Speelgoed#tel}: the toys, counted the way they are searched) and
  *       the two other things guhs react to by themselves (a jukebox: they dance while it plays; a burning campfire: pyjamas
- *       late in the evening): how many stand in the area, also when that is none.</li>
+ *       late in the evening): how many stand in the area, also when that is none; bbq2: and the working Hapluikjes
+ *       (where chore output goes when no Bank Guh stands in the area).</li>
  * </ul>
  * The client asks ({@link HuisjePayloads.OverzichtVraag}: when the dialog opens, on its refresh button and every few
  * seconds while it is open); only the owner (or an op) within 24 blocks gets an answer, like the screen's buttons, and at
@@ -141,6 +144,8 @@ public final class HuisjeOverzicht {
                 KlusGebied.van(level, h, KlusGebied.Soort.JUKEBOX).size()));
         dingen.add(ding("kampvuur", new ItemStack(Items.CAMPFIRE), "gui.guhs.huisje.overzicht.ding.kampvuur.naam",
                 KlusGebied.van(level, h, KlusGebied.Soort.KAMPVUUR).size()));
+        // bbq2: the working Hapluikjes of the area (chore output goes into one when no Bank Guh stands in the area)
+        dingen.add(ding("hapluikje", new ItemStack(BankFeature.HAPLUIKJE_ITEM.get()), "block.guhs.hapluikje", Voorraad.luikjes(level, h).size()));
         t.put("Dingen", dingen);
         return t;
     }

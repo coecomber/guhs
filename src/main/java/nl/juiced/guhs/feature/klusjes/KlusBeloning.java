@@ -16,6 +16,7 @@ import nl.juiced.guhs.feature.band.Reden;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.Klus;
+import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.quest.GuhQuests;
 
 /**
@@ -25,6 +26,11 @@ import nl.juiced.guhs.quest.GuhQuests;
  * the owner: the advancements {@code lieve_vadsjes/klusjes_<id>} (the first time one of their residents does that chore),
  * {@code klusjes_alle} (all ten), {@code klusjes_honderd} (a hundred chores), {@code klusjes_bank} (sorted into a Bank Guh)
  * and {@code klusjes_zeldzaam} (a rare find). Per player: bits of the chores done in {@link #GEDAAN}, the count in {@link #TOTAAL}.
+ * <p>
+ * bbq2: chores that are not one of the ten (the machines, the plantage, Sjokkel's polishing) count for the hundred too;
+ * {@code klusjes_alle} stays the ten. New in the tab Guh-technologie: {@code techniek/tech_klusjes_luikje} (chore output
+ * went through a Hapluikje, {@link #luikje}) and {@code techniek/tech_klusjes_oogst} (the bigger harvest, {@link #meerGeoogst});
+ * each with a hidden twin {@code quest/tech_klusjes_*} for the FTB chapter.
  */
 public final class KlusBeloning {
     public static final String GEDAAN = "guhs_klusjes_gedaan", TOTAAL = "guhs_klusjes_totaal";
@@ -52,12 +58,9 @@ public final class KlusBeloning {
     /** The owner's chore bits, the count and the advancements. */
     public static void voortgang(ServerPlayer p, String id) {
         int i = KlusjesFeature.IDS.indexOf(id);
-        if (i < 0) {
-            return;
-        }
         CompoundTag t = GuhQuests.saved(p);
         int bits = t.getIntOr(GEDAAN, 0);
-        if ((bits & (1 << i)) == 0) {
+        if (i >= 0 && (bits & (1 << i)) == 0) {
             bits |= 1 << i;
             t.putInt(GEDAAN, bits);
             GidsFeature.grant(p, "lieve_vadsjes/klusjes_" + id);
@@ -82,6 +85,25 @@ public final class KlusBeloning {
         if (owner != null) {
             GidsFeature.grant(owner, "lieve_vadsjes/klusjes_bank");
         }
+    }
+
+    /** bbq2: an advancement of the tab Guh-technologie and its hidden twin for the FTB chapter (quest/&lt;naam&gt;). */
+    public static void techniek(Mob mob, String naam) {
+        ServerPlayer owner = Band.eigenaarOnline(mob);
+        if (owner != null) {
+            GuhAdvancements.grant(owner, naam);
+            GidsFeature.grant(owner, "techniek/" + naam);
+        }
+    }
+
+    /** bbq2: chore output went through a Hapluikje to a Bank Guh far away. */
+    public static void luikje(Mob mob) {
+        techniek(mob, "tech_klusjes_luikje");
+    }
+
+    /** bbq2: a resident harvested one of the new kinds (pumpkin, melon, sugar cane, cocoa, nether wart, a scheutje). */
+    public static void meerGeoogst(Mob mob) {
+        techniek(mob, "tech_klusjes_oogst");
     }
 
     /** Something rare dug up or fished: the owner hears about it, the guh writes it down. */

@@ -289,6 +289,7 @@ public class HuisjeScreen extends Screen {
         } else {
             // where the chores' spoils go
             Component opslag = Component.translatable(data.getBooleanOr("Bank", false) ? "gui.guhs.huisje.opslag.bank"
+                    : data.getBooleanOr("Luikje", false) ? "gui.guhs.huisje.opslag.luikje"   // (bbq2: a Hapluikje in the home base)
                     : data.getBooleanOr("Kist", false) ? "gui.guhs.huisje.opslag.kist" : "gui.guhs.huisje.opslag.deur");
             GidsTekst.passend(g, opslag, left + 8, top + 42, W - 16, 0.75f, LICHT, false);
         }
