@@ -472,17 +472,18 @@ def huis(b, x0, z0, w, d, deur, stijl, hoog=3, nok=None, schoorsteen=None, ramen
                     if b.get(x, y, z) is None:
                         b.set(x, y, z, s.muur if i < 2 else dakv, s.muur_props if i < 2 else None)
         top = G + hoog + (span + 1) // 2 - 1
-    # a lantern by the door: under the eave when the door is under one, else on the wall's corner post
+    # a lantern by the door, on the side where the name sign is not: hanging under the eave when the door is under one,
+    # else on a post
     if lamp:
         onder_dakrand = (nok == "x" and kant in ("north", "south")) or (nok == "z" and kant in ("west", "east"))
+        zx, zz = RICHTING[LINKS[kant]]
+        lx, lz = dx_ + ox - zx, dz_ + oz - zz
         if onder_dakrand:
-            lx, lz = dx_ + ox + (1 if kant in ("north", "south") else 0), dz_ + oz + (1 if kant in ("west", "east") else 0)
             b.lamp(lx, G + hoog - 1, lz, hangend=True)
         else:
-            lx, lz = dx_ + ox + (1 if kant in ("north", "south") else 0), dz_ + oz + (1 if kant in ("west", "east") else 0)
             b.set(lx, G + 1, lz, "spruce_fence")
             b.lamp(lx, G + 2, lz)
-            b.vrij.add((lx, lz))
+        b.vrij.add((lx, lz))
     # the chimney: bricks from the floor through the roof, a campfire on top for the smoke
     if schoorsteen:
         cx_, cz_ = schoorsteen
@@ -862,7 +863,7 @@ def strandpoort(b):
         b.vrij.add((x + dx, z))
     for dx in range(-2, 3):
         b.set(x + dx, G + 4, z, "stripped_spruce_log", {"axis": "x"})
-    b.bord(x, G + 3, z + 1, ["~ Snuffeldorp ~", "Hier woont", "iedereen op", "vier poten"], facing="south")
+    b.bord(x, G + 4, z + 1, ["~ Snuffeldorp ~", "Hier woont", "iedereen op", "vier poten"], facing="south")       # (on the beam: a wall sign needs a block behind it)
     b.lamp(x - 1, G + 3, z, hangend=True)
     b.lamp(x + 1, G + 3, z, hangend=True)
     b.set(x, G + 3, z, "stripped_spruce_log", {"axis": "x"}) if False else None
@@ -1049,10 +1050,11 @@ def wei(b):
                 if rng.random() < 0.18:
                     b.set(x, G + 1, z, "lily_pad")
             elif r <= 4.7:
-                b.set(x, G, z, "sand" if rng.random() < 0.5 else "grass_block")
+                zand = rng.random() < 0.5
+                b.set(x, G, z, "sand" if zand else "grass_block")
                 b.vrij.add((x, z))
-                if rng.random() < 0.3:
-                    b.set(x, G + 1, z, "sugar_cane" if False else "fern")
+                if not zand and rng.random() < 0.5:
+                    b.set(x, G + 1, z, "fern")
     # the bee tree on the west side: a big oak with a bee nest and flowers around it
     bx, bz_ = 56, 72
     b.boom(bx, bz_, hoog=6, soort="oak", breed=3)
@@ -1525,6 +1527,39 @@ def controleer(b, data, dorp):
                 problems.append(f"geurbron {br['id']}: {s.get(x, y, z)} on top of it")
         if z < GRENS_Z + 3:
             problems.append(f"geurbron {br['id']} lies in the closed part")
+    # what a stamp would take away again: the game checks every placed block's support (a wall sign with air behind it, a
+    # hanging lantern under nothing, a plant on the wrong ground simply disappear)
+    PLANT = ("short_grass", "fern", "poppy", "dandelion", "cornflower", "oxeye_daisy", "azure_bluet", "allium", "pink_tulip", "white_tulip", "orange_tulip")
+    GROND = ("grass_block", "dirt", "coarse_dirt", "rooted_dirt", "moss_block", "farmland", "podzol")
+    for (x, y, z), (name, props, _nbt) in s.blocks.items():
+        k = name.split(":")[1]
+        onder = (s.get(x, y - 1, z) or ":").split(":")[1]
+        boven = s.get(x, y + 1, z)
+        fout = None
+        if k.endswith("_wall_sign"):
+            dx, dz = RICHTING[TEGEN[props["facing"]]]
+            achter = s.get(x + dx, y, z + dz)
+            if achter is None or achter.split(":")[1] in PLANT:
+                fout = "has nothing behind it"
+        elif k.endswith("_sign") or k.endswith("_carpet") or k.endswith("_pressure_plate") or k == "cake" or (k.endswith("_door") and props.get("half") == "lower"):
+            if not onder or onder in PLANT:
+                fout = "stands on nothing"
+        elif k == "lantern" and props.get("hanging") == "true":
+            if boven is None:
+                fout = "hangs from nothing"
+        elif k == "lantern":
+            if not onder:
+                fout = "stands on nothing"
+        elif k in PLANT and onder not in GROND:
+            fout = f"grows on {onder}"
+        elif k == "dead_bush" and onder not in ("sand", "red_sand", "dirt", "coarse_dirt", "terracotta"):
+            fout = f"grows on {onder}"
+        elif k in ("carrots", "potatoes", "beetroots", "wheat") and onder != "farmland":
+            fout = f"grows on {onder}"
+        elif k == "lily_pad" and onder != "water":
+            fout = f"floats on {onder}"
+        if fout:
+            problems.append(f"{k} at {(x, y, z)} {fout}")
     # the growth scene's camera (feature/snuffel/Boom.java), turned by boom_draai: 12 blocks to the unturned south of the
     # tree, 6 up, 9 west .. 9 east; with boom_draai 2 that is NORTH of the tree, looking back over the village
     bx, by, bz = data["boom"]
