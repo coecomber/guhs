@@ -7,9 +7,12 @@ import java.util.function.Predicate;
 import net.minecraft.world.entity.Entity;
 
 /**
- * einde2, slice biomes: who the kruimelwolk carries. Everybody sinks slowly through a {@code guhs:kruimelwolk}; whoever
- * one of the registered rules names stands on it (the Kruimelguh registers itself).
- * Skeleton stub: the list and the question are real, the cloud block that asks it comes with the biomes slice.
+ * einde2, slice biomes: who the kruimelwolk carries. Everybody sinks slowly through a {@code guhs:kruimelwolk}
+ * ({@link E2BiomesBlokken.Kruimelwolk}); whoever one of the registered rules names stands on it like on a floor (the
+ * Kruimelguh registers itself).
+ * <p>
+ * A rule is asked on the server AND on the client (a player's own movement is worked out on the client): it may only look
+ * at what both sides know of the entity (its type, synced data, what it wears), never at server-only state.
  * <p>
  * hook fase B: the Guhvatar's air power registers the players who learnt it here.
  */

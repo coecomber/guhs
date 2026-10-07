@@ -1,0 +1,86 @@
+# einde2, slice biomes, in a real generated world: each of the six biomes of the outer islands from the ground and from above,
+# the knabbelkoor, a crystal spire, a cloud. (tpbiome looks for the biome; the Guheinde has no skylight, so no time of day.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_biomes.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 90 0
+wait 80
+
+section Gatenkaasheuvels: holes, a sauce pond, boulders
+tpbiome guhs:guheinde guhs:gatenkaasheuvels
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 10
+waitrender 300
+hier
+shot e2_gatenkaasheuvels_grond
+/tp @s ~ ~30 ~
+look 45 60
+wait 60
+shot e2_gatenkaasheuvels_boven
+
+section Korstwoestijn: cracked crust, dunes
+tpbiome guhs:guheinde guhs:korstwoestijn
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 10
+waitrender 300
+hier
+shot e2_korstwoestijn_grond
+/tp @s ~ ~30 ~
+look 45 60
+wait 60
+shot e2_korstwoestijn_boven
+
+section Kruimelwolken: crumb islets and clouds
+tpbiome guhs:guheinde guhs:kruimelwolken
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 -15
+waitrender 300
+hier
+shot e2_kruimelwolken_omhoog
+/tp @s ~ ~40 ~
+look 200 35
+wait 60
+shot e2_kruimelwolken_boven
+
+section Schimmelkaasvlakte: blue cheese, giant mushrooms, ponds
+tpbiome guhs:guheinde guhs:schimmelkaasvlakte
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot e2_schimmelkaasvlakte_grond
+/tp @s ~ ~25 ~
+look 45 55
+wait 60
+shot e2_schimmelkaasvlakte_boven
+
+section Kristalkaasklippen: spires and crystals
+tpbiome guhs:guheinde guhs:kristalkaasklippen
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 -10
+waitrender 300
+hier
+shot e2_kristalkaasklippen_grond
+/tp @s ~ ~35 ~
+look 45 55
+wait 60
+shot e2_kristalkaasklippen_boven
+
+section Knabbelkoorbos: the singing poles
+tpbiome guhs:guheinde guhs:knabbelkoorbos
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 -10
+waitrender 300
+hier
+shot e2_knabbelkoorbos_grond
+/tp @s ~ ~35 ~
+look 45 55
+wait 60
+shot e2_knabbelkoorbos_boven
+
+section the middle is unchanged
+/execute in guhs:guheinde run tp @s 0 110 0
+look 0 60
+waitrender 300
+hier
+shot e2_midden_ongewijzigd
