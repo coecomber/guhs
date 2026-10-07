@@ -228,15 +228,63 @@ class Kijker:
             alle_c.append(c[m])
         self.punten(beeld, diepte, cam, np.concatenate(alle_p), np.concatenate(alle_c))
 
-    def figuur(self, beeld, diepte, cam, plek, rgb=(255, 150, 200), hoog=1.0, breed=0.7):
-        """A guh-sized marker (a blob with ears) at a spot: a character of the cast, or the player (taller)."""
-        n = 900
-        rng = np.random.default_rng(1)
-        p = rng.random((n, 3)) * np.array([breed, hoog, breed]) + np.array(plek) - np.array([breed / 2, 0, breed / 2])
-        oor = rng.random((120, 3)) * np.array([breed * 1.2, 0.25, 0.2]) + np.array(plek) + np.array([-breed * 0.6, hoog, -0.1])
-        pts = np.concatenate([p, oor]).astype(np.float32)
-        c = np.repeat(np.array(rgb, np.float32)[None, :], len(pts), 0) * (0.7 + 0.3 * rng.random((len(pts), 1)))
-        self.punten(beeld, diepte, cam, pts, c)
+    def doos(self, beeld, diepte, cam, lo, hi, rgb, yaw=0.0, om=None, licht=1.0):
+        """A solid box (lo..hi, world blocks), turned `yaw` degrees (Minecraft) round the vertical through `om`."""
+        lo, hi = np.array(lo, np.float32), np.array(hi, np.float32)
+        om = np.array(om if om is not None else (lo + hi) / 2, np.float32)
+        a = math.radians(-yaw)
+        R = np.array([[math.cos(a), 0, math.sin(a)], [0, 1, 0], [-math.sin(a), 0, math.cos(a)]], np.float32)
+        oog = cam[0]
+        dicht = cam[5] / (2 * cam[4] * cam[5] / cam[6]) / max(0.6, float(np.linalg.norm((lo + hi) / 2 - oog)))
+        alle_p, alle_c = [], []
+        for as_ in range(3):
+            u, v = [i for i in range(3) if i != as_]
+            for kant, helder in ((lo[as_], 0.62 if as_ != 1 else 0.5), (hi[as_], 0.82 if as_ != 1 else 1.0)):
+                nu = max(2, int((hi[u] - lo[u]) * dicht * 1.6) + 1)
+                nv = max(2, int((hi[v] - lo[v]) * dicht * 1.6) + 1)
+                A, Bv = np.meshgrid((np.arange(nu) + 0.5) / nu, (np.arange(nv) + 0.5) / nv)
+                P = np.zeros(A.shape + (3,), np.float32)
+                P[..., as_] = kant
+                P[..., u] = lo[u] + A * (hi[u] - lo[u])
+                P[..., v] = lo[v] + Bv * (hi[v] - lo[v])
+                P = (P.reshape(-1, 3) - om) @ R.T + om
+                alle_p.append(P)
+                alle_c.append(np.repeat(np.array(rgb, np.float32)[None, :] * helder * licht, len(P), 0))
+        self.punten(beeld, diepte, cam, np.concatenate(alle_p), np.concatenate(alle_c))
+
+    def figuur(self, beeld, diepte, cam, plek, rgb=(255, 150, 200), hoog=1.0, breed=0.7, yaw=None, soort="guh", licht=1.0):
+        """A stand-in for a character at a spot (feet), looking along `yaw` (Minecraft degrees; None: no face): a sitting guh
+        (body, head, two ears, eyes), "guhdalf" (grey, with the pointed hat and the staff) or "speler" (a player: two blocks tall)."""
+        x, y, z = plek
+        om = (x, y, z)
+        j = yaw or 0.0
+
+        def d(lo, hi, kleur):
+            self.doos(beeld, diepte, cam, (x + lo[0], y + lo[1], z + lo[2]), (x + hi[0], y + hi[1], z + hi[2]), kleur, yaw=j, om=om, licht=licht)
+        if soort == "speler":
+            d((-0.25, 0, -0.13), (0.25, 0.75, 0.13), (60, 70, 150))
+            d((-0.25, 0.75, -0.13), (0.25, 1.45, 0.13), rgb)
+            d((-0.25, 1.45, -0.25), (0.25, 1.95, 0.25), (190, 150, 120))
+            if yaw is not None:
+                d((-0.16, 1.66, 0.25), (-0.06, 1.76, 0.27), (30, 30, 40))
+                d((0.06, 1.66, 0.25), (0.16, 1.76, 0.27), (30, 30, 40))
+            return
+        k = hoog
+        d((-0.3 * k, 0, -0.28 * k), (0.3 * k, 0.55 * k, 0.28 * k), tuple(c * 0.9 for c in rgb))
+        d((-0.38 * k, 0.5 * k, -0.34 * k), (0.38 * k, 1.05 * k, 0.34 * k), rgb)
+        if yaw is not None:
+            d((-0.24 * k, 0.72 * k, 0.34 * k), (-0.08 * k, 0.9 * k, 0.36 * k), (30, 60, 90))
+            d((0.08 * k, 0.72 * k, 0.34 * k), (0.24 * k, 0.9 * k, 0.36 * k), (30, 60, 90))
+        if soort == "guhdalf":
+            d((-0.5 * k, 1.05 * k, -0.5 * k), (0.5 * k, 1.13 * k, 0.5 * k), (96, 100, 112))          # the brim
+            d((-0.3 * k, 1.13 * k, -0.3 * k), (0.3 * k, 1.45 * k, 0.3 * k), (104, 108, 120))
+            d((-0.17 * k, 1.45 * k, -0.17 * k), (0.17 * k, 1.75 * k, 0.17 * k), (104, 108, 120))
+            d((-0.07 * k, 1.75 * k, -0.07 * k), (0.07 * k, 2.0 * k, 0.07 * k), (104, 108, 120))
+            d((-0.56 * k, 0, 0.22 * k), (-0.48 * k, 1.9 * k, 0.3 * k), (120, 86, 50))                # the staff
+            d((-0.6 * k, 1.9 * k, 0.18 * k), (-0.44 * k, 2.06 * k, 0.34 * k), (230, 200, 90))
+        else:
+            d((-0.36 * k, 1.05 * k, -0.06 * k), (-0.14 * k, 1.3 * k, 0.06 * k), rgb)
+            d((0.14 * k, 1.05 * k, -0.06 * k), (0.36 * k, 1.3 * k, 0.06 * k), rgb)
 
 
 def naar_png(beeld, pad, schaal=2):
@@ -309,6 +357,28 @@ def _rog_pose(geo_file, anims, naam, sinds):
     return M.pose(geo_file, a, t)
 
 
+KLEUREN = {"araguh": (150, 120, 90), "leguhlas": (236, 226, 170), "gimguh": (190, 110, 70), "boromika": (120, 120, 126), "sam": (226, 190, 130),
+           "merrie": (240, 200, 150), "pippguh": (250, 216, 170)}
+
+
+def _yaw_op(s, naam, t):
+    """Where an actor looks at tick t (Minecraft yaw): along its walk while it walks, else at its last `kijk`, else its start yaw."""
+    def yaw(van, naar):
+        return math.degrees(math.atan2(-(naar[0] - van[0]), naar[2] - van[2]))
+    uit = next(a[4] for a in s.acteurs if a[0] == naam)
+    laatste = -1
+    hier = s.plek(naam, t)
+    for a, t0, naar in sorted((x for x in s.kijken if x[0] == naam), key=lambda x: x[1]):
+        if t0 <= t:
+            uit, laatste = yaw(hier, naar), t0
+    for a, t0, t1, naar in sorted((l for l in s.lopen if l[0] == naam), key=lambda l: l[1]):
+        if t0 <= t and t0 >= laatste - 400:
+            van = s.plek(naam, t0)
+            if t < t1 and abs(naar[0] - van[0]) + abs(naar[2] - van[2]) > 1e-3:
+                uit = yaw(van, naar)
+    return uit
+
+
 def scene_frames(b, out, s, tijden, breed=480, hoog=270):
     """Draws the scene `s` at these ticks: the camera of that moment, every actor where the script has it (the Barbecuerog as
     his model in the pose of his animation, with the light he carries; everybody else as a marker), the bridge gone after it
@@ -360,8 +430,9 @@ def scene_frames(b, out, s, tijden, breed=480, hoog=270):
                 k.model(beeld, diepte, cam, _rog_pose(geo_file, anims, anim, t - sinds), tex, glow, np.array(p, np.float32), kijkt,
                         helder=0.5 if brandt else 0.12)
             else:
-                rgb = (120, 190, 255) if soort == "speler" else (150, 150, 170) if naam == "guhdalf" else (255, 150, 200)
-                k.figuur(beeld, diepte, cam, p, rgb=rgb, hoog=1.8 if soort == "speler" else 1.1, breed=0.6 if soort == "speler" else 0.8)
+                rgb = (120, 190, 255) if soort == "speler" else (176, 178, 190) if naam == "guhdalf" else KLEUREN.get(naam, (255, 150, 200))
+                k.figuur(beeld, diepte, cam, p, rgb=rgb, hoog=1.0, yaw=_yaw_op(s, naam, t),
+                         soort="speler" if soort == "speler" else "guhdalf" if naam == "guhdalf" else "guh", licht=0.75)
         for ft, ticks, sterkte in s.flitsen:
             if ft <= t < ft + ticks * 2.5:
                 a = sterkte * (1 - (t - ft) / (ticks * 2.5)) ** 1.6

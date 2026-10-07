@@ -1,6 +1,9 @@
 package nl.juiced.guhs.feature.ringh3.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -12,8 +15,10 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -37,6 +42,10 @@ import nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler;
  * </ul>
  * While it is broken the stones are taken out again once a second (the server may show the real ones again after a chunk
  * reload). A break that no server message confirms (a replay) heals by itself a few seconds after the scene.
+ * <p>
+ * When it breaks before your eyes the stones FALL: every stone of the span becomes a falling block of this game alone
+ * ({@link #PUIN}: the server never hears of them, they place nothing and drop nothing) that tumbles into the chasm and goes up
+ * in dust where it lands.
  */
 public final class BrugBreuk {
     /** The stones that are gone, with what they were. */
@@ -45,6 +54,11 @@ public final class BrugBreuk {
     private static ClientLevel waar;
     private static boolean server, sceneBrak;
     private static int heelOver = -1, tik;
+    /** The stones on their way down (entities of this client only; ids far below the cutscene actors' own). */
+    private static final List<FallingBlockEntity> PUIN = new ArrayList<>();
+    private static int puinId = -5_000_000;
+    /** A falling stone lives at most this many ticks (the chasm is ten deep: a second and a half). */
+    private static final int PUIN_TICKS = 70;
     /** After a scene that the server does not follow up, the bridge is whole again after this many ticks. */
     private static final int NA_SCENE = 100;
 
@@ -64,6 +78,7 @@ public final class BrugBreuk {
 
     static void wis() {
         WEG.clear();
+        PUIN.clear();
         waar = null;
         server = false;
         sceneBrak = false;
@@ -98,6 +113,7 @@ public final class BrugBreuk {
                 heel(true);
             }
         }
+        puinTick(level);
         if (!WEG.isEmpty() && ++tik % 20 == 0) {
             for (BlockPos pos : WEG.keySet()) {
                 if (!level.getBlockState(pos).isAir()) {
@@ -156,8 +172,9 @@ public final class BrugBreuk {
                     WEG.putIfAbsent(pos.immutable(), state);
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
                     if (stof) {
-                        // the stones fall: chunks of them tumble down, dust hangs where the span was
-                        for (int i = 0; i < 6; i++) {
+                        // the stones fall: every one of them drops into the chasm, splinters fly, dust hangs where the span was
+                        val(level, pos, state, r);
+                        for (int i = 0; i < 3; i++) {
                             level.addAlwaysVisibleParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), true, pos.getX() + r.nextDouble(),
                                     pos.getY() + r.nextDouble(), pos.getZ() + r.nextDouble(), (r.nextDouble() - 0.5) * 0.3, -0.2 - r.nextDouble() * 0.4,
                                     (r.nextDouble() - 0.5) * 0.3);
@@ -171,9 +188,55 @@ public final class BrugBreuk {
         }
     }
 
+    /** One stone of the span lets go (the place it had is air already). */
+    private static void val(ClientLevel level, BlockPos pos, BlockState state, RandomSource r) {
+        if (state.getRenderShape() != RenderShape.MODEL || PUIN.size() >= 96) {
+            return;
+        }
+        // (on a client this makes the entity and nothing else: a client level takes no "fresh" entities, it is added below
+        // under an id of our own)
+        FallingBlockEntity steen = FallingBlockEntity.fall(level, pos, state);
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
+        steen.dropItem = false;
+        steen.setId(puinId--);
+        steen.setDeltaMovement((r.nextDouble() - 0.5) * 0.16, -r.nextDouble() * 0.22, (r.nextDouble() - 0.5) * 0.16);
+        level.addEntity(steen);
+        PUIN.add(steen);
+    }
+
+    /** (every tick) a stone that landed, or fell long enough, goes up in dust. */
+    private static void puinTick(ClientLevel level) {
+        for (Iterator<FallingBlockEntity> it = PUIN.iterator(); it.hasNext(); ) {
+            FallingBlockEntity steen = it.next();
+            if (steen.isRemoved() || steen.level() != level) {
+                it.remove();
+            } else if (steen.onGround() || steen.tickCount > PUIN_TICKS) {
+                RandomSource r = level.getRandom();
+                for (int i = 0; i < 4; i++) {
+                    level.addAlwaysVisibleParticle(new BlockParticleOption(ParticleTypes.BLOCK, steen.getBlockState()), true, steen.getX() + r.nextDouble() - 0.5,
+                            steen.getY() + r.nextDouble(), steen.getZ() + r.nextDouble() - 0.5, (r.nextDouble() - 0.5) * 0.4, 0.2 + r.nextDouble() * 0.3,
+                            (r.nextDouble() - 0.5) * 0.4);
+                }
+                level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, true, steen.getX(), steen.getY() + 0.4, steen.getZ(), 0, 0.04, 0);
+                level.removeEntity(steen.getId(), Entity.RemovalReason.DISCARDED);
+                it.remove();
+            }
+        }
+    }
+
+    private static void weg(ClientLevel level) {
+        for (FallingBlockEntity steen : PUIN) {
+            if (!steen.isRemoved() && steen.level() == level) {
+                level.removeEntity(steen.getId(), Entity.RemovalReason.DISCARDED);
+            }
+        }
+        PUIN.clear();
+    }
+
     private static void heel(boolean puf) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null && level == waar) {
+            weg(level);
             for (Map.Entry<BlockPos, BlockState> e : WEG.entrySet()) {
                 if (level.getBlockState(e.getKey()).isAir()) {
                     level.setBlock(e.getKey(), e.getValue(), 19);

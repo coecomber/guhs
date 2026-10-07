@@ -874,17 +874,24 @@ class Bouw:
 
     def kloof(self):
         x0, y0, z0, x1, y1, z1 = KLOOF
-        # the bed of glowing coals at the bottom, heaped against the walls
+        # the bed of coals at the bottom, heaped against the walls: rivers of glowing coal between banks and islands of black
+        # slag (broad shapes from a noise of their own: a coin toss per block made a checkerboard of it, seen from the bridge)
+        gloed = _ruis(21301809)
         for x in range(x0, x1 + 1):
             for z in range(z0, z1 + 1):
                 r = self.rng.random()
-                self.set(x, y0 - 1, z, GLOEIKOOL if r < 0.62 else GRILLKOOL if r < 0.8 else ZWART)
+                heet = gloed(x, z, 5.5) * 0.7 + gloed(x + 300, z + 170, 2.4) * 0.3
+                self.set(x, y0 - 1, z, GLOEIKOOL if heet > 0.5 else GRILLKOOL if heet > 0.44 else BASALT_RUW if r > 0.9 else ZWART,
+                         {"axis": "y"} if heet <= 0.44 and r > 0.9 else None)
                 self.set(x, y0 - 2, z, HOUTSKOOL)
                 rand = min(z - z0, z1 - z, x - x0, x1 - x)
                 hoop = int(max(0, 3 - rand) * self.ruis(x, z, 2.5) * 1.6) + (1 if r > 0.93 else 0)
                 for y in range(y0, y0 + hoop):
-                    self.set(x, y, z, GLOEIKOOL if self.rng.random() < 0.5 else GRILLKOOL)
-                if hoop == 0 and r < 0.1:
+                    kop = self.rng.random()
+                    self.set(x, y, z, GLOEIKOOL if heet > 0.47 and (y == y0 or kop < 0.6) else GRILLKOOL)
+                if hoop == 0 and heet < 0.3:
+                    self.set(x, y0, z, ZWART if heet > 0.22 or r < 0.5 else HOUTSKOOL)      # the slag stands a block proud of the fire
+                elif hoop == 0 and r < 0.1 and heet > 0.5:
                     self.set(x, y0, z, SMEUL)
         # the walls bulge and break: ledges of rock under the hall floor and the east bank
         for z in range(z0, z1 + 1):

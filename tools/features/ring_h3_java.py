@@ -82,6 +82,9 @@ def _vec(scene, p):
 
 
 VANILLA_GELUID = {"DONDER": "SoundEvents.LIGHTNING_BOLT_THUNDER"}
+# particles that are more than a field of ParticleTypes: FLITS = the flash of a firework (one great soft ball of light, gone in
+# four ticks), warm white
+DEELTJE = {"FLITS": "ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFF2D0)"}
 
 
 def _scene(s, naam):
@@ -115,7 +118,7 @@ def _scene(s, naam):
         else:
             r.append(f"            .geluid({t}, {bron}::get, {_f(volume)}f, {_f(pitch)}f)")
     for t, soort, pos, aantal, spreiding in sorted(s.deeltjes, key=lambda x: (x[0], x[1])):
-        r.append(f"            .deeltjes({t}, ParticleTypes.{soort}, {_vec(s, pos)}, {aantal}, {_f(spreiding)})")
+        r.append(f"            .deeltjes({t}, {DEELTJE.get(soort, 'ParticleTypes.' + soort)}, {_vec(s, pos)}, {aantal}, {_f(spreiding)})")
     for t, kracht, ticks in sorted(s.schudden):
         r.append(f"            .schud({t}, {_f(kracht)}f, {ticks})")
     for t0, t1 in sorted(s.zwart):
@@ -129,7 +132,8 @@ def scenes():
     emmer, brug = S.emmer(), S.brug()
     flitsen = ", ".join(f"{{{t}, {ticks}, {int(round(sterkte * 100))}}}" for t, ticks, sterkte in sorted(brug.flitsen))
     r = [KOP, "package nl.juiced.guhs.feature.ringh3;\n",
-         "import net.minecraft.core.particles.ParticleTypes;", "import net.minecraft.sounds.SoundEvents;", "import net.minecraft.world.phys.Vec3;",
+         "import net.minecraft.core.particles.ColorParticleOption;", "import net.minecraft.core.particles.ParticleTypes;",
+         "import net.minecraft.sounds.SoundEvents;", "import net.minecraft.world.phys.Vec3;",
          "import nl.juiced.guhs.entity.GuhNpcEntity;", "import nl.juiced.guhs.entity.GuhVariant;", "import nl.juiced.guhs.feature.verhaal.Cutscene;\n",
          "/**",
          " * bbq2 (ring-h3): the two camera scenes of the mine, as the verhaal engine wants them. Positions are relative to the scene's",
