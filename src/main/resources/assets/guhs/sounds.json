@@ -2705,5 +2705,45 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
+  },
+  "einde2_vetbootje.fluitje": {
+    "sounds": [
+      "guhs:einde2_vetbootje/fluitje1",
+      "guhs:einde2_vetbootje/fluitje2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.fluitje"
+  },
+  "einde2_vetbootje.aankomst": {
+    "sounds": [
+      "guhs:einde2_vetbootje/aankomst"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.aankomst"
+  },
+  "einde2_vetbootje.kraak": {
+    "sounds": [
+      "guhs:einde2_vetbootje/kraak1",
+      "guhs:einde2_vetbootje/kraak2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.kraak"
+  },
+  "einde2_vetbootje.verf": {
+    "sounds": [
+      "guhs:einde2_vetbootje/verf"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.verf"
+  },
+  "einde2_vetbootje.brander": {
+    "sounds": [
+      "guhs:einde2_vetbootje/brander1",
+      "guhs:einde2_vetbootje/brander2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.brander"
+  },
+  "einde2_vetbootje.vouw": {
+    "sounds": [
+      "guhs:einde2_vetbootje/vouw1",
+      "guhs:einde2_vetbootje/vouw2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.vouw"
   }
 }
