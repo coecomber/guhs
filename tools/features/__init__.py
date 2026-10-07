@@ -48,6 +48,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',
             'guhrio_beloning',
             'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
+            'snuffel_steiger',   # verhalenpad: snuffel-steiger (the dock and the opening; after snuffel)
             ]
 
 

@@ -1,0 +1,125 @@
+# Het Snuffeleiland, the dock (bbq2 / verhalenpad) AutoCheck: a real steigerhuisje on a shore of the Guhmensie, who lives
+# there, the sickbed talk, the choice at the captain, and the four cutscenes (frames of each).
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_snuffel-steiger.txt
+# (commands: see autocheck.txt; /guhs steiger ... are this slice's own, see feature/snuffelsteiger/SteigerCommando;
+#  /guhs steiger ga <plek> puts you on the same spot of whatever copy is nearest, looking the same way, however it is turned)
+# NOTHING of this was ever seen by the slice itself (it may not start a client): every picture here is a first look.
+
+section setup: to the Guhmensie, a clear noon, to the nearest steigerhuisje (generated on the way)
+/gamemode spectator
+/execute in guhs:guhmension run tp @s 1200 120 0
+wait 60
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/effect give @s minecraft:night_vision infinite 0 true
+/guhs snuffel wis
+/guhs verhaal wis snuffeleiland @s
+/guhs steiger waar
+/guhs steiger ga
+wait 200
+/guhs steiger ga
+wait 100
+/guhs steiger bewoners
+wait 80
+/guhs steiger bewoners
+wait 40
+
+section the building from outside: from the sea, from behind, from the garden gate, down the pier
+/guhs steiger ga zee
+waitrender 200
+shot steiger_vanaf_zee
+/guhs steiger ga achter
+waitrender 200
+shot steiger_vanaf_land
+/guhs steiger ga tuin
+waitrender 100
+shot steiger_tuin_en_feest
+/guhs steiger ga kade
+waitrender 100
+shot steiger_kade_en_pier
+/guhs steiger ga platform
+waitrender 100
+shot steiger_kapitein_en_boot
+
+section inside: the sickbed with the puppy (a red shiba puppy: nobody chose yet) and Buurvrouw Mandje, the hearth, papa's bed
+/guhs steiger ga binnen
+waitrender 100
+shot steiger_binnen_ziekbed
+
+section the feast: the story starts by itself for whoever stands on the dock (survival); four frames of the 20 seconds
+/gamemode survival
+/guhs steiger ga kade
+wait 30
+shot steiger_feest_begin
+wait 100
+shot steiger_feest_pup_komt_buiten
+wait 130
+shot steiger_feest_pup_valt
+wait 80
+shot steiger_feest_iedereen_erbij
+wait 120
+/guhs steiger stand
+
+section the sickbed talk (click Buurvrouw Mandje by hand to read all six pages; here: its result) and the captain's question
+/guhs steiger ga binnen
+wait 20
+shot steiger_binnen_na_feest
+/guhs steiger ziekbed
+/guhs steiger ga platform
+wait 20
+gui keep
+/guhs snuffel keuze
+wait 20
+shot steiger_keuze_hond gui
+gui close
+/guhs snuffel kies corgi sable c Woef
+wait 20
+
+section the puppy in bed is the viewer's own now: a sable corgi puppy
+/guhs steiger ga binnen
+wait 30
+shot steiger_binnen_wiebel_is_corgi
+
+section the crossing (25 s): aboard, out, the swell, the storm, "I turn back", the jump, the swim; it ends in black and on the island
+/guhs steiger ga platform
+wait 20
+/guhs steiger scene overtocht
+wait 40
+shot steiger_overtocht_aan_boord
+wait 80
+shot steiger_overtocht_uitvaren
+wait 80
+shot steiger_overtocht_open_zee
+wait 70
+shot steiger_overtocht_storm
+wait 70
+shot steiger_overtocht_ik_keer_om
+wait 80
+shot steiger_overtocht_sprong
+wait 40
+shot steiger_overtocht_zwemmen
+wait 100
+
+section the short crossing and coming home (the scenes alone, at the dock)
+/guhs steiger scene vaart
+wait 60
+shot steiger_vaart
+wait 100
+/guhs steiger scene thuis
+wait 50
+shot steiger_thuiskomst_boot_komt
+wait 60
+shot steiger_thuiskomst_aan_wal
+wait 60
+
+section the real hand-over: the captain's "Hijs de zeilen!" (the whole crossing, then the island's beach as a dog), and home again
+/guhs steiger vaar
+wait 620
+shot steiger_overdracht_op_het_eiland gui
+/guhs snuffel huis
+wait 60
+shot steiger_thuis_boot_scene
+wait 140
+shot steiger_weer_thuis_op_de_steiger gui
+/guhs steiger stand

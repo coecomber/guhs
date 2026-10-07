@@ -111,6 +111,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.guhriow3.client.GuhrioW3Client.init(modBus);
         nl.juiced.guhs.feature.guhriobeloning.client.GuhrioBeloningClient.init(modBus);
         nl.juiced.guhs.feature.snuffel.client.SnuffelClient.init(modBus);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffelsteiger.client.SnuffelsteigerClient.init(modBus);   // verhalenpad: snuffel-steiger
     }
 
     private FeaturesClient() {

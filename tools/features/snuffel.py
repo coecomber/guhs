@@ -369,9 +369,10 @@ LANG = {
 
 STAPPEN = [  # (stapnaam, nu, waar): the questline "snuffeleiland" in the Guhdex; the dock (0-1) and the village (2-8) fill it in
     ("Vind een steigerhuisje", "Zoek een steigerhuisje aan het water. Je superkompas (Mijn verhaal) wijst de weg.",
-     "Een steigerhuisje aan de kust van de Guhmensie"),
-    ("Kies je hond en vaar uit", "Je broertje of zusje is ziek en papa is al weken weg. Kies je hond en je maatje, en vaar met de kapitein het water op.",
-     "De steiger bij het steigerhuisje"),
+     "Een steigerhuisje aan een Diepe Guhzee in de Guhmensie"),
+    ("Kies je hond en vaar uit", "Kleine Wiebel is ziek en papa is al weken weg. Ga naar het ziekbed in het huisje. Kies daarna bij Kapitein "
+     "Zoutsnoet je hond en je maatje, en vaar met hem het water op.",
+     "Het steigerhuisje: het ziekbed in het huisje, de kapitein aan het eind van de steiger"),
     ("Aangespoeld", "Je bent een hond! Jutje Kwispel heeft je op het strand gevonden. Loop met haar mee naar het dorp.",
      "Het strand van het Snuffeleiland"),
     ("Naar de dokter", "Vertel Dokter Pleisterpoot wat er thuis aan de hand is.", "Het dokterspraktijkje in Snuffeldorp"),
@@ -384,16 +385,18 @@ STAPPEN = [  # (stapnaam, nu, waar): the questline "snuffeleiland" in the Guhdex
     ("Het snuffelexamen", "Je neus is er klaar voor. Doe je examen bij Meester Truffelneus.", "De wei net buiten Snuffeldorp"),
     ("Een spoor van papa", "Je hebt je diploma! Maar wat ruik je daar bij het boompje? Volg je neus.", "Het boompje bij Snuffeldorp"),
 ]
-KORT = {"0": "Zoek een steigerhuisje aan het water", "1": "Kies je hond en vaar uit met de kapitein", "2": "Loop met Jutje Kwispel naar het dorp",
+KORT = {"0": "Zoek een steigerhuisje aan het water", "1": "Ga naar het ziekbed, kies je hond en vaar uit", "2": "Loop met Jutje Kwispel naar het dorp",
         "3": "Praat met Dokter Pleisterpoot", "4": "Volg de snuffelles van Meester Truffelneus", "5": "Kijk wat er rommelt op het pleintje",
         "6": "Doe goede daden voor de dorpelingen", "7": "Doe het snuffelexamen", "8": "Volg je neus bij het boompje"}
 VERBORGEN = ["snuffel_eerste_geur", "snuffel_guhstation", "snuffel_diploma"]
 
 FTB_STAPPEN = [  # (titel, tekst, icon) for the steps 1..9 (quest "snuffel_snuffeleiland_<i>", task quest/snuffeleiland_stap_<i>)
-    ("Een steigerhuisje", "Aan het water in de &dGuhmensie&r staat hier en daar een &fsteigerhuisje&r met lantaarns. Daar is feest... maar "
-     "je kleine broertje of zusje wordt ziek. Je &6superkompas&r (Mijn verhaal) wijst de weg.", "minecraft:lantern"),
-    ("Welke hond ben jij?", "Papa is al weken weg om de &dgeneesbloem&r te zoeken. Jij gaat hem achterna! Kies je &fhond&r (ras, vacht en "
-     "naam) en het &amaatje&r dat met je meegaat, en vaar uit met de kapitein. Njeg, wat een golven...", "minecraft:oak_boat"),
+    ("Een steigerhuisje", "Aan de &9Diepe Guhzee&r in de &dGuhmensie&r staat hier en daar een &fsteigerhuisje&r vol lampions. Daar is het "
+     "lantaarnfeest... maar je kleine broertje of zusje, &6Kleine Wiebel&r, zakt in elkaar. Je &6superkompas&r (Mijn verhaal) wijst de weg.",
+     "minecraft:lantern"),
+    ("Welke hond ben jij?", "&6Buurvrouw Mandje&r vertelt het bij het ziekbed: papa is al weken weg om de &dgeneesbloem&r te zoeken. Jij gaat "
+     "hem achterna! Kies bij &6Kapitein Zoutsnoet&r je &fhond&r (ras, vacht en naam) en het &amaatje&r dat met je meegaat, en vaar uit met "
+     "De Natte Neus. Njeg, wat een golven...", "minecraft:oak_boat"),
     ("Aangespoeld!", "Je wordt wakker op het strand van &bHet Snuffeleiland&r, en je hebt... pootjes?! Op het eiland ben je een hond. "
      "&6Jutje Kwispel&r brengt je naar Snuffeldorp. Je eigen spulletjes liggen veilig thuis op je te wachten.", "minecraft:sand"),
     ("Dokter Pleisterpoot", "De oude dorpsdokter weet het zeker: de geneesbloem vind je alleen met een &fechte snuffelneus&r. "
