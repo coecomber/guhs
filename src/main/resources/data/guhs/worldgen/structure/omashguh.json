@@ -14,22 +14,22 @@
     }
   },
   "templates": "guhs:omashguh",
-  "tiles_x": 1,
-  "tiles_z": 1,
+  "tiles_x": 5,
+  "tiles_z": 5,
   "tile_size": 32,
   "anchor": [
-    8,
+    72,
     0,
-    8
+    72
   ],
   "size": [
-    5,
-    4,
-    5
+    136,
+    88,
+    144
   ],
-  "y": 160,
+  "y": 142,
   "min_distance": 1100,
   "rand": 0,
-  "keep_clear": 9,
+  "keep_clear": 73,
   "voorrang": 300
 }

@@ -90,6 +90,18 @@
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755481A2A05AFF2",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_zij1.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.09375,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -1072,6 +1084,87 @@
       x: 6.0,
       y: 23.9125,
       shape: "rsquare",
+    },
+    {
+      id: "4755487D45B59819",
+      icon: {
+        id: "guhs:einde2_bouw_zij1_postgoot",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:omashguh",
+          id: "4755489036AD4BB2",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488517EC65BE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 0.0,
+      y: 27.875,
+      shape: "octagon",
+    },
+    {
+      id: "475548CDE98316BF",
+      icon: {
+        id: "guhs:kruimelwolk",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:westelijke_luchttempel",
+          id: "4755480469E6C6DE",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B0D17C9891",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 1.5,
+      y: 27.875,
+      shape: "octagon",
+    },
+    {
+      id: "47554838803BAAC0",
+      icon: {
+        id: "guhs:lichtstaafje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:vuurtempel_roku",
+          id: "47554865DCD35601",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548858546543B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 3.0,
+      y: 27.875,
+      shape: "octagon",
     },
   ],
 }

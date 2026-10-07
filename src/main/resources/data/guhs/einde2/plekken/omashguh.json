@@ -2,37 +2,468 @@
   "structuur": "omashguh",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    136,
+    88,
+    144
   ],
   "anker": [
-    8,
+    72,
     0,
-    8
+    72
   ],
   "plekken": {
+    "bumi": {
+      "soort": "npc",
+      "pos": [
+        68,
+        54,
+        61
+      ],
+      "yaw": 0.0,
+      "wie": "koning Bumi-guh, voor zijn troon",
+      "kind": "BUMI_GUH"
+    },
+    "flopsie": {
+      "soort": "npc",
+      "pos": [
+        75,
+        53,
+        62
+      ],
+      "yaw": 20.0,
+      "wie": "Flopsie-guh, het veel te grote huisdier van de koning",
+      "kind": "FLOPSIE"
+    },
+    "kristalsnoep": {
+      "soort": "prop",
+      "pos": [
+        61,
+        53,
+        61
+      ],
+      "wie": "de sokkel van de kristalsnoep-ring"
+    },
+    "troonzaal": {
+      "soort": "zone",
+      "pos": [
+        59,
+        53,
+        59
+      ],
+      "tot": [
+        77,
+        61,
+        77
+      ],
+      "wie": "de troonzaal"
+    },
+    "glijbaan_start": {
+      "soort": "prop",
+      "pos": [
+        68,
+        53,
+        83
+      ],
+      "wie": "het laadplatform: hier beginnen de drie postglijbanen"
+    },
+    "proef_1": {
+      "soort": "zone",
+      "pos": [
+        53,
+        39,
+        57
+      ],
+      "tot": [
+        61,
+        49,
+        79
+      ],
+      "wie": "proef 1: de sleutel in de waterval"
+    },
+    "proef_1_start": {
+      "soort": "prop",
+      "pos": [
+        54,
+        39,
+        68
+      ],
+      "wie": "het begin van proef 1"
+    },
+    "proef_2": {
+      "soort": "zone",
+      "pos": [
+        75,
+        39,
+        57
+      ],
+      "tot": [
+        83,
+        49,
+        79
+      ],
+      "wie": "proef 2: Flopsie zoek"
+    },
+    "proef_2_start": {
+      "soort": "prop",
+      "pos": [
+        82,
+        39,
+        68
+      ],
+      "wie": "het begin van proef 2"
+    },
+    "proef_3": {
+      "soort": "zone",
+      "pos": [
+        64,
+        39,
+        64
+      ],
+      "tot": [
+        72,
+        49,
+        83
+      ],
+      "wie": "proef 3: kies je tegenstander"
+    },
+    "proef_3_start": {
+      "soort": "prop",
+      "pos": [
+        68,
+        39,
+        82
+      ],
+      "wie": "het begin van proef 3"
+    },
+    "postguh": {
+      "soort": "npc",
+      "pos": [
+        68,
+        25,
+        89
+      ],
+      "yaw": 0.0,
+      "wie": "de postguh, achter zijn loket",
+      "kind": "POSTGUH"
+    },
+    "postkantoor": {
+      "soort": "zone",
+      "pos": [
+        58,
+        25,
+        88
+      ],
+      "tot": [
+        78,
+        30,
+        96
+      ],
+      "wie": "het postkantoor"
+    },
+    "glijbaan_finish": {
+      "soort": "prop",
+      "pos": [
+        68,
+        25,
+        102
+      ],
+      "wie": "de postbak: hier komen de drie glijbanen uit"
+    },
+    "das_molguh_1": {
+      "soort": "wezen",
+      "pos": [
+        88,
+        25,
+        60
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:das_molguh"
+    },
+    "das_molguh_2": {
+      "soort": "wezen",
+      "pos": [
+        92,
+        25,
+        64
+      ],
+      "yaw": -60.0,
+      "entity": "guhs:das_molguh"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        29,
+        25,
+        63
+      ],
+      "yaw": -90.0,
+      "wie": "een Omashguhse bakker",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        107,
+        25,
+        63
+      ],
+      "yaw": 90.0,
+      "wie": "een burger met een brief",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        68,
+        25,
+        28
+      ],
+      "yaw": 0.0,
+      "wie": "de buurvrouw van de postguh",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        52,
+        25,
+        108
+      ],
+      "yaw": 180.0,
+      "wie": "een guh die op de post wacht",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_5": {
+      "soort": "npc",
+      "pos": [
+        98,
+        25,
+        108
+      ],
+      "yaw": 180.0,
+      "wie": "een guh met een kar vol kristalkaas",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_6": {
+      "soort": "npc",
+      "pos": [
+        48,
+        39,
+        57
+      ],
+      "yaw": -90.0,
+      "wie": "een terrasbewoner",
+      "kind": "OMASHGUH_BURGER"
+    },
+    "bewoner_7": {
+      "soort": "npc",
+      "pos": [
+        45,
+        39,
+        88
+      ],
+      "yaw": 180.0,
+      "wie": "de wachter bij de trap",
+      "kind": "OMASHGUH_BURGER"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        62,
+        25,
+        123
       ],
       "tot": [
-        4,
-        3,
-        4
+        74,
+        30,
+        135
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "de landingsplek buiten de poort"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        68,
+        25,
+        127
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        88,
+        48,
+        174
+      ],
+      "wie": "van hier zie je de hele berg, met de glijbanen"
+    },
+    "glijbaan_route_1": {
+      "soort": "pad",
+      "punten": [
+        [
+          64,
+          53,
+          84
+        ],
+        [
+          64,
+          53,
+          87
+        ],
+        [
+          49,
+          48,
+          87
+        ],
+        [
+          49,
+          43,
+          76
+        ],
+        [
+          36,
+          43,
+          76
+        ],
+        [
+          36,
+          32,
+          100
+        ],
+        [
+          66,
+          25,
+          100
+        ]
+      ],
+      "wie": "postglijbaan linksom: 97 blokken"
+    },
+    "glijbaan_route_2": {
+      "soort": "pad",
+      "punten": [
+        [
+          68,
+          53,
+          84
+        ],
+        [
+          68,
+          49,
+          107
+        ],
+        [
+          66,
+          48,
+          107
+        ],
+        [
+          66,
+          46,
+          111
+        ],
+        [
+          70,
+          44,
+          111
+        ],
+        [
+          70,
+          42,
+          107
+        ],
+        [
+          66,
+          40,
+          107
+        ],
+        [
+          66,
+          38,
+          111
+        ],
+        [
+          70,
+          36,
+          111
+        ],
+        [
+          70,
+          34,
+          107
+        ],
+        [
+          66,
+          32,
+          107
+        ],
+        [
+          66,
+          30,
+          111
+        ],
+        [
+          70,
+          28,
+          111
+        ],
+        [
+          70,
+          26,
+          107
+        ],
+        [
+          68,
+          25,
+          107
+        ],
+        [
+          68,
+          25,
+          104
+        ]
+      ],
+      "wie": "postglijbaan de kurkentrekker: 75 blokken"
+    },
+    "glijbaan_route_3": {
+      "soort": "pad",
+      "punten": [
+        [
+          72,
+          53,
+          84
+        ],
+        [
+          72,
+          53,
+          87
+        ],
+        [
+          87,
+          48,
+          87
+        ],
+        [
+          87,
+          43,
+          76
+        ],
+        [
+          100,
+          43,
+          76
+        ],
+        [
+          100,
+          32,
+          100
+        ],
+        [
+          70,
+          25,
+          100
+        ]
+      ],
+      "wie": "postglijbaan rechtsom: 97 blokken"
     }
   }
 }

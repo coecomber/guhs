@@ -2,37 +2,315 @@
   "structuur": "westelijke_luchttempel",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    112,
+    84,
+    112
   ],
   "anker": [
-    8,
+    56,
     0,
-    8
+    56
   ],
   "plekken": {
+    "bizon_1": {
+      "soort": "prop",
+      "pos": [
+        40,
+        63,
+        22
+      ],
+      "wie": "hok 1 van de luchtbizon-guhs (leeg: de kudde is zoek)"
+    },
+    "bizon_2": {
+      "soort": "prop",
+      "pos": [
+        48,
+        63,
+        22
+      ],
+      "wie": "hok 2 van de luchtbizon-guhs (leeg: de kudde is zoek)"
+    },
+    "bizon_3": {
+      "soort": "prop",
+      "pos": [
+        56,
+        63,
+        22
+      ],
+      "wie": "hok 3 van de luchtbizon-guhs (leeg: de kudde is zoek)"
+    },
+    "bizon_4": {
+      "soort": "prop",
+      "pos": [
+        64,
+        63,
+        22
+      ],
+      "wie": "hok 4 van de luchtbizon-guhs (leeg: de kudde is zoek)"
+    },
+    "bizon_5": {
+      "soort": "prop",
+      "pos": [
+        72,
+        63,
+        22
+      ],
+      "wie": "hok 5 van de luchtbizon-guhs (leeg: de kudde is zoek)"
+    },
+    "bizonstal": {
+      "soort": "zone",
+      "pos": [
+        37,
+        63,
+        19
+      ],
+      "tot": [
+        75,
+        67,
+        30
+      ],
+      "wie": "de stal van de luchtbizon-guhs"
+    },
+    "luchtnon": {
+      "soort": "npc",
+      "pos": [
+        58,
+        46,
+        64
+      ],
+      "yaw": 0.0,
+      "wie": "de luchtnon-guh, bij de trap in de hangende hal",
+      "kind": "LUCHTNON_GUH"
+    },
+    "lemur_1": {
+      "soort": "wezen",
+      "pos": [
+        51,
+        46,
+        65
+      ],
+      "yaw": -40.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "windgang_1": {
+      "soort": "zone",
+      "pos": [
+        55,
+        46,
+        14
+      ],
+      "tot": [
+        57,
+        49,
+        40
+      ],
+      "wie": "windgang 1: van de hal naar de monding aan de northkant"
+    },
+    "windgang_2": {
+      "soort": "zone",
+      "pos": [
+        72,
+        46,
+        55
+      ],
+      "tot": [
+        98,
+        49,
+        57
+      ],
+      "wie": "windgang 2: van de hal naar de monding aan de eastkant"
+    },
+    "windgang_3": {
+      "soort": "zone",
+      "pos": [
+        55,
+        46,
+        72
+      ],
+      "tot": [
+        57,
+        49,
+        98
+      ],
+      "wie": "windgang 3: van de hal naar de monding aan de southkant"
+    },
+    "windgang_4": {
+      "soort": "zone",
+      "pos": [
+        14,
+        46,
+        55
+      ],
+      "tot": [
+        40,
+        49,
+        57
+      ],
+      "wie": "windgang 4: van de hal naar de monding aan de westkant"
+    },
+    "windfluit_1": {
+      "soort": "prop",
+      "pos": [
+        56,
+        46,
+        15
+      ],
+      "wie": "de monding van windgang 1 (het balkon aan de northkant)"
+    },
+    "windfluit_2": {
+      "soort": "prop",
+      "pos": [
+        97,
+        46,
+        56
+      ],
+      "wie": "de monding van windgang 2 (het balkon aan de eastkant)"
+    },
+    "windfluit_3": {
+      "soort": "prop",
+      "pos": [
+        56,
+        46,
+        97
+      ],
+      "wie": "de monding van windgang 3 (het balkon aan de southkant)"
+    },
+    "windfluit_4": {
+      "soort": "prop",
+      "pos": [
+        15,
+        46,
+        56
+      ],
+      "wie": "de monding van windgang 4 (het balkon aan de westkant)"
+    },
+    "lemur_2": {
+      "soort": "wezen",
+      "pos": [
+        58,
+        34,
+        23
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "windgang_5": {
+      "soort": "zone",
+      "pos": [
+        55,
+        16,
+        55
+      ],
+      "tot": [
+        57,
+        43,
+        57
+      ],
+      "wie": "windgang 5: de orgelpijp, recht omlaag door de middenpagode"
+    },
+    "windfluit_5": {
+      "soort": "prop",
+      "pos": [
+        59,
+        21,
+        56
+      ],
+      "wie": "de monding van de orgelpijp (de onderste verdieping)"
+    },
+    "lemur_3": {
+      "soort": "wezen",
+      "pos": [
+        53,
+        33,
+        60
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "fontein": {
+      "soort": "prop",
+      "pos": [
+        56,
+        71,
+        72
+      ],
+      "wie": "de fontein op het eiland"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        50,
+        71,
+        84
       ],
       "tot": [
-        4,
-        3,
-        4
+        62,
+        76,
+        96
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "de landingsplek op het eiland"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        56,
+        71,
+        89
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        -30,
+        41,
+        86
+      ],
+      "wie": "van hier zie je de tempel onder het eiland hangen"
+    },
+    "kudde_1": {
+      "soort": "prop",
+      "pos": [
+        7,
+        68,
+        56
+      ],
+      "wie": "een richel aan de zijkant van het eiland"
+    },
+    "kudde_2": {
+      "soort": "prop",
+      "pos": [
+        104,
+        67,
+        56
+      ],
+      "wie": "een richel aan de zijkant van het eiland"
+    },
+    "kudde_3": {
+      "soort": "prop",
+      "pos": [
+        100,
+        49,
+        16
+      ],
+      "wie": "een wolk waar een luchtbizon-guh op ligt te dutten"
+    },
+    "kudde_4": {
+      "soort": "prop",
+      "pos": [
+        16,
+        37,
+        94
+      ],
+      "wie": "een wolk waar een luchtbizon-guh op ligt te dutten"
+    },
+    "kudde_5": {
+      "soort": "prop",
+      "pos": [
+        18,
+        71,
+        48
+      ],
+      "wie": "het verste puntje van het gras"
     }
   }
 }

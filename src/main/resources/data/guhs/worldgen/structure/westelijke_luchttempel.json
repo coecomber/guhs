@@ -14,22 +14,22 @@
     }
   },
   "templates": "guhs:westelijke_luchttempel",
-  "tiles_x": 1,
-  "tiles_z": 1,
+  "tiles_x": 4,
+  "tiles_z": 4,
   "tile_size": 32,
   "anchor": [
-    8,
+    56,
     0,
-    8
+    56
   ],
   "size": [
-    5,
-    4,
-    5
+    112,
+    84,
+    112
   ],
-  "y": 160,
+  "y": 150,
   "min_distance": 1100,
   "rand": 0,
-  "keep_clear": 9,
+  "keep_clear": 57,
   "voorrang": 299
 }
