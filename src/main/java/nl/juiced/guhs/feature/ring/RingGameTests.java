@@ -92,24 +92,99 @@ public final class RingGameTests {
         return c != null && c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t ? t.getKey() : "";
     }
 
-    /** The grill portal only lets a player through who finished ALL of chapter 1; the way back is never blocked. */
+    /**
+     * The portal lock on the merged tree (PHASE3 R01): the grill portal Guhmensie -> Barbecuether is closed for EVERYBODY
+     * (a creative player too, a spectator not) until the LAST step of the real chapter 1; the way back is never asked; a
+     * player who is in the Barbecuether without chapter 1 can leave and is not moved by anything; and both questions ("may
+     * start", "may use the portal") have one answer each: {@link Ring#magBeginnen} and {@link Ring#magDoorPortaal}.
+     */
     @GuhTest(template = KAMER, batch = BATCH)
     public static void ringPortaalslot(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ServerPlayer nieuw = speler(helper, 2, 2), bezig = speler(helper, 3, 2), klaar = speler(helper, 4, 2);
-        for (ServerPlayer p : List.of(nieuw, bezig, klaar)) {
+        ServerPlayer nieuw = speler(helper, 2, 2), bezig = speler(helper, 3, 2), klaar = speler(helper, 4, 2), bouwer = speler(helper, 5, 2),
+                kijker = speler(helper, 6, 2);
+        for (ServerPlayer p : List.of(nieuw, bezig, klaar, bouwer, kijker)) {
             nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(p);   // (guhpad: they followed the stories of the Guhmensie; that lock has its own tests)
         }
-        Ring.lijn(1).begin(bezig);
-        klaarTot(klaar, 1);
+        Verhaallijn h1 = Ring.lijn(1);
+        helper.assertTrue(h1.stappen() == 6 && "ring_h1".equals(h1.id()), "the real chapter 1 (six steps) is the key of the lock");
+        // (1) may start: only the Grillguh's quest opens it, and only Ring.magBeginnen says so
+        helper.assertTrue(!Ring.magBeginnen(nieuw) && !Ring.begonnen(nieuw), "a new player may not start");
+        nl.juiced.guhs.feature.barbecuether.Grillguh.setStep(bezig, nl.juiced.guhs.feature.barbecuether.Grillguh.DONE);
+        helper.assertTrue(Ring.magBeginnen(bezig) && !Ring.magDoorPortaal(bezig), "the Grillguh's quest lets a player START, it does not open the portal");
+        // (2) closed for everybody until the LAST step
         helper.assertTrue(RingFeature.PORTAAL_DICHT.equals(key(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, nieuw))), "refused: the story has not begun");
-        helper.assertTrue(Ring.lijn(1).klaar(bezig) || GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, bezig) != null,
-                "refused: chapter 1 is not finished yet");
+        h1.begin(bezig);
+        for (int stap = 0; stap < h1.stappen(); stap++) {
+            h1.zet(bezig, stap);
+            helper.assertTrue(!Ring.magDoorPortaal(bezig) && RingFeature.PORTAAL_DICHT.equals(key(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, bezig))),
+                    "refused at step " + stap + " of chapter 1");
+        }
+        h1.zet(bezig, h1.stappen());
+        helper.assertTrue(Ring.magDoorPortaal(bezig) && GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, bezig) == null, "the last step opens it");
+        klaarTot(klaar, 1);
         helper.assertTrue(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, klaar) == null, "open: all of chapter 1 is done");
-        helper.assertTrue(GrillPortalBlock.slot(BarbecuetherFeature.BARBECUETHER, level, nieuw) == null, "the way back is never blocked");
+        bouwer.setGameMode(GameType.CREATIVE);
+        helper.assertTrue(!Ring.magDoorPortaal(bouwer) && GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, bouwer) != null, "a creative player is refused too");
+        kijker.setGameMode(GameType.SPECTATOR);
+        helper.assertTrue(Ring.magDoorPortaal(kijker) && GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, kijker) == null, "a spectator passes");
         Entity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         helper.assertTrue(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, guh) == null, "only players are stopped");
-        weg(helper, nieuw, bezig, klaar);
+        // (3) the way back is never asked, whoever it is; and the portal does lead back
+        for (ServerPlayer p : List.of(nieuw, bouwer, kijker, klaar)) {
+            helper.assertTrue(GrillPortalBlock.slot(BarbecuetherFeature.BARBECUETHER, level, p) == null, "the way back is never blocked");
+        }
+        helper.assertTrue(nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.targetDimension(BarbecuetherFeature.BARBECUETHER) == ModDimensions.GUHMENSION,
+                "a grill portal in the Barbecuether leads to the Guhmensie");
+        // (4) somebody who is in the Barbecuether without chapter 1 (they lived there before the update) is left alone: the
+        // whole upkeep of the story runs for them (Ring.OVERAL: this level counts as a story world) and they stay put
+        Vec3 stond = nieuw.position();
+        for (int i = 0; i < 60; i++) {
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(nieuw));
+            RingEvents.seconde(nieuw);
+        }
+        helper.assertTrue(nieuw.position().distanceToSqr(stond) < 1.0e-6 && nieuw.level() == level && !Ring.begonnen(nieuw) && !Ring.heeft(nieuw),
+                "a player without chapter 1 is not moved and nothing starts for them: " + nieuw.position());
+        weg(helper, nieuw, bezig, klaar, bouwer, kijker);
+        helper.succeed();
+    }
+
+    /**
+     * PHASE3 R14: a grill portal that makes its own frame on arrival never builds into a protected building: the spot it
+     * wanted lies in a protected box, so the frame comes next to it, and not one block inside the box changes. (That the
+     * search starts outside Guhdalfs sluiers is asked in ring-h2's world test, with a real wall.)
+     */
+    @GuhTest(template = KAMER, batch = BATCH + "_portaalplek")
+    public static void ringPortaalNooitInEenGebouw(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos midden = helper.absolutePos(new BlockPos(10, 2, 10));
+        BoundingBox doos = new BoundingBox(midden.getX() - 3, midden.getY() - 1, midden.getZ() - 3, midden.getX() + 3, midden.getY() + 6, midden.getZ() + 3);
+        // (what the forcer may touch: put back afterwards, block for block)
+        java.util.Map<BlockPos, net.minecraft.world.level.block.state.BlockState> was = new java.util.HashMap<>();
+        for (BlockPos pos : BlockPos.betweenClosed(midden.offset(-20, -3, -20), midden.offset(20, 8, 20))) {
+            was.put(pos.immutable(), level.getBlockState(pos));
+        }
+        String naam = "ring_test_portaaldoos";
+        Bescherming.zetDoos(level, naam, doos);
+        try {
+            helper.assertTrue(!nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.magHier(level, midden)
+                    && nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.magHier(level, helper.absolutePos(new BlockPos(2, 2, 16))), "inside the box no frame, outside it one may");
+            var gemaakt = nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.createPortal(level, midden, net.minecraft.core.Direction.Axis.X);
+            helper.assertTrue(gemaakt.isPresent(), "a portal is made");
+            BlockPos hoek = gemaakt.get().minCorner;
+            helper.assertTrue(level.getBlockState(hoek).is(BarbecuetherFeature.BARBECUETHER_PORTAAL.get()) && !Bescherming.beschermd(level, hoek)
+                    && hoek.closerThan(midden, 16), "it stands next to the protected box, not in it: " + hoek.subtract(midden));
+            for (BlockPos pos : BlockPos.betweenClosed(doos.minX(), doos.minY(), doos.minZ(), doos.maxX(), doos.maxY(), doos.maxZ())) {
+                helper.assertTrue(level.getBlockState(pos) == was.get(pos), "a block inside the protected box changed: " + pos.subtract(midden));
+            }
+        } finally {
+            Bescherming.wisDozen(level, naam);
+            was.forEach((pos, state) -> {
+                if (level.getBlockState(pos) != state) {
+                    level.setBlock(pos, state, net.minecraft.world.level.block.Block.UPDATE_CLIENTS | net.minecraft.world.level.block.Block.UPDATE_KNOWN_SHAPE);
+                }
+            });
+        }
         helper.succeed();
     }
 
@@ -378,6 +453,36 @@ public final class RingGameTests {
         });
     }
 
+    /**
+     * PHASE3 R09: the ring and the games do not mix. In a game (a level of Super Guhrio, a race...: Minigames.playing) the
+     * ring can't be put on, a ring that was on comes off, a running hunt of the Nine ends and no new one starts.
+     */
+    @GuhTest(template = KAMER, batch = BATCH + "_spel")
+    public static void ringNietInEenSpel(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, 10, 10);
+        klaarTot(p, 1);
+        Ring.geef(p);
+        helper.assertTrue(Ring.magOm(p) && Ring.doeOm(p, true) && Ring.om(p), "outside a game the ring goes on");
+        String spel = "ring_test_spel";
+        try {
+            nl.juiced.guhs.feature.Minigames.registerGame(spel, pl -> pl == p);
+            helper.assertTrue(!Ring.magOm(p), "in a game");
+            RingEvents.seconde(p);
+            helper.assertTrue(!Ring.om(p), "the ring comes off when a game begins");
+            helper.assertTrue(!Ring.doeOm(p, true) && !Ring.om(p), "and can't be put on in it");
+            for (int i = 0; i < 12; i++) {
+                RingEvents.seconde(p);
+            }
+            helper.assertTrue(!Negen.wordtGejaagd(p), "the Nine have no business in a game");
+        } finally {
+            nl.juiced.guhs.feature.Minigames.registerGame(spel, pl -> false);
+        }
+        helper.assertTrue(Ring.doeOm(p, true) && Ring.om(p), "after the game the ring works as before");
+        Ring.doeOm(p, false);
+        weg(helper, p);
+        helper.succeed();
+    }
+
     /** The three gifts: the flask's lamp walks along, the rope pulls you to a hook. */
     @GuhTest(template = KAMER, batch = BATCH + "_gaven", timeoutTicks = 300)
     public static void ringGaven(GameTestHelper helper) {
@@ -401,6 +506,32 @@ public final class RingGameTests {
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         Gaven.lamp(p);
         helper.assertTrue(level.getBlockState(BlockPos.containing(p.getX(), p.getEyeY(), p.getZ())).isAir(), "put away: dark again");
+        // PHASE3 R11: the lamp is remembered with the player; one that a crash left behind is put out at the next login
+        ItemStack flesje = new ItemStack(RingFeature.LICHTFLESJE.get());
+        BlockPos lamp = BlockPos.containing(p.getX(), p.getEyeY(), p.getZ());
+        p.setItemInHand(InteractionHand.MAIN_HAND, flesje);
+        Gaven.lamp(p);
+        helper.assertTrue(level.getBlockState(lamp).is(Blocks.LIGHT) && GuhQuests.saved(p).getLongOr("guhs_ring_lamp_pos", 0L) == lamp.asLong(),
+                "the lamp's spot is written in the player's saved data");
+        Gaven.wisAlles(null);                                   // (a crash: the server forgets every lamp, the block stays)
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        Gaven.lamp(p);
+        helper.assertTrue(level.getBlockState(lamp).is(Blocks.LIGHT), "after a crash the light block is still there");
+        Gaven.doofBewaard(p);
+        helper.assertTrue(level.getBlockState(lamp).isAir() && !GuhQuests.saved(p).contains("guhs_ring_lamp_pos"), "the next login puts it out and forgets it");
+        // no lamp where nothing may be placed: inside a protected building
+        String doos = "ring_test_lampdoos";
+        Bescherming.zetDoos(level, doos, new BoundingBox(lamp.getX() - 1, lamp.getY() - 2, lamp.getZ() - 1, lamp.getX() + 1, lamp.getY() + 2, lamp.getZ() + 1));
+        p.setItemInHand(InteractionHand.MAIN_HAND, flesje);
+        Gaven.lamp(p);
+        helper.assertTrue(level.getBlockState(lamp).isAir() && !Gaven.magLamp(level, lamp) && !GuhQuests.saved(p).contains("guhs_ring_lamp_pos"),
+                "no light block inside a protected building");
+        Bescherming.wisDozen(level, doos);
+        Gaven.lamp(p);
+        helper.assertTrue(level.getBlockState(lamp).is(Blocks.LIGHT), "outside it the lamp burns again");
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        Gaven.lamp(p);
+        helper.assertTrue(level.getBlockState(lamp).isAir(), "and goes out");
         // the rope
         BlockPos haak = helper.absolutePos(HAAK);
         helper.assertTrue(level.getBlockState(haak).getBlock() instanceof Gaven.Haak, "the template has its hook");
@@ -529,14 +660,24 @@ public final class RingGameTests {
         slaper.snapTo(bed.getX() + 0.5, bed.getY(), bed.getZ() + 0.5);
         level.addFreshEntity(slaper);
         Vec3 lag = slaper.position();
+        // (PHASE3 R09 / R10) a plain guh that stands somewhere as a prop (no AI: the guh that carries the Guhshi look in a
+        // level of Super Guhrio, a show guh) is not lured away either
+        GuhEntity pop = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
+        BlockPos sokkel = helper.absolutePos(new BlockPos(9, 2, 11));
+        pop.snapTo(sokkel.getX() + 0.5, sokkel.getY(), sokkel.getZ() + 0.5);
+        pop.setNoAi(true);
+        level.addFreshEntity(pop);
+        Vec3 stond = pop.position();
         long begin = level.getGameTime();
         helper.succeedWhen(() -> {
             helper.assertTrue(wild.distanceTo(p) < 4.2, "a wild guh that smells the ring trots after its bearer");
             helper.assertTrue(level.getGameTime() - begin >= 60, "three looks of every guh have passed");
             helper.assertTrue(slaper.isAlive() && slaper.position().distanceTo(lag) < 0.3 && slaper.distanceTo(p) > 4.2,
                     "the stand-in stays where it was put: " + slaper.position().distanceTo(lag));
+            helper.assertTrue(pop.isAlive() && pop.position().distanceTo(stond) < 0.05 && !pop.getNavigation().isInProgress(), "a guh without AI is a prop: it stays");
             wild.discard();
             slaper.discard();
+            pop.discard();
             weg(helper, p);
         });
     }

@@ -80,6 +80,7 @@ TEKSTEN = {
     "item.guhs.knabbelring.lore3": "Maar het Oog ziet je wél, en in de Guhbarbecuether komen de Negen.",
     "quest.guhs.ring.om": "Je doet de Knabbelring om. Niemand ziet je... behalve het Oog.",
     "quest.guhs.ring.af": "Je doet de Knabbelring af. Poeh.",
+    "quest.guhs.ring.om.spel": "Niet tijdens een spelletje, njeg: hier blijft de ring in je zak.",
     "quest.guhs.ring.portaal_dicht": "Guhdalf heeft deze teleportatiemagie uitgezet. Misschien kan jij hem helpen een ring mee te nemen als je toch op reis gaat?",
     "quest.guhs.ring.portaal_open": "Guhdalf heeft de teleportatiemagie van het grillportaal weer aangezet. Voor jou, njeg. De reis kan beginnen!",
     "quest.guhs.ring.wegwijs": "Je verhaal is begonnen! Linksboven zie je steeds wat je moet doen. In de Guhdex (tab Verhalen) staat je reiskaart, "

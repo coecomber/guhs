@@ -74,9 +74,14 @@ public final class RingEvents {
         } else {
             DRAGERS.remove(p.getUUID());
         }
-        // worn: nobody sees you (the Eye does); the ring comes off by itself when it leaves your pockets
+        // worn: nobody sees you (the Eye does); the ring comes off by itself when it leaves your pockets, and when a game
+        // begins (a level of Super Guhrio, a race): there the Nine have no business either
+        boolean inSpel = !Ring.magOm(p);
+        if (inSpel && Negen.wordtGejaagd(p)) {
+            Negen.einde(p);
+        }
         if (Ring.om(p)) {
-            if (!heeft) {
+            if (!heeft || inSpel) {
                 Ring.doeOm(p, false);
             } else {
                 p.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 50, 0, true, false, false));
@@ -132,9 +137,16 @@ public final class RingEvents {
                 || GuhHooks.isBewoner(guh) || GuhHooks.isBezig(guh) || !(guh.level() instanceof ServerLevel level)) {
             return;
         }
-        Player dichtst = level.getNearestPlayer(guh, KWIJL_AFSTAND);
-        if (!(dichtst instanceof ServerPlayer p) || !DRAGERS.contains(p.getUUID()) || Ring.om(p) || p.isSpectator()) {
+        // (PHASE3 R09 / R10) a guh that somebody put down as a prop stays a prop: one without AI (the guh that carries the
+        // Guhshi look in a level, a show guh), one with the story flag; and no drooling at all in the worlds that are not
+        // nature (the Guhpixel lobby, the room inside a Guhhuisje)
+        if (guh.isNoAi() || GuhHooks.heeft(guh, nl.juiced.guhs.feature.verhaal.VerhaalVlaggen.VERHAAL_NPC)
+                || level.dimension() == nl.juiced.guhs.feature.guhpixel.Guhpixel.DIM || level.dimension() == nl.juiced.guhs.feature.huisje.Binnen.DIM) {
             return;
+        }
+        Player dichtst = level.getNearestPlayer(guh, KWIJL_AFSTAND);
+        if (!(dichtst instanceof ServerPlayer p) || !DRAGERS.contains(p.getUUID()) || Ring.om(p) || p.isSpectator() || !Ring.magOm(p)) {
+            return;   // (a player in a game is not followed either: its creatures are part of the game)
         }
         guh.getLookControl().setLookAt(p, 30f, 30f);
         if (guh.distanceToSqr(p) > 9) {
@@ -162,6 +174,14 @@ public final class RingEvents {
     public static void onDoelwit(LivingChangeTargetEvent event) {
         if (event.getNewAboutToBeSetTarget() instanceof Player p && Ring.onzichtbaarVoorMikas(p) && Mikas.isMika(event.getEntity())) {
             event.setCanceled(true);
+        }
+    }
+
+    /** A lamp of the Lichtflesje that a crash left behind in the world is put out when its player comes back (PHASE3 R11). */
+    @SubscribeEvent
+    public static void onInloggen(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p) {
+            Gaven.doofBewaard(p);
         }
     }
 

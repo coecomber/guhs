@@ -183,6 +183,8 @@ public final class BestaandFeature {
         NeoForge.EVENT_BUS.addListener(Schijn::opWeg);
         NeoForge.EVENT_BUS.addListener(Schijn::opDimensie);
         NeoForge.EVENT_BUS.addListener(Schijn::opStop);
+        NeoForge.EVENT_BUS.addListener(Schijn::opChunk);
+        NeoForge.EVENT_BUS.addListener(Schijn::opBlokUpdate);
         NeoForge.EVENT_BUS.addListener(BestaandEvents::rechtsklik);
         NeoForge.EVENT_BUS.addListener(BestaandEvents::linksklik);
         NeoForge.EVENT_BUS.addListener(BestaandFeature::commando);

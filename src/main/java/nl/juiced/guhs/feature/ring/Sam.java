@@ -267,6 +267,14 @@ public final class Sam {
             }
         }
         String doet = doet(sam);
+        if (!Ring.magOm(p) && !doet.equals(DRAAGT)) {
+            // (PHASE3 R09) his player is in a game (a level of Super Guhrio, a race): Sam-guh waits where he stands, at the
+            // gate, and neither walks nor hops in after them; when the game is over he follows again
+            sam.getNavigation().stop();
+            zetDoet(sam, WACHT, 40);
+            sam.getPersistentData().putLong(VerhaalGuhs.PLEK, sam.blockPosition().asLong());
+            return;
+        }
         if (doet.equals(DRAAGT) && sam.getFirstPassenger() != p) {
             // the player got off (or was put back somewhere): the ride is over
             RITTEN.remove(p.getUUID());

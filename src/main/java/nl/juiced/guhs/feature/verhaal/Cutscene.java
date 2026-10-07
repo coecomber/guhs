@@ -83,6 +83,7 @@ public final class Cutscene {
     @Nullable
     private final String lijn, kaart;
     private final double verbergEcht;
+    private final boolean cameraOntwijkt;
     private final List<CameraPunt> camera;
     private final List<Acteur> acteurs;
     private final List<Loop> lopen;
@@ -100,6 +101,7 @@ public final class Cutscene {
         this.lijn = b.lijn;
         this.kaart = b.kaart;
         this.verbergEcht = b.verbergEcht;
+        this.cameraOntwijkt = b.cameraOntwijkt;
         this.camera = b.camera.stream().sorted(Comparator.comparingInt(CameraPunt::t)).toList();
         this.acteurs = List.copyOf(b.acteurs);
         this.lopen = b.lopen.stream().sorted(Comparator.comparingInt(Loop::t0)).toList();
@@ -123,6 +125,7 @@ public final class Cutscene {
         @Nullable
         private String lijn, kaart;
         private double verbergEcht;
+        private boolean cameraOntwijkt;
         private final List<CameraPunt> camera = new ArrayList<>();
         private final List<Acteur> acteurs = new ArrayList<>();
         private final List<Loop> lopen = new ArrayList<>();
@@ -249,6 +252,18 @@ public final class Cutscene {
             return this;
         }
 
+        /**
+         * For a scene that plays on land nobody checked (not inside a structure whose template the scene was written
+         * against: a camp beside an old pit, "the flattest ground nearby"): when a camera position of the script lies inside
+         * a solid block in the viewer's world (a hill, a wall), the camera is pulled in along its own line of sight until it
+         * is in the open; the picture keeps looking at the same thing from nearer by. A scene without this plays exactly as
+         * written, whatever stands there.
+         */
+        public Builder cameraOntwijkt() {
+            this.cameraOntwijkt = true;
+            return this;
+        }
+
         /** The questline whose Guhdex page (and travel map) gets this scene's replay button. */
         public Builder bij(String lijnId) {
             this.lijn = lijnId;
@@ -312,6 +327,43 @@ public final class Cutscene {
 
     public double verbergEcht() {
         return verbergEcht;
+    }
+
+    /** Does the camera of this scene step out of solid blocks ({@link Builder#cameraOntwijkt})? */
+    public boolean cameraOntwijkt() {
+        return cameraOntwijkt;
+    }
+
+    /**
+     * Where a camera that {@link #cameraOntwijkt} stands for a script position {@code pos} that looks at {@code kijk} (world
+     * coordinates): {@code pos} itself when it is in the open, else the first spot in the open on the way to what it looks
+     * at (half a block further, so the near wall is behind the lens), never nearer than 1.5 blocks to its subject. Both
+     * sides (the client moves the camera; the game tests ask the same question of the server's world).
+     */
+    public static Vec3 uitDeGrond(net.minecraft.world.level.BlockGetter level, Vec3 pos, Vec3 kijk) {
+        if (!inBlok(level, pos)) {
+            return pos;
+        }
+        Vec3 d = kijk.subtract(pos);
+        double lengte = d.length();
+        if (lengte < 2.0) {
+            return pos;
+        }
+        Vec3 stap = d.scale(0.5 / lengte);
+        Vec3 q = pos;
+        for (double weg = 0.5; weg <= lengte - 1.5; weg += 0.5) {
+            q = q.add(stap);
+            if (!inBlok(level, q)) {
+                Vec3 verder = q.add(stap);
+                return weg + 0.5 <= lengte - 1.5 && !inBlok(level, verder) ? verder : q;
+            }
+        }
+        return pos;   // (rock all the way: nothing to gain)
+    }
+
+    private static boolean inBlok(net.minecraft.world.level.BlockGetter level, Vec3 p) {
+        net.minecraft.core.BlockPos b = net.minecraft.core.BlockPos.containing(p);
+        return level.getBlockState(b).isViewBlocking(level, b);
     }
 
     public List<CameraPunt> camera() {

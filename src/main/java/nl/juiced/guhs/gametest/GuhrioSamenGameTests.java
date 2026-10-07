@@ -181,7 +181,7 @@ public class GuhrioSamenGameTests {
      */
     // (the timeout is in ticks and the test server runs hundreds of ticks a second; the template's Pad-guh is there once
     //  his chunk is loaded, which takes real time)
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 4000)
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 40000)
     public static void guhrioSamenPrinsesEenKeerGezegd(GameTestHelper helper) throws ReflectiveOperationException {
         String naam = "guhriow1_test_1_2";
         ServerLevel level = helper.getLevel();

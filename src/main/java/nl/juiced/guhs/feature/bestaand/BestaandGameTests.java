@@ -56,7 +56,8 @@ import nl.juiced.guhs.registry.ModItems;
  *       bowl burns only for who lit it and stays out in the world;</li>
  *   <li>{@link #bestaandBurcht} (a fake, turned copy of a Spiesburcht): Bezetting brings the wachthokje and the Wachter-guh;
  *       the weeds only the player at that step sees, pulling them, a spot that was built over, the reward once, a fire bowl
- *       that could not be placed counts as lit;</li>
+ *       that could not be placed counts as lit; the second player finishes after the first; a hokje spot that was built
+ *       over (an old copy) puts the Wachter-guh next to it;</li>
  *   <li>{@link #bestaandBrugvuurProp}: a bridge fire prop really lands on its spot of a copy and reports in;</li>
  *   <li>{@link #bestaandPaleis} (a fake copy of a grillpaleis): the naaihoek and the Knuffelmaker-guh come; a cage opens
  *       with vads or by sneaking, a Nether-Mika that looks only shoves, the freed plush is gone for that player alone and
@@ -251,8 +252,17 @@ public class BestaandGameTests {
             helper.assertTrue(BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_MELDEN, "the screen waits for an answer");
             rol.antwoord(wachter, a, WIEDEN);
             helper.assertTrue(BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_TUIN && advancement(a, "wachter_stap_3"), "step 3: the tuintje");
+            // a chunk that is sent to a (again) gets a's burning bowls right behind it (nothing to see on a mock client: it must not fail)
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.level.ChunkWatchEvent.Sent(a, level.getChunkAt(korven.get(0)), level));
+            // a real update of a block that a is shown otherwise: a's list goes out again in a's next tick; b is shown nothing there
+            Schijn.neemStraks(a);
+            Schijn.neemStraks(b);
+            level.setBlockAndUpdate(korven.get(3).above(2), Blocks.COBBLESTONE.defaultBlockState());
+            helper.assertTrue(!Schijn.neemStraks(a), "(a block update somewhere else asks nothing)");
+            level.setBlockAndUpdate(korven.get(3).above(2), Blocks.AIR.defaultBlockState());
             // a fire bowl that goes away is forgotten
             level.setBlockAndUpdate(korven.get(3), Blocks.AIR.defaultBlockState());
+            helper.assertTrue(Schijn.neemStraks(a) && !Schijn.neemStraks(b), "the real block under a's burning bowl changed: a refresh for a, not for b");
             helper.assertTrue(zietHier(helper, a, 16).size() == 3, "a removed bowl is no longer shown");
         } finally {
             weg(helper, a, b);
@@ -373,6 +383,56 @@ public class BestaandGameTests {
                     "a lost recipe card comes back (only the card)");
             helper.assertTrue(BestaandFeature.WACHTER.stand(a).klaar() && BestaandFeature.WACHTER.stand(a).beloningen().stream().allMatch(x -> x.binnen()),
                     "the Guhdex ticks the rewards");
+
+            // --- b goes on now that a is done: the other three fires, the same six tufts, the same reward ---
+            helper.assertTrue(zietHier(helper, b, 24).isEmpty() && BestaandFeature.WACHTER.stap(b) == BestaandFeature.WACHTER_VUREN && Vuren.aantal(b) == 1,
+                    "nothing a did moved the story of b: three fires to go, no weeds to see");
+            b.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(BestaandFeature.AANSTEEKSPIES.get()));
+            for (int nr = 1; nr < Vuren.AANTAL; nr++) {
+                BlockPos korf = helper.absolutePos(new BlockPos(18 + nr, 2, 20));
+                level.setBlockAndUpdate(korf, BestaandFeature.VUURKORF.get().defaultBlockState().setValue(VuurkorfBlock.NR, nr));
+                gebruik(b, korf);
+                helper.assertTrue(Vuren.brandt(b, nr) && !level.getBlockState(korf).getValue(VuurkorfBlock.LIT), "b lights the bowl of bridge " + nr + ", for b alone");
+                level.setBlockAndUpdate(korf, Blocks.AIR.defaultBlockState());
+            }
+            helper.assertTrue(BestaandFeature.WACHTER.stap(b) == BestaandFeature.WACHTER_MELDEN, "four fires: b reports in");
+            rol.talk(wachter, b);
+            rol.antwoord(wachter, b, WIEDEN);
+            helper.assertTrue(BestaandFeature.WACHTER.stap(b) == BestaandFeature.WACHTER_TUIN && zietHier(helper, b, 24).size() == Tuintje.AANTAL
+                    && zietHier(helper, a, 24).isEmpty(),
+                    "all six tufts stand there again, for b (a pulled them for a alone)");
+            for (int i = 0; i < Tuintje.AANTAL; i++) {
+                helper.assertTrue(Tuintje.klik(b, level, pollen.get(i)), "b pulls tuft " + i);
+            }
+            rol.talk(wachter, b);
+            rol.antwoord(wachter, b, DANK);
+            helper.assertTrue(BestaandFeature.WACHTER.klaar(b) && count(b, BestaandFeature.RECEPT_LANTAARN.get()) == 1
+                    && count(b, BestaandFeature.ZIELIG_LANTAARNTJE_ITEM.get()) == 2 && count(b, ModItems.clothingItem(GuhClothes.BESTAAND_WACHTERSHELM)) == 1
+                    && count(b, BestaandFeature.AANSTEEKSPIES.get()) == 0 && advancement(b, "barbecuether/bestaand_wachter"),
+                    "the second player finishes the whole line after the first, with the same reward");
+
+            // --- an old copy on a lived-in server: somebody built over the spot in the hokje. The Wachter-guh comes back next
+            //     to it, on a floor, never inside the blocks; and he is found again there (no second one) ---
+            metTag(helper, tag).forEach(Entity::discard);
+            level.setBlockAndUpdate(plek, Blocks.COBBLESTONE.defaultBlockState());
+            level.setBlockAndUpdate(plek.above(), Blocks.COBBLESTONE.defaultBlockState());
+            Bezetting.controleer(level, bij);
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, bij) == 1, "the Wachter-guh comes back to a copy that lost him");
+            List<Entity> weer = metTag(helper, tag);
+            helper.assertTrue(weer.size() == 1 && weer.get(0) instanceof GuhNpcEntity, "once: " + weer);
+            Entity nieuw = weer.get(0);
+            BlockPos staat = nieuw.blockPosition();
+            helper.assertTrue(!staat.equals(plek) && !staat.equals(plek.above()) && Math.abs(staat.getX() - plek.getX()) <= Bezetting.UITWIJK
+                    && Math.abs(staat.getZ() - plek.getZ()) <= Bezetting.UITWIJK && Math.abs(staat.getY() - plek.getY()) <= Bezetting.UITWIJK_HOOGTE,
+                    "not at the built-over spot but close to it: " + staat + " / " + plek);
+            helper.assertTrue(level.noBlockCollision(nieuw, nieuw.getBoundingBox().deflate(1.0E-4)) && level.getBlockState(staat.below()).isFaceSturdy(level, staat.below(), Direction.UP),
+                    "he stands free, on a floor: " + level.getBlockState(staat) + " over " + level.getBlockState(staat.below()));
+            helper.assertTrue(Features.role(((GuhNpcEntity) nieuw).getKind()) == rol, "and he is the Wachter-guh, with his talk");
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, bij) == 0 && metTag(helper, tag).size() == 1, "he is known at his new spot: no second one");
+            level.setBlockAndUpdate(plek, Blocks.AIR.defaultBlockState());
+            level.setBlockAndUpdate(plek.above(), Blocks.AIR.defaultBlockState());
             metTag(helper, tag).forEach(Entity::discard);
         } finally {
             Bezetting.vergeet(vuur0);
@@ -595,6 +655,24 @@ public class BestaandGameTests {
             helper.assertTrue(count(a, BestaandFeature.RECEPT_KNUFFEL.get()) == 1 && count(a, BestaandFeature.KNUFFELGUH_ITEM.get()) == 0, "a lost patroon comes back");
             helper.assertTrue(Schijn.gewenst(a).size() == 24, "the plush guhs stay with the Knuffelmaker-guh for a");
 
+            // --- b starts after a is done: the three cages are full for b, who pays, brings thread and gets the same reward ---
+            rol.talk(maker, b);
+            rol.antwoord(maker, b, HELP);
+            helper.assertTrue(BestaandFeature.KNUFFELMAKER.stap(b) == BestaandFeature.KNUFFELMAKER_KOOIEN && Kooien.aantal(b) == 0 && Schijn.gewenst(b).isEmpty(),
+                    "b begins: every plush is still in its cage for b");
+            ItemStack vanB = new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get(), 3);
+            Kooien.klik(b, level, kooien.get(0).offset(2, 1, 0), vanB, InteractionHand.MAIN_HAND);
+            Kooien.klik(b, level, kooien.get(1).offset(-2, 0, 0), vanB, InteractionHand.MAIN_HAND);
+            Kooien.klik(b, level, kooien.get(2).offset(2, 0, 0), vanB, InteractionHand.MAIN_HAND);
+            helper.assertTrue(Kooien.aantal(b) == 3 && vanB.isEmpty() && BestaandFeature.KNUFFELMAKER.stap(b) == BestaandFeature.KNUFFELMAKER_DRAAD
+                    && Schijn.gewenst(b).size() == 24, "b freed all three after a did: " + Kooien.aantal(b));
+            b.getInventory().add(new ItemStack(Items.STRING, BestaandFeature.DRAAD));
+            rol.talk(maker, b);
+            helper.assertTrue(BestaandFeature.KNUFFELMAKER.klaar(b) && count(b, BestaandFeature.RECEPT_KNUFFEL.get()) == 1
+                    && count(b, BestaandFeature.KNUFFELGUH_ITEM.get()) == 1 && count(b, BestaandFeature.KNUFFELMIKA_ITEM.get()) == 1
+                    && count(b, BestaandFeature.KNUFFELROOKGUH_ITEM.get()) == 1 && advancement(b, "barbecuether/bestaand_knuffelmaker"),
+                    "the second player finishes the whole line after the first, with the same reward");
+
             // --- a cage somebody broke open counts as freed (c) ---
             rol.talk(maker, c);
             rol.antwoord(maker, c, HELP);
@@ -602,7 +680,7 @@ public class BestaandGameTests {
             rol.talk(maker, c);
             helper.assertTrue(Kooien.vrij(c, 1) && Kooien.aantal(c) == 1 && BestaandFeature.KNUFFELMAKER.stap(c) == BestaandFeature.KNUFFELMAKER_KOOIEN,
                     "the broken cage is counted for c, the other two are still to do");
-            helper.assertTrue(BestaandFeature.KNUFFELMAKER.stap(b) == 0 && Kooien.aantal(b) == 0, "b did nothing and has nothing");
+            helper.assertTrue(BestaandFeature.KNUFFELMAKER.klaar(b) && BestaandFeature.KNUFFELMAKER.klaar(a), "and a and b stay done");
             metTag(helper, tag).forEach(Entity::discard);
         } finally {
             if (mika != null) {

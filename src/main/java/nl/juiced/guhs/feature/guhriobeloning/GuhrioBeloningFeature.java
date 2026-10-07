@@ -196,7 +196,13 @@ public final class GuhrioBeloningFeature {
         return uit;
     }
 
-    /** Guhshi, the five outfits, and whether you ever bought something from Pad-guh. */
+    /**
+     * The secrets of the castle that have a quest in the quest book: the secret room of 1-1 and of 1-2 (world 1 remembers
+     * them) and the warp room of world 2. The Guhdex says which you found, not where they are.
+     */
+    public static final int GEHEIMEN = 3;
+
+    /** Guhshi, the five outfits, whether you ever bought something from Pad-guh, and the castle's secrets you found. */
     private static List<VerhaalStand.Beloning> beloningen(ServerPlayer p) {
         List<VerhaalStand.Beloning> uit = new ArrayList<>();
         uit.add(Verhaallijn.beloning("guhs:guhrio_guhshi_ei", "gui.guhs.guhriobeloning.beloning.guhshi", VerhaalGuhs.heeftGetemd(p, VerhaalGuh.GUHSHI)));
@@ -204,6 +210,11 @@ public final class GuhrioBeloningFeature {
             uit.add(Verhaallijn.beloning("guhs:" + c.id(), "gui.guhs.guhriobeloning.beloning." + c.id(), KledingUnlocks.heeft(p, c)));
         }
         uit.add(Verhaallijn.beloning("guhs:guhriobeloning_pijp", "gui.guhs.guhriobeloning.beloning.bouwblokken", LIJN.vlag(p, Winkel.BLOK_GEKOCHT)));
+        uit.add(Verhaallijn.beloning("guhs:guhrio_vraagblok", "gui.guhs.guhriobeloning.geheim.1_1",
+                nl.juiced.guhs.feature.guhriow1.Binnentuin.geheimGevonden(p, nl.juiced.guhs.feature.guhriow1.Binnentuin.LEVEL_1)));
+        uit.add(Verhaallijn.beloning("guhs:guhrio_vraagblok", "gui.guhs.guhriobeloning.geheim.1_2",
+                nl.juiced.guhs.feature.guhriow1.Binnentuin.geheimGevonden(p, nl.juiced.guhs.feature.guhriow1.Binnentuin.LEVEL_2)));
+        uit.add(Verhaallijn.beloning("guhs:guhrio_pijp", "gui.guhs.guhriobeloning.geheim.warp", nl.juiced.guhs.feature.guhriow2.GuhrioW2.warpGevonden(p)));
         return uit;
     }
 

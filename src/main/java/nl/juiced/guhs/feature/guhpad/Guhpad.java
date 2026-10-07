@@ -28,9 +28,11 @@ import nl.juiced.guhs.quest.GuhQuests;
  * Het Guhpad (DESIGN_VERHALENPAD A): the stories open the worlds. The rules, each behind ONE static method:
  * <ul>
  *   <li>{@link #magKnabbelring}: Guhdalf only starts the Knabbelring for a player who finished every big story of the
- *       Guhmensie ({@code ringh1.Feest.magBeginnen} asks it; his refusal lists what is missing: {@link #guhdalfWeigert});</li>
+ *       Guhmensie (the gate of the story, {@code ring.Ring.magBeginnen}, asks it; his refusal lists what is missing:
+ *       {@link #guhdalfWeigert});</li>
  *   <li>{@link #magBarbecuether}: the grill portal Guhmensie -> Guhbarbecuether: those stories AND chapter 1 of the
- *       Knabbelring (the lock is the first of {@code GrillPortalBlock.SLOTEN}: {@link #grillSlot});</li>
+ *       Knabbelring (the lock is the first of {@code GrillPortalBlock.SLOTEN}: {@link #grillSlot}; the gate of the portal,
+ *       {@code ring.Ring.magDoorPortaal}, asks the stories too, so both say the same);</li>
  *   <li>{@link #magGuheinde}: the portal in the Knabbelkelder: the Knabbelring and Super Guhrio finished and the
  *       Aangebrande Mika beaten ({@code GuheindePortaalBlock} asks {@link #guheindeGeweigerd} / {@link #guheindeSlot}).
  *       <b>The Guheinde update extends this one method</b> (or {@link #eisen} for {@link Wereld#GUHEINDE}).</li>

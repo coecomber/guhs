@@ -25,9 +25,9 @@ import nl.juiced.guhs.feature.verhaal.Doelen;
  *   <li>client.GuhpadTab: the Guhdex tab Verhalen with the path map on top, the stories per world, and the preview of
  *       "Het echte Guheinde".</li>
  * </ul>
- * The only registry content is the custom statistic {@code guhs:verhalen_gevolgd}. Three other packages each call in with
- * one line: {@code ringh1.Feest} (magBeginnen and Guhdalf's refusal), {@code guheinde.GuheindePortaalBlock} (the lock) and
- * {@code verhaal.Doelen} (the hook {@code anders}).
+ * The only registry content is the custom statistic {@code guhs:verhalen_gevolgd}. Four other packages each call in with a
+ * line: {@code ring.Ring} (its two gates magBeginnen and magDoorPortaal), {@code ringh1.Feest} (Guhdalf's refusal),
+ * {@code guheinde.GuheindePortaalBlock} (the lock) and {@code verhaal.Doelen} (the hook {@code anders}).
  */
 public final class GuhpadFeature {
     /** The custom statistic "Verhalen gevolgd" (lang stat.guhs.verhalen_gevolgd). */

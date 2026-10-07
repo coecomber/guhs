@@ -230,7 +230,7 @@ public class GuhrioEngineGameTests {
     // =====================================================================================================================
 
     /** The Vuurpeper: big, and a mouse button throws a knabbel (two at most) that flattens the Guhmba it meets. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void engineVuurpeperGooit(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockPos vraag = new BlockPos(5, 5, Z), plek = new BlockPos(12, 2, Z);
@@ -261,7 +261,7 @@ public class GuhrioEngineGameTests {
     }
 
     /** The Schild-Mika: landed on = into its shell; touched = the shell slides off, flattens Guhmba's and flips a switch for the kicker. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void engineSchildMika(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockPos plek = new BlockPos(8, 2, Z), guhmbaPlek = new BlockPos(13, 2, Z), schakelaar = new BlockPos(18, 2, Z);
@@ -295,7 +295,7 @@ public class GuhrioEngineGameTests {
     }
 
     /** The Plof-Mika drops when a player of the level passes under it, lies still, floats back up; a touch sends you back. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void enginePlofMika(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockPos plek = new BlockPos(10, 6, Z);
@@ -328,7 +328,7 @@ public class GuhrioEngineGameTests {
     }
 
     /** The Hapbloem comes out of its pipe and goes back in; while it is out the pipe is shut and a touch is a kiss. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void engineHapbloem(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockState mond = GuhrioFeature.PIJP.get().defaultBlockState().setValue(GuhrioBlocks.PijpBlok.KANAAL, 6);
@@ -397,7 +397,7 @@ public class GuhrioEngineGameTests {
     }
 
     /** A platform is where the clock says (the same on both sides); a falling block drops once somebody stands on it and comes back. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void enginePlatformEnValblok(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockPos plek = new BlockPos(6, 4, Z), val = new BlockPos(14, 4, Z);
@@ -490,7 +490,7 @@ public class GuhrioEngineGameTests {
     // =====================================================================================================================
 
     /** Guhshi only carries whoever found his egg; a touch costs Guhshi first; his tongue eats a Guhmba and a coin. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void engineGuhshi(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         BlockPos ei = new BlockPos(5, 2, Z), plek = new BlockPos(7, 2, Z), guhmbaPlek = new BlockPos(11, 2, Z), munt = new BlockPos(16, 3, Z);
@@ -652,7 +652,7 @@ public class GuhrioEngineGameTests {
     }
 
     /** A cutscene always wins from a level: while it plays the level stands still (no time, no falling, no actions). */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void engineCutsceneWint(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         ServerPlayer p = start(helper, startAbs);

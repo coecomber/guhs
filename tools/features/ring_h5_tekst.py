@@ -56,9 +56,9 @@ TEKSTEN = {
     "quest.guhs.ringh5.smikagol.verder.0": "En nu rechtdoor, baasje, aan de achterkant het dal uit. Volg je neusje: het ruikt daar naar frituur. Lekker vet. Njeg.",
     "quest.guhs.ringh5.smikagol.verder.1": "Niet rechtdoor, baasje, daar zit het dal potdicht van de rots. Het gangetje hier vlakbij, door de rotswand bij het lantaarntje. Daar ruikt het naar frituur!",
     "quest.guhs.ringh5.smikagol.verder.2": "Niet rechtdoor, baasje, daar zit rots. Onder de toren van het Oog door, ssst, zachtjesss... en aan de overkant het gangetje door de rotswand. Daar ruikt het naar frituur!",
-    # (every way on in solid rock, as far as is looked: Hoofdstuk.verder. Outside the build anybody can dig; the guards and the
-    # riders still watch whoever has not finished the whole story, the Eye does not)
-    "quest.guhs.ringh5.smikagol.verder.dicht": "Ssst, baasje... aan de achterkant zit het dal potdicht van de rots, overal. Hakken dan maar: recht door de achterwand, buiten het dal mag dat. Of zachtjesss terug langs de wachters en buitenom. Volg je neusje naar de frituur. Njeg.",
+    # (every way on in solid rock, as far as is looked: Hoofdstuk.verder. Outside the build anybody can dig; and the guards,
+    # the riders and the Eye leave a player alone once THEIR chapter 5 is done: Hoofdstuk.voorbij, PHASE3 R05)
+    "quest.guhs.ringh5.smikagol.verder.dicht": "Ssst, baasje... aan de achterkant zit het dal potdicht van de rots, overal. Hakken dan maar: recht door de achterwand, buiten het dal mag dat. Of gewoon terug door het dal en buitenom: de wachters en het Oog kijken niet meer naar ons om, wij zijn er al langs. Volg je neusje naar de frituur. Njeg.",
     "quest.guhs.ringh5.sam.klaar": "Twee stoofpotjes voor de klim. En ik blijf achter die griezel lopen, dan zie ik wat hij doet.",
     # --- the lane ------------------------------------------------------------------------------------------------------------------
     "quest.guhs.ringh5.rook.dicht": "Je ziet geen poot voor ogen in die rook. Had je niet iets dat licht geeft?",

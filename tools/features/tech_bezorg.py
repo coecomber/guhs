@@ -451,6 +451,8 @@ def _texts():
         K + "halte.geen_station": f"Geen Stepstation binnen {bereik} blokken. Het paaltje wacht tot er een komt, njeg.",
         K + "halte.vol": f"Elk Stepstation in de buurt heeft al {haltes} haltes. Meer kan zijn rugzakje niet aan!",
         K + "halte.geen_kist": "Hier staat geen kist of machine tegenaan. Het Bezorgguhtje slaat dit paaltje over.",
+        K + "halte.mag_niet": "Dit paaltje mag hier niet bij: de kist staat in een beschermd gebouw of in het klusgebied van andermans "
+                              "Guhhuisje. Het Bezorgguhtje slaat het over, njeg.",
         K + "station.gekoppeld": "Er komt een Bezorgguhtje wonen! %s Haltepaaltjes in de buurt horen er nu bij.",
         K + "station.nieuw": "Er komt een Bezorgguhtje wonen! Zet nu Haltepaaltjes tegen je kisten.",
         # --- the whistle ---

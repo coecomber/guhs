@@ -17,10 +17,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.ChunkWatchEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -32,8 +35,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * shows it, lights it and plays its particles, while the server's world, and so every other player, keeps the real block.
  * <p>
  * A {@link Bron} says what a player should see ({@link #registreer}); every {@link #TICKS} ticks each player's list is
- * made again and sent again (a chunk that the client loaded anew, or a real update of that block, shows the real block
- * until then), and what is no longer wanted goes back to the real block. {@link #toon} shows one at once (right after the
+ * made again and sent again, and what is no longer wanted goes back to the real block. A chunk that is sent to the client
+ * (anew) gets its shown blocks right behind it ({@link #opChunk}), and a real update of a shown block asks for a refresh in
+ * the player's next tick ({@link #opBlokUpdate}); whatever slips through shows the real block for at most a second. {@link #toon} shows one at once (right after the
  * click that earned it) and asks for a refresh in the player's next tick ({@link #straks}): the game answers every click
  * on a block with the REAL state of that block and of the one next to it, which would put a fire out again for up to a
  * second. Nothing is saved here: the sources read the player's questline flags.
@@ -114,6 +118,11 @@ public final class Schijn {
         STRAKS.add(p.getUUID());
     }
 
+    /** (tests) Was a refresh in this player's next tick asked for? Forgets it. */
+    static boolean neemStraks(ServerPlayer p) {
+        return STRAKS.remove(p.getUUID());
+    }
+
     /** What this player sees at this spot: what was last sent to them, else the real block. */
     public static BlockState ziet(ServerPlayer p, BlockPos pos) {
         BlockState state = GETOOND.getOrDefault(p.getUUID(), Map.of()).get(pos);
@@ -147,6 +156,40 @@ public final class Schijn {
         if (event.getEntity() instanceof ServerPlayer p && (STRAKS.remove(p.getUUID()) | (p.tickCount + p.getId()) % TICKS == 0)) {
             ververs(p);
         }
+    }
+
+    /**
+     * A chunk was sent to a player (again: they came back, or their client dropped and reloaded it): it holds the REAL
+     * blocks, so what this player was shown in it goes out again right behind it, instead of up to a second later.
+     */
+    static void opChunk(ChunkWatchEvent.Sent event) {
+        Map<BlockPos, BlockState> had = GETOOND.get(event.getPlayer().getUUID());
+        if (had == null || had.isEmpty()) {
+            return;
+        }
+        ChunkPos chunk = event.getPos();
+        had.forEach((pos, state) -> {
+            if (pos.getX() >> 4 == chunk.x() && pos.getZ() >> 4 == chunk.z()) {
+                stuur(event.getPlayer(), pos, state);
+            }
+        });
+    }
+
+    /**
+     * The real block at a spot that somebody is shown otherwise changed (the game tells every client the real state): that
+     * player's list is sent again in their next tick. Fired for every block update of the server, so nothing happens here
+     * unless a player is shown something at all.
+     */
+    static void opBlokUpdate(BlockEvent.NeighborNotifyEvent event) {
+        if (GETOOND.isEmpty() || event.getLevel().isClientSide()) {
+            return;
+        }
+        BlockPos pos = event.getPos();
+        GETOOND.forEach((speler, had) -> {
+            if (had.containsKey(pos)) {
+                STRAKS.add(speler);
+            }
+        });
     }
 
     static void opWeg(PlayerEvent.PlayerLoggedOutEvent event) {

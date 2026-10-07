@@ -208,6 +208,34 @@ public class FossielmijnGameTests {
             rol.talk(npc, a);
             helper.assertTrue(tel(a, FossielmijnFeature.FOSSIELBEELDJE_ITEM.get()) == 1 && !lijn.klaar(b), "the reward only once; b is where b was");
 
+            // b goes on now that a is done: the stand that is full for a still has four empty hooks for b
+            helper.assertTrue(Integer.bitCount(Opgraving.geplaatst(b)) == 1 && lijn.stap(b) == 2, "b's stand did not move while a finished");
+            for (int i = 0; i < 4; i++) {
+                Opgraving.zetOpRek(b, rek);
+            }
+            helper.assertTrue(Opgraving.geplaatst(b) == Opgraving.ALLES && lijn.stap(b) == 3, "b's skeleton is whole too");
+            rol.talk(npc, b);
+            helper.assertTrue(lijn.klaar(b) && tel(b, FossielmijnFeature.FOSSIELBEELDJE_ITEM.get()) == 1 && tel(b, FossielmijnFeature.KWASTJE.get()) == 1,
+                    "the second player finishes after the first, with the same reward");
+            // and somebody who only arrives now: the same sand still holds five bones for them, the same stand is empty for them
+            ServerPlayer c = speler(helper, new BlockPos(4, 2, 2));
+            try {
+                rol.talk(npc, c);
+                helper.assertTrue(lijn.stap(c) == 1 && Opgraving.gevonden(c) == 0 && !Opgraving.isGekwast(c, zand[0]), "a newcomer begins with untouched sand");
+                for (int i = 0; i < 5; i++) {
+                    helper.assertTrue(kwast(c, zand[i]), "the newcomer finds bone " + (i + 1) + " where a and b found theirs");
+                }
+                for (int i = 0; i < 5; i++) {
+                    Opgraving.zetOpRek(c, rek);
+                }
+                rol.talk(npc, c);
+                helper.assertTrue(lijn.klaar(c) && tel(c, FossielmijnFeature.FOSSIELBEELDJE_ITEM.get()) == 1, "and is done: any number of players, one after the other");
+                helper.assertTrue(level.getBlockState(zand[0]) == FossielmijnFeature.BOTTENZAND.get().defaultBlockState()
+                        && level.getBlockState(rek) == FossielmijnFeature.SKELETREK.get().defaultBlockState(), "sand and stand are still what they were");
+            } finally {
+                weg(helper, c);
+            }
+
             // the daily finds: every spot once a day, per player
             a.getInventory().clearContent();
             helper.assertTrue(kwast(a, zand[5]) && !a.getInventory().isEmpty(), "a find in a spot a had not brushed today");
@@ -338,6 +366,30 @@ public class FossielmijnGameTests {
             helper.assertTrue(rol.offers(npc) != null && !rol.offers(npc).isEmpty(), "and he sells a new one");
             helper.assertTrue(!FossielmijnFeature.MIJNWERKER.stand(a).beloningen().isEmpty() && !Zoutmijn.nodig(b, 1).isEmpty()
                     && !Opgraving.nodig(b, 1).isEmpty(), "the Guhdex knows what is needed and what the rewards are");
+            // b starts after a is done: the rubble that a cleared lies there again, the vein gives b a stock of their own
+            rol.talk(npc, b);
+            helper.assertTrue(lijn.stap(b) == 1 && lijn.teller(b, Zoutmijn.PUIN) == 0, "b begins: the lump b hacked before the talk never counted");
+            // (a is clearing at the same time would leave b short for a minute at most: every lump is back 1200 ticks after it went)
+            b.gameMode.destroyBlock(puin[0]);
+            b.gameMode.destroyBlock(puin[1]);
+            Herstel.verschuif(level, FossielmijnBlocks.Puin.TERUG);
+            Herstel.verwerk(level);
+            helper.assertTrue(level.getBlockState(puin[0]) == ligt && lijn.teller(b, Zoutmijn.PUIN) == 2, "two lumps counted for b, and they are back for whoever comes next");
+            for (int i = 0; i < 3; i++) {
+                b.gameMode.destroyBlock(puin[i]);
+            }
+            helper.assertTrue(lijn.stap(b) == 2, "the same lumps again: five in all, the track is clear for b");
+            Zoutmijn.zetVoorraad(a, 0);
+            helper.assertTrue(Zoutmijn.hak(b, ader, level.getBlockState(ader), new ItemStack(Items.IRON_PICKAXE)) == 1 && lijn.stap(b) == 3
+                    && Zoutmijn.voorraad(b) == Zoutmijn.VOORRAAD_MAX - 1, "b finds the vein, also when a emptied theirs");
+            for (int i = 0; i < Zoutmijn.BOTERHAM - 1; i++) {
+                Zoutmijn.hak(b, ader, level.getBlockState(ader), new ItemStack(Items.IRON_PICKAXE));
+            }
+            rol.talk(npc, b);
+            helper.assertTrue(lijn.klaar(b) && tel(b, FossielmijnFeature.ZOUTKRISTALHOUWEEL.get()) == 1 && tel(a, FossielmijnFeature.ZOUTKRISTALHOUWEEL.get()) == 1,
+                    "the second player finishes the whole line after the first, with the same reward");
+            Herstel.verschuif(level, FossielmijnBlocks.Puin.TERUG);
+            Herstel.verwerk(level);
         } finally {
             npc.discard();
             weg(helper, a, b);

@@ -46,7 +46,9 @@ WIKI = {
          "luikjes hem vanzelf terug."),
         ("bank-guh-buikje", "Buizen en trechters",
          f"Knabbelbuizen en trechters kunnen altijd spullen IN een Bank Guh stoppen (tot {CAP} per soort). Er spullen UIT halen kan alleen "
-         "bij een bank met het Bodemloos Knabbelmaagje. Een Voorraadmeter kan wel altijd tellen wat erin zit."),
+         "bij een bank met het Bodemloos Knabbelmaagje. Let op: zo'n bank geeft dan ook alles: een trechter eronder, een gewoon "
+         "Richtingstuk of een ophaal-Haltepaaltje haalt hem helemaal leeg. Alleen een Filterstuk met 'laat liggen' houdt iets voor je "
+         "achter. Een Voorraadmeter kan altijd tellen wat erin zit."),
         ("bank-guh-buikje", "Klusjes",
          "Staat er een Bank Guh in de klus-area van een Guhhuisje, dan sorteren de bewoners alles erin. Zit de bank vol met iets, dan "
          "gaat de rest naar een tweede Bank Guh in de klus-area, anders naar de kist, anders naar de deur. Bij Opruimen blijft in de "

@@ -36,7 +36,6 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
-import nl.juiced.guhs.feature.barbecuether.Grillguh;
 import nl.juiced.guhs.feature.ring.Cast;
 import nl.juiced.guhs.feature.ring.Ring;
 import nl.juiced.guhs.feature.ring.RingBeloning;
@@ -131,16 +130,11 @@ public final class Feest {
     }
 
     /**
-     * May this player start the story: the Grillguh's quest is done (they lit a grill portal), and (guhpad) they finished
-     * every big story of the Guhmensie?
+     * (once a second per player) the story starts by itself once the player may start it ({@link Ring#magBeginnen}: the
+     * Grillguh's barbecue burns): "zoek Guhdalf".
      */
-    public static boolean magBeginnen(ServerPlayer p) {
-        return Grillguh.step(p) >= Grillguh.DONE && nl.juiced.guhs.feature.guhpad.Guhpad.magKnabbelring(p);
-    }
-
-    /** (once a second per player) the story starts by itself once the Grillguh's barbecue burns: "zoek Guhdalf". */
     static void begin(ServerPlayer p) {
-        if (!lijn().begonnen(p) && lijn().stap(p) == 0 && magBeginnen(p)) {
+        if (!lijn().begonnen(p) && lijn().stap(p) == 0 && Ring.magBeginnen(p)) {
             lijn().begin(p);
         }
     }
@@ -183,9 +177,10 @@ public final class Feest {
         }
         switch (stap) {
             case 0 -> {
-                if (!magBeginnen(p)) {
+                if (!Ring.magBeginnen(p)) {
                     // (guhpad: first the stories of the Guhmensie that are missing, as a list; then, as before, the Grillguh)
-                    if (!nl.juiced.guhs.feature.guhpad.Guhpad.guhdalfWeigert(npc, p) || Grillguh.step(p) < Grillguh.DONE) {
+                    if (!nl.juiced.guhs.feature.guhpad.Guhpad.guhdalfWeigert(npc, p)
+                            || nl.juiced.guhs.feature.barbecuether.Grillguh.step(p) < nl.juiced.guhs.feature.barbecuether.Grillguh.DONE) {
                         GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
                     }
                     return;

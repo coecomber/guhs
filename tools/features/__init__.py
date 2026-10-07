@@ -47,6 +47,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'tech_klusjes', 'tech_quests', 'paleizen', 'bestaand', 'fossiel_mijn', 'sausdieren', 'camping_markt', 'toren_peper', 'ring', 'ring_h1',
             'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',
             'guhrio_beloning',
+            # bbq2 phase 3 (append only): the winks at the older stories
+            'ring_knipogen',
             # verhalenpad: het Guhpad (the stories open the worlds; lang, hidden advancements, two pictures, FTB lock quests)
             'guhpad']
 

@@ -798,10 +798,10 @@ LANG = {
     "item.guhs.grill_halsdoek": "Koksdoekje",
     "entity.guhs.guh_npc.grillguh": "Grillguh",
     "structure.guhs.barbecueput": "Barbecueput",
-    "structure.guhs.barbecueput.tooltip": "Kapotte barbecues met een grillkoolframe. In de grote woont de Grillguh (ook in de Barbecuether zelf)",
+    "structure.guhs.barbecueput.tooltip": "Kapotte barbecues met een grillkoolframe. De Grillguh woont alleen in een grote put: in nieuw land ligt die midden in een Knabbelgouw (staat ook in deze lijst)",
     "gui.guhs.superkompas.barbecue": "Barbecue",
     "gui.guhs.superkompas.barbecue.tooltip": "Alles om te barbecueën, van de Guhmensie tot diep in de Barbecuether",
-    "gui.guhs.guhdex.rarity.grillguh": "Zeldzaamheid: Zeldzaam (grote barbecueput)",
+    "gui.guhs.guhdex.rarity.grillguh": "Zeldzaamheid: Zeldzaam (grote barbecueput; in nieuw land midden in een Knabbelgouw)",
     "gui.guhs.guhdex.info.grillguh": "Een guh-kok met een torenhoge koksmuts en een schort. De Mika's hebben zijn Aanmaakblokjes gejat! Help hem en hij leert je zijn geheime grillrecept.",
     "dimension.guhs.barbecuether": "De Guhbarbecuether",
     "quest.guhs.barbecuether.wrong_dimension": "Njeg... dit barbecueportaal wil alleen branden in de Guhmensie of de Barbecuether!",
@@ -973,11 +973,11 @@ def selfcheck_assets(h):
 def ftb(fq):
     q, item, adv, structure, biome, dim = fq.q, fq.item, fq.adv, fq.structure, fq.biome, fq.dim
     y = 60
-    q("bbq_put", "Wie heeft hier gebarbecued?", "Ergens in de Guhmensie liggen kapotte barbecues met een half grillkoolframe: de &6barbecueputten&r. Het superkompas (Barbecue > Barbecueput) wijst de weg.",
+    q("bbq_put", "Wie heeft hier gebarbecued?", "Ergens in de Guhmensie liggen kapotte barbecues met een half grillkoolframe: de &6barbecueputten&r. Het superkompas (Barbecue > Barbecueput) wijst de weg. De grote, die van de Grillguh, ligt in nieuw land midden in een &6Knabbelgouw&r (Barbecue > Knabbelgouw).",
       # (bbq2: the task is the visible advancement, not the structure guhs:barbecueput: a new big pit in the Guhmensie is the
       # middle of a Knabbelgouw, a structure of its own, and features/ring_h1.py lets that advancement count there too)
       "guhs:gebeitelde_houtskoolsteen_stenen", [adv("guhs:barbecuether/barbecueput")], rewards=(("guhs:kaas_knabbels", 12),), x=-8, y=y, shape="hexagon", xp=100)
-    q("bbq_grillguh", "NJEG, mijn barbecue!", "In de grote barbecueput zit de &dGrillguh&r. De Mika's hebben zijn Aanmaakblokjes gejat! Praat met hem.",
+    q("bbq_grillguh", "NJEG, mijn barbecue!", "In de &6grote barbecueput&r zit de &dGrillguh&r. In nieuw land ligt die put midden in een &6Knabbelgouw&r: het superkompas (Barbecue > Knabbelgouw) wijst de weg. De Mika's hebben zijn Aanmaakblokjes gejat! Praat met hem.",
       "guhs:grill_koksmuts", [adv("grill_gevonden")], x=-6, y=y)
     q("bbq_grillkool", "Zwart als houtskool", "Laat &6kaassaus&r over een &8blok steenkool&r stromen: sssss... &8grillkool&r! Maak er een paar.",
       "guhs:grillkool", [item("guhs:grillkool", 4)], rewards=(("minecraft:coal_block", 2),), x=-4, y=y)

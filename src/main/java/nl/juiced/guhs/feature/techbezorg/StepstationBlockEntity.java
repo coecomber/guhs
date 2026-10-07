@@ -35,6 +35,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.vadskracht.Kisten;
 import nl.juiced.guhs.feature.vadskracht.MachineBlock;
@@ -83,6 +84,12 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
     /** Ticks: how long it tries to reach a whistling player, and how long it waits there without its backpack being opened. */
     public static final int ROEP_TICKS = 20 * 40, WACHT_BIJ_SPELER = 20 * 20;
     private static final int VEEL = Bezorgnet.RUGZAK * 64;
+    /**
+     * A store with more slots than this is not walked whole at an "ophalen" stop: this many slots per look, like the
+     * Knabbelbuizen do at a big store ({@code Buizen.MAX_ZOEK}; a double chest still fits).
+     */
+    public static final int MAX_ZOEK = 54;
+    private int bekeken;
 
     private final List<BlockPos> haltes = new ArrayList<>();
     private Fase fase = Fase.SLAAPT;
@@ -662,6 +669,10 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
         if (uit == null) {
             return 0;
         }
+        if (uit.size() > MAX_ZOEK) {
+            return haalOpGroot(sl, h, uit, echt);
+        }
+        bekeken = uit.size();
         int totaal = 0;
         Set<ItemResource> gezien = new HashSet<>();
         for (int vak = 0; vak < uit.size(); vak++) {
@@ -690,6 +701,75 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
             setChanged();
         }
         return totaal;
+    }
+
+    /**
+     * {@link #haalOp} at a store with more than {@link #MAX_ZOEK} slots (an upgraded Bank Guh shows one slot per kind of
+     * item: hundreds, maybe thousands). Only {@link #MAX_ZOEK} slots are looked at per visit, each asked for directly (no
+     * walk over the whole store per kind), and every kind in them costs one question to every "afleveren" stop. When
+     * that stretch holds nothing to take, the next look goes on behind it ({@link HaltepaaltjeBlockEntity#zoekVan}), so
+     * after a few looks the whole store has been seen; a stretch that has something is where the real visit starts.
+     */
+    private int haalOpGroot(ServerLevel sl, HaltepaaltjeBlockEntity h, ResourceHandler<ItemResource> uit, boolean echt) {
+        int vakken = uit.size(), van = Math.floorMod(h.zoekVan(), vakken);
+        bekeken = MAX_ZOEK;
+        int totaal = 0;
+        Set<ItemResource> gezien = new HashSet<>();
+        for (int k = 0; k < MAX_ZOEK; k++) {
+            int vak = (van + k) % vakken;
+            ItemResource soort = uit.getResource(vak);
+            if (soort.isEmpty() || !gezien.add(soort)) {
+                continue;
+            }
+            ItemStack een = soort.toStack(1);
+            if (!h.past(een)) {
+                continue;
+            }
+            int wil = gevraagd(sl, een) - (int) Math.min(VEEL, Kisten.tel(vakken(), stack -> ItemStack.isSameItemSameComponents(stack, een)));
+            if (wil <= 0) {
+                continue;
+            }
+            int n = uitVak(uit, vak, soort, wil, !echt);
+            if (n <= 0) {
+                continue;
+            }
+            if (!echt) {
+                h.zetZoekVan(vak);   // (the visit itself starts at this slot)
+                return 1;
+            }
+            totaal += n;
+        }
+        if (totaal > 0) {
+            setChanged();
+        } else {
+            h.zetZoekVan(van + MAX_ZOEK);
+        }
+        return totaal;
+    }
+
+    /** Moves up to max of this kind out of this one slot into the backpack; {@code vraag}: only says how many would move. */
+    private int uitVak(ResourceHandler<ItemResource> uit, int vak, ItemResource soort, int max, boolean vraag) {
+        int past;
+        try (Transaction tx = Transaction.openRoot()) {
+            int eruit = uit.extract(vak, soort, Math.min(max, VEEL), tx);
+            past = eruit <= 0 ? 0 : vakken().insert(soort, eruit, tx);
+        }   // (not committed: this only measured)
+        if (past <= 0 || vraag) {
+            return past;
+        }
+        try (Transaction tx = Transaction.openRoot()) {
+            int eruit = uit.extract(vak, soort, past, tx);
+            if (eruit <= 0 || vakken().insert(soort, eruit, tx) != eruit) {
+                return 0;
+            }
+            tx.commit();
+            return eruit;
+        }
+    }
+
+    /** (tests) how many slots of the store the last look at an "ophalen" stop walked. */
+    public int bekeken() {
+        return bekeken;
     }
 
     /** How many of this item the "afleveren" stops of this round can take in right now (at most a full backpack). */

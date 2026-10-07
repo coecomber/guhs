@@ -33,6 +33,7 @@ import nl.juiced.guhs.feature.ring.Ring;
 import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.ring.Sam;
 import nl.juiced.guhs.feature.ring.Zicht;
+import nl.juiced.guhs.feature.ringknipoog.Knipogen;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
@@ -314,7 +315,8 @@ public final class Guhvendel {
     static boolean luid(ServerPlayer p, Oord o) {
         Verhaallijn lijn = lijn();
         if (Ring.aanZet(p, lijn, RAADSBEL)) {
-            if (!Cutscenes.speel(p, RingH2Scenes.RAAD, o.anker(), o.draai(), Guhvendel::naRaad)) {
+            // (ring-knipogen: the first time somebody walks into the council right after it)
+            if (!Knipogen.speel(p, RingH2Scenes.RAAD, Knipogen.BALTOGUH, o.anker(), o.draai(), Guhvendel::naRaad)) {
                 return false;   // (already watching something)
             }
             Sam.wacht(p, RingH2Scenes.RAAD.duur() + 60);

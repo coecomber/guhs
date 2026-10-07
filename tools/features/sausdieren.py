@@ -119,6 +119,7 @@ LANG = {
     "gui.guhs.sausdieren.optie.opstappen": "Ik ben er klaar voor!",
     "gui.guhs.sausdieren.optie.rondje": "Nog een rondje!",
     "gui.guhs.sausdieren.optie.uitleg": "Hoe tem ik er zelf een?",
+    "gui.guhs.sausdieren.optie.blubje": "Heb je een Sausblubje voor me?",
     # the Verzorger-guh
     V + "hallo": "Njeg! Welkom in de Sausloper-stal. Mijn lopers stappen de hele dag door de frituursaus, want op het droge krijgen ze "
                  "koude pootjes. Wil je leren hoe je er vrienden mee wordt? Dan mag je er straks zelf een temmen.",
@@ -137,6 +138,10 @@ LANG = {
     V + "na": "Njeg, daar is mijn beste leerling! Zin in een rondje door de sausbak? Ik klok je tijd.",
     V + "uitleg": "Zoek een wilde Sausloper op de frituursauszee en voer hem pindascheutjes tot hij hartjes geeft. Zadel erop, stok in je "
                   "hand en rijden maar. Sluip en klik om hem te laten wachten. En laat hem niet te lang op het droge staan!",
+    V + "blubje": "Een blubje? Die stuiteren hier de hele dag tussen mijn pootjes door. Hier, eentje in een potje. Laat het thuis vrij, "
+                  "geef het drie kaasknabbels en het groeit. Daarna een knuffel en je hebt er twee, met een klodder blubroom erbij. Njeg!",
+    V + "blubje_heb_je": "Je hebt er nog eentje in een potje zitten, njeg. Laat dat eerst maar vrij.",
+    V + "blubje_morgen": "Vandaag heb je er al eentje meegekregen. Morgen stuitert er vast weer een nieuw blubje de stal in.",
     "quest.guhs.sausdieren.hint.lok": "lok een Sausloper met de pindasaus aan een stok naar de Verzorger-guh",
     "quest.guhs.sausdieren.hint.gelokt": "vraag de Verzorger-guh wat een Sausloper lust",
     "quest.guhs.sausdieren.hint.voer": "voer een Sausloper van de stal drie pindascheutjes",
@@ -461,7 +466,8 @@ def ftb(fq):
       "kleinere blubjes.", "guhs:kaas_knabbels", [adv("sausdieren_gesplitst")], deps=["sausdieren_blubje_dex"])
     q("sausdieren_blubroom", "Blubroom",
       "Elke keer dat een Sausblubje splitst blijft er een klodder &6blubroom&r liggen. Een klein blubje groeit van drie knabbels weer "
-      "een maatje, dus een hokje blubjes blijft blubben.", "guhs:blubroom", [item("guhs:blubroom", 3)], deps=["sausdieren_knuffel"])
+      "een maatje, dus een hokje blubjes blijft blubben. Geen blubje te vinden? De &6Verzorger-guh&r van de Sausloper-stal geeft "
+      "zijn leerlingen er elke dag eentje in een potje mee.", "guhs:blubroom", [item("guhs:blubroom", 3)], deps=["sausdieren_knuffel"])
     q("sausdieren_potje", "Blubje to go",
       "Een &6klein&r Sausblubje past precies in een glazen flesje (rechtsklik). Zo neem je het mee naar huis. De uitvinder-guh weet "
       "er vast ook raad mee...", "guhs:sausblubje_potje", [item("guhs:sausblubje_potje")], deps=["sausdieren_knuffel"])

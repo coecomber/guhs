@@ -169,7 +169,15 @@ public final class Gaven {
         }
     }
 
-    /** (every other tick) the lamp: a light block of air that walks along with whoever holds the flask. */
+    /** Player saved data: where this player's lamp block stands right now (dimension id + block position), see {@link #lamp}. */
+    private static final String LAMP_DIM = "guhs_ring_lamp_dim", LAMP_POS = "guhs_ring_lamp_pos";
+
+    /**
+     * (every other tick) the lamp: a light block of air that walks along with whoever holds the flask. Where it stands is
+     * also written in the player's saved data (PHASE3 R11), so a lamp that a server crash left behind is put out when its
+     * player logs in again ({@link #doofBewaard}). No lamp where nothing may be placed: inside a protected quest building
+     * ({@code Bescherming}), in Guhpixel or in the room inside a Guhhuisje.
+     */
     static void lamp(ServerPlayer p) {
         boolean aan = p.isAlive() && !p.isSpectator() && p.isHolding(RingFeature.LICHTFLESJE.get());
         Lamp oud = LAMPEN.get(p.getUUID());
@@ -178,14 +186,52 @@ public final class Gaven {
         }
         ServerLevel level = p.level();
         BlockPos wil = aan ? lampPlek(level, p) : null;
+        if (wil != null && (oud == null || oud.dim() != level.dimension() || !oud.pos().equals(wil)) && !magLamp(level, wil)) {
+            wil = null;   // (asked only when the lamp would move: the answer for where it stands is known)
+        }
         if (oud != null && (wil == null || oud.dim() != level.dimension() || !oud.pos().equals(wil))) {
             doof(p.level().getServer().getLevel(oud.dim()), oud.pos());
             LAMPEN.remove(p.getUUID());
+            vergeetBewaard(p);
             oud = null;
         }
         if (wil != null && oud == null) {
             level.setBlock(wil, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, LAMP_LICHT), Block.UPDATE_ALL);
             LAMPEN.put(p.getUUID(), new Lamp(level.dimension(), wil));
+            CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(p);
+            saved.putString(LAMP_DIM, level.dimension().identifier().toString());
+            saved.putLong(LAMP_POS, wil.asLong());
+        }
+    }
+
+    /** May a lamp block stand here: not in a protected building, not in Guhpixel, not in the room inside a Guhhuisje? */
+    static boolean magLamp(ServerLevel level, BlockPos pos) {
+        return !nl.juiced.guhs.feature.wereld.Bescherming.beschermd(level, pos) && !nl.juiced.guhs.feature.guhpixel.Guhpixel.in(level, pos)
+                && level.dimension() != nl.juiced.guhs.feature.huisje.Binnen.DIM;
+    }
+
+    private static void vergeetBewaard(ServerPlayer p) {
+        CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(p);
+        saved.remove(LAMP_DIM);
+        saved.remove(LAMP_POS);
+    }
+
+    /**
+     * (login) the lamp this player's saved data still knows about is one that was never put out: the server stopped without
+     * a logout (a crash). Its block is removed now (its chunk is loaded for it, once), wherever the player is by now.
+     */
+    static void doofBewaard(ServerPlayer p) {
+        CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(p);
+        if (!saved.contains(LAMP_POS) || LAMPEN.containsKey(p.getUUID())) {
+            return;
+        }
+        net.minecraft.resources.Identifier dim = net.minecraft.resources.Identifier.tryParse(saved.getStringOr(LAMP_DIM, ""));
+        BlockPos pos = BlockPos.of(saved.getLongOr(LAMP_POS, 0L));
+        vergeetBewaard(p);
+        ServerLevel level = dim == null ? null : p.level().getServer().getLevel(ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, dim));
+        if (level != null && !level.isOutsideBuildHeight(pos)) {
+            level.getChunkAt(pos);   // (loads it: the block has to go, and nobody else knows it is there)
+            doof(level, pos);
         }
     }
 
@@ -510,6 +556,7 @@ public final class Gaven {
         Lamp lamp = LAMPEN.remove(p.getUUID());
         if (lamp != null) {
             doof(p.level().getServer().getLevel(lamp.dim()), lamp.pos());
+            vergeetBewaard(p);
         }
     }
 

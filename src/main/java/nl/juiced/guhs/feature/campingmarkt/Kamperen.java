@@ -42,7 +42,9 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.gids.VerhaalStand;
+import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.knus.KnusTags;
+import nl.juiced.guhs.feature.ring.Ring;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.wereld.Bezetting;
 import nl.juiced.guhs.feature.wereld.Herstel;
@@ -484,12 +486,44 @@ public final class Kamperen {
 
     /**
      * (GuhHooks.tick, every guh, server side) a resident that walks keeps to the camping: its first spot is its home
-     * ({@link #THUIS}); strayed further than {@link #THUIS_TERUG} it is put back there.
+     * ({@link #THUIS}); strayed further than {@link #THUIS_TERUG} it is put back there. And no resident follows the
+     * Knabbelring ({@link #nietKwijlen}).
      */
     public static void bewonerTick(GuhEntity guh) {
-        if ((guh.tickCount + guh.getId()) % 40 == 0 && kampeerder(guh) >= 0) {
-            houdThuis(guh);
+        int fase = (guh.tickCount + guh.getId()) % 40;
+        // (the ring's own hook looks when this is 0 or 20: half a second before that the resident is marked)
+        if ((fase == 0 || fase == 10 || fase == 30) && kampeerder(guh) >= 0) {
+            if (fase == 0) {
+                houdThuis(guh);
+            } else {
+                nietKwijlen(guh);
+            }
         }
+    }
+
+    /** A resident does not look up for a ring bearer who comes this close (well before the 10 blocks at which a wild guh starts to drool). */
+    public static final int RING_BEREIK = 20;
+    /** ... and stays "busy" this long after one was seen (looked at once a second). */
+    public static final int RING_BEZIG = 60;
+
+    /**
+     * What {@link #bewonerTick} does for a resident once a second: a wild guh that smells the Knabbelring trots after its
+     * bearer, drooling (feature/ring/RingEvents.guhTick), and every player of chapters 2-6 walks through the Guhbarbecuether
+     * with the ring in their pockets. A resident belongs to the camping: while a ring bearer is near it is busy
+     * ({@link GuhHooks#bezig}), which that hook respects. Only then: the rest of the time it keeps its own day
+     * (playing, napping, the camp fire). True when it was marked busy.
+     */
+    static boolean nietKwijlen(GuhEntity guh) {
+        if (!(guh.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        for (ServerPlayer p : level.players()) {
+            if (!p.isSpectator() && p.distanceToSqr(guh) < RING_BEREIK * RING_BEREIK && Ring.heeft(p)) {
+                GuhHooks.bezig(guh, RING_BEZIG);
+                return true;
+            }
+        }
+        return false;
     }
 
     /** What {@link #bewonerTick} does for a resident, every two seconds. */

@@ -104,6 +104,7 @@ public class OpruimenKlus extends BasisKlus {
         long nu = level.getGameTime();
         return level.getEntitiesOfClass(ItemEntity.class, huisje.gebied(), i -> i.isAlive() && !i.getItem().isEmpty()
                 && i.getAge() >= RUST && !i.hasPickUpDelay() && huisje.inGebied(i.blockPosition()) && KlusGebied.inTest(huisje, i.position())
+                && !KlusGebied.beschermd(level, i.blockPosition())
                 && (binnen6 == null || i.position().distanceToSqr(binnen6) <= 36)
                 && !(vrij && GECLAIMD.containsKey(i) && GECLAIMD.get(i) > nu) && Voorraad.past(level, huisje, i.getItem()));
     }

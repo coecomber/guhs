@@ -304,7 +304,7 @@ public class GuhpadGameTests {
             standIn = metSnuffeleiland();
             Grillguh.setStep(p, Grillguh.DONE);
             // closed: nothing followed yet
-            helper.assertTrue(!Guhpad.magKnabbelring(p) && !Feest.magBeginnen(p), "closed: no story of the Guhmensie followed");
+            helper.assertTrue(!Guhpad.magKnabbelring(p) && !Ring.magBeginnen(p), "closed: no story of the Guhmensie followed");
             helper.assertTrue(sleutels(Guhpad.ontbreektVoorKnabbelring(p)).equals(List.of("gui.guhs.guhpad.verhaal.balto", "gui.guhs.guhpad.verhaal.mewtwo",
                     "gui.guhs.guhpad.verhaal.hemel", "gui.guhs.guhpad.verhaal.guhwaii", "gui.guhs.guhpad.verhaal.snuffeleiland")), "all five are missing, in order");
             String lijst = NlTekst.tekst(Guhpad.lijst(Guhpad.ontbreektVoorKnabbelring(p)));
@@ -320,20 +320,20 @@ public class GuhpadGameTests {
             for (GrootVerhaal v : List.of(GroteVerhalen.BALTO, GroteVerhalen.MEWTWO, GroteVerhalen.HEMEL, GroteVerhalen.SNUFFEL)) {
                 GroteVerhalen.zetGedaan(p, v, true);
             }
-            helper.assertTrue(!Guhpad.magKnabbelring(p) && !Feest.magBeginnen(p) && NlTekst.tekst(Guhpad.lijst(Guhpad.ontbreektVoorKnabbelring(p))).equals("Ohana op Guhwai'i"),
+            helper.assertTrue(!Guhpad.magKnabbelring(p) && !Ring.magBeginnen(p) && NlTekst.tekst(Guhpad.lijst(Guhpad.ontbreektVoorKnabbelring(p))).equals("Ohana op Guhwai'i"),
                     "four of five: still closed, one name left");
             rol.talk(guhdalf, p);
             helper.assertTrue(!h1.begonnen(p) && !Cutscenes.bezig(p), "still no");
             // the last one really finished: open
             Ohana.zet(p, Ohana.KLAAR);
-            helper.assertTrue(Guhpad.magKnabbelring(p) && Feest.magBeginnen(p) && Guhpad.ontbreektVoorKnabbelring(p).isEmpty() && !Guhpad.guhdalfWeigert(guhdalf, p),
+            helper.assertTrue(Guhpad.magKnabbelring(p) && Ring.magBeginnen(p) && Guhpad.ontbreektVoorKnabbelring(p).isEmpty() && !Guhpad.guhdalfWeigert(guhdalf, p),
                     "all five: Guhdalf may start");
             seconde(p);
             helper.assertTrue(h1.begonnen(p), "the story begins by itself now (zoek Guhdalf)");
             // the Grillguh's barbecue is still asked, as before; and the stories alone are not enough for the portal
             ServerPlayer koud = speler(helper);
             guhmensieGedaan(koud);
-            helper.assertTrue(Guhpad.magKnabbelring(koud) && !Feest.magBeginnen(koud) && !Guhpad.guhdalfWeigert(guhdalf, koud),
+            helper.assertTrue(Guhpad.magKnabbelring(koud) && !Ring.magBeginnen(koud) && !Guhpad.guhdalfWeigert(guhdalf, koud),
                     "every story but a cold barbecue: Guhdalf has no list to give, the old rule still says no");
             weg(helper, koud);
         } finally {
@@ -378,6 +378,9 @@ public class GuhpadGameTests {
             // open
             helper.assertTrue(GrillPortalBlock.slot(mensie, level, klaar) == null && Guhpad.magBarbecuether(klaar) && Guhpad.open(klaar, Wereld.BARBECUETHER),
                     "open: the five stories and chapter 1");
+            for (ServerPlayer p : List.of(nieuw, verhalen, verder, klaar)) {
+                helper.assertTrue(Ring.magDoorPortaal(p) == Guhpad.magBarbecuether(p), "the Knabbelring's own gate of the portal says the same as the Guhpad");
+            }
             // the way out is never blocked, and who is inside may stay: only a portal that leads IN from elsewhere is ever asked
             for (ServerPlayer p : List.of(nieuw, verder, verhalen)) {
                 helper.assertTrue(GrillPortalBlock.slot(bbq, level, p) == null && Guhpad.slot(bbq, mensie, p) == null, "the way out of the Guhbarbecuether is open");
