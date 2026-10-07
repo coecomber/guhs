@@ -225,6 +225,14 @@ def _wandkleed(plek, x, z0, kleur):
     plek.zet(x, 2, z0, kleur)                                     # a swallow tail
 
 
+def _azalea(plek, x, z):
+    """A flowering azalea in a planter of moss let into the floor. On the room's own floor it broke off in every real copy
+    (found with /guhs bouwcheck compleet at the merge of the Guhrio slices: flowering_azalea>air 3): an azalea only stays
+    on moss, earth or clay."""
+    plek.zet(x, 0, z, "minecraft:moss_block")
+    plek.zet(x, 1, z, "minecraft:flowering_azalea")
+
+
 def torenkamer(plek):
     from features import wereld
     h = plek.h
@@ -289,8 +297,8 @@ def torenkamer(plek):
     plek.zet(4, 2, 4, "minecraft:pink_carpet")
     _trap(plek, 3, 1, 4, "minecraft:quartz_stairs", "links")
     _trap(plek, 5, 1, 4, "minecraft:quartz_stairs", "rechts")
-    plek.zet(1, 1, 1, "minecraft:flowering_azalea")
-    plek.zet(19, 1, 1, "minecraft:flowering_azalea")
+    _azalea(plek, 1, 1)
+    _azalea(plek, 19, 1)
     # her piano at the front right: black with white keys, a stool in front of it
     for x in (16, 17, 18):
         plek.zet(x, 1, 0, "minecraft:polished_blackstone")
@@ -307,7 +315,7 @@ def torenkamer(plek):
                 plek.zet(19, y, z, "minecraft:chiseled_bookshelf",
                          {"facing": plek.kant("links"), **{f"slot_{i}_occupied": "true" if i % 2 else "false" for i in range(6)}})
     _lantaarn(plek, 19, 4, 10)
-    plek.zet(18, 1, 12, "minecraft:flowering_azalea")
+    _azalea(plek, 18, 12)
     # Guhshi's nest right of the runner: a green rug, hay, a trough and a block of knabbels
     _tapijt(plek, 13, 3, 17, 7, "minecraft:green_carpet")
     _tapijt(plek, 14, 4, 16, 6, "minecraft:lime_carpet")

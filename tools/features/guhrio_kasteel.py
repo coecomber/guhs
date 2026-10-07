@@ -754,6 +754,33 @@ def controleer_naden(b):
     return fouten[:20]
 
 
+# vanilla plants that break off at the first block update unless they stand on earth (found with /guhs bouwcheck compleet
+# at the merge of the level slices: the three flowering azaleas of the tower room stood on the room's floor and were gone
+# in every real copy). A slice's own plant blocks (guhs:guhriow1_bloem) decide for themselves and are not looked at.
+PLANT = ("minecraft:azalea", "minecraft:flowering_azalea", "minecraft:fern", "minecraft:large_fern", "minecraft:short_grass", "minecraft:tall_grass",
+         "minecraft:dandelion", "minecraft:poppy", "minecraft:blue_orchid", "minecraft:allium", "minecraft:azure_bluet", "minecraft:oxeye_daisy",
+         "minecraft:cornflower", "minecraft:lily_of_the_valley", "minecraft:sunflower", "minecraft:lilac", "minecraft:rose_bush", "minecraft:peony",
+         "minecraft:sweet_berry_bush", "minecraft:pink_petals")
+PLANT_EINDE = ("_sapling", "_tulip")
+AARDE = ("minecraft:grass_block", "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:podzol", "minecraft:rooted_dirt", "minecraft:moss_block",
+         "minecraft:mud", "minecraft:muddy_mangrove_roots", "minecraft:mycelium", "minecraft:farmland")
+
+
+def controleer_planten(b):
+    """A vanilla plant must stand on earth (an azalea also on clay), in the shell and in whatever a slice put into a slot."""
+    fouten = []
+    for (x, y, z), (naam, props, _nbt) in b.s.blocks.items():
+        if not (naam in PLANT or (naam.startswith("minecraft:") and "potted_" not in naam and naam.endswith(PLANT_EINDE))):
+            continue
+        if props and props.get("half") == "upper":
+            continue                                             # (the top half of a tall plant stands on its bottom half)
+        onder = b.get(x, y - 1, z) or "minecraft:air"
+        if onder not in AARDE and not ("azalea" in naam and onder == "minecraft:clay"):
+            fouten.append(f"{NAAM}: {naam} at {(x, y, z)} stands on {onder} and will break off in a real copy: put earth or moss "
+                          f"under it (minecraft:moss_block), or use a potted plant")
+    return fouten[:20]
+
+
 # =====================================================================================================================
 def bouw(h):
     """Builds the whole castle; returns (Bouw, lane builders, problems)."""
@@ -789,7 +816,7 @@ def bouw(h):
             fn(plek)
     banen = levels(h, b, poorten)
     verlicht_binnen(b)
-    problems += controleer_camera(b, banen) + controleer_naden(b)
+    problems += controleer_camera(b, banen) + controleer_naden(b) + controleer_planten(b)
     return b, banen, problems
 
 
