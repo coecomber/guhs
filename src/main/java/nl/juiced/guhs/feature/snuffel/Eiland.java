@@ -74,8 +74,8 @@ public final class Eiland {
     static final String PAD = "/data/guhs/snuffel/eiland.json";
     /** The flat sea of the dimension: the top water block, the top of the sand under it, the top of the stone under that. */
     public static final int ZEE = 62, ZAND = 43, STEEN = 39;
-    /** The tag (persistent data) of everything {@link #bewoon} puts on an island: its key and the stamp it belongs to. */
-    public static final String TAG_SLEUTEL = "guhs_snuffel_plek", TAG_VERSIE = "guhs_snuffel_versie";
+    /** The tags (persistent data) of everything {@link #bewoon} puts on an island: its key, its stamp and the island it belongs to. */
+    public static final String TAG_SLEUTEL = "guhs_snuffel_plek", TAG_VERSIE = "guhs_snuffel_versie", TAG_EILAND = "guhs_snuffel_eiland";
     public static final String BOOM_SLEUTEL = "@boom";
 
     public record Stuk(Identifier template, BlockPos plek) {
@@ -418,8 +418,7 @@ public final class Eiland {
             if (!geladen(level, plek)) {
                 continue;
             }
-            List<BewonerEntity> er = level.getEntitiesOfClass(BewonerEntity.class, new AABB(plek, plek).inflate(48, 24, 48),
-                    e -> b.sleutel().equals(e.getPersistentData().getStringOr(TAG_SLEUTEL, "")));
+            List<BewonerEntity> er = level.getEntitiesOfClass(BewonerEntity.class, new AABB(plek, plek).inflate(48, 24, 48), e -> hoort(e, p, b.sleutel()));
             BewonerEntity goed = null;
             for (BewonerEntity e : er) {
                 boolean past = goed == null && e.getPersistentData().getIntOr(TAG_VERSIE, -1) == p.opzet().versie() && e.klopt(b)
@@ -437,8 +436,7 @@ public final class Eiland {
                 GEMIST.remove(sleutel);
                 BewonerEntity nieuw = Bewoners.maak(level, b, plek);
                 if (nieuw != null) {
-                    nieuw.getPersistentData().putString(TAG_SLEUTEL, b.sleutel());
-                    nieuw.getPersistentData().putInt(TAG_VERSIE, p.opzet().versie());
+                    merk(nieuw, p, b.sleutel());
                     level.addFreshEntity(nieuw);
                 }
             }
@@ -447,8 +445,7 @@ public final class Eiland {
         BlockPos voet = p.boom();
         Vec3 plek = Vec3.atBottomCenterOf(voet);
         if (geladen(level, plek)) {
-            List<BoompjeEntity> er = level.getEntitiesOfClass(BoompjeEntity.class, new AABB(plek, plek).inflate(48, 24, 48),
-                    e -> BOOM_SLEUTEL.equals(e.getPersistentData().getStringOr(TAG_SLEUTEL, "")));
+            List<BoompjeEntity> er = level.getEntitiesOfClass(BoompjeEntity.class, new AABB(plek, plek).inflate(48, 24, 48), e -> hoort(e, p, BOOM_SLEUTEL));
             BoompjeEntity goed = null;
             for (BoompjeEntity e : er) {
                 if (goed == null && e.position().distanceToSqr(plek) < 0.01) {
@@ -465,11 +462,24 @@ public final class Eiland {
                 BoompjeEntity boom = SnuffelFeature.SNUFFEL_BOOMPJE.get().create(level, EntitySpawnReason.TRIGGERED);
                 if (boom != null) {
                     boom.snapTo(plek.x, plek.y, plek.z, 0f, 0f);
-                    boom.getPersistentData().putString(TAG_SLEUTEL, BOOM_SLEUTEL);
+                    merk(boom, p, BOOM_SLEUTEL);
                     level.addFreshEntity(boom);
                 }
             }
         }
+    }
+
+    /** Marks an entity as this island's own, on this key (what {@link #bewoon} does for what it makes). */
+    static void merk(Entity e, Plaats p, String sleutel) {
+        e.getPersistentData().putString(TAG_SLEUTEL, sleutel);
+        e.getPersistentData().putInt(TAG_VERSIE, p.opzet().versie());
+        e.getPersistentData().putLong(TAG_EILAND, p.oorsprong().asLong());
+    }
+
+    /** Is this entity this island's own for this key? */
+    private static boolean hoort(Entity e, Plaats p, String sleutel) {
+        CompoundTag t = e.getPersistentData();
+        return sleutel.equals(t.getStringOr(TAG_SLEUTEL, "")) && t.getLongOr(TAG_EILAND, Long.MIN_VALUE) == p.oorsprong().asLong();
     }
 
     private static String sleutel(Plaats p, String s) {
@@ -485,7 +495,7 @@ public final class Eiland {
     @Nullable
     public static BoompjeEntity boomEntity(Plaats p) {
         Vec3 plek = Vec3.atBottomCenterOf(p.boom());
-        List<BoompjeEntity> er = p.level().getEntitiesOfClass(BoompjeEntity.class, new AABB(plek, plek).inflate(1));
+        List<BoompjeEntity> er = p.level().getEntitiesOfClass(BoompjeEntity.class, new AABB(plek, plek).inflate(1), e -> hoort(e, p, BOOM_SLEUTEL));
         return er.isEmpty() ? null : er.get(0);
     }
 
@@ -495,8 +505,7 @@ public final class Eiland {
         for (BewonerPlek b : p.opzet().bewoners()) {
             if (b.sleutel().equals(sleutel)) {
                 Vec3 plek = p.wereld(b.plek());
-                List<BewonerEntity> er = p.level().getEntitiesOfClass(BewonerEntity.class, new AABB(plek, plek).inflate(48, 24, 48),
-                        e -> sleutel.equals(e.getPersistentData().getStringOr(TAG_SLEUTEL, "")));
+                List<BewonerEntity> er = p.level().getEntitiesOfClass(BewonerEntity.class, new AABB(plek, plek).inflate(48, 24, 48), e -> hoort(e, p, sleutel));
                 return er.isEmpty() ? null : er.get(0);
             }
         }

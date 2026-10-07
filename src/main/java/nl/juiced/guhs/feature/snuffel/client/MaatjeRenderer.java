@@ -35,7 +35,8 @@ public class MaatjeRenderer extends GeoEntityRenderer<MaatjeEntity, EntityRender
     }
 
     static String naam(MaatjeEntity m) {
-        return "snuffel_maatje_" + m.soort() + (m.ondeugend() ? "_ondeugend" : "_blij");
+        String soort = m.alsSpeler() ? EigenStand.maatje() : m.soort();
+        return "snuffel_maatje_" + (Honden.MAATJES.contains(soort) ? soort : "b") + (m.ondeugend() ? "_ondeugend" : "_blij");
     }
 
     @Override

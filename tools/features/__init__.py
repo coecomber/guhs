@@ -46,7 +46,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'bbq2', 'vadskracht', 'verhaal_motor', 'wereld', 'bank', 'tech_bronnen', 'tech_buizen', 'tech_machines', 'tech_vloeistof', 'tech_bezorg',
             'tech_klusjes', 'tech_quests', 'paleizen', 'bestaand', 'fossiel_mijn', 'sausdieren', 'camping_markt', 'toren_peper', 'ring', 'ring_h1',
             'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',
-            'guhrio_beloning']
+            'guhrio_beloning',
+            'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
+            ]
 
 
 def modules():

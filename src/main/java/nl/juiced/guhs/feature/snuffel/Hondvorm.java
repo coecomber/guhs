@@ -313,6 +313,7 @@ public final class Hondvorm {
         Honden.Ras ras = Honden.ras(Keuze.vanOfStandaard(p).ras());
         float toon = ras == null ? 1f : 1.55f - ras.hoogte() * 0.6f;   // (a small dog yaps, a big one woofs)
         p.level().playSound(null, p.blockPosition(), SnuffelFeature.BLAF_GELUID.get(), SoundSource.PLAYERS, 0.9f, toon + p.getRandom().nextFloat() * 0.1f);
+        p.level().playSound(null, p.blockPosition(), SnuffelFeature.NJEG_GELUID.get(), SoundSource.PLAYERS, 0.5f, toon);
         gebaar(p, BLAF, BLAF_TICKS);
         return true;
     }

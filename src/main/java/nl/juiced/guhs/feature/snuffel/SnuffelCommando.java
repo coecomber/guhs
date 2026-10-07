@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
  * geur &lt;id&gt;                      learn a scent          daad &lt;id&gt; [geur]     a good deed
  * bron &lt;id&gt; &lt;geur&gt; [graven]      a scent source at your feet           bronweg &lt;id&gt;
  * bewoner &lt;naam&gt; | hond &lt;ras&gt; &lt;kleur&gt; [pup]   a resident in front of you
- * station | kaart                open the Guhstation window / the pause menu
+ * station | kaart | boekje       open the Guhstation window / the pause menu / the snuffelboekje
  * klaar                          finish the first series (Guhstation, blossom twig)
  * wis                            forget everything of the island (never while a dog)
  * </pre>
@@ -124,6 +124,11 @@ final class SnuffelCommando {
                     return GuhstationBlock.open(p, p.blockPosition()) ? 1 : 0;
                 }))
                 .then(Commands.literal("kaart").executes(c -> GeheugenkaartItem.open(c.getSource().getPlayerOrException()) ? 1 : 0))
+                .then(Commands.literal("boekje").executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    nl.juiced.guhs.network.ModNetworking.sendTo(p, new SnuffelPayloads.Open(SnuffelPayloads.Open.BOEKJE, Stand.van(p)));
+                    return 1;
+                }))
                 .then(Commands.literal("klaar").executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     return zeg(c, Snuffel.rondAf(p) ? "De eerste reeks is klaar" : "Was al klaar");

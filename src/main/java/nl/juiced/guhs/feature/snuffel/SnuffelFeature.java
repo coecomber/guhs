@@ -95,6 +95,8 @@ public final class SnuffelFeature {
     // --- sounds (vanilla and guh sounds, pitched, in sounds.json; no music) -----------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> SNUF_GELUID = geluid("snuffel.snuf");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLAF_GELUID = geluid("snuffel.blaf");
+    /** The "njeg" in a bark (a guh's happy squeak, high). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> NJEG_GELUID = geluid("snuffel.njeg");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAAF_GELUID = geluid("snuffel.graaf");
     public static final DeferredHolder<SoundEvent, SoundEvent> KWISPEL_GELUID = geluid("snuffel.kwispel");
     public static final DeferredHolder<SoundEvent, SoundEvent> GEVONDEN_GELUID = geluid("snuffel.gevonden");

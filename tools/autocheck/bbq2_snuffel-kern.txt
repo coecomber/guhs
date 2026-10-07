@@ -1,0 +1,178 @@
+# Het Snuffeleiland, the kern (bbq2 / verhalenpad) AutoCheck: the test island, the dog form in first and third person,
+# the scent meter, digging, the companion, the tree's stages and the growth scene, the four screens, the Guhstation.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_snuffel-kern.txt
+# (commands: see autocheck.txt; /guhs snuffel ... are this slice's own, see feature/snuffel/SnuffelCommando)
+# NOTHING of this was ever seen by the slice itself (it may not start a client): every picture here is a first look.
+# The kern's test island: centre 0 64 0 in guhs:snuffeleiland; beach (south) 0.5 64 13.5; the tree -0 64 -7; the jetty east.
+
+section setup: a known inventory at home, a choice, off to the island
+/gamemode survival
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/clear @s
+/give @s minecraft:diamond_pickaxe 1
+/give @s minecraft:cooked_beef 17
+/give @s minecraft:oak_planks 33
+wait 10
+shot snuffel_thuis_voor_vertrek
+/guhs snuffel wis
+/guhs snuffel kies shiba rood b Snuffie
+/guhs snuffel ga strand
+wait 100
+
+section the island from above and from its four sides (spectator: the dog form stays, the companion is not there yet)
+/gamemode spectator
+camera 0.5 110 0.5 0 90
+waitrender 300
+shot snuffel_eiland_boven
+camera 34 84 34 135 28
+waitrender 200
+shot snuffel_eiland_zuidoost
+camera -34 84 -34 -45 28
+waitrender 200
+shot snuffel_eiland_noordwest
+camera 30 70 0.5 90 12
+waitrender 200
+shot snuffel_steiger
+camera -9 67.5 6 -110 12
+waitrender 200
+shot snuffel_kampvuur_en_pup
+
+section the dog form: first person (low camera, no hand, the memory card in slot 9), then third person from behind and in front
+/gamemode survival
+/tp @s 0.5 64 11.5 180 5
+wait 20
+shot snuffel_eerste_persoon gui
+perspective back
+wait 10
+shot snuffel_derde_persoon_achter
+perspective front
+wait 10
+shot snuffel_derde_persoon_voor
+perspective first
+
+section poses, each seen from the side by a free camera: sit, wag, sniff (nose down), bark, dig
+/guhs snuffel houding 2
+camera 3.5 65 11.5 90 10
+waitrender 40
+shot snuffel_zit
+/guhs snuffel houding 4
+waitrender 20
+shot snuffel_kwispel
+/guhs snuffel houding 1
+waitrender 20
+shot snuffel_snuffelt
+/guhs snuffel houding 0
+/guhs snuffel blaf
+waitrender 3
+shot snuffel_blaft
+/guhs snuffel graaf
+waitrender 10
+shot snuffel_graaft
+wait 40
+
+section the dog walks nose down to the buried bone and digs it up (the METER itself only shows while the sniff KEY is held:
+# the script cannot hold it; look at it by hand: hold R near -3.5 64 12.5, the row of blocks should fill up in orange)
+/tp @s 0.5 64 11.5 180 20
+/guhs snuffel houding 1
+perspective back
+wait 20
+shot snuffel_snuffelt_derde_persoon
+/tp @s -3.5 64 12.5 180 30
+wait 20
+/guhs snuffel graaf
+wait 12
+shot snuffel_graaft_op_de_plek
+wait 40
+shot snuffel_gevonden gui
+/guhs snuffel houding 0
+perspective first
+
+section the companion (only you see it) pointing at the next scent, and its naughty face
+/guhs snuffel maatje geef
+wait 20
+/tp @s 2.5 64 2.5 -60 5
+wait 20
+perspective back
+shot snuffel_maatje_bij_hond
+/guhs snuffel houding 1
+wait 30
+shot snuffel_maatje_wijst
+/guhs snuffel maatje stout
+wait 10
+shot snuffel_maatje_ondeugend
+/guhs snuffel houding 0
+perspective first
+
+section the tree: the ring of stones, then each stage; the last step with the growth scene (three frames of it)
+/tp @s 0.5 64 -3.5 180 10
+/guhs snuffel boom 0
+wait 20
+shot snuffel_boom_0
+/guhs snuffel boom 1
+wait 20
+shot snuffel_boom_1
+/guhs snuffel boom 2
+wait 20
+shot snuffel_boom_2
+/guhs snuffel boom 3
+wait 20
+shot snuffel_boom_3
+/guhs snuffel groei
+wait 20
+shot snuffel_groei_begin
+wait 40
+shot snuffel_groei_plop
+wait 40
+shot snuffel_groei_eind
+wait 60
+shot snuffel_boom_4
+
+section the residents: the captain on the jetty and his offer to sail home
+/tp @s 15.5 64 2.5 -90 5
+wait 20
+shot snuffel_kapitein
+
+section the screens: the snuffelboekje, the memory card's menu, the choice (both pages)
+gui keep
+/guhs snuffel boekje
+wait 10
+shot snuffel_boekje gui
+widgets
+gui close
+gui keep
+/guhs snuffel kaart
+wait 10
+shot snuffel_pauze gui
+widgets
+gui close
+gui keep
+/guhs snuffel keuze
+wait 30
+shot snuffel_keuze_hond gui
+widgets
+press Verder »
+wait 30
+shot snuffel_keuze_maatje gui
+widgets
+gui close
+
+section home again: exactly where we left, the inventory as it was; then the Guhstation
+/guhs snuffel klaar
+/guhs snuffel huis
+wait 60
+shot snuffel_weer_thuis
+gui keep
+/guhs snuffel station
+wait 30
+shot snuffel_guhstation_scherm_komen_aanrennen gui
+wait 50
+shot snuffel_guhstation_scherm_spelen gui
+wait 60
+shot snuffel_guhstation_scherm_pup_rent gui
+widgets
+gui close
+/setblock ~1 ~ ~ guhs:guhstation
+wait 10
+shot snuffel_guhstation_blok

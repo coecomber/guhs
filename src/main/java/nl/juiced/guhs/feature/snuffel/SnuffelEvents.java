@@ -53,8 +53,8 @@ import nl.juiced.guhs.Guhs;
  * <b>The rules for a dog</b> (a creative builder passes the block rules): no breaking and no placing of blocks, no using
  * an item on the world, only blocks of the tag {@code guhs:snuffel_bruikbaar} (doors, gates, bells...) can be used; a dog
  * attacks nothing and nothing hurts it (only /kill gets through); it tosses nothing (the memory card comes straight back),
- * picks nothing up, rides nothing unless a slice says so ({@link #RIJDBAAR}), and a bed never sets the spawn point on the
- * island. On an island nothing explodes or griefs.
+ * picks nothing up, puts nothing in an item frame or on an armour stand, rides nothing unless a slice says so
+ * ({@link #RIJDBAAR}), and a bed never sets the spawn point on the island. On an island nothing explodes or griefs.
  */
 public final class SnuffelEvents {
     /** Blocks a dog can use with a right-click. */
@@ -238,6 +238,25 @@ public final class SnuffelEvents {
         }
         // (no buckets, boats, bone meal, spawn eggs...; the memory card opens its menu through its own "use")
         event.setUseItem(TriState.FALSE);
+    }
+
+    /** A paw puts nothing in an item frame or on an armour stand (the memory card would leave its slot that way). */
+    @SubscribeEvent
+    public static void onUseEntity(PlayerInteractEvent.EntityInteractSpecific event) {
+        if (ding(event.getTarget()) && hond(event.getEntity()) && !vrij(event.getEntity())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onUseEntity(PlayerInteractEvent.EntityInteract event) {
+        if (ding(event.getTarget()) && hond(event.getEntity()) && !vrij(event.getEntity())) {
+            event.setCanceled(true);
+        }
+    }
+
+    private static boolean ding(Entity e) {
+        return e instanceof net.minecraft.world.entity.decoration.HangingEntity || e instanceof net.minecraft.world.entity.decoration.ArmorStand;
     }
 
     @SubscribeEvent

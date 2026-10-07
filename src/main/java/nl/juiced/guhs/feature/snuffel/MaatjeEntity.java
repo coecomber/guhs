@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
 
 /**
  * The companion (entity {@code guhs:snuffel_maatje}): the naughty little forest sprite that only ITS OWN player can see.
@@ -35,6 +36,10 @@ import net.minecraft.world.phys.Vec3;
  * It floats along next to its dog. While the dog sniffs and smells something, it floats ahead in the direction of the
  * scent and points (animation "wijs"); on the spot it dances. It is never saved: {@link Maatjes} makes it again whenever
  * its player is a dog on the island.
+ * <p>
+ * As a cutscene actor (client-only, so only the viewer sees it anyway) its tag says what it looks like: {@code Speler}
+ * (the variant the viewer chose), or {@code Soort} (a, b, c), and {@code Ondeugend} for the naughty face; the scene's
+ * {@code animatie(actor, t, name)} plays idle, blij, ondeugend or wijs.
  */
 public class MaatjeEntity extends Entity implements GeoEntity {
     public static final int RUST = 0, BLIJ = 1, STOUT = 2, WIJST = 3;
@@ -48,6 +53,8 @@ public class MaatjeEntity extends Entity implements GeoEntity {
     @Nullable
     private UUID eigenaar;
     private int ondeugendTot = -1, actieTot = -1;
+    /** Client, an actor: drawn as the variant of whoever looks at it. */
+    private boolean alsSpeler;
 
     public MaatjeEntity(EntityType<? extends MaatjeEntity> type, Level level) {
         super(type, level);
@@ -78,6 +85,11 @@ public class MaatjeEntity extends Entity implements GeoEntity {
 
     public void zetSoort(String soort) {
         entityData.set(DATA_SOORT, Honden.MAATJES.contains(soort) ? soort : "b");
+    }
+
+    /** (Client) is this "the viewer's own companion" (a cutscene actor)? */
+    public boolean alsSpeler() {
+        return alsSpeler;
     }
 
     /** The naughty face (false: the happy one). */
@@ -185,8 +197,12 @@ public class MaatjeEntity extends Entity implements GeoEntity {
         return false;
     }
 
+    /** Never saved; this only reads what a cutscene says about its actor. */
     @Override
     protected void readAdditionalSaveData(ValueInput in) {
+        zetSoort(in.getStringOr("Soort", soort()));
+        alsSpeler = in.getBooleanOr("Speler", false);
+        entityData.set(DATA_ONDEUGEND, in.getBooleanOr("Ondeugend", false));
     }
 
     @Override
@@ -195,12 +211,22 @@ public class MaatjeEntity extends Entity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<MaatjeEntity>("actie", 3, state -> state.setAndContinue(switch (actie()) {
-            case BLIJ -> DANS;
-            case STOUT -> STOUTERD;
-            case WIJST -> WIJS;
-            default -> IDLE;
-        })));
+        controllers.add(new AnimationController<MaatjeEntity>("actie", 3, state -> {
+            String scene = level().isClientSide() ? Cutscenes.animatie(this) : "";
+            int actie = switch (scene) {
+                case "blij" -> BLIJ;
+                case "ondeugend" -> STOUT;
+                case "wijs" -> WIJST;
+                case "idle" -> RUST;
+                default -> actie();
+            };
+            return state.setAndContinue(switch (actie) {
+                case BLIJ -> DANS;
+                case STOUT -> STOUTERD;
+                case WIJST -> WIJS;
+                default -> IDLE;
+            });
+        }));
     }
 
     @Override
