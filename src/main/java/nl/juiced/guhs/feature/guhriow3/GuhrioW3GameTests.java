@@ -424,7 +424,8 @@ public class GuhrioW3GameTests {
 
     /**
      * The six big vadsmunten of the burcht are counted at a flagpole of world 3 (the hidden advancement of its FTB quest):
-     * not with five, and with all six only once a flagpole of world 3 is reached.
+     * not with five, and with all six only once a flagpole of world 3 is reached. And Pad-guh's pointer to the duel's gate
+     * is on its way after the flagpole of 3-2 (not of 3-1), as long as the duel is not won.
      */
     @GuhTest(template = KAMER, batch = BATCH)
     public static void guhriow3VadsmuntenVanDeBurcht(GameTestHelper helper) {
@@ -457,6 +458,7 @@ public class GuhrioW3GameTests {
         GuhrioSpel.tick(p);
         helper.assertTrue(s.klaar() && GuhrioKasteel.vadsmunten(p, GuhrioW3Feature.LEVEL_3_1) == 7, "3-1 done with its three vadsmunten");
         helper.assertFalse(p.getAdvancements().getOrStartProgress(adv).isDone(), "three of the six is not all of them");
+        helper.assertFalse(GuhrioW3Feature.padguhStraks(p), "Pad-guh says nothing after 3-1");
         GuhrioSpel.stop(p, GuhrioSpel.Einde.KLAAR);
         // 3-2: two of them and the flagpole: not yet; the third and the flagpole again: now
         helper.assertTrue(GuhrioSpel.start(p, starts[1]), "into 3-2");
@@ -467,6 +469,7 @@ public class GuhrioW3GameTests {
         GuhrioSpel.tick(p);
         helper.assertTrue(s.klaar() && GuhrioKasteel.gehaald(p, GuhrioW3Feature.LEVEL_3_2), "3-2 done");
         helper.assertFalse(p.getAdvancements().getOrStartProgress(adv).isDone(), "five of the six is not all of them");
+        helper.assertTrue(GuhrioW3Feature.padguhStraks(p), "after 3-2 Pad-guh will point at the duel's gate");
         GuhrioSpel.stop(p, GuhrioSpel.Einde.KLAAR);
         helper.assertTrue(GuhrioSpel.start(p, starts[1]), "3-2 again");
         s = GuhrioSpel.sessie(p);
@@ -474,7 +477,14 @@ public class GuhrioW3GameTests {
         zet(helper, p, 12.5);
         GuhrioSpel.tick(p);
         helper.assertTrue(p.getAdvancements().getOrStartProgress(adv).isDone(), "all six, at a flagpole of the burcht");
-        weg(helper, p);
+        // whoever has won the duel needs no pointer any more
+        ServerPlayer q = speler(helper);
+        GuhrioKasteel.winDuel(q);
+        helper.assertTrue(GuhrioSpel.start(q, starts[1]), "the winner in 3-2");
+        zet(helper, q, 12.5);
+        GuhrioSpel.tick(q);
+        helper.assertTrue(GuhrioSpel.sessie(q).klaar() && !GuhrioW3Feature.padguhStraks(q), "no pointer for who has won the duel");
+        weg(helper, p, q);
         GuhrioLevel.vergeet(GuhrioW3Feature.LEVEL_3_1);
         GuhrioLevel.vergeet(GuhrioW3Feature.LEVEL_3_2);
         helper.succeed();

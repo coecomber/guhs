@@ -13,7 +13,8 @@
 #     on his back, big enough: about 2 x 3.3 blocks), his walk / crouch / jump / landing, a coal, the boss bar, the bridge
 #     dropping column by column, the lever leaning over, the shell rolling like a wheel (and his head peeking out at the
 #     broken end), the knabbel bouncing it back, the splash, him sitting sulking on the far ledge, the bridge coming back.
-#   - the end scene: black bars, the princess and the cake coming out of the door (the princess looks like whatever
+#   - the end scene: black bars, the princess pushing the cake on its serving cart out of the door (the cart: wheels,
+#     golden legs, a pink cloth, a push bar at both ends; the cake stands ON the tray; the princess looks like whatever
 #     guhrio-beloning made of the kind PERZIKGUH), the cake losing a quarter, his happy face, the fade; then the tower room.
 # Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-w3.txt -PautocheckTimeout=30
 section setup

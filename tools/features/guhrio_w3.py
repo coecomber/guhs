@@ -36,7 +36,7 @@ TEXTS = {
     "block.guhs.guhriow3_peperstruik": "Vuurpeperstruik",
     "entity.guhs.grote_nether_mika": "Grote Nether-Mika",
     "entity.guhs.guhriow3_kooltje": "Gloeiend kooltje",
-    "entity.guhs.guhriow3_taart": "Taart van Prinses Perzikguh",
+    "entity.guhs.guhriow3_taart": "Taartkarretje van Prinses Perzikguh",
     "gui.guhs.guhriow3.intro": "\"WIE KOMT DAAR AAN MIJN TAART?! NJEG!\"",
     "gui.guhs.guhriow3.ronde1": "Ronde 1: ren onder hem door als hij springt en trek aan de hendel, njeg!",
     "gui.guhs.guhriow3.hendel": "KLIK! De halve brug ploft in de saus. \"MIJN BRUG!\"",
@@ -49,8 +49,8 @@ TEXTS = {
     "gui.guhs.guhriow3.gewonnen": "Je hebt de Grote Nether-Mika verslagen in %s. Hij is niet boos meer: hij heeft taart. Vahoeg!",
     "gui.guhs.guhriow3.parkeer": "Guhshi wacht hier even op je: van vuurpepers moet hij niezen, njeg.",
     "gui.guhs.guhriow3.peper_guhshi": "Op Guhshi gooi je geen knabbels (hij hapt ze zelf op). Zet hem eerst bij een parkeerpaal, njeg.",
-    "gui.guhs.guhriow3.padguh": "Pad-guh: Bedankt! Maar de prinses is in een ander kasteeldeel, njeg. (Achter die hele grote poort met die "
-                                "hoorns, denk ik.)",
+    "gui.guhs.guhriow3.padguh": "Pad-guh: Psst! Achter die hele grote poort met die hoorns ruikt het naar taart. Dáár moet je zijn, "
+                                "denk ik. Vahoeg veel succes, njeg!",
 }
 SCENE_TEKST = {
     "mok": "Hmpf. Nat. Plakkerig. En nog steeds geen taart. Njeg.",

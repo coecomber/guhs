@@ -1,6 +1,10 @@
 package nl.juiced.guhs.feature.guhriow3;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -16,6 +20,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -29,6 +34,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -55,7 +61,10 @@ import nl.juiced.guhs.registry.ModSounds;
  *     the duel's bridge is made of.</li>
  *     <li>{@link #EINDE}: the end scene (Prinses Perzikguh and the cake, {@link TaartEntity}), {@link #KAART_DUEL}: the
  *     narrator card a player reads the first time they walk into the arena.</li>
- *     <li>After the flagpole of 3-2 Pad-guh says his line once more: the princess is in another part of the castle.</li>
+ *     <li>After the flagpole of 3-2, as long as the duel is not won, Pad-guh calls where to go next: the great gate with the
+ *     horns. The line comes {@link #PADGUH_NA} ticks after the flagpole, when the player stands in the level hall again with
+ *     that gate in front of them. (His running gag itself, "de prinses is in een ander kasteeldeel", is guhrio-beloning's: it
+ *     is said once per world at the flagpole, so this line only adds the way and never repeats it.)</li>
  * </ul>
  * Everything is per player (the engine's sessions) except the boss himself, who is shared by whoever is in the arena: they
  * beat him together and all of them win. Nothing here hurts anybody.
@@ -85,13 +94,17 @@ public final class GuhrioW3Feature {
     public static final DeferredHolder<EntityType<?>, EntityType<GroteNetherMikaEntity>> GROTE_NETHER_MIKA = wezen("grote_nether_mika",
             GroteNetherMikaEntity::new, GroteNetherMikaEntity.BREED, GroteNetherMikaEntity.HOOG);
     public static final DeferredHolder<EntityType<?>, EntityType<KooltjeEntity>> KOOLTJE = wezen("guhriow3_kooltje", KooltjeEntity::new, 0.6f, 0.6f);
-    public static final DeferredHolder<EntityType<?>, EntityType<TaartEntity>> TAART = wezen("guhriow3_taart", TaartEntity::new, 0.9f, 0.6f);
+    public static final DeferredHolder<EntityType<?>, EntityType<TaartEntity>> TAART = wezen("guhriow3_taart", TaartEntity::new, 1.0f, 1.2f);
 
     /** The level ids of this world. */
     public static final String LEVEL_3_1 = "kasteel_3_1", LEVEL_3_2 = "kasteel_3_2";
     /** The narrator card of the duel (shown the first time a player walks into the arena) and the end scene. */
     public static final String KAART_DUEL = "guhriow3_duel";
     public static final Cutscene EINDE = einde();
+    /** How long after the flagpole of 3-2 Pad-guh's pointer comes (the flagpole itself takes 70 ticks: then you are in the hall). */
+    public static final int PADGUH_NA = 80;
+    /** Whom Pad-guh still has to call after: the ticks that are left. Never saved (a line lost at a restart is no loss). */
+    private static final Map<UUID, Integer> PADGUH_STRAKS = new ConcurrentHashMap<>();
 
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> wezen(String id, EntityType.EntityFactory<T> maker, float breed,
                                                                                          float hoog) {
@@ -112,7 +125,7 @@ public final class GuhrioW3Feature {
 
     /**
      * The end scene: the Grote Nether-Mika sits on the far ledge, wet and sulking; Prinses Perzikguh comes out of her door
-     * with the cake; he only wanted a piece, and he gets the biggest one. Written against the arena of
+     * pushing the cake on its serving cart; he only wanted a piece, and he gets the biggest one. Written against the arena of
      * tools/features/guhrio_w3.py (the door of the tower room is painted behind cells 32-33, he sits at 30.3).
      */
     private static Cutscene einde() {
@@ -141,7 +154,7 @@ public final class GuhrioW3Feature {
                 .zeg(268, mika, "stukje", 84)
                 .cameraKnip(356, plek(29.3, 2.5, 7.4), plek(31.3, 1.2, 0)).camera(520, plek(29.6, 2.3, 6.8), plek(31.3, 1.2, 0))
                 .zeg(360, perzik, "vragen", 76)
-                .loop(taart, 384, 412, plek(31.55, 0, 0))
+                .loop(taart, 384, 412, plek(31.8, 0, 0))
                 .animatie(taart, 426, "stukje")
                 .geluid(426, () -> SoundEvents.GENERIC_EAT.value(), 0.9f, 0.8f)
                 .animatie(mika, 430, "blij")
@@ -162,7 +175,11 @@ public final class GuhrioW3Feature {
         ENTITY_TYPES.register(modBus);
         Verteller.registreer(KAART_DUEL, 4, GuhrioKasteel.LIJN.id());
         GuhrioSpel.BIJ_KLAAR.add((player, sessie, ticks, record) -> naMast(player, sessie.level().level().id()));
-        NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> DuelPlan.vergeet());
+        NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> {
+            DuelPlan.vergeet();
+            PADGUH_STRAKS.clear();
+        });
+        NeoForge.EVENT_BUS.addListener(GuhrioW3Feature::tik);
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
             if (event.getPlayer() == null) {
                 DuelPlan.vergeet();
@@ -171,14 +188,40 @@ public final class GuhrioW3Feature {
         NeoForge.EVENT_BUS.addListener(GuhrioW3Feature::commandos);
     }
 
-    /** A flagpole of this world: the big vadsmunten of the burcht, and after 3-2 Pad-guh's running gag. */
+    /** A flagpole of this world: the big vadsmunten of the burcht, and after 3-2 Pad-guh's pointer to the duel's gate. */
     private static void naMast(ServerPlayer player, String level) {
         if (!LEVEL_3_1.equals(level) && !LEVEL_3_2.equals(level)) {
             return;
         }
         vadsmunten(player);
-        if (LEVEL_3_2.equals(level)) {
-            player.sendSystemMessage(Component.translatable("gui.guhs.guhriow3.padguh").withStyle(ChatFormatting.LIGHT_PURPLE));
+        if (LEVEL_3_2.equals(level) && !GuhrioKasteel.duelGewonnen(player)) {
+            PADGUH_STRAKS.put(player.getUUID(), PADGUH_NA);
+        }
+    }
+
+    /** Is Pad-guh about to call his pointer to the duel's gate after this player? */
+    static boolean padguhStraks(Player player) {
+        return PADGUH_STRAKS.containsKey(player.getUUID());
+    }
+
+    /** Pad-guh's pointer, once its ticks are over, for whoever is still there and has not won the duel in the meantime. */
+    private static void tik(ServerTickEvent.Post event) {
+        if (PADGUH_STRAKS.isEmpty()) {
+            return;
+        }
+        // (an entry of the iterator writes through to the map; the entries removeIf hands out can't be changed)
+        for (Iterator<Map.Entry<UUID, Integer>> it = PADGUH_STRAKS.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<UUID, Integer> e = it.next();
+            int over = e.getValue() - 1;
+            if (over > 0) {
+                e.setValue(over);
+                continue;
+            }
+            it.remove();
+            ServerPlayer p = event.getServer().getPlayerList().getPlayer(e.getKey());
+            if (p != null && !GuhrioKasteel.duelGewonnen(p)) {
+                p.sendSystemMessage(Component.translatable("gui.guhs.guhriow3.padguh").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
         }
     }
 

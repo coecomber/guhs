@@ -13,11 +13,11 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 /**
- * bbq2 (guhrio-w3): the cake of Prinses Perzikguh, as a thing a cutscene can carry around: the prop of the end scene of the
- * duel ({@link GuhrioW3Feature#EINDE}). It does nothing: the scene moves it (it is one of the scene's actors, only in the
- * viewer's own game). {@code Stukjes} (0..3) is how many pieces are gone. One that somebody summons by hand just stands there
- * and is never saved. Drawn by client.GuhrioW3Client from the box model guhriow3_taart
- * (tools/features/guhrio_w3_modellen.py).
+ * bbq2 (guhrio-w3): the cake of Prinses Perzikguh on her serving cart, as a thing a cutscene can roll around: the prop of
+ * the end scene of the duel ({@link GuhrioW3Feature#EINDE}). It does nothing: the scene moves it (it is one of the scene's
+ * actors, only in the viewer's own game). {@code Stukjes} (0..3) is how many pieces are gone. One that somebody summons by
+ * hand just stands there and is never saved. Drawn by client.GuhrioW3Client from the box model guhriow3_taart (the cart,
+ * the plate, four quarters: tools/features/guhrio_w3_modellen.py).
  */
 public class TaartEntity extends Entity {
     private static final EntityDataAccessor<Integer> DATA_STUKJES = SynchedEntityData.defineId(TaartEntity.class, EntityDataSerializers.INT);

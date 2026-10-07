@@ -272,8 +272,14 @@ public final class GuhrioW3Client {
         }
     }
 
-    /** The cake of the end scene: a plate and four quarters (one gone once the Grote Nether-Mika has had his piece). */
+    /**
+     * The cake of the end scene on the princess's serving cart: the cart, and on its tray a plate and four quarters (one gone
+     * once the Grote Nether-Mika has had his piece).
+     */
     public static class Taart extends Basis<TaartEntity> {
+        /** The top of the cart's tray, in pixels (KAR_HOOG of tools/features/guhrio_w3_modellen.py). */
+        public static final float KAR_HOOG = 10f;
+
         public Taart(EntityRendererProvider.Context context) {
             super(context, "guhriow3_taart", 0.3f);
         }
@@ -289,6 +295,8 @@ public final class GuhrioW3Client {
         protected void teken(Staat state, PoseStack pose, SubmitNodeCollector collector) {
             pose.mulPose(Axis.YP.rotationDegrees(-naarCamera(state.yaw)));
             pose.scale(1f / 16f, 1f / 16f, 1f / 16f);
+            model.dien("kar", pose, collector, state.lightCoords);
+            pose.translate(0, KAR_HOOG, 0);
             model.dien("bord", pose, collector, state.lightCoords);
             for (int i = state.getal; i < 4; i++) {
                 model.dien("punt_" + i, pose, collector, state.lightCoords);

@@ -8,7 +8,10 @@ bbq2 (guhrio-w3) - the box models of world 3 of Super Guhrio, made with the engi
                       hoofd (ears, horns, mane, collar), gezicht_boos / gezicht_mok / gezicht_blij (the head box with one
                       of three faces, and the snout), bol (the shell he tucks into: a spiked ball round the origin).
   guhriow3_kooltje    a lump of glowing coal (part kool)
-  guhriow3_taart      the cake of Prinses Perzikguh: a plate (bord) and four quarters (punt_0 .. punt_3), a cherry on each
+  guhriow3_taart      the cake of Prinses Perzikguh on her serving cart: the cart (kar: four wheels, golden legs, a shelf,
+                      a tray with a pink cloth, a push bar at both ends), a plate (bord) and four quarters (punt_0 ..
+                      punt_3), a cherry on each. Plate and quarters are modelled on the ground and drawn KAR_HOOG pixels
+                      up, on the tray (client/GuhrioW3Client.java reads the same number: Taart.KAR_HOOG)
 
 `python tools/features/guhrio_w3_modellen.py <dir>` (from the repo root, after the generators ran) renders preview
 pictures of all of them from the files on disk.
@@ -239,8 +242,50 @@ def kooltje(h):
     m.save(h)
 
 
+KAR_HOOG = 10                 # the tray's top: the plate and the cake are drawn this many pixels up
+
+
+def _kar(m):
+    """The serving cart the princess pushes the cake out on: four dark wheels, golden legs, a shelf half way up, a tray with
+    a pink cloth whose top is KAR_HOOG, and a golden push bar at both ends (so it looks right whichever way it rolls)."""
+    goud = gm.kleur((226, 178, 70), 4, 263, licht=(255, 228, 136), donker=(158, 110, 36))
+    wiel = gm.kleur((58, 46, 52), 3, 264, licht=(112, 98, 104), donker=(30, 22, 26))
+
+    def kleed(a):
+        hh, ww = a.shape[:2]
+        a[:, :, :3] = (255, 236, 242)
+        a[:, :, 3] = 255
+        a[0, :, :3] = (255, 170, 196)
+        a[hh - 1, :, :3] = (255, 170, 196)
+        a[:, 0, :3] = (255, 170, 196)
+        a[:, ww - 1, :3] = (255, 170, 196)
+
+    def zoom(a):
+        hh, ww = a.shape[:2]
+        a[:, :, :3] = (255, 236, 242)
+        a[:, :, 3] = 255
+        a[hh - 1, ::2, :3] = (255, 170, 196)                               # a scalloped hem
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            x0, x1 = sorted((sx * 5, sx * 7))
+            z0, z1 = sorted((sz * 4.5, sz * 6.5))
+            m.doos("kar", (x0, 0, z0), (x1, 2, z1), wiel)
+            x0, x1 = sorted((sx * 5.5, sx * 6.5))
+            z0, z1 = sorted((sz * 5, sz * 6))
+            m.doos("kar", (x0, 2, z0), (x1, KAR_HOOG - 1, z1), goud)
+    m.doos("kar", (-6.5, 4, -6), (6.5, 5, 6), goud)
+    m.doos("kar", (-8, KAR_HOOG - 2, -8), (8, KAR_HOOG, 8), zoom, boven=kleed, onder=goud)
+    for sx in (-1, 1):                                                     # the push bars
+        x0, x1 = sorted((sx * 8, sx * 9))
+        for sz in (-1, 1):
+            z0, z1 = sorted((sz * 5, sz * 6))
+            m.doos("kar", (x0, KAR_HOOG - 2, z0), (x1, KAR_HOOG + 3, z1), goud)
+        m.doos("kar", (x0, KAR_HOOG + 3, -6), (x1, KAR_HOOG + 4, 6), goud)
+
+
 def taart(h):
-    m = gm.Model("guhriow3_taart", 64, 64)
+    m = gm.Model("guhriow3_taart", 128, 64)
+    _kar(m)
     m.doos("bord", (-7.5, 0, -7.5), (7.5, 1, 7.5), gm.kleur((244, 244, 250), 2, 260, licht=WIT, donker=(190, 190, 204)))
 
     def lagen(a):
@@ -283,6 +328,12 @@ POSES = {
 }
 
 
+# the cake as the client draws it: plate and quarters on the cart's tray; whole, and with the Grote Nether-Mika's piece gone
+TAART_OP_KAR = {deel: (0, KAR_HOOG, 0) for deel in ("bord", "punt_0", "punt_1", "punt_2", "punt_3")}
+TAART_POSES = {"guhriow3_taart": ["kar", "bord", "punt_0", "punt_1", "punt_2", "punt_3"],
+               "guhriow3_taart_stukje": ["kar", "bord", "punt_1", "punt_2", "punt_3"]}
+
+
 def voorbeeld(out):
     """Renders the models into `out` (run from the repo root)."""
     import sys
@@ -293,9 +344,9 @@ def voorbeeld(out):
         q = gm.quads("grote_nether_mika", delen, schuif)
         for hoek, kant in ((215, "voor"), (150, "zij"), (180, "recht"), (35, "achter")):
             wr.render(q, hoek, -14, 384, margin=0.06).save(os.path.join(out, f"mika_{pose}_{kant}.png"))
-    for naam in ("guhriow3_kooltje", "guhriow3_taart"):
-        wr.render(gm.quads(naam), 210, -24, 256, margin=0.1).save(os.path.join(out, f"{naam}.png"))
-    wr.render(gm.quads("guhriow3_taart", ["bord", "punt_1", "punt_2", "punt_3"]), 210, -24, 256, margin=0.1).save(os.path.join(out, "guhriow3_taart_stukje.png"))
+    wr.render(gm.quads("guhriow3_kooltje"), 210, -24, 256, margin=0.1).save(os.path.join(out, "guhriow3_kooltje.png"))
+    for naam, delen in TAART_POSES.items():
+        wr.render(gm.quads("guhriow3_taart", delen, TAART_OP_KAR), 210, -24, 256, margin=0.1).save(os.path.join(out, f"{naam}.png"))
     print("guhrio-w3 models rendered to", out)
 
 
