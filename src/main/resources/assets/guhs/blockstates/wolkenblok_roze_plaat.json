@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/wolkenblok_roze_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/wolkenblok_roze_0"
+    },
+    "type=top": {
+      "model": "guhs:block/wolkenblok_roze_plaat_top"
+    }
+  }
+}

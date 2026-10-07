@@ -26,7 +26,17 @@
     "guhs:bleekmos",
     "guhs:bleekmos_tapijt",
     "guhs:bleek_hangmos",
-    "guhs:esdoorn_bladeren_rood",
-    "guhs:esdoorn_bladeren_oranje"
+    "guhs:wolkenblok_wit",
+    "guhs:wolkenblok_wit_plaat",
+    "guhs:wolkenblok_wit_trap",
+    "guhs:wolkenblok_roze",
+    "guhs:wolkenblok_roze_plaat",
+    "guhs:wolkenblok_roze_trap",
+    "guhs:regenboogblok",
+    "guhs:regenboogblok_plaat",
+    "guhs:regenboogblok_trap",
+    "guhs:wolkenbank",
+    "guhs:wolkenbed",
+    "guhs:wolkenlamp"
   ]
 }

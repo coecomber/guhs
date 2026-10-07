@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "guhs:wolkenblok_roze"
+  },
+  "result": {
+    "id": "guhs:wolkenblok_roze_plaat",
+    "count": 6
+  }
+}

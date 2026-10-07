@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:pink_petals"
+  ],
+  "result": {
+    "id": "guhs:drijvende_bloesemblaadjes",
+    "count": 2
+  }
+}

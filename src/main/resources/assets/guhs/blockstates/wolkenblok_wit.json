@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/wolkenblok_wit_0"
+      },
+      {
+        "model": "guhs:block/wolkenblok_wit_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/wolkenblok_wit_1"
+      },
+      {
+        "model": "guhs:block/wolkenblok_wit_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/wolkenblok_wit_2"
+      },
+      {
+        "model": "guhs:block/wolkenblok_wit_2",
+        "y": 90
+      }
+    ]
+  }
+}
