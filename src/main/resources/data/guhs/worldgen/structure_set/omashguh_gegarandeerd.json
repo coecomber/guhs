@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:omashguh",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401308,
+    "min_afstand": 1300,
+    "max_afstand": 2600,
+    "sector": 2,
+    "sectoren": 16
+  }
+}

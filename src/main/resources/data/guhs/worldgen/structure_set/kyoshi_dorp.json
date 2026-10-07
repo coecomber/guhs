@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:kyoshi_dorp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 96,
+    "separation": 40,
+    "salt": 21401401
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:vuurtempel_roku",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401328,
+    "min_afstand": 1300,
+    "max_afstand": 2600,
+    "sector": 10,
+    "sectoren": 16
+  }
+}

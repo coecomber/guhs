@@ -1,0 +1,38 @@
+{
+  "structuur": "bibliotheek_wan_shi_guh",
+  "soort": "leegte_bouw",
+  "grootte": [
+    5,
+    4,
+    5
+  ],
+  "anker": [
+    8,
+    0,
+    8
+  ],
+  "plekken": {
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "tot": [
+        4,
+        3,
+        4
+      ],
+      "wie": "hier komt de echte plek nog"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        2,
+        1,
+        2
+      ]
+    }
+  }
+}

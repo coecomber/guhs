@@ -1,0 +1,62 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            1.0,
+            0.82,
+            0.3
+          ],
+          "scale": 1.0
+        },
+        "probability": 0.002
+      }
+    ],
+    "minecraft:visual/fog_color": "#3c1e34",
+    "minecraft:visual/sky_color": "#2a1028",
+    "minecraft:visual/water_fog_color": "#6a2a50"
+  },
+  "has_precipitation": false,
+  "temperature": 0.5,
+  "downfall": 0.5,
+  "effects": {
+    "water_color": "#f08cc0",
+    "foliage_color": "#e8b83c",
+    "grass_color": "#e8b83c"
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "guhs:mika",
+        "weight": 4,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": [],
+  "features": []
+}

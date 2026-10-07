@@ -1,0 +1,36 @@
+{
+  "values": [
+    {
+      "id": "guhs:omashguh",
+      "required": false
+    },
+    {
+      "id": "guhs:westelijke_luchttempel",
+      "required": false
+    },
+    {
+      "id": "guhs:vuurtempel_roku",
+      "required": false
+    },
+    {
+      "id": "guhs:kyoshi_dorp",
+      "required": false
+    },
+    {
+      "id": "guhs:bibliotheek_wan_shi_guh",
+      "required": false
+    },
+    {
+      "id": "guhs:leeuwschildpad_eiland",
+      "required": false
+    },
+    {
+      "id": "guhs:leegtehaven",
+      "required": false
+    },
+    {
+      "id": "guhs:guhvleugel_ringenrace",
+      "required": false
+    }
+  ]
+}

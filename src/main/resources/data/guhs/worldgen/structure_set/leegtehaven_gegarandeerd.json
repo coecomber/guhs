@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:leegtehaven",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401438,
+    "min_afstand": 1200,
+    "max_afstand": 2000,
+    "sector": 9,
+    "sectoren": 16
+  }
+}

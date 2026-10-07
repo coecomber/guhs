@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:westelijke_luchttempel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401318,
+    "min_afstand": 1300,
+    "max_afstand": 2600,
+    "sector": 6,
+    "sectoren": 16
+  }
+}

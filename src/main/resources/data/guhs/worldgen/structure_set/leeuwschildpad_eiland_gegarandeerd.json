@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:leeuwschildpad_eiland",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401428,
+    "min_afstand": 1500,
+    "max_afstand": 2800,
+    "sector": 5,
+    "sectoren": 16
+  }
+}

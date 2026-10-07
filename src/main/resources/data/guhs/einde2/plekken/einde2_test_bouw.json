@@ -1,0 +1,134 @@
+{
+  "structuur": "einde2_test_bouw",
+  "soort": "leegte_bouw",
+  "grootte": [
+    80,
+    12,
+    48
+  ],
+  "anker": [
+    40,
+    0,
+    24
+  ],
+  "plekken": {
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        2,
+        3,
+        2
+      ],
+      "tot": [
+        12,
+        6,
+        12
+      ],
+      "wie": "de landingsplek"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        7,
+        3,
+        7
+      ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        -20,
+        8,
+        24
+      ]
+    },
+    "proefguh": {
+      "soort": "npc",
+      "pos": [
+        40,
+        3,
+        20
+      ],
+      "yaw": 90.0,
+      "wie": "een proefguh",
+      "kind": "PROEFGUH"
+    },
+    "opgesloten": {
+      "soort": "npc",
+      "pos": [
+        63,
+        3,
+        33
+      ],
+      "yaw": 0.0,
+      "wie": "zit in het hutje"
+    },
+    "tafel": {
+      "soort": "prop",
+      "pos": [
+        44,
+        2,
+        20
+      ],
+      "wie": "een blok in de vloer"
+    },
+    "route": {
+      "soort": "pad",
+      "punten": [
+        [
+          7,
+          3,
+          7
+        ],
+        [
+          40,
+          3,
+          7
+        ],
+        [
+          72,
+          3,
+          40
+        ]
+      ]
+    },
+    "ring_01": {
+      "soort": "ring",
+      "pos": [
+        70,
+        8,
+        10
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "vijver": {
+      "soort": "zone",
+      "pos": [
+        20,
+        2,
+        30
+      ],
+      "tot": [
+        26,
+        4,
+        36
+      ]
+    }
+  },
+  "lagen": {
+    "proef": {
+      "template": "guhs:einde2_test_bouw/laag_proef",
+      "pos": [
+        50,
+        3,
+        10
+      ],
+      "grootte": [
+        3,
+        3,
+        3
+      ]
+    }
+  }
+}

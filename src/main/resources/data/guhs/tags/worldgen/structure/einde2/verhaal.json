@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "guhs:zuidelijke_luchttempel",
+      "required": false
+    },
+    {
+      "id": "guhs:noordelijke_waterstam",
+      "required": false
+    },
+    {
+      "id": "guhs:ba_sing_guh",
+      "required": false
+    },
+    {
+      "id": "guhs:vuurnatie_hoofdstad",
+      "required": false
+    }
+  ]
+}

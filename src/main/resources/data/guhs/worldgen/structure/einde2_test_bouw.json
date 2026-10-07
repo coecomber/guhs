@@ -1,0 +1,34 @@
+{
+  "type": "guhs:leegte_bouw",
+  "biomes": "#guhs:has_structure/einde2_test_bouw",
+  "step": "fluid_springs",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "templates": "guhs:einde2_test_bouw",
+  "tiles_x": 3,
+  "tiles_z": 2,
+  "tile_size": 32,
+  "anchor": [
+    40,
+    0,
+    24
+  ],
+  "size": [
+    80,
+    12,
+    48
+  ],
+  "y": 160,
+  "min_distance": 1100,
+  "rand": 48,
+  "keep_clear": 89
+}
