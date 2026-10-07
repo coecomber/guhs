@@ -129,21 +129,18 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
                 }
             }
         }
-        boek.zet(bankId(), hier);
+        boek.onthoud(bankId(), hier, storage);   // (the address, and the stomach: a Hapluikje asks the book what fits)
         toonUpgrade();
     }
 
     /**
-     * The bank's chunk unloads: the address book remembers what it holds, so a Hapluikje can say what still fits without
-     * loading this chunk again ({@link BankAdressen.Schaduw}).
+     * The bank's chunk unloads. The address book goes on looking at this stomach ({@link BankAdressen.Schaduw}): it is what
+     * was saved, and nothing changes it any more, so a Hapluikje can say what still fits without loading this chunk again.
      */
     @Override
     public void onChunkUnloaded() {
         super.onChunkUnloaded();
         ontladen = true;
-        if (level instanceof ServerLevel server && bankId != null) {
-            BankAdressen.van(server.getServer()).onthoud(bankId, GlobalPos.of(server.dimension(), worldPosition), storage);
-        }
     }
 
     /** Removed while its chunk stays loaded (broken or replaced, also without side effects): a shadow of it would lie. */
@@ -151,7 +148,10 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     public void setRemoved() {
         super.setRemoved();
         if (!ontladen && level instanceof ServerLevel server && bankId != null) {
-            BankAdressen.van(server.getServer()).vergeet(bankId);
+            BankAdressen boek = BankAdressen.van(server.getServer());
+            if (GlobalPos.of(server.dimension(), worldPosition).equals(boek.plek(bankId))) {
+                boek.vergeet(bankId);   // (only when the book means THIS bank: a copy elsewhere keeps its own)
+            }
         }
     }
 

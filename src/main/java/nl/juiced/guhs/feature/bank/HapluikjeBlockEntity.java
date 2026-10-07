@@ -47,11 +47,12 @@ import nl.juiced.guhs.storage.BankStorage;
  * <b>A bank whose chunk is not loaded.</b> Asking the luikje what fits never loads anything: an insert may be a mere
  * question (a transaction that is thrown away), and the ones who ask do so all day (a Richtingstuk every few ticks, a
  * hopper, a Haltepaaltje, the chore scan). So for an unloaded bank the luikje answers from what the address book
- * remembers of it ({@link BankAdressen.Schaduw}, exact: nothing changes in an unloaded chunk) and only notes what it
- * accepted ({@link #wacht}); when the giver's transaction is really committed the bank's chunk is loaded, the noted
- * items go in and the chunk stays loaded for a little while ({@link #lever}). A bank the book has no shadow of (after
- * a server start) is asked for in the background and the luikje refuses until it is there, a few ticks later. A bank
- * that IS loaded is only kept loaded by a delivery that really went through, never by a question.
+ * knows of it ({@link BankAdressen.Schaduw}: the bank's stomach as it was left, exact: nothing changes in an unloaded
+ * chunk) and only notes what it accepted ({@link #wacht}); when the giver's transaction is really committed the bank's
+ * chunk is loaded, the noted items go in and the chunk stays loaded for a little while ({@link #lever}). A bank the
+ * book has no shadow of (it was not in the world since the server started) is asked for in the background and the
+ * luikje refuses until it is there, a few ticks later. A bank that IS loaded is only kept loaded by a delivery that
+ * really went through, never by a question.
  * <p>
  * It takes nothing, and so the giver keeps the items (a hopper stays full, a Knabbelbuis holds on to it, a hand keeps the
  * stack), when: it has no vadskracht ({@link VadsGetallen#HAPLUIKJE} VK), it is not linked, its bank stands nowhere (it

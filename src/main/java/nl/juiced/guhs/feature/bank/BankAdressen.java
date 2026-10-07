@@ -30,13 +30,14 @@ import nl.juiced.guhs.storage.GuhSavedData;
  * when the block is removed. The book may still be wrong (a chunk rolled back, a block replaced without side effects):
  * {@link #zoek} always looks at the block itself and tidies up a stale line.
  * <p>
- * <b>A bank whose chunk is not loaded is never loaded just to ANSWER a question.</b> When a bank's chunk unloads, the
- * book keeps a {@link Schaduw} of it in memory (how much room it has for every kind; nothing changes in a chunk that is
- * not loaded, so that stays exact), and a Hapluikje answers "what fits" from that. Only a real, committed delivery or a
- * player's click loads the chunk ({@link #zoek} with {@code laad}). A bank the book has no shadow of (after a server
- * start) is asked for in the background ({@link #wek}) and the luikje refuses until it is there. So whatever only polls
- * a luikje (a Richtingstuk every few ticks, a hopper holding what the bank is full of, a Haltepaaltje that asks what
- * fits, the chore scan) loads nothing and keeps nothing loaded.
+ * <b>A bank whose chunk is not loaded is never loaded just to ANSWER a question.</b> From the moment a bank appears in the
+ * world ({@link #onthoud}, with its address) the book keeps a {@link Schaduw} of it in memory: its stomach, also after its
+ * chunk unloaded (nothing changes in a chunk that is not loaded, so what the stomach said last stays exact; no moment
+ * between "unloading" and "unloaded" at which the book knows nothing). A Hapluikje answers "what fits" from that. Only a
+ * real, committed delivery or a player's click loads the chunk ({@link #zoek} with {@code laad}). A bank that has not been
+ * in the world since the server started has no shadow: it is asked for in the background ({@link #wek}) and the luikje
+ * refuses until it is there. So whatever only polls a luikje (a Richtingstuk every few ticks, a hopper holding what the
+ * bank is full of, a Haltepaaltje that asks what fits, the chore scan) loads nothing and keeps nothing loaded.
  */
 public final class BankAdressen extends SavedData {
     private static final Codec<BankAdressen> CODEC = Codec.unboundedMap(UUIDUtil.STRING_CODEC, GlobalPos.CODEC)
@@ -44,27 +45,24 @@ public final class BankAdressen extends SavedData {
     public static final SavedDataType<BankAdressen> TYPE = GuhSavedData.type("bank_adressen", BankAdressen::new, CODEC);
 
     private final Map<UUID, GlobalPos> adressen = new HashMap<>();
-    /** Banks whose chunk unloaded since the server started: what they held then. In memory only, never saved. */
+    /** Banks that stood in the world since the server started: their stomach as it was last seen. In memory only, never saved. */
     private final Map<UUID, Schaduw> schaduwen = new HashMap<>();
 
     /**
-     * What a bank held at the moment its chunk unloaded: enough to say how many more of a kind fit. Exact for as long as
-     * the chunk stays unloaded; thrown away as soon as the bank is back ({@link #zet}) or gone ({@link #wis}).
+     * The stomach of a placed bank, to say how many more of a kind fit without loading its chunk. While the bank's chunk
+     * is loaded this is the bank's own stomach; after the chunk unloaded it is that stomach as it was left (which is what
+     * was saved). Replaced when the bank appears again ({@link #onthoud}), gone when the bank is ({@link #wis}, {@link #vergeet}).
      */
     public static final class Schaduw {
-        private final Map<ItemResource, Long> aantallen;
-        private final boolean opgevoerd;
+        private final BankStorage maag;
 
-        private Schaduw(Map<ItemResource, Long> aantallen, boolean opgevoerd) {
-            this.aantallen = aantallen;
-            this.opgevoerd = opgevoerd;
+        private Schaduw(BankStorage maag) {
+            this.maag = maag;
         }
 
-        /** How many more of this kind the bank takes (the rule of {@link BankStorage#room}). */
+        /** How many more of this kind the bank takes (the rule of {@link BankStorage#room}: the cap, or no limit when upgraded). */
         public long ruimte(ItemResource soort) {
-            Long heeft = aantallen.get(soort);
-            long vrij = (opgevoerd ? Long.MAX_VALUE : BankStorage.CAP) - (heeft == null ? 0 : heeft);
-            return Math.max(0, vrij);
+            return maag.room(soort);
         }
     }
 
@@ -86,7 +84,6 @@ public final class BankAdressen extends SavedData {
     }
 
     public void zet(UUID bank, GlobalPos plek) {
-        schaduwen.remove(bank);   // (the bank itself is there again: ask it, not its shadow)
         if (!plek.equals(adressen.put(bank, plek))) {
             setDirty();
         }
@@ -108,11 +105,10 @@ public final class BankAdressen extends SavedData {
     // the shadow of a bank whose chunk is not loaded
     // =====================================================================================================================
 
-    /** The chunk of this bank unloads: remember what it holds (only when the book says the bank stands right there). */
+    /** This bank stands in the world at this address ({@link #zet}) with this stomach: the book keeps looking at it. */
     public void onthoud(UUID bank, GlobalPos plek, BankStorage maag) {
-        if (plek.equals(adressen.get(bank))) {
-            schaduwen.put(bank, new Schaduw(maag.aantallen(), maag.isUpgraded()));
-        }
+        zet(bank, plek);
+        schaduwen.put(bank, new Schaduw(maag));
     }
 
     /**
@@ -123,7 +119,7 @@ public final class BankAdressen extends SavedData {
         schaduwen.remove(bank);
     }
 
-    /** What the bank held when its chunk unloaded, or null: not known (ask the bank itself, or {@link #wek} it). */
+    /** The stomach of this bank as it was last seen in the world, or null: not known (ask the bank itself, or {@link #wek} it). */
     @Nullable
     public Schaduw schaduw(UUID bank) {
         return schaduwen.get(bank);
@@ -178,6 +174,12 @@ public final class BankAdressen extends SavedData {
             level.getChunk(pos);   // (loads it now: the bank was placed there, so the chunk exists on disk)
         }
         if (level.getBlockEntity(pos) instanceof BankGuhBlockEntity be && bank.equals(be.bankId())) {
+            // (whoever finds the bank itself brings the book up to date: a chunk that was loaded for one tick only never
+            // told the book about its new block entity)
+            Schaduw schaduw = boek.schaduwen.get(bank);
+            if (schaduw == null || schaduw.maag != be.getStorage()) {
+                boek.schaduwen.put(bank, new Schaduw(be.getStorage()));
+            }
             return be;
         }
         boek.wis(bank, plek);      // (a stale line: there is no such bank there any more)

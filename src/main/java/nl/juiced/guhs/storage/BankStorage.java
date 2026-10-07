@@ -66,7 +66,8 @@ public class BankStorage {
         return like.isEmpty() ? 0 : room(ItemResource.of(like));
     }
 
-    long room(ItemResource key) {
+    /** How many more of this kind fit (the same rule, for a kind without a stack). */
+    public long room(ItemResource key) {
         return Math.max(0, cap() - amount(key));
     }
 
@@ -140,11 +141,6 @@ public class BankStorage {
 
     public int version() {
         return version;
-    }
-
-    /** A copy of how many there are of every kind (the shadow that {@code BankAdressen} keeps of an unloaded bank). */
-    public Map<ItemResource, Long> aantallen() {
-        return new java.util.HashMap<>(items);
     }
 
     public BankContents snapshot() {
