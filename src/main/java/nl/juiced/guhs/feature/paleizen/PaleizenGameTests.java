@@ -518,6 +518,48 @@ public class PaleizenGameTests {
             b.snapTo(dier[0].getX() + 1.5, dier[0].getY(), dier[0].getZ() + 1.5);
             a.snapTo(dier[0].getX() - 1.5, dier[0].getY(), dier[0].getZ() + 1.5);
             helper.assertTrue(StalQuest.LIJN.stap(b) == 1 && StalQuest.onrustig(dier[0]) && StalQuest.aantalKalm(b) == 0 && dier[0].isAlive(), "nothing was used up for b");
+            // ... and b finishes the whole line at the same animals, the same voerbak and a runaway of their own
+            b.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            for (int nr : new int[]{0, 2, 3}) {
+                for (int i = 0; i < StalQuest.AAIEN; i++) {
+                    StalQuest.aai(b, dier[nr]);
+                }
+            }
+            helper.assertTrue(StalQuest.aantalKalm(b) == 3 && "1_klaar".equals(StalQuest.LIJN.sleutel(b)), "b calmed three (two of them others than a did)");
+            StalQuest.ROL.talk(knecht, b);
+            helper.assertTrue(StalQuest.LIJN.stap(b) == 2 && tel(b, voer) == 1, "a sack of feed for b");
+            helper.assertTrue(GuhVoerbakBlock.voer(level.getBlockState(bak)) == 0, "the voerbak that a filled is empty again");
+            ItemStack zakB = inHand(b, voer);
+            helper.assertTrue(StalQuest.vulVoerbak(b, bak, zakB) && StalQuest.gevoerd(b) && zakB.isEmpty(), "b fills it too");
+            Herstel.verschuif(level, StalQuest.VOERBAK_TICKS);
+            Herstel.verwerk(level);
+            b.getInventory().clearContent();
+            StalQuest.ROL.talk(knecht, b);
+            helper.assertTrue(StalQuest.LIJN.stap(b) == 3 && StalQuest.zoekt(b) && !StalQuest.zoekt(a) && StalQuest.tick(a, start) == null, "Knorretje has run away again, from b only");
+            WorstzwijntjeEntity kb = StalQuest.tick(b, start);
+            helper.assertTrue(kb != null && b.getUUID().equals(kb.ontsnaptVan()), "a runaway of b's own");
+            StalQuest.pak(a, kb);
+            helper.assertTrue(kb.isAlive() && tel(a, gevangen) == 0, "a (who is done) can't take it");
+            StalQuest.pak(b, kb);
+            StalQuest.ROL.talk(knecht, b);
+            helper.assertTrue(StalQuest.LIJN.klaar(b) && tel(b, gevangen) == 0 && tel(b, mandje) == 2 && tel(a, mandje) == 2,
+                    "the second player finishes the whole line after the first, with the same reward");
+            helper.assertTrue(level.getEntitiesOfClass(WorstzwijntjeEntity.class, kamer(helper), WorstzwijntjeEntity::isStal).size() == 5,
+                    "and the stable still has its five animals");
+            // a copy that LOSES its Stalknecht-guh and an animal (a mod that clears entities, a broken chunk) gets them back, once
+            knecht.discard();
+            dier[2].discard();
+            helper.assertTrue(Bezetting.controleer(level, midden) == 0, "seen missing once: nothing yet");
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, midden) == 2, "seen missing twice: both come back");
+            List<WorstzwijntjeEntity> dierenWeer = level.getEntitiesOfClass(WorstzwijntjeEntity.class, kamer(helper), z -> z.isStal() && z.isAlive());
+            List<GuhNpcEntity> knechtWeer = level.getEntitiesOfClass(GuhNpcEntity.class, kamer(helper), n -> n.isAlive() && n.getKind() == GuhNpcEntity.Kind.STALKNECHTGUH);
+            helper.assertTrue(dierenWeer.size() == 5 && dierenWeer.stream().filter(z -> z.stalNr() == 2).count() == 1 && knechtWeer.size() == 1
+                    && NpcRollen.van(knechtWeer.get(0)) == StalQuest.ROL && knechtWeer.get(0).isInvulnerable(), "five animals and one Stalknecht-guh again, with his talk");
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, midden) == 0, "and no doubles at the next look");
+            StalQuest.ROL.talk(knechtWeer.get(0), b);
+            helper.assertTrue(StalQuest.LIJN.klaar(b), "the questline is in the player, not in the guh: b is still done at the new one");
         } finally {
             Kopieen.testWissen(level);
             level.setBlockAndUpdate(helper.absolutePos(new BlockPos(2, 2, 7)), Blocks.AIR.defaultBlockState());
@@ -668,6 +710,37 @@ public class PaleizenGameTests {
             GuhQuests.take(a, kaart, 1);
             TolQuest.ROL.talk(wachter, a);
             helper.assertTrue(tel(a, kaart) == 1, "a lost card comes again");
+            // b and c finish after a: the same bell rings for each of them, the building set comes to each
+            for (ServerPlayer later : List.of(b, c)) {
+                helper.assertTrue(TolQuest.LIJN.stap(later) == 3 && TolQuest.bel(later, bel) && TolQuest.LIJN.stap(later) == 4, "the bell that a rang rings for the next one too");
+                TolQuest.ROL.talk(wachter, later);
+                helper.assertTrue(TolQuest.LIJN.klaar(later) && tel(later, kaart) == 1 && tel(later, PaleizenFeature.BRUGPLANK.get().asItem()) == 16
+                        && tel(later, PaleizenFeature.BRUGLEUNING.get().asItem()) == 8, "done after the first player, with the same building set");
+            }
+            // and somebody who only arrives now does the whole line: toll, the gap (it fell open again), the bell, the reward
+            ServerPlayer e = speler(helper, new BlockPos(27, 2, 10));
+            try {
+                Kopieen.testWissen(level);
+                StructureStart weer = PaleisProef.bouw(level, PaleisPlekken.BRUGPALEIS, new BlockPos(29, 28, 5), helper.absolutePos(new BlockPos(0, 1, 0)), false);
+                TolQuest.ROL.talk(wachter, e);
+                e.getInventory().add(new ItemStack(knabbels, 8));
+                TolQuest.ROL.antwoord(wachter, e, 1);
+                helper.assertTrue(TolQuest.LIJN.stap(e) == 2 && TolQuest.magDoor(e) && TolQuest.openRijen(level, weer) == 5, "the newcomer paid; the gap lies open for them");
+                ItemStack vanE = inHand(e, plank);
+                for (int i = 0; i < TolQuest.RIJEN; i++) {
+                    TolQuest.legPlank(e, vanE);
+                }
+                helper.assertTrue(TolQuest.LIJN.stap(e) == 3 && TolQuest.openRijen(level, weer) == 0, "and mends it");
+                Herstel.verschuif(level, TolQuest.HERSTEL_TICKS);
+                Herstel.verwerk(level);
+                Kopieen.testWissen(level);
+                PaleisProef.bouw(level, PaleisPlekken.BRUGPALEIS, new BlockPos(70, 28, 5), helper.absolutePos(new BlockPos(0, 1, 0)), false);
+                helper.assertTrue(TolQuest.bel(e, bel) && TolQuest.LIJN.stap(e) == 4, "rings the bell");
+                TolQuest.ROL.talk(wachter, e);
+                helper.assertTrue(TolQuest.LIJN.klaar(e) && tel(e, kaart) == 1, "and is done: a third, a fourth... any number of players");
+            } finally {
+                weg(helper, e);
+            }
         } finally {
             Kopieen.testWissen(level);
             for (BlockPos p : List.of(new BlockPos(12, 6, 10), new BlockPos(12, 5, 10), new BlockPos(20, 3, 20), new BlockPos(20, 2, 20))) {

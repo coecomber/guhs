@@ -49,7 +49,9 @@ WIKI = {
          "blubjes blubben zolang jij voert en knuffelt."),
         ("systemen/sausdieren", "Blubje in een potje",
          "Een klein Sausblubje past in een glazen flesje: rechtsklik en je hebt een Sausblubje in een potje. Klik met het potje op een "
-         "blok om het weer vrij te laten. De uitvinder-guh gebruikt zo'n potje voor zijn Blubkacheltje."),
+         "blok om het weer vrij te laten. De uitvinder-guh gebruikt zo'n potje voor zijn Blubkacheltje. Geen wild blubje te vinden? "
+         "Wie de proefrit van de Sausloper-stal heeft gereden, krijgt van de Verzorger-guh elke dag een Sausblubje in een potje "
+         "(vraag erom, zolang je er geen bij je hebt)."),
         ("systemen/sausdieren", "Blubroom en het Stuiterdrankje",
          "Roer blubroom door kaasbouillon in de Guhbrouwketel en tap een Stuiterdrankje. Drie minuten lang doet vallen geen pijn: je "
          "stuitert weer omhoog, elke keer wat minder hoog. Wie sluipt, landt gewoon. Blubroom zit ook in recepten van Guh-technologie."),

@@ -217,7 +217,8 @@ public final class SausdierenFeature {
     /**
      * {@code /guhs sausdieren ...} (ops; for the AutoCheck script and dev checks): {@code proefrit} starts the test lap at the
      * Verzorger-guh nearest to you, {@code blubje <1-3>} puts a Sausblubje of that size in front of you, and in dev runs only
-     * {@code stal} places the stable's template (with its sauce) at your feet.
+     * {@code stal} places the stable's template (with its sauce) at your feet, and {@code spawnproef speler|tel|weg} puts a
+     * stand-in player at the command's spot, counts the wild creatures around it and takes it away again ({@link Spawnproef}).
      */
     private static void commando(RegisterCommandsEvent event) {
         var wortel = Commands.literal("sausdieren").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
@@ -252,6 +253,11 @@ public final class SausdierenFeature {
                 s.sendSuccess(() -> Component.literal(gelukt ? "De Sausloper-stal staat op " + hoek.toShortString() : "Geen template guhs:sausloper_stal"), false);
                 return gelukt ? 1 : 0;
             }));
+            // (a headless dev server has no player, and without one the natural spawner never runs: a stand-in to count wild ones)
+            wortel.then(Commands.literal("spawnproef")
+                    .then(Commands.literal("speler").executes(c -> Spawnproef.speler(c.getSource())))
+                    .then(Commands.literal("tel").executes(c -> Spawnproef.tel(c.getSource())))
+                    .then(Commands.literal("weg").executes(c -> Spawnproef.weg(c.getSource()))));
         }
         event.getDispatcher().register(Commands.literal("guhs").then(wortel));
     }
