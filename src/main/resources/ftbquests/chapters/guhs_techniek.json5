@@ -339,6 +339,33 @@
       y: 6.5625,
     },
     {
+      id: "475548FAE94982EA",
+      icon: {
+        id: "minecraft:pumpkin",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tech_klusjes_oogst",
+          id: "475548C0F31216D3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D531C4F66F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+    },
+    {
       id: "4755484ABA7ABFD0",
       icon: {
         id: "guhs:vadsmolen",
@@ -363,7 +390,7 @@
         },
       ],
       x: 9.0,
-      y: 6.5625,
+      y: 8.0625,
     },
     {
       id: "475548740C56ABC5",
@@ -389,7 +416,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 8.0625,
     },
     {
@@ -416,7 +443,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 8.0625,
     },
     {
@@ -441,7 +468,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 8.0625,
       shape: "circle",
     },
@@ -981,6 +1008,33 @@
       shape: "gear",
     },
     {
+      id: "4755488D31012FE1",
+      icon: {
+        id: "guhs:hapluikje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tech_klusjes_luikje",
+          id: "475548DC71189E91",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548010545DD27",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 13.525,
+    },
+    {
       id: "475548BDFB85CAA9",
       icon: {
         id: "guhs:opzuiger",
@@ -1004,7 +1058,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 13.525,
     },
     {
@@ -1036,7 +1090,7 @@
           xp: 100,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 13.525,
       shape: "gear",
     },
@@ -1064,7 +1118,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 13.525,
     },
     {
@@ -1093,7 +1147,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 3.0,
       y: 13.525,
     },
     {
@@ -1118,7 +1172,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 1.5,
       y: 13.525,
       shape: "circle",
     },
