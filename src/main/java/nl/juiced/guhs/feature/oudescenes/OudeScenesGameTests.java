@@ -356,9 +356,10 @@ public class OudeScenesGameTests {
 
     /**
      * At a real copy of its building a scene is anchored on its own template block, turned like the copy (here: a copy of
-     * the chapel made by hand around the test room, a quarter turn).
+     * the chapel made by hand around the test room, a quarter turn). A batch of its own: a test copy counts for the whole
+     * level, so the other tests of this class would find it from their rooms.
      */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = KAMER, batch = BATCH + "_kopie", timeoutTicks = 100)
     public static void oudescenesKopie(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, true);
