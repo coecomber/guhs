@@ -22,18 +22,24 @@ chapter (FTB_SLOT in tech_quests.py) previews what the Guheinde will add. Dutch 
 Added at the merge of tech-klusjes and tech-quests (the two slices were built side by side): the two chores of the Guhhuisje
 that work the machines, "tech_quests_klus_machines" in project 1 and "tech_quests_klus_plantage" in project 4. Their tasks
 are the hidden advancements of features/tech_klusjes.py (quest/tech_klusjes_machines, quest/tech_klusjes_plantage).
+
+Added in phase 3: the other two hidden advancements of tech-klusjes that had a visible twin but no quest (DESIGN_130 0: every
+new quest is in the book): "tech_quests_klus_oogst" (the bigger harvest of the farmen chore) in project 1 and
+"tech_quests_klus_luikje" (chore output through a Hapluikje) in project 2. And the quests that send the player into the
+Guhbarbecuether say that the way there goes through the grill portal first (the portal lock of the Knabbelring).
 """
 from features import tech_bezorg, tech_bronnen, tech_vloeistof, vadskracht, wereld
 
 SECTIES = [
     ("tech_quests_bakken", "Project 1: Nooit meer zelf bakken", "item:guhs:block/guh_oven_front_on",
      ["tech_quests_rad", "tech_quests_draad", "tech_quests_oven", "tech_quests_aflezen", "tech_quests_trechters", "tech_quests_klus_machines",
-      "tech_quests_molen", "tech_quests_knuffel", "tech_quests_disco", "tech_quests_hoeveel"]),
+      "tech_quests_klus_oogst", "tech_quests_molen", "tech_quests_knuffel", "tech_quests_disco", "tech_quests_hoeveel"]),
     ("tech_quests_centrale", "De Oude Guhrad-centrale", "npc:uitvinderguh",
      ["tech_quests_centrale_vind"] + [f"tech_quests_techniek_{i}" for i in range(1, 9)] + ["tech_quests_maagje", "tech_quests_kaarten"]),
     ("tech_quests_bank", "Project 2: Alles vanzelf in de bank", "item:guhs:block/hapluikje_voor_werkt",
      ["tech_quests_zout", "tech_quests_buis", "tech_quests_richting", "tech_quests_filter", "tech_quests_sorteer", "tech_quests_sleutel",
-      "tech_quests_hapluikje", "tech_quests_opzuiger", "tech_quests_oogster", "tech_quests_sensor", "tech_quests_batterij", "tech_quests_magazijn"]),
+      "tech_quests_hapluikje", "tech_quests_klus_luikje", "tech_quests_opzuiger", "tech_quests_oogster", "tech_quests_sensor", "tech_quests_batterij",
+      "tech_quests_magazijn"]),
     ("tech_quests_saus", "Project 3: Saus uit de kraan", "item:guhs:block/sauspomp_voor_werkt",
      ["tech_quests_saus_kaart", "tech_quests_pomp", "tech_quests_vat", "tech_quests_frituur", "tech_quests_brouw", "tech_quests_pers",
       "tech_quests_blub"]),
@@ -55,6 +61,11 @@ LEVERINGEN = [
     [("gloeister", "gloeister", 1), ("knabbels", "kaasknabbels", 256)],
 ]
 ZOUT = 4                         # (UitvinderRol.ZOUT)
+# Everything from the Zout tier on lies in the Guhbarbecuether, and the way there is the grill portal, which only works for
+# who may go through (today: chapter 1 of the Knabbelring; that gate gets more conditions later, so the text names the
+# portal, not the conditions: the portal itself tells a player it refuses what must happen first).
+PORTAAL = ("&7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst "
+           "moet gebeuren.&r")
 
 
 def breng(fase):
@@ -98,6 +109,11 @@ def ftb(fq):
       "hij bij uit de kist naast het huisje of uit je Bank Guh. Wat klaarligt, haalt hij op. Alleen bij machines van jou in zijn klus-area. "
       "Njeg, wie heeft er dan nog trechters nodig?",
       "guhs:guhhuisje_klein", [adv("tech_klusjes_machines")], deps=["tech_quests_trechters"])
+    q("tech_quests_klus_oogst", "Pompoenenplukker",
+      "Een bewoner met het klusje &eFarmen&r oogst meer dan graan: ook &epompoenen&r en &emeloenen&r aan hun stengel, &esuikerriet&r, "
+      "&ecacao&r, &enetherwrat&r en de &escheutjes&r uit de Guhbarbecuether. Hij laat de plant staan, dus alles groeit vanzelf weer aan. "
+      "Laat hem er één oogsten. Njeg, pompoentaart!",
+      "minecraft:pumpkin", [adv("tech_klusjes_oogst")], deps=["tech_quests_klus_machines"])
     q("tech_quests_molen", "Malen zonder wind",
       f"De &dVadsmolen&r (een guh-molentje, ijzer, Guhdraad, steen en een knabbel) maalt op {g('MOLEN')} vadskracht: knabbelgraan tot "
       "knabbelmeel, botten tot beendermeel, grillspiesen tot poeder, keisteen tot grind en grind tot zand. En hij geeft meer dan malen "
@@ -122,7 +138,7 @@ def ftb(fq):
     # === the Oude Guhrad-centrale: the practice hall ========================================================================
     q("tech_quests_centrale_vind", "De Oude Guhrad-centrale",
       "In de &6Guhbarbecuether&r staat een oude krachtcentrale met een koperen dak en twee schoorstenen. Vijf oude guhs rennen er nog "
-      "altijd hun rondjes. Het superkompas (Barbecue > Oude Guhrad-centrale) wijst de weg.",
+      "altijd hun rondjes. Het superkompas (Barbecue > Oude Guhrad-centrale) wijst de weg. " + PORTAAL,
       "minecraft:waxed_weathered_cut_copper", [structure("oude_guhrad_centrale")], rewards=(("guhs:kaas_knabbels", 12),),
       deps=["intro_guhs_techniek"], shape="hexagon", xp=100)
     wereld.ftb_questlijn(fq, "tech_quests", "techniek", [
@@ -145,7 +161,8 @@ def ftb(fq):
         na=["tech_quests_centrale_vind"], eind=(("guhs:kaas_knabbels", 24),))
     q("tech_quests_maagje", "Een maag zonder bodem",
       "Klik met het &dBodemloos Knabbelmaagje&r op je neergezette Bank Guh: de grens van 256 per soort is weg, voor altijd (ook als je hem "
-      "oppakt). En pas dan mogen buizen er ook spullen &euit&r halen.",
+      "oppakt). En pas dan mogen buizen er ook spullen &euit&r halen. &cLet op:&r een trechter onder je bank, een gewoon Richtingstuk of een "
+      "ophaal-Haltepaaltje haalt hem dan helemaal leeg. Alleen een Filterstuk met &elaat liggen&r houdt iets voor je achter.",
       "guhs:bank_upgrade", [adv("bank_opgevoerd")], deps=["tech_quests_techniek_8"], shape="rsquare")
     q("tech_quests_kaarten", "Drie receptkaarten",
       "Een receptkaart leg je linksboven in het werkbankrooster bij het recept: hij &eblijft liggen&r, dus één kaart is genoeg voor altijd. "
@@ -155,8 +172,8 @@ def ftb(fq):
 
     # === Project 2: Alles vanzelf in de bank (Zout) =========================================================================
     q("tech_quests_zout", "Een zak zout",
-      "De slimme machines vragen &dzoutkristal&r. Haal een voorraadje: de kristalader van de Zoutkristalmijn groeit voor iedere speler "
-      "vanzelf weer aan.",
+      "De slimme machines vragen &dzoutkristal&r uit de &6Guhbarbecuether&r. Haal een voorraadje: de kristalader van de Zoutkristalmijn "
+      "groeit voor iedere speler vanzelf weer aan. " + PORTAAL,
       "guhs:zoutkristal", [item("guhs:zoutkristal", 8)], deps=["intro_guhs_techniek"], shape="hexagon")
     q("tech_quests_buis", "Knabbelbuizen",
       "Glas, kaasknabbels en zoutkristal geven 8 &dKnabbelbuizen&r. Ze zijn doorzichtig: je ziet je spullen erdoor rollen. Een buis "
@@ -185,6 +202,11 @@ def ftb(fq):
       "(uit je hand, een trechter, een buis, klusguhs, een Bezorgguhtje) belandt in je bank. Hoe ver weg ook, zelfs in een andere dimensie. "
       "Zet er een bij je mijn, je akker en je oven. Vol is vol: wat niet past, blijft waar het was.",
       "guhs:hapluikje", [adv("bank_gehapt")], rewards=(("guhs:kaas_knabbels", 16),), deps=["tech_quests_sleutel"], shape="gear", xp=100)
+    q("tech_quests_klus_luikje", "Hap, opgeruimd!",
+      "Staat er een werkend &dHapluikje&r in het klusgebied van je &dGuhhuisje&r? Dan stoppen je bewoners de buit van hun klusjes daarin "
+      "als er geen Bank Guh in de buurt staat (of als die vol zit): de oogst, het hout, wat ze opruimen. Zo ligt alles in je bank, hoe ver die ook weg "
+      "staat. Laat een bewoner iets door het luikje happen.",
+      "guhs:hapluikje", [adv("tech_klusjes_luikje")], deps=["tech_quests_hapluikje"])
     q("tech_quests_opzuiger", "De Opzuiger",
       f"De &dOpzuiger&r ({g('OPZUIGER')} vadskracht) slurpt alles op wat binnen vier blokken los op de grond ligt. Zet hem onder je "
       "boomgaard of naast je guhs, met een buis naar een Hapluikje.",
@@ -212,7 +234,8 @@ def ftb(fq):
     # === Project 3: Saus uit de kraan (Saus) ================================================================================
     q("tech_quests_saus_kaart", "Saus en slangen",
       "Voor dit project heb je de &dreceptkaart: saus en slangen&r nodig (van de Uitvinder-guh, na zijn oefenhal), en &dgrillspiesen&r of "
-      "&dblubroom&r uit de Guhbarbecuether. &dSausslangen&r maak je zonder kaart: gedroogde kelp, koper en een grillspies geven er 8.",
+      "&dblubroom&r uit de Guhbarbecuether. &dSausslangen&r maak je zonder kaart: gedroogde kelp, koper en een grillspies geven er 8. "
+      + PORTAAL,
       "guhs:techquest_recept_saus", [item("guhs:techquest_recept_saus")], deps=["intro_guhs_techniek"], shape="hexagon")
     q("tech_quests_pomp", "De Sauspomp",
       f"Zet de &dSauspomp&r ({g('POMP')} vadskracht) óp een bronblok kaassaus, kaasfrituursaus of water. Hij pompt een emmer per twee "
@@ -300,7 +323,8 @@ def ftb(fq):
 
     # === De Grote Knabbelmachine (Gloeister) ================================================================================
     q("tech_quests_gloeister", "Een gloeister",
-      "De laatste laag begint met een &dgloeister&r: die laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis.",
+      "De laatste laag begint met een &dgloeister&r: die laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis in "
+      "de &6Guhbarbecuether&r. " + PORTAAL,
       "guhs:gloeister", [item("guhs:gloeister")], deps=["intro_guhs_techniek"], shape="hexagon")
     q("tech_quests_kern", "De Gloeisterkern",
       f"Eén gloeister, grillkool en zoutkristal maken een &dGloeisterkern&r: &b{g('GLOEISTERKERN')} vadskracht&r, voor altijd, zonder guh. "
