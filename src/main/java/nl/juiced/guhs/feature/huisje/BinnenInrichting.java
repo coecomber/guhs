@@ -234,7 +234,7 @@ public final class BinnenInrichting {
             float yaw = b.kijk().toYRot();
             Vec3 bed = Vec3.atBottomCenterOf(o.offset(b.bed())).add(0, BED_HOOGTE, 0);
             Vec3 kastje = Vec3.atBottomCenterOf(o.offset(b.kastje())).add(0, 0.5, 0);
-            item(level, s.lievelings(), kastje, yaw, "ground", 1.1f);
+            item(level, s.lievelings(), kastje, yaw, "ground", 0.8f);
             if (s.waar() == Waar.SLAAPT) {
                 if (s.guh()) {
                     slaper(level, s, bed, yaw);
@@ -294,7 +294,7 @@ public final class BinnenInrichting {
             }
             double opzij = (n == 0 ? 0 : n == 1 ? -0.24 : 0.24);
             item(level, new ItemStack(ModItems.clothingItem(c)), midden.add(zij.getStepX() * opzij, n == 0 ? 0 : -0.08, zij.getStepZ() * opzij),
-                    kijk.toYRot(), "fixed", 0.42f);
+                    kijk.toYRot(), "fixed", 0.3f);
             n++;
         }
     }
@@ -307,8 +307,8 @@ public final class BinnenInrichting {
         blok.putString("Name", "minecraft:pink_carpet");
         tag.put("block_state", blok);
         CompoundTag tf = new CompoundTag();
-        tf.put("translation", op ? floats(-0.42f, 0f, -0.34f) : floats(-0.42f, 0f, 0.08f));
-        tf.put("scale", op ? floats(0.84f, 5.2f, 0.62f) : floats(0.84f, 1.6f, 0.4f));
+        tf.put("translation", op ? floats(-0.52f, 0f, -0.54f) : floats(-0.42f, 0f, 0.08f));
+        tf.put("scale", op ? floats(1.04f, 8.5f, 0.8f) : floats(0.84f, 1.6f, 0.4f));
         tf.put("left_rotation", floats(0f, 0f, 0f, 1f));
         tf.put("right_rotation", floats(0f, 0f, 0f, 1f));
         tag.put("transformation", tf);
