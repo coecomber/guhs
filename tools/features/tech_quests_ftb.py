@@ -261,7 +261,8 @@ def ftb(fq):
     q("tech_quests_blub", "Het Blubkacheltje",
       f"Een &dSausblubje&r in een potje op een &dBlubkacheltje&r geeft {g('BLUBKACHELTJE')} vadskracht zolang hij warm is: voer hem af en toe "
       f"een kaasknabbel (één knabbel is {tech_bronnen.getal('BLUB_SECONDEN') // 60} minuten; een buis mag hem ook voeren). Sluip en klik "
-      "met een lege hand om je blubje terug te krijgen.",
+      "met een lege hand om je blubje terug te krijgen. Geen blubje te vinden? De Verzorger-guh van de &6Sausloper-stal&r geeft er na "
+      "zijn questlijn elke dag één.",
       "guhs:blubkacheltje", [adv("tech_bronnen_blub")], deps=["tech_quests_saus_kaart"])
 
     # === Project 4: Een fabriek die doorwerkt (Saus) ========================================================================
