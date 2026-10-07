@@ -138,6 +138,18 @@
         "Komt na: Het superkompas (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548429C10754C",
+      image: "guhs:textures/ftbquests/guhs_verhalen/kop_extra_snuffel_dorp.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 31.131249999999994,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -3666,6 +3678,363 @@
       x: 7.5,
       y: 34.412499999999994,
       shape: "gear",
+    },
+    {
+      id: "4755481D5724F8E0",
+      icon: {
+        id: "minecraft:bone",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_eerste_geur",
+          id: "475548AEDE8B4ADC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FAFE77AA18",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 11.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548C4F8FCAB3B",
+      icon: {
+        id: "minecraft:moss_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_maatje",
+          id: "4755482F2EC48924",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554873999D54A6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755487B4B1EBC52",
+      icon: {
+        id: "minecraft:bread",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_bakker",
+          id: "475548C62DBF64E3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ECFBB275D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 14.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755485AE67999A0",
+      icon: {
+        id: "minecraft:fishing_rod",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_visser",
+          id: "47554826A8A468FF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A28E98DCC3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 16.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755484143B2AFD0",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_juf",
+          id: "475548E27A6D1C66",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484E147F260D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 17.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548D392880ED4",
+      icon: {
+        id: "minecraft:purple_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_oma",
+          id: "475548F649CC0C00",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554811A7811179",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 19.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548A933E77E3D",
+      icon: {
+        id: "minecraft:bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_tuinder",
+          id: "4755485A654CF5B1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E521736EC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755484C0C6D6655",
+      icon: {
+        id: "minecraft:slime_ball",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_pup",
+          id: "4755489CEEC5DFD8",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488CB8F0F85D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755487151437CA9",
+      icon: {
+        id: "minecraft:oak_sapling",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_boom",
+          id: "475548EECEE2A7A4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554881C547370A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755488A9783254C",
+      icon: {
+        id: "minecraft:cake",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_alle",
+          id: "47554888B9E32443",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554885D15B60C5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554805862BEBE4",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 17.5,
+      y: 34.412499999999994,
+      shape: "gear",
+    },
+    {
+      id: "47554829F0432F06",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_diploma",
+          id: "475548CC46434472",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C5947E747A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 34.412499999999994,
+    },
+    {
+      id: "475548887B999389",
+      icon: {
+        id: "minecraft:red_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_versperring",
+          id: "475548A0F64C75DB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548663F856216",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 14.5,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755488100662CF9",
+      icon: {
+        id: "guhs:guhstation",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_guhstation",
+          id: "4755488486945F1E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481768C3C25D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 34.412499999999994,
     },
   ],
 }

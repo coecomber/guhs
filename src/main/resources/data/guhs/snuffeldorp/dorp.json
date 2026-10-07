@@ -1,0 +1,111 @@
+{
+  "plekken": {
+    "strand": [
+      56,
+      20,
+      160
+    ],
+    "strandpoort": [
+      70,
+      20,
+      134
+    ],
+    "emmer": [
+      84,
+      21,
+      113
+    ],
+    "plein": [
+      84,
+      20,
+      109
+    ],
+    "weipoort": [
+      84,
+      20,
+      96
+    ],
+    "wei": [
+      73,
+      20,
+      80
+    ],
+    "boom": [
+      97,
+      22,
+      80
+    ],
+    "haven": [
+      131,
+      20,
+      114
+    ],
+    "versperring": [
+      84,
+      20,
+      51
+    ],
+    "dokter": [
+      70,
+      20,
+      107
+    ]
+  },
+  "grens_z": 47,
+  "gesprekken": {
+    "redder.welkom": 3,
+    "redder.dag": 1,
+    "redder.klaar": 1,
+    "dokter.verhaal": 4,
+    "dokter.dag": 1,
+    "dokter.klaar": 1,
+    "trainer.eerst_dokter": 1,
+    "trainer.les1": 3,
+    "trainer.les1_hint": 1,
+    "trainer.les2": 2,
+    "trainer.les2_hint": 1,
+    "trainer.les3": 2,
+    "trainer.les3_hint": 1,
+    "trainer.lessen_klaar": 2,
+    "trainer.kabaal": 1,
+    "trainer.daden": 1,
+    "trainer.examen": 3,
+    "trainer.examen_hint": 1,
+    "trainer.diploma": 3,
+    "trainer.boom": 1,
+    "trainer.klaar": 1,
+    "bakker.hallo": 1,
+    "bakker.vraag": 2,
+    "bakker.hint": 1,
+    "bakker.terug": 1,
+    "bakker.dank": 1,
+    "visser.hallo": 1,
+    "visser.vraag": 2,
+    "visser.hint": 1,
+    "visser.terug": 1,
+    "visser.dank": 1,
+    "juf.hallo": 1,
+    "juf.vraag": 2,
+    "juf.hint": 1,
+    "juf.terug": 1,
+    "juf.dank": 1,
+    "oma.hallo": 1,
+    "oma.vraag": 2,
+    "oma.hint": 1,
+    "oma.terug": 1,
+    "oma.dank": 1,
+    "tuinder.hallo": 1,
+    "tuinder.vraag": 2,
+    "tuinder.hint": 1,
+    "tuinder.terug": 1,
+    "tuinder.dank": 1,
+    "pup.hallo": 1,
+    "pup.vraag": 2,
+    "pup.hint": 1,
+    "pup.terug": 1,
+    "pup.dank": 1,
+    "kapitein.vraag": 1,
+    "kapitein.vraag_klaar": 1,
+    "kapitein.station": 1
+  }
+}

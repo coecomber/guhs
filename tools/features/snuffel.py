@@ -373,21 +373,50 @@ STAPPEN = [  # (stapnaam, nu, waar): the questline "snuffeleiland" in the Guhdex
     ("Kies je hond en vaar uit", "Kleine Wiebel is ziek en papa is al weken weg. Ga naar het ziekbed in het huisje. Kies daarna bij Kapitein "
      "Zoutsnoet je hond en je maatje, en vaar met hem het water op.",
      "Het steigerhuisje: het ziekbed in het huisje, de kapitein aan het eind van de steiger"),
-    ("Aangespoeld", "Je bent een hond! Jutje Kwispel heeft je op het strand gevonden. Loop met haar mee naar het dorp.",
-     "Het strand van het Snuffeleiland"),
-    ("Naar de dokter", "Vertel Dokter Pleisterpoot wat er thuis aan de hand is.", "Het dokterspraktijkje in Snuffeldorp"),
-    ("Snuffelles", "Meester Truffelneus leert je snuffelen. Houd de snuffeltoets ingedrukt en volg je neus. Op de plek zelf graaf je.",
+    ("Aangespoeld", "Je bent een hond! Jutje Kwispel vond je op het strand en is vooruit gerend. Volg het pad naar Snuffeldorp en praat met haar bij "
+     "het strandpoortje.", "Het strand van het Snuffeleiland"),
+    ("Naar de dokter", "Vertel Dokter Pleisterpoot wat er thuis aan de hand is. Zijn praktijk is het witte huis met het rode kruis, bij het plein.",
+     "De dokterspraktijk in Snuffeldorp"),
+    ("Snuffelles", "Meester Truffelneus leert je snuffelen. Ga door het poortje aan de noordkant van het plein naar de wei en praat met hem.",
      "De wei net buiten Snuffeldorp"),
-    ("Er rommelt iets", "In het dorp valt van alles om, maar niemand ziet wie het doet. Ga eens kijken bij het pleintje.",
+    ("Er rommelt iets", "Op het plein valt van alles om, maar niemand ziet wie het doet. Ga eens kijken bij de put.",
      "Het pleintje van Snuffeldorp"),
-    ("Goede daden", "De dorpelingen zijn van alles kwijt. Snuffel het voor ze terug: van elke goede daad groeit het boompje van je maatje.",
-     "Snuffeldorp"),
-    ("Het snuffelexamen", "Je neus is er klaar voor. Doe je examen bij Meester Truffelneus.", "De wei net buiten Snuffeldorp"),
-    ("Een spoor van papa", "Je hebt je diploma! Maar wat ruik je daar bij het boompje? Volg je neus.", "Het boompje bij Snuffeldorp"),
+    ("Goede daden", "De dorpelingen zijn van alles kwijt. Praat met de bakker, de visser, de juf, oma, de tuinder of Kleine Kwijlebal. Van elke goede "
+     "daad groeit het boompje van je maatje.", "Snuffeldorp"),
+    ("Het snuffelexamen", "Het boompje is een jong boompje: je neus is er klaar voor. Praat met Meester Truffelneus in de wei.",
+     "De wei net buiten Snuffeldorp"),
+    ("Een spoor van papa", "Je hebt je diploma: je bent een Snuffelpup! Je maatje wil je iets laten zien bij het boompje, op het heuveltje in de wei.",
+     "Het boompje bij Snuffeldorp"),
 ]
-KORT = {"0": "Zoek een steigerhuisje aan het water", "1": "Ga naar het ziekbed, kies je hond en vaar uit", "2": "Loop met Jutje Kwispel naar het dorp",
-        "3": "Praat met Dokter Pleisterpoot", "4": "Volg de snuffelles van Meester Truffelneus", "5": "Kijk wat er rommelt op het pleintje",
-        "6": "Doe goede daden voor de dorpelingen", "7": "Doe het snuffelexamen", "8": "Volg je neus bij het boompje"}
+KORT = {"0": "Zoek een steigerhuisje aan het water", "1": "Ga naar het ziekbed, kies je hond en vaar uit",   # snuffel-steiger (the steps 0-1)
+        # snuffel-dorp (the steps 2-8 and their variants)
+        "2": "Loop naar het dorp en praat met Jutje Kwispel", "3": "Praat met Dokter Pleisterpoot (het huis met het rode kruis)",
+        "4": "Praat met Meester Truffelneus in de wei", "4_bot": "Les 1: snuffel het kluifje op en graaf het uit",
+        "4_fluit": "Les 2: snuffel het fluitje op (blauw, verder weg)", "4_bij": "Les 3: snuffel bij de bijeneik (groen, niet graven)",
+        "4_terug": "Ga terug naar Meester Truffelneus", "5": "Ga kijken bij de put op het plein", "6": "Vraag de dorpelingen wat ze kwijt zijn",
+        "6_zoek": "Snuffel op wat de dorpelingen kwijt zijn", "6_breng": "Breng terug wat je hebt gevonden",
+        "7": "Praat met Meester Truffelneus over je examen", "7_bezig": "Examen: snuffel de vier geuren op",
+        "7_diploma": "Haal je diploma bij Meester Truffelneus", "8": "Ga naar het boompje van je maatje", "8_snuffel": "Snuffel en graaf bij het boompje",
+        "thuis": "Ga terug naar het Snuffeleiland (steigerhuisje)"}
+# The text variants of the steps (feature/snuffel/Snuffel.java SLEUTELS): sleutel -> (nu, waar)
+EXTRA = {
+    # snuffel-dorp
+    "thuis": ("Het verhaal gaat verder op het Snuffeleiland. Ga naar een steigerhuisje aan het water en vraag de kapitein om je over te varen.",
+              "Een steigerhuisje aan een Diepe Guhzee in de Guhmensie"),
+    "4_bot": ("Les 1: houd de snuffeltoets ingedrukt en loop naar waar de oranje meter het hardst uitslaat. Slaat hij helemaal uit? Graaf dan met "
+              "de aanvalsknop.", "De wei, vlak bij Meester Truffelneus"),
+    "4_fluit": ("Les 2: het fluitje van de meester ligt verder weg in de wei, bij de heg aan de westkant. Blauw is een ding. Graaf het op.",
+                "De wei, richting de heg"),
+    "4_bij": ("Les 3: niet alles ligt onder de grond. Ga vlak bij de bijeneik aan de westkant van de wei staan en blijf snuffelen.",
+              "De grote eik aan de westkant van de wei"),
+    "4_terug": ("Gevonden! Ga terug naar Meester Truffelneus.", "De wei net buiten Snuffeldorp"),
+    "6_zoek": ("Snuffel op wat de dorpelingen kwijt zijn (je maatje wijst mee) en graaf het uit. Weet je niet meer waar? Vraag het ze nog eens.",
+               "Snuffeldorp, de wei en het strand"),
+    "6_breng": ("Je hebt iets gevonden! Breng het terug naar wie het kwijt was.", "Snuffeldorp"),
+    "7_bezig": ("Het examen loopt: snuffel de vier verstopte geuren op, van elke kleur één. Zakken bestaat niet.", "De wei en Snuffeldorp"),
+    "7_diploma": ("Alle vier gevonden! Haal je diploma bij Meester Truffelneus.", "De wei net buiten Snuffeldorp"),
+    "8_snuffel": ("Tussen de stenen bij het boompje ruik je iets vreemds. Snuffel en graaf!", "Het boompje bij Snuffeldorp"),
+}
 VERBORGEN = ["snuffel_eerste_geur", "snuffel_guhstation", "snuffel_diploma"]
 
 FTB_STAPPEN = [  # (titel, tekst, icon) for the steps 1..9 (quest "snuffel_snuffeleiland_<i>", task quest/snuffeleiland_stap_<i>)
@@ -405,8 +434,9 @@ FTB_STAPPEN = [  # (titel, tekst, icon) for the steps 1..9 (quest "snuffel_snuff
      "slaat harder uit hoe dichter je bij bent, met een kleur per soort geur. Op de plek zelf graaf je het op.", "minecraft:bone"),
     ("Wie doet dat toch?", "Er valt een emmer om en niemand ziet waarom. Alleen jij ziet het: een ondeugend &abosgeestje&r! Het wordt "
      "je maatje, en het wijst je voortaan de weg naar geuren.", "minecraft:bucket"),
-    ("Goede daden", "De bakker, de visser, de juf, oma en de tuinder zijn iets kwijt. Snuffel het terug! Van elke goede daad leer je "
-     "een geur en groeit het &aboompje&r van je maatje een stukje.", "minecraft:oak_sapling"),
+    ("Goede daden", "De bakker, de visser, de juf, oma, de tuinder en Kleine Kwijlebal zijn iets kwijt. Vraag ernaar, snuffel het op en "
+     "breng het terug! Van elke goede daad leer je een geur en groeit het &aboompje&r van je maatje een stukje. Vier is genoeg.",
+     "minecraft:oak_sapling"),
     ("Het snuffelexamen", "Tijd voor je examen bij Meester Truffelneus. Zakken bestaat niet: je neus mag er zo lang over doen als hij "
      "wil. Dan ben je een echte &6Snuffelpup&r (rang 1 van 5).", "minecraft:writable_book"),
     ("Een spoor van papa", "Bij het boompje ruik je iets bekends... papa is hier geweest! Het lost nog niets op, maar je weet nu waar je "
@@ -428,7 +458,7 @@ def texts(h):
         STAPPEN,
         klaar=("Je bent een echte Snuffelpup en je hebt een spoor van papa. Met het Guhstation ga je terug naar het eiland wanneer je wilt. "
                "Wordt vervolgd, njeg!", "Het Snuffeleiland"),
-        kort=KORT)
+        extra=EXTRA, kort=KORT)
 
 
 def tags(h):

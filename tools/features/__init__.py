@@ -54,6 +54,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'oude_scenes',    # bbq2 verhalenpad: oude-scenes (append only, see above)
             'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
             'snuffel_steiger',   # verhalenpad: snuffel-steiger (the dock and the opening; after snuffel)
+            'snuffel_dorp',   # verhalenpad: snuffel-dorp (the island and the first series; after 'snuffel': it writes eiland.json again)
             ]
 
 

@@ -134,6 +134,7 @@ public final class Features {
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.register(modBus);   // bbq2 verhalenpad: oude-scenes
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.register(modBus);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.register(modBus);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.snuffeldorp.SnuffeldorpFeature.register(modBus);   // verhalenpad: snuffel-dorp
     }
 
     public static void payloads(PayloadRegistrar registrar) {
