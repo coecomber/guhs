@@ -586,9 +586,10 @@ public final class Hoofdstuk {
      * What Smikagol says about the way on when the chapter is done (the end of the lang key): the number of the way on with
      * the least rock behind it ({@link Plekken#UITGANGEN}; when it makes no difference the far mouth, then the tunnel next to
      * the last fire, then the one beyond the tower), or
-     * "dicht" when all three stand in solid rock as far as is looked ({@link #INGANG_KIJK}): then he sends the player back out
-     * the way they came in. (Merge of the ring chapters: the first real copy that was looked at with the whole chain in the
-     * world, seed 20261099, stood like that; inside the build nobody can dig.)
+     * "dicht" when all three stand in solid rock as far as is looked ({@link #INGANG_KIJK}): then he says so, and that the
+     * player can dig on through the back wall (outside the build anybody can dig) or sneak back past the guards. (Merge of
+     * the ring chapters: the first real copy that was looked at with the whole chain in the world, seed 20261099, stood
+     * like that.)
      */
     static String verder(ServerLevel level, Terrein t) {
         int[] rots = new int[Plekken.UITGANGEN.size()];
