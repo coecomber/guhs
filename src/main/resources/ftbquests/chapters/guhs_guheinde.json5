@@ -92,8 +92,8 @@
     },
     {
       height: 1.5625,
-      id: "4755481A2A05AFF2",
-      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_zij1.png",
+      id: "47554865233583EF",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_zij2.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -1086,74 +1086,99 @@
       shape: "rsquare",
     },
     {
-      id: "4755487D45B59819",
+      id: "4755488735CCDD7C",
       icon: {
-        id: "guhs:einde2_bouw_zij1_postgoot",
+        id: "minecraft:lantern",
       },
       tasks: [
         {
           type: "structure",
-          structure: "guhs:omashguh",
-          id: "4755489036AD4BB2",
+          structure: "guhs:leegtehaven",
+          id: "475548BA043E560A",
         },
       ],
       rewards: [
         {
-          id: "4755488517EC65BE",
+          id: "475548B1BA2EAE87",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 12,
+          count: 10,
         },
       ],
       x: 0.0,
       y: 27.875,
-      shape: "octagon",
+      shape: "circle",
     },
     {
-      id: "475548CDE98316BF",
+      id: "475548AB8D2D044A",
       icon: {
-        id: "guhs:kruimelwolk",
+        id: "minecraft:green_banner",
       },
       tasks: [
         {
           type: "structure",
-          structure: "guhs:westelijke_luchttempel",
-          id: "4755480469E6C6DE",
+          structure: "guhs:kyoshi_dorp",
+          id: "475548DC704CB0D8",
         },
       ],
       rewards: [
         {
-          id: "475548B0D17C9891",
+          id: "4755480512F05636",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 12,
+          count: 10,
         },
       ],
       x: 1.5,
       y: 27.875,
-      shape: "octagon",
     },
     {
-      id: "47554838803BAAC0",
+      id: "475548A01F3BD331",
       icon: {
-        id: "guhs:lichtstaafje",
+        id: "minecraft:bookshelf",
       },
       tasks: [
         {
           type: "structure",
-          structure: "guhs:vuurtempel_roku",
-          id: "47554865DCD35601",
+          structure: "guhs:bibliotheek_wan_shi_guh",
+          id: "4755480F330F1389",
         },
       ],
       rewards: [
         {
-          id: "475548858546543B",
+          id: "47554834548DC0CC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 3.0,
+      y: 27.875,
+    },
+    {
+      id: "475548A73C3D36BC",
+      icon: {
+        id: "minecraft:turtle_scute",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:leeuwschildpad_eiland",
+          id: "4755484FA491991A",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D38E69023",
           type: "item",
           item: {
             count: 1,
@@ -1162,9 +1187,36 @@
           count: 12,
         },
       ],
-      x: 3.0,
+      x: 4.5,
       y: 27.875,
-      shape: "octagon",
+      shape: "diamond",
+    },
+    {
+      id: "475548D9018EFF87",
+      icon: {
+        id: "guhs:ringenrace_ring",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:guhvleugel_ringenrace",
+          id: "4755485D485AA203",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482EEC8A948C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 6.0,
+      y: 27.875,
+      shape: "rsquare",
     },
   ],
 }

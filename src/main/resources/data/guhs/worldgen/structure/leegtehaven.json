@@ -14,22 +14,22 @@
     }
   },
   "templates": "guhs:leegtehaven",
-  "tiles_x": 1,
-  "tiles_z": 1,
+  "tiles_x": 5,
+  "tiles_z": 4,
   "tile_size": 32,
   "anchor": [
-    8,
+    72,
     0,
-    8
+    56
   ],
   "size": [
-    5,
-    4,
-    5
+    144,
+    60,
+    116
   ],
-  "y": 160,
+  "y": 176,
   "min_distance": 1100,
   "rand": 0,
-  "keep_clear": 9,
+  "keep_clear": 73,
   "voorrang": 301
 }
