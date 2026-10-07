@@ -1,0 +1,110 @@
+{
+  "parent": "guhs:guheinde/einde2_biomeguhs_eerste",
+  "display": {
+    "icon": {
+      "id": "guhs:kristalkaas"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_alle.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_alle.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "korstguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"korstguh\"}"
+            }
+          }
+        ]
+      }
+    },
+    "duinguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"duinguh\"}"
+            }
+          }
+        ]
+      }
+    },
+    "kruimelguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"kruimelguh\"}"
+            }
+          }
+        ]
+      }
+    },
+    "schimmelguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"schimmelguh\"}"
+            }
+          }
+        ]
+      }
+    },
+    "kristalguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"kristalguh\"}"
+            }
+          }
+        ]
+      }
+    },
+    "koorguh": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"koorguh\"}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

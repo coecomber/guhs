@@ -78,6 +78,18 @@
         "Komt na: OPPER-GEVADST!",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548A10DD6662E",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_biomeguhs.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -768,6 +780,261 @@
       ],
       x: 6.0,
       y: 18.450000000000003,
+    },
+    {
+      id: "475548D84B9AE10E",
+      icon: {
+        id: "guhs:kruimelrots",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_korstguh",
+          id: "47554850A4383DAE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FC4AF38A27",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548DF69B7FDC4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+    },
+    {
+      id: "475548CEE65ECAF0",
+      icon: {
+        id: "guhs:kruimelzand",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_duinguh",
+          id: "4755484944600532",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482899C1149D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483FFED6DB63",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548AEAF6A3954",
+      icon: {
+        id: "guhs:kruimelwolk",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_kruimelguh",
+          id: "475548A2A0E7F379",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B5A701683D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548553E0AF746",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+    },
+    {
+      id: "4755481074B8D283",
+      icon: {
+        id: "guhs:schimmelkaas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_schimmelguh",
+          id: "4755485AB60547D3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483C689F0BC5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C612BA23D9",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+    },
+    {
+      id: "47554826934AB4E3",
+      icon: {
+        id: "guhs:kristalkaas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_kristalguh",
+          id: "475548ABC0AF2F68",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554876B6D7AEC9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A6BA8BD0BF",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+    },
+    {
+      id: "475548762616D09E",
+      icon: {
+        id: "guhs:knabbelkoorvrucht",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_koorguh",
+          id: "475548A72303546C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554801F8E3F945",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F4432D0D20",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548D40EDC0FD6",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_korstguh",
+          id: "47554877BD64ED51",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_duinguh",
+          id: "475548E913AD9CE9",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_kruimelguh",
+          id: "475548BD06169370",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_schimmelguh",
+          id: "475548B060112760",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_kristalguh",
+          id: "4755488F668343CB",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_koorguh",
+          id: "47554884FF115C67",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554822970FDDF8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "475548A13B91D2D2",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 9.0,
+      y: 22.4125,
+      shape: "gear",
     },
   ],
 }
