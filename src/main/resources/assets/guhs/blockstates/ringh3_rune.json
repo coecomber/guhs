@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "teken=0": {
+      "model": "guhs:block/ringh3_rune_kaas"
+    },
+    "teken=1": {
+      "model": "guhs:block/ringh3_rune_worst"
+    },
+    "teken=2": {
+      "model": "guhs:block/ringh3_rune_saus"
+    },
+    "teken=3": {
+      "model": "guhs:block/ringh3_rune_knabbel"
+    },
+    "teken=4": {
+      "model": "guhs:block/ringh3_rune_bot"
+    },
+    "teken=5": {
+      "model": "guhs:block/ringh3_rune_vlam"
+    },
+    "teken=6": {
+      "model": "guhs:block/ringh3_rune_njeg"
+    },
+    "teken=7": {
+      "model": "guhs:block/ringh3_rune_trommel"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:knabbelmoria",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301808,
+    "min_afstand": 250,
+    "max_afstand": 700,
+    "alleen_nieuw": true,
+    "sector": 13,
+    "sectoren": 16
+  }
+}
