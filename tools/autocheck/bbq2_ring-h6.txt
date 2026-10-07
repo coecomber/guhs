@@ -1,0 +1,175 @@
+# bbq2, ring-h6 (AutoCheck, dev only): chapter 6 of the Knabbelring, De Frituurberg. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h6.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh6 ..., feature/ringh6/RingH6Commands.java, and
+# /guhs ring ..., /guhs verhaal ...)
+# The mountain is a try-out copy (/guhs ringh6 bouw: the very tiles worldgen places, not turned) in the Guhbarbecuether with
+# its base camp at 5000 33 5000, so template (x, y, z) = world (x + 4953, y + 23, z + 4913); the axis of the mountain is at
+# world 5000.5 / 4960.5.
+# Shots: the mountain from the plain (south, west, east), the base camp and the gate of the Kronkelpad, the three terraces
+# with their cages and Rookguhjes, a hook with its blue lantern, the cleft, the balcony with the frying basket and the
+# gantry, a falling coal, Smikagol grabbing, the narrator card, nine frames of the finale, three of the flight, six of the
+# feast, and the questline in the Guhdex.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:barbecuether run tp @s 5000 33 5000
+wait 60
+/forceload add 4944 4904 5056 5016
+wait 100
+/guhs ring wis
+/guhs ringh6 bouw
+wait 200
+/kill @e[type=item,distance=..120]
+clearchat
+
+section the mountain from the plain
+/gamemode spectator
+camera 5001.5 37.0 5007.5 180 -32
+waitrender 400
+shot bbq2_ringh6_berg_zuid
+camera 4956.5 40.0 4961.5 -90 -30
+waitrender 200
+shot bbq2_ringh6_berg_west
+camera 5044.5 40.0 4961.5 90 -30
+waitrender 200
+shot bbq2_ringh6_berg_oost
+camera 5006.5 36.5 5008.5 150 8
+waitrender 200
+shot bbq2_ringh6_kamp
+camera 5003.5 35.5 5000.5 185 -5
+waitrender 200
+shot bbq2_ringh6_poort
+
+section the terraces, the cages, a hook
+camera 4973.5 55.5 4969.5 60 20
+waitrender 200
+shot bbq2_ringh6_richel_1
+camera 4971.5 54.5 4965.5 -70 -55
+waitrender 200
+shot bbq2_ringh6_haak_omhoog
+camera 4979.5 75.5 4967.5 30 25
+waitrender 200
+shot bbq2_ringh6_richel_2
+camera 5020.5 89.5 4958.5 110 22
+waitrender 200
+shot bbq2_ringh6_richel_3
+camera 4986.5 94.0 4958.5 -70 15
+waitrender 200
+shot bbq2_ringh6_spleet
+
+section the crater: the balcony, the frying basket, the gantry
+camera 4993.5 91.0 4964.5 -65 20
+waitrender 200
+shot bbq2_ringh6_bakrandje
+camera 5001.0 99.0 4950.5 0 55
+waitrender 200
+shot bbq2_ringh6_mand_van_boven
+camera 4994.5 90.5 4961.5 -90 -45
+waitrender 200
+shot bbq2_ringh6_gantry
+
+section the climb: the card, a coal, Smikagol
+/gamemode creative
+/guhs ringh6 ga kamp
+wait 20
+gui keep
+/guhs ringh6 stap 1
+wait 140
+shot bbq2_ringh6_vertelkaart gui
+press Verder
+gui close
+wait 60
+/guhs ring geef
+/guhs ring sam
+/guhs ring smikagol
+/tp @s 5005.5 36 4990.5 200 -20
+wait 40
+/guhs ringh6 kool
+wait 14
+shot bbq2_ringh6_kool gui
+wait 40
+/guhs ringh6 stap 2
+/guhs ringh6 ga richel_1
+wait 40
+/guhs ringh6 graai
+wait 10
+shot bbq2_ringh6_smikagol_graait gui
+/guhs ringh6 stand
+wait 20
+
+section the finale on the balcony (1470 ticks, not skippable)
+/guhs ringh6 stap 5
+/guhs ringh6 ga rand
+wait 40
+/guhs verhaal scene ringh6_frituur
+wait 60
+shot bbq2_ringh6_finale_1_krater gui
+wait 140
+shot bbq2_ringh6_finale_2_twijfel gui
+wait 150
+shot bbq2_ringh6_finale_3_smikagol gui
+wait 110
+shot bbq2_ringh6_finale_4_dans gui
+wait 72
+shot bbq2_ringh6_finale_5_plons gui
+wait 190
+shot bbq2_ringh6_finale_6_krokant gui
+wait 110
+shot bbq2_ringh6_finale_7_lekker gui
+wait 240
+shot bbq2_ringh6_finale_8_delen gui
+wait 130
+shot bbq2_ringh6_finale_9_oog gui
+wait 340
+
+section the flight (370 ticks)
+/guhs verhaal scene ringh6_vlucht
+wait 60
+shot bbq2_ringh6_vlucht_1_borrelt gui
+wait 150
+shot bbq2_ringh6_vlucht_2_rookguhs gui
+wait 110
+shot bbq2_ringh6_vlucht_3_omhoog gui
+wait 150
+
+section the feast (960 ticks; on a platform in the overworld)
+/execute in minecraft:overworld run tp @s 6000 141 6000
+/forceload add 5970 5970 6030 6030
+wait 80
+/fill 5980 139 5980 6020 139 6020 minecraft:grass_block
+/fill 5980 140 5980 6020 150 6020 minecraft:air
+/time set noon
+/tp @s 6000.5 140 6000.5
+wait 40
+/guhs verhaal scene ringh6_feest
+wait 60
+shot bbq2_ringh6_feest_1_gouw gui
+wait 90
+shot bbq2_ringh6_feest_2_guhdalf gui
+wait 290
+shot bbq2_ringh6_feest_3_kroon gui
+wait 60
+shot bbq2_ringh6_feest_4_koning gui
+wait 200
+shot bbq2_ringh6_feest_5_boromika gui
+wait 220
+shot bbq2_ringh6_feest_6_einde gui
+wait 140
+
+section the questline in the Guhdex
+/guhs ringh6 stap 3
+gui verhalen ring_h6
+wait 20
+shot bbq2_ringh6_gids gui
+gui verhalenscroll 1
+wait 10
+shot bbq2_ringh6_gids_2 gui
+gui close
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_ringh6_reiskaart gui
+gui close
+/guhs ringh6 stand

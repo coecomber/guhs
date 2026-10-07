@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:ringh6_stukje_knabbelring"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_h6_gefrituurd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_h6_gefrituurd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_h6_rookguhs"
+}
