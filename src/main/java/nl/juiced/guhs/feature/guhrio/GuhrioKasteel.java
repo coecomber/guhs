@@ -189,6 +189,17 @@ public final class GuhrioKasteel {
         return true;
     }
 
+    /**
+     * Puts {@code aantal} level coins into the pocket (Pad-guh's tip at a flagpole; nothing below zero). They do not count
+     * as "ever found": that number is the coins of the levels themselves ({@link #pak}).
+     */
+    public static void geef(ServerPlayer player, int aantal) {
+        if (aantal > 0) {
+            CompoundTag spaar = GuhrioSpel.spaar(player);
+            spaar.putInt("Munten", spaar.getIntOr("Munten", 0) + aantal);
+        }
+    }
+
     /** Has this player found Guhshi's egg (world 2)? */
     public static boolean heeftEi(Player player) {
         return GuhrioSpel.spaar(player).getBooleanOr("Ei", false);
