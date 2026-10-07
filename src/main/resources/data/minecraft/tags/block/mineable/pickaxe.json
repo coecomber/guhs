@@ -175,6 +175,12 @@
     "guhs:guhriow2_warpbuis",
     "guhs:guhriow2_warppijp",
     "guhs:guhriow2_eislot",
-    "guhs:guhriow2_nest"
+    "guhs:guhriow2_nest",
+    "guhs:guhriow3_brug",
+    "guhs:guhriow3_hendel",
+    "guhs:guhriobeloning_vraagblok",
+    "guhs:guhriobeloning_vlaggenmast",
+    "guhs:guhriobeloning_pijp",
+    "guhs:guhriobeloning_scorebord"
   ]
 }
