@@ -1,18 +1,36 @@
 package nl.juiced.guhs.feature.snuffel;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.logging.LogUtils;
 
+import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.players.NameAndId;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 /**
@@ -30,9 +48,28 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
  * klaar                          finish the first series (Guhstation, blossom twig)
  * wis                            forget everything of the island (never while a dog)
  * </pre>
+ * In dev runs only (for a headless server): {@code proefspeler <naam>} logs a stand-in player in (or moves it to the
+ * command's spot), {@code proefweg <naam>} logs it out (saved), {@code zakken} lists the executing player's inventory, size
+ * and position, {@code eiland} says what stands on the island, {@code neus} what the executing dog smells and why,
+ * {@code proefrespawn <naam>} presses "Respawn" for a dead stand-in.
  */
 final class SnuffelCommando {
+    /** (Dev) the stand-in players: nobody ticks a player whose connection is not the server's own, so we do. */
+    private static final Set<String> PROEF = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private static boolean proefTick;
+
     private SnuffelCommando() {
+    }
+
+    private static void tikProefspelers(net.neoforged.neoforge.event.tick.ServerTickEvent.Post event) {
+        for (String naam : PROEF) {
+            ServerPlayer p = event.getServer().getPlayerList().getPlayerByName(naam);
+            if (p == null) {
+                PROEF.remove(naam);
+            } else {
+                p.doTick();
+            }
+        }
     }
 
     private static int zeg(CommandContext<CommandSourceStack> c, String tekst) {
@@ -149,6 +186,100 @@ final class SnuffelCommando {
                     Stand.stuur(p);
                     return zeg(c, "Alles van het Snuffeleiland vergeten");
                 }));
+        if (!FMLEnvironment.isProduction()) {
+            // dev runs only: a stand-in player for a headless server (a real ServerPlayer on a connection that leads nowhere,
+            // ticked like any player), so the dog form can be walked through in the REAL dimension from the console
+            if (!proefTick) {
+                proefTick = true;
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(SnuffelCommando::tikProefspelers);
+            }
+            wortel.then(Commands.literal("proefspeler").then(Commands.argument("naam", StringArgumentType.word()).executes(c -> {
+                CommandSourceStack s = c.getSource();
+                String naam = StringArgumentType.getString(c, "naam");
+                ServerPlayer p = s.getServer().getPlayerList().getPlayerByName(naam);
+                PROEF.add(naam);
+                if (p == null) {
+                    // a login as the game does it (server/network/config/PrepareSpawnTask): the saved data decides the level and
+                    // the spot, the player is loaded from its file, then placed
+                    MinecraftServer server = s.getServer();
+                    UUID uuid = UUID.nameUUIDFromBytes(naam.getBytes());
+                    CommonListenerCookie cookie = CommonListenerCookie.createInitial(new GameProfile(uuid, naam), false);
+                    try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(LogUtils.getLogger())) {
+                        Optional<ValueInput> data = server.getPlayerList().loadPlayerData(new NameAndId(uuid, naam))
+                                .map(tag -> TagValueInput.create(reporter, server.registryAccess(), tag));
+                        ServerPlayer.SavedPosition bewaard = data.<ServerPlayer.SavedPosition>flatMap(tag -> tag.read(ServerPlayer.SavedPosition.MAP_CODEC))
+                                .orElse(ServerPlayer.SavedPosition.EMPTY);
+                        ServerLevel level = bewaard.dimension().map(server::getLevel).orElse(s.getLevel());
+                        Vec3 plek = bewaard.position().orElse(s.getPosition());
+                        Vec2 hoek = bewaard.rotation().orElse(Vec2.ZERO);
+                        ServerPlayer nieuw = new ServerPlayer(server, level, cookie.gameProfile(), cookie.clientInformation());
+                        data.ifPresent(nieuw::load);
+                        net.neoforged.neoforge.event.EventHooks.firePlayerLoadingEvent(nieuw, server.getPlayerList(), nieuw.getStringUUID());
+                        nieuw.snapTo(plek, hoek.x, hoek.y);
+                        Connection connection = new Connection(PacketFlow.SERVERBOUND);
+                        new EmbeddedChannel(connection);
+                        server.getPlayerList().placeNewPlayer(connection, nieuw, cookie);
+                        return zeg(c, "proefspeler " + naam + " logged in (" + (data.isPresent() ? "from its file" : "new") + ") at " + nieuw.position() + " in "
+                                + nieuw.level().dimension().identifier());
+                    }
+                }
+                Vec3 plek = s.getPosition();
+                p.teleportTo(s.getLevel(), plek.x, plek.y, plek.z, Set.of(), s.getRotation().y, s.getRotation().x, false);
+                return zeg(c, "proefspeler " + naam + " stands at " + p.position() + " in " + p.level().dimension().identifier());
+            })));
+            wortel.then(Commands.literal("proefweg").then(Commands.argument("naam", StringArgumentType.word()).executes(c -> {
+                ServerPlayer p = c.getSource().getServer().getPlayerList().getPlayerByName(StringArgumentType.getString(c, "naam"));
+                if (p == null) {
+                    return 0;
+                }
+                c.getSource().getServer().getPlayerList().remove(p);
+                return zeg(c, "proefspeler logged out (saved)");
+            })));
+            wortel.then(Commands.literal("zakken").executes(c -> {
+                ServerPlayer p = c.getSource().getPlayerOrException();
+                StringBuilder uit = new StringBuilder("zakken van " + p.getGameProfile().name() + " (gekozen " + p.getInventory().getSelectedSlot() + ", hoog "
+                        + p.getBbHeight() + ", ogen " + p.getEyeHeight() + ", " + p.position() + " " + p.getYRot() + "/" + p.getXRot() + " in "
+                        + p.level().dimension().identifier() + "):");
+                for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
+                    ItemStack stack = p.getInventory().getItem(i);
+                    if (!stack.isEmpty()) {
+                        uit.append(' ').append(i).append('=').append(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath())
+                                .append('x').append(stack.getCount());
+                    }
+                }
+                return zeg(c, uit.toString());
+            }));
+            wortel.then(Commands.literal("proefrespawn").then(Commands.argument("naam", StringArgumentType.word()).executes(c -> {
+                // (what a client's "Respawn" button asks for)
+                ServerPlayer p = c.getSource().getServer().getPlayerList().getPlayerByName(StringArgumentType.getString(c, "naam"));
+                if (p == null || !p.isDeadOrDying()) {
+                    return fout(c, "geen dode proefspeler");
+                }
+                ServerPlayer nieuw = c.getSource().getServer().getPlayerList().respawn(p, false, net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+                p.connection.player = nieuw;
+                return zeg(c, "proefspeler respawned at " + nieuw.position() + " in " + nieuw.level().dimension().identifier());
+            })));
+            wortel.then(Commands.literal("neus").executes(c -> {
+                ServerPlayer p = c.getSource().getPlayerOrException();
+                StringBuilder uit = new StringBuilder("neus: " + Geurbronnen.ruik(p) + " graafbaar: " + Geurbronnen.graafbaarBij(p) + " graaft: " + Snuffelen.graaft(p)
+                        + " grond: " + p.onGround() + " water: " + p.isInWater() + " scene: " + nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(p) + " bronnen:");
+                for (Geurbronnen.Bron b : Geurbronnen.bronnen(p)) {
+                    uit.append(' ').append(b.id()).append('@').append(b.plek()).append(Geurbronnen.ruikbaar(p, b) ? "" : "(niet ruikbaar)");
+                }
+                return zeg(c, uit.toString());
+            }));
+            wortel.then(Commands.literal("eiland").executes(c -> {
+                Eiland.Plaats pl = Eiland.plaats(c.getSource().getServer());
+                if (pl == null) {
+                    return fout(c, "geen eiland");
+                }
+                int bewoners = pl.level().getEntitiesOfClass(BewonerEntity.class, pl.doos().inflate(16)).size();
+                int bomen = pl.level().getEntitiesOfClass(BoompjeEntity.class, pl.doos().inflate(16)).size();
+                int maatjes = pl.level().getEntitiesOfClass(MaatjeEntity.class, pl.doos().inflate(16)).size();
+                return zeg(c, "eiland: gebouwd versie " + Eiland.gebouwd(pl) + " (jar " + pl.opzet().versie() + "), hoek " + pl.oorsprong().toShortString() + ", spelers "
+                        + Eiland.spelers(pl).size() + ", bewoners " + bewoners + ", bomen " + bomen + ", maatjes " + maatjes);
+            }));
+        }
         event.getDispatcher().register(Commands.literal("guhs").then(wortel));
     }
 
