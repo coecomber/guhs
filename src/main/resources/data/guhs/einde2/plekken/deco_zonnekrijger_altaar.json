@@ -1,0 +1,46 @@
+{
+  "structuur": "deco_zonnekrijger_altaar",
+  "soort": "jigsaw",
+  "plekken": {
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        9,
+        11,
+        10
+      ],
+      "wie": "Eeuwige vlam. / Brandt al sinds / de 1e draakguh. / Niet blazen!",
+      "stuk": "einde2_deco/deco_zonnekrijger_altaar"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        9,
+        7,
+        3
+      ],
+      "wie": "Zonnesteen. / Niet pakken. / (De vorige plakt / er nog aan.)",
+      "stuk": "einde2_deco/deco_zonnekrijger_altaar"
+    },
+    "bovenop": {
+      "soort": "prop",
+      "pos": [
+        9,
+        11,
+        11
+      ],
+      "wie": "boven op het altaar",
+      "stuk": "einde2_deco/deco_zonnekrijger_altaar"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        9,
+        5,
+        9
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_zonnekrijger_altaar"
+    }
+  }
+}

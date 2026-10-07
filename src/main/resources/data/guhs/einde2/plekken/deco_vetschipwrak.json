@@ -1,0 +1,46 @@
+{
+  "structuur": "deco_vetschipwrak",
+  "soort": "jigsaw",
+  "plekken": {
+    "kist": {
+      "soort": "prop",
+      "pos": [
+        18,
+        6,
+        7
+      ],
+      "wie": "einde2_deco_mika",
+      "stuk": "einde2_deco/deco_vetschipwrak"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        12,
+        5,
+        12
+      ],
+      "wie": "Vetschip Njegus / Kapitein keek / naar een knabbel / i.p.v. vooruit.",
+      "stuk": "einde2_deco/deco_vetschipwrak"
+    },
+    "ruim": {
+      "soort": "prop",
+      "pos": [
+        17,
+        6,
+        7
+      ],
+      "wie": "in het ruim van het achterschip",
+      "stuk": "einde2_deco/deco_vetschipwrak"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        12,
+        5,
+        7
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_vetschipwrak"
+    }
+  }
+}

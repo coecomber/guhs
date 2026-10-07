@@ -1,0 +1,78 @@
+{
+  "structuur": "deco_sintelstrand_huisje",
+  "soort": "jigsaw",
+  "plekken": {
+    "kist": {
+      "soort": "prop",
+      "pos": [
+        12,
+        6,
+        5
+      ],
+      "wie": "einde2_deco",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        10,
+        7,
+        11
+      ],
+      "wie": "Zomerhuisje / Sintelstrand. / Vuurheer is er / nooit. Vads maar",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "kamer": {
+      "soort": "prop",
+      "pos": [
+        9,
+        6,
+        7
+      ],
+      "wie": "in het huisje",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "eend_1": {
+      "soort": "wezen",
+      "pos": [
+        12,
+        5,
+        15
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:schildpad_eendguh",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "eend_2": {
+      "soort": "wezen",
+      "pos": [
+        13,
+        5,
+        16
+      ],
+      "yaw": -90.0,
+      "entity": "guhs:schildpad_eendguh",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        8,
+        5,
+        17
+      ],
+      "wie": "Toneel vanavond: / De jongen in de / kaasbol. Slecht, / maar grappig.",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        9,
+        5,
+        10
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_sintelstrand_huisje"
+    }
+  }
+}

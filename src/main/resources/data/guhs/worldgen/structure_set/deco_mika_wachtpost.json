@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:deco_mika_wachtpost",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 28,
+    "salt": 21758005
+  }
+}

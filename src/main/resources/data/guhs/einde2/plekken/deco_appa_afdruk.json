@@ -1,0 +1,46 @@
+{
+  "structuur": "deco_appa_afdruk",
+  "soort": "jigsaw",
+  "plekken": {
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        10,
+        6,
+        12
+      ],
+      "wie": "Verloren: bizon / Lief, pluizig, / luistert naar / jip jip.",
+      "stuk": "einde2_deco/deco_appa_afdruk"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        7,
+        5,
+        12
+      ],
+      "wie": "Hier stond iets / heel groots met / zes poten. Het / zei: grrmmf.",
+      "stuk": "einde2_deco/deco_appa_afdruk"
+    },
+    "afdruk": {
+      "soort": "prop",
+      "pos": [
+        5,
+        4,
+        8
+      ],
+      "wie": "midden in de linker afdruk",
+      "stuk": "einde2_deco/deco_appa_afdruk"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        10,
+        5,
+        7
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_appa_afdruk"
+    }
+  }
+}

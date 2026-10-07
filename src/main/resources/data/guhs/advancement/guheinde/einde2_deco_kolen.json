@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/guheinde_poort",
+  "display": {
+    "icon": {
+      "id": "guhs:einde2_deco_kool"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_deco_kolen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_deco_kolen.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

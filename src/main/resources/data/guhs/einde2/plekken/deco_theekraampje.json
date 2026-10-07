@@ -1,0 +1,56 @@
+{
+  "structuur": "deco_theekraampje",
+  "soort": "jigsaw",
+  "plekken": {
+    "kist": {
+      "soort": "prop",
+      "pos": [
+        5,
+        5,
+        3
+      ],
+      "wie": "einde2_deco_thee",
+      "stuk": "einde2_deco/deco_theekraampje"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        9,
+        5,
+        7
+      ],
+      "wie": "Oom Miroh's thee / Ben even weg: / neef zoeken. / Schenk zelf in.",
+      "stuk": "einde2_deco/deco_theekraampje"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        11,
+        5,
+        9
+      ],
+      "wie": "Thee delen met / een vreemde is / het fijnste dat / er is, njeg.",
+      "stuk": "einde2_deco/deco_theekraampje"
+    },
+    "toonbank": {
+      "soort": "prop",
+      "pos": [
+        7,
+        5,
+        5
+      ],
+      "wie": "achter de toonbank",
+      "stuk": "einde2_deco/deco_theekraampje"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        7,
+        5,
+        6
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_theekraampje"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "structuur": "deco_geheime_tunnel",
+  "soort": "jigsaw",
+  "plekken": {
+    "bordje_binnen": {
+      "soort": "prop",
+      "pos": [
+        8,
+        6,
+        11
+      ],
+      "wie": "Liefde is het / helderst in het / donker. (Kusje / = licht aan.)",
+      "stuk": "einde2_deco/deco_geheime_tunnel"
+    },
+    "kamer": {
+      "soort": "prop",
+      "pos": [
+        6,
+        5,
+        11
+      ],
+      "wie": "de kamer in het midden",
+      "stuk": "einde2_deco/deco_geheime_tunnel"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        9,
+        5,
+        20
+      ],
+      "wie": "Geheime tunnel! / Geheime tunnel! / Door de bergen! / Geheime tunnel!",
+      "stuk": "einde2_deco/deco_geheime_tunnel"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        6,
+        5,
+        11
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_geheime_tunnel"
+    }
+  }
+}

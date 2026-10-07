@@ -1,0 +1,191 @@
+# einde2, slice deco: the twenty decoration buildings of the outer islands in a row (the dev command /guhs einde2 deco toon puts
+# every template down, eight blocks apart, its ground layer at the caller's feet), each from the south-west and from above; the
+# ones with a room also from inside. (The Guheinde has no skylight, so no time of day.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_deco.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+/guhs einde2 deco toon
+wait 100
+
+section Verlaten luchtbizon-stal
+/tp @s 1394 215 26 facing 1410 206 9
+waitrender 200
+shot e2_deco_luchtbizonstal
+/tp @s 1426 218 -6 facing 1410 206 9
+wait 40
+shot e2_deco_luchtbizonstal_achter
+/tp @s 1410.5 200 10.5 facing 1410.5 201 6
+wait 40
+shot e2_deco_luchtbizonstal_binnen
+
+section Meditatiepaal
+/tp @s 1423 219 18 facing 1434 208 5
+waitrender 200
+shot e2_deco_meditatiepaal
+/tp @s 1445 222 -6 facing 1434 208 5
+wait 40
+shot e2_deco_meditatiepaal_achter
+
+section Luchtbalveld-ruïne
+/tp @s 1442 212 22 facing 1459 204 7
+waitrender 200
+shot e2_deco_luchtbalveld_ruine
+/tp @s 1476 215 -6 facing 1459 204 7
+wait 40
+shot e2_deco_luchtbalveld_ruine_achter
+
+section Geestenoase-vijver
+/tp @s 1473 211 24 facing 1487 204 8
+waitrender 200
+shot e2_deco_geestenoase_vijver
+/tp @s 1501 214 -6 facing 1487 204 8
+wait 40
+shot e2_deco_geestenoase_vijver_achter
+
+section IJsvissershutje
+/tp @s 1498 212 22 facing 1511 204 7
+waitrender 200
+shot e2_deco_ijsvissershutje
+/tp @s 1524 215 -6 facing 1511 204 7
+wait 40
+shot e2_deco_ijsvissershutje_achter
+/tp @s 1511.5 200 7.5 facing 1511.5 201 3
+wait 40
+shot e2_deco_ijsvissershutje_binnen
+
+section Waterstam-kano op het droge
+/tp @s 1521 210 18 facing 1535 203 5
+waitrender 200
+shot e2_deco_waterstam_kano
+/tp @s 1549 213 -6 facing 1535 203 5
+wait 40
+shot e2_deco_waterstam_kano_achter
+
+section Das-molguh-grot
+/tp @s 1546 212 26 facing 1561 204 9
+waitrender 200
+shot e2_deco_das_molguh_grot
+/tp @s 1576 215 -6 facing 1561 204 9
+wait 40
+shot e2_deco_das_molguh_grot_achter
+/tp @s 1561.5 200 11.5 facing 1561.5 201 7
+wait 40
+shot e2_deco_das_molguh_grot_binnen
+
+section Verlaten Aardrommel-ring
+/tp @s 1573 211 28 facing 1589 204 10
+waitrender 200
+shot e2_deco_aardrommel_ring
+/tp @s 1605 214 -6 facing 1589 204 10
+wait 40
+shot e2_deco_aardrommel_ring_achter
+
+section Koolkraam-wrak
+/tp @s 1602 210 22 facing 1616 203 7
+waitrender 200
+shot e2_deco_koolkraam_wrak
+/tp @s 1630 213 -6 facing 1616 203 7
+wait 40
+shot e2_deco_koolkraam_wrak_achter
+
+section Sintelstrand-zomerhuisje
+/tp @s 1627 214 28 facing 1642 205 10
+waitrender 200
+shot e2_deco_sintelstrand_huisje
+/tp @s 1657 217 -6 facing 1642 205 10
+wait 40
+shot e2_deco_sintelstrand_huisje_achter
+/tp @s 1642.5 201 8.5 facing 1642.5 202 4
+wait 40
+shot e2_deco_sintelstrand_huisje_binnen
+
+section Zonnekrijger-altaar
+/tp @s 1654 216 26 facing 1669 206 9
+waitrender 200
+shot e2_deco_zonnekrijger_altaar
+/tp @s 1684 219 -6 facing 1669 206 9
+wait 40
+shot e2_deco_zonnekrijger_altaar_achter
+
+section Verlaten theekraampje
+/tp @s 1681 210 20 facing 1694 203 6
+waitrender 200
+shot e2_deco_theekraampje
+/tp @s 1707 213 -6 facing 1694 203 6
+wait 40
+shot e2_deco_theekraampje_achter
+
+section Mika-wachtpost
+/tp @s 1704 217 24 facing 1717 207 8
+waitrender 200
+shot e2_deco_mika_wachtpost
+/tp @s 1730 220 -6 facing 1717 207 8
+wait 40
+shot e2_deco_mika_wachtpost_achter
+/tp @s 1717.5 200 7.5 facing 1717.5 201 3
+wait 40
+shot e2_deco_mika_wachtpost_binnen
+
+section Vetschipwrak
+/tp @s 1727 212 22 facing 1745 204 7
+waitrender 200
+shot e2_deco_vetschipwrak
+/tp @s 1762 215 -6 facing 1745 204 7
+wait 40
+shot e2_deco_vetschipwrak_achter
+
+section Karavaanresten bij een oase
+/tp @s 1759 212 26 facing 1775 204 9
+waitrender 200
+shot e2_deco_karavaanresten
+/tp @s 1791 215 -6 facing 1775 204 9
+wait 40
+shot e2_deco_karavaanresten_achter
+
+section Bevroren kaasbol
+/tp @s 1788 214 22 facing 1801 205 7
+waitrender 200
+shot e2_deco_bevroren_kaasbol
+/tp @s 1814 217 -6 facing 1801 205 7
+wait 40
+shot e2_deco_bevroren_kaasbol_achter
+/tp @s 1801.5 201 8.5 facing 1801.5 202 4
+wait 40
+shot e2_deco_bevroren_kaasbol_binnen
+
+section Geheime tunnel
+/tp @s 1811 212 30 facing 1823 204 11
+waitrender 200
+shot e2_deco_geheime_tunnel
+/tp @s 1835 215 -6 facing 1823 204 11
+wait 40
+shot e2_deco_geheime_tunnel_achter
+/tp @s 1823.5 200 13.5 facing 1823.5 201 9
+wait 40
+shot e2_deco_geheime_tunnel_binnen
+
+section Boemerangboom
+/tp @s 1832 216 20 facing 1844 206 6
+waitrender 200
+shot e2_deco_boemerangboom
+/tp @s 1856 219 -6 facing 1844 206 6
+wait 40
+shot e2_deco_boemerangboom_achter
+
+section Pai Sho-tafeltje
+/tp @s 1853 211 20 facing 1865 204 6
+waitrender 200
+shot e2_deco_pai_sho_tafeltje
+/tp @s 1877 214 -6 facing 1865 204 6
+wait 40
+shot e2_deco_pai_sho_tafeltje_achter
+
+section Appa-afdruk
+/tp @s 1874 209 22 facing 1890 203 7
+waitrender 200
+shot e2_deco_appa_afdruk
+/tp @s 1906 212 -6 facing 1890 203 7
+wait 40
+shot e2_deco_appa_afdruk_achter
