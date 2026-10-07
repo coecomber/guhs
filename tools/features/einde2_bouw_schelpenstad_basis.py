@@ -20,8 +20,12 @@ from features import einde2_kit as kit
 from features import guheinde_bouw as gb
 
 NAAM = "schelpenstad"
-W, H, D = 256, 48, 96
+W, H, D = 256, 48, 96            # (H: how high the build itself reaches)
 Y = kit.LAAG_MIN                 # the world y of template y 0
+# the BOX of the build is the whole deep band, like Bikinibodem's: its tiles empty every column up to the top of the islands
+# that stand in it, and vestingen and decoration above it give way. (A box of only H high cut the islands over the town off
+# at its top: their upper halves stayed hanging there as slabs with a flat underside, over the landing place too.)
+DOOS_H = kit.LAAG_MAX - Y + 1
 ANKER = (120, 0, 40)
 SEED = 21401750
 PREFIX = "sign.guhs.einde2_bouw_schelpenstad"
@@ -124,7 +128,7 @@ class Stad(kit.Bouw):
     in the deep band) and finds the ground of a column."""
 
     def __init__(self, h):
-        super().__init__(h, NAAM, (W, H, D), SEED, prefix=PREFIX)
+        super().__init__(h, NAAM, (W, DOOS_H, D), SEED, prefix=PREFIX)
         self.vast = set()        # cells the light keeper may not use (roads, floors, the spots of the markers)
 
     def licht(self):

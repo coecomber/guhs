@@ -3,7 +3,7 @@ einde2 (the Guheinde expansion), slice bouw_schelpenstad: the road trip of the s
 (no story logic, no cast: every character and every prop of the story is a marker in the sidecar).
 Java: nl.juiced.guhs.feature.einde2.bouwschelpenstad (E2BouwSchelpenstadFeature).
 
-  - guhs:schelpenstad: a guhs:leegte_bouw of 256 x 48 x 96 in the deep band that stands next to Bikinibodem (its "bij",
+  - guhs:schelpenstad: a guhs:leegte_bouw of 256 x 114 x 96 (the build itself is 48 high) in the deep band that stands next to Bikinibodem (its "bij",
     build contract 6.11): the road out of Bikinibodem, De Ruige Kroeg (a tugboat on the dry with the bar in its hull), the
     loopgraaf (a trench right across the slab, a path down and a path up, the perches of the monsters) and Schelpenstad (a
     seaside town of shell stone on a beach of kruimelzand: the souvenir shop of the Cycloop, a lighthouse, a pier into
@@ -133,7 +133,7 @@ def selfcheck(h, b):
                 encoding="utf-8").read()
     x0, y0, z0, x1, y1, z1 = TEST_DOOS
     for wil in (f"WEST_EIND = {basis.X_WEST_EIND}, OOST_BEGIN = {basis.X_OOST_BEGIN}, OOST_EIND = {basis.X_OOST_EIND}",
-                f"TEST_X = {x0}, TEST_Y = {y0}, TEST_Z = {z0}", f"GROOTTE_X = {basis.W}, GROOTTE_Y = {basis.H}, GROOTTE_Z = {basis.D}"):
+                f"TEST_X = {x0}, TEST_Y = {y0}, TEST_Z = {z0}", f"GROOTTE_X = {basis.W}, GROOTTE_Y = {basis.DOOS_H}, GROOTTE_Z = {basis.D}"):
         if wil not in java:
             problems.append(f"E2BouwSchelpenstadGameTests does not say '{wil}' (the build changed?)")
     if problems:

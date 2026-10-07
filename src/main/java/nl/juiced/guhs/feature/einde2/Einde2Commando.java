@@ -56,6 +56,11 @@ public final class Einde2Commando {
     private static int waar(CommandSourceStack source, String structuur) {
         ServerLevel level = guheinde(source);
         ChunkPos start = level == null ? null : Plekken.startChunk(level, structuur);
+        if (level != null && start == null && !Plekken.bekend(level, structuur)) {
+            // (the spots are worked out on a thread of their own right after the level loads: nobody waits for that here)
+            source.sendFailure(Component.translatable("gui.guhs.einde2.commando.zoekt", structuur));
+            return 0;
+        }
         BoundingBox doos = start == null ? null : Plekken.doos(level, structuur);
         if (doos == null) {
             source.sendFailure(Component.translatable("gui.guhs.einde2.commando.geen", structuur));
@@ -64,6 +69,10 @@ public final class Einde2Commando {
         BlockPos o = Plekken.oorsprong(level, structuur);
         source.sendSuccess(() -> Component.translatable("gui.guhs.einde2.commando.waar", structuur, start.x() + ", " + start.z(), o.toShortString(),
                 doos.minX() + " " + doos.minY() + " " + doos.minZ() + " .. " + doos.maxX() + " " + doos.maxY() + " " + doos.maxZ()), false);
+        if (Plekken.start(level, structuur) == null) {
+            // (the spot follows from the seed; in terrain that was there before einde2 the copy itself was never made)
+            source.sendSuccess(() -> Component.translatable("gui.guhs.einde2.commando.staat_niet", structuur), false);
+        }
         return 1;
     }
 

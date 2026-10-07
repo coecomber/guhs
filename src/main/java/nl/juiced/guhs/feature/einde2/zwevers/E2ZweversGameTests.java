@@ -495,7 +495,7 @@ public class E2ZweversGameTests {
                 GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH)) {
             helper.assertTrue(GuhDex.isCreaturePage(pagina) && GuhDex.ENTRIES.contains(pagina), pagina + " is a Guhdex creature page");
         }
-        helper.assertTrue(GuhDex.EXTRA.contains(GuhVariant.LEEGTEWALVISGUH) && !GuhDex.EXTRA.contains(GuhVariant.KRUIMELKWAL), "the whale is a bonus page, the others count");
+        helper.assertTrue(GuhDex.EXTRA.contains(GuhVariant.LEEGTEWALVISGUH) && GuhDex.EXTRA.contains(GuhVariant.KRUIMELKWAL), "bonus pages, as every creature page of the outer islands");
         ServerPlayer p = speler(helper, STEEN);
         List<Entity> dieren = new ArrayList<>();
         for (EntityType<?> soort : List.<EntityType<?>>of(E2ZweversFeature.KRUIMELKWAL.get(), E2ZweversFeature.VLEERMUIS_LEMURGUH.get(),

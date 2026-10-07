@@ -27,13 +27,18 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
@@ -47,7 +52,9 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
  * breaking, no placing blocks, no buckets, no explosions, no griefing mobs inside the boxes of a registered structure's
  * pieces (plus a rim), and no fire or fluids from outside ({@link Protected}). Doors, chests, buttons and riding still
  * work; creative players may change everything. The empty rim piece of a story structure protects nothing. A bed in a
- * protected place never explodes ({@link #bedBlijftHeel}).
+ * protected place never explodes ({@link #bedBlijftHeel}), a cake that stands there for show is never eaten
+ * ({@link #taartBlijftHeel}: the first visitor would finish it for everybody after them), and what the builders put down
+ * as decoration never hurts ({@link #doetGeenPijn}: a camp fire, a stalagmite, a hot floor).
  * <p>
  * hook fase B: the same shape as the sister update's {@code feature/wereld/Bescherming}; after the merge the bodies here
  * become a delegation to it. {@link #uitzondering} is where a quest lets a player change some blocks.
@@ -164,6 +171,7 @@ public final class Einde2Bescherming {
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onUseItem);
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onExplosion);
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onMobGriefing);
+        NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onDamage);
         Protected.add(Einde2Bescherming::beschermd);
     }
 
@@ -188,6 +196,32 @@ public final class Einde2Bescherming {
         return level.getBlockState(pos).getBlock() instanceof BedBlock && beschermd(level, pos);
     }
 
+    /**
+     * A cake in a protected place (a vanilla cake, a guh taart, a cake with a candle): it stands there for show, for every
+     * player who comes by. Eaten it would be gone for good after the first visitor, and nobody can put a new one down. A
+     * click only says a line (creative players may eat or change it).
+     */
+    public static boolean taartBlijftHeel(Level level, BlockPos pos) {
+        return (level.getBlockState(pos).getBlock() instanceof CakeBlock || level.getBlockState(pos).getBlock() instanceof CandleCakeBlock)
+                && beschermd(level, pos);
+    }
+
+    /**
+     * The harm a decoration can do: the builders used lit camp fires, stalagmites as teeth and spires, and hot floors. In a
+     * protected place none of that hurts anybody, player or guh (nobody is really harmed in the towns of the outer islands;
+     * what a creature or a fall does is not touched).
+     */
+    public static boolean doetGeenPijn(DamageSource source) {
+        return source.is(DamageTypes.CAMPFIRE) || source.is(DamageTypes.STALAGMITE) || source.is(DamageTypes.HOT_FLOOR)
+                || source.is(DamageTypes.CACTUS) || source.is(DamageTypes.SWEET_BERRY_BUSH);
+    }
+
+    private static void onDamage(LivingIncomingDamageEvent event) {
+        if (doetGeenPijn(event.getSource()) && beschermd(event.getEntity().level(), event.getEntity().blockPosition())) {
+            event.setCanceled(true);
+        }
+    }
+
     private static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
         if (event.getLevel().isClientSide()) {
@@ -197,6 +231,12 @@ public final class Einde2Bescherming {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.einde2.bed").withStyle(ChatFormatting.LIGHT_PURPLE));
+            return;
+        }
+        if (!event.getEntity().getAbilities().instabuild && taartBlijftHeel(event.getLevel(), event.getPos())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.einde2.taart").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (stack.isEmpty()) {

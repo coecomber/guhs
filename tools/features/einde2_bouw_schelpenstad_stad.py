@@ -168,7 +168,7 @@ def winkel(b):
     b.set(mx + 4, V, z1 - 2, KAARTENREK)
     for x in range(x1 - 6, x1 - 2):                             # the till
         b.set(x, V, z1 - 3, BERK)
-    b.set(x1 - 3, V + 1, z1 - 3, "guhs:kaaskluis", {"facing": "south"})
+    b.set(x1 - 3, V + 1, z1 - 3, "minecraft:lodestone")        # (the till. Not the Kaasmijn's vault: that one pays out loot for goudkaas)
     b.set(x1 - 5, V + 1, z1 - 3, "minecraft:flower_pot")
     b.bord(x1 - 4, V, z1 - 2, "south", ["Kassa", "Ruilen mag niet", "Huilen wel"])
     b.set(mx, V, 25, KUSSEN)                                    # the crown display
@@ -546,7 +546,9 @@ def plekken(b):
     guh = "guhs:bikinibodem_guh"
     b.zone("aankomst", px - 6, V, pz - 6, px + 6, V + 20, pz + 6, wie="het plein van Schelpenstad: hier land je")
     b.prop("aankomst_speler", px, V, pz + 3)
-    b.prop("uitzicht", LAND_OOST + 44, 34, 84, wie="boven de Leegtezee: de stad, het strand en daarachter de heuvel met de loopgraaf")
+    # (inside the box, above the strip of sea it holds: beyond the box nothing keeps the islands away, and a viewpoint out there
+    # can lie inside the rock of one)
+    b.prop("uitzicht", W - 6, 34, 84, wie="boven de Leegtezee: de stad, het strand en daarachter de heuvel met de loopgraaf")
     b.zone("schelpenstad", STAD_X, G - 4, 8, LAND_OOST, V + 30, 90, wie="Schelpenstad, op de rand van het strand")
     b.zone("strand", STAD_X + 2, G - 4, STRAND_Z, LAND_OOST, V + 4, 90, wie="het strand van kruimelzand")
     b.zone("kust", STRAND_X, G - 6, 12, W - 1, V + 4, 84, wie="de rand van de plaat: daarachter is de leegte de zee")

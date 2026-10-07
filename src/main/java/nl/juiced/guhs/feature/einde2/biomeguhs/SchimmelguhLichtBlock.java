@@ -24,7 +24,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 public class SchimmelguhLichtBlock extends Block {
     /** The light it gives; how often it checks its guh (ticks); how far the guh may be (blocks around this block). */
     public static final int LICHT = 12, KIJK = 10;
-    public static final double BIJ = 1.3;
+    public static final double BIJ = 2.6;      // (the lamp lets its light lag Schimmellamp.SPELING blocks behind)
 
     public SchimmelguhLichtBlock(Properties properties) {
         super(properties);

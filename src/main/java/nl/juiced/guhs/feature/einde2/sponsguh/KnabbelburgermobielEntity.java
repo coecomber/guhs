@@ -113,6 +113,9 @@ public class KnabbelburgermobielEntity extends Entity implements GeoEntity {
     public void tick() {
         super.tick();
         if (level().isClientSide()) {
+            // (26.1: the server's position updates only set a target in the handler; a plain Entity must take the steps itself,
+            // as a boat and a living entity do. Without this the car stays where it appeared on every client)
+            interpolation.interpolate();
             return;
         }
         float vooruit = 0, stuur = 0;

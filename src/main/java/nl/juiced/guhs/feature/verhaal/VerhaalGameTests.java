@@ -488,9 +488,11 @@ public class VerhaalGameTests {
             helper.assertTrue(c.isCharacter() && c.npcKind() == null, c + ": a creature page");
         }
         helper.assertTrue(GuhDex.ENTRIES.get(GuhDex.ENTRIES.size() - 1) == GuhVariant.values()[GuhVariant.values().length - 1]
-                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA, GuhVariant.LEEGTEWALVISGUH,
+                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA, GuhVariant.ENDER_MIKA,
+                        GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH, GuhVariant.VLEERMUIS_LEMURGUH,
+                        GuhVariant.OTTER_PINGUINGUH, GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH, GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH,
                         GuhVariant.SPONSGUH, GuhVariant.GERRIT)),
-                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud and (einde2) the Leegtewalvisguh, Sponsguh and Gerrit");
+                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud and (einde2) every creature page of the outer islands");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {
             ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));

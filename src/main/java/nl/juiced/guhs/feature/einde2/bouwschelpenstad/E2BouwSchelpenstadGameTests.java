@@ -52,7 +52,7 @@ public class E2BouwSchelpenstadGameTests {
     private static final String WINKEL = "einde2_bouw_schelpenstad_test_winkel";
     private static final String P = "guhs:einde2_bouw_schelpenstad_";
     // the numbers of the build (the generator's self-check reads these lines)
-    private static final int GROOTTE_X = 256, GROOTTE_Y = 48, GROOTTE_Z = 96;
+    private static final int GROOTTE_X = 256, GROOTTE_Y = 114, GROOTTE_Z = 96;
     private static final int WEST_EIND = 89, OOST_BEGIN = 129, OOST_EIND = 175;
     private static final int TEST_X = 180, TEST_Y = 13, TEST_Z = 13;
     // the road at the seam (build contract 6.11)
@@ -121,7 +121,7 @@ public class E2BouwSchelpenstadGameTests {
         Einde2Test.controleerLeegteBouw(helper, ID);
         LeegteBouwStructure schelp = Plekken.leegteBouw(helper.getLevel().registryAccess(), ID);
         helper.assertTrue(schelp != null && schelp.size().getX() == GROOTTE_X && schelp.size().getY() == GROOTTE_Y && schelp.size().getZ() == GROOTTE_Z,
-                "256 x 48 x 96");
+                "256 x 114 x 96");
         helper.assertTrue(schelp.y() == Einde2Ids.LAAG_MIN && schelp.anchor().equals(new BlockPos(120, 0, 40)) && schelp.ruim() && schelp.rand() == 0,
                 "y 4, anchor [120, 0, 40], its tiles empty their box, no rim");
         helper.assertTrue(schelp.tilesX() == 8 && schelp.tilesZ() == 3, "8 x 3 tiles");

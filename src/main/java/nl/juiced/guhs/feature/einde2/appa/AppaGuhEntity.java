@@ -106,12 +106,21 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     private static final Vec3[] TEAM = {new Vec3(0.82, 2.5, -0.1), new Vec3(-0.82, 2.5, -0.1), new Vec3(0, 2.5, 0.82),
             new Vec3(0.5, 2.5, -0.62), new Vec3(-0.5, 2.5, -0.62)};
 
+    /** How far his owner may stand from him with the saddle chest open (blocks; he is big). */
+    public static final double KIST_BEREIK = 10.0;
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final SimpleContainer kist = new SimpleContainer(KIST_VAKKEN) {
         @Override
         public void setChanged() {
             super.setChanged();
             kistVeranderd();
+        }
+
+        /** An open chest shuts when he is gone, was made again (a recall, a story flight) or its owner walked off. */
+        @Override
+        public boolean stillValid(Player player) {
+            return kistGeldig(player);
         }
     };
     /** Which Appa of his owner this is ({@link Appa}: an older number than the owner's steps aside). */
@@ -124,6 +133,11 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     private boolean teamBezig;
     /** Server: he lets everybody off (a landing by himself, a recall). */
     boolean uitstappen;
+    /** Server: the last spot he stood on the ground (not saved; null until he has landed once). */
+    @Nullable
+    private Vec3 laatsteGrond;
+    /** How fast he glides back to that ground when nobody steers him over the void (blocks per tick). */
+    public static final double TERUG_SNELHEID = 0.3;
     /** Server: the flight he is on (null: none). */
     @Nullable
     private Vlucht vlucht;
@@ -220,13 +234,24 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     }
 
     private void kistVeranderd() {
-        if (kistStil || level().isClientSide()) {
-            return;
+        if (kistStil || level().isClientSide() || isWeggehaald()) {
+            return;                                 // (a stale menu of an Appa that was taken away never writes: the new one has the chest)
         }
         ServerPlayer baas = baas();
-        if (baas != null && kistGelezen) {
+        if (baas != null && kistGelezen && gen == Appa.gen(baas)) {
             Appa.schrijfKist(baas, kist);
         }
+    }
+
+    /** Taken out of the world for good (discarded or dead), not just unloaded with its chunk. */
+    private boolean isWeggehaald() {
+        return getRemovalReason() != null && getRemovalReason().shouldDestroy();
+    }
+
+    /** May this player (still) look into the saddle chest: he is alive and here, theirs, the copy that counts, and near. */
+    boolean kistGeldig(Player player) {
+        return isAlive() && !isRemoved() && isEigenaar(player) && player.distanceToSqr(this) <= KIST_BEREIK * KIST_BEREIK
+                && (!(player instanceof ServerPlayer sp) || gen == Appa.gen(sp));
     }
 
     /** His owner, when online. */
@@ -474,6 +499,12 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         return (float) getAttributeValue(Attributes.MOVEMENT_SPEED);
     }
 
+    /** He hovers for as long as his rider likes: the server must not take that for cheating (allow-flight=false). */
+    @Override
+    public boolean isFlyingVehicle() {
+        return true;
+    }
+
     @Override
     public void travel(Vec3 input) {
         if (getControllingPassenger() instanceof Player rider) {
@@ -518,20 +549,46 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         resetFallDistance();
     }
 
-    /** Nobody at the reins: on the ground he stands; in the air he sinks gently when there is ground below, else he hangs. */
+    /**
+     * Nobody at the reins: on the ground he stands; in the air he sinks gently when there is ground below. Over the void he
+     * glides back to the last ground he stood on (his owner logged out in the air, a guest is still aboard: nobody is left
+     * hanging), and only hangs when he knows no ground.
+     */
     private void zweef() {
         if (onGround() || level().isClientSide()) {
             super.travel(Vec3.ZERO);
             return;
         }
         Vec3 m = getDeltaMovement();
-        vlieg(new Vec3(m.x * 0.8, grondOnder(64) ? -0.14 : 0, m.z * 0.8));
+        if (grondOnder(64) || laatsteGrond == null) {
+            vlieg(new Vec3(m.x * 0.8, grondOnder(64) ? -0.14 : 0, m.z * 0.8));
+            return;
+        }
+        Vec3 naar = new Vec3(laatsteGrond.x - getX(), 0, laatsteGrond.z - getZ());
+        double ver = naar.length();
+        Vec3 stap = ver < 1.0e-3 ? Vec3.ZERO : naar.scale(Math.min(TERUG_SNELHEID, ver) / ver);
+        double dy = Mth.clamp(laatsteGrond.y + 2.0 - getY(), -0.14, 0.14);
+        if (ver > 1.0e-3) {
+            setYRot(Mth.approachDegrees(getYRot(), (float) (Mth.atan2(naar.z, naar.x) * (180.0 / Math.PI)) - 90f, 4f));
+        }
+        vlieg(new Vec3(stap.x, dy, stap.z));
     }
 
     private boolean grondOnder(double diep) {
-        Vec3 van = position().add(0, 0.2, 0);
-        return level().clip(new ClipContext(van, van.add(0, -diep, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this)).getType()
+        return grondOnder(this, diep);
+    }
+
+    /** Is there something to land on within {@code diep} blocks under this entity? */
+    static boolean grondOnder(Entity e, double diep) {
+        Vec3 van = e.position().add(0, 0.2, 0);
+        return e.level().clip(new ClipContext(van, van.add(0, -diep, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, e)).getType()
                 != HitResult.Type.MISS;
+    }
+
+    /** Server: where he last stood on the ground in this level (null: not since he came into the world). */
+    @Nullable
+    Vec3 laatsteGrond() {
+        return laatsteGrond;
     }
 
     // --- flying by himself (the server) --------------------------------------------------------------------------------------
@@ -696,6 +753,9 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
             return;
         }
         boolean lucht = !onGround() && level().noCollision(this, getBoundingBox().move(0, -0.75, 0));
+        if (onGround() && tickCount % 10 == 0) {
+            laatsteGrond = position();
+        }
         if (lucht != isLucht()) {
             entityData.set(DATA_LUCHT, lucht);
             if (lucht && bestuurder() != null) {

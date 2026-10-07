@@ -27,6 +27,10 @@ public final class E2BouwBikinibodemClient {
         NeoForge.EVENT_BUS.addListener(E2BouwBikinibodemClient::onTick);
         NeoForge.EVENT_BUS.addListener(E2BouwBikinibodemClient::onFog);
         NeoForge.EVENT_BUS.addListener(E2BouwBikinibodemClient::onFogColour);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) -> {
+            Leegtemist.wisClient();
+            mist = mistO = 0f;
+        });
     }
 
     private static void onTick(ClientTickEvent.Post event) {

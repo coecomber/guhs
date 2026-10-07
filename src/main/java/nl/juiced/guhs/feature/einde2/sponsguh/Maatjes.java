@@ -80,18 +80,32 @@ public final class Maatjes {
         return null;
     }
 
-    /** A spot next to the player to stand on: beside them, else right where they stand. */
+    /** A spot next to the player to stand on: beside them, else right where they stand (when someone asks for the buddy). */
     static BlockPos plekBij(ServerPlayer p) {
+        BlockPos vast = vastePlekBij(p);
+        return vast == null ? p.blockPosition() : vast;
+    }
+
+    /**
+     * The same, but null when there is no floor at the player's own spot either (they fly: on an Appa-guh, a vetbootje,
+     * wings): a buddy that comes along BY ITSELF waits for that, put down in the air it would fall into the void, again and
+     * again.
+     */
+    @Nullable
+    static BlockPos vastePlekBij(ServerPlayer p) {
         BlockPos hier = p.blockPosition();
         for (BlockPos bij : new BlockPos[] {hier.relative(p.getDirection().getClockWise()), hier.relative(p.getDirection().getCounterClockWise()),
                 hier.relative(p.getDirection().getOpposite())}) {
             if (p.level().getBlockState(bij).getCollisionShape(p.level(), bij).isEmpty()
-                    && p.level().getBlockState(bij.above()).getCollisionShape(p.level(), bij.above()).isEmpty()
-                    && !p.level().getBlockState(bij.below()).getCollisionShape(p.level(), bij.below()).isEmpty()) {
+                    && p.level().getBlockState(bij.above()).getCollisionShape(p.level(), bij.above()).isEmpty() && vloer(p, bij)) {
                 return bij;
             }
         }
-        return hier;
+        return vloer(p, hier) ? hier : null;
+    }
+
+    private static boolean vloer(ServerPlayer p, BlockPos pos) {
+        return !p.level().getBlockState(pos.below()).getCollisionShape(p.level(), pos.below()).isEmpty();
     }
 
     /** Gives this player theirs, once: when they have one already, that one comes. */
@@ -191,6 +205,9 @@ public final class Maatjes {
         if ((e != null && e.level() == p.level()) || !p.level().areEntitiesLoaded(ChunkPos.pack(p.blockPosition()))) {
             GEMIST.remove(key);
             return;
+        }
+        if (vastePlekBij(p) == null) {
+            return;                                                          // (the owner is in the air: it comes when they land)
         }
         if (GEMIST.merge(key, 1, Integer::sum) >= 2) {                       // (twice in a row: it really is not here)
             roep(p, soort, type);

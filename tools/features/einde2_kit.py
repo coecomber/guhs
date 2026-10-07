@@ -450,6 +450,13 @@ class Bouw(gb.Bouw):
         sx, sy, sz = structure.size
         if not (self.inside(x, y, z) and self.inside(x + sx - 1, y + sy - 1, z + sz - 1)):
             self.fouten.append(f"laag {naam} steekt buiten de bouw")
+        # an overlay cell on a block of the build would replace that block, and Plekken.ruimLaag (every overlay cell becomes
+        # air) would then leave a hole in the one copy of the build: an overlay only fills air
+        samen = sorted((x + cx, y + cy, z + cz) for (cx, cy, cz), bl in structure.blocks.items()
+                       if bl[0] != gb.AIR and self.s.blocks.get((x + cx, y + cy, z + cz), (gb.AIR,))[0] != gb.AIR)
+        if samen:
+            raise SystemExit(f"{self.name}: laag {naam}: {len(samen)} cellen vallen samen met blokken van de bouw, bv. {samen[:4]} "
+                             f"(haal ze uit de laag: als de laag weggaat blijft daar anders een gat)")
         structure.save(f"{self.name}/laag_{naam}")
         self.lagen[naam] = {"template": f"guhs:{self.name}/laag_{naam}", "pos": [x, y, z], "grootte": [sx, sy, sz]}
 

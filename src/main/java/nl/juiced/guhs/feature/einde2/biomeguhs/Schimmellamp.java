@@ -20,6 +20,8 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 public final class Schimmellamp {
     /** How often a lamp looks where its light should be (ticks). */
     public static final int STAP = 5;
+    /** How far (blocks, counted along the axes) the guh's head may be from its light before the light moves along. */
+    public static final int SPELING = 2;
 
     public static boolean gloeit(GuhEntity guh) {
         return guh.getVariant() == GuhVariant.SCHIMMELGUH && Trucs.doet(guh);
@@ -48,8 +50,34 @@ public final class Schimmellamp {
             }
         }
         if (aan) {
-            licht(guh.level(), lichtPlek(guh));
+            schijn(guh);
         }
+    }
+
+    // (server: where each glowing guh's light block is)
+    private static final java.util.Map<GuhEntity, BlockPos> LICHT_VAN = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+    /**
+     * The guh's light: it stays where it is for as long as the guh's head is within {@link #SPELING} blocks of it, and only
+     * then moves along. (Every move is a light block placed and one removed, and each of those makes the game work the
+     * light out again around it and every client in range redraw: a walking guh would do that for every block it walks.)
+     */
+    static void schijn(GuhEntity guh) {
+        BlockPos plek = lichtPlek(guh);
+        if (lichtVan(guh) != null) {
+            return;
+        }
+        if (licht(guh.level(), plek)) {
+            LICHT_VAN.put(guh, plek);
+        }
+    }
+
+    /** Server: where this guh's light block is right now (null: it has none within {@link #SPELING} blocks of its head). */
+    @javax.annotation.Nullable
+    public static BlockPos lichtVan(GuhEntity guh) {
+        BlockPos oud = LICHT_VAN.get(guh);
+        return oud != null && oud.distManhattan(lichtPlek(guh)) <= SPELING && guh.level().isLoaded(oud)
+                && guh.level().getBlockState(oud).is(E2BiomeguhsFeature.SCHIMMELGUH_LICHT.get()) ? oud : null;
     }
 
     /** Puts the light here when this is plain air (the block ticks itself away when the guh has gone). */

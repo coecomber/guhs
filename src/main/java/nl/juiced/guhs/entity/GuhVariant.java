@@ -137,7 +137,7 @@ public enum GuhVariant {
     // <hemel>
     // </hemel>
     // <einde2>
-    // einde2: creature pages of the outer islands (their id is their entity id); LEEGTEWALVISGUH is a bonus page, see GuhDex.EXTRA
+    // einde2: creature pages of the outer islands (their id is their entity id); all bonus pages, see GuhDex.EXTRA
     ENDER_MIKA(0), KAASMIJT(0), SCHUILGUH(0), KRUIMELKWAL(0), LEEGTEWALVISGUH(0), VLEERMUIS_LEMURGUH(0), OTTER_PINGUINGUH(0), DAS_MOLGUH(0), SCHILDPAD_EENDGUH(0), APPA_GUH(0), MOMO_GUH(0),
     // (the buddy and the pet of the Sponsguh story: both bonus pages)
     SPONSGUH(0), GERRIT(0),

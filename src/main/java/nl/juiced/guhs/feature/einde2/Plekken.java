@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
@@ -28,7 +31,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -55,7 +60,11 @@ import nl.juiced.guhs.world.GegarandeerdPlacement;
  *   <li>the ONE guaranteed copy of a {@code guhs:leegte_bouw} ({@link #startChunk}, {@link #oorsprong}, {@link #doos},
  *       {@link #wereld(ServerLevel, String, String)}, {@link #aankomst}): pure functions of the world seed, no chunk is
  *       loaded or generated (it is what /locate and the Superkompas point at). A build that stands next to another one
- *       (its {@code bij}: Schelpenstad next to Bikinibodem) has its one copy at a fixed offset from that neighbour's;</li>
+ *       (its {@code bij}: Schelpenstad next to Bikinibodem) has its one copy at a fixed offset from that neighbour's.
+ *       The search behind a spot can take tens of seconds right after a level loads (Bikinibodem's), so these never make
+ *       the server thread wait for it: there they answer null ("not known yet") until {@link #zoekVooruit} has the spots
+ *       of the level, and are a map lookup from then on. They say where the copy BELONGS; {@link #start} says whether it
+ *       really stands there (in terrain that existed before einde2 it does not);</li>
  *   <li>any copy that is already there ({@link #bij}, {@link #wereld(StructureStart, Plek)}): a random copy of a side
  *       place, a Mika-vesting.</li>
  * </ul>
@@ -171,13 +180,105 @@ public final class Plekken {
         return access.lookupOrThrow(Registries.STRUCTURE).getValue(Guhs.id(structuur)) instanceof LeegteBouwStructure l ? l : null;
     }
 
+    // (per level: the start chunks that are worked out; an empty Optional: this world has no spot for it)
+    private static final Map<ServerLevel, Map<String, Optional<ChunkPos>>> BEKEND = Collections.synchronizedMap(new WeakHashMap<>());
+    // (the levels whose spots are being worked out, or are)
+    private static final Map<ServerLevel, Boolean> GEZOCHT = Collections.synchronizedMap(new WeakHashMap<>());
+
     /**
      * The start chunk of the guaranteed copy: the ring position of the set {@code <structuur>_gegarandeerd}, or, for a build
      * with a {@code bij}, the chunk at its offset from the guaranteed copy of its neighbour.
+     * <p>
+     * Never makes the server thread wait for the search: asked there before the spot is worked out it answers null and
+     * {@link #zoekVooruit} gets going (the tick loop would stand still for as long as the search takes, up to tens of
+     * seconds for Bikinibodem). Any other thread waits for the answer.
      */
     @Nullable
     public static ChunkPos startChunk(ServerLevel guheinde, String structuur) {
-        return startChunk(guheinde.registryAccess(), guheinde.getChunkSource().getGeneratorState(), guheinde.getSeed(), structuur);
+        Map<String, Optional<ChunkPos>> bekend = bekend(guheinde);
+        Optional<ChunkPos> al = bekend.get(structuur);
+        if (al != null) {
+            return al.orElse(null);
+        }
+        if (guheinde.getServer().isSameThread()) {
+            zoekVooruit(guheinde);
+            return null;
+        }
+        ChunkPos chunk = startChunk(guheinde.registryAccess(), guheinde.getChunkSource().getGeneratorState(), guheinde.getSeed(), structuur);
+        bekend.put(structuur, Optional.ofNullable(chunk));
+        return chunk;
+    }
+
+    private static Map<String, Optional<ChunkPos>> bekend(ServerLevel level) {
+        return BEKEND.computeIfAbsent(level, l -> new ConcurrentHashMap<>());
+    }
+
+    /** Is the spot of this structure worked out for this level ({@link #startChunk} then answers at once, also with "none")? */
+    public static boolean bekend(ServerLevel guheinde, String structuur) {
+        return bekend(guheinde).containsKey(structuur);
+    }
+
+    /**
+     * Works out the spots of the fourteen big places of this level on a thread of its own, once per level (at level load,
+     * and when the server thread asks before that is done). It waits for the searches the world itself runs at level load
+     * (GegarandeerdPlacement.vooruit: the same ones, so nothing is searched twice) and keeps the answers.
+     */
+    public static void zoekVooruit(ServerLevel guheinde) {
+        if (GEZOCHT.putIfAbsent(guheinde, Boolean.TRUE) != null) {
+            return;
+        }
+        Map<String, Optional<ChunkPos>> bekend = bekend(guheinde);
+        RegistryAccess access = guheinde.registryAccess();
+        ChunkGeneratorStructureState state = guheinde.getChunkSource().getGeneratorState();
+        long seed = guheinde.getSeed();
+        // (who goes first is searched first, as the world does it: no search then waits inside another)
+        List<String> namen = new ArrayList<>(Einde2Ids.LEEGTE_STRUCTUREN);
+        namen.sort((a, b) -> Integer.compare(voorrang(access, b), voorrang(access, a)));
+        Thread thread = new Thread(() -> {
+            for (String structuur : namen) {
+                try {
+                    bekend.put(structuur, Optional.ofNullable(startChunk(access, state, seed, structuur)));
+                } catch (RuntimeException ex) {
+                    LOGGER.warn("Guhs: the spot of {} could not be worked out", structuur, ex);
+                    bekend.put(structuur, Optional.empty());
+                }
+            }
+        }, "Guhs einde2 plekken");
+        thread.setDaemon(true);
+        thread.setPriority(Thread.MIN_PRIORITY);
+        thread.start();
+    }
+
+    private static int voorrang(RegistryAccess access, String structuur) {
+        LeegteBouwStructure bouw = leegteBouw(access, structuur);
+        return bouw == null ? 0 : bouw.voorrang();
+    }
+
+    /** (Level load, after the world registered its structure state: the spots of the Guheinde are worked out ahead.) */
+    static void onLevelLoad(net.neoforged.neoforge.event.level.LevelEvent.Load event) {
+        if (event.getLevel() instanceof ServerLevel level && nl.juiced.guhs.feature.guheinde.GuheindeFeature.isGuheinde(level)) {
+            zoekVooruit(level);
+        }
+    }
+
+    /**
+     * The structure start of the guaranteed copy when it really stands in the world (null: no spot, not known yet, or the
+     * copy is not there: its start chunk was made before einde2 came, which is what happens in terrain players had already
+     * been to). Loads that one chunk as far as its structure starts (as /locate does). A copy whose start chunk is new while
+     * chunks around it are old stands there cut off at those chunks: this cannot tell.
+     * <p>
+     * hook fase B: ask this (not {@link #doos}) before a player is sent to a place or it is offered as a destination.
+     */
+    @Nullable
+    public static StructureStart start(ServerLevel guheinde, String structuur) {
+        Structure structure = guheinde.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(Guhs.id(structuur));
+        ChunkPos chunk = structure == null ? null : startChunk(guheinde, structuur);
+        if (chunk == null) {
+            return null;
+        }
+        ChunkAccess daar = guheinde.getChunk(chunk.x(), chunk.z(), ChunkStatus.STRUCTURE_STARTS);
+        StructureStart start = guheinde.structureManager().getStartForStructure(SectionPos.bottomOf(daar), structure, daar);
+        return start != null && start.isValid() ? start : null;
     }
 
     /** The same for a structure state that isn't a level's own (the game tests' Guheinde, see {@link Einde2Test}). */

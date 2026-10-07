@@ -420,18 +420,23 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
 
     /** The boxes it keeps away from: Bikinibodem and Schelpenstad (they reach up to its height). */
     public static List<BoundingBox> mijd(ServerLevel level) {
-        return MIJD_DOZEN.computeIfAbsent(level, l -> {
-            List<BoundingBox> uit = new ArrayList<>();
-            if (GuheindeFeature.isGuheinde(l)) {
-                for (String structuur : Einde2Ids.SPONS_STRUCTUREN) {
-                    BoundingBox doos = Plekken.doos(l, structuur);
-                    if (doos != null) {
-                        uit.add(doos);
-                    }
+        List<BoundingBox> al = MIJD_DOZEN.get(level);
+        if (al != null) {
+            return al;
+        }
+        List<BoundingBox> uit = new ArrayList<>();
+        if (GuheindeFeature.isGuheinde(level)) {
+            for (String structuur : Einde2Ids.SPONS_STRUCTUREN) {
+                BoundingBox doos = Plekken.doos(level, structuur);
+                if (doos != null) {
+                    uit.add(doos);
+                } else if (!Plekken.bekend(level, structuur)) {
+                    return List.of();   // (the spots of this level are still being worked out: nothing is kept, ask again later)
                 }
             }
-            return uit;
-        });
+        }
+        MIJD_DOZEN.put(level, uit);
+        return uit;
     }
 
     /** (Tests) the boxes of this level. */
@@ -676,6 +681,15 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
         @Override
         public boolean isPickable() {
             return true;
+        }
+
+        /**
+         * No arrow, snowball or fishing hook ever hits the back: a projectile asks nothing about who shot it, and for a
+         * player without the whale's sight there is nothing here (theirs would stop in the empty air).
+         */
+        @Override
+        public boolean canBeHitByProjectile() {
+            return false;
         }
 
         @Override

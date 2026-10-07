@@ -470,7 +470,9 @@ def eiland(b):
         b.straatlamp(x, z, TI + 1)
     b.zone("aankomst", CX - 4, TI + 1, CZ - 4, CX + 4, TI + 6, CZ + 4, wie="het eilandje boven de zeepbel: hier land je")
     b.prop("aankomst_speler", CX, TI + 1, CZ, wie="hier sta je na aankomst")
-    b.prop("uitzicht", 252, 74, 176, wie="schuin boven de weg naar Schelpenstad: de hele zeepbel met het eilandje erboven")
+    # (28 blocks east of the box, in the room Schelpenstad's tiles empty from bottom to top (its box starts at z 64 + 96 = 160
+    # at the latest): further south nothing keeps the islands away and the viewpoint could lie inside the rock of one)
+    b.prop("uitzicht", 252, 74, 150, wie="schuin boven de weg naar Schelpenstad: de hele zeepbel met het eilandje erboven")
     b.sign(CX - 4, TI + 1, CZ - 5, "south", ["Bikinibodem", "onder de leegte", "Naar beneden:", "stap in de bel"], wall=False)
     b.sign(CX + 4, TI + 1, CZ - 5, "south", ["Adem inhouden", "hoeft niet.", "Het is mist,", "geen water, njeg"], wall=False)
     b.sign(CX + 4, TI + 1, CZ + 5, "north", ["Hier kom je", "weer boven.", "Tot bubbels!", ""], wall=False)

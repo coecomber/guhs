@@ -57,6 +57,11 @@ public final class Leegtemist {
         }
     }
 
+    /** Client: leaving a world or a server (the next one tells again when the player is in the mist there). */
+    public static void wisClient() {
+        hier = false;
+    }
+
     /** Is this player inside the dome (the zone {@code koepel} of the one Bikinibodem)? Works on both sides. */
     public static boolean inMist(Player p) {
         return p.level().isClientSide() ? hier : IN.contains(p.getUUID());

@@ -154,13 +154,63 @@ public final class Appa {
 
     /** Takes an Appa out of the world (everybody steps off first; his chest is safe in the owner's data). */
     private static void verdwijn(AppaGuhEntity appa) {
+        stapUit(appa, null);
+        if (appa.baas() != null && appa.baas().containerMenu instanceof net.minecraft.world.inventory.ChestMenu menu && menu.getContainer() == appa.kist()) {
+            appa.baas().closeContainer();          // (his saddle chest was open: it goes with him)
+        }
+        appa.discard();
+    }
+
+    /**
+     * Everybody off him. Whoever would fall into the void (no ground within 64 blocks below: a guest, a guh from the basket)
+     * is set down on ground instead: at {@code veilig}, else where he last stood on the ground. Without either they float
+     * down as before.
+     */
+    static void stapUit(AppaGuhEntity appa, @Nullable Vec3 veilig) {
+        List<Entity> wie = List.copyOf(appa.getPassengers());
         appa.uitstappen = true;
         try {
             appa.ejectPassengers();
         } finally {
             appa.uitstappen = false;
         }
-        appa.discard();
+        Vec3 naar = veilig != null ? veilig : appa.laatsteGrond();
+        if (naar == null) {
+            return;
+        }
+        for (Entity e : wie) {
+            if (e.isAlive() && !e.isRemoved() && !AppaGuhEntity.grondOnder(e, 64)) {
+                e.teleportTo(naar.x, naar.y + 0.1, naar.z);
+                e.resetFallDistance();
+                e.setDeltaMovement(Vec3.ZERO);
+            }
+        }
+    }
+
+    /**
+     * A player who leaves the game on an Appa that carries another player too: the game then keeps him in the world (it only
+     * takes a mount along with its one player), so whoever leaves would come back in mid-air without him, and a guest who is
+     * the last to leave would take him along in their own data. They step off first, onto the ground he last stood on.
+     */
+    static void bijVertrek(ServerPlayer p) {
+        if (!(p.getVehicle() instanceof AppaGuhEntity appa)) {
+            return;
+        }
+        boolean alleen = appa.getPassengers().stream().filter(e -> e instanceof net.minecraft.world.entity.player.Player).count() <= 1;
+        if (alleen && appa.isEigenaar(p)) {
+            return;                                 // (the owner alone: he goes along with them, as any mount)
+        }
+        appa.uitstappen = true;
+        try {
+            p.stopRiding();
+        } finally {
+            appa.uitstappen = false;
+        }
+        Vec3 naar = appa.laatsteGrond();
+        if (naar != null && !AppaGuhEntity.grondOnder(p, 64)) {
+            p.teleportTo(naar.x, naar.y + 0.1, naar.z);
+            p.resetFallDistance();
+        }
     }
 
     /** This player's loaded Appa, or null (none, dead, in an unloaded chunk). */
@@ -206,12 +256,8 @@ public final class Appa {
         Vec3 plek = landplek(p);
         if (appa != null && appa.level() == level) {
             appa.stopVlucht();
-            appa.uitstappen = true;
-            try {
-                appa.ejectPassengers();
-            } finally {
-                appa.uitstappen = false;
-            }
+            // (a guest or a guh that would drop into the void comes along to where he lands, when that is on the ground)
+            stapUit(appa, level.noCollision(E2AppaFeature.APPA_GUH.get().getSpawnAABB(plek.x, plek.y, plek.z).move(0, -1, 0)) ? null : plek);
             appa.snapTo(plek.x, plek.y, plek.z, p.getYRot(), 0);
             appa.setDeltaMovement(Vec3.ZERO);
             return appa;

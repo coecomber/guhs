@@ -452,6 +452,11 @@ def _maak(h, opslaan, controle):
         if fouten:
             raise SystemExit(f"{NAAM}: self-check found {len(fouten)} problem(s):\n  " + "\n  ".join(fouten[:60]))
         print(f"{NAAM}: self-check ok {b.stats}, {b.lichtjes} lichtjes gezet")
+    # the Leeuwschildpad-guh lays its chin ON the quay: where a cell of the overlay is a block of the build, the build keeps
+    # its block (else taking the overlay away again would leave a hole in the quay)
+    for (x, y, z) in list(laag.blocks):
+        if b.s.blocks.get((LAAG[0] + x, LAAG[1] + y, LAAG[2] + z), (gb.AIR,))[0] != gb.AIR:
+            del laag.blocks[(x, y, z)]
     if opslaan:
         b.laag("leeuwschildpad", laag, *LAAG)
         b.save_tiles()

@@ -40,6 +40,11 @@ public final class E2AppaClient {
     public static void init(IEventBus modBus) {
         modBus.addListener(E2AppaClient::renderers);
         NeoForge.EVENT_BUS.addListener(E2AppaClient::schouder);
+        // (entity ids start again in the next world or on the next server: nothing of this one may stay)
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) -> {
+            E2AppaPayloads.CLIENT_SCHOUDERS.clear();
+            SCHOUDER_MOMOS.clear();
+        });
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {

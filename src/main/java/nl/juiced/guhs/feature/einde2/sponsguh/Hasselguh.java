@@ -64,13 +64,18 @@ public final class Hasselguh {
         }
     }
 
-    /** No getting off halfway (sneaking does nothing: "Blijf zitten, njeg"). */
+    /**
+     * No getting off halfway (sneaking does nothing: "Blijf zitten, njeg"). Only the sneak key is refused: a teleport (a
+     * command, a story, a change of dimension) takes its player off first, and refusing that would leave them a passenger of
+     * an entity they are no longer near. David notices the empty back in his next tick and ends the ride.
+     */
     @SubscribeEvent
     public static void onMount(EntityMountEvent event) {
         if (event.isDismounting() && !event.getLevel().isClientSide() && event.getEntityBeingMounted() instanceof DavidHasselguhEntity david
-                && david.onderweg() && !david.uitstappen && event.getEntityMounting().isAlive() && !event.getEntityMounting().isRemoved()) {
+                && david.onderweg() && !david.uitstappen && event.getEntityMounting() instanceof ServerPlayer player && player.isAlive()
+                && !player.isRemoved() && player.isShiftKeyDown()) {
             event.setCanceled(true);
-            if (event.getEntityMounting() instanceof ServerPlayer player && player.isShiftKeyDown() && player.tickCount % 20 == 0) {
+            if (player.tickCount % 20 == 0) {
                 player.sendOverlayMessage(Component.translatable("gui.guhs.einde2_sponsguh_wezens.hasselguh.blijf_zitten").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }

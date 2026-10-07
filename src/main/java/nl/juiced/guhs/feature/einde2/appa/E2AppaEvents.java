@@ -98,10 +98,19 @@ public final class E2AppaEvents {
         }
     }
 
+    /** Whoever comes to see a player hears how it is now, also "no Momo": an old "yes" of before they walked off must not stay. */
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof ServerPlayer target && event.getEntity() instanceof ServerPlayer watcher && Momo.opSchouder(target)) {
+        if (event.getTarget() instanceof ServerPlayer target && event.getEntity() instanceof ServerPlayer watcher) {
             nl.juiced.guhs.network.ModNetworking.sendTo(watcher, E2AppaPayloads.bericht(target));
+        }
+    }
+
+    /** Leaving the game on an Appa-guh that carries more players ({@link Appa#bijVertrek}). */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            Appa.bijVertrek(player);
         }
     }
 

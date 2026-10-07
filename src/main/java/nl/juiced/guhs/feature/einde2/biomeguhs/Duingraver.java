@@ -8,9 +8,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.gids.GidsFeature;
@@ -120,12 +125,29 @@ public final class Duingraver implements VariantGedrag {
         }
     }
 
-    /** Both sides: kruimelzand never holds a Duinguh (the slow-down a block gives whoever is inside it is dropped again). */
+    /** The Duinguh's own footing on kruimelzand: the sand's slow wading (its speed factor) does not count for it. */
+    public static final Identifier ZAND_VLOT = Guhs.id("einde2_biomeguhs_duinguh_zand");
+
+    /**
+     * Both sides: kruimelzand never holds a Duinguh. The slow-down a block gives whoever is inside it is dropped again, and
+     * while it stands in or on the sand it walks as fast as on any ground (the sand's speed factor slows every entity; a
+     * full movement efficiency takes that away, as soul speed does on soul sand).
+     */
     @Override
     public void tick(GuhEntity guh) {
         BlockState zand = zand(guh);
         if (zand != null) {
             guh.makeStuckInBlock(zand, Vec3.ZERO);
+        }
+        AttributeInstance vlot = guh.getAttribute(Attributes.MOVEMENT_EFFICIENCY);
+        if (vlot == null) {
+            return;
+        }
+        boolean heeft = vlot.hasModifier(ZAND_VLOT);
+        if (zand != null && !heeft) {
+            vlot.addTransientModifier(new AttributeModifier(ZAND_VLOT, 1.0, AttributeModifier.Operation.ADD_VALUE));
+        } else if (zand == null && heeft) {
+            vlot.removeModifier(ZAND_VLOT);
         }
     }
 }

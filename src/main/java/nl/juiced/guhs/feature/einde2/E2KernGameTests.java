@@ -407,6 +407,25 @@ public class E2KernGameTests {
                     && !Einde2Bescherming.bedBlijftHeel(level, helper.absolutePos(new BlockPos(20, 1, 2))), "only a bed inside the box");
             helper.setBlock(new BlockPos(1, 1, 1), Blocks.AIR);
             helper.setBlock(new BlockPos(20, 1, 2), Blocks.AIR);
+            // a cake that stands there for show is never eaten (the first visitor would finish it for everybody after them)
+            helper.setBlock(new BlockPos(1, 1, 1), Blocks.CAKE);
+            helper.setBlock(new BlockPos(20, 1, 2), Blocks.CAKE);
+            helper.assertTrue(Einde2Bescherming.taartBlijftHeel(level, helper.absolutePos(new BlockPos(1, 1, 1))) && !Einde2Bescherming.taartBlijftHeel(level, pos)
+                    && !Einde2Bescherming.taartBlijftHeel(level, helper.absolutePos(new BlockPos(20, 1, 2))), "only a cake inside the box");
+            helper.setBlock(new BlockPos(1, 1, 1), Blocks.AIR);
+            helper.setBlock(new BlockPos(20, 1, 2), Blocks.AIR);
+            // what the builders put down as decoration never hurts in there; a fall or a creature is not touched
+            var bronnen = level.damageSources();
+            helper.assertTrue(Einde2Bescherming.doetGeenPijn(bronnen.campfire()) && Einde2Bescherming.doetGeenPijn(bronnen.stalagmite())
+                    && Einde2Bescherming.doetGeenPijn(bronnen.hotFloor()) && !Einde2Bescherming.doetGeenPijn(bronnen.fall())
+                    && !Einde2Bescherming.doetGeenPijn(bronnen.generic()), "a camp fire, a stalagmite and a hot floor are decoration");
+            var binnen = helper.spawn(net.minecraft.world.entity.EntityType.PIG, new BlockPos(2, 2, 2));
+            var buiten = helper.spawn(net.minecraft.world.entity.EntityType.PIG, new BlockPos(20, 2, 2));
+            float gezond = binnen.getHealth();
+            helper.assertTrue(!binnen.hurtServer(level, bronnen.campfire(), 2f) && binnen.getHealth() == gezond, "a camp fire in the box does not hurt");
+            helper.assertTrue(buiten.hurtServer(level, bronnen.campfire(), 2f) && buiten.getHealth() < gezond, "outside the box it does");
+            binnen.discard();
+            buiten.discard();
             helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(level, pos, state, player)).isCanceled(), "no breaking");
             var place = new BlockEvent.EntityPlaceEvent(BlockSnapshot.create(level.dimension(), level, pos.above()), Blocks.END_STONE.defaultBlockState(), player);
             helper.assertTrue(NeoForge.EVENT_BUS.post(place).isCanceled(), "no building");
@@ -444,6 +463,21 @@ public class E2KernGameTests {
                     && !SpelGroepen.structuurBezocht(b, Einde2Ids.LEEGTEHAVEN), "the compass knows the visit, per player");
             helper.assertTrue(Einde2Ontdekt.ontdek(a, Einde2Ids.BA_SING_GUH) && !Einde2Ontdekt.inKompas(Einde2Ids.BA_SING_GUH)
                     && !SpelGroepen.structuurBezocht(a, Einde2Ids.BA_SING_GUH), "a story structure is found, but it is no compass place");
+            // a place a story still hides from a player is not found by flying into it; found once, nothing is granted again
+            var zichtbaar = Einde2Haken.VERBORGEN;
+            Einde2Haken.VERBORGEN = (p, id) -> p == b && id.equals(Einde2Ids.VUURNATIE_HOOFDSTAD);
+            try {
+                helper.assertTrue(!Einde2Ontdekt.ontdek(b, Einde2Ids.VUURNATIE_HOOFDSTAD) && !Einde2Ontdekt.heeft(b, Einde2Ids.VUURNATIE_HOOFDSTAD)
+                        && Einde2Ontdekt.ontdek(a, Einde2Ids.VUURNATIE_HOOFDSTAD), "hidden for b, not for a");
+                var verborgen = helper.getLevel().getServer().getAdvancements().get(Guhs.id("quest/einde2_gevonden_" + Einde2Ids.VUURNATIE_HOOFDSTAD));
+                helper.assertTrue(verborgen != null && !b.getAdvancements().getOrStartProgress(verborgen).isDone(), "and no advancement for b");
+            } finally {
+                Einde2Haken.VERBORGEN = zichtbaar;
+            }
+            helper.assertTrue(Einde2Ontdekt.ontdek(b, Einde2Ids.VUURNATIE_HOOFDSTAD), "the veil is gone: now b finds it");
+            // an empty box in the air is no place: only a structure start that really stands there counts (the test world has none)
+            helper.assertTrue(Einde2Ontdekt.bouwBij(helper.getLevel(), helper.absolutePos(new BlockPos(1, 180, 1))) == null
+                    && Einde2Ontdekt.bouwBij(helper.getLevel(), helper.absolutePos(new BlockPos(1, 20, 1))) == null, "no start, nothing found");
             // the hooks: no-ops by default
             ServerLevel level = helper.getLevel();
             helper.assertTrue(Einde2Haken.portaalGeweigerd(level, a) == null, "no portal lock");
@@ -499,8 +533,9 @@ public class E2KernGameTests {
         for (String naam : GuhDex.NIEUW_EINDE2) {
             GuhVariant v = GuhVariant.valueOf(naam);
             helper.assertTrue(GuhDex.ENTRIES.contains(v), naam + " is in the Guhdex");
-            helper.assertTrue(GuhDex.TELLEND.contains(v) == (v != GuhVariant.LEEGTEWALVISGUH && v != GuhVariant.SPONSGUH && v != GuhVariant.GERRIT),
-                    naam + ": counts, unless it is a bonus page");
+            // (only the six tameable biome guhs count for a full Guhdex: every creature page is a bonus page)
+            helper.assertTrue(GuhDex.TELLEND.contains(v) == v.isBuitenGuh() && GuhDex.TELLEND.contains(v) == GuhDex.TELLEND_EINDE2.contains(v)
+                    && GuhDex.EXTRA.contains(v) == v.isCharacter(), naam + ": a biome guh counts, a creature page is a bonus page");
             if (v.isCharacter()) {
                 helper.assertTrue(GuhDex.isCreaturePage(v) && BuiltInRegistries.ENTITY_TYPE.containsKey(Guhs.id(v.id())), naam + ": a creature page with its entity");
             } else {
@@ -511,6 +546,27 @@ public class E2KernGameTests {
         helper.assertTrue(GuhVariant.KORSTGUH.ordinal() == GuhVariant.PINGUH.ordinal() + 1 && GuhVariant.KOORGUH.ordinal() == GuhVariant.REISGUH.ordinal() - 1,
                 "the six guhs sit between PINGUH and REISGUH");
         helper.assertTrue(GuhVariant.values()[GuhVariant.values().length - 1] == GuhVariant.GERRIT, "the creature pages come last");
+        // "wie de titel al had houdt hem": a full Guhdex but for the six biome guhs at the first login with einde2 is remembered
+        ServerPlayer oud = speler(helper), nieuw = speler(helper);
+        try {
+            var gezien = nl.juiced.guhs.world.GuhWorldData.get(helper.getLevel().getServer()).player(oud.getUUID()).seen;
+            gezien.addAll(GuhDex.TELLEND);
+            gezien.removeAll(GuhDex.TELLEND_EINDE2);
+            helper.assertTrue(!GuhDex.vol(gezien) && GuhDex.volZonderEinde2(gezien) && GuhDex.TELLEND_EINDE2.size() == 6, "full, but for the six new guhs");
+            // (a mock player logs in like any other, so the look was done then, with an empty Guhdex: the old player is looked at anew)
+            helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(oud).getBooleanOr(GuhDex.EINDE2_KENNER_GEKEKEN, false)
+                    && nl.juiced.guhs.quest.GuhQuests.saved(nieuw).getBooleanOr(GuhDex.EINDE2_KENNER_GEKEKEN, false), "the login looks, once");
+            nl.juiced.guhs.quest.GuhQuests.saved(oud).remove(GuhDex.EINDE2_KENNER_GEKEKEN);
+            GuhDex.onthoudKennerEinde2(oud);
+            helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(oud).getBooleanOr(GuhDex.EINDE2_KENNER_OUD, false)
+                    && !nl.juiced.guhs.quest.GuhQuests.saved(nieuw).getBooleanOr(GuhDex.EINDE2_KENNER_OUD, false), "the old Guhkenner is remembered, a new player is not");
+            nl.juiced.guhs.world.GuhWorldData.get(helper.getLevel().getServer()).player(nieuw.getUUID()).seen.addAll(gezien);
+            GuhDex.onthoudKennerEinde2(nieuw);
+            helper.assertTrue(!nl.juiced.guhs.quest.GuhQuests.saved(nieuw).getBooleanOr(GuhDex.EINDE2_KENNER_OUD, false), "looked at once: later is too late");
+        } finally {
+            weg(helper, oud);
+            weg(helper, nieuw);
+        }
         // the Superkompas tab "einde": the vesting, the eight side places and Bikinibodem, each an existing structure; the story
         // structures and Schelpenstad are in no tab
         var einde = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("einde")).findFirst().orElseThrow();

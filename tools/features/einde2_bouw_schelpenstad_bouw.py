@@ -1,5 +1,5 @@
 """
-einde2, slice bouw_schelpenstad - the build itself: guhs:schelpenstad, a guhs:leegte_bouw of 256 x 48 x 96 in the deep band
+einde2, slice bouw_schelpenstad - the build itself: guhs:schelpenstad, a guhs:leegte_bouw of 256 x 114 x 96 (the build itself is 48 high) in the deep band
 that stands next to Bikinibodem (build contract 6.11). bouw(h) puts the parts together (the land, the road, De Ruige Kroeg,
 the loopgraaf, Schelpenstad), records the markers of build contract 6.7, lights what you can walk on, checks everything
 and returns the build; build(h) of the main module saves it.

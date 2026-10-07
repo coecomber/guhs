@@ -91,6 +91,9 @@ public final class Enderguhs {
             return null;
         }
         BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+        if (nl.juiced.guhs.feature.einde2.Einde2Bescherming.beschermd(level, pos)) {
+            return null;   // (einde2: nothing comes by itself inside a big place of the outer islands: not on its streets, not on its roofs)
+        }
         return op(level, pos, random);
     }
 

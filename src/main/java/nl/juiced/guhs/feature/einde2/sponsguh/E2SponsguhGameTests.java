@@ -438,7 +438,10 @@ public class E2SponsguhGameTests {
         SponsguhWezen patguh = maak(helper, Cast.PATGUH, 3, 3);
         helper.assertTrue(david.zetMee(patguh) && patguh.getVehicle() == david, "the cast rides along");
         helper.runAfterDelay(8, () -> {
+            // (the sneak key is what a player gets off with: only that is refused, a teleport must be able to take them off)
+            player.setShiftKeyDown(true);
             player.stopRiding();
+            player.setShiftKeyDown(false);
             helper.assertTrue(player.getVehicle() == david && Hasselguh.draagt(player), "no getting off on the way");
         });
         helper.succeedWhen(() -> {

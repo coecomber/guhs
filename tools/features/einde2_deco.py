@@ -37,8 +37,11 @@ GEWOON = ["gatenkaasheuvels", "korstwoestijn"]
 # the grid of a set (chunks): the two common biomes are everywhere, so their buildings stand far apart; a rare biome is a
 # patch of a few hundred blocks (2-5 % of the land each), so a building of it needs a finer grid to be met at all: the biome
 # itself keeps it rare. Measured with E2DecoGameTests.einde2DecoZeldzaam (it logs what starts per 4000 x 4000 blocks): about
-# 20 buildings in the two common biomes together, and one or two per patch of a rare biome
-RUIM, FIJN = (48, 20), (14, 6)
+# 20 buildings in the two common biomes together. FIJN was 14 / 6 at first: one or two buildings in every rare patch, up to
+# 38 in a square rich in rare biomes, which is more than "aan de rustige kant" (DESIGN 2). With 20 / 8 (the grid of the
+# Mika-vesting) it is about half of that: a rare patch has one building, or none. ONE constant: the user decides in the
+# dev client whether the outer islands want more or fewer (the build contract asked 48 / 20, which is one in twenty patches)
+RUIM, FIJN = (48, 20), (20, 8)
 POST = (64, 28)           # (the wachtpost is small and fits almost anywhere: a wider grid keeps it as rare as the others)
 
 # id: (the Dutch name, its biomes, (spacing, separation)): IN THE ORDER OF THE SALTS (build contract 3.3)

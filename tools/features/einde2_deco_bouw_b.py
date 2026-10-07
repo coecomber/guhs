@@ -32,7 +32,8 @@ def kool(b, x, y, z, geplet=False):
 
 
 def rots(b):
-    return b.kies([(KLK, 88), (ERTS, 5), (KR, 7)])
+    # (ore as sparse as in the klipkaas of the biome itself: a mound is no little mine, the loot stays modest)
+    return b.kies([(KLK, 91), (ERTS, 2), (KR, 7)])
 
 
 # =====================================================================================================================

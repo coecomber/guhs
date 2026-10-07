@@ -188,8 +188,10 @@ public abstract class EigenWezen extends SponsguhWezen {
             }
             wacht = adjustedTickDelay(10);
             if (distanceToSqr(baas) > 24.0 * 24.0) {
-                BlockPos bij = Maatjes.plekBij(baas);
-                snapTo(bij.getX() + 0.5, bij.getY(), bij.getZ() + 0.5, getYRot(), getXRot());
+                BlockPos bij = Maatjes.vastePlekBij(baas);
+                if (bij != null) {                                           // (an owner in the air: it waits here until they land)
+                    snapTo(bij.getX() + 0.5, bij.getY(), bij.getZ() + 0.5, getYRot(), getXRot());
+                }
                 getNavigation().stop();
             } else {
                 getNavigation().moveTo(baas, volgSnelheid());

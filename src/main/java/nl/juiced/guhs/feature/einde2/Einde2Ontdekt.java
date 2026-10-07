@@ -13,8 +13,8 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -27,7 +27,8 @@ import nl.juiced.guhs.quest.GuhQuests;
 /**
  * einde2: which big places of the outer islands a player has been to. Every {@link #INTERVAL} ticks, for players in the
  * Guheinde (the high band and, for the two deep places, below it): the guhs:leegte_bouw structure whose build the player is
- * in is remembered in the player's own data ({@link #KEY}, a list of structure ids) and the hidden advancement
+ * in (a copy that really stands there, guaranteed or random: {@link #bouwBij}) is remembered in the player's own data
+ * ({@link #KEY}, a list of structure ids) and the hidden advancement
  * {@code guhs:quest/einde2_gevonden_<id>} is granted (tools/features/einde2.py writes them; the FTB "Vind ..." quests ask
  * for it). Per player, for any number of players. A place of the Superkompas is marked visited there as well
  * (SpelGroepen), so the compass and this list never disagree.
@@ -57,46 +58,52 @@ public final class Einde2Ontdekt {
         }
     }
 
-    /** The big place (one of the fourteen) whose build this spot lies in: its box, not its empty rim (null: none). */
+    /**
+     * The big place (one of the fourteen) whose build this spot lies in: its box, not its empty rim (null: none). Only a
+     * copy that really stands there counts: a structure start the chunk of this spot refers to. Where the one guaranteed
+     * copy belongs follows from the seed, but in terrain that was there before einde2 it was never made: an empty box in
+     * the air is no place to find.
+     */
     @Nullable
     public static String bouwBij(ServerLevel level, BlockPos pos) {
-        // (cheap first: the boxes of the guaranteed copies follow from the seed; the two deep places only have that one copy)
-        for (String id : Einde2Ids.LEEGTE_STRUCTUREN) {
-            BoundingBox doos = Plekken.doos(level, id);
-            if (doos != null && doos.isInside(pos)) {
-                return id;
+        if (!level.isLoaded(pos)) {
+            return null;
+        }
+        // (cheap first, below the high band: only the two deep places are there, and each has just its one copy)
+        if (pos.getY() < Einde2Ids.HOOG_MIN - 2) {
+            boolean diep = false;
+            for (String id : Einde2Ids.SPONS_STRUCTUREN) {
+                BoundingBox doos = Plekken.doos(level, id);
+                diep |= doos != null && doos.isInside(pos);
+            }
+            if (!diep) {
+                return null;
             }
         }
-        // (the random copies of the side places, in the high band: the chunk's structure references)
-        if (pos.getY() < Einde2Ids.HOOG_MIN - 2 || !level.isLoaded(pos)) {
-            return null;
-        }
-        StructureStart start = level.structureManager().getStructureWithPieceAt(pos, s -> s.is(Einde2Ids.ZIJ));
-        if (!start.isValid()) {
-            return null;
-        }
-        for (StructurePiece piece : start.getPieces()) {
-            if (piece instanceof LeegteBouwStructure.Stuk && piece.getBoundingBox().isInside(pos)) {
-                Identifier key = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getKey(start.getStructure());
+        // (the chunk's structure references: every start of a leegte_bouw whose pieces reach into this chunk)
+        for (StructureStart start : level.structureManager().startsForStructure(ChunkPos.containing(pos), s -> s instanceof LeegteBouwStructure)) {
+            if (start.isValid() && start.getStructure() instanceof LeegteBouwStructure bouw && bouw.doos(start.getChunkPos()).isInside(pos)) {
+                Identifier key = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getKey(bouw);
                 return key == null ? null : key.getPath();
             }
         }
         return null;
     }
 
-    /** Remembers the place for this player and grants its advancement (true: it is new for them). */
+    /**
+     * Remembers the place for this player and grants its advancement (true: it is new for them). A place a story still
+     * hides from this player ({@link Einde2Haken#VERBORGEN}) is not found by flying into it: false, and nothing is kept.
+     */
     public static boolean ontdek(ServerPlayer player, String structuur) {
+        if (heeft(player, structuur) || Einde2Haken.VERBORGEN.test(player, structuur)) {   // hook fase B: the veil of a story structure
+            return false;
+        }
         GuhAdvancements.grant(player, "einde2_gevonden_" + structuur);
         if (inKompas(structuur)) {
             SpelGroepen.bezoekStructuur(player, structuur);   // (the compass's own "visited" list; it remembers a place once)
         }
         CompoundTag saved = GuhQuests.saved(player);
         ListTag list = saved.getListOrEmpty(KEY);
-        for (int i = 0; i < list.size(); i++) {
-            if (structuur.equals(list.getStringOr(i, ""))) {
-                return false;
-            }
-        }
         list.add(StringTag.valueOf(structuur));
         saved.put(KEY, list);
         return true;

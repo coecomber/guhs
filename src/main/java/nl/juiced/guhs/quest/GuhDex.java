@@ -40,7 +40,8 @@ public final class GuhDex {
             GuhVariant.SJOELGUH, GuhVariant.DOOLHOFGUH, GuhVariant.KATAPULTGUH, GuhVariant.SPELLEIDERGUH, GuhVariant.SCHAATSMEESTERGUH,
             GuhVariant.STEMPELGUH, GuhVariant.CIRCUITGUH, GuhVariant.BRANDWEERGUH, GuhVariant.POLITIEGUH, GuhVariant.APOTHEKERGUH,
             GuhVariant.BOUWVAKKERGUH,
-            // einde2: the six guhs of the Guheinde's outer islands (its creature pages follow by themselves, see na)
+            // einde2: the six guhs of the Guheinde's outer islands (its creature pages follow by themselves, see na; they are
+            // bonus pages, see EXTRA)
             GuhVariant.KORSTGUH, GuhVariant.DUINGUH, GuhVariant.KRUIMELGUH, GuhVariant.SCHIMMELGUH, GuhVariant.KRISTALGUH, GuhVariant.KOORGUH));
 
     /** 3.0: the old list plus every variant after {@code last} in enum order (the Guhverhalen pages: all counting). */
@@ -61,7 +62,11 @@ public final class GuhDex {
      */
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
             GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,    // (1.2.8: the Bleekwoud is rare and they only come at night)
-            GuhVariant.LEEGTEWALVISGUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT);   // (einde2: each hidden behind an optional questline)
+            // (einde2: every creature page of the outer islands is a bonus page: only the six tameable biome guhs count for
+            // "compleet"; several of these are only met in a story or behind an optional questline)
+            GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,
+            GuhVariant.VLEERMUIS_LEMURGUH, GuhVariant.OTTER_PINGUINGUH, GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH,
+            GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT);
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
@@ -270,6 +275,42 @@ public final class GuhDex {
     public static final java.util.Set<String> NIEUW_EINDE2 = java.util.Set.of("KORSTGUH", "DUINGUH", "KRUIMELGUH", "SCHIMMELGUH", "KRISTALGUH", "KOORGUH",
             "ENDER_MIKA", "KAASMIJT", "SCHUILGUH", "KRUIMELKWAL", "LEEGTEWALVISGUH", "VLEERMUIS_LEMURGUH", "OTTER_PINGUINGUH", "DAS_MOLGUH",
             "SCHILDPAD_EENDGUH", "APPA_GUH", "MOMO_GUH", "SPONSGUH", "GERRIT");
+
+    /** einde2: the six of {@link #NIEUW_EINDE2} that count for a full Guhdex (the tameable biome guhs; the others are bonus pages). */
+    public static final java.util.Set<GuhVariant> TELLEND_EINDE2 = java.util.Set.of(GuhVariant.KORSTGUH, GuhVariant.DUINGUH, GuhVariant.KRUIMELGUH,
+            GuhVariant.SCHIMMELGUH, GuhVariant.KRISTALGUH, GuhVariant.KOORGUH);
+    /** Player data (GuhQuests.saved): the einde2 look at an older full Guhdex has been done for this player. */
+    public static final String EINDE2_KENNER_GEKEKEN = "guhs_einde2_kenner_gekeken";
+    /**
+     * Player data: "had a full Guhdex before new counting pages came". The sister update reads this very key for the title
+     * Guhkenner (its {@code GuhDex.kenner}); on this branch nothing reads it yet.
+     */
+    public static final String EINDE2_KENNER_OUD = "guhs_guhkenner_oud";
+
+    /** einde2: every counting page except the six biome guhs seen? */
+    public static boolean volZonderEinde2(java.util.Collection<GuhVariant> seen) {
+        return TELLEND.stream().filter(v -> !TELLEND_EINDE2.contains(v)).allMatch(seen::contains);
+    }
+
+    /**
+     * einde2 (login): looked at ONCE per player, the first time they log in with the Guheinde expansion: whoever has every
+     * counting page except the six biome guhs by then had a full Guhdex before and keeps the title Guhkenner for good
+     * (DESIGN 3: "wie de titel al had houdt hem"). A flag the sister update set earlier stays as it is. Later logins change
+     * nothing: a new player needs the six biome guhs too.
+     * <p>
+     * hook merge (einde2 onto the sister update): its {@code kenner(player)} already honours {@link #EINDE2_KENNER_OUD};
+     * nothing else has to be wired.
+     */
+    public static void onthoudKennerEinde2(ServerPlayer player) {
+        net.minecraft.nbt.CompoundTag saved = GuhQuests.saved(player);
+        if (saved.getBooleanOr(EINDE2_KENNER_GEKEKEN, false)) {
+            return;
+        }
+        saved.putBoolean(EINDE2_KENNER_GEKEKEN, true);
+        if (volZonderEinde2(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen)) {
+            saved.putBoolean(EINDE2_KENNER_OUD, true);
+        }
+    }
 
     private GuhDex() {
     }

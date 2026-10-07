@@ -230,12 +230,13 @@ public class E2BiomeguhsGameTests {
         wild.setNoAi(true);
         BlockPos[] plek = new BlockPos[1];
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(Schimmellamp.gloeit(lamp)
-                        && level.getBlockState(Schimmellamp.lichtPlek(lamp)).is(E2BiomeguhsFeature.SCHIMMELGUH_LICHT.get()), "tamed: it glows, with a real light"))
+                .thenWaitUntil(() -> helper.assertTrue(Schimmellamp.gloeit(lamp) && Schimmellamp.lichtVan(lamp) != null, "tamed: it glows, with a real light"))
                 .thenIdle(15)
                 .thenExecute(() -> {
-                    plek[0] = Schimmellamp.lichtPlek(lamp);
-                    helper.assertTrue(level.getBlockState(plek[0]).is(E2BiomeguhsFeature.SCHIMMELGUH_LICHT.get()), "the light stays while the guh is there");
+                    // (the light is at its head, or lags at most SPELING blocks behind: it does not move for every step)
+                    plek[0] = Schimmellamp.lichtVan(lamp);
+                    helper.assertTrue(plek[0] != null && plek[0].distManhattan(Schimmellamp.lichtPlek(lamp)) <= Schimmellamp.SPELING
+                            && level.getBlockState(plek[0]).is(E2BiomeguhsFeature.SCHIMMELGUH_LICHT.get()), "the light stays while the guh is there");
                     helper.assertTrue(level.getBrightness(LightLayer.BLOCK, plek[0]) == SchimmelguhLichtBlock.LICHT, "as bright as a lamp: "
                             + level.getBrightness(LightLayer.BLOCK, plek[0]));
                     helper.assertTrue(!Schimmellamp.gloeit(wild) && !level.getBlockState(Schimmellamp.lichtPlek(wild)).is(E2BiomeguhsFeature.SCHIMMELGUH_LICHT.get()),

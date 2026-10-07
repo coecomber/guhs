@@ -77,6 +77,13 @@ public final class Einde2 {
         Einde2Ontdekt.register();
         NeoForge.EVENT_BUS.addListener(Einde2Commando::register);
         NeoForge.EVENT_BUS.addListener(LeegteBouwStructure::onLevelLoad);
+        // (after the world has registered its structure state for the guaranteed copies, which it does at normal priority)
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, Plekken::onLevelLoad);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) -> {
+            if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
+                GuhDex.onthoudKennerEinde2(player);   // (whoever had a full Guhdex before the six biome guhs keeps the title)
+            }
+        });
         for (String structuur : Einde2Ids.LEEGTE_STRUCTUREN) {
             Einde2Bescherming.registreer(structuur, BESCHERM_RAND);
         }

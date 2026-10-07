@@ -206,7 +206,8 @@ def paleis(b):
     for x in range(C - 4, C + 5):
         b.set(x, Y3 + 1, x0 + 5, TRAP, gb.stair("north"))
     b.fill(C - 1, Y3 + 1, x0 + 1, C + 1, Y3 + 1, x0 + 4, "green_terracotta")
-    b.set(C, Y3 + 2, x0 + 1, "guhs:koningstroon", {"facing": "south", "royal": "true"})
+    # (a plain throne, not a "royal" one: that kind seats a new wild Koningguh on itself every day, and this is Bumi-guh's)
+    b.set(C, Y3 + 2, x0 + 1, "guhs:koningstroon", {"facing": "south", "royal": "false"})
     for x in (C - 2, C + 2):
         b.fill(x, Y3 + 2, x0 + 1, x, Y3 + 4, x0 + 1, "guhs:kristalkaas_blok")
         g.kristal(b, x, Y3 + 5, x0 + 1)
