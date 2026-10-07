@@ -1,0 +1,270 @@
+# bbq2 (guhrio-w1): Super Guhrio wereld 1, de binnentuin (levels 1-1 and 1-2), in the real client.
+# NOT run by the slice (a slice starts no game client): this is for the merge step's visual check.
+# Builds the whole castle unturned in the sky with its corner at 6000 100 6000 (/guhs guhrio bouwkasteel), like
+# bbq2_guhrio-engine.txt. A cell (s, row) of a level is then at:
+#   1-1 (west wing, runs south):  x 6019, y 127 + row, z 6011 + s      start (s 2, row 3) = 6019 130 6013
+#   1-2 (east wing, runs north):  x 6107, y 127 + row, z 6106 - s      start (s 2, row 3) = 6107 130 6104
+# In the garden (rows 0..9) you walk on row 3 (y 130), one floor up (rows 10..19) on row 12 (y 139).
+# (The sections "1-1" and "1-2" of bbq2_guhrio-engine.txt were written for the engine's practice lanes: with this slice
+#  merged their teleports land in THESE levels, one row too high. This script replaces them.)
+# Look at: the picture must be a clean side view of ONE floor (the garden: grass, hedges, the painted wall with hills that
+# have eyes and pale trees; one floor up: clouds, treetops, the top of the wall, pale towers and clouds with a snoet far
+# away). Nothing on the painted wall may look like something you can stand on. The tips appear above the panel (yellow)
+# while the level was never finished. The plants on the lawn are crosses you walk through. The jump: a step of 2 and a
+# pit of 3 must be easy (guhriosprong measures it) - if not, the levels need lower steps, not a different check.
+# The gag: at the flagpole of 1-2 Pad-guh stands in front of a little gate; a second after the "gehaald" line he says
+# "Bedankt! Maar de prinses is in een ander kasteeldeel, njeg." in the chat and above the panel.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-w1.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in minecraft:overworld run tp @s 6063.5 190 6063.5 0 90
+wait 60
+/forceload add 6000 6000 6127 6127
+wait 40
+/guhs guhrio bouwkasteel 6000 100 6000
+wait 100
+waitrender 600
+/guhs guhrio wis
+/guhs guhriow1 wis
+/gamemode survival
+
+section 1-1 the lawn: tips, the first ?-block, the first Guhmba
+/guhs guhrio start 6019 130 6013
+wait 20
+shot w1_1_1_00_start gui
+key right on
+guhriowacht 4
+shot w1_1_1_01_tip_lopen gui
+guhriowacht 9
+key right off
+wait 5
+shot w1_1_1_02_tip_vraagblok gui
+key jump on
+wait 10
+key jump off
+wait 12
+guhriosprong 10 a held jump on the lawn (3.3 high was worked out)
+/tp @s 6019.5 131 6025.5
+wait 15
+shot w1_1_1_03_guhmba_vanaf_de_heg gui
+/tp @s 6019.5 130 6035.5
+wait 15
+shot w1_1_1_04_stenen_en_vadsmunt gui
+/tp @s 6019.5 132 6042.5
+wait 8
+key left on
+key jump on
+wait 14
+key jump off
+key left off
+wait 20
+guhriopos 1-1 from the double hedge onto the bricks (a step of 2)
+shot w1_1_1_05_op_de_stenen gui
+/tp @s 6019.5 130 6046.5
+wait 15
+shot w1_1_1_06_kaasvijver gui
+key right on
+key jump on
+wait 12
+key jump off
+wait 14
+key right off
+guhriopos 1-1 over the first pit (2 wide)
+section 1-1 the secret: the mole's den
+/tp @s 6019.5 132 6059.5
+wait 10
+shot w1_1_1_07_pijp_met_muntje gui
+key down on
+wait 4
+key down off
+wait 45
+guhriopos 1-1 in the mole's den
+shot w1_1_1_08_mollenhol gui
+/tp @s 6019.5 139 6026.5
+wait 8
+key right on
+wait 30
+key right off
+wait 40
+guhriopos 1-1 out of the den's pipe (s 58)
+shot w1_1_1_09_terug_op_het_gazon gui
+/tp @s 6019.5 130 6073.5
+wait 15
+shot w1_1_1_10_trapje_over_de_vijver gui
+/tp @s 6019.5 131 6098.5
+wait 15
+shot w1_1_1_11_grote_pijp gui
+section 1-1 over the clouds
+/tp @s 6019.5 133 6099.5
+wait 8
+key down on
+wait 4
+key down off
+wait 45
+guhriopos 1-1 out of the pipe on the clouds (s 27)
+shot w1_1_1_12_boven_de_wolken gui
+/tp @s 6019.5 139 6050.5
+wait 15
+shot w1_1_1_13_gat_in_de_wolken gui
+/tp @s 6019.5 139 6058.5
+wait 15
+shot w1_1_1_14_boomtop_met_guhmba gui
+/tp @s 6019.5 139 6070.5
+wait 6
+key jump on
+wait 10
+key jump off
+wait 14
+shot w1_1_1_15_onzichtbaar_blok gui
+/tp @s 6019.5 144 6073.5
+wait 12
+shot w1_1_1_16_vadsmunt_op_het_wolkje gui
+/tp @s 6019.5 139 6083.5
+wait 15
+shot w1_1_1_17_regenboog_van_munten gui
+/tp @s 6019.5 143 6095.5
+wait 8
+key right on
+key jump on
+wait 10
+key jump off
+wait 30
+key right off
+shot w1_1_1_18_vlaggenmast gui
+wait 90
+guhriopos 1-1 after the flagpole (back in the hall)
+shot w1_1_1_19_terug_in_de_hal gui
+/guhs guhriow1 info
+
+section 1-2 the hedge garden
+/guhs guhrio gehaald kasteel_1_1
+/guhs guhrio start 6107 130 6104
+wait 20
+shot w1_1_2_00_start gui
+/tp @s 6107.5 131 6096.5
+wait 15
+shot w1_1_2_01_heg_met_guhmba gui
+/tp @s 6107.5 130 6087.5
+wait 10
+shot w1_1_2_02_kaasvijvers gui
+key right on
+key jump on
+wait 12
+key jump off
+wait 16
+key jump on
+wait 12
+key jump off
+wait 16
+key right off
+guhriopos 1-2 over the two ponds and the island
+/tp @s 6107.5 131 6075.5
+wait 20
+shot w1_1_2_03_schild_mika_en_guhmbas gui
+/tp @s 6107.5 130 6057.5
+wait 10
+/guhs guhrio kracht 1
+wait 5
+shot w1_1_2_04_kistje_van_stenen gui
+/tp @s 6107.5 130 6053.5
+wait 5
+key jump on
+wait 10
+key jump off
+wait 16
+key jump on
+wait 10
+key jump off
+wait 16
+shot w1_1_2_05_ingebroken gui
+/guhs guhrio kracht 0
+section 1-2 the secret: the coin greenhouse
+/tp @s 6107.5 130 6042.5
+wait 6
+key jump on
+wait 6
+key jump off
+wait 14
+shot w1_1_2_06_onzichtbaar_blok_bij_de_boog gui
+/tp @s 6107.5 134 6038.5
+wait 12
+shot w1_1_2_07_deur_op_de_boog gui
+key up on
+wait 3
+key up off
+wait 20
+guhriopos 1-2 in the greenhouse
+shot w1_1_2_08_muntenkas gui
+key right on
+wait 60
+key right off
+wait 5
+shot w1_1_2_09_muntenkas_vadsmunt gui
+/tp @s 6107.5 139 6028.5
+wait 8
+key up on
+wait 3
+key up off
+wait 20
+section 1-2 the wide pond, the tower door, the wall
+/tp @s 6107.5 130 6034.5
+wait 15
+shot w1_1_2_10_brede_vijver gui
+key right on
+key sprint on
+wait 14
+key jump on
+wait 14
+key jump off
+wait 20
+key sprint off
+key right off
+guhriopos 1-2 over the wide pond (3 wide, with a run)
+/tp @s 6107.5 130 6017.5
+wait 15
+shot w1_1_2_11_torendeur gui
+/tp @s 6107.5 130 6016.5
+wait 6
+key up on
+wait 3
+key up off
+wait 20
+guhriopos 1-2 through the tower door (on the wall, s 3)
+shot w1_1_2_12_op_de_tuinmuur gui
+/tp @s 6107.5 139 6088.5
+wait 15
+shot w1_1_2_13_kantelen_en_guhmbas gui
+/tp @s 6107.5 141 6061.5
+wait 15
+shot w1_1_2_14_muurtorentje gui
+/tp @s 6107.5 142 6054.5
+wait 6
+key right on
+key jump on
+wait 14
+key jump off
+wait 30
+key right off
+guhriopos 1-2 off the little tower over the gap (the third vadsmunt hangs there)
+shot w1_1_2_15_na_het_torentje gui
+/tp @s 6107.5 143 6045.5
+wait 8
+key right on
+key jump on
+wait 10
+key jump off
+wait 30
+key right off
+shot w1_1_2_16_vlaggenmast_en_padguh gui
+wait 30
+shot w1_1_2_17_bedankt gui
+wait 80
+guhriopos 1-2 after the flagpole (back in the hall)
+shot w1_1_2_18_terug_in_de_hal gui
+/guhs guhriow1 info
+gui verhalen
+wait 20
+shot w1_guhdex_verhalen

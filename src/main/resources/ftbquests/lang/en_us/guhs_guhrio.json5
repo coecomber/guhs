@@ -31,4 +31,32 @@
   "quest.47554805AFF4AADE.quest_desc": [
     "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg.",
   ],
+  "quest.475548F577B8469E.title": "Level 1-1: de binnentuin",
+  "quest.475548F577B8469E.quest_desc": [
+    "De eerste poort links in de levelhal. Een geschilderd gazon binnen de kasteelmuren: hier leer je lopen, springen, tegen &6vraagtekenblokken&r bonken en bovenop &dGuhmba's&r landen. Aan het eind van het gazon duik je in de grote groene pijp (&dS&r) en loop je over de wolken en de boomtoppen naar de vlaggenmast. Njeg!",
+  ],
+  "quest.4755483B8CA942F9.title": "Level 1-2: de heggentuin",
+  "quest.4755483B8CA942F9.quest_desc": [
+    "De eerste poort rechts. Heggen om op te klimmen, kaasvijvers om over te springen en een &dSchild-Mika&r met een rijtje Guhmba's ervoor: spring op hem en schop zijn schild weg. Door de torendeur (&dW&r) kom je bovenop de tuinmuur; daar staat de vlaggenmast.",
+  ],
+  "quest.4755482DA0916079.title": "In een ander kasteeldeel",
+  "quest.4755482DA0916079.quest_desc": [
+    "Achter de vlaggenmast van level 1-2 staat &dPad-guh&r al te zwaaien. Hij heeft goed nieuws en slecht nieuws. &oBedankt! Maar de prinses is in een ander kasteeldeel, njeg.&r De poort naar de kelders (wereld 2) is nu open.",
+  ],
+  "quest.47554803F15ACD30.title": "Drie keer vads in de binnentuin",
+  "quest.47554803F15ACD30.quest_desc": [
+    "De drie &6grote vadsmunten&r van level 1-1. Eén ligt bovenop de stenen (klim op de heg erachter en spring terug), één ligt op een wolkje (waarom zweeft daar een los muntje?), en één ligt ergens waar alleen een mol komt. Haal daarna de vlaggenmast.",
+  ],
+  "quest.475548418E82DEBA.title": "Drie keer vads in de heggentuin",
+  "quest.475548418E82DEBA.quest_desc": [
+    "De drie &6grote vadsmunten&r van level 1-2. Eén zit in een kistje van stenen: daar kom je alleen in als je groot bent (de &dSuperknabbel&r zit in het blok ervoor). Eén hangt hoog boven het gat achter het muurtorentje: spring ver. En één staat bij de tuinman op de plank. Haal daarna de vlaggenmast.",
+  ],
+  "quest.475548A80B002AFD.title": "Het mollenhol",
+  "quest.475548A80B002AFD.quest_desc": [
+    "Niet elke pijp in de binnentuin is zomaar een pijp. Boven één ervan zweeft een muntje. Probeer er eens in te duiken (&dS&r), njeg.",
+  ],
+  "quest.475548DEC98FD1DD.title": "De muntenkas",
+  "quest.475548DEC98FD1DD.quest_desc": [
+    "Bovenop de heggenboog van level 1-2 staat een deur. Maar hoe kom je daar? Naast het lage heggetje ervoor zweven twee muntjes boven elkaar... spring er eens onder. Sommige blokken zie je pas als je er met je hoofd tegenaan bonkt.",
+  ],
 }

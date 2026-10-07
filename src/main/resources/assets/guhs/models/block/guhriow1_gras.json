@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/guhriow1_gras_boven",
+    "bottom": "guhs:block/guhriow1_aarde",
+    "side": "guhs:block/guhriow1_gras"
+  }
+}

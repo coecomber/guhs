@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "soort=0": {
+      "model": "guhs:block/guhriow1_bloem_0"
+    },
+    "soort=1": {
+      "model": "guhs:block/guhriow1_bloem_1"
+    },
+    "soort=2": {
+      "model": "guhs:block/guhriow1_bloem_2"
+    },
+    "soort=3": {
+      "model": "guhs:block/guhriow1_bloem_3"
+    }
+  }
+}

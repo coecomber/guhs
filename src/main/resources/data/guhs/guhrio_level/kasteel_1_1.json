@@ -17,19 +17,59 @@
       ],
       "camera": "rechts",
       "afstand": 11,
-      "hoogte": 6,
-      "onder": -4,
-      "boven": 15
+      "hoogte": 5,
+      "onder": -3,
+      "boven": 6
+    },
+    {
+      "id": "hol",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          17,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 5,
+      "onder": 7,
+      "boven": 16
+    },
+    {
+      "id": "boven",
+      "punten": [
+        [
+          22,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 5,
+      "onder": 7,
+      "boven": 16
     }
   ],
   "uitgang": [
     47,
-    -4,
+    -3,
     -44
   ],
   "ingang": [
     55,
-    -4,
+    -3,
     -25
   ]
 }
