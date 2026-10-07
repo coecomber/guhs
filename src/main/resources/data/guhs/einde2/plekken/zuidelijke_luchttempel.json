@@ -1,0 +1,2110 @@
+{
+  "structuur": "zuidelijke_luchttempel",
+  "soort": "leegte_bouw",
+  "grootte": [
+    192,
+    116,
+    192
+  ],
+  "anker": [
+    88,
+    0,
+    88
+  ],
+  "plekken": {
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        88,
+        41,
+        165
+      ],
+      "tot": [
+        104,
+        49,
+        179
+      ],
+      "wie": "de landingsplek (17 x 15, vrij erboven)"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        96,
+        41,
+        172
+      ],
+      "wie": "hier sta je na aankomst"
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        96,
+        74,
+        226
+      ],
+      "wie": "het openingsshot: de tempel van het zuiden af gezien"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        110,
+        41,
+        168
+      ],
+      "wie": "rustpunt: hier komt het rustvuur"
+    },
+    "kamp": {
+      "soort": "zone",
+      "pos": [
+        60,
+        41,
+        159
+      ],
+      "tot": [
+        85,
+        47,
+        180
+      ],
+      "wie": "het kamp van het team"
+    },
+    "appa_kamp": {
+      "soort": "prop",
+      "pos": [
+        70,
+        41,
+        172
+      ],
+      "wie": "hier ligt Appa in het kamp (5 x 5 vrij)"
+    },
+    "team_aang": {
+      "soort": "npc",
+      "pos": [
+        76,
+        41,
+        166
+      ],
+      "yaw": -90.0,
+      "wie": "Aang-guh bij het kampvuur"
+    },
+    "team_momo": {
+      "soort": "npc",
+      "pos": [
+        78,
+        41,
+        164
+      ],
+      "yaw": 0.0,
+      "wie": "Momo-guh bij het kampvuur"
+    },
+    "team_katara": {
+      "soort": "npc",
+      "pos": [
+        82,
+        41,
+        166
+      ],
+      "yaw": 90.0,
+      "wie": "Katara-guh bij het kampvuur"
+    },
+    "team_sokka": {
+      "soort": "npc",
+      "pos": [
+        80,
+        41,
+        169
+      ],
+      "yaw": 180.0,
+      "wie": "Sokka-guh bij het kampvuur"
+    },
+    "team_toph": {
+      "soort": "npc",
+      "pos": [
+        78,
+        41,
+        169
+      ],
+      "yaw": 180.0,
+      "wie": "Toph-guh bij het kampvuur"
+    },
+    "team_zuka": {
+      "soort": "npc",
+      "pos": [
+        80,
+        41,
+        164
+      ],
+      "yaw": 0.0,
+      "wie": "Zuka bij het kampvuur"
+    },
+    "poort": {
+      "soort": "prop",
+      "pos": [
+        96,
+        49,
+        151
+      ],
+      "wie": "onder de tempelpoort"
+    },
+    "aang": {
+      "soort": "npc",
+      "pos": [
+        96,
+        49,
+        145
+      ],
+      "yaw": 0.0,
+      "wie": "Aang-guh wacht je op achter de poort",
+      "kind": "AANG_GUH"
+    },
+    "zweef_landing": {
+      "soort": "prop",
+      "pos": [
+        96,
+        49,
+        138
+      ],
+      "wie": "het midden van het voorplein: hier land je na de zweefringen"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        116,
+        49,
+        140
+      ],
+      "wie": "rustpunt: hier komt het rustvuur"
+    },
+    "hal": {
+      "soort": "zone",
+      "pos": [
+        76,
+        53,
+        76
+      ],
+      "tot": [
+        116,
+        66,
+        116
+      ],
+      "wie": "de Hal van de Guhvatars"
+    },
+    "beeld_01": {
+      "soort": "prop",
+      "pos": [
+        83,
+        53,
+        110
+      ],
+      "wie": "Guhvatar Wan-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_02": {
+      "soort": "prop",
+      "pos": [
+        83,
+        53,
+        101
+      ],
+      "wie": "Plons-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_03": {
+      "soort": "prop",
+      "pos": [
+        83,
+        53,
+        92
+      ],
+      "wie": "Kluit-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_04": {
+      "soort": "prop",
+      "pos": [
+        81,
+        53,
+        83
+      ],
+      "wie": "Guhvatar ...guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_05": {
+      "soort": "prop",
+      "pos": [
+        91,
+        53,
+        83
+      ],
+      "wie": "Szeto-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_06": {
+      "soort": "prop",
+      "pos": [
+        101,
+        53,
+        83
+      ],
+      "wie": "Yangchen-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "beeld_07": {
+      "soort": "prop",
+      "pos": [
+        111,
+        53,
+        83
+      ],
+      "wie": "Kuruk-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "kyoshi_beeld": {
+      "soort": "npc",
+      "pos": [
+        106,
+        53,
+        92
+      ],
+      "yaw": 90.0,
+      "wie": "Kyoshi-guh geeft raad (voor het beeld)",
+      "kind": "KYOSHI_GUH"
+    },
+    "roku_beeld": {
+      "soort": "npc",
+      "pos": [
+        106,
+        53,
+        101
+      ],
+      "yaw": 90.0,
+      "wie": "Roku-guh geeft raad (voor het beeld)",
+      "kind": "ROKU_GUH"
+    },
+    "beeld_08": {
+      "soort": "prop",
+      "pos": [
+        109,
+        53,
+        110
+      ],
+      "wie": "Aang-guh (de voorkant van het voetstuk; het beeld staat erachter)"
+    },
+    "voetstuk_leeg": {
+      "soort": "prop",
+      "pos": [
+        96,
+        53,
+        96
+      ],
+      "wie": "het laatste, lege voetstuk (hier komt het beeld van de speler)"
+    },
+    "monnikenverblijf": {
+      "soort": "zone",
+      "pos": [
+        68,
+        49,
+        42
+      ],
+      "tot": [
+        84,
+        83,
+        58
+      ],
+      "wie": "het monnikenverblijf (de noordwesttoren)"
+    },
+    "momo": {
+      "soort": "npc",
+      "pos": [
+        78,
+        49,
+        44
+      ],
+      "yaw": 0.0,
+      "wie": "Momo-guh's schuilplek achter de tonnen in de keuken",
+      "entity": "guhs:momo_guh"
+    },
+    "bed_speler": {
+      "soort": "prop",
+      "pos": [
+        79,
+        63,
+        44
+      ],
+      "wie": "het logeerbed van de speler (het lichtblauwe, het hoofdeinde)"
+    },
+    "momo_eind": {
+      "soort": "prop",
+      "pos": [
+        116,
+        77,
+        47
+      ],
+      "wie": "Momo-guh's nest onder het dak van de windtoren: het eind van de achtervolging"
+    },
+    "zweef_start": {
+      "soort": "prop",
+      "pos": [
+        96,
+        96,
+        109
+      ],
+      "wie": "de sprongplank van de zweefringen (zuidbalkon van de grote toren)"
+    },
+    "zadel": {
+      "soort": "prop",
+      "pos": [
+        101,
+        49,
+        41
+      ],
+      "wie": "het kapotte zadel op zijn schraag"
+    },
+    "appels": {
+      "soort": "prop",
+      "pos": [
+        90,
+        49,
+        39
+      ],
+      "wie": "de ton met appels voor Appa"
+    },
+    "appa": {
+      "soort": "prop",
+      "pos": [
+        96,
+        49,
+        34
+      ],
+      "wie": "hier staat Appa in zijn stal (7 x 5 x 7 vrij)"
+    },
+    "appa_stal": {
+      "soort": "zone",
+      "pos": [
+        88,
+        49,
+        27
+      ],
+      "tot": [
+        104,
+        57,
+        43
+      ],
+      "wie": "de stal van Appa"
+    },
+    "luchtbal_paal_01": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_02": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_03": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_04": {
+      "soort": "prop",
+      "pos": [
+        39,
+        51,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_05": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_06": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_07": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_08": {
+      "soort": "prop",
+      "pos": [
+        47,
+        51,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_09": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        79
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_10": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_11": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_12": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_13": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_14": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_15": {
+      "soort": "prop",
+      "pos": [
+        45,
+        51,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_16": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_17": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        81
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_18": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_19": {
+      "soort": "prop",
+      "pos": [
+        35,
+        51,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_20": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_21": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_22": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_23": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_24": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        83
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_25": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_26": {
+      "soort": "prop",
+      "pos": [
+        33,
+        51,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_27": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_28": {
+      "soort": "prop",
+      "pos": [
+        41,
+        51,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_29": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_30": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_31": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        85
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_32": {
+      "soort": "prop",
+      "pos": [
+        31,
+        51,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_33": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_34": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_35": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_36": {
+      "soort": "prop",
+      "pos": [
+        39,
+        51,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_37": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_38": {
+      "soort": "prop",
+      "pos": [
+        47,
+        51,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_39": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        87
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_40": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_41": {
+      "soort": "prop",
+      "pos": [
+        37,
+        51,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_42": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_43": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_44": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_45": {
+      "soort": "prop",
+      "pos": [
+        45,
+        51,
+        89
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_46": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_47": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_48": {
+      "soort": "prop",
+      "pos": [
+        35,
+        51,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_49": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_50": {
+      "soort": "prop",
+      "pos": [
+        43,
+        51,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_51": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_52": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_53": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        91
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_54": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_55": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_56": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_57": {
+      "soort": "prop",
+      "pos": [
+        41,
+        51,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_58": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_59": {
+      "soort": "prop",
+      "pos": [
+        49,
+        51,
+        93
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_60": {
+      "soort": "prop",
+      "pos": [
+        31,
+        51,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_61": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_62": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_63": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_64": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_65": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_66": {
+      "soort": "prop",
+      "pos": [
+        47,
+        51,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_67": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        95
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_68": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_69": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_70": {
+      "soort": "prop",
+      "pos": [
+        37,
+        51,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_71": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_72": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_73": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_74": {
+      "soort": "prop",
+      "pos": [
+        49,
+        50,
+        97
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_75": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_76": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_77": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_78": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_79": {
+      "soort": "prop",
+      "pos": [
+        43,
+        51,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_80": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_81": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        99
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_82": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_83": {
+      "soort": "prop",
+      "pos": [
+        33,
+        51,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_84": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_85": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_86": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_87": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_88": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_89": {
+      "soort": "prop",
+      "pos": [
+        49,
+        51,
+        101
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_90": {
+      "soort": "prop",
+      "pos": [
+        31,
+        51,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_91": {
+      "soort": "prop",
+      "pos": [
+        37,
+        50,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_92": {
+      "soort": "prop",
+      "pos": [
+        39,
+        51,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_93": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_94": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_95": {
+      "soort": "prop",
+      "pos": [
+        45,
+        50,
+        103
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_96": {
+      "soort": "prop",
+      "pos": [
+        31,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_97": {
+      "soort": "prop",
+      "pos": [
+        33,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_98": {
+      "soort": "prop",
+      "pos": [
+        35,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_99": {
+      "soort": "prop",
+      "pos": [
+        37,
+        51,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_100": {
+      "soort": "prop",
+      "pos": [
+        39,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_101": {
+      "soort": "prop",
+      "pos": [
+        41,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_102": {
+      "soort": "prop",
+      "pos": [
+        43,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_103": {
+      "soort": "prop",
+      "pos": [
+        45,
+        51,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_paal_104": {
+      "soort": "prop",
+      "pos": [
+        47,
+        50,
+        105
+      ],
+      "wie": "de top van een paal"
+    },
+    "luchtbal_start_speler": {
+      "soort": "prop",
+      "pos": [
+        40,
+        51,
+        106
+      ],
+      "wie": "het startplatform van de speler"
+    },
+    "luchtbal_doel_speler": {
+      "soort": "prop",
+      "pos": [
+        40,
+        54,
+        109
+      ],
+      "wie": "het gat van het doel van de speler"
+    },
+    "luchtbal_start_aang": {
+      "soort": "prop",
+      "pos": [
+        40,
+        51,
+        78
+      ],
+      "wie": "het startplatform van Aang-guh"
+    },
+    "luchtbal_doel_aang": {
+      "soort": "prop",
+      "pos": [
+        40,
+        54,
+        75
+      ],
+      "wie": "het gat van het doel van Aang-guh"
+    },
+    "luchtbal_veld": {
+      "soort": "zone",
+      "pos": [
+        30,
+        43,
+        78
+      ],
+      "tot": [
+        50,
+        60,
+        106
+      ],
+      "wie": "het luchtbalveld"
+    },
+    "taartenbank": {
+      "soort": "prop",
+      "pos": [
+        57,
+        49,
+        92
+      ],
+      "wie": "de taartenbank van Guhatso"
+    },
+    "guhatso": {
+      "soort": "npc",
+      "pos": [
+        60,
+        49,
+        92
+      ],
+      "yaw": 90.0,
+      "wie": "de herinnering van monnik Guhatso (gooit taarten)",
+      "kind": "GUHATSO"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        62,
+        49,
+        104
+      ],
+      "wie": "rustpunt: hier komt het rustvuur"
+    },
+    "scooter_start": {
+      "soort": "prop",
+      "pos": [
+        35,
+        49,
+        135
+      ],
+      "wie": "de start van de luchtscooter-baan"
+    },
+    "scooter_finish": {
+      "soort": "prop",
+      "pos": [
+        161,
+        49,
+        51
+      ],
+      "wie": "de finish van de luchtscooter-baan"
+    },
+    "scooter_baan": {
+      "soort": "pad",
+      "punten": [
+        [
+          35,
+          49,
+          135
+        ],
+        [
+          31,
+          49,
+          129
+        ],
+        [
+          27,
+          49,
+          122
+        ],
+        [
+          24,
+          49,
+          115
+        ],
+        [
+          21,
+          49,
+          108
+        ],
+        [
+          20,
+          49,
+          100
+        ],
+        [
+          19,
+          49,
+          93
+        ],
+        [
+          19,
+          49,
+          85
+        ],
+        [
+          20,
+          49,
+          77
+        ],
+        [
+          22,
+          49,
+          70
+        ],
+        [
+          25,
+          49,
+          63
+        ],
+        [
+          28,
+          49,
+          56
+        ],
+        [
+          32,
+          49,
+          49
+        ],
+        [
+          37,
+          49,
+          43
+        ],
+        [
+          43,
+          49,
+          37
+        ],
+        [
+          49,
+          49,
+          32
+        ],
+        [
+          55,
+          49,
+          28
+        ],
+        [
+          62,
+          49,
+          24
+        ],
+        [
+          70,
+          49,
+          21
+        ],
+        [
+          77,
+          49,
+          19
+        ],
+        [
+          85,
+          49,
+          18
+        ],
+        [
+          93,
+          49,
+          17
+        ],
+        [
+          101,
+          49,
+          17
+        ],
+        [
+          109,
+          49,
+          18
+        ],
+        [
+          117,
+          49,
+          20
+        ],
+        [
+          125,
+          49,
+          22
+        ],
+        [
+          132,
+          49,
+          26
+        ],
+        [
+          139,
+          49,
+          29
+        ],
+        [
+          145,
+          49,
+          34
+        ],
+        [
+          151,
+          49,
+          39
+        ],
+        [
+          157,
+          49,
+          45
+        ],
+        [
+          161,
+          49,
+          51
+        ],
+        [
+          161,
+          49,
+          51
+        ]
+      ],
+      "wie": "de middenlijn van de luchtscooter-baan, van start naar finish"
+    },
+    "knipoog_sjokkel": {
+      "soort": "pad",
+      "punten": [
+        [
+          33,
+          50,
+          127
+        ],
+        [
+          29,
+          50,
+          119
+        ]
+      ],
+      "wie": "Sjokkel kruipt over de binnenrand van het eerste stuk van de baan (van het eerste naar het tweede punt)"
+    },
+    "knipoog_sjokkel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          40,
+          51,
+          119
+        ],
+        [
+          31,
+          50,
+          123
+        ]
+      ],
+      "wie": "de camera van de knipoog met Sjokkel op de luchtscooter-baan"
+    },
+    "werkplaatsdeur": {
+      "soort": "prop",
+      "pos": [
+        132,
+        49,
+        93
+      ],
+      "wie": "het onderste middelste blok van de dichte deur van de Werktuigguh"
+    },
+    "werkplaats": {
+      "soort": "zone",
+      "pos": [
+        133,
+        49,
+        81
+      ],
+      "tot": [
+        165,
+        56,
+        105
+      ],
+      "wie": "de werkplaats van de Werktuigguh (achter de dichte deur)"
+    },
+    "oefen_1": {
+      "soort": "prop",
+      "pos": [
+        137,
+        49,
+        84
+      ],
+      "wie": "oefenopstelling 1: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "oefen_2": {
+      "soort": "prop",
+      "pos": [
+        143,
+        49,
+        84
+      ],
+      "wie": "oefenopstelling 2: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "oefen_3": {
+      "soort": "prop",
+      "pos": [
+        149,
+        49,
+        84
+      ],
+      "wie": "oefenopstelling 3: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "oefen_4": {
+      "soort": "prop",
+      "pos": [
+        155,
+        49,
+        84
+      ],
+      "wie": "oefenopstelling 4: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "oefen_5": {
+      "soort": "prop",
+      "pos": [
+        162,
+        49,
+        91
+      ],
+      "wie": "oefenopstelling 5: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "oefen_6": {
+      "soort": "prop",
+      "pos": [
+        162,
+        49,
+        97
+      ],
+      "wie": "oefenopstelling 6: het midden van een vrij vak van 5 x 4 x 5"
+    },
+    "werkbank": {
+      "soort": "prop",
+      "pos": [
+        141,
+        49,
+        98
+      ],
+      "wie": "de werkbank van de Werktuigguh (achter de dichte deur)"
+    },
+    "werktuigguh": {
+      "soort": "npc",
+      "pos": [
+        141,
+        49,
+        96
+      ],
+      "yaw": 0.0,
+      "wie": "de Werktuigguh aan zijn werkbank (achter de dichte deur)",
+      "kind": "WERKTUIGGUH"
+    },
+    "vredesballon_bouwplaats": {
+      "soort": "zone",
+      "pos": [
+        138,
+        49,
+        107
+      ],
+      "tot": [
+        166,
+        93,
+        141
+      ],
+      "wie": "de bouwplaats van de Vredesballon (ommuurd, open naar de lucht)"
+    },
+    "vredesballon_anker": {
+      "soort": "prop",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "wie": "de oorsprong van de lagen laag_vredesballon_1 .. _5 (25 x 44 x 25)"
+    },
+    "vredesballon_teller": {
+      "soort": "prop",
+      "pos": [
+        144,
+        50,
+        107
+      ],
+      "wie": "hier hangt het voortgangsbord van de Vredesballon (tegen de zuidmuur van de werkplaats)"
+    },
+    "rustpunt_4": {
+      "soort": "prop",
+      "pos": [
+        108,
+        49,
+        54
+      ],
+      "wie": "rustpunt: hier komt het rustvuur"
+    },
+    "lemur_1": {
+      "soort": "wezen",
+      "pos": [
+        72,
+        49,
+        132
+      ],
+      "yaw": -113.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "lemur_2": {
+      "soort": "wezen",
+      "pos": [
+        120,
+        49,
+        142
+      ],
+      "yaw": -46.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "lemur_3": {
+      "soort": "wezen",
+      "pos": [
+        62,
+        49,
+        66
+      ],
+      "yaw": 21.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "lemur_4": {
+      "soort": "wezen",
+      "pos": [
+        128,
+        49,
+        68
+      ],
+      "yaw": 88.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "lemur_5": {
+      "soort": "wezen",
+      "pos": [
+        91,
+        49,
+        62
+      ],
+      "yaw": 155.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "lemur_6": {
+      "soort": "wezen",
+      "pos": [
+        96,
+        49,
+        126
+      ],
+      "yaw": -138.0,
+      "entity": "guhs:vleermuis_lemurguh"
+    },
+    "zweefring_01": {
+      "soort": "ring",
+      "pos": [
+        96,
+        92,
+        121
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_02": {
+      "soort": "ring",
+      "pos": [
+        84,
+        89,
+        130
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "zweefring_03": {
+      "soort": "ring",
+      "pos": [
+        68,
+        86,
+        125
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "zweefring_04": {
+      "soort": "ring",
+      "pos": [
+        58,
+        84,
+        108
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_05": {
+      "soort": "ring",
+      "pos": [
+        58,
+        82,
+        88
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_06": {
+      "soort": "ring",
+      "pos": [
+        58,
+        80,
+        68
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_07": {
+      "soort": "ring",
+      "pos": [
+        57,
+        78,
+        46
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_08": {
+      "soort": "ring",
+      "pos": [
+        76,
+        76,
+        32
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "zweefring_09": {
+      "soort": "ring",
+      "pos": [
+        96,
+        74,
+        27
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "zweefring_10": {
+      "soort": "ring",
+      "pos": [
+        116,
+        72,
+        32
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "zweefring_11": {
+      "soort": "ring",
+      "pos": [
+        132,
+        69,
+        48
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_12": {
+      "soort": "ring",
+      "pos": [
+        131,
+        66,
+        72
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_13": {
+      "soort": "ring",
+      "pos": [
+        128,
+        62,
+        112
+      ],
+      "as": "z",
+      "straal": 4
+    },
+    "zweefring_14": {
+      "soort": "ring",
+      "pos": [
+        112,
+        57,
+        134
+      ],
+      "as": "x",
+      "straal": 4
+    },
+    "momo_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          78,
+          49,
+          46
+        ],
+        [
+          76,
+          56,
+          50
+        ],
+        [
+          76,
+          63,
+          50
+        ],
+        [
+          76,
+          70,
+          54
+        ],
+        [
+          76,
+          70,
+          64
+        ],
+        [
+          78,
+          68,
+          77
+        ],
+        [
+          78,
+          68,
+          96
+        ],
+        [
+          80,
+          68,
+          114
+        ],
+        [
+          96,
+          68,
+          112
+        ],
+        [
+          112,
+          68,
+          114
+        ],
+        [
+          114,
+          68,
+          96
+        ],
+        [
+          114,
+          68,
+          77
+        ],
+        [
+          116,
+          70,
+          64
+        ],
+        [
+          116,
+          70,
+          54
+        ],
+        [
+          116,
+          77,
+          49
+        ]
+      ],
+      "wie": "de achtervolging van Momo-guh: keuken, monnikentoren, brug, het dak van de hal rond, brug, windtoren, nest"
+    }
+  },
+  "lagen": {
+    "vredesballon_1": {
+      "template": "guhs:zuidelijke_luchttempel/laag_vredesballon_1",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "grootte": [
+        25,
+        42,
+        25
+      ]
+    },
+    "vredesballon_2": {
+      "template": "guhs:zuidelijke_luchttempel/laag_vredesballon_2",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "grootte": [
+        25,
+        42,
+        25
+      ]
+    },
+    "vredesballon_3": {
+      "template": "guhs:zuidelijke_luchttempel/laag_vredesballon_3",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "grootte": [
+        25,
+        42,
+        25
+      ]
+    },
+    "vredesballon_4": {
+      "template": "guhs:zuidelijke_luchttempel/laag_vredesballon_4",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "grootte": [
+        25,
+        42,
+        25
+      ]
+    },
+    "vredesballon_5": {
+      "template": "guhs:zuidelijke_luchttempel/laag_vredesballon_5",
+      "pos": [
+        140,
+        49,
+        112
+      ],
+      "grootte": [
+        25,
+        42,
+        25
+      ]
+    }
+  }
+}

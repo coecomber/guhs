@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:einde2_bouw_lucht_tegel",
+    "minecraft:light_blue_dye"
+  ],
+  "result": {
+    "id": "guhs:einde2_bouw_lucht_pijltegel"
+  }
+}

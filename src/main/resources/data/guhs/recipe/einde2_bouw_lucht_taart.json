@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BSB",
+    "WWW"
+  ],
+  "key": {
+    "B": "minecraft:sweet_berries",
+    "S": "minecraft:sugar",
+    "W": "minecraft:wheat"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_lucht_taart"
+  }
+}
