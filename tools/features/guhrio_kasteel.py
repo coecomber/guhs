@@ -23,6 +23,7 @@ lanes and decoration), writes the level files and the tiles, and declares the st
 """
 import importlib
 import math
+import os
 
 from features import guhrio_baan as gb
 from features import guhrio_proef
@@ -672,6 +673,7 @@ def _stempel(h, b, baan, poort, uitgang, na, duel):
     baan.controleer(duel=duel)
     kleur = achtergrond(baan.thema, baan.rng)
     baan.stempel(b.set, b.s.entity, kleur)
+    _dam(b, baan)
     gb.level_json(h, baan.id, baan.banen(), baan.wereld, baan.naar_eigen(uitgang), baan.naar_eigen(poort[2]), na)
     # the gate in the hall: two blocks that know where the level's start block is, counted in the gate's own frame
     (px, py, pz), kijkt, _voor = poort
@@ -681,6 +683,39 @@ def _stempel(h, b, baan, poort, uitgang, na, duel):
         dx, dyy, dz = sx - px, sy - (py + dy), sz - pz
         b.set(px, py + dy, pz, gb.POORT, {"facing": kijkt}, {"id": "guhs:guhrio_start", "Level": baan.id, "NaarX": dx * fx + dz * fz,
                                                              "NaarY": dyy, "NaarZ": -dx * fz + dz * fx})
+
+
+def _dam(b, baan):
+    """
+    The sauce of a pit stays in its pit. The trench under a lane runs from end to end, and in a real copy a fluid spreads a
+    few blocks along it (195 cells of the castle held sauce the template has as air: bouwcheck compleet at the merge). So
+    the trench is closed with a plain brick at both ends of every stretch of sauce, under the ground beside the pit: nothing
+    of it is ever seen. A pit a level leaves DRY right beside a sauce pit would show the sauce flow in: refused.
+    """
+    for s in sorted(baan.trog):
+        for n in (s - 1, s + 1):
+            if not 0 <= n < baan.L or n in baan.trog:
+                continue
+            if baan.haal(n, 0) is None or baan.haal(n, 0) in gb.LOS:
+                baan.fout(f"the pit at s = {n} is dry but lies right beside the sauce at s = {s}: the sauce would flow into it in a real "
+                          f"copy (give it sauce too with baan.saus, or leave a column of ground between them)")
+            b.set(*baan.bouw(n, -1), STENEN)
+
+
+def hallen(h, banen):
+    """
+    data/guhs/guhrio_kasteel/hallen.json: the sealed level halls of the castle (the lane, its gallery and the trench) in
+    the coordinates of the whole build, each with its level and that level's start block. GuhrioKasteel.java puts a player
+    who stands in one without playing its level (a crash, a teleport) back at the level's gate: a hall has no door.
+    """
+    uit = []
+    for wereld, thema, kant in LEVELS:
+        v = VLEUGEL[kant]
+        x0, x1 = min(v["galerij"][0], v["baan"]), max(v["galerij"][1], v["baan"])
+        uit.append((banen[wereld], [x0, Y0[thema] - 1, LZ0, x1, Y0[thema] + SLOT_H - 1, LZ1]))
+    uit.append((banen["duel"], [42, DUEL_Y0 - 1, 39, 83, DUEL_Y0 + DUEL_H - 1, 50]))
+    h.w(os.path.join(h.D, NAAM, "hallen.json"), [
+        {"level": baan.id, "start": list(baan.bouw(*baan._start)), "kijkt": baan.kant("verder"), "doos": doos} for baan, doos in uit])
 
 
 def verlicht_binnen(b):
@@ -827,6 +862,7 @@ def build(h):
         print(f"{NAAM} geometry check found problems:\n  " + "\n  ".join(problems[:60]))
         raise SystemExit(f"guhrio: fix the castle ({len(problems)} problems, see above)")
     nx, nz, _saved = b.save_tiles(NAAM)
+    hallen(h, banen)
     wereld.bbq_structuur(h, NAAM, soort="burcht", titel="Kasteel van de Grote Nether-Mika",
                          tooltip="Super Guhrio: zes levels van opzij, een duel en een ontvoerde prinses (Guhbarbecuether)",
                          biomes=wereld.BBQ, salt=21302301, spacing=44, separation=18,
