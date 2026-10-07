@@ -90,6 +90,18 @@
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755486CE658189C",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_bikinibodem.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.09375,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -1072,6 +1084,33 @@
       x: 6.0,
       y: 23.9125,
       shape: "rsquare",
+    },
+    {
+      id: "475548DCC194C801",
+      icon: {
+        id: "guhs:zeepbel",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:bikinibodem",
+          id: "4755482BE967199F",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554814A632C641",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 0.0,
+      y: 27.875,
+      shape: "circle",
     },
   ],
 }

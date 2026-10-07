@@ -2,36 +2,1989 @@
   "structuur": "bikinibodem",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    224,
+    114,
+    224
   ],
   "anker": [
-    8,
+    104,
     0,
-    8
+    104
   ],
   "plekken": {
+    "koepel": {
+      "soort": "zone",
+      "pos": [
+        6,
+        16,
+        12
+      ],
+      "tot": [
+        206,
+        81,
+        212
+      ],
+      "wie": "alles onder de zeepbel: hier hangt de leegtemist"
+    },
+    "plein": {
+      "soort": "zone",
+      "pos": [
+        88,
+        16,
+        94
+      ],
+      "tot": [
+        124,
+        24,
+        130
+      ],
+      "wie": "het Bellenplein, met de lift in het midden"
+    },
+    "weg_1": {
+      "soort": "pad",
+      "punten": [
+        [
+          48,
+          16,
+          112
+        ],
+        [
+          88,
+          16,
+          112
+        ],
+        [
+          93,
+          16,
+          112
+        ],
+        [
+          97,
+          16,
+          103
+        ],
+        [
+          106,
+          16,
+          99
+        ],
+        [
+          115,
+          16,
+          103
+        ],
+        [
+          119,
+          16,
+          112
+        ],
+        [
+          124,
+          16,
+          112
+        ],
+        [
+          204,
+          16,
+          112
+        ]
+      ],
+      "wie": "de Hoofdstraat, van de vaarschool over het plein (om de lift heen) naar de stadspoort"
+    },
+    "weg_2": {
+      "soort": "pad",
+      "punten": [
+        [
+          106,
+          16,
+          69
+        ],
+        [
+          106,
+          16,
+          94
+        ],
+        [
+          106,
+          16,
+          99
+        ],
+        [
+          115,
+          16,
+          103
+        ],
+        [
+          119,
+          16,
+          112
+        ],
+        [
+          115,
+          16,
+          121
+        ],
+        [
+          106,
+          16,
+          125
+        ],
+        [
+          106,
+          16,
+          130
+        ],
+        [
+          106,
+          16,
+          150
+        ]
+      ],
+      "wie": "de Bellenlaan, van de Bellenkom over het plein naar de Schelpstraat"
+    },
+    "weg_3": {
+      "soort": "pad",
+      "punten": [
+        [
+          61,
+          16,
+          73
+        ],
+        [
+          157,
+          16,
+          73
+        ],
+        [
+          157,
+          16,
+          153
+        ],
+        [
+          61,
+          16,
+          153
+        ],
+        [
+          61,
+          16,
+          73
+        ]
+      ],
+      "wie": "de ringweg: Noordstraat, Oostring, Schelpstraat, Westring"
+    },
+    "neptuguh_troon": {
+      "soort": "prop",
+      "pos": [
+        91,
+        16,
+        127
+      ],
+      "wie": "hier zet koning Neptuguh zijn troon neer als hij op bezoek komt (7 x 7 x 7 vrij)"
+    },
+    "neptuguh": {
+      "soort": "npc",
+      "pos": [
+        91,
+        16,
+        127
+      ],
+      "yaw": -135.0,
+      "wie": "koning Neptuguh",
+      "entity": "guhs:neptuguh"
+    },
+    "bevroren_krabguh": {
+      "soort": "prop",
+      "pos": [
+        96,
+        16,
+        128
+      ],
+      "wie": "hier staat Meneer Krabguh als ijsklomp (deel 2)"
+    },
+    "examen_brug": {
+      "soort": "zone",
+      "pos": [
+        20,
+        16,
+        107
+      ],
+      "tot": [
+        26,
+        23,
+        117
+      ],
+      "wie": "het bruggetje in het parcours"
+    },
+    "examen_start": {
+      "soort": "prop",
+      "pos": [
+        51,
+        16,
+        100
+      ],
+      "wie": "hier staat het vetbootje klaar (5 x 4 x 7 vrij)"
+    },
+    "examen_finish": {
+      "soort": "prop",
+      "pos": [
+        51,
+        16,
+        104
+      ],
+      "wie": "de finishlijn: een rondje verder"
+    },
+    "examen_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          51,
+          16,
+          100
+        ],
+        [
+          51,
+          16,
+          85
+        ],
+        [
+          30,
+          16,
+          85
+        ],
+        [
+          23,
+          16,
+          85
+        ],
+        [
+          23,
+          16,
+          100
+        ],
+        [
+          23,
+          18,
+          112
+        ],
+        [
+          23,
+          16,
+          124
+        ],
+        [
+          23,
+          16,
+          139
+        ],
+        [
+          32,
+          16,
+          139
+        ],
+        [
+          43,
+          16,
+          139
+        ],
+        [
+          51,
+          16,
+          139
+        ],
+        [
+          51,
+          16,
+          120
+        ],
+        [
+          51,
+          16,
+          104
+        ],
+        [
+          51,
+          16,
+          100
+        ]
+      ],
+      "wie": "het pylonenparcours: een rondje tegen de klok in, over het bruggetje"
+    },
+    "pylon_01": {
+      "soort": "prop",
+      "pos": [
+        47,
+        16,
+        89
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_02": {
+      "soort": "prop",
+      "pos": [
+        27,
+        16,
+        89
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_03": {
+      "soort": "prop",
+      "pos": [
+        27,
+        16,
+        135
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_04": {
+      "soort": "prop",
+      "pos": [
+        47,
+        16,
+        135
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_05": {
+      "soort": "prop",
+      "pos": [
+        30,
+        16,
+        137
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_06": {
+      "soort": "prop",
+      "pos": [
+        35,
+        16,
+        141
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_07": {
+      "soort": "prop",
+      "pos": [
+        40,
+        16,
+        137
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_08": {
+      "soort": "prop",
+      "pos": [
+        45,
+        16,
+        141
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_09": {
+      "soort": "prop",
+      "pos": [
+        21,
+        16,
+        95
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_10": {
+      "soort": "prop",
+      "pos": [
+        25,
+        16,
+        101
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_11": {
+      "soort": "prop",
+      "pos": [
+        21,
+        16,
+        123
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_12": {
+      "soort": "prop",
+      "pos": [
+        25,
+        16,
+        129
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_13": {
+      "soort": "prop",
+      "pos": [
+        49,
+        16,
+        127
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_14": {
+      "soort": "prop",
+      "pos": [
+        53,
+        16,
+        121
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_15": {
+      "soort": "prop",
+      "pos": [
+        30,
+        16,
+        83
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "pylon_16": {
+      "soort": "prop",
+      "pos": [
+        40,
+        16,
+        87
+      ],
+      "wie": "een pylon van het parcours"
+    },
+    "knipoog_guhdalf_brug": {
+      "soort": "npc",
+      "pos": [
+        23,
+        18,
+        112
+      ],
+      "yaw": 180.0,
+      "wie": "Guhdalf: gij zult niet passeren zonder rijbewijs",
+      "kind": "GUHDALF"
+    },
+    "knipoog_guhdalf_omweg": {
+      "soort": "pad",
+      "punten": [
+        [
+          23,
+          16,
+          103
+        ],
+        [
+          37,
+          16,
+          103
+        ],
+        [
+          37,
+          16,
+          121
+        ],
+        [
+          23,
+          16,
+          121
+        ]
+      ],
+      "wie": "om Guhdalf heen: van de baan af, om de sausvijver, en weer terug"
+    },
+    "grill": {
+      "soort": "prop",
+      "pos": [
+        134,
+        16,
+        83
+      ],
+      "wie": "de grill van De Krokante Knabbel"
+    },
+    "grill_speler": {
+      "soort": "prop",
+      "pos": [
+        134,
+        16,
+        84
+      ],
+      "wie": "hier sta je te bakken"
+    },
+    "sponsguh_werk": {
+      "soort": "npc",
+      "pos": [
+        136,
+        16,
+        84
+      ],
+      "yaw": 90.0,
+      "wie": "Sponsguh aan de grill",
+      "entity": "guhs:sponsguh"
+    },
+    "kluis": {
+      "soort": "prop",
+      "pos": [
+        150,
+        16,
+        83
+      ],
+      "wie": "de kluis met het geheime recept"
+    },
+    "krabguh": {
+      "soort": "npc",
+      "pos": [
+        147,
+        16,
+        87
+      ],
+      "yaw": 0.0,
+      "wie": "Meneer Krabguh",
+      "entity": "guhs:meneer_krabguh"
+    },
+    "kantoor": {
+      "soort": "zone",
+      "pos": [
+        143,
+        16,
+        83
+      ],
+      "tot": [
+        151,
+        19,
+        89
+      ],
+      "wie": "het kantoor van Meneer Krabguh"
+    },
+    "kassa": {
+      "soort": "prop",
+      "pos": [
+        140,
+        17,
+        92
+      ],
+      "wie": "de kassa, op de toonbank"
+    },
+    "octo_kassa": {
+      "soort": "npc",
+      "pos": [
+        140,
+        16,
+        91
+      ],
+      "yaw": 0.0,
+      "wie": "Octo Tentakel achter de kassa (hij zucht)",
+      "entity": "guhs:octo_mika"
+    },
+    "besteltafel_1": {
+      "soort": "prop",
+      "pos": [
+        131,
+        16,
+        95
+      ],
+      "wie": "een besteltafel met een bel"
+    },
+    "besteltafel_2": {
+      "soort": "prop",
+      "pos": [
+        131,
+        16,
+        101
+      ],
+      "wie": "een besteltafel met een bel"
+    },
+    "besteltafel_3": {
+      "soort": "prop",
+      "pos": [
+        148,
+        16,
+        103
+      ],
+      "wie": "een besteltafel met een bel"
+    },
+    "klant_1": {
+      "soort": "npc",
+      "pos": [
+        132,
+        16,
+        95
+      ],
+      "yaw": 90.0,
+      "wie": "een klant aan tafel",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "klant_2": {
+      "soort": "npc",
+      "pos": [
+        132,
+        16,
+        101
+      ],
+      "yaw": 90.0,
+      "wie": "een klant aan tafel",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "klant_3": {
+      "soort": "npc",
+      "pos": [
+        149,
+        16,
+        103
+      ],
+      "yaw": 90.0,
+      "wie": "een klant aan tafel",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "klant_4": {
+      "soort": "npc",
+      "pos": [
+        135,
+        16,
+        99
+      ],
+      "yaw": 180.0,
+      "wie": "een klant aan tafel",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "parel": {
+      "soort": "npc",
+      "pos": [
+        144,
+        16,
+        98
+      ],
+      "yaw": 0.0,
+      "wie": "Parel, de dochter van Meneer Krabguh (5 x 5 x 5 vrij)",
+      "entity": "guhs:parel_guh"
+    },
+    "krokante_knabbel": {
+      "soort": "zone",
+      "pos": [
+        127,
+        16,
+        82
+      ],
+      "tot": [
+        152,
+        25,
+        106
+      ],
+      "wie": "De Krokante Knabbel"
+    },
+    "mobiel_start": {
+      "soort": "prop",
+      "pos": [
+        139,
+        16,
+        112
+      ],
+      "wie": "voor de deur: hier staat de Knabbelburgermobiel bij het begin van deel 2 (5 x 4 x 7 vrij)"
+    },
+    "vetemmer_ingang": {
+      "soort": "prop",
+      "pos": [
+        139,
+        16,
+        118
+      ],
+      "wie": "de voordeur van De Vetemmer"
+    },
+    "vetemmer": {
+      "soort": "zone",
+      "pos": [
+        130,
+        16,
+        118
+      ],
+      "tot": [
+        148,
+        24,
+        136
+      ],
+      "wie": "De Vetemmer: het restaurant, zonder gasten"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        140,
+        16,
+        137
+      ],
+      "wie": "voor de sluiproute van De Vetemmer"
+    },
+    "karen": {
+      "soort": "prop",
+      "pos": [
+        129,
+        16,
+        142
+      ],
+      "wie": "Karen, Plankmika's computervrouw"
+    },
+    "plankmika": {
+      "soort": "npc",
+      "pos": [
+        133,
+        16,
+        142
+      ],
+      "yaw": 90.0,
+      "wie": "Plankmika",
+      "entity": "guhs:plankmika"
+    },
+    "knipoog_kloon_professor": {
+      "soort": "npc",
+      "pos": [
+        131,
+        16,
+        143
+      ],
+      "yaw": 180.0,
+      "wie": "Professor Knabbelkloon: als u het recept kloont, heeft u er twee",
+      "kind": "KNABBELKLOON"
+    },
+    "plan_z_kast": {
+      "soort": "prop",
+      "pos": [
+        135,
+        16,
+        137
+      ],
+      "wie": "de archiefkast: de la van Plan Z"
+    },
+    "plan_z_plankmika": {
+      "soort": "npc",
+      "pos": [
+        135,
+        16,
+        138
+      ],
+      "yaw": 180.0,
+      "wie": "hier staat Plankmika als hij Plan Z vindt",
+      "entity": "guhs:plankmika"
+    },
+    "knipoog_kloon_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          135,
+          18,
+          145
+        ],
+        [
+          131,
+          17,
+          142
+        ]
+      ],
+      "wie": "de camera van knipoog_kloon"
+    },
+    "sluip_start": {
+      "soort": "prop",
+      "pos": [
+        140,
+        16,
+        138
+      ],
+      "wie": "hier begint de sluiproute"
+    },
+    "sluip_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          140,
+          16,
+          138
+        ],
+        [
+          149,
+          16,
+          138
+        ],
+        [
+          149,
+          16,
+          142
+        ],
+        [
+          140,
+          16,
+          142
+        ],
+        [
+          140,
+          16,
+          146
+        ],
+        [
+          148,
+          16,
+          146
+        ]
+      ],
+      "wie": "langs camera's en lasers naar het recept"
+    },
+    "laser_1": {
+      "soort": "zone",
+      "pos": [
+        144,
+        16,
+        137
+      ],
+      "tot": [
+        144,
+        18,
+        139
+      ],
+      "wie": "een laserstraal dwars over de gang"
+    },
+    "laser_2": {
+      "soort": "zone",
+      "pos": [
+        148,
+        16,
+        140
+      ],
+      "tot": [
+        150,
+        18,
+        140
+      ],
+      "wie": "een laserstraal dwars over de gang"
+    },
+    "laser_3": {
+      "soort": "zone",
+      "pos": [
+        143,
+        16,
+        141
+      ],
+      "tot": [
+        143,
+        18,
+        143
+      ],
+      "wie": "een laserstraal dwars over de gang"
+    },
+    "laser_4": {
+      "soort": "zone",
+      "pos": [
+        145,
+        16,
+        145
+      ],
+      "tot": [
+        145,
+        18,
+        147
+      ],
+      "wie": "een laserstraal dwars over de gang"
+    },
+    "camera_1": {
+      "soort": "prop",
+      "pos": [
+        150,
+        19,
+        137
+      ],
+      "wie": "een bewakingscamera aan het plafond"
+    },
+    "camera_2": {
+      "soort": "prop",
+      "pos": [
+        139,
+        19,
+        143
+      ],
+      "wie": "een bewakingscamera aan het plafond"
+    },
+    "camera_3": {
+      "soort": "prop",
+      "pos": [
+        150,
+        19,
+        145
+      ],
+      "wie": "een bewakingscamera aan het plafond"
+    },
+    "camera_4": {
+      "soort": "prop",
+      "pos": [
+        146,
+        19,
+        141
+      ],
+      "wie": "een bewakingscamera aan het plafond"
+    },
+    "receptkluis": {
+      "soort": "prop",
+      "pos": [
+        150,
+        17,
+        146
+      ],
+      "wie": "hier ligt het gestolen recept (achter de lasers)"
+    },
+    "lab": {
+      "soort": "zone",
+      "pos": [
+        127,
+        16,
+        136
+      ],
+      "tot": [
+        151,
+        19,
+        148
+      ],
+      "wie": "het lab van Plankmika, met de sluiproute"
+    },
+    "ijs_toonbank": {
+      "soort": "prop",
+      "pos": [
+        76,
+        16,
+        88
+      ],
+      "wie": "de toonbank van de ijssalon"
+    },
+    "ijsverkoper": {
+      "soort": "npc",
+      "pos": [
+        76,
+        16,
+        86
+      ],
+      "yaw": 0.0,
+      "wie": "de ijsverkoper",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "ijs_sponsguh": {
+      "soort": "npc",
+      "pos": [
+        75,
+        17,
+        90
+      ],
+      "yaw": 180.0,
+      "wie": "Sponsguh op zijn kruk aan de bar",
+      "entity": "guhs:sponsguh"
+    },
+    "ijs_patguh": {
+      "soort": "npc",
+      "pos": [
+        77,
+        17,
+        90
+      ],
+      "yaw": 180.0,
+      "wie": "Patguh naast hem",
+      "entity": "guhs:patguh"
+    },
+    "ijs_speler": {
+      "soort": "prop",
+      "pos": [
+        79,
+        16,
+        90
+      ],
+      "wie": "jouw kruk"
+    },
+    "knipoog_ijs_balto": {
+      "soort": "npc",
+      "pos": [
+        70,
+        17,
+        98
+      ],
+      "yaw": -90.0,
+      "wie": "Baltoguh achter een torenhoge ijscoupe: ijs, sneeuw, bijna hetzelfde",
+      "kind": "BALTOGUH"
+    },
+    "knipoog_ijs_coupe": {
+      "soort": "prop",
+      "pos": [
+        71,
+        16,
+        98
+      ],
+      "wie": "het tafeltje voor hem: hier komt de torenhoge ijscoupe (3 vrij erboven)"
+    },
+    "knipoog_ijs_kistje": {
+      "soort": "prop",
+      "pos": [
+        70,
+        16,
+        99
+      ],
+      "wie": "op de vloer naast zijn kruk: het medicijnkistje dat hij niet ziet"
+    },
+    "knipoog_ijs_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          77,
+          18,
+          102
+        ],
+        [
+          71,
+          18,
+          98
+        ]
+      ],
+      "wie": "de camera van knipoog_ijs"
+    },
+    "ijssalon": {
+      "soort": "zone",
+      "pos": [
+        66,
+        16,
+        84
+      ],
+      "tot": [
+        86,
+        20,
+        106
+      ],
+      "wie": "de Guhfy Guhber-ijssalon"
+    },
+    "bootschool": {
+      "soort": "zone",
+      "pos": [
+        31,
+        16,
+        125
+      ],
+      "tot": [
+        45,
+        20,
+        134
+      ],
+      "wie": "de vaarschool van juf Pufguh"
+    },
+    "pufguh": {
+      "soort": "npc",
+      "pos": [
+        46,
+        16,
+        122
+      ],
+      "yaw": -90.0,
+      "wie": "juf Pufguh, bij de startstreep",
+      "entity": "guhs:juf_pufguh"
+    },
+    "knipoog_guhdalf_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          38,
+          21,
+          119
+        ],
+        [
+          23,
+          19,
+          112
+        ]
+      ],
+      "wie": "de camera van knipoog_guhdalf"
+    },
+    "bellenkom": {
+      "soort": "zone",
+      "pos": [
+        80,
+        16,
+        38
+      ],
+      "tot": [
+        132,
+        30,
+        68
+      ],
+      "wie": "De Bellenkom, het stadion"
+    },
+    "podium": {
+      "soort": "zone",
+      "pos": [
+        97,
+        18,
+        40
+      ],
+      "tot": [
+        115,
+        24,
+        46
+      ],
+      "wie": "het podium van de Bellenkom"
+    },
+    "podium_octo": {
+      "soort": "npc",
+      "pos": [
+        106,
+        18,
+        43
+      ],
+      "yaw": 0.0,
+      "wie": "Octo Tentakel, de dirigent",
+      "entity": "guhs:octo_mika"
+    },
+    "podium_sponsguh": {
+      "soort": "npc",
+      "pos": [
+        102,
+        18,
+        45
+      ],
+      "yaw": 0.0,
+      "wie": "Sponsguh zingt",
+      "entity": "guhs:sponsguh"
+    },
+    "podium_trommel": {
+      "soort": "prop",
+      "pos": [
+        110,
+        18,
+        45
+      ],
+      "wie": "jouw trommel"
+    },
+    "band_1": {
+      "soort": "npc",
+      "pos": [
+        99,
+        18,
+        42
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "band_2": {
+      "soort": "npc",
+      "pos": [
+        101,
+        18,
+        43
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "band_3": {
+      "soort": "npc",
+      "pos": [
+        104,
+        18,
+        41
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "band_4": {
+      "soort": "npc",
+      "pos": [
+        108,
+        18,
+        41
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "band_5": {
+      "soort": "npc",
+      "pos": [
+        111,
+        18,
+        43
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "band_6": {
+      "soort": "npc",
+      "pos": [
+        113,
+        18,
+        42
+      ],
+      "yaw": 0.0,
+      "wie": "de fanfare: een Bikinibodemguh met een instrument",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "rook_1": {
+      "soort": "prop",
+      "pos": [
+        98,
+        18,
+        46
+      ],
+      "wie": "rookmachine aan de rand van het podium"
+    },
+    "rook_2": {
+      "soort": "prop",
+      "pos": [
+        103,
+        18,
+        46
+      ],
+      "wie": "rookmachine aan de rand van het podium"
+    },
+    "rook_3": {
+      "soort": "prop",
+      "pos": [
+        109,
+        18,
+        46
+      ],
+      "wie": "rookmachine aan de rand van het podium"
+    },
+    "rook_4": {
+      "soort": "prop",
+      "pos": [
+        114,
+        18,
+        46
+      ],
+      "wie": "rookmachine aan de rand van het podium"
+    },
+    "licht_1": {
+      "soort": "prop",
+      "pos": [
+        99,
+        25,
+        44
+      ],
+      "wie": "een schijnwerper boven het podium"
+    },
+    "licht_2": {
+      "soort": "prop",
+      "pos": [
+        104,
+        25,
+        44
+      ],
+      "wie": "een schijnwerper boven het podium"
+    },
+    "licht_3": {
+      "soort": "prop",
+      "pos": [
+        108,
+        25,
+        44
+      ],
+      "wie": "een schijnwerper boven het podium"
+    },
+    "licht_4": {
+      "soort": "prop",
+      "pos": [
+        113,
+        25,
+        44
+      ],
+      "wie": "een schijnwerper boven het podium"
+    },
+    "octoliam": {
+      "soort": "npc",
+      "pos": [
+        125,
+        18,
+        53
+      ],
+      "yaw": 90.0,
+      "wie": "Octoliam, op de tribune",
+      "entity": "guhs:octoliam"
+    },
+    "tribune": {
+      "soort": "zone",
+      "pos": [
+        121,
+        16,
+        44
+      ],
+      "tot": [
+        131,
+        24,
+        62
+      ],
+      "wie": "de oosttribune"
+    },
+    "sponsguh": {
+      "soort": "npc",
+      "pos": [
+        82,
+        16,
+        159
+      ],
+      "yaw": 180.0,
+      "wie": "Sponsguh Kaasbroek, bij zijn deur",
+      "entity": "guhs:sponsguh"
+    },
+    "gerrit": {
+      "soort": "npc",
+      "pos": [
+        84,
+        16,
+        168
+      ],
+      "yaw": 90.0,
+      "wie": "slak Gerrit",
+      "entity": "guhs:gerrit"
+    },
+    "sponsguh_bed": {
+      "soort": "prop",
+      "pos": [
+        80,
+        22,
+        165
+      ],
+      "wie": "het bed van Sponsguh"
+    },
+    "sponsguh_huis": {
+      "soort": "zone",
+      "pos": [
+        75,
+        16,
+        160
+      ],
+      "tot": [
+        89,
+        30,
+        174
+      ],
+      "wie": "het knabbelkoorvruchthuis van Sponsguh"
+    },
+    "bewoner_10": {
+      "soort": "npc",
+      "pos": [
+        108,
+        16,
+        157
+      ],
+      "yaw": 180.0,
+      "wie": "een buurguh die naar de klarinet luistert (met oren dicht)",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "klarinet_standaard": {
+      "soort": "prop",
+      "pos": [
+        109,
+        16,
+        163
+      ],
+      "wie": "de klarinet op zijn standaard"
+    },
+    "octo": {
+      "soort": "npc",
+      "pos": [
+        106,
+        16,
+        164
+      ],
+      "yaw": 180.0,
+      "wie": "Octo Tentakel, thuis",
+      "entity": "guhs:octo_mika"
+    },
+    "octo_huis": {
+      "soort": "zone",
+      "pos": [
+        100,
+        16,
+        158
+      ],
+      "tot": [
+        112,
+        31,
+        169
+      ],
+      "wie": "het moai-huis van Octo Tentakel: vol zelfportretten en klarinetdingen"
+    },
+    "patguh": {
+      "soort": "npc",
+      "pos": [
+        127,
+        16,
+        160
+      ],
+      "yaw": 180.0,
+      "wie": "Patguh Ster, naast zijn rots",
+      "entity": "guhs:patguh"
+    },
+    "patguh_rots": {
+      "soort": "zone",
+      "pos": [
+        124,
+        9,
+        161
+      ],
+      "tot": [
+        136,
+        22,
+        173
+      ],
+      "wie": "de kruimelrots van Patguh, met de kamer eronder"
+    },
+    "koepel_sluis": {
+      "soort": "prop",
+      "pos": [
+        161,
+        16,
+        134
+      ],
+      "wie": "de luchtsluis van de boomkoepel"
+    },
+    "sandy": {
+      "soort": "npc",
+      "pos": [
+        172,
+        16,
+        133
+      ],
+      "yaw": 90.0,
+      "wie": "Sandy-guh",
+      "entity": "guhs:sandy_guh"
+    },
+    "karate_mat": {
+      "soort": "zone",
+      "pos": [
+        170,
+        16,
+        136
+      ],
+      "tot": [
+        176,
+        19,
+        142
+      ],
+      "wie": "de karatemat"
+    },
+    "raket": {
+      "soort": "prop",
+      "pos": [
+        171,
+        16,
+        128
+      ],
+      "wie": "de kapotte raket (3 x 6 x 3): hier bouw je hem af"
+    },
+    "boomkoepel": {
+      "soort": "zone",
+      "pos": [
+        163,
+        16,
+        122
+      ],
+      "tot": [
+        187,
+        28,
+        146
+      ],
+      "wie": "de luchtkoepel van Sandy-guh"
+    },
+    "zeemeerman": {
+      "soort": "npc",
+      "pos": [
+        169,
+        16,
+        87
+      ],
+      "yaw": -90.0,
+      "wie": "Zeemeerman",
+      "entity": "guhs:zeemeerman_guh"
+    },
+    "mosselguh": {
+      "soort": "npc",
+      "pos": [
+        169,
+        16,
+        89
+      ],
+      "yaw": -90.0,
+      "wie": "Mosselguh",
+      "entity": "guhs:mosselguh"
+    },
+    "rusthuis": {
+      "soort": "zone",
+      "pos": [
+        163,
+        16,
+        80
+      ],
+      "tot": [
+        181,
+        20,
+        96
+      ],
+      "wie": "het rusthuis van Zeemeerman en Mosselguh"
+    },
+    "onzichtbare_boot": {
+      "soort": "zone",
+      "pos": [
+        166,
+        16,
+        99
+      ],
+      "tot": [
+        170,
+        19,
+        105
+      ],
+      "wie": "de parkeerplek van de onzichtbare bootmobiel (er is niets te zien)"
+    },
+    "riem": {
+      "soort": "prop",
+      "pos": [
+        173,
+        16,
+        104
+      ],
+      "wie": "hier duikt de verloren riem van Zeemeerman op"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        95,
+        16,
+        92
+      ],
+      "yaw": 0.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        117,
+        16,
+        92
+      ],
+      "yaw": 0.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        83,
+        16,
+        124
+      ],
+      "yaw": -90.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        83,
+        16,
+        141
+      ],
+      "yaw": -90.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_5": {
+      "soort": "npc",
+      "pos": [
+        95,
+        16,
+        134
+      ],
+      "yaw": 180.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_6": {
+      "soort": "npc",
+      "pos": [
+        117,
+        16,
+        134
+      ],
+      "yaw": 180.0,
+      "wie": "een Bikinibodemguh voor zijn huis",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_7": {
+      "soort": "npc",
+      "pos": [
+        134,
+        16,
+        77
+      ],
+      "yaw": 180.0,
+      "wie": "een Bikinibodemguh die op de bus wacht",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_8": {
+      "soort": "npc",
+      "pos": [
+        99,
+        16,
+        116
+      ],
+      "yaw": -45.0,
+      "wie": "een Bikinibodemguh op het plein",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_9": {
+      "soort": "npc",
+      "pos": [
+        118,
+        16,
+        122
+      ],
+      "yaw": 135.0,
+      "wie": "een Bikinibodemguh op het plein",
+      "entity": "guhs:bikinibodem_guh"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        102,
+        108,
+        108
       ],
       "tot": [
-        4,
-        3,
-        4
+        110,
+        113,
+        116
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "het eilandje boven de zeepbel: hier land je"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        106,
+        108,
+        112
+      ],
+      "wie": "hier sta je na aankomst"
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        252,
+        74,
+        176
+      ],
+      "wie": "schuin boven de weg naar Schelpenstad: de hele zeepbel met het eilandje erboven"
+    },
+    "bubbel_boven": {
+      "soort": "prop",
+      "pos": [
+        106,
+        108,
+        108
+      ],
+      "wie": "op het eilandje: hier stap je de bubbelstroom omlaag in"
+    },
+    "bubbel_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          106,
+          108,
+          106
+        ],
+        [
+          106,
+          82,
+          106
+        ],
+        [
+          106,
+          16,
+          106
+        ]
+      ],
+      "wie": "de kolom omlaag, van boven naar beneden"
+    },
+    "bubbel_onder": {
+      "soort": "prop",
+      "pos": [
+        106,
+        16,
+        109
+      ],
+      "wie": "hier zet de bubbelstroom je neer, op het plein"
+    },
+    "bubbel_omhoog": {
+      "soort": "prop",
+      "pos": [
+        106,
+        16,
+        115
+      ],
+      "wie": "de voet van de kolom terug omhoog"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        108,
+        16,
+        111
+      ],
+      "wie": "waar de lift je neerzet"
+    },
+    "stadspoort": {
+      "soort": "prop",
+      "pos": [
+        205,
+        16,
+        112
+      ],
+      "wie": "de poort in de zeepbelwand, op de weg naar het oosten"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        200,
+        16,
+        114
+      ],
+      "wie": "bij de stadspoort"
+    },
+    "weg_naar_schelpenstad": {
+      "soort": "pad",
+      "punten": [
+        [
+          205,
+          16,
+          112
+        ],
+        [
+          215,
+          16,
+          112
+        ],
+        [
+          223,
+          16,
+          112
+        ]
+      ],
+      "wie": "van de poort naar de naad met Schelpenstad"
+    },
+    "hasselguh_landing": {
+      "soort": "prop",
+      "pos": [
+        214,
+        16,
+        121
+      ],
+      "wie": "de steiger naast de weg: hier zet David Hasselguh je af (9 x 6 x 13 vrij)"
+    },
+    "guhlander_anker": {
+      "soort": "prop",
+      "pos": [
+        126,
+        16,
+        160
+      ],
+      "wie": "de oorsprong van de laag vliegende_guhlander: het spookschip hangt boven het oosten van de Schelpstraat"
+    },
+    "guhlander_dek": {
+      "soort": "prop",
+      "pos": [
+        134,
+        47,
+        164
+      ],
+      "wie": "op het dek van De Vliegende Guhlander"
+    },
+    "spookkapitein": {
+      "soort": "npc",
+      "pos": [
+        133,
+        47,
+        164
+      ],
+      "yaw": -90.0,
+      "wie": "de spookkapitein, op zijn dek",
+      "entity": "guhs:spookkapitein"
+    },
+    "guhlander_trap": {
+      "soort": "prop",
+      "pos": [
+        139,
+        16,
+        165
+      ],
+      "wie": "op de grond: hier begint de weg omhoog naar het spookschip"
+    },
+    "raket_onderdeel_1": {
+      "soort": "prop",
+      "pos": [
+        151,
+        16,
+        66
+      ],
+      "wie": "een kwijtgeraakt raketonderdeel: bij het Kwallenveld in het noordoosten"
+    },
+    "raket_onderdeel_2": {
+      "soort": "prop",
+      "pos": [
+        72,
+        16,
+        145
+      ],
+      "wie": "een kwijtgeraakt raketonderdeel: achter de huisjes aan de Westring"
+    },
+    "raket_onderdeel_3": {
+      "soort": "prop",
+      "pos": [
+        96,
+        16,
+        172
+      ],
+      "wie": "een kwijtgeraakt raketonderdeel: tussen de huizen van de Schelpstraat"
+    },
+    "kwallenveld_1": {
+      "soort": "zone",
+      "pos": [
+        44,
+        16,
+        160
+      ],
+      "tot": [
+        68,
+        28,
+        184
+      ],
+      "wie": "een Kwallenveld: hier komen de Kruimelkwallen"
+    },
+    "kwallenveld_2": {
+      "soort": "zone",
+      "pos": [
+        144,
+        16,
+        160
+      ],
+      "tot": [
+        168,
+        28,
+        184
+      ],
+      "wie": "een Kwallenveld: hier komen de Kruimelkwallen"
+    },
+    "kwallenveld_3": {
+      "soort": "zone",
+      "pos": [
+        140,
+        16,
+        40
+      ],
+      "tot": [
+        164,
+        28,
+        64
+      ],
+      "wie": "een Kwallenveld: hier komen de Kruimelkwallen"
+    },
+    "kwallenveld_4": {
+      "soort": "zone",
+      "pos": [
+        46,
+        16,
+        40
+      ],
+      "tot": [
+        70,
+        28,
+        64
+      ],
+      "wie": "een Kwallenveld: hier komen de Kruimelkwallen"
+    },
+    "kwallen_patguh": {
+      "soort": "npc",
+      "pos": [
+        69,
+        16,
+        159
+      ],
+      "yaw": 45.0,
+      "wie": "Patguh met de netjes",
+      "entity": "guhs:patguh"
+    },
+    "kwallen_start": {
+      "soort": "prop",
+      "pos": [
+        68,
+        16,
+        160
+      ],
+      "wie": "hier begint het kwallen vangen"
+    },
+    "knipoog_rookguh_zweef": {
+      "soort": "pad",
+      "punten": [
+        [
+          50,
+          22,
+          176
+        ],
+        [
+          56,
+          21,
+          172
+        ],
+        [
+          59,
+          23,
+          167
+        ],
+        [
+          64,
+          28,
+          162
+        ]
+      ],
+      "wie": "een Rookguh zweeft tussen de kwallen door, en dan met net en al weg"
+    },
+    "knipoog_rookguh_patguh": {
+      "soort": "npc",
+      "pos": [
+        57,
+        18,
+        175
+      ],
+      "yaw": 160.0,
+      "wie": "Patguh met zijn net: dit is de grootste!",
+      "entity": "guhs:patguh"
+    },
+    "knipoog_rookguh_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          65,
+          22,
+          181
+        ],
+        [
+          56,
+          21,
+          172
+        ]
+      ],
+      "wie": "de camera van knipoog_rookguh"
+    }
+  },
+  "lagen": {
+    "vliegende_guhlander": {
+      "template": "guhs:bikinibodem/laag_vliegende_guhlander",
+      "pos": [
+        126,
+        16,
+        160
+      ],
+      "grootte": [
+        21,
+        46,
+        9
       ]
     }
   }

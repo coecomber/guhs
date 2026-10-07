@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "guhs:block/bloemwolk"
+    "all": "guhs:block/einde2_bouw_bikinibodem_koraal"
   }
 }

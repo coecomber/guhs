@@ -139,6 +139,12 @@
     "guhs:knabbelkoorblok_plaat",
     "guhs:kruimelrots_stenen_muur",
     "guhs:schimmelkaas_stenen_muur",
-    "guhs:klipkaas_stenen_muur"
+    "guhs:klipkaas_stenen_muur",
+    "guhs:einde2_bouw_bikinibodem_koraal",
+    "guhs:einde2_bouw_bikinibodem_pylon",
+    "guhs:einde2_bouw_bikinibodem_kluis",
+    "guhs:einde2_bouw_bikinibodem_kassa",
+    "guhs:einde2_bouw_bikinibodem_camera",
+    "guhs:einde2_bouw_bikinibodem_archiefkast"
   ]
 }

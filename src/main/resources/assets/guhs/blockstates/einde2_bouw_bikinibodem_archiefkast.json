@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_archiefkast"
+    },
+    "facing=east": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_archiefkast",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_archiefkast",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_archiefkast",
+      "y": 270
+    }
+  }
+}

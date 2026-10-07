@@ -1,0 +1,213 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_bikinibodem_camera",
+    "t": "guhs:block/einde2_bouw_bikinibodem_camera"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        12,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            0,
+            8,
+            4,
+            12
+          ],
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        8,
+        4
+      ],
+      "to": [
+        11,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            5,
+            1,
+            15,
+            7
+          ],
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        9,
+        2
+      ],
+      "to": [
+        9.5,
+        11,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ],
+          "texture": "#t"
+        }
+      }
+    }
+  ]
+}
