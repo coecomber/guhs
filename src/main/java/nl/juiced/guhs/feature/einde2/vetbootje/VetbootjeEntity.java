@@ -96,6 +96,8 @@ public class VetbootjeEntity extends Entity implements GeoEntity {
     private int lerpSteps;
     private double lerpX, lerpY, lerpZ, lerpYRot;
     private boolean gekeken;
+    @Nullable
+    private Vec3 vorige;
 
     // --- client only: for drawing ---
     public float helling, hellingO, wiel, wielO;
@@ -262,7 +264,10 @@ public class VetbootjeEntity extends Entity implements GeoEntity {
                 neemOver(b);
             }
         }
-        if (Math.abs(snelheid) > 0.05 && tickCount % 90 == 0) {
+        // (with somebody at the wheel their game sails it: the server only sees where it went)
+        double gevaren = vorige == null ? 0 : position().distanceTo(vorige);
+        vorige = position();
+        if (gevaren > 0.05 && tickCount % 90 == 0) {
             level().playSound(null, this, E2VetbootjeFeature.KRAAK.get(), SoundSource.NEUTRAL, 0.5f, 0.9f + random.nextFloat() * 0.2f);
         }
     }

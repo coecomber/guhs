@@ -10,7 +10,9 @@ Java: nl.juiced.guhs.feature.einde2.vetbootje (E2VetbootjeFeature).
 
 No Guhdex pages and no FTB quests: the questline of the vetbootje (phase B) and the Vredesballon (phase C) bring them.
 """
+import glob
 import os
+import re
 
 from PIL import Image
 
@@ -189,6 +191,19 @@ def selfcheck(h):
             problems.append(f"the name idea {n!r} is longer than Vetbootje.NAAM_MAX")
     if len(NAAM_IDEEEN) != 12 or len(WINDSTREKEN) != 8:
         problems.append("WerfScreen.IDEEEN (12) / the eight wind directions do not match the lists here")
+    # every text the Java code asks for exists (a key that ends in a dot is the start of a numbered or named family)
+    java = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2", "vetbootje")
+    bron = " ".join(open(f, encoding="utf-8").read() for f in sorted(glob.glob(os.path.join(java, "**", "*.java"), recursive=True)))
+    bron = bron.replace('T + "', '"' + G + "commando.")
+    for key in sorted(set(re.findall(r'"((?:gui\.guhs\.einde2_vetbootje|item\.guhs)\.[a-z0-9_.]+)"', bron))):
+        if key.endswith(".") and key != G + "commando.":
+            if not any(k.startswith(key) for k in TEXTS):
+                problems.append(f"no text starts with {key}")
+        elif not key.endswith(".") and key not in TEXTS:
+            problems.append(f"the Java code asks for the text {key}, which is not in TEXTS")
+    enum = re.search(r"enum Zeil \{\s*([A-Z, ]+);", open(os.path.join(java, "Zeil.java"), encoding="utf-8").read())
+    if not enum or [z.strip().lower() for z in enum.group(1).split(",")] != modellen.ZEILEN:
+        problems.append("Zeil.java and einde2_vetbootje_modellen.ZEILEN do not list the same sails in the same order")
     if problems:
         raise SystemExit("einde2_vetbootje:\n  " + "\n  ".join(problems))
 

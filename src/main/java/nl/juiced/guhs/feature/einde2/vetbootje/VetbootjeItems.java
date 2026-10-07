@@ -47,6 +47,7 @@ public final class VetbootjeItems {
             level.playSound(null, player.blockPosition(), E2VetbootjeFeature.FLUITJE.get(), SoundSource.PLAYERS, 1f, 0.95f + level.getRandom().nextFloat() * 0.1f);
             player.getCooldowns().addCooldown(stack, FLUIT_WACHT);
             if (!Vetbootje.heeft(sp)) {
+                // hook fase B: this line points at the questline (a vetschip of the Mika-vesting); nothing gives the boat before that
                 sp.sendOverlayMessage(Component.translatable("gui.guhs.einde2_vetbootje.fluit.geen").withStyle(ChatFormatting.LIGHT_PURPLE));
                 return InteractionResult.SUCCESS;
             }

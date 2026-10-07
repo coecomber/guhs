@@ -39,6 +39,7 @@ public final class Heteluchtballon {
 
     /** Gives this player their heteluchtballon, once (a second call does nothing). */
     public static void geef(ServerPlayer p) {
+        // hook fase C: the reward of the fifth stage of the Vredesballon calls this
         Vloot.Boot b = Vetbootje.blad(p);
         if (b.ballon) {
             return;
@@ -57,6 +58,7 @@ public final class Heteluchtballon {
      * player never had one.
      */
     public static boolean opnieuw(ServerPlayer p) {
+        // hook fase C: the Werktuigguh hands out a new one to whoever lost theirs
         Vloot.Boot b = Vetbootje.blad(p);
         if (!b.ballon) {
             return false;

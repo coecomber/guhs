@@ -48,6 +48,7 @@ public final class Vetbootje {
      * already, that one comes. Never null.
      */
     public static VetbootjeEntity geef(ServerPlayer p) {
+        // hook fase B: the end of the vetbootje questline (the notice on a vetschip of the Mika-vesting, built at the helling) calls this
         Vloot.Boot b = blad(p);
         if (!b.heeft) {
             b.heeft = true;
@@ -138,6 +139,7 @@ public final class Vetbootje {
 
     /** Opens the customise screen (the werfboekje, later the shipyard). */
     public static void openWerf(ServerPlayer p) {
+        // hook fase B: the scheepsbouwer-guh of the Leegtehaven (marker leegtehaven/scheepsbouwer) opens the same screen
         Vloot.Boot b = blad(p);
         int kleur = b.kleur.getId(), zeil = b.zeil.ordinal();
         String naam = b.naam == null ? "" : b.naam.getString();
@@ -155,6 +157,7 @@ public final class Vetbootje {
      */
     @Nullable
     public static VetbootjeEntity leen(ServerLevel level, Vec3 plek, float yaw, DyeColor kleur, Zeil zeil, @Nullable Component naam) {
+        // hook fase B: juf Pufguh's boating exam (bikinibodem/examen_start), the bootmobielen of Bikinibodem
         VetbootjeEntity boot = E2VetbootjeFeature.VETBOOTJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (boot == null) {
             return null;
