@@ -284,9 +284,10 @@
       },
       tasks: [
         {
-          type: "structure",
-          structure: "guhs:barbecueput",
+          type: "advancement",
+          advancement: "guhs:barbecuether/barbecueput",
           id: "475548019C6B2CDE",
+          criterion: "",
         },
       ],
       rewards: [
