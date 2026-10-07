@@ -91,7 +91,9 @@ public class SuperkompasItem extends GuhCompassItem {
                     "hamster_house_extra_extra_large", "guhramid", "guhbibliotheek", "onderwater"),
             cat("wonen", "guhs:knuffelsteen_gezicht", net.minecraft.world.item.Items.OAK_DOOR, "guh_village", "hamster_house", "hamster_house_medium",
                     "hamster_house_large", "boomhutdorp"),
-            cat("einde", "guhs:enderguh_ei", net.minecraft.world.item.Items.ENDER_EYE, "knabbelkelder", "guheinde_terugpoort"),   // (2.8: the terugpoort, in the Guheinde itself)
+            cat("einde", "guhs:enderguh_ei", net.minecraft.world.item.Items.ENDER_EYE, "knabbelkelder", "guheinde_terugpoort",
+                    "mika_vesting", "leegtehaven", "omashguh", "westelijke_luchttempel", "vuurtempel_roku", "kyoshi_dorp", "bibliotheek_wan_shi_guh",
+                    "leeuwschildpad_eiland", "guhvleugel_ringenrace"),   // (2.8: the terugpoort, in the Guheinde itself)
             cat("ondergrond", "guhs:gatenkaas", net.minecraft.world.item.Items.LANTERN, "stille_voorraadkelder", "gatenkaas_mijnschacht"),
             cat("barbecue", "guhs:grillspies", net.minecraft.world.item.Items.CAMPFIRE, "barbecueput", "spiesburcht", "mika_grillpaleis"),
             // 2.8 (Knuffeldal): the cozy places

@@ -55,6 +55,17 @@ public class GuheindePortaalBlock extends Block implements Portal {
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.canUsePortal(false) && Shapes.joinIsNotEmpty(Shapes.create(entity.getBoundingBox().move(-pos.getX(), -pos.getY(), -pos.getZ())),
                 state.getShape(level, pos), BooleanOp.AND)) {
+            // hook fase B (einde2): the portal lock, only asked on the way INTO the Guheinde; with no locks nothing changes
+            if (level instanceof ServerLevel server && server.dimension() != GuheindeFeature.GUHEINDE && !entity.isOnPortalCooldown()) {
+                net.minecraft.network.chat.Component reden = nl.juiced.guhs.feature.einde2.Einde2Haken.portaalGeweigerd(server, entity);
+                if (reden != null) {
+                    if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                        player.sendOverlayMessage(reden);
+                    }
+                    entity.setPortalCooldown(60);   // (the message once per attempt, not every tick)
+                    return;
+                }
+            }
             entity.setAsInsidePortal(this, pos);
         }
     }

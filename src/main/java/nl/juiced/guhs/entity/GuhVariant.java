@@ -50,6 +50,10 @@ public enum GuhVariant {
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
     PINGUH(0, "pinguh"),
+    // <einde2-guhs>
+    // einde2: the six guhs of the Guheinde's outer islands, one per biome (einde2 slice biomeguhs); real tameable variants
+    KORSTGUH(0, "korstguh"), DUINGUH(0, "duinguh"), KRUIMELGUH(0, "kruimelguh"), SCHIMMELGUH(0, "schimmelguh"), KRISTALGUH(0, "kristalguh"), KOORGUH(0, "koorguh"),
+    // </einde2-guhs>
     /**
      * Guhdex pages for guh characters that aren't variants of the guh itself (seen, never tamed): each has the name of
      * its GuhNpcEntity.Kind. Everything from REISGUH on is a character.
@@ -131,6 +135,10 @@ public enum GuhVariant {
     // </timmerguh>
     // <hemel>
     // </hemel>
+    // <einde2>
+    // einde2: creature pages of the outer islands (their id is their entity id); LEEGTEWALVISGUH is a bonus page, see GuhDex.EXTRA
+    ENDER_MIKA(0), KAASMIJT(0), SCHUILGUH(0), KRUIMELKWAL(0), LEEGTEWALVISGUH(0), VLEERMUIS_LEMURGUH(0), OTTER_PINGUINGUH(0), DAS_MOLGUH(0), SCHILDPAD_EENDGUH(0), APPA_GUH(0), MOMO_GUH(0),
+    // </einde2>
     ;
 
     /** The Guhdex page is a guh character (GuhNpcEntity), not a variant: it can't be tamed. */
@@ -144,6 +152,11 @@ public enum GuhVariant {
      */
     public boolean isVerhaalGuh() {
         return this == BALTOGUH || this == MEWTWO || this == STITCH626;
+    }
+
+    /** einde2: one of the six guhs of the Guheinde's outer islands (KORSTGUH .. KOORGUH): real tameable variants, each bound to its biome. */
+    public boolean isBuitenGuh() {
+        return ordinal() >= KORSTGUH.ordinal() && ordinal() <= KOORGUH.ordinal();
     }
 
     /** The kind of guh character this page is about (null for a real variant). */
@@ -175,7 +188,7 @@ public enum GuhVariant {
     public static final int ROLL_OUT_OF = 1000;
     /** Bone prefixes that only some variants show (all hidden on a normal guh). */
     public static final List<String> VARIANT_BONES = List.of("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh",
-            "balto", "mewtwo", "stitch");
+            "balto", "mewtwo", "stitch", "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh");
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

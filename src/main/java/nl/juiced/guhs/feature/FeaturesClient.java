@@ -19,6 +19,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.emotes.client.EmotesClient.init(modBus);
         nl.juiced.guhs.feature.onderwater.client.OnderwaterClient.init(modBus);
         nl.juiced.guhs.feature.guheinde.client.GuheindeClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.client.Einde2Client.init(modBus);   // einde2: the Guheinde expansion, see feature/einde2/Einde2
         nl.juiced.guhs.feature.gatenkaas.client.GatenkaasClient.init(modBus);
         nl.juiced.guhs.feature.kaasmoeras.client.KaasmoerasClient.init(modBus);
         nl.juiced.guhs.feature.vadswoud.client.VadswoudClient.init(modBus);

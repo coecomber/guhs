@@ -39,6 +39,7 @@ public final class Features {
         nl.juiced.guhs.feature.emotes.EmotesFeature.register(modBus);
         nl.juiced.guhs.feature.onderwater.OnderwaterFeature.register(modBus);
         nl.juiced.guhs.feature.guheinde.GuheindeFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.Einde2.register(modBus);   // einde2: the Guheinde expansion, see feature/einde2/Einde2
         nl.juiced.guhs.feature.gatenkaas.GatenkaasFeature.register(modBus);
         nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.register(modBus);
         nl.juiced.guhs.feature.vadswoud.VadswoudFeature.register(modBus);
@@ -114,6 +115,7 @@ public final class Features {
         nl.juiced.guhs.feature.emotes.EmotesFeature.payloads(registrar);
         nl.juiced.guhs.feature.onderwater.OnderwaterFeature.payloads(registrar);
         nl.juiced.guhs.feature.guheinde.GuheindeFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.Einde2.payloads(registrar);   // einde2: the Guheinde expansion, see feature/einde2/Einde2
         nl.juiced.guhs.feature.gatenkaas.GatenkaasFeature.payloads(registrar);
         nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.payloads(registrar);
         nl.juiced.guhs.feature.vadswoud.VadswoudFeature.payloads(registrar);
@@ -186,6 +188,7 @@ public final class Features {
         nl.juiced.guhs.feature.emotes.EmotesFeature.creative(output);
         nl.juiced.guhs.feature.onderwater.OnderwaterFeature.creative(output);
         nl.juiced.guhs.feature.guheinde.GuheindeFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.Einde2.creative(output);   // einde2: the Guheinde expansion, see feature/einde2/Einde2
         nl.juiced.guhs.feature.gatenkaas.GatenkaasFeature.creative(output);
         nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.creative(output);
         nl.juiced.guhs.feature.vadswoud.VadswoudFeature.creative(output);

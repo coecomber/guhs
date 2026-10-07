@@ -570,7 +570,7 @@ public class WereldlevenGameTests {
                     && ids.contains("pinguh"), "21 variants + glitter: " + ids);
             int echte = 0;
             for (GuhVariant v : GuhVariant.values()) {
-                if (!v.isCharacter() && !v.isVerhaalGuh()) {   // (3.0: the story guhs have no plush)
+                if (!v.isCharacter() && !v.isVerhaalGuh() && !v.isBuitenGuh()) {   // (3.0: the story guhs have no plush; einde2: nor the outer-island guhs)
                     echte++;
                     helper.assertTrue(ids.contains(v.id()), "a plushie for " + v.id());
                 }

@@ -20,6 +20,8 @@ TEXTURES = ["guh"] + [f"guh_{v}" for v in (
 # (3.0: "baltoguh", "mewtwo", "stitch626": the story guhs of the Guhverhalen, painted by make_guh_variants + their slices)
 # (2.9: "pinguh", "pinguh_keizer", "pinguh_pluis" are the three Pinguh looks, painted by tools/features/guhpolder.py)
 GLOWMASKS = ["guh_ender_glowmask"]
+# (einde2: the six guhs of the Guheinde's outer islands, painted by tools/features/einde2_biomeguhs.py)
+TEXTURES += [f"guh_{v}" for v in ("korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh")]
 
 S = 4                                   # texture pixels per model UV unit (512 px texture, 128 UV)
 FACE = (0, 49 * S, 14 * S, 60 * S)      # the head's front (north) face

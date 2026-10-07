@@ -282,10 +282,11 @@ public class KnusGameTests {
             helper.assertTrue(Features.role(GuhNpcEntity.Kind.BURGEMEESTERGUH) != Binnenkort.ROLE && Features.role(GuhNpcEntity.Kind.COCOTJE) != null,
                     "the Burgemeester and Cocotje are phase 1's own");
             // GuhVariant: PLUISGUH is a real variant (before REISGUH), the pages come after GRILLGUH in the contract's order
-            // (2.9: PINGUH sits between PLUISGUH and REISGUH)
+            // (2.9: PINGUH sits between PLUISGUH and REISGUH; einde2: then the six guhs of the Guheinde's outer islands, KORSTGUH .. KOORGUH)
             helper.assertTrue(!GuhVariant.PLUISGUH.isCharacter() && GuhVariant.PLUISGUH.ordinal() == GuhVariant.PINGUH.ordinal() - 1
-                    && !GuhVariant.PINGUH.isCharacter() && GuhVariant.PINGUH.ordinal() == GuhVariant.REISGUH.ordinal() - 1,
-                    "PLUISGUH, PINGUH just before REISGUH");
+                    && !GuhVariant.PINGUH.isCharacter() && GuhVariant.PINGUH.ordinal() == GuhVariant.KORSTGUH.ordinal() - 1
+                    && !GuhVariant.KOORGUH.isCharacter() && GuhVariant.KOORGUH.ordinal() == GuhVariant.REISGUH.ordinal() - 1,
+                    "PLUISGUH, PINGUH, then KORSTGUH .. KOORGUH just before REISGUH");
             helper.assertTrue(GuhVariant.PLUISGUH.shows("pluis_kuif") && !GuhVariant.NORMAL.shows("pluis_kuif"), "its fluffy bones");
             List<GuhVariant> pages = List.of(GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
                     GuhVariant.THEEGUH, GuhVariant.KAPPERGUH, GuhVariant.BOERINNEGUH, GuhVariant.GUHSCHAAPJE, GuhVariant.KNABBELKIPPETJE,
