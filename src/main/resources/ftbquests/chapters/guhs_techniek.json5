@@ -312,6 +312,33 @@
       shape: "gear",
     },
     {
+      id: "475548857F9855C8",
+      icon: {
+        id: "guhs:guhhuisje_klein",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tech_klusjes_machines",
+          id: "47554892306D3C2B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554810E8AC4BAD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
       id: "4755484ABA7ABFD0",
       icon: {
         id: "guhs:vadsmolen",
@@ -335,7 +362,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 9.0,
       y: 6.5625,
     },
     {
@@ -363,7 +390,7 @@
         },
       ],
       x: 9.0,
-      y: 6.5625,
+      y: 8.0625,
     },
     {
       id: "47554862789E1FC3",
@@ -389,7 +416,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 8.0625,
     },
     {
@@ -414,7 +441,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 8.0625,
       shape: "circle",
     },
@@ -1429,6 +1456,33 @@
       shape: "gear",
     },
     {
+      id: "47554824C71FDE23",
+      icon: {
+        id: "minecraft:iron_axe",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tech_klusjes_plantage",
+          id: "47554867ABD6B440",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480C0BA47343",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+    },
+    {
       id: "4755481FE3A70B9B",
       icon: {
         id: "guhs:tekentafel",
@@ -1452,7 +1506,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 7.5,
       y: 17.4875,
     },
     {
@@ -1484,7 +1538,7 @@
           xp: 100,
         },
       ],
-      x: 7.5,
+      x: 9.0,
       y: 17.4875,
       shape: "gear",
     },
@@ -1515,7 +1569,7 @@
         },
       ],
       x: 9.0,
-      y: 17.4875,
+      y: 18.9875,
       shape: "hexagon",
     },
     {
@@ -1542,7 +1596,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 18.9875,
     },
     {
@@ -1569,7 +1623,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 18.9875,
     },
     {
@@ -1601,7 +1655,7 @@
           xp: 100,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 18.9875,
       shape: "gear",
     },
@@ -1629,7 +1683,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 3.0,
       y: 18.9875,
       shape: "circle",
     },
@@ -1657,7 +1711,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 1.5,
       y: 18.9875,
       shape: "diamond",
     },
