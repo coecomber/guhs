@@ -1,0 +1,100 @@
+{
+  "variants": {
+    "kleur=white,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_white"
+    },
+    "kleur=white,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_white"
+    },
+    "kleur=orange,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_orange"
+    },
+    "kleur=orange,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_orange"
+    },
+    "kleur=magenta,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_magenta"
+    },
+    "kleur=magenta,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_magenta"
+    },
+    "kleur=light_blue,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_light_blue"
+    },
+    "kleur=light_blue,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_light_blue"
+    },
+    "kleur=yellow,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_yellow"
+    },
+    "kleur=yellow,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_yellow"
+    },
+    "kleur=lime,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_lime"
+    },
+    "kleur=lime,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_lime"
+    },
+    "kleur=pink,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_pink"
+    },
+    "kleur=pink,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_pink"
+    },
+    "kleur=gray,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_gray"
+    },
+    "kleur=gray,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_gray"
+    },
+    "kleur=light_gray,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_light_gray"
+    },
+    "kleur=light_gray,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_light_gray"
+    },
+    "kleur=cyan,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_cyan"
+    },
+    "kleur=cyan,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_cyan"
+    },
+    "kleur=purple,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_purple"
+    },
+    "kleur=purple,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_purple"
+    },
+    "kleur=blue,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_blue"
+    },
+    "kleur=blue,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_blue"
+    },
+    "kleur=brown,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_brown"
+    },
+    "kleur=brown,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_brown"
+    },
+    "kleur=green,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_green"
+    },
+    "kleur=green,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_green"
+    },
+    "kleur=red,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_red"
+    },
+    "kleur=red,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_red"
+    },
+    "kleur=black,mond=true": {
+      "model": "guhs:block/guhriobeloning_pijp_black"
+    },
+    "kleur=black,mond=false": {
+      "model": "guhs:block/guhriobeloning_pijp_lijf_black"
+    }
+  }
+}

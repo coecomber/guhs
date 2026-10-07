@@ -163,6 +163,10 @@
     "guhs:guhrio_pijp_lijf",
     "guhs:guhrio_schakelaar",
     "guhs:guhrio_schakelblok",
-    "guhs:guhrio_grillspies_plek"
+    "guhs:guhrio_grillspies_plek",
+    "guhs:guhriobeloning_vraagblok",
+    "guhs:guhriobeloning_vlaggenmast",
+    "guhs:guhriobeloning_pijp",
+    "guhs:guhriobeloning_scorebord"
   ]
 }

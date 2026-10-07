@@ -42,6 +42,18 @@
         "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548A99404D6C6",
+      image: "guhs:textures/ftbquests/guhs_guhrio/kop_guhrio_beloning.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
+      ],
+    },
   ],
   order_index: 15,
   progression_mode: "flexible",
@@ -237,6 +249,410 @@
       x: 6.0,
       y: 6.5625,
       shape: "circle",
+    },
+    {
+      id: "4755484BD5553E34",
+      icon: {
+        id: "guhs:guhriobeloning_vraagblok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_padguh",
+          id: "475548CE38BE6E84",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C79E9781D9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755485575A35836",
+      icon: {
+        id: "guhs:guhrio_munt",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_gekocht",
+          id: "47554803FAD5F664",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483894C0CCB4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548B92786A428",
+      icon: {
+        id: "guhs:guhriobeloning_rode_pet",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhriobeloning_rode_pet",
+          },
+          id: "475548AEC77F3CA6",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489755AF926F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548EBBBB7F4BF",
+      icon: {
+        id: "guhs:guhriobeloning_groene_pet",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhriobeloning_groene_pet",
+          },
+          id: "4755484881AFF04F",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A3E57407BC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548DB721C0B22",
+      icon: {
+        id: "guhs:guhriobeloning_schild",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhriobeloning_schild",
+          },
+          id: "4755482DBFC1E6E1",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484E75B17E6C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554804693FF697",
+      icon: {
+        id: "guhs:guhriobeloning_vraagblok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_vraagblok",
+          id: "4755480C9FD51670",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B3AB563AE0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755480DD81A02F8",
+      icon: {
+        id: "guhs:guhriobeloning_pijp",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_pijp",
+          id: "4755488A88AFA456",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C6E7A0FB76",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554804EE753C55",
+      icon: {
+        id: "guhs:guhriobeloning_vlaggenmast",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhriobeloning_vlaggenmast",
+          },
+          id: "4755480645F154F0",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554865A5B378E3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548E6BFF6012C",
+      icon: {
+        id: "minecraft:clock",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_bord",
+          id: "475548937790C15E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BE2F2E7278",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755485005B27EAE",
+      icon: {
+        id: "guhs:guhriobeloning_prinsessenkroon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_kroon",
+          id: "475548EA54BE3A8B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B6CAB23B4B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548379B7B41C7",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 8.0625,
+      shape: "hexagon",
+    },
+    {
+      id: "47554821F0593D47",
+      icon: {
+        id: "guhs:guhrio_guhshi_ei",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_guhshi",
+          id: "475548F4F05F15D6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554818E7B00960",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548835BF4AD1E",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 16.0,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "475548F8A76475FF",
+      icon: {
+        id: "guhs:guhrio_guhshi_plek",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_guhshi",
+          id: "47554813DD6B8B42",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480785BBFA55",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548ECA8720FFA",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_tong",
+          id: "475548ECDC7A2F31",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554809DC971E22",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 8.0625,
+    },
+    {
+      id: "47554824E8A33A22",
+      icon: {
+        id: "guhs:guhriobeloning_gouden_pet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_beloning_gouden_pet",
+          id: "4755488672D66427",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554894B18528D3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548EE04B210AC",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 11.5,
+      y: 8.0625,
+      shape: "diamond",
     },
   ],
 }
