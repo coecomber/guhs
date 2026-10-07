@@ -1,0 +1,68 @@
+# einde2, slice vetbootje, in a real world: the vetbootje in a few colours and sails (from the front and from behind), the
+# scheepswerf screen's result on the boat, and the heteluchtballon on the ground and in the air.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_vetbootje.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+wait 40
+
+section the vetbootje as it is given
+/guhs einde2 vetbootje geef
+wait 40
+look 0 10
+waitrender 200
+shot vetbootje_nieuw_achter
+/tp @s ~ ~ ~8 180 10
+wait 20
+/tp @s ~ ~ ~ 180 10
+wait 40
+shot vetbootje_nieuw_voor
+
+section painted at the werf
+/guhs einde2 vetbootje stel pink hart
+wait 30
+shot vetbootje_roze_hart
+/guhs einde2 vetbootje stel light_blue ster
+wait 30
+shot vetbootje_blauw_ster
+/guhs einde2 vetbootje stel yellow knabbel
+wait 30
+shot vetbootje_geel_knabbel
+/guhs einde2 vetbootje stel black streep
+wait 30
+shot vetbootje_zwart_streep
+/guhs einde2 vetbootje stel lime kruimel
+wait 30
+shot vetbootje_lime_kruimel
+
+section called back, by night (the lampion glows)
+/tp @s ~12 ~ ~12 0 10
+wait 20
+/guhs einde2 vetbootje roep
+/time set midnight
+wait 200
+shot vetbootje_nacht
+
+section a leenbootje next to it
+/time set noon
+/guhs einde2 vetbootje leen
+wait 40
+shot vetbootje_leen
+
+section the heteluchtballon
+/tp @s ~20 ~ ~ 0 0
+wait 20
+/summon guhs:heteluchtballon ~ ~ ~6
+wait 40
+look 0 -20
+waitrender 200
+shot heteluchtballon_grond
+/tp @s ~ ~ ~14 180 -15
+wait 20
+/tp @s ~ ~ ~ 180 -15
+wait 40
+shot heteluchtballon_snoet
