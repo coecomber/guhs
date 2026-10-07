@@ -7,12 +7,17 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -43,11 +49,13 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.guhrio.GuhrioKasteel;
+import nl.juiced.guhs.feature.guhrio.GuhrioLevel;
 import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Verteller;
 import nl.juiced.guhs.quest.GuhAdvancements;
+import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModSounds;
 
 /**
@@ -105,6 +113,22 @@ public final class GuhrioW3Feature {
     public static final int PADGUH_NA = 80;
     /** Whom Pad-guh still has to call after: the ticks that are left. Never saved (a line lost at a restart is no loss). */
     private static final Map<UUID, Integer> PADGUH_STRAKS = new ConcurrentHashMap<>();
+
+    /**
+     * Player key (a compound in {@code GuhQuests.saved}): the Grote Nether-Mika fell while this player was in the arena, and
+     * the end scene - at whose end the duel counts as won - has not been watched to its end yet. Written when he falls
+     * ({@link #zetTegoed}), taken away by {@link GroteNetherMikaEntity#gewonnen}. As long as it is there the scene is
+     * offered again ({@link #probeerEinde}, twice a second): to somebody who was still reading the narrator card when he
+     * fell, and to somebody who logged out during the scene (the story engine drops a scene's ending then).
+     */
+    public static final String TEGOED = "guhs_guhriow3_tegoed";
+    /** How near the arena's start block somebody without a session must be for the owed scene (the level hall under it is). */
+    public static final double TEGOED_NABIJ = 48;
+    private static final int TEGOED_ELKE = 10;
+
+    /** What is owed: where the scene plays, where it lets you out (the tower room) and how long the fight took. */
+    record Tegoed(String dim, BlockPos anker, Rotation draai, @Nullable BlockPos uit, int ticks) {
+    }
 
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> wezen(String id, EntityType.EntityFactory<T> maker, float breed,
                                                                                          float hoog) {
@@ -204,8 +228,18 @@ public final class GuhrioW3Feature {
         return PADGUH_STRAKS.containsKey(player.getUUID());
     }
 
-    /** Pad-guh's pointer, once its ticks are over, for whoever is still there and has not won the duel in the meantime. */
+    /**
+     * Every server tick. Twice a second: the end scene for whoever it is owed to and can watch it now. And Pad-guh's
+     * pointer, once its ticks are over, for whoever is still there and has not won the duel in the meantime.
+     */
     private static void tik(ServerTickEvent.Post event) {
+        if (event.getServer().getTickCount() % TEGOED_ELKE == 0) {
+            for (ServerPlayer p : event.getServer().getPlayerList().getPlayers()) {
+                if (GuhQuests.saved(p).contains(TEGOED)) {
+                    probeerEinde(p);
+                }
+            }
+        }
         if (PADGUH_STRAKS.isEmpty()) {
             return;
         }
@@ -225,6 +259,69 @@ public final class GuhrioW3Feature {
         }
     }
 
+    // =====================================================================================================================
+    // the end scene that is owed
+    // =====================================================================================================================
+
+    /** The boss of this arena fell while this player was in it: the end scene (and with it the win) is owed from now on. */
+    static void zetTegoed(ServerPlayer player, GuhrioLevel.Geplaatst arena, int ticks) {
+        Rotation draai = Rotation.NONE;
+        for (Rotation r : Rotation.values()) {
+            if (r.rotate(Direction.EAST) == arena.kant()) {
+                draai = r;
+            }
+        }
+        CompoundTag t = new CompoundTag();
+        t.putString("Dim", arena.dimensie().identifier().toString());
+        t.putLong("Anker", arena.anker().asLong());
+        t.putInt("Draai", draai.ordinal());
+        if (arena.uitgang() != null) {
+            t.putLong("Uit", arena.uitgang().asLong());
+        }
+        t.putInt("Ticks", ticks);
+        GuhQuests.saved(player).put(TEGOED, t);
+    }
+
+    /** What is owed to this player, or null. */
+    @Nullable
+    static Tegoed tegoed(Player player) {
+        CompoundTag saved = GuhQuests.saved(player);
+        if (!saved.contains(TEGOED)) {
+            return null;
+        }
+        CompoundTag t = saved.getCompoundOrEmpty(TEGOED);
+        return new Tegoed(t.getStringOr("Dim", ""), BlockPos.of(t.getLongOr("Anker", 0L)),
+                Rotation.values()[Math.floorMod(t.getIntOr("Draai", 0), Rotation.values().length)],
+                t.contains("Uit") ? BlockPos.of(t.getLongOr("Uit", 0L)) : null, t.getIntOr("Ticks", 0));
+    }
+
+    /** (GroteNetherMikaEntity.gewonnen) nothing is owed any more; what was, or null. */
+    @Nullable
+    static Tegoed neemTegoed(Player player) {
+        Tegoed t = tegoed(player);
+        GuhQuests.saved(player).remove(TEGOED);
+        return t;
+    }
+
+    /**
+     * Plays the owed end scene when this player can watch it now: not watching or reading anything, in the duel arena (not
+     * in a pipe or at a flagpole) or, without a level, near it in the same dimension - the level hall under the arena, where
+     * a login puts whoever logged out in the duel. True when the scene started; its end is {@link GroteNetherMikaEntity#gewonnen}.
+     */
+    static boolean probeerEinde(ServerPlayer player) {
+        Tegoed t = tegoed(player);
+        if (t == null || !player.isAlive() || player.isSpectator() || Cutscenes.bezig(player)
+                || !player.level().dimension().identifier().toString().equals(t.dim())) {
+            return false;
+        }
+        GuhrioSpel.Sessie s = GuhrioSpel.sessie(player);
+        if (s != null ? !GuhrioKasteel.DUEL.equals(s.level().level().id()) || s.inPijp() || s.klaar()
+                : !t.anker().closerToCenterThan(player.position(), TEGOED_NABIJ)) {
+            return false;
+        }
+        return Cutscenes.speel(player, EINDE, t.anker(), t.draai(), GroteNetherMikaEntity::gewonnen);
+    }
+
     /** All six big vadsmunten of world 3: the hidden advancement of its FTB quest. */
     static void vadsmunten(ServerPlayer player) {
         if (GuhrioKasteel.vadsmunten(player, LEVEL_3_1) == 7 && GuhrioKasteel.vadsmunten(player, LEVEL_3_2) == 7) {
@@ -233,7 +330,8 @@ public final class GuhrioW3Feature {
     }
 
     /**
-     * The first time a player is in the duel arena: the narrator card (the level waits for whoever reads). True when the
+     * The first time a player is in the duel arena: the narrator card. Only its reader waits: the level stands still for
+     * him and nothing touches him, while the fight begins for whoever is ready (see GroteNetherMikaEntity). True when the
      * card is shown now.
      */
     static boolean kaart(ServerPlayer player) {
