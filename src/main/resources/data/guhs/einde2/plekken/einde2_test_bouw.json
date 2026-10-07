@@ -114,6 +114,33 @@
         4,
         36
       ]
+    },
+    "proefwezen": {
+      "soort": "npc",
+      "pos": [
+        36,
+        3,
+        20
+      ],
+      "yaw": -90.0,
+      "wie": "een wezen van een latere fase",
+      "entity": "guhs:sponsguh"
+    },
+    "proefscene_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          40,
+          5,
+          12
+        ],
+        [
+          40,
+          4,
+          20
+        ]
+      ],
+      "wie": "de camera van proefscene"
     }
   },
   "lagen": {

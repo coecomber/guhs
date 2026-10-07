@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:bikinibodem",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401608,
+    "min_afstand": 1600,
+    "max_afstand": 3000,
+    "sector": 3,
+    "sectoren": 16
+  }
+}

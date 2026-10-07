@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "guhs:bikinibodem",
+      "required": false
+    },
+    {
+      "id": "guhs:schelpenstad",
+      "required": false
+    }
+  ]
+}
