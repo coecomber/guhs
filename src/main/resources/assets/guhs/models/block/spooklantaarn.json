@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/template_lantern",
   "textures": {
-    "all": "guhs:block/spooklantaarn"
+    "lantern": "guhs:block/spooklantaarn"
   }
 }

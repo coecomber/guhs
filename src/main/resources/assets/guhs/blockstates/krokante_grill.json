@@ -1,7 +1,34 @@
 {
   "variants": {
-    "": {
+    "bakt=false,facing=north": {
       "model": "guhs:block/krokante_grill"
+    },
+    "bakt=false,facing=east": {
+      "model": "guhs:block/krokante_grill",
+      "y": 90
+    },
+    "bakt=false,facing=south": {
+      "model": "guhs:block/krokante_grill",
+      "y": 180
+    },
+    "bakt=false,facing=west": {
+      "model": "guhs:block/krokante_grill",
+      "y": 270
+    },
+    "bakt=true,facing=north": {
+      "model": "guhs:block/krokante_grill_bakt"
+    },
+    "bakt=true,facing=east": {
+      "model": "guhs:block/krokante_grill_bakt",
+      "y": 90
+    },
+    "bakt=true,facing=south": {
+      "model": "guhs:block/krokante_grill_bakt",
+      "y": 180
+    },
+    "bakt=true,facing=west": {
+      "model": "guhs:block/krokante_grill_bakt",
+      "y": 270
     }
   }
 }

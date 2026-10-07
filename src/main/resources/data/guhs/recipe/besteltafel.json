@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RNR",
+    "PPP",
+    " S "
+  ],
+  "key": {
+    "R": "minecraft:red_carpet",
+    "N": "minecraft:gold_nugget",
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:besteltafel"
+  }
+}

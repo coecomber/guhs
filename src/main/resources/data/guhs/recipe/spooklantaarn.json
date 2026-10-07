@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NDN",
+    "NLN",
+    "NNN"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "D": "minecraft:lime_dye",
+    "L": "guhs:lichtstaafje"
+  },
+  "result": {
+    "id": "guhs:spooklantaarn"
+  }
+}

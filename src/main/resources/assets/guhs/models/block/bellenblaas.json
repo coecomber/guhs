@@ -1,6 +1,84 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "guhs:block/bellenblaas"
-  }
+    "particle": "guhs:block/bellenblaas",
+    "pot": "guhs:block/bellenblaas",
+    "sop": "guhs:block/bellenblaas_sop",
+    "ring": "guhs:block/bellenblaas_ring"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#sop"
+        },
+        "down": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        6,
+        7.9
+      ],
+      "to": [
+        13,
+        16,
+        8.1
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          7,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      },
+      "faces": {
+        "north": {
+          "texture": "#ring",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#ring",
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ]
+        }
+      }
+    }
+  ]
 }
