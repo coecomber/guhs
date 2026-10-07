@@ -37,9 +37,12 @@ import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
 import nl.juiced.guhs.feature.mewtwo.MewtwoFeature;
 import nl.juiced.guhs.feature.ring.Cast;
 import nl.juiced.guhs.feature.ring.RingFeature;
+import nl.juiced.guhs.feature.ringh2.Guhvendel;
 import nl.juiced.guhs.feature.ringh3.Mijn;
 import nl.juiced.guhs.feature.ringh3.Plekken;
 import nl.juiced.guhs.feature.ringh3.RingH3Feature;
+import nl.juiced.guhs.feature.ringh4.Boomstad;
+import nl.juiced.guhs.feature.ringh6.Berg;
 import nl.juiced.guhs.feature.ringsausuman.Bakkerij;
 import nl.juiced.guhs.feature.ringsausuman.RingSausumanFeature;
 import nl.juiced.guhs.feature.ringsausuman.Toren;
@@ -290,24 +293,29 @@ public final class Knipogen {
         if (gezien(p, STITCH) || lijn.stap(p) != 2 || !lijn.aanDeBeurt(p) || lijn.vlag(p, Bakkerij.GEVULD) || !p.onGround()) {
             return false;
         }
-        ServerLevel level = p.level();
-        BlockPos bakker = null;
-        for (BlockPos pos : BlockPos.betweenClosed(p.blockPosition().offset(-10, 0, -10), p.blockPosition().offset(10, 2, 10))) {
-            if (level.getBlockState(pos).is(RingSausumanFeature.RINGENBAKKER.get())) {
-                bakker = pos.immutable();
-                break;
-            }
-        }
+        BlockPos bakker = ringenbakker(p);
         if (bakker == null) {
             return false;
         }
-        Rotation draai = Toren.draai(level.getBlockState(bakker).getValue(HorizontalDirectionalBlock.FACING));
+        Rotation draai = Toren.draai(p.level().getBlockState(bakker).getValue(HorizontalDirectionalBlock.FACING));
         Vec3 lokaal = lokaal(bakker, draai, p.position());
         // the hall's floor in the machine's frame (the machine looks along +z): 7 wide, 10 deep, one below the machine's face
         if (lokaal.x < -3.0 || lokaal.x > 4.0 || lokaal.z < 1.0 || lokaal.z > 11.0 || Math.abs(lokaal.y + 1.0) > 0.6) {
             return false;
         }
         return toon(p, STITCH, bakker, draai, null);
+    }
+
+    /** The Ringenbakker of the hall this player stands in (its face is one block above the hall's floor), or null. */
+    @Nullable
+    static BlockPos ringenbakker(ServerPlayer p) {
+        ServerLevel level = p.level();
+        for (BlockPos pos : BlockPos.betweenClosed(p.blockPosition().offset(-10, 0, -10), p.blockPosition().offset(10, 2, 10))) {
+            if (level.getBlockState(pos).is(RingSausumanFeature.RINGENBAKKER.get())) {
+                return pos.immutable();
+            }
+        }
+        return null;
     }
 
     /** A world position in the frame of an anchor block that is turned {@code draai} (the opposite of {@link Cutscene#wereld}). */
@@ -334,9 +342,8 @@ public final class Knipogen {
         if (blok == null || s.staat(blok) == 0 || !blok.closerToCenterThan(p.position(), KISTJE_BEREIK)) {
             return false;
         }
-        Baan baan = s.level().banen().get(0);
-        Vec3 camera = baan.naarCamera(baan.plek(blok.getX() + 0.5, blok.getZ() + 0.5).stuk());
-        return toon(p, KISTJE, blok, naarCamera(Direction.getApproximateNearest(camera.x, 0, camera.z)), null);
+        Plek plek = plek(p, KISTJE);
+        return plek != null && toon(p, KISTJE, plek.anker(), plek.draai(), null);
     }
 
     /** The ?-block with the medicine chest of this session's level: the coin block of the first lane at {@link #KISTJE_S}, or null. */
@@ -363,6 +370,52 @@ public final class Knipogen {
             case EAST -> Rotation.COUNTERCLOCKWISE_90;
             default -> Rotation.NONE;
         };
+    }
+
+    /** Where a wink plays: its anchor block and how its frame is turned. */
+    public record Plek(BlockPos anker, Rotation draai) {
+    }
+
+    /**
+     * (the dev command {@code /guhs ringknipoog speel}) where this wink would play for a player who stands where this one
+     * stands: in the frame of the building around them. Null: its building is not here. The two that need no building (the
+     * feast, a ?-block outside a level) play on the player's own spot, the ?-block three above their feet.
+     */
+    @Nullable
+    static Plek plek(ServerPlayer p, Cutscene knipoog) {
+        ServerLevel level = p.level();
+        BlockPos hier = p.blockPosition();
+        if (knipoog == BALTOGUH) {
+            Guhvendel.Oord o = Guhvendel.oord(level, hier);
+            return o == null ? null : new Plek(o.anker(), o.draai());
+        }
+        if (knipoog == KLOON) {
+            Mijn m = Mijn.bij(level, hier);
+            return m == null ? null : new Plek(m.wereld(Plekken.POORT_BUITEN), m.draai());
+        }
+        if (knipoog == SPIEGEL) {
+            Boomstad.Kopie k = Boomstad.bij(level, hier);
+            return k == null ? null : new Plek(k.blok("spiegel"), k.draai());
+        }
+        if (knipoog == STITCH) {
+            BlockPos bakker = ringenbakker(p);
+            return bakker == null ? null : new Plek(bakker, Toren.draai(level.getBlockState(bakker).getValue(HorizontalDirectionalBlock.FACING)));
+        }
+        if (knipoog == BORIS) {
+            Berg.Kopie berg = Berg.bij(level, hier);
+            return berg == null ? null : new Plek(berg.wereld("richel_3"), berg.draai());
+        }
+        if (knipoog == KISTJE) {
+            GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+            BlockPos blok = s == null ? null : kistjeBlok(s);
+            if (blok != null) {
+                Baan baan = s.level().banen().get(0);
+                Vec3 camera = baan.naarCamera(baan.plek(blok.getX() + 0.5, blok.getZ() + 0.5).stuk());
+                return new Plek(blok, naarCamera(Direction.getApproximateNearest(camera.x, 0, camera.z)));
+            }
+            return new Plek(hier.above(3), Rotation.NONE);
+        }
+        return new Plek(hier, Rotation.NONE);
     }
 
     static void vergeet(UUID speler) {
@@ -615,7 +668,7 @@ public final class Knipogen {
         final String stitch = "stitch", sausuman = "sausuman", speler = Cutscene.SPELER;
         Vec3 machine = new Vec3(0.5, 0.4, 0.6), bijOven = new Vec3(-2.45, -1, 7.25), oven = new Vec3(-2.5, -0.4, 8.2), deur = new Vec3(0.5, -1, 10.4);
         Vec3 boem = new Vec3(-2.5, 0.5, 8.3);
-        Cutscene.Builder s = Cutscene.maak("ringknipoog_stitch").duur(184).bij("ring_sausuman").verbergEcht(11)
+        Cutscene.Builder s = Cutscene.maak("ringknipoog_stitch").duur(184).bij("ring_sausuman").verbergEcht(14)
                 .speler(new Vec3(1.5, -1, 5.5), 135)
                 .npc(sausuman, Kind.SAUSUMAN, new Vec3(-2.5, -1, 2.5), -45)
                 .guh("sam", GuhVariant.SAM_GUH, new Vec3(2.6, -1, 6.9), 120)
@@ -670,7 +723,7 @@ public final class Knipogen {
         final String boris = "boris", sam = "sam", speler = Cutscene.SPELER;
         // (he stays inside the air that the mountain's template carves itself: what lies further out over the sea differs per world)
         Vec3 ver = new Vec3(9.5, 4.3, 5.5), bijMuur = new Vec3(5.6, 1.7, -1.5), weg = new Vec3(9.6, 4.6, 5.0);
-        return Cutscene.maak("ringknipoog_boris").duur(192).bij("ring_h6").kaart("ring_h6").verbergEcht(12)
+        return Cutscene.maak("ringknipoog_boris").duur(192).bij("ring_h6").kaart("ring_h6").verbergEcht(16)
                 .speler(new Vec3(0.5, 0, -1.5), 270)
                 .guh(sam, GuhVariant.SAM_GUH, new Vec3(2.4, 0, -2.3), 270)
                 .npc(boris, Kind.BORIS, ver, 90)
@@ -743,7 +796,7 @@ public final class Knipogen {
         // 3. just in time for dessert
         s.cameraKnip(134, new Vec3(-7.0, 4.0, 8.0), new Vec3(0.0, 1.0, 2.0))
                 .camera(178, new Vec3(-7.6, 4.4, 8.6), new Vec3(0.0, 1.0, 2.0))
-                .zeg(136, "sam", "toetje", 40)
+                .zeg(136, "sam", "toetje", 44)
                 .deeltjes(138, ParticleTypes.HEART, new Vec3(-2.3, 0.9, 5.3), 6, 0.4)
                 .geluid(138, () -> ModSounds.GUH_HAPPY.get(), 1.0f, 1.2f)
                 .geluid(152, LanddiertjesFeature.SHUCKLE_GELUID, 1.0f, 1.3f)
@@ -766,7 +819,7 @@ public final class Knipogen {
     private static Cutscene kloonScene() {
         final String kloon = "kloon", guhdalf = "guhdalf", speler = Cutscene.SPELER;
         Vec3 ver = new Vec3(-7.4, 0, 0.3), bijGuhdalf = new Vec3(-0.9, 0, -0.3), weg = new Vec3(-6.6, 0, 0.6);
-        return Cutscene.maak("ringknipoog_kloon").duur(190).bij("ring_h3").kaart("ring_h3").verbergEcht(16)
+        return Cutscene.maak("ringknipoog_kloon").duur(190).bij("ring_h3").kaart("ring_h3").verbergEcht(20)
                 .acteur(guhdalf, ModEntities.GUH_NPC, new Vec3(0.5, 0, -1.5), 250, Cast.acteur(Kind.GUHDALF, "grijs"))
                 .npc("gimguh", Kind.GIMGUH, new Vec3(-0.5, 0, 3.5), 290)
                 .npc("leguhlas", Kind.LEGUHLAS, new Vec3(-3.5, 0, 4.5), 300)
