@@ -997,8 +997,8 @@
         98
       ],
       "yaw": -90.0,
-      "wie": "Baltoguh achter een torenhoge ijscoupe: ijs, sneeuw, bijna hetzelfde",
-      "kind": "BALTOGUH"
+      "wie": "Baltoguh (de guh-variant BALTOGUH) achter een torenhoge ijscoupe",
+      "entity": "guhs:guh"
     },
     "knipoog_ijs_coupe": {
       "soort": "prop",
