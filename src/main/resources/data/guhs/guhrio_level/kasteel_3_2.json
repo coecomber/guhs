@@ -19,6 +19,26 @@
       "afstand": 11,
       "hoogte": 6,
       "onder": -4,
+      "boven": 8
+    },
+    {
+      "id": "peperkamer",
+      "punten": [
+        [
+          58,
+          0,
+          0
+        ],
+        [
+          84,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": 9,
       "boven": 15
     }
   ],

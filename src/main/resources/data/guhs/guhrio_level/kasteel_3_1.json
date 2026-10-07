@@ -19,6 +19,26 @@
       "afstand": 11,
       "hoogte": 6,
       "onder": -4,
+      "boven": 8
+    },
+    {
+      "id": "schatkamer",
+      "punten": [
+        [
+          64,
+          0,
+          0
+        ],
+        [
+          88,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": 9,
       "boven": 15
     }
   ],
