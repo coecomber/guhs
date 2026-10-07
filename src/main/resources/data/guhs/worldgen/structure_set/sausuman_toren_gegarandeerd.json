@@ -8,10 +8,11 @@
   "placement": {
     "type": "guhs:gegarandeerd",
     "salt": 21302208,
-    "min_afstand": 250,
-    "max_afstand": 900,
+    "min_afstand": 200,
+    "max_afstand": 400,
     "alleen_nieuw": true,
-    "sector": 13,
-    "sectoren": 16
+    "sector": 0,
+    "sectoren": 1,
+    "rond": "guhs:guhladriel_boomstad_gegarandeerd"
   }
 }

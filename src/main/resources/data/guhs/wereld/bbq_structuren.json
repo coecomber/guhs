@@ -3,6 +3,8 @@
     "fossiel_opgraving",
     "grillcamping",
     "guhrio_kasteel",
+    "guhvendel",
+    "knabbelgouw",
     "mika_brugpaleis",
     "mika_ruilmarkt",
     "mika_stal",
@@ -16,6 +18,9 @@
     "zoutkristalmijn"
   ],
   "sluier": [
-    "knabbelmoria"
+    "frituurberg",
+    "guhladriel_boomstad",
+    "knabbelmoria",
+    "zwarte_roosterpoort"
   ]
 }

@@ -2390,5 +2390,61 @@
       }
     ],
     "subtitle": "subtitles.guhs.ringh3.brokkel"
+  },
+  "ringsausuman.sputter": {
+    "sounds": [
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:block.candle.extinguish",
+        "type": "event",
+        "pitch": 0.5,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringsausuman.sputter"
+  },
+  "ringsausuman.ronk": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event",
+        "pitch": 0.55,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringsausuman.ronk"
+  },
+  "ringsausuman.pling": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringsausuman.pling"
+  },
+  "ringsausuman.mok": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.villager.no",
+        "type": "event",
+        "pitch": 0.55,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringsausuman.mok"
   }
 }

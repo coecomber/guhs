@@ -8,10 +8,11 @@
   "placement": {
     "type": "guhs:gegarandeerd",
     "salt": 21301908,
-    "min_afstand": 300,
-    "max_afstand": 800,
+    "min_afstand": 250,
+    "max_afstand": 500,
     "alleen_nieuw": true,
-    "sector": 13,
-    "sectoren": 16
+    "sector": 0,
+    "sectoren": 1,
+    "rond": "guhs:knabbelmoria_gegarandeerd"
   }
 }
