@@ -110,6 +110,7 @@ def teksten():
         K + "wacht.saus": "%s",
         K + "wacht.flesjes": f"{getal('BROUW_FLESJES')} glazen flesjes",
         K + "wacht.snack": "kaasknabbels of een guhvis om te frituren",
+        K + "slang_te_lang": "Deze slang is te lang, njeg: na %s slangen heeft de saus geen zin meer",
         K + "brouwt": "Er borrelt %s: %s%%",
         K + "perst": "Hij perst: %s%%",
         # clicks

@@ -335,6 +335,9 @@ public abstract class SausMachineBlockEntity extends MachineBlockEntity {
         if (wacht != null) {
             regels.accept(Component.translatable(SausTekst.K + "wacht", wacht).withStyle(ChatFormatting.GRAY));
         }
+        if (level instanceof ServerLevel server && Slangen.teLang(server, worldPosition)) {
+            regels.accept(Component.translatable(SausTekst.K + "slang_te_lang", SausGetallen.SLANG_MAX).withStyle(ChatFormatting.GOLD));
+        }
     }
 
     @Override

@@ -44,7 +44,11 @@ public final class Slangen {
         }
     }
 
-    private record Onthouden(int versie, long tot, List<Aansluiting> lijst) {
+    private record Onthouden(int versie, long tot, List<Aansluiting> lijst, boolean teLang) {
+    }
+
+    /** What one search found: the ends, and whether hoses were left out because the net is longer than {@link SausGetallen#SLANG_MAX}. */
+    private record Gevonden(List<Aansluiting> lijst, boolean teLang) {
     }
 
     private static final class PerLevel {
@@ -84,18 +88,31 @@ public final class Slangen {
      * promise: {@link Aansluiting#handler} is null when the block there holds no fluid (any more).
      */
     public static List<Aansluiting> aansluitingen(ServerLevel level, BlockPos pos) {
+        return onthouden(level, pos).lijst;
+    }
+
+    /**
+     * Is the hose net of the block at {@code pos} longer than {@link SausGetallen#SLANG_MAX} hoses? Then what lies beyond
+     * that many hoses is not joined (nothing comes out there), and the pump or machine says so in its hover readout.
+     */
+    public static boolean teLang(ServerLevel level, BlockPos pos) {
+        return onthouden(level, pos).teLang;
+    }
+
+    private static Onthouden onthouden(ServerLevel level, BlockPos pos) {
         PerLevel per = van(level);
         long nu = level.getGameTime();
         Onthouden oud = per.lijsten.get(pos);
         if (oud != null && oud.versie == per.versie && nu < oud.tot) {
-            return oud.lijst;
+            return oud;
         }
-        List<Aansluiting> lijst = zoek(level, pos);
-        per.lijsten.put(pos.immutable(), new Onthouden(per.versie, nu + SausGetallen.SLANG_ONTHOUD, lijst));
-        return lijst;
+        Gevonden gevonden = zoek(level, pos);
+        Onthouden nieuw = new Onthouden(per.versie, nu + SausGetallen.SLANG_ONTHOUD, gevonden.lijst, gevonden.teLang);
+        per.lijsten.put(pos.immutable(), nieuw);
+        return nieuw;
     }
 
-    private static List<Aansluiting> zoek(ServerLevel level, BlockPos pos) {
+    private static Gevonden zoek(ServerLevel level, BlockPos pos) {
         Set<BlockPos> zelf = new HashSet<>();
         zelf.add(pos.immutable());
         zelf.addAll(Meerblok.delen(pos, level.getBlockState(pos)));
@@ -119,6 +136,7 @@ public final class Slangen {
             }
         }
         int slangen = gezien.size();
+        boolean teLang = false;
         while (!rij.isEmpty()) {
             BlockPos slang = rij.poll();
             BlockState slangState = level.getBlockState(slang);
@@ -132,16 +150,22 @@ public final class Slangen {
                 }
                 BlockState state = level.getBlockState(buur);
                 if (state.getBlock() instanceof SausslangBlock) {
-                    if (slangen < SausGetallen.SLANG_MAX && gezien.add(buur)) {
-                        slangen++;
-                        rij.add(buur);
+                    if (gezien.contains(buur)) {
+                        continue;
                     }
+                    if (slangen >= SausGetallen.SLANG_MAX) {
+                        teLang = true;   // (a hose that is left out: beyond it nothing is joined)
+                        continue;
+                    }
+                    gezien.add(buur);
+                    slangen++;
+                    rij.add(buur);
                 } else {
                     uit.add(new Aansluiting(buur, kant.getOpposite()));
                 }
             }
         }
-        return List.copyOf(uit);
+        return new Gevonden(List.copyOf(uit), teLang);
     }
 
     /**

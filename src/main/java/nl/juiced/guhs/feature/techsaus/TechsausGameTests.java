@@ -600,4 +600,47 @@ public class TechsausGameTests {
         weg(helper, speler);
         helper.succeed();
     }
+
+    /**
+     * A hose net longer than {@link SausGetallen#SLANG_MAX} hoses: what lies beyond is not joined, and the pump says so in
+     * its hover readout (it said nothing before: the sauce simply did not arrive). A shorter net says nothing.
+     */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void techsausSlangTeLang(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pomp = p(0, 0), pompAbs = helper.absolutePos(pomp);
+        zet(helper, pomp, TechsausFeature.SAUSPOMP.get(), SauspompBlockEntity.class);
+        List<BlockPos> slangen = new java.util.ArrayList<>();
+        for (int y = 3; y <= 6; y++) {
+            for (int x = 0; x <= 10; x++) {
+                for (int z = 0; z <= 6; z++) {
+                    BlockPos plek = new BlockPos(x, y, z);
+                    if (!plek.equals(pomp)) {
+                        slangen.add(plek);
+                    }
+                }
+            }
+        }
+        helper.assertTrue(slangen.size() > SausGetallen.SLANG_MAX + 40, "(the room holds more hoses than a net may have: " + slangen.size() + ")");
+        String regel = "Deze slang is te lang, njeg: na " + SausGetallen.SLANG_MAX + " slangen heeft de saus geen zin meer";
+        // a net of exactly the most hoses: fine
+        slang(helper, slangen.subList(0, SausGetallen.SLANG_MAX).toArray(BlockPos[]::new));
+        helper.assertTrue(!Slangen.teLang(level, pompAbs), "a net of " + SausGetallen.SLANG_MAX + " hoses is not too long");
+        helper.assertTrue(!lees(helper, pomp).contains(regel), "and the pump says nothing about it: " + lees(helper, pomp));
+        // one hose more
+        slang(helper, slangen.get(SausGetallen.SLANG_MAX));
+        helper.assertTrue(Slangen.teLang(level, pompAbs), "one hose more: too long");
+        helper.assertTrue(lees(helper, pomp).contains(regel), "the pump's hover says so: " + lees(helper, pomp));
+        slang(helper, slangen.subList(SausGetallen.SLANG_MAX + 1, slangen.size()).toArray(BlockPos[]::new));
+        helper.assertTrue(Slangen.teLang(level, pompAbs), "and many more: still too long");
+        // shortened again: the line is gone
+        for (BlockPos plek : slangen.subList(SausGetallen.SLANG_MAX - 20, slangen.size())) {
+            helper.setBlock(plek, Blocks.AIR);
+        }
+        helper.assertTrue(!Slangen.teLang(level, pompAbs) && !lees(helper, pomp).contains(regel), "shortened: the pump is content again");
+        for (BlockPos plek : slangen) {
+            helper.setBlock(plek, Blocks.AIR);
+        }
+        helper.succeed();
+    }
 }
