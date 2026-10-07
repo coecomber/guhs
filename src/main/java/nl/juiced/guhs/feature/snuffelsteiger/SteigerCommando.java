@@ -49,6 +49,9 @@ import nl.juiced.guhs.item.GuhCompassItem;
  * ga [kade|tuin|binnen|steiger|platform|zee|achter]   to the nearest steigerhuisje; with a spot (when you are at one): to that
  *                           spot of it, looking the right way (for pictures: the same view at every copy, however it is turned)
  * </pre>
+ * In dev runs only: {@code dump} writes the blocks of the copy here and the land and water around it (and where its dogs
+ * and its boat are) to {@code steiger_dump.json} in the game directory, for a picture of a dock as it really stands in
+ * generated terrain (W/scratch/snuffel-steiger/render_dump.py).
  */
 final class SteigerCommando {
     private SteigerCommando() {
@@ -189,6 +192,54 @@ final class SteigerCommando {
                 + "/17 planken met " + water + "/17 water eronder, keermuur op " + muur + " plekken (hoogste " + hoogste + ")");
     }
 
+    /** (Dev runs) the copy here and 14 blocks around it as a JSON file: [dx, dy, dz, block id, {properties}] relative to its anchor. */
+    private static int dump(CommandContext<CommandSourceStack> c) {
+        ServerLevel level = c.getSource().getLevel();
+        Steiger.Oord o = Steiger.oord(level, BlockPos.containing(c.getSource().getPosition()));
+        if (o == null) {
+            return fout(c, "Hier staat geen steigerhuisje");
+        }
+        com.google.gson.JsonObject uit = new com.google.gson.JsonObject();
+        uit.addProperty("draai", o.draai().name());
+        com.google.gson.JsonArray blokken = new com.google.gson.JsonArray();
+        net.minecraft.world.level.levelgen.structure.BoundingBox d = o.doos();
+        BlockPos a = o.anker();
+        for (BlockPos pos : BlockPos.betweenClosed(d.minX() - 14, a.getY() - 9, d.minZ() - 14, d.maxX() + 14, a.getY() + 15, d.maxZ() + 14)) {
+            net.minecraft.world.level.block.state.BlockState st = level.getBlockState(pos);
+            if (st.isAir()) {
+                continue;
+            }
+            com.google.gson.JsonArray b = new com.google.gson.JsonArray();
+            b.add(pos.getX() - a.getX());
+            b.add(pos.getY() - a.getY());
+            b.add(pos.getZ() - a.getZ());
+            b.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(st.getBlock()).toString());
+            com.google.gson.JsonObject props = new com.google.gson.JsonObject();
+            st.getValues().forEach(v -> props.addProperty(v.property().getName(), v.valueName()));
+            b.add(props);
+            blokken.add(b);
+        }
+        uit.add("blokken", blokken);
+        com.google.gson.JsonArray wezens = new com.google.gson.JsonArray();
+        for (Entity e : level.getEntities((Entity) null, new net.minecraft.world.phys.AABB(a).inflate(64), x -> x instanceof SteigerBewoner || x instanceof SteigerBoot)) {
+            com.google.gson.JsonArray w = new com.google.gson.JsonArray();
+            w.add(e.getX() - a.getX());
+            w.add(e.getY() - a.getY());
+            w.add(e.getZ() - a.getZ());
+            w.add(e.getYRot());
+            w.add(e instanceof SteigerBewoner b ? b.rol() : "boot");
+            wezens.add(w);
+        }
+        uit.add("wezens", wezens);
+        java.nio.file.Path pad = net.neoforged.fml.loading.FMLPaths.GAMEDIR.get().resolve("steiger_dump.json");
+        try {
+            java.nio.file.Files.writeString(pad, uit.toString());
+        } catch (java.io.IOException e) {
+            return fout(c, "Schrijven mislukt: " + e.getMessage());
+        }
+        return zeg(c, blokken.size() + " blokken en " + wezens.size() + " wezens naar " + pad);
+    }
+
     static void registreer(RegisterCommandsEvent event) {
         var wortel = Commands.literal("steiger").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stand").executes(c -> {
@@ -253,6 +304,9 @@ final class SteigerCommando {
                     }
                     return zeg(c, "gemaakt=" + gemaakt + " aanwezig:" + wie);
                 }));
+        if (!net.neoforged.fml.loading.FMLEnvironment.isProduction()) {
+            wortel.then(Commands.literal("dump").executes(SteigerCommando::dump));
+        }
         event.getDispatcher().register(Commands.literal("guhs").then(wortel));
     }
 }

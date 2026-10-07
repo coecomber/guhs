@@ -71,8 +71,9 @@ public class GidsGameTests {
         helper.assertTrue(mg.kopjes().stream().map(SuperkompasItem.Kopje::id).toList().equals(List.of("klassiekers", "knuffeldal", "grote_guhspelen",
                 "verhalen", "guhpixel")), "the subheadings (3.0: + verhalen; guhpixel: + guhpixel): " + mg.kopjes());
         SuperkompasItem.Category verhalen = cats.stream().filter(c -> c.id().equals("verhalen")).findFirst().orElseThrow();
+        // (verhalenpad snuffel-steiger: + the steigerhuisje, where Het Snuffeleiland begins)
         helper.assertTrue(verhalen.structures().equals(List.of("nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
-                "guhwaii_surfstrand", "knuffeldal_stadje")), "3.0: the Verhalen tab (1.3.1: without the capsule): " + verhalen.structures());
+                "guhwaii_surfstrand", "knuffeldal_stadje", "steigerhuisje")), "3.0: the Verhalen tab (1.3.1: without the capsule): " + verhalen.structures());
         // 1.3.1: the capsule is only a stop of the Ohana questline; the structure and its name stay, a compass that still looks for it keeps working
         helper.assertTrue(!SuperkompasItem.allowed("guhwaii_capsule") && SuperkompasItem.categoryOf("guhwaii_capsule") == -1
                 && structures.containsKey(Guhs.id("guhwaii_capsule")) && net.minecraft.locale.Language.getInstance().has("structure.guhs.guhwaii_capsule"),

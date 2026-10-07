@@ -41,19 +41,29 @@ public final class SteigerScenes {
 
     /** The boat and who is aboard move as one (the bow looks to +z, out to sea). */
     private static Cutscene.Builder vaar(Cutscene.Builder b, int t0, int t1, double x, double z, double dy, boolean spelerAanBoord) {
+        return vaar(b, t0, t1, x, z, dy, spelerAanBoord, 1);
+    }
+
+    /** ...boeg: +1 = the bow looks to +z (out to sea), -1 = to -z (coming in): the captain is always at the stern. */
+    private static Cutscene.Builder vaar(Cutscene.Builder b, int t0, int t1, double x, double z, double dy, boolean spelerAanBoord, int boeg) {
         b.loop("boot", t0, t1, boot(x, z, dy));
-        b.loop("kapitein", t0, t1, boot(x, z + Steiger.BOOT_ROER, dy + Steiger.BOOT_DEK));
+        b.loop("kapitein", t0, t1, boot(x, z + boeg * Steiger.BOOT_ROER, dy + Steiger.BOOT_DEK));
         if (spelerAanBoord) {
-            b.loop(Cutscene.SPELER, t0, t1, boot(x, z + Steiger.BOOT_BOEG, dy + Steiger.BOOT_DEK));
+            b.loop(Cutscene.SPELER, t0, t1, boot(x, z + boeg * Steiger.BOOT_BOEG, dy + Steiger.BOOT_DEK));
         }
         return b;
     }
 
     private static Cutscene.Builder schip(Cutscene.Builder b, double x, double z, boolean spelerAanBoord) {
-        b.acteur("boot", SnuffelsteigerFeature.STEIGER_BOOT, boot(x, z, 0), Steiger.BOOT_YAW);
-        b.acteur("kapitein", SnuffelFeature.SNUFFEL_HOND, boot(x, z + Steiger.BOOT_ROER, Steiger.BOOT_DEK), 0, tag -> tag.putString("Bewoner", "kapitein"));
+        return schip(b, x, z, spelerAanBoord, 1);
+    }
+
+    private static Cutscene.Builder schip(Cutscene.Builder b, double x, double z, boolean spelerAanBoord, int boeg) {
+        float yaw = boeg > 0 ? Steiger.BOOT_YAW : Steiger.BOOT_YAW + 180f;
+        b.acteur("boot", SnuffelsteigerFeature.STEIGER_BOOT, boot(x, z, 0), yaw);
+        b.acteur("kapitein", SnuffelFeature.SNUFFEL_HOND, boot(x, z + boeg * Steiger.BOOT_ROER, Steiger.BOOT_DEK), yaw, tag -> tag.putString("Bewoner", "kapitein"));
         if (spelerAanBoord) {
-            b.speler(boot(x, z + Steiger.BOOT_BOEG, Steiger.BOOT_DEK), 0);
+            b.speler(boot(x, z + boeg * Steiger.BOOT_BOEG, Steiger.BOOT_DEK), yaw);
         }
         return b;
     }
@@ -69,7 +79,7 @@ public final class SteigerScenes {
     // 1. the lantern feast and the collapse
     // =====================================================================================================================
     private static Cutscene feest() {
-        Vec3 val = p(10.5, 0, 18.5);                 // where the puppy goes down, under the second lantern arch
+        Vec3 val = p(10.5, 0, 18.5);                 // where the puppy goes down: on the pier, between its two lantern arches
         Cutscene.Builder b = Cutscene.maak("snuffelsteiger_feest").duur(FEEST_DUUR).bij("snuffeleiland").verbergEcht(48)
                 .speler(p(16.5, 0, 8.5), 180)
                 .acteur("boot", SnuffelsteigerFeature.STEIGER_BOOT, Steiger.punt(Steiger.BOOT), Steiger.BOOT_YAW)
@@ -221,19 +231,21 @@ public final class SteigerScenes {
     private static Cutscene thuiskomst() {
         double x = Steiger.BOOT.x, z0 = Steiger.BOOT.z;
         Cutscene.Builder b = Cutscene.maak("snuffelsteiger_thuiskomst").duur(THUISKOMST_DUUR).verbergEcht(48);
-        schip(b, x, z0 + 6.5, true);
+        schip(b, x, z0 + 6.5, true, -1);
         b.acteur("buur", SnuffelFeature.SNUFFEL_HOND, p(9.5, 0, 29.5), -70, tag -> {
             tag.putString("Ras", "golden");
             tag.putString("Kleur", "rood");
         });
         b.zwart(-10, 22);
         b.camera(0, p(8.5, 1.9, 25.5), p(x, -1.3, z0 + 5)).camera(110, p(9.5, 1.7, 26.5), p(x - 0.6, -1.0, z0 + 0.5));
-        vaar(b, 8, 100, x, z0, 0, true);
+        vaar(b, 8, 100, x, z0, 0, true, -1);
         b.geluid(12, SnuffelsteigerFeature.RIEM_GELUID, 0.8f, 0.9f).geluid(60, SnuffelsteigerFeature.RIEM_GELUID, 0.7f, 1f);
         b.animatie("buur", 1, "kwispel").geluid(26, SnuffelFeature.BLAF_GELUID, 0.7f, 1.1f).zeg(24, "buur", "daar", 44);
         b.zeg(72, "kapitein", "thuis", 50);
         b.animatie(Cutscene.SPELER, 106, "spring").loop(Cutscene.SPELER, 106, 120, p(12.5, 0, 29.5));
         b.geluid(119, SnuffelsteigerFeature.PLANK_GELUID, 1f, 0.8f).kijk(Cutscene.SPELER, 121, p(9.5, 0, 29.5));
+        // (it ends in black: the boat that lies moored there looks out to sea again)
+        b.zwart(THUISKOMST_DUUR - 12, THUISKOMST_DUUR);
         return b.registreer();
     }
 }
