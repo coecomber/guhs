@@ -95,6 +95,16 @@ public final class Pijpreis {
      */
     @Nullable
     public static BlockPos partner(ServerLevel level, BlockPos mond) {
+        return partner(level, mond, null);
+    }
+
+    /**
+     * The same for this traveller: a mouth where they may not come out is no partner - inside Guhdalfs sluier of a chapter
+     * they have not reached (a pipe that a template put there, or that somebody further in the story built), and inside a
+     * sealed level hall of the Kasteel van de Grote Nether-Mika (nobody can stand there without playing its level).
+     */
+    @Nullable
+    public static BlockPos partner(ServerLevel level, BlockPos mond, @Nullable ServerPlayer voor) {
         BlockState eigen = level.getBlockState(mond);
         if (!(eigen.getBlock() instanceof PijpBlock)) {
             return null;
@@ -108,12 +118,18 @@ public final class Pijpreis {
                 continue;
             }
             double d = pos.distSqr(mond);
-            if (d < afstand && vrij(level, pos)) {
+            if (d < afstand && vrij(level, pos) && (voor == null || magUit(voor, level, pos))) {
                 beste = pos;
                 afstand = d;
             }
         }
         return beste;
+    }
+
+    /** May this traveller come out of this mouth? */
+    private static boolean magUit(ServerPlayer p, ServerLevel level, BlockPos mond) {
+        return nl.juiced.guhs.feature.verhaal.Sluiers.magBinnen(p, mond.above())
+                && nl.juiced.guhs.feature.guhrio.GuhrioKasteel.halBij(level, mond.above()) == null;
     }
 
     /** Two blocks of room above this mouth? */
@@ -137,7 +153,7 @@ public final class Pijpreis {
         } else if (Minigames.playing(p) != null || Cutscenes.bezig(p)) {
             waarom = "bezig";
         } else {
-            naar = partner(p.level(), mond);
+            naar = partner(p.level(), mond, p);
             if (naar == null) {
                 waarom = "geen_partner";
             }
@@ -200,7 +216,7 @@ public final class Pijpreis {
         if (reis.tick == IN_TICKS) {
             BlockState doel = level.getBlockState(reis.naar);
             // (the other pipe was broken while you slid down: you simply come up where you went in)
-            BlockPos uit = doel.getBlock() instanceof PijpBlock && vrij(level, reis.naar) ? reis.naar : reis.van;
+            BlockPos uit = doel.getBlock() instanceof PijpBlock && vrij(level, reis.naar) && magUit(p, level, reis.naar) ? reis.naar : reis.van;
             p.teleportTo(level, uit.getX() + 0.5, uit.getY() + 1, uit.getZ() + 0.5, Set.of(), p.getYRot(), p.getXRot(), false);
             p.resetFallDistance();
             film(p, GuhrioBeloningPayloads.Film.UIT, UIT_TICKS);
