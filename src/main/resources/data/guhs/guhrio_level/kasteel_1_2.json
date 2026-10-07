@@ -17,39 +17,59 @@
       ],
       "camera": "rechts",
       "afstand": 11,
-      "hoogte": 6,
-      "onder": -4,
-      "boven": 8
+      "hoogte": 5,
+      "onder": -3,
+      "boven": 6
     },
     {
-      "id": "bonus",
+      "id": "muur",
       "punten": [
         [
-          26,
+          -2,
           0,
           0
         ],
         [
-          42,
+          69,
           0,
           0
         ]
       ],
       "camera": "rechts",
       "afstand": 11,
-      "hoogte": 6,
-      "onder": 9,
-      "boven": 15
+      "hoogte": 5,
+      "onder": 7,
+      "boven": 16
+    },
+    {
+      "id": "kas",
+      "punten": [
+        [
+          74,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 5,
+      "onder": 7,
+      "boven": 16
     }
   ],
   "uitgang": [
     44,
-    -4,
+    -3,
     -44
   ],
   "ingang": [
     36,
-    -4,
+    -3,
     -25
   ],
   "na": "kasteel_1_1"

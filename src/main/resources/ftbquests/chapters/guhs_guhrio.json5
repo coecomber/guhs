@@ -42,6 +42,18 @@
         "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755480260E5E400",
+      image: "guhs:textures/ftbquests/guhs_guhrio/kop_guhrio_w1.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
+      ],
+    },
   ],
   order_index: 15,
   progression_mode: "flexible",
@@ -235,6 +247,205 @@
         },
       ],
       x: 6.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548F577B8469E",
+      icon: {
+        id: "guhs:guhriow1_gras",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_stap_2",
+          id: "475548115D356DBC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485DC7F62FEF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755483B8CA942F9",
+      icon: {
+        id: "guhs:guhriow1_heg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_stap_3",
+          id: "4755486B071738D0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CCADBAF858",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755482DA0916079",
+      icon: {
+        id: "guhs:guhrio_mast",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_w1_prinses",
+          id: "475548ABD369B07C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D6EF161865",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755486D971C5201",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "47554803F15ACD30",
+      icon: {
+        id: "guhs:guhrio_vadsmunt",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_w1_vads_1_1",
+          id: "47554832223450D0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F507D5327F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+      shape: "diamond",
+    },
+    {
+      id: "475548418E82DEBA",
+      icon: {
+        id: "guhs:guhrio_vadsmunt",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_w1_vads_1_2",
+          id: "475548007B137F77",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AE5C3C5520",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+      shape: "diamond",
+    },
+    {
+      id: "475548A80B002AFD",
+      icon: {
+        id: "guhs:guhrio_pijp",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_w1_geheim_1_1",
+          id: "47554860189C00FA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E7B79F61DC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548DEC98FD1DD",
+      icon: {
+        id: "guhs:guhrio_deur",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhrio_w1_geheim_1_2",
+          id: "47554835B1377A9D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548375BA3B267",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
       y: 6.5625,
       shape: "circle",
     },

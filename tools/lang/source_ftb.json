@@ -1886,6 +1886,7 @@
   "ftb.guhs_guhrio.title": "&cSuper Guhrio",
   "ftb.guhs_guhrio.sub": "Bedankt! Maar de prinses is in een ander kasteeldeel, njeg",
   "ftb.guhs_guhrio.section.guhrio": "Het Kasteel van de Grote Nether-Mika",
+  "ftb.guhs_guhrio.section.guhrio_w1": "Wereld 1: de binnentuin",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.title": "Hoe kom je hier?",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.desc": "Dit hoofdstuk komt na &6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r.\n\nIn een frituursauszee van de Guhbarbecuether staat het &cKasteel van de Grote Nether-Mika&r (superkompas: Barbecue). Op het voorplein wacht &dPad-guh&r: Prinses Perzikguh is meegenomen... voor een stukje taart.\n\nBinnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks: je begint gewoon weer bij de laatste vlag. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   "ftb.guhs_guhrio.q.guhrio_kasteel.title": "Een kasteel in de saus",
@@ -1897,5 +1898,19 @@
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.title": "Achttien keer vads",
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.desc": "In elk level liggen drie &6grote vadsmunten&r. Ze blijven van jou, ook als je het level opnieuw speelt; de Guhdex (Verhalen > Super Guhrio) houdt per level bij welke je hebt.",
   "ftb.guhs_guhrio.q.guhrio_loop.title": "In één ruk door",
-  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg."
+  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w1_1_1.title": "Level 1-1: de binnentuin",
+  "ftb.guhs_guhrio.q.guhrio_w1_1_1.desc": "De eerste poort links in de levelhal. Een geschilderd gazon binnen de kasteelmuren: hier leer je lopen, springen, tegen &6vraagtekenblokken&r bonken en bovenop &dGuhmba's&r landen. Aan het eind van het gazon duik je in de grote groene pijp (&dS&r) en loop je over de wolken en de boomtoppen naar de vlaggenmast. Njeg!",
+  "ftb.guhs_guhrio.q.guhrio_w1_1_2.title": "Level 1-2: de heggentuin",
+  "ftb.guhs_guhrio.q.guhrio_w1_1_2.desc": "De eerste poort rechts. Heggen om op te klimmen, kaasvijvers om over te springen en een &dSchild-Mika&r met een rijtje Guhmba's ervoor: spring op hem en schop zijn schild weg. Door de torendeur (&dW&r) kom je bovenop de tuinmuur; daar staat de vlaggenmast.",
+  "ftb.guhs_guhrio.q.guhrio_w1_prinses.title": "In een ander kasteeldeel",
+  "ftb.guhs_guhrio.q.guhrio_w1_prinses.desc": "Achter de vlaggenmast van level 1-2 staat &dPad-guh&r al te zwaaien. Hij heeft goed nieuws en slecht nieuws. &oBedankt! Maar de prinses is in een ander kasteeldeel, njeg.&r De poort naar de kelders (wereld 2) is nu open.",
+  "ftb.guhs_guhrio.q.guhrio_w1_vads_1_1.title": "Drie keer vads in de binnentuin",
+  "ftb.guhs_guhrio.q.guhrio_w1_vads_1_1.desc": "De drie &6grote vadsmunten&r van level 1-1. Eén ligt bovenop de stenen (klim op de heg erachter en spring terug), één ligt op een wolkje (waarom zweeft daar een los muntje?), en één ligt ergens waar alleen een mol komt. Haal daarna de vlaggenmast.",
+  "ftb.guhs_guhrio.q.guhrio_w1_vads_1_2.title": "Drie keer vads in de heggentuin",
+  "ftb.guhs_guhrio.q.guhrio_w1_vads_1_2.desc": "De drie &6grote vadsmunten&r van level 1-2. Eén zit in een kistje van stenen: daar kom je alleen in als je groot bent (de &dSuperknabbel&r zit in het blok ervoor). Eén hangt hoog boven het gat achter het muurtorentje: spring ver. En één staat bij de tuinman op de plank. Haal daarna de vlaggenmast.",
+  "ftb.guhs_guhrio.q.guhrio_w1_geheim_1_1.title": "Het mollenhol",
+  "ftb.guhs_guhrio.q.guhrio_w1_geheim_1_1.desc": "Niet elke pijp in de binnentuin is zomaar een pijp. Boven één ervan zweeft een muntje. Probeer er eens in te duiken (&dS&r), njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w1_geheim_1_2.title": "De muntenkas",
+  "ftb.guhs_guhrio.q.guhrio_w1_geheim_1_2.desc": "Bovenop de heggenboog van level 1-2 staat een deur. Maar hoe kom je daar? Naast het lage heggetje ervoor zweven twee muntjes boven elkaar... spring er eens onder. Sommige blokken zie je pas als je er met je hoofd tegenaan bonkt."
 }
