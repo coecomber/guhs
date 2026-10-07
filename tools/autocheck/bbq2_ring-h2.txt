@@ -1,0 +1,158 @@
+# bbq2, ring-h2 (AutoCheck, dev only): Guhvendel and chapter 2 of the Knabbelring, "De Raad van Guhrond". Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h2.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh2 ..., feature/ringh2/RingH2Commands.java;
+#  /guhs ringh2 bouw only exists in dev runs: it places the template and lets it count as a copy of guhs:guhvendel)
+# Shots: Guhvendel from the gate, the hall, the great fall, the council ring; the narrator card; the cast before the
+# council (Guhrond on the porch, the pair at the knabbel pile, the kitchen); frames of the council and of the fellowship;
+# the cast in the council ring; the Guhdex page of the chapter; Guhrond alone after the chapter.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+# The template's corner is put at 6000 140 6000: the gate is at 6030 149 6058, the council ring's table at 6041 150 6027.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 6030 154 6035
+/forceload add 5990 5990 6070 6070
+wait 80
+/fill 5990 139 5990 6070 139 6070 guhs:houtskoolsteen
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..90]
+/guhs ring wis
+/guhs ringh2 stap 0
+/tp @s 6000 140 6000
+wait 10
+/guhs ringh2 bouw
+wait 60
+waitrender 300
+clearchat
+
+section the house (nobody's story is here yet: no cast for a player at step 0 who is an op in creative... they see everybody)
+/gamemode spectator
+/tp @s 6030.5 156 6072 180 18
+wait 5
+/tp @s 6030.5 156 6072 180 18
+wait 40
+shot bbq2_ringh2_guhvendel_zuid world
+/tp @s 6052 164 6062 135 30
+wait 5
+/tp @s 6052 164 6062 135 30
+wait 40
+shot bbq2_ringh2_guhvendel_zuidoost world
+/tp @s 6030.5 151 6030 180 -12
+wait 5
+/tp @s 6030.5 151 6030 180 -12
+wait 40
+shot bbq2_ringh2_grote_val world
+/tp @s 6033 152 6026 270 5
+wait 5
+/tp @s 6033 152 6026 270 5
+wait 40
+shot bbq2_ringh2_hal world
+/tp @s 6031 154 6031 300 20
+wait 5
+/tp @s 6031 154 6031 300 20
+wait 40
+shot bbq2_ringh2_raadskring world
+
+section the narrator card (survival: the story is this player's)
+/gamemode survival
+/guhs ringh2 ga poort
+gui keep
+/guhs verhaal kaart ring_h2
+wait 20
+shot bbq2_ringh2_kaart_1 gui
+wait 110
+shot bbq2_ringh2_kaart_2 gui
+click 320 342
+wait 20
+
+section before the council: Guhrond on the porch, the pair at the pile, the kitchen
+/guhs ringh2 stap 2
+wait 40
+/tp @s 6027.5 149 6026.5 90 0
+wait 5
+/tp @s 6027.5 149 6026.5 90 0
+wait 40
+shot bbq2_ringh2_guhrond_stoep world
+/tp @s 6019.5 149 6047.5 180 5
+wait 5
+/tp @s 6019.5 149 6047.5 180 5
+wait 40
+shot bbq2_ringh2_leguhlas_gimguh world
+/tp @s 6041.5 149 6047.5 180 5
+wait 5
+/tp @s 6041.5 149 6047.5 180 5
+wait 40
+shot bbq2_ringh2_keuken world
+
+section the council (1340 ticks): the ring of pillars, the ring on the stone, Gimguh's tooth, everybody at once
+/guhs ringh2 stap 3
+/guhs ringh2 ga bel
+wait 20
+/guhs ringh2 bel
+wait 60
+shot bbq2_ringh2_raad_1 gui
+wait 140
+shot bbq2_ringh2_raad_2 gui
+wait 140
+shot bbq2_ringh2_raad_ring gui
+wait 160
+shot bbq2_ringh2_raad_boromika gui
+wait 250
+shot bbq2_ringh2_raad_gimguh gui
+wait 350
+shot bbq2_ringh2_raad_ruzie gui
+wait 180
+shot bbq2_ringh2_raad_eind gui
+wait 120
+
+section after the bell: the cast sits in the council ring
+wait 40
+/tp @s 6036.5 150 6030.5 300 5
+wait 5
+/tp @s 6036.5 150 6030.5 300 5
+wait 40
+shot bbq2_ringh2_kring_bezet world
+
+section the fellowship (1132 ticks)
+/guhs ringh2 scene genootschap
+wait 60
+shot bbq2_ringh2_genootschap_1 gui
+wait 220
+shot bbq2_ringh2_genootschap_araguh gui
+wait 280
+shot bbq2_ringh2_genootschap_sam gui
+wait 200
+shot bbq2_ringh2_genootschap_merrie gui
+wait 250
+shot bbq2_ringh2_genootschap_negen gui
+wait 200
+
+section the Guhdex: the chapter's page, the travel map
+gui verhalen ring_h2
+wait 20
+shot bbq2_ringh2_gids gui
+gui close
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_ringh2_reiskaart gui
+gui close
+
+section after the chapter: only Guhrond lives here
+/guhs ringh2 stap 6
+wait 40
+/tp @s 6027.5 149 6026.5 90 0
+wait 5
+/tp @s 6027.5 149 6026.5 90 0
+wait 40
+shot bbq2_ringh2_guhrond_thuis world
+/tp @s 6036.5 150 6030.5 300 5
+wait 5
+/tp @s 6036.5 150 6030.5 300 5
+wait 40
+shot bbq2_ringh2_kring_leeg world
+/guhs ring wis
