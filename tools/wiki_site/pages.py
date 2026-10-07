@@ -949,7 +949,7 @@ class Builder:
                 steps = self.ftb_steps(c, s.get("sid"))
                 total += len(steps)
                 lijst = '<ol class="steps">' + "".join(steps) + "</ol>"
-                if c in T.SPOILER_FTB:      # (a story's quests in order: every one of them is a spoiler for who is not there yet)
+                if c in T.SPOILER_FTB or s.get("sid") in T.SPOILER_FTB_SECTIONS:      # (a story's quests in order: spoilers for who is not there yet)
                     lijst = (f'<details class="spoiler"><summary>{t("Spoiler: show these quests", "Spoiler: laat deze quests zien")}</summary>'
                              f'{lijst}</details>')
                 pg.add_section(f"sec-{s.get('sid')}", plain_(s["title"]), plain_(s["title"]), lijst)

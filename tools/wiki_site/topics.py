@@ -594,6 +594,7 @@ STORY_GUHS = {}          # Guhdex creatures that are tameable guhs: variant -> w
 SPOILER_PAGES = set()    # pages without a picture in lists, cards and the search; their own picture sits behind a toggle
 SPOILER_STEPS = set()    # story pages whose list of FTB quests sits behind a toggle
 SPOILER_FTB = set()      # FTB chapters whose quest-book page hides every section behind a toggle
+SPOILER_FTB_SECTIONS = set()   # ... and the FTB sections that are hidden wherever they stand (a section may move to another chapter)
 SUPERKOMPAS_EXTRA = {}   # tab -> the structures the features add from code (SuperkompasItem.voegToe)
 NOTES = []               # what the build should tell (a text without English, a note that could not be read)
 _extended = set()
@@ -636,6 +637,9 @@ def extend(root):
     SPOILER_PAGES.update(W.SPOILER_PAGINA)
     SPOILER_STEPS.update(W.SPOILER_STAPPEN)
     SPOILER_FTB.update(W.SPOILER_FTB)
+    SPOILER_FTB_SECTIONS.update(W.SPOILER_FTB_SECTIES)
+    for pid in W.SPOILER_STAPPEN:           # (the quests of a hidden story page are hidden on the quest-book pages too)
+        SPOILER_FTB_SECTIONS.update(sid for _, sid in (b.verhalen.get(pid, {}).get("ftb") or []) if sid)
     for tab, ids in W.SUPERKOMPAS.items():
         SUPERKOMPAS_EXTRA.setdefault(tab, []).extend(x for x in ids if x not in SUPERKOMPAS_EXTRA.get(tab, []))
     for did, pages in W.DIMENSIE_VERWANT.items():

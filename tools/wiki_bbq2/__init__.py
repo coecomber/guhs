@@ -109,6 +109,9 @@ SPOILER_STAPPEN = {"verhalen/knabbelring", "verhalen/ring-h2", "verhalen/ring-h3
                    "verhalen/ring-sausuman", "verhalen/super-guhrio", "verhalen/super-guhrio-duel", "verhalen/pad-guhs-kraam"}
 # FTB chapters whose quest-book page hides every section behind a toggle
 SPOILER_FTB = {"guhs_knabbelring", "guhs_guhrio"}
+# ... and FTB sections hidden wherever they stand (the sections of the SPOILER_STAPPEN pages are added by themselves): when
+# a chapter of the quest book is rearranged, its story sections keep their toggle
+SPOILER_FTB_SECTIES = {"guhrio_w1", "guhrio_w2"}
 # pages without a picture in lists, cards and the search, and with their own picture behind a toggle
 SPOILER_PAGINA = {"bouwwerken/guhvendel", "bouwwerken/knabbelmoria", "bouwwerken/guhladriel_boomstad", "bouwwerken/zwarte_roosterpoort",
                   "bouwwerken/frituurberg", "bouwwerken/sausuman_toren", "wezens/barbecuerog", "wezens/grote_nether_mika",
