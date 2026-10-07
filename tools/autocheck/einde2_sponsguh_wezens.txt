@@ -1,0 +1,77 @@
+# einde2, slice sponsguh_wezens: the whole cast in a row (every look), the flags, the buddy and the pet, the
+# Knabbelburgermobiel, the blocks and the ride on David Hasselguh, for the merge step's visual check.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sponsguh_wezens.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+/fill ~-24 ~-1 ~-4 ~24 ~-1 ~20 minecraft:smooth_quartz
+/fill ~-24 ~ ~-4 ~24 ~8 ~20 minecraft:air
+wait 20
+
+section the cast
+look 0 5
+/guhs einde2 sponsguh_wezens cast
+waitrender 200
+shot sponsguh_cast_voor
+look -40 5
+wait 40
+shot sponsguh_cast_links
+look 40 5
+wait 40
+shot sponsguh_cast_rechts
+/tp @s ~-12 ~ ~2
+look 20 0
+wait 40
+shot sponsguh_cast_dichtbij_links
+/tp @s ~12 ~ ~
+look 0 0
+wait 40
+shot sponsguh_cast_dichtbij_midden
+/tp @s ~12 ~ ~
+look -20 0
+wait 40
+shot sponsguh_cast_dichtbij_rechts
+/tp @s ~-12 ~ ~-2
+
+section the flags
+/guhs einde2 sponsguh_wezens vlag true
+wait 30
+shot sponsguh_vlag_aan
+/guhs einde2 sponsguh_wezens vlag false
+wait 30
+
+section the buddy, the pet and the car
+/tp @s ~ ~ ~-3
+/guhs einde2 sponsguh_wezens geef sponsguh
+/guhs einde2 sponsguh_wezens geef gerrit
+/guhs einde2 sponsguh_wezens mobiel
+look 0 15
+wait 60
+shot sponsguh_maatje_gerrit_mobiel
+
+section the blocks
+/setblock ~-3 ~ ~2 guhs:karen[gezicht=1]
+/setblock ~-2 ~ ~2 guhs:karen[gezicht=2]
+/setblock ~-1 ~ ~2 guhs:krokante_grill
+/setblock ~ ~ ~2 guhs:besteltafel
+/setblock ~1 ~ ~2 guhs:bellenblaas
+/setblock ~2 ~ ~2 guhs:spooklantaarn
+/setblock ~3 ~ ~2 guhs:vruchthuis_wand
+/setblock ~3 ~1 ~2 guhs:vruchthuis_raam
+/setblock ~3 ~2 ~2 guhs:vruchthuis_dak
+/setblock ~4 ~ ~2 guhs:vruchthuis_deur[half=lower]
+/setblock ~4 ~1 ~2 guhs:vruchthuis_deur[half=upper]
+look 0 20
+wait 60
+shot sponsguh_blokken
+
+section the ride
+/guhs einde2 sponsguh_wezens draag
+wait 40
+shot sponsguh_rit
+wait 200
+/guhs einde2 sponsguh_wezens ruimop

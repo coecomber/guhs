@@ -356,6 +356,20 @@ public enum GuhClothes {
     //
     // einde2 (the Sponsguh story): the slice sponsguh_wezens adds its clothes ONLY between these two markers
     // <einde2_sponsguh>
+    /** Sponsguh Kaasbroek: the square brown trousers with a belt and a white shirt (the suit bones), a white collar and a red tie. */
+    SPONSGUH_VIERKANTE_BROEK(Slot.BODY, "outfit_suit", "outfit_sponsguh_das"),
+    /** Sponsguh Kaasbroek: the white Krokante Knabbel cap of the fry cook (the cap bones), a blue anchor on the front. */
+    SPONSGUH_KNABBELPETJE(Slot.HEAD, "outfit_cap", "outfit_sponsguh_anker"),
+    /** Sponsguh Kaasbroek: Patguh's green trunks with purple flowers (the suit bones). */
+    SPONSGUH_BLOEMETJESBROEK(Slot.BODY, "outfit_suit"),
+    /** Sponsguh Kaasbroek: Sandy-guh's air helmet: a glass dome round the head with a pink flower on top. */
+    SPONSGUH_LUCHTHELM(Slot.HEAD, "outfit_sponsguh_helm"),
+    /** Sponsguh Kaasbroek: Plankmika's antennas: two thin dark green stalks with a knob on the guh ears (OREN). */
+    SPONSGUH_ANTENNES(Slot.OREN, "outfit_oren_sponsguh"),
+    /** Sponsguh Kaasbroek: the Guhfy Guhber ice hat: a waffle cone with a pink scoop on top (the party hat bones). */
+    SPONSGUH_IJSHOEDJE(Slot.HEAD, "outfit_party_hat", "outfit_party_pom"),
+    /** Sponsguh Kaasbroek: the hero cape of Zeemeerman and Mosselguh (the cape bones, on the back). */
+    SPONSGUH_HELDENCAPE(Slot.BACK, "outfit_cape"),
     // </einde2_sponsguh>
     //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
