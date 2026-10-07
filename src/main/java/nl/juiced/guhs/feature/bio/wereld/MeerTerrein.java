@@ -21,10 +21,10 @@ public final class MeerTerrein {
     /** The top water block of every lake (= {@link DalTerrein#HOOGTE}[0] - 1). */
     public static final int WATER = 49;
     public static final double DIEP_OEVER = 1.3, DIEP_MIDDEN = 7.0, DIEP_OVER = 0.05;
-    public static final int CEL = 64;
+    public static final int CEL = 96;
     /** A large island needs the lake this far (in d) around its middle, a small one this far. */
     public static final double GROOT_VANAF = 0.04, KLEIN_VANAF = 0.012;
-    public static final double GROOT_KANS = 0.55, KLEIN_KANS = 0.6;
+    public static final double GROOT_KANS = 0.5, KLEIN_KANS = 0.6;
     // </meer-terrein>
 
     private static final int SOORT = 1;

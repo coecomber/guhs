@@ -119,7 +119,9 @@ def test_structuren(h):
         s.set(cx, y + 1, cz - 2, "minecraft:red_wool")          # the north side: what the spot looks at
         s.set(cx, y + 2, cz - 2, "minecraft:red_wool")
         s.save(naam)
-        h.structure(naam, biomen, spacing=3, separation=1, salt=SALT + 10 * i, reach=16, centre=f"guhs:{naam}_midden")
+        # (the air test sparse: every start of kind lucht keeps natural islands away, and the island test needs some)
+        ruim = soort == "lucht"
+        h.structure(naam, biomen, spacing=10 if ruim else 3, separation=4 if ruim else 1, salt=SALT + 10 * i, reach=16, centre=f"guhs:{naam}_midden")
         plek(h, naam, soort, hoogte=30 if soort == "lucht" else None, ruimte=14 if soort == "lucht" else None, alleen_test=True)
 
 

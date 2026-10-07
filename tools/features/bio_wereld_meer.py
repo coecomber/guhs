@@ -27,7 +27,8 @@ def biome(h, lib, ores, lege_spawners):
         "spawners": {**lege_spawners, "creature": [{"type": "guhs:guh", "weight": 100, "minCount": 2, "maxCount": 4}]},
         "spawn_costs": {}, "carvers": {"air": []},
         # PLACEHOLDER plants: a few guhbloesem trees on the shore and the islands
-        "features": [[], ["guhs:bio_wereld_vulling"], [], [], [], [], ores, [], [], ["guhs:guhbloesem_rare"], []]}
+        # (no ore veins: the valley and the lake cut down to where the veins are, they would lie open at the surface)
+        "features": [[], ["guhs:bio_wereld_vulling"], [], [], [], [], [], [], [], ["guhs:bloesemmeertje_bloesemboom"], []]}
 
 
 def surface(h, lib):
@@ -41,4 +42,13 @@ def surface(h, lib):
 
 
 def build(h, lib):
-    """Everything else of the biome (configured / placed features, tags, sounds): nothing yet."""
+    """Everything else of the biome (configured / placed features, tags, sounds)."""
+    # PLACEHOLDER tree: the Guhmensie's guhbloesem tree, only on dry ground (the heightmap of world generation does not
+    # see the water the vulling feature placed, so without the air check trees would stand on the river bed and lake floor)
+    h.w(f"{h.D}/worldgen/placed_feature/bloesemmeertje_bloesemboom.json", {"feature": "guhs:guhbloesem", "placement": [
+        {"type": "minecraft:rarity_filter", "chance": 6}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
+        {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:all_of", "predicates": [
+            {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"},
+            {"type": "minecraft:would_survive", "state": {"Name": "guhs:guhbloesem_sapling", "Properties": {"stage": "0"}}}]}},
+        {"type": "minecraft:biome"}]})
