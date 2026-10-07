@@ -135,8 +135,11 @@ class Renderer:
         self.alias_re = re.compile(r"(?<![\w-])(" + trie_regex(sorted(self.alias, key=len, reverse=True)) + r")(?![\w-])", re.I)
 
     def autolink(self, h, page, linked):
+        """Links the first mention of another page, once per page and PER LANGUAGE: a reader sees one of the two languages,
+        so the first English mention and the first Dutch mention each get the link (`linked` holds (language, page id);
+        with one set for both, the English text - which stands first - took every link and the Dutch reader got none)."""
         h = self.en.html(h)         # the English names first (english.py), so a link never cuts an in-game text in two
-        out, stack = [], []
+        out, stack, langs = [], [], []
         for part in re.split(r"(<[^>]+>)", h):
             if part.startswith("<"):
                 m = re.match(r"<(/?)([a-zA-Z0-9]+)", part)
@@ -146,23 +149,30 @@ class Renderer:
                         if name in stack:
                             while stack and stack.pop() != name:
                                 pass
+                        if any(n == name for n, _ in langs):
+                            while langs and langs.pop()[0] != name:
+                                pass
                     elif not part.endswith("/>") and name not in ("img", "br", "hr", "input", "meta", "link", "source", "wbr"):
                         if name in AUTOLINK_SKIP_TAGS or 'class="rarity"' in part or 'class="count"' in part:
                             stack.append(name)
                         elif stack:
                             stack.append(name)
+                        lg = re.search(r'\blang="(en|nl)"', part)
+                        langs.append((name, lg.group(1) if lg else (langs[-1][1] if langs else None)))
                 out.append(part)
                 continue
             if stack or not part.strip():
                 out.append(part)
                 continue
+            lang = langs[-1][1] if langs else None
+            readers = (lang,) if lang else ("en", "nl")     # a text without a language is read by both
 
             def sub(m):
                 key = fold(m.group(1))
                 pid = self.alias.get(key)
-                if not pid or pid == page.id or pid in linked:
+                if not pid or pid == page.id or all((r, pid) in linked for r in readers):
                     return m.group(0)
-                linked.add(pid)
+                linked.update((r, pid) for r in readers)
                 return f'<a href="@@{pid}@@" class="auto">{m.group(1)}</a>'
             out.append(self.alias_re.sub(sub, part))
         return "".join(out)
