@@ -20,7 +20,7 @@ import nl.juiced.guhs.feature.vogels.VogelsFeature;
  * <ul>
  *   <li>{@link #WAKKER} (15 s, anchor = the beach spot): black, waves and gulls, Jutje Kwispel's snout above you, your
  *   first look at your own paws, she runs ahead to the village.</li>
- *   <li>{@link #MAATJE} (15 s, anchor = the air block on the well's south rim): a bucket rattles and falls off the well all
+ *   <li>{@link #MAATJE} (15 s, anchor = the air block on the well's north rim): a bucket rattles and falls off the well all
  *   by itself, nobody sees who did it; only you see the companion rise out of the well, and it sees that you see it.</li>
  *   <li>{@link #SPOOR} (10 s, anchor = the tree's foot, turned like the growth scene): you dig between the stones, father's
  *   scarf, and the camera rises to look past the tree at the roadblock and the hills behind it.</li>
@@ -82,15 +82,16 @@ public final class DorpScenes {
                 tag.put("item", emmer);
                 tag.putString("billboard", "center");
             })
-            .acteur("ik", SnuffelFeature.SNUFFEL_HOND, new Vec3(1.5, -1, 5.5), 180, DorpScenes::speler)
-            .acteur("pup", SnuffelFeature.SNUFFEL_HOND, new Vec3(3.5, -1, 2.5), 135, tag -> tag.putString("Bewoner", "pup"))
+            // (the dog stands north of the well: that is where it comes walking from, out of the meadow)
+            .acteur("ik", SnuffelFeature.SNUFFEL_HOND, new Vec3(1.5, -1, -5.5), 0, DorpScenes::speler)
+            .acteur("pup", SnuffelFeature.SNUFFEL_HOND, new Vec3(3.5, -1, 4.5), 150, tag -> tag.putString("Bewoner", "pup"))
             .acteur("bakker", SnuffelFeature.SNUFFEL_HOND, new Vec3(-4.5, -1, 1.5), -90, tag -> tag.putString("Bewoner", "bakker"))
-            .acteur("maatje", SnuffelFeature.SNUFFEL_MAATJE, new Vec3(0.5, -1.6, -0.5), 0, tag -> {
+            .acteur("maatje", SnuffelFeature.SNUFFEL_MAATJE, new Vec3(0.5, -1.6, 1.5), 180, tag -> {
                 tag.putBoolean("Speler", true);
                 tag.putBoolean("Ondeugend", true);
             })
-            .camera(0, new Vec3(5.5, 1.8, 7.5), new Vec3(0.5, 0.3, 0.5))
-            .camera(148, new Vec3(4.0, 1.3, 5.5), new Vec3(0.5, 0.3, 0.8))
+            .camera(0, new Vec3(5.5, 1.8, -7.5), new Vec3(0.5, 0.3, 0.5))
+            .camera(148, new Vec3(4.0, 1.3, -5.5), new Vec3(0.5, 0.3, 0.2))
             // the bucket rattles, hops and falls off the well
             .animatie("emmer", 20, "spring")
             .geluid(20, () -> SoundEvents.BUCKET_FILL, 0.7f, 1.3f)
@@ -100,25 +101,25 @@ public final class DorpScenes {
             .animatie("pup", 56, "blaf")
             .geluid(57, SnuffelFeature.BLAF_GELUID, 0.7f, 1.4f)
             .zeg(58, "pup", "kef", 34)
-            .loop("emmer", 84, 94, new Vec3(0.5, -0.5, 1.7))
+            .loop("emmer", 84, 94, new Vec3(0.5, -0.5, -0.7))
             .geluid(94, () -> SoundEvents.BUCKET_EMPTY, 1f, 0.9f)
-            .deeltjes(94, ParticleTypes.SPLASH, new Vec3(0.5, -0.8, 1.7), 26, 0.35)
+            .deeltjes(94, ParticleTypes.SPLASH, new Vec3(0.5, -0.8, -0.7), 26, 0.35)
             .schud(94, 0.12f, 6)
-            .kijk("bakker", 96, new Vec3(0.5, -0.5, 1.7))
+            .kijk("bakker", 96, new Vec3(0.5, -0.5, -0.7))
             .animatie("bakker", 100, "blaf")
             .zeg(100, "bakker", "alweer", 48)
             // only you see who did it
-            .cameraKnip(150, new Vec3(2.6, 0.0, 4.6), new Vec3(0.5, 1.2, -0.3))
-            .camera(300, new Vec3(2.9, 0.2, 5.0), new Vec3(0.9, 0.9, 1.5))
-            .loop("maatje", 152, 172, new Vec3(0.5, 1.2, -0.3))
+            .cameraKnip(150, new Vec3(2.8, 0.0, -4.4), new Vec3(0.5, 1.1, 1.3))
+            .camera(300, new Vec3(3.1, 0.2, -4.9), new Vec3(0.9, 0.8, -1.0))
+            .loop("maatje", 152, 172, new Vec3(0.5, 1.1, 1.3))
             .geluid(154, SnuffelFeature.MAATJE_GELUID, 1f, 1f)
             .animatie("maatje", 172, "ondeugend")
             .zeg(158, "", "alleen_jij", 50)
-            .kijk("maatje", 208, new Vec3(1.5, -0.4, 5.5))
+            .kijk("maatje", 208, new Vec3(1.5, -0.4, -5.5))
             .animatie("maatje", 210, "idle")
             .zeg(212, "maatje", "zien", 46)
             .animatie("ik", 230, "kwispel")
-            .loop("maatje", 258, 284, new Vec3(1.6, -0.1, 4.5))
+            .loop("maatje", 258, 284, new Vec3(1.6, -0.1, -4.4))
             .geluid(262, SnuffelFeature.MAATJE_GELUID, 1f, 1.2f)
             .zeg(260, "maatje", "blijf", 40)
             .animatie("maatje", 286, "blij")

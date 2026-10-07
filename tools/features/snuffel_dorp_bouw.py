@@ -1418,9 +1418,9 @@ def eiland(h):
         # what the villagers lost
         bron("deegroller", "deegroller", 106, 100 - 1, True, 44),
         bron("dobber", "dobber", 135, 130, True, 44),
-        bron("schoolbel", "schoolbel", 70, 60, True, 52),
+        bron("schoolbel", "schoolbel", 70, 60, True, 62),
         bron("bolwol", "bolwol", 50, 146, True, 44),
-        bron("gietertje", "gietertje", 108, 84, True, 48),
+        bron("gietertje", "gietertje", 108, 84, True, 58),
         bron("stuiterbal", "stuiterbal", 66, 142, True, 40),
         # the exam: one of every kind
         bron("examen_kaasknabbel", "kaasknabbel", 102, 62, True, 40),
@@ -1440,7 +1440,7 @@ def eiland(h):
     strand_(b, strand)
     planten(b)
     verbind(b)
-    emmer = (px, G + 2, pz + 1)                    # the air block on the well's south rim: the bucket of the companion's scene stands here
+    emmer = (px, G + 2, pz - 1)                    # the air block on the well's north rim (the side of the weipoort): the bucket of the companion's scene stands here
     data = dict(versie=VERSIE, oorsprong=list(OORSPRONG), maat=[SX, SY, SZ], stukken=[],
                 strand=dict(plek=[strand[0] + 0.5, b.voet(*strand), strand[1] + 0.5], yaw=180.0),
                 haven=dict(plek=[haven_plek[0] + 0.5, G + 1, haven_plek[1] + 0.5], yaw=90.0),
@@ -1450,7 +1450,7 @@ def eiland(h):
             strand=[strand[0], b.voet(*strand), strand[1]],
             strandpoort=[STRANDPOORT[0], F, STRANDPOORT[1]],
             emmer=list(emmer),
-            plein=[px, F, pz + 4],
+            plein=[px, F, pz - 5],
             weipoort=[wx, F, wz],
             wei=[TRAINER[0] + 2, F, TRAINER[1] + 2],
             boom=[kx, G + BOOM_HOOG + 1, kz],
@@ -1556,7 +1556,7 @@ def controleer(b, data, dorp):
 
     pl = dorp["plekken"]
     vloer("wakker", pl["strand"], [(0, 0), (1, -1), (1, -2), (2, -3), (3, -5), (4, -7), (6, -10), (7, -11), (-1, 1)])
-    vloer("maatje", pl["emmer"], [(1, 5), (1, 4), (3, 2), (-4, 1), (0, 1)], dy=-1)
+    vloer("maatje", pl["emmer"], [(1, -6), (1, -5), (1, -4), (3, 4), (-5, 1), (0, -1), (0, -2)], dy=-1)
     vloer("afvaart", pl["haven"], [(0, 0), (2, 0), (-1, 1), (0, 2), (0, 3)])
     # the bucket's spot: on the well's rim
     ex, ey, ez = pl["emmer"]

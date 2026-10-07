@@ -260,7 +260,7 @@ public final class Dorp {
         BlockPos emmer = pl.wereld(plaats, Plekken.EMMER);
         if (emmer == null) {
             maatje(p);
-        } else if (emmer.closerToCenterThan(p.position(), 10) && !Praat.bezig(p)) {
+        } else if (emmer.closerToCenterThan(p.position(), 8) && !Praat.bezig(p)) {
             Cutscenes.speel(p, DorpScenes.MAATJE, emmer, Rotation.NONE, Dorp::maatje);
         }
     }
