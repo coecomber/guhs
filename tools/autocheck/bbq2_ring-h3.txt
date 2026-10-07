@@ -25,9 +25,15 @@ wait 100
 wait 20
 /guhs ringh3 bouw
 wait 100
+# (the chapter opens with its narrator card, which stays until it is read: read it - wait for its lines, press Verder - or
+# it comes back every time this tool closes it and nothing else can start)
+gui keep
 /guhs ring hoofdstuk 3
+wait 160
+click 320 342
+wait 10
+gui close
 /guhs ringh3 stap 1
-/effect clear @s
 clearchat
 
 section the west forecourt and the gate

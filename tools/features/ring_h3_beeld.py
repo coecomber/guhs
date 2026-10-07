@@ -339,7 +339,7 @@ def alles(b, out, alleen=()):
 # frames of the scenes
 # =====================================================================================================================
 # what the Barbecuerog plays when a scene names an animation: (animation, loops)
-_LUS = {"loop", "donker", "slaap", "wankel", "idle"}
+_LUS = {"loop", "donker", "slaap", "wankel", "idle", "dreig"}
 
 
 def _rog_pose(geo_file, anims, naam, sinds):
@@ -414,7 +414,7 @@ def scene_frames(b, out, s, tijden, breed=480, hoog=270):
             brandt = anim not in ("donker", "slaap") and not (anim == "opkomst" and t - sinds < 26)
             if brandt and rog[1][1] > 0:
                 licht = k.met_licht([(rog[1][0], rog[1][1] + 5.5, rog[1][2], 15)])
-        beeld, diepte, cam = k.teken(oog, kijk, breed=breed, hoog=hoog, licht=licht)
+        beeld, diepte, cam = k.teken(oog, kijk, breed=breed, hoog=hoog, licht=licht, fov=s.fov_op(t))
         for naam, soort, arg, start, yaw in s.acteurs:
             p = s.plek(naam, t)
             if soort == "wezen":
@@ -434,8 +434,8 @@ def scene_frames(b, out, s, tijden, breed=480, hoog=270):
                 k.figuur(beeld, diepte, cam, p, rgb=rgb, hoog=1.0, yaw=_yaw_op(s, naam, t),
                          soort="speler" if soort == "speler" else "guhdalf" if naam == "guhdalf" else "guh", licht=0.75)
         for ft, ticks, sterkte in s.flitsen:
-            if ft <= t < ft + ticks * 2.5:
-                a = sterkte * (1 - (t - ft) / (ticks * 2.5)) ** 1.6
+            if ft <= t < ft + ticks:
+                a = sterkte * (1 - (t - ft) / ticks) ** 2.2
                 beeld = beeld * (1 - a) + np.array([255, 248, 230], np.float32) * a
         # the bars of a scene
         balk = int(hoog * 0.13)

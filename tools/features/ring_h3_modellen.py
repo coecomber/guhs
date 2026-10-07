@@ -18,11 +18,23 @@ What makes him a demon and not a golem of boxes (the polish list of 2026-10-06, 
   - skin: plates of charcoal, ashen in the middle, fire in the seams of broad patches only (a net of thin bright cracks
     all over reads as a lava golem).
 
-The model is built at its real size (no renderer scale): 16 units = one block; 9.7 blocks to the top of his head, 12.5 to the
-tips of his horns, his fire to 13.5; his wings are 18 blocks wide folded and 21 spread. Every cube has per-face UVs into one
-512 x 512 atlas of painted material tiles (1 px per unit, so 16 px per block like the rest of the game); the glow mask
-(<name>_glowmask.png, GeckoLib's AutoGlowingGeoLayer) holds the seams, the eyes, the embers and every flame. Nothing is
-translucent: wings, flames and teeth are cut-out.
+What the polish pass of 2026-10-07 changed after seeing him in a game client (from below, in his own light, against a dark wall):
+  - the wings are CARRIED HIGH (VLEUGEL_RUST: raised behind his shoulders, half open, 30 % bigger): folded low behind his
+    back they vanished behind his own body from the front; thrown wide (VLEUGEL_WIJD) they span the chasm;
+  - the head is 28 % bigger, with a muzzle, a scowling brow (bones wenk_*), burning almond eyes set under it and fangs of
+    red-hot iron; the inside of his mouth is one furnace (tile muil): the seamed coal tile made a sign of dark lines there;
+  - his legs are a beast's: thigh, shin, a long hock bone (bones hak_*), toes: a Z from the side, not two pillars;
+  - no straight bars of light that cross (the rift in his chest with the glow under his plates was a cross);
+  - a wall of fire behind his head and shoulders (three single sheets) for his black shape to stand out against;
+  - the lash: three knotted braadworstjes at his fist, then a thin cord of white fire with flames along it;
+  - animation dreig: he looms over what stands before him (the bridge scene, under YOU.. SHALL.. NOT..).
+
+The model is built at its real size (no renderer scale): 16 units = one block; 10.3 blocks to the top of his head, 12.9 to the
+tips of his horns, his fire to 15.5; his wings are 21.5 blocks wide as he carries them and 24.5 thrown wide (LIJF_MAAT scales
+all of him so that he fits under the nave of the hall). Every cube has per-face UVs into one 512 x 512 atlas of painted
+material tiles; the glow mask (<name>_glowmask.png, GeckoLib's AutoGlowingGeoLayer) holds the seams, the eyes, the embers and
+every flame (the renderer only uses it while he is dark: burning, he is drawn once at full brightness). Nothing is
+translucent: wings, flames and teeth are cut-out. 109 bones, 373 cubes.
 
   build(h)        geckolib/models/entity/barbecuerog.geo.json, geckolib/animations/entity/barbecuerog.animation.json,
                   textures/entity/barbecuerog.png + barbecuerog_glowmask.png
@@ -57,6 +69,18 @@ ZWEEP_N = len(ZWEEP_X)
 VLEUGEL_RIBBEN = ((16, -5, 84), (68, 14, 92))
 VLEUGEL_VINGERS = ((-9, 97), (-33, 110))
 
+# the wings (left wing; the right one mirrors y and z): the turn of the wing arm and of the outer part
+#   RUST    how he carries them: raised high behind his shoulders, half open (they tower over his head and frame him from the
+#           front: folded low behind his back they vanished behind his own body in the game)
+#   WIJD    thrown open: a great V over the whole hall
+#   DICHT   wrapped round him (asleep in the dark)
+VLEUGEL_RUST = ((0, -24, -50), (0, 10, 34))
+VLEUGEL_WIJD = ((0, -4, -34), (0, 0, 8))
+VLEUGEL_DICHT = ((0, -68, -12), (0, -16, 78))
+VLEUGEL_MAAT = 1.3                  # the whole wing, scaled about its root
+LIJF_MAAT = 0.87                    # all of him: with his longer legs and greater head he must still fit under the nave (14 blocks)
+KOP_MAAT = 1.28                     # the head with horns, ears and its fire, scaled about the neck
+
 # material -> (x, y, w, h) in the atlas
 TEGELS = {
     "kool": (0, 0, 128, 128),          # plates of black charcoal, fire in the seams of two fifths of them
@@ -79,6 +103,8 @@ TEGELS = {
     "rooster": (224, 256, 32, 64),     # grill iron (his belt)
     "klauw": (256, 256, 32, 64),
     "gebit": (288, 256, 128, 32),      # a row of fangs (hanging: the gum at the top), open between them
+    "muil": (416, 256, 64, 64),        # the inside of his mouth: a furnace (no seams: from below it is all you see of his face)
+    "lasso": (0, 320, 32, 64),         # the lash beyond the worstjes: a cord of white fire
     "leeg": (480, 480, 16, 16),        # nothing (see-through)
 }
 
@@ -141,6 +167,34 @@ class Model:
         if kruis:
             self.cube(bone, [x - 0.1, y, z - breed / 2], [0.2, hoog, breed], mat, faces="ew", stretch=True)
 
+    def tak(self, top):
+        """The bone `top` and every bone under it."""
+        namen = {top}
+        groeit = True
+        while groeit:
+            groeit = False
+            for b in self.bones:
+                if b.get("parent") in namen and b["name"] not in namen:
+                    namen.add(b["name"])
+                    groeit = True
+        return [b for b in self.bones if b["name"] in namen]
+
+    def schaal_tak(self, top, f):
+        """Scales a bone and everything under it about that bone's own pivot (the rest pose turns stay as they are)."""
+        p = list(self._bone(top)["pivot"])
+        for b in self.tak(top):
+            b["pivot"] = [round(p[i] + (b["pivot"][i] - p[i]) * f, 3) for i in range(3)]
+            for c in b["cubes"]:
+                c["origin"] = [round(p[i] + (c["origin"][i] - p[i]) * f, 3) for i in range(3)]
+                c["size"] = [round(v * f, 3) for v in c["size"]]
+
+    def til(self, dy):
+        """Lifts the whole model."""
+        for b in self.bones:
+            b["pivot"][1] = round(b["pivot"][1] + dy, 3)
+            for c in b["cubes"]:
+                c["origin"][1] = round(c["origin"][1] + dy, 3)
+
     def geo(self):
         return {"format_version": "1.12.0", "minecraft:geometry": [{
             "description": {"identifier": f"geometry.{NAAM}", "texture_width": ATLAS, "texture_height": ATLAS,
@@ -180,25 +234,31 @@ def maak():
 
     # --- the legs: thigh (knee forward), shin (ankle back), a great clawed foot --------------------------------------------------
     def been(kant, s, c):
-        m.bone(f"leg_{s}", "heup", [kant * 14, 68, 2], rotation=[-18, 0, kant * -8])
+        # a beast's hind leg: the thigh forward to a high knee, the shin back to the hock, a long hock bone forward and down
+        # to the toes he stands on (seen from the side: a Z, not a pillar)
+        m.bone(f"leg_{s}", "heup", [kant * 14, 68, 2], rotation=[-36, 0, kant * -9])
         c(f"leg_{s}", [4, 34, -11], [22, 38, 24], "kool")
         c(f"leg_{s}", [24.5, 42, -8], [4, 26, 18], "kool2")                 # the muscle on the outside of the thigh
+        c(f"leg_{s}", [6, 44, 11.5], [18, 24, 5], "kool2")                  # and the ham behind it
         c(f"leg_{s}", [19, 67, -5], [8, 7, 10], "hoorn")                    # a hip spike
         c(f"leg_{s}", [6.5, 29, -14.5], [17, 10, 7], "kool2")               # the knee cap
         c(f"leg_{s}", [12.5, 33, -20], [5, 5, 6.5], "hoorn")                # and its spike
         c(f"leg_{s}", [8, 36, 12.4], [14, 12, 1.2], "gloed")                # the hollow of the knee glows
-        m.bone(f"scheen_{s}", f"leg_{s}", [kant * 15, 36, 0], rotation=[38, 0, 0])
+        m.bone(f"scheen_{s}", f"leg_{s}", [kant * 15, 36, 0], rotation=[76, 0, 0])
         c(f"scheen_{s}", [7, 18, -8], [16, 20, 17], "kool2")
-        c(f"scheen_{s}", [8.5, 6, -6.5], [13, 13, 13], "kool2")             # (thinner towards the ankle)
+        c(f"scheen_{s}", [8.5, 4, -6.5], [13, 15, 13], "kool2")             # (thinner towards the hock)
         c(f"scheen_{s}", [9, 15, 8.5], [12, 19, 5], "kool")                 # the calf
-        c(f"scheen_{s}", [13, 30, 12], [4, 5, 7], "hoorn")                  # the hock spur
-        m.bone(f"voet_{s}", f"scheen_{s}", [kant * 15, 8, 0], rotation=[-20, 0, 0])
-        c(f"voet_{s}", [4, 0, -18], [22, 10, 30], "kool")
-        c(f"voet_{s}", [7, 9.5, -12], [16, 4, 15], "kool2")                 # the instep
+        c(f"scheen_{s}", [12.5, 1, 4], [5, 7, 9], "hoorn")                  # the hock spur
+        m.bone(f"hak_{s}", f"scheen_{s}", [kant * 15, 6, 0], rotation=[-64, 0, 0])
+        c(f"hak_{s}", [9.5, -30, -5.5], [11, 38, 11], "kool")               # the hock bone
+        c(f"hak_{s}", [10.5, -26, -7], [9, 26, 1.6], "gloed")               # a seam of fire down its front
+        m.bone(f"voet_{s}", f"hak_{s}", [kant * 15, -28, 0], rotation=[24, 0, 0])
+        c(f"voet_{s}", [4, -36, -18], [22, 10, 28], "kool")
+        c(f"voet_{s}", [7, -26.5, -12], [16, 4, 15], "kool2")               # the instep
         for i in range(3):
-            c(f"voet_{s}", [4.3 + i * 7.6, 0, -28], [5.8, 7, 11], "klauw", stretch=True)
-            c(f"voet_{s}", [5.4 + i * 7.6, 0, -33], [3.6, 4.5, 6], "klauw", stretch=(0.5, 1.0))
-        c(f"voet_{s}", [12, 2, 11], [7, 6, 8], "klauw", stretch=True)       # the heel spur
+            c(f"voet_{s}", [4.3 + i * 7.6, -36, -29], [5.8, 7.5, 12], "klauw", stretch=True)
+            c(f"voet_{s}", [5.4 + i * 7.6, -36, -36], [3.6, 4.5, 8], "klauw", stretch=(0.5, 1.0))
+        c(f"voet_{s}", [12, -34, 9], [7, 6, 8], "klauw", stretch=True)      # the dew claw behind
     beide(been)
 
     # --- the tail: thick, spiked, an ember club at the end --------------------------------------------------------------------------
@@ -220,10 +280,11 @@ def maak():
     # --- the waist: narrow, plates of charcoal over the fire in his belly ----------------------------------------------------------
     m.bone("body", "heup", [0, 78, 4], rotation=[10, 0, 0])
     m.cube("body", [-16, 76, -9.5], [32, 26, 21], "kool2")
-    m.cube("body", [-11.5, 78, -10.5], [23, 22, 1.2], "gloed")               # the fire, seen between the plates
+    m.cube("body", [-11.5, 78, -10.5], [23, 22, 1.2], "muil")                # the fire, seen between the plates
     for rij in range(3):
-        for x in (-10.8, 1.2):
-            m.cube("body", [x, 78.6 + rij * 7.4, -12], [9.6, 6.1, 2.2], "kool")
+        for i, x in enumerate((-10.8, 1.2)):
+            # (the plates overlap like scales and are shoved out of line: no grid, no cross of light)
+            m.cube("body", [x - (0.9 if (rij + i) % 2 else 0), 78.2 + rij * 7.4 + (0.9 if i else 0), -12], [10.5, 6.9, 2.2], "kool")
     m.cube("body", [-18.5, 77, -7], [3.5, 23, 16], "kool")                   # the flanks
     m.cube("body", [15, 77, -7], [3.5, 23, 16], "kool")
     m.cube("body", [-2.5, 88, 11], [5, 8, 6], "hoorn")
@@ -234,8 +295,10 @@ def maak():
     m.cube("borst", [-32, 111, -16], [64, 27, 36], "kool")                   # the barrel of the chest
     m.cube("borst", [-27.5, 114.5, -20], [25.5, 21, 4.5], "kool2")           # the pectoral plates
     m.cube("borst", [2, 114.5, -20], [25.5, 21, 4.5], "kool2")
-    m.cube("borst", [-2, 110, -17.8], [4, 27, 1.8], "gloed")                 # the rift between them
-    m.cube("borst", [-26, 112.8, -18.4], [52, 1.7, 2.4], "gloed")            # and the glow under them
+    # the rift between them: a jagged wound of fire, widest at the heart (no straight bar under the plates: with the rift it
+    # made a cross on his chest)
+    for (x, y, w, hg) in ((-1.6, 127, 3.2, 9), (-2.8, 119, 5.2, 8.5), (-1.2, 112, 3.4, 7.5), (0.6, 106, 2.4, 6.5)):
+        m.cube("borst", [x, y, -17.9], [w, hg, 1.9], "muil")
     m.cube("borst", [-25, 119, 14], [50, 25, 13], "kool2")                   # the hump of his back
     m.cube("borst", [-17, 126, 26], [34, 16, 6], "kool")
     m.cube("borst", [-13, 130, -11], [26, 18, 22], "kool2")                  # the root of the neck, thick as a tree
@@ -295,13 +358,21 @@ def maak():
     wx, wy, wz = 41.5, 46, -2
     for i in range(ZWEEP_N):
         naam = f"zweep_{i + 1}"
-        dik = 4.6 - i * 0.16
+        worst = i < 3                                                        # (the joke, close to his fist: three knotted braadworstjes)
+        dik = 4.8 - i * 0.3 if worst else max(1.5, 2.6 - (i - 3) * 0.14)
         m.bone(naam, ouder, [wx, wy, wz], rotation=[ZWEEP_X[i], ZWEEP_Y[i], 0])
-        m.cube(naam, [wx - dik / 2, wy - 12, wz - dik / 2], [dik, 11.2, dik], "worst")
-        m.cube(naam, [wx - dik / 2 + 0.6, wy - 13, wz - dik / 2 + 0.6], [dik - 1.2, 2.0, dik - 1.2], "knoop")
+        if worst:
+            m.cube(naam, [wx - dik / 2, wy - 12, wz - dik / 2], [dik, 11.2, dik], "worst")
+            m.cube(naam, [wx - dik / 2 + 0.8, wy - 13, wz - dik / 2 + 0.8], [dik - 1.6, 2.0, dik - 1.6], "knoop")
+        else:
+            m.cube(naam, [wx - dik / 2, wy - 13, wz - dik / 2], [dik, 13, dik], "lasso", faces="nsew", stretch=True)
         m.bone(f"vlam_zweep_{i + 1}", naam, [wx, wy - 6, wz])
-        groot = i in (2, 5, 8) or i == ZWEEP_N - 1
-        m.vlam(f"vlam_zweep_{i + 1}", wx, wy - (11 if groot else 9), wz, 11 if groot else 7.5, 19 if groot else 12, "vlam_a" if i % 2 else "vlam_b")
+        groot = i in (5, 8) or i == ZWEEP_N - 1
+        if worst:
+            m.vlam(f"vlam_zweep_{i + 1}", wx, wy - 9, wz, 6, 9, "vlam_b", kruis=False)
+        else:
+            # fire runs along the whole lash: a ragged tongue on every link
+            m.vlam(f"vlam_zweep_{i + 1}", wx, wy - (15 if groot else 13), wz, 13 if groot else 9, 22 if groot else 15, "vlam_a" if i % 2 else "vlam_b")
         ouder, wy = naam, wy - 13
 
     # --- the blade of fire (right hand) ----------------------------------------------------------------------------------------------
@@ -321,24 +392,27 @@ def maak():
     # --- the head: carried low and forward between the shoulders ------------------------------------------------------------------------
     m.bone("head", "borst", [0, 140, -12], rotation=[-12, 0, 0])
     m.cube("head", [-13, 134, -20], [26, 20, 16], "kool2")                   # the back of the skull, into the neck
-    m.cube("head", [-16, 138, -46], [32, 22, 30], "kool")                    # the skull
-    m.cube("head", [-18, 153.5, -49.5], [36, 7.5, 11], "kool2")              # the brow: a heavy overhang
-    m.cube("head", [-9.5, 150.4, -48.8], [8, 3.6, 3], "kool2")               # and its angry inner corners
-    m.cube("head", [1.5, 150.4, -48.8], [8, 3.6, 3], "kool2")
-    m.cube("head", [-9.5, 137, -56], [19, 12, 11], "kool")                   # the blunt snout (a Mika's, grown monstrous)
-    m.cube("head", [-5, 148.5, -53], [10, 4, 8], "kool2")                    # the bridge of the nose
-    m.cube("head", [-2.5, 144.6, -57.2], [5, 3.4, 1.6], "oor")               # his little nose still glows pink
-    m.cube("head", [-8.5, 136.2, -55], [17, 0.8, 30], "gloed", faces="d")    # the roof of his mouth: a furnace
+    m.cube("head", [-15, 139, -44], [30, 21, 28], "kool")                    # the skull
+    m.cube("head", [-17, 147, -37], [34, 11, 19], "kool2")                   # broad over the temples: a wedge, not a box
+    m.cube("head", [-12, 137.5, -47], [24, 10, 6], "kool2")                  # the cheeks, drawn in under the eyes
+    m.cube("head", [-8.5, 138, -58], [17, 10.5, 14], "kool")                 # the muzzle (the blunt snout of a Mika, grown monstrous)
+    m.cube("head", [-6.5, 139, -62], [13, 8, 4.5], "kool2")                  # and its blunt end
+    m.cube("head", [-3.5, 148, -57], [7, 3.4, 12], "kool2")                  # the ridge of the nose
+    m.cube("head", [-2.0, 144.8, -62.7], [4, 2.4, 1.0], "oor")               # his little nose still glows pink
+    m.cube("head", [-7.5, 137.7, -60], [15, 0.4, 30], "muil", faces="d", stretch=True)    # the roof of his mouth: a furnace
     m.cube("head", [-3.5, 160, -42], [7, 3.5, 30], "hoorn")                  # a crest over the skull
 
     def kop(kant, s, c):
-        m.bone(f"oog_{s}", "head", [kant * 10.4, 149.8, -46])                 # (a bone of its own: he can shut it)
-        for o, sz in (([4.2, 147.2, -46.7], [6, 4.6, 1.4]), ([9.4, 148.8, -46.7], [7.2, 5.4, 1.4])):
-            c(f"oog_{s}", o, sz, "oog", stretch=True)                        # eyes: slanted slits of white fire
-        c("head", [14.8, 139, -44], [4, 9.5, 17], "kool2")                   # the cheek bone
-        c("head", [17.6, 141.5, -36], [4, 4, 8], "hoorn")                    # and a spike on it
-        c("head", [16.1, 139.5, -26], [1.2, 9, 10], "gloed")                 # a glowing gill behind the jaw
-        c("head", [12.5, 160.5, -47], [4.5, 7, 4.5], "hoorn")                # a little horn over each eye
+        # the brow: a heavy overhang that slants down to the nose (he scowls); the eye burns deep under it, slanted the same way
+        m.bone(f"wenk_{s}", "head", [kant * 2, 153, -46], rotation=[0, 0, kant * 15])
+        c(f"wenk_{s}", [0.5, 152.4, -54.5], [19, 7.0, 15.5], "kool2")
+        c(f"wenk_{s}", [13, 158, -49], [5, 6, 5], "hoorn")                   # a little horn over each eye
+        m.bone(f"oog_{s}", "head", [kant * 9.5, 148.4, -45], rotation=[0, 0, kant * 15])     # (a bone of its own: he can shut it)
+        c(f"oog_{s}", [2.6, 142.2, -51.6], [14.4, 9.6, 0.9], "oog", faces="n", stretch=True, flip="" if kant > 0 else "n")
+        c("head", [2.2, 142.4, -50.8], [15, 9.6, 4.2], "kool2")              # the socket it sits in
+        c("head", [14.2, 139, -44], [4, 9.5, 17], "kool2")                   # the cheek bone
+        c("head", [17, 141.5, -36], [4.5, 4, 9], "hoorn")                    # and a spike on it
+        c("head", [15.2, 139.5, -26], [1.2, 9, 10], "gloed")                 # a glowing gill behind the jaw
     beide(kop)
 
     def tand(bone, x, y, z, dik, lang, neer=True):
@@ -353,23 +427,26 @@ def maak():
             else:
                 m.cube(bone, [x + o, y0, z + o], [w, h, w], "tand", stretch=(v1, v0))
                 y0 += h
-    # his teeth: rows of fangs (flat, cut out: real points), and four great ones with body to them
-    m.cube("head", [-9.5, 129.2, -56.25], [19, 8.2, 0.2], "gebit", faces="ns", stretch=True)
-    m.cube("head", [-9.7, 130.2, -55.5], [0.2, 7.2, 20], "gebit", faces="ew", stretch=True)
-    m.cube("head", [9.5, 130.2, -55.5], [0.2, 7.2, 20], "gebit", faces="ew", stretch=True, flip="ew")
-    tand("head", -9.6, 137.6, -56.4, 3.4, 9.5)
-    tand("head", 6.2, 137.6, -56.4, 3.4, 9.5)
-    tand("head", -14.2, 138.5, -53.5, 4.2, 15)                               # one long crooked fang, as every Mika has
-    m.bone("kaak", "head", [0, 138, -18], rotation=[14, 0, 0])
-    m.cube("kaak", [-10.5, 126.5, -53], [21, 6.5, 36], "kool2", mats={"u": "gloed"})
-    m.cube("kaak", [-7.5, 123, -51], [15, 4, 11], "kool")                    # the chin
-    m.cube("kaak", [-2, 118.5, -50], [4, 5, 4], "hoorn")                     # and a spike under it
-    m.cube("kaak", [-13.2, 127, -30], [3, 11, 13], "kool")                   # the hinges of the jaw
-    m.cube("kaak", [10.2, 127, -30], [3, 11, 13], "kool")
-    m.cube("kaak", [-9.5, 133, -53.15], [19, 6.2, 0.2], "gebit", faces="ns", stretch=(1.0, 0.0), flip="ns")
-    m.cube("kaak", [-10.3, 133, -52.5], [0.2, 5.6, 19], "gebit", faces="ew", stretch=(1.0, 0.0), flip="ew")
-    m.cube("kaak", [10.1, 133, -52.5], [0.2, 5.6, 19], "gebit", faces="ew", stretch=(1.0, 0.0))
-    tand("kaak", 8.6, 131, -54.2, 4.0, 13.5, neer=False)                     # a tusk standing up outside the lip (the other side has the fang)
+    # his teeth: rows of fangs along the jaws (flat, cut out: real points) and great ones with body to them in front
+    m.cube("head", [-8.7, 131.4, -58.5], [0.2, 6.8, 22], "gebit", faces="ew", stretch=True)
+    m.cube("head", [8.5, 131.4, -58.5], [0.2, 6.8, 22], "gebit", faces="ew", stretch=True, flip="ew")
+    for x, dik, lang in ((-4.6, 2.4, 6.5), (2.4, 2.4, 5.0)):
+        tand("head", x, 138.2, -62.3, dik, lang)
+    tand("head", -10.2, 138.4, -60.5, 4.2, 13)                               # the great canines
+    tand("head", 6.0, 138.4, -60.5, 4.2, 13)
+    tand("head", -13.4, 138.8, -55, 3.8, 17)                                 # and one long crooked fang, as every Mika has
+    m.bone("kaak", "head", [0, 138, -18], rotation=[16, 0, 0])
+    m.cube("kaak", [-9.5, 127, -57], [19, 6, 40], "kool2", mats={"u": "muil"})
+    m.cube("kaak", [-6.5, 123.5, -56], [13, 4, 13], "kool")                  # the chin
+    m.cube("kaak", [-2, 119, -55], [4, 5, 4], "hoorn")                       # and a spike under it
+    m.cube("kaak", [-12.5, 127, -30], [3, 11, 13], "kool")                   # the hinges of the jaw
+    m.cube("kaak", [9.5, 127, -30], [3, 11, 13], "kool")
+    m.cube("kaak", [-9.3, 133, -56.5], [0.2, 5.4, 20], "gebit", faces="ew", stretch=(1.0, 0.0), flip="ew")
+    m.cube("kaak", [9.1, 133, -56.5], [0.2, 5.4, 20], "gebit", faces="ew", stretch=(1.0, 0.0))
+    for x, dik, lang in ((-3.6, 2.4, 5), (1.2, 2.4, 5)):
+        tand("kaak", x, 132.6, -57.6, dik, lang, neer=False)
+    tand("kaak", -8.6, 132, -58.4, 3.8, 12, neer=False)                      # tusks standing up outside the lip
+    tand("kaak", 4.8, 132, -58.4, 3.8, 12, neer=False)
 
     # horns of gloeikool: a chain of turned pieces, sweeping out, then up and forward like a bull's
     def hoorn(kant, s, c):
@@ -390,17 +467,20 @@ def maak():
     beide(hoorn)
 
     # --- the mane: a storm of fire from his crown down his neck and his back, on his shoulders, his elbows, his tail -----------------------
-    manen = (("head", 0, 161, -38, 20, 38, "vlam_a"), ("head", -10, 160, -30, 16, 34, "vlam_b"), ("head", 10, 160, -30, 16, 34, "vlam_a"),
-             ("head", 0, 162, -26, 36, 62, "vlam_c"), ("head", -11, 158, -14, 20, 42, "vlam_a"), ("head", 11, 158, -14, 20, 42, "vlam_b"),
-             ("head", 0, 154, -8, 34, 56, "vlam_c"),
-             ("borst", 0, 147, 6, 38, 58, "vlam_c"), ("borst", -15, 144, 8, 20, 38, "vlam_b"), ("borst", 15, 144, 8, 20, 38, "vlam_a"),
-             ("borst", 0, 141, 22, 32, 48, "vlam_c"), ("borst", 0, 127, 32, 22, 36, "vlam_a"), ("borst", 0, 110, 28, 16, 26, "vlam_b"),
-             ("arm_left", 39, 149, 0, 20, 36, "vlam_a"), ("arm_right", -39, 149, 0, 20, 36, "vlam_b"),
-             ("onderarm_left", 41.5, 93, 15, 11, 20, "vlam_b"), ("onderarm_right", -41.5, 93, 15, 11, 20, "vlam_a"),
-             ("body", 0, 96, 13, 12, 20, "vlam_a"), ("tail", 0, 79, 28, 11, 18, "vlam_b"), ("tail_2", 0, 77, 58, 10, 16, "vlam_a"))
+    manen = (("head", 0, 161, -38, 22, 44, "vlam_a"), ("head", -10, 160, -30, 18, 40, "vlam_b"), ("head", 10, 160, -30, 18, 40, "vlam_a"),
+             ("head", 0, 162, -26, 44, 82, "vlam_c"), ("head", -12, 158, -14, 24, 54, "vlam_a"), ("head", 12, 158, -14, 24, 54, "vlam_b"),
+             ("head", 0, 154, -8, 46, 76, "vlam_c"),
+             ("borst", 0, 147, 6, 56, 92, "vlam_c"), ("borst", -19, 144, 8, 26, 56, "vlam_b"), ("borst", 19, 144, 8, 26, 56, "vlam_a"),
+             ("borst", 0, 141, 22, 48, 70, "vlam_c"), ("borst", 0, 127, 32, 30, 48, "vlam_a"), ("borst", 0, 110, 28, 20, 32, "vlam_b"),
+             ("arm_left", 39, 149, 0, 24, 44, "vlam_a"), ("arm_right", -39, 149, 0, 24, 44, "vlam_b"),
+             ("onderarm_left", 41.5, 93, 15, 12, 22, "vlam_b"), ("onderarm_right", -41.5, 93, 15, 12, 22, "vlam_a"),
+             ("body", 0, 96, 13, 14, 24, "vlam_a"), ("tail", 0, 79, 28, 12, 20, "vlam_b"), ("tail_2", 0, 77, 58, 11, 18, "vlam_a"),
+             # the wall of fire behind his head and shoulders (single sheets across his back: what his black shape stands out against)
+             ("borst", -30, 138, 16, 40, 72, "vlam_c"), ("borst", 30, 138, 16, 40, 72, "vlam_c"), ("borst", 0, 150, 14, 70, 110, "vlam_c"))
+    VLAK = {20, 21, 22}                                                      # (the single sheets)
     for i, (bot, x, y, z, breed, hoog, mat) in enumerate(manen):
         m.bone(f"vlam_{i + 1}", bot, [x, y, z])
-        m.vlam(f"vlam_{i + 1}", x, y, z, breed, hoog, mat)
+        m.vlam(f"vlam_{i + 1}", x, y, z, breed, hoog, mat, kruis=i not in VLAK)
     m.bone("vlam_staart", "tail_3", [0, 77, 105])
     m.vlam("vlam_staart", 0, 77, 105, 15, 26, "vlam_b")
 
@@ -428,7 +508,41 @@ def maak():
         m.bone(f"vlam_vleugel_{s}", f"vleugel_{s}", [kant * 66, 150, 18.5])
         m.vlam(f"vlam_vleugel_{s}", kant * 66, 150, 18.5, 12, 22, "vlam_a" if kant > 0 else "vlam_b")
     beide(vleugel)
+    for kant, s in ((1, "left"), (-1, "right")):
+        (a, b) = VLEUGEL_RUST
+        m._bone(f"vleugel_{s}")["rotation"] = [float(a[0]), float(kant * a[1]), float(kant * a[2])]
+        m._bone(f"vleugel_{s}_2")["rotation"] = [float(b[0]), float(kant * b[1]), float(kant * b[2])]
+        m.schaal_tak(f"vleugel_{s}", VLEUGEL_MAAT)
+    m.schaal_tak("head", KOP_MAAT)
+    m.schaal_tak("root", LIJF_MAAT)
+    m.til(-_voetzool(m))                                                     # he stands on his toes: his soles on the floor
     return m
+
+
+def _voetzool(m):
+    """The y (units) of the lowest corner of his feet in the rest pose (bone turns as GeckoLib applies them: Rz(-z) Ry(y) Rx(-x)
+    about the pivot, parents after children)."""
+    def draai(b):
+        rx, ry, rz = (math.radians(v) for v in b.get("rotation", (0, 0, 0)))
+        rx, rz = -rx, -rz
+        X = np.array([[1, 0, 0], [0, math.cos(rx), -math.sin(rx)], [0, math.sin(rx), math.cos(rx)]])
+        Y = np.array([[math.cos(ry), 0, math.sin(ry)], [0, 1, 0], [-math.sin(ry), 0, math.cos(ry)]])
+        Z = np.array([[math.cos(rz), -math.sin(rz), 0], [math.sin(rz), math.cos(rz), 0], [0, 0, 1]])
+        return Z @ Y @ X
+    laagst = 1e9
+    for bot in m.bones:
+        if not bot["name"].startswith("voet_"):
+            continue
+        for c in bot["cubes"]:
+            for i in range(8):
+                p = np.array([c["origin"][k] + (c["size"][k] if i >> k & 1 else 0) for k in range(3)], float)
+                b = bot
+                while b:
+                    piv = np.array(b["pivot"], float)
+                    p = draai(b) @ (p - piv) + piv
+                    b = m._bone(b["parent"]) if b.get("parent") else None
+                laagst = min(laagst, float(p[1]))
+    return laagst
 
 
 # =====================================================================================================================
@@ -627,21 +741,15 @@ def _vleugel(rng, mat):
     for hoek, lang in VLEUGEL_VINGERS:
         lijn(68, 0, 68 - math.sin(math.radians(hoek)) * lang, math.cos(math.radians(hoek)) * lang, 4.6, 0.85)
     lijn(12, 3, 168, 3, 5.0, 0.7)                                # under the arm of the wing
-    for _ in range(7):                                           # thin veins between them
-        x0, y0 = rng.uniform(x_links, x_links + breed), rng.uniform(4, 30)
-        lijn(x0, y0, x0 + rng.uniform(-14, 14), y0 + rng.uniform(24, 58), 1.3, 0.5)
     # the hem burns; holes burnt through
     rand = np.clip(1 - diepte / 3.0, 0, 1) * alpha
     halo = np.clip(1 - diepte / 9.0, 0, 1) * alpha * 0.55
     gat = np.zeros((n, n), bool)
     gatrand = np.zeros((n, n), np.float32)
-    for _ in range(4):
-        cx, cy, r = rng.uniform(10, n - 10), rng.uniform(n * 0.3, n * 0.8), rng.uniform(3.0, 6.0)
-        d = np.sqrt((xx - cx) ** 2 + ((yy - cy) * 0.8) ** 2)
-        gat |= d < r
-        gatrand = np.maximum(gatrand, np.clip(1 - (d - r) / 2.5, 0, 1) * (d >= r))
     alpha &= ~gat
-    heet = np.clip(np.maximum.reduce([naad, rand, halo, gatrand, warm * 0.34]), 0, 1)
+    # (the sail glows deeper red towards its hem: against a dark wall the whole wing must read, not only its frame)
+    diep = np.clip((Y + top) / np.maximum(zoom, 1.0), 0, 1) ** 1.6 * 0.3 * alpha
+    heet = np.clip(np.maximum.reduce([naad, rand, halo, _vervaag(warm, 6) * 0.2 + diep]), 0, 1)
     for _ in range(34):                                          # embers adrift in the smoke
         sx, sy = int(rng.integers(1, n - 1)), int(rng.integers(n // 8, n - 1))
         heet[sy, sx] = 1.0
@@ -697,22 +805,28 @@ def textuur(seed=21301851):
     _zet(arr, glow, "worst", worst, gloed=np.clip(scheur * 1.1, 0, 1))
     knoop = 0.6 + rng.random((32, 32)) * 0.3
     _zet(arr, glow, "knoop", _gloei(knoop), gloed=np.ones((32, 32)))
-    # the eye: white fire, an orange rim, a slit
+    # the eye: an almond of white fire, widest near the nose, a point at its outer corner; cut out
     yy, xx = np.mgrid[0:32, 0:32].astype(np.float32)
-    d = np.abs(yy - 15.5) / 15.5
-    oog = _gloei(1.0 - d * 0.45)
-    oog[:, 14:18] = (255, 120, 20)
-    oog[4:28, 15:17] = (90, 14, 0)
-    _zet(arr, glow, "oog", oog, gloed=np.ones((32, 32)))
-    # a fang (the top of the tile = the point): smoked bone, yellowed, black and glowing at the root
+    u = xx / 31.0
+    half = 15.5 * np.clip(np.sin(np.clip(u * 0.94 + 0.06, 0, 1) * math.pi), 0, 1) ** 0.6 * (0.42 + 0.58 * u)
+    d = np.abs(yy - 15.5) / np.maximum(half, 0.4)
+    oog = _gloei(np.clip(1.06 - d * 0.5, 0, 1))
+    _zet(arr, glow, "oog", oog, alpha=np.where(d < 1.0, 255, 0), gloed=np.ones((32, 32)))
+    # the inside of his mouth: a furnace, white in its depth, red at the lips; no seams, no pattern
+    yy, xx = np.mgrid[0:64, 0:64].astype(np.float32)
+    d = np.sqrt(((xx - 31.5) / 34.0) ** 2 + ((yy - 31.5) / 34.0) ** 2)
+    heet = np.clip(1.08 - d * 1.05 + (_ruis(rng, 64, 16) - 0.5) * 0.14, 0.0, 1.0)
+    _zet(arr, glow, "muil", _gloei(heet) * np.clip(heet * 3.0, 0.12, 1)[..., None], gloed=np.clip(heet * 1.6, 0, 1))
+    # the lash: a cord of fire, white along its axis
+    yy, xx = np.mgrid[0:64, 0:32].astype(np.float32)
+    heet = np.clip(1.0 - np.abs(xx - 15.5) / 15.5 * 0.5 + np.sin(yy * 0.8) * 0.06, 0, 1)
+    _zet(arr, glow, "lasso", _gloei(heet), gloed=np.ones((64, 32)))
+    # a fang (the top of the tile = the point): black iron at the root, red-hot along its length, white-hot at the point
     yy, xx = np.mgrid[0:64, 0:32].astype(np.float32)
     t = yy / 63.0
-    been = np.array((232, 214, 160))[None, None, :] * (1 - t[..., None]) + np.array((128, 86, 48))[None, None, :] * t[..., None]
-    been = been * (0.86 + rng.random((64, 32, 1)) * 0.18)
-    been *= (1 - 0.22 * (np.abs(xx - 15.5) / 15.5) ** 2)[..., None]                 # rounder: darker towards its sides
-    heet = np.clip((t - 0.82) * 4.5, 0, 1)
-    been = been * (1 - heet[..., None]) + _gloei(0.26 + heet * 0.4) * heet[..., None]
-    _zet(arr, glow, "tand", been, gloed=heet * 0.8)
+    heet = np.clip(1.02 - t * 0.86, 0, 1) * (1 - 0.3 * (np.abs(xx - 15.5) / 15.5) ** 2)
+    been = _gloei(heet) * np.clip(0.25 + heet * 1.2, 0, 1)[..., None]
+    _zet(arr, glow, "tand", been, gloed=np.clip(heet * 1.5, 0.15, 1))
     # a row of fangs (hanging; the gum at the top): every one a curved point of its own length, gaps between them
     x0, y0, w, h = TEGELS["gebit"]
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
@@ -727,15 +841,16 @@ def textuur(seed=21301851):
         d = np.clip((yy - 3) / lang, 0, 1)
         half = breed / 2 * (1 - d) ** 0.85
         binnen = (np.abs(xx - (x + breed / 2) - krom * d * d) < half) & (yy >= 3) & (yy < 3 + lang)
-        kleur = np.array((128, 86, 48))[None, None, :] * (1 - d[..., None]) + np.array((236, 220, 168))[None, None, :] * d[..., None]
+        kleur = _gloei(np.clip(0.2 + d * 0.8, 0, 1)) * np.clip(0.3 + d[..., None] * 1.1, 0, 1)
         kleur = kleur * (1 - 0.3 * np.clip(np.abs(xx - (x + breed / 2) - krom * d * d) / np.maximum(half, 0.5), 0, 1) ** 2)[..., None]
         rij = np.where(binnen[..., None], kleur, rij)
         open_ |= binnen
         x += breed + float(rng.uniform(0.5, 3.5))
     tandvlees = yy < 4
     rij = np.where(tandvlees[..., None], _gloei(np.full((h, w), 0.42)), rij)
+    gl[open_] = 0.62
     gl[tandvlees] = 0.7
-    _zet(arr, glow, "gebit", rij * (0.9 + rng.random((h, w, 1)) * 0.14), alpha=np.where(open_ | tandvlees, 255, 0), gloed=gl)
+    _zet(arr, glow, "gebit", rij, alpha=np.where(open_ | tandvlees, 255, 0), gloed=np.where(open_, 0.8, gl))
     yy, xx = np.mgrid[0:64, 0:32].astype(np.float32)
     t = yy / 63.0
     # a claw (the top of the tile = black iron, the bottom red-hot)
@@ -800,9 +915,13 @@ def _zweep_golf(lengte, kracht, fase=0.0, slagen=1):
 
 
 def _vleugels(open_, tip, heen=0.0):
-    """Wing pose (added to the folded rest pose): open_ lifts and spreads the arm, tip unfolds the outer part."""
-    return {"vleugel_left": [0, 38 * open_ + heen, 42 * open_ - 18 * open_], "vleugel_right": [0, -38 * open_ - heen, -42 * open_ + 18 * open_],
-            "vleugel_left_2": [0, -14 * tip, -58 * tip + 12 * tip], "vleugel_right_2": [0, 14 * tip, 58 * tip - 12 * tip]}
+    """Wing pose as an animation turn (added to the rest pose VLEUGEL_RUST): open_ 0 = wrapped round him .. 1 = thrown wide,
+    tip the same for the outer part; heen sweeps both wings forward."""
+    def naar(i, f):
+        return [VLEUGEL_DICHT[i][k] + (VLEUGEL_WIJD[i][k] - VLEUGEL_DICHT[i][k]) * f - VLEUGEL_RUST[i][k] for k in range(3)]
+    a, b = naar(0, open_), naar(1, tip)
+    return {"vleugel_left": [a[0], a[1] + heen, a[2]], "vleugel_right": [a[0], -a[1] - heen, -a[2]],
+            "vleugel_left_2": b, "vleugel_right_2": [b[0], -b[1], -b[2]]}
 
 
 def _rot(d):
@@ -839,7 +958,7 @@ def animaties():
     A["idle"] = (True, L, idle)
     # --- loop: slow, crushing steps; the whole body rolls, the wings half open ------------------------------------------------------
     L = 2.4
-    w = _vleugels(0.35, 0.3)
+    w = {k: [0, 0, 0] for k in _vleugels(0, 0)}              # (he carries them as in rest: raised, half open)
     loop = _flakker(L, 1.3)
     loop.update(_zweep_golf(L, 12, slagen=2))
     loop.update({
@@ -950,8 +1069,7 @@ def animaties():
         "voet_left": _rot(_sleutels((0.0, [-14, 0, 0]))), "voet_right": _rot(_sleutels((0.0, [-14, 0, 0]))),
         "body": _rot(_sleutels((0.0, [26, 0, 0]))), "borst": _rot(_sleutels((0.0, [16, 0, 0]))),
         "arm_left": _rot(_sleutels((0.0, [-10, 0, 8]))), "arm_right": _rot(_sleutels((0.0, [-10, 0, -8]))),
-        "vleugel_left": _rot(_sleutels((0.0, [0, -30, 30]))), "vleugel_right": _rot(_sleutels((0.0, [0, 30, -30]))),
-        "vleugel_left_2": _rot(_sleutels((0.0, [0, -30, 20]))), "vleugel_right_2": _rot(_sleutels((0.0, [0, 30, -20]))),
+        **{naam: _rot(_sleutels((0.0, v))) for naam, v in _vleugels(0.0, 0.0).items()},
         "zwaardvlam": {"scale": _sleutels((0.0, [0, 0, 0]))},
     }
     donker = dict(uit)
@@ -1002,6 +1120,28 @@ def animaties():
     opkomst.update({naam: _rot(_sleutels((0.0, [0, 0, 0]), (3.0, [0, 0, 0]), (3.4, [20, 0, 6]), (4.0, [-12, 0, -6]), (7.0, [0, 0, 0]))) for naam in ZWEEP[:5]})
     opkomst["zweep_1"]["scale"] = _sleutels((0.0, [0, 0, 0]), (2.9, [0, 0, 0]), (3.3, [1, 1, 1]), (7.0, [1, 1, 1]))
     A["opkomst"] = (False, L, opkomst)
+    # --- dreig: he looms: bent forward over what stands before him, wings thrown wide and beating slowly, jaws open, the blade
+    #     and the lash held out to both sides (the bridge scene, under YOU.. SHALL.. NOT..) ------------------------------------------------
+    L = 3.0
+    wa, wb = _vleugels(1.0, 1.0), _vleugels(0.86, 0.8, 8)
+    dreig = _flakker(L, 2.0)
+    dreig.update(_zweep_golf(L, 14, slagen=2))
+    dreig.update({
+        "heup": {"position": _sleutels((0.0, [0, -3, -4]), (1.5, [0, -1, -6]), (3.0, [0, -3, -4]))},
+        "body": _rot(_sleutels((0.0, [15, 0, 0]), (1.5, [19, 0, 0]), (3.0, [15, 0, 0]))),
+        "borst": {"rotation": _sleutels((0.0, [9, 0, 0]), (1.5, [12, 0, 0]), (3.0, [9, 0, 0])),
+                  "scale": _sleutels((0.0, [1, 1, 1]), (1.5, [1.05, 1.04, 1.07]), (3.0, [1, 1, 1]))},
+        "head": _rot(_sleutels((0.0, [8, -6, 0]), (0.75, [12, 0, 3]), (1.5, [8, 6, 0]), (2.25, [12, 0, -3]), (3.0, [8, -6, 0]))),
+        "kaak": _rot(_sleutels((0.0, [26, 0, 0]), (1.5, [38, 0, 0]), (3.0, [26, 0, 0]))),
+        "arm_left": _rot(_sleutels((0.0, [-14, 0, -40]), (1.5, [-18, 0, -46]), (3.0, [-14, 0, -40]))),
+        "arm_right": _rot(_sleutels((0.0, [-34, 0, 34]), (1.5, [-40, 0, 40]), (3.0, [-34, 0, 34]))),
+        "onderarm_left": _rot(_sleutels((0.0, [-20, 0, 0]))), "onderarm_right": _rot(_sleutels((0.0, [-26, 0, 0]))),
+        "zwaard": _rot(_sleutels((0.0, [-30, 0, 0]))),
+        "tail": _rot(_sleutels((0.0, [18, -12, 0]), (1.5, [18, 12, 0]), (3.0, [18, -12, 0]))),
+        "zwaardvlam": {"scale": _sleutels((0.0, [1.3, 1.3, 1.08]), (1.5, [1.5, 1.5, 1.12]), (3.0, [1.3, 1.3, 1.08]))},
+        **{naam: _rot(_sleutels((0.0, wa[naam]), (1.5, wb[naam]), (3.0, wa[naam]))) for naam in wa},
+    })
+    A["dreig"] = (True, L, dreig)
     # --- wankel: the stone goes from under him: arms flail, wings beat for air that isn't there ---------------------------------------------
     L = 1.2
     wankel = _flakker(L, 2.0)
@@ -1027,7 +1167,7 @@ def animaties():
         f"animation.{NAAM}.{naam}": {"loop": lus, "animation_length": lengte, "bones": bones} for naam, (lus, lengte, bones) in A.items()}}
 
 
-ANIMATIES = ("idle", "loop", "brul", "stamp", "zweep", "zwaard", "donker", "slaap", "opkomst", "wankel")
+ANIMATIES = ("idle", "loop", "brul", "stamp", "zweep", "zwaard", "donker", "slaap", "opkomst", "wankel", "dreig")
 
 
 # =====================================================================================================================
@@ -1191,14 +1331,16 @@ def preview(out, alleen=()):
         "rust_voor": (geo_file, 25, -8, {}), "rust_zij": (geo_file, 100, -6, {}), "rust_achter": (geo_file, 205, -8, {}),
         "rust_voor2": (geo_file, -30, -8, {}), "rust_recht": (geo_file, 0, -4, {}),
         "laag": (geo_file, 18, 16, {}),                                             # from below, as a guh sees him
-        "kop": (geo_file, 22, -4, {"kader": (-3.6, 6.4, 3.0, 13.0)}),
+        "kop": (geo_file, 22, 8, {"kader": (-4.0, 6.0, 4.0, 14.0)}),
+        "kop_brul": (a("brul", 1.2), 20, 10, {"kader": (-4.0, 5.0, 4.0, 13.0)}),
+        "laag_brul": (a("brul", 1.2), 12, 28, {}), "laag2": (geo_file, -20, 30, {}),
         "kop_recht": (geo_file, 0, 0, {"kader": (-3.0, 6.6, 3.0, 12.6)}),
         "kop_laag": (a("brul", 1.2), 14, 14, {"kader": (-3.6, 5.0, 3.6, 12.2)}),
         "lijf_voor": (geo_file, 20, -6, {"zonder": kaal}), "lijf_zij": (geo_file, 90, -6, {"zonder": kaal}),
         "donker": (a("donker", 0.0), 20, -6, {"helder": 0.1, "achter": (10, 7, 7)}),
         "brul": (a("brul", 1.0), 25, -6, {}), "brul_voor": (a("brul", 1.0), 0, 6, {}), "brul_achter": (a("brul", 1.0), 180, -6, {}),
         "zweep": (a("zweep", 0.85), 40, -6, {}), "zwaard": (a("zwaard", 0.7), 25, -6, {}), "loop": (a("loop", 0.0), 70, -6, {}),
-        "stamp": (a("stamp", 0.55), 40, -6, {}), "opkomst5": (a("opkomst", 5.0), 15, 4, {}), "wankel": (a("wankel", 0.3), 30, -6, {}),
+        "stamp": (a("stamp", 0.55), 40, -6, {}), "dreig": (a("dreig", 0.7), 20, 22, {}), "dreig_zij": (a("dreig", 0.7), 90, 0, {}), "opkomst5": (a("opkomst", 5.0), 15, 4, {}), "wankel": (a("wankel", 0.3), 30, -6, {}),
     }
     for naam, (gf, yaw, pitch, kw) in shots.items():
         if alleen and naam not in alleen:
