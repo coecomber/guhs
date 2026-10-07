@@ -245,6 +245,10 @@ SNEL = 0.31                         # blocks per tick of the flight
 
 
 def brug():
+    # The camera shake (the engine's swing goes with the SQUARE of the strength, and holds for the ticks given): after the first
+    # teaser the user asked for clearly less of it. Everything is about half the swing it had and much shorter; only the real
+    # blows are strong (his roar 1.7, the leap 1.9, VADS! 2.2, the bridge breaking 2.2: they were 2.6 / 3.2 / 3.6 / 3.4 and
+    # lasted two seconds), and the three words tremble (0.55 for 3 ticks) so the line under them stays readable.
     s = Scene("ringh3_brug", "De brug van Knabbel-dûm", B.PLEKKEN["BRUG_ANKER"], 1770, 70)
     s.wezen("rog", "BARBECUEROG", ROG, 270, "De Barbecuerog")
     s.npc("guhdalf", "GUHDALF", (40.5, D, 14.5), 90, "Guhdalf")
@@ -274,7 +278,7 @@ def brug():
     s.cam(200, (33.0, D + 2.6, 14.5), (11.5, D + 6.0, 14.5))
     for t in (12, 44, 76, 108, 140, 172):
         s.geluid(t, "TROMMEL", 1.0, 0.8)
-        s.schud(t, 0.5, 5)
+        s.schud(t, 0.35, 3)
     s.zeg(24, "", "trommels", 66, "Trommels. Trommels in de diepte.")
     s.zeg(112, "", "ogen", 70, "En in het donker van de Diepe Poort gingen twee ogen open.")
     s.anim("pippguh", 120, "schrik")
@@ -293,7 +297,7 @@ def brug():
     s.deeltje(254, "LAVA", (11.5, D + 6.0, 14.5), 24, 1.6)
     s.deeltje(280, "LARGE_SMOKE", (11.5, D + 9.0, 14.5), 60, 2.4)
     s.geluid(296, "BRUL", 1.0, 1.0)
-    s.schud(298, 2.6, 46)
+    s.schud(298, 1.7, 22)
     s.flits(298, 6, 0.3)
     s.stoot(300, STOOT_RING, (13.5, D + 0.2, 14.5), 1.6)
     s.deeltje(300, "FLAME", (13.0, D + 8.5, 14.5), 120, 3.0)
@@ -311,7 +315,7 @@ def brug():
     s.loop("rog", 420, 690, RAND)
     for t in range(432, 690, 24):
         s.geluid(t, "STAP", 0.9, 0.7)
-        s.schud(t, 0.9, 6)
+        s.schud(t, 0.6, 3)
     aankomst = {}
     # (they leave one after the other and all of them are over the bridge before the demon leaps; Guhdalf lets the last one
     # pass him and comes last: nobody runs through anybody, nobody crosses a camera that looks at the demon)
@@ -348,7 +352,7 @@ def brug():
     s.cam(792, (72.8, D + 2.4, 18.8), (63.5, D + 6.0, 14.5))
     s.cam(812, (72.8, D + 2.4, 18.8), (63.5, D + 6.5, 14.5))
     s.lens(705, 816, 78)
-    s.schud(792, 3.2, 34)
+    s.schud(792, 1.9, 14)
     s.geluid(792, "STAP", 1.0, 0.5)
     s.deeltje(792, "LARGE_SMOKE", (63.5, D + 0.4, 14.5), 90, 2.6)
     s.deeltje(792, "LAVA", (63.5, D + 0.4, 14.5), 36, 2.2)
@@ -378,12 +382,12 @@ def brug():
     s.anim("rog", 1004, "")
     s.loop("rog", 1004, 1030, (66.5, D, 14.5))
     s.geluid(1006, "STAP", 1.0, 0.6)
-    s.schud(1006, 1.4, 8)
+    s.schud(1006, 0.9, 4)
     s.anim("rog", 1008, "zwaard")
     s.anim("guhdalf", 1016, "toover")
     s.flits(1029, 9, 0.7)
     s.geluid(1029, "STAF", 1.0, 1.2)
-    s.schud(1029, 2.2, 16)
+    s.schud(1029, 1.4, 8)
     # (a burst of light where the blade meets his shield, sparks flying off it and gone: nothing that hangs in the air)
     s.stoot(1029, STOOT_LICHT, (71.6, D + 3.0, 14.5), 1.0)
     s.deeltje(1031, "FLAME", (70.5, D + 3.5, 14.5), 40, 1.2)
@@ -404,7 +408,7 @@ def brug():
     for i, t in enumerate((1086, 1114, 1142)):
         s.zeg(t, "guhdalf", f"you_{i + 1}", 28, " ".join(ZIN_YOU.split(" ")[:i + 1]))
         s.geluid(t, "STAF", 0.9, 0.7 + i * 0.08)
-        s.schud(t, 0.9, 6)
+        s.schud(t, 0.55, 3)
         s.stoot(t, STOOT_LICHT, (73.0, D + 2.3, 14.9), 0.3 + i * 0.1)        # the staff flares brighter at every word
     s.zeg(1170, "guhdalf", "you_4", 76, ZIN_YOU)
     # VADS! the staff comes down: light, thunder, a crack runs through the span
@@ -416,7 +420,7 @@ def brug():
     s.flits(1172, 18, 1.0)
     s.geluid(1172, "DONDER", 1.0, 0.9)
     s.geluid(1172, "STAF", 1.0, 0.5)
-    s.schud(1172, 3.6, 44)
+    s.schud(1172, 2.2, 18)
     s.stoot(1172, STOOT_LICHT, (72.8, D + 0.8, 14.5), 1.6)
     s.stoot(1173, STOOT_RING, (72.8, D + 0.15, 14.5), 1.2)
     s.stoot(1178, STOOT_RING, (70.0, D + 0.15, 14.5), 0.8)                   # the crack runs west through the span
@@ -425,7 +429,7 @@ def brug():
     # he laughs at it: a roar, another step
     s.anim("rog", 1236, "brul")
     s.geluid(1238, "BRUL", 1.0, 1.1)
-    s.schud(1256, 1.6, 30)
+    s.schud(1256, 1.2, 14)
 
     # ---- F. the bridge breaks (1250 - 1430) ----
     # from high in the north-east corner of the chasm: the fellowship on the bank below, Guhdalf, the demon, the whole span
@@ -444,9 +448,9 @@ def brug():
     s.anim("boromika", BREEKT + 36, "knik")
     s.loop("rog", 1270, 1298, (69.0, D, 14.5))
     s.geluid(1272, "STAP", 1.0, 0.6)
-    s.schud(1272, 1.2, 8)
+    s.schud(1272, 0.8, 4)
     s.geluid(BREEKT, "BREUK", 1.0, 0.8)
-    s.schud(BREEKT, 3.4, 40)
+    s.schud(BREEKT, 2.2, 20)
     s.flits(BREEKT, 4, 0.3)
     s.deeltje(BREEKT, "LARGE_SMOKE", (69.0, D - 0.5, 14.5), 120, 2.4)
     s.deeltje(BREEKT, "CAMPFIRE_COSY_SMOKE", (69.0, D - 1.0, 14.5), 40, 2.0)
@@ -457,7 +461,7 @@ def brug():
     s.geluid(1380, "BRUL", 0.5, 0.55)
     s.deeltje(1390, "LAVA", (69.0, 3.5, 14.5), 60, 3.0)
     s.stoot(1388, STOOT_VUUR, (69.0, 2.5, 14.5), 1.0)                        # where he goes into the deep: a column of fire
-    s.schud(1390, 1.8, 20)
+    s.schud(1390, 1.1, 10)
     # that was that
     s.cam(1396, (76.2, D + 1.4, 13.2), (73.5, D + 1.35, 14.5), knip=True)
     s.cam(1430, (76.4, D + 1.4, 13.1), (73.5, D + 1.35, 14.5))
@@ -471,7 +475,7 @@ def brug():
     s.geluid(1434, "ZWEEP", 1.0, 1.0)
     s.stoot(1434, STOOT_ZWEEP, (73.3, D + 0.2, 14.5), 1.0)
     s.deeltje(1440, "LAVA", (73.2, D + 0.3, 14.5), 14, 0.4)
-    s.schud(1438, 1.2, 8)
+    s.schud(1438, 0.8, 5)
     s.anim("guhdalf", 1438, "schrik")                         # (both paws up: this is how he hangs; "val" only when he lets go)
     s.loop("guhdalf", 1438, 1452, (72.62, D - 0.9, 14.5))
     s.kijk("guhdalf", 1453, (80.0, D, 14.5))
