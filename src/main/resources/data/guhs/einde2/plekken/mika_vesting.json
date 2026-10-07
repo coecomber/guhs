@@ -1,0 +1,150 @@
+{
+  "structuur": "mika_vesting",
+  "soort": "jigsaw",
+  "plekken": {
+    "kapitein": {
+      "soort": "npc",
+      "pos": [
+        12,
+        1,
+        5
+      ],
+      "yaw": 0.0,
+      "wie": "de vesting-kapitein, achter zijn bureau",
+      "kind": "VESTINGKAPITEIN_MIKA",
+      "stuk": "einde2_vesting/kern"
+    },
+    "kok": {
+      "soort": "npc",
+      "pos": [
+        9,
+        1,
+        3
+      ],
+      "yaw": 0.0,
+      "wie": "de spijtige Mika-kok, bij zijn soepketel",
+      "kind": "MIKA_KOK",
+      "stuk": "einde2_vesting/keuken"
+    },
+    "keuken": {
+      "soort": "zone",
+      "pos": [
+        1,
+        1,
+        1
+      ],
+      "tot": [
+        13,
+        6,
+        13
+      ],
+      "wie": "de keuken van de vesting",
+      "stuk": "einde2_vesting/keuken"
+    },
+    "schatkamer": {
+      "soort": "zone",
+      "pos": [
+        9,
+        1,
+        9
+      ],
+      "tot": [
+        13,
+        6,
+        13
+      ],
+      "wie": "de schatkamer van de vesting",
+      "stuk": "einde2_vesting/troon"
+    },
+    "cel_1": {
+      "soort": "prop",
+      "pos": [
+        3,
+        5,
+        2
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "cel_2": {
+      "soort": "prop",
+      "pos": [
+        3,
+        5,
+        6
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "cel_3": {
+      "soort": "prop",
+      "pos": [
+        3,
+        5,
+        10
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "cel_4": {
+      "soort": "prop",
+      "pos": [
+        11,
+        5,
+        2
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "cel_5": {
+      "soort": "prop",
+      "pos": [
+        11,
+        5,
+        6
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "cel_6": {
+      "soort": "prop",
+      "pos": [
+        11,
+        5,
+        10
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/cellenblok"
+    },
+    "vetbootje_opdracht": {
+      "soort": "prop",
+      "pos": [
+        3,
+        2,
+        1
+      ],
+      "wie": "hier hangt de opdracht voor het vetbootje (op het havenbord)",
+      "stuk": "einde2_vesting/steiger"
+    },
+    "cel_7": {
+      "soort": "prop",
+      "pos": [
+        2,
+        9,
+        8
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/toren_kerker"
+    },
+    "cel_8": {
+      "soort": "prop",
+      "pos": [
+        8,
+        9,
+        8
+      ],
+      "wie": "hier staat de magere guh van deze cel",
+      "stuk": "einde2_vesting/toren_kerker"
+    }
+  }
+}

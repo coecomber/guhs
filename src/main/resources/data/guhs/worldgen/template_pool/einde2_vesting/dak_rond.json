@@ -1,0 +1,14 @@
+{
+  "fallback": "guhs:einde2_vesting/dak_rond_plat",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:einde2_vesting/dak_spits",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}
