@@ -49,7 +49,8 @@ public final class GuhrioBeloningClient {
     private static long klok;
     /** Set by the render-state modifier: how far (0..1) this player is inside a pipe. */
     private static final ContextKey<Float> IN_PIJP = new ContextKey<>(Guhs.id("guhriobeloning_in_pijp"));
-    private static final ContextKey<Boolean> GEDUWD = new ContextKey<>(Guhs.id("guhriobeloning_geduwd"));
+    /** The pose as it was before {@link Krimp} squeezed it (put back once the player is drawn). */
+    private static final ContextKey<com.mojang.blaze3d.vertex.PoseStack.Pose> POSE_WAS = new ContextKey<>(Guhs.id("guhriobeloning_pose_was"));
 
     private GuhrioBeloningClient() {
     }
@@ -111,28 +112,37 @@ public final class GuhrioBeloningClient {
         return f.fase == GuhrioBeloningPayloads.Film.IN ? t : 1f - t;
     }
 
-    /** Draws a player who is in a pipe film shrinking down into the pipe (the pose is put back after the player is drawn). */
+    /**
+     * Draws a player who is in a pipe film shrinking down into the pipe. The pose stack never gets deeper here: the top pose
+     * is squeezed in place and its old value is kept with the render state, to be put back after the player is drawn. When
+     * another mod cancels the render after us, the "after" event never comes: then nothing is left to undo but the squeeze
+     * itself, which is gone with the pose that the entity renderer's caller pops (a push here would stay on the stack for
+     * good, and the game stops on a pose stack that is not empty at the end of a frame).
+     */
     public static final class Krimp {
         private Krimp() {
         }
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.LOWEST)
         public static void voor(RenderLivingEvent.Pre<?, ?, ?> event) {
             Float diep = event.getRenderState().getRenderData(IN_PIJP);
+            // (a pose kept by a render that was cancelled after us is of another frame: never put that one back)
+            event.getRenderState().setRenderData(POSE_WAS, null);
             if (diep != null) {
-                event.getPoseStack().pushPose();
+                com.mojang.blaze3d.vertex.PoseStack.Pose top = event.getPoseStack().last();
+                event.getRenderState().setRenderData(POSE_WAS, top.copy());
                 event.getPoseStack().translate(0, -0.9f * diep, 0);
                 event.getPoseStack().scale(1f - 0.35f * diep, Math.max(0.02f, 1f - 0.97f * diep), 1f - 0.35f * diep);
-                event.getRenderState().setRenderData(GEDUWD, Boolean.TRUE);
             }
         }
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGHEST)
         public static void na(RenderLivingEvent.Post<?, ?, ?> event) {
-            if (event.getRenderState().getRenderData(GEDUWD) != null) {
-                event.getRenderState().setRenderData(GEDUWD, null);
+            com.mojang.blaze3d.vertex.PoseStack.Pose was = event.getRenderState().getRenderData(POSE_WAS);
+            if (was != null) {
+                event.getRenderState().setRenderData(POSE_WAS, null);
                 event.getRenderState().setRenderData(IN_PIJP, null);
-                event.getPoseStack().popPose();
+                event.getPoseStack().last().set(was);
             }
         }
     }
