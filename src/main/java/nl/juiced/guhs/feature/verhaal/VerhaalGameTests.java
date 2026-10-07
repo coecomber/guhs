@@ -246,7 +246,10 @@ public class VerhaalGameTests {
                 BandEvents.voer(gewoon, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 BandEvents.voer(mint, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 int h1 = voeren.getOrDefault(gewoon.getId(), 0), h2 = voeren.getOrDefault(mint.getId(), 0);
-                helper.assertTrue(h1 >= Reden.VOEREN.standaard() && h2 == 2 * h1 && gegeten.get() == 1, "VOEREN x voerFactor: " + h1 + " / " + h2);
+                // (a guh's secret favourites come from its random UUID: when the cupcake happens to be one, the guh is "blij" before it
+                // gets its hearts and Band.geefHartjes gives x1.5, rounded up; that is no fault of the voerFactor, so both are right)
+                int v1 = Reden.VOEREN.standaard(), b1 = (int) Math.ceil(v1 * 1.5), b2 = (int) Math.ceil(2 * v1 * 1.5);
+                helper.assertTrue((h1 == v1 || h1 == b1) && (h2 == 2 * v1 || h2 == b2) && gegeten.get() == 1, "VOEREN x voerFactor: " + h1 + " / " + h2);
                 helper.assertTrue(VariantGedragen.draagFactor(mint) == 2 && VariantGedragen.draagFactor(gewoon) == 1
                         && VariantGedragen.draagFactor(helper.spawn(EntityType.PIG, new BlockPos(1, 1, 9))) == 1, "draagFactor");
                 // a chore trip: the lampjes round takes twice as many lamps

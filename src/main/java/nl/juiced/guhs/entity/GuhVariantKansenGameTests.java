@@ -31,7 +31,9 @@ public class GuhVariantKansenGameTests {
             helper.assertTrue(v.weight == gewicht.getOrDefault(v, 0), "the weight of " + v + ": " + v.weight);
             som += v.weight;
         }
-        helper.assertTrue(GuhVariant.ROLL_OUT_OF == 1000 && som == 72, "72 of 1000 wild guhs are a variant (was 90): " + som);
+        // (the table above adds up to 67: 17 + 17 + 13 + 6 + 2 + 3 + 4 + 5. This test said 72 and 92.8% and failed on the released 1.3.1
+        // itself; the weights are what is out in the world, so the numbers of the test were corrected at the bbq2 merge)
+        helper.assertTrue(GuhVariant.ROLL_OUT_OF == 1000 && som == 67, "67 of 1000 wild guhs are a variant (was 90): " + som);
         // the roll follows the table, and a ghost is a normal guh by day
         RandomSource random = RandomSource.create(131);
         Map<GuhVariant, Integer> gezien = new EnumMap<>(GuhVariant.class);
@@ -39,7 +41,7 @@ public class GuhVariantKansenGameTests {
         for (int i = 0; i < n; i++) {
             gezien.merge(GuhVariant.roll(random), 1, Integer::sum);
         }
-        helper.assertTrue(Math.abs(gezien.get(GuhVariant.NORMAL) - n * 0.928) < n * 0.005, "about 92.8% normal: " + gezien.get(GuhVariant.NORMAL));
+        helper.assertTrue(Math.abs(gezien.get(GuhVariant.NORMAL) - n * 0.933) < n * 0.005, "about 93.3% normal: " + gezien.get(GuhVariant.NORMAL));
         helper.assertTrue(Math.abs(gezien.get(GuhVariant.MINT) - n * 0.017) < n * 0.003 && Math.abs(gezien.get(GuhVariant.SNOW) - n * 0.013) < n * 0.003,
                 "mint about 1.7%, snow about 1.3%: " + gezien);
         for (int i = 0; i < 2000; i++) {
