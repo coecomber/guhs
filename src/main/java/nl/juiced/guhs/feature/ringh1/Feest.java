@@ -178,7 +178,11 @@ public final class Feest {
         switch (stap) {
             case 0 -> {
                 if (!Ring.magBeginnen(p)) {
-                    GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
+                    // (guhpad: first the stories of the Guhmensie that are missing, as a list; then, as before, the Grillguh)
+                    if (!nl.juiced.guhs.feature.guhpad.Guhpad.guhdalfWeigert(npc, p)
+                            || nl.juiced.guhs.feature.barbecuether.Grillguh.step(p) < nl.juiced.guhs.feature.barbecuether.Grillguh.DONE) {
+                        GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
+                    }
                     return;
                 }
                 l.begin(p);

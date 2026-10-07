@@ -2,7 +2,7 @@
   default_hide_dependency_lines: false,
   default_quest_shape: "circle",
   filename: "guhs_guheinde",
-  group: "475548DB0F6F37EB",
+  group: "4755489B04766E01",
   guhs_chapter_version: 31,
   icon: {
     components: {
@@ -79,7 +79,7 @@
       ],
     },
   ],
-  order_index: 5,
+  order_index: 15,
   progression_mode: "flexible",
   quest_links: [
     {
@@ -99,7 +99,7 @@
   ],
   quests: [
     {
-      id: "4755482CDD9DBAAA",
+      id: "4755482CB82CCF3D",
       icon: {
         components: {
           "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guheinde.png",
@@ -108,13 +108,36 @@
       },
       tasks: [
         {
-          type: "checkmark",
-          id: "4755481AB5264153",
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_klaar_knabbelring",
+          id: "475548837D6916B0",
+          icon: {
+            id: "guhs:knabbelring",
+          },
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_klaar_guhrio",
+          id: "47554864DEB36D85",
+          icon: {
+            id: "guhs:guhrio_vadsmunt",
+          },
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_mika",
+          id: "475548993527E0BB",
+          icon: {
+            id: "guhs:gloeister",
+          },
+          criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755484A05AA9445",
+          id: "475548698ABD9187",
           type: "item",
           item: {
             count: 1,

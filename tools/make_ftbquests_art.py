@@ -5,6 +5,9 @@ The pictures of the FTB Quests chapters (made by tools/make_ftbquests.py, which 
   textures/ftbquests/<chapter>/kop_<id>.png  a section header: a ribbon with a portrait and the section title
   textures/ftbquests/<chapter>/slot_<module>.png   (bbq2) a "to be continued" card at the end of a chapter: what is still missing
   textures/ftbquests/icon_<chapter>.png      the chapter's guh icon (a custom FTB icon)
+  textures/ftbquests/icon_vraag.png          (guhpad) the question-mark icon of the quests of "Het echte Guheinde"
+A portrait 'silhouet:<spec>' is the black shape of that render with a question mark (guhpad); the ribbon colour "nacht" has
+question marks where the other colours have hearts and kaasknabbels.
 Guhs, NPCs and creatures are rendered from their own .geo.json models with tools/wiki_renders.py; structures come from the
 wiki renders (docs/wiki/img, also made by wiki_renders.py). Text uses Minecraft's own pixel font (from the vanilla jar).
 
@@ -42,6 +45,7 @@ PALETTE = {
     "peach": ((255, 222, 214), (255, 160, 170), (120, 50, 60)),
     "green": ((200, 244, 196), (104, 200, 110), (26, 84, 36)),   # 3.0: Diertjes van de Guhmensie
     "cyan": ((196, 246, 250), (84, 204, 224), (16, 84, 104)),    # bbq2: Guh-technologie
+    "nacht": ((126, 104, 170), (52, 40, 80), (14, 10, 24)),      # guhpad: Het echte Guheinde (a mystery: no hearts, question marks)
 }
 
 
@@ -168,9 +172,12 @@ NPC_HIDE = {"guhdalf": ("wit_hoed", "wit_mantel", "wit_knop"), "araguh": ("aragu
 @lru_cache(maxsize=None)
 def sprite(spec, size=256):
     """spec: 'guh:<variant>' | 'npc:<kind>' (2.8 NPCs have their own model, the rest sit) | 'geo:<model>:<texture>' |
-    'wiki:<picture>' | 'item:<ns:id>'. Returns a cropped RGBA image."""
+    'wiki:<picture>' | 'item:<ns:id>' | 'silhouet:<any of those>' (guhpad: its black shape with a question mark).
+    Returns a cropped RGBA image."""
     kind, _, rest = spec.partition(":")
     img = None
+    if kind == "silhouet":
+        return silhouet(sprite(rest, size))
     if kind == "guh":
         tex = "guhs:entity/guh" if rest in ("", "normal") else f"guhs:entity/guh_{rest}"
         if rest == "rainbow":
@@ -198,6 +205,40 @@ def sprite(spec, size=256):
         raise ValueError(spec)
     box = img.getbbox()
     return img.crop(box) if box else img
+
+
+def silhouet(img):
+    """guhpad: the black shape of a render with a lilac edge of light and a question mark on it: somebody we do not know yet."""
+    alpha = img.getchannel("A").point(lambda v: 255 if v > 40 else 0)
+    out = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    rand = alpha.filter(ImageFilter.MaxFilter(max(3, (img.width // 60) * 2 + 1)))
+    out.paste((120, 96, 176, 255), (0, 0), rand)
+    out.paste((14, 10, 24, 255), (0, 0), alpha)
+    q = fancy_text("?", max(2, img.width // 26), (176, 144, 224), (14, 10, 24), shadow=False)
+    q = q.crop(q.getbbox())
+    out.alpha_composite(q, ((img.width - q.width) // 2, max(0, int(img.height * 0.42) - q.height // 2)))
+    return out
+
+
+def vraagteken(px=64):
+    """guhpad: the icon of a quest nobody knows anything about yet: a question mark on a dark tile."""
+    img = Image.new("RGBA", (px, px), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img, "RGBA")
+    light, main, dark = PALETTE["nacht"]
+    d.rounded_rectangle((3, 3, px - 4, px - 4), radius=px // 5, fill=main + (255,), outline=dark + (255,), width=max(2, px // 20))
+    d.rounded_rectangle((8, 8, px - 9, px // 2), radius=px // 8, fill=light + (70,))
+    q = fancy_text("?", max(2, px // 12), (204, 180, 240), dark, shadow=False)
+    q = q.crop(q.getbbox())
+    img.alpha_composite(q, ((px - q.width) // 2, (px - q.height) // 2))
+    return img
+
+
+def versiering(colour, i=0, scale=1.0):
+    """The little thing that floats around a picture: a heart, or (guhpad, the colour "nacht") a question mark."""
+    if colour != "nacht":
+        return heart(int((4 if i != 1 else 5) * scale))
+    q = fancy_text("?", max(2, int((3 if i != 1 else 4) * scale)), PALETTE["nacht"][0], PALETTE["nacht"][2], shadow=False)
+    return q.crop(q.getbbox())
 
 
 def fit(img, w, h):
@@ -240,12 +281,16 @@ def ribbon(draw, x0, y0, x1, y1, colours, tails=True, stitch=True):
         draw.line((x, y, x + step, y), fill=light + (200,), width=max(1, h // 40))
 
 
-def scatter(img, rng, n_knabbels, n_hearts, avoid, scale=1.0):
-    """Kaasknabbels and hearts around the edges (not on the rectangles in `avoid`)."""
+def scatter(img, rng, n_knabbels, n_hearts, avoid, scale=1.0, colour=None):
+    """Kaasknabbels and hearts around the edges (not on the rectangles in `avoid`); guhpad: question marks for "nacht"."""
     placed = list(avoid)
     for i in range(n_knabbels + n_hearts):
-        deco = knabbel(int(rng.choice((30, 36, 42)) * scale), rng.randint(-25, 25)) if i < n_knabbels else \
-            heart(int(rng.choice((3, 4, 5)) * scale))
+        if colour == "nacht":
+            deco = versiering(colour, rng.choice((0, 1)), scale)
+            deco.putalpha(deco.getchannel("A").point(lambda v, f=rng.choice((110, 160, 220)): v * f // 255))
+        else:
+            deco = knabbel(int(rng.choice((30, 36, 42)) * scale), rng.randint(-25, 25)) if i < n_knabbels else \
+                heart(int(rng.choice((3, 4, 5)) * scale))
         for _ in range(60):
             x, y = rng.randint(0, img.width - deco.width), rng.randint(0, img.height - deco.height)
             box = (x - 4, y - 4, x + deco.width + 4, y + deco.height + 4)
@@ -282,10 +327,10 @@ def title_banner(title, colour, left, right, seed):
         boxes.append((x, H - spr.height - 4, x + spr.width, H))
     # three little hearts floating over the ribbon's middle
     for i, dx in enumerate((-40, 0, 40)):
-        hrt = heart(4 if i != 1 else 5)
+        hrt = versiering(colour, i)
         img.alpha_composite(hrt, (W // 2 + dx - hrt.width // 2, ry0 - hrt.height - (8 if i == 1 else 0)))
         boxes.append((W // 2 + dx - 20, ry0 - 40, W // 2 + dx + 20, ry0))
-    scatter(img, rng, 6, 6, boxes)
+    scatter(img, rng, 6, 6, boxes, colour=colour)
     return img
 
 
@@ -311,10 +356,10 @@ def welcome_picture(specs, colour, seed, stage=None):
         img.alpha_composite(spr, (x, H - 56 - spr.height))
     rng = random.Random(seed)
     for _ in range(5):
-        hrt = heart(rng.choice((3, 4)))
+        hrt = versiering(colour, 0, rng.choice((0.8, 1.0)))
         img.alpha_composite(hrt, (rng.randint(40, W - 70), rng.randint(30, 80)))
     for x, y in ((34, 30), (W - 76, 30), (34, H - 80), (W - 76, H - 80)):
-        img.alpha_composite(knabbel(40, rng.randint(-20, 20)), (x, y))
+        img.alpha_composite(versiering(colour, 1, 1.4) if colour == "nacht" else knabbel(40, rng.randint(-20, 20)), (x, y))
     return img
 
 
@@ -346,8 +391,8 @@ def header(title, portrait, colour, sub=None):
     for t in lines:
         img.alpha_composite(t, (x0, y))
         y += t.height + gap
-    hrt = heart(4)
-    img.alpha_composite(hrt, (W - 64, H // 2 - hrt.height // 2))
+    hrt = versiering(colour, 0)
+    img.alpha_composite(hrt, (W - 64 + (10 if colour == "nacht" else 0), H // 2 - hrt.height // 2))
     return img
 
 
@@ -426,7 +471,8 @@ def make_art(jobs, force=False):
         new_stamp[rel] = key
         if not force and stamp.get(rel) == key and os.path.exists(path):
             continue
-        img = {"title": title_banner, "welcome": welcome_picture, "header": header, "icon": face, "slot": slot}[fn](*args)
+        img = {"title": title_banner, "welcome": welcome_picture, "header": header, "icon": face, "slot": slot,
+               "vraag": vraagteken}[fn](*args)   # (guhpad: "vraag", a question-mark quest icon)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         img.save(path, optimize=True)
         drawn += 1

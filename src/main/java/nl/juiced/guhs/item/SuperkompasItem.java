@@ -227,7 +227,7 @@ public class SuperkompasItem extends GuhCompassItem {
             return;
         }
         Component tekst;
-        nl.juiced.guhs.feature.verhaal.Doel d = doel ? nl.juiced.guhs.feature.verhaal.Doelen.van(p) : null;
+        nl.juiced.guhs.feature.verhaal.Doel d = doel ? nl.juiced.guhs.feature.verhaal.Doelen.kompas(p) : null;   // (guhpad: Doelen.kompas)
         if (!doel) {
             tekst = Component.translatable("item.guhs.guh_compass.none");
         } else if (d == null) {

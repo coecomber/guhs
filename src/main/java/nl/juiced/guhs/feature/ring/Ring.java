@@ -127,7 +127,8 @@ public final class Ring {
      * ({@code quest.guhs.ringh1.guhdalf.grillguh} is the text of today's only condition).
      */
     public static boolean magBeginnen(ServerPlayer p) {
-        return Grillguh.step(p) >= Grillguh.DONE;
+        // (guhpad: and every big story of the Guhmensie is finished; Guhdalf lists what is missing: Guhpad.guhdalfWeigert)
+        return Grillguh.step(p) >= Grillguh.DONE && nl.juiced.guhs.feature.guhpad.Guhpad.magKnabbelring(p);
     }
 
     /**
@@ -139,7 +140,9 @@ public final class Ring {
      * is added HERE.
      */
     public static boolean magDoorPortaal(ServerPlayer p) {
-        return p.isSpectator() || lijn(1).klaar(p);
+        // (guhpad: and every big story of the Guhmensie is finished, also for who had chapter 1 before; the same truth as
+        // Guhpad.magBarbecuether, whose own lock stands in front of this one and lists what is missing)
+        return p.isSpectator() || lijn(1).klaar(p) && nl.juiced.guhs.feature.guhpad.Guhpad.magKnabbelring(p);
     }
 
     /** Did this player start the story (talked to Guhdalf, or is somewhere in chapter 1 or later)? */

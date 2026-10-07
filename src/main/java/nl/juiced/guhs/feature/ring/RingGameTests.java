@@ -103,6 +103,9 @@ public final class RingGameTests {
         ServerLevel level = helper.getLevel();
         ServerPlayer nieuw = speler(helper, 2, 2), bezig = speler(helper, 3, 2), klaar = speler(helper, 4, 2), bouwer = speler(helper, 5, 2),
                 kijker = speler(helper, 6, 2);
+        for (ServerPlayer p : List.of(nieuw, bezig, klaar, bouwer, kijker)) {
+            nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(p);   // (guhpad: they followed the stories of the Guhmensie; that lock has its own tests)
+        }
         Verhaallijn h1 = Ring.lijn(1);
         helper.assertTrue(h1.stappen() == 6 && "ring_h1".equals(h1.id()), "the real chapter 1 (six steps) is the key of the lock");
         // (1) may start: only the Grillguh's quest opens it, and only Ring.magBeginnen says so

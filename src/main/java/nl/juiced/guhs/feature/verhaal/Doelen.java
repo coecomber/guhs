@@ -41,6 +41,19 @@ public final class Doelen {
 
     private static final Map<UUID, Gezocht> GEZOCHT = new ConcurrentHashMap<>();
 
+    /**
+     * guhpad: where "Mijn verhaal" points for a player whose followed questline has no goal (or who follows none); null:
+     * nowhere. Set by feature.guhpad.GuhpadFeature (the nearest story the player has not done yet).
+     */
+    public static volatile java.util.function.Function<ServerPlayer, Doel> anders = p -> null;
+
+    /** guhpad: what "Mijn verhaal" shows: the goal of the followed questline, else what {@link #anders} says. */
+    @Nullable
+    public static Doel kompas(ServerPlayer p) {
+        Doel d = van(p);
+        return d != null ? d : anders.apply(p);
+    }
+
     /** The goal of the line this player follows (null: none). */
     @Nullable
     public static Doel van(ServerPlayer p) {
@@ -91,7 +104,7 @@ public final class Doelen {
      */
     @Nullable
     public static BlockPos wijs(ServerPlayer p) {
-        Doel d = van(p);
+        Doel d = kompas(p);   // (guhpad: also without a followed questline)
         if (d == null) {
             return null;
         }

@@ -2,7 +2,7 @@
   default_hide_dependency_lines: false,
   default_quest_shape: "circle",
   filename: "guhs_verhalen",
-  group: "475548DB0F6F37EB",
+  group: "4755489B04766E01",
   guhs_chapter_version: 31,
   icon: {
     components: {
@@ -127,7 +127,7 @@
       ],
     },
   ],
-  order_index: 11,
+  order_index: 13,
   progression_mode: "flexible",
   quest_links: [
     {
@@ -140,7 +140,7 @@
   ],
   quests: [
     {
-      id: "47554866B1836808",
+      id: "475548976F9E59F7",
       icon: {
         components: {
           "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_verhalen.png",
@@ -149,13 +149,17 @@
       },
       tasks: [
         {
-          type: "checkmark",
-          id: "4755487A12DBD3D7",
+          type: "dimension",
+          dimension: "guhs:guhmension",
+          id: "4755487A079F405B",
+          icon: {
+            id: "guhs:block_of_kaasknabbels",
+          },
         },
       ],
       rewards: [
         {
-          id: "47554838AC453C99",
+          id: "475548F22D59387E",
           type: "item",
           item: {
             count: 1,

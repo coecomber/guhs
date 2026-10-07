@@ -49,6 +49,18 @@ public final class GidsVerhalenTab {
     static final int TEKST = 0xFF5A3A4A, DONKER = 0xFF3A1C30, ROZE = 0xFF7A2848, LICHT = 0xFFB0708A, GROEN = 0xFF3E9A5A,
             GRIJS = 0xFF9A8090;
 
+    /**
+     * guhpad: another layout of the LIST (set by a feature's client init; null: the plain list of {@link #lijstRegels}).
+     * It builds its rows from the public pieces of this tab ({@link #rij}, {@link #kaartRij}, {@link #doelSchakelaar},
+     * {@link #kop}, {@link #tekst}, {@link #losseHerbekijk}) and asks for a redraw with {@link #verbouw}.
+     */
+    public interface Indeling {
+        List<GidsLijst.Regel> lijst(GidsVerhalenTab tab, List<VerhaalStand> alle);
+    }
+
+    @Nullable
+    public static volatile Indeling indeling;
+
     private final GidsLijst lijst = new GidsLijst();
     private Runnable herbouw = () -> {
     };
@@ -113,8 +125,55 @@ public final class GidsVerhalenTab {
         bewaarScroll();
     }
 
-    int rijBreedte() {
+    public int rijBreedte() {
         return lijst.rijBreedte();
+    }
+
+    /** guhpad: builds the list again where it is scrolled to (a layout folded something open or shut). */
+    public void verbouw() {
+        if (open == null) {
+            lijstScroll = lijst.scroll();
+        }
+        herbouw.run();
+    }
+
+    /** guhpad: scrolls the list so that the first row that fits (of the rows that show now) is at the top. */
+    public void scrollNaarRegel(java.util.function.Predicate<GidsLijst.Regel> welke) {
+        int y = 0;
+        for (GidsLijst.Regel r : lijst.regels()) {
+            if (welke.test(r)) {
+                lijst.scrollNaar(y);
+                bewaarScroll();
+                return;
+            }
+            y += r.hoogte();
+        }
+    }
+
+    /** guhpad: a questline's row of the list ("???" while it is still a secret). */
+    public GidsLijst.Regel rij(VerhaalStand v) {
+        return geheim(v.id()) ? new Geheim() : new Rij(v);
+    }
+
+    /** guhpad: the row that opens a group's travel map. */
+    public GidsLijst.Regel kaartRij(Reiskaart k) {
+        return new KaartRij(k);
+    }
+
+    /** guhpad: the switch of the objective line (the first row of the list). */
+    public GidsLijst.Regel doelSchakelaar() {
+        return new DoelSchakelaar();
+    }
+
+    /** guhpad: the heading and the rows of the seen scenes and cards that belong to no questline (empty: none). */
+    public List<GidsLijst.Regel> losseHerbekijk() {
+        List<GidsLijst.Regel> out = new ArrayList<>();
+        List<GidsLijst.Regel> los = herbekijkRegels(null);
+        if (!los.isEmpty()) {
+            out.add(kop(Component.translatable("gui.guhs.verhalen.kop.herbekijk")));
+            out.addAll(los);
+        }
+        return out;
     }
 
     /** Opens another page of the tab (a questline, or a map). */
@@ -191,7 +250,7 @@ public final class GidsVerhalenTab {
     // =====================================================================================================================
 
     /** The heading a questline stands under: its group (a registered line), else "nieuw" (the Guhverhalen) or "oud". */
-    static String groepVan(String id) {
+    public static String groepVan(String id) {
         Verhaallijn l = Verhaallijnen.van(id);
         return l != null ? l.groep() : VerhalenVoortgang.NIEUW.contains(id) ? "nieuw" : "oud";
     }
@@ -206,6 +265,10 @@ public final class GidsVerhalenTab {
     private List<GidsLijst.Regel> lijstRegels() {
         List<GidsLijst.Regel> out = new ArrayList<>();
         List<VerhaalStand> alle = VerhalenCache.verhalen();
+        Indeling eigen = indeling;
+        if (eigen != null && !alle.isEmpty()) {
+            return eigen.lijst(this, alle);   // (guhpad: the path map on top, the stories folded per world)
+        }
         if (!alle.isEmpty()) {
             out.add(new DoelSchakelaar());
         }
@@ -231,7 +294,7 @@ public final class GidsVerhalenTab {
         return out;
     }
 
-    static GidsLijst.Regel kop(Component tekst) {
+    public static GidsLijst.Regel kop(Component tekst) {
         return new GidsLijst.Regel() {
             @Override
             public int hoogte() {
@@ -475,7 +538,7 @@ public final class GidsVerhalenTab {
     }
 
     /** Wrapped text at a scale, indented. */
-    GidsLijst.Regel tekst(Component c, float scale, int kleur, int in) {
+    public GidsLijst.Regel tekst(Component c, float scale, int kleur, int in) {
         return new GidsLijst.Regel() {
             @Override
             public int hoogte() {

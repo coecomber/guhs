@@ -1,15 +1,19 @@
 {
-  "chapter.475548FB06F5DC45.title": "&dGuh Tales",
+  "chapter_group.4755489B04766E01.title": "&6Het Guhpad",
+  "chapter.475548FB06F5DC45.title": "&dVerhalen van de Guhmensie",
   "chapter.475548FB06F5DC45.chapter_subtitle": [
-    "12. Baltoguh, Guhtwo, 626-guh, the Snuggleheart and the Carpenter Guh. Nyeg!",
+    "1. De grote verhalen van de roze wereld. Hier begint het Guhpad, njeg!",
   ],
-  "quest.47554866B1836808.title": "How Do You Get Here?",
-  "quest.47554866B1836808.quest_desc": [
-    "This chapter comes after &6The Super Compass&r in &dThe Guhmension&r: pick the new &dTales&r tab there.",
+  "task.4755487A079F405B.title": "Stap door je guhportaal de Guhmensie in",
+  "quest.475548976F9E59F7.title": "Het Guhpad begint hier",
+  "quest.475548976F9E59F7.quest_desc": [
+    "Dit is het begin van &6het Guhpad&r: de grote verhalen openen de werelden. Eerst de &dGuhmensie&r, dan de &6Guhbarbecuether&r, dan het &5Guheinde&r. &dDit hoofdstuk zit niet op slot&r: stap door je guhportaal en je bent er.",
     "",
-    "That's where you'll find the places of the great guh tales: &fNomguh&r in the white Snowguh Tundra (Baltoguh!), &5Clone Island&r in the Deep Guh Sea (Guhtwo!), the &dCloud Chapel&r high up in the clouds, and the islands of &bGuhwai'i&r (626-guh!). And in every Snuggledale town the &6Carpenter Guh&r is building a house.",
+    "Kies in je &6superkompas&r de keuze &dMijn verhaal&r: het wijst naar het dichtstbijzijnde verhaal dat je nog niet hebt gedaan. De plekken zelf staan in de tab &dVerhalen&r.",
     "",
-    "Every tale ends with a new friend: a story guh you can tame once (per player). Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
+    "De grote verhalen van de Guhmensie: &fNomguh&r in de witte Sneeuwguhtoendra (Baltoguh!), het &5kloon-eiland&r in de Diepe Guhzee (Guhtwo!), het &dHemelkapelletje&r hoog in de wolken en de eilandjes van &bGuhwai'i&r (626-guh!).",
+    "",
+    "Heb je ze allemaal gevolgd? Dan wacht &dGuhdalf&r op je met de Knabbelring en gaat het volgende hoofdstuk open. De &6Timmerguh&r, het surfen en de andere rijtjes hier tellen daar niet voor mee: die zijn er voor de gezelligheid. Hier kun je alles in elke volgorde doen.",
   ],
   "quest.475548743CAEF30F.title": "Once Upon a Guh...",
   "quest.475548743CAEF30F.quest_desc": [

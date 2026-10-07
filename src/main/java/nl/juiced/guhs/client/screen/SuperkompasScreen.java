@@ -29,7 +29,9 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * inventory; the name on hover), under it the chosen category's name and what it's about, and a scrolling list of its
  * places in two columns, with subheadings where a category has them (Minigames: Klassiekers, Knuffeldal, De Grote
  * Guhspelen). A minigame place shows its game's icon; every place shows a green tick once you've been there (1.3.1). Click a place: that's what
- * the compass looks for.
+ * the compass looks for. The first option of every tab is "Mijn verhaal" (guhpad: a normal option next to the places, with
+ * its explanation on hover): the compass then points to the next goal of the questline you follow, or else to the nearest
+ * story you have not done yet.
  */
 public class SuperkompasScreen extends Screen {
     private static final int W = 300, H = 232;
@@ -96,10 +98,19 @@ public class SuperkompasScreen extends Screen {
     private List<GidsLijst.Regel> regels() {
         List<GidsLijst.Regel> out = new ArrayList<>();
         SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
-        out.add(new MijnVerhaal());   // (bbq2: the first entry of every tab)
+        // guhpad: "Mijn verhaal" is a normal option, the first one next to the places of every tab (a tab that starts with
+        // a subheading gets it on a row of its own above that heading)
+        boolean mijnVerhaal = c.kopjes().isEmpty() || c.kopjes().get(0).id() != null;
+        if (mijnVerhaal) {
+            out.add(new Paar(SuperkompasItem.DOEL, null));
+        }
         for (SuperkompasItem.Kopje k : c.kopjes()) {
             // (bbq2: what Guhdalfs sluier still hides for this player is not listed)
-            List<String> s = k.structures().stream().filter(id -> !nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.verborgen(id)).toList();
+            List<String> s = new ArrayList<>(k.structures().stream().filter(id -> !nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.verborgen(id)).toList());
+            if (!mijnVerhaal) {
+                s.add(0, SuperkompasItem.DOEL);
+                mijnVerhaal = true;
+            }
             if (s.isEmpty()) {
                 continue;
             }
@@ -221,56 +232,16 @@ public class SuperkompasScreen extends Screen {
         }
     }
 
-    /**
-     * bbq2: "Mijn verhaal": the compass follows your story by itself (SuperkompasItem.DOEL): one wide button, with the
-     * questline you follow next to its name.
-     */
-    private final class MijnVerhaal implements GidsLijst.Regel {
-        @Override
-        public int hoogte() {
-            return KNOP_H + 5;
-        }
+    /** guhpad: is this option "Mijn verhaal" (SuperkompasItem.DOEL: no place, the compass follows your story by itself)? */
+    private static boolean isMijnVerhaal(String id) {
+        return SuperkompasItem.DOEL.equals(id);
+    }
 
-        private Component doel() {
-            String volg = nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.volg();
-            return volg.isEmpty() ? Component.translatable("gui.guhs.verhaal.kompas.geen")
-                    : Component.translatable("gui.guhs.verhalen." + volg + ".naam");
-        }
-
-        @Override
-        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
-            boolean gekozen = SuperkompasItem.DOEL.equals(chosen);
-            boolean on = hover && my >= y + 1 && my < y + 1 + KNOP_H;
-            g.fill(x, y + 1, x + w, y + 1 + KNOP_H, gekozen || on ? GOUD : 0xFF9A7A4A);
-            g.fill(x + 1, y + 2, x + w - 1, y + KNOP_H, on ? 0xFF6A4E34 : gekozen ? 0xFF5A3A2A : 0xFF4A3426);
-            g.fill(x + 1, y + 2, x + w - 1, y + 3, 0x20FFFFFF);
-            g.item(new ItemStack(net.minecraft.world.item.Items.WRITABLE_BOOK), x + 3, y + 3);
-            Component label = Component.translatable("structure.guhs." + SuperkompasItem.DOEL);
-            if (gekozen) {
-                label = Component.literal("\u25B6 ").append(label);
-            }
-            int lw = GidsTekst.passend(g, label.copy().withStyle(ChatFormatting.BOLD), x + 23, y + 7, w / 2 - 26, 1f, gekozen ? GOUD : LICHT, false);
-            GidsTekst.passend(g, doel(), x + 23 + lw + 8, y + 8, w - 23 - lw - 14, 0.75f, ZACHT, false);
-        }
-
-        @Override
-        public boolean klik(double mx, double my, int x, int y, int w) {
-            if (my >= y + 1 && my < y + 1 + KNOP_H) {
-                kies(SuperkompasItem.DOEL);
-                return true;
-            }
-            return false;
-        }
-
-        @Nullable
-        @Override
-        public List<Component> tip(double mx, double my, int x, int y, int w) {
-            List<Component> out = new ArrayList<>();
-            out.add(Component.translatable("structure.guhs." + SuperkompasItem.DOEL).withStyle(ChatFormatting.BOLD));
-            out.add(Component.translatable("structure.guhs." + SuperkompasItem.DOEL + ".tooltip").withStyle(ChatFormatting.GRAY));
-            out.add(doel().copy().withStyle(ChatFormatting.GOLD));
-            return out;
-        }
+    /** guhpad: the questline "Mijn verhaal" follows now (null: none, it looks for the nearest story you have not done). */
+    @Nullable
+    private static Component gevolgd() {
+        String volg = nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.volg();
+        return volg.isEmpty() ? null : Component.translatable("gui.guhs.verhalen." + volg + ".naam");
     }
 
     /** Two places side by side (the right one may be missing). */
@@ -330,18 +301,19 @@ public class SuperkompasScreen extends Screen {
             g.fill(x, y, x + w, y + KNOP_H, rand);
             g.fill(x + 1, y + 1, x + w - 1, y + KNOP_H - 1, on ? 0xFF6A3E54 : gekozen ? 0xFF5A3A2A : 0xFF462838);
             g.fill(x + 1, y + 1, x + w - 1, y + 2, 0x20FFFFFF);
-            SpelGroepen.Groep groep = GidsData.groepVanStructuur(id);
+            boolean verhaal = isMijnVerhaal(id);
+            SpelGroepen.Groep groep = verhaal ? null : GidsData.groepVanStructuur(id);
             int tx = x + 5;
-            if (groep != null) {
+            if (groep != null || verhaal) {
                 g.pose().pushMatrix();
                 g.pose().translate(x + 3, y + 3);
                 g.pose().scale(0.875f, 0.875f);
-                g.item(groep.icoon().get(), 0, 0);
+                g.item(verhaal ? new ItemStack(net.minecraft.world.item.Items.WRITABLE_BOOK) : groep.icoon().get(), 0, 0);
                 g.pose().popMatrix();
                 tx = x + 20;
             }
             int rechtsRuimte = 4;
-            if (isBezocht(id, groep)) {
+            if (!verhaal && isBezocht(id, groep)) {
                 GidsTekst.schaal(g, Component.literal("✔"), x + w - 4, y + 6, 1f, 0xFF68D88A, true);
                 rechtsRuimte = 14;
             }
@@ -371,6 +343,17 @@ public class SuperkompasScreen extends Screen {
             }
             List<Component> out = new ArrayList<>();
             out.add(Component.translatable("structure.guhs." + id).withStyle(ChatFormatting.BOLD));
+            if (isMijnVerhaal(id)) {
+                // guhpad: the short explanation, and what it follows now
+                out.add(Component.translatable("gui.guhs.guhpad.kompas.uitleg").withStyle(ChatFormatting.GRAY));
+                Component volg = gevolgd();
+                out.add(volg == null ? Component.translatable("gui.guhs.guhpad.kompas.dichtstbij").withStyle(ChatFormatting.GOLD)
+                        : Component.translatable("gui.guhs.guhpad.kompas.volgt", volg).withStyle(ChatFormatting.GOLD));
+                if (id.equals(chosen)) {
+                    out.add(Component.translatable("gui.guhs.superkompas.zoekt_al").withStyle(ChatFormatting.GOLD));
+                }
+                return out;
+            }
             out.add(Component.translatable("structure.guhs." + id + ".tooltip").withStyle(ChatFormatting.GRAY));
             SpelGroepen.Groep groep = GidsData.groepVanStructuur(id);
             // (1.3.1) every place tells whether you have been there, not only the minigame buildings

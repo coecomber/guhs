@@ -1,15 +1,19 @@
 {
-  "chapter.475548FB06F5DC45.title": "&dGuhverhalen",
+  "chapter_group.4755489B04766E01.title": "&6Het Guhpad",
+  "chapter.475548FB06F5DC45.title": "&dVerhalen van de Guhmensie",
   "chapter.475548FB06F5DC45.chapter_subtitle": [
-    "12. Baltoguh, Guhtwo, 626-guh, het Knuffelhart en de Timmerguh. Njeg!",
+    "1. De grote verhalen van de roze wereld. Hier begint het Guhpad, njeg!",
   ],
-  "quest.47554866B1836808.title": "Hoe kom je hier?",
-  "quest.47554866B1836808.quest_desc": [
-    "Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar de nieuwe tab &dVerhalen&r.",
+  "task.4755487A079F405B.title": "Stap door je guhportaal de Guhmensie in",
+  "quest.475548976F9E59F7.title": "Het Guhpad begint hier",
+  "quest.475548976F9E59F7.quest_desc": [
+    "Dit is het begin van &6het Guhpad&r: de grote verhalen openen de werelden. Eerst de &dGuhmensie&r, dan de &6Guhbarbecuether&r, dan het &5Guheinde&r. &dDit hoofdstuk zit niet op slot&r: stap door je guhportaal en je bent er.",
     "",
-    "Daar vind je de plekken van de grote guhverhalen: &fNomguh&r in de witte Sneeuwguhtoendra (Baltoguh!), het &5kloon-eiland&r in de Diepe Guhzee (Guhtwo!), het &dHemelkapelletje&r hoog in de wolken, en de eilandjes van &bGuhwai'i&r (626-guh!). En in elk Knuffeldal-stadje bouwt de &6Timmerguh&r een huisje.",
+    "Kies in je &6superkompas&r de keuze &dMijn verhaal&r: het wijst naar het dichtstbijzijnde verhaal dat je nog niet hebt gedaan. De plekken zelf staan in de tab &dVerhalen&r.",
     "",
-    "Elk verhaal eindigt met een nieuwe vriend: een verhaalguh die je (per speler) één keer mag temmen. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
+    "De grote verhalen van de Guhmensie: &fNomguh&r in de witte Sneeuwguhtoendra (Baltoguh!), het &5kloon-eiland&r in de Diepe Guhzee (Guhtwo!), het &dHemelkapelletje&r hoog in de wolken en de eilandjes van &bGuhwai'i&r (626-guh!).",
+    "",
+    "Heb je ze allemaal gevolgd? Dan wacht &dGuhdalf&r op je met de Knabbelring en gaat het volgende hoofdstuk open. De &6Timmerguh&r, het surfen en de andere rijtjes hier tellen daar niet voor mee: die zijn er voor de gezelligheid. Hier kun je alles in elke volgorde doen.",
   ],
   "quest.475548743CAEF30F.title": "Er was eens...",
   "quest.475548743CAEF30F.quest_desc": [

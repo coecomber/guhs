@@ -133,6 +133,8 @@ public final class RingKetenGameTests {
         BlockPos portaal = helper.absolutePos(new BlockPos(20, 3, 20)), thuis = helper.absolutePos(new BlockPos(6, 3, 18));
         Thuis.testLevel = level;
         ServerPlayer eerste = speler(helper, 12, 10), tweede = speler(helper, 13, 10);
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(eerste);   // (guhpad: both followed the stories of the Guhmensie; that lock has its own tests)
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(tweede);
         ServerPlayer[] aanDeBeurt = {eerste};
         int[] fase = {0}, wacht = {0, 0}, klok = {0};
         helper.onEachTick(() -> {

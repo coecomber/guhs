@@ -114,6 +114,8 @@ public final class RingH1GameTests {
         Verhaallijn l = RingH1Feature.LIJN;
         helper.assertTrue(l == Ring.lijn(1) && l.stappen() == 6, "chapter 1 has six steps");
         ServerPlayer p = speler(helper, 20, 20), ander = speler(helper, 21, 21);
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(p);   // (guhpad: both followed the stories of the Guhmensie; that lock has its own tests)
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(ander);
         BlockPos hoek = helper.absolutePos(new BlockPos(14, 2, 4));
         helper.assertTrue(RingH1Events.zetKamp(level, hoek, Rotation.CLOCKWISE_90), "the camp template exists");
         Gouw.Plek kamp = new Gouw.Plek(hoek, Rotation.CLOCKWISE_90);
