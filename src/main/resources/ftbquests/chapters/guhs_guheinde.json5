@@ -80,8 +80,8 @@
     },
     {
       height: 1.5625,
-      id: "4755489B1CA6ACF4",
-      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_zwevers.png",
+      id: "475548E38EB7A3F8",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_biomes.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -92,8 +92,8 @@
     },
     {
       height: 1.5625,
-      id: "4755481808E30B35",
-      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_vesting.png",
+      id: "4755481A2A05AFF2",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_zij1.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -794,152 +794,216 @@
       y: 18.450000000000003,
     },
     {
-      id: "47554853F4D5793F",
+      id: "47554853B36716B7",
       icon: {
-        id: "guhs:kruimelkwal_spawn_egg",
+        id: "minecraft:filled_map",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/seen_kruimelkwal",
-          id: "475548D66AF3CF19",
-          criterion: "",
+          type: "biome",
+          biome: "guhs:gatenkaasheuvels",
+          id: "4755480617833E07",
         },
       ],
       rewards: [
         {
-          id: "475548D2AE80AC5E",
+          id: "47554829A2BABC74",
           type: "item",
           item: {
             count: 1,
-            id: "minecraft:glass_bottle",
+            id: "guhs:kaas_knabbels",
           },
-          count: 3,
-        },
-        {
-          id: "475548B5ED139EB0",
-          type: "xp",
-          xp: 50,
+          count: 6,
         },
       ],
       x: 0.0,
       y: 22.4125,
-      shape: "gear",
+      shape: "circle",
     },
     {
-      id: "4755487E247ECC2E",
+      id: "47554805D50DEDAC",
       icon: {
-        id: "guhs:kruimelkwal_pot",
+        id: "minecraft:filled_map",
       },
       tasks: [
         {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kruimelkwal_pot",
-          },
-          id: "475548E0FA880EC2",
+          type: "biome",
+          biome: "guhs:korstwoestijn",
+          id: "47554873258ADA1F",
         },
       ],
       rewards: [
         {
-          id: "475548764697BCF8",
+          id: "4755486F3099B3C6",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 8,
-        },
-        {
-          id: "475548D05C0405DF",
-          type: "xp",
-          xp: 100,
+          count: 6,
         },
       ],
       x: 1.5,
       y: 22.4125,
+      shape: "circle",
     },
     {
-      id: "475548A9F00BDC3A",
+      id: "4755487D3AA3ECF4",
       icon: {
-        id: "guhs:vleermuis_lemurguh_spawn_egg",
+        id: "minecraft:filled_map",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/seen_vleermuis_lemurguh",
-          id: "4755484D5855D21F",
-          criterion: "",
+          type: "biome",
+          biome: "guhs:kruimelwolken",
+          id: "475548600C04352C",
         },
       ],
       rewards: [
         {
-          id: "475548F5AB4DB856",
+          id: "475548D1A27A2A04",
           type: "item",
           item: {
             count: 1,
-            id: "minecraft:apple",
+            id: "guhs:kaas_knabbels",
           },
-          count: 4,
-        },
-        {
-          id: "47554838EC44465A",
-          type: "xp",
-          xp: 50,
+          count: 10,
         },
       ],
       x: 3.0,
       y: 22.4125,
+      shape: "circle",
     },
     {
-      id: "4755484B866D6CF8",
+      id: "475548260E8335EA",
       icon: {
-        id: "guhs:otter_pinguinguh_spawn_egg",
+        id: "minecraft:filled_map",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/seen_otter_pinguinguh",
-          id: "4755487A3733A30C",
-          criterion: "",
+          type: "biome",
+          biome: "guhs:schimmelkaasvlakte",
+          id: "47554805DA08936E",
         },
       ],
       rewards: [
         {
-          id: "4755480318BCEE47",
+          id: "475548B05098F9D4",
           type: "item",
           item: {
             count: 1,
-            id: "minecraft:cod",
+            id: "guhs:kaas_knabbels",
           },
-          count: 4,
-        },
-        {
-          id: "475548128543D606",
-          type: "xp",
-          xp: 50,
+          count: 10,
         },
       ],
       x: 4.5,
       y: 22.4125,
+      shape: "circle",
     },
     {
-      id: "475548360D83FBB8",
+      id: "4755489AAB3712B8",
       icon: {
-        id: "guhs:das_molguh_spawn_egg",
+        id: "minecraft:filled_map",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/seen_das_molguh",
-          id: "475548085F512F5F",
-          criterion: "",
+          type: "biome",
+          biome: "guhs:kristalkaasklippen",
+          id: "475548841570E71C",
         },
       ],
       rewards: [
         {
-          id: "475548DD2030EADA",
+          id: "475548F9261CCB19",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "4755481479785AC4",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:knabbelkoorbos",
+          id: "47554833FE4B6B97",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A32273EE09",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "475548D46E709FAB",
+      icon: {
+        id: "guhs:kristalkaas",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kristalkaas",
+          },
+          count: 3,
+          id: "475548FD877345F6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FD7BC46B5C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 9.0,
+      y: 22.4125,
+      shape: "diamond",
+    },
+    {
+      id: "475548D6CC0341A8",
+      icon: {
+        id: "guhs:knabbelkoorvrucht",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorvrucht",
+          },
+          id: "47554832126B455A",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548367E97A94A",
           type: "item",
           item: {
             count: 1,
@@ -947,62 +1011,95 @@
           },
           count: 8,
         },
-        {
-          id: "475548537C0E283D",
-          type: "xp",
-          xp: 50,
-        },
       ],
-      x: 6.0,
-      y: 22.4125,
+      x: 9.0,
+      y: 23.9125,
     },
     {
-      id: "47554827FF086DFC",
+      id: "475548F9822BE5AD",
       icon: {
-        id: "guhs:schildpad_eendguh_spawn_egg",
+        id: "guhs:gepofte_knabbelkoorvrucht",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/seen_schildpad_eendguh",
-          id: "47554896F97AFFB9",
-          criterion: "",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gepofte_knabbelkoorvrucht",
+          },
+          count: 4,
+          id: "47554812DD7A802E",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorblok",
+          },
+          count: 4,
+          id: "4755487E420EA820",
         },
       ],
       rewards: [
         {
-          id: "4755487279C3D22B",
+          id: "47554868152935E0",
           type: "item",
           item: {
             count: 1,
-            id: "minecraft:bread",
+            id: "guhs:kaas_knabbels",
           },
-          count: 4,
-        },
-        {
-          id: "475548B95BCDA21C",
-          type: "xp",
-          xp: 50,
+          count: 8,
         },
       ],
       x: 7.5,
-      y: 22.4125,
+      y: 23.9125,
     },
     {
-      id: "4755485707A6ACE1",
+      id: "4755481C21C11078",
       icon: {
-        id: "guhs:mika_steen_pilaar",
+        id: "guhs:lichtstaafje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:lichtstaafje",
+          },
+          count: 4,
+          id: "475548F1CDEA4C0D",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554860C77EC6A8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 23.9125,
+      shape: "rsquare",
+    },
+    {
+      id: "4755487D45B59819",
+      icon: {
+        id: "guhs:einde2_bouw_zij1_postgoot",
       },
       tasks: [
         {
           type: "structure",
-          structure: "guhs:mika_vesting",
-          id: "47554862216531C6",
+          structure: "guhs:omashguh",
+          id: "4755489036AD4BB2",
         },
       ],
       rewards: [
         {
-          id: "475548AE9A1FFD73",
+          id: "4755488517EC65BE",
           type: "item",
           item: {
             count: 1,
@@ -1016,59 +1113,58 @@
       shape: "octagon",
     },
     {
-      id: "475548E68B036FA5",
+      id: "475548CDE98316BF",
       icon: {
-        id: "guhs:kaas_knabbels",
+        id: "guhs:kruimelwolk",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/einde2_vesting_bevrijd",
-          id: "475548AA3A20B61B",
-          criterion: "",
+          type: "structure",
+          structure: "guhs:westelijke_luchttempel",
+          id: "4755480469E6C6DE",
         },
       ],
       rewards: [
         {
-          id: "475548AB5998D2D8",
+          id: "475548B0D17C9891",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 10,
+          count: 12,
         },
       ],
       x: 1.5,
       y: 27.875,
+      shape: "octagon",
     },
     {
-      id: "475548EAE15A258B",
+      id: "47554838803BAAC0",
       icon: {
-        id: "guhs:gefrituurde_kaasknabbels",
+        id: "guhs:lichtstaafje",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/einde2_vesting_bevrijder",
-          id: "475548DF27C313A7",
-          criterion: "",
+          type: "structure",
+          structure: "guhs:vuurtempel_roku",
+          id: "47554865DCD35601",
         },
       ],
       rewards: [
         {
-          id: "4755480F602E01F6",
+          id: "475548858546543B",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 24,
+          count: 12,
         },
       ],
       x: 3.0,
       y: 27.875,
-      shape: "diamond",
+      shape: "octagon",
     },
   ],
 }

@@ -2,37 +2,220 @@
   "structuur": "vuurtempel_roku",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    128,
+    84,
+    112
   ],
   "anker": [
-    8,
+    72,
     0,
-    8
+    56
   ],
   "plekken": {
+    "vuurwijze_1": {
+      "soort": "npc",
+      "pos": [
+        61,
+        21,
+        40
+      ],
+      "yaw": 0.0,
+      "wie": "een Vuurwijze, links van de deur",
+      "kind": "VUURWIJZE_MIKA"
+    },
+    "vuurwijze_2": {
+      "soort": "npc",
+      "pos": [
+        67,
+        21,
+        40
+      ],
+      "yaw": 0.0,
+      "wie": "een Vuurwijze, rechts van de deur",
+      "kind": "VUURWIJZE_MIKA"
+    },
+    "shyu": {
+      "soort": "npc",
+      "pos": [
+        67,
+        21,
+        11
+      ],
+      "yaw": 90.0,
+      "wie": "de vriendelijke Vuurwijze, bij het luik achter het altaar",
+      "kind": "VUURWIJZE_SHYU"
+    },
+    "vuurwijze_3": {
+      "soort": "npc",
+      "pos": [
+        66,
+        30,
+        29
+      ],
+      "yaw": 0.0,
+      "wie": "een Vuurwijze tussen de boekenkasten",
+      "kind": "VUURWIJZE_MIKA"
+    },
+    "vuurwijze_4": {
+      "soort": "npc",
+      "pos": [
+        60,
+        39,
+        32
+      ],
+      "yaw": 0.0,
+      "wie": "een Vuurwijze die doet alsof hij mediteert",
+      "kind": "VUURWIJZE_MIKA"
+    },
+    "vuurdeur_1": {
+      "soort": "prop",
+      "pos": [
+        56,
+        58,
+        27
+      ],
+      "wie": "vuurdeur 1: het middelste blok is het slot"
+    },
+    "vuurdeur_2": {
+      "soort": "prop",
+      "pos": [
+        60,
+        58,
+        27
+      ],
+      "wie": "vuurdeur 2: het middelste blok is het slot"
+    },
+    "vuurdeur_3": {
+      "soort": "prop",
+      "pos": [
+        64,
+        58,
+        27
+      ],
+      "wie": "vuurdeur 3: het middelste blok is het slot"
+    },
+    "vuurdeur_4": {
+      "soort": "prop",
+      "pos": [
+        68,
+        58,
+        27
+      ],
+      "wie": "vuurdeur 4: het middelste blok is het slot"
+    },
+    "vuurdeur_5": {
+      "soort": "prop",
+      "pos": [
+        72,
+        58,
+        27
+      ],
+      "wie": "vuurdeur 5: het middelste blok is het slot"
+    },
+    "vuurwijze_5": {
+      "soort": "npc",
+      "pos": [
+        66,
+        57,
+        31
+      ],
+      "yaw": 180.0,
+      "wie": "de oudste Vuurwijze, op wacht voor de vuurdeuren",
+      "kind": "VUURWIJZE_MIKA"
+    },
+    "roku_beeld": {
+      "soort": "prop",
+      "pos": [
+        64,
+        57,
+        18
+      ],
+      "wie": "het beeld van Guhvatar Roku-guh (de voet)"
+    },
+    "roku": {
+      "soort": "npc",
+      "pos": [
+        64,
+        57,
+        22
+      ],
+      "yaw": 0.0,
+      "wie": "Guhvatar Roku-guh verschijnt hier, voor zijn beeld",
+      "kind": "ROKU_GUH"
+    },
+    "zonnestraal": {
+      "soort": "prop",
+      "pos": [
+        75,
+        61,
+        17
+      ],
+      "wie": "het venster waar bij zonnewende de straal door valt, recht op de ogen van het beeld"
+    },
+    "heiligdom": {
+      "soort": "zone",
+      "pos": [
+        54,
+        57,
+        16
+      ],
+      "tot": [
+        74,
+        64,
+        26
+      ],
+      "wie": "het heiligdom achter de vijf vuurdeuren (dicht)"
+    },
+    "eendguh_1": {
+      "soort": "wezen",
+      "pos": [
+        87,
+        21,
+        38
+      ],
+      "yaw": -90.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "eendguh_2": {
+      "soort": "wezen",
+      "pos": [
+        96,
+        21,
+        42
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        21,
+        21,
+        59
       ],
       "tot": [
-        4,
-        3,
-        4
+        31,
+        26,
+        69
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "de landingsplek op de westelijke hoorn"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        26,
+        21,
+        64
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        64,
+        42,
+        142
+      ],
+      "wie": "van hier zie je de halve maan met de toren in het midden"
     }
   }
 }

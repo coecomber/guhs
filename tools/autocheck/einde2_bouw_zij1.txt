@@ -1,0 +1,128 @@
+# einde2, slice bouw_zij1, in a real generated world: Omashguh, the Westelijke Luchttempel and the Vuurtempel van Roku-guh,
+# each from its uitzicht spot (the whole island), at its landing place and at the spots that matter (the chutes, the
+# hanging hall and a wind flute, the five fire doors). /guhs einde2 plek teleports to a marker of the guaranteed copy.
+# (The Guheinde has no skylight, so no time of day. A /tp with a new pitch right after a teleport may not turn the head:
+# every look comes after a wait.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_zij1.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+
+section Omashguh: the whole mountain from the south
+/guhs einde2 plek omashguh uitzicht
+wait 40
+look 195 12
+waitrender 400
+hier
+shot e2_omashguh_uitzicht
+
+section Omashguh: the gate from the landing place
+/guhs einde2 plek omashguh aankomst_speler
+wait 40
+look 180 -15
+waitrender 300
+shot e2_omashguh_poort
+
+section Omashguh: the platform where the three chutes start
+/guhs einde2 plek omashguh glijbaan_start
+wait 40
+look 0 25
+waitrender 300
+shot e2_omashguh_glijbaan_start
+
+section Omashguh: the post square, the kurkentrekker and the post office
+/guhs einde2 plek omashguh glijbaan_finish
+wait 40
+look 0 -30
+waitrender 300
+shot e2_omashguh_kurkentrekker
+look 180 -5
+wait 40
+shot e2_omashguh_postkantoor
+
+section Omashguh: the throne hall and a trial room
+/guhs einde2 plek omashguh bumi
+wait 40
+look 0 0
+waitrender 200
+shot e2_omashguh_troonzaal
+/guhs einde2 plek omashguh proef_1_start
+wait 40
+look 180 -10
+waitrender 200
+shot e2_omashguh_proef_1
+
+section Westelijke Luchttempel: the temple hanging under its island
+/guhs einde2 plek westelijke_luchttempel uitzicht
+wait 40
+look -100 -20
+waitrender 400
+hier
+shot e2_luchttempel_uitzicht
+
+section Westelijke Luchttempel: on top (the pavilion over the cellar stairs, the fountain)
+/guhs einde2 plek westelijke_luchttempel aankomst_speler
+wait 40
+look 180 0
+waitrender 300
+shot e2_luchttempel_bovenop
+
+section Westelijke Luchttempel: the hanging hall, a wind flute, the stable
+/guhs einde2 plek westelijke_luchttempel luchtnon
+wait 40
+look 150 -5
+waitrender 300
+shot e2_luchttempel_hal
+/guhs einde2 plek westelijke_luchttempel windfluit_2
+wait 40
+look -90 10
+waitrender 300
+shot e2_luchttempel_windfluit
+/guhs einde2 plek westelijke_luchttempel bizon_3
+wait 40
+look 180 0
+waitrender 300
+shot e2_luchttempel_bizonstal
+/guhs einde2 plek westelijke_luchttempel windfluit_5
+wait 40
+look 90 40
+waitrender 300
+shot e2_luchttempel_orgelpijp
+
+section Vuurtempel van Roku-guh: the crescent from the south
+/guhs einde2 plek vuurtempel_roku uitzicht
+wait 40
+look 180 15
+waitrender 400
+hier
+shot e2_vuurtempel_uitzicht
+
+section Vuurtempel van Roku-guh: the landing place, the path and the tower
+/guhs einde2 plek vuurtempel_roku aankomst_speler
+wait 40
+look -130 -20
+waitrender 300
+shot e2_vuurtempel_aankomst
+
+section Vuurtempel van Roku-guh: the hall, the five fire doors, the secret way
+/guhs einde2 plek vuurtempel_roku vuurwijze_1
+wait 40
+look 180 -5
+waitrender 300
+shot e2_vuurtempel_hal
+/guhs einde2 plek vuurtempel_roku vuurwijze_5
+wait 40
+look 180 0
+waitrender 300
+shot e2_vuurtempel_vuurdeuren
+/guhs einde2 plek vuurtempel_roku roku
+wait 40
+look 180 -10
+waitrender 300
+shot e2_vuurtempel_heiligdom
+/guhs einde2 plek vuurtempel_roku shyu
+wait 40
+look 90 30
+waitrender 300
+shot e2_vuurtempel_luik
