@@ -90,6 +90,18 @@
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755481808E30B35",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_vesting.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.09375,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -975,6 +987,88 @@
       ],
       x: 7.5,
       y: 22.4125,
+    },
+    {
+      id: "4755485707A6ACE1",
+      icon: {
+        id: "guhs:mika_steen_pilaar",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_vesting",
+          id: "47554862216531C6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AE9A1FFD73",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 0.0,
+      y: 27.875,
+      shape: "octagon",
+    },
+    {
+      id: "475548E68B036FA5",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_vesting_bevrijd",
+          id: "475548AA3A20B61B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AB5998D2D8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 1.5,
+      y: 27.875,
+    },
+    {
+      id: "475548EAE15A258B",
+      icon: {
+        id: "guhs:gefrituurde_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_vesting_bevrijder",
+          id: "475548DF27C313A7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480F602E01F6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 24,
+        },
+      ],
+      x: 3.0,
+      y: 27.875,
+      shape: "diamond",
     },
   ],
 }

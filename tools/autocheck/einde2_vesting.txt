@@ -1,0 +1,99 @@
+# einde2, slice vesting: a whole modular Mika-vesting put together in the void of the Guheinde (the dev command builds one
+# where you stand, its wachtlokaal at your feet), from four sides and from inside; then every ship on its own.
+# (The Guheinde has no skylight, so no time of day. /guhs einde2 vesting only exists in a dev run.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_vesting.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 400 150 400
+wait 80
+
+section a whole vesting
+/guhs einde2 vesting bouw
+wait 100
+/tp @s ~ ~2 ~14
+look 180 5
+waitrender 300
+hier
+shot e2_vesting_poort
+/tp @s ~-60 ~38 ~46
+look -130 28
+wait 80
+shot e2_vesting_zuidwest
+/tp @s ~120 ~ ~
+look 130 28
+wait 80
+shot e2_vesting_zuidoost
+/tp @s ~ ~ ~-120
+look 50 28
+wait 80
+shot e2_vesting_noordoost
+/tp @s ~-120 ~ ~
+look -50 28
+wait 80
+shot e2_vesting_noordwest
+/tp @s ~60 ~40 ~60
+look 0 89
+wait 80
+shot e2_vesting_boven
+
+section inside the keep
+/tp @s 400 151 398
+look 20 10
+wait 60
+shot e2_vesting_wachtlokaal
+/tp @s 404 159 404
+look 160 15
+wait 60
+shot e2_vesting_keuken
+/tp @s 404 175 400
+look -40 15
+wait 60
+shot e2_vesting_troonzaal
+/tp @s 400 184 400
+look 135 10
+wait 60
+shot e2_vesting_dak
+
+section the pieces one by one
+/execute in guhs:guheinde run tp @s 800 150 800
+wait 60
+/guhs einde2 vesting stuk cellenblok
+/tp @s ~-8 ~14 ~-8
+look -45 40
+wait 80
+shot e2_vesting_stuk_cellenblok
+/execute in guhs:guheinde run tp @s 900 150 800
+wait 60
+/guhs einde2 vesting stuk schip_groot
+/tp @s ~-16 ~26 ~-10
+look -50 35
+wait 80
+shot e2_vesting_stuk_schip_groot
+/execute in guhs:guheinde run tp @s 1000 150 800
+wait 60
+/guhs einde2 vesting stuk schip_sloep
+/tp @s ~-14 ~20 ~-8
+look -50 35
+wait 80
+shot e2_vesting_stuk_schip_sloep
+/execute in guhs:guheinde run tp @s 1100 150 800
+wait 60
+/guhs einde2 vesting stuk schip_ballon
+/tp @s ~-16 ~24 ~-8
+look -50 30
+wait 80
+shot e2_vesting_stuk_schip_ballon
+/execute in guhs:guheinde run tp @s 1200 150 800
+wait 60
+/guhs einde2 vesting stuk toren_kerker
+/tp @s ~-10 ~22 ~-10
+look -45 40
+wait 80
+shot e2_vesting_stuk_toren_kerker
+/execute in guhs:guheinde run tp @s 1300 150 800
+wait 60
+/guhs einde2 vesting stuk toren_rond
+/tp @s ~-10 ~22 ~-10
+look -45 40
+wait 80
+shot e2_vesting_stuk_toren_rond

@@ -121,4 +121,16 @@
   "quest.47554827FF086DFC.quest_desc": [
     "In the &5Nibble Chorus Forest&r a &dTurtle-Duck Guh&r bobs along now and then: a duckling in a turtle shell. Hold &6bread&r and it follows you everywhere. Get close for your Guhdex.",
   ],
+  "quest.4755485707A6ACE1.title": "A Fortress Full of Towers",
+  "quest.4755485707A6ACE1.quest_desc": [
+    "The &dMika Fortresses&r of the outer islands have grown: a keep with a guard room, a kitchen and a throne room, bridges to side towers that float on a point, and at the pier a &6grease ship&r. Find one (the Super Compass points the way) and walk in. Every fortress is different, nyeg!",
+  ],
+  "quest.475548E68B036FA5.title": "A Sleepover at Mika's",
+  "quest.475548E68B036FA5.quest_desc": [
+    "Behind the keep stands the &dcell block&r: \"the guest wing\", the Mikas call it. There are skinny guhs inside. Give one a &6cheese nibble&r through the door: WAHOOG! Every player can free every guh once.",
+  ],
+  "quest.475548EAE15A258B.title": "Six Empty Cells",
+  "quest.475548EAE15A258B.quest_desc": [
+    "Free &6six&r skinny guhs from the cells of Mika Fortresses. The cell block holds six, and a dungeon tower (\"the guest room\") two more. The Mikas don't get it: weren't the keys eaten?",
+  ],
 }

@@ -1,0 +1,14 @@
+{
+  "fallback": "guhs:einde2_vesting/dak_vierkant_plat",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:einde2_vesting/dak_kantelen",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}
