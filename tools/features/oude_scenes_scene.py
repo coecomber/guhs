@@ -17,6 +17,10 @@ frames. So what a scene says and where its building is can't drift apart.
 Every staging here is our own: our characters, our buildings, our words (the one line that the ohana story already had is
 used again, as the design asks). Sounds are sound effects only (the mod's own and vanilla's): no music.
 
+Acting: "zwaai", "buk", "sta" and "spring" work on every actor (the engine). The story guhs (Baltoguh, the Guhtwo, 626-guh)
+and Guhdalf also play the Knabbelring cast's named animations while they are an actor (ring-knipogen's and ring-kern's client:
+kijk, schaam, praat, lach, knik...; "" stops one); on the other characters such a name does nothing, so none is used there.
+
 Camera shake is calm everywhere (the engine's swing goes with the SQUARE of the strength): nothing above 0.6.
 """
 
@@ -245,9 +249,11 @@ def balto():
     # Baltoguh sniffs about: a few steps into the white (he all but disappears), and back, none the wiser
     s.loop("balto", 34, 62, (182.6, Y, 11.6))
     s.geluid(40, "SNUIF", 0.9, 1.0)
+    s.anim("balto", 36, "kijk")
     s.loop("balto", 70, 96, (185.0, Y, 14.3))
     s.geluid(74, "SNUIF", 0.8, 1.1)
     s.kijk("balto", 98, (186.0, Y, 13.6))
+    s.anim("balto", 98, "schaam")
     s.zeg(84, "balto", "kwijt", 60, "Snuf... snuf... alleen maar sneeuw. Ik ben de weg kwijt, njeg.")
     s.kijk("speler", 96, (185.0, Y, 14.3))
 
@@ -262,6 +268,7 @@ def balto():
     s.cam(150, (183.3, Y + 0.7, 12.3), (184.5, 25.9, 7.0), knip=True)
     s.cam(262, (183.6, Y + 0.9, 11.3), (184.5, 25.8, 7.0))
     s.kijk("balto", 156, ROTS)
+    s.anim("balto", 156, "")
     s.kijk("speler", 160, ROTS)
     s.loop("balto", 176, 204, (184.4, Y, 10.4))
     s.zeg(160, "", "wolf", 58, "En dan staat ze daar, op de Wolvenrots. Een witte wolf-guh. Ze gloeit zachtjes, als een sterretje.")
@@ -275,6 +282,8 @@ def balto():
     s.cam(344, (181.0, Y + 1.7, 13.0), (184.6, Y + 2.3, 9.0))
     s.zeg(266, "balto", "half", 40, "Half guh, half wolf... en dat is precies goed. Huil mee!")
     s.anim("balto", 304, "spring")
+    s.anim("balto", 306, "lach")                           # (nose up, shaking with it: the howl)
+    s.anim("balto", 344, "")
     s.geluid(306, "HUIL", 1.0, 1.0)
     s.anim("wolf", 314, "spring")
     s.geluid(316, "HUIL", 0.9, 1.25)
@@ -358,6 +367,9 @@ def mewtwo():
     s.geluid(242, "TANK_HEEL", 0.9, 0.7)
     s.geluid(250, "TELEKINESE", 1.0, 0.9)
     s.schud(244, 0.4, 14)
+    s.anim("guhtwo", 262, "kijk")
+    s.anim("guhtwo", 300, "praat")
+    s.anim("guhtwo", 344, "")
     s.zeg(272, "guhtwo", "wie", 70, "Wie ben ik... en waar zijn mijn knabbels?")
 
     # ---- D (346 - 440): Mieuwguh giggles past ----
@@ -391,6 +403,7 @@ def ohana():
     s.npc("lilo", "LILO_GUH", s.weg(LILO[0], LILO[2]), 0, "Lilo-guh", kleur=(250, 120, 120), maat=0.85)
     s.wezen("boek", "() -> EntityType.ITEM_DISPLAY", (10.9, Y + 0.03, 33.3), 135, kleur=(170, 110, 60), vorm="boek", nbt="prentenboek")
     s.kijk("stitch", 0, VUUR)
+    s.anim("stitch", 20, "schaam")
 
     # the whole scene: night, for this viewer only
     s.donker(-10, 8)
@@ -413,6 +426,7 @@ def ohana():
     s.geluid(128, "GUH_AMBIENT", 0.8, 1.35)
     s.zeg(132, "lilo", "erbij", 34, "Schuif eens op, vadsje. Ik kom erbij zitten.")
     s.kijk("stitch", 138, LILO)
+    s.anim("stitch", 138, "")
     s.kijk("lilo", 170, VUUR)
     s.zeg(172, "lilo", "citaat", 74, "Ohana betekent familie. Familie betekent dat niemand wordt achtergelaten... of vergeten. Njeg.")
 
@@ -425,6 +439,8 @@ def ohana():
     s.stoot(272, "HARTJE", (11.85, Y + 1.2, 33.4), 10, 0.35)
     s.stroom(280, 326, "HARTJE", (11.85, Y + 1.25, 33.4), None, 0.25, 0.3)
     s.anim("lilo", 276, "spring")
+    s.anim("stitch", 274, "lach")
+    s.anim("stitch", 330, "")
     s.zeg(276, "stitch", "ohana", 46, "O... ha... na. NJEG!")
 
     # ---- D (330 - 420): the stars. The camera lets go of them and looks up ----
@@ -511,7 +527,7 @@ def grill():
     Y = 5.0
     GUH = (27.5, Y, 14.5)
     BEELD = (7.5, 12.0, 7.5)                     # on the head of the north-west statue
-    s = Scene("grill", "Hij brandt weer!", "grillguh", "barbecueput_groot", "barbecueput", "barbecueput_groot", (27, 5, 14), 360, 30, grond=4)
+    s = Scene("grill", "Hij brandt weer!", "grillguh", "barbecueput_groot", "barbecueput", "barbecueput_groot", (27, 5, 14), 360, 44, grond=4)
     s.speler((18.0, Y, 24.7), 0)
     s.npc("grillguh", "GRILLGUH", GUH, 90, "Grillguh", kleur=(250, 240, 230))
     s.npc("guhdalf", "GUHDALF", BEELD, 0, "???", kleur=(176, 178, 190), maat=1.15)
@@ -565,6 +581,8 @@ def grill():
     s.cam(360, (13.4, 12.8, 14.8), (7.5, 13.1, 7.5))
     s.zeg(236, "", "verte", 50, "En in de verte, boven op een verkoold guhbeeld, stond iemand met een punthoed te kijken.")
     s.zeg(296, "guhdalf", "begonnen", 44, "Hm. Het vuur brandt weer. Dan is het begonnen, njeg.")
+    s.anim("guhdalf", 298, "knik")
+    s.anim("guhdalf", 334, "")
     s.kijk("guhdalf", 336, (7.5, 12.0, -6.0))
     s.geluid(338, "MANTEL", 0.7, 0.8)
     s.donker(346, 360)
