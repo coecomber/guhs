@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "guhs:block/ringsausuman_ringenbakker_voor",
+    "side": "guhs:block/ringsausuman_ringenbakker_zij",
+    "top": "guhs:block/ringsausuman_ringenbakker_boven"
+  }
+}

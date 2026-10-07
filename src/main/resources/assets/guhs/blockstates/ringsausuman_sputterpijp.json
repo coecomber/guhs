@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "groot=false": {
+      "model": "guhs:block/ringsausuman_sputterpijp"
+    },
+    "groot=true": {
+      "model": "guhs:block/ringsausuman_sputterpijp"
+    }
+  }
+}

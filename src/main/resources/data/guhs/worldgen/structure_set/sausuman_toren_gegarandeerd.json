@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:sausuman_toren",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21302208,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 13,
+    "sectoren": 16
+  }
+}
