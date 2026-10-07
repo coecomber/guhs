@@ -8,7 +8,8 @@ einde2 (bouw_water): the Noordelijke Waterstam put together. bouw(h) makes the w
      floor that is still dark (sea lanterns in the beds of the water, froglights in the oasis, glowing coals on the ship);
   5. the self-check: the kit's own (reachability, floating blocks, light, every marker) plus what only this build has:
      nothing opens into the hollow inside of the berg, the canal loop is boat-wide and two deep with two clear blocks
-     above it, the sea is a closed basin, the sled run only ever steps down, Appa's spot is free.
+     above it, the sea is a closed basin, the sled run only ever steps down, Appa's spot is free, you can walk on board
+     Zhao's ship and down into its hold, and the islet of the ice bridge and the cage of the moon fish stay out of reach.
 """
 from collections import deque
 
@@ -144,15 +145,15 @@ def plekken(b, gr, haltes, sp):
     sx0, sx1, sz0, sz1 = g.SCHIP
     b.zone("haven", 150, T0 + 1, 150, 206, T0 + 14, 206, wie="de haven buiten de muur")
     b.zone("zhao_schip", sx0 - 1, schip.KIEL, sz0 - 3, sx1 + 1, schip.DEK + 18, sz1, wie="de VNS Schroeiplek")
-    b.plek("zhao", *sp["brug"], yaw=180.0, wie="admiraal Zhao-Mika, op de brug", kind="ZHAO_MIKA", los=True)
+    b.plek("zhao", *sp["brug"], yaw=180.0, wie="admiraal Zhao-Mika, op de brug", kind="ZHAO_MIKA")
     b.prop("sluip_start", 170, T0 + 1, 157, wie="achter de tonnen op de haven")
-    b.pad("sluip_route", [(170, T0 + 1, 157), (174, T0 + 1, 162), (174, T0 + 1, 186), sp["ladder"], (sx0 + 1, schip.DEK + 1, 186), sp["dek_achter"],
-                          sp["luik"], (sp["luik"][0], schip.KIEL + 1, sp["luik"][2] - 1), sp["celdeur"]],
-          wie="over de steiger, de ladder op, achter de tonnen langs naar het achterluik en omlaag naar de cel")
+    b.pad("sluip_route", [(170, T0 + 1, 157), (174, T0 + 1, 162), (174, T0 + 1, 186), sp["ladder"], (sx0 + 1, schip.DEK + 1, 186), (sx0 + 1, schip.DEK + 1, 196),
+                          sp["dek_achter"], sp["luik"], sp["trap_onder"], sp["celdeur"]],
+          wie="over de steiger, de ladder op, achter de tonnen langs om de schoorsteen, de trap achter de toren af en naar de cel")
     wachten = [(sp["plank"], 180.0, "boven aan de boegklep"), (sp["dek_voor"], 180.0, "op het voordek, bij de katapult"), (sp["dek_toren"], 180.0, "voor de deur van de toren"),
                (sp["ruim"], 0.0, "in het ruim"), ((sp["celdeur"][0], sp["celdeur"][1], sp["celdeur"][2] - 2), 180.0, "voor de cel")]
     for i, (c, yaw, wie) in enumerate(wachten, 1):
-        b.plek(f"sluip_wacht_{i}", *c, yaw=yaw, wie="een Vuurnatie-Mika " + wie, kind="VUURNATIE_MIKA", los=True)
+        b.plek(f"sluip_wacht_{i}", *c, yaw=yaw, wie="een Vuurnatie-Mika " + wie, kind="VUURNATIE_MIKA")
     b.prop("maanvis_kooi", *sp["kooi"], wie="de kuip in de kooi, in de cel in het achterschip", los=True)
     vx0, vx1, vz0, vz1 = g.VLOOT
     b.zone("vloot", vx0, SEA + 1, vz0, vx1, SEA + 24, vz1, wie="open zee voor de muur: de vloot, en de grote golf")
@@ -270,8 +271,18 @@ def verlicht(b, start, min_licht=6):
 # =====================================================================================================================
 # the checks only this build has
 # =====================================================================================================================
-def eigen_controle(b, gr):
+def eigen_controle(b, gr, reach):
     p = []
+    # what must stay out of reach until the story opens it: the islet in the wave pool (an ice bridge), the tub in the cage
+    ex, ez, _ = g.EILANDJE
+    if (int(ex), T1 + 1, int(ez)) in reach:
+        p.append("het eilandje in het golfbassin is zonder ijsbrug te bereiken")
+    kooi = tuple(b.plekken["maanvis_kooi"]["pos"])
+    if kooi in reach or gb.near(reach, kooi):
+        p.append("de kuip in de kooi is te bereiken")
+    for id in ("zhao", "sluip_wacht_4", "sluip_wacht_5", "hoofdman", "yue_maan", "golf_plek", "slee_start"):
+        if tuple(b.plekken[id]["pos"]) not in reach:
+            p.append(f"{id}: daar kom je niet")
     blocks = b.s.blocks
     naam = lambda c: (blocks.get(c) or (None,))[0]  # noqa: E731
     # nothing opens into the hollow inside of the berg
@@ -398,7 +409,7 @@ def bouw(h, opslaan=True, streng=True):
     tralies(b)
     rooster(b, gr)
     b.lampen = verlicht(b, START)
-    problems = b.check(START, VERWACHT) + eigen_controle(b, gr)
+    problems = b.check(START, VERWACHT) + eigen_controle(b, gr, kit.Loper(b).bfs(START))
     b.problemen = problems
     if problems and streng:
         raise SystemExit(f"{NAAM}: self-check found {len(problems)} problem(s):\n  " + "\n  ".join(problems[:60]))

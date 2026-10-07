@@ -4,8 +4,8 @@ einde2 (bouw_water): the ships of the Vuurnatie at the Noordelijke Waterstam.
   - vlaggenschip(b): admiraal Zhao-Mika's flagship "VNS Schroeiplek", moored bow-first at the harbour shelf with its bow
     ramp down. All grill iron and charcoal stone (the Vuurnatie are Mika's, and Mika's come from the Barbecuether). You can
     board it over the ramp or, quietly, up the ladder on its side; on deck a catapult, crates, the bridge tower (guard room,
-    Zhao's cabin, the bridge) and the funnel; below deck the hold, the bunks, the boiler room and the brig with the cage for
-    the moon fish.
+    Zhao's cabin, the bridge) and the funnel; below deck (down the companionway aft of the tower, or the ladder in the guard
+    room) the hold, the bunks, the boiler room and the brig with the cage for the moon fish.
   - vloot(h): the overlay template laag_vloot: three more ships for the siege. Blocks only (no block entities), and they
     lie ON the water (nothing below the water line): a later phase puts the overlay there and takes it away again as air.
 """
@@ -174,18 +174,23 @@ def vlaggenschip(b):
     b.fill(X0 + 1, KIEL, Z0 + 8, X1 - 1, KIEL, Z1 - 3, STENEN)
     for z in range(Z0 + 10, Z1 - 2, 6):                           # light in the ceiling of the hold
         b.set(XM, DEK, z, GLOED)
-    # the hatch in the guard room and its ladder (on a pillar), the second ladder aft of the funnel under an open hatch
+    # the hatch in the guard room and its ladder (on a pillar)
     hx, hz = tx0 + 1, tz0 + 5
     for yy in range(yh, DEK):
         b.set(hx - 1, yy, hz, PILAAR, {"axis": "y"})
     for yy in range(yh, DEK + 1):
         b.set(hx, yy, hz, "ladder", {"facing": "east", "waterlogged": "false"})
-    ax, az = XM, 197
-    for yy in range(yh, DEK):
-        b.set(ax, yy, az + 1, PILAAR, {"axis": "y"})
-    for yy in range(yh, DEK + 1):
-        b.set(ax, yy, az, "ladder", {"facing": "north", "waterlogged": "false"})
-    b.set(ax - 1, DEK + 1, az, "dark_oak_trapdoor", {"facing": "east", "half": "bottom", "open": "true", "powered": "false", "waterlogged": "false"})
+    # the companionway aft of the tower, on the starboard side: an open well in the deck, five steps down into the boiler room
+    ax, az = X1 - 2, tz1 + 2
+    for i in range(5):
+        z, top = az + i, DEK - 1 - i
+        for yy in range(top + 1, DEK + 1):
+            b.set(ax, yy, z, LUCHT)
+        b.set(ax, top, z, S_TRAP, gb.stair("north"))
+        for yy in range(yh, top):
+            b.set(ax, yy, z, STENEN)
+    for z in range(az, az + 5):                                   # a rail along the well, on the side of the deck
+        b.set(ax - 1, DEK + 1, z, S_MUUR)
     # the fore hold: what the Mika's took along (coals, barrels, a suspicious amount of knabbels)
     for x, z, blok, n in ((X0 + 1, 173, "coal_block", 2), (X0 + 2, 173, "coal_block", 1), (X0 + 1, 174, "coal_block", 1), (X1 - 1, 172, "barrel", 2),
                           (X1 - 1, 173, "barrel", 3), (X1 - 2, 173, "barrel", 1), (X1 - 1, 176, "guhs:block_of_kaasknabbels", 2),
@@ -236,9 +241,10 @@ def vlaggenschip(b):
     b.set(kx, yh, kz, "water_cauldron", {"level": "3"})
     b.set(kx, yh + 2, kz, GLOED)
     b.sign(XM, yh, bz - 1, "north", ["Kooi voor 1", "vis. NIET", "opeten! Ook", "niet proeven."], wall=False)
-    return {"ladder": (X0 - 1, T0 + 1, lz), "luik": (ax, DEK + 1, az), "kooi": (kx, yh, kz), "celdeur": (XM + 2, yh, bz), "brug": (XM, y + 8, tz0 + 3),
+    return {"ladder": (X0 - 1, T0 + 1, lz), "luik": (ax, DEK + 1, az - 1), "trap_onder": (ax, yh, az + 5), "kooi": (kx, yh, kz), "celdeur": (XM + 2, yh, bz),
+            "brug": (XM, y + 8, tz0 + 3),
             "ruim": (XM, yh, 175), "kooien": (XM, yh, 185), "dek_voor": (XM + 2, y, 176), "dek_toren": (XM, y, tz0 - 2),
-            "plank": (XM, y, Z0 + 3), "dek_achter": (XM + 2, y, 197)}
+            "plank": (XM, y, Z0 + 3), "dek_achter": (XM, y, 198)}
 
 
 # =====================================================================================================================
