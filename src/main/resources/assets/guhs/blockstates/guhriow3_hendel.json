@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "getrokken=false": {
+      "model": "guhs:block/guhriow3_hendel"
+    },
+    "getrokken=true": {
+      "model": "guhs:block/guhriow3_hendel_om"
+    }
+  }
+}

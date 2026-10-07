@@ -1886,6 +1886,7 @@
   "ftb.guhs_guhrio.title": "&cSuper Guhrio",
   "ftb.guhs_guhrio.sub": "Bedankt! Maar de prinses is in een ander kasteeldeel, njeg",
   "ftb.guhs_guhrio.section.guhrio": "Het Kasteel van de Grote Nether-Mika",
+  "ftb.guhs_guhrio.section.guhrio_w3": "Wereld 3: de burcht",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.title": "Hoe kom je hier?",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.desc": "Dit hoofdstuk komt na &6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r.\n\nIn een frituursauszee van de Guhbarbecuether staat het &cKasteel van de Grote Nether-Mika&r (superkompas: Barbecue). Op het voorplein wacht &dPad-guh&r: Prinses Perzikguh is meegenomen... voor een stukje taart.\n\nBinnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks: je begint gewoon weer bij de laatste vlag. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   "ftb.guhs_guhrio.q.guhrio_kasteel.title": "Een kasteel in de saus",
@@ -1897,5 +1898,19 @@
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.title": "Achttien keer vads",
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.desc": "In elk level liggen drie &6grote vadsmunten&r. Ze blijven van jou, ook als je het level opnieuw speelt; de Guhdex (Verhalen > Super Guhrio) houdt per level bij welke je hebt.",
   "ftb.guhs_guhrio.q.guhrio_loop.title": "In één ruk door",
-  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg."
+  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w3_3_1.title": "Level 3-1: De Grillgang",
+  "ftb.guhs_guhrio.q.guhrio_w3_3_1.desc": "De poort van &6level 3-1&r gaat open als de kelders gehaald zijn. Hier wacht &dGuhshi&r op wie zijn ei gevonden heeft: loop tegen hem aan en je zit erop. Spatie ingedrukt houden = fladderen. Spring over de saus van naaf naar naaf van de draaiende &6grillspiesen&r en lok de &6Plof-Mika's&r naar beneden voor je eronderdoor rent. Bij de &dparkeerpaal&r blijft Guhshi even wachten: het stuk met de &6Vuurpeper&r doe je te voet (een knabbel door de spleet zet de schakelaar om).",
+  "ftb.guhs_guhrio.q.guhrio_w3_3_2.title": "Level 3-2: De Sauskelder",
+  "ftb.guhs_guhrio.q.guhrio_w3_3_2.desc": "Het level van Guhshi. Twee gaten zijn zo breed dat alleen zijn fladdersprong eroverheen komt (te voet legt de &dklokschakelaar&r er acht tellen lang een brug). Daartussen: valblokken onder snelle spiesen, een platform onder twee Plof-Mika's, en achter een deur de &6Peperkamer&r.",
+  "ftb.guhs_guhrio.q.guhrio_w3_vadsmunten.title": "Zes keer vads in de burcht",
+  "ftb.guhs_guhrio.q.guhrio_w3_vadsmunten.desc": "De zes &6grote vadsmunten&r van wereld 3. Tip: één hangt boven de middelste grillspies, één ligt onder een Plof-Mika, één in een schatkamer waar je alleen door een pijp met een Hapbloem komt, één hoog boven het eerste grote gat, één laag tussen twee valblokken (een klein hupje!) en één in de kooi van de Peperkamer.",
+  "ftb.guhs_guhrio.q.guhrio_w3_hendel.title": "Ronde 1: de hendel",
+  "ftb.guhs_guhrio.q.guhrio_w3_hendel.desc": "Achter de grote poort staat de &6Grote Nether-Mika&r op zijn roosterbrug. Hij gooit trage gloeiende kooltjes (spring eroverheen) en als hij landt, duwt de dreun je weg (spring op het goede moment). Ren &donder hem door&r terwijl hij in de lucht hangt en trek aan de &6hendel&r: de halve brug ploft in de saus. De groene pijp brengt je terug.",
+  "ftb.guhs_guhrio.q.guhrio_w3_schild.title": "Ronde 2 en 3: schild retour",
+  "ftb.guhs_guhrio.q.guhrio_w3_schild.desc": "Op de korte brug kruipt hij in zijn schild en rolt heen en weer: &dspring eroverheen&r. Na drie bonken tegen de muur zit het &6?-blok&r weer vol: pak de &6Vuurpeper&r en gooi een knabbel tegen het schild terwijl het op je af rolt. Dan stuitert het terug. Drie keer raak en hij kan niet meer remmen.",
+  "ftb.guhs_guhrio.q.guhrio_w3_duel.title": "De Grote Nether-Mika",
+  "ftb.guhs_guhrio.q.guhrio_w3_duel.desc": "Win het duel. Hij plonst in de saus, klimt er aan de overkant weer uit (nat, plakkerig, beledigd, verder niks aan de hand) en gaat zitten mokken. Niemand doet hier iemand pijn, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w3_taart.title": "Een stukje taart",
+  "ftb.guhs_guhrio.q.guhrio_w3_taart.desc": "Kijk hoe het afloopt: &dPrinses Perzikguh&r, de taart, en waarom de Grote Nether-Mika haar eigenlijk had meegenomen. De Guhdex (Verhalen > Super Guhrio) speelt het filmpje nog eens af. Daarna sta je in de torenkamer."
 }
