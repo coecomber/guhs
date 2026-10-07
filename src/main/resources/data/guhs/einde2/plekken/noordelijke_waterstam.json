@@ -923,17 +923,22 @@
           186
         ],
         [
-          184,
+          178,
           35,
-          197
+          196
         ],
         [
           182,
           35,
-          197
+          198
         ],
         [
-          182,
+          185,
+          35,
+          190
+        ],
+        [
+          185,
           29,
           196
         ],
@@ -943,7 +948,7 @@
           199
         ]
       ],
-      "wie": "over de steiger, de ladder op, achter de tonnen langs naar het achterluik en omlaag naar de cel"
+      "wie": "over de steiger, de ladder op, achter de tonnen langs om de schoorsteen, de trap achter de toren af en naar de cel"
     },
     "sluip_wacht_1": {
       "soort": "npc",
