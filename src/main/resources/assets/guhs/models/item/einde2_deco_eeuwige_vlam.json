@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/einde2_deco_eeuwige_vlam"
+  }
+}

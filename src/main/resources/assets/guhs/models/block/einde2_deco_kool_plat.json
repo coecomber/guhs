@@ -1,0 +1,137 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "zij": "guhs:block/einde2_deco_kool",
+    "top": "guhs:block/einde2_deco_kool_plat",
+    "particle": "guhs:block/einde2_deco_kool"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        1.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            14,
+            14,
+            15.5
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            2,
+            14,
+            14,
+            15.5
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            2,
+            14,
+            14,
+            15.5
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            2,
+            14,
+            14,
+            15.5
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#top"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        1.5,
+        4
+      ],
+      "to": [
+        11,
+        2.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            13,
+            11,
+            14
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            5,
+            13,
+            11,
+            14
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            5,
+            13,
+            11,
+            14
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            5,
+            13,
+            11,
+            14
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            5,
+            4,
+            11,
+            10
+          ],
+          "texture": "#top"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "structuur": "deco_luchtbizonstal",
+  "soort": "jigsaw",
+  "plekken": {
+    "kist": {
+      "soort": "prop",
+      "pos": [
+        14,
+        5,
+        5
+      ],
+      "wie": "einde2_deco",
+      "stuk": "einde2_deco/deco_luchtbizonstal"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        4,
+        6,
+        13
+      ],
+      "wie": "Luchtbizon-stal / Bizon is even / een blokje om. / (al 100 jaar)",
+      "stuk": "einde2_deco/deco_luchtbizonstal"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        8,
+        6,
+        5
+      ],
+      "wie": "Niet voeren na / middernacht. / Hij gaat ervan / njeggen.",
+      "stuk": "einde2_deco/deco_luchtbizonstal"
+    },
+    "lemur": {
+      "soort": "wezen",
+      "pos": [
+        11,
+        5,
+        8
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:vleermuis_lemurguh",
+      "stuk": "einde2_deco/deco_luchtbizonstal"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        10,
+        5,
+        9
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_luchtbizonstal"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "structuur": "deco_mika_wachtpost",
+  "soort": "jigsaw",
+  "plekken": {
+    "kist": {
+      "soort": "prop",
+      "pos": [
+        6,
+        5,
+        5
+      ],
+      "wie": "einde2_deco_mika",
+      "stuk": "einde2_deco/deco_mika_wachtpost"
+    },
+    "bordje_rooster": {
+      "soort": "prop",
+      "pos": [
+        8,
+        6,
+        6
+      ],
+      "wie": "Dienstrooster: / ma: vadsen / di: vadsen / wo: ook vadsen",
+      "stuk": "einde2_deco/deco_mika_wachtpost"
+    },
+    "uitkijk": {
+      "soort": "prop",
+      "pos": [
+        8,
+        11,
+        6
+      ],
+      "wie": "boven op de uitkijk",
+      "stuk": "einde2_deco/deco_mika_wachtpost"
+    },
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        8,
+        5,
+        14
+      ],
+      "wie": "Wachtpost 12. / Mika is even / knabbels halen. / Niet doorlopen!",
+      "stuk": "einde2_deco/deco_mika_wachtpost"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        7,
+        5,
+        8
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_mika_wachtpost"
+    }
+  }
+}

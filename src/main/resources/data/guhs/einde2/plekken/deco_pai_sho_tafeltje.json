@@ -1,0 +1,36 @@
+{
+  "structuur": "deco_pai_sho_tafeltje",
+  "soort": "jigsaw",
+  "plekken": {
+    "bordje": {
+      "soort": "prop",
+      "pos": [
+        9,
+        5,
+        9
+      ],
+      "wie": "Pai Sho. / Wie de witte / lotus legt, mag / aanschuiven.",
+      "stuk": "einde2_deco/deco_pai_sho_tafeltje"
+    },
+    "bordje_2": {
+      "soort": "prop",
+      "pos": [
+        4,
+        6,
+        9
+      ],
+      "wie": "Oom Miroh was / hier. Hij won. / Hij wint altijd. / (Beetje vads.)",
+      "stuk": "einde2_deco/deco_pai_sho_tafeltje"
+    },
+    "midden": {
+      "soort": "prop",
+      "pos": [
+        6,
+        5,
+        6
+      ],
+      "wie": "het midden van het bouwsel",
+      "stuk": "einde2_deco/deco_pai_sho_tafeltje"
+    }
+  }
+}

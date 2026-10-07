@@ -1,0 +1,38 @@
+{
+  "variants": {
+    "geplet=false": [
+      {
+        "model": "guhs:block/einde2_deco_kool"
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool",
+        "y": 270
+      }
+    ],
+    "geplet=true": [
+      {
+        "model": "guhs:block/einde2_deco_kool_plat"
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool_plat",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool_plat",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/einde2_deco_kool_plat",
+        "y": 270
+      }
+    ]
+  }
+}

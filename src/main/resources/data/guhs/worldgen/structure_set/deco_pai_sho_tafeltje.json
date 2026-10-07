@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:deco_pai_sho_tafeltje",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 48,
+    "separation": 20,
+    "salt": 21936607
+  }
+}
