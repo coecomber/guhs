@@ -519,9 +519,21 @@ public final class RingGameTests {
         wild.snapTo(ver.getX() + 0.5, ver.getY(), ver.getZ() + 0.5);
         wild.setPersonality(nl.juiced.guhs.entity.GuhPersonality.BRAVE);
         level.addFreshEntity(wild);
+        // (after the merge of 1.3.2) a stand-in that another feature builds on GuhEntity, here the sleeper in a Guhhuisje's room,
+        // is nobody's guh either: it does not smell the ring and stays in its bed
+        nl.juiced.guhs.feature.huisje.BinnenGuh slaper = nl.juiced.guhs.feature.huisje.HuisjeFeature.SLAPER.get().create(level, EntitySpawnReason.TRIGGERED);
+        BlockPos bed = helper.absolutePos(new BlockPos(10, 2, 17));
+        slaper.snapTo(bed.getX() + 0.5, bed.getY(), bed.getZ() + 0.5);
+        level.addFreshEntity(slaper);
+        Vec3 lag = slaper.position();
+        long begin = level.getGameTime();
         helper.succeedWhen(() -> {
             helper.assertTrue(wild.distanceTo(p) < 4.2, "a wild guh that smells the ring trots after its bearer");
+            helper.assertTrue(level.getGameTime() - begin >= 60, "three looks of every guh have passed");
+            helper.assertTrue(slaper.isAlive() && slaper.position().distanceTo(lag) < 0.3 && slaper.distanceTo(p) > 4.2,
+                    "the stand-in stays where it was put: " + slaper.position().distanceTo(lag));
             wild.discard();
+            slaper.discard();
             weg(helper, p);
         });
     }

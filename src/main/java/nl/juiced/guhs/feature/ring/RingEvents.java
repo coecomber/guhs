@@ -119,10 +119,16 @@ public final class RingEvents {
         }
     }
 
-    /** (GuhHooks.tick, every guh, server) a wild guh that smells the ring trots after its bearer, drooling. */
+    /**
+     * (GuhHooks.tick, every guh, server) a wild guh that smells the ring trots after its bearer, drooling. Only a real guh
+     * (entity type guhs:guh) does: the stand-ins and game guhs that other features build on GuhEntity (the sleeper in a
+     * Guhhuisje's room, the Guhmon and Boer zoekt Guh stand-ins, the crew of Among Guhs, race and parade guhs) are
+     * nobody's guh either, and they stay where their own feature put them.
+     */
     static void guhTick(GuhEntity guh) {
         Sam.guhTick(guh);
         if (DRAGERS.isEmpty() || (guh.tickCount + guh.getId()) % 20 != 0 || guh.isTame() || guh.isRemoved() || VerhaalGuhs.isKopie(guh)
+                || guh.getType() != nl.juiced.guhs.registry.ModEntities.GUH.get()
                 || GuhHooks.isBewoner(guh) || GuhHooks.isBezig(guh) || !(guh.level() instanceof ServerLevel level)) {
             return;
         }
