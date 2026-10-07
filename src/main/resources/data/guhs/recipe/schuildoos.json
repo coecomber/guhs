@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S",
+    "K",
+    "S"
+  ],
+  "key": {
+    "S": "guhs:doosschil",
+    "K": "minecraft:chest"
+  },
+  "result": {
+    "id": "guhs:schuildoos"
+  }
+}

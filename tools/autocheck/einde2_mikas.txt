@@ -1,0 +1,62 @@
+# einde2 slice mikas AutoCheck: the Ender-Mika, the Kaasmijt, the Schuilguhs (floor, wall, ceiling) and the Schuildoos on a
+# little stage, their Guhdex pages and their items. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_mikas.txt -PautocheckTimeout=20
+# (commands: see autocheck.txt; written by the slice, not run by it: the merge step runs it.)
+# /guhs einde2 mikas toon builds the stage 4 blocks to the south of the player (a dev-run command).
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/tp @s 0 120 0 0 0
+/fill -8 119 -4 8 119 14 minecraft:smooth_stone
+wait 40
+/guhs einde2 mikas toon
+wait 60
+
+section the stage: Ender-Mika (a trader, so it stands still), Kaasmijt, three Schuilguhs, two Schuildozen
+camera 0.5 122 0.5 0 12
+waitrender 200
+shot mikas_toneel
+log --- the Ender-Mika: 46 pixels of thin purple-black Mika, glowing eyes, the knabbel in its right hand
+camera -2.5 122 4.5 0 8
+wait 40
+shot mikas_ender_mika
+camera -1.2 123.2 8.6 150 20
+wait 20
+shot mikas_ender_mika_achter
+log --- the Kaasmijt (it has no AI here, or it would be at your toes)
+camera -0.5 120.6 4.6 0 25
+wait 20
+shot mikas_kaasmijt
+log --- the Schuilguhs: next to one the lid is open, a few blocks off it peeks
+camera 1.5 121.2 5.2 0 10
+wait 60
+shot mikas_schuilguh_vloer_open
+camera 2.0 122.5 5.5 0 -5
+wait 60
+shot mikas_schuilguh_muur_en_plafond
+camera 1.5 122 1.5 0 10
+wait 100
+shot mikas_schuilguh_gluurt
+log --- the Schuildozen: lid down, and lifted
+camera 4.5 121.6 3.5 0 20
+wait 20
+shot mikas_schuildoos
+unlock
+
+section an ordinary Ender-Mika: look at it and it flits away
+/tp @s 0 120 -2 0 0
+/summon guhs:ender_mika 0 120 8
+wait 10
+look 0 -10
+wait 30
+shot mikas_ender_mika_flitst
+unlock
+
+section pages and items
+gui guhdex mikas_dex
+gui close
+gui creative guhs
+gui close
+quit

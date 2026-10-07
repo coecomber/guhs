@@ -1,0 +1,149 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "zij": "guhs:block/schuildoos_zij",
+    "boven": "guhs:block/schuildoos_boven",
+    "binnen": "guhs:block/schuildoos_binnen",
+    "onder": "guhs:block/schuildoos_onder",
+    "particle": "guhs:block/schuildoos_onder"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        8,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#binnen",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#onder",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        8,
+        0.5
+      ],
+      "to": [
+        15.5,
+        12,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "uv": [
+            0.5,
+            0,
+            15.5,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            0.5,
+            0,
+            15.5,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            0.5,
+            0,
+            15.5,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            0.5,
+            0,
+            15.5,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#boven",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#onder",
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            15.5
+          ]
+        }
+      }
+    }
+  ]
+}
