@@ -375,6 +375,50 @@ public final class RingH6GameTests {
         });
     }
 
+    /**
+     * PHASE3 R15: the way to the mountain goes across the frituur sea. The ring bearer whose chapter this is is not burnt
+     * within the approach (where the ring gets heavy), on the mountain nobody is; a visitor on the way gets nothing special,
+     * and far from the mountain fire is fire.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_nader")
+    public static void ringh6VeiligOpWegNaarDeBerg(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        BlockPos nul = helper.absolutePos(BlockPos.ZERO);
+        // (the mountain's wall as its sluier has it; the players stand OFF the test mountain: beside its box)
+        nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Berg.STRUCTUUR);
+        nl.juiced.guhs.feature.verhaal.Sluiers.zetPlek(level, Berg.STRUCTUUR,
+                new net.minecraft.world.level.levelgen.structure.BoundingBox(nul.getX() + 200, nul.getY(), nul.getZ() + 200, nul.getX() + 230, nul.getY() + 30, nul.getZ() + 230));
+        ServerPlayer drager = speler(helper, berg, "kamp"), gast = speler(helper, berg, "kamp"), ver = speler(helper, berg, "kamp");
+        try {
+            opStap(drager, 1);
+            opStap(ver, 1);
+            Ring.lijn(1).begin(gast);
+            Ring.lijn(1).zet(gast, Ring.lijn(1).stappen());
+            Vec3 opWeg = new Vec3(nul.getX() + 150.5, nul.getY() + 40, nul.getZ() + 215.5), weg = new Vec3(nul.getX() - 300.5, nul.getY() + 40, nul.getZ() + 215.5);
+            drager.snapTo(opWeg.x, opWeg.y, opWeg.z);
+            gast.snapTo(opWeg.x, opWeg.y, opWeg.z);
+            ver.snapTo(weg.x, weg.y, weg.z);
+            helper.assertTrue(Berg.van(drager) == null && Klim.afstandTotBerg(drager) < Ring.ZWAAR_AFSTAND && Klim.afstandTotBerg(ver) > Ring.ZWAAR_AFSTAND,
+                    "off the mountain, 50 blocks from its wall: " + Klim.afstandTotBerg(drager));
+            helper.assertTrue(Klim.beschermdOpWeg(drager) && !Klim.beschermdOpWeg(gast) && !Klim.beschermdOpWeg(ver), "only the ring bearer of this chapter, only near the mountain");
+            float leven = drager.getHealth();
+            drager.hurtServer(level, level.damageSources().lava(), 4f);
+            drager.hurtServer(level, level.damageSources().inFire(), 1f);
+            helper.assertTrue(drager.getHealth() == leven && drager.getRemainingFireTicks() <= 0, "the frituur and fire do not burn the ring bearer on the way");
+            drager.hurtServer(level, level.damageSources().cactus(), 1f);
+            helper.assertTrue(drager.getHealth() < leven, "(other damage is as always: this is no safe zone)");
+            float gastLeven = gast.getHealth(), verLeven = ver.getHealth();
+            gast.hurtServer(level, level.damageSources().lava(), 4f);
+            ver.hurtServer(level, level.damageSources().lava(), 4f);
+            helper.assertTrue(gast.getHealth() < gastLeven && ver.getHealth() < verLeven, "a visitor, and the ring bearer far from the mountain: fire is fire");
+        } finally {
+            nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Berg.STRUCTUUR);
+            weg(helper, drager, gast, ver);
+        }
+        helper.succeed();
+    }
+
     /** Home: the feast looks for flat open ground; the goal of step 6 is the landing spot. */
     @GuhTest(template = BERG, batch = BATCH)
     public static void ringh6Thuis(GameTestHelper helper) {

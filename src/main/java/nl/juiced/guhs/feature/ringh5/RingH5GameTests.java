@@ -344,14 +344,15 @@ public final class RingH5GameTests {
         w.setYHeadRot(-90f);
         level.addFreshEntity(w);
         ServerPlayer p = speler(helper, new BlockPos(14, 2, 10)), drager = speler(helper, new BlockPos(13, 2, 11)), achter = speler(helper, new BlockPos(6, 2, 10));
-        ServerPlayer rots = speler(helper, new BlockPos(13, 2, 9)), klaar = speler(helper, new BlockPos(12, 2, 10));
+        ServerPlayer rots = speler(helper, new BlockPos(13, 2, 9)), klaar = speler(helper, new BlockPos(12, 2, 10)), verder = speler(helper, new BlockPos(14, 2, 11));
         klaarTot(p, 4);
         klaarTot(drager, 4);
         klaarTot(achter, 4);
         klaarTot(rots, 4);
         klaarTot(klaar, 6);
+        klaarTot(verder, 5);
         Vec3 rust = rustpunt(helper, p);
-        for (ServerPlayer q : List.of(drager, achter, rots, klaar)) {
+        for (ServerPlayer q : List.of(drager, achter, rots, klaar, verder)) {
             rustpunt(helper, q);
         }
         Ring.geef(drager);
@@ -362,15 +363,26 @@ public final class RingH5GameTests {
         helper.assertTrue(!w.ziet(achter), "behind his back: not seen");
         helper.assertTrue(Gaven.isRots(rots) && !w.ziet(rots), "a rock: not seen");
         helper.assertTrue(!w.ziet(klaar), "who finished the story: left alone");
-        Vec3 drPlek = drager.position(), achterPlek = achter.position(), rotsPlek = rots.position(), klaarPlek = klaar.position();
+        // PHASE3 R05: past the gate for good once YOUR chapter 5 is done; the valley is no toll on the way back
+        helper.assertTrue(Hoofdstuk.voorbij(verder) && !Hoofdstuk.voorbij(p) && !Ring.klaar(verder) && !w.ziet(verder), "who finished chapter 5: the guard lets them walk");
+        Terrein dal = veld(helper);
+        Vec3 oog = oogpunt(helper);
+        List<ServerPlayer> wakker = Blik.aanwezig(level, dal, oog);
+        helper.assertTrue(wakker.contains(p) && !wakker.contains(verder) && !wakker.contains(klaar), "the Eye only looks for who is not past the gate: " + wakker.size());
+        nl.juiced.guhs.feature.ring.KnekelRuiterEntity ruiter = Hoofdstuk.maakRuiter(level, List.of(new BlockPos(28 + 4, 7, 21 + 4), new BlockPos(28 + 8, 7, 21 + 4)),
+                Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(4, 2, 4))), Rotation.NONE);
+        helper.assertTrue(ruiter != null && nl.juiced.guhs.feature.ring.Zicht.magZien(p, ruiter) && !nl.juiced.guhs.feature.ring.Zicht.magZien(verder, ruiter)
+                && !nl.juiced.guhs.feature.ring.Zicht.magZien(klaar, ruiter), "a rider of the lane is only there for who still has to sneak past");
+        Vec3 drPlek = drager.position(), achterPlek = achter.position(), rotsPlek = rots.position(), klaarPlek = klaar.position(), verderPlek = verder.position();
         float leven = p.getHealth();
         helper.succeedWhen(() -> {
             helper.assertTrue(bij(p, rust), "seen for " + RoosterwachterEntity.GENADE + " ticks: back at the rest point");
             helper.assertTrue(p.getHealth() == leven, "unharmed");
-            helper.assertTrue(bij(drager, drPlek) && bij(achter, achterPlek) && bij(rots, rotsPlek) && bij(klaar, klaarPlek), "the others stand where they stood");
+            helper.assertTrue(bij(drager, drPlek) && bij(achter, achterPlek) && bij(rots, rotsPlek) && bij(klaar, klaarPlek) && bij(verder, verderPlek),
+                    "the others stand where they stood");
             helper.assertTrue(w.isAlive() && w.position().distanceTo(post) < 0.3, "the guard keeps his post");
             w.discard();
-            weg(helper, p, drager, achter, rots, klaar);
+            weg(helper, p, drager, achter, rots, klaar, verder);
         });
     }
 

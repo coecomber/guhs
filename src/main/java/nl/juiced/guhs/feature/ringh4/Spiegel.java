@@ -138,7 +138,10 @@ public final class Spiegel {
                 }
             });
         } else if (lijn.aanDeBeurt(p) && lijn.stap(p) > 4) {
-            Cutscenes.speel(p, SCENE, pos, draai, null);        // (again, for whoever likes to be scared)
+            // (PHASE3 R07) the mirror showed this player what it had to show: a second click does not lock them into the whole
+            // scene again (55 s, not skippable). Who wants to see it again does so in the Guhdex ("Opnieuw bekijken"), where it
+            // is their own choice and can be closed.
+            p.sendOverlayMessage(Component.translatable(Q + "kalm").withStyle(ChatFormatting.AQUA));
         } else {
             p.sendOverlayMessage(Component.translatable(Q + (lijn.aanDeBeurt(p) ? "donker" : "eigen_snoet")).withStyle(ChatFormatting.AQUA));
         }

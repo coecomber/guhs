@@ -101,7 +101,7 @@ public class RoosterwachterEntity extends PathfinderMob implements GeoEntity {
 
     /** Does he see this player right now? */
     public boolean ziet(ServerPlayer p) {
-        if (!p.isAlive() || p.isSpectator() || p.isCreative() || Ring.klaar(p) || Ring.onzichtbaarVoorMikas(p) || Gaven.isRots(p) || Blik.bijRustpunt(p)) {
+        if (!p.isAlive() || p.isSpectator() || p.isCreative() || Hoofdstuk.voorbij(p) || Ring.onzichtbaarVoorMikas(p) || Gaven.isRots(p) || Blik.bijRustpunt(p)) {
             return false;
         }
         double afstand = distanceToSqr(p);
@@ -135,7 +135,7 @@ public class RoosterwachterEntity extends PathfinderMob implements GeoEntity {
                 gezien.remove(p.getUUID());
                 continue;
             }
-            if (Ring.onzichtbaarVoorMikas(p) && p.distanceToSqr(this) < 3.5 * 3.5 && !Ring.klaar(p)) {
+            if (Ring.onzichtbaarVoorMikas(p) && p.distanceToSqr(this) < 3.5 * 3.5 && !Hoofdstuk.voorbij(p)) {
                 snuif(level, p);
             }
             boolean ziet = ziet(p) && Duwtje.mag(p);
