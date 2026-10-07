@@ -885,7 +885,9 @@ def boomkoepel(b):
                 d = ((x - tx) / 4.4) ** 2 + ((y - (V + 5.5)) / 2.6) ** 2 + ((z - tz) / 4.4) ** 2
                 binnen = (x - cx) ** 2 + (y - V) ** 2 + (z - cz) ** 2 < (r - 1.6) ** 2
                 if d <= 1.0 and binnen and b.naam(x, y, z) is None:
-                    b.set(x, y, z, "guhs:guhbloesem_leaves")
+                    # (persistent: a tile gets no neighbour updates, so a leaf keeps the distance of the template, and a
+                    # leaf at distance 7 that is not persistent falls off at its first random tick)
+                    b.set(x, y, z, "guhs:guhbloesem_leaves", {"distance": "7", "persistent": "true", "waterlogged": "false"})
     b.set(tx, V + 5, tz, "shroomlight")
     b.set(tx - 2, V + 4, tz + 1, "shroomlight")
     b.set(tx + 1, V + 4, tz - 2, "shroomlight")
