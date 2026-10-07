@@ -20,7 +20,7 @@ import net.minecraft.util.StringRepresentable;
  *   <tr><td>oever</td><td>the bank right beside the river (dry, on the terrace, two blocks of terrace behind it); looks at the water</td></tr>
  *   <tr><td>over_rivier</td><td>the middle of the river where it is at most 9 wide with level banks and runs on for 3 blocks both ways; y = the banks; looks ALONG the river, so the building's left-right axis lies across it</td></tr>
  *   <tr><td>waterval</td><td>the bank at the foot of a fall of 4 blocks or more (on the lower terrace, at most 6 from the falling water); looks at the fall</td></tr>
- *   <tr><td>rots</td><td>the bank at the TOP of a tall fall (10 blocks or more within 4 blocks of the edge); looks out over the fall</td></tr>
+ *   <tr><td>rots</td><td>the bank at the TOP of a tall fall (10 blocks or more within 6 blocks of the edge); looks out over the fall</td></tr>
  *   <tr><td>meer_oever</td><td>the shore of the lake (dry, at most 2 above the water, open water for 6 blocks in front); looks at the water</td></tr>
  *   <tr><td>meer_eiland</td><td>the flat ground of a large lake island with 4 blocks of it all around; looks to the nearest water</td></tr>
  *   <tr><td>meer_boom</td><td>3 blocks from the big tree of a large lake island, on the island's inner side; looks at the tree</td></tr>
@@ -218,10 +218,10 @@ public final class BioPlekken {
         return null;
     }
 
-    /** The drop of the water at a {@link Kaart#VAL} column in a direction: down to the lowest water within 4 columns. */
+    /** The drop of the water at a {@link Kaart#VAL} column in a direction: down to the lowest water within 6 columns. */
     static int val(BioModel m, int x, int z, Direction d) {
         int w = m.water(x, z), laag = w;
-        for (int a = 1; a <= 4; a++) {
+        for (int a = 1; a <= 6; a++) {
             int w2 = m.water(x + d.getStepX() * a, z + d.getStepZ() * a);
             if (w2 == Kaart.GEEN || w2 > laag) {
                 break;

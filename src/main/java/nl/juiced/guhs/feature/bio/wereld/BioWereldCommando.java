@@ -41,7 +41,13 @@ import nl.juiced.guhs.feature.bio.BioZelftest;
  *       the water, water outside its bed ("lek"), and how many falls there are and flow;</li>
  *   <li>{@code kaart <x> <z> <chunks>}: generates the chunks around and writes the top blocks and the model to
  *       {@code bio_kaart_<x>_<z>.txt} in the server directory (tools/features/bio_wereld_kaart.py draws it);</li>
- *   <li>{@code tijd <x> <z> <chunks>}: generates the chunks around and says how long a chunk took.</li>
+ *   <li>{@code tijd <x> <z> <chunks>}: generates the chunks around and says how long a chunk took;</li>
+ *   <li>{@code stroom <x> <z> <chunks>}: keeps the chunks around loaded and ticking, so the falls start to flow;</li>
+ *   <li>{@code check|kaart|tijd|stroom bij <name> <chunks>}: the same at the middle of the nearest klaterdal, bloesemmeertje
+ *       or wolkenweide from 0 0, or (name = a kind of spot, e.g. waterval) at the nearest such spot from there; the place
+ *       is printed first, as "bij &lt;name&gt; = x z";</li>
+ *   <li>{@code plektest <soort>}: on a server started with GUHS_BIO_PLEKTEST: finds the nearest test structure of that kind
+ *       of spot and checks that its marker stands where the model says.</li>
  * </ul>
  */
 public final class BioWereldCommando {
@@ -58,7 +64,7 @@ public final class BioWereldCommando {
                         .then(Commands.argument("chunks", IntegerArgumentType.integer(1, 400))
                                 .executes(c -> zeg(c, plek(model(c), StringArgumentType.getString(c, "soort"), IntegerArgumentType.getInteger(c, "x"),
                                         IntegerArgumentType.getInteger(c, "z"), IntegerArgumentType.getInteger(c, "chunks")))))))));
-        for (String wat : new String[]{"check", "kaart", "tijd"}) {
+        for (String wat : new String[]{"check", "kaart", "tijd", "stroom"}) {
             wereld.then(Commands.literal(wat).then(Commands.argument("x", IntegerArgumentType.integer()).then(Commands.argument("z", IntegerArgumentType.integer())
                     .then(Commands.argument("chunks", IntegerArgumentType.integer(0, 12)).executes(c -> {
                         ServerLevel level = c.getSource().getLevel();
@@ -66,10 +72,31 @@ public final class BioWereldCommando {
                         return zeg(c, switch (wat) {
                             case "check" -> List.of(check(level, x, z, r).tekst());
                             case "kaart" -> List.of(kaart(level, x, z, r));
+                            case "stroom" -> List.of(stroom(level, x, z, r));
                             default -> List.of(tijd(level, x, z, r));
                         });
                     })))));
         }
+        // the same three at a biome: "bij <biome> <chunks>" finds the nearest one from 0 0 and goes to its middle
+        for (String wat : new String[]{"check", "kaart", "tijd", "stroom"}) {
+            wereld.then(Commands.literal(wat).then(Commands.literal("bij").then(Commands.argument("biome", StringArgumentType.word())
+                    .then(Commands.argument("chunks", IntegerArgumentType.integer(0, 12)).executes(c -> {
+                        ServerLevel level = c.getSource().getLevel();
+                        BlockPos p = midden(level, StringArgumentType.getString(c, "biome"));
+                        if (p == null) {
+                            return zeg(c, List.of(wat + ": no such biome or spot within 12000 blocks of 0 0"));
+                        }
+                        int r = IntegerArgumentType.getInteger(c, "chunks");
+                        return zeg(c, List.of("bij " + StringArgumentType.getString(c, "biome") + " = " + p.getX() + " " + p.getZ(), switch (wat) {
+                            case "check" -> check(level, p.getX(), p.getZ(), r).tekst();
+                            case "kaart" -> kaart(level, p.getX(), p.getZ(), r);
+                            case "stroom" -> stroom(level, p.getX(), p.getZ(), r);
+                            default -> tijd(level, p.getX(), p.getZ(), r);
+                        }));
+                    })))));
+        }
+        wereld.then(Commands.literal("plektest").then(Commands.argument("soort", StringArgumentType.word())
+                .executes(c -> zeg(c, List.of(plektest(c.getSource().getLevel(), StringArgumentType.getString(c, "soort")))))));
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bio").then(wereld)));
     }
 
@@ -239,6 +266,17 @@ public final class BioWereldCommando {
         return String.format(Locale.ROOT, "tijd %d %d: %d chunks (%d of ours) in %.0f ms, %.1f ms per chunk", x, z, n, onze, ms, ms / n);
     }
 
+    /** Keeps the chunks around loaded and ticking (so the water of the falls starts to flow); undo with /forceload remove all. */
+    static String stroom(ServerLevel level, int x, int z, int straal) {
+        int n = 0;
+        for (int cx = (x >> 4) - straal; cx <= (x >> 4) + straal; cx++) {
+            for (int cz = (z >> 4) - straal; cz <= (z >> 4) + straal; cz++) {
+                n += level.setChunkForced(cx, cz, true) ? 1 : 0;
+            }
+        }
+        return "stroom " + x + " " + z + ": " + n + " chunks now stay loaded and tick";
+    }
+
     static String kaart(ServerLevel level, int x, int z, int straal) {
         BioModel m = model(level);
         Path uit = Path.of("bio_kaart_" + x + "_" + z + ".txt");
@@ -263,6 +301,124 @@ public final class BioWereldCommando {
             return "kaart: " + e;
         }
         return "kaart: " + n + " columns written to " + uit.toAbsolutePath();
+    }
+
+    /**
+     * The middle of the nearest biome of this name from 0 0: from where the biome source first finds it, uphill on the
+     * model's "how far in" value (for the Klaterdal: until the second terrace; else to the top), or null.
+     */
+    static BlockPos midden(ServerLevel level, String biome) {
+        BioPlekken.Soort plek = null;
+        for (BioPlekken.Soort srt : BioPlekken.Soort.values()) {
+            if (srt.getSerializedName().equals(biome)) {
+                plek = srt;
+            }
+        }
+        if (plek != null) {
+            // a kind of spot: the nearest one from the middle of its biome
+            boolean lucht = plek == BioPlekken.Soort.WEIDE || plek == BioPlekken.Soort.LUCHT || plek == BioPlekken.Soort.ZWEEFEILAND;
+            BlockPos van = midden(level, lucht ? "wolkenweide" : biome.startsWith("meer_") ? "bloesemmeertje" : "klaterdal");
+            if (van == null) {
+                return null;
+            }
+            BioModel model = model(level);
+            for (int r = 0; r <= 60; r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) == r) {
+                            Optional<BioPlekken.Plek> gev = BioPlekken.zoek(model, plek, (van.getX() >> 4) + dx, (van.getZ() >> 4) + dz, 30);
+                            if (gev.isPresent()) {
+                                return new BlockPos(gev.get().x(), gev.get().y(), gev.get().z());
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        ResourceKey<Biome> key = switch (biome) {
+            case "klaterdal" -> Bio.KLATERDAL;
+            case "bloesemmeertje" -> Bio.BLOESEMMEERTJE;
+            case "wolkenweide" -> Bio.WOLKENWEIDE;
+            default -> null;
+        };
+        BlockPos p = key == null ? null : BioZelftest.vind(level, key, new BlockPos(0, 80, 0), 12000);
+        if (p == null) {
+            return null;
+        }
+        BioModel m = model(level);
+        boolean weide = key == Bio.WOLKENWEIDE;
+        int x = p.getX(), z = p.getZ();
+        for (int stap = 0; stap < 300; stap++) {
+            if (key == Bio.KLATERDAL && m.terras(x, z) >= 0 && m.terras(x, z) <= 1) {
+                break;
+            }
+            double best = weide ? m.eWeide(x, z) : m.eDal(x, z);
+            int bx = x, bz = z;
+            for (Direction d : Direction.Plane.HORIZONTAL) {
+                double v = weide ? m.eWeide(x + d.getStepX() * 8, z + d.getStepZ() * 8) : m.eDal(x + d.getStepX() * 8, z + d.getStepZ() * 8);
+                if (v > best) {
+                    best = v;
+                    bx = x + d.getStepX() * 8;
+                    bz = z + d.getStepZ() * 8;
+                }
+            }
+            if (bx == x && bz == z) {
+                break;
+            }
+            x = bx;
+            z = bz;
+        }
+        return new BlockPos(x, 80, z);
+    }
+
+    /**
+     * Finds the nearest generated TEST structure of a kind of spot (a server started with GUHS_BIO_PLEKTEST), generates
+     * its chunk and checks that its marker stands on the spot the model gives for that chunk: the glowing post on the
+     * spot, the red block two to the side the spot looks at.
+     */
+    static String plektest(ServerLevel level, String naam) {
+        BioPlekken.Soort soort;
+        try {
+            soort = BioPlekken.Soort.valueOf(naam.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            return "plektest: unknown kind " + naam;
+        }
+        if (!BioPlekStructure.TEST_AAN) {
+            return "plektest: start the server with the environment variable GUHS_BIO_PLEKTEST set";
+        }
+        boolean lucht = soort == BioPlekken.Soort.WEIDE || soort == BioPlekken.Soort.LUCHT || soort == BioPlekken.Soort.ZWEEFEILAND;
+        boolean meer = soort.getSerializedName().startsWith("meer_");
+        String biome = lucht ? "wolkenweide" : meer ? "bloesemmeertje" : "klaterdal";
+        BlockPos van = midden(level, biome);
+        var structures = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        var holder = structures.get(nl.juiced.guhs.Guhs.id(biome + "_plektest_" + soort.getSerializedName()));
+        if (van == null || holder.isEmpty() || !(holder.get().value() instanceof BioPlekStructure)) {
+            return "plektest " + naam + ": FOUT no biome or no test structure";
+        }
+        var gevonden = level.getChunkSource().getGenerator().findNearestMapStructure(level, net.minecraft.core.HolderSet.direct(holder.get()), van, 60, false);
+        if (gevonden == null) {
+            return "plektest " + naam + ": FOUT no structure within 60 chunks of " + van.getX() + " " + van.getZ();
+        }
+        int cx = gevonden.getFirst().getX() >> 4, cz = gevonden.getFirst().getZ() >> 4;
+        BioModel m = model(level);
+        Optional<BioPlekken.Plek> plek = BioPlekken.zoek(m, soort, cx, cz, 30);
+        if (plek.isEmpty()) {
+            return "plektest " + naam + ": FOUT a structure started in chunk " + cx + " " + cz + " but the model has no spot there";
+        }
+        BioPlekken.Plek p = plek.get();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                level.getChunk(cx + dx, cz + dz);
+            }
+        }
+        String post = BuiltInRegistries.BLOCK.getKey(level.getBlockState(new BlockPos(p.x(), p.y() + 1, p.z())).getBlock()).getPath();
+        String anker = BuiltInRegistries.BLOCK.getKey(level.getBlockState(new BlockPos(p.x(), p.y(), p.z())).getBlock()).getPath();
+        String rood = BuiltInRegistries.BLOCK.getKey(level.getBlockState(new BlockPos(p.x() + p.kijk().getStepX() * 2, p.y() + 1,
+                p.z() + p.kijk().getStepZ() * 2)).getBlock()).getPath();
+        boolean goed = post.equals("glowstone") && rood.equals("red_wool") && anker.endsWith("_concrete");
+        return "plektest " + naam + ": " + (goed ? "OK" : "FOUT") + " spot " + p.x() + " " + p.y() + " " + p.z() + " kijk " + p.kijk().getName() + ": plate "
+                + anker + ", post " + post + ", north marker " + rood + "; " + kolom(m, p.x(), p.z());
     }
 
     /** The self test "wereld": each biome is found, and around the find the generated blocks agree with the model. */

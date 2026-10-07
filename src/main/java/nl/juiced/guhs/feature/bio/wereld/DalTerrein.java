@@ -27,26 +27,26 @@ public final class DalTerrein {
     /** e below this: the rim, where our terrain blends in. */
     public static final double RAND = 0.03;
     /** No river nearer to the edge than this (its neighbours must be ours, or it could leak). */
-    public static final double RIVIER_VANAF = 0.042;
+    public static final double RIVIER_VANAF = 0.04;
     /** e where terrace 3 ends, 2 ends, 1 ends, and the valley floor ends (the lake starts). */
-    public static final double[] TRAP = {0.065, 0.10, 0.135, 0.17};
+    public static final double[] TRAP = {0.05, 0.075, 0.10, 0.125};
     /** The top block of terrace 0 (valley floor) .. 3 (rim). */
     public static final int[] HOOGTE = {50, 57, 64, 71};
     /** From this e on the biome is the Bloesemmeertje (a strip of shore before the water). */
-    public static final double MEER_BIOME = 0.155;
+    public static final double MEER_BIOME = 0.112;
     /** How much the small noise frays the terrace edges (in e). */
     public static final double RAFEL = 0.005;
     /** Half the width of the river, and what the pond on the valley floor adds. */
     public static final double RIVIER_BREED = 2.3, VIJVER_BREED = 5.0;
     /** The knijp noise (the detail noise, stretched) above this pinches terrace 2 to a ledge: a tall waterfall. */
-    public static final double KNIJP_VANAF = 0.15;
+    public static final double KNIJP_VANAF = 0.05;
     // </dal-terrein>
 
     static final int MUUR = 100000;
 
     /** The terrace of a (frayed) e: 3 .. 0, or -1 for the lake. */
     public static int terras(double e, double knijp) {
-        double e2 = TRAP[1] + (TRAP[0] + 0.005 - TRAP[1]) * knijp;
+        double e2 = TRAP[1] + (TRAP[0] + 0.003 - TRAP[1]) * knijp;
         if (e < TRAP[0]) {
             return 3;
         }

@@ -45,14 +45,14 @@ public final class BioModel {
 
     // <wereld-plaatsing> (the shares: BioWereldGameTests.bioWereldAandeel; only the kern/placement owner edits these)
     /** The dal region (Klaterdal + Bloesemmeertje) starts where its noise is this high. */
-    public static final double DAL_VANAF = 0.37;
+    public static final double DAL_VANAF = 0.39;
     /** The Wolkenweide starts where its noise is this high. */
-    public static final double WEIDE_VANAF = 0.60;
+    public static final double WEIDE_VANAF = 0.62;
     /** The older regions: {noise, the value where our regions must have ended}; all well before their own terrain starts. */
     private static final double[][] MASKERS = {{R_ZEE, 0.30}, {R_KNUFFEL, 0.45}, {R_POLDER, 0.54}, {R_TOENDRA, 0.44}, {R_GUHWAII, 0.34},
             {R_BLEEKWOUD, 0.60}};
-    /** How fast our regions fade towards an older one (their noises are twice as steep as the dal noise). */
-    private static final double MASKER_SCHAAL = 0.5;
+    /** How fast our regions fade towards an older one: within 0.08 of its noise below the value above, a dal is squeezed (no lake there). */
+    private static final double MASKER_SCHAAL = 2.0;
     /** The Wolkenweide keeps this far (in dal noise) from a dal. */
     private static final double WEIDE_DAL_AF = 0.05;
     // </wereld-plaatsing>
