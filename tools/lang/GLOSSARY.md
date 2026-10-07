@@ -1508,7 +1508,7 @@ back* to your rest fire / flag: never "kill", "die", "damage", "attack", "lives"
 | Ik ga niet zonder jou / Ik ga mee! | I'm Not Going Without You / I'm Coming Too! | |
 | Ik neem de ring wel mee! Al weet ik de weg niet. | I will take the ring! Though I do not know the way. | |
 | Men wandelt niet zomaar naar de Frituurberg | One does not simply walk to Mount Fry | |
-| Pootjes vegen, njeg | Wipe your paws, nyeg | sign at the Last Cozy House |
+| Pootjes vegen, njeg | Wipe your paws, nyeg | the line; on the three SIGNS it is *Wipe paws, nyeg* (a sign line is 90 pixels wide) |
 | dingen die nog gebakken moeten worden | things that have yet to be baked | the mirror; title *Wat nog gebakken moet worden* = *What Has Yet to Be Baked* |
 | Niet duister, maar ROND en VADS als de dageraad! | Not dark, but ROUND and CHONK as the dawn! | |
 | Ik heb alleen maar een beetje trek | I'm only a tiny bit hungry | |
@@ -1588,3 +1588,46 @@ back* to your rest fire / flag: never "kill", "die", "damage", "attack", "lives"
 | Hij had gewoon trek in taart | He Just Wanted Some Cake | |
 | Geheim gevonden, njeg! | Secret found, nyeg! | |
 | Een held! Njeg! / Guhshi is van jou! | A Hero! Nyeg! / Guhshi Is Yours! | |
+
+### Added during the review of c40 - c62 (cross-chunk rules and names)
+
+**Floors.** Dutch *begane grond* = *ground floor*; *eerste / tweede / derde verdieping* = *one floor up / two floors up /
+three floors up* (never "first / second / third floor": American and British counting differ by one, and the player has to
+find the right stairs). *een trap omhoog* = *one staircase up*.
+
+**A quoted button is the button.** Where a text quotes a screen label, use the label's own words: the Filter Piece's
+*alleen deze / alles behalve / laat liggen* = *only these / all except / leave behind* (screen: *Only these*, *All except*,
+*Leave behind:*), a Stop Post's *Ophalen / Afleveren* = *Pick Up / Drop Off*.
+
+**The quest book ticks.** *afvinken* = *to tick off* (as in the older chapters), and the closing lines of a "How Do You
+Get Here?" quest are the standard ones: *Nothing is locked: every quest ticks itself off as soon as you've done it, even
+if you did it earlier. The headings show what logically comes after what. Tick this off and get chonky to work!*
+
+**Steps of a story** (`gui.guhs.verhalen.<story>.stap.N`) are sentences: only the first word and names get a capital
+(*The lookout ridge*, *Up the rope*, but *The Ash Field*, *Shadow Lane*). Quest and advancement TITLES stay Title Case.
+
+**Dutch that stays in en_us on purpose.** Guhdalf's *YOU.. SHALL.. NOT.. VADS!*; the word **VRIJ** on the campsite board of
+the Grill Campground (it is painted into the texture, green, and *BEZET* in red: the English says *a green VRIJ (vacant)
+sign*, never "a VACANT sign"); the dev command `/guhs verhaal demo`; the names *Smikkel*, *Guhdalf*, *Smikagol*...
+
+| Dutch | English | note |
+|---|---|---|
+| baasje (Smikagol to the player) | master | *Volg ons, vadsje... eh, baasje* = *Follow us, chonkie... er, master*; a guh's note still says *my human* |
+| Opa Njeg / Tante Vads / Oma Vahoeg / Neef Guh | Grandpa Nyeg / Auntie Chonk / Granny Wahoog / Cousin Guh | the runners of the Old Guh Wheel Power Plant (with *Uncle Nibble*) |
+| Prof. dr. Guh | Prof. Dr. Guh | sign at the Fossil Dig |
+| wachtkamer (Knabbelmoria) / westpoort / oostpoort / valhek | guard room / West Gate / East Gate / portcullis | the *Wachtkamer* of the toll bridge is a *Waiting Room* |
+| steiger | dock (boats, Sauce Striders) / scaffold (under the toll bridge) / little jetty (the castle) | |
+| gang (under the Black Grill Gate) | tunnel | *de gang* of Nibblemoria is *the corridor* |
+| wei / box / gangpad / voerbak (Mika-stal) | paddock / pen / aisle / feeding trough | |
+| receptie / houtschuur / kampeerplekjes | reception / woodshed / campsites | Grill Campground |
+| afdakje | little roof | Fossil Dig, Ash Field |
+| kijkbedden / brouwhoek | display beds / brewing corner | Pepper Garden |
+| knabbelbak (vuurtoren) | Nibble Trough | |
+| pollen Mikakruid | clumps of Mika Weed | |
+| brok(ken) puin / hakken (puin, zout) | chunk(s) of rubble / to chip | *Hak maar raak!* = *Chip away!* |
+| marktbewijs | market permit | what you haggle over |
+| kaasvijver | cheese pond | Super Guhrio world 1 |
+| ?-blok | ?-block | in the duel's texts; the block itself is the *Question Block* |
+| Floep! (the lighthouse lamp) | Fwoop! | *floept aan* = *fwoops on*; the catapult's *Floep!* is still *Floop!* |
+| Hmpf | Hmph | |
+| %s uur (a duration) | %s h | never "%s hours" (1 hours) |
