@@ -1,0 +1,47 @@
+# biomes3 wereld-kern in a real generated world: the three biomes from the ground and from above.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_wereld.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section het Klaterdal
+tpbiome guhs:guhmension guhs:klaterdal
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot klaterdal_grond
+/tp @s ~ ~40 ~
+look 45 55
+waitrender 300
+shot klaterdal_boven
+
+section het Bloesemmeertje
+tpbiome guhs:guhmension guhs:bloesemmeertje
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot bloesemmeertje_grond
+/tp @s ~ ~45 ~
+look 45 60
+waitrender 300
+shot bloesemmeertje_boven
+
+section de Wolkenweide
+tpbiome guhs:guhmension guhs:wolkenweide
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 -20
+waitrender 300
+hier
+shot wolkenweide_grond
+look 200 -35
+wait 60
+shot wolkenweide_omhoog
+/tp @s ~ ~110 ~
+look 45 60
+waitrender 300
+shot wolkenweide_boven
