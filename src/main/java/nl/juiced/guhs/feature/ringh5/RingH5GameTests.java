@@ -411,6 +411,13 @@ public final class RingH5GameTests {
         level.setBlock(voorDeMond, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
         helper.assertTrue(Hoofdstuk.rotsVoor(level, kamp, 0) == 1, "a block of rock right in front of the mouth is counted");
         level.setBlock(voorDeMond, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+        // the ways on behind the wall are measured the same way, each in its own direction (here the east tunnel: to +x)
+        Terrein verder = terrein(helper, Plekken.UITGANGEN.get(2), OPEN);
+        BlockPos voorDeGang = verder.wereld(Plekken.UITGANGEN.get(2).offset(1, 1, 0));
+        helper.assertTrue(Plekken.UITGANGEN.size() == 3 && Hoofdstuk.rotsAchter(level, verder, 2) == 0, "the east way on is open");
+        level.setBlock(voorDeGang, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
+        helper.assertTrue(Hoofdstuk.rotsAchter(level, verder, 2) == 1, "a block of rock right outside a way on is counted");
+        level.setBlock(voorDeGang, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
         zet(helper, p, new BlockPos(30, 2, 30));
         GuhNpcEntity boromika = Cast.zet(level, GuhNpcEntity.Kind.BOROMIKA, kamp.midden(Plekken.BOROMIKA), 120f, RingH5Feature.BOROMIKA_PLEK);
         Map<String, Vec3> onthoud = new HashMap<>();

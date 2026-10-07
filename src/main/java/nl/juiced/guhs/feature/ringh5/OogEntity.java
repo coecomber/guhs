@@ -54,8 +54,10 @@ import org.joml.Vector3f;
  *       never hurts anybody.</li>
  *   <li>When nobody on the trip is in the valley it sleeps (lids shut); for players whose story is done it has had its
  *       piece of ring and looks the other way.</li>
- *   <li>In a cutscene it is an actor like any other: the animation names {@code omlaag}, {@code schrik}, {@code dicht},
- *       {@code knipper} and {@code slaap} pose it ({@code Cutscene.Builder.animatie}), {@code kijk} turns it.</li>
+ *   <li>In a cutscene it is an actor like any other ({@code Cutscene.Builder.animatie}): {@code slaap} / {@code dicht}
+ *       shut its lids, {@code schrik} / {@code zoek} make it dart about, {@code knipper} / {@code tevreden} / {@code eet}
+ *       are the pleased squint (chapter 6: it gets its piece of ring), any other name ({@code kijk}) is its wide open
+ *       stare; {@code Cutscene.Builder.kijk} turns it.</li>
  * </ul>
  * It knows its {@link Terrein} (saved): the copy of the structure it belongs to. One made by a spawn egg or a command looks
  * for the copy it hangs in; outside any copy it just blinks.
@@ -395,7 +397,7 @@ public class OogEntity extends Mob implements GeoEntity {
             if (scene.equals("schrik") || scene.equals("zoek")) {
                 return state.setAndContinue(ZOEK);
             }
-            if (scene.equals("knipper") || scene.equals("tevreden")) {
+            if (scene.equals("knipper") || scene.equals("tevreden") || scene.equals("eet")) {
                 return state.setAndContinue(TEVREDEN);
             }
             if (!scene.isEmpty()) {

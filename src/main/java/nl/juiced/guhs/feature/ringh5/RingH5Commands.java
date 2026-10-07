@@ -190,7 +190,12 @@ final class RingH5Commands {
             int rots = Hoofdstuk.rotsVoor(level, t, i);
             s.append(" ").append(namen[i]).append(rots == 0 ? " open" : rots >= Hoofdstuk.INGANG_KIJK ? " " + rots + "+ blocks of rock" : " " + rots + " blocks of rock");
         }
-        s.append(" (the compass points at the ").append(namen[Hoofdstuk.besteIngang(level, t, c.getSource().getPosition())]).append(")");
+        s.append(" (the compass points at the ").append(namen[Hoofdstuk.besteIngang(level, t, c.getSource().getPosition())]).append("), ways on:");
+        String[] verder = {"far mouth", "west tunnel", "east tunnel"};
+        for (int i = 0; i < Plekken.UITGANGEN.size(); i++) {
+            int rots = Hoofdstuk.rotsAchter(level, t, i);
+            s.append(" ").append(verder[i]).append(rots == 0 ? " open" : rots >= Hoofdstuk.INGANG_KIJK ? " " + rots + "+ blocks of rock" : " " + rots + " blocks of rock");
+        }
         AABB doos = t.doos(List.of(BlockPos.ZERO, Plekken.MAAT));
         int ogen = level.getEntitiesOfClass(OogEntity.class, doos, Entity::isAlive).size();
         int wachters = level.getEntitiesOfClass(RoosterwachterEntity.class, doos, Entity::isAlive).size();

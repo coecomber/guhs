@@ -87,6 +87,7 @@ public final class Plekken {
 
     /** The three ways in, where they meet the edge of the build: the mouth, and a tunnel through the cliff on either side of the camp. */
     public static final List<BlockPos> INGANGEN = List.of(new BlockPos(48, 7, 0), new BlockPos(0, 7, 6), new BlockPos(95, 7, 6));
+    public static final List<BlockPos> UITGANGEN = List.of(new BlockPos(20, 7, 95), new BlockPos(0, 7, 85), new BlockPos(95, 7, 85));
 
     /** The size of the whole build and its anchor (the burcht's anchor: tools/features/ring_h5.py). */
     public static final BlockPos MAAT = new BlockPos(96, 64, 96);

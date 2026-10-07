@@ -557,10 +557,18 @@ public final class Hoofdstuk {
      * still stand with a side in solid rock (outside the build a player can dig, inside nobody can).
      */
     public static int rotsVoor(ServerLevel level, Terrein t, int ingang) {
-        BlockPos van = Plekken.INGANGEN.get(ingang);
+        return rots(level, t, Plekken.INGANGEN.get(ingang), NAAR_BUITEN[ingang][0], NAAR_BUITEN[ingang][1]);
+    }
+
+    /** The same for a way on behind the wall ({@link Plekken#UITGANGEN}: the far mouth to +z, the tunnels to -x and +x). */
+    public static int rotsAchter(ServerLevel level, Terrein t, int uitgang) {
+        return rots(level, t, Plekken.UITGANGEN.get(uitgang), uitgang == 0 ? 0 : NAAR_BUITEN[uitgang][0], uitgang == 0 ? 1 : 0);
+    }
+
+    private static int rots(ServerLevel level, Terrein t, BlockPos van, int dx, int dz) {
         int rots = 0;
         while (rots < INGANG_KIJK) {
-            BlockPos pos = t.wereld(van.offset(NAAR_BUITEN[ingang][0] * (rots + 1), 1, NAAR_BUITEN[ingang][1] * (rots + 1)));
+            BlockPos pos = t.wereld(van.offset(dx * (rots + 1), 1, dz * (rots + 1)));
             if (!level.isLoaded(pos) || !level.getBlockState(pos).blocksMotion()) {
                 break;
             }

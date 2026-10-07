@@ -17,7 +17,8 @@ The valley is the whole course of chapter 5, from the mouth you come in by (z 0)
                                 riders of the Nine on patrol, then het Wachthek with three Mika guards (only the ring gets you
                                 past them) and behind it the fifth Rustvuurtje at het Roosterpoortje, the little side door
     z 70 - 77   de Muur         the wall with the Zwarte Roosterpoort between its two gate towers; the tunnel of the side door
-    z 78 - 95   Achter de muur  the foot of the tower of the Eye, the last Rustvuurtje, the mouth towards the Frituurberg
+    z 78 - 95   Achter de muur  the foot of the tower of the Eye (a passage runs under it), the last Rustvuurtje, the mouth
+                                towards the Frituurberg and, like at the camp, a tunnel through either cliff: three ways on
 
 PLEKKEN is the single source of every spot the Java side works with (feature/ringh5/Plekken.java has the same numbers; check()
 fails the generator run when they differ, like features/bestaand_bouw.py). All coordinates count in the whole build.
@@ -127,6 +128,9 @@ PLEKKEN = {
     "ROUTE_ACHTER": [(13, F, 72), (13, F, 79), (18, F, 83)],
     # the three ways in: the mouth and a tunnel through the cliff on either side of the camp (where they meet the edge of the build)
     "INGANGEN": [(48, F, 0), (0, F, 6), (95, F, 6)],
+    # and the three ways on, behind the wall: the far mouth and a tunnel through either cliff (the east one lies beyond the passage
+    # under the tower of the Eye)
+    "UITGANGEN": [(20, F, 95), (0, F, 85), (95, F, 85)],
     # the whole build (for the test copy)
     "MAAT": [(SX, SY, SZ)], "ANKER": [ANKER],
 }
@@ -379,34 +383,34 @@ def kamp(b, h):
     b.s.entity(bx + 0.5, F, bz + 0.5, ring.cast(h, "boromika", "ringh5_boromika", "ring_h5", 0, 99, plek="ringh5_kamp", yaw=120.0))
 
 
-def zijgangen(b):
-    """A tunnel through the cliff on either side of the camp, out to the edge of the build: the valley may come to stand in
-    solid rock with its mouth against a wall, and then one of these two may be the side a cave comes by (outside the build
-    a player digs; inside it nobody can)."""
+def zijgangen(b, zm=6, bord=("Kamp van de", "Reisgenoten.", "Vuurtje brandt.", "Kom binnen, njeg!"), wat="in"):
+    """A tunnel through the cliff on either side (around z = zm), out to the edge of the build: the valley may come to stand
+    in solid rock with its mouth against a wall, and then one of these two may be the side a cave comes by (outside the
+    build a player digs; inside it nobody can). At the camp they are ways in, behind the wall ways on."""
     for west in (True, False):
-        xs = range(0, links(6) + 3) if west else range(rechts(6) - 2, SX)
+        xs = range(0, links(zm) + 3) if west else range(rechts(zm) - 2, SX)
         for x in xs:
-            for z in (5, 6, 7):
+            for z in (zm - 1, zm, zm + 1):
                 for y in range(0, G):
                     b.set(x, y, z, ROTS)
-                b.set(x, G, z, STENEN if z == 6 else b.grondblok(x, z))
-                for y in range(F, F + 4 - (1 if z != 6 and x % 5 == 2 else 0)):
+                b.set(x, G, z, STENEN if z == zm else b.grondblok(x, z))
+                for y in range(F, F + 4 - (1 if z != zm and x % 5 == 2 else 0)):
                     b.set(x, y, z, AIR)
             # rock around it where the cliff is thin
-            for z in (4, 8):
+            for z in (zm - 2, zm + 2):
                 for y in range(0, F + 5):
                     if b.get(x, y, z) is None:
                         b.set(x, y, z, ROTS)
-            for z in (5, 6, 7):
+            for z in (zm - 1, zm, zm + 1):
                 for y in (F + 4, F + 5):
                     if b.get(x, y, z) is None:
                         b.set(x, y, z, ROTS)
-        binnen_x = links(6) + 3 if west else rechts(6) - 3
-        b.fence(binnen_x, F, 4)
-        b.fence(binnen_x, F + 1, 4)
-        b.lantern(binnen_x, F + 2, 4)
-        _bord(b, binnen_x + (1 if west else -1), F, 4, 0, ["Kamp van de", "Reisgenoten.", "Vuurtje brandt.", "Kom binnen, njeg!"])
-        b.must_reach["the way in on the " + ("west" if west else "east")] = (0 if west else SX - 1, F, 6)
+        binnen_x = links(zm) + 3 if west else rechts(zm) - 3
+        b.fence(binnen_x, F, zm - 2)
+        b.fence(binnen_x, F + 1, zm - 2)
+        b.lantern(binnen_x, F + 2, zm - 2)
+        _bord(b, binnen_x + (1 if west else -1), F, zm - 2, 0, list(bord))
+        b.must_reach[f"the way {wat} on the " + ("west" if west else "east")] = (0 if west else SX - 1, F, zm)
 
 
 def uitkijk(b):
@@ -1053,6 +1057,26 @@ def achter(b):
         b.set(x, F, z, SMEUL)
     b.must_reach["the last fire"] = (vx + 1, F, vz + 1)
     b.must_reach["the far mouth"] = (20, F, 94)
+    # a passage under the tower of the Eye to the other half of the yard (three wide, glowing coal in its walls)
+    cx, cz = OOG_C
+    for x in range(cx - 8, cx + 9):
+        for z in (cz + 3, cz + 4, cz + 5):
+            b.set(x, G, z, ZWART_GLAD)
+            for y in range(F, F + 3):
+                b.set(x, y, z, AIR)
+            b.set(x, F + 3, z, ZWART if z != cz + 4 else GEBEITELD)
+        if x in (cx - 4, cx, cx + 4):
+            b.set(x, F + 1, cz + 2, GLOEIKOOL)
+    for x in (cx - 8, cx + 8):
+        for z in (cz + 2, cz + 6):
+            for y in range(F, F + 4):
+                b.set(x, y, z, GEPOLIJST)
+    for x, z in ((66, 83), (74, 88), (80, 81)):
+        if b.get(x, G, z) in (ROTS, AS_AARDE) and b.get(x, F, z) == AIR:
+            b.set(x, F, z, SMEUL)
+    b.must_reach["the yard beyond the tower"] = (70, F, 85)
+    # the ways on through the cliffs
+    zijgangen(b, zm=85, bord=("De Frituurberg?", "Volg je neus.", "Het ruikt naar", "frituur. Njeg!"), wat="on")
 
 
 # =====================================================================================================================
