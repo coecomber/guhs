@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -21,6 +22,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -109,6 +111,7 @@ public final class TechbronFeature {
             b -> b.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));
 
     public static void register(IEventBus modBus) {
+        NeoForge.EVENT_BUS.addListener(TechbronFeature::klikOpKachel);
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
@@ -160,6 +163,19 @@ public final class TechbronFeature {
             stack.set(LADING.get(), Math.min(lading, nl.juiced.guhs.feature.vadskracht.VadsGetallen.BATTERIJ));
         }
         return stack;
+    }
+
+    /**
+     * (game bus, both sides) A click on a Blubkacheltje with a Sausblubje jar or blubje food ALWAYS goes to the stove,
+     * also while sneaking. Vanilla skips the block when the player sneaks with something in the hand and lets the item
+     * act instead; the jar's own action is "let the blubje out", so the blubje ended up NEXT to the stove (and sneak +
+     * an empty hand is how it comes out of the stove, so players do sneak here).
+     */
+    private static void klikOpKachel(PlayerInteractEvent.RightClickBlock event) {
+        ItemStack stack = event.getItemStack();
+        if ((stack.is(BLUBJE_IN_POT) || stack.is(BLUBVOER)) && event.getLevel().getBlockState(event.getPos()).getBlock() instanceof BlubkacheltjeBlock) {
+            event.setUseBlock(TriState.TRUE);
+        }
     }
 
     private TechbronFeature() {
