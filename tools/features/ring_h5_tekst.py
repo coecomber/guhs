@@ -56,6 +56,8 @@ TEKSTEN = {
     "quest.guhs.ringh5.smikagol.verder.0": "En nu rechtdoor, baasje, aan de achterkant het dal uit. Volg je neusje: het ruikt daar naar frituur. Lekker vet. Njeg.",
     "quest.guhs.ringh5.smikagol.verder.1": "Niet rechtdoor, baasje, daar zit het dal potdicht van de rots. Het gangetje hier vlakbij, door de rotswand bij het lantaarntje. Daar ruikt het naar frituur!",
     "quest.guhs.ringh5.smikagol.verder.2": "Niet rechtdoor, baasje, daar zit rots. Onder de toren van het Oog door, ssst, zachtjesss... en aan de overkant het gangetje door de rotswand. Daar ruikt het naar frituur!",
+    # (every way on in solid rock, as far as is looked: back out the way the player came in; Hoofdstuk.verder)
+    "quest.guhs.ringh5.smikagol.verder.dicht": "Ssst, baasje... aan de achterkant zit het dal potdicht van de rots, overal. Terug door het Roosterpoortje en dezelfde weg het dal weer uit, dan buitenom: volg je neusje naar de frituur. Of hakken, hakken, hakken. Njeg.",
     "quest.guhs.ringh5.sam.klaar": "Twee stoofpotjes voor de klim. En ik blijf achter die griezel lopen, dan zie ik wat hij doet.",
     # --- the lane ------------------------------------------------------------------------------------------------------------------
     "quest.guhs.ringh5.rook.dicht": "Je ziet geen poot voor ogen in die rook. Had je niet iets dat licht geeft?",

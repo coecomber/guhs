@@ -974,7 +974,9 @@ def ftb(fq):
     q, item, adv, structure, biome, dim = fq.q, fq.item, fq.adv, fq.structure, fq.biome, fq.dim
     y = 60
     q("bbq_put", "Wie heeft hier gebarbecued?", "Ergens in de Guhmensie liggen kapotte barbecues met een half grillkoolframe: de &6barbecueputten&r. Het superkompas (Barbecue > Barbecueput) wijst de weg.",
-      "guhs:gebeitelde_houtskoolsteen_stenen", [structure("barbecueput")], rewards=(("guhs:kaas_knabbels", 12),), x=-8, y=y, shape="hexagon", xp=100)
+      # (bbq2: the task is the visible advancement, not the structure guhs:barbecueput: a new big pit in the Guhmensie is the
+      # middle of a Knabbelgouw, a structure of its own, and features/ring_h1.py lets that advancement count there too)
+      "guhs:gebeitelde_houtskoolsteen_stenen", [adv("guhs:barbecuether/barbecueput")], rewards=(("guhs:kaas_knabbels", 12),), x=-8, y=y, shape="hexagon", xp=100)
     q("bbq_grillguh", "NJEG, mijn barbecue!", "In de grote barbecueput zit de &dGrillguh&r. De Mika's hebben zijn Aanmaakblokjes gejat! Praat met hem.",
       "guhs:grill_koksmuts", [adv("grill_gevonden")], x=-6, y=y)
     q("bbq_grillkool", "Zwart als houtskool", "Laat &6kaassaus&r over een &8blok steenkool&r stromen: sssss... &8grillkool&r! Maak er een paar.",

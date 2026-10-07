@@ -205,7 +205,7 @@ public final class Hoofdstuk {
             Terrein t = HIER.get(p.getUUID());
             if (t != null && t.isIn(p.level())) {
                 // (the valley may stand with a side in solid rock: he names the way on with the least rock behind it)
-                Smikagol.zeg(p, "quest.guhs.ringh5.smikagol.verder." + besteUitgang(p.level(), t));
+                Smikagol.zeg(p, "quest.guhs.ringh5.smikagol.verder." + verder(p.level(), t));
             }
             Entity sam = Sam.van(p);
             if (lijn().eenmalig(p, "proviand")) {
@@ -583,15 +583,24 @@ public final class Hoofdstuk {
     }
 
     /**
-     * The way on with the least rock behind it ({@link Plekken#UITGANGEN}); when it makes no difference the far mouth, then
-     * the tunnel next to the last fire, then the one beyond the tower. Smikagol names it when the chapter is done.
+     * What Smikagol says about the way on when the chapter is done (the end of the lang key): the number of the way on with
+     * the least rock behind it ({@link Plekken#UITGANGEN}; when it makes no difference the far mouth, then the tunnel next to
+     * the last fire, then the one beyond the tower), or
+     * "dicht" when all three stand in solid rock as far as is looked ({@link #INGANG_KIJK}): then he sends the player back out
+     * the way they came in. (Merge of the ring chapters: the first real copy that was looked at with the whole chain in the
+     * world, seed 20261099, stood like that; inside the build nobody can dig.)
      */
-    static int besteUitgang(ServerLevel level, Terrein t) {
+    static String verder(ServerLevel level, Terrein t) {
         int[] rots = new int[Plekken.UITGANGEN.size()];
         for (int i = 0; i < rots.length; i++) {
             rots[i] = rotsAchter(level, t, i);
         }
-        return minste(rots);
+        return verder(rots);
+    }
+
+    static String verder(int... rots) {
+        int beste = minste(rots);
+        return rots[beste] >= INGANG_KIJK ? "dicht" : String.valueOf(beste);
     }
 
     /** The first index of the smallest number. */
