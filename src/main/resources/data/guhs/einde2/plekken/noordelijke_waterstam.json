@@ -1,0 +1,1145 @@
+{
+  "structuur": "noordelijke_waterstam",
+  "soort": "leegte_bouw",
+  "grootte": [
+    224,
+    88,
+    240
+  ],
+  "anker": [
+    104,
+    0,
+    120
+  ],
+  "plekken": {
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        120,
+        31,
+        153
+      ],
+      "tot": [
+        132,
+        40,
+        165
+      ],
+      "wie": "het landingsijs buiten de poort"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        126,
+        31,
+        159
+      ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        112,
+        66,
+        268
+      ],
+      "wie": "boven de zee, recht voor de ijsmuur"
+    },
+    "kamp": {
+      "soort": "zone",
+      "pos": [
+        135,
+        31,
+        153
+      ],
+      "tot": [
+        151,
+        36,
+        165
+      ],
+      "wie": "het kamp van Team Guhvatar"
+    },
+    "appa_kamp": {
+      "soort": "prop",
+      "pos": [
+        145,
+        31,
+        162
+      ],
+      "wie": "Appa-guh ligt hier (5 x 5 vrij)"
+    },
+    "team_aang": {
+      "soort": "npc",
+      "pos": [
+        144,
+        31,
+        154
+      ],
+      "yaw": 0.0,
+      "wie": "Aang-guh",
+      "kind": "AANG_GUH"
+    },
+    "team_momo": {
+      "soort": "npc",
+      "pos": [
+        146,
+        31,
+        154
+      ],
+      "yaw": 20.0,
+      "wie": "Momo-guh"
+    },
+    "team_katara": {
+      "soort": "npc",
+      "pos": [
+        142,
+        31,
+        158
+      ],
+      "yaw": -135.0,
+      "wie": "Katara-guh",
+      "kind": "KATARA_GUH"
+    },
+    "team_sokka": {
+      "soort": "npc",
+      "pos": [
+        146,
+        31,
+        158
+      ],
+      "yaw": 135.0,
+      "wie": "Sokka-guh",
+      "kind": "SOKKA_GUH"
+    },
+    "team_toph": {
+      "soort": "npc",
+      "pos": [
+        148,
+        31,
+        156
+      ],
+      "yaw": 90.0,
+      "wie": "Toph-guh",
+      "kind": "TOPH_GUH"
+    },
+    "team_zuka": {
+      "soort": "npc",
+      "pos": [
+        140,
+        31,
+        159
+      ],
+      "yaw": -90.0,
+      "wie": "Zuka",
+      "kind": "ZUKA"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        134,
+        31,
+        154
+      ],
+      "wie": "bij het kamp"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        170,
+        31,
+        154
+      ],
+      "wie": "op de haven, voor het sluipen naar het schip"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        118,
+        31,
+        134
+      ],
+      "wie": "binnen de poort"
+    },
+    "rustpunt_4": {
+      "soort": "prop",
+      "pos": [
+        116,
+        43,
+        36
+      ],
+      "wie": "achter het paleis, voor de geestenoase"
+    },
+    "rustpunt_5": {
+      "soort": "prop",
+      "pos": [
+        90,
+        49,
+        145
+      ],
+      "wie": "op de ijsmuur, bij de sleebaan en de Golfkansel"
+    },
+    "ijsmuur_poort": {
+      "soort": "prop",
+      "pos": [
+        112,
+        31,
+        145
+      ],
+      "wie": "het midden van de poortboog (hier sluit de poort)"
+    },
+    "poortwachter": {
+      "soort": "npc",
+      "pos": [
+        117,
+        31,
+        155
+      ],
+      "yaw": 0.0,
+      "wie": "de poortwachter-guh",
+      "kind": "WATERSTAM_WACHTER"
+    },
+    "ijsmuur_top": {
+      "soort": "zone",
+      "pos": [
+        40,
+        49,
+        141
+      ],
+      "tot": [
+        184,
+        56,
+        148
+      ],
+      "wie": "de weergang op de ijsmuur"
+    },
+    "golf_plek": {
+      "soort": "prop",
+      "pos": [
+        112,
+        52,
+        148
+      ],
+      "wie": "op de Golfkansel: hier sta je voor de grote golf"
+    },
+    "gracht_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          112,
+          30,
+          105
+        ],
+        [
+          178,
+          30,
+          105
+        ],
+        [
+          178,
+          30,
+          129
+        ],
+        [
+          112,
+          30,
+          129
+        ],
+        [
+          46,
+          30,
+          129
+        ],
+        [
+          46,
+          30,
+          105
+        ],
+        [
+          112,
+          30,
+          105
+        ]
+      ],
+      "wie": "de ringgracht, een rondje met de klok mee vanaf het bekken"
+    },
+    "gracht_groot": {
+      "soort": "pad",
+      "punten": [
+        [
+          112,
+          30,
+          105
+        ],
+        [
+          112,
+          30,
+          129
+        ],
+        [
+          112,
+          30,
+          145
+        ],
+        [
+          112,
+          30,
+          166
+        ]
+      ],
+      "wie": "de Grote Gracht: van het bekken door de poort naar zee"
+    },
+    "gracht_dwars": {
+      "soort": "pad",
+      "punten": [
+        [
+          46,
+          30,
+          117
+        ],
+        [
+          112,
+          30,
+          117
+        ],
+        [
+          178,
+          30,
+          117
+        ]
+      ],
+      "wie": "de dwarsgracht tussen de huizen (smal: drie breed)"
+    },
+    "gondel_start": {
+      "soort": "prop",
+      "pos": [
+        112,
+        31,
+        102
+      ],
+      "wie": "de kade aan het bekken, onder aan de grote trap"
+    },
+    "gondel_halte_1": {
+      "soort": "prop",
+      "pos": [
+        108,
+        31,
+        135
+      ],
+      "wie": "bij de poort"
+    },
+    "gondel_halte_2": {
+      "soort": "prop",
+      "pos": [
+        42,
+        31,
+        117
+      ],
+      "wie": "aan de westgracht"
+    },
+    "gondel_halte_3": {
+      "soort": "prop",
+      "pos": [
+        182,
+        31,
+        117
+      ],
+      "wie": "aan de oostgracht"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        70,
+        31,
+        109
+      ],
+      "yaw": 0.0,
+      "wie": "een Waterstam-guh bij de huizen aan de noordkade",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        150,
+        31,
+        109
+      ],
+      "yaw": 0.0,
+      "wie": "een Waterstam-guh bij de huizen aan de noordkade",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        86,
+        31,
+        126
+      ],
+      "yaw": 180.0,
+      "wie": "een Waterstam-guh op de zuidkade",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        140,
+        31,
+        125
+      ],
+      "yaw": 180.0,
+      "wie": "een Waterstam-guh op de zuidkade",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_5": {
+      "soort": "npc",
+      "pos": [
+        100,
+        31,
+        109
+      ],
+      "yaw": 90.0,
+      "wie": "een Waterstam-guh op de markt",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_6": {
+      "soort": "npc",
+      "pos": [
+        68,
+        37,
+        87
+      ],
+      "yaw": -90.0,
+      "wie": "een Waterstam-guh in de bovenstraat",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_7": {
+      "soort": "npc",
+      "pos": [
+        159,
+        31,
+        160
+      ],
+      "yaw": 180.0,
+      "wie": "een Waterstam-guh in de haven",
+      "kind": "WATERSTAM_GUH"
+    },
+    "bewoner_8": {
+      "soort": "npc",
+      "pos": [
+        84,
+        43,
+        66
+      ],
+      "yaw": 180.0,
+      "wie": "een Waterstam-guh op het paleisterras",
+      "kind": "WATERSTAM_GUH"
+    },
+    "markt": {
+      "soort": "zone",
+      "pos": [
+        96,
+        31,
+        108
+      ],
+      "tot": [
+        106,
+        35,
+        115
+      ],
+      "wie": "de markt aan het bekken"
+    },
+    "trainingsplein": {
+      "soort": "zone",
+      "pos": [
+        90,
+        37,
+        77
+      ],
+      "tot": [
+        134,
+        44,
+        93
+      ],
+      "wie": "het trainingsplein van Meester Pakguh"
+    },
+    "pakguh": {
+      "soort": "npc",
+      "pos": [
+        112,
+        37,
+        79
+      ],
+      "yaw": 0.0,
+      "wie": "Meester Pakguh",
+      "kind": "PAKGUH"
+    },
+    "katara": {
+      "soort": "npc",
+      "pos": [
+        109,
+        37,
+        85
+      ],
+      "yaw": 180.0,
+      "wie": "Katara-guh",
+      "kind": "KATARA_GUH"
+    },
+    "sokka": {
+      "soort": "npc",
+      "pos": [
+        118,
+        37,
+        90
+      ],
+      "yaw": 150.0,
+      "wie": "Sokka-guh",
+      "kind": "SOKKA_GUH"
+    },
+    "zweep_doel_1": {
+      "soort": "prop",
+      "pos": [
+        132,
+        38,
+        78
+      ],
+      "wie": "een zweepdoel"
+    },
+    "zweep_doel_2": {
+      "soort": "prop",
+      "pos": [
+        132,
+        38,
+        81
+      ],
+      "wie": "een zweepdoel"
+    },
+    "zweep_doel_3": {
+      "soort": "prop",
+      "pos": [
+        132,
+        38,
+        84
+      ],
+      "wie": "een zweepdoel"
+    },
+    "zweep_doel_4": {
+      "soort": "prop",
+      "pos": [
+        132,
+        38,
+        87
+      ],
+      "wie": "een zweepdoel"
+    },
+    "zweep_doel_5": {
+      "soort": "prop",
+      "pos": [
+        132,
+        38,
+        90
+      ],
+      "wie": "een zweepdoel"
+    },
+    "golf_bassin": {
+      "soort": "zone",
+      "pos": [
+        142,
+        34,
+        79
+      ],
+      "tot": [
+        168,
+        42,
+        95
+      ],
+      "wie": "het golfbassin"
+    },
+    "ijsbrug_a": {
+      "soort": "prop",
+      "pos": [
+        150,
+        36,
+        87
+      ],
+      "wie": "het eind van de steiger"
+    },
+    "ijsbrug_b": {
+      "soort": "prop",
+      "pos": [
+        157,
+        36,
+        87
+      ],
+      "wie": "de rand van het eilandje"
+    },
+    "paleis": {
+      "soort": "zone",
+      "pos": [
+        88,
+        44,
+        38
+      ],
+      "tot": [
+        136,
+        82,
+        63
+      ],
+      "wie": "het paleis van de hoofdman"
+    },
+    "hoofdman": {
+      "soort": "npc",
+      "pos": [
+        112,
+        47,
+        42
+      ],
+      "yaw": 0.0,
+      "wie": "hoofdman Arnook-guh",
+      "kind": "ARNOOK_GUH"
+    },
+    "yue": {
+      "soort": "npc",
+      "pos": [
+        115,
+        47,
+        42
+      ],
+      "yaw": 0.0,
+      "wie": "prinses Yue-guh",
+      "kind": "YUE_GUH"
+    },
+    "troon": {
+      "soort": "prop",
+      "pos": [
+        112,
+        47,
+        40
+      ],
+      "wie": "de zetel van de hoofdman"
+    },
+    "paleis_poort": {
+      "soort": "prop",
+      "pos": [
+        112,
+        45,
+        63
+      ],
+      "wie": "de grote deur van het paleis"
+    },
+    "genezershut": {
+      "soort": "zone",
+      "pos": [
+        69,
+        43,
+        45
+      ],
+      "tot": [
+        79,
+        48,
+        55
+      ],
+      "wie": "de genezershut van Yugoda-guh"
+    },
+    "geestenoase": {
+      "soort": "zone",
+      "pos": [
+        103,
+        41,
+        12
+      ],
+      "tot": [
+        121,
+        56,
+        30
+      ],
+      "wie": "de geestenoase"
+    },
+    "oase_poort": {
+      "soort": "prop",
+      "pos": [
+        112,
+        43,
+        33
+      ],
+      "wie": "het deurtje in het ijs"
+    },
+    "vis_maan": {
+      "soort": "prop",
+      "pos": [
+        109,
+        42,
+        20
+      ],
+      "wie": "hier zwemt Tui, de maanvis"
+    },
+    "vis_oceaan": {
+      "soort": "prop",
+      "pos": [
+        115,
+        42,
+        20
+      ],
+      "wie": "hier zwemt La, de zeevis"
+    },
+    "yue_maan": {
+      "soort": "prop",
+      "pos": [
+        112,
+        43,
+        20
+      ],
+      "wie": "op het eilandje in de vijver, onder het poortje: hier wordt Yue-guh de maan"
+    },
+    "slee_start": {
+      "soort": "prop",
+      "pos": [
+        96,
+        49,
+        153
+      ],
+      "wie": "de Glijkansel op de ijsmuur"
+    },
+    "slee_baan": {
+      "soort": "pad",
+      "punten": [
+        [
+          93,
+          49,
+          153
+        ],
+        [
+          85,
+          47,
+          153
+        ],
+        [
+          77,
+          46,
+          153
+        ],
+        [
+          69,
+          44,
+          153
+        ],
+        [
+          61,
+          42,
+          153
+        ],
+        [
+          53,
+          40,
+          153
+        ],
+        [
+          49,
+          39,
+          159
+        ],
+        [
+          55,
+          37,
+          163
+        ],
+        [
+          62,
+          36,
+          163
+        ],
+        [
+          69,
+          34,
+          163
+        ],
+        [
+          76,
+          33,
+          163
+        ],
+        [
+          83,
+          31,
+          163
+        ],
+        [
+          90,
+          31,
+          163
+        ]
+      ],
+      "wie": "de sleebaan, van de muur naar het plat"
+    },
+    "slee_finish": {
+      "soort": "prop",
+      "pos": [
+        90,
+        31,
+        163
+      ],
+      "wie": "voor de sneeuwhoop"
+    },
+    "otter_1": {
+      "soort": "wezen",
+      "pos": [
+        96,
+        49,
+        151
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_2": {
+      "soort": "wezen",
+      "pos": [
+        97,
+        49,
+        154
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_3": {
+      "soort": "wezen",
+      "pos": [
+        95,
+        49,
+        155
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_4": {
+      "soort": "wezen",
+      "pos": [
+        97,
+        49,
+        152
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_5": {
+      "soort": "wezen",
+      "pos": [
+        68,
+        31,
+        156
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_6": {
+      "soort": "wezen",
+      "pos": [
+        76,
+        31,
+        159
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_7": {
+      "soort": "wezen",
+      "pos": [
+        84,
+        31,
+        157
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "haven": {
+      "soort": "zone",
+      "pos": [
+        150,
+        31,
+        150
+      ],
+      "tot": [
+        206,
+        44,
+        206
+      ],
+      "wie": "de haven buiten de muur"
+    },
+    "zhao_schip": {
+      "soort": "zone",
+      "pos": [
+        176,
+        28,
+        160
+      ],
+      "tot": [
+        188,
+        52,
+        204
+      ],
+      "wie": "de VNS Schroeiplek"
+    },
+    "zhao": {
+      "soort": "npc",
+      "pos": [
+        182,
+        43,
+        184
+      ],
+      "yaw": 180.0,
+      "wie": "admiraal Zhao-Mika, op de brug",
+      "kind": "ZHAO_MIKA"
+    },
+    "sluip_start": {
+      "soort": "prop",
+      "pos": [
+        170,
+        31,
+        157
+      ],
+      "wie": "achter de tonnen op de haven"
+    },
+    "sluip_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          170,
+          31,
+          157
+        ],
+        [
+          174,
+          31,
+          162
+        ],
+        [
+          174,
+          31,
+          186
+        ],
+        [
+          176,
+          31,
+          186
+        ],
+        [
+          178,
+          35,
+          186
+        ],
+        [
+          178,
+          35,
+          196
+        ],
+        [
+          182,
+          35,
+          198
+        ],
+        [
+          185,
+          35,
+          190
+        ],
+        [
+          185,
+          29,
+          196
+        ],
+        [
+          184,
+          29,
+          199
+        ]
+      ],
+      "wie": "over de steiger, de ladder op, achter de tonnen langs om de schoorsteen, de trap achter de toren af en naar de cel"
+    },
+    "sluip_wacht_1": {
+      "soort": "npc",
+      "pos": [
+        182,
+        35,
+        166
+      ],
+      "yaw": 180.0,
+      "wie": "een Vuurnatie-Mika boven aan de boegklep",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "sluip_wacht_2": {
+      "soort": "npc",
+      "pos": [
+        184,
+        35,
+        176
+      ],
+      "yaw": 180.0,
+      "wie": "een Vuurnatie-Mika op het voordek, bij de katapult",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "sluip_wacht_3": {
+      "soort": "npc",
+      "pos": [
+        182,
+        35,
+        179
+      ],
+      "yaw": 180.0,
+      "wie": "een Vuurnatie-Mika voor de deur van de toren",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "sluip_wacht_4": {
+      "soort": "npc",
+      "pos": [
+        182,
+        29,
+        175
+      ],
+      "yaw": 0.0,
+      "wie": "een Vuurnatie-Mika in het ruim",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "sluip_wacht_5": {
+      "soort": "npc",
+      "pos": [
+        184,
+        29,
+        197
+      ],
+      "yaw": 180.0,
+      "wie": "een Vuurnatie-Mika voor de cel",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "maanvis_kooi": {
+      "soort": "prop",
+      "pos": [
+        181,
+        29,
+        201
+      ],
+      "wie": "de kuip in de kooi, in de cel in het achterschip"
+    },
+    "vloot": {
+      "soort": "zone",
+      "pos": [
+        48,
+        31,
+        170
+      ],
+      "tot": [
+        144,
+        54,
+        217
+      ],
+      "wie": "open zee voor de muur: de vloot, en de grote golf"
+    },
+    "knipoog_sjokkel": {
+      "soort": "pad",
+      "punten": [
+        [
+          84,
+          44,
+          75
+        ],
+        [
+          96,
+          44,
+          75
+        ]
+      ],
+      "wie": "Sjokkel kruipt over de rand van het paleisterras, achter het trainingsplein"
+    },
+    "knipoog_sjokkel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          99,
+          39,
+          86
+        ],
+        [
+          90,
+          44,
+          75
+        ]
+      ],
+      "wie": "vanaf het plein omhoog naar de rand"
+    },
+    "knipoog_balto_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          52,
+          37,
+          89
+        ],
+        [
+          80,
+          37,
+          89
+        ],
+        [
+          98,
+          37,
+          89
+        ],
+        [
+          98,
+          37,
+          91
+        ],
+        [
+          56,
+          37,
+          91
+        ]
+      ],
+      "wie": "Baltoguh sjokt met zijn slee de bovenstraat uit het plein op en weer terug"
+    },
+    "knipoog_balto_stop": {
+      "soort": "npc",
+      "pos": [
+        98,
+        37,
+        89
+      ],
+      "yaw": 180.0,
+      "wie": "Baltoguh blijft staan en kijkt naar de ijsstad"
+    },
+    "knipoog_balto_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          104,
+          40,
+          96
+        ],
+        [
+          100,
+          38,
+          87
+        ]
+      ],
+      "wie": "vanaf de grote trap over het plein"
+    },
+    "vloot_anker": {
+      "soort": "prop",
+      "pos": [
+        50,
+        31,
+        172
+      ],
+      "wie": "de oorsprong van laag_vloot (de noordwesthoek, op het water)"
+    }
+  },
+  "lagen": {
+    "vloot": {
+      "template": "guhs:noordelijke_waterstam/laag_vloot",
+      "pos": [
+        50,
+        31,
+        172
+      ],
+      "grootte": [
+        92,
+        18,
+        44
+      ]
+    }
+  }
+}

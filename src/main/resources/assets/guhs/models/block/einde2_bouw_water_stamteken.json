@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "guhs:block/einde2_bouw_water_stamteken"
+  }
+}

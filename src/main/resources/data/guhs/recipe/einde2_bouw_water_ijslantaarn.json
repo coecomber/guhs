@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SKS",
+    " S "
+  ],
+  "key": {
+    "S": "guhs:einde2_bouw_water_ijssteen",
+    "K": "guhs:guh_kristal"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_water_ijslantaarn",
+    "count": 4
+  }
+}
