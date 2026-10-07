@@ -105,9 +105,11 @@ class Guide:
              f"Bring an <b>iron pickaxe</b>: the shiny pink {L('blokken/compressed_super_vahoege_vads', 'compressed super vahoege vads')} ore in the "
              "Guhmension only drops something with iron (or better). Every other Guhs ore, kaasknabbel ore too, breaks with any pickaxe."),
             (f"Veel later wil je {L('blokken/grillkool', 'grillkool')} voor het portaal naar de {L('dimensies/barbecuether')}: dat vraagt een houweel van "
-             f"diamantniveau, maar een {L('items/vahoege_vads_pickaxe', 'vahoege-vadshouweel')} telt ook. Dus nog steeds geen diamanten nodig. Vahoeg!",
+             f"diamantniveau, maar een {L('items/vahoege_vads_pickaxe', 'vahoege-vadshouweel')} telt ook. Dus nog steeds geen diamanten nodig. Vahoeg! "
+             f"Het portaal gaat pas open na het eerste hoofdstuk van {L('verhalen/knabbelring')}: tien gezellige minuten bij Guhdalf.",
              f"Much later you'll want {L('blokken/grillkool', 'grillkool')} for the portal to the {L('dimensies/barbecuether')}: that takes a diamond-level "
-             f"pickaxe, but a {L('items/vahoege_vads_pickaxe', 'vahoege vads pickaxe')} counts too. So still no diamonds needed. Vahoeg!"),
+             f"pickaxe, but a {L('items/vahoege_vads_pickaxe', 'vahoege vads pickaxe')} counts too. So still no diamonds needed. Vahoeg! "
+             f"The portal only opens after the first chapter of {L('verhalen/knabbelring')}: ten cozy minutes with Guhdalf."),
             ("<b>Wat eten</b> voor onderweg (brood, gebakken vlees, of straks guhsnacks).",
              "<b>Some food</b> for the trip (bread, cooked meat, or guh snacks later on)."),
             ("<b>Een bed</b>. In de Guhmensie werken bedden gewoon: slaap er een keer in, vlak bij je portaal, dan word je daar wakker als het misgaat "

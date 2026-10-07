@@ -13,11 +13,23 @@ import sys
 VERSION = "1.1.0"
 
 
+def _ftb():
+    """tools/make_ftbquests.py as a namespace (run once, without writing anything)."""
+    if not hasattr(_ftb, "ns"):
+        import runpy
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        _ftb.ns = runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_ftbquests.py"), run_name="count")
+    return _ftb.ns
+
+
 def quest_count():
-    """How many quests the FTB chapter has (tools/make_ftbquests.py, without writing anything)."""
-    import runpy
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    return len(runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_ftbquests.py"), run_name="count")["QUESTS"])
+    """How many quests the FTB chapters have."""
+    return len(_ftb()["QUESTS"])
+
+
+def chapter_count():
+    """How many FTB chapters there are."""
+    return len(_ftb()["ORDER"])
 
 
 def t(en, nl):
@@ -174,6 +186,10 @@ code,kbd{font-family:var(--mono);font-size:.88em;background:var(--rasp-soft);pad
 .cmd{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;padding:6px 10px}
 .note{border-left:4px solid var(--cheese);background:var(--cheese-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+details.spoiler{border:1.5px dashed var(--lilac);border-radius:12px;padding:8px 12px;margin:8px 0;background:var(--card);max-width:68ch}
+details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--muted)}
+.sec .sec{margin:12px 0 0;border-radius:14px}
+.sec .sec h2{font-size:21px}
 footer{color:var(--muted);font-size:14px;padding-bottom:40px}
 @media (max-width:860px){
   .layout{grid-template-columns:minmax(0,1fr)}
@@ -2759,6 +2775,61 @@ def guhpixel_sections():
     return out
 
 
+def bbq2_sections():
+    """bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio): the texts of the slices'
+    notes tools/features/*_wiki.py with the English of tools/wiki_bbq2/en.py (tools/wiki_bbq2/__init__.py joins them). One
+    section per wiki page, inside one section per group, so the wiki site (tools/wiki_site/kb.py) can put every text on its
+    page; a paragraph the spoiler rule hides sits in a <details class="spoiler">. -> [(sid, en, nl, html)]"""
+    import wiki_bbq2
+    b = wiki_bbq2.cached(os.getcwd())
+    esc = lambda x: html.escape(x, quote=False)
+    pages, groep = {}, {}          # page -> [text rows] in the order of the notes; page -> its group
+    for row in b.tekst:
+        pages.setdefault(row["pagina"], []).append(row)
+        groep.setdefault(row["pagina"], b.groep(row["module"]))
+    own = dict(b.verhalen, **b.systemen)
+
+    def titel(pid):
+        if pid in own:
+            return own[pid]["en"], own[pid]["nl"]
+        return wiki_bbq2.ANDERE_PAGINA.get(pid, (pid, pid))
+
+    def tekst(row):
+        if isinstance(row["nl"], dict):
+            head, rows = row["nl"]["tabel"]
+            return table(head, rows)
+        nl, en = row["nl"].split("\n\n"), (row["en"] or row["nl"]).split("\n\n")
+        if len(en) != len(nl):          # (the English has other paragraph breaks: one block each)
+            nl, en = [" ".join(nl)], [" ".join(en)]
+        return "".join(p(esc(e), esc(n)) for e, n in zip(en, nl))
+
+    out = []
+    for gid, g_en, g_nl, _ in wiki_bbq2.GROEPEN:
+        body = ""
+        for pid, rows in pages.items():
+            if groep[pid] != gid:
+                continue
+            parts, last = [], None
+            for row in rows:
+                text = tekst(row)
+                if row["spoiler"]:
+                    kop = f'<p><b>{t(esc(row["kopje_en"]), esc(row["kopje"]))}</b></p>' if row.get("kop_verborgen") else ""
+                    text = (f'<details class="spoiler"><summary>{t("Spoiler: click to read", "Spoiler: klik om te lezen")}</summary>'
+                            f'{kop}{text}</details>')
+                if row.get("kop_verborgen"):          # (the heading itself is the surprise: it is inside the toggle)
+                    parts.append(text)
+                    continue
+                if (row["kopje_en"], row["kopje"]) != last:
+                    parts.append(h3(esc(row["kopje_en"]), esc(row["kopje"])))
+                    last = (row["kopje_en"], row["kopje"])
+                parts.append(text)
+            en, nl = titel(pid)
+            body += section(wiki_bbq2.sectie(pid), esc(en), esc(nl), "".join(parts), open_=False)
+        if any(groep[x] == gid for x in pages):
+            out.append((gid, g_en, g_nl, section(gid, g_en, g_nl, body)))
+    return out
+
+
 def bleekwoud_section():
     """1.2.8: Het Bleekwoud (the mod's own Pale Garden): the biome, bleekhout, the guh hearts with the Kraakguh and the
     Kraak-Mika, kaashars, the oogbloempje, and the two structures (tools/features/bleekwoud.py)."""
@@ -3951,17 +4022,17 @@ def build():
       "Nederlands is, anders Engels). Zelf kiezen kan met de knop <b>Taal</b> in het guhmenu, of met <i>Taal van Guhs</i> in de instellingen van de mod "
       "(<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in het bestand: <code>language</code> in <code>config/guhs-client.toml</code>): "
       "Auto, NL of EN. Elke speler kiest voor zichzelf, ook op een server."),
-     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: fourteen chapters with "
-      + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen and the critters...). "
+     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: " + str(chapter_count()) + " chapters with "
+      + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen, the critters, Guh Technology, The Lord of the Nibble Ring and Super Guhrio...). "
       "Each chapter starts with a <i>Hoe kom je hier?</i> quest that links to where it begins.",
-      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: veertien hoofdstukken met " + str(quest_count()) + " quests "
-      "(elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, het Guheinde, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de Guhverhalen en de diertjes...). Elk hoofdstuk begint met een "
+      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: " + str(chapter_count()) + " hoofdstukken met " + str(quest_count()) + " quests "
+      "(elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, het Guheinde, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de Guhverhalen, de diertjes, Guh-technologie, In de ban van de Knabbelring en Super Guhrio...). Elk hoofdstuk begint met een "
       "<i>Hoe kom je hier?</i>-quest met een linkje naar waar het begint.")])}
 """))
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------
     # --- new in 1.2.8: het Bleekwoud ------------------------------------------------------------------------------------------
-    _px = guhpixel_sections()                # guhpixel, the Reisbureau, the Guh-parkour (built once: the contents list below reuses it)
+    _px = bbq2_sections() + guhpixel_sections()   # bbq2, then guhpixel, the Reisbureau, the Guh-parkour (built once: the contents list below reuses it)
     for _sid, _en, _nl, _html in _px:
         S.append(_html)
     S.append(bleekwoud_section())
@@ -4881,8 +4952,8 @@ def build():
              "Found in hamster houses. Unlike normal spawners you can mine it with a pickaxe and take it home.",
              "Te vinden in hamsterhuizen. Anders dan gewone spawners kun je hem met een houweel meenemen."),
         card(img("guh_sitting", "Bank Guh"), "Bank Guh", "Bankguh",
-             "So <i>vadsig</i> it stores infinite items in its stomach. Search (<code>@mod</code>), sort, filter, a crafting grid, deposit all. Keeps everything when broken. Only from the Hungry Guh at a guh picnic (one per player); it can't be crafted.",
-             "Zo <i>vadsig</i> dat er oneindig veel spullen in zijn buikje passen. Zoeken (<code>@mod</code>), sorteren, filteren, een werkbank, alles erin. Houdt alles als je hem breekt. Alleen van de Hongerige Guh bij een guhpicknick (een per speler); je kunt hem niet zelf maken."),
+             "So <i>vadsig</i> that all sorts of things fit in its tummy: 256 of each kind (more only with the Inventor Guh's Bottomless Nibble Belly). Search (<code>@mod</code>), sort, filter, a crafting grid, deposit all. Keeps everything when broken. Only from the Hungry Guh at a guh picnic (one per player); it can't be crafted.",
+             "Zo <i>vadsig</i> dat er van alles in zijn buikje past: 256 van elke soort (meer alleen met het Bodemloos Knabbelmaagje van de Uitvinder-guh). Zoeken (<code>@mod</code>), sorteren, filteren, een werkbank, alles erin. Houdt alles als je hem breekt. Alleen van de Hongerige Guh bij een guhpicknick (een per speler); je kunt hem niet zelf maken."),
         card(icon("picked_up_guh", "Picked-up guh").replace('class="px"', 'class="px" style="width:96px;height:96px"'),
              "Picked-up Guh", "Opgepakte guh", "Your guh, in your pocket. Put it down on a block, or into a Guh Wheel.",
              "Je guh, in je zak. Zet hem op een blok, of in een guhrad."),
@@ -4944,30 +5015,38 @@ def build():
     # --- redstone -------------------------------------------------------------------------------------------------
     red = entry(img("guh_wheel", "Guh wheel"), "Guh Wheel", "Guhrad",
                 p("A big pink flower-shaped running wheel (3 blocks wide and tall). Pick up your tamed guh and right-click the wheel "
-                  "with it: the guh runs and the wheel spins. While it runs, the wheel gives <b>full redstone power (15)</b> in every "
-                  "direction. Right-click the running wheel to get your guh back.",
+                  "with it: the guh runs and the wheel spins. A running wheel is a <b>source of chonk power</b> for every guh machine "
+                  "next to it or joined to it with Guh Wire; a happy guh gives more. Look at the wheel and you read how much its setup "
+                  "uses. While it runs the wheel also still gives redstone power (15). Right-click the running wheel to get your guh back.",
                   "Een groot roze bloemvormig loopwiel (3 blokken breed en hoog). Pak je tamme guh op en rechtsklik er het rad mee: "
-                  "de guh rent en het rad draait. Zolang hij rent geeft het rad <b>volle redstonestroom (15)</b> in alle richtingen. "
-                  "Rechtsklik op het draaiende rad om je guh terug te krijgen."), wide=True) + \
+                  "de guh rent en het rad draait. Een draaiend rad is een <b>bron van vadskracht</b> voor elke guhmachine die ernaast "
+                  "staat of er met Guhdraad aan vastzit; een blij guhtje geeft meer. Kijk naar het rad en je leest hoeveel de opstelling "
+                  "gebruikt. Zolang het draait geeft het rad ook nog steeds redstonestroom (15). Rechtsklik op het draaiende rad om je "
+                  "guh terug te krijgen."), wide=True) + \
           entry(img("guh_wire", "Guh wire"), "Guh Wire", "Guhdraad",
-                p("Pink redstone dust that <b>never fades</b>. It connects like redstone dust (dots, lines, corners, up steps). "
-                  "When any part of a connected wire is powered, the whole wire gives full power &mdash; however long it is. "
-                  "Dark rose when off, bright pink with sparkles when on. It's powered by anything that gives redstone power except "
-                  "redstone dust (put a repeater in between).",
-                  "Roze redstonestof die <b>nooit zwakker wordt</b>. Hij verbindt zoals redstonestof (puntjes, lijnen, hoeken, trapjes op). "
-                  "Als er ergens stroom op een verbonden draad staat, geeft de hele draad volle stroom &mdash; hoe lang hij ook is. "
-                  "Donker oudroze als hij uit is, felroze met glinsteringen als hij aan is. Werkt met alles wat redstonestroom geeft "
-                  "behalve redstonestof (zet er een versterker tussen)."), wide=True) +           entry(img("guh_oven", "Guh oven"), "Guh Oven", "Guhoven",
-                p("<i>New in 1.2.5.</i> A pink furnace with a guh face that needs <b>no fuel</b>: it bakes on <b>guh power</b>. Put it "
-                  "next to a running Guh Wheel (any of its blocks) or next to powered Guh Wire and it smelts just like a furnace (the "
-                  "same recipes and speed, XP, hoppers, comparator). Ordinary redstone (levers, torches, a redstone block) does nothing. "
-                  "Its screen has a little guh wheel instead of the fuel slot: pink while it bakes.",
-                  "<i>Nieuw in 1.2.5.</i> Een roze oven met een guhgezichtje die <b>geen brandstof</b> nodig heeft: hij bakt op "
-                  "<b>guhkracht</b>. Zet hem naast een draaiend Guhrad (elk blok ervan) of naast Guhdraad met stroom erop en hij smelt "
-                  "net als een oven (dezelfde recepten en snelheid, XP, trechters, comparator). Gewone redstone (hendels, fakkels, een "
-                  "redstoneblok) doet niks. In zijn scherm zit een klein guhradje in plaats van het brandstofvakje: roze als hij bakt."),
+                p("Pink wire that carries <b>chonk power</b> from your sources to your guh machines. It connects like redstone dust "
+                  "(dots, lines, corners, up steps), and everything joined by it is one setup: look at it and you read how much chonk "
+                  "power that setup uses. Dark rose when the setup is off, bright pink with sparkles while it runs; then it also gives a "
+                  "redstone signal, so a lamp at the end of the wire simply burns. Redstone INTO the wire does nothing: a lever or a "
+                  "redstone block is not a source.",
+                  "Roze draad die <b>vadskracht</b> van je bronnen naar je guhmachines brengt. Hij verbindt zoals redstonestof "
+                  "(puntjes, lijnen, hoeken, trapjes op), en alles wat eraan vastzit is samen één opstelling: kijk ernaar en je leest "
+                  "hoeveel vadskracht die opstelling gebruikt. Donker oudroze als de opstelling stilstaat, felroze met glinsteringen als "
+                  "ze draait; dan geeft hij ook een redstonesignaal, dus een lamp aan het eind van de draad brandt gewoon. Redstone de "
+                  "draad IN doet niks: een hendel of een redstoneblok is geen bron."), wide=True) + \
+          entry(img("guh_oven", "Guh oven"), "Guh Oven", "Guhoven",
+                p("A pink furnace with a guh face that needs <b>no fuel</b>: it bakes on <b>chonk power</b>. Put it next to a Guh "
+                  "Wheel with a guh running in it (any of its blocks), or join it with Guh Wire to any source, and it smelts just like a "
+                  "furnace (the same recipes and speed, XP, hoppers, comparator). Ordinary redstone (levers, torches, a redstone block) "
+                  "does nothing, and without chonk power its snoot sleeps. Its screen has a little guh wheel instead of the fuel slot: "
+                  "pink while it bakes.",
+                  "Een roze oven met een guhgezichtje die <b>geen brandstof</b> nodig heeft: hij bakt op <b>vadskracht</b>. Zet hem "
+                  "naast een Guhrad waar een guh in rent (elk blok ervan), of sluit hem met Guhdraad aan op een bron, en hij smelt net "
+                  "als een oven (dezelfde recepten en snelheid, XP, trechters, comparator). Gewone redstone (hendels, fakkels, een "
+                  "redstoneblok) doet niks, en zonder vadskracht slaapt zijn snoet. In zijn scherm zit een klein guhradje in plaats van "
+                  "het brandstofvakje: roze als hij bakt."),
                 wide=True) +           '<div class="recipes">' + recipe_card("guh_oven", "Guh Oven", "Guhoven") + '</div>'
-    S.append(section("redstone", "Redstone", "Redstone", red))
+    S.append(section("redstone", "Chonk power and redstone", "Vadskracht en redstone", red))
 
     # --- guhmension -------------------------------------------------------------------------------------------------
     FLAT, ROLL, STEEP = ("almost flat", "bijna vlak"), ("rolling hills", "glooiende heuvels"), ("very steep", "heel steil")
@@ -5331,7 +5410,7 @@ def build():
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),
-        ("redstone", "Redstone", "Redstone"),
+        ("redstone", "Chonk power", "Vadskracht"),
         ("guhmension", "The Guhmension", "De Guhmensie"), ("villages", "Guh villages", "Guhdorpen"), ("structures", "Structures", "Bouwwerken"),
         ("recipes", "Recipes", "Recepten"), ("more", "Advancements", "Vooruitgangen")])
 
