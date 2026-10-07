@@ -1,0 +1,121 @@
+# einde2, slice bouw_water, in a real generated world: the Noordelijke Waterstam from the sea, its gate, the canals, the
+# training square, the palace inside and out, the spirit oasis, the sled run, the harbour and Zhao's ship, and the fleet
+# overlay put down and taken away again. (/guhs einde2 plek teleports to a marker of the one guaranteed copy; the Guheinde
+# has no skylight, so no time of day. The first teleport generates the whole place: give it time.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_water.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/guhs einde2 waar noordelijke_waterstam
+/guhs einde2 plek noordelijke_waterstam aankomst_speler
+wait 200
+
+section the opening shot: the ice wall from above the sea
+/guhs einde2 plek noordelijke_waterstam uitzicht
+wait 20
+look 180 18
+waitrender 600
+hier
+shot e2_water_uitzicht
+
+section the landing place, the camp and the gate
+/guhs einde2 plek noordelijke_waterstam aankomst_speler
+look 135 -8
+waitrender 300
+shot e2_water_aankomst
+/guhs einde2 plek noordelijke_waterstam poortwachter
+look 150 -25
+wait 60
+shot e2_water_poort
+
+section through the gate: the great canal, the houses, a bridge
+/guhs einde2 plek noordelijke_waterstam rustpunt_3
+look 180 -5
+waitrender 300
+shot e2_water_gracht
+/guhs einde2 plek noordelijke_waterstam bewoner_1
+look 90 0
+wait 60
+shot e2_water_kade
+/guhs einde2 plek noordelijke_waterstam gondel_start
+look 0 0
+wait 60
+shot e2_water_bekken
+
+section the training square and the wave pool
+/guhs einde2 plek noordelijke_waterstam katara
+look 180 -10
+waitrender 200
+shot e2_water_plein
+/guhs einde2 plek noordelijke_waterstam ijsbrug_a
+look -90 5
+wait 60
+shot e2_water_bassin
+
+section the palace: from the terrace, the throne hall, the council hall
+/guhs einde2 plek noordelijke_waterstam bewoner_8
+look -130 -25
+waitrender 300
+shot e2_water_paleis
+/guhs einde2 plek noordelijke_waterstam paleis_poort
+look 180 -5
+wait 80
+shot e2_water_troonzaal
+/guhs einde2 plek noordelijke_waterstam hoofdman
+look 0 5
+wait 60
+shot e2_water_troon_terug
+
+section the spirit oasis
+/guhs einde2 plek noordelijke_waterstam rustpunt_4
+look 150 0
+wait 60
+shot e2_water_oasedeur
+/guhs einde2 plek noordelijke_waterstam yue_maan
+look 180 -20
+waitrender 200
+shot e2_water_oase_waterval
+look 0 10
+wait 40
+shot e2_water_oase_vijver
+
+section the wall top: the Golfkansel and the start of the sled run
+/guhs einde2 plek noordelijke_waterstam golf_plek
+look 0 15
+waitrender 300
+shot e2_water_golfkansel
+/guhs einde2 plek noordelijke_waterstam slee_start
+look 90 20
+wait 60
+shot e2_water_slee_start
+/guhs einde2 plek noordelijke_waterstam slee_finish
+look 90 -15
+wait 60
+shot e2_water_slee_finish
+
+section the harbour and the VNS Schroeiplek
+/guhs einde2 plek noordelijke_waterstam sluip_start
+look -30 -10
+waitrender 300
+shot e2_water_haven
+/guhs einde2 plek noordelijke_waterstam sluip_wacht_2
+look 0 0
+wait 60
+shot e2_water_schip_dek
+/guhs einde2 plek noordelijke_waterstam sluip_wacht_5
+look 0 0
+wait 60
+shot e2_water_schip_cel
+/guhs einde2 plek noordelijke_waterstam zhao
+look 180 10
+wait 60
+shot e2_water_schip_brug
+
+section the fleet (the overlay, for everybody) seen from the Golfkansel, and gone again
+/guhs einde2 plek noordelijke_waterstam golf_plek
+/guhs einde2 bouw_water vloot aan
+look 0 20
+waitrender 300
+shot e2_water_vloot
+/guhs einde2 bouw_water vloot uit
+wait 60
+shot e2_water_vloot_weg
