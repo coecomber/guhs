@@ -1,0 +1,47 @@
+# biomes3, slice blokken-wolk: every block of the slice in one row (the dev command builds it), by day and by night.
+# Particles (the wolkenstroom's puffs and arrows, the waterfall's foam and mist) show in the shots; the sounds do not.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_blokken_wolk.txt -PautocheckTimeout=20
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 180 0
+wait 60
+/guhs bio blokken-wolk proef 0 180 0
+wait 100
+
+section the cloud bank and the rainbow
+camera 10 190 24 180 30
+waitrender 200
+shot wolk_bank_boven
+camera 10 174 20 180 -30
+wait 40
+shot wolk_bank_onder
+camera 27 190 22 180 20
+wait 40
+shot wolk_regenboog
+camera 27 200 3.5 90 89
+wait 40
+shot wolk_regenboog_boven
+
+section the furniture and the petals
+camera 22 185 19 180 30
+wait 40
+shot wolk_meubels
+camera 32.5 187 20 180 45
+wait 40
+shot wolk_blaadjes
+
+section the waterfalls (the tall one foams, the drop of two does not) and the lift columns (white arrows up, pink arrows down)
+camera 42.5 184 12 180 0
+wait 200
+shot wolk_waterval
+camera 42.5 185 24 180 -10
+wait 100
+shot wolk_lift
+/time set midnight
+wait 200
+shot wolk_lift_nacht
+camera 22 185 19 180 30
+wait 40
+shot wolk_meubels_nacht
