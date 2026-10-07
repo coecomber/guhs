@@ -1,0 +1,228 @@
+maat 75 9 51
+voet 2
+start 37.5 2.0 12.5 180.0
+zone slaapzaal kamer 4 4 18 14
+zone kantine kamer 28 3 46 15
+zone navigatie kamer 56 4 70 14
+zone reactor kamer 4 20 18 30
+zone ziekenboeg kamer 24 20 34 30
+zone elektra kamer 40 20 50 30
+zone machinekamer kamer 4 36 18 46
+zone voorraadkamer kamer 28 35 46 47
+zone schildkamer kamer 56 36 70 46
+zone gang_h1 gang 19 8 27 10
+zone gang_h2 gang 47 8 55 10
+zone gang_h3 gang 19 40 27 42
+zone gang_h4 gang 47 40 55 42
+zone gang_v1a gang 10 15 12 19
+zone gang_v1b gang 10 31 12 35
+zone gang_v2 gang 62 15 64 35
+zone gang_vm gang 35 16 39 34
+knoop hub_slaapzaal_0 11 9 slaapzaal
+knoop hub_navigatie_0 63 9 navigatie
+knoop hub_reactor_0 11 25 reactor
+knoop hub_ziekenboeg_0 29 25 ziekenboeg
+knoop hub_elektra_0 45 25 elektra
+knoop hub_machinekamer_0 11 41 machinekamer
+knoop hub_voorraadkamer_0 37 41 voorraadkamer
+knoop hub_schildkamer_0 63 41 schildkamer
+knoop hub_kantine_0 32 9 kantine
+knoop hub_kantine_1 37 5 kantine
+knoop hub_kantine_2 42 9 kantine
+knoop hub_kantine_3 37 13 kantine
+knoop vm_midden 37 25 gang_vm
+knoop deur_slaapzaal_o 19 9 gang_h1
+knoop deur_slaapzaal_z 11 15 gang_v1a
+knoop deur_kantine_w 27 9 gang_h1
+knoop deur_kantine_o 47 9 gang_h2
+knoop deur_kantine_z 37 16 gang_vm
+knoop deur_navigatie_w 55 9 gang_h2
+knoop deur_navigatie_z 63 15 gang_v2
+knoop deur_reactor_n 11 19 gang_v1a
+knoop deur_reactor_z 11 31 gang_v1b
+knoop deur_ziekenboeg_o 35 25 gang_vm
+knoop deur_elektra_w 39 25 gang_vm
+knoop deur_machinekamer_n 11 35 gang_v1b
+knoop deur_machinekamer_o 19 41 gang_h3
+knoop deur_voorraadkamer_w 27 41 gang_h3
+knoop deur_voorraadkamer_o 47 41 gang_h4
+knoop deur_voorraadkamer_n 37 34 gang_vm
+knoop deur_schildkamer_w 55 41 gang_h4
+knoop deur_schildkamer_n 63 35 gang_v2
+knoop bij_slaap_kruimel 4 6 slaapzaal
+knoop bij_slaap_droom 4 12 slaapzaal
+knoop bij_kantine_kruimel 31 3 kantine
+knoop bij_kantine_droom 43 3 kantine
+knoop bij_nav_pasje 59 4 navigatie
+knoop bij_nav_droom 67 4 navigatie
+knoop bij_nav_worst 68 14 navigatie
+knoop bij_nav_alarm 70 9 navigatie
+knoop bij_reactor_schakel 4 23 reactor
+knoop bij_reactor_alarm 4 27 reactor
+knoop bij_zieken_weeg 24 23 ziekenboeg
+knoop bij_zieken_sorteer 31 20 ziekenboeg
+knoop bij_elektra_worst 43 20 elektra
+knoop bij_elektra_schakel 50 23 elektra
+knoop bij_elektra_licht 50 27 elektra
+knoop bij_machine_tank 4 39 machinekamer
+knoop bij_voorraad_tank 31 47 voorraadkamer
+knoop bij_voorraad_sorteer 37 47 voorraadkamer
+knoop bij_voorraad_worst 43 47 voorraadkamer
+knoop bij_schild_schakel 70 39 schildkamer
+knoop bij_schild_droom 59 46 schildkamer
+knoop bij_luik_slaapzaal 16 12 slaapzaal
+knoop bij_luik_reactor 16 22 reactor
+knoop bij_luik_machinekamer 16 45 machinekamer
+knoop bij_luik_ziekenboeg 26 29 ziekenboeg
+knoop bij_luik_elektra 48 29 elektra
+knoop bij_luik_voorraadkamer 45 36 voorraadkamer
+knoop bij_luik_navigatie 69 12 navigatie
+knoop bij_luik_schildkamer 69 38 schildkamer
+knoop bij_knop 37 6 kantine
+rand hub_kantine_0 hub_kantine_1
+rand hub_kantine_1 hub_kantine_2
+rand hub_kantine_2 hub_kantine_3
+rand hub_kantine_3 hub_kantine_0
+rand deur_slaapzaal_o hub_slaapzaal_0
+rand deur_slaapzaal_z hub_slaapzaal_0
+rand deur_kantine_w hub_kantine_0
+rand deur_kantine_o hub_kantine_2
+rand deur_kantine_z hub_kantine_3
+rand deur_navigatie_w hub_navigatie_0
+rand deur_navigatie_z hub_navigatie_0
+rand deur_reactor_n hub_reactor_0
+rand deur_reactor_z hub_reactor_0
+rand deur_ziekenboeg_o hub_ziekenboeg_0
+rand deur_elektra_w hub_elektra_0
+rand deur_machinekamer_n hub_machinekamer_0
+rand deur_machinekamer_o hub_machinekamer_0
+rand deur_voorraadkamer_w hub_voorraadkamer_0
+rand deur_voorraadkamer_o hub_voorraadkamer_0
+rand deur_voorraadkamer_n hub_voorraadkamer_0
+rand deur_schildkamer_w hub_schildkamer_0
+rand deur_schildkamer_n hub_schildkamer_0
+rand deur_slaapzaal_o deur_kantine_w
+rand deur_kantine_o deur_navigatie_w
+rand deur_machinekamer_o deur_voorraadkamer_w
+rand deur_voorraadkamer_o deur_schildkamer_w
+rand deur_slaapzaal_z deur_reactor_n
+rand deur_reactor_z deur_machinekamer_n
+rand deur_navigatie_z deur_schildkamer_n
+rand deur_kantine_z vm_midden
+rand vm_midden deur_voorraadkamer_n
+rand vm_midden deur_ziekenboeg_o
+rand vm_midden deur_elektra_w
+rand bij_slaap_kruimel hub_slaapzaal_0
+rand bij_slaap_droom hub_slaapzaal_0
+rand bij_kantine_kruimel hub_kantine_0
+rand bij_kantine_droom hub_kantine_2
+rand bij_nav_pasje hub_navigatie_0
+rand bij_nav_droom hub_navigatie_0
+rand bij_nav_worst hub_navigatie_0
+rand bij_nav_alarm hub_navigatie_0
+rand bij_reactor_schakel hub_reactor_0
+rand bij_reactor_alarm hub_reactor_0
+rand bij_zieken_weeg hub_ziekenboeg_0
+rand bij_zieken_sorteer hub_ziekenboeg_0
+rand bij_elektra_worst hub_elektra_0
+rand bij_elektra_schakel hub_elektra_0
+rand bij_elektra_licht hub_elektra_0
+rand bij_machine_tank hub_machinekamer_0
+rand bij_voorraad_tank hub_voorraadkamer_0
+rand bij_voorraad_sorteer hub_voorraadkamer_0
+rand bij_voorraad_worst hub_voorraadkamer_0
+rand bij_schild_schakel hub_schildkamer_0
+rand bij_schild_droom hub_schildkamer_0
+rand bij_luik_slaapzaal hub_slaapzaal_0
+rand bij_luik_reactor hub_reactor_0
+rand bij_luik_machinekamer hub_machinekamer_0
+rand bij_luik_ziekenboeg hub_ziekenboeg_0
+rand bij_luik_elektra hub_elektra_0
+rand bij_luik_voorraadkamer hub_voorraadkamer_0
+rand bij_luik_navigatie hub_navigatie_0
+rand bij_luik_schildkamer hub_schildkamer_0
+rand bij_knop hub_kantine_1
+deur slaapzaal_o slaapzaal deur_slaapzaal_o 19 8 19 10
+deur slaapzaal_z slaapzaal deur_slaapzaal_z 10 15 12 15
+deur kantine_w kantine deur_kantine_w 27 8 27 10
+deur kantine_o kantine deur_kantine_o 47 8 47 10
+deur kantine_z kantine deur_kantine_z 36 16 38 16
+deur navigatie_w navigatie deur_navigatie_w 55 8 55 10
+deur navigatie_z navigatie deur_navigatie_z 62 15 64 15
+deur reactor_n reactor deur_reactor_n 10 19 12 19
+deur reactor_z reactor deur_reactor_z 10 31 12 31
+deur ziekenboeg_o ziekenboeg deur_ziekenboeg_o 35 24 35 26
+deur elektra_w elektra deur_elektra_w 39 24 39 26
+deur machinekamer_n machinekamer deur_machinekamer_n 10 35 12 35
+deur machinekamer_o machinekamer deur_machinekamer_o 19 40 19 42
+deur voorraadkamer_w voorraadkamer deur_voorraadkamer_w 27 40 27 42
+deur voorraadkamer_o voorraadkamer deur_voorraadkamer_o 47 40 47 42
+deur voorraadkamer_n voorraadkamer deur_voorraadkamer_n 36 34 38 34
+deur schildkamer_w schildkamer deur_schildkamer_w 55 40 55 42
+deur schildkamer_n schildkamer deur_schildkamer_n 62 35 64 35
+paneel slaap_kruimel slaapzaal taak 3 3 6 east bij_slaap_kruimel
+paneel slaap_droom slaapzaal taak 3 3 12 east bij_slaap_droom
+paneel kantine_kruimel kantine taak 31 3 2 south bij_kantine_kruimel
+paneel kantine_droom kantine taak 43 3 2 south bij_kantine_droom
+paneel nav_pasje navigatie taak 59 3 3 south bij_nav_pasje
+paneel nav_droom navigatie taak 67 3 3 south bij_nav_droom
+paneel nav_worst navigatie taak 68 3 15 north bij_nav_worst
+paneel nav_alarm navigatie alarm 71 3 9 west bij_nav_alarm
+paneel reactor_schakel reactor taak 3 3 23 east bij_reactor_schakel
+paneel reactor_alarm reactor alarm 3 3 27 east bij_reactor_alarm
+paneel zieken_weeg ziekenboeg taak 23 3 23 east bij_zieken_weeg
+paneel zieken_sorteer ziekenboeg taak 31 3 19 south bij_zieken_sorteer
+paneel elektra_worst elektra taak 43 3 19 south bij_elektra_worst
+paneel elektra_schakel elektra taak 51 3 23 west bij_elektra_schakel
+paneel elektra_licht elektra licht 51 3 27 west bij_elektra_licht
+paneel machine_tank machinekamer taak 3 3 39 east bij_machine_tank
+paneel voorraad_tank voorraadkamer taak 31 3 48 north bij_voorraad_tank
+paneel voorraad_sorteer voorraadkamer taak 37 3 48 north bij_voorraad_sorteer
+paneel voorraad_worst voorraadkamer taak 43 3 48 north bij_voorraad_worst
+paneel schild_schakel schildkamer taak 71 3 39 west bij_schild_schakel
+paneel schild_droom schildkamer taak 59 3 47 north bij_schild_droom
+luik luik_slaapzaal slaapzaal a 16 2 12 bij_luik_slaapzaal
+luik luik_reactor reactor a 16 2 22 bij_luik_reactor
+luik luik_machinekamer machinekamer a 16 2 45 bij_luik_machinekamer
+luik luik_ziekenboeg ziekenboeg b 26 2 29 bij_luik_ziekenboeg
+luik luik_elektra elektra b 48 2 29 bij_luik_elektra
+luik luik_voorraadkamer voorraadkamer b 45 2 36 bij_luik_voorraadkamer
+luik luik_navigatie navigatie c 69 2 12 bij_luik_navigatie
+luik luik_schildkamer schildkamer c 69 2 38 bij_luik_schildkamer
+knop 37 3 9 bij_knop
+stoel 0 37.5 5.5
+stoel 1 40.0 6.3
+stoel 2 41.5 8.5
+stoel 3 41.5 10.5
+stoel 4 40.0 12.7
+stoel 5 37.5 13.5
+stoel 6 35.0 12.7
+stoel 7 33.5 10.5
+stoel 8 33.5 8.5
+stoel 9 35.0 6.3
+bed 0 6.5 5.0 180.0
+bed 1 8.5 5.0 180.0
+bed 2 10.5 5.0 180.0
+bed 3 12.5 5.0 180.0
+bed 4 14.5 5.0 180.0
+bed 5 16.5 5.0 180.0
+bed 6 5.5 14.0 0.0
+bed 7 7.5 14.0 0.0
+bed 8 15.5 14.0 0.0
+bed 9 17.5 14.0 0.0
+taak worst_elektra worstjes 160 elektra_worst
+taak worst_nav worstjes 160 nav_worst
+taak worst_voorraad worstjes 160 voorraad_worst
+taak pasje_nav pasje 120 nav_pasje
+taak kruimel_kantine kruimelbak 180 kantine_kruimel
+taak kruimel_slaap kruimelbak 180 slaap_kruimel
+taak tank pindasaus 160 voorraad_tank machine_tank
+taak sorteer_voorraad sorteren 200 voorraad_sorteer
+taak sorteer_zieken sorteren 200 zieken_sorteer
+taak droom_slaap dromen 180 slaap_droom kantine_droom
+taak droom_nav dromen 180 nav_droom kantine_droom
+taak droom_schild dromen 180 schild_droom kantine_droom
+taak weeg wegen 220 zieken_weeg
+taak schakel_elektra schakelaars 140 elektra_schakel
+taak schakel_reactor schakelaars 140 reactor_schakel
+taak schakel_schild schakelaars 140 schild_schakel

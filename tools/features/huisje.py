@@ -324,6 +324,9 @@ def advancements(h):
                  "Laat een Guhhuisje helemaal vol wonen met guhs en maatjes")
     band.visible(h, "huisje_groot", "huisje_gebouwd", "guhs:guhhuisje_groot", "goal", "Villa Vahoeg",
                  "Bouw het grootste Guhhuisje: plek voor acht vadsige bewoners")
+    # 1.3.2: going inside (the button "Naar binnen" in the huisje screen)
+    band.visible(h, "huisje_binnen", "huisje_gebouwd", "minecraft:pink_bed", "task", "Kijk eens binnen",
+                 "Klik in het scherm van een Guhhuisje op Naar binnen: elk bewonertje heeft er een eigen bedje, en er staat een logeerbedje voor jou")
 
 
 TEXTS = {
@@ -511,6 +514,8 @@ def build(h):
     texts(h)
     test_templates(h)
     selfcheck(h)
+    from features import huisje_binnen   # 1.3.2: the inside of the huisje (dimension, room templates, texts)
+    huisje_binnen.build(h)
 
 
 # =====================================================================================================================
@@ -528,6 +533,11 @@ def ftb(fq):
     q("huisje_slapen", "Welterusten, guh", "'s Nachts lopen je bewoners door de snoetdeur naar binnen en slapen ze in hun huisje (kijk maar naar "
       "de zzz bij de raampjes). 's Ochtends komen ze gapend weer naar buiten. Wacht een nachtje af!",
       "minecraft:red_bed", [adv("huisje_slapen")], rewards=(("guhs:marshmallow_knabbel", 3),))
+    q("huisje_binnen", "Kijk eens binnen", "Rechtsklik een Guhhuisje en klik op &dNaar binnen&r. Ding-dong! Binnen is alles guhmaat, dus jij bent "
+      "ineens heel groot. Elke bewoner heeft een eigen bedje met een naambordje, zijn lievelingsding op het kastje en zijn kleren aan het haakje. "
+      "'s Nachts liggen ze er te snurken; is een bedje leeg, dan ligt er een briefje waar je guh is. In je eigen huisje mag je slapers &dinstoppen&r en "
+      "zachtjes aaien, op een bedje klikken voor het dagboekje en het prikbord lezen. In het &dlogeerbedje&r slaap je zelf de nacht door. De deur "
+      "brengt je weer naar buiten.", "minecraft:pink_bed", [adv("huisje_binnen")], rewards=(("guhs:kaas_knabbels", 8),))
     q("huisje_koepel", "Laat klus-area zien", "In het huisje-scherm kun je &9laat klus-area zien&r aanzetten: een blauwe koepel over het gebied "
       "waar je bewoners rondlopen, klusjes doen en spelen. Zo weet je precies waar je tuintjes en kisten moeten staan.",
       "minecraft:light_blue_stained_glass", [{"type": "checkmark"}], rewards=(("guhs:kaas_knabbels", 4),))

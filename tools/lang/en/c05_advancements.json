@@ -1456,5 +1456,11 @@
   "sign.guhs.bleekwoud.verhuisd_naar": "Moved to",
   "sign.guhs.bleekwoud.knuffeldal": "Snuggledale.",
   "sign.guhs.bleekwoud.slaap_lekker": "Sleep tight!",
-  "sign.guhs.bleekwoud.houthakkerguh": "- Woodcutter"
+  "sign.guhs.bleekwoud.houthakkerguh": "- Woodcutter",
+  "advancements.guhs.lieve_vadsjes.huisje_binnen.title": "Have a Look Inside",
+  "advancements.guhs.lieve_vadsjes.huisje_binnen.description": "Click Go inside in the screen of a Guh House: every little resident has its own bed there, and there is a guest bed for you",
+  "sign.guhs.huisje_binnen.prikbord": "~ Notice Board ~",
+  "sign.guhs.huisje_binnen.wie_doet": "Who does",
+  "sign.guhs.huisje_binnen.welk_klusje": "which chore?",
+  "sign.guhs.huisje_binnen.klik_njeg": "(click, nyeg)"
 }

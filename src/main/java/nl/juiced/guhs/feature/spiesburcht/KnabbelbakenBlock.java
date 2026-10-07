@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Het Knabbelbaken: the beacon of the guhs. On a pyramid of vads, kaas and knabbel blocks (tag
+ * Het Knabbelbaken: the beacon of the guhs. On a pyramid of blocks of vahoege vads (1.3.1: only those; tag
  * guhs:knabbelbaken_basis, 1 to 4 layers) it gives a guh effect to you and to every tamed guh nearby. Right-click to
  * pick the effect ({@link KnabbelbakenBlockEntity.Gunst}); a bigger pyramid reaches further and unlocks more.
  */

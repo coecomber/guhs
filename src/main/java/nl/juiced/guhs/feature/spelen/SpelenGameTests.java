@@ -137,6 +137,25 @@ public class SpelenGameTests {
         SpelGroepen.Client.set(data.bezocht());
         helper.assertTrue(SpelGroepen.Client.bezocht("circuit") && !SpelGroepen.Client.bezocht("doolhof"), "client cache");
         SpelGroepen.Client.set(List.of());
+        // 1.3.1: every Superkompas place is remembered too, in the same list and payload, as "s:" + structure id
+        helper.assertTrue(!SpelGroepen.structuurBezocht(p, "guh_kasteel") && SpelGroepen.bezoekStructuur(p, "guh_kasteel")
+                && !SpelGroepen.bezoekStructuur(p, "guh_kasteel") && SpelGroepen.structuurBezocht(p, "guh_kasteel"), "a place is remembered once");
+        helper.assertTrue(SpelGroepen.bezocht(p).equals(List.of("sjoelen", SpelGroepen.STRUCTUUR + "guh_kasteel"))
+                && !SpelGroepen.structuurBezocht(p, "sjoelen") && !SpelGroepen.bezocht(p, "guh_kasteel") && !SpelGroepen.structuurBezocht(p, "sjoelhuisje"),
+                "places and groups don't mix: " + SpelGroepen.bezocht(p));
+        for (SpelGroepen.Groep g : SpelGroepen.alle()) {
+            helper.assertTrue(!g.id().startsWith(SpelGroepen.STRUCTUUR) && !g.id().contains(":"), "a group id never looks like a place: " + g.id());
+        }
+        helper.assertTrue(SpelGroepen.kijk(p).isEmpty(), "still nothing new on an empty test floor");
+        var plekken = new SpelenPayloads.SpelgroepenData(SpelGroepen.bezocht(p));
+        SpelenPayloads.SpelgroepenData.STREAM_CODEC.encode(buf, plekken);
+        SpelGroepen.Client.set(SpelenPayloads.SpelgroepenData.STREAM_CODEC.decode(buf).bezocht());
+        helper.assertTrue(SpelGroepen.Client.structuurBezocht("guh_kasteel") && SpelGroepen.Client.bezocht("sjoelen")
+                && !SpelGroepen.Client.structuurBezocht("sjoelhuisje") && !SpelGroepen.Client.bezocht("guh_kasteel"), "the client knows the place");
+        // the readers of the list look up by group id: the new entries change nothing for them
+        helper.assertTrue(nl.juiced.guhs.feature.gids.GidsFeature.nodig(false).stream().noneMatch(g -> SpelGroepen.bezocht(p, g.id()) && !g.id().equals("sjoelen")),
+                "only sjoelen counts as a visited group");
+        SpelGroepen.Client.set(List.of());
         leave(helper, p);
         helper.succeed();
     }

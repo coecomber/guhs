@@ -11,12 +11,12 @@ import net.minecraft.world.phys.Vec3;
  * (laps on the glijbaantje, a while on the wip/schommel) and hands out the hearts at the end. This task is done as soon
  * as the guh sits.
  */
-class ToestelSpel extends SpeelTaak {
+public class ToestelSpel extends SpeelTaak {
     private final BlockPos pos;
     private int plek;
     private int wachten;
 
-    ToestelSpel(Mob mob, ServerLevel level, BlockPos pos, int plek) {
+    public ToestelSpel(Mob mob, ServerLevel level, BlockPos pos, int plek) {
         super(mob, level);
         this.pos = pos.immutable();
         this.plek = plek;

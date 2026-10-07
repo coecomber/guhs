@@ -103,6 +103,7 @@
   "biome.guhs.mikas_biome": "Mika's Biome",
   "block.guhs.bank_guh": "Bank Guh",
   "block.guhs.compressed_super_vahoege_vads": "Compressed Super Wahoog Chonk",
+  "block.guhs.block_of_vahoege_vads": "Block of Wahoog Chonk",
   "item.guhs.vahoege_vads": "Wahoog Chonk",
   "item.guhs.vahoege_vads_ingot": "Wahoog Chonk Ingot",
   "item.guhs.vahoege_vads_sword": "Wahoog Chonk Sword",
@@ -111,6 +112,8 @@
   "item.guhs.vahoege_vads_shovel": "Wahoog Chonk Shovel",
   "item.guhs.vahoege_vads_hoe": "Wahoog Chonk Hoe",
   "item.guhs.vahoege_vads_paxel": "Wahoog Chonk Paxel",
+  "item.guhs.vahoege_vads_shears": "Wahoog Chonk Shears",
+  "item.guhs.vahoege_vads_shears.lore": "Never breaks. Snip away, nyeg! The sheep thinks it is wahoog.",
   "item.guhs.vahoege_vads_helmet": "Wahoog Chonk Helmet",
   "item.guhs.vahoege_vads_chestplate": "Wahoog Chonk Chestplate",
   "item.guhs.vahoege_vads_leggings": "Wahoog Chonk Leggings",
@@ -1749,5 +1752,11 @@
   "block.guhs.guhwaii_palm_poort": "Guh Palm Fence Gate",
   "block.guhs.guhwaii_palm_deur": "Guh Palm Door",
   "block.guhs.guhwaii_palm_luik": "Guh Palm Trapdoor",
-  "block.guhs.guhwaii_palm_bord": "Guh Palm Sign"
+  "block.guhs.guhwaii_palm_bord": "Guh Palm Sign",
+  "block.guhs.huisje_bedje": "Guh Bed",
+  "block.guhs.huisje_raam": "Little House Window",
+  "entity.guhs.huisje_slaper": "Sleeping Guh",
+  "dimension.guhs.huisje_binnen": "Inside a Guh House",
+  "subtitles.guhs.huisje.bel": "Ding-dong, nyeg",
+  "biome.guhs.huisje_binnen": "Inside a Guh House"
 }

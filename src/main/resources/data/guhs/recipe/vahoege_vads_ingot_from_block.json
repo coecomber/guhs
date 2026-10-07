@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:block_of_vahoege_vads"
+  ],
+  "result": {
+    "id": "guhs:vahoege_vads_ingot",
+    "count": 9
+  }
+}

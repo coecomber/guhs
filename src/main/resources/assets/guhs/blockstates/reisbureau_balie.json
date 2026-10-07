@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,vast=false": {
+      "model": "guhs:block/reisbureau_balie"
+    },
+    "facing=east,vast=false": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 90
+    },
+    "facing=south,vast=false": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 180
+    },
+    "facing=west,vast=false": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 270
+    },
+    "facing=north,vast=true": {
+      "model": "guhs:block/reisbureau_balie"
+    },
+    "facing=east,vast=true": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 90
+    },
+    "facing=south,vast=true": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 180
+    },
+    "facing=west,vast=true": {
+      "model": "guhs:block/reisbureau_balie",
+      "y": 270
+    }
+  }
+}

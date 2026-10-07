@@ -1,0 +1,13 @@
+{
+  "type": "guhs:guhpixel",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:guhpixel",
+      "layers": [],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

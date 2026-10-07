@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PCP",
+    "F F"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "C": "minecraft:clock",
+    "F": "#minecraft:wooden_fences"
+  },
+  "result": {
+    "id": "guhs:guhparkour_scorebord"
+  }
+}

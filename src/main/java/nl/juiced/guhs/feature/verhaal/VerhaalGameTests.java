@@ -478,7 +478,8 @@ public class VerhaalGameTests {
             }
         }
         for (GuhNpcEntity.Kind kind : GuhNpcEntity.Kind.values()) {
-            if (NpcRollen.isVerhaalKind(kind)) {
+            // (guhpixel: its NPC kinds have no character page, the Guhdex tab "Guhpixel & uitjes" is their place)
+            if (NpcRollen.isVerhaalKind(kind) && kind.ordinal() < GuhNpcEntity.Kind.LOBBY_WELKOMSTGUH.ordinal()) {
                 GuhVariant page = GuhVariant.ofCharacter(kind);
                 helper.assertTrue(page != null && page.npcKind() == kind && GuhDex.ENTRIES.contains(page), kind + ": its character page");
             }

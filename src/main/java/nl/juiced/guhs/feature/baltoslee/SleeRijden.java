@@ -8,7 +8,8 @@ import net.minecraft.util.Mth;
  * <ul>
  *   <li>W = "Hup, hup!": the dogs run faster (up to {@link #TOP}); nothing: they trot ({@link #KRUIS}); S = brake.</li>
  *   <li>A/D steer. Off the marked track the snow is deep: slow ({@link #DIEP}).</li>
- *   <li>Downhill is faster, uphill slower. Cold dogs ({@link #warmteFactor}) run slower: rest at a vuurkorf!</li>
+ *   <li>Downhill is faster, uphill slower. Cold dogs ({@link #warmteFactor}) run slower: rest at a vuurkorf! (1.3.1: they
+ *       really get cold now, once per trek: see {@link #KOU_PER_TICK}.)</li>
  *   <li>On an ice bridge the sled slides: it keeps drifting sideways and steers gently (fall off the side and you land in
  *       the soft snow below, back to the start of the bridge).</li>
  *   <li>Wind gusts ({@link #windvlaag}) push the sled sideways; how hard depends on the storm. They are part of the track
@@ -22,8 +23,38 @@ public final class SleeRijden {
     public static final double BUITEN = 1.5;
     /** On an ice bridge: this far past its edge and you fall off. */
     public static final double IJS_RAND = 0.35;
-    /** The gusts: one chance per this many blocks, lasting this long. */
-    public static final double VLAAG_CEL = 26, VLAAG_LENGTE = 9, VLAAG_WAARSCHUWING = 8;
+    // --- 1.3.1: how hard the trek is (the medicine ride and the sledesprint): every number in one place -------------------------
+    /**
+     * The gusts: one chance (3 in 4) per VLAAG_CEL blocks, VLAAG_LENGTE blocks long, announced VLAAG_WAARSCHUWING blocks ahead
+     * (HUD arrow + whoosh from that side). 1.3.1: was 26 / 9 / 8.
+     */
+    public static final double VLAAG_CEL = 22, VLAAG_LENGTE = 12, VLAAG_WAARSCHUWING = 12;
+    /**
+     * A gust's push at its peak, blocks per tick sideways: WIND_KRACHT * (WIND_BASIS + (1 - WIND_BASIS) * storm). Full steering
+     * is 0.11, so in a heavy storm the peak of a gust is stronger than you can steer: steer against it from the warning on.
+     * 1.3.1: was 0.05 * storm (a gust you could ignore). On an ice bridge only WIND_IJS of it counts (as before: holdable).
+     */
+    public static final double WIND_KRACHT = 0.16, WIND_BASIS = 0.35, WIND_IJS = 0.08;
+    /**
+     * The cold: every riding tick the dogs lose KOU_PER_TICK + storm * KOU_STORM warmth (of 100). 1.3.1: was storm * 0.04,
+     * which never got them cold. Now: "getting cold" (the warning) below WARMTE_WAARSCHUWING after about 560 ticks of
+     * riding, slow below WARMTE_KOUD (speed x TRAAG_KOUD) after about 800, very slow below WARMTE_IJSKOUD (x TRAAG_IJSKOUD)
+     * after about 1020; the whole trek is about 1400 ticks flat out. So: one stop at a vuurkorf somewhere in the middle (it
+     * warms them up completely in {@link SleeRit#RUST_TICKS}) and they stay warm to the finish; none and the last third crawls.
+     */
+    public static final float KOU_PER_TICK = 0.08f, KOU_STORM = 0.01f;
+    public static final float WARMTE_WAARSCHUWING = 50, WARMTE_KOUD = 30, WARMTE_IJSKOUD = 10;
+    public static final double TRAAG_KOUD = 0.7, TRAAG_IJSKOUD = 0.45;
+
+    /** How much warmth the dogs lose in one riding tick in this storm. */
+    public static float kou(float storm) {
+        return KOU_PER_TICK + storm * KOU_STORM;
+    }
+
+    /** A gust's push (blocks per tick sideways, signed) for windvlaag g (-1..1) in this storm. */
+    public static double windKracht(double g, float storm) {
+        return g * WIND_KRACHT * (WIND_BASIS + (1 - WIND_BASIS) * storm);
+    }
 
     /** What the rider does: vooruit (-1 brake .. 1 faster), stuur (-1 left .. 1 right). */
     public record Invoer(double vooruit, double stuur) {
@@ -51,7 +82,7 @@ public final class SleeRijden {
 
     /** Warm dogs run at full speed; cold ones slower (warmte 0..100). */
     public static double warmteFactor(float warmte) {
-        return warmte < 10 ? 0.62 : warmte < 30 ? 0.8 : 1.0;
+        return warmte < WARMTE_IJSKOUD ? TRAAG_IJSKOUD : warmte < WARMTE_KOUD ? TRAAG_KOUD : 1.0;
     }
 
     /** One tick of the sled on leg been of the route. */
@@ -78,10 +109,10 @@ public final class SleeRijden {
         st.v = Mth.clamp(st.v - b.helling(st.s) * 0.018, 0, TOP * 1.2);
         st.s = Math.min(b.lengte, st.s + st.v);
 
-        double wind = windvlaag(seed, been, st.s, b.lengte) * storm * 0.05;
+        double wind = windKracht(windvlaag(seed, been, st.s, b.lengte), storm);
         double grip = 0.25 + 0.75 * Math.min(1, st.v / KRUIS);
         if (ijs) {
-            st.latV = st.latV * 0.93 + stuur * 0.016 * grip + wind * 0.25;   // (a gust on the ice: you can still hold it)
+            st.latV = st.latV * 0.93 + stuur * 0.016 * grip + wind * WIND_IJS;   // (a gust on the ice: you can still hold it)
             st.lat += st.latV;
         } else {
             st.latV = 0;

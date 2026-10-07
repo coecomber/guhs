@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,bezet=false": {
+      "model": "guhs:block/guhkantoor_bureautje"
+    },
+    "facing=east,bezet=false": {
+      "model": "guhs:block/guhkantoor_bureautje",
+      "y": 90
+    },
+    "facing=south,bezet=false": {
+      "model": "guhs:block/guhkantoor_bureautje",
+      "y": 180
+    },
+    "facing=west,bezet=false": {
+      "model": "guhs:block/guhkantoor_bureautje",
+      "y": 270
+    },
+    "facing=north,bezet=true": {
+      "model": "guhs:block/guhkantoor_bureautje_bezet"
+    },
+    "facing=east,bezet=true": {
+      "model": "guhs:block/guhkantoor_bureautje_bezet",
+      "y": 90
+    },
+    "facing=south,bezet=true": {
+      "model": "guhs:block/guhkantoor_bureautje_bezet",
+      "y": 180
+    },
+    "facing=west,bezet=true": {
+      "model": "guhs:block/guhkantoor_bureautje_bezet",
+      "y": 270
+    }
+  }
+}

@@ -275,6 +275,8 @@ def check(alles):
         problems.append(f"Reisguh.PLEKKEN differs from PLEKKEN: {reis}")
     gebruikt = set()
     for root, _dirs, files in os.walk(JAVA):
+        if os.sep + "guhpixel" in root:
+            continue   # (guhpixel: the kern and its slices write their own command texts in tools/features/guhpixel*.py)
         for f in files:
             if f.endswith(".java"):
                 with open(os.path.join(root, f), encoding="utf-8") as fh:

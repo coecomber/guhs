@@ -20,7 +20,7 @@ from .site import CAT_ICON, CAT_ORDER, CATEGORIES, esc, fold, p, t
 
 SECTION_ORDER = ["start", "mobs", "care", "personalities", "maag", "sled", "guhdex", "food", "items", "vads", "redstone", "guhmension",
                  "villages", "structures", "reizen", "new21", "new22", "new23", "new24", "rare24", "new25", "new26", "new27", "new28",
-                 "new281", "new29", "fixes210", "new210", "fixes2101", "new30", "new128", "more", "recipes"]
+                 "new281", "new29", "fixes210", "new210", "fixes2101", "new30", "new128", "guhpixel", "reisbureau", "guhparkour", "more", "recipes"]
 AUTOLINK_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "code", "summary", "button", "th", "dt", "script", "style", "kbd", "b"}
 STOP = {"guh", "guhs", "vads", "njeg", "vahoeg", "kaas", "knus", "samen", "blij", "lief", "stil", "emotes", "effecten", "items", "blokken",
         "slee", "blokje", "klein", "groot", "medium", "makkelijk", "lastig", "kist", "hart", "eten", "vis", "ster", "gras", "tong", "tand",
@@ -63,7 +63,7 @@ def trie_regex(words):
     return build(trie)
 
 
-V = r"(?:2\.(?:10\.1|10|8\.1|[1-9])|3\.0)(?![\d.]*\d)"      # the release numbers the one-page wiki talks about
+V = r"(?<![\d.])(?:2\.(?:10\.1|10|8\.1|[1-9])|3\.0)(?![\d.]*\d)"      # the release numbers the one-page wiki talks about (not the 2.8 in 1.2.8)
 NOT_A_UNIT = r"(?!\s*(?:%|blocks|blokken|x\b|&times;|times|keer|hearts|hartjes))"
 
 
@@ -215,7 +215,8 @@ class Renderer:
                 c["image_html"] = ""
             elif c.kind in ("card", "figure") and c.images and c.images[0] == main_pic:
                 body = fold(plain(split_t(c.body)[1] if 'lang="nl"' in (c.body or "") else c.body))
-                if not body or body[:60] in lead:
+                # (the same text as the lead: once is enough - unless that lead came from this very text and isn't shown as a lead)
+                if not body or (body[:60] in lead and not page.data.get("lead_nl_kb")):
                     continue
                 c = type(c)(c)
                 c["image_html"] = ""

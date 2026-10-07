@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,7 +15,6 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.screen.GuhScreen;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.network.GuhActionPayload;
-import nl.juiced.guhs.registry.ModItems;
 
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
@@ -26,8 +24,8 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  *     <li>sneak + tap -> pick it up (as an item)</li>
  *     <li>hold       -> open the Guh menu</li>
  * </ul>
- * Holding kaas knabbels, a snack (#guhs:band/snacks, 2.10), a lead, a name tag or a saddle skips this so
- * feeding/leashing/naming/saddling work normally.
+ * Holding an item that does something of its own on the guh (kaas knabbels, a snack, a lead, a name tag, a saddle, tea for a
+ * guest at the tea table...; {@link GuhEntity#heeftEigenKlik}) skips this so feeding/leashing/naming/saddling work normally.
  */
 @EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT)
 public final class GuhInteractHandler {
@@ -101,11 +99,13 @@ public final class GuhInteractHandler {
         return guh.isTame() && guh.isOwnedBy(player) ? guh : null;
     }
 
-    /** Items that should keep their normal right-click behaviour on a guh (feeding, leashing, naming, saddling). */
+    /**
+     * False for items that keep their own right-click on a guh (feeding, leashing, naming, saddling, dressing, a wish at the
+     * tea table...): see {@link GuhEntity#heeftEigenKlik}. 1.2.9: this used to be a short fixed list here, so tea, cake, a baby
+     * bottle or a golden dandelion on your own guh only petted it.
+     */
     private static boolean handlesItem(ItemStack stack, GuhEntity guh) {
-        return !stack.is(ModItems.KAAS_KNABBELS.get()) && !stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get())
-                && !stack.is(nl.juiced.guhs.feature.band.BandFeature.SNACKS)   // 2.10: feeding a snack (hearts); a tap is a pet
-                && !stack.is(Items.LEAD) && !stack.is(Items.NAME_TAG) && !(stack.is(Items.SADDLE) && !guh.isSaddled());
+        return !guh.heeftEigenKlik(stack, Minecraft.getInstance().player);
     }
 
     private GuhInteractHandler() {

@@ -161,7 +161,7 @@ def ftb(fq):
       "&6S&r = remmen, &6A/D&r = sturen. Zie je niks meer? Volg de gloeiende snuffelsterretjes van Baltoguh.",
       "guhs:sneeuwslee", [adv("balto_slee_tocht")], rewards=(("guhs:kaas_knabbels", 16),), shape="gear", xp=300)
     q("balto_slee_rustpunt", "Warme pootjes", "Onderweg staan &6vuurkorven&r. Rem af en sta er even stil: de sledehondjes warmen "
-      "hun pootjes. Koude pootjes zijn trage pootjes!", "minecraft:campfire", [adv("balto_slee_rustpunt")],
+      "hun pootjes. Koude pootjes zijn trage pootjes: stop elke tocht minstens één keer, anders gaan ze sloom lopen!", "minecraft:campfire", [adv("balto_slee_rustpunt")],
       rewards=(("guhs:kaas_knabbels", 8),), deps=["balto_slee_tocht"], xp=100)
     q("balto_slee_ijsbrug", "Over de ijsbrug", "De &bijsbrug&r is smal en glad: de slee glijdt door als je stuurt. Rustig aan, en "
       "blijf in het midden. Plof je eraf, dan land je in de zachte sneeuw en mag je het nog eens proberen.", "minecraft:packed_ice",

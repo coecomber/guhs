@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/huisje_bedje"
+    },
+    "facing=east": {
+      "model": "guhs:block/huisje_bedje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/huisje_bedje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/huisje_bedje",
+      "y": 270
+    }
+  }
+}

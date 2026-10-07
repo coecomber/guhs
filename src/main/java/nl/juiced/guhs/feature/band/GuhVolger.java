@@ -77,6 +77,15 @@ public final class GuhVolger {
             if (r != null) {
                 r.naam = g.hasCustomName() ? g.getCustomName().copy() : Component.empty();   // (1.2.0: see BandData.Rec.naam)
             }
+        } else if (!guh) {
+            // 1.2.10: a maatje's name too (the Guhdex tab "Mijn andere vadsjes"); before, only its item told us
+            BandData data = BandData.get(s);
+            BandData.Rec r = data.vind(eigenaar, Band.id(guhOfMaatje));
+            Component naam = guhOfMaatje.hasCustomName() ? guhOfMaatje.getCustomName().copy() : Component.empty();
+            if (r != null && !r.naam.equals(naam)) {
+                r.naam = naam;
+                data.setDirty();
+            }
         }
     }
 

@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:internetcafe",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20301008,
+    "min_afstand": 4300,
+    "max_afstand": 5600,
+    "sector": 0,
+    "sectoren": 2
+  }
+}

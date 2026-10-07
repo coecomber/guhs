@@ -43,7 +43,28 @@ public final class HuisjePayloads {
     public static volatile Consumer<Overzicht> overzichtOntvanger = p -> {
     };
 
-    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN }
+    /** (Append only: sent by ordinal.) 1.3.2 BINNEN: the button "Naar binnen", for the owner and for visitors. */
+    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN, BINNEN }
+
+    /** Client: the door fade of going in or out (set by client.HuisjeClient). */
+    public static volatile Consumer<BinnenFx> fade = p -> {
+    };
+
+    /** 1.3.2, server to client: fade the screen (black and pink) because the player steps through the huisje's door. */
+    public record BinnenFx(boolean naarBinnen) implements CustomPacketPayload {
+        public static final Type<BinnenFx> TYPE = new Type<>(Guhs.id("huisje_binnen_fx"));
+        public static final StreamCodec<FriendlyByteBuf, BinnenFx> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.BOOL, BinnenFx::naarBinnen, BinnenFx::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(BinnenFx p, IPayloadContext context) {
+            fade.accept(p);
+        }
+    }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("huisje_open"));
@@ -117,6 +138,7 @@ public final class HuisjePayloads {
         registrar.playToServer(Doe.TYPE, Doe.STREAM_CODEC, Doe::handle);
         registrar.playToServer(OverzichtVraag.TYPE, OverzichtVraag.STREAM_CODEC, OverzichtVraag::handle);
         registrar.playToClient(Overzicht.TYPE, Overzicht.STREAM_CODEC, Overzicht::handle);
+        registrar.playToClient(BinnenFx.TYPE, BinnenFx.STREAM_CODEC, BinnenFx::handle);
     }
 
     // =====================================================================================================================
@@ -218,11 +240,15 @@ public final class HuisjePayloads {
         if (h == null) {
             return;
         }
+        Actie actie = Actie.values()[Math.floorMod(p.actie(), Actie.values().length)];
+        if (actie == Actie.BINNEN) {   // 1.3.2: everybody who can see the screen may go inside
+            Binnen.vraag(player, h);
+            return;
+        }
         if (!Huisjes.magBewerken(player, h)) {   // 3.0: only the owner (or an op) changes a huisje
             player.sendOverlayMessage(Huisjes.vanWie(h).copy().withStyle(ChatFormatting.GRAY));
             return;
         }
-        Actie actie = Actie.values()[Math.floorMod(p.actie(), Actie.values().length)];
         switch (actie) {
             case NAAM -> {
                 if (!Huisjes.hernoem(player.level().getServer(), h, p.tekst())) {
@@ -249,6 +275,9 @@ public final class HuisjePayloads {
             case MELDINGEN -> {
                 h.zetMeldingen(p.aan());
                 Huisjes.dirty();
+            }
+            case BINNEN -> {
+                // (handled above)
             }
             case KLUS -> {
                 try {

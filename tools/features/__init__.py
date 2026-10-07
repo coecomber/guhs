@@ -36,6 +36,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhoven',
             # 1.2.8: het Bleekwoud
             'bleekwoud',
+            # guhpixel: the kern, then its nine slices (each a stub until its slice fills it in)
+            'guhpixel', 'guhpixel_lobby', 'guhpixel_grap1', 'guhpixel_grap2', 'guhpixel_among', 'guhpixel_guhkade', 'guhpixel_kantoor',
+            'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour',
             # einde2 (the Guheinde expansion): what the update shares (the post-pass hook), then its fourteen slices (append only)
             'einde2', 'einde2_biomes', 'einde2_biomeguhs', 'einde2_mikas', 'einde2_zwevers', 'einde2_appa', 'einde2_vetbootje', 'einde2_vesting', 'einde2_deco',
             'einde2_bouw_lucht', 'einde2_bouw_water', 'einde2_bouw_aarde', 'einde2_bouw_vuur', 'einde2_bouw_zij1', 'einde2_bouw_zij2']

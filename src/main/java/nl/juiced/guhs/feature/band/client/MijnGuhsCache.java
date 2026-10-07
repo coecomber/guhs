@@ -40,7 +40,12 @@ public final class MijnGuhsCache {
                       long sinds, boolean dood, String plekSoort) {
     }
 
+    /** 1.2.10: one of your other tamed critters (the tab "Mijn andere vadsjes"); naam is empty when it has no name of its own. */
+    public record Vadsje(UUID id, Component naam, String soort, Component plek, String plekSoort) {
+    }
+
     private static List<Guh> guhs = List.of();
+    private static List<Vadsje> vadsjes = List.of();
     private static long dag;
     @Nullable
     private static UUID focus;
@@ -51,6 +56,17 @@ public final class MijnGuhsCache {
 
     public static List<Guh> guhs() {
         return guhs;
+    }
+
+    /** Your other tamed critters, sorted by kind. */
+    public static List<Vadsje> vadsjes() {
+        return vadsjes;
+    }
+
+    /** (AutoCheck) fills the other critters without a server. */
+    public static void zetVadsjes(List<Vadsje> voorbeeld) {
+        vadsjes = List.copyOf(voorbeeld);
+        versie++;
     }
 
     /** Today's Minecraft day (for "dag N" in the dagboekje). */
@@ -99,6 +115,18 @@ public final class MijnGuhsCache {
             }
         }
         guhs = List.copyOf(list);
+        List<Vadsje> andere = new ArrayList<>();
+        ListTag vadsjesList = data.getListOrEmpty("Vadsjes");
+        for (int i = 0; i < vadsjesList.size(); i++) {
+            CompoundTag t = vadsjesList.getCompoundOrEmpty(i);
+            try {
+                andere.add(new Vadsje(UUID.fromString(t.getStringOr("Id", "")), nl.juiced.guhs.taal.Tekst.get(t, "Naam"), t.getStringOr("Soort", ""),
+                        tekst(t.getStringOr("Plek", ""), reg), t.getStringOr("PlekSoort", "")));
+            } catch (RuntimeException e) {
+                com.mojang.logging.LogUtils.getLogger().warn("Mijn andere vadsjes: skipped one", e);
+            }
+        }
+        vadsjes = List.copyOf(andere);
         dag = data.getLongOr("Dag", 0L);
         if (data.contains("Focus")) {
             try {
@@ -111,7 +139,7 @@ public final class MijnGuhsCache {
         if (Minecraft.getInstance().screen instanceof GuhDexScreen screen) {
             if (focus != null) {
                 screen.naarDagboek();   // 2.10.1: the menu's "Dagboekje": straight to that guh's page, whatever tab was open
-            } else if (GuhDexScreen.tab() == GuhDexScreen.Tab.MIJN_GUHS) {
+            } else if (GuhDexScreen.tab() == GuhDexScreen.Tab.MIJN_GUHS || GuhDexScreen.tab() == GuhDexScreen.Tab.ANDERE_VADSJES) {
                 screen.mijnGuhsVernieuwd();
             }
         }

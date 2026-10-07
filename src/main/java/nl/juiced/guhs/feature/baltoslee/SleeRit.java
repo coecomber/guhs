@@ -52,7 +52,8 @@ import net.minecraft.world.entity.EntitySpawnReason;
  * </ul>
  * On the way: gusts push the sled sideways ({@link SleeRijden#windvlaag}), avalanches come down the slopes (be on the far side
  * of the track when the snow crosses it, or you are buried: dig out, a little back), ice bridges are slippery and narrow
- * (fall off: plof, back to the bridge's start), the dogs get cold in the storm (slower) and warm up when you stop at a
+ * (fall off: plof, back to the bridge's start), the dogs get cold in the storm (slower; 1.3.1: cold enough that a trek
+ * needs one stop, see SleeRijden.KOU_PER_TICK) and warm up when you stop at a
  * vuurkorf. Nothing ever hurts: the rider is protected like in every minigame, and "failing" is a cute puff of snow.
  * <p>
  * The rider's game drives the sled and reports every tick ({@link #meld}); the server checks each report against the
@@ -70,8 +71,11 @@ public final class SleeRit {
     public static final int RUST_STIL = 10;
     /** The avalanche: you are safe on the far side of the track, at least this part of its half width away from the middle. */
     public static final double LAWINE_VEILIG = 0.35;
-    /** Steele-Mika's speed per level (blocks per tick; you trot at 0.28 and run at 0.46). */
-    public static final double[] STEELE_SNELHEID = {0.25, 0.31, 0.37};
+    /**
+     * Steele-Mika's speed per level (blocks per tick; you trot at 0.28 and run at 0.46). 1.3.1: medium and lastig a little
+     * slower (were 0.31 and 0.37), because you now lose about six seconds at a vuurkorf and some more to the gusts.
+     */
+    public static final double[] STEELE_SNELHEID = {0.25, 0.30, 0.35};
     /** The storm of the sledesprint per level; the medicine ride's storm. */
     public static final float[] SPRINT_STORM = {0.22f, 0.42f, 0.65f};
     public static final float TOCHT_STORM_HEEN = 0.72f, TOCHT_STORM_TERUG = 0.85f, STORM_HELDER = 0.1f;
@@ -99,6 +103,8 @@ public final class SleeRit {
     /** Has the rider's game ever reported (else the server rides by itself: game tests)? */
     private boolean clientGezien;
     private boolean berghutGemeld, dieptepuntGemeld;
+    /** (1.3.1) the cold warnings that were given since the dogs were last warm: 1 = getting cold, 2 = slow. */
+    private int koudGemeld;
     private int tijdTerug, limiet, rijTijd;
     private long lastTick, clientTick = -1000;
     private final Set<Integer> lawineGedaan = new HashSet<>(), rustGebruikt = new HashSet<>(), ijsGevallen = new HashSet<>(), rustGehint = new HashSet<>();
@@ -267,6 +273,7 @@ public final class SleeRit {
             rit.steeleZegt(player, "gui.guhs.baltoslee.steele.start");
         }
         player.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.besturing").withStyle(ChatFormatting.GRAY));
+        player.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.koud.uitleg").withStyle(ChatFormatting.GOLD));   // 1.3.1
         rit.sync(level, sled);
         if (modus == Modus.TOCHT) {
             SleeTocht.meld(player, SleeTocht.Moment.START);
@@ -439,8 +446,43 @@ public final class SleeRit {
         }
         storm += Mth.clamp(doel - storm, -0.01f, 0.01f);
         if (fase == SleeEntity.RIJDT) {
-            warmte = Math.max(0, warmte - storm * 0.04f);
+            warmte = Math.max(0, warmte - SleeRijden.kou(storm));
+            koudMelden(level);
         }
+    }
+
+    /** (1.3.1) Tells the rider, once each, that the paws are getting cold and that the dogs have slowed down. */
+    private void koudMelden(ServerLevel level) {
+        int stand = warmte < SleeRijden.WARMTE_KOUD ? 2 : warmte < SleeRijden.WARMTE_WAARSCHUWING ? 1 : 0;
+        if (stand == 0) {
+            koudGemeld = 0;
+            return;
+        }
+        if (stand <= koudGemeld) {
+            return;
+        }
+        koudGemeld = stand;
+        ServerPlayer player = level.getServer().getPlayerList().getPlayer(speler);
+        if (player == null) {
+            return;
+        }
+        Component tekst = Component.translatable(stand == 1 ? "gui.guhs.baltoslee.koud.bijna" : "gui.guhs.baltoslee.koud.traag")
+                .withStyle(stand == 1 ? ChatFormatting.GOLD : ChatFormatting.AQUA);
+        player.sendSystemMessage(tekst);
+        player.sendOverlayMessage(tekst);
+        if (player.connection != null) {
+            notifySound(player, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, stand == 1 ? 0.8f : 0.6f);
+        }
+    }
+
+    /** (1.3.1, tests) how cold the rider was told it is: 0 = warm, 1 = getting cold, 2 = slow. */
+    public int koudGemeld() {
+        return koudGemeld;
+    }
+
+    /** (Tests) sets the dogs' warmth. */
+    public void zetWarmte(float warmte) {
+        this.warmte = Mth.clamp(warmte, 0, 100);
     }
 
     /** The clocks: the race time, the time left for the way back (too late: TE_LAAT). */

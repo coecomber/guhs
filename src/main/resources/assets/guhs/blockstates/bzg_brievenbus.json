@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/bzg_brievenbus"
+    },
+    "facing=east": {
+      "model": "guhs:block/bzg_brievenbus",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/bzg_brievenbus",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/bzg_brievenbus",
+      "y": 270
+    }
+  }
+}

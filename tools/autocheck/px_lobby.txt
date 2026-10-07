@@ -1,0 +1,170 @@
+# guhpixel slice "lobby" (visual QA, run by the merge step): the lobby island from every side, the stalls and the logo, the
+# shop and its screen, the boards (shared and personal), the parkour, the golden knabbels, the lobby guhs, the Guhdex section,
+# and the Guh-internetcafe in the Guhmension. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_lobby.txt -PautocheckTimeout=30 -Dguhs.autocheck.fresh=true
+# (camera x y z yaw pitch; yaw 0 = looking south, 180 = north, -90 = east, 90 = west)
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section lobby: arriving (unlock + enter), the greeter gives the cable
+/guhs px muntjes wis
+/guhs px lobby
+wait 120
+/guhs px lobby borden
+wait 110
+shot lobby_aankomst
+camera 0.5 100 6.5 180 -8
+wait 30
+shot lobby_logo_en_kraampjes
+camera 3.5 100 -1.5 180 0
+wait 20
+shot lobby_welkomstguh
+npc lobby_welkomstguh
+interact npc
+wait 30
+shot lobby_welkomstguh_praat gui
+gui close
+wait 10
+
+section lobby: all around
+# (spectator: a creative player that is put in the air falls; every camera stays inside the lobby box, outside it the
+# rules put you back on the spawn point)
+/gamemode spectator
+camera 0.5 150 47.5 180 48
+waitrender 200
+shot lobby_van_boven_zuid
+camera 47.5 140 0.5 90 40
+waitrender 200
+shot lobby_van_oost
+camera -47.5 122 30.5 -135 30
+waitrender 200
+shot lobby_winkel_van_boven
+camera 0.5 74 47.5 180 -35
+waitrender 200
+shot lobby_onderkant
+
+section lobby: the stalls, the empty one, the boards, the door home
+camera 0.5 101 -12.5 180 0
+wait 30
+shot lobby_kraampjes_midden
+camera 20.5 100 -9.5 -150 0
+wait 30
+shot lobby_kraampje_binnenkort
+camera -10.5 100 10.5 0 -5
+wait 30
+shot lobby_bord_stats
+camera 10.5 100 10.5 0 -5
+wait 30
+shot lobby_bord_online
+camera 0.5 100 20.5 0 -10
+wait 30
+shot lobby_voordeur
+
+section lobby: the shop and its screen
+camera -18.5 100 6.5 90 -5
+wait 30
+shot lobby_winkel_voorkant
+camera -31.5 100 6.5 90 0
+wait 30
+shot lobby_winkel_binnen
+/gamemode creative
+/guhs px muntjes zet 400
+gui keep
+/guhs px winkel
+wait 30
+shot lobby_winkel_scherm gui
+widgets
+wait 90
+shot lobby_winkel_scherm_grap gui
+gui close
+/guhs px muntjes zet 0
+gui keep
+/guhs px winkel
+wait 30
+shot lobby_winkel_scherm_arm gui
+gui close
+
+section lobby: the parkour (start, the course, a finish by command) and the knabbels
+/gamemode spectator
+camera 24.5 100 6.5 -90 -10
+wait 30
+shot lobby_parkour_start
+camera 36.5 106 14.5 150 10
+wait 30
+shot lobby_parkour_daken
+camera -30.5 108 10.5 20 15
+wait 30
+shot lobby_parkour_finish
+/guhs px lobby parkour klaar 912
+wait 60
+shot lobby_parkour_gehaald
+camera 24.5 100 6.5 -90 -10
+wait 60
+shot lobby_parkour_record
+camera 9.5 101.5 12.5 0 60
+wait 20
+shot lobby_knabbel_bloembak
+camera -10.5 94 21.5 180 20
+wait 20
+shot lobby_knabbel_kelder
+/guhs px lobby knabbels alle
+wait 80
+shot lobby_knabbels_alle
+/guhs px lobby knabbels toon
+
+section lobby: the lobby guhs and their chat
+camera 35.5 100 5.5 -90 0
+wait 30
+shot lobby_afk_hoek
+camera 10.5 100 5.5 -60 0
+wait 20
+/guhs px lobby chat
+wait 20
+/guhs px lobby chat
+wait 20
+shot lobby_chat
+
+section lobby: the Guhdex section and the titles
+/gamemode creative
+/tp @s 0.5 100 0.5 180 0
+wait 10
+gui dexopen guhpixel
+wait 30
+shot lobby_guhdex gui
+gui close
+gui dexopen titels
+wait 30
+shot lobby_titels gui
+gui close
+
+section lobby: the door home brings you back
+/lobby
+wait 100
+shot lobby_weer_thuis
+
+section internetcafe: the building, inside, the Beheerder, the screen
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+tplocate guhs:guhmension internetcafe
+wait 200
+shot internetcafe_buiten
+npc internetcafe_beheerder
+wait 20
+shot internetcafe_binnen
+interact npc
+wait 30
+shot internetcafe_beheerder gui
+gui close
+npc internetcafe_slaper
+interact npc
+wait 20
+shot internetcafe_slaper
+/guhs px ontgrendel uit
+wait 10
+/lobby
+wait 20
+shot internetcafe_lobby_op_slot
+/guhs px ontgrendel aan

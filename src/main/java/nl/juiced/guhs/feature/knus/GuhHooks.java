@@ -3,6 +3,7 @@ package nl.juiced.guhs.feature.knus;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -48,6 +49,7 @@ public final class GuhHooks {
     private static final List<BiConsumer<GuhEntity, GoalSelector>> DOELEN = new CopyOnWriteArrayList<>();
     private static final List<Consumer<GuhEntity>> TICKS = new CopyOnWriteArrayList<>();
     private static final List<Klik> KLIKKEN = new CopyOnWriteArrayList<>();
+    private static final List<BiPredicate<GuhEntity, net.minecraft.world.item.ItemStack>> ITEMS = new CopyOnWriteArrayList<>();
 
     private GuhHooks() {
     }
@@ -62,6 +64,25 @@ public final class GuhHooks {
 
     public static void klik(Klik klik) {
         KLIKKEN.add(klik);
+    }
+
+    /**
+     * (1.2.9) An item your {@link #klik} hook takes on a guh. The client swallows a right-click on your own tamed guh (a tap
+     * is a pet, holding opens the menu) unless the item in your hand does something of its own: without this the click
+     * never reaches the hook. Asked on the client: only use what the client knows.
+     */
+    public static void item(BiPredicate<GuhEntity, net.minecraft.world.item.ItemStack> neemt) {
+        ITEMS.add(neemt);
+    }
+
+    /** (GuhEntity.heeftEigenKlik, client) */
+    public static boolean neemtItem(GuhEntity guh, net.minecraft.world.item.ItemStack stack) {
+        for (BiPredicate<GuhEntity, net.minecraft.world.item.ItemStack> neemt : ITEMS) {
+            if (neemt.test(guh, stack)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // --- called by GuhEntity ----------------------------------------------------------------------------------------------

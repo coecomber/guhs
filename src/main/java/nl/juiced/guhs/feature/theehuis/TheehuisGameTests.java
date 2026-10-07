@@ -157,6 +157,78 @@ public class TheehuisGameTests {
         helper.succeed();
     }
 
+    /** 1.2.9: until the first cup is poured there is always a guest who asks for tea (the house tea is plain knabbelthee). */
+    @GuhTest(template = KAMER)
+    public static void theehuisAltijdIemandThee(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(10, 2, 10));
+        GuhNpcEntity npc = theelepel(helper);
+        GuhEntity a = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 12));
+        GuhEntity b = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 2, 12));
+        Theekransje k = Theekransje.of(npc);
+        try {
+            a.tame(p);
+            b.tame(p);
+            helper.assertTrue(k.start(npc, p), "a theekransje starts");
+            for (int ronde = 0; ronde < 12; ronde++) {
+                for (Theekransje.Gast g : k.gasten) {
+                    g.wens = Theekransje.Wens.GEEN;
+                    g.rust = 0;
+                }
+                for (int i = 0; i <= Theekransje.LOOP_TICKS + 20; i++) {
+                    k.tick(npc);
+                }
+                helper.assertTrue(k.isBezig() && k.gasten.stream().anyMatch(g -> g.wens == Theekransje.Wens.THEE), "somebody wants tea, round " + ronde);
+            }
+            // the house tea is enough for that wish
+            Theekransje.Gast dorst = k.gasten.stream().filter(g -> g.wens == Theekransje.Wens.THEE).findFirst().orElseThrow();
+            GuhEntity guh = dorst.guh.equals(a.getUUID()) ? a : b;
+            int voor = k.gezelligheid();
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TheehuisFeature.thee(TheeBlocks.Soort.KNABBELTHEE)));
+            Theekransje.klikOpGuh(guh, p, InteractionHand.MAIN_HAND);
+            helper.assertTrue(k.gezelligheid() == voor + Theekransje.PUNT_THEE && k.theeGeschonken, "plain knabbelthee is poured");
+        } finally {
+            if (k.isBezig()) {
+                k.klaar(helper.getLevel(), false);
+            }
+            Theekransje.vergeet(npc);
+            npc.discard();
+            a.discard();
+            b.discard();
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * 1.2.9: the client only swallows a right-click on your own guh (tap = pet, hold = menu) when the item in your hand has no
+     * use of its own on it. Tea and cake for a guest at the tea table are checked on the client (the wish bubbles).
+     */
+    @GuhTest(template = EMPTY)
+    public static void theehuisEigenKlikItems(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
+        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(1, 2, 1));
+        try {
+            guh.tame(p);
+            ItemStack thee = new ItemStack(TheehuisFeature.thee(TheeBlocks.Soort.KNABBELTHEE));
+            helper.assertTrue(guh.heeftEigenKlik(new ItemStack(ModItems.KAAS_KNABBELS.get()), p) && guh.heeftEigenKlik(new ItemStack(Items.COOKIE), p)
+                    && guh.heeftEigenKlik(new ItemStack(Items.LEAD), p) && guh.heeftEigenKlik(new ItemStack(Items.NAME_TAG), p), "food, lead, name tag");
+            helper.assertTrue(guh.heeftEigenKlik(new ItemStack(nl.juiced.guhs.feature.creche.CrecheFeature.BABYFLESJE.get()), p), "the baby bottle");
+            helper.assertTrue(!guh.heeftEigenKlik(ItemStack.EMPTY, p) && !guh.heeftEigenKlik(new ItemStack(Items.STICK), p)
+                    && !guh.heeftEigenKlik(thee, p), "an empty hand, a stick, tea away from the table: a pet");
+            helper.assertTrue(!guh.heeftEigenKlik(new ItemStack(Items.GOLDEN_DANDELION), p), "a golden dandelion does nothing for a grown guh");
+            guh.setBaby(true);
+            helper.assertTrue(guh.heeftEigenKlik(new ItemStack(Items.GOLDEN_DANDELION), p), "a golden dandelion for a baby");
+            TheehuisPayloads.CLIENT_WENSEN.put(guh.getId(), Theekransje.Wens.THEE.ordinal());
+            helper.assertTrue(guh.heeftEigenKlik(thee, p) && guh.heeftEigenKlik(new ItemStack(Items.HONEY_BOTTLE), p)
+                    && !guh.heeftEigenKlik(new ItemStack(Items.STICK), p), "a guest at the table: tea and sweets are served");
+        } finally {
+            TheehuisPayloads.CLIENT_WENSEN.remove(guh.getId());
+            guh.discard();
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
+
     @GuhTest(template = KAMER)
     public static void theehuisGeenGuhsGeenKransje(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(10, 2, 10));

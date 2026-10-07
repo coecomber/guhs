@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_band",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 27,
+  guhs_chapter_version: 30,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_band.png",
@@ -452,6 +452,33 @@
       y: 6.5625,
     },
     {
+      id: "475548FCD6347F35",
+      icon: {
+        id: "minecraft:pink_bed",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/huisje_binnen",
+          id: "4755482B5B09FEF1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548889F14C16D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
       id: "47554815633813E3",
       icon: {
         id: "minecraft:light_blue_stained_glass",
@@ -473,7 +500,7 @@
           count: 4,
         },
       ],
-      x: 16.0,
+      x: 17.5,
       y: 6.5625,
     },
     {
@@ -507,7 +534,7 @@
           xp: 150,
         },
       ],
-      x: 17.5,
+      x: 19.0,
       y: 6.5625,
     },
     {
@@ -539,7 +566,7 @@
           xp: 300,
         },
       ],
-      x: 19.0,
+      x: 20.5,
       y: 6.5625,
       shape: "gear",
     },
@@ -573,7 +600,7 @@
         },
       ],
       x: 20.5,
-      y: 6.5625,
+      y: 8.0625,
     },
     {
       id: "47554875D303D1A0",
@@ -606,7 +633,7 @@
           xp: 50,
         },
       ],
-      x: 20.5,
+      x: 19.0,
       y: 8.0625,
     },
     {

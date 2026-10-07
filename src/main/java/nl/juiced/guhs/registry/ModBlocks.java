@@ -75,6 +75,11 @@ public final class ModBlocks {
             nl.juiced.guhs.block.GuhWorkstationBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.5f).sound(SoundType.WOOD));
 
+    /** 1.3.1: the storage block of nine vahoege-vadsstaven; the only block a Knabbelbaken's pyramid is made of. */
+    public static final DeferredBlock<Block> BLOCK_OF_VAHOEGE_VADS = BLOCKS.registerBlock("block_of_vahoege_vads", Block::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(5f, 6f).requiresCorrectToolForDrops()
+                    .sound(SoundType.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE));
+
     public static final DeferredBlock<Block> COMPRESSED_SUPER_VAHOEGE_VADS = BLOCKS.registerBlock("compressed_super_vahoege_vads",
             props -> new DropExperienceBlock(UniformInt.of(3, 7), props),
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(4.5f, 6f).requiresCorrectToolForDrops()

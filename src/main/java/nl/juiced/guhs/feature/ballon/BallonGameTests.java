@@ -201,6 +201,30 @@ public class BallonGameTests {
         helper.succeed();
     }
 
+    /** 1.2.11: talking to Kapitein Wolkje opens his menu (no take-off yet); "Instappen!" is what flies, with him along. */
+    @GuhTest(template = EMPTY)
+    public static void ballonMenu(GameTestHelper helper) {
+        GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(1, 1, 5));
+        npc.setKind(GuhNpcEntity.Kind.BALLONGUH);
+        LuchtballonEntity b = ballon(helper, new BlockPos(4, 2, 4));
+        ServerPlayer p = player(helper);
+        try {
+            BallonRole.INSTANCE.talk(npc, p);
+            helper.assertTrue(p.getVehicle() == null && !b.vliegt(), "talking only opens the menu");
+            helper.assertTrue(KnusVoortgang.teller(p, BallonVlucht.GEVONDEN) == 1, "found him");
+            BallonRole.INSTANCE.antwoord(npc, p, BallonRole.OPT_UITLEG);
+            helper.assertTrue(p.getVehicle() == null && !b.vliegt(), "the explanation doesn't fly either");
+            BallonRole.INSTANCE.antwoord(npc, p, BallonRole.OPT_VLIEGEN);
+            helper.assertTrue(p.getVehicle() == b && b.vliegt() && npc.getUUID().equals(b.kapitein()), "stepping in: off, with the captain");
+            b.land(false);
+        } finally {
+            leave(helper, p);
+            b.discard();
+            npc.discard();
+        }
+        helper.succeed();
+    }
+
     @GuhTest(template = EMPTY)
     public static void ballonFestivalTemplate(GameTestHelper helper) {
         var t = helper.getLevel().getStructureManager().get(Guhs.id("ballonfestival"));

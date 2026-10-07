@@ -156,7 +156,7 @@ public class HuisjeScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        naam = new EditBox(font, left + 10, top + 22, 192, 16, Component.translatable("gui.guhs.huisje.naam"));
+        naam = new EditBox(font, left + 10, top + 22, 114, 16, Component.translatable("gui.guhs.huisje.naam"));
         naam.setMaxLength(Huisjes.MAX_NAAM);
         naam.setValue(nl.juiced.guhs.taal.Tekst.get(data, "Naam").getString());
         boolean mag = mag();
@@ -167,12 +167,18 @@ public class HuisjeScreen extends Screen {
         }
         addRenderableWidget(naam);
         Button hernoem = Button.builder(Component.translatable("gui.guhs.huisje.hernoem"),
-                b -> hernoem()).bounds(left + 206, top + 21, 62, 18).build();
+                b -> hernoem()).bounds(left + 128, top + 21, 58, 18).build();
         hernoem.active = mag;
         if (!mag) {
             hernoem.setTooltip(alleenKijken());
         }
         addRenderableWidget(hernoem);
+        // 1.3.2: "Naar binnen": through the snoet door into the huisje (the owner and visitors alike)
+        addRenderableWidget(Button.builder(Component.translatable("gui.guhs.huisje.binnen.knop"), b -> {
+            stuur(HuisjePayloads.Actie.BINNEN, "", "", false, 0);
+            onClose();
+        }).bounds(left + 189, top + 21, 80, 18).tooltip(net.minecraft.client.gui.components.Tooltip.create(
+                Component.translatable("gui.guhs.huisje.binnen.knop.tooltip"))).build());
         // 1.2.5: chat messages about rare finds on/off
         boolean meld = data.getBooleanOr("Meldingen", true);
         Button melding = Button.builder(meldLabel(meld), b -> {

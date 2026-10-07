@@ -32,6 +32,7 @@ import nl.juiced.guhs.feature.wereldleven.Dagritme;
  *   <li>night (the overworld clock, also in fixed-time dimensions): walk to the door and go inside
  *       ({@link Huisjes#naarBinnen}: hidden, zzz at the windows);</li>
  *   <li>morning: come out of the door with a yawn;</li>
+ *   <li>1.3.2, by day: now and then somebody is at home, for a midday nap or out of the rain ({@link #dagThuis});</li>
  *   <li>day: every {@link Klus#wacht()} ticks try a random chore that is switched on for it and run its
  *       {@link KlusTaak} (claiming the guh with GuhHooks.bezig); when there is nothing to do, 1 in 6 plays with a toy
  *       nearby ({@link Speelgoed#willekeurig}); else it wanders around its home. Speed x {@link Band#klusSnelheid}.</li>
@@ -41,10 +42,14 @@ import nl.juiced.guhs.feature.wereldleven.Dagritme;
 public class HuisjeGoal extends Goal {
     /** Tests: the day part per huisje controller position (instead of the clock). */
     public static final Map<BlockPos, Dagdeel> TEST_DAGDEEL = new ConcurrentHashMap<>();
+    /** Tests: the huisjes (controller positions) whose residents are at home by day ({@link #dagThuis}). */
+    public static final java.util.Set<BlockPos> TEST_THUIS = ConcurrentHashMap.newKeySet();
 
     private final PathfinderMob mob;
     @Nullable
     private KlusTaak taak;
+    /** 1.3.2: what the running task is: a chore's id, "" for a toy (the note on its bed in the room says it). */
+    private String taakKlus = "";
     private int taakTicks;
     private long volgendeKlus, volgendeWandel;
     @Nullable
@@ -129,6 +134,40 @@ public class HuisjeGoal extends Goal {
         return Dagdeel.van(nl.juiced.guhs.world.GuhTime.dayTime(level.getServer().overworld()));
     }
 
+    /**
+     * 1.3.2: by day somebody is at home now and then (so there is something to see when you go inside): it shelters from
+     * the rain (babies always, of the others one in four, another quarter every day) or takes its midday nap (the day part
+     * DUTJE; babies always, of the others one in six). Being at home is the same "inside" as at night
+     * ({@link Huisjes#naarBinnen}); a resident never drops a chore for it and comes out again when the rain or the nap is
+     * over. On the game test server only the huisjes in {@link #TEST_THUIS} do this (the clock and the weather there are
+     * nobody's business).
+     */
+    static boolean dagThuis(ServerLevel level, Huisje h, PathfinderMob mob) {
+        if (TEST_DAGDEEL.containsKey(h.pos()) || level.getServer() instanceof net.minecraft.gametest.framework.GameTestServer) {
+            return TEST_THUIS.contains(h.pos());
+        }
+        long tijd = nl.juiced.guhs.world.GuhTime.dayTime(level.getServer().overworld());
+        int lot = Math.floorMod(Band.id(mob).hashCode() + (int) Math.floorDiv(tijd, 24000L) * 31, 12);
+        if (level.isRainingAt(h.pos().above(h.maat().hoogte()))) {
+            return mob.isBaby() || lot % 4 == 0;
+        }
+        return Dagdeel.van(tijd) == Dagdeel.DUTJE && (mob.isBaby() || lot % 6 == 1);
+    }
+
+    /** To the door and inside (at night, and by day for a nap or out of the rain). */
+    private void naarDeur(Huisje h) {
+        BlockPos d = h.deur();
+        if (mob.distanceToSqr(Vec3.atBottomCenterOf(d)) < 2.5) {
+            Huisjes.naarBinnen(mob, h);
+        } else if (mob.getNavigation().isDone() || mob.tickCount % 40 == 0) {
+            if (!mob.getNavigation().moveTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, 1.0)) {
+                if (mob.distanceToSqr(Vec3.atBottomCenterOf(d)) < 64) {
+                    Huisjes.naarBinnen(mob, h);   // (can't walk the last bit: in it goes anyway)
+                }
+            }
+        }
+    }
+
     @Override
     public void tick() {
         if (!(mob.level() instanceof ServerLevel level)) {
@@ -149,23 +188,14 @@ public class HuisjeGoal extends Goal {
         boolean nacht = dagdeel(level, h) == Dagdeel.NACHT;
         if (binnen) {
             Huisjes.houdBinnen(mob);
-            if (!nacht) {
+            if (!nacht && !dagThuis(level, h, mob)) {
                 Huisjes.naarBuiten(mob, h, true);
             }
             return;
         }
         if (nacht) {
             stopTaak();
-            BlockPos d = h.deur();
-            if (mob.distanceToSqr(Vec3.atBottomCenterOf(d)) < 2.5) {
-                Huisjes.naarBinnen(mob, h);
-            } else if (mob.getNavigation().isDone() || mob.tickCount % 40 == 0) {
-                if (!mob.getNavigation().moveTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, 1.0)) {
-                    if (mob.distanceToSqr(Vec3.atBottomCenterOf(d)) < 64) {
-                        Huisjes.naarBinnen(mob, h);   // (can't walk the last bit: in it goes anyway)
-                    }
-                }
-            }
+            naarDeur(h);
             return;
         }
         if (mob instanceof GuhEntity g && Dagritme.slaapt(g)) {
@@ -186,6 +216,10 @@ public class HuisjeGoal extends Goal {
             if (!verder || ++taakTicks > lopend.maxTicks()) {
                 stopTaak();
             }
+            return;
+        }
+        if (dagThuis(level, h, mob)) {   // 1.3.2: nothing to finish: a nap, or out of the rain
+            naarDeur(h);
             return;
         }
         float snel = Band.klusSnelheid(mob);
@@ -243,6 +277,7 @@ public class HuisjeGoal extends Goal {
             geprobeerd(k, level.getGameTime());
             if (t != null) {
                 start(t);
+                taakKlus = k.id();
                 return true;
             }
         }
@@ -269,6 +304,7 @@ public class HuisjeGoal extends Goal {
 
     private void start(KlusTaak t) {
         taak = t;
+        taakKlus = "";
         taakTicks = 0;
         if (mob instanceof GuhEntity g) {
             GuhHooks.bezig(g, 40);
@@ -294,5 +330,16 @@ public class HuisjeGoal extends Goal {
     @Nullable
     public KlusTaak taak() {
         return taak;
+    }
+
+    /** 1.3.2: what this resident is doing right now: null = nothing, "" = playing with a toy, else the chore's id. */
+    @Nullable
+    public static String bezigMet(net.minecraft.world.entity.Mob mob) {
+        for (WrappedGoal w : mob.goalSelector.getAvailableGoals()) {
+            if (w.getGoal() instanceof HuisjeGoal g) {
+                return g.taak == null ? null : g.taakKlus;
+            }
+        }
+        return null;
     }
 }

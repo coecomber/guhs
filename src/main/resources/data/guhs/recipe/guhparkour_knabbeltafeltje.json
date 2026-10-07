@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KBK",
+    "SSS",
+    "F F"
+  ],
+  "key": {
+    "K": "guhs:kaas_knabbels",
+    "B": "minecraft:bowl",
+    "S": "#minecraft:wooden_slabs",
+    "F": "#minecraft:wooden_fences"
+  },
+  "result": {
+    "id": "guhs:guhparkour_knabbeltafeltje"
+  }
+}

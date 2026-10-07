@@ -66,7 +66,7 @@ public final class Roepen {
     private static final DeferredHolder<TicketType, TicketType> TICKET = TICKET_TYPES.register("roep",
             () -> new TicketType(TicketType.NO_TIMEOUT, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION | TicketType.FLAG_KEEP_DIMENSION_ACTIVE));
 
-    public enum Uitkomst { OK, BEZIG, NIET_JOUW, OPGEPAKT, GUHWIEL, DOOD, KWIJT }
+    public enum Uitkomst { OK, BEZIG, NIET_JOUW, OPGEPAKT, GUHWIEL, DOOD, KWIJT, NIET_THUIS }
 
     /** A guh being fetched from an unloaded chunk (or a Guhkamer guest that is still asleep in its room). */
     private static final class Klus {
@@ -109,6 +109,7 @@ public final class Roepen {
         return switch (soort) {
             case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND -> Uitkomst.OPGEPAKT;
             case GUHWIEL -> Uitkomst.GUHWIEL;
+            case OP_VAKANTIE, OP_KANTOOR -> Uitkomst.NIET_THUIS;   // (guhpixel: stored as data; its own balie / Prikklok brings it back)
             default -> null;
         };
     }
@@ -123,7 +124,8 @@ public final class Roepen {
      * (or {@link #WACHT} ticks later we say it can't be found). Tells the player (overlay) and refreshes their Guhdex.
      */
     public static Uitkomst roep(ServerPlayer speler, UUID id) {
-        Uitkomst u = probeer(speler, id);
+        boolean inGuhpixel = nl.juiced.guhs.feature.guhpixel.Guhpixel.in(speler);   // (no guhs in guhpixel)
+        Uitkomst u = inGuhpixel ? Uitkomst.NIET_THUIS : probeer(speler, id);
         Component naam = naam(speler.level().getServer(), speler.getUUID(), id);
         switch (u) {
             case BEZIG -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.zoeken", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -132,6 +134,8 @@ public final class Roepen {
             case GUHWIEL -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.guhwiel", naam).withStyle(ChatFormatting.GOLD));
             case DOOD -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.dood", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
             case KWIJT -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.kwijt", naam).withStyle(ChatFormatting.GOLD));
+            case NIET_THUIS -> speler.sendOverlayMessage(Component.translatable(inGuhpixel ? "gui.guhs.guhpixel.roep.niet_hier"
+                    : "gui.guhs.guhpixel.roep.niet_thuis", naam).withStyle(ChatFormatting.GOLD));
             case OK -> {
             }
         }

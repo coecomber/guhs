@@ -29,10 +29,12 @@ public class KnabbelkorfBlock extends BeehiveBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
-        if (state.getValue(HONEY_LEVEL) < MAX_HONEY_LEVELS || !(stack.is(Items.SHEARS) || stack.is(Items.GLASS_BOTTLE))) {
+        // (1.3.1) any shears (ItemAbilities.SHEARS_HARVEST, like the vanilla beehive), so the Vahoege-vadsschaar works too
+        boolean schaar = stack.canPerformAction(net.neoforged.neoforge.common.ItemAbilities.SHEARS_HARVEST);
+        if (state.getValue(HONEY_LEVEL) < MAX_HONEY_LEVELS || !(schaar || stack.is(Items.GLASS_BOTTLE))) {
             return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
-        if (stack.is(Items.SHEARS)) {
+        if (schaar) {
             level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1f, 1f);
             if (!level.isClientSide()) {
                 popResource(level, pos, new ItemStack(ModItems.KAAS_KNABBELS.get(), 3 + level.getRandom().nextInt(3)));

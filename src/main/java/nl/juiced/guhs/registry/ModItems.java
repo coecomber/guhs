@@ -132,6 +132,10 @@ public final class ModItems {
             nl.juiced.guhs.item.PaxelItem::new,
             () -> vadsRepair(nl.juiced.guhs.item.PaxelItem.properties(unbreakable(), ModArmorMaterials.VADS_TIER, 4.0f, -2.9f)));
 
+    /** 1.3.1: shears of vahoege vads (the raw vads, in the vanilla shears shape) that never break. */
+    public static final DeferredItem<nl.juiced.guhs.item.VadsSchaarItem> VADS_SHEARS = ITEMS.registerItem("vahoege_vads_shears",
+            nl.juiced.guhs.item.VadsSchaarItem::new, () -> nl.juiced.guhs.item.VadsSchaarItem.properties(new Item.Properties()));
+
     public static final DeferredItem<Item> VADS_HELMET = ITEMS.registerItem("vahoege_vads_helmet",
             Item::new, () -> vadsRepair(unbreakable().humanoidArmor(ModArmorMaterials.VAHOEGE_VADS, ArmorType.HELMET)));
     public static final DeferredItem<Item> VADS_CHESTPLATE = ITEMS.registerItem("vahoege_vads_chestplate",
@@ -326,6 +330,7 @@ public final class ModItems {
         ITEMS.registerSimpleBlockItem(ModBlocks.KAASKNABBEL_COBBLESTONE);
         ITEMS.registerSimpleBlockItem(ModBlocks.BLOCK_OF_KAASKNABBELS);
         ITEMS.registerSimpleBlockItem(ModBlocks.COMPRESSED_SUPER_VAHOEGE_VADS);
+        ITEMS.registerSimpleBlockItem(ModBlocks.BLOCK_OF_VAHOEGE_VADS);   // 1.3.1
         ITEMS.registerSimpleBlockItem(ModBlocks.FRYING_PAN);
         ITEMS.registerSimpleBlockItem(ModBlocks.GUH_WHEEL);
         ITEMS.registerSimpleBlockItem(ModBlocks.GUH_WIRE);

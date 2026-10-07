@@ -186,6 +186,25 @@ public class PiepDierItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        // 1.2.10: what it is (when it carries a name of its own) and how healthy it is
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data != null) {
+            net.minecraft.nbt.CompoundTag tag = data.copyTag();
+            if (stack.has(DataComponents.CUSTOM_NAME)) {
+                tooltip.accept(Component.translatable(getDescriptionId()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            if (tag.contains("Health")) {
+                double max = 0;
+                net.minecraft.nbt.ListTag attributes = tag.getListOrEmpty("attributes");
+                for (int i = 0; i < attributes.size(); i++) {
+                    if (attributes.getCompoundOrEmpty(i).getStringOr("id", "").endsWith("max_health")) {
+                        max = attributes.getCompoundOrEmpty(i).getDoubleOr("base", 0.0);
+                    }
+                }
+                int hp = (int) Math.ceil(tag.getFloatOr("Health", 0.0F));
+                tooltip.accept(Component.translatable("gui.guhs.menu.hp", hp, (int) Math.max(max, hp)).withStyle(ChatFormatting.GRAY));
+            }
+        }
         tooltip.accept(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

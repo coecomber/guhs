@@ -65,7 +65,7 @@ public final class Titels {
             HUISJESBOUWER = "huisjesbouwer", OPPER_VADSER = "opper_vadser", GUHKENNER = "guhkenner";
 
     /** Every title, in the order of the Guhdex tab (the two old ones first: see the class comment). */
-    public static final List<Titel> ALLE = List.of(
+    public static final List<Titel> ALLE = java.util.stream.Stream.concat(java.util.stream.Stream.of(
             new Titel(HELD_VAN_NOMGUH, "gui.guhs.balto.titel", ChatFormatting.AQUA, "guhs:baltoguh_beeldje", BaltoVerhaal::isHeld),
             new Titel(KNUFFELBURGEMEESTER, "gui.guhs.knuffeldal.titel", ChatFormatting.LIGHT_PURPLE, "guhs:knus_oorkonde",
                     Burgemeester::isKnuffelburgemeester),
@@ -79,7 +79,8 @@ public final class Titels {
             new Titel(OPPER_VADSER, "gui.guhs.titels.naam." + OPPER_VADSER, ChatFormatting.RED, "guhs:knabbelkroon",
                     p -> GuhQuests.saved(p).getIntOr(GuheindeGevecht.WINS, 0) > 0),
             new Titel(GUHKENNER, "gui.guhs.titels.naam." + GUHKENNER, ChatFormatting.GREEN, "guhs:guhdex",
-                    p -> GuhDex.vol(GuhWorldData.get(p.level().getServer()).player(p.getUUID()).seen)));
+                    p -> GuhDex.vol(GuhWorldData.get(p.level().getServer()).player(p.getUUID()).seen))),
+            nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream()).toList();   // (guhpixel: the titles of its slices come last)
 
     /** Server: the title each online player showed last (to notice changes; "" = none). */
     private static final Map<UUID, String> LAATST = new ConcurrentHashMap<>();
@@ -112,7 +113,8 @@ public final class Titels {
 
     /**
      * The title this player shows (null: none): the chosen one when it is earned; nothing when they chose "geen titel";
-     * else (never chosen, or the chosen one isn't theirs any more) the first earned one.
+     * (1.3.1) nothing either when the chosen title doesn't exist any more; else (never chosen, or the chosen one isn't theirs
+     * any more) the first earned one.
      */
     @Nullable
     public static Titel actief(ServerPlayer p) {
@@ -123,6 +125,9 @@ public final class Titels {
         Titel gekozen = van(keuze);
         if (gekozen != null && heeft(p, gekozen)) {
             return gekozen;
+        }
+        if (gekozen == null && !keuze.isEmpty()) {
+            return null;   // (1.3.1) the chosen title doesn't exist any more (it was removed): no title, not some other one
         }
         for (Titel t : ALLE) {
             if (heeft(p, t)) {

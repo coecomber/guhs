@@ -1,0 +1,234 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhbioscoop_projector",
+    "kast": "guhs:block/guhbioscoop_projector",
+    "lens": "guhs:block/guhbioscoop_projector_lens_aan",
+    "spoel": "guhs:block/guhbioscoop_projector_spoel"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        5,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        5,
+        2
+      ],
+      "to": [
+        13,
+        12,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        6.5,
+        0
+      ],
+      "to": [
+        10.5,
+        11.5,
+        2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#lens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        7,
+        12,
+        2.5
+      ],
+      "to": [
+        9,
+        16,
+        7.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#spoel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#spoel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        12,
+        8.5
+      ],
+      "to": [
+        9,
+        16,
+        13.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#kast"
+        },
+        "south": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#spoel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#spoel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

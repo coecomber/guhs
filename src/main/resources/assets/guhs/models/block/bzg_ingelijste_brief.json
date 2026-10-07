@@ -1,0 +1,246 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/bzg_ingelijste_brief_lijst",
+    "lijst": "guhs:block/bzg_ingelijste_brief_lijst",
+    "brief": "guhs:block/bzg_ingelijste_brief"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        1,
+        15
+      ],
+      "to": [
+        14,
+        15,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14,
+        14.4
+      ],
+      "to": [
+        14,
+        15,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1,
+        14.4
+      ],
+      "to": [
+        14,
+        2,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        14.4
+      ],
+      "to": [
+        3,
+        14,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        2,
+        14.4
+      ],
+      "to": [
+        14,
+        14,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        2,
+        14.6
+      ],
+      "to": [
+        13,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brief",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        -7
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

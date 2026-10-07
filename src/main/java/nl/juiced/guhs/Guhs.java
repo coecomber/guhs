@@ -59,6 +59,7 @@ public class Guhs {
         modBus.addListener(ModEntities::addTemptRange);
         modBus.addListener(ModPoiTypes::addHiveBlocks);
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> event.enqueueWork(ModBlocks::registerPots));
+        modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> event.enqueueWork(nl.juiced.guhs.item.VadsSchaarItem::registerDispenser));
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> nl.juiced.guhs.compat.FtbQuestsChapter.install());
         if (net.neoforged.fml.ModList.get().isLoaded("ftbquests")) {   // 1.1.3: tick off quest progress that FTB Quests left stuck
             NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.compat.FtbQuestsRepair::onPlayerTick);

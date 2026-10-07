@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "GKG",
+    "IRI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:glass",
+    "K": "guhs:guhpixel_netwerkkabeltje",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "guhs:guhpixel_poort"
+  }
+}

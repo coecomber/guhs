@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    " F ",
+    " S "
+  ],
+  "key": {
+    "G": "minecraft:lime_wool",
+    "F": "#minecraft:wooden_fences",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "guhs:guhparkour_startpaaltje"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhbioscoop_popcornmachine_kar",
+    "kar": "guhs:block/guhbioscoop_popcornmachine_kar",
+    "voor": "guhs:block/guhbioscoop_popcornmachine_voor",
+    "glas": "guhs:block/guhbioscoop_popcornmachine_glas",
+    "dak": "guhs:block/guhbioscoop_popcornmachine_dak"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        6,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kar"
+        },
+        "up": {
+          "texture": "#kar"
+        },
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            0,
+            4,
+            16,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#kar"
+        },
+        "west": {
+          "texture": "#kar"
+        },
+        "east": {
+          "texture": "#kar"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        6,
+        2
+      ],
+      "to": [
+        14,
+        14,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#glas"
+        },
+        "up": {
+          "texture": "#glas"
+        },
+        "north": {
+          "texture": "#glas",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#glas",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#glas",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#glas",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        14,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#dak"
+        },
+        "up": {
+          "texture": "#dak"
+        },
+        "north": {
+          "texture": "#dak"
+        },
+        "south": {
+          "texture": "#dak"
+        },
+        "west": {
+          "texture": "#dak"
+        },
+        "east": {
+          "texture": "#dak"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+# 1.2.10: the Guhdex tab Mijn andere vadsjes, the mayor's Knusfeest hover is not covered here.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsjes1210.txt
+section 1.2.10: the Guhdex tab Mijn andere vadsjes (example critters, then empty) and the tooltips of picked-up critters
+/gamemode creative
+gui anderevadsjes
+wait 10
+shot gui_anderevadsjes gui
+gui anderevadsjes leeg
+wait 10
+shot gui_anderevadsjes_leeg gui
+gui mijnguhs list
+wait 10
+shot gui_mijnguhs_lijst_1210 gui
+gui close

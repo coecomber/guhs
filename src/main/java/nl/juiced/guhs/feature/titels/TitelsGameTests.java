@@ -114,7 +114,7 @@ public class TitelsGameTests {
     public static void titelsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         Set<String> ids = new HashSet<>(), namen = new HashSet<>();
-        helper.assertTrue(Titels.ALLE.size() == 8, "eight titles, got " + Titels.ALLE.size());
+        helper.assertTrue(Titels.ALLE.size() == 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size(), "eight titles (and the guhpixel ones), got " + Titels.ALLE.size());
         for (Titels.Titel t : Titels.ALLE) {
             helper.assertTrue(ids.add(t.id()) && namen.add(t.naamSleutel()), "unique: " + t.id());
             helper.assertTrue(lang.has(t.naamSleutel()), "name of " + t.id());
@@ -163,10 +163,10 @@ public class TitelsGameTests {
                 Titels.HUISJESBOUWER, () -> TimmerguhVoortgang.zet(p, TimmerguhVoortgang.KLAAR),
                 Titels.OPPER_VADSER, () -> GuhQuests.saved(p).putInt(GuheindeGevecht.WINS, 1),
                 Titels.GUHKENNER, () -> GuhWorldData.get(helper.getLevel().getServer()).player(p.getUUID()).seen.addAll(GuhDex.TELLEND));
-        helper.assertTrue(hoe.size() == Titels.ALLE.size(), "a way to earn every title");
+        helper.assertTrue(hoe.size() == 8, "a way to earn every title (the guhpixel titles have their own tests)");
         int n = 0;
         // (the last one first: each new title is the only new one)
-        for (int i = Titels.ALLE.size() - 1; i >= 0; i--) {
+        for (int i = 8 - 1; i >= 0; i--) {
             Titels.Titel t = Titels.ALLE.get(i);
             helper.assertTrue(!Titels.heeft(p, t), t.id() + " isn't earned yet");
             hoe.get(t.id()).run();
@@ -245,6 +245,16 @@ public class TitelsGameTests {
         toont(helper, p, titel(Titels.VRIEND_VAN_GUHTWO), "the new one");
         helper.assertTrue(Titels.kies(p, ""), "\"\" is none too");
         toont(helper, p, null, "none again");
+        // 1.3.1: a saved choice for a title that doesn't exist any more (six guhpixel titles were removed): no title, no raw key
+        for (String weg : List.of("lobby_dakhaas", "lobby_mvg", "among_onterecht", "among_kussenkampioen", "among_speurguh", "among_taakjesguh")) {
+            helper.assertTrue(Titels.van(weg) == null, "removed in 1.3.1: " + weg);
+            GuhQuests.saved(p).putString(Titels.KEUZE, weg);
+            Titels.kijk(p);
+            toont(helper, p, null, "a removed title was chosen (" + weg + ")");
+            helper.assertTrue(TitelsPayloads.stand(p).actief().isEmpty() && !TitelsPayloads.stand(p).behaald().contains(weg), "the tab: none shows");
+        }
+        helper.assertTrue(Titels.kies(p, Titels.OPPER_VADSER), "and another title can be chosen again");
+        toont(helper, p, titel(Titels.OPPER_VADSER), "after a removed title");
         weg(helper, p);
         helper.succeed();
     }

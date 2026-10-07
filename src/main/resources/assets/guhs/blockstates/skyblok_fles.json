@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/skyblok_fles"
+    },
+    "facing=east": {
+      "model": "guhs:block/skyblok_fles",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/skyblok_fles",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/skyblok_fles",
+      "y": 270
+    }
+  }
+}

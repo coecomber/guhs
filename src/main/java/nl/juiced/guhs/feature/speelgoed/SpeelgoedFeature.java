@@ -131,8 +131,8 @@ public final class SpeelgoedFeature {
     }
 
     /** A toy block item with its lore line. */
-    static final class SpeelgoedBlockItem extends BlockItem {
-        SpeelgoedBlockItem(net.minecraft.world.level.block.Block block, Item.Properties properties) {
+    public static final class SpeelgoedBlockItem extends BlockItem {
+        public SpeelgoedBlockItem(net.minecraft.world.level.block.Block block, Item.Properties properties) {
             super(block, properties);
         }
 

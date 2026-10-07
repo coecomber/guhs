@@ -42,7 +42,11 @@ public enum PlekSoort {
     /** 3.0: it died: "In de wolkjes... njeg" (the Knuffelhart can bring it back, see Wolkjes). */
     IN_DE_WOLKJES,
     /** 1.2.5: just called over with "Roep naar mij" in the Guhdex (detail: the owner's name). */
-    BIJ_JOU;
+    BIJ_JOU,
+    /** guhpixel: away on a trip of the Reisbureau, stored as data (detail: the destination). */
+    OP_VAKANTIE,
+    /** guhpixel: at work (asleep) on a Guhkantoor, stored as data. */
+    OP_KANTOOR;
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);

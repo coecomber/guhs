@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhparkour_horde"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhparkour_horde",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhparkour_horde",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhparkour_horde",
+      "y": 270
+    }
+  }
+}

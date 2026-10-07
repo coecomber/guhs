@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "PBP"
+  ],
+  "key": {
+    "C": "minecraft:pink_carpet",
+    "P": "#minecraft:planks",
+    "B": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:guhparkour_springplank"
+  }
+}

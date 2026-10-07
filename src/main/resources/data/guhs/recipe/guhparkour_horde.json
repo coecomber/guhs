@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SWS",
+    "F F"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "W": "minecraft:pink_wool",
+    "F": "#minecraft:wooden_fences"
+  },
+  "result": {
+    "id": "guhs:guhparkour_horde",
+    "count": 2
+  }
+}

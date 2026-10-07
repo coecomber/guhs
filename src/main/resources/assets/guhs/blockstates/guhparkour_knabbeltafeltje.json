@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhparkour_knabbeltafeltje"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhparkour_knabbeltafeltje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhparkour_knabbeltafeltje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhparkour_knabbeltafeltje",
+      "y": 270
+    }
+  }
+}

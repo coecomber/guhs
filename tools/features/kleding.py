@@ -282,6 +282,11 @@ ANDERE_29 = {"sjoelen", "doolhof", "katapult", "knabbelspelen", "elftocht", "cir
 # 3.0 (Guhverhalen): the story slices register their own pieces too (KledingBronnen.bron in their Feature.register)
 ANDERE_30 = {"timmerguh", "balto", "mewtwo", "hemel", "guhwaii"}
 # loot inside a feature's OWN building counts as that feature (the same logical source; 2.8 sets stay as 2.8 made them)
+# guhpixel: every slice registers the sources of its own pieces (marker blocks px_<slice> in GuhClothes)
+def _eigen_bron(marker):
+    return marker in ANDERE_29 or marker in ANDERE_30 or (marker or "").startswith("px_")
+
+
 EIGEN_LOOT = {("boerderij_zakdoek", "guhboerderij.json")}
 
 
@@ -289,7 +294,7 @@ def selfcheck(h):
     problems = []
     pieces, bronnen = _pieces(), _bronnen()
     for pid, (slot, marker) in pieces.items():
-        if slot == "HAAR" or marker in ANDERE_29 or marker in ANDERE_30:
+        if slot == "HAAR" or _eigen_bron(marker):
             continue
         n = len(bronnen.get(pid, []))
         if n != 1:
@@ -305,7 +310,7 @@ def selfcheck(h):
                 continue
             txt = open(os.path.join(root, f), encoding="utf-8").read()
             for pid in re.findall(r'"guhs:([a-z0-9_]+)"', txt):
-                if pid not in pieces or pieces[pid][0] == "HAAR" or pieces[pid][1] in ANDERE_29 or pieces[pid][1] in ANDERE_30:
+                if pid not in pieces or pieces[pid][0] == "HAAR" or _eigen_bron(pieces[pid][1]):
                     continue
                 bron = (bronnen.get(pid) or ["?"])[0]
                 if not bron.startswith("loot_") and (pid, f) not in EIGEN_LOOT:

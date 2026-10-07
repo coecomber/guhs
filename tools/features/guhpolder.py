@@ -4,7 +4,7 @@ Guhmensie where the Elf-Guhjestocht is held (the elftocht module places it on th
 
   - the biome guhs:guhpolder: its own noise guhmension_polder, flattened towards the middle (guhpolder_wereld.py; the
     numbers for the Elf-Guhjestocht: PEAK_MIN, TOCHT_RING, TOCHT_RADIUS there); cold, snowing, frost glitter in the air;
-    guhs spawn (half of them become a Pinguh), never Mika's; Knabbelkelders may lie under it
+    guhs spawn (a third of them become a Pinguh), never Mika's; Knabbelkelders may lie under it
   - blocks: rijpgras, rijpsprietjes, guh_ijsbloempje (light blue dye), polderijs (never melts; no snow settles on it),
     knotwilg_stam + knotwilg_bladeren (snow caps), ijspegelguh_kristal (light), guh_molentje (turning sails, a guh face:
     grinds #guhs:knus/knabbelgraan into knabbelmeel, tag guhs:knus/knabbelmeel; the knabbeloven bakes twice as much with it)
@@ -79,7 +79,7 @@ LANG = {
     "gui.guhs.guhpolder.meel_dubbel": "Gebakken met knabbelmeel: dubbel zoveel, VAHOEG!",
     "entity.guhs.guh.pinguh": "Pinguh",
     "gui.guhs.guhdex.rarity.pinguh": "Zeldzaamheid: Ongewoon (alleen in de Guhpolder)",
-    "gui.guhs.guhdex.info.pinguh": "Een guh in een pinguinpakje! De helft van de wilde guhs in de ijskoude Guhpolder is een Pinguh. "
+    "gui.guhs.guhdex.info.pinguh": "Een guh in een pinguinpakje! Een derde van de wilde guhs in de ijskoude Guhpolder is een Pinguh. "
                                    "Er zijn klassieke Pinguhs (zwart met een wit buikje en een oranje snaveltje), deftige Keizerpinguhs "
                                    "(een beetje groter, met gouden wangetjes) en heel soms een grijs pluizig Pinguh-kuikentje: alle "
                                    "baby's zijn zo! Waggelt vadsig rond en glijdt op zijn buik over het ijs. Tem hem met kaasknabbels, "
@@ -309,7 +309,7 @@ def ftb(fq):
     q("guhpolder_vind", "De Guhpolder", "Ergens in de Guhmensie ligt een ijskoude, platte &bGuhpolder&r: rijpgras, knotwilgen, bevroren "
       "sloten en sneeuwguhtjes. Hier wordt de &bElf-Guhjestocht&r geschaatst! Neem een warme sjaal mee, njeg.", "guhs:rijpgras",
       [fq.biome("guhpolder")], rewards=(("guhs:kaas_knabbels", 8),), shape="circle", xp=100)
-    q("guhpolder_pinguh", "Een vadsige Pinguh", "De helft van de wilde guhs in de polder is een &bPinguh&r: klassiek, keizer of een "
+    q("guhpolder_pinguh", "Een vadsige Pinguh", "Een derde van de wilde guhs in de polder is een &bPinguh&r: klassiek, keizer of een "
       "grijs pluizig kuikentje. Tem er een met kaasknabbels. Hij glijdt op zijn buik over het ijs, en tijdens de Elf-Guhjestocht "
       "glijdt hij met je mee!", "guhs:polderijs", [adv("guhs:grote_guhspelen/guhpolder_pinguh")], rewards=(("guhs:kaas_knabbels", 16),),
       deps=["guhpolder_vind"], xp=150)

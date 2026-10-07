@@ -202,8 +202,8 @@ def tags(h):
     for brew, items in BROUW.items():
         h.add_tag(f"guhs/tags/item/brouwsel/{brew}", items)
     h.add_tag("guhs/tags/item/vads_uitrusting", [f"guhs:vahoege_vads_{p}" for p in ("helmet", "chestplate", "leggings", "boots")])
-    h.add_tag("guhs/tags/block/knabbelbaken_basis", ["guhs:block_of_kaasknabbels", "guhs:compressed_super_vahoege_vads",
-                                                     {"id": "guhs:gatenkaas", "required": False}])
+    # 1.3.1: only blocks of vahoege vads (written whole, not add_tag: the knabbel block, the vads ore and gatenkaas are out)
+    h.w(f"{h.D}/tags/block/knabbelbaken_basis.json", {"replace": False, "values": ["guhs:block_of_vahoege_vads"]})
     h.add_tag("guhs/tags/block/aangebrande_mika_basis", ["guhs:as_blok", "guhs:as_aarde"])
     h.add_tag("minecraft/tags/block/mineable/pickaxe", ["guhs:guhbrouwketel"])
     h.add_tag("minecraft/tags/block/wither_immune", ["guhs:knabbelbaken"])
@@ -283,7 +283,7 @@ LANG = {
     "quest.guhs.guhbrouwketel.brouwsel.sluipknabbel": "Sluipknabbeldrankje",
     "quest.guhs.guhbrouwketel.brouwsel.guhsprong": "Guhsprongdrankje",
     # the Knabbelbaken
-    "quest.guhs.knabbelbaken.geen_piramide": "Zet het Knabbelbaken op een piramide van vads-, kaas- of knabbelblokken!",
+    "quest.guhs.knabbelbaken.geen_piramide": "Zet het Knabbelbaken op een piramide van blokken vahoege vads!",
     "quest.guhs.knabbelbaken.gekozen": "Knabbelbaken: %s (%s lagen, %s blokken ver)",
     "quest.guhs.knabbelbaken.gunst.vahoeg": "VAHOEG (snelheid en een volle buik)",
     "quest.guhs.knabbelbaken.gunst.guhsprong": "Guhsprong (hoger springen)",
@@ -496,7 +496,7 @@ def ftb(fq):
       [item("guhs:verkoolde_mikakop", 3)], x=4, y=y, shape="diamond", xp=150)
     q("sb_baas", "Doorgebakken!", "Zet 4 asblokken in een T en drie verkoolde mikakoppen erop: de &cAangebrande Mika&r wordt wakker! Versla hem voor de &6gloeister&r.",
       "guhs:gloeister", [adv("aangebrande_mika_verslagen")], rewards=(("guhs:vahoege_vads_ingot", 4),), x=6, y=y, shape="octagon", xp=500)
-    q("sb_baken", "Een baken van knabbels", "Maak een &6Knabbelbaken&r (glas, de gloeister, grillkool), zet het op een piramide van knabbel- of vadsblokken en kies een guh-effect. Ook je guhs krijgen het!",
+    q("sb_baken", "Een baken van knabbels", "Maak een &6Knabbelbaken&r (glas, de gloeister, grillkool), zet het op een piramide van &dblokken vahoege vads&r (negen vadsstaven per blok) en kies een guh-effect. Ook je guhs krijgen het!",
       "guhs:knabbelbaken", [adv("knabbelbaken_aan")], rewards=(("guhs:block_of_kaasknabbels", 2),), x=8, y=y, shape="gear", xp=300)
     y2 = 65.5
     q("sb_rookguh", "Vahoeg naar huis", "Een zielige &7Rookguh&r zweeft rond in de Rookdelta. Voer hem kaasknabbels (of gooi ze naar hem) tot hij vahoeg naar huis zweeft.",

@@ -35,11 +35,18 @@ public class PickedUpGuhItem extends Item {
         super(properties);
     }
 
+    /** (item data, 1.2.10) the band hearts at the moment it was picked up; only read by the tooltip. */
+    public static final String HARTJES = "GuhHartjes";
+
     /** Takes the guh out of the world and returns it as an item. */
     public static ItemStack pickUp(GuhEntity guh) {
         CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(guh);
         tag.putString("id", EntityType.getKey(guh.getType()).toString());
         tag.putBoolean("Sitting", false);
+        if (!guh.level().isClientSide() && nl.juiced.guhs.feature.band.Band.isBandGuh(guh)) {
+            // 1.2.10: the hearts with its owner, for the tooltip (they don't change while it is an item)
+            tag.putInt(HARTJES, nl.juiced.guhs.feature.band.Band.hartjes(guh));
+        }
         if (guh.hasCustomName()) {
             nl.juiced.guhs.taal.Tekst.put(tag, "GuhDisplayName", guh.getCustomName());   // (1.2.0: the name itself, any language)
         }
@@ -133,6 +140,22 @@ public class PickedUpGuhItem extends Item {
             } else if (attribute.getStringOr("id", "").endsWith("max_health")) {
                 maxHealth = attribute.getDoubleOr("base", 0.0);
             }
+        }
+        // 1.2.10: what kind of guh this is and how close you are (the name is the item's own name)
+        if (data.contains("Variant")) {
+            Component soort = nl.juiced.guhs.entity.GuhVariant.byId(data.getStringOr("Variant", "")).displayName();
+            nl.juiced.guhs.entity.GuhPersonality aard = nl.juiced.guhs.entity.GuhPersonality.byId(data.getStringOr("Personality", ""));
+            tooltip.accept((aard == null ? soort.copy() : soort.copy().append(" · ").append(aard.displayName())).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        if (data.contains(HARTJES)) {
+            int hartjes = data.getIntOr(HARTJES, 0);
+            nl.juiced.guhs.feature.band.BandNiveau niveau = nl.juiced.guhs.feature.band.BandNiveau.van(hartjes);
+            nl.juiced.guhs.feature.band.BandNiveau volgende = niveau.volgende();
+            Component stand = volgende == null ? Component.translatable("gui.guhs.mijnguhs.hartjes_max", hartjes)
+                    : Component.translatable("gui.guhs.mijnguhs.hartjes", hartjes, volgende.drempel());
+            Component naam = niveau == nl.juiced.guhs.feature.band.BandNiveau.GEEN ? Component.translatable("gui.guhs.band.niveau.geen") : niveau.naam();
+            tooltip.accept(Component.literal("♥ ").append(naam).withStyle(ChatFormatting.RED));
+            tooltip.accept(Component.literal("   ").append(stand).withStyle(ChatFormatting.GRAY));
         }
         tooltip.accept(Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", scale * 1.45)).withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloatOr("Health", 0.0F)), (int) maxHealth).withStyle(ChatFormatting.GRAY));

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "soort=in": {
+      "model": "guhs:block/guhpixel_portaal_in"
+    },
+    "soort=uit": {
+      "model": "guhs:block/guhpixel_portaal_uit"
+    }
+  }
+}

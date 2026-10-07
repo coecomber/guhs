@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/reisbureau_souvenir_knuffeldal"
+    },
+    "facing=east": {
+      "model": "guhs:block/reisbureau_souvenir_knuffeldal",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/reisbureau_souvenir_knuffeldal",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/reisbureau_souvenir_knuffeldal",
+      "y": 270
+    }
+  }
+}

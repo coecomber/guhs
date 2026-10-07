@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/among_noodknop"
+    },
+    "facing=east": {
+      "model": "guhs:block/among_noodknop",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/among_noodknop",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/among_noodknop",
+      "y": 270
+    }
+  }
+}

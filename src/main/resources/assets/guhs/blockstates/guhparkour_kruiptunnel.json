@@ -1,0 +1,234 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "bobbel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "bobbel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "bobbel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "bobbel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "bobbel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_5"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "bobbel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "bobbel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "bobbel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "bobbel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "bobbel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_5",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "bobbel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "bobbel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "bobbel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "bobbel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "bobbel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_5",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "bobbel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "bobbel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "bobbel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "bobbel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "bobbel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhparkour_kruiptunnel_bobbel_5",
+        "y": 270
+      }
+    }
+  ]
+}

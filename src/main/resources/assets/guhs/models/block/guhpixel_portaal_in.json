@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": {
+      "sprite": "guhs:block/guhpixel_portaal_in",
+      "force_translucent": true
+    }
+  }
+}

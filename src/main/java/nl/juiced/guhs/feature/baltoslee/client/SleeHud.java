@@ -119,7 +119,8 @@ public final class SleeHud {
         Component wl = Component.translatable("gui.guhs.baltoslee.hud.warmte");
         g.text(font, wl, wbx - 4 - font.width(wl), ly, 0xFFFFD8A0, true);
         g.fill(wbx, ly + 1, wbx + wbl, ly + 7, BALK);
-        int wk = warmte < 10 ? 0xFF7FB8FF : warmte < 30 ? 0xFFFFC060 : 0xFFFF8A3A;
+        int wk = warmte < SleeRijden.WARMTE_KOUD ? (now / 5 % 2 == 0 ? 0xFF7FB8FF : 0xFFCFE4FF)
+                : warmte < SleeRijden.WARMTE_WAARSCHUWING ? 0xFFFFC060 : 0xFFFF8A3A;   // (1.3.1: blinks blue when the dogs are slow)
         g.fill(wbx, ly + 1, wbx + (int) (wbl * warmte / 100f), ly + 7, wk);
         int vy = y + 44;
         g.text(font, Component.translatable("gui.guhs.baltoslee.hud.vaart"), x + 8, vy, 0xFFCFE8FF, true);
@@ -180,15 +181,18 @@ public final class SleeHud {
                 } else if (vlaag != 0) {
                     waarschuwing = Component.translatable(vlaag > 0 ? "gui.guhs.baltoslee.hud.vlaag_links" : "gui.guhs.baltoslee.hud.vlaag_rechts");
                     kleur = 0xFFD8E8FF;
-                } else if (r.zone(sled.been, RitRoute.Soort.RUST, s) != null && warmte < 90) {
+                } else if (r.zone(sled.been, RitRoute.Soort.RUST, s) != null && warmte < 90) {   // (a used rest point shows it too: harmless)
                     waarschuwing = Component.translatable("gui.guhs.baltoslee.hud.vuurkorf");
                     kleur = 0xFFFFB060;
                 } else if (Math.abs(sled.lat) > b.breedte(s) + 0.05) {
                     waarschuwing = Component.translatable("gui.guhs.baltoslee.hud.diep");
                     kleur = 0xFFD0E0FF;
-                } else if (warmte < 30) {
+                } else if (warmte < SleeRijden.WARMTE_KOUD) {
                     waarschuwing = Component.translatable("gui.guhs.baltoslee.hud.koud");
-                    kleur = 0xFF9FC8FF;
+                    kleur = knipper ? 0xFF9FC8FF : 0xFFFFFFFF;
+                } else if (warmte < SleeRijden.WARMTE_WAARSCHUWING) {   // 1.3.1: the paws are getting cold
+                    waarschuwing = Component.translatable("gui.guhs.baltoslee.hud.koud_bijna");
+                    kleur = 0xFFFFC870;
                 }
             }
             default -> {

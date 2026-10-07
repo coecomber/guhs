@@ -1,0 +1,1620 @@
+{
+  "formaat": 1,
+  "id": "guhmon",
+  "duur": 1020,
+  "atlas": {
+    "textuur": "guhs:textures/guhbioscoop/guhmon.png",
+    "breedte": 256,
+    "hoogte": 64
+  },
+  "sprites": {
+    "badge": {
+      "uv": [
+        24,
+        22,
+        11,
+        10
+      ]
+    },
+    "ballon": {
+      "uv": [
+        1,
+        1,
+        40,
+        20
+      ]
+    },
+    "guh_goud_blij_rond_pet-rood": {
+      "uv": [
+        42,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_goud_open_rond_pet-rood": {
+      "uv": [
+        65,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_blij_rond": {
+      "uv": [
+        88,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_dicht_rond": {
+      "uv": [
+        111,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_half_rond": {
+      "uv": [
+        134,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_lila_open_rond": {
+      "uv": [
+        157,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_boos_rond_muts-blauw": {
+      "uv": [
+        180,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_dicht_rond_muts-blauw": {
+      "uv": [
+        203,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_half_rond_muts-blauw": {
+      "uv": [
+        226,
+        1,
+        22,
+        18
+      ]
+    },
+    "guh_mint_open_rond_muts-blauw": {
+      "uv": [
+        1,
+        22,
+        22,
+        18
+      ]
+    },
+    "knabbel": {
+      "uv": [
+        71,
+        22,
+        8,
+        7
+      ]
+    },
+    "platform": {
+      "uv": [
+        36,
+        22,
+        34,
+        9
+      ]
+    },
+    "ster": {
+      "uv": [
+        95,
+        22,
+        5,
+        5
+      ]
+    },
+    "wit": {
+      "uv": [
+        101,
+        22,
+        4,
+        4
+      ]
+    },
+    "zzz": {
+      "uv": [
+        80,
+        22,
+        7,
+        7
+      ],
+      "frames": 2,
+      "per": 12
+    }
+  },
+  "scenes": [
+    {
+      "naam": "titel",
+      "duur": 70,
+      "lagen": [
+        {
+          "vlak": "#2a4a7a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "ster",
+          "x": 14,
+          "y": 40
+        },
+        {
+          "sprite": "ster",
+          "x": 92,
+          "y": 44
+        },
+        {
+          "sprite": "badge",
+          "x": 50,
+          "y": 46,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 30
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t1",
+          "schaal": 2.0,
+          "uitlijn": "midden",
+          "kleur": "#ffe27a",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": -18
+            },
+            {
+              "t": 14,
+              "x": 56,
+              "y": 10,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t2",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 32,
+          "van": 18
+        }
+      ]
+    },
+    {
+      "naam": "uitdaging",
+      "duur": 130,
+      "lagen": [
+        {
+          "vlak": "#f0d8a0",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#d8b878",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "sprite": "guh_goud_open_rond_pet-rood",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 120,
+              "y": 32
+            },
+            {
+              "t": 30,
+              "x": 70,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "tot": 30,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_goud_open_rond_pet-rood",
+          "x": 70,
+          "y": 32,
+          "van": 30,
+          "tot": 90
+        },
+        {
+          "sprite": "guh_goud_blij_rond_pet-rood",
+          "x": 70,
+          "y": 32,
+          "van": 90
+        },
+        {
+          "sprite": "guh_lila_open_rond",
+          "x": 18,
+          "y": 32
+        }
+      ]
+    },
+    {
+      "naam": "vadsen",
+      "duur": 130,
+      "lagen": [
+        {
+          "vlak": "#d8f0c8",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#c0e4b0",
+          "x": 0,
+          "y": 44,
+          "w": 112,
+          "h": 20
+        },
+        {
+          "sprite": "platform",
+          "x": 70,
+          "y": 26
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-blauw",
+          "x": 76,
+          "y": 10,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26
+          }
+        },
+        {
+          "sprite": "guh_lila_half_rond",
+          "x": 14,
+          "y": 28,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26,
+            "fase": 10
+          }
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 4,
+          "y": 3,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 5,
+          "y": 4,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t3",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 23,
+          "y": 10,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 20,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 60,
+          "y": 33,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 61,
+          "y": 34,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t5",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 63,
+          "y": 35
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 63,
+          "y": 40
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 79,
+          "y": 40,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 79,
+              "y": 40,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 20,
+              "x": 79,
+              "y": 40,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 79,
+              "y": 40,
+              "w": 7.8,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t6",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#3a8ad0",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 24,
+              "x": 96,
+              "y": 30
+            },
+            {
+              "t": 70,
+              "x": 96,
+              "y": 22
+            }
+          ],
+          "van": 24,
+          "tot": 70
+        }
+      ]
+    },
+    {
+      "naam": "njeg",
+      "duur": 130,
+      "lagen": [
+        {
+          "vlak": "#d8f0c8",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#c0e4b0",
+          "x": 0,
+          "y": 44,
+          "w": 112,
+          "h": 20
+        },
+        {
+          "sprite": "platform",
+          "x": 70,
+          "y": 26
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44
+        },
+        {
+          "sprite": "guh_mint_boos_rond_muts-blauw",
+          "x": 76,
+          "y": 10,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26
+          }
+        },
+        {
+          "sprite": "guh_lila_open_rond",
+          "x": 14,
+          "y": 28,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26,
+            "fase": 10
+          }
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 4,
+          "y": 3,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 5,
+          "y": 4,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t3",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 23,
+          "y": 10,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 20,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 60,
+          "y": 33,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 61,
+          "y": 34,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t5",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 63,
+          "y": 35
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 63,
+          "y": 40
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 79,
+          "y": 40,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 79,
+              "y": 40,
+              "w": 7.8,
+              "h": 3
+            },
+            {
+              "t": 20,
+              "x": 79,
+              "y": 40,
+              "w": 7.8,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 79,
+              "y": 40,
+              "w": 3.9,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "sprite": "ballon",
+          "x": 44,
+          "y": 0,
+          "spiegel": true,
+          "van": 10,
+          "tot": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t7",
+          "schaal": 0.9,
+          "uitlijn": "midden",
+          "kleur": "#d63c3c",
+          "x": 64,
+          "y": 4,
+          "van": 10,
+          "tot": 64
+        }
+      ]
+    },
+    {
+      "naam": "knabbel",
+      "duur": 140,
+      "lagen": [
+        {
+          "vlak": "#d8f0c8",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#c0e4b0",
+          "x": 0,
+          "y": 44,
+          "w": 112,
+          "h": 20
+        },
+        {
+          "sprite": "platform",
+          "x": 70,
+          "y": 26
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44
+        },
+        {
+          "sprite": "guh_mint_open_rond_muts-blauw",
+          "x": 76,
+          "y": 10,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26
+          }
+        },
+        {
+          "sprite": "guh_lila_blij_rond",
+          "x": 14,
+          "y": 28,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26,
+            "fase": 10
+          }
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 4,
+          "y": 3,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 5,
+          "y": 4,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t3",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 23,
+          "y": 10,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 30,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 120,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 60,
+          "y": 33,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 61,
+          "y": 34,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t5",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 63,
+          "y": 35
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 63,
+          "y": 40
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 79,
+          "y": 40,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 79,
+              "y": 40,
+              "w": 3.9,
+              "h": 3
+            },
+            {
+              "t": 30,
+              "x": 79,
+              "y": 40,
+              "w": 3.9,
+              "h": 3
+            },
+            {
+              "t": 120,
+              "x": 79,
+              "y": 40,
+              "w": 14.3,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "sprite": "knabbel",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 90,
+              "y": 50,
+              "r": 0
+            },
+            {
+              "t": 26,
+              "x": 30,
+              "y": 30,
+              "e": "uit"
+            }
+          ],
+          "tot": 30
+        }
+      ]
+    },
+    {
+      "naam": "dutje",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#d8f0c8",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#c0e4b0",
+          "x": 0,
+          "y": 44,
+          "w": 112,
+          "h": 20
+        },
+        {
+          "sprite": "platform",
+          "x": 70,
+          "y": 26
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44
+        },
+        {
+          "sprite": "guh_mint_half_rond_muts-blauw",
+          "x": 76,
+          "y": 10,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26
+          }
+        },
+        {
+          "sprite": "guh_lila_half_rond",
+          "x": 14,
+          "y": 28,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26,
+            "fase": 10
+          }
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 4,
+          "y": 3,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 5,
+          "y": 4,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t3",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 23,
+          "y": 10,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 8,
+              "x": 23,
+              "y": 10,
+              "w": 0.0,
+              "h": 3
+            },
+            {
+              "t": 40,
+              "x": 23,
+              "y": 10,
+              "w": 22.1,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 60,
+          "y": 33,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 61,
+          "y": 34,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t5",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 63,
+          "y": 35
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 63,
+          "y": 40
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 79,
+          "y": 40,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 79,
+              "y": 40,
+              "w": 14.3,
+              "h": 3
+            },
+            {
+              "t": 8,
+              "x": 79,
+              "y": 40,
+              "w": 14.3,
+              "h": 3
+            },
+            {
+              "t": 40,
+              "x": 79,
+              "y": 40,
+              "w": 14.3,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 96,
+              "x": 79,
+              "y": 40,
+              "w": 14.3,
+              "h": 3
+            },
+            {
+              "t": 130,
+              "x": 79,
+              "y": 40,
+              "w": 26,
+              "h": 3,
+              "e": "zacht"
+            }
+          ],
+          "van": 96
+        },
+        {
+          "vlak": "#d8f0c8",
+          "x": 12,
+          "y": 26,
+          "w": 26,
+          "h": 20,
+          "van": 134
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44,
+          "van": 134
+        },
+        {
+          "sprite": "guh_lila_dicht_rond",
+          "x": 14,
+          "y": 28,
+          "van": 134
+        },
+        {
+          "sprite": "zzz",
+          "x": 34,
+          "y": 20,
+          "van": 138
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t8",
+          "schaal": 1.5,
+          "uitlijn": "midden",
+          "kleur": "#d63c3c",
+          "schaduw": true,
+          "x": 100,
+          "y": 6,
+          "van": 10,
+          "tot": 60
+        }
+      ]
+    },
+    {
+      "naam": "winst",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#d8f0c8",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#c0e4b0",
+          "x": 0,
+          "y": 44,
+          "w": 112,
+          "h": 20
+        },
+        {
+          "sprite": "platform",
+          "x": 70,
+          "y": 26
+        },
+        {
+          "sprite": "platform",
+          "x": 8,
+          "y": 44
+        },
+        {
+          "sprite": "guh_mint_dicht_rond_muts-blauw",
+          "x": 76,
+          "y": 10,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26
+          }
+        },
+        {
+          "sprite": "guh_lila_dicht_rond",
+          "x": 14,
+          "y": 28,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 26,
+            "fase": 10
+          }
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 4,
+          "y": 3,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 5,
+          "y": 4,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t3",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 23,
+          "y": 10,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 23,
+              "y": 10,
+              "w": 22.1,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 23,
+              "y": 10,
+              "w": 22.1,
+              "h": 3
+            },
+            {
+              "t": 110,
+              "x": 23,
+              "y": 10,
+              "w": 26.0,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "vlak": "#3a2a48",
+          "x": 60,
+          "y": 33,
+          "w": 48,
+          "h": 13
+        },
+        {
+          "vlak": "#fff6fb",
+          "x": 61,
+          "y": 34,
+          "w": 46,
+          "h": 11
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t5",
+          "schaal": 0.5,
+          "uitlijn": "links",
+          "kleur": "#3a2a48",
+          "x": 63,
+          "y": 35
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t4",
+          "schaal": 0.4,
+          "uitlijn": "links",
+          "kleur": "#b06090",
+          "x": 63,
+          "y": 40
+        },
+        {
+          "vlak": "#5a4a64",
+          "x": 79,
+          "y": 40,
+          "w": 26,
+          "h": 3
+        },
+        {
+          "vlak": "#7ad0ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 79,
+              "y": 40,
+              "w": 26.0,
+              "h": 3
+            },
+            {
+              "t": 60,
+              "x": 79,
+              "y": 40,
+              "w": 26.0,
+              "h": 3
+            },
+            {
+              "t": 110,
+              "x": 79,
+              "y": 40,
+              "w": 26.0,
+              "h": 3,
+              "e": "zacht"
+            }
+          ]
+        },
+        {
+          "sprite": "zzz",
+          "x": 34,
+          "y": 20
+        },
+        {
+          "sprite": "zzz",
+          "x": 96,
+          "y": 2,
+          "van": 112
+        },
+        {
+          "vlak": "#2a4a7a",
+          "x": 22,
+          "y": 14,
+          "w": 68,
+          "h": 16,
+          "tot": 70
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t9",
+          "schaal": 1.25,
+          "uitlijn": "midden",
+          "kleur": "#ffe27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 17,
+          "tot": 70
+        },
+        {
+          "sprite": "badge",
+          "sleutels": [
+            {
+              "t": 70,
+              "x": 50,
+              "y": -12
+            },
+            {
+              "t": 88,
+              "x": 50,
+              "y": 16,
+              "e": "uit"
+            }
+          ],
+          "van": 70
+        }
+      ]
+    },
+    {
+      "naam": "aftiteling",
+      "duur": 100,
+      "lagen": [
+        {
+          "vlak": "#140c1c",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t10",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 66
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 16
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t11",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 77
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 27
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t12",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 88
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 38
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t13",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 99
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 49
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.guhmon.t14",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 4,
+          "van": 72
+        },
+        {
+          "sprite": "guh_lila_dicht_rond",
+          "x": 86,
+          "y": 44,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 30
+          }
+        },
+        {
+          "sprite": "zzz",
+          "x": 100,
+          "y": 34,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 24
+          }
+        }
+      ]
+    }
+  ],
+  "ondertitels": [
+    {
+      "van": 78,
+      "tot": 138,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o1"
+    },
+    {
+      "van": 144,
+      "tot": 196,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o2"
+    },
+    {
+      "van": 205,
+      "tot": 262,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o3"
+    },
+    {
+      "van": 268,
+      "tot": 326,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o4"
+    },
+    {
+      "van": 335,
+      "tot": 392,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o5"
+    },
+    {
+      "van": 398,
+      "tot": 456,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o6"
+    },
+    {
+      "van": 465,
+      "tot": 526,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o7"
+    },
+    {
+      "van": 532,
+      "tot": 596,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o8"
+    },
+    {
+      "van": 605,
+      "tot": 676,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o9"
+    },
+    {
+      "van": 684,
+      "tot": 766,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o10"
+    },
+    {
+      "van": 775,
+      "tot": 836,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o11"
+    },
+    {
+      "van": 842,
+      "tot": 916,
+      "tekst": "gui.guhs.guhbioscoop.film.guhmon.o12"
+    }
+  ],
+  "geluiden": [
+    {
+      "t": 2,
+      "geluid": "guhs:guhbioscoop.film.titel",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 100,
+      "geluid": "guhs:guhbioscoop.film.guh",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 144,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 208,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 268,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 340,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 488,
+      "geluid": "guhs:guhbioscoop.film.smak",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 504,
+      "geluid": "guhs:guhbioscoop.film.smak",
+      "volume": 1.0,
+      "toon": 1.1
+    },
+    {
+      "t": 606,
+      "geluid": "guhs:guhbioscoop.film.spanning",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 696,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 736,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 774,
+      "geluid": "guhs:guhbioscoop.film.fanfare",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 858,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 932,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    }
+  ],
+  "cues": [
+    {
+      "t": 272,
+      "soort": "lach"
+    },
+    {
+      "t": 404,
+      "soort": "lach"
+    },
+    {
+      "t": 612,
+      "soort": "schrik"
+    },
+    {
+      "t": 778,
+      "soort": "juich"
+    },
+    {
+      "t": 890,
+      "soort": "slaap"
+    },
+    {
+      "t": 936,
+      "soort": "slaap"
+    }
+  ]
+}

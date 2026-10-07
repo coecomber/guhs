@@ -68,7 +68,10 @@ public final class SpiesburchtFeature {
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECES = DeferredRegister.create(Registries.STRUCTURE_PIECE, Guhs.MODID);
 
     public static final ResourceKey<Biome> ASDAL = ResourceKey.create(Registries.BIOME, Guhs.id("asdal"));
-    /** The blocks a Knabbelbaken's pyramid can be made of (vads, kaas and knabbel blocks; other slices add theirs). */
+    /**
+     * The blocks a Knabbelbaken's pyramid can be made of. 1.3.1: only guhs:block_of_vahoege_vads (it used to be blocks of
+     * kaasknabbels, compressed super vahoege vads and gatenkaas).
+     */
     public static final TagKey<Block> BAKEN_BASIS = TagKey.create(Registries.BLOCK, Guhs.id("knabbelbaken_basis"));
     /** The T under the three verkoolde mikakoppen (as_blok). */
     public static final TagKey<Block> AANGEBRAND_BASIS = TagKey.create(Registries.BLOCK, Guhs.id("aangebrande_mika_basis"));

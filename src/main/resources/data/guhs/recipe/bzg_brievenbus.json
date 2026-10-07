@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RIR",
+    "IPI",
+    " S "
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:paper",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:bzg_brievenbus"
+  }
+}

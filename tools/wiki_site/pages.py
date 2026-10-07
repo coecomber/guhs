@@ -768,6 +768,7 @@ class Builder:
             if structs:
                 pg.add_section("structures", "Structures", "Bouwwerken", '<ul class="chips-list">' + "".join(
                     f"<li>{L('bouwwerken/' + s, esc(self.structure_name(s)[0]))}</li>" for s in structs) + "</ul>")
+            pg.related += T.DIMENSION_RELATED.get(did, [])
             pg.aliases |= {nl.split(" ", 1)[1] if nl.startswith(("De ", "Het ")) else nl}
             pg.data["sort"] = did
             self.add(pg)
@@ -784,6 +785,9 @@ class Builder:
             if m.get("structure"):
                 pg.info("Where", "Waar", L(f"bouwwerken/{m['structure']}", esc(self.structure_name(m["structure"])[0])))
                 pg.related.append(f"bouwwerken/{m['structure']}")
+            if m.get("home"):   # (a game without a structure of its own: the page it is played from)
+                pg.info("Where", "Waar", L(m["home"]))
+                pg.related.append(m["home"])
             if m.get("npc"):
                 pg.info("Host", "Spelleider", L(f"npcs/{m['npc']}"))
                 pg.related.append(f"npcs/{m['npc']}")

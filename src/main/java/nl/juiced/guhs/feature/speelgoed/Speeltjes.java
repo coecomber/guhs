@@ -130,7 +130,7 @@ public final class Speeltjes {
     }
 
     /** The toy blocks (glijbaantje, wip, schommel controllers and tunnel pieces) within bereik of rond. */
-    static Stream<BlockPos> toestellen(ServerLevel level, BlockPos rond, int bereik) {
+    public static Stream<BlockPos> toestellen(ServerLevel level, BlockPos rond, int bereik) {
         return level.getPoiManager().getInRange(h -> h.is(SpeelgoedFeature.POI.getKey()), rond, bereik, PoiManager.Occupancy.ANY)
                 .map(PoiRecord::getPos);
     }

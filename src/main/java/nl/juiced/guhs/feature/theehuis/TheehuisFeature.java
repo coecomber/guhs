@@ -114,6 +114,7 @@ public final class TheehuisFeature {
         MOB_EFFECTS.register(modBus);
         Minigames.registerGame(Minigames.THEEHUIS, Theekransje::isGastheer);
         GuhHooks.klik(Theekransje::klikOpGuh);
+        GuhHooks.item(Theekransje::isVoorGast);
         NeoForge.EVENT_BUS.addListener(Theekransje::onLogout);
         NeoForge.EVENT_BUS.addListener(Theekransje::onChangeDimension);
         NeoForge.EVENT_BUS.addListener(Theekransje::onPlayerTick);

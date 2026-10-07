@@ -406,6 +406,38 @@ public class BandGameTests {
         helper.succeed();
     }
 
+    /** 1.2.10: the Guhdex tab "Mijn andere vadsjes": the owner's tamed maatjes with their kind, name and place; not the guhs. */
+    @GuhTest(template = WEI, batch = BATCH)
+    public static void bandAndereVadsjesSnapshot(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        GuhEntity a = guh(helper, p, new BlockPos(3, 1, 3));
+        var muis = helper.spawn(nl.juiced.guhs.feature.piep.PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(5, 1, 5));
+        var schilly = helper.spawn(nl.juiced.guhs.feature.piep.PiepFeature.SCHILLY.get(), new BlockPos(7, 1, 7));
+        try {
+            muis.tame(p);
+            schilly.tame(p);
+            muis.setCustomName(net.minecraft.network.chat.Component.literal("Piepje"));
+            GuhVolger.zet(muis, PlekSoort.WERELD, "");
+            GuhVolger.zet(schilly, PlekSoort.ZIT, "");
+            CompoundTag data = MijnGuhs.snapshot(p, null);
+            ListTag vadsjes = data.getListOrEmpty("Vadsjes");
+            helper.assertTrue(data.getListOrEmpty("Guhs").size() == 1 && vadsjes.size() == 2, "one guh, two other vadsjes: " + vadsjes);
+            CompoundTag m = vadsjes.getCompoundOrEmpty(0), s = vadsjes.getCompoundOrEmpty(1);
+            helper.assertTrue(m.getStringOr("Soort", "").equals("pieppiepmuisje") && m.getStringOr("Naam", "").equals("Piepje")
+                    && m.getStringOr("Id", "").equals(Band.id(muis).toString()) && !m.getStringOr("Plek", "").isEmpty()
+                    && m.getStringOr("PlekSoort", "").equals(PlekSoort.WERELD.id()), "the mouse, sorted by kind, with its name and place: " + m);
+            helper.assertTrue(s.getStringOr("Soort", "").equals("schilly") && s.getStringOr("PlekSoort", "").equals(PlekSoort.ZIT.id()), "Schilly: " + s);
+            GuhVolger.zet(muis, PlekSoort.ONBEKEND, "");   // (what its death does)
+            helper.assertTrue(MijnGuhs.snapshot(p, null).getListOrEmpty("Vadsjes").size() == 1, "a vadsje that is gone is left out");
+            helper.assertTrue(a.isAlive(), "(the guh)");
+        } finally {
+            muis.discard();
+            schilly.discard();
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
+
     @GuhTest(template = WEI, batch = BATCH)
     public static void bandTemmenOpentHetHoofdstuk(GameTestHelper helper) {
         ServerPlayer p = speler(helper);

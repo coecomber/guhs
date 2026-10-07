@@ -38,7 +38,7 @@ import nl.juiced.guhs.world.ModDimensions;
  */
 public final class KnuffeldalEvents {
     /** Out of the wild guhs born in the Knuffeldal, this many are a Pluisguh. */
-    public static final float PLUISGUH_CHANCE = 0.35f;
+    public static final float PLUISGUH_CHANCE = 0.23f;   // 1.3.1: was 0.35
     /** A resident walks back home when it gets this far away. */
     public static final double THUIS_AFSTAND = 9.0;
     static final String CHECKED = "guhs_knuffeldal_checked";
