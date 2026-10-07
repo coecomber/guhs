@@ -1,5 +1,13 @@
 package nl.juiced.guhs.feature.techmachine;
 
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.item.component.BlockItemStateProperties;
+import net.minecraft.world.item.component.Bees;
+import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.core.component.DataComponents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -829,5 +837,95 @@ public class TechmachineGameTests {
         bak.vakken().set(0, ItemResource.EMPTY, 0);
         nr[0]++;
         fase[0] = 0;
+    }
+
+    /**
+     * Who chops the BOTTOM log of the bak's tree by hand leaves a floating trunk. The bak does not plant a new sapling under
+     * it (that one would never grow) and still knows its tree: an axe on the bak or a chore guh takes the rest down, and a
+     * bee nest that came with the tree comes along as an item with its bees and its honey (it hung in the air before).
+     */
+    @GuhTest(template = BOS, batch = "techmachine_bak", timeoutTicks = 600, skyAccess = true)
+    public static void techmachinePlantagebakOndersteStamEnBijennest(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        PlantagebakBlockEntity bak = bak(helper);
+        // (beside the foot of the trunk: a tree only asks for free room around its trunk from one block up)
+        BlockPos plantAbs = helper.absolutePos(PLANT), nestPlek = PLANT.north(), nestAbs = helper.absolutePos(nestPlek);
+        gelijk(helper, 3, bak.plant(new ItemStack(Items.OAK_SAPLING, 3)), "three saplings in the bak");
+        // the nest appears at the moment the tree grows (as a tree's own bee nest does), with honey and a bee at home
+        java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockGrowFeatureEvent> nestje = e -> {
+            if (e.getPos().equals(plantAbs) && level.getBlockState(nestAbs).isAir()) {
+                level.setBlock(nestAbs, Blocks.BEE_NEST.defaultBlockState().setValue(BeehiveBlock.HONEY_LEVEL, 3), Block.UPDATE_ALL);
+                Bee bij = EntityType.BEE.create(level, EntitySpawnReason.TRIGGERED);
+                bij.snapTo(nestAbs.getX() + 0.5, nestAbs.getY() + 1.5, nestAbs.getZ() + 0.5);
+                ((BeehiveBlockEntity) level.getBlockEntity(nestAbs)).addOccupant(bij);
+            }
+        };
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.NORMAL, false,
+                net.neoforged.neoforge.event.level.BlockGrowFeatureEvent.class, nestje);
+        helper.runAfterDelay(25, () -> {
+            helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT);
+            bak.voortgang = PlantagebakBlockEntity.GROEITIJD - 3;
+            helper.runAfterDelay(10, () -> {
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(nestje);
+                helper.assertTrue(bak.heeftBoom() && helper.getBlockState(PLANT).is(BlockTags.LOGS), "the tree stands (wilNiet " + bak.wilNiet() + ")");
+                helper.assertTrue(helper.getBlockState(nestPlek).is(Blocks.BEE_NEST), "with a bee nest against its trunk: " + helper.getBlockState(nestPlek));
+                int stammen = bak.stam().size(), zaailingen = bak.voorraad().getCount();
+                helper.assertTrue(stammen >= 4, "a trunk of at least four logs: " + stammen);
+                // the bottom log is chopped by hand
+                helper.setBlock(PLANT, Blocks.AIR);
+                helper.runAfterDelay(3 * 20 + 5, () -> {
+                    helper.assertTrue(helper.getBlockState(PLANT).isAir(), "no sapling is planted under the floating trunk: " + helper.getBlockState(PLANT));
+                    gelijk(helper, zaailingen, bak.voorraad().getCount(), "the saplings stay in the bak");
+                    helper.assertTrue(bak.heeftBoom() && bak.stand() == PlantagebakBlockEntity.Stand.BOOM, "the bak still knows its tree");
+                    gelijk(helper, stammen - 1, bak.stam().size(), "the rest of the trunk");
+                    helper.assertBlockProperty(BAK, MachineBlock.SNOET, Snoet.VOL);
+                    // an axe on the bak (or a chore guh): the rest comes down, nest and all
+                    List<ItemStack> buit = bak.hak(null);
+                    gelijk(helper, stammen - 1, buit.stream().filter(s -> s.is(Items.OAK_LOG)).mapToInt(ItemStack::getCount).sum(), "every log that still stood");
+                    gelijk(helper, 0, telBlokken(helper, s -> s.is(BlockTags.LOGS) || s.is(BlockTags.LEAVES) || s.is(Blocks.BEE_NEST)), "nothing of the tree is left, no floating nest");
+                    ItemStack nest = buit.stream().filter(s -> s.is(Items.BEE_NEST)).findFirst().orElse(ItemStack.EMPTY);
+                    helper.assertTrue(!nest.isEmpty() && nest.getCount() == 1, "the bee nest is in the harvest: " + buit);
+                    Bees bijen = nest.get(DataComponents.BEES);
+                    helper.assertTrue(bijen != null && bijen.bees().size() == 1, "with its bee in it: " + bijen);
+                    BlockItemStateProperties staat = nest.get(DataComponents.BLOCK_STATE);
+                    helper.assertTrue(staat != null && Integer.valueOf(3).equals(staat.get(BeehiveBlock.HONEY_LEVEL)), "and its honey: " + staat);
+                    gelijk(helper, 0, level.getEntitiesOfClass(Bee.class, new net.minecraft.world.phys.AABB(nestAbs).inflate(8)).size(), "no angry bee came out");
+                    gelijk(helper, PlantagebakBlockEntity.Stand.LEEG, bak.stand(), "ready for the next tree");
+                    helper.succeedWhen(() -> helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT));   // now it plants again
+                });
+            });
+        });
+    }
+
+    /**
+     * What a Neerzetter puts down belongs to whoever placed the Neerzetter (a machine without an owner is refused in every
+     * huisje's home base and served by anybody's chore guhs); and a machine's items are not in what the clients get.
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 400)
+    public static void techmachineNeerzetterGeeftZijnEigenaarDoor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        UUID baas = UUID.randomUUID();
+        NeerzetterBlockEntity zetter = machine(helper, p(2, 6), TechmachineFeature.NEERZETTER.get());
+        zetter.zetEigenaar(baas);
+        zetter.vakken().set(0, ItemResource.of(TechmachineFeature.OOGSTER.get().asItem()), 1);
+        zetter.vakken().set(1, ItemResource.of(Items.OAK_PLANKS), 7);
+        // nobody's Neerzetter: what it places stays nobody's
+        NeerzetterBlockEntity los = machine(helper, p(6, 6), TechmachineFeature.NEERZETTER.get());
+        los.vakken().set(0, ItemResource.of(TechmachineFeature.KNABBELAAR.get().asItem()), 1);
+        // the clients do not get the slots
+        var naarClient = zetter.getUpdateTag(level.registryAccess());
+        helper.assertTrue(zetter.saveWithoutMetadata(level.registryAccess()).contains("Vakken") && !naarClient.contains("Vakken"),
+                "the saved data holds the items, the update for the clients does not: " + naarClient);
+        helper.assertTrue(naarClient.contains("Bezig"), "the rest is still sent");
+        NeerzetterBlockEntity kopie = new NeerzetterBlockEntity(zetter.getBlockPos(), zetter.getBlockState());
+        kopie.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), naarClient));
+        gelijk(helper, 0, tel(kopie, Items.OAK_PLANKS), "(a client loads that without the items)");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(helper.getBlockState(p(2, 5)).is(TechmachineFeature.OOGSTER.get()), "the Neerzetter placed the Oogster: " + helper.getBlockState(p(2, 5)));
+            helper.assertTrue(level.getBlockEntity(helper.absolutePos(p(2, 5))) instanceof OogsterBlockEntity oogster && baas.equals(oogster.eigenaar()),
+                    "and it belongs to the Neerzetter's owner");
+            helper.assertTrue(level.getBlockEntity(helper.absolutePos(p(6, 5))) instanceof KnabbelaarBlockEntity knabbelaar && knabbelaar.eigenaar() == null,
+                    "what nobody's Neerzetter places is nobody's");
+        });
     }
 }

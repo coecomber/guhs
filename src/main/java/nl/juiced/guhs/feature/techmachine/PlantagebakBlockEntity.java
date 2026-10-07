@@ -28,6 +28,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.item.component.BlockItemStateProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
@@ -57,7 +61,9 @@ import nl.juiced.guhs.feature.wereld.Bescherming;
  *       (some trees insist);</li>
  *   <li>{@link Stand#BOOM}: the tree stands, the face is surprised, and the bak waits until it is gone: chopped by hand,
  *       by an axe on the bak or by a chore guh ({@link #hak}: the WHOLE tree in one go, leaves and all; saplings that
- *       fall out go back into the slot until it holds {@link #RESERVE}). Then it starts again.</li>
+ *       fall out go back into the slot until it holds {@link #RESERVE}). Then it starts again. "Gone" = no log of it
+ *       stands any more: who chops the bottom log first leaves a floating trunk, and a sapling under that would never
+ *       grow, so the bak waits (and {@link #hak} still takes the rest down).</li>
  * </ol>
  * The bak remembers exactly which blocks the tree put there ({@link #stam}, the rest of it in {@code kroon}), so
  * {@link #hak} never touches a log cabin next to it. Nothing grows where its owner may not build
@@ -70,6 +76,8 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
     public static final int OPNIEUW = 10 * 20;
     /** After a chop the bak keeps saplings that fell out until it holds this many (enough for a square of four, twice). */
     public static final int RESERVE = 8;
+    /** How often (ticks) a tree whose bottom log is gone is looked at for other logs that still stand. */
+    private static final int STAM_KIJK = 20;
     /** The box around the plant spot in which a tree may put its blocks: sideways, below, above. */
     private static final int STRAAL = 10, ONDER = 2, BOVEN = 44;
 
@@ -198,7 +206,9 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
 
     /**
      * Chops the whole tree down in one go: every block the tree put there that is still what it was (logs, leaves, wart
-     * blocks, vines...; never a block with a block entity such as a bee nest) is broken and its drops are collected.
+     * blocks, vines...) is broken and its drops are collected. A bee nest that came with the tree comes along as an item
+     * with its bees and its honey in it (what silk touch gives: it would hang in the air otherwise, and nobody is stung);
+     * any other block with a block entity is left alone (nothing a tree of the game makes; never somebody's chest).
      * Saplings of the planted kind among them go back into the slot first. Returns the rest of the harvest (yours to
      * hand out). Nothing happens (an empty list) when no tree of the bak stands.
      */
@@ -216,7 +226,14 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
                 continue;
             }
             BlockState toen = om.palet.get(om.soort[i]), nu = server.getBlockState(plek);
-            if (nu.isAir() || nu.hasBlockEntity() || !zelfde(toen, nu)) {
+            if (nu.isAir() || !zelfde(toen, nu)) {
+                continue;
+            }
+            if (nu.hasBlockEntity()) {
+                if (nu.getBlock() instanceof BeehiveBlock) {
+                    voegToe(buit, nest(server, plek, nu));
+                    server.setBlock(plek, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                }
                 continue;
             }
             for (ItemStack d : Block.getDrops(nu, server, plek, null, wie, ItemStack.EMPTY)) {
@@ -242,6 +259,17 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
         });
         setChanged();
         return buit;
+    }
+
+    /** The bee nest here as an item: the bees that are at home and the honey stay in it. */
+    private static ItemStack nest(ServerLevel server, BlockPos plek, BlockState state) {
+        ItemStack nest = new ItemStack(state.getBlock());
+        BlockEntity be = server.getBlockEntity(plek);
+        if (be != null) {
+            nest.applyComponents(be.collectComponents());
+        }
+        nest.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, state.getValue(BeehiveBlock.HONEY_LEVEL)));
+        return nest;
     }
 
     /** Is this still the block the tree put here? (The tip and the stalk of a hanging vine are two blocks of one plant.) */
@@ -294,7 +322,13 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
         }
         BlockState daar = server.getBlockState(plek);
         if (stand == Stand.BOOM && (stamBlok == null || !daar.is(stamBlok))) {
-            // the trunk is gone (chopped by hand): what is left of the tree is no longer the bak's business
+            // the bottom log is gone (chopped by hand). While other logs of the tree still stand the bak waits: a new
+            // sapling under a floating trunk "wil niet groeien", and an axe on the bak or a chore guh can still fell the
+            // rest. Looked at once a second (a big tree is a few hundred blocks). No log left: the leaves that remain are
+            // no longer the bak's business
+            if (server.getGameTime() % STAM_KIJK != 0 || !stam().isEmpty()) {
+                return;
+            }
             boom = Boom.GEEN;
             stamBlok = null;
             stand = Stand.LEEG;
