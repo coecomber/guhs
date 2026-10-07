@@ -56,7 +56,7 @@ public class DierenKlus extends BasisKlus {
         boolean voer = Voorraad.tel(level, huisje, s -> s.is(BoerderijFeature.KNABBELVOER.get())) > 0;
         boolean fles = Voorraad.tel(level, huisje, s -> s.is(Items.GLASS_BOTTLE)) > 0;
         List<BoerderijDier> dieren = level.getEntitiesOfClass(BoerderijDier.class, huisje.gebied(), d -> d.isAlive()
-                && huisje.inGebied(d.blockPosition()) && KlusGebied.inTest(huisje, d.position()));
+                && huisje.inGebied(d.blockPosition()) && KlusGebied.inTest(huisje, d.position()) && !KlusGebied.beschermd(level, d.blockPosition()));
         int werk = KlusGebied.van(level, huisje, KlusGebied.Soort.NEST).size() + KlusGebied.van(level, huisje, KlusGebied.Soort.KORF).size()
                 + (int) dieren.stream().filter(d -> nodig(d, voer, fles)).count();
         if (werk > 0) {
@@ -88,7 +88,7 @@ public class DierenKlus extends BasisKlus {
         boolean fles = Voorraad.tel(level, huisje, s -> s.is(Items.GLASS_BOTTLE)) > 0;
         List<BoerderijDier> dieren = level.getEntitiesOfClass(BoerderijDier.class, huisje.gebied(), d -> d.isAlive()
                 && huisje.inGebied(d.blockPosition()) && (r <= 0 || d.position().distanceToSqr(bij) <= r * r) && !KlusGebied.geclaimd(level, d.blockPosition())
-                && nodig(d, voer, fles));
+                && !KlusGebied.beschermd(level, d.blockPosition()) && nodig(d, voer, fles));
         return dieren.stream().min(Comparator.comparingDouble(d -> d.position().distanceToSqr(bij))).orElse(null);
     }
 
