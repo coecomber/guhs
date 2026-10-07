@@ -385,9 +385,15 @@ public final class Hondvorm {
 
     static void opLogin(ServerPlayer p) {
         // (a dead player waits for the respawn; a living one is checked at once: the island may be gone, or they may be on it)
+        boolean wasHond = actief(p);
         controleer(p);
         if (actief(p)) {
             p.refreshDimensions();
+        } else if (wasHond && p.isAlive()) {
+            // logged out as a dog, logged in somewhere that is no island (its dimension is gone and the game put the player on
+            // the same coordinates of another world): a player with everything again, and back where they left from
+            LOG.warn("Snuffeleiland: {} logged in as a dog outside the island, sent home", p.getGameProfile().name());
+            Reis.thuisZonderEiland(p);
         }
         sync(p);
         Stand.stuur(p);

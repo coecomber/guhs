@@ -335,9 +335,10 @@ public class SnuffelGameTests {
         helper.assertTrue(hond(p) && alleenKaart(p), "3: logged in on the island: a dog");
         // 4) ... and logging in when the island is NOT where the player is any more (the dimension is gone, the server moved them)
         SnuffelEvents.onLogout(new PlayerEvent.PlayerLoggedOutEvent(p));
-        p.snapTo(t.thuis(1).x, t.thuis(1).y, t.thuis(1).z, 0f, 0f);
+        p.snapTo(t.thuis(1).x, t.thuis(1).y + 3, t.thuis(1).z, 0f, 0f);
         SnuffelEvents.onLogin(new PlayerEvent.PlayerLoggedInEvent(p));
         helper.assertTrue(mens(p) && verschil(voor, p) == null, "4: logged in off the island: a player with everything: " + verschil(voor, p));
+        helper.assertTrue(dicht(p.position(), t.thuis(1)), "4: ... and back where they left for the island from (they left from home 1 in step 2): " + p.position());
 
         // 5) a dog dies (/kill): nothing drops, nothing goes onto the dead body, the respawn gives everything back
         Reis.naarEiland(p, t.plaats, Reis.Aankomst.STRAND);

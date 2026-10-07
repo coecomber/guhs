@@ -218,7 +218,7 @@ public final class Reis {
             p.stopSleepInBed(true, true);
         }
         p.stopRiding();
-        TeleportTransition tr = terug(p, plaats);
+        TeleportTransition tr = terug(p);
         if (tr.newLevel() == p.level()) {
             Vec3 v = tr.position();
             p.teleportTo(tr.newLevel(), v.x, v.y, v.z, Set.of(), tr.yRot(), tr.xRot(), true);
@@ -232,11 +232,24 @@ public final class Reis {
         return true;
     }
 
+    /** For a player who turned out to be on no island at login: to the stored home (or the respawn point), no questions. */
+    static void thuisZonderEiland(ServerPlayer p) {
+        TeleportTransition tr = terug(p);
+        if (tr.newLevel() == p.level()) {
+            Vec3 v = tr.position();
+            p.teleportTo(tr.newLevel(), v.x, v.y, v.z, Set.of(), tr.yRot(), tr.xRot(), true);
+        } else {
+            p.teleport(tr);
+        }
+        p.setDeltaMovement(Vec3.ZERO);
+        p.resetFallDistance();
+    }
+
     /**
      * The way home: the stored spot itself (exactly), a little higher when something was built there since, and without a
      * usable home (none stored, its level is gone, or it lies on an island) the respawn point or the world spawn.
      */
-    static TeleportTransition terug(ServerPlayer p, Eiland.Plaats vanaf) {
+    static TeleportTransition terug(ServerPlayer p) {
         MinecraftServer server = p.level().getServer();
         Thuis thuis = thuis(p);
         ServerLevel level = thuis == null || server == null ? null : server.getLevel(thuis.dim());

@@ -152,7 +152,8 @@ public final class Snuffel {
 
     /**
      * What the Guhdex shows under the story: the two things the island gives, then the player's rank ("Snuffelpup (rang 1
-     * (laagste) van 5 (hoogste))") and the list of all five ranks, each ticked when reached.
+     * (laagste) van 5 (hoogste))") and the list of all five ranks, each ticked when reached (nothing is ticked before the
+     * player's first visit to the island).
      */
     static List<VerhaalStand.Beloning> beloningen(ServerPlayer p) {
         List<VerhaalStand.Beloning> uit = new ArrayList<>();
@@ -160,9 +161,11 @@ public final class Snuffel {
         uit.add(new VerhaalStand.Beloning("guhs:snuffel_bloesemtakje", Component.translatable("item.guhs.snuffel_bloesemtakje"), Boom.cadeauGehad(p)));
         Rang rang = Rang.van(p);
         int geuren = Geuren.aantal(p);
-        uit.add(new VerhaalStand.Beloning("minecraft:name_tag", Component.translatable("gui.guhs.snuffel.rang.jouw", rang.regel(), geuren), true));
+        // (a rank is something of a dog: whoever was never on the island has none yet, so nothing is ticked for them)
+        boolean hond = Reis.bezocht(p);
+        uit.add(new VerhaalStand.Beloning("minecraft:name_tag", Component.translatable("gui.guhs.snuffel.rang.jouw", rang.regel(), geuren), hond));
         for (Rang r : Rang.values()) {
-            uit.add(new VerhaalStand.Beloning(r.ordinal() == 0 ? "minecraft:bone" : "minecraft:paper", r.lijstRegel(), r.ordinal() <= rang.ordinal()));
+            uit.add(new VerhaalStand.Beloning(r.ordinal() == 0 ? "minecraft:bone" : "minecraft:paper", r.lijstRegel(), hond && r.ordinal() <= rang.ordinal()));
         }
         return uit;
     }
