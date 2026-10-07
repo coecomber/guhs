@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/bloemwolk"
+    "kleur=0": {
+      "model": "guhs:block/bloemwolk_0"
+    },
+    "kleur=1": {
+      "model": "guhs:block/bloemwolk_1"
+    },
+    "kleur=2": {
+      "model": "guhs:block/bloemwolk_2"
+    },
+    "kleur=3": {
+      "model": "guhs:block/bloemwolk_3"
     }
   }
 }

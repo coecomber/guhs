@@ -1,0 +1,136 @@
+# einde2, slice bouw_bikinibodem, in a real generated world: Bikinibodem onder de leegte from outside, the island above the
+# dome, the ride down the bubbelstroom, the plein, every house inside and out, the Kwallenvelden, the gate and the seam.
+# (/guhs einde2 plek takes you to a marker of the one guaranteed copy; the Guheinde has no skylight, so no time of day.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_bikinibodem.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 90 0
+wait 80
+/guhs einde2 waar bikinibodem
+
+section From outside: the whole bubble with the island above it
+/guhs einde2 plek bikinibodem uitzicht
+look 105 20
+waitrender 600
+hier
+shot e2_bikinibodem_uitzicht
+
+section The island above the dome: the landing place and the two columns
+/guhs einde2 plek bikinibodem aankomst_speler
+look 180 10
+waitrender 300
+shot e2_bikinibodem_eiland
+/guhs einde2 plek bikinibodem bubbel_boven
+look 180 60
+wait 40
+shot e2_bikinibodem_bubbel_boven
+
+section The plein: the foot of the lift, the leegtemist, the bloemwolken above
+/guhs einde2 plek bikinibodem bubbel_onder
+look 0 -10
+waitrender 400
+shot e2_bikinibodem_plein
+look 0 -70
+wait 20
+shot e2_bikinibodem_hemel
+/guhs einde2 plek bikinibodem neptuguh_troon
+look -135 5
+wait 40
+shot e2_bikinibodem_troonplek
+
+section De Krokante Knabbel: outside, the hall, the kitchen, the office
+/guhs einde2 plek bikinibodem mobiel_start
+look 180 -5
+waitrender 200
+shot e2_bikinibodem_krokante_knabbel_buiten
+/guhs einde2 plek bikinibodem parel
+look 150 5
+wait 40
+shot e2_bikinibodem_krokante_knabbel_zaal
+/guhs einde2 plek bikinibodem grill_speler
+look 180 15
+wait 40
+shot e2_bikinibodem_grill
+/guhs einde2 plek bikinibodem krabguh
+look 135 5
+wait 40
+shot e2_bikinibodem_kantoor
+
+section De Vetemmer: the bucket, the lab with Karen, the sneak route
+/guhs einde2 plek bikinibodem vetemmer_ingang
+/tp @s ~ ~ ~-6
+look 0 -10
+waitrender 200
+shot e2_bikinibodem_vetemmer_buiten
+/guhs einde2 plek bikinibodem plankmika
+look 90 5
+wait 40
+shot e2_bikinibodem_lab
+/guhs einde2 plek bikinibodem sluip_start
+look -90 5
+wait 40
+shot e2_bikinibodem_sluiproute
+
+section The ice parlour, the boating school and its course, the Bellenkom
+/guhs einde2 plek bikinibodem ijs_speler
+look 180 5
+waitrender 200
+shot e2_bikinibodem_ijssalon
+/guhs einde2 plek bikinibodem examen_start
+look 135 5
+waitrender 200
+shot e2_bikinibodem_vaarschool
+/guhs einde2 plek bikinibodem knipoog_guhdalf_brug
+look 0 10
+wait 40
+shot e2_bikinibodem_bruggetje
+/guhs einde2 plek bikinibodem octoliam
+look 110 15
+waitrender 200
+shot e2_bikinibodem_bellenkom
+
+section The Schelpstraat: the fruit, the moai, the rock
+/guhs einde2 plek bikinibodem sponsguh
+look 0 -10
+waitrender 200
+shot e2_bikinibodem_sponsguh_huis
+/guhs einde2 plek bikinibodem bewoner_10
+look 0 -25
+wait 40
+shot e2_bikinibodem_octo_huis
+/guhs einde2 plek bikinibodem octo
+look 90 0
+wait 40
+shot e2_bikinibodem_octo_binnen
+/guhs einde2 plek bikinibodem patguh
+look -45 0
+wait 40
+shot e2_bikinibodem_patguh_rots
+
+section Sandy-guh's dome, the rest home, a Kwallenveld, the mooring of the ghost ship
+/guhs einde2 plek bikinibodem sandy
+look -60 -5
+waitrender 200
+shot e2_bikinibodem_boomkoepel
+/guhs einde2 plek bikinibodem zeemeerman
+look -90 5
+wait 40
+shot e2_bikinibodem_rusthuis
+/guhs einde2 plek bikinibodem kwallen_start
+look 45 0
+waitrender 200
+shot e2_bikinibodem_kwallenveld
+/guhs einde2 plek bikinibodem guhlander_trap
+look 180 -50
+wait 40
+shot e2_bikinibodem_aanlegplaats
+
+section The gate and the road to the seam with Schelpenstad
+/guhs einde2 plek bikinibodem rustpunt_3
+look -90 0
+waitrender 200
+shot e2_bikinibodem_stadspoort
+/guhs einde2 plek bikinibodem hasselguh_landing
+look 90 0
+wait 40
+shot e2_bikinibodem_steiger

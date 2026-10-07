@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/bubbelstroom"
+    "richting=omhoog": {
+      "model": "guhs:block/bubbelstroom_omhoog"
+    },
+    "richting=omlaag": {
+      "model": "guhs:block/bubbelstroom_omlaag"
     }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": {
+      "sprite": "guhs:block/bubbelstroom_omlaag",
+      "force_translucent": true
+    }
+  }
+}

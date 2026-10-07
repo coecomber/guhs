@@ -14,23 +14,27 @@
     }
   },
   "templates": "guhs:bikinibodem",
-  "tiles_x": 1,
-  "tiles_z": 1,
+  "tiles_x": 7,
+  "tiles_z": 7,
   "tile_size": 32,
   "anchor": [
-    8,
+    104,
     0,
-    8
+    104
   ],
   "size": [
-    5,
-    4,
-    5
+    224,
+    114,
+    224
   ],
   "y": 4,
   "min_distance": 1100,
   "rand": 0,
   "ruim": true,
-  "keep_clear": 9,
+  "leeg": [
+    480,
+    224
+  ],
+  "keep_clear": 120,
   "voorrang": 302
 }

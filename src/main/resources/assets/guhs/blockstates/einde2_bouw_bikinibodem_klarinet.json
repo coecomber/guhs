@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_klarinet"
+    },
+    "facing=east": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_klarinet",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_klarinet",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/einde2_bouw_bikinibodem_klarinet",
+      "y": 270
+    }
+  }
+}

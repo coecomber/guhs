@@ -1,0 +1,213 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_bikinibodem_kassa",
+    "t": "guhs:block/einde2_bouw_bikinibodem_kassa"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        4
+      ],
+      "to": [
+        14,
+        6,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            7,
+            7
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            7,
+            7
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            7,
+            7
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            7,
+            7
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            7,
+            7
+          ],
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        6,
+        9
+      ],
+      "to": [
+        12,
+        11,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        6,
+        4
+      ],
+      "to": [
+        11,
+        7,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        },
+        "south": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        },
+        "east": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        },
+        "west": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        },
+        "up": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        },
+        "down": {
+          "uv": [
+            8,
+            8,
+            16,
+            12
+          ],
+          "texture": "#t"
+        }
+      }
+    }
+  ]
+}
