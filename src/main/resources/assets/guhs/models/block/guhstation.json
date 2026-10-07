@@ -1,0 +1,244 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhstation_zij",
+    "boven": "guhs:block/guhstation_boven",
+    "voor": "guhs:block/guhstation_voor",
+    "zij": "guhs:block/guhstation_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        4,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            2,
+            12,
+            14,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            2,
+            12,
+            14,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            3,
+            12,
+            13,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            3,
+            12,
+            13,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#boven",
+          "uv": [
+            2,
+            3,
+            14,
+            13
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#zij",
+          "uv": [
+            2,
+            0,
+            14,
+            10
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        4,
+        4
+      ],
+      "to": [
+        13,
+        5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "uv": [
+            3,
+            11,
+            13,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            3,
+            11,
+            13,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            4,
+            11,
+            12,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            4,
+            11,
+            12,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#boven",
+          "uv": [
+            3,
+            4,
+            13,
+            12
+          ],
+          "rotation": 180
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        3.5,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        4,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        4,
+        1
+      ],
+      "scale": [
+        0.45,
+        0.45,
+        0.45
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        5,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        5,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    }
+  }
+}

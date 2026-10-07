@@ -51,7 +51,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'ring_knipogen',
             # verhalenpad: het Guhpad (the stories open the worlds; lang, hidden advancements, two pictures, FTB lock quests)
             'guhpad',
-            'oude_scenes']    # bbq2 verhalenpad: oude-scenes (append only, see above)
+            'oude_scenes',    # bbq2 verhalenpad: oude-scenes (append only, see above)
+            'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
+            'snuffel_steiger',   # verhalenpad: snuffel-steiger (the dock and the opening; after snuffel)
+            ]
 
 
 def modules():

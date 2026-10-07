@@ -1,0 +1,137 @@
+{
+  "versie": 1,
+  "oorsprong": [
+    -30,
+    44,
+    -30
+  ],
+  "maat": [
+    61,
+    34,
+    61
+  ],
+  "stukken": [
+    {
+      "template": "guhs:snuffel/eiland",
+      "plek": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "strand": {
+    "plek": [
+      30.5,
+      20,
+      43.5
+    ],
+    "yaw": 180.0
+  },
+  "haven": {
+    "plek": [
+      51.5,
+      20,
+      30.5
+    ],
+    "yaw": 90.0
+  },
+  "boom": [
+    30,
+    20,
+    23
+  ],
+  "boom_draai": 0,
+  "grens": 10,
+  "bewoners": [
+    {
+      "sleutel": "kapitein",
+      "bewoner": "kapitein",
+      "plek": [
+        46.5,
+        20,
+        31.5
+      ],
+      "yaw": -90.0
+    },
+    {
+      "sleutel": "redder",
+      "bewoner": "redder",
+      "plek": [
+        33.5,
+        20,
+        41.5
+      ],
+      "yaw": 160.0,
+      "houding": "kwispel"
+    },
+    {
+      "sleutel": "proef_pup",
+      "ras": "corgi",
+      "kleur": "sable",
+      "pup": true,
+      "plek": [
+        25.5,
+        20,
+        30.5
+      ],
+      "yaw": 135.0,
+      "houding": "zit"
+    }
+  ],
+  "geuren": [
+    {
+      "id": "proef_botje",
+      "soort": "eten",
+      "rang": 1,
+      "icoon": "minecraft:bone"
+    },
+    {
+      "id": "proef_bal",
+      "soort": "voorwerp",
+      "rang": 1,
+      "icoon": "minecraft:slime_ball"
+    },
+    {
+      "id": "proef_zeelucht",
+      "soort": "vreemd",
+      "rang": 1,
+      "icoon": "minecraft:nautilus_shell"
+    }
+  ],
+  "geurbronnen": [
+    {
+      "id": "proef_botje",
+      "geur": "proef_botje",
+      "plek": [
+        26,
+        20,
+        42
+      ],
+      "graven": true,
+      "bereik": 22
+    },
+    {
+      "id": "proef_bal",
+      "geur": "proef_bal",
+      "plek": [
+        37,
+        20,
+        26
+      ],
+      "graven": true,
+      "bereik": 22
+    },
+    {
+      "id": "proef_zeelucht",
+      "geur": "proef_zeelucht",
+      "plek": [
+        45,
+        20,
+        30
+      ],
+      "graven": false,
+      "bereik": 14
+    }
+  ]
+}

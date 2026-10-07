@@ -153,7 +153,8 @@ public class NieuwTerreinGameTests {
         GegarandeerdPlacement.onthoudBestaand(level, stateB, seed, generator, height, opslag, () -> NieuwTerrein.van(k -> false));
         ChunkPos nieuwNiets = nieuw.plek(stateB, seed).orElse(null);
         helper.assertTrue(s1.equals(nieuwNiets), "a brand-new world: the same spot as before (" + s1 + " / " + nieuwNiets + ")");
-        helper.assertTrue(opslag.alles().size() == 1 && opslag.alles().values().iterator().next().chunk().equals(s1), "and it is saved: " + opslag.alles());
+        // (verhalenpad snuffel-steiger: the steigerhuisje's own alleen_nieuw set goes before this one and is searched, and saved, on the way)
+        helper.assertTrue(opslag.plek("?") != null && opslag.plek("?").chunk().equals(s1), "and it is saved: " + opslag.alles());
 
         // 2. the old spot and 20 chunks around it exist already: another spot, in new terrain
         java.util.function.LongPredicate rondS1 = k -> Math.abs(ChunkPos.getX(k) - s1.x()) <= 20 && Math.abs(ChunkPos.getZ(k) - s1.z()) <= 20;
