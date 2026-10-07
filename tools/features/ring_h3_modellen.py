@@ -332,8 +332,9 @@ def maak():
     m.cube("head", [-3.5, 160, -42], [7, 3.5, 30], "hoorn")                  # a crest over the skull
 
     def kop(kant, s, c):
+        m.bone(f"oog_{s}", "head", [kant * 10.4, 149.8, -46])                 # (a bone of its own: he can shut it)
         for o, sz in (([4.2, 147.2, -46.7], [6, 4.6, 1.4]), ([9.4, 148.8, -46.7], [7.2, 5.4, 1.4])):
-            c("head", o, sz, "oog", stretch=True)                            # eyes: slanted slits of white fire
+            c(f"oog_{s}", o, sz, "oog", stretch=True)                        # eyes: slanted slits of white fire
         c("head", [14.8, 139, -44], [4, 9.5, 17], "kool2")                   # the cheek bone
         c("head", [17.6, 141.5, -36], [4, 4, 8], "hoorn")                    # and a spike on it
         c("head", [16.1, 139.5, -26], [1.2, 9, 10], "gloed")                 # a glowing gill behind the jaw
@@ -959,6 +960,12 @@ def animaties():
     donker["borst"] = {"rotation": _sleutels((0.0, [16, 0, 0])), "scale": _sleutels((0.0, [1, 1, 1]), (2.0, [1.03, 1.03, 1.05]), (4.0, [1, 1, 1]))}
     donker["zweep_1"] = {"scale": _sleutels((0.0, [0, 0, 0]))}          # (the whip lies coiled out of sight until it burns)
     A["donker"] = (True, L, donker)
+    # --- slaap: the same shape in the dark with his eyes shut (the bridge scene: "two eyes opened" is slaap -> donker) ------------------
+    slaap = dict(donker)
+    slaap["oog_left"] = {"scale": _sleutels((0.0, [1, 0.06, 1]))}
+    slaap["oog_right"] = {"scale": _sleutels((0.0, [1, 0.06, 1]))}
+    slaap["head"] = _rot(_sleutels((0.0, [30, 0, 0]), (2.0, [28, 0, 0]), (4.0, [30, 0, 0])))
+    A["slaap"] = (True, L, slaap)
     # --- opkomst: out of the dark: the head lifts, the mane catches fire flame by flame, the blade ignites, he rises to his full height
     #     and the wings open like a storm ---------------------------------------------------------------------------------------------------
     L = 7.0
@@ -1020,7 +1027,7 @@ def animaties():
         f"animation.{NAAM}.{naam}": {"loop": lus, "animation_length": lengte, "bones": bones} for naam, (lus, lengte, bones) in A.items()}}
 
 
-ANIMATIES = ("idle", "loop", "brul", "stamp", "zweep", "zwaard", "donker", "opkomst", "wankel")
+ANIMATIES = ("idle", "loop", "brul", "stamp", "zweep", "zwaard", "donker", "slaap", "opkomst", "wankel")
 
 
 # =====================================================================================================================

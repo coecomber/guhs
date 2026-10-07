@@ -339,7 +339,7 @@ def alles(b, out, alleen=()):
 # frames of the scenes
 # =====================================================================================================================
 # what the Barbecuerog plays when a scene names an animation: (animation, loops)
-_LUS = {"loop", "donker", "wankel", "idle"}
+_LUS = {"loop", "donker", "slaap", "wankel", "idle"}
 
 
 def _rog_pose(geo_file, anims, naam, sinds):
@@ -411,7 +411,7 @@ def scene_frames(b, out, s, tijden, breed=480, hoog=270):
         brandt = False
         if rog:
             anim, sinds = rog[2]
-            brandt = anim != "donker" and not (anim == "opkomst" and t - sinds < 26)
+            brandt = anim not in ("donker", "slaap") and not (anim == "opkomst" and t - sinds < 26)
             if brandt and rog[1][1] > 0:
                 licht = k.met_licht([(rog[1][0], rog[1][1] + 5.5, rog[1][2], 15)])
         beeld, diepte, cam = k.teken(oog, kijk, breed=breed, hoog=hoog, licht=licht)

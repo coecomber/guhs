@@ -247,7 +247,8 @@ def brug():
     s.kijk("guhdalf", 0, ROG)
 
     # ---- A. the dark (0 - 200): the nave, seen from the chasm end; far away, in the Diepe Poort, something opens its eyes ----
-    s.anim("rog", 1, "donker")
+    s.anim("rog", 1, "slaap")                         # a shape in the dark: only the fire in his seams
+    s.anim("rog", 106, "donker")                      # ... and then he opens his eyes (the line of tick 112)
     s.donker(-10, 6)
     s.cam(0, (43.5, D + 3.4, 14.5), (11.5, D + 5.0, 14.5))
     s.cam(200, (33.0, D + 2.6, 14.5), (11.5, D + 6.0, 14.5))

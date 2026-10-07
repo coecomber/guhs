@@ -44,7 +44,8 @@ import nl.juiced.guhs.feature.verhaal.Duwtje;
  *       that player walks into the great hall: he rises out of the Diepe Poort ({@link #OPKOMST}), strides down the nave
  *       ({@link #LOOPT}) to the edge of the chasm ({@link #STAAT_AAN_DE_RAND}), stomping and roaring on the way.</li>
  *   <li><b>In the bridge scene</b> he is an actor of the viewer's own game: the scene names his animations
- *       ({@code donker, opkomst, loop, brul, zwaard, zweep, stamp, wankel}), read here from {@link Cutscenes#animatie}.</li>
+ *       ({@code slaap, donker, opkomst, loop, brul, zwaard, zweep, stamp, wankel}; slaap is donker with his eyes shut), read
+ *       here from {@link Cutscenes#animatie}.</li>
  * </ul>
  */
 public class BarbecuerogEntity extends Mob implements GeoEntity {
@@ -65,7 +66,8 @@ public class BarbecuerogEntity extends Mob implements GeoEntity {
 
     private static final String A = "animation.barbecuerog.";
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop(A + "idle"), LOOP = RawAnimation.begin().thenLoop(A + "loop"),
-            DONKER_ANIM = RawAnimation.begin().thenLoop(A + "donker"), WANKEL = RawAnimation.begin().thenLoop(A + "wankel");
+            DONKER_ANIM = RawAnimation.begin().thenLoop(A + "donker"), SLAAP_ANIM = RawAnimation.begin().thenLoop(A + "slaap"),
+            WANKEL = RawAnimation.begin().thenLoop(A + "wankel");
     /** The animations that play once (on the controller "actie"). */
     public static final Set<String> EENMALIG = Set.of("brul", "stamp", "zweep", "zwaard", "opkomst");
 
@@ -126,7 +128,7 @@ public class BarbecuerogEntity extends Mob implements GeoEntity {
     /** Do his flames burn (then he carries light and sheds embers)? Not while he sleeps in the dark. */
     public boolean brandt() {
         String scene = level().isClientSide() ? Cutscenes.animatie(this) : "";
-        if (scene.equals("donker")) {
+        if (scene.equals("donker") || scene.equals("slaap")) {
             return false;
         }
         if (scene.equals("opkomst")) {
@@ -323,6 +325,7 @@ public class BarbecuerogEntity extends Mob implements GeoEntity {
         RawAnimation anim = switch (sceneNaam) {
             case "loop" -> LOOP;
             case "donker" -> DONKER_ANIM;
+            case "slaap" -> SLAAP_ANIM;
             case "wankel" -> WANKEL;
             case "" -> staat() == LOOPT ? LOOP : staat() == DONKER ? DONKER_ANIM : IDLE;
             default -> IDLE;
