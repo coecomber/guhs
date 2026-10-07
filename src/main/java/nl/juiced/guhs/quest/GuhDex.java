@@ -61,7 +61,7 @@ public final class GuhDex {
      */
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
             GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,    // (1.2.8: the Bleekwoud is rare and they only come at night)
-            GuhVariant.LEEGTEWALVISGUH);   // (einde2: hidden behind an optional questline)
+            GuhVariant.LEEGTEWALVISGUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT);   // (einde2: each hidden behind an optional questline)
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
@@ -264,12 +264,12 @@ public final class GuhDex {
     }
 
     /**
-     * einde2: the names of the seventeen pages the Guheinde expansion adds (hook fase B: a title or reward that was earned
+     * einde2: the names of the nineteen pages the Guheinde expansion adds (hook fase B: a title or reward that was earned
      * with a full Guhdex before them may leave these out).
      */
     public static final java.util.Set<String> NIEUW_EINDE2 = java.util.Set.of("KORSTGUH", "DUINGUH", "KRUIMELGUH", "SCHIMMELGUH", "KRISTALGUH", "KOORGUH",
             "ENDER_MIKA", "KAASMIJT", "SCHUILGUH", "KRUIMELKWAL", "LEEGTEWALVISGUH", "VLEERMUIS_LEMURGUH", "OTTER_PINGUINGUH", "DAS_MOLGUH",
-            "SCHILDPAD_EENDGUH", "APPA_GUH", "MOMO_GUH");
+            "SCHILDPAD_EENDGUH", "APPA_GUH", "MOMO_GUH", "SPONSGUH", "GERRIT");
 
     private GuhDex() {
     }

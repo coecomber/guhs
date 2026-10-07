@@ -53,6 +53,8 @@ public final class Einde2Test {
 
     /** The seeds {@link #controleerLeegteBouw} tries. */
     public static final long[] SEEDS = {21400001L, 21400002L, 21400003L};
+    /** The ten seeds the search for a terrain-free box in the deep band is tried for ({@link #zoekLeeg}). */
+    public static final long[] LEEG_SEEDS = {21400001L, 21400002L, 21400003L, 21400004L, 21400005L, 21400006L, 21400007L, 21400008L, 21400009L, 21400010L};
 
     private static final Map<String, Wereld> WERELDEN = new ConcurrentHashMap<>();
 
@@ -95,6 +97,7 @@ public final class Einde2Test {
         state.ensureStructuresGenerated();
         Wereld w = new Wereld(level, generator, random, state, seed);
         BouwRuimte.remember(random, state);
+        LeegteBouwStructure.onthoud(random, state);
         GegarandeerdPlacement.onthoud(level, state, seed, generator, w.hoogte());
         return w;
     }
@@ -117,7 +120,10 @@ public final class Einde2Test {
         return start.isValid() ? start : null;
     }
 
-    /** The chunk of the guaranteed copy of this structure for this seed (null: it has none, or no spot was found). */
+    /**
+     * The chunk of the guaranteed copy of this structure for this seed (null: it has none, or no spot was found); for a build
+     * that stands next to another one: the one chunk next to that neighbour's guaranteed copy.
+     */
     @Nullable
     public static ChunkPos gegarandeerd(Wereld w, String structuur) {
         return Plekken.startChunk(w.level.registryAccess(), w.state, w.seed, structuur);
@@ -125,8 +131,12 @@ public final class Einde2Test {
 
     /**
      * The checks every guhs:leegte_bouw must pass, for three seeds: the guaranteed copy exists, lies in its ring and really
-     * starts there, its box lies in the high band and its tiles within 8 chunks of the start chunk, every tile template
-     * exists, every marker of the sidecar lies inside the box and the biome at the anchor is one of the structure's.
+     * starts there, its box lies in its band (the high band; the deep band for a build whose y lies below it) and its tiles
+     * within 8 chunks of the start chunk, every tile template exists, every marker of the sidecar lies inside the box and the
+     * biome at the anchor is one of the structure's. A build with a terrain-free box ({@code leeg}): no more sampled columns
+     * hold terrain than the search round that found the spot allows ({@link #leegRonde} says which round). A build that
+     * stands next to another one ({@code bij}): it starts exactly at its offset and nowhere else, and the two boxes touch
+     * without overlapping.
      */
     public static void controleerLeegteBouw(GameTestHelper helper, String structuur) {
         for (long seed : SEEDS) {
@@ -143,15 +153,19 @@ public final class Einde2Test {
             return List.of("no guhs:leegte_bouw structure");
         }
         StructureSet set = w.level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id(structuur + "_gegarandeerd"));
-        if (set == null || !(set.placement() instanceof GegarandeerdPlacement ring)) {
+        GegarandeerdPlacement ring = set != null && set.placement() instanceof GegarandeerdPlacement g ? g : null;
+        if (ring == null && bouw.bij().isEmpty()) {
             return List.of("no guaranteed set");
+        }
+        if (ring != null && bouw.bij().isPresent()) {
+            fouten.add("a build that stands next to another one has no guaranteed set of its own");
         }
         ChunkPos chunk = gegarandeerd(w, structuur);
         if (chunk == null) {
             return List.of("no spot for the guaranteed copy");
         }
         double d = Math.hypot(chunk.getMinBlockX(), chunk.getMinBlockZ());
-        if (d < ring.minAfstand() || d > ring.maxAfstand()) {
+        if (bouw.bij().isEmpty() && (d < ring.minAfstand() || d > ring.maxAfstand())) {
             fouten.add("not in its ring: " + (int) d + " blocks from 0,0");
         }
         StructureStart start = start(w, structuur, chunk);
@@ -159,8 +173,42 @@ public final class Einde2Test {
             return List.of("doesn't start at " + chunk);
         }
         BoundingBox doos = bouw.doos(chunk);
-        if (doos.minY() < Einde2Ids.HOOG_MIN || doos.maxY() > Einde2Ids.HOOG_MAX) {
-            fouten.add("outside the high band: y " + doos.minY() + ".." + doos.maxY());
+        boolean diep = bouw.y() < Einde2Ids.HOOG_MIN;
+        if (diep ? doos.minY() < Einde2Ids.LAAG_MIN || doos.maxY() > Einde2Ids.LAAG_MAX : doos.minY() < Einde2Ids.HOOG_MIN || doos.maxY() > Einde2Ids.HOOG_MAX) {
+            fouten.add("outside the " + (diep ? "deep" : "high") + " band: y " + doos.minY() + ".." + doos.maxY());
+        }
+        if (diep != bouw.ruim()) {
+            fouten.add(diep ? "a build of the deep band must empty its box (ruim)" : "only a build of the deep band empties its box (ruim)");
+        }
+        if (bouw.leeg().isPresent()) {
+            int mag = bouw.leegMag(leegRonde(w, structuur));
+            int staat = bouw.terrein(w.generator, w.random, w.hoogte(), bouw.oorsprong(chunk), Integer.MAX_VALUE);
+            if (staat > mag) {
+                fouten.add("terrain in " + staat + " of " + bouw.leegKolommen() + " columns of its leeg box (at most " + mag + ")");
+            }
+        }
+        if (bouw.bij().isPresent()) {
+            LeegteBouwStructure.Bij bij = bouw.bij().get();
+            String naam = bij.structuur().getPath();
+            LeegteBouwStructure buur = Plekken.leegteBouw(w.level.registryAccess(), naam);
+            ChunkPos bij2 = buur == null ? null : gegarandeerd(w, naam);
+            if (bij2 == null) {
+                return List.of("its neighbour " + naam + " has no spot");
+            }
+            if (!bouw.oorsprong(chunk).equals(buur.oorsprong(bij2).offset(bij.dx(), bouw.y() - buur.y(), bij.dz()))) {
+                fouten.add("not at its offset from " + naam + ": " + bouw.oorsprong(chunk) + " vs " + buur.oorsprong(bij2));
+            }
+            BoundingBox ander = buur.doos(bij2);
+            if (doos.intersects(ander)) {
+                fouten.add("its box cuts the box of " + naam);
+            } else if (bouw.size().getX() > 16 && buur.size().getX() > 16 && !doos.inflatedBy(1, 0, 1).intersects(ander)) {
+                fouten.add("its box doesn't touch the box of " + naam);   // (the skeleton's stand-in platforms are too small to touch)
+            }
+            for (ChunkPos elders : List.of(new ChunkPos(chunk.x() + 1, chunk.z()), new ChunkPos(chunk.x(), chunk.z() - 1), bij2)) {
+                if (!elders.equals(chunk) && start(w, structuur, elders) != null) {
+                    fouten.add("it also starts at " + elders);
+                }
+            }
         }
         int tiles = 0;
         for (StructurePiece piece : start.getPieces()) {
@@ -215,5 +263,49 @@ public final class Einde2Test {
             fouten.add("the biome at the anchor is not allowed");
         }
         return fouten;
+    }
+
+    /**
+     * Which round of the guaranteed search found this structure's spot, as its flatness factor: 1 = a spot whose {@code leeg}
+     * box is wholly free of terrain, 2 = terrain in at most 5 % of the sampled columns, 3 = at most 15 % (0: no spot).
+     */
+    public static int leegRonde(Wereld w, String structuur) {
+        StructureSet set = w.level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id(structuur + "_gegarandeerd"));
+        ChunkPos chunk = gegarandeerd(w, structuur);
+        return chunk != null && set != null && set.placement() instanceof GegarandeerdPlacement ring ? ring.vlakFactor(w.state, w.seed, chunk) : 0;
+    }
+
+    /** What {@link #zoekLeeg} found: the flatness factor of the round (0: no spot), the spots tried, the columns with terrain at the spot. */
+    public record Leegte(int factor, int pogingen, int terrein, int kolommen) {
+    }
+
+    /** The rounds of the guaranteed search as a terrain-free box meets them: {spots tried, flatness factor} (GegarandeerdPlacement.RONDES). */
+    private static final int[][] LEEG_RONDES = {{1024, 1}, {384, 2}, {384, 3}};
+
+    /**
+     * Tries the search for a terrain-free box in this world the way the guaranteed search does, without a structure: spots
+     * between {@code lo} and {@code hi} blocks from 0,0 (spread evenly over that ring, in a fixed order per seed), first
+     * asking for no terrain at all in a box of {@code lx} by {@code lz} blocks, then letting it stand in 5 % and in 15 % of
+     * the sampled columns ({@link LeegteBouwStructure#terrein}). So a slice (or whoever changes a ring or a box in
+     * tools/features/einde2_kit.py) sees which round finds a spot, for any seed.
+     */
+    public static Leegte zoekLeeg(Wereld w, int lo, int hi, int lx, int lz) {
+        java.util.SplittableRandom rng = new java.util.SplittableRandom(w.seed * 31 + 21400060L);
+        LevelHeightAccessor hoogte = w.hoogte();
+        int kolommen = LeegteBouwStructure.kolommen(lx, lz), pogingen = 0;
+        for (int[] ronde : LEEG_RONDES) {
+            int mag = LeegteBouwStructure.leegMag(kolommen, ronde[1]);
+            for (int k = 0; k < ronde[0]; k++) {
+                double a = rng.nextDouble() * Math.PI * 2;
+                double r = Math.sqrt((double) lo * lo + rng.nextDouble() * ((double) hi * hi - (double) lo * lo));
+                BlockPos o = new BlockPos(Math.floorDiv((int) Math.round(Math.cos(a) * r), 16) * 16, 0, Math.floorDiv((int) Math.round(Math.sin(a) * r), 16) * 16);
+                pogingen++;
+                int staat = LeegteBouwStructure.terrein(w.generator, w.random, hoogte, o, lx, lz, mag);
+                if (staat <= mag) {
+                    return new Leegte(ronde[1], pogingen, staat, kolommen);
+                }
+            }
+        }
+        return new Leegte(0, pogingen, 0, kolommen);
     }
 }

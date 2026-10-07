@@ -25,9 +25,10 @@ import nl.juiced.guhs.quest.GuhDex;
 
 /**
  * einde2: the Guheinde expansion (six biomes on the outer islands, their guhs and creatures, the modular Mika-vesting, the
- * big places of the Guhvatar story and the side places). This class is the one door from {@code feature/Features} into the
- * update: it registers what the whole update shares (the structure type {@code guhs:leegte_bouw}, protection, discovery,
- * the /guhs einde2 commands) and then calls the fourteen slices, each in its own package under this one.
+ * big places of the Guhvatar story, the side places, and the cast and the two places of the Sponsguh story). This class is
+ * the one door from {@code feature/Features} into the update: it registers what the whole update shares (the structure type
+ * {@code guhs:leegte_bouw}, protection, discovery, the /guhs einde2 commands) and then calls the seventeen slices, each in
+ * its own package under this one.
  * <p>
  * Shared by every slice: {@link Einde2Ids} (ids, tags, height bands), {@link Plekken} (where a structure and its markers
  * are), {@link Einde2Bescherming}, {@link Einde2Ontdekt}, {@link Einde2Haken} (the hooks for the later story and tech
@@ -38,7 +39,7 @@ public final class Einde2 {
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, Guhs.MODID);
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECES = DeferredRegister.create(Registries.STRUCTURE_PIECE, Guhs.MODID);
 
-    /** A big place floating in the high band of the Guheinde (see {@link LeegteBouwStructure}). */
+    /** A big place floating in the high band of the Guheinde, or lying in its deep band (see {@link LeegteBouwStructure}). */
     public static final DeferredHolder<StructureType<?>, StructureType<LeegteBouwStructure>> LEEGTE_BOUW =
             STRUCTURE_TYPES.register("leegte_bouw", () -> () -> LeegteBouwStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> LEEGTE_STUK =
@@ -75,13 +76,11 @@ public final class Einde2 {
         Einde2Bescherming.register();
         Einde2Ontdekt.register();
         NeoForge.EVENT_BUS.addListener(Einde2Commando::register);
-        for (String structuur : Einde2Ids.VERHAAL_STRUCTUREN) {
+        NeoForge.EVENT_BUS.addListener(LeegteBouwStructure::onLevelLoad);
+        for (String structuur : Einde2Ids.LEEGTE_STRUCTUREN) {
             Einde2Bescherming.registreer(structuur, BESCHERM_RAND);
         }
-        for (String structuur : Einde2Ids.ZIJ_STRUCTUREN) {
-            Einde2Bescherming.registreer(structuur, BESCHERM_RAND);
-        }
-        // the fourteen slices, in the order of the build contract
+        // the seventeen slices, in the order of the build contract
         nl.juiced.guhs.feature.einde2.biomes.E2BiomesFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.biomeguhs.E2BiomeguhsFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.mikas.E2MikasFeature.register(modBus);
@@ -96,6 +95,9 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwvuur.E2BouwVuurFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.register(modBus);
+        nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.register(modBus);
         // the stand-ins that are left: attributes, and their Guhdex page (the page's name is the entity id)
         modBus.addListener((EntityAttributeCreationEvent event) -> PLAATSHOUDERS.forEach(
                 type -> event.put(type.get(), Einde2Plaatshouder.createAttributes().build())));
@@ -124,6 +126,9 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwvuur.E2BouwVuurFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -141,6 +146,9 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwvuur.E2BouwVuurFeature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.creative(output);
+        nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.creative(output);
     }
 
     private Einde2() {

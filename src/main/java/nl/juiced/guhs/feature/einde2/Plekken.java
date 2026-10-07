@@ -54,7 +54,8 @@ import nl.juiced.guhs.world.GegarandeerdPlacement;
  * <ul>
  *   <li>the ONE guaranteed copy of a {@code guhs:leegte_bouw} ({@link #startChunk}, {@link #oorsprong}, {@link #doos},
  *       {@link #wereld(ServerLevel, String, String)}, {@link #aankomst}): pure functions of the world seed, no chunk is
- *       loaded or generated (it is what /locate and the Superkompas point at);</li>
+ *       loaded or generated (it is what /locate and the Superkompas point at). A build that stands next to another one
+ *       (its {@code bij}: Schelpenstad next to Bikinibodem) has its one copy at a fixed offset from that neighbour's;</li>
  *   <li>any copy that is already there ({@link #bij}, {@link #wereld(StructureStart, Plek)}): a random copy of a side
  *       place, a Mika-vesting.</li>
  * </ul>
@@ -170,7 +171,10 @@ public final class Plekken {
         return access.lookupOrThrow(Registries.STRUCTURE).getValue(Guhs.id(structuur)) instanceof LeegteBouwStructure l ? l : null;
     }
 
-    /** The start chunk of the guaranteed copy: the ring position of the set {@code <structuur>_gegarandeerd}. */
+    /**
+     * The start chunk of the guaranteed copy: the ring position of the set {@code <structuur>_gegarandeerd}, or, for a build
+     * with a {@code bij}, the chunk at its offset from the guaranteed copy of its neighbour.
+     */
     @Nullable
     public static ChunkPos startChunk(ServerLevel guheinde, String structuur) {
         return startChunk(guheinde.registryAccess(), guheinde.getChunkSource().getGeneratorState(), guheinde.getSeed(), structuur);
@@ -178,9 +182,25 @@ public final class Plekken {
 
     /** The same for a structure state that isn't a level's own (the game tests' Guheinde, see {@link Einde2Test}). */
     @Nullable
-    public static ChunkPos startChunk(RegistryAccess access, ChunkGeneratorStructureState state, long seed, String structuur) {
+    public static ChunkPos startChunk(RegistryAccess access, @Nullable ChunkGeneratorStructureState state, long seed, String structuur) {
+        LeegteBouwStructure bouw = leegteBouw(access, structuur);
+        if (bouw != null && bouw.bij().isPresent()) {
+            return startChunk(access, state, seed, bouw);
+        }
         StructureSet set = access.lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id(structuur + "_gegarandeerd"));
         return set != null && set.placement() instanceof GegarandeerdPlacement g ? g.plek(state, seed).orElse(null) : null;
+    }
+
+    /** The one start chunk of a build that stands next to another one (null: no {@code bij}, or its neighbour has no spot). */
+    @Nullable
+    public static ChunkPos startChunk(RegistryAccess access, @Nullable ChunkGeneratorStructureState state, long seed, LeegteBouwStructure bouw) {
+        if (bouw.bij().isEmpty()) {
+            return null;
+        }
+        String naam = bouw.bij().get().structuur().getPath();
+        LeegteBouwStructure buur = leegteBouw(access, naam);
+        ChunkPos start = buur == null || buur.bij().isPresent() ? null : startChunk(access, state, seed, naam);
+        return start == null ? null : bouw.bijChunk(buur, start);
     }
 
     /** The world position of template 0,0,0 of the guaranteed copy. */

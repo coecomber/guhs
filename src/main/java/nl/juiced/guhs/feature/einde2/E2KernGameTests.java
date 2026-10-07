@@ -3,14 +3,22 @@ package nl.juiced.guhs.feature.einde2;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -20,11 +28,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -32,6 +42,7 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.einde2.biomeguhs.Biomeguhs;
+import nl.juiced.guhs.feature.spelen.SpelGroepen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.item.SuperkompasItem;
@@ -41,8 +52,10 @@ import nl.juiced.guhs.world.GegarandeerdPlacement;
 /**
  * Game tests of the einde2 skeleton: the structure type guhs:leegte_bouw on the test build {@code einde2_test_bouw}
  * (tools/features/einde2.py: 3 x 2 tiles, in no structure set), {@link Plekken} (sidecar to world and back, for a
- * leegte_bouw and for a jigsaw piece, the guaranteed copy, the overlays), protection, discovery, the hooks and the
- * wiring (pages, compass, stand-in entities). The Guheinde's generator comes from {@link Einde2Test}.
+ * leegte_bouw and for a jigsaw piece, the guaranteed copy, the overlays), the deep band (a tile that empties its box and
+ * keeps its template's shapes, the terrain-free box, the pair that stands next to each other, the void of ten seeds),
+ * protection, discovery, the hooks and the wiring (pages, compass, stand-in entities). The Guheinde's generator comes from
+ * {@link Einde2Test}.
  */
 public class E2KernGameTests {
     private static final String EMPTY = "empty";
@@ -197,6 +210,164 @@ public class E2KernGameTests {
         helper.succeed();
     }
 
+    /**
+     * A tile of the deep band: it empties its own box before it places its template (rock of a relaxed spot never sticks
+     * into town) and leaves everything outside it alone, and its blocks keep the states of the template (a ladder that hangs
+     * on nothing stays, where a plain placement lets it pop off): nothing breaks at a tile seam.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2KernRuimeTegel(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var tegel = Guhs.id("einde2_test_tegel");
+        helper.assertTrue(level.getStructureManager().get(tegel).isPresent(), "the test tile exists");
+        for (int x = 0; x <= 3; x++) {
+            for (int y = 1; y <= 3; y++) {
+                for (int z = 1; z <= 3; z++) {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.STONE);
+                }
+            }
+        }
+        BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
+        LeegteBouwStructure.Stuk stuk = new LeegteBouwStructure.Stuk(level.getStructureManager(), tegel, at, true);
+        BoundingBox box = stuk.getBoundingBox();
+        helper.assertTrue(box.equals(BoundingBox.fromCorners(at, at.offset(2, 2, 2))), "the tile's box is its template: " + box);
+        // saved and loaded again: it still empties its box
+        CompoundTag tag = stuk.createTag(StructurePieceSerializationContext.fromLevel(level));
+        helper.assertTrue(new LeegteBouwStructure.Stuk(level.getStructureManager(), tag).ruim()
+                && !new LeegteBouwStructure.Stuk(level.getStructureManager(), tegel, at, false).ruim(), "ruim survives saving");
+        stuk.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), level.getRandom(), box, ChunkPos.containing(at), at);
+        var lamp = BuiltInRegistries.BLOCK.getValue(Guhs.id("guh_kristal_lamp"));
+        int lucht = 0;
+        for (BlockPos p : BlockPos.betweenClosed(at, at.offset(2, 2, 2))) {
+            BlockState state = level.getBlockState(p);
+            if (p.equals(at)) {
+                helper.assertTrue(state.is(lamp), "the lamp of the template");
+            } else if (p.equals(at.offset(1, 1, 1))) {
+                helper.assertTrue(state.is(Blocks.LADDER), "the ladder keeps hanging (the template's shape is kept): " + state);
+            } else {
+                helper.assertTrue(state.isAir(), "everything else in the box is air: " + state + " at " + p);
+                lucht++;
+            }
+        }
+        helper.assertTrue(lucht == 25, "25 cells of rock emptied");
+        for (int y = 0; y <= 2; y++) {
+            helper.assertTrue(level.getBlockState(at.offset(-1, y, 1)).is(Blocks.STONE), "rock outside the box stays");
+        }
+        // the same template put down the plain way: the ladder looks at its neighbours and falls off
+        for (BlockPos p : BlockPos.betweenClosed(at, at.offset(2, 2, 2))) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
+        }
+        level.getStructureManager().get(tegel).orElseThrow().placeInWorld(level, at, at, new StructurePlaceSettings(), level.getRandom(), 2);
+        helper.assertTrue(level.getBlockState(at).is(lamp) && level.getBlockState(at.offset(1, 1, 1)).isAir(),
+                "without known shapes the ladder is gone: " + level.getBlockState(at.offset(1, 1, 1)));
+        // a tile of the high band leaves the world as it is
+        for (BlockPos p : BlockPos.betweenClosed(at, at.offset(2, 2, 2))) {
+            level.setBlock(p, Blocks.STONE.defaultBlockState(), 2);
+        }
+        new LeegteBouwStructure.Stuk(level.getStructureManager(), tegel, at, false).postProcess(level, level.structureManager(),
+                level.getChunkSource().getGenerator(), level.getRandom(), box, ChunkPos.containing(at), at);
+        helper.assertTrue(level.getBlockState(at).is(lamp) && level.getBlockState(at.offset(2, 2, 2)).is(Blocks.STONE), "no ruim: unset cells stay");
+        helper.succeed();
+    }
+
+    /**
+     * The Sponsguh pair in a Guheinde of one outer biome: the stand-in Bikinibodem has its guaranteed copy in the deep band,
+     * the stand-in Schelpenstad stands exactly at its offset from it and nowhere else ({@code bij}), and {@link Plekken}
+     * answers for both.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 2400)
+    public static void einde2KernSponsPaar(GameTestHelper helper) {
+        Einde2Test.Wereld w = Einde2Test.wereld(helper, SEED, Einde2Ids.GATENKAASHEUVELS);
+        var access = helper.getLevel().registryAccess();
+        for (String id : Einde2Ids.SPONS_STRUCTUREN) {
+            List<String> fouten = Einde2Test.controleer(w, id);
+            helper.assertTrue(fouten.isEmpty(), id + ": " + fouten);
+        }
+        LeegteBouwStructure bikini = Plekken.leegteBouw(access, Einde2Ids.BIKINIBODEM), schelp = Plekken.leegteBouw(access, Einde2Ids.SCHELPENSTAD);
+        helper.assertTrue(bikini.ruim() && schelp.ruim() && bikini.bij().isEmpty() && schelp.bij().isPresent()
+                && schelp.bij().get().structuur().equals(Guhs.id(Einde2Ids.BIKINIBODEM)), "both empty their box; Schelpenstad stands next to Bikinibodem");
+        ChunkPos b = Einde2Test.gegarandeerd(w, Einde2Ids.BIKINIBODEM), s = Einde2Test.gegarandeerd(w, Einde2Ids.SCHELPENSTAD);
+        StructureSet ring = access.lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id("bikinibodem_gegarandeerd"));
+        helper.assertTrue(ring != null && ring.placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 1600 && g.maxAfstand() == 3000,
+                "Bikinibodem's ring");
+        helper.assertTrue(access.lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id("schelpenstad_gegarandeerd")) == null
+                && access.lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id("schelpenstad")).placement() instanceof RandomSpreadStructurePlacement r
+                && r.spacing() == 1 && r.separation() == 0, "Schelpenstad's one set makes every chunk a candidate");
+        helper.assertTrue(schelp.oorsprong(s).equals(bikini.oorsprong(b).offset(224, 0, 64)), "224 east and 64 south of Bikinibodem's origin: "
+                + schelp.oorsprong(s) + " vs " + bikini.oorsprong(b));
+        helper.assertTrue(s.equals(schelp.bijChunk(bikini, b)) && bikini.bijChunk(schelp, s) == null, "bijChunk is the pure function behind it");
+        helper.assertTrue(Math.hypot(s.getMiddleBlockX(), s.getMiddleBlockZ()) > Einde2Ids.STRAAL_MIDDEN + 256, "still far outside the middle");
+        StructureStart start = Einde2Test.start(w, Einde2Ids.SCHELPENSTAD, s);
+        helper.assertTrue(start != null && start.getPieces().stream().allMatch(p -> p instanceof LeegteBouwStructure.Stuk t && t.ruim()),
+                "it starts there, with tiles that empty their box and no rim");
+        helper.assertTrue(Einde2Test.start(w, Einde2Ids.SCHELPENSTAD, new ChunkPos(s.x() + 3, s.z() - 2)) == null
+                && Einde2Test.start(w, Einde2Ids.SCHELPENSTAD, b) == null, "and in no other chunk");
+        BoundingBox doos = schelp.doos(s);
+        helper.assertTrue(doos.minY() == Einde2Ids.LAAG_MIN && doos.maxY() <= Einde2Ids.LAAG_MAX, "in the deep band: " + doos);
+        helper.succeed();
+    }
+
+    /**
+     * The terrain-free box ({@code leeg}): a build that asks for one only starts where no sampled column holds terrain. And
+     * what the Guheinde really offers the Sponsguh pair: the outer islands are about 43 % land in small pieces, so the box of
+     * 480 x 224 the pair asks for has no spot without any terrain; for ten seeds the search still finds its spot in the ring,
+     * in a round that lets terrain stand in 5 % or 15 % of the columns (the tiles empty their box: {@code ruim}).
+     */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 6000)
+    public static void einde2KernLeeg(GameTestHelper helper) throws java.io.IOException {
+        ServerLevel level = helper.getLevel();
+        Einde2Test.Wereld w = Einde2Test.wereld(helper, SEED, Einde2Ids.GATENKAASHEUVELS);
+        // the stand-in Bikinibodem's structure with a terrain-free box of its own (a small one: such a spot is easy to find)
+        JsonObject json;
+        try (var reader = level.getServer().getResourceManager().getResource(Guhs.id("worldgen/structure/bikinibodem.json")).orElseThrow().openAsReader()) {
+            json = JsonParser.parseReader(reader).getAsJsonObject();
+        }
+        helper.assertTrue(!json.has("leeg") && json.get("ruim").getAsBoolean(), "the stand-in asks for no terrain-free box (it always finds its spot)");
+        JsonArray leeg = new JsonArray();
+        leeg.add(96);
+        leeg.add(64);
+        json.add("leeg", leeg);
+        Structure structure = Structure.DIRECT_CODEC.parse(RegistryOps.create(JsonOps.INSTANCE, level.registryAccess()), json).getOrThrow();
+        LeegteBouwStructure bouw = (LeegteBouwStructure) structure;
+        helper.assertTrue(bouw.leegKolommen() == 4 * 3 && bouw.leegMag(1) == 0, "96 x 64: columns 0, 32, 64, 95 by 0, 32, 63; none may hold terrain");
+        helper.assertTrue(LeegteBouwStructure.kolommen(480, 224) == 16 * 8 && LeegteBouwStructure.leegMag(128, 2) == 6 && LeegteBouwStructure.leegMag(128, 3) == 19,
+                "480 x 224: 16 x 8 columns; the relaxed rounds let terrain stand in 5 % and 15 % of them");
+        BiPredicate<ChunkPos, Boolean> klopt = (chunk, moet) -> {
+            StructureStart start = structure.generate(Holder.direct(structure), level.dimension(), level.registryAccess(), w.generator(),
+                    w.generator().getBiomeSource(), w.random(), level.getStructureManager(), w.seed(), chunk, 0, w.hoogte(), structure.biomes()::contains);
+            return start.isValid() == moet;
+        };
+        int vrij = 0, vol = 0;
+        for (int k = 0; k < 400 && (vrij < 3 || vol < 6); k++) {
+            ChunkPos chunk = new ChunkPos(100 + (k % 20) * 9, -150 + (k / 20) * 9);
+            int staat = bouw.terrein(w.generator(), w.random(), w.hoogte(), bouw.oorsprong(chunk), Integer.MAX_VALUE);
+            if (staat == 0 ? vrij++ < 3 : vol++ < 6) {
+                helper.assertTrue(klopt.test(chunk, staat == 0), "terrain in " + staat + " columns at " + chunk + ": it starts only when there is none");
+            }
+        }
+        helper.assertTrue(vrij >= 3 && vol >= 6, "the sample holds both void and islands: " + vrij + " free, " + vol + " not");
+        // ten seeds, the pair's own box and ring: a spot is always found, and the log says in which round
+        List<Einde2Test.Wereld> werelden = new java.util.ArrayList<>();
+        for (long seed : Einde2Test.LEEG_SEEDS) {
+            werelden.add(Einde2Test.wereld(helper, seed, Einde2Ids.GATENKAASHEUVELS));
+        }
+        List<Einde2Test.Leegte> gevonden = werelden.parallelStream().map(wereld -> Einde2Test.zoekLeeg(wereld, 1600, 3000, 480, 224)).toList();
+        StringBuilder log = new StringBuilder();
+        for (int k = 0; k < gevonden.size(); k++) {
+            Einde2Test.Leegte l = gevonden.get(k);
+            log.append(Einde2Test.LEEG_SEEDS[k]).append(": round x").append(l.factor()).append(" after ").append(l.pogingen()).append(" spots, terrain in ")
+                    .append(l.terrein()).append(" of ").append(l.kolommen()).append("; ");
+        }
+        com.mojang.logging.LogUtils.getLogger().info("einde2: a box of 480 x 224 in the ring 1600-3000, per seed: {}", log);
+        for (Einde2Test.Leegte l : gevonden) {
+            helper.assertTrue(l.factor() > 0 && l.terrein() <= LeegteBouwStructure.leegMag(l.kolommen(), l.factor()), "every seed has its spot: " + log);
+        }
+        // a box that fits the land: 256 x 160 has a spot without any terrain
+        Einde2Test.Leegte klein = Einde2Test.zoekLeeg(w, 1600, 3000, 256, 160);
+        helper.assertTrue(klein.factor() == 1 && klein.terrein() == 0, "a box of 256 x 160 finds a spot of pure void: " + klein);
+        helper.succeed();
+    }
+
     /** Protection on a test box: no breaking or building, creative may, a registered exception may, outside is free. */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void einde2KernBescherming(GameTestHelper helper) {
@@ -242,9 +413,14 @@ public class E2KernGameTests {
             var adv = helper.getLevel().getServer().getAdvancements().get(Guhs.id("quest/einde2_gevonden_leegtehaven"));
             helper.assertTrue(adv != null && a.getAdvancements().getOrStartProgress(adv).isDone() && !b.getAdvancements().getOrStartProgress(adv).isDone(),
                     "the hidden advancement, only for the finder");
-            for (String id : Einde2Ids.VERHAAL_STRUCTUREN) {
+            for (String id : Einde2Ids.LEEGTE_STRUCTUREN) {
                 helper.assertTrue(helper.getLevel().getServer().getAdvancements().get(Guhs.id("quest/einde2_gevonden_" + id)) != null, "advancement of " + id);
             }
+            // a place of the Superkompas is marked visited there too; a story structure is in no tab
+            helper.assertTrue(Einde2Ontdekt.inKompas(Einde2Ids.LEEGTEHAVEN) && SpelGroepen.structuurBezocht(a, Einde2Ids.LEEGTEHAVEN)
+                    && !SpelGroepen.structuurBezocht(b, Einde2Ids.LEEGTEHAVEN), "the compass knows the visit, per player");
+            helper.assertTrue(Einde2Ontdekt.ontdek(a, Einde2Ids.BA_SING_GUH) && !Einde2Ontdekt.inKompas(Einde2Ids.BA_SING_GUH)
+                    && !SpelGroepen.structuurBezocht(a, Einde2Ids.BA_SING_GUH), "a story structure is found, but it is no compass place");
             // the hooks: no-ops by default
             ServerLevel level = helper.getLevel();
             helper.assertTrue(Einde2Haken.portaalGeweigerd(level, a) == null, "no portal lock");
@@ -257,6 +433,33 @@ public class E2KernGameTests {
             }
             helper.assertTrue(!Einde2Haken.ELEMENT_GELEERD.test(a, Einde2Ids.Element.LUCHT) && !Einde2Haken.WERKPLAATS_OPEN.test(a)
                     && !Einde2Haken.VERBORGEN.test(a, Einde2Ids.BA_SING_GUH), "nobody learnt an element, the workshop is shut, nothing is hidden");
+            // the lock is a list of separate conditions behind one question
+            helper.assertTrue(Einde2Haken.magNaarGuheinde(level, a) && Einde2Haken.portaalRedenen(level, a).isEmpty(), "no lock: everybody may go");
+            BiFunction<ServerLevel, Entity, Component> een = (l, e) -> e == a ? Component.literal("een") : null;
+            BiFunction<ServerLevel, Entity, Component> twee = (l, e) -> Component.literal("twee");
+            Einde2Haken.PORTAAL_SLOTEN.add(een);
+            Einde2Haken.PORTAAL_SLOTEN.add(twee);
+            try {
+                helper.assertTrue(!Einde2Haken.magNaarGuheinde(level, a) && !Einde2Haken.magNaarGuheinde(level, b), "one lock is enough to refuse");
+                helper.assertTrue(Einde2Haken.portaalRedenen(level, a).stream().map(Component::getString).toList().equals(List.of("een", "twee"))
+                        && Einde2Haken.portaalRedenen(level, b).stream().map(Component::getString).toList().equals(List.of("twee"))
+                        && Einde2Haken.portaalGeweigerd(level, a).getString().equals("een"), "every reason, in the order the locks were added");
+            } finally {
+                Einde2Haken.PORTAAL_SLOTEN.remove(een);
+                Einde2Haken.PORTAAL_SLOTEN.remove(twee);
+            }
+            // the stories: one group, fixed ids, nobody has finished one; the recipe is secret; nothing hangs on the fight yet
+            helper.assertTrue(Einde2Haken.VERHAAL_GROEP.equals("guheinde") && Einde2Haken.GROTE_VERHALEN.size() == 6 && Einde2Haken.KLEINE_VERHALEN.size() == 14
+                    && Einde2Haken.GROTE_VERHALEN.stream().noneMatch(Einde2Haken.KLEINE_VERHALEN::contains), "six big stories, fourteen small ones");
+            helper.assertTrue(Einde2Haken.groteVerhalenKlaar(a) == 0 && !Einde2Haken.KNABBELBURGER_RECEPT.test(a) && Einde2Haken.GEVECHT_BEGINT.isEmpty(),
+                    "no story finished, no recipe, no entrance scene");
+            var oud = Einde2Haken.VERHAAL_KLAAR;
+            Einde2Haken.VERHAAL_KLAAR = (p, id) -> p == a && (id.startsWith("guhvatar_") || id.equals("omashguh"));
+            try {
+                helper.assertTrue(Einde2Haken.groteVerhalenKlaar(a) == 4 && Einde2Haken.groteVerhalenKlaar(b) == 0, "the counter of big stories, per player");
+            } finally {
+                Einde2Haken.VERHAAL_KLAAR = oud;
+            }
         } finally {
             weg(helper, a);
             weg(helper, b);
@@ -268,12 +471,13 @@ public class E2KernGameTests {
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void einde2KernSkelet(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
-        // the six guhs are real variants, the eleven creatures are pages; all seventeen are named in NIEUW_EINDE2
-        helper.assertTrue(GuhDex.NIEUW_EINDE2.size() == 17, "seventeen new pages");
+        // the six guhs are real variants, the thirteen creatures are pages; all nineteen are named in NIEUW_EINDE2
+        helper.assertTrue(GuhDex.NIEUW_EINDE2.size() == 19, "nineteen new pages");
         for (String naam : GuhDex.NIEUW_EINDE2) {
             GuhVariant v = GuhVariant.valueOf(naam);
             helper.assertTrue(GuhDex.ENTRIES.contains(v), naam + " is in the Guhdex");
-            helper.assertTrue(GuhDex.TELLEND.contains(v) == (v != GuhVariant.LEEGTEWALVISGUH), naam + ": counts, unless it is the bonus page");
+            helper.assertTrue(GuhDex.TELLEND.contains(v) == (v != GuhVariant.LEEGTEWALVISGUH && v != GuhVariant.SPONSGUH && v != GuhVariant.GERRIT),
+                    naam + ": counts, unless it is a bonus page");
             if (v.isCharacter()) {
                 helper.assertTrue(GuhDex.isCreaturePage(v) && BuiltInRegistries.ENTITY_TYPE.containsKey(Guhs.id(v.id())), naam + ": a creature page with its entity");
             } else {
@@ -283,8 +487,9 @@ public class E2KernGameTests {
         }
         helper.assertTrue(GuhVariant.KORSTGUH.ordinal() == GuhVariant.PINGUH.ordinal() + 1 && GuhVariant.KOORGUH.ordinal() == GuhVariant.REISGUH.ordinal() - 1,
                 "the six guhs sit between PINGUH and REISGUH");
-        helper.assertTrue(GuhVariant.values()[GuhVariant.values().length - 1] == GuhVariant.MOMO_GUH, "the creature pages come last");
-        // the Superkompas tab "einde": the vesting and the eight side places, each an existing structure; the story structures are in no tab
+        helper.assertTrue(GuhVariant.values()[GuhVariant.values().length - 1] == GuhVariant.GERRIT, "the creature pages come last");
+        // the Superkompas tab "einde": the vesting, the eight side places and Bikinibodem, each an existing structure; the story
+        // structures and Schelpenstad are in no tab
         var einde = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("einde")).findFirst().orElseThrow();
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         helper.assertTrue(einde.structures().contains(Einde2Ids.MIKA_VESTING), "the Mika-vesting is in the compass");
@@ -297,6 +502,20 @@ public class E2KernGameTests {
         for (String id : Einde2Ids.VERHAAL_STRUCTUREN) {
             helper.assertTrue(SuperkompasItem.CATEGORIES.stream().noneMatch(c -> c.structures().contains(id)), id + " is in no compass tab");
         }
+        helper.assertTrue(einde.structures().contains(Einde2Ids.BIKINIBODEM) && !Einde2Ontdekt.inKompas(Einde2Ids.SCHELPENSTAD),
+                "Bikinibodem is in the compass, Schelpenstad is not (the road leads there)");
+        for (String id : Einde2Ids.SPONS_STRUCTUREN) {
+            helper.assertTrue(structures.getValue(Guhs.id(id)) instanceof LeegteBouwStructure, id + " is a guhs:leegte_bouw");
+            helper.assertTrue(structures.get(Guhs.id(id)).orElseThrow().is(Einde2Ids.SPONSGUH), id + " is in guhs:einde2/sponsguh");
+            helper.assertTrue(Plekken.plek(id, "aankomst") != null, id + " has a sidecar");
+        }
+        helper.assertTrue(Einde2Ids.LEEGTE_STRUCTUREN.size() == 14 && Einde2Ids.LEEGTE_STRUCTUREN.containsAll(Einde2Ids.SPONS_STRUCTUREN), "fourteen big places");
+        // the stand-in blocks and items the builds of the Sponsguh story place
+        for (String id : List.of("karen", "krokante_grill", "besteltafel", "vruchthuis_wand", "vruchthuis_dak", "vruchthuis_raam", "vruchthuis_deur",
+                "bellenblaas", "spooklantaarn", "zeepbel", "bubbelstroom", "bloemwolk")) {
+            helper.assertTrue(BuiltInRegistries.BLOCK.containsKey(Guhs.id(id)) && BuiltInRegistries.ITEM.containsKey(Guhs.id(id)), "block and item " + id);
+        }
+        helper.assertTrue(BuiltInRegistries.ITEM.containsKey(Guhs.id("knabbelburger")) && BuiltInRegistries.ITEM.containsKey(Guhs.id("kwallenjam")), "the food");
         helper.assertTrue(Einde2Ids.ELEMENT_VAN.keySet().stream().allMatch(Einde2Ids.ZIJ_STRUCTUREN::contains), "the element places are side places");
         // the biomes and their tags
         var biomes = access.lookupOrThrow(Registries.BIOME);

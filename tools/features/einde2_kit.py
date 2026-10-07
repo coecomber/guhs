@@ -4,11 +4,13 @@ einde2 (the Guheinde expansion): the helper library of every einde2 module (not 
     import features.einde2_kit as kit
 
   - the numbers every slice shares: the height bands of the Guheinde, the six biomes of the outer islands, their block
-    palettes (PALET) and the placement table of the twelve big places (STRUCTUREN: salt, sector, ring, voorrang, biomes);
+    palettes (PALET), the placement table of the fourteen big places (STRUCTUREN: salt, sector, ring, voorrang, biomes, band)
+    and the road at the seam between the two places of the Sponsguh story (WEG, check_naad);
   - small writers: pagina (a Guhdex page), verborgen / zichtbaar (advancements), spawn_ei, stub_blok / stub_item /
     stub_structuur (the placeholders of the skeleton);
-  - Bouw: guheinde_bouw.Bouw for a build that floats in the high band, with the markers ("plekken": where a character, a
-    prop, a zone, a route, a ring or a creature goes), the overlay templates, save_tiles() and a self-check;
+  - Bouw: guheinde_bouw.Bouw for a build that floats in the high band (or lies in the deep band), with the markers
+    ("plekken": where a character, a prop, a zone, a route, a ring or a creature goes, and the camera of a scene), the
+    overlay templates, save_tiles() and a self-check;
   - leegte_structuur / eiland_structuur: the ONLY places that write the worldgen JSON of an einde2 structure (the
     structure, its sets, its biome tag, its voorrang, its sidecar data/guhs/einde2/plekken/<name>.json and its name).
 
@@ -27,6 +29,9 @@ from features import guheinde_bouw as gb
 # copy only lands in terrain nobody has been to
 EINDE2_ALLEEN_NIEUW = False
 HOOG_MIN, HOOG_MAX, NATUUR_MAX, EILANDBOUW_MAX, TILE = 134, 253, 119, 127, 32
+# the deep band: inside the natural band, but only in a spot where the Guheinde has no terrain at all (the Sponsguh pair)
+LAAG_MIN, LAAG_MAX = 4, 117
+BAND = {"hoog": (HOOG_MIN, HOOG_MAX), "laag": (LAAG_MIN, LAAG_MAX)}
 STRAAL_MIDDEN = 960          # within this many blocks of 0,0 the biome stays guhs:guheinde
 MIN_AFSTAND = 1100           # no einde2 structure starts nearer to 0,0 than this
 SECTOREN = 16                # the ring of every guaranteed einde2 set is cut into this many slices
@@ -64,16 +69,20 @@ PALET = {
 VERHAAL = ["zuidelijke_luchttempel", "noordelijke_waterstam", "ba_sing_guh", "vuurnatie_hoofdstad"]   # (in chapter order)
 ZIJ = ["omashguh", "westelijke_luchttempel", "vuurtempel_roku", "kyoshi_dorp", "bibliotheek_wan_shi_guh", "leeuwschildpad_eiland",
        "leegtehaven", "guhvleugel_ringenrace"]
+SPONS = ["bikinibodem", "schelpenstad"]                                                              # (the Sponsguh story)
 
 
-def _plek(slice_, salt, sector, ring, voorrang, biomes=None, rand=0, spreiding=None, kompas=None):
+def _plek(slice_, salt, sector, ring, voorrang, biomes=None, rand=0, spreiding=None, kompas=None, band="hoog", leeg=None, bij=None):
     return {"slice": slice_, "salt": salt, "sector": sector, "ring": ring, "voorrang": voorrang, "biomes": biomes or list(BUITEN), "rand": rand,
-            "spreiding": spreiding, "kompas": kompas}
+            "spreiding": spreiding, "kompas": kompas, "band": band, "leeg": leeg, "bij": bij}
 
 
-# the placement of the twelve big places (build contract 6.4). ring = blocks from 0,0 of the one guaranteed copy, sector = its
+# the placement of the fourteen big places (build contract 6.4). ring = blocks from 0,0 of the one guaranteed copy, sector = its
 # slice of that ring (of SECTOREN), spreiding = (spacing, separation) in chunks of the very rare random copies (None: only
 # the guaranteed copy), rand = blocks kept free around the box, kompas = its Superkompas tab. Never change a salt.
+# band = "hoog" (y 134-253, above the terrain) or "laag" (y 4-117, the deep band: build contract 6.11), and for the deep band:
+# leeg = (x, z): this box from the build's origin must be free of terrain; bij = (structure, dx, dz): the build has no spot of
+# its own, it stands at that offset from the origin of the one guaranteed copy of that structure.
 STRUCTUREN = {
     "zuidelijke_luchttempel": _plek("bouw_lucht", 21400901, 0, (2000, 3200), 400, rand=48),
     "noordelijke_waterstam": _plek("bouw_water", 21401001, 4, (2000, 3200), 399, rand=48),
@@ -87,7 +96,16 @@ STRUCTUREN = {
     "leeuwschildpad_eiland": _plek("bouw_zij2", 21401421, 5, (1500, 2800), 295, kompas="einde"),
     "leegtehaven": _plek("bouw_zij2", 21401431, 9, (1200, 2000), 301, kompas="einde"),
     "guhvleugel_ringenrace": _plek("bouw_zij2", 21401441, 13, (1300, 2600), 294, ["kruimelwolken"], kompas="einde"),
+    "bikinibodem": _plek("bouw_bikinibodem", 21401601, 3, (1600, 3000), 302, kompas="einde", band="laag", leeg=(480, 224)),
+    "schelpenstad": _plek("bouw_schelpenstad", 21401701, None, None, 293, band="laag", bij=("bikinibodem", 224, 64)),
 }
+
+# the road at the seam between Bikinibodem (its east face) and Schelpenstad (its west face), in template coordinates (both
+# builds have y 4, so the same template y is the same world y): 9 wide; the two outer columns are the kerb (dek at y with a
+# rand wall on it), the seven inner ones the deck (dek at y, the middle one the streep), `vrij` blocks of nothing above it
+# and `onder` blocks of grond under it. Both builds keep exactly this for their last `lengte` blocks before the seam.
+WEG = dict(y=15, breed=9, z_bikini=(108, 116), z_schelp=(44, 52), dek="guhs:kruimelrots_stenen", streep="guhs:gebarsten_korst",
+           rand="guhs:kruimelrots_stenen_muur", vrij=6, grond="guhs:kaaskorst", onder=2, lengte=8)
 
 # the markers every guhs:leegte_bouw has, and the ones the four story structures have on top (build contract 6.6)
 STANDAARD = ["aankomst", "aankomst_speler", "uitzicht"]
@@ -198,15 +216,48 @@ def stub_item(h, id, naam, rgb):
 
 def stub_structuur(h, id, titel):
     """The placeholder of a big place: a little lit platform as a real guhs:leegte_bouw with the set, salt, sector and ring
-    of STRUCTUREN, so the id exists (the Superkompas lists it) and the placement can be tried. The owner slice replaces it."""
+    of STRUCTUREN (and its bij), so the id exists (the Superkompas lists it) and the placement can be tried. In the deep band
+    it asks for no terrain-free spot (zonder_leeg): a 5 x 5 platform fits anywhere. The owner slice replaces it."""
     b = Bouw(h, id, (5, 4, 5), STRUCTUREN[id]["salt"])
     b.fill(0, 0, 0, 4, 0, 4, "guhs:kaaskorst_stenen")
     b.set(2, 0, 2, "guhs:guh_kristal_lamp")
     b.zone("aankomst", 0, 1, 0, 4, 3, 4, wie="hier komt de echte plek nog")
     b.prop("aankomst_speler", 2, 1, 2)
     b.save_tiles()
-    leegte_structuur(h, b, titel=titel, tooltip="Hier wordt nog aan gebouwd, njeg", y=HOOG_MIN + 26)
+    leegte_structuur(h, b, titel=titel, tooltip="Hier wordt nog aan gebouwd, njeg", y=LAAG_MIN if b.band == "laag" else HOOG_MIN + 26,
+                     zonder_leeg=True)
     return b
+
+
+def check_naad(b, kant):
+    """The road at the seam between the two places of the Sponsguh story, block for block (WEG): kant "oost" = Bikinibodem's
+    east face (its last WEG["lengte"] blocks up to x = W - 1), kant "west" = Schelpenstad's west face (x = 0 and on).
+    Returns the problems (an empty list: the two builds will meet)."""
+    assert kant in ("oost", "west"), kant
+    z0, z1 = WEG["z_bikini"] if kant == "oost" else WEG["z_schelp"]
+    xs = range(b.W - WEG["lengte"], b.W) if kant == "oost" else range(0, WEG["lengte"])
+    y, midden = WEG["y"], (z0 + z1) // 2
+    naam = lambda c: (b.s.blocks.get(c) or (None,))[0]  # noqa: E731
+    p = []
+    if z1 - z0 + 1 != WEG["breed"]:
+        p.append(f"naad {kant}: de weg is {z1 - z0 + 1} breed, niet {WEG['breed']}")
+    for x in xs:
+        for z in range(z0, z1 + 1):
+            stoep = z in (z0, z1)
+            wil = WEG["streep"] if z == midden else WEG["dek"]
+            if naam((x, y, z)) != wil:
+                p.append(f"naad {kant} {(x, y, z)}: {naam((x, y, z))}, moet {wil} zijn")
+            for d in range(1, WEG["onder"] + 1):
+                if naam((x, y - d, z)) != WEG["grond"]:
+                    p.append(f"naad {kant} {(x, y - d, z)}: {naam((x, y - d, z))}, moet {WEG['grond']} zijn")
+            for d in range(1, WEG["vrij"] + 1):
+                er = naam((x, y + d, z))
+                if stoep and d == 1:
+                    if er != WEG["rand"]:
+                        p.append(f"naad {kant} {(x, y + d, z)}: {er}, moet {WEG['rand']} zijn (de stoeprand)")
+                elif er not in (None, gb.AIR):
+                    p.append(f"naad {kant} {(x, y + d, z)}: {er} staat boven de weg ({WEG['vrij']} vrij)")
+    return p[:40]
 
 
 # =====================================================================================================================
@@ -247,7 +298,11 @@ class Loper(gb.Walker):
 
 class Bouw(gb.Bouw):
     """A build of einde2 in the making. Coordinates are TEMPLATE coordinates of the whole build; cells nobody sets stay what
-    the world has (air, in the high band). prefix = the sign text prefix of the slice ("sign.guhs.einde2_<slice>")."""
+    the world has (air, in the high band; air as well in the deep band, where the tiles empty their box first).
+    prefix = the sign text prefix of the slice ("sign.guhs.einde2_<slice>"). The band follows from STRUCTUREN[name].
+
+    The tiles are placed with the block states of the template as they are (no block looks at its neighbours): write the
+    final states yourself (connect() does fences, panes, bars and walls)."""
 
     def __init__(self, h, name, size, seed, prefix=None):
         if not hasattr(h, "ms"):
@@ -260,6 +315,9 @@ class Bouw(gb.Bouw):
         self.dun = set()         # extra block names the walker passes through (a slice's own small decoration)
         self.tiles = None        # (tiles_x, tiles_z, [(i, j)]) once saved
         self.fouten = []         # marker mistakes found while building
+        self.cameras = {}        # scene id -> (the eye points, the look-at point, the marker ids it must see)
+        self.band = STRUCTUREN.get(name, {}).get("band", "hoog")
+        self.ruim = self.band == "laag"   # (the tiles empty their box first: every tile is saved, also an empty one)
 
     def is_dun(self, n):
         return n in self.dun or gb.is_thin(n) or any(t in n for t in DUN)
@@ -297,11 +355,14 @@ class Bouw(gb.Bouw):
         if los:
             self.los.add(id)
 
-    def plek(self, id, x, y, z, yaw=0.0, wie="", kind=None, los=False):
+    def plek(self, id, x, y, z, yaw=0.0, wie="", kind=None, los=False, wezen=None):
         """Where a character stands (soort npc): the block its feet are in, the way it looks (Minecraft yaw: 0 south, 90 west,
-        180 north, -90 east), who it is and the GuhNpcEntity.Kind name reserved for it. NOTHING is placed: the spot stays free.
+        180 north, -90 east), who it is and the GuhNpcEntity.Kind name reserved for it, or wezen="guhs:<entity id>" when the
+        character is an entity type (the cast of the Sponsguh story). NOTHING is placed: the spot stays free.
         los=True: shut in or apart on purpose (a cell, a ship before the sneak route): not checked for reachability."""
-        self._merk(id, {"soort": "npc", "pos": [x, y, z], "yaw": float(yaw), "wie": wie, "kind": kind}, los)
+        if kind and wezen:
+            self.fouten.append(f"plek '{id}': een kind OF een wezen, niet allebei")
+        self._merk(id, {"soort": "npc", "pos": [x, y, z], "yaw": float(yaw), "wie": wie, "kind": kind, "entity": wezen}, los)
 
     def prop(self, id, x, y, z, wie="", los=False):
         """A block position a later phase reads or changes (a door, a lever spot, a table, a pedestal, where a player stands)."""
@@ -327,6 +388,54 @@ class Bouw(gb.Bouw):
         data.update(nbt)
         self.ent(x + 0.5, y, z + 0.5, data, entity)
         self._merk(id, {"soort": "wezen", "pos": [x, y, z], "yaw": float(yaw), "entity": entity})
+
+    def camera(self, id, oog, kijk, zicht=(), wie=""):
+        """The camera of a scene <id> (a wink of a few seconds a later phase plays): records the pad <id>_camera = [oog, kijk]:
+        the first point is where the camera is, the last what it looks at. oog may be a list of points (a camera that moves).
+        check() wants a free line (no solid block) from every eye point to the look-at point and from the first eye point to
+        every marker id in zicht (the actors and props of the scene)."""
+        ogen = [tuple(map(int, q)) for q in (oog if isinstance(oog[0], (list, tuple)) else [oog])]
+        kijk = tuple(map(int, kijk))
+        self.pad(f"{id}_camera", ogen + [kijk], wie=wie or f"de camera van {id}")
+        self.cameras[id] = (ogen, kijk, list(zicht))
+
+    def ziet(self, a, b):
+        """Is the straight line from cell a to cell b free of solid blocks (glass, fences and small things do not count; the
+        two end cells themselves neither: a prop is often a block)? Returns None, or the first cell in the way."""
+        (ax, ay, az), (bx, by, bz) = a, b
+        n = int(max(abs(bx - ax), abs(by - ay), abs(bz - az)) * 4) + 1
+        for k in range(1, n):
+            t = k / n
+            c = (int(math.floor(ax + 0.5 + (bx - ax) * t)), int(math.floor(ay + 0.5 + (by - ay) * t)), int(math.floor(az + 0.5 + (bz - az) * t)))
+            if c == tuple(a) or c == tuple(b):
+                continue
+            bl = self.s.blocks.get(c)
+            if bl is not None and self.solid_at(c) and not any(s in bl[0] for s in gb.TRANSPARENT_SUB):
+                return c
+        return None
+
+    def _camera_fouten(self):
+        p = []
+        for id, (ogen, kijk, zicht) in self.cameras.items():
+            for oog in ogen:
+                if self.s.blocks.get(oog) is not None and self.solid_at(oog):
+                    p.append(f"camera {id} {oog}: staat in een blok")
+                weg = self.ziet(oog, kijk)
+                if weg:
+                    p.append(f"camera {id} {oog}: ziet zijn kijkpunt {kijk} niet ({self.s.blocks[weg][0]} op {weg})")
+            for m in zicht:
+                e = self.plekken.get(m)
+                if e is None or "pos" not in e:
+                    p.append(f"camera {id}: plek '{m}' (zicht) bestaat niet")
+                    continue
+                x, y, z = e["pos"]
+                doel = (x, y + 1, z) if e["soort"] == "npc" else (x, y, z)   # (a character: its head)
+                weg = self.ziet(ogen[0], doel)
+                if weg and e["soort"] != "npc":
+                    weg = self.ziet(ogen[0], (x, y + 1, z)) and weg          # (a prop in a floor or a table: seen from above)
+                if weg:
+                    p.append(f"camera {id} {ogen[0]}: ziet plek {m} {doel} niet ({self.s.blocks[weg][0]} op {weg})")
+        return p
 
     def laag(self, naam, structure, x, y, z):
         """An overlay template <name>/laag_<naam> (a Structure of its own, blocks only) that a later phase puts on the build
@@ -396,6 +505,7 @@ class Bouw(gb.Bouw):
           - every npc spot: two free blocks on a solid one, and you can walk there from `start`; every prop: you can stand on
             it or right next to it; unless it was recorded with los=True;
           - zones, pads and rings inside the build (only `uitzicht` lies outside: up to 40 blocks off the rim);
+          - every camera (camera()): not in a block, a free line to its look-at point and to the markers it must see;
           - the aankomst zone at least 9 x 9;
           - a walkable floor darker than min_licht.
         start = where a player stands after arriving (the aankomst_speler spot)."""
@@ -443,6 +553,7 @@ class Bouw(gb.Bouw):
             elif e["soort"] == "prop":
                 if c not in reach and not gb.near(reach, c, dy=(-1, 0, 1)) and (c[0], c[1] + 1, c[2]) not in reach:
                     p.append(f"plek {id} {c}: daar kun je niet bij (los=True als dat zo hoort)")
+        p += self._camera_fouten()
         a = self.plekken.get("aankomst")
         if a and a.get("soort") == "zone" and standaard:
             if a["tot"][0] - a["pos"][0] + 1 < 9 or a["tot"][2] - a["pos"][2] + 1 < 9:
@@ -457,8 +568,9 @@ class Bouw(gb.Bouw):
 
     # --- saving -----------------------------------------------------------------------------------------------------------
     def save_tiles(self):
-        """Cuts the build into 32 x 32 tiles <name>/stuk_<i>_<j> (empty tiles are left out; tiles of an earlier, bigger build
-        are removed). Returns (tiles_x, tiles_z)."""
+        """Cuts the build into 32 x 32 tiles <name>/stuk_<i>_<j> (empty tiles are left out, except in the deep band: there
+        every tile empties its box, so every tile is a piece; tiles of an earlier, bigger build are removed).
+        Returns (tiles_x, tiles_z)."""
         tiles, ents = {}, {}
         for (x, y, z), b in self.s.blocks.items():
             tiles.setdefault((x // TILE, z // TILE), {})[(x % TILE, y, z % TILE)] = b
@@ -469,7 +581,7 @@ class Bouw(gb.Bouw):
         saved = []
         for i in range(nx):
             for j in range(nz):
-                if (i, j) not in tiles and (i, j) not in ents:
+                if (i, j) not in tiles and (i, j) not in ents and not self.ruim:
                     continue
                 t = self.h.Structure((min(TILE, self.W - i * TILE), self.H, min(TILE, self.D - j * TILE)))
                 t.blocks = tiles.get((i, j), {})
@@ -522,12 +634,16 @@ def gebruikte_salts(h, behalve=()):
     return out
 
 
-def leegte_structuur(h, b, *, titel, tooltip, y, anker=None):
+def leegte_structuur(h, b, *, titel, tooltip, y, anker=None, zonder_leeg=False):
     """Everything of a guhs:leegte_bouw except its templates (call b.save_tiles() first, or it is done here): the structure,
     its guaranteed set (salt + 7), its very rare random set when STRUCTUREN says so, its biome tag, its voorrang, its sidecar
-    and its name (+ Superkompas tooltip). y = the world y of template y 0 (in the high band). Asserts the limits of the type."""
+    and its name (+ Superkompas tooltip). y = the world y of template y 0, in the band of STRUCTUREN[name]. Asserts the limits
+    of the type. The deep band: "ruim" (the tiles empty their box first), "leeg" (the terrain-free box; zonder_leeg=True
+    leaves it out: only the skeleton's stand-in platform) and, for a build that stands next to another one, "bij" with ONE
+    set (random_spread 1 / 0: every chunk a candidate, the type refuses all but the one) instead of a guaranteed set."""
     name, D = b.name, h.D
     info = STRUCTUREN[name]
+    band_min, band_max = BAND[info["band"]]
     if b.tiles is None:
         b.save_tiles()
     nx, nz, saved = b.tiles
@@ -535,35 +651,59 @@ def leegte_structuur(h, b, *, titel, tooltip, y, anker=None):
     ax, ay, az = anker
     assert saved, f"{name}: no tiles"
     assert b.W <= MAX_VOETAFDRUK and b.D <= MAX_VOETAFDRUK, f"{name}: footprint {b.W} x {b.D} is more than {MAX_VOETAFDRUK}"
-    assert b.H <= MAX_HOOGTE, f"{name}: {b.H} high is more than {MAX_HOOGTE}"
+    assert b.H <= band_max - band_min + 1, f"{name}: {b.H} high is more than {band_max - band_min + 1}"
     assert ax % 16 == 8 and az % 16 == 8, f"{name}: anchor x and z must be 16 k + 8 (tiles line up with chunks): {anker}"
     assert 8 <= ax <= MAX_ANKER and 8 <= az <= MAX_ANKER, f"{name}: anchor at most {MAX_ANKER}: {anker}"
     assert b.W - ax <= MAX_VOORBIJ_ANKER and b.D - az <= MAX_VOORBIJ_ANKER, f"{name}: more than {MAX_VOORBIJ_ANKER} past the anchor (tiles beyond 8 chunks are never placed)"
-    assert HOOG_MIN <= y and y + b.H - 1 <= HOOG_MAX, f"{name}: y {y}..{y + b.H - 1} is outside the high band {HOOG_MIN}..{HOOG_MAX}"
+    assert band_min <= y and y + b.H - 1 <= band_max, f"{name}: y {y}..{y + b.H - 1} is outside its band ({info['band']}) {band_min}..{band_max}"
+    assert (info["band"] == "laag") == b.ruim, f"{name}: Bouw({name!r}) must know its band before save_tiles()"
     for naam, laag in b.lagen.items():
         (x0, y0, z0), (sx, sy, sz) = laag["pos"], laag["grootte"]
         assert b.inside(x0, y0, z0) and b.inside(x0 + sx - 1, y0 + sy - 1, z0 + sz - 1), f"{name}: laag {naam} outside the build"
-    lo, hi = info["ring"]
     behalve = (name, f"{name}_gegarandeerd")
     used = gebruikte_salts(h, behalve)
     assert info["salt"] not in used and info["salt"] + 7 not in used, f"{name}: salt in use by {used.get(info['salt']) or used.get(info['salt'] + 7)}"
-    h.w(f"{D}/worldgen/structure/{name}.json", {
+    structuur = {
         "type": "guhs:leegte_bouw", "biomes": f"#guhs:has_structure/{name}", "step": "surface_structures", "terrain_adaptation": "none",
         "spawn_overrides": {"monster": {"bounding_box": "full", "spawns": []}, "creature": {"bounding_box": "full", "spawns": []}},
         "templates": f"guhs:{name}", "tiles_x": nx, "tiles_z": nz, "tile_size": TILE, "anchor": [ax, ay, az], "size": [b.W, b.H, b.D],
-        "y": y, "min_distance": MIN_AFSTAND, "rand": info["rand"]})
-    placement = {"type": "guhs:gegarandeerd", "salt": info["salt"] + 7, "min_afstand": lo, "max_afstand": hi, "sector": info["sector"],
-                 "sectoren": SECTOREN}
-    if EINDE2_ALLEEN_NIEUW:
-        placement["alleen_nieuw"] = True
-    h.w(f"{D}/worldgen/structure_set/{name}_gegarandeerd.json", {"structures": [{"structure": f"guhs:{name}", "weight": 1}], "placement": placement})
-    spread = f"{D}/worldgen/structure_set/{name}.json"
-    if info["spreiding"]:
-        spacing, separation = info["spreiding"]
+        "y": y, "min_distance": MIN_AFSTAND, "rand": info["rand"]}
+    if b.ruim:
+        structuur["ruim"] = True
+    if info["leeg"] and not zonder_leeg:
+        lx, lz = info["leeg"]
+        assert lx >= b.W and lz >= b.D, f"{name}: its leeg box {info['leeg']} is smaller than the build"
+        structuur["leeg"] = [lx, lz]
+    gegarandeerd, spread = f"{D}/worldgen/structure_set/{name}_gegarandeerd.json", f"{D}/worldgen/structure_set/{name}.json"
+    if info["bij"]:
+        buur, dx, dz = info["bij"]
+        assert info["spreiding"] is None and info["ring"] is None, f"{name}: a bij build has no ring and no spread of its own"
+        assert dx % 16 == 0 and dz % 16 == 0, f"{name}: bij offset ({dx}, {dz}) must be whole chunks (tiles line up with chunks)"
+        leeg = STRUCTUREN[buur]["leeg"]
+        assert leeg and 0 <= dx and 0 <= dz and dx + b.W <= leeg[0] and dz + b.D <= leeg[1], \
+            f"{name}: does not fit in the leeg box {leeg} of {buur} at ({dx}, {dz})"
+        assert STRUCTUREN[buur]["band"] == info["band"] and STRUCTUREN[buur]["bij"] is None, f"{name}: {buur} must be a build of the same band with a spot of its own"
+        structuur["bij"] = {"structuur": f"guhs:{buur}", "dx": dx, "dz": dz}
+    h.w(f"{D}/worldgen/structure/{name}.json", structuur)
+    if info["bij"]:
+        # (its ONE set: every chunk is a candidate and the type refuses all but the chunk next to its neighbour)
         h.w(spread, {"structures": [{"structure": f"guhs:{name}", "weight": 1}],
-                     "placement": {"type": "minecraft:random_spread", "spacing": spacing, "separation": separation, "salt": info["salt"]}})
-    elif os.path.exists(spread):
-        os.remove(spread)
+                     "placement": {"type": "minecraft:random_spread", "spacing": 1, "separation": 0, "salt": info["salt"]}})
+        if os.path.exists(gegarandeerd):
+            os.remove(gegarandeerd)
+    else:
+        lo, hi = info["ring"]
+        placement = {"type": "guhs:gegarandeerd", "salt": info["salt"] + 7, "min_afstand": lo, "max_afstand": hi, "sector": info["sector"],
+                     "sectoren": SECTOREN}
+        if EINDE2_ALLEEN_NIEUW:
+            placement["alleen_nieuw"] = True
+        h.w(gegarandeerd, {"structures": [{"structure": f"guhs:{name}", "weight": 1}], "placement": placement})
+        if info["spreiding"]:
+            spacing, separation = info["spreiding"]
+            h.w(spread, {"structures": [{"structure": f"guhs:{name}", "weight": 1}],
+                         "placement": {"type": "minecraft:random_spread", "spacing": spacing, "separation": separation, "salt": info["salt"]}})
+        elif os.path.exists(spread):
+            os.remove(spread)
     alle = sorted(info["biomes"]) == sorted(BUITEN)
     h.w(f"{D}/tags/worldgen/biome/has_structure/{name}.json", {"values": [ALLE_ZES] if alle else [f"guhs:{x}" for x in info["biomes"]]})
     h.VOORRANG[name] = info["voorrang"]

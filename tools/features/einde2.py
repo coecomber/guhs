@@ -1,16 +1,19 @@
 """
 einde2 (the Guheinde expansion): what the whole update shares (Java: nl.juiced.guhs.feature.einde2, see Einde2.java). The
-fourteen slices each have a module of their own after this one in features.FEATURES (einde2_biomes ... einde2_bouw_zij2);
-the helper library they all use is einde2_kit.py.
+seventeen slices each have a module of their own after this one in features.FEATURES (einde2_biomes ...
+einde2_bouw_schelpenstad); the helper library they all use is einde2_kit.py.
 
   - the post-pass hook of the structure type guhs:leegte_bouw (make_v2.bouwruimte writes its keep_clear and voorrang);
   - the biome tags of the outer islands (guhs:einde2/buiteneilanden, gewoon, zeldzaam and one per element), the block tags
     guhs:einde2/eilandgrond (what creatures spawn on and features grow on; the biomes slice adds its surface blocks) and
-    guhs:einde2/wolk, the structure tags guhs:einde2/verhaal and guhs:einde2/zij;
-  - the hidden advancements quest/einde2_gevonden_<id> of the twelve big places (Einde2Ontdekt grants them);
+    guhs:einde2/wolk, the structure tags guhs:einde2/verhaal, guhs:einde2/zij and guhs:einde2/sponsguh;
+  - the hidden advancements quest/einde2_gevonden_<id> of the fourteen big places (Einde2Ontdekt grants them);
   - the texts of the shared Java code (protection, the /guhs einde2 commands);
   - einde2_test_bouw: a small guhs:leegte_bouw of 3 x 2 tiles with every kind of marker and an overlay, in no structure set
-    (it never generates in a world): the game tests of the type, of Plekken and of the kit's own self-check.
+    (it never generates in a world): the game tests of the type, of Plekken and of the kit's own self-check (with a scene
+    camera and a stretch of the seam road, so camera() and check_naad are tried too);
+  - einde2_test_tegel: one tiny tile for the game test of the tiles themselves (it empties its box first, and a ladder that
+    hangs on nothing stays: the tiles keep the block states of their template).
 """
 import features.einde2_kit as kit
 
@@ -41,12 +44,12 @@ def tags(h):
     h.add_tag("guhs/tags/block/einde2/eilandgrond", ["guhs:kaaskorst"])
     h.add_tag("guhs/tags/block/einde2/wolk", [])
     # (the structures arrive slice by slice: not required)
-    for tag, names in (("verhaal", kit.VERHAAL), ("zij", kit.ZIJ)):
+    for tag, names in (("verhaal", kit.VERHAAL), ("zij", kit.ZIJ), ("sponsguh", kit.SPONS)):
         h.w(f"{D}/tags/worldgen/structure/einde2/{tag}.json", {"values": [{"id": f"guhs:{n}", "required": False} for n in names]})
 
 
 def advancements(h):
-    for name in kit.VERHAAL + kit.ZIJ:
+    for name in kit.VERHAAL + kit.ZIJ + kit.SPONS:
         kit.verborgen(h, f"einde2_gevonden_{name}")
 
 
@@ -83,7 +86,19 @@ def test_bouw(h):
     laag.fill(0, 0, 0, 2, 0, 2, "guhs:mika_steen")
     laag.set(1, 1, 1, "guhs:guh_kristal_lamp")
     b.laag("proef", laag, 50, 3, 10)
-    problems = b.check((7, 3, 7), ["proefguh", "opgesloten", "tafel", "route", ("ring", 1), "vijver"])
+    # a scene: the camera sees the proefguh and its table, not the guh that is shut in the hut
+    b.plek("proefwezen", 36, 3, 20, yaw=-90.0, wie="een wezen van een latere fase", wezen="guhs:sponsguh")
+    b.camera("proefscene", (40, 5, 12), (40, 4, 20), zicht=["proefguh", "tafel", "proefwezen"])
+    problems = b.check((7, 3, 7), ["proefguh", "opgesloten", "tafel", "route", ("ring", 1), "vijver", "proefscene_camera"])
+    blind = kit.Bouw(h, TEST_BOUW + "_blind", (80, 12, 48), 21400052)
+    blind.s.blocks = dict(b.s.blocks)
+    blind.plekken = dict(b.plekken)
+    blind.camera("blind", (40, 5, 12), (63, 4, 33), zicht=["opgesloten"])
+    found = " | ".join(blind._camera_fouten())
+    for expected in ("ziet zijn kijkpunt", "ziet plek opgesloten"):
+        if expected not in found:
+            problems.append(f"de cameracontrole mist '{expected}': {found}")
+    problems += naad_proef(h)
     # the check must also catch what is wrong: a marker in the wall, a missing id, a spot nobody can reach
     fout = kit.Bouw(h, TEST_BOUW + "_fout", (16, 8, 16), 21400051)
     fout.fill(0, 0, 0, 15, 0, 15, "guhs:kaaskorst_stenen")
@@ -109,16 +124,48 @@ def test_bouw(h):
     print(f"{TEST_BOUW}: self-check ok {b.stats}, {nx} x {nz} tiles")
 
 
+def naad_proef(h):
+    """kit.check_naad on a little stretch of the seam road (both faces), and that it catches a road that is one block off."""
+    W = kit.WEG
+    p = []
+    for kant, (z0, z1) in (("oost", W["z_bikini"]), ("west", W["z_schelp"])):
+        b = kit.Bouw(h, f"{TEST_BOUW}_naad_{kant}", (16, 24, z1 + 4), 21400053)
+        for x in range(16):
+            for z in range(z0, z1 + 1):
+                b.fill(x, W["y"] - W["onder"], z, x, W["y"] - 1, z, W["grond"])
+                b.set(x, W["y"], z, W["streep"] if z == (z0 + z1) // 2 else W["dek"])
+                if z in (z0, z1):
+                    b.set(x, W["y"] + 1, z, W["rand"])
+        p += kit.check_naad(b, kant)
+        b.set(15 if kant == "oost" else 0, W["y"] + 3, z0 + 2, "guhs:kaaskorst")       # (something above the deck)
+        b.set(15 if kant == "oost" else 0, W["y"], z0 + 1, W["streep"])               # (the stripe in the wrong column)
+        if len(kit.check_naad(b, kant)) != 2:
+            p.append(f"check_naad {kant} mist een fout: {kit.check_naad(b, kant)}")
+    return p
+
+
+def test_tegel(h):
+    """3 x 3 x 3: a lamp in a corner and a ladder in the middle that hangs on nothing."""
+    t = h.Structure((3, 3, 3))
+    t.set(0, 0, 0, "guhs:guh_kristal_lamp")
+    t.set(1, 1, 1, "minecraft:ladder", {"facing": "north", "waterlogged": "false"})
+    t.save("einde2_test_tegel")
+
+
 def selfcheck(h):
     missing = [k for k in TEXTS if k not in h.NL]
     for name, info in kit.STRUCTUREN.items():
-        if info["slice"] not in ("bouw_lucht", "bouw_water", "bouw_aarde", "bouw_vuur", "bouw_zij1", "bouw_zij2"):
+        if info["slice"] not in ("bouw_lucht", "bouw_water", "bouw_aarde", "bouw_vuur", "bouw_zij1", "bouw_zij2", "bouw_bikinibodem",
+                                 "bouw_schelpenstad"):
             missing.append(f"slice of {name}")
     salts = [i["salt"] for i in kit.STRUCTUREN.values()] + [i["salt"] + 7 for i in kit.STRUCTUREN.values()]
     if len(set(salts)) != len(salts):
         missing.append("a salt of STRUCTUREN is used twice")
-    if sorted(kit.STRUCTUREN) != sorted(kit.VERHAAL + kit.ZIJ):
-        missing.append("STRUCTUREN is not VERHAAL + ZIJ")
+    if sorted(kit.STRUCTUREN) != sorted(kit.VERHAAL + kit.ZIJ + kit.SPONS):
+        missing.append("STRUCTUREN is not VERHAAL + ZIJ + SPONS")
+    for name, info in kit.STRUCTUREN.items():
+        if (info["band"] == "laag") != (name in kit.SPONS) or (info["bij"] is None) != (info["ring"] is not None):
+            missing.append(f"band / bij of {name}")
     if missing:
         raise SystemExit(f"einde2: {missing}")
 
@@ -129,4 +176,5 @@ def build(h):
     advancements(h)
     texts(h)
     test_bouw(h)
+    test_tegel(h)
     selfcheck(h)

@@ -494,6 +494,7 @@ public class GuheindeGevecht extends SavedData {
         spawnBoss(level, null);
         broadcast(level, "gui.guhs.guheinde.aankomst", ChatFormatting.DARK_PURPLE);
         setDirty();
+        nl.juiced.guhs.feature.einde2.Einde2Haken.GEVECHT_BEGINT.forEach(h -> h.accept(level));   // hook fase B (einde2)
     }
 
     private void spawnBoss(ServerLevel level, @Nullable HongerigeEnderguhEntity mount) {

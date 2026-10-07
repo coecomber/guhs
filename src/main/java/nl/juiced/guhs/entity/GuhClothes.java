@@ -354,6 +354,10 @@ public enum GuhClothes {
     GUHWAII_SURFPLANKJE(Slot.BACK, "outfit_guhwaii_surfplank"),
     // </guhwaii>
     //
+    // einde2 (the Sponsguh story): the slice sponsguh_wezens adds its clothes ONLY between these two markers
+    // <einde2_sponsguh>
+    // </einde2_sponsguh>
+    //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
     // <px_lobby>
     // </px_lobby>

@@ -33,9 +33,7 @@ public final class Einde2Commando {
     }
 
     private static List<String> structuren() {
-        List<String> all = new ArrayList<>(Einde2Ids.VERHAAL_STRUCTUREN);
-        all.addAll(Einde2Ids.ZIJ_STRUCTUREN);
-        return all;
+        return new ArrayList<>(Einde2Ids.LEEGTE_STRUCTUREN);
     }
 
     static void register(RegisterCommandsEvent event) {

@@ -283,8 +283,9 @@ ANDERE_29 = {"sjoelen", "doolhof", "katapult", "knabbelspelen", "elftocht", "cir
 ANDERE_30 = {"timmerguh", "balto", "mewtwo", "hemel", "guhwaii"}
 # loot inside a feature's OWN building counts as that feature (the same logical source; 2.8 sets stay as 2.8 made them)
 # guhpixel: every slice registers the sources of its own pieces (marker blocks px_<slice> in GuhClothes)
+# einde2: the same for its marker blocks einde2_<slice>
 def _eigen_bron(marker):
-    return marker in ANDERE_29 or marker in ANDERE_30 or (marker or "").startswith("px_")
+    return marker in ANDERE_29 or marker in ANDERE_30 or (marker or "").startswith(("px_", "einde2_"))
 
 
 EIGEN_LOOT = {("boerderij_zakdoek", "guhboerderij.json")}

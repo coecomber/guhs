@@ -58,3 +58,44 @@
 | Guhvleugel-ringenrace | Guh Wing Ring Race |  |
 | Guhvatar | Guhvatar |  |
 | Mika-vesting | Mika Fortress | already in the glossary |
+| Sponsguh Kaasbroek | Spongeguh Cheesepants | the Sponsguh story (proposals: the well-known English names of the parodied show, guh-ified the same way) |
+| Patguh Ster | Patguh Star |  |
+| Meneer Krabguh | Mr. Krabguh |  |
+| Parel | Pearl |  |
+| Sandy-guh | Sandy Guh |  |
+| Gerrit | Gary | the snail |
+| Octo Tentakel | Squidmika Tentacles | Octo-Mika = Squidmika |
+| Octoliam | Squilliam |  |
+| Plankmika | Plankmika |  |
+| Karen | Karen |  |
+| juf Pufguh | Mrs. Puffguh |  |
+| koning Neptuguh | King Neptuguh |  |
+| prinses Mindy-guh | Princess Mindy Guh |  |
+| Dennis-Mika | Dennis Mika |  |
+| de Cycloop | the Cyclops |  |
+| David Hasselguh | David Hasselguh |  |
+| Zeemeerman | Mermaid Guh |  |
+| Mosselguh | Barnacle Guh |  |
+| De Vliegende Guhlander | The Flying Guhchman |  |
+| Bikinibodem | Bikini Bottom | structure |
+| Schelpenstad | Shell City | structure |
+| De Krokante Knabbel | The Krusty Nibble |  |
+| De Vetemmer | The Grease Bucket |  |
+| De Ruige Kroeg | The Thug Tug |  |
+| de loopgraaf | the Trench |  |
+| Bellenkom | Bubble Bowl |  |
+| Kwallenvelden | Jelly Fields |  |
+| Guhfy Guhber | Guhfy Guhber |  |
+| Knabbelburger | Nibble Patty |  |
+| Knabbelburgermobiel | Patty Wagon |  |
+| kwallenjam | Jelly Jam |  |
+| spooklantaarn | Ghost Lantern |  |
+| bellenblaas | Bubble Blower |  |
+| zeepbel | Soap Bubble |  |
+| bubbelstroom | Bubble Stream |  |
+| bloemwolk | Flower Cloud |  |
+| leegtemist | void mist |  |
+| besteltafel | Order Table |  |
+| grill | Grill |  |
+| vruchthuis | Fruit House |  |
+| heldencape | Hero Cape |  |

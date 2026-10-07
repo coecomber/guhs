@@ -13,7 +13,8 @@ import nl.juiced.guhs.Guhs;
 
 /**
  * einde2 (the Guheinde expansion): every id the slices share, in one place: the biomes of the outer islands, their tags,
- * the big places (the four story structures, the eight side places) and the height bands of the dimension. Complete from
+ * the big places (the four story structures, the eight side places, the two places of the Sponsguh story) and the height
+ * bands of the dimension. Complete from
  * the skeleton on: a slice reads it, nobody adds to it. The same numbers and names live in tools/features/einde2_kit.py
  * (the tags and structures themselves come from tools/features/einde2.py and the slices' modules).
  */
@@ -60,6 +61,8 @@ public final class Einde2Ids {
     /** The four story structures / the eight side places (structure tags). */
     public static final TagKey<Structure> VERHAAL = TagKey.create(Registries.STRUCTURE, Guhs.id("einde2/verhaal"));
     public static final TagKey<Structure> ZIJ = TagKey.create(Registries.STRUCTURE, Guhs.id("einde2/zij"));
+    /** The two places of the Sponsguh story (structure tag). */
+    public static final TagKey<Structure> SPONSGUH = TagKey.create(Registries.STRUCTURE, Guhs.id("einde2/sponsguh"));
 
     // --- structures -------------------------------------------------------------------------------------------------------
     public static final String ZUIDELIJKE_LUCHTTEMPEL = "zuidelijke_luchttempel", NOORDELIJKE_WATERSTAM = "noordelijke_waterstam",
@@ -68,11 +71,18 @@ public final class Einde2Ids {
             KYOSHI_DORP = "kyoshi_dorp", BIBLIOTHEEK_WAN_SHI_GUH = "bibliotheek_wan_shi_guh", LEEUWSCHILDPAD_EILAND = "leeuwschildpad_eiland",
             LEEGTEHAVEN = "leegtehaven", GUHVLEUGEL_RINGENRACE = "guhvleugel_ringenrace";
     public static final String MIKA_VESTING = "mika_vesting";
+    /** The Sponsguh story: the town deep under the islands and the place its road leads to (the deep band). */
+    public static final String BIKINIBODEM = "bikinibodem", SCHELPENSTAD = "schelpenstad";
     /** The four story structures, in chapter order. */
     public static final List<String> VERHAAL_STRUCTUREN = List.of(ZUIDELIJKE_LUCHTTEMPEL, NOORDELIJKE_WATERSTAM, BA_SING_GUH, VUURNATIE_HOOFDSTAD);
     /** The eight side places (the Superkompas tab "einde" lists them). */
     public static final List<String> ZIJ_STRUCTUREN = List.of(OMASHGUH, WESTELIJKE_LUCHTTEMPEL, VUURTEMPEL_ROKU, KYOSHI_DORP, BIBLIOTHEEK_WAN_SHI_GUH,
             LEEUWSCHILDPAD_EILAND, LEEGTEHAVEN, GUHVLEUGEL_RINGENRACE);
+    /** The two places of the Sponsguh story, in the order of the story (Schelpenstad stands next to the one Bikinibodem). */
+    public static final List<String> SPONS_STRUCTUREN = List.of(BIKINIBODEM, SCHELPENSTAD);
+    /** Every guhs:leegte_bouw of einde2: the story structures, the side places, the Sponsguh pair (fourteen). */
+    public static final List<String> LEEGTE_STRUCTUREN = java.util.stream.Stream.of(VERHAAL_STRUCTUREN, ZIJ_STRUCTUREN, SPONS_STRUCTUREN)
+            .flatMap(List::stream).toList();
     /** Side place -> the element its resident asks for (the others ask for none); see {@link Einde2Haken#ELEMENT_GELEERD}. */
     public static final Map<String, Element> ELEMENT_VAN = Map.of(OMASHGUH, Element.AARDE, WESTELIJKE_LUCHTTEMPEL, Element.LUCHT,
             VUURTEMPEL_ROKU, Element.VUUR, KYOSHI_DORP, Element.WATER);
@@ -80,6 +90,11 @@ public final class Einde2Ids {
     // --- the height bands of the Guheinde (y 0-255) ------------------------------------------------------------------------
     /** The high band: only guhs:leegte_bouw structures (the big places, each with its own floating island). */
     public static final int HOOG_MIN = 134, HOOG_MAX = 253;
+    /**
+     * The deep band: inside the natural band, but only in a spot where the Guheinde has no terrain at all (the two places of
+     * the Sponsguh story; see LeegteBouwStructure's {@code leeg} and {@code ruim}).
+     */
+    public static final int LAAG_MIN = 4, LAAG_MAX = 117;
     /** The top of the terrain and of every biome feature. */
     public static final int NATUUR_MAX = 119;
     /** The top of the buildings that stand on an island (Mika-vesting, terugpoort, decoration). */

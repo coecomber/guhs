@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.feature.einde2.Einde2;
 
 /**
- * einde2, client side (see {@link Einde2}): calls the client side of the fourteen slices and gives every stand-in
+ * einde2, client side (see {@link Einde2}): calls the client side of the seventeen slices and gives every stand-in
  * entity type that is still there ({@link Einde2#plaatshouders}) an empty renderer. Only called on the client.
  */
 public final class Einde2Client {
@@ -26,6 +26,9 @@ public final class Einde2Client {
         nl.juiced.guhs.feature.einde2.bouwvuur.client.E2BouwVuurClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij1.client.E2BouwZij1Client.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij2.client.E2BouwZij2Client.init(modBus);
+        nl.juiced.guhs.feature.einde2.sponsguh.client.E2SponsguhClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.bouwbikinibodem.client.E2BouwBikinibodemClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.bouwschelpenstad.client.E2BouwSchelpenstadClient.init(modBus);
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {
