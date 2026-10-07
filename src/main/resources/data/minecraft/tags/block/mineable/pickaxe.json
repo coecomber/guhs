@@ -139,6 +139,12 @@
     "guhs:knabbelkoorblok_plaat",
     "guhs:kruimelrots_stenen_muur",
     "guhs:schimmelkaas_stenen_muur",
-    "guhs:klipkaas_stenen_muur"
+    "guhs:klipkaas_stenen_muur",
+    "guhs:einde2_bouw_water_ijssteen",
+    "guhs:einde2_bouw_water_ijssteen_trap",
+    "guhs:einde2_bouw_water_ijssteen_plaat",
+    "guhs:einde2_bouw_water_ijslantaarn",
+    "guhs:einde2_bouw_water_stamteken",
+    "guhs:einde2_bouw_water_vuurnatie_teken"
   ]
 }

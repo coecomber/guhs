@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HR",
+    "RH"
+  ],
+  "key": {
+    "H": "guhs:houtskoolsteen_stenen",
+    "R": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_water_vuurnatie_teken",
+    "count": 2
+  }
+}

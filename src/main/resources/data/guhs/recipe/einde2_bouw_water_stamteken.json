@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SL",
+    "LS"
+  ],
+  "key": {
+    "S": "guhs:einde2_bouw_water_ijssteen",
+    "L": "minecraft:lapis_lazuli"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_water_stamteken",
+    "count": 2
+  }
+}

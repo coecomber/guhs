@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:noordelijke_waterstam",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21401008,
+    "min_afstand": 2000,
+    "max_afstand": 3200,
+    "sector": 4,
+    "sectoren": 16
+  }
+}

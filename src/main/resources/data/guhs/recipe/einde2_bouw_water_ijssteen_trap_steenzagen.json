@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:einde2_bouw_water_ijssteen",
+  "result": {
+    "id": "guhs:einde2_bouw_water_ijssteen_trap"
+  }
+}

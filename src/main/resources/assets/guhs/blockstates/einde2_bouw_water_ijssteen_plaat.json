@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/einde2_bouw_water_ijssteen_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/einde2_bouw_water_ijssteen_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/einde2_bouw_water_ijssteen"
+    }
+  }
+}
