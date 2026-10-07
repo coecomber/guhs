@@ -236,6 +236,7 @@ TEXTS = {
     "block.guhs.huisje_raam": "Huisjesraampje",
     "entity.guhs.huisje_slaper": "Slapende guh",
     "dimension.guhs.huisje_binnen": "In een Guhhuisje",
+    "biome.guhs.huisje_binnen": "In een Guhhuisje",
     "subtitles.guhs.huisje.bel": "Ding-dong, njeg",
     # the button in the huisje screen
     "gui.guhs.huisje.binnen.knop": "Naar binnen",

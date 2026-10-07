@@ -200,6 +200,10 @@ public final class BinnenCommando {
                     }
                     check.accept(dicht, maat.id() + ": floor and ceiling are closed");
                 }
+                if (gestempeld && maat == HuisjeMaat.KLEIN) {
+                    int dingen = BinnenInrichting.proef(level, net.minecraft.world.phys.Vec3.atBottomCenterOf(o.offset(k.mat())));
+                    check.accept(dingen == 3, "a blanket, a note and a thing on a table can stand in the dimension: " + dingen + " of 3");
+                }
                 Stempel.ruim(level, Stempel.doos(o, BinnenKamer.MAX).inflate(1));
                 Stempel.leeg(level, o, BinnenKamer.MAX);
             }

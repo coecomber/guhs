@@ -550,7 +550,7 @@ public final class Binnen {
                 opDeMat(p, h, k, true);
             }
             nuActief.add(h.cel);
-            if ((nu + h.cel) % 20 == 0) {
+            if ((nu + h.cel) % 20 == 0 || !BinnenInrichting.gebouwd(h.cel)) {
                 BinnenInrichting.ververs(level, h, k, false);
             }
             BinnenInrichting.tick(level, h, k, nu);

@@ -80,8 +80,12 @@ public final class BinnenInrichting {
                        ItemStack lievelings) {
     }
 
-    private record Staat(String teken, List<Slot> slots) {
+    /** What a room shows: who is where (as a text to compare), the slots, and how many things were put there. */
+    private record Staat(String teken, List<Slot> slots, int aantal) {
     }
+
+    /** Counts what {@link #bouw} puts in a room. */
+    private static int gezet;
 
     private static final Map<Integer, Staat> STATEN = new HashMap<>();
     private static final Map<UUID, Integer> AAI_RUST = new ConcurrentHashMap<>();
@@ -191,14 +195,24 @@ public final class BinnenInrichting {
 
     /** Brings the room up to date: rebuilt when something changed since the last look (or always with {@code altijd}). */
     static void ververs(ServerLevel level, Huisje h, BinnenKamer k, boolean altijd) {
+        if (!level.isPositionEntityTicking(BlockPos.containing(Binnen.mat(h, k)))) {
+            return;   // (the room's chunk is not ready for entities yet, a tick after somebody arrived: Binnen.tick asks again)
+        }
         List<Slot> slots = stand(level.getServer(), h);
         String teken = teken(slots);
         Staat oud = STATEN.get(h.cel);
-        if (!altijd && oud != null && oud.teken().equals(teken)) {
+        // unchanged, and everything that was put there still stands (whatever got lost is simply made again)
+        if (!altijd && oud != null && oud.teken().equals(teken) && dingen(level, h).size() == oud.aantal()) {
             return;
         }
+        gezet = 0;
         bouw(level, h, k, slots);
-        STATEN.put(h.cel, new Staat(teken, slots));
+        STATEN.put(h.cel, new Staat(teken, slots, gezet));
+    }
+
+    /** Was this cell's room furnished since somebody came in? */
+    static boolean gebouwd(int cel) {
+        return STATEN.containsKey(cel);
     }
 
     private static void bouw(ServerLevel level, Huisje h, BinnenKamer k, List<Slot> slots) {
@@ -262,7 +276,9 @@ public final class BinnenInrichting {
         g.setYBodyRot(yaw);
         g.slaap(true);
         g.addTag(Binnen.TAG);
-        level.addFreshEntity(g);
+        if (level.addFreshEntity(g)) {
+            gezet++;
+        }
     }
 
     /** At most three pieces of clothing on the hook beside the bed. */
@@ -342,8 +358,8 @@ public final class BinnenInrichting {
             x.snapTo(pos.x, pos.y, pos.z, yaw, 0f);
             return x;
         });
-        if (e != null) {
-            level.addFreshEntity(e);
+        if (e != null && level.addFreshEntity(e)) {
+            gezet++;
         }
     }
 
@@ -361,6 +377,14 @@ public final class BinnenInrichting {
             l.add(StringTag.valueOf(s));
         }
         return l;
+    }
+
+    /** (The zelftest) one blanket, one note and one thing on a table at this spot; returns how many of them stand there. */
+    static int proef(ServerLevel level, Vec3 pos) {
+        dek(level, pos, 0f, 0, true);
+        briefje(level, pos.add(0, 0.5, 0), Component.translatable("gui.guhs.huisje.binnen.briefje.buiten"));
+        item(level, new ItemStack(ModItems.KAAS_KNABBELS.get()), pos.add(1, 0, 0), 0f, "ground", 1.1f);
+        return level.getEntities((Entity) null, new AABB(pos, pos).inflate(3), e -> e.entityTags().contains(Binnen.TAG)).size();
     }
 
     /** Removes everything this class put in the room of this huisje. */
@@ -482,9 +506,9 @@ public final class BinnenInrichting {
                 }
             }
             dek(level, g.position(), g.getYRot(), bed, true);
-            STATEN.remove(h.cel);
+            Staat oud = STATEN.remove(h.cel);
             List<Slot> slots = stand(s, h);
-            STATEN.put(h.cel, new Staat(teken(slots), slots));
+            STATEN.put(h.cel, new Staat(teken(slots), slots, oud == null ? dingen(level, h).size() : oud.aantal()));
             level.sendParticles(BandFeature.GROOT_HARTJE.get(), g.getX(), g.getY() + 0.9, g.getZ(), 1, 0, 0, 0, 0);
             level.playSound(null, g.blockPosition(), SoundEvents.WOOL_PLACE, SoundSource.NEUTRAL, 0.6f, 1.3f);
             p.sendOverlayMessage(Component.translatable("gui.guhs.huisje.binnen.instoppen", g.getName()).withStyle(ChatFormatting.LIGHT_PURPLE));

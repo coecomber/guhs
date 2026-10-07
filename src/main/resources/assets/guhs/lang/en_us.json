@@ -6388,6 +6388,7 @@
   "block.guhs.huisje_raam": "Little House Window",
   "entity.guhs.huisje_slaper": "Sleeping Guh",
   "dimension.guhs.huisje_binnen": "Inside a Guh House",
+  "biome.guhs.huisje_binnen": "Inside a Guh House",
   "subtitles.guhs.huisje.bel": "Ding-dong, nyeg",
   "gui.guhs.huisje.binnen.knop": "Go inside",
   "gui.guhs.huisje.binnen.knop.tooltip": "Walk through the snoot door into the house. You are a little big for it, nyeg!",

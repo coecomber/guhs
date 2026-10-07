@@ -6388,6 +6388,7 @@
   "block.guhs.huisje_raam": "Huisjesraampje",
   "entity.guhs.huisje_slaper": "Slapende guh",
   "dimension.guhs.huisje_binnen": "In een Guhhuisje",
+  "biome.guhs.huisje_binnen": "In een Guhhuisje",
   "subtitles.guhs.huisje.bel": "Ding-dong, njeg",
   "gui.guhs.huisje.binnen.knop": "Naar binnen",
   "gui.guhs.huisje.binnen.knop.tooltip": "Loop door het snoetdeurtje het huisje in. Je bent wel een beetje groot, njeg!",

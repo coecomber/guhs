@@ -1757,5 +1757,6 @@
   "block.guhs.huisje_raam": "Little House Window",
   "entity.guhs.huisje_slaper": "Sleeping Guh",
   "dimension.guhs.huisje_binnen": "Inside a Guh House",
-  "subtitles.guhs.huisje.bel": "Ding-dong, nyeg"
+  "subtitles.guhs.huisje.bel": "Ding-dong, nyeg",
+  "biome.guhs.huisje_binnen": "Inside a Guh House"
 }

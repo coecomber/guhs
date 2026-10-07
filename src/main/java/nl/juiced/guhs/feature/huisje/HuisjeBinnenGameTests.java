@@ -214,6 +214,9 @@ public class HuisjeBinnenGameTests {
         helper.runAfterDelay(25, () -> {
             helper.assertTrue(BinnenInrichting.slots(s, h).size() == 2 && !BinnenInrichting.slots(s, h).get(1).guh(), "the muisje has the second bed now");
             helper.assertTrue(BinnenInrichting.dingen(level, h).stream().noneMatch(e -> e instanceof Display.TextDisplay), "the note is gone");
+            helper.assertTrue(BinnenInrichting.dingen(level, h).stream().filter(e -> e instanceof Display.BlockDisplay).count() == 2
+                    && BinnenInrichting.dingen(level, h).stream().filter(e -> e instanceof Display.ItemDisplay).count() >= 2, "two blankets and the things on the two bedside tables stand: "
+                    + BinnenInrichting.dingen(level, h).stream().map(e -> e.getType().toShortString()).toList());
             helper.assertTrue(bordje(level, h, k, 2).equals(net.minecraft.network.chat.Component.translatable("gui.guhs.huisje.binnen.bordje.vrij").getString()),
                     "the third bed is free again: " + bordje(level, h, k, 2));
             // the last one leaves: everything is removed; somebody comes in: it is made again
