@@ -297,7 +297,12 @@ public final class Sluiers {
      */
     public static int kenGegarandeerd(ServerLevel level) {
         var state = level.getChunkSource().getGeneratorState();
-        return kenGegarandeerd(level, state, level.getSeed(), structuur -> true);
+        int bekend = kenGegarandeerd(level, state, level.getSeed(), structuur -> true);
+        if (bekend > 0) {
+            com.mojang.logging.LogUtils.getLogger().info("Guhs: Guhdalfs sluier knows the {} story places of {} from their guaranteed spots (nobody has to come near first)",
+                    bekend, level.dimension().identifier());
+        }
+        return bekend;
     }
 
     /**
