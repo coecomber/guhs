@@ -88,9 +88,13 @@ public final class RingKetenGameTests {
         return p;
     }
 
-    /** One tick of this player's game: every chapter's own upkeep runs, as on a real server. */
-    private static void tik(ServerPlayer p) {
-        p.tickCount++;
+    /**
+     * One tick of this player's game: every chapter's own upkeep runs, as on a real server. The player's clock is set by
+     * the test, one tick at a time (whatever the test server does to a mock player's own counter): the once-a-second jobs
+     * of the chapters hang on it, each at its own moment of the second.
+     */
+    private static void tik(ServerPlayer p, int tijd) {
+        p.tickCount = tijd;
         NeoForge.EVENT_BUS.post(new PlayerTickEvent.Post(p));
     }
 
@@ -130,14 +134,20 @@ public final class RingKetenGameTests {
         Thuis.testLevel = level;
         ServerPlayer eerste = speler(helper, 12, 10), tweede = speler(helper, 13, 10);
         ServerPlayer[] aanDeBeurt = {eerste};
-        int[] fase = {0};
+        int[] fase = {0}, wacht = {0, 0}, klok = {0};
         helper.onEachTick(() -> {
             ServerPlayer p = aanDeBeurt[0];
             if (p == null) {
                 return;
             }
-            tik(p);
+            tik(p, ++klok[0]);
             Verhaallijn h1 = Ring.lijn(1);
+            // (a phase that waits for the game takes a second or two; one that waits much longer says where it hangs)
+            wacht[1] = wacht[0] == fase[0] ? wacht[1] + 1 : 0;
+            wacht[0] = fase[0];
+            helper.assertTrue(wacht[1] < 200, "the chain hangs: player " + (p == eerste ? 1 : 2) + ", phase " + fase[0] + ", step " + h1.stap(p) + " of chapter 1, begun "
+                    + Ring.begonnen(p) + ", may begin " + Ring.magBeginnen(p) + ", watching " + Cutscenes.bezig(p) + ", ring " + Ring.heeft(p) + ", Sam-guh "
+                    + (Sam.van(p) != null) + ", at " + p.blockPosition().subtract(helper.absolutePos(BlockPos.ZERO)).toShortString());
             switch (fase[0]) {
                 case 0 -> {
                     // --- the gate: nothing starts, nothing opens, until the Grillguh's barbecue burns --------------------------

@@ -402,21 +402,23 @@ public final class RingH6GameTests {
             helper.assertTrue(Berg.van(drager) == null && Klim.afstandTotBerg(drager) < Ring.ZWAAR_AFSTAND && Klim.afstandTotBerg(ver) > Ring.ZWAAR_AFSTAND,
                     "off the mountain, 50 blocks from its wall: " + Klim.afstandTotBerg(drager));
             helper.assertTrue(Klim.beschermdOpWeg(drager) && !Klim.beschermdOpWeg(gast) && !Klim.beschermdOpWeg(ver), "only the ring bearer of this chapter, only near the mountain");
-            float leven = drager.getHealth();
-            drager.hurtServer(level, level.damageSources().lava(), 4f);
-            drager.hurtServer(level, level.damageSources().inFire(), 1f);
-            helper.assertTrue(drager.getHealth() == leven && drager.getRemainingFireTicks() <= 0, "the frituur and fire do not burn the ring bearer on the way");
-            drager.hurtServer(level, level.damageSources().cactus(), 1f);
-            helper.assertTrue(drager.getHealth() < leven, "(other damage is as always: this is no safe zone)");
-            float gastLeven = gast.getHealth(), verLeven = ver.getHealth();
-            gast.hurtServer(level, level.damageSources().lava(), 4f);
-            ver.hurtServer(level, level.damageSources().lava(), 4f);
-            helper.assertTrue(gast.getHealth() < gastLeven && ver.getHealth() < verLeven, "a visitor, and the ring bearer far from the mountain: fire is fire");
+            // (the incoming-damage event itself: a mock player is spawn-invulnerable to everything but a fall, so its health says nothing)
+            helper.assertTrue(geweigerd(drager, level.damageSources().lava()) && geweigerd(drager, level.damageSources().inFire())
+                    && geweigerd(drager, level.damageSources().onFire()), "the frituur and fire do not burn the ring bearer on the way");
+            helper.assertTrue(!geweigerd(drager, level.damageSources().cactus()) && !geweigerd(drager, level.damageSources().fall())
+                    && !geweigerd(drager, level.damageSources().genericKill()), "(other damage is as always: this is no safe zone)");
+            helper.assertTrue(!geweigerd(gast, level.damageSources().lava()) && !geweigerd(ver, level.damageSources().lava()),
+                    "a visitor, and the ring bearer far from the mountain: fire is fire");
         } finally {
             nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Berg.STRUCTUUR);
             weg(helper, drager, gast, ver);
         }
         helper.succeed();
+    }
+
+    /** Does the game refuse this damage for this player (the incoming-damage event is cancelled)? */
+    private static boolean geweigerd(ServerPlayer p, net.minecraft.world.damagesource.DamageSource bron) {
+        return net.neoforged.neoforge.common.CommonHooks.onEntityIncomingDamage(p, new net.neoforged.neoforge.common.damagesource.DamageContainer(bron, 4f));
     }
 
     /** Home: the feast looks for flat open ground; the goal of step 6 is the landing spot. */

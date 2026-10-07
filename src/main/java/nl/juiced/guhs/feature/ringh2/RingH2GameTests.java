@@ -312,7 +312,7 @@ public final class RingH2GameTests {
      * copy, the house's plek) and is only shown to players whose own step is in its range. And a turned copy maps the bell
      * and the stone table the way a template is turned.
      */
-    @GuhTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH + "_scene")   // (its own batch: it ends with Kopieen.testWissen, which wipes every test copy of the level)
     public static void ringh2AlleenInHunEigenScene(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Verhaallijn lijn = RingH2Feature.LIJN;

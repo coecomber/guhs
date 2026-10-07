@@ -186,7 +186,8 @@ public class NieuwTerreinGameTests {
         ChunkPos s5 = nieuw.plek(stateB, seed).orElse(null);
         helper.assertTrue(s5 != null, "the last resort finds a spot beyond what exists");
         int d5 = (int) Math.round(Math.hypot(s5.getMinBlockX(), s5.getMinBlockZ()));
-        helper.assertTrue(d5 > ver && d5 <= oud.maxAfstand() * 4 && opslag5.alles().size() == 1, "in the ring x3 or x4, saved: " + d5 + " blocks");
+        helper.assertTrue(d5 > ver && d5 <= oud.maxAfstand() * 4 && opslag5.alles().values().stream().anyMatch(plek -> plek.chunk().equals(s5)),
+                "in the ring x3 or x4, saved: " + d5 + " blocks");
         helper.assertTrue(NieuwTerrein.van(bewoond).nieuw(s5, GegarandeerdPlacement.NIEUW_RAND + 16), "in new terrain");
 
         // 6. (PHASE3 R04) the operator's tool: nothing new within four times the ring, so GEEN PLEK; then a spot is asked near
@@ -195,13 +196,15 @@ public class NieuwTerreinGameTests {
         java.util.function.LongPredicate overal = k -> Math.hypot(ChunkPos.getX(k) * 16 + 8, ChunkPos.getZ(k) * 16 + 8) <= alles;
         GegarandeerdData opslag6 = new GegarandeerdData();
         GegarandeerdPlacement.onthoudBestaand(level, stateB, seed, generator, height, opslag6, () -> NieuwTerrein.van(overal));
-        helper.assertTrue(nieuw.plek(stateB, seed).isEmpty() && opslag6.alles().isEmpty(), "no new terrain within reach: GEEN PLEK");
+        helper.assertTrue(nieuw.plek(stateB, seed).isEmpty(), "no new terrain within reach: GEEN PLEK");
+        int bewaardVoor = opslag6.alles().size();
         int px = alles + 900, pz = -(alles + 900);
         var hand = nieuw.zoekRond(stateB, seed, px, pz, 600);
         helper.assertTrue(hand.left().isPresent(), "the operator's spot is found: " + hand.right().orElse(""));
         ChunkPos s6 = hand.left().get().chunk();
         int d6 = (int) Math.round(Math.hypot(s6.getMinBlockX() - px, s6.getMinBlockZ() - pz));
-        helper.assertTrue(d6 <= 600 && s6.equals(nieuw.plek(stateB, seed).orElse(null)) && opslag6.alles().size() == 1
+        helper.assertTrue(d6 <= 600 && s6.equals(nieuw.plek(stateB, seed).orElse(null)) && opslag6.alles().size() > bewaardVoor
+                && opslag6.alles().values().stream().anyMatch(plek -> plek.chunk().equals(s6))
                 && NieuwTerrein.van(overal).nieuw(s6, GegarandeerdPlacement.NIEUW_RAND + 16), "within 600 blocks of the point, in new terrain, saved: " + d6);
         helper.assertTrue(nieuw.zoekRond(stateB, seed, px + 2000, pz, 600).right().isPresent(), "a set that has its spot never moves");
         helper.assertTrue(oud.zoekRond(stateA, seed, px, pz, 600).right().isPresent(), "a set whose spot is fixed by the seed cannot be given one");

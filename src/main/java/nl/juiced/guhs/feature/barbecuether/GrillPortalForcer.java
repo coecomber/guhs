@@ -73,6 +73,14 @@ public final class GrillPortalForcer {
         BlockPos exitPos = scaledTarget(from.dimensionType(), target.dimensionType(), border, entity.getX(), entity.getY(), entity.getZ());
 
         Optional<BlockPos> existing = findClosestPortalPosition(target, exitPos, toBarbecue, border);
+        if (existing.isEmpty()) {
+            // (R14) the spot lies in or at a story structure: the portal for it stands outside the wall, where createPortal
+            // would build it. Look there before building, or every trip would add another frame next to the last one.
+            BlockPos buiten = nl.juiced.guhs.feature.verhaal.Sluiers.buitenAlleMuren(target, exitPos, MUUR_MARGE);
+            if (!buiten.equals(exitPos)) {
+                existing = findClosestPortalPosition(target, buiten, toBarbecue, border);
+            }
+        }
         BlockUtil.FoundRectangle rect;
         TeleportTransition.PostTeleportTransition post;
         if (existing.isPresent()) {
