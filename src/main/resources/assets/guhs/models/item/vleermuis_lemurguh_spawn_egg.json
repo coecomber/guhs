@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/vleermuis_lemurguh_spawn_egg"
+  }
+}

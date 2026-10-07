@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "guhs:block/kruimelkwal_pot"
+    },
+    "hanging=true": {
+      "model": "guhs:block/kruimelkwal_pot_hangend"
+    }
+  }
+}

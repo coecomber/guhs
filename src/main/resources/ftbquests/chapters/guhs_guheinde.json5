@@ -78,6 +78,18 @@
         "Komt na: OPPER-GEVADST!",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755489B1CA6ACF4",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_zwevers.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -768,6 +780,201 @@
       ],
       x: 6.0,
       y: 18.450000000000003,
+    },
+    {
+      id: "47554853F4D5793F",
+      icon: {
+        id: "guhs:kruimelkwal_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_kruimelkwal",
+          id: "475548D66AF3CF19",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D2AE80AC5E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:glass_bottle",
+          },
+          count: 3,
+        },
+        {
+          id: "475548B5ED139EB0",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+      shape: "gear",
+    },
+    {
+      id: "4755487E247ECC2E",
+      icon: {
+        id: "guhs:kruimelkwal_pot",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kruimelkwal_pot",
+          },
+          id: "475548E0FA880EC2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548764697BCF8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D05C0405DF",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548A9F00BDC3A",
+      icon: {
+        id: "guhs:vleermuis_lemurguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_vleermuis_lemurguh",
+          id: "4755484D5855D21F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F5AB4DB856",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:apple",
+          },
+          count: 4,
+        },
+        {
+          id: "47554838EC44465A",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+    },
+    {
+      id: "4755484B866D6CF8",
+      icon: {
+        id: "guhs:otter_pinguinguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_otter_pinguinguh",
+          id: "4755487A3733A30C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480318BCEE47",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:cod",
+          },
+          count: 4,
+        },
+        {
+          id: "475548128543D606",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548360D83FBB8",
+      icon: {
+        id: "guhs:das_molguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_das_molguh",
+          id: "475548085F512F5F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DD2030EADA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548537C0E283D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+    },
+    {
+      id: "47554827FF086DFC",
+      icon: {
+        id: "guhs:schildpad_eendguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_schildpad_eendguh",
+          id: "47554896F97AFFB9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487279C3D22B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:bread",
+          },
+          count: 4,
+        },
+        {
+          id: "475548B95BCDA21C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
     },
   ],
 }
