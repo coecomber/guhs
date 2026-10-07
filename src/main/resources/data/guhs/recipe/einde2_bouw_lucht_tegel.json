@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CB"
+  ],
+  "key": {
+    "C": "minecraft:calcite",
+    "B": "minecraft:light_blue_dye"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_lucht_tegel",
+    "count": 3
+  }
+}

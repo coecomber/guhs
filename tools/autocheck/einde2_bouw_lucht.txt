@@ -1,0 +1,137 @@
+# einde2, slice bouw_lucht, in a real generated world: the Zuidelijke Luchttempel from outside and inside, the five stages
+# of the Vredesballon, the workshop behind its door. (The Guheinde has no skylight, so no time of day.)
+# /guhs einde2 plek <structuur> <plek> teleports to a marker of the one guaranteed copy; /guhs einde2 bouw_lucht ... are
+# the slice's own dev-run commands.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_lucht.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/guhs einde2 plek zuidelijke_luchttempel aankomst_speler
+wait 200
+waitrender 400
+
+section the opening shot: the temple from the south
+/guhs einde2 plek zuidelijke_luchttempel uitzicht
+wait 40
+look 180 5
+waitrender 400
+hier
+shot e2_lucht_uitzicht
+
+section landing terrace, camp, stairs and gate
+/guhs einde2 plek zuidelijke_luchttempel aankomst_speler
+look 180 -10
+waitrender 200
+shot e2_lucht_aankomst
+/guhs einde2 plek zuidelijke_luchttempel appa_kamp
+look -90 5
+wait 40
+shot e2_lucht_kamp
+/guhs einde2 plek zuidelijke_luchttempel poort
+look 180 -15
+wait 40
+shot e2_lucht_poort
+
+section forecourt and the Hal van de Guhvatars
+/guhs einde2 plek zuidelijke_luchttempel aang
+look 180 -25
+waitrender 200
+shot e2_lucht_voorplein
+/guhs einde2 plek zuidelijke_luchttempel voetstuk_leeg
+/tp @s ~ ~2 ~8
+look 180 5
+waitrender 200
+shot e2_lucht_hal_noord
+look 90 0
+wait 20
+shot e2_lucht_hal_west
+look -90 0
+wait 20
+shot e2_lucht_hal_oost
+/guhs einde2 plek zuidelijke_luchttempel kyoshi_beeld
+look -90 -10
+wait 20
+shot e2_lucht_kyoshi
+/guhs einde2 plek zuidelijke_luchttempel roku_beeld
+look -90 -10
+wait 20
+shot e2_lucht_roku
+
+section training: taartenterras, luchtbalveld, luchtscooter-baan, zweefringen
+/guhs einde2 plek zuidelijke_luchttempel guhatso
+look 90 10
+waitrender 200
+shot e2_lucht_taartenterras
+/guhs einde2 plek zuidelijke_luchttempel luchtbal_start_speler
+look 180 15
+wait 40
+shot e2_lucht_luchtbal
+/guhs einde2 plek zuidelijke_luchttempel scooter_start
+look 110 5
+waitrender 200
+shot e2_lucht_scooter_start
+/guhs einde2 plek zuidelijke_luchttempel scooter_finish
+look 160 5
+waitrender 200
+shot e2_lucht_scooter_finish
+/guhs einde2 plek zuidelijke_luchttempel zweef_start
+look 0 20
+waitrender 300
+shot e2_lucht_zweef_start
+
+section Appa's stable and the two towers
+/guhs einde2 plek zuidelijke_luchttempel appa
+look 0 -5
+waitrender 200
+shot e2_lucht_stal
+/guhs einde2 plek zuidelijke_luchttempel momo
+look 180 0
+wait 40
+shot e2_lucht_keuken
+/guhs einde2 plek zuidelijke_luchttempel bed_speler
+/tp @s ~-2 ~ ~3
+look 180 10
+wait 40
+shot e2_lucht_slaapzaal
+/guhs einde2 plek zuidelijke_luchttempel momo_eind
+/tp @s ~ ~ ~4
+look 180 15
+wait 40
+shot e2_lucht_momo_nest
+
+section the workshop: shut, then open for a look inside
+/guhs einde2 plek zuidelijke_luchttempel werkplaatsdeur
+/tp @s ~-5 ~ ~
+look -90 0
+waitrender 200
+shot e2_lucht_deur_dicht
+/guhs einde2 plek zuidelijke_luchttempel werktuigguh
+look 0 5
+waitrender 200
+shot e2_lucht_werkplaats_zuid
+look 180 0
+wait 20
+shot e2_lucht_werkplaats_noord
+
+section the Vredesballon in five stages
+/guhs einde2 plek zuidelijke_luchttempel vredesballon_teller
+/tp @s ~-4 ~8 ~2
+look -35 -15
+/guhs einde2 bouw_lucht ballon 0
+waitrender 200
+shot e2_lucht_ballon_0
+/guhs einde2 bouw_lucht ballon 1
+wait 40
+shot e2_lucht_ballon_1
+/guhs einde2 bouw_lucht ballon 2
+wait 40
+shot e2_lucht_ballon_2
+/guhs einde2 bouw_lucht ballon 3
+wait 40
+shot e2_lucht_ballon_3
+/guhs einde2 bouw_lucht ballon 4
+wait 40
+shot e2_lucht_ballon_4
+/guhs einde2 bouw_lucht ballon 5
+wait 40
+shot e2_lucht_ballon_5
+/guhs einde2 bouw_lucht ballon 0

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " K ",
+    "KPK",
+    " K "
+  ],
+  "key": {
+    "K": "minecraft:copper_ingot",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_lucht_tandwiel",
+    "count": 2
+  }
+}
