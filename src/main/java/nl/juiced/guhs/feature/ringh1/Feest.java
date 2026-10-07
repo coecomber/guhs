@@ -36,7 +36,6 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
-import nl.juiced.guhs.feature.barbecuether.Grillguh;
 import nl.juiced.guhs.feature.ring.Cast;
 import nl.juiced.guhs.feature.ring.Ring;
 import nl.juiced.guhs.feature.ring.RingBeloning;
@@ -130,14 +129,12 @@ public final class Feest {
         return Ring.doel(Gouw.STRUCTUUR);
     }
 
-    /** May this player start the story: the Grillguh's quest is done (they lit a grill portal)? */
-    public static boolean magBeginnen(ServerPlayer p) {
-        return Grillguh.step(p) >= Grillguh.DONE;
-    }
-
-    /** (once a second per player) the story starts by itself once the Grillguh's barbecue burns: "zoek Guhdalf". */
+    /**
+     * (once a second per player) the story starts by itself once the player may start it ({@link Ring#magBeginnen}: the
+     * Grillguh's barbecue burns): "zoek Guhdalf".
+     */
     static void begin(ServerPlayer p) {
-        if (!lijn().begonnen(p) && lijn().stap(p) == 0 && magBeginnen(p)) {
+        if (!lijn().begonnen(p) && lijn().stap(p) == 0 && Ring.magBeginnen(p)) {
             lijn().begin(p);
         }
     }
@@ -180,7 +177,7 @@ public final class Feest {
         }
         switch (stap) {
             case 0 -> {
-                if (!magBeginnen(p)) {
+                if (!Ring.magBeginnen(p)) {
                     GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
                     return;
                 }

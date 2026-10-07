@@ -29,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
+import nl.juiced.guhs.feature.barbecuether.Grillguh;
 import nl.juiced.guhs.feature.ringh1.RingH1Feature;
 import nl.juiced.guhs.feature.ringh2.RingH2Feature;
 import nl.juiced.guhs.feature.ringh3.RingH3Feature;
@@ -75,7 +76,7 @@ public final class Ring {
     /** Why a player was put back on their rest point (the message quest.guhs.ring.terug.&lt;reden&gt;). */
     public static final String NEGEN = "negen", OOG = "oog", GEVALLEN = "gevallen";
 
-    static final String OM_TEKST = "quest.guhs.ring.om", AF_TEKST = "quest.guhs.ring.af";
+    static final String OM_TEKST = "quest.guhs.ring.om", AF_TEKST = "quest.guhs.ring.af", OM_SPEL_TEKST = "quest.guhs.ring.om.spel";
     private static final String GEGEVEN = "guhs_ring_gegeven";
     private static final Identifier ZWAAR = Guhs.id("ring_zwaar");
     /** How much slower the heaviest ring makes its bearer (x the walking speed). */
@@ -113,6 +114,32 @@ public final class Ring {
     /** The six chapters in order (without the extra stop). */
     public static List<Verhaallijn> lijnen() {
         return List.of(lijn(1), lijn(2), lijn(3), lijn(4), lijn(5), lijn(6));
+    }
+
+    // --- the two gates (each question has exactly ONE answer in the code: these two methods) ------------------------------------
+
+    /**
+     * THE gate of the story: may this player START the Knabbelring? Today: the Grillguh's quest is done (they lit a grill
+     * portal). Everybody who wants to know asks here and nowhere else: the start by itself once a second
+     * ({@code ringh1.Feest.begin}), Guhdalf at his camp ({@code ringh1.Feest.praat}), and through {@link #begonnen} the
+     * objective line, "Mijn verhaal" and Sam-guh (a line is only followed once it has begun). A later precondition (the
+     * stories that have to be done first) is added HERE, with its own text at Guhdalf
+     * ({@code quest.guhs.ringh1.guhdalf.grillguh} is the text of today's only condition).
+     */
+    public static boolean magBeginnen(ServerPlayer p) {
+        return Grillguh.step(p) >= Grillguh.DONE;
+    }
+
+    /**
+     * THE gate of the grill portal: may this player go through it from the Guhmensie to the Guhbarbecuether? Today: ALL of
+     * chapter 1 is done (the last step of ring_h1), for everybody, creative players and who was there before included;
+     * spectators pass. The portal block asks here through the one lock of {@code RingFeature.register}
+     * ({@code GrillPortalBlock.SLOTEN}), which is only ever asked on the way THERE: the way back (Barbecuether ->
+     * Guhmensie) is never asked, and nothing moves a player who is in the Barbecuether without this. A later precondition
+     * is added HERE.
+     */
+    public static boolean magDoorPortaal(ServerPlayer p) {
+        return p.isSpectator() || lijn(1).klaar(p);
     }
 
     /** Did this player start the story (talked to Guhdalf, or is somewhere in chapter 1 or later)? */
@@ -225,9 +252,26 @@ public final class Ring {
         return sinds == null ? 0 : (int) Math.max(1, p.level().getGameTime() - sinds);
     }
 
-    /** Puts the ring on or takes it off (only a player who carries it can wear it). Returns whether it is on afterwards. */
+    /**
+     * May this player wear the ring right now? Not inside a game ({@code Minigames.playing}: a Super Guhrio level, a race,
+     * the Guhpixel games...): the ring is a thing of the story's own world. Worn in a castle level it would call the Nine
+     * into a sealed hall, who then put the player on their rest point outside (the level ends), and it would hide the
+     * player from nothing there (PHASE3 R09).
+     */
+    public static boolean magOm(ServerPlayer p) {
+        return Minigames.playing(p) == null;
+    }
+
+    /**
+     * Puts the ring on or takes it off (only a player who carries it can wear it, and not inside a game: {@link #magOm}).
+     * Returns whether it is on afterwards.
+     */
     public static boolean doeOm(ServerPlayer p, boolean aan) {
         boolean was = om(p);
+        if (aan && !was && heeft(p) && !magOm(p)) {
+            p.sendOverlayMessage(Component.translatable(OM_SPEL_TEKST).withStyle(ChatFormatting.GRAY));
+            return false;
+        }
         if (aan && heeft(p)) {
             if (!was) {
                 OM.put(p.getUUID(), p.level().getGameTime());

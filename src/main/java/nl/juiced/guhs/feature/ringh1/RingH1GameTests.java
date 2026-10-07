@@ -52,6 +52,7 @@ import nl.juiced.guhs.feature.verhaal.Doel;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.verhaal.Verteller;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 import nl.juiced.guhs.feature.wereld.Bezetting;
 import nl.juiced.guhs.feature.wereld.Kopieen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
@@ -314,6 +315,92 @@ public final class RingH1GameTests {
             }
             helper.succeed();
         });
+    }
+
+    /**
+     * PHASE3 R03: an old big barbecueput where Bezetting's own strip had no free spot for the camp (players built there).
+     * The wider search knows spots in all four turns and a ring further out, none of them in the pit and all within
+     * Bezetting's reach; it takes a free one (turned) and never one over something built; what it placed is kept and is
+     * "the camp of this pit" for everybody who asks. And the operator's camp: exactly where they stand, facing where they
+     * look, one per pit, never in the pit; forgetting it makes room for another.
+     */
+    @GuhTest(template = KAMER, batch = BATCH + "_kamp2")
+    public static void ringh1KampRuimerEnVanDeOperator(GameTestHelper helper) throws ReflectiveOperationException {
+        ServerLevel level = helper.getLevel();
+        Structure structure = Kopieen.structuur(level, Gouw.PUT);
+        // (the pit lies south of the room, as in ringh1KampBijOudePut: its box starts at room z 16)
+        BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3)).subtract(Gouw.KEUZES.get(0));
+        StructurePoolElement element = StructurePoolElement.single("guhs:" + Gouw.PUT_STUK).apply(StructureTemplatePool.Projection.RIGID);
+        BoundingBox box = element.getBoundingBox(level.getStructureManager(), pos, Rotation.NONE);
+        StructurePiece piece = new PoolElementStructurePiece(level.getStructureManager(), element, pos, 0, Rotation.NONE, box, LiquidSettings.IGNORE_WATERLOGGING);
+        StructureStart start = new StructureStart(structure, ChunkPos.containing(pos), 0, new PiecesContainer(List.of(piece)));
+        String tag = Bezetting.tag(Gouw.KAMP, start);
+        Gouw.Kampen kampen = Gouw.Kampen.get(level);
+        Kopieen.test(level, start);
+        try {
+            kampen.vergeet(tag);
+            // the spots of the wider search
+            List<Gouw.Plek> keuzes = Gouw.ruimereKeuzes(start);
+            java.util.Set<Rotation> draaien = new java.util.HashSet<>();
+            BlockPos midden = pos.offset(Gouw.PUT_MIDDEN);
+            for (Gouw.Plek k : keuzes) {
+                draaien.add(k.draai());
+                helper.assertTrue(!k.doos().intersects(box), "a spot of the wider search cuts into the pit: " + k);
+                BlockPos g = k.wereld(Gouw.GUHDALF);
+                helper.assertTrue(Math.abs(g.getX() - midden.getX()) <= Gouw.KAMP_ZOEK && Math.abs(g.getZ() - midden.getZ()) <= Gouw.KAMP_ZOEK,
+                        "Guhdalf of a spot of the wider search stands out of Bezetting's reach: " + k);
+            }
+            helper.assertTrue(draaien.size() == 4 && keuzes.size() > Gouw.KEUZES.size(), "all four turns, more spots than Bezetting's own 48: " + keuzes.size());
+            // Bezetting found no room on its own strip (written by hand: the land around the test is not ours to fill)
+            var veld = Bezetting.Geplaatst.class.getDeclaredField("plekken");
+            veld.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Long> geplaatst = (java.util.Map<String, Long>) veld.get(Bezetting.Geplaatst.get(level));
+            geplaatst.put(tag, Long.MIN_VALUE);
+            helper.assertTrue(Bezetting.Geplaatst.get(level).gehad(Gouw.KAMP, start) && Gouw.kampVan(level, start) == null, "no camp: the strip was full");
+            // a spot where somebody built is not taken; then nothing is left: remembered, not tried again
+            Gouw.Plek plek = new Gouw.Plek(helper.absolutePos(new BlockPos(18, 2, 1)), Rotation.CLOCKWISE_90);
+            BlockPos muur = plek.wereld(new BlockPos(7, 2, 5));
+            level.setBlock(muur, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekRuimer(level, start, List.of(plek)) == null && kampen.geen(tag) && !level.getBlockState(plek.wereld(Gouw.TAFEL)).is(RingH1Feature.FEESTTAFEL.get()),
+                    "never over something a player built");
+            helper.assertTrue(Gouw.zoekRuimer(level, start, List.of(plek)) == null, "and the pit is not tried again by itself");
+            // the same spot, free: the camp stands there, turned, and is this pit's camp from now on
+            level.setBlock(muur, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            kampen.vergeet(tag);
+            Gouw.Plek kamp = Gouw.zoekRuimer(level, start, List.of(plek));
+            helper.assertTrue(kamp != null && kamp.draai() == Rotation.CLOCKWISE_90 && kamp.hoek().equals(plek.hoek()), "the camp stands on the free spot, turned: " + kamp);
+            helper.assertTrue(level.getBlockState(kamp.wereld(Gouw.TAFEL)).is(RingH1Feature.FEESTTAFEL.get()), "with its party table where a turned camp has it");
+            Gouw.Plek gevonden = Gouw.kampVan(level, start), gelezen = Gouw.kampBij(level, kamp.wereld(Gouw.GUHDALF));
+            helper.assertTrue(kamp.equals(gevonden) && kamp.equals(Gouw.kampBijPut(level, kamp.hoek())) && kamp.equals(Gouw.zoekRuimer(level, start, List.of())),
+                    "it is the camp of this pit, for Bezetting's Guhdalf and Sam-guh too: " + gevonden);
+            helper.assertTrue(gelezen.draai() == kamp.draai() && gelezen.hoek().equals(kamp.hoek()), "and the scenes read its turn back from the table: " + gelezen);
+            Bescherming.wisDozen(level, Gouw.KAMP);
+            Gouw.beschermBijChunk(level, ChunkPos.containing(midden));
+            helper.assertTrue(Bescherming.beschermd(level, kamp.wereld(Gouw.TAFEL)), "a chunk of the pit loads: the camp is a protected box (R21)");
+            // the operator: forget it, put it down by hand
+            BlockPos voeten = helper.absolutePos(new BlockPos(12, 3, 9));
+            String vergeten = Gouw.vergeetKampBijPut(level, voeten);
+            helper.assertTrue(Gouw.kampVan(level, start) == null && vergeten.startsWith("forgotten"), "forgotten: " + vergeten);
+            String nee = Gouw.zetKampBijPut(level, voeten, net.minecraft.core.Direction.SOUTH);
+            Gouw.Plek hand = Gouw.kampVan(level, start);
+            helper.assertTrue(nee == null && hand != null && hand.draai() == Rotation.NONE && hand.hoek().equals(voeten.below().offset(-7, 0, -5)),
+                    "the operator's camp stands where they stand, its open side where they look: " + nee + " " + hand);
+            helper.assertTrue(level.getBlockState(hand.wereld(Gouw.TAFEL)).is(RingH1Feature.FEESTTAFEL.get()) && Bescherming.beschermd(level, hand.wereld(Gouw.TAFEL)),
+                    "with its table, protected at once");
+            helper.assertTrue(Gouw.zetKampBijPut(level, voeten, net.minecraft.core.Direction.SOUTH) != null, "one camp per pit");
+            kampen.vergeet(tag);
+            helper.assertTrue(Gouw.zetKampBijPut(level, midden, net.minecraft.core.Direction.SOUTH) != null && Gouw.kampVan(level, start) == null, "never in the pit itself");
+            helper.assertTrue(Gouw.zetKampBijPut(level, helper.absolutePos(new BlockPos(12, 3, 9)).offset(400, 0, 0), net.minecraft.core.Direction.SOUTH) != null,
+                    "and not where there is no big pit");
+        } finally {
+            kampen.vergeet(tag);
+            Bezetting.Geplaatst.get(level).vergeet(Gouw.KAMP, start);
+            Kopieen.testWissen(level);
+            Bescherming.wisDozen(level, Gouw.KAMP);
+            ruimOp(helper);
+        }
+        helper.succeed();
     }
 
     /**
