@@ -23,7 +23,7 @@ there), the props a scene needs and its zones. In street order:
 import math
 
 from features import guheinde_bouw as gb
-from features.einde2_bouw_bikinibodem_bouw import (ARCHIEF, CAMERA, G, Hoek, KASSA, KLARINET, KLUIS, KORAAL, KSTEEN, LAMP, PORTRET, ROTS, STEEN_MUUR,
+from features.einde2_bouw_bikinibodem_bouw import (ARCHIEF, CAMERA, G, Hoek, KASSA, KLARINET, KLUIS, KORAAL, KSTEEN, LAMP, PORTRET, ROTS, STEEN, STEEN_MUUR,
                                                    STROOM, V)
 
 GLAS = "minecraft:glass"
