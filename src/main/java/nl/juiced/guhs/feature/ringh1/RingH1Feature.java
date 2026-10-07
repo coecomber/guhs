@@ -72,7 +72,7 @@ public final class RingH1Feature {
     private static final Vec3 GUHDALF = new Vec3(0.5, 0, 0.5), SPELER = new Vec3(0.5, 0, 3.5), MIDDEN = new Vec3(-1.5, 1.0, 2.0);
 
     /** Guhdalf has arrived: what is going on, and why there is a party first. */
-    public static final Cutscene AANKOMST = Cutscene.maak(AANKOMST_ID).duur(600).bij("ring_h1").kaart(KAART).verbergEcht(14)
+    public static final Cutscene AANKOMST = Cutscene.maak(AANKOMST_ID).duur(600).bij("ring_h1").kaart(KAART).verbergEcht(14).cameraOntwijkt()
             .speler(SPELER, 180)
             .npc("guhdalf", GuhNpcEntity.Kind.GUHDALF, GUHDALF, 0)
             .guh("sam", GuhVariant.SAM_GUH, new Vec3(-5.5, 0, 3.5), 270)
@@ -111,7 +111,7 @@ public final class RingH1Feature {
             .registreer();
 
     /** The farewell party: the cake, the speech, the ring, Sam-guh who is coming along whether you like it or not. */
-    public static final Cutscene FEEST = Cutscene.maak(FEEST_ID).duur(820).bij("ring_h1").kaart(KAART).verbergEcht(14)
+    public static final Cutscene FEEST = Cutscene.maak(FEEST_ID).duur(820).bij("ring_h1").kaart(KAART).verbergEcht(14).cameraOntwijkt()
             .speler(new Vec3(-1.5, 0, 3.5), 180)
             .npc("guhdalf", GuhNpcEntity.Kind.GUHDALF, GUHDALF, 0)
             .guh("sam", GuhVariant.SAM_GUH, new Vec3(-4.5, 0, 2.5), 250)

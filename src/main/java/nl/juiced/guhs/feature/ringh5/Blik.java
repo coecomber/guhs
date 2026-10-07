@@ -133,11 +133,11 @@ public final class Blik {
         return n;
     }
 
-    /** Who keeps the Eye awake: every player in this copy, within reach, whose story is not done yet. */
+    /** Who keeps the Eye awake: every player in this copy, within reach, who is not past the gate yet ({@link Hoofdstuk#voorbij}). */
     public static List<ServerPlayer> aanwezig(ServerLevel level, Terrein t, Vec3 oog) {
         List<ServerPlayer> uit = new ArrayList<>();
         for (ServerPlayer p : level.players()) {
-            if (p.isAlive() && !p.isSpectator() && !p.isCreative() && !Ring.klaar(p) && p.distanceToSqr(oog) <= BEREIK * BEREIK && t.bevat(p.position())) {
+            if (p.isAlive() && !p.isSpectator() && !p.isCreative() && !Hoofdstuk.voorbij(p) && p.distanceToSqr(oog) <= BEREIK * BEREIK && t.bevat(p.position())) {
                 uit.add(p);
             }
         }

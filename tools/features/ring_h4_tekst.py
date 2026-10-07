@@ -104,6 +104,7 @@ TEKSTEN = {
     # the mirror
     Q + "spiegel.donker": "De schaal is leeg en donker. Guhladriel moet hem eerst vullen, njeg.",
     Q + "spiegel.eigen_snoet": "Je ziet alleen je eigen snoet. Mooi hoor.",
+    Q + "spiegel.kalm": "De spiegel is weer kalm: hij heeft je alles laten zien. Nog eens kijken? Guhdex > Verhalen > Opnieuw bekijken, njeg.",
     # Leguhlas and Gimguh on the quay
     Q + "leguhlas.steiger.later": "Deze bootjes zijn van elfenhout. Ze zinken nooit. Tenzij Gimguh erin gaat staan.",
     Q + "leguhlas.steiger.wacht.0": "Eerst naar Vrouwe Guhladriel, boven in de Grote Spies. De bootjes lopen niet weg. Varen wel, maar niet zonder mij.",

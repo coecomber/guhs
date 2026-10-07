@@ -105,6 +105,11 @@ public final class Klim {
             return;
         }
         if (!opDeBergWereld(level)) {
+            if (stap == 5 && lijn.vlag(p, Finale.GEFRITUURD)) {
+                // (PHASE3 R16) the ring is fried but the Rookguhs never flew this player home (a logout in the flight scene,
+                // and then they left the Barbecuether by themselves): the feast still has to find them
+                Finale.vlucht(p, null);
+            }
             return;
         }
         // the chapter opens: the narrator card with the map (once)
@@ -184,15 +189,32 @@ public final class Klim {
         if (stap > 4 || !Ring.heeft(p)) {
             return;
         }
+        double dichtst = afstandTotBerg(p);
+        if (dichtst < Ring.ZWAAR_AFSTAND) {
+            Ring.zetZwaarte(p, ZWAAR_VOET * 0.75 * (1 - dichtst / Ring.ZWAAR_AFSTAND), 45);
+        }
+    }
+
+    /** How far (blocks, sideways) this player is from the nearest Frituurberg of their level (MAX_VALUE: none known). */
+    static double afstandTotBerg(ServerPlayer p) {
         double dichtst = Double.MAX_VALUE;
         for (Sluiers.Zone berg : Sluiers.zones(p.level(), Berg.STRUCTUUR)) {
             double dx = Math.max(Math.max(berg.x0() - p.getX(), 0), p.getX() - (berg.x1() + 1));
             double dz = Math.max(Math.max(berg.z0() - p.getZ(), 0), p.getZ() - (berg.z1() + 1));
             dichtst = Math.min(dichtst, Math.sqrt(dx * dx + dz * dz));
         }
-        if (dichtst < Ring.ZWAAR_AFSTAND) {
-            Ring.zetZwaarte(p, ZWAAR_VOET * 0.75 * (1 - dichtst / Ring.ZWAAR_AFSTAND), 45);
-        }
+        return dichtst;
+    }
+
+    /**
+     * PHASE3 R15 (DESIGN_130 0: failing never costs items or lives): the Frituurberg is an island in the frituur sea and
+     * the ring already slows its bearer from {@link Ring#ZWAAR_AFSTAND} blocks on. In that same approach the ring bearer
+     * whose chapter this is (not done) is not burnt: neither by the frituur they have to cross nor by fire. On the mountain
+     * itself nobody is ({@link RingH6Events}); a visitor on the way there who is not at this chapter gets nothing special.
+     */
+    static boolean beschermdOpWeg(ServerPlayer p) {
+        Verhaallijn lijn = lijn();
+        return opDeBergWereld(p.level()) && lijn.aanDeBeurt(p) && !lijn.klaar(p) && Ring.begonnen(p) && afstandTotBerg(p) < Ring.ZWAAR_AFSTAND;
     }
 
     /** Step 0 -> 1: the base camp. Sam-guh and Smikagol say their piece; from here it goes up. */

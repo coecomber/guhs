@@ -125,9 +125,10 @@ public final class RingFeature {
         NeoForge.EVENT_BUS.register(RingEvents.class);
         NeoForge.EVENT_BUS.addListener(RingCommands::register);
 
-        // the portal lock: Guhmensie -> Barbecuether only after ALL of chapter 1, for everybody (the hook is only ever
-        // asked on the way there; the way back is never blocked). Other entities than players are let through.
-        GrillPortalBlock.SLOTEN.add((level, entity) -> entity instanceof ServerPlayer p && !p.isSpectator() && !Ring.lijn(1).klaar(p)
+        // the portal lock: Guhmensie -> Barbecuether only for who Ring.magDoorPortaal lets through (today: ALL of chapter 1,
+        // for everybody). The hook is only ever asked on the way there; the way back is never blocked. Other entities than
+        // players are let through.
+        GrillPortalBlock.SLOTEN.add((level, entity) -> entity instanceof ServerPlayer p && !Ring.magDoorPortaal(p)
                 ? Component.translatable(PORTAAL_DICHT) : null);
 
         // the travel map of the Guhdex (the picture and the names: tools/features/ring.py reiskaart)
@@ -149,7 +150,7 @@ public final class RingFeature {
         }
         Verhaallijn eerste = Ring.lijn(1);
         eerste.opStap((p, oud, nieuw) -> {
-            if (nieuw >= eerste.stappen() && oud < eerste.stappen()) {
+            if (nieuw >= eerste.stappen() && oud < eerste.stappen() && Ring.magDoorPortaal(p)) {
                 p.sendSystemMessage(Component.translatable("quest.guhs.ring.portaal_open").withStyle(ChatFormatting.GOLD));
             }
         });

@@ -111,6 +111,16 @@ public final class Hoofdstuk {
         return lijn().aanDeBeurt(p) && !lijn().klaar(p) && Ring.begonnen(p);
     }
 
+    /**
+     * Is this player past the gate for good: THEIR chapter 5 is done (or the whole story)? Then the valley leaves them
+     * alone: the Eye does not look for them, the guards of het Wachthek and the riders in the lane let them walk. Sneaking
+     * is the puzzle of this chapter, not a toll for every later visit: a player who finished it and has to go back (a copy
+     * of the gate can stand closed in on its far side, CONTRACT_130 13.16) simply walks back through the valley.
+     */
+    public static boolean voorbij(ServerPlayer p) {
+        return lijn().klaar(p) || Ring.klaar(p);
+    }
+
     // =====================================================================================================================
     // once a second, per player
     // =====================================================================================================================
@@ -674,13 +684,13 @@ public final class Hoofdstuk {
         return w;
     }
 
-    /** A rider of the Nine on its round in the lane; gone for whoever finished the whole story. */
+    /** A rider of the Nine on its round in the lane; gone for whoever finished this chapter ({@link #voorbij}). */
     @Nullable
     static KnekelRuiterEntity maakRuiter(ServerLevel level, List<BlockPos> ronde, Vec3 plek, Rotation draai) {
         Terrein t = terrein(level, ronde.get(0), plek, draai);
         KnekelRuiterEntity r = Negen.maakPatrouille(level, ronde.stream().map(t::wereld).toList());
         if (r != null) {
-            Zicht.alleenBij(r, "ring_h6", 0, Math.max(0, Ring.lijn(6).stappen() - 1));
+            Zicht.alleenBij(r, lijn().id(), 0, STAPPEN - 1);
         }
         return r;
     }

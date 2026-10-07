@@ -43,7 +43,7 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
 public final class RingH4Events {
     static final String Q = "quest.guhs.ringh4.";
     /** How near a "place" step counts as reached (blocks). */
-    public static final double POORT_BEREIK = 9, VUUR_BEREIK = 4.5, AANLEG_BEREIK = 7;
+    public static final double POORT_BEREIK = 9, VUUR_BEREIK = 4.5, AANLEG_BEREIK = 7, STEIGER_BEREIK = 10;
     /** (not saved) the last time a player's copy was looked up: once every 2 seconds is enough. */
     private static final Map<UUID, Long> GEKEKEN = new ConcurrentHashMap<>();
 
@@ -89,6 +89,13 @@ public final class RingH4Events {
             default -> {
                 if (!p.isPassenger() && hier.distanceTo(kopie.punt("aanleg")) <= AANLEG_BEREIK && Duwtje.mag(p)) {
                     klaar(p, false);
+                } else if (!p.isPassenger() && hier.distanceTo(kopie.punt("steiger")) <= STEIGER_BEREIK && tijd % 160 < 40) {
+                    // (PHASE3 R17) the one guide boat is down the river with somebody else, and Leguhlas and Gimguh with it:
+                    // whoever waits on the empty quay hears why (about every 8 seconds; the trip takes about a minute)
+                    ElfenbootjeEntity boot = Vaart.boot(p.level(), kopie.punt("boot"), ElfenbootjeEntity.GIDS);
+                    if (boot != null && boot.isWeg()) {
+                        p.sendOverlayMessage(Component.translatable(Q + "leguhlas.steiger.bootje_weg").withStyle(ChatFormatting.AQUA));
+                    }
                 }
             }
         }
