@@ -109,6 +109,13 @@ public final class BouwCheck {
                         .executes(c -> gegarandeerd(c.getSource(), c.getSource().getLevel()))
                         .then(Commands.argument("dimensie", DimensionArgument.dimension())
                                 .executes(c -> gegarandeerd(c.getSource(), DimensionArgument.getDimension(c, "dimensie")))))
+                .then(Commands.literal("plek")
+                        .then(Commands.argument("set", com.mojang.brigadier.arguments.StringArgumentType.word())
+                                .then(Commands.argument("x", IntegerArgumentType.integer())
+                                        .then(Commands.argument("z", IntegerArgumentType.integer())
+                                                .executes(c -> plek(c, 600))
+                                                .then(Commands.argument("straal", IntegerArgumentType.integer(64, 4000))
+                                                        .executes(c -> plek(c, IntegerArgumentType.getInteger(c, "straal"))))))))
                 .then(Commands.argument("dimensie", DimensionArgument.dimension())
                         .then(Commands.argument("straal", IntegerArgumentType.integer(16, 30000))
                                 .executes(c -> run(c, 3, true, 0))
@@ -133,6 +140,29 @@ public final class BouwCheck {
         }
         j.stopped = true;
         source.sendSuccess(() -> Component.literal("Bouwcheck wordt gestopt."), true);
+        return 1;
+    }
+
+    /**
+     * bbq2, phase 3: /guhs bouwcheck plek &lt;set&gt; &lt;x&gt; &lt;z&gt; [straal] (the set's name without "guhs:", in the dimension
+     * of the source: /execute in ...): an operator gives a guaranteed set that reported GEEN PLEK a spot within straal (600)
+     * blocks of a point of their choice, in terrain that was never generated ({@link GegarandeerdPlacement#zoekRond}). The
+     * emergency tool for a world where a link of a story chain found no spot. It searches on the server thread (seconds).
+     */
+    private static int plek(CommandContext<CommandSourceStack> c, int straal) {
+        CommandSourceStack source = c.getSource();
+        ServerLevel level = source.getLevel();
+        String naam = com.mojang.brigadier.arguments.StringArgumentType.getString(c, "set");
+        int x = IntegerArgumentType.getInteger(c, "x"), z = IntegerArgumentType.getInteger(c, "z");
+        Either<GegarandeerdPlacement.Plek, String> uit = GegarandeerdPlacement.zoekRond(level, Identifier.fromNamespaceAndPath("guhs", naam), x, z, straal);
+        if (uit.right().isPresent()) {
+            source.sendFailure(Component.literal("Bouwcheck plek: " + uit.right().get()));
+            return 0;
+        }
+        ChunkPos chunk = uit.left().orElseThrow().chunk();
+        source.sendSuccess(() -> Component.literal("Bouwcheck plek: guhs:" + naam + " krijgt chunk " + chunk + " (blok " + chunk.getMiddleBlockX() + ", "
+                + chunk.getMiddleBlockZ() + ") in " + level.dimension().identifier() + ". De plek is bewaard; het gebouw komt zodra het land daar "
+                + "gemaakt wordt. De sets die op deze wachtten worden nu opnieuw gezocht: kijk zo met /guhs bouwcheck gegarandeerd."), true);
         return 1;
     }
 
