@@ -202,6 +202,11 @@ public final class Hoofdstuk {
         if (nieuw >= STAPPEN && oud < STAPPEN) {
             Ring.behaald(p, "ring_h5_klaar");
             Smikagol.zeg(p, "quest.guhs.ringh5.smikagol.klaar");
+            Terrein t = HIER.get(p.getUUID());
+            if (t != null && t.isIn(p.level())) {
+                // (the valley may stand with a side in solid rock: he names the way on with the least rock behind it)
+                Smikagol.zeg(p, "quest.guhs.ringh5.smikagol.verder." + besteUitgang(p.level(), t));
+            }
             Entity sam = Sam.van(p);
             if (lijn().eenmalig(p, "proviand")) {
                 Minigames.give(p, new ItemStack(RingFeature.STOOFPOTJE.get(), 2));
@@ -575,6 +580,29 @@ public final class Hoofdstuk {
             rots++;
         }
         return rots;
+    }
+
+    /**
+     * The way on with the least rock behind it ({@link Plekken#UITGANGEN}); when it makes no difference the far mouth, then
+     * the tunnel next to the last fire, then the one beyond the tower. Smikagol names it when the chapter is done.
+     */
+    static int besteUitgang(ServerLevel level, Terrein t) {
+        int[] rots = new int[Plekken.UITGANGEN.size()];
+        for (int i = 0; i < rots.length; i++) {
+            rots[i] = rotsAchter(level, t, i);
+        }
+        return minste(rots);
+    }
+
+    /** The first index of the smallest number. */
+    static int minste(int... getallen) {
+        int beste = 0;
+        for (int i = 1; i < getallen.length; i++) {
+            if (getallen[i] < getallen[beste]) {
+                beste = i;
+            }
+        }
+        return beste;
     }
 
     /** The way in with the least rock in front of it (the nearest one when it makes no difference); kept for a while. */

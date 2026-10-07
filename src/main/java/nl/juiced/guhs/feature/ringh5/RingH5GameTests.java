@@ -417,6 +417,8 @@ public final class RingH5GameTests {
         helper.assertTrue(Plekken.UITGANGEN.size() == 3 && Hoofdstuk.rotsAchter(level, verder, 2) == 0, "the east way on is open");
         level.setBlock(voorDeGang, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
         helper.assertTrue(Hoofdstuk.rotsAchter(level, verder, 2) == 1, "a block of rock right outside a way on is counted");
+        helper.assertTrue(Hoofdstuk.minste(0, 0, 0) == 0 && Hoofdstuk.minste(12, 12, 0) == 2 && Hoofdstuk.minste(3, 1, 1) == 1,
+                "Smikagol names the way on with the least rock behind it, the nearest when it makes no difference");
         level.setBlock(voorDeGang, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
         zet(helper, p, new BlockPos(30, 2, 30));
         GuhNpcEntity boromika = Cast.zet(level, GuhNpcEntity.Kind.BOROMIKA, kamp.midden(Plekken.BOROMIKA), 120f, RingH5Feature.BOROMIKA_PLEK);
