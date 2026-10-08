@@ -1,0 +1,136 @@
+# biomes3 slice bouw-dal: het weebhuisje and the Klaterdal mini structures in a real client.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_bouw_dal.txt -PautocheckTimeout=40
+# Looks to judge: Evivads (blond, bow) and Nielsvads (glasses, light-brown hair, a little taller), the collection and the
+# mini-loket inside, the departure by balloon, the note on the door, the homecoming; then each mini structure where it
+# really generated. The dev commands are those of BouwDalCheck (/guhs bio bouw-dal ...).
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section the verzamelreeks, the foods and the outfits on a row
+/give @s guhs:japan_geluksguh
+/give @s guhs:japan_lampion
+/give @s guhs:japan_mini_torii
+/give @s guhs:japan_ramenkom
+/give @s guhs:japan_daruma_guh
+/give @s guhs:japan_waaier
+/give @s guhs:japan_theeservies
+/give @s guhs:japan_kokeshi_guh
+/give @s guhs:japan_koinobori
+/give @s guhs:japan_bonsai_schaaltje
+/give @s guhs:japan_windgong
+/give @s guhs:japan_maneki_knabbel
+/give @s guhs:japan_sushi
+/give @s guhs:japan_ramen
+/give @s guhs:japan_mochi
+/give @s guhs:japan_onigiri
+/give @s guhs:japan_kimono
+/give @s guhs:japan_hachimaki
+/give @s guhs:japan_kattenoortjes
+/give @s guhs:japan_strikje
+wait 20
+shot dal_inventaris
+
+section het weebhuisje: outside, the two at home
+ga weebhuisje
+plek lokaal 7 2 -6
+tpplek 0 3 0
+plek lokaal 7 3 7
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot weeb_buiten_voor
+plek lokaal 20 2 -4
+tpplek 0 5 0
+plek lokaal 9 3 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot weeb_buiten_ballon
+
+section inside: the collection, the mini-loket, the two friends side by side
+plek lokaal 6 2 8
+tpplek 0 0 0
+plek lokaal 5 3 11
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot weeb_binnen_figuurtjes
+plek lokaal 9 3 10
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 20
+shot weeb_binnen_loket
+plek lokaal 4 3 10
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 20
+shot weeb_nielsvads
+/guhs bio bouw-dal reis status
+
+section the trip: the scene, the walk, the balloon, the empty house
+plek lokaal 3 2 -3
+tpplek 0 2 0
+plek lokaal 9 4 4
+plekcmd tp @s ~ ~ ~ facing {p}
+/guhs bio bouw-dal reis start
+wait 120
+shot weeb_scene
+wait 180
+shot weeb_lopen
+wait 120
+shot weeb_instappen
+wait 160
+shot weeb_stijgt
+wait 220
+/guhs bio bouw-dal reis status
+plek lokaal 6 2 2
+tpplek 0 0 0
+plek lokaal 6 3 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 100
+shot weeb_briefje_op_de_deur
+/guhs bio bouw-dal reis klok 24100
+wait 60
+/guhs bio bouw-dal reis status
+shot weeb_tadaima
+
+section the mini structures where they generated
+ga dal_torii
+tpplek 6 3 -8
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_torii
+ga dal_torii_water
+tpplek 2 4 -12
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_torii_water
+ga dal_lantaarns
+tpplek 4 5 -8
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_lantaarns
+/time set 14000
+wait 200
+shot dal_lantaarns_avond
+/time set noon
+ga dal_boogbrug
+tpplek 3 4 -12
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_boogbrug
+ga dal_theehuisje
+tpplek 8 6 12
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_theehuisje
+ga dal_zenhoek
+tpplek 0 12 -6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_zenhoek
+ga dal_staptreden
+tpplek 3 3 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot dal_staptreden
