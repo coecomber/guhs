@@ -39,6 +39,12 @@
     "guhs:regenboogblok_trap",
     "guhs:wolkenbank",
     "guhs:wolkenbed",
-    "guhs:wolkenlamp"
+    "guhs:wolkenlamp",
+    "guhs:bliksemsmidse_wolk",
+    "guhs:bliksemsmidse_wolk_plaat",
+    "guhs:bliksemsmidse_wolk_trap",
+    "guhs:bliksemsmidse_wolkentafel",
+    "guhs:bliksemsmidse_wolkenplank",
+    "guhs:bliksemsmidse_onweerswolkje"
   ]
 }

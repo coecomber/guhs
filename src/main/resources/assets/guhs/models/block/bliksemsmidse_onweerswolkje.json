@@ -1,0 +1,250 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/bliksemsmidse_wolk_zij_0"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        8,
+        4
+      ],
+      "to": [
+        13,
+        13,
+        12
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        9,
+        3
+      ],
+      "to": [
+        12,
+        12,
+        13
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        13,
+        5
+      ],
+      "to": [
+        10,
+        15,
+        10
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        12.5,
+        7
+      ],
+      "to": [
+        12.5,
+        14.5,
+        11.5
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        5,
+        7.5
+      ],
+      "to": [
+        8,
+        8,
+        8.5
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        8,
+        3,
+        7.5
+      ],
+      "to": [
+        9.5,
+        6,
+        8.5
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "down": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_bliksem"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        8,
+        -8,
+        3
+      ],
+      "to": [
+        8,
+        8,
+        13
+      ],
+      "shade": false,
+      "faces": {
+        "west": {
+          "texture": "guhs:block/bliksemsmidse_regen"
+        },
+        "east": {
+          "texture": "guhs:block/bliksemsmidse_regen"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        -8,
+        8
+      ],
+      "to": [
+        13,
+        8,
+        8
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "guhs:block/bliksemsmidse_regen"
+        },
+        "south": {
+          "texture": "guhs:block/bliksemsmidse_regen"
+        }
+      }
+    }
+  ]
+}

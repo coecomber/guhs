@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_0"
+      },
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_1"
+      },
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_2"
+      },
+      {
+        "model": "guhs:block/bliksemsmidse_wolk_2",
+        "y": 90
+      }
+    ]
+  }
+}
