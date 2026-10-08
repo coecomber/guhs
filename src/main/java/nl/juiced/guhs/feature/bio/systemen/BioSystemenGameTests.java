@@ -278,8 +278,10 @@ public class BioSystemenGameTests {
     public static void bioSystemenTitelsOpHunBewijs(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         vergeet(p, Bewijzen.HOOGSTE_EILAND, Bewijzen.REUS_DRIE);
-        helper.assertTrue(BioTitels.ALLE.size() == 4 && Titels.ALLE.containsAll(BioTitels.ALLE)
-                && Titels.ALLE.subList(Titels.ALLE.size() - 4, Titels.ALLE.size()).equals(BioTitels.ALLE), "four titles, the last four of the list");
+        // (1.4.0, the merge with bbq2: its features add their titles with Titels.registreer AFTER these, so the four stand
+        // together directly after the guhpixel ones and are no longer the last of the list)
+        helper.assertTrue(BioTitels.ALLE.size() == 4 && java.util.Collections.indexOfSubList(Titels.ALLE, BioTitels.ALLE)
+                == 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size(), "four titles, together after the guhpixel ones");
         Language lang = Language.getInstance();
         for (Titels.Titel t : BioTitels.ALLE) {
             helper.assertTrue(!Titels.heeft(p, t) && !Titels.kies(p, t.id()), t.id() + " is locked for a new player");

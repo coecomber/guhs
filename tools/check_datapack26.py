@@ -200,6 +200,19 @@ def vanilla_structure_set(d):
     return d
 
 
+def vanilla_density(o):
+    """1.4.0 (biomes3): our own density function types (guhs:bio_terrein wraps the Guhmensie's final_density, guhs:bio_regio
+    feeds the biome parameters): one with an "input" becomes that input, one without becomes the constant 0."""
+    if isinstance(o, list):
+        return [vanilla_density(x) for x in o]
+    if isinstance(o, dict):
+        if own(o.get("type")) and ("input" in o or "ruis" in o):
+            REPLACED[("density_function_type", o["type"])] = 1
+            return vanilla_density(o["input"]) if "input" in o else 0.0
+        return {k: vanilla_density(v) for k, v in o.items()}
+    return o
+
+
 def tag_values(d, reg):
     vals = []
     for v in d.get("values", []):
@@ -284,6 +297,8 @@ def build_pack():
                 d = vanilla_structure_set(d)
             elif folder == "worldgen" and sub == "biome":
                 d = vanilla_features(d)
+            elif folder == "worldgen" and sub in ("noise_settings", "density_function"):
+                d = vanilla_density(d)
             if folder == "dimension_type":
                 d.get("attributes", {}).pop("neoforge:custom_skybox", None)
                 d.get("attributes", {}).pop("neoforge:custom_weather_effects", None)

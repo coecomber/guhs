@@ -44,7 +44,8 @@ REEKS = ("japan_geluksguh", "japan_lampion", "japan_mini_torii", "japan_ramenkom
          "japan_kokeshi_guh", "japan_koinobori", "japan_bonsai_schaaltje", "japan_windgong", "japan_maneki_knabbel")
 
 # FTB: section id -> the quest keys in it (tools/make_ftbquests.py reads this; all in the existing chapter "De Guhmensie")
-FTB_SECTIES = {
+# (1.4.0, the merge with bbq2: named BIO_SECTIES because FTB_SECTIES is bbq2's hook for a module's own list of sections in make_ftbquests.py)
+BIO_SECTIES = {
     "bio_meer": ["bio_botenhuisje", "bio_visser", "bio_koivoer", "bio_koi_voeren", "bio_koi_emmer", "bio_roeien", "bio_visser_klaar",
                  "bio_picknickeilandje", "bio_mand", "bio_hanami", "bio_bloesemguh", "bio_kikker_blad", "bio_bloesemblaadjes"],
     "bio_dal": ["bio_torii", "bio_tanukiguh", "bio_theehuisje", "bio_bouw_torii", "bio_bouw_dak", "bio_bouw_shoji", "bio_bouw_zen"],
@@ -75,9 +76,9 @@ def selfcheck(h):
     eisen = _Opnemer()
     ftb(eisen)
     keys = [x[0] for x in eisen.quests]
-    geplaatst = [k for ks in FTB_SECTIES.values() for k in ks] + FTB_PORTAAL
+    geplaatst = [k for ks in BIO_SECTIES.values() for k in ks] + FTB_PORTAAL
     if sorted(keys) != sorted(geplaatst):
-        problems.append(f"FTB_SECTIES / FTB_PORTAAL and ftb() differ: {sorted(set(keys) ^ set(geplaatst))}")
+        problems.append(f"BIO_SECTIES / FTB_PORTAAL and ftb() differ: {sorted(set(keys) ^ set(geplaatst))}")
     for key, _titel, _desc, icoon, taken, beloning in eisen.quests:
         for t in taken:
             if t["type"] == "advancement":

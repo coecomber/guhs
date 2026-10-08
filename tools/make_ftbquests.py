@@ -660,11 +660,11 @@ SECTIONS = {
             keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "schaar"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
         # biomes3 (appended, so the sections above keep their places): the three new biomes, each after its biome quest
-        sec("bio_meer", "Het Bloesemmeertje", "npc:botenhuisje_visserguh", keys=_BIO.FTB_SECTIES["bio_meer"], upstream="biome_bloesemmeertje"),
-        sec("bio_dal", "Het Klaterdal", "guh:tanukiguh", keys=_BIO.FTB_SECTIES["bio_dal"], upstream="biome_klaterdal"),
-        sec("bio_weeb", "Het weebhuisje", "npc:weeb_evivads", keys=_BIO.FTB_SECTIES["bio_weeb"], upstream="biome_klaterdal"),
-        sec("bio_weide", "De Wolkenweide", "npc:wolkenhoeder", keys=_BIO.FTB_SECTIES["bio_weide"], upstream="biome_wolkenweide"),
-        sec("bio_lucht", "Hoog in de wolken", "npc:smidguh", keys=_BIO.FTB_SECTIES["bio_lucht"], upstream="biome_wolkenweide"),
+        sec("bio_meer", "Het Bloesemmeertje", "npc:botenhuisje_visserguh", keys=_BIO.BIO_SECTIES["bio_meer"], upstream="biome_bloesemmeertje"),
+        sec("bio_dal", "Het Klaterdal", "guh:tanukiguh", keys=_BIO.BIO_SECTIES["bio_dal"], upstream="biome_klaterdal"),
+        sec("bio_weeb", "Het weebhuisje", "npc:weeb_evivads", keys=_BIO.BIO_SECTIES["bio_weeb"], upstream="biome_klaterdal"),
+        sec("bio_weide", "De Wolkenweide", "npc:wolkenhoeder", keys=_BIO.BIO_SECTIES["bio_weide"], upstream="biome_wolkenweide"),
+        sec("bio_lucht", "Hoog in de wolken", "npc:smidguh", keys=_BIO.BIO_SECTIES["bio_lucht"], upstream="biome_wolkenweide"),
     ],
     "guhs_minigames": [
         sec("beauty", "Guh Beauty Theater", "npc:showguh", module="beauty", upstream="intro"),
