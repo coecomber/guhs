@@ -964,7 +964,10 @@ class Builder:
                 if c in T.SPOILER_FTB or s.get("sid") in T.SPOILER_FTB_SECTIONS:      # (a story's quests in order: spoilers for who is not there yet)
                     lijst = (f'<details class="spoiler"><summary>{t("Spoiler: show these quests", "Spoiler: laat deze quests zien")}</summary>'
                              f'{lijst}</details>')
-                pg.add_section(f"sec-{s.get('sid')}", plain_(s["title"]), plain_(s["title"]), lijst)
+                # (the English title of a section is the overlay's, as on its English header picture; without one it stays Dutch)
+                module = s.get("module") if isinstance(s.get("module"), str) else None
+                en_title = self.g.ftb_section_en.get(f"ftb.{ftb['text_chapter'](c, module)}.section.{s.get('sid')}")
+                pg.add_section(f"sec-{s.get('sid')}", esc(plain_(en_title)) if en_title else plain_(s["title"]), plain_(s["title"]), lijst)
             pg.info("Quests", "Quests", str(total))
             pg.info("Kind", "Soort", t("FTB quest chapter", "FTB-questhoofdstuk"))
             pg.related.append("systemen/ftb-quests")

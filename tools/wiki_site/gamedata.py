@@ -637,7 +637,17 @@ class Game:
         quests = {q[0]: q for q in ns["QUESTS"]}
         return dict(chapters=ns["CHAPTERS"], order=ns["ORDER"], sections=sections, quests=quests,
                     groups=ns.get("GROEPEN", {}), group_of=ns.get("groep_van", lambda c: "guhs"),      # (the chapter groups of the sidebar)
-                    plain=ns.get("plain", lambda s: re.sub(r"&[0-9a-fk-or]", "", s)))
+                    plain=ns.get("plain", lambda s: re.sub(r"&[0-9a-fk-or]", "", s)),
+                    text_chapter=ns.get("tekst_hoofdstuk", lambda c, module: c))        # (the chapter name in a section's text key)
+
+    @cached_property
+    def ftb_section_en(self):
+        """{ftb.<chapter>.section.<sid>: English}: the English titles of the quest book's sections. They are only painted on
+        the header pictures (no lang file has them), so they come straight from the overlay tools/lang/en/*.json."""
+        out = {}
+        for path in sorted(glob.glob(os.path.join(self.tools, "lang", "en", "*.json"))):
+            out.update((k, v) for k, v in read_json(path).items() if ".section." in k and isinstance(v, str))
+        return out
 
     # --- misc lang lists -------------------------------------------------------------------------------------------------------
     def lang_group(self, prefix, suffix_filter=None):
