@@ -98,6 +98,13 @@ TEXTS = {
                                      "wereld, dan wijst het naar het portaal.",
     "gui.guhs.guhpad.kompas.dichtstbij": "Nu: het dichtstbijzijnde verhaal dat je nog niet hebt gedaan",
     "gui.guhs.guhpad.kompas.volgt": "Nu volg je: %s",
+    # --- (1.4.1) the Superkompas tab Verhalen: the places per world, a place you have not reached yet ---------------------------
+    "gui.guhs.guhpad.kompas.verhaal": "Verhaal: %s",
+    "gui.guhs.guhpad.kompas.geheim": "???",
+    "gui.guhs.guhpad.kompas.geheim.uitleg": "Een plek uit %s waar je verhaal nog niet is geweest. Volg het verhaal, dan staat "
+                                            "hij hier vanzelf. Njeg!",
+    "gui.guhs.guhpad.kompas.vouw_open": "Klik om de plekken te laten zien",
+    "gui.guhs.guhpad.kompas.vouw_dicht": "Klik om de plekken in te klappen",
     # --- a world is still locked: Guhdalf, the grill portal, the portal of the Knabbelkelder (%s = the list) --------------------
     "quest.guhs.guhpad.guhdalf.nee": "Hohoho, njeg! Een ring draag je niet zomaar. Laat eerst zien dat je een dappere guh bent en volg "
                                      "deze verhalen in de Guhmensie: %s. Kom daarna terug, dan steek ik het vuurwerk voor je aan!",

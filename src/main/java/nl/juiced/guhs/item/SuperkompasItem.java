@@ -157,6 +157,14 @@ public class SuperkompasItem extends GuhCompassItem {
                 return i;
             }
         }
+        // 1.4.1: the tab Verhalen also lists the places of the big stories (feature.guhpad.KompasVerhalen)
+        if (nl.juiced.guhs.feature.guhpad.KompasVerhalen.isPlek(structure)) {
+            for (int i = 0; i < CATEGORIES.size(); i++) {
+                if (CATEGORIES.get(i).id().equals(nl.juiced.guhs.feature.guhpad.KompasVerhalen.TAB)) {
+                    return i;
+                }
+            }
+        }
         return -1;
     }
 
@@ -165,7 +173,8 @@ public class SuperkompasItem extends GuhCompassItem {
     }
 
     public static boolean allowed(String structure) {
-        return DOEL.equals(structure) || CATEGORIES.stream().anyMatch(c -> c.structures().contains(structure));
+        return DOEL.equals(structure) || CATEGORIES.stream().anyMatch(c -> c.structures().contains(structure))
+                || nl.juiced.guhs.feature.guhpad.KompasVerhalen.isPlek(structure);   // 1.4.1: the places of the big stories
     }
 
     @Nullable

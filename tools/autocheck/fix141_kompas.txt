@@ -1,0 +1,40 @@
+# 1.4.1 (AutoCheck, dev only): the Superkompas tab Verhalen split by world like the Guhdex tab Verhalen. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/fix141_kompas.txt -PautocheckTimeout=20
+# (gui kompasverhalen <name> [screenfuls]: dev/AutoCheck.java; /guhs guhpad, /guhs ring: their own commands)
+# Shots: fix141_kompas_*: a new player (the Guhmensie open, the Guhbarbecuether and the Guheinde locked with what is missing,
+# the chapter places of the Knabbelring as "???", Het echte Guheinde as a locked line), then a player in chapter 3 of the
+# Knabbelring (the Guhbarbecuether open; the Knabbelgouw, Guhvendel and Knabbelmoria by name, the rest still "???").
+
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/weather clear
+/item replace entity @s weapon.mainhand with guhs:guhmensie_superkompas
+wait 40
+clearchat
+
+section a new player
+/guhs guhpad vergeet @s alles
+/guhs ring wis
+wait 60
+gui kompasverhalen fix141_kompas_nieuw_1 0
+gui kompasverhalen fix141_kompas_nieuw_2 1
+gui kompasverhalen fix141_kompas_nieuw_3 2
+
+section the Guhmensie done, in chapter 3 of the Knabbelring
+/guhs guhpad gedaan @s balto
+/guhs guhpad gedaan @s mewtwo
+/guhs guhpad gedaan @s hemel
+/guhs guhpad gedaan @s guhwaii
+/guhs guhpad gedaan @s snuffeleiland
+/guhs ring hoofdstuk 3
+wait 60
+gui kompasverhalen fix141_kompas_h3_1 0
+gui kompasverhalen fix141_kompas_h3_2 1
+gui kompasverhalen fix141_kompas_h3_3 2
+
+section tidy up
+/guhs guhpad vergeet @s alles
+/guhs ring wis
+wait 20

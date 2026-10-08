@@ -79,7 +79,7 @@ public final class GuhpadTab implements GidsVerhalenTab.Indeling {
     }
 
     /** Every big story of this world is finished (and it has at least one). */
-    static boolean allesGedaan(Stand stand, Wereld w) {
+    public static boolean allesGedaan(Stand stand, Wereld w) {
         List<GuhpadPayloads.Verhaal> v = stand.verhalen(w);
         return !v.isEmpty() && v.stream().allMatch(GuhpadPayloads.Verhaal::klaar);
     }
@@ -141,7 +141,7 @@ public final class GuhpadTab implements GidsVerhalenTab.Indeling {
     }
 
     /** "A, B en C" of what a world still asks. */
-    static MutableComponent lijst(List<GuhpadPayloads.Eis> eisen) {
+    public static MutableComponent lijst(List<GuhpadPayloads.Eis> eisen) {
         MutableComponent out = Component.empty();
         for (int i = 0; i < eisen.size(); i++) {
             if (i > 0) {
@@ -153,7 +153,7 @@ public final class GuhpadTab implements GidsVerhalenTab.Indeling {
     }
 
     /** The tooltip of a world: its name, open or locked, its big stories ticked, and what it still asks. */
-    static List<Component> uitleg(Stand stand, Wereld w) {
+    public static List<Component> uitleg(Stand stand, Wereld w) {
         List<Component> tip = new ArrayList<>();
         tip.add(w.naam().withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
         tip.add(Component.translatable("gui.guhs.guhpad.wereld." + w.id() + ".uitleg").withStyle(ChatFormatting.GRAY));
@@ -185,14 +185,14 @@ public final class GuhpadTab implements GidsVerhalenTab.Indeling {
         return Minecraft.getInstance().font;
     }
 
-    static ItemStack stack(String id) {
+    public static ItemStack stack(String id) {
         Identifier key = Identifier.tryParse(id);
         var item = key == null ? Items.AIR : BuiltInRegistries.ITEM.getValue(key);
         return new ItemStack(item == Items.AIR ? Items.BOOK : item);
     }
 
     /** A little padlock, 7 x 8 pixels. */
-    static void slotje(GuiGraphicsExtractor g, int x, int y, int kleur, int oog) {
+    public static void slotje(GuiGraphicsExtractor g, int x, int y, int kleur, int oog) {
         g.fill(x + 1, y, x + 6, y + 1, kleur);
         g.fill(x + 1, y + 1, x + 2, y + 4, kleur);
         g.fill(x + 5, y + 1, x + 6, y + 4, kleur);

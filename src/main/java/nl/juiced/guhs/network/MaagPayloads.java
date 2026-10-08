@@ -328,7 +328,9 @@ public final class MaagPayloads {
         }
 
         public static void handle(SuperkompasChoice p, IPayloadContext context) {
-            if (context.player() instanceof ServerPlayer player && nl.juiced.guhs.item.SuperkompasItem.allowed(p.structure())) {
+            // (1.4.1: not a place Guhdalfs sluier still hides for this player, the "???" entries of the tab Verhalen)
+            if (context.player() instanceof ServerPlayer player && nl.juiced.guhs.item.SuperkompasItem.allowed(p.structure())
+                    && nl.juiced.guhs.feature.guhpad.KompasVerhalen.magKiezen(player, p.structure())) {
                 var stack = player.getItemInHand(p.mainHand() ? net.minecraft.world.InteractionHand.MAIN_HAND : net.minecraft.world.InteractionHand.OFF_HAND);
                 if (stack.getItem() instanceof nl.juiced.guhs.item.SuperkompasItem) {
                     nl.juiced.guhs.item.SuperkompasItem.choose(stack, p.structure());

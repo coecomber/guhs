@@ -87,8 +87,8 @@ LANG = {
     "gui.guhs.huisje.van_wie": "Dit is het huisje van %1$s (%2$s). Alleen %1$s mag het veranderen.",
     # the Verhalen tab of the Superkompas, the Kleding tab, the Minigames tab
     "gui.guhs.superkompas.verhalen": "Verhalen",
-    "gui.guhs.superkompas.verhalen.tooltip": "De plekken van de grote guhverhalen: Nomguh, het kloon-eiland, het Hemelkapelletje, Guhwai'i "
-                                             "en de bouwplaats van de Timmerguh",
+    # (1.4.1: the tab lists every big story's places per world of the Guhpad, feature.guhpad.KompasVerhalen)
+    "gui.guhs.superkompas.verhalen.tooltip": "De plekken van de grote verhalen, per wereld van het Guhpad",
     "gui.guhs.gids.soort.verhalen": "Guhverhalen",
     "gui.guhs.kledingbron.timmerguh": "Timmerguh's bouwplaats",
     "gui.guhs.kledingbron.nomguh": "Held van Nomguh",

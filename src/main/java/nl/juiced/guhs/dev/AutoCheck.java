@@ -1723,6 +1723,33 @@ public final class AutoCheck {
                     return true;
                 };
             }
+            case "kompasverhalen": {
+                // gui kompasverhalen <name> [screenfuls]: (1.4.1) the Superkompas tab Verhalen (the stories per world), scrolled
+                // this many screenfuls down, one shot
+                String name = a.length > 2 ? a[2] : "gui_kompasverhalen";
+                double schermen = a.length > 3 ? Double.parseDouble(a[3]) : 0;
+                queue.addFirst(mc -> {
+                    mc.setScreen(null);
+                    opened = false;
+                    return true;
+                });
+                queue.addFirst(shot(name, true));
+                queue.addFirst(waitTicks(3));
+                return mc -> {
+                    opened = true;
+                    parkMouse(mc);
+                    var sk = new nl.juiced.guhs.client.screen.SuperkompasScreen(net.minecraft.world.InteractionHand.MAIN_HAND, "nomguh");
+                    mc.setScreen(sk);
+                    var cats = nl.juiced.guhs.item.SuperkompasItem.CATEGORIES;
+                    for (int i = 0; i < cats.size(); i++) {
+                        if (cats.get(i).id().equals(nl.juiced.guhs.feature.guhpad.KompasVerhalen.TAB)) {
+                            sk.showTab(i);
+                        }
+                    }
+                    sk.scrollLijst(schermen);
+                    return true;
+                };
+            }
             case "taalvraag": {
                 // gui taalvraag [name] [keep]: (1.2.0) the first-join language question (AutoCheck runs never get it by themselves);
                 // with "keep" it stays open (for mouse/press/shot commands) until 'gui close'
