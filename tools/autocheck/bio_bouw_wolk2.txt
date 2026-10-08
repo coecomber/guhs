@@ -1,0 +1,72 @@
+# biomes3, slice bouw-wolk2: the regenboogbrug, the wolkenkasteeltje and the bliksemsmidse, each placed by the dev command
+# (its deck at y 199, south of where the player stands), by day and the forge also by night.
+# The shots show the particles (zzz, flashes, the onweerswolkje's rain, the lift's arrows); the sounds they do not.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_bouw_wolk2.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/guhs bio bouw-wolk2 zet regenboogbrug
+wait 60
+
+section the rainbow bridge: from the side, from above, as a walker at its west foot, the pot at its end
+camera 0 204 70 180 6
+waitrender 200
+shot brug_zijkant
+camera 0 240 40 180 62
+wait 40
+shot brug_boven
+camera -20.5 201.6 18.5 -90 -12
+wait 40
+shot brug_loper_west
+camera 0 211.5 18.5 -90 14
+wait 40
+shot brug_loper_top
+camera 17 202.2 18.5 -90 14
+wait 40
+shot brug_pot
+
+section the cloud castle: outside, through the gate, the hall from above, the giant from the back of the hall
+/tp @s 200 200 0
+wait 60
+/guhs bio bouw-wolk2 zet wolkenkasteeltje
+wait 100
+camera 222 214 62 160 18
+waitrender 200
+shot kasteel_buiten
+camera 200 201.6 31 180 -4
+wait 40
+shot kasteel_poort
+camera 200 201.6 23 180 -8
+wait 120
+shot kasteel_reus_van_de_poort
+camera 200 230 17 180 89
+wait 40
+shot kasteel_boven
+camera 193.5 201.6 9 -45 -10
+wait 120
+shot kasteel_reus_bij_de_schat
+camera 200 201.6 40 0 20
+wait 40
+shot kasteel_bonenstaak
+
+section the lightning forge: outside, the door, inside; again at night (the flashes)
+/tp @s 400 200 0
+wait 60
+/guhs bio bouw-wolk2 zet bliksemsmidse
+wait 100
+camera 412 208 48 160 14
+waitrender 200
+shot smidse_buiten
+camera 400.5 201.6 26 180 0
+wait 40
+shot smidse_deur
+camera 400.5 201.6 19.5 180 5
+wait 60
+shot smidse_binnen
+/time set midnight
+camera 412 208 48 160 14
+wait 300
+shot smidse_nacht
