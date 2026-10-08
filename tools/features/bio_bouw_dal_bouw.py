@@ -41,21 +41,24 @@ STRUCTUREN = ["dal_torii", "dal_torii_water", "dal_lantaarns", "dal_boogbrug", "
 YAW = {"south": 0.0, "west": 90.0, "north": 180.0, "east": -90.0}
 # structure sets: (kind of spot, spacing, separation, salt); the salts are 2150NN01, 2150NN11, ... with NN = 06.
 # How often: a structure only starts in a chunk that HAS a spot of its kind, and those are few. Measured on seed 20261007
-# in the 81 x 81 chunks around the dal at 256 352 (/guhs bio bouw-dal tel 40): with spacing 7 / 5 / 6 / 4 / 2 / 9 / 4 / 13
-# the valley got 2 torii, 2 torii in the water, 4 lantern paths, 1 bridge, no tea house, 1 zen corner, 4 stairs and no
-# weebhuisje: about 1.5 % of the chunks a "terras" set tries have a terrace spot, 0.25 % of the "over_rivier" tries, 1 % of
-# the "waterval" tries. The numbers below aim at a valley of that size (about 1000 blocks across) with about 6 torii,
-# 3 torii in the water, 6 lantern paths, 3 zen corners, 4 bridges, 4 stairs, a tea house at every tall fall (most valleys
-# have none to two) and 1 to 2 weebhuisjes (none in about one valley in five: the Superkompas finds the nearest).
+# in the 81 x 81 chunks around the dal at 256 352 (one valley, about 1000 blocks across; /guhs bio bouw-dal tel 40), over
+# two rounds with other spacings: of the chunks a set tries, 1.0 % has a "terras" spot (15 starts in 1557 tries), 0.4 % an
+# "over_rivier" spot (11 in 2769), 1.0 % a "waterval" spot (4 in 411), and 2 chunks in 6561 a "rots" spot. With the
+# spacings below a valley of that size gets on average 7 torii, 3 torii in the water, 4 lantern paths, 2 zen corners,
+# 3 bridges, 4 stairs, a tea house at every tall fall (this valley has three) and 1.3 weebhuisjes: none in about one
+# valley in four, two in about one in four (the Superkompas finds the nearest). What that valley really got in the third
+# round (these spacings, the torii still at 4): 1 torii, 1 in the water, 3 lantern paths, 3 bridges, 3 tea houses, 2 zen
+# corners, 4 stairs, 2 weebhuisjes 590 blocks apart. One torii is thin for the valley's emblem: its spacing went to 3
+# (7 on average) after that count.
 PLAATSING = {
-    "dal_torii": ("terras", 4, 2, 21500601),
-    "dal_torii_water": ("over_rivier", 4, 2, 21500611),
+    "dal_torii": ("terras", 3, 1, 21500601),
+    "dal_torii_water": ("over_rivier", 3, 1, 21500611),
     "dal_lantaarns": ("terras", 4, 2, 21500621),
-    "dal_boogbrug": ("over_rivier", 2, 1, 21500631),
+    "dal_boogbrug": ("over_rivier", 3, 1, 21500631),
     "dal_theehuisje": ("rots", 1, 0, 21500641),
     "dal_zenhoek": ("terras", 6, 3, 21500651),
     "dal_staptreden": ("waterval", 4, 2, 21500661),
-    "weebhuisje": ("terras", 8, 4, 21500671),
+    "weebhuisje": ("terras", 7, 3, 21500671),
 }
 WATER_BLIJFT = ("dal_theehuisje", "dal_boogbrug")
 

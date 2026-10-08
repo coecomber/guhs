@@ -446,6 +446,7 @@ public final class WeebHuis {
         String wie = TERUG_SPREKERS[v];
         speler.sendSystemMessage(regel(naam(wie.charAt(0)), "quest.guhs.weeb.terug." + (v + 1) + ".1"));
         speler.sendSystemMessage(regel(naam(wie.charAt(1)), "quest.guhs.weeb.terug." + (v + 1) + ".2"));
+        GuhAdvancements.grant(speler, "weeb_eerste_reis");       // (also for who had logged off before the balloon left)
         Cadeaus.Cadeau c = Cadeaus.geef(speler, level.getRandom());
         speler.sendSystemMessage(Component.translatable("quest.guhs.weeb.cadeau", Cadeaus.stapel(c).getHoverName()).withStyle(ChatFormatting.GOLD));
         if (c.pool() == Cadeaus.Pool.REEKS) {
