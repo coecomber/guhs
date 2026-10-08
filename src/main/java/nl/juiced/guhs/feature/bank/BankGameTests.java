@@ -53,7 +53,8 @@ import nl.juiced.guhs.taal.NlTekst;
 /**
  * bbq2 (bank): the cap of 256 per kind of item, banks from before the cap (nothing clamped, nothing lost), every way in
  * keeps the remainder (the screen's actions, shift-click, closing, JEI), the upgrade (use on the bank, kept on block
- * entity + item + loot table), the Bank Guh's item capability (in to the cap, out only when upgraded, transactions), and
+ * entity + item + loot table), the Bank Guh's item capability (in to the cap, NOTHING ever out: the user's decision B6;
+ * the one way out is the door for a Filterstuk, {@code filterkant()}, of an upgraded bank; transactions), and
  * the Hapluikje with its link key (vadskracht, any distance, another dimension, deposit only, clean refusals).
  */
 public class BankGameTests {
@@ -357,7 +358,9 @@ public class BankGameTests {
         if (!geleend.isEmpty()) {
             gelijk(helper, 1, Kisten.stop(h, geleend).getCount(), "a loaned thing is refused");
         }
-        // looking is always allowed (a Voorraadmeter), taking only from an upgraded bank
+        // looking is always allowed (a Voorraadmeter); taking: never through the capability, and through the door for a
+        // Filterstuk only from an upgraded bank
+        ResourceHandler<ItemResource> filter = be.filterkant();
         Kisten.stop(h, new ItemStack(Items.DIRT, 12));
         gelijk(helper, (long) CAP, Kisten.tel(h, st -> st.is(Items.COBBLESTONE)), "tel sees the cobblestone");
         gelijk(helper, 12L, Kisten.tel(h, st -> st.is(Items.DIRT)), "and the dirt");
@@ -365,17 +368,46 @@ public class BankGameTests {
         helper.setBlock(p(4, 2), Blocks.CHEST);
         ResourceHandler<ItemResource> kist = Kisten.van(level, helper.absolutePos(p(4, 2)), null);
         gelijk(helper, 0, Kisten.verplaats(h, kist, st -> true, 1000), "no upgrade: nothing can be moved out");
+        helper.assertTrue(Kisten.neem(filter, st -> true, 64).isEmpty() && Kisten.verplaats(filter, kist, st -> true, 1000) == 0,
+                "no upgrade: nothing comes out for a Filterstuk either");
         gelijk(helper, (long) CAP + 12, be.getStorage().snapshot().totalItems(), "everything is still inside");
         s.setUpgraded(true);
-        ItemStack eruit = Kisten.neem(h, st -> st.is(Items.DIRT), 5);
-        helper.assertTrue(eruit.is(Items.DIRT) && eruit.getCount() == 5 && s.count(new ItemStack(Items.DIRT)) == 7, "upgraded: five dirt taken");
+        // B6: an upgraded bank still gives NOTHING through the capability (what a hopper, a plain tube piece and a pick-up
+        // Haltepaaltje see): not by kind, not by slot, not in one big move
+        helper.assertTrue(Kisten.neem(h, st -> true, 64).isEmpty() && Kisten.neem(h, st -> true, 64, true).isEmpty(), "upgraded: still nothing out of the capability");
+        gelijk(helper, 0, Kisten.verplaats(h, kist, st -> true, 1000), "upgraded: nothing can be moved out through the capability");
+        try (Transaction tx = Transaction.openRoot()) {
+            int perVak = 0;
+            for (int vak = 0; vak < h.size(); vak++) {
+                ItemResource soort = h.getResource(vak);
+                perVak += soort.isEmpty() ? 0 : h.extract(vak, soort, 64, tx);
+            }
+            gelijk(helper, 0, perVak, "upgraded: no slot of the capability gives anything");
+            tx.commit();
+        }
+        gelijk(helper, (long) CAP + 12, be.getStorage().snapshot().totalItems(), "upgraded: everything is still inside");
+        helper.assertTrue(Kisten.van(level, be.getBlockPos(), Direction.DOWN) == h && Kisten.van(level, be.getBlockPos(), null) == h,
+                "every side of the bank is that capability: the door for a Filterstuk is not one");
+        // the door for a Filterstuk: the same slots, the same way in, and the one way out
+        helper.assertTrue(filter == be.filterkant() && filter != h && filter.size() == h.size() && filter.getResource(0).equals(h.getResource(0))
+                && filter.getAmountAsLong(0) == h.getAmountAsLong(0), "the Filterstuk's door shows the same stomach");
+        ItemStack eruit = Kisten.neem(filter, st -> st.is(Items.DIRT), 5);
+        helper.assertTrue(eruit.is(Items.DIRT) && eruit.getCount() == 5 && s.count(new ItemStack(Items.DIRT)) == 7, "upgraded: a Filterstuk takes five dirt");
+        // (a taking that is not committed changes nothing)
+        gelijk(helper, 3, Kisten.neem(filter, st -> st.is(Items.DIRT), 3, true).getCount(), "(asking what would come out)");
+        try (Transaction tx = Transaction.openRoot()) {
+            gelijk(helper, 7, filter.extract(ItemResource.of(Items.DIRT), 64, tx), "(seven dirt out in an open transaction)");
+        }
+        gelijk(helper, 7L, s.count(new ItemStack(Items.DIRT)), "an aborted taking puts everything back");
+        gelijk(helper, 0, Kisten.stop(filter, new ItemStack(Items.DIRT, 2)).getCount(), "(what a Filterstuk cannot send goes back in through the same door)");
+        gelijk(helper, 2, Kisten.neem(filter, st -> st.is(Items.DIRT), 2).getCount(), "(and out again)");
         // moving everything out walks over the slots: every kind must come along (the slots do not shift)
         s.insert(new ItemStack(Items.STICK), 9);
         s.insert(new ItemStack(Items.APPLE), 4);
         s.insert(new ItemStack(Items.GRAVEL), 20);
         int verplaatst;
         try (Transaction tx = Transaction.openRoot()) {
-            verplaatst = ResourceHandlerUtil.move(h, kist, soort -> true, 10_000, tx);
+            verplaatst = ResourceHandlerUtil.move(filter, kist, soort -> true, 10_000, tx);
             tx.commit();
         }
         gelijk(helper, CAP + 7 + 9 + 4 + 20, verplaatst, "everything moved to the chest in one go");
@@ -388,8 +420,12 @@ public class BankGameTests {
         helper.succeed();
     }
 
-    /** Real hoppers: one on top fills the bank up to the cap, one below only gets something from an upgraded bank. */
-    @GuhTest(template = KAMER, batch = "bank_trechter", timeoutTicks = 400)
+    /**
+     * Real hoppers: one on top fills the bank up to the cap; one below NEVER gets anything, not from a bank without the
+     * upgrade and (the user's decision B6) not from an upgraded one either: a store is not emptied by a hopper that
+     * happens to hang under it.
+     */
+    @GuhTest(template = KAMER, batch = "bank_trechter", timeoutTicks = 800)
     public static void bankTrechters(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos onder = new BlockPos(3, 2, 3), midden = onder.above(), boven = midden.above();
@@ -406,8 +442,19 @@ public class BankGameTests {
             helper.assertTrue(uit.isEmpty(), "the hopper below gets nothing from a bank without the upgrade");
             in.setItem(0, ItemStack.EMPTY);
             be.getStorage().setUpgraded(true);
-            helper.succeedWhen(() -> helper.assertTrue(uit.countItem(Items.COBBLESTONE) >= 3 && be.getStorage().count(kei(1)) < CAP,
-                    "upgraded: the hopper below pulls cobblestone out"));
+            be.getStorage().insert(new ItemStack(Items.DIRT), 40);
+        });
+        // (a hopper tries every 8 ticks: 180 ticks are more than twenty tries)
+        helper.runAfterDelay(300, () -> {
+            helper.assertTrue(be.getStorage().isUpgraded() && uit.isEmpty(), "upgraded: the hopper below still gets nothing: " + uit.getItem(0));
+            helper.assertTrue(be.getStorage().count(kei(1)) == CAP && be.getStorage().count(new ItemStack(Items.DIRT)) == 40,
+                    "upgraded: the bank keeps everything: " + be.getStorage().count(kei(1)) + " / " + be.getStorage().count(new ItemStack(Items.DIRT)));
+            // and the hopper on top still fills an upgraded bank, past the old cap
+            in.setItem(0, kei(8));
+            helper.succeedWhen(() -> {
+                helper.assertTrue(be.getStorage().count(kei(1)) == CAP + 8 && in.isEmpty(), "upgraded: the hopper on top fills on: " + be.getStorage().count(kei(1)));
+                helper.assertTrue(uit.isEmpty(), "and still nothing comes out below");
+            });
         });
     }
 

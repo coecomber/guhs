@@ -704,8 +704,9 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
     }
 
     /**
-     * {@link #haalOp} at a store with more than {@link #MAX_ZOEK} slots (an upgraded Bank Guh shows one slot per kind of
-     * item: hundreds, maybe thousands). Only {@link #MAX_ZOEK} slots are looked at per visit, each asked for directly (no
+     * {@link #haalOp} at a store with more than {@link #MAX_ZOEK} slots (a Bank Guh shows one slot per kind of item:
+     * hundreds, maybe thousands; nothing ever comes out of a bank for a pole, the user's decision B6, but the walk over it
+     * has to stay short all the same, and another mod's big store does give). Only {@link #MAX_ZOEK} slots are looked at per visit, each asked for directly (no
      * walk over the whole store per kind), and every kind in them costs one question to every "afleveren" stop. When
      * that stretch holds nothing to take, the next look goes on behind it ({@link HaltepaaltjeBlockEntity#zoekVan}), so
      * after a few looks the whole store has been seen; a stretch that has something is where the real visit starts.

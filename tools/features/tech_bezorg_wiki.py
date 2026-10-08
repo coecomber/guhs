@@ -32,7 +32,8 @@ WIKI = {
          "Afleveren gaat in de kist aan de kant waar het paaltje staat, net als bij een trechter. Zet het paaltje dus bovenop een "
          "oven om hem te vullen. Ophalen werkt als een trechter onder de kist: bij een oven krijg je wat klaar is, en de "
          "brandstof blijft liggen. Het werkt met alles waar spullen in kunnen: kisten, tonnen, guh-machines, de Bank Guh en het "
-         "Hapluikje. Net als de machines werkt een paaltje niet bij een kist in een beschermd gebouw of in de klus-area van het "
+         "Hapluikje. Uit een Bank Guh haalt een paaltje nooit iets op (afleveren kan wel): spullen uit je bank halen kan alleen "
+         "een Filterstuk aan een Knabbelbuis. Net als de machines werkt een paaltje niet bij een kist in een beschermd gebouw of in de klus-area van het "
          "Guhhuisje van iemand anders: dan slaat het Bezorgguhtje het over."),
         ("systemen/bezorgguhtje", "Nooit iets kwijt",
          "De spullen in de rugzak worden bewaard door het Stepstation. Wat er ook met het Bezorgguhtje gebeurt: er raakt niets "

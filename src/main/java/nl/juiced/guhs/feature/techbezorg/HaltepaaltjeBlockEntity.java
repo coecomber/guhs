@@ -142,7 +142,8 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
         return magAntwoord;
     }
 
-    int zoekVan() {
+    /** Where the next look at a store with more slots than one look walks begins (public for the tests of the walk). */
+    public int zoekVan() {
         return zoekVan;
     }
 

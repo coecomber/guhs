@@ -18,8 +18,13 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
  * <ul>
  * <li><b>In</b>: always, up to the cap per kind of item ({@link BankStorage#CAP}; no cap once upgraded). What does not fit
  * is simply not taken, so the one who brings it keeps it.</li>
- * <li><b>Out</b>: only from an UPGRADED bank. A bank without the upgrade can be looked into (a Voorraadmeter counts what
- * is in it) but gives nothing to a pipe or a hopper.</li>
+ * <li><b>Out</b>: NEVER through the capability, upgraded or not (the user's decision B6): a hopper under the bank, a plain
+ * Knabbelbuis piece or a pick-up Haltepaaltje gets nothing, so a store can never be emptied by accident. A bank can always
+ * be looked into (a Voorraadmeter counts what is in it).</li>
+ * <li><b>The one way out</b> is {@link #filterkant()}: the door of an UPGRADED bank for a Filterstuk, the piece on which
+ * its owner says what may be taken and how much has to stay ({@code feature/techbuis/FilterBlockEntity}). It is the same
+ * stomach, the same slots and the same undo log, only with a working {@code extract}; it is not a capability, so nothing
+ * finds it by accident.</li>
  * </ul>
  * The stomach has no slots, so this shows one slot per kind of item plus one empty slot at the end (where a new kind goes
  * in). A kind keeps its slot number for as long as it is in the bank; a kind that ran out leaves an empty slot that the
@@ -180,16 +185,78 @@ public final class BankHandler implements ResourceHandler<ItemResource> {
         return erin;
     }
 
-    /** Out: only from an upgraded bank. */
+    /** Out: never through the capability (hoppers, plain tube pieces, pick-up poles); see {@link #filterkant()}. */
     @Override
     public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
         TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-        return resource.equals(getResource(index)) ? extract(resource, amount, transaction) : 0;
+        return 0;
     }
 
     @Override
     public int extract(ItemResource resource, int amount, TransactionContext transaction) {
         TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+        return 0;
+    }
+
+    /**
+     * The bank as a Filterstuk sees it: everything of this handler (the same slots, the same way in), plus the one way
+     * out: taking works here, from an UPGRADED bank only. The same object every time.
+     */
+    public ResourceHandler<ItemResource> filterkant() {
+        return filterkant;
+    }
+
+    private final ResourceHandler<ItemResource> filterkant = new ResourceHandler<>() {
+        @Override
+        public int size() {
+            return BankHandler.this.size();
+        }
+
+        @Override
+        public ItemResource getResource(int index) {
+            return BankHandler.this.getResource(index);
+        }
+
+        @Override
+        public long getAmountAsLong(int index) {
+            return BankHandler.this.getAmountAsLong(index);
+        }
+
+        @Override
+        public long getCapacityAsLong(int index, ItemResource resource) {
+            return BankHandler.this.getCapacityAsLong(index, resource);
+        }
+
+        @Override
+        public boolean isValid(int index, ItemResource resource) {
+            return BankHandler.this.isValid(index, resource);
+        }
+
+        @Override
+        public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
+            return BankHandler.this.insert(index, resource, amount, transaction);
+        }
+
+        @Override
+        public int insert(ItemResource resource, int amount, TransactionContext transaction) {
+            return BankHandler.this.insert(resource, amount, transaction);
+        }
+
+        @Override
+        public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            return resource.equals(BankHandler.this.getResource(index)) ? neem(resource, amount, transaction) : 0;
+        }
+
+        @Override
+        public int extract(ItemResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            return neem(resource, amount, transaction);
+        }
+    };
+
+    /** Takes up to this many of this kind out (inside the transaction): only an upgraded bank gives. */
+    private int neem(ItemResource resource, int amount, TransactionContext transaction) {
         if (amount == 0 || !storage.isUpgraded()) {
             return 0;
         }

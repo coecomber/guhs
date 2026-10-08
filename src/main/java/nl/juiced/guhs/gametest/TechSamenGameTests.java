@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.neoforged.neoforge.transfer.ResourceHandler;
@@ -63,6 +64,7 @@ import nl.juiced.guhs.feature.vadskracht.VadskrachtFeature;
 import nl.juiced.guhs.feature.wereld.Bescherming;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.taal.NlTekst;
 import nl.juiced.guhs.world.WildeDieren;
 
 /**
@@ -179,8 +181,9 @@ public class TechSamenGameTests {
     }
 
     /**
-     * A Filterstuk behind a Bank Guh with 40 wheat, "laat liggen 10": nothing comes out of a bank without its upgrade;
-     * upgraded, 30 go to the chest and 10 stay.
+     * A Filterstuk behind a Bank Guh with 40 wheat, "laat liggen 10": nothing comes out of a bank without its upgrade (and
+     * the piece says why); upgraded, 30 go to the chest and 10 stay. The Filterstuk is the ONLY thing that takes from a
+     * bank (the user's decision B6): see {@link #techsamenBankGeeftAlleenAanEenFilterstuk}.
      */
     @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 900)
     public static void techsamenBankAlleenLeegMetUpgrade(GameTestHelper helper) {
@@ -199,6 +202,7 @@ public class TechSamenGameTests {
             helper.assertTrue(filter.heeftKracht(), "the Filterstuk has vadskracht");
             gelijk(helper, 0, doel.countItem(Items.WHEAT) + rollend(filter), "nothing comes out of a bank without its upgrade");
             gelijk(helper, 40L, bank.getStorage().count(tarwe), "the bank still holds its wheat");
+            gelijk(helper, "Deze Bank Guh geeft pas iets met het Bodemloos Knabbelmaagje", NlTekst.tekst(filter.stand()), "what the Filterstuk says");
             bank.getStorage().setUpgraded(true);
             helper.succeedWhen(() -> {
                 gelijk(helper, 30, doel.countItem(Items.WHEAT), "upgraded: the wheat above ten went to the chest");
@@ -206,6 +210,82 @@ public class TechSamenGameTests {
                 gelijk(helper, 12L, bank.getStorage().count(kei(1)), "cobblestone is not on the list");
                 gelijk(helper, 0, rollend(filter), "nothing left in the tube");
             });
+        });
+    }
+
+    /**
+     * The user's decision B6: an UPGRADED Bank Guh gives nothing to a plain Richtingstuk behind it (which says so) and
+     * nothing to a hopper under it, however long they try; the Filterstuk at its other side takes what is on its list and
+     * leaves what it must. A Filterstuk without a list takes every kind, down to "laat liggen". And the Richtingstuk still
+     * puts things INTO the bank through its own tube.
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 1500)
+    public static void techsamenBankGeeftAlleenAanEenFilterstuk(GameTestHelper helper) {
+        BlockPos plek = new BlockPos(7, 3, 7);
+        helper.setBlock(plek.below(), Blocks.HOPPER);
+        BankGuhBlockEntity bank = bank(helper, plek);
+        HopperBlockEntity trechter = (HopperBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(plek.below()));
+        ItemStack tarwe = new ItemStack(Items.WHEAT);
+        bank.getStorage().setUpgraded(true);
+        gelijk(helper, 300L, bank.getStorage().insert(tarwe, 300), "300 wheat in the upgraded bank");
+        gelijk(helper, 20L, bank.getStorage().insert(kei(1), 20), "and 20 cobblestone");
+        // west of the bank: a plain Richtingstuk that bites out of the bank, a tube, a chest
+        helper.setBlock(plek.west(), TechbuisFeature.KNABBELBUIS_RICHTING.get().defaultBlockState().setValue(BuisStukBlock.FACING, Direction.WEST));
+        BuisStukBlockEntity richting = (BuisStukBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(plek.west()));
+        helper.setBlock(plek.west(2), TechbuisFeature.KNABBELBUIS.get());
+        ChestBlockEntity links = kist(helper, plek.west(3));
+        // east of the bank: a Filterstuk (wheat, laat liggen 100), a tube, a chest; its vadskracht from a source next to it
+        helper.setBlock(plek.east(), TechbuisFeature.KNABBELBUIS_FILTER.get().defaultBlockState().setValue(BuisStukBlock.FACING, Direction.EAST));
+        FilterBlockEntity filter = (FilterBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(plek.east()));
+        helper.assertTrue(filter.filter().voegToe(tarwe), "wheat on the list");
+        filter.filter().zetGetal(100);
+        helper.setBlock(plek.east(2), TechbuisFeature.KNABBELBUIS.get());
+        ChestBlockEntity rechts = kist(helper, plek.east(3));
+        bron(helper, plek.east().north());
+        gelijk(helper, 1, richting.routes().size(), "the Richtingstuk's tube ends at the chest");
+        helper.succeedWhen(() -> {
+            gelijk(helper, 200, rechts.countItem(Items.WHEAT), "the Filterstuk took the wheat above a hundred");
+            gelijk(helper, 100L, bank.getStorage().count(tarwe), "a hundred wheat stay in the bank");
+            gelijk(helper, 0, rollend(filter), "nothing left in the Filterstuk's tube");
+            // all that time (hundreds of ticks) the Richtingstuk and the hopper tried too
+            helper.assertTrue(links.isEmpty() && rollend(richting) == 0, "the plain Richtingstuk got nothing out of the upgraded bank");
+            helper.assertTrue(trechter.isEmpty(), "the hopper under the upgraded bank got nothing: " + trechter.getItem(0));
+            gelijk(helper, 20L, bank.getStorage().count(kei(1)), "the cobblestone (not on the list) is all there");
+            gelijk(helper, "Uit een Bank Guh hapt alleen een Filterstuk, njeg", NlTekst.tekst(richting.stand()), "what the Richtingstuk says");
+            helper.assertTrue(rechts.countItem(Items.COBBLESTONE) == 0 && !filter.verstopt(), "and the Filterstuk took nothing that is not on its list");
+        });
+    }
+
+    /**
+     * B6, the other half: a Filterstuk with an EMPTY list ("laat alles door") at an upgraded bank takes every kind, each
+     * down to "laat liggen"; and a Richtingstuk whose tube ends at an upgraded bank still fills it.
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 1500)
+    public static void techsamenFilterstukZonderLijstEnBankVullen(GameTestHelper helper) {
+        BlockPos plek = new BlockPos(7, 2, 3);
+        BankGuhBlockEntity bank = bank(helper, plek);
+        bank.getStorage().setUpgraded(true);
+        gelijk(helper, 40L, bank.getStorage().insert(new ItemStack(Items.WHEAT), 40), "40 wheat in the upgraded bank");
+        gelijk(helper, 30L, bank.getStorage().insert(kei(1), 30), "and 30 cobblestone");
+        helper.setBlock(plek.east(), TechbuisFeature.KNABBELBUIS_FILTER.get().defaultBlockState().setValue(BuisStukBlock.FACING, Direction.EAST));
+        FilterBlockEntity filter = (FilterBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(plek.east()));
+        filter.filter().zetGetal(25);
+        helper.setBlock(plek.east(2), TechbuisFeature.KNABBELBUIS.get());
+        ChestBlockEntity uit = kist(helper, plek.east(3));
+        bron(helper, plek.east().north());
+        // a chest whose Richtingstuk sends into the bank from the west
+        ChestBlockEntity in = kist(helper, plek.west(3));
+        in.setItem(0, new ItemStack(Items.DIRT, 12));
+        helper.setBlock(plek.west(2), TechbuisFeature.KNABBELBUIS_RICHTING.get().defaultBlockState().setValue(BuisStukBlock.FACING, Direction.EAST));
+        helper.setBlock(plek.west(), TechbuisFeature.KNABBELBUIS.get());
+        helper.succeedWhen(() -> {
+            gelijk(helper, 25L, bank.getStorage().count(new ItemStack(Items.WHEAT)), "25 wheat stay");
+            gelijk(helper, 25L, bank.getStorage().count(kei(1)), "25 cobblestone stay");
+            gelijk(helper, 15, uit.countItem(Items.WHEAT), "the other wheat is in the chest");
+            gelijk(helper, 5, uit.countItem(Items.COBBLESTONE), "the other cobblestone too");
+            // (the dirt comes in through the other tube and has fewer than 25: it never leaves again)
+            gelijk(helper, 12L, bank.getStorage().count(new ItemStack(Items.DIRT)), "the dirt of the other chest went INTO the bank");
+            helper.assertTrue(in.isEmpty() && uit.countItem(Items.DIRT) == 0, "and stays there: under 'laat liggen'");
         });
     }
 
@@ -242,11 +322,11 @@ public class TechSamenGameTests {
     }
 
     /**
-     * An "ophalen" pole at a Bank Guh: nothing leaves a bank without its upgrade; from an upgraded bank the Bezorgguhtje
-     * brings what the other stop asks for.
+     * An "ophalen" pole at a Bank Guh: nothing leaves a bank without its upgrade, and (the user's decision B6) nothing
+     * leaves an UPGRADED bank either: a Bezorgguhtje never fetches from a bank, it only delivers there.
      */
     @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 1500)
-    public static void techsamenBezorgguhtjeHaaltUitEenOpgevoerdeBank(GameTestHelper helper) {
+    public static void techsamenBezorgguhtjeHaaltNietsUitEenBank(GameTestHelper helper) {
         BankGuhBlockEntity bank = bank(helper, p(2, 3));
         gelijk(helper, 30L, bank.getStorage().insert(new ItemStack(knabbel()), 30), "30 knabbels in the bank");
         gelijk(helper, 9L, bank.getStorage().insert(kei(1), 9), "and 9 cobblestone");
@@ -260,12 +340,15 @@ public class TechSamenGameTests {
             gelijk(helper, 30L, bank.getStorage().count(new ItemStack(knabbel())), "the bank still holds its knabbels");
             helper.assertTrue(station.rugzakLeeg(), "and the backpack is empty");
             bank.getStorage().setUpgraded(true);
-            helper.succeedWhen(() -> {
-                gelijk(helper, 30, b.countItem(knabbel()), "upgraded: the knabbels are in the chest");
-                gelijk(helper, 0L, bank.getStorage().count(new ItemStack(knabbel())), "and out of the bank");
-                gelijk(helper, 9L, bank.getStorage().count(kei(1)), "the cobblestone nobody asks for stays");
-                helper.assertTrue(station.rugzakLeeg(), "the backpack is empty");
-            });
+        });
+        // (the guhtje keeps riding its round: four hundred more ticks are several visits to the pole at the bank)
+        helper.runAfterDelay(700, () -> {
+            helper.assertTrue(bank.isUpgraded(), "(the bank is upgraded by now)");
+            gelijk(helper, 0, b.countItem(knabbel()), "upgraded: still nothing comes out of the bank for a pole");
+            gelijk(helper, 30L, bank.getStorage().count(new ItemStack(knabbel())), "upgraded: the bank keeps its knabbels");
+            gelijk(helper, 9L, bank.getStorage().count(kei(1)), "and its cobblestone");
+            helper.assertTrue(station.rugzakLeeg(), "the backpack is empty");
+            helper.succeed();
         });
     }
 
@@ -787,8 +870,9 @@ public class TechSamenGameTests {
 
     /**
      * An "ophalen" pole at an upgraded Bank Guh that holds hundreds of kinds: a look walks at most
-     * {@link StepstationBlockEntity#MAX_ZOEK} slots (it walked all of them, and asked every "afleveren" stop about each),
-     * goes on where it stopped, and so still finds the one kind the other stop asks for at the very end of the bank.
+     * {@link StepstationBlockEntity#MAX_ZOEK} slots (it walked all of them, and asked every "afleveren" stop about each)
+     * and goes on where it stopped. Since the user's decision B6 a pole gets nothing out of a bank, so the kind the other
+     * stop asks for, at the very end of the bank, is LOOKED at (the walk comes round) and stays where it is.
      */
     @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 3000)
     public static void techsamenBezorgguhtjeBijEenBankMetHonderdenSoorten(GameTestHelper helper) {
@@ -812,12 +896,19 @@ public class TechSamenGameTests {
         paal(helper, p(2, 4), true, station);
         HaltepaaltjeBlockEntity paalB = paal(helper, p(12, 4), false, station);
         paalB.zetFilter(0, new ItemStack(knabbel()));
+        HaltepaaltjeBlockEntity paalA = (HaltepaaltjeBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(p(2, 4)));
         int[] meeste = {0};
-        helper.onEachTick(() -> meeste[0] = Math.max(meeste[0], station.bekeken()));
+        java.util.Set<Integer> begonnen = new java.util.HashSet<>();
+        helper.onEachTick(() -> {
+            meeste[0] = Math.max(meeste[0], station.bekeken());
+            begonnen.add(Math.floorMod(paalA.zoekVan(), 302) / StepstationBlockEntity.MAX_ZOEK);
+        });
         helper.succeedWhen(() -> {
-            gelijk(helper, 20, b.countItem(knabbel()), "the knabbels from the end of the bank are in the chest");
-            gelijk(helper, 0L, bank.getStorage().count(new ItemStack(knabbel())), "and out of the bank");
-            gelijk(helper, 300, bank.getStorage().snapshot().entries().size(), "every other kind stays in the bank");
+            // the walk came all the way round the 302 slots (six stretches of 54), the last stretch with the knabbels included
+            helper.assertTrue(begonnen.size() >= 6, "the looks walked on through the whole bank, a stretch at a time: " + begonnen);
+            gelijk(helper, 0, b.countItem(knabbel()), "nothing comes out of the bank for a pole, upgraded or not");
+            gelijk(helper, 20L, bank.getStorage().count(new ItemStack(knabbel())), "the knabbels at the end of the bank stay");
+            gelijk(helper, 301, bank.getStorage().snapshot().entries().size(), "every kind stays in the bank");
             helper.assertTrue(station.rugzakLeeg(), "the backpack is empty");
             helper.assertTrue(meeste[0] > 0 && meeste[0] <= StepstationBlockEntity.MAX_ZOEK, "no look walked more than " + StepstationBlockEntity.MAX_ZOEK
                     + " slots of the bank: " + meeste[0]);

@@ -173,11 +173,8 @@ def _teksten():
         f"item.guhs.{UPGRADE}": "Bodemloos Knabbelmaagje",
         f"item.guhs.{UPGRADE}.lore": "Klik ermee op je Bankguh: dan past er niet meer hooguit %s van elke soort in zijn buikje, maar oneindig veel",
         f"item.guhs.{UPGRADE}.lore.blijft": "Het blijft voor altijd bij die Bankguh, ook als je hem oppakt en ergens anders neerzet",
-        f"item.guhs.{UPGRADE}.lore.uit": "Let op: daarna mogen trechters en buizen er ook spullen uit halen",
+        f"item.guhs.{UPGRADE}.lore.uit": "Daarna mag een Filterstuk er ook spullen uit happen. Trechters en gewone buizen krijgen niks, njeg",
         f"item.guhs.{UPGRADE}.gelukt": "Slok! Het buikje van je Bankguh is nu bodemloos. Vahoeg!",
-        f"item.guhs.{UPGRADE}.uit": "Let op: trechters, Richtingstukken en Bezorgguhtjes mogen nu ook spullen uit deze Bankguh halen, en die "
-                                    "halen alles weg. Alleen een Filterstuk met 'laat liggen' houdt iets voor je achter.",
-        f"item.guhs.{UPGRADE}.trechter": "Er hangt een trechter onder deze Bankguh: die slurpt hem nu helemaal leeg, njeg!",
         f"item.guhs.{UPGRADE}.al": "Deze Bankguh heeft al een Bodemloos Knabbelmaagje. Twee buikjes is te vadsig, njeg",
         # the link key
         f"item.guhs.{SLEUTEL}": "Banksleutel",
@@ -227,8 +224,9 @@ def ftb(fq):
       "guhs:bank_guh", [adv("bank_vol")], rewards=(("guhs:kaas_knabbels", 8),), deps=["bank_plaatsen"], xp=50)
     q("bank_opgevoerd", "Het Bodemloos Knabbelmaagje", "De &duitvinder-guh&r in de &6Oude Guhrad-centrale&r (Guhbarbecuether) heeft iets "
       "geknutseld: het &dBodemloos Knabbelmaagje&r. Help hem met zijn oefenhal en je krijgt er een. Klik ermee op je Bank Guh en er past van "
-      "alles &eoneindig veel&r in. Het blijft bij die bank, ook als je hem oppakt. Pas dan kunnen &eKnabbelbuizen&r er ook spullen uit halen. "
-      "&cLet op:&r een trechter eronder of een gewoon Richtingstuk haalt hem dan helemaal leeg; alleen een Filterstuk laat iets liggen.",
+      "alles &eoneindig veel&r in. Het blijft bij die bank, ook als je hem oppakt. Pas dan kan een &eKnabbelbuis&r er ook spullen uit halen, "
+      "en alleen met een &dFilterstuk&r: daarop zet jij wat eruit mag en hoeveel er moet blijven liggen. Een trechter of een gewoon "
+      "Richtingstuk krijgt nooit iets uit je bank.",
       f"guhs:{UPGRADE}", [adv("bank_opgevoerd")], rewards=(("guhs:gefrituurde_kaasknabbels", 4),), deps=["bank_vol"], shape="rsquare", xp=150)
     q("bank_sleutel", "De Banksleutel", "Maak een &dBanksleutel&r (een zoutkristal, een goudstaaf en een kaasknabbel) en klik ermee op je "
       "&dBank Guh&r: de sleutel kent hem nu. Hij raakt nooit op, dus je koppelt er zoveel Hapluikjes mee als je wilt.",
