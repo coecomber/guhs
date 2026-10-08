@@ -71,6 +71,8 @@ public class HemelGameTests {
 
     /** How long a test waits for a killed guh's body to leave by itself (it takes 20 ticks of dying) before it takes it away. */
     private static final int LICHAAM_WACHT = 120;
+    /** biomes3 merge: per killed guh, the first check that failed after it (tick: message). */
+    private static final java.util.Map<UUID, String> EERSTE = new java.util.concurrent.ConcurrentHashMap<>();
 
     /**
      * biomes3 fix-klein: "the body is gone first", made robust. The two tests that bring a guh back must wait until the dead
@@ -86,7 +88,7 @@ public class HemelGameTests {
         if (nu == null) {
             return;
         }
-        helper.assertTrue(nu == lichaam, "(the guh already came back on an earlier tick, and a check after that failed then)");
+        helper.assertTrue(nu == lichaam, "(the guh already came back on an earlier tick, and a check after that failed then: on tick " + EERSTE.get(lichaam.getUUID()) + ")");
         helper.assertTrue(helper.getTick() >= LICHAAM_WACHT, "(the body is gone first)");
         org.slf4j.LoggerFactory.getLogger("guhs").warn("HemelGameTests: the body of a killed guh did not leave in {} ticks: health {}, deathTime {}, tickCount {}, "
                 + "alive {}, removed {}, passenger {}, entity ticking at its spot {}, loaded {}, server ticks {}; the test removes it itself", helper.getTick(),
@@ -166,6 +168,7 @@ public class HemelGameTests {
         helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(hart).inflate(12)).forEach(Entity::discard);
         helper.succeedWhen(() -> {
             lichaamWeg(helper, guh);   // biomes3 fix-klein
+            try {   // biomes3 merge: remember the FIRST check that fails (see lichaamWeg)
             helper.assertTrue(Hemel.terug(ander, hart, id) == null, "someone else can't (their heart sleeps, and it isn't theirs)");
             HemelQuest.wakker(ander);
             helper.assertTrue(Hemel.terug(ander, hart, id) == null && Wolkjes.isDood(p.level().getServer(), p.getUUID(), id), "not someone else's guh");
@@ -183,6 +186,10 @@ public class HemelGameTests {
             helper.assertTrue(Hemel.terug(p, hart, id) == null && Hemel.lijst(p).isEmpty(), "a living guh can't come back again");
             terug.discard();
             weg(helper, p, ander);
+            } catch (RuntimeException e) {
+                EERSTE.putIfAbsent(id, helper.getTick() + ": " + e.getMessage());
+                throw e;
+            }
         });
     }
 
