@@ -82,7 +82,7 @@ The biggest update so far: a big story in six chapters, a castle you play from t
 
 ### Smaller things, and for servers
 
-- **Quest book**: more than 1,100 quests in two chapter groups. The chapters "The Lord of the Nibble Ring" and "Super Guhrio" are sections of Tales of the Guhbarbecuether. Packs get the new chapters by themselves; chapters a pack changed are left alone.
+- **Quest book**: more than 1,100 quests in two chapter groups, with the new chapter Guh Technology in the group Guhs and the big stories in The Guh Path. Packs get the new chapters by themselves; chapters a pack changed are left alone.
 - **Everything is in the Guhdex, the quest book and the wiki, in Dutch and English.** One line is the same in both languages on purpose. You will know it when you hear it.
 - **Servers**: no world reset and no new start-up flags. The first start with this version takes longer: the mod looks for a place in unexplored terrain for every new building and story place (a couple of minutes on a big world; let it finish). On a world that has been explored far and wide the new buildings stand further out; the Super Compass finds them.
 - **For admins**: `/guhs bouwcheck gegarandeerd <dimension>` lists where every guaranteed building landed, `/guhs ringh1 zetkamp` puts Guhdalf's camp at a big Barbecue Pit where you stand (for a pit where players built on every free spot), and `/guhs guhpad gedaan <player> <story|alles>` marks a big story as followed for the Guh Path. A live map should not show the places listed in `data/guhs/kaart/verborgen.json` of the jar: they are the story's surprises.
