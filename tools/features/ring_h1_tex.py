@@ -37,8 +37,18 @@ def textures(h):
     h.save(_krat(h), "block", "ringh1_krat.png")
 
 
+def _uv(element, uv):
+    """This uv on every face of the element."""
+    for face in element["faces"].values():
+        face["uv"] = list(uv)
+    return element
+
+
 def _model(h, name, elements, textures):
-    h.w(f"{h.A}/models/block/{name}.json", {"parent": "minecraft:block/block", "textures": textures, "elements": elements})
+    # (uvfix: a part above y 16 gets a uv outside its texture by itself; 26.1 cannot bake that for a texture with holes in
+    #  it: "Cannot compute translucency out of bounds" for the cake's side, and the whole party table was a purple-black cube)
+    from features import uvfix
+    h.w(f"{h.A}/models/block/{name}.json", {"parent": "minecraft:block/block", "textures": textures, "elements": uvfix.binnen(elements)})
 
 
 def modellen(h):
@@ -60,8 +70,9 @@ def modellen(h):
         el([0, 12, 0], [16, 14, 16], "#hout"),
         el([1, 0, 1], [3, 12, 3], "#hout"), el([13, 0, 1], [15, 12, 3], "#hout"), el([1, 0, 13], [3, 12, 15], "#hout"), el([13, 0, 13], [15, 12, 15], "#hout"),
         el([0.5, 14, 0.5], [15.5, 14.25, 15.5], "#kleed", faces=("up", "north", "south", "east", "west")),
-        el([4, 14.25, 4], [12, 19, 12], "#taart_zij", faces=("north", "south", "east", "west")),
-        el([4, 14.25, 4], [12, 19, 12], "#taart", faces=("up",)),
+        # (the cake's own part of its two pictures: the side is the lower half of cake_side, the rest of it is empty)
+        _uv(el([4, 14.25, 4], [12, 19, 12], "#taart_zij", faces=("north", "south", "east", "west")), [1, 8, 15, 16]),
+        _uv(el([4, 14.25, 4], [12, 19, 12], "#taart", faces=("up",)), [1, 1, 15, 15]),
         el([7.5, 19, 7.5], [8.5, 22, 8.5], "#kaars"),
         el([1, 14.25, 11], [4, 16, 14], "#knabbels"), el([12, 14.25, 1], [15, 15.5, 4], "#knabbels"),
     ], {"particle": "minecraft:block/spruce_planks", "hout": "minecraft:block/spruce_planks", "kleed": "minecraft:block/pink_wool",
