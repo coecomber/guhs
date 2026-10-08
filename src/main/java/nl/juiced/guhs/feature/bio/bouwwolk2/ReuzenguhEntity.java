@@ -310,6 +310,7 @@ public class ReuzenguhEntity extends Mob implements GeoEntity {
         speler.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, ZWEEF_TICKS, 0, false, false));
         speler.sendSystemMessage(Component.translatable("gui.guhs.reuzenguh.weg." + getRandom().nextInt(WEG_REGELS)).withStyle(ChatFormatting.LIGHT_PURPLE));
         GuhAdvancements.grant(speler, "reuzenguh_weggeblazen");
+        nl.juiced.guhs.feature.bio.systemen.Bewijzen.nies(speler);   // biomes3 systemen: the count for the title "Gezondheid!"
         sporen.remove(speler.getUUID());
     }
 

@@ -114,7 +114,8 @@ public class TitelsGameTests {
     public static void titelsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         Set<String> ids = new HashSet<>(), namen = new HashSet<>();
-        helper.assertTrue(Titels.ALLE.size() == 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size(), "eight titles (and the guhpixel ones), got " + Titels.ALLE.size());
+        helper.assertTrue(Titels.ALLE.size() == 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size() + nl.juiced.guhs.feature.bio.systemen.BioTitels.ALLE.size(),   // biomes3
+                "eight titles (and the guhpixel and biomes3 ones), got " + Titels.ALLE.size());
         for (Titels.Titel t : Titels.ALLE) {
             helper.assertTrue(ids.add(t.id()) && namen.add(t.naamSleutel()), "unique: " + t.id());
             helper.assertTrue(lang.has(t.naamSleutel()), "name of " + t.id());

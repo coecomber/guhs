@@ -155,7 +155,8 @@ GEO = lambda n: os.path.join(wr.ASSETS, "geckolib", "models", "entity", n + ".ge
 HIDE = ("saddle",) + tuple(f"armor_{t}{p}" for t in ("iron", "diamond", "netherite") for p in ("", "_body"))
 VARIANT_BONES = {"teckel": ("teckel",), "ender": ("ender",), "koning": ("koning",), "wolk": ("wolk",), "zeemeerguh": ("zeemeer",),
                  "asguh": ("asguh",), "pluisguh": ("pluis",), "brontosaurus": ("neck",), "vahoege_ender": ("ender",),
-                 "baltoguh": ("balto",), "mewtwo": ("mewtwo",), "stitch626": ("stitch",)}   # 3.0: the story guhs
+                 "baltoguh": ("balto",), "mewtwo": ("mewtwo",), "stitch626": ("stitch",),   # 3.0: the story guhs
+                 "bloesemguh": ("bloesem",), "tanukiguh": ("tanuki",)}   # biomes3
 
 
 @lru_cache(maxsize=None)

@@ -2,12 +2,12 @@
 Guhpixel slice "reisbureau" (Java: feature/guhpixel/reisbureau; namespace reisbureau; English: tools/lang/en/c38_px_reisbureau.json).
 
 Reisbureau "De Vadsvakantie" (DESIGN_PX section 5): send ONE of your guhs on a trip that takes real time (1, 2, 8 or 24
-hours; every real day four trips out of sixteen destinations); it comes back with an ansichtkaart and a souvenir. Independent
+hours; every real day four trips out of twenty destinations: sixteen of guhpixel, four of biomes3); it comes back with an ansichtkaart and a souvenir. Independent
 of the guhpixel dimension. This module makes:
   - the structure "reisbureau" in the Guhmensie (guhpixel_reisbureau_bouw.py) with its random_spread set and its guaranteed
     copy (ring 4300-5600, sector 1 of 2), the Reisagent-guh (NPC kind reisbureau_agent);
-  - the Reisbalie (craftable with the Reisstempel), the Reisstempel, seventeen ansichtkaarten (sixteen destinations + the
-    proefreisje), 16 common + 16 rare souvenirs, the Gouden koffertje and the Koffertje (guhpixel_reisbureau_modellen.py and
+  - the Reisbalie (craftable with the Reisstempel), the Reisstempel, twenty-one ansichtkaarten (twenty destinations + the
+    proefreisje), 20 common + 20 rare souvenirs, the Gouden koffertje and the Koffertje (guhpixel_reisbureau_modellen.py and
     guhpixel_reisbureau_tex.py), recipes, loot tables, sounds, the hidden quest advancements;
   - every Dutch text (guhpixel_reisbureau_tekst.py) and the FTB quests of the section "Reisbureau De Vadsvakantie".
 The first destination is spelled exactly "Vadsen bij huize Lingsesdijk 86", its picture "Huize Lingsesdijk 86".
@@ -99,8 +99,9 @@ def selfcheck(h):
     verwacht = [(b[0], str(b[1]), str(b[2])) for b in tekst.BESTEMMINGEN] + [(tekst.PROEF[0], str(tekst.PROEF[1]), "0")]
     if gevonden != verwacht:
         problems.append(f"Bestemming.java differs from guhpixel_reisbureau_tekst.py:\n    {gevonden}\n    {verwacht}")
-    if len(tekst.BESTEMMINGEN) != 16 or [b[1] for b in tekst.BESTEMMINGEN] != [60] * 4 + [120] * 4 + [480] * 4 + [1440] * 4:
-        problems.append("sixteen destinations, four per duration")
+    # biomes3: twenty, five per duration (sixteen and four before); the daily offer (Reizen.aanbod) takes one per duration
+    if len(tekst.BESTEMMINGEN) != 20 or [b[1] for b in tekst.BESTEMMINGEN] != [60] * 5 + [120] * 5 + [480] * 5 + [1440] * 5:
+        problems.append("twenty destinations, five per duration")
     if TEXTS[f"gui.guhs.{NAME}.bestemming.lingsesdijk"] != "Vadsen bij huize Lingsesdijk 86" \
             or "\"Huize Lingsesdijk 86\"" not in TEXTS[f"block.guhs.{NAME}_souvenir_lingsesdijk"]:
         problems.append("the first destination is 'Vadsen bij huize Lingsesdijk 86', its picture 'Huize Lingsesdijk 86'")
@@ -139,7 +140,7 @@ def ftb(fq):
     q(f"{NAME}_koffertje", "Het Gouden koffertje", "Een souvenir dat je al hebt wordt een &6stempel&r op je reispas. Bij tien "
       "stempels krijg je van de Reisagent-guh een &6Gouden koffertje&r.", f"guhs:{NAME}_gouden_koffertje",
       [item(f"guhs:{NAME}_gouden_koffertje")], rewards=(("guhs:gefrituurde_kaasknabbels", 4),), deps=[f"{NAME}_eerste_reis"], xp=150)
-    q(f"{NAME}_album", "Het hele album", "Verzamel het gewone souvenir van &6alle zestien bestemmingen&r, van Vadsen bij huize "
-      "Lingsesdijk 86 tot de Thuisblijfvakantie \"Balkonië\". Elke echte dag zijn er vier andere reizen, dus dit duurt even. Je album "
+    q(f"{NAME}_album", "Het hele album", "Verzamel het gewone souvenir van &6alle twintig bestemmingen&r, van Vadsen bij huize "
+      "Lingsesdijk 86 tot Japan, met Evivads en Nielsvads. Elke echte dag zijn er vier andere reizen, dus dit duurt even. Je album "
       "staat in de Guhdex.", f"guhs:{NAME}_souvenir_lingsesdijk", [adv(f"{NAME}_album")], rewards=(("guhs:gefrituurde_kaasknabbels", 6),),
       deps=[f"{NAME}_eerste_reis"], shape="hexagon", xp=300)

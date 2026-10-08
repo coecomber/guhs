@@ -80,7 +80,8 @@ public final class Titels {
                     p -> GuhQuests.saved(p).getIntOr(GuheindeGevecht.WINS, 0) > 0),
             new Titel(GUHKENNER, "gui.guhs.titels.naam." + GUHKENNER, ChatFormatting.GREEN, "guhs:guhdex",
                     p -> GuhDex.vol(GuhWorldData.get(p.level().getServer()).player(p.getUUID()).seen))),
-            nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream()).toList();   // (guhpixel: the titles of its slices come last)
+            java.util.stream.Stream.concat(nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream(),   // (guhpixel: the titles of its slices)
+                    nl.juiced.guhs.feature.bio.systemen.BioTitels.ALLE.stream())).toList();   // biomes3: its four titles come last
 
     /** Server: the title each online player showed last (to notice changes; "" = none). */
     private static final Map<UUID, String> LAATST = new ConcurrentHashMap<>();
