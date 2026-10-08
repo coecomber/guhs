@@ -37,8 +37,8 @@ PAGINA = {
         "eyes cannot."),
     "systemen/guhstation": (
         "The Guhstation",
-        "A gray-black game console with a guh snoot on it. You get it when you have played through the first series of Sniff Island. "
-        "With it you go back to the island whenever you want."),
+        "A gray-black game console with a guh snoot on it. You get it when you have played through the first series of Sniff Island, "
+        "together with the island's music disc. With it you go back to the island whenever you want."),
     "systemen/snuffeldorp-bewoners": (
         "The dogs of Sniffville",
         "On Sniff Island everybody lives on four paws. You meet ten dogs in the first story. Six of them have mislaid something."),
@@ -177,6 +177,19 @@ TEKST = {
         "running and play. Click 'Press start' and you are back on the island, at the spot where you were last time. Don't feel like it? "
         "Click 'No, I'd rather not sniff right now, nyeg'. If you do not have a Guhstation yet, the captain at a dock cottage sails you to "
         "the island."),
+    ("systemen/guhstation", "De muziekplaat van het eiland"): (
+        "The island's music disc",
+        "At the end of the first series you also get the music disc 'Sniff Island' (Guh - Paws in the Sand), a present from Captain "
+        "Saltsnout. Had you already finished the story? Then talk to the captain in the island's harbor. Every player gets it once. In "
+        "a jukebox you hear the tune at normal volume; the Disco Dynamo counts it as a rare disc. While the Guhstation's screen is open "
+        "you hear the same tune very softly (the 'Jukebox/Note Blocks' slider in the sound settings controls it too). Apart from that "
+        "the island is quiet: there you only hear the sea and your own nose."),
+    ("systemen/guhstation", "Je eigen deuntje"): (
+        "Your own tune",
+        "The tune is one sound with one file, so you can replace it on your own computer with a resource pack. Put your own music as "
+        "OGG Vorbis in the pack at assets/guhs/sounds/music_disc_snuffeleiland.ogg and switch the pack on: the disc and the Guhstation "
+        "then play your file (the sound is called guhs:music_disc.snuffeleiland). Nothing changes in the mod itself, and other players "
+        "simply hear the mod's own tune."),
     ("systemen/guhstation", "Weer naar huis"): (
         "Home again",
         "On the island you have a memory card in your hotbar. Use it and choose 'Save and go home': you stand exactly where you were before "
@@ -263,11 +276,12 @@ TEKST = {
         "7. A trace of Papa",
         "At the little tree your buddy gives you a blossom twig. And between the stones you smell something familiar. You dig: a blue "
         "scarf with stripes. Papa has been here! His trail goes further onto the island, past the roadblock. With this the story is "
-        "finished and you get the Guhstation. To be continued."),
+        "finished and you get the Guhstation and the island's music disc. To be continued."),
     ("verhalen/snuffeldorp", "Naar huis en terug"): (
         "Home and back",
         "Captain Saltsnout in the harbor sails you home whenever you want, and with the memory card you can do that too. Your story is "
-        "kept. If you already have the Guhstation, you go back to the island with it. If yours is gone, the captain has another one."),
+        "kept. If you already have the Guhstation, you go back to the island with it. If yours is gone, the captain has another one. Had "
+        "you finished the story before the music disc existed? Then talk to the captain: you still get it, once."),
     ("systemen/snuffeldorp-bewoners", "Wie is wie"): (
         "Who is who",
         "Wendy Wagtail is the beachcomber who finds you; she lives in the beachcomber's hut by the beach gate. Doctor Plasterpaw is the old "

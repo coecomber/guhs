@@ -3420,6 +3420,14 @@
     ],
     "subtitle": "subtitles.guhs.snuffel.maatje"
   },
+  "music_disc.snuffeleiland": {
+    "sounds": [
+      {
+        "name": "guhs:music_disc_snuffeleiland",
+        "stream": true
+      }
+    ]
+  },
   "snuffelsteiger.piep": {
     "sounds": [
       {

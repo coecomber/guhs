@@ -58,10 +58,11 @@ WIKI = {
         ("verhalen/snuffeldorp", "7. Een spoor van papa",
          "Bij het boompje geeft je maatje je een bloesemtakje. En tussen de stenen ruik je iets bekends. Je graaft: een blauwe sjaal met "
          "strepen. Papa is hier geweest! Zijn spoor loopt verder het eiland op, voorbij de wegversperring. Het verhaal is hiermee klaar "
-         "en je krijgt het Guhstation. Wordt vervolgd."),
+         "en je krijgt het Guhstation en de muziekplaat van het eiland. Wordt vervolgd."),
         ("verhalen/snuffeldorp", "Naar huis en terug",
          "Kapitein Zoutsnoet in de haven vaart je naar huis wanneer je wilt, en met de geheugenkaart kan dat ook. Je verhaal blijft "
-         "bewaard. Heb je het Guhstation al, dan ga je daarmee terug naar het eiland. Ben je het kwijt, dan heeft de kapitein er nog een."),
+         "bewaard. Heb je het Guhstation al, dan ga je daarmee terug naar het eiland. Ben je het kwijt, dan heeft de kapitein er nog een. Had je het verhaal al uit "
+         "voordat de muziekplaat bestond? Praat dan met de kapitein: je krijgt hem alsnog, één keer."),
         ("systemen/snuffeldorp_bewoners", "Wie is wie",
          "Jutje Kwispel is de strandjutter die je vindt; ze woont in de juttershut bij het strandpoortje. Dokter Pleisterpoot is de oude "
          "teckel met de doktersjas. Meester Truffelneus, de grote speurhond met de groene cape, geeft snuffelles in de wei. Kapitein "

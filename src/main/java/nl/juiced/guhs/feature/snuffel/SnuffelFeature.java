@@ -77,6 +77,16 @@ public final class SnuffelFeature {
             tooltip.accept(Component.translatable("item.guhs.snuffel_bloesemtakje.lore").withStyle(ChatFormatting.GRAY));
         }
     }, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+    /**
+     * The island's music disc (jukebox song {@code guhs:snuffeleiland}): Kapitein Zoutsnoet's present at the end of the first
+     * series ({@link Snuffel#geefPlaat}).
+     */
+    public static final DeferredItem<Item> MUZIEKPLAAT = ITEMS.registerItem("music_disc_snuffeleiland", p -> new Item(p) {
+        @Override
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.music_disc_snuffeleiland.lore").withStyle(ChatFormatting.GRAY));
+        }
+    }, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Guhs.id("snuffeleiland"))));
 
     // --- entities ---------------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<BewonerEntity>> SNUFFEL_BEWONER = ENTITY_TYPES.register("snuffel_bewoner",
@@ -92,7 +102,7 @@ public final class SnuffelFeature {
             () -> EntityType.Builder.of(BoompjeEntity::new, MobCategory.MISC).sized(0.9f, 1.5f).eyeHeight(0.8f).clientTrackingRange(10).updateInterval(20)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("snuffel_boompje"))));
 
-    // --- sounds (vanilla and guh sounds, pitched, in sounds.json; no music) -----------------------------------------------------
+    // --- sounds (vanilla and guh sounds, pitched, in sounds.json) ---------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> SNUF_GELUID = geluid("snuffel.snuf");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLAF_GELUID = geluid("snuffel.blaf");
     /** The "njeg" in a bark (a guh's happy squeak, high). */
@@ -106,6 +116,14 @@ public final class SnuffelFeature {
     public static final DeferredHolder<SoundEvent, SoundEvent> GUHSTATION_GELUID = geluid("snuffel.guhstation");
     /** The companion's giggle (for the scene in which it appears, and whenever it is up to something). */
     public static final DeferredHolder<SoundEvent, SoundEvent> MAATJE_GELUID = geluid("snuffel.maatje");
+
+    /**
+     * The island tune (our own, tools/features/snuffel_geluid.py): ONE sound event with ONE file
+     * ({@code assets/guhs/sounds/music_disc_snuffeleiland.ogg}), so a resource pack replaces it with a single OGG. It plays
+     * at full volume from the disc {@link #MUZIEKPLAAT} only, and very softly in the Guhstation's window
+     * ({@code client.GuhstationMuziek}); the island itself has no music.
+     */
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUZIEK = geluid("music_disc.snuffeleiland");
 
     private static DeferredHolder<SoundEvent, SoundEvent> geluid(String naam) {
         return SOUNDS.register(naam, () -> SoundEvent.createVariableRangeEvent(Guhs.id(naam)));
@@ -160,5 +178,6 @@ public final class SnuffelFeature {
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(GUHSTATION_ITEM.get()));
         output.accept(new ItemStack(SNUFFEL_BLOESEMTAKJE.get()));
+        output.accept(new ItemStack(MUZIEKPLAAT.get()));
     }
 }

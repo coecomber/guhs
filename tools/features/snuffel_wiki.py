@@ -20,7 +20,7 @@ WIKI = {
                       ["verhalen/snuffeleiland", "systemen/guhstation"]),
         "guhstation": ("Het Guhstation", "block_guhstation",
                        "Een grijszwart spelkastje met een guh-snoet erop. Je krijgt het als je de eerste reeks van het Snuffeleiland "
-                       "hebt uitgespeeld. Daarmee ga je terug naar het eiland wanneer je wilt.",
+                       "hebt uitgespeeld, samen met de muziekplaat van het eiland. Daarmee ga je terug naar het eiland wanneer je wilt.",
                        ["verhalen/snuffeleiland", "systemen/snuffelen"]),
     },
     "tekst": [
@@ -58,6 +58,17 @@ WIKI = {
          "zusje aanrennen en spelen. Klik op 'Druk op start' en je staat weer op het eiland, op de plek waar je de vorige keer "
          "was. Geen zin? Klik op 'Nee ik wil even niet snuffelen, njeg'. Heb je nog geen Guhstation, dan vaart de kapitein bij een "
          "steigerhuisje je naar het eiland."),
+        ("systemen/guhstation", "De muziekplaat van het eiland",
+         "Aan het eind van de eerste reeks krijg je ook de muziekplaat 'Het Snuffeleiland' (Guh - Pootjes in het zand), een cadeautje "
+         "van Kapitein Zoutsnoet. Had je het verhaal al uit? Praat dan met de kapitein in de haven van het eiland. Iedere speler "
+         "krijgt hem één keer. In een jukebox hoor je het deuntje op gewone sterkte; de Disco-dynamo telt hem als zeldzame plaat. "
+         "Zolang het schermpje van het Guhstation open is, hoor je hetzelfde deuntje heel zachtjes (de schuif 'Jukebox/nootblokken' "
+         "bij de geluidsinstellingen regelt het mee). Verder is het op het eiland stil: daar hoor je alleen de zee en je eigen neus."),
+        ("systemen/guhstation", "Je eigen deuntje",
+         "Het deuntje is één geluid met één bestand, dus je kunt het op je eigen computer vervangen met een resourcepack. Zet je eigen "
+         "muziek als OGG Vorbis in het pack op assets/guhs/sounds/music_disc_snuffeleiland.ogg en zet het pack aan: de plaat en het "
+         "Guhstation spelen dan jouw bestand (het geluid heet guhs:music_disc.snuffeleiland). Er verandert niets aan de mod zelf, en "
+         "andere spelers horen gewoon het eigen deuntje van de mod."),
         ("systemen/guhstation", "Weer naar huis",
          "Op het eiland heb je een geheugenkaart in je balk. Gebruik hem en kies 'Opslaan en naar huis': je staat precies waar je "
          "was voordat je vertrok, met al je eigen spullen. Kapitein Zoutsnoet in de haven van het eiland vaart je ook terug."),

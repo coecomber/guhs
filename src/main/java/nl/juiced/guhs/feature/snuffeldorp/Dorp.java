@@ -308,7 +308,10 @@ public final class Dorp {
         p.sendSystemMessage(Component.translatable("gui.guhs.snuffeldorp.bloesem.2", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
-    /** The very end of the first series: the story is finished (the Guhpad asks for this) and the Guhstation is given. */
+    /**
+     * The very end of the first series: the story is finished (the Guhpad asks for this), the Guhstation is given and with
+     * it the island's music disc (the captain's present, handed over by the companion).
+     */
     static void einde(ServerPlayer p) {
         if (!Snuffel.rondAf(p)) {
             return;
@@ -316,6 +319,7 @@ public final class Dorp {
         Component naam = Honden.maatjeNaam(Keuze.vanOfStandaard(p).maatje());
         p.sendSystemMessage(Component.translatable("gui.guhs.snuffeldorp.einde.1").withStyle(ChatFormatting.GOLD));
         p.sendSystemMessage(Component.translatable("gui.guhs.snuffeldorp.einde.2", naam).withStyle(ChatFormatting.GREEN));
+        p.sendSystemMessage(Component.translatable("gui.guhs.snuffeldorp.einde.plaat", naam).withStyle(ChatFormatting.AQUA));
         p.sendSystemMessage(Component.translatable("gui.guhs.snuffeldorp.einde.3").withStyle(ChatFormatting.GOLD));
         Maatjes.blij(p);
     }

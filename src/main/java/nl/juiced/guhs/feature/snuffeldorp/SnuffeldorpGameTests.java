@@ -438,8 +438,8 @@ public class SnuffeldorpGameTests {
         Dorp.Klus extra = Dorp.KLUSSEN.get(SnuffelFeature.DADEN_NODIG);
         d.dan(wie + " finished the first series", () -> {
             helper.assertTrue(LIJN.vlag(p, Dorp.SJAAL) && Geuren.kent(p, "papa_sjaal") && Cutscenes.gezien(p, DorpScenes.SPOOR.id()), "the scarf, and the last scene");
-            helper.assertTrue(Snuffel.klaar(p) && Snuffel.heeftGuhstationGehad(p) && SnuffelKluis.postAantal(p) == 2 && LIJN.stand(p).klaar(),
-                    "the story is finished (what the Guhpad asks) and the Guhstation travels home with the twig");
+            helper.assertTrue(Snuffel.klaar(p) && Snuffel.heeftGuhstationGehad(p) && Snuffel.heeftPlaatGehad(p) && SnuffelKluis.postAantal(p) == 3
+                    && LIJN.stand(p).klaar(), "the story is finished (what the Guhpad asks); the Guhstation and the music disc travel home with the twig");
             helper.assertTrue(Geuren.aantal(p) == 3 + 1 + SnuffelFeature.DADEN_NODIG + 4 + 1, "thirteen scents learned: " + Geuren.geleerd(p));
             helper.assertTrue(Hondvorm.actief(p) && tel(p, SnuffelFeature.GUHSTATION_ITEM.get()) == 0, "still a dog with a dog's pockets");
             t.praat(p, "trainer");
@@ -467,7 +467,7 @@ public class SnuffeldorpGameTests {
             t.praat(p, DorpRollen.KAPITEIN);
             helper.assertTrue("snuffeldorp_kapitein".equals(Praat.lopend(p)), "the captain asks");
             Praat.antwoord(p, Eiland.bewoner(t.plaats, DorpRollen.KAPITEIN), 2);
-            helper.assertTrue(SnuffelKluis.postAantal(p) == 3, "a lost Guhstation is replaced for whoever finished");
+            helper.assertTrue(SnuffelKluis.postAantal(p) == 4, "a lost Guhstation is replaced for whoever finished (and no second music disc)");
             t.praat(p, DorpRollen.KAPITEIN);
             Praat.antwoord(p, Eiland.bewoner(t.plaats, DorpRollen.KAPITEIN), 1);
             helper.assertTrue(Cutscenes.bezig(p) && Hondvorm.actief(p), "the boat scene plays first");
@@ -475,7 +475,7 @@ public class SnuffeldorpGameTests {
         d.dan(wie + " is home", () -> {
             helper.assertTrue(dicht(p.position(), huis) && p.level() == helper.getLevel(), "exactly home: " + p.position());
             helper.assertTrue(tel(p, SnuffelFeature.GUHSTATION_ITEM.get()) == 2 && tel(p, SnuffelFeature.SNUFFEL_BLOESEMTAKJE.get()) == 1
-                    && p.getInventory().getItem(3).is(net.minecraft.world.item.Items.COOKIE) && p.getInventory().getItem(3).getCount() == 5,
+                    && tel(p, SnuffelFeature.MUZIEKPLAAT.get()) == 1 && p.getInventory().getItem(3).is(net.minecraft.world.item.Items.COOKIE) && p.getInventory().getItem(3).getCount() == 5,
                     "the own things back in their slots, the island's gifts added");
             helper.assertTrue(LIJN.klaar(p) && "klaar".equals(LIJN.sleutel(p)) && LIJN.doel(p) == null, "finished, at home");
         });
@@ -541,7 +541,8 @@ public class SnuffeldorpGameTests {
             // the captain sails a dog home at any point of the story, without a Guhstation to give
             t.praat(q, DorpRollen.KAPITEIN);
             Praat.antwoord(q, Eiland.bewoner(t.plaats, DorpRollen.KAPITEIN), 2);
-            helper.assertTrue(SnuffelKluis.postAantal(q) == 0 && Hondvorm.actief(q), "no Guhstation for a dog that did not finish");
+            helper.assertTrue(SnuffelKluis.postAantal(q) == 0 && !Snuffel.heeftPlaatGehad(q) && Hondvorm.actief(q),
+                    "no Guhstation and no music disc for a dog that did not finish");
             Praat.antwoord(q, Eiland.bewoner(t.plaats, DorpRollen.KAPITEIN), 0);
             helper.assertTrue(Hondvorm.actief(q) && !Cutscenes.bezig(q), "\"Ik blijf nog even\": nothing happens");
             // the exam cannot be started out of turn, and its scents are nobody's
@@ -630,6 +631,64 @@ public class SnuffeldorpGameTests {
     private static boolean steigerDoel(ServerPlayer p) {
         nl.juiced.guhs.feature.verhaal.Doel d = LIJN.doel(p);
         return d != null && d.dim() == nl.juiced.guhs.world.ModDimensions.GUHMENSION && "steigerhuisje".equals(d.structuur());
+    }
+
+    /**
+     * The island's music disc: once per player. With the Guhstation at the end of the story; from Kapitein Zoutsnoet for
+     * whoever had finished before the disc existed; never for a dog that did not finish; never twice.
+     */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 600)
+    public static void snuffeldorpMuziekplaat(GameTestHelper helper) {
+        Proef t = new Proef(helper, true);
+        ServerPlayer p = t.speler(0), q = t.speler(1);
+        net.minecraft.world.item.Item plaat = SnuffelFeature.MUZIEKPLAAT.get();
+        Draaiboek d = new Draaiboek();
+        d.dan("an old save: the story finished before the disc existed", () -> {
+            helper.assertTrue(Snuffel.rondAf(p) && tel(p, plaat) == 1 && tel(p, SnuffelFeature.GUHSTATION_ITEM.get()) == 1 && Snuffel.heeftPlaatGehad(p),
+                    "a player who finishes at home gets the Guhstation and the disc at once");
+            p.getInventory().clearContent();
+            nl.juiced.guhs.feature.snuffel.SnuffelData.van(p).remove("Muziekplaat");
+            helper.assertTrue(Snuffel.klaar(p) && Snuffel.heeftGuhstationGehad(p) && !Snuffel.heeftPlaatGehad(p), "finished, a Guhstation, no disc yet");
+            helper.assertTrue(!LIJN.stand(p).beloningen().get(1).binnen() && LIJN.stand(p).beloningen().get(0).binnen(), "the Guhdex: the disc is still to come");
+            // (both saw the waking scene long ago)
+            LIJN.vlag(p, Dorp.WAKKER, true);
+            LIJN.begin(q);
+            LIJN.zet(q, SnuffelFeature.STAP_DOKTER);
+            LIJN.vlag(q, Dorp.WAKKER, true);
+            Reis.naarEiland(p, t.plaats, Reis.Aankomst.STRAND);
+            Reis.naarEiland(q, t.plaats, Reis.Aankomst.STRAND);
+        }, null, () -> t.bewoond() && Hondvorm.actief(p) && Hondvorm.actief(q) && !Cutscenes.bezig(p) && !Cutscenes.bezig(q));
+        d.wacht(helper, 5);
+        d.dan("the captain hands it over, once", () -> {
+            BewonerEntity kapitein = Eiland.bewoner(t.plaats, DorpRollen.KAPITEIN);
+            helper.assertTrue(!Snuffel.rondAf(p) && !Snuffel.heeftPlaatGehad(p) && SnuffelKluis.postAantal(p) == 0, "finishing again does not give it: the captain does");
+            t.praat(p, DorpRollen.KAPITEIN);
+            helper.assertTrue(Snuffel.heeftPlaatGehad(p) && SnuffelKluis.postAantal(p) == 1 && "snuffeldorp_kapitein".equals(Praat.lopend(p)),
+                    "the next talk with the captain: the disc goes in the post, and he asks his question as always");
+            helper.assertTrue(LIJN.stand(p).beloningen().get(1).binnen(), "the Guhdex ticks it");
+            Praat.antwoord(p, kapitein, 0);
+            t.praat(p, DorpRollen.KAPITEIN);
+            Praat.antwoord(p, kapitein, 0);
+            t.praat(p, DorpRollen.KAPITEIN);
+            helper.assertTrue(SnuffelKluis.postAantal(p) == 1 && !Snuffel.geefPlaat(p), "never a second one");
+            // a new Guhstation does not bring a new disc
+            Praat.antwoord(p, kapitein, 2);
+            helper.assertTrue(SnuffelKluis.postAantal(p) == 2, "a replaced Guhstation, no disc with it");
+            // a dog in the middle of the story gets none
+            t.praat(q, DorpRollen.KAPITEIN);
+            Praat.antwoord(q, kapitein, 0);
+            helper.assertTrue(!Snuffel.heeftPlaatGehad(q) && SnuffelKluis.postAantal(q) == 0, "per player: nothing for a dog that did not finish");
+            // ...until it finishes: then with the Guhstation, and the captain has nothing more to give
+            helper.assertTrue(Snuffel.rondAf(q) && Snuffel.heeftPlaatGehad(q) && SnuffelKluis.postAantal(q) == 3, "at the end: the twig, the Guhstation and the disc");
+            t.praat(q, DorpRollen.KAPITEIN);
+            Praat.antwoord(q, kapitein, 0);
+            helper.assertTrue(SnuffelKluis.postAantal(q) == 3, "not again from the captain");
+            helper.assertTrue(Reis.naarHuis(p) && Reis.naarHuis(q), "home");
+            helper.assertTrue(tel(p, plaat) == 1 && tel(p, SnuffelFeature.GUHSTATION_ITEM.get()) == 1, "the old save: exactly one disc at home (and the new Guhstation)");
+            helper.assertTrue(tel(q, plaat) == 1 && tel(q, SnuffelFeature.GUHSTATION_ITEM.get()) == 1 && tel(q, SnuffelFeature.SNUFFEL_BLOESEMTAKJE.get()) == 1,
+                    "the fresh finish: exactly one disc at home");
+        });
+        d.speel(helper, t);
     }
 
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 400)

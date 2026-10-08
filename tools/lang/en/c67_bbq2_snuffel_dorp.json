@@ -74,6 +74,7 @@
   "quest.guhs.snuffeldorp.kapitein.vraag.0": "Ahoy, landlubber! My little boat is ready. Shall I sail you back home? You'll end up exactly where you came from, with all your things. The island isn't going anywhere, and neither is your nose, nyeg.",
   "quest.guhs.snuffeldorp.kapitein.vraag_klaar.0": "Ahoy, sniff pup! Sailing home? With your Guhstation you can come back whenever you like. Can't find that little box? Just say so, I've got a few more in the hold.",
   "quest.guhs.snuffeldorp.kapitein.station.0": "Captain Saltsnout slides a new Guhstation over to you. It goes home with you, nyeg.",
+  "quest.guhs.snuffeldorp.kapitein.plaat.0": "Captain Saltsnout: Hold on, sniff pup! This music disc is for you. I've been playing it on my boat for years and the seagulls have had quite enough of it. Into the jukebox at home with it, nyeg!",
   "scene.guhs.snuffeldorp_wakker.titel": "Washed Ashore",
   "scene.guhs.snuffeldorp_wakker.golven": "Waves. Sand in your ears. And something wet sniffing at your snout...",
   "scene.guhs.snuffeldorp_wakker.hallo": "Sniff sniff... Hey! You're okay! Nyeg, you're so wet.",
@@ -114,6 +115,7 @@
   "gui.guhs.snuffeldorp.bloesem.2": "%s: Hey... do you smell that too? Between the stones by the little tree. Something strange. Have a sniff!",
   "gui.guhs.snuffeldorp.einde.1": "A trace of Papa! It leads farther up the island, past the roadblock. You may only pass there as a Sniff Nose.",
   "gui.guhs.snuffeldorp.einde.2": "%s: Oh yes, this was in my hiding spot too. A gray-black little box with a guh snoot on it: a Guhstation! Put it down at home and you'll be back with me in no time.",
+  "gui.guhs.snuffeldorp.einde.plaat": "%s: And Captain Saltsnout told me to give you this music disc. He's been playing it on his boat for years and the seagulls have had quite enough of it. Into the jukebox at home with it, nyeg!",
   "gui.guhs.snuffeldorp.einde.3": "The first story of Sniff Island is done. You're a real Sniff Pup! To be continued, nyeg.",
   "gui.guhs.snuffeldorp.doel.strandpoort": "The beach gate of Sniffville",
   "gui.guhs.snuffeldorp.doel.dokter": "Doctor Plasterpaw's office",
@@ -209,5 +211,5 @@
   "ftb.guhs_verhalen.q.snuffel_dorp_versperring.title": "You May Only Pass Here as a Sniff Nose",
   "ftb.guhs_verhalen.q.snuffel_dorp_versperring.desc": "Behind the meadow the road goes on, up the island: a forest, a hill with standing stones, a lighthouse. But there is a friendly &croadblock&r. A Sniff Pup can't get past it, not even swimming. To be continued!",
   "ftb.guhs_verhalen.q.snuffel_dorp_guhstation.title": "The Guhstation",
-  "ftb.guhs_verhalen.q.snuffel_dorp_guhstation.desc": "Your buddy still had something in its hiding spot: a &8Guhstation&r. Put it down at home, click it and press start: you're back on the island, at the spot where you were. Can't find it? &6Captain Saltsnout&r in the harbor has a few more."
+  "ftb.guhs_verhalen.q.snuffel_dorp_guhstation.desc": "Your buddy still had something in its hiding spot: a &8Guhstation&r. Put it down at home, click it and press start: you're back on the island, at the spot where you were. Can't find it? &6Captain Saltsnout&r in the harbor has a few more. He also gives you the island's &bmusic disc&r: the little tune you hear softly while the Guhstation's screen is open."
 }
