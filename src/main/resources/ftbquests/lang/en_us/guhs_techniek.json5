@@ -93,7 +93,7 @@
   ],
   "quest.475548CB872211C2.title": "A Belly Without a Bottom",
   "quest.475548CB872211C2.quest_desc": [
-    "Click your placed Bank Guh with the &dBottomless Nibble Belly&r: the limit of 256 per kind is gone, forever (even when you pick it up). And only then may tubes take stuff &eout&r of it too. &cWatch out:&r a hopper under your bank, a plain Direction Piece or a pick-up Stop Post will then empty it completely. Only a Filter Piece with &eleave behind&r keeps something back for you.",
+    "Click your placed Bank Guh with the &dBottomless Nibble Belly&r: the limit of 256 per kind is gone, forever (even when you pick it up). And only then may a &dFilter Piece&r nom stuff &eout&r of it too: you set on it what it may take and how much has to stay behind. A hopper under your bank, a plain Direction Piece or a pick-up Stop Post never gets anything out of your bank.",
   ],
   "quest.475548F60C0C821A.title": "Three Recipe Cards",
   "quest.475548F60C0C821A.quest_desc": [
@@ -149,7 +149,7 @@
   ],
   "quest.475548CAB39407AC.title": "The Bank as a Warehouse",
   "quest.475548CAB39407AC.quest_desc": [
-    "With the Bottomless Nibble Belly (from the Inventor Guh), tubes may take things out of your Bank Guh too. Put a Filter Piece against it with &eleave behind 64&r: the bank feeds your ovens and mills, but always keeps a stack back for you. Careful: a hopper or a plain Direction Piece gobbles an upgraded bank completely empty.",
+    "With the Bottomless Nibble Belly (from the Inventor Guh), a Filter Piece may nom from your Bank Guh too. Put a Filter Piece against it, pick what may come out and set &eleave behind 64&r: the bank feeds your ovens and mills, but always keeps a stack back for you. A hopper or a plain Direction Piece gets nothing out of your bank: only the Filter Piece can do that.",
   ],
   "quest.475548EE50E67F23.title": "Sauce and Hoses",
   "quest.475548EE50E67F23.quest_desc": [
