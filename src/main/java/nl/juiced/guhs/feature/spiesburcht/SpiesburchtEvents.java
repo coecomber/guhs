@@ -83,12 +83,13 @@ public final class SpiesburchtEvents {
     }
 
     /**
-     * 1.4.1: why no Asguh was ever born. The spawn rule above lets a guh through in the dark, but after it the spawner asks
+     * 1.4.1: why you never saw an Asguh. The spawn rule above lets a guh through in the dark, but after it the spawner asks
      * the animal itself (Mob#checkSpawnRules), and every animal answers with Animal#getWalkTargetValue: no grass under it
      * means "is it light here?", and in the Guhbarbecuether (no sky, ambient light 0.1) that only says yes at block light 12
-     * or more. So in the dark Asdal the answer was always no. For a guh that the natural spawner brings on the ash of the
-     * Asdal the light no longer counts (the room it needs still does), and no more come than {@link Drukte#MAX_ASGUHS}
-     * around a player. Chunk generation stays as it was: such guhs would stay for ever and fill the creature cap.
+     * or more. So in the dark Asdal the answer was no, except right next to a fire or the sauce (measured: 2 Asguhs around
+     * a player after seven minutes, both beside a fire). For a guh that the natural spawner brings on the ash of the Asdal
+     * the light no longer counts (the room it needs still does), and no more come than {@link Drukte#MAX_ASGUHS} around a
+     * player. Chunk generation stays as it was: such guhs would stay for ever and fill the creature cap.
      */
     static void onPositionCheck(MobSpawnEvent.PositionCheck event) {
         if (event.getResult() != MobSpawnEvent.PositionCheck.Result.DEFAULT || event.getSpawnType() != EntitySpawnReason.NATURAL

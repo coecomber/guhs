@@ -22,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
+import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * 1.4.1: how busy the open Guhbarbecuether gets. No resources of its own: the lists of who spawns where are the biome
@@ -110,9 +111,9 @@ public final class Drukte {
         return mob.isAlive() && mob.getType().getCategory() == MobCategory.MONSTER && !mob.isPersistenceRequired() && !mob.requiresCustomPersistence();
     }
 
-    /** A wild Asguh (nobody's). */
+    /** A wild Asguh: nobody's and not kept on purpose (not tame, not named, not a resident of a building). */
     public static boolean isWildeAsguh(Mob mob) {
-        return mob.isAlive() && mob instanceof GuhEntity guh && SpiesburchtEvents.isAsguh(guh) && !guh.isTame();
+        return mob.isAlive() && mob instanceof GuhEntity guh && SpiesburchtEvents.isAsguh(guh) && WildeDieren.isWild(guh);
     }
 
     /** May the natural spawner bring another wild Asguh on this spot? */
