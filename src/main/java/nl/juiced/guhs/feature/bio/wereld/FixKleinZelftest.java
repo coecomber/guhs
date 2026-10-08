@@ -49,8 +49,20 @@ final class FixKleinZelftest {
                 }
                 BlockPos p = gevonden.getFirst();
                 level.getChunk(p.getX() >> 4, p.getZ() >> 4);
-                boolean in = WolkLanding.inGebouw(level, p), niet = !WolkLanding.inGebouw(level, p.offset(160, 0, 0)) || WolkLanding.inWeide(level, p.offset(160, 0, 0));
-                meld.check(in && niet, id.getPath() + " at " + p.getX() + " " + p.getZ() + ": its column is soft (" + in + "), 160 blocks beside it is not its column");
+                var starts = level.structureManager().startsForStructure(new net.minecraft.world.level.ChunkPos(p.getX() >> 4, p.getZ() >> 4), s -> s == holder.get().value());
+                if (starts.isEmpty()) {
+                    meld.fout(id.getPath() + " at " + p.getX() + " " + p.getZ() + ": no start in its chunk");
+                    continue;
+                }
+                // the middle of its box, a corner of it, and the block just outside that corner (when that is not Wolkenweide itself)
+                var doos = starts.get(0).getBoundingBox();
+                BlockPos midden = doos.getCenter(), hoek = new BlockPos(doos.minX(), doos.minY(), doos.maxZ()), buiten = hoek.offset(-1, 0, 1);
+                level.getChunk(midden.getX() >> 4, midden.getZ() >> 4);
+                level.getChunk(hoek.getX() >> 4, hoek.getZ() >> 4);
+                level.getChunk(buiten.getX() >> 4, buiten.getZ() >> 4);
+                boolean in = WolkLanding.inGebouw(level, midden) && WolkLanding.inGebouw(level, hoek), uit = !WolkLanding.inGebouw(level, buiten);
+                meld.check(in && uit, id.getPath() + " (box " + doos.minX() + " " + doos.minZ() + " .. " + doos.maxX() + " " + doos.maxZ() + "): its middle and its corner are soft ("
+                        + in + "), one block outside the corner is not its column (" + uit + "); the corner lies in the Wolkenweide: " + Bio.in(level, hoek, Bio.WOLKENWEIDE));
             }
         });
     }
