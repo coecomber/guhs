@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:sterrenstof",
+    "guhs:wolkenlamp"
+  ],
+  "result": {
+    "id": "guhs:sterrenlantaarn"
+  }
+}

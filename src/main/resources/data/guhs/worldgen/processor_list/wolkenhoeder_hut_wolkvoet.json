@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "processor_type": "guhs:wolkenhoeder_hut_wolkvoet",
+      "onder_y": 5
+    }
+  ]
+}
