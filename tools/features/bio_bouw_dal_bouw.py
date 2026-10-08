@@ -429,6 +429,12 @@ def dal_staptreden(h):
     for x in range(3):                                             # the landing on top
         b.zet(x, G + hoog, 0, STEEN)
         b.lucht(x, G + hoog + 1, 0, x, G + hoog + 3, 0)
+    # biomes3 merge: the valley's rim face is 8 high since fix-dal (the others 7): an eighth step on the landing, with its
+    # cheeks. The processor list guhs:dal_staptreden_top leaves this layer out where it would stand in the open air (a face
+    # of 7: the landing is the top, as before) and so only places it inside a face that goes one higher.
+    b.zet(1, G + hoog + 1, 0, trap(STEEN, "north"))
+    for x in (0, 2):
+        b.zet(x, G + hoog + 1, 0, STEEN)
     return b.bewaar()
 
 
@@ -572,6 +578,14 @@ def build(h):
     h.add_tag("guhs/tags/block/dal_water_blijft", ["minecraft:water"])
     h.w(f"{D}/worldgen/processor_list/dal_water_blijft.json", {"processors": [
         {"processor_type": "minecraft:protected_blocks", "value": "#guhs:dal_water_blijft"}]})
+    # (biomes3 merge) everything of a template from its eighth layer up (local y 8: dal_staptreden's extra step) becomes air
+    # where the world has air: see dal_staptreden
+    h.w(f"{D}/worldgen/processor_list/dal_staptreden_top.json", {"processors": [{"processor_type": "minecraft:rule", "rules": [{
+        "input_predicate": {"predicate_type": "minecraft:always_true"},
+        "location_predicate": {"predicate_type": "minecraft:block_match", "block": "minecraft:air"},
+        "position_predicate": {"predicate_type": "minecraft:axis_aligned_linear_pos", "axis": "y", "min_dist": 7, "max_dist": 8,
+                               "min_chance": 0.0, "max_chance": 1.0},
+        "output_state": {"Name": "minecraft:air"}}]}]})
     for naam in STRUCTUREN:
         soort, spacing, separation, salt = PLAATSING[naam]
         varianten = sorted(k for k in gebouwd if k == naam or (k.startswith(naam + "_") and len(k) == len(naam) + 2))
@@ -580,7 +594,8 @@ def build(h):
         h.structure(naam, ["klaterdal"], spacing=spacing, separation=separation, salt=salt, reach=24, centre=f"guhs:{naam}_midden")
         h.w(f"{D}/worldgen/template_pool/{naam}/start.json", {"fallback": "minecraft:empty", "elements": [
             {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{v}", "projection": "rigid",
-                                      "processors": "guhs:dal_water_blijft" if naam in WATER_BLIJFT else "minecraft:empty"}}
+                                      "processors": "guhs:dal_water_blijft" if naam in WATER_BLIJFT
+                                      else "guhs:dal_staptreden_top" if naam == "dal_staptreden" else "minecraft:empty"}}
             for v in varianten]})
         # biomes3 merge: the weebhuisje is 15 x 15: level terrace 8 around its middle (the default 6 left its outer ring unasked)
         bio_plek.plek(h, naam, soort, vlak=8 if naam == "weebhuisje" else None)
