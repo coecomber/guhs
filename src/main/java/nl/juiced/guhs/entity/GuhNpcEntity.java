@@ -151,6 +151,13 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <bio_bouw_dal>
         // </bio_bouw_dal>
         // <bio_bouw_meer>
+        /** biomes3: the visser-guh on the jetty of a botenhuisje (koivoer, the roeibootje, the lessons of the lake). */
+        BOTENHUISJE_VISSERGUH(1.0f),
+        /** biomes3: the hanami guhs of a picknickeilandje: a plain guh and a bloesemguh, awake and asleep. */
+        HANAMI_GUH(0.85f),
+        HANAMI_GUH_SLAAPT(0.85f),
+        HANAMI_BLOESEMGUH(0.9f),
+        HANAMI_BLOESEMGUH_SLAAPT(0.9f),
         // </bio_bouw_meer>
         // <bio_bouw_wolk1>
         // </bio_bouw_wolk1>
