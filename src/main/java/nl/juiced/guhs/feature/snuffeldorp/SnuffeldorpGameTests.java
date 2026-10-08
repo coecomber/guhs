@@ -68,8 +68,8 @@ import nl.juiced.guhs.taal.NlTekst;
  *   story names (buried or not as the story plays it), the spots, the line, the tiles, the scenes and their lengths,
  *   every conversation and screen line in Dutch.</li>
  *   <li>(1.4.1) {@code snuffeldorpZee}: on the little island {@code snuffeldorp_test_zee} with its own land map: three
- *   seconds in the sea and a dog stands where it last stood on land; the pond and the wet edge are no sea; touching land
- *   starts the count again; a deck is land and the water under it sea; a builder swims on; without a spot of its own the
+ *   seconds in the sea and a dog stands where it last stood on land; the pond and the wet edge are no sea; a hop out of
+ *   the water does not start the count again, touching land does; a deck is land and the water under it sea; a builder swims on; without a spot of its own the
  *   kern's last spot or the beach; and closed ground of the map counts as behind the roadblock (a dog that is already
  *   stuck there is put in front of it).</li>
  *   <li>(1.4.1) {@code snuffeldorpKaartKlopt}: the REAL island's land map: everything the story needs stands on walkable
@@ -846,7 +846,12 @@ public class SnuffeldorpGameTests {
             inZee.run();
             zetOp(t, bouwer, zee, false);
         });
-        d.wacht(helper, 40);
+        d.wacht(helper, 25);
+        // (a swimmer bobs and hops out of the water all the time: that does not start the count again)
+        d.dan("a hop out of the water", () -> zetOp(t, hond, zee.add(0, 1.5, 0), false));
+        d.wacht(helper, 8);
+        d.dan("and in again", () -> zetOp(t, hond, zee, false));
+        d.wacht(helper, 7);
         d.dan("and after about three seconds the dog is put back", () -> helper.assertTrue(!eruit.getAsBoolean(), "two seconds in the sea is fine: " + hond.position()),
                 null, eruit);
         d.dan("where it last stood on land, unharmed; a builder swims on", () -> {

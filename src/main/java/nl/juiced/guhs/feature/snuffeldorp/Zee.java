@@ -26,10 +26,12 @@ import nl.juiced.guhs.feature.verhaal.Duwtje;
  * harbour basin. So: a dog that is in the sea for about three seconds ({@link #TICKS}) is put back where it last stood on
  * land, unharmed, with a friendly line.
  * <p>
- * <b>What is the sea</b> is not guessed from the water but read from the island's own map ({@link Landkaart}): water on a
- * column of the kind {@code ~} (or under a deck, {@code S}). The pond, the well, the moestuin's ditch and the wet edge
- * of the beach (the sand ledge and the strip where the sea is one block deep) are columns of the kind {@code e}: a dog
- * may splash there as long as it likes.
+ * <b>What is the sea</b> is not guessed from the water but read from the island's own map ({@link Landkaart}): a dog is
+ * "in the sea" while it is on a column of the kind {@code ~} (or {@code S}, a deck) and does not stand dry on something
+ * there. So a swimmer who bobs or hops out of the water for a moment is still in the sea (the count goes on), and a dog
+ * on the jetty, the boat or a rock is not. The pond, the well, the moestuin's ditch and the wet edge of the beach (the
+ * sand ledge and the strip where the sea is one block deep) are columns of the kind {@code e}: a dog may splash there as
+ * long as it likes.
  * <p>
  * <b>Where it is put back</b>: the last spot it stood on the ground, out of the water, on walkable land of the start
  * zone or on a deck ({@link Landkaart#veilig}), remembered every tick. Without such a spot (a login in the water, a
@@ -75,8 +77,8 @@ public final class Zee {
             return;
         }
         Vec3 pos = p.position();
-        boolean water = inWater(p);
-        if (water && kaart.zee(plaats, pos)) {
+        boolean droog = p.onGround() && !inWater(p);     // stands on something, out of the water
+        if (kaart.zee(plaats, pos) && !droog) {
             if (++s.nat >= TICKS && Duwtje.mag(p)) {
                 s.nat = 0;
                 Vec3 terug = s.veilig != null && goed(plaats, pl, kaart, s.veilig) ? s.veilig : zonderPlek(p, plaats, pl, kaart);
@@ -86,7 +88,7 @@ public final class Zee {
             return;
         }
         s.nat = 0;
-        if (!water && p.onGround() && goed(plaats, pl, kaart, pos)) {
+        if (droog && goed(plaats, pl, kaart, pos)) {
             s.veilig = pos;
             s.yaw = p.getYRot();
         }
