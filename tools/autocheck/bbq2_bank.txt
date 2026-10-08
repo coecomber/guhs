@@ -44,10 +44,12 @@ wait 5
 shot bank_tooltip_n_van_256 gui
 mouse 2 2
 # a refused deposit: cobblestone in the inventory, "Alles erin" -> the cobblestone stays and the line says "Vol!"
-/give @s minecraft:cobblestone 64
-/give @s minecraft:gravel 10
+# (in the MAIN inventory: "Alles erin" leaves the hotbar alone, so with /give, which fills the hotbar first, nothing
+#  happened in the first run of this script; the button's text is the language's own: "All In" in an English round)
+/item replace entity @s inventory.0 with minecraft:cobblestone 64
+/item replace entity @s inventory.1 with minecraft:gravel 10
 wait 10
-press Alles erin
+click 378 169
 wait 10
 shot bank_scherm_vol_melding gui
 gui close
@@ -92,23 +94,26 @@ shot hapluikje_gezichten
 /gamemode creative
 
 section Hapluikje: the hover readout and what a click says
-/tp @s 3003.5 140 3002.5 180 10
+# (unlock + a pitch of 32: the camera above holds yaw 180 / pitch 12, and at 12 degrees from 1.5 blocks the crosshair goes
+#  over the luikje, into the hopper above it: no readout in the first run of this script)
+unlock
+/tp @s 3003.5 140 3002.5 180 32
 wait 20
-/tp @s 3003.5 140 3002.5 180 10
+/tp @s 3003.5 140 3002.5 180 32
 wait 30
 clearchat
 shot hapluikje_hover_gekoppeld gui
 use 3003 140 3000
 wait 10
 shot hapluikje_klik_klaar gui
-/tp @s 3000.5 140 3002.5 180 10
-wait 30
+/tp @s 3000.5 140 3002.5 180 32
+wait 60
 shot hapluikje_hover_slaapt_los gui
 use 3000 140 3000
 wait 10
 shot hapluikje_klik_slaapt gui
-/tp @s 3004.5 140 3002.5 180 10
-wait 30
+/tp @s 3004.5 140 3002.5 180 32
+wait 60
 shot hapluikje_hover_bank_vol gui
 
 section the items in the creative tab (names, tooltips: the merge step hovers them by hand)
