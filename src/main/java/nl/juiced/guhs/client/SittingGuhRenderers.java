@@ -176,6 +176,19 @@ public final class SittingGuhRenderers {
         }
     }
 
+    /**
+     * 1.4.0: the characters with the shape of a Mika (in their model the bone "head" hangs on the root, not on a body: it
+     * stands on the ground and is most of the character). Turning that head far up or down turns the whole character over,
+     * so a portrait that follows the mouse (the talking screen) lets them look only a little down.
+     */
+    private static final java.util.Set<GuhNpcEntity.Kind> KOP_OP_DE_GROND = java.util.EnumSet.of(GuhNpcEntity.Kind.STEELE_MIKA,
+            GuhNpcEntity.Kind.MIKA_OMA, GuhNpcEntity.Kind.TOLWACHTER_MIKA, GuhNpcEntity.Kind.MARKTMEESTER_MIKA, GuhNpcEntity.Kind.SMIKAGOL,
+            GuhNpcEntity.Kind.BOROMIKA, GuhNpcEntity.Kind.SAUSUMAN);
+
+    public static boolean kopOpDeGrond(GuhNpcEntity.Kind kind) {
+        return KOP_OP_DE_GROND.contains(kind);
+    }
+
     private SittingGuhRenderers() {
     }
 }
