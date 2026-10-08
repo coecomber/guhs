@@ -12,8 +12,8 @@ import nl.juiced.guhs.feature.bio.Bio;
  * <p>
  * Per lake column of {@link MeerTerrein}: the bed and the water up to {@link MeerTerrein#WATER}; sand on the beaches
  * ({@link MeerTerrein#STRAND}); smooth knuffelsteen for the boulders and stepping stones ({@link MeerTerrein#STEEN}).
- * The bed gets bluer and darker with depth ({@link #bodem}): sand, calcite, light blue and cyan wool, cyan concrete (the
- * Guhmensie's ground is wool, so is its lake bed), mixed block by block over about two blocks of depth so no contour
+ * The bed gets bluer and darker with depth ({@link #bodem}): sand, then the lake's own sediment ({@link MeerBodem}:
+ * meerzand and three tones of meerslib), mixed block by block over about two blocks of depth so no contour
  * lines show. On every large island the BIG tree stands on the island's tree spot ({@link MeerTerrein.Eiland#boomX});
  * it is placed here, before the buildings, because the structure spot {@code meer_boom} is "under that tree".
  * <p>
@@ -29,16 +29,17 @@ public final class MeerVulling {
         if (v < 1.7) {
             return Blocks.SAND.defaultBlockState();
         }
+        // (biomes3 fix-klein: sediment of our own instead of calcite, wool and concrete; the bands are unchanged)
         if (v < 3.1) {
-            return Blocks.CALCITE.defaultBlockState();
+            return MeerBodem.MEERZAND.get().defaultBlockState();
         }
         if (v < 4.9) {
-            return Blocks.LIGHT_BLUE_WOOL.defaultBlockState();
+            return MeerBodem.SLIB_LICHT.get().defaultBlockState();
         }
         if (v < 6.3) {
-            return Blocks.CYAN_WOOL.defaultBlockState();
+            return MeerBodem.SLIB.get().defaultBlockState();
         }
-        return Blocks.CYAN_CONCRETE.defaultBlockState();
+        return MeerBodem.SLIB_DIEP.get().defaultBlockState();
     }
 
     /** Places the lake of this chunk; returns how many blocks were set. */

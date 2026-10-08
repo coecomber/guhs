@@ -46,10 +46,13 @@ public final class WereldSlice {
         FEATURES.register(modBus);
         STRUCTURE_TYPES.register(modBus);
         MeerLeven.register(modBus); // biomes3 wereld-meer
+        MeerBodem.register(modBus); // biomes3 fix-klein
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOW, WolkLanding::onVal); // biomes3 fix-klein
         WolkWereld.register(modBus); // biomes3 wereld-wolk
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> Luchtruim.laad(e.getServer()));
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> BioWereldCommando.registreer(e));
         BioWereldCommando.zelftest();
+        FixKleinZelftest.registreer(); // biomes3 fix-klein
         DalBlokken.register(modBus); // biomes3 wereld-dal
     }
 
@@ -58,6 +61,7 @@ public final class WereldSlice {
 
     public static void creative(Consumer<ItemStack> output) {
         MeerLeven.creative(output); // biomes3 wereld-meer
+        MeerBodem.creative(output); // biomes3 fix-klein
         DalBlokken.creative(output); // biomes3 wereld-dal
         WolkBlokken.creative(output); // biomes3 wereld-wolk
     }

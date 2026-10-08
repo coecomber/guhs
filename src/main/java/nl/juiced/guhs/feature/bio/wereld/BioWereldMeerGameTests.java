@@ -447,7 +447,7 @@ public class BioWereldMeerGameTests {
     /** The bed: sand in the shallows, the darkest block in the deep, bluer with every block of depth, and mixed between (no contour lines). */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void bioWereldMeerBodem(GameTestHelper helper) {
-        List<Block> volgorde = List.of(Blocks.SAND, Blocks.CALCITE, Blocks.LIGHT_BLUE_WOOL, Blocks.CYAN_WOOL, Blocks.CYAN_CONCRETE);
+        List<Block> volgorde = List.of(Blocks.SAND, MeerBodem.MEERZAND.get(), MeerBodem.SLIB_LICHT.get(), MeerBodem.SLIB.get(), MeerBodem.SLIB_DIEP.get());   // biomes3 fix-klein
         double vorige = -1;
         for (int d = 1; d <= MeerTerrein.DIEP_MAX; d++) {
             int[] n = new int[volgorde.size()];
