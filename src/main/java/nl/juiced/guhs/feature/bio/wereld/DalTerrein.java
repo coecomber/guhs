@@ -13,12 +13,15 @@ import java.util.List;
  * <p>
  * <b>Broad terraces, or fewer of them.</b> How wide a terrace gets follows from how steeply e rises ({@link #steilte},
  * measured over 32 blocks so it changes slowly). Where the valley has room, the four terraces are each
- * {@link #TRAP_E} of e wide (15-45 blocks). Where it is squeezed (against an older region, or the dal noise itself is
- * steep) the terraces are not made narrower: terrace 2 thins to a rock ledge first ({@link #SMAL_2}; the two faces around
- * it become one wall of 14 and the other two terraces share its room), then terrace 1 ({@link #SMAL_1}; one wall of 21
- * with ledges, a broad rim above and a broad floor below). The "knijp" noise does the same to terrace 2 here and there
- * in a roomy valley. So an edge is always the level line of a smooth function, and the distance to it in BLOCKS
- * ({@link Vorm#s}) is what everything near an edge is cut from.
+ * {@link #TRAP_E} of e wide (18-45 blocks). Where it is squeezed (against an older region, or the dal noise itself is
+ * steep) the terraces are not made narrower, the valley is made SHALLOWER: first the rim terrace goes ({@link #KRAP_A}:
+ * its edge moves out through the rim's blend, so the valley starts one step lower and the three terraces that are left
+ * share the room), then terrace 2 as well ({@link #KRAP_B}: two broad levels and one face). The squeezed side of a dal is
+ * so a gentle, shallow piece of the same valley instead of a steep narrow stair. Here and there the "knijp" noise
+ * pinches the middle terrace to a rock ledge: the two faces around it are one wall of 14, the place of the tall
+ * waterfall (in a roomy valley now and then; in a squeezed one more often, and there it trades the shallowest shape, two
+ * levels 7 apart, for a rim of 64 over one white wall). An edge is always the level line of a smooth function, and the
+ * distance to it in BLOCKS ({@link Vorm#s}) is what everything near an edge is cut from.
  * <p>
  * <b>The water.</b> A river is the zero line of the noise {@link BioModel#R_RIVIER} ({@link #RIVIER_BREED} to each
  * side), a brook that of the same noise far away ({@link #BEEK_BREED}); both start thin (a spring) just inside the rim,
@@ -47,8 +50,6 @@ public final class DalTerrein {
     public static final double RAND = 0.03;
     /** A river starts this many blocks inside the rim's blend (as a spring), and is at full width this many further. */
     public static final double BRON_VANAF = 2.5, BRON_OVER = 5.0;
-    /** What the rim terrace gets extra (in e) when terrace 2 is a ledge, and again when terrace 1 is: room for the river above the tall fall. */
-    public static final double RAND_EXTRA = 0.010;
     /** e where terrace 3 ends, 2 ends, 1 ends (in a roomy valley), and the valley floor ends (the lake starts). */
     public static final double[] TRAP = {0.05, 0.075, 0.10, 0.125};
     /** The top block of terrace 0 (valley floor) .. 3 (rim). */
@@ -59,24 +60,25 @@ public final class DalTerrein {
     public static final double RAFEL = 0.005, RAFEL_BLOK = 3.0;
     /** A roomy terrace is this much e wide. */
     public static final double TRAP_E = 0.025;
-    /** Terrace 2 thins out between these natural widths (blocks), terrace 1 between the next two. */
-    public static final double[] SMAL_2 = {18, 11}, SMAL_1 = {10, 5};
+    /** The rim terrace goes between these natural terrace widths (blocks; 0.025 of e), terrace 2 between the next two. */
+    public static final double[] KRAP_A = {19, 14}, KRAP_B = {13, 9.5};
+    /** Where a terrace is gone its edge lies at this e (outside the dal, beyond every fray). */
+    public static final double WEG = -0.012;
     /** A terrace thinner than this is a ledge: the river takes the faces around it as one tall waterfall. */
     public static final double RICHEL = 6.0;
     /** Half the width of the river and of a brook, and what the pond on the valley floor adds. */
     public static final double RIVIER_BREED = 3.0, BEEK_BREED = 1.15, VIJVER_BREED = 5.0;
-    /** The knijp noise (the detail noise, stretched) above this pinches terrace 2 to a ledge in a roomy valley: a tall waterfall. */
-    public static final double KNIJP_VANAF = 0.28;
+    /** The knijp noise (the detail noise, stretched) above this pinches the middle terrace to a ledge: a tall waterfall. In a squeezed stretch the bar is this much lower. */
+    public static final double KNIJP_VANAF = 0.18, KNIJP_KRAP = 0.30;
     /** The cascades: {blocks before the edge, how far the water has dropped from there}. Never a step of one. */
-    static final double[][] ZACHT = {{-8, 2}, {-4, 4}, {0, 7}}, STEVIG = {{-4, 2}, {0, 7}}, HOOG = {{-3.6, 5}, {-1.8, 10}, {0, 14}},
-            HEEL_HOOG = {{-5.4, 5}, {-3.6, 10}, {-1.8, 16}, {0, 21}};
+    static final double[][] ZACHT = {{-8, 2}, {-4, 4}, {0, 7}}, STEVIG = {{-4, 2}, {0, 7}}, HOOG = {{-3.6, 5}, {-1.8, 10}, {0, 14}};
     /** The type noise above these gives a cascade a real fall at its foot (edges 0 and 1; the edge to the valley floor). */
-    public static final double STEVIG_VANAF = -0.05, STEVIG_VLOER = 0.12;
+    public static final double STEVIG_VANAF = -0.05, STEVIG_VLOER = 0.0;
     /** Koi pools: one try per cell of this size, and how often it is taken. */
-    public static final int POEL_CEL = 48;
-    public static final double POEL_KANS = 0.6;
+    public static final int POEL_CEL = 24;
+    public static final double POEL_KANS = 0.85;
     /** Stepping stones: one try per cell. */
-    public static final int STAP_CEL = 32;
+    public static final int STAP_CEL = 16;
     public static final double STAP_KANS = 0.7;
     /** Boulders: one try per cell; the chance on open terrace, at the foot of a face, beside a fall. */
     public static final int KEI_CEL = 8;
@@ -104,7 +106,7 @@ public final class DalTerrein {
     public static final class Vorm {
         /** Inside the terraces proper (not the rim's blend, not the lake, not outside)? */
         public boolean kern;
-        /** The terrace 3 .. 0, or -1. */
+        /** The terrace 3 .. 0 (also in the rim's blend: the terrace the blend ends in), or -1. */
         public int t;
         /** How steep e is here (per block), the frayed e. */
         public double g, ew;
@@ -118,7 +120,7 @@ public final class DalTerrein {
         public int val, peil;
         /** The nearest edge has a real fall at its foot (a plunge pool); it is the tall waterfall. */
         public boolean echt, hoog;
-        /** 1 where the river may be at full width; less at its spring and in a squeezed stretch (0: no river). */
+        /** 1 where the river may be at full width; less at its spring just inside the rim (0: no river). */
         public double bron;
         /** How much the river fans out near a cascade, and into the plunge pool; the pond of the valley floor. */
         public double waaier, kom, vijver;
@@ -148,10 +150,6 @@ public final class DalTerrein {
     /** The frayed e the lake's edge and the two biomes are cut from (the kern's; the terrace edges use {@link Vorm#ew}). */
     public static double rafel(BioModel m, int x, int z, double e) {
         return e + RAFEL * m.ruis(BioModel.R_DETAIL, x, z);
-    }
-
-    public static double knijp(BioModel m, int x, int z) {
-        return BioModel.zacht((m.ruis(BioModel.R_DETAIL, x * 0.15 + 300, z * 0.15 - 700) - KNIJP_VANAF) / 0.15);
     }
 
     /** |grad e| at a lattice point, over 32 blocks (cached in the model). */
@@ -187,33 +185,50 @@ public final class DalTerrein {
         v.g = g;
         v.kern = false;
         v.t = -1;
-        if (e < RAND) {
-            v.t = e > 0 ? 3 : -1;
+        if (e <= 0) {
             return;
         }
         double det = m.ruis(BioModel.R_DETAIL, x, z);
-        if (e + RAFEL * det >= TRAP[3]) {
+        if (e >= RAND && e + RAFEL * det >= TRAP[3]) {
+            return;
+        }
+        // how many terraces there is room for: qA = the rim terrace is gone, qB = terrace 2 as well
+        double breed = TRAP_E / g;
+        double qA = BioModel.zacht((KRAP_A[0] - breed) / (KRAP_A[0] - KRAP_A[1])), qB = BioModel.zacht((KRAP_B[0] - breed) / (KRAP_B[0] - KRAP_B[1]));
+        double ruim = TRAP[3] - RAND;
+        double t0 = v.t0 = TRAP[0] + (WEG - TRAP[0]) * qA;
+        // the knijp: where it is high the middle terrace is only a rock ledge, the place of the tall waterfall. In a squeezed
+        // stretch it is high more often, and there it keeps terrace 2 (a rim of 64 over one wall of 14) where the valley
+        // would else be at its shallowest
+        double knijp = BioModel.zacht((m.ruis(BioModel.R_DETAIL, x * 0.15 + 300, z * 0.15 - 700) - KNIJP_VANAF + KNIJP_KRAP * qB) / 0.15);
+        double qBe = qB * (1 - knijp);
+        double t1 = TRAP[1] + (RAND + ruim / 3 - TRAP[1]) * qA;
+        t1 += (WEG - t1) * qBe;
+        double t2 = TRAP[2] + (RAND + ruim * 2 / 3 - TRAP[2]) * qA;
+        t2 += (RAND + ruim / 2 - t2) * qBe;
+        if (knijp > 0) {
+            double richel = Math.max(0, Math.min(3.5, 1.2 + 3.0 * m.ruis(BioModel.R_DETAIL, x * 0.3 + 5000, z * 0.3 + 100))) * g;
+            // (all four terraces: terrace 2 is the ledge; the rim gone: terrace 1 is)
+            t1 += (t0 + richel - t1) * knijp * (1 - qA);
+            t2 += (t1 + richel - t2) * knijp * qA;
+        }
+        v.t1 = t1;
+        v.t2 = t2;
+        double ew = v.ew = e + Math.min(RAFEL, RAFEL_BLOK * g) * det;
+        int t = v.t = ew < t0 ? 3 : ew < t1 ? 2 : ew < t2 ? 1 : 0;
+        if (e < RAND) {
+            // the rim's blend: it ends in the terrace that is the rim here
+            v.t = Math.max(1, t);
             return;
         }
         v.kern = true;
-        double breed = TRAP_E / g;
-        double qA = BioModel.zacht((SMAL_2[0] - breed) / (SMAL_2[0] - SMAL_2[1])), qB = BioModel.zacht((SMAL_1[0] - breed) / (SMAL_1[0] - SMAL_1[1]));
-        double p2 = Math.max(qA, knijp(m, x, z));
-        double d3 = m.ruis(BioModel.R_DETAIL, x * 0.3 + 5000, z * 0.3 + 100);
-        double richel2 = Math.max(0, Math.min(3.5, 1.2 + 3.0 * d3)), richel1 = Math.max(0, Math.min(3.5, 1.2 - 3.0 * d3));
-        double t0 = v.t0 = TRAP[0] + RAND_EXTRA * (qA + qB);
-        double t1 = v.t1 = TRAP[0] + TRAP_E + (t0 + richel2 * g - TRAP[0] - TRAP_E) * p2;
-        double mid = TRAP[2] + ((t0 + TRAP[3]) / 2 - TRAP[2]) * qA;
-        double t2 = v.t2 = mid + (t1 + richel1 * g - mid) * qB;
-        double ew = v.ew = e + Math.min(RAFEL, RAFEL_BLOK * g) * det;
-        int t = v.t = ew < t0 ? 3 : ew < t1 ? 2 : ew < t2 ? 1 : 0;
         double s0 = v.s[0] = (ew - t0) / g, s1 = v.s[1] = (ew - t1) / g, s2 = v.s[2] = (ew - t2) / g;
         // the river's level: every edge drops it; an edge next to a ledge is taken together with the next one
         double d07 = m.ruis(BioModel.R_DETAIL, x * 0.07 + 77, z * 0.07 - 33);
         boolean stevig = d07 > STEVIG_VANAF, stevigVloer = d07 > STEVIG_VLOER;
-        boolean smal2 = (t1 - t0) / g < RICHEL, smal1 = (t2 - t1) / g < RICHEL;
+        boolean smal1 = (t2 - t1) / g < RICHEL, smal2 = !smal1 && (t1 - t0) / g < RICHEL;
         double c0 = trap(s0, stevig ? STEVIG : ZACHT), c1 = trap(s1, stevig ? STEVIG : ZACHT), c2 = trap(s2, stevigVloer ? STEVIG : ZACHT);
-        double val = smal2 && smal1 ? trap(s2, HEEL_HOOG) : smal2 ? trap(s1, HOOG) + c2 : smal1 ? c0 + trap(s2, HOOG) : c0 + c1 + c2;
+        double val = smal1 ? c0 + trap(s2, HOOG) : smal2 ? trap(s1, HOOG) + c2 : c0 + c1 + c2;
         v.val = (int) val;
         v.peil = HOOGTE[3] - 1 - v.val;
         int dichtst = Math.abs(s0) < Math.abs(s1) ? 0 : 1;
@@ -225,7 +240,7 @@ public final class DalTerrein {
         v.echt = v.hoog || (dichtst == 2 ? stevigVloer : stevig) && !(smal2 && dichtst == 0) && !(smal1 && dichtst == 1);
         v.waaier = BioModel.zacht((sn + 12) / 4) * (1 - BioModel.zacht((sn - 6) / 4));
         v.kom = BioModel.zacht((sn + 0.5) / 1.0) * (1 - BioModel.zacht((sn - 4) / 3.5));
-        v.bron = BioModel.zacht((e - RAND - BRON_VANAF * g) / (BRON_OVER * g)) * (t == 0 ? 1.0 : 1 - BioModel.zacht(qB / 0.6));
+        v.bron = BioModel.zacht((e - RAND - BRON_VANAF * g) / (BRON_OVER * g));
         v.vijver = t == 0 ? VIJVER_BREED * BioModel.zacht((ew - t2 - 0.006) / 0.02) : 0;
         v.bol = Math.max(0, Math.min(2.6, 0.3 + 3.2 * m.ruis(BioModel.R_DETAIL, x + 1000, z + 1000)));
         v.schouder = Math.max(0, Math.min(1.6, 0.4 + 2.4 * det));
@@ -270,6 +285,16 @@ public final class DalTerrein {
     public record Kei(int x, int z, double straal, int hoog, int terras) {
     }
 
+    /** Is this column clear of every cascade: at least na blocks past each edge above it, at least voor before each edge below? */
+    static boolean rustig(Vorm v, double na, double voor) {
+        for (double s : v.s) {
+            if (s > -voor && s < na) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** The pool of a grid cell, or null (cached). */
     static Poel poel(BioModel m, int cx, int cz) {
         long sleutel = BioModel.sleutel(SOORT_POEL, cx, cz);
@@ -280,16 +305,16 @@ public final class DalTerrein {
         Poel uit = null;
         long h = m.hash(cx, cz, 5201);
         if (BioModel.kans(h, 0) < POEL_KANS) {
-            double px = cx * POEL_CEL + 6 + BioModel.kans(h, 1) * (POEL_CEL - 12), pz = cz * POEL_CEL + 6 + BioModel.kans(h, 2) * (POEL_CEL - 12);
+            double px = cx * POEL_CEL + BioModel.kans(h, 1) * POEL_CEL, pz = cz * POEL_CEL + BioModel.kans(h, 2) * POEL_CEL;
             double[] l = lijn(m, px, pz, 0, 0);
             if (Math.abs(l[0]) <= 14) {
-                double straal = 3.2 + 2.2 * BioModel.kans(h, 3);
+                double straal = 2.8 + 1.6 * BioModel.kans(h, 3);
                 // beside the river, on the side the try fell on, just touching it
                 double schuif = l[0] - Math.signum(l[0] == 0 ? 1 : l[0]) * (straal - 0.3);
                 px -= l[1] * schuif;
                 pz -= l[2] * schuif;
                 Vorm v = bij(m, (int) Math.round(px), (int) Math.round(pz));
-                if (v.kern && v.bron > 0.95 && v.vijver < 0.5 && Math.abs(v.s[0]) > straal + 6 && Math.abs(v.s[1]) > straal + 6 && Math.abs(v.s[2]) > straal + 6) {
+                if (v.kern && v.bron > 0.95 && v.vijver < 2.5 && rustig(v, straal + 1, straal + 8.5)) {
                     uit = new Poel(px, pz, straal, BioModel.kans(h, 4) * 6.283, BioModel.kans(h, 5) * 6.283);
                 }
             }
@@ -315,7 +340,7 @@ public final class DalTerrein {
                 pz -= l[2] * l[0];
                 l = lijn(m, px, pz, 0, 0);
                 Vorm v = bij(m, (int) Math.round(px), (int) Math.round(pz));
-                if (Math.abs(l[0]) < 1.5 && v.kern && v.bron > 0.95 && v.vijver < 0.3 && (v.sn > 6.5 || v.sn < -9.5)) {
+                if (Math.abs(l[0]) < 1.5 && v.kern && v.bron > 0.95 && v.vijver < 0.3 && rustig(v, 5.5, 9)) {
                     uit = new Stap(px, pz, l[1], l[2]);
                 }
             }
@@ -408,11 +433,6 @@ public final class DalTerrein {
                     h[idx] = MUUR;
                     continue;
                 }
-                if (e[idx] < RAND) {
-                    h[idx] = HOOGTE[3];
-                    ter[idx] = 3;
-                    continue;
-                }
                 // (bilinear steepness)
                 int kx = Math.floorDiv(x, ROOSTER) - r0x, kz = Math.floorDiv(z, ROOSTER) - r0z;
                 for (int a = 0; a < 4; a++) {
@@ -426,6 +446,12 @@ public final class DalTerrein {
                 double g = (knopen[kx + kz * rn] * (1 - tx) + knopen[kx + 1 + kz * rn] * tx) * (1 - tz)
                         + (knopen[kx + (kz + 1) * rn] * (1 - tx) + knopen[kx + 1 + (kz + 1) * rn] * tx) * tz;
                 vorm(m, x, z, e[idx], g, v);
+                if (e[idx] < RAND) {
+                    // the rim's blend: towards the height of the terrace that is the rim here
+                    h[idx] = HOOGTE[v.t];
+                    ter[idx] = (byte) v.t;
+                    continue;
+                }
                 w[idx] = rafel(m, x, z, e[idx]);
                 if (!v.kern) {
                     if (eilanden == null) {

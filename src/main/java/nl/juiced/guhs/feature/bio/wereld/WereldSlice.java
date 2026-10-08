@@ -48,12 +48,14 @@ public final class WereldSlice {
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> Luchtruim.laad(e.getServer()));
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> BioWereldCommando.registreer(e));
         BioWereldCommando.zelftest();
+        DalBlokken.register(modBus); // biomes3 wereld-dal
     }
 
     public static void payloads(PayloadRegistrar registrar) {
     }
 
     public static void creative(Consumer<ItemStack> output) {
+        DalBlokken.creative(output); // biomes3 wereld-dal
     }
 
     private WereldSlice() {
