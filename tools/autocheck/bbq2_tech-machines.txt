@@ -19,7 +19,8 @@ section setup
 /forceload add 2970 2970 3030 3030
 wait 80
 /fill 2970 139 2970 3030 139 3030 minecraft:grass_block
-/fill 2980 140 2980 3020 170 3020 minecraft:air
+/fill 2980 140 2980 3020 155 3020 minecraft:air
+/fill 2980 156 2980 3020 170 3020 minecraft:air
 /gamemode creative
 /tp @s 3000 140 2990
 wait 20
@@ -53,6 +54,9 @@ wait 10
 shot techmachine_plantagebak_achterkant
 
 section the hover readout (under the vadskracht lines: each machine's own line)
+# (unlock: a 'camera' line holds its yaw and pitch until the next 'look' / 'unlock', so the /tp's below never turned the head
+#  and every hover and screen shot of the first run looked north, away from the row)
+unlock
 /gamemode creative
 /tp @s 2993.5 140 2993.2 0 20
 wait 20
@@ -71,32 +75,38 @@ wait 30
 shot techmachine_hover_plantagebak gui
 
 section the screens
+# (gui keep: a screen the server opens is closed as "unexpected" unless the script says it wants it)
 /tp @s 2989.5 140 2993.2 0 15
 wait 10
+gui keep
 use 2989 140 2995
 wait 10
 shot techmachine_scherm_vadsmolen gui
 gui close
 /tp @s 2993.5 140 2993.2 0 15
 wait 10
+gui keep
 use 2993 140 2995
 wait 10
 shot techmachine_scherm_oogster gui
 gui close
 /tp @s 3004.5 140 2993.2 0 15
 wait 10
+gui keep
 use 3004 140 2995
 wait 10
 shot techmachine_scherm_tekentafel gui
 gui close
 /tp @s 3006.5 140 2993.2 0 15
 wait 10
+gui keep
 use 3006 140 2995
 wait 10
 shot techmachine_scherm_knutselmachine gui
 gui close
 /tp @s 3010.5 140 2991.2 0 25
 wait 10
+gui keep
 use 3010 140 2993
 wait 10
 shot techmachine_scherm_plantagebak gui

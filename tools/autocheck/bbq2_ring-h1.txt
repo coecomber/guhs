@@ -18,7 +18,13 @@ section setup
 /forceload add 6940 6940 7100 7100
 wait 100
 /fill 6960 139 6960 7040 139 7040 minecraft:grass_block
-/fill 6960 140 6960 7040 160 7040 minecraft:air
+# (five slices: /fill takes at most 32768 blocks, the whole room is 137781)
+/fill 6960 140 6960 7040 143 7040 minecraft:air
+/fill 6960 144 6960 7040 147 7040 minecraft:air
+/fill 6960 148 6960 7040 151 7040 minecraft:air
+/fill 6960 152 6960 7040 155 7040 minecraft:air
+/fill 6960 156 6960 7040 159 7040 minecraft:air
+/fill 6960 160 6960 7040 160 7040 minecraft:air
 /gamemode creative
 /kill @e[type=!minecraft:player,distance=..80]
 /guhs ring wis
@@ -57,12 +63,21 @@ section the story: the gate, the card, the arrival (600 ticks)
 /gamemode survival
 /tp @s 7000.5 140 6999.5 180 0
 /guhs ringh1 stand
+# (gui keep + a click on "Verder": a narrator card that the script closes itself comes back at once, for ever (it is
+#  not skippable), and no scene can start while it is up: in the first run of this script every shot below was Guhdalf
+#  standing in his camp. The button is the middle of the bottom of the card, 640x360 at GUI scale 2.)
+gui keep
 /guhs verhaal kaart ring_h1
 wait 40
 shot bbq2_ringh1_kaart_1 gui
 wait 120
 shot bbq2_ringh1_kaart_2 gui
-wait 400
+wait 140
+shot bbq2_ringh1_kaart_3 gui
+click 320 342
+wait 20
+gui close
+wait 20
 /execute positioned 7000 140 6996 run guhs verhaal scene ringh1_aankomst
 wait 40
 shot bbq2_ringh1_aankomst_1 gui
@@ -101,11 +116,16 @@ shot bbq2_ringh1_guhdex gui
 gui verhalen @kaart:knabbelring
 wait 20
 shot bbq2_ringh1_reiskaart gui
+gui close
 
 section the Knabbelgouw (the whole template, its lawn at the player's feet)
-/gamemode creative
+# (spectator from here on: a creative player who does not fly fell to the ground during every wait below, so the Gouw
+#  of the first run stood sixty blocks lower than the cameras looked)
+/gamemode spectator
 /kill @e[type=!minecraft:player,distance=..80]
-/fill 6960 140 6960 7040 150 7040 minecraft:air
+/fill 6960 140 6960 7040 143 7040 minecraft:air
+/fill 6960 144 6960 7040 147 7040 minecraft:air
+/fill 6960 148 6960 7040 150 7040 minecraft:air
 /tp @s 6920 141 6920
 /forceload add 6900 6900 7020 7020
 wait 60

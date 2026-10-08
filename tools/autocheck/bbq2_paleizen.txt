@@ -72,6 +72,8 @@ section De Mika-stal: the barn, the paddock, the boxes with the Worstzwijntjes
 /forceload add 2950 3170 3020 3240
 wait 60
 /fill 2950 195 3170 3020 199 3240 guhs:houtskoolsteen
+# (again: a creative player who does not fly fell to the sea during the wait, and the stable was built down there)
+/tp @s 3000 200 3200
 /guhs paleizen bouw mika_stal
 wait 100
 /gamemode spectator
@@ -100,6 +102,7 @@ section De Mika-woonblokken: the estate, the courtyard, Mika-oma on the top gall
 /tp @s 3000 200 3400
 /forceload add 2960 3330 3040 3410
 wait 60
+/tp @s 3000 200 3400
 /guhs paleizen bouw mika_woonblokken
 wait 140
 /gamemode spectator

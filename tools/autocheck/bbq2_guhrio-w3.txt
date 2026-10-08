@@ -144,13 +144,16 @@ wait 20
 section the duel: round 1
 /guhs guhrio gehaald kasteel_3_2
 /guhs verhaal vergeet guhriow3_duel
+# (gui keep + a click on "Verder": a narrator card that the script does not want is closed and comes back at once, for
+#  ever, and the fight waits for a player who is still reading; the card's four lines are up after 87 ticks)
+gui keep
 /guhs guhrio start 6045 147 6039
-wait 30
+wait 110
 shot w3_duel_00_vertelkaart gui
-key jump on
-wait 3
-key jump off
-wait 140
+click 320 342
+wait 10
+gui close
+wait 130
 shot w3_duel_01_brul gui
 wait 60
 shot w3_duel_02_ronde_1 gui
