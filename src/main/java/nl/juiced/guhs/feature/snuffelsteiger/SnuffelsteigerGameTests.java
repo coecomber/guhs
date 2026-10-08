@@ -445,6 +445,7 @@ public class SnuffelsteigerGameTests {
         Map<KustStructure.Reden, Integer> telling = new EnumMap<>(KustStructure.Reden.class);
         List<String> fouten = new ArrayList<>();
         int kandidaten = 0, starts = 0, geweken = 0;
+        List<BoundingBox> dozen = new ArrayList<>();
         int r = 3000 / 16, s = spread.spacing();
         StringBuilder waar = new StringBuilder();
         for (int rx = Math.floorDiv(-r, s); rx <= Math.floorDiv(r, s); rx++) {
@@ -467,6 +468,7 @@ public class SnuffelsteigerGameTests {
                     continue;
                 }
                 starts++;
+                dozen.add(start.getBoundingBox());
                 KustStructure.Plek p = u.plek();
                 BlockPos a = p.anker();
                 int dx = p.zee().getStepX(), dz = p.zee().getStepZ();
@@ -514,13 +516,31 @@ public class SnuffelsteigerGameTests {
                     kust.biomes()::contains);
             if (!start.isValid()) {
                 fouten.add("the guaranteed copy does not start at " + c);
+            } else if (!dozen.contains(start.getBoundingBox())) {
+                dozen.add(start.getBoundingBox());
             }
         }
-        LOGGER.info("Snuffelsteiger kust: {} candidates within 3000 blocks, outcomes {}, {} starts ({} gave way), guaranteed {}; starts:{}; problems: {}", kandidaten,
-                telling, starts, geweken, zekerWaar, waar, fouten);
+        // two docks never stand side by side (the world check of 1.4.0: on one fitting shore they stood in a row, yards 10
+        // blocks apart, the guaranteed copy in the middle): eigen_afstand blocks between any two, the guaranteed one included
+        int eigen = kust.eigenAfstand(), dichtst = Integer.MAX_VALUE;
+        for (int a = 0; a < dozen.size(); a++) {
+            for (int b = a + 1; b < dozen.size(); b++) {
+                BoundingBox een = dozen.get(a), twee = dozen.get(b);
+                int tussen = Math.max(Math.max(een.minX(), twee.minX()) - Math.min(een.maxX(), twee.maxX()),
+                        Math.max(een.minZ(), twee.minZ()) - Math.min(een.maxZ(), twee.maxZ()));
+                dichtst = Math.min(dichtst, tussen);
+                if (een.inflatedBy(eigen).intersects(twee)) {
+                    fouten.add("two docks stand " + tussen + " blocks apart: " + een + " and " + twee);
+                }
+            }
+        }
+        LOGGER.info("Snuffelsteiger kust: {} candidates within 3000 blocks, outcomes {}, {} starts ({} gave way), guaranteed {}, the two nearest docks {} "
+                + "blocks apart; starts:{}; problems: {}", kandidaten, telling, starts, geweken, zekerWaar, dichtst, waar, fouten);
         helper.assertTrue(fouten.isEmpty(), "every start stands right on a shore: " + fouten);
         helper.assertTrue(starts >= 16, "enough docks along the shores within 3000 blocks: " + starts + " " + telling);
-        helper.assertTrue(geweken * 2 <= starts, "most good spots really get their dock: " + geweken + " gave way, " + starts + " start");
+        helper.assertTrue(eigen >= 64, "docks keep their distance: " + eigen);
+        // (a good spot gives way to a story place within 600 blocks of 0,0, to another building, or to a dock next door)
+        helper.assertTrue(geweken <= starts, "at least half of the good spots really get their dock: " + geweken + " gave way, " + starts + " start");
         helper.assertTrue(houder.is(BouwRuimte.VERHAAL), "a story place: never within 600 blocks of 0,0");
         helper.assertTrue(kust.keepClear() > 0, "it takes part in BouwRuimte: " + kust.keepClear());
         helper.succeed();

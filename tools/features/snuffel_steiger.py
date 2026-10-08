@@ -29,6 +29,9 @@ TYPE = "guhs:kust_steiger"
 SALT = 21305201
 # the normal set: a candidate chunk every SPACING chunks; only the ones on a fitting shore become a dock
 SPACING, SEPARATION = 6, 2
+# two docks keep this many blocks between their boxes, also a dock of the normal set next to the guaranteed copy
+# (BouwRuimte.Ruimte.eigenAfstand; without it the candidates of one fitting shore made a row of docks, yards 10 blocks apart)
+EIGEN_AFSTAND = 96
 # the one guaranteed copy, in terrain that does not exist yet (alleen_nieuw): the ring grows x1.5 and x2 when it is all old
 # land (a server whose Guhmensie exists out to 3000 blocks finds its spot between 3000 and 4000)
 GEGARANDEERD = dict(sector=3, min=900, max=2000)
@@ -88,7 +91,8 @@ def structuur(h):
         "terrain_adaptation": "none", "start_pool": f"guhs:{STRUCTUUR}/start",
         "zee_noise": f"guhs:{dz.SEA_NOISE}", "band_van": BAND[0], "band_tot": BAND[1], "oever": OEVER, "water_van": dz.WATER_FROM,
         "water_y": dz.WATER_LEVEL - 1,
-        "anker": list(bouw.ANKER), "y": bouw.DEK_Y, "land": LAND, "water": WATER, "open_zee": OPEN_ZEE})
+        "anker": list(bouw.ANKER), "y": bouw.DEK_Y, "land": LAND, "water": WATER, "open_zee": OPEN_ZEE,
+        "eigen_afstand": EIGEN_AFSTAND})
     h.w(f"{D}/worldgen/template_pool/{STRUCTUUR}/start.json", {"fallback": "minecraft:empty", "elements": [
         {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{STRUCTUUR}",
                                   "projection": "rigid", "processors": {"processors": [processor()]}}}]})

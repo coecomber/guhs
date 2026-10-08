@@ -48,7 +48,8 @@ import nl.juiced.guhs.world.BouwRuimte;
  *       boat floats), and {@code open_zee} blocks further out it is still sea (the boat can sail away).</li>
  * </ol>
  * No terrain adaptation: the template brings its own foundation and its own air. It takes part in {@link BouwRuimte}
- * like every guhs building ({@code keep_clear}, {@code voorrang}); tools/features/snuffel_steiger.py writes the JSON.
+ * like every guhs building ({@code keep_clear}, {@code voorrang}) and keeps {@code eigen_afstand} blocks between two of
+ * its own kind; tools/features/snuffel_steiger.py writes the JSON.
  */
 public class KustStructure extends Structure implements BouwRuimte.Ruimte {
     /** How far the walk from the middle of the start chunk to the shore's contour may be (blocks). */
@@ -78,7 +79,8 @@ public class KustStructure extends Structure implements BouwRuimte.Ruimte {
             Codec.INT.listOf().listOf().fieldOf("water").forGetter(s -> s.water),
             Codec.INT.listOf().optionalFieldOf("open_zee", List.of()).forGetter(s -> s.openZee),
             Codec.INT.optionalFieldOf("keep_clear", 0).forGetter(s -> s.keepClear),
-            Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang)
+            Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang),
+            Codec.INT.optionalFieldOf("eigen_afstand", BouwRuimte.MARGIN).forGetter(s -> s.eigenAfstand)
     ).apply(i, KustStructure::new));
 
     private final Holder<StructureTemplatePool> startPool;
@@ -89,9 +91,10 @@ public class KustStructure extends Structure implements BouwRuimte.Ruimte {
     private final List<Integer> openZee;
     private final int keepClear;
     private final Optional<Integer> voorrang;
+    private final int eigenAfstand;
 
     public KustStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Zee zee, BlockPos anker, int y, List<List<Integer>> land,
-                         List<List<Integer>> water, List<Integer> openZee, int keepClear, Optional<Integer> voorrang) {
+                         List<List<Integer>> water, List<Integer> openZee, int keepClear, Optional<Integer> voorrang, int eigenAfstand) {
         super(settings);
         this.startPool = startPool;
         this.zee = zee;
@@ -102,11 +105,18 @@ public class KustStructure extends Structure implements BouwRuimte.Ruimte {
         this.openZee = openZee;
         this.keepClear = keepClear;
         this.voorrang = voorrang;
+        this.eigenAfstand = eigenAfstand;
     }
 
     @Override
     public int keepClear() {
         return keepClear;
+    }
+
+    /** The room between two shore buildings of this kind ({@code eigen_afstand}: no row of docks on one shore). */
+    @Override
+    public int eigenAfstand() {
+        return eigenAfstand;
     }
 
     @Override

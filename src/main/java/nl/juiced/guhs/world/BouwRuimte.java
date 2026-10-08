@@ -39,7 +39,8 @@ import net.neoforged.neoforge.event.level.LevelEvent;
  * Before it starts, it looks at the starts nearby of every structure set that goes first, and gives way (doesn't start)
  * when one of them really starts there (checked the way the game itself does: the set's placement, its weighted pick,
  * its ground and biome checks and, in turn, who that one gives way to) with pieces within {@link #MARGIN} blocks of its
- * own. Order: the set with the higher voorrang first (default: its keep_clear), then by name; within one set the start
+ * own ({@link Ruimte#eigenAfstand} blocks between two copies of one structure that asks for more). Order: the set with the
+ * higher voorrang first (default: its keep_clear), then by name; within one set the start
  * in the lower chunk (x, then z) goes first. The order is strict, so the checks always end. The structures of others
  * (vanilla villages, other mods) always go first: ours give way to them.
  * <p>
@@ -72,6 +73,16 @@ public final class BouwRuimte {
 
         /** Who goes first (higher first); by default the reach. */
         int voorrang();
+
+        /**
+         * Blocks of room kept between two copies of THIS structure (the starts of its normal set among each other, and a
+         * start of its normal set next to its guaranteed copy); by default the room every two buildings keep
+         * ({@link #MARGIN}). The world check of 1.4.0: the steigerhuisje's candidates lie two chunks apart at the nearest,
+         * so on one fitting shore docks stood in a row, their yards 10 blocks apart, the guaranteed copy in the middle.
+         */
+        default int eigenAfstand() {
+            return MARGIN;
+        }
     }
 
     private BouwRuimte() {
@@ -377,6 +388,8 @@ public final class BouwRuimte {
         ChunkPos here = context.chunkPos();
         ChunkGeneratorStructureState state = STATES.get(context.randomState());
         Map<SetInfo, Boolean> possible = POSSIBLE.computeIfAbsent(context.biomeSource(), b -> new ConcurrentHashMap<>());
+        // (copies of one structure may keep more room among themselves than two buildings do: Ruimte.eigenAfstand)
+        int eigen = me instanceof Ruimte ruimte ? Math.max(MARGIN, ruimte.eigenAfstand()) : MARGIN;
         for (SetInfo other : i.sets) {
             boolean same = other == mine;
             if (!same && (other.voorrang < mine.voorrang || (other.voorrang == mine.voorrang && other.name.compareTo(mine.name) > 0))) {
@@ -388,13 +401,15 @@ public final class BouwRuimte {
             if (!possible.computeIfAbsent(other, o -> canBeIn(o, context.biomeSource()))) {
                 continue;
             }
-            int range = myReach + other.reach + MARGIN + 16;
+            // (the other set holds this very structure: its own normal set, or its guaranteed copy)
+            int marge = eigen > MARGIN && (same || i.gegarandeerd.getOrDefault(me, List.of()).contains(other)) ? eigen : MARGIN;
+            int range = myReach + other.reach + marge + 16;
             for (ChunkPos c : candidates(other, state, context.seed(), here, range)) {
                 if (same && (c.x() > here.x() || (c.x() == here.x() && c.z() >= here.z()))) {
                     continue; // (within one set the lower chunk goes first)
                 }
                 // (where its pieces could be at most: skip it when that is nowhere near our pieces)
-                int cx = c.getMiddleBlockX(), cz = c.getMiddleBlockZ(), reach = other.reach + MARGIN;
+                int cx = c.getMiddleBlockX(), cz = c.getMiddleBlockZ(), reach = other.reach + marge;
                 if (cx + reach < box.minX() || cx - reach > box.maxX() || cz + reach < box.minZ() || cz - reach > box.maxZ()) {
                     continue;
                 }
@@ -403,7 +418,7 @@ public final class BouwRuimte {
                     continue;
                 }
                 for (BoundingBox t : theirs) {
-                    BoundingBox around = t.inflatedBy(MARGIN);
+                    BoundingBox around = t.inflatedBy(marge);
                     if (!around.intersects(box)) {
                         continue;
                     }
