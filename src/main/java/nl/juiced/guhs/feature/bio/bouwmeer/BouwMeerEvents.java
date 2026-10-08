@@ -179,7 +179,9 @@ public final class BouwMeerEvents {
      * {@code ... zorg [x y z]} keeps the buildings near you (or near that spot) in order now and says what it found;
      * {@code ... kijk <x y z> <x y z> <naam>} writes the blocks of a box to {@code bio_bouw_meer_<naam>.json} in the
      * server directory (guhs_workbio/reports/screens/bouw-meer/_bron/wereld.py draws it): to look at a generated
-     * building without a client. Gamemasters only.
+     * building without a client;
+     * {@code ... tel <straal>} counts the buildings per lake around you without generating anything ({@link Telling}).
+     * Gamemasters only.
      */
     static void commando(RegisterCommandsEvent event) {
         var stap = Commands.literal("stap").then(Commands.argument("stap", IntegerArgumentType.integer(0, 5)).executes(ctx -> {
@@ -229,8 +231,15 @@ public final class BouwMeerEvents {
                     ctx.getSource().sendSuccess(() -> Component.literal("[bouw-meer] " + regel), false);
                     return 1;
                 }))));
+        var tel = Commands.literal("tel").then(Commands.argument("straal", IntegerArgumentType.integer(200, 8000)).executes(ctx -> {
+            List<String> regels = Telling.tel(ctx.getSource().getLevel(), BlockPos.containing(ctx.getSource().getPosition()), IntegerArgumentType.getInteger(ctx, "straal"));
+            for (String regel : regels) {
+                ctx.getSource().sendSuccess(() -> Component.literal("[bouw-meer] tel: " + regel), false);
+            }
+            return regels.size();
+        }));
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bio")
-                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.literal("bouw-meer").then(stap).then(klok).then(zorg).then(kijk))));
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.literal("bouw-meer").then(stap).then(klok).then(zorg).then(kijk).then(tel))));
     }
 
     private static final List<AABB> KLOK_BOXEN = new ArrayList<>();
@@ -409,14 +418,20 @@ public final class BouwMeerEvents {
                 waar + ": meerpaal " + anker.toShortString() + " faces " + kijk + ", the berth's water is " + (ligplaats == null ? "MISSING" : (anker.getY() - ligplaats.getY()) + " below the deck (1 wanted)"));
         // open water in the berth and ahead of the jetty; deep enough to row away
         int open = 0, kolommen = 0;
+        StringBuilder dicht = new StringBuilder();
         for (int zuid = -14; zuid <= 3; zuid++) {
             for (int oost = 1; oost <= 3; oost++) {
                 kolommen++;
                 BlockPos p = MeerpaalBlock.plek(anker, kijk, oost, -1, zuid);
-                open += level.getFluidState(p).is(FluidTags.WATER) && level.getBlockState(p.above()).isAir() ? 1 : 0;
+                boolean vrij = level.getFluidState(p).is(FluidTags.WATER) && level.getBlockState(p.above()).isAir();
+                open += vrij ? 1 : 0;
+                if (!vrij && dicht.length() < 300) {
+                    dicht.append(" [").append(oost).append('/').append(zuid).append(": ").append(staat(level.getBlockState(p))).append(" under ")
+                            .append(staat(level.getBlockState(p.above()))).append(']');
+                }
             }
         }
-        meld.check(open >= kolommen - 3, waar + ": the berth and the way out are open water (" + open + " of " + kolommen + " columns)");
+        meld.check(open >= kolommen - 3, waar + ": the berth and the way out are open water (" + open + " of " + kolommen + " columns)" + dicht);
         // the jetty's end: over water, and its post stands on the bottom
         BlockPos eind = MeerpaalBlock.plek(anker, kijk, (int) MeerpaalBlock.VISSER[0], 0, (int) MeerpaalBlock.VISSER[2]);
         boolean boven = level.getFluidState(eind.below()).is(FluidTags.WATER);
@@ -470,7 +485,9 @@ public final class BouwMeerEvents {
             for (int zuid = -3; zuid <= 2; zuid++) {
                 BlockPos p = MeerpaalBlock.plek(mand, kijk, oost, -1, zuid);
                 nat += level.getFluidState(p).isEmpty() && level.getFluidState(p.above()).isEmpty() ? 0 : 1;
-                kleed += level.getBlockState(p).is(BlockTags.WOOL) && !level.getBlockState(p.below()).isAir() ? 1 : 0;
+                BlockState tegel = level.getBlockState(p);
+                kleed += (tegel.is(net.minecraft.world.level.block.Blocks.LIGHT_BLUE_WOOL) || tegel.is(net.minecraft.world.level.block.Blocks.WHITE_WOOL))
+                        && !level.getBlockState(p.below()).isAir() ? 1 : 0;
             }
         }
         meld.check(kleed == 27 && nat == 0, waar + ": mand " + mand.toShortString() + " faces " + kijk + ", the rug has " + kleed + " of 27 tiles on the ground, "
