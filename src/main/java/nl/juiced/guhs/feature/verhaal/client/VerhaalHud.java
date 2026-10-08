@@ -67,31 +67,54 @@ public final class VerhaalHud {
         return I18n.exists(kort) ? kort : "gui.guhs.verhalen." + volg + ".nu." + sleutel;
     }
 
-    static void doel(GuiGraphicsExtractor g, DeltaTracker delta) {
-        Minecraft mc = Minecraft.getInstance();
+    /** The objective line's own size and place on the screen. */
+    private static final float SCHAAL = 0.75f;
+    private static final int DOEL_X = 3, DOEL_Y = 3;
+
+    /** The lines of the objective as it is drawn now (at most two); null: the objective line is not on the screen. */
+    private static List<FormattedCharSequence> doelRegels(Minecraft mc, int guiBreed) {
         if (mc.options.hideGui || mc.player == null || !GuhsClientConfig.objectiveLine() || CutsceneSpeler.actief() || VertelScherm.actief()
                 || mc.getDebugOverlay().showDebugScreen()) {
-            return;
+            return null;
         }
         String key = doelKey();
         if (key == null) {
+            return null;
+        }
+        Component tekst = Component.literal("➜ ").withStyle(ChatFormatting.GOLD).append(Component.translatable(key).withStyle(ChatFormatting.WHITE));
+        int max = (int) (Math.min(guiBreed * 0.42f, 230) / SCHAAL);
+        List<FormattedCharSequence> regels = mc.font.split(tekst, max);
+        return regels.size() > 2 ? regels.subList(0, 2) : regels;
+    }
+
+    private static int doelHoogte(List<FormattedCharSequence> regels) {
+        return Math.round((regels.size() * 10 + 9) * SCHAAL) + 5;
+    }
+
+    /**
+     * (1.4.1) The y just under the objective line's box, or the box's own top when the line is not drawn now: where
+     * another small HUD part of the top left corner (the dog's keys on Het Snuffeleiland) begins, so the two never overlap.
+     */
+    public static int onderkant(GuiGraphicsExtractor g) {
+        List<FormattedCharSequence> regels = doelRegels(Minecraft.getInstance(), g.guiWidth());
+        return regels == null ? DOEL_Y : DOEL_Y + doelHoogte(regels) + 2;
+    }
+
+    static void doel(GuiGraphicsExtractor g, DeltaTracker delta) {
+        Minecraft mc = Minecraft.getInstance();
+        List<FormattedCharSequence> regels = doelRegels(mc, g.guiWidth());
+        if (regels == null) {
             return;
         }
         Font font = mc.font;
         Component naam = Component.translatable("gui.guhs.verhalen." + VerhaalSync.Client.volg() + ".naam");
-        Component tekst = Component.literal("➜ ").withStyle(ChatFormatting.GOLD).append(Component.translatable(key).withStyle(ChatFormatting.WHITE));
-        float schaal = 0.75f;
-        int max = (int) (Math.min(g.guiWidth() * 0.42f, 230) / schaal);
-        List<FormattedCharSequence> regels = font.split(tekst, max);
-        if (regels.size() > 2) {
-            regels = regels.subList(0, 2);
-        }
+        float schaal = SCHAAL;
         int breed = font.width(naam);
         for (FormattedCharSequence r : regels) {
             breed = Math.max(breed, font.width(r));
         }
-        int w = Math.round(breed * schaal) + 8, h = Math.round((regels.size() * 10 + 9) * schaal) + 5;
-        int x = 3, y = 3;
+        int w = Math.round(breed * schaal) + 8, h = doelHoogte(regels);
+        int x = DOEL_X, y = DOEL_Y;
         g.fill(x, y, x + w, y + h, 0x70201018);
         g.fill(x, y, x + 1, y + h, 0xFFF7D27A);
         g.pose().pushMatrix();

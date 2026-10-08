@@ -1,6 +1,8 @@
 package nl.juiced.guhs.feature.snuffel.client;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -9,6 +11,7 @@ import net.minecraft.util.Mth;
 import nl.juiced.guhs.feature.snuffel.GeurSoort;
 import nl.juiced.guhs.feature.snuffel.SnuffelPayloads;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
+import nl.juiced.guhs.feature.verhaal.client.VerhaalHud;
 
 /**
  * What a dog sees on its screen (GUI layer {@code guhs:snuffel_hud}):
@@ -16,6 +19,8 @@ import nl.juiced.guhs.feature.verhaal.Cutscenes;
  *   <li>the SCENT METER while the nose is on the ground: a row of blocks above the hotbar that fills up the closer the
  *   scent is and swings harder the stronger it gets, in the colour of the kind of scent (orange food, blue a thing, green
  *   an animal, purple something strange; grey: nothing in the air), with the kind's name, and "Graaf hier!" on the spot;</li>
+ *   <li>(1.4.1) top left, right under the objective line: the four dog actions (Blaffen, Kwispelen, Snuffelen, Zitten)
+ *   with the key each is bound to right now, for as long as you are a dog;</li>
  *   <li>the keys, for a while after you became a dog;</li>
  *   <li>the exam's progress while one runs.</li>
  * </ul>
@@ -54,6 +59,37 @@ public final class SnuffelHud {
         return SnuffelKeys.SNUFFEL.isDown() && SnuffelClient.ticks() - meterTick < 20;
     }
 
+    /** The dog actions of the little list top left, in the order they stand there: Blaffen, Kwispelen, Snuffelen, Zitten. */
+    private static final KeyMapping[] ACTIE_TOETS = {SnuffelKeys.BLAF, SnuffelKeys.KWISPEL, SnuffelKeys.SNUFFEL, SnuffelKeys.ZIT};
+    private static final String[] ACTIE_NAAM = {"gui.guhs.snuffel.actie.blaf", "gui.guhs.snuffel.actie.kwispel", "gui.guhs.snuffel.actie.snuffel",
+            "gui.guhs.snuffel.actie.zit"};
+
+    /**
+     * "[B] Blaffen" and so on, small (the objective line's size and colours), with its top at {@code y}. The key is asked
+     * of the key mapping every frame, so a key the player bound otherwise (or took away: "not bound") shows as it is.
+     */
+    private static void toetsen(GuiGraphicsExtractor g, Font font, int y) {
+        float schaal = 0.75f;
+        Component[] regels = new Component[ACTIE_TOETS.length];
+        int breed = 0;
+        for (int i = 0; i < regels.length; i++) {
+            KeyMapping k = ACTIE_TOETS[i];
+            regels[i] = Component.literal("[").append(k.getTranslatedKeyMessage()).append("] ").withStyle(k.isUnbound() ? ChatFormatting.GRAY : ChatFormatting.GOLD)
+                    .append(Component.translatable(ACTIE_NAAM[i]).withStyle(ChatFormatting.WHITE));
+            breed = Math.max(breed, font.width(regels[i]));
+        }
+        int x = 3, w = Math.round(breed * schaal) + 8, h = Math.round(regels.length * 10 * schaal) + 4;
+        g.fill(x, y, x + w, y + h, 0x70201018);
+        g.fill(x, y, x + 1, y + h, 0xFFF7D27A);
+        g.pose().pushMatrix();
+        g.pose().translate(x + 4, y + 3);
+        g.pose().scale(schaal, schaal);
+        for (int i = 0; i < regels.length; i++) {
+            g.text(font, regels[i], 0, i * 10, 0xFFFFFFFF, true);
+        }
+        g.pose().popMatrix();
+    }
+
     static void extractRenderState(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || mc.player == null || !HondClient.eigenHond() || Cutscenes.bezig(mc.player)) {
@@ -86,6 +122,10 @@ public final class SnuffelHud {
             }
             int tekstKleur = soort != null && meter.plek() && (int) (tijd / 5) % 2 == 0 ? 0xFFFFFFFF : kleur;
             g.centeredText(font, tekst, sw / 2, y - 11, tekstKleur);
+        }
+        // --- the four dog actions with the keys they are bound to NOW, top left, right under the objective line (1.4.1) ---
+        if (!mc.getDebugOverlay().showDebugScreen()) {
+            toetsen(g, font, VerhaalHud.onderkant(g));
         }
         // --- the keys, for a while ---
         if (hondSinds >= 0 && SnuffelClient.ticks() - hondSinds < UITLEG_TICKS && mc.screen == null) {
