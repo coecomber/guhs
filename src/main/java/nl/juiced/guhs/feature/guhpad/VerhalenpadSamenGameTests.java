@@ -303,7 +303,7 @@ public class VerhalenpadSamenGameTests {
     }
 
     /**
-     * The six scenes of the old stories and the seven winks of the Knabbelring are thirteen scenes of their own; each hangs
+     * The six scenes of the old stories and the eight winks of the Knabbelring are fourteen scenes of their own; each hangs
      * under a page of the Guhdex tab Verhalen ("Opnieuw bekijken"), the old ones under the Guhmensie, the winks under the
      * Guhbarbecuether; and "seen" of the one never changes "seen" of the other.
      */
@@ -317,7 +317,7 @@ public class VerhalenpadSamenGameTests {
             List<String> paginas = VerhalenVoortgang.alle(p).stream().map(VerhaalStand::id).toList();
             List<Cutscene> samen = new ArrayList<>(oud);
             samen.addAll(knipogen);
-            helper.assertTrue(oud.size() == 6 && knipogen.size() == 7 && samen.stream().map(Cutscene::id).distinct().count() == 13, "six old scenes, seven winks");
+            helper.assertTrue(oud.size() == 6 && knipogen.size() == 8 && samen.stream().map(Cutscene::id).distinct().count() == 14, "six old scenes, eight winks");
             for (Cutscene s : samen) {
                 boolean oude = oud.contains(s);
                 helper.assertTrue(alle.contains(s.id()) && Cutscene.van(s.id()) == s, s.id() + " is registered");
