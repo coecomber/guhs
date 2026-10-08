@@ -53,7 +53,7 @@ public final class DalTerrein {
     /** e where terrace 3 ends, 2 ends, 1 ends (in a roomy valley), and the valley floor ends (the lake starts). */
     public static final double[] TRAP = {0.05, 0.075, 0.10, 0.125};
     /** The top block of terrace 0 (valley floor) .. 3 (rim). */
-    public static final int[] HOOGTE = {50, 57, 64, 71};
+    public static final int[] HOOGTE = {50, 57, 64, 72}; // biomes3 fix-dal: the rim one higher (a drop of 22 in a full valley)
     /** From this e on the biome is the Bloesemmeertje (a strip of shore before the water). */
     public static final double MEER_BIOME = 0.112;
     /** How much the small noise frays the lake's edge (in e), and at most the terrace edges (in blocks). */
@@ -72,19 +72,37 @@ public final class DalTerrein {
     public static final double KNIJP_VANAF = 0.18, KNIJP_KRAP = 0.30;
     /** The cascades: {blocks before the edge, how far the water has dropped from there}. Never a step of one. */
     static final double[][] ZACHT = {{-8, 2}, {-4, 4}, {0, 7}}, STEVIG = {{-4, 2}, {0, 7}}, HOOG = {{-3.6, 5}, {-1.8, 10}, {0, 14}};
+    /**
+     * biomes3 fix-dal: the rim's face is 8 (the valley drops 22): four steps of 2, or 3 and a fall of 5 with its plunge pool, and
+     * the tall waterfall that starts at the rim is 5 + 5 + 5. (The stair of slice bouw-dal is 7 high: beside a fall of the rim
+     * its top step lies one under the lawn.)
+     */
+    static final double[][] ZACHT_RAND = {{-9, 2}, {-6, 4}, {-3, 6}, {0, 8}}, STEVIG_RAND = {{-4, 3}, {0, 8}}, HOOG_RAND = {{-3.6, 5}, {-1.8, 10}, {0, 15}};
     /** The type noise above these gives a cascade a real fall at its foot (edges 0 and 1; the edge to the valley floor). */
     public static final double STEVIG_VANAF = -0.05, STEVIG_VLOER = 0.0;
     /** Koi pools: one try per cell of this size, and how often it is taken. */
     public static final int POEL_CEL = 24;
-    public static final double POEL_KANS = 0.85;
+    public static final double POEL_KANS = 0.9;
     /** Stepping stones: one try per cell. */
     public static final int STAP_CEL = 16;
     public static final double STAP_KANS = 0.7;
     /** Boulders: one try per cell; the chance on open terrace, at the foot of a face, beside a fall. */
     public static final int KEI_CEL = 8;
-    public static final double KEI_LOS = 0.035, KEI_VOET = 0.28, KEI_VAL = 0.8;
-    /** The rounded foot of a face bulges out at most this far (blocks). */
-    public static final double BOL = 2.6;
+    public static final double KEI_LOS = 0.05, KEI_VOET = 0.28, KEI_VAL = 0.8, KEI_OEVER = 0.2;
+    /** biomes3 fix-dal: and on the rim of a face (1.5 to 5.5 blocks before its edge). */
+    public static final double KEI_RAND = 0.16;
+    /**
+     * biomes3 fix-dal: the faces. The foot of a face bulges out as rounded, stepped rock: at most {@link #VOET_MAX} blocks where
+     * the terrace below has room (a terrace of {@link #SMAL_TERRAS} or less keeps a foot of {@link #VOET_MIN}, so the terrace
+     * stays broad and its building spots stay), and up to the face's height minus one. The shoulder is rounded off one or two
+     * blocks deep over at most {@link #SCHOUDER_MAX}. Beside the tall waterfall the foot is {@link #VOET_HOOG} wider.
+     */
+    public static final double VOET_MIN = 1.0, VOET_MAX = 5.5, VOET_HOOG = 2.0, SCHOUDER_MIN = 1.0, SCHOUDER_MAX = 3.0, SMAL_TERRAS = 28.0;
+    /** biomes3 fix-dal: on the RIGHT bank the foot of the tall waterfall's wall is sculpted too, from this far from the water. */
+    public static final double HOOG_VRIJ = 5.0;
+    /** biomes3 fix-dal: boulders IN the river (they split the flow): one try per cell, in calm stretches and at the mouth of a plunge pool. */
+    public static final int ROTS_CEL = 14;
+    public static final double ROTS_KANS = 0.4;
     /** The right bank is kept plain this far from the water (the building side). */
     public static final double VRIJ = 9.0;
     /** The natural steps beside a cascade: from .. to this far from the left bank. */
@@ -102,7 +120,7 @@ public final class DalTerrein {
     private static final int LIP_RONDES = 3;
     /** The lattice of {@link #steilte}. */
     private static final int ROOSTER = 16;
-    private static final int SOORT_STEILTE = 20, SOORT_POEL = 21, SOORT_STAP = 22, SOORT_KEI = 23;
+    private static final int SOORT_STEILTE = 20, SOORT_POEL = 21, SOORT_STAP = 22, SOORT_KEI = 23, SOORT_ROTS = 24; // biomes3 fix-dal: 24
 
     /** What the shape rules say about one column (everything except "is it water", which needs the river's distance). */
     public static final class Vorm {
@@ -128,6 +146,12 @@ public final class DalTerrein {
         public double waaier, kom, vijver;
         /** How far the shoulder of the face below is rounded off (blocks). */
         public double schouder;
+
+        /** biomes3 fix-dal: how broad terrace t is here, in blocks (the natural width between its two edges). */
+        public double breed(int t) {
+            double b = t == 3 ? t0 - RAND : t == 2 ? t1 - t0 : t == 1 ? t2 - t1 : TRAP[3] - t2;
+            return b / g;
+        }
 
         /** Half the width of the river here, and of a brook. */
         public double rivier() {
@@ -229,8 +253,8 @@ public final class DalTerrein {
         double d07 = m.ruis(BioModel.R_DETAIL, x * 0.07 + 77, z * 0.07 - 33);
         boolean stevig = d07 > STEVIG_VANAF, stevigVloer = d07 > STEVIG_VLOER;
         boolean smal1 = (t2 - t1) / g < RICHEL, smal2 = !smal1 && (t1 - t0) / g < RICHEL;
-        double c0 = trap(s0, stevig ? STEVIG : ZACHT), c1 = trap(s1, stevig ? STEVIG : ZACHT), c2 = trap(s2, stevigVloer ? STEVIG : ZACHT);
-        double val = smal1 ? c0 + trap(s2, HOOG) : smal2 ? trap(s1, HOOG) + c2 : c0 + c1 + c2;
+        double c0 = trap(s0, stevig ? STEVIG_RAND : ZACHT_RAND), c1 = trap(s1, stevig ? STEVIG : ZACHT), c2 = trap(s2, stevigVloer ? STEVIG : ZACHT);
+        double val = smal1 ? c0 + trap(s2, HOOG) : smal2 ? trap(s1, HOOG_RAND) + c2 : c0 + c1 + c2;
         v.val = (int) val;
         v.peil = HOOGTE[3] - 1 - v.val;
         int dichtst = Math.abs(s0) < Math.abs(s1) ? 0 : 1;
@@ -309,13 +333,13 @@ public final class DalTerrein {
             double px = cx * POEL_CEL + BioModel.kans(h, 1) * POEL_CEL, pz = cz * POEL_CEL + BioModel.kans(h, 2) * POEL_CEL;
             double[] l = lijn(m, px, pz, 0, 0);
             if (Math.abs(l[0]) <= 14) {
-                double straal = 2.8 + 1.6 * BioModel.kans(h, 3);
+                double k3 = BioModel.kans(h, 3), straal = 2.8 + 3.4 * k3 * k3; // biomes3 fix-dal: now and then a wide calm pool
                 // beside the river, on the side the try fell on, just touching it
                 double schuif = l[0] - Math.signum(l[0] == 0 ? 1 : l[0]) * (straal - 0.3);
                 px -= l[1] * schuif;
                 pz -= l[2] * schuif;
                 Vorm v = bij(m, (int) Math.round(px), (int) Math.round(pz));
-                if (v.kern && v.bron > 0.95 && v.vijver < 2.5 && rustig(v, straal + 1, straal + 8.5)) {
+                if (v.kern && v.bron > 0.95 && v.vijver < 2.5 && rustig(v, Math.max(straal + 1, straal * 1.25 + 3.5), straal + 8.5)) {
                     uit = new Poel(px, pz, straal, BioModel.kans(h, 4) * 6.283, BioModel.kans(h, 5) * 6.283);
                 }
             }
@@ -368,20 +392,79 @@ public final class DalTerrein {
                 double naast = Math.abs(r[0]) - v.rivier(), naastBeek = Math.abs(b[0]) - v.beek();
                 boolean stroomt = v.bron > 0.9;
                 double kans = KEI_LOS;
-                if (v.sn >= 0.5 && v.sn < 6) {
+                // (biomes3 fix-dal: a narrow terrace keeps its boulders small and close to the face: it has no room to lose)
+                boolean ruim = v.breed(v.t) >= SMAL_TERRAS + 4;
+                if (v.sn >= 0.5 && v.sn < (ruim ? 6 : 2.2)) {
                     kans = KEI_VOET;
+                } else if (ruim && v.sn > -4.0 && v.sn < -1.0) {
+                    kans = KEI_RAND;
+                } else if (Math.abs(v.sn) > 7 && !(stroomt && naast < 9)) {
+                    // (biomes3 fix-dal: no loose boulder out on the open terrace: that is the building ground. They lie near a
+                    // face and near the water, where nothing is built anyway)
+                    kans = 0;
                 }
                 boolean flank = stroomt && r[0] < 0 && naast < 3.0 && v.sn > -7 && v.sn < 7;
                 if (flank) {
                     kans = KEI_VAL;
+                } else if (stroomt && r[0] < 0 && naast < 2.6) {
+                    // (biomes3 fix-dal: and here and there all along the left bank)
+                    kans = Math.max(kans, KEI_OEVER);
                 }
-                boolean vrij = stroomt && (r[0] > 0 && naast < VRIJ || naastBeek < 4 || r[0] < 0 && naast >= 3.0 && naast < TREDE_TOT + 1.5 && v.sn > -16 && v.sn < 3);
+                boolean vrij = stroomt && (r[0] > 0 && naast < VRIJ || naastBeek < 4 || r[0] < 0 && naast >= 3.0 && naast < TREDE_TOT + 1.5);
                 if (naast > 0.8 && naastBeek > 0.8 && !vrij && BioModel.kans(h, 0) < kans) {
-                    uit = new Kei(px, pz, 1.4 + 1.5 * BioModel.kans(h, 3), 1 + (int) (BioModel.kans(h, 4) * (flank ? 3.4 : 2.5)), v.t);
+                    double k3 = BioModel.kans(h, 3);
+                    boolean groot = k3 > 0.8 && ruim;
+                    uit = new Kei(px, pz, (ruim || flank ? 1.4 + 1.5 * k3 : 1.2 + 0.7 * k3) + (groot ? 4 * (k3 - 0.8) : 0), 1 + (int) (BioModel.kans(h, 4) * (flank ? 3.4 : 2.5) + (groot ? 1 : 0)), v.t);
                 }
             }
         }
         bewaar(m, sleutel, uit == null ? Boolean.FALSE : uit);
+        return uit;
+    }
+
+    /** biomes3 fix-dal: a boulder in the river: middle, radius, height above the water. */
+    public record Rots(double x, double z, double straal, int hoog) {
+    }
+
+    /** The river boulder of a grid cell, or null (cached). */
+    static Rots rots(BioModel m, int cx, int cz) {
+        long sleutel = BioModel.sleutel(SOORT_ROTS, cx, cz);
+        Object bekend = m.cellen.get(sleutel);
+        if (bekend != null) {
+            return bekend instanceof Rots r ? r : null;
+        }
+        Rots uit = null;
+        long h = m.hash(cx, cz, 5501);
+        if (BioModel.kans(h, 0) < ROTS_KANS) {
+            double px = cx * ROTS_CEL + BioModel.kans(h, 1) * ROTS_CEL, pz = cz * ROTS_CEL + BioModel.kans(h, 2) * ROTS_CEL;
+            double[] l = lijn(m, px, pz, 0, 0);
+            if (Math.abs(l[0]) <= 9) {
+                // on the river's middle line, a little to one side
+                double naar = l[0] - (BioModel.kans(h, 3) - 0.5) * 2.4;
+                px -= l[1] * naar;
+                pz -= l[2] * naar;
+                Vorm v = bij(m, (int) Math.round(px), (int) Math.round(pz));
+                if (v.kern && v.bron > 0.95 && v.vijver < 1.5 && rustig(v, 7, 9.5)
+                        && stap(m, Math.floorDiv((int) Math.floor(px), STAP_CEL), Math.floorDiv((int) Math.floor(pz), STAP_CEL)) == null) {
+                    uit = new Rots(px, pz, 0.9 + 1.0 * BioModel.kans(h, 4), 1 + (int) (BioModel.kans(h, 5) * 2.2));
+                }
+            }
+        }
+        bewaar(m, sleutel, uit == null ? Boolean.FALSE : uit);
+        return uit;
+    }
+
+    private static List<Rots> rotsenBij(BioModel m, int x0, int z0, int n) {
+        List<Rots> uit = new ArrayList<>(2);
+        int bereik = 12;
+        for (int cx = Math.floorDiv(x0 - bereik, ROTS_CEL); cx <= Math.floorDiv(x0 + n + bereik, ROTS_CEL); cx++) {
+            for (int cz = Math.floorDiv(z0 - bereik, ROTS_CEL); cz <= Math.floorDiv(z0 + n + bereik, ROTS_CEL); cz++) {
+                Rots r = rots(m, cx, cz);
+                if (r != null && r.x() + 3 >= x0 && r.x() - 3 < x0 + n && r.z() + 3 >= z0 && r.z() - 3 < z0 + n) {
+                    uit.add(r);
+                }
+            }
+        }
         return uit;
     }
 
@@ -438,6 +521,9 @@ public final class DalTerrein {
         List<Poel> poelen = null;
         List<Stap> stappen = null;
         List<Kei> keien = null;
+        List<Rots> rotsen = null;
+        int[] put = new int[n * n]; // biomes3 fix-dal: the level of every column before the lips (for the pit rule)
+        boolean[] schouder2 = new boolean[n * n]; // (a shoulder two deep)
         Vorm v = new Vorm();
         for (int j = 0; j < n; j++) {
             for (int i = 0; i < n; i++) {
@@ -531,7 +617,23 @@ public final class DalTerrein {
                             }
                         }
                     }
-                    if (steen) {
+                    int rotsOp = 0;
+                    if (!steen && rivier && v.peil == top - 1 && v.bron > 0.95) {
+                        // biomes3 fix-dal: a boulder in the river
+                        if (rotsen == null) {
+                            rotsen = rotsenBij(m, x0, z0, n);
+                        }
+                        for (Rots ro : rotsen) {
+                            double dx = x - ro.x(), dz = z - ro.z(), q = (dx * dx + dz * dz) / (ro.straal() * ro.straal());
+                            if (q < 1) {
+                                rotsOp = Math.max(rotsOp, Math.max(1, (int) Math.round(ro.hoog() * Math.sqrt(1 - q))));
+                            }
+                        }
+                    }
+                    if (rotsOp > 0) {
+                        h[idx] = v.peil + rotsOp;
+                        vl[idx] = (short) (Kaart.RIVIER | Kaart.LIP | VORM);
+                    } else if (steen) {
                         h[idx] = v.peil;
                         vl[idx] = (short) (Kaart.RIVIER | Kaart.LIP);
                     } else {
@@ -543,26 +645,55 @@ public final class DalTerrein {
                 }
                 // dry ground. The right bank near the water, and both banks of a brook, stay plain
                 boolean vrij = stroomt && (!links && naast < VRIJ || naastBeek < 4);
-                if (!vrij) {
-                    int edge = 2 - t;
-                    // the rounded foot of the face above this terrace
-                    if (t < 3 && v.s[edge] >= 0 && v.s[edge] < BOL) {
-                        // (how far the foot bulges out here, in blocks: a noise of its own, only read this close to a face)
-                        double bol = Math.min(BOL, 0.3 + 3.2 * m.ruis(BioModel.R_DETAIL, x + 1000, z + 1000));
-                        if (v.s[edge] < bol) {
-                            double q = v.s[edge] / bol;
-                            int op = (int) Math.round(Math.max(1, Math.min(3.6, 1.6 * bol)) * Math.sqrt(1 - q * q));
+                // biomes3 fix-dal: the band of the natural steps and of the path along the left bank stays clear of rock
+                boolean pad = stroomt && links && naast >= TREDE_VAN - 1 && naast < TREDE_TOT + 1;
+                // (and the column right at the water: the bank at the foot of a fall is a spot a building can ask for)
+                pad |= stroomt && naast < 1.3;
+                // (the foot of the tall waterfall's wall: on the right bank it is sculpted too, a few blocks from the water)
+                boolean hoogVoet = v.hoog && t < 3 && v.sn >= 0 && v.sn == v.s[2 - t];
+                boolean voetVrij = vrij && !(hoogVoet && !links && naast >= HOOG_VRIJ && naastBeek >= 4);
+                if (!voetVrij && !pad && t < 3) {
+                    // the foot of the face above this terrace: rounded rock that bulges out and steps down
+                    double sv = v.s[2 - t];
+                    double wmax = Math.max(VOET_MIN, Math.min(VOET_MAX, (v.breed(t) - SMAL_TERRAS) * 0.4 + VOET_MIN)) + (hoogVoet ? VOET_HOOG : 0);
+                    if (sv >= 0 && sv < wmax) {
+                        // (a slow noise along the face: where the rock comes forward and how high; a fast one roughens it)
+                        double ruig = m.ruis(BioModel.R_DETAIL, x * 0.23 + 1000, z * 0.23 + 1000), fijn = m.ruis(BioModel.R_DETAIL, x + 1000, z + 1000);
+                        // (a narrow terrace keeps a foot of ONE column, so it stays broad; that one column is there along most of
+                        // the face, at a height of its own: the wall reads as stepped rock, not as a cut)
+                        double deel = 0.6 + 1.25 * ruig + 0.45 * fijn + (hoogVoet ? 0.25 : 0);
+                        double breedte = deel < (wmax > 1.5 ? 0.22 : 0.5) ? 0 : Math.max(1.0, wmax * Math.min(1.0, deel));
+                        if (sv < breedte) {
+                            int wand = HOOGTE[t + 1] - top;
+                            double q = sv / breedte;
+                            double tot = Math.max(1.0, Math.min(wand - 1.0, wand * (0.5 + 0.9 * ruig + (hoogVoet ? 0.2 : 0))));
+                            int op = (int) Math.round(tot * Math.sqrt(1 - q * q));
+                            // (above two blocks it steps by two: ledges, not a slope)
+                            if (op > 2 && ((op - 2) & 1) != 0) {
+                                op += fijn > 0 && op < wand - 1 ? 1 : -1;
+                            }
                             if (op > 0) {
                                 hoogte = top + op;
                                 vlag |= VORM;
                             }
                         }
                     }
-                    // the rounded shoulder of the face below it
-                    if (t > 0 && v.s[3 - t] >= -v.schouder) {
-                        hoogte = top - 1;
-                        vlag |= VORM;
+                }
+                if (!vrij && !pad && t > 0) {
+                    // the rounded shoulder of the face below it: one block down, two at the very edge where it is wide
+                    double sb = -v.s[3 - t];
+                    double smax = Math.max(SCHOUDER_MIN, Math.min(SCHOUDER_MAX, (v.breed(t) - SMAL_TERRAS) * 0.25 + SCHOUDER_MIN));
+                    if (sb <= smax) {
+                        double deel = 0.5 + 1.3 * m.ruis(BioModel.R_DETAIL, x * 0.23 - 2000, z * 0.23 + 500) + 0.5 * v.det;
+                        double rond = deel < (smax > 1.5 ? 0.2 : 0.45) ? -1 : Math.max(1.0, smax * Math.min(1.0, deel));
+                        if (sb < rond) {
+                            schouder2[idx] = deel > 0.75 && sb <= Math.max(1.0, rond * 0.4);
+                            hoogte = Math.min(hoogte, top - (schouder2[idx] ? 2 : 1));
+                            vlag |= VORM;
+                        }
                     }
+                }
+                if (!vrij && !pad) {
                     if (keien == null) {
                         keien = keienBij(m, x0, z0, n);
                     }
@@ -589,6 +720,17 @@ public final class DalTerrein {
                             double s = v.s[edge];
                             int onder = HOOGTE[2 - edge];
                             if (s < 0 && onder + (int) Math.ceil(-s) < hoogte) {
+                                // biomes3 fix-dal: only where the lower terrace really lies at the flight's foot, a few
+                                // blocks of it (where edges cross, a flight sank into the ground as a trench)
+                                boolean voet = true;
+                                for (double verder = 1.5; verder < 5 && voet; verder += 3) {
+                                    double weg = -s + verder;
+                                    Vorm onderaan = bij(m, (int) Math.round(x + ex / el * weg), (int) Math.round(z + ez / el * weg));
+                                    voet = onderaan.kern && onderaan.t <= 2 - edge;
+                                }
+                                if (!voet) {
+                                    continue;
+                                }
                                 hoogte = onder + (int) Math.ceil(-s);
                                 vlag = (short) (VORM | TREDE);
                             }
@@ -598,6 +740,11 @@ public final class DalTerrein {
                 h[idx] = hoogte;
                 vl[idx] = vlag;
             }
+        }
+        // biomes3 fix-dal: the level a walker stands (or swims) at in every column, before the lips: a dry column that lies
+        // two or more below ALL four neighbours would be a pit nobody climbs out of; it is raised (below, per own column)
+        for (int idx = 0; idx < n * n; idx++) {
+            put[idx] = wat[idx] != Kaart.GEEN ? wat[idx] : h[idx];
         }
         // the lips: river water next to lower DRY ground would run out of its bed; such a column becomes rock up to the
         // water's level. So does water next to water exactly ONE lower (a seam between two kinds of cascade): a one-block
@@ -654,6 +801,29 @@ public final class DalTerrein {
                         hoogte = wat[idx] - 1;
                     }
                 }
+                if (wat[idx] == Kaart.GEEN && (vlag & Kaart.LIP) == 0 && ter[idx] >= 0) {
+                    // biomes3 fix-dal: no pits. (1) a sliver of a lower terrace caught between higher ones (where two edges
+                    // cross) takes the height of the terrace around it; (2) a shoulder is two deep only right beside the
+                    // lower terrace; (3) a column two or more below all four neighbours is raised
+                    int sliert = sliert(ter, vl, wat, idx, n);
+                    if (sliert >= 0) {
+                        hoogte = HOOGTE[sliert];
+                        vlag = VORM;
+                    } else if (schouder2[idx] && hoogte == HOOGTE[ter[idx]] - 2) {
+                        boolean rand = false;
+                        for (int b : buren) {
+                            rand |= wat[idx + b] != Kaart.GEEN || ter[idx + b] >= 0 && ter[idx + b] < ter[idx] && sliert(ter, vl, wat, idx + b, n) < 0;
+                        }
+                        if (!rand) {
+                            hoogte++;
+                        }
+                    }
+                    int laagst = Math.min(Math.min(put[idx - 1], put[idx + 1]), Math.min(put[idx - n], put[idx + n]));
+                    if (laagst < MUUR && hoogte < laagst - 1) {
+                        hoogte = laagst - 1;
+                        vlag |= VORM;
+                    }
+                }
                 k.hoogte[o] = hoogte;
                 k.vlag[o] = vlag;
             }
@@ -661,13 +831,49 @@ public final class DalTerrein {
         return true;
     }
 
+    /**
+     * biomes3 fix-dal: is this dry column a sliver of its terrace: along x or along z fewer than four columns of this terrace
+     * (or a lower one) in a row, with a HIGHER terrace at both ends (where two edges cross the valley floor reaches up in
+     * thin fingers, seven deep)? Then the index of the lowest terrace beside it, else -1. Only looks at the terrace index of
+     * the columns within four blocks, so every chunk map answers the same for a column.
+     */
+    private static int sliert(byte[] ter, short[] vl, int[] wat, int idx, int n) {
+        int t = ter[idx];
+        if (t < 0 || wat[idx] != Kaart.GEEN || (vl[idx] & (TREDE | Kaart.LIP)) != 0) {
+            return -1;
+        }
+        int uit = 99;
+        for (int stap : new int[]{1, n}) {
+            int lang = 1, eind = 99;
+            boolean dicht = true;
+            for (int kant = -1; kant <= 1 && dicht; kant += 2) {
+                for (int a = 1; a <= 4; a++) {
+                    int bt = ter[idx + kant * a * stap];
+                    if (bt > t) {
+                        eind = Math.min(eind, bt);
+                        break;
+                    }
+                    if (bt < 0 || a == 4) {
+                        dicht = false;
+                        break;
+                    }
+                    lang++;
+                }
+            }
+            if (dicht && lang < 4) {
+                uit = Math.min(uit, eind);
+            }
+        }
+        return uit < 99 ? uit : -1;
+    }
+
     private static List<Poel> poelenBij(BioModel m, int x0, int z0, int n) {
         List<Poel> uit = new ArrayList<>(2);
-        int bereik = 22;
+        int bereik = 25;
         for (int cx = Math.floorDiv(x0 - bereik, POEL_CEL); cx <= Math.floorDiv(x0 + n + bereik, POEL_CEL); cx++) {
             for (int cz = Math.floorDiv(z0 - bereik, POEL_CEL); cz <= Math.floorDiv(z0 + n + bereik, POEL_CEL); cz++) {
                 Poel p = poel(m, cx, cz);
-                if (p != null && p.x() + 8 >= x0 && p.x() - 8 < x0 + n && p.z() + 8 >= z0 && p.z() - 8 < z0 + n) {
+                if (p != null && p.x() + 9 >= x0 && p.x() - 9 < x0 + n && p.z() + 9 >= z0 && p.z() - 9 < z0 + n) {
                     uit.add(p);
                 }
             }

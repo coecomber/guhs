@@ -2,16 +2,12 @@ package nl.juiced.guhs.feature.bio.wereld;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.bio.Bio;
 import nl.juiced.guhs.world.BouwRuimte;
 
@@ -19,35 +15,47 @@ import nl.juiced.guhs.world.BouwRuimte;
  * biomes3 wereld, the Klaterdal: what grows there, placed with the terrain (by {@link DalVulling}) because every choice
  * needs the terrain model: how far the water is, whether the ground is plain terrace, where the rock is.
  * <p>
- * Calm and uncluttered is the rule (the first sketch had too much tall grass): no grass at all; soft patches of pale moss
- * ({@link DalBlokken#MOS}) on the pink ground, a few flowers in small clumps of one kind, reeds on stretches of bank,
- * petals and a lily pad on still water. Trees keep {@link #BOOM_AF} blocks from every water so no crown hides the river:
- * guhbloesem trees thinly spread, a rare red or orange esdoorn as an accent ({@link #esdoorn}: a rounded crown of one
- * colour with a soft cloud of the other), crooked little trees on boulders and rock ledges ({@link #bonsai}), and
- * here and there a grove of guh-bamboe. Nothing is planted in or on a building ({@link BouwRuimte#inBuilding}).
- * Everything is a pure function of the world seed and the position.
+ * Lush but calm (biomes3 fix-dal; the first sketch had too much tall grass, the first finished valley was bare): still no
+ * grass at all. Broad soft patches of pale moss ({@link DalBlokken#MOS}) on the pink ground; flowers in DRIFTS of one kind
+ * near the water and in the groves; reeds in tufts on the bank; petals and lily pads on still water, most on the koi
+ * pools. Along the river's LEFT bank a path of flush stepping stones and a little sand links the natural rock steps beside
+ * the cascades, so a walker is led from the rim to the lake. Guhbloesem trees ({@link BloesemBoom}, small to large, now
+ * and then a giant) stand in GROVES with open lawn between; near the water they lean towards it, but no crown reaches over
+ * it, and the river's right bank keeps its clear building strip. Esdoorn accents ({@link #esdoorn}) stand in ones and twos
+ * by a fall and by a koi pool; crooked little trees ({@link #bonsai}) on boulders and on the ledges of the rock, leaning
+ * out; guh-bamboe in real groves against a rock face. Nothing is planted in or on a building
+ * ({@link BouwRuimte#inBuilding}). Everything is a pure function of the world seed and the position.
  */
 public final class DalPlanten {
     // <dal-planten>
-    /** Trees stand at least this far from water. */
-    public static final int BOOM_AF = 9;
-    /** One try for a tree per cell of this size; the chance of a guhbloesem, of an esdoorn. */
-    public static final int BOOM_CEL = 12;
-    public static final double BLOESEM_KANS = 0.30, ESDOORN_KANS = 0.04;
-    /** One try for a bamboo grove per cell. */
-    public static final int BAMBOE_CEL = 36;
-    public static final double BAMBOE_KANS = 0.25;
-    /** The moss noise above this is a moss patch (small soft patches, about a seventh of the ground). */
-    public static final double MOS_VANAF = 0.33;
-    /** Flowers: one try for a clump per cell. */
-    public static final int BLOEM_CEL = 14;
-    public static final double BLOEM_KANS = 0.3;
-    /** How many boulders carry a crooked little tree. */
-    public static final double BONSAI_KANS = 0.45;
+    /** One try for a guhbloesem per cell of this size; the chance in a grove, at a grove's edge, on the open lawn. */
+    public static final int BOOM_CEL = 6;
+    public static final double BOOM_BOS = 0.6, BOOM_RAND = 0.2, BOOM_GAZON = 0.09;
+    /** The grove noise above this is a grove, above the second its edge. */
+    public static final double BOS_VANAF = -0.06, BOS_RAND = -0.2;
+    /** A trunk stands at least this far from the water on the left bank (beyond the path), a crown's edge this far. */
+    public static final int STAM_AF = 7, KROON_AF = 1;
+    /** On the right bank the trunk stays out of the building strip, and the crown's edge this far from the water. */
+    public static final int STAM_RECHTS = 11, KROON_RECHTS = 6;
+    /** Esdoorn accents: one try per cell near a fall, and the chance beside a koi pool. */
+    public static final int ESDOORN_CEL = 10;
+    public static final double ESDOORN_VAL = 0.8, ESDOORN_POEL = 0.6;
+    /** One try for a bamboo grove per cell (it must stand against a rock face). */
+    public static final int BAMBOE_CEL = 14;
+    public static final double BAMBOE_KANS = 0.7;
+    /** The moss noise above this is a moss patch (broad soft patches, about a quarter of the ground). */
+    public static final double MOS_VANAF = 0.4;
+    /** Flower drifts: the drift noise above this, near water or in a grove; how full a drift is. */
+    public static final double BLOEM_VANAF = 0.2, BLOEM_VOL = 0.55;
+    /** The path on the left bank: this far from the water. */
+    public static final double PAD_VAN = 3.8, PAD_TOT = 5.7;
+    /** How many boulders carry a crooked little tree; how many ledge columns do, near a fall and elsewhere. */
+    public static final double BONSAI_KANS = 0.6, BONSAI_VAL = 0.09, BONSAI_RICHEL = 0.012;
     // </dal-planten>
 
-    private static final String[] BLOEMEN = {"roze_guhbloem", "knabbelroos", "roze_hibiscus", "guhoortjes"};
-    private static final ResourceKey<ConfiguredFeature<?, ?>> GUHBLOESEM = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("guhbloesem"));
+    static final String[] BLOEMEN = {"roze_guhbloem", "knabbelroos", "roze_hibiscus", "guhoortjes"};
+    /** The window of model columns around a chunk the plants look at. */
+    private static final int RAND = 12, N = 16 + 2 * RAND;
 
     private static boolean grond(BlockState s) {
         return s.is(Blocks.PINK_WOOL) || s.is(DalBlokken.MOS.get());
@@ -58,22 +66,147 @@ public final class DalPlanten {
         return m.terras(x, z) >= 0 && m.droog(x, z) && m.vlag(x, z) == 0 && m.soort(x, z) == Kaart.DAL;
     }
 
-    /** Is there water (or anything that is not plain ground at this height) within r blocks? */
-    private static boolean vrij(BioModel m, int x, int z, int r, int h, boolean ookRots) {
-        for (int dx = -r; dx <= r; dx++) {
-            for (int dz = -r; dz <= r; dz++) {
-                if (dx * dx + dz * dz > r * r + 1) {
-                    continue;
+    /** What the model says around a chunk: heights, and the distance in blocks to the nearest water and to the nearest fall. */
+    private static final class Buurt {
+        final int x0, z0;
+        final int[] h = new int[N * N];
+        final float[] water = new float[N * N], val = new float[N * N];
+
+        Buurt(BioModel m, Kaart k) {
+            x0 = (k.cx << 4) - RAND;
+            z0 = (k.cz << 4) - RAND;
+            for (int j = 0; j < N; j++) {
+                for (int i = 0; i < N; i++) {
+                    int idx = i + j * N, x = x0 + i, z = z0 + j;
+                    Kaart kk = m.kaart(x >> 4, z >> 4);
+                    water[idx] = val[idx] = 99;
+                    if (kk.leeg) {
+                        h[idx] = Kaart.GEEN;
+                        continue;
+                    }
+                    int o = Kaart.index(x, z);
+                    h[idx] = kk.hoogte[o];
+                    if (kk.meng[o] >= 1f && (kk.water[o] != Kaart.GEEN || (kk.vlag[o] & Kaart.LIP) != 0)) {
+                        water[idx] = 0;
+                        if ((kk.vlag[o] & Kaart.VAL) != 0) {
+                            val[idx] = 0;
+                        }
+                    }
                 }
-                if (m.water(x + dx, z + dz) != Kaart.GEEN || (m.vlag(x + dx, z + dz) & Kaart.LIP) != 0) {
-                    return false;
+            }
+            afstand(water);
+            afstand(val);
+        }
+
+        /** A chamfer distance transform (1 straight, 1.4 diagonal). */
+        private static void afstand(float[] d) {
+            for (int j = 0; j < N; j++) {
+                for (int i = 0; i < N; i++) {
+                    int idx = i + j * N;
+                    float v = d[idx];
+                    if (i > 0) {
+                        v = Math.min(v, d[idx - 1] + 1);
+                    }
+                    if (j > 0) {
+                        v = Math.min(v, d[idx - N] + 1);
+                        if (i > 0) {
+                            v = Math.min(v, d[idx - N - 1] + 1.4f);
+                        }
+                        if (i < N - 1) {
+                            v = Math.min(v, d[idx - N + 1] + 1.4f);
+                        }
+                    }
+                    d[idx] = v;
                 }
-                if (ookRots && Math.abs(dx) <= 2 && Math.abs(dz) <= 2 && (m.hoogte(x + dx, z + dz) != h || m.vlag(x + dx, z + dz) != 0)) {
+            }
+            for (int j = N - 1; j >= 0; j--) {
+                for (int i = N - 1; i >= 0; i--) {
+                    int idx = i + j * N;
+                    float v = d[idx];
+                    if (i < N - 1) {
+                        v = Math.min(v, d[idx + 1] + 1);
+                    }
+                    if (j < N - 1) {
+                        v = Math.min(v, d[idx + N] + 1);
+                        if (i < N - 1) {
+                            v = Math.min(v, d[idx + N + 1] + 1.4f);
+                        }
+                        if (i > 0) {
+                            v = Math.min(v, d[idx + N - 1] + 1.4f);
+                        }
+                    }
+                    d[idx] = v;
+                }
+            }
+        }
+
+        int idx(int x, int z) {
+            int i = Math.max(0, Math.min(N - 1, x - x0)), j = Math.max(0, Math.min(N - 1, z - z0));
+            return i + j * N;
+        }
+
+        /** Blocks to the nearest water (12 or more: far). */
+        float water(int x, int z) {
+            return water[idx(x, z)];
+        }
+
+        float val(int x, int z) {
+            return val[idx(x, z)];
+        }
+
+        int h(int x, int z) {
+            return h[idx(x, z)];
+        }
+
+        /** The step (-1, 0, 1 each way) towards the nearest water from a column, or {0, 0}. */
+        int[] naarWater(int x, int z) {
+            float best = water(x, z);
+            int[] uit = {0, 0};
+            for (int[] d : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+                float v = water(x + d[0] * 3, z + d[1] * 3);
+                if (v < best - 1.5f) {
+                    best = v;
+                    uit = d;
+                }
+            }
+            return uit;
+        }
+    }
+
+    /** {is this the river's left bank, blocks to the river's middle line} from the river noise (three samples). */
+    private static double[] rivier(BioModel m, int x, int z) {
+        double r = m.ruis(BioModel.R_RIVIER, x, z);
+        double gx = (m.ruis(BioModel.R_RIVIER, x + 1, z) - m.ruis(BioModel.R_RIVIER, x - 1, z)) / 2, gz = (m.ruis(BioModel.R_RIVIER, x, z + 1) - m.ruis(BioModel.R_RIVIER, x, z - 1)) / 2;
+        double g = Math.sqrt(gx * gx + gz * gz);
+        return new double[]{r < 0 ? 1 : 0, g <= 0.0012 ? 99 : Math.abs(r) / g};
+    }
+
+    /**
+     * May a tree with this crown stand here? The trunk on plain level ground, far enough from the water for its side of
+     * the river, the crown's edge clear of the water, and no building.
+     */
+    private static boolean boomMag(WorldGenLevel level, BioModel m, Buurt b, int x, int z, double kx, double kz, double straal) {
+        int h = m.hoogte(x, z);
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (m.hoogte(x + dx, z + dz) != h || m.vlag(x + dx, z + dz) != 0 || !m.droog(x + dx, z + dz)) {
                     return false;
                 }
             }
         }
-        return true;
+        float stam = b.water(x, z), kroon = b.water((int) Math.round(kx), (int) Math.round(kz));
+        if (stam < STAM_AF || kroon < straal + KROON_AF) {
+            return false;
+        }
+        if (stam < STAM_RECHTS + 6) {
+            double[] r = rivier(m, x, z);
+            // (the right bank of the RIVER; a brook or a pool far from the river's line has no building strip)
+            if (r[0] == 0 && r[1] < stam + 9 && (stam < STAM_RECHTS || kroon < straal + KROON_RECHTS)) {
+                return false;
+            }
+        }
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        return grond(level.getBlockState(p.set(x, h, z))) && !inGebouw(level, x, h + 1, z, (int) Math.ceil(straal));
     }
 
     static int vul(WorldGenLevel level, BioModel m, Kaart k) {
@@ -83,8 +216,14 @@ public final class DalPlanten {
         BlockState mos = DalBlokken.MOS.get().defaultBlockState(), riet = DalBlokken.RIET.get().defaultBlockState();
         BlockState blaadjes = Bio.blok("drijvende_bloesemblaadjes", Blocks.PINK_PETALS).defaultBlockState();
         BlockState lelie = Bio.blok("guh_waterlelie", Blocks.LILY_PAD).defaultBlockState();
+        BlockState steen = DalVulling.rots(), zand = DalVulling.bedding();
+        BlockState[] bloemen = new BlockState[BLOEMEN.length];
+        for (int i = 0; i < bloemen.length; i++) {
+            bloemen[i] = Bio.blok(BLOEMEN[i], Blocks.PINK_TULIP).defaultBlockState();
+        }
         var poelen = DalTerrein.poelen(m, k.cx, k.cz);
-        // --- per column: moss, reeds, petals ---------------------------------------------------------------------------------
+        Buurt b = new Buurt(m, k);
+        // --- per column: moss, the path, flowers, reeds, petals --------------------------------------------------------------------
         for (int o = 0; o < 256; o++) {
             if (k.terras[o] < 0 || k.meng[o] < 1f) {
                 continue;
@@ -92,7 +231,7 @@ public final class DalPlanten {
             int x = x0 + (o & 15), z = z0 + (o >> 4), h = k.hoogte[o], w = k.water[o];
             long hash = m.hash(x, z, 6101);
             if (w != Kaart.GEEN) {
-                // petals and a lily pad on still water: not at a fall, and not where a fall lands
+                // petals and lily pads on still water: not at a fall, and not where a fall lands
                 if ((k.vlag[o] & Kaart.VAL) != 0) {
                     continue;
                 }
@@ -110,12 +249,12 @@ public final class DalPlanten {
                 for (DalTerrein.Poel pl : poelen) {
                     poel |= pl.rand(x - pl.x(), z - pl.z()) > 0;
                 }
-                double kans = poel ? 0.26 : m.ruis(BioModel.R_DETAIL, x * 0.8 + 500, z * 0.22 - 500) > 0.38 ? 0.3 : k.terras[o] == 0 ? 0.03 : 0.012;
+                double kans = poel ? 0.30 : m.ruis(BioModel.R_DETAIL, x * 0.8 + 500, z * 0.22 - 500) > 0.26 ? 0.32 : k.terras[o] == 0 ? 0.04 : 0.025;
                 double worp = BioModel.kans(hash, 0);
                 if (worp < kans && level.isEmptyBlock(p.set(x, w + 1, z)) && !(gebouwen && BouwRuimte.inBuilding(level, p))) {
                     level.setBlock(p, DalVulling.met(blaadjes, "dichtheid", String.valueOf(1 + (int) (BioModel.kans(hash, 1) * (poel ? 3 : 2)))), 2);
                     gezet++;
-                } else if (poel && worp > 0.955 && level.isEmptyBlock(p.set(x, w + 1, z)) && !(gebouwen && BouwRuimte.inBuilding(level, p))) {
+                } else if (poel && worp > 0.90 && level.isEmptyBlock(p.set(x, w + 1, z)) && !(gebouwen && BouwRuimte.inBuilding(level, p))) {
                     level.setBlock(p, lelie, 2);
                     gezet++;
                 }
@@ -130,68 +269,118 @@ public final class DalPlanten {
                 oever |= m.water(bx, bz) == h - 1;
                 rots |= m.water(bx, bz) == Kaart.GEEN && (m.vlag(bx, bz) & DalTerrein.VORM) != 0 && m.hoogte(bx, bz) > h;
             }
-            // moss: small patches all over, more of it against rock and (in stretches) along the water
-            double mosRuis = m.ruis(BioModel.R_DETAIL, x * 1.1 + 900, z * 1.1 + 300);
-            boolean opMos = mosRuis > MOS_VANAF || rots && mosRuis > -0.15 || oever && mosRuis > 0.08;
+            float nat = b.water(x, z);
+            boolean dal = k.soort[o] == Kaart.DAL;
+            // the path along the left bank: flush stepping stones and a little sand, the ground between them
+            if (dal && nat >= PAD_VAN && nat < PAD_TOT) {
+                double[] r = rivier(m, x, z);
+                if (r[0] == 1 && r[1] < nat + 12) {
+                    double worp = BioModel.kans(hash, 7);
+                    // (stones lie in twos and threes: a slow hash along the bank decides where)
+                    boolean groep = BioModel.kans(m.hash(x >> 1, z >> 1, 6102), 0) < 0.62;
+                    if (groep && worp < 0.72) {
+                        level.setBlock(p, steen, 2);
+                        gezet++;
+                        continue;
+                    }
+                    if (worp > 0.80) {
+                        level.setBlock(p, zand, 2);
+                        gezet++;
+                        continue;
+                    }
+                }
+            }
+            // moss: broad soft patches, more of it against rock, along the water and in the groves
+            double grof = m.ruis(BioModel.R_DETAIL, x * 0.5 + 900, z * 0.5 + 300), fijn = m.ruis(BioModel.R_DETAIL, x * 1.1 + 900, z * 1.1 + 300);
+            double mosRuis = grof + 0.4 * fijn;
+            boolean opMos = mosRuis > MOS_VANAF || rots && mosRuis > -0.2 || oever && mosRuis > 0.0 || nat < 3.5 && mosRuis > 0.18 || mosRuis > MOS_VANAF - 0.15 && bos(m, x, z) > BOS_VANAF + 0.2;
             if (opMos) {
                 level.setBlock(p, mos, 2);
                 gezet++;
             }
-            if (oever && m.ruis(BioModel.R_DETAIL, x * 0.4 + 123, z * 0.4 + 77) > 0.2 && BioModel.kans(hash, 3) < 0.6
-                    && level.isEmptyBlock(p.set(x, h + 1, z))) {
+            if (!level.isEmptyBlock(p.set(x, h + 1, z))) {
+                continue;
+            }
+            // reeds: tufts on the bank
+            if (oever && m.ruis(BioModel.R_DETAIL, x * 0.4 + 123, z * 0.4 + 77) > 0.18 && BioModel.kans(hash, 3) < 0.7) {
                 level.setBlock(p, riet, 2);
                 gezet++;
+                continue;
             }
-        }
-        // --- flowers: a small clump of one kind per cell, now and then -----------------------------------------------------------
-        for (int cx = Math.floorDiv(x0 - 4, BLOEM_CEL); cx <= Math.floorDiv(x0 + 19, BLOEM_CEL); cx++) {
-            for (int cz = Math.floorDiv(z0 - 4, BLOEM_CEL); cz <= Math.floorDiv(z0 + 19, BLOEM_CEL); cz++) {
-                long hash = m.hash(cx, cz, 6201);
-                if (BioModel.kans(hash, 0) >= BLOEM_KANS) {
-                    continue;
-                }
-                int mx = cx * BLOEM_CEL + (int) (BioModel.kans(hash, 1) * BLOEM_CEL), mz = cz * BLOEM_CEL + (int) (BioModel.kans(hash, 2) * BLOEM_CEL);
-                BlockState bloem = Bio.blok(BLOEMEN[(int) (BioModel.kans(hash, 3) * BLOEMEN.length)], Blocks.PINK_TULIP).defaultBlockState();
-                int aantal = 2 + (int) (BioModel.kans(hash, 4) * 4);
-                for (int i = 0; i < aantal; i++) {
-                    int x = mx + (int) Math.round((BioModel.kans(hash, 10 + i) - 0.5) * 6), z = mz + (int) Math.round((BioModel.kans(hash, 30 + i) - 0.5) * 6);
-                    if ((x >> 4) != k.cx || (z >> 4) != k.cz || !vlak(m, x, z)) {
-                        continue;
-                    }
-                    int h = m.hoogte(x, z);
-                    if (grond(level.getBlockState(p.set(x, h, z))) && level.isEmptyBlock(p.set(x, h + 1, z)) && !(gebouwen && BouwRuimte.inBuilding(level, p))) {
-                        level.setBlock(p, bloem, 2);
-                        gezet++;
-                    }
+            // flowers: drifts of one kind near the water and in the groves
+            if (dal && (nat < 7 || bos(m, x, z) > BOS_VANAF)) {
+                double drift = m.ruis(BioModel.R_DETAIL, x * 0.5 + 2100, z * 0.5 - 1300);
+                if (drift > BLOEM_VANAF && BioModel.kans(hash, 4) < BLOEM_VOL * Math.min(1.0, (drift - BLOEM_VANAF) / 0.12 + 0.35) || BioModel.kans(hash, 4) < 0.012) {
+                    int soort = (int) ((m.ruis(BioModel.R_DETAIL, x * 0.06 + 5100, z * 0.06 + 3300) + 1) * 3.5) & 3;
+                    level.setBlock(p, bloemen[soort], 2);
+                    gezet++;
                 }
             }
         }
-        // --- trees: thinly spread, never near the water ---------------------------------------------------------------------------
+        // --- guhbloesem trees: groves with open lawn between ------------------------------------------------------------------------
         for (int cx = Math.floorDiv(x0, BOOM_CEL); cx <= Math.floorDiv(x0 + 15, BOOM_CEL); cx++) {
             for (int cz = Math.floorDiv(z0, BOOM_CEL); cz <= Math.floorDiv(z0 + 15, BOOM_CEL); cz++) {
                 long hash = m.hash(cx, cz, 6301);
-                int x = cx * BOOM_CEL + 1 + (int) (BioModel.kans(hash, 1) * (BOOM_CEL - 2)), z = cz * BOOM_CEL + 1 + (int) (BioModel.kans(hash, 2) * (BOOM_CEL - 2));
-                double worp = BioModel.kans(hash, 0);
-                if ((x >> 4) != k.cx || (z >> 4) != k.cz || worp >= BLOESEM_KANS + ESDOORN_KANS || !vlak(m, x, z)) {
+                int x = cx * BOOM_CEL + (int) (BioModel.kans(hash, 1) * BOOM_CEL), z = cz * BOOM_CEL + (int) (BioModel.kans(hash, 2) * BOOM_CEL);
+                if ((x >> 4) != k.cx || (z >> 4) != k.cz || !vlak(m, x, z)) {
                     continue;
                 }
-                int h = m.hoogte(x, z);
-                if (!vrij(m, x, z, BOOM_AF, h, true) || !grond(level.getBlockState(p.set(x, h, z))) || !level.isEmptyBlock(p.set(x, h + 1, z))
-                        || inGebouw(level, x, h + 1, z, 3)) {
+                double bos = bos(m, x, z), worp = BioModel.kans(hash, 0);
+                if (worp >= (bos > BOS_VANAF ? BOOM_BOS : bos > BOS_RAND ? BOOM_RAND : BOOM_GAZON)) {
                     continue;
                 }
-                RandomSource rand = RandomSource.create(hash);
-                if (worp < ESDOORN_KANS) {
-                    gezet += esdoorn(level, rand, x, h + 1, z);
-                } else {
-                    var boom = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).get(GUHBLOESEM);
-                    if (boom.isPresent() && boom.get().value().place(level, level.getLevel().getChunkSource().getGenerator(), rand, new BlockPos(x, h + 1, z))) {
-                        gezet += 40;
+                // sizes: a grove mixes small, middle and large (its heart now and then a giant); a tree alone is middle or large
+                double w2 = BioModel.kans(hash, 5);
+                int maat = bos > BOS_VANAF ? (w2 < 0.25 ? 0 : w2 < 0.65 ? 1 : w2 < 0.965 || bos < 0.25 ? 2 : 3) : w2 < 0.45 ? 1 : 2;
+                // near the water it leans towards it
+                int[] leun = b.water(x, z) < 15 ? b.naarWater(x, z) : new int[]{0, 0};
+                MeerTerrein.Boom boom = new MeerTerrein.Boom(x, z, maat, leun[0], leun[1], false, hash);
+                double[] kroon = BloesemBoom.kroon(boom);
+                if (!boomMag(level, m, b, x, z, kroon[0], kroon[1], kroon[2])) {
+                    if (maat == 0 || leun[0] == 0 && leun[1] == 0) {
+                        continue;
+                    }
+                    // (no room for it: a small upright one may still fit)
+                    boom = new MeerTerrein.Boom(x, z, 0, 0, 0, false, hash);
+                    kroon = BloesemBoom.kroon(boom);
+                    if (!boomMag(level, m, b, x, z, kroon[0], kroon[1], kroon[2])) {
+                        continue;
                     }
                 }
+                gezet += BloesemBoom.bouw(level, boom, m.hoogte(x, z) + 1);
             }
         }
-        // --- crooked little trees on boulders -------------------------------------------------------------------------------------
+        // --- esdoorn accents: by a fall, and beside a koi pool ----------------------------------------------------------------------
+        for (int cx = Math.floorDiv(x0, ESDOORN_CEL); cx <= Math.floorDiv(x0 + 15, ESDOORN_CEL); cx++) {
+            for (int cz = Math.floorDiv(z0, ESDOORN_CEL); cz <= Math.floorDiv(z0 + 15, ESDOORN_CEL); cz++) {
+                long hash = m.hash(cx, cz, 6601);
+                int x = cx * ESDOORN_CEL + (int) (BioModel.kans(hash, 1) * ESDOORN_CEL), z = cz * ESDOORN_CEL + (int) (BioModel.kans(hash, 2) * ESDOORN_CEL);
+                if ((x >> 4) != k.cx || (z >> 4) != k.cz || BioModel.kans(hash, 0) >= ESDOORN_VAL || b.val(x, z) > 13.5f || !vlak(m, x, z)
+                        || !boomMag(level, m, b, x, z, x, z, 3.6)) {
+                    continue;
+                }
+                gezet += esdoorn(level, RandomSource.create(hash), x, m.hoogte(x, z) + 1, z);
+            }
+        }
+        for (DalTerrein.Poel pl : poelen) {
+            long hash = m.hash((long) Math.floor(pl.x()), (long) Math.floor(pl.z()), 6602);
+            if (BioModel.kans(hash, 0) >= ESDOORN_POEL) {
+                continue;
+            }
+            // (a few tries around the pool: the first place the model allows; every chunk makes the same tries)
+            for (int i = 0; i < 6; i++) {
+                double hoek = (BioModel.kans(hash, 1) + i / 6.0) * 6.283, ver = pl.straal() * 1.25 + 5.5 + 2 * BioModel.kans(hash, 2 + i);
+                int x = (int) Math.round(pl.x() + Math.cos(hoek) * ver), z = (int) Math.round(pl.z() + Math.sin(hoek) * ver);
+                if (!vlak(m, x, z) || !boomMagModel(m, x, z)) {
+                    continue;
+                }
+                if ((x >> 4) == k.cx && (z >> 4) == k.cz && boomMag(level, m, b, x, z, x, z, 3.6)) {
+                    gezet += esdoorn(level, RandomSource.create(hash), x, m.hoogte(x, z) + 1, z);
+                }
+                break;
+            }
+        }
+        // --- crooked little trees: on boulders, and on ledges of the rock (most near a fall), leaning out ---------------------------
         for (DalTerrein.Kei kei : DalTerrein.keien(m, k.cx, k.cz)) {
             if ((kei.x() >> 4) != k.cx || (kei.z() >> 4) != k.cz || kei.hoog() < 2 || kei.straal() < 1.8) {
                 continue;
@@ -200,22 +389,91 @@ public final class DalPlanten {
             int h = m.hoogte(kei.x(), kei.z());
             if (BioModel.kans(hash, 0) < BONSAI_KANS && (m.vlag(kei.x(), kei.z()) & DalTerrein.VORM) != 0 && m.water(kei.x(), kei.z()) == Kaart.GEEN
                     && h > DalTerrein.HOOGTE[kei.terras()] && !inGebouw(level, kei.x(), h + 1, kei.z(), 2)) {
-                gezet += bonsai(level, RandomSource.create(hash), kei.x(), h + 1, kei.z());
+                gezet += bonsai(level, RandomSource.create(hash), kei.x(), h + 1, kei.z(), omlaag(m, kei.x(), kei.z(), h));
             }
         }
-        // --- a grove of guh-bamboe ------------------------------------------------------------------------------------------------
+        for (int o = 0; o < 256; o++) {
+            if (k.terras[o] < 0 || k.meng[o] < 1f || k.water[o] != Kaart.GEEN || (k.vlag[o] & (DalTerrein.VORM | DalTerrein.TREDE | Kaart.LIP)) != DalTerrein.VORM) {
+                continue;
+            }
+            int x = x0 + (o & 15), z = z0 + (o >> 4), h = k.hoogte[o];
+            if (h < DalTerrein.HOOGTE[k.terras[o]] + 2) {
+                continue;
+            }
+            long hash = m.hash(x, z, 6402);
+            if (BioModel.kans(hash, 0) >= (b.val(x, z) < 8 ? BONSAI_VAL : BONSAI_RICHEL)) {
+                continue;
+            }
+            // (the top of a ledge: no neighbour higher, and a drop on one side to lean over)
+            Direction naar = omlaag(m, x, z, h);
+            boolean top = naar != null;
+            for (Direction d : Direction.Plane.HORIZONTAL) {
+                top &= m.hoogte(x + d.getStepX(), z + d.getStepZ()) <= h || m.water(x + d.getStepX(), z + d.getStepZ()) != Kaart.GEEN;
+            }
+            if (top && !inGebouw(level, x, h + 1, z, 2)) {
+                gezet += bonsai(level, RandomSource.create(hash), x, h + 1, z, naar);
+            }
+        }
+        // --- groves of guh-bamboe against a rock face ---------------------------------------------------------------------------------
         for (int cx = Math.floorDiv(x0, BAMBOE_CEL); cx <= Math.floorDiv(x0 + 15, BAMBOE_CEL); cx++) {
             for (int cz = Math.floorDiv(z0, BAMBOE_CEL); cz <= Math.floorDiv(z0 + 15, BAMBOE_CEL); cz++) {
                 long hash = m.hash(cx, cz, 6501);
-                int x = cx * BAMBOE_CEL + 6 + (int) (BioModel.kans(hash, 1) * (BAMBOE_CEL - 12)), z = cz * BAMBOE_CEL + 6 + (int) (BioModel.kans(hash, 2) * (BAMBOE_CEL - 12));
-                if ((x >> 4) != k.cx || (z >> 4) != k.cz || BioModel.kans(hash, 0) >= BAMBOE_KANS || !vlak(m, x, z)
-                        || !vrij(m, x, z, 5, m.hoogte(x, z), false) || inGebouw(level, x, m.hoogte(x, z) + 1, z, 5)) {
+                int x = cx * BAMBOE_CEL + 2 + (int) (BioModel.kans(hash, 1) * (BAMBOE_CEL - 4)), z = cz * BAMBOE_CEL + 2 + (int) (BioModel.kans(hash, 2) * (BAMBOE_CEL - 4));
+                if ((x >> 4) != k.cx || (z >> 4) != k.cz || BioModel.kans(hash, 0) >= BAMBOE_KANS || !vlak(m, x, z) || b.water(x, z) < 6) {
                     continue;
                 }
-                gezet += bamboe(level, m, hash, x, z, 3.2 + 2.3 * BioModel.kans(hash, 3));
+                int h = m.hoogte(x, z);
+                boolean wand = false;
+                for (Direction d : Direction.Plane.HORIZONTAL) {
+                    for (int a = 2; a <= 5 && !wand; a++) {
+                        wand = b.h(x + d.getStepX() * a, z + d.getStepZ() * a) >= h + 4;
+                    }
+                }
+                if (!wand || b.water(x, z) < STAM_RECHTS && rivier(m, x, z)[0] == 0 || inGebouw(level, x, h + 1, z, 5)) {
+                    continue;
+                }
+                gezet += bamboe(level, m, b, hash, x, z, 3.6 + 2.4 * BioModel.kans(hash, 3));
             }
         }
         return gezet;
+    }
+
+    /** The grove noise: high where the guhbloesem trees stand together. */
+    private static double bos(BioModel m, int x, int z) {
+        return m.ruis(BioModel.R_DETAIL, x * 0.4 + 4000, z * 0.4 - 2500);
+    }
+
+    /** The model's part of {@link #boomMag} for an esdoorn beside a pool (so neighbouring chunks agree which try is taken). */
+    private static boolean boomMagModel(BioModel m, int x, int z) {
+        int h = m.hoogte(x, z);
+        for (int dx = -5; dx <= 5; dx++) {
+            for (int dz = -5; dz <= 5; dz++) {
+                if (m.water(x + dx, z + dz) != Kaart.GEEN) {
+                    return false;
+                }
+                if (Math.abs(dx) <= 1 && Math.abs(dz) <= 1 && (m.hoogte(x + dx, z + dz) != h || m.vlag(x + dx, z + dz) != 0)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /** The side on which the ground (or water) lies lowest under a column at height h, at least two down; or null. */
+    private static Direction omlaag(BioModel m, int x, int z, int h) {
+        Direction uit = null;
+        int laagst = h - 1;
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            for (int a = 1; a <= 2; a++) {
+                int bx = x + d.getStepX() * a, bz = z + d.getStepZ() * a;
+                int peil = m.water(bx, bz) != Kaart.GEEN ? m.water(bx, bz) : m.hoogte(bx, bz);
+                if (m.meng(bx, bz) >= 1f && peil < laagst) {
+                    laagst = peil;
+                    uit = d;
+                }
+            }
+        }
+        return uit;
     }
 
     private static boolean inGebouw(WorldGenLevel level, int x, int y, int z, int r) {
@@ -230,7 +488,7 @@ public final class DalPlanten {
         return false;
     }
 
-    private static BlockState blad(BlockState s) {
+    static BlockState blad(BlockState s) {
         return s.hasProperty(LeavesBlock.PERSISTENT) ? s.setValue(LeavesBlock.PERSISTENT, true) : s;
     }
 
@@ -285,13 +543,17 @@ public final class DalPlanten {
      * A crooked little tree on a rock, its foot at (x, y, z): two blocks of trunk, a jog to the side, and two or three flat
      * pads of leaves at different heights (a cloud-pruned garden tree). Most are pale green, some blossom pink, a few red.
      */
-    static int bonsai(WorldGenLevel level, RandomSource rand, int x, int y, int z) {
+    static int bonsai(WorldGenLevel level, RandomSource rand, int x, int y, int z, Direction naar) {
         BlockState stam = Bio.blok("esdoorn_stam", Blocks.CHERRY_LOG).defaultBlockState();
         float soort = rand.nextFloat();
         BlockState loof = blad(soort < 0.62f ? DalBlokken.BONSAIBLAD.get().defaultBlockState()
                 : soort < 0.87f ? Bio.blok("guhbloesem_leaves", Blocks.CHERRY_LEAVES).defaultBlockState()
                 : Bio.blok("esdoorn_bladeren_rood", Blocks.CHERRY_LEAVES).defaultBlockState());
         Direction zij = Direction.Plane.HORIZONTAL.getRandomDirection(rand);
+        if (naar != null) {
+            // (biomes3 fix-dal: it leans out over the drop)
+            zij = naar;
+        }
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         if (!level.isEmptyBlock(p.set(x, y, z)) || !level.isEmptyBlock(p.set(x, y + 3, z))) {
             return 0;
@@ -335,18 +597,20 @@ public final class DalPlanten {
         return gezet;
     }
 
-    /** A grove of guh-bamboe around (x, z): stalks on about half of the plain ground within the radius, on moss. */
-    private static int bamboe(WorldGenLevel level, BioModel m, long hash, int x, int z, double straal) {
+    /** A grove of guh-bamboe around (x, z): stalks on most of the plain ground within the radius (thinner at its edge), on moss. */
+    private static int bamboe(WorldGenLevel level, BioModel m, Buurt b, long hash, int x, int z, double straal) {
         BlockState stengel = Bio.blok("guh_bamboe", Blocks.BAMBOO).defaultBlockState();
         stengel = DalVulling.met(stengel, "stage", "0");
         BlockState mos = DalBlokken.MOS.get().defaultBlockState();
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         int r = (int) Math.ceil(straal), gezet = 0;
-        for (int dx = -r; dx <= r; dx++) {
-            for (int dz = -r; dz <= r; dz++) {
-                double q = (dx * dx + dz * dz) / (straal * straal);
+        double f1 = BioModel.kans(hash, 8) * 6.283, f2 = BioModel.kans(hash, 9) * 6.283;
+        for (int dx = -r - 1; dx <= r + 1; dx++) {
+            for (int dz = -r - 1; dz <= r + 1; dz++) {
+                double hoek = Math.atan2(dz, dx), rand = straal * (1 + 0.18 * Math.sin(2 * hoek + f1) + 0.12 * Math.sin(3 * hoek + f2));
+                double q = (dx * dx + dz * dz) / (rand * rand);
                 int px = x + dx, pz = z + dz;
-                if (q > 1 || !vlak(m, px, pz)) {
+                if (q > 1 || !vlak(m, px, pz) || b.water(px, pz) < 4.5) {
                     continue;
                 }
                 int h = m.hoogte(px, pz);
@@ -355,10 +619,10 @@ public final class DalPlanten {
                 }
                 level.setBlock(p, mos, 2);
                 long kh = m.hash(px, pz, 6502);
-                if (BioModel.kans(kh, 0) >= 0.5 - 0.2 * q || !level.isEmptyBlock(p.set(px, h + 1, pz))) {
+                if (BioModel.kans(kh, 0) >= 0.66 - 0.3 * q || !level.isEmptyBlock(p.set(px, h + 1, pz))) {
                     continue;
                 }
-                int hoog = Math.max(3, (int) Math.round((5 + BioModel.kans(kh, 1) * 4.5) * (1 - 0.3 * q)));
+                int hoog = Math.max(4, (int) Math.round((6 + BioModel.kans(kh, 1) * 4.5) * (1 - 0.3 * q)));
                 for (int i = 0; i < hoog; i++) {
                     if (!level.isEmptyBlock(p.set(px, h + 1 + i, pz))) {
                         hoog = i;
