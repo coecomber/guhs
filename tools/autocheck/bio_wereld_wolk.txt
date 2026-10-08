@@ -1,5 +1,5 @@
-# biomes3 wereld-wolk: the finished Wolkenweide in a real generated world (seed 20261007: a stack with a waterfall
-# stands near -520 432). What a still cannot show is listed in guhs_workbio/reports/slice_wereld-wolk.md section 3.
+# biomes3 wereld-wolk: the finished Wolkenweide in a real generated world (seed 20261007: stacks of islands
+# stand at -545 376, -464 376 and -545 294). What a still cannot show is listed in guhs_workbio/reports/slice_wereld-wolk.md section 3.
 # Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_wereld_wolk.txt -PautocheckTimeout=40
 section setup
 /gamemode creative
