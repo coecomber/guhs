@@ -1,0 +1,206 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/wolkenblok_wit_meubel_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        3,
+        9
+      ],
+      "to": [
+        16,
+        6,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        11,
+        9
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        0.5,
+        13
+      ],
+      "to": [
+        4,
+        3,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0.5,
+        13
+      ],
+      "to": [
+        15,
+        3,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8.5,
+        13
+      ],
+      "to": [
+        4,
+        11,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        8.5,
+        13
+      ],
+      "to": [
+        15,
+        11,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_boven"
+        },
+        "down": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_onder"
+        },
+        "north": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "south": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+        },
+        "west": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        },
+        "east": {
+          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+        }
+      }
+    }
+  ]
+}

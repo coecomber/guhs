@@ -125,6 +125,11 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
             return Optional.empty();
         }
         BioPlekken.Plek p = plek.get();
+        // biomes3 bouw-wolk2: a building in the air hangs over the meadow itself, not over its rim, where the land of the
+        // neighbours rises into the building: the meadow must be whole all round the start, as far as the building reaches
+        if (soort == BioPlekken.Soort.LUCHT && !heleWeide(BioModel.van(context.randomState()), p.x(), p.z(), ruimte)) {
+            return Optional.empty();
+        }
         // vanilla's jigsaw placement draws the start piece's rotation first thing from the context's random: hand it a
         // random whose first draw is the rotation we want (found by trying seeds; the same every time)
         Rotation wil = draai(p.kijk());
@@ -148,6 +153,25 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
         return BouwRuimte.claim(context, this, JigsawPlacement.addPieces(gedraaid, jigsaw.startPool(), jigsaw.startJigsawName(), jigsaw.size(),
                 new BlockPos(p.x(), p.y() + 1, p.z()), false, Optional.empty(), jigsaw.maxDistance(), PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
                 LiquidSettings.IGNORE_WATERLOGGING));
+    }
+
+    /**
+     * biomes3 bouw-wolk2: is the Wolkenweide's meadow whole (no blend into other land) at sixteen points around this
+     * column, on rings of {@code straal} and half of it?
+     */
+    static boolean heleWeide(BioModel m, int x, int z, int straal) {
+        for (int ring = 1; ring <= 2; ring++) {
+            double r = straal * ring / 2.0;
+            for (int i = 0; i < 8; i++) {
+                int px = x + (int) Math.round(Math.cos(i * Math.PI / 4) * r), pz = z + (int) Math.round(Math.sin(i * Math.PI / 4) * r);
+                Kaart k = m.kaart(px >> 4, pz >> 4);
+                int o = Kaart.index(px, pz);
+                if (k.leeg || k.soort[o] != Kaart.WEIDE || k.meng[o] < 1f) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

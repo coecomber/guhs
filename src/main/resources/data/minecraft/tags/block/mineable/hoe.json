@@ -40,6 +40,11 @@
     "guhs:wolkenbank",
     "guhs:wolkenbed",
     "guhs:wolkenlamp",
-    "guhs:wolkenweide_rank"
+    "guhs:bliksemsmidse_wolk",
+    "guhs:bliksemsmidse_wolk_plaat",
+    "guhs:bliksemsmidse_wolk_trap",
+    "guhs:bliksemsmidse_wolkentafel",
+    "guhs:bliksemsmidse_wolkenplank",
+    "guhs:bliksemsmidse_onweerswolkje"
   ]
 }

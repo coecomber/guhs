@@ -155,6 +155,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <bio_bouw_wolk1>
         // </bio_bouw_wolk1>
         // <bio_bouw_wolk2>
+        SMIDGUH(1.0f),
         // </bio_bouw_wolk2>
         ;
 

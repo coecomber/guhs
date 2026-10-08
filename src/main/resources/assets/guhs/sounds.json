@@ -2778,5 +2778,42 @@
       "guhs:bio_dieren/schaapje_pluis2"
     ],
     "subtitle": "subtitles.guhs.wolkenschaapje.pluis"
+  },
+  "reuzenguh.snurk": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/snurk1",
+      "guhs:bio_bouw_wolk2/snurk2",
+      "guhs:bio_bouw_wolk2/snurk3"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.snurk"
+  },
+  "reuzenguh.grom": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/grom1",
+      "guhs:bio_bouw_wolk2/grom2"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.grom"
+  },
+  "reuzenguh.nies": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/nies1",
+      "guhs:bio_bouw_wolk2/nies2"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.nies"
+  },
+  "bliksemsmidse.rommel": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/rommel1",
+      "guhs:bio_bouw_wolk2/rommel2",
+      "guhs:bio_bouw_wolk2/rommel3"
+    ],
+    "subtitle": "subtitles.guhs.bliksemsmidse.rommel"
+  },
+  "smidguh.hamer": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/hamer1",
+      "guhs:bio_bouw_wolk2/hamer2"
+    ],
+    "subtitle": "subtitles.guhs.smidguh.hamer"
   }
 }
