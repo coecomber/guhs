@@ -49,7 +49,7 @@ public final class DalTerrein {
     /** e below this: the rim, where our terrain blends in. */
     public static final double RAND = 0.03;
     /** A river starts this many blocks inside the rim's blend (as a spring), and is at full width this many further. */
-    public static final double BRON_VANAF = 2.5, BRON_OVER = 5.0;
+    public static final double BRON_VANAF = 2.0, BRON_OVER = 3.0;
     /** e where terrace 3 ends, 2 ends, 1 ends (in a roomy valley), and the valley floor ends (the lake starts). */
     public static final double[] TRAP = {0.05, 0.075, 0.10, 0.125};
     /** The top block of terrace 0 (valley floor) .. 3 (rim). */
@@ -67,7 +67,7 @@ public final class DalTerrein {
     /** A terrace thinner than this is a ledge: the river takes the faces around it as one tall waterfall. */
     public static final double RICHEL = 6.0;
     /** Half the width of the river and of a brook, and what the pond on the valley floor adds. */
-    public static final double RIVIER_BREED = 3.0, BEEK_BREED = 1.15, VIJVER_BREED = 5.0;
+    public static final double RIVIER_BREED = 3.0, BEEK_BREED = 1.6, VIJVER_BREED = 5.0;
     /** The knijp noise (the detail noise, stretched) above this pinches the middle terrace to a ledge: a tall waterfall. In a squeezed stretch the bar is this much lower. */
     public static final double KNIJP_VANAF = 0.18, KNIJP_KRAP = 0.30;
     /** The cascades: {blocks before the edge, how far the water has dropped from there}. Never a step of one. */
@@ -83,6 +83,8 @@ public final class DalTerrein {
     /** Boulders: one try per cell; the chance on open terrace, at the foot of a face, beside a fall. */
     public static final int KEI_CEL = 8;
     public static final double KEI_LOS = 0.035, KEI_VOET = 0.28, KEI_VAL = 0.8;
+    /** The rounded foot of a face bulges out at most this far (blocks). */
+    public static final double BOL = 2.6;
     /** The right bank is kept plain this far from the water (the building side). */
     public static final double VRIJ = 9.0;
     /** The natural steps beside a cascade: from .. to this far from the left bank. */
@@ -95,9 +97,9 @@ public final class DalTerrein {
     public static final byte TREDE = 64;
 
     static final int MUUR = 100000;
-    /** Columns around a chunk that are worked out too (the gradients, four rounds of lips, the fall flags). */
-    static final int MARGE = 6;
-    private static final int LIP_RONDES = 4;
+    /** Columns around a chunk that are worked out too (the gradients, three rounds of lips, the fall flags). */
+    static final int MARGE = 5;
+    private static final int LIP_RONDES = 3;
     /** The lattice of {@link #steilte}. */
     private static final int ROOSTER = 16;
     private static final int SOORT_STEILTE = 20, SOORT_POEL = 21, SOORT_STAP = 22, SOORT_KEI = 23;
@@ -108,8 +110,8 @@ public final class DalTerrein {
         public boolean kern;
         /** The terrace 3 .. 0 (also in the rim's blend: the terrace the blend ends in), or -1. */
         public int t;
-        /** How steep e is here (per block), the frayed e. */
-        public double g, ew;
+        /** How steep e is here (per block), the frayed e, and the detail noise it is frayed with. */
+        public double g, ew, det;
         /** The e where the rim terrace, terrace 2 and terrace 1 end here. */
         public double t0, t1, t2;
         /** Blocks past edge 0 (rim to terrace 2), 1, 2 (to the valley floor); negative before it. */
@@ -124,8 +126,8 @@ public final class DalTerrein {
         public double bron;
         /** How much the river fans out near a cascade, and into the plunge pool; the pond of the valley floor. */
         public double waaier, kom, vijver;
-        /** Noises for the rock: the foot's bulge (blocks), the shoulder (blocks). */
-        public double bol, schouder;
+        /** How far the shoulder of the face below is rounded off (blocks). */
+        public double schouder;
 
         /** Half the width of the river here, and of a brook. */
         public double rivier() {
@@ -188,7 +190,7 @@ public final class DalTerrein {
         if (e <= 0) {
             return;
         }
-        double det = m.ruis(BioModel.R_DETAIL, x, z);
+        double det = v.det = m.ruis(BioModel.R_DETAIL, x, z);
         if (e >= RAND && e + RAFEL * det >= TRAP[3]) {
             return;
         }
@@ -242,7 +244,6 @@ public final class DalTerrein {
         v.kom = BioModel.zacht((sn + 0.5) / 1.0) * (1 - BioModel.zacht((sn - 4) / 3.5));
         v.bron = BioModel.zacht((e - RAND - BRON_VANAF * g) / (BRON_OVER * g));
         v.vijver = t == 0 ? VIJVER_BREED * BioModel.zacht((ew - t2 - 0.006) / 0.02) : 0;
-        v.bol = Math.max(0, Math.min(2.6, 0.3 + 3.2 * m.ruis(BioModel.R_DETAIL, x + 1000, z + 1000)));
         v.schouder = Math.max(0, Math.min(1.6, 0.4 + 2.4 * det));
     }
 
@@ -384,8 +385,21 @@ public final class DalTerrein {
         return uit;
     }
 
+    /** How often the model worked out a chunk map with dal columns, and the nanoseconds that took (dev command "kosten"). */
+    static final java.util.concurrent.atomic.LongAdder KAARTEN = new java.util.concurrent.atomic.LongAdder(), KAART_NS = new java.util.concurrent.atomic.LongAdder();
+
     /** Fills the dal columns of a chunk map; false when the chunk has none. */
     static boolean vul(BioModel m, Kaart k) {
+        long t0 = System.nanoTime();
+        boolean iets = vulKaart(m, k);
+        if (iets) {
+            KAARTEN.increment();
+            KAART_NS.add(System.nanoTime() - t0);
+        }
+        return iets;
+    }
+
+    private static boolean vulKaart(BioModel m, Kaart k) {
         final int marge = MARGE, n = 16 + 2 * marge;
         int x0 = (k.cx << 4) - marge, z0 = (k.cz << 4) - marge;
         double[] e = new double[n * n];
@@ -452,7 +466,7 @@ public final class DalTerrein {
                     ter[idx] = (byte) v.t;
                     continue;
                 }
-                w[idx] = rafel(m, x, z, e[idx]);
+                w[idx] = e[idx] + RAFEL * v.det;
                 if (!v.kern) {
                     if (eilanden == null) {
                         eilanden = MeerTerrein.bij(m, x0, z0, x0 + n, z0 + n);
@@ -531,12 +545,16 @@ public final class DalTerrein {
                 if (!vrij) {
                     int edge = 2 - t;
                     // the rounded foot of the face above this terrace
-                    if (t < 3 && v.s[edge] >= 0 && v.s[edge] < v.bol) {
-                        double q = v.s[edge] / v.bol;
-                        int op = (int) Math.round(Math.max(1, Math.min(3.6, 1.6 * v.bol)) * Math.sqrt(1 - q * q));
-                        if (op > 0) {
-                            hoogte = top + op;
-                            vlag |= VORM;
+                    if (t < 3 && v.s[edge] >= 0 && v.s[edge] < BOL) {
+                        // (how far the foot bulges out here, in blocks: a noise of its own, only read this close to a face)
+                        double bol = Math.min(BOL, 0.3 + 3.2 * m.ruis(BioModel.R_DETAIL, x + 1000, z + 1000));
+                        if (v.s[edge] < bol) {
+                            double q = v.s[edge] / bol;
+                            int op = (int) Math.round(Math.max(1, Math.min(3.6, 1.6 * bol)) * Math.sqrt(1 - q * q));
+                            if (op > 0) {
+                                hoogte = top + op;
+                                vlag |= VORM;
+                            }
                         }
                     }
                     // the rounded shoulder of the face below it

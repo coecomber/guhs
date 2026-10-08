@@ -30,15 +30,15 @@ import nl.juiced.guhs.world.BouwRuimte;
 public final class DalPlanten {
     // <dal-planten>
     /** Trees stand at least this far from water. */
-    public static final int BOOM_AF = 7;
+    public static final int BOOM_AF = 9;
     /** One try for a tree per cell of this size; the chance of a guhbloesem, of an esdoorn. */
     public static final int BOOM_CEL = 12;
     public static final double BLOESEM_KANS = 0.30, ESDOORN_KANS = 0.04;
     /** One try for a bamboo grove per cell. */
     public static final int BAMBOE_CEL = 36;
     public static final double BAMBOE_KANS = 0.25;
-    /** The moss noise above this is a moss patch (about a fifth of the ground). */
-    public static final double MOS_VANAF = 0.24;
+    /** The moss noise above this is a moss patch (small soft patches, about a seventh of the ground). */
+    public static final double MOS_VANAF = 0.33;
     /** Flowers: one try for a clump per cell. */
     public static final int BLOEM_CEL = 14;
     public static final double BLOEM_KANS = 0.3;
@@ -130,13 +130,14 @@ public final class DalPlanten {
                 oever |= m.water(bx, bz) == h - 1;
                 rots |= m.water(bx, bz) == Kaart.GEEN && (m.vlag(bx, bz) & DalTerrein.VORM) != 0 && m.hoogte(bx, bz) > h;
             }
-            boolean opMos = m.ruis(BioModel.R_DETAIL, x * 0.35 + 900, z * 0.35 + 300) > MOS_VANAF || rots && BioModel.kans(hash, 2) < 0.7
-                    || oever && BioModel.kans(hash, 2) < 0.35;
+            // moss: small patches all over, more of it against rock and (in stretches) along the water
+            double mosRuis = m.ruis(BioModel.R_DETAIL, x * 1.1 + 900, z * 1.1 + 300);
+            boolean opMos = mosRuis > MOS_VANAF || rots && mosRuis > -0.15 || oever && mosRuis > 0.08;
             if (opMos) {
                 level.setBlock(p, mos, 2);
                 gezet++;
             }
-            if (oever && m.ruis(BioModel.R_DETAIL, x * 0.25 + 123, z * 0.25 + 77) > 0.12 && BioModel.kans(hash, 3) < 0.5
+            if (oever && m.ruis(BioModel.R_DETAIL, x * 0.4 + 123, z * 0.4 + 77) > 0.2 && BioModel.kans(hash, 3) < 0.6
                     && level.isEmptyBlock(p.set(x, h + 1, z))) {
                 level.setBlock(p, riet, 2);
                 gezet++;

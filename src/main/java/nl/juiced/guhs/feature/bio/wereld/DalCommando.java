@@ -21,7 +21,9 @@ import nl.juiced.guhs.feature.bio.BioZelftest;
  *   <li>{@code /guhs bio wereld-dal vorm <x> <z>}: what the shape rules say about a column (terrace, the distances to the
  *       three edges in blocks, the river's level, the kind of cascade);</li>
  *   <li>{@code /guhs bio wereld-dal tel <x> <z> <chunks>}: generates the chunks around and counts what stands there:
- *       water, falls, moss, trees, bamboo, petals, reeds, natural steps, and how much of the river lies under a tree.</li>
+ *       water, falls, moss, trees, bamboo, petals, reeds, natural steps, and how much of the river lies under a tree;</li>
+ *   <li>{@code /guhs bio wereld-dal kosten}: what the valley has cost world generation since the last call (the terrain
+ *       model's chunk maps, and the blocks and plants per chunk).</li>
  * </ul>
  * Self test "wereld-dal" ({@code /guhs bio zelftest wereld-dal}): around the nearest Klaterdal the valley has its water,
  * rock, moss and trees, every natural step is a stair block, and no tree stands over the river.
@@ -53,7 +55,22 @@ public final class DalCommando {
                     c.getSource().sendSuccess(() -> Component.literal("[bio-wereld-dal] " + r), false);
                     return 1;
                 })))));
+        dal.then(Commands.literal("kosten").executes(c -> {
+            String r = kosten();
+            c.getSource().sendSuccess(() -> Component.literal("[bio-wereld-dal] " + r), false);
+            return 1;
+        }));
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bio").then(dal)));
+    }
+
+    /** What the Klaterdal has cost world generation since the server started (and resets the count). */
+    static String kosten() {
+        long kaarten = DalTerrein.KAARTEN.sumThenReset(), kaartNs = DalTerrein.KAART_NS.sumThenReset();
+        long chunks = DalVulling.CHUNKS.sumThenReset(), chunkNs = DalVulling.CHUNK_NS.sumThenReset();
+        return String.format(Locale.ROOT, "kosten: the terrain model worked out %d chunk maps in %.0f ms (%.3f ms each); blocks and plants for %d chunks "
+                        + "took %.0f ms (%.3f ms each); per generated chunk of the valley that is %.1f maps and %.2f ms in all", kaarten, kaartNs / 1e6,
+                kaarten == 0 ? 0 : kaartNs / 1e6 / kaarten, chunks, chunkNs / 1e6, chunks == 0 ? 0 : chunkNs / 1e6 / chunks,
+                chunks == 0 ? 0 : kaarten / (double) chunks, chunks == 0 ? 0 : (kaartNs + chunkNs) / 1e6 / chunks);
     }
 
     static String vorm(BioModel m, int x, int z) {

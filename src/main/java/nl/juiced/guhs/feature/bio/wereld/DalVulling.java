@@ -46,8 +46,21 @@ public final class DalVulling {
         return w.isPresent() ? state.setValue(p, (Comparable) w.get()) : state;
     }
 
+    /** How many chunks got their Klaterdal blocks and plants, and the nanoseconds that took (dev command "kosten"). */
+    static final java.util.concurrent.atomic.LongAdder CHUNKS = new java.util.concurrent.atomic.LongAdder(), CHUNK_NS = new java.util.concurrent.atomic.LongAdder();
+
     /** Places the Klaterdal's part of this chunk; returns how many blocks were set. */
     static int vul(WorldGenLevel level, BioModel m, Kaart k) {
+        long t0 = System.nanoTime();
+        int gezet = vulChunk(level, m, k);
+        if (gezet > 0) {
+            CHUNKS.increment();
+            CHUNK_NS.add(System.nanoTime() - t0);
+        }
+        return gezet;
+    }
+
+    private static int vulChunk(WorldGenLevel level, BioModel m, Kaart k) {
         boolean dal = false;
         for (int o = 0; o < 256 && !dal; o++) {
             dal = k.terras[o] >= 0 && k.meng[o] >= 1f;
