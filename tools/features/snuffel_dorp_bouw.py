@@ -29,7 +29,7 @@ SX, SY, SZ = 168, 62, 192
 CX, CZ = 84, 98                           # the middle of the island's outline
 OORSPRONG = (-CX, ZAND + 1, -CZ)          # the template stands on the sea floor; the island's middle is world 0, 0
 G = ZEE + 1 - OORSPRONG[1]                # template y of the ground blocks at height 0 (their top is world y 64)
-VERSIE = 3                                # (the kern's test island was 1; raise it when the island changes on a live server)
+VERSIE = 4                                # (the kern's test island was 1; raise it when the island changes on a live server; 4: the tiles' order)
 TEGEL = 48
 
 # --- the plan ---------------------------------------------------------------------------------------------------------------
@@ -1469,14 +1469,37 @@ def eiland(h):
     return b, data, dorp
 
 
+def tegel_volgorde(s, tegels_):
+    """The order in which the tiles are stamped. The game checks every stamped block's support at once, so a wall sign whose
+    wall lies in a tile that comes LATER would be gone again before its wall is there (seen on a dev server: the sign
+    "Snuffeldorp" on the weipoort, whose beam lies exactly on a seam). So a tile comes after every tile one of its wall
+    signs leans on; the rest keeps its sorted order."""
+    na = {t: set() for t in tegels_}                 # tile -> the tiles that must be stamped before it
+    for (x, y, z), (name, props, _nbt) in s.blocks.items():
+        if name.endswith("_wall_sign"):
+            dx, dz = RICHTING[TEGEN[props["facing"]]]
+            hier, daar = (x // TEGEL, z // TEGEL), ((x + dx) // TEGEL, (z + dz) // TEGEL)
+            if daar != hier and daar in na:
+                na[hier].add(daar)
+    volgorde = []
+    over = sorted(tegels_)
+    while over:
+        vrij = [t for t in over if not (na[t] - set(volgorde))]
+        if not vrij:
+            raise SystemExit(f"snuffel_dorp: wall signs lean on each other's tiles in a circle: {over}")
+        volgorde.append(vrij[0])
+        over.remove(vrij[0])
+    return volgorde
+
+
 def tegels(b, data):
-    """Saves the island as tiles of TEGEL x SY x TEGEL and fills data["stukken"]."""
+    """Saves the island as tiles of TEGEL x SY x TEGEL and fills data["stukken"] (in the order they are stamped)."""
     s = b.s
     stukken = []
     per = {}
     for (x, y, z), v in s.blocks.items():
         per.setdefault((x // TEGEL, z // TEGEL), []).append(((x, y, z), v))
-    for (i, j) in sorted(per):
+    for (i, j) in tegel_volgorde(s, list(per)):
         t = b.h.Structure((min(TEGEL, SX - i * TEGEL), SY, min(TEGEL, SZ - j * TEGEL)))
         for (x, y, z), v in per[(i, j)]:
             if v[0] != "minecraft:air":
