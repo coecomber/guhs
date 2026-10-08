@@ -153,6 +153,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <bio_bouw_meer>
         // </bio_bouw_meer>
         // <bio_bouw_wolk1>
+        STERRENWACHT_RUINE_STERRENKIJKER(1.0f),
+        BALLONVAARDERGUH(1.0f),
         // </bio_bouw_wolk1>
         // <bio_bouw_wolk2>
         // </bio_bouw_wolk2>
