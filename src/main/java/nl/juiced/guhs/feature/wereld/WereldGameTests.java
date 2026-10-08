@@ -161,6 +161,27 @@ public class WereldGameTests {
             helper.assertTrue(Bezetting.controleer(level, bij) == 1 && metTag(helper, tag).size() == 1
                     && metTag(helper, tag).get(0).getType() == EntityType.ARMOR_STAND, "a wezen from its maker");
             metTag(helper, tag).forEach(Entity::discard);
+
+            // a wezen that its maker puts somewhere else than its registered spot (Guhdalf of an old big barbecueput: registered
+            // at the pit's middle, where the grill stands, and seated at his camp beside the pit): what stands on the
+            // REGISTERED spot does not move it (the world check of 1.4.0 found him next to the grill at every real old pit)
+            Bezetting.vergeet(id);
+            BlockPos elders = plek.offset(0, 0, 6);
+            Bezetting.wezen(id, BEWOOND, null, new BlockPos(3, 1, 3), (l, p, d) -> {
+                Entity e = EntityType.ARMOR_STAND.create(l, EntitySpawnReason.STRUCTURE);
+                e.snapTo(elders.getX() + 0.5, elders.getY(), elders.getZ() + 0.5, 0f, 0f);
+                return e;
+            }, 12);
+            level.setBlock(plek, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
+            level.setBlock(plek.above(), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
+            Bezetting.controleer(level, bij);
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, bij) == 1 && metTag(helper, tag).size() == 1 && metTag(helper, tag).get(0).blockPosition().equals(elders),
+                    "a wezen stays where its maker put it, whatever stands on its registered spot: "
+                            + metTag(helper, tag).stream().map(e -> e.blockPosition().toShortString()).toList());
+            level.setBlock(plek, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+            level.setBlock(plek.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+            metTag(helper, tag).forEach(Entity::discard);
         } finally {
             Bezetting.vergeet(id);
             Kopieen.testWissen(level);

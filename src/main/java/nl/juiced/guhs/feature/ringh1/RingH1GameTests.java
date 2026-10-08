@@ -406,6 +406,93 @@ public final class RingH1GameTests {
     }
 
     /**
+     * The world check of 1.4.0: an old big pit lies in the land as worldgen dug it in, so the land beside it may be higher,
+     * lower or sloping, and then neither Bezetting's strip nor the turned spots have room (two of six untouched pits of a
+     * world of 1.3.2 had no camp, so no Guhdalf). The last round puts the camp ON the land: a spot with a trunk, water,
+     * leaves somebody placed, anything built, or land that is too steep is refused; on land that only rolls a little the
+     * flowers and loose leaves go, the one higher layer comes off, the dip is filled, and the camp stands level.
+     */
+    @GuhTest(template = KAMER, batch = BATCH + "_kamp3", skyAccess = true)
+    public static void ringh1KampOpHetLand(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Structure structure = Kopieen.structuur(level, Gouw.PUT);
+        // (the pit lies south of the room, as in ringh1KampBijOudePut; its ground layer is the lawn, helper y 2)
+        BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3)).subtract(Gouw.KEUZES.get(0));
+        StructurePoolElement element = StructurePoolElement.single("guhs:" + Gouw.PUT_STUK).apply(StructureTemplatePool.Projection.RIGID);
+        BoundingBox box = element.getBoundingBox(level.getStructureManager(), pos, Rotation.NONE);
+        StructurePiece piece = new PoolElementStructurePiece(level.getStructureManager(), element, pos, 0, Rotation.NONE, box, LiquidSettings.IGNORE_WATERLOGGING);
+        StructureStart start = new StructureStart(structure, ChunkPos.containing(pos), 0, new PiecesContainer(List.of(piece)));
+        var template = level.getStructureManager().get(Gouw.KAMP_TEMPLATE).orElseThrow();
+        Kopieen.test(level, start);
+        try {
+            // the camp's footprint: room x 5..19, z 7..17
+            Gouw.Plek plek = new Gouw.Plek(helper.absolutePos(new BlockPos(5, 2, 7)), Rotation.NONE);
+            List<Gouw.Plek> keuzes = List.of(plek);
+            BlockPos tafel = plek.wereld(Gouw.TAFEL);
+            java.util.function.Supplier<Boolean> staat = () -> level.getBlockState(tafel).is(RingH1Feature.FEESTTAFEL.get());
+            // the land rolls: a strip one block higher in the west, a dip in the north-east corner
+            for (int z = 7; z <= 17; z++) {
+                for (int x = 5; x <= 8; x++) {
+                    helper.setBlock(new BlockPos(x, 3, z), Blocks.GRASS_BLOCK);
+                }
+            }
+            for (int z = 7; z <= 9; z++) {
+                helper.setBlock(new BlockPos(19, 2, z), Blocks.AIR);
+            }
+            BlockPos ding = helper.absolutePos(new BlockPos(12, 3, 11)), blad = helper.absolutePos(new BlockPos(14, 5, 12));
+            // what refuses a spot
+            level.setBlock(ding, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "never over something a player built");
+            level.setBlock(ding, Blocks.OAK_LOG.defaultBlockState(), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "never through the trunk of a tree");
+            level.setBlock(ding, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(ding.below(), Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "never in the water");
+            level.setBlock(ding.below(), Blocks.GRASS_BLOCK.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(blad, Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "leaves somebody placed stay");
+            level.setBlock(blad, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            for (int dy = 0; dy < 4; dy++) {
+                level.setBlock(ding.above(dy), Blocks.GRASS_BLOCK.defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "not on land that is too steep");
+            for (int dy = 0; dy < 4; dy++) {
+                level.setBlock(ding.above(dy), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            // a knabbel block that sticks out of the land is never dug off (it may be somebody's): the plate goes up to it
+            // instead, which here costs too much earth
+            level.setBlock(ding.above(), nl.juiced.guhs.registry.ModBlocks.BLOCK_OF_KAASKNABBELS.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(ding, Blocks.GRASS_BLOCK.defaultBlockState(), Block.UPDATE_CLIENTS);
+            helper.assertTrue(Gouw.zoekOpHetLand(level, start, template, keuzes).isEmpty() && !staat.get(), "a knabbel block is never dug off");
+            level.setBlock(ding.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(ding, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            // what grows there goes, the land is levelled
+            level.setBlock(ding, Blocks.POPPY.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(blad, Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, false), Block.UPDATE_CLIENTS);
+            java.util.Optional<Gouw.Plek> uit = Gouw.zoekOpHetLand(level, start, template, keuzes);
+            helper.assertTrue(uit != null && uit.isPresent() && uit.get().equals(plek), "the camp stands level with the lawn, one layer under the strip: " + uit);
+            helper.assertTrue(staat.get(), "with its party table");
+            helper.assertTrue(!level.getBlockState(ding).is(Blocks.POPPY) && !level.getBlockState(blad).is(net.minecraft.tags.BlockTags.LEAVES),
+                    "the flower and the loose leaves made room");
+            for (int z = 7; z <= 17; z++) {
+                for (int x = 5; x <= 8; x++) {
+                    helper.assertTrue(!level.getBlockState(helper.absolutePos(new BlockPos(x, 3, z))).is(Blocks.GRASS_BLOCK), "the higher strip came off at " + x + ", " + z);
+                }
+            }
+            for (int z = 7; z <= 9; z++) {
+                BlockPos kuil = helper.absolutePos(new BlockPos(19, 2, z));
+                helper.assertTrue(level.getBlockState(kuil).isSolidRender(), "the dip is filled up to the plate at z " + z + ": " + level.getBlockState(kuil));
+            }
+            Gouw.Plek gelezen = Gouw.kampBij(level, plek.wereld(Gouw.GUHDALF));
+            helper.assertTrue(gelezen.equals(plek), "and the scenes read the camp back from the table: " + gelezen);
+        } finally {
+            Kopieen.testWissen(level);
+            ruimOp(helper);
+        }
+        helper.succeed();
+    }
+
+    /**
      * The worldgen side: guhs:knabbelgouw is a structure of the barbecueput set, only for biomes of the Guhmensie; the
      * barbecueput makes no big pits in the open any more, and exactly what it made under a ceiling; the template holds the
      * big pit, the camp and every quest prop.

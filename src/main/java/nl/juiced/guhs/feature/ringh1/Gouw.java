@@ -60,7 +60,9 @@ import nl.juiced.guhs.world.ModDimensions;
  *   <li><b>Guhdalf's camp at an old big pit</b> (prop template guhs:ringh1_kamp): {@link Bezetting} puts it once per pit on
  *       the first free spot of {@link #KEUZES}, a ring of spots around the pit: only where there is nothing but air, plants and
  *       natural ground, so never over something a player built. When none of those is free {@link #zoekRuimer} looks
- *       further (a fourth ring, and the camp turned all four ways), and when even that finds nothing the server log says so
+ *       further (a fourth ring, and the camp turned all four ways), then puts the camp on the land as it lies beside a pit
+ *       in a hollow or on a slope ({@link #zoekOpHetLand}: a little earthwork, never where anything was built), and when
+ *       even that finds nothing the server log says so
  *       once and an operator puts the camp down by hand ({@code /guhs ringh1 zetkamp}, {@link #zetKampBijPut}): without a
  *       camp nobody can start the story at that pit. Camps that Bezetting did not place itself are kept in
  *       {@link Kampen}.</li>
@@ -542,9 +544,204 @@ public final class Gouw {
                 }
             }
         }
+        if (keuzes == null) {
+            // the last round: on the land as it lies (a pit in a hollow or on a slope has no spot at its own height)
+            Optional<Plek> land = zoekOpHetLand(level, start, template.get(), null);
+            if (land == null) {
+                return null;   // (not loaded: later)
+            }
+            if (land.isPresent()) {
+                data.zet(tag, land.get());
+                return land.get();
+            }
+        }
         data.zetGeen(tag);
         meldGeenKamp(level, start, tag);
         return null;
+    }
+
+    // =====================================================================================================================
+    // the last round of the wider search: the camp on the land as it lies
+    // =====================================================================================================================
+
+    /**
+     * How deep the land under the camp may be filled up, and how many blocks of earth (filled up + dug off) a camp may cost:
+     * one per column of its plate on average.
+     */
+    static final int MAX_VULLEN = 3, MAX_GRONDWERK = 165;
+    /** A spot that costs no more earth than this is neat enough: no need to look further from the pit for a better one. */
+    static final int NET_GRONDWERK = 40;
+    /** The land is read from this far above the pit's ground layer down to this far below it; the plate lies at most this high. */
+    private static final int LAND_BOVEN = 30, LAND_ONDER = 14, LAND_HOOGST = 18;
+
+    /** What grows on the land and may make room for the camp: air, grass and flowers, the loose leaves of a tree. Never a fluid. */
+    private static boolean begroeiing(net.minecraft.world.level.block.state.BlockState state) {
+        if (Bezetting.leeg(state)) {
+            return true;
+        }
+        if (!state.getFluidState().isEmpty()) {
+            return false;
+        }
+        if (state.is(net.minecraft.tags.BlockTags.LEAVES)) {
+            // (a tree that grew by itself; leaves somebody placed stay)
+            return state.hasProperty(net.minecraft.world.level.block.LeavesBlock.PERSISTENT) && !state.getValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT);
+        }
+        return state.getBlock() instanceof net.minecraft.world.level.block.VegetationBlock;
+    }
+
+    /** The land itself: natural ground, or a knabbel block that lies in it. Never a fluid. */
+    private static boolean landgrond(net.minecraft.world.level.block.state.BlockState state) {
+        return state.getFluidState().isEmpty() && (state.is(Bezetting.NATUURLIJK) || state.is(nl.juiced.guhs.registry.ModBlocks.BLOCK_OF_KAASKNABBELS.get()));
+    }
+
+    /** A spot the camp fits on with a little earthwork: the plate's height, what it costs, and the land under every column. */
+    private record OpLand(Plek kamp, int grondwerk, BoundingBox voet, int[] top, net.minecraft.world.level.block.state.BlockState[] grond) {
+    }
+
+    /**
+     * Can the camp stand on the land of this spot (only its x and z count)? Every column of its footprint must be natural
+     * land with nothing on it but what grows there: a trunk, water, a hole or anything a player may have built refuses the
+     * spot. The plate comes level with the highest land of the footprint, or one block under it (then that one layer of
+     * real land is dug off, never a knabbel block); lower land is filled up, at most {@link #MAX_VULLEN} deep. Null: no.
+     */
+    @Nullable
+    private static OpLand opLand(ServerLevel level, StructureTemplate template, Plek keuze, int putGrond) {
+        net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings zo =
+                new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings().setRotation(keuze.draai()).setMirror(Mirror.NONE);
+        BoundingBox voet = template.getBoundingBox(zo, keuze.hoek());
+        int breed = voet.getXSpan(), diep = voet.getZSpan();
+        int[] top = new int[breed * diep];
+        net.minecraft.world.level.block.state.BlockState[] grond = new net.minecraft.world.level.block.state.BlockState[breed * diep];
+        BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+        int hoogst = Integer.MIN_VALUE, laagst = Integer.MAX_VALUE;
+        int onder = Math.max(level.getMinY() + 1, putGrond - LAND_ONDER), boven = Math.min(level.getMaxY() - 1, putGrond + LAND_BOVEN);
+        for (int i = 0; i < top.length; i++) {
+            int x = voet.minX() + i % breed, z = voet.minZ() + i / breed;
+            int y = boven;
+            net.minecraft.world.level.block.state.BlockState state = null;
+            for (; y >= onder; y--) {
+                state = level.getBlockState(at.set(x, y, z));
+                if (!begroeiing(state)) {
+                    break;
+                }
+            }
+            if (y < onder || !landgrond(state) || level.getBlockEntity(at) != null) {
+                return null;   // (a hole, water, a trunk, something built)
+            }
+            top[i] = y;
+            grond[i] = state;
+            hoogst = Math.max(hoogst, y);
+            laagst = Math.min(laagst, y);
+        }
+        if (hoogst > putGrond + LAND_HOOGST) {
+            return null;   // (above this the land was not read all the way up to the camp's top)
+        }
+        int beste = Integer.MAX_VALUE, plaat = 0;
+        for (int p = hoogst; p >= hoogst - 1; p--) {
+            if (p - laagst > MAX_VULLEN) {
+                continue;
+            }
+            int werk = 0;
+            for (int i = 0; i < top.length && werk <= MAX_GRONDWERK; i++) {
+                if (top[i] <= p) {
+                    werk += p - top[i];
+                } else if (grond[i].is(Bezetting.NATUURLIJK)
+                        && Bezetting.vrij(level.getBlockState(at.set(voet.minX() + i % breed, p, voet.minZ() + i / breed))) && level.getBlockEntity(at) == null) {
+                    werk++;   // (one layer of real land comes off; what lies under it is land too)
+                } else {
+                    werk = Integer.MAX_VALUE - 1;
+                }
+            }
+            if (werk < beste) {
+                beste = werk;
+                plaat = p;
+            }
+        }
+        if (beste > MAX_GRONDWERK) {
+            return null;
+        }
+        BlockPos hoek = new BlockPos(keuze.hoek().getX(), plaat, keuze.hoek().getZ());
+        return new OpLand(new Plek(hoek, keuze.draai()), beste, voet, top, grond);
+    }
+
+    /**
+     * The last round of the wider search (the world check of 1.4.0: of six old big pits that nobody ever touched, two had no
+     * spot for the camp at all, the one nearest to the world's middle among them: a pit lies in the land as worldgen dug it
+     * in, so the land around it may be eight blocks higher, or slope). Every spot of Bezetting's strip and of the wider
+     * rings is looked at again ON THE LAND AS IT LIES ({@link #opLand}), from near to far: the first one that is neat
+     * ({@link #NET_GRONDWERK}) gets the camp, else the one that needs the least earthwork. What grows there is cleared, lower
+     * land under the plate is filled up with the land's own block, one layer of higher land comes off. Empty: no spot;
+     * null: not everything around the pit is loaded yet. {@code keuzes}: the spots (null: all of them; the tests give
+     * their own).
+     */
+    @Nullable
+    static Optional<Plek> zoekOpHetLand(ServerLevel level, StructureStart start, StructureTemplate template, @Nullable List<Plek> keuzes) {
+        BlockPos grondlaag = Kopieen.wereld(start, PUT_STUK, new BlockPos(0, G, 0));
+        if (grondlaag == null) {
+            return Optional.empty();
+        }
+        if (keuzes == null) {
+            keuzes = new ArrayList<>();
+            Rotation put = Kopieen.draai(start, PUT_STUK);
+            for (BlockPos keuze : KEUZES) {
+                BlockPos hoek = Kopieen.wereld(start, PUT_STUK, keuze);
+                if (hoek != null) {
+                    keuzes.add(new Plek(hoek, put));
+                }
+            }
+            keuzes.addAll(ruimereKeuzes(start));
+        }
+        net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings zo =
+                new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings().setMirror(Mirror.NONE);
+        for (Plek keuze : keuzes) {
+            BoundingBox voet = template.getBoundingBox(zo.setRotation(keuze.draai()), keuze.hoek());
+            for (int x = voet.minX() >> 4; x <= voet.maxX() >> 4; x++) {
+                for (int z = voet.minZ() >> 4; z <= voet.maxZ() >> 4; z++) {
+                    if (!level.hasChunk(x, z)) {
+                        return null;
+                    }
+                }
+            }
+        }
+        // (the spots come from near to far: the first one that is neat wins, else the one with the least earthwork)
+        OpLand beste = null;
+        for (Plek keuze : keuzes) {
+            OpLand kan = opLand(level, template, keuze, grondlaag.getY());
+            if (kan != null && (beste == null || kan.grondwerk() < beste.grondwerk())) {
+                beste = kan;
+                if (kan.grondwerk() <= NET_GRONDWERK) {
+                    break;
+                }
+            }
+        }
+        if (beste == null) {
+            return Optional.empty();
+        }
+        Plek kamp = beste.kamp();
+        BoundingBox voet = beste.voet();
+        int breed = voet.getXSpan(), plaat = kamp.hoek().getY();
+        BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+        net.minecraft.world.level.block.state.BlockState lucht = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+        for (int i = 0; i < beste.top().length; i++) {
+            int x = voet.minX() + i % breed, z = voet.minZ() + i / breed;
+            // lower land comes up to the plate (the plate's four open corners too), with the block the land has there
+            // (never with knabbel blocks: those are worth digging the camp's foot away for)
+            net.minecraft.world.level.block.state.BlockState vulling = beste.grond()[i].is(Bezetting.NATUURLIJK) ? beste.grond()[i]
+                    : net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState();
+            for (int y = beste.top()[i] + 1; y <= plaat; y++) {
+                level.setBlock(at.set(x, y, z), vulling, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+            // and the camp's own room is cleared: what grew there, and the one layer of land above the plate
+            for (int y = plaat + 1; y < plaat + KAMP_MAAT.getY(); y++) {
+                if (!level.getBlockState(at.set(x, y, z)).isAir()) {
+                    level.setBlock(at, lucht, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                }
+            }
+        }
+        template.placeInWorld(level, kamp.hoek(), kamp.hoek(), zo.setRotation(kamp.draai()), level.getRandom(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        LOGGER.info("Guhs: Guhdalf's camp stands at {} (turned {}) next to the big barbecueput of chunk {}: on the land as it lies, {} blocks of earth moved",
+                kamp.hoek().toShortString(), kamp.draai(), start.getChunkPos(), beste.grondwerk());
+        return Optional.of(kamp);
     }
 
     /** Bezetting's own rule for a prop's box (its {@code past} is private): free, or not, or (null) not loaded. */
@@ -582,7 +779,7 @@ public final class Gouw {
     private static void meldGeenKamp(ServerLevel level, StructureStart start, String tag) {
         if (GEMELD.add(level.dimension().identifier() + "|" + tag)) {
             BlockPos midden = start.getBoundingBox().getCenter();
-            LOGGER.warn("Guhs: NO ROOM for Guhdalf's camp at the big barbecueput at {} ({}): players built all around it. Nobody can start the "
+            LOGGER.warn("Guhs: NO ROOM for Guhdalf's camp at the big barbecueput at {} ({}): the land around it is too steep or too wet, or players built all around it. Nobody can start the "
                     + "Knabbelring at THIS pit (the grill portal stays shut for who has no other pit or Knabbelgouw). An operator can put the camp down by "
                     + "hand: stand where it should be, look the way its open side should face, and run /guhs ringh1 zetkamp", midden.toShortString(),
                     level.dimension().identifier());
@@ -713,8 +910,8 @@ public final class Gouw {
     private static final Map<UUID, Gezocht> GEZOCHT = new ConcurrentHashMap<>();
 
     /**
-     * The nearest place in the Guhmensie where Guhdalf stands: the middle of a Knabbelgouw or of an old big barbecueput
-     * (small pits and pits that got no camp don't count). Looked up at most once a minute per player (or after 96 blocks);
+     * The nearest place in the Guhmensie where Guhdalf stands: the middle of a Knabbelgouw, or Guhdalf's camp at an old big
+     * barbecueput (the pit's middle while its camp is not there yet; small pits and pits that got no camp don't count). Looked up at most once a minute per player (or after 96 blocks);
      * null: not in the Guhmensie, or none within reach.
      */
     @Nullable
@@ -794,10 +991,13 @@ public final class Gouw {
             if (template == null || !template.getPath().contains(PUT_STUK)) {
                 continue;   // (a small pit: no Grillguh, no Guhdalf)
             }
-            if (geplaatst.gehad(KAMP, start) && kampVan(level, start) == null) {
+            Plek kamp = kampVan(level, start);
+            if (geplaatst.gehad(KAMP, start) && kamp == null) {
                 continue;   // (no room for the camp there: Guhdalf is not at this pit)
             }
-            return start.getPieces().get(0).getBoundingBox().getCenter();
+            // (once the camp stands: Guhdalf himself. A camp on the land beside a sunken pit can lie some forty blocks from the
+            // pit's middle, out of sight from the grill)
+            return kamp != null ? kamp.wereld(GUHDALF) : start.getPieces().get(0).getBoundingBox().getCenter();
         }
         return null;
     }

@@ -324,13 +324,17 @@ public final class Bezetting {
         bescherm(e);
         if (!e.isAddedToLevel()) {
             // (an old Spiesburcht or grillpaleis may be built over by now: never inside somebody's blocks)
+            // Its own spot is where its maker put it, which need not be the registered spot: Guhdalf of an old big barbecueput is
+            // registered at the pit's middle (that is where he is looked for) and sits at his camp beside the pit. Asking about
+            // the registered spot moved him and Sam-guh from the camp to the grill in the middle of every real old pit.
+            plek = e.position();
             Vec3 vrij = vrijePlek(level, e, plek);
             if (vrij == null) {
-                LOGGER.info("Guhs: no free spot for the inhabitant {} around {} ({} {}): it stands at its own spot all the same", w.id, pos.toShortString(),
-                        w.structuur, start.getChunkPos());
+                LOGGER.info("Guhs: no free spot for the inhabitant {} around {} ({} {}): it stands at its own spot all the same", w.id,
+                        BlockPos.containing(plek).toShortString(), w.structuur, start.getChunkPos());
             } else if (!vrij.equals(plek)) {
-                LOGGER.info("Guhs: the spot of the inhabitant {} at {} is built over ({} {}): it stands at {} instead", w.id, pos.toShortString(), w.structuur,
-                        start.getChunkPos(), BlockPos.containing(vrij).toShortString());
+                LOGGER.info("Guhs: the spot of the inhabitant {} at {} is built over ({} {}): it stands at {} instead", w.id, BlockPos.containing(plek).toShortString(),
+                        w.structuur, start.getChunkPos(), BlockPos.containing(vrij).toShortString());
                 e.snapTo(vrij.x, vrij.y, vrij.z, e.getYRot(), e.getXRot());
                 plek = vrij;
             }
