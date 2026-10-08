@@ -15,7 +15,7 @@ as the landscape made it (water under the jetty, the island's own tree).
                     lantern as steps from it: LIGPLAATS, VISSER, LANTAARN below are the same numbers.
 
   picknickeilandje (spot meer_boom: three blocks from the big tree of a large island, the tree to the north)
-      x 0..12, y 0..9, z 0..10.  The rug is IN the ground at y 0 (x 3..9, z 3..6, round the trunk), the jigsaw at
+      x 0..12, y 0..9, z 0..10.  The rug is IN the ground at y 0 (x 4..8, z 3..6, round the trunk), the jigsaw at
       (6, 0, 6); the tree's trunk stands at (6, 1.., 3). (7, 1, 5) is de picknickmand, the anchor: MAND. Java (MandBlock) knows the three
       seats as steps from it: ZITPLEKKEN. No tree and no lanterns in the template: the lanterns are hung in whatever tree
       the island has when a player first comes near (MandBlock.versier).
@@ -36,11 +36,13 @@ STEIGER_ANKER = (8, JY, HUIS_NOORD + 10)
 
 MAND = (7, 1, 5)
 ZITPLEKKEN = [("bloesem", -2.0, 0.0, 1.0, 0, "hanami_bloesemguh"), ("guh", 0.0, 0.0, 1.0, 0, "hanami_guh"),
-              ("slaper", -4.0, 0.0, -1.0, 1, "hanami_guh_slaapt")]
+              ("slaper", -3.0, 0.0, -1.0, 1, "hanami_guh_slaapt")]
 PICKNICK_MAAT = (13, 10, 11)
 PICKNICK_ANKER = (6, 0, 6)
 STAM = (6, 3)                            # where the island's tree stands (x, z): three north of the jigsaw
-KLEED = [(x, z) for x in range(3, 10) for z in range(3, 7) if (x, z) != STAM]
+# (five wide: on the smallest island with the most ragged outline the flat ground is 4.7 blocks round the middle, and the
+# rug's far corners lie 4.3 from it; two wider and a corner hung over the beach)
+KLEED = [(x, z) for x in range(4, 9) for z in range(3, 7) if (x, z) != STAM]
 BIJ_STAM = [(x, z) for x in range(5, 8) for z in range(2, 5)]
 
 LUCHT = "minecraft:air"
@@ -197,10 +199,11 @@ def picknick(h, s, ox=0, oy=0, oz=0, anker=True, guhs=True):
     zet(5, 1, 5, "guhs:theepotje", {"facing": "south"})
     zet(4, 1, 5, "guhs:roze_guh_koek", {"facing": "east", "koeken": "3"})
     zet(8, 1, 5, "guhs:roze_guh_koek", {"facing": "north", "koeken": "2"})
-    zet(9, 1, 4, "guhs:pink_kussen", {"facing": "west"})
-    zet(3, 1, 6, "guhs:white_kussen", {"facing": "north"})
-    zet(9, 1, 6, "guhs:pink_kussen", {"facing": "north"})
+    zet(8, 1, 4, "guhs:pink_kussen", {"facing": "west"})
+    zet(4, 1, 6, "guhs:white_kussen", {"facing": "north"})
+    zet(8, 1, 6, "guhs:pink_kussen", {"facing": "north"})
     zet(8, 1, 3, "guhs:lampion_roze", {"hanging": "false", "waterlogged": "false"})
+    zet(4, 1, 3, "guhs:lampion_geel", {"hanging": "false", "waterlogged": "false"})
     if guhs:
         for (_naam, oost, op, zuid, draai, kind) in ZITPLEKKEN:
             _npc(h, s, ox + MAND[0] + 0.5 + oost, oy + MAND[1] + op, oz + MAND[2] + 0.5 + zuid, kind, 180.0 + 90.0 * draai, naam_zichtbaar=False)

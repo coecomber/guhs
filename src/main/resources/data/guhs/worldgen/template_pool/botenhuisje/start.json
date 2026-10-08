@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:botenhuisje",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:botenhuisje_palen"
       }
     }
   ]

@@ -4,7 +4,8 @@ biomes3 slice "bouw-meer" (Java: feature/bio/bouwmeer; English: tools/lang/en/c8
 What stands at the Bloesemmeertje:
   - het botenhuisje (structure botenhuisje, guhs:bio_plek kind meer_oever, Superkompas tab knus): boathouse, jetty,
     de meerpaal (anchor block), the roeibootje (entity; vanilla's boat renderer with our own picture), the visser-guh
-    (NPC kind botenhuisje_visserguh: his own model with a straw hat and a rod), the steigerlantaarn;
+    (NPC kind botenhuisje_visserguh: his own model with a straw hat and a rod), the steigerlantaarn; a processor list
+    (botenhuisje_palen) turns the posts into waterlogged posts where they stand in the lake's water;
   - het picknickeilandje (structure picknickeilandje, kind meer_boom, tab knus): rug, de picknickmand (anchor block,
     a treat per player from loot table chests/picknickeilandje), the hanami guhs (NPC kinds hanami_*);
   - three decorations: botenhuisje_steigerlantaarn, botenhuisje_hengelstandaard, botenhuisje_koiwindzak (reward + recipes);
@@ -26,6 +27,7 @@ BLOKKEN = ["botenhuisje_meerpaal", "botenhuisje_steigerlantaarn", "botenhuisje_h
 MET_ITEM = ["botenhuisje_steigerlantaarn", "botenhuisje_hengelstandaard", "botenhuisje_koiwindzak"]
 NPCS = ["botenhuisje_visserguh", "hanami_guh", "hanami_guh_slaapt", "hanami_bloesemguh", "hanami_bloesemguh_slaapt"]
 STRUCTUREN = ["botenhuisje", "picknickeilandje"]
+PALEN = "botenhuisje_palen"            # the processor list of the botenhuisje's start pool (see data())
 IMPOSSIBLE = {"done": {"trigger": "minecraft:impossible"}}
 BEWIJZEN = {  # guhs:quest/<name> (Java: BouwMeerSlice.BEWIJZEN)
     "botenhuisje_gevonden": {"done": {"trigger": "minecraft:location", "conditions": {"player": {"location": {"structures": "guhs:botenhuisje"}}}}},
@@ -35,7 +37,7 @@ BEWIJZEN = {  # guhs:quest/<name> (Java: BouwMeerSlice.BEWIJZEN)
 }
 # structure sets: (biomes, spacing, separation, salt, kind of spot); frequencies: see the slice report
 SETS = {
-    "botenhuisje": (["bloesemmeertje", "klaterdal"], 5, 2, 21500701, "meer_oever"),
+    "botenhuisje": (["bloesemmeertje", "klaterdal"], 6, 2, 21500701, "meer_oever"),
     "picknickeilandje": (["bloesemmeertje"], 2, 0, 21500711, "meer_boom"),
 }
 
@@ -433,6 +435,19 @@ def data(h):
     for naam, (biomes, spacing, separation, salt, soort) in SETS.items():
         h.structure(naam, biomes, spacing=spacing, separation=separation, salt=salt, reach=24, centre=f"guhs:{naam}_midden")
         bio_plek.plek(h, naam, soort)
+    # The jetty's posts and the lake's water: the model is the terrain, so a post never takes water away. Where a post of
+    # the template (a bleekhout stam) comes to stand in water it becomes a waterlogged bleekhout hek post: the water of
+    # that column stays source water. In the lake floor, in the shore and in the air it stays the log it was.
+    w(f"{D}/worldgen/processor_list/{PALEN}.json", {"processors": [{"processor_type": "minecraft:rule", "rules": [{
+        "input_predicate": {"predicate_type": "minecraft:block_match", "block": "guhs:bleekhout_stam"},
+        "location_predicate": {"predicate_type": "minecraft:block_match", "block": "minecraft:water"},
+        "output_state": {"Name": "guhs:bleekhout_hek", "Properties": {
+            "east": "false", "north": "false", "south": "false", "west": "false", "waterlogged": "true"}}}]}]})
+
+    def met_palen(pool):
+        for e in pool["elements"]:
+            e["element"]["processors"] = f"guhs:{PALEN}"
+    h.patch_json(f"{D}/worldgen/template_pool/botenhuisje/start.json", met_palen)
     for naam, crit in BEWIJZEN.items():
         w(f"{D}/advancement/quest/{naam}.json", {"criteria": crit})
     tel = h.count_fn
@@ -492,6 +507,10 @@ def selfcheck(h):
         for p in (f"{D}/structure/{s}.nbt", f"{D}/worldgen/structure/{s}.json", f"{D}/worldgen/structure_set/{s}.json"):
             if not os.path.exists(p):
                 mis.append(p)
+        pool = f"{D}/worldgen/template_pool/{s}/start.json"
+        wil = f"guhs:{PALEN}" if s == "botenhuisje" else "minecraft:empty"
+        if not os.path.exists(pool) or any(e["element"]["processors"] != wil for e in json.load(open(pool, encoding="utf-8"))["elements"]):
+            mis.append(f"start pool of {s}: processors are not {wil}")
         if os.path.exists(f"{D}/worldgen/structure/{s}.json"):
             st = json.load(open(f"{D}/worldgen/structure/{s}.json", encoding="utf-8"))
             if st.get("type") != "guhs:bio_plek" or st.get("plek") != SETS[s][4]:

@@ -89,7 +89,7 @@ public class MandBlock extends HorizontalDirectionalBlock {
     public static final List<Zitplek> ZITPLEKKEN = List.of(
             new Zitplek("bloesem", -2.0, 0.0, 1.0, 0, GuhNpcEntity.Kind.HANAMI_BLOESEMGUH, GuhNpcEntity.Kind.HANAMI_BLOESEMGUH_SLAAPT, false),
             new Zitplek("guh", 0.0, 0.0, 1.0, 0, GuhNpcEntity.Kind.HANAMI_GUH, GuhNpcEntity.Kind.HANAMI_GUH_SLAAPT, false),
-            new Zitplek("slaper", -4.0, 0.0, -1.0, 1, GuhNpcEntity.Kind.HANAMI_GUH, GuhNpcEntity.Kind.HANAMI_GUH_SLAAPT, true));
+            new Zitplek("slaper", -3.0, 0.0, -1.0, 1, GuhNpcEntity.Kind.HANAMI_GUH, GuhNpcEntity.Kind.HANAMI_GUH_SLAAPT, true));
 
     public MandBlock(Properties properties) {
         super(properties);

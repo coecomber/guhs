@@ -479,10 +479,10 @@ public class BioBouwMeerGameTests {
         Direction kijk = Direction.NORTH;
         // the rug lies in the ground round the trunk; the island's tree stands at its head
         int kleed = 0;
-        for (BlockPos pos : BlockPos.betweenClosed(mand.offset(-5, -1, -3), mand.offset(3, -1, 2))) {
+        for (BlockPos pos : BlockPos.betweenClosed(mand.offset(-4, -1, -3), mand.offset(2, -1, 2))) {
             kleed += level.getBlockState(pos).is(BlockTags.WOOL) ? 1 : 0;
         }
-        helper.assertTrue(kleed == 27 && level.getBlockState(mand.offset(-1, 0, -2)).is(BlockTags.LOGS), "27 tiles of rug round the trunk: " + kleed);
+        helper.assertTrue(kleed == 19 && level.getBlockState(mand.offset(-1, 0, -2)).is(BlockTags.LOGS), "19 tiles of rug round the trunk: " + kleed);
         // three guhs on their seats, as the mand expects them
         helper.assertTrue(hanami(helper).size() == 3, "three hanami guhs: " + hanami(helper).size());
         for (MandBlock.Zitplek z : MandBlock.ZITPLEKKEN) {

@@ -416,10 +416,11 @@ public final class BouwMeerEvents {
         BlockPos ligplaats = MeerpaalBlock.ligplaats(level, anker, kijk);
         meld.check(ligplaats != null && anker.getY() - ligplaats.getY() == 1,
                 waar + ": meerpaal " + anker.toShortString() + " faces " + kijk + ", the berth's water is " + (ligplaats == null ? "MISSING" : (anker.getY() - ligplaats.getY()) + " below the deck (1 wanted)"));
-        // open water in the berth and ahead of the jetty; deep enough to row away
+        // open water in the berth and out past the roof (beyond that the boat can turn away from the jetty: a shoal or an
+        // islet off the jetty's end is the lake's own business)
         int open = 0, kolommen = 0;
         StringBuilder dicht = new StringBuilder();
-        for (int zuid = -14; zuid <= 3; zuid++) {
+        for (int zuid = -9; zuid <= 3; zuid++) {
             for (int oost = 1; oost <= 3; oost++) {
                 kolommen++;
                 BlockPos p = MeerpaalBlock.plek(anker, kijk, oost, -1, zuid);
@@ -431,18 +432,22 @@ public final class BouwMeerEvents {
                 }
             }
         }
-        meld.check(open >= kolommen - 3, waar + ": the berth and the way out are open water (" + open + " of " + kolommen + " columns)" + dicht);
+        meld.check(open >= kolommen - 2, waar + ": the berth and the way out are open water (" + open + " of " + kolommen + " columns)" + dicht);
         // the jetty's end: over water, and its post stands on the bottom
         BlockPos eind = MeerpaalBlock.plek(anker, kijk, (int) MeerpaalBlock.VISSER[0], 0, (int) MeerpaalBlock.VISSER[2]);
         boolean boven = level.getFluidState(eind.below()).is(FluidTags.WATER);
         BlockPos paal = MeerpaalBlock.plek(anker, kijk, MeerpaalBlock.LANTAARN[0], -1, MeerpaalBlock.LANTAARN[2]);
-        int diep = 0;
-        while (diep < 12 && level.getBlockState(paal.below(diep)).is(BlockTags.LOGS)) {
+        // (in the water a post is a waterlogged bleekhout hek, so the lake keeps its water; in the floor it is the log.
+        // That no water went missing anywhere is the wereld slice's own check of blocks against its model.)
+        int diep = 0, nat = 0;
+        while (diep < 12 && (level.getBlockState(paal.below(diep)).is(BlockTags.LOGS) || level.getBlockState(paal.below(diep)).is(BlockTags.FENCES))) {
+            nat += level.getFluidState(paal.below(diep)).isSource() ? 1 : 0;
             diep++;
         }
         BlockState onder = level.getBlockState(paal.below(diep));
-        meld.check(boven && diep > 0 && diep < 12 && !onder.isAir() && onder.getFluidState().isEmpty(),
-                waar + ": the jetty's end is over water (" + boven + "), its post goes " + diep + " down and stands on " + staat(onder));
+        meld.check(boven && diep > 0 && diep < 12 && !onder.isAir() && onder.getFluidState().isEmpty() && nat > 0,
+                waar + ": the jetty's end is over water (" + boven + "), its post goes " + diep + " down (" + nat + " of it in water and waterlogged) and stands on "
+                        + staat(onder));
         BlockState lamp = level.getBlockState(MeerpaalBlock.plek(anker, kijk, MeerpaalBlock.LANTAARN[0], MeerpaalBlock.LANTAARN[1], MeerpaalBlock.LANTAARN[2]));
         meld.check(lamp.getBlock() instanceof SteigerlantaarnBlock, waar + ": the lantern stands on the jetty's end (" + staat(lamp) + ")");
         // nothing of the deck is buried: air above the walkway
@@ -481,7 +486,7 @@ public final class BouwMeerEvents {
         Direction kijk = state.getValue(MandBlock.FACING);
         // the rug lies on the island: wool with ground under it, no water at its level within two blocks
         int kleed = 0, nat = 0;
-        for (int oost = -5; oost <= 3; oost++) {
+        for (int oost = -4; oost <= 2; oost++) {
             for (int zuid = -3; zuid <= 2; zuid++) {
                 BlockPos p = MeerpaalBlock.plek(mand, kijk, oost, -1, zuid);
                 nat += level.getFluidState(p).isEmpty() && level.getFluidState(p.above()).isEmpty() ? 0 : 1;
@@ -490,7 +495,7 @@ public final class BouwMeerEvents {
                         && !level.getBlockState(p.below()).isAir() ? 1 : 0;
             }
         }
-        meld.check(kleed == 27 && nat == 0, waar + ": mand " + mand.toShortString() + " faces " + kijk + ", the rug has " + kleed + " of 27 tiles on the ground, "
+        meld.check(kleed == 19 && nat == 0, waar + ": mand " + mand.toShortString() + " faces " + kijk + ", the rug has " + kleed + " of 19 tiles on the ground, "
                 + nat + " wet columns around it");
         // the island's own tree stands where the picnic looks
         int stam = 0, blad = 0;
