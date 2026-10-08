@@ -693,6 +693,25 @@ public final class WolkTerrein {
     }
 
     /**
+     * biomes3 fix-plaatsing: does a cushion of cloud (two blocks thick, at y and y - 1) keep out of the air the routes
+     * need? Nothing checked that: in a stack at -12055 -8107 of seed 20261007 the cushion under the stream down from the
+     * second island lay over the last three steps of the stair from the meadow, and the whole stack (ten islands) could
+     * not be reached. A lift or stream whose cushion would do that does not fit there.
+     */
+    private static boolean kussenPast(Stapel s, int x, int y, int z, double straal) {
+        for (Doos d : s.vrij) {
+            if (d.y0 > y || d.y1 < y - 1) {
+                continue;
+            }
+            double dx = Math.max(0, Math.max(d.x0 - x, x - d.x1)), dz = Math.max(0, Math.max(d.z0 - z, z - d.z1));
+            if (dx * dx + dz * dz <= straal * straal) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * A lift pair from island a up to island b: a wolkenlift column on a's rim to b's rim, and a wolkenstroom column down
      * beside it on a cushion of cloud. False (and nothing added) when it does not fit.
      */
@@ -704,6 +723,9 @@ public final class WolkTerrein {
         }
         Direction p = d.getClockWise();
         int lx = a.x + d.getStepX() * (extA - 1), lz = a.z + d.getStepZ() * (extA - 1);
+        if (!kussenPast(s, lx, a.top, lz, 2.9)) { // biomes3 fix-plaatsing
+            return false;
+        }
         b.zet(lx + d.getStepX() * (extB + 2), lz + d.getStepZ() * (extB + 2), a.top + rijs);
         for (int i = -2; i <= 2; i++) {
             for (int q = -2; q <= 2; q++) {
@@ -734,7 +756,7 @@ public final class WolkTerrein {
                     bij = i * i + q * q <= 20 && a.is(sx + i - a.x, sz + q - a.z);
                 }
             }
-            if (!bij) {
+            if (!bij || !kussenPast(s, sx, a.top, sz, 4.4)) { // biomes3 fix-plaatsing: kussenPast
                 continue;
             }
             int[] m2 = s.merk();

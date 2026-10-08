@@ -423,7 +423,17 @@ public class BioWereldDalGameTests {
         List<int[]> lijst = new ArrayList<>(dalen(m, 2));
         if (seed == SEEDS[0]) {
             // the dal nearest to spawn on the scratch servers' seed (the one every report names)
-            lijst.add(new int[]{300, 480});
+            // biomes3 fix-plaatsing: was the fixed place 300 480; the regions are shapes now (BioRegio) and lie elsewhere: asked of the model
+            BioRegio dichtst = null;
+            for (BioRegio g : BioRegio.bij(m, -4000, -4000, 4000, 4000)) {
+                if (!g.weide && (dichtst == null || Math.hypot(g.x, g.z) < Math.hypot(dichtst.x, dichtst.z))) {
+                    dichtst = g;
+                }
+            }
+            if (dichtst != null) {
+                double[] p = dichtst.inDal(0, 0.5);
+                lijst.add(new int[]{(int) p[0], (int) p[1]});
+            }
         }
         return lijst;
     }
