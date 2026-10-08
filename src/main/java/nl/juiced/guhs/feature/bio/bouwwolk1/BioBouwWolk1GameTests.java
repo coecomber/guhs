@@ -205,12 +205,13 @@ public final class BioBouwWolk1GameTests {
         helper.succeedWhen(() -> {
             // (slice dieren: a wolkenschaapje on a lead becomes kept within a second: never a come-and-go animal again)
             CompoundTag tag = Nbt.saveWithoutId(mijn);
-            helper.assertTrue(tag.getBooleanOr("Gehouden", false) && tag.getBooleanOr("PersistenceRequired", false), "kept for good after a moment on the lead");
+            helper.assertTrue(tag.getBooleanOr("Gehouden", false) && tag.getBooleanOr("PersistenceRequired", false), "kept for good after a moment on the lead: leashed " + mijn.isLeashed() + ", ticks " + mijn.tickCount
+                    + ", alive " + mijn.isAlive() + ", at " + mijn.position() + ", the player at " + a.position() + " alive " + a.isAlive() + " in the level " + level.players().contains(a));
             Mob terug = (Mob) Kudde.soort().orElseThrow().create(level, EntitySpawnReason.LOAD);
             Nbt.load(terug, tag);
             helper.assertTrue(terug.isPersistenceRequired() && terug.shouldBeSaved(), "still the player's after saving and loading");
             terug.discard();
-            for (Mob m : level.getEntitiesOfClass(Mob.class, hoeder.getBoundingBox().inflate(16), m -> Kudde.soort().orElseThrow() == m.getType())) {
+            for (Mob m : level.getEntitiesOfClass(Mob.class, helper.getBounds().inflate(2), m -> Kudde.soort().orElseThrow() == m.getType())) { // biomes3 merge: own structure only (was 16 blocks round the wolkenhoeder)
                 m.discard();
             }
             hoeder.discard();
@@ -273,7 +274,9 @@ public final class BioBouwWolk1GameTests {
             }
             helper.assertTrue(r[1] == 0 && Kudde.kudde(level, hoeder).size() == Kudde.AANTAL && wild.isAlive(), "and then it stays four: nothing piles up");
         } finally {
-            for (Mob m : level.getEntitiesOfClass(Mob.class, hoeder.getBoundingBox().inflate(80), m -> Kudde.soort().orElseThrow() == m.getType())) {
+            // biomes3 merge: only this test's own structure (was 80 blocks round the wolkenhoeder, which also removed the schaapje of
+            // bioBouwWolk1Schaapje next door three ticks after it was handed out: that test failed one run in four)
+            for (Mob m : level.getEntitiesOfClass(Mob.class, helper.getBounds().inflate(2, 40, 2), m -> Kudde.soort().orElseThrow() == m.getType())) {
                 m.discard();
             }
             hoeder.discard();
