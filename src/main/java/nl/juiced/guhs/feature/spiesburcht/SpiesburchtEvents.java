@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.MobDespawnEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -48,6 +49,8 @@ public final class SpiesburchtEvents {
     static void register() {
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onFinalizeSpawn);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, SpiesburchtEvents::onPositionCheck);   // (after the ones that forbid a spot)
+        NeoForge.EVENT_BUS.addListener(Drukte::onFinalizeSpawn);
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, SpiesburchtEvents::onDespawnCheck);   // (before world/WildeDieren)
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onHurt);
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onEntityTick);
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onFeed);
@@ -118,8 +121,8 @@ public final class SpiesburchtEvents {
 
     /**
      * A guh born in the Asdal is an Asguh. 1.4.1: one that the natural spawner brings comes and goes like the other wild
-     * animals (world/WildeDieren: never saved, gone when everybody is far away; a tamed or named one stays), so they never
-     * pile up and never keep the creature cap full for the Rookguhs, Sauslopers and Sausblubjes.
+     * animals (world/WildeDieren: never saved, gone when everybody is more than 128 blocks away; a tamed or named one
+     * stays), so they never pile up and never keep the creature cap full for the Rookguhs, Sauslopers and Sausblubjes.
      */
     static void onFinalizeSpawn(FinalizeSpawnEvent event) {
         if (event.getEntity() instanceof GuhEntity guh && (event.getSpawnType() == EntitySpawnReason.NATURAL
@@ -130,6 +133,25 @@ public final class SpiesburchtEvents {
                 WildeDieren.markeer(guh);
             }
         }
+    }
+
+    /**
+     * 1.4.1: a wild Asguh that comes and goes does not wander off while you are on your way to it (the other come-and-go
+     * animals now and then despawn from 32 blocks, like a monster): it only goes when every player is far away.
+     */
+    static void onDespawnCheck(MobDespawnEvent event) {
+        if (event.getResult() != MobDespawnEvent.Result.DEFAULT || !(event.getEntity() instanceof GuhEntity guh)) {
+            return;
+        }
+        Entity speler = guh.level().getNearestPlayer(guh, -1.0);
+        if (speler != null && blijftNog(guh, speler.distanceToSqr(guh))) {
+            event.setResult(MobDespawnEvent.Result.DENY);
+        }
+    }
+
+    /** A wild come-and-go Asguh with the nearest player this far away (squared): does it stay for now? */
+    static boolean blijftNog(GuhEntity guh, double afstandSqr) {
+        return isAsguh(guh) && WildeDieren.isKomEnGa(guh) && !WildeDieren.magWeg(guh, afstandSqr);
     }
 
     /** Fire, frying sauce and hot ash: an Asguh doesn't feel a thing. */

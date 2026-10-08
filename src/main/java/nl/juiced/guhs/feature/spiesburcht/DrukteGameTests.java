@@ -28,8 +28,8 @@ import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * 1.4.1, the spawns of the Guhbarbecuether ({@link Drukte}, {@link SpiesburchtEvents}): fewer aggressive mobs in the open
- * (half of vanilla's cap around a player, the buildings and every other spawn left alone), and the Asguhs of the Asdal that
- * were never born (an animal refuses a dark spot) and now come and go.
+ * (half of vanilla's cap around a player, a building's own count half, every other spawn left alone), and the Asguhs of the
+ * Asdal that an animal's own light check kept away and that now come and go.
  */
 public class DrukteGameTests {
     private static final String ROOM = "spiesburcht_testkamer";
@@ -65,8 +65,8 @@ public class DrukteGameTests {
 
     /**
      * The count behind the rule: the aggressive mobs around the player nearest to a spot, the way vanilla's cap counts them
-     * (one that is kept on purpose and a creature do not count). And what the rule leaves alone: every spawn that is not
-     * the natural spawner's, every other dimension, a spot outside a building with its own monsters.
+     * (one that is kept on purpose and a creature do not count), with a building's own counting half. And what the rule
+     * leaves alone: every spawn that is not the natural spawner's and every other dimension.
      */
     @GuhTest(template = ROOM, timeoutTicks = 100)
     public static void fewerAggressiveMobsInTheOpen(GameTestHelper helper) {
@@ -89,11 +89,16 @@ public class DrukteGameTests {
         helper.runAfterDelay(2, () -> {
             helper.assertTrue(Drukte.isBoos((Mob) made.get(0)) && !Drukte.isBoos(kept) && !Drukte.isBoos((Mob) made.get(4)),
                     "wild Mikas count, a kept one and a guh don't");
-            int n = Drukte.tel(level, null, midden, 6, Drukte::isBoos);
+            int n = Drukte.rond(level, null, midden, 6, Drukte::isBoos).size();
             helper.assertTrue(n == 3, "three aggressive mobs in the room: " + n);
-            int rond = Drukte.rondSpeler(level, spot, 6, Drukte::isBoos);
+            int rond = Drukte.rondSpeler(level, spot, 6, Drukte::isBoos).size();
             helper.assertTrue(rond == 3, "three around the player nearest to the spot: " + rond);
             helper.assertTrue(Drukte.vol(level, spot, 6, 3) && !Drukte.vol(level, spot, 6, 4), "full at the maximum, not below it");
+            // a building's own Mika counts half: three in the open and two of a building are as busy as four in the open
+            made.get(1).addTag(Drukte.VAN_GEBOUW);
+            made.get(2).addTag(Drukte.VAN_GEBOUW);
+            helper.assertTrue(Drukte.drukte(level, spot, 6) == 4, "one in the open and two of a building: " + Drukte.drukte(level, spot, 6));
+            helper.assertTrue(Drukte.vol(level, spot, 6, 2) && !Drukte.vol(level, spot, 6, 3), "a building's own count half");
             helper.assertTrue(Drukte.MAX_BOOS * 2 == MobCategory.MONSTER.getMaxInstancesPerChunk(), "half of vanilla's monster cap: " + Drukte.MAX_BOOS);
             // what the rule leaves alone
             for (EntityType<? extends Mob> type : List.of(ModEntities.NETHER_MIKA.get(), SpiesburchtFeature.VONK_MIKA.get(), SpiesburchtFeature.KNEKEL_MIKA.get())) {
@@ -175,9 +180,16 @@ public class DrukteGameTests {
             helper.assertTrue(WildeDieren.isKomEnGa(wild) && !wild.shouldBeSaved() && WildeDieren.magWeg(wild, 129.0 * 129.0),
                     "a wild Asguh comes and goes: never saved, gone at 128 blocks");
             helper.assertFalse(WildeDieren.magWeg(wild, 100.0 * 100.0), "not while a player is within 128 blocks");
+            // (the other come-and-go animals may wander off from 32 blocks; an Asguh waits for you)
+            helper.assertTrue(SpiesburchtEvents.blijftNog(wild, 100.0 * 100.0) && !SpiesburchtEvents.blijftNog(wild, 129.0 * 129.0)
+                    && !SpiesburchtEvents.blijftNog(tam, 100.0 * 100.0) && !SpiesburchtEvents.blijftNog(gewoon, 100.0 * 100.0),
+                    "a wild Asguh stays while a player is within 128 blocks");
+            net.neoforged.neoforge.event.entity.living.MobDespawnEvent check = new net.neoforged.neoforge.event.entity.living.MobDespawnEvent(wild, level);
+            SpiesburchtEvents.onDespawnCheck(check);
+            helper.assertTrue(check.getResult() == net.neoforged.neoforge.event.entity.living.MobDespawnEvent.Result.DENY, "with the player next to it: it stays");
             helper.assertTrue(!WildeDieren.isKomEnGa(tam) && tam.shouldBeSaved() && !WildeDieren.magWeg(tam, 500.0 * 500.0), "a tamed Asguh stays");
             helper.assertTrue(Drukte.isWildeAsguh(wild) && !Drukte.isWildeAsguh(tam) && !Drukte.isWildeAsguh(gewoon), "only the wild Asguh counts");
-            int n = Drukte.tel(level, null, midden, 6, Drukte::isWildeAsguh);
+            int n = Drukte.rond(level, null, midden, 6, Drukte::isWildeAsguh).size();
             helper.assertTrue(n == 1, "one wild Asguh in the room: " + n);
             helper.assertTrue(Drukte.MAX_ASGUHS < MobCategory.CREATURE.getMaxInstancesPerChunk(), "room left in the creature cap");
             wild.discard();
