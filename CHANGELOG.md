@@ -3,6 +3,19 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.4.1 — Minecraft 26.1.2
+
+Quality of life, small changes and bug fixes for the Guh Path update. Same requirements as 1.4.0 and no world reset: every fix also works in worlds that already exist, and a player who got stuck in 1.4.0 is put right by the update itself.
+
+- **The Lord of the Nibble Ring, the ending:** the Smoke Guhs no longer set you down in the void. You land on solid ground by your own Nibble Shire and nothing can hurt you for the first ten seconds.
+- **"Go to the party in the Nibble Shire" can always be completed.** Were you put in the void in 1.4.0? Walk to your Guhdalf in the Guhmension and the party starts. It also works after dying, logging out or respawning, and the hint now says clearly where to go.
+- **The Mirror of Guhladriel:** the banks of the cheese sauce river now have white steps, so you can climb out when you fall in. Tree cities that already exist get them too.
+- **Sniff Island: your keys on screen.** The keys for Bark, Wag, Sniff and Sit are now shown top left, right under the objective line, as you have bound them.
+- **Sniff Island: dogs no longer swim in the sea.** After about 3 seconds the waves put you back where you last stood on land. The pond, the well and the wet edge of the beach are fine. A dog that was stuck behind the roadblock is put back by itself.
+- **Master Trufflenose now explains clearly how digging works:** just hold down your left mouse button (as a dog you do not break the block, you dig).
+- **Fewer angry Mikas in the open Guhbarbecuether.** About half as many Nether Mikas, Spark Mikas and Skelly Mikas walk around in the open biomes (about 35 around you instead of 70), and the Skelly Mika of the Ash Vale became a little rarer still. The Skewer Keep and the Mika Grill Palace stay as busy as they were.
+- **Ash Guhs really live in the Ash Vale now:** about six around you. They were almost never born because it was too dark for them there. Wild Ash Guhs come and go (tamed ones stay, of course).
+
 ## 1.4.0 — the Guh Path update — Minecraft 26.1.2
 
 The biggest update so far: a big story in six chapters, a castle you play from the side, thirteen buildings with their own questlines in the Guhbarbecuether, guh machines that run on chonk power, an island where you are a dog, three new biomes in the Guhmension, and the Guh Path that ties the big stories and the worlds together. Same requirements as 1.3.2. Existing worlds and servers keep everything (no world reset): new structures only appear in chunks that were not generated yet, and Sniff Island is a new dimension that the game adds by itself. Everything is per player, so any number of players can do every story and questline on one server. And as always: nothing in this update can hurt you or cost you items.
