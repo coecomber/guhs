@@ -67,8 +67,9 @@ public final class SnuffelHud {
     /**
      * "[B] Blaffen" and so on, small (the objective line's size and colours), with its top at {@code y}. The key is asked
      * of the key mapping every frame, so a key the player bound otherwise (or took away: "not bound") shows as it is.
+     * Returns the y just under the list.
      */
-    private static void toetsen(GuiGraphicsExtractor g, Font font, int y) {
+    private static int toetsen(GuiGraphicsExtractor g, Font font, int y) {
         float schaal = 0.75f;
         Component[] regels = new Component[ACTIE_TOETS.length];
         int breed = 0;
@@ -88,6 +89,7 @@ public final class SnuffelHud {
             g.text(font, regels[i], 0, i * 10, 0xFFFFFFFF, true);
         }
         g.pose().popMatrix();
+        return y + h;
     }
 
     static void extractRenderState(GuiGraphicsExtractor g, DeltaTracker delta) {
@@ -124,8 +126,9 @@ public final class SnuffelHud {
             g.centeredText(font, tekst, sw / 2, y - 11, tekstKleur);
         }
         // --- the four dog actions with the keys they are bound to NOW, top left, right under the objective line (1.4.1) ---
+        int onder = 0;
         if (!mc.getDebugOverlay().showDebugScreen()) {
-            toetsen(g, font, VerhaalHud.onderkant(g));
+            onder = toetsen(g, font, VerhaalHud.onderkant(g));
         }
         // --- the keys, for a while ---
         if (hondSinds >= 0 && SnuffelClient.ticks() - hondSinds < UITLEG_TICKS && mc.screen == null) {
@@ -140,7 +143,8 @@ public final class SnuffelHud {
             for (Component c : regels) {
                 breed = Math.max(breed, font.width(c));
             }
-            int x = 6, y = sh / 2 - regels.length * 5;
+            // (on a very low screen: under the little list above, never through it)
+            int x = 6, y = Math.max(sh / 2 - regels.length * 5, onder + 7);
             g.fill(x - 3, y - 3, x + breed + 3, y + regels.length * 10 + 1, ACHTER);
             for (int i = 0; i < regels.length; i++) {
                 g.text(font, regels[i], x, y + i * 10, 0xFFF3E4C4, false);
