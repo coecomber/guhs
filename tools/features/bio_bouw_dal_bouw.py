@@ -582,5 +582,6 @@ def build(h):
             {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{v}", "projection": "rigid",
                                       "processors": "guhs:dal_water_blijft" if naam in WATER_BLIJFT else "minecraft:empty"}}
             for v in varianten]})
-        bio_plek.plek(h, naam, soort)
+        # biomes3 merge: the weebhuisje is 15 x 15: level terrace 8 around its middle (the default 6 left its outer ring unasked)
+        bio_plek.plek(h, naam, soort, vlak=8 if naam == "weebhuisje" else None)
     return gebouwd

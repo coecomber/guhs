@@ -38,6 +38,7 @@ import nl.juiced.guhs.world.BouwRuimte;
  *   <li>{@code plek}: the kind of spot; {@code hoogte}: blocks above the meadow, kind {@code lucht} only (default 24);</li>
  *   <li>{@code ruimte}: kind {@code lucht} only: no natural island or cloud within this many blocks of the start chunk's
  *       middle, from the meadow to the sky (default 20);</li>
+ *   <li>{@code vlak}: kind {@code terras} only: plain level terrace this far around the spot (default 6, even);</li>
  *   <li>{@code keep_clear}, {@code voorrang}: as for every guhs structure ({@link BouwRuimte});</li>
  *   <li>{@code alleen_test}: test data, only generates when the environment variable GUHS_BIO_PLEKTEST is set.</li>
  * </ul>
@@ -63,6 +64,7 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
             BioPlekken.Soort.CODEC.fieldOf("plek").forGetter(s -> s.soort),
             Codec.intRange(1, 160).optionalFieldOf("hoogte", 24).forGetter(s -> s.hoogte),
             Codec.intRange(0, 64).optionalFieldOf("ruimte", 20).forGetter(s -> s.ruimte),
+            Codec.intRange(2, 16).optionalFieldOf("vlak", BioPlekken.VLAK).forGetter(s -> s.vlak), // biomes3 merge
             Codec.INT.optionalFieldOf("keep_clear", 0).forGetter(s -> s.keepClear),
             Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang),
             Codec.BOOL.optionalFieldOf("alleen_test", false).forGetter(s -> s.alleenTest)
@@ -75,13 +77,15 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
     private final BioPlekken.Soort soort;
     private final int hoogte;
     private final int ruimte;
+    private final int vlak;
     private final int keepClear;
     private final Optional<Integer> voorrang;
     private final boolean alleenTest;
 
-    public BioPlekStructure(StructureSettings settings, Jigsaw jigsaw, BioPlekken.Soort soort, int hoogte, int ruimte, int keepClear,
+    public BioPlekStructure(StructureSettings settings, Jigsaw jigsaw, BioPlekken.Soort soort, int hoogte, int ruimte, int vlak, int keepClear,
                             Optional<Integer> voorrang, boolean alleenTest) {
         super(settings);
+        this.vlak = vlak;
         this.jigsaw = jigsaw;
         this.soort = soort;
         this.hoogte = hoogte;
@@ -120,7 +124,7 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
             return Optional.empty();
         }
         ChunkPos chunk = context.chunkPos();
-        Optional<BioPlekken.Plek> plek = BioPlekken.zoek(BioModel.van(context.randomState()), soort, chunk.x(), chunk.z(), hoogte);
+        Optional<BioPlekken.Plek> plek = BioPlekken.zoek(BioModel.van(context.randomState()), soort, chunk.x(), chunk.z(), hoogte, vlak);
         if (plek.isEmpty()) {
             return Optional.empty();
         }

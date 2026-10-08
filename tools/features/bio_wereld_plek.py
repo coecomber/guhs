@@ -52,7 +52,7 @@ TEST = "plektest"
 SALT = 21500101   # the wereld slice's structure sets: 21500101, 21500111, ...
 
 
-def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", alleen_test=False):
+def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", alleen_test=False, vlak=None):
     """Turns the structure `naam` (written by h.structure) into a guhs:bio_plek structure of this kind of spot."""
     assert soort in SOORTEN, f"bio_plek: unknown kind {soort} (one of {', '.join(SOORTEN)})"
     hooks(h)
@@ -71,6 +71,10 @@ def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", al
         if ruimte is not None:
             assert soort == "lucht" and 0 <= ruimte <= 64, "ruimte only for kind lucht, at most 64"
             s["ruimte"] = int(ruimte)
+        if vlak is not None:
+            # (biomes3 merge) how far around a terras spot the terrace is plain and level; default 6
+            assert soort == "terras" and 2 <= vlak <= 16 and vlak % 2 == 0, "vlak only for kind terras, even, 2..16"
+            s["vlak"] = int(vlak)
         if alleen_test:
             s["alleen_test"] = True
     h.patch_json(f"{h.D}/worldgen/structure/{naam}.json", patch)

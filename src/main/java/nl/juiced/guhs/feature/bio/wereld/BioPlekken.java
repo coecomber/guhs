@@ -49,6 +49,18 @@ public final class BioPlekken {
 
     /** The spot of this kind in chunk (cx, cz) nearest to its middle. hoogte: only for {@link Soort#LUCHT}. */
     public static Optional<Plek> zoek(BioModel m, Soort soort, int cx, int cz, int hoogte) {
+        return zoek(m, soort, cx, cz, hoogte, VLAK);
+    }
+
+    /** biomes3 merge: a {@code terras} spot is plain level terrace this far around it, unless the structure asks for more. */
+    public static final int VLAK = 6;
+
+    /**
+     * biomes3 merge: as {@link #zoek(BioModel, Soort, int, int, int)}, with how far around a {@code terras} spot the
+     * terrace must be plain and level ({@code vlak}; a building wider than 13 stood with its outer ring on the lake's
+     * shore or over a face).
+     */
+    public static Optional<Plek> zoek(BioModel m, Soort soort, int cx, int cz, int hoogte, int vlak) {
         Kaart k = m.kaart(cx, cz);
         if (k.leeg) {
             return Optional.empty();
@@ -102,7 +114,7 @@ public final class BioPlekken {
                 continue;
             }
             Plek p = switch (soort) {
-                case TERRAS -> terras(m, k, o, x, z, willekeurig);
+                case TERRAS -> terras(m, k, o, x, z, willekeurig, vlak);
                 case OEVER -> oever(m, k, o, x, z);
                 case OVER_RIVIER -> overRivier(m, k, o, x, z, willekeurig);
                 case WATERVAL -> waterval(m, k, o, x, z, 4, false);
@@ -123,13 +135,13 @@ public final class BioPlekken {
         return m.water(x, z) != Kaart.GEEN && (m.vlag(x, z) & Kaart.RIVIER) != 0;
     }
 
-    private static Plek terras(BioModel m, Kaart k, int o, int x, int z, Direction anders) {
+    private static Plek terras(BioModel m, Kaart k, int o, int x, int z, Direction anders, int vlak) {
         if (k.terras[o] < 0 || k.water[o] != Kaart.GEEN || k.vlag[o] != 0 || ((x | z) & 1) != 0) {
             return null;
         }
         int h = k.hoogte[o];
-        for (int dx = -6; dx <= 6; dx += 2) {
-            for (int dz = -6; dz <= 6; dz += 2) {
+        for (int dx = -vlak; dx <= vlak; dx += 2) {
+            for (int dz = -vlak; dz <= vlak; dz += 2) {
                 if (m.hoogte(x + dx, z + dz) != h || !m.droog(x + dx, z + dz)) {
                     return null;
                 }
