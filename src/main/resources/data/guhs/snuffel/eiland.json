@@ -1,5 +1,5 @@
 {
-  "versie": 3,
+  "versie": 4,
   "oorsprong": [
     -84,
     44,
@@ -52,19 +52,19 @@
       ]
     },
     {
-      "template": "guhs:snuffeldorp/eiland_1_1",
-      "plek": [
-        48,
-        0,
-        48
-      ]
-    },
-    {
       "template": "guhs:snuffeldorp/eiland_1_2",
       "plek": [
         48,
         0,
         96
+      ]
+    },
+    {
+      "template": "guhs:snuffeldorp/eiland_1_1",
+      "plek": [
+        48,
+        0,
+        48
       ]
     },
     {
