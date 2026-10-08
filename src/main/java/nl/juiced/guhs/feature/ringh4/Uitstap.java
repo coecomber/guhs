@@ -78,13 +78,17 @@ public final class Uitstap {
         return BlockPos.containing(kopie.wereld(new Vec3(lokaal.getX() + 0.5, lokaal.getY() + 0.5, lokaal.getZ() + 0.5)));
     }
 
-    /** (every {@link #CHECK_TICKS} ticks of a player) the copy around this player gets the steps it misses. */
+    /**
+     * (every {@link #CHECK_TICKS} ticks of a player) the copy around this player gets the steps it misses. Only a real copy
+     * (a structure start of the world): a try-out copy of a game test has spots of its own and no river where the
+     * template has one.
+     */
     static void rond(ServerPlayer p) {
         if (p.isSpectator() || Plekken.UITSTAP.isEmpty()) {
             return;
         }
         Boomstad.Kopie kopie = Boomstad.bij(p.level(), p.blockPosition());
-        if (kopie != null) {
+        if (kopie != null && kopie.eigen() == null) {
             controleer(p.level(), kopie, -1);
         }
     }

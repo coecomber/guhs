@@ -17,7 +17,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -116,15 +118,24 @@ public final class Thuis {
             return plek;
         }
         // (nothing known, or no place to stand there: the nearest Knabbelgouw, the nearest barbecueput, the world's spawn)
-        BlockPos spawn = level.getRespawnData().pos();
-        for (String structuur : new String[]{Ring.STRUCTUREN.get(0), "barbecueput"}) {
-            BlockPos midden = GuhCompassItem.findCenter(level, ResourceKey.create(Registries.STRUCTURE, Guhs.id(structuur)), spawn);
+        for (int keuze = 0; keuze < 3; keuze++) {
+            BlockPos midden = gezocht(level, keuze);
             plek = midden == null ? null : landing(level, midden);
             if (plek != null) {
                 return plek;
             }
         }
-        return landing(level, spawn);
+        return null;
+    }
+
+    /** The choices that have to be searched for: 0 the nearest Knabbelgouw, 1 the nearest barbecueput, 2 the world's spawn. */
+    @Nullable
+    private static BlockPos gezocht(ServerLevel level, int keuze) {
+        BlockPos spawn = level.getRespawnData().pos();
+        if (keuze >= 2) {
+            return spawn;
+        }
+        return GuhCompassItem.findCenter(level, ResourceKey.create(Registries.STRUCTURE, Guhs.id(keuze == 0 ? Ring.STRUCTUREN.get(0) : "barbecueput")), spawn);
     }
 
     /**
@@ -163,7 +174,11 @@ public final class Thuis {
         }
         ChunkPos chunk = WARM.get(p.getUUID());
         if (chunk == null) {
+            // (looked up once per flight: for a player without a Gouw or a portal this is a search)
             BlockPos rond = bekend(p, level);
+            for (int keuze = 0; rond == null && keuze < 3; keuze++) {
+                rond = gezocht(level, keuze);
+            }
             if (rond == null) {
                 return;
             }
@@ -190,16 +205,26 @@ public final class Thuis {
      * A place to stand near this spot: a cell with a solid block under it and room for a player, no fluid ({@link #staan}).
      * The first that exists: open ground under the sky 4-9 steps away at about this height (what the Rookguhs always
      * chose); the nearest place to stand within {@link #ZOEK} blocks at about this height (under a roof, on a ledge); open
-     * ground under the sky 4-9 steps away at any height (for a spot whose own height says nothing). Null: there is none.
-     * Never a spot without ground. The chunks around the spot are loaded first.
+     * ground under the sky 4-9 steps away at any height (for a spot whose own height says nothing); and only when there is
+     * nothing else, the nearest place to stand in a tree top. Null: there is none. Never a spot without ground. The chunks
+     * around the spot are loaded first.
      */
     @Nullable
     static BlockPos landing(ServerLevel level, BlockPos rond) {
         laad(level, rond, ZOEK);
-        BlockPos hemel = onderDeHemel(level, rond, true);
-        if (hemel != null) {
-            return hemel;
+        BlockPos plek = onderDeHemel(level, rond, true);
+        if (plek == null) {
+            plek = dichtstbij(level, rond, true);
         }
+        if (plek == null) {
+            plek = onderDeHemel(level, rond, false);
+        }
+        return plek != null ? plek : dichtstbij(level, rond, false);
+    }
+
+    /** The nearest place to stand within {@link #ZOEK} blocks at about this height ({@code grond}: not on leaves), or null. */
+    @Nullable
+    private static BlockPos dichtstbij(ServerLevel level, BlockPos rond, boolean grond) {
         BlockPos beste = null;
         double besteD = Double.MAX_VALUE;
         for (int dx = -ZOEK; dx <= ZOEK; dx++) {
@@ -210,14 +235,14 @@ public final class Thuis {
                 for (int dy = ZOEK_HOOGTE; dy >= -ZOEK_HOOGTE; dy--) {
                     double d = dx * dx + dz * dz + 4.0 * dy * dy;
                     BlockPos voet = rond.offset(dx, dy, dz);
-                    if (d < besteD && staan(level, voet)) {
+                    if (d < besteD && landbaar(level, voet, grond)) {
                         beste = voet;
                         besteD = d;
                     }
                 }
             }
         }
-        return beste != null ? beste : onderDeHemel(level, rond, false);
+        return beste;
     }
 
     /** Open ground under the sky 4-9 steps from this spot ({@code opHoogte}: within 8 blocks of its height), or null. */
@@ -229,12 +254,24 @@ public final class Thuis {
                 int x = rond.getX() + (int) Math.round(Math.cos(hoek) * straal), z = rond.getZ() + (int) Math.round(Math.sin(hoek) * straal);
                 int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
                 BlockPos voet = new BlockPos(x, y, z);
-                if ((!opHoogte || Math.abs(y - rond.getY()) <= 8) && staan(level, voet)) {
+                if ((!opHoogte || Math.abs(y - rond.getY()) <= 8) && landbaar(level, voet, true)) {
                     return voet;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * May the Rookguhs put somebody down in this cell: a place to stand ({@link #staan}) that is not in a fire or on a
+     * campfire or magma, and ({@code grond}) not on the leaves of a tree?
+     */
+    private static boolean landbaar(ServerLevel level, BlockPos voet, boolean grond) {
+        if (!staan(level, voet) || level.getBlockState(voet).is(BlockTags.FIRE)) {
+            return false;
+        }
+        BlockState onder = level.getBlockState(voet.below());
+        return !onder.is(BlockTags.CAMPFIRES) && !onder.is(Blocks.MAGMA_BLOCK) && !(grond && onder.is(BlockTags.LEAVES));
     }
 
     /** Is this a cell to stand in: inside the world, a solid block under it, room for a player, no fluid? */
