@@ -226,11 +226,11 @@ WIKI = {
         ("systemen/snuffelen", "Je eigen hond",
          dict(galerij=[
              ("snuffel_hond_shiba", ("Shiba", "Shiba"), ("Red, Black and Tan, Cream", "Rood, zwart-tan, crème")),
-             ("snuffel_hond_jackrussell", ("Jack Russell", "Jack russell"), ("White with Brown, White with Black, Tricolor", "Wit met bruin, wit met zwart, driekleur")),
+             ("snuffel_hond_jackrussell", ("Jack Russell", "Jack russell"), ("White and Brown, White and Black, Tricolor", "Wit met bruin, wit met zwart, driekleur")),
              ("snuffel_hond_teckel", ("Dachshund", "Teckel"), ("Red, Black and Tan, Chocolate and Tan", "Rood, zwart-tan, chocola-tan")),
              ("snuffel_hond_corgi", ("Corgi", "Corgi"), ("Red and White, Sable, Tricolor", "Rood-wit, sable, driekleur")),
              ("snuffel_hond_golden", ("Golden Retriever", "Golden retriever"), ("Gold, Light Cream, Red Gold", "Goud, licht crème, roodgoud")),
-             ("snuffel_hond_mops", ("Pug", "Mopshond"), ("Beige, Apricot, Black", "Beige, abrikoos, zwart")),
+             ("snuffel_hond_mops", ("Pug", "Mopshond"), ("Fawn, Apricot, Black", "Beige, abrikoos, zwart")),
          ]),
          "Your own dog", None, "Je eigen hond"),
         ("systemen/snuffelen", "Je maatje",

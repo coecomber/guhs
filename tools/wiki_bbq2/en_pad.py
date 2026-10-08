@@ -9,7 +9,8 @@ TEKST:  (page, Dutch heading) -> (English heading, English text).
 Hand-written, with the names of tools/lang/GLOSSARY.md section 25 (Het Guhpad = The Guh Path, Het Snuffeleiland = Sniff Island
 without an article, Snuffeldorp = Sniffville, Steigerhuisje = Dock Cottage, maatje = buddy, Snuffelmeester = Sniff Maestro and
 never "Sniff Master", geneesbloem = healing flower, the island's dogs by their English names) and the rules of that section:
-the four colors of the scent meter are fixed words, a tale you follow is a story, nobody gets hurt and nobody fails.
+the four colors of the scent meter are fixed words, a tale you follow is a story, nobody gets hurt and nobody fails, a thing
+that is "kwijt" is mislaid, gone or missing and never "lost", a rank takes an article in a sentence (you are a Sniff Pup).
 """
 
 PAGINA = {
@@ -40,7 +41,7 @@ PAGINA = {
         "With it you go back to the island whenever you want."),
     "systemen/snuffeldorp-bewoners": (
         "The dogs of Sniffville",
-        "On Sniff Island everybody lives on four paws. You meet ten dogs in the first story. Six of them have lost something."),
+        "On Sniff Island everybody lives on four paws. You meet ten dogs in the first story. Six of them have mislaid something."),
 }
 
 TEKST = {
@@ -266,7 +267,7 @@ TEKST = {
     ("verhalen/snuffeldorp", "Naar huis en terug"): (
         "Home and back",
         "Captain Saltsnout in the harbor sails you home whenever you want, and with the memory card you can do that too. Your story is "
-        "kept. If you already have the Guhstation, you go back to the island with it. If you have lost it, the captain has another one."),
+        "kept. If you already have the Guhstation, you go back to the island with it. If yours is gone, the captain has another one."),
     ("systemen/snuffeldorp-bewoners", "Wie is wie"): (
         "Who is who",
         "Wendy Wagtail is the beachcomber who finds you; she lives in the beachcomber's hut by the beach gate. Doctor Plasterpaw is the old "
@@ -276,6 +277,6 @@ TEKST = {
         "in his vegetable patch and Little Droolball runs around by the well."),
     ("systemen/snuffeldorp-bewoners", "Iedereen ziet zijn eigen verhaal"): (
         "Everybody sees their own story",
-        "The dogs are there for everyone, but what they say to you depends on how far you are. What a villager has lost, every player can "
+        "The dogs are there for everyone, but what they say to you depends on how far you are. What a villager has mislaid, every player can "
         "find back for themselves. You also see the little tree in your own step, and only you can see your buddy."),
 }
