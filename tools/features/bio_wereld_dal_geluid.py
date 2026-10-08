@@ -15,7 +15,10 @@ Called from bio_wereld_dal.build (schrijf). Needs numpy, scipy and PyAV, like th
 import os
 
 import numpy as np
-from scipy.signal import butter, lfilter
+try:                                    # (only needed to MAKE the sounds; the wiki build runs without them)
+    from scipy.signal import butter, lfilter
+except ImportError:
+    butter = lfilter = None
 
 SR = 44100
 # the "in" scale on D (D Eb G A Bb), two and a half octaves: calm, a little wistful, unmistakably Japanese

@@ -29,8 +29,11 @@ import os
 import sys
 
 import numpy as np
-import soundfile as sf
-from scipy.signal import butter, fftconvolve, lfilter
+try:                                    # (only needed to MAKE the sounds; the wiki build runs without them)
+    import soundfile as sf
+    from scipy.signal import butter, fftconvolve, lfilter
+except ImportError:
+    sf = butter = fftconvolve = lfilter = None
 
 SR = 48000
 BPM = 116.0
