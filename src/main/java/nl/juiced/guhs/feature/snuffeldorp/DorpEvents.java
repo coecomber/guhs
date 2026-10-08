@@ -31,10 +31,12 @@ public final class DorpEvents {
     @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         Wegversperring.vergeet(event.getEntity().getUUID());
+        Zee.vergeet(event.getEntity().getUUID());
     }
 
     @SubscribeEvent
     public static void onStop(ServerStoppedEvent event) {
         Wegversperring.wis();
+        Zee.wis();
     }
 }

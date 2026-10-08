@@ -67,10 +67,17 @@ import nl.juiced.guhs.taal.NlTekst;
  *   <li>{@code snuffeldorpEilandKlopt}: the REAL island's data: ten residents with a role each, every scent source the
  *   story names (buried or not as the story plays it), the spots, the line, the tiles, the scenes and their lengths,
  *   every conversation and screen line in Dutch.</li>
+ *   <li>(1.4.1) {@code snuffeldorpZee}: on the little island {@code snuffeldorp_test_zee} with its own land map: three
+ *   seconds in the sea and a dog stands where it last stood on land; the pond and the wet edge are no sea; touching land
+ *   starts the count again; a deck is land and the water under it sea; a builder swims on; without a spot of its own the
+ *   kern's last spot or the beach; and closed ground of the map counts as behind the roadblock (a dog that is already
+ *   stuck there is put in front of it).</li>
+ *   <li>(1.4.1) {@code snuffeldorpKaartKlopt}: the REAL island's land map: everything the story needs stands on walkable
+ *   land, the pond and the well are no sea, the harbour basin is, the pocket behind the roadblock is closed ground.</li>
  * </ul>
  */
 public class SnuffeldorpGameTests {
-    private static final String BATCH = "snuffeldorp", VERHAAL = "snuffeldorp_verhaal", VLOER = "snuffeldorp_test_vloer";
+    private static final String BATCH = "snuffeldorp", VERHAAL = "snuffeldorp_verhaal", VLOER = "snuffeldorp_test_vloer", ZEE = "snuffeldorp_test_zee";
     private static final Verhaallijn LIJN = SnuffelFeature.LIJN;
     private static final int GRENS = 3;
 
@@ -81,9 +88,27 @@ public class SnuffeldorpGameTests {
         final List<ServerPlayer> spelers = new ArrayList<>();
         final Map<String, BlockPos> bron = new HashMap<>();
         final Map<String, Boolean> graven = new HashMap<>();
+        final boolean zee;
+
+        /**
+         * (1.4.1) The sea rule's island: the whole template {@code snuffeldorp_test_zee} (tools/features/snuffel_dorp_bouw.py
+         * test_zee: land with a pond, a sea one block deep, a deck over it) with the land map that was written with it.
+         * No residents, no line: the map's closed ground (the land's two northern rows) is all that is closed.
+         */
+        Proef(GameTestHelper helper, Landkaart kaart) {
+            this.helper = helper;
+            this.zee = true;
+            DorpRollen.init();
+            Eiland.Opzet opzet = new Eiland.Opzet(1, BlockPos.ZERO, new Vec3i(kaart.breed(), 4, kaart.diep()), List.of(), new Eiland.Punt(new Vec3(5.5, 2, 9.5), 180f),
+                    new Eiland.Punt(new Vec3(11.5, 3, 6.5), 90f), new BlockPos(8, 2, 11), 0, 1, List.of(), List.of(), List.of());
+            this.plaats = Eiland.test(helper.getLevel(), helper.absolutePos(new BlockPos(0, 1, 0)), opzet);
+            Plekken.test(plaats, new Plekken(Map.of(Plekken.VERSPERRING, new BlockPos(5, 2, 3)), Plekken.GEEN_GRENS));
+            Landkaart.test(plaats, kaart);
+        }
 
         Proef(GameTestHelper helper, boolean dorp) {
             this.helper = helper;
+            this.zee = false;
             // (a kern test may have given a resident another role in this JVM: the village's own roles again)
             DorpRollen.init();
             Eiland.Opzet echt = Eiland.opzet();
@@ -116,7 +141,7 @@ public class SnuffeldorpGameTests {
 
         /** "Home": a spot on the test floor outside the island. */
         Vec3 thuis(int welke) {
-            BlockPos b = helper.absolutePos(welke == 0 ? new BlockPos(1, 2, 1) : new BlockPos(39, 2, 39));
+            BlockPos b = helper.absolutePos(zee ? new BlockPos(26, 2, welke == 0 ? 4 : 8) : welke == 0 ? new BlockPos(1, 2, 1) : new BlockPos(39, 2, 39));
             return new Vec3(b.getX() + 0.5, b.getY(), b.getZ() + 0.5);
         }
 
@@ -180,6 +205,7 @@ public class SnuffeldorpGameTests {
                 }
                 Praat.vergeet(p);
                 Wegversperring.vergeet(p.getUUID());
+                Zee.vergeet(p.getUUID());
                 Minigames.forget(p);
                 if (!p.isRemoved()) {
                     helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
@@ -190,6 +216,7 @@ public class SnuffeldorpGameTests {
                 e.discard();
             }
             Plekken.testWeg(plaats);
+            Landkaart.testWeg(plaats);
             Eiland.testWeg(plaats);
         }
     }
@@ -755,5 +782,227 @@ public class SnuffeldorpGameTests {
         }
         helper.assertTrue(mis.isEmpty(), "missing or wrong: " + mis);
         helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // 1.4.1: the sea, and the closed ground of the land map
+    // =====================================================================================================================
+
+    /** Puts a mock player somewhere on the test island (island coordinates): standing on the ground, or afloat. */
+    private static void zetOp(Proef t, ServerPlayer p, Vec3 rel, boolean opGrond) {
+        t.zet(p, t.plaats.wereld(rel));
+        p.setOnGround(opGrond);
+    }
+
+    @GuhTest(template = ZEE, batch = BATCH, timeoutTicks = 1600)
+    public static void snuffeldorpZee(GameTestHelper helper) {
+        Landkaart kaart = Landkaart.lees(Landkaart.TEST_PAD);
+        helper.assertTrue(kaart != null && kaart.breed() == 21 && kaart.diep() == 13, "the test island's land map is in the jar");
+        Proef t = new Proef(helper, kaart);
+        ServerPlayer hond = t.speler(0), bouwer = t.speler(1);
+        Draaiboek d = new Draaiboek();
+        // island coordinates: the land's floor is y 2, the sea's water is the block y 1, the deck's floor is y 3
+        Vec3 landA = new Vec3(5.5, 2, 5.5), landB = new Vec3(7.5, 2, 8.5), zee = new Vec3(15.5, 1, 3.5), rand = new Vec3(10.5, 1, 3.5),
+                vijver = new Vec3(4.5, 1, 6.5), dek = new Vec3(12.5, 3, 6.5), onderDek = new Vec3(12.5, 1, 6.5), dichtGrond = new Vec3(5.5, 2, 0.5),
+                versperring = new Vec3(5.5, 2, 3.5), strand = new Vec3(5.5, 2, 9.5);
+        long[] sinds = {0};
+        Runnable inZee = () -> {
+            zetOp(t, hond, zee, false);
+            sinds[0] = helper.getLevel().getGameTime();
+        };
+        BooleanSupplier eruit = () -> !dicht(hond.position(), t.plaats.wereld(zee));
+        d.dan("two dogs on the island", () -> {
+            Eiland.Plaats pl = t.plaats;
+            helper.assertTrue(kaart.zee(pl, pl.wereld(zee)) && !kaart.zee(pl, pl.wereld(rand)) && !kaart.zee(pl, pl.wereld(vijver)) && kaart.zee(pl, pl.wereld(onderDek))
+                    && kaart.zee(pl, pl.wereld(new Vec3(40.5, 1, 3.5))), "the map: the sea, the wet edge, the pond, under the deck, outside the map");
+            helper.assertTrue(kaart.veilig(pl, pl.wereld(landA)) && kaart.veilig(pl, pl.wereld(dek)) && !kaart.veilig(pl, pl.wereld(vijver))
+                    && !kaart.veilig(pl, pl.wereld(rand)) && !kaart.veilig(pl, pl.wereld(dichtGrond)), "the map: where a dog is put back");
+            helper.assertTrue(helper.getLevel().getFluidState(BlockPos.containing(pl.wereld(zee))).is(net.minecraft.tags.FluidTags.WATER)
+                    && helper.getLevel().getFluidState(BlockPos.containing(pl.wereld(vijver))).is(net.minecraft.tags.FluidTags.WATER)
+                    && helper.getLevel().getFluidState(BlockPos.containing(pl.wereld(onderDek))).is(net.minecraft.tags.FluidTags.WATER)
+                    && helper.getLevel().getFluidState(BlockPos.containing(pl.wereld(landA))).isEmpty(), "the template: water where the map says water");
+            Reis.naarEiland(hond, t.plaats, Reis.Aankomst.STRAND);
+            Reis.naarEiland(bouwer, t.plaats, Reis.Aankomst.STRAND);
+            bouwer.setGameMode(GameType.CREATIVE);
+        }, null, () -> LIJN.vlag(hond, Dorp.WAKKER) && !Cutscenes.bezig(hond) && !Cutscenes.bezig(bouwer));
+        d.dan("the arrival on the beach moves nobody", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(strand)) && Hondvorm.actief(hond), "the dog stands on the beach: " + hond.position());
+            zetOp(t, hond, landA, true);
+        });
+        d.wacht(helper, 3);
+        d.dan("the pond is no sea", () -> {
+            helper.assertTrue(Zee.veilig(hond) != null && dicht(Zee.veilig(hond), t.plaats.wereld(landA)), "the spot on land is remembered: " + Zee.veilig(hond));
+            zetOp(t, hond, vijver, false);
+        });
+        d.wacht(helper, Zee.TICKS + 30);
+        d.dan("the wet edge of the beach is no sea", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(vijver)), "a dog may splash in the pond as long as it likes: " + hond.position());
+            zetOp(t, hond, rand, false);
+        });
+        d.wacht(helper, Zee.TICKS + 30);
+        d.dan("the sea: nothing happens for two seconds", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(rand)), "a dog may paddle in the wet edge as long as it likes: " + hond.position());
+            helper.assertTrue(dicht(Zee.veilig(hond), t.plaats.wereld(landA)), "water is never a spot to go back to");
+            inZee.run();
+            zetOp(t, bouwer, zee, false);
+        });
+        d.wacht(helper, 40);
+        d.dan("and after about three seconds the dog is put back", () -> helper.assertTrue(!eruit.getAsBoolean(), "two seconds in the sea is fine: " + hond.position()),
+                null, eruit);
+        d.dan("where it last stood on land, unharmed; a builder swims on", () -> {
+            long duur = helper.getLevel().getGameTime() - sinds[0];
+            helper.assertTrue(duur >= Zee.TICKS - 2 && duur <= Zee.TICKS + 5, "after about three seconds: " + duur + " ticks");
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(landA)), "back on the last spot on land: " + hond.position());
+            helper.assertTrue(hond.getHealth() == hond.getMaxHealth() && Hondvorm.actief(hond), "nothing hurts, still a dog");
+            helper.assertTrue(dicht(bouwer.position(), t.plaats.wereld(zee)), "a builder in creative mode is left alone");
+            bouwer.setGameMode(GameType.SPECTATOR);
+            // touching land starts the count again
+            inZee.run();
+        });
+        d.wacht(helper, 40);
+        d.dan("out of the sea for a moment", () -> zetOp(t, hond, landB, true));
+        d.wacht(helper, 3);
+        d.dan("and in again", inZee);
+        d.wacht(helper, 40);
+        d.dan("the three seconds count from the last time in", () -> helper.assertTrue(!eruit.getAsBoolean(), "40 + 40 ticks with land in between is fine"), null, eruit);
+        d.dan("back on the NEW spot; the deck is land", () -> {
+            long duur = helper.getLevel().getGameTime() - sinds[0];
+            helper.assertTrue(duur >= Zee.TICKS - 2 && dicht(hond.position(), t.plaats.wereld(landB)), "the last spot on land, after " + duur + " ticks: " + hond.position());
+            helper.assertTrue(dicht(bouwer.position(), t.plaats.wereld(zee)), "a spectator is left alone");
+            zetOp(t, hond, dek, true);
+        });
+        d.wacht(helper, 3);
+        d.dan("the water under the deck is sea", () -> {
+            helper.assertTrue(dicht(Zee.veilig(hond), t.plaats.wereld(dek)), "the deck is a spot to go back to");
+            zetOp(t, hond, onderDek, false);
+        }, null, () -> !dicht(hond.position(), t.plaats.wereld(onderDek)));
+        d.dan("back on the deck; home from a spot on land", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(dek)), "fallen off the jetty: back on the jetty: " + hond.position());
+            // no spot of its own (a login in the water, a server that started again): the kern's last spot when that is land
+            zetOp(t, hond, landB, true);
+            helper.assertTrue(Reis.naarHuis(hond), "home with the memory card");
+            Reis.naarEiland(hond, t.plaats, Reis.Aankomst.STRAND);
+            Zee.vergeet(hond.getUUID());
+            inZee.run();
+        }, null, eruit);
+        d.dan("no spot of its own: the kern's last spot", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(landB)), "the last spot the kern remembers: " + hond.position());
+            // and when that is no land either (it lies in the pond): the beach
+            zetOp(t, hond, vijver, true);
+            helper.assertTrue(Reis.naarHuis(hond), "home again");
+            Reis.naarEiland(hond, t.plaats, Reis.Aankomst.STRAND);
+            Zee.vergeet(hond.getUUID());
+            inZee.run();
+        }, null, eruit);
+        d.dan("no good spot at all: the beach; a dog that is stuck on closed ground", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(strand)), "the beach: " + hond.position());
+            // the map's closed ground counts as behind the roadblock, also for a dog that already stands there (no spot known)
+            Wegversperring.vergeet(hond.getUUID());
+            Zee.vergeet(hond.getUUID());
+            bouwer.setGameMode(GameType.CREATIVE);
+            zetOp(t, hond, dichtGrond, true);
+            zetOp(t, bouwer, dichtGrond, true);
+        }, null, () -> !dicht(hond.position(), t.plaats.wereld(dichtGrond)));
+        d.dan("is put in front of the roadblock", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(versperring)), "at the roadblock's own spot: " + hond.position());
+            helper.assertTrue(dicht(bouwer.position(), t.plaats.wereld(dichtGrond)), "a builder may stand on closed ground");
+            helper.assertTrue(hond.getHealth() == hond.getMaxHealth() && Hondvorm.actief(hond), "nothing hurts");
+            zetOp(t, hond, landA, true);
+        });
+        d.wacht(helper, 3);
+        d.dan("with a spot on land: back there", () -> zetOp(t, hond, dichtGrond, true), null, () -> !dicht(hond.position(), t.plaats.wereld(dichtGrond)));
+        d.dan("the dog's southern edge decides", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(landA)), "back where it last stood on open land: " + hond.position());
+            // leaning against the closed ground from the south: the middle of the dog is over the closed row, its southern edge is not
+            zetOp(t, hond, new Vec3(5.5, 2, 1.8), true);
+        });
+        d.wacht(helper, 5);
+        d.dan("a step further north it is closed", () -> {
+            helper.assertTrue(dicht(hond.position(), t.plaats.wereld(new Vec3(5.5, 2, 1.8))), "leaning against it is not behind it: " + hond.position());
+            helper.assertTrue(dicht(Zee.veilig(hond), t.plaats.wereld(landA)), "closed ground is never a spot to go back to");
+            zetOp(t, hond, new Vec3(5.5, 2, 1.6), true);
+        }, null, () -> dicht(hond.position(), t.plaats.wereld(landA)));
+        d.speel(helper, t);
+    }
+
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void snuffeldorpKaartKlopt(GameTestHelper helper) {
+        Landkaart kaart = Landkaart.echt();
+        Eiland.Opzet opzet = Eiland.opzet();
+        Plekken pl = Plekken.echt();
+        helper.assertTrue(kaart != null && kaart.breed() == opzet.maat().getX() && kaart.diep() == opzet.maat().getZ(), "the land map covers the island's box");
+        // (an island with its corner on 0, 0, 0: world = the island's own coordinates)
+        Eiland.Plaats hier = new Eiland.Plaats(helper.getLevel(), BlockPos.ZERO, opzet, true);
+        List<String> mis = new ArrayList<>();
+        if (kaart.vak(hier, opzet.strand().plek()) != Landkaart.LAND || kaart.vak(hier, opzet.haven().plek()) != Landkaart.DEK) {
+            mis.add("the beach is land, the harbour's arrival a deck");
+        }
+        for (Eiland.BewonerPlek b : opzet.bewoners()) {
+            if (!naast(kaart, b.plek().x, b.plek().z)) {
+                mis.add("resident " + b.sleutel() + " stands on walkable land");
+            }
+        }
+        for (Eiland.BronPlek b : opzet.bronnen()) {
+            if (!naast(kaart, b.plek().getX(), b.plek().getZ())) {
+                mis.add("source " + b.id() + " lies at walkable land");
+            }
+        }
+        for (Map.Entry<String, BlockPos> e : pl.plekken().entrySet()) {
+            Vec3 v = Vec3.atBottomCenterOf(e.getValue());
+            if (!e.getKey().equals(Plekken.EMMER) && (!kaart.veilig(hier, v) || Wegversperring.dicht(hier, pl, kaart, v))) {
+                mis.add("spot " + e.getKey() + " is walkable land in front of the roadblock");
+            }
+        }
+        // what is sea and what is not
+        BlockPos plein = pl.plekken().get(Plekken.PLEIN), haven = pl.plekken().get(Plekken.HAVEN), weg = pl.plekken().get(Plekken.VERSPERRING);
+        Vec3 put = new Vec3(plein.getX() + 0.5, 20, plein.getZ() + 5.5), vijver = new Vec3(64.5, 20, 62.5), bassin = new Vec3(haven.getX() + 0.5, 19, haven.getZ() + 8.5);
+        helper.assertTrue(kaart.vak(hier, put) == Landkaart.EILAND && kaart.vak(hier, vijver) == Landkaart.EILAND && !kaart.zee(hier, put) && !kaart.zee(hier, vijver),
+                "the well and the pond are the island's own water");
+        helper.assertTrue(kaart.vak(hier, bassin) == Landkaart.ZEE && kaart.zee(hier, Vec3.atBottomCenterOf(haven)) && kaart.veilig(hier, Vec3.atBottomCenterOf(haven)),
+                "the harbour basin is sea; the jetty is land to stand on and sea to swim under");
+        helper.assertTrue(kaart.zee(hier, new Vec3(1.5, 19, 1.5)) && kaart.zee(hier, new Vec3(-30, 19, 400)), "the open sea, also outside the map");
+        // the closed ground: the roadblock, the pocket behind it up to the line, nothing walkable near or north of the line
+        int wz = weg.getZ() - 1;
+        for (int z = pl.grensZ(); z <= wz; z++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                if (kaart.vak(weg.getX() + dx, z) != Landkaart.DICHT) {
+                    mis.add("the pocket behind the roadblock at " + (weg.getX() + dx) + ", " + z + " is closed ground");
+                }
+            }
+        }
+        // (the roadblock's fence stands in the middle of its block: a dog is 0.6 wide)
+        Vec3 noordkant = new Vec3(weg.getX() + 0.5, 20, wz + 0.07), zuidkant = new Vec3(weg.getX() + 0.5, 20, wz + 0.93);
+        helper.assertTrue(kaart.dicht(hier, noordkant) && Wegversperring.dicht(hier, pl, kaart, noordkant) && !kaart.dicht(hier, zuidkant)
+                && !Wegversperring.dicht(hier, pl, kaart, zuidkant) && kaart.veilig(hier, Vec3.atBottomCenterOf(weg)),
+                "a dog that leans against the back of the roadblock is behind it, one that leans against its front is not");
+        int[] tel = new int[128];
+        for (int z = 0; z < kaart.diep(); z++) {
+            for (int x = 0; x < kaart.breed(); x++) {
+                char c = kaart.vak(x, z);
+                tel[c & 127]++;
+                if (z < pl.grensZ() + 2 && c != Landkaart.DICHT && c != Landkaart.ZEE) {
+                    mis.add("north of the line everything is closed ground or sea, not '" + c + "' at " + x + ", " + z);
+                }
+            }
+        }
+        helper.assertTrue(tel[Landkaart.LAND] > 8000 && tel[Landkaart.DEK] > 50 && tel[Landkaart.DICHT] > 1000 && tel[Landkaart.EILAND] > 500
+                && tel[Landkaart.ZEE] > 8000 && tel[Landkaart.LAND] + tel[Landkaart.DEK] + tel[Landkaart.DICHT] + tel[Landkaart.EILAND] + tel[Landkaart.ZEE]
+                == kaart.breed() * kaart.diep(), "the five kinds of column, and no other");
+        helper.assertTrue(NlTekst.has("gui.guhs.snuffeldorp.zee"), "the friendly line of the sea");
+        helper.assertTrue(mis.isEmpty(), "the land map: " + mis);
+        helper.succeed();
+    }
+
+    /** Walkable land on this column or on one of its eight neighbours (island coordinates). */
+    private static boolean naast(Landkaart kaart, double x, double z) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                char c = kaart.vak((int) Math.floor(x) + dx, (int) Math.floor(z) + dz);
+                if (c == Landkaart.LAND || c == Landkaart.DEK) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

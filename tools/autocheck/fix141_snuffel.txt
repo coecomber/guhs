@@ -1,0 +1,81 @@
+# Het Snuffeleiland, fix release 1.4.1 AutoCheck: the dog's keys top left under the objective line, the sea that puts a dog
+# back on land after three seconds, the pond that does not, a dog that stands in the pocket behind the roadblock, and
+# Meester Truffelneus' words about digging.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/fix141_snuffel.txt
+# (commands: see autocheck.txt; /guhs snuffel ... = feature/snuffel/SnuffelCommando, /guhs snuffeldorp ... = feature/snuffeldorp/DorpCommando)
+# World coordinates (the island's middle is 0, 0; the ground's top is y 64; the sea's top water block is y 62): the beach spot
+# -27.5 64 62.5, the open sea south of it -27.5 62 74.5, the pond -19.5 63 -35.5, the pocket behind the roadblock 0.5 64 -49.5.
+
+section setup: a choice
+/gamemode survival
+/time set noon
+wait 10
+/guhs snuffel wis
+/guhs snuffel kies golden goud b Snuffie
+
+section washed ashore: no keys while the waking scene plays, then the keys right under the objective line
+/guhs snuffel ga strand
+wait 120
+shot fix141_scene_zonder_toetsen gui
+wait 260
+clearchat
+shot fix141_toetsen_onder_doelregel gui
+
+section the sea: fine for a second and a half, back on the beach after three
+/tp @s -27.5 62 74.5 0 0
+wait 30
+shot fix141_zee_na_anderhalve_seconde gui
+wait 50
+shot fix141_zee_teruggezet gui
+/guhs snuffel zakken
+
+section the pond is the island's own water: a dog stays in it
+/tp @s -19.5 63.2 -35.5 0 0
+wait 90
+shot fix141_vijver_blijft gui
+/guhs snuffel zakken
+
+section a dog that stands in the pocket behind the roadblock is put in front of it
+/tp @s 0.5 64 -49.5 180 0
+wait 10
+shot fix141_achter_versperring_bevrijd gui
+/guhs snuffel zakken
+
+section lesson 1: the trainer on digging (page 4 of 4), the step's hint line, his reminder
+# (gui keep: without it AutoCheck closes a screen a server command opens. The first round of this script, the one look of
+#  the fix itself, ran without it: its two pictures of the talking screen showed the world, the rest was as meant.)
+/guhs snuffeldorp stap 4
+/guhs snuffeldorp ga trainer
+wait 20
+gui keep
+/guhs snuffeldorp praat trainer
+wait 20
+press Verder
+wait 5
+press Verder
+wait 5
+shot fix141_les1_pagina3 gui
+press Verder
+wait 5
+shot fix141_les1_graven gui
+gui close
+wait 10
+clearchat
+shot fix141_doelregel_les1 gui
+/guhs snuffeldorp praat trainer
+wait 20
+shot fix141_les1_hint gui
+gui close
+
+section the exam's HUD (top middle) next to the keys (top left)
+/guhs snuffeldorp stap 7
+/guhs snuffeldorp ga trainer
+wait 20
+/guhs snuffeldorp praat trainer
+wait 20
+gui close
+wait 5
+clearchat
+shot fix141_examen_hud_en_toetsen gui
+
+quit
