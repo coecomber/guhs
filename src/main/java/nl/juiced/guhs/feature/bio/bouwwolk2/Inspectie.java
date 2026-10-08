@@ -70,7 +70,7 @@ public final class Inspectie {
             meld.check(s != null && Guhs.id("bio_plek").equals(type), "structure " + naam + " is a guhs:bio_plek (" + type + ")");
             StructureSet set = sets.getValue(Guhs.id(naam));
             int spacing = set != null && set.placement() instanceof RandomSpreadStructurePlacement p ? p.spacing() : -1;
-            meld.check(spacing >= 8, "structure set " + naam + ": random_spread, spacing " + spacing + " (a lucht set keeps 8 or more)");
+            meld.check(spacing >= 2, "structure set " + naam + ": random_spread, spacing " + spacing + " (one per Wolkenweide: per_regio)"); // biomes3 fix-plaatsing: was "8 or more"
             meld.check(level.getStructureManager().get(Guhs.id(naam)).isPresent(), "template " + naam + " is loaded");
             boolean inKompas = SuperkompasItem.CATEGORIES.stream().anyMatch(c -> c.id().equals("wonderen") && c.structures().contains(naam));
             meld.check(inKompas, naam + " is in the Superkompas tab wonderen");

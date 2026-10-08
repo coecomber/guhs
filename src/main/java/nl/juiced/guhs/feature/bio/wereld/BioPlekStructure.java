@@ -147,7 +147,8 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
 
     /** Does this structure generate at all (test data only on a test server)? */
     public boolean doetMee() {
-        return !alleenTest || TEST_AAN;
+        // (biomes3 fix-plaatsing: with GUHS_BIO_LUCHT=0 no building in the air generates: the natural sky alone, to measure against)
+        return (!alleenTest || TEST_AAN) && !(soort == BioPlekken.Soort.LUCHT && Luchtruim.GEEN_GEBOUWEN);
     }
 
     /** The rotation that turns a template's north side to this direction. */

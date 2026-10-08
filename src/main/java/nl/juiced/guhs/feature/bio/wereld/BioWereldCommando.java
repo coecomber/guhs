@@ -502,6 +502,11 @@ public final class BioWereldCommando {
                 BlockPos van = lucht ? weide : dal;
                 if (van != null) {
                     String regel = plek(m, s.getSerializedName(), van.getX(), van.getZ(), 60).get(0);
+                    if (regel.contains(": none") && !lucht) {
+                        // biomes3 fix-plaatsing: a dal is 350-650 across now, and not every one has a tall fall or a large island:
+                        // the rare kinds are looked for among the neighbouring dals too
+                        regel = plek(m, s.getSerializedName(), van.getX(), van.getZ(), 170).get(0);
+                    }
                     plekken.add(regel);
                     meld.check(!regel.contains(": none"), regel);
                 }

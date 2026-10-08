@@ -69,7 +69,8 @@ public final class Luchtruim {
     private static volatile Map<BioPlekStructure, RandomSpreadStructurePlacement> plaatsingen = Map.of();
     private static volatile long seed;
     /** To measure what the buildings cost the sky: with GUHS_BIO_LUCHT=0 in the environment (or {@link #zonder}) no air is kept free at all. */
-    private static volatile boolean uit = "0".equals(System.getenv("GUHS_BIO_LUCHT"));
+    static final boolean GEEN_GEBOUWEN = "0".equals(System.getenv("GUHS_BIO_LUCHT"));
+    private static volatile boolean uit = GEEN_GEBOUWEN;
 
     /** For measurements only: keep no air free (true) or do (false). Models made before the call keep what they worked out. */
     public static void zonder(boolean geen) {
