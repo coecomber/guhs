@@ -167,7 +167,7 @@ public final class BioWereldCommando {
     }
 
     /** What a check found. */
-    public record Uitslag(int kolommen, int grond, int water, int lek, int vallen, int stromend, int eilandBlokken, String eerste) {
+    public record Uitslag(int kolommen, int grond, int water, int lek, int vallen, int stromend, int eilandBlokken, String eerste, String gebouwen) {
         public boolean goed() {
             return kolommen > 0 && grond == 0 && water == 0 && lek == 0;
         }
@@ -175,8 +175,24 @@ public final class BioWereldCommando {
         public String tekst() {
             return "check: " + kolommen + " columns of ours, ground wrong " + grond + ", water wrong " + water + ", water outside its bed " + lek
                     + ", fall columns " + vallen + ", flowing water blocks " + stromend + ", floating island blocks " + eilandBlokken
+                    + (gebouwen.isEmpty() ? "" : "; differences inside a building (not counted): " + gebouwen)
                     + (eerste.isEmpty() ? "" : " (first: " + eerste + ")");
         }
+    }
+
+    /**
+     * biomes3 merge: the structure whose piece holds this block, or null. A building may differ from the model inside its
+     * own pieces (dal_staptreden's rock cheek takes the outermost column of the upper river, a lift pad lies in the
+     * meadow's top layer, a jetty post stands in the lake): {@link #check} counts those apart, per structure, so that a
+     * healthy world reports 0 and every exception is named.
+     */
+    private static String gebouw(ServerLevel level, BlockPos p) {
+        var start = level.structureManager().getStructureWithPieceAt(p, h -> true);
+        if (!start.isValid()) {
+            return null;
+        }
+        var id = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getKey(start.getStructure());
+        return id == null ? "?" : id.getPath();
     }
 
     /** Generates the chunks around (x, z) and compares their blocks with the terrain model. */
@@ -184,6 +200,7 @@ public final class BioWereldCommando {
         BioModel m = model(level);
         int kolommen = 0, grond = 0, water = 0, lek = 0, vallen = 0, stromend = 0, eiland = 0;
         String eerste = "";
+        java.util.Map<String, Integer> inGebouw = new java.util.TreeMap<>(); // biomes3 merge: differences inside a structure piece, per structure
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         for (int cx = (x >> 4) - straal; cx <= (x >> 4) + straal; cx++) {
             for (int cz = (z >> 4) - straal; cz <= (z >> 4) + straal; cz++) {
@@ -200,8 +217,13 @@ public final class BioWereldCommando {
                     int px = (cx << 4) + (o & 15), pz = (cz << 4) + (o >> 4), h = k.hoogte[o], w = k.water[o];
                     BlockState onder = level.getBlockState(p.set(px, h, pz));
                     if (onder.isAir() || !onder.getFluidState().isEmpty()) {
-                        grond++;
-                        eerste = eerste.isEmpty() ? "ground " + px + " " + h + " " + pz + " is " + onder : eerste;
+                        String g = gebouw(level, p);
+                        if (g != null) {
+                            inGebouw.merge(g + " ground", 1, Integer::sum);
+                        } else {
+                            grond++;
+                            eerste = eerste.isEmpty() ? "ground " + px + " " + h + " " + pz + " is " + onder : eerste;
+                        }
                     }
                     boolean valBuur = false;
                     for (Direction d : Direction.Plane.HORIZONTAL) {
@@ -212,8 +234,13 @@ public final class BioWereldCommando {
                         for (int y = h + 1; y <= w; y++) {
                             var f = level.getFluidState(p.set(px, y, pz));
                             if (!f.is(Fluids.WATER) || !f.isSource()) {
-                                water++;
-                                eerste = eerste.isEmpty() ? "water " + px + " " + y + " " + pz + " is " + level.getBlockState(p) : eerste;
+                                String g = gebouw(level, p);
+                                if (g != null) {
+                                    inGebouw.merge(g + " water", 1, Integer::sum);
+                                } else {
+                                    water++;
+                                    eerste = eerste.isEmpty() ? "water " + px + " " + y + " " + pz + " is " + level.getBlockState(p) : eerste;
+                                }
                             }
                         }
                         if ((k.vlag[o] & Kaart.VAL) != 0) {
@@ -227,8 +254,13 @@ public final class BioWereldCommando {
                             if (valBuur || k.soort[o] == Kaart.WEIDE && WolkTerrein.water(m, px, y, pz)) { // biomes3 wereld-wolk: island ponds and falls
                                 stromend++;
                             } else {
-                                lek++;
-                                eerste = eerste.isEmpty() ? "leak " + px + " " + y + " " + pz : eerste;
+                                String g = gebouw(level, p);
+                                if (g != null) {
+                                    inGebouw.merge(g + " water above", 1, Integer::sum);
+                                } else {
+                                    lek++;
+                                    eerste = eerste.isEmpty() ? "leak " + px + " " + y + " " + pz : eerste;
+                                }
                             }
                         }
                     }
@@ -237,8 +269,13 @@ public final class BioWereldCommando {
                         for (int s = 0; s < sp.length; s += 2) {
                             for (int y = sp[s]; y <= sp[s + 1]; y++) {
                                 if (level.getBlockState(p.set(px, y, pz)).isAir()) {
-                                    grond++;
-                                    eerste = eerste.isEmpty() ? "island " + px + " " + y + " " + pz + " is air" : eerste;
+                                    String g = gebouw(level, p);
+                                    if (g != null) {
+                                        inGebouw.merge(g + " island", 1, Integer::sum);
+                                    } else {
+                                        grond++;
+                                        eerste = eerste.isEmpty() ? "island " + px + " " + y + " " + pz + " is air" : eerste;
+                                    }
                                 } else {
                                     eiland++;
                                 }
@@ -248,7 +285,9 @@ public final class BioWereldCommando {
                 }
             }
         }
-        return new Uitslag(kolommen, grond, water, lek, vallen, stromend, eiland, eerste);
+        StringBuilder gebouwen = new StringBuilder();
+        inGebouw.forEach((naam, n) -> gebouwen.append(gebouwen.length() == 0 ? "" : ", ").append(naam).append(' ').append(n));
+        return new Uitslag(kolommen, grond, water, lek, vallen, stromend, eiland, eerste, gebouwen.toString());
     }
 
     static String tijd(ServerLevel level, int x, int z, int straal) {
@@ -263,7 +302,7 @@ public final class BioWereldCommando {
             }
         }
         double ms = (System.nanoTime() - t0) / 1e6;
-        return String.format(Locale.ROOT, "tijd %d %d: %d chunks (%d of ours) in %.0f ms, %.1f ms per chunk", x, z, n, onze, ms, ms / n);
+        return String.format(Locale.ROOT, "tijd %d %d: %d chunks (%d of ours) in %.0f ms, %.1f ms per chunk; %s", x, z, n, onze, ms, ms / n, BioModel.teller());
     }
 
     /** Keeps the chunks around loaded and ticking (so the water of the falls starts to flow); undo with /forceload remove all. */

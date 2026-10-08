@@ -72,6 +72,24 @@ public final class BioModel {
     public final long zaad;
     private final ThreadLocal<Kaart[]> kaarten = ThreadLocal.withInitial(() -> new Kaart[CACHE]);
     private static final int CACHE = 256;
+    // biomes3 merge: behind the per-thread cache one cache for all threads. World generation asks for a chunk's map from
+    // many worker threads (structure starts, biomes, density, the surface, each feature), and each used to work it out
+    // again: 25-35 times per generated chunk. A Kaart is never changed after bouw() returns and bouw() is a pure function
+    // of the model and the chunk, so sharing is safe; two threads that miss at the same moment both build the same map
+    // and one of them wins (no lock is held while building: bouw() asks for neighbouring maps itself).
+    // Bound: at most GEDEELD_MAX maps (about 8 KB each when not empty), then the whole cache is dropped.
+    // GUHS_BIO_KAART_CACHE=0 in the environment switches it off (to measure).
+    private static final boolean GEDEELD = !"0".equals(System.getenv("GUHS_BIO_KAART_CACHE"));
+    private static final int GEDEELD_MAX = 2048;
+    private final ConcurrentHashMap<Long, Kaart> gedeeld = new ConcurrentHashMap<>();
+    private static final java.util.concurrent.atomic.LongAdder GEBOUWD = new java.util.concurrent.atomic.LongAdder(),
+            GEDEELD_RAAK = new java.util.concurrent.atomic.LongAdder(), BOUW_NS = new java.util.concurrent.atomic.LongAdder();
+
+    /** How many chunk maps were worked out and how many came from the shared cache since the last call (resets the count). */
+    public static String teller() {
+        long n = GEBOUWD.sumThenReset(), raak = GEDEELD_RAAK.sumThenReset(), ns = BOUW_NS.sumThenReset();
+        return String.format(java.util.Locale.ROOT, "chunk maps: %d worked out in %.0f ms, %d taken from the shared cache (%s)", n, ns / 1e6, raak, GEDEELD ? "on" : "OFF");
+    }
     /** Per-cell results of the biome classes (lake islands, floating islands, clouds), keyed by {@link #sleutel}. */
     final Map<Long, Object> cellen = new ConcurrentHashMap<>();
 
@@ -194,7 +212,32 @@ public final class BioModel {
         if (k != null && k.cx == cx && k.cz == cz) {
             return k;
         }
-        return cache[slot] = bouw(cx, cz);
+        if (!GEDEELD) {
+            return cache[slot] = getimed(cx, cz);
+        }
+        long sleutel = (long) cx << 32 | cz & 0xFFFFFFFFL;
+        k = gedeeld.get(sleutel);
+        if (k == null) {
+            k = getimed(cx, cz);
+            if (gedeeld.size() >= GEDEELD_MAX) {
+                gedeeld.clear();
+            }
+            gedeeld.put(sleutel, k);
+        } else {
+            GEDEELD_RAAK.increment();
+        }
+        return cache[slot] = k;
+    }
+
+    private Kaart getimed(int cx, int cz) {
+        long t0 = System.nanoTime();
+        Kaart k = bouw(cx, cz);
+        if (!k.leeg) {
+            // (a map that asks for its neighbours' maps counts their time too: the total is an upper bound)
+            GEBOUWD.increment();
+            BOUW_NS.add(System.nanoTime() - t0);
+        }
+        return k;
     }
 
     private Kaart bouw(int cx, int cz) {

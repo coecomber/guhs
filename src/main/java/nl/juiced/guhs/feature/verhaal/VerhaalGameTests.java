@@ -243,6 +243,12 @@ public class VerhaalGameTests {
                         voeren.merge(g.getId(), erbij, Integer::sum);
                     }
                 });
+                // (biomes3 merge) these two guhs of one owner are each other's only possible favourite friend. Favorietjes looks every
+                // 100 ticks at (tickCount + entity id): when that tick falls in these first 20, the guh is "blij" and its hearts
+                // count x1.5 ("2 / 6", "3 / 4"). Which entity ids the two get depends on the tests that ran before, so the test
+                // failed in some batches and never in others. Not what this assert is about: nobody is blij here.
+                gewoon.getPersistentData().remove(Band.BLIJ_TOT);
+                mint.getPersistentData().remove(Band.BLIJ_TOT);
                 BandEvents.voer(gewoon, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 BandEvents.voer(mint, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 int h1 = voeren.getOrDefault(gewoon.getId(), 0), h2 = voeren.getOrDefault(mint.getId(), 0);

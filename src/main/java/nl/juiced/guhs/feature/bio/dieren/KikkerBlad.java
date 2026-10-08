@@ -164,7 +164,7 @@ public final class KikkerBlad {
 
         OpBladGoal(KikkerguhEntity k) {
             this.k = k;
-            setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+            setFlags(EnumSet.of(Flag.MOVE)); // biomes3 merge: not JUMP (it never uses the jump control). With JUMP the kikkerguh's FloatGoal (priority 0, flag JUMP) stopped this goal for as long as the frog floated: a hop that fell short left it bobbing beside its leaf until a random stroll brought it ashore (the flaky bioDierenKikkerOpBlad)
         }
 
         @Override

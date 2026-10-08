@@ -27,7 +27,7 @@ from features import bio_wereld_eiland as eil
 
 M = 5
 HOOGTE = {"wolkenhoeder_hut": 46, "sterrenwacht_ruine": 66, "luchtballon_haven": 30}
-GROND = "minecraft:pink_wool"
+GROND = "guhs:wolkenweide_gras"   # biomes3 merge: the island builder's top since wereld-wolk (was pink wool; mats, plants and basins look for it)
 WATER = "minecraft:water"
 BED = "guhs:parelmoer"
 KUDDE = 4                       # the fold's herd (Java: Kudde.AANTAL)
@@ -77,7 +77,7 @@ def boom(s, rnd, x, y, z, groot=False, bloesem=False):
 
 def hekken(s, b):
     """Fences join their neighbours (fence, gate, any full block), as the game would on placement."""
-    los = {"minecraft:water", "minecraft:air", "guhs:roze_gras", "guhs:roze_guhbloem", "guhs:wolkenstroom", "guhs:bleek_hangmos",
+    los = {"minecraft:water", "minecraft:air", "guhs:roze_gras", "guhs:pluisgras", "guhs:roze_guhbloem", "guhs:wolkenstroom", "guhs:bleek_hangmos",
            "guhs:guh_kristal_cluster", b["lamp"], b["bank"], b["bed"], b["deur"], "guhs:mini_luchtballon", "guhs:lampion_roze",
            "guhs:guh_telescoop", "guhs:guh_stoel", "guhs:sterrenlantaarn", "guhs:sterrenwacht_ruine_sterrenkaart", "minecraft:hay_block"}
     for (x, y, z), (naam, props, _) in list(s.blocks.items()):
@@ -183,7 +183,7 @@ def planten(s, rnd, tops, vrij, kans_gras=0.2, kans_bloem=0.05, veldjes=0):
         elif q < kans_bloem:
             s.set(x, y + 1, z, "guhs:roze_guhbloem")
         elif q < kans_bloem + kans_gras:
-            s.set(x, y + 1, z, "guhs:roze_gras")
+            s.set(x, y + 1, z, "guhs:pluisgras")   # biomes3 merge: the Wolkenweide's own fluff (wereld-wolk plants no roze_gras)
 
 
 def npc(h, s, x, y, z, kind, yaw, plek=None):

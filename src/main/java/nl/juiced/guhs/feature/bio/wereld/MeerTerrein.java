@@ -503,7 +503,7 @@ public final class MeerTerrein {
             return GEEN_MEER;
         }
         double ew = DalTerrein.rafel(m, x, z, e);
-        if (DalTerrein.terras(ew, 0) >= 0) {
+        if (ew < DalTerrein.TRAP[3]) { // biomes3 merge: was DalTerrein.terras(ew, 0) >= 0, which the valley's rewrite dropped; the lake still starts where the frayed e reaches TRAP[3] (DalTerrein.vorm: "e + RAFEL * det >= TRAP[3]")
             return GEEN_MEER;
         }
         List<Eiland> eilanden = bij(m, x, z, x + 1, z + 1);
