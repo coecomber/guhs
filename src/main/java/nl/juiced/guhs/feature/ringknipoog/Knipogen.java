@@ -56,8 +56,9 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModSounds;
 
 /**
- * bbq2 (ring-knipogen): the seven "knipogen" of the Knabbelring and Super Guhrio: winks at the older stories, each a
- * mini-cutscene of five to ten seconds with a guest from that story (texts: tools/features/ring_knipogen.py). A player
+ * bbq2 (ring-knipogen): the "knipogen" of the Knabbelring and Super Guhrio: seven winks at the older stories, each a
+ * mini-cutscene of five to ten seconds with a guest from that story, and an eighth that is a joke of its own (texts:
+ * tools/features/ring_knipogen.py). A player
  * sees each wink ONCE, whether or not they did the old story; "seen" is the engine's own mark of the scene
  * ({@link Cutscenes#gezien}), so a wink that was cut off (a logout) simply comes again the next time its moment comes.
  * A wink never holds the story up: when it was seen already, or cannot be shown now, the story goes on without it.
@@ -79,6 +80,10 @@ import nl.juiced.guhs.registry.ModSounds;
  *       at the feast of chapter 6. Right after the feast scene ({@code Thuis.seconde}).</li>
  *   <li>{@link #KLOON} at the gate of the mine (ring-h3): Professor Knabbelkloon proposes two rings, Guhdalf says no. Right
  *       after the chapter's narrator card, on the forecourt ({@link #kloon}).</li>
+ *   <li>{@link #SJEKEL} in Guhvendel (ring-h2), the user's own joke, no guest: the fellowship has just been formed when
+ *       Pippguh has a question about the ring; the rest says "Huh?", nobody says anything for a moment, and everything goes
+ *       on as if nothing happened. Right after the scene of the fellowship ({@code Guhvendel.meldAan} plays both through
+ *       {@link #speel}).</li>
  * </ol>
  * Every scene is written in the frame of the scene it belongs to (its anchor block and the copy's rotation), in template
  * coordinates; the self-check of tools/features/ring_knipogen.py reads this file and proves against the templates that no
@@ -99,7 +104,7 @@ public final class Knipogen {
     /** A wink with something of the story right behind it waits until the player may be touched again, at most this long. */
     public static final int STRAKS_MAX = 200;
 
-    public static Cutscene BALTOGUH, KISTJE, SPIEGEL, STITCH, BORIS, SJOKKEL, KLOON;
+    public static Cutscene BALTOGUH, KISTJE, SPIEGEL, STITCH, BORIS, SJOKKEL, KLOON, SJEKEL;
 
     /**
      * (tests) winks also play for a player whose game cannot show a cutscene. Without it such a player (the mock players of
@@ -130,11 +135,12 @@ public final class Knipogen {
         BORIS = boris();
         SJOKKEL = sjokkel();
         KLOON = kloonScene();
+        SJEKEL = sjekel();
     }
 
-    /** The seven winks, in the order of the class text. */
+    /** The eight winks, in the order of the class text. */
     public static List<Cutscene> alle() {
-        return List.of(BALTOGUH, KISTJE, SPIEGEL, STITCH, BORIS, SJOKKEL, KLOON);
+        return List.of(BALTOGUH, KISTJE, SPIEGEL, STITCH, BORIS, SJOKKEL, KLOON, SJEKEL);
     }
 
     // =====================================================================================================================
@@ -385,7 +391,7 @@ public final class Knipogen {
     static Plek plek(ServerPlayer p, Cutscene knipoog) {
         ServerLevel level = p.level();
         BlockPos hier = p.blockPosition();
-        if (knipoog == BALTOGUH) {
+        if (knipoog == BALTOGUH || knipoog == SJEKEL) {
             Guhvendel.Oord o = Guhvendel.oord(level, hier);
             return o == null ? null : new Plek(o.anker(), o.draai());
         }
@@ -855,5 +861,79 @@ public final class Knipogen {
                 .geluid(158, () -> SoundEvents.BOOK_PAGE_TURN, 1.0f, 0.8f)
                 .zwart(180, 190)
                 .registreer();
+    }
+
+    // =====================================================================================================================
+    // 8. Pippguh and the half sjekel
+    // =====================================================================================================================
+
+    /**
+     * The council ring of Guhvendel as the scene of the fellowship leaves it (anchor: the stone table, RingH2Scenes' frame;
+     * everybody stands where that scene put them, the ring still lies on the stone, they are still cheering). Pippguh
+     * steps up to the stone, weighs the ring with his eyes and says the line the user gave word for word (the text
+     * "sjekel": never shorten or reword it; "Liekguh" is only a name, nobody of that name appears). The rest of the
+     * fellowship: "Huh?". Nobody says anything for a second. And then the cheering simply goes on.
+     */
+    private static Cutscene sjekel() {
+        final String pipp = "pippguh", rest = "rest", speler = Cutscene.SPELER;
+        String[] genootschap = {"guhrond", "guhdalf", "araguh", "leguhlas", "gimguh", "boromika", "merrie", "sam"};
+        Vec3 bijSteen = new Vec3(1.5, 0, 1.8), opSteen = new Vec3(0.5, 1.3, 0.5), bijPipp = new Vec3(1.5, 0.9, 1.8);
+        Cutscene.Builder s = Cutscene.maak("ringknipoog_sjekel").duur(180).bij("ring_h2").kaart("ring_h2").verbergEcht(14)
+                .npc("guhrond", Kind.GUHROND, new Vec3(0.5, 0.5, -4.5), 0)
+                .npc("guhdalf", Kind.GUHDALF, new Vec3(1.2, 0, -1.6), 20)
+                .npc("araguh", Kind.ARAGUH, new Vec3(-2.0, 0, -1.3), 300)
+                .npc("leguhlas", Kind.LEGUHLAS, new Vec3(5.5, 0.5, -0.5), 90)
+                .npc("gimguh", Kind.GIMGUH, new Vec3(5.5, 0.5, 1.5), 90)
+                .npc("boromika", Kind.BOROMIKA, new Vec3(3.5, 0.5, 4.5), 135)
+                .npc("merrie", Kind.MERRIE, new Vec3(2.6, 0, 2.2), 150)
+                .npc(pipp, Kind.PIPPGUH, new Vec3(1.6, 0, 3.1), 180)
+                .guh("sam", GuhVariant.SAM_GUH, new Vec3(-2.2, 0, 1.7), 200)
+                .speler(new Vec3(-0.9, 0, 0.5), 270)
+                .acteur("ring", () -> EntityType.ITEM_DISPLAY, new Vec3(0.5, 1.3, 0.5), 0, ding("guhs:knabbelring", 1.4f))
+                .zwart(-8, 4);
+        // 1. they are still cheering; Pippguh has seen something shiny
+        s.camera(0, new Vec3(-0.5, 1.45, 2.9), new Vec3(1.0, 1.1, 1.1))
+                .camera(122, new Vec3(-0.3, 1.4, 2.7), new Vec3(1.0, 1.1, 1.1))
+                .animatie(speler, 2, "zwaai")
+                .loop(pipp, 2, 14, bijSteen).kijk(pipp, 15, opSteen)
+                .animatie(pipp, 16, "kijk");
+        for (String wie : genootschap) {
+            s.animatie(wie, 1, "juich");
+        }
+        // 2. the line, word for word; one by one they stop cheering
+        s.zeg(14, pipp, "sjekel", 108)
+                .animatie(pipp, 30, "praat")
+                .animatie(pipp, 58, "grijp")
+                .animatie(pipp, 72, "praat")
+                .animatie(pipp, 98, "schud")
+                .animatie(pipp, 120, "")
+                .animatie("merrie", 26, "").kijk("merrie", 26, bijPipp)
+                .kijk(speler, 40, bijPipp);
+        for (String wie : genootschap) {
+            if (!wie.equals("merrie")) {
+                s.animatie(wie, 44, "").kijk(wie, 46, bijPipp);
+            }
+        }
+        // 3. "Huh?"
+        s.cameraKnip(124, new Vec3(0.9, 2.0, 4.4), new Vec3(0.6, 0.9, -0.8))
+                .camera(166, new Vec3(0.9, 2.0, 4.4), new Vec3(0.6, 0.9, -0.8))
+                .zeg(126, rest, "huh", 24)
+                .geluid(126, () -> ModSounds.GUH_AMBIENT.get(), 0.9f, 1.35f);
+        for (String wie : genootschap) {
+            s.animatie(wie, 126, "kijk");
+        }
+        // 4. a beat of silence (ticks 150 - 166: nothing at all), and then everything goes on as if nothing happened
+        s.camera(178, new Vec3(0.9, 2.3, 4.6), new Vec3(0.6, 0.9, -0.8))
+                .geluid(166, () -> ModSounds.GUH_HAPPY.get(), 1.0f, 1.0f)
+                .animatie("guhrond", 166, "wijs")
+                .kijk(pipp, 166, new Vec3(0.5, 1.3, -4.5))
+                .animatie(pipp, 168, "juich")
+                .animatie(speler, 168, "zwaai");
+        for (String wie : genootschap) {
+            if (!wie.equals("guhrond")) {
+                s.animatie(wie, 166, "juich").kijk(wie, 166, new Vec3(0.5, 1.3, -4.5));
+            }
+        }
+        return s.zwart(170, 180).registreer();
     }
 }

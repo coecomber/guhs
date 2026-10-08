@@ -320,8 +320,9 @@ TEKST = {
     ("systemen/knabbelbuizen", "Laat er een paar liggen"): (
         "Leave a few behind",
         "A Filter Piece that noms from a chest or the Bank Guh can leave a number of each thing behind: 'Leave behind: 16' means at least "
-        "sixteen of them always stay. Handy when you want to feed your machines without your stock running out. Nomming out of a Bank Guh "
-        "only works when the bank has its upgrade; putting things in is always allowed."),
+        "sixteen of them always stay. Handy when you want to feed your machines without your stock running out. Only a Filter Piece can "
+        "nom out of a Bank Guh, and only when the bank has the Bottomless Nibble Belly: a plain Direction Piece or a hopper never gets "
+        "anything out of it. Putting things in is always allowed."),
     ("systemen/knabbelbuizen", "Op slot met redstone"): (
         "Locked with redstone",
         "A redstone signal locks a Direction Piece or a Filter Piece, just like a hopper. That way a sensor can switch the tube on and "
@@ -465,7 +466,9 @@ TEKST = {
         "Pick Up and Drop Off",
         "Dropping off goes into the chest on the side where the post stands, just like a hopper. So put the post on top of a furnace to "
         "fill it. Picking up works like a hopper under the chest: at a furnace you get what is ready, and the fuel stays. It works with "
-        "everything that can hold things: chests, barrels, guh machines, the Bank Guh and the Nom Hatch. Just like the machines, a post "
+        "everything that can hold things: chests, barrels, guh machines, the Bank Guh and the Nom Hatch. A post never picks anything up "
+        "out of a Bank Guh (dropping off there works): only a Filter Piece on a Nibble Tube can take things out of your bank. Just like "
+        "the machines, a post "
         "does not work at a chest in a protected building or in the chore area of somebody else's guh house: then the Delivery Guhling "
         "skips it."),
     ("systemen/bezorgguhtje", "Nooit iets kwijt"): (
@@ -507,10 +510,11 @@ TEKST = {
         "of that thing. Pick the bank up and put it down somewhere else, and its hatches find it again by themselves."),
     ("systemen/bank-guh-buikje", "Buizen en trechters"): (
         "Tubes and hoppers",
-        "Nibble Tubes and hoppers can always put things INTO a Bank Guh (up to 256 per kind). Taking things OUT only works at a bank with "
-        "the Bottomless Nibble Belly. Mind you: such a bank then gives everything: a hopper underneath, a plain Direction Piece or a "
-        "pick-up Stop Post empties it completely. Only a Filter Piece with 'leave behind' keeps something back for you. A Stock Meter can "
-        "always count what is inside."),
+        "Nibble Tubes and hoppers can always put things INTO a Bank Guh (up to 256 per kind). Taking things OUT works in one way only: "
+        "with a Filter Piece on a Nibble Tube, against a bank with the Bottomless Nibble Belly. On the Filter Piece you set what may come "
+        "out, and with 'leave behind' how many of each thing have to stay in the bank. A hopper underneath, a plain Direction Piece or a "
+        "pick-up Stop Post never gets anything out of a Bank Guh, not even out of a bank with the belly: so your stock never runs empty "
+        "by accident. A Stock Meter can always count what is inside."),
     ("systemen/bank-guh-buikje", "Klusjes"): (
         "Chores",
         "When a Bank Guh stands in the chore area of a guh house, the residents sort everything into it. When the bank is full of "

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +21,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.vadskracht.Snoet;
 import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
 import nl.juiced.guhs.feature.vadskracht.VadsKracht;
@@ -28,7 +32,8 @@ import nl.juiced.guhs.feature.vadskracht.VadsVerbruiker;
 /**
  * The block entity of a Filterstuk: a {@link BuisStukBlockEntity} that needs vadskracht ({@link VadsGetallen#BUISFILTER}),
  * takes a mouthful at a time ({@link Buizen#HAP_FILTER}) and has a list ({@link BuisFilter}): what it takes out of the
- * block behind it, and what it lets through when others send past it. Without vadskracht it is shut. Its face
+ * block behind it, and what it lets through when others send past it. Without vadskracht it is shut. It is also the ONLY
+ * thing that takes items out of a Bank Guh (an upgraded one; {@link #kist}). Its face
  * ({@link FilterBlock#SNOET}) is asleep without vadskracht, surprised when it cannot get rid of its items, happy otherwise.
  */
 public class FilterBlockEntity extends BuisStukBlockEntity implements VadsVerbruiker, MenuProvider {
@@ -83,6 +88,27 @@ public class FilterBlockEntity extends BuisStukBlockEntity implements VadsVerbru
     @Override
     public boolean isGericht() {
         return filter.isGericht();
+    }
+
+    /**
+     * The user's decision B6: a Bank Guh gives items to a Filterstuk only (never to a hopper, a plain piece or a pick-up
+     * Haltepaaltje), and only when the bank is upgraded. So behind a bank this piece does not ask for the item capability
+     * (nothing comes out of that) but for the bank's own door for filters; what it takes there is its list
+     * ({@link #magEruit}) and what it leaves is "laat liggen" ({@link #bewaar}).
+     */
+    @Nullable
+    @Override
+    protected ResourceHandler<ItemResource> kist(BlockPos achter, Direction voor) {
+        BankGuhBlockEntity bank = bankAchter();
+        return bank != null ? bank.filterkant() : super.kist(achter, voor);
+    }
+
+    /** Behind a Bank Guh without its Bodemloos Knabbelmaagje even a Filterstuk gets nothing. */
+    @Nullable
+    @Override
+    protected String krijgtNiks() {
+        BankGuhBlockEntity bank = bankAchter();
+        return bank != null && !bank.isUpgraded() ? "bank_maagje" : null;
     }
 
     @Override

@@ -45,10 +45,11 @@ WIKI = {
          "hem opgepakt) of als de bank vol zit met dat ding. Pak je de bank op en zet je hem ergens anders neer, dan vinden zijn "
          "luikjes hem vanzelf terug."),
         ("bank-guh-buikje", "Buizen en trechters",
-         f"Knabbelbuizen en trechters kunnen altijd spullen IN een Bank Guh stoppen (tot {CAP} per soort). Er spullen UIT halen kan alleen "
-         "bij een bank met het Bodemloos Knabbelmaagje. Let op: zo'n bank geeft dan ook alles: een trechter eronder, een gewoon "
-         "Richtingstuk of een ophaal-Haltepaaltje haalt hem helemaal leeg. Alleen een Filterstuk met 'laat liggen' houdt iets voor je "
-         "achter. Een Voorraadmeter kan altijd tellen wat erin zit."),
+         f"Knabbelbuizen en trechters kunnen altijd spullen IN een Bank Guh stoppen (tot {CAP} per soort). Er spullen UIT halen kan maar "
+         "op één manier: met een Filterstuk aan een Knabbelbuis, tegen een bank met het Bodemloos Knabbelmaagje. Op het Filterstuk zet je "
+         "wat eruit mag, en met 'laat liggen' hoeveel er van elk ding in de bank moet blijven. Een trechter eronder, een gewoon "
+         "Richtingstuk of een ophaal-Haltepaaltje krijgt nooit iets uit een Bank Guh, ook niet uit een bank met het maagje: je voorraad "
+         "loopt dus nooit per ongeluk leeg. Een Voorraadmeter kan altijd tellen wat erin zit."),
         ("bank-guh-buikje", "Klusjes",
          "Staat er een Bank Guh in de klus-area van een Guhhuisje, dan sorteren de bewoners alles erin. Zit de bank vol met iets, dan "
          "gaat de rest naar een tweede Bank Guh in de klus-area, anders naar de kist, anders naar de deur. Bij Opruimen blijft in de "

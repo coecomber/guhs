@@ -30,6 +30,7 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.Features;
 import nl.juiced.guhs.feature.vadskracht.Kisten;
 import nl.juiced.guhs.network.ModNetworking;
@@ -47,6 +48,9 @@ import nl.juiced.guhs.network.ModNetworking;
  * what came back are saved, and fall out when the piece is broken.
  * <p>
  * A piece with a tube behind it never bites: it is a one-way valve that others send through ({@link #laatDoor}).
+ * <p>
+ * A Bank Guh gives nothing to this piece (nor to a hopper or a pick-up Haltepaaltje): only a {@link FilterBlockEntity}
+ * takes items out of a bank, through {@link #kist}; a plain piece behind a bank says so ({@link #krijgtNiks}).
  */
 public class BuisStukBlockEntity extends BlockEntity {
     /**
@@ -130,6 +134,31 @@ public class BuisStukBlockEntity extends BlockEntity {
     protected void voorTick(ServerLevel level) {
     }
 
+    /**
+     * The item handler of the block behind the piece: its item capability at the side the piece touches. (The Filterstuk
+     * at a Bank Guh: the bank's own door for filters, the only thing a bank gives anything through.)
+     */
+    @Nullable
+    protected ResourceHandler<ItemResource> kist(BlockPos achter, Direction voor) {
+        return level == null ? null : Kisten.van(level, achter, voor);
+    }
+
+    /**
+     * The piece stands behind something it will never get anything out of, however long it waits: the line that says why
+     * (lang gui.guhs.techbuis.stand.*), or null. A plain piece behind a Bank Guh: a bank gives to a Filterstuk only.
+     */
+    @Nullable
+    protected String krijgtNiks() {
+        return bankAchter() != null ? "bank_filter" : null;
+    }
+
+    /** The Bank Guh behind the piece, or null. */
+    @Nullable
+    protected final BankGuhBlockEntity bankAchter() {
+        BlockPos achter = worldPosition.relative(voor().getOpposite());
+        return level != null && level.isLoaded(achter) && level.getBlockEntity(achter) instanceof BankGuhBlockEntity bank ? bank : null;
+    }
+
     // =====================================================================================================================
     // state
     // =====================================================================================================================
@@ -181,7 +210,7 @@ public class BuisStukBlockEntity extends BlockEntity {
             return null;
         }
         BlockState state = level.getBlockState(achter);
-        return state.isAir() || Buizen.isBuis(state) || Buizen.isStuk(state) ? null : Kisten.van(level, achter, voor);
+        return state.isAir() || Buizen.isBuis(state) || Buizen.isStuk(state) ? null : kist(achter, voor);
     }
 
     /** Where this piece can send to, nearest first (looked up again when the tubes changed). */
@@ -309,9 +338,9 @@ public class BuisStukBlockEntity extends BlockEntity {
             verstopt = weg == 0;
             return weg > 0;
         }
-        // 3. out of what is behind the piece
+        // 3. out of what is behind the piece (never out of a Bank Guh that gives this piece nothing: no walk over its slots)
         ResourceHandler<ItemResource> bron = bron();
-        if (bron == null) {
+        if (bron == null || krijgtNiks() != null) {
             verstopt = false;
             return false;
         }
@@ -478,6 +507,10 @@ public class BuisStukBlockEntity extends BlockEntity {
         if (verstopt || !terug.isEmpty()) {
             return Component.translatable(k + "verstopt").withStyle(ChatFormatting.GOLD);
         }
+        String niks = krijgtNiks();
+        if (niks != null) {
+            return Component.translatable(k + niks).withStyle(ChatFormatting.GOLD);
+        }
         int plekken = routes().size();
         if (plekken == 0) {
             return Component.translatable(k + "geen_plek").withStyle(ChatFormatting.GOLD);
@@ -493,7 +526,7 @@ public class BuisStukBlockEntity extends BlockEntity {
     /** Everything about the piece (the hover readout of the Filterstuk adds its list). */
     public void regels(Consumer<Component> regels) {
         regels.accept(stand());
-        if (level != null && bron() != null) {
+        if (level != null && bron() != null && krijgtNiks() == null) {
             BlockPos achter = worldPosition.relative(voor().getOpposite());
             regels.accept(Component.translatable("gui.guhs.techbuis.stand.hapt_uit", level.getBlockState(achter).getBlock().getName())
                     .withStyle(ChatFormatting.GRAY));

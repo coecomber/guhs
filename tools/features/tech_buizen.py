@@ -669,6 +669,9 @@ TEXTS = {
     G + "stand.plekken": "Stuurt spullen naar %s plek(ken)",
     G + "stand.onderweg": "Stuurt spullen naar %s plek(ken); er rollen er nu %s door de buis",
     G + "stand.hapt_uit": "Hapt uit: %s",
+    # behind a Bank Guh: a bank gives to a Filterstuk only, and only with its upgrade
+    G + "stand.bank_filter": "Uit een Bank Guh hapt alleen een Filterstuk, njeg",
+    G + "stand.bank_maagje": "Deze Bank Guh geeft pas iets met het Bodemloos Knabbelmaagje",
     G + "filter.alles": "Laat alles door (het lijstje is leeg)",
     G + "filter.alleen": "Laat alleen door: %s",
     G + "filter.behalve": "Laat alles door behalve: %s",

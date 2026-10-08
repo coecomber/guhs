@@ -55,7 +55,8 @@ import nl.juiced.guhs.storage.BankStorage;
  * good. It stays with the bank when the bank is picked up (block entity + the item component {@link #BANK_OPGEVOERD} +
  * the loot table). Only the uitvinder-guh gives one (tech-quests): there is no recipe.</li>
  * <li><b>The item capability of the Bank Guh</b> ({@link nl.juiced.guhs.storage.BankHandler}): pipes, hoppers and chore
- * guhs can always put in (up to the cap), taking out only works on an upgraded bank.</li>
+ * guhs can always put in (up to the cap); nothing ever comes OUT through it. The one way out for a machine is a Filterstuk
+ * behind an upgraded bank ({@code BankGuhBlockEntity.filterkant()}): what it takes and how much stays is its list.</li>
  * <li><b>The Hapluikje</b> ({@link #HAPLUIKJE}): a little guh machine on vadskracht that swallows whatever is put in (by
  * hand, hopper, Knabbelbuis, chore guh, Bezorgguhtje) and it lands in the ONE bank it is linked to, however far away, in
  * any dimension. Deposit only. Linked with the {@link #BANK_SLEUTEL}: click the bank, then the luikje (one bank per

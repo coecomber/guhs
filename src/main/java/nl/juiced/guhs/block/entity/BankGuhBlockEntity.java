@@ -17,6 +17,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.block.BankGuhBlock;
 import nl.juiced.guhs.feature.Features;
 import nl.juiced.guhs.feature.bank.BankAdressen;
@@ -48,7 +50,7 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh_sitting.idle");
 
     private final BankStorage storage = new BankStorage(this::veranderd);
-    /** What pipes, hoppers and Hapluikjes get (loaned things never go in). */
+    /** What pipes, hoppers and Hapluikjes get: a way IN only (loaned things never go in). */
     private final BankHandler handler = new BankHandler(storage, soort -> soort.test(Features::isLoaned));
     /** This bank's id; given the first time the bank stands in a world (banks from before bbq2 get one then). */
     @Nullable
@@ -65,9 +67,17 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
         return storage;
     }
 
-    /** The item capability: in up to the cap, out only when upgraded. The same object every time. */
+    /** The item capability: in up to the cap, and nothing ever comes out of it. The same object every time. */
     public BankHandler handler() {
         return handler;
+    }
+
+    /**
+     * The one way OUT for a machine: what a Filterstuk behind this bank gets instead of the capability. In as
+     * {@link #handler}, out only when this bank is upgraded (what is taken and how much stays is the Filterstuk's list).
+     */
+    public ResourceHandler<ItemResource> filterkant() {
+        return handler.filterkant();
     }
 
     public boolean isUpgraded() {

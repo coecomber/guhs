@@ -161,8 +161,8 @@ def ftb(fq):
         na=["tech_quests_centrale_vind"], eind=(("guhs:kaas_knabbels", 24),))
     q("tech_quests_maagje", "Een maag zonder bodem",
       "Klik met het &dBodemloos Knabbelmaagje&r op je neergezette Bank Guh: de grens van 256 per soort is weg, voor altijd (ook als je hem "
-      "oppakt). En pas dan mogen buizen er ook spullen &euit&r halen. &cLet op:&r een trechter onder je bank, een gewoon Richtingstuk of een "
-      "ophaal-Haltepaaltje haalt hem dan helemaal leeg. Alleen een Filterstuk met &elaat liggen&r houdt iets voor je achter.",
+      "oppakt). En pas dan mag een &dFilterstuk&r er ook spullen &euit&r happen: jij zet erop wat het mag pakken en hoeveel er moet blijven "
+      "liggen. Een trechter onder je bank, een gewoon Richtingstuk of een ophaal-Haltepaaltje krijgt nooit iets uit je bank.",
       "guhs:bank_upgrade", [adv("bank_opgevoerd")], deps=["tech_quests_techniek_8"], shape="rsquare")
     q("tech_quests_kaarten", "Drie receptkaarten",
       "Een receptkaart leg je linksboven in het werkbankrooster bij het recept: hij &eblijft liggen&r, dus één kaart is genoeg voor altijd. "
@@ -226,9 +226,9 @@ def ftb(fq):
       "tekort, dan springt hij bij. Hij houdt zijn lading als je hem oppakt.",
       "guhs:knabbelbatterij", [item("guhs:knabbelbatterij")], deps=["tech_quests_sensor"])
     q("tech_quests_magazijn", "De bank als magazijn",
-      "Met het Bodemloos Knabbelmaagje (van de Uitvinder-guh) mogen buizen ook uit je Bank Guh halen. Zet er een Filterstuk tegen met "
-      "&elaat liggen 64&r: de bank voert je ovens en molens, maar houdt altijd een stapel voor jou achter. Pas op: een trechter of een "
-      "gewoon Richtingstuk eet een opgevoerde bank helemaal leeg.",
+      "Met het Bodemloos Knabbelmaagje (van de Uitvinder-guh) mag een Filterstuk ook uit je Bank Guh happen. Zet er een Filterstuk tegen, "
+      "kies wat eruit mag en zet &elaat liggen 64&r: de bank voert je ovens en molens, maar houdt altijd een stapel voor jou achter. Een "
+      "trechter of een gewoon Richtingstuk krijgt niks uit je bank: dat kan alleen het Filterstuk.",
       "guhs:bank_guh", VINK, deps=["tech_quests_hapluikje"], shape="circle")
 
     # === Project 3: Saus uit de kraan (Saus) ================================================================================

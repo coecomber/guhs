@@ -56,7 +56,8 @@ WIKI = {
         (P, "Laat er een paar liggen",
          "Een Filterstuk dat uit een kist of de Bank Guh hapt kan van elk ding een aantal laten liggen: 'Laat liggen: 16' betekent "
          "dat er altijd minstens zestien van achterblijven. Handig als je je machines wilt voeren zonder dat je voorraad opraakt. "
-         "Uit een Bank Guh happen kan alleen als de bank zijn upgrade heeft; erin stoppen mag altijd."),
+         "Uit een Bank Guh happen kan alleen een Filterstuk, en alleen als de bank het Bodemloos Knabbelmaagje heeft: een gewoon "
+         "Richtingstuk of een trechter krijgt er nooit iets uit. Erin stoppen mag altijd."),
         (P, "Op slot met redstone",
          "Een redstonesignaal zet een Richtingstuk of Filterstuk op slot, net als bij een trechter. Zo laat je een sensor de buis "
          "aan- en uitzetten. Guhdraad telt niet mee: dat geeft ook een redstonesignaal, maar daar zit je Filterstuk gewoon aan vast."),

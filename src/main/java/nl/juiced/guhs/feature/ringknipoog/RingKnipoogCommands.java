@@ -11,7 +11,7 @@ import nl.juiced.guhs.feature.verhaal.Cutscenes;
  * bbq2 (ring-knipogen): the op commands {@code /guhs ringknipoog ...} (dev checks and the AutoCheck script
  * tools/autocheck/bbq2_ring-knipogen.txt; plain literal texts: nobody but an op ever reads them).
  * <pre>
- * /guhs ringknipoog stand      which of the seven winks the player has seen
+ * /guhs ringknipoog stand      which of the eight winks the player has seen
  * /guhs ringknipoog vergeet    the player has seen none of them (they all play again when their moment comes)
  * /guhs ringknipoog speel &lt;naam&gt;   plays a wink now, seen or not, in the frame of the building the player stands in
  *                              (baltoguh: Guhvendel, kloon: the mine, spiegel: the tree city, stitch: a Ringenbakker within

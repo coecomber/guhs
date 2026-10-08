@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -22,7 +21,8 @@ import nl.juiced.guhs.storage.BankStorage;
 /**
  * The Bodemloos Knabbelmaagje ({@code guhs:bank_upgrade}): the one upgrade of the Bank Guh. Used on a placed bank it takes away
  * the cap of {@link BankStorage#CAP} per kind of item, for good: the upgrade stays with that bank, also when the bank is
- * picked up and put down again. One item per bank; a bank that has it already does not eat a second one. The uitvinder-guh
+ * picked up and put down again. An upgraded bank is also the only bank a Filterstuk can take items out of (nothing else
+ * ever takes from a bank: {@link nl.juiced.guhs.storage.BankHandler}). One item per bank; a bank that has it already does not eat a second one. The uitvinder-guh
  * of the Oude Guhrad-centrale gives it (tech-quests); there is no recipe.
  */
 public class BankUpgradeItem extends Item {
@@ -48,12 +48,6 @@ public class BankUpgradeItem extends Item {
             level.playSound(null, p, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5f, 1.4f);
         }
         player.sendOverlayMessage(Component.translatable("item.guhs.bank_upgrade.gelukt"));
-        // from now on pipes and hoppers may also take things OUT, and all but the Filterstuk take everything: say so now,
-        // in the chat (it stays readable), and louder when a hopper already hangs under this bank
-        player.sendSystemMessage(Component.translatable("item.guhs.bank_upgrade.uit").withStyle(ChatFormatting.GOLD));
-        if (player.level().getBlockState(p.below()).is(Blocks.HOPPER)) {
-            player.sendSystemMessage(Component.translatable("item.guhs.bank_upgrade.trechter").withStyle(ChatFormatting.RED));
-        }
         BankFeature.opgevoerd(player);
         return true;
     }
@@ -67,6 +61,7 @@ public class BankUpgradeItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore", BankStorage.CAP).withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore.blijft").withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore.uit").withStyle(ChatFormatting.GOLD));
+        // (B6: an upgraded bank gives to a Filterstuk only; hoppers and plain tubes never get anything out of a bank)
+        tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore.uit").withStyle(ChatFormatting.GRAY));
     }
 }
