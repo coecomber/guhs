@@ -21,5 +21,6 @@
     "use_expansion_hack": false,
     "start_jigsaw_name": "guhs:dal_theehuisje_midden"
   },
-  "plek": "rots"
+  "plek": "rots",
+  "per_regio": 1.0
 }

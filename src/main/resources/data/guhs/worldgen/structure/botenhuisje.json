@@ -21,5 +21,7 @@
     "use_expansion_hack": false,
     "start_jigsaw_name": "guhs:botenhuisje_midden"
   },
-  "plek": "meer_oever"
+  "plek": "meer_oever",
+  "per_regio": 1.0,
+  "twee_vanaf": 135
 }

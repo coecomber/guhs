@@ -22,5 +22,6 @@
     "start_jigsaw_name": "guhs:weebhuisje_midden"
   },
   "plek": "terras",
-  "vlak": 8
+  "vlak": 8,
+  "per_regio": 1.0
 }

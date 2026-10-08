@@ -21,5 +21,6 @@
     "use_expansion_hack": false,
     "start_jigsaw_name": "guhs:picknickeilandje_midden"
   },
-  "plek": "meer_boom"
+  "plek": "meer_boom",
+  "per_regio": 0.42
 }
