@@ -1,6 +1,7 @@
 {
   "attributes": {
     "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:bloesemmeertje.ambient",
       "mood": {
         "sound": "minecraft:ambient.cave",
         "tick_delay": 6000,
@@ -10,9 +11,9 @@
     },
     "minecraft:audio/background_music": {
       "default": {
-        "sound": "minecraft:music.overworld.cherry_grove",
-        "min_delay": 12000,
-        "max_delay": 24000
+        "sound": "guhs:bloesemmeertje.muziek",
+        "min_delay": 6000,
+        "max_delay": 14000
       },
       "creative": {
         "sound": "minecraft:music.creative",
@@ -20,17 +21,25 @@
         "max_delay": 24000
       }
     },
-    "minecraft:visual/fog_color": "#ffe9f3",
-    "minecraft:visual/sky_color": "#f4c4e2",
-    "minecraft:visual/water_fog_color": "#2f9fa8"
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:cherry_leaves"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#fdeef6",
+    "minecraft:visual/sky_color": "#ebcbec",
+    "minecraft:visual/water_fog_color": "#3cb8be"
   },
-  "has_precipitation": false,
+  "has_precipitation": true,
   "temperature": 0.8,
   "downfall": 0.5,
   "effects": {
-    "water_color": "#5fd3d6",
-    "foliage_color": "#f7b6cb",
-    "grass_color": "#f7b6cb"
+    "water_color": "#4fd6d2",
+    "foliage_color": "#f9bfd6",
+    "grass_color": "#f9bfd6"
   },
   "creature_spawn_probability": 0.3,
   "spawners": {
@@ -65,7 +74,7 @@
     [],
     [],
     [
-      "guhs:bloesemmeertje_bloesemboom"
+      "guhs:bloesemmeertje_leven"
     ],
     []
   ]

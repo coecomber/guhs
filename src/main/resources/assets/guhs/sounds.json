@@ -2735,6 +2735,36 @@
     ],
     "subtitle": "subtitles.guhs.waterval.ruis"
   },
+  "bloesemmeertje.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/muziek1",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "guhs:bloesemmeertje/muziek2",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:music.overworld.cherry_grove",
+        "type": "event",
+        "weight": 3
+      }
+    ]
+  },
+  "bloesemmeertje.ambient": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/ambient",
+        "stream": true,
+        "volume": 0.55
+      }
+    ]
+  },
   "koi.hap": {
     "sounds": [
       "guhs:bio_dieren/koi_hap1",
