@@ -194,7 +194,8 @@ public class BioWereldDalGameTests {
      */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void bioWereldDalWatervalRegel(GameTestHelper helper) {
-        for (double[][] soort : new double[][][]{DalTerrein.ZACHT, DalTerrein.STEVIG, DalTerrein.HOOG}) {
+        for (double[][] soort : new double[][][]{DalTerrein.ZACHT, DalTerrein.STEVIG, DalTerrein.HOOG, DalTerrein.ZACHT_RAND, DalTerrein.STEVIG_RAND,
+                DalTerrein.HOOG_RAND}) { // biomes3 fix-dal: the rim has its own three
             double vorige = 0;
             for (int i = 0; i < soort.length; i++) {
                 int stap = (int) (soort[i][1] - vorige);
@@ -207,10 +208,10 @@ public class BioWereldDalGameTests {
                 boolean groot = voet != null && voet.groot();
                 boolean moet = stap >= nl.juiced.guhs.feature.bio.blokkenwolk.Waterval.GROOT;
                 helper.assertTrue(groot == moet, "a drop of " + stap + (moet ? " gets" : " gets no") + " foam: " + voet);
-                if (soort == DalTerrein.ZACHT) {
+                if (soort == DalTerrein.ZACHT || soort == DalTerrein.ZACHT_RAND) {
                     helper.assertTrue(!groot, "a gentle cascade has no foam (drop " + stap + ")");
                 }
-                if (soort == DalTerrein.HOOG) {
+                if (soort == DalTerrein.HOOG || soort == DalTerrein.HOOG_RAND) {
                     helper.assertTrue(groot, "every step of the tall waterfall has foam (drop " + stap + ")");
                 }
             }
