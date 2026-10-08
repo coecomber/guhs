@@ -291,6 +291,7 @@ public final class Finale {
         if (!Ring.aanZet(p, lijn, 5) || !lijn.vlag(p, GEFRITUURD)) {
             return;
         }
+        Thuis.warm(p);                                        // (1.4.1: home is loaded by the time they get there)
         if (berg == null) {
             if (Duwtje.mag(p)) {
                 Thuis.breng(p);

@@ -153,7 +153,8 @@ TEKSTEN = {
     # the end
     "quest.guhs.ringh6.stukje": "Je krijgt je eigen stukje gefrituurde Knabbelring. Bewaren mag. Opeten ook.",
     "quest.guhs.ringh6.thuis": "De Rookguhs zetten je zachtjes neer in de Guhmensie. Daar wordt al gezongen: loop naar het feest!",
-    "quest.guhs.ringh6.thuis.ver": "Het feest is in de Knabbelgouw, bij de grote barbecueput. Het Superkompas wijst de weg (Mijn verhaal).",
+    "quest.guhs.ringh6.thuis.ver": "Het feest wacht op je in de Knabbelgouw: het kamp van Guhdalf bij de grote barbecueput in de Guhmensie, waar je "
+                                   "verhaal begon. Ga erheen (het Superkompas wijst de weg: Mijn verhaal). Zodra je daar op de grond staat, begint het feest.",
     "quest.guhs.ringh6.feest.klaar": "Wat een feest. En vanaf nu is er elke dag eentje, in de Knabbelgouw.",
     "gui.guhs.ringh6.doel.thuis": "Het feest in de Knabbelgouw",
 }

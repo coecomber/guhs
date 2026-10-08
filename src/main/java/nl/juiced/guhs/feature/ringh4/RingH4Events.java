@@ -38,6 +38,8 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
  *   <li>Guhladriel's blessing: nobody takes fall damage in the tree city (stairs around trunks, rope bridges, flets 25
  *       blocks up: DESIGN_130 0, nothing new hurts a player).</li>
  *   <li>Nobody gets out of a sailing elf boat; whoever logs out in one stands on the jetty again.</li>
+ *   <li>1.4.1, for every player near a tree city (whatever their story): a city that was generated before gets its steps out
+ *       of the sauce ({@link Uitstap}).</li>
  * </ul>
  */
 public final class RingH4Events {
@@ -49,8 +51,14 @@ public final class RingH4Events {
 
     @SubscribeEvent
     public static void onTick(PlayerTickEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer p && (p.tickCount + p.getId()) % 20 == 0) {
+        if (!(event.getEntity() instanceof ServerPlayer p)) {
+            return;
+        }
+        if ((p.tickCount + p.getId()) % 20 == 0) {
             tik(p, false);
+        }
+        if ((p.tickCount + p.getId()) % Uitstap.CHECK_TICKS == 11) {
+            Uitstap.rond(p);                                  // (1.4.1: a city from before gets its steps out of the sauce)
         }
     }
 

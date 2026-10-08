@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -433,7 +434,7 @@ public final class RingH6GameTests {
         helper.assertTrue(level.getBlockState(plek.below()).blocksMotion() && !level.getBlockState(plek).blocksMotion() && plek.closerThan(kamp, 30),
                 "the feast stands on open ground nearby: " + plek);
         BlockPos land = Thuis.landing(level, kamp);
-        helper.assertTrue(level.getBlockState(land.below()).blocksMotion() && !level.getBlockState(land).blocksMotion(), "a landing spot to stand on: " + land);
+        helper.assertTrue(land != null && Thuis.staan(level, land), "a landing spot to stand on: " + land);
         helper.assertTrue(Berg.STRUCTUUR.equals(Ring.STRUCTUREN.get(5)), "(ring-kern's name of the mountain)");
         Thuis.testLevel = level;
         Thuis.testPlek = kamp;
@@ -455,6 +456,245 @@ public final class RingH6GameTests {
                 "the Rookguhs put the player down next to their Gouw: " + bij + " / " + gouw);
         weg(helper, p);
         helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // 1.4.1: home in chunks that are not loaded, a saved spot that is no place to stand, a death before the feast
+    // =====================================================================================================================
+
+    /**
+     * A column {@code dx, dz} chunks from this test whose chunk is NOT loaded (the test world is flat: bedrock, dirt, grass),
+     * at the height a player stands on there. That height is read from a neighbour chunk four chunks further on, which this
+     * loads; the column's own chunk stays unloaded.
+     */
+    private static BlockPos ver(GameTestHelper helper, int dx, int dz) {
+        ServerLevel level = helper.getLevel();
+        BlockPos nul = helper.absolutePos(BlockPos.ZERO);
+        int cx = (nul.getX() >> 4) + dx, cz = (nul.getZ() >> 4) + dz;
+        for (int i = 0; i < 40 && geladenRond(level, cx, cz); i++) {
+            cx += dx < 0 ? -5 : 5;
+        }
+        helper.assertTrue(!geladenRond(level, cx, cz), "(the test needs chunks nobody loaded around " + cx + ", " + cz + ")");
+        int ref = cx + (dx < 0 ? -4 : 4);
+        level.getChunk(ref, cz);
+        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (ref << 4) + 8, (cz << 4) + 8);
+        helper.assertTrue(y > level.getMinY() + 1, "(the test world has ground: " + y + ")");
+        helper.assertTrue(!geladenRond(level, cx, cz), "(reading the height next door loaded nothing here)");
+        return new BlockPos((cx << 4) + 8, y, (cz << 4) + 8);
+    }
+
+    private static boolean geladenRond(ServerLevel level, int cx, int cz) {
+        for (int x = cx - 1; x <= cx + 1; x++) {
+            for (int z = cz - 1; z <= cz + 1; z++) {
+                if (level.hasChunk(x, z)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Chapter 1 wrote down that this player's Gouw (Guhdalf's block) is here, in the level of the feast. */
+    private static void zetGouw(ServerPlayer p, ServerLevel level, BlockPos gouw) {
+        CompoundTag saved = GuhQuests.saved(p);
+        saved.putLong("guhs_ringh1_thuis", gouw.asLong());
+        saved.putString("guhs_ringh1_thuis_dim", level.dimension().identifier().toString());
+    }
+
+    /** As a respawn does: a new player entity that only has what the old one's saved data holds. */
+    private static ServerPlayer herboren(GameTestHelper helper, ServerPlayer oud, Vec3 waar) {
+        ServerPlayer nieuw = GuhMockPlayer.of(helper);
+        nieuw.setGameMode(GameType.SURVIVAL);
+        nieuw.getInventory().clearContent();
+        nieuw.getPersistentData().put("PlayerPersisted", GuhQuests.saved(oud).copy());
+        nieuw.snapTo(waar.x, waar.y, waar.z);
+        nieuw.setOnGround(true);
+        return nieuw;
+    }
+
+    /**
+     * 1.4.1 (A): the Rookguhs fly a player home while the chunks of home are not loaded (the player is still in the
+     * Guhbarbecuether). 1.4.0 read the height of such a column as the bottom of the world and put the player there. Now the
+     * chunks are loaded first, the spot has ground under it, the player stands on it and nothing hurts them while they arrive.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis")
+    public static void ringh6LandingInOngeladenChunk(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "rand");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        try {
+            opStap(p, 5);
+            lijn.vlag(p, Finale.GEFRITUURD, true);
+            BlockPos gouw = ver(helper, 40, 40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            helper.assertTrue(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gouw.getX() + 4, gouw.getZ()) == level.getMinY(),
+                    "(what 1.4.0 read: the height of an unloaded column is the bottom of the world)");
+            p.fallDistance = 30;
+            Thuis.breng(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(lijn.stap(p) == 6 && thuis != null, "the flight ends in step 6 with a saved home: " + thuis);
+            helper.assertTrue(level.hasChunk(gouw.getX() >> 4, gouw.getZ() >> 4), "the chunks of home were loaded to choose the spot");
+            helper.assertTrue(Thuis.staan(level, thuis) && level.getBlockState(thuis.below()).blocksMotion(), "home has solid ground under it: " + thuis);
+            helper.assertTrue(thuis.getY() == gouw.getY() && thuis.getY() > level.getMinY(), "on the surface, not at the bottom of the world: " + thuis);
+            double dx = thuis.getX() - gouw.getX(), dz = thuis.getZ() - gouw.getZ();
+            helper.assertTrue(dx * dx + dz * dz >= 4 && dx * dx + dz * dz <= 2.0 * Thuis.ZOEK * Thuis.ZOEK, "a few steps from Guhdalf: " + thuis + " / " + gouw);
+            helper.assertTrue(p.position().distanceTo(Vec3.atBottomCenterOf(thuis)) < 0.01 && p.fallDistance == 0, "the player stands exactly there: " + p.position());
+            helper.assertTrue(Thuis.netGeland(p) && geweigerd(p, level.damageSources().fall()) && geweigerd(p, level.damageSources().inWall())
+                    && geweigerd(p, level.damageSources().lava()), "nothing hurts a player who is just put down");
+            helper.assertTrue(!geweigerd(p, level.damageSources().genericKill()), "(/kill still works)");
+            Doel doel = lijn.doel(p);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()) && doel.dim() == level.dimension(), "the compass points at home");
+            // a spot whose own height says nothing (the middle of a structure, a spot saved at the bottom of the world)
+            BlockPos elders = ver(helper, -40, 40);
+            for (int y : new int[]{level.getMinY(), elders.getY() + 60}) {
+                BlockPos land = Thuis.landing(level, new BlockPos(elders.getX(), y, elders.getZ()));
+                helper.assertTrue(land != null && Thuis.staan(level, land) && land.getY() == elders.getY(), "from height " + y + ": the ground, " + land);
+            }
+            helper.assertTrue(!Thuis.staan(level, new BlockPos(elders.getX(), level.getMinY(), elders.getZ()))
+                    && !Thuis.staan(level, new BlockPos(elders.getX(), level.getMinY() - 5, elders.getZ()))
+                    && !Thuis.staan(level, elders.above(5)), "the bottom of the world, the void and thin air are no place to stand");
+        } finally {
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * 1.4.1 (B): a player whom 1.4.0 put down in the void has a saved home at the bottom of the world (the X and Z of their
+     * Guhdalf), and the feast asked for 40 blocks in 3D, so it never started. Now that spot is chosen again (wherever the
+     * player is), a saved spot in the air too once its chunk is loaded, and the feast starts when they stand near home.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis", timeoutTicks = 400)
+    public static void ringh6SlechtThuisWordtHersteld(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "kamp");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        boolean klaar = false;
+        try {
+            opStap(p, 6);
+            BlockPos gouw = ver(helper, 40, -40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            // exactly what 1.4.0 saved: Guhdalf's column, at the bottom of the world
+            BlockPos kapot = new BlockPos(gouw.getX(), level.getMinY(), gouw.getZ());
+            GuhQuests.saved(p).putLong(Thuis.THUIS, kapot.asLong());
+            helper.assertTrue(!Thuis.dichtbij(p, kapot), "(the player is far from home)");
+            Klim.seconde(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(thuis != null && !thuis.equals(kapot) && Thuis.staan(level, thuis) && thuis.getY() == gouw.getY(),
+                    "the saved spot is a place to stand again, on the ground at their Guhdalf: " + thuis);
+            helper.assertTrue(lijn.stap(p) == 6 && !Cutscenes.bezig(p), "far from home: no feast yet");
+            Doel doel = lijn.doel(p);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()), "the compass points at the repaired spot");
+            Klim.seconde(p);
+            helper.assertTrue(thuis.equals(Thuis.thuis(p)), "a good spot is left alone");
+            // a saved spot in thin air (no ground under it), its chunk loaded: chosen again
+            GuhQuests.saved(p).putLong(Thuis.THUIS, thuis.above(20).asLong());
+            Klim.seconde(p);
+            helper.assertTrue(thuis.equals(Thuis.thuis(p)), "a spot without ground is chosen again: " + Thuis.thuis(p));
+            // sideways is what counts: high above (or far under) home is at home; but the feast waits for the ground
+            p.snapTo(gouw.getX() + 2.5, gouw.getY() + 90, gouw.getZ() + 0.5);
+            helper.assertTrue(Thuis.dichtbij(p, kapot) && Thuis.dichtbij(p, thuis), "high above home counts as near (1.4.0 measured in 3D)");
+            p.setOnGround(false);
+            Klim.seconde(p);
+            helper.assertTrue(!Cutscenes.bezig(p), "in the air: the feast waits until they stand on the ground");
+            // the player walks to their Guhdalf, as the author did
+            p.snapTo(gouw.getX() + 2.5, gouw.getY(), gouw.getZ() + 0.5);
+            p.setOnGround(true);
+            Klim.seconde(p);
+            helper.assertTrue(Cutscenes.bezig(p), "at their Guhdalf, on the ground: the feast plays");
+            klaar = true;
+        } finally {
+            if (!klaar) {
+                weg(helper, p);
+            }
+        }
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            tik(p);
+            p.setOnGround(true);
+            if (++tel[0] % 5 == 0) {
+                Klim.seconde(p);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.klaar(p) && Cutscenes.gezien(p, "ringh6_feest"), "the feast was seen: the questline is done (step " + lijn.stap(p) + ")");
+            helper.assertTrue(Ring.klaar(p) && RingBeloning.gegeven(p), "ring-kern gave the rewards of the story");
+            if (Smikagol.maatje(p) != null) {
+                Smikagol.maatje(p).discard();
+            }
+            weg(helper, p);
+        });
+    }
+
+    /**
+     * 1.4.1 (B): between the flight and the feast a player dies, respawns far away (a new player entity: only the saved
+     * data comes along) and walks home later: the feast still starts when they stand near home on the ground.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis", timeoutTicks = 400)
+    public static void ringh6FeestNaEenDood(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "rand");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        ServerPlayer[] nieuw = {null};
+        boolean klaar = false;
+        try {
+            opStap(p, 5);
+            lijn.vlag(p, Finale.GEFRITUURD, true);
+            BlockPos gouw = ver(helper, -40, -40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            Thuis.breng(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(lijn.stap(p) == 6 && thuis != null && Thuis.staan(level, thuis), "flown home: " + thuis);
+            // they die before the feast (it waits a moment after the landing)
+            p.setHealth(0f);
+            for (int i = 0; i < 5; i++) {
+                Klim.seconde(p);
+            }
+            helper.assertTrue(lijn.stap(p) == 6 && !Cutscenes.bezig(p), "dead: nothing happens, the step stays");
+            // the respawn: a new entity at their bed, far from home
+            ServerPlayer q = herboren(helper, p, Vec3.atBottomCenterOf(berg.wereld("kamp")));
+            nieuw[0] = q;
+            helper.assertTrue(lijn.stap(q) == 6 && thuis.equals(Thuis.thuis(q)), "the step and the home came along with the saved data");
+            Klim.seconde(q);
+            helper.assertTrue(!Cutscenes.bezig(q) && lijn.stap(q) == 6, "far from home: no feast, the step waits");
+            Doel doel = lijn.doel(q);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()) && doel.dim() == level.dimension(), "the compass still points at home");
+            // later they walk home: 30 blocks from the spot is near enough
+            q.snapTo(thuis.getX() + 30.5, thuis.getY(), thuis.getZ() + 0.5);
+            q.setOnGround(true);
+            Klim.seconde(q);
+            helper.assertTrue(Cutscenes.bezig(q), "back near home, on the ground: the feast plays");
+            klaar = true;
+        } finally {
+            if (!klaar) {
+                weg(helper, nieuw[0] == null ? new ServerPlayer[]{p} : new ServerPlayer[]{p, nieuw[0]});
+            }
+        }
+        ServerPlayer q = nieuw[0];
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            tik(q);
+            q.setOnGround(true);
+            if (++tel[0] % 5 == 0) {
+                Klim.seconde(q);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.klaar(q) && Cutscenes.gezien(q, "ringh6_feest"), "the feast was seen: the questline is done (step " + lijn.stap(q) + ")");
+            if (Smikagol.maatje(q) != null) {
+                Smikagol.maatje(q).discard();
+            }
+            weg(helper, p, q);
+        });
     }
 
     private RingH6GameTests() {
