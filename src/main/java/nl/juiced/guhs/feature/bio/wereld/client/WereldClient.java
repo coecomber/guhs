@@ -5,6 +5,7 @@ import net.neoforged.bus.api.IEventBus;
 /** Client side of the biomes3 slice "wereld" (a stub until its slice fills it in). BioClient calls {@link #init}. */
 public final class WereldClient {
     public static void init(IEventBus modBus) {
+        MeerClient.init(modBus); // biomes3 wereld-meer
     }
 
     private WereldClient() {
