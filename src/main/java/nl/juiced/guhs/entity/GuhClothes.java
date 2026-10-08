@@ -418,6 +418,10 @@ public enum GuhClothes {
     // </px_parkour>
     // biomes3: the outfits of het weebhuisje (the slice bouw-dal adds them only between these two lines)
     // <bio_bouw_dal>
+    JAPAN_KIMONO(Slot.BODY, "outfit_suit"),
+    JAPAN_HACHIMAKI(Slot.HEAD, "outfit_spelen_zweetband"),
+    JAPAN_KATTENOORTJES(Slot.OREN, "outfit_oren_balto"),
+    JAPAN_STRIKJE(Slot.NECK, "outfit_bowtie"),
     // </bio_bouw_dal>
     ;
 

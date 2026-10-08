@@ -149,6 +149,9 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </px_parkour>
         // biomes3: one block per slice; a slice adds its kinds only between its own two lines
         // <bio_bouw_dal>
+        WEEB_EVIVADS(1.12f),
+        WEEB_NIELSVADS(1.2f),
+        DAL_THEEGUH(0.95f),
         // </bio_bouw_dal>
         // <bio_bouw_meer>
         // </bio_bouw_meer>
