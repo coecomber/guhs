@@ -21,5 +21,6 @@
     "use_expansion_hack": false,
     "start_jigsaw_name": "guhs:weebhuisje_midden"
   },
-  "plek": "terras"
+  "plek": "terras",
+  "vlak": 8
 }
