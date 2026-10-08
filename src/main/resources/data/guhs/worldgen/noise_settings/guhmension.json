@@ -4286,10 +4286,30 @@
             }
           },
           "then_run": {
-            "type": "minecraft:block",
-            "result_state": {
-              "Name": "guhs:gladde_knuffelsteen"
-            }
+            "type": "minecraft:sequence",
+            "sequence": [
+              {
+                "type": "minecraft:condition",
+                "if_true": {
+                  "type": "minecraft:noise_threshold",
+                  "noise": "guhs:klaterdal_detail",
+                  "min_threshold": 0.42,
+                  "max_threshold": 0.56
+                },
+                "then_run": {
+                  "type": "minecraft:block",
+                  "result_state": {
+                    "Name": "guhs:parelmoer"
+                  }
+                }
+              },
+              {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "guhs:gladde_knuffelsteen"
+                }
+              }
+            ]
           }
         }
       },

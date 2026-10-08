@@ -190,7 +190,8 @@ public class BioWereldGameTests {
                                 terras[k.terras[o]]++;
                                 boolean rv = (k.vlag[o] & Kaart.RIVIER) != 0;
                                 int top = DalTerrein.HOOGTE[k.terras[o]];
-                                if (!rv && h != top || rv && wat != Kaart.GEEN && (wat != top - 1 || h < top - 3)) {
+                                // biomes3 wereld-dal: a sculpted column (cascade, plunge pool, boulder, rounded face, natural step) has its own height
+                                if ((k.vlag[o] & DalTerrein.VORM) == 0 && (!rv && h != top || rv && wat != Kaart.GEEN && (wat != top - 1 || h < top - 3))) {
                                     fout++;
                                     eerste = eerste.isEmpty() ? "terrace height at " + x + " " + z : eerste;
                                 }
