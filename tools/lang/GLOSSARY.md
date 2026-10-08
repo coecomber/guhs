@@ -1807,3 +1807,43 @@ the chunk's source file lists the ones its lines use).
 | Het lantaarnfeest / De overtocht | The Lantern Feast / The Crossing | scene titles |
 | Naar het Snuffeleiland / Weer thuis / Naar huis | To Sniff Island / Home Again / Homeward | scene titles |
 | Het boompje groeit | The Little Tree Grows | scene title |
+
+### Added during the review of c63 - c67 (rules and words the translators settled)
+
+**Something that is *kwijt* is never "lost".** The villagers have *mislaid* their things, a thing *is gone* or *is
+missing*, somebody *can't find* it: *Ik ben mijn Guhstation kwijt* = *My Guhstation is gone*, *Ik ben de weg kwijt* = *I
+can't find the way*, *Een hond raakt hem nooit kwijt* = *A dog never misplaces it*. A storm *settles down* (it does not
+"die down"), *Jij leeft nog!* = *You're okay!*
+
+**A fever is hot, not glowing.** *Wiebel gloeit* = *Wobble is burning up*, *gloeit als een kacheltje* = *is as hot as a
+little stove*. The white wolf guh and the Sunfluff really *glow*.
+
+**The Guhstation has a guh snoot** (*guh-snoet*, section 24), a dog has a *snout* (*snuit*) and *paws*; only the player's
+own new *pootjes* are *pawsies*.
+
+**A rank takes an article in a sentence**: *Je bent nu %s* = *You are now a %s*, *Je bent officieel Snuffelpup* = *You are
+officially a Sniff Pup*. After a colon the rank line stands alone (*From now on you are officially: %s*).
+
+**Master Trufflenose never contracts** (*I am*, *you will*, *that is*): it is how the schoolmaster sounds. His one fixed
+exception is the line everybody uses, *There's no such thing as failing*.
+
+**In a list a requirement keeps its tick-box form**: *Still needed: The Lord of the Nibble Ring, Super Guhrio and Beat the
+Burnt Mika* (the same words as the lock quest's tick box).
+
+**Small words.** *Plof* (the pup flomps to the floor) = *Flomp*; *Fwiet* = *Fweet*; *TINGELING* = *DING-A-LING*; *een tien
+(met een griffel)* = *an A (with a gold star)*; *bolletjes* (the baker's) = *rolls*; *groeien als kool* = *growing like
+weeds*; the pug's *beige* coat is *Fawn*; *voor de gezelligheid* = *for fun*; in running text the sauce is *cheese frying
+sauce* (the item is *Cheese Frying Sauce*).
+
+| Dutch | English | note |
+|---|---|---|
+| hartjesraam | heart window | the Cloud Chapel, the Snuggleheart's scene |
+| prentenboek | picture book | 626-guh's, by the campfire |
+| verkoold guhbeeld | charred guh statue | where the stranger with the pointy hat stands |
+| Even pauze | Little Break | the memory card's menu |
+| Kies je hond | Choose Your Dog | the choice screen's title |
+| Alleen jij ziet het | Only You Can See It | quest title |
+| Het hele dorp geholpen | The Whole Village Helped | quest title |
+| Snuffelpup met diploma | Sniff Pup with a Diploma | quest title |
+| Eeuwige pauze / Dorstige knollen | Endless Recess / Thirsty Turnips | quest titles |
+| Een trui met één mouw / Beet of geen beet? | A Sweater with One Sleeve / To Bite or Not to Bite? | quest titles |
