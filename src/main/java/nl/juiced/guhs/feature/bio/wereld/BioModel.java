@@ -219,10 +219,14 @@ public final class BioModel {
         k = gedeeld.get(sleutel);
         if (k == null) {
             k = getimed(cx, cz);
-            if (gedeeld.size() >= GEDEELD_MAX) {
-                gedeeld.clear();
+            // (only maps that took a terrain pass are shared: "nothing of ours near here" costs 25 noise samples to find out
+            // again, and those chunks are nearly all of the world: they would push the real maps out)
+            if (k.duur) {
+                if (gedeeld.size() >= GEDEELD_MAX) {
+                    gedeeld.clear();
+                }
+                gedeeld.put(sleutel, k);
             }
-            gedeeld.put(sleutel, k);
         } else {
             GEDEELD_RAAK.increment();
         }
@@ -232,7 +236,7 @@ public final class BioModel {
     private Kaart getimed(int cx, int cz) {
         long t0 = System.nanoTime();
         Kaart k = bouw(cx, cz);
-        if (!k.leeg) {
+        if (k.duur) {
             // (a map that asks for its neighbours' maps counts their time too: the total is an upper bound)
             GEBOUWD.increment();
             BOUW_NS.add(System.nanoTime() - t0);
@@ -266,7 +270,11 @@ public final class BioModel {
         if (weide) {
             iets |= WolkTerrein.vul(this, k);
         }
-        return iets ? k : Kaart.leeg(cx, cz);
+        if (!iets) {
+            k = Kaart.leeg(cx, cz);
+        }
+        k.duur = true;
+        return k;
     }
 
     // --- single columns (structure spots, tests, commands) -------------------------------------------------------------------

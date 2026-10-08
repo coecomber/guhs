@@ -60,6 +60,8 @@ public final class Kaart {
     public final short[] vlag;
     public final int[][] spans;
     int cx, cz;
+    /** biomes3 merge: working this map out took a terrain pass (also when it came out empty): worth sharing between threads. */
+    boolean duur;
 
     private Kaart(boolean leeg) {
         this.leeg = leeg;

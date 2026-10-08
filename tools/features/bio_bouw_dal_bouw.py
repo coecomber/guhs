@@ -50,15 +50,20 @@ YAW = {"south": 0.0, "west": 90.0, "north": 180.0, "east": -90.0}
 # round (these spacings, the torii still at 4): 1 torii, 1 in the water, 3 lantern paths, 3 bridges, 3 tea houses, 2 zen
 # corners, 4 stairs, 2 weebhuisjes 590 blocks apart. One torii is thin for the valley's emblem: its spacing went to 3
 # (7 on average) after that count.
+# biomes3 merge: with the finished valley of wereld-dal (broad terraces, a plain right bank) a "terras" spot is in 2.3 % of
+# the chunks a set tries instead of 1.0 % (34 starts in 1461 tries, same valley, same command): 16 torii, 9 lantern paths,
+# 3 zen corners and SIX weebhuisjes stood in it. The four terras sets got 1.5 x their spacing (the square root of 2.3), which
+# brings back the averages above: 6 torii, 4 lantern paths, 2 zen corners, 1.2 weebhuisjes a valley.
+# dal_torii_water found no spot in this valley any more (0 in 729 tries; the river is 6-7 wide now): left as it was.
 PLAATSING = {
-    "dal_torii": ("terras", 3, 1, 21500601),
+    "dal_torii": ("terras", 5, 2, 21500601),
     "dal_torii_water": ("over_rivier", 3, 1, 21500611),
-    "dal_lantaarns": ("terras", 4, 2, 21500621),
+    "dal_lantaarns": ("terras", 6, 3, 21500621),
     "dal_boogbrug": ("over_rivier", 3, 1, 21500631),
     "dal_theehuisje": ("rots", 1, 0, 21500641),
-    "dal_zenhoek": ("terras", 6, 3, 21500651),
+    "dal_zenhoek": ("terras", 9, 4, 21500651),
     "dal_staptreden": ("waterval", 4, 2, 21500661),
-    "weebhuisje": ("terras", 7, 3, 21500671),
+    "weebhuisje": ("terras", 11, 5, 21500671),
 }
 WATER_BLIJFT = ("dal_theehuisje", "dal_boogbrug")
 
