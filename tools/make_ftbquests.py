@@ -27,7 +27,8 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 30   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje)
+CHAPTER_VERSION = 33   # (33 = biomes3: the three new biomes, their five sections in De Guhmensie, twenty Reisbureau destinations; bbq2 holds 32, so the merge with bbq2 / einde2 takes ONE number above every side again)
+# 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje)
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -97,7 +98,9 @@ BIOMES = [("guh_fields", "Guhvelden"), ("knabbel_crumbs", "Knabbelkruimels"), ("
           # guhpixel: the nine biomes of dimension/guhmension.json that were missing here (new ids only; the ten above keep theirs)
           ("bleekwoud", "Bleekwoud"), ("gatenkaasgrotten", "Gatenkaasgrotten"), ("kaasmoeras", "Kaasmoeras"), ("vadswoud", "Vadswoud"),
           ("diepe_guhzee", "Diepe Guhzee"), ("knuffeldal", "Knuffeldal"), ("guhpolder", "Guhpolder"),
-          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i")]
+          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i"),
+          # biomes3 (new ids only, appended)
+          ("bloesemmeertje", "Bloesemmeertje"), ("klaterdal", "Klaterdal"), ("wolkenweide", "Wolkenweide")]
 for i, (b, name) in enumerate(BIOMES):
     # (the first ten in one row at y=6 as always; the new ones in a second row, clear of the fish at 6,7 and the slime block at 8,5.5)
     q(f"biome_{b}", name, f"Bezoek het bioom &d{name}&r in de Guhmensie.", "minecraft:filled_map", [biome(b)],
@@ -466,7 +469,10 @@ MODULE_CHAPTER = {
     "guhpixel": "guhs_guhpixel", "guhpixel_lobby": "guhs_guhpixel", "guhpixel_grap1": "guhs_guhpixel", "guhpixel_grap2": "guhs_guhpixel",
     "guhpixel_among": "guhs_guhpixel", "guhpixel_guhkade": "guhs_guhpixel", "guhpixel_kantoor": "guhs_guhpixel",
     "guhpixel_bioscoop": "guhs_guhpixel", "guhpixel_reisbureau": "guhs_guhpixel", "guhpixel_parkour": "guhs_guhpixel",
+    # biomes3: no chapter of its own; its sections stand in SECTIONS["guhs_guhmensie"]
+    "bio_systemen": "guhs_guhmensie",
 }
+_BIO = MODULES["bio_systemen"]   # biomes3: which quest goes in which section (tools/features/bio_systemen.py)
 PREFIX_CHAPTER = [("maag", "guhs_maag"), ("heiligdom", "guhs_maag"), ("variant_", "guhs_basis"), ("emote", "guhs_basis"),
                   ("biome_", "guhs_guhmensie"), ("struct_", "guhs_guhmensie"), ("verstop", "guhs_minigames"), ("kermis", "guhs_minigames"),
                   ("onderwater", "guhs_onderwater"), ("diepzee", "guhs_onderwater"), ("guheinde", "guhs_guheinde"),
@@ -490,7 +496,8 @@ SECTIONS = {
         sec("emotes", "Emotes: kijk wat ik kan!", "guh:mint", module="emotes", upstream="tame"),
     ],
     "guhs_guhmensie": [
-        sec("portaal", "Het guhportaal", "wiki:guh_portal", keys=["portal_block", "guhmension", "pink_moon", "superkompas", "reisguhs"],
+        sec("portaal", "Het guhportaal", "wiki:guh_portal", keys=["portal_block", "guhmension", "pink_moon", "superkompas", "reisguhs"]
+            + _BIO.FTB_PORTAAL,   # biomes3: the Superkompas tab "Biomes"
             upstream="intro"),
         sec("biomen", "De biomen", "item:minecraft:filled_map", keys=[f"biome_{b}" for b, _ in BIOMES]),
         sec("wezens", "Wezens (en Mika's, njeg)", "geo:mika:mika",
@@ -502,6 +509,12 @@ SECTIONS = {
         sec("spullen", "Knabbels, kristal & vads", "item:guhs:guh_kristal",
             keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "schaar"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
+        # biomes3 (appended, so the sections above keep their places): the three new biomes, each after its biome quest
+        sec("bio_meer", "Het Bloesemmeertje", "npc:botenhuisje_visserguh", keys=_BIO.FTB_SECTIES["bio_meer"], upstream="biome_bloesemmeertje"),
+        sec("bio_dal", "Het Klaterdal", "guh:tanukiguh", keys=_BIO.FTB_SECTIES["bio_dal"], upstream="biome_klaterdal"),
+        sec("bio_weeb", "Het weebhuisje", "npc:weeb_evivads", keys=_BIO.FTB_SECTIES["bio_weeb"], upstream="biome_klaterdal"),
+        sec("bio_weide", "De Wolkenweide", "npc:wolkenhoeder", keys=_BIO.FTB_SECTIES["bio_weide"], upstream="biome_wolkenweide"),
+        sec("bio_lucht", "Hoog in de wolken", "npc:smidguh", keys=_BIO.FTB_SECTIES["bio_lucht"], upstream="biome_wolkenweide"),
     ],
     "guhs_minigames": [
         sec("beauty", "Guh Beauty Theater", "npc:showguh", module="beauty", upstream="intro"),

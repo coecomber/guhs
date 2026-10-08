@@ -39,8 +39,8 @@ import nl.juiced.guhs.feature.verhaal.NpcRollen;
 /**
  * Guhpixel slice "reisbureau": Reisbureau "De Vadsvakantie" (DESIGN_PX section 5; independent of the guhpixel dimension).
  * Send ONE of your guhs on a trip of 1, 2, 8 or 24 real hours ({@link Reizen}); it comes back with an ansichtkaart
- * ({@link KaartItem}) and a souvenir ({@link Souvenirs}: 16 common + 16 rare decoration blocks). This class owns the
- * registers: the Reisbalie ({@link BalieBlock}), the Reisstempel, seventeen ansichtkaarten, the souvenirs, the Gouden
+ * ({@link KaartItem}) and a souvenir ({@link Souvenirs}: 20 common + 20 rare decoration blocks). This class owns the
+ * registers: the Reisbalie ({@link BalieBlock}), the Reisstempel, twenty-one ansichtkaarten, the souvenirs, the Gouden
  * koffertje and the Koffertje, the sounds; and wires the Reisagent-guh ({@link Reisagent}), the walk-off
  * ({@link Uitzwaaien}), the sunglasses ({@link Zonnebril}), the Guhdex section ({@link ReisGids}) and the dev commands
  * ({@link ReisCommando}). Resources: tools/features/guhpixel_reisbureau*.py.
@@ -132,7 +132,7 @@ public final class ReisbureauSlice {
             vier = aanbod.get(i).minuten() == Bestemming.DUREN[i];
         }
         meld.check(vier, "today's offer: four trips, one per duration: " + aanbod);
-        meld.check(SOUVENIRS.size() == 34 && KAARTEN.size() == 17, "32 souvenirs + 2 koffertjes, 17 ansichtkaarten");
+        meld.check(SOUVENIRS.size() == 42 && KAARTEN.size() == 21, "40 souvenirs + 2 koffertjes, 21 ansichtkaarten");   // biomes3: 34 and 17 before
         var sets = server.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET);
         meld.check(sets.get(net.minecraft.resources.ResourceKey.create(Registries.STRUCTURE_SET, Guhs.id("reisbureau"))).isPresent()
                 && sets.get(net.minecraft.resources.ResourceKey.create(Registries.STRUCTURE_SET, Guhs.id("reisbureau_gegarandeerd"))).isPresent(),

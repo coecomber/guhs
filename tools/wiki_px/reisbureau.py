@@ -2,7 +2,7 @@
 The wiki part of the guhpixel slice "reisbureau": Reisbureau "De Vadsvakantie" (its own wiki section).
 
 body(w) returns the HTML, built with the helpers of tools/make_wiki.py (every text twice: English, Dutch; the English is
-hand-written here and follows tools/lang/GLOSSARY.md and tools/lang/glossary_px/reisbureau.md). The table of the sixteen
+hand-written here and follows tools/lang/GLOSSARY.md and tools/lang/glossary_px/reisbureau.md). The table of the twenty
 destinations is made from tools/features/guhpixel_reisbureau_tekst.py (Dutch) and the English names below.
 renders(r) adds the pictures docs/wiki/img/reisbureau_*.png and icon_reisbureau_*.png.
 """
@@ -28,6 +28,11 @@ EN = {
     "wereldreis": ("Around the World in 80 Naps", "Globe", "Spinning Golden Globe"),
     "cruise": ("Cruise on the Guh Sea", "Little Ship in a Bottle", "Life Buoy with Golden Anchor"),
     "balkonie": ("Staycation \"Balconia\"", "Painting \"Home Is Chonk Too\"", "\"Balconia\" Sign"),
+    # biomes3 (proposals of slice systemen; the English pass may refine them)
+    "bloesemmeertje": ("Hanami at Blossom Lake", "Blossom Twig in a Little Vase", "Little Koi Bowl"),
+    "klaterdal": ("Tea Break in the Babbling Vale", "Bamboo Clacker", "Mini Waterfall"),
+    "wolkenweide": ("Cloud Watching on the Cloud Meadow", "Little Cloud in a Jar", "Little Rainbow in a Jar"),
+    "japan": ("Japan, with Evivads and Nielsvads", "Little Bullet Train", "Golden Fuji Guh"),
 }
 DUUR = {60: ("1 hour", "1 uur"), 120: ("2 hours", "2 uur"), 480: ("8 hours", "8 uur"), 1440: ("24 hours", "24 uur")}
 
@@ -82,9 +87,9 @@ def body(w):
                   + w.recipe_card(f"{N}_balie"))
     reizen = h3("Trips", "Reizen") + \
         ul([("Every real day there are <b>four trips</b>, one of 1, 2, 8 and 24 hours, the same for everyone on the server. They come out of "
-             "sixteen destinations; within four days every destination of a duration has come by.",
-             "Elke echte dag zijn er <b>vier reizen</b>, één van 1, 2, 8 en 24 uur, voor iedereen op de server dezelfde. Ze komen uit zestien "
-             "bestemmingen; binnen vier dagen is elke bestemming van een duur een keer langs geweest."),
+             "twenty destinations; within five days every destination of a duration has come by.",
+             "Elke echte dag zijn er <b>vier reizen</b>, één van 1, 2, 8 en 24 uur, voor iedereen op de server dezelfde. Ze komen uit twintig "
+             "bestemmingen; binnen vijf dagen is elke bestemming van een duur een keer langs geweest."),
             ("The screen shows per trip how long it takes, what your guh will <b>probably</b> bring and what it brings <b>with luck</b>. "
              "Hover over a trip for the explanation. A green dot means you already have that souvenir.",
              "Het scherm laat per reis zien hoe lang hij duurt, wat je guh <b>waarschijnlijk</b> meeneemt en wat hij <b>met geluk</b> "
@@ -115,17 +120,17 @@ def body(w):
               [[DUUR[60], "5%"], [DUUR[120], "8%"], [DUUR[480], "15%"], [DUUR[1440], "30%"]]) + \
         p("A souvenir you already had becomes a <b>stamp on your travel pass</b> instead of a second item. Ten stamps: the Travel Agent "
           "Guh gives you a <b>Golden Suitcase</b>, and the pass starts again. The Guhdex tab \"Guhpixel & outings\" has the album with all "
-          "32 souvenirs and the 16 postcards.",
+          "40 souvenirs and the 20 postcards.",
           "Een souvenir dat je al had wordt een <b>stempel op je reispas</b> in plaats van een tweede exemplaar. Tien stempels: je krijgt "
           "van de Reisagent-guh een <b>Gouden koffertje</b>, en de pas begint opnieuw. In het Guhdex-tabblad \"Guhpixel & uitjes\" staat "
-          "het album met alle 32 souvenirs en de 16 ansichtkaarten.")
+          "het album met alle 40 souvenirs en de 20 ansichtkaarten.")
     rijen = []
     for (bid, minuten, _kans, naam, _plek, _uitleg, _kaart, souvenir, zeldzaam) in _bestemmingen():
         en = EN[bid]
         rijen.append([DUUR[minuten], (en[0], naam),
                       w.icon(f"{N}_souvenir_{bid}", en[1]) + " " + w.t(en[1], souvenir[0]),
                       w.icon(f"{N}_zeldzaam_{bid}", en[2]) + " " + w.t(en[2], zeldzaam[0])])
-    bestemmingen = h3("The sixteen destinations", "De zestien bestemmingen") + \
+    bestemmingen = h3("The twenty destinations", "De twintig bestemmingen") + \
         table([("Takes", "Duur"), ("Trip", "Reis"), ("Souvenir", "Souvenir"), ("Rare souvenir", "Zeldzaam souvenir")], rijen) + \
         p("All souvenirs are small decoration blocks. The paintings, the \"Balconia\" sign, the carnival mask and the life buoy hang on a "
           "wall; the rest stands on the floor. Some do a little something: the bathtub steams, the campfire burns (harmlessly), it snows "

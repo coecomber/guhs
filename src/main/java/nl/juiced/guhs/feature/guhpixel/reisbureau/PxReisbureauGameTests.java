@@ -140,15 +140,16 @@ public final class PxReisbureauGameTests {
                 helper.assertTrue(a.equals(Reizen.aanbod(seed, dag)), "the same for everyone: derived from the day and the seed");
                 gisteren = a.toArray(new Bestemming[0]);
             }
-            // every block of four days shows all four destinations of every duration, so the whole pool comes by
+            // every block of five days shows all five destinations of every duration, so the whole pool comes by (biomes3: four and four)
             Set<Bestemming> gezien = EnumSet.noneOf(Bestemming.class);
-            for (long dag = 20000; dag < 20008; dag++) {
+            for (long dag = 20000; dag < 20010; dag++) {
                 gezien.addAll(Reizen.aanbod(seed, dag));
             }
-            helper.assertTrue(gezien.containsAll(Bestemming.ECHT), "within eight days all sixteen destinations were offered, seed " + seed + ": " + gezien);
+            helper.assertTrue(gezien.containsAll(Bestemming.ECHT), "within ten days all twenty destinations were offered, seed " + seed + ": " + gezien);
         }
         helper.assertTrue(!Reizen.aanbod(1L, 20000).equals(Reizen.aanbod(1L, 20001)), "another day, another offer");
-        helper.assertTrue(Bestemming.ECHT.size() == 16 && Bestemming.metDuur(60).size() == 4 && Bestemming.metDuur(1440).size() == 4, "sixteen, four per duration");
+        helper.assertTrue(Bestemming.ECHT.size() == 20 && Bestemming.metDuur(60).size() == 5 && Bestemming.metDuur(120).size() == 5
+                && Bestemming.metDuur(480).size() == 5 && Bestemming.metDuur(1440).size() == 5, "twenty, five per duration (biomes3: sixteen and four before)");
         helper.assertTrue(Bestemming.LINGSESDIJK.kans() == 5 && Bestemming.GUHWAII.kans() == 8 && Bestemming.NOMGUH.kans() == 15 && Bestemming.BALKONIE.kans() == 30,
                 "the chances on the rare souvenir: 5, 8, 15, 30 %");
         helper.assertTrue(Bestemming.OM_DE_HOEK.duurMs() == 5 * 60_000L && Bestemming.KAASMAAN.duurMs() == 24 * Klok.UUR, "durations in real time");
@@ -536,7 +537,7 @@ public final class PxReisbureauGameTests {
                 behaald += r.toString().contains("reisbureau_souvenir_lingsesdijk") ? 1 : 0;
             }
         }
-        helper.assertTrue(plaatjes == 48, "the album: 16 souvenirs + 16 rare ones + 16 ansichtkaarten, got " + plaatjes);
+        helper.assertTrue(plaatjes == 60, "the album: 20 souvenirs + 20 rare ones + 20 ansichtkaarten, got " + plaatjes);   // biomes3: 48 before
         helper.assertTrue(behaald == 1, "the one souvenir the player has is in it");
         Reizen.data(p).remove("Souvenirs");
         klaar(helper, p);
@@ -548,7 +549,7 @@ public final class PxReisbureauGameTests {
         try (var reader = helper.getLevel().getServer().getResourceManager().getResource(Guhs.id("reisbureau/vormen.json")).orElseThrow().openAsReader()) {
             vormen = JsonParser.parseReader(reader).getAsJsonObject();
         }
-        helper.assertTrue(vormen.size() == Souvenirs.ALLE.size() && Souvenirs.ALLE.size() == 34, "34 blocks in both tables");
+        helper.assertTrue(vormen.size() == Souvenirs.ALLE.size() && Souvenirs.ALLE.size() == 42, "42 blocks in both tables");   // biomes3: 34 before
         int gewoon = 0, zeldzaam = 0;
         for (Souvenirs.Soort s : Souvenirs.ALLE) {
             JsonObject j = vormen.getAsJsonObject("reisbureau_" + s.id());
@@ -569,7 +570,7 @@ public final class PxReisbureauGameTests {
             gewoon += s.id().startsWith("souvenir_") ? 1 : 0;
             zeldzaam += s.zeldzaam() ? 1 : 0;
         }
-        helper.assertTrue(gewoon == 16 && zeldzaam == 16, "16 common and 16 rare souvenirs");
+        helper.assertTrue(gewoon == 20 && zeldzaam == 20, "20 common and 20 rare souvenirs");   // biomes3: 16 and 16 before
         for (Bestemming b : Bestemming.ECHT) {
             helper.assertTrue(b.souvenir() != null && b.zeldzaam() != null && b.souvenir() != b.zeldzaam() && b.kaart() instanceof KaartItem k && k.bestemming() == b,
                     b + ": a souvenir, a rare one and its own ansichtkaart");
