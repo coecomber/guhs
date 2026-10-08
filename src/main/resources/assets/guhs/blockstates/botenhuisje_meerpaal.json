@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/botenhuisje_meerpaal"
+    },
+    "facing=east": {
+      "model": "guhs:block/botenhuisje_meerpaal",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/botenhuisje_meerpaal",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/botenhuisje_meerpaal",
+      "y": 270
+    }
+  }
+}

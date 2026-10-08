@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:fishing_rod",
+    "guhs:bleekhout_plaat"
+  ],
+  "result": {
+    "id": "guhs:botenhuisje_hengelstandaard"
+  }
+}

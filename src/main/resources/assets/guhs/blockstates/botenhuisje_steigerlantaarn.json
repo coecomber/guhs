@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/botenhuisje_steigerlantaarn"
+    },
+    "lit=true": {
+      "model": "guhs:block/botenhuisje_steigerlantaarn_aan"
+    }
+  }
+}
