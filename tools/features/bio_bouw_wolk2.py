@@ -253,7 +253,17 @@ def meubel_modellen(h):
         return e
 
     def blok(naam, elements, particle, extra=None):
-        model = {"parent": "minecraft:block/block", "textures": {"particle": particle}, "elements": elements}
+        # biomes3 eindfix: a face names a texture VARIABLE ("#t0"), never a path: with a path in a face the game logs
+        # "Missing texture references" and draws the purple-and-black block (the files were all there)
+        textures, elements = {"particle": particle}, json.loads(json.dumps(elements))
+        namen = {}
+        for e in elements:
+            for vlak in e.get("faces", {}).values():
+                if not vlak["texture"].startswith("#"):
+                    var = namen.setdefault(vlak["texture"], f"t{len(namen)}")
+                    textures[var] = vlak["texture"]
+                    vlak["texture"] = "#" + var
+        model = {"parent": "minecraft:block/block", "textures": textures, "elements": elements}
         if extra:
             model.update(extra)
         w(f"{A}/models/block/{naam}.json", model)

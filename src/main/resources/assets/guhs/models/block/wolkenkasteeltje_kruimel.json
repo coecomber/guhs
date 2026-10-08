@@ -1,7 +1,8 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "guhs:block/wolkenkasteeltje_goud"
+    "particle": "guhs:block/wolkenkasteeltje_goud",
+    "t0": "guhs:block/wolkenkasteeltje_goud"
   },
   "elements": [
     {
@@ -17,22 +18,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         }
       }
     },
@@ -49,22 +50,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         }
       }
     },
@@ -81,22 +82,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         }
       }
     },
@@ -113,22 +114,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/wolkenkasteeltje_goud"
+          "texture": "#t0"
         }
       }
     }

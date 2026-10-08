@@ -94,6 +94,15 @@ for path in glob.glob(f"{A}/models/**/*.json", recursive=True):
         t = sprite(t)
         if not t.startswith("#") and not tex_exists(t):
             problems.append(f"{rel}: missing texture {t}")
+    # a face names a texture variable; a path there is "Missing texture references" in the game: purple and black
+    for e in data.get("elements", []):
+        for side, face in e.get("faces", {}).items():
+            if not face.get("texture", "").startswith("#"):
+                problems.append(f"{rel}: face {side} names the texture {face.get('texture')!r} directly (must be a #variable)")
+                break
+        else:
+            continue
+        break
     # gone in 26.1 (tools/mc26.py converts them): item model overrides, render_type, NeoForge model loaders, spawn egg template
     for key in ("overrides", "render_type", "loader"):
         if key in data:

@@ -1,7 +1,15 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "guhs:block/wolkenblok_wit_meubel_zij"
+    "particle": "guhs:block/wolkenblok_wit_meubel_zij",
+    "t0": "guhs:block/wolkenblok_wit_meubel_boven",
+    "t1": "guhs:block/wolkenblok_wit_meubel_onder",
+    "t2": "guhs:block/wolkenblok_wit_meubel_zij",
+    "t3": "guhs:block/wolkenblok_wit_meubel_kant",
+    "t4": "guhs:block/wolkenblok_roze_meubel_boven",
+    "t5": "guhs:block/wolkenblok_roze_meubel_onder",
+    "t6": "guhs:block/wolkenblok_roze_meubel_zij",
+    "t7": "guhs:block/wolkenblok_roze_meubel_kant"
   },
   "elements": [
     {
@@ -18,22 +26,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         }
       }
     },
@@ -51,22 +59,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         }
       }
     },
@@ -84,22 +92,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         }
       }
     },
@@ -117,22 +125,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         }
       }
     },
@@ -150,22 +158,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_boven"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_onder"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_zij"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_wit_meubel_kant"
+          "texture": "#t3"
         }
       }
     },
@@ -183,22 +191,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_boven"
+          "texture": "#t4"
         },
         "down": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_onder"
+          "texture": "#t5"
         },
         "north": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+          "texture": "#t6"
         },
         "south": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_zij"
+          "texture": "#t6"
         },
         "west": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+          "texture": "#t7"
         },
         "east": {
-          "texture": "guhs:block/wolkenblok_roze_meubel_kant"
+          "texture": "#t7"
         }
       }
     }

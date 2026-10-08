@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "guhs:block/regenboogbrug_pot_ijzer"
+    "particle": "guhs:block/regenboogbrug_pot_ijzer",
+    "t0": "guhs:block/regenboogbrug_pot_ijzer",
+    "t1": "guhs:block/regenboogbrug_pot_kaas"
   },
   "elements": [
     {
@@ -17,22 +19,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -49,22 +51,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -81,22 +83,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -113,22 +115,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -145,22 +147,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -177,22 +179,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -209,22 +211,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_ijzer"
+          "texture": "#t0"
         }
       }
     },
@@ -241,22 +243,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         }
       }
     },
@@ -273,22 +275,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         }
       }
     },
@@ -305,22 +307,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         }
       }
     },
@@ -337,22 +339,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         }
       }
     },
@@ -369,22 +371,22 @@
       ],
       "faces": {
         "down": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "up": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "south": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "west": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         },
         "east": {
-          "texture": "guhs:block/regenboogbrug_pot_kaas"
+          "texture": "#t1"
         }
       }
     }

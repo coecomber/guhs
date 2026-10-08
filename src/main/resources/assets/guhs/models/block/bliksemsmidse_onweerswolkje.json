@@ -1,7 +1,13 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "guhs:block/bliksemsmidse_wolk_zij_0"
+    "particle": "guhs:block/bliksemsmidse_wolk_zij_0",
+    "t0": "guhs:block/bliksemsmidse_wolk_boven_0",
+    "t1": "guhs:block/bliksemsmidse_wolk_onder_0",
+    "t2": "guhs:block/bliksemsmidse_wolk_zij_0",
+    "t3": "guhs:block/bliksemsmidse_wolk_zij_1",
+    "t4": "guhs:block/bliksemsmidse_bliksem",
+    "t5": "guhs:block/bliksemsmidse_regen"
   },
   "elements": [
     {
@@ -18,22 +24,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         }
       }
     },
@@ -51,22 +57,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         }
       }
     },
@@ -84,22 +90,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         }
       }
     },
@@ -117,22 +123,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_wolk_boven_0"
+          "texture": "#t0"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_wolk_onder_0"
+          "texture": "#t1"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_0"
+          "texture": "#t2"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_wolk_zij_1"
+          "texture": "#t3"
         }
       }
     },
@@ -150,22 +156,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         }
       },
       "light_emission": 15
@@ -184,22 +190,22 @@
       "shade": false,
       "faces": {
         "up": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "down": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "north": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "west": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_bliksem"
+          "texture": "#t4"
         }
       },
       "light_emission": 15
@@ -218,10 +224,10 @@
       "shade": false,
       "faces": {
         "west": {
-          "texture": "guhs:block/bliksemsmidse_regen"
+          "texture": "#t5"
         },
         "east": {
-          "texture": "guhs:block/bliksemsmidse_regen"
+          "texture": "#t5"
         }
       }
     },
@@ -239,10 +245,10 @@
       "shade": false,
       "faces": {
         "north": {
-          "texture": "guhs:block/bliksemsmidse_regen"
+          "texture": "#t5"
         },
         "south": {
-          "texture": "guhs:block/bliksemsmidse_regen"
+          "texture": "#t5"
         }
       }
     }
