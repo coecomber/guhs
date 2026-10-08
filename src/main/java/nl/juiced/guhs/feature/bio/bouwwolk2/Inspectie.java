@@ -54,6 +54,8 @@ public final class Inspectie {
     }
 
     private static final List<Plek> GEVONDEN = new ArrayList<>();
+    /** The y of each template's deck (tools/features/bio_bouw_wolk2_bouw.py STRUCTUREN "hoogte"). */
+    private static final Map<String, Integer> DEK = Map.of("regenboogbrug", 36, "wolkenkasteeltje", 102, "bliksemsmidse", 24);
 
     static void registreer() {
         BioZelftest.registreer("bouw_wolk2", Inspectie::zelftest);
@@ -133,6 +135,24 @@ public final class Inspectie {
                     }
                 }
             }
+            // how often: the set's possible start chunks within 64 chunks of the meadow, and how many of them have their middle in the Wolkenweide
+            StructureSet set = server.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id(naam));
+            if (set != null && set.placement() instanceof RandomSpreadStructurePlacement spread) {
+                int mogelijk = 0, inWeide = 0;
+                int s0 = spread.spacing();
+                long seed = level.getSeed();
+                for (int gx = Math.floorDiv((weide.getX() >> 4) - 64, s0); gx <= Math.floorDiv((weide.getX() >> 4) + 64, s0); gx++) {
+                    for (int gz = Math.floorDiv((weide.getZ() >> 4) - 64, s0); gz <= Math.floorDiv((weide.getZ() >> 4) + 64, s0); gz++) {
+                        var c = spread.getPotentialStructureChunk(seed, gx * s0, gz * s0);
+                        mogelijk++;
+                        if (Bio.in(level, new BlockPos(c.getMiddleBlockX(), 100, c.getMiddleBlockZ()), Bio.WOLKENWEIDE)) {
+                            inWeide++;
+                        }
+                    }
+                }
+                log(uit, true, naam + ": spacing " + s0 + ": " + mogelijk + " possible starts within 64 chunks of the Wolkenweide at " + weide.toShortString() + ", " + inWeide
+                        + " of them with their middle in the Wolkenweide");
+            }
             if (starts.size() < aantal) {
                 log(uit, false, naam + ": only " + starts.size() + " of " + aantal + " found near the Wolkenweide at " + weide.toShortString());
             }
@@ -203,8 +223,10 @@ public final class Inspectie {
             boolean heel = totaal > 0 && goed >= totaal - Math.max(2, totaal / 500);
             tel[heel ? 0 : 1]++;
             log(uit, heel, wie + ": whole: " + goed + " of " + totaal + " template blocks in the world" + (mis.length() > 0 ? " (differs:" + mis + ")" : ""));
-            // anything of the natural sky inside the box? (from 8 above the foot of the lifts: below that is the meadow)
-            int vreemd = 0;
+            // anything that is not ours inside the box? Land that rises under the building is no harm (counted, with its
+            // highest block); anything from 14 below the deck up stands in the building's own air: an island, a cloud, a hill
+            int dekY = plek.hoek.getY() + DEK.getOrDefault(plek.naam, 0);
+            int vreemd = 0, raakt = 0, land = 0, landTop = Integer.MIN_VALUE;
             StringBuilder wat = new StringBuilder();
             BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
             for (int x = plek.doos.minX(); x <= plek.doos.maxX(); x++) {
@@ -215,8 +237,20 @@ public final class Inspectie {
                             continue;
                         }
                         BlockState s = level.getBlockState(p);
-                        if (!s.isAir()) {
+                        if (!s.isAir() && y < dekY - 14) {
+                            land++;
+                            landTop = Math.max(landTop, y);
+                        } else if (!s.isAir()) {
                             vreemd++;
+                            // does it touch the building (a block of ours next to it, corners included)?
+                            boolean naast = false;
+                            for (BlockPos q : BlockPos.betweenClosed(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1)) {
+                                if (eigen.contains(q)) {
+                                    naast = true;
+                                    break;
+                                }
+                            }
+                            raakt += naast ? 1 : 0;
                             if (wat.length() < 120) {
                                 wat.append(' ').append(BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath()).append('@').append(x).append(',').append(y).append(',').append(z);
                             }
@@ -224,8 +258,10 @@ public final class Inspectie {
                     }
                 }
             }
-            tel[vreemd == 0 ? 0 : 1]++;
-            log(uit, vreemd == 0, wie + ": nothing of the natural sky stands in its box (" + vreemd + " foreign blocks" + wat + ")");
+            tel[raakt == 0 ? 0 : 1]++;
+            log(uit, raakt == 0, wie + ": nothing of the natural sky touches the building: " + raakt + " foreign blocks against a block of ours; in the corners of its box, from 14 under its deck (y "
+                    + dekY + ") up: " + vreemd + " foreign blocks" + wat
+                    + "; land under it higher than 10 above the lifts' foot: " + land + " blocks" + (land > 0 ? ", up to y " + landTop : ""));
             boolean bereikbaar = liftKolommen == 18 && liftGrond >= 12;
             tel[bereikbaar ? 0 : 1]++;
             log(uit, bereikbaar, wie + ": reachable: " + liftKolommen + " lift pads (two columns of nine), " + liftGrond + " of them with ground under their foot");

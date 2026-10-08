@@ -31,8 +31,8 @@ LINKS = {"north": "west", "west": "south", "south": "east", "east": "north"}    
 # hoogte: the anchor's height above the meadow; ruimte: the air kept free around it; spacing/separation in chunks
 STRUCTUREN = {
     "regenboogbrug": {"hoogte": 36, "ruimte": 38, "spacing": 14, "separation": 6, "salt": 21500901},
-    "wolkenkasteeltje": {"hoogte": 102, "ruimte": 34, "spacing": 16, "separation": 7, "salt": 21500911},
-    "bliksemsmidse": {"hoogte": 24, "ruimte": 20, "spacing": 9, "separation": 4, "salt": 21500921},
+    "wolkenkasteeltje": {"hoogte": 102, "ruimte": 34, "spacing": 14, "separation": 6, "salt": 21500911},
+    "bliksemsmidse": {"hoogte": 24, "ruimte": 24, "spacing": 9, "separation": 4, "salt": 21500921},
 }
 # template positions the Java side mirrors (filled by the builders)
 MATEN = {}
