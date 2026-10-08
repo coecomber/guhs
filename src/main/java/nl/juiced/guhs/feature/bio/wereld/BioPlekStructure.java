@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -39,6 +40,10 @@ import nl.juiced.guhs.world.BouwRuimte;
  *   <li>{@code ruimte}: kind {@code lucht} only: no natural island or cloud within this many blocks of the start chunk's
  *       middle, from the meadow to the sky (default 20);</li>
  *   <li>{@code vlak}: kind {@code terras} only: plain level terrace this far around the spot (default 6, even);</li>
+ *   <li>{@code per_regio} (biomes3 fix-plaatsing): ONE per region instead of "wherever the set tries a chunk with a spot":
+ *       a number 0..1, the chance that a region (a valley with its lake, a Wolkenweide) has this building; its place is
+ *       chosen from the terrain model for the whole region ({@link RegioKeuze}). {@code twee_vanaf}: regions whose lake
+ *       or meadow has at least this mean radius get two;</li>
  *   <li>{@code keep_clear}, {@code voorrang}: as for every guhs structure ({@link BouwRuimte});</li>
  *   <li>{@code alleen_test}: test data, only generates when the environment variable GUHS_BIO_PLEKTEST is set.</li>
  * </ul>
@@ -65,6 +70,8 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
             Codec.intRange(1, 160).optionalFieldOf("hoogte", 24).forGetter(s -> s.hoogte),
             Codec.intRange(0, 64).optionalFieldOf("ruimte", 20).forGetter(s -> s.ruimte),
             Codec.intRange(2, 16).optionalFieldOf("vlak", BioPlekken.VLAK).forGetter(s -> s.vlak), // biomes3 merge
+            Codec.doubleRange(0, 1).optionalFieldOf("per_regio").forGetter(s -> s.perRegio), // biomes3 fix-plaatsing
+            Codec.intRange(0, 100000).optionalFieldOf("twee_vanaf", 0).forGetter(s -> s.tweeVanaf), // biomes3 fix-plaatsing
             Codec.INT.optionalFieldOf("keep_clear", 0).forGetter(s -> s.keepClear),
             Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang),
             Codec.BOOL.optionalFieldOf("alleen_test", false).forGetter(s -> s.alleenTest)
@@ -78,14 +85,18 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
     private final int hoogte;
     private final int ruimte;
     private final int vlak;
+    private final Optional<Double> perRegio;
+    private final int tweeVanaf;
     private final int keepClear;
     private final Optional<Integer> voorrang;
     private final boolean alleenTest;
 
-    public BioPlekStructure(StructureSettings settings, Jigsaw jigsaw, BioPlekken.Soort soort, int hoogte, int ruimte, int vlak, int keepClear,
-                            Optional<Integer> voorrang, boolean alleenTest) {
+    public BioPlekStructure(StructureSettings settings, Jigsaw jigsaw, BioPlekken.Soort soort, int hoogte, int ruimte, int vlak, Optional<Double> perRegio,
+                            int tweeVanaf, int keepClear, Optional<Integer> voorrang, boolean alleenTest) {
         super(settings);
         this.vlak = vlak;
+        this.perRegio = perRegio;
+        this.tweeVanaf = tweeVanaf;
         this.jigsaw = jigsaw;
         this.soort = soort;
         this.hoogte = hoogte;
@@ -101,6 +112,37 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
 
     public int ruimte() {
         return ruimte;
+    }
+
+    public int hoogte() {
+        return hoogte;
+    }
+
+    public int vlak() {
+        return vlak;
+    }
+
+    /** biomes3 fix-plaatsing: one per region ({@link RegioKeuze}): the chance that a region has this building; empty: wherever the set tries a chunk with a spot. */
+    public Optional<Double> perRegio() {
+        return perRegio;
+    }
+
+    /** biomes3 fix-plaatsing: a region whose lake or meadow has at least this mean radius gets a second one (0: never). */
+    public int tweeVanaf() {
+        return tweeVanaf;
+    }
+
+    public Holder<StructureTemplatePool> startPool() {
+        return jigsaw.startPool();
+    }
+
+    public Optional<Identifier> startJigsaw() {
+        return jigsaw.startJigsawName();
+    }
+
+    /** A number of this structure's own, the same in every run (from the name of its start pool): what its choices per region are drawn with. */
+    public long zout() {
+        return jigsaw.startPool().unwrapKey().map(k -> (long) k.identifier().toString().hashCode()).orElse(0L) & 0xFFFFFFFFL;
     }
 
     /** Does this structure generate at all (test data only on a test server)? */
@@ -123,16 +165,45 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
         if (!doetMee()) {
             return Optional.empty();
         }
-        ChunkPos chunk = context.chunkPos();
-        Optional<BioPlekken.Plek> plek = BioPlekken.zoek(BioModel.van(context.randomState()), soort, chunk.x(), chunk.z(), hoogte, vlak);
-        if (plek.isEmpty()) {
-            return Optional.empty();
+        // biomes3 fix-plaatsing: counted (BioModel.teller): what the structure starts cost
+        boolean buitenste = BioModel.plekIn();
+        long t0 = buitenste ? System.nanoTime() : 0;
+        try {
+            return vind(context);
+        } finally {
+            BioModel.plekUit(buitenste, t0);
         }
-        BioPlekken.Plek p = plek.get();
-        // biomes3 bouw-wolk2: a building in the air hangs over the meadow itself, not over its rim, where the land of the
-        // neighbours rises into the building: the meadow must be whole all round the start, as far as the building reaches
-        if (soort == BioPlekken.Soort.LUCHT && !heleWeide(BioModel.van(context.randomState()), p.x(), p.z(), ruimte)) {
-            return Optional.empty();
+    }
+
+    private Optional<GenerationStub> vind(GenerationContext context) {
+        ChunkPos chunk = context.chunkPos();
+        BioModel model = BioModel.van(context.randomState());
+        BioPlekken.Plek p;
+        if (perRegio.isPresent()) {
+            // biomes3 fix-plaatsing: one per region. The spot was chosen from the terrain model for the whole region; this
+            // chunk starts the structure when the spot lies in its cell of the structure set's grid (so the building can
+            // stand a few chunks from its start chunk)
+            RandomSpreadStructurePlacement plaatsing = Luchtruim.plaatsing(this);
+            if (plaatsing == null) {
+                return Optional.empty();
+            }
+            Optional<BioPlekken.Plek> gekozen = RegioKeuze.inCel(model, this, chunk.x(), chunk.z(), plaatsing.spacing());
+            if (gekozen.isEmpty()) {
+                return Optional.empty();
+            }
+            p = gekozen.get();
+        } else {
+            Optional<BioPlekken.Plek> plek = BioPlekken.zoek(model, soort, chunk.x(), chunk.z(), hoogte, vlak);
+            if (plek.isEmpty()) {
+                return Optional.empty();
+            }
+            p = plek.get();
+            // biomes3 bouw-wolk2: a building in the air hangs over the meadow itself, not over its rim, where the land of the
+            // neighbours rises into the building: the meadow must be whole all round the start, as far as the building reaches
+            // (biomes3 fix-plaatsing: asked of the region values, exactly as Luchtruim does for the air it keeps free)
+            if (soort == BioPlekken.Soort.LUCHT && !RegioKeuze.heleWeide(model, p.x(), p.z(), ruimte)) {
+                return Optional.empty();
+            }
         }
         // vanilla's jigsaw placement draws the start piece's rotation first thing from the context's random: hand it a
         // random whose first draw is the rotation we want (found by trying seeds; the same every time)
@@ -159,28 +230,11 @@ public class BioPlekStructure extends Structure implements BouwRuimte.Ruimte {
                 LiquidSettings.IGNORE_WATERLOGGING));
     }
 
-    /**
-     * biomes3 bouw-wolk2: is the Wolkenweide's meadow whole (no blend into other land) at sixteen points around this
-     * column, on rings of {@code straal} and half of it?
-     */
-    static boolean heleWeide(BioModel m, int x, int z, int straal) {
-        for (int ring = 1; ring <= 2; ring++) {
-            double r = straal * ring / 2.0;
-            for (int i = 0; i < 8; i++) {
-                int px = x + (int) Math.round(Math.cos(i * Math.PI / 4) * r), pz = z + (int) Math.round(Math.sin(i * Math.PI / 4) * r);
-                Kaart k = m.kaart(px >> 4, pz >> 4);
-                int o = Kaart.index(px, pz);
-                if (k.leeg || k.soort[o] != Kaart.WEIDE || k.meng[o] < 1f) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     @Override
     public int keepClear() {
-        return keepClear;
+        // biomes3 fix-plaatsing: a one-per-region building can stand anywhere in its start chunk's grid cell
+        RandomSpreadStructurePlacement plaatsing = perRegio.isPresent() ? Luchtruim.plaatsing(this) : null;
+        return keepClear + (plaatsing == null ? 0 : 16 * (plaatsing.spacing() - 1));
     }
 
     @Override

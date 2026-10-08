@@ -26,15 +26,16 @@ import org.jspecify.annotations.Nullable;
  *   <li>{@link BioVulling} (feature {@code guhs:bio_wereld_vulling}): water, river beds, clouds, lifts;</li>
  *   <li>{@link BioPlekken} / {@link BioPlekStructure}: the spots for buildings.</li>
  * </ul>
- * The regions. One low noise ({@link #R_DAL}, about 1000 blocks) makes a "dal": where it rises above {@link #DAL_VANAF}
- * the land steps down in terraces (the Klaterdal, {@link DalTerrein}) to a lake in the middle (the Bloesemmeertje,
- * {@link MeerTerrein}); so the two always lie together and every river ends in the lake. A second noise
- * ({@link #R_WEIDE}) makes the rare Wolkenweide ({@link WolkTerrein}). Both give way to every older region (deep sea,
- * Knuffeldal, Guhpolder, tundra, Guhwai'i, Bleekwoud): {@link #masker}. Nothing of ours touches a column outside these
- * regions, so the rest of the Guhmensie generates exactly as before.
+ * The regions (biomes3 fix-plaatsing: shapes with a size of their own, {@link BioRegio}; they were the tops of two low
+ * noises). A "dal" is a lake outline with a valley around it: the land steps down in terraces (the Klaterdal,
+ * {@link DalTerrein}) to the lake in the middle (the Bloesemmeertje, {@link MeerTerrein}); so the two always lie together
+ * and every river ends in the lake. The rare Wolkenweide ({@link WolkTerrein}) is a region of the same making. Both
+ * give way to every older region (deep sea, Knuffeldal, Guhpolder, tundra, Guhwai'i, Bleekwoud): {@link #masker}; a
+ * region only exists where those leave its heart whole. Nothing of ours touches a column outside these regions, so the
+ * rest of the Guhmensie generates exactly as before.
  * <p>
  * The value everything hangs on is "how far into the region" a column lies: {@link #eDal} / {@link #eWeide} (0 at the
- * edge, rising inward; the region noise above its threshold, cut down near an older region).
+ * edge, rising inward; the region's own value, cut down near an older region).
  */
 public final class BioModel {
     /** The noises, in the order of the {@code ruis} list of the two density functions (tools/features/bio_wereld.py). */
@@ -43,19 +44,13 @@ public final class BioModel {
     public static final int R_DAL = 0, R_WEIDE = 1, R_RIVIER = 2, R_DETAIL = 3, R_ZEE = 4, R_KNUFFEL = 5, R_POLDER = 6, R_TOENDRA = 7,
             R_GUHWAII = 8, R_BLEEKWOUD = 9;
 
-    // <wereld-plaatsing> (the shares: BioWereldGameTests.bioWereldAandeel; only the kern/placement owner edits these)
-    /** The dal region (Klaterdal + Bloesemmeertje) starts where its noise is this high. */
-    public static final double DAL_VANAF = 0.39;
-    /** The Wolkenweide starts where its noise is this high. */
-    public static final double WEIDE_VANAF = 0.62;
+    // <wereld-plaatsing> (where the regions lie and how big they are: BioRegio; only the kern/placement owner edits these)
     /** The older regions: {noise, the value where our regions must have ended}; all well before their own terrain starts. */
     // biomes3 wereld-meer: MASKERS and MASKER_SCHAAL are package-visible now (MeerTerrein.afstand reads them); values untouched
     static final double[][] MASKERS = {{R_ZEE, 0.30}, {R_KNUFFEL, 0.45}, {R_POLDER, 0.54}, {R_TOENDRA, 0.44}, {R_GUHWAII, 0.34},
             {R_BLEEKWOUD, 0.60}};
     /** How fast our regions fade towards an older one: within 0.08 of its noise below the value above, a dal is squeezed (no lake there). */
     static final double MASKER_SCHAAL = 2.0;
-    /** The Wolkenweide keeps this far (in dal noise) from a dal. */
-    private static final double WEIDE_DAL_AF = 0.05;
     // </wereld-plaatsing>
 
     /** Below this y the Guhmensie's own underground stays (caves, the Gatenkaasgrotten). */
@@ -85,13 +80,104 @@ public final class BioModel {
     private static final java.util.concurrent.atomic.LongAdder GEBOUWD = new java.util.concurrent.atomic.LongAdder(),
             GEDEELD_RAAK = new java.util.concurrent.atomic.LongAdder(), BOUW_NS = new java.util.concurrent.atomic.LongAdder();
 
+    // biomes3 fix-plaatsing: what the structure starts cost. Every guhs:bio_plek structure set asks the model about the
+    // chunks it may start in, for every generated chunk (and BouwRuimte asks again for its neighbours): counted apart.
+    private static final java.util.concurrent.atomic.LongAdder PLEK_KEER = new java.util.concurrent.atomic.LongAdder(),
+            PLEK_NS = new java.util.concurrent.atomic.LongAdder(), PLEK_KAARTEN = new java.util.concurrent.atomic.LongAdder();
+    private static final ThreadLocal<int[]> IN_PLEK = ThreadLocal.withInitial(() -> new int[1]);
+
+    /** A structure start asks for its spot on this thread; true when it is the outermost such call (hand the answer to {@link #plekUit}). */
+    static boolean plekIn() {
+        return IN_PLEK.get()[0]++ == 0;
+    }
+
+    static void plekUit(boolean buitenste, long t0) {
+        IN_PLEK.get()[0]--;
+        if (buitenste) {
+            PLEK_KEER.increment();
+            PLEK_NS.add(System.nanoTime() - t0);
+        }
+    }
+
     /** How many chunk maps were worked out and how many came from the shared cache since the last call (resets the count). */
     public static String teller() {
         long n = GEBOUWD.sumThenReset(), raak = GEDEELD_RAAK.sumThenReset(), ns = BOUW_NS.sumThenReset();
-        return String.format(java.util.Locale.ROOT, "chunk maps: %d worked out in %.0f ms, %d taken from the shared cache (%s)", n, ns / 1e6, raak, GEDEELD ? "on" : "OFF");
+        long keer = PLEK_KEER.sumThenReset(), plekNs = PLEK_NS.sumThenReset(), plekKaarten = PLEK_KAARTEN.sumThenReset();
+        return String.format(java.util.Locale.ROOT, "chunk maps: %d worked out in %.0f ms, %d taken from the shared cache (%s); structure starts: %d asked for a spot, "
+                + "%.1f ms in all, %d chunk maps worked out for them", n, ns / 1e6, raak, GEDEELD ? "on" : "OFF", keer, plekNs / 1e6, plekKaarten);
     }
     /** Per-cell results of the biome classes (lake islands, floating islands, clouds), keyed by {@link #sleutel}. */
     final Map<Long, Object> cellen = new ConcurrentHashMap<>();
+    /** biomes3 fix-plaatsing: the regions per cell ({@link BioRegio}); a map of its own, so the busy {@link #cellen} never empties it. */
+    final Map<Long, Object> regios = new ConcurrentHashMap<>();
+    /** biomes3 fix-plaatsing: what was chosen per region (the one-per-region buildings, {@link RegioKeuze}). */
+    final Map<Long, Object> keuzes = new ConcurrentHashMap<>();
+    /** The regions around the cell this thread last asked about (the 3 x 3 cells: nothing reaches further), dal and Wolkenweide apart. */
+    private static final class Buurt {
+        int cx = Integer.MIN_VALUE, cz;
+        BioRegio[] dalen = {}, weiden = {};
+    }
+    private final ThreadLocal<Buurt> buurt = ThreadLocal.withInitial(Buurt::new);
+
+    void bewaarRegio(long sleutel, Object wat) {
+        if (regios.size() > 40000) {
+            regios.clear();
+        }
+        regios.put(sleutel, wat);
+    }
+
+    void bewaarKeuze(long sleutel, Object wat) {
+        if (keuzes.size() > 20000) {
+            keuzes.clear();
+        }
+        keuzes.put(sleutel, wat);
+    }
+
+    private Buurt buurt(double x, double z) {
+        int cx = (int) Math.floor(x / BioRegio.CEL), cz = (int) Math.floor(z / BioRegio.CEL);
+        Buurt b = buurt.get();
+        if (b.cx != cx || b.cz != cz) {
+            java.util.List<BioRegio> dalen = new java.util.ArrayList<>(2), weiden = new java.util.ArrayList<>(2);
+            for (int ax = -1; ax <= 1; ax++) {
+                for (int az = -1; az <= 1; az++) {
+                    BioRegio r = BioRegio.winnaar(this, cx + ax, cz + az);
+                    if (r != null) {
+                        (r.weide ? weiden : dalen).add(r);
+                    }
+                }
+            }
+            b.dalen = dalen.toArray(new BioRegio[0]);
+            b.weiden = weiden.toArray(new BioRegio[0]);
+            b.cx = cx;
+            b.cz = cz;
+        }
+        return b;
+    }
+
+    /** The dal (weide false) or Wolkenweide (true) whose reach holds this column, or null. Regions never overlap: at most one. */
+    @Nullable
+    public BioRegio regio(double x, double z, boolean weide) {
+        Buurt b = buurt(x, z);
+        for (BioRegio r : weide ? b.weiden : b.dalen) {
+            if (r.bereikt(x, z)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    /** Can a region of this kind reach into the box of {@code marge} blocks around chunk (cx, cz)? */
+    private boolean regioBijChunk(int cx, int cz, boolean weide, int marge) {
+        double mx = (cx << 4) + 8, mz = (cz << 4) + 8, r = 8 * Math.sqrt(2) + marge * Math.sqrt(2);
+        Buurt b = buurt(mx, mz);
+        for (BioRegio g : weide ? b.weiden : b.dalen) {
+            double dx = mx - g.x, dz = mz - g.z, ver = g.buiten + r;
+            if (dx * dx + dz * dz <= ver * ver) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private BioModel(NormalNoise[] ruis) {
         this.ruis = ruis;
@@ -187,19 +273,38 @@ public final class BioModel {
         return m;
     }
 
+    /** Outside every region: far below 0 (what {@link #eDal} and {@link #eWeide} answer where no region reaches). */
+    public static final double BUITEN = -1;
+
+    /** The dal's own value at (x, z), before the older regions cut into it ({@link BioRegio#eigen}); {@link #BUITEN} where no dal reaches. */
+    public double dalEigen(double x, double z) {
+        BioRegio r = regio(x, z, false);
+        return r == null ? BUITEN : r.eigen(this, x, z);
+    }
+
+    /** The Wolkenweide's own value at (x, z), before the older regions cut into it; {@link #BUITEN} where none reaches. */
+    public double weideEigen(double x, double z) {
+        BioRegio r = regio(x, z, true);
+        return r == null ? BUITEN : r.eigen(this, x, z);
+    }
+
     /** How far into a dal (x, z) lies: at most 0 outside, rising inward (0.03: past the rim; see {@link DalTerrein}). */
     public double eDal(double x, double z) {
-        double r = ruis[R_DAL].getValue(x, 0, z) - DAL_VANAF;
+        BioRegio g = regio(x, z, false);
+        if (g == null) {
+            return BUITEN;
+        }
+        double r = g.eigen(this, x, z);
         return r <= 0 ? r : Math.min(r, masker(x, z));
     }
 
     /** How far into a Wolkenweide (x, z) lies: at most 0 outside, rising inward. */
     public double eWeide(double x, double z) {
-        double r = ruis[R_WEIDE].getValue(x, 0, z) - WEIDE_VANAF;
-        if (r <= 0) {
-            return r;
+        BioRegio g = regio(x, z, true);
+        if (g == null) {
+            return BUITEN;
         }
-        r = Math.min(r, -WEIDE_DAL_AF - (ruis[R_DAL].getValue(x, 0, z) - DAL_VANAF));
+        double r = g.eigen(this, x, z);
         return r <= 0 ? r : Math.min(r, masker(x, z));
     }
 
@@ -240,24 +345,25 @@ public final class BioModel {
             // (a map that asks for its neighbours' maps counts their time too: the total is an upper bound)
             GEBOUWD.increment();
             BOUW_NS.add(System.nanoTime() - t0);
+            if (IN_PLEK.get()[0] > 0) {
+                PLEK_KAARTEN.increment();
+            }
         }
         return k;
     }
 
     private Kaart bouw(int cx, int cz) {
-        int x0 = (cx << 4) - MARGE, z0 = (cz << 4) - MARGE;
-        double stap = (16 + 2 * MARGE - 1) / 4.0;
-        boolean dal = false, weide = false;
-        for (int i = 0; i <= 4 && !(dal && weide); i++) {
-            for (int j = 0; j <= 4; j++) {
-                double x = x0 + i * stap, z = z0 + j * stap;
-                if (!dal && ruis[R_DAL].getValue(x, 0, z) > DAL_VANAF - 0.04) {
-                    dal = true;
-                }
-                if (!weide && ruis[R_WEIDE].getValue(x, 0, z) > WEIDE_VANAF - 0.07) {
-                    weide = true;
-                }
-            }
+        // biomes3 fix-plaatsing: the regions are shapes with a known reach: no noise is asked for a chunk none of them comes near
+        boolean dal = regioBijChunk(cx, cz, false, DalTerrein.MARGE + 1), weide = regioBijChunk(cx, cz, true, 1);
+        // (a region's reach is a circle around its widest side: a chunk can lie in it and still be well outside the edge. The
+        // region's own value changes at most BioRegio.HELLING_MAX per block, so far enough below 0 at the chunk's
+        // middle there is no column of ours in the chunk, nor in the margin the valley's pass looks at)
+        double mx = (cx << 4) + 8, mz = (cz << 4) + 8;
+        if (dal && dalEigen(mx, mz) < -BioRegio.HELLING_MAX * (12 + DalTerrein.MARGE * 1.5)) {
+            dal = false;
+        }
+        if (weide && weideEigen(mx, mz) < -BioRegio.HELLING_MAX_WEIDE * 13) {
+            weide = false;
         }
         if (!dal && !weide) {
             return Kaart.leeg(cx, cz);

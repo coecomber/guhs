@@ -326,7 +326,7 @@ public class BioWereldDalGameTests {
                                     double x = x0 + i, z = z0 + j;
                                     double v = switch (f) {
                                         case 0 -> m.eDal(x, z);
-                                        case 1 -> m.ruis(BioModel.R_DAL, x, z) - BioModel.DAL_VANAF;
+                                        case 1 -> m.dalEigen(x, z); // biomes3 fix-plaatsing: was the dal noise above its threshold
                                         case 2 -> m.masker(x, z);
                                         case 3 -> m.ruis(BioModel.R_RIVIER, x, z);
                                         case 4 -> m.ruis(BioModel.R_DETAIL, x, z);

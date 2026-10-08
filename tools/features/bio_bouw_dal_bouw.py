@@ -56,15 +56,26 @@ YAW = {"south": 0.0, "west": 90.0, "north": 180.0, "east": -90.0}
 # brings back the averages above: 6 torii, 4 lantern paths, 2 zen corners, 1.2 weebhuisjes a valley.
 # dal_torii_water found no spot in this valley any more (0 in 729 tries; the river is 6-7 wide now): left as it was.
 PLAATSING = {
-    "dal_torii": ("terras", 5, 2, 21500601),
-    "dal_torii_water": ("over_rivier", 3, 1, 21500611),
-    "dal_lantaarns": ("terras", 6, 3, 21500621),
-    "dal_boogbrug": ("over_rivier", 3, 1, 21500631),
-    "dal_theehuisje": ("rots", 1, 0, 21500641),
-    "dal_zenhoek": ("terras", 9, 4, 21500651),
-    "dal_staptreden": ("waterval", 4, 2, 21500661),
-    "weebhuisje": ("terras", 11, 5, 21500671),
+    "dal_torii": ("terras", 7, 3, 21500601),
+    "dal_torii_water": ("monding", 4, 0, 21500611),
+    "dal_lantaarns": ("terras", 9, 4, 21500621),
+    "dal_boogbrug": ("over_rivier", 4, 1, 21500631),
+    "dal_theehuisje": ("rots", 4, 0, 21500641),
+    "dal_zenhoek": ("terras", 11, 5, 21500651),
+    "dal_staptreden": ("waterval", 3, 1, 21500661),
+    "weebhuisje": ("terras", 4, 0, 21500671),
 }
+# biomes3 fix-plaatsing (the placement owner; only the numbers and kinds in the table above). A valley is a region with a
+# size of its own now (a ring 95-170 wide around a lake 130-330 across), and two buildings are ONE PER VALLEY
+# (bio_wereld_plek.PER_REGIO; their set is only a grid of 4 x 4 chunks whose cell the chosen spot lies in):
+# the weebhuisje (exactly one where a valley has the room, never two) and dal_torii_water, which found no spot since the
+# river is 6-7 wide: it stands in the pond at a river's mouth now (kind "monding": shallow water at the lake's level,
+# looking at the lake), which lies in biome bloesemmeertje as often as in klaterdal, so it is tagged for both.
+# The spacings of the five that stay "wherever the set tries a chunk with a spot" were set for a valley of the new size (420
+# chunks of terraces on average): counted from the model over 60 valleys with the old spacings (5 / 6 / 3 / 9 / 4) a valley
+# had 10 torii, 7 lantern paths, 3.5 bridges, 3.3 zen corners and 1 stair; with these about 5, 3, 2, 2 and 2.
+# dal_theehuisje is one per valley too (at a tall fall, where the valley has one): its set tried EVERY chunk (spacing 1),
+# so every chunk near a valley cost a chunk map of the terrain model; now the tall falls are looked for along the river.
 WATER_BLIJFT = ("dal_theehuisje", "dal_boogbrug")
 
 
@@ -577,7 +588,7 @@ def build(h):
         varianten = sorted(k for k in gebouwd if k == naam or (k.startswith(naam + "_") and len(k) == len(naam) + 2))
         assert varianten, naam
         # (h.structure writes a pool that names the template `naam`: point it at a real file first, then at all of them)
-        h.structure(naam, ["klaterdal"], spacing=spacing, separation=separation, salt=salt, reach=24, centre=f"guhs:{naam}_midden")
+        h.structure(naam, ["klaterdal", "bloesemmeertje"] if soort == "monding" else ["klaterdal"], spacing=spacing, separation=separation, salt=salt, reach=24, centre=f"guhs:{naam}_midden")
         h.w(f"{D}/worldgen/template_pool/{naam}/start.json", {"fallback": "minecraft:empty", "elements": [
             {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{v}", "projection": "rigid",
                                       "processors": "guhs:dal_water_blijft" if naam in WATER_BLIJFT else "minecraft:empty"}}

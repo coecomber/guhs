@@ -513,8 +513,12 @@ def selfcheck(h, templates=None):
             if s.get("type") != "guhs:bio_plek" or s.get("plek") != "lucht":
                 mis.append(f"{naam} is not a guhs:bio_plek of kind lucht")
         p = f"{D}/worldgen/structure_set/{naam}.json"
-        if os.path.exists(p) and json.load(open(p, encoding="utf-8"))["placement"]["spacing"] < 8:
-            mis.append(f"{naam}: a lucht set must keep spacing 8 or more")
+        # biomes3 fix-plaatsing: a lucht structure is one per region now (only the buildings that come keep air free); the
+        # old rule "spacing 8 or more" holds for a lucht set that is NOT per_regio
+        ps = f"{D}/worldgen/structure/{naam}.json"
+        if os.path.exists(p) and os.path.exists(ps) and "per_regio" not in json.load(open(ps, encoding="utf-8")) \
+                and json.load(open(p, encoding="utf-8"))["placement"]["spacing"] < 8:
+            mis.append(f"{naam}: a lucht set that is not per_regio must keep spacing 8 or more")
     for event, (files, _sub) in SOUNDS.items():
         for f in files:
             p = f"{A}/sounds/{GELUID_MAP}/{f}.ogg"

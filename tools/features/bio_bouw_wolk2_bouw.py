@@ -30,9 +30,11 @@ LINKS = {"north": "west", "west": "south", "south": "east", "east": "north"}    
 
 # hoogte: the anchor's height above the meadow; ruimte: the air kept free around it; spacing/separation in chunks
 STRUCTUREN = {
-    "regenboogbrug": {"hoogte": 36, "ruimte": 38, "spacing": 14, "separation": 6, "salt": 21500901},
-    "wolkenkasteeltje": {"hoogte": 102, "ruimte": 34, "spacing": 14, "separation": 6, "salt": 21500911},
-    "bliksemsmidse": {"hoogte": 24, "ruimte": 24, "spacing": 9, "separation": 4, "salt": 21500921},
+    # biomes3 fix-plaatsing: one per Wolkenweide (bio_wereld_plek.PER_REGIO: a forge in every one, a bridge in 30 %, a
+    # castle in 30 %); the set is only the grid whose cell the chosen spot lies in
+    "regenboogbrug": {"hoogte": 36, "ruimte": 38, "spacing": 4, "separation": 0, "salt": 21500901},
+    "wolkenkasteeltje": {"hoogte": 102, "ruimte": 34, "spacing": 4, "separation": 0, "salt": 21500911},
+    "bliksemsmidse": {"hoogte": 24, "ruimte": 24, "spacing": 4, "separation": 0, "salt": 21500921},
 }
 # template positions the Java side mirrors (filled by the builders)
 MATEN = {}

@@ -103,8 +103,6 @@ public class BioWereldGameTests {
         List<ResourceKey<Biome>> onze = List.of(Bio.KLATERDAL, Bio.BLOESEMMEERTJE, Bio.WOLKENWEIDE);
         long totaal = 0, anders = 0, verschoven = 0, rand = 0;
         long[] aantal = new long[4];
-        float[] dal = new float[SEEDS.length * N * N], weide = new float[SEEDS.length * N * N];
-        int n = 0;
         for (long seed : SEEDS) {
             Wereld w = wereld(helper, seed);
             Climate.Sampler sampler = w.random.sampler();
@@ -128,18 +126,10 @@ public class BioWereldGameTests {
                     if (soort != Kaart.BUITEN && w.model.meng(qx, qz) < 1f) {
                         rand++;
                     }
-                    dal[n] = (float) w.model.ruis(BioModel.R_DAL, x, z);
-                    weide[n++] = (float) w.model.ruis(BioModel.R_WEIDE, x, z);
                 }
             }
         }
-        java.util.Arrays.sort(dal);
-        java.util.Arrays.sort(weide);
-        StringBuilder kwantielen = new StringBuilder();
-        for (double deel : new double[]{0.005, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.07, 0.10, 0.13}) {
-            kwantielen.append(String.format(Locale.ROOT, "%n   the top %.1f%% of the noises: dal above %.3f, weide above %.3f", 100 * deel,
-                    dal[(int) (dal.length * (1 - deel))], weide[(int) (weide.length * (1 - deel))]));
-        }
+        String kwantielen = "";
         double pDal = aantal[Kaart.DAL] / (double) totaal, pMeer = aantal[Kaart.MEER] / (double) totaal, pWeide = aantal[Kaart.WEIDE] / (double) totaal;
         LOGGER.info("biomes3 shares of the Guhmensie surface ({} samples): Klaterdal {}%, Bloesemmeertje {}%, Wolkenweide {}%; together {}% of the old map "
                         + "changes (of which {}% is the rim where the terrain blends); biome and model differ in {} samples; outside our regions the biome "
@@ -370,6 +360,8 @@ public class BioWereldGameTests {
                                 case MEER_EILAND, MEER_BOOM -> (m.vlag(p.x(), p.z()) & Kaart.GROOT) != 0 && m.hoogte(p.x(), p.z()) == p.y();
                                 case WEIDE -> m.soort(p.x(), p.z()) == Kaart.WEIDE && m.hoogte(p.x(), p.z()) == p.y();
                                 case LUCHT -> p.y() == m.hoogte(p.x(), p.z()) + 30;
+                                case MONDING -> m.water(p.x(), p.z()) == MeerTerrein.WATER && p.y() == MeerTerrein.WATER + 1 && m.terras(p.x(), p.z()) == 0
+                                        && m.water(p.x() + sx * 2, p.z() + sz * 2) == MeerTerrein.WATER; // biomes3 fix-plaatsing
                                 case ZWEEFEILAND -> !m.luchtVrij(p.x(), p.z(), p.y(), p.y()) && m.luchtVrij(p.x(), p.z(), p.y() + 1, p.y() + 4);
                             };
                             if (!goed && fout.isEmpty()) {

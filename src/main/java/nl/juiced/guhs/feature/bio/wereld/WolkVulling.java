@@ -316,7 +316,7 @@ public final class WolkVulling {
             }
             int x = x0 + (o & 15), z = z0 + (o >> 4);
             double dik = WolkTerrein.zee(m, x, z);
-            if (dik <= 0 || Luchtruim.bezet(x, z, 2)) {
+            if (dik <= 0 || Luchtruim.bezet(m, x, z, 2, y - 1, y + 4)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
                 continue;
             }
             int vol = (int) dik;

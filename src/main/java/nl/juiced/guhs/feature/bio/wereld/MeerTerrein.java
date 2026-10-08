@@ -134,8 +134,9 @@ public final class MeerTerrein {
      * everywhere.)
      */
     static double afstand(BioModel m, int x, int z, double d) {
-        double n = m.ruis(BioModel.R_DAL, x, z), eigen = n - BioModel.DAL_VANAF;
-        double gx = (m.ruis(BioModel.R_DAL, x + 3, z) - n) / 3, gz = (m.ruis(BioModel.R_DAL, x, z + 3) - n) / 3;
+        // biomes3 fix-plaatsing: the dal's own value comes from its region's shape now (BioModel.dalEigen), no longer from a noise
+        double n = m.dalEigen(x, z), eigen = n;
+        double gx = (m.dalEigen(x + 3, z) - n) / 3, gz = (m.dalEigen(x, z + 3) - n) / 3;
         double a, e = eigen;
         // beside an older region the dal is squeezed and the lake's edge runs where that region says: the nearest of all
         // the edges (each older region on its own, so the distance has no jumps where two of them meet)

@@ -37,8 +37,10 @@ BEWIJZEN = {  # guhs:quest/<name> (Java: BouwMeerSlice.BEWIJZEN)
 }
 # structure sets: (biomes, spacing, separation, salt, kind of spot); frequencies: see the slice report
 SETS = {
-    "botenhuisje": (["bloesemmeertje", "klaterdal"], 6, 2, 21500701, "meer_oever"),
-    "picknickeilandje": (["bloesemmeertje"], 2, 0, 21500711, "meer_boom"),
+    # biomes3 fix-plaatsing: both are one per lake now (bio_wereld_plek.PER_REGIO: a botenhuisje at every lake, two at the
+    # largest; a picknickeilandje at about one lake in three); the set is only the grid whose cell the chosen spot lies in
+    "botenhuisje": (["bloesemmeertje", "klaterdal"], 4, 0, 21500701, "meer_oever"),
+    "picknickeilandje": (["bloesemmeertje"], 4, 0, 21500711, "meer_boom"),
 }
 
 # =====================================================================================================================

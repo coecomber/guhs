@@ -510,6 +510,15 @@ public final class WolkTerrein {
         return false;
     }
 
+    /** biomes3 fix-plaatsing: the lowest block of an island (its longest drip point), for {@link Luchtruim}. */
+    private static int onderkant(Eiland e) {
+        int diepst = 0;
+        for (short d : e.diep) {
+            diepst = Math.max(diepst, d);
+        }
+        return e.top - diepst - 1;
+    }
+
     private static boolean inRegio(BioModel m, int x, int z, int marge) {
         return m.eWeide(x, z) >= BINNEN && m.eWeide(x - marge, z) > RAND && m.eWeide(x + marge, z) > RAND && m.eWeide(x, z - marge) > RAND
                 && m.eWeide(x, z + marge) > RAND;
@@ -519,7 +528,7 @@ public final class WolkTerrein {
     private static boolean klopt(BioModel m, Stapel s, Eiland nieuw, int[] merk, int ruim) {
         if (nieuw != null) {
             int st = (int) nieuw.straal();
-            if (Math.hypot(nieuw.x - s.x, nieuw.z - s.z) + st > ruim || !inRegio(m, nieuw.x, nieuw.z, st + 2) || Luchtruim.bezet(nieuw.x, nieuw.z, st + 2)) {
+            if (Math.hypot(nieuw.x - s.x, nieuw.z - s.z) + st > ruim || !inRegio(m, nieuw.x, nieuw.z, st + 2) || Luchtruim.bezet(m, nieuw.x, nieuw.z, st + 2, onderkant(nieuw), nieuw.top + 18)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
                 return false;
             }
             for (Doos d : s.vrij) {
@@ -566,13 +575,13 @@ public final class WolkTerrein {
         }
         for (int i = merk[1]; i < s.stappen.size(); i++) {
             Stap p = s.stappen.get(i);
-            if (Math.hypot(p.x - s.x, p.z - s.z) + 3 > ruim || m.eWeide(p.x, p.z) < BINNEN || Luchtruim.bezet(p.x, p.z, 3)) {
+            if (Math.hypot(p.x - s.x, p.z - s.z) + 3 > ruim || m.eWeide(p.x, p.z) < BINNEN || Luchtruim.bezet(m, p.x, p.z, 3, p.top - 3, p.top + 5)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
                 return false;
             }
         }
         for (int i = merk[2]; i < s.kolommen.size(); i++) {
             Kolom k = s.kolommen.get(i);
-            if (Math.hypot(k.x - s.x, k.z - s.z) + 5 > ruim || !inRegio(m, k.x, k.z, 5) || Luchtruim.bezet(k.x, k.z, 5)) {
+            if (Math.hypot(k.x - s.x, k.z - s.z) + 5 > ruim || !inRegio(m, k.x, k.z, 5) || Luchtruim.bezet(m, k.x, k.z, 5, k.voet - 1, k.boven + 3)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
                 return false;
             }
         }
@@ -879,6 +888,18 @@ public final class WolkTerrein {
     private static int klasse(long h, int n) {
         double k = BioModel.kans(h, n);
         return k < 0.50 ? KLEIN : k < 0.92 ? MIDDEL : GROOT;
+    }
+
+    /**
+     * biomes3 fix-plaatsing: where the stack of a grid cell would stand ({x, z}), or null when the cell tries for none: the
+     * same draws as {@link #stapel}, without building it (a building in the air chooses its place between the stacks, and
+     * the stacks ask where the buildings are: this breaks the circle).
+     */
+    static int[] stapelMidden(BioModel m, int cx, int cz) {
+        long h = m.hash(cx, cz, 5301);
+        int vrijheid = STAPEL_CEL - 2 * STAPEL_RUIM - 4;
+        int ax = cx * STAPEL_CEL + STAPEL_RUIM + 2 + (int) (BioModel.kans(h, 1) * vrijheid), az = cz * STAPEL_CEL + STAPEL_RUIM + 2 + (int) (BioModel.kans(h, 2) * vrijheid);
+        return BioModel.kans(h, 0) < STAPEL_KANS && m.eWeide(ax, az) >= BINNEN ? new int[]{ax, az} : null;
     }
 
     /** The stack of a grid cell (cached in the model); never null, maybe without islands. */
@@ -1260,7 +1281,7 @@ public final class WolkTerrein {
 
     /** The meadow's pond around (x, z) with a short winding stream to a second, smaller pool; null when there is no room. */
     private static Plas plas(BioModel m, Stapel s, int x, int z, long h) {
-        if (!inRegio(m, x, z, 12) || Luchtruim.bezet(x, z, 12)) {
+        if (!inRegio(m, x, z, 12) || Luchtruim.bezet(m, x, z, 12, grond(m, x, z) - 3, grond(m, x, z) + 3)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
             return null;
         }
         java.util.Map<Long, Integer> nat = new java.util.HashMap<>();
@@ -1285,7 +1306,7 @@ public final class WolkTerrein {
             px += Math.cos(hoek);
             pz += Math.sin(hoek);
             int bx = (int) Math.round(px), bz = (int) Math.round(pz);
-            if (!inRegio(m, bx, bz, 5) || Luchtruim.bezet(bx, bz, 5) || Math.hypot(bx - s.x, bz - s.z) > STAPEL_RUIM - 1) {
+            if (!inRegio(m, bx, bz, 5) || Luchtruim.bezet(m, bx, bz, 5, grond(m, bx, bz) - 3, grond(m, bx, bz) + 3) || Math.hypot(bx - s.x, bz - s.z) > STAPEL_RUIM - 1) {
                 break;
             }
             nat.putIfAbsent(pak(bx, bz), 1);
@@ -1523,7 +1544,7 @@ public final class WolkTerrein {
     /** A rock may float among a stack's islands, as long as it is in nobody's way: no route, no island, no tree, no fall. */
     private static boolean rotsVrij(BioModel m, Eiland e) {
         int st = (int) e.straal() + 2;
-        if (Luchtruim.bezet(e.x, e.z, st)) {
+        if (Luchtruim.bezet(m, e.x, e.z, st, e.top - 9, e.top + 5)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
             return false;
         }
         Doos d = new Doos(e.x - st, e.top - 9, e.z - st, e.x + st, e.top + 5, e.z + st);
@@ -1584,7 +1605,7 @@ public final class WolkTerrein {
                 }
             }
         }
-        return !Luchtruim.bezet(e.x, e.z, reik);
+        return !Luchtruim.bezet(m, e.x, e.z, reik, grond(m, e.x, e.z) - 3, e.top + 18); // biomes3 fix-plaatsing: Luchtruim asks the heights too (a loose island has its own way down to the meadow)
     }
 
     /** Every stack (the loose islands' own included) that can reach into the box [x0, x1) x [z0, z1). */
@@ -1638,11 +1659,14 @@ public final class WolkTerrein {
         for (int welke = 0; welke < 3; welke++) {
             long h = m.hash(cx, cz, 6301 + welke);
             int x = cx * WOLK_CEL + (int) (BioModel.kans(h, 1) * WOLK_CEL), z = cz * WOLK_CEL + (int) (BioModel.kans(h, 2) * WOLK_CEL);
-            if (BioModel.kans(h, 0) >= (welke == 0 ? WOLK_KANS : welke == 1 ? 0.55 : 0.8) || m.eWeide(x, z) < BINNEN || Luchtruim.bezet(x, z, 22)) {
+            if (BioModel.kans(h, 0) >= (welke == 0 ? WOLK_KANS : welke == 1 ? 0.55 : 0.8) || m.eWeide(x, z) < BINNEN) {
                 continue;
             }
             double groot = welke == 0 ? 0.85 + 0.6 * BioModel.kans(h, 6) : welke == 1 ? 0.5 + 0.3 * BioModel.kans(h, 6) : 0.3 + 0.2 * BioModel.kans(h, 6);
             int y = grond(m, x, z) + (welke == 0 ? 14 + (int) (88 * BioModel.kans(h, 3)) : welke == 1 ? 60 + (int) (52 * BioModel.kans(h, 3)) : 18 + (int) (90 * BioModel.kans(h, 3)));
+            if (Luchtruim.bezet(m, x, z, 22, y - 8, y + 8)) { // biomes3 fix-plaatsing: Luchtruim asks the heights too
+                continue;
+            }
             boolean roze = BioModel.kans(h, 4) < ROZE_KANS;
             int n = welke == 0 ? 3 + (int) (BioModel.kans(h, 5) * 4) : welke == 1 ? 2 + (int) (BioModel.kans(h, 5) * 2) : 1 + (int) (BioModel.kans(h, 5) * 2);
             double rx0 = (7 + 4 * BioModel.kans(h, 7)) * groot, rz0 = (5.5 + 3.5 * BioModel.kans(h, 8)) * groot, ry0 = (2.4 + 1.4 * BioModel.kans(h, 9)) * Math.sqrt(groot);

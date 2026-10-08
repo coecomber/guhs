@@ -269,6 +269,11 @@ public final class DalTerrein {
     /** Where the brook's zero lines are read in the river noise. */
     static final double BEEK_X = 7000, BEEK_Z = -3000;
 
+    /** biomes3 fix-plaatsing: about how many blocks (x, z) lies from the middle line of the nearest river or brook (99: none near); no chunk map asked. */
+    static double bijWater(BioModel m, int x, int z) {
+        return Math.min(Math.abs(lijn(m, x, z, 0, 0)[0]), Math.abs(lijn(m, x, z, BEEK_X, BEEK_Z)[0]));
+    }
+
     // --- the things on a point -------------------------------------------------------------------------------------------------
     /** A koi pool beside the river: its middle, radius and the two phases of its irregular outline. */
     public record Poel(double x, double z, double straal, double f1, double f2) {
