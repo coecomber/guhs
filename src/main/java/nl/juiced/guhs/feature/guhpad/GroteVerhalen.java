@@ -24,6 +24,12 @@ import nl.juiced.guhs.feature.guhwaii.Ohana;
 import nl.juiced.guhs.feature.hemel.HemelQuest;
 import nl.juiced.guhs.feature.mewtwo.MewtwoVoortgang;
 import nl.juiced.guhs.feature.ring.Ring;
+import nl.juiced.guhs.feature.ringh2.Guhvendel;
+import nl.juiced.guhs.feature.ringh3.Mijn;
+import nl.juiced.guhs.feature.ringh4.Boomstad;
+import nl.juiced.guhs.feature.ringh5.RingH5Feature;
+import nl.juiced.guhs.feature.ringh6.Berg;
+import nl.juiced.guhs.feature.ringsausuman.Toren;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.verhaal.Verhaallijnen;
 import nl.juiced.guhs.quest.GuhQuests;
@@ -117,6 +123,20 @@ public final class GroteVerhalen {
             return "gui.guhs.guhpad.verhaal." + id;
         }
 
+        /**
+         * (1.4.1) The places of this story the Superkompas lists under it, in story order: where it begins, then what
+         * {@link GroteVerhalen#voegPlek(String, String)} added (the Knabbelring: one place per chapter and the Toren).
+         */
+        public List<String> plekken() {
+            List<String> out = new ArrayList<>(structuren);
+            for (String extra : PLEKKEN.getOrDefault(id, List.of())) {
+                if (!out.contains(extra)) {
+                    out.add(extra);
+                }
+            }
+            return out;
+        }
+
         /** Is the story in this game (always, except a story whose own update is not installed yet)? */
         public boolean isEr() {
             return STAND_IN.containsKey(id) || bestaat.getAsBoolean();
@@ -139,6 +159,9 @@ public final class GroteVerhalen {
     private static final List<GrootVerhaal> ALLE = new CopyOnWriteArrayList<>();
     /** Which world the questlines of a Verhaallijn group belong to, and single questlines that differ from their group. */
     private static final Map<String, Wereld> GROEPEN = new ConcurrentHashMap<>(), LIJNEN = new ConcurrentHashMap<>();
+    /** (1.4.1) The Superkompas places of a big story besides where it begins, and the places of a world that belong to no big story. */
+    private static final Map<String, List<String>> PLEKKEN = new ConcurrentHashMap<>();
+    private static final Map<Wereld, List<String>> WERELD_PLEKKEN = new ConcurrentHashMap<>();
     /** (game tests) stories that count as "there" although their own update is not installed. */
     private static final Map<String, Boolean> STAND_IN = new ConcurrentHashMap<>();
 
@@ -163,6 +186,14 @@ public final class GroteVerhalen {
             GROEPEN.put(groep, Wereld.BARBECUETHER);
         }
         LIJNEN.put("guheinde", Wereld.GUHEINDE);   // (the Opper-Mika line, one of the older adventures)
+        // 1.4.1: the Superkompas tab Verhalen lists every story's places per world. The Knabbelring: the place of each
+        // chapter after the Knabbelgouw, and the Toren van Sausuman (Guhdalfs sluier decides per player what shows as "???")
+        for (String plek : List.of(Guhvendel.STRUCTUUR, Mijn.STRUCTUUR, Boomstad.STRUCTUUR, RingH5Feature.STRUCTUUR, Berg.STRUCTUUR, Toren.STRUCTUUR)) {
+            voegPlek(KNABBELRING.id(), plek);
+        }
+        // the Guheinde has no big story of its own yet: the way in (the Opper-Mika adventure) and the way back
+        voegPlek(Wereld.GUHEINDE, "knabbelkelder");
+        voegPlek(Wereld.GUHEINDE, "guheinde_terugpoort");
     }
 
     private static GrootVerhaal groot(String id, Wereld wereld, Wereld begin, String icoon, List<String> structuren, List<String> lijnen,
@@ -192,6 +223,51 @@ public final class GroteVerhalen {
             ALLE.add(v);
         }
         return v;
+    }
+
+    /**
+     * (1.4.1) Adds a place (a guhs structure id without namespace) to a big story: the Superkompas tab Verhalen lists it
+     * under that story, after the places that are there (from your Feature.register; common code, both sides). Lang
+     * structure.guhs.&lt;id&gt; (+ .tooltip). A place behind Guhdalfs sluier shows as "???" until it is open for the player.
+     */
+    public static void voegPlek(String verhaal, String structuur) {
+        PLEKKEN.compute(verhaal, (k, oud) -> metPlek(oud, structuur));
+    }
+
+    /** (1.4.1) Adds a place that belongs to no big story to a world of the Superkompas tab Verhalen (both sides). */
+    public static void voegPlek(Wereld wereld, String structuur) {
+        WERELD_PLEKKEN.compute(wereld, (k, oud) -> metPlek(oud, structuur));
+    }
+
+    private static List<String> metPlek(@Nullable List<String> oud, String structuur) {
+        List<String> nieuw = new ArrayList<>(oud == null ? List.of() : oud);
+        if (!nieuw.contains(structuur)) {
+            nieuw.add(structuur);
+        }
+        return List.copyOf(nieuw);
+    }
+
+    /** (1.4.1) The places of this world that belong to no big story, in the order they were added. */
+    public static List<String> plekken(Wereld wereld) {
+        return WERELD_PLEKKEN.getOrDefault(wereld, List.of());
+    }
+
+    /** (1.4.1) Is this structure a place of a big story of this game? */
+    public static boolean isVerhaalPlek(@Nullable String structuur) {
+        if (structuur == null) {
+            return false;
+        }
+        for (GrootVerhaal v : alle()) {
+            if (v.plekken().contains(structuur)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** (1.4.1) Is this structure a place of a big story of this game, or of a world (so the Superkompas may look for it)? */
+    public static boolean isPlek(@Nullable String structuur) {
+        return isVerhaalPlek(structuur) || structuur != null && WERELD_PLEKKEN.values().stream().anyMatch(l -> l.contains(structuur));
     }
 
     /** The questlines of this Verhaallijn group are shown under this world in the Guhdex (both sides). */

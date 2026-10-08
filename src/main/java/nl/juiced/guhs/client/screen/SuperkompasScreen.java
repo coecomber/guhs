@@ -19,6 +19,10 @@ import nl.juiced.guhs.feature.gids.GidsData;
 import nl.juiced.guhs.feature.gids.client.GidsLijst;
 import nl.juiced.guhs.feature.gids.client.GidsTabs;
 import nl.juiced.guhs.feature.gids.client.GidsTekst;
+import nl.juiced.guhs.feature.guhpad.GroteVerhalen.Wereld;
+import nl.juiced.guhs.feature.guhpad.GuhpadPayloads;
+import nl.juiced.guhs.feature.guhpad.KompasVerhalen;
+import nl.juiced.guhs.feature.guhpad.client.GuhpadTab;
 import nl.juiced.guhs.feature.spelen.SpelGroepen;
 import nl.juiced.guhs.item.SuperkompasItem;
 import nl.juiced.guhs.network.MaagPayloads;
@@ -32,6 +36,11 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * the compass looks for. The first option of every tab is "Mijn verhaal" (guhpad: a normal option next to the places, with
  * its explanation on hover): the compass then points to the next goal of the questline you follow, or else to the nearest
  * story you have not done yet.
+ * <p>
+ * 1.4.1: the tab Verhalen is split by world and progress like the Guhdex tab Verhalen ({@code feature.guhpad.KompasVerhalen},
+ * the one source is GroteVerhalen): a heading per world of the Guhpad that folds open and shut, locked with what is still
+ * missing where the player may not go yet, under it every big story's places (the Knabbelring: a place per chapter). A place
+ * the player's story has not reached is "???" with a lock and can not be chosen. "Het echte Guheinde" is only its locked line.
  */
 public class SuperkompasScreen extends Screen {
     private static final int W = 300, H = 232;
@@ -43,6 +52,11 @@ public class SuperkompasScreen extends Screen {
     @Nullable
     private final String chosen;
     private final GidsLijst lijst = new GidsLijst();
+    /** (1.4.1, the tab Verhalen) the worlds the player folded shut; remembered while the game runs. */
+    private static final java.util.Map<Wereld, Boolean> GEVOUWEN = new java.util.EnumMap<>(Wereld.class);
+    /** (1.4.1, the tab Verhalen) the places that show as "???" now, and the big story of each story place. */
+    private final java.util.Set<String> geheim = new java.util.HashSet<>();
+    private final java.util.Map<String, String> verhaalVan = new java.util.HashMap<>();
     private int left, top, tab;
 
     public SuperkompasScreen(InteractionHand hand, @Nullable String chosen) {
@@ -100,8 +114,13 @@ public class SuperkompasScreen extends Screen {
         if (nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.is(tab)) {   // biomes3
             return nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.regels(hand, lijst, this::onClose);   // biomes3
         }   // biomes3
+        geheim.clear();
+        verhaalVan.clear();
         List<GidsLijst.Regel> out = new ArrayList<>();
         SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
+        if (c.id().equals(KompasVerhalen.TAB)) {   // 1.4.1
+            return verhalenRegels();
+        }
         // guhpad: "Mijn verhaal" is a normal option, the first one next to the places of every tab (a tab that starts with
         // a subheading gets it on a row of its own above that heading)
         boolean mijnVerhaal = c.kopjes().isEmpty() || c.kopjes().get(0).id() != null;
@@ -126,6 +145,61 @@ public class SuperkompasScreen extends Screen {
             }
         }
         return out;
+    }
+
+    /**
+     * 1.4.1: the rows of the tab Verhalen: "Mijn verhaal" on top, then per world of the Guhpad its heading, what it still
+     * asks when it is locked, and its places (see the class text).
+     */
+    private List<GidsLijst.Regel> verhalenRegels() {
+        List<GidsLijst.Regel> out = new ArrayList<>();
+        out.add(new Paar(SuperkompasItem.DOEL, null));
+        GuhpadPayloads.Stand stand = GuhpadPayloads.Client.stand();
+        for (KompasVerhalen.Groep groep : KompasVerhalen.groepen(stand, nl.juiced.guhs.feature.verhaal.VerhaalSync.Client::verborgen)) {
+            out.add(new WereldKop(groep, stand));
+            if (groep.wereld() == Wereld.ECHT || isGevouwen(groep.wereld())) {
+                continue;
+            }
+            if (!groep.mist().isEmpty()) {
+                out.add(new Tekst(Component.translatable("gui.guhs.guhpad.nog_nodig", GuhpadTab.lijst(groep.mist())), 0xFFF0A8C0));
+            }
+            for (KompasVerhalen.Blok blok : groep.blokken()) {
+                if (blok.kop() != null) {
+                    out.add(new Kopje(Component.translatable("gui.guhs.guhpad.verhaal." + blok.kop())));
+                }
+                List<KompasVerhalen.Plek> plekken = blok.plekken();
+                for (KompasVerhalen.Plek plek : plekken) {
+                    if (plek.geheim()) {
+                        geheim.add(plek.structuur());
+                    }
+                    if (plek.verhaal() != null) {
+                        verhaalVan.put(plek.structuur(), plek.verhaal());
+                    }
+                }
+                for (int i = 0; i < plekken.size(); i += 2) {
+                    out.add(new Paar(plekken.get(i).structuur(), i + 1 < plekken.size() ? plekken.get(i + 1).structuur() : null));
+                }
+            }
+            if (groep.blokken().isEmpty()) {
+                out.add(new Tekst(Component.translatable("gui.guhs.guhpad.leeg").withStyle(ChatFormatting.ITALIC), ZACHT));
+            }
+        }
+        return out;
+    }
+
+    private static boolean isGevouwen(Wereld w) {
+        return GEVOUWEN.getOrDefault(w, false);
+    }
+
+    /** (AutoCheck) folds a world of the tab Verhalen open or shut. */
+    public void vouw(Wereld w, boolean dicht) {
+        GEVOUWEN.put(w, dicht);
+        lijst.zet(regels());
+    }
+
+    /** (AutoCheck) scrolls the list this many screenfuls down from the top. */
+    public void scrollLijst(double schermen) {
+        lijst.scrollNaar(schermen * (H - LIST_TOP - 34));
     }
 
     private void kies(String id) {
@@ -240,6 +314,104 @@ public class SuperkompasScreen extends Screen {
         }
     }
 
+    /** 1.4.1 (the tab Verhalen): the heading of a world of the Guhpad; click to fold its places open or shut. Dark, like this menu. */
+    private final class WereldKop implements GidsLijst.Regel {
+        private final KompasVerhalen.Groep groep;
+        private final GuhpadPayloads.Stand stand;
+        private final ItemStack icoon;
+
+        WereldKop(KompasVerhalen.Groep groep, GuhpadPayloads.Stand stand) {
+            this.groep = groep;
+            this.stand = stand;
+            this.icoon = GuhpadTab.stack(groep.wereld().icoon());
+        }
+
+        private boolean echt() {
+            return groep.wereld() == Wereld.ECHT;
+        }
+
+        @Override
+        public int hoogte() {
+            return 22;
+        }
+
+        @Override
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
+            Wereld wereld = groep.wereld();
+            boolean echt = echt();
+            g.fill(x, y + 2, x + w, y + 20, echt ? 0xFF2A1C3A : hover ? 0xFF6A3E54 : 0xFF54304A);
+            g.fill(x, y + 2, x + w, y + 3, 0x20FFFFFF);
+            g.fill(x, y + 19, x + w, y + 20, echt ? 0xFF6A4E9A : GOUD);
+            int kleur = echt ? 0xFFD8C8F0 : GOUD;
+            if (echt) {
+                g.text(font, Component.literal("?").withStyle(ChatFormatting.BOLD), x + 17, y + 7, 0xFFB090E0, false);
+            } else {
+                GidsTekst.schaal(g, Component.literal(isGevouwen(wereld) ? "\u25B6" : "\u25BC"), x + 4, y + 8, 0.75f, kleur, false);
+                g.item(icoon, x + 13, y + 3);
+            }
+            // on the right, as in the Guhdex: locked, or how many of its big stories are done
+            int rechts = x + w - 5;
+            if (groep.opSlot()) {
+                GuhpadTab.slotje(g, rechts - 7, y + 7, echt ? 0xFFB090E0 : 0xFFF0A8C0, echt ? 0xFF2A1C3A : 0xFF54304A);
+                Component slot = Component.translatable("gui.guhs.guhpad.op_slot");
+                GidsTekst.schaal(g, slot, rechts - 10, y + 9, 0.625f, echt ? 0xFFB090E0 : 0xFFF0A8C0, true);
+                rechts -= 14 + Math.round(font.width(slot) * 0.625f);
+            } else if (!stand.eisen().isEmpty()) {
+                List<GuhpadPayloads.Verhaal> verhalen = stand.verhalen(wereld);
+                long klaar = verhalen.stream().filter(GuhpadPayloads.Verhaal::klaar).count();
+                boolean alles = GuhpadTab.allesGedaan(stand, wereld);
+                Component telling = verhalen.isEmpty() ? Component.translatable("gui.guhs.guhpad.open")
+                        : Component.literal((alles ? "\u2714 " : "") + klaar + " / " + verhalen.size() + " \u2605");
+                GidsTekst.schaal(g, telling, rechts, y + 8, 0.75f, alles || verhalen.isEmpty() ? 0xFF68D88A : LICHT, true);
+                rechts -= 6 + Math.round(font.width(telling) * 0.75f);
+            }
+            GidsTekst.passend(g, wereld.naam().withStyle(ChatFormatting.BOLD), x + 33, y + 7, rechts - x - 35, 1f, kleur, false);
+        }
+
+        @Override
+        public boolean klik(double mx, double my, int x, int y, int w) {
+            if (echt()) {
+                return true;   // (nothing to fold open: locked for everybody)
+            }
+            GEVOUWEN.put(groep.wereld(), !isGevouwen(groep.wereld()));
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                    net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK.value(), 1.2f));
+            lijst.zet(regels());
+            return true;
+        }
+
+        @Override
+        public List<Component> tip(double mx, double my, int x, int y, int w) {
+            List<Component> tip = new ArrayList<>(GuhpadTab.uitleg(stand, groep.wereld()));
+            if (!echt()) {
+                tip.add(Component.translatable(isGevouwen(groep.wereld()) ? "gui.guhs.guhpad.kompas.vouw_open" : "gui.guhs.guhpad.kompas.vouw_dicht")
+                        .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+            }
+            return tip;
+        }
+    }
+
+    /** 1.4.1 (the tab Verhalen): a small wrapped line under a world's heading (what it still asks; "no stories here yet"). */
+    private final class Tekst implements GidsLijst.Regel {
+        private final Component tekst;
+        private final int kleur;
+
+        Tekst(Component tekst, int kleur) {
+            this.tekst = tekst;
+            this.kleur = kleur;
+        }
+
+        @Override
+        public int hoogte() {
+            return GidsTekst.hoogte(tekst, lijst.rijBreedte() - 12, 0.75f) + 4;
+        }
+
+        @Override
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
+            GidsTekst.alinea(g, tekst, x + 6, y + 2, w - 12, 0.75f, kleur);
+        }
+    }
+
     /** guhpad: is this option "Mijn verhaal" (SuperkompasItem.DOEL: no place, the compass follows your story by itself)? */
     private static boolean isMijnVerhaal(String id) {
         return SuperkompasItem.DOEL.equals(id);
@@ -304,6 +476,14 @@ public class SuperkompasScreen extends Screen {
         }
 
         private void knop(GuiGraphicsExtractor g, String id, int x, int y, int w, boolean on) {
+            if (geheim.contains(id)) {
+                // 1.4.1: a place the player's story has not reached: "???" with a lock, not a button
+                g.fill(x, y, x + w, y + KNOP_H, 0xFF4A3442);
+                g.fill(x + 1, y + 1, x + w - 1, y + KNOP_H - 1, 0xFF2E1C28);
+                GuhpadTab.slotje(g, x + 6, y + 6, ZACHT, 0xFF2E1C28);
+                g.text(font, Component.translatable("gui.guhs.guhpad.kompas.geheim"), x + 20, y + 6, ZACHT, false);
+                return;
+            }
             boolean gekozen = id.equals(chosen);
             int rand = gekozen ? GOUD : on ? 0xFFE8B8CC : 0xFF6A4A5A;
             g.fill(x, y, x + w, y + KNOP_H, rand);
@@ -336,7 +516,9 @@ public class SuperkompasScreen extends Screen {
         public boolean klik(double mx, double my, int x, int y, int w) {
             String id = onder(mx, my, x, y, w);
             if (id != null) {
-                kies(id);
+                if (!geheim.contains(id)) {   // (1.4.1: a "???" place can not be chosen)
+                    kies(id);
+                }
                 return true;
             }
             return false;
@@ -350,7 +532,19 @@ public class SuperkompasScreen extends Screen {
                 return null;
             }
             List<Component> out = new ArrayList<>();
+            String verhaal = verhaalVan.get(id);
+            if (geheim.contains(id)) {
+                // 1.4.1: no name, no description: only which story it is a part of
+                out.add(Component.translatable("gui.guhs.guhpad.kompas.geheim").withStyle(ChatFormatting.BOLD));
+                out.add(Component.translatable("gui.guhs.guhpad.kompas.geheim.uitleg",
+                        Component.translatable("gui.guhs.guhpad.verhaal." + verhaal)).withStyle(ChatFormatting.GRAY));
+                return out;
+            }
             out.add(Component.translatable("structure.guhs." + id).withStyle(ChatFormatting.BOLD));
+            if (verhaal != null) {
+                out.add(Component.translatable("gui.guhs.guhpad.kompas.verhaal", Component.translatable("gui.guhs.guhpad.verhaal." + verhaal))
+                        .withStyle(ChatFormatting.GOLD));
+            }
             if (isMijnVerhaal(id)) {
                 // guhpad: the short explanation, and what it follows now
                 out.add(Component.translatable("gui.guhs.guhpad.kompas.uitleg").withStyle(ChatFormatting.GRAY));
