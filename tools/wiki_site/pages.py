@@ -674,7 +674,11 @@ class Builder:
                 pg.info("Biomes", "Biomen", self.biome_links(s["biomes"], limit=8))
             placement = (s.get("set") or {}).get("placement", {})
             ptype = placement.get("type", "")
-            if ptype.endswith("random_spread") and (placement.get("spacing") or 99) <= 6:
+            zeker = (s.get("set") or {}).get("gegarandeerd")       # (the one guaranteed copy: guhs:gegarandeerd, see gamedata.structure_sets)
+            if ptype.endswith("gegarandeerd"):                      # no other set: this copy is the only one
+                pg.info("Rarity", "Zeldzaamheid", t("one per world", "een per wereld"))
+                pg.columns["rarity"] = (999, t("one per world", "een per wereld"))
+            elif ptype.endswith("random_spread") and (placement.get("spacing") or 99) <= 6:
                 pg.info("Rarity", "Zeldzaamheid", t("one in every area of its biome", "een in elk gebied van zijn bioom"))
                 pg.columns["rarity"] = (500, t("one per area", "een per gebied"))
             elif ptype.endswith("random_spread"):
@@ -691,6 +695,14 @@ class Builder:
                 pg.columns["rarity"] = (500, t("one per region", "een per gebied"))
             else:
                 pg.columns["rarity"] = (0, "")
+            if zeker:
+                nieuw = t(", in land nobody has explored yet", ", in land dat nog niemand heeft verkend") if zeker.get("alleen_nieuw") else ""
+                if zeker.get("rond"):       # (a place of a story chain: it stands near the one before it; which one is the story's to tell)
+                    waar = t("one in every world", "een in elke wereld")
+                else:
+                    a, b = zeker.get("min_afstand"), zeker.get("max_afstand")
+                    waar = t(f"one at {a} to {b} blocks from 0,0", f"een op {a} tot {b} blokken van 0,0")
+                pg.info("Always there", "Staat er altijd", waar + nieuw)
             together = [x for x in (s.get("set") or {}).get("together", []) if x != sid]
             if together:
                 pg.info("Shares its spot with", "Deelt zijn plek met", ", ".join(L(f"bouwwerken/{x}", esc(self.structure_name(x)[0])) for x in together))
@@ -1014,12 +1026,17 @@ class Builder:
         P["systemen/kleding"].info("Pieces", "Kledingstukken", L("kleding/index", str(len(g.clothes))))
         # FTB
         ftb = g.ftb
-        items = []
+        items, groep = [], None
         for c in ftb["order"]:
             pid = f"verhalen/ftb-{c.replace('guhs_', '')}"
             n = sum(len(s["quests"]) for s in ftb["sections"].get(c, []))
+            if len(ftb["groups"]) > 1 and ftb["group_of"](c) != groep:      # (the groups of the quest book's sidebar, in its order)
+                groep = ftb["group_of"](c)
+                naam = esc(ftb["plain"](ftb["groups"].get(groep, groep)))
+                items.append(("</ol>" if items else "") + f"<h3>{t(esc(self.english.text(naam)), naam)}</h3><ol>")
             items.append(f"<li>{L(pid, esc(ftb['plain'](ftb['chapters'][c]['title'])))} <span class=\"muted\">({n})</span></li>")
-        P["systemen/ftb-quests"].add_section("chapters", "The chapters", "De hoofdstukken", "<ol>" + "".join(items) + "</ol>")
+        lijst = "".join(items) + "</ol>" if len(ftb["groups"]) > 1 else "<ol>" + "".join(items) + "</ol>"
+        P["systemen/ftb-quests"].add_section("chapters", "The chapters", "De hoofdstukken", lijst)
         P["systemen/ftb-quests"].info("Quests", "Quests", str(len(ftb["quests"])))
         P["systemen/ftb-quests"].info("Chapters", "Hoofdstukken", str(len(ftb["order"])))
         # advancements

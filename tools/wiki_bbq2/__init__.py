@@ -1,21 +1,23 @@
 """
-The wiki of bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio): the docs step
-that turns the slices' notes into wiki pages.
+The wiki of bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio, and the second
+part: Het Guhpad, the scenes of the older stories, Het Snuffeleiland): the docs step that turns the slices' notes into wiki pages.
 
 Every slice wrote tools/features/<module>_wiki.py with one dict WIKI (Dutch only; CONTRACT_130 2.4):
     "verhalen":    {slug: dict(nl=, img=, lead_nl=, ftb=[(chapter, sid)], structure=, npcs=[...], related=[...])}
     "systemen":    {slug: (Dutch title, picture, Dutch lead, [related])}
     "npc_home":    {kind: page}          "entity_home": {entity: page}
     "tekst":       [(page, "Kopje", "Dutch paragraphs, plain text")]
+The docs step's own texts (eigen.py) have the same shape with their English next to them; there a text may also be a table or
+a row of pictures, and may name the heading of a note's paragraph it comes right after (see eigen.py).
 load(root) reads EVERY tools/features/*_wiki.py (a later slice's file joins in by itself), puts the page names in one shape,
 adds the English of tools/wiki_bbq2/en.py and the docs step's own tables below (spoiler rules, better pictures, a few extra
 paragraphs), and hands the result to
   * tools/make_wiki.py bbq2_sections(): the knowledge base (one section per page, so tools/wiki_site/kb.py cuts it into chunks);
   * tools/wiki_site/topics.py extend(): the story and mechanic pages themselves and where the chunks go.
-The pictures are made by tools/wiki_bbq2/renders.py (python tools/wiki_renders.py docs/wiki/img --only-bbq2).
+The pictures are made by tools/wiki_bbq2/renders.py and renders_pad.py (python tools/wiki_renders.py docs/wiki/img --only-bbq2).
 
 English: tools/wiki_bbq2/en.py holds a hand-written English text for every Dutch title, lead, heading and paragraph, with the
-names of tools/lang/GLOSSARY.md section 24. A Dutch text without English is shown in Dutch on the English side and listed in
+names of tools/lang/GLOSSARY.md sections 24 and 25. A Dutch text without English is shown in Dutch on the English side and listed in
 the build's notes; so is an English text whose Dutch changed since it was written (tools/wiki_bbq2/en_hash.json remembers the
 Dutch it was written for: `python tools/wiki_bbq2/check.py` lists both, `--stamp` records the present Dutch after a review).
 
@@ -26,6 +28,9 @@ THE SPOILER RULE (user decision): a story page tells how to start and follow a s
   * SPOILER_PAGINA pages (the later chapters' places, the Barbecuerog, the Eye, the castle's boss) show no picture in any
     list, card or search result, and their own picture sits behind a toggle;
   * a story page's own picture is never a later chapter's place: PLAATJE gives it a character or an item instead.
+Het Snuffeleiland follows the same rule: how you find the dock, choose your dog and buddy, sniff, what the ranks are and how
+you get home is told openly; who turns up in the village, what the exam asks and what you find at the very end sit behind a
+toggle, and so do its quest lists.
 """
 import hashlib
 import importlib
@@ -40,8 +45,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 VOLGORDE = ["vadskracht", "tech_bronnen", "tech_buizen", "tech_machines", "tech_vloeistof", "tech_bezorg", "bank", "tech_klusjes", "tech_quests",
             "fossiel_mijn", "bestaand", "paleizen", "sausdieren", "camping_markt", "toren_peper",
             "ring", "ring_h1", "ring_h2", "ring_h3", "ring_h4", "ring_h5", "ring_h6", "ring_sausuman", "ring_knipogen",
-            "guhrio", "guhrio_w1", "guhrio_w2", "guhrio_w3", "guhrio_beloning"]
-# the four groups of the one-page wiki: (id, English, Dutch, the modules in it); a module in no group goes to the last one
+            "guhrio", "guhrio_w1", "guhrio_w2", "guhrio_w3", "guhrio_beloning",
+            "guhpad", "oude_scenes", "snuffel_steiger", "snuffel", "snuffel_dorp"]
+# the groups of the one-page wiki: (id, English, Dutch, the modules in it); a module in no group goes to the last one
 GROEPEN = [("bbq2_tech", "Guh Technology", "Guh-technologie",
             ["vadskracht", "tech_bronnen", "tech_buizen", "tech_machines", "tech_vloeistof", "tech_bezorg", "bank", "tech_klusjes", "tech_quests"]),
            ("bbq2_gebouwen", "The Guh Barbecuether: new buildings", "De Guhbarbecuether: nieuwe gebouwen",
@@ -49,11 +55,19 @@ GROEPEN = [("bbq2_tech", "Guh Technology", "Guh-technologie",
            ("bbq2_ring", "The Lord of the Nibble Ring", "In de ban van de Knabbelring",
             ["ring", "ring_h1", "ring_h2", "ring_h3", "ring_h4", "ring_h5", "ring_h6", "ring_sausuman", "ring_knipogen"]),
            ("bbq2_guhrio", "Super Guhrio", "Super Guhrio", ["guhrio", "guhrio_w1", "guhrio_w2", "guhrio_w3", "guhrio_beloning"]),
+           ("bbq2_guhpad", "The Guh Path", "Het Guhpad", ["guhpad", "oude_scenes"]),
+           ("bbq2_snuffel", "Sniff Island", "Het Snuffeleiland", ["snuffel_steiger", "snuffel", "snuffel_dorp"]),
            ("bbq2_meer", "More new things", "Nog meer nieuws", [])]
 
 # --- the docs step's own corrections to the notes ----------------------------------------------------------------------------
 # a page the notes name in another way -> the page
-ANDERS = {"dieren/worstzwijntje": "diertjes/worstzwijntje", "bank-guh-buikje": "systemen/bank-guh-buikje"}
+ANDERS = {"dieren/worstzwijntje": "diertjes/worstzwijntje", "bank-guh-buikje": "systemen/bank-guh-buikje",
+          # (the two portal blocks have no page of their own: what the Guhpad says about them stands with their dimension)
+          "guheinde_portaal": "dimensies/guheinde", "barbecuether_portaal": "dimensies/barbecuether",
+          "guhmensie_superkompas": "systemen/superkompas",
+          # (the notes of the old stories' scenes name the stories by their code names)
+          "verhalen/balto": "verhalen/nomguh", "verhalen/mewtwo": "verhalen/kloon-eiland", "verhalen/guhwaii": "verhalen/ohana",
+          "verhalen/hemel": "verhalen/hemelkapelletje"}
 # page -> picture (instead of the note's): a story's own picture is never a later chapter's place, the duel's is not the boss
 PLAATJE = {"verhalen/knabbelring": "icon_knabbelring", "verhalen/ring-h2": "npc_guhrond", "verhalen/ring-h3": "npc_gimguh",
            "verhalen/ring-h4": "npc_guhladriel", "verhalen/ring-h5": "npc_boromika", "verhalen/ring-h6": "guh_variant_sam_guh",
@@ -69,6 +83,12 @@ PLAATJE = {"verhalen/knabbelring": "icon_knabbelring", "verhalen/ring-h2": "npc_
            "verhalen/knabbelmachine": "block_knabbelmachine_beeldje"}
 # page -> the structure its story starts at (instead of the note's)
 BEGINT_BIJ = {"verhalen/knabbelring": "knabbelgouw"}
+# page -> its sections of the quest book (instead of the note's: the sections of a module that is not the first of its chapter
+# are called extra_<module>, tools/make_ftbquests.py assign)
+FTB = {"verhalen/snuffeleiland": [("guhs_verhalen", "extra_snuffel")], "verhalen/snuffeldorp": [("guhs_verhalen", "extra_snuffel_dorp")]}
+# (page, Kopje) of a note's paragraph that is left out: the docs step's own text (eigen.py) says the same thing more completely
+VERVALLEN = {("dimensies/barbecuether", "Op slot"),              # eigen.py "Het grillportaal zit eerst op slot"
+             ("verhalen/knabbelring", "Eerst de Guhmensie")}       # the Knabbelring's own "Hoe begin je?" names the stories now
 # page -> a Dutch lead without the story's surprises (instead of the note's); its English is in en.py like any lead
 LEAD = {
     "verhalen/ring-h3": "Hoofdstuk 3 van In de ban van de Knabbelring. Onder de Houtskoolvlakte ligt de oude mijn van de dwerg-guhs. Je komt er "
@@ -84,6 +104,8 @@ LEAD = {
     "verhalen/ring-sausuman": "De extra halte van In de ban van de Knabbelring. In een zwarte toren vol sputterende machines woont Sausuman van "
                               "de Vele Sauzen, een tovenaar-Mika die ook een hapje van de ring wil. Hij krijgt het niet, dus wil hij er zelf "
                               "een bakken. Jij mag de ingrediënten halen.",
+    "verhalen/snuffeldorp": "Je spoelt aan op het strand van het Snuffeleiland en wordt wakker als hond. In Snuffeldorp leer je snuffelen, krijg "
+                            "je een ondeugend maatje, help je de dorpelingen en haal je je snuffeldiploma. Hoe het afloopt, moet je zelf ruiken, njeg.",
     "verhalen/super-guhrio-duel": "Achter de grote poort van de levelhal wacht het duel met de Grote Nether-Mika: drie rondes op zijn roosterbrug "
                                   "boven de frituursaus. Hij duwt alleen maar, njeg: wie geraakt wordt, staat weer bij zijn vlaggetje.",
 }
@@ -101,13 +123,20 @@ SPOILER_TEKST = {
     ("verhalen/super-guhrio-duel", "Ronde 1: de hendel"), ("verhalen/super-guhrio-duel", "Ronde 2 en 3: het schild"),
     ("verhalen/super-guhrio-duel", "Hoe het afloopt"),
     ("verhalen/pad-guhs-kraam", "Bedankt! Maar de prinses..."), ("bouwwerken/guhrio_kasteel", "De torenkamer"),
+    # the old stories' scenes: what each scene shows
+    ("systemen/oude-scenes", "De zes filmpjes"),
+    # Het Snuffeleiland: who turns up, what the exam asks, what lies at the end
+    ("verhalen/snuffeldorp", "4. Er rommelt iets"), ("verhalen/snuffeldorp", "5. Goede daden"),
+    ("verhalen/snuffeldorp", "6. Het snuffelexamen"), ("verhalen/snuffeldorp", "7. Een spoor van papa"),
 }
 # (page, Kopje) whose heading itself is the surprise: it goes inside the toggle too
-SPOILER_KOP = {("verhalen/ring-h3", "De Barbecuerog")}
+SPOILER_KOP = {("verhalen/ring-h3", "De Barbecuerog"), ("verhalen/snuffeldorp", "7. Een spoor van papa")}
 # story pages whose list of FTB quests sits behind a toggle (every step of a later chapter is a spoiler)
 SPOILER_STAPPEN = {"verhalen/knabbelring", "verhalen/ring-h2", "verhalen/ring-h3", "verhalen/ring-h4", "verhalen/ring-h5", "verhalen/ring-h6",
-                   "verhalen/ring-sausuman", "verhalen/super-guhrio", "verhalen/super-guhrio-duel", "verhalen/pad-guhs-kraam"}
-# FTB chapters whose quest-book page hides every section behind a toggle
+                   "verhalen/ring-sausuman", "verhalen/super-guhrio", "verhalen/super-guhrio-duel", "verhalen/pad-guhs-kraam",
+                   "verhalen/snuffeleiland", "verhalen/snuffeldorp"}
+# FTB chapters whose quest-book page hides every section behind a toggle (the two chapters of the first part moved into
+# "Verhalen van de Guhbarbecuether": their sections are hidden one by one, through SPOILER_STAPPEN and SPOILER_FTB_SECTIES)
 SPOILER_FTB = {"guhs_knabbelring", "guhs_guhrio"}
 # ... and FTB sections hidden wherever they stand (the sections of the SPOILER_STAPPEN pages are added by themselves): when
 # a chapter of the quest book is rearranged, its story sections keep their toggle
@@ -118,7 +147,10 @@ SPOILER_PAGINA = {"bouwwerken/guhvendel", "bouwwerken/knabbelmoria", "bouwwerken
                   "wezens/oog_van_sausron"}
 # entities without a page: thrown things, moving parts of a level, and the one that would give the ending away
 GEEN_PAGINA = {"ringh6_valkool", "ringh6_krokante_smikagol", "guhrio_grillspies", "guhrio_knabbel", "guhrio_platform", "guhrio_valblok",
-               "guhriow3_kooltje", "guhriow3_taart"}
+               "guhriow3_kooltje", "guhriow3_taart",
+               # Het Snuffeleiland: the dog a player is, the buddy, the residents and the tree are told on the pages of the story
+               # (a page called "Maatje" would also turn every "maatje" of the wiki into a link to it)
+               "snuffel_hond", "snuffel_maatje", "snuffel_bewoner", "snuffel_boompje", "steiger_bewoner", "steiger_boot"}
 DIERTJES = ["worstzwijntje"]                                  # (farm animals: the rest of the new creatures are "wezens")
 BAZEN = {"barbecuerog", "grote_nether_mika"}
 VERHAALGUHS = {"sam_guh": "verhalen/knabbelring", "guhshi": "verhalen/pad-guhs-kraam"}     # Guhdex creatures that are tameable guhs
@@ -131,11 +163,12 @@ ENTITY_HOME = {"knekel_ruiter": "systemen/knabbelring", "guhmba": "systemen/supe
 NPC_VERHAAL = {"guhdalf": "knabbelring", "smikagol": "knabbelring", "araguh": "knabbelring", "leguhlas": "knabbelring", "gimguh": "knabbelring",
                "boromika": "knabbelring", "merrie": "knabbelring", "pippguh": "knabbelring", "padguh": "pad-guhs-kraam",
                "perzikguh": "pad-guhs-kraam", "uitvinderguh": "techniek"}
-# the structures the features add to the Superkompas tab "Barbecue" from code (SuperkompasItem.voegToe; the hidden story places
+# the structures the features add to the Superkompas tabs "Barbecue" and "Verhalen" from code (SuperkompasItem.voegToe; the hidden story places
 # only show up there once the player's story has reached them)
 SUPERKOMPAS = {"barbecue": ["knabbelgouw", "ring_rustpunt", "oude_guhrad_centrale", "zoutkristalmijn", "fossiel_opgraving", "sausloper_stal",
                             "grillcamping", "mika_ruilmarkt", "rookguh_vuurtoren", "pepertuin", "mika_woonblokken", "mika_stal",
-                            "mika_brugpaleis", "guhrio_kasteel", "guhvendel", "sausuman_toren"]}
+                            "mika_brugpaleis", "guhrio_kasteel", "guhvendel", "sausuman_toren"],
+               "verhalen": ["steigerhuisje"]}
 # clothing source -> the page it comes from
 BRON_PAGINA = {"ring": "verhalen/knabbelring", "guhrio_beloning": "verhalen/pad-guhs-kraam", "paleizen": "verhalen/mika-oma",
                "bestaand": "verhalen/wachter", "camping_markt": "verhalen/camping", "toren_peper": "verhalen/vuurtoren"}
@@ -161,10 +194,23 @@ VERWANT = {
     "verhalen/sausloper": ["wezens/sausloper", "wezens/sausblubje"],
     "systemen/sausdieren": ["wezens/sausloper", "wezens/sausblubje", "bouwwerken/sausloper_stal"],
     "systemen/bezorgguhtje": ["wezens/bezorgguhtje", "blokken/stepstation", "blokken/haltepaaltje", "verhalen/vuurtoren"],
+    "systemen/het-guhpad": ["verhalen/nomguh", "verhalen/kloon-eiland", "verhalen/hemelkapelletje", "verhalen/ohana", "verhalen/snuffeleiland",
+                            "dimensies/barbecuether", "dimensies/guheinde", "systemen/ftb-quests", "systemen/oude-scenes"],
+    "systemen/oude-scenes": ["verhalen/nomguh", "verhalen/kloon-eiland", "verhalen/ohana", "verhalen/hemelkapelletje", "verhalen/grillguh",
+                             "verhalen/timmerguh"],
+    "verhalen/snuffeleiland": ["verhalen/snuffeldorp", "systemen/snuffeldorp-bewoners", "dimensies/snuffeleiland", "systemen/het-guhpad"],
+    "verhalen/snuffeldorp": ["dimensies/snuffeleiland", "blokken/guhstation"],
+    "systemen/snuffelen": ["verhalen/snuffeldorp", "systemen/snuffeldorp-bewoners", "items/snuffel_geheugenkaart"],
+    "systemen/guhstation": ["blokken/guhstation", "items/snuffel_geheugenkaart", "bouwwerken/steigerhuisje"],
+    "systemen/snuffeldorp-bewoners": ["verhalen/snuffeleiland"],
 }
 # dimension -> pages under its "see also"
 DIMENSIE_VERWANT = {"barbecuether": ["verhalen/knabbelring", "verhalen/super-guhrio", "systemen/guh-technologie", "systemen/sausdieren",
-                                     "systemen/zoutkristal", "systemen/pepers", "systemen/rustpunten", "verhalen/grillguh"]}
+                                     "systemen/zoutkristal", "systemen/pepers", "systemen/rustpunten", "verhalen/grillguh",
+                                     "systemen/het-guhpad"],
+                    "guheinde": ["systemen/het-guhpad"],
+                    "snuffeleiland": ["verhalen/snuffeleiland", "verhalen/snuffeldorp", "systemen/snuffelen", "systemen/snuffeldorp-bewoners",
+                                      "systemen/guhstation", "bouwwerken/steigerhuisje"]}
 
 
 def sha(text):
@@ -262,10 +308,13 @@ def load(root):
         pg["related"] = [b.pagina(r) for r in pg.get("related", [])] + VERWANT.get(pid, [])
         if pid in BEGINT_BIJ:
             pg["structure"] = BEGINT_BIJ[pid]
+        if pid in FTB:
+            pg["ftb"] = list(FTB[pid])
         for kind in pg.get("npcs", []):
             b.npc_verhaal.setdefault(kind, pid.split("/", 1)[1])
     for kind, slug in NPC_VERHAAL.items():
         b.npc_verhaal[kind] = slug
+    na = []                             # eigen.py rows that come right after a note's paragraph: (index in b.tekst, that heading)
     for m, w in raw:
         for kind, ref in (w.get("npc_home") or {}).items():
             b.npc_home[kind] = b.pagina(ref)
@@ -274,13 +323,30 @@ def load(root):
         for row in w.get("tekst") or []:
             ref, kopje, nl = row[:3]
             pid = b.pagina(ref)
+            if (pid, kopje) in VERVALLEN and m != "eigen":
+                continue
             if m == "eigen":            # the docs step's own paragraphs carry their English with them (eigen.py)
                 kopje_en, en = row[3], row[4]
+                if len(row) > 5:
+                    na.append((len(b.tekst), row[5]))
             else:
                 e = english((pid, kopje), kopje + "\n" + nl, "tekst")
                 kopje_en, en = e if e else (kopje, None)
             b.tekst.append(dict(pagina=pid, kopje=kopje, kopje_en=kopje_en, nl=nl, en=en, spoiler=(pid, kopje) in SPOILER_TEKST,
                                 kop_verborgen=(pid, kopje) in SPOILER_KOP, module=m))
+    # a docs-step text that names a heading moves to right after the last note text of its page under that heading (several
+    # texts for one spot keep their own order)
+    achter = {}
+    for row, kopje in [(b.tekst[i], kopje) for i, kopje in na]:
+        plek = (row["pagina"], kopje)
+        if plek not in achter:
+            achter[plek] = next((o for o in reversed(b.tekst) if o["pagina"] == row["pagina"] and o["kopje"] == kopje and o["module"] != "eigen"), None)
+        if achter[plek] is None:
+            b.notes.append(f"bbq2: eigen.py puts a text after '{kopje}' on {row['pagina']}, but no note has that heading")
+            continue
+        del b.tekst[next(k for k, o in enumerate(b.tekst) if o is row)]
+        b.tekst.insert(next(k for k, o in enumerate(b.tekst) if o is achter[plek]) + 1, row)
+        achter[plek] = row
     for hk in stale:
         b.notes.append(f"bbq2: the Dutch of {hk} changed since its English was written: check tools/wiki_bbq2/en.py, "
                        f"then python tools/wiki_bbq2/check.py --stamp")
@@ -307,6 +373,15 @@ ANDERE_PAGINA = {
     "bouwwerken/guhvendel": ("Guhvendell", "Guhvendel"),
     "bouwwerken/guhrio_kasteel": ("Big Nether Mika's Castle", "Het Kasteel van de Grote Nether-Mika"),
     "diertjes/worstzwijntje": ("The Sausage Piglet", "Het Worstzwijntje"),
+    "dimensies/guheinde": ("The Guh End: the lock on the portal", "Het Guheinde: het slot op het portaal"),
+    "dimensies/snuffeleiland": ("Sniff Island: the dimension", "Het Snuffeleiland: de dimensie"),
+    "bouwwerken/steigerhuisje": ("The Dock Cottage", "Het Steigerhuisje"),
+    "verhalen/nomguh": ("Baltoguh and Nomguh: the scene", "Baltoguh en Nomguh: het filmpje"),
+    "verhalen/kloon-eiland": ("Guhtwo and Clone Island: the scene", "Guhtwo en het kloon-eiland: het filmpje"),
+    "verhalen/ohana": ("Ohana on Guhwai'i: the scene", "Ohana op Guhwai'i: het filmpje"),
+    "verhalen/hemelkapelletje": ("The Cloud Chapel: the scene", "Het Hemelkapelletje: het filmpje"),
+    "verhalen/grillguh": ("The Grill Guh: the scene", "De Grillguh: het filmpje"),
+    "verhalen/timmerguh": ("The Carpenter Guh: the scene", "De Timmerguh: het filmpje"),
 }
 
 

@@ -48,9 +48,16 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
 - **Minigames.** More than twenty of them, each in its own building with its own guh host, coins, shop, outfit and
   world top-3 boards: guh race, golf, disco, fishing, shuffleboard, a hedge maze, a catapult, a skating tour past eleven
   villages, a kart circuit, surfing, hula, baking, hairdressing and more.
-- **Stories.** Four story questlines with their own characters, talking screens with answers, and a special story
-  guh to tame at the end (a medicine sled ride through a snowstorm, a clone-island lab, a chapel in the clouds that
-  brings lost guhs back, and a tropical *ohana* island).
+- **Stories.** Story questlines with their own characters, talking screens with answers, a short camera scene at
+  their biggest moment, and a special story guh to tame at the end (a medicine sled ride through a snowstorm, a
+  clone-island lab, a chapel in the clouds that brings lost guhs back, and a tropical *ohana* island).
+- **Sniff Island.** Your little brother or sister is ill, so you sail after Papa to find the healing flower, wash
+  ashore on an island and wake up as a dog. Pick your breed, coat and buddy (a forest sprite only you can see), learn to
+  sniff with a scent meter, help the dogs of Sniffville and earn your diploma as a Sniff Pup, rank 1 of 5. Your own
+  things wait safely at home, and the Guhstation takes you back whenever you like.
+- **The Guh Path.** The big stories open the worlds: follow the five stories of the Guhmension and Guhdalf begins the
+  Nibble Ring and the grill portal lets you into the Guhbarbecuether; the Nibble Ring, Super Guhrio and the Burnt Mika
+  open the Guh End. A path map in the Guhdex and *My Story* on the Super Compass always show what comes next.
 - **The Lord of the Nibble Ring.** The big story of the Guh Barbecuether: a ring-shaped nibble that makes everyone
   greedy has to go to Mount Fry, not to be destroyed but to be fried and shared. Six chapters with real camera scenes,
   a Journey Map in the Guhdex, an objective on screen, and Sam-guh who walks with you the whole way. The Eye, the Nine
@@ -64,6 +71,8 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
   Disco Dynamo) and guh machines use it: see-through Nibble Tubes with filters, sauce pumps and hoses, a Harvester, a
   Nibbler, a Placer, a Tinker Machine for auto-crafting, a Plantation Box, sensors, and the Delivery Guhling on its
   scooter. Every machine has a snoot that shows how it is doing. The quest book teaches it in projects.
+  Tubes and hoppers can always put things into a Bank Guh; only a Nibble Tube with a Filter Piece takes them out
+  again, and only from a bank with its upgrade.
 - **Three extra dimensions.** Your own **Guhbelly** (a pocket dimension inside a giant guh), the fiery
   **Guhbarbecuether** and the endgame **Guh End**, where Overlord Mika has stolen every cheese nibble in the kingdom.
 - **Little critters.** Squeaksqueak mice, plush turtles, birds, ducklings, bunnies, hedgehogs, squirrels, axolotl
@@ -71,8 +80,9 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
 - **Useful blocks.** The **Bank Guh** (storage for every kind of item with search and a crafting grid: 256 of each
   kind, more with its upgrade), the **Nom Hatch** that puts things into your bank from anywhere, the frying pan, sled
   rails, furniture, food and lots of decoration blocks.
-- **FTB Quests support.** If FTB Quests is installed, a *Guhs* chapter group (more than 1,000 quests, in English and
-  Dutch) installs itself. Only the chapters of the big story open one by one.
+- **FTB Quests support.** If FTB Quests is installed, two chapter groups install themselves (more than 1,100 quests,
+  in English and Dutch): *Guhs* with everything there is to do, and *The Guh Path* with the big stories in order. Each
+  chapter of The Guh Path starts with a lock quest that shows which stories to follow first.
 
 Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wiki/)**.
 
@@ -153,7 +163,15 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - De **Guhmensie** met veel biomen: Knuffeldal, Guhpolder, Guhwai'i, de sneeuwtoendra, diepe guhzeeën, kaasgrotten en meer.
 - Gebouwen om te ontdekken: hamsterhuizen, guhdorpen met guh-dorpelingen, het pretpark Guhland, een guhkasteel, een kermis met achtbaan, zwevende eilanden en veel meer, met een **superkompas**.
 - Meer dan twintig **minigames**, elk met een eigen gebouw, gastguh, munten, winkel, pakje en top-3-borden.
-- Vier **verhalen** met personages, gesprekken met antwoordknoppen en een bijzondere verhaalguh als beloning.
+- **Verhalen** met personages, gesprekken met antwoordknoppen, een kort filmpje op hun grootste moment en een bijzondere
+  verhaalguh als beloning.
+- **Het Snuffeleiland**: je broertje of zusje is ziek, dus vaar je papa achterna om de geneesbloem te zoeken, spoel je aan op
+  een eiland en word je wakker als hond. Kies je ras, je vacht en je maatje (een bosgeestje dat alleen jij ziet), leer
+  snuffelen met de geurmeter, help de honden van Snuffeldorp en haal je diploma als Snuffelpup, rang 1 van 5. Je eigen
+  spullen wachten veilig thuis, en met het Guhstation ga je terug wanneer je wilt.
+- **Het Guhpad**: de grote verhalen openen de werelden. Volg de vijf verhalen van de Guhmensie en Guhdalf begint met de
+  Knabbelring en het grillportaal laat je door naar de Guhbarbecuether; de Knabbelring, Super Guhrio en de Aangebrande
+  Mika openen het Guheinde. De padkaart in de Guhdex en *Mijn verhaal* op het superkompas wijzen steeds de weg.
 - **In de ban van de Knabbelring**: het grote verhaal van de Guhbarbecuether. Een ringvormige knabbel moet naar de Frituurberg,
   niet om hem te vernietigen maar om hem te frituren en te delen. Zes hoofdstukken met echte filmpjes, een reiskaart in de
   Guhdex en Sam-guh die de hele weg meeloopt. Niemand doet je pijn: wie gezien wordt, staat weer bij zijn laatste rustvuurtje.
@@ -163,11 +181,15 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - **Guh-technologie**: guhs maken **vadskracht** (in een Guhrad, op een Knuffelgenerator, op een Disco-dynamo) en guhmachines
   gebruiken het: Knabbelbuizen met filters, sauspompen en slangen, een Oogster, een Knabbelaar, een Knutselmachine, een
   Plantagebak, sensoren en het Bezorgguhtje op zijn stepje. Elke machine heeft een snoet die laat zien hoe het gaat.
+  Buizen en trechters kunnen altijd spullen in een Bankguh stoppen; eruit halen kan alleen een Knabbelbuis met een
+  Filterstuk, en alleen uit een bank met zijn upgrade.
 - Drie extra dimensies: je eigen **Guhmaag**, de **Guhbarbecuether** en het **Guheinde** met Opper-Mika.
 - Diertjes: pieppiepmuisjes, knuffelschildpadjes, vogeltjes, eendjes, konijntjes, egeltjes en meer.
 - Handige blokken: de **Bankguh** (opslag voor alles, 256 van elke soort en meer met zijn upgrade), het **Hapluikje** dat van
   overal spullen in je bank stopt, de frituurpan, sledebanen en meubels.
-- **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (meer dan 1000 quests).
+- **FTB Quests**: is het geïnstalleerd, dan komen er vanzelf twee groepen bij (meer dan 1100 quests): *Guhs* met alles wat
+  er te doen is, en *Het Guhpad* met de grote verhalen op volgorde, elk hoofdstuk met een slotquest die laat zien welke
+  verhalen je eerst nog moet volgen.
 - De **officiële Guhs-server** `guhs.nl` (dag en nacht aan). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
 
 **Nodig:** Guhs 1.1.x en 1.2.x: Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+ (Java 25). Guhs 1.0.x: Minecraft 1.21.1,

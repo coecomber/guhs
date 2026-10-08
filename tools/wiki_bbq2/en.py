@@ -3,6 +3,8 @@ The English of the bbq2 wiki pages (tools/wiki_bbq2/__init__.py reads this; the 
 
 PAGINA: page -> (English title, English lead).
 TEKST:  (page, Dutch heading) -> (English heading, English text). A blank line starts a new paragraph, as in the Dutch.
+The pages of the second part (Het Guhpad, the scenes of the older stories, Het Snuffeleiland) are in en_pad.py, with the names
+of GLOSSARY.md section 25; the last lines of this file take them in.
 
 Hand-written, with the names of tools/lang/GLOSSARY.md section 24 (vadskracht = chonk power, Knabbelbuis = Nibble Tube,
 Hapluikje = Nom Hatch, In de ban van de Knabbelring = The Lord of the Nibble Ring, Frituurberg = Mount Fry, ...), American
@@ -825,14 +827,17 @@ TEKST = {
     # ================================================= the Nibble Ring: the core =================================================
     ("verhalen/knabbelring", "Hoe begin je?"): (
         "How do you start?",
-        "First light the grill portal (the Grillguh's quest). After that Guhdalf stands with his cart at the big barbecue pit in the "
-        "Guhmension. The grill portal to the Guh Barbecuether works for nobody any more until you have done the whole first chapter; "
-        "going back is always possible."),
+        "First follow the big stories of the Guhmension: Baltoguh and Nomguh, Guhtwo and Clone Island, The Cloud Chapel, Ohana on "
+        "Guhwai'i and Sniff Island. Guhdalf does not begin before that, and he tells you which ones you are still missing (see The Guh "
+        "Path). Also light the grill portal (the Grill Guh's quest). After that Guhdalf stands with his cart at the big barbecue pit in "
+        "the Guhmension. The grill portal to the Guh Barbecuether works for nobody until they have done the whole first chapter; going "
+        "back is always possible."),
     ("verhalen/knabbelring", "Zo volg je het verhaal"): (
         "How to follow the story",
         "In the top left of the screen it says what you have to do now (you can switch it off in the Guhdex). In the Guhdex, tab Tales, is "
         "the Journey Map with a check mark per step and 'You are here'. The Super Compass points to 'My Story'. Sam-guh says it too when "
-        "you click him. The chapters in the quest book open one by one."),
+        "you click him. In the quest book the story is in the group The Guh Path, chapter Tales of the Guhbarbecuether: the quests open "
+        "one by one."),
     ("verhalen/knabbelring", "Niemand doet je pijn"): (
         "Nobody hurts you",
         "The Eye, the Nine and everything you meet on the way only shoves: you then stand at your last rest stop again. You never lose "
@@ -1226,3 +1231,9 @@ TEKST = {
         "Behind the duel hall lies the room of Princess Peachguh: a pink carpet to her cake table, a peach of wool in a golden frame, her "
         "four-poster bed, a little tea corner, a piano and Guhshi's nest."),
 }
+
+# the second part of bbq2 (Het Guhpad, the scenes of the older stories, Het Snuffeleiland): tools/wiki_bbq2/en_pad.py
+from . import en_pad as _pad  # noqa: E402
+
+PAGINA.update(_pad.PAGINA)
+TEKST.update(_pad.TEKST)
