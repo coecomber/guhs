@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/japan_koinobori"
+    },
+    "facing=east": {
+      "model": "guhs:block/japan_koinobori",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/japan_koinobori",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/japan_koinobori",
+      "y": 270
+    }
+  }
+}

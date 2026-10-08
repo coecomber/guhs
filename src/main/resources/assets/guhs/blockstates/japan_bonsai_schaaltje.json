@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/japan_bonsai_schaaltje"
+    },
+    "facing=east": {
+      "model": "guhs:block/japan_bonsai_schaaltje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/japan_bonsai_schaaltje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/japan_bonsai_schaaltje",
+      "y": 270
+    }
+  }
+}
