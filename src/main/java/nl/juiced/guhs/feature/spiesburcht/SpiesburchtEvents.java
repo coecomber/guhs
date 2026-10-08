@@ -17,9 +17,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -27,8 +31,11 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
+import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
 import nl.juiced.guhs.quest.GuhAdvancements;
+import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * The Asguh (a guh variant that only lives in the Asdal: grey and sooty with glowing cheeks, fire can't hurt it, sweet
@@ -40,6 +47,7 @@ public final class SpiesburchtEvents {
 
     static void register() {
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onFinalizeSpawn);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOW, SpiesburchtEvents::onPositionCheck);   // (after the ones that forbid a spot)
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onHurt);
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onEntityTick);
         NeoForge.EVENT_BUS.addListener(SpiesburchtEvents::onFeed);
@@ -62,17 +70,65 @@ public final class SpiesburchtEvents {
 
     /** Guhs may be born in the dark Asdal (on its ash), where a normal guh would find it too dark. */
     public static boolean asguhMaySpawn(EntityType<GuhEntity> type, ServerLevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
-        return level.getBiome(pos).is(SpiesburchtFeature.ASDAL) && Mob.checkMobSpawnRules(type, level, reason, pos, random)
-                && (level.getBlockState(pos.below()).is(nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.AS_BLOK.get())
-                || level.getBlockState(pos.below()).is(nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.AS_AARDE.get()));
+        return level.getBiome(pos).is(SpiesburchtFeature.ASDAL) && Mob.checkMobSpawnRules(type, level, reason, pos, random) && opAs(level, pos);
     }
 
-    /** A guh born in the Asdal is an Asguh. */
+    /** Does this spot have the ash of the Asdal under it? */
+    public static boolean opAs(LevelReader level, BlockPos pos) {
+        BlockState grond = level.getBlockState(pos.below());
+        return grond.is(BarbecuetherFeature.AS_BLOK.get()) || grond.is(BarbecuetherFeature.AS_AARDE.get());
+    }
+
+    /**
+     * 1.4.1: why no Asguh was ever born. The spawn rule above lets a guh through in the dark, but after it the spawner asks
+     * the animal itself (Mob#checkSpawnRules), and every animal answers with Animal#getWalkTargetValue: no grass under it
+     * means "is it light here?", and in the Guhbarbecuether (no sky, ambient light 0.1) that only says yes at block light 12
+     * or more. So in the dark Asdal the answer was always no. For a guh that the natural spawner brings on the ash of the
+     * Asdal the light no longer counts (the room it needs still does), and no more come than {@link Drukte#MAX_ASGUHS}
+     * around a player. Chunk generation stays as it was: such guhs would stay for ever and fill the creature cap.
+     */
+    static void onPositionCheck(MobSpawnEvent.PositionCheck event) {
+        if (event.getResult() != MobSpawnEvent.PositionCheck.Result.DEFAULT || event.getSpawnType() != EntitySpawnReason.NATURAL
+                || !(event.getEntity() instanceof GuhEntity guh) || guh.getType() != ModEntities.GUH.get()) {
+            return;
+        }
+        boolean inAsdal = event.getLevel().getBiome(guh.blockPosition()).is(SpiesburchtFeature.ASDAL);
+        MobSpawnEvent.PositionCheck.Result antwoord = asguhPlek(guh, event.getLevel(), inAsdal,
+                inAsdal && !Drukte.asguhMagErbij(event.getLevel().getLevel(), guh.blockPosition()));
+        if (antwoord != MobSpawnEvent.PositionCheck.Result.DEFAULT) {
+            event.setResult(antwoord);
+        }
+    }
+
+    /**
+     * The answer for a guh that the natural spawner wants to put here: FAIL when enough wild Asguhs are around already
+     * ({@code vol}), SUCCEED on the ash of the Asdal with room for it (however dark), DEFAULT (the animal's own answer)
+     * everywhere else.
+     */
+    static MobSpawnEvent.PositionCheck.Result asguhPlek(GuhEntity guh, ServerLevelAccessor level, boolean inAsdal, boolean vol) {
+        if (!inAsdal) {
+            return MobSpawnEvent.PositionCheck.Result.DEFAULT;
+        }
+        if (vol) {
+            return MobSpawnEvent.PositionCheck.Result.FAIL;
+        }
+        return opAs(level, guh.blockPosition()) && guh.checkSpawnObstruction(level) ? MobSpawnEvent.PositionCheck.Result.SUCCEED
+                : MobSpawnEvent.PositionCheck.Result.DEFAULT;
+    }
+
+    /**
+     * A guh born in the Asdal is an Asguh. 1.4.1: one that the natural spawner brings comes and goes like the other wild
+     * animals (world/WildeDieren: never saved, gone when everybody is far away; a tamed or named one stays), so they never
+     * pile up and never keep the creature cap full for the Rookguhs, Sauslopers and Sausblubjes.
+     */
     static void onFinalizeSpawn(FinalizeSpawnEvent event) {
         if (event.getEntity() instanceof GuhEntity guh && (event.getSpawnType() == EntitySpawnReason.NATURAL
                 || event.getSpawnType() == EntitySpawnReason.CHUNK_GENERATION || event.getSpawnType() == EntitySpawnReason.SPAWNER)
                 && event.getLevel().getBiome(BlockPos.containing(event.getX(), event.getY(), event.getZ())).is(SpiesburchtFeature.ASDAL)) {
             guh.setVariant(GuhVariant.ASGUH);
+            if (event.getSpawnType() == EntitySpawnReason.NATURAL && guh.getType() == ModEntities.GUH.get()) {
+                WildeDieren.markeer(guh);
+            }
         }
     }
 
