@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:white_wool",
+    "minecraft:orange_dye"
+  ],
+  "result": {
+    "id": "guhs:botenhuisje_koiwindzak"
+  }
+}
