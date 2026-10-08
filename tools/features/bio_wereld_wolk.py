@@ -10,9 +10,9 @@ What this file writes:
     besides the ores: every plant and tree of this biome is placed by WolkVulling from the terrain model, so nothing lands
     in a lift column or on a stepping stone;
   - the surface rule: wolkenweide_gras on top of the meadow and of every island, and under an island's top soft layers
-    of rock by depth: rose, a cream seam, lilac, a seam of parelmoer, and on (LAGEN; the same list paints the islands of
+    of rock by depth: rose, a pale blue seam, lilac, a seam of parelmoer, and on (LAGEN; the same list paints the islands of
     templates, bio_wereld_eiland.py);
-  - seven blocks: wolkenweide_gras, wolkenweide_steen (rose), wolkenweide_steen_lila, wolkenweide_steen_room (cream), wolkenweide_kristal (softly glowing),
+  - seven blocks: wolkenweide_gras, wolkenweide_steen (rose), wolkenweide_steen_lila, wolkenweide_steen_blauw (pale blue), wolkenweide_kristal (softly glowing),
     wolkenweide_kristalpunt (the little point that hangs under a crystal), wolkenweide_rank (a pale hanging vine); their
     textures, models, loot, tags and names;
   - the particles wolkenweide_pluisje and wolkenweide_glinster; sounds.json for wolkenweide.muziek / .sfeer (the OGGs:
@@ -31,20 +31,20 @@ EILAND_VANAF_Y = 74   # above the meadow's highest ground (WolkTerrein.WEIDE_Y +
 GRAS = "guhs:wolkenweide_gras"
 STEEN = "guhs:wolkenweide_steen"
 LILA = "guhs:wolkenweide_steen_lila"
-ROOM = "guhs:wolkenweide_steen_room"
+BLAUW = "guhs:wolkenweide_steen_blauw"
 KRISTAL = "guhs:wolkenweide_kristal"
 KRISTALPUNT = "guhs:wolkenweide_kristalpunt"
 RANK = "guhs:wolkenweide_rank"
-BLOKKEN = ["wolkenweide_gras", "wolkenweide_steen", "wolkenweide_steen_lila", "wolkenweide_steen_room", "wolkenweide_kristal", "wolkenweide_kristalpunt", "wolkenweide_rank"]
+BLOKKEN = ["wolkenweide_gras", "wolkenweide_steen", "wolkenweide_steen_lila", "wolkenweide_steen_blauw", "wolkenweide_kristal", "wolkenweide_kristalpunt", "wolkenweide_rank"]
 # the layers under an island's top block: (how many blocks, block), from the top down; below the last: rose
-LAGEN = [(2, STEEN), (1, ROOM), (3, LILA), (1, "guhs:parelmoer"), (3, STEEN), (2, ROOM), (4, LILA), (1, "guhs:parelmoer"), (4, STEEN), (2, ROOM),
+LAGEN = [(2, STEEN), (1, BLAUW), (3, LILA), (1, "guhs:parelmoer"), (3, STEEN), (2, BLAUW), (4, LILA), (1, "guhs:parelmoer"), (4, STEEN), (2, BLAUW),
          (5, LILA)]
 
 TEKSTEN = {
     "block.guhs.wolkenweide_gras": "Wolkenweidegras",
     "block.guhs.wolkenweide_steen": "Wolkensteen",
     "block.guhs.wolkenweide_steen_lila": "Lila wolkensteen",
-    "block.guhs.wolkenweide_steen_room": "Roomwitte wolkensteen",
+    "block.guhs.wolkenweide_steen_blauw": "Lichtblauwe wolkensteen",
     "block.guhs.wolkenweide_kristal": "Wolkenkristal",
     "block.guhs.wolkenweide_kristalpunt": "Wolkenkristalpunt",
     "block.guhs.wolkenweide_rank": "Wolkenrank",
@@ -132,7 +132,7 @@ def _beeld(rgb, alpha=255):
 
 GRAS_LICHT, GRAS_DONKER = (250, 233, 240), (240, 212, 226)
 STEEN_TINT = {"wolkenweide_steen": ((244, 205, 219), (229, 178, 199)), "wolkenweide_steen_lila": ((214, 201, 240), (190, 173, 224)),
-              "wolkenweide_steen_room": ((255, 244, 232), (246, 226, 212))}
+              "wolkenweide_steen_blauw": ((216, 232, 252), (190, 211, 244))}
 
 
 def _gesteente(naam):
@@ -206,9 +206,23 @@ def models(h):
         "top": "guhs:block/wolkenweide_gras_top", "side": "guhs:block/wolkenweide_gras_zij", "bottom": "guhs:block/wolkenweide_steen"}})
     w(f"{A}/blockstates/wolkenweide_gras.json", {"variants": {"": {"model": "guhs:block/wolkenweide_gras"}}})
     w(f"{A}/models/item/wolkenweide_gras.json", {"parent": "guhs:block/wolkenweide_gras"})
-    for b in ("wolkenweide_steen", "wolkenweide_steen_lila", "wolkenweide_steen_room", "wolkenweide_kristal"):
+    for b in ("wolkenweide_steen", "wolkenweide_steen_lila", "wolkenweide_steen_blauw"):
         h.simple_block(b)
-    for name in ("wolkenweide_kristalpunt", "wolkenweide_rank", "wolkenweide_rank_punt"):
+    # the crystal glows: its faces are lit from inside (light_emission) and drawn without side shading, so a tip under an
+    # island stays a soft light spot instead of a dark underside
+    kubus = {"from": [0, 0, 0], "to": [16, 16, 16], "shade": False, "light_emission": 11,
+             "faces": {f: {"texture": "#all", "cullface": f} for f in ("down", "up", "north", "south", "west", "east")}}
+    w(f"{A}/models/block/wolkenweide_kristal.json", {"parent": "minecraft:block/block", "textures": {"all": "guhs:block/wolkenweide_kristal",
+                                                                                                   "particle": "guhs:block/wolkenweide_kristal"}, "elements": [kubus]})
+    w(f"{A}/blockstates/wolkenweide_kristal.json", {"variants": {"": {"model": "guhs:block/wolkenweide_kristal"}}})
+    w(f"{A}/models/item/wolkenweide_kristal.json", {"parent": "guhs:block/wolkenweide_kristal"})
+    kruis = [{"from": [0.8, 0, 8], "to": [15.2, 16, 8], "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": 45, "rescale": True}, "shade": False,
+              "light_emission": 9, "faces": {"north": {"uv": [0, 0, 16, 16], "texture": "#cross"}, "south": {"uv": [0, 0, 16, 16], "texture": "#cross"}}},
+             {"from": [8, 0, 0.8], "to": [8, 16, 15.2], "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": 45, "rescale": True}, "shade": False,
+              "light_emission": 9, "faces": {"west": {"uv": [0, 0, 16, 16], "texture": "#cross"}, "east": {"uv": [0, 0, 16, 16], "texture": "#cross"}}}]
+    w(f"{A}/models/block/wolkenweide_kristalpunt.json", {"ambientocclusion": False, "render_type": "minecraft:cutout", "textures": {
+        "cross": "guhs:block/wolkenweide_kristalpunt", "particle": "guhs:block/wolkenweide_kristalpunt"}, "elements": kruis})
+    for name in ("wolkenweide_rank", "wolkenweide_rank_punt"):
         w(f"{A}/models/block/{name}.json", {"parent": "minecraft:block/cross", "render_type": "minecraft:cutout", "textures": {"cross": f"guhs:block/{name}"}})
     w(f"{A}/blockstates/wolkenweide_kristalpunt.json", {"variants": {"": {"model": "guhs:block/wolkenweide_kristalpunt"}}})
     w(f"{A}/blockstates/wolkenweide_rank.json", {"variants": {"tip=false": {"model": "guhs:block/wolkenweide_rank"},
@@ -228,10 +242,10 @@ def data(h):
     # plants and trees stand on the grass; animals and guhs may appear on it
     h.add_tag("minecraft/tags/block/animals_spawnable_on", [GRAS])
     h.add_tag("minecraft/tags/block/mineable/shovel", [GRAS])
-    h.add_tag("minecraft/tags/block/mineable/pickaxe", [STEEN, LILA, ROOM, KRISTAL, KRISTALPUNT])
+    h.add_tag("minecraft/tags/block/mineable/pickaxe", [STEEN, LILA, BLAUW, KRISTAL, KRISTALPUNT])
     h.add_tag("minecraft/tags/block/mineable/hoe", [RANK])
     h.add_tag("minecraft/tags/block/sword_efficient", [RANK])
-    h.add_tag("guhs/tags/block/wolkenweide", ids)
+    h.w(f"{h.R}/data/guhs/tags/block/wolkenweide.json", {"replace": False, "values": ids})
 
     def patch(d):
         d["wolkenweide.muziek"] = {"sounds": [{"name": "guhs:wolkenweide/muziek", "stream": True}]}

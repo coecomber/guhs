@@ -208,7 +208,7 @@ public class BioWereldWolkGameTests {
     /**
      * THE proof: in a few Wolkenweides of two seeds, walk the jump rule over the model's blocks (ground, islands, stepping
      * stones, clouds, lift columns) from the meadow. Every island of every stack must be reached, the highest included,
-     * and from the highest there must be a way back to the meadow.
+     * and from every island there must be a way back to the meadow.
      */
     @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 6000)
     public static void bioWereldWolkRoutes(GameTestHelper helper) {
@@ -264,27 +264,36 @@ public class BioWereldWolkGameTests {
                             eerste = "seed " + seed + ": island " + e.x + " " + e.top + " " + e.z + " (level " + e.niveau + ") of the stack at " + s.x + " " + s.z;
                         }
                     }
-                    if (ergens(b, vloer(top))) {
-                        topBereikt++;
-                        b.loop(plat(vloer(top)), lf);
+                    topBereikt += ergens(b, vloer(top)) ? 1 : 0;
+                    boolean allen = true;
+                    for (WolkTerrein.Eiland e : s.eilanden) {
+                        b.loop(plat(vloer(e)), lf);
                         boolean beneden = ergens(b, grond);
-                        terug += beneden ? 1 : 0;
+                        allen &= beneden;
                         if (!beneden && eerste.isEmpty()) {
-                            eerste = "seed " + seed + ": no way down from " + top.x + " " + top.top + " " + top.z;
+                            eerste = "seed " + seed + ": no way down from " + e.x + " " + e.top + " " + e.z + " (island " + s.eilanden.indexOf(e) + " of " + s.eilanden.size()
+                                    + ", level " + e.niveau + ", stack at " + s.x + " " + s.z + "); from it reached:";
+                            for (WolkTerrein.Eiland o : s.eilanden) {
+                                eerste += " [" + s.eilanden.indexOf(o) + ": " + o.x + " " + o.top + " " + o.z + " r" + o.r + " v" + o.vorm + (ergens(b, vloer(o)) ? " yes]" : " no]");
+                            }
+                            for (WolkTerrein.Kolom k : s.kolommen) {
+                                eerste += " {" + (k.omlaag() ? "down " : "up ") + k.x() + " " + k.voet() + ".." + k.boven() + " " + k.z() + "}";
+                            }
                         }
                     }
+                    terug += allen ? 1 : 0;
                 }
             }
         }
         LOGGER.info("biomes3 Wolkenweide routes: {} stacks (by islands 1..7: {} {} {} {} {} {} {}), islands reached {} of {}, highest island reached in {} stacks, "
-                        + "a way back down in {}; highest top {} above the meadow; {} lifts, {} streams, {} stepping stones, {} stacks with a waterfall; loose islands {} "
+                        + "a way back down from every island in {}; highest top {} above the meadow; {} lifts, {} streams, {} stepping stones, {} stacks with a waterfall; loose islands {} "
                         + "({} with a way up, {} of those reached); in the stacks' boxes: cloud blocks {}, slabs {}, stairs {}, water {}; stack cells in the "
                         + "region {} ({} empty, mean radius {}). {}", stapels, niveaus[1],
                 niveaus[2], niveaus[3], niveaus[4], niveaus[5], niveaus[6], niveaus[7], bereikt, eilanden, topBereikt, terug, hoogste, liften, stromen, stappen, metWater,
                 los, losMetWeg, losBereikt, tel[0], tel[1], tel[2], tel[3], cellen, leeg, straal / Math.max(1, cellen - leeg), eerste);
         helper.assertTrue(stapels >= 8, "stacks found: " + stapels);
         helper.assertTrue(bereikt == eilanden, "every island of every stack is reached from the meadow by the jump rule: " + bereikt + " of " + eilanden + "; " + eerste);
-        helper.assertTrue(terug == stapels, "from every stack's highest island there is a way back down: " + terug + " of " + stapels + "; " + eerste);
+        helper.assertTrue(terug == stapels, "from every island of every stack there is a way back down to the meadow: " + terug + " of " + stapels + "; " + eerste);
         helper.assertTrue(hoogste >= 60 && hoogste <= WolkTerrein.LAAG + WolkTerrein.HOOG, "the highest island is high: " + hoogste);
         helper.assertTrue(liften >= 4 && stromen >= 3 && stappen >= 40, "lifts " + liften + ", streams " + stromen + ", stepping stones " + stappen);
         helper.assertTrue(niveaus[3] + niveaus[4] + niveaus[5] + niveaus[6] + niveaus[7] >= stapels / 2, "most stacks have three islands or more");

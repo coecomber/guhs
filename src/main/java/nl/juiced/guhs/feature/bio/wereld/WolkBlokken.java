@@ -38,7 +38,7 @@ import nl.juiced.guhs.Guhs;
  * tools/features/bio_wereld_wolk.py).
  * <ul>
  *   <li>{@code wolkenweide_gras}: the soft pale grass of the meadow and the island tops;</li>
- *   <li>{@code wolkenweide_steen} (rose), {@code wolkenweide_steen_lila} and {@code wolkenweide_steen_room} (cream): the
+ *   <li>{@code wolkenweide_steen} (rose), {@code wolkenweide_steen_lila} and {@code wolkenweide_steen_blauw} (pale blue): the
  *       pastel rock of the islands' undersides, in layers with a seam of parelmoer (the surface rule);</li>
  *   <li>{@code wolkenweide_kristal}: the softly glowing tip of a drip point, and {@code wolkenweide_kristalpunt}, the
  *       little point that hangs under it;</li>
@@ -59,8 +59,8 @@ public final class WolkBlokken {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.2f, 3.0f).requiresCorrectToolForDrops().sound(SoundType.CALCITE));
     public static final DeferredBlock<Block> STEEN_LILA = BLOCKS.registerSimpleBlock("wolkenweide_steen_lila",
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).strength(1.2f, 3.0f).requiresCorrectToolForDrops().sound(SoundType.CALCITE));
-    public static final DeferredBlock<Block> STEEN_ROOM = BLOCKS.registerSimpleBlock("wolkenweide_steen_room",
-            () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(1.2f, 3.0f).requiresCorrectToolForDrops().sound(SoundType.CALCITE));
+    public static final DeferredBlock<Block> STEEN_BLAUW = BLOCKS.registerSimpleBlock("wolkenweide_steen_blauw",
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.2f, 3.0f).requiresCorrectToolForDrops().sound(SoundType.CALCITE));
     public static final DeferredBlock<Block> KRISTAL = BLOCKS.registerSimpleBlock("wolkenweide_kristal",
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(1.0f).sound(SoundType.AMETHYST).lightLevel(s -> 9));
     public static final DeferredBlock<Kristalpunt> KRISTALPUNT = BLOCKS.registerBlock("wolkenweide_kristalpunt", Kristalpunt::new,
@@ -73,7 +73,7 @@ public final class WolkBlokken {
     public static final DeferredItem<BlockItem> GRAS_ITEM = ITEMS.registerSimpleBlockItem(GRAS);
     public static final DeferredItem<BlockItem> STEEN_ITEM = ITEMS.registerSimpleBlockItem(STEEN);
     public static final DeferredItem<BlockItem> STEEN_LILA_ITEM = ITEMS.registerSimpleBlockItem(STEEN_LILA);
-    public static final DeferredItem<BlockItem> STEEN_ROOM_ITEM = ITEMS.registerSimpleBlockItem(STEEN_ROOM);
+    public static final DeferredItem<BlockItem> STEEN_BLAUW_ITEM = ITEMS.registerSimpleBlockItem(STEEN_BLAUW);
     public static final DeferredItem<BlockItem> KRISTAL_ITEM = ITEMS.registerSimpleBlockItem(KRISTAL);
     public static final DeferredItem<BlockItem> KRISTALPUNT_ITEM = ITEMS.registerSimpleBlockItem(KRISTALPUNT);
     public static final DeferredItem<BlockItem> RANK_ITEM = ITEMS.registerSimpleBlockItem(RANK);
@@ -127,7 +127,7 @@ public final class WolkBlokken {
     }
 
     public static List<DeferredBlock<? extends Block>> blokken() {
-        return List.of(GRAS, STEEN, STEEN_LILA, STEEN_ROOM, KRISTAL, KRISTALPUNT, RANK);
+        return List.of(GRAS, STEEN, STEEN_LILA, STEEN_BLAUW, KRISTAL, KRISTALPUNT, RANK);
     }
 
     static void register(IEventBus modBus) {
@@ -138,7 +138,7 @@ public final class WolkBlokken {
     }
 
     static void creative(Consumer<ItemStack> output) {
-        for (DeferredItem<BlockItem> item : List.of(GRAS_ITEM, STEEN_ITEM, STEEN_LILA_ITEM, STEEN_ROOM_ITEM, KRISTAL_ITEM, KRISTALPUNT_ITEM, RANK_ITEM)) {
+        for (DeferredItem<BlockItem> item : List.of(GRAS_ITEM, STEEN_ITEM, STEEN_LILA_ITEM, STEEN_BLAUW_ITEM, KRISTAL_ITEM, KRISTALPUNT_ITEM, RANK_ITEM)) {
             output.accept(new ItemStack(item.get()));
         }
     }

@@ -26,7 +26,8 @@ import net.minecraft.core.Direction;
  *       and {@link #TRAP_STAP} further (a gap of one block), eight to a turn, for rises of 5-10;</li>
  *   <li>a <i>lift pair</i>: a wolkenlift column from the lower island's rim up to the higher island's rim and a
  *       wolkenstroom column down beside it ({@link Kolom}, 3 x 3 as in the zwevende_eilanden structure) on a cloud
- *       cushion ({@link Kussen}) that also catches whoever steps off the rim, for rises of 14-32.</li>
+ *       cushion ({@link Kussen}) that also catches whoever steps off the rim, for rises of 14-32. Where the stream has
+ *       no room beside the lift it stands at another side of the higher island and goes down to the meadow.</li>
  * </ul>
  * The first island is reached from the meadow by a wenteltrap or a lift pair. Around every stepping stone, column and
  * landing the air is kept free ({@link Stapel#vrij}); a link that does not fit ends the chain, so what stands is always
@@ -56,7 +57,7 @@ public final class WolkTerrein {
     public static final int LAAG = 9, HOOG = 79;
     public static final int TRAP_TOT = 14, TRAP_STAP = 4;
     /** The grid of the stacks, and how far a stack may reach from its middle. */
-    public static final int STAPEL_CEL = 96, STAPEL_RUIM = 44;
+    public static final int STAPEL_CEL = 84, STAPEL_RUIM = 38;
     public static final double STAPEL_KANS = 0.88, WATER_KANS = 0.6;
     public static final int WOLK_CEL = 48;
     public static final double WOLK_KANS = 0.9, ROZE_KANS = 0.22;
@@ -180,12 +181,14 @@ public final class WolkTerrein {
                 drup[i * 3] = u * cos - vv * sin;
                 drup[i * 3 + 1] = u * sin + vv * cos;
                 double lang = BioModel.kans(h, 22 + i * 3);
-                drup[i * 3 + 2] = rots ? 1 + 1.5 * lang : klasse == KLEIN ? 3.5 + 4.5 * lang : klasse == MIDDEL ? 5 + 7 * lang : 6 + 8 * lang;
-                if (i == 0 && !rots) {
+                drup[i * 3 + 2] = rots ? 1 + 1.5 * lang : klasse == KLEIN ? 2.5 + 3.5 * lang : klasse == MIDDEL ? 5 + 7 * lang : 6 + 8 * lang;
+                if (i == 0 && klasse >= MIDDEL) {
                     drup[2] += 2;
                 }
+                // (a narrow island gets short points, or it would become a pillar)
+                drup[i * 3 + 2] = Math.min(drup[i * 3 + 2], 1.5 * klein + 1);
             }
-            double bak = rots ? 0.9 * klein + 0.4 : 1.2 * klein + 2.2;
+            double bak = rots ? 0.9 * klein + 0.4 : klasse == KLEIN ? 0.95 * klein + 1.4 : 1.2 * klein + 2.2;
             // a low hill on some medium and large islands, away from the middle (the middle stays the island's flat top)
             boolean heuvel = klasse >= MIDDEL && (vorm == ROND || vorm == LANG || vorm == GAT) && BioModel.kans(h, 14) < 0.5;
             double hh = 1 + (int) (BioModel.kans(h, 15) * 3), hr = 2 + 1.5 * hh, ha2 = BioModel.kans(h, 16) * 6.283;
@@ -741,11 +744,27 @@ public final class WolkTerrein {
                 s.terug(m2);
             }
         }
-        if (!stroom) {
-            // no room for a stream: a big cushion under b's rim beside the lift, to step off onto
-            s.kussens.add(new Kussen(lx + p.getStepX() * 5 * eerst + d.getStepX(), a.top, lz + p.getStepZ() * 5 * eerst + d.getStepZ(), 5.2));
+        // no room beside the lift: a stream from another side of b all the way down to the meadow
+        for (int t = 0; t < 12 && !stroom; t++) {
+            Direction e = RICHTINGEN[(t + (int) (BioModel.kans(h, 52) * 4)) % 4];
+            int rij = t < 4 ? 0 : t < 8 ? 3 : -3, ext = b.reik3(e, rij);
+            if (ext == GEEN) {
+                continue;
+            }
+            Direction pe = e.getClockWise();
+            int sx = b.x + e.getStepX() * (ext + 2) + pe.getStepX() * rij, sz = b.z + e.getStepZ() * (ext + 2) + pe.getStepZ() * rij, sg = grond(m, sx, sz);
+            int[] m2 = s.merk();
+            s.kolommen.add(new Kolom(sx, sz, sg, b.top + 1, e, true, false));
+            s.vrij.add(new Doos(sx - 1, sg + 1, sz - 1, sx + 1, b.top + 4, sz + 1));
+            s.terpen.add(new Terp(sx, sz, 1, sg, true));
+            if (klopt(m, s, null, m2, STAPEL_RUIM)) {
+                stroom = true;
+            } else {
+                s.terug(m2);
+            }
         }
-        if (klopt(m, s, b, merk, STAPEL_RUIM)) {
+        // (a lift without a way down is not built)
+        if (stroom && klopt(m, s, b, merk, STAPEL_RUIM)) {
             return true;
         }
         s.terug(merk);
@@ -992,13 +1011,39 @@ public final class WolkTerrein {
         if (!rimVast(a, d, 1) || !rimVast(b, d.getOpposite(), 1)) {
             return false;
         }
-        int extA = a.reik3(d, 0), extB = b.reik3(d.getOpposite(), 0);
-        b.zet(a.x + d.getStepX() * (extA + 2 + extB), a.z + d.getStepZ() * (extA + 2 + extB), a.top + verschil);
+        // the two rims face each other on the same row: there the gap is exactly one block, on the other rows at least one
+        // (b's rows are counted the other way round, it looks back at a)
+        int afstand = GEEN;
+        for (int q = -1; q <= 1; q++) {
+            int ra = a.reik(d, q), rb = b.reik(d.getOpposite(), -q);
+            if (ra != GEEN && rb != GEEN) {
+                afstand = Math.max(afstand, ra + rb + 2);
+            }
+        }
+        if (afstand == GEEN) {
+            return false;
+        }
+        b.zet(a.x + d.getStepX() * afstand, a.z + d.getStepZ() * afstand, a.top + verschil);
         landing(s, a, d, 1);
         landing(s, b, d.getOpposite(), 1);
-        int gx = a.x + d.getStepX() * (extA + 1), gz = a.z + d.getStepZ() * (extA + 1);
-        s.vrij.add(new Doos(gx - Math.abs(d.getStepZ()), Math.min(a.top, b.top) + 1, gz - Math.abs(d.getStepX()), gx + Math.abs(d.getStepZ()), Math.max(a.top, b.top) + 5,
-                gz + Math.abs(d.getStepX())));
+        Direction p = d.getClockWise();
+        for (int q = -1; q <= 1; q++) {
+            int ra = a.reik(d, q), rb = b.reik(d.getOpposite(), -q);
+            if (ra != GEEN && rb != GEEN) {
+                int x0 = a.x + d.getStepX() * (ra + 1) + p.getStepX() * q, z0 = a.z + d.getStepZ() * (ra + 1) + p.getStepZ() * q;
+                int x1 = a.x + d.getStepX() * (afstand - rb - 1) + p.getStepX() * q, z1 = a.z + d.getStepZ() * (afstand - rb - 1) + p.getStepZ() * q;
+                s.vrij.add(new Doos(Math.min(x0, x1), Math.min(a.top, b.top) + 1, Math.min(z0, z1), Math.max(x0, x1), Math.max(a.top, b.top) + 5, Math.max(z0, z1)));
+                if (ra + rb + 2 == afstand) {
+                    // the two rim columns that face each other across one block: flat, with room to jump
+                    int ax = a.x + d.getStepX() * ra + p.getStepX() * q, az = a.z + d.getStepZ() * ra + p.getStepZ() * q;
+                    int bx = a.x + d.getStepX() * (ra + 2) + p.getStepX() * q, bz = a.z + d.getStepZ() * (ra + 2) + p.getStepZ() * q;
+                    a.vlak(ax - a.x, az - a.z);
+                    b.vlak(bx - b.x, bz - b.z);
+                    s.vrij.add(new Doos(ax, a.top + 1, az, ax, a.top + 4, az));
+                    s.vrij.add(new Doos(bx, b.top + 1, bz, bx, b.top + 4, bz));
+                }
+            }
+        }
         if (klopt(m, s, b, merk, STAPEL_RUIM)) {
             return true;
         }
@@ -1582,7 +1627,7 @@ public final class WolkTerrein {
     public record Wolk(int x, int y, int z, double rx, double ry, double rz, boolean roze, int bank) {
     }
 
-    /** The cloud blobs of a grid cell (cached in the model): a big bank, and sometimes a small high one. */
+    /** The cloud blobs of a grid cell (cached in the model): a big bank, sometimes a smaller high one, and a little puff. */
     public static Wolk[] wolken(BioModel m, int cx, int cz) {
         long sleutel = BioModel.sleutel(SOORT_WOLK, cx, cz);
         Object bekend = m.cellen.get(sleutel);
@@ -1590,16 +1635,16 @@ public final class WolkTerrein {
             return (Wolk[]) bekend;
         }
         List<Wolk> uit = new ArrayList<>(8);
-        for (int welke = 0; welke < 2; welke++) {
+        for (int welke = 0; welke < 3; welke++) {
             long h = m.hash(cx, cz, 6301 + welke);
             int x = cx * WOLK_CEL + (int) (BioModel.kans(h, 1) * WOLK_CEL), z = cz * WOLK_CEL + (int) (BioModel.kans(h, 2) * WOLK_CEL);
-            if (BioModel.kans(h, 0) >= (welke == 0 ? WOLK_KANS : 0.55) || m.eWeide(x, z) < BINNEN || Luchtruim.bezet(x, z, 22)) {
+            if (BioModel.kans(h, 0) >= (welke == 0 ? WOLK_KANS : welke == 1 ? 0.55 : 0.8) || m.eWeide(x, z) < BINNEN || Luchtruim.bezet(x, z, 22)) {
                 continue;
             }
-            double groot = welke == 0 ? 0.85 + 0.6 * BioModel.kans(h, 6) : 0.5 + 0.3 * BioModel.kans(h, 6);
-            int y = grond(m, x, z) + (welke == 0 ? 14 + (int) (88 * BioModel.kans(h, 3)) : 60 + (int) (52 * BioModel.kans(h, 3)));
+            double groot = welke == 0 ? 0.85 + 0.6 * BioModel.kans(h, 6) : welke == 1 ? 0.5 + 0.3 * BioModel.kans(h, 6) : 0.3 + 0.2 * BioModel.kans(h, 6);
+            int y = grond(m, x, z) + (welke == 0 ? 14 + (int) (88 * BioModel.kans(h, 3)) : welke == 1 ? 60 + (int) (52 * BioModel.kans(h, 3)) : 18 + (int) (90 * BioModel.kans(h, 3)));
             boolean roze = BioModel.kans(h, 4) < ROZE_KANS;
-            int n = welke == 0 ? 3 + (int) (BioModel.kans(h, 5) * 4) : 2 + (int) (BioModel.kans(h, 5) * 2);
+            int n = welke == 0 ? 3 + (int) (BioModel.kans(h, 5) * 4) : welke == 1 ? 2 + (int) (BioModel.kans(h, 5) * 2) : 1 + (int) (BioModel.kans(h, 5) * 2);
             double rx0 = (7 + 4 * BioModel.kans(h, 7)) * groot, rz0 = (5.5 + 3.5 * BioModel.kans(h, 8)) * groot, ry0 = (2.4 + 1.4 * BioModel.kans(h, 9)) * Math.sqrt(groot);
             for (int i = 0; i < n; i++) {
                 double a = BioModel.kans(h, 10 + i * 5) * 6.283, d = i == 0 ? 0 : 0.55 + 0.4 * BioModel.kans(h, 11 + i * 5);
@@ -1616,8 +1661,14 @@ public final class WolkTerrein {
 
     /** How thick the thin cloud sea is at this column, in blocks (0: none; halves are slabs). */
     public static double zee(BioModel m, int x, int z) {
-        double v = m.ruis(BioModel.R_RIVIER, x * 0.9 - 9000, z * 0.9 + 9000) + 0.05 * m.ruis(BioModel.R_DETAIL, x * 1.7, z * 1.7);
-        return v < 0.12 ? 0 : Math.min(2.5, 0.5 + (v - 0.12) * 9);
+        double v = m.ruis(BioModel.R_RIVIER, x * 0.9 - 9000, z * 0.9 + 9000);
+        if (v < 0.02) {
+            return 0;
+        }
+        // (two finer noises break the sheet into drifts with holes between them: billows, thick in their middles, thin at their edges)
+        double rand = Math.min(1, (v - 0.02) * 6);
+        double dik = rand * (0.7 + 3.4 * m.ruis(BioModel.R_DETAIL, x * 0.8 + 700, z * 0.8 - 700) + 1.6 * m.ruis(BioModel.R_DETAIL, x * 2.1 - 300, z * 2.1 + 300));
+        return dik < 0.5 ? 0 : Math.min(3.0, dik);
     }
 
     /** Is the thin cloud sea at this column (0: no; 1 or 2: that many blocks thick)? */

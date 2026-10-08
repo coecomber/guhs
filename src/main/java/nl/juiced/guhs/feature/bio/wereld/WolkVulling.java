@@ -143,6 +143,15 @@ public final class WolkVulling {
             if (dicht[o] || y <= k.hoogte[o] || k.water[o] != Kaart.GEEN && y <= k.water[o] + 1 || k.inSpan(o, y)) {
                 return;
             }
+            // (no cloud lies on an island: four blocks of air stay above every top, or a bank could wall off half an island)
+            int[] sp = k.spans[o];
+            if (sp != null) {
+                for (int i = 0; i < sp.length; i += 2) {
+                    if (y > sp[i + 1] && y <= sp[i + 1] + 4) {
+                        return;
+                    }
+                }
+            }
             if (doosKolom[o]) {
                 for (WolkTerrein.Doos d : dozen) {
                     if (d.bevat(x, y, z)) {
@@ -214,7 +223,7 @@ public final class WolkVulling {
         for (int cx = Math.floorDiv(x0 - bereik, cel); cx <= Math.floorDiv(x0 + 15 + bereik, cel); cx++) {
             for (int cz = Math.floorDiv(z0 - bereik, cel); cz <= Math.floorDiv(z0 + 15 + bereik, cel); cz++) {
                 WolkTerrein.Wolk[] alle = WolkTerrein.wolken(m, cx, cz);
-                for (int bank = 0; bank < 2; bank++) {
+                for (int bank = 0; bank < 3; bank++) {
                     boolean iets = false;
                     for (WolkTerrein.Wolk w : alle) {
                         if (w.bank() != bank || w.x() + w.rx() < x0 - 1 || w.x() - w.rx() > x0 + 16 || w.z() + w.rz() < z0 - 1 || w.z() - w.rz() > z0 + 16) {
@@ -316,6 +325,10 @@ public final class WolkVulling {
             }
             if (dik - vol >= 0.5) {
                 zet.zet(x, y + vol, z, pal.witOnder, true);
+            }
+            if (dik >= 1.9) {
+                // (a drift is rounded underneath too)
+                zet.zet(x, y - 1, z, pal.witBoven, true);
             }
         }
     }
