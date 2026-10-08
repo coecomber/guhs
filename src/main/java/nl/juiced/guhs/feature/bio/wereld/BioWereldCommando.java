@@ -46,6 +46,10 @@ import nl.juiced.guhs.feature.bio.BioZelftest;
  *   <li>{@code check|kaart|tijd|stroom bij <name> <chunks>}: the same at the middle of the nearest klaterdal, bloesemmeertje
  *       or wolkenweide from 0 0, or (name = a kind of spot, e.g. waterval) at the nearest such spot from there; the place
  *       is printed first, as "bij &lt;name&gt; = x z";</li>
+ *   <li>{@code regios [blokken]} (biomes3 fix-plaatsing): every region (a dal, a Wolkenweide) within that distance (default
+ *       3000) of where the command is given, with the place chosen for each one-per-region building, and how many of every
+ *       building each region gets; {@code lucht}: the buildings in the air and the shape of the air each keeps free;
+ *       {@code teller}: the model's counters since they were last read;</li>
  *   <li>{@code plektest <soort>}: on a server started with GUHS_BIO_PLEKTEST: finds the nearest test structure of that kind
  *       of spot and checks that its marker stands where the model says.</li>
  * </ul>
@@ -95,9 +99,23 @@ public final class BioWereldCommando {
                         }));
                     })))));
         }
+        // biomes3 fix-plaatsing: the regions and what was chosen for them
+        wereld.then(Commands.literal("regios").executes(c -> zeg(c, regios(c, 3000)))
+                .then(Commands.argument("blokken", IntegerArgumentType.integer(500, 16000)).executes(c -> zeg(c, regios(c, IntegerArgumentType.getInteger(c, "blokken"))))));
+        wereld.then(Commands.literal("lucht").executes(c -> zeg(c, List.of("the buildings in the air and the air they keep free:" + Luchtruim.verslag()))));
+        wereld.then(Commands.literal("teller").executes(c -> zeg(c, List.of(BioModel.teller()))));
         wereld.then(Commands.literal("plektest").then(Commands.argument("soort", StringArgumentType.word())
                 .executes(c -> zeg(c, List.of(plektest(c.getSource().getLevel(), StringArgumentType.getString(c, "soort")))))));
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bio").then(wereld)));
+    }
+
+    /** The regions within this many blocks of where the command is given, each with its one-per-region buildings, and the count of every building per region. */
+    private static List<String> regios(CommandContext<CommandSourceStack> c, int blokken) {
+        BioModel m = model(c);
+        int x = (int) c.getSource().getPosition().x, z = (int) c.getSource().getPosition().z;
+        List<String> uit = new ArrayList<>(PlaatsingMeting.lijst(m, x, z, blokken));
+        uit.add(PlaatsingMeting.telling(m, x, z, blokken, 12, 6));
+        return uit;
     }
 
     private static BioModel model(CommandContext<CommandSourceStack> c) {
@@ -484,6 +502,11 @@ public final class BioWereldCommando {
                 BlockPos van = lucht ? weide : dal;
                 if (van != null) {
                     String regel = plek(m, s.getSerializedName(), van.getX(), van.getZ(), 60).get(0);
+                    if (regel.contains(": none") && !lucht) {
+                        // biomes3 fix-plaatsing: a dal is 350-650 across now, and not every one has a tall fall or a large island:
+                        // the rare kinds are looked for among the neighbouring dals too
+                        regel = plek(m, s.getSerializedName(), van.getX(), van.getZ(), 170).get(0);
+                    }
                     plekken.add(regel);
                     meld.check(!regel.contains(": none"), regel);
                 }

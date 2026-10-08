@@ -9,11 +9,20 @@ BioPlekken). A slice writes it with the generator's own h.structure(...) and the
     h.structure("dal_boogbrug", ["klaterdal"], spacing=5, separation=2, salt=21500601, reach=24, centre="guhs:dal_boogbrug_midden")
     bio_plek.plek(h, "dal_boogbrug", "over_rivier")
 
-    plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none")
+    plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", vlak=None, per_regio=None, twee_vanaf=None)
         naam    the structure (written by h.structure just before)
-        soort   SOORTEN: "terras", "oever", "over_rivier", "waterval", "rots" (Klaterdal); "meer_oever", "meer_eiland",
-                "meer_boom" (Bloesemmeertje; a shore can lie in the Klaterdal's valley floor too: give both biomes);
-                "weide", "lucht", "zweefeiland" (Wolkenweide)
+        soort   SOORTEN: "terras", "oever", "over_rivier", "waterval", "rots" (Klaterdal); "monding" (the pond where a
+                river runs into the lake: valley floor, often inside biome Bloesemmeertje: give both biomes);
+                "meer_oever", "meer_eiland", "meer_boom" (Bloesemmeertje; a shore can lie in the Klaterdal's valley
+                floor too: give both biomes); "weide", "lucht", "zweefeiland" (Wolkenweide)
+        per_regio   (biomes3 fix-plaatsing) ONE per region: a valley with its lake, or a Wolkenweide, gets this building
+                at most once, with this chance (1.0: every region that has a fitting spot). Its place is chosen from the
+                terrain model for the whole region (Java: RegioKeuze), not by where the structure set happens to try.
+                Give the set a spacing of about 4 and separation 0: the set's grid only decides which chunk STARTS the
+                structure (the building may stand anywhere in that chunk's grid cell), and locate / the Superkompas
+                look 100 grid cells far. Every structure of kind "lucht" should be per_regio: only those reserve just
+                the air their own template needs (Luchtruim); one without it reserves a cylinder at every possible start.
+        twee_vanaf  with per_regio: a region whose lake (or meadow) has at least this mean radius gets two, far apart
         hoogte  kind "lucht": blocks above the meadow where the start jigsaw comes (default 24)
         ruimte  kind "lucht": no natural island or cloud within this many blocks of the start (default 20, at most 64);
                 make it the reach of your template from its anchor, plus a few
@@ -47,15 +56,37 @@ SOORTEN = {  # kind -> (biomes, the colour of its test plate)
     "meer_oever": (["bloesemmeertje", "klaterdal"], "cyan"), "meer_eiland": (["bloesemmeertje"], "green"),
     "meer_boom": (["bloesemmeertje"], "brown"),
     "weide": (["wolkenweide"], "magenta"), "lucht": (["wolkenweide"], "purple"), "zweefeiland": (["wolkenweide"], "blue"),
+    "monding": (["klaterdal", "bloesemmeertje"], "white"),   # biomes3 fix-plaatsing (last: the test salts of the others stay)
+}
+# biomes3 fix-plaatsing: the ONE-PER-REGION buildings, by structure name: (chance that a region has it, twee_vanaf or None).
+# plek() applies this when the caller gives no per_regio itself, so the building slices' modules only hold the grid of
+# their structure set (spacing 4, separation 0 for all of these). What the numbers give: tools/../BioPlaatsingGameTests
+# (bioPlaatsingTelling) and guhs_workbio/reports/fix_plaatsing.md.
+PER_REGIO = {
+    "weebhuisje": (1.0, None),            # the user's "max 1x per biome": exactly one per valley that has the room
+    "dal_torii_water": (1.0, None),       # the big torii in the pond at a river's mouth, looking at the lake
+    "dal_theehuisje": (1.0, None),        # the tea house at the top of a tall fall: one in every valley that has such a fall
+    "botenhuisje": (1.0, 135),            # one per lake; the largest lakes (mean radius 135+, about one in ten) a second
+    "picknickeilandje": (0.42, None),     # about one lake in three (not every lake has a large island with the tree spot)
+    "bliksemsmidse": (1.0, None), "luchtballon_haven": (1.0, None), "sterrenwacht_ruine": (1.0, None),
+    "wolkenhoeder_hut": (0.75, None),     # "most" Wolkenweides
+    "regenboogbrug": (0.30, None), "wolkenkasteeltje": (0.30, None),   # a bridge or a castle in about one in two
 }
 TEST = "plektest"
 SALT = 21500101   # the wereld slice's structure sets: 21500101, 21500111, ...
 
 
-def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", alleen_test=False, vlak=None):
+def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", alleen_test=False, vlak=None, per_regio=None, twee_vanaf=None):
     """Turns the structure `naam` (written by h.structure) into a guhs:bio_plek structure of this kind of spot."""
     assert soort in SOORTEN, f"bio_plek: unknown kind {soort} (one of {', '.join(SOORTEN)})"
     hooks(h)
+    if per_regio is None and naam in PER_REGIO:
+        per_regio, twee_vanaf = PER_REGIO[naam]
+    if per_regio is not None:
+        with open(f"{h.D}/worldgen/structure_set/{naam}.json", encoding="utf-8") as f:
+            plaatsing = __import__("json").load(f)["placement"]
+        assert plaatsing["spacing"] <= 6 and plaatsing["separation"] == 0, \
+            f"bio_plek: {naam} is one per region: give its set spacing 2-6 and separation 0 (it has {plaatsing})"
 
     def patch(s):
         assert s["type"] in ("guhs:flat_jigsaw", "guhs:bio_plek"), f"bio_plek: {naam} is a {s['type']}"
@@ -75,6 +106,16 @@ def plek(h, naam, soort, hoogte=None, ruimte=None, terrain_adaptation="none", al
             # (biomes3 merge) how far around a terras spot the terrace is plain and level; default 6
             assert soort == "terras" and 2 <= vlak <= 16 and vlak % 2 == 0, "vlak only for kind terras, even, 2..16"
             s["vlak"] = int(vlak)
+        if per_regio is not None:
+            # (biomes3 fix-plaatsing) one per region, with this chance
+            assert 0.0 < per_regio <= 1.0, "per_regio is a chance: 0 < per_regio <= 1"
+            s["per_regio"] = float(per_regio)
+            if twee_vanaf is not None:
+                s["twee_vanaf"] = int(twee_vanaf)
+        else:
+            assert twee_vanaf is None, "twee_vanaf only with per_regio"
+            s.pop("per_regio", None)
+            s.pop("twee_vanaf", None)
         if alleen_test:
             s["alleen_test"] = True
     h.patch_json(f"{h.D}/worldgen/structure/{naam}.json", patch)
@@ -110,6 +151,8 @@ def test_structuren(h):
             s = h.Structure((5, 5, 5))
             for x in range(5):
                 for z in range(5):
+                    if soort == "monding" and (x, z) != (2, 2):
+                        continue   # (a post in the pond: the water stays)
                     if soort == "over_rivier" and x not in (0, 4) and (x, z) != (2, 2):
                         continue   # (a bridge: two bank plates and the middle; the water stays)
                     s.set(x, 0, z, plaat)

@@ -21,6 +21,7 @@ import net.minecraft.util.StringRepresentable;
  *   <tr><td>over_rivier</td><td>the middle of the river where it is at most 9 wide with level banks and runs on for 3 blocks both ways; y = the banks; looks ALONG the river, so the building's left-right axis lies across it</td></tr>
  *   <tr><td>waterval</td><td>the bank at the foot of a fall of 4 blocks or more (on the lower terrace, at most 6 from the falling water); looks at the fall</td></tr>
  *   <tr><td>rots</td><td>the bank at the TOP of a tall fall (10 blocks or more within 6 blocks of the edge); looks out over the fall</td></tr>
+ *   <tr><td>monding</td><td>(biomes3 fix-plaatsing) in the pond where a river of the valley floor runs into the lake: shallow water at the lake's level, 4 blocks of it to both sides, the open lake within 14 blocks ahead; y = one above the water (as {@code over_rivier}); looks at the lake</td></tr>
  *   <tr><td>meer_oever</td><td>the shore of the lake (dry, at most 2 above the water, open water for 6 blocks in front); looks at the water</td></tr>
  *   <tr><td>meer_eiland</td><td>the flat ground of a large lake island with 4 blocks of it all around; looks to the nearest water</td></tr>
  *   <tr><td>meer_boom</td><td>3 blocks from the big tree of a large lake island, on the island's inner side; looks at the tree</td></tr>
@@ -31,7 +32,7 @@ import net.minecraft.util.StringRepresentable;
  */
 public final class BioPlekken {
     public enum Soort implements StringRepresentable {
-        TERRAS, OEVER, OVER_RIVIER, WATERVAL, ROTS, MEER_OEVER, MEER_EILAND, MEER_BOOM, WEIDE, LUCHT, ZWEEFEILAND;
+        TERRAS, OEVER, OVER_RIVIER, WATERVAL, ROTS, MEER_OEVER, MEER_EILAND, MEER_BOOM, WEIDE, LUCHT, ZWEEFEILAND, MONDING; // biomes3 fix-plaatsing: MONDING
 
         public static final Codec<Soort> CODEC = StringRepresentable.fromEnum(Soort::values);
 
@@ -52,6 +53,11 @@ public final class BioPlekken {
         return zoek(m, soort, cx, cz, hoogte, VLAK);
     }
 
+    /** The direction drawn for a chunk (the kinds that look nowhere in particular). */
+    static Direction willekeurig(BioModel m, int cx, int cz) {
+        return RICHTINGEN[(int) (BioModel.kans(m.hash(cx, cz, 7401), 0) * 4)];
+    }
+
     /** biomes3 merge: a {@code terras} spot is plain level terrace this far around it, unless the structure asks for more. */
     public static final int VLAK = 6;
 
@@ -66,7 +72,7 @@ public final class BioPlekken {
             return Optional.empty();
         }
         int x0 = cx << 4, z0 = cz << 4, mx = x0 + 8, mz = z0 + 8;
-        Direction willekeurig = RICHTINGEN[(int) (BioModel.kans(m.hash(cx, cz, 7401), 0) * 4)];
+        Direction willekeurig = willekeurig(m, cx, cz);
         switch (soort) {
             case WEIDE, LUCHT -> {
                 int o = Kaart.index(mx, mz);
@@ -121,6 +127,7 @@ public final class BioPlekken {
                 case ROTS -> waterval(m, k, o, x, z, 10, true);
                 case MEER_OEVER -> meerOever(m, k, o, x, z);
                 case MEER_EILAND -> meerEiland(m, k, o, x, z);
+                case MONDING -> monding(m, k, o, x, z);
                 default -> null;
             };
             if (p != null) {
@@ -294,6 +301,46 @@ public final class BioPlekken {
             }
             if (open && m.droog(x - sx, z - sz) && m.droog(x - 2 * sx, z - 2 * sz) && m.droog(x + sz, z + sx) && m.droog(x - sz, z - sx)) {
                 return new Plek(x, k.hoogte[o], z, d);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * biomes3 fix-plaatsing: in the pond at a river's mouth. The column is river water of the valley floor at the lake's
+     * level, at most two deep; so are the columns 4 to both sides (across the way it looks) in three rows; and straight
+     * ahead the water runs on, unbroken, into the lake itself within 14 blocks.
+     */
+    private static Plek monding(BioModel m, Kaart k, int o, int x, int z) {
+        if (k.terras[o] != 0 || k.water[o] != MeerTerrein.WATER || (k.vlag[o] & (Kaart.RIVIER | Kaart.VAL | Kaart.LIP)) != Kaart.RIVIER
+                || k.water[o] - k.hoogte[o] > 2) {
+            return null;
+        }
+        for (Direction d : RICHTINGEN) {
+            int sx = d.getStepX(), sz = d.getStepZ();
+            boolean meer = false;
+            for (int a = 1; a <= 14; a++) {
+                int px = x + sx * a, pz = z + sz * a;
+                if (m.water(px, pz) != MeerTerrein.WATER) {
+                    break;
+                }
+                if (a >= 3 && m.terras(px, pz) < 0 && m.soort(px, pz) == Kaart.MEER) {
+                    meer = true;
+                    break;
+                }
+            }
+            if (!meer) {
+                continue;
+            }
+            boolean nat = true;
+            for (int b = -4; b <= 4 && nat; b++) {
+                for (int a = -1; a <= 1 && nat; a++) {
+                    int px = x + sx * a + sz * b, pz = z + sz * a + sx * b;
+                    nat = m.water(px, pz) == MeerTerrein.WATER && MeerTerrein.WATER - m.hoogte(px, pz) <= 2;
+                }
+            }
+            if (nat) {
+                return new Plek(x, MeerTerrein.WATER + 1, z, d);
             }
         }
         return null;

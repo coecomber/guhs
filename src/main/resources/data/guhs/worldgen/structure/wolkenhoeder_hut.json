@@ -23,5 +23,6 @@
   },
   "plek": "lucht",
   "hoogte": 46,
-  "ruimte": 46
+  "ruimte": 46,
+  "per_regio": 0.75
 }

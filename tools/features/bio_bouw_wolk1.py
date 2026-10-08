@@ -22,9 +22,12 @@ from features import guhpixel_lib as px
 H, S, L = tekst.H, tekst.S, tekst.L
 # name: (builder, spacing, separation, salt, ruimte)   spacing in chunks; a Wolkenweide is roughly 200 chunks
 STRUCTUREN = {
-    H: (bouw.hoeder, 16, 8, 21500801, 46),
-    S: (bouw.sterrenwacht, 11, 5, 21500811, 26),
-    L: (bouw.haven, 10, 5, 21500821, 36),
+    # biomes3 fix-plaatsing: one per Wolkenweide (bio_wereld_plek.PER_REGIO: a haven and a ruin in every one, the hut in
+    # three of four); the set is only the grid whose cell the chosen spot lies in, and only the buildings that really
+    # come keep air free (the shape of their own template), so the spacing no longer costs natural islands
+    H: (bouw.hoeder, 4, 0, 21500801, 46),
+    S: (bouw.sterrenwacht, 4, 0, 21500811, 26),
+    L: (bouw.haven, 4, 0, 21500821, 36),
 }
 PROCESSOR = f"{H}_wolkvoet"
 ADVANCEMENTS = (f"{H}_gevonden", f"{H}_les", f"{H}_schaapje", f"{S}_gevonden", f"{S}_sterrenstof", f"{L}_gevonden", f"{L}_vaart")

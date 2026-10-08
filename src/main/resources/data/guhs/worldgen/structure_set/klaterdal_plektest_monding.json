@@ -1,14 +1,14 @@
 {
   "structures": [
     {
-      "structure": "guhs:wolkenhoeder_hut",
+      "structure": "guhs:klaterdal_plektest_monding",
       "weight": 1
     }
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 4,
-    "separation": 0,
-    "salt": 21500801
+    "spacing": 3,
+    "separation": 1,
+    "salt": 21500211
   }
 }

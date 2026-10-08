@@ -162,7 +162,8 @@ public final class BouwDalCheck {
             BlockPos anker = wereld(stuk, a[0], a[1], a[2]);
             String waar = id + " at " + anker.toShortString() + " (" + stuk.getRotation().name().toLowerCase() + ", "
                     + (int) Math.sqrt(anker.distSqr(dal)) + " from " + dal.toShortString() + "): ";
-            meld.check(Bio.in(level, anker, Bio.KLATERDAL), waar + "stands in the Klaterdal");
+            // biomes3 fix-plaatsing: dal_torii_water stands in the pond at a river's mouth, which is biome Bloesemmeertje as often as Klaterdal
+            meld.check(Bio.in(level, anker, Bio.KLATERDAL) || id.equals("dal_torii_water") && Bio.in(level, anker, Bio.BLOESEMMEERTJE), waar + "stands in the Klaterdal");
             kijk(level, id, stuk, anker, meld);
         }
     }

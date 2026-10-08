@@ -369,8 +369,8 @@ public final class BouwWolk1Commando {
             var s = structuren.get(ResourceKey.create(Registries.STRUCTURE, Guhs.id(naam)));
             meld.check(s.isPresent() && BuiltInRegistries.STRUCTURE_TYPE.getKey(s.get().value().type()).equals(Guhs.id("bio_plek")), naam + " is a guhs:bio_plek structure");
             var set = sets.get(ResourceKey.create(Registries.STRUCTURE_SET, Guhs.id(naam)));
-            boolean dun = set.isPresent() && set.get().value().placement() instanceof RandomSpreadStructurePlacement r && r.spacing() >= 8;
-            meld.check(dun, naam + ": its set is a random spread with spacing 8 or more"
+            boolean dun = set.isPresent() && set.get().value().placement() instanceof RandomSpreadStructurePlacement r && r.spacing() >= 2; // biomes3 fix-plaatsing: one per Wolkenweide now (per_regio), the set is only its grid
+            meld.check(dun, naam + ": its set is a random spread (one per Wolkenweide: per_regio)"
                     + (set.isPresent() && set.get().value().placement() instanceof RandomSpreadStructurePlacement r ? " (" + r.spacing() + "/" + r.separation() + ")" : ""));
             var template = level.getStructureManager().get(Guhs.id(naam));
             meld.check(template.isPresent(), naam + ": template " + template.map(t -> t.getSize().toShortString()).orElse("missing"));

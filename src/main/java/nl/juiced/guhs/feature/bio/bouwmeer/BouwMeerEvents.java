@@ -387,6 +387,22 @@ public final class BouwMeerEvents {
                 }
             }
         }
+        // biomes3 fix-plaatsing: a one-per-region building stands on the spot chosen for its lake, which can lie a few chunks
+        // from the chunk that starts it (the place locate names); then that chunk holds the start but no piece of it
+        StructureStart eigen = level.structureManager().getStartForStructure(net.minecraft.core.SectionPos.bottomOf(level.getChunk(c.x(), c.z())), structure,
+                level.getChunk(c.x(), c.z()));
+        if (eigen != null && eigen.isValid()) {
+            for (StructurePiece piece : eigen.getPieces()) {
+                if (piece instanceof PoolElementStructurePiece p) {
+                    for (int cx = p.getBoundingBox().minX() >> 4; cx <= p.getBoundingBox().maxX() >> 4; cx++) {
+                        for (int cz = p.getBoundingBox().minZ() >> 4; cz <= p.getBoundingBox().maxZ() >> 4; cz++) {
+                            level.getChunk(cx, cz);
+                        }
+                    }
+                    return p;
+                }
+            }
+        }
         return null;
     }
 
