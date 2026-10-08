@@ -1895,7 +1895,7 @@
     {
       id: "47554857146896BE",
       icon: {
-        id: "guhs:kaas_knabbels",
+        id: "minecraft:writable_book",
       },
       tasks: [
         {
