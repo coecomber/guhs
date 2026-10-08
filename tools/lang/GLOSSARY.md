@@ -1631,3 +1631,219 @@ sign*, never "a VACANT sign"); the dev command `/guhs verhaal demo`; the names *
 | Floep! (the lighthouse lamp) | Fwoop! | *floept aan* = *fwoops on*; the catapult's *Floep!* is still *Floop!* |
 | Hmpf | Hmph | |
 | %s uur (a duration) | %s h | never "%s hours" (1 hours) |
+
+## 25. The Guh Path, the old stories' scenes, Sniff Island (verhalenpad)
+
+Chunks `c63` - `c67`. Everything above still holds: njeg = **nyeg**, vads = **chonk**, vahoeg = **wahoog**, knabbel =
+**nibble**, pootjes = **pawsies** (a sign says *paws*), American spelling (*harbor, gray, color, favorite, neighbor*).
+
+**Sniff Island is our own story.** It was inspired by the premise of an old dog adventure game and by nothing more: every
+name here is ours, and the English must be ours too. Use the names of the tables below and never a term you remember from a
+dog game. In particular a *Snuffelmeester* is a **Sniff Maestro** (never "Sniff Master"), the *geneesbloem* is the
+**healing flower** (never a "legendary flower") and the *maatje* is a **buddy**, a **forest sprite**.
+
+**Tales and stories.** Titles, the tab and the chapters are *Tales* (*Tales of the Guhmension*, the *Tales* tab); in a
+sentence a tale you follow is a *story*: *de grote verhalen* = *the big stories*, *Verhalen gevolgd: %s van %s* = *Stories
+followed: %s of %s*, *volg deze verhalen* = *follow these stories* (as *My Story* and *You're following this story* in
+section 24).
+
+**Nobody gets hurt, nobody fails.** A dog that swims too far is *washed back ashore*, a dog behind the roadblock is *put
+back*. *Zakken bestaat niet* = *There's no such thing as failing*.
+
+**How they talk.**
+- The dogs of the island say *njeg* like everybody else. *Woef!* = *Woof!*, *Kef!* = *Yip!*, *Snuf snuf* = *Sniff sniff*.
+  A puppy's sad *Piep...* = *Whimper...* (an excited *Piep!* may be *Yip!*; never *Squeak*: that is the mouse of Squeak!).
+- **Kapitein Zoutsnoet** calls the player *landrot* = **landlubber**; *Ahoi* = *Ahoy*.
+- **Oma Wolletje** calls everybody *lieverd* = **dearie**. The residents call the player *pup* = **pup**.
+- **Meester Truffelneus** is a schoolmaster: short, strict, kind. *Zoek!* = *Seek!* His motto *Neus omlaag, staart omhoog*
+  = *Nose down, tail up*.
+- *papa* = **Papa** (a name: *I'm going after Papa!*), *je vader* = *your father*, *je broertje of zusje* = *your little
+  brother or sister* (the game does not know which).
+
+**The four colors of the scent meter are fixed** (the lessons, the exam, the hints and the quest book all use them):
+*oranje: iets lekkers* = **orange: something tasty**, *blauw: een ding* = **blue: a thing**, *groen: een dier* = **green:
+an animal**, *paars: iets vreemds* = **purple: something strange**. The four kinds stand after *Je ruikt %s* = *You
+smell %s*, so they are lowercase and carry their own article.
+
+**The rank line** is *%s (rang %s (laagste) van %s (hoogste))* = *%s (rank %s (lowest) of %s (highest))*, on a sign *(rang 2
+van 5)* = *(rank 2 of 5)*: a player must always see which rank they have and how many there are.
+
+**Steps of the story** (`gui.guhs.verhalen.snuffeleiland.stap.N`) are sentences (section 24): *Washed ashore*, *Good
+deeds*, *The sniffing exam*. Scene, quest and advancement titles with the same Dutch are Title Case: *Washed Ashore*.
+
+**Signs.** A sign line is its own key and shows 90 pixels (about 15 letters). One key can stand on several signs
+(*Snuffeldorp*, *Snuffelschool*, *Truffelneus* do): keep a name alone on its line so every sign still reads well.
+
+### Het Guhpad (c63)
+
+| Dutch | English | note |
+|---|---|---|
+| Het Guhpad / het Guhpad | The Guh Path / the Guh Path | the big stories open the worlds; FTB chapter group, Guhdex path map |
+| padkaart / halte | path map / stop | the map at the top of the Tales tab |
+| Verhalen van de Guhmensie | Tales of the Guhmension | FTB chapter (was *Guhverhalen* = *Guh Tales*) |
+| Verhalen van de Guhbarbecuether | Tales of the Guhbarbecuether | FTB chapter (holds the Nibble Ring and Super Guhrio) |
+| Verhalen van het Guheinde | Tales of the Guh End | FTB chapter (was *Het Guheinde*) |
+| Het echte Guheinde / het echte Guheinde | The Real Guh End / the real Guh End | the locked last chapter; mysterious, no spoilers |
+| Verhalen gevolgd | Stories Followed | statistic and quest title; the counter is *Stories followed: %s of %s* |
+| groot verhaal / de grote verhalen | big story / the big stories | the seven that count for the Guh Path |
+| op slot / open | locked / open | *Op slot voor iedereen* = *Locked for everyone* |
+| Slotje: eerst de Guhmensie / Slotje: eerst de Guhbarbecuether | Lock: The Guhmension First / Lock: The Guhbarbecuether First | the lock quests |
+| Het Guhpad begint hier | The Guh Path Starts Here | first quest of *Tales of the Guhmension* |
+| Guh-technologie, laag 6 / Guh-technologie: laag 6 / laag 6 | Guh Technology, tier 6 / Guh Technology: Tier 6 / tier 6 | the placeholders of the real Guh End |
+| het knabbelfeest van Guhdalf | Guhdalf's nibble party | chapter 1 of the Nibble Ring (*A Long-Expected Nibble Party*) |
+| De Aangebrande Mika verslaan | Beat the Burnt Mika | |
+| Baltoguh en Nomguh / Guhtwo en het kloon-eiland | Baltoguh and Nomguh / Guhtwo and Clone Island | the big stories by their path names |
+| Het Hemelkapelletje / Ohana op Guhwai'i | The Cloud Chapel / Ohana on Guhwai'i | |
+| guhportaal / grillportaal / het portaal in de Knabbelkelder | guh portal / grill portal / the portal in the Nibble Cellar | |
+
+### The old stories' scenes (c64)
+
+The six scenes play in stories that have had English since 1.2.0: every name in them is an older name (sections 6 - 16;
+the chunk's source file lists the ones its lines use).
+
+| Dutch | English | note |
+|---|---|---|
+| De witte wolf-guh | The White Wolf Guh | scene title and speaker (Baltoguh's story) |
+| Dag 45: de nacht van de knal | Day 45: The Night of the Bang | Guhtwo's story; the professor's notes say *Day 45. BOOM!* |
+| Ohana, bij het kampvuurtje | Ohana, by the Campfire | the ohana line is word for word the English of `gui.guhs.guhwaii.ohana.citaat` |
+| Het Knuffelhart klopt | The Snuggleheart Beats | *Bonk... bonk.* = *Thump... thump.* |
+| Hij brandt weer! | It's Burning Again! | the line: *WAHOOG, it's burning again!* (as the advancement of that name) |
+| Het dak zit erop | The Roof Is On | |
+| Boris (in je hoofd) | Boris (in your head) | speaker |
+| Het eerste bewonertje | The first little resident | speaker |
+| AUUUHOE-NJEG! | AWOOO-NYEG! | the howl |
+| Wie ben ik... en waar zijn mijn knabbels? | Who am I... and where are my nibbles? | Guhtwo |
+| Dan is het begonnen, njeg | Then it has begun, nyeg | the stranger with the pointy hat (the speaker is shown as ???) |
+
+### Sniff Island: places, things and words (c65 - c67)
+
+| Dutch | English | note |
+|---|---|---|
+| Het Snuffeleiland / het Snuffeleiland | Sniff Island / Sniff Island | no article in English: *on Sniff Island*, *to Sniff Island*; dimension, biome, story |
+| HET SNUFFEL EILAND | SNIFF ISLAND | the title on the Guhstation's little screen |
+| Snuffeldorp | Sniffville | the village |
+| Steigerhuisje / steigerhuisje | Dock Cottage / dock cottage | the structure in the Guhmension; *steiger* = *dock* (section 24) |
+| De Natte Neus | The Wet Nose | the captain's boat |
+| Guhstation | Guhstation | stays; *kastje* = *little box*, *spelkastje* = *game console* |
+| Geheugenkaart / geheugenkaart | Memory Card / memory card | the item that brings you home |
+| Snuffelboekje / snuffelboekje | Sniff Book / sniff book | |
+| snuffelen / opsnuffelen / snuffelaar | to sniff / to sniff out / sniffer | |
+| snuffeltoets / geurmeter | sniff key / scent meter | the meter *swings* (*slaat uit*); *Slaat hij helemaal uit?* = *Swinging all the way?* |
+| geur / Geleerde geuren | scent / Scents learned | |
+| aanvalsknop | attack button | you dig with it: *graven* = *to dig*, *Graaf!* = *Dig!* |
+| Snuffelpup | Sniff Pup | rank 1 (*rang* = *rank*); lowercase *snuffelpup* (a way to call you) = *sniff pup* |
+| Snuffelneus | Sniff Nose | rank 2; the doctor's *een echte snuffelneus* = *a real sniff nose* |
+| Snuffelspeurder | Sniff Sleuth | rank 3 (as *Nibble Sleuth*) |
+| Snuffelmeester | Sniff Maestro | rank 4; never "Sniff Master" |
+| Opper-Snuffelmeester | Grand Sniff Maestro | rank 5 |
+| goede daad / goede daden | good deed / good deeds | |
+| maatje / Maatje | buddy / Buddy | the companion only you can see |
+| bosgeestje / Het bosgeestje | forest sprite / The forest sprite | what a buddy is |
+| Zweefzaadje / Mos-eikeltje / Zonnepluisje | Driftseed / Moss Acorn / Sunfluff | the three buddies |
+| boompje / Boompje van je maatje | little tree / Your Buddy's Little Tree | |
+| kiem / scheutje / struikje / jong boompje | sprout / shoot / little bush / young tree | the tree's four steps; *een kaal plekje* = *a bare patch* |
+| stenenkrans | ring of stones | around the little tree |
+| Bloesemtakje van je boompje / bloesemtakje | Blossom Twig from Your Little Tree / blossom twig | |
+| snuffelles / snuffelschool / Snuffelschool | sniffing lessons / sniff school / Sniff School | |
+| snuffelexamen / snuffeldiploma | sniffing exam / sniffing diploma | |
+| snuffelkoorts | sniffle fever | what Little Wobble has |
+| geneesbloem | healing flower | never "legendary flower" |
+| lantaarnfeest / het lantaarnfeest | Lantern Feast / the Lantern Feast | *lampion* = *paper lantern* |
+| wegversperring | roadblock | friendly |
+| Eilandhond / Snuffelhond / Steigerhond | Island Dog / Sniff Dog / Dock Dog | entity names |
+| het strand / strandpoortje / weipoortje | the beach / beach gate / meadow gate | |
+| de wei (Snuffeleiland) | the meadow | not the *paddock* of the Mika Stable |
+| het plein / het pleintje / de put | the square / the little square / the well | |
+| havenkantoor | Harbor Office | *de haven* = *the harbor* |
+| dokterspraktijk / praktijk (dokter) | doctor's office / office | the white house with the red cross |
+| het schooltje / juttershut / vissershut | the little school / beachcomber's hut / fisherman's hut | |
+| moestuin / kippenhok / bijeneik | vegetable patch / chicken coop / bee oak | *moestuin* as in section 24 |
+| kluifje / fluitje / deegroller | chew bone / whistle / rolling pin | scents |
+| dobber | bobber | *Dobber dobbert, visser vist* = *Bobber bobs, fisher fishes* |
+| schoolbel / bol wol / gietertje | school bell / ball of wool / little watering can | wool smells of sheep |
+| stuiterbal / reservepet / De sjaal van papa | bouncy ball / spare cap / Papa's scarf | |
+| Ras / Vacht | Breed / Coat | the choice screen |
+| Shiba / Jack russell / Teckel | Shiba / Jack Russell / Dachshund | |
+| Corgi / Golden retriever / Mopshond | Corgi / Golden Retriever / Pug | |
+| Speurhond | Sleuth Hound | the trainer's breed |
+| Zwart-tan / Chocola-tan / Driekleur | Black and Tan / Chocolate and Tan / Tricolor | coats; the others are plain color words (*Crème* = *Cream*) |
+
+### Sniff Island: who is who
+
+| Dutch | English | note |
+|---|---|---|
+| Dokter Pleisterpoot | Doctor Plasterpaw | on his sign *Dokter* + *Pleisterpoot* = *Doctor* + *Plasterpaw* |
+| Meester Truffelneus | Master Trufflenose | the sniffing teacher; alone on a sign *Truffelneus* = *Trufflenose* |
+| Kapitein Zoutsnoet | Captain Saltsnout | on a sign *Kapt. Zoutsnoet* = *Capt. Saltsnout* |
+| Jutje Kwispel | Wendy Wagtail | *Strandjutter* = *Beachcomber* |
+| Papa Zwerfpoot | Papa Wanderpaw | *die ouwe Zwerfpoot* = *old Wanderpaw* |
+| Bakker Kruimelsnuit | Baker Crumbsnout | |
+| Visser Natneus | Fisher Wetnose | |
+| Juf Blaffetje | Miss Barkley | |
+| Oma Wolletje | Granny Woolly | |
+| Tuinder Knolletje | Gardener Turnip | *knollen* = *turnips* |
+| Kleine Kwijlebal | Little Droolball | the village puppy |
+| Kleine Wiebel / Wiebel | Little Wobble / Wobble | your little brother or sister, at the dock |
+| Buurvrouw Mandje | Mrs. Basket | the neighbor at the dock (a dog's basket) |
+
+### Sniff Island: lines and titles that stand in more than one chunk
+
+| Dutch | English | note |
+|---|---|---|
+| Hier mag je pas door als Snuffelneus | You May Only Pass Here as a Sniff Nose | quest title; the line itself: *You may only pass here as a Sniff Nose* |
+| Neus omlaag, staart omhoog | Nose Down, Tail Up | quest title; the motto: *Nose down, tail up* |
+| Het eiland loopt niet weg | The island isn't going anywhere | the captain |
+| Nee ik wil even niet snuffelen, njeg | No, I'd rather not sniff right now, nyeg | the Guhstation's second button |
+| Druk op start | Press start | |
+| Opslaan en naar huis / Verder spelen | Save and go home / Keep playing | the memory card's menu |
+| Ik ga papa achterna! / Hijs de zeilen! | I'm going after Papa! / Hoist the sails! | answer buttons |
+| Wordt vervolgd, njeg! | To be continued, nyeg! | |
+| Aangespoeld | Washed Ashore | scene and quest title; the step: *Washed ashore* |
+| Wie doet dat toch? | Who Keeps Doing That? | scene and quest title |
+| Een spoor van papa | A Trace of Papa | scene and quest title; the step: *A trace of Papa* |
+| Welke hond ben jij? | Which Dog Are You? | quest title; the screen heading: *Which dog are you?* |
+| Snuffelles / Goede daden / Het snuffelexamen | Sniffing Lessons / Good Deeds / The Sniffing Exam | quest titles; the steps: *Sniffing lessons*, *Good deeds*, *The sniffing exam* |
+| Er rommelt iets | Something's rattling | step |
+| Het lantaarnfeest / De overtocht | The Lantern Feast / The Crossing | scene titles |
+| Naar het Snuffeleiland / Weer thuis / Naar huis | To Sniff Island / Home Again / Homeward | scene titles |
+| Het boompje groeit | The Little Tree Grows | scene title |
+
+### Added during the review of c63 - c67 (rules and words the translators settled)
+
+**Something that is *kwijt* is never "lost".** The villagers have *mislaid* their things, a thing *is gone* or *is
+missing*, somebody *can't find* it: *Ik ben mijn Guhstation kwijt* = *My Guhstation is gone*, *Ik ben de weg kwijt* = *I
+can't find the way*, *Een hond raakt hem nooit kwijt* = *A dog never misplaces it*. A storm *settles down* (it does not
+"die down"), *Jij leeft nog!* = *You're okay!*
+
+**A fever is hot, not glowing.** *Wiebel gloeit* = *Wobble is burning up*, *gloeit als een kacheltje* = *is as hot as a
+little stove*. The white wolf guh and the Sunfluff really *glow*.
+
+**The Guhstation has a guh snoot** (*guh-snoet*, section 24), a dog has a *snout* (*snuit*) and *paws*; only the player's
+own new *pootjes* are *pawsies*.
+
+**A rank takes an article in a sentence**: *Je bent nu %s* = *You are now a %s*, *Je bent officieel Snuffelpup* = *You are
+officially a Sniff Pup*. After a colon the rank line stands alone (*From now on you are officially: %s*).
+
+**Master Trufflenose never contracts** (*I am*, *you will*, *that is*): it is how the schoolmaster sounds. His one fixed
+exception is the line everybody uses, *There's no such thing as failing*.
+
+**In a list a requirement keeps its tick-box form**: *Still needed: The Lord of the Nibble Ring, Super Guhrio and Beat the
+Burnt Mika* (the same words as the lock quest's tick box).
+
+**Small words.** *Plof* (the pup flomps to the floor) = *Flomp*; *Fwiet* = *Fweet*; *TINGELING* = *DING-A-LING*; *een tien
+(met een griffel)* = *an A (with a gold star)*; *bolletjes* (the baker's) = *rolls*; *groeien als kool* = *growing like
+weeds*; the pug's *beige* coat is *Fawn*; *voor de gezelligheid* = *for fun*; in running text the sauce is *cheese frying
+sauce* (the item is *Cheese Frying Sauce*).
+
+| Dutch | English | note |
+|---|---|---|
+| hartjesraam | heart window | the Cloud Chapel, the Snuggleheart's scene |
+| prentenboek | picture book | 626-guh's, by the campfire |
+| verkoold guhbeeld | charred guh statue | where the stranger with the pointy hat stands |
+| Even pauze | Little Break | the memory card's menu |
+| Kies je hond | Choose Your Dog | the choice screen's title |
+| Alleen jij ziet het | Only You Can See It | quest title |
+| Het hele dorp geholpen | The Whole Village Helped | quest title |
+| Snuffelpup met diploma | Sniff Pup with a Diploma | quest title |
+| Eeuwige pauze / Dorstige knollen | Endless Recess / Thirsty Turnips | quest titles |
+| Een trui met één mouw / Beet of geen beet? | A Sweater with One Sleeve / To Bite or Not to Bite? | quest titles |
