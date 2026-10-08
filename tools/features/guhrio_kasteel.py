@@ -855,6 +855,14 @@ def bouw(h):
     return b, banen, problems
 
 
+# The user's decision B2 (2026-10-08): the castle is ONE big structure. Every world has its guaranteed copy (sector 11 of
+# the ring 400-1100 around 0,0), and besides it only a RARE extra copy FAR away: the random set has cells of 256 chunks
+# (4096 blocks; it was 44 / 18: four or five castles within 1200 blocks of 0,0 on every seed), with a triangular spread, so
+# a copy lies near the middle of its cell, about 2000-3500 blocks from 0,0, and hardly ever near it. Measured in the real
+# generator on six seeds by GuhrioPlaatsingGameTests (which also pins where the guaranteed copy stands).
+SPACING, SEPARATION = 256, 64
+
+
 def build(h):
     from features import wereld
     b, banen, problems = bouw(h)
@@ -865,11 +873,13 @@ def build(h):
     hallen(h, banen)
     wereld.bbq_structuur(h, NAAM, soort="burcht", titel="Kasteel van de Grote Nether-Mika",
                          tooltip="Super Guhrio: zes levels van opzij, een duel en een ontvoerde prinses (Guhbarbecuether)",
-                         biomes=wereld.BBQ, salt=21302301, spacing=44, separation=18,
+                         biomes=wereld.BBQ, salt=21302301, spacing=SPACING, separation=SEPARATION,
                          gegarandeerd=dict(sector=11, min=400, max=1100), voorrang=290,
                          burcht=dict(placement="paleis", tiles_x=nx, tiles_z=nz, tile_size=sb.TILE, anchor=ANKER, min_y=33, max_y=33, reach=48),
                          spawns=None)
     # nothing spawns inside the castle (its tiles): the levels bring their own creatures, and they only shove
     h.patch_json(f"{h.D}/worldgen/structure/{NAAM}.json", lambda d: d.update(spawn_overrides={
         "monster": {"bounding_box": "piece", "spawns": []}, "creature": {"bounding_box": "piece", "spawns": []}}))
+    # the random set leans to the middle of its cells (see SPACING): hardly ever a copy near 0,0, where the guaranteed one stands
+    h.patch_json(f"{h.D}/worldgen/structure_set/{NAAM}.json", lambda d: d["placement"].update(spread_type="triangular"))
     return b, banen
