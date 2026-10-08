@@ -346,7 +346,7 @@ CHAPTERS = {
         intro=["Je bent er al! Dit is het allereerste hoofdstuk: hier begint elk guh-avontuur, met een handje &6kaasknabbels&r.",
                "Lees de hoofdstukken van boven naar beneden: " + READING + ".",
                "Bovenaan elk hoofdstuk staat zo'n &dHoe kom je hier?&r-quest, met een linkje naar de quest in een ander hoofdstuk waar het begint.",
-               NIKS_OP_SLOT + " (Alleen de maaggroottes in De Guhmaag komen echt na elkaar.)"]),
+               NIKS_OP_SLOT + " (Alleen de maaggroottes in De Guhmaag komen echt na elkaar, en in &6Het Guhpad&r openen de grote verhalen de werelden: elk hoofdstuk begint daar met een slotquest.)"]),
     "guhs_guhmensie": dict(
         title="&dDe Guhmensie", sub="Roze wol, kaassaus en heel veel guhs", colour="magenta", icon="npc:reisguh",
         banner=("npc:reisguh", "geo:guh_bee:guh_bee"), welcome=(["npc:reisguh", "guh:starry", "geo:mika:mika"], "wiki:guh_portal"),
