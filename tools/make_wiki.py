@@ -2776,7 +2776,8 @@ def guhpixel_sections():
 
 
 def bbq2_sections():
-    """bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio): the texts of the slices'
+    """bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio, Het Guhpad, Het
+    Snuffeleiland): the texts of the slices'
     notes tools/features/*_wiki.py with the English of tools/wiki_bbq2/en.py (tools/wiki_bbq2/__init__.py joins them). One
     section per wiki page, inside one section per group, so the wiki site (tools/wiki_site/kb.py) can put every text on its
     page; a paragraph the spoiler rule hides sits in a <details class="spoiler">. -> [(sid, en, nl, html)]"""
@@ -2795,6 +2796,11 @@ def bbq2_sections():
         return wiki_bbq2.ANDERE_PAGINA.get(pid, (pid, pid))
 
     def tekst(row):
+        if isinstance(row["nl"], dict) and "galerij" in row["nl"]:
+            # a row of pictures: (picture, (English, Dutch) name, (English, Dutch) text)
+            return '<div class="gallery">' + "".join(
+                f'<figure><div class="stage">{img(name, titel[1])}</div><figcaption><h3>{t(esc(titel[0]), esc(titel[1]))}</h3>'
+                f'{p(esc(uitleg[0]), esc(uitleg[1])) if uitleg else ""}</figcaption></figure>' for name, titel, uitleg in row["nl"]["galerij"]) + "</div>"
         if isinstance(row["nl"], dict):
             head, rows = row["nl"]["tabel"]
             return table(head, rows)
@@ -2822,6 +2828,8 @@ def bbq2_sections():
                 if (row["kopje_en"], row["kopje"]) != last:
                     parts.append(h3(esc(row["kopje_en"]), esc(row["kopje"])))
                     last = (row["kopje_en"], row["kopje"])
+                elif isinstance(row["nl"], dict) and "galerij" in row["nl"]:
+                    parts.append("<!--S-->")      # (tools/wiki_site/kb.py: the pictures come after the paragraph above them)
                 parts.append(text)
             en, nl = titel(pid)
             body += section(wiki_bbq2.sectie(pid), esc(en), esc(nl), "".join(parts), open_=False)
@@ -4022,12 +4030,16 @@ def build():
       "Nederlands is, anders Engels). Zelf kiezen kan met de knop <b>Taal</b> in het guhmenu, of met <i>Taal van Guhs</i> in de instellingen van de mod "
       "(<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in het bestand: <code>language</code> in <code>config/guhs-client.toml</code>): "
       "Auto, NL of EN. Elke speler kiest voor zichzelf, ook op een server."),
-     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: " + str(chapter_count()) + " chapters with "
-      + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen, the critters, Guh Technology, The Lord of the Nibble Ring and Super Guhrio...). "
-      "Each chapter starts with a <i>Hoe kom je hier?</i> quest that links to where it begins.",
-      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: " + str(chapter_count()) + " hoofdstukken met " + str(quest_count()) + " quests "
-      "(elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, het Guheinde, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de Guhverhalen, de diertjes, Guh-technologie, In de ban van de Knabbelring en Super Guhrio...). Elk hoofdstuk begint met een "
-      "<i>Hoe kom je hier?</i>-quest met een linkje naar waar het begint.")])}
+     ("<b>FTB Quests</b> in your pack? Then two chapter groups are added to the quest book automatically, " + str(chapter_count()) + " chapters with "
+      + str(quest_count()) + " quests. The group <b>Guhs</b> has everything there is to do (every guh kind, every structure and biome, the stomach, the minigames, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the critters, Guh Technology...): "
+      "each of its chapters starts with a <i>Hoe kom je hier?</i> quest that links to where it begins. Below it the group <b>The Guh Path</b> has the big stories in the order in which they open the worlds "
+      "(Tales of the Guhmension, Tales of the Guhbarbecuether with The Lord of the Nibble Ring and Super Guhrio, Tales of the Guh End, and the locked The Real Guh End): each of its chapters starts with a lock quest "
+      "that shows which stories you still have to follow first.",
+      "<b>FTB Quests</b> in je pack? Dan komen er vanzelf twee groepen in het questboek, " + str(chapter_count()) + " hoofdstukken met " + str(quest_count()) + " quests. "
+      "In de groep <b>Guhs</b> staat alles wat er te doen is (elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de diertjes, Guh-technologie...): "
+      "elk hoofdstuk daarvan begint met een <i>Hoe kom je hier?</i>-quest met een linkje naar waar het begint. Daaronder staat de groep <b>Het Guhpad</b> met de grote verhalen in de volgorde waarin ze de werelden openen "
+      "(Verhalen van de Guhmensie, Verhalen van de Guhbarbecuether met In de ban van de Knabbelring en Super Guhrio, Verhalen van het Guheinde en het gesloten Het echte Guheinde): elk hoofdstuk daarvan begint met een slotquest "
+      "die laat zien welke verhalen je eerst nog moet volgen.")])}
 """))
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------

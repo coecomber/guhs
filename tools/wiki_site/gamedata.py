@@ -420,8 +420,16 @@ class Game:
             d = read_json(f)
             sid = os.path.splitext(os.path.basename(f))[0]
             for s in d["structures"]:
-                out[s["structure"].split(":")[1]] = dict(set=sid, placement=d["placement"], weight=s.get("weight", 1),
-                                                         together=[x["structure"].split(":")[1] for x in d["structures"]])
+                key = s["structure"].split(":")[1]
+                if d["placement"].get("type") == "guhs:gegarandeerd":
+                    # (bbq2) the ONE guaranteed copy in new terrain: kept next to the building's own set, which says how rare the
+                    # others are; a building with only this set has no others
+                    out.setdefault(key, dict(set=sid, placement=d["placement"], weight=s.get("weight", 1), together=[key]))
+                    out[key]["gegarandeerd"] = d["placement"]
+                    continue
+                out[key] = dict(set=sid, placement=d["placement"], weight=s.get("weight", 1),
+                                together=[x["structure"].split(":")[1] for x in d["structures"]],
+                                **({"gegarandeerd": out[key]["gegarandeerd"]} if "gegarandeerd" in out.get(key, {}) else {}))
         return out
 
     @cached_property
@@ -440,11 +448,17 @@ class Game:
     @cached_property
     def dimension_biomes(self):
         """{dimension id: [biome ids]} (Guhmension: everything that isn't in another dimension)."""
+        from .topics import DIMENSIONS
         out = {}
         for f in glob.glob(os.path.join(self.data, "dimension", "*.json")):
             did = os.path.splitext(os.path.basename(f))[0]
-            src = read_json(f)["generator"].get("biome_source", {})
-            if src.get("type") == "minecraft:fixed":
+            gen = read_json(f)["generator"]
+            src = gen.get("biome_source", {})
+            if gen.get("type") == "minecraft:flat" and did in DIMENSIONS:
+                # (the sea of the Snuffeleiland: one biome in the generator's settings; a flat dimension without a wiki page,
+                # like the room inside a Guh House, keeps counting as the Guhmension)
+                out[did] = [gen.get("settings", {}).get("biome")]
+            elif src.get("type") == "minecraft:fixed":
                 out[did] = [src["biome"]]
             else:
                 out[did] = [b["biome"] for b in src.get("biomes", [])]
@@ -622,6 +636,7 @@ class Game:
             os.chdir(here)
         quests = {q[0]: q for q in ns["QUESTS"]}
         return dict(chapters=ns["CHAPTERS"], order=ns["ORDER"], sections=sections, quests=quests,
+                    groups=ns.get("GROEPEN", {}), group_of=ns.get("groep_van", lambda c: "guhs"),      # (the chapter groups of the sidebar)
                     plain=ns.get("plain", lambda s: re.sub(r"&[0-9a-fk-or]", "", s)))
 
     # --- misc lang lists -------------------------------------------------------------------------------------------------------

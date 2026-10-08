@@ -2992,7 +2992,8 @@ def main_px(out):
 def main_bbq2(out, only=None):
     """bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio): the characters, the
     creatures, the blocks and the buildings, drawn by tools/wiki_bbq2/renders.py (renders(r): r is this module, r.OUT the folder).
-    only: a set of "npcs" / "wezens" / "blokken" / "bouwwerken" (default everything)."""
+    only: a set of "npcs" / "wezens" / "blokken" / "bouwwerken" / "verhalenpad" (default everything; "verhalenpad" = Het Guhpad
+    and Het Snuffeleiland, tools/wiki_bbq2/renders_pad.py)."""
     sys.path.insert(0, "tools")
     os.makedirs(out, exist_ok=True)
     r = sys.modules[__name__]
@@ -3007,7 +3008,7 @@ if __name__ == "__main__":
     elif "--only-px" in sys.argv:      # (just the guhpixel pictures, into an existing img folder)
         sys.argv.remove("--only-px")
         main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
-    elif "--only-bbq2" in sys.argv:    # (just the bbq2 pictures, into an existing img folder; --bbq2=npcs,wezens,blokken,bouwwerken for a part)
+    elif "--only-bbq2" in sys.argv:    # (just the bbq2 pictures, into an existing img folder; --bbq2=npcs,wezens,blokken,bouwwerken,verhalenpad for a part)
         sys.argv.remove("--only-bbq2")
         part = next((a for a in sys.argv if a.startswith("--bbq2=")), None)
         if part:

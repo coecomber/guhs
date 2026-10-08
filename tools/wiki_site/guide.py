@@ -106,10 +106,12 @@ class Guide:
              "Guhmension only drops something with iron (or better). Every other Guhs ore, kaasknabbel ore too, breaks with any pickaxe."),
             (f"Veel later wil je {L('blokken/grillkool', 'grillkool')} voor het portaal naar de {L('dimensies/barbecuether')}: dat vraagt een houweel van "
              f"diamantniveau, maar een {L('items/vahoege_vads_pickaxe', 'vahoege-vadshouweel')} telt ook. Dus nog steeds geen diamanten nodig. Vahoeg! "
-             f"Het portaal gaat pas open na het eerste hoofdstuk van {L('verhalen/knabbelring')}: tien gezellige minuten bij Guhdalf.",
+             f"Het portaal gaat pas open na de grote verhalen van de Guhmensie en het eerste hoofdstuk van {L('verhalen/knabbelring')}: "
+             f"zie {L('systemen/het-guhpad')}.",
              f"Much later you'll want {L('blokken/grillkool', 'grillkool')} for the portal to the {L('dimensies/barbecuether')}: that takes a diamond-level "
              f"pickaxe, but a {L('items/vahoege_vads_pickaxe', 'vahoege vads pickaxe')} counts too. So still no diamonds needed. Vahoeg! "
-             f"The portal only opens after the first chapter of {L('verhalen/knabbelring')}: ten cozy minutes with Guhdalf."),
+             f"The portal only opens after the big stories of the Guhmension and the first chapter of {L('verhalen/knabbelring')}: "
+             f"see {L('systemen/het-guhpad')}."),
             ("<b>Wat eten</b> voor onderweg (brood, gebakken vlees, of straks guhsnacks).",
              "<b>Some food</b> for the trip (bread, cooked meat, or guh snacks later on)."),
             ("<b>Een bed</b>. In de Guhmensie werken bedden gewoon: slaap er een keer in, vlak bij je portaal, dan word je daar wakker als het misgaat "
@@ -288,14 +290,18 @@ class Guide:
                       f"{L('systemen/guhhuisje', 'guh house')} and they live there and do {L('systemen/klusjes', 'chores')} during the day."),
             self.goal("icon_baltoguh_beeldje", "De guhverhalen", "The guh stories",
                       f"De {L('verhalen/index', 'guhverhalen')} zijn grote avonturen met een nieuwe vriend aan het eind. Het tabblad <b>Verhalen</b> in je Guhdex laat "
-                      "per verhaal zien waar je bent en wat de volgende stap is; de superkompas-tab Verhalen wijst de weg.",
+                      "per verhaal zien waar je bent en wat de volgende stap is; de superkompas-tab Verhalen wijst de weg. De grote verhalen openen "
+                      f"de volgende werelden: dat is {L('systemen/het-guhpad')}.",
                       f"The {L('verhalen/index', 'guh stories')} are big adventures with a new friend at the end. The <b>Stories</b> tab in your Guhdex shows "
-                      "for every story where you are and what's next; the super compass tab Stories points the way."),
+                      "for every story where you are and what's next; the super compass tab Stories points the way. The big stories open the next "
+                      f"worlds: that is {L('systemen/het-guhpad')}."),
             self.goal("icon_timmerguh_bouwboekje", "FTB-quests", "FTB quests",
-                      f"Zit {L('systemen/ftb-quests', 'FTB Quests')} in je pack? Dan staat er vanzelf een groep <b>Guhs</b> in je questboek, met dertien hoofdstukken. "
-                      "Niks zit op slot, en elk hoofdstuk begint met <i>Hoe kom je hier?</i>.",
-                      f"Got {L('systemen/ftb-quests', 'FTB Quests')} in your pack? Then a <b>Guhs</b> group with thirteen chapters is in your quest book automatically. "
-                      "Nothing is locked, and every chapter starts with <i>Hoe kom je hier?</i>."),
+                      f"Zit {L('systemen/ftb-quests', 'FTB Quests')} in je pack? Dan staan er vanzelf twee groepen in je questboek: <b>Guhs</b>, met dertien hoofdstukken, en "
+                      "<b>Het Guhpad</b>, met de grote verhalen. In Guhs zit niks op slot en begint elk hoofdstuk met <i>Hoe kom je hier?</i>; een hoofdstuk van "
+                      "Het Guhpad begint met een slotquest die laat zien welke verhalen je eerst nog moet volgen.",
+                      f"Got {L('systemen/ftb-quests', 'FTB Quests')} in your pack? Then two groups are in your quest book automatically: <b>Guhs</b>, with thirteen chapters, and "
+                      "<b>The Guh Path</b>, with the big stories. Nothing in Guhs is locked and each of its chapters starts with <i>Hoe kom je hier?</i>; a "
+                      "chapter of The Guh Path starts with a lock quest that shows which stories you still have to follow first."),
             self.goal("icon_guh_ballon", "Samen spelen op een server?", "Playing together on a server?",
                       f"Speel op de {L('systemen/officiele-server', 'officiële Guhs-server')} (<b>guhs.nl</b>, dag en nacht aan): met Prism Launcher sta je er in een paar minuten. "
                       "Een eigen server? Installeer Guhs op de server en bij iedereen, en zet er <b>Lootr</b> bij: dan krijgt elke speler zijn eigen buit uit de kisten "

@@ -8,6 +8,8 @@ drawn from the mod's own files, like every other wiki picture:
   guh_variant_<id>.png      Sam-guh and Guhshi (the guh model with their own bones)
   block_<id>.png, icon_<id>.png   every new block with a 3D model (the look of its item: a machine that is awake)
   structure_<id>.png        the new buildings, from their .nbt (the tiled ones put back together)
+The pictures of the second part (Het Guhpad, Het Snuffeleiland: the dogs, the buddies, the dock cottage, the island, the
+Guhstation, the path map) are made by tools/wiki_bbq2/renders_pad.py (--bbq2=verhalenpad).
 
 SPOILERS: the pictures of the story's later places and of the two big surprises are made too (structure pages and creature
 pages need them), but the site only shows them behind a spoiler toggle and never in a list: see SPOILER_* in
@@ -167,7 +169,7 @@ LOS = {"hapluikje", "knuffelgenerator", "disco_dynamo", "blubkacheltje", "gloeis
        "knabbelbuis_richting", "knabbelbuis_filter", "opzuiger", "voorraadmeter", "snuffelsensor", "guhklok", "guhteller", "vadsmolen",
        "oogster", "knabbelaar", "neerzetter", "knutselmachine", "tekentafel", "plantagebak", "sauspomp", "sausslang", "sausvat",
        "brouwautomaat", "frituurautomaat", "grillkoolpers", "stepstation", "haltepaaltje", "grote_knabbelmachine", "knabbelmachine_beeldje",
-       "elfentouw_haak", "oog_van_sausron_beeldje"}
+       "elfentouw_haak", "oog_van_sausron_beeldje", "guhstation"}
 # blocks that are bigger than one block: (yaw, pitch)
 KIJK = {"knuffelgenerator": (30, -30), "disco_dynamo": (30, -32), "grote_knabbelmachine": (30, -16)}
 
@@ -357,6 +359,7 @@ def structures(r, only=None):
 
 
 def renders(r, only=None):
+    """only: a set of "npcs" / "wezens" / "blokken" / "bouwwerken" / "verhalenpad" (default everything)."""
     if only is None or "npcs" in only:
         npcs(r)
     if only is None or "wezens" in only:
@@ -365,3 +368,6 @@ def renders(r, only=None):
         blocks(r)
     if only is None or "bouwwerken" in only:
         structures(r)
+    if only is None or "verhalenpad" in only:        # Het Guhpad and Het Snuffeleiland: tools/wiki_bbq2/renders_pad.py
+        from . import renders_pad
+        renders_pad.renders(r, blocks)

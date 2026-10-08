@@ -29,12 +29,14 @@ WIKI = {
     "entity_home": {"smikagol": "verhalen/knabbelring", "knekel_ruiter": "verhalen/knabbelring"},
     "tekst": [
         ("verhalen/knabbelring", "Hoe begin je?",
-         "Steek eerst het grillportaal aan (de quest van de Grillguh). Daarna staat Guhdalf met zijn kar bij de grote barbecueput in de Guhmensie. "
-         "Het grillportaal naar de Guhbarbecuether werkt voor niemand meer tot je het hele eerste hoofdstuk hebt gedaan; terug kan altijd."),
+         "Volg eerst de grote verhalen van de Guhmensie: Baltoguh en Nomguh, Guhtwo en het kloon-eiland, Het Hemelkapelletje, Ohana op "
+         "Guhwai'i en Het Snuffeleiland. Eerder begint Guhdalf er niet aan, en hij zegt je welke je nog mist (zie Het Guhpad). Steek ook het "
+         "grillportaal aan (de quest van de Grillguh). Daarna staat Guhdalf met zijn kar bij de grote barbecueput in de Guhmensie. "
+         "Het grillportaal naar de Guhbarbecuether werkt voor niemand tot hij het hele eerste hoofdstuk heeft gedaan; terug kan altijd."),
         ("verhalen/knabbelring", "Zo volg je het verhaal",
          "Linksboven in beeld staat wat je nu moet doen (uit te zetten in de Guhdex). In de Guhdex, tab Verhalen, staat de reiskaart met een vinkje "
-         "per stap en 'Je bent hier'. Het Superkompas wijst naar 'Mijn verhaal'. Sam-guh zegt het ook als je op hem klikt. De hoofdstukken in het "
-         "questboek gaan één voor één open."),
+         "per stap en 'Je bent hier'. Het Superkompas wijst naar 'Mijn verhaal'. Sam-guh zegt het ook als je op hem klikt. In het questboek "
+         "staat het verhaal in de groep Het Guhpad, hoofdstuk Verhalen van de Guhbarbecuether: de quests gaan één voor één open."),
         ("verhalen/knabbelring", "Niemand doet je pijn",
          "Het Oog, de Negen en alles wat je onderweg tegenkomt duwt alleen: je staat dan weer bij je laatste rustpunt. Je verliest nooit spullen."),
         ("verhalen/knabbelring", "Samen spelen",
