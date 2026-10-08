@@ -291,10 +291,14 @@ public class BioWereldWolkGameTests {
                         + "region {} ({} empty, mean radius {}). {}", stapels, niveaus[1],
                 niveaus[2], niveaus[3], niveaus[4], niveaus[5], niveaus[6], niveaus[7], bereikt, eilanden, topBereikt, terug, hoogste, liften, stromen, stappen, metWater,
                 los, losMetWeg, losBereikt, tel[0], tel[1], tel[2], tel[3], cellen, leeg, straal / Math.max(1, cellen - leeg), eerste);
-        helper.assertTrue(stapels >= 8, "stacks found: " + stapels);
+        // biomes3 merge: was >= 8 (14 found) while no building in the air existed. The six lucht sets of wave B reserve air at
+        // every possible start (Luchtruim, read from the test server's own structure sets and seed 0): 7 stacks are left here.
+        helper.assertTrue(stapels >= 4, "stacks found: " + stapels);
         helper.assertTrue(bereikt == eilanden, "every island of every stack is reached from the meadow by the jump rule: " + bereikt + " of " + eilanden + "; " + eerste);
         helper.assertTrue(terug == stapels, "from every island of every stack there is a way back down to the meadow: " + terug + " of " + stapels + "; " + eerste);
-        helper.assertTrue(hoogste >= 60 && hoogste <= WolkTerrein.LAAG + WolkTerrein.HOOG, "the highest island is high: " + hoogste);
+        helper.assertTrue(hoogste >= 60 && hoogste <= WolkTerrein.LAAG + WolkTerrein.HOOG + 3, "the highest island is high: " + hoogste); // biomes3 merge: + 3. A stack is capped
+        // from the meadow under its MIDDLE (WolkTerrein: "grond + LAAG + HOOG - a.top"), this measures from the meadow under the top island, and the
+        // meadow rolls 2.5 up and down; with the lucht sets of wave B the stacks stand elsewhere and one comes out at 89
         helper.assertTrue(liften >= 4 && stromen >= 3 && stappen >= 40, "lifts " + liften + ", streams " + stromen + ", stepping stones " + stappen);
         helper.assertTrue(niveaus[3] + niveaus[4] + niveaus[5] + niveaus[6] + niveaus[7] >= stapels / 2, "most stacks have three islands or more");
         helper.assertTrue(losMetWeg == 0 || losBereikt * 10 >= losMetWeg * 8, "loose islands with a way up are reached: " + losBereikt + " of " + losMetWeg);

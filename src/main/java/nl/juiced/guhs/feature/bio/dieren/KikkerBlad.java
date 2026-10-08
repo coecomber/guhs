@@ -53,6 +53,11 @@ public final class KikkerBlad {
     public static final int VLUCHT_TIJD = 20 * 4;
     static final String VLUCHT_TOT = "guhs_bio_dieren_vlucht_tot";
 
+    /** Closer than this (blocks, sideways) to the middle of a leaf a frog in the water is under it, not beside it. */
+    static final double ONDER = 1.15;
+    /** A hop out of the water needs this much more push than one from the ground. */
+    static final double UIT_WATER = 1.6;
+
     private KikkerBlad() {
     }
 
@@ -253,10 +258,18 @@ public final class KikkerBlad {
                 // right at it: the last little shuffle to the middle
                 k.getNavigation().stop();
                 k.getMoveControl().setWantedPosition(blad.getX() + 0.5, blad.getY() + 0.1, blad.getZ() + 0.5, 0.8);
+            } else if (d2 < ONDER * ONDER && dy > 0.6 && k.isInWater()) {
+                // biomes3 merge: it floats UNDER its leaf, or right against its edge (a hop from the water that fell short brought it
+                // there; a leaf is solid from below). A hop from here only bumps its head, for ever: paddle out sideways first
+                double len = Math.sqrt(d2), ux = len < 0.05 ? 1 : -dx / len, uz = len < 0.05 ? 0 : -dz / len;
+                k.getNavigation().stop();
+                k.getMoveControl().setWantedPosition(blad.getX() + 0.5 + ux * (ONDER + 0.5), k.getY(), blad.getZ() + 0.5 + uz * (ONDER + 0.5), 1.0);
             } else if (d2 < 3.2 * 3.2 && dy < 1.3 && dy > -1.6 && sprongWacht == 0 && (k.isInWater() || k.onGround())) {
                 // close enough: one hop onto the leaf (the reach of a hop: about 11 x its speed, air drag 0.91)
+                // biomes3 merge: out of the water the first ticks of a hop are braked by the water (x 0.8 a tick), and it fell
+                // short by half: more push from the water
                 double afstand = Math.sqrt(d2);
-                spring(k, dx, dz, Math.min(0.42, 0.075 * afstand + 0.03), 0.36 + Math.max(0, dy) * 0.12);
+                spring(k, dx, dz, Math.min(0.42, (0.075 * afstand + 0.03) * (k.isInWater() ? UIT_WATER : 1.0)), 0.36 + Math.max(0, dy) * 0.12);
                 k.getNavigation().stop();
                 sprongWacht = 24;
             } else if (ticks % 20 == 0 && sprongWacht == 0) {

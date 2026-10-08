@@ -62,7 +62,7 @@ public final class MeerTerrein {
     /** Extra column flags of the lake, next to {@link Kaart#EILAND} and {@link Kaart#GROOT} (bits {@link Kaart} does not use). */
     public static final byte STEEN = (byte) Kaart.MEER_STEEN, STRAND = (byte) Kaart.MEER_STRAND; // biomes3 merge: named in Kaart (must stay below 256: kolom packs them in 8 bits)
 
-    private static final int SOORT = 1, SOORT_KEI = 5;
+    private static final int SOORT = 1, SOORT_KEI = 6; // biomes3 merge: KEI was 5, which is WolkTerrein.SOORT_KANDIDAAT (one key space: BioModel.cellen; lake 1 and 6, Wolkenweide 2-5, Klaterdal 20-23)
     /** The furthest anything of an island (its underwater slope included) lies from its middle. */
     private static final int BEREIK = 48;
 
