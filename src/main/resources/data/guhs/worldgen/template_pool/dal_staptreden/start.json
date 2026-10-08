@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:dal_staptreden",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:dal_staptreden_top"
       }
     }
   ]
