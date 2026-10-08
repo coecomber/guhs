@@ -2735,6 +2735,42 @@
     ],
     "subtitle": "subtitles.guhs.waterval.ruis"
   },
+  "klaterdal.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "klaterdal.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/sfeer",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.sfeer"
+  },
+  "klaterdal.windgong": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/windgong1",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong2",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong3",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.windgong"
+  },
   "koi.hap": {
     "sounds": [
       "guhs:bio_dieren/koi_hap1",
