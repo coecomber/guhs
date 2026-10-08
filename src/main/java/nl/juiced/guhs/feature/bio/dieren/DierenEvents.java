@@ -101,8 +101,20 @@ public final class DierenEvents {
                 if (plek == null) {
                     meld.ok(b.identifier().getPath() + ": not in the biome source yet (the wereld slice puts it there), predicates not asked");
                 } else {
-                    meld.check(BiomeGuhs.variantVoor(BiomeGuhs.nieuwBiome(level, plek)) != null,
-                            b.identifier().getPath() + " at " + plek.toShortString() + " has its guh: " + BiomeGuhs.variantVoor(BiomeGuhs.nieuwBiome(level, plek)));
+                    // (merge: the source's spot can lie on a thin rim, where the level's own, smoothed biome lookup - the one a
+                    // guh is asked with - already says the neighbour; so look for a spot close by that the level agrees on)
+                    BlockPos echt = null;
+                    for (int dx = -32; dx <= 32 && echt == null; dx += 8) {
+                        for (int dz = -32; dz <= 32 && echt == null; dz += 8) {
+                            BlockPos q = plek.offset(dx, 0, dz);
+                            if (BiomeGuhs.nieuwBiome(level, q) == b) {
+                                echt = q;
+                            }
+                        }
+                    }
+                    meld.check(echt != null && BiomeGuhs.variantVoor(BiomeGuhs.nieuwBiome(level, echt)) != null,
+                            b.identifier().getPath() + " near " + plek.toShortString() + ": the level sees the biome at " + (echt == null ? "no spot within 32 blocks" : echt.toShortString())
+                                    + " and it has its guh: " + (echt == null ? null : BiomeGuhs.variantVoor(b)));
                 }
             }
         });
