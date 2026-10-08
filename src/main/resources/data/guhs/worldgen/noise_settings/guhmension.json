@@ -4411,7 +4411,7 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "guhs:wolkenweide_steen_room"
+                              "Name": "guhs:wolkenweide_steen_blauw"
                             }
                           }
                         },
@@ -4475,7 +4475,7 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "guhs:wolkenweide_steen_room"
+                              "Name": "guhs:wolkenweide_steen_blauw"
                             }
                           }
                         },
@@ -4539,7 +4539,7 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "guhs:wolkenweide_steen_room"
+                              "Name": "guhs:wolkenweide_steen_blauw"
                             }
                           }
                         },
@@ -4599,7 +4599,7 @@
                         "then_run": {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "guhs:wolkenweide_steen_room"
+                            "Name": "guhs:wolkenweide_steen_blauw"
                           }
                         }
                       },
@@ -4663,7 +4663,7 @@
                         "then_run": {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "guhs:wolkenweide_steen_room"
+                            "Name": "guhs:wolkenweide_steen_blauw"
                           }
                         }
                       },
@@ -4727,7 +4727,7 @@
                         "then_run": {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "guhs:wolkenweide_steen_room"
+                            "Name": "guhs:wolkenweide_steen_blauw"
                           }
                         }
                       },
