@@ -523,6 +523,7 @@ public final class DalTerrein {
         List<Kei> keien = null;
         List<Rots> rotsen = null;
         int[] put = new int[n * n]; // biomes3 fix-dal: the level of every column before the lips (for the pit rule)
+        boolean[] schouder2 = new boolean[n * n]; // (a shoulder two deep)
         Vorm v = new Vorm();
         for (int j = 0; j < n; j++) {
             for (int i = 0; i < n; i++) {
@@ -686,7 +687,8 @@ public final class DalTerrein {
                         double deel = 0.5 + 1.3 * m.ruis(BioModel.R_DETAIL, x * 0.23 - 2000, z * 0.23 + 500) + 0.5 * v.det;
                         double rond = deel < (smax > 1.5 ? 0.2 : 0.45) ? -1 : Math.max(1.0, smax * Math.min(1.0, deel));
                         if (sb < rond) {
-                            hoogte = Math.min(hoogte, top - (deel > 0.75 && sb <= Math.max(1.0, rond * 0.4) ? 2 : 1));
+                            schouder2[idx] = deel > 0.75 && sb <= Math.max(1.0, rond * 0.4);
+                            hoogte = Math.min(hoogte, top - (schouder2[idx] ? 2 : 1));
                             vlag |= VORM;
                         }
                     }
@@ -718,6 +720,17 @@ public final class DalTerrein {
                             double s = v.s[edge];
                             int onder = HOOGTE[2 - edge];
                             if (s < 0 && onder + (int) Math.ceil(-s) < hoogte) {
+                                // biomes3 fix-dal: only where the lower terrace really lies at the flight's foot, a few
+                                // blocks of it (where edges cross, a flight sank into the ground as a trench)
+                                boolean voet = true;
+                                for (double verder = 1.5; verder < 5 && voet; verder += 3) {
+                                    double weg = -s + verder;
+                                    Vorm onderaan = bij(m, (int) Math.round(x + ex / el * weg), (int) Math.round(z + ez / el * weg));
+                                    voet = onderaan.kern && onderaan.t <= 2 - edge;
+                                }
+                                if (!voet) {
+                                    continue;
+                                }
                                 hoogte = onder + (int) Math.ceil(-s);
                                 vlag = (short) (VORM | TREDE);
                             }
@@ -789,6 +802,22 @@ public final class DalTerrein {
                     }
                 }
                 if (wat[idx] == Kaart.GEEN && (vlag & Kaart.LIP) == 0 && ter[idx] >= 0) {
+                    // biomes3 fix-dal: no pits. (1) a sliver of a lower terrace caught between higher ones (where two edges
+                    // cross) takes the height of the terrace around it; (2) a shoulder is two deep only right beside the
+                    // lower terrace; (3) a column two or more below all four neighbours is raised
+                    int sliert = sliert(ter, vl, wat, idx, n);
+                    if (sliert >= 0) {
+                        hoogte = HOOGTE[sliert];
+                        vlag = VORM;
+                    } else if (schouder2[idx] && hoogte == HOOGTE[ter[idx]] - 2) {
+                        boolean rand = false;
+                        for (int b : buren) {
+                            rand |= wat[idx + b] != Kaart.GEEN || ter[idx + b] >= 0 && ter[idx + b] < ter[idx] && sliert(ter, vl, wat, idx + b, n) < 0;
+                        }
+                        if (!rand) {
+                            hoogte++;
+                        }
+                    }
                     int laagst = Math.min(Math.min(put[idx - 1], put[idx + 1]), Math.min(put[idx - n], put[idx + n]));
                     if (laagst < MUUR && hoogte < laagst - 1) {
                         hoogte = laagst - 1;
@@ -800,6 +829,42 @@ public final class DalTerrein {
             }
         }
         return true;
+    }
+
+    /**
+     * biomes3 fix-dal: is this dry column a sliver of its terrace: along x or along z fewer than four columns of this terrace
+     * (or a lower one) in a row, with a HIGHER terrace at both ends (where two edges cross the valley floor reaches up in
+     * thin fingers, seven deep)? Then the index of the lowest terrace beside it, else -1. Only looks at the terrace index of
+     * the columns within four blocks, so every chunk map answers the same for a column.
+     */
+    private static int sliert(byte[] ter, short[] vl, int[] wat, int idx, int n) {
+        int t = ter[idx];
+        if (t < 0 || wat[idx] != Kaart.GEEN || (vl[idx] & (TREDE | Kaart.LIP)) != 0) {
+            return -1;
+        }
+        int uit = 99;
+        for (int stap : new int[]{1, n}) {
+            int lang = 1, eind = 99;
+            boolean dicht = true;
+            for (int kant = -1; kant <= 1 && dicht; kant += 2) {
+                for (int a = 1; a <= 4; a++) {
+                    int bt = ter[idx + kant * a * stap];
+                    if (bt > t) {
+                        eind = Math.min(eind, bt);
+                        break;
+                    }
+                    if (bt < 0 || a == 4) {
+                        dicht = false;
+                        break;
+                    }
+                    lang++;
+                }
+            }
+            if (dicht && lang < 4) {
+                uit = Math.min(uit, eind);
+            }
+        }
+        return uit < 99 ? uit : -1;
     }
 
     private static List<Poel> poelenBij(BioModel m, int x0, int z0, int n) {

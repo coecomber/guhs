@@ -30,23 +30,23 @@ public final class DalPlanten {
     // <dal-planten>
     /** One try for a guhbloesem per cell of this size; the chance in a grove, at a grove's edge, on the open lawn. */
     public static final int BOOM_CEL = 6;
-    public static final double BOOM_BOS = 0.62, BOOM_RAND = 0.14, BOOM_GAZON = 0.03;
+    public static final double BOOM_BOS = 0.6, BOOM_RAND = 0.2, BOOM_GAZON = 0.09;
     /** The grove noise above this is a grove, above the second its edge. */
-    public static final double BOS_VANAF = 0.13, BOS_RAND = 0.0;
+    public static final double BOS_VANAF = -0.06, BOS_RAND = -0.2;
     /** A trunk stands at least this far from the water on the left bank (beyond the path), a crown's edge this far. */
     public static final int STAM_AF = 7, KROON_AF = 1;
     /** On the right bank the trunk stays out of the building strip, and the crown's edge this far from the water. */
     public static final int STAM_RECHTS = 11, KROON_RECHTS = 6;
     /** Esdoorn accents: one try per cell near a fall, and the chance beside a koi pool. */
-    public static final int ESDOORN_CEL = 14;
-    public static final double ESDOORN_VAL = 0.6, ESDOORN_POEL = 0.55;
+    public static final int ESDOORN_CEL = 10;
+    public static final double ESDOORN_VAL = 0.8, ESDOORN_POEL = 0.6;
     /** One try for a bamboo grove per cell (it must stand against a rock face). */
-    public static final int BAMBOE_CEL = 18;
-    public static final double BAMBOE_KANS = 0.45;
+    public static final int BAMBOE_CEL = 14;
+    public static final double BAMBOE_KANS = 0.7;
     /** The moss noise above this is a moss patch (broad soft patches, about a quarter of the ground). */
-    public static final double MOS_VANAF = 0.17;
+    public static final double MOS_VANAF = 0.4;
     /** Flower drifts: the drift noise above this, near water or in a grove; how full a drift is. */
-    public static final double BLOEM_VANAF = 0.26, BLOEM_VOL = 0.5;
+    public static final double BLOEM_VANAF = 0.2, BLOEM_VOL = 0.55;
     /** The path on the left bank: this far from the water. */
     public static final double PAD_VAN = 3.8, PAD_TOT = 5.7;
     /** How many boulders carry a crooked little tree; how many ledge columns do, near a fall and elsewhere. */
@@ -249,7 +249,7 @@ public final class DalPlanten {
                 for (DalTerrein.Poel pl : poelen) {
                     poel |= pl.rand(x - pl.x(), z - pl.z()) > 0;
                 }
-                double kans = poel ? 0.30 : m.ruis(BioModel.R_DETAIL, x * 0.8 + 500, z * 0.22 - 500) > 0.38 ? 0.3 : k.terras[o] == 0 ? 0.03 : 0.012;
+                double kans = poel ? 0.30 : m.ruis(BioModel.R_DETAIL, x * 0.8 + 500, z * 0.22 - 500) > 0.26 ? 0.32 : k.terras[o] == 0 ? 0.04 : 0.025;
                 double worp = BioModel.kans(hash, 0);
                 if (worp < kans && level.isEmptyBlock(p.set(x, w + 1, z)) && !(gebouwen && BouwRuimte.inBuilding(level, p))) {
                     level.setBlock(p, DalVulling.met(blaadjes, "dichtheid", String.valueOf(1 + (int) (BioModel.kans(hash, 1) * (poel ? 3 : 2)))), 2);
@@ -291,9 +291,9 @@ public final class DalPlanten {
                 }
             }
             // moss: broad soft patches, more of it against rock, along the water and in the groves
-            double grof = m.ruis(BioModel.R_DETAIL, x * 0.3 + 900, z * 0.3 + 300), fijn = m.ruis(BioModel.R_DETAIL, x * 1.1 + 900, z * 1.1 + 300);
+            double grof = m.ruis(BioModel.R_DETAIL, x * 0.5 + 900, z * 0.5 + 300), fijn = m.ruis(BioModel.R_DETAIL, x * 1.1 + 900, z * 1.1 + 300);
             double mosRuis = grof + 0.4 * fijn;
-            boolean opMos = mosRuis > MOS_VANAF || rots && mosRuis > -0.25 || oever && mosRuis > -0.05 || nat < 3.5 && mosRuis > 0.05;
+            boolean opMos = mosRuis > MOS_VANAF || rots && mosRuis > -0.2 || oever && mosRuis > 0.0 || nat < 3.5 && mosRuis > 0.18 || mosRuis > MOS_VANAF - 0.15 && bos(m, x, z) > BOS_VANAF + 0.2;
             if (opMos) {
                 level.setBlock(p, mos, 2);
                 gezet++;
@@ -310,7 +310,7 @@ public final class DalPlanten {
             // flowers: drifts of one kind near the water and in the groves
             if (dal && (nat < 7 || bos(m, x, z) > BOS_VANAF)) {
                 double drift = m.ruis(BioModel.R_DETAIL, x * 0.5 + 2100, z * 0.5 - 1300);
-                if (drift > BLOEM_VANAF && BioModel.kans(hash, 4) < BLOEM_VOL * Math.min(1.0, (drift - BLOEM_VANAF) / 0.12 + 0.35)) {
+                if (drift > BLOEM_VANAF && BioModel.kans(hash, 4) < BLOEM_VOL * Math.min(1.0, (drift - BLOEM_VANAF) / 0.12 + 0.35) || BioModel.kans(hash, 4) < 0.012) {
                     int soort = (int) ((m.ruis(BioModel.R_DETAIL, x * 0.06 + 5100, z * 0.06 + 3300) + 1) * 3.5) & 3;
                     level.setBlock(p, bloemen[soort], 2);
                     gezet++;
@@ -331,7 +331,7 @@ public final class DalPlanten {
                 }
                 // sizes: a grove mixes small, middle and large (its heart now and then a giant); a tree alone is middle or large
                 double w2 = BioModel.kans(hash, 5);
-                int maat = bos > BOS_VANAF ? (w2 < 0.30 ? 0 : w2 < 0.70 ? 1 : w2 < 0.965 || bos < 0.3 ? 2 : 3) : w2 < 0.45 ? 1 : 2;
+                int maat = bos > BOS_VANAF ? (w2 < 0.25 ? 0 : w2 < 0.65 ? 1 : w2 < 0.965 || bos < 0.25 ? 2 : 3) : w2 < 0.45 ? 1 : 2;
                 // near the water it leans towards it
                 int[] leun = b.water(x, z) < 15 ? b.naarWater(x, z) : new int[]{0, 0};
                 MeerTerrein.Boom boom = new MeerTerrein.Boom(x, z, maat, leun[0], leun[1], false, hash);
@@ -355,7 +355,7 @@ public final class DalPlanten {
             for (int cz = Math.floorDiv(z0, ESDOORN_CEL); cz <= Math.floorDiv(z0 + 15, ESDOORN_CEL); cz++) {
                 long hash = m.hash(cx, cz, 6601);
                 int x = cx * ESDOORN_CEL + (int) (BioModel.kans(hash, 1) * ESDOORN_CEL), z = cz * ESDOORN_CEL + (int) (BioModel.kans(hash, 2) * ESDOORN_CEL);
-                if ((x >> 4) != k.cx || (z >> 4) != k.cz || BioModel.kans(hash, 0) >= ESDOORN_VAL || b.val(x, z) > 11.5f || !vlak(m, x, z)
+                if ((x >> 4) != k.cx || (z >> 4) != k.cz || BioModel.kans(hash, 0) >= ESDOORN_VAL || b.val(x, z) > 13.5f || !vlak(m, x, z)
                         || !boomMag(level, m, b, x, z, x, z, 3.6)) {
                     continue;
                 }
@@ -440,7 +440,7 @@ public final class DalPlanten {
 
     /** The grove noise: high where the guhbloesem trees stand together. */
     private static double bos(BioModel m, int x, int z) {
-        return m.ruis(BioModel.R_DETAIL, x * 0.16 + 4000, z * 0.16 - 2500);
+        return m.ruis(BioModel.R_DETAIL, x * 0.4 + 4000, z * 0.4 - 2500);
     }
 
     /** The model's part of {@link #boomMag} for an esdoorn beside a pool (so neighbouring chunks agree which try is taken). */

@@ -169,14 +169,19 @@ public final class DalVulling {
             if (laagst <= h - 2) {
                 // the face under this column's top: rock, with moss in soft patches
                 for (int y = h - 1; y > laagst; y--) {
-                    double vlek = m.ruis(BioModel.R_DETAIL, x * 0.6 + y * 0.9 + 333, z * 0.6 - y * 0.7 - 111);
-                    level.setBlock(p.set(x, y, z), vlek > 0.22 ? mos : BioModel.kans(hash, y) < 0.10 ? glans : rots, 2);
+                    double vlek = m.ruis(BioModel.R_DETAIL, x * 0.5 + y * 0.45 + 333, z * 0.5 - y * 0.35 - 111);
+                    level.setBlock(p.set(x, y, z), vlek > 0.1 ? mos : BioModel.kans(hash, y) < 0.10 ? glans : rots, 2);
                     gezet++;
                 }
                 // a strand hanging over the edge of a high face (not over a flight of steps or the water)
-                if (laagst <= h - 4 && !laagTrede && m.ruis(BioModel.R_DETAIL, x * 0.3 + 7000, z * 0.3 - 9000) > 0.12 && BioModel.kans(hash, 55) < 0.5) {
+                if (laagst <= h - 4 && !laagTrede && m.ruis(BioModel.R_DETAIL, x * 0.3 + 7000, z * 0.3 - 9000) > -0.12 && BioModel.kans(hash, 55) < 0.6) {
                     BlockState hang = m.ruis(BioModel.R_DETAIL, x * 0.08 - 4100, z * 0.08 + 2600) > 0 ? hangRoze : hangGroen;
-                    int lang = 1 + (int) (BioModel.kans(hash, 56) * 3);
+                    // (a low bush on the rim itself, and its strands down the face)
+                    if ((vlag & DalTerrein.TREDE) == 0 && BioModel.kans(hash, 57) < 0.7 && level.isEmptyBlock(p.set(x, h + 1, z))) {
+                        level.setBlock(p, hang, 2);
+                        gezet++;
+                    }
+                    int lang = 1 + (int) (BioModel.kans(hash, 56) * 3.4);
                     for (int i = 0; i < lang; i++) {
                         // (two blocks of air stay under it: you walk along the foot of the face)
                         if (h - i < laagst + 3 || !level.isEmptyBlock(p.set(laagX, h - i, laagZ)) || gebouwen && BouwRuimte.inBuilding(level, p)) {
