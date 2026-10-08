@@ -122,7 +122,7 @@ public final class BioWereldCommando {
         }
         int o = Kaart.index(x, z);
         StringBuilder vl = new StringBuilder();
-        String[] namen = {"rivier", "lip", "val", "eiland", "groot"};
+        String[] namen = {"rivier", "lip", "val", "eiland", "groot", "meer-steen", "meer-strand", "dal-vorm", "dal-trede"};
         for (int b = 0; b < namen.length; b++) {
             if ((k.vlag[o] & 1 << b) != 0) {
                 vl.append(' ').append(namen[b]);

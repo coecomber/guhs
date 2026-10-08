@@ -92,9 +92,9 @@ public final class DalTerrein {
     // </dal-terrein>
 
     /** Flag in {@link Kaart#vlag} (a bit of ours beside the kern's): the column is sculpted (not plain terrace or plain river). */
-    public static final byte VORM = 32;
+    public static final short VORM = Kaart.DAL_VORM; // biomes3 merge: was 32, the lake's STEEN
     /** Flag: a natural step beside a cascade ({@link DalVulling} lays a stair block on it). */
-    public static final byte TREDE = 64;
+    public static final short TREDE = Kaart.DAL_TREDE; // biomes3 merge: was 64, the lake's STRAND
 
     static final int MUUR = 100000;
     /** Columns around a chunk that are worked out too (the gradients, three rounds of lips, the fall flags). */
@@ -432,7 +432,8 @@ public final class DalTerrein {
         }
         double[] w = new double[n * n];
         int[] h = new int[n * n], wat = new int[n * n];
-        byte[] ter = new byte[n * n], vl = new byte[n * n];
+        byte[] ter = new byte[n * n];
+        short[] vl = new short[n * n]; // biomes3 merge: flags are wider than a byte
         List<MeerTerrein.Eiland> eilanden = null;
         List<Poel> poelen = null;
         List<Stap> stappen = null;
@@ -477,7 +478,7 @@ public final class DalTerrein {
                 int t = v.t, top = HOOGTE[t];
                 ter[idx] = (byte) t;
                 int hoogte = top;
-                byte vlag = 0;
+                short vlag = 0;
                 // the water lines: distance to the river and to the brook (central differences on the grid)
                 double naast = 99, naastBeek = 99, rnx = 1, rnz = 0;
                 boolean links = false, stroomt = v.bron > 0.35;
@@ -532,11 +533,11 @@ public final class DalTerrein {
                     }
                     if (steen) {
                         h[idx] = v.peil;
-                        vl[idx] = (byte) (Kaart.RIVIER | Kaart.LIP);
+                        vl[idx] = (short) (Kaart.RIVIER | Kaart.LIP);
                     } else {
                         wat[idx] = v.peil;
                         h[idx] = v.peil - diep;
-                        vl[idx] = (byte) (Kaart.RIVIER | (v.peil != top - 1 || diep > 2 ? VORM : 0));
+                        vl[idx] = (short) (Kaart.RIVIER | (v.peil != top - 1 || diep > 2 ? VORM : 0));
                     }
                     continue;
                 }
@@ -589,7 +590,7 @@ public final class DalTerrein {
                             int onder = HOOGTE[2 - edge];
                             if (s < 0 && onder + (int) Math.ceil(-s) < hoogte) {
                                 hoogte = onder + (int) Math.ceil(-s);
-                                vlag = (byte) (VORM | TREDE);
+                                vlag = (short) (VORM | TREDE);
                             }
                         }
                     }
@@ -640,7 +641,7 @@ public final class DalTerrein {
                 k.soort[o] = e[idx] >= RAND && w[idx] >= MEER_BIOME ? Kaart.MEER : Kaart.DAL;
                 k.water[o] = wat[idx];
                 k.terras[o] = ter[idx];
-                byte vlag = vl[idx];
+                short vlag = vl[idx];
                 int hoogte = h[idx];
                 if ((vlag & Kaart.RIVIER) != 0 && wat[idx] != Kaart.GEEN) {
                     for (int b : buren) {

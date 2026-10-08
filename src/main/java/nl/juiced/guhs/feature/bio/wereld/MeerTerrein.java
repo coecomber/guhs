@@ -60,7 +60,7 @@ public final class MeerTerrein {
     // </meer-terrein>
 
     /** Extra column flags of the lake, next to {@link Kaart#EILAND} and {@link Kaart#GROOT} (bits {@link Kaart} does not use). */
-    public static final byte STEEN = 32, STRAND = 64;
+    public static final byte STEEN = (byte) Kaart.MEER_STEEN, STRAND = (byte) Kaart.MEER_STRAND; // biomes3 merge: named in Kaart (must stay below 256: kolom packs them in 8 bits)
 
     private static final int SOORT = 1, SOORT_KEI = 5;
     /** The furthest anything of an island (its underwater slope included) lies from its middle. */
@@ -481,12 +481,12 @@ public final class MeerTerrein {
     }
 
     /** One lake column: its top solid block, its water and its flags, into the arrays at idx. d = e past the valley floor. */
-    static void kolom(BioModel m, int x, int z, double d, List<Eiland> eilanden, int[] h, int[] wat, byte[] vl, int idx) {
+    static void kolom(BioModel m, int x, int z, double d, List<Eiland> eilanden, int[] h, int[] wat, short[] vl, int idx) {
         long k = metKeien(vorm(m, x, z, d, eilanden), x, z, eilanden);
         int top = (int) (k >> 8);
         h[idx] = top;
         wat[idx] = top >= WATER ? Kaart.GEEN : WATER;
-        vl[idx] = (byte) (k & 0xFF);
+        vl[idx] = (short) (k & 0xFF);
     }
 
     /** {@link #los} of a column that is not a lake column. */

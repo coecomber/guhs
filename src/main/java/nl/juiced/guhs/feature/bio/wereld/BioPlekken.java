@@ -268,7 +268,8 @@ public final class BioPlekken {
     }
 
     private static Plek meerOever(BioModel m, Kaart k, int o, int x, int z) {
-        if (k.water[o] != Kaart.GEEN || (k.vlag[o] & (Kaart.LIP | Kaart.EILAND)) != 0 || k.hoogte[o] > MeerTerrein.WATER + 2
+        // biomes3 merge: nor on a lake boulder or a sculpted valley column (boulder, rounded foot, natural step): a shore spot is plain ground or sand
+        if (k.water[o] != Kaart.GEEN || (k.vlag[o] & (Kaart.LIP | Kaart.EILAND | Kaart.MEER_STEEN | Kaart.DAL_VORM)) != 0 || k.hoogte[o] > MeerTerrein.WATER + 2
                 || k.hoogte[o] <= MeerTerrein.WATER) {
             return null;
         }

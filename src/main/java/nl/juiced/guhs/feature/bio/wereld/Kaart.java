@@ -12,7 +12,8 @@ package nl.juiced.guhs.feature.bio.wereld;
  *   <li>{@link #hoogte}: the y of our top solid block (ground, river bed, lake floor, island);</li>
  *   <li>{@link #water}: the y of the top water block, or {@link #GEEN};</li>
  *   <li>{@link #terras}: the Klaterdal terrace (0 = the valley floor at the lake, 3 = the rim), -1 elsewhere;</li>
- *   <li>{@link #vlag}: bits {@link #RIVIER}, {@link #LIP}, {@link #VAL}, {@link #EILAND};</li>
+ *   <li>{@link #vlag}: bits {@link #RIVIER}, {@link #LIP}, {@link #VAL}, {@link #EILAND}, {@link #GROOT}, and the
+ *       polish bits {@link #MEER_STEEN}, {@link #MEER_STRAND}, {@link #DAL_VORM}, {@link #DAL_TREDE};</li>
  *   <li>{@link #spans}: floating solids of the Wolkenweide as pairs (bottom y, top y), or null.</li>
  * </ul>
  */
@@ -29,6 +30,18 @@ public final class Kaart {
     public static final byte EILAND = 8;
     /** Land of a LARGE lake island. */
     public static final byte GROOT = 16;
+    // biomes3 merge: the bits the polish of the lake and of the valley added each in their own file were the same two
+    // numbers (32, 64). Lake and valley columns lie side by side and several readers look at a neighbour's flags without
+    // asking whose column it is (DalPlanten "against rock", MeerLeven on the valley-floor strip of biome Bloesemmeertje,
+    // BioPlekken's meer_oever in the valley floor), so every bit has ONE meaning now; that needs more than a byte.
+    /** Lake: a boulder or stepping stone (stone at or above the water). {@link MeerTerrein#STEEN}. */
+    public static final short MEER_STEEN = 32;
+    /** Lake: sand (the shore's edge, an island's rim or beach). {@link MeerTerrein#STRAND}. */
+    public static final short MEER_STRAND = 64;
+    /** Klaterdal: a sculpted column (cascade, plunge pool, boulder, rounded face, natural step). {@link DalTerrein#VORM}. */
+    public static final short DAL_VORM = 128;
+    /** Klaterdal: a natural step beside a cascade. {@link DalTerrein#TREDE}. */
+    public static final short DAL_TREDE = 256;
 
     /** A chunk none of our biomes touches. */
     static Kaart leeg(int cx, int cz) {
@@ -44,7 +57,7 @@ public final class Kaart {
     public final int[] hoogte;
     public final int[] water;
     public final byte[] terras;
-    public final byte[] vlag;
+    public final short[] vlag;
     public final int[][] spans;
     int cx, cz;
 
@@ -68,7 +81,7 @@ public final class Kaart {
         hoogte = new int[256];
         water = new int[256];
         terras = new byte[256];
-        vlag = new byte[256];
+        vlag = new short[256];
         spans = new int[256][];
         java.util.Arrays.fill(water, GEEN);
         java.util.Arrays.fill(terras, (byte) -1);

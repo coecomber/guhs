@@ -289,7 +289,7 @@ public class MeerLeven extends Feature<NoneFeatureConfiguration> {
             int x = x0 + (o & 15), z = z0 + (o >> 4), h = k.hoogte[o];
             float kans = rnd.nextFloat(), kans2 = rnd.nextFloat();
             if (k.water[o] == Kaart.GEEN) {
-                if ((k.vlag[o] & (MeerTerrein.STEEN | MeerTerrein.STRAND | Kaart.LIP | Kaart.RIVIER)) != 0 || h > MeerTerrein.WATER + 6) {
+                if ((k.vlag[o] & (MeerTerrein.STEEN | MeerTerrein.STRAND | Kaart.LIP | Kaart.RIVIER | Kaart.DAL_VORM)) != 0 || h > MeerTerrein.WATER + 6) { // biomes3 merge: + DAL_VORM (rock of the valley on the floor strip of this biome)
                     continue;
                 }
                 BlockState wat = null;
