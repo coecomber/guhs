@@ -2735,6 +2735,20 @@
     ],
     "subtitle": "subtitles.guhs.waterval.ruis"
   },
+  "wolkenweide.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:wolkenweide/muziek",
+        "stream": true
+      }
+    ]
+  },
+  "wolkenweide.sfeer": {
+    "sounds": [
+      "guhs:wolkenweide/sfeer"
+    ],
+    "subtitle": "subtitles.guhs.wolkenweide.sfeer"
+  },
   "koi.hap": {
     "sounds": [
       "guhs:bio_dieren/koi_hap1",
