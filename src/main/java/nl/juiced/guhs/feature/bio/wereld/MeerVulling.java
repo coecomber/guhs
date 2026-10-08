@@ -3,33 +3,52 @@ package nl.juiced.guhs.feature.bio.wereld;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.bio.Bio;
 
 /**
- * biomes3 wereld, the Bloesemmeertje: the blocks of the lake (called by {@link BioVulling} for every chunk).
+ * biomes3 wereld, the Bloesemmeertje: the blocks of the lake (called by {@link BioVulling} for every chunk, step "lakes",
+ * before any building).
  * <p>
- * Per lake column of {@link MeerTerrein}: a sandy floor and water up to {@link MeerTerrein#WATER}; the beach ring of an
- * island and a shoal at the water line get sand. On every large island a PLACEHOLDER big tree stands at the island's tree
- * spot ({@link MeerTerrein.Eiland#boomX}), which is where the structure spot {@code meer_boom} points.
+ * Per lake column of {@link MeerTerrein}: the bed and the water up to {@link MeerTerrein#WATER}; sand on the beaches
+ * ({@link MeerTerrein#STRAND}); smooth knuffelsteen for the boulders and stepping stones ({@link MeerTerrein#STEEN}).
+ * The bed gets bluer and darker with depth ({@link #bodem}): sand, calcite, light blue and cyan wool, cyan concrete (the
+ * Guhmensie's ground is wool, so is its lake bed), mixed block by block over about two blocks of depth so no contour
+ * lines show. On every large island the BIG tree stands on the island's tree spot ({@link MeerTerrein.Eiland#boomX});
+ * it is placed here, before the buildings, because the structure spot {@code meer_boom} is "under that tree".
  * <p>
- * Extension points for the Bloesemmeertje polish agent: {@link #bodem} (the floor that gets bluer with depth),
- * {@link #groteBoom} (replace the placeholder by the real overhanging tree; keep its foot on the tree spot), and more
- * passes in {@link #vul} (stepping stones, boulders); lilies, reeds, seagrass and the other trees are ordinary placed
- * features in tools/features/bio_wereld_meer.py.
+ * Everything else that lives here (the other trees, flowers, reeds, lilies, petals, seagrass) is {@link MeerLeven}, a
+ * later step that keeps clear of buildings.
  */
 public final class MeerVulling {
-    static BlockState bodem(int diepte) {
-        return Blocks.SAND.defaultBlockState();
+    /** The bed under this many blocks of water at (x, z); the mix between two kinds is spread over about two blocks of depth. */
+    static BlockState bodem(int diepte, int x, int z) {
+        long h = BioModel.mix(x * 0x9E3779B97F4A7C15L ^ BioModel.mix(z * 0xC2B2AE3D27D4EB4FL + 77));
+        // a triangular draw in -1..1: mostly near 0, so the middle of a band is nearly pure
+        double v = diepte + (BioModel.kans(h, 0) + BioModel.kans(h, 1) - 1.0);
+        if (v < 1.7) {
+            return Blocks.SAND.defaultBlockState();
+        }
+        if (v < 3.1) {
+            return Blocks.CALCITE.defaultBlockState();
+        }
+        if (v < 4.9) {
+            return Blocks.LIGHT_BLUE_WOOL.defaultBlockState();
+        }
+        if (v < 6.3) {
+            return Blocks.CYAN_WOOL.defaultBlockState();
+        }
+        return Blocks.CYAN_CONCRETE.defaultBlockState();
     }
 
     /** Places the lake of this chunk; returns how many blocks were set. */
     static int vul(WorldGenLevel level, BioModel m, Kaart k) {
-        BlockState water = Blocks.WATER.defaultBlockState();
+        BlockState water = Blocks.WATER.defaultBlockState(), zand = Blocks.SAND.defaultBlockState();
+        BlockState steen = Bio.blok("gladde_knuffelsteen", Blocks.CALCITE).defaultBlockState();
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         int x0 = k.cx << 4, z0 = k.cz << 4, gezet = 0;
         boolean meer = false;
+        long t0 = System.nanoTime();
         for (int o = 0; o < 256; o++) {
             if (k.terras[o] >= 0 || k.soort[o] == Kaart.WEIDE || k.soort[o] == Kaart.BUITEN || k.meng[o] < 1f) {
                 continue;
@@ -37,15 +56,20 @@ public final class MeerVulling {
             meer = true;
             int x = x0 + (o & 15), z = z0 + (o >> 4), h = k.hoogte[o];
             if (k.water[o] == Kaart.GEEN) {
-                if (h <= MeerTerrein.WATER + 1) {
-                    // a beach or a shoal
-                    level.setBlock(p.set(x, h, z), bodem(0), 2);
-                    level.setBlock(p.set(x, h - 1, z), bodem(0), 2);
+                if ((k.vlag[o] & MeerTerrein.STEEN) != 0) {
+                    // a boulder or a stepping stone: stone down to below the bed around it
+                    for (int y = h; y >= h - 4; y--) {
+                        level.setBlock(p.set(x, y, z), steen, 2);
+                    }
+                    gezet += 5;
+                } else if ((k.vlag[o] & MeerTerrein.STRAND) != 0) {
+                    level.setBlock(p.set(x, h, z), zand, 2);
+                    level.setBlock(p.set(x, h - 1, z), zand, 2);
                     gezet += 2;
                 }
                 continue;
             }
-            BlockState bodem = bodem(k.water[o] - h);
+            BlockState bodem = bodem(k.water[o] - h, x, z);
             level.setBlock(p.set(x, h, z), bodem, 2);
             level.setBlock(p.set(x, h - 1, z), bodem, 2);
             for (int y = h + 1; y <= k.water[o]; y++) {
@@ -54,38 +78,23 @@ public final class MeerVulling {
             }
         }
         if (meer) {
-            for (MeerTerrein.Eiland ei : MeerTerrein.bij(m, x0, z0, x0 + 16, z0 + 16)) {
+            for (MeerTerrein.Eiland ei : MeerTerrein.eilandenBij(m, x0, z0, x0 + 16, z0 + 16)) {
                 if (ei.groot() && (ei.boomX() >> 4) == k.cx && (ei.boomZ() >> 4) == k.cz) {
                     gezet += groteBoom(level, m, ei);
                 }
             }
+            MeerLeven.VUL_NS.add(System.nanoTime() - t0);
+            MeerLeven.VUL_N.increment();
         }
         return gezet;
     }
 
-    /** PLACEHOLDER: a plain guhbloesem tree on the island's tree spot (a trunk of six with a round crown). */
+    /** The big tree of a large island, on its tree spot: the rare giant, or a large leaning one. */
     static int groteBoom(WorldGenLevel level, BioModel m, MeerTerrein.Eiland ei) {
-        BlockState stam = Bio.blok("guhbloesem_log", Blocks.CHERRY_LOG).defaultBlockState();
-        BlockState blad = Bio.blok("guhbloesem_leaves", Blocks.CHERRY_LEAVES).defaultBlockState();
-        if (blad.hasProperty(LeavesBlock.PERSISTENT)) {
-            blad = blad.setValue(LeavesBlock.PERSISTENT, true);
+        if (!m.droog(ei.boomX(), ei.boomZ())) {
+            return 0;
         }
-        int x = ei.boomX(), z = ei.boomZ(), y = m.hoogte(x, z) + 1, gezet = 0;
-        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dz = -3; dz <= 3; dz++) {
-                for (int dy = -2; dy <= 2; dy++) {
-                    if (dx * dx + dz * dz + dy * dy * 2 <= 11 && level.isEmptyBlock(p.set(x + dx, y + 6 + dy, z + dz))) {
-                        level.setBlock(p, blad, 2);
-                        gezet++;
-                    }
-                }
-            }
-        }
-        for (int dy = 0; dy < 6; dy++) {
-            level.setBlock(p.set(x, y + dy, z), stam, 2);
-        }
-        return gezet + 6;
+        return BloesemBoom.bouw(level, ei.bomen()[0], m.hoogte(ei.boomX(), ei.boomZ()) + 1);
     }
 
     private MeerVulling() {
