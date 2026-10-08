@@ -32,6 +32,16 @@ public final class Plekken {
     /** The boat's path from the harbour of the glade to the landing (the middle of the boat; template coordinates). */
     public static final List<Vec3> ROUTE;
 
+    /** One cell of a step out of the sauce: a block of the template (coordinates of the whole build) and the id of what it becomes. */
+    public record Cel(BlockPos lokaal, String blok) {
+    }
+
+    /**
+     * 1.4.1: the steps out of the Guhduin (the builder's {@code uitstappen}): per step its cells, top-down per column. A new
+     * copy has them from its template; {@link Uitstap} makes them at a copy that was generated before.
+     */
+    public static final List<List<Cel>> UITSTAP;
+
     static {
         try (InputStream in = Plekken.class.getResourceAsStream(PAD)) {
             if (in == null) {
@@ -48,6 +58,18 @@ public final class Plekken {
                 route.add(punt(e.getAsJsonArray()));
             }
             ROUTE = List.copyOf(route);
+            List<List<Cel>> uitstap = new ArrayList<>();
+            if (root.has("uitstap")) {
+                for (JsonElement trap : root.getAsJsonArray("uitstap")) {
+                    List<Cel> cellen = new ArrayList<>();
+                    for (JsonElement e : trap.getAsJsonArray()) {
+                        JsonArray c = e.getAsJsonArray();
+                        cellen.add(new Cel(new BlockPos(c.get(0).getAsInt(), c.get(1).getAsInt(), c.get(2).getAsInt()), c.get(3).getAsString()));
+                    }
+                    uitstap.add(List.copyOf(cellen));
+                }
+            }
+            UITSTAP = List.copyOf(uitstap);
         } catch (IOException e) {
             throw new IllegalStateException("ringh4: can't read " + PAD, e);
         }

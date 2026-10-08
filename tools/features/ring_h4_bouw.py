@@ -14,6 +14,7 @@ From west to east (x; north is -z):
   - the harbour (x 84..94): a jetty with the elf boats on a round pool of sauce;
   - the Guhduin (x 90..172): a calm river of kaassaus through a gorge, and half-way, one on each bank, the two giant guh
     statues of the Arguhnath: sitting guh kings of old tuff with knabbel crowns, one paw raised: "halt, njeg";
+    here and there a white step in the bank, level with the sauce: the way out for whoever fell in (1.4.1, uitstappen);
   - the landing (180, 48): a little beach with a jetty, a Rustvuurtje and the signpost to the Zwarte Roosterpoort.
 
 Template y 0 is the layer the cave floor is replaced by (the anchor's y): the sauce of the river lies in layer 1, its banks
@@ -49,6 +50,7 @@ RIVIER = (90, 172)            # the river (x from .. to)
 AANLEG = (180, 48)            # the landing
 R_AANLEG = 11
 BEELD_X = 131                 # the Arguhnath
+ZWEM = 8                      # nobody in the sauce is more than this many cells of swimming from a step out (1.4.1)
 
 GROOT = (48, 46)              # de Grote Spies
 ZAAL_Y = 25                   # the hall's floor layer
@@ -996,6 +998,61 @@ class Stad:
             if _top(b, boven[1]) == 1.0 and not b.endswith(("_slab", "_stairs", "_plaat", "_trapdoor")) and b not in (VUUR, SPIEGEL, HEK):
                 self.set(x, y, z, ROTS)
 
+    # --- 7b. the way out of the sauce (1.4.1) -------------------------------------------------------------------------------------
+    def uitstappen(self):
+        """Steps out of the Guhduin. The banks stand a whole block above the sauce (and so do the jetties), so whoever fell in
+        could not get out anywhere. A step out is a cell of the bank at the water's edge made one block lower (a white stone
+        level with the sauce: you float onto it) with a half step behind it up to the bank, two cells wide where the bank
+        allows. No cell of the sauce is more than ZWEM cells of swimming from one (check() asks it again of the finished
+        build), with as few steps as that takes: every time the step that brings the most cells within reach is added.
+
+        self.uitstap: per step its cells [(x, y, z, block)], top-down per column (a plant goes before the ground under it).
+        feature/ringh4/Uitstap makes exactly these changes at copies that were generated before 1.4.1, from
+        data/guhs/ringh4/plekken.json: a step only replaces plain bank (nylium or as-earth on rock, nothing but a plant on it)."""
+        saus = zwemcellen(self)
+
+        def oever(x, z):
+            return (self.soort.get((x, z)) in ("oever", "aanleg", "weide") and self.grond.get((x, z)) == OEVER
+                    and self.get(x, OEVER, z) in (NYLIUM, AS_AARDE) and self.get(x, OEVER - 1, z) == ROTS
+                    and all(self.get(x, y, z) in (None, AIR) + UITSTAP_PLANT for y in (OEVER + 1, OEVER + 2, OEVER + 3)))
+
+        boten = [self.plek[n] for n in ("boot", "boot_deco_1", "boot_deco_2", "boot_terug")]
+        kandidaten = {}
+        for (x, z) in sorted(saus):
+            if any(math.hypot(x + 0.5 - bx, z + 0.5 - bz) < 2.5 for bx, _, bz in boten):
+                continue                                   # (a moored boat lies in the way there)
+            for dx, dz in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                if all(oever(x + dx * i, z + dz * i) for i in (1, 2, 3)):
+                    # (the stone at the water's edge, the half step behind it, the bank behind that)
+                    kandidaten[((x, z), (dx, dz))] = tuple((x + dx * i, z + dz * i) for i in (1, 2, 3))
+        bereik = {c: {q for q, n in _zwem(saus, {c}).items() if n <= ZWEM} for c in sorted({k[0] for k in kandidaten})}
+        gekozen, bezet, nog = [], set(), set(saus)
+        while nog:
+            vrij = [k for k in sorted(kandidaten) if not bezet & set(kandidaten[k])]
+            beste = max(vrij, key=lambda k: len(bereik[k[0]] & nog), default=None)
+            if beste is None or not bereik[beste[0]] & nog:
+                raise SystemExit(f"ring_h4: no step out of the sauce can be made within {ZWEM} cells of {min(nog)}")
+            gekozen.append(beste)
+            bezet.update(kandidaten[beste])
+            nog -= bereik[beste[0]]
+        self.uitstap = []
+        for k in sorted(gekozen):
+            (x, z), (dx, dz) = k
+            paren = [kandidaten[k]]
+            for px, pz in ((dz, dx), (-dz, -dx)):          # (two wide: the neighbour along the bank, when it is plain bank too)
+                buur = ((x + px, z + pz), (dx, dz))
+                if buur in kandidaten and not bezet & set(kandidaten[buur]):
+                    paren.append(kandidaten[buur])
+                    bezet.update(kandidaten[buur])
+                    break
+            cellen = []
+            for (ax, az), (bx, bz), _ in paren:
+                cellen += [(ax, OEVER + 1, az, AIR), (ax, OEVER, az, AIR), (ax, OEVER - 1, az, KALK),
+                           (bx, OEVER + 1, bz, AIR), (bx, OEVER, bz, KWARTS_PLAAT)]
+            for cx, cy, cz, naam in cellen:
+                self.set(cx, cy, cz, naam, _plaat("bottom") if naam == KWARTS_PLAAT else None)
+            self.uitstap.append(cellen)
+
     # --- 8. who lives here ------------------------------------------------------------------------------------------------------
     def bewoners(self):
         from features import ring
@@ -1018,6 +1075,43 @@ class Stad:
                                     "Rotation": h.floats(yaw, 0.0), "NeoForgeData": {"guhs_bezetting": id}})
 
 
+UITSTAP_PLANT = ("guhs:pindascheutjes", "guhs:sate_zwammetje")
+
+
+def zwemcellen(stad):
+    """The cells (x, z) of the sauce a player can be in: sauce (it is one block deep) with a free layer over it. Not under a
+    jetty: its planks lie in that layer."""
+    return {(x, z) for (x, y, z), b in stad.s.blocks.items() if b[0] == SAUS and y == SAUS_Y and stad.get(x, SAUS_Y + 1, z) in (None, AIR)}
+
+
+def _zwem(saus, bronnen):
+    """Cells of swimming (4 directions, through the sauce) from every cell in `bronnen` to every cell of the sauce it reaches."""
+    d = {c: 0 for c in bronnen if c in saus}
+    rij = sorted(d)
+    while rij:
+        volgende = []
+        for (x, z) in rij:
+            for c in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1)):
+                if c in saus and c not in d:
+                    d[c] = d[(x, z)] + 1
+                    volgende.append(c)
+        rij = volgende
+    return d
+
+
+def zwem_afstanden(stad):
+    """Per cell of the sauce: how many cells of swimming to the nearest step out (a cell next to its white stone). Read from
+    the finished build, not from what uitstappen() meant to make."""
+    saus = zwemcellen(stad)
+    bij = set()
+    for trap in stad.uitstap:
+        for (x, y, z, naam) in trap:
+            if naam == KALK and stad.get(x, y, z) == KALK and stad.vrij(x, y + 1, z) and stad.vrij(x, y + 2, z):
+                bij.update(c for c in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1)) if c in saus)
+    d = _zwem(saus, bij)
+    return {c: d.get(c, 999) for c in saus}
+
+
 def bouw(h):
     """The whole build (not saved)."""
     s = Stad(h)
@@ -1036,6 +1130,7 @@ def bouw(h):
     s.licht()
     s.planten()
     s.bedekt()
+    s.uitstappen()
     s.bewoners()
     return s
 
@@ -1145,6 +1240,31 @@ def check(stad):
             problems.append(f"plek {naam} {(x, y, z)}: nothing to stand on, or no room (under: {onder[0] if onder else None}, at: {stad.get(x, y, z)})")
     if len(stad.s.entities) != 10:
         problems.append(f"{len(stad.s.entities)} entities, expected 10")
+    # 1.4.1: whoever falls in the sauce gets out: a step within ZWEM cells of swimming of every cell, and every step is one:
+    # a stone level with the sauce at the water's edge, a half step behind it, the bank behind that, room to walk
+    afstand = zwem_afstanden(stad)
+    ver = max(sorted(afstand), key=lambda c: afstand[c])
+    if afstand[ver] > ZWEM:
+        problems.append(f"the sauce at {ver} is {afstand[ver]} cells of swimming from a step out (at most {ZWEM})")
+    if not 1 <= len(stad.uitstap) <= 60:
+        problems.append(f"{len(stad.uitstap)} steps out of the sauce (feature/ringh4/Uitstap remembers at most 60 per copy)")
+    staan = loopbaar(stad)
+    naast_saus = {c for (x, z) in afstand for c in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1))}
+    for trap in stad.uitstap:
+        stenen = [(x, y, z) for (x, y, z, naam) in trap if naam == KALK]
+        platen = [(x, y, z) for (x, y, z, naam) in trap if naam == KWARTS_PLAAT]
+        for (x, y, z) in stenen:
+            buren = ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1))
+            if y != SAUS_Y or (x, z) not in naast_saus:
+                problems.append(f"the step out at {(x, y, z)} is not level with the sauce next to it")
+            if y + 1.0 not in staan.get((x, z), []):
+                problems.append(f"nobody can stand on the step out at {(x, y, z)}")
+            if not any((bx, y + 1, bz) in platen and y + 1.5 in staan.get((bx, bz), []) for bx, bz in buren):
+                problems.append(f"the step out at {(x, y, z)} has no half step behind it")
+        for (x, y, z) in platen:
+            if not any(y + 1.0 in staan.get(c, []) and blocks.get((c[0], y, c[1]), ("",))[0] in (NYLIUM, AS_AARDE, KALK, DIORIET)
+                       for c in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1))):
+                problems.append(f"the half step at {(x, y, z)} does not lead onto the bank")
     # the seams of a burcht (ladders, wall signs, beds: there are none, this keeps it that way)
     problems += paleizen_bouw.check_steun(stad, ANKER, TILE)
     return problems
@@ -1176,7 +1296,9 @@ def plekken_json(stad):
     """data/guhs/ringh4/plekken.json: every spot (template coordinates of the whole build) and the boat's path."""
     return {"anker": list(ANKER), "grootte": list(SIZE),
             "plekken": {k: [float(c) for c in v] for k, v in sorted(stad.plek.items())},
-            "route": [[float(c) for c in p] for p in stad.route]}
+            "route": [[float(c) for c in p] for p in stad.route],
+            # 1.4.1: the steps out of the sauce, for the copies that were generated before (feature/ringh4/Uitstap)
+            "uitstap": [[[x, y, z, naam] for (x, y, z, naam) in trap] for trap in stad.uitstap]}
 
 
 def test_template(h):

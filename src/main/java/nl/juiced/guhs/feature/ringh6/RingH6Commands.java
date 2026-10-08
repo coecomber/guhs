@@ -33,6 +33,8 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
  * /guhs ringh6 kool               a coal over the player's head
  * /guhs ringh6 graai              Smikagol grabs now
  * /guhs ringh6 thuis              where the flight home would put this player down
+ * /guhs ringh6 landing            where the Rookguhs would put somebody down around this spot (loads its chunks, as the flight
+ *                                 does; also from the console: execute in guhs:guhmension positioned &lt;x y z&gt; run guhs ringh6 landing)
  * /guhs ringh6 bouw               (dev runs only: it builds) a try-out Frituurberg with its base camp where the player stands
  * /guhs ringh6 testberg           (dev runs only) the small test mountain's spots count from the block under the player
  * </pre>
@@ -111,6 +113,19 @@ final class RingH6Commands {
             ServerPlayer p = c.getSource().getPlayerOrException();
             BlockPos plek = Thuis.plek(p);
             return zeg(c, "home: " + (plek == null ? "no Guhmensie here" : plek.toShortString()) + ", saved: " + Thuis.thuis(p));
+        }));
+        cmd.then(Commands.literal("landing").executes(c -> {
+            ServerLevel level = c.getSource().getLevel();
+            BlockPos rond = BlockPos.containing(c.getSource().getPosition());
+            boolean geladen = level.hasChunk(rond.getX() >> 4, rond.getZ() >> 4);
+            int oud = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, rond.getX(), rond.getZ());
+            long t0 = System.nanoTime();
+            BlockPos plek = Thuis.landing(level, rond);
+            long ms = (System.nanoTime() - t0) / 1_000_000;
+            return zeg(c, "around " + rond.toShortString() + " in " + level.dimension().identifier() + " (its chunk was " + (geladen ? "loaded" : "NOT loaded")
+                    + ", its height read " + oud + ", the bottom of the world is " + level.getMinY() + "): "
+                    + (plek == null ? "no place to stand" : plek.toShortString() + " on " + level.getBlockState(plek.below()).getBlock().getName().getString()
+                    + ", a place to stand: " + Thuis.staan(level, plek)) + " (" + ms + " ms)");
         }));
         if (!FMLEnvironment.isProduction()) {
             cmd.then(Commands.literal("bouw").executes(c -> {

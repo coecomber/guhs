@@ -14,6 +14,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  *   <li>Every tick of a player on a mountain: {@link Klim#tik} (no fire, the frituur, a long fall, Smikagol's grab); once a
  *       second: the chapter's upkeep ({@link Klim#seconde}).</li>
  *   <li>A player on a Frituurberg is never hurt by fire, the frituur or a fall: whoever climbs it, whoever visits it.</li>
+ *   <li>A player the Rookguhs just put down at home is not hurt by anything for a moment ({@link Thuis#netGeland}).</li>
  *   <li>Logging out and the server stopping: nothing of a climb is left behind.</li>
  * </ul>
  */
@@ -32,6 +33,10 @@ public final class RingH6Events {
     @SubscribeEvent
     public static void onSchade(LivingIncomingDamageEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            return;
+        }
+        if (Thuis.netGeland(p)) {
+            event.setCanceled(true);                          // (1.4.1: the Rookguhs just put them down at home: nothing hurts)
             return;
         }
         boolean vuur = event.getSource().is(DamageTypeTags.IS_FIRE);

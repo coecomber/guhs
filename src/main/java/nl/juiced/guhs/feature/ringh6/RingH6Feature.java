@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
@@ -63,6 +64,13 @@ public final class RingH6Feature {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
+    public static final DeferredRegister<TicketType> TICKETS = DeferredRegister.create(Registries.TICKET_TYPE, Guhs.MODID);
+    /**
+     * 1.4.1: loads the chunks of a player's home in the Guhmensie in the background while the Rookguhs fly them there
+     * ({@link Thuis#warm}; asked again every second of the flight, gone 20 seconds after the last time; not saved).
+     */
+    public static final DeferredHolder<TicketType, TicketType> THUIS_TICKET = TICKETS.register("ringh6_thuis",
+            () -> new TicketType(400L, TicketType.FLAG_LOADING | TicketType.FLAG_CAN_EXPIRE_IF_UNLOADED));
 
     /** The lock of a Rookguh cage (a quest prop: it can't be broken, moved or blown up). */
     public static final DeferredBlock<KooislotBlock> KOOISLOT = BLOCKS.registerBlock("ringh6_kooislot", KooislotBlock::new,
@@ -115,6 +123,7 @@ public final class RingH6Feature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
+        TICKETS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> {
             event.put(ROOKGUH.get(), RookguhEntity.createAttributes().build());
             event.put(KROKANTE_SMIKAGOL.get(), SmikagolEntity.createAttributes().build());

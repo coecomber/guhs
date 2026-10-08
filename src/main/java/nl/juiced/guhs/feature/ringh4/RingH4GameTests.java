@@ -1,18 +1,26 @@
 package nl.juiced.guhs.feature.ringh4;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -338,6 +346,161 @@ public final class RingH4GameTests {
                 helper.succeed();
             }
         });
+    }
+
+    // =====================================================================================================================
+    // 1.4.1: the steps out of the sauce
+    // =====================================================================================================================
+
+    private static BlockState blok(String id) {
+        BlockState s = BuiltInRegistries.BLOCK.getValue(Identifier.parse(id)).defaultBlockState();
+        if (s.isAir() && !id.equals("minecraft:air")) {
+            throw new IllegalStateException("no block " + id);
+        }
+        return s;
+    }
+
+    /** A copy (not turned) whose step {@code nr} has its first cell at this spot of the test room. */
+    private static Boomstad.Kopie kopieMetTrap(GameTestHelper helper, int nr, BlockPos daar) {
+        BlockPos eerste = Plekken.UITSTAP.get(nr).get(0).lokaal();
+        return new Boomstad.Kopie(helper.absolutePos(daar).subtract(eerste.subtract(Plekken.ANKER)), Rotation.NONE, null, null);
+    }
+
+    /**
+     * The bank as 1.4.0 generated it at the cells of this step: rock at the sauce's layer, nylium on it, air over it (and a
+     * plant on the first column: it has to go with the ground under it).
+     */
+    private static void oudeOever(ServerLevel level, Boomstad.Kopie k, int nr) {
+        boolean plant = false;
+        for (Plekken.Cel c : Plekken.UITSTAP.get(nr)) {
+            int y = c.lokaal().getY();
+            BlockState oud = y >= 3 ? blok("minecraft:air") : blok(y == 2 ? "guhs:pindasaus_nylium" : "guhs:houtskoolsteen");
+            if (y == 3 && !plant) {
+                oud = blok("guhs:sate_zwammetje");              // (not a plant that gives way by itself)
+                plant = true;
+            }
+            level.setBlock(Uitstap.wereld(k, c.lokaal()), oud, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+        }
+    }
+
+    /** Every block of the part of the test room the steps of this test are built in. */
+    private static Map<BlockPos, BlockState> foto(GameTestHelper helper) {
+        Map<BlockPos, BlockState> uit = new HashMap<>();
+        for (BlockPos pos : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(1, 1, 5)), helper.absolutePos(new BlockPos(23, 6, 10)))) {
+            uit.put(pos.immutable(), helper.getLevel().getBlockState(pos));
+        }
+        return uit;
+    }
+
+    /**
+     * 1.4.1 (C): whoever fell in the kaassaus of the Guhduin could not get out (the banks stand a whole block above it). The
+     * builder now makes steps out, and {@link Uitstap} makes the same steps at a city that was generated before: once per
+     * copy, only where the bank is still plain bank, nothing else touched, and never in chunks that are not loaded.
+     */
+    @GuhTest(template = KAMER, batch = "ringh4_uitstap")
+    public static void ringh4UitstapUitDeSaus(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // what the builder wrote: steps along the whole trip of the boat, each a stone level with the sauce and a half step
+        int n = Uitstap.aantal();
+        helper.assertTrue(n >= 4 && n <= 60 && n == Plekken.UITSTAP.size(), "plekken.json has the steps out of the sauce: " + n);
+        int sausLaag = (int) Math.floor(Plekken.punt("boot").y);
+        List<BlockPos> stenen = new ArrayList<>();
+        for (List<Plekken.Cel> trap : Plekken.UITSTAP) {
+            int steen = 0, plaat = 0;
+            for (Plekken.Cel c : trap) {
+                BlockPos l = c.lokaal();
+                helper.assertTrue(l.getX() >= 0 && l.getX() < Plekken.GROOTTE.getX() && l.getZ() >= 0 && l.getZ() < Plekken.GROOTTE.getZ(), "a step inside the build: " + l);
+                if (c.blok().equals("minecraft:calcite")) {
+                    helper.assertTrue(l.getY() == sausLaag, "the stone of a step lies in the layer of the sauce: " + l);
+                    stenen.add(l);
+                    steen++;
+                } else if (c.blok().equals("minecraft:smooth_quartz_slab")) {
+                    helper.assertTrue(l.getY() == sausLaag + 1, "the half step lies one layer higher: " + l);
+                    plaat++;
+                } else {
+                    helper.assertTrue(c.blok().equals("minecraft:air"), "a step is made of a stone, a half step and air: " + c.blok());
+                }
+            }
+            helper.assertTrue(steen >= 1 && steen == plaat, "a step: a stone with a half step behind it (" + steen + " / " + plaat + ")");
+        }
+        for (Vec3 punt : Plekken.ROUTE) {
+            double dichtst = Double.MAX_VALUE;
+            for (BlockPos s : stenen) {
+                dichtst = Math.min(dichtst, Math.hypot(s.getX() + 0.5 - punt.x, s.getZ() + 0.5 - punt.z));
+            }
+            helper.assertTrue(dichtst <= 12, "a step out within a short swim of every point of the boat's trip: " + dichtst + " at " + punt);
+        }
+        // a copy turns its steps like the game turns the blocks of its tiles
+        BlockPos anker = helper.absolutePos(new BlockPos(12, 1, 8));
+        for (Rotation draai : Rotation.values()) {
+            Boomstad.Kopie k = new Boomstad.Kopie(anker, draai, null, null);
+            for (List<Plekken.Cel> trap : Plekken.UITSTAP) {
+                BlockPos lokaal = trap.get(0).lokaal();
+                BlockPos verwacht = StructureTemplate.transform(lokaal, Mirror.NONE, draai, Plekken.ANKER).subtract(Plekken.ANKER).offset(anker);
+                helper.assertTrue(Uitstap.wereld(k, lokaal).equals(verwacht), draai + ": a step at " + Uitstap.wereld(k, lokaal) + ", its block lands at " + verwacht);
+            }
+        }
+
+        // 1) a city from 1.4.0: plain bank where the step belongs. It is made, exactly as the builder wrote it, and only it
+        Boomstad.Kopie oud = kopieMetTrap(helper, 0, new BlockPos(5, 4, 7));
+        oudeOever(level, oud, 0);
+        Map<BlockPos, BlockState> voor = foto(helper);
+        helper.assertTrue(!Uitstap.gehad(level, oud, 0), "(nothing was done at this copy yet)");
+        helper.assertTrue(Uitstap.controleer(level, oud, 0) == 1, "the step is made at a copy that was generated before");
+        Map<BlockPos, BlockState> verwacht = new HashMap<>(voor);
+        for (Plekken.Cel c : Plekken.UITSTAP.get(0)) {
+            BlockPos pos = Uitstap.wereld(oud, c.lokaal());
+            BlockState nu = level.getBlockState(pos);
+            helper.assertTrue(nu == blok(c.blok()), "the cell " + c.lokaal() + " became " + c.blok() + ": " + nu);
+            if (nu.getBlock() instanceof SlabBlock) {
+                helper.assertTrue(nu.getValue(SlabBlock.TYPE) == SlabType.BOTTOM, "the half step is a bottom slab");
+            }
+            if (c.blok().equals("minecraft:calcite")) {
+                helper.assertTrue(level.getBlockState(pos.above()).isAir() && level.getBlockState(pos.above(2)).isAir(), "room to stand on the stone (the plant went with its ground)");
+            }
+            verwacht.put(pos, nu);
+        }
+        helper.assertTrue(verwacht.equals(foto(helper)), "nothing but the cells of the step was changed");
+        helper.assertTrue(Uitstap.gehad(level, oud, 0) && Uitstap.controleer(level, oud, 0) == 0 && verwacht.equals(foto(helper)), "once per copy: a second look does nothing");
+
+        // 2) somebody built on the bank: the whole step is left out there, for good, and nothing is touched
+        Boomstad.Kopie bebouwd = kopieMetTrap(helper, 0, new BlockPos(12, 4, 7));
+        oudeOever(level, bebouwd, 0);
+        BlockPos plank = null;
+        for (Plekken.Cel c : Plekken.UITSTAP.get(0)) {
+            if (c.blok().equals("minecraft:smooth_quartz_slab")) {
+                plank = Uitstap.wereld(bebouwd, c.lokaal());
+            }
+        }
+        level.setBlock(plank, Blocks.OAK_PLANKS.defaultBlockState(), Block.UPDATE_CLIENTS);
+        voor = foto(helper);
+        helper.assertTrue(Uitstap.controleer(level, bebouwd, 0) == 0 && voor.equals(foto(helper)), "a cell that is no plain bank: no step, nothing touched");
+        level.setBlock(plank, blok("guhs:pindasaus_nylium"), Block.UPDATE_CLIENTS);
+        voor = foto(helper);
+        helper.assertTrue(Uitstap.gehad(level, bebouwd, 0) && Uitstap.controleer(level, bebouwd, 0) == 0 && voor.equals(foto(helper)), "and that copy is not looked at again");
+
+        // 3) a new city: the template has the step already: nothing to do
+        Boomstad.Kopie nieuw = kopieMetTrap(helper, 0, new BlockPos(19, 4, 7));
+        for (Plekken.Cel c : Plekken.UITSTAP.get(0)) {
+            level.setBlock(Uitstap.wereld(nieuw, c.lokaal()), blok(c.blok()), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+        }
+        voor = foto(helper);
+        helper.assertTrue(Uitstap.controleer(level, nieuw, 0) == 0 && Uitstap.gehad(level, nieuw, 0) && voor.equals(foto(helper)), "a copy that has the step is left alone");
+
+        // 4) a copy in chunks that are not loaded: nothing is loaded, nothing is remembered: it gets its turn later
+        BlockPos nul = helper.absolutePos(BlockPos.ZERO);
+        int cx = (nul.getX() >> 4) + 60, cz = (nul.getZ() >> 4) - 60;
+        while (level.hasChunk(cx, cz)) {
+            cx += 7;
+        }
+        BlockPos eerste = Plekken.UITSTAP.get(0).get(0).lokaal();
+        Boomstad.Kopie ver = new Boomstad.Kopie(new BlockPos((cx << 4) + 8, 200, (cz << 4) + 8).subtract(eerste.subtract(Plekken.ANKER)), Rotation.NONE, null, null);
+        helper.assertTrue(Uitstap.controleer(level, ver, 0) == 0 && !Uitstap.gehad(level, ver, 0) && !level.hasChunk(cx, cz), "not loaded: nothing happens, it waits");
+
+        for (Boomstad.Kopie k : List.of(oud, bebouwd, nieuw, ver)) {
+            Uitstap.vergeet(level, k);
+        }
+        helper.succeed();
     }
 
     private RingH4GameTests() {

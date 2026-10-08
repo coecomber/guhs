@@ -39,6 +39,8 @@ import nl.juiced.guhs.feature.wereld.Kopieen;
  *                               beeld_noord, uitgang ...: the names of plekken.json)
  * /guhs ringh4 kaart            the narrator card;  /guhs ringh4 scene: the mirror scene on the mirror of this copy
  * /guhs ringh4 boot             into the guide boat of this copy (as a click on it)
+ * /guhs ringh4 uitstap          the steps out of the sauce of this copy: how many it has, and the missing ones are made now
+ *                               (as happens by itself while a player is near; also from the console with execute ... positioned)
  * /guhs ringh4 bouw             (dev runs only) builds the whole city here, the gate at the player's feet, as a try-out copy
  * </pre>
  */
@@ -53,6 +55,16 @@ final class RingH4Commands {
                     + ", copy " + (k == null ? "none here" : "anchor " + k.anker().toShortString() + " " + k.draai()) + ", in its box: "
                     + Boomstad.binnen(p.level(), p.blockPosition()) + ", guide boat " + (boot == null ? "none near" : boot.blockPosition().toShortString()
                     + (boot.isWeg() ? " (under way)" : "")));
+        }));
+        cmd.then(Commands.literal("uitstap").executes(c -> {
+            ServerLevel level = c.getSource().getLevel();
+            Boomstad.Kopie k = Boomstad.bij(level, BlockPos.containing(c.getSource().getPosition()));
+            if (k == null) {
+                return zeg(c, "no tree city here (loaded chunks only)");
+            }
+            int voor = Uitstap.gehad(level, k), gemaakt = Uitstap.controleer(level, k), na = Uitstap.gehad(level, k);
+            return zeg(c, "tree city at " + k.anker().toShortString() + " " + k.draai() + ": " + Uitstap.aantal() + " steps out of the sauce, " + voor
+                    + " were handled before, " + gemaakt + " made now, " + (Uitstap.aantal() - na) + " still wait for their chunks");
         }));
         cmd.then(Commands.literal("stap").then(Commands.argument("n", IntegerArgumentType.integer(0, 7)).executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();

@@ -132,6 +132,8 @@ def selfcheck(h, stad, tegels):
             problems.append(f"plekken.json misses '{naam}'")
     if len(plekken["route"]) < 10:
         problems.append("the boat's path is too short")
+    if not plekken.get("uitstap"):
+        problems.append("plekken.json has no steps out of the sauce (1.4.1: feature/ringh4/Uitstap makes them at older copies)")
     java = open(os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "ringh4", "RingH4Feature.java"), encoding="utf-8").read()
     if f".stappen({len(tekst.STAPPEN)})" not in java:
         problems.append(f"RingH4Feature.LIJN must have {len(tekst.STAPPEN)} steps")
