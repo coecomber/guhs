@@ -2735,6 +2735,72 @@
     ],
     "subtitle": "subtitles.guhs.waterval.ruis"
   },
+  "klaterdal.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "klaterdal.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/sfeer",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.sfeer"
+  },
+  "klaterdal.windgong": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/windgong1",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong2",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong3",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.windgong"
+  },
+  "bloesemmeertje.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/muziek1",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "guhs:bloesemmeertje/muziek2",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:music.overworld.cherry_grove",
+        "type": "event",
+        "weight": 3
+      }
+    ]
+  },
+  "bloesemmeertje.ambient": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/ambient",
+        "stream": true,
+        "volume": 0.55
+      }
+    ]
+  },
   "wolkenweide.muziek": {
     "sounds": [
       {
