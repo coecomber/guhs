@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/japan_theeservies"
+    },
+    "facing=east": {
+      "model": "guhs:block/japan_theeservies",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/japan_theeservies",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/japan_theeservies",
+      "y": 270
+    }
+  }
+}
