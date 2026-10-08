@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:wolkenhoeder_hut",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 16,
+    "separation": 8,
+    "salt": 21500801
+  }
+}
