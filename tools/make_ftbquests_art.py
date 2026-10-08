@@ -163,7 +163,8 @@ VARIANT_BONES = {"teckel": ("teckel",), "ender": ("ender",), "koning": ("koning"
                  "asguh": ("asguh",), "pluisguh": ("pluis",), "brontosaurus": ("neck",), "vahoege_ender": ("ender",),
                  "baltoguh": ("balto",), "mewtwo": ("mewtwo",), "stitch626": ("stitch",),   # 3.0: the story guhs
                  "sam_guh": ("samguh",),   # bbq2: Sam-guh (his pack, bedroll, pan and tuft)
-                 "guhshi": ("guhshi",)}    # bbq2: Guhshi (his nose, crest, saddle, belly, tail and boots)
+                 "guhshi": ("guhshi",),    # bbq2: Guhshi (his nose, crest, saddle, belly, tail and boots)
+                 "bloesemguh": ("bloesem",), "tanukiguh": ("tanuki",)}   # biomes3
 # bbq2 (ring-kern): two looks in one NPC model (the game picks one per viewer): a picture shows the look of the start of
 # the story, so Guhdalf is grey and Araguh wears no crown yet (no spoilers in the quest book)
 NPC_HIDE = {"guhdalf": ("wit_hoed", "wit_mantel", "wit_knop"), "araguh": ("araguh_kroon",)}

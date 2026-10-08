@@ -115,8 +115,8 @@ public class TitelsGameTests {
         Language lang = Language.getInstance();
         Set<String> ids = new HashSet<>(), namen = new HashSet<>();
         // (bbq2: the eight built-in titles, the guhpixel ones, and the ones slices registered with Titels.registreer: ringdrager, ...)
-        helper.assertTrue(Titels.ALLE.size() >= 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size(),
-                "at least the eight built-in titles and the guhpixel ones, got " + Titels.ALLE.size());
+        helper.assertTrue(Titels.ALLE.size() >= 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size() + nl.juiced.guhs.feature.bio.systemen.BioTitels.ALLE.size(),   // biomes3
+                "at least the eight built-in titles and the guhpixel and biomes3 ones, got " + Titels.ALLE.size());
         for (Titels.Titel t : Titels.ALLE) {
             helper.assertTrue(ids.add(t.id()) && namen.add(t.naamSleutel()), "unique: " + t.id());
             helper.assertTrue(lang.has(t.naamSleutel()), "name of " + t.id());

@@ -1,0 +1,105 @@
+# biomes3 slice bouw-wolk1 in a real generated world: the big island with the wolkenhoeder-hut (from below, from above,
+# the hut and the fold close up, the waterfall), the Sterrenwacht-ruine by day and at night (falling stars), the
+# Luchtballon-haven. Not run by the slice (no client there); the offline pictures are in
+# guhs_workbio/reports/screens/bouw-wolk1.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_bouw_wolk1.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section the big island: from below and from above
+ga wolkenhoeder_hut
+plek lokaal 31 51 27
+tpplek 44 -30 44
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 400
+hier
+shot hoeder_laag
+tpplek -40 -22 30
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot hoeder_laag_andere_kant
+tpplek 20 34 30
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot hoeder_boven
+log --- the hut, the fold with four wolkenschaapjes and the wolkenhoeder
+plek lokaal 41 52 24
+tpplek 2 4 12
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot hoeder_hut
+plek lokaal 21 52 26
+tpplek 9 5 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot hoeder_wei
+/execute at @s run guhs bio bouw-wolk1 inspecteer wolkenhoeder_hut 1
+log --- the waterfall: foam and mist where it lands in the catch island's pool and in the cloud
+plek lokaal 35 37 48
+tpplek 9 3 2
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot hoeder_waterval_bekken
+plek lokaal 35 27 55
+tpplek 8 4 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot hoeder_waterval_wolk
+log --- the lift (white puffs up) and the stream (pink puffs down), with their cloud feet on the meadow
+plek lokaal 31 8 27
+tpplek -30 2 4
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot hoeder_lift_voet
+
+section the lesson (talk to the wolkenhoeder by hand: the screen with "Ja, leer het me!")
+/give @s minecraft:shears
+/give @s guhs:wolkenpluis 8
+log shear a schaapje of the fold, make wolkenblok at the hut's crafting table, build three steps, sit on the cloud bench
+
+section the Sterrenwacht-ruine by day and at night
+ga sterrenwacht_ruine
+plek lokaal 19 71 17
+tpplek 12 5 14
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+hier
+shot sterrenwacht_dag
+plek lokaal 19 73 17
+tpplek 3 1 5
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot sterrenwacht_binnen_dag_hij_slaapt
+/time set midnight
+wait 300
+shot sterrenwacht_binnen_nacht_hij_is_wakker
+plek lokaal 19 75 17
+tpplek 18 2 18
+plekcmd tp @s ~ ~ ~ facing {p}
+look 45 -35
+wait 200
+shot sterrenwacht_nacht_vallende_sterren_1
+wait 60
+shot sterrenwacht_nacht_vallende_sterren_2
+/execute at @s run guhs bio bouw-wolk1 inspecteer sterrenwacht_ruine 1
+/time set noon
+
+section the Luchtballon-haven
+ga luchtballon_haven
+plek lokaal 21 35 17
+tpplek 16 8 28
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+hier
+shot haven
+plek lokaal 21 36 36
+tpplek -9 4 6
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot haven_steiger_ballonnen
+/execute at @s run guhs bio bouw-wolk1 inspecteer luchtballon_haven 1
+log talk to the ballonvaarder-guh by hand: "Ja, vaar me naar beneden!" and ride down; a second time the same day he says "morgen weer"

@@ -1,0 +1,83 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:klaterdal.sfeer",
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "guhs:klaterdal.windgong",
+        "tick_chance": 0.0009
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "guhs:klaterdal.muziek",
+        "min_delay": 3600,
+        "max_delay": 9600
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:cherry_leaves"
+        },
+        "probability": 0.0028
+      }
+    ],
+    "minecraft:visual/fog_color": "#fdebf3",
+    "minecraft:visual/sky_color": "#dce4f8",
+    "minecraft:visual/water_fog_color": "#5cc3c8"
+  },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.4,
+  "effects": {
+    "water_color": "#86e4e0",
+    "foliage_color": "#f2b3cc",
+    "grass_color": "#f6bcd0"
+  },
+  "creature_spawn_probability": 0.3,
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": [],
+  "features": [
+    [],
+    [
+      "guhs:bio_wereld_vulling"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ]
+}

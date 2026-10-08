@@ -43,6 +43,10 @@
     "minecraft:melon_slice",
     "minecraft:apple",
     "minecraft:pumpkin_pie",
-    "guhs:kokosnoot"
+    "guhs:kokosnoot",
+    "guhs:japan_sushi",
+    "guhs:japan_ramen",
+    "guhs:japan_mochi",
+    "guhs:japan_onigiri"
   ]
 }

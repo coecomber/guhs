@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "roze_lakhout_slab",
+  "key": {
+    "#": "guhs:roze_lakhout_planken"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "guhs:roze_lakhout_plaat"
+  }
+}

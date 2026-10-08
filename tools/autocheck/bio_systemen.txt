@@ -1,0 +1,205 @@
+# biomes3 slice systemen (visual QA): the quest book (the chapter De Guhmensie with the five new sections and the three
+# biome quests), the Reisbureau screen on five days in a row (all twenty destinations pass by, the four new ones among
+# them), the four new ansichtkaarten and eight new souvenirs, the titles list, the Guhdex pages of the new animals and the
+# weebhuisje's section. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_systemen.txt -PautocheckTimeout=30
+# (commands: see autocheck.txt; dev commands: /guhs bio systemen titels|japan|top, /guhs px reisbureau ..., /guhs px klok <uren>)
+section setup
+guhstaal nl
+guiscale 2
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:pink_concrete
+/fill 2975 140 2975 3025 152 3025 minecraft:air
+/fill 2984 140 2994 3016 144 2994 minecraft:white_concrete
+/tp @s 3000 140 3008
+wait 40
+
+section FTB quest book: every chapter (look at De Guhmensie: De biomen has 22, and five new sections at the bottom)
+gui ftbquests bio_systemen_ftb
+
+section the eight new souvenirs, on the floor in a row (common, rare per destination)
+/setblock 2993 140 2998 guhs:reisbureau_souvenir_bloesemmeertje[facing=south]
+/setblock 2995 140 2998 guhs:reisbureau_zeldzaam_bloesemmeertje[facing=south]
+/setblock 2997 140 2998 guhs:reisbureau_souvenir_klaterdal[facing=south]
+/setblock 2999 140 2998 guhs:reisbureau_zeldzaam_klaterdal[facing=south]
+/setblock 3001 140 2998 guhs:reisbureau_souvenir_wolkenweide[facing=south]
+/setblock 3003 140 2998 guhs:reisbureau_zeldzaam_wolkenweide[facing=south]
+/setblock 3005 140 2998 guhs:reisbureau_souvenir_japan[facing=south]
+/setblock 3007 140 2998 guhs:reisbureau_zeldzaam_japan[facing=south]
+wait 60
+/gamemode spectator
+camera 3000.5 142.5 3003.5 180 25
+waitrender 300
+shot bio_systemen_souvenirs
+camera 2996.5 141.6 3000.6 180 25
+waitrender 60
+shot bio_systemen_souvenirs_links
+camera 3004.5 141.6 3000.6 180 25
+waitrender 60
+shot bio_systemen_souvenirs_rechts
+/time set midnight
+wait 60
+shot bio_systemen_souvenirs_nacht
+/time set noon
+/gamemode creative
+
+section the Reisbureau screen, five days in a row: every destination of every duration comes by once
+/setblock 3000 140 3004 guhs:reisbureau_balie[facing=south]
+/tp @s 3000.5 140 3006.5 180 20
+/guhs px klok herstel
+/guhs px reisbureau souvenirs wis
+/guhs px reisbureau stap 3
+/guhs px reisbureau guh
+wait 20
+/guhs px reisbureau aanbod
+gui keep
+use 3000 140 3004
+wait 30
+mouse 200 110
+wait 5
+shot bio_systemen_reis_dag1 gui
+gui close
+/guhs px klok 24
+wait 10
+gui keep
+use 3000 140 3004
+wait 30
+shot bio_systemen_reis_dag2 gui
+gui close
+/guhs px klok 24
+wait 10
+gui keep
+use 3000 140 3004
+wait 30
+shot bio_systemen_reis_dag3 gui
+gui close
+/guhs px klok 24
+wait 10
+gui keep
+use 3000 140 3004
+wait 30
+shot bio_systemen_reis_dag4 gui
+gui close
+/guhs px klok 24
+wait 10
+gui keep
+use 3000 140 3004
+wait 30
+shot bio_systemen_reis_dag5 gui
+mouse 200 190
+wait 5
+shot bio_systemen_reis_dag5_24uur gui
+gui close
+/guhs px klok herstel
+
+section the four new ansichtkaarten, read (Japan: the three of them)
+/guhs px reisbureau kaart bloesemmeertje
+wait 10
+gui keep
+useitem 5
+wait 30
+shot bio_systemen_kaart_bloesemmeertje gui
+gui close
+/clear @s
+/guhs px reisbureau kaart klaterdal
+wait 10
+gui keep
+useitem 5
+wait 30
+shot bio_systemen_kaart_klaterdal gui
+gui close
+/clear @s
+/guhs px reisbureau kaart wolkenweide
+wait 10
+gui keep
+useitem 5
+wait 30
+shot bio_systemen_kaart_wolkenweide gui
+gui close
+/clear @s
+/guhs px reisbureau kaart japan
+wait 10
+gui keep
+useitem 5
+wait 30
+shot bio_systemen_kaart_japan gui
+gui close
+/clear @s
+
+section the Guhdex: the Reisbureau album (60 cells) and the weebhuisje's section (hidden, half, complete)
+/guhs bio systemen japan wis
+/guhs px reisbureau souvenirs alles
+gui dexopen guhpixel
+wait 30
+shot bio_systemen_gids_zonder_weebhuisje gui
+scroll 320 180 -8
+wait 10
+shot bio_systemen_gids_album gui
+gui close
+/guhs bio systemen japan half
+gui dexopen guhpixel
+wait 30
+scroll 320 180 -40
+wait 10
+shot bio_systemen_gids_weebhuisje_half gui
+gui close
+/guhs bio systemen japan alles
+gui dexopen guhpixel
+wait 30
+scroll 320 180 -40
+wait 10
+shot bio_systemen_gids_weebhuisje_compleet gui
+gui close
+/guhs px reisbureau souvenirs wis
+
+section the titles list: the four new ones locked (hover: the hint), then earned, one chosen
+/guhs bio systemen titels wis
+wait 10
+gui dexopen titels
+wait 20
+scroll 320 180 -40
+mouse 20 20
+wait 10
+shot bio_systemen_titels_op_slot gui
+gui close
+/guhs bio systemen titels alles
+wait 10
+gui dexopen titels
+wait 20
+scroll 320 180 -40
+mouse 20 20
+wait 10
+shot bio_systemen_titels_verdiend gui
+gui close
+clearchat
+titelsstand kies biosystemen_weeb
+wait 10
+titelnaam
+/say Ohayo!
+wait 10
+titelsstand kies biosystemen_gezondheid
+wait 10
+titelnaam
+/say Hatsjoe-guh!
+wait 20
+shot bio_systemen_titels_chat gui
+titelsstand geen
+/guhs bio systemen titels wis
+
+section the Guhdex pages (the four bonus pages: Bloesemguh, Tanukiguh, Koi, Wolkenschaapje; the changed Wolkguh and Kikkerguh)
+gui guhdex bio_systemen_dex
+
+section the summit in a real Wolkenweide (the title Hoofd in de wolken): go there, ask where the nearest summit is
+tpbiome guhs:guhmension guhs:wolkenweide
+wait 100
+/guhs bio systemen top
+hier
+shot bio_systemen_wolkenweide
+quit

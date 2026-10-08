@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "guhs:block/tatami_kop",
+    "down": "guhs:block/tatami_onder",
+    "north": "guhs:block/tatami_zij_kop",
+    "south": "guhs:block/tatami_zij_kop",
+    "west": "guhs:block/tatami_zij_rand",
+    "east": "guhs:block/tatami_zij_rand",
+    "particle": "guhs:block/tatami_kop"
+  }
+}

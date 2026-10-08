@@ -206,6 +206,11 @@ SYSTEMS = {
                     "A projector, a screen of Cinema Screen and Cinema Seats: play the nine movies at home, with your guhs and popcorn in the theater.",
                     ["dimensies/guhpixel", "blokken/guhbioscoop_projector", "blokken/guhbioscoop_doek", "blokken/guhbioscoop_stoeltje",
                      "blokken/guhbioscoop_popcornmachine"]),
+    "bouwblokken-biomen": ("Bouwblokken uit de nieuwe biomen", "Building blocks from the new biomes", "shot133_bio_blokken_kamer",
+                           "Roze lakhout, guh-dakpannen met een krul, shoji en tatami, een zenhoekje, wolkenblokken en regenboogblokken: wat je ervan maakt en hoe.",
+                           "Pink lacquerwood, guh roof tiles with a curl, shoji and tatami, a zen corner, cloud blocks and rainbow blocks: what you make of them and how.",
+                           ["biomen/klaterdal", "biomen/wolkenweide", "biomen/bloesemmeertje", "blokken/roze_lakhout_planken", "blokken/guh_dakpan_wit",
+                            "blokken/shoji", "blokken/tatami", "blokken/wolkenblok_wit", "blokken/regenboogblok"]),
     "temmen": ("Temmen, rijden en oppakken", "Taming, riding and picking up", "guh_saddle",
                "Een wilde guh tem je met kaasknabbels. Een tamme guh kun je berijden, oppakken, aankleden en lanceren.",
                "You tame a wild guh with kaasknabbels. A tamed guh can be ridden, picked up, dressed up and launched.", ["systemen/karakters", "systemen/hartjes"]),
@@ -297,6 +302,7 @@ VARIANT_HOME = {
     "mager": "bouwwerken/knabbelkelder", "vahoege_ender": "dimensies/guheinde", "kaasmoerasguh": "biomen/kaasmoeras",
     "asguh": "biomen/asdal", "pluisguh": "biomen/knuffeldal", "pinguh": "biomen/guhpolder", "golden": "bouwwerken/guhramid",
     "ender": "dimensies/guheinde", "snow": "biomen/guh_peaks", "brococolief": "bouwwerken/guh_village",
+    "bloesemguh": "biomen/bloesemmeertje", "tanukiguh": "biomen/klaterdal",
     "baltoguh": "verhalen/nomguh", "mewtwo": "verhalen/kloon-eiland", "stitch626": "verhalen/ohana",
 }
 # NPC kind (or villager profession) -> where it lives
@@ -329,6 +335,7 @@ NPC_HOME = {
     "bedwars_guh": "dimensies/guhpixel", "vadsnite_guh": "dimensies/guhpixel", "guhmon_gymleider": "dimensies/guhpixel",
     "bzg_presentatrice": "dimensies/guhpixel", "bzg_boer": "minigames/bzg", "among_kapitein": "dimensies/guhpixel",
     "among_logboekguh": "dimensies/guhpixel", "reisbureau_agent": "bouwwerken/reisbureau",
+    "weeb_evivads": "bouwwerken/weebhuisje", "weeb_nielsvads": "bouwwerken/weebhuisje", "dal_theeguh": "biomen/klaterdal",
 }
 # dimension -> pages to list under "see also" (what the game data doesn't link by itself)
 DIMENSION_RELATED = {
@@ -459,6 +466,11 @@ LOOT_LABEL = {"knabbelschat": ("Knabbelschat (Guheinde)", "Knabbel treasure (Guh
 DROP = "-"
 # (section, English title) -> page (DROP: leave out). Checked first.
 CHUNK_RULES = {
+    # biomes3: a page per biome, the Weeb House, the block sets (a mechanics page), the Biomes tab and the titles
+    ("biomes3", "Blossom Lake"): "biomen/bloesemmeertje", ("biomes3", "Babbledale"): "biomen/klaterdal",
+    ("biomes3", "The Cloud Meadow"): "biomen/wolkenweide", ("biomes3", "The Weeb House"): "bouwwerken/weebhuisje",
+    ("biomes3", "The new block sets"): "systemen/bouwblokken-biomen", ("biomes3", "The Super Compass tab Biomes"): "systemen/superkompas",
+    ("biomes3", "New titles"): "systemen/guhdex",
     # guhpixel: every game and home thing has its own page; the rest of the section (how to get in, lobby, ranks) is the dimension page
     ("guhpixel", "Skyblok"): "minigames/skyblok", ("guhpixel", "Bedwars"): "minigames/bedwars", ("guhpixel", "Chonknite"): "minigames/vadsnite",
     ("guhpixel", "Guhmon Battle"): "minigames/guhmon", ("guhpixel", "The Nap Gym"): "minigames/guhmon", ("guhpixel", "Badge Case"): "minigames/guhmon",
@@ -583,7 +595,7 @@ H3_RULES = [
 ]
 # section -> page, the last resort
 SECTION_RULES = {
-    "start": "index", "guhpixel": "dimensies/guhpixel", "reisbureau": "bouwwerken/reisbureau", "guhparkour": "systemen/guhparkour",
+    "start": "index", "biomes3": "dimensies/guhmension", "guhpixel": "dimensies/guhpixel", "reisbureau": "bouwwerken/reisbureau", "guhparkour": "systemen/guhparkour",
     "new128": "biomen/bleekwoud", "new26": "verhalen/guheinde", "new21": "minigames/kermis", "personalities": "systemen/karakters",
     "care": "systemen/temmen", "maag": "dimensies/guhmaag", "sled": "systemen/guhslee", "guhdex": "systemen/guhdex",
     "vads": "systemen/vahoege-vads", "redstone": DROP, "guhmension": "dimensies/guhmension", "villages": "bouwwerken/guh_village",

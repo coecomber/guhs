@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PVP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#guhs:guh_dakpan",
+    "V": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:guh_dakpan_roze",
+    "count": 8
+  }
+}

@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * The table of the 32 souvenirs, the Gouden koffertje and the Koffertje: wall or floor, the block's shape (facing north),
+ * The table of the 40 souvenirs (biomes3: 32 + the eight of its four destinations), the Gouden koffertje and the Koffertje: wall or floor, the block's shape (facing north),
  * its light and its little effect. The same numbers as tools/features/guhpixel_reisbureau_modellen.py, which writes them to
  * data/guhs/reisbureau/vormen.json; the game test PxReisbureauGameTests#souvenirsKloppenMetDeModellen compares the two.
  */
@@ -24,7 +24,7 @@ public final class Souvenirs {
             return id.startsWith("zeldzaam_");
         }
 
-        /** One of the 32 album souvenirs (not the koffertjes). */
+        /** One of the album souvenirs (not the koffertjes). */
         public boolean souvenir() {
             return id.startsWith("souvenir_") || zeldzaam();
         }
@@ -66,6 +66,15 @@ public final class Souvenirs {
         s(a, "zeldzaam_cruise", true, 1.5, 1.5, 14, 14.5, 15, 16, 0, Effect.GEEN);
         s(a, "souvenir_balkonie", true, 0.5, 0.5, 14, 15.5, 15.5, 16, 0, Effect.GEEN);
         s(a, "zeldzaam_balkonie", true, 1.5, 4.5, 15, 14.5, 14, 16, 0, Effect.GEEN);
+        // biomes3: the three new biomes and "Japan, met Evivads en Nielsvads"
+        s(a, "souvenir_bloesemmeertje", false, 4.5, 0, 5.5, 11.5, 14.5, 10, 0, Effect.GEEN);
+        s(a, "zeldzaam_bloesemmeertje", false, 3.5, 0, 3.5, 12.5, 8.5, 12.5, 0, Effect.GLINSTER);
+        s(a, "souvenir_klaterdal", false, 2, 0, 3, 14, 12, 12, 0, Effect.GEEN);
+        s(a, "zeldzaam_klaterdal", false, 2, 0, 2, 14, 13, 14, 0, Effect.STOOM);
+        s(a, "souvenir_wolkenweide", false, 4.5, 0, 4.5, 11.5, 11, 11.5, 0, Effect.GEEN);
+        s(a, "zeldzaam_wolkenweide", false, 4.5, 0, 4.5, 11.5, 11, 11.5, 8, Effect.GLINSTER);
+        s(a, "souvenir_japan", false, 1, 0, 6.5, 15, 5.5, 9.5, 0, Effect.GEEN);
+        s(a, "zeldzaam_japan", false, 2, 0, 2, 14, 12, 14, 0, Effect.GLINSTER);
         s(a, "gouden_koffertje", false, 3, 0, 4.5, 13, 9, 11, 0, Effect.GLINSTER);
         s(a, "koffertje", false, 3, 0, 4.5, 13, 9, 11, 0, Effect.GEEN);
         ALLE = List.copyOf(a);

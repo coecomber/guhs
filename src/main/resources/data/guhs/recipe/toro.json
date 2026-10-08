@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "T",
+    "S"
+  ],
+  "key": {
+    "P": "guhs:gladde_knuffelsteen_plaat",
+    "T": "minecraft:torch",
+    "S": "guhs:gladde_knuffelsteen"
+  },
+  "result": {
+    "id": "guhs:toro"
+  }
+}

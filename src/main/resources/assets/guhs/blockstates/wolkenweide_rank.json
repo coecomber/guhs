@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "tip=false": {
+      "model": "guhs:block/wolkenweide_rank"
+    },
+    "tip=true": {
+      "model": "guhs:block/wolkenweide_rank_punt"
+    }
+  }
+}

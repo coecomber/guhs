@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "roze_lakhout_stairs",
+  "key": {
+    "#": "guhs:roze_lakhout_planken"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "guhs:roze_lakhout_trap"
+  }
+}

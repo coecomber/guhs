@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:wool",
+    "#minecraft:dirt",
+    "#minecraft:sand",
+    "guhs:geharkt_zand",
+    "guhs:geharkt_zand_ring",
+    "guhs:gladde_knuffelsteen"
+  ]
+}

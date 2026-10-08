@@ -97,6 +97,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.register(modBus);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.register(modBus);
+        nl.juiced.guhs.feature.bio.BioFeature.register(modBus);   // biomes3: the kern and its slices
         // --- guhpixel: the kern and its nine slices ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.register(modBus);
         // --- bbq2 ---
@@ -207,6 +208,7 @@ public final class Features {
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.payloads(registrar);
         // --- 1.2.0 ---
         nl.juiced.guhs.feature.weerder.WeerderFeature.payloads(registrar);
+        nl.juiced.guhs.feature.bio.BioFeature.payloads(registrar);   // biomes3
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.payloads(registrar);
         // --- bbq2 ---
@@ -318,6 +320,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.creative(output);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
+        nl.juiced.guhs.feature.bio.BioFeature.creative(output);   // biomes3
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.creative(output);
         // --- bbq2 ---

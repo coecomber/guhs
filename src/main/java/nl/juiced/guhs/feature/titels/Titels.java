@@ -83,7 +83,8 @@ public final class Titels {
                     p -> GuhQuests.saved(p).getIntOr(GuheindeGevecht.WINS, 0) > 0),
             new Titel(GUHKENNER, "gui.guhs.titels.naam." + GUHKENNER, ChatFormatting.GREEN, "guhs:guhdex",
                     GuhDex::kenner)),
-            nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream()).toList());   // (guhpixel: the titles of its slices come after the eight)
+            java.util.stream.Stream.concat(nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.stream(),   // (guhpixel: the titles of its slices come after the eight)
+                    nl.juiced.guhs.feature.bio.systemen.BioTitels.ALLE.stream())).toList());   // biomes3: its four titles come after those
 
     /**
      * bbq2: adds a title (from your Feature.register; common code, both sides): lang {@code gui.guhs.titels.naam.<id>} and

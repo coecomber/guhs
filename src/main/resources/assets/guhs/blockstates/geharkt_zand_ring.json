@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "vorm=rond": {
+      "model": "guhs:block/geharkt_zand_ring_rond"
+    },
+    "vorm=noord": {
+      "model": "guhs:block/geharkt_zand_ring_rand"
+    },
+    "vorm=oost": {
+      "model": "guhs:block/geharkt_zand_ring_rand",
+      "y": 90
+    },
+    "vorm=zuid": {
+      "model": "guhs:block/geharkt_zand_ring_rand",
+      "y": 180
+    },
+    "vorm=west": {
+      "model": "guhs:block/geharkt_zand_ring_rand",
+      "y": 270
+    },
+    "vorm=noordoost": {
+      "model": "guhs:block/geharkt_zand_ring_hoek"
+    },
+    "vorm=zuidoost": {
+      "model": "guhs:block/geharkt_zand_ring_hoek",
+      "y": 90
+    },
+    "vorm=zuidwest": {
+      "model": "guhs:block/geharkt_zand_ring_hoek",
+      "y": 180
+    },
+    "vorm=noordwest": {
+      "model": "guhs:block/geharkt_zand_ring_hoek",
+      "y": 270
+    }
+  }
+}

@@ -1,5 +1,6 @@
 """
-Reisbureau "De Vadsvakantie": the sixteen destinations (+ the proefreisje) and every Dutch text of the slice.
+Reisbureau "De Vadsvakantie": the twenty destinations (+ the proefreisje) and every Dutch text of the slice.
+(biomes3 added the last one of each duration: bloesemmeertje, klaterdal, wolkenweide and japan; sixteen before.)
 English: tools/lang/en/c38_px_reisbureau.json. The Java side (feature/guhpixel/reisbureau/Bestemming.java) has the same
 ids, durations and chances: selfcheck() of guhpixel_reisbureau.py compares them.
 
@@ -35,6 +36,13 @@ BESTEMMINGEN = [
      "zei dat dat hier elke dag gebeurt. Njeg, wat een fijne plek!",
      ("Knuffelschaapje", "Een wollig schaapje uit Knuffeldal. Zegt geen mèh, maar is wel heel zacht."),
      ("Gouden bel", "De gouden bel van het liefste schaap van Knuffeldal. Tingeling, njeg.")),
+    # biomes3
+    ("bloesemmeertje", 1 * UUR, 5, "Hanami bij het Bloesemmeertje", "het Bloesemmeertje",
+     "Een kleedje onder de bloesembomen aan het water. Kijken hoe de blaadjes vallen. Meer is het niet, njeg.",
+     "Hoi baas! Ik lig op een kleedje onder een bloesemboom. Er vallen de hele tijd roze blaadjes op mijn neus. De koi "
+     "kwamen kijken of ik koivoer was. De visser-guh zei: stilzitten is ook vissen. Dat kan ik heel goed. Njeg!",
+     ("Bloesemtakje in een vaasje", "Een takje guhbloesem van het Bloesemmeertje. Het bloeit altijd, ook als het sneeuwt."),
+     ("Koikommetje", "Een glazen kom met een piepklein gouden koitje erin. Het glinstert in de zon. Voeren hoeft niet.")),
     # ---- 2 hours (8%) ---------------------------------------------------------------------------------------------------
     ("guhwaii", 2 * UUR, 8, "Strandmiddag op Guhwai'i", "Guhwai'i",
      "Zon, zand en een handdoek. Surfen mag, liggen ook.",
@@ -60,6 +68,13 @@ BESTEMMINGEN = [
      "het snuffelen. Ik breng een vaasje mee voor op tafel. Njeg!",
      ("Tulpenvaas", "Een vaasje met roze tulpen van de Guhkenhof. Ze blijven altijd mooi."),
      ("Regenboogtulpen", "Tulpen in alle kleuren tegelijk. Niemand weet hoe ze het doen.")),
+    # biomes3
+    ("klaterdal", 2 * UUR, 8, "Theepauze in het Klaterdal", "het Klaterdal",
+     "Thee drinken in het theehuisje bij de grote waterval. Het water klatert, je guh knikkebolt.",
+     "Dag baas! In het Klaterdal klatert alles: de waterval, de rivier en mijn buik. Ik kreeg thee in het theehuisje op de "
+     "rots en viel in slaap op de tatami. Een tanukiguh heeft mijn koekje opgegeten. Ik vond het goed. Vahoeg!",
+     ("Bamboe-klatertje", "Een bamboebuisje dat volloopt, omkiept en tok zegt. Daar word je heel rustig van."),
+     ("Mini-watervalletje", "Een watervalletje op een rots, klein genoeg voor op de kast. De nevel is echt.")),
     # ---- 8 hours (15%) --------------------------------------------------------------------------------------------------
     ("nomguh", 8 * UUR, 15, "Wintersport in Nomguh", "Nomguh",
      "Sleeën, sneeuw en warme chocolademelk. Je guh rolt meestal gewoon de berg af.",
@@ -85,6 +100,13 @@ BESTEMMINGEN = [
      "zong een liedje. Ik heb meegezongen: njeeeeg! Hij vond het prachtig, denk ik.",
      ("Gondeltje", "Een gondeltje uit Guhnetië. Liggen maar, iemand anders duwt."),
      ("Carnavalsmasker", "Een deftig masker met veren en goud. Hang het aan de muur.")),
+    # biomes3
+    ("wolkenweide", 8 * UUR, 15, "Wolkjes kijken op de Wolkenweide", "de Wolkenweide",
+     "Hoog boven alles op een zachte wolk liggen. Schaapjes tellen gaat hier vanzelf.",
+     "Hoi baas, hier boven! Ik lig op een wolk. Hij is zachter dan mijn mandje, sorry. De wolkenschaapjes zweven voorbij "
+     "en ik heb ze geteld: bij zeven sliep ik al. Ergens snurkt iets heel groots. Ik snurk gezellig mee. Njeg!",
+     ("Wolkje in een potje", "Een echt wolkje van de Wolkenweide, in een glazen potje met een kurk. Niet openmaken, dan waait het weg."),
+     ("Regenboogje in een potje", "Het eindje van een regenboog, gevangen in een potje. Het geeft zacht licht in alle kleuren.")),
     # ---- 24 hours (30%) -------------------------------------------------------------------------------------------------
     ("kaasmaan", 24 * UUR, 30, "Reis naar de Kaasmaan", "een raket naar de Kaasmaan",
      "Met de raket naar de maan. Die is echt van kaas. Je guh gaat dat heel goed controleren.",
@@ -110,6 +132,15 @@ BESTEMMINGEN = [
      "jou zien langslopen en gezwaaid, maar je zag me niet. Thuis is het ook vads. Njeg!",
      ("Schilderij \"Thuis is het ook vads\"", "Een guh op de bank, 24 uur lang. Hang het aan de muur."),
      ("Bordje \"Balkonië\"", "Een bordje voor naast de voordeur. Nu is je huis een vakantieland.")),
+    # biomes3: the guh tags along with the two weebs of the weebhuisje (their own twelve-piece collection is another one)
+    ("japan", 24 * UUR, 30, "Japan, met Evivads en Nielsvads", "Japan (met Evivads en Nielsvads)",
+     "Je guh mag mee met de twee weebs uit het weebhuisje. Evivads: \"Kawaii, een reisgenootje!\" Nielsvads: \"We gaan met "
+     "de trein. Een échte trein.\"",
+     "Konnichiwa baas! Ik ben in Japan met Evivads en Nielsvads. Evivads riep bij elke bloesemboom: \"Kawaii!\" Nielsvads "
+     "wilde alleen maar met de trein: \"Sugoi, dít is pas echt openbaar vervoer.\" We reden zeven keer hetzelfde rondje. "
+     "Ik sliep in het bagagerek. Mata ne, tot morgen! Njeg!",
+     ("Kogeltreintje", "Een wit kogeltreintje met een guhneus. Nielsvads zegt dat het precies op tijd rijdt, ook als het stilstaat."),
+     ("Gouden Fuji-guh", "De beroemde berg, maar dan met guhoortjes en een mutsje van sneeuw. Evivads vond hem \"sugoi kawaii\".")),
 ]
 
 # the proefreisje of the questline: five minutes, a postcard, no souvenir

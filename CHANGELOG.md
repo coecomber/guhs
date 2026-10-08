@@ -5,7 +5,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.4.0 — the Guh Path update — Minecraft 26.1.2
 
-The biggest update so far: a big story in six chapters, a castle you play from the side, thirteen buildings with their own questlines in the Guhbarbecuether, guh machines that run on chonk power, an island where you are a dog, and the Guh Path that ties the big stories and the worlds together. Same requirements as 1.3.2. Existing worlds and servers keep everything (no world reset): new structures only appear in chunks that were not generated yet, and Sniff Island is a new dimension that the game adds by itself. Everything is per player, so any number of players can do every story and questline on one server. And as always: nothing in this update can hurt you or cost you items.
+The biggest update so far: a big story in six chapters, a castle you play from the side, thirteen buildings with their own questlines in the Guhbarbecuether, guh machines that run on chonk power, an island where you are a dog, three new biomes in the Guhmension, and the Guh Path that ties the big stories and the worlds together. Same requirements as 1.3.2. Existing worlds and servers keep everything (no world reset): new structures only appear in chunks that were not generated yet, and Sniff Island is a new dimension that the game adds by itself. Everything is per player, so any number of players can do every story and questline on one server. And as always: nothing in this update can hurt you or cost you items.
 
 ### Read this first: four rules that change
 
@@ -79,6 +79,18 @@ The biggest update so far: a big story in six chapters, a castle you play from t
 ### Scenes for the older stories
 
 - **Six older stories each got one short camera scene** (15 to 25 seconds) at their biggest moment: Baltoguh and Nomguh, Guhtwo and Clone Island, Ohana on Guhwai'i, the Cloud Chapel, the Grill Guh and the Carpenter Guh. You see it once, at that moment, and can watch it again from the Guhdex. Were you already past that moment? Then you do not have to redo anything: the scene is simply ready to watch in your Guhdex.
+
+### Three new biomes in the Guhmension
+
+- **Far out, in terrain nobody has visited yet**, lie the **Bloesemmeertje (Blossom Lake)**, the **Klaterdal (Babbledale)** and the **Wolkenweide (Cloud Meadow)**. No Mika spawns in any of them.
+- **Blossom Lake**: a calm lake with islands, guh blossom trees on the shore and pink petals on the water. Koi in five colors (take one home in a bucket of water), frogguhs on lily pads and the **Bloesemguh (Blossom Guh)**. At the **Boathouse** the Fisher Guh lends you his rowboat and teaches you the lake in four little lessons; on a rare **Picnic Island** guhs celebrate hanami.
+- **Babbledale**: a terraced valley full of brooks and waterfalls, with red and orange maples, guh bamboo and bonsai, and the **Tanukiguh (Tanuki Guh)**. To find: pink torii gates with guh ears, a tea house by a tall waterfall, an arched bridge, stone guh lanterns, a zen corner and stepping stones.
+- **Het weebhuisje (The Weeb House)**, sometimes one in a Babbledale. **Evivads and Nielsvads (Evichonk and Nielschonk)** live there. Wave them off when they leave for Japan by balloon, and when they are back everyone who waved gets a present, as often as you like: the Japan Collection of twelve decorations, food for you and your guhs, and four outfits. The house cannot be broken.
+- **The Cloud Meadow**: a pale meadow under stacks of floating islets and clouds. A cloud lift takes you up, a cloud stream back down, and a fall there never hurts. **Wolkenschaapjes (Cloud Lambs)** give cloud fluff and wild Cloud Guhs live there. To find: the **Cloud Shepherd's Hut** (four lessons from fluff to cloud blocks), the **Balloon Harbor**, the **Observatory Ruin**, the very rare **Rainbow Bridge**, the **Cloud Castle** (sneak past the sleeping Giant Guh; if he wakes up he only sneezes you outside) and the **Lightning Forge**.
+- **New block sets to build with**: Pink Lacquerwood, Smooth Snugglestone, Guh Roof Tiles with a Roof Curl, Shoji Sliding Panels, Tatami Mats, Stone Guh Lanterns, Raked Sand, Potted Bonsai, Babble Moss, Lake Tiles, Cloud Blocks, Thunderclouds, Rainbow Blocks and cloud furniture.
+- **The Super Compass has a tab Biomes**: a row per dimension with all its biomes. Pick one and the compass points to the nearest spot and says about how far it is; biomes you have visited get a check mark. The new buildings are on the tabs Cozy and Wonders.
+- **Also**: fifty new quests in the chapter The Guhmension, four titles (Weeb, Head in the Clouds, Bless You!, Koi Whisperer), four new destinations at the Travel Agency (twenty in all), and four bonus pages in the Guhdex (Blossom Guh, Tanuki Guh, Koi, Cloud Lamb) that are not needed for a complete Guhdex.
+- **On a world that exists already** the three biomes only appear in chunks that were not generated yet.
 
 ### Smaller things, and for servers
 

@@ -1,0 +1,28 @@
+{
+  "type": "guhs:bio_plek",
+  "biomes": "#guhs:has_structure/wolkenkasteeltje",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "keep_clear": 43,
+  "jigsaw": {
+    "type": "minecraft:jigsaw",
+    "biomes": "#guhs:has_structure/wolkenkasteeltje",
+    "step": "fluid_springs",
+    "spawn_overrides": {},
+    "terrain_adaptation": "none",
+    "start_pool": "guhs:wolkenkasteeltje/start",
+    "size": 1,
+    "start_height": {
+      "absolute": 0
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 42,
+    "use_expansion_hack": false,
+    "start_jigsaw_name": "guhs:wolkenkasteeltje_midden"
+  },
+  "plek": "lucht",
+  "hoogte": 102,
+  "ruimte": 34,
+  "per_regio": 0.3
+}

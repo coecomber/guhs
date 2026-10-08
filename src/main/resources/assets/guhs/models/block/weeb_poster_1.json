@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "t": "guhs:block/weeb_poster_1",
+    "particle": "guhs:block/weeb_poster_1"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        1,
+        15.6
+      ],
+      "to": [
+        15,
+        15,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#t",
+          "uv": [
+            0.125,
+            0.125,
+            0.875,
+            0.875
+          ]
+        },
+        "up": {
+          "texture": "#t",
+          "uv": [
+            0.125,
+            0.125,
+            0.875,
+            0.875
+          ]
+        },
+        "north": {
+          "texture": "#t",
+          "uv": [
+            0.0,
+            8.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#t",
+          "uv": [
+            0.125,
+            0.125,
+            0.875,
+            0.875
+          ]
+        },
+        "west": {
+          "texture": "#t",
+          "uv": [
+            0.125,
+            0.125,
+            0.875,
+            0.875
+          ]
+        },
+        "east": {
+          "texture": "#t",
+          "uv": [
+            0.125,
+            0.125,
+            0.875,
+            0.875
+          ]
+        }
+      }
+    }
+  ]
+}

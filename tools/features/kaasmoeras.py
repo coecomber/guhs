@@ -965,8 +965,9 @@ TEXTS = {
     # the Guhdex pages
     "gui.guhs.guhdex.rarity.kaasmoerasguh": "Zeldzaamheid: Alleen in het Kaasmoeras",
     "gui.guhs.guhdex.info.kaasmoerasguh": "Groen-geel gevlekt, alsof hij door de modder heeft gerold (heeft hij ook). Woont alleen in het Kaasmoeras. Tem hem met kaasknabbels: dan wordt hij nog vadsiger!",
-    "gui.guhs.guhdex.rarity.kikkerguh": "Zeldzaamheid: Vaak (Kaasmoeras)",
-    "gui.guhs.guhdex.info.kikkerguh": "Kwaak-guh! Hupt rond in het Kaasmoeras, in roze, mint of geel. Hapt kaasmotten weg en spuugt dan een gloeiende motknabbel uit. Lust ook kaasknabbels.",
+    # biomes3: the kikkerguh also lives at the Bloesemmeertje and the Klaterdal ponds, on the leaves (it said "Vaak (Kaasmoeras)")
+    "gui.guhs.guhdex.rarity.kikkerguh": "Zeldzaamheid: Vaak (Kaasmoeras, Bloesemmeertje en de vijvers van het Klaterdal)",
+    "gui.guhs.guhdex.info.kikkerguh": "Kwaak-guh! Hupt rond in het Kaasmoeras, in roze, mint of geel. Hapt kaasmotten weg en spuugt dan een gloeiende motknabbel uit. Lust ook kaasknabbels. Bij het Bloesemmeertje en in het Klaterdal zit hij op een lelieblad: kom je te dichtbij, dan plonst hij weg. 's Avonds kwaakt hij het hardst.",
     "gui.guhs.guhdex.rarity.kaasmot": "Zeldzaamheid: Vaak (rond kaas en lampjes)",
     "gui.guhs.guhdex.info.kaasmot": "Een piepklein Mika-motje met gatenkaas-vleugeltjes. Fladdert rond kaas en lampjes en pikt kaasknabbels van de grond. Njeg! Kikkerguhs vinden ze heerlijk.",
     "gui.guhs.guhdex.rarity.moerasheks_mika": "Zeldzaamheid: Zeldzaam (paalhut in het Kaasmoeras)",

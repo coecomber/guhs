@@ -1,0 +1,113 @@
+# biomes3 slice kompas (visual QA): the Superkompas tab Biomes. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_kompas.txt -PautocheckTimeout=20
+# (gui 640x360 at gui scale 2: the menu is at 170,64 and 300x232. With 11 tabs the Biomes tab is the last one, at
+#  438..462 x 86..108; the list starts at 178,134 and is 128 high; a section heading is 21 high, a row of biomes 23.)
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/weather clear
+/item replace entity @s weapon.mainhand with guhs:guhmensie_superkompas
+/guhs bio kompas bezocht wis
+wait 40
+
+section a player who has been nowhere: four padlocks
+useitem 2
+wait 10
+click 450 97
+wait 5
+mouse 20 20
+wait 5
+shot kompas_01_alles_op_slot gui
+mouse 300 144
+wait 5
+shot kompas_02_slot_guhmensie gui
+mouse 300 165
+wait 5
+shot kompas_03_slot_barbecuether gui
+mouse 300 186
+wait 5
+shot kompas_04_slot_guheinde gui
+mouse 300 207
+wait 5
+shot kompas_05_teaser gui
+mouse 450 97
+wait 5
+shot kompas_06_tab_tip gui
+gui close
+
+section the Guhmensie visited, three biomes seen
+/guhs bio kompas bezocht dimensie guhmension
+/guhs bio kompas bezocht biome guh_fields
+/guhs bio kompas bezocht biome kaasmoeras
+/guhs bio kompas bezocht biome bleekwoud
+wait 10
+useitem 2
+wait 10
+mouse 20 20
+wait 5
+shot kompas_07_guhmensie_open gui
+mouse 240 166
+wait 5
+shot kompas_08_biome_bezocht gui
+mouse 400 166
+wait 5
+shot kompas_09_biome_niet_bezocht gui
+scroll 300 200 -30
+mouse 20 20
+wait 5
+shot kompas_10_onderaan gui
+mouse 300 251
+wait 5
+shot kompas_11_teaser_onderaan gui
+scroll 300 200 30
+wait 5
+log --- choose a biome in the overworld: the compass says where it lies (AutoCheck's click reports a PROBLEM here: see the end)
+click 240 166
+wait 30
+shot kompas_12_gekozen_elders gui
+useitem 2
+wait 10
+mouse 20 20
+wait 5
+shot kompas_13_gekozen_in_menu gui
+gui close
+
+section everything visited
+/guhs bio kompas bezocht alles
+wait 10
+useitem 2
+wait 10
+mouse 20 20
+wait 5
+shot kompas_14_alles_bezocht gui
+click 300 144
+wait 5
+shot kompas_15_dichtgeklapt gui
+click 300 165
+wait 5
+shot kompas_16_barbecuether_open gui
+gui close
+
+section a structure tab still works, and the compass in the Guhmensie
+gui superkompas kompas_tabs
+/execute in guhs:guhmension run tp @s 0 150 0
+/execute at @s run fill ~-2 ~-1 ~-2 ~2 ~-1 ~2 minecraft:glass
+wait 100
+log --- the compass still looks for the Guhvelden (chosen above): the menu opens on Biomes with the Guhmensie folded open
+useitem 2
+wait 10
+mouse 20 20
+wait 5
+shot kompas_17_in_de_guhmensie gui
+log --- choose the second biome: the compass says it is looking, then how far it is
+log --- (the click closes the menu, and AutoCheck's click then reports a PROBLEM "mc2.screen is null": that is the tool, not the menu)
+click 400 166
+wait 3
+shot kompas_17b_gekozen gui
+wait 20
+shot kompas_18_zoeken gui
+wait 40
+shot kompas_19_afstand gui
+/execute at @s run fill ~-2 ~-1 ~-2 ~2 ~-1 ~2 minecraft:air
+quit

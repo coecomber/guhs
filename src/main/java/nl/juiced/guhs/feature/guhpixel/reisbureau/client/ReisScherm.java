@@ -282,7 +282,7 @@ public class ReisScherm extends Screen {
             }
         }
         Component tel = Component.translatable(G + "reispas.reizen", data.getIntOr("Reizen", 0)).append("  ·  ")
-                .append(Component.translatable(G + "reispas.souvenirs", data.getIntOr("Souvenirs", 0), 32));
+                .append(Component.translatable(G + "reispas.souvenirs", data.getIntOr("Souvenirs", 0), 2 * nl.juiced.guhs.feature.guhpixel.reisbureau.Bestemming.ECHT.size()));   // biomes3: was a fixed 32
         GidsTekst.passend(g, tel, left + W - 8, py + 2, W - 16 - (sx - lx) - Reizen.STEMPELS_VOL * 13 - 8, 0.875f, GOUD, true);
         Component melding = Tekst.get(data, "Melding");
         if (!Tekst.empty(melding)) {

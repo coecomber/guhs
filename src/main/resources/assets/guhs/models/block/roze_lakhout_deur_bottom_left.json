@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "guhs:block/roze_lakhout_deur_bottom",
+    "top": "guhs:block/roze_lakhout_deur_top"
+  }
+}

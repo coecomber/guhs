@@ -47,6 +47,11 @@ public enum GuhVariant {
     KAASMOERASGUH(0),
     /** De Asguh: grey and sooty with glowing cheeks, fire can't hurt it. Only born in the Asdal of the Barbecuether (spiesburcht feature). */
     ASGUH(0, "asguh"),
+    // <bio_dieren>
+    // biomes3: de Bloesemguh (petals in its fur, a blossom by its ear; only born in the Bloesemmeertje) and de Tanukiguh (a ringed
+    // bushy tail, a dark mask, a leaf on its head; only born in the Klaterdal): feature/bio/dieren/BiomeGuhs
+    BLOESEMGUH(0, "bloesem"), TANUKIGUH(0, "tanuki"),
+    // </bio_dieren>
     /** De Pluisguh (2.8): extra fluffy and pink, with a fluffy tuft and cheek fluff. Only born in the Knuffeldal (knuffeldal feature). */
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
@@ -133,6 +138,9 @@ public enum GuhVariant {
     // </guhwaii>
     // <guhwaiispellen>
     // </guhwaiispellen>
+    // <bio_dieren_wezens>
+    KOI(0), WOLKENSCHAAPJE(0),   // biomes3: creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA
+    // </bio_dieren_wezens>
     // <timmerguh>
     // </timmerguh>
     // <hemel>
@@ -150,6 +158,11 @@ public enum GuhVariant {
      */
     public boolean isVerhaalGuh() {
         return nl.juiced.guhs.feature.verhaal.VerhaalGuh.van(this) != null;   // (bbq2: also Sam-guh and Guhshi)
+    }
+
+    /** biomes3: the Bloesemguh and the Tanukiguh: real tameable variants, each bound to its biome (no plush, bonus Guhdex pages). */
+    public boolean isBioGuh() {
+        return this == BLOESEMGUH || this == TANUKIGUH;
     }
 
     /** The kind of guh character this page is about (null for a real variant). */
@@ -181,7 +194,8 @@ public enum GuhVariant {
     public static final int ROLL_OUT_OF = 1000;
     /** Bone prefixes that only some variants show (all hidden on a normal guh). */
     public static final List<String> VARIANT_BONES = List.of("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh",
-            "balto", "mewtwo", "stitch", "samguh", "guhshi");
+            "balto", "mewtwo", "stitch", "samguh", "guhshi",
+            "bloesem", "tanuki");   // biomes3
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

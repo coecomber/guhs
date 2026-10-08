@@ -1,0 +1,15 @@
+package nl.juiced.guhs.feature.bio.wereld.client;
+
+import net.neoforged.bus.api.IEventBus;
+
+/** Client side of the biomes3 slice "wereld" (a stub until its slice fills it in). BioClient calls {@link #init}. */
+public final class WereldClient {
+    public static void init(IEventBus modBus) {
+        MeerClient.init(modBus); // biomes3 wereld-meer
+        DalSfeer.init(modBus); // biomes3 wereld-dal
+        WolkClient.init(modBus); // biomes3 wereld-wolk
+    }
+
+    private WereldClient() {
+    }
+}

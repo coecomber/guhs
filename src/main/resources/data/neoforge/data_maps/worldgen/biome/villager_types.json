@@ -53,6 +53,15 @@
     },
     "guhs:bleekwoud": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:klaterdal": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:bloesemmeertje": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:wolkenweide": {
+      "villager_type": "guhs:guh"
     }
   }
 }

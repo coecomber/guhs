@@ -1,0 +1,74 @@
+# biomes3 wereld-meer in a real generated world: the finished Bloesemmeertje (shore, island, under water, petals, rain, dusk).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_wereld_meer.txt -PautocheckTimeout=30
+# Look at: open calm water; a shore of points and bays with a sand edge; the bed going from sand to blue without contour
+# lines; trees leaning over the water with a FEW loose hanging strands; petals drifting away from them; lilies and pink
+# bloesemriet only in sheltered corners; a large island with flat free ground, a little beach, a hill or a sand spit.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section het meer van boven
+tpbiome guhs:guhmension guhs:bloesemmeertje
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot meer_oever_grond
+/tp @s ~ ~45 ~
+look 45 60
+waitrender 300
+shot meer_boven
+/tp @s ~ ~40 ~
+look 45 80
+waitrender 300
+shot meer_hoog_boven
+
+section een groot eiland (de boomplek en het vlakke veld)
+/execute in guhs:guhmension run tp @s 211 62 470
+waitrender 300
+/guhs bio wereld plek meer_boom 211 479 20
+/guhs bio wereld plek meer_eiland 211 479 20
+look 200 25
+shot eiland_schuin
+/execute in guhs:guhmension run tp @s 205 53 486
+look 135 5
+waitrender 200
+shot eiland_ooghoogte
+look 315 5
+wait 40
+shot eiland_ooghoogte_andersom
+
+section onder water (de bodem, zeegras; helder op 7 diep)
+/execute in guhs:guhmension run tp @s 240 44 560
+/gamemode spectator
+look 45 10
+waitrender 200
+shot onder_water_diep
+look 45 -40
+wait 40
+shot onder_water_omhoog
+/gamemode creative
+
+section regen en wind (meer vallende blaadjes)
+/execute in guhs:guhmension run tp @s 205 54 486
+/weather rain
+wait 400
+look 135 0
+shot regen_blaadjes
+/weather thunder
+wait 300
+shot onweer_blaadjes
+/weather clear
+
+section avond en nacht
+/time set 12500
+wait 300
+look 270 0
+shot schemering_bries
+/time set midnight
+wait 300
+shot nacht
+/time set noon

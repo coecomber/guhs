@@ -243,6 +243,12 @@ public class VerhaalGameTests {
                         voeren.merge(g.getId(), erbij, Integer::sum);
                     }
                 });
+                // (biomes3 merge) these two guhs of one owner are each other's only possible favourite friend. Favorietjes looks every
+                // 100 ticks at (tickCount + entity id): when that tick falls in these first 20, the guh is "blij" and its hearts
+                // count x1.5 ("2 / 6", "3 / 4"). Which entity ids the two get depends on the tests that ran before, so the test
+                // failed in some batches and never in others. Not what this assert is about: nobody is blij here.
+                gewoon.getPersistentData().remove(Band.BLIJ_TOT);
+                mint.getPersistentData().remove(Band.BLIJ_TOT);
                 BandEvents.voer(gewoon, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 BandEvents.voer(mint, p, new ItemStack(ModItems.GUH_CUPCAKE.get(), 4));
                 int h1 = voeren.getOrDefault(gewoon.getId(), 0), h2 = voeren.getOrDefault(mint.getId(), 0);
@@ -492,8 +498,9 @@ public class VerhaalGameTests {
             helper.assertTrue(c.isCharacter() && c.npcKind() == null, c + ": a creature page");
         }
         helper.assertTrue(GuhDex.ENTRIES.get(GuhDex.ENTRIES.size() - 1) == GuhVariant.values()[GuhVariant.values().length - 1]
-                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA)),
-                "appended in enum order; the bonus pages are the Rookguh and (1.2.8) the two of the Bleekwoud");
+                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,
+                        GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE)),   // biomes3
+                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud and (biomes3) the four of the new biomes");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {
             ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));

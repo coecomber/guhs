@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PVP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "V": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:roze_lakhout_planken",
+    "count": 8
+  }
+}

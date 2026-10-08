@@ -57,17 +57,18 @@ public class SuperkompasScreen extends Screen {
         } else {
             tab = Math.max(0, of);
         }
+        tab = nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.start(hand, chosen, tab, laatste);   // biomes3: the tab Biomes
     }
 
     /** (AutoCheck) the tab that shows. */
     public void showTab(int index) {
-        tab = Math.floorMod(index, SuperkompasItem.CATEGORIES.size());
+        tab = Math.floorMod(index, SuperkompasItem.CATEGORIES.size() + 1);   // biomes3: + the tab Biomes
         laatste = tab;
         rebuildWidgets();
     }
 
     private int tabsX() {
-        return left + (W - GidsTabs.breedte(SuperkompasItem.CATEGORIES.size())) / 2;
+        return nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabsX(left, W);   // biomes3: one more tab, narrower tabs when they no longer fit
     }
 
     @Override
@@ -96,6 +97,9 @@ public class SuperkompasScreen extends Screen {
 
     /** The rows: subheadings and pairs of places. */
     private List<GidsLijst.Regel> regels() {
+        if (nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.is(tab)) {   // biomes3
+            return nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.regels(hand, lijst, this::onClose);   // biomes3
+        }   // biomes3
         List<GidsLijst.Regel> out = new ArrayList<>();
         SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
         // guhpad: "Mijn verhaal" is a normal option, the first one next to the places of every tab (a tab that starts with
@@ -139,10 +143,12 @@ public class SuperkompasScreen extends Screen {
         g.fill(left, top, left + W, top + TABS_Y + GidsTabs.H, 0xF0241320);
         g.fill(left, top + TABS_Y + GidsTabs.H, left + W, top + TABS_Y + GidsTabs.H + 1, GOUD);
         g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 7, LICHT);
-        List<ItemStack> icons = SuperkompasItem.CATEGORIES.stream().map(SuperkompasItem.Category::icoon).toList();
-        GidsTabs.teken(g, tabsX(), top + TABS_Y, icons, tab, mouseX, mouseY, GidsTabs.SUPERKOMPAS);
+        List<SuperkompasItem.Category> tabs = nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabs();   // biomes3: the categories and the tab Biomes
+        List<ItemStack> icons = tabs.stream().map(SuperkompasItem.Category::icoon).toList();   // biomes3
+        GidsTabs.teken(g, tabsX(), top + TABS_Y, icons, tab, mouseX, mouseY, GidsTabs.SUPERKOMPAS,
+                nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabW(tabs.size()), nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabGap(tabs.size()));   // biomes3
         // the category: its name and what it is about
-        SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
+        SuperkompasItem.Category c = tabs.get(tab);   // biomes3
         int y = top + TABS_Y + GidsTabs.H + 5;
         g.text(font, c.naam().copy().withStyle(ChatFormatting.BOLD), left + 10, y, GOUD, false);
         GidsTekst.passend(g, Component.translatable("gui.guhs.superkompas." + c.id() + ".tooltip"), left + 10, y + 11, W - 20, 0.75f, ZACHT, false);
@@ -154,9 +160,10 @@ public class SuperkompasScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(g, mouseX, mouseY, partialTick);
-        int hover = GidsTabs.onder(tabsX(), top + TABS_Y, SuperkompasItem.CATEGORIES.size(), mouseX, mouseY);
+        List<SuperkompasItem.Category> tabs = nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabs();   // biomes3
+        int hover = GidsTabs.onder(tabsX(), top + TABS_Y, tabs.size(), mouseX, mouseY, nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabW(tabs.size()), nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabGap(tabs.size()));   // biomes3
         if (hover >= 0) {
-            SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(hover);
+            SuperkompasItem.Category c = tabs.get(hover);   // biomes3
             g.setComponentTooltipForNextFrame(font, List.of(c.naam().copy().withStyle(ChatFormatting.BOLD),
                     Component.translatable("gui.guhs.superkompas." + c.id() + ".tooltip").withStyle(ChatFormatting.GRAY)), mouseX, mouseY);
         } else {
@@ -171,7 +178,8 @@ public class SuperkompasScreen extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         double mouseX = event.x(), mouseY = event.y();
         int button = event.button();
-        int hit = GidsTabs.onder(tabsX(), top + TABS_Y, SuperkompasItem.CATEGORIES.size(), mouseX, mouseY);
+        int tabs = SuperkompasItem.CATEGORIES.size() + 1;   // biomes3: + the tab Biomes
+        int hit = GidsTabs.onder(tabsX(), top + TABS_Y, tabs, mouseX, mouseY, nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabW(tabs), nl.juiced.guhs.feature.bio.kompas.client.BiomesTab.tabGap(tabs));   // biomes3
         if (hit >= 0 && button == 0) {
             if (hit != tab) {
                 minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(

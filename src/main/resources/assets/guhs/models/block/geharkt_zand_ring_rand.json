@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "guhs:block/geharkt_zand_ring_rand",
+    "down": "guhs:block/geharkt_zand_zij",
+    "north": "guhs:block/geharkt_zand_zij",
+    "south": "guhs:block/geharkt_zand_zij",
+    "west": "guhs:block/geharkt_zand_zij",
+    "east": "guhs:block/geharkt_zand_zij",
+    "particle": "guhs:block/geharkt_zand_ring_rand"
+  }
+}

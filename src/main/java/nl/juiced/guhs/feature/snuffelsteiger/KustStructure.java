@@ -255,7 +255,7 @@ public class KustStructure extends Structure implements BouwRuimte.Ruimte {
         Uitkomst uit = zoek(noise, context.chunkPos(), (x, z) -> context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG,
                 context.heightAccessor(), context.randomState()));
         Plek plek = uit.plek();
-        if (plek == null) {
+        if (plek == null || inNieuwBiome(context, plek)) {
             return Optional.empty();
         }
         StructurePoolElement element = startPool.value().getRandomTemplate(context.random());
@@ -266,6 +266,24 @@ public class KustStructure extends Structure implements BouwRuimte.Ruimte {
         PoolElementStructurePiece stuk = new PoolElementStructurePiece(context.structureTemplateManager(), element, hoek, element.getGroundLevelDelta(), draai,
                 doos, LiquidSettings.APPLY_WATERLOGGING);
         return BouwRuimte.claim(context, this, Optional.of(new GenerationStub(plek.anker(), builder -> builder.addPiece(stuk))));
+    }
+
+    /**
+     * 1.4.0 (biomes3): the dock stays out of the Bloesemmeertje, the Klaterdal and the Wolkenweide. Its biome tag asks a Diepe
+     * Guhzee at the anchor (the water's edge), and those three regions keep off the sea themselves; this also refuses a spot
+     * whose plot on the land or whose pier reaches into one of them (a valley that comes down to the shore).
+     */
+    private boolean inNieuwBiome(GenerationContext context, Plek plek) {
+        nl.juiced.guhs.feature.bio.wereld.BioModel model = nl.juiced.guhs.feature.bio.wereld.BioModel.van(context.randomState());
+        for (List<List<Integer>> punten : List.of(land, water)) {
+            for (List<Integer> l : punten) {
+                BlockPos w = wereld(plek, anker, l.get(0), l.get(1));
+                if (model.soort(w.getX(), w.getZ()) != nl.juiced.guhs.feature.bio.wereld.Kaart.BUITEN) {
+                    return true;
+                }
+            }
+        }
+        return model.soort(plek.anker().getX(), plek.anker().getZ()) != nl.juiced.guhs.feature.bio.wereld.Kaart.BUITEN;
     }
 
     @Override

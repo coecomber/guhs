@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/sterrenwacht_ruine_sterrenkaart"
+    },
+    "facing=east": {
+      "model": "guhs:block/sterrenwacht_ruine_sterrenkaart",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/sterrenwacht_ruine_sterrenkaart",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/sterrenwacht_ruine_sterrenkaart",
+      "y": 270
+    }
+  }
+}

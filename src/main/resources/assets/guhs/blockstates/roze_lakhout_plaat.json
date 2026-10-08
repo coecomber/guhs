@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/roze_lakhout_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/roze_lakhout_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/roze_lakhout_plaat_top"
+    }
+  }
+}

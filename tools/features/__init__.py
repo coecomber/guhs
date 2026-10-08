@@ -55,7 +55,11 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
             'snuffel_steiger',   # verhalenpad: snuffel-steiger (the dock and the opening; after snuffel)
             'snuffel_dorp',   # verhalenpad: snuffel-dorp (the island and the first series; after 'snuffel': it writes eiland.json again)
-            ]
+            # biomes3 (merged into 1.4.0 after bbq2; append only; bio_wereld wraps the Guhmensie's final_density, so no module that
+            # writes the Guhmensie's terrain may come after it): the kern, then its slices, the blocks first (nothing here may
+            # depend on its index: variant and clothes painters take their rng from bio_lib.rng)
+            'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
+            'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen']
 
 
 def modules():

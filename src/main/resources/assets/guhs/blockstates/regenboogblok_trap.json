@@ -1,0 +1,484 @@
+{
+  "variants": {
+    "facing=north,half=bottom,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_straight_heel"
+    },
+    "facing=north,half=bottom,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_left_heel"
+    },
+    "facing=north,half=bottom,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_right_heel"
+    },
+    "facing=north,half=bottom,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_left_heel"
+    },
+    "facing=north,half=bottom,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_right_heel"
+    },
+    "facing=north,half=top,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_top_straight_heel"
+    },
+    "facing=north,half=top,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_left_heel"
+    },
+    "facing=north,half=top,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_right_heel"
+    },
+    "facing=north,half=top,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_left_heel"
+    },
+    "facing=north,half=top,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_right_heel"
+    },
+    "facing=east,half=bottom,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_straight_heel"
+    },
+    "facing=east,half=bottom,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_left_heel"
+    },
+    "facing=east,half=bottom,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_right_heel"
+    },
+    "facing=east,half=bottom,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_left_heel"
+    },
+    "facing=east,half=bottom,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_right_heel"
+    },
+    "facing=east,half=top,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_top_straight_heel"
+    },
+    "facing=east,half=top,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_left_heel"
+    },
+    "facing=east,half=top,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_right_heel"
+    },
+    "facing=east,half=top,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_left_heel"
+    },
+    "facing=east,half=top,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_right_heel"
+    },
+    "facing=south,half=bottom,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_straight_heel"
+    },
+    "facing=south,half=bottom,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_left_heel"
+    },
+    "facing=south,half=bottom,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_right_heel"
+    },
+    "facing=south,half=bottom,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_left_heel"
+    },
+    "facing=south,half=bottom,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_right_heel"
+    },
+    "facing=south,half=top,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_top_straight_heel"
+    },
+    "facing=south,half=top,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_left_heel"
+    },
+    "facing=south,half=top,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_right_heel"
+    },
+    "facing=south,half=top,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_left_heel"
+    },
+    "facing=south,half=top,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_right_heel"
+    },
+    "facing=west,half=bottom,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_straight_heel"
+    },
+    "facing=west,half=bottom,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_left_heel"
+    },
+    "facing=west,half=bottom,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_right_heel"
+    },
+    "facing=west,half=bottom,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_left_heel"
+    },
+    "facing=west,half=bottom,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_right_heel"
+    },
+    "facing=west,half=top,shape=straight,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_top_straight_heel"
+    },
+    "facing=west,half=top,shape=inner_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_left_heel"
+    },
+    "facing=west,half=top,shape=inner_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_right_heel"
+    },
+    "facing=west,half=top,shape=outer_left,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_left_heel"
+    },
+    "facing=west,half=top,shape=outer_right,strook=heel": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_right_heel"
+    },
+    "facing=north,half=bottom,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_straight_a"
+    },
+    "facing=north,half=bottom,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_left_a"
+    },
+    "facing=north,half=bottom,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_right_a"
+    },
+    "facing=north,half=bottom,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_left_a"
+    },
+    "facing=north,half=bottom,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_right_a"
+    },
+    "facing=north,half=top,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_top_straight_a"
+    },
+    "facing=north,half=top,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_left_a"
+    },
+    "facing=north,half=top,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_right_a"
+    },
+    "facing=north,half=top,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_left_a"
+    },
+    "facing=north,half=top,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_right_a"
+    },
+    "facing=east,half=bottom,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_straight_a"
+    },
+    "facing=east,half=bottom,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_left_a"
+    },
+    "facing=east,half=bottom,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_right_a"
+    },
+    "facing=east,half=bottom,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_left_a"
+    },
+    "facing=east,half=bottom,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_right_a"
+    },
+    "facing=east,half=top,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_top_straight_a"
+    },
+    "facing=east,half=top,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_left_a"
+    },
+    "facing=east,half=top,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_right_a"
+    },
+    "facing=east,half=top,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_left_a"
+    },
+    "facing=east,half=top,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_right_a"
+    },
+    "facing=south,half=bottom,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_straight_a"
+    },
+    "facing=south,half=bottom,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_left_a"
+    },
+    "facing=south,half=bottom,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_right_a"
+    },
+    "facing=south,half=bottom,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_left_a"
+    },
+    "facing=south,half=bottom,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_right_a"
+    },
+    "facing=south,half=top,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_top_straight_a"
+    },
+    "facing=south,half=top,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_left_a"
+    },
+    "facing=south,half=top,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_right_a"
+    },
+    "facing=south,half=top,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_left_a"
+    },
+    "facing=south,half=top,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_right_a"
+    },
+    "facing=west,half=bottom,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_straight_a"
+    },
+    "facing=west,half=bottom,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_left_a"
+    },
+    "facing=west,half=bottom,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_right_a"
+    },
+    "facing=west,half=bottom,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_left_a"
+    },
+    "facing=west,half=bottom,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_right_a"
+    },
+    "facing=west,half=top,shape=straight,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_top_straight_a"
+    },
+    "facing=west,half=top,shape=inner_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_left_a"
+    },
+    "facing=west,half=top,shape=inner_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_right_a"
+    },
+    "facing=west,half=top,shape=outer_left,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_left_a"
+    },
+    "facing=west,half=top,shape=outer_right,strook=a": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_right_a"
+    },
+    "facing=north,half=bottom,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_straight_b"
+    },
+    "facing=north,half=bottom,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_left_b"
+    },
+    "facing=north,half=bottom,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_right_b"
+    },
+    "facing=north,half=bottom,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_left_b"
+    },
+    "facing=north,half=bottom,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_right_b"
+    },
+    "facing=north,half=top,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_top_straight_b"
+    },
+    "facing=north,half=top,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_left_b"
+    },
+    "facing=north,half=top,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_right_b"
+    },
+    "facing=north,half=top,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_left_b"
+    },
+    "facing=north,half=top,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_right_b"
+    },
+    "facing=east,half=bottom,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_straight_b"
+    },
+    "facing=east,half=bottom,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_left_b"
+    },
+    "facing=east,half=bottom,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_right_b"
+    },
+    "facing=east,half=bottom,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_left_b"
+    },
+    "facing=east,half=bottom,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_right_b"
+    },
+    "facing=east,half=top,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_top_straight_b"
+    },
+    "facing=east,half=top,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_left_b"
+    },
+    "facing=east,half=top,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_right_b"
+    },
+    "facing=east,half=top,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_left_b"
+    },
+    "facing=east,half=top,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_right_b"
+    },
+    "facing=south,half=bottom,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_straight_b"
+    },
+    "facing=south,half=bottom,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_left_b"
+    },
+    "facing=south,half=bottom,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_right_b"
+    },
+    "facing=south,half=bottom,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_left_b"
+    },
+    "facing=south,half=bottom,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_right_b"
+    },
+    "facing=south,half=top,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_top_straight_b"
+    },
+    "facing=south,half=top,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_left_b"
+    },
+    "facing=south,half=top,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_right_b"
+    },
+    "facing=south,half=top,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_left_b"
+    },
+    "facing=south,half=top,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_right_b"
+    },
+    "facing=west,half=bottom,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_straight_b"
+    },
+    "facing=west,half=bottom,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_left_b"
+    },
+    "facing=west,half=bottom,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_right_b"
+    },
+    "facing=west,half=bottom,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_left_b"
+    },
+    "facing=west,half=bottom,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_right_b"
+    },
+    "facing=west,half=top,shape=straight,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_top_straight_b"
+    },
+    "facing=west,half=top,shape=inner_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_left_b"
+    },
+    "facing=west,half=top,shape=inner_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_right_b"
+    },
+    "facing=west,half=top,shape=outer_left,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_left_b"
+    },
+    "facing=west,half=top,shape=outer_right,strook=b": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_right_b"
+    },
+    "facing=north,half=bottom,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_straight_c"
+    },
+    "facing=north,half=bottom,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_left_c"
+    },
+    "facing=north,half=bottom,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_inner_right_c"
+    },
+    "facing=north,half=bottom,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_left_c"
+    },
+    "facing=north,half=bottom,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_bottom_outer_right_c"
+    },
+    "facing=north,half=top,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_top_straight_c"
+    },
+    "facing=north,half=top,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_left_c"
+    },
+    "facing=north,half=top,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_top_inner_right_c"
+    },
+    "facing=north,half=top,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_left_c"
+    },
+    "facing=north,half=top,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_north_top_outer_right_c"
+    },
+    "facing=east,half=bottom,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_straight_c"
+    },
+    "facing=east,half=bottom,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_left_c"
+    },
+    "facing=east,half=bottom,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_inner_right_c"
+    },
+    "facing=east,half=bottom,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_left_c"
+    },
+    "facing=east,half=bottom,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_bottom_outer_right_c"
+    },
+    "facing=east,half=top,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_top_straight_c"
+    },
+    "facing=east,half=top,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_left_c"
+    },
+    "facing=east,half=top,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_top_inner_right_c"
+    },
+    "facing=east,half=top,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_left_c"
+    },
+    "facing=east,half=top,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_east_top_outer_right_c"
+    },
+    "facing=south,half=bottom,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_straight_c"
+    },
+    "facing=south,half=bottom,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_left_c"
+    },
+    "facing=south,half=bottom,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_inner_right_c"
+    },
+    "facing=south,half=bottom,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_left_c"
+    },
+    "facing=south,half=bottom,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_bottom_outer_right_c"
+    },
+    "facing=south,half=top,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_top_straight_c"
+    },
+    "facing=south,half=top,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_left_c"
+    },
+    "facing=south,half=top,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_top_inner_right_c"
+    },
+    "facing=south,half=top,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_left_c"
+    },
+    "facing=south,half=top,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_south_top_outer_right_c"
+    },
+    "facing=west,half=bottom,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_straight_c"
+    },
+    "facing=west,half=bottom,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_left_c"
+    },
+    "facing=west,half=bottom,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_inner_right_c"
+    },
+    "facing=west,half=bottom,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_left_c"
+    },
+    "facing=west,half=bottom,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_bottom_outer_right_c"
+    },
+    "facing=west,half=top,shape=straight,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_top_straight_c"
+    },
+    "facing=west,half=top,shape=inner_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_left_c"
+    },
+    "facing=west,half=top,shape=inner_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_top_inner_right_c"
+    },
+    "facing=west,half=top,shape=outer_left,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_left_c"
+    },
+    "facing=west,half=top,shape=outer_right,strook=c": {
+      "model": "guhs:block/regenboogblok_trap_west_top_outer_right_c"
+    }
+  }
+}

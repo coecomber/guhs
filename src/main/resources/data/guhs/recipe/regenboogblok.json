@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RYB",
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "Y": "minecraft:yellow_dye",
+    "B": "minecraft:blue_dye",
+    "P": "guhs:wolkenpluis"
+  },
+  "result": {
+    "id": "guhs:regenboogblok",
+    "count": 6
+  }
+}

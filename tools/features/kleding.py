@@ -286,6 +286,8 @@ ANDERE_BBQ2 = {"paleizen", "bestaand", "camping_markt", "toren_peper", "ring", "
 # loot inside a feature's OWN building counts as that feature (the same logical source; 2.8 sets stay as 2.8 made them)
 # guhpixel: every slice registers the sources of its own pieces (marker blocks px_<slice> in GuhClothes)
 def _eigen_bron(marker):
+    if (marker or "").startswith("bio_"):   # biomes3: a slice registers the sources of its own pieces, as px_ does
+        return True
     return marker in ANDERE_29 or marker in ANDERE_30 or marker in ANDERE_BBQ2 or (marker or "").startswith("px_")
 
 

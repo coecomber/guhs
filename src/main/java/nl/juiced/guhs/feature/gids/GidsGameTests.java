@@ -62,8 +62,10 @@ public class GidsGameTests {
         }
         // the ids the other features rely on stay, Knus exactly as 2.8 made it
         SuperkompasItem.Category knus = cats.stream().filter(c -> c.id().equals("knus")).findFirst().orElseThrow();
-        helper.assertTrue(knus.structures().equals(List.of("knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht", "ballonfestival", "kampeerplekje",
-                "knuffelbad", "reisbureau")), "knus as 2.8 made it, plus the Reisbureau (guhpixel): " + knus.structures());
+        // (biomes3: later updates append their cosy places with SuperkompasItem.voegToe, after these seven)
+        helper.assertTrue(knus.structures().size() >= 7 && knus.structures().subList(0, 7).equals(List.of("knuffeldal_stadje", "guhboerderij",
+                "guh_sterrenwacht", "ballonfestival", "kampeerplekje", "knuffelbad", "reisbureau")),
+                "knus as 2.8 made it, plus the Reisbureau (guhpixel): " + knus.structures());
         helper.assertTrue(ids.contains("barbecue") && cats.stream().filter(c -> c.id().equals("avontuur")).findFirst().orElseThrow().structures()
                 .contains("kaasknabbel_nest"), "barbecue stays, the nest stays in avontuur");
         // one Minigames tab with the subheadings, and every minigame building of the Guhdex in it

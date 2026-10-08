@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "roze_lakhout_door",
+  "key": {
+    "#": "guhs:roze_lakhout_planken"
+  },
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "guhs:roze_lakhout_deur"
+  }
+}
