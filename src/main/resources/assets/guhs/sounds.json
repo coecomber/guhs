@@ -3498,5 +3498,181 @@
       }
     ],
     "subtitle": "subtitles.guhs.snuffelsteiger.golf"
+  },
+  "wolkenblok.stap": {
+    "sounds": [
+      "guhs:wolkenblok/stap1",
+      "guhs:wolkenblok/stap2",
+      "guhs:wolkenblok/stap3",
+      "guhs:wolkenblok/stap4"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.stap"
+  },
+  "wolkenblok.plaats": {
+    "sounds": [
+      "guhs:wolkenblok/plaats1",
+      "guhs:wolkenblok/plaats2"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.plaats"
+  },
+  "wolkenblok.breek": {
+    "sounds": [
+      "guhs:wolkenblok/breek1",
+      "guhs:wolkenblok/breek2"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.breek"
+  },
+  "waterval.ruis": {
+    "sounds": [
+      "guhs:waterval/ruis"
+    ],
+    "subtitle": "subtitles.guhs.waterval.ruis"
+  },
+  "klaterdal.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "klaterdal.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/sfeer",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.sfeer"
+  },
+  "klaterdal.windgong": {
+    "sounds": [
+      {
+        "name": "guhs:klaterdal/windgong1",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong2",
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:klaterdal/windgong3",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.klaterdal.windgong"
+  },
+  "bloesemmeertje.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/muziek1",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "guhs:bloesemmeertje/muziek2",
+        "stream": true,
+        "weight": 3,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:music.overworld.cherry_grove",
+        "type": "event",
+        "weight": 3
+      }
+    ]
+  },
+  "bloesemmeertje.ambient": {
+    "sounds": [
+      {
+        "name": "guhs:bloesemmeertje/ambient",
+        "stream": true,
+        "volume": 0.55
+      }
+    ]
+  },
+  "wolkenweide.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:wolkenweide/muziek",
+        "stream": true
+      }
+    ]
+  },
+  "wolkenweide.sfeer": {
+    "sounds": [
+      "guhs:wolkenweide/sfeer"
+    ],
+    "subtitle": "subtitles.guhs.wolkenweide.sfeer"
+  },
+  "koi.hap": {
+    "sounds": [
+      "guhs:bio_dieren/koi_hap1",
+      "guhs:bio_dieren/koi_hap2",
+      "guhs:bio_dieren/koi_hap3"
+    ],
+    "subtitle": "subtitles.guhs.koi.hap"
+  },
+  "koi.strooi": {
+    "sounds": [
+      "guhs:bio_dieren/koi_strooi1",
+      "guhs:bio_dieren/koi_strooi2"
+    ],
+    "subtitle": "subtitles.guhs.koi.strooi"
+  },
+  "wolkenschaapje.bleh": {
+    "sounds": [
+      "guhs:bio_dieren/schaapje_bleh1",
+      "guhs:bio_dieren/schaapje_bleh2",
+      "guhs:bio_dieren/schaapje_bleh3"
+    ],
+    "subtitle": "subtitles.guhs.wolkenschaapje.bleh"
+  },
+  "wolkenschaapje.pluis": {
+    "sounds": [
+      "guhs:bio_dieren/schaapje_pluis1",
+      "guhs:bio_dieren/schaapje_pluis2"
+    ],
+    "subtitle": "subtitles.guhs.wolkenschaapje.pluis"
+  },
+  "reuzenguh.snurk": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/snurk1",
+      "guhs:bio_bouw_wolk2/snurk2",
+      "guhs:bio_bouw_wolk2/snurk3"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.snurk"
+  },
+  "reuzenguh.grom": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/grom1",
+      "guhs:bio_bouw_wolk2/grom2"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.grom"
+  },
+  "reuzenguh.nies": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/nies1",
+      "guhs:bio_bouw_wolk2/nies2"
+    ],
+    "subtitle": "subtitles.guhs.reuzenguh.nies"
+  },
+  "bliksemsmidse.rommel": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/rommel1",
+      "guhs:bio_bouw_wolk2/rommel2",
+      "guhs:bio_bouw_wolk2/rommel3"
+    ],
+    "subtitle": "subtitles.guhs.bliksemsmidse.rommel"
+  },
+  "smidguh.hamer": {
+    "sounds": [
+      "guhs:bio_bouw_wolk2/hamer1",
+      "guhs:bio_bouw_wolk2/hamer2"
+    ],
+    "subtitle": "subtitles.guhs.smidguh.hamer"
   }
 }

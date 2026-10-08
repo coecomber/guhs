@@ -31,6 +31,14 @@
   "quest.475548DBEA8ADA4D.quest_desc": [
     "At every guh portal in the Guhmension (and at the Guh Castle) there's a blue &bTravel Guh&r. The big places have one too: Guhwarden on the Eleven Guhtowns Tour, Snuggledale town, the Guh Fair, Guhland, the Balloon Festival and the Guh Circuit. Discover 3 by right-clicking them; after that you travel between your discovered Travel Guhs in one click. With a Travel Guh Whistle you can place one yourself.",
   ],
+  "quest.475548E6EA3EFB18.title": "The Biomes Tab",
+  "quest.475548E6EA3EFB18.quest_desc": [
+    "Your &6Super Compass&r has a new tab: &dBiomes&r. For each world there is a row with all its biomes. A row with a little lock opens as soon as you have been to that world. Unfold the Guhmension, pick a biome and hold the compass: it points to the nearest spot.",
+  ],
+  "quest.475548C985D45C26.title": "There It Is!",
+  "quest.475548C985D45C26.quest_desc": [
+    "Walk with your Super Compass to the biome you picked, until you are right in the middle of it. Every biome you have already been to gets a check mark in the tab. Nyeg, so many places!",
+  ],
   "quest.4755482918A79BBA.title": "Guh Fields",
   "quest.4755482918A79BBA.quest_desc": [
     "Visit the &dGuh Fields&r biome in the Guhmension.",
@@ -106,6 +114,18 @@
   "quest.4755488E61CB72B7.title": "Guhwai'i",
   "quest.4755488E61CB72B7.quest_desc": [
     "Visit the &dGuhwai'i&r biome in the Guhmension.",
+  ],
+  "quest.4755481991CCAFCA.title": "Blossom Lake",
+  "quest.4755481991CCAFCA.quest_desc": [
+    "Visit the &dBlossom Lake&r biome in the Guhmension.",
+  ],
+  "quest.4755481E722B4CC5.title": "Babbledale",
+  "quest.4755481E722B4CC5.quest_desc": [
+    "Visit the &dBabbledale&r biome in the Guhmension.",
+  ],
+  "quest.475548B1AB7E4D6E.title": "Cloud Meadow",
+  "quest.475548B1AB7E4D6E.quest_desc": [
+    "Visit the &dCloud Meadow&r biome in the Guhmension.",
   ],
   "quest.4755489DFD70FDF1.title": "Buzz Buzz Guh",
   "quest.4755489DFD70FDF1.quest_desc": [
@@ -322,6 +342,186 @@
   "quest.475548056E6FFE61.title": "Party Animal",
   "quest.475548056E6FFE61.quest_desc": [
     "Experience all three events: the Cheese Shower, the Chonk Parade and the Star Shower.",
+  ],
+  "quest.475548F6592CF67D.title": "The Boathouse",
+  "quest.475548F6592CF67D.quest_desc": [
+    "On the shore of a &dBlossom Lake&r stands a little boathouse with a jetty. The &6Super Compass&r shows the way (Cozy tab).",
+  ],
+  "quest.475548C3FDDAA2AA.title": "The Fisher Guh",
+  "quest.475548C3FDDAA2AA.quest_desc": [
+    "On the jetty sits the &dFisher Guh&r with his fishing rod. He never catches anything and he is fine with that. Talk to him.",
+  ],
+  "quest.475548382145125B.title": "A Handful of Koi Food",
+  "quest.475548382145125B.quest_desc": [
+    "The Fisher Guh gives you a handful of &6koi food&r every day. Just ask.",
+  ],
+  "quest.4755480A11D65D01.title": "Chomp!",
+  "quest.4755480A11D65D01.quest_desc": [
+    "Hold koi food near the water: the &dkoi&r come swimming up to you. Right-click the water to scatter a handful, or give it to one koi. There are red-and-white, tricolor, pink, blue and golden ones.",
+  ],
+  "quest.4755487D01DD271D.title": "A Koi for Home",
+  "quest.4755487D01DD271D.quest_desc": [
+    "Scoop up a koi with a bucket of water. At home in your own pond it stays yours, in its own color.",
+  ],
+  "quest.4755488C3E0C6A3E.title": "A Little Row",
+  "quest.4755488C3E0C6A3E.quest_desc": [
+    "By the jetty lies a &6rowboat&r. Hop in and row a lap around the lake. The boat stays with its lake.",
+  ],
+  "quest.475548A761F5D489.title": "Getting to Know the Lake",
+  "quest.475548A761F5D489.quest_desc": [
+    "The Fisher Guh wants to teach you all about his lake: the koi, the blossom petals, the island. Four little lessons, at your own pace. At the end you get things for your own little spot by the water.",
+  ],
+  "quest.475548EF4C775304.title": "Hanami!",
+  "quest.475548EF4C775304.quest_desc": [
+    "Very rarely, on an island in the lake, a picnic blanket lies under the biggest blossom tree: the &dPicnic Island&r (Super Compass: Cozy).",
+  ],
+  "quest.475548D10AD68AF8.title": "Treats from the Basket",
+  "quest.475548D10AD68AF8.quest_desc": [
+    "On the blanket stands a &6picnic basket&r. It holds one treat for everyone, once. Have a look.",
+  ],
+  "quest.4755480E29355438.title": "Blossom Watching",
+  "quest.4755480E29355438.quest_desc": [
+    "The guhs on the island are celebrating &dhanami&r: blossom watching. By day they party, in the evening they sleep by the water. Talk to one of them.",
+  ],
+  "quest.475548D7275EA689.title": "The Blossom Guh",
+  "quest.475548D7275EA689.quest_desc": [
+    "At Blossom Lake, &dBlossom Guhs&r are sometimes born: blossom-white, with pink petals in their fur. Get close to one for your Guhdex.",
+  ],
+  "quest.47554834DA9810FA.title": "Ribbit on a Leaf",
+  "quest.47554834DA9810FA.quest_desc": [
+    "By the lake, &dfrogguhs&r sit on the lilies and the blossom petals. Come too close and they plop away. So sneak: spot one sitting on its leaf.",
+  ],
+  "quest.4755480F7972E966.title": "Blossom on the Water",
+  "quest.4755480F7972E966.quest_desc": [
+    "Pink &6blossom petals&r float on the lake. Take a few along: at home you can lay them on your own pond, just like a lily pad.",
+  ],
+  "quest.4755481E908833FB.title": "Through the Gate",
+  "quest.4755481E908833FB.quest_desc": [
+    "In &dBabbledale&r stand pink gates with guh ears on the top beam: &dtorii&r. Find one and walk under it.",
+  ],
+  "quest.4755485AA2C1B81C.title": "The Tanuki Guh",
+  "quest.4755485AA2C1B81C.quest_desc": [
+    "In Babbledale, &dTanuki Guhs&r are sometimes born: gray-brown, with a little mask, a ringed bushy tail and a leaf on their head. Get close to one for your Guhdex.",
+  ],
+  "quest.47554858561B261C.title": "Tea by the Waterfall",
+  "quest.47554858561B261C.quest_desc": [
+    "On a rock next to a tall waterfall stands an open &dtea house&r. Sit there for a while and listen to the babbling.",
+  ],
+  "quest.475548D992C46650.title": "Your Own Torii",
+  "quest.475548D992C46650.quest_desc": [
+    "Build a gate of &6pink lacquerwood&r at home: two posts four &6beams&r high, on top a crossbeam of five beams and five &6slabs&r as a little roof. You make pink lacquerwood planks from maple logs, or by lacquering eight planks pink with pink dye.",
+  ],
+  "quest.475548ED1743A674.title": "A Roof with a Curl",
+  "quest.475548ED1743A674.quest_desc": [
+    "Lay a roof of &6guh roof tiles&r (pink, white or soft gray): stairs for the sloping sides and a &6roof curl&r on every corner, so the roof edge curls up.",
+  ],
+  "quest.475548401CF6A813.title": "Slide It Open",
+  "quest.475548401CF6A813.quest_desc": [
+    "Make a little room with &6shoji&r for walls (right-click: they really slide open and let light through) and a floor of &6tatami&r.",
+  ],
+  "quest.4755482FE5FB7721.title": "A Zen Corner",
+  "quest.4755482FE5FB7721.quest_desc": [
+    "Lay a patch of &6raked sand&r with one spot with &6rings&r, put three smooth snugglestones on it and a &6stone guh lantern&r beside it. It lights up by itself when it gets dark.",
+  ],
+  "quest.475548FDE46126BB.title": "The Weeb House",
+  "quest.475548FDE46126BB.quest_desc": [
+    "In a Babbledale there sometimes stands one guh-Japanese little house with a hot-air balloon beside it: the &dWeeb House&r (Super Compass: Cozy). Shoes off!",
+  ],
+  "quest.4755485393451706.title": "Ohayo, guh-chan!",
+  "quest.4755485393451706.quest_desc": [
+    "Talk to &dEvichonk&r and &dNielschonk&r. Their little house is full of figurines. Don't touch: that's a limited edition.",
+  ],
+  "quest.475548A3A820B1A1.title": "Ittekimasu!",
+  "quest.475548A3A820B1A1.quest_desc": [
+    "Talk to them again. Wait... it's cherry blossom season. In Japan. Wave them off when their balloon leaves: they are gone for a guh day, with a note on the door.",
+  ],
+  "quest.475548CC0468DB8F.title": "Tadaima!",
+  "quest.475548CC0468DB8F.quest_desc": [
+    "Come back a day later: they are home again, with stories and a &6present&r for everyone who waved them off. You can do this as often as you like.",
+  ],
+  "quest.47554884FCC8E485.title": "Itadakimasu!",
+  "quest.47554884FCC8E485.quest_desc": [
+    "Sometimes they bring food: &6guh sushi&r, &6ramen&r, &6mochi&r or &6onigiri&r. Yummy for you and for your guhs. Taste one.",
+  ],
+  "quest.47554856BADC510C.title": "Kawaii!",
+  "quest.47554856BADC510C.quest_desc": [
+    "Four outfits for your guh come from Japan: the &6kimono&r, the &6hachimaki&r, the &6cat ears&r and the &6bow&r. Collect all four.",
+  ],
+  "quest.47554847FC4939CB.title": "The Whole Collection",
+  "quest.47554847FC4939CB.quest_desc": [
+    "The &dJapan Collection&r has twelve pieces, from the waving lucky guh to the maneki nibble. Swap a double with Evichonk and Nielschonk for one you miss. Once you have been given all twelve, you are a true &dWeeb&r: you may wear that title. Your collection is in the Guhdex.",
+  ],
+  "quest.475548AA08AFC393.title": "The Big Island",
+  "quest.475548AA08AFC393.quest_desc": [
+    "Very rarely, a big island floats above a &dCloud Meadow&r, with a hill, a little lake and a waterfall over the edge. There stands the hut of the &dcloud shepherd&r (Super Compass: Cozy).",
+  ],
+  "quest.475548FDA3D957D0.title": "Fluff!",
+  "quest.475548FDA3D957D0.quest_desc": [
+    "&dCloud Lambs&r float a hand's width above the grass. Snip one with shears: you get &6cloud fluff&r and after a while it is just as fluffy again.",
+  ],
+  "quest.47554859FD804A3E.title": "Cloud Maker",
+  "quest.47554859FD804A3E.quest_desc": [
+    "The cloud shepherd teaches you how to turn cloud fluff into &6cloud blocks&r: soft, you sink in a little and you never land hard on them. Follow his lesson to the end.",
+  ],
+  "quest.475548953E200B90.title": "A Lamb for Home",
+  "quest.475548953E200B90.quest_desc": [
+    "Whoever finishes his lesson may take one cloud lamb home. It stays with you, if you take good care of it.",
+  ],
+  "quest.47554890FE8DA130.title": "Cloud Guhs in the Wild",
+  "quest.47554890FE8DA130.quest_desc": [
+    "The &dCloud Guh&r used to live only on the Floating Guh Islets. In the Cloud Meadow he now simply walks around in the wild too. Get close to one.",
+  ],
+  "quest.4755480A8674A8EF.title": "The Harbor in the Sky",
+  "quest.4755480A8674A8EF.quest_desc": [
+    "On the edge of an island lies a jetty with hot-air balloons: the &dBalloon Harbor&r (Super Compass: Cozy). The balloonist guh is waiting for passengers.",
+  ],
+  "quest.47554816C24C7628.title": "Gently Down",
+  "quest.47554816C24C7628.quest_desc": [
+    "Once a day the balloonist guh takes you along in his balloon: in a big arc over the edge and gently down to the meadow below. Hop in and enjoy until you have landed.",
+  ],
+  "quest.475548B86E2B7E00.title": "The Sleeping Stargazer",
+  "quest.475548B86E2B7E00.quest_desc": [
+    "On a high island stands an old &dobservatory&r, half collapsed (Super Compass: Wonders). The stargazer guh there sleeps during the day.",
+  ],
+  "quest.475548EE1382BD3A.title": "Stardust",
+  "quest.475548EE1382BD3A.quest_desc": [
+    "Come back to the ruin at night: more stars fall there than anywhere else and the stargazer is awake. Look through the telescope: every night you get a little &6stardust&r.",
+  ],
+  "quest.475548D268916CD9.title": "Sitting on a Cloud",
+  "quest.475548D268916CD9.quest_desc": [
+    "Put a &6cloud bench&r down at home (make it from cloud blocks and cloud fluff, or trade for it with the Smith Guh) and sit on it. A cloud bed and a cloud lamp go nicely with it.",
+  ],
+  "quest.4755480D22408464.title": "The End of the Rainbow",
+  "quest.4755480D22408464.quest_desc": [
+    "Very rare: a real &drainbow&r as a bridge between two islands (Super Compass: Wonders). You can walk across it.",
+  ],
+  "quest.4755480A4103CE16.title": "The Pot at the End",
+  "quest.4755480A4103CE16.quest_desc": [
+    "At the end of the rainbow there is no pot of gold, but a pot of &6cheese nibbles&r. It is full again every day.",
+  ],
+  "quest.475548E35CC2C15A.title": "Your Own Rainbow",
+  "quest.475548E35CC2C15A.quest_desc": [
+    "&6Rainbow blocks&r are soft and a little see-through. You make them from cloud fluff with red, yellow and blue dye. Build an arch with them at home: blocks for the legs and stairs for the bend.",
+  ],
+  "quest.47554846099FBA38.title": "The Smith in the Thundercloud",
+  "quest.47554846099FBA38.quest_desc": [
+    "A dark little cloud that rumbles softly: the &dLightning Forge&r (Super Compass: Wonders). No fright: flash is sweet.",
+  ],
+  "quest.47554881412D5A6E.title": "Tap. Tap.",
+  "quest.47554881412D5A6E.quest_desc": [
+    "The &dSmith Guh&r presses clouds into blocks. Bring him cloud fluff and trade it for a cloud bench, a cloud bed or a cloud lamp.",
+  ],
+  "quest.4755486115A8145E.title": "The Castle on the Highest Cloud",
+  "quest.4755486115A8145E.quest_desc": [
+    "On the highest cloud stands a half-collapsed &dCloud Castle&r (Super Compass: Wonders). Inside, something very big is snoring.",
+  ],
+  "quest.4755482AE701033F.title": "Shhhh",
+  "quest.4755482AE701033F.quest_desc": [
+    "In the castle a &dGiant Guh&r sleeps on his hoard. Sneak past, no running and no jumping, and take one golden crumb. If he wakes up, he only sneezes you gently out of the castle.",
+  ],
+  "quest.475548A32E043DE5.title": "Head in the Clouds",
+  "quest.475548A32E043DE5.quest_desc": [
+    "Above the meadow hang stacks of islets, higher and higher. Climb, jump and ride the lift to the &dvery highest islet&r of such a stack and look down. Whoever has stood there may wear the title &bHead in the Clouds&r.",
   ],
   "quest.475548B5EEC988FD.title": "Full Is Full, Nyeg",
   "quest.475548B5EEC988FD.quest_desc": [

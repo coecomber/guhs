@@ -31,6 +31,14 @@
   "quest.475548DBEA8ADA4D.quest_desc": [
     "Bij elk guhportaal in de Guhmensie (en bij het guhkasteel) zit een blauwe &bReisguh&r. Ook in de grote plekken woont er een: Guhwarden bij de Elf-Guhjestocht, het Knuffeldal-stadje, de Guhkermis, Guhland, het Ballonfestival en het Guhcircuit. Ontdek er 3 door ze te rechtsklikken; daarna reis je in een klik tussen je ontdekte Reisguhs. Met een Reisguh-fluitje zet je er zelf een neer.",
   ],
+  "quest.475548E6EA3EFB18.title": "Het tabblad Biomes",
+  "quest.475548E6EA3EFB18.quest_desc": [
+    "Je &6Superkompas&r heeft een nieuw tabblad: &dBiomes&r. Per wereld staat er een rijtje met alle biomen. Een rijtje met een slotje gaat open zodra je in die wereld bent geweest. Klap de Guhmensie open, kies een bioom en houd het kompas vast: het wijst naar de dichtstbijzijnde plek.",
+  ],
+  "quest.475548C985D45C26.title": "Daar is het!",
+  "quest.475548C985D45C26.quest_desc": [
+    "Loop met je Superkompas naar het bioom dat je gekozen hebt, tot je er middenin staat. Achter elk bioom waar je al was staat in het tabblad een vinkje. Njeg, wat veel plekken!",
+  ],
   "quest.4755482918A79BBA.title": "Guhvelden",
   "quest.4755482918A79BBA.quest_desc": [
     "Bezoek het bioom &dGuhvelden&r in de Guhmensie.",
@@ -106,6 +114,18 @@
   "quest.4755488E61CB72B7.title": "Guhwai'i",
   "quest.4755488E61CB72B7.quest_desc": [
     "Bezoek het bioom &dGuhwai'i&r in de Guhmensie.",
+  ],
+  "quest.4755481991CCAFCA.title": "Bloesemmeertje",
+  "quest.4755481991CCAFCA.quest_desc": [
+    "Bezoek het bioom &dBloesemmeertje&r in de Guhmensie.",
+  ],
+  "quest.4755481E722B4CC5.title": "Klaterdal",
+  "quest.4755481E722B4CC5.quest_desc": [
+    "Bezoek het bioom &dKlaterdal&r in de Guhmensie.",
+  ],
+  "quest.475548B1AB7E4D6E.title": "Wolkenweide",
+  "quest.475548B1AB7E4D6E.quest_desc": [
+    "Bezoek het bioom &dWolkenweide&r in de Guhmensie.",
   ],
   "quest.4755489DFD70FDF1.title": "Zoemzoem guh",
   "quest.4755489DFD70FDF1.quest_desc": [
@@ -322,6 +342,186 @@
   "quest.475548056E6FFE61.title": "Feestneus",
   "quest.475548056E6FFE61.quest_desc": [
     "Maak alle drie de evenementen mee: de kaasregen, de Vadsparade en de sterrenregen.",
+  ],
+  "quest.475548F6592CF67D.title": "Het botenhuisje",
+  "quest.475548F6592CF67D.quest_desc": [
+    "Aan de oever van een &dBloesemmeertje&r staat een klein botenhuisje met een steiger. Het &6Superkompas&r wijst de weg (tabblad Knus).",
+  ],
+  "quest.475548C3FDDAA2AA.title": "De visser-guh",
+  "quest.475548C3FDDAA2AA.quest_desc": [
+    "Op de steiger zit de &dvisser-guh&r met zijn hengel. Hij vangt nooit iets en dat vindt hij prima. Praat met hem.",
+  ],
+  "quest.475548382145125B.title": "Een handje koivoer",
+  "quest.475548382145125B.quest_desc": [
+    "De visser-guh geeft je elke dag een handje &6koivoer&r. Vraag er maar om.",
+  ],
+  "quest.4755480A11D65D01.title": "Hap!",
+  "quest.4755480A11D65D01.quest_desc": [
+    "Houd koivoer vast bij het water: de &dkoi&r komen naar je toe gezwommen. Rechtsklik op het water om een handje te strooien, of geef het aan één koi. Er zijn rood-witte, driekleurige, roze, blauwe en gouden.",
+  ],
+  "quest.4755487D01DD271D.title": "Een koi voor thuis",
+  "quest.4755487D01DD271D.quest_desc": [
+    "Schep een koi op met een emmer water. Thuis in je eigen vijver blijft hij van jou, in zijn eigen kleur.",
+  ],
+  "quest.4755488C3E0C6A3E.title": "Een rondje roeien",
+  "quest.4755488C3E0C6A3E.quest_desc": [
+    "Bij de steiger ligt een &6roeibootje&r. Stap in en roei een rondje over het meer. Het bootje blijft bij het meer horen.",
+  ],
+  "quest.475548A761F5D489.title": "Het meer leren kennen",
+  "quest.475548A761F5D489.quest_desc": [
+    "De visser-guh wil je alles over zijn meer leren: de koi, de bloesemblaadjes, het eilandje. Vier lesjes, in je eigen tempo. Aan het eind krijg je spulletjes voor je eigen plekje aan het water.",
+  ],
+  "quest.475548EF4C775304.title": "Hanami!",
+  "quest.475548EF4C775304.quest_desc": [
+    "Heel soms ligt er op een eilandje in het meer een picknickkleed onder de grootste bloesemboom: het &dpicknickeilandje&r (Superkompas: Knus).",
+  ],
+  "quest.475548D10AD68AF8.title": "Lekkers uit de mand",
+  "quest.475548D10AD68AF8.quest_desc": [
+    "Op het kleed staat een &6picknickmand&r. Er zit voor iedereen één keer iets lekkers in. Kijk maar.",
+  ],
+  "quest.4755480E29355438.title": "Bloesem kijken",
+  "quest.4755480E29355438.quest_desc": [
+    "De guhs op het eilandje vieren &dhanami&r: bloesem kijken. Overdag feesten ze, 's avonds slapen ze bij het water. Praat met een van hen.",
+  ],
+  "quest.475548D7275EA689.title": "De Bloesemguh",
+  "quest.475548D7275EA689.quest_desc": [
+    "Bij het Bloesemmeertje worden soms &dBloesemguhs&r geboren: bloesemwit, met roze blaadjes in hun vacht. Kom dichtbij er een voor je Guhdex.",
+  ],
+  "quest.47554834DA9810FA.title": "Kwaak op een blad",
+  "quest.47554834DA9810FA.quest_desc": [
+    "Bij het meer zitten &dkikkerguhs&r op de lelies en de bloesemblaadjes. Kom je te dichtbij, dan plonzen ze weg. Sluip maar: zie er eentje zitten op zijn blad.",
+  ],
+  "quest.4755480F7972E966.title": "Bloesem op het water",
+  "quest.4755480F7972E966.quest_desc": [
+    "Op het meer drijven roze &6bloesemblaadjes&r. Pak er een paar mee: je kunt ze thuis op je eigen vijver leggen, net als een lelieblad.",
+  ],
+  "quest.4755481E908833FB.title": "Door de poort",
+  "quest.4755481E908833FB.quest_desc": [
+    "In het &dKlaterdal&r staan roze poorten met guhoortjes op de bovenste balk: &dtorii&r. Zoek er een en loop eronderdoor.",
+  ],
+  "quest.4755485AA2C1B81C.title": "De Tanukiguh",
+  "quest.4755485AA2C1B81C.quest_desc": [
+    "In het Klaterdal worden soms &dTanukiguhs&r geboren: grijsbruin, met een maskertje, een geringde pluimstaart en een blaadje op hun kop. Kom dichtbij er een voor je Guhdex.",
+  ],
+  "quest.47554858561B261C.title": "Thee bij de waterval",
+  "quest.47554858561B261C.quest_desc": [
+    "Op een rots naast een hoge waterval staat een open &dtheehuisje&r. Ga er even zitten en luister naar het klateren.",
+  ],
+  "quest.475548D992C46650.title": "Je eigen torii",
+  "quest.475548D992C46650.quest_desc": [
+    "Bouw thuis een poort van &6roze lakhout&r: twee palen van vier &6balken&r hoog, daarop een dwarsbalk van vijf balken en als dakje vijf &6platen&r. Roze lakhoutplanken maak je van esdoornstammen, of door acht planken roze te lakken met roze verf.",
+  ],
+  "quest.475548ED1743A674.title": "Een dak met een krul",
+  "quest.475548ED1743A674.quest_desc": [
+    "Leg een dak van &6guh-dakpannen&r (roze, wit of zachtgrijs): trappen voor de schuine kanten en op elke hoek een &6krulhoek&r, zodat de dakrand omhoog krult.",
+  ],
+  "quest.475548401CF6A813.title": "Schuif maar open",
+  "quest.475548401CF6A813.quest_desc": [
+    "Maak een kamertje met &6shoji&r als wanden (rechtsklik: ze schuiven echt open en laten licht door) en een vloer van &6tatami&r.",
+  ],
+  "quest.4755482FE5FB7721.title": "Een zenhoekje",
+  "quest.4755482FE5FB7721.quest_desc": [
+    "Leg een vlakje &6geharkt zand&r met één plek met &6ringen&r, zet er drie gladde knuffelstenen op en een &6stenen guh-lantaarn&r ernaast. Die gaat vanzelf aan als het donker wordt.",
+  ],
+  "quest.475548FDE46126BB.title": "Het weebhuisje",
+  "quest.475548FDE46126BB.quest_desc": [
+    "In een Klaterdal staat soms één guh-Japans huisje met een luchtballon ernaast: het &dweebhuisje&r (Superkompas: Knus). Schoenen uit!",
+  ],
+  "quest.4755485393451706.title": "Ohayo, guh-chan!",
+  "quest.4755485393451706.quest_desc": [
+    "Praat met &dEvivads&r en &dNielsvads&r. Hun huisje staat vol figuurtjes. Niet aankomen: dat is een limited edition.",
+  ],
+  "quest.475548A3A820B1A1.title": "Ittekimasu!",
+  "quest.475548A3A820B1A1.quest_desc": [
+    "Praat nog eens met ze. Wacht... het is kersenbloesemtijd. In Japan. Zwaai ze uit als hun ballon vertrekt: ze zijn een guhdag weg, met een briefje op de deur.",
+  ],
+  "quest.475548CC0468DB8F.title": "Tadaima!",
+  "quest.475548CC0468DB8F.quest_desc": [
+    "Kom een dag later terug: ze zijn er weer, met verhalen en een &6cadeautje&r voor iedereen die ze uitzwaaide. Dat kan zo vaak als je wilt.",
+  ],
+  "quest.47554884FCC8E485.title": "Itadakimasu!",
+  "quest.47554884FCC8E485.quest_desc": [
+    "Soms nemen ze eten mee: &6guh-sushi&r, &6ramen&r, &6mochi&r of &6onigiri&r. Lekker voor jou en voor je guhs. Proef er eentje.",
+  ],
+  "quest.47554856BADC510C.title": "Kawaii!",
+  "quest.47554856BADC510C.quest_desc": [
+    "Vier pakjes voor je guh komen uit Japan: de &6kimono&r, de &6hachimaki&r, de &6kattenoortjes&r en het &6strikje&r. Verzamel ze alle vier.",
+  ],
+  "quest.47554847FC4939CB.title": "De hele verzameling",
+  "quest.47554847FC4939CB.quest_desc": [
+    "Twaalf stukken telt de &dJapan-verzameling&r, van de zwaaiende geluksguh tot de maneki-knabbel. Een dubbele ruil je bij Evivads en Nielsvads voor eentje die je mist. Heb je ze alle twaalf gekregen, dan ben je een echte &dWeeb&r: die titel mag je dragen. Je verzameling staat in de Guhdex.",
+  ],
+  "quest.475548AA08AFC393.title": "Het grote eiland",
+  "quest.475548AA08AFC393.quest_desc": [
+    "Heel zelden zweeft er boven een &dWolkenweide&r een groot eiland met een heuvel, een meertje en een waterval over de rand. Daar staat de hut van de &dwolkenhoeder&r (Superkompas: Knus).",
+  ],
+  "quest.475548FDA3D957D0.title": "Pluis!",
+  "quest.475548FDA3D957D0.quest_desc": [
+    "&dWolkenschaapjes&r zweven een handje boven het gras. Knip er eentje met een schaar: je krijgt &6wolkenpluis&r en na een poosje is hij weer net zo pluizig.",
+  ],
+  "quest.47554859FD804A3E.title": "Wolkenmaker",
+  "quest.47554859FD804A3E.quest_desc": [
+    "De wolkenhoeder leert je hoe je van wolkenpluis &6wolkenblokken&r maakt: zacht, je zakt er een beetje in en je valt er nooit hard op. Volg zijn les tot het eind.",
+  ],
+  "quest.475548953E200B90.title": "Een schaapje voor thuis",
+  "quest.475548953E200B90.quest_desc": [
+    "Wie zijn les af heeft, mag één wolkenschaapje van de kudde mee naar huis nemen. Het blijft bij je, als je goed voor hem zorgt.",
+  ],
+  "quest.47554890FE8DA130.title": "Wolkguhs in het wild",
+  "quest.47554890FE8DA130.quest_desc": [
+    "De &dWolkguh&r woonde alleen op de zwevende guh-eilandjes. In de Wolkenweide loopt hij nu ook gewoon in het wild rond. Kom dichtbij er een.",
+  ],
+  "quest.4755480A8674A8EF.title": "De haven in de lucht",
+  "quest.4755480A8674A8EF.quest_desc": [
+    "Aan de rand van een eiland ligt een steiger met luchtballonnen: de &dluchtballon-haven&r (Superkompas: Knus). De ballonvaarder-guh wacht op passagiers.",
+  ],
+  "quest.47554816C24C7628.title": "Zachtjes naar beneden",
+  "quest.47554816C24C7628.quest_desc": [
+    "Eén keer per dag neemt de ballonvaarder-guh je mee in zijn ballon: in een grote boog over de rand en zachtjes naar de weide beneden. Stap in en geniet tot je geland bent.",
+  ],
+  "quest.475548B86E2B7E00.title": "De slapende sterrenkijker",
+  "quest.475548B86E2B7E00.quest_desc": [
+    "Op een hoog eiland staat een oude &dsterrenwacht&r, half ingestort (Superkompas: Wonderen). De sterrenkijker-guh daar slaapt overdag.",
+  ],
+  "quest.475548EE1382BD3A.title": "Sterrenstof",
+  "quest.475548EE1382BD3A.quest_desc": [
+    "Kom 's nachts terug bij de ruïne: daar vallen meer sterren dan waar ook en de sterrenkijker is wakker. Kijk door de telescoop: elke nacht krijg je een beetje &6sterrenstof&r.",
+  ],
+  "quest.475548D268916CD9.title": "Zitten op een wolk",
+  "quest.475548D268916CD9.quest_desc": [
+    "Zet thuis een &6wolkenbank&r neer (maak hem van wolkenblokken en wolkenpluis, of ruil hem bij de smid-guh) en ga erop zitten. Een wolkenbed en een wolkenlamp passen er mooi bij.",
+  ],
+  "quest.4755480D22408464.title": "Het einde van de regenboog",
+  "quest.4755480D22408464.quest_desc": [
+    "Heel zeldzaam: een echte &dregenboog&r als brug tussen twee eilanden (Superkompas: Wonderen). Je kunt eroverheen lopen.",
+  ],
+  "quest.4755480A4103CE16.title": "De pot aan het eind",
+  "quest.4755480A4103CE16.quest_desc": [
+    "Aan het einde van de regenboog staat geen pot goud, maar een pot &6kaasknabbels&r. Elke dag is hij weer vol.",
+  ],
+  "quest.475548E35CC2C15A.title": "Je eigen regenboog",
+  "quest.475548E35CC2C15A.quest_desc": [
+    "&6Regenboogblokken&r zijn zacht en een beetje doorzichtig. Je maakt ze van wolkenpluis met rode, gele en blauwe verf. Bouw er thuis een boog mee: blokken voor de poten en trappen voor de bocht.",
+  ],
+  "quest.47554846099FBA38.title": "De smid in de donderwolk",
+  "quest.47554846099FBA38.quest_desc": [
+    "Een donker wolkje dat zachtjes rommelt: de &dbliksemsmidse&r (Superkompas: Wonderen). Niet schrikken: flits is lief.",
+  ],
+  "quest.47554881412D5A6E.title": "Tik. Tik.",
+  "quest.47554881412D5A6E.quest_desc": [
+    "De &dsmid-guh&r perst wolken tot blokken. Breng hem wolkenpluis en ruil het voor een wolkenbank, een wolkenbed of een wolkenlamp.",
+  ],
+  "quest.4755486115A8145E.title": "Het kasteel op de hoogste wolk",
+  "quest.4755486115A8145E.quest_desc": [
+    "Op de hoogste wolk staat een half ingestort &dwolkenkasteeltje&r (Superkompas: Wonderen). Binnen snurkt iets heel groots.",
+  ],
+  "quest.4755482AE701033F.title": "Sssst",
+  "quest.4755482AE701033F.quest_desc": [
+    "In het kasteel slaapt een &dreuzenguh&r op zijn schat. Sluip erlangs, niet rennen en niet springen, en pak één gouden kruimel. Wordt hij wakker, dan niest hij je alleen maar zachtjes het kasteel uit.",
+  ],
+  "quest.475548A32E043DE5.title": "Hoofd in de wolken",
+  "quest.475548A32E043DE5.quest_desc": [
+    "Boven de weide hangen stapels eilandjes, steeds hoger. Klim, spring en lift naar het &dallerhoogste eilandje&r van zo'n stapel en kijk naar beneden. Wie daar gestaan heeft, mag de titel &bHoofd in de wolken&r dragen.",
   ],
   "quest.475548B5EEC988FD.title": "Vol is vol, njeg",
   "quest.475548B5EEC988FD.quest_desc": [
