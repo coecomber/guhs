@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/bloesemmeertje_meertegels",
+    "side": "guhs:block/bloesemmeertje_meertegels",
+    "top": "guhs:block/bloesemmeertje_meertegels"
+  }
+}

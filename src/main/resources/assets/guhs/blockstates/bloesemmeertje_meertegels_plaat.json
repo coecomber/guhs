@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/bloesemmeertje_meertegels_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/bloesemmeertje_meertegels"
+    },
+    "type=top": {
+      "model": "guhs:block/bloesemmeertje_meertegels_plaat_top"
+    }
+  }
+}
