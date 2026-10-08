@@ -92,8 +92,8 @@ public final class Snuffel {
 
     /**
      * The end of the first series: the questline {@code snuffeleiland} is finished (this is what the Guhpad asks for), the
-     * tree gives its blossom twig and the player gets the Guhstation. Safe to call again: nothing is given twice. True the
-     * first time.
+     * tree gives its blossom twig and the player gets the Guhstation and the island's music disc. Safe to call again: nothing
+     * is given twice. True the first time.
      */
     public static boolean rondAf(ServerPlayer p) {
         boolean eerste = !SnuffelFeature.LIJN.klaar(p);
@@ -101,6 +101,10 @@ public final class Snuffel {
         SnuffelFeature.LIJN.zet(p, SnuffelFeature.STAPPEN);
         Boom.geefCadeau(p);
         geefGuhstation(p, false);
+        if (eerste) {
+            // (whoever had finished before the disc existed gets it from the captain, with his line: DorpRollen.kapitein)
+            geefPlaat(p);
+        }
         Stand.stuur(p);
         return eerste;
     }
@@ -123,6 +127,23 @@ public final class Snuffel {
 
     public static boolean heeftGuhstationGehad(ServerPlayer p) {
         return SnuffelData.heeft(p) && SnuffelData.van(p).getBooleanOr("Guhstation", false);
+    }
+
+    /**
+     * Gives the island's music disc, once per player and never again (true when it was given now). At the end of the first
+     * series with the Guhstation; whoever finished the story before the disc existed gets it from Kapitein Zoutsnoet.
+     */
+    public static boolean geefPlaat(ServerPlayer p) {
+        if (heeftPlaatGehad(p)) {
+            return false;
+        }
+        SnuffelData.van(p).putBoolean("Muziekplaat", true);
+        geef(p, new ItemStack(SnuffelFeature.MUZIEKPLAAT.get()));
+        return true;
+    }
+
+    public static boolean heeftPlaatGehad(ServerPlayer p) {
+        return SnuffelData.heeft(p) && SnuffelData.van(p).getBooleanOr("Muziekplaat", false);
     }
 
     /**
@@ -185,13 +206,14 @@ public final class Snuffel {
     }
 
     /**
-     * What the Guhdex shows under the story: the two things the island gives, then the player's rank ("Snuffelpup (rang 1
+     * What the Guhdex shows under the story: the three things the island gives, then the player's rank ("Snuffelpup (rang 1
      * (laagste) van 5 (hoogste))") and the list of all five ranks, each ticked when reached (nothing is ticked before the
      * player's first visit to the island).
      */
     static List<VerhaalStand.Beloning> beloningen(ServerPlayer p) {
         List<VerhaalStand.Beloning> uit = new ArrayList<>();
         uit.add(new VerhaalStand.Beloning("guhs:guhstation", Component.translatable("block.guhs.guhstation"), heeftGuhstationGehad(p)));
+        uit.add(new VerhaalStand.Beloning("guhs:music_disc_snuffeleiland", Component.translatable("item.guhs.music_disc_snuffeleiland"), heeftPlaatGehad(p)));
         uit.add(new VerhaalStand.Beloning("guhs:snuffel_bloesemtakje", Component.translatable("item.guhs.snuffel_bloesemtakje"), Boom.cadeauGehad(p)));
         Rang rang = Rang.van(p);
         int geuren = Geuren.aantal(p);

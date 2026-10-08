@@ -138,6 +138,14 @@ The generators for models, textures, sounds, structures, FTB quests and the wiki
 `pip install -r tools/requirements-wiki.txt`). Run them from the project root. The Blockbench model sources are in
 `blockbench/`.
 
+### Your own tune on Sniff Island
+
+The tune of the music disc *Het Snuffeleiland* (also heard very softly in the Guhstation's window) is the mod's own
+composition: `tools/features/snuffel_geluid.py` writes it as notes and synthesizes it. It is one sound event,
+`guhs:music_disc.snuffeleiland`, with one file. To hear other audio on your own machine, make a resource pack with your
+OGG Vorbis file at `assets/guhs/sounds/music_disc_snuffeleiland.ogg` (plus the usual `pack.mcmeta`) and switch it on:
+the standard Minecraft resource pack override, nothing in the mod changes.
+
 ## Credits
 
 - **Guh model:** Lieke (the original Blockbench guh).

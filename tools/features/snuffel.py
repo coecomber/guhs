@@ -11,6 +11,8 @@ Het Snuffeleiland, the KERN (DESIGN_VERHALENPAD C). Java: feature/snuffel.
   - data/guhs/snuffel/eiland.json + template guhs:snuffel/eiland: the small test island of snuffel_bouw.py (the island
     slice writes both again), and the game tests' floor snuffel_test_eiland;
   - block guhstation, items snuffel_geheugenkaart and snuffel_bloesemtakje (snuffel_tex.py);
+  - the island tune: the music disc music_disc_snuffeleiland, its jukebox song and its ONE sound event
+    guhs:music_disc.snuffeleiland (the OGG itself: snuffel_geluid.py; also heard very softly in the Guhstation's window);
   - the sounds (vanilla and guh sounds, pitched), the texts, the questline "snuffeleiland" (nine steps: the frame that the
     dock and the village slices fill in), its hidden advancements and its FTB quests.
 
@@ -196,7 +198,7 @@ def eiland(h):
 
 
 # =====================================================================================================================
-# sounds (vanilla and guh sounds, pitched; no new sound files, no music)
+# sounds (vanilla and guh sounds, pitched; no new sound files) and the island tune (our own, snuffel_geluid.py)
 # =====================================================================================================================
 SOUNDS = {
     "snuffel.snuf": [{"name": "minecraft:entity.fox.sniff", "type": "event", "pitch": 1.25, "volume": 0.8}],
@@ -223,11 +225,29 @@ SUBTITLES = {
 }
 
 
+# The island tune: ONE sound event with ONE file (assets/guhs/sounds/music_disc_snuffeleiland.ogg), so a resource pack
+# replaces it with a single OGG. Streamed, no subtitle, like the vanilla records.
+PLAAT = "snuffeleiland"                               # the jukebox song; the item is music_disc_<PLAAT>
+PLAAT_GELUID = f"music_disc.{PLAAT}"
+PLAAT_SECONDEN = 75                                   # snuffel_geluid.py: 36 bars at 116 BPM = 74.5 s
+PLAAT_COMPARATOR = 10
+
+
 def sounds(h):
     def patch(d):
         for event, entries in SOUNDS.items():
             d[event] = {"sounds": entries, "subtitle": f"subtitles.guhs.{event}"}
+        d[PLAAT_GELUID] = {"sounds": [{"name": f"guhs:music_disc_{PLAAT}", "stream": True}]}
     h.patch_json(f"{h.A}/sounds.json", patch)
+
+
+def plaat(h):
+    """The music disc of the island: its jukebox song (the texture and the item model: snuffel_tex.py)."""
+    h.w(f"{h.D}/jukebox_song/{PLAAT}.json", {"sound_event": f"guhs:{PLAAT_GELUID}", "description": {"translate": f"jukebox_song.guhs.{PLAAT}"},
+                                              "length_in_seconds": float(PLAAT_SECONDEN), "comparator_output": PLAAT_COMPARATOR})
+    h.add_tag("c/tags/item/music_discs", [f"guhs:music_disc_{PLAAT}"])
+    # the Disco-dynamo counts it as a rare disc
+    h.add_tag("guhs/tags/item/techbron/zeldzame_plaat", [f"guhs:music_disc_{PLAAT}"])
 
 
 # =====================================================================================================================
@@ -240,6 +260,9 @@ LANG = {
     "block.guhs.guhstation": "Guhstation",
     "block.guhs.guhstation.lore": "Een grijszwart spelkastje met een guh-snoet erop. Het ruikt een beetje naar zeelucht en natte hond",
     "block.guhs.guhstation.tooltip": "Zet het neer en klik erop: zo ga je terug naar het Snuffeleiland",
+    "item.guhs.music_disc_snuffeleiland": "Muziekplaat: Het Snuffeleiland",
+    "item.guhs.music_disc_snuffeleiland.lore": "Het deuntje van het eiland. Kapitein Zoutsnoet draaide het elke dag op zijn boot",
+    "jukebox_song.guhs.snuffeleiland": "Guh - Pootjes in het zand",
     "item.guhs.snuffel_geheugenkaart": "Geheugenkaart",
     "item.guhs.snuffel_geheugenkaart.lore": "Hier staat alles op wat je neus heeft geleerd. Een hond raakt hem nooit kwijt",
     "item.guhs.snuffel_geheugenkaart.tooltip": "Gebruik hem om op te slaan en naar huis te gaan",
@@ -440,7 +463,8 @@ FTB_STAPPEN = [  # (titel, tekst, icon) for the steps 1..9 (quest "snuffel_snuff
     ("Het snuffelexamen", "Tijd voor je examen bij Meester Truffelneus. Zakken bestaat niet: je neus mag er zo lang over doen als hij "
      "wil. Dan ben je een echte &6Snuffelpup&r (rang 1 van 5).", "minecraft:writable_book"),
     ("Een spoor van papa", "Bij het boompje ruik je iets bekends... papa is hier geweest! Het lost nog niets op, maar je weet nu waar je "
-     "moet zoeken. Je krijgt het &8Guhstation&r: daarmee ga je terug naar het eiland wanneer je wilt. Wordt vervolgd, njeg!", "guhs:guhstation"),
+     "moet zoeken. Je krijgt het &8Guhstation&r: daarmee ga je terug naar het eiland wanneer je wilt. En de &bmuziekplaat&r van het eiland, "
+     "voor in je jukebox. Wordt vervolgd, njeg!", "guhs:guhstation"),
 ]
 
 
@@ -552,16 +576,29 @@ def selfcheck(h, json_uit, texturen, rassen, bewoners, data):
                                       "dimension/snuffeleiland.json", "dimension_type/snuffeleiland.json", "worldgen/biome/snuffeleiland.json",
                                       "advancement/quest/snuffeleiland_stap_9.json", "loot_table/blocks/guhstation.json")]
               + [f"{h.A}/{f}" for f in ("blockstates/guhstation.json", "models/block/guhstation.json", "models/item/guhstation.json",
-                                        "models/item/snuffel_geheugenkaart.json", "models/item/snuffel_bloesemtakje.json")]
+                                        "models/item/snuffel_geheugenkaart.json", "models/item/snuffel_bloesemtakje.json",
+                                        f"models/item/music_disc_{PLAAT}.json", f"sounds/music_disc_{PLAAT}.ogg")]
+              + [f"{h.D}/jukebox_song/{PLAAT}.json"]
               + [os.path.join(h.TEX, *f) for f in (("block", "guhstation_boven.png"), ("block", "guhstation_voor.png"), ("block", "guhstation_zij.png"),
                                                    ("item", "snuffel_geheugenkaart.png"), ("item", "snuffel_bloesemtakje.png"),
+                                                   ("item", f"music_disc_{PLAAT}.png"),
                                                    ("gui", "snuffel", "guhstation_logo.png"))]):
         if not os.path.exists(p):
             problems.append(f"missing file {p}")
     geluiden = json.load(open(f"{h.A}/sounds.json", encoding="utf-8"))
-    for e in SOUNDS:
+    for e in list(SOUNDS) + [PLAAT_GELUID]:
         if e not in geluiden:
             problems.append(f"sounds.json misses {e}")
+    # the tune is ONE event with ONE file (a resource pack replaces exactly that), and Java names the same event
+    if geluiden.get(PLAAT_GELUID) != {"sounds": [{"name": f"guhs:music_disc_{PLAAT}", "stream": True}]}:
+        problems.append(f"sounds.json: {PLAAT_GELUID} is not one streamed file")
+    feature = open(os.path.join(JAVA, "SnuffelFeature.java"), encoding="utf-8").read()
+    for stuk in (f'"{PLAAT_GELUID}"', f'"music_disc_{PLAAT}"', f'Guhs.id("{PLAAT}")'):
+        if stuk not in feature:
+            problems.append(f"SnuffelFeature.java does not name {stuk}")
+    for key in (f"item.guhs.music_disc_{PLAAT}", f"item.guhs.music_disc_{PLAAT}.lore", f"jukebox_song.guhs.{PLAAT}"):
+        if key not in h.NL:
+            problems.append(f"missing lang {key}")
     if problems:
         raise SystemExit("snuffel self-check failed:\n  " + "\n  ".join(problems))
 
@@ -573,6 +610,7 @@ def build(h):
     data = eiland(h)
     tex.build(h)
     sounds(h)
+    plaat(h)
     texts(h)
     tags(h)
     selfcheck(h, json_uit, texturen, rassen, bewoners, data)

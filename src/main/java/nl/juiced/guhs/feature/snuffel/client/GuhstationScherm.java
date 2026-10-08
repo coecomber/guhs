@@ -29,7 +29,8 @@ import org.lwjgl.glfw.GLFW;
  * little brother or sister run in from the sides and play: they greet each other wagging, the puppy dashes off and back,
  * your dog barks, sniffs, the puppy sits. Under them "Druk op start" blinks (click it, or Enter / Space): off to the last
  * spot you stood on the island. Below the white: your sniffing rank and your number of scents, small; and the button "Nee
- * ik wil even niet snuffelen, njeg" that closes the window.
+ * ik wil even niet snuffelen, njeg" that closes the window. While the window is open the island tune plays very softly
+ * ({@link GuhstationMuziek}).
  */
 public final class GuhstationScherm extends Screen {
     private static final int W = 244, H = 196, VELD_W = 220, VELD_H = 112;
@@ -61,6 +62,13 @@ public final class GuhstationScherm extends Screen {
         top = (height - H) / 2;
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.snuffel.guhstation.nee"), b -> onClose()).bounds(left + 12, top + H - 28, W - 24, 20)
                 .build());
+        GuhstationMuziek.aan();
+    }
+
+    @Override
+    public void removed() {
+        GuhstationMuziek.uit();
+        super.removed();
     }
 
     private int veldX() {

@@ -944,14 +944,25 @@ public class SnuffelGameTests {
         // the end of the first series, as a dog: the story is done, the gifts travel home
         Reis.naarEiland(p, t.plaats, Reis.Aankomst.STRAND);
         helper.assertTrue(Snuffel.rondAf(p) && lijn.klaar(p) && Snuffel.klaar(p), "the first series is finished: this is what the Guhpad asks");
-        helper.assertTrue(alleenKaart(p) && SnuffelKluis.postAantal(p) == 2, "a dog's pockets stay empty: the Guhstation and the twig are in the post");
-        helper.assertTrue(!Snuffel.rondAf(p) && SnuffelKluis.postAantal(p) == 2, "finishing again gives nothing more");
+        helper.assertTrue(alleenKaart(p) && SnuffelKluis.postAantal(p) == 3 && Snuffel.heeftPlaatGehad(p),
+                "a dog's pockets stay empty: the Guhstation, the music disc and the twig are in the post");
+        helper.assertTrue(!Snuffel.rondAf(p) && !Snuffel.geefPlaat(p) && SnuffelKluis.postAantal(p) == 3, "finishing again gives nothing more");
         Reis.naarHuis(p);
         Inventory inv = p.getInventory();
-        helper.assertTrue(inv.countItem(SnuffelFeature.GUHSTATION_ITEM.get()) == 1 && inv.countItem(SnuffelFeature.SNUFFEL_BLOESEMTAKJE.get()) == 1,
-                "at home: one Guhstation and the blossom twig");
-        helper.assertTrue(lijn.stand(p).klaar() && lijn.stand(p).beloningen().get(0).binnen() && lijn.stand(p).beloningen().get(1).binnen(),
-                "the Guhdex ticks both gifts");
+        helper.assertTrue(inv.countItem(SnuffelFeature.GUHSTATION_ITEM.get()) == 1 && inv.countItem(SnuffelFeature.SNUFFEL_BLOESEMTAKJE.get()) == 1
+                && inv.countItem(SnuffelFeature.MUZIEKPLAAT.get()) == 1, "at home: one Guhstation, one music disc and the blossom twig");
+        var gaven = lijn.stand(p).beloningen();
+        helper.assertTrue(lijn.stand(p).klaar() && gaven.get(0).binnen() && gaven.get(1).binnen() && gaven.get(2).binnen()
+                && "guhs:music_disc_snuffeleiland".equals(gaven.get(1).item()), "the Guhdex ticks the three gifts, the disc next to the Guhstation");
+        helper.assertTrue(lijn.stand(q).beloningen().stream().noneMatch(b -> b.binnen()), "nothing ticked for somebody else");
+        // the disc is a real music disc of the Disco-dynamo's rare kind
+        ItemStack plaat = new ItemStack(SnuffelFeature.MUZIEKPLAAT.get());
+        helper.assertTrue(plaat.has(net.minecraft.core.component.DataComponents.JUKEBOX_PLAYABLE)
+                && plaat.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, nl.juiced.guhs.Guhs.id("techbron/zeldzame_plaat")))
+                && helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.JUKEBOX_SONG)
+                        .getOptional(nl.juiced.guhs.Guhs.id("snuffeleiland"))
+                        .filter(s -> s.soundEvent().value() == SnuffelFeature.MUZIEK.get() && s.lengthInSeconds() >= 60f).isPresent(),
+                "the disc plays the island tune in a jukebox and counts as a rare disc");
         helper.assertTrue(Snuffel.geefGuhstation(p, true) && inv.countItem(SnuffelFeature.GUHSTATION_ITEM.get()) == 2, "a lost Guhstation can be given again");
         helper.assertTrue(!lijn.klaar(q) && !Snuffel.heeftGuhstationGehad(q) && lijn.stap(q) == 0, "everything per player");
         // a player at home gets things at once

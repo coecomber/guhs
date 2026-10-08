@@ -102,7 +102,8 @@ def ftb(fq):
          "minecraft:red_wool", [fq.adv("snuffel_dorp_versperring")], rewards=klein, deps=["snuffel_snuffeleiland_5"])
     fq.q("snuffel_dorp_guhstation", "Het Guhstation",
          "Je maatje had nog iets in zijn verstopplek: een &8Guhstation&r. Zet het thuis neer, klik erop en druk op start: je staat weer op het "
-         "eiland, op de plek waar je was. Kwijt? &6Kapitein Zoutsnoet&r in de haven heeft er nog een paar.",
+         "eiland, op de plek waar je was. Kwijt? &6Kapitein Zoutsnoet&r in de haven heeft er nog een paar. Van hem krijg je ook de "
+         "&bmuziekplaat&r van het eiland: het deuntje dat je zachtjes hoort als het schermpje van het Guhstation open is.",
          "guhs:guhstation", [fq.adv("snuffel_guhstation")], rewards=klein, deps=["snuffel_snuffeleiland_9"])
 
 

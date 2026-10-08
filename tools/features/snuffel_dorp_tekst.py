@@ -154,6 +154,9 @@ GESPREKKEN = {
     "kapitein.vraag_klaar": ["Ahoi, snuffelpup! Naar huis varen? Met je Guhstation kom je terug wanneer je wilt. Ben je dat kastje kwijt? Zeg het "
                              "gerust, ik heb er nog een paar in het ruim."],
     "kapitein.station": ["Kapitein Zoutsnoet schuift je een nieuw Guhstation toe. Het gaat met je mee naar huis, njeg."],
+    # (the island's music disc, for whoever finished the story before the disc existed: a line in the chat, once)
+    "kapitein.plaat": ["Kapitein Zoutsnoet: Wacht eens, snuffelpup! Deze muziekplaat is voor jou. Ik draai hem al jaren op mijn boot en de "
+                       "meeuwen zijn er helemaal klaar mee. Thuis in de jukebox ermee, njeg!"],
 }
 
 SCENES = {
@@ -201,6 +204,8 @@ LANG = {
     G + "einde.1": "Een spoor van papa! Het loopt verder het eiland op, voorbij de wegversperring. Daar mag je pas door als Snuffelneus.",
     G + "einde.2": "%s: O ja, dit lag ook nog in mijn verstopplek. Een grijszwart kastje met een guh-snoet erop: een Guhstation! Zet het thuis neer "
                    "en je bent zo weer bij mij.",
+    G + "einde.plaat": "%s: En deze muziekplaat moest ik je geven van Kapitein Zoutsnoet. Hij draait hem al jaren op zijn boot en de meeuwen "
+                       "zijn er helemaal klaar mee. Thuis in de jukebox ermee, njeg!",
     G + "einde.3": "Het eerste verhaal van het Snuffeleiland is klaar. Je bent een echte Snuffelpup! Wordt vervolgd, njeg.",
     G + "doel.strandpoort": "Het strandpoortje van Snuffeldorp",
     G + "doel.dokter": "De praktijk van Dokter Pleisterpoot",

@@ -4,6 +4,8 @@ logo: three 16 x 16 faces and a block model of two boxes), the memory card, the 
 the Guhstation's window. The dogs, the companions and the tree are NOT here: those are the approved models of
 snuffel_modellen.py.
 """
+import math
+
 import numpy as np
 from PIL import Image
 
@@ -172,7 +174,32 @@ PAL = {"k": (30, 30, 36, 255), "g": (74, 76, 88, 255), "G": (110, 112, 126, 255)
        "r": (246, 160, 196, 255), "R": (226, 110, 160, 255)}
 
 
+def muziekplaat():
+    """The island's music disc: black vinyl, a sea-green label with a sandy paw print."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            d = math.hypot(x - 7.5, y - 7.5)
+            if d <= 7.6:
+                px[x, y] = (30, 26, 34, 255) if int(d) % 2 else (48, 42, 54, 255)
+            if d <= 3.6:
+                px[x, y] = (64, 176, 170, 255)
+    zand, zand_donker = (246, 226, 160, 255), (214, 186, 116, 255)
+    for x, y in ((6, 6), (8, 5), (9, 6)):                                # three toes
+        px[x, y] = zand
+    for x, y in ((7, 8), (8, 8), (7, 9), (8, 9)):                        # the pad
+        px[x, y] = zand
+    px[8, 9] = zand_donker
+    px[7, 7] = zand
+    px[3, 4] = px[4, 3] = (110, 100, 120, 255)                           # shine on the vinyl
+    px[11, 12] = px[12, 11] = (120, 200, 196, 255)                       # a glint of the sea
+    return img
+
+
 def build(h):
+    h.save(muziekplaat(), "item", "music_disc_snuffeleiland.png")
+    h.item_model("music_disc_snuffeleiland")
     h.save(guhstation_boven(), "block", "guhstation_boven.png")
     h.save(guhstation_voor(), "block", "guhstation_voor.png")
     h.save(guhstation_zij(), "block", "guhstation_zij.png")

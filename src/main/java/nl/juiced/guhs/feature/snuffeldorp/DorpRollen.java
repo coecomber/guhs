@@ -29,7 +29,8 @@ import nl.juiced.guhs.feature.verhaal.Verhaallijn;
  *   <li>{@code bakker}, {@code visser}, {@code juf}, {@code oma}, {@code tuinder}, {@code pup}: each lost something
  *   ({@link Dorp#KLUSSEN}): ask, find, bring back = a good deed;</li>
  *   <li>{@code havenkapitein} Kapitein Zoutsnoet at his boat: sails you home (the scene {@link DorpScenes#AFVAART}), and
- *   gives a new Guhstation to whoever finished the story and lost theirs. (His key is not {@code kapitein}: that is the
+ *   gives a new Guhstation to whoever finished the story and lost theirs, and the island's music disc (once) to whoever
+ *   finished it before the disc existed. (His key is not {@code kapitein}: that is the
  *   captain at a dock in the Guhmensie, the dock slice's.)</li>
  * </ul>
  * The texts: tools/features/snuffel_dorp_tekst.py. The resident is the same dog for everybody; what it says depends on the
@@ -179,6 +180,10 @@ public final class DorpRollen {
     // --- Kapitein Zoutsnoet -----------------------------------------------------------------------------------------------------
 
     static void kapitein(BewonerEntity npc, ServerPlayer p) {
+        // the island's music disc: at the end of the story it comes with the Guhstation; whoever had finished already gets it here
+        if (Snuffel.klaar(p) && Snuffel.geefPlaat(p)) {
+            p.sendSystemMessage(Component.translatable(Gesprek.key("kapitein.plaat", 0)).withStyle(ChatFormatting.AQUA));
+        }
         if (!Hondvorm.actief(p)) {
             Bewoners.kapitein(npc, p);
         } else if (Snuffel.klaar(p)) {
