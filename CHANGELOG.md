@@ -15,6 +15,8 @@ Quality of life, small changes and bug fixes for the Guh Path update. Same requi
 - **Master Trufflenose now explains clearly how digging works:** just hold down your left mouse button (as a dog you do not break the block, you dig).
 - **Fewer angry Mikas in the open Guhbarbecuether.** About half as many Nether Mikas, Spark Mikas and Skelly Mikas walk around in the open biomes (about 35 around you instead of 70), and the Skelly Mika of the Ash Vale became a little rarer still. The Skewer Keep and the Mika Grill Palace stay as busy as they were.
 - **Ash Guhs really live in the Ash Vale now:** about six around you. They were almost never born because it was too dark for them there. Wild Ash Guhs come and go (tamed ones stay, of course).
+- **Super Compass: the Tales tab is split per world, just like in the Guhdex** (Guhmension, Guhbarbecuether, Guh End, The Real Guh End), with locks. All the new stories are listed on their own: Sniff Island, every place of the Nibble Ring (what you have not reached yet stays "???") and Super Guhrio's castle.
+- **New: the music disc "Sniff Island"** with a cheerful island tune of its own. You get it together with the Guhstation (had you already finished the story? Then talk to Captain Saltsnout), and you hear the tune very softly while the Guhstation's little screen is open.
 
 ## 1.4.0 — the Guh Path update — Minecraft 26.1.2
 
