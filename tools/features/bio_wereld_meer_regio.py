@@ -28,7 +28,10 @@ KLEUR = {"minecraft:sand": (228, 214, 166), "minecraft:pink_wool": (242, 160, 19
          "minecraft:cyan_wool": (30, 140, 148), "minecraft:cyan_concrete": (21, 119, 136), "guhs:guhbloesem_leaves": (236, 128, 184),
          "guhs:guhbloesem_log": (112, 72, 84), "guhs:drijvende_bloesemblaadjes": (255, 222, 236), "guhs:guh_waterlelie": (240, 120, 170),
          "guhs:bloesemmeertje_riet": (206, 190, 150), "minecraft:seagrass": (60, 150, 110), "guhs:kaaskoraal": (240, 200, 80),
-         "guhs:reuzenschelp": (250, 240, 250)}
+         "guhs:reuzenschelp": (250, 240, 250),
+         # biomes3 fix-klein: the lake's own sediment (MeerBodem)
+         "guhs:bloesemmeertje_meerzand": (228, 226, 206), "guhs:bloesemmeertje_meerslib_licht": (145, 206, 205),
+         "guhs:bloesemmeertje_meerslib": (80, 166, 173), "guhs:bloesemmeertje_meerslib_diep": (36, 123, 140)}
 
 
 def onder_water(bed, diepte):

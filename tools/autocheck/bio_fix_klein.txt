@@ -1,0 +1,53 @@
+# biomes3 fix-klein in a real generated world: the lake bed's own blocks through real water, the meertegels, the soft landing.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_fix_klein.txt -PautocheckTimeout=30
+# Look at: the bed going from sand over pale meerzand to blue-green meerslib without contour lines and without the weave
+# of wool; the dug hole (meerslib in the bag, not wool); the tiles as a floor beside white and birch; after the drop of
+# 100 blocks a puff of cloud and full health.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section de bodem door het water
+tpbiome guhs:guhmension guhs:bloesemmeertje
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~30 ~
+look 45 70
+waitrender 300
+hier
+shot bodem_boven
+/execute in guhs:guhmension run tp @s 240 60 560
+look 45 60
+waitrender 300
+shot bodem_groot_meer
+/execute in guhs:guhmension run tp @s 240 44 560
+look 45 20
+waitrender 200
+shot bodem_onder_water
+
+section de blokken in de hand en als vloer
+/execute in guhs:guhmension run tp @s 0 200 0
+/fill ~2 ~-1 ~2 ~10 ~-1 ~8 guhs:bloesemmeertje_meertegels
+/fill ~2 ~ ~8 ~10 ~3 ~8 minecraft:smooth_quartz
+/fill ~2 ~ ~7 ~10 ~ ~7 guhs:bloesemmeertje_meertegels_trap[facing=south]
+/fill ~11 ~-1 ~2 ~11 ~-1 ~8 minecraft:birch_planks
+/setblock ~3 ~ ~3 minecraft:sand
+/setblock ~4 ~ ~3 guhs:bloesemmeertje_meerzand
+/setblock ~5 ~ ~3 guhs:bloesemmeertje_meerslib_licht
+/setblock ~6 ~ ~3 guhs:bloesemmeertje_meerslib
+/setblock ~7 ~ ~3 guhs:bloesemmeertje_meerslib_diep
+/setblock ~8 ~ ~3 guhs:bloesemmeertje_meertegels_plaat
+/tp @s ~6 ~3 ~-2
+look 0 30
+waitrender 200
+shot blokken_rij
+
+section zacht landen in de Wolkenweide
+tpbiome guhs:guhmension guhs:wolkenweide
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~100 ~
+/gamemode survival
+wait 140
+hier
+shot na_de_val
+/gamemode creative
