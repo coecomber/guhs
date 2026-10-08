@@ -55,8 +55,9 @@ import nl.juiced.guhs.feature.verhaal.NpcRollen;
  * <ul>
  *   <li>{@code inspecteer <structuur> <aantal>}: finds that many different ones of the structure (from 0 0 outwards),
  *       generates the chunks of each, and compares the world with the template block by block: template blocks that
- *       are not there ("anders"), blocks inside the building's box that are not the template's ("vreemd": a natural
- *       island, cloud or older terrain that reaches in), water outside the template's water ("lek") and template water
+ *       are not there ("anders"), blocks inside the building's box, more than 6 above the meadow, that are not the
+ *       template's ("vreemd": a hill of older terrain, a natural island or cloud in the box) and how many of those lie
+ *       within two blocks of the building itself ("raakt": it really touches), water outside the template's water ("lek") and template water
  *       that is gone ("droog"), the NPCs, herd schaapjes and balloons present, the lift pads against the real meadow.
  *       It also gives every water block of the template a fluid tick and keeps the chunks loaded, so a second
  *       {@code inspecteer} a while later shows whether the water stayed where it was written;</li>
@@ -103,16 +104,22 @@ public final class BouwWolk1Commando {
             return uit;
         }
         List<BlockPos> van = new ArrayList<>(List.of(BlockPos.ZERO));
+        for (int ring = 1; ring <= 2; ring++) {                  // (other Wolkenweides: a coarse grid of places to look from)
+            for (int gx = -ring; gx <= ring; gx++) {
+                for (int gz = -ring; gz <= ring; gz++) {
+                    if (Math.max(Math.abs(gx), Math.abs(gz)) == ring) {
+                        van.add(new BlockPos(gx * 1600, 0, gz * 1600));
+                    }
+                }
+            }
+        }
         Set<Long> gezien = new HashSet<>();
-        for (int i = 0; i < van.size() && uit.size() < aantal && i < 40; i++) {
+        for (int i = 0; i < van.size() && uit.size() < aantal && i < 60; i++) {
             Pair<BlockPos, Holder<Structure>> p = level.getChunkSource().getGenerator().findNearestMapStructure(level, HolderSet.direct(holder), van.get(i), 100, false);
             if (p == null) {
                 continue;
             }
             BlockPos pos = p.getFirst();
-            for (int[] d : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, -1}}) {
-                van.add(pos.offset(d[0] * 700, 0, d[1] * 700));
-            }
             if (!gezien.add(net.minecraft.world.level.ChunkPos.pack(pos))) {
                 continue;
             }
@@ -194,7 +201,7 @@ public final class BouwWolk1Commando {
 
     /** One line: what the world has of this building. Every water block of the template also gets a fluid tick. */
     static String rapport(ServerLevel level, Gevonden g, int nr) {
-        int anders = 0, voetGezet = 0, droog = 0, lek = 0, vreemd = 0, water = 0;
+        int anders = 0, voetGezet = 0, droog = 0, lek = 0, vreemd = 0, raakt = 0, vreemdTop = Integer.MIN_VALUE, water = 0;
         List<String> voorbeelden = new ArrayList<>();
         for (Map.Entry<BlockPos, String> e : g.blokken().entrySet()) {
             BlockState echt = level.getBlockState(e.getKey());
@@ -237,8 +244,22 @@ public final class BouwWolk1Commando {
                         }
                     } else if (y > voetTop + 6) {            // (below that the meadow itself lies in the box)
                         vreemd++;
-                        if (vreemde.size() < 4) {
-                            vreemde.add(id(echt) + " at " + p.toShortString());
+                        vreemdTop = Math.max(vreemdTop, y);
+                        // does it touch the building (a template block within two blocks)?
+                        boolean dichtbij = false;
+                        for (int a = -2; a <= 2 && !dichtbij; a++) {
+                            for (int b = -2; b <= 2 && !dichtbij; b++) {
+                                for (int c = -2; c <= 2 && !dichtbij; c++) {
+                                    BlockPos q = new BlockPos(x + a, y + b, z + c);
+                                    dichtbij = g.blokken().containsKey(q) && !g.voet().contains(q) && !g.blokken().get(q).startsWith("guhs:wolken");
+                                }
+                            }
+                        }
+                        if (dichtbij) {
+                            raakt++;
+                            if (vreemde.size() < 4) {
+                                vreemde.add(id(echt) + " at " + p.toShortString());
+                            }
                         }
                     }
                 }
@@ -274,8 +295,20 @@ public final class BouwWolk1Commando {
         }
         return g.naam() + " #" + nr + " anchor " + g.anker().toShortString() + " box " + box.minX() + " " + box.minY() + " " + box.minZ() + " .. " + box.maxX() + " "
                 + box.maxY() + " " + box.maxZ() + ": template " + (g.blokken().size() - g.voet().size()) + " blocks, anders " + anders + ", vreemd " + vreemd
+                + (vreemd > 0 ? " (up to y " + vreemdTop + ", island bottom y " + eilandBodem(g) + ")" : "") + " raakt " + raakt
                 + ", water " + water + " droog " + droog + " lek " + lek + ", feet " + voetGezet + " of " + g.voet().size() + " placed;" + pads + " entities "
                 + new java.util.TreeMap<>(wezens) + (voorbeelden.isEmpty() ? "" : " | anders: " + voorbeelden) + (vreemde.isEmpty() ? "" : " | vreemd/lek: " + vreemde);
+    }
+
+    /** The lowest block of the building itself (not a lift column, not a cloud foot). */
+    private static int eilandBodem(Gevonden g) {
+        int laag = Integer.MAX_VALUE;
+        for (Map.Entry<BlockPos, String> e : g.blokken().entrySet()) {
+            if (!g.voet().contains(e.getKey()) && !e.getValue().startsWith("guhs:wolken")) {
+                laag = Math.min(laag, e.getKey().getY());
+            }
+        }
+        return laag;
     }
 
     /** The y of the highest block one can stand on in this column at or below {@code vanaf} (the top of the ground or of a foot). */
