@@ -7,6 +7,7 @@ public final class WereldClient {
     public static void init(IEventBus modBus) {
         MeerClient.init(modBus); // biomes3 wereld-meer
         DalSfeer.init(modBus); // biomes3 wereld-dal
+        WolkClient.init(modBus); // biomes3 wereld-wolk
     }
 
     private WereldClient() {

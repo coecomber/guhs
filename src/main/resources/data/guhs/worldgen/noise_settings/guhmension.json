@@ -4361,54 +4361,424 @@
           ]
         },
         "then_run": {
-          "type": "minecraft:condition",
-          "if_true": {
-            "type": "minecraft:y_above",
-            "anchor": {
-              "absolute": 77
-            },
-            "surface_depth_multiplier": 0,
-            "add_stone_depth": false
-          },
-          "then_run": {
-            "type": "minecraft:condition",
-            "if_true": {
-              "type": "minecraft:not",
-              "invert": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
                 "type": "minecraft:stone_depth",
                 "offset": 0,
                 "add_surface_depth": false,
                 "secondary_depth_range": 0,
                 "surface_type": "floor"
+              },
+              "then_run": {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "guhs:wolkenweide_gras"
+                }
               }
             },
-            "then_run": {
-              "type": "minecraft:sequence",
-              "sequence": [
-                {
-                  "type": "minecraft:condition",
-                  "if_true": {
-                    "type": "minecraft:noise_threshold",
-                    "noise": "guhs:klaterdal_detail",
-                    "min_threshold": 0.15,
-                    "max_threshold": 10.0
-                  },
-                  "then_run": {
-                    "type": "minecraft:block",
-                    "result_state": {
-                      "Name": "guhs:knuffelsteen"
-                    }
-                  }
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:y_above",
+                "anchor": {
+                  "absolute": 74
                 },
-                {
-                  "type": "minecraft:block",
-                  "result_state": {
-                    "Name": "minecraft:pink_terracotta"
+                "surface_depth_multiplier": 0,
+                "add_stone_depth": false
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:noise_threshold",
+                      "noise": "guhs:klaterdal_detail",
+                      "min_threshold": 0.12,
+                      "max_threshold": 10.0
+                    },
+                    "then_run": {
+                      "type": "minecraft:sequence",
+                      "sequence": [
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 3,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 4,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_blauw"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 7,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_lila"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 8,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:parelmoer"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 11,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 13,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_blauw"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 17,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_lila"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 18,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:parelmoer"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 22,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 24,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_blauw"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:stone_depth",
+                            "offset": 29,
+                            "add_surface_depth": false,
+                            "secondary_depth_range": 0,
+                            "surface_type": "floor"
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "guhs:wolkenweide_steen_lila"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "sequence": [
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 2,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 3,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_blauw"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 6,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_lila"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 7,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:parelmoer"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 10,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 12,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_blauw"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 16,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_lila"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 17,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:parelmoer"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 21,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 23,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_blauw"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:stone_depth",
+                          "offset": 28,
+                          "add_surface_depth": false,
+                          "secondary_depth_range": 0,
+                          "surface_type": "floor"
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "guhs:wolkenweide_steen_lila"
+                          }
+                        }
+                      },
+                      {
+                        "type": "minecraft:block",
+                        "result_state": {
+                          "Name": "guhs:wolkenweide_steen"
+                        }
+                      }
+                    ]
                   }
-                }
-              ]
+                ]
+              }
             }
-          }
+          ]
         }
       }
     ]
