@@ -104,7 +104,7 @@ PAGINA = {
     "verhalen/tolwachter": (
         "The Toll Bridge of the Mika Bridge Palace",
         "The Mika Bridge Palace is a toll bridge high above the sauce: you walk in through the mouth of a gigantic Mika. The Toll Keeper "
-        "Mika only lets you through when you pay 8 kaasknabbels or solve three riddles. After that you put the five rows of planks back in "
+        "Mika only lets you through when you solve three of his riddles (he does not take kaasknabbels). After that you put the five rows of planks back in "
         "the gap in the bridge and ring the toll bell. From then on you may always pass for free, and you get the blueprint of the bridge."),
     "verhalen/sausloper": (
         "The Sauce Strider Stable",

@@ -28,7 +28,7 @@ _GEBOUWEN = [
      ("calm and feed the Sausage Piglets and catch the one that escaped", "kalmeer en voer de Worstzwijntjes en vang de ontsnapte"),
      ("two Sausage Piglets for your own farm", "twee Worstzwijntjes voor je eigen boerderij")),
     (("Mika Bridge Palace", "Mika-brugpaleis"), ("Toll Keeper Mika", "Tolwachter-Mika"),
-     ("three riddles or pay the toll, then mend the bridge", "drie raadsels of tol betalen, en dan de brug maken"),
+     ("guess three riddles, then mend the bridge", "drie raadsels raden, en dan de brug maken"),
      ("free passage and the blueprint of the bridge", "vrije doorgang en de bouwtekening van de brug")),
     (("Fossil Dig", "Fossiel-opgraving"), ("Archaeologist Guh", "Archeoloog-guh"),
      ("dust five bones free and put the skeleton together", "kwast vijf botten los en zet het skelet in elkaar"),

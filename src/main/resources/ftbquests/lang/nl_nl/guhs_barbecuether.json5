@@ -219,9 +219,9 @@
   "quest.47554806AFF8F02D.quest_desc": [
     "In de bek zit de &cTolwachter-Mika&r. Praat met hem.",
   ],
-  "quest.47554857146896BE.title": "Knabbels of raadsels",
+  "quest.47554857146896BE.title": "Raadsels, geen knabbels",
   "quest.47554857146896BE.quest_desc": [
-    "Betaal &68 kaasknabbels&r tol, of raad &ddrie raadsels&r goed. Fout geraden? Dan krijg je gewoon een ander raadsel.",
+    "De tol is hier geen knabbel maar een raadsel: raad &ddrie raadsels&r goed. Fout geraden? Dan krijg je gewoon een ander raadsel.",
   ],
   "quest.47554829770D6716.title": "Mika-kwaliteit",
   "quest.47554829770D6716.quest_desc": [
@@ -237,7 +237,7 @@
   ],
   "quest.47554836074C3471.title": "Raadselkoning",
   "quest.47554836074C3471.quest_desc": [
-    "Raad drie raadsels van de Tolwachter-Mika goed (in plaats van tol te betalen). Njeg njeg njeg!",
+    "Raad drie raadsels van de Tolwachter-Mika goed. Hij had liever knabbels gehad. Njeg njeg njeg!",
   ],
   "quest.47554835793D89AE.title": "Je eigen Mika-brug",
   "quest.47554835793D89AE.quest_desc": [

@@ -23,7 +23,7 @@ WIKI = {
         wereld.wiki_questlijn(
             "tolwachter", "De tolbrug van het Mika-brugpaleis",
             "Het Mika-brugpaleis is een tolbrug hoog boven de saus: je loopt er binnen door de bek van een reusachtige Mika. De "
-            "Tolwachter-Mika laat je pas door als je 8 kaasknabbels betaalt of drie raadsels raadt. Daarna leg je de vijf rijen planken "
+            "Tolwachter-Mika laat je pas door als je drie van zijn raadsels raadt (knabbels neemt hij niet aan). Daarna leg je de vijf rijen planken "
             "terug in het gat van de brug en luid je de tolbel. Je mag voortaan altijd gratis door en krijgt de bouwtekening van de "
             "brug.", "mika_brugpaleis", ["tolwachter_mika"], [(BBQ, "paleizen_brugpaleis")], related=["verhalen/mika_oma", "verhalen/stalknecht"]),
     ]),
