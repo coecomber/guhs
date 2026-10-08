@@ -17,7 +17,9 @@ coordinates below: x east, y up, z south; G = the template y of that ground laye
 What the terrain guarantees, and what the templates do about it:
   - terras: flat dry ground 6 blocks around the anchor, so everything that must stand on ground stays within 13 x 13.
   - over_rivier: the river is at most 9 wide under the anchor, the banks one above the water. The bridge is 13 long and
-    lies ON the banks (nothing of it is in the ground layer), so it fits any width. The big torii's posts go 3 down.
+    lies ON the banks, so it fits any width; under each end is a stone abutment three deep (seen only where the bank
+    falls away further out: the first copy the dev server found hung in the air at one end). The big torii's posts go
+    3 down. Neither takes the place of water (the bridge through guhs:dal_water_blijft).
   - rots: only the anchor column itself is sure (the bank at the very top of the fall; the river is beside it, east or
     west, and the drop right in front, north). The tea house is a deck one above the ground that reaches back (south)
     onto the terrace, on a rock footing that tapers down; the processor list guhs:dal_water_blijft keeps every water
@@ -37,18 +39,25 @@ STEEN = "guhs:gladde_knuffelsteen"
 PLANK = "guhs:roze_lakhout_planken"
 STRUCTUREN = ["dal_torii", "dal_torii_water", "dal_lantaarns", "dal_boogbrug", "dal_theehuisje", "dal_zenhoek", "dal_staptreden", "weebhuisje"]
 YAW = {"south": 0.0, "west": 90.0, "north": 180.0, "east": -90.0}
-# structure sets: (kind of spot, spacing, separation, salt); the salts are 2150NN01, 2150NN11, ... with NN = 06
+# structure sets: (kind of spot, spacing, separation, salt); the salts are 2150NN01, 2150NN11, ... with NN = 06.
+# How often: a structure only starts in a chunk that HAS a spot of its kind, and those are few. Measured on seed 20261007
+# in the 81 x 81 chunks around the dal at 256 352 (/guhs bio bouw-dal tel 40): with spacing 7 / 5 / 6 / 4 / 2 / 9 / 4 / 13
+# the valley got 2 torii, 2 torii in the water, 4 lantern paths, 1 bridge, no tea house, 1 zen corner, 4 stairs and no
+# weebhuisje: about 1.5 % of the chunks a "terras" set tries have a terrace spot, 0.25 % of the "over_rivier" tries, 1 % of
+# the "waterval" tries. The numbers below aim at a valley of that size (about 1000 blocks across) with about 6 torii,
+# 3 torii in the water, 6 lantern paths, 3 zen corners, 4 bridges, 4 stairs, a tea house at every tall fall (most valleys
+# have none to two) and 1 to 2 weebhuisjes (none in about one valley in five: the Superkompas finds the nearest).
 PLAATSING = {
-    "dal_torii": ("terras", 11, 4, 21500601),
-    "dal_torii_water": ("over_rivier", 5, 2, 21500611),
-    "dal_lantaarns": ("terras", 10, 4, 21500621),
-    "dal_boogbrug": ("over_rivier", 4, 2, 21500631),
+    "dal_torii": ("terras", 4, 2, 21500601),
+    "dal_torii_water": ("over_rivier", 4, 2, 21500611),
+    "dal_lantaarns": ("terras", 4, 2, 21500621),
+    "dal_boogbrug": ("over_rivier", 2, 1, 21500631),
     "dal_theehuisje": ("rots", 1, 0, 21500641),
-    "dal_zenhoek": ("terras", 12, 5, 21500651),
-    "dal_staptreden": ("waterval", 3, 1, 21500661),
-    "weebhuisje": ("terras", 18, 9, 21500671),
+    "dal_zenhoek": ("terras", 6, 3, 21500651),
+    "dal_staptreden": ("waterval", 4, 2, 21500661),
+    "weebhuisje": ("terras", 8, 4, 21500671),
 }
-WATER_BLIJFT = ("dal_theehuisje",)
+WATER_BLIJFT = ("dal_theehuisje", "dal_boogbrug")
 
 
 def balk(as_="y"):
@@ -247,9 +256,9 @@ def dal_lantaarns(h, variant):
 # boogbrug
 # =====================================================================================================================
 def dal_boogbrug(h, variant):
-    G = 0
+    G = 2
     half = 6
-    b = Bouw(h, "dal_boogbrug", (2 * half + 1, 6, 4), (half, G, 1))
+    b = Bouw(h, "dal_boogbrug", (2 * half + 1, G + 6, 4), (half, G, 1))
     b.zet(half, G, 1, "minecraft:air")
     lak = "guhs:roze_lakhout"
     for dx in range(-half, half + 1):
@@ -262,6 +271,11 @@ def dal_boogbrug(h, variant):
                 b.zet(half + dx, G + qq // 2, z, plaat(lak, "top"))
             else:
                 b.zet(half + dx, G + 1 + (qq - 1) // 2, z, plaat(lak))
+    for x in (0, 1, 2 * half - 1, 2 * half):                       # a stone abutment under each end: where the bank is lower
+        for z in range(4):                                         # than the spot promised, the bridge still lands on something
+            for y in range(G - 2, G + 1):                          # (it never takes the place of water: guhs:dal_water_blijft)
+                if y >= 0:
+                    b.zet(x, y, z, STEEN)
     for x in (0, 2 * half):                                        # the four end posts
         for z in (0, 3):
             b.zet(x, G + 1, z, balk("y"))

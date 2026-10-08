@@ -32,7 +32,6 @@ import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.band.BandFeature;
-import nl.juiced.guhs.feature.bio.wereld.BioPlekStructure;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
@@ -431,7 +430,7 @@ public class BioBouwDalGameTests {
         var sets = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET);
         for (String id : BouwDalCheck.ANKER.keySet()) {
             var s = register.getValue(Guhs.id(id));
-            helper.assertTrue(s instanceof BioPlekStructure, id + " is a guhs:bio_plek structure");
+            helper.assertTrue(s != null && Guhs.id("bio_plek").equals(BuiltInRegistries.STRUCTURE_TYPE.getKey(s.type())), id + " is a guhs:bio_plek structure");
             helper.assertTrue(sets.getValue(Guhs.id(id)) != null, id + " has its structure set");
             helper.assertTrue(sets.getValue(Guhs.id(id + "_gegarandeerd")) == null, id + " has no guaranteed copy");
         }

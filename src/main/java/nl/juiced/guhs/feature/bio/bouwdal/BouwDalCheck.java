@@ -62,7 +62,7 @@ public final class BouwDalCheck {
         ANKER.put("dal_torii", new int[]{4, 1, 2});
         ANKER.put("dal_torii_water", new int[]{5, 3, 1});
         ANKER.put("dal_lantaarns", new int[]{5, 0, 3});
-        ANKER.put("dal_boogbrug", new int[]{6, 0, 1});
+        ANKER.put("dal_boogbrug", new int[]{6, 2, 1});
         ANKER.put("dal_theehuisje", new int[]{3, 5, 1});
         ANKER.put("dal_zenhoek", new int[]{6, 0, 5});
         ANKER.put("dal_staptreden", new int[]{1, 0, 8});
@@ -199,10 +199,10 @@ public final class BouwDalCheck {
                 int plaat = tel(level, box, "roze_lakhout_plaat");
                 boolean nat = water(level, anker.below());
                 // both ends: the first slab lies one above the bank, and there is ground under it
-                BlockPos west = wereld(stuk, 0, 0, 1), oost = wereld(stuk, 12, 0, 1);
+                BlockPos west = wereld(stuk, 0, 2, 1), oost = wereld(stuk, 12, 2, 1);
                 int natOnder = 0;
                 for (int x = 0; x <= 12; x++) {
-                    natOnder += water(level, wereld(stuk, x, -1, 1)) ? 1 : 0;
+                    natOnder += water(level, wereld(stuk, x, 1, 1)) ? 1 : 0;
                 }
                 meld.check(plaat >= 40 && nat && vast(level, west) && vast(level, oost) && natOnder >= 3 && natOnder <= 9,
                         id + ": " + plaat + " deck slabs, water under the middle: " + nat + ", the river is " + natOnder
@@ -257,6 +257,52 @@ public final class BouwDalCheck {
             default -> {
             }
         }
+    }
+
+    /**
+     * How many of each structure really start within this many chunks of the first Klaterdal (the structure starts of every
+     * chunk the set would try are worked out: slow, a dev command for a scratch server).
+     */
+    static List<String> tel(MinecraftServer server, int straal) {
+        List<String> uit = new java.util.ArrayList<>();
+        ServerLevel level = server.getLevel(ModDimensions.GUHMENSION);
+        BlockPos dal = level == null ? null : BioZelftest.vind(level, Bio.KLATERDAL, BlockPos.ZERO, 6400);
+        if (dal == null) {
+            uit.add("[bouw-dal] tel: no Klaterdal");
+            return uit;
+        }
+        var register = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        var state = level.getChunkSource().getGeneratorState();
+        int mx = dal.getX() >> 4, mz = dal.getZ() >> 4;
+        for (String id : ANKER.keySet()) {
+            var holder = register.get(ResourceKey.create(Registries.STRUCTURE, Guhs.id(id))).orElse(null);
+            if (holder == null) {
+                continue;
+            }
+            int geprobeerd = 0, gestart = 0;
+            StringBuilder waar = new StringBuilder();
+            for (var placement : state.getPlacementsForStructure(holder)) {
+                for (int cx = mx - straal; cx <= mx + straal; cx++) {
+                    for (int cz = mz - straal; cz <= mz + straal; cz++) {
+                        if (!placement.isStructureChunk(state, cx, cz)) {
+                            continue;
+                        }
+                        geprobeerd++;
+                        ChunkAccess chunk = level.getChunk(cx, cz, ChunkStatus.STRUCTURE_STARTS);
+                        StructureStart start = level.structureManager().getStartForStructure(SectionPos.bottomOf(chunk), holder.value(), chunk);
+                        if (start != null && start.isValid()) {
+                            gestart++;
+                            if (gestart <= 6) {
+                                waar.append(' ').append(start.getBoundingBox().getCenter().toShortString().replace(", ", "/"));
+                            }
+                        }
+                    }
+                }
+            }
+            uit.add("[bouw-dal] tel " + id + ": " + gestart + " within " + straal + " chunks of " + dal.toShortString() + " (" + geprobeerd
+                    + " chunks tried):" + waar);
+        }
+        return uit;
     }
 
     // --- the dev commands ---------------------------------------------------------------------------------------------------
@@ -326,6 +372,12 @@ public final class BouwDalCheck {
             }
             return fout == 0 ? 1 : 0;
         }));
+        cmd.then(Commands.literal("tel").then(Commands.argument("chunks", IntegerArgumentType.integer(1, 80)).executes(ctx -> {
+            for (String regel : tel(ctx.getSource().getServer(), IntegerArgumentType.getInteger(ctx, "chunks"))) {
+                ctx.getSource().sendSuccess(() -> Component.literal(regel), false);
+            }
+            return 1;
+        })));
         var reis = Commands.literal("reis");
         reis.then(Commands.literal("status").executes(ctx -> {
             WeebHuis h = huis(ctx.getSource());
