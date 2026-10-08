@@ -42,8 +42,10 @@ import nl.juiced.guhs.feature.guhrio.GuhrioBlocks;
 import nl.juiced.guhs.feature.guhrio.GuhrioPayloads;
 import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
 import nl.juiced.guhs.feature.landdiertjes.ShuckleEntity;
+import nl.juiced.guhs.feature.ring.Cast;
 import nl.juiced.guhs.feature.ring.Gaven;
 import nl.juiced.guhs.feature.ring.Ring;
+import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.ring.Sam;
 import nl.juiced.guhs.feature.ring.Zicht;
 import nl.juiced.guhs.feature.ringh2.Guhvendel;
@@ -63,6 +65,7 @@ import nl.juiced.guhs.feature.ringsausuman.RingSausumanFeature;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Duwtje;
+import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.feature.verhaal.VerhaalGuhs;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.verhaal.Verteller;
@@ -71,6 +74,7 @@ import nl.juiced.guhs.feature.wereld.Kopieen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.quest.GuhQuests;
+import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.taal.NlTekst;
 
 /**
@@ -80,7 +84,8 @@ import nl.juiced.guhs.taal.NlTekst;
  * by the server: the tests post their tick event themselves (that is what ends a scene a mock player watches).
  * <ul>
  *   <li>the rule: once per player, the scene's own {@code daarna} exactly once and after the wink, a wink that was cut off;</li>
- *   <li>the hooks, each through what a real player does: the council bell (ring-h2), the mirror (ring-h4), the feast at
+ *   <li>the hooks, each through what a real player does: the council bell and "ik neem de ring wel mee" at Guhrond
+ *       (ring-h2: the first and the eighth wink), the mirror (ring-h4), the feast at
  *       home (ring-h6), a click on Sam-guh on the mountain (ring-h6), the narrator card at the gate of the mine (ring-h3),
  *       Sausuman's hall, the ?-block of level 1-1, and Sjokkel on the bridge head.</li>
  * </ul>
@@ -170,7 +175,7 @@ public final class RingKnipoogGameTests {
         Cutscene scene = Cutscene.van("ringh2_raad"), knipoog = Knipogen.BALTOGUH;
         BlockPos anker = helper.absolutePos(new BlockPos(12, 2, 12));
         int[] daarna = new int[5];
-        helper.assertTrue(Knipogen.alle().size() == 7 && Knipogen.alle().stream().allMatch(k -> Cutscene.van(k.id()) == k), "seven winks, all registered");
+        helper.assertTrue(Knipogen.alle().size() == 8 && Knipogen.alle().stream().allMatch(k -> Cutscene.van(k.id()) == k), "eight winks, all registered");
         for (Cutscene k : Knipogen.alle()) {
             helper.assertTrue(k.duur() >= 100 && k.duur() <= Knipogen.MAX_TICKS, k.id() + " takes five to ten seconds: " + k.duur());
             helper.assertTrue(k.lijn() != null && k.heeftSpeler() && k.cameraOp(0) != null, k.id() + " belongs to a questline, has the player in it and a camera");
@@ -766,6 +771,109 @@ public final class RingKnipoogGameTests {
         });
     }
 
+    /**
+     * Wink 8 (the user's own joke): "Ik neem de ring wel mee!" at Guhrond. The scene of the fellowship, then Pippguh and the
+     * half sjekel as a scene of its own, then the step and Guhrond's provisions, exactly once: the story does not notice
+     * the wink. Once per player: a later player gets their own, a player who saw it before only gets the fellowship. A
+     * player who logs out DURING the wink keeps step 4 and, back at Guhrond, only gets the wink (not the 57 seconds of the
+     * fellowship again) and then the step. The scene itself: about eight seconds, Pippguh says the user's line word for
+     * word, the rest says "Huh?", then nobody says anything until the scene is over.
+     */
+    @GuhTest(template = KAMER, batch = BATCH + "_sjekel", timeoutTicks = 300)
+    public static void ringknipoogSjekelNaHetGenootschap(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos tafel = helper.absolutePos(new BlockPos(14, 2, 12));
+        kopie(level, Guhvendel.STRUCTUUR, tafel.subtract(Guhvendel.KRING), kamer(helper));
+        GuhNpcEntity guhrond = Cast.zet(level, GuhNpcEntity.Kind.GUHROND, Vec3.atBottomCenterOf(tafel.offset(0, 0, -4)), 0f, Guhvendel.PLEK);
+        helper.assertTrue(guhrond != null && NpcRollen.van(guhrond) != null, "a Guhrond of Guhvendel with the house's role");
+        ServerPlayer p = speler(helper, 8, 12), later = speler(helper, 8, 14), oud = speler(helper, 8, 16), weg = speler(helper, 8, 18);
+        List<ServerPlayer> allen = List.of(p, later, oud, weg);
+        Verhaallijn lijn = RingH2Feature.LIJN;
+        for (ServerPlayer x : allen) {
+            opStap(x, 2, Guhvendel.MELDEN);
+        }
+        // (this one saw Pippguh's question in an earlier life)
+        GuhQuests.saved(oud).put("guhs_scene_" + Knipogen.SJEKEL.id(), gezienTag());
+        Cutscene genootschap = Cutscene.van("ringh2_genootschap"), sjekel = Knipogen.SJEKEL;
+        // the scene itself
+        helper.assertTrue(sjekel.id().equals("ringknipoog_sjekel") && sjekel.duur() >= 140 && sjekel.duur() <= 180,
+                "a mini-cutscene of about eight seconds (at most nine): " + sjekel.duur() + " ticks");
+        helper.assertTrue(genootschap != null && genootschap.duur() == 1132, "the scene of the fellowship is as long as it was: " + (genootschap == null ? -1 : genootschap.duur()));
+        helper.assertTrue("ring_h2".equals(sjekel.lijn()), "it can be watched again under chapter 2 in the Guhdex");
+        List<Cutscene.Zeg> zinnen = sjekel.zinnen().stream().sorted(java.util.Comparator.comparingInt(Cutscene.Zeg::t)).toList();
+        helper.assertTrue(zinnen.size() == 2 && zinnen.get(0).spreker().equals("pippguh") && zinnen.get(0).key().equals("sjekel")
+                && zinnen.get(1).spreker().equals("rest") && zinnen.get(1).key().equals("huh"), "two lines: Pippguh's, then the rest's: " + zinnen);
+        helper.assertTrue(("Wow, die ring weegt bijna een halve sjekel gok ik zo. Mag ik hem? Misschien kan ik Liekguh ermee kopen... "
+                + "Oh nee wacht, laat maar, die heeft al een neusring.").equals(nl(sjekel, "sjekel")), "Pippguh says the user's line, word for word: " + nl(sjekel, "sjekel"));
+        helper.assertTrue("Huh?".equals(nl(sjekel, "huh")) && "Pippguh".equals(nl(sjekel, "naam.pippguh")) && "De rest van het genootschap".equals(nl(sjekel, "naam.rest")),
+                "the rest of the fellowship says \"Huh?\"");
+        Cutscene.Zeg regel = zinnen.get(0), huh = zinnen.get(1);
+        helper.assertTrue(huh.t() >= regel.t() + regel.ticks(), "\"Huh?\" comes when Pippguh is done");
+        helper.assertTrue(sjekel.duur() - (huh.t() + huh.ticks()) >= 20, "then a beat of silence: at least a second without a line before the scene ends");
+        helper.assertTrue(sjekel.acteurs().stream().anyMatch(a -> a.naam().equals("pippguh")) && sjekel.acteurs().size() >= 10 && sjekel.heeftSpeler(),
+                "Pippguh, the rest of the fellowship and the player are in it");
+        helper.assertTrue(sjekel.acteurs().stream().noneMatch(a -> a.naam().toLowerCase(java.util.Locale.ROOT).contains("liek")), "nobody called Liekguh appears: it is only a name");
+        // the hook: what a real player does (the answer button at Guhrond)
+        Guhvendel.Oord o = Guhvendel.oord(level, p.blockPosition());
+        helper.assertTrue(o != null && o.anker().equals(tafel), "the copy of Guhvendel is found");
+        int ja = 1;   // (GuhvendelRol.JA: "Ik neem de ring wel mee!")
+        NpcRollen.van(guhrond).antwoord(guhrond, p, ja);
+        NpcRollen.van(guhrond).antwoord(guhrond, oud, ja);
+        helper.assertTrue(Cutscenes.bezig(p) && Cutscenes.bezig(oud) && lijn.stap(p) == Guhvendel.MELDEN, "the answer: the fellowship plays, the step waits");
+        helper.onEachTick(() -> {
+            for (ServerPlayer x : allen) {
+                stil(x);
+                tik(x);
+            }
+        });
+        helper.runAfterDelay(3, () -> {
+            helper.assertTrue(Cutscenes.gezien(p, "ringh2_genootschap") && Cutscenes.bezig(p) && Knipogen.gestart(p) == 1 && lijn.stap(p) == Guhvendel.MELDEN
+                    && GuhQuests.count(p, RingFeature.STOOFPOTJE.get()) == 0,
+                    "after the fellowship Pippguh has his question; the step and the provisions wait (started " + Knipogen.gestart(p) + ", step " + lijn.stap(p) + ")");
+            helper.assertTrue(sjekel.id().equals(GuhQuests.saved(p).getStringOr(Knipogen.OPEN, "")), "the wink is owed");
+            helper.assertTrue(!Cutscenes.bezig(oud) && lijn.stap(oud) == Guhvendel.VERTREK && Knipogen.gestart(oud) == 0
+                    && GuhQuests.count(oud, RingFeature.STOOFPOTJE.get()) == 2, "who saw it before: the fellowship, then the step, no wink");
+        });
+        helper.runAfterDelay(6, () -> {
+            helper.assertTrue(!Cutscenes.bezig(p) && Knipogen.gezien(p, sjekel) && lijn.stap(p) == Guhvendel.VERTREK, "the wink is over: step 5 (" + lijn.stap(p) + ")");
+            helper.assertTrue(GuhQuests.count(p, ModItems.KAAS_KNABBELS.get()) == 6 && GuhQuests.count(p, RingFeature.STOOFPOTJE.get()) == 2
+                    && !GuhQuests.saved(p).contains(Knipogen.OPEN), "the story went on as if nothing happened: Guhrond's provisions, once");
+            CompoundTag waar = GuhQuests.saved(p).getCompoundOrEmpty("guhs_scene_" + sjekel.id());
+            helper.assertTrue(BlockPos.of(waar.getLongOr("Pos", 0L)).equals(tafel) && waar.getIntOr("Draai", -1) == Rotation.NONE.ordinal(),
+                    "it was played in the frame of the fellowship's own scene: the stone table");
+            // asking again changes nothing (the step is past it)
+            NpcRollen.van(guhrond).antwoord(guhrond, p, ja);
+            helper.assertTrue(!Cutscenes.bezig(p) && Knipogen.gestart(p) == 1 && GuhQuests.count(p, RingFeature.STOOFPOTJE.get()) == 2, "once per player, and nothing twice");
+            // a player who comes later, and one who will log out in the middle of the wink
+            NpcRollen.van(guhrond).antwoord(guhrond, later, ja);
+            NpcRollen.van(guhrond).antwoord(guhrond, weg, ja);
+            helper.assertTrue(Cutscenes.bezig(later) && Cutscenes.bezig(weg), "two later players' fellowship");
+        });
+        helper.runAfterDelay(9, () -> {
+            helper.assertTrue(Cutscenes.bezig(later) && Knipogen.gestart(later) == 1, "the later player's wink plays");
+            helper.assertTrue(Cutscenes.bezig(weg) && Knipogen.gestart(weg) == 1, "and the fourth player's");
+            NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerLoggedOutEvent(weg));
+            helper.assertTrue(!Cutscenes.bezig(weg) && !Knipogen.gezien(weg, sjekel) && Cutscenes.gezien(weg, "ringh2_genootschap") && lijn.stap(weg) == Guhvendel.MELDEN
+                    && GuhQuests.count(weg, RingFeature.STOOFPOTJE.get()) == 0, "cut off: the fellowship was seen, the wink was not, the story did not move");
+            helper.assertTrue(sjekel.id().equals(GuhQuests.saved(weg).getStringOr(Knipogen.OPEN, "")), "the wink is still owed");
+        });
+        helper.runAfterDelay(12, () -> {
+            helper.assertTrue(!Cutscenes.bezig(later) && Knipogen.gezien(later, sjekel) && lijn.stap(later) == Guhvendel.VERTREK
+                    && GuhQuests.count(later, RingFeature.STOOFPOTJE.get()) == 2, "the later player saw it too and went on");
+            // back at Guhrond: only the wink that is owed, then the step
+            NpcRollen.van(guhrond).antwoord(guhrond, weg, ja);
+            helper.assertTrue(Cutscenes.bezig(weg) && Knipogen.gestart(weg) == 1 && lijn.stap(weg) == Guhvendel.MELDEN, "the wink that is owed plays");
+        });
+        helper.runAfterDelay(15, () -> {
+            helper.assertTrue(!Cutscenes.bezig(weg) && Knipogen.gezien(weg, sjekel) && lijn.stap(weg) == Guhvendel.VERTREK
+                    && GuhQuests.count(weg, RingFeature.STOOFPOTJE.get()) == 2, "two ticks later (not four): the wink alone, then the step and the provisions");
+            guhrond.discard();
+            Kopieen.testWissen(level);
+            weg(helper, p, later, oud, weg);
+            helper.succeed();
+        });
+    }
+
     /** The characters the winks borrow exist, and every wink knows the story it winks at. */
     @GuhTest(template = "empty", batch = BATCH + "_gasten")
     public static void ringknipoogGastenBestaan(GameTestHelper helper) {
@@ -792,6 +900,8 @@ public final class RingKnipoogGameTests {
         helper.assertTrue("Een normale guh kan deze berg niet op... maar heel misschien...".equals(nl(Knipogen.BORIS, "berg"))
                 && "Hé, dat is mijn moment.".equals(nl(Knipogen.BORIS, "moment")), "Boris and Sam-guh");
         helper.assertTrue("Twee ringen is twee keer zo lekker!".equals(nl(Knipogen.KLOON, "twee")) && "Nee.".equals(nl(Knipogen.KLOON, "nee")), "the professor and Guhdalf");
+        helper.assertTrue(("Wow, die ring weegt bijna een halve sjekel gok ik zo. Mag ik hem? Misschien kan ik Liekguh ermee kopen... Oh nee wacht, laat maar, "
+                + "die heeft al een neusring.").equals(nl(Knipogen.SJEKEL, "sjekel")) && "Huh?".equals(nl(Knipogen.SJEKEL, "huh")), "Pippguh and the rest of the fellowship");
         helper.succeed();
     }
 

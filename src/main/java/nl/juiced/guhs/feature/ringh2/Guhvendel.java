@@ -356,8 +356,9 @@ public final class Guhvendel {
             naGenootschap(p);   // (a Guhrond that stands nowhere near a copy: no scene to play)
             return true;
         }
-        if (!Cutscenes.speel(p, RingH2Scenes.GENOOTSCHAP, o.anker(), o.draai(), Guhvendel::naGenootschap)) {
-            return false;
+        // (ring-knipogen: the first time, Pippguh has a question about the ring right after it)
+        if (!Knipogen.speel(p, RingH2Scenes.GENOOTSCHAP, Knipogen.SJEKEL, o.anker(), o.draai(), Guhvendel::naGenootschap)) {
+            return false;   // (already watching something)
         }
         Sam.wacht(p, RingH2Scenes.GENOOTSCHAP.duur() + 60);
         return true;

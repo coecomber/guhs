@@ -14,15 +14,17 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.feature.ringh3.RingH3Feature;
 
 /**
- * bbq2 (ring-knipogen): the seven winks at the older stories that the user picked for the Knabbelring and Super Guhrio,
+ * bbq2 (ring-knipogen): the seven winks at the older stories that the user picked for the Knabbelring and Super Guhrio
+ * (and an eighth, a joke of the user's own: Pippguh and the half sjekel, in Guhvendel),
  * each a mini-cutscene of five to ten seconds that a player sees once ({@link Knipogen}: the scenes, how a wink is played
  * around a scene of the story, and the winks that find their own moment), and Sjokkel, who sets out over the bridge of the
  * mine in chapter 3 and arrives at the feast of chapter 6 ({@link Sjokkel}). Texts: tools/features/ring_knipogen.py.
  * <p>
  * How the winks hang in the story (nothing else of the chapters was changed):
  * <ul>
- *   <li>three chapter scenes play through {@link Knipogen#speel} instead of {@code Cutscenes.speel} (the wink right after
- *       the scene, then the scene's own {@code daarna}): the council in {@code ringh2.Guhvendel.luid}, the mirror in
+ *   <li>four chapter scenes play through {@link Knipogen#speel} instead of {@code Cutscenes.speel} (the wink right after
+ *       the scene, then the scene's own {@code daarna}): the council in {@code ringh2.Guhvendel.luid}, the fellowship in
+ *       {@code ringh2.Guhvendel.meldAan} (the eighth wink: Pippguh and the half sjekel), the mirror in
  *       {@code ringh4.Spiegel.kijk}, the feast in {@code ringh6.Thuis.seconde};</li>
  *   <li>{@code ringh6.Klim.samKlik} asks {@link Knipogen#eerst} before Sam-guh carries;</li>
  *   <li>everything else is looked at from here: a step listener on chapter 3 and a look once a second (the gate of the

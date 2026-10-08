@@ -1,8 +1,9 @@
 """
-bbq2 (ring-knipogen): the seven "knipogen" of the Knabbelring and Super Guhrio: winks at the older stories, each a
-mini-cutscene of five to ten seconds that a player sees once (Java: feature/ringknipoog; the scenes are in Knipogen.java).
+bbq2 (ring-knipogen): the "knipogen" of the Knabbelring and Super Guhrio: seven winks at the older stories and an eighth
+that is a joke of the user's own (Pippguh and the half sjekel), each a mini-cutscene of five to ten seconds that a player
+sees once (Java: feature/ringknipoog; the scenes are in Knipogen.java).
 
-  build(h)   the Dutch texts of the seven scenes (their titles are the "Opnieuw bekijken" buttons in the Guhdex), the two
+  build(h)   the Dutch texts of the eight scenes (their titles are the "Opnieuw bekijken" buttons in the Guhdex), the two
              lines about Sjokkel on the bridge of the mine, the test room, and the self-check.
 
 No FTB quests and no Guhdex page on purpose: a wink is a surprise, not a task. The self-check reads Knipogen.java and
@@ -12,7 +13,7 @@ proves what nobody has seen in the game yet, as far as the templates can prove i
     and nothing of that building stands between a camera and what it looks at (the scene's frame is the anchor of the
     chapter scene it follows: read from the chapter's own files, so a template that moves is noticed here);
   - the ?-block with the medicine chest is where Knipogen.KISTJE_S says, and Sjokkel's line lies on the bridge head;
-  - the four spots where a chapter plays a wink are still there (a merge that loses one fails the build).
+  - the five spots where a chapter plays a wink are still there (a merge that loses one fails the build).
 """
 import json
 import math
@@ -60,7 +61,19 @@ SCENES = {
         {"twee": "Twee ringen is twee keer zo lekker!",
          "nee": "Nee."},
         {"kloon": "Professor Knabbelkloon", "guhdalf": "Guhdalf"}),
+    # The eighth: no guest from an older story, a joke the user gave word for word (the orchestrator's note of 2026-10-07 in
+    # CONTRACT_130). NEVER reword or shorten "sjekel"; "Liekguh" is only a name, nobody of that name appears anywhere.
+    "ringknipoog_sjekel": (
+        "Een halve sjekel",
+        {"sjekel": "Wow, die ring weegt bijna een halve sjekel gok ik zo. Mag ik hem? Misschien kan ik Liekguh ermee kopen... "
+                   "Oh nee wacht, laat maar, die heeft al een neusring.",
+         "huh": "Huh?"},
+        {"pippguh": "Pippguh", "rest": "De rest van het genootschap"}),
 }
+
+# The line of the eighth wink, exactly as the user gave it (the self-check compares).
+SJEKEL = ("Wow, die ring weegt bijna een halve sjekel gok ik zo. Mag ik hem? Misschien kan ik Liekguh ermee kopen... Oh nee wacht, laat maar, "
+          "die heeft al een neusring.")
 
 TEKST = {
     # the action bar, once, for a player in the great hall of the mine who comes near the bridge head
@@ -69,9 +82,10 @@ TEKST = {
     T + "sjokkel.klik": "Sjokkel is onderweg naar een feest. Stoor hem maar niet, njeg.",
 }
 
-# The four spots where a chapter plays a wink (file under feature/, the text that has to be in it).
+# The five spots where a chapter plays a wink (file under feature/, the text that has to be in it).
 HAKEN = [
     ("ringh2/Guhvendel.java", "Knipogen.speel(p, RingH2Scenes.RAAD, Knipogen.BALTOGUH, o.anker(), o.draai(), Guhvendel::naRaad)"),
+    ("ringh2/Guhvendel.java", "Knipogen.speel(p, RingH2Scenes.GENOOTSCHAP, Knipogen.SJEKEL, o.anker(), o.draai(), Guhvendel::naGenootschap)"),
     ("ringh4/Spiegel.java", "Knipogen.speel(p, SCENE, Knipogen.SPIEGEL, pos, draai, s -> {"),
     ("ringh6/Thuis.java", "Knipogen.speel(p, Finale.FEEST, Knipogen.SJOKKEL, anker, Rotation.NONE, Thuis::klaar)"),
     ("ringh6/Klim.java", 'Knipogen.boris(p, berg.wereld("richel_3"), berg.draai(), q -> draag(q, berg))'),
@@ -143,6 +157,7 @@ def _ankers(h):
     s = java(os.path.join("ringknipoog", "Knipogen.java"), r"KISTJE_S = (\d+);")[0]
     return {
         "baltoguh": ("guhvendel", java(os.path.join("ringh2", "Guhvendel.java"), r"KRING = new BlockPos\((\d+), (\d+), (\d+)\)")),
+        "sjekel": ("guhvendel", java(os.path.join("ringh2", "Guhvendel.java"), r"KRING = new BlockPos\((\d+), (\d+), (\d+)\)")),
         # the level 1-1 as its test template has it: cell (s, row) at (1 + s, 2 + row, 1), the ?-block in row 6, the camera's side +z
         "kistjeScene": ("guhriow1_test_1_1", (1 + s, 2 + 6, 1)),
         "spiegel": ("guhladriel_boomstad", tuple(int(v) for v in plekken["spiegel"])),
@@ -299,6 +314,8 @@ def selfcheck(h):
             problems.append(f"lang {key}")
     if not os.path.exists(os.path.join(h.D, "structure", "ringknipoog_test_kamer.nbt")):
         problems.append("the test room is missing")
+    if h.NL.get("scene.guhs.ringknipoog_sjekel.sjekel") != SJEKEL or h.NL.get("scene.guhs.ringknipoog_sjekel.huh") != "Huh?":
+        problems.append("the eighth wink no longer says the user's own words")
     java = open(os.path.join(PKG, "ringknipoog", "Knipogen.java"), encoding="utf-8").read()
     # every scene: registered once, five to ten seconds, its lines and its speakers have a text
     ids = re.findall(r'Cutscene\.maak\("(\w+)"\)\.duur\((\d+)\)', java)

@@ -1,4 +1,4 @@
-# bbq2, ring-knipogen (AutoCheck, dev only): the seven winks at the older stories. Run:
+# bbq2, ring-knipogen (AutoCheck, dev only): the seven winks at the older stories and the eighth (Pippguh's joke). Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-knipogen.txt
 # (commands: see autocheck.txt; the op commands used here: /guhs ringknipoog speel <naam> | stand | vergeet
 #  (feature/ringknipoog/RingKnipoogCommands.java: speel plays a wink in the frame of the building the player stands in,
@@ -14,6 +14,10 @@
 #   boris     the Derde Richel: Boris flaps in along the wall (wings: his cutscene animation "vlieg"), his line, Sam-guh's
 #   sjokkel   the feast: Sjokkel in the foreground, the party behind him, everybody cheers
 #   kistje    a ?-block over a lane: the chest pops out of the block, Pad-guh pops out of the ground two cells on
+#   sjekel    the council ring of Guhvendel right after the fellowship was formed: Pippguh steps up to the ring on the stone
+#             (is the ring between him and the camera, not over his face?), his long line (three lines of subtitle: do
+#             they fit in the bar, in Dutch and in English?), the wide shot with everybody staring at him and "Huh?", a
+#             second in which nothing at all happens, and the cheering going on
 # NOT run by the slice itself (no game client in phase 3 so far): this is for the final visual check.
 
 section setup
@@ -50,6 +54,23 @@ shot bbq2_knipoog_baltoguh_3_afslag gui
 wait 70
 shot bbq2_knipoog_baltoguh_4_weg gui
 wait 60
+
+section 8. Pippguh and the half sjekel (180 ticks; the same copy of Guhvendel)
+clearchat
+/guhs ringknipoog speel sjekel
+wait 22
+shot bbq2_knipoog_sjekel_1_ring gui
+wait 50
+shot bbq2_knipoog_sjekel_2_mag_ik_hem gui
+wait 40
+shot bbq2_knipoog_sjekel_3_neusring gui
+wait 22
+shot bbq2_knipoog_sjekel_4_huh gui
+wait 24
+shot bbq2_knipoog_sjekel_5_stilte gui
+wait 14
+shot bbq2_knipoog_sjekel_6_verder gui
+wait 40
 /forceload remove 5990 5990 6070 6070
 
 section 7. Professor Knabbelkloon at the gate of the mine (190 ticks)
