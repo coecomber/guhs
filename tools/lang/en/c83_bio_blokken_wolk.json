@@ -1,1 +1,21 @@
-{}
+{
+  "subtitles.guhs.wolkenblok.stap": "Cloud poofs softly",
+  "subtitles.guhs.wolkenblok.plaats": "Cloud placed",
+  "subtitles.guhs.wolkenblok.breek": "Cloud drifts away",
+  "subtitles.guhs.waterval.ruis": "Waterfall rushes",
+  "block.guhs.wolkenblok_wit": "White Cloud Block",
+  "block.guhs.wolkenblok_wit_plaat": "White Cloud Slab",
+  "block.guhs.wolkenblok_wit_trap": "White Cloud Stairs",
+  "block.guhs.wolkenblok_roze": "Pink Cloud Block",
+  "block.guhs.wolkenblok_roze_plaat": "Pink Cloud Slab",
+  "block.guhs.wolkenblok_roze_trap": "Pink Cloud Stairs",
+  "block.guhs.regenboogblok": "Rainbow Block",
+  "block.guhs.regenboogblok_plaat": "Rainbow Slab",
+  "block.guhs.regenboogblok_trap": "Rainbow Stairs",
+  "block.guhs.wolkenbank": "Cloud Bench",
+  "block.guhs.wolkenbed": "Cloud Bed",
+  "block.guhs.wolkenbed.hier_niet": "You can't sleep here, nyeg! Not even on a cloud.",
+  "block.guhs.wolkenlamp": "Cloud Lamp",
+  "block.guhs.drijvende_bloesemblaadjes": "Floating Blossom Petals",
+  "item.guhs.wolkenpluis": "Cloud Fluff"
+}

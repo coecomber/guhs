@@ -1,1 +1,24 @@
-{}
+{
+  "gui.guhs.superkompas.biomes": "Biomes",
+  "gui.guhs.superkompas.biomes.tooltip": "All biomes, per dimension. Pick one and your Super Compass points to the nearest!",
+  "gui.guhs.superkompas.sectie.guhmension": "Guhmension",
+  "gui.guhs.superkompas.sectie.guhmension.slot": "You have never been here. Step through a guh portal into the Guhmension, and this little lock opens by itself. Wahoog!",
+  "gui.guhs.superkompas.sectie.barbecuether": "Barbecuether",
+  "gui.guhs.superkompas.sectie.barbecuether.slot": "You have never been here. Find a barbecue pit in the Guhmension and step through the barbecue portal. It is hot there though, nyeg!",
+  "gui.guhs.superkompas.sectie.guheinde": "Guh End",
+  "gui.guhs.superkompas.sectie.guheinde.slot": "You have never been here. Deep under the Guhmension lies a Nibble Cellar, and there stands a portal. Do you dare? Nyeg!",
+  "gui.guhs.superkompas.sectie.echte_guheinde": "The Real Guh End",
+  "gui.guhs.superkompas.sectie.echte_guheinde.slot": "Nobody has been here yet... nyeg?",
+  "gui.guhs.biokompas.op_slot": "Locked",
+  "gui.guhs.biokompas.telling": "%s of the %s biomes visited",
+  "gui.guhs.biokompas.open": "Click to unfold",
+  "gui.guhs.biokompas.dicht": "Click to fold up",
+  "gui.guhs.biokompas.geweest": "You have been here, wahoog!",
+  "gui.guhs.biokompas.niet_geweest": "You have not been here yet, nyeg...",
+  "gui.guhs.biokompas.tip_elders": "This biome lies in: %s. Your Super Compass shows the way there!",
+  "gui.guhs.biokompas.zoeken": "%s: searching... nyeg, one moment!",
+  "gui.guhs.biokompas.afstand": "%s: about %s blocks away",
+  "gui.guhs.biokompas.hier": "You are there: %s. Wahoog!",
+  "gui.guhs.biokompas.niets": "%s: not found nearby, nyeg. Walk a good bit further and I will search again!",
+  "gui.guhs.biokompas.elders": "%s lies somewhere else: %s. Your Super Compass shows the way there!"
+}
