@@ -41,10 +41,14 @@ GESPREKKEN = {
         "Les één: HOUD DE SNUFFELTOETS INGEDRUKT. Je neus gaat naar de grond en op je scherm verschijnt de geurmeter. Hoe dichter bij de geur, hoe "
         "harder hij uitslaat.",
         "De kleur zegt wat je ruikt. Oranje is iets lekkers. Ik heb hier vlakbij een kluifje begraven. Slaat de meter helemaal uit? Dan sta je "
-        "erop: graaf met de aanvalsknop. Zoek!",
+        "erop, en dan ga je GRAVEN.",
+        # (1.4.1: how digging works, said in so many words)
+        "Graven is simpel: houd gewoon je linkermuisknop ingedrukt. Je bent nu een hond, dus je breekt het blok niet: je graaft! Blijf vasthouden "
+        "tot het kluifje boven komt. Zoek!",
     ],
     "trainer.les1_hint": ["Neus omlaag, staart omhoog! Houd de snuffeltoets ingedrukt en loop naar waar de oranje meter het hardst uitslaat. Het "
-                          "kluifje ligt hier vlakbij in het gras. Dan graven!"],
+                          "kluifje ligt hier vlakbij in het gras. Sta je erop? Houd dan gewoon je linkermuisknop ingedrukt: als hond breek je "
+                          "het blok niet, je graaft!"],
     "trainer.les2": [
         "Een kluifje, en nog niet eens opgegeten. Knap! Dat was oranje: iets lekkers. Les twee: BLAUW. Blauw is een ding.",
         "Ik ben mijn fluitje kwijt. Het ligt ergens verder weg in de wei, richting de heg. Hoe verder weg, hoe zwakker de geur: loop gewoon de "
@@ -192,6 +196,7 @@ LANG = {
     G + "examen_klaar": "Alle vier de geuren gevonden! Ga terug naar Meester Truffelneus voor je diploma. Vahoeg!",
     G + "daden_klaar": "Het boompje van je maatje is een jong boompje! Meester Truffelneus wacht op je in de wei: tijd voor je examen.",
     G + "versperring": "Hier mag je pas door als Snuffelneus",
+    G + "zee": "Njeg, de zee is veel te wild voor hondenpootjes! De golven zetten je terug op het droge",
     G + "wakker.1": "Je bent een hond op het Snuffeleiland! Loop over het pad naar het dorp: Jutje Kwispel wacht bij het strandpoortje.",
     G + "wakker.2": "Je eigen spulletjes liggen veilig thuis. Met de geheugenkaart in je balk ga je altijd terug naar huis.",
     G + "maatje.1": "%s: Hihi! Die emmer, dat was ik. En de deegroller. En de schoolbel. En... nou ja. Ik verstop graag dingen. Sorry, njeg.",

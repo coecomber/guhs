@@ -3,8 +3,9 @@ Het Snuffeleiland, slice snuffel-dorp: the ISLAND and the FIRST SERIES (DESIGN_V
 
   - the island itself (snuffel_dorp_bouw.py): the tiles guhs:snuffeldorp/eiland_<i>_<j>, data/guhs/snuffel/eiland.json
     (written AGAIN, over the kern's test island: this module stands after 'snuffel' in FEATURES) and this slice's own spots
-    data/guhs/snuffeldorp/dorp.json (scene anchors, the line of the roadblock, how many pages every conversation has);
-  - the game tests' floor snuffeldorp_test_vloer;
+    data/guhs/snuffeldorp/dorp.json (scene anchors, the line of the roadblock, how many pages every conversation has) and
+    data/guhs/snuffeldorp/kaart.json (1.4.1: the land map that tells the sea from the island, snuffel_dorp_bouw.kaart);
+  - the game tests' floor snuffeldorp_test_vloer and the sea rule's little test island snuffeldorp_test_zee + kaart_test.json;
   - the texts (snuffel_dorp_tekst.py): what the residents say, the four scenes, screen lines, scents, good deeds, the exam.
     The steps of the questline themselves are tuples of snuffel.py (STAPPEN / KORT / EXTRA: the kern's rule);
   - blocks a dog may use on the island (tag guhs:snuffel_bruikbaar): nothing new was needed (doors and gates are in);
@@ -59,7 +60,12 @@ def eiland(h):
     dorp["gesprekken"] = {id: len(paginas) for id, paginas in tekst.GESPREKKEN.items()}
     h.w(f"{h.D}/snuffel/eiland.json", data)
     h.w(f"{h.D}/snuffeldorp/dorp.json", dorp)
+    # (1.4.1) the land map: where the sea begins and which ground is closed (feature/snuffeldorp/Landkaart.java)
+    h.w(f"{h.D}/snuffeldorp/kaart.json", b.kaart)
     bouw.test_vloer(h).save("snuffeldorp_test_vloer")
+    zee, rijen = bouw.test_zee(h)
+    zee.save("snuffeldorp_test_zee")
+    h.w(f"{h.D}/snuffeldorp/kaart_test.json", dict(breed=bouw.ZEE_EILAND[0], diep=bouw.ZEE_EILAND[2], rijen=rijen))
     return b, data, dorp
 
 
@@ -192,7 +198,8 @@ def selfcheck(h, b, data, dorp):
         for r in regels:
             if breedte(r) > 90:
                 problems.append(f"sign line too wide ({breedte(r)} px): {r}")
-    for p in ([f"{h.D}/snuffeldorp/dorp.json", f"{h.D}/structure/snuffeldorp_test_vloer.nbt"]
+    for p in ([f"{h.D}/snuffeldorp/dorp.json", f"{h.D}/structure/snuffeldorp_test_vloer.nbt", f"{h.D}/snuffeldorp/kaart.json",
+               f"{h.D}/snuffeldorp/kaart_test.json", f"{h.D}/structure/snuffeldorp_test_zee.nbt"]
               + [f"{h.D}/structure/{st['template'].split(':')[1]}.nbt" for st in data["stukken"]]
               + [f"{h.D}/advancement/quest/{n}.json" for n in VERBORGEN]):
         if not os.path.exists(p):

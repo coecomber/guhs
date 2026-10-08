@@ -1463,9 +1463,11 @@ def eiland(h):
         grens_z=GRENS_Z,
     )
     problems = controleer(b, data, dorp)
+    b.data, b.dorp = data, dorp
+    if not problems:
+        b.kaart, problems = kaart(b)
     if problems:
         raise SystemExit("snuffel_dorp: the island is not right:\n  " + "\n  ".join(problems))
-    b.data, b.dorp = data, dorp
     return b, data, dorp
 
 
@@ -1693,8 +1695,137 @@ def binnen_bereik(s, c, gezien):
     return any((c[0] + dx, c[1] + dz) in gezien for dx in (-1, 0, 1) for dz in (-1, 0, 1))
 
 
+# =====================================================================================================================
+# the land map: where the sea begins (1.4.1; data/guhs/snuffeldorp/kaart.json, feature/snuffeldorp/Landkaart.java)
+# =====================================================================================================================
+K_ZEE, K_LAND, K_DEK, K_EILAND, K_DICHT = "~", "L", "S", "e", "x"
+
+
+def kaart(b):
+    """The island seen from above, one character per column (rows = z, characters = x), made from the island that was
+    just built (so it can never disagree with the blocks). It is what tells the SEA from the island's own water:
+
+      L  land     a column of the start zone a dog can WALK to from the beach (the flood of `controleer`: steps of one
+                  block, no swimming). Only here (and on S) a dog is ever put back.
+      S  steiger  the same, but a deck over the water (the jetty, the gangway, the captain's boat): standing on it is
+                  land, the water under it is sea.
+      x  dicht    the closed part AND its wall: every column on or north of the ridge's south face that cannot be
+                  walked to and is not under water: the hills, the ridge's top, its row of rocks in the sea, the north
+                  coast's sand ledge, the roadblock itself and the pocket behind it. A Snuffelpup that stands here is
+                  put back by the roadblock's rule (Wegversperring.java).
+      e  eiland   the rest of the START ZONE's island: inside the outline but nowhere to walk (the pond, the well, the
+                  moestuin's ditch, walls, roofs, trees), and the WET EDGE: sea columns whose bottom lies at most one
+                  block under the surface (the sand ledge and the paddling strip along the start zone's coast). Water
+                  here is never sea.
+      ~  zee      everything else: the open sea, every bit of water around the closed part, and the harbour basin (quay,
+                  jetty and boat stand two blocks above the water there: a dog that falls in cannot climb out, so it is
+                  helped out like out of the open sea).
+
+    Returns (dict for kaart.json, problems)."""
+    s = b.s
+    bodem = {}                                  # (x, z) -> the highest block of the column that is not water
+    for (x, y, z), (name, _props, _nbt) in s.blocks.items():
+        if name not in ("minecraft:water", "minecraft:air", "minecraft:lily_pad") and y > bodem.get((x, z), -1):
+            bodem[(x, z)] = y
+    rijen = []
+    for z in range(SZ):
+        rij = []
+        for x in range(SX):
+            zr = rug_z(x)
+            rug_of_noord = z <= zr + 0.6
+            if (x, z) in b.bereikbaar:
+                c = K_DEK if kust(x, z) < 0 else K_LAND
+            elif (x, z) in b.top:
+                c = K_DICHT if rug_of_noord else K_ZEE if kust(x, z) < 0 else K_EILAND
+            elif rug_of_noord:
+                # around the closed part there is no wet edge: what lies dry there (the ridge's rocks in the sea, the sand
+                # ledge of the north coast) is closed ground, every drop of water is sea
+                c = K_DICHT if bodem.get((x, z), -1) >= G - 1 else K_ZEE
+            elif bodem.get((x, z), -1) >= G - 2 and not in_haven(x, z):
+                c = K_EILAND                    # the wet edge
+            else:
+                c = K_ZEE
+            rij.append(c)
+        rijen.append("".join(rij))
+    problems = []
+
+    def vak(x, z):
+        return rijen[int(math.floor(z))][int(math.floor(x))]
+
+    def moet(naam, x, z, soorten):
+        if vak(x, z) not in soorten:
+            problems.append(f"land map: {naam} at {(int(x), int(z))} is '{vak(x, z)}', not one of '{soorten}'")
+
+    data, dorp = b.data, b.dorp
+    moet("strand", data["strand"]["plek"][0], data["strand"]["plek"][2], K_LAND)
+    moet("haven", data["haven"]["plek"][0], data["haven"]["plek"][2], K_DEK)
+    for bw in data["bewoners"]:
+        x, z = bw["plek"][0], bw["plek"][2]
+        if not any(vak(x + dx, z + dz) in (K_LAND, K_DEK) for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
+            problems.append(f"land map: resident {bw['sleutel']} does not stand on walkable land")
+    for br in data["geurbronnen"]:
+        x, z = br["plek"][0], br["plek"][2]
+        if not any(vak(x + dx, z + dz) == K_LAND for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
+            problems.append(f"land map: scent source {br['id']} does not lie at walkable land")
+    for naam, p in dorp["plekken"].items():
+        if naam != "emmer":
+            moet("spot " + naam, p[0], p[2], K_LAND + K_DEK)
+    moet("the pond", 64, 62, K_EILAND)
+    moet("the well", PLEIN[0], PLEIN[1], K_EILAND)
+    moet("the harbour basin", HAVEN_X + 8, STEIGER_Z + 7, K_ZEE)
+    moet("the harbour basin under the quay", HAVEN_X, STEIGER_Z - 6, K_ZEE)
+    moet("the open sea", 2, 2, K_ZEE)
+    moet("the roadblock", CX, VERSPERRING_Z, K_DICHT)
+    for z in range(GRENS_Z, VERSPERRING_Z):
+        for dx in (-2, -1, 0, 1, 2):
+            moet("the pocket behind the roadblock", CX + dx, z, K_DICHT)
+    for z in range(SZ):
+        for x in range(SX):
+            c = rijen[z][x]
+            if c in (K_LAND, K_DEK) and z < GRENS_Z + 2:
+                problems.append(f"land map: walkable land at {(x, z)} lies behind the roadblock's line")
+            if c == K_ZEE and (x, z) not in b.top and z > rug_z(x) + 0.6 and any(s.get(x, y, z) != "minecraft:water" and s.get(x, y, z) is not None for y in (G - 1, G - 2)):
+                problems.append(f"land map: the sea at {(x, z)} is less than two blocks deep")
+            if c == K_DICHT and z > rug_z(x) + 0.6:
+                problems.append(f"land map: closed ground at {(x, z)} lies south of the ridge")
+    return dict(breed=SX, diep=SZ, rijen=rijen), problems
+
+
 # --- the game tests' floor: a field of grass with a sand rim (feature/snuffeldorp/SnuffeldorpGameTests marks its own island on it) ---
 TEST_MAAT = (41, 6, 41)
+# --- the sea rule's test island (1.4.1): land with a pond, a walled-in sea one block deep, a deck over it, bare floor to the east ---
+ZEE_MAAT = (29, 4, 13)
+ZEE_EILAND = (21, 4, 13)          # the island's box inside that template (the rest is "home")
+
+
+def test_zee(h):
+    """-> (Structure, rows of the test island's land map): the same five kinds of column as the real map, small enough to
+    read: rows z 0-1 of the land are closed ground, the rest is walkable; x 10 is the wet edge, x 11-19 the sea, with a
+    deck over it at z 6 (x 10-13); one block of pond at (4, 6)."""
+    t = h.Structure(ZEE_MAAT)
+    ex, _ey, ez = ZEE_EILAND
+    rijen = []
+    for z in range(ez):
+        rij = []
+        for x in range(ZEE_MAAT[0]):
+            t.set(x, 0, z, "minecraft:stone")
+            if x >= ex:
+                continue
+            if x < 10:
+                vijver = (x, z) == (4, 6)
+                t.set(x, 1, z, "minecraft:water" if vijver else "minecraft:grass_block", {"level": "0"} if vijver else None)
+                rij.append(K_EILAND if vijver else K_DICHT if z < 2 else K_LAND)
+            elif x == ex - 1 or z in (0, ez - 1):
+                t.set(x, 1, z, "minecraft:stone")           # the wall that keeps the sea in
+                rij.append(K_ZEE)
+            else:
+                t.set(x, 1, z, "minecraft:water", {"level": "0"})
+                dek = z == 6 and x <= 13
+                if dek:
+                    t.set(x, 2, z, "minecraft:spruce_planks")
+                rij.append(K_DEK if dek else K_EILAND if x == 10 else K_ZEE)
+        rijen.append("".join(rij))
+    return t, rijen
 
 
 def test_vloer(h):
@@ -1753,4 +1884,6 @@ if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "."
     os.makedirs(out, exist_ok=True)
     plattegrond(bb, os.path.join(out, "plattegrond.png"))
+    with open(os.path.join(out, "kaart.txt"), "w", encoding="utf-8") as f_:
+        f_.write("\n".join(bb.kaart["rijen"]) + "\n")
     print(len(bb.s.blocks), "blocks;", "strand", d_["strand"], "haven", d_["haven"])

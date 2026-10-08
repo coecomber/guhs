@@ -324,6 +324,10 @@ LANG = {
     G + "optie.naar_huis": "Vaar me maar naar huis",
     G + "optie.blijven": "Ik blijf nog even",
     # the keys on the screen
+    G + "actie.blaf": "Blaffen",              # (1.4.1) the four dog actions with their keys, top left under the objective line
+    G + "actie.kwispel": "Kwispelen",
+    G + "actie.snuffel": "Snuffelen",
+    G + "actie.zit": "Zitten",
     G + "toets.snuffel": "[%s] ingedrukt: snuffelen",
     G + "toets.graaf": "[%s] graven",
     G + "toets.zit": "[%s] zitten   [%s] kwispelen",
@@ -391,7 +395,7 @@ STAPPEN = [  # (stapnaam, nu, waar): the questline "snuffeleiland" in the Guhdex
 KORT = {"0": "Zoek een steigerhuisje aan het water", "1": "Ga naar het ziekbed, kies je hond en vaar uit",   # snuffel-steiger (the steps 0-1)
         # snuffel-dorp (the steps 2-8 and their variants)
         "2": "Loop naar het dorp en praat met Jutje Kwispel", "3": "Praat met Dokter Pleisterpoot (het huis met het rode kruis)",
-        "4": "Praat met Meester Truffelneus in de wei", "4_bot": "Les 1: snuffel het kluifje op en graaf het uit",
+        "4": "Praat met Meester Truffelneus in de wei", "4_bot": "Les 1: snuffel het kluifje op. Graven: houd je linkermuisknop ingedrukt",
         "4_fluit": "Les 2: snuffel het fluitje op (blauw, verder weg)", "4_bij": "Les 3: snuffel bij de bijeneik (groen, niet graven)",
         "4_terug": "Ga terug naar Meester Truffelneus", "5": "Ga kijken bij de put op het plein", "6": "Vraag de dorpelingen wat ze kwijt zijn",
         "6_zoek": "Snuffel op wat de dorpelingen kwijt zijn", "6_breng": "Breng terug wat je hebt gevonden",
@@ -403,8 +407,8 @@ EXTRA = {
     # snuffel-dorp
     "thuis": ("Het verhaal gaat verder op het Snuffeleiland. Ga naar een steigerhuisje aan het water en vraag de kapitein om je over te varen.",
               "Een steigerhuisje aan een Diepe Guhzee in de Guhmensie"),
-    "4_bot": ("Les 1: houd de snuffeltoets ingedrukt en loop naar waar de oranje meter het hardst uitslaat. Slaat hij helemaal uit? Graaf dan met "
-              "de aanvalsknop.", "De wei, vlak bij Meester Truffelneus"),
+    "4_bot": ("Les 1: houd de snuffeltoets ingedrukt en loop naar waar de oranje meter het hardst uitslaat. Slaat hij helemaal uit? Houd dan "
+              "gewoon je linkermuisknop ingedrukt: als hond breek je het blok niet, je graaft.", "De wei, vlak bij Meester Truffelneus"),
     "4_fluit": ("Les 2: het fluitje van de meester ligt verder weg in de wei, bij de heg aan de westkant. Blauw is een ding. Graaf het op.",
                 "De wei, richting de heg"),
     "4_bij": ("Les 3: niet alles ligt onder de grond. Ga vlak bij de bijeneik aan de westkant van de wei staan en blijf snuffelen.",

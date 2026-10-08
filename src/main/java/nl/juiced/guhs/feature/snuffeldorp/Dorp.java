@@ -211,6 +211,7 @@ public final class Dorp {
             return;
         }
         Wegversperring.tick(p, plaats, pl);
+        Zee.tick(p, plaats, pl);
         // (the server's clock: a game test's mock player has no tick count of its own)
         if ((p.level().getServer().getTickCount() + p.getId()) % 5 != 0 || Cutscenes.bezig(p)) {
             return;
