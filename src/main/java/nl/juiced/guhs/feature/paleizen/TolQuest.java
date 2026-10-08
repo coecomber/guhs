@@ -34,14 +34,14 @@ import nl.juiced.guhs.feature.wereld.Bezetting;
 import nl.juiced.guhs.feature.wereld.Herstel;
 import nl.juiced.guhs.feature.wereld.QuestRol;
 import nl.juiced.guhs.quest.GuhQuests;
-import nl.juiced.guhs.registry.ModItems;
 
 /**
  * bbq2 (paleizen): "De tolbrug van het Mika-brugpaleis" (Verhaallijn {@code tolwachter}, per player):
  * <ol start="0">
  *   <li>talk to the Tolwachter-Mika in the mouth of the tolhuis;</li>
- *   <li>pay {@link #TOL} kaasknabbels, or guess {@link #RAADSELS_NODIG} of his riddles (a wrong answer costs nothing: another
- *       riddle). Until then the gate shoves you back out ({@link #poort}: a Duwtje, per player; the passage itself is open);</li>
+ *   <li>guess {@link #RAADSELS_NODIG} of his riddles (a wrong answer costs nothing: another riddle). The riddles are the only
+ *       way through: he does not take kaasknabbels for it (he only grumbles that he would rather have had them). Until then the
+ *       gate shoves you back out ({@link #poort}: a Duwtje, per player; the passage itself is open);</li>
  *   <li>lay the {@link #RIJEN} missing rows of planks in the bridge ({@link #legPlank}: one plank of his lays a row). Every
  *       row falls out again {@link #HERSTEL_TICKS} ticks after it was laid, so the next player finds the gap again; under the
  *       gap hangs a scaffold, nobody falls far;</li>
@@ -51,15 +51,15 @@ import nl.juiced.guhs.registry.ModItems;
  */
 public final class TolQuest {
     static final String Q = "quest.guhs.paleizen.tol.", GUI = "gui.guhs.paleizen.";
-    public static final int TOL = 8, RAADSELS_NODIG = 3, RIJEN = 5;
+    public static final int RAADSELS_NODIG = 3, RIJEN = 5;
     /** A row of planks stays this long (a minute), then the gap is back for the next player. */
     public static final int HERSTEL_TICKS = 1200;
     /** The right answer (0, 1, 2 = a, b, c) of every riddle: tools/features/paleizen_tekst.py RAADSELS (the self-check compares). */
     static final int[] GOED = {0, 1, 2, 0, 1, 2};
-    private static final int OPTIE_TOL = 1, OPTIE_RAADSELS = 2, OPTIE_LATER = 3, OPTIE_ANTWOORD = 10;
+    private static final int OPTIE_RAADSELS = 2, OPTIE_LATER = 3, OPTIE_ANTWOORD = 10;
 
     public static final Verhaallijn LIJN = Verhaallijn.maak("tolwachter", "barbecue").stappen(5).icoon("minecraft:bell")
-            .nodig((p, stap) -> stap == 1 ? List.of(Verhaallijn.nodig("guhs:kaas_knabbels", GUI + "nodig.tol", GuhQuests.count(p, ModItems.KAAS_KNABBELS.get()), TOL))
+            .nodig((p, stap) -> stap == 1 ? List.of(Verhaallijn.nodig("minecraft:writable_book", GUI + "nodig.raadsels", TolQuest.LIJN.teller(p, "goed"), RAADSELS_NODIG))
                     : stap == 2 ? List.of(Verhaallijn.nodig("guhs:paleizen_losse_plank", GuhQuests.count(p, PaleizenFeature.LOSSE_PLANK.get()), 1)) : List.of())
             .beloningen(p -> List.of(Verhaallijn.beloning("minecraft:bell", GUI + "beloning.doorgang", magDoor(p)),
                     Verhaallijn.beloning("guhs:paleizen_recept_brug", klaar(p)), Verhaallijn.beloning("guhs:paleizen_brugplank", klaar(p)),
@@ -79,7 +79,7 @@ public final class TolQuest {
         return LIJN.klaar(p);
     }
 
-    /** May this player walk through the gate (toll paid or riddles guessed, in their own questline)? */
+    /** May this player walk through the gate (riddles guessed, in their own questline)? */
     public static boolean magDoor(ServerPlayer p) {
         return LIJN.stap(p) >= 2;
     }
@@ -97,8 +97,7 @@ public final class TolQuest {
                 case 0, 1 -> {
                     LIJN.begin(p);
                     verder(p, 0);
-                    scherm(p, npc, Q + "hallo", new Praat.Optie(OPTIE_TOL, Q + "optie.tol"), new Praat.Optie(OPTIE_RAADSELS, Q + "optie.raadsels"),
-                            new Praat.Optie(OPTIE_LATER, Q + "optie.later"));
+                    scherm(p, npc, Q + "hallo", new Praat.Optie(OPTIE_RAADSELS, Q + "optie.raadsels"), new Praat.Optie(OPTIE_LATER, Q + "optie.later"));
                 }
                 case 2 -> {
                     int nog = openRijen(p);
@@ -140,17 +139,7 @@ public final class TolQuest {
             if (stap != 1) {
                 return;
             }
-            if (optie == OPTIE_TOL) {
-                int heb = GuhQuests.count(p, ModItems.KAAS_KNABBELS.get());
-                if (heb < TOL) {
-                    zeg(p, npc, Q + "tol_tekort", heb);
-                    return;
-                }
-                GuhQuests.take(p, ModItems.KAAS_KNABBELS.get(), TOL);
-                p.level().playSound(null, npc, SoundEvents.CHAIN_PLACE, SoundSource.NEUTRAL, 1f, 1.4f);
-                zeg(p, npc, Q + "tol_betaald");
-                door(npc, p);
-            } else if (optie == OPTIE_RAADSELS) {
+            if (optie == OPTIE_RAADSELS) {
                 vraag(npc, p);
             } else if (optie >= OPTIE_ANTWOORD && optie < OPTIE_ANTWOORD + 3) {
                 int raadsel = Math.floorMod(LIJN.teller(p, "raadsel"), GOED.length);
@@ -181,7 +170,7 @@ public final class TolQuest {
                     new Praat.Optie(OPTIE_ANTWOORD + 2, key + ".c"));
         }
 
-        /** Toll paid or riddles guessed: the gate is open for this player, and here are the planks for the gap. */
+        /** Riddles guessed: the gate is open for this player, and here are the planks for the gap. */
         private void door(GuhNpcEntity npc, ServerPlayer p) {
             if (verder(p, 1)) {
                 geefPlanken(p, RIJEN);
@@ -201,11 +190,11 @@ public final class TolQuest {
 
     // --- the gate --------------------------------------------------------------------------------------------------------
 
-    /** (not saved) when a player last got the "first pay" message, and for how many ticks in a row they stood in the gate. */
+    /** (not saved) when a player last got the "riddles first" message, and for how many ticks in a row they stood in the gate. */
     private static final Map<UUID, long[]> POORT = new ConcurrentHashMap<>();
 
     /**
-     * Every tick for a player near a Mika-brugpaleis: whoever stands in the passage of the tolhuis without having paid is
+     * Every tick for a player near a Mika-brugpaleis: whoever stands in the passage of the tolhuis without having guessed the riddles is
      * shoved back out towards the mouth (and put back in front of it when they keep pushing). True when it shoved.
      */
     public static boolean poort(ServerPlayer p, @Nullable StructureStart brug) {

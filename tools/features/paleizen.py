@@ -10,7 +10,7 @@ Java: src/main/java/nl/juiced/guhs/feature/paleizen/.
     sweet hoglin parody, a farm animal of the Guhboerderij kind). The Stalknecht-guh (NPC stalknechtguh, questline stalknecht):
     pet three restless Worstzwijntjes calm, fill the voerbak, catch the runaway. Reward: two Worstzwijntjes in a basket.
   - guhs:mika_brugpaleis (paleizen_bouw.brugpaleis): a toll bridge through a giant Mika's mouth. The Tolwachter-Mika (NPC
-    tolwachter_mika, questline tolwachter): pay toll or guess three riddles, lay the five missing rows of planks (they fall
+    tolwachter_mika, questline tolwachter): guess three riddles (the only way through), lay the five missing rows of planks (they fall
     out again after a minute, for the next player), ring the tolbel. Reward: free passage, the bridge building set (the blocks
     paleizen_brugplank and paleizen_brugleuning and their recipe card paleizen_recept_brug).
 
@@ -349,8 +349,8 @@ def ftb(fq):
       "guhs:paleizen_brugplank", [structure("mika_brugpaleis")], rewards=(("guhs:kaas_knabbels", 12),), deps=["bbq_aan"], shape="hexagon", xp=100)
     wereld.ftb_questlijn(fq, "paleizen", "tolwachter", [
         ("HALT! Tol!", "In de bek zit de &cTolwachter-Mika&r. Praat met hem.", "minecraft:gold_nugget"),
-        ("Knabbels of raadsels", "Betaal &68 kaasknabbels&r tol, of raad &ddrie raadsels&r goed. Fout geraden? Dan krijg je gewoon een "
-                                 "ander raadsel.", "guhs:kaas_knabbels"),
+        ("Raadsels, geen knabbels", "De tol is hier geen knabbel maar een raadsel: raad &ddrie raadsels&r goed. Fout geraden? Dan "
+                                    "krijg je gewoon een ander raadsel.", "minecraft:writable_book"),
         ("Mika-kwaliteit", "De brug is kapot (alweer). Leg de vijf planken van de Tolwachter in het gat: rechtsklik met een plank, "
                            "vlak bij het gat. Erin gevallen? Onder het gat hangt een steiger met een ladder.", "guhs:paleizen_losse_plank"),
         ("DONG!", "Loop over de gemaakte brug naar de klokkentoren en luid de &6tolbel&r. Schiet op: na een minuutje vallen de planken "
@@ -358,7 +358,7 @@ def ftb(fq):
         ("Tolvrij!", "Ga terug naar de Tolwachter-Mika. Je mag voortaan altijd gratis door, en je krijgt de &6bouwtekening&r van de "
                      "brug met planken en touwleuning.", "guhs:paleizen_recept_brug"),
     ], na=["paleizen_brug_vind"], eind=(("guhs:kaas_knabbels", 16),))
-    q("paleizen_raadsels", "Raadselkoning", "Raad drie raadsels van de Tolwachter-Mika goed (in plaats van tol te betalen). Njeg njeg njeg!",
+    q("paleizen_raadsels", "Raadselkoning", "Raad drie raadsels van de Tolwachter-Mika goed. Hij had liever knabbels gehad. Njeg njeg njeg!",
       "minecraft:writable_book", [adv("paleizen_raadsels")], rewards=(("guhs:kaas_knabbels", 8),), deps=["paleizen_tolwachter_1"])
     q("paleizen_brug_bouwen", "Je eigen Mika-brug", "Met de &6bouwtekening&r in je werkbank maak je &dMika-brugplanken&r (planken en "
       "touw) en &dtouwleuning&r (stokjes en touw). De tekening blijft gewoon liggen.", "guhs:paleizen_brugleuning",

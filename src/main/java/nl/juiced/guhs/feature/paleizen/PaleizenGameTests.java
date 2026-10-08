@@ -574,9 +574,17 @@ public class PaleizenGameTests {
     // the Tolwachter-Mika
     // =================================================================================================================
 
+    /** Asks the Tolwachter for his riddles (answer 2) and gives three right answers in a row (answers 10, 11, 12 = a, b, c). */
+    private static void raadDrie(GuhNpcEntity wachter, ServerPlayer p) {
+        TolQuest.ROL.antwoord(wachter, p, 2);
+        for (int i = 0; i < TolQuest.RAADSELS_NODIG; i++) {
+            TolQuest.ROL.antwoord(wachter, p, 10 + TolQuest.GOED[TolQuest.LIJN.teller(p, "raadsel") % TolQuest.GOED.length]);
+        }
+    }
+
     /**
-     * "De tolbrug" at a copy of the Mika-brugpaleis: the gate shoves back whoever has not paid (and nobody else), toll or
-     * three riddles open it per player, five planks lay the five rows (everyone who laid one has mended it; the rows fall
+     * "De tolbrug" at a copy of the Mika-brugpaleis: the gate shoves back whoever has not guessed the riddles (and nobody
+     * else), only three riddles open it per player (kaasknabbels buy nothing), five planks lay the five rows (everyone who laid one has mended it; the rows fall
      * out again), the tolbel only counts on its step, and the building set comes once (the card again when lost).
      */
     @GuhTest(template = KAMER, batch = "paleizen_tol", timeoutTicks = 200)
@@ -595,7 +603,7 @@ public class PaleizenGameTests {
                     && NpcRollen.van(wachters.get(0)) == TolQuest.ROL, "the Tolwachter-Mika sits beside the mouth: " + wachters);
             GuhNpcEntity wachter = wachters.get(0);
             Item knabbels = ModItems.KAAS_KNABBELS.get(), plank = PaleizenFeature.LOSSE_PLANK.get();
-            // the gate: a shove back towards the mouth for a (survival, not paid); never for creative players
+            // the gate: a shove back towards the mouth for a (survival, no riddles guessed); never for creative players
             BlockPos inPoort = new BlockPos(12, 2, 10);
             Vec3 buiten = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(1, 2, 10)));
             naar(helper, a, inPoort);
@@ -614,14 +622,18 @@ public class PaleizenGameTests {
             naar(helper, b, inPoort);
             helper.assertTrue(!TolQuest.poort(b, start), "a creative player walks through");
             b.setGameMode(GameType.SURVIVAL);
-            // step 0 and 1 for a: toll
+            // step 0 and 1 for a: the riddles are the only way through. The old pay option (answer 1) is gone: knabbels buy nothing
             TolQuest.ROL.talk(wachter, a);
-            helper.assertTrue(TolQuest.LIJN.stap(a) == 1 && !TolQuest.magDoor(a), "he wants toll or riddles");
-            TolQuest.ROL.antwoord(wachter, a, 1);
-            helper.assertTrue(TolQuest.LIJN.stap(a) == 1, "no knabbels, no passage");
+            helper.assertTrue(TolQuest.LIJN.stap(a) == 1 && !TolQuest.magDoor(a), "he wants riddles");
             a.getInventory().add(new ItemStack(knabbels, 10));
             TolQuest.ROL.antwoord(wachter, a, 1);
-            helper.assertTrue(TolQuest.LIJN.stap(a) == 2 && tel(a, knabbels) == 2 && tel(a, plank) == TolQuest.RIJEN && TolQuest.magDoor(a), "eight knabbels: through, with five planks");
+            helper.assertTrue(TolQuest.LIJN.stap(a) == 1 && tel(a, knabbels) == 10 && tel(a, plank) == 0 && !TolQuest.magDoor(a) && TolQuest.LIJN.teller(a, "goed") == 0,
+                    "paying is no option any more: the knabbels stay, the gate stays shut");
+            naar(helper, a, inPoort);
+            helper.assertTrue(TolQuest.poort(a, start), "a pocket full of knabbels does not open the gate");
+            raadDrie(wachter, a);
+            helper.assertTrue(TolQuest.LIJN.stap(a) == 2 && tel(a, knabbels) == 10 && tel(a, plank) == TolQuest.RIJEN && TolQuest.magDoor(a),
+                    "three riddles: through, with five planks, and the riddles cost no knabbels");
             naar(helper, a, inPoort);
             helper.assertTrue(!TolQuest.poort(a, start) && TolQuest.poort(b, start), "the gate is open for a, not for b");
             // step 1 for b: riddles; a wrong answer costs nothing
@@ -636,10 +648,9 @@ public class PaleizenGameTests {
                 TolQuest.ROL.antwoord(wachter, b, 10 + TolQuest.GOED[TolQuest.LIJN.teller(b, "raadsel") % TolQuest.GOED.length]);
             }
             helper.assertTrue(TolQuest.LIJN.stap(b) == 2 && tel(b, plank) == TolQuest.RIJEN && !TolQuest.poort(b, start), "three right: b is through too");
-            // c pays as well and lays nothing
+            // c guesses them as well and lays nothing
             TolQuest.ROL.talk(wachter, c);
-            c.getInventory().add(new ItemStack(knabbels, 8));
-            TolQuest.ROL.antwoord(wachter, c, 1);
+            raadDrie(wachter, c);
             // step 2: the gap. Far away nothing is laid; near it a plank lays a whole row, from the tolhuis side on
             BoundingBox gat = PaleisPlekken.wereld(start, PaleisPlekken.Brug.GAT);
             BlockPos rij0 = helper.absolutePos(new BlockPos(29, 1, 8));
@@ -717,15 +728,14 @@ public class PaleizenGameTests {
                 helper.assertTrue(TolQuest.LIJN.klaar(later) && tel(later, kaart) == 1 && tel(later, PaleizenFeature.BRUGPLANK.get().asItem()) == 16
                         && tel(later, PaleizenFeature.BRUGLEUNING.get().asItem()) == 8, "done after the first player, with the same building set");
             }
-            // and somebody who only arrives now does the whole line: toll, the gap (it fell open again), the bell, the reward
+            // and somebody who only arrives now does the whole line: the riddles, the gap (it fell open again), the bell, the reward
             ServerPlayer e = speler(helper, new BlockPos(27, 2, 10));
             try {
                 Kopieen.testWissen(level);
                 StructureStart weer = PaleisProef.bouw(level, PaleisPlekken.BRUGPALEIS, new BlockPos(29, 28, 5), helper.absolutePos(new BlockPos(0, 1, 0)), false);
                 TolQuest.ROL.talk(wachter, e);
-                e.getInventory().add(new ItemStack(knabbels, 8));
-                TolQuest.ROL.antwoord(wachter, e, 1);
-                helper.assertTrue(TolQuest.LIJN.stap(e) == 2 && TolQuest.magDoor(e) && TolQuest.openRijen(level, weer) == 5, "the newcomer paid; the gap lies open for them");
+                raadDrie(wachter, e);
+                helper.assertTrue(TolQuest.LIJN.stap(e) == 2 && TolQuest.magDoor(e) && TolQuest.openRijen(level, weer) == 5, "the newcomer guessed three; the gap lies open for them");
                 ItemStack vanE = inHand(e, plank);
                 for (int i = 0; i < TolQuest.RIJEN; i++) {
                     TolQuest.legPlank(e, vanE);

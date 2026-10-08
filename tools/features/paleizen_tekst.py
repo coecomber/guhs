@@ -71,12 +71,12 @@ LIJNEN = {
               "3_gevangen": "Breng Knorretje naar de Stalknecht-guh"}),
     "tolwachter": dict(
         naam="De tolbrug van het Mika-brugpaleis",
-        uitleg="Niemand komt over de brug zonder tol te betalen of drie raadsels te raden. En de brug zelf? Die is alweer kapot. "
+        uitleg="Niemand komt over de brug zonder drie raadsels van de Tolwachter te raden. En de brug zelf? Die is alweer kapot. "
                "Mika-kwaliteit, njeg.",
         stappen=[
             ("Praat met de Tolwachter-Mika", "Loop naar de reusachtige Mikabek en praat met de Tolwachter-Mika.",
              "Het Mika-brugpaleis in de Guhbarbecuether (superkompas: Barbecue)"),
-            ("Betaal tol of raad drie raadsels", "Betaal 8 kaasknabbels tol, of raad drie raadsels van de Tolwachter-Mika goed.",
+            ("Raad drie raadsels", "Raad drie raadsels van de Tolwachter-Mika goed. Fout geraden? Dan krijg je gewoon een ander raadsel.",
              "Bij de Tolwachter-Mika in de poort"),
             ("Repareer de brug", "Leg de vijf brugplanken van de Tolwachter in het gat (rechtsklik met een plank, vlak bij het gat).",
              "Op de brug, voorbij het tolhuis"),
@@ -85,7 +85,7 @@ LIJNEN = {
             ("Terug naar de Tolwachter", "Ga terug naar de Tolwachter-Mika voor je beloning.", "Bij de Tolwachter-Mika in de poort"),
         ],
         klaar=("De brug is heel (voor even), de bel luidt en jij mag altijd gratis door. Vahoeg!", "Het Mika-brugpaleis"),
-        kort={"0": "Praat met de Tolwachter-Mika", "1": "Betaal tol of raad drie raadsels", "2": "Leg de vijf planken in het gat",
+        kort={"0": "Praat met de Tolwachter-Mika", "1": "Raad drie raadsels van de Tolwachter", "2": "Leg de vijf planken in het gat",
               "3": "Luid de tolbel aan de overkant", "4": "Ga terug naar de Tolwachter-Mika"}),
 }
 
@@ -229,9 +229,7 @@ TEXTS = {
     GUI + "knorretje": "Knorretje",
     # --- the Tolwachter-Mika -----------------------------------------------------------------------------------------------
     TOL + "hallo": "HALT! Dit is de tolbrug van het Mika-brugpaleis en ik ben de Tolwachter. Niemand komt door mijn bek... eh, door "
-                   "DE bek, zonder tol. Acht kaasknabbels. Of, als je denkt dat je slim bent: drie raadsels. Njeg njeg njeg.",
-    TOL + "tol_tekort": "Acht kaasknabbels, zei ik. Jij hebt er %s. Tellen kan ik wel, njeg. Probeer anders de raadsels.",
-    TOL + "tol_betaald": "Acht knabbels! Kling klang, in het spaarpotje. Je mag door.",
+                   "DE bek, zonder tol. En de tol is: drie raadsels. Ik had liever knabbels gehad, maar de baas zegt raadsels. Njeg njeg njeg.",
     TOL + "raadsel_goed": "Grr. Goed. Dat is er %s van de 3.",
     TOL + "raadsel_fout": "FOUT! Njeg njeg njeg! Denk nog maar eens goed na. Ik heb er nog meer.",
     TOL + "raadsels_klaar": "Drie goed?! Wie heeft jou de antwoorden verteld... Nou ja. Afspraak is afspraak. Je mag door.",
@@ -242,15 +240,14 @@ TEXTS = {
     TOL + "brug_kwijt": "Planken kwijt? In de saus laten vallen zeker. Hier, ik heb er nog. Ik heb er ALTIJD nog.",
     TOL + "brug_wacht": "Iemand anders heeft de brug net gemaakt. Wacht maar even: hij stort zo weer in. Mika-kwaliteit!",
     TOL + "bel_nog": "De brug is heel? Luid dan de tolbel in de klokkentoren aan de overkant. Dan weet iedereen dat de brug weer "
-                     "open is. En dat er weer tol te halen valt!",
-    TOL + "klaar": "DONG! Ik hoorde hem tot hier. Mooi werk. Vooruit: jij betaalt nooit meer tol op mijn brug. En hier, de "
+                     "open is. En dat er weer raadsels te raden vallen!",
+    TOL + "klaar": "DONG! Ik hoorde hem tot hier. Mooi werk. Vooruit: jij hoeft nooit meer een raadsel te raden op mijn brug. En hier, de "
                    "bouwtekening van de brug, met wat planken en touwleuning. Kun je thuis je eigen brug bouwen. Zonder tol. "
                    "Zonde, maar goed.",
     TOL + "dank0": "Vrije doorgang voor jou. Maar zeg het niet tegen de anderen, straks wil iedereen het.",
     TOL + "dank1": "De brug is alweer ingestort? Ja. Dat doet hij. Daar is het een Mika-brug voor.",
     TOL + "dank2": "Wil je nog een raadsel? Wat is geel en kost acht knabbels? ...Niks. Ik wil gewoon acht knabbels.",
     TOL + "tekening_kwijt": "Bouwtekening kwijt? Hier is een nieuwe. Ik teken ze zelf. Daarom staat de brug er scheef op.",
-    TOL + "optie.tol": "Ik betaal tol (8 kaasknabbels)",
     TOL + "optie.raadsels": "Kom maar op met die raadsels!",
     TOL + "optie.later": "Ik kom later terug",
     TOL + "optie.ok": "Komt goed!",
@@ -258,7 +255,7 @@ TEXTS = {
     TOL + "hint.brug": "leg de vijf planken in het gat in de brug (rechtsklik met een plank, vlak bij het gat)",
     TOL + "hint.bel": "loop over de brug naar de klokkentoren en luid de tolbel",
     TOL + "hint.terug": "ga terug naar de Tolwachter-Mika voor je beloning",
-    GUI + "tol.halt": "Ho ho! Eerst tol betalen of drie raadsels raden, njeg!",
+    GUI + "tol.halt": "Ho ho! Eerst drie raadsels raden, njeg!",
     GUI + "tol.plank": "Tik tik tik! Nog %s rijen planken.",
     GUI + "tol.plank.op": "Je planken zijn op, maar er missen nog %s rijen. Haal nieuwe planken bij de Tolwachter-Mika.",
     GUI + "tol.plank.ver": "Loop naar het gat in de tolbrug om deze plank te leggen.",
@@ -269,12 +266,12 @@ TEXTS = {
     GUI + "tol.bel.niet_nu": "Dong. Mooi geluid. Maar de Tolwachter weet van niks: praat eerst met hem.",
     GUI + "beloning.doorgang": "Vrije doorgang over de tolbrug, voor altijd",
     GUI + "beloning.zwijntjes": "Twee Worstzwijntjes in een mandje (voor thuis)",
-    GUI + "nodig.tol": "Kaasknabbels voor de tol (of raad drie raadsels)",
+    GUI + "nodig.raadsels": "Raadsels van de Tolwachter goed geraden",
     # --- the signs in the templates ----------------------------------------------------------------------------------------
-    SIGN + "brug.welkom1": "TOLBRUG", SIGN + "brug.welkom2": "Mika-brugpaleis", SIGN + "brug.welkom3": "Tol: 8 knabbels",
-    SIGN + "brug.tol1": "HALT! TOL!", SIGN + "brug.tol2": "8 kaasknabbels", SIGN + "brug.tol3": "of 3 raadsels",
-    SIGN + "brug.tol4": "(geen korting)",
-    SIGN + "brug.dag1": "Tot ziens!", SIGN + "brug.dag2": "Kom nog eens", SIGN + "brug.dag3": "betalen, njeg",
+    SIGN + "brug.welkom1": "TOLBRUG", SIGN + "brug.welkom2": "Mika-brugpaleis", SIGN + "brug.welkom3": "Tol: 3 raadsels",
+    SIGN + "brug.tol1": "HALT! TOL!", SIGN + "brug.tol2": "3 raadsels raden", SIGN + "brug.tol3": "Knabbels? Nee.",
+    SIGN + "brug.tol4": "(helaas, njeg)",
+    SIGN + "brug.dag1": "Tot ziens!", SIGN + "brug.dag2": "Kom nog eens", SIGN + "brug.dag3": "raden, njeg",
     SIGN + "brug.kantoor1": "Tolkantoor", SIGN + "brug.kantoor2": "Klachten?", SIGN + "brug.kantoor3": "Kosten ook tol.",
     SIGN + "brug.wacht1": "Wachtkamer", SIGN + "brug.wacht2": "Wachten is", SIGN + "brug.wacht3": "gratis. Nog wel.",
     SIGN + "brug.spaar1": "Spaarpotje van", SIGN + "brug.spaar2": "de Tolwachter", SIGN + "brug.spaar3": "AFBLIJVEN!",
@@ -314,7 +311,7 @@ PAGINA = ("Worstzwijntje", "Ongewoon (in de Mika-stal van de Guhbarbecuether)",
 STRUCTUREN = {
     "mika_woonblokken": ("Mika-woonblokken", "De flats van de Nether-Mika's: galerijen, waslijnen en Mika-oma met haar soep (Guhbarbecuether)"),
     "mika_stal": ("Mika-stal", "De stal van de Worstzwijntjes, met de Stalknecht-guh voor de grote deur (Guhbarbecuether)"),
-    "mika_brugpaleis": ("Mika-brugpaleis", "Een tolbrug door de bek van een reusachtige Mika. De Tolwachter wil knabbels of raadsels (Guhbarbecuether)"),
+    "mika_brugpaleis": ("Mika-brugpaleis", "Een tolbrug door de bek van een reusachtige Mika. De Tolwachter wil drie raadsels van je horen (Guhbarbecuether)"),
 }
 
 # visible advancements (tab guhs:barbecuether/): name -> (parent, icon, frame, title, text, structure or None)
@@ -327,7 +324,7 @@ ADVANCEMENTS = {
                             "Kalmeer de Worstzwijntjes, vul de voerbak en vang Knorretje", None),
     "paleizen_brugpaleis": ("binnen", "guhs:paleizen_brugplank", "task", "Door de bek van de Mika", "Vind het Mika-brugpaleis", "mika_brugpaleis"),
     "paleizen_tolwachter": ("paleizen_brugpaleis", "minecraft:bell", "goal", "Tolvrij!",
-                            "Betaal tol of raad de raadsels, repareer de brug en luid de tolbel", None),
+                            "Raad de raadsels, repareer de brug en luid de tolbel", None),
 }
 # hidden ones for FTB tasks (besides quest/<lijn>_stap_<i>)
 VERBORGEN = ["paleizen_raadsels", "paleizen_snuffel", "paleizen_korting"]
