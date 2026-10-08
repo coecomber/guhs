@@ -39,8 +39,11 @@ public final class Kudde {
     public static final String TAG = "guhs_bio_bouw_wolk1_kudde";
     public static final int AANTAL = 4;
     public static final int ELKE = 200;
-    /** Further than this from the middle of the fold (sideways), or this far above or below it: back into the fold. */
-    public static final double LOS = 4.8, LOS_HOOG = 3.0;
+    /**
+     * Further than this from the middle of the fold along x or z (a square: the fold is 8 x 8 fence, so a schaapje inside
+     * is at most 3.4 from the middle and one outside the fence at least 3.6), or this far above or below it: back in.
+     */
+    public static final double LOS = 3.5, LOS_HOOG = 3.0;
     /** A herd schaapje within this many blocks still counts (it is fetched, not replaced). */
     public static final int ZOEK = 64;
     /** roleData of the wolkenhoeder: the middle of the fold (found once from where the herd stands). */
@@ -65,7 +68,7 @@ public final class Kudde {
         CompoundTag d = npc.roleData;
         if (d.contains(WEI)) {
             BlockPos p = BlockPos.of(d.getLongOr(WEI, 0L));
-            return new Vec3(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+            return new Vec3(p.getX(), p.getY(), p.getZ());      // (a block corner: the middle of an even-sized fold)
         }
         Vec3 som = Vec3.ZERO;
         int n = 0;
@@ -79,8 +82,9 @@ public final class Kudde {
             return npc.position();           // (no herd to learn the fold from yet: nothing is remembered)
         }
         Vec3 midden = som.scale(1.0 / n);
-        d.putLong(WEI, BlockPos.containing(midden.x, npc.getY(), midden.z).asLong());
-        return new Vec3(midden.x, npc.getY(), midden.z);
+        BlockPos p = BlockPos.containing(Math.round(midden.x), npc.getY(), Math.round(midden.z));
+        d.putLong(WEI, p.asLong());
+        return new Vec3(p.getX(), p.getY(), p.getZ());
     }
 
     /** The wolkenhoeder looks after his herd once. Returns {fetched back, called anew}. */
@@ -98,7 +102,7 @@ public final class Kudde {
                 m.dropLeash();
             }
             double dx = m.getX() - wei.x, dz = m.getZ() - wei.z;
-            if (dx * dx + dz * dz > LOS * LOS || Math.abs(m.getY() - wei.y) > LOS_HOOG) {
+            if (Math.abs(dx) > LOS || Math.abs(dz) > LOS || Math.abs(m.getY() - wei.y) > LOS_HOOG) {
                 zetTerug(level, m, wei, kudde.indexOf(m));
                 terug++;
             }

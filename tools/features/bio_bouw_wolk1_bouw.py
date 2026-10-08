@@ -79,7 +79,7 @@ def hekken(s, b):
     """Fences join their neighbours (fence, gate, any full block), as the game would on placement."""
     los = {"minecraft:water", "minecraft:air", "guhs:roze_gras", "guhs:pluisgras", "guhs:roze_guhbloem", "guhs:wolkenstroom", "guhs:bleek_hangmos",
            "guhs:guh_kristal_cluster", b["lamp"], b["bank"], b["bed"], b["deur"], "guhs:mini_luchtballon", "guhs:lampion_roze",
-           "guhs:guh_telescoop", "guhs:guh_stoel", "guhs:sterrenlantaarn", "guhs:sterrenwacht_ruine_sterrenkaart", "minecraft:hay_block"}
+           "guhs:guh_telescoop", "guhs:guh_stoel", "guhs:sterrenlantaarn", "guhs:sterrenwacht_ruine_sterrenkaart", "minecraft:hay_block", "minecraft:water_cauldron"}
     for (x, y, z), (naam, props, _) in list(s.blocks.items()):
         if naam != b["hek"]:
             continue
@@ -327,10 +327,17 @@ def hoeder(h):
                     s.set(x, top + 1, z, b["hek"])
     for (x, z) in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
         s.set(x, top + 2, z, b["lamp"])
-    s.set(x0 + 1, top + 1, z0 + 1, "minecraft:hay_block", {"axis": "y"})
-    s.set(x0 + 2, top + 1, z0 + 1, "minecraft:hay_block", {"axis": "x"})
-    s.set(x0 + 1, top + 1, z1 - 1, "minecraft:water_cauldron", {"level": "3"})
-    schapen = [(x0 + 3, z0 + 2), (x0 + 5, z0 + 3), (x0 + 3, z1 - 2), (x0 + 5, z1 - 2)][:KUDDE]
+    # biomes3 eindfix: nothing stands INSIDE the fold (the schaapjes hopped out over the hay and the trough). Hay and
+    # trough stand against the outside of the east fence, south of the gate; one carpet on the south fence lets the
+    # player step over (a mob does not path over a fence with a carpet on it).
+    for (x, z, naam_, props) in ((x1 + 1, z1 - 1, "minecraft:hay_block", {"axis": "y"}), (x1 + 1, z1, "minecraft:hay_block", {"axis": "x"}),
+                                 (x1 + 1, z1 - 2, "minecraft:water_cauldron", {"level": "3"})):
+        assert tops[(x, z)] == top and s.get(x, top + 1, z) is None, "hay and trough stand on free flat ground outside the fold"
+        s.set(x, top + 1, z, naam_, props)
+    s.set(x0 + 3, top + 2, z1, "minecraft:pink_carpet")
+    assert all(s.get(x, top + 1, z) is None for x in range(x0 + 1, x1) for z in range(z0 + 1, z1)), "the fold is empty inside"
+    # (Kudde.wei learns the middle of the fold from the herd: these four average to its exact middle, a block corner)
+    schapen = [(x0 + 2, z0 + 2), (x0 + 5, z0 + 2), (x0 + 2, z1 - 2), (x0 + 5, z1 - 2)][:KUDDE]
     for i, (x, z) in enumerate(schapen):
         s.entity(x + 0.5, float(top + 1), z + 0.5, {"id": "guhs:wolkenschaapje", "PersistenceRequired": h.ms.Byte(1), "Gehouden": h.ms.Byte(1),
                                                      "Tags": h.ms.NbtList(8, [KUDDE_TAG]), "Rotation": h.ms.floats(90.0 * i, 0.0)})
