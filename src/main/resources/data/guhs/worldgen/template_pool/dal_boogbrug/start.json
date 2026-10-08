@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:dal_boogbrug_a",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:dal_water_blijft"
       }
     },
     {
@@ -16,7 +16,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:dal_boogbrug_b",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:dal_water_blijft"
       }
     }
   ]
