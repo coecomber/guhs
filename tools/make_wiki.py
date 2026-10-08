@@ -2759,6 +2759,15 @@ def guhpixel_sections():
     return out
 
 
+def bio_section():
+    """biomes3: Blossom Lake, Babbledale, the Cloud Meadow, the Weeb House, the block sets, the Super Compass tab Biomes
+    (tools/wiki_bio.py: body(w), w is this module, like the guhpixel slices)."""
+    import importlib
+    import types
+    return section("biomes3", "New biomes: Blossom Lake, Babbledale and the Cloud Meadow", "Nieuwe biomen: Bloesemmeertje, Klaterdal en Wolkenweide",
+                   importlib.import_module("wiki_bio").body(types.SimpleNamespace(**globals())))
+
+
 def bleekwoud_section():
     """1.2.8: Het Bleekwoud (the mod's own Pale Garden): the biome, bleekhout, the guh hearts with the Kraakguh and the
     Kraak-Mika, kaashars, the oogbloempje, and the two structures (tools/features/bleekwoud.py)."""
@@ -3964,6 +3973,7 @@ def build():
     _px = guhpixel_sections()                # guhpixel, the Reisbureau, the Guh-parkour (built once: the contents list below reuses it)
     for _sid, _en, _nl, _html in _px:
         S.append(_html)
+    S.append(bio_section())
     S.append(bleekwoud_section())
 
     S.append(verhalen30_section())
@@ -4797,13 +4807,17 @@ def build():
                   "grey with a little lock and a hint. The titles: <b>Held van Nomguh</b> (help Baltoguh in Nomguh), <b>Knuffelburgemeester</b> (Het Grote "
                   "Knusfeest), <b>Vriend van Guhtwo</b> (the kloon-eiland), <b>Ohana-guh</b> (the 626-guh on Guhwai'i), <b>Wolkenvriend</b> (the Knuffelhart "
                   "in the Hemelkapelletje), <b>Huisjesbouwer</b> (build a guhhuisje with the Timmerguh), <b>Opper-vadser</b> (defeat Opper-Mika in the "
-                  "Guheinde) and <b>Guhkenner</b> (a full Guhdex).",
+                  "Guheinde) and <b>Guhkenner</b> (a full Guhdex). From the new biomes: <b>Weeb</b> (complete the Japan Collection of the Weeb House), "
+                  "<b>Head in the Clouds</b> (the very highest islet above a Cloud Meadow), <b>Bless You!</b> (get sneezed out of a Cloud Castle three "
+                  "times) and <b>Koi Whisperer</b> (the Fisher Guh's lessons).",
                   "<i>Nieuw in 1.2.6.</i> Het zevende tabblad, <b>Titels</b> (het naamkaartje), laat elke <b>titel</b> zien. Kies er een die je verdiend hebt "
                   "(klik 'm nog een keer aan, of <i>Geen titel</i>, voor geen) en hij staat achter je naam in de spelerslijst, boven je hoofd en in de chat. "
                   "Een titel die je nog niet hebt is grijs met een slotje en een tip. De titels: <b>Held van Nomguh</b> (help Baltoguh in Nomguh), "
                   "<b>Knuffelburgemeester</b> (Het Grote Knusfeest), <b>Vriend van Guhtwo</b> (het kloon-eiland), <b>Ohana-guh</b> (de 626-guh op Guhwai'i), "
                   "<b>Wolkenvriend</b> (het Knuffelhart in het Hemelkapelletje), <b>Huisjesbouwer</b> (bouw een guhhuisje met de Timmerguh), "
-                  "<b>Opper-vadser</b> (versla Opper-Mika in het Guheinde) en <b>Guhkenner</b> (een volle Guhdex)."), wide=True)
+                  "<b>Opper-vadser</b> (versla Opper-Mika in het Guheinde) en <b>Guhkenner</b> (een volle Guhdex). Uit de nieuwe biomen: <b>Weeb</b> (maak de "
+                  "Japan-verzameling van het weebhuisje compleet), <b>Hoofd in de wolken</b> (het allerhoogste eilandje boven een Wolkenweide), "
+                  "<b>Gezondheid!</b> (laat je drie keer een wolkenkasteeltje uit niezen) en <b>Koifluisteraar</b> (de lesjes van de visser-guh)."), wide=True)
     S.append(section("guhdex", "Guhdex", "Guhdex", dex))
 
     # --- food, furniture and deco ---------------------------------------------------------------------------------------
@@ -5327,7 +5341,7 @@ def build():
     S.append(section("more", "Advancements and commands", "Vooruitgangen en commando's", adv))
 
     toc = "".join(f'<a href="#{sid}">{t(en, nl)}</a>' for sid, en, nl in [
-        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in _px], ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
+        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in _px], ("biomes3", "New biomes", "Nieuwe biomen"), ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),

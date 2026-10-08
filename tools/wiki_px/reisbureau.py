@@ -28,11 +28,11 @@ EN = {
     "wereldreis": ("Around the World in 80 Naps", "Globe", "Spinning Golden Globe"),
     "cruise": ("Cruise on the Guh Sea", "Little Ship in a Bottle", "Life Buoy with Golden Anchor"),
     "balkonie": ("Staycation \"Balconia\"", "Painting \"Home Is Chonk Too\"", "\"Balconia\" Sign"),
-    # biomes3 (proposals of slice systemen; the English pass may refine them)
+    # biomes3 (as in tools/lang/en/c38_px_reisbureau.json)
     "bloesemmeertje": ("Hanami at Blossom Lake", "Blossom Twig in a Little Vase", "Little Koi Bowl"),
-    "klaterdal": ("Tea Break in the Babbling Vale", "Bamboo Clacker", "Mini Waterfall"),
+    "klaterdal": ("Tea Break in Babbledale", "Bamboo Clacker", "Mini Waterfall"),
     "wolkenweide": ("Cloud Watching on the Cloud Meadow", "Little Cloud in a Jar", "Little Rainbow in a Jar"),
-    "japan": ("Japan, with Evivads and Nielsvads", "Little Bullet Train", "Golden Fuji Guh"),
+    "japan": ("Japan, with Evichonk and Nielschonk", "Little Bullet Train", "Golden Fuji Guh"),
 }
 DUUR = {60: ("1 hour", "1 uur"), 120: ("2 hours", "2 uur"), 480: ("8 hours", "8 uur"), 1440: ("24 hours", "24 uur")}
 
