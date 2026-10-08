@@ -58,7 +58,7 @@ public final class BioPlekken {
         switch (soort) {
             case WEIDE, LUCHT -> {
                 int o = Kaart.index(mx, mz);
-                if (k.soort[o] != Kaart.WEIDE || k.meng[o] < 1f) {
+                if (k.soort[o] != Kaart.WEIDE || k.meng[o] < 1f || soort == Soort.WEIDE && k.water[o] != Kaart.GEEN) { // biomes3 wereld-wolk: not in the meadow's pond
                     return Optional.empty();
                 }
                 return Optional.of(new Plek(mx, k.hoogte[o] + (soort == Soort.LUCHT ? hoogte : 0), mz, willekeurig));

@@ -4,8 +4,9 @@ biomes3 wereld: the builder of floating islands, cloud banks and lift columns fo
 The natural islands of the Wolkenweide are made by the terrain model (Java: WolkTerrein). A structure of the Wolkenweide
 brings its own island or cloud inside its template (structure type guhs:bio_plek, kind "lucht"); with these three
 functions it gets the same shapes: the same outlines (round, elongated, crescent, double, with a hole), the same
-drip-shaped underside, plus the finish the approved sketch shows (base-ontwerpen/vibes/_bron/biome_wolkenweide_v2.py):
-layered pastel rock, glowing crystal tips, hanging vines.
+drip-shaped underside, and the same finish as the natural islands (WolkVulling.java and the surface rule of
+bio_wereld_wolk.py): wolkenweide_gras on top, soft layers of pastel rock by depth (bio_wereld_wolk.LAGEN), softly glowing
+wolkenweide_kristal in the drip points with a kristalpunt hanging under each, pale wolkenweide_rank vines.
 
     from features import bio_wereld_eiland as eiland
 
@@ -20,7 +21,7 @@ layered pastel rock, glowing crystal tips, hanging vines.
         diepte     how far the underside hangs under the middle (default: about 1.7 x the smallest radius + 3)
         punten     the number of long drip points (default 2-4 by size)
         relief     None, or a function (dx, dz) -> extra blocks of height on top (a hill); the edge always stays flat
-        top        the top block (default "minecraft:pink_wool", the Guhmensie's ground)
+        top        the top block (default: guhs:wolkenweide_gras, the Wolkenweide's own grass)
         kristal / ranken   glowing tips in the drip points and crystals / vines hanging under it (default True)
       returns {(x, z): y} : the y of the top block of every column of the island (put your building on those).
       Leave room in the template: about straal + 2 to every side, and `diepte` + 8 below y_top.
@@ -39,11 +40,9 @@ Everything is deterministic (lib.rng on the seed): the same call paints the same
 import math
 
 from features import bio_lib as lib
+from features import bio_wereld_wolk as weide
 
-STEEN = ["guhs:knuffelsteen", "minecraft:calcite", "guhs:guh_kristalsteen", "minecraft:purpur_block",
-         "minecraft:calcite", "minecraft:pink_concrete_powder", "guhs:parelmoer", "minecraft:purpur_block"]
-GLOED = "guhs:guh_kristal_blok"
-AARDE = "minecraft:pink_wool"
+AARDE = None   # (the default top: the Wolkenweide's grass)
 VORMEN = ("rond", "lang", "maan", "dubbel", "gat")
 
 
@@ -67,6 +66,9 @@ def eiland(h, s, midden, straal_x, straal_z, zaad, vorm="rond", draai=0.0, diept
            top=AARDE, kristal=True, ranken=True):
     assert vorm in VORMEN, vorm
     rnd = lib.rng(f"bio_wereld_eiland/{zaad}")
+    top = top or lib.blok(h, "wolkenweide_gras", "minecraft:pink_wool")
+    gloed = lib.blok(h, "wolkenweide_kristal", "guhs:guh_kristal_blok")
+    echt = lib.bestaat(h, "wolkenweide_steen")
     cx, cy, cz = midden
     p = [float(rnd.uniform(0, 6.283)) for _ in range(6)]
     c, sn = math.cos(math.radians(draai)), math.sin(math.radians(draai))
@@ -96,28 +98,29 @@ def eiland(h, s, midden, straal_x, straal_z, zaad, vorm="rond", draai=0.0, diept
         hoog = cy + (int(round(relief(dx, dz) * min(1.0, f * 5))) if relief else 0)
         bodem = int(round(hoog - onder))
         in_punt = any((dx - tx) ** 2 + (dz - tz) ** 2 <= (2.2 if r > 8 else 1.1 if r > 4.4 else 0.3) for (tx, tz, _, _) in tips)
-        golf = 1.3 * math.sin(x * 0.33 + p[5]) + 1.0 * math.sin(z * 0.4 + p[3]) + 0.6 * math.sin((x - z) * 0.21 + p[2])
+        golf = 1 if math.sin(x * 0.33 + p[5]) + math.sin(z * 0.4 + p[3]) > 0.5 else 0
         for y in range(bodem, hoog + 1):
             d = hoog - y
             if d == 0:
                 blok = top
-            elif d == 1 and onder > 2.2 and r > 2.5:
-                blok = AARDE
-            elif kristal and in_punt and y - bodem < (3 if r > 8 else 2 if r > 2.5 else 1):
-                blok = GLOED
+            elif kristal and in_punt and d > 1 and y - bodem < (3 if r > 8 else 2 if r > 2.5 else 1):
+                blok = gloed
             else:
-                blok = STEEN[int(max(0, d - 2 + golf) / 2.0) % len(STEEN)]
+                # (the layers of the natural islands, their seams wandering a block)
+                blok = weide.laag(max(1, d - golf)) if echt else "guhs:knuffelsteen"
             s.set(x, y, z, blok)
         if s.inside(x, hoog, z):
             tops[(x, z)] = hoog
         q = float(rnd.random())
-        if ranken and q < 0.11:
-            n = int(rnd.integers(2, 8 if r > 6 else 5))
+        if kristal and in_punt and echt and (x, bodem - 1, z) not in s.blocks and any((dx, dz) == (tx, tz) for (tx, tz, _, _) in tips):
+            s.set(x, bodem - 1, z, "guhs:wolkenweide_kristalpunt")
+        elif ranken and q < 0.13:
+            n = int(rnd.integers(1, 7 if r > 6 else 5))
             for i in range(1, n + 1):
                 if (x, bodem - i, z) not in s.blocks:
-                    s.set(x, bodem - i, z, "guhs:bleek_hangmos", {"tip": "true" if i == n else "false"})
-        elif kristal and q < 0.17 and (x, bodem - 1, z) not in s.blocks:
-            s.set(x, bodem - 1, z, "guhs:guh_kristal_cluster", {"facing": "down"})
+                    s.set(x, bodem - i, z, lib.blok(h, "wolkenweide_rank", "guhs:bleek_hangmos"), {"tip": "true" if i == n else "false"})
+        elif kristal and echt and q < 0.16 and (x, bodem - 1, z) not in s.blocks:
+            s.set(x, bodem - 1, z, "guhs:wolkenweide_kristalpunt")
     return tops
 
 

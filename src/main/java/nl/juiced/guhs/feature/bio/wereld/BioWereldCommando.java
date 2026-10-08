@@ -224,7 +224,7 @@ public final class BioWereldCommando {
                     for (int y = (w == Kaart.GEEN ? h : w) + 1; y <= (w == Kaart.GEEN ? h : w) + 16; y++) {
                         var f = level.getFluidState(p.set(px, y, pz));
                         if (!f.isEmpty()) {
-                            if (valBuur) {
+                            if (valBuur || k.soort[o] == Kaart.WEIDE && WolkTerrein.water(m, px, y, pz)) { // biomes3 wereld-wolk: island ponds and falls
                                 stromend++;
                             } else {
                                 lek++;

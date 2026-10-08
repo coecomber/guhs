@@ -45,6 +45,7 @@ public final class WereldSlice {
         DICHTHEDEN.register(modBus);
         FEATURES.register(modBus);
         STRUCTURE_TYPES.register(modBus);
+        WolkWereld.register(modBus); // biomes3 wereld-wolk
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> Luchtruim.laad(e.getServer()));
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> BioWereldCommando.registreer(e));
         BioWereldCommando.zelftest();
@@ -54,6 +55,7 @@ public final class WereldSlice {
     }
 
     public static void creative(Consumer<ItemStack> output) {
+        WolkBlokken.creative(output); // biomes3 wereld-wolk
     }
 
     private WereldSlice() {
