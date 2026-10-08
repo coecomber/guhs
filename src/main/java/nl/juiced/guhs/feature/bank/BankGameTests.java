@@ -328,7 +328,7 @@ public class BankGameTests {
     // =====================================================================================================================
 
     @GuhTest(template = KAMER, batch = BATCH)
-    public static void bankCapabilityInAltijdUitAlleenOpgevoerd(GameTestHelper helper) {
+    public static void bankCapabilityInAltijdUitAlleenVoorEenFilterstuk(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BankGuhBlockEntity be = bank(helper, p(2, 2));
         BankStorage s = be.getStorage();

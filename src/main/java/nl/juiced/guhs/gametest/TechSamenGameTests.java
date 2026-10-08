@@ -898,14 +898,16 @@ public class TechSamenGameTests {
         paalB.zetFilter(0, new ItemStack(knabbel()));
         HaltepaaltjeBlockEntity paalA = (HaltepaaltjeBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(p(2, 4)));
         int[] meeste = {0};
-        java.util.Set<Integer> begonnen = new java.util.HashSet<>();
+        java.util.Set<Integer> begonnen = new java.util.TreeSet<>();
         helper.onEachTick(() -> {
             meeste[0] = Math.max(meeste[0], station.bekeken());
-            begonnen.add(Math.floorMod(paalA.zoekVan(), 302) / StepstationBlockEntity.MAX_ZOEK);
+            begonnen.add(paalA.zoekVan());
         });
         helper.succeedWhen(() -> {
-            // the walk came all the way round the 302 slots (six stretches of 54), the last stretch with the knabbels included
-            helper.assertTrue(begonnen.size() >= 6, "the looks walked on through the whole bank, a stretch at a time: " + begonnen);
+            // the walk came all the way round the 302 slots: six stretches of 54, each begun where the one before ended, and
+            // the LAST one (from slot 270, the knabbels in it) was walked too and gave nothing: the next one begins past the end
+            helper.assertTrue(begonnen.containsAll(List.of(0, 54, 108, 162, 216, 270, 324)),
+                    "the looks walked on through the whole bank, a stretch at a time: " + begonnen);
             gelijk(helper, 0, b.countItem(knabbel()), "nothing comes out of the bank for a pole, upgraded or not");
             gelijk(helper, 20L, bank.getStorage().count(new ItemStack(knabbel())), "the knabbels at the end of the bank stay");
             gelijk(helper, 301, bank.getStorage().snapshot().entries().size(), "every kind stays in the bank");
