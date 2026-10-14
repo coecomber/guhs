@@ -109,7 +109,7 @@ def stadsmuur(b):
 
 def goot(b, punten, lus=None):
     """Lays a chute along corner points (x, z, y): the chute blocks (each pushes on to the next), a trough around them
-    (a kerb and a wall, so nobody slides out), three free blocks above and a post under it every fourth block.
+    (a kerb and a wall, so nobody slides out; a full block in the bends), three free blocks above and a post under it every fourth block.
     lus = extra (x, z) corners that are walked `rondes` times while the chute drops to the y after it (the spiral)."""
     cellen = []
     for (x0, z0, y0), (x1, z1, y1) in zip(punten, punten[1:]):
@@ -127,6 +127,13 @@ def goot(b, punten, lus=None):
         b.set(x, y, z, GOOT, {"facing": facing})
         for d in (1, 2, 3):
             b.set(x, y + d, z, gb.AIR)
+    # around a bend the trough gets a FULL block instead of the thin wall: a rider swings wide in a bend, and past the
+    # thin wall (narrower than a block) they would end up over the kerb, off the chute, and stick there
+    bocht = set()
+    for i in range(1, len(cellen) - 1):
+        (ax, _ay, az), (x, _y, z), (bx, _by, bz) = cellen[i - 1], cellen[i], cellen[i + 1]
+        if (x - ax, z - az) != (bx - x, bz - z):
+            bocht.update(range(i - 1, i + 2))
     for i, (x, y, z) in enumerate(cellen[:-1]):
         if i < 2:
             continue                                 # (the first blocks lie in the platform: you step in from the side)
@@ -142,7 +149,7 @@ def goot(b, punten, lus=None):
                     b.set(c[0], y, c[1], STENEN)
                 boven = b.s.blocks.get((c[0], y + 1, c[1]), (gb.AIR,))[0]
                 if boven == gb.AIR or boven == WAL:
-                    b.set(c[0], y + 1, c[1], WAL)
+                    b.set(c[0], y + 1, c[1], STENEN if i in bocht else WAL)
         if i % 4 == 2:
             yy = y - 1
             while yy > 0 and (x, yy, z) not in b.s.blocks:
