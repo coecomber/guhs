@@ -3,6 +3,24 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.4.2 — Minecraft 26.1.2
+
+A new park, an easier trip around the Nibble Ring, a tidier Travel Guh menu and a handful of bug fixes. Same requirements as 1.4.1 and no world reset: the new park only grows in chunks that were not generated yet, and the fixes to buildings also mend the copies that already exist.
+
+- **New: Nibble Park (Het Knabbelpark)!** A big pink park in the Guhmension that grows differently every time, like a village: little walks over the hills with hedges, flowers, blossom trees, park benches, guh lanterns and guh litter bins (nyeg!), a fountain square with its own Travel Guh "Knabbelpark" (she always stays there), a statue garden, the deer pen with Fawnguhs and the Park Ranger Guh. Help him for a day and a Fawnguh may come along with you, plus a statuette of your own guh. There is always one within a good walk in new land; the Super Compass shows the way (tab Cozy).
+- **Little spots in the park**, a different mix in every park: a duck pond with guh ducklings and a rowboat, The Jolly Chonk Playground (slide, swings, seesaw and a sandbox with a cheese nibble every day), a picnic meadow with the Stall Guh's stall (pay in chonk), a music garden where the guhs dance to the jukebox, a Japanese garden with a red bridge and Nibble Koi, Granny Guh feeding the Pigeonguhs, a lookout tower with telescopes on the highest spot of the park, a puppet theatre where the Guh Kids shout "BEHIND YOU!", a wishing tree where your wish hangs on a little sign, and a "No Mikas allowed" bench with a sulky Mika on it. You can craft the swing, seesaw and slide yourself too.
+- **Flying around the Nibble Ring:** finish a chapter and a Travel Smoke Guh hovers at its exit. Click him and he flies you to any place of your journey you have already been to (the next one at the top), also from the Nibble Shire to the Guhbarbecuether and back. Sam-guh flies along, and you always land safely on solid ground, a little way in front of the entrance.
+- **The Travel Guh menu has a new layout:** nothing hides behind the buttons any more. Star your favourite places (always on top), move Travel Guhs up and down in your own order (also onto another page) and sort by own order, distance or name. It is all remembered per player.
+
+### Bug fixes
+
+- Place names like Snuggledale and the Guh Fair now really show in the Travel Guh list (they were blank).
+- The hole in the deck of the old boat in Nomguh is gone (you could fall in and never get out); also in existing worlds.
+- You can get out of every foam bath of the Snuggle Pool again: the foam no longer holds you down and there is a half-height ledge along the edge (also in existing Snuggle Pools).
+- Building a barbecue portal and lighting it with a Fire Starter Cube works again in the pit of the Nibble Shire.
+- A Bank Guh stored inside another Bank Guh can be taken out again.
+- A guh portal makes its Travel Guh only once: picking her up and going through again no longer makes a new one.
+
 ## 1.4.1 — Minecraft 26.1.2
 
 Quality of life, small changes and bug fixes for the Guh Path update. Same requirements as 1.4.0 and no world reset: every fix also works in worlds that already exist, and a player who got stuck in 1.4.0 is put right by the update itself.

@@ -1,7 +1,8 @@
 """
 1.4.2 Het Knabbelpark, slice park-plekjes b (Java: feature/park/plek; English: tools/lang/en/c142_park_b.json; design:
 guhs_work142/DESIGN_142.md 9, 9a; the Plekjes API: park_bouw.py and reports/slice_park.md). Five more plekjes, each one
-at most ONCE per park (a second copy becomes a flower bed: feature/park/plek/Uitkijktoren.schik):
+at most ONCE per park (1.4.2 merge: like every plekje with inhabitants, also those of park_plek_a; a second copy becomes
+another such plekje the park lacks, else a flower bed: feature/park/plek/Uitkijktoren.schik):
 
   duivenvoer_oma   Oma-guh on her bench, feeding the Duifguhtjes (pigeon-parody little birds of the Guhmensie). Talk to her
                    and she gives you a handful of broodkruimels (once a day): strooi them and the Duifguhtjes flutter round

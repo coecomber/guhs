@@ -33,8 +33,10 @@ import nl.juiced.guhs.feature.wereld.Kopieen;
  * 1.4.2 (park-plekjes b): the post-step of the park's layout (called once from {@code ParkStructure.layout}, after a
  * complete layout is drawn; the Plekjes API point 3):
  * <ol>
- *   <li>the plekjes of {@link #UNIEK} stand at most once in a park: a second copy (and a third...) becomes the little flower
- *       bed {@link #VULSEL} (smaller than every one of them, so it fits where they stood);</li>
+ *   <li>the plekjes of {@link #UNIEK} (every plekje with inhabitants or per-park state, of both plekjes slices: Bezetting and
+ *       the upkeep address a piece by its name, so a second copy would stand empty) stand at most once in a park: a second
+ *       copy (and a third...) becomes another UNIEK plekje this park does not have yet (when it fits in the footprint), else
+ *       the little flower bed {@link #VULSEL} (smaller than every one of them, so it fits where they stood);</li>
  *   <li>in {@value #KANS} of 4 parks (from the layout's own random: the same every time) the plekje on the HIGHEST spot of
  *       the park (the highest ground of all plekjes whose footprint can hold the tower, {@value #TOREN_MAAT} x
  *       {@value #TOREN_MAAT}) becomes the {@link #TOREN uitkijktoren}.</li>
@@ -46,9 +48,13 @@ import nl.juiced.guhs.feature.wereld.Kopieen;
  */
 public final class Uitkijktoren {
     public static final String TOREN = "knabbelpark/uitkijktoren", VULSEL = "knabbelpark/plek_b_vulsel";
-    /** The plekjes that stand at most once in a park (park_plek_b.PLEKJES). */
+    /**
+     * The plekjes that stand at most once in a park: every plekje with inhabitants or per-park state (park_plek_b.PLEKJES,
+     * and of plekjes A the eendenvijver, picknickweide, muziektuin and japanse tuin; the speeltuin has neither: it may come twice).
+     */
     public static final List<String> UNIEK = List.of("knabbelpark/duivenvoer_oma", "knabbelpark/poppenkast", "knabbelpark/wensboom",
-            "knabbelpark/mika_bankje");
+            "knabbelpark/mika_bankje", PlekAPlekken.EENDENVIJVER, PlekAPlekken.PICKNICKWEIDE, PlekAPlekken.MUZIEKTUIN,
+            PlekAPlekken.JAPANSE_TUIN);
     /** The tower's footprint (park_plek_b.TOREN_MAAT); in how many of 4 parks it stands. */
     public static final int TOREN_MAAT = 9, KANS = 3;
 
@@ -63,6 +69,14 @@ public final class Uitkijktoren {
     public static Schikking schik(StructurePiecesBuilder builder, StructureTemplateManager mgr, RandomSource random) {
         List<StructurePiece> pieces = new ArrayList<>(builder.build().pieces());
         int vervangen = 0;
+        // every UNIEK plekje the park already has (its first copy stays)
+        Set<String> aanwezig = new HashSet<>();
+        for (StructurePiece piece : pieces) {
+            Identifier id = PleinSlot.template(piece);
+            if (id != null && UNIEK.contains(id.getPath()) && plekje(piece, mgr)) {
+                aanwezig.add(id.getPath());
+            }
+        }
         Set<String> gezien = new HashSet<>();
         for (int i = 0; i < pieces.size(); i++) {
             Identifier id = PleinSlot.template(pieces.get(i));
@@ -70,10 +84,20 @@ public final class Uitkijktoren {
                 continue;
             }
             if (!gezien.add(id.getPath())) {
-                StructurePiece nieuw = wissel((PoolElementStructurePiece) pieces.get(i), VULSEL, mgr);
-                if (nieuw != pieces.get(i)) {
-                    pieces.set(i, nieuw);
-                    vervangen++;
+                // a second copy: another UNIEK plekje the park does not have yet (in a random order), else the flower bed
+                List<String> kandidaten = new ArrayList<>(UNIEK);
+                kandidaten.removeAll(aanwezig);
+                net.minecraft.util.Util.shuffle(kandidaten, random);
+                kandidaten.add(VULSEL);
+                for (String k : kandidaten) {
+                    StructurePiece nieuw = wissel((PoolElementStructurePiece) pieces.get(i), k, mgr);
+                    if (nieuw != pieces.get(i)) {
+                        pieces.set(i, nieuw);
+                        vervangen++;
+                        aanwezig.add(k);
+                        gezien.add(k);
+                        break;
+                    }
                 }
             }
         }

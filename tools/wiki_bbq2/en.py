@@ -1248,3 +1248,79 @@ TEKST[("verhalen/knabbelring", "Met de Rookguh")] = (
     "story at the top. He flies you there (Sam-guh flies along) and puts you down about 25 blocks in front of the entrance, on solid "
     "ground. He also flies from the Shire in the Guhmension to the Guhbarbecuether and back, when the grill portal is open for you. "
     "He never flies to a place you have not been to yet: that is still behind Guhdalf's Veil.")
+
+# 1.4.2: Het Knabbelpark (tools/features/park_wiki.py, park_plek_a_wiki.py, park_plek_b_wiki.py)
+TEKST.update({
+    ("bouwwerken/knabbelpark", "Een park dat groeit als een dorp"): (
+        "A park that grows like a village",
+        "No two Nibble Parks are the same. In the middle there is always the fountain square, with the Travel Guh 'Knabbelpark' on the "
+        "little island in the fountain. She belongs to the square: you can't pick her up and her name stays as it is. From the square, "
+        "little walks wind over the hills, with hedges, flowers, guh lanterns, park benches and here and there a guh litter bin. Along "
+        "the walks lie little spots: a flower meadow, a resting spot, a little wood, a big blossom tree."),
+    ("bouwwerken/knabbelpark", "Wat er altijd is"): (
+        "What is always there",
+        "Three things are always attached to the square, so the Park Ranger Guh can always be helped: the statue garden with the "
+        "statues of Joostvadsje and trapguh, Liekguh and Lunde, and Grandpa Cheeseguh (each with a plaque to read), the deer pen with "
+        "three Fawnguhs and the Pen Keeper Guh, and the Park Ranger's little house."),
+    ("bouwwerken/knabbelpark", "Waar vind je het?"): (
+        "Where do you find it?",
+        "Nibble Park only grows in the Guhmension, on dry, gently rolling land. There is always one within a good walk in land where "
+        "nobody has been yet, and further out one every now and then. The Super Compass shows the way (tab Cozy)."),
+    ("bouwwerken/knabbelpark", "De guhprullenbak"): (
+        "The guh litter bin",
+        "Throw something into a guh litter bin (right-click with something in your hand) and it eats one of them: nyeg! Tools and "
+        "other nice things it simply spits back out. You can craft them yourself too, just like the park bench and the guh lantern."),
+    # plekjes A
+    ("bouwwerken/knabbelpark", "De eendenvijver"): (
+        "The duck pond",
+        "In the duck pond two guh ducks swim with a row of ducklings behind them. Give them bread, seeds or a cheese nibble: "
+        "quack-nyeg! At the little jetty a rowboat always lies ready, even when someone else has just gone off in it."),
+    ("bouwwerken/knabbelpark", "De speeltuin"): (
+        "The playground",
+        "The Jolly Chonk Playground has a slide (climb the ladder and step in), two swings and a seesaw for two (right-click to sit "
+        "down). You can dig in the sandbox: once a day you find a cheese nibble there. You can also craft or buy the slide, the swing "
+        "and the seesaw, for a playground next to your own house."),
+    ("bouwwerken/knabbelpark", "De picknickweide"): (
+        "The picnic meadow",
+        "On the picnic meadow lie checked picnic blankets with tea and cushions. The Stall Guh behind his stall sells cheese nibbles, "
+        "cookies, cake, picnic blankets, park benches and playground things. You pay with Wahoog Chonk."),
+    ("bouwwerken/knabbelpark", "De muziektuin"): (
+        "The music garden",
+        "Between the flower beds and a little greenhouse stands the bandstand. Click the jukebox: the park's record box picks a "
+        "record and the three guhs in the bandstand start to dance. Another click turns the music off again. Your own record is "
+        "welcome too."),
+    ("bouwwerken/knabbelpark", "De japanse tuin"): (
+        "The Japanese garden",
+        "A brook flows under a red arched bridge into a koi pond with Nibble Koi: koi in cheese nibble colors, a wink at Babbledale. "
+        "Give them a cheese nibble or koi food and they jump out of the water with joy. Across the bridge lies a zen corner with "
+        "raked sand, a toro and bamboo."),
+    # plekjes B
+    ("bouwwerken/knabbelpark", "Oma-guh en de Duifguhtjes"): (
+        "Granny Guh and the Pigeonguhs",
+        "On some spots Granny Guh sits on her bench feeding the Pigeonguhs: chubby grey little birds with a shiny green-purple neck "
+        "and real guh eyes. Talk to her and you get a handful of breadcrumbs (once a day). Scatter them (right-click) and the "
+        "Pigeonguhs come right over; hold your crumbs and they flutter around you. Coo!"),
+    ("bouwwerken/knabbelpark", "De uitkijktoren"): (
+        "The lookout tower",
+        "When a park has a lookout tower, it always stands on the highest spot of the park. A spiral staircase takes you to the top, "
+        "and there stand two telescopes: right-click and you look far away, just like through a real spyglass. Sneak to look "
+        "normally again."),
+    ("bouwwerken/knabbelpark", "De poppenkast"): (
+        "The puppet theatre",
+        "Click the stage of the puppet theatre and the show begins: a guh puts down his cheese nibble, a Mika wants to sneak off "
+        "with it and the Guh Kids on the benches shout as loud as they can: BEHIND YOU! Luckily they share in the end."),
+    ("bouwwerken/knabbelpark", "De wensboom"): (
+        "The wishing tree",
+        "Rename a piece of paper on an anvil: that is your wish. Right-click the trunk of the wishing tree with it and your wish "
+        "hangs on a little sign under a branch, for everyone to read. You may hang two per tree; sneak with an empty hand to take "
+        "your own wishes down again."),
+    ("bouwwerken/knabbelpark", "Het Mika-bankje"): (
+        "The Mika bench",
+        "There is a sign 'No Mikas allowed' next to it, but there is always a sulky Mika sitting on it. Come too close and he "
+        "shoves you away (he never hurts). Give him a cheese nibble and he hops off happily; the next day he is back again."),
+})
+PAGINA["verhalen/knabbelpark"] = (
+    "A day in Nibble Park",
+    "In the little house of every Nibble Park the Park Ranger Guh sits behind his counter. Help him for a day: read the three "
+    "plaques in the statue garden, give every Fawnguh in the deer pen a cheese nibble and bring the Pen Keeper Guh six wheat for "
+    "the hay rack. Then you get a Fawnguh of your own and a statuette of your guh.")
