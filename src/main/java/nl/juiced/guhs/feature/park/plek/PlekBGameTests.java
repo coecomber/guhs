@@ -235,7 +235,7 @@ public class PlekBGameTests {
         BlockPos oost = hoek.offset(PlekB.KIJKER_OOST), west = hoek.offset(PlekB.KIJKER_WEST);
         helper.assertTrue(level.getBlockState(oost).is(PlekB.VERREKIJKER.get()) && level.getBlockState(west).is(PlekB.VERREKIJKER.get()), "two verrekijkers");
         // walk from the entrance (south edge, middle) up the stairs
-        Set<BlockPos> bereikt = loop(level, hoek.offset(Uitkijktoren.TOREN_MAAT / 2, 2, Uitkijktoren.TOREN_MAAT - 1),
+        Set<BlockPos> bereikt = loop(level, hoek.offset(Uitkijktoren.TOREN_MAAT / 2, 2, Uitkijktoren.TOREN_MAAT - 2),
                 new BoundingBox(hoek.getX() - 1, hoek.getY(), hoek.getZ() - 1, hoek.getX() + 9, hoek.getY() + 20, hoek.getZ() + 9));
         int hoogst = bereikt.stream().mapToInt(BlockPos::getY).max().orElse(-1);
         for (BlockPos k : List.of(oost, west)) {
