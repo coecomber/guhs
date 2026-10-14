@@ -1,0 +1,55 @@
+# einde2 slice cast_team AutoCheck: Team Guhvatar and their friends (twenty-two kinds: Zuka in six looks, Oom Miroh in three,
+# Suki-guh and Yue-guh in two) in one row, from the front and from the side. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_cast_team.txt -PautocheckTimeout=20
+# (commands: see autocheck.txt; written by the slice, not run by it: the merge step runs it.)
+# /guhs einde2 cast_team toon puts the row 5 blocks in front of the player (3 apart, facing the player); ... weg removes it.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/tp @s 0 120 0 0 0
+/fill -36 119 -2 36 119 10 minecraft:smooth_stone
+wait 40
+/guhs einde2 cast_team toon
+wait 60
+
+section the row: east half, x 31.5 down to 1.5 (Aang-guh .. Oom Miroh)
+log --- Aang-guh, Katara-guh, Sokka-guh, Toph-guh, then Zuka: waiter, prince, Vuurheer, banished, Blue Spirit, team
+camera 21.5 122 -3 15 15
+waitrender 200
+shot cast_team_oost
+camera 28.5 121.2 1.5 0 10
+wait 20
+shot cast_team_aang_katara
+camera 19.5 121.2 1.5 0 10
+wait 20
+shot cast_team_sokka_toph_zuka
+camera 10.5 121.2 1.5 0 10
+wait 20
+shot cast_team_zuka_looks
+camera 1.5 121.2 1.5 0 10
+wait 20
+shot cast_team_zuka_miroh
+
+section the row: west half, x -1.5 down to -31.5 (Oom Miroh .. the racemeester)
+log --- Oom Miroh (tea house, prisoner, Witte Lotus), Suki-guh (warrior, prisoner), Yue-guh (princess, moon spirit), the five
+camera -21.5 122 -3 -15 15
+waitrender 200
+shot cast_team_west
+camera -7.5 121.2 1.5 0 10
+wait 20
+shot cast_team_miroh_suki
+camera -16.5 121.2 1.5 0 10
+wait 20
+shot cast_team_yue_veer
+camera -25.5 121.2 1.5 0 10
+wait 20
+shot cast_team_haven
+camera -31.5 121.2 1.5 0 10
+wait 20
+shot cast_team_race
+
+section cleanup
+/guhs einde2 cast_team weg
+wait 20

@@ -105,6 +105,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.register(modBus);
         // the stand-ins that are left: attributes, and their Guhdex page (the page's name is the entity id)
         modBus.addListener((EntityAttributeCreationEvent event) -> PLAATSHOUDERS.forEach(
                 type -> event.put(type.get(), Einde2Plaatshouder.createAttributes().build())));
@@ -136,6 +137,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -156,6 +158,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.creative(output);
     }
 
     private Einde2() {

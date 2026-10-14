@@ -29,6 +29,7 @@ public final class Einde2Client {
         nl.juiced.guhs.feature.einde2.sponsguh.client.E2SponsguhClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.client.E2BouwBikinibodemClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.client.E2BouwSchelpenstadClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.castteam.client.E2CastTeamClient.init(modBus);
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {
