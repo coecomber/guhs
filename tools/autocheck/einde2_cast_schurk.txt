@@ -1,0 +1,53 @@
+# einde2 slice cast_schurk AutoCheck: the twelve Mika kinds of the Guhvatar story (the Vuurnatie-Mika once per mix set) in one
+# row, and every creature in every look in a row behind it (the draakguhs Ran and Shaw, beer Bosco, Wan Shi Guh, a vosguh,
+# the two heads of the Leeuwschildpad-guh's moving parts, Flopsie, the five luchtbizon-guhs, Tui and La). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_cast_schurk.txt -PautocheckTimeout=30
+# (written by the slice, not run by it: the merge step runs it.) /guhs einde2 cast_schurk toon puts the rows 5 and 16 blocks
+# in front of the player (who looks south here), facing the player; /guhs einde2 cast_schurk weg takes them away.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/tp @s 0 120 0 0 0
+/fill -40 119 -4 40 119 30 minecraft:smooth_stone
+/fill -40 120 -4 40 130 30 minecraft:air
+wait 40
+/guhs einde2 cast_schurk toon
+wait 60
+
+section the Mika kinds
+camera 0.5 122 -1.5 0 10
+waitrender 200
+shot cast_schurk_mikas
+camera -12.5 121.5 1.5 0 5
+wait 30
+shot cast_schurk_mikas_links
+camera 0.5 121.5 1.5 0 5
+wait 30
+shot cast_schurk_mikas_midden
+camera 12.5 121.5 1.5 0 5
+wait 30
+shot cast_schurk_mikas_rechts
+log --- Vuurheer Mikai (tall, scale 1.6), Feniks-koning Mikai (flames, glowing eyes), Vadsige Mikai (round, a knabbel)
+camera -15.5 123 1.5 0 10
+wait 30
+shot cast_schurk_mikai
+
+section the creatures
+camera 0.5 126 -4.5 0 15
+wait 60
+shot cast_schurk_wezens
+camera -26.5 124 6.5 0 15
+wait 30
+shot cast_schurk_draken
+camera -4.5 122 10.5 0 10
+wait 30
+shot cast_schurk_wezens_midden
+camera 18.5 123 8.5 0 12
+wait 30
+shot cast_schurk_bizons
+
+section tidy up
+/guhs einde2 cast_schurk weg
+wait 20
