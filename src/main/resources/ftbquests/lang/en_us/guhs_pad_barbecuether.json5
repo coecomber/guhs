@@ -72,7 +72,7 @@
   ],
   "quest.475548622257E13C.title": "Off on an Adventure!",
   "quest.475548622257E13C.quest_desc": [
-    "This way you'll never lose your way: at the &6top left&r it says what to do now, the &dGuhdex&r (Tales tab) holds your &6Journey Map&r, the &6Super Compass&r points to 'My Story' and Sam-guh knows too. The chapters below open one by one.",
+    "This way you'll never lose your way: at the &6top left&r it says what to do now, the &dGuhdex&r (Tales tab) holds your &6Journey Map&r, the &6Super Compass&r points to 'My Story' and Sam-guh knows too. Is it a long walk? At the exit of every chapter you finished a &dTravel Smoke Guh&r waits to fly you back or on. The chapters below open one by one.",
   ],
   "quest.4755488107709AAF.title": "Right on Time",
   "quest.4755488107709AAF.quest_desc": [
@@ -449,5 +449,13 @@
   "quest.47554824E8A33A22.title": "The Golden Chonk Cap",
   "quest.47554824E8A33A22.quest_desc": [
     "Got all &6eighteen big chonk coins&r? Then go see Toad-guh: he has the &6Golden Chonk Cap&r for you. The Guhdex (Tales > Toad-guh's Stall and the Rewards) shows per level which chonk coins you're still missing.",
+  ],
+  "quest.475548968E36107F.title": "Taxi, nyeg!",
+  "quest.475548968E36107F.quest_desc": [
+    "Finished a chapter of the Nibble Ring? Then a &dTravel Smoke Guh&r hovers at the &6exit&r. Click him and choose where you want to go: every place of your journey you have already been to, with the next one at the top. He flies you there and puts you down neatly, a little way in front of the entrance. Sam-guh simply flies along.",
+  ],
+  "quest.475548497F30429C.title": "Over the grill portal",
+  "quest.475548497F30429C.quest_desc": [
+    "A Travel Smoke Guh also flies you from the &6Nibble Shire&r in the Guhmension to the Guhbarbecuether (and back). For that the grill portal has to be open for you, of course.",
   ],
 }
