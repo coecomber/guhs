@@ -3308,6 +3308,7 @@ def kasteel():
         "gui.guhs.reis.to": "%s  (%s blokken)",
         "gui.guhs.reis.to.tooltip": "Klik om erheen te reizen",
         "gui.guhs.reis.none": "Je kent nog geen andere Reisguhs. Zoek ze op (bij elk guhportaal staat er een, en in grote plekken zoals Guhwarden, Knuffeldal en de Guhkermis) en rechtsklik ze om ze te ontdekken!",
+        "gui.guhs.reis.rij": "%s  (%s bl)",
         "gui.guhs.reis.sort": "Sorteer: %s",
         "gui.guhs.reis.sort.eigen": "eigen volgorde",
         "gui.guhs.reis.sort.afstand": "afstand",

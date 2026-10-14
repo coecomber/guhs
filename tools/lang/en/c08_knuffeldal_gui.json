@@ -108,6 +108,7 @@
   "gui.guhs.reis.to": "%s  (%s blocks)",
   "gui.guhs.reis.to.tooltip": "Click to travel there",
   "gui.guhs.reis.none": "You don't know any other Travel Guhs yet. Go find them (there's one at every guh portal, and in big places like Guhwarden, Snuggledale and the Guh Fair) and right-click them to discover them!",
+  "gui.guhs.reis.rij": "%s  (%s m)",
   "gui.guhs.reis.sort": "Sort: %s",
   "gui.guhs.reis.sort.eigen": "own order",
   "gui.guhs.reis.sort.afstand": "distance",

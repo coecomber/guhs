@@ -121,12 +121,15 @@ public class ReisguhScreen extends Screen {
                                 send(Reisguh.FAVORITE, id);
                             })
                     .bounds(left + 12, y, 20, 20).tooltip(GuhScreen.tip(r.fav() ? "gui.guhs.reis.unfav.tooltip" : "gui.guhs.reis.fav.tooltip")).build());
-            addRenderableWidget(Button.builder(Component.translatable("gui.guhs.reis.to", r.name(), r.distance()),
+            // (short "(812 bl)" in the row as in the mockup; a long name scrolls, the tooltip has it in full)
+            addRenderableWidget(Button.builder(Component.translatable("gui.guhs.reis.rij", r.name(), r.distance()),
                             b -> {
                                 send(Reisguh.TRAVEL, id);
                                 onClose();
                             })
-                    .bounds(left + 36, y, W - 36 - 12 - 48, 20).tooltip(GuhScreen.tip("gui.guhs.reis.to.tooltip")).build());
+                    .bounds(left + 36, y, W - 36 - 12 - 48, 20)
+                    .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.guhs.reis.to", r.name(), r.distance())
+                            .append("\n").append(Component.translatable("gui.guhs.reis.to.tooltip")))).build());
             boolean eigen = sort == ReisVolgorde.EIGEN;
             Button up = Button.builder(Component.literal("▲"), b -> {
                         follow = r.id();
