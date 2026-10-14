@@ -1,0 +1,112 @@
+# Guhs 1.4.2 (slice reisguh): the Reisguh menu with ten discovered Reisguhs: layout at GUI scale 2 and 3 (small window),
+# star, move (also over a page border), sort. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/fix142_reisguh.txt
+
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/execute in guhs:guhmension run tp @s 16 202 11 180 20
+wait 80
+/forceload add 0 0 31 31
+/fill 0 200 0 31 200 20 minecraft:pink_wool
+/fill 0 201 0 31 212 20 minecraft:air
+/tp @s 16 201 11 180 20
+/summon guhs:guh_npc 2 201 3 {Kind:"reisguh",ReisName:"Thuis",PersistenceRequired:1b}
+/summon guhs:guh_npc 5 201 3 {Kind:"reisguh",ReisName:"Knuffeldal",PersistenceRequired:1b}
+/summon guhs:guh_npc 8 201 3 {Kind:"reisguh",ReisName:"Nomguh",PersistenceRequired:1b}
+/summon guhs:guh_npc 11 201 3 {Kind:"reisguh",ReisName:"Guhkermis",PersistenceRequired:1b}
+/summon guhs:guh_npc 14 201 3 {Kind:"reisguh",ReisName:"Ballonfestival",PersistenceRequired:1b}
+/summon guhs:guh_npc 17 201 3 {Kind:"reisguh",ReisName:"Kaasmoeras-station",PersistenceRequired:1b}
+/summon guhs:guh_npc 20 201 3 {Kind:"reisguh",ReisName:"Bij de grote boom",PersistenceRequired:1b}
+/summon guhs:guh_npc 23 201 3 {Kind:"reisguh",ReisName:"Vadsplek",PersistenceRequired:1b}
+/summon guhs:guh_npc 26 201 3 {Kind:"reisguh",ReisName:"Guhland",PersistenceRequired:1b}
+/summon guhs:guh_npc 29 201 3 {Kind:"reisguh",ReisName:"Mijn allerlangste Reisguh-naam!!",PersistenceRequired:1b}
+/summon guhs:guh_npc 16 201 8 {Kind:"reisguh",ReisName:"Hier",PersistenceRequired:1b}
+wait 60
+
+section discover them all (in this order: the own order)
+interact 2 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 5 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 8 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 11 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 14 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 17 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 20 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 23 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 26 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+interact 29 201 3 guhs:guh_npc
+wait 10
+gui close
+wait 5
+
+section the menu at GUI scale 2
+interact 16 201 8 guhs:guh_npc
+wait 20
+shot reisguh142_schaal2 gui
+widgets
+
+section GUI scale 3 (a small screen: fewer rows, nothing overlaps)
+guiscale 3
+wait 20
+shot reisguh142_schaal3 gui
+widgets
+
+section move the first row down, then star the first row
+press ▼
+wait 20
+shot reisguh142_omlaag gui
+press ☆
+wait 20
+shot reisguh142_ster gui
+
+section next page
+press >
+wait 20
+shot reisguh142_pagina2 gui
+widgets
+
+section sort: afstand, naam, back to eigen volgorde
+press Sorteer: eigen volgorde
+wait 20
+shot reisguh142_afstand gui
+press Sorteer: afstand
+wait 20
+shot reisguh142_naam gui
+widgets
+press Sorteer: naam
+wait 20
+guiscale 2
+wait 10
+gui close
+quit
