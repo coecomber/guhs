@@ -157,7 +157,8 @@ SCENE = {
     "mok": "Ik wilde KAAS. Dit is GROENTE. Ga weg. Ik mok.",
 }
 STAPPEN = [  # (stapnaam, nu, waar): the questline in the Guhdex and on the travel map
-    ("Klop aan bij Sausuman", "Ga naar de zwarte toren en praat met Sausuman. Hij wil iets van je.",
+    ("Klop aan bij Sausuman", "Ga naar de zwarte toren en praat met Sausuman. Hij wil iets van je."
+     " Of laat je vliegen: bij de aanlegplaats van de boomstad wacht een Reis-Rookguh.",
      "De Toren van Sausuman, een eindje lopen vanaf de boomstad van Guhladriel"),
     ("Deeg, saus en kaas", "Haal ringdeeg (eerste verdieping), hete frituursaus (tweede) en kaas (derde) uit de toren.",
      "Boven in de Toren van Sausuman"),

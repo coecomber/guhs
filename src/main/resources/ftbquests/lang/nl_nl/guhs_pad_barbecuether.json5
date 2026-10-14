@@ -72,7 +72,7 @@
   ],
   "quest.475548622257E13C.title": "Op avontuur!",
   "quest.475548622257E13C.quest_desc": [
-    "Zo raak je de weg nooit kwijt: &6linksboven&r staat wat je nu moet doen, in de &dGuhdex&r (tab Verhalen) staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. De hoofdstukken hieronder gaan één voor één open.",
+    "Zo raak je de weg nooit kwijt: &6linksboven&r staat wat je nu moet doen, in de &dGuhdex&r (tab Verhalen) staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. Is het ver lopen? Bij de uitgang van elk hoofdstuk dat je uitspeelde wacht een &dReis-Rookguh&r die je terug of verder vliegt. De hoofdstukken hieronder gaan één voor één open.",
   ],
   "quest.4755488107709AAF.title": "Precies op tijd",
   "quest.4755488107709AAF.quest_desc": [
@@ -449,5 +449,13 @@
   "quest.47554824E8A33A22.title": "De gouden vadspet",
   "quest.47554824E8A33A22.quest_desc": [
     "Heb je alle &6achttien grote vadsmunten&r? Ga dan naar Pad-guh: hij heeft de &6gouden vadspet&r voor je. De Guhdex (Verhalen > Pad-guh's kraam en de beloningen) laat per level zien welke vadsmunten je nog mist.",
+  ],
+  "quest.475548968E36107F.title": "Taxi, njeg!",
+  "quest.475548968E36107F.quest_desc": [
+    "Heb je een hoofdstuk van de Knabbelring uitgespeeld? Dan zweeft er bij de &6uitgang&r een &dReis-Rookguh&r. Klik op hem en kies waar je heen wilt: elke plek van je reis waar je al geweest bent, met de volgende bovenaan. Hij vliegt je erheen en zet je netjes neer, een stukje voor de ingang. Sam-guh vliegt gewoon mee.",
+  ],
+  "quest.475548497F30429C.title": "Over het grillportaal heen",
+  "quest.475548497F30429C.quest_desc": [
+    "Een Reis-Rookguh vliegt je ook van de &6Knabbelgouw&r in de Guhmensie naar de Guhbarbecuether (en terug). Daarvoor moet het grillportaal voor jou wel open zijn, natuurlijk.",
   ],
 }

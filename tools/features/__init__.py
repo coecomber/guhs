@@ -59,7 +59,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # writes the Guhmensie's terrain may come after it): the kern, then its slices, the blocks first (nothing here may
             # depend on its index: variant and clothes painters take their rng from bio_lib.rng)
             'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
-            'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen']
+            'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen',
+            # 1.4.2 (append only, see above): the Rookguh-vlucht of the Knabbelring
+            'ring_vlucht']
 
 
 def modules():

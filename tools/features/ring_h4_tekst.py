@@ -12,7 +12,8 @@ UITLEG = ("Na de mijn is iedereen moe en verdrietig. In het gouden woud Guhlóri
           "haar spiegel als je durft, en vaar dan met de elfenbootjes de Guhduin af. Njeg.")
 WAAR = "Caras Guhladhon, de boomstad in de Guhbarbecuether"
 STAPPEN = [
-    ("Naar het gouden woud", "Loop naar de boomstad van Guhladriel. Het Superkompas en Sam-guh wijzen de weg.", "Het gouden woud Guhlórien, een flink eind lopen"),
+    ("Naar het gouden woud", "Loop naar de boomstad van Guhladriel. Het Superkompas en Sam-guh wijzen de weg."
+     " Of laat je vliegen: bij de uitgang van Knabbelmoria wacht een Reis-Rookguh.", "Het gouden woud Guhlórien, een flink eind lopen"),
     ("Leguhlas bij de poort", "Praat met Leguhlas bij de poort van de boomstad.", WAAR),
     ("Omhoog naar Guhladriel", "Klim de grote wenteltrap rond de Grote Spies op en praat met Vrouwe Guhladriel in haar zaal.", WAAR),
     ("Uitrusten", "Ga naar de gastenvlonder (de boom bij de poort, de trap omhoog) en kruip bij het Rustvuurtje.", WAAR),

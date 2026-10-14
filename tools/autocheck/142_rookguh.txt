@@ -1,0 +1,54 @@
+# 1.4.2, rookguh (AutoCheck, dev only): de Rookguh-vlucht of the Knabbelring. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/142_rookguh.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringvlucht ..., feature/ringvlucht/RingVluchtCommands.java,
+# and /guhs ring ..., /guhs verhaal ...)
+# Shots: the Reis-Rookguh (front and side), its screen with the places of a player whose story is done, three frames of the
+# flight scene (the Rookguh floating down, climbing on, up and away), and where the flight lands (the Guhvendel try-out is
+# not built here: the scene is played on the spot with /guhs verhaal scene, the landing is told by /guhs ringvlucht waar).
+# NOT run by the slice itself: this is for the merge step's visual check (Dutch only).
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:guhmension run tp @s 0.5 150 0.5 0 0
+wait 100
+/fill -8 149 -8 8 149 8 minecraft:grass_block
+/fill -8 150 -8 8 160 8 minecraft:air
+/tp @s 0.5 150 0.5 0 0
+wait 40
+/guhs ring hoofdstuk 7
+wait 20
+clearchat
+
+section the Reis-Rookguh
+/guhs ringvlucht rookguh gouw
+wait 40
+shot 142_rookguh_voor
+/tp @s 4.5 150 4.5 facing 0.5 151.5 2.5
+wait 20
+shot 142_rookguh_zij
+
+section its screen
+/gamemode survival
+/tp @s 0.5 150 0.5 0 0
+wait 10
+interact 0.5 151 2.5 guhs:ringvlucht_rookguh
+wait 20
+widgets
+shot 142_rookguh_scherm gui
+gui close
+/gamemode creative
+/guhs ringvlucht lijst
+
+section the flight scene
+/guhs verhaal scene ringvlucht_vlucht_sam
+wait 30
+shot 142_rookguh_vlucht_1 gui
+wait 25
+shot 142_rookguh_vlucht_2 gui
+wait 50
+shot 142_rookguh_vlucht_3 gui
+wait 80
+/guhs ringvlucht waar gouw
+quit

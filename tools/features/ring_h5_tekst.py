@@ -85,7 +85,8 @@ LIJN_UITLEG = ("De poort naar het land van Sausron zit potdicht en vanaf zijn to
                "Wie gezien wordt, staat zo weer bij het laatste rustvuurtje: je verliest nooit iets.")
 # (stapnaam, nu, waar) for the steps 0..9
 STAPPEN = [
-    ("Naar de Zwarte Roosterpoort", "Loop naar het kamp aan de rand van het Asdal. Je Superkompas en Sam-guh wijzen de weg.",
+    ("Naar de Zwarte Roosterpoort", "Loop naar het kamp aan de rand van het Asdal. Je Superkompas en Sam-guh wijzen de weg."
+     " Of laat je vliegen: bij de aanlegplaats van de boomstad wacht een Reis-Rookguh.",
      "Het kamp voor de Zwarte Roosterpoort, in het Asdal van de Guhbarbecuether"),
     ("Boromika bij het vuur", "Praat met Boromika bij het kampvuur. Hij kijkt wel erg lang naar je ring.", "Het kamp voor de Zwarte Roosterpoort"),
     ("Een dief bij de proviand", "Er ritselt iets bij de zakken met proviand. Ga kijken en klik op de dief.", "Achter de rots bij het kamp"),

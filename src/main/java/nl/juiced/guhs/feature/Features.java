@@ -136,6 +136,7 @@ public final class Features {
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.register(modBus);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.register(modBus);   // verhalenpad: snuffel-steiger
         nl.juiced.guhs.feature.snuffeldorp.SnuffeldorpFeature.register(modBus);   // verhalenpad: snuffel-dorp
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.register(modBus);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -246,6 +247,7 @@ public final class Features {
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.payloads(registrar);   // bbq2 verhalenpad: oude-scenes
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.payloads(registrar);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.payloads(registrar);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.payloads(registrar);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -358,6 +360,7 @@ public final class Features {
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.creative(output);   // bbq2 verhalenpad: oude-scenes
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.creative(output);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.creative(output);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.creative(output);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

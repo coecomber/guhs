@@ -1237,3 +1237,14 @@ from . import en_pad as _pad  # noqa: E402
 
 PAGINA.update(_pad.PAGINA)
 TEKST.update(_pad.TEKST)
+
+# 1.4.2 (rookguh): the Rookguh-vlucht of the Knabbelring (tools/features/ring_vlucht_wiki.py)
+TEKST[("verhalen/knabbelring", "Met de Rookguh")] = (
+    "By Smoke Guh",
+    "The places of the Nibble Ring lie far apart. Once you have played the story of a chapter, a Travel Smoke Guh hovers at its exit "
+    "(at the Nibble Shire next to Guhdalf's camp, at Guhvendell by the gate, at Nibblemoria on the east square, at the tree city by "
+    "the landing of the Elven Boats, at the Tower of Sauceruman in the yard, behind the Black Grill Gate and at the base camp of Mount "
+    "Fry). Click him and choose where you want to go: every place of your journey you have already been to, with the next place of the "
+    "story at the top. He flies you there (Sam-guh flies along) and puts you down about 25 blocks in front of the entrance, on solid "
+    "ground. He also flies from the Shire in the Guhmension to the Guhbarbecuether and back, when the grill portal is open for you. "
+    "He never flies to a place you have not been to yet: that is still behind Guhdalf's Veil.")

@@ -186,6 +186,18 @@
         "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "47554837A438FDB7",
+      image: "guhs:textures/ftbquests/guhs_pad_barbecuether/kop_ring_vlucht.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 34.55625,
+      hover: [
+        "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
+      ],
+    },
   ],
   order_index: 14,
   progression_mode: "flexible",
@@ -3624,6 +3636,60 @@
       x: 0.0,
       y: 37.8375,
       shape: "diamond",
+    },
+    {
+      id: "475548968E36107F",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ringvlucht_gevlogen",
+          id: "475548483AABAE63",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BE58261E49",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 11.5,
+      y: 36.3375,
+    },
+    {
+      id: "475548497F30429C",
+      icon: {
+        id: "guhs:grillkool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ringvlucht_grens",
+          id: "4755485B0F9E6AD9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486442E6DA21",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 36.3375,
     },
   ],
 }

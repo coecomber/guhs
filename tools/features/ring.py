@@ -321,5 +321,6 @@ def ftb(fq):
     fq.q("ring_feest", "Er is altijd wel iets te vieren", "In de Knabbelgouw is het nu elke dag feest. Eén &6Feestknabbel&r per dag, anders rol je de "
          "heuvel af.", "guhs:ring_feestknabbel", [fq.adv("ring_feest")], deps=na)
     fq.q("ring_wegwijs", "Op avontuur!", "Zo raak je de weg nooit kwijt: &6linksboven&r staat wat je nu moet doen, in de &dGuhdex&r (tab Verhalen) "
-         "staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. De hoofdstukken hieronder gaan één voor één open.",
+         "staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. Is het ver lopen? Bij de uitgang van elk "
+         "hoofdstuk dat je uitspeelde wacht een &dReis-Rookguh&r die je terug of verder vliegt. De hoofdstukken hieronder gaan één voor één open.",
          "guhs:guhdex", [fq.adv("ring_wegwijs")], deps=na)

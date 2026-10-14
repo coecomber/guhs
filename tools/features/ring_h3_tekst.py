@@ -26,7 +26,8 @@ UITLEG = ("Hoofdstuk 3 van de Knabbelring. Onder de Houtskoolvlakte ligt de oude
           "hefbomen, een put waar je beter niks in kunt laten vallen, en heel diep iets dat al eeuwen ligt te smeulen.")
 STAPPEN = [
     ("De Poort van Knabbelmoria",
-     "Loop met Sam-guh naar de Mijnen van Knabbelmoria, onder de Houtskoolvlakte. Het Superkompas (Mijn verhaal) wijst de weg.",
+     "Loop met Sam-guh naar de Mijnen van Knabbelmoria, onder de Houtskoolvlakte. Het Superkompas (Mijn verhaal) wijst de weg."
+     " Of laat je vliegen: bij de poort van Guhvendel wacht een Reis-Rookguh.",
      "De Guhbarbecuether, een flink eind lopen van Guhvendel"),
     ("Zeg njeg en treed binnen",
      "De poort zit potdicht. Boven de deur gloeit een spreuk: 'Zeg njeg en treed binnen.' Typ het woord in de chat, of klik op de "
