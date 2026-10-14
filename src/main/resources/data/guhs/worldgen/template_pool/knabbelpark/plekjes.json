@@ -83,6 +83,42 @@
       }
     },
     {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelpark/duivenvoer_oma",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelpark/poppenkast",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelpark/wensboom",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelpark/mika_bankje",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
       "weight": 1,
       "element": {
         "element_type": "minecraft:empty_pool_element"

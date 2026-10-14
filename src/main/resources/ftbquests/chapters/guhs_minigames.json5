@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_minigames",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 35,
+  guhs_chapter_version: 36,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_minigames.png",
@@ -284,8 +284,8 @@
     },
     {
       height: 1.5625,
-      id: "4755488ADEFEE069",
-      image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_gids.png",
+      id: "475548B81C45DE91",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_parkb.png",
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
@@ -296,11 +296,23 @@
     },
     {
       height: 1.5625,
+      id: "4755488ADEFEE069",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_gids.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 57.36874999999999,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "47554836794BC800",
       image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_guhpolder.png",
       rotation: 0.0,
       width: 10.0,
-      x: 4.5,
+      x: 16.0,
       y: 57.36874999999999,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
@@ -5156,6 +5168,168 @@
       y: 55.18749999999999,
     },
     {
+      id: "47554810E0D76B7E",
+      icon: {
+        id: "guhs:park_kruimels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkb_kruimels",
+          id: "475548D5DD412835",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B7ED91BE85",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 11.5,
+      y: 55.18749999999999,
+    },
+    {
+      id: "4755487BCB1CED08",
+      icon: {
+        id: "guhs:duifguhtje_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_duifguhtje",
+          id: "475548E82EBCCDC3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487EF2B286FE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 55.18749999999999,
+    },
+    {
+      id: "4755482C79F61F4F",
+      icon: {
+        id: "guhs:park_verrekijker",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkb_verrekijker",
+          id: "4755484C98DD688F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554814E4516967",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 14.5,
+      y: 55.18749999999999,
+    },
+    {
+      id: "4755485377A5852B",
+      icon: {
+        id: "guhs:park_poppenkast",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkb_poppenkast",
+          id: "475548937B0FC8D3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E90838CCD9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 16.0,
+      y: 55.18749999999999,
+    },
+    {
+      id: "475548A2ED3DD5FC",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkb_wens",
+          id: "4755489F388EFE28",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480E8636836D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 17.5,
+      y: 55.18749999999999,
+    },
+    {
+      id: "475548B0E653E794",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkb_mika_blij",
+          id: "475548805518A7FA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482AE26A21E5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 55.18749999999999,
+    },
+    {
       id: "475548CB65F2E24D",
       icon: {
         id: "guhs:guhmensie_superkompas",
@@ -5184,8 +5358,8 @@
           xp: 150,
         },
       ],
-      x: 11.5,
-      y: 55.18749999999999,
+      x: 0.0,
+      y: 59.14999999999999,
       shape: "gear",
     },
     {
@@ -5225,8 +5399,8 @@
           xp: 400,
         },
       ],
-      x: 13.0,
-      y: 55.18749999999999,
+      x: 1.5,
+      y: 59.14999999999999,
       shape: "rsquare",
     },
     {
@@ -5257,7 +5431,7 @@
           xp: 100,
         },
       ],
-      x: 0.0,
+      x: 11.5,
       y: 59.14999999999999,
       shape: "circle",
     },
@@ -5290,7 +5464,7 @@
           xp: 150,
         },
       ],
-      x: 1.5,
+      x: 13.0,
       y: 59.14999999999999,
     },
     {
@@ -5320,7 +5494,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 14.5,
       y: 59.14999999999999,
     },
     {
@@ -5349,7 +5523,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 16.0,
       y: 59.14999999999999,
     },
     {
@@ -5384,7 +5558,7 @@
           xp: 100,
         },
       ],
-      x: 6.0,
+      x: 17.5,
       y: 59.14999999999999,
     },
   ],
