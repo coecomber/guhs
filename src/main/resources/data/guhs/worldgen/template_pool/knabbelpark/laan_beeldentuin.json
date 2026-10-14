@@ -1,0 +1,61 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelpark/laan_beeldentuin",
+        "projection": "terrain_matching",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:rule",
+              "rules": [
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:dirt_path"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:water"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:cherry_planks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:grass_block"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:water"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:cherry_planks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "guhs:knuffelgras"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:water"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:cherry_planks"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

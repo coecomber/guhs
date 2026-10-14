@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/park_prullenbak"
+    },
+    "facing=east": {
+      "model": "guhs:block/park_prullenbak",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/park_prullenbak",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/park_prullenbak",
+      "y": 270
+    }
+  }
+}

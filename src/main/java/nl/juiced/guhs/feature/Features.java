@@ -98,6 +98,7 @@ public final class Features {
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.register(modBus);
         nl.juiced.guhs.feature.bio.BioFeature.register(modBus);   // biomes3: the kern and its slices
+        nl.juiced.guhs.feature.park.ParkFeature.register(modBus);   // 1.4.2: Het Knabbelpark
         // --- guhpixel: the kern and its nine slices ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.register(modBus);
         // --- bbq2 ---
@@ -210,6 +211,7 @@ public final class Features {
         // --- 1.2.0 ---
         nl.juiced.guhs.feature.weerder.WeerderFeature.payloads(registrar);
         nl.juiced.guhs.feature.bio.BioFeature.payloads(registrar);   // biomes3
+        nl.juiced.guhs.feature.park.ParkFeature.payloads(registrar);   // 1.4.2
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.payloads(registrar);
         // --- bbq2 ---
@@ -323,6 +325,7 @@ public final class Features {
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
         nl.juiced.guhs.feature.bio.BioFeature.creative(output);   // biomes3
+        nl.juiced.guhs.feature.park.ParkFeature.creative(output);   // 1.4.2
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.creative(output);
         // --- bbq2 ---

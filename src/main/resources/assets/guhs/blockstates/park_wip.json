@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,kant=vlak": {
+      "model": "guhs:block/park_wip_vlak"
+    },
+    "facing=east,kant=a": {
+      "model": "guhs:block/park_wip_a"
+    },
+    "facing=east,kant=b": {
+      "model": "guhs:block/park_wip_b"
+    },
+    "facing=south,kant=vlak": {
+      "model": "guhs:block/park_wip_vlak",
+      "y": 90
+    },
+    "facing=south,kant=a": {
+      "model": "guhs:block/park_wip_a",
+      "y": 90
+    },
+    "facing=south,kant=b": {
+      "model": "guhs:block/park_wip_b",
+      "y": 90
+    },
+    "facing=west,kant=vlak": {
+      "model": "guhs:block/park_wip_vlak",
+      "y": 180
+    },
+    "facing=west,kant=a": {
+      "model": "guhs:block/park_wip_a",
+      "y": 180
+    },
+    "facing=west,kant=b": {
+      "model": "guhs:block/park_wip_b",
+      "y": 180
+    },
+    "facing=north,kant=vlak": {
+      "model": "guhs:block/park_wip_vlak",
+      "y": 270
+    },
+    "facing=north,kant=a": {
+      "model": "guhs:block/park_wip_a",
+      "y": 270
+    },
+    "facing=north,kant=b": {
+      "model": "guhs:block/park_wip_b",
+      "y": 270
+    }
+  }
+}

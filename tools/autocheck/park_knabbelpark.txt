@@ -1,0 +1,43 @@
+# Het Knabbelpark (1.4.2) AutoCheck: the nearest park in the Guhmensie from a few viewpoints (do the walks follow the hills,
+# does anything float or sit buried?), the plaza, the statues, the deer pen, the parkwachter; then the walk check.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/park_knabbelpark.txt
+# (commands: see autocheck.txt; /guhs park keur is the park's own walk check, its lines go to the report via chat)
+
+section setup: the Guhmensie, a clear noon
+/gamemode spectator
+/execute in guhs:guhmension run tp @s 0 140 0
+wait 60
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/effect give @s minecraft:night_vision infinite 0 true
+renderdistance 16
+
+section the park from the sky and from its sides
+tplocate guhs:guhmension knabbelpark
+wait 100
+
+section the plaza, the statues, the deer pen, the hut (template coordinates of the plaza)
+camtpl 16 18 -6 0 55
+waitrender 300
+shot park_plein_boven
+camtpl 16 4 6 0 15
+waitrender 200
+shot park_fontein
+camtpl 16 10 -28 180 25
+waitrender 200
+shot park_beeldentuin_richting
+camtpl 52 12 16 90 30
+waitrender 200
+shot park_hertenkooi_richting
+camtpl -18 10 16 270 30
+waitrender 200
+shot park_parkwachter_richting
+camtpl 16 30 70 180 40
+waitrender 300
+shot park_paden_zuid
+
+section the walk check
+/guhs park keur 200
+wait 40
+quit

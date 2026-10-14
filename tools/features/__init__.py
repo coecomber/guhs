@@ -61,7 +61,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
             'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen',
             # 1.4.2 (append only, see above): the Rookguh-vlucht of the Knabbelring
-            'ring_vlucht']
+            'ring_vlucht',
+            # 1.4.2: Het Knabbelpark (park-kern, then park-plekjes in the same module; append only)
+            'park',
+            'park_plek_a']   # <park-a> 1.4.2: five random plekjes of the park (append only)
 
 
 def modules():

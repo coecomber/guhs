@@ -1,0 +1,109 @@
+{
+  "variants": {
+    "facing=north,stand=0": {
+      "model": "guhs:block/park_schommel_0"
+    },
+    "facing=north,stand=1": {
+      "model": "guhs:block/park_schommel_1"
+    },
+    "facing=north,stand=2": {
+      "model": "guhs:block/park_schommel_2"
+    },
+    "facing=north,stand=3": {
+      "model": "guhs:block/park_schommel_3"
+    },
+    "facing=north,stand=4": {
+      "model": "guhs:block/park_schommel_4"
+    },
+    "facing=north,stand=5": {
+      "model": "guhs:block/park_schommel_5"
+    },
+    "facing=north,stand=6": {
+      "model": "guhs:block/park_schommel_6"
+    },
+    "facing=east,stand=0": {
+      "model": "guhs:block/park_schommel_0",
+      "y": 90
+    },
+    "facing=east,stand=1": {
+      "model": "guhs:block/park_schommel_1",
+      "y": 90
+    },
+    "facing=east,stand=2": {
+      "model": "guhs:block/park_schommel_2",
+      "y": 90
+    },
+    "facing=east,stand=3": {
+      "model": "guhs:block/park_schommel_3",
+      "y": 90
+    },
+    "facing=east,stand=4": {
+      "model": "guhs:block/park_schommel_4",
+      "y": 90
+    },
+    "facing=east,stand=5": {
+      "model": "guhs:block/park_schommel_5",
+      "y": 90
+    },
+    "facing=east,stand=6": {
+      "model": "guhs:block/park_schommel_6",
+      "y": 90
+    },
+    "facing=south,stand=0": {
+      "model": "guhs:block/park_schommel_0",
+      "y": 180
+    },
+    "facing=south,stand=1": {
+      "model": "guhs:block/park_schommel_1",
+      "y": 180
+    },
+    "facing=south,stand=2": {
+      "model": "guhs:block/park_schommel_2",
+      "y": 180
+    },
+    "facing=south,stand=3": {
+      "model": "guhs:block/park_schommel_3",
+      "y": 180
+    },
+    "facing=south,stand=4": {
+      "model": "guhs:block/park_schommel_4",
+      "y": 180
+    },
+    "facing=south,stand=5": {
+      "model": "guhs:block/park_schommel_5",
+      "y": 180
+    },
+    "facing=south,stand=6": {
+      "model": "guhs:block/park_schommel_6",
+      "y": 180
+    },
+    "facing=west,stand=0": {
+      "model": "guhs:block/park_schommel_0",
+      "y": 270
+    },
+    "facing=west,stand=1": {
+      "model": "guhs:block/park_schommel_1",
+      "y": 270
+    },
+    "facing=west,stand=2": {
+      "model": "guhs:block/park_schommel_2",
+      "y": 270
+    },
+    "facing=west,stand=3": {
+      "model": "guhs:block/park_schommel_3",
+      "y": 270
+    },
+    "facing=west,stand=4": {
+      "model": "guhs:block/park_schommel_4",
+      "y": 270
+    },
+    "facing=west,stand=5": {
+      "model": "guhs:block/park_schommel_5",
+      "y": 270
+    },
+    "facing=west,stand=6": {
+      "model": "guhs:block/park_schommel_6",
+      "y": 270
+    }
+  }
+}

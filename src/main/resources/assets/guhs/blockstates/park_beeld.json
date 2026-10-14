@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "beeld=joostvadsje,facing=north": {
+      "model": "guhs:block/park_beeld"
+    },
+    "beeld=trapguh,facing=north": {
+      "model": "guhs:block/park_beeld"
+    },
+    "beeld=liekguh,facing=north": {
+      "model": "guhs:block/park_beeld"
+    },
+    "beeld=lunde,facing=north": {
+      "model": "guhs:block/park_beeld"
+    },
+    "beeld=opa_kaasguh,facing=north": {
+      "model": "guhs:block/park_beeld_kaas"
+    },
+    "beeld=joostvadsje,facing=east": {
+      "model": "guhs:block/park_beeld",
+      "y": 90
+    },
+    "beeld=trapguh,facing=east": {
+      "model": "guhs:block/park_beeld",
+      "y": 90
+    },
+    "beeld=liekguh,facing=east": {
+      "model": "guhs:block/park_beeld",
+      "y": 90
+    },
+    "beeld=lunde,facing=east": {
+      "model": "guhs:block/park_beeld",
+      "y": 90
+    },
+    "beeld=opa_kaasguh,facing=east": {
+      "model": "guhs:block/park_beeld_kaas",
+      "y": 90
+    },
+    "beeld=joostvadsje,facing=south": {
+      "model": "guhs:block/park_beeld",
+      "y": 180
+    },
+    "beeld=trapguh,facing=south": {
+      "model": "guhs:block/park_beeld",
+      "y": 180
+    },
+    "beeld=liekguh,facing=south": {
+      "model": "guhs:block/park_beeld",
+      "y": 180
+    },
+    "beeld=lunde,facing=south": {
+      "model": "guhs:block/park_beeld",
+      "y": 180
+    },
+    "beeld=opa_kaasguh,facing=south": {
+      "model": "guhs:block/park_beeld_kaas",
+      "y": 180
+    },
+    "beeld=joostvadsje,facing=west": {
+      "model": "guhs:block/park_beeld",
+      "y": 270
+    },
+    "beeld=trapguh,facing=west": {
+      "model": "guhs:block/park_beeld",
+      "y": 270
+    },
+    "beeld=liekguh,facing=west": {
+      "model": "guhs:block/park_beeld",
+      "y": 270
+    },
+    "beeld=lunde,facing=west": {
+      "model": "guhs:block/park_beeld",
+      "y": 270
+    },
+    "beeld=opa_kaasguh,facing=west": {
+      "model": "guhs:block/park_beeld_kaas",
+      "y": 270
+    }
+  }
+}

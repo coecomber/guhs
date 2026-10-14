@@ -32,6 +32,7 @@ public final class GuhDex {
             GuhVariant.BOSWACHTERGUH, GuhVariant.KNABBELPLUKKER,
             GuhVariant.GRILLGUH, GuhVariant.ASGUH, GuhVariant.ROOKGUH,   // (2.10.1: the Rookguh, with your saved-Rookguh count)
             GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH,   // biomes3
+            GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
             // 2.8 (Knuffeldal)
             GuhVariant.PLUISGUH, GuhVariant.PINGUH, GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
             GuhVariant.THEEGUH, GuhVariant.KAPPERGUH, GuhVariant.BOERINNEGUH, GuhVariant.GUHSCHAAPJE, GuhVariant.KNABBELKIPPETJE,
@@ -60,7 +61,9 @@ public final class GuhDex {
      */
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
             GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,   // (1.2.8: the Bleekwoud is rare and they only come at night)
-            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE);   // biomes3: the new biomes only exist in new chunks, far out
+            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3: the new biomes only exist in new chunks, far out
+            GuhVariant.HERTGUHTJE,   // 1.4.2: only in Het Knabbelpark (new chunks too)
+            GuhVariant.KNABBELKOI);   // <park-a> 1.4.2: only in the japanse tuin of a Knabbelpark
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
