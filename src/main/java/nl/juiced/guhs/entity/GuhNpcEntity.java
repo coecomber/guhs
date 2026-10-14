@@ -101,6 +101,16 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </timmerguh>
         // <balto>
         // </balto>
+        // einde2, cast_volk (CONTRACT_E2 11): the masters, rulers and townsfolk of the Guhvatar story
+        // <einde2_cast_volk>
+        GUHATSO(1.0f), PAKGUH(1.0f), BUMI_GUH(1.0f), AARDEKONING_GUH(1.0f), ARNOOK_GUH(1.1f), PIANDAO_GUH(1.0f), WERKTUIGGUH(1.0f),
+        ROKU_GUH(1.15f), ROKU_GUH_BEELD(1.15f), KYOSHI_GUH(1.25f), KYOSHI_GUH_BEELD(1.25f),
+        JOO_DEE_GUH(1.0f), KOOLMAN(1.0f), LOKETGUH(1.0f), KEI_GUH(1.3f), AARDROMMEL_OMROEPER(0.9f), FANGUH(0.9f), LUCHTNON_GUH(1.0f), POSTGUH(1.0f),
+        PROFESSOR_ZEI_GUH(1.0f), KYOSHI_DORPSOUDSTE(0.9f), KYOSHI_KRIJGSTERGUH(1.0f),
+        WATERSTAM_GUH(1.0f), WATERSTAM_WACHTER(1.1f), BA_SING_GUH_BURGER(1.0f), OMASHGUH_BURGER(1.0f), KYOSHI_DORPSGUH(1.0f), GEVANGENE_GUH(1.0f),
+        ZONNEKRIJGER_GUH(1.05f), VUURWIJZE_MIKA(1.0f), VUURWIJZE_SHYU(1.0f), VUURNATIE_BURGER_MIKA(1.0f), VUURNATIE_JUF(1.0f), VUURNATIE_LEERLING(0.7f),
+        TONEELSPELER_GUH(1.0f), TONEELSPELER_GUH_KATARA(1.0f), TONEELSPELER_GUH_SOKKA(1.0f), TONEELSPELER_GUH_TOPH(1.3f), TONEELSPELER_GUH_ZUKA(1.0f),
+        // </einde2_cast_volk>
         // <mewtwo>
         // </mewtwo>
         // <hemel>
