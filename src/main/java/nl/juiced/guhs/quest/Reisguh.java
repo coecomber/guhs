@@ -1,7 +1,5 @@
 package nl.juiced.guhs.quest;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,6 +47,8 @@ public final class Reisguh {
     public static final int MAX_NAME = 32;
     /** Actions from the screen. */
     public static final int RENAME = 0, TRAVEL = 1;
+    /** 1.4.2: star a row, move it up / down, sort the list (text = a Reisguh's id, for SORT the mode): {@link ReisVolgorde}. */
+    public static final int FAVORITE = 2, UP = 3, DOWN = 4, SORT = 5;
     /** 2.10.1: a wild Reisguh turns up with one in this many guh groups spawning in the Guhmension (was 250)... */
     public static final int WILD_EEN_OP = 120;
     /** ...but never closer than this to another Reisguh (was 200). */
@@ -109,6 +109,10 @@ public final class Reisguh {
     public static class Data extends SavedData {
         final Map<UUID, Point> points = new LinkedHashMap<>();
         final Map<UUID, Set<UUID>> discovered = new java.util.HashMap<>();
+        /** 1.4.2: per player their own order, favourites and sort mode (ReisVolgorde). */
+        final Map<UUID, List<UUID>> volgorde = new java.util.HashMap<>();
+        final Map<UUID, Set<UUID>> favorieten = new java.util.HashMap<>();
+        final Map<UUID, Integer> sortering = new java.util.HashMap<>();
 
         public static Data get(MinecraftServer server) {
             return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), Data.TYPE, "guhs_reisguhs");
@@ -135,6 +139,7 @@ public final class Reisguh {
                 players.put(player.toString(), ids);
             });
             tag.put("Discovered", players);
+            ReisVolgorde.save(this, tag);
             return tag;
         }
 
@@ -152,6 +157,7 @@ public final class Reisguh {
                 }
                 data.discovered.put(UUID.fromString(key), set);
             }
+            ReisVolgorde.load(data, tag);
             return data;
         }
 
@@ -224,8 +230,7 @@ public final class Reisguh {
         Data data = Data.get(level.getServer());
         data.points.putIfAbsent(npc.getUUID(), new Point(npc.getUUID(), name(npc), npc.blockPosition(), npc.getYRot()));
         Set<UUID> mine = data.of(player.getUUID());
-        if (mine.add(npc.getUUID())) {
-            data.setDirty();
+        if (ReisVolgorde.ontdek(data, player.getUUID(), npc.getUUID())) {      // (1.4.2: at the end of your own order)
             GuhQuests.say(player, npc, "quest.guhs.reis.discovered", name(npc));
             level.playSound(null, npc.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.6f, 1.6f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, npc.getX(), npc.getY() + 1.5, npc.getZ(), 12, 0.5, 0.5, 0.5, 0);
@@ -238,22 +243,18 @@ public final class Reisguh {
 
     private static void open(GuhNpcEntity npc, ServerPlayer player) {
         Data data = Data.get(player.level().getServer());
-        List<Point> list = new ArrayList<>();
-        for (UUID id : data.of(player.getUUID())) {
-            Point p = data.points.get(id);
-            if (p != null && !id.equals(npc.getUUID())) {
-                list.add(p);
-            }
-        }
-        list.sort(Comparator.comparingDouble(p -> p.pos().distSqr(npc.blockPosition())));
+        // 1.4.2: in the player's own order, favourites first; the screen sorts by distance or name itself (it reads the names)
+        List<Point> list = ReisVolgorde.rijen(data, player.getUUID(), npc.getUUID());
         CompoundTag tag = new CompoundTag();
         nl.juiced.guhs.taal.Tekst.put(tag, "Name", name(npc));
+        tag.putInt("Sort", ReisVolgorde.sortering(data, player.getUUID()));
         ListTag points = new ListTag();
         for (Point p : list) {
             CompoundTag c = new CompoundTag();
             c.store("Id", UUIDUtil.CODEC, p.id());
             nl.juiced.guhs.taal.Tekst.put(c, "Name", p.name());
             c.putInt("Distance", (int) Math.sqrt(p.pos().distSqr(npc.blockPosition())));
+            c.putBoolean("Fav", ReisVolgorde.favoriet(data, player.getUUID(), p.id()));
             points.add(c);
         }
         tag.put("Points", points);
@@ -293,6 +294,26 @@ public final class Reisguh {
             }
             travel(player, p);
             nl.juiced.guhs.feature.reisguh.ReisguhFluit.reis(npc, player.level(), target);   // (2.8: both conductors whistle)
+        } else if (action == SORT) {
+            try {
+                ReisVolgorde.zetSortering(data, player.getUUID(), Integer.parseInt(text));
+            } catch (NumberFormatException e) {
+                return;
+            }
+            open(npc, player);
+        } else if (action == FAVORITE || action == UP || action == DOWN) {
+            UUID target;
+            try {
+                target = UUID.fromString(text);
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            if (action == FAVORITE) {
+                ReisVolgorde.wisselFavoriet(data, player.getUUID(), target);
+            } else {
+                ReisVolgorde.schuif(data, player.getUUID(), npc.getUUID(), target, action == UP ? -1 : 1);
+            }
+            open(npc, player);
         }
     }
 
