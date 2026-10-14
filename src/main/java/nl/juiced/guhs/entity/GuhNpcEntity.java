@@ -177,6 +177,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <bio_bouw_wolk2>
         SMIDGUH(1.0f),
         // </bio_bouw_wolk2>
+        // <park>
+        /** 1.4.2: the parkwachter-guh in his hut in Het Knabbelpark, and the kooi-verzorger-guh at the hertenkooi (feature/park). */
+        PARKWACHTERGUH(1.0f),
+        KOOIVERZORGERGUH(0.95f),
+        // </park>
         ;
 
         public final float scale;

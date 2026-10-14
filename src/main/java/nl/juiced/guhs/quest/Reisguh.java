@@ -47,6 +47,11 @@ import net.minecraft.world.entity.EntitySpawnReason;
  */
 public final class Reisguh {
     public static final int MAX_NAME = 32;
+    /**
+     * 1.4.2 (Het Knabbelpark): persistent-data flag of a Reisguh that belongs to her spot with her name (the one in the middle
+     * of a park): she can not be picked up and her name can not be changed.
+     */
+    public static final String VAST = "guhs_reis_vast";
     /** Actions from the screen. */
     public static final int RENAME = 0, TRAVEL = 1;
     /** 2.10.1: a wild Reisguh turns up with one in this many guh groups spawning in the Guhmension (was 250)... */
@@ -270,6 +275,10 @@ public final class Reisguh {
             return;
         }
         if (action == RENAME) {
+            if (npc.getPersistentData().getBooleanOr(VAST, false)) {   // (1.4.2: her name belongs to her spot)
+                player.sendOverlayMessage(Component.translatable("quest.guhs.reis.vaste_naam", name(npc)).withStyle(ChatFormatting.LIGHT_PURPLE));
+                return;
+            }
             String name = text.strip();
             if (name.isEmpty() || name.length() > MAX_NAME) {
                 return;
@@ -310,7 +319,8 @@ public final class Reisguh {
 
     public static void pickUp(GuhNpcEntity npc, ServerPlayer player) {
         // 1.2.1: a Reisguh that came with a building stays there (it can't be put down in a building again either)
-        if (player.level().structureManager().getStructureWithPieceAt(npc.blockPosition(), s -> true).isValid()) {
+        // (1.4.2: and one marked VAST stays wherever she is)
+        if (npc.getPersistentData().getBooleanOr(VAST, false) || player.level().structureManager().getStructureWithPieceAt(npc.blockPosition(), s -> true).isValid()) {
             player.sendOverlayMessage(Component.translatable("quest.guhs.reis.hoort_hier").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
