@@ -42,7 +42,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # einde2 (the Guheinde expansion): what the update shares (the post-pass hook), then its seventeen slices (append only)
             'einde2', 'einde2_biomes', 'einde2_biomeguhs', 'einde2_mikas', 'einde2_zwevers', 'einde2_appa', 'einde2_vetbootje', 'einde2_vesting', 'einde2_deco',
             'einde2_bouw_lucht', 'einde2_bouw_water', 'einde2_bouw_aarde', 'einde2_bouw_vuur', 'einde2_bouw_zij1', 'einde2_bouw_zij2',
-            'einde2_sponsguh_wezens', 'einde2_bouw_bikinibodem', 'einde2_bouw_schelpenstad']
+            'einde2_sponsguh_wezens', 'einde2_bouw_bikinibodem', 'einde2_bouw_schelpenstad',
+            'einde2_cast_team']
 
 
 def modules():

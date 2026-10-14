@@ -99,6 +99,15 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         KNABBELKLOON(1.0f), WOLKENHOEDER(1.05f), LILO_GUH(0.8f), NANI_GUH(1.0f), TIKIGUH(1.0f),
         // <timmerguh>
         // </timmerguh>
+        // einde2, cast_team (CONTRACT_E2 11): Team Guhvatar and their friends; a look of a character is a kind of its own (<BASIS>_<LOOK>)
+        // <einde2_cast_team>
+        AANG_GUH(0.9f), KATARA_GUH(1.0f), SOKKA_GUH(1.0f), TOPH_GUH(0.8f),
+        // (CONTRACT_E2 11.9: Zuka in six looks)
+        ZUKA(1.0f), ZUKA_PRINS(1.0f), ZUKA_VUURHEER(1.05f), ZUKA_BALLING(1.0f), ZUKA_BLAUWE_GEEST(1.0f), ZUKA_TEAM(1.0f),
+        OOM_MIROH(1.0f), OOM_MIROH_GEVANGENE(1.0f), OOM_MIROH_LOTUS(1.0f),
+        SUKI_GUH(1.0f), SUKI_GUH_GEVANGENE(1.0f), YUE_GUH(0.95f), YUE_GUH_MAAN(0.95f),
+        VEERGUH(1.0f), SCHEEPSBOUWERGUH(1.05f), KROEGBAASGUH(1.1f), KAPITEINGUH(0.95f), RINGENRACEGUH(1.0f),
+        // </einde2_cast_team>
         // <balto>
         // </balto>
         // <mewtwo>
