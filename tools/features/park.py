@@ -246,7 +246,7 @@ def ftb(fq):
     kn = "guhs:kaas_knabbels"
     q("park_gevonden", "Het Knabbelpark", "Ergens in de &dGuhmensie&r ligt een groot roze park, met wandelpaadjes over de heuvels, "
       "bankjes, lantaarns en heel veel bloemen. Het &6Superkompas&r wijst de weg (tabblad Knus).", "guhs:park_lantaarn",
-      [st(f"guhs:{STRUCTUUR}")], rewards=((kn, 12),), shape="circle", xp=100)
+      [st(STRUCTUUR)], rewards=((kn, 12),), shape="circle", xp=100)
     wereld.ftb_questlijn(fq, NAME, STRUCTUUR, [
         ("De parkwachter", "In zijn huisje zit de &dparkwachter-guh&r. Praat met hem: hij kan wel een handje hulp gebruiken.",
          "guhs:park_bankje"),

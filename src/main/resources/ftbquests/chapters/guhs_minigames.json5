@@ -4725,7 +4725,7 @@
       tasks: [
         {
           type: "structure",
-          structure: "guhs:guhs:knabbelpark",
+          structure: "guhs:knabbelpark",
           id: "475548ED7BFE80EE",
         },
       ],
