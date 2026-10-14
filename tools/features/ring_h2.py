@@ -39,7 +39,8 @@ UITLEG = ("In Guhvendel, het huis van Guhrond, komt een raad bijeen over de Knab
 STAPPEN = [
     ("Reis naar Guhvendel",
      "Loop met Sam-guh door de Guhbarbecuether naar Guhvendel, het huis van Guhrond. Je Superkompas (Mijn verhaal) wijst de weg. "
-     "Kom je een Rustvuurtje tegen, loop er dan even langs.",
+     "Kom je een Rustvuurtje tegen, loop er dan even langs. Of laat je vliegen: bij Guhdalfs kamp in de Gouw wacht nu een "
+     "Reis-Rookguh.",
      "Guhvendel, in het Worstenwoud van de Guhbarbecuether"),
     ("Guhrond heet je welkom",
      "Je bent er! Praat met Guhrond. Hij staat op de stoep van het grote witte huis met het groene dak.",

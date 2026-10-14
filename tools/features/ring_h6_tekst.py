@@ -21,7 +21,8 @@ LIJN_NAAM = "De Frituurberg"
 LIJN_UITLEG = "De Knabbelring moet de frituur in. Boven op de Frituurberg, in de Rookdelta. Sam-guh loopt mee, Smikagol ook. Helaas."
 WAAR = "De Frituurberg in de Rookdelta (Guhbarbecuether)"
 STAPPEN = [
-    ("Naar de Frituurberg", "Loop met Sam-guh naar de voet van de Frituurberg en zoek het basiskamp met het Rustvuurtje.", WAAR),
+    ("Naar de Frituurberg", "Loop met Sam-guh naar de voet van de Frituurberg en zoek het basiskamp met het Rustvuurtje."
+     " Of laat je vliegen: achter de Zwarte Roosterpoort wacht een Reis-Rookguh.", WAAR),
     ("Het Kronkelpad", "Klim het Kronkelpad op naar de Eerste Richel. Ontwijk de vallende kooltjes (ze duwen alleen) en klik op het slot "
                        "van de kooi om het Rookguhje te bevrijden.", "Het Kronkelpad, om de berg heen"),
     ("Langs het touw omhoog", "Het pad is ingestort. Kijk omhoog naar het blauwe lampje en gebruik het Elfentouw op de haak, twee keer. "
