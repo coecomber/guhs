@@ -1,0 +1,55 @@
+# einde2, slice cast_volk: every character of the slice (the masters, rulers and townsfolk of the Guhvatar story) in rows,
+# a crowd kind once per mix set, for the merge step's visual check (the slice writes it, the merge step runs it).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_cast_volk.txt -PautocheckTimeout=30
+# /guhs einde2 cast_volk toon (dev run only) puts them down: 12 to a row, 3 apart, the first row 4 blocks to the south,
+# every next row 4 further; /guhs einde2 cast_volk weg takes them away.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/tp @s 0 120 0 0 0
+/fill -22 119 -2 22 119 22 minecraft:smooth_quartz
+/fill -22 120 -2 22 128 22 minecraft:air
+wait 40
+/guhs einde2 cast_volk toon
+wait 60
+
+section row 1: Guhatso (see-through and glowing after the merge's M2), Pakguh, Bumi-guh, Aardekoning-guh, Arnook-guh, Piandao-guh, Werktuigguh, Roku-guh and his statue, Kyoshi-guh and her statue, Joo Dee-guh
+camera 0.5 122 -1.5 0 8
+waitrender 200
+shot cast_volk_rij1
+camera -9.5 121.5 1.0 0 10
+wait 20
+shot cast_volk_rij1_links
+camera 9.5 121.5 1.0 0 10
+wait 20
+shot cast_volk_rij1_rechts
+
+section row 2: the koolman with his cart, the loketguh, De Kei-guh, the omroeper, the fan-guh, the luchtnon-guh, the postguh, prof. Zei-guh, the dorpsoudste, three Kyoshi-krijgsterguhs
+camera 0.5 122 3.0 0 12
+wait 20
+shot cast_volk_rij2
+
+section row 3 and 4: the crowds, one per mix set (Waterstam-guhs, the poortwachter, Ba Sing Guh, Omashguh, Kyoshi-dorp, the prisoners), the Zonnekrijger-guh
+camera 0.5 122.5 7.0 0 14
+wait 20
+shot cast_volk_rij3
+camera 0.5 122.5 11.0 0 14
+wait 20
+shot cast_volk_rij4
+
+section row 5 and 6: the fire nation Mika's (sages, Shyu, townsfolk, the juf, the pupils) and the toneelgroep of Sintelstrand
+camera 0.5 122.5 15.0 0 14
+wait 20
+shot cast_volk_rij5
+camera 0.5 122.5 19.0 0 14
+wait 20
+shot cast_volk_rij6
+
+section click one: a line of small talk in the chat
+interact 0 121 4 guhs:guh_npc
+wait 20
+shot cast_volk_praatje gui
+/guhs einde2 cast_volk weg
+wait 20
+quit
