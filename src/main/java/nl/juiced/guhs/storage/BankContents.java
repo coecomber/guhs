@@ -27,6 +27,21 @@ public record BankContents(List<Entry> entries) {
                 ItemStack.STREAM_CODEC, Entry::item,
                 ByteBufCodecs.VAR_LONG, Entry::count,
                 Entry::new);
+
+        /**
+         * 1.4.2: equal by content. A record compares its ItemStack by identity, so a Bank Guh ITEM with a stomach (this
+         * record inside its BANK_CONTENTS component) never matched itself after a trip over the network or through a save:
+         * the screen asked for "that Bank Guh" and the stomach said it had none, so it could not be taken out again.
+         */
+        @Override
+        public boolean equals(Object o) {
+            return this == o || o instanceof Entry e && count == e.count && ItemStack.matches(item, e.item);
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * ItemStack.hashItemAndComponents(item) + Long.hashCode(count);
+        }
     }
 
     public static final Codec<BankContents> CODEC = Entry.CODEC.listOf().xmap(BankContents::new, BankContents::entries);

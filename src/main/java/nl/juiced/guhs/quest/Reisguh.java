@@ -374,17 +374,31 @@ public final class Reisguh {
         return npc;
     }
 
-    /** Next to a guh portal in the Guhmension there is always a Reisguh (within 5 blocks): put one there if there isn't. */
+    /**
+     * Next to a new guh portal in the Guhmension a Reisguh is put down (within 5 blocks), ONCE per portal ever (1.4.2,
+     * {@link ReisguhPortalen}): after she is picked up, going through again does not make another one.
+     */
     public static void nearPortal(ServerLevel level, BlockPos portal) {
-        if (level.dimension() != ModDimensions.GUHMENSION) {
+        if (level.dimension() == ModDimensions.GUHMENSION) {
+            nearPortalIn(level, portal);
+        }
+    }
+
+    /** (also for the tests, which have no Guhmension) {@link #nearPortal} in this level. */
+    static void nearPortalIn(ServerLevel level, BlockPos portal) {
+        ReisguhPortalen gehad = ReisguhPortalen.van(level);
+        if (gehad.gehad(portal)) {
             return;
         }
         level.getChunk(portal);
         // (the list, not the entities: a Reisguh just put down in a chunk that is still loading isn't visible as an entity yet)
-        if (Data.get(level.getServer()).points.values().stream().anyMatch(p -> p.pos().closerThan(portal, 8))
+        // (1.4.2: a portal from before that already has its Reisguh, or whose Reisguh was carried off, is remembered now)
+        if (Data.get(level.getServer()).points.values().stream().anyMatch(p -> p.pos().closerThan(portal, 8) || ReisguhPortalen.portaalNaamBij(p.name(), portal))
                 || !level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(portal).inflate(8), n -> n.getKind() == GuhNpcEntity.Kind.REISGUH).isEmpty()) {
+            gehad.onthoud(portal);
             return;
         }
+        gehad.onthoud(portal);
         for (int[] d : new int[][]{{3, 2}, {-3, 2}, {3, -2}, {-3, -2}, {0, 3}, {0, -3}, {4, 0}, {-4, 0}}) {
             BlockPos spot = portal.offset(d[0], 0, d[1]);
             for (int dy = -2; dy <= 2; dy++) {
