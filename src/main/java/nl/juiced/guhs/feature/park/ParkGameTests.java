@@ -274,6 +274,15 @@ public class ParkGameTests {
             }
             ParkKeur.Uitslag u = ParkKeur.keur(level, start);
             (u.goed() ? goed : fouten).add(chunk + ": " + u);
+            // the fountain round the Reisguh holds water
+            BlockPos midden = Kopieen.wereld(start, ParkPlekken.PLEIN, ParkPlekken.REISGUH);
+            int water = 0;
+            for (BlockPos q : BlockPos.betweenClosed(midden.offset(-4, -2, -4), midden.offset(4, 0, 4))) {
+                water += level.getFluidState(q).isSource() ? 1 : 0;
+            }
+            if (water < 12) {
+                fouten.add(chunk + ": the fountain has " + water + " water");
+            }
         }
         LOGGER.info("Knabbelpark built: {} / {}", goed, fouten);
         helper.assertTrue(fouten.isEmpty(), "every built park walkable and complete: " + fouten);
