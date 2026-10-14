@@ -13,6 +13,7 @@ public final class ParkClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(ParkFeature.BEELD_BE.get(), BeeldRenderer::new));
+        nl.juiced.guhs.feature.park.plek.client.PlekBClient.init(modBus);   // park-plekjes b
     }
 
     private ParkClient() {

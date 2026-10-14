@@ -62,7 +62,8 @@ public final class GuhDex {
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
             GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,   // (1.2.8: the Bleekwoud is rare and they only come at night)
             GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3: the new biomes only exist in new chunks, far out
-            GuhVariant.HERTGUHTJE);   // 1.4.2: only in Het Knabbelpark (new chunks too)
+            GuhVariant.HERTGUHTJE,   // 1.4.2: only in Het Knabbelpark (new chunks too)
+            GuhVariant.DUIFGUHTJE);   // 1.4.2 park-plekjes b: only at Oma-guh's plekje of Het Knabbelpark
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 

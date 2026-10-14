@@ -61,7 +61,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
             'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen',
             # 1.4.2: Het Knabbelpark (park-kern, then park-plekjes in the same module; append only)
-            'park']
+            'park',
+            'park_plek_b']   # 1.4.2 park-plekjes b (after 'park': it writes the texts and models of its plekjes)
 
 
 def modules():
