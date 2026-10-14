@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RW",
+    "WR"
+  ],
+  "key": {
+    "R": "minecraft:red_carpet",
+    "W": "minecraft:white_carpet"
+  },
+  "result": {
+    "id": "guhs:park_picknickkleed",
+    "count": 4
+  }
+}

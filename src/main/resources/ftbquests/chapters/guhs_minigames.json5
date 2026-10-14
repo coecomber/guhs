@@ -272,11 +272,23 @@
     },
     {
       height: 1.5625,
+      id: "475548A38F1D8EA1",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_park_plekjes.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 53.40624999999999,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "4755488ADEFEE069",
       image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_gids.png",
       rotation: 0.0,
       width: 10.0,
-      x: 4.5,
+      x: 16.0,
       y: 53.40624999999999,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
@@ -288,8 +300,8 @@
       image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_guhpolder.png",
       rotation: 0.0,
       width: 10.0,
-      x: 16.0,
-      y: 53.40624999999999,
+      x: 4.5,
+      y: 57.36874999999999,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
       ],
@@ -4940,6 +4952,210 @@
       y: 51.224999999999994,
     },
     {
+      id: "4755481F4787761D",
+      icon: {
+        id: "minecraft:bread",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_eendjes",
+          id: "4755484E56295142",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830DB0B9212",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548C749F6C35A",
+          type: "xp",
+          xp: 20,
+        },
+      ],
+      x: 0.0,
+      y: 55.18749999999999,
+    },
+    {
+      id: "47554813BB03F6EB",
+      icon: {
+        id: "guhs:park_schommel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_glijbaan",
+          id: "475548D40327C757",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_schommel",
+          id: "475548408AC33143",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_wip",
+          id: "475548D2B25D0E9B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CDF0A7852C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554850BBF7C65D",
+          type: "xp",
+          xp: 30,
+        },
+      ],
+      x: 1.5,
+      y: 55.18749999999999,
+    },
+    {
+      id: "475548D5DCC19E58",
+      icon: {
+        id: "minecraft:sand",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_zandbak",
+          id: "47554830323CD1F0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486E59863A36",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "4755489731CDE264",
+          type: "xp",
+          xp: 20,
+        },
+      ],
+      x: 3.0,
+      y: 55.18749999999999,
+    },
+    {
+      id: "47554802699965E9",
+      icon: {
+        id: "guhs:park_picknickkleed",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_kraampje",
+          id: "4755486CD6970984",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F123153966",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "4755483B56AE1ADC",
+          type: "xp",
+          xp: 20,
+        },
+      ],
+      x: 4.5,
+      y: 55.18749999999999,
+    },
+    {
+      id: "475548A8BFAC698A",
+      icon: {
+        id: "minecraft:jukebox",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_muziek",
+          id: "47554884A1E53973",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DF1B7CD9D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "47554850257DA506",
+          type: "xp",
+          xp: 20,
+        },
+      ],
+      x: 6.0,
+      y: 55.18749999999999,
+    },
+    {
+      id: "4755480764188CCC",
+      icon: {
+        id: "guhs:koivoer",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/parkplek_knabbelkoi",
+          id: "475548567D0D4EE9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DD4E0A2BC3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548509FA5B2AF",
+          type: "xp",
+          xp: 30,
+        },
+      ],
+      x: 7.5,
+      y: 55.18749999999999,
+    },
+    {
       id: "475548CB65F2E24D",
       icon: {
         id: "guhs:guhmensie_superkompas",
@@ -4968,7 +5184,7 @@
           xp: 150,
         },
       ],
-      x: 0.0,
+      x: 11.5,
       y: 55.18749999999999,
       shape: "gear",
     },
@@ -5009,7 +5225,7 @@
           xp: 400,
         },
       ],
-      x: 1.5,
+      x: 13.0,
       y: 55.18749999999999,
       shape: "rsquare",
     },
@@ -5041,8 +5257,8 @@
           xp: 100,
         },
       ],
-      x: 11.5,
-      y: 55.18749999999999,
+      x: 0.0,
+      y: 59.14999999999999,
       shape: "circle",
     },
     {
@@ -5074,8 +5290,8 @@
           xp: 150,
         },
       ],
-      x: 13.0,
-      y: 55.18749999999999,
+      x: 1.5,
+      y: 59.14999999999999,
     },
     {
       id: "475548AF7C757117",
@@ -5104,8 +5320,8 @@
           count: 8,
         },
       ],
-      x: 14.5,
-      y: 55.18749999999999,
+      x: 3.0,
+      y: 59.14999999999999,
     },
     {
       id: "475548321705AC6B",
@@ -5133,8 +5349,8 @@
           count: 8,
         },
       ],
-      x: 16.0,
-      y: 55.18749999999999,
+      x: 4.5,
+      y: 59.14999999999999,
     },
     {
       id: "475548FCF35677EC",
@@ -5168,8 +5384,8 @@
           xp: 100,
         },
       ],
-      x: 17.5,
-      y: 55.18749999999999,
+      x: 6.0,
+      y: 59.14999999999999,
     },
   ],
 }
