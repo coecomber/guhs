@@ -129,6 +129,10 @@ public class CastWezen extends PathfinderMob implements GeoEntity {
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
+        if (wezen == Wezens.LEEUWSCHILDPAD_GUH) {
+            noPhysics = true;                                   // (Entity.load has just read NoGravity: false)
+            setNoGravity(true);
+        }
         String houding = tag.getStringOr("Houding", "idle");
         entityData.set(DATA_HOUDING, wezen.blijft(houding) ? houding : "idle");
         entityData.set(DATA_STIL, tag.getBooleanOr("Stil", false));
@@ -289,6 +293,10 @@ public class CastWezen extends PathfinderMob implements GeoEntity {
 
     @Override
     public void tick() {
+        if (wezen == Wezens.LEEUWSCHILDPAD_GUH) {
+            noPhysics = true;
+            setNoGravity(true);
+        }
         super.tick();
         if (level().isClientSide()) {
             return;

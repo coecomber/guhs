@@ -48,14 +48,14 @@ import nl.juiced.guhs.storage.Nbt;
 public class E2CastSchurkGameTests {
     private static final String VLOER = "einde2_cast_schurk_test_vloer", VIJVER = "einde2_cast_schurk_test_vijver";
     private static final String BATCH = "einde2_cast_schurk";
-    /** The pond of the room VIJVER (template x, z; water at y 1 .. 2: the same numbers as the python module). */
+    /** The pond of the room VIJVER (template x, z; water at template y 1 .. 2 = helper y 2 .. 3: the same numbers as the python module). */
     private static final int VIJVER_X0 = 2, VIJVER_X1 = 14, VIJVER_Z0 = 2, VIJVER_Z1 = 14;
     private static final String P = "animation.guh_sitting.";
 
     private static ServerPlayer speler(GameTestHelper helper, int x, int z) {
         ServerPlayer player = GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
-        Vec3 at = helper.absoluteVec(new Vec3(x + 0.5, 1, z + 0.5));
+        Vec3 at = helper.absoluteVec(new Vec3(x + 0.5, 2, z + 0.5));
         player.snapTo(at.x, at.y, at.z, 0, 0);
         return player;
     }
@@ -189,7 +189,7 @@ public class E2CastSchurkGameTests {
         NpcRole eigen = (npc, p) -> gehoord[0]++;
         int x = 1;
         for (GuhNpcEntity.Kind kind : CastSchurk.kinds()) {
-            GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(x, 1, 7));
+            GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(x, 2, 7));
             x = x % 13 + 1;
             npc.setKind(kind);
             helper.assertTrue(NpcRollen.van(npc) == CastSchurkRol.ROL, kind + ": the default role of the slice");
@@ -251,7 +251,7 @@ public class E2CastSchurkGameTests {
                 helper.assertTrue(wezen.houding().equals("idle"), w + ": back to idle");
             }
             // nothing hurts it
-            Vec3 at = helper.absoluteVec(new Vec3(7.5, 1, 7.5));
+            Vec3 at = helper.absoluteVec(new Vec3(7.5, 2, 7.5));
             wezen.snapTo(at.x, at.y, at.z, 0, 0);
             level.addFreshEntity(wezen);
             float hp = wezen.getHealth();
@@ -268,11 +268,11 @@ public class E2CastSchurkGameTests {
     /** What a building's template writes: Soort, Stil, Honk, Houding, Draagt, read from NBT and saved again; the bison's scale. */
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
     public static void einde2CastSchurkUitTemplate(GameTestHelper helper) {
-        CastWezen draak = (CastWezen) laad(helper, "{id:\"guhs:draakguh\",Soort:1,Stil:1b,Houding:\"slaap\"}", helper.absoluteVec(new Vec3(3.5, 1, 3.5)));
-        CastWezen bizon = (CastWezen) laad(helper, "{id:\"guhs:luchtbizon_guh\",Soort:4,Houding:\"vlieg\"}", helper.absoluteVec(new Vec3(10.5, 1, 3.5)));
-        VosguhEntity vos = (VosguhEntity) laad(helper, "{id:\"guhs:vosguh\",Honk:6,Draagt:1b}", helper.absoluteVec(new Vec3(4.5, 1, 11.5)));
-        CastWezen kop = (CastWezen) laad(helper, "{id:\"guhs:leeuwschildpad_guh\",Soort:1,Stil:1b}", helper.absoluteVec(new Vec3(10.5, 3, 11.5)));
-        CastWezen bosco = (CastWezen) laad(helper, "{id:\"guhs:bosco\",Houding:\"geen_houding\"}", helper.absoluteVec(new Vec3(7.5, 1, 7.5)));
+        CastWezen draak = (CastWezen) laad(helper, "{id:\"guhs:draakguh\",Soort:1,Stil:1b,Houding:\"slaap\"}", helper.absoluteVec(new Vec3(3.5, 2, 3.5)));
+        CastWezen bizon = (CastWezen) laad(helper, "{id:\"guhs:luchtbizon_guh\",Soort:4,Houding:\"vlieg\"}", helper.absoluteVec(new Vec3(10.5, 2, 3.5)));
+        VosguhEntity vos = (VosguhEntity) laad(helper, "{id:\"guhs:vosguh\",Honk:6,Draagt:1b}", helper.absoluteVec(new Vec3(4.5, 2, 11.5)));
+        CastWezen kop = (CastWezen) laad(helper, "{id:\"guhs:leeuwschildpad_guh\",Soort:1,Stil:1b}", helper.absoluteVec(new Vec3(10.5, 4, 11.5)));
+        CastWezen bosco = (CastWezen) laad(helper, "{id:\"guhs:bosco\",Houding:\"geen_houding\"}", helper.absoluteVec(new Vec3(7.5, 2, 7.5)));
         helper.assertTrue(draak.soort() == 1 && draak.stil() && draak.houding().equals("slaap"), "Soort, Stil and Houding from NBT");
         helper.assertTrue(draak.getName().getContents() instanceof TranslatableContents t && t.getKey().equals("entity.guhs.draakguh.1"), "Shaw is called Shaw");
         helper.assertTrue(bizon.soort() == 4 && Math.abs(bizon.getAttributeValue(Attributes.SCALE) - CastWezen.BIZON_SCHAAL[4]) < 1e-4, "the calf is small");
@@ -300,8 +300,8 @@ public class E2CastSchurkGameTests {
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
     public static void einde2CastSchurkKlik(GameTestHelper helper) {
         ServerPlayer player = speler(helper, 5, 5);
-        CastWezen flopsie = maak(helper, Wezens.FLOPSIE, 8, 1, 5);
-        CastWezen kop = maak(helper, Wezens.LEEUWSCHILDPAD_GUH, 5, 2, 9);
+        CastWezen flopsie = maak(helper, Wezens.FLOPSIE, 8, 2, 5);
+        CastWezen kop = maak(helper, Wezens.LEEUWSCHILDPAD_GUH, 5, 3, 9);
         int[] gehoord = {0, 0};
         BiFunction<CastWezen, ServerPlayer, Boolean> nee = (w, p) -> {
             if (w == flopsie) {
@@ -341,10 +341,10 @@ public class E2CastSchurkGameTests {
     /** Tui and La: on one ring round their midpoint, opposite each other, never out of the water; a fish with stil lies still. */
     @GuhTest(template = VIJVER, batch = BATCH, timeoutTicks = 200)
     public static void einde2CastSchurkVissen(GameTestHelper helper) {
-        CastVisEntity tui = maak(helper, Wezens.MAANVIS, 5, 1, 8);
-        CastVisEntity la = maak(helper, Wezens.OCEAANVIS, 11, 1, 8);
+        CastVisEntity tui = maak(helper, Wezens.MAANVIS, 5, 2, 8);
+        CastVisEntity la = maak(helper, Wezens.OCEAANVIS, 11, 2, 8);
         ServerLevel level = helper.getLevel();
-        AABB vijver = new AABB(helper.absolutePos(new BlockPos(VIJVER_X0, 1, VIJVER_Z0)).getCenter(), helper.absolutePos(new BlockPos(VIJVER_X1, 2, VIJVER_Z1)).getCenter()).inflate(0.5);
+        AABB vijver = new AABB(helper.absolutePos(new BlockPos(VIJVER_X0, 2, VIJVER_Z0)).getCenter(), helper.absolutePos(new BlockPos(VIJVER_X1, 3, VIJVER_Z1)).getCenter()).inflate(0.5);
         helper.assertTrue(tui.partner() == la && la.partner() == tui, "each finds the other");
         helper.runAfterDelay(150, () -> {
             for (CastVisEntity v : List.of(tui, la)) {
@@ -378,7 +378,7 @@ public class E2CastSchurkGameTests {
         for (GuhNpcEntity.Kind kind : CastSchurk.kinds()) {
             kinds += Math.max(1, CastSchurk.mix(kind));
         }
-        int n = E2CastSchurkCommando.zet(level, helper.absolutePos(new BlockPos(7, 1, 1)), Direction.SOUTH);
+        int n = E2CastSchurkCommando.zet(level, helper.absolutePos(new BlockPos(7, 2, 1)), Direction.SOUTH);
         helper.assertTrue(n == kinds + wezens, "every kind (each mix set) and every creature in every look: " + n + " of " + (kinds + wezens));
         int weg = E2CastSchurkCommando.weg(level);
         helper.assertTrue(weg == n, "weg removes them all: " + weg);
