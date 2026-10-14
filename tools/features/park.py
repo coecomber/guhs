@@ -251,7 +251,7 @@ def ftb(fq):
         ("De parkwachter", "In zijn huisje zit de &dparkwachter-guh&r. Praat met hem: hij kan wel een handje hulp gebruiken.",
          "guhs:park_bankje"),
         ("De beeldentuin", "Lees de drie &6plaquettes&r bij de beelden van Joostvadsje en trapguh, Liekguh en Lunde, en Opa Kaasguh. "
-         "Rechtsklik op een plaquette.", "guhs:park_plaquette"),
+         "Rechtsklik op een plaquette.", "minecraft:oak_sign"),
         ("Hertguhtjes voeren", "In de hertenkooi wonen drie &dHertguhtjes&r. Geef ze elk een kaasknabbel, over het hek heen.",
          "guhs:kaas_knabbels"),
         ("De kooi-verzorger", "Help de &dkooi-verzorger-guh&r bij de hooibalen: ze heeft tarwe nodig voor de ruif.", "minecraft:wheat"),

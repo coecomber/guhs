@@ -52,7 +52,7 @@ public final class Park {
 
     public static final Verhaallijn LIJN = Verhaallijn.maak("knabbelpark", "knabbelpark").stappen(KLAAR).icoon("guhs:park_eigen_beeld")
             .nodig((p, stap) -> switch (stap) {
-                case PLAQUETTES_STAP -> List.of(Verhaallijn.nodig("guhs:park_plaquette", "gui.guhs.park.nodig.plaquettes", gelezen(p), PLAQUETTES));
+                case PLAQUETTES_STAP -> List.of(Verhaallijn.nodig("minecraft:oak_sign", "gui.guhs.park.nodig.plaquettes", gelezen(p), PLAQUETTES));
                 case VOEREN -> List.of(Verhaallijn.nodig("guhs:kaas_knabbels", "gui.guhs.park.nodig.herten", gevoerd(p), HERTEN));
                 case KLUSJE -> List.of(Verhaallijn.nodig("minecraft:wheat", GuhQuests.count(p, Items.WHEAT), HOOI));
                 default -> List.of();

@@ -169,6 +169,11 @@ public enum GuhVariant {
         return this == BLOESEMGUH || this == TANUKIGUH;
     }
 
+    /** No plush in the knuffelkast (biomes3: the biome guhs; 1.4.2: the park's Hertguhtje), so a complete knuffelkast stays what it was. */
+    public boolean geenKnuffel() {
+        return isBioGuh() || this == HERTGUHTJE;
+    }
+
     /** The kind of guh character this page is about (null for a real variant). */
     @javax.annotation.Nullable
     public GuhNpcEntity.Kind npcKind() {
