@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "guhs:block/park_wensstam",
+    "end": "guhs:block/guhbloesem_log_top"
+  }
+}
