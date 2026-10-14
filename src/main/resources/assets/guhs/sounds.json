@@ -3682,5 +3682,22 @@
       "guhs:bio_bouw_wolk2/hamer2"
     ],
     "subtitle": "subtitles.guhs.smidguh.hamer"
+  },
+  "park.njeg": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 0.75,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.park.njeg"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "P P"
+  ],
+  "key": {
+    "S": "minecraft:cherry_slab",
+    "P": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:park_bankje",
+    "count": 2
+  }
+}

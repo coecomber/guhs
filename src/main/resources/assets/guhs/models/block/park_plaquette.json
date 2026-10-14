@@ -1,0 +1,83 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/park_plaquette",
+    "paal": "minecraft:block/dark_oak_log",
+    "brons": "guhs:block/park_plaquette"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        10,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        8,
+        6
+      ],
+      "to": [
+        14,
+        15,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#brons"
+        },
+        "up": {
+          "texture": "#brons"
+        },
+        "north": {
+          "texture": "#brons"
+        },
+        "south": {
+          "texture": "#brons"
+        },
+        "west": {
+          "texture": "#brons"
+        },
+        "east": {
+          "texture": "#brons"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          11.5,
+          7
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    }
+  ]
+}

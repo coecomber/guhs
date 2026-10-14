@@ -1,0 +1,259 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/park_lantaarn_licht",
+    "licht": "guhs:block/park_lantaarn_licht",
+    "gezicht": "guhs:block/park_lantaarn_gezicht",
+    "kap": "guhs:block/park_lantaarn_kap"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        1,
+        4.5
+      ],
+      "to": [
+        11.5,
+        8,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#licht"
+        },
+        "up": {
+          "texture": "#licht"
+        },
+        "north": {
+          "texture": "#gezicht"
+        },
+        "south": {
+          "texture": "#gezicht"
+        },
+        "west": {
+          "texture": "#licht"
+        },
+        "east": {
+          "texture": "#licht"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        4,
+        8,
+        4
+      ],
+      "to": [
+        12,
+        9,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        9,
+        6.5
+      ],
+      "to": [
+        6,
+        11.5,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        9,
+        6.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

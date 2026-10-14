@@ -260,8 +260,8 @@
     },
     {
       height: 1.5625,
-      id: "4755488ADEFEE069",
-      image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_gids.png",
+      id: "475548E2C26F761B",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_park.png",
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
@@ -272,11 +272,23 @@
     },
     {
       height: 1.5625,
+      id: "4755488ADEFEE069",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_gids.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 53.40624999999999,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "47554836794BC800",
       image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_guhpolder.png",
       rotation: 0.0,
       width: 10.0,
-      x: 4.5,
+      x: 16.0,
       y: 53.40624999999999,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
@@ -4682,6 +4694,252 @@
       shape: "gear",
     },
     {
+      id: "475548FEB607EF65",
+      icon: {
+        id: "guhs:park_lantaarn",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:guhs:knabbelpark",
+          id: "475548ED7BFE80EE",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AECD9AB8E0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554800419184B0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 49.724999999999994,
+      shape: "circle",
+    },
+    {
+      id: "475548DC5CE6E04A",
+      icon: {
+        id: "guhs:park_bankje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelpark_stap_1",
+          id: "4755484089600A6B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A525259D9E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 49.724999999999994,
+    },
+    {
+      id: "4755485D890A02AC",
+      icon: {
+        id: "guhs:park_plaquette",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelpark_stap_2",
+          id: "4755488787BA3968",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481E62F2B664",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 49.724999999999994,
+    },
+    {
+      id: "47554822D1B422EA",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelpark_stap_3",
+          id: "4755489BD7FEFE35",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D1D2D6D2E6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 49.724999999999994,
+    },
+    {
+      id: "475548E980668DAB",
+      icon: {
+        id: "minecraft:wheat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelpark_stap_4",
+          id: "475548F6D351A6F2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489FDB46C52C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 49.724999999999994,
+    },
+    {
+      id: "4755482CC5C10C90",
+      icon: {
+        id: "guhs:park_eigen_beeld",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelpark_stap_5",
+          id: "47554831BB951443",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C348E72A7D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548314118BB43",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:park_lantaarn",
+          },
+          count: 2,
+        },
+        {
+          id: "4755486BCB9C2C5E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 49.724999999999994,
+      shape: "gear",
+    },
+    {
+      id: "47554833AC1D7852",
+      icon: {
+        id: "guhs:park_eigen_beeld",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_hertguhtje",
+          id: "475548323D081E1B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554847DD8D9C9D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548365730E956",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 20.5,
+      y: 49.724999999999994,
+    },
+    {
+      id: "475548E479EC601B",
+      icon: {
+        id: "guhs:park_prullenbak",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/park_prullenbak",
+          id: "475548E8FF024A18",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554861B285A6A7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "475548EF6F04D363",
+          type: "xp",
+          xp: 20,
+        },
+      ],
+      x: 20.5,
+      y: 51.224999999999994,
+    },
+    {
       id: "475548CB65F2E24D",
       icon: {
         id: "guhs:guhmensie_superkompas",
@@ -4710,8 +4968,8 @@
           xp: 150,
         },
       ],
-      x: 11.5,
-      y: 49.724999999999994,
+      x: 0.0,
+      y: 55.18749999999999,
       shape: "gear",
     },
     {
@@ -4751,8 +5009,8 @@
           xp: 400,
         },
       ],
-      x: 13.0,
-      y: 49.724999999999994,
+      x: 1.5,
+      y: 55.18749999999999,
       shape: "rsquare",
     },
     {
@@ -4783,7 +5041,7 @@
           xp: 100,
         },
       ],
-      x: 0.0,
+      x: 11.5,
       y: 55.18749999999999,
       shape: "circle",
     },
@@ -4816,7 +5074,7 @@
           xp: 150,
         },
       ],
-      x: 1.5,
+      x: 13.0,
       y: 55.18749999999999,
     },
     {
@@ -4846,7 +5104,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 14.5,
       y: 55.18749999999999,
     },
     {
@@ -4875,7 +5133,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 16.0,
       y: 55.18749999999999,
     },
     {
@@ -4910,7 +5168,7 @@
           xp: 100,
         },
       ],
-      x: 6.0,
+      x: 17.5,
       y: 55.18749999999999,
     },
   ],
