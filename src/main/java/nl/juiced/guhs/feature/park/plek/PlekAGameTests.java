@@ -162,7 +162,7 @@ public class PlekAGameTests {
                 }
                 case "japanse_tuin" -> {
                     if (level.getEntitiesOfClass(Knabbelkoi.class, a, e -> e.getPersistentData().getStringOr(Bezetting.TAG, "").startsWith(PlekA.KOI_ID)
-                            && e.isInWater()).size() != 4) {
+                            && level.getFluidState(e.blockPosition()).isSource()).size() != 4) {
                         fouten.add(naam + ": not four Knabbelkoi's in the water");
                     }
                 }
@@ -510,9 +510,11 @@ public class PlekAGameTests {
         level.addFreshEntity(npc);
         ServerPlayer p = speler(helper, new BlockPos(3, 2, 5));
         GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
+        guh.setBehavior(GuhEntity.Behavior.PASSIVE);
         BlockPos ver = helper.absolutePos(new BlockPos(12, 2, 12));
         guh.snapTo(ver.getX() + 0.5, ver.getY(), ver.getZ() + 0.5, 0, 0);
         level.addFreshEntity(guh);
+        boolean klaar = false;
         try {
             NpcRole rol = NpcRollen.rol(GuhNpcEntity.Kind.KRAAMGUH);
             helper.assertTrue(rol != null, "the kraampjesguh has a role");
@@ -524,12 +526,25 @@ public class PlekAGameTests {
             helper.assertTrue(adv(p, "parkplek_kraampje"), "the advancement");
             BlockPos thuis = helper.absolutePos(new BlockPos(3, 2, 10));
             helper.assertTrue(!PlekAEvents.thuis(guh, ver, 3), "at home: stays");
-            helper.assertTrue(PlekAEvents.thuis(guh, thuis, 3) && guh.getNavigation().isInProgress(), "far from home: goes back");
-            helper.succeed();
-        } finally {
+            helper.assertTrue(PlekAEvents.thuis(guh, thuis, 3), "far from home: sent back");
             npc.discard();
-            guh.discard();
             weg(helper, p);
+            klaar = true;
+            helper.onEachTick(() -> {
+                if (helper.getTick() % 20 == 0) {
+                    PlekAEvents.thuis(guh, thuis, 3);
+                }
+            });
+            helper.succeedWhen(() -> {
+                helper.assertTrue(guh.position().distanceTo(Vec3.atBottomCenterOf(thuis)) < 4, "it walks home: " + guh.position());
+                guh.discard();
+            });
+        } finally {
+            if (!klaar) {
+                npc.discard();
+                guh.discard();
+                weg(helper, p);
+            }
         }
     }
 }
