@@ -56,6 +56,8 @@ import net.minecraft.resources.Identifier;
  * </ul>
  */
 public final class KnuffelbadFeature {
+    /** 1.4.2: the repair of the Knuffelbaden built before (assets/guhs/herstel/knuffelbad_142.json, written by tools/features/knuffelbad.py). */
+    public static final String HERSTEL = "knuffelbad_142";
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
@@ -178,6 +180,7 @@ public final class KnuffelbadFeature {
             KnuffelbadProtection.vergeetAlles();
         });
         KnuffelbadProtection.register();
+        nl.juiced.guhs.feature.wereld.Reparaties.registreer(HERSTEL);   // 1.4.2: a way out of every foam spot, also in the baths built before
         Wasritueel.register();
         KnuffelbadVoortgang.register();
     }

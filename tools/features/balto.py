@@ -322,6 +322,8 @@ def nomguh(h):
     route = bouw.route_json(info)
     rapport = bouw.check(s, info, route)
     s.save(bouw.NAME)
+    from features import balto_gebouwen, herstel142
+    herstel142.schrijf(h, "nomguh_142", bouw.NAME, s, balto_gebouwen.HERSTEL_142)   # 1.4.2: mend the Nomguhs built before
     h.w(f"{h.A}/nomguh/route.json", route)
     h.w(f"{h.D}/worldgen/template_pool/{bouw.NAME}/start.json", {"fallback": "minecraft:empty", "elements": [
         {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{bouw.NAME}",

@@ -61,6 +61,14 @@ LIFT = "guhs:wolkenlift"
 STREAM = "guhs:wolkenstroom"
 PARELMOER = "guhs:parelmoer_tegels"
 
+# 1.4.2: a way out of every foam spot: a ledge at half-slab height beside the foam (out of the water you jump onto it, then
+# step out); where a wall stands round the foam, a slab in the wall beside the ledge is the next step (RICHELS_142 lists
+# them all: the repair of the copies that were built before, feature/knuffelbad/KnuffelbadHerstel.java, uses the same spots)
+RICHEL = {"type": "bottom", "waterlogged": "false"}
+RICHEL_BREED = 1.0                  # the ledge ring of the outdoor foam bath (from its edge inwards)
+TUINDEUR_142 = [(66, G + 1, 82), (66, G + 2, 82)]
+HERSTEL_142 = []                    # (spot, [old blocks]) of every 1.4.2 change: tools/features/herstel142.py
+
 SLIDES = ("roze_trechter", "glimtunnel", "grote_plons")
 POOL = (46, 38, 89, 61)             # the big pool: water x 44..89, z 38..61 (rounded corners)
 NPC_SPOT = (48, G + 2, 86)
@@ -525,7 +533,12 @@ def bouw_zwembad(b, paden_):
                 s.set(x, 1, z, TEGEL)
                 s.set(x, 2, z, WATER)
                 s.set(x, 3, z, WATER)
-                s.set(x, G, z, SCHUIM)
+                # 1.4.2: round the edge a ledge at half-slab height (you jump onto it out of the foam, then step out)
+                if d <= r - RICHEL_BREED:
+                    s.set(x, G, z, SCHUIM)
+                else:
+                    s.set(x, G, z, KS_PLAAT, RICHEL)
+                    HERSTEL_142.append(((x, G, z), [SCHUIM]))
             elif d <= r + 1.2:
                 for y in (1, 2, 3, G):
                     s.set(x, y, z, TRECHTER)
@@ -741,6 +754,11 @@ def bouw_badhuis(b, h):
     vleugel(b, 70, 90, 72, 90, deuren=((70, 80), (80, 90)))
     gang(b, 26, 35, 78, 82)
     gang(b, 61, 70, 78, 82)
+    # 1.4.2: a doorway from that corridor to the lawn behind it (the corner between the head, the east wing and the giant
+    # duck was a pit: whoever fell in from a roof could not get out)
+    for (x, y, z) in TUINDEUR_142:
+        b.set(x, y, z, AIR, force=True)
+        HERSTEL_142.append(((x, y, z), [KS, mc("pink_stained_glass")]))
     cx, cz = BADHUIS_KOP
     cells, size = voxel_kop(h, 1.8)
     remap = {mc("purpur_block"): KS, mc("pink_wool"): KS, mc("black_concrete"): mc("black_stained_glass"),
@@ -778,7 +796,12 @@ def bouw_badhuis(b, h):
             if dd < 0.5:
                 b.set(x, G, z, TRECHTER)
             elif dd <= 2.4:
-                b.set(x, G, z, SCHUIM)
+                # (1.4.2: the eight spots 2.2 out are ledges at half-slab height, each beside a slab of the rim)
+                if abs(dd - math.sqrt(5)) < 0.01:
+                    b.set(x, G, z, KS_PLAAT, RICHEL)
+                    HERSTEL_142.append(((x, G, z), [SCHUIM]))
+                else:
+                    b.set(x, G, z, SCHUIM)
                 b.set(x, G - 1, z, WATER)
             elif dd <= 3.4:
                 b.set(x, G, z, TRECHTER)
@@ -826,11 +849,17 @@ def bouw_badhuis(b, h):
         for x in range(bx - 2, bx + 3):
             for z in range(bz - 3, bz + 4):
                 edge = x in (bx - 2, bx + 2) or z in (bz - 3, bz + 3)
+                # (1.4.2: in the middle of both long sides a ledge at half-slab height and a slab in the wall beside it)
+                uit = z == bz and x in (bx - 2, bx - 1, bx + 1, bx + 2)
                 if edge:
-                    b.set(x, G + 1, z, TRECHTER)
+                    b.set(x, G + 1, z, PLUIS_PLAAT if uit else TRECHTER, RICHEL if uit else None)
+                    if uit:
+                        HERSTEL_142.append(((x, G + 1, z), [TRECHTER]))
                 else:
                     b.set(x, G - 1, z, WATER)
-                    b.set(x, G, z, SCHUIM)
+                    b.set(x, G, z, KS_PLAAT if uit else SCHUIM, RICHEL if uit else None)
+                    if uit:
+                        HERSTEL_142.append(((x, G, z), [SCHUIM]))
 
 
 # =====================================================================================================================
@@ -1004,6 +1033,7 @@ def bewoners(b, paden_):
 # =====================================================================================================================
 def template(h):
     b = Bouw(h)
+    HERSTEL_142.clear()
     paden_ = paden()
     bouw_terrein(b, paden_)
     for sid in SLIDES:                 # where you get off: a little square of path tiles, kept free
@@ -1229,6 +1259,8 @@ def build_all(h, pad_dir):
         ss, vs = inf["samples"].rit()
         summary[sid] = dict(lengte=round(inf["samples"].lengte, 1), ticks=len(ss), eendjes=len(out["eendjes"]), vmax=round(float(vs.max()), 2))
     s.save(NAME)
+    from features import herstel142
+    herstel142.schrijf(h, "knuffelbad_142", NAME, s, HERSTEL_142)
     return s, info, summary
 
 
