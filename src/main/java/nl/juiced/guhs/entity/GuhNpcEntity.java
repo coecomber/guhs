@@ -182,6 +182,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         PARKWACHTERGUH(1.0f),
         KOOIVERZORGERGUH(0.95f),
         // </park>
+        // <park-a>
+        /** 1.4.2: de kraampjesguh at the picknick kraampje of Het Knabbelpark: picnic treats and playground pieces for vads (feature/park/plek). */
+        KRAAMGUH(1.0f),
+        // </park-a>
         ;
 
         public final float scale;

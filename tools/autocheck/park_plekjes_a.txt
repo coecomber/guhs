@@ -1,0 +1,48 @@
+# Het Knabbelpark, plekjes A (1.4.2) AutoCheck: the five plekjes placed side by side on a flat spot high in the Guhmensie sky
+# (/guhs parkplek zet <naam>: the template as worldgen places it, the eendjes and the rowing boat made at once), each from a
+# viewpoint south of its entrance and from above. Dutch only.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/park_plekjes_a.txt
+
+section setup: the Guhmensie, a clear noon
+/gamemode creative
+/execute in guhs:guhmension run tp @s 4000 200 4000
+wait 60
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/effect give @s minecraft:night_vision infinite 0 true
+renderdistance 12
+
+section the plekjes (each 30 blocks east of the one before)
+/tp @s 4000 200 4000
+/guhs parkplek zet eendenvijver
+/tp @s 4030 200 4000
+/guhs parkplek zet speeltuin
+/tp @s 4060 200 4000
+/guhs parkplek zet picknickweide
+/tp @s 4090 200 4000
+/guhs parkplek zet muziektuin
+/tp @s 4120 200 4000
+/guhs parkplek zet japanse_tuin
+/gamemode spectator
+wait 60
+
+section the looks
+/tp @s 4000 206 4010 180 25
+waitrender 200
+shot plek_eendenvijver
+/tp @s 4030 206 4010 180 25
+waitrender 200
+shot plek_speeltuin
+/tp @s 4060 206 4010 180 25
+waitrender 200
+shot plek_picknickweide
+/tp @s 4090 207 4012 180 25
+waitrender 200
+shot plek_muziektuin
+/tp @s 4120 206 4010 180 25
+waitrender 200
+shot plek_japanse_tuin
+/tp @s 4060 230 3992 180 70
+waitrender 300
+shot plekjes_boven

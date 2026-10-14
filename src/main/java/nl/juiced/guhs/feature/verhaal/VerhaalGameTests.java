@@ -500,7 +500,8 @@ public class VerhaalGameTests {
         helper.assertTrue(GuhDex.ENTRIES.get(GuhDex.ENTRIES.size() - 1) == GuhVariant.values()[GuhVariant.values().length - 1]
                 && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,
                         GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3
-                        GuhVariant.HERTGUHTJE)),   // 1.4.2 (park)
+                        GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
+                        GuhVariant.KNABBELKOI)),   // <park-a> 1.4.2 (park plekjes)
                 "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud and (biomes3) the four of the new biomes");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {

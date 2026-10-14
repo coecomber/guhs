@@ -335,7 +335,8 @@ public class BioSystemenGameTests {
     public static void bioSystemenGuhdexBlijftCompleet(GameTestHelper helper) {
         List<GuhVariant> nieuw = List.of(GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE);
         Set<GuhVariant> oudeBonus = Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,
-                GuhVariant.HERTGUHTJE);   // (1.4.2: the park's Hertguhtje is a bonus page too)
+                GuhVariant.HERTGUHTJE,   // (1.4.2: the park's Hertguhtje is a bonus page too)
+                GuhVariant.KNABBELKOI);   // <park-a> (1.4.2: and the Knabbelkoi of its japanse tuin)
         // what counted before biomes3: every page that is not new, minus the bonus pages there were
         List<GuhVariant> voorheen = GuhDex.ENTRIES.stream().filter(v -> !nieuw.contains(v) && !oudeBonus.contains(v)).toList();
         helper.assertTrue(GuhDex.ENTRIES.containsAll(nieuw) && GuhDex.EXTRA.containsAll(nieuw) && GuhDex.EXTRA.size() == oudeBonus.size() + nieuw.size(),

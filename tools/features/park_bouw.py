@@ -880,6 +880,7 @@ def bloesemboom(h):
 PADEN = [("recht_lang", 5), ("recht_kort", 3), ("bocht", 5), ("splitsing", 2), ("kruising", 1), ("rotonde", 1)]
 EINDEN = [("eind_bank", 2), ("eind_bloemen", 1)]
 PLEKJES = [("bloemenweide", 2), ("rustplekje", 2), ("bosje", 3), ("bloesemboom", 2)]
+PLEKJES += [("eendenvijver", 2), ("speeltuin", 2), ("picknickweide", 2), ("muziektuin", 2), ("japanse_tuin", 2)]   # <park-a> park_plek_a.py
 PLEKJES_LEEG = 1                     # the weight of "nothing here" in the plekjes pool
 VERPLICHT = ["plein", "laan_beeldentuin", "laan_hertenkooi", "laan_parkwachter", "beeldentuin", "hertenkooi", "parkwachter"]
 
@@ -904,6 +905,8 @@ def templates(h, plekken):
     t["rustplekje"] = rustplekje(h)
     t["bosje"] = bosje(h)
     t["bloesemboom"] = bloesemboom(h)
+    from features import park_plek_a    # <park-a>
+    t.update(park_plek_a.templates(h))
     return t
 
 

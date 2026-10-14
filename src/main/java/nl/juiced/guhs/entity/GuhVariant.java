@@ -149,6 +149,9 @@ public enum GuhVariant {
     // </timmerguh>
     // <hemel>
     // </hemel>
+    // <park-a>
+    KNABBELKOI(0),   // 1.4.2: creature page (its id is its entity id) of the Knabbelkoi in the japanse tuin of Het Knabbelpark; a bonus page, see GuhDex.EXTRA
+    // </park-a>
     ;
 
     /** The Guhdex page is a guh character (GuhNpcEntity), not a variant: it can't be tamed. */

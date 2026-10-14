@@ -134,6 +134,7 @@ public final class ParkFeature {
         ParkPlekjes.bescherm();
         SuperkompasItem.voegToe("knus", STRUCTUUR);
         NeoForge.EVENT_BUS.addListener(ParkCommando::registreer);
+        nl.juiced.guhs.feature.park.plek.PlekA.register(modBus);   // <park-a> the plekjes eendenvijver, speeltuin, picknickweide, muziektuin, japanse tuin
     }
 
     /** The park's Reisguh: named "Knabbelpark", never picked up or renamed. */
@@ -157,6 +158,7 @@ public final class ParkFeature {
         for (DeferredItem<? extends Item> item : List.of(BANKJE_ITEM, LANTAARN_ITEM, PRULLENBAK_ITEM, EIGEN_BEELD_ITEM)) {
             output.accept(new ItemStack(item.get()));
         }
+        nl.juiced.guhs.feature.park.plek.PlekA.creative(output);   // <park-a>
     }
 
     private ParkFeature() {
