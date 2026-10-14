@@ -61,12 +61,12 @@ public final class E2ZweversFeature {
             () -> EntityType.Builder.of(KruimelkwalEntity::new, MobCategory.AMBIENT).sized(0.8f, 0.85f).eyeHeight(0.55f)
                     .clientTrackingRange(8).build(key("kruimelkwal")));
     /**
-     * Sized as its model (it lives at scale 8: LeegtewalvisguhEntity.SCHAAL, so its own box is 4 x 4.8 blocks, inside its
+     * Sized as its model (it lives at scale 16: LeegtewalvisguhEntity.SCHAAL, so its own box is 8 x 9.6 blocks, inside its
      * body). What you land on are its parts (see the class).
      */
     public static final DeferredHolder<EntityType<?>, EntityType<LeegtewalvisguhEntity>> LEEGTEWALVISGUH = ENTITY_TYPES.register("leegtewalvisguh",
             () -> EntityType.Builder.of(LeegtewalvisguhEntity::new, MobCategory.MISC).sized(0.5f, 0.6f).eyeHeight(0.4f)
-                    .clientTrackingRange(16).updateInterval(2).fireImmune().build(key("leegtewalvisguh")));
+                    .clientTrackingRange(20).updateInterval(2).fireImmune().build(key("leegtewalvisguh")));
     /**
      * The kind of thing a box of the whale's back is (LeegtewalvisguhEntity.Rug): never summoned, saved or drawn. It has a
      * type of its own so that whatever looks for "a Leegtewalvisguh here" (the Guhdex) never finds the back instead.

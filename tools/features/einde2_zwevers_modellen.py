@@ -6,8 +6,8 @@ Every one of them is guh-family at a glance: the big glossy guh eyes, pink blush
 guh_face / ears), on a body of its own:
   kruimelkwal          a see-through bell of warm cheese crumbs with a glowing core, four long tentacles and four frills
   leegtewalvisguh      a huge void-lilac whale with a cream belly, starry flanks (they glow), a flat crusty back on which
-                       knabbelkoor grows, round guh ears, a jaw that sings. Modelled small (1 model pixel = half a block):
-                       the entity lives at scale 8 (SCHAAL_WALVIS, its scale attribute), and its Guhdex picture shows the
+                       knabbelkoor grows, round guh ears, a jaw that sings. Modelled small (1 model pixel = one block):
+                       the entity lives at scale 16 (SCHAAL_WALVIS, its scale attribute), and its Guhdex picture shows the
                        model as it is
   vleermuis_lemurguh   a cream lemur with huge ears, dark wing membranes and a ringed tail (lucht)
   otter_pinguinguh     a slate-blue penguin body with a white otter face, whiskers and four flippers (water)
@@ -44,7 +44,7 @@ except ImportError:                                   # (run as a script from th
 plain, disc, guh_face, cube, bone, geo = bd.plain, bd.disc, bd.guh_face, bd.cube, bd.bone, bd.geo
 kf, anim = lm.kf, lm.anim
 
-SCHAAL_WALVIS = 8.0                 # = LeegtewalvisguhEntity.SCHAAL (the entity's scale attribute)
+SCHAAL_WALVIS = 16.0                # = LeegtewalvisguhEntity.SCHAAL (the entity's scale attribute)
 
 # --- colours ------------------------------------------------------------------------------------------------------------------
 KWAL = (255, 222, 140)              # the bell: warm cheese crumb
@@ -96,7 +96,7 @@ SCHILD_RAND = (198, 214, 132)
 # =====================================================================================================================
 class Vel(bd.Atlas):
     """boerderij_dieren's atlas, plus: a second sheet with what glows (a painter with a `gloei(arr) -> RGBA` attribute
-    writes there too), its own texel size (the whale lives at scale 8, so it gets 8 texels per model pixel), and a
+    writes there too), its own texel size (the whale: 8 texels per model pixel, chosen when it lived at scale 8; at scale 16 a texel is two pixels of a block), and a
     generator seeded from a name (kit.rng: never from a place in a list)."""
 
     def __init__(self, naam, s=bd.S):
@@ -540,7 +540,7 @@ def kruimelkwal_anims():
         "idle": anim(2.4, idle), "zwem": anim(1.2, zwem), "stuiter": anim(0.6, stuiter, False), "blij": anim(0.6, blij, False)}}
 
 
-# the knabbelkoor on the whale's back: (x, z, height, [(branch dx, dz, at height)]) in model pixels (2 = one block);
+# the knabbelkoor on the whale's back: (x, z, height, [(branch dx, dz, at height)]) in model pixels (1 = one block);
 # the middle of the back stays free to walk and to land on
 KOOR_PLANTEN = [(-7.0, -8.0, 7.0, [(1, 0, 3.0)]), (6.5, -3.5, 9.0, [(-1, 0, 4.0), (0, 1, 6.5)]), (-6.5, 4.0, 5.0, []),
                 (7.0, 9.5, 8.0, [(0, -1, 3.5)]), (-3.0, 12.0, 6.0, [(1, 0, 2.5)]), (1.5, -12.0, 4.0, [])]

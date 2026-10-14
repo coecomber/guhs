@@ -85,20 +85,20 @@ import com.geckolib.util.GeckoLibUtil;
  * stands on its back is carried and turned along with it by the side that moves them: a player by their own client, a guh
  * by the server ({@link #draagMee}).
  * <p>
- * The model is small (tools/features/einde2_zwevers_modellen.py: 1 model pixel = half a block) and the whale lives at
+ * The model is small (tools/features/einde2_zwevers_modellen.py: 1 model pixel = one block in the world) and the whale lives at
  * scale {@link #SCHAAL} (the vanilla scale attribute): drawn that big in the world, and at its model size in the Guhdex
  * (a picture of an entity ignores the scale), where it fits on its page.
  */
 public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     /** Its scale attribute (= einde2_zwevers_modellen.SCHAAL_WALVIS). */
-    public static final float SCHAAL = 8f;
+    public static final float SCHAAL = 16f;
     /** The top of its back, in blocks above its feet (= RUG_Y of the model, scaled). */
-    public static final double RUG = 6.0;
+    public static final double RUG = 12.0;
     /** The boxes of its back: this wide and high, at these distances ahead of its middle (the head is in front). */
-    public static final float DEEL_BREED = 8.5f, DEEL_HOOG = 5.5f;
-    public static final double[] DEEL_PLEK = {7.0, 3.5, 0.0, -3.5, -7.0};
-    /** It flies with its feet between these heights (its back then lies at 96-116: inside the natural band, under the high one). */
-    public static final int MIN_Y = 90, MAX_Y = 110;
+    public static final float DEEL_BREED = 17f, DEEL_HOOG = 11f;
+    public static final double[] DEEL_PLEK = {14.0, 7.0, 0.0, -7.0, -14.0};
+    /** It flies with its feet between these heights (its back then lies at 98-116: inside the natural band, under the high one). */
+    public static final int MIN_Y = 86, MAX_Y = 104;
     /** Blocks per tick, and degrees per tick it can turn. */
     public static final double VAART = 0.045;
     public static final float DRAAI = 0.3f;
@@ -106,9 +106,13 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     public static final int ZANG_TICKS = 160, NOOT_TICKS = 40;
     public static final float[] ZANG = {0.6f, 0.75f, 0.67f, 0.5f};
     /** It keeps this far from the boxes of the deep band's big places. */
-    public static final int MIJD = 32;
+    public static final int MIJD = 44;
     /** A come-and-go whale leaves when no player who sees it is within this many blocks. */
-    public static final int WEG = 320;
+    public static final int WEG = 384;
+    /** Half its width (the hull, without the fins): {@link #inDeWeg} also looks this far to its sides. */
+    public static final double HALF_BREED = 10.0;
+    /** Room it keeps under its belly. */
+    public static final int ONDER = 8;
     /** Player key: the Minecraft day of the last pearl. */
     public static final String PAREL_DAG = "guhs_einde2_zwevers_parel_dag";
 
@@ -210,7 +214,7 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
         if (e instanceof Player p) {
             return Walviszicht.ziet(p);
         }
-        if (e.distanceToSqr(this) > 24 * 24) {
+        if (e.distanceToSqr(this) > 48 * 48) {
             return false;
         }
         for (Entity ruiter : e.getPassengers()) {
@@ -303,7 +307,7 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
         Vec3 stap = nu.subtract(vorigePlek);
         float draai = Mth.wrapDegrees(getYRot() - vorigeKoers);
         if (stap.lengthSqr() > 1e-10 || Math.abs(draai) > 1e-4f) {
-            AABB zoek = new AABB(vorigePlek.x - 13, vorigePlek.y + RUG - 0.5, vorigePlek.z - 13, vorigePlek.x + 13, vorigePlek.y + RUG + 1.0, vorigePlek.z + 13);
+            AABB zoek = new AABB(vorigePlek.x - 26, vorigePlek.y + RUG - 0.5, vorigePlek.z - 26, vorigePlek.x + 26, vorigePlek.y + RUG + 1.0, vorigePlek.z + 26);
             for (Entity e : level().getEntities(this, zoek, x -> !(x instanceof Rug) && !x.isPassenger() && x.isLocalInstanceAuthoritative())) {
                 double voet = e.getBoundingBox().minY - (vorigePlek.y + RUG);
                 if (voet < -0.3 || voet > 0.2 || !draagt(e) || !opOudeRug(e)) {
@@ -367,12 +371,12 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
             }
         } else if (--volgendeZang <= 0) {
             volgendeZang = 500 + random.nextInt(700);
-            if (iemandZiet(96)) {
+            if (iemandZiet(128)) {
                 zing();
             }
         }
         if (tickCount % 20 == 0) {
-            kijkers(48, p -> {
+            kijkers(64, p -> {
                 GuhDex.zie(p, GuhVariant.LEEGTEWALVISGUH);
                 if (staatOp(p)) {
                     GuhAdvancements.grant(p, "einde2_zwevers_walvisrug");
@@ -391,7 +395,7 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
             return;
         }
         Vec3 f = vooruit(koers);
-        for (int d : new int[]{14, 28}) {
+        for (int d : new int[]{28, 56}) {
             if (inDeWeg(level, getX() + f.x * d, getZ() + f.z * d)) {
                 doelKoers = koers + draaiKant * 50f;
                 koersTijd = 80;
@@ -402,13 +406,20 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
 
     /**
      * Should it stay away from this spot at its own height? The edge of the world that is awake (where entities tick: beyond
-     * it the whale would hang still), an island or a cloud as high as its belly, and the big places of the deep band with
+     * it the whale would hang still), an island or a cloud as high as its belly (under its middle or its sides, with {@link #ONDER} blocks to spare), and the big places of the deep band with
      * {@link #MIJD} blocks around them.
      */
     public boolean inDeWeg(ServerLevel level, double x, double z) {
         BlockPos p = BlockPos.containing(x, getY(), z);
-        if (!level.isPositionEntityTicking(p) || level.getHeight(Heightmap.Types.MOTION_BLOCKING, p.getX(), p.getZ()) > getY() - 4) {
+        if (!level.isPositionEntityTicking(p)) {
             return true;
+        }
+        // under its middle and under its four sides (it is wide: an island edge beside the spine would scrape its flank)
+        for (int[] k : new int[][]{{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+            int kx = Mth.floor(x + k[0] * HALF_BREED), kz = Mth.floor(z + k[1] * HALF_BREED);
+            if (level.getHeight(Heightmap.Types.MOTION_BLOCKING, kx, kz) > getY() - ONDER) {
+                return true;
+            }
         }
         for (BoundingBox doos : mijd(level)) {
             if (x >= doos.minX() - MIJD && x <= doos.maxX() + MIJD && z >= doos.minZ() - MIJD && z <= doos.maxZ() + MIJD) {
@@ -482,10 +493,10 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
         }
         if (zangTik % NOOT_TICKS == 0) {
             float toon = ZANG[(zangTik / NOOT_TICKS) % ZANG.length];
-            level().playLocalSound(getX(), rugY(), getZ(), E2ZweversFeature.WALVIS_ZANG.get(), SoundSource.NEUTRAL, 5f, toon, false);
-            Vec3 gat = position().add(vooruit(getYRot()).scale(8.5)).add(0, RUG + 0.3, 0);   // (the blowhole on its head)
+            level().playLocalSound(getX(), rugY(), getZ(), E2ZweversFeature.WALVIS_ZANG.get(), SoundSource.NEUTRAL, 7f, toon, false);
+            Vec3 gat = position().add(vooruit(getYRot()).scale(17)).add(0, RUG + 0.3, 0);   // (the blowhole on its head)
             for (int i = 0; i < 5; i++) {
-                level().addParticle(ParticleTypes.NOTE, gat.x + random.nextGaussian() * 0.6, gat.y + i * 0.5, gat.z + random.nextGaussian() * 0.6,
+                level().addParticle(ParticleTypes.NOTE, gat.x + random.nextGaussian() * 1.2, gat.y + i, gat.z + random.nextGaussian() * 1.2,
                         random.nextInt(25) / 24.0, 0, 0);
             }
         }
@@ -600,7 +611,7 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     /** Seen from as far as it is sent (its own box is small: the default would hide it beyond a few dozen blocks). */
     @Override
     public boolean shouldRenderAtSqrDistance(double distance) {
-        return distance < 320.0 * 320.0;
+        return distance < 448.0 * 448.0;
     }
 
     // --- save ---------------------------------------------------------------------------------------------------------------------

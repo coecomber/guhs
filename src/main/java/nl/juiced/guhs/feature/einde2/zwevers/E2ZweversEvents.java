@@ -117,7 +117,7 @@ public final class E2ZweversEvents {
     static int walvis(ServerPlayer player) {
         Vec3 kijk = player.getLookAngle().multiply(1, 0, 1);
         kijk = kijk.lengthSqr() < 1e-4 ? new Vec3(0, 0, 1) : kijk.normalize();
-        Vec3 plek = player.position().add(kijk.scale(30)).add(0, -8, 0);
+        Vec3 plek = player.position().add(kijk.scale(50)).add(0, -14, 0);
         LeegtewalvisguhEntity walvis = Leegtewalvissen.op(player.level(), plek, player.getYRot() - 90f);
         return walvis == null ? 0 : 1;
     }

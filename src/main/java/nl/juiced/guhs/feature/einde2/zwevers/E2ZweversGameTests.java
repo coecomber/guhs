@@ -181,8 +181,8 @@ public class E2ZweversGameTests {
         helper.assertTrue(w.draagt(a) && !w.draagt(b), "its back only carries the player with the flag");
         helper.runAfterDelay(25, () -> {
             double rug = w.rugY();
-            // the real collision path, at its middle and far out towards its head (ten blocks from its own box)
-            for (double vooruit : new double[]{0, 10, -9}) {
+            // the real collision path, at its middle and far out towards its head and tail (twenty blocks from its own box)
+            for (double vooruit : new double[]{0, 20, -18}) {
                 Vec3 plek = w.position().add(LeegtewalvisguhEntity.vooruit(w.getYRot()).scale(vooruit));
                 AABB voeten = new AABB(plek.x - 0.3, rug - 0.6, plek.z - 0.3, plek.x + 0.3, rug + 0.4, plek.z + 0.3);
                 helper.assertTrue(!level.getEntityCollisions(a, voeten).isEmpty(), "the back is solid for the player with the flag (" + vooruit + ")");
@@ -254,12 +254,12 @@ public class E2ZweversGameTests {
         helper.assertTrue(Leegtewalvissen.dichtste(level, start) >= 0 && Leegtewalvissen.dichtste(level, start) < 1, "the nearest whale is found (searches skip it otherwise)");
         helper.assertTrue(LeegtewalvisguhEntity.MIN_Y + LeegtewalvisguhEntity.RUG >= 90 && LeegtewalvisguhEntity.MAX_Y + LeegtewalvisguhEntity.RUG <= Einde2Ids.NATUUR_MAX,
                 "its back stays in the natural band");
-        // what it steers clear of: the boxes of the deep band's big places, with 32 blocks around them
+        // what it steers clear of: the boxes of the deep band's big places, with MIJD blocks around them
         helper.assertFalse(w.inDeWeg(level, w.getX(), w.getZ() + 4), "open sky ahead");
         int rand = (int) Math.floor(w.getZ()) + 5 + LeegtewalvisguhEntity.MIJD;
         BoundingBox doos = new BoundingBox((int) w.getX() - 10, 4, rand, (int) w.getX() + 10, 117, rand + 30);
         LeegtewalvisguhEntity.zetMijd(level, List.of(doos));
-        helper.assertTrue(w.inDeWeg(level, w.getX(), rand - LeegtewalvisguhEntity.MIJD + 0.5), "32 blocks before a big place of the deep band: in the way");
+        helper.assertTrue(w.inDeWeg(level, w.getX(), rand - LeegtewalvisguhEntity.MIJD + 0.5), LeegtewalvisguhEntity.MIJD + " blocks before a big place of the deep band: in the way");
         helper.assertFalse(w.inDeWeg(level, w.getX(), rand - LeegtewalvisguhEntity.MIJD - 2), "further off: free");
         LeegtewalvisguhEntity.zetMijd(level, new ArrayList<>());
         helper.assertFalse(w.isPushable() || w.isPickable(), "it can't be pushed (you point at its back)");

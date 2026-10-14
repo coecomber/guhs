@@ -25,7 +25,7 @@ public final class Leegtewalvissen {
     public static final int TIJD = 600, KANS = 3;
     /** At most one whale within this many blocks of a player who sees it. */
     public static final int BEREIK = 256;
-    public static final int MIN_AFSTAND = 48, MAX_AFSTAND = 80;
+    public static final int MIN_AFSTAND = 72, MAX_AFSTAND = 120;
 
     static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level) || !GuheindeFeature.isGuheinde(level) || level.getGameTime() % TIJD != 250) {
@@ -61,9 +61,9 @@ public final class Leegtewalvissen {
         }
         double a = random.nextDouble() * Math.PI * 2, d = MIN_AFSTAND + random.nextInt(MAX_AFSTAND - MIN_AFSTAND + 1);
         double x = player.getX() + Math.cos(a) * d, z = player.getZ() + Math.sin(a) * d;
-        int y = Mth.clamp(player.getBlockY() - 12 + random.nextInt(24), LeegtewalvisguhEntity.MIN_Y, LeegtewalvisguhEntity.MAX_Y);
-        // it heads past the player, some thirty blocks to one side
-        Vec3 langs = new Vec3(player.getX() - Math.sin(a) * 30, y, player.getZ() + Math.cos(a) * 30);
+        int y = Mth.clamp(player.getBlockY() - 24 + random.nextInt(36), LeegtewalvisguhEntity.MIN_Y, LeegtewalvisguhEntity.MAX_Y);
+        // it heads past the player, some forty blocks to one side
+        Vec3 langs = new Vec3(player.getX() - Math.sin(a) * 40, y, player.getZ() + Math.cos(a) * 40);
         float koers = (float) (Mth.atan2(langs.z - z, langs.x - x) * Mth.RAD_TO_DEG) - 90f;
         return op(level, new Vec3(x, y, z), koers);
     }
@@ -80,7 +80,7 @@ public final class Leegtewalvissen {
         }
         walvis.snapTo(plek.x, plek.y, plek.z, koers, 0);
         Vec3 f = LeegtewalvisguhEntity.vooruit(koers);
-        for (int d : new int[]{-12, 0, 12, 24}) {
+        for (int d : new int[]{-24, 0, 24, 48}) {
             if (walvis.inDeWeg(level, plek.x + f.x * d, plek.z + f.z * d)) {
                 walvis.discard();
                 return null;
