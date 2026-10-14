@@ -7,7 +7,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 
 /**
  * einde2, slice cast_team: the default role of every kind of {@link CastTeam} (CONTRACT_E2 11.2 G): a click says one of the
- * kind's two lines of small talk ({@code quest.guhs.einde2_cast_team.praatje.<kind>.0} / {@code .1}), nothing else.
+ * kind's two lines of small talk ({@code quest.guhs.einde2_cast_team.praatje.<kind>.0} / {@code .1}) and plays its {@code praat} animation (11.7 M3), nothing else.
  * A role registered for a spot ({@code NpcRollen.zet(kind, "<structuur>/<plek>", rol)}) wins over this one.
  */
 public final class CastTeamRol implements NpcRole {
@@ -22,7 +22,7 @@ public final class CastTeamRol implements NpcRole {
     @Override
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         GuhQuests.say(player, npc, praatje(npc.getKind(), npc.level().getRandom().nextInt(2)));
-        // hook fase B: M3 of CONTRACT_E2 11.7 lets it play "praat" (npc.speel("praat"))
+        npc.speel("praat");                                    // (CONTRACT_E2 11.7 M3)
     }
 
     private CastTeamRol() {

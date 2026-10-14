@@ -185,7 +185,21 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     }
 
     private static final EntityDataAccessor<Integer> DATA_KIND = SynchedEntityData.defineId(GuhNpcEntity.class, EntityDataSerializers.INT);
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh_sitting.idle");
+    /** einde2 (CONTRACT_E2 11.7 M3): the named animation that plays now ("" = idle) and a counter that restarts the same one. */
+    private static final EntityDataAccessor<String> DATA_SPEEL = SynchedEntityData.defineId(GuhNpcEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> DATA_SPEEL_N = SynchedEntityData.defineId(GuhNpcEntity.class, EntityDataSerializers.INT);
+    private static final String ANIMATIE = "animation.guh_sitting.";
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop(ANIMATIE + "idle");
+    /**
+     * einde2 (CONTRACT_E2 11.7 M3): per kind, how long each named animation of its file lasts in ticks (0 = a pose that lasts
+     * until {@link #speel speel("")}; below 0 = the file does not hold it). Filled for the einde2 cast from its three tables
+     * (feature/einde2/CastTabellen); a kind without an entry plays nothing on demand.
+     */
+    public static final java.util.Map<Kind, java.util.function.ToIntFunction<String>> ANIMATIE_DUUR = new java.util.concurrent.ConcurrentHashMap<>();
+    /** Server: the tick count at which the one-shot that plays now is over (-1: none, or a lasting pose). */
+    private int speelTot = -1;
+    /** Client: the last {@link #DATA_SPEEL_N} the controller started. */
+    private int speelGezien;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     /** The Maagenzym-guh belongs to one stomach. */
     @Nullable
@@ -228,6 +242,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_KIND, Kind.TANDARTS.ordinal());
+        builder.define(DATA_SPEEL, "");
+        builder.define(DATA_SPEEL_N, 0);
     }
 
     @Override
@@ -246,6 +262,40 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         this.getAttribute(Attributes.SCALE).setBaseValue(kind.scale);
         this.refreshDimensions();
         this.setCustomName(Component.translatable("entity.guhs.guh_npc." + kind.id()));
+    }
+
+    /**
+     * einde2 (CONTRACT_E2 11.7 M3): plays {@code animation.guh_sitting.<naam>} of the kind's animation file once on every
+     * client (synced) and goes back to idle; a pose ({@code (houding)}, 0 ticks in the table) lasts until {@code speel("")}.
+     * A name the kind's file does not hold does nothing. Server side only. hook fase B: the cutscenes and roles call this.
+     */
+    public void speel(String naam) {
+        if (this.level().isClientSide()) {
+            return;
+        }
+        if (naam == null || naam.isEmpty()) {
+            this.entityData.set(DATA_SPEEL, "");
+            speelTot = -1;
+            return;
+        }
+        int duur = duur(naam);
+        if (duur < 0) {
+            return;
+        }
+        this.entityData.set(DATA_SPEEL, naam);
+        this.entityData.set(DATA_SPEEL_N, this.entityData.get(DATA_SPEEL_N) + 1);
+        speelTot = duur == 0 ? -1 : this.tickCount + duur;
+    }
+
+    /** The named animation that plays now ("" = idle). */
+    public String speelt() {
+        return this.entityData.get(DATA_SPEEL);
+    }
+
+    /** How long this kind's animation lasts in ticks: 0 = a lasting pose, below 0 = its file does not hold it. */
+    public int duur(String naam) {
+        java.util.function.ToIntFunction<String> tabel = ANIMATIE_DUUR.get(getKind());
+        return tabel == null ? -1 : tabel.applyAsInt(naam);
     }
 
     @Nullable
@@ -476,6 +526,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             roleData.putFloat("GateYaw", getYRot());
         }
         super.tick();
+        if (!this.level().isClientSide() && speelTot >= 0 && this.tickCount >= speelTot) {
+            speelTot = -1;                                           // (the one-shot is over: back to idle)
+            this.entityData.set(DATA_SPEEL, "");
+        }
         if (!this.level().isClientSide() && getKind() == Kind.VERSTOPGUHTJE) {
             verstop.tick(this);
         }
@@ -505,7 +559,19 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>("main", 0, state -> state.setAndContinue(IDLE)));
+        controllers.add(new AnimationController<>("main", 0, state -> {
+            String naam = speelt();
+            if (naam.isEmpty()) {
+                return state.setAndContinue(IDLE);
+            }
+            int n = this.entityData.get(DATA_SPEEL_N);
+            if (n != speelGezien) {
+                speelGezien = n;
+                state.controller().reset();                         // (the same name again: from the start)
+            }
+            return state.setAndContinue(duur(naam) == 0 ? RawAnimation.begin().thenPlayAndHold(ANIMATIE + naam)
+                    : RawAnimation.begin().thenPlay(ANIMATIE + naam).thenLoop(ANIMATIE + "idle"));
+        }));
     }
 
     @Override

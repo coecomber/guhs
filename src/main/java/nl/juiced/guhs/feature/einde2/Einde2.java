@@ -32,7 +32,9 @@ import nl.juiced.guhs.quest.GuhDex;
  * <p>
  * Shared by every slice: {@link Einde2Ids} (ids, tags, height bands), {@link Plekken} (where a structure and its markers
  * are), {@link Einde2Bescherming}, {@link Einde2Ontdekt}, {@link Einde2Haken} (the hooks for the later story and tech
- * phases), {@link Einde2Test} (the Guheinde's generator in a game test). Resources: tools/features/einde2.py and the
+ * phases), {@link Einde2Test} (the Guheinde's generator in a game test). After the three cast slices: {@link Bewoners} (the
+ * residents at the markers), {@link CastTabellen} (the three cast tables as one) and {@link Einde2Toon} (the dev rows of every
+ * model). Resources: tools/features/einde2.py and the
  * slices' own tools/features/einde2_*.py; the helper library is tools/features/einde2_kit.py.
  */
 public final class Einde2 {
@@ -108,6 +110,10 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.castvolk.E2CastVolkFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.register(modBus);
+        // the merge step of the cast (CONTRACT_E2 11.7, 11.9): residents at the markers, named animations on demand, the dev rows
+        Bewoners.register();
+        CastTabellen.registreer();
+        NeoForge.EVENT_BUS.addListener(Einde2Toon::register);
         // the stand-ins that are left: attributes, and their Guhdex page (the page's name is the entity id)
         modBus.addListener((EntityAttributeCreationEvent event) -> PLAATSHOUDERS.forEach(
                 type -> event.put(type.get(), Einde2Plaatshouder.createAttributes().build())));

@@ -14,10 +14,13 @@ import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.Guhs;
@@ -43,6 +46,12 @@ public final class SittingGuhRenderers {
     public static final Map<GuhNpcEntity.Kind, Identifier> NPC_MODELEN = new ConcurrentHashMap<>();
     public static final Map<GuhNpcEntity.Kind, Identifier> NPC_ANIMATIES = new ConcurrentHashMap<>();
     public static final Map<GuhNpcEntity.Kind, NpcAnimator> NPC_ANIMATORS = new ConcurrentHashMap<>();
+    /**
+     * einde2 (CONTRACT_E2 11.7 M2): kinds drawn see-through (a memory, a spirit: their texture has alpha) and kinds with a
+     * glow layer ({@code textures/entity/npc_<kind>_glowmask.png}, added full bright). Filled from the einde2 cast tables.
+     */
+    public static final java.util.Set<GuhNpcEntity.Kind> NPC_DOORZICHTIG = ConcurrentHashMap.newKeySet();
+    public static final java.util.Set<GuhNpcEntity.Kind> NPC_GLOED = ConcurrentHashMap.newKeySet();
 
     /** The kind of the NPC being drawn (render state ticket; the model picks its geo file from it). */
     public static final DataTicket<GuhNpcEntity.Kind> NPC_KIND = DataTicket.create("guhs_npc_kind", GuhNpcEntity.Kind.class);
@@ -142,6 +151,26 @@ public final class SittingGuhRenderers {
                 }
             });
             this.shadowRadius = 0.6f;
+            // einde2 (11.7 M2): the glowmask of a glowing kind, full bright on top (black = nothing)
+            withRenderLayer(new AutoGlowingGeoLayer<GuhNpcEntity, Void, LivingEntityRenderState>(this) {
+                @Nullable
+                @Override
+                protected RenderType getRenderType(LivingEntityRenderState state) {
+                    GuhNpcEntity.Kind kind = state.getGeckolibData(NPC_KIND);
+                    return kind != null && NPC_GLOED.contains(kind)
+                            ? GuhRenderTypes.eyes(Guhs.id("textures/entity/npc_" + kind.id() + "_glowmask.png")) : null;
+                }
+            });
+        }
+
+        /** einde2 (11.7 M2): a see-through kind is drawn translucent. */
+        @Override
+        public @Nullable RenderType getRenderType(LivingEntityRenderState state, Identifier texture) {
+            GuhNpcEntity.Kind kind = state.getGeckolibData(NPC_KIND);
+            if (kind != null && NPC_DOORZICHTIG.contains(kind) && !state.isInvisible) {
+                return RenderTypes.entityTranslucent(texture);
+            }
+            return super.getRenderType(state, texture);
         }
 
         @Override
