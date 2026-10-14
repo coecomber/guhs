@@ -135,6 +135,7 @@ public final class ParkFeature {
         SuperkompasItem.voegToe("knus", STRUCTUUR);
         NeoForge.EVENT_BUS.addListener(ParkCommando::registreer);
         nl.juiced.guhs.feature.park.plek.PlekA.register(modBus);   // <park-a> the plekjes eendenvijver, speeltuin, picknickweide, muziektuin, japanse tuin
+        nl.juiced.guhs.feature.park.plek.PlekB.register(modBus);   // park-plekjes b
     }
 
     /** The park's Reisguh: named "Knabbelpark", never picked up or renamed. */
@@ -152,6 +153,7 @@ public final class ParkFeature {
     }
 
     public static void payloads(PayloadRegistrar registrar) {
+        nl.juiced.guhs.feature.park.plek.PlekB.payloads(registrar);   // park-plekjes b
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -159,6 +161,7 @@ public final class ParkFeature {
             output.accept(new ItemStack(item.get()));
         }
         nl.juiced.guhs.feature.park.plek.PlekA.creative(output);   // <park-a>
+        nl.juiced.guhs.feature.park.plek.PlekB.creative(output);   // park-plekjes b
     }
 
     private ParkFeature() {

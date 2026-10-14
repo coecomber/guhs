@@ -3699,5 +3699,39 @@
       }
     ],
     "subtitle": "subtitles.guhs.park.njeg"
+  },
+  "parkb.roekoe": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.parrot.ambient",
+        "type": "event",
+        "pitch": 0.55,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:vogels.pluisvinkje",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.parkb.roekoe"
+  },
+  "parkb.applaus": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.parkb.applaus"
   }
 }

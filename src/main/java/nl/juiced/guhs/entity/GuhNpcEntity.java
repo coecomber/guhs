@@ -186,6 +186,12 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         /** 1.4.2: de kraampjesguh at the picknick kraampje of Het Knabbelpark: picnic treats and playground pieces for vads (feature/park/plek). */
         KRAAMGUH(1.0f),
         // </park-a>
+        // <park-b>
+        /** 1.4.2 park-plekjes b (feature/park/plek): Oma-guh feeding the Duifguhtjes, the sulking Mika on his bench, the guhkindjes at the poppenkast. */
+        OMAGUH(1.0f),
+        MOKMIKA(0.9f),
+        GUHKINDJE(0.6f),
+        // </park-b>
         ;
 
         public final float scale;

@@ -145,6 +145,9 @@ public enum GuhVariant {
     // <bio_dieren_wezens>
     KOI(0), WOLKENSCHAAPJE(0),   // biomes3: creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA
     // </bio_dieren_wezens>
+    // <park-b>
+    DUIFGUHTJE(0),   // 1.4.2 park-plekjes b: creature page (entity guhs:duifguhtje, feature/park/plek); a bonus page, see GuhDex.EXTRA
+    // </park-b>
     // <timmerguh>
     // </timmerguh>
     // <hemel>

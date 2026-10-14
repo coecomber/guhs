@@ -907,6 +907,7 @@ def templates(h, plekken):
     t["bloesemboom"] = bloesemboom(h)
     from features import park_plek_a    # <park-a>
     t.update(park_plek_a.templates(h))
+    t.update(park_plek_b.templates(h))      # park-plekjes b (its plekjes, the uitkijktoren and the filler)
     return t
 
 
@@ -1075,3 +1076,9 @@ def check(h, t, plekken):
                 if u not in gezien:
                     problems.append(f"{naam}: connector {u} not on the path")
     return problems
+
+
+# --- park-plekjes b (tools/features/park_plek_b.py): four more random plekjes; the uitkijktoren and the filler are swapped in by
+# feature/park/plek/Uitkijktoren.schik (not in the pool) ------------------------------------------------------------------
+from features import park_plek_b  # noqa: E402
+PLEKJES += park_plek_b.PLEKJES

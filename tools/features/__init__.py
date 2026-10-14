@@ -64,7 +64,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'ring_vlucht',
             # 1.4.2: Het Knabbelpark (park-kern, then park-plekjes in the same module; append only)
             'park',
-            'park_plek_a']   # <park-a> 1.4.2: five random plekjes of the park (append only)
+            'park_plek_a',   # <park-a> 1.4.2: five random plekjes of the park (append only)
+            'park_plek_b']   # 1.4.2 park-plekjes b (after 'park': it writes the texts and models of its plekjes)
 
 
 def modules():

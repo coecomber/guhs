@@ -57,6 +57,8 @@ import nl.juiced.guhs.world.BouwRuimte;
  *       selection and placement priority on the plaza's jigsaws) so nothing random can take their room, and when a layout
  *       still misses one, another layout is drawn (up to {@code pogingen}, from the chunk seed: the same every time); a
  *       chunk where no layout has them all gets no park;</li>
+ *   <li>(park-plekjes b) on a complete layout, {@code plek.Uitkijktoren#schik}: the once-per-park plekjes stay once, and the
+ *       uitkijktoren takes the place of the plekje on the highest spot (only plekjes are swapped, inside their footprint);</li>
  *   <li>the boxes of the walks are grown to the real height of the land under them (a terrain-matching piece keeps the
  *       box of its template at the height of its joint, but its blocks follow the hills): so protection
  *       ({@code feature.wereld.Bescherming}), {@link BouwRuimte} and the "no plants on buildings" filter know where the
@@ -169,6 +171,8 @@ public class ParkStructure extends Structure implements BouwRuimte.Ruimte {
             if (builder.isEmpty() || !compleet(builder.build())) {
                 continue;
             }
+            // park-plekjes b: once-per-park plekjes, the uitkijktoren on the highest plekje spot (plekjes only, inside their footprint)
+            nl.juiced.guhs.feature.park.plek.Uitkijktoren.schik(builder, context.structureTemplateManager(), random);
             groeiPaden(builder.build(), context.chunkGenerator(), context.heightAccessor(), context.randomState());
             return Optional.of(new Layout(new GenerationStub(stub.get().position(), Either.right(builder)), poging));
         }
