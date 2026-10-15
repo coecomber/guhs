@@ -54,7 +54,7 @@ import nl.juiced.guhs.registry.ModEntities;
  */
 public final class Einde2Toon {
     public static final String TAG = "guhs_einde2_toon";
-    public static final List<String> GROEPEN = List.of("team", "volk", "schurk", "sponsguh", "wezens");
+    public static final List<String> GROEPEN = List.of("team", "volk", "schurk", "sponsguh", "wezens", "geest");
     /** Blocks between two things of a row, things per row, blocks between two rows, and from the player to the first row. */
     static final int AFSTAND = 3, PER_RIJ = 16, RIJ = 5, VOOR = 5;
     /** The entity types of the group "wezens", in order (the whale comes last, on its own). */
@@ -166,6 +166,9 @@ public final class Einde2Toon {
                 // the whale: about 20 x 12 x 44 blocks, in a row of its own, its snout towards the player and well behind the rest
                 uit.add(new Ding("leegtewalvisguh", level -> maakType(level, "leegtewalvisguh"), 0, -1, 24, 48, 24, true));
             }
+            // (geestmodellen: the creatures of the Geestenwereld in every look, the Theegeest and the Bestelguh)
+            case "geest" -> nl.juiced.guhs.feature.einde2.geestwezens.GeestToon.rij()
+                    .forEach(r -> uit.add(new Ding(r.naam(), r.maak(), 0, -1, r.breed(), r.diep(), r.achter(), r.alleen())));
             default -> {
             }
         }
