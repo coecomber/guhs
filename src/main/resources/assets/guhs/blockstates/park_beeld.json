@@ -6,9 +6,6 @@
     "beeld=trapguh,facing=north": {
       "model": "guhs:block/park_beeld"
     },
-    "beeld=suusvadsje,facing=north": {
-      "model": "guhs:block/park_beeld"
-    },
     "beeld=liekguh,facing=north": {
       "model": "guhs:block/park_beeld"
     },
@@ -18,15 +15,14 @@
     "beeld=opa_kaasguh,facing=north": {
       "model": "guhs:block/park_beeld_kaas"
     },
+    "beeld=suusvadsje,facing=north": {
+      "model": "guhs:block/park_beeld"
+    },
     "beeld=joostvadsje,facing=east": {
       "model": "guhs:block/park_beeld",
       "y": 90
     },
     "beeld=trapguh,facing=east": {
-      "model": "guhs:block/park_beeld",
-      "y": 90
-    },
-    "beeld=suusvadsje,facing=east": {
       "model": "guhs:block/park_beeld",
       "y": 90
     },
@@ -42,15 +38,15 @@
       "model": "guhs:block/park_beeld_kaas",
       "y": 90
     },
+    "beeld=suusvadsje,facing=east": {
+      "model": "guhs:block/park_beeld",
+      "y": 90
+    },
     "beeld=joostvadsje,facing=south": {
       "model": "guhs:block/park_beeld",
       "y": 180
     },
     "beeld=trapguh,facing=south": {
-      "model": "guhs:block/park_beeld",
-      "y": 180
-    },
-    "beeld=suusvadsje,facing=south": {
       "model": "guhs:block/park_beeld",
       "y": 180
     },
@@ -66,15 +62,15 @@
       "model": "guhs:block/park_beeld_kaas",
       "y": 180
     },
+    "beeld=suusvadsje,facing=south": {
+      "model": "guhs:block/park_beeld",
+      "y": 180
+    },
     "beeld=joostvadsje,facing=west": {
       "model": "guhs:block/park_beeld",
       "y": 270
     },
     "beeld=trapguh,facing=west": {
-      "model": "guhs:block/park_beeld",
-      "y": 270
-    },
-    "beeld=suusvadsje,facing=west": {
       "model": "guhs:block/park_beeld",
       "y": 270
     },
@@ -88,6 +84,10 @@
     },
     "beeld=opa_kaasguh,facing=west": {
       "model": "guhs:block/park_beeld_kaas",
+      "y": 270
+    },
+    "beeld=suusvadsje,facing=west": {
+      "model": "guhs:block/park_beeld",
       "y": 270
     }
   }

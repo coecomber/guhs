@@ -11,6 +11,7 @@
     "min_afstand": 1300,
     "max_afstand": 2600,
     "sector": 14,
-    "sectoren": 16
+    "sectoren": 16,
+    "alleen_nieuw": true
   }
 }
