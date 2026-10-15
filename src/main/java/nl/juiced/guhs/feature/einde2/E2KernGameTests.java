@@ -511,11 +511,11 @@ public class E2KernGameTests {
                 Einde2Haken.PORTAAL_SLOTEN.remove(een);
                 Einde2Haken.PORTAAL_SLOTEN.remove(twee);
             }
-            // the stories: one group, fixed ids, nobody has finished one; the recipe is secret; nothing hangs on the fight yet
+            // the stories: one group, fixed ids, nobody has finished one; the recipe is secret; zij's Opper-Mika entrance scene listens to the fight
             helper.assertTrue(Einde2Haken.VERHAAL_GROEP.equals("guheinde") && Einde2Haken.GROTE_VERHALEN.size() == 6 && Einde2Haken.KLEINE_VERHALEN.size() == 14
                     && Einde2Haken.GROTE_VERHALEN.stream().noneMatch(Einde2Haken.KLEINE_VERHALEN::contains), "six big stories, fourteen small ones");
-            helper.assertTrue(Einde2Haken.groteVerhalenKlaar(a) == 0 && !Einde2Haken.KNABBELBURGER_RECEPT.test(a) && Einde2Haken.GEVECHT_BEGINT.isEmpty(),
-                    "no story finished, no recipe, no entrance scene");
+            helper.assertTrue(Einde2Haken.groteVerhalenKlaar(a) == 0 && !Einde2Haken.KNABBELBURGER_RECEPT.test(a) && !Einde2Haken.GEVECHT_BEGINT.isEmpty(),
+                    "no story finished, no recipe, the entrance scene is wired");
             var oud = Einde2Haken.VERHAAL_KLAAR;
             Einde2Haken.VERHAAL_KLAAR = (p, id) -> p == a && (id.startsWith("guhvatar_") || id.equals("omashguh"));
             try {
