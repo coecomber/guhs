@@ -26,6 +26,11 @@ public final class Leegtewalvissen {
     /** At most one whale within this many blocks of a player who sees it. */
     public static final int BEREIK = 256;
     public static final int MIN_AFSTAND = 72, MAX_AFSTAND = 120;
+    /**
+     * einde2 phase B (reizen): may a whale come for this player by itself (besides the flag)? The whale questline keeps the
+     * first sighting for its own moment: a player who believed the captain sees no whale before the one that rises for them.
+     */
+    public static volatile java.util.function.Predicate<ServerPlayer> MAG_KOMEN = p -> true;
 
     static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level) || !GuheindeFeature.isGuheinde(level) || level.getGameTime() % TIJD != 250) {
@@ -56,7 +61,7 @@ public final class Leegtewalvissen {
     /** One whale for this player, when the rules above allow it and the spot is free. Or null. */
     @Nullable
     public static LeegtewalvisguhEntity aanvullen(ServerLevel level, ServerPlayer player, RandomSource random) {
-        if (!magErbij(Walviszicht.ziet(player), player.getX(), player.getZ(), dichtste(level, player.position()))) {
+        if (!MAG_KOMEN.test(player) || !magErbij(Walviszicht.ziet(player), player.getX(), player.getZ(), dichtste(level, player.position()))) {
             return null;
         }
         double a = random.nextDouble() * Math.PI * 2, d = MIN_AFSTAND + random.nextInt(MAX_AFSTAND - MIN_AFSTAND + 1);

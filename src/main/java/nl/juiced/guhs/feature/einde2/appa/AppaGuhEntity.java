@@ -256,9 +256,20 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
 
     /** His owner, when online. */
     @Nullable
-    ServerPlayer baas() {
+    public ServerPlayer baas() {
         UUID e = eigenaar();
         return e == null || level().getServer() == null ? null : level().getServer().getPlayerList().getPlayer(e);
+    }
+
+    /**
+     * einde2 phase B (reizen): a shove while he flies himself (a fireball of Zuka's ship, a dodge): added to his motion,
+     * which his own flight smooths away again in about a second. Never hurts anybody.
+     */
+    public void duw(Vec3 impuls) {
+        if (!level().isClientSide()) {
+            setDeltaMovement(getDeltaMovement().add(impuls));
+            hurtMarked = true;
+        }
     }
 
     // --- seats ----------------------------------------------------------------------------------------------------------------

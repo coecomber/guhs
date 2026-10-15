@@ -32,7 +32,7 @@
   "entity.guhs.leegtewalvisguh": "Void Whale Guh",
   "entity.guhs.leegtewalvisguh_rug": "Void Whale Guh's Back",
   "gui.guhs.guhdex.rarity.leegtewalvisguh": "Rarity: Legendary, between the outer islands (only for those who believe the captain)",
-  "gui.guhs.guhdex.info.leegtewalvisguh": "Huge, slow and chonkily content, it floats between the islands, singing so low that your nibbles tremble. Nibble Chorus grows on its back, and there is plenty of room to land and float along for a while. Feed it a Nibble Chorus Fruit and it thanks you with a Void Pearl (one a day, it is thrifty). You can't tame it: you try putting an island on a lead. The old captain in the harbor pub always said so.",
+  "gui.guhs.guhdex.info.leegtewalvisguh": "Huge, slow and chonkily content, it floats between the islands, singing so low that your nibbles tremble. Nibble Chorus grows on its back, and there is plenty of room to land and float along for a while. Feed it a Nibble Chorus Fruit and it thanks you with a Void Pearl (one a day, it is thrifty). You don't put an island on a lead, but whoever believes the old captain in the harbor pub and feeds a whale often gets one of their own: a flying home with a little house on its back.",
   "entity.guhs.vleermuis_lemurguh": "Bat-Lemur Guh",
   "gui.guhs.guhdex.rarity.vleermuis_lemurguh": "Rarity: Rare in the Crumb Clouds (and at the air temples)",
   "gui.guhs.guhdex.info.vleermuis_lemurguh": "Half bat, half lemur, all guh: enormous ears, a ringed tail and little skin wings. It flutters from spot to spot in short hops and likes nothing better than napping upside down from a ceiling, wings wrapped around itself like a blanket. Sneak, and it sleeps on. Crazy about fruit: an apple, berries or a Nibble Chorus Fruit. Mind your nibbles, say the monks. Nyeg.",
@@ -57,5 +57,6 @@
   "ftb.guhs_guheinde.q.einde2_zwevers_das_molguh.title": "It Feels You Coming",
   "ftb.guhs_guheinde.q.einde2_zwevers_das_molguh.desc": "In the &6Crystal Cheese Cliffs&r the odd &dBadger-Mole Guh&r digs away. It is blind, but it feels your steps (sneak!). In soft ground it tunnels around without breaking a single block. Get close for your Guhdex.",
   "ftb.guhs_guheinde.q.einde2_zwevers_schildpad_eendguh.title": "Quack-Nyeg",
-  "ftb.guhs_guheinde.q.einde2_zwevers_schildpad_eendguh.desc": "In the &5Nibble Chorus Forest&r a &dTurtle-Duck Guh&r bobs along now and then: a duckling in a turtle shell. Hold &6bread&r and it follows you everywhere. Get close for your Guhdex."
+  "ftb.guhs_guheinde.q.einde2_zwevers_schildpad_eendguh.desc": "In the &5Nibble Chorus Forest&r a &dTurtle-Duck Guh&r bobs along now and then: a duckling in a turtle shell. Hold &6bread&r and it follows you everywhere. Get close for your Guhdex.",
+  "gui.guhs.einde2_zwevers.walvis.remt": "Your whale slows down: something big hangs in front of its snout. Look another way."
 }

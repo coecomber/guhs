@@ -43,6 +43,11 @@ import nl.juiced.guhs.taal.Tekst;
 public final class Appa {
     /** Called when an auto flight ({@link #vlieg}) lands, with the rider. */
     public static final List<Consumer<ServerPlayer>> AANGEKOMEN = new CopyOnWriteArrayList<>();
+    /**
+     * einde2 phase B (reizen): the whistle blown while sitting on your own Appa's head. True = it was handled (the list of
+     * places to fly to opened); false = the old line "you are sitting on him already".
+     */
+    public static volatile java.util.function.Predicate<ServerPlayer> OP_ZIJN_KOP = p -> false;
     /** The player's saved Appa: Heeft, Gen, Weg, Naam, Items. */
     public static final String KEY = "guhs_einde2_appa_appa";
 
