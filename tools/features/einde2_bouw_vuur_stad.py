@@ -810,6 +810,12 @@ def voorplein(b):
     b.pad("knipoog_sjokkel", [(118, V, 91), (115, V, 88), (113, V, 85)], wie="Sjokkels laatste stukje, tot op de finish")
     b.camera("knipoog_sjokkel", (121, V + 3, 88), (113, V, 85), zicht=["knipoog_sjokkel_finish", "kroning_zuka"])
     b.sign(111, V, 85, "east", ["FINISH", "luchtscooter-", "baan. Eindelijk", "njeg"], wall=False)
+    # (h4_vuur) the square of the Agni Kai (the forecourt, outside the throne room) and its middle: the golden heart of the sun
+    b.zone("agni_kai_plein", 116, V, 78, 140, V + 6, 91, wie="het plein van de Agni Kai: het voorplein, buiten de troonzaal")
+    b.prop("agni_kai_midden", cx, V, cz, wie="het midden van de Agni Kai: het gouden hart van de zon in de vloer")
+    # (h4_vuur) the run of the airship fleet in the finale: entities only, through the open sky above the city and the crater
+    b.pad("luchtvloot_route", [(230, 100, 80), (200, 104, 66), (166, 108, 44), (128, 110, 30), (94, 104, 30), (66, 92, 42)],
+          wie="de vlucht door de luchtvloot: van boven de kade, om de krater heen, naar de duelarena (alleen open lucht)")
 
 
 # =====================================================================================================================
@@ -983,6 +989,18 @@ def bunker(b):
     b.plek("azula_bunker", tx1 - 1, B + 3, zt, yaw=90.0, wie="Azula-Mika, die het al wist", kind="AZULA_MIKA")
     b.zone("bunker_troonzaal", tx0, B + 1, tz0, tx1, B + 5, tz1, wie="de troonzaal van de bunker")
     b.zone("bunker", x0, B + 1, z0, x1, B + 5, z1, wie="de bunker onder het voorplein")
+    # --- (h4_vuur) Oom Miroh's cell under the palace: a small room south of the entry hall, bars in the wall between ---
+    cx0, cx1, cz0, cz1 = sx - 1, sx + 4, z0 + 8, z0 + 12
+    b.lucht(cx0, B + 1, cz0, cx1, B + 4, cz1)
+    b.fill(cx0, B, cz0, cx1, B, cz1, STENEN)
+    for x in range(sx, sx + 4):
+        for y in (B + 1, B + 2, B + 3):
+            b.set(x, y, z0 + 7, "iron_bars")
+    b.set(cx0, B + 1, cz1, "hay_block")
+    b.set(cx0 + 1, B + 1, cz1, "hay_block")
+    b.set(cx1, B + 1, cz1, "white_candle", {"candles": "1", "lit": "false", "waterlogged": "false"})
+    b.lantaarn(sx + 2, B + 4, z0 + 10, True)
+    b.prop("miroh_cel", sx + 2, B + 1, z0 + 9, wie="in de cel van Oom Miroh onder het paleis (achter de tralies naast de hal)", los=True)
 
 
 def kamer(b, x0, z0, x1, z1, y, deur, kant, vloer=None, hoog=4):

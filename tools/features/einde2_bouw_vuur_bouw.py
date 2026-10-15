@@ -403,6 +403,8 @@ VERWACHT = [
     "ronde_water", "ronde_aarde", "ronde_vuur", "komeet_zicht", "komeetscherf", "kroning", "kroning_zuka",
     "knipoog_sjokkel", "knipoog_sjokkel_finish", "knipoog_sjokkel_camera", "knipoog_stitch_paneel", "knipoog_stitch_bewaker",
     ("knipoog_stitch_celdeur", 3), "knipoog_stitch_camera",
+    # phase B (h4_vuur, CONTRACT_E2_B 4.1): the cell under the palace, the square of the Agni Kai, the route of the fleet
+    "miroh_cel", "agni_kai_plein", "agni_kai_midden", "luchtvloot_route",
 ]
 
 

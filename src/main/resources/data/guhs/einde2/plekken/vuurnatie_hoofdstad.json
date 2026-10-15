@@ -530,6 +530,65 @@
       ],
       "wie": "de camera van knipoog_sjokkel"
     },
+    "agni_kai_plein": {
+      "soort": "zone",
+      "pos": [
+        116,
+        51,
+        78
+      ],
+      "tot": [
+        140,
+        57,
+        91
+      ],
+      "wie": "het plein van de Agni Kai: het voorplein, buiten de troonzaal"
+    },
+    "agni_kai_midden": {
+      "soort": "prop",
+      "pos": [
+        128,
+        51,
+        85
+      ],
+      "wie": "het midden van de Agni Kai: het gouden hart van de zon in de vloer"
+    },
+    "luchtvloot_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          230,
+          100,
+          80
+        ],
+        [
+          200,
+          104,
+          66
+        ],
+        [
+          166,
+          108,
+          44
+        ],
+        [
+          128,
+          110,
+          30
+        ],
+        [
+          94,
+          104,
+          30
+        ],
+        [
+          66,
+          92,
+          42
+        ]
+      ],
+      "wie": "de vlucht door de luchtvloot: van boven de kade, om de krater heen, naar de duelarena (alleen open lucht)"
+    },
     "paleis": {
       "soort": "zone",
       "pos": [
@@ -734,6 +793,15 @@
         110
       ],
       "wie": "de bunker onder het voorplein"
+    },
+    "miroh_cel": {
+      "soort": "prop",
+      "pos": [
+        110,
+        30,
+        93
+      ],
+      "wie": "in de cel van Oom Miroh onder het paleis (achter de tralies naast de hal)"
     },
     "havenpoort": {
       "soort": "prop",

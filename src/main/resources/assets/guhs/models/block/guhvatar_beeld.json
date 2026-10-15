@@ -1,0 +1,147 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "top": "guhs:block/guhvatar_beeld_top",
+    "zij": "guhs:block/guhvatar_beeld_zij",
+    "voor": "guhs:block/guhvatar_beeld_voor",
+    "particle": "guhs:block/guhvatar_beeld_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        5,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            1,
+            11,
+            15,
+            14
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            11,
+            15,
+            14
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            11,
+            15,
+            14
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            11,
+            15,
+            14
+          ]
+        }
+      }
+    }
+  ]
+}

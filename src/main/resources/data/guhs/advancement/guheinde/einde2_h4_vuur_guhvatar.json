@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/guheinde_winst",
+  "display": {
+    "icon": {
+      "id": "guhs:guhvatar_beeld"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_h4_vuur_guhvatar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_h4_vuur_guhvatar.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

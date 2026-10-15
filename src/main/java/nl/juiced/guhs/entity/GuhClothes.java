@@ -444,6 +444,10 @@ public enum GuhClothes {
     // </einde2_h3_aarde>
     // einde2 phase B, h4_vuur: the clothes of chapter 4 (the Vuurnatie disguise, Zuka's scar); ONLY between these two markers, one constant per line
     // <einde2_h4_vuur>
+    /** The Guhvatar story, chapter 4: the Vuurnatie disguise (red tunic with a golden collar and a black sash; the suit bones). */
+    VUURNATIE_VERMOMMING(Slot.BODY, "outfit_suit"),
+    /** The Guhvatar story, the finale: Zuka's scar round one eye (its own bone over the eye, the eyepatch swatch painted as a scar). */
+    ZUKA_LITTEKEN(Slot.EYES, "outfit_zuka_litteken"),
     // </einde2_h4_vuur>
     // einde2 phase B, zij: the clothes of the side places (the Kyoshi make-up); ONLY between these two markers, one constant per line
     // <einde2_zij>

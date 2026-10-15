@@ -1,0 +1,104 @@
+# einde2 phase B, h4_vuur (AutoCheck, dev only): chapter 4 and the finale of the Guhvatar story in the Vuurnatie-hoofdstad.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_h4_vuur.txt
+# Commands of the slice: /guhs einde2 h4 ga <stap> | scene <naam> | ronde <1-5> | win | wis (E2H4VuurCommando).
+# Every scene waits for a click after its first line (1.4.4): a shot shows the opening frame of each scene; the minigames
+# get a shot of their start. NOT run by the slice itself (no game client in phase B): this is for the merge step.
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:guheinde run tp @s 0 200 0
+wait 60
+tplocate guhs:guheinde guhs:vuurnatie_hoofdstad
+/guhs einde2 h4 wis
+
+section the cell under the palace and the square of the Agni Kai (build additions of this slice)
+camtpl 109.5 31.5 88.5 180 10
+waitrender 200
+shot einde2_h4_vuur_cel
+camtpl 128.5 58.0 100.5 180 25
+waitrender 200
+shot einde2_h4_vuur_agni_kai_plein
+
+section chapter 4, step by step (first frame of every scene, the start of every minigame)
+/guhs einde2 h4 ga aankomst
+wait 120
+shot einde2_h4_vuur_aankomst gui
+/guhs einde2 h4 ga school
+wait 20
+/guhs einde2 h4 scene school
+wait 60
+shot einde2_h4_vuur_school gui
+/guhs einde2 h4 ga dansfeest
+wait 120
+shot einde2_h4_vuur_dansfeest gui
+/guhs einde2 h4 ga eendjes
+wait 40
+shot einde2_h4_vuur_eendjes gui
+/guhs einde2 h4 scene zwarte_zon
+wait 80
+shot einde2_h4_vuur_zwarte_zon gui
+/guhs einde2 h4 scene gevangenis
+wait 60
+shot einde2_h4_vuur_gevangenis gui
+/guhs einde2 h4 scene kamp
+wait 60
+shot einde2_h4_vuur_kamp gui
+/guhs einde2 h4 ga kokend_rotsblok
+wait 40
+shot einde2_h4_vuur_gondel gui
+/guhs einde2 h4 scene knipoog_stitch
+wait 40
+shot einde2_h4_vuur_knipoog_stitch gui
+/guhs einde2 h4 scene kokend_rotsblok
+wait 60
+shot einde2_h4_vuur_kokend_rotsblok gui
+/guhs einde2 h4 ga drakendans
+wait 80
+shot einde2_h4_vuur_drakendans gui
+/guhs einde2 h4 scene draken
+wait 200
+shot einde2_h4_vuur_draken gui
+/guhs einde2 h4 scene toneel
+wait 60
+shot einde2_h4_vuur_toneel gui
+/guhs einde2 h4 scene tent
+wait 60
+shot einde2_h4_vuur_tent gui
+
+section the finale
+/guhs einde2 h4 scene leeuwschildpad
+wait 160
+shot einde2_h4_vuur_leeuwschildpad gui
+/guhs einde2 h4 ga luchtvloot
+wait 120
+shot einde2_h4_vuur_luchtvloot gui
+/guhs einde2 h4 scene agni_kai
+wait 60
+shot einde2_h4_vuur_agni_kai gui
+/guhs einde2 h4 ronde 1
+wait 80
+shot einde2_h4_vuur_duel_1 gui
+/guhs einde2 h4 ronde 2
+wait 40
+shot einde2_h4_vuur_duel_2 gui
+/guhs einde2 h4 ronde 5
+wait 40
+shot einde2_h4_vuur_duel_5 gui
+/guhs einde2 h4 scene omslag
+wait 200
+shot einde2_h4_vuur_omslag gui
+/guhs einde2 h4 scene kroning
+wait 120
+shot einde2_h4_vuur_kroning gui
+/guhs einde2 h4 scene aftiteling
+wait 300
+shot einde2_h4_vuur_aftiteling gui
+/guhs einde2 h4 ga klaar
+wait 40
+/give @s guhs:guhvatar_beeld
+gui dexopen verhalen open
+shot einde2_h4_vuur_guhdex gui
+gui close
+/guhs einde2 h4 wis
