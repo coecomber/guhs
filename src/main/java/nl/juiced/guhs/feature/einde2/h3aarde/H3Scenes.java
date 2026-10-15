@@ -51,6 +51,9 @@ public final class H3Scenes {
     /** Every scene of the chapter by its short name (the dev command: {@code /guhs einde2 h3 scene <naam>}). */
     public static final Map<String, Scene> ALLE = new LinkedHashMap<>();
 
+    /** The song of {@link #LU_TEN}: the tick each caption starts at (8 lines; own words, own tune, CONTRACT_E2_B 6.3). */
+    public static final int[] LIED = {240, 362, 484, 606, 728, 850, 972, 1094};
+
     public static final Scene AANKOMST = aankomst();
     public static final Scene LOKET = loket();
     public static final Scene AARDROMMEL = aardrommel();
@@ -62,9 +65,6 @@ public final class H3Scenes {
     public static final Scene VAL = val();
     public static final Scene KNIPOOG_MEWTWO = knipoogMewtwo();
     public static final Scene KNIPOOG_SJOKKEL = knipoogSjokkel();
-
-    /** The song of {@link #LU_TEN}: the tick each caption starts at (8 lines; own words, own tune, CONTRACT_E2_B 6.3). */
-    public static final int[] LIED = {240, 362, 484, 606, 728, 850, 972, 1094};
 
     private H3Scenes() {
     }

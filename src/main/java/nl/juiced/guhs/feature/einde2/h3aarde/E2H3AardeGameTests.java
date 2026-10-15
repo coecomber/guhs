@@ -60,10 +60,15 @@ public class E2H3AardeGameTests {
         H3Schijn.vul(p, stad, voorP);
         H3Schijn.vul(q, stad, voorQ);
         helper.assertTrue(voorP.containsKey(poort) && voorP.get(poort).is(Blocks.IRON_BARS) && !voorQ.containsKey(poort), "the closed gate is p's alone");
+        // (mock players do not tick by themselves: their tick events drive the lock of the card and the scenes)
+        helper.onEachTick(() -> {
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(p));
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(q));
+        });
         // p arrives: the narrator card, then the scene; step 1 (q stays where q was)
         H3Verloop.aankomst(p, stad);
         helper.runAfterDelay(30, () -> helper.assertTrue(E2H3Aarde.stap(p) == E2H3Aarde.LOKET && E2H3Aarde.stap(q) == E2H3Aarde.LOKET + 1,
-                "arrived: p at the desk, q untouched"));
+                "arrived: p at the desk, q untouched: " + E2H3Aarde.stap(p) + " " + E2H3Aarde.stap(q)));
         helper.runAfterDelay(80, () -> {
             // (after the after-care of the last scene) the tea house: walking into it plays its scene, only for the one whose step it is
             E2VerhaalDev.zetTot(p, E2Verhaal.AARDE, E2H3Aarde.THEEHUIS);
