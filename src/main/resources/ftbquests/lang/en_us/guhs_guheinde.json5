@@ -100,6 +100,154 @@
   "quest.47554806041E9EFE.quest_desc": [
     "Place four Nibble Crystals on the four Nibble Pedestals around the return portal and Overlord Mika comes back. Defeat him again for an Enderguh Egg.",
   ],
+  "quest.47554887D6B9327B.title": "A Mad Old King",
+  "quest.47554887D6B9327B.quest_desc": [
+    "Talk to King Bumi Guh in the throne room of Omashguh.",
+  ],
+  "quest.4755489CB959FD72.title": "The Key in the Waterfall",
+  "quest.4755489CB959FD72.quest_desc": [
+    "Get the key out of the waterfall of glass (trial 1). Climbing won't work: use your earth power in the room.",
+  ],
+  "quest.475548E2084227C9.title": "Where Is Flopsie?",
+  "quest.475548E2084227C9.quest_desc": [
+    "Find Flopsie, the king's pet. The hutch of trial 2 is awfully small...",
+  ],
+  "quest.4755482F56F4058B.title": "Choose Your Opponent",
+  "quest.4755482F56F4058B.quest_desc": [
+    "Go to the arena of trial 3, choose your opponent and answer the king's last question.",
+  ],
+  "quest.475548E37348514E.title": "Faster than the Mail",
+  "quest.475548E37348514E.quest_desc": [
+    "Jump into a mail chute on the loading platform in front of the palace and slide to the post office in under 40 seconds.",
+  ],
+  "quest.4755489579E347D3.title": "The Air Nun",
+  "quest.4755489579E347D3.quest_desc": [
+    "Talk to the air nun guh in the hanging hall of the Western Air Temple.",
+  ],
+  "quest.4755484C8EF34C78.title": "Let the Temple Sing",
+  "quest.4755484C8EF34C78.quest_desc": [
+    "Stand on the balcony at the end of each of the five wind corridors and use your air power there.",
+  ],
+  "quest.475548EFBFFB21B0.title": "The Stray Herd",
+  "quest.475548EFBFFB21B0.quest_desc": [
+    "Five sky bison guhs drift lost around the island. Fly to them (on Appa or with your wings) and click them: they fly to their own pen.",
+  ],
+  "quest.4755484AECCB89D1.title": "Back to the Air Nun",
+  "quest.4755484AECCB89D1.quest_desc": [
+    "The herd is home and the temple sings. Tell the air nun guh.",
+  ],
+  "quest.475548223B104367.title": "The Friendly Fire Sage",
+  "quest.475548223B104367.quest_desc": [
+    "Talk to Shyu, the friendly Fire Sage by the hatch behind the altar.",
+  ],
+  "quest.4755489C23D6BB22.title": "Five Fire Doors",
+  "quest.4755489C23D6BB22.quest_desc": [
+    "At the top of the tower, stand before each fire door and use your fire power: light all five locks.",
+  ],
+  "quest.4755483E3CA71054.title": "The Sanctum",
+  "quest.4755483E3CA71054.quest_desc": [
+    "The doors are open, just for you. Walk into the sanctum.",
+  ],
+  "quest.475548424323ED27.title": "Roku Guh",
+  "quest.475548424323ED27.quest_desc": [
+    "Talk to the spirit of Guhvatar Roku Guh in the sanctum.",
+  ],
+  "quest.4755481216FCF0F5.title": "The Leader",
+  "quest.4755481216FCF0F5.quest_desc": [
+    "Talk to the leader of the Kyoshi Warrior Guhs in the dojo.",
+  ],
+  "quest.4755484A2201DCCD.title": "The Fan Dance",
+  "quest.4755484A2201DCCD.quest_desc": [
+    "Stand on the golden tile in the middle of the dance floor and follow the calls on the beat: DUCK, JUMP or TURN. Twelve right is enough.",
+  ],
+  "quest.4755484F555F7BA8.title": "Painted Like a Warrior",
+  "quest.4755484F555F7BA8.quest_desc": [
+    "Go to the makeup table under the mirror in the dojo (click it, or crouch in front of it).",
+  ],
+  "quest.475548482494C628.title": "The Biggest Fan",
+  "quest.475548482494C628.quest_desc": [
+    "Show yourself to the foaming fan guh by the gate.",
+  ],
+  "quest.475548E099759FE7.title": "The Owl's Rules",
+  "quest.475548E099759FE7.quest_desc": [
+    "Talk to Wan Shi Guh in the owl hall, at the very bottom of the library.",
+  ],
+  "quest.47554833C30980E8.title": "A Piece of Knowledge",
+  "quest.47554833C30980E8.quest_desc": [
+    "Bring Wan Shi Guh three pieces of knowledge: a map, a compass, a clock, a spyglass or a book. Hold it and click him.",
+  ],
+  "quest.4755482E062506EA.title": "A Book for You",
+  "quest.4755482E062506EA.quest_desc": [
+    "A fox guh brings the book that suits you. Find one and click it.",
+  ],
+  "quest.475548E332B34235.title": "The Planetarium",
+  "quest.475548E332B34235.quest_desc": [
+    "Turn the wheel of the planetarium, next to Professor Zei Guh.",
+  ],
+  "quest.4755483BDD833ABF.title": "Over the Shell",
+  "quest.4755483BDD833ABF.quest_desc": [
+    "Walk over the shell of the island to the stone ring at the very top.",
+  ],
+  "quest.4755480FD9808A2D.title": "The Raised Paw",
+  "quest.4755480FD9808A2D.quest_desc": [
+    "Go down along his flank and stand on the palm of his raised paw.",
+  ],
+  "quest.47554866CA8F2D61.title": "A Nibble as an Offering",
+  "quest.47554866CA8F2D61.quest_desc": [
+    "Hold a cheese nibble and click his snout while you stand on his palm.",
+  ],
+  "quest.475548ED95DCF284.title": "Four Lasting Chonk Arts",
+  "quest.475548ED95DCF284.quest_desc": [
+    "Every element you learn in the story of the Guhvatar leaves something lasting: an &6air leap&r (in mid-air too), &6walking on water&r, a little &6earth pillar&r and a &6paw flame&r. One key (by default &dH&r): tap = use, hold = the element wheel.",
+  ],
+  "quest.475548846B7F300D.title": "A Sighing Cook",
+  "quest.475548846B7F300D.quest_desc": [
+    "Talk to the Mika cook in the kitchen of a Mika Fortress.",
+  ],
+  "quest.475548EF06519287.title": "Ingredients",
+  "quest.475548EF06519287.quest_desc": [
+    "Bring the cook 2 blue cheese mushrooms, 2 crystal cheese nuggets, 2 nibble chorus fruits and 1 crumb cloud from the outer islands.",
+  ],
+  "quest.4755483610C29FF1.title": "Distract the Captain",
+  "quest.4755483610C29FF1.quest_desc": [
+    "Talk to the fortress captain on the ground floor and come up with something that works.",
+  ],
+  "quest.475548BAED7542BD.title": "The Secret Soup",
+  "quest.475548BAED7542BD.quest_desc": [
+    "Back to the cook in the kitchen.",
+  ],
+  "quest.475548A807E2530A.title": "A Kitchen of His Own",
+  "quest.475548A807E2530A.quest_desc": [
+    "Visit the cook in his new kitchen in the Void Harbor: The Sorry Spatula.",
+  ],
+  "quest.4755484E751BC639.title": "The Note",
+  "quest.4755484E751BC639.quest_desc": [
+    "Read the note on the harbor board at the pier of a Mika Fortress (click it).",
+  ],
+  "quest.4755486EBDACD359.title": "To the Shipyard",
+  "quest.4755486EBDACD359.quest_desc": [
+    "Bring the shipwright guh in the Void Harbor 24 planks, 8 wool, 4 Mika's Grease and 2 flash crumbs. Then he builds your boat.",
+  ],
+  "quest.475548CE6FC5177F.title": "Christen Your Boat",
+  "quest.475548CE6FC5177F.quest_desc": [
+    "Your little grease boat is ready. Talk to the shipwright guh and give it a color, a sail and a name.",
+  ],
+  "quest.47554893C0F629AC.title": "Trading with Ender Mikas",
+  "quest.47554893C0F629AC.quest_desc": [
+    "On the market of the Void Harbor, Ender Mikas stand behind their stalls. Their offers change every day. Click one to trade.",
+  ],
+  "quest.47554800DEC3D562.title": "The Chonky Wave",
+  "quest.47554800DEC3D562.quest_desc": [
+    "The ferry guh in the Void Harbor sails you for free to every place in the Guh End you know, and to the main island.",
+  ],
+  "quest.475548AD6006E2DD.title": "The Guh Wing Ring Race",
+  "quest.475548AD6006E2DD.quest_desc": [
+    "Talk to the race master guh on the starting platform, fly through all eighteen rings and land on the landing strip. Under 45 seconds and you become a &dRing Racer&r.",
+  ],
+  "quest.475548200AAB2DA1.title": "Fortress Liberator",
+  "quest.475548200AAB2DA1.quest_desc": [
+    "Free six skinny guhs from the cells of the Mika Fortresses (give them a nibble). That earns the title &dFortress Liberator&r.",
+  ],
   "quest.4755481CB9D16CCF.title": "Where Are We Flying?",
   "quest.4755481CB9D16CCF.quest_desc": [
     "Sit on your &dAppa Guh&r's head and blow the &6Appa Whistle&r. You get a list of every building you know in the Guheinde. Pick one and Appa flies there: you may steer, or let go and he flies himself. Your team rides along on his back.",

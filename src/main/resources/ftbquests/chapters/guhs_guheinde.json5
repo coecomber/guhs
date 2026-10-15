@@ -80,12 +80,36 @@
     },
     {
       height: 1.5625,
+      id: "475548AD23D346C9",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_zij.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755482BE86F57F9",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_zij_haven.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 29.09375,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "475548950FD80AFD",
       image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_reizen.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 20.63125,
+      y: 34.55625,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -97,7 +121,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 26.09375,
+      y: 40.01875,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -109,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 31.55625,
+      y: 45.481249999999996,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -121,7 +145,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 35.51875,
+      y: 49.443749999999994,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -133,7 +157,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 39.481249999999996,
+      y: 53.40624999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -145,7 +169,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 43.443749999999994,
+      y: 57.36874999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -157,7 +181,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 47.40624999999999,
+      y: 61.33124999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -169,7 +193,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 51.36874999999999,
+      y: 65.29374999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -181,7 +205,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 55.33124999999999,
+      y: 69.25625,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -193,7 +217,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 59.29374999999999,
+      y: 73.21875,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -913,6 +937,1058 @@
       y: 18.450000000000003,
     },
     {
+      id: "47554887D6B9327B",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_1",
+          id: "475548D35B4C342A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EA57ADCED1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+    },
+    {
+      id: "4755489CB959FD72",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_2",
+          id: "4755489756F383F9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DCD315D584",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548E2084227C9",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_3",
+          id: "475548A261619691",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489FE7F288E7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+    },
+    {
+      id: "4755482F56F4058B",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_4",
+          id: "475548ACCF73428C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830C8D0DE4B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548E37348514E",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_5",
+          id: "475548A0CC932408",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484A81EFC7B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548054B11CB06",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+      shape: "gear",
+    },
+    {
+      id: "4755489579E347D3",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_1",
+          id: "47554834AA21B0BA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482CA23A48D7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+    },
+    {
+      id: "4755484C8EF34C78",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_2",
+          id: "4755484A2E9D79C6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548907EDC9620",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 22.4125,
+    },
+    {
+      id: "475548EFBFFB21B0",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_3",
+          id: "475548AB3C484292",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487F64B3B9FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 23.9125,
+    },
+    {
+      id: "4755484AECCB89D1",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_4",
+          id: "4755483733B31596",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E84C84F710",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554823DE3D58BA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 23.9125,
+      shape: "gear",
+    },
+    {
+      id: "475548223B104367",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_1",
+          id: "47554878A49003DF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489F06F92994",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 23.9125,
+    },
+    {
+      id: "4755489C23D6BB22",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_2",
+          id: "47554813D419791E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AEC2861034",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 23.9125,
+    },
+    {
+      id: "4755483E3CA71054",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_3",
+          id: "475548685F937CCC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D5ED97560B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 23.9125,
+    },
+    {
+      id: "475548424323ED27",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_4",
+          id: "4755480CFBF275D2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D56DF51EEE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B9B143C434",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 23.9125,
+      shape: "gear",
+    },
+    {
+      id: "4755481216FCF0F5",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_1",
+          id: "475548C4096FE021",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484DB324211E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 23.9125,
+    },
+    {
+      id: "4755484A2201DCCD",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_2",
+          id: "475548C20F682872",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489EE0BC8746",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 25.4125,
+    },
+    {
+      id: "4755484F555F7BA8",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_3",
+          id: "4755486BDAAC7CB7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A247D8F2C8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 25.4125,
+    },
+    {
+      id: "475548482494C628",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_4",
+          id: "47554879C1B1A3EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C8B28C4699",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548C5FD6C2D53",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 25.4125,
+      shape: "gear",
+    },
+    {
+      id: "475548E099759FE7",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_1",
+          id: "475548BADC6BE238",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F694E5C7AF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 25.4125,
+    },
+    {
+      id: "47554833C30980E8",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_2",
+          id: "475548FE258F2D72",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DC29DA57C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 25.4125,
+    },
+    {
+      id: "4755482E062506EA",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_3",
+          id: "47554835DF9FD30F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485D200B90CE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 25.4125,
+    },
+    {
+      id: "475548E332B34235",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_4",
+          id: "475548E51B718BA6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480B3EB8A623",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548188BE9D97F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 25.4125,
+      shape: "gear",
+    },
+    {
+      id: "4755483BDD833ABF",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_1",
+          id: "47554841B85B3106",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548285C12242B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 26.9125,
+    },
+    {
+      id: "4755480FD9808A2D",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_2",
+          id: "47554804AF879AAE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548450F7797BA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 26.9125,
+    },
+    {
+      id: "47554866CA8F2D61",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_3",
+          id: "475548E8836667C9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554835AD1E1430",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F2DA892C6C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 26.9125,
+      shape: "gear",
+    },
+    {
+      id: "475548ED95DCF284",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_kracht",
+          id: "4755487FF7A6E34C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BF12DE20FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 4.5,
+      y: 26.9125,
+      shape: "diamond",
+    },
+    {
+      id: "475548846B7F300D",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_1",
+          id: "475548FF16E15C72",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E5AEB39CFE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 30.875,
+    },
+    {
+      id: "475548EF06519287",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_2",
+          id: "47554888CF5B523A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816528E98D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 30.875,
+    },
+    {
+      id: "4755483610C29FF1",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_3",
+          id: "4755489250A248AA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554809AF0F8BE3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 30.875,
+    },
+    {
+      id: "475548BAED7542BD",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_4",
+          id: "4755488F93474F78",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554839226C9910",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 30.875,
+    },
+    {
+      id: "475548A807E2530A",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_5",
+          id: "475548F120C265C5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488BB2DAB303",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548572B097974",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 30.875,
+      shape: "gear",
+    },
+    {
+      id: "4755484E751BC639",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_1",
+          id: "475548C832DCE9E2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487FE2516A4E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 30.875,
+    },
+    {
+      id: "4755486EBDACD359",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_2",
+          id: "4755483717CB97E4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B53207BB56",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 30.875,
+    },
+    {
+      id: "475548CE6FC5177F",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_3",
+          id: "475548C05FC8FCE9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486F7277900B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554843294AE665",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 32.375,
+      shape: "gear",
+    },
+    {
+      id: "47554893C0F629AC",
+      icon: {
+        id: "guhs:flitskruimel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_handel",
+          id: "475548924885FA5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485F7C838B67",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 7.5,
+      y: 32.375,
+      shape: "diamond",
+    },
+    {
+      id: "47554800DEC3D562",
+      icon: {
+        id: "minecraft:oak_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_veer",
+          id: "4755485E2A885EDA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481206861470",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 6.0,
+      y: 32.375,
+      shape: "diamond",
+    },
+    {
+      id: "475548AD6006E2DD",
+      icon: {
+        id: "guhs:guhvleugels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_ringenrace",
+          id: "475548FF1A11EC85",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484587D7CBEC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 4.5,
+      y: 32.375,
+      shape: "diamond",
+    },
+    {
+      id: "475548200AAB2DA1",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_vesting_bevrijder",
+          id: "4755483D34CCC062",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554882ED4F9C9B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 3.0,
+      y: 32.375,
+      shape: "diamond",
+    },
+    {
       id: "4755481CB9D16CCF",
       icon: {
         id: "guhs:appa_fluitje",
@@ -942,7 +2018,7 @@
         },
       ],
       x: 0.0,
-      y: 22.4125,
+      y: 36.3375,
       shape: "gear",
     },
     {
@@ -975,7 +2051,7 @@
         },
       ],
       x: 1.5,
-      y: 22.4125,
+      y: 36.3375,
     },
     {
       id: "475548F410D4474E",
@@ -1007,7 +2083,7 @@
         },
       ],
       x: 3.0,
-      y: 22.4125,
+      y: 36.3375,
     },
     {
       id: "4755485210EC91BC",
@@ -1039,7 +2115,7 @@
         },
       ],
       x: 4.5,
-      y: 22.4125,
+      y: 36.3375,
     },
     {
       id: "475548B37C0518EC",
@@ -1071,7 +2147,7 @@
         },
       ],
       x: 6.0,
-      y: 22.4125,
+      y: 36.3375,
     },
     {
       id: "4755488C256867F2",
@@ -1103,7 +2179,7 @@
         },
       ],
       x: 7.5,
-      y: 22.4125,
+      y: 36.3375,
     },
     {
       id: "475548E7961EE6D3",
@@ -1135,7 +2211,7 @@
         },
       ],
       x: 9.0,
-      y: 22.4125,
+      y: 36.3375,
       shape: "gear",
     },
     {
@@ -1168,7 +2244,7 @@
         },
       ],
       x: 9.0,
-      y: 23.9125,
+      y: 37.8375,
     },
     {
       id: "47554853B36716B7",
@@ -1194,7 +2270,7 @@
         },
       ],
       x: 0.0,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1221,7 +2297,7 @@
         },
       ],
       x: 1.5,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1248,7 +2324,7 @@
         },
       ],
       x: 3.0,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1275,7 +2351,7 @@
         },
       ],
       x: 4.5,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1302,7 +2378,7 @@
         },
       ],
       x: 6.0,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1329,7 +2405,7 @@
         },
       ],
       x: 7.5,
-      y: 27.875,
+      y: 41.8,
       shape: "circle",
     },
     {
@@ -1360,7 +2436,7 @@
         },
       ],
       x: 9.0,
-      y: 27.875,
+      y: 41.8,
       shape: "diamond",
     },
     {
@@ -1390,7 +2466,7 @@
         },
       ],
       x: 9.0,
-      y: 29.375,
+      y: 43.3,
     },
     {
       id: "475548F9822BE5AD",
@@ -1429,7 +2505,7 @@
         },
       ],
       x: 7.5,
-      y: 29.375,
+      y: 43.3,
     },
     {
       id: "4755481C21C11078",
@@ -1459,7 +2535,7 @@
         },
       ],
       x: 6.0,
-      y: 29.375,
+      y: 43.3,
       shape: "rsquare",
     },
     {
@@ -1492,7 +2568,7 @@
         },
       ],
       x: 0.0,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "475548CEE65ECAF0",
@@ -1524,7 +2600,7 @@
         },
       ],
       x: 1.5,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "475548AEAF6A3954",
@@ -1556,7 +2632,7 @@
         },
       ],
       x: 3.0,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "4755481074B8D283",
@@ -1588,7 +2664,7 @@
         },
       ],
       x: 4.5,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "47554826934AB4E3",
@@ -1620,7 +2696,7 @@
         },
       ],
       x: 6.0,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "475548762616D09E",
@@ -1652,7 +2728,7 @@
         },
       ],
       x: 7.5,
-      y: 33.3375,
+      y: 47.262499999999996,
     },
     {
       id: "475548D40EDC0FD6",
@@ -1714,7 +2790,7 @@
         },
       ],
       x: 9.0,
-      y: 33.3375,
+      y: 47.262499999999996,
       shape: "gear",
     },
     {
@@ -1747,7 +2823,7 @@
         },
       ],
       x: 0.0,
-      y: 37.3,
+      y: 51.224999999999994,
       shape: "gear",
     },
     {
@@ -1782,7 +2858,7 @@
         },
       ],
       x: 1.5,
-      y: 37.3,
+      y: 51.224999999999994,
     },
     {
       id: "4755481CB9AB65EB",
@@ -1814,7 +2890,7 @@
         },
       ],
       x: 3.0,
-      y: 37.3,
+      y: 51.224999999999994,
     },
     {
       id: "47554806DC2A1289",
@@ -1846,7 +2922,7 @@
         },
       ],
       x: 4.5,
-      y: 37.3,
+      y: 51.224999999999994,
       shape: "circle",
     },
     {
@@ -1881,7 +2957,7 @@
         },
       ],
       x: 6.0,
-      y: 37.3,
+      y: 51.224999999999994,
     },
     {
       id: "475548EFBFE1D433",
@@ -1915,7 +2991,7 @@
         },
       ],
       x: 7.5,
-      y: 37.3,
+      y: 51.224999999999994,
       shape: "gear",
     },
     {
@@ -1948,7 +3024,7 @@
         },
       ],
       x: 0.0,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
       shape: "gear",
     },
     {
@@ -1983,7 +3059,7 @@
         },
       ],
       x: 1.5,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
     },
     {
       id: "475548A9F00BDC3A",
@@ -2015,7 +3091,7 @@
         },
       ],
       x: 3.0,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
     },
     {
       id: "4755484B866D6CF8",
@@ -2047,7 +3123,7 @@
         },
       ],
       x: 4.5,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
     },
     {
       id: "475548360D83FBB8",
@@ -2079,7 +3155,7 @@
         },
       ],
       x: 6.0,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
     },
     {
       id: "47554827FF086DFC",
@@ -2111,7 +3187,7 @@
         },
       ],
       x: 7.5,
-      y: 41.262499999999996,
+      y: 55.18749999999999,
     },
     {
       id: "4755485707A6ACE1",
@@ -2137,7 +3213,7 @@
         },
       ],
       x: 0.0,
-      y: 45.224999999999994,
+      y: 59.14999999999999,
       shape: "octagon",
     },
     {
@@ -2165,7 +3241,7 @@
         },
       ],
       x: 1.5,
-      y: 45.224999999999994,
+      y: 59.14999999999999,
     },
     {
       id: "475548EAE15A258B",
@@ -2192,7 +3268,7 @@
         },
       ],
       x: 3.0,
-      y: 45.224999999999994,
+      y: 59.14999999999999,
       shape: "diamond",
     },
     {
@@ -2219,7 +3295,7 @@
         },
       ],
       x: 0.0,
-      y: 49.18749999999999,
+      y: 63.11249999999999,
       shape: "octagon",
     },
     {
@@ -2246,7 +3322,7 @@
         },
       ],
       x: 1.5,
-      y: 49.18749999999999,
+      y: 63.11249999999999,
       shape: "octagon",
     },
     {
@@ -2273,7 +3349,7 @@
         },
       ],
       x: 3.0,
-      y: 49.18749999999999,
+      y: 63.11249999999999,
       shape: "octagon",
     },
     {
@@ -2300,7 +3376,7 @@
         },
       ],
       x: 0.0,
-      y: 53.14999999999999,
+      y: 67.07499999999999,
       shape: "circle",
     },
     {
@@ -2327,7 +3403,7 @@
         },
       ],
       x: 1.5,
-      y: 53.14999999999999,
+      y: 67.07499999999999,
     },
     {
       id: "475548A01F3BD331",
@@ -2353,7 +3429,7 @@
         },
       ],
       x: 3.0,
-      y: 53.14999999999999,
+      y: 67.07499999999999,
     },
     {
       id: "475548A73C3D36BC",
@@ -2379,7 +3455,7 @@
         },
       ],
       x: 4.5,
-      y: 53.14999999999999,
+      y: 67.07499999999999,
       shape: "diamond",
     },
     {
@@ -2406,7 +3482,7 @@
         },
       ],
       x: 6.0,
-      y: 53.14999999999999,
+      y: 67.07499999999999,
       shape: "rsquare",
     },
     {
@@ -2433,7 +3509,7 @@
         },
       ],
       x: 0.0,
-      y: 57.11249999999999,
+      y: 71.0375,
       shape: "circle",
     },
     {
@@ -2460,7 +3536,7 @@
         },
       ],
       x: 0.0,
-      y: 61.07499999999999,
+      y: 75.0,
       shape: "circle",
     },
   ],
