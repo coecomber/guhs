@@ -104,12 +104,24 @@
     },
     {
       height: 1.5625,
+      id: "475548DC8C7366B2",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_h3_aarde.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 33.05625,
+      hover: [
+        "Komt na: De sneeuwstorm",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "475548AD23D346C9",
       image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_zij.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 33.05625,
+      y: 40.01875,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -121,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 41.51875,
+      y: 48.481249999999996,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -133,7 +145,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 46.981249999999996,
+      y: 53.943749999999994,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -145,7 +157,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 52.443749999999994,
+      y: 59.40624999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -157,7 +169,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 57.90624999999999,
+      y: 64.86874999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -169,7 +181,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 61.86874999999999,
+      y: 68.83125,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -181,7 +193,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 65.83125,
+      y: 72.79375,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -193,7 +205,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 69.79375,
+      y: 76.75625000000001,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -205,7 +217,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 73.75625000000001,
+      y: 80.71875000000001,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -217,7 +229,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 77.71875000000001,
+      y: 84.68125000000002,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -229,7 +241,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 81.68125000000002,
+      y: 88.64375000000003,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -241,7 +253,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 85.64375000000003,
+      y: 92.60625000000003,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -1883,6 +1895,474 @@
       shape: "gear",
     },
     {
+      id: "47554889B2CF7719",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_stadssteen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_1",
+          id: "47554821640ADD0D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483485EE92F3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 34.8375,
+      dependencies: [
+        "475548C02FD04BE1",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548705EE469FC",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_2",
+          id: "475548E4A3CF9728",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554858440DC517",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 34.8375,
+      dependencies: [
+        "47554889B2CF7719",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480E121C1882",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_aardemunt",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_3",
+          id: "4755484336118FA3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FE5AAA86C2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 34.8375,
+      dependencies: [
+        "475548705EE469FC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548551324C288",
+      icon: {
+        id: "minecraft:sculk_sensor",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_4",
+          id: "47554895175BA7C4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FA57997CCD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 34.8375,
+      dependencies: [
+        "4755480E121C1882",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C1090ADAB6",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_spoor",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_5",
+          id: "4755489BF2378940",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830C4C9C358",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 34.8375,
+      dependencies: [
+        "475548551324C288",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548312D6883B4",
+      icon: {
+        id: "guhs:theepotje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_6",
+          id: "475548F1E8AF0AE7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B054DC2FCE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 34.8375,
+      dependencies: [
+        "475548C1090ADAB6",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755486207C044D9",
+      icon: {
+        id: "guhs:theeset",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_7",
+          id: "475548D2D296B5CC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482247460C56",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 34.8375,
+      dependencies: [
+        "475548312D6883B4",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BA2CF7E327",
+      icon: {
+        id: "guhs:pai_sho_tafel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_8",
+          id: "47554840B87EC925",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480692AD1F93",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 36.3375,
+      dependencies: [
+        "4755486207C044D9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554869E62D4E81",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_9",
+          id: "47554883D5908EB4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482AD0C50754",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 36.3375,
+      dependencies: [
+        "475548BA2CF7E327",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A1AFBC1C26",
+      icon: {
+        id: "guhs:appa_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_10",
+          id: "475548F6CB207E70",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489D3BFD2DA1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 36.3375,
+      dependencies: [
+        "47554869E62D4E81",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548E5D95592E9",
+      icon: {
+        id: "minecraft:honeycomb",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_11",
+          id: "4755489D5C3B5578",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554810BE5F5051",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 36.3375,
+      dependencies: [
+        "475548A1AFBC1C26",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554821B209F985",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_12",
+          id: "475548135717B41F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487ED92577EA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 36.3375,
+      dependencies: [
+        "475548E5D95592E9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548725E4BDD62",
+      icon: {
+        id: "minecraft:cherry_sapling",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_13",
+          id: "47554878B636D266",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B840017647",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 36.3375,
+      dependencies: [
+        "47554821B209F985",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548CF40A57A51",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_groen_kristal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_14",
+          id: "475548D9DB7A4E9D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487E410756BD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 36.3375,
+      dependencies: [
+        "475548725E4BDD62",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755489691C7FA24",
+      icon: {
+        id: "minecraft:mud_bricks",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_15",
+          id: "475548FC88308BD6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B5B03E52AD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 37.8375,
+      dependencies: [
+        "475548CF40A57A51",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
       id: "47554887D6B9327B",
       icon: {
         id: "guhs:einde2_zij_kristalsnoep_ring",
@@ -1907,7 +2387,7 @@
         },
       ],
       x: 0.0,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "4755489CB959FD72",
@@ -1934,7 +2414,7 @@
         },
       ],
       x: 1.5,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "475548E2084227C9",
@@ -1961,7 +2441,7 @@
         },
       ],
       x: 3.0,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "4755482F56F4058B",
@@ -1988,7 +2468,7 @@
         },
       ],
       x: 4.5,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "475548E37348514E",
@@ -2020,7 +2500,7 @@
         },
       ],
       x: 6.0,
-      y: 34.8375,
+      y: 41.8,
       shape: "gear",
     },
     {
@@ -2048,7 +2528,7 @@
         },
       ],
       x: 7.5,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "4755484C8EF34C78",
@@ -2075,7 +2555,7 @@
         },
       ],
       x: 9.0,
-      y: 34.8375,
+      y: 41.8,
     },
     {
       id: "475548EFBFFB21B0",
@@ -2102,7 +2582,7 @@
         },
       ],
       x: 9.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755484AECCB89D1",
@@ -2134,7 +2614,7 @@
         },
       ],
       x: 7.5,
-      y: 36.3375,
+      y: 43.3,
       shape: "gear",
     },
     {
@@ -2162,7 +2642,7 @@
         },
       ],
       x: 6.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755489C23D6BB22",
@@ -2189,7 +2669,7 @@
         },
       ],
       x: 4.5,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755483E3CA71054",
@@ -2216,7 +2696,7 @@
         },
       ],
       x: 3.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "475548424323ED27",
@@ -2248,7 +2728,7 @@
         },
       ],
       x: 1.5,
-      y: 36.3375,
+      y: 43.3,
       shape: "gear",
     },
     {
@@ -2276,7 +2756,7 @@
         },
       ],
       x: 0.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755484A2201DCCD",
@@ -2303,7 +2783,7 @@
         },
       ],
       x: 0.0,
-      y: 37.8375,
+      y: 44.8,
     },
     {
       id: "4755484F555F7BA8",
@@ -2330,7 +2810,7 @@
         },
       ],
       x: 1.5,
-      y: 37.8375,
+      y: 44.8,
     },
     {
       id: "475548482494C628",
@@ -2362,7 +2842,7 @@
         },
       ],
       x: 3.0,
-      y: 37.8375,
+      y: 44.8,
       shape: "gear",
     },
     {
@@ -2390,7 +2870,7 @@
         },
       ],
       x: 4.5,
-      y: 37.8375,
+      y: 44.8,
     },
     {
       id: "47554833C30980E8",
@@ -2417,7 +2897,7 @@
         },
       ],
       x: 6.0,
-      y: 37.8375,
+      y: 44.8,
     },
     {
       id: "4755482E062506EA",
@@ -2444,7 +2924,7 @@
         },
       ],
       x: 7.5,
-      y: 37.8375,
+      y: 44.8,
     },
     {
       id: "475548E332B34235",
@@ -2476,7 +2956,7 @@
         },
       ],
       x: 9.0,
-      y: 37.8375,
+      y: 44.8,
       shape: "gear",
     },
     {
@@ -2504,7 +2984,7 @@
         },
       ],
       x: 9.0,
-      y: 39.3375,
+      y: 46.3,
     },
     {
       id: "4755480FD9808A2D",
@@ -2531,7 +3011,7 @@
         },
       ],
       x: 7.5,
-      y: 39.3375,
+      y: 46.3,
     },
     {
       id: "47554866CA8F2D61",
@@ -2563,7 +3043,7 @@
         },
       ],
       x: 6.0,
-      y: 39.3375,
+      y: 46.3,
       shape: "gear",
     },
     {
@@ -2591,7 +3071,7 @@
         },
       ],
       x: 4.5,
-      y: 39.3375,
+      y: 46.3,
       shape: "diamond",
     },
     {
@@ -2619,7 +3099,7 @@
         },
       ],
       x: 0.0,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "475548EF06519287",
@@ -2646,7 +3126,7 @@
         },
       ],
       x: 1.5,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "4755483610C29FF1",
@@ -2673,7 +3153,7 @@
         },
       ],
       x: 3.0,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "475548BAED7542BD",
@@ -2700,7 +3180,7 @@
         },
       ],
       x: 4.5,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "475548A807E2530A",
@@ -2732,7 +3212,7 @@
         },
       ],
       x: 6.0,
-      y: 43.3,
+      y: 50.262499999999996,
       shape: "gear",
     },
     {
@@ -2760,7 +3240,7 @@
         },
       ],
       x: 7.5,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "4755486EBDACD359",
@@ -2787,7 +3267,7 @@
         },
       ],
       x: 9.0,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "475548CE6FC5177F",
@@ -2819,7 +3299,7 @@
         },
       ],
       x: 9.0,
-      y: 44.8,
+      y: 51.762499999999996,
       shape: "gear",
     },
     {
@@ -2847,7 +3327,7 @@
         },
       ],
       x: 7.5,
-      y: 44.8,
+      y: 51.762499999999996,
       shape: "diamond",
     },
     {
@@ -2875,7 +3355,7 @@
         },
       ],
       x: 6.0,
-      y: 44.8,
+      y: 51.762499999999996,
       shape: "diamond",
     },
     {
@@ -2903,7 +3383,7 @@
         },
       ],
       x: 4.5,
-      y: 44.8,
+      y: 51.762499999999996,
       shape: "diamond",
     },
     {
@@ -2931,7 +3411,7 @@
         },
       ],
       x: 3.0,
-      y: 44.8,
+      y: 51.762499999999996,
       shape: "diamond",
     },
     {
@@ -2964,7 +3444,7 @@
         },
       ],
       x: 0.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
       shape: "gear",
     },
     {
@@ -2997,7 +3477,7 @@
         },
       ],
       x: 1.5,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "475548F410D4474E",
@@ -3029,7 +3509,7 @@
         },
       ],
       x: 3.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "4755485210EC91BC",
@@ -3061,7 +3541,7 @@
         },
       ],
       x: 4.5,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "475548B37C0518EC",
@@ -3093,7 +3573,7 @@
         },
       ],
       x: 6.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "4755488C256867F2",
@@ -3125,7 +3605,7 @@
         },
       ],
       x: 7.5,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "475548E7961EE6D3",
@@ -3157,7 +3637,7 @@
         },
       ],
       x: 9.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
       shape: "gear",
     },
     {
@@ -3190,7 +3670,7 @@
         },
       ],
       x: 9.0,
-      y: 50.262499999999996,
+      y: 57.224999999999994,
     },
     {
       id: "47554853B36716B7",
@@ -3216,7 +3696,7 @@
         },
       ],
       x: 0.0,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3243,7 +3723,7 @@
         },
       ],
       x: 1.5,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3270,7 +3750,7 @@
         },
       ],
       x: 3.0,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3297,7 +3777,7 @@
         },
       ],
       x: 4.5,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3324,7 +3804,7 @@
         },
       ],
       x: 6.0,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3351,7 +3831,7 @@
         },
       ],
       x: 7.5,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "circle",
     },
     {
@@ -3382,7 +3862,7 @@
         },
       ],
       x: 9.0,
-      y: 54.224999999999994,
+      y: 61.18749999999999,
       shape: "diamond",
     },
     {
@@ -3412,7 +3892,7 @@
         },
       ],
       x: 9.0,
-      y: 55.724999999999994,
+      y: 62.68749999999999,
     },
     {
       id: "475548F9822BE5AD",
@@ -3451,7 +3931,7 @@
         },
       ],
       x: 7.5,
-      y: 55.724999999999994,
+      y: 62.68749999999999,
     },
     {
       id: "4755481C21C11078",
@@ -3481,7 +3961,7 @@
         },
       ],
       x: 6.0,
-      y: 55.724999999999994,
+      y: 62.68749999999999,
       shape: "rsquare",
     },
     {
@@ -3514,7 +3994,7 @@
         },
       ],
       x: 0.0,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "475548CEE65ECAF0",
@@ -3546,7 +4026,7 @@
         },
       ],
       x: 1.5,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "475548AEAF6A3954",
@@ -3578,7 +4058,7 @@
         },
       ],
       x: 3.0,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "4755481074B8D283",
@@ -3610,7 +4090,7 @@
         },
       ],
       x: 4.5,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "47554826934AB4E3",
@@ -3642,7 +4122,7 @@
         },
       ],
       x: 6.0,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "475548762616D09E",
@@ -3674,7 +4154,7 @@
         },
       ],
       x: 7.5,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
     },
     {
       id: "475548D40EDC0FD6",
@@ -3736,7 +4216,7 @@
         },
       ],
       x: 9.0,
-      y: 59.68749999999999,
+      y: 66.64999999999999,
       shape: "gear",
     },
     {
@@ -3769,7 +4249,7 @@
         },
       ],
       x: 0.0,
-      y: 63.64999999999999,
+      y: 70.6125,
       shape: "gear",
     },
     {
@@ -3804,7 +4284,7 @@
         },
       ],
       x: 1.5,
-      y: 63.64999999999999,
+      y: 70.6125,
     },
     {
       id: "4755481CB9AB65EB",
@@ -3836,7 +4316,7 @@
         },
       ],
       x: 3.0,
-      y: 63.64999999999999,
+      y: 70.6125,
     },
     {
       id: "47554806DC2A1289",
@@ -3868,7 +4348,7 @@
         },
       ],
       x: 4.5,
-      y: 63.64999999999999,
+      y: 70.6125,
       shape: "circle",
     },
     {
@@ -3903,7 +4383,7 @@
         },
       ],
       x: 6.0,
-      y: 63.64999999999999,
+      y: 70.6125,
     },
     {
       id: "475548EFBFE1D433",
@@ -3937,7 +4417,7 @@
         },
       ],
       x: 7.5,
-      y: 63.64999999999999,
+      y: 70.6125,
       shape: "gear",
     },
     {
@@ -3970,7 +4450,7 @@
         },
       ],
       x: 0.0,
-      y: 67.6125,
+      y: 74.575,
       shape: "gear",
     },
     {
@@ -4005,7 +4485,7 @@
         },
       ],
       x: 1.5,
-      y: 67.6125,
+      y: 74.575,
     },
     {
       id: "475548A9F00BDC3A",
@@ -4037,7 +4517,7 @@
         },
       ],
       x: 3.0,
-      y: 67.6125,
+      y: 74.575,
     },
     {
       id: "4755484B866D6CF8",
@@ -4069,7 +4549,7 @@
         },
       ],
       x: 4.5,
-      y: 67.6125,
+      y: 74.575,
     },
     {
       id: "475548360D83FBB8",
@@ -4101,7 +4581,7 @@
         },
       ],
       x: 6.0,
-      y: 67.6125,
+      y: 74.575,
     },
     {
       id: "47554827FF086DFC",
@@ -4133,7 +4613,7 @@
         },
       ],
       x: 7.5,
-      y: 67.6125,
+      y: 74.575,
     },
     {
       id: "4755485707A6ACE1",
@@ -4159,7 +4639,7 @@
         },
       ],
       x: 0.0,
-      y: 71.575,
+      y: 78.53750000000001,
       shape: "octagon",
     },
     {
@@ -4187,7 +4667,7 @@
         },
       ],
       x: 1.5,
-      y: 71.575,
+      y: 78.53750000000001,
     },
     {
       id: "475548EAE15A258B",
@@ -4214,7 +4694,7 @@
         },
       ],
       x: 3.0,
-      y: 71.575,
+      y: 78.53750000000001,
       shape: "diamond",
     },
     {
@@ -4241,7 +4721,7 @@
         },
       ],
       x: 0.0,
-      y: 75.53750000000001,
+      y: 82.50000000000001,
       shape: "octagon",
     },
     {
@@ -4268,7 +4748,7 @@
         },
       ],
       x: 1.5,
-      y: 75.53750000000001,
+      y: 82.50000000000001,
       shape: "octagon",
     },
     {
@@ -4295,7 +4775,7 @@
         },
       ],
       x: 3.0,
-      y: 75.53750000000001,
+      y: 82.50000000000001,
       shape: "octagon",
     },
     {
@@ -4322,7 +4802,7 @@
         },
       ],
       x: 0.0,
-      y: 79.50000000000001,
+      y: 86.46250000000002,
       shape: "circle",
     },
     {
@@ -4349,7 +4829,7 @@
         },
       ],
       x: 1.5,
-      y: 79.50000000000001,
+      y: 86.46250000000002,
     },
     {
       id: "475548A01F3BD331",
@@ -4375,7 +4855,7 @@
         },
       ],
       x: 3.0,
-      y: 79.50000000000001,
+      y: 86.46250000000002,
     },
     {
       id: "475548A73C3D36BC",
@@ -4401,7 +4881,7 @@
         },
       ],
       x: 4.5,
-      y: 79.50000000000001,
+      y: 86.46250000000002,
       shape: "diamond",
     },
     {
@@ -4428,7 +4908,7 @@
         },
       ],
       x: 6.0,
-      y: 79.50000000000001,
+      y: 86.46250000000002,
       shape: "rsquare",
     },
     {
@@ -4455,7 +4935,7 @@
         },
       ],
       x: 0.0,
-      y: 83.46250000000002,
+      y: 90.42500000000003,
       shape: "circle",
     },
     {
@@ -4482,7 +4962,7 @@
         },
       ],
       x: 0.0,
-      y: 87.42500000000003,
+      y: 94.38750000000003,
       shape: "circle",
     },
   ],
