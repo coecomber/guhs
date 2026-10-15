@@ -26,7 +26,7 @@
   ],
   "quest.4755480BF2E8ECFD.title": "Twaalf Ogen van Vadsig",
   "quest.4755480BF2E8ECFD.quest_desc": [
-    "Guhkristal + kaasknabbel + Mika-traan = een &6Oog van Vadsig&r. Je hebt er twaalf nodig voor het portaal (en een paar extra om te gooien, want ze gaan soms &5njeg&r kapot).",
+    "Guhkristal + kaasknabbel + Mika-traan + grillspiespoeder (uit de Spiesburcht in de Barbecuether) = een &6Oog van Vadsig&r. Je hebt er twaalf nodig voor het portaal (en een paar extra om te gooien, want ze gaan soms &5njeg&r kapot).",
   ],
   "quest.475548E52AC6A515.title": "De Knabbelkelder",
   "quest.475548E52AC6A515.quest_desc": [
@@ -38,7 +38,7 @@
   ],
   "quest.47554894C6AA450A.title": "Twaalf ogen",
   "quest.47554894C6AA450A.quest_desc": [
-    "Stop een Oog van Vadsig in elk van de twaalf knabbelportaalframes in de portaalkamer. Pas op voor de Mika-larfjes!",
+    "Stop een Oog van Vadsig in elk van de twaalf knabbelportaalframes in de portaalkamer. Pas op voor de Mika-larfjes! Het portaal laat je pas door als je de &6Aangebrande Mika&r in de Barbecuether hebt verslagen.",
   ],
   "quest.475548048B20D10A.title": "Het Guheinde",
   "quest.475548048B20D10A.quest_desc": [
@@ -99,6 +99,46 @@
   "quest.47554806041E9EFE.title": "Nog een rondje",
   "quest.47554806041E9EFE.quest_desc": [
     "Zet vier knabbelkristallen op de vier knabbelsokkels rond het terugportaal en Opper-Mika komt terug. Versla hem nog eens voor een Enderguh-ei.",
+  ],
+  "quest.475548C7558482E0.title": "De kaasbol",
+  "quest.475548C7558482E0.quest_desc": [
+    "Wie Opper-Mika heeft verslagen, ziet bij de Knabbelberg een &6gloeiende kaasbol&r aanspoelen. Tik hem open en kijk wie erin zat.",
+  ],
+  "quest.475548A9701734ED.title": "Jip jip!",
+  "quest.475548A9701734ED.quest_desc": [
+    "Vlieg op &dAppa-guh&r naar de &bZuidelijke Luchttempel&r. Je hoeft niet te zoeken: hij weet de weg.",
+  ],
+  "quest.4755481AEA21FDF5.title": "De Hal van de Guhvatars",
+  "quest.4755481AEA21FDF5.quest_desc": [
+    "In de hal staan de beelden van alle Guhvatars vóór jou. Twee van hen hebben je iets te vertellen.",
+  ],
+  "quest.47554839AA2D25C8.title": "Luchtbal",
+  "quest.47554839AA2D25C8.quest_desc": [
+    "Speel luchtbal tegen &dAang-guh&r op de palen. Guhatso is scheidsrechter. Eerst tot drie!",
+  ],
+  "quest.4755482D09C7C42F.title": "De luchtscooter-baan",
+  "quest.4755482D09C7C42F.quest_desc": [
+    "Race de hele baan rond de tempel rond voordat de tijd om is. Zoeeef!",
+  ],
+  "quest.475548BD32FFB82C.title": "Zweven",
+  "quest.475548BD32FFB82C.quest_desc": [
+    "Spring van de grote toren en zweef door de ringen. Minstens tien van de veertien.",
+  ],
+  "quest.47554888BF921F00.title": "Achter Momo aan",
+  "quest.47554888BF921F00.quest_desc": [
+    "Een lemurguhtje grist je knabbel. Volg hem door de hele tempel, de torens op en over de bruggen.",
+  ],
+  "quest.475548BCD2AA528A.title": "Appa's stal",
+  "quest.475548BCD2AA528A.quest_desc": [
+    "Maak het oude zadel heel en voer Appa drie appels. Een blije Appa is een vliegende Appa.",
+  ],
+  "quest.4755480446808BF8.title": "Nog niet af",
+  "quest.4755480446808BF8.quest_desc": [
+    "Achter een dichte deur knutselt iemand. Wie? Dat hoor je wel. Of eigenlijk: dat hoor je nog niet.",
+  ],
+  "quest.475548B7ECBA1C3E.title": "Eindelijk, de Guhvatar",
+  "quest.475548B7ECBA1C3E.quest_desc": [
+    "Een Vuurnatie-schip ramt de steiger. Ontsnap op Appa en leer luchtsturen: het eerste van de vier elementen!",
   ],
   "quest.47554887D6B9327B.title": "Een gekke oude koning",
   "quest.47554887D6B9327B.quest_desc": [
