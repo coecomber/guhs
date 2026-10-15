@@ -75,6 +75,15 @@ public class BioKernGameTests {
             if (json.has("biomes")) {
                 json.getAsJsonArray("biomes").forEach(b -> inBron.add(b.getAsJsonObject().get("biome").getAsString()));
             }
+            // einde2: the Guheinde's own source guhs:guheinde_biomes (the main island, then the common and the rare outer biomes)
+            if (json.has("midden")) {
+                inBron.add(json.get("midden").getAsString());
+            }
+            for (String veld : new String[]{"gewoon", "zeldzaam"}) {
+                if (json.has(veld)) {
+                    json.getAsJsonArray(veld).forEach(b -> inBron.add(b.getAsString()));
+                }
+            }
             helper.assertTrue(!inBron.isEmpty(), "biomes in the biome source of " + s.id());
             for (String b : inBron) {
                 helper.assertTrue(b.startsWith("guhs:") && BiomeLijst.heeft(s.id(), b.substring(5)), "section " + s.id() + " lists " + b);

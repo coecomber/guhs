@@ -41,6 +41,24 @@ public class E2ToonGameTests {
                 }
             }
         }
+        // (merge_main) a forced chunk's entities load a tick or more later, and an entity added before that is not in
+        // getAllEntities yet: wait until the whole area has its entities, else weg misses the far rows of "alles"
+        net.minecraft.world.phys.AABB gebied = new net.minecraft.world.phys.AABB(at.getX() - 80, at.getY(), at.getZ() - 8, at.getX() + 80, at.getY() + 1, at.getZ() + 240);
+        wachtTot(helper, () -> Bewoners.geladen(level, gebied), 300, () -> toon(helper, level, at, vast));
+    }
+
+    /** Runs {@code dan} as soon as {@code klaar} holds (checked every tick), or fails after {@code ticks}. */
+    private static void wachtTot(GameTestHelper helper, java.util.function.BooleanSupplier klaar, int ticks, Runnable dan) {
+        if (klaar.getAsBoolean()) {
+            dan.run();
+        } else if (ticks <= 0) {
+            helper.fail("the forced chunks of the rows never loaded their entities");
+        } else {
+            helper.runAfterDelay(1, () -> wachtTot(helper, klaar, ticks - 1, dan));
+        }
+    }
+
+    private static void toon(GameTestHelper helper, ServerLevel level, BlockPos at, List<ChunkPos> vast) {
         // the expected sizes, counted from the tables
         int team = CastTabellen.kinds(CastTabellen.Groep.TEAM).size();
         int volk = 0, schurk = 0, sponsguh = 1;
@@ -102,7 +120,8 @@ public class E2ToonGameTests {
         }
         int alles = Einde2Toon.toon(level, at, Direction.SOUTH, Einde2Toon.GROEPEN);
         helper.assertTrue(alles == Einde2Toon.aantal(Einde2Toon.GROEPEN), "alles: " + alles);
-        helper.assertTrue(Einde2Toon.weg(level) == alles, "weg after alles");
+        int wegAlles = Einde2Toon.weg(level);
+        helper.assertTrue(wegAlles == alles, "weg after alles: " + wegAlles + " of " + alles);
         helper.runAfterDelay(2, () -> {
             helper.assertTrue(rij(level).isEmpty(), "nothing of the rows is left");
             for (ChunkPos c : vast) {
