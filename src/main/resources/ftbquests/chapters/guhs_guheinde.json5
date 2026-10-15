@@ -92,12 +92,24 @@
     },
     {
       height: 1.5625,
+      id: "47554848F519B675",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_h2_water.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.09375,
+      hover: [
+        "Komt na: Eindelijk, de Guhvatar",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "475548AD23D346C9",
       image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_zij.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 26.09375,
+      y: 33.05625,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -109,7 +121,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 34.55625,
+      y: 41.51875,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -121,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 40.01875,
+      y: 46.981249999999996,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -133,7 +145,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 45.481249999999996,
+      y: 52.443749999999994,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -145,7 +157,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 50.943749999999994,
+      y: 57.90624999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -157,7 +169,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 54.90624999999999,
+      y: 61.86874999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -169,7 +181,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 58.86874999999999,
+      y: 65.83125,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -181,7 +193,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 62.83124999999999,
+      y: 69.79375,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -193,7 +205,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 66.79374999999999,
+      y: 73.75625000000001,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -205,7 +217,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 70.75625,
+      y: 77.71875000000001,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -217,7 +229,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 74.71875,
+      y: 81.68125000000002,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -229,7 +241,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 78.68125,
+      y: 85.64375000000003,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -1306,6 +1318,571 @@
       shape: "gear",
     },
     {
+      id: "47554818784F7192",
+      icon: {
+        id: "guhs:einde2_bouw_water_ijssteen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_1",
+          id: "475548779C443511",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554870C6B520CD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 27.875,
+      dependencies: [
+        "475548B7ECBA1C3E",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "47554882EDE700F2",
+      icon: {
+        id: "minecraft:water_bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_2",
+          id: "4755483384BC2684",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830DF237B36",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 27.875,
+      dependencies: [
+        "47554818784F7192",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548053FBAF427",
+      icon: {
+        id: "minecraft:target",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_3",
+          id: "4755482A9FF5BC97",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554855A615F617",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 27.875,
+      dependencies: [
+        "47554882EDE700F2",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C3DDB96B7A",
+      icon: {
+        id: "minecraft:heart_of_the_sea",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_4",
+          id: "4755485628658EDE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D9C8AC8DF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 4.5,
+      y: 27.875,
+      dependencies: [
+        "475548053FBAF427",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548352E8F0A9E",
+      icon: {
+        id: "minecraft:packed_ice",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_5",
+          id: "47554879A6B7C298",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554836EDCF7E85",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 6.0,
+      y: 27.875,
+      dependencies: [
+        "475548C3DDB96B7A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548377CF07D17",
+      icon: {
+        id: "minecraft:snowball",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_6",
+          id: "475548E64EF5CF7A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485D461E9552",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 27.875,
+      dependencies: [
+        "475548352E8F0A9E",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755484FD8C1D113",
+      icon: {
+        id: "minecraft:oak_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_7",
+          id: "47554803FED4BCDF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EC59F8A56F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 27.875,
+      dependencies: [
+        "475548377CF07D17",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548CD0DCFB668",
+      icon: {
+        id: "minecraft:white_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_8",
+          id: "4755489C648AB437",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B18189458",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 29.375,
+      dependencies: [
+        "4755484FD8C1D113",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554876D9117935",
+      icon: {
+        id: "minecraft:campfire",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_9",
+          id: "4755486C8483A025",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CE9AB455BE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 29.375,
+      dependencies: [
+        "475548CD0DCFB668",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554858C3983DE7",
+      icon: {
+        id: "guhs:blauwe_geest_masker",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_10",
+          id: "475548730FDBCE3D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554825EC40520C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 6.0,
+      y: 29.375,
+      dependencies: [
+        "47554876D9117935",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554834E0FDC094",
+      icon: {
+        id: "minecraft:tropical_fish",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_11",
+          id: "475548058FCF2E19",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B0D8D5043A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 4.5,
+      y: 29.375,
+      dependencies: [
+        "47554858C3983DE7",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554877FCB1E593",
+      icon: {
+        id: "minecraft:lily_pad",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_12",
+          id: "475548EB48E80E22",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548937593C4AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 29.375,
+      dependencies: [
+        "47554834E0FDC094",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C4C3942FDD",
+      icon: {
+        id: "minecraft:carved_pumpkin",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_13",
+          id: "475548441AB911A9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A551F939E9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 29.375,
+      dependencies: [
+        "47554877FCB1E593",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755481C5436C7EC",
+      icon: {
+        id: "minecraft:prismarine_crystals",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_14",
+          id: "47554825FFE9B0FF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484F64E112C3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 29.375,
+      dependencies: [
+        "475548C4C3942FDD",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A06C4A2DF3",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_15",
+          id: "47554897FBE15675",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481A3CBB2935",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 30.875,
+      dependencies: [
+        "4755481C5436C7EC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554824937D9A6D",
+      icon: {
+        id: "minecraft:sea_lantern",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_16",
+          id: "47554898A04C63E5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A33CE6523A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 30.875,
+      dependencies: [
+        "475548A06C4A2DF3",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548284C705674",
+      icon: {
+        id: "minecraft:trident",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_17",
+          id: "475548E70F46E198",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AC60048A86",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 30.875,
+      dependencies: [
+        "47554824937D9A6D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C02FD04BE1",
+      icon: {
+        id: "guhs:boemerang",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_18",
+          id: "475548931C2D4C59",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485AF987335E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F456F51D0A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 30.875,
+      dependencies: [
+        "475548284C705674",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
       id: "47554887D6B9327B",
       icon: {
         id: "guhs:einde2_zij_kristalsnoep_ring",
@@ -1330,7 +1907,7 @@
         },
       ],
       x: 0.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "4755489CB959FD72",
@@ -1357,7 +1934,7 @@
         },
       ],
       x: 1.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548E2084227C9",
@@ -1384,7 +1961,7 @@
         },
       ],
       x: 3.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "4755482F56F4058B",
@@ -1411,7 +1988,7 @@
         },
       ],
       x: 4.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548E37348514E",
@@ -1443,7 +2020,7 @@
         },
       ],
       x: 6.0,
-      y: 27.875,
+      y: 34.8375,
       shape: "gear",
     },
     {
@@ -1471,7 +2048,7 @@
         },
       ],
       x: 7.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "4755484C8EF34C78",
@@ -1498,7 +2075,7 @@
         },
       ],
       x: 9.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548EFBFFB21B0",
@@ -1525,7 +2102,7 @@
         },
       ],
       x: 9.0,
-      y: 29.375,
+      y: 36.3375,
     },
     {
       id: "4755484AECCB89D1",
@@ -1557,7 +2134,7 @@
         },
       ],
       x: 7.5,
-      y: 29.375,
+      y: 36.3375,
       shape: "gear",
     },
     {
@@ -1585,7 +2162,7 @@
         },
       ],
       x: 6.0,
-      y: 29.375,
+      y: 36.3375,
     },
     {
       id: "4755489C23D6BB22",
@@ -1612,7 +2189,7 @@
         },
       ],
       x: 4.5,
-      y: 29.375,
+      y: 36.3375,
     },
     {
       id: "4755483E3CA71054",
@@ -1639,7 +2216,7 @@
         },
       ],
       x: 3.0,
-      y: 29.375,
+      y: 36.3375,
     },
     {
       id: "475548424323ED27",
@@ -1671,7 +2248,7 @@
         },
       ],
       x: 1.5,
-      y: 29.375,
+      y: 36.3375,
       shape: "gear",
     },
     {
@@ -1699,7 +2276,7 @@
         },
       ],
       x: 0.0,
-      y: 29.375,
+      y: 36.3375,
     },
     {
       id: "4755484A2201DCCD",
@@ -1726,7 +2303,7 @@
         },
       ],
       x: 0.0,
-      y: 30.875,
+      y: 37.8375,
     },
     {
       id: "4755484F555F7BA8",
@@ -1753,7 +2330,7 @@
         },
       ],
       x: 1.5,
-      y: 30.875,
+      y: 37.8375,
     },
     {
       id: "475548482494C628",
@@ -1785,7 +2362,7 @@
         },
       ],
       x: 3.0,
-      y: 30.875,
+      y: 37.8375,
       shape: "gear",
     },
     {
@@ -1813,7 +2390,7 @@
         },
       ],
       x: 4.5,
-      y: 30.875,
+      y: 37.8375,
     },
     {
       id: "47554833C30980E8",
@@ -1840,7 +2417,7 @@
         },
       ],
       x: 6.0,
-      y: 30.875,
+      y: 37.8375,
     },
     {
       id: "4755482E062506EA",
@@ -1867,7 +2444,7 @@
         },
       ],
       x: 7.5,
-      y: 30.875,
+      y: 37.8375,
     },
     {
       id: "475548E332B34235",
@@ -1899,7 +2476,7 @@
         },
       ],
       x: 9.0,
-      y: 30.875,
+      y: 37.8375,
       shape: "gear",
     },
     {
@@ -1927,7 +2504,7 @@
         },
       ],
       x: 9.0,
-      y: 32.375,
+      y: 39.3375,
     },
     {
       id: "4755480FD9808A2D",
@@ -1954,7 +2531,7 @@
         },
       ],
       x: 7.5,
-      y: 32.375,
+      y: 39.3375,
     },
     {
       id: "47554866CA8F2D61",
@@ -1986,7 +2563,7 @@
         },
       ],
       x: 6.0,
-      y: 32.375,
+      y: 39.3375,
       shape: "gear",
     },
     {
@@ -2014,7 +2591,7 @@
         },
       ],
       x: 4.5,
-      y: 32.375,
+      y: 39.3375,
       shape: "diamond",
     },
     {
@@ -2042,7 +2619,7 @@
         },
       ],
       x: 0.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "475548EF06519287",
@@ -2069,7 +2646,7 @@
         },
       ],
       x: 1.5,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755483610C29FF1",
@@ -2096,7 +2673,7 @@
         },
       ],
       x: 3.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "475548BAED7542BD",
@@ -2123,7 +2700,7 @@
         },
       ],
       x: 4.5,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "475548A807E2530A",
@@ -2155,7 +2732,7 @@
         },
       ],
       x: 6.0,
-      y: 36.3375,
+      y: 43.3,
       shape: "gear",
     },
     {
@@ -2183,7 +2760,7 @@
         },
       ],
       x: 7.5,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "4755486EBDACD359",
@@ -2210,7 +2787,7 @@
         },
       ],
       x: 9.0,
-      y: 36.3375,
+      y: 43.3,
     },
     {
       id: "475548CE6FC5177F",
@@ -2242,7 +2819,7 @@
         },
       ],
       x: 9.0,
-      y: 37.8375,
+      y: 44.8,
       shape: "gear",
     },
     {
@@ -2270,7 +2847,7 @@
         },
       ],
       x: 7.5,
-      y: 37.8375,
+      y: 44.8,
       shape: "diamond",
     },
     {
@@ -2298,7 +2875,7 @@
         },
       ],
       x: 6.0,
-      y: 37.8375,
+      y: 44.8,
       shape: "diamond",
     },
     {
@@ -2326,7 +2903,7 @@
         },
       ],
       x: 4.5,
-      y: 37.8375,
+      y: 44.8,
       shape: "diamond",
     },
     {
@@ -2354,7 +2931,7 @@
         },
       ],
       x: 3.0,
-      y: 37.8375,
+      y: 44.8,
       shape: "diamond",
     },
     {
@@ -2387,7 +2964,7 @@
         },
       ],
       x: 0.0,
-      y: 41.8,
+      y: 48.762499999999996,
       shape: "gear",
     },
     {
@@ -2420,7 +2997,7 @@
         },
       ],
       x: 1.5,
-      y: 41.8,
+      y: 48.762499999999996,
     },
     {
       id: "475548F410D4474E",
@@ -2452,7 +3029,7 @@
         },
       ],
       x: 3.0,
-      y: 41.8,
+      y: 48.762499999999996,
     },
     {
       id: "4755485210EC91BC",
@@ -2484,7 +3061,7 @@
         },
       ],
       x: 4.5,
-      y: 41.8,
+      y: 48.762499999999996,
     },
     {
       id: "475548B37C0518EC",
@@ -2516,7 +3093,7 @@
         },
       ],
       x: 6.0,
-      y: 41.8,
+      y: 48.762499999999996,
     },
     {
       id: "4755488C256867F2",
@@ -2548,7 +3125,7 @@
         },
       ],
       x: 7.5,
-      y: 41.8,
+      y: 48.762499999999996,
     },
     {
       id: "475548E7961EE6D3",
@@ -2580,7 +3157,7 @@
         },
       ],
       x: 9.0,
-      y: 41.8,
+      y: 48.762499999999996,
       shape: "gear",
     },
     {
@@ -2613,7 +3190,7 @@
         },
       ],
       x: 9.0,
-      y: 43.3,
+      y: 50.262499999999996,
     },
     {
       id: "47554853B36716B7",
@@ -2639,7 +3216,7 @@
         },
       ],
       x: 0.0,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2666,7 +3243,7 @@
         },
       ],
       x: 1.5,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2693,7 +3270,7 @@
         },
       ],
       x: 3.0,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2720,7 +3297,7 @@
         },
       ],
       x: 4.5,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2747,7 +3324,7 @@
         },
       ],
       x: 6.0,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2774,7 +3351,7 @@
         },
       ],
       x: 7.5,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "circle",
     },
     {
@@ -2805,7 +3382,7 @@
         },
       ],
       x: 9.0,
-      y: 47.262499999999996,
+      y: 54.224999999999994,
       shape: "diamond",
     },
     {
@@ -2835,7 +3412,7 @@
         },
       ],
       x: 9.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "475548F9822BE5AD",
@@ -2874,7 +3451,7 @@
         },
       ],
       x: 7.5,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
     },
     {
       id: "4755481C21C11078",
@@ -2904,7 +3481,7 @@
         },
       ],
       x: 6.0,
-      y: 48.762499999999996,
+      y: 55.724999999999994,
       shape: "rsquare",
     },
     {
@@ -2937,7 +3514,7 @@
         },
       ],
       x: 0.0,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "475548CEE65ECAF0",
@@ -2969,7 +3546,7 @@
         },
       ],
       x: 1.5,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "475548AEAF6A3954",
@@ -3001,7 +3578,7 @@
         },
       ],
       x: 3.0,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "4755481074B8D283",
@@ -3033,7 +3610,7 @@
         },
       ],
       x: 4.5,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "47554826934AB4E3",
@@ -3065,7 +3642,7 @@
         },
       ],
       x: 6.0,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "475548762616D09E",
@@ -3097,7 +3674,7 @@
         },
       ],
       x: 7.5,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
     },
     {
       id: "475548D40EDC0FD6",
@@ -3159,7 +3736,7 @@
         },
       ],
       x: 9.0,
-      y: 52.724999999999994,
+      y: 59.68749999999999,
       shape: "gear",
     },
     {
@@ -3192,7 +3769,7 @@
         },
       ],
       x: 0.0,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
       shape: "gear",
     },
     {
@@ -3227,7 +3804,7 @@
         },
       ],
       x: 1.5,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
     },
     {
       id: "4755481CB9AB65EB",
@@ -3259,7 +3836,7 @@
         },
       ],
       x: 3.0,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
     },
     {
       id: "47554806DC2A1289",
@@ -3291,7 +3868,7 @@
         },
       ],
       x: 4.5,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
       shape: "circle",
     },
     {
@@ -3326,7 +3903,7 @@
         },
       ],
       x: 6.0,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
     },
     {
       id: "475548EFBFE1D433",
@@ -3360,7 +3937,7 @@
         },
       ],
       x: 7.5,
-      y: 56.68749999999999,
+      y: 63.64999999999999,
       shape: "gear",
     },
     {
@@ -3393,7 +3970,7 @@
         },
       ],
       x: 0.0,
-      y: 60.64999999999999,
+      y: 67.6125,
       shape: "gear",
     },
     {
@@ -3428,7 +4005,7 @@
         },
       ],
       x: 1.5,
-      y: 60.64999999999999,
+      y: 67.6125,
     },
     {
       id: "475548A9F00BDC3A",
@@ -3460,7 +4037,7 @@
         },
       ],
       x: 3.0,
-      y: 60.64999999999999,
+      y: 67.6125,
     },
     {
       id: "4755484B866D6CF8",
@@ -3492,7 +4069,7 @@
         },
       ],
       x: 4.5,
-      y: 60.64999999999999,
+      y: 67.6125,
     },
     {
       id: "475548360D83FBB8",
@@ -3524,7 +4101,7 @@
         },
       ],
       x: 6.0,
-      y: 60.64999999999999,
+      y: 67.6125,
     },
     {
       id: "47554827FF086DFC",
@@ -3556,7 +4133,7 @@
         },
       ],
       x: 7.5,
-      y: 60.64999999999999,
+      y: 67.6125,
     },
     {
       id: "4755485707A6ACE1",
@@ -3582,7 +4159,7 @@
         },
       ],
       x: 0.0,
-      y: 64.61249999999998,
+      y: 71.575,
       shape: "octagon",
     },
     {
@@ -3610,7 +4187,7 @@
         },
       ],
       x: 1.5,
-      y: 64.61249999999998,
+      y: 71.575,
     },
     {
       id: "475548EAE15A258B",
@@ -3637,7 +4214,7 @@
         },
       ],
       x: 3.0,
-      y: 64.61249999999998,
+      y: 71.575,
       shape: "diamond",
     },
     {
@@ -3664,7 +4241,7 @@
         },
       ],
       x: 0.0,
-      y: 68.57499999999999,
+      y: 75.53750000000001,
       shape: "octagon",
     },
     {
@@ -3691,7 +4268,7 @@
         },
       ],
       x: 1.5,
-      y: 68.57499999999999,
+      y: 75.53750000000001,
       shape: "octagon",
     },
     {
@@ -3718,7 +4295,7 @@
         },
       ],
       x: 3.0,
-      y: 68.57499999999999,
+      y: 75.53750000000001,
       shape: "octagon",
     },
     {
@@ -3745,7 +4322,7 @@
         },
       ],
       x: 0.0,
-      y: 72.5375,
+      y: 79.50000000000001,
       shape: "circle",
     },
     {
@@ -3772,7 +4349,7 @@
         },
       ],
       x: 1.5,
-      y: 72.5375,
+      y: 79.50000000000001,
     },
     {
       id: "475548A01F3BD331",
@@ -3798,7 +4375,7 @@
         },
       ],
       x: 3.0,
-      y: 72.5375,
+      y: 79.50000000000001,
     },
     {
       id: "475548A73C3D36BC",
@@ -3824,7 +4401,7 @@
         },
       ],
       x: 4.5,
-      y: 72.5375,
+      y: 79.50000000000001,
       shape: "diamond",
     },
     {
@@ -3851,7 +4428,7 @@
         },
       ],
       x: 6.0,
-      y: 72.5375,
+      y: 79.50000000000001,
       shape: "rsquare",
     },
     {
@@ -3878,7 +4455,7 @@
         },
       ],
       x: 0.0,
-      y: 76.5,
+      y: 83.46250000000002,
       shape: "circle",
     },
     {
@@ -3905,7 +4482,7 @@
         },
       ],
       x: 0.0,
-      y: 80.4625,
+      y: 87.42500000000003,
       shape: "circle",
     },
   ],
