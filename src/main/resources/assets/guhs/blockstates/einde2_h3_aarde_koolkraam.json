@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/einde2_h3_aarde_koolkraam",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "guhs:block/einde2_h3_aarde_koolkraam",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/einde2_h3_aarde_koolkraam",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/einde2_h3_aarde_koolkraam",
+      "y": 270
+    }
+  }
+}

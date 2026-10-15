@@ -1,0 +1,617 @@
+{
+  "heel": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:spruce_planks"
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 1,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 1,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 1,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:lime_wool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:green_wool"
+      }
+    }
+  ],
+  "kapot": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:stripped_spruce_log",
+        "Properties": {
+          "axis": "x"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:stripped_spruce_log",
+        "Properties": {
+          "axis": "z"
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:stripped_spruce_log",
+        "Properties": {
+          "axis": "x"
+        }
+      }
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "state": {
+        "Name": "minecraft:spruce_slab",
+        "Properties": {
+          "type": "bottom",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:green_carpet"
+      }
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:spruce_slab",
+        "Properties": {
+          "type": "bottom",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:lime_carpet"
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 1,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 2,
+      "state": {
+        "Name": "minecraft:lime_carpet"
+      }
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 3,
+      "state": {
+        "Name": "minecraft:green_carpet"
+      }
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 2,
+      "state": {
+        "Name": "guhs:einde2_bouw_aarde_kool"
+      }
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 0,
+      "state": {
+        "Name": "minecraft:spruce_fence",
+        "Properties": {
+          "north": "false",
+          "east": "false",
+          "south": "false",
+          "west": "false",
+          "waterlogged": "false"
+        }
+      }
+    }
+  ]
+}
