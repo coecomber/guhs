@@ -127,6 +127,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         VUURHEER_MIKAI(1.6f), VUURHEER_MIKAI_KOMEET(1.6f), VUURHEER_MIKAI_VADSIG(1.25f), AZULA_MIKA(1.0f), TY_LEE_MIKA(0.9f), ZHAO_MIKA(1.05f),
         LONG_FENG_MIKA(1.05f), DAI_LI_MIKA(1.0f), VUURNATIE_MIKA(1.0f), GEVANGENIS_DIRECTEUR_MIKA(1.1f), MIKA_KOK(1.0f), VESTINGKAPITEIN_MIKA(1.15f),
         // </einde2_cast_schurk>
+        // einde2, geestmodellen: the Theegeest of the Geestenwereld, and the Bestelguh of tech tier 5 (its model; phase C gives it its work)
+        // <einde2_geest>
+        THEEGEEST_GUH(1.0f), BESTELGUH(1.0f),
+        // </einde2_geest>
         // <hemel>
         // </hemel>
         // <guhwaii>

@@ -1,0 +1,35 @@
+# einde2 slice geestmodellen AutoCheck: the creatures of the Geestenwereld in every look (Koh with his six faces, Hei Bai-guh
+# small and as the giant, Fang, Tui and La, the libelkonijnguh, the four lantaarngeesten, the schaduwgeest) and the two kinds
+# (the Theegeest, the Bestelguh), in the rows of the dev command /guhs einde2 toon geest. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_geestmodellen.txt -PautocheckTimeout=30
+# (written by the slice, not run by it: the merge step runs it.) The rows stand 5 blocks and more in front of the player
+# (who looks south here), facing the player; /guhs einde2 toon weg takes them away.
+
+section setup
+/gamemode creative
+/time set midnight
+/weather clear
+/tp @s 0 120 0 0 0
+/fill -60 119 -4 60 119 60 minecraft:smooth_stone
+/fill -60 120 -4 60 135 60 minecraft:air
+wait 40
+/guhs einde2 toon geest
+wait 60
+
+section the creatures
+camera 0.5 124 -2.5 0 12
+waitrender 200
+shot geestmodellen_rij
+camera -22.5 122 2.5 0 8
+wait 30
+shot geestmodellen_koh
+camera 0.5 122 2.5 0 8
+wait 30
+shot geestmodellen_midden
+camera 22.5 122 2.5 0 8
+wait 30
+shot geestmodellen_rechts
+
+section away
+/guhs einde2 toon weg
+wait 20
