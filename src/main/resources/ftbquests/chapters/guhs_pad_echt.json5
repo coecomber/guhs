@@ -71,7 +71,7 @@
         {
           type: "stat",
           stat: "guhs:verhalen_gevolgd",
-          value: 7,
+          value: 8,
           id: "4755484B9D13BD15",
           icon: {
             id: "guhs:guhdex",

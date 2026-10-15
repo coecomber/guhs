@@ -1,10 +1,14 @@
 {
   "structures": [
+    "guhs:ba_sing_guh",
     "guhs:frituurberg",
     "guhs:guhladriel_boomstad",
     "guhs:guhvendel",
     "guhs:knabbelmoria",
+    "guhs:noordelijke_waterstam",
     "guhs:sausuman_toren",
+    "guhs:vuurnatie_hoofdstad",
+    "guhs:zuidelijke_luchttempel",
     "guhs:zwarte_roosterpoort"
   ]
 }
