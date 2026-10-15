@@ -78,6 +78,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.entity.JsonNaamFix::onJoin);   // 1.2.6: JSON names from our templates
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.PicknickMuziek::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onRespawnCopy);
+        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.event.VadsAambeeld::onAnvilUpdate);   // 1.5.0: two Vads pieces combine in an anvil
         // (26.1: VillagerTradesEvent is gone; guh villager trades come from mixin/VillagerMixin, owner A)
         NeoForge.EVENT_BUS.addListener(ModVillagers::onVillagerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onPlayerTick);

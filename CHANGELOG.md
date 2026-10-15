@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.5.0 — Minecraft 26.1.2 (in progress)
+
+- **Fixed: two Vahoege Vads pieces combine in an anvil again.** Two enchanted pieces of the same vads gear (helmet, chestplate, leggings, boots, sword, pickaxe, axe, shovel, hoe, Vadspaxel or Vahoege-vadsschaar) left the anvil's result slot empty, because the gear never breaks. Now they merge like ordinary tools: equal levels go up one (two helmets with Protection III give Protection IV), otherwise the highest level stays, and enchantments that do not fit or clash are skipped. The XP cost, the "Too Expensive!" limit and renaming work as usual. The gear stays unbreakable.
+- **Fixed: you can make pepper soup again.** Pouring a bucket of kaassaus (Bucket of Cheese Sauce) into a Guhbrouwketel (Guh Brewing Cauldron) inside or next to a guh building always said "Geen vuur of emmers naast een guhgebouw, njeg!" (No fire or buckets next to a guh building), so the pepper brew in the Peperteler-guh's kas could not be started. The sauce goes into the cauldron now. Pouring buckets out next to guh buildings is still not allowed.
+
 ## 1.3.2 — Minecraft 26.1.2
 
 One new thing: you can go inside your Guh Houses. Same requirements as 1.3.1 and no worldgen changes. The rooms are in a new hidden dimension that the game adds by itself: players do not have to do anything, and existing worlds and servers keep everything (no world reset). Every Guh House that already stands gets its room the first time somebody goes in.

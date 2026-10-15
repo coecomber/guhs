@@ -134,11 +134,23 @@ public final class Protected {
                 && event.getLevel().getBlockState(event.getPos()).is(nl.juiced.guhs.feature.knuffelbad.KnuffelbadFeature.GUH_WASTOBBE.get())) {
             return;   // 1.2.7: a bucket of water on a wash tub is its shower (nothing is poured out): that's fine
         }
+        if (vultKetel(event.getEntity(), event.getLevel(), event.getPos(), event.getItemStack())) {
+            return;   // 1.5.0: the kaassaus goes INTO a Guhbrouwketel (nothing is poured out): the pepper brew of the protected kas
+        }
         BlockPos target = event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace());
         if (denied(event.getEntity(), target)) {
             event.setUseItem(TriState.FALSE);
             event.setCanceled(true);
         }
+    }
+
+    /**
+     * Is this a bucket of kaassaus going into a Guhbrouwketel? The ketel takes the saus itself (its bouillon), so nothing
+     * flows out, also when the ketel stands in or next to a guh building. Not while sneaking: then the bucket pours.
+     */
+    public static boolean vultKetel(Player player, Level level, BlockPos pos, ItemStack stack) {
+        return stack.is(nl.juiced.guhs.registry.ModItems.KAAS_SAUS_BUCKET.get()) && !player.isSecondaryUseActive()
+                && level.getBlockState(pos).is(nl.juiced.guhs.feature.spiesburcht.SpiesburchtFeature.GUHBROUWKETEL.get());
     }
 
     /** Buckets are emptied where you look (also without clicking a block first). */
