@@ -1,0 +1,72 @@
+# einde2, slice geestenwereld: the Spirit World in a real world: every zone, the sky, the masks of Koh's Grot, the puzzle,
+# the hall with the memorial stones and the fresco, the hanging pond, the tea pavilion and Fang's perch.
+# /guhs einde2 geest plek <zone or marker> takes you to a marker of the build (dev run only).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_geestenwereld.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/guhs einde2 geest ga
+wait 200
+waitrender 400
+
+section the opening shot: the Meditatiecirkel from the south
+/guhs einde2 geest plek uitzicht
+wait 40
+look 180 25
+waitrender 400
+shot e2_geest_uitzicht
+
+section arrival and lantern tree
+/guhs einde2 geest ga
+look 180 -5
+waitrender 200
+shot e2_geest_aankomst
+
+section the Gefluisterwoud
+/guhs einde2 geest plek gefluisterwoud
+look 90 0
+waitrender 300
+shot e2_geest_woud
+
+section Koh's Grot, the masks
+/guhs einde2 geest plek koh
+look 0 5
+waitrender 300
+shot e2_geest_koh
+/guhs einde2 geest plek koh_grot
+look 180 10
+waitrender 200
+shot e2_geest_koh_buiten
+
+section the Witte Lotus-ruines: puzzle, gate, hall, fresco
+/guhs einde2 geest plek lotus_ruines
+look 180 10
+waitrender 300
+shot e2_geest_poort
+/guhs einde2 geest plek fresco
+look 180 -10
+waitrender 200
+shot e2_geest_fresco
+/guhs einde2 geest plek top_voorgangers
+look 180 0
+waitrender 300
+shot e2_geest_top
+
+section the Hemelvijver
+/guhs einde2 geest plek hemelvijver
+look -90 -5
+waitrender 300
+shot e2_geest_vijver
+
+section the Theepaviljoen and Fang's Hemelpad
+/guhs einde2 geest plek theepaviljoen
+look 0 5
+waitrender 300
+shot e2_geest_thee
+/guhs einde2 geest plek fang_pad
+look 180 5
+waitrender 300
+shot e2_geest_fang
+
+section back to the body
+/guhs einde2 geest terug
+wait 40

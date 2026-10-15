@@ -1,0 +1,184 @@
+{
+  "variants": {
+    "facing=north,gezicht=0": {
+      "model": "guhs:block/geestenmasker_noh"
+    },
+    "facing=east,gezicht=0": {
+      "model": "guhs:block/geestenmasker_noh",
+      "y": 90
+    },
+    "facing=south,gezicht=0": {
+      "model": "guhs:block/geestenmasker_noh",
+      "y": 180
+    },
+    "facing=west,gezicht=0": {
+      "model": "guhs:block/geestenmasker_noh",
+      "y": 270
+    },
+    "facing=north,gezicht=1": {
+      "model": "guhs:block/geestenmasker_guh"
+    },
+    "facing=east,gezicht=1": {
+      "model": "guhs:block/geestenmasker_guh",
+      "y": 90
+    },
+    "facing=south,gezicht=1": {
+      "model": "guhs:block/geestenmasker_guh",
+      "y": 180
+    },
+    "facing=west,gezicht=1": {
+      "model": "guhs:block/geestenmasker_guh",
+      "y": 270
+    },
+    "facing=north,gezicht=2": {
+      "model": "guhs:block/geestenmasker_mika"
+    },
+    "facing=east,gezicht=2": {
+      "model": "guhs:block/geestenmasker_mika",
+      "y": 90
+    },
+    "facing=south,gezicht=2": {
+      "model": "guhs:block/geestenmasker_mika",
+      "y": 180
+    },
+    "facing=west,gezicht=2": {
+      "model": "guhs:block/geestenmasker_mika",
+      "y": 270
+    },
+    "facing=north,gezicht=3": {
+      "model": "guhs:block/geestenmasker_guhdalf"
+    },
+    "facing=east,gezicht=3": {
+      "model": "guhs:block/geestenmasker_guhdalf",
+      "y": 90
+    },
+    "facing=south,gezicht=3": {
+      "model": "guhs:block/geestenmasker_guhdalf",
+      "y": 180
+    },
+    "facing=west,gezicht=3": {
+      "model": "guhs:block/geestenmasker_guhdalf",
+      "y": 270
+    },
+    "facing=north,gezicht=4": {
+      "model": "guhs:block/geestenmasker_sponsguh"
+    },
+    "facing=east,gezicht=4": {
+      "model": "guhs:block/geestenmasker_sponsguh",
+      "y": 90
+    },
+    "facing=south,gezicht=4": {
+      "model": "guhs:block/geestenmasker_sponsguh",
+      "y": 180
+    },
+    "facing=west,gezicht=4": {
+      "model": "guhs:block/geestenmasker_sponsguh",
+      "y": 270
+    },
+    "facing=north,gezicht=5": {
+      "model": "guhs:block/geestenmasker_vos"
+    },
+    "facing=east,gezicht=5": {
+      "model": "guhs:block/geestenmasker_vos",
+      "y": 90
+    },
+    "facing=south,gezicht=5": {
+      "model": "guhs:block/geestenmasker_vos",
+      "y": 180
+    },
+    "facing=west,gezicht=5": {
+      "model": "guhs:block/geestenmasker_vos",
+      "y": 270
+    },
+    "facing=north,gezicht=6": {
+      "model": "guhs:block/geestenmasker_aap"
+    },
+    "facing=east,gezicht=6": {
+      "model": "guhs:block/geestenmasker_aap",
+      "y": 90
+    },
+    "facing=south,gezicht=6": {
+      "model": "guhs:block/geestenmasker_aap",
+      "y": 180
+    },
+    "facing=west,gezicht=6": {
+      "model": "guhs:block/geestenmasker_aap",
+      "y": 270
+    },
+    "facing=north,gezicht=7": {
+      "model": "guhs:block/geestenmasker_lach"
+    },
+    "facing=east,gezicht=7": {
+      "model": "guhs:block/geestenmasker_lach",
+      "y": 90
+    },
+    "facing=south,gezicht=7": {
+      "model": "guhs:block/geestenmasker_lach",
+      "y": 180
+    },
+    "facing=west,gezicht=7": {
+      "model": "guhs:block/geestenmasker_lach",
+      "y": 270
+    },
+    "facing=north,gezicht=8": {
+      "model": "guhs:block/geestenmasker_verdriet"
+    },
+    "facing=east,gezicht=8": {
+      "model": "guhs:block/geestenmasker_verdriet",
+      "y": 90
+    },
+    "facing=south,gezicht=8": {
+      "model": "guhs:block/geestenmasker_verdriet",
+      "y": 180
+    },
+    "facing=west,gezicht=8": {
+      "model": "guhs:block/geestenmasker_verdriet",
+      "y": 270
+    },
+    "facing=north,gezicht=9": {
+      "model": "guhs:block/geestenmasker_blanco"
+    },
+    "facing=east,gezicht=9": {
+      "model": "guhs:block/geestenmasker_blanco",
+      "y": 90
+    },
+    "facing=south,gezicht=9": {
+      "model": "guhs:block/geestenmasker_blanco",
+      "y": 180
+    },
+    "facing=west,gezicht=9": {
+      "model": "guhs:block/geestenmasker_blanco",
+      "y": 270
+    },
+    "facing=north,gezicht=10": {
+      "model": "guhs:block/geestenmasker_blauwe_geest"
+    },
+    "facing=east,gezicht=10": {
+      "model": "guhs:block/geestenmasker_blauwe_geest",
+      "y": 90
+    },
+    "facing=south,gezicht=10": {
+      "model": "guhs:block/geestenmasker_blauwe_geest",
+      "y": 180
+    },
+    "facing=west,gezicht=10": {
+      "model": "guhs:block/geestenmasker_blauwe_geest",
+      "y": 270
+    },
+    "facing=north,gezicht=11": {
+      "model": "guhs:block/geestenmasker_uil"
+    },
+    "facing=east,gezicht=11": {
+      "model": "guhs:block/geestenmasker_uil",
+      "y": 90
+    },
+    "facing=south,gezicht=11": {
+      "model": "guhs:block/geestenmasker_uil",
+      "y": 180
+    },
+    "facing=west,gezicht=11": {
+      "model": "guhs:block/geestenmasker_uil",
+      "y": 270
+    }
+  }
+}

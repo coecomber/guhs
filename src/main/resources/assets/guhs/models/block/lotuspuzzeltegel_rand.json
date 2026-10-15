@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/lotuspuzzeltegel_rand",
+    "bottom": "guhs:block/lotuspuzzeltegel_zij",
+    "side": "guhs:block/lotuspuzzeltegel_zij"
+  }
+}

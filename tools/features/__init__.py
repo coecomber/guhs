@@ -44,7 +44,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'einde2_bouw_lucht', 'einde2_bouw_water', 'einde2_bouw_aarde', 'einde2_bouw_vuur', 'einde2_bouw_zij1', 'einde2_bouw_zij2',
             'einde2_sponsguh_wezens', 'einde2_bouw_bikinibodem', 'einde2_bouw_schelpenstad',
             'einde2_cast_team', 'einde2_cast_volk', 'einde2_cast_schurk',
-            'einde2_geestmodellen']
+            'einde2_geestmodellen', 'einde2_geestenwereld']
 
 
 def modules():

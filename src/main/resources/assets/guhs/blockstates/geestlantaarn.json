@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "guhs:block/geestlantaarn"
+    },
+    "hanging=true": {
+      "model": "guhs:block/geestlantaarn_hangend"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:einde2_geestenwereld.sfeer",
+      "additions": {
+        "sound": "guhs:einde2_geestenwereld.gefluister",
+        "tick_chance": 0.0016
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.overworld.cherry_grove",
+        "min_delay": 6000,
+        "max_delay": 18000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:glow"
+        },
+        "probability": 0.0035
+      },
+      {
+        "particle": {
+          "type": "minecraft:end_rod"
+        },
+        "probability": 0.0006
+      }
+    ],
+    "minecraft:visual/fog_color": "#c4b2ea",
+    "minecraft:visual/fog_end_distance": 170.0,
+    "minecraft:visual/fog_start_distance": 24.0,
+    "minecraft:visual/sky_color": "#7c68c0",
+    "minecraft:visual/water_fog_color": "#9ab8f0"
+  },
+  "has_precipitation": false,
+  "temperature": 0.6,
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#a8ecf4",
+    "foliage_color": "#9ce8e4",
+    "grass_color": "#c4a4ec"
+  },
+  "spawners": {},
+  "spawn_costs": {},
+  "carvers": [],
+  "features": [
+    [
+      "guhs:einde2_geestenwereld_stukken"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ]
+}

@@ -111,6 +111,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.geestwezens.E2GeestWezensFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.geestenwereld.E2GeestenwereldFeature.register(modBus);   // <einde2_geestenwereld/>
         // the merge step of the cast (CONTRACT_E2 11.7, 11.9): residents at the markers, named animations on demand, the dev rows
         Bewoners.register();
         CastTabellen.registreer();
@@ -150,6 +151,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.geestwezens.E2GeestWezensFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.geestenwereld.E2GeestenwereldFeature.payloads(registrar);   // <einde2_geestenwereld/>
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -174,6 +176,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.creative(output);
         nl.juiced.guhs.feature.einde2.castteam.E2CastTeamFeature.creative(output);
         nl.juiced.guhs.feature.einde2.geestwezens.E2GeestWezensFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.geestenwereld.E2GeestenwereldFeature.creative(output);   // <einde2_geestenwereld/>
     }
 
     private Einde2() {
