@@ -133,6 +133,8 @@ public final class E2MikasFeature {
         EFFECTS.register(modBus);
         SOUNDS.register(modBus);
         PARTICLES.register(modBus);
+        // merge_main: a player who wears the Knabbelring is no target for a Mika, so an Ender-Mika does not rob them either
+        EnderMikaEntity.LAAT_MET_RUST.add(nl.juiced.guhs.feature.ring.Ring::onzichtbaarVoorMikas);
         modBus.addListener((EntityAttributeCreationEvent event) -> {
             event.put(ENDER_MIKA.get(), EnderMikaEntity.createEnderAttributes().build());
             event.put(KAASMIJT.get(), KaasmijtEntity.createAttributes().build());

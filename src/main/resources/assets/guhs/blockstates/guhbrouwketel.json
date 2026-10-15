@@ -212,6 +212,87 @@
       "apply": {
         "model": "guhs:block/guhbrouwketel_guhsprong_3"
       }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_blubroom_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_blubroom_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "5"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_blubroom_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "6"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_pepervuur_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "6"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_pepervuur_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "6"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_pepervuur_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "7"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_peperzoet_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "7"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_peperzoet_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "7"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_peperzoet_3"
+      }
     }
   ]
 }

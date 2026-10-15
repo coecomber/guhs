@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:esdoorn_stam"
+  ],
+  "result": {
+    "id": "guhs:roze_lakhout_planken",
+    "count": 4
+  }
+}

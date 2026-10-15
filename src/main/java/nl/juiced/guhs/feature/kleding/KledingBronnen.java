@@ -28,7 +28,9 @@ public final class KledingBronnen {
             "barbecuether", "knuffeldal", "theehuis", "boerderij", "tuintjes", "sterrenwacht", "ballon", "kamperen", "wereldleven",
             "beroep_brandweer", "beroep_politie", "beroep_apotheek", "beroep_bouw",
             // 3.0 (Guhverhalen)
-            "timmerguh", "nomguh", "sledesprint", "mewtwo", "hemel", "guhwaii", "guhwaii_spellen");
+            "timmerguh", "nomguh", "sledesprint", "mewtwo", "hemel", "guhwaii", "guhwaii_spellen",
+            // bbq2 (the marker names of CONTRACT_130 5.4)
+            "paleizen", "bestaand", "camping_markt", "toren_peper", "ring", "guhrio_beloning");
 
     private static final Map<GuhClothes, String> BRON = new EnumMap<>(GuhClothes.class);
     private static final Map<GuhClothes, net.minecraft.network.chat.Component> PRIJS = new EnumMap<>(GuhClothes.class);

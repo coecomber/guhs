@@ -585,8 +585,12 @@ def berghut(b, x0, z0, Y):
 # =====================================================================================================================
 # the old boat on the frozen bay
 # =====================================================================================================================
+HERSTEL_142 = []    # 1.4.2: (spot, [old blocks]) of the mended deck planks (tools/features/herstel142.py)
+
+
 def boot(b, x0, z0, Y):
     """Baltoguh and Boris' old boat (bow to the north), 7 wide and 15 long, stuck in the ice at Y (the ice level)."""
+    HERSTEL_142.clear()
     L, Bb = 15, 7
     mx = x0 + Bb // 2
     for i in range(L):
@@ -603,10 +607,13 @@ def boot(b, x0, z0, Y):
                     b.set(x, y, z, "dark_oak_planks" if y == Y + 2 and edge else "spruce_planks")
                 else:
                     b.set(x, y, z, "air")
-        # the deck at Y+2 inside the hull (a few broken planks)
+        # the deck at Y+2 inside the hull (a few broken planks: 1.4.2 they sag half a block instead of being a hole you
+        # could fall into and never climb out of; feature/balto/NomguhHerstel.java mends the copies built before)
         for x in range(mx - half + 1, mx + half):
-            if not (i in (5, 6) and x == mx + 1):
-                b.set(x, Y + 1, z, "spruce_slab", {"type": "top", "waterlogged": "false"})
+            gezakt = i in (5, 6) and x == mx + 1
+            b.set(x, Y + 1, z, "spruce_slab", {"type": "bottom" if gezakt else "top", "waterlogged": "false"})
+            if gezakt:
+                HERSTEL_142.append(((x, Y + 1, z), ["air", "snow"]))
     # the cabin at the stern (5 x 4), a door to the bow, a window, a stove pipe
     cz0, cz1 = z0 + L - 6, z0 + L - 2
     for z in range(cz0, cz1 + 1):

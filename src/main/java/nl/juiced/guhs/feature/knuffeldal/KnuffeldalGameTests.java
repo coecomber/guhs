@@ -319,7 +319,8 @@ public class KnuffeldalGameTests {
             }
             helper.assertTrue(!KnuffeldalEvents.decide(guh, true), "decided only once");
         }
-        helper.assertTrue(pluis > n * 0.25 && pluis < n * 0.45, "about 35%: " + pluis + " of " + n);
+        // (1.3.1 lowered the chance from 35% to 23%, KnuffeldalEvents.PLUISGUH_CHANCE: 92 of 400 on average, 8 either way)
+        helper.assertTrue(pluis > n * 0.14 && pluis < n * 0.32, "about 23%: " + pluis + " of " + n);
         GuhEntity outside = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(!KnuffeldalEvents.decide(outside, false) && outside.getVariant() == GuhVariant.NORMAL, "never outside the Knuffeldal");
         GuhEntity bewoner = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);

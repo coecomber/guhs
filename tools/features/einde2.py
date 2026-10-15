@@ -47,6 +47,9 @@ def tags(h):
         h.w(f"{D}/tags/worldgen/biome/einde2/{element}.json", biome([name]))
     h.add_tag("guhs/tags/block/einde2/eilandgrond", ["guhs:kaaskorst"])
     h.add_tag("guhs/tags/block/einde2/wolk", [])
+    # merge_main (bbq2's machines): the Knabbelaar never eats the einde2 blocks that must stay where they are (CONTRACT_E2 4.1)
+    h.add_tag("guhs/tags/block/techmachine_knabbelt_niet", ["guhs:werkplaatsdeur", "guhs:bubbelstroom", "guhs:zeepbel", "guhs:karen",
+                                                            "guhs:krokante_grill", "guhs:besteltafel"])
     # (the structures arrive slice by slice: not required)
     for tag, names in (("verhaal", kit.VERHAAL), ("zij", kit.ZIJ), ("sponsguh", kit.SPONS)):
         h.w(f"{D}/tags/worldgen/structure/einde2/{tag}.json", {"values": [{"id": f"guhs:{n}", "required": False} for n in names]})

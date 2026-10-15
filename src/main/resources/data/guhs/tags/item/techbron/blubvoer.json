@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:kaas_knabbels",
+    {
+      "id": "#guhs:sausdieren/sausblubje_voer",
+      "required": false
+    }
+  ]
+}

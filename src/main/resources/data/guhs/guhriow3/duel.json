@@ -1,0 +1,18 @@
+{
+  "brug_van": 7,
+  "brug_tot": 26,
+  "breuk": 17,
+  "muur_links": -2,
+  "muur_rechts": 37,
+  "hendel": [
+    33,
+    0,
+    0
+  ],
+  "vraag": [
+    4,
+    3,
+    0
+  ],
+  "blok": "guhs:guhriow3_brug"
+}

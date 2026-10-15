@@ -114,7 +114,9 @@ public class TitelsGameTests {
     public static void titelsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         Set<String> ids = new HashSet<>(), namen = new HashSet<>();
-        helper.assertTrue(Titels.ALLE.size() == 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size(), "eight titles (and the guhpixel ones), got " + Titels.ALLE.size());
+        // (bbq2: the eight built-in titles, the guhpixel ones, and the ones slices registered with Titels.registreer: ringdrager, ...)
+        helper.assertTrue(Titels.ALLE.size() >= 8 + nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE.size() + nl.juiced.guhs.feature.bio.systemen.BioTitels.ALLE.size(),   // biomes3
+                "at least the eight built-in titles and the guhpixel and biomes3 ones, got " + Titels.ALLE.size());
         for (Titels.Titel t : Titels.ALLE) {
             helper.assertTrue(ids.add(t.id()) && namen.add(t.naamSleutel()), "unique: " + t.id());
             helper.assertTrue(lang.has(t.naamSleutel()), "name of " + t.id());
@@ -163,11 +165,16 @@ public class TitelsGameTests {
                 Titels.HUISJESBOUWER, () -> TimmerguhVoortgang.zet(p, TimmerguhVoortgang.KLAAR),
                 Titels.OPPER_VADSER, () -> GuhQuests.saved(p).putInt(GuheindeGevecht.WINS, 1),
                 Titels.GUHKENNER, () -> GuhWorldData.get(helper.getLevel().getServer()).player(p.getUUID()).seen.addAll(GuhDex.TELLEND));
-        helper.assertTrue(hoe.size() == 8, "a way to earn every title (the guhpixel titles have their own tests)");
+        // (the guhpixel titles have their own tests; bbq2: a title a slice registered itself is tested by that slice, e.g. RingGameTests.ringVerhaal)
+        helper.assertTrue(hoe.size() == 8 && Titels.ALLE.stream().filter(t -> hoe.containsKey(t.id())).count() == hoe.size(),
+                "a way to earn every built-in title");
         int n = 0;
         // (the last one first: each new title is the only new one)
         for (int i = 8 - 1; i >= 0; i--) {
             Titels.Titel t = Titels.ALLE.get(i);
+            if (!hoe.containsKey(t.id())) {
+                continue;
+            }
             helper.assertTrue(!Titels.heeft(p, t), t.id() + " isn't earned yet");
             hoe.get(t.id()).run();
             n++;

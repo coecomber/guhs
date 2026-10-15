@@ -269,6 +269,13 @@ class Game:
             c["wild"] = c["const"] in wild_ids
         return out
 
+    def class_src(self, name):
+        """The (comment-free) source of the class with this simple name, or None."""
+        if not hasattr(self, "_class_files"):
+            self._class_files = {os.path.splitext(os.path.basename(f))[0]: f for f in self.java_files}
+        f = self._class_files.get(name)
+        return self.java_stripped(f) if f else None
+
     def _clothing_sources(self, consts):
         bron, prijs, loose = {}, {}, {}
         const_set = set(consts)
@@ -282,13 +289,20 @@ class Game:
             cls = os.path.splitext(os.path.basename(f))[0]
             strings = dict(re.findall(r'static\s+final\s+String\s+([A-Z_]+)\s*=\s*"([^"]*)"', src))
 
-            def sval(expr):
+            def sval(expr, here=src, depth=0):
+                """A string argument: a literal, a constant of this class, or (bbq2) a constant of another class
+                (RingBeloning.BRON), also when that constant is itself another class's constant (BRON = GuhrioKasteel.GROEP)."""
                 expr = expr.strip()
                 if expr.startswith('"'):
                     return unquote(expr)
-                if re.fullmatch(r"[A-Z_]+", expr) and expr in strings:
+                if here is src and re.fullmatch(r"[A-Z_]+", expr) and expr in strings:
                     return strings[expr]
-                return None
+                m = re.fullmatch(r"(?:(\w+)\.)?([A-Z_][A-Z0-9_]*)", expr)
+                if not m or depth > 4:
+                    return None
+                other = self.class_src(m.group(1)) if m.group(1) else here
+                d = re.search(r"static\s+final\s+String\s+" + m.group(2) + r"\s*=\s*([^;]+);", other or "")
+                return sval(d.group(1), other, depth + 1) if d else None
             # KledingBronLijst: b("bron", X, "prijs")
             if cls == "KledingBronLijst":
                 for m in re.finditer(r'\bb\(\s*"(\w+)"\s*,\s*([A-Z0-9_]+)\s*,\s*([^;]+?)\)\s*;', src):
@@ -306,6 +320,10 @@ class Game:
                 if b is None:
                     continue
                 p = self.resolve_string_expr(args[2], cls) if len(args) > 2 else None
+                if p is None and len(args) > 2:      # (bbq2) KledingBronnen.prijs("lang key"): the text of that key, when it takes no number
+                    pm = re.fullmatch(r'KledingBronnen\.prijs\(\s*"([\w.]+)"\s*\)', args[2].strip())
+                    if pm and "%" not in self.lang_nl.get(pm.group(1), "%"):
+                        p = self.lang_nl[pm.group(1)]
                 if target in const_set:
                     bron[target] = b
                     if p:
@@ -319,6 +337,11 @@ class Game:
                     names = re.findall(r"GuhClothes\.([A-Z0-9_]+)", expr)
                     if not names:
                         lm = re.search(re.escape(expr.strip()) + r"\s*=\s*List\.of\((.*?)\);", src, re.S)
+                        if lm:
+                            names = re.findall(r"\b([A-Z][A-Z0-9_]+)\b", lm.group(1))
+                    if not names:       # (bbq2) a list of another class: for (GuhClothes c : RingBeloning.KLEDING)
+                        qm = re.fullmatch(r"(\w+)\.([A-Z_][A-Z0-9_]*)", expr.strip())
+                        lm = qm and re.search(r"\b" + qm.group(2) + r"\s*=\s*List\.of\((.*?)\);", self.class_src(qm.group(1)) or "", re.S)
                         if lm:
                             names = re.findall(r"\b([A-Z][A-Z0-9_]+)\b", lm.group(1))
                     if not names:
@@ -397,8 +420,16 @@ class Game:
             d = read_json(f)
             sid = os.path.splitext(os.path.basename(f))[0]
             for s in d["structures"]:
-                out[s["structure"].split(":")[1]] = dict(set=sid, placement=d["placement"], weight=s.get("weight", 1),
-                                                         together=[x["structure"].split(":")[1] for x in d["structures"]])
+                key = s["structure"].split(":")[1]
+                if d["placement"].get("type") == "guhs:gegarandeerd":
+                    # (bbq2) the ONE guaranteed copy in new terrain: kept next to the building's own set, which says how rare the
+                    # others are; a building with only this set has no others
+                    out.setdefault(key, dict(set=sid, placement=d["placement"], weight=s.get("weight", 1), together=[key]))
+                    out[key]["gegarandeerd"] = d["placement"]
+                    continue
+                out[key] = dict(set=sid, placement=d["placement"], weight=s.get("weight", 1),
+                                together=[x["structure"].split(":")[1] for x in d["structures"]],
+                                **({"gegarandeerd": out[key]["gegarandeerd"]} if "gegarandeerd" in out.get(key, {}) else {}))
         return out
 
     @cached_property
@@ -417,11 +448,17 @@ class Game:
     @cached_property
     def dimension_biomes(self):
         """{dimension id: [biome ids]} (Guhmension: everything that isn't in another dimension)."""
+        from .topics import DIMENSIONS
         out = {}
         for f in glob.glob(os.path.join(self.data, "dimension", "*.json")):
             did = os.path.splitext(os.path.basename(f))[0]
-            src = read_json(f)["generator"].get("biome_source", {})
-            if src.get("type") == "minecraft:fixed":
+            gen = read_json(f)["generator"]
+            src = gen.get("biome_source", {})
+            if gen.get("type") == "minecraft:flat" and did in DIMENSIONS:
+                # (the sea of the Snuffeleiland: one biome in the generator's settings; a flat dimension without a wiki page,
+                # like the room inside a Guh House, keeps counting as the Guhmension)
+                out[did] = [gen.get("settings", {}).get("biome")]
+            elif src.get("type") == "minecraft:fixed":
                 out[did] = [src["biome"]]
             else:
                 out[did] = [b["biome"] for b in src.get("biomes", [])]
@@ -504,6 +541,9 @@ class Game:
                 continue
             lore = [self.lang_nl[x] for x in (f"{kind}.{NS}.{iid}.lore", f"{kind}.{NS}.{iid}.tooltip", f"{kind}.{NS}.{iid}.desc")
                     if x in self.lang_nl]
+            if iid in ("bank_guh", "bank_upgrade"):      # their text takes the bank's cap ("wel %s van elke soort"): BankStorage.CAP
+                cap = re.search(r"int CAP = (\d+);", self.java_src(os.path.join("storage", "BankStorage.java")))
+                lore = [x.replace("%s", cap.group(1)) if cap else x for x in lore]
             out[iid] = dict(id=iid, name=v, block=kind == "block" or iid in self.blockstates, lore=lore)
         return out
 
@@ -596,7 +636,18 @@ class Game:
             os.chdir(here)
         quests = {q[0]: q for q in ns["QUESTS"]}
         return dict(chapters=ns["CHAPTERS"], order=ns["ORDER"], sections=sections, quests=quests,
-                    plain=ns.get("plain", lambda s: re.sub(r"&[0-9a-fk-or]", "", s)))
+                    groups=ns.get("GROEPEN", {}), group_of=ns.get("groep_van", lambda c: "guhs"),      # (the chapter groups of the sidebar)
+                    plain=ns.get("plain", lambda s: re.sub(r"&[0-9a-fk-or]", "", s)),
+                    text_chapter=ns.get("tekst_hoofdstuk", lambda c, module: c))        # (the chapter name in a section's text key)
+
+    @cached_property
+    def ftb_section_en(self):
+        """{ftb.<chapter>.section.<sid>: English}: the English titles of the quest book's sections. They are only painted on
+        the header pictures (no lang file has them), so they come straight from the overlay tools/lang/en/*.json."""
+        out = {}
+        for path in sorted(glob.glob(os.path.join(self.tools, "lang", "en", "*.json"))):
+            out.update((k, v) for k, v in read_json(path).items() if ".section." in k and isinstance(v, str))
+        return out
 
     # --- misc lang lists -------------------------------------------------------------------------------------------------------
     def lang_group(self, prefix, suffix_filter=None):

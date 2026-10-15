@@ -1,0 +1,14 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:botenhuisje"
+          }
+        }
+      }
+    }
+  }
+}

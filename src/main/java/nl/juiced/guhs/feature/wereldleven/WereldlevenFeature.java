@@ -80,8 +80,10 @@ public final class WereldlevenFeature {
     static {
         List<String> ids = new ArrayList<>();
         for (GuhVariant v : GuhVariant.values()) {
-            // (3.0: the story guhs have no plush; einde2: nor do the guhs of the Guheinde's outer islands; tools/features/wereldleven.py KNUFFEL_IDS)
-            if (!v.isCharacter() && !v.isVerhaalGuh() && !v.isBuitenGuh()) {
+            if (v.geenKnuffel()) {
+                continue;   // biomes3 (1.4.2: and the Hertguhtje): the Bloesemguh and the Tanukiguh have no plush (the complete knuffelkast stays what it was)
+            }
+            if (!v.isCharacter() && !v.isVerhaalGuh()) {   // (3.0: the story guhs have no plush; tools/features/wereldleven.py KNUFFEL_IDS)
                 ids.add(v.name().toLowerCase(Locale.ROOT));
             }
         }

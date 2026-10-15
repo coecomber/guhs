@@ -709,13 +709,22 @@ def structures(h):
     h.w(f"{D}/worldgen/structure/barbecueput.json", {
         "type": "guhs:barbecueput", "biomes": "#guhs:has_structure/barbecueput", "step": "surface_structures",
         "spawn_overrides": {}, "terrain_adaptation": "beard_thin", "start_pool": "guhs:barbecueput/start",
-        "start_jigsaw_name": put.MIDDEN, "check_radius": 20, "max_height_difference": 12, "headroom": 10})
-    h.w(f"{D}/worldgen/template_pool/barbecueput/start.json", {"fallback": "minecraft:empty", "elements": [
-        {"weight": wgt, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{name}",
-                                    "projection": "rigid", "processors": "minecraft:empty"}}
-        for name, wgt in (("barbecueput_groot", 2), ("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1))]})
-    # rare, but findable: about as rare as the guh kermis (many spots are too steep, so the grid is a bit tighter)
-    h.w(f"{D}/worldgen/structure_set/barbecueput.json", {"structures": [{"structure": "guhs:barbecueput", "weight": 1}],
+        "start_jigsaw_name": put.MIDDEN, "check_radius": 20, "max_height_difference": 12, "headroom": 10,
+        # bbq2 (ring-h1): in the open (the Guhmensie) only the small pits from now on: a new big pit there is always the
+        # middle of a Knabbelgouw (guhs:knabbelgouw, the second structure of this set; features/ring_h1.py)
+        "surface_pool": "guhs:barbecueput/klein"})
+    def pool(*templates):
+        return {"fallback": "minecraft:empty", "elements": [
+            {"weight": wgt, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{name}",
+                                        "projection": "rigid", "processors": "minecraft:empty"}} for name, wgt in templates]}
+    h.w(f"{D}/worldgen/template_pool/barbecueput/start.json", pool(("barbecueput_groot", 2), ("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1)))
+    h.w(f"{D}/worldgen/template_pool/barbecueput/klein.json", pool(("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1)))
+    # rare, but findable: about as rare as the guh kermis (many spots are too steep, so the grid is a bit tighter).
+    # bbq2 (ring-h1): the set holds two structures. In the Guhmensie the game picks one of them per spot (3 : 2 for the
+    # Knabbelgouw, as the big pit had 2 of 4 and the Knabbelgouw needs more flat room; where it does not fit, a small pit
+    # comes); in the Guhbarbecuether the Knabbelgouw's biomes never match, so there it is always guhs:barbecueput.
+    h.w(f"{D}/worldgen/structure_set/barbecueput.json", {"structures": [{"structure": "guhs:barbecueput", "weight": 2},
+                                                                        {"structure": "guhs:knabbelgouw", "weight": 3}],
                                                          "placement": {"type": "minecraft:random_spread", "spacing": 36, "separation": 14,
                                                                        "salt": 27012027}})
     h.w(f"{D}/tags/worldgen/biome/has_structure/barbecueput.json", {"values": [f"guhs:{b}" for b in h.GUHMENSION_LAND + ["mikas_biome"]]
@@ -789,10 +798,10 @@ LANG = {
     "item.guhs.grill_halsdoek": "Koksdoekje",
     "entity.guhs.guh_npc.grillguh": "Grillguh",
     "structure.guhs.barbecueput": "Barbecueput",
-    "structure.guhs.barbecueput.tooltip": "Kapotte barbecues met een grillkoolframe. In de grote woont de Grillguh (ook in de Barbecuether zelf)",
+    "structure.guhs.barbecueput.tooltip": "Kapotte barbecues met een grillkoolframe. De Grillguh woont alleen in een grote put: in nieuw land ligt die midden in een Knabbelgouw (staat ook in deze lijst)",
     "gui.guhs.superkompas.barbecue": "Barbecue",
     "gui.guhs.superkompas.barbecue.tooltip": "Alles om te barbecueën, van de Guhmensie tot diep in de Barbecuether",
-    "gui.guhs.guhdex.rarity.grillguh": "Zeldzaamheid: Zeldzaam (grote barbecueput)",
+    "gui.guhs.guhdex.rarity.grillguh": "Zeldzaamheid: Zeldzaam (grote barbecueput; in nieuw land midden in een Knabbelgouw)",
     "gui.guhs.guhdex.info.grillguh": "Een guh-kok met een torenhoge koksmuts en een schort. De Mika's hebben zijn Aanmaakblokjes gejat! Help hem en hij leert je zijn geheime grillrecept.",
     "dimension.guhs.barbecuether": "De Guhbarbecuether",
     "quest.guhs.barbecuether.wrong_dimension": "Njeg... dit barbecueportaal wil alleen branden in de Guhmensie of de Barbecuether!",
@@ -964,9 +973,11 @@ def selfcheck_assets(h):
 def ftb(fq):
     q, item, adv, structure, biome, dim = fq.q, fq.item, fq.adv, fq.structure, fq.biome, fq.dim
     y = 60
-    q("bbq_put", "Wie heeft hier gebarbecued?", "Ergens in de Guhmensie liggen kapotte barbecues met een half grillkoolframe: de &6barbecueputten&r. Het superkompas (Barbecue > Barbecueput) wijst de weg.",
-      "guhs:gebeitelde_houtskoolsteen_stenen", [structure("barbecueput")], rewards=(("guhs:kaas_knabbels", 12),), x=-8, y=y, shape="hexagon", xp=100)
-    q("bbq_grillguh", "NJEG, mijn barbecue!", "In de grote barbecueput zit de &dGrillguh&r. De Mika's hebben zijn Aanmaakblokjes gejat! Praat met hem.",
+    q("bbq_put", "Wie heeft hier gebarbecued?", "Ergens in de Guhmensie liggen kapotte barbecues met een half grillkoolframe: de &6barbecueputten&r. Het superkompas (Barbecue > Barbecueput) wijst de weg. De grote, die van de Grillguh, ligt in nieuw land midden in een &6Knabbelgouw&r (Barbecue > Knabbelgouw).",
+      # (bbq2: the task is the visible advancement, not the structure guhs:barbecueput: a new big pit in the Guhmensie is the
+      # middle of a Knabbelgouw, a structure of its own, and features/ring_h1.py lets that advancement count there too)
+      "guhs:gebeitelde_houtskoolsteen_stenen", [adv("guhs:barbecuether/barbecueput")], rewards=(("guhs:kaas_knabbels", 12),), x=-8, y=y, shape="hexagon", xp=100)
+    q("bbq_grillguh", "NJEG, mijn barbecue!", "In de &6grote barbecueput&r zit de &dGrillguh&r. In nieuw land ligt die put midden in een &6Knabbelgouw&r: het superkompas (Barbecue > Knabbelgouw) wijst de weg. De Mika's hebben zijn Aanmaakblokjes gejat! Praat met hem.",
       "guhs:grill_koksmuts", [adv("grill_gevonden")], x=-6, y=y)
     q("bbq_grillkool", "Zwart als houtskool", "Laat &6kaassaus&r over een &8blok steenkool&r stromen: sssss... &8grillkool&r! Maak er een paar.",
       "guhs:grillkool", [item("guhs:grillkool", 4)], rewards=(("minecraft:coal_block", 2),), x=-4, y=y)

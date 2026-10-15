@@ -1,0 +1,57 @@
+# biomes3 wereld-dal: the finished Klaterdal in a real generated world, for the client pass (nothing here was ever seen in a
+# client by the slice itself). To look at: broad pink terraces with white rounded rock faces, the river with its low
+# cascades and (where it is found) the tall waterfall with foam and mist, pale moss, guhbloesem trees that keep away from
+# the water, crooked little trees on boulders, guh-bamboe, petals on the pools, the lighter turquoise water, the pale sky,
+# falling petals (many more in the rain and during a gust of wind, which comes about every two minutes with a wind chime).
+# Listen: the babbling ambience loop, the koto music, the chime.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_wereld_dal.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section het dal vanaf de grond
+tpbiome guhs:guhmension guhs:klaterdal
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot dal_grond
+look 225 5
+wait 40
+shot dal_grond_andersom
+
+section het dal van boven
+/tp @s ~ ~45 ~
+look 45 55
+waitrender 300
+shot dal_boven
+/tp @s ~ ~40 ~
+look 45 75
+waitrender 300
+shot dal_hoog_boven
+
+section de rivier
+# (each line prints "bij <kind> = x z": the nearest bank, foot of a fall and top of a tall fall from the first Klaterdal;
+#  tp there by hand for a close look at the cascades, the plunge pool and the natural steps on the left bank)
+/execute in guhs:guhmension run guhs bio wereld check bij oever 1
+/execute in guhs:guhmension run guhs bio wereld check bij waterval 1
+/execute in guhs:guhmension run guhs bio wereld check bij rots 1
+wait 20
+
+section regen: meer blaadjes
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+/weather rain
+look 45 0
+wait 200
+shot dal_regen
+/weather clear
+
+section avond
+/time set 13000
+wait 100
+look 135 0
+shot dal_avond
+/time set noon

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "WSW",
+    "WRW"
+  ],
+  "key": {
+    "W": "minecraft:light_gray_wool",
+    "S": "minecraft:string",
+    "R": "guhs:bestaand_recept_knuffel"
+  },
+  "result": {
+    "id": "guhs:bestaand_knuffelrookguh"
+  }
+}

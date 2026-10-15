@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,part=head": {
+      "model": "guhs:block/wolkenbed_hoofd"
+    },
+    "facing=north,part=foot": {
+      "model": "guhs:block/wolkenbed_voet"
+    },
+    "facing=east,part=head": {
+      "model": "guhs:block/wolkenbed_hoofd",
+      "y": 90
+    },
+    "facing=east,part=foot": {
+      "model": "guhs:block/wolkenbed_voet",
+      "y": 90
+    },
+    "facing=south,part=head": {
+      "model": "guhs:block/wolkenbed_hoofd",
+      "y": 180
+    },
+    "facing=south,part=foot": {
+      "model": "guhs:block/wolkenbed_voet",
+      "y": 180
+    },
+    "facing=west,part=head": {
+      "model": "guhs:block/wolkenbed_hoofd",
+      "y": 270
+    },
+    "facing=west,part=foot": {
+      "model": "guhs:block/wolkenbed_voet",
+      "y": 270
+    }
+  }
+}

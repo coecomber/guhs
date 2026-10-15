@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/guhriow2_nest_boven",
+    "bottom": "guhs:block/guhriow2_keldersteen",
+    "side": "guhs:block/guhriow2_nest_zij"
+  }
+}

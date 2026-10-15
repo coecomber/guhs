@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  W",
+    "WWW",
+    "PPP"
+  ],
+  "key": {
+    "W": "guhs:wolkenblok_wit",
+    "P": "guhs:wolkenpluis"
+  },
+  "result": {
+    "id": "guhs:wolkenbank"
+  }
+}

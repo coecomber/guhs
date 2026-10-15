@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/guhriow2_warppijp_boven",
+    "bottom": "guhs:block/guhriow2_warppijp_boven",
+    "side": "guhs:block/guhriow2_warppijp"
+  }
+}

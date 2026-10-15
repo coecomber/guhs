@@ -1,15 +1,19 @@
 {
-  "chapter.475548FB06F5DC45.title": "&dGuh Tales",
+  "chapter_group.4755489B04766E01.title": "&6The Guh Path",
+  "chapter.475548FB06F5DC45.title": "&dTales of the Guhmension",
   "chapter.475548FB06F5DC45.chapter_subtitle": [
-    "12. Baltoguh, Guhtwo, 626-guh, the Snuggleheart and the Carpenter Guh. Nyeg!",
+    "1. The big stories of the pink world. The Guh Path starts here, nyeg!",
   ],
-  "quest.47554866B1836808.title": "How Do You Get Here?",
-  "quest.47554866B1836808.quest_desc": [
-    "This chapter comes after &6The Super Compass&r in &dThe Guhmension&r: pick the new &dTales&r tab there.",
+  "task.4755487A079F405B.title": "Step through your guh portal into the Guhmension",
+  "quest.475548976F9E59F7.title": "The Guh Path Starts Here",
+  "quest.475548976F9E59F7.quest_desc": [
+    "This is the start of &6the Guh Path&r: the big stories open the worlds. First the &dGuhmension&r, then the &6Guhbarbecuether&r, then the &5Guh End&r. &dThis chapter isn't locked&r: step through your guh portal and you're there.",
     "",
-    "That's where you'll find the places of the great guh tales: &fNomguh&r in the white Snowguh Tundra (Baltoguh!), &5Clone Island&r in the Deep Guh Sea (Guhtwo!), the &dCloud Chapel&r high up in the clouds, and the islands of &bGuhwai'i&r (626-guh!). And in every Snuggledale town the &6Carpenter Guh&r is building a house.",
+    "In your &6Super Compass&r, pick &dMy Story&r: it points to the nearest story you haven't done yet. The places themselves are in the &dTales&r tab.",
     "",
-    "Every tale ends with a new friend: a story guh you can tame once (per player). Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
+    "The big stories of the Guhmension: &fNomguh&r in the white Snowguh Tundra (Baltoguh!), &5Clone Island&r in the Deep Guh Sea (Guhtwo!), the &dCloud Chapel&r high up in the clouds, the islands of &bGuhwai'i&r (626-guh!) and the &6dock cottage&r by the water, where the boat to &6Sniff Island&r leaves.",
+    "",
+    "Followed them all? Then &dGuhdalf&r is waiting for you with the Nibble Ring and the next chapter opens. The &6Carpenter Guh&r, the surfing and the other rows here don't count for that: they're just here for fun. Here you can do everything in any order.",
   ],
   "quest.475548743CAEF30F.title": "Once Upon a Guh...",
   "quest.475548743CAEF30F.quest_desc": [
@@ -418,5 +422,93 @@
   "quest.4755484E34BB269B.title": "Hula at Home",
   "quest.4755484E34BB269B.quest_desc": [
     "Buy the &6Tiki Radio&r (10 Seashell Coins). Right-click: the hula songs of Guhwai'i play, even at home!",
+  ],
+  "quest.475548F0FC447BA7.title": "A Dock Cottage",
+  "quest.475548F0FC447BA7.quest_desc": [
+    "Here and there on the &9Deep Guh Sea&r in the &dGuhmension&r stands a &fdock cottage&r full of paper lanterns. That's where the Lantern Feast is... but your little brother or sister, &6Little Wobble&r, flomps to the floor. Your &6Super Compass&r (My Story) shows the way.",
+  ],
+  "quest.47554840805681BB.title": "Which Dog Are You?",
+  "quest.47554840805681BB.quest_desc": [
+    "&6Mrs. Basket&r tells you at the sickbed: Papa has been gone for weeks, looking for the &dhealing flower&r. You're going after him! With &6Captain Saltsnout&r, choose your &fdog&r (breed, coat and name) and the &abuddy&r who comes along, and set sail on The Wet Nose. Nyeg, what waves...",
+  ],
+  "quest.475548F335AD3977.title": "Washed Ashore!",
+  "quest.475548F335AD3977.quest_desc": [
+    "You wake up on the beach of &bSniff Island&r, and you have... pawsies?! On the island you're a dog. &6Wendy Wagtail&r takes you to Sniffville. Your own things are waiting safely for you at home.",
+  ],
+  "quest.475548661F0C965A.title": "Doctor Plasterpaw",
+  "quest.475548661F0C965A.quest_desc": [
+    "The old village doctor is sure of it: you'll only find the healing flower with a &freal sniff nose&r. For that you have to go to the meadow.",
+  ],
+  "quest.475548924BAE3631.title": "Sniffing Lessons",
+  "quest.475548924BAE3631.quest_desc": [
+    "&6Master Trufflenose&r teaches you to sniff: hold the sniff key and your nose goes to the ground. The &fscent meter&r swings harder the closer you get, with a color for each kind of scent. Right on the spot, you dig it up.",
+  ],
+  "quest.4755484ABFAF6563.title": "Who Keeps Doing That?",
+  "quest.4755484ABFAF6563.quest_desc": [
+    "A bucket topples over and nobody sees why. Only you can see it: a naughty &aforest sprite&r! It becomes your buddy, and from now on it shows you the way to scents.",
+  ],
+  "quest.4755488745704E72.title": "Good Deeds",
+  "quest.4755488745704E72.quest_desc": [
+    "The baker, the fisher, the teacher, Granny, the gardener and Little Droolball have each mislaid something. Ask about it, sniff it out and bring it back! With every good deed you learn a scent and your buddy's &alittle tree&r grows a bit. Four is enough.",
+  ],
+  "quest.475548189E89A494.title": "The Sniffing Exam",
+  "quest.475548189E89A494.quest_desc": [
+    "Time for your exam with Master Trufflenose. There's no such thing as failing: your nose may take as long as it likes. Then you're a real &6Sniff Pup&r (rank 1 of 5).",
+  ],
+  "quest.47554894D344E0BD.title": "A Trace of Papa",
+  "quest.47554894D344E0BD.quest_desc": [
+    "By the little tree you smell something familiar... Papa was here! It doesn't solve anything yet, but now you know where to look. You get the &8Guhstation&r: with it you can go back to the island whenever you like. And the island's &bmusic disc&r, for your jukebox. To be continued, nyeg!",
+  ],
+  "quest.4755481D5724F8E0.title": "Nose Down, Tail Up",
+  "quest.4755481D5724F8E0.quest_desc": [
+    "Your first scent! Hold the &fsniff key&r and walk to where the &fscent meter&r swings hardest. Orange is something tasty, blue a thing, green an animal and purple something strange. Everything your nose learns is in your &fsniff book&r.",
+  ],
+  "quest.475548C4F8FCAB3B.title": "Only You Can See It",
+  "quest.475548C4F8FCAB3B.quest_desc": [
+    "The naughty &aforest sprite&r has hidden half the household of Sniffville. Now that you can see it, it wants to make everything right: it points the way when you smell something, and with every good deed its little tree grows.",
+  ],
+  "quest.4755487B4B1EBC52.title": "Rolls, Rolls, Rolls",
+  "quest.4755487B4B1EBC52.quest_desc": [
+    "&6Baker Crumbsnout&r can't find his rolling pin and has been baking nothing but rolls for days. Ask him about it, sniff out the rolling pin (orange: something tasty) and bring it back.",
+  ],
+  "quest.4755485AE67999A0.title": "To Bite or Not to Bite?",
+  "quest.4755485AE67999A0.quest_desc": [
+    "&6Fisher Wetnose&r is missing his favorite bobber. It drifted off with the tide. Sniff along the coast south of the harbor (green: it smells of fish).",
+  ],
+  "quest.4755484143B2AFD0.title": "Endless Recess",
+  "quest.4755484143B2AFD0.quest_desc": [
+    "Without the school bell recess is never over. &6Miss Barkley&r likes that less than the pups do. Look for the bell at the back of the meadow (blue: a thing).",
+  ],
+  "quest.475548D392880ED4.title": "A Sweater with One Sleeve",
+  "quest.475548D392880ED4.quest_desc": [
+    "The lilac ball of wool of &6Granny Woolly&r has rolled away, through the beach gate. Sniff in the sand on the west side of the beach (green: wool smells of sheep).",
+  ],
+  "quest.475548A933E77E3D.title": "Thirsty Turnips",
+  "quest.475548A933E77E3D.quest_desc": [
+    "&6Gardener Turnip&r waters his turnips with his hat, and it leaks. His little watering can is somewhere on the east side of the meadow (blue: a thing).",
+  ],
+  "quest.4755484C0C6D6655.title": "Yip! Ball! Yip!",
+  "quest.4755484C0C6D6655.quest_desc": [
+    "The bouncy ball of &6Little Droolball&r bounced out the beach gate. It's covered in drool, so you'll smell it right away (blue: a thing).",
+  ],
+  "quest.4755487151437CA9.title": "A Young Tree",
+  "quest.4755487151437CA9.quest_desc": [
+    "Four good deeds: your buddy's little tree has grown from a &asprout&r through a &ashoot&r and a &alittle bush&r into a &ayoung tree&r. At every step you see it grow, high above the village. Master Trufflenose now thinks you're ready for the exam.",
+  ],
+  "quest.4755488A9783254C.title": "The Whole Village Helped",
+  "quest.4755488A9783254C.quest_desc": [
+    "All six villagers have their things back. It's quiet again in Sniffville. Well: the school bell rings, the pup bounces and the baker sings. Nyeg!",
+  ],
+  "quest.47554829F0432F06.title": "Sniff Pup with a Diploma",
+  "quest.47554829F0432F06.quest_desc": [
+    "Passed Master Trufflenose's sniffing exam: four hidden scents, one of each color. You are officially a &6Sniff Pup&r, rank 1 (the lowest) of 5 (the highest). The other ranks come in a later story.",
+  ],
+  "quest.475548887B999389.title": "You May Only Pass Here as a Sniff Nose",
+  "quest.475548887B999389.quest_desc": [
+    "Behind the meadow the road goes on, up the island: a forest, a hill with standing stones, a lighthouse. But there is a friendly &croadblock&r. A Sniff Pup can't get past it, not even swimming. To be continued!",
+  ],
+  "quest.4755488100662CF9.title": "The Guhstation",
+  "quest.4755488100662CF9.quest_desc": [
+    "Your buddy still had something in its hiding spot: a &8Guhstation&r. Put it down at home, click it and press start: you're back on the island, at the spot where you were. Can't find it? &6Captain Saltsnout&r in the harbor has a few more. He also gives you the island's &bmusic disc&r: the little tune you hear softly while the Guhstation's screen is open.",
   ],
 }

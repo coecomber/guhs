@@ -7,6 +7,151 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 - **Fixed: two Vahoege Vads pieces combine in an anvil again.** Two enchanted pieces of the same vads gear (helmet, chestplate, leggings, boots, sword, pickaxe, axe, shovel, hoe, Vadspaxel or Vahoege-vadsschaar) left the anvil's result slot empty, because the gear never breaks. Now they merge like ordinary tools: equal levels go up one (two helmets with Protection III give Protection IV), otherwise the highest level stays, and enchantments that do not fit or clash are skipped. The XP cost, the "Too Expensive!" limit and renaming work as usual. The gear stays unbreakable.
 - **Fixed: you can make pepper soup again.** Pouring a bucket of kaassaus (Bucket of Cheese Sauce) into a Guhbrouwketel (Guh Brewing Cauldron) inside or next to a guh building always said "Geen vuur of emmers naast een guhgebouw, njeg!" (No fire or buckets next to a guh building), so the pepper brew in the Peperteler-guh's kas could not be started. The sauce goes into the cauldron now. Pouring buckets out next to guh buildings is still not allowed.
+## 1.4.4 — Minecraft 26.1.2
+
+Every story scene now waits for you. Same requirements as 1.4.3, no world reset.
+
+- **Click to continue:** after every line of a cutscene the scene stands still: the camera stops, everybody in it rests, and "Click to continue" shows in the corner. One click (left or right mouse button, or space) and it goes on. The parts without talking (flying, chasing, a look over the land) simply play on. This holds for every scene of the mod: The Lord of the Nibble Ring, Super Guhrio, Sniff Island, the old stories of the Guh Path (Baltoguh, Guhtwo, Ohana, the Cloud Chapel, the Grill Guh and the Carpenter Guh) and every scene you watch again from the Guhdex.
+- **Narrator cards and picture books** work the same way: the next line appears when you click.
+- **Seen it before? Hold to skip.** A scene or narrator card you have already watched to the end can be skipped as a whole by holding the button for a moment ("Hold to skip" shows top right, with a little bar). A scene you see for the first time can never be skipped.
+- **On a server everyone clicks for themselves:** your scene only waits for you, and nothing of the story (Sam-guh, the sled of Baltoguh, the Eye over the Ash Field) runs ahead while you are still reading.
+
+## 1.4.3 — Minecraft 26.1.2
+
+Quick fixes in Nibble Park.
+
+- The statue of Joostvadsje now has Suusvadsje beside him, with trapguh sitting between the two of them.
+- Lunde is a she: her statue's text now says so.
+- The plaques in front of the statues face the path the right way round.
+
+## 1.4.2 — Minecraft 26.1.2
+
+A new park, an easier trip around the Nibble Ring, a tidier Travel Guh menu and a handful of bug fixes. Same requirements as 1.4.1 and no world reset: the new park only grows in chunks that were not generated yet, and the fixes to buildings also mend the copies that already exist.
+
+- **New: Nibble Park (Het Knabbelpark)!** A big pink park in the Guhmension that grows differently every time, like a village: little walks over the hills with hedges, flowers, blossom trees, park benches, guh lanterns and guh litter bins (nyeg!), a fountain square with its own Travel Guh "Knabbelpark" (she always stays there), a statue garden, the deer pen with Fawnguhs and the Park Ranger Guh. Help him for a day and a Fawnguh may come along with you, plus a statuette of your own guh. There is always one within a good walk in new land; the Super Compass shows the way (tab Cozy).
+- **Little spots in the park**, a different mix in every park: a duck pond with guh ducklings and a rowboat, The Jolly Chonk Playground (slide, swings, seesaw and a sandbox with a cheese nibble every day), a picnic meadow with the Stall Guh's stall (pay in chonk), a music garden where the guhs dance to the jukebox, a Japanese garden with a red bridge and Nibble Koi, Granny Guh feeding the Pigeonguhs, a lookout tower with telescopes on the highest spot of the park, a puppet theatre where the Guh Kids shout "BEHIND YOU!", a wishing tree where your wish hangs on a little sign, and a "No Mikas allowed" bench with a sulky Mika on it. You can craft the swing, seesaw and slide yourself too.
+- **Flying around the Nibble Ring:** finish a chapter and a Travel Smoke Guh hovers at its exit. Click him and he flies you to any place of your journey you have already been to (the next one at the top), also from the Nibble Shire to the Guhbarbecuether and back. Sam-guh flies along, and you always land safely on solid ground, a little way in front of the entrance.
+- **The Travel Guh menu has a new layout:** nothing hides behind the buttons any more. Star your favourite places (always on top), move Travel Guhs up and down in your own order (also onto another page) and sort by own order, distance or name. It is all remembered per player.
+
+### Bug fixes
+
+- Place names like Snuggledale and the Guh Fair now really show in the Travel Guh list (they were blank).
+- The hole in the deck of the old boat in Nomguh is gone (you could fall in and never get out); also in existing worlds.
+- You can get out of every foam bath of the Snuggle Pool again: the foam no longer holds you down and there is a half-height ledge along the edge (also in existing Snuggle Pools).
+- Building a barbecue portal and lighting it with a Fire Starter Cube works again in the pit of the Nibble Shire.
+- A Bank Guh stored inside another Bank Guh can be taken out again.
+- A guh portal makes its Travel Guh only once: picking her up and going through again no longer makes a new one.
+
+## 1.4.1 — Minecraft 26.1.2
+
+Quality of life, small changes and bug fixes for the Guh Path update. Same requirements as 1.4.0 and no world reset: every fix also works in worlds that already exist, and a player who got stuck in 1.4.0 is put right by the update itself.
+
+- **The Lord of the Nibble Ring, the ending:** the Smoke Guhs no longer set you down in the void. You land on solid ground by your own Nibble Shire and nothing can hurt you for the first ten seconds.
+- **"Go to the party in the Nibble Shire" can always be completed.** Were you put in the void in 1.4.0? Walk to your Guhdalf in the Guhmension and the party starts. It also works after dying, logging out or respawning, and the hint now says clearly where to go.
+- **The Mirror of Guhladriel:** the banks of the cheese sauce river now have white steps, so you can climb out when you fall in. Tree cities that already exist get them too.
+- **Sniff Island: your keys on screen.** The keys for Bark, Wag, Sniff and Sit are now shown top left, right under the objective line, as you have bound them.
+- **Sniff Island: dogs no longer swim in the sea.** After about 3 seconds the waves put you back where you last stood on land. The pond, the well and the wet edge of the beach are fine. A dog that was stuck behind the roadblock is put back by itself.
+- **Master Trufflenose now explains clearly how digging works:** just hold down your left mouse button (as a dog you do not break the block, you dig).
+- **Fewer angry Mikas in the open Guhbarbecuether.** About half as many Nether Mikas, Spark Mikas and Skelly Mikas walk around in the open biomes (about 35 around you instead of 70), and the Skelly Mika of the Ash Vale became a little rarer still. The Skewer Keep and the Mika Grill Palace stay as busy as they were.
+- **Ash Guhs really live in the Ash Vale now:** about six around you. They were almost never born because it was too dark for them there. Wild Ash Guhs come and go (tamed ones stay, of course).
+- **Super Compass: the Tales tab is split per world, just like in the Guhdex** (Guhmension, Guhbarbecuether, Guh End, The Real Guh End), with locks. All the new stories are listed on their own: Sniff Island, every place of the Nibble Ring (what you have not reached yet stays "???") and Super Guhrio's castle.
+- **New: the music disc "Sniff Island"** with a cheerful island tune of its own. You get it together with the Guhstation (had you already finished the story? Then talk to Captain Saltsnout), and you hear the tune very softly while the Guhstation's little screen is open.
+
+## 1.4.0 — the Guh Path update — Minecraft 26.1.2
+
+The biggest update so far: a big story in six chapters, a castle you play from the side, thirteen buildings with their own questlines in the Guhbarbecuether, guh machines that run on chonk power, an island where you are a dog, three new biomes in the Guhmension, and the Guh Path that ties the big stories and the worlds together. Same requirements as 1.3.2. Existing worlds and servers keep everything (no world reset): new structures only appear in chunks that were not generated yet, and Sniff Island is a new dimension that the game adds by itself. Everything is per player, so any number of players can do every story and questline on one server. And as always: nothing in this update can hurt you or cost you items.
+
+### Read this first: four rules that change
+
+- **The Guhbarbecuether opens with the stories.** The grill portal only lets you through once you have (1) followed all five big stories of the Guhmension: **Baltoguh and Nomguh**, **Guhtwo and Clone Island**, **The Cloud Chapel**, **Ohana on Guhwai'i** and the new **Sniff Island**, and (2) finished chapter 1 of **The Lord of the Nibble Ring** (Guhdalf's nibble party, which is in the Guhmension). This holds for everyone, also if you have been to the Guhbarbecuether before. If you are in there when the update arrives you may stay as long as you like, and the way back out is never locked; once you are out, you get back in after the stories. Everything you had already done is kept. The portal and Guhdalf tell you exactly which stories you are still missing.
+- **The Guheinde (Guh End) opens after the Guhbarbecuether.** The portal in the Nibble Cellar only lets you through once you have followed **The Lord of the Nibble Ring** and **Super Guhrio** and have beaten the **Aangebrande Mika (Burnt Mika)**. A Burnt Mika you summoned before this update counts. The same rule as above for whoever is already inside: stay as long as you like, leaving always works.
+- **A Bank Guh holds 256 of each kind of item.** Its screen and tooltip show the count ("n/256"). One upgrade, the **Bodemloos Knabbelmaagje (Bottomless Nibble Belly)**, makes a bank bottomless again and stays on it when you pick the bank up; you earn it from the Inventor Guh in the Guhbarbecuether. Does a bank already hold more than 256 of something? Nothing is lost and you can always take it out; you just cannot add more of that kind until it is under 256 or the bank is upgraded.
+- **Guhdraad (Guh Wire) and the Guhoven (Guh Oven) need a real power source.** Guh Wire now carries **vadskracht (chonk power)** and nothing else: redstone into the wire does nothing any more. A Guh Wheel with a guh running in it makes 10 chonk power (15 with a happy guh), a Guh Oven uses 5. Everything on one stretch of wire is one setup, and when a setup asks for more than its sources make, **the whole setup stands still** until you add a source or take a machine off. Look at any wheel, wire or machine to read how your setup is doing ("This setup uses 10/15 chonk power"). An oven or wire that was fed by redstone stands still until it has a real source. Guh Wire still gives a redstone signal while its setup runs, so a Guh Wheel that drives redstone keeps working.
+
+### The Guh Path (Het Guhpad)
+
+- **The big stories open the worlds**: first the Guhmension, then the Guhbarbecuether, then the Guh End (the two locks above). Seven stories count: the five of the Guhmension, The Lord of the Nibble Ring and Super Guhrio. The Carpenter Guh, the Grill Guh, the buildings and Guh Technology are there for the fun of it.
+- **A path map in the Guhdex.** The Tales tab starts with the whole Guh Path: a check mark where you are done, a lock where you may not go yet, and what a stop still asks when you point at it. Below it the stories are sorted per world and can be folded open and shut. Big stories carry a little gold star.
+- **Mijn verhaal (My Story) on the Super Compass.** The first choice of every tab. It points to the next step of the story you follow, or else to the nearest big story you have not done yet (to the portal when that is in another world).
+- **Quest book: a second chapter group, The Guh Path**, at the bottom of the sidebar: Tales of the Guhmension, Tales of the Guhbarbecuether, Tales of the Guh End and The Real Guh End. Each starts with a lock quest that ticks off the stories you have. The story quests moved there from their old chapters; your progress is kept.
+- **Het echte Guheinde (The Real Guh End)** is a chapter full of question marks with one counter, "Stories followed". Nobody knows what lies there yet.
+
+### Sniff Island (Het Snuffeleiland)
+
+- **A new story in the Guhmension**, the fifth big one. It starts at a **Steigerhuisje (Dock Cottage)**: a white cottage with a pier at a Deep Guh Sea (Super Compass, Tales tab, or My Story). Your little brother or sister is ill, only a healing flower can help, and Papa has been looking for it for weeks. You sail after him, wash ashore on an island... and wake up as a dog.
+- **You are a dog there.** Choose your breed (Shiba, Jack Russell, Dachshund, Corgi, Golden Retriever or Pug, each in three coats), a name and a buddy. Other players see your dog with your name above it. You can sit, wag and bark, and above all **sniff**: hold the sniff key and a scent meter swings harder the closer you get; its color says what you smell. On the spot you dig. Every scent goes into your sniff book.
+- **Sniffville and the first sniffing series** (about 30 to 45 minutes): lessons at the sniff school, villagers who have mislaid something, a little tree that grows with every good deed, and an exam without a clock in which you cannot fail. You finish as a **Snuffelpup (Sniff Pup), rank 1 of 5**. The other ranks and the rest of the island come in a later update.
+- **Your things are safe.** On the island your own inventory waits for you exactly as it was, and you have it back in the same place when you go home, also after logging out or a server restart. You cannot build or break there and nothing can hurt you.
+- **There and back.** The captain at a Dock Cottage sails you over as often as you like. At the end of the series you get the **Guhstation**, a little game console that takes you back to where you last stood on the island. The Memory Card in your hotbar ("Save and go home") or the island's captain brings you home, exactly to where you left. There is no music on the island, only its own sounds.
+
+### The Lord of the Nibble Ring (In de ban van de Knabbelring)
+
+- **The big story of the Guhbarbecuether, in six chapters.** A ring-shaped nibble that makes everyone greedy has to go to Mount Fry. Guhdalf starts it in the Guhmension once you have followed the five stories there and the Grill Guh's barbecue burns again; from chapter 2 on it plays in the Guhbarbecuether, with a real trek between the chapters and rest stops on the way.
+- **Easy to follow.** A Journey Map in the Guhdex shows the chapters with "You are here" and "What to do now", an objective line stays on your screen (you can switch it off in the Guhdex), and the Super Compass and Sam-guh always point to the next goal. Sam-guh walks with you the whole way.
+- **Real camera scenes** at the big moments, and a story card with a drawn map before each chapter. During a scene you cannot be pushed and nothing can happen to you. Every scene can be watched again from the Guhdex.
+- **No spoilers.** The place of a later chapter is hidden behind **Guhdalf's Veil**, a wall of smoke that gently sends you back until your own story gets there; it is not on the Super Compass until then either. The story places are protected against breaking and building.
+- **Nobody gets hurt.** Whatever is on the road only shoves you back to your last rest fire. Sneaking, puzzles and a climb make it the hardest questline so far, but failing never costs anything.
+- **Afterwards** the places stay open with new chats, you may walk along with a friend who is still on the way, and there are outfits, a title, a statuette and two companions to earn.
+- **Where does it start?** In newly generated terrain the big Barbecue Pit with the Grill Guh is the middle of a **Knabbelgouw (Nibble Shire)**. At a big Barbecue Pit that already exists, Guhdalf pitches his camp next to it.
+- **Eight small winks**: here and there somebody from an older story walks through the picture.
+
+### Super Guhrio
+
+- **Het Kasteel van de Grote Nether-Mika (Big Nether Mika's Castle)**, in a sauce sea of the Guhbarbecuether: one castle within reach of the middle of the world and only a rare extra one far away. It is in the Super Compass.
+- **Six levels played in side view**: A and D to walk, space to jump, S to duck or go down a pipe, W through a door, sprint to run. Question blocks, pipes, moving platforms, a flagpole at the end of every level, and a duel at the very end.
+- **No lives.** A fall or a bump puts you back at your last flag. Coins and progress are per player, and several players can be in a level at once.
+- **To collect**: three big chonk coins per level (the Guhdex shows which ones you have), secrets and bonus rooms, your own best time per level and for the whole castle next to the server record, and level coins to spend in Pad-guh's shop on outfits and building blocks (a question block, a flagpole and a green pipe that really takes you to another pipe nearby).
+- **Guhshi**: you find his egg on the way, ride him in the later levels, and afterwards he can be yours, once per player.
+
+### The Guhbarbecuether's buildings
+
+- **Thirteen buildings, each with somebody who has a short questline for every player and a modest reward**: the **Fossil Dig** (Archaeologist Guh), the **Salt Crystal Mine** (Mineworker Guh), the **Smoke Guh Lighthouse** (Lighthouse Keeper Guh), the **Pepper Garden** (Pepper Grower Guh), the **Grill Campground** (Camp Boss Guh), the **Nether Mika Barter Market** (Market Master Mika), the **Mika Apartments** (Granny Mika), the **Mika Stable** (Stable Hand Guh), the **Mika Bridge Palace** (Toll Keeper Mika), the **Sauce Strider Stable** (Caretaker Guh), the **Old Guh Wheel Power Plant** (Inventor Guh), and two you already know: the **Skewer Keep** now has a Guard Guh and the **Mika Grill Palace** a Plushie Maker Guh. Those two also turn up at keeps and palaces that already stand in your world.
+- **Every new building is in the Super Compass** (Barbecue tab) and stands at least once within reach of the middle of the world, in terrain nobody has explored yet. The new buildings are protected against breaking and building; the Skewer Keep and the Grill Palace stay as they were.
+- **New creatures**: the **Sausloper (Sauce Strider)**, a long-legged mount that walks on the frying sauce; the bouncing **Sausblubje (Sauce Blubby)**; the **Worstzwijntje (Sausage Piglet)**; and the **Bezorgguhtje (Delivery Guhling)** on its scooter. All sweet.
+- **New things from the questlines**: salt crystal (the key to the second tier of Guh Technology), pepper plants and two new Guh Potions, plushie blocks, a bridge building set, a fossil statuette, tents and a big campfire, and several outfits.
+- **Six new Guhdex pages** (Sauce Blubby, Sauce Strider, Sausage Piglet, Delivery Guhling, Guhshi and Sam-guh) count for a complete Guhdex. If you already had the title for a full Guhdex, you keep it.
+
+### Guh Technology (Guh-technologie)
+
+- **Guhs make chonk power, guh machines use it.** Sources: the Guh Wheel, the **Knuffelgenerator (Cuddle Generator)** (a big pink cushion your guhs come and lie on), the **Disco-dynamo (Disco Dynamo)** (a dance floor with a turntable), the Blub Stove and the Glowstar Core, plus the **Knabbelbatterij (Nibble Battery)** to store some. There is a maximum per kind of source in one setup; an extra one says "Doesn't count" when you look at it.
+- **Every machine has a snoot** that shows how it is doing: asleep without chonk power, happy at work, surprised when it is full.
+- **Knabbelbuizen (Nibble Tubes)**: see-through tubes in which you watch your items roll, with a Direction Piece and a Filter Piece. They connect to chests, machines and the Bank Guh.
+- **Machines**: the Slurper (picks up loose items), the Harvester, the Nibbler (breaks the block in front of it), the Placer, the **Knutselmachine (Tinker Machine)** for auto-crafting with a Blueprint from the Drawing Table, the **Plantagebak (Plantation Box)** that grows any sapling into a tree within a minute, the Chonk Mill, and an Auto Brewer and Auto Fryer. Machines respect protected buildings and other players' Guh House areas.
+- **Sauce on tap**: a Sauce Pump on a sauce source, Sauce Hoses, a Sauce Vat with a tap, and the Grill Coal Press.
+- **The Bezorgguhtje (Delivery Guhling)** lives in a Scooter Station and rides between Stop Posts to pick up and drop off, within about 96 blocks.
+- **Sensors**: the Stock Meter, the Sniff Sensor, the Guh Clock and the Guh Counter.
+- **Four tiers.** The first can be made right away (Guh Wheel, Guh Wire, Guh Oven, Cuddle Generator, Disco Dynamo). The second needs **salt crystal** from the Guhbarbecuether; the third the recipe cards of the Inventor Guh in the Old Guh Wheel Power Plant, who teaches it all in his practice hall; the fourth comes after the Burnt Mika, with the Glowstar Core and **De Grote Knabbelmachine (The Great Nibble Machine)** as the big project at the end. So everything from the second tier on lies behind the grill portal.
+- **A quest book chapter of its own, Guh Technology**, built from projects ("Never Bake Yourself Again", "Everything into the Bank by Itself", "Sauce on Tap", "A Factory That Keeps Going"): after every quest or two something works in your own world.
+- **New chores for the residents of a Guh House**: refill and empty guh machines (off until you switch it on, and a machine only gets what you have shown it once), plant and chop in Plantation Boxes, and harvest more crops (pumpkin, melon, sugar cane, cocoa, peppers and sprouts).
+
+### The Bank Guh
+
+- **The Hapluikje (Nom Hatch).** Link it to one of your Bank Guhs with a Bank Key, and everything that goes in (by hand, hopper, tube, chore guh or Delivery Guhling) lands in that bank, however far away it stands, even in another dimension. It needs chonk power and only takes things in. When the bank is full for that kind, the hatch refuses and keeps the items.
+- **Putting in always works, taking out only through a Filter Piece.** Hoppers and Nibble Tubes can put items into a Bank Guh, up to its limit. Nothing comes out through a hopper, a plain tube or a Stop Post. Only a Nibble Tube with a **Filter Piece** takes items out, and only from a bank with the Bottomless Nibble Belly: the filter's list says what to take, and "leave at least" how much must stay.
+- **Nothing gets lost at the limit.** The bank screen, deposit-all, the crafting grid, JEI's "+" and the chores of a Guh House all leave with you (or in the chest) what no longer fits.
+
+### Scenes for the older stories
+
+- **Six older stories each got one short camera scene** (15 to 25 seconds) at their biggest moment: Baltoguh and Nomguh, Guhtwo and Clone Island, Ohana on Guhwai'i, the Cloud Chapel, the Grill Guh and the Carpenter Guh. You see it once, at that moment, and can watch it again from the Guhdex. Were you already past that moment? Then you do not have to redo anything: the scene is simply ready to watch in your Guhdex.
+
+### Three new biomes in the Guhmension
+
+- **Far out, in terrain nobody has visited yet**, lie the **Bloesemmeertje (Blossom Lake)**, the **Klaterdal (Babbledale)** and the **Wolkenweide (Cloud Meadow)**. No Mika spawns in any of them.
+- **Blossom Lake**: a calm lake with islands, guh blossom trees on the shore and pink petals on the water. Koi in five colors (take one home in a bucket of water), frogguhs on lily pads and the **Bloesemguh (Blossom Guh)**. At the **Boathouse** the Fisher Guh lends you his rowboat and teaches you the lake in four little lessons; on a rare **Picnic Island** guhs celebrate hanami.
+- **Babbledale**: a terraced valley full of brooks and waterfalls, with red and orange maples, guh bamboo and bonsai, and the **Tanukiguh (Tanuki Guh)**. To find: pink torii gates with guh ears, a tea house by a tall waterfall, an arched bridge, stone guh lanterns, a zen corner and stepping stones.
+- **Het weebhuisje (The Weeb House)**, sometimes one in a Babbledale. **Evivads and Nielsvads (Evichonk and Nielschonk)** live there. Wave them off when they leave for Japan by balloon, and when they are back everyone who waved gets a present, as often as you like: the Japan Collection of twelve decorations, food for you and your guhs, and four outfits. The house cannot be broken.
+- **The Cloud Meadow**: a pale meadow under stacks of floating islets and clouds. A cloud lift takes you up, a cloud stream back down, and a fall there never hurts. **Wolkenschaapjes (Cloud Lambs)** give cloud fluff and wild Cloud Guhs live there. To find: the **Cloud Shepherd's Hut** (four lessons from fluff to cloud blocks), the **Balloon Harbor**, the **Observatory Ruin**, the very rare **Rainbow Bridge**, the **Cloud Castle** (sneak past the sleeping Giant Guh; if he wakes up he only sneezes you outside) and the **Lightning Forge**.
+- **New block sets to build with**: Pink Lacquerwood, Smooth Snugglestone, Guh Roof Tiles with a Roof Curl, Shoji Sliding Panels, Tatami Mats, Stone Guh Lanterns, Raked Sand, Potted Bonsai, Babble Moss, Lake Tiles, Cloud Blocks, Thunderclouds, Rainbow Blocks and cloud furniture.
+- **The Super Compass has a tab Biomes**: a row per dimension with all its biomes. Pick one and the compass points to the nearest spot and says about how far it is; biomes you have visited get a check mark. The new buildings are on the tabs Cozy and Wonders.
+- **Also**: fifty new quests in the chapter The Guhmension, four titles (Weeb, Head in the Clouds, Bless You!, Koi Whisperer), four new destinations at the Travel Agency (twenty in all), and four bonus pages in the Guhdex (Blossom Guh, Tanuki Guh, Koi, Cloud Lamb) that are not needed for a complete Guhdex.
+- **On a world that exists already** the three biomes only appear in chunks that were not generated yet.
+
+### Smaller things, and for servers
+
+- **Quest book**: more than 1,100 quests in two chapter groups, with the new chapter Guh Technology in the group Guhs and the big stories in The Guh Path. Packs get the new chapters by themselves; chapters a pack changed are left alone.
+- **Everything is in the Guhdex, the quest book and the wiki, in Dutch and English.** One line is the same in both languages on purpose. You will know it when you hear it.
+- **Servers**: no world reset and no new start-up flags. The first start with this version takes longer: the mod looks for a place in unexplored terrain for every new building and story place (a couple of minutes on a big world; let it finish). On a world that has been explored far and wide the new buildings stand further out; the Super Compass finds them.
+- **For admins**: `/guhs bouwcheck gegarandeerd <dimension>` lists where every guaranteed building landed, `/guhs ringh1 zetkamp` puts Guhdalf's camp at a big Barbecue Pit where you stand (for a pit where players built on every free spot), and `/guhs guhpad gedaan <player> <story|alles>` marks a big story as followed for the Guh Path. A live map should not show the places listed in `data/guhs/kaart/verborgen.json` of the jar: they are the story's surprises.
 
 ## 1.3.2 — Minecraft 26.1.2
 

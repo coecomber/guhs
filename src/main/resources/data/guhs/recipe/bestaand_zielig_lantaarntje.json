@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NNN",
+    "DGR",
+    "NNN"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "D": "minecraft:light_blue_dye",
+    "G": "guhs:gloeikoolgruis",
+    "R": "guhs:bestaand_recept_lantaarn"
+  },
+  "result": {
+    "id": "guhs:bestaand_zielig_lantaarntje",
+    "count": 2
+  }
+}

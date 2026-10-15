@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:kaasfrituursaus",
+    "minecraft:lava",
+    "guhs:gloeikool",
+    "guhs:smeulkooltjes",
+    "minecraft:magma_block",
+    "minecraft:campfire",
+    "minecraft:soul_campfire",
+    "minecraft:fire"
+  ]
+}

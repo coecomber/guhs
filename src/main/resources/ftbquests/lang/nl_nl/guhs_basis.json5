@@ -8,11 +8,11 @@
   "quest.475548077F9CDE38.quest_desc": [
     "Je bent er al! Dit is het allereerste hoofdstuk: hier begint elk guh-avontuur, met een handje &6kaasknabbels&r.",
     "",
-    "Lees de hoofdstukken van boven naar beneden: &dGuhs \\& basis&r > &dDe Guhmensie&r > &6Minigames \\& bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > &5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras \\& woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r > &dGuhverhalen&r > &aDiertjes&r > &dGuhpixel&r.",
+    "Lees de hoofdstukken van boven naar beneden: &dGuhs \\& basis&r > &dDe Guhmensie&r > &6Minigames \\& bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > &6De Guhbarbecuether&r > &eGrotten, moeras \\& woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r > &aDiertjes&r > &dGuhpixel&r > &bGuh-technologie&r. De grote verhalen staan helemaal onderaan bij elkaar, in de groep &6Het Guhpad&r: &dVerhalen van de Guhmensie&r > &6Verhalen van de Guhbarbecuether&r > &5Verhalen van het Guheinde&r > &7Het echte Guheinde&r.",
     "",
     "Bovenaan elk hoofdstuk staat zo'n &dHoe kom je hier?&r-quest, met een linkje naar de quest in een ander hoofdstuk waar het begint.",
     "",
-    "Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag! (Alleen de maaggroottes in De Guhmaag komen echt na elkaar.)",
+    "Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag! (Alleen de maaggroottes in De Guhmaag komen echt na elkaar, en in &6Het Guhpad&r openen de grote verhalen de werelden: elk hoofdstuk begint daar met een slotquest.)",
   ],
   "quest.4755481164F1D771.title": "Frituurvads",
   "quest.4755481164F1D771.quest_desc": [
@@ -128,11 +128,11 @@
   ],
   "quest.4755485EDA0EA987.title": "Guhrad",
   "quest.4755485EDA0EA987.quest_desc": [
-    "Zet je tamme guh in een guhrad: volle redstonestroom!",
+    "Zet je tamme guh in een &dGuhrad&r: hij rent &dvadskracht&r bij elkaar voor je guhmachines, en moe wordt hij nooit. Een blij guhtje rent extra hard! &dGuhdraad&r brengt de vadskracht naar je machines. Kijk naar het rad of de draad en je leest hoeveel vadskracht je opstelling gebruikt. Njeg!",
   ],
-  "quest.4755485299AA59F1.title": "Bakken op guhkracht",
+  "quest.4755485299AA59F1.title": "Bakken op vadskracht",
   "quest.4755485299AA59F1.quest_desc": [
-    "Een &dGuhoven&r (8 keisteen om een kaasknabbel) heeft geen kolen nodig: hij bakt op guhkracht! Zet hem naast een draaiend &dGuhrad&r, of sluit hem aan met &dGuhdraad&r. Gewone redstone vindt hij niks. Het guhtje rent, de oven bakt. Njeg!",
+    "Een &dGuhoven&r (8 keisteen om een kaasknabbel) heeft geen kolen nodig: hij bakt op &dvadskracht&r! Zet hem naast een &dGuhrad&r waar een guh in rent, of sluit hem aan met &dGuhdraad&r. Kijk naar de oven en je leest hoeveel vadskracht je opstelling gebruikt: vraagt die meer dan je guhs bij elkaar rennen, dan staat alles stil. Gewone redstone vindt hij niks. Het guhtje rent, de oven bakt. Njeg!",
   ],
   "quest.47554803591FB2A0.title": "Kijk eens wat ik kan!",
   "quest.47554803591FB2A0.quest_desc": [

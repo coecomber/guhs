@@ -1,0 +1,37 @@
+{
+  "textures": {
+    "particle": "guhs:block/guhbrouwketel_blubroom",
+    "saus": "guhs:block/guhbrouwketel_blubroom"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        8,
+        1
+      ],
+      "to": [
+        15,
+        11.8,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#saus"
+        },
+        "north": {
+          "texture": "#saus"
+        },
+        "south": {
+          "texture": "#saus"
+        },
+        "east": {
+          "texture": "#saus"
+        },
+        "west": {
+          "texture": "#saus"
+        }
+      }
+    }
+  ]
+}

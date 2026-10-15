@@ -1,0 +1,749 @@
+{
+  "structuur": "knuffelbad",
+  "blokken": [
+    {
+      "pos": [
+        43,
+        4,
+        28
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        43,
+        4,
+        29
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        43,
+        4,
+        30
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        43,
+        4,
+        31
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        43,
+        4,
+        32
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        43,
+        4,
+        33
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        44,
+        4,
+        27
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        44,
+        4,
+        34
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        45,
+        4,
+        26
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        45,
+        4,
+        35
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        46,
+        4,
+        26
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        46,
+        4,
+        35
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        47,
+        4,
+        25
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        47,
+        4,
+        35
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        47,
+        4,
+        36
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        48,
+        4,
+        25
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        48,
+        4,
+        36
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        49,
+        4,
+        26
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        49,
+        4,
+        35
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        50,
+        4,
+        26
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        50,
+        4,
+        35
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        51,
+        4,
+        26
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        51,
+        4,
+        27
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        51,
+        4,
+        34
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        52,
+        4,
+        27
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        52,
+        4,
+        28
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        52,
+        4,
+        33
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        52,
+        4,
+        34
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        53,
+        4,
+        29
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        53,
+        4,
+        30
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        53,
+        4,
+        31
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        53,
+        4,
+        32
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        66,
+        5,
+        82
+      ],
+      "oud": [
+        "guhs:knuffelsteen",
+        "minecraft:pink_stained_glass"
+      ],
+      "blok": "minecraft:air"
+    },
+    {
+      "pos": [
+        66,
+        6,
+        82
+      ],
+      "oud": [
+        "guhs:knuffelsteen",
+        "minecraft:pink_stained_glass"
+      ],
+      "blok": "minecraft:air"
+    },
+    {
+      "pos": [
+        46,
+        4,
+        77
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        46,
+        4,
+        79
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        47,
+        4,
+        76
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        47,
+        4,
+        80
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        49,
+        4,
+        76
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        49,
+        4,
+        80
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        50,
+        4,
+        77
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        50,
+        4,
+        79
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        74,
+        5,
+        81
+      ],
+      "oud": [
+        "guhs:trechtertegel"
+      ],
+      "blok": "guhs:pluisdak_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        75,
+        4,
+        81
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        77,
+        4,
+        81
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        78,
+        5,
+        81
+      ],
+      "oud": [
+        "guhs:trechtertegel"
+      ],
+      "blok": "guhs:pluisdak_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        82,
+        5,
+        81
+      ],
+      "oud": [
+        "guhs:trechtertegel"
+      ],
+      "blok": "guhs:pluisdak_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        83,
+        4,
+        81
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        85,
+        4,
+        81
+      ],
+      "oud": [
+        "guhs:knuffelbad_schuim"
+      ],
+      "blok": "guhs:knuffelsteen_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        86,
+        5,
+        81
+      ],
+      "oud": [
+        "guhs:trechtertegel"
+      ],
+      "blok": "guhs:pluisdak_plaat",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    }
+  ]
+}

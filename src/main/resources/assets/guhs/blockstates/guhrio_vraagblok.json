@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "leeg=false": {
+      "model": "guhs:block/guhrio_vraagblok"
+    },
+    "leeg=true": {
+      "model": "guhs:block/guhrio_vraagblok_leeg"
+    }
+  }
+}

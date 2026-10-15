@@ -92,6 +92,11 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
         return voorrang.orElse(keepClear);
     }
 
+    /** bbq2: the anchor of the build (template coordinates of the whole build): every tile turns around it (feature/wereld/Kopieen). */
+    public BlockPos anchor() {
+        return anchor;
+    }
+
     public Identifier tile(int i, int j) {
         return templates.withPath(templates.getPath() + "/stuk_" + i + "_" + j);
     }

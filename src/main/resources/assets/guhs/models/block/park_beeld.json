@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/polished_andesite",
+    "voet": "minecraft:block/polished_andesite",
+    "zuil": "minecraft:block/smooth_stone",
+    "kaas": "guhs:block/gatenkaas"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        3,
+        2
+      ],
+      "to": [
+        14,
+        8,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zuil"
+        },
+        "up": {
+          "texture": "#zuil"
+        },
+        "north": {
+          "texture": "#zuil"
+        },
+        "south": {
+          "texture": "#zuil"
+        },
+        "west": {
+          "texture": "#zuil"
+        },
+        "east": {
+          "texture": "#zuil"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    }
+  ]
+}

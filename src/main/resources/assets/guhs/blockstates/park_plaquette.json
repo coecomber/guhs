@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,nr=1": {
+      "model": "guhs:block/park_plaquette"
+    },
+    "facing=north,nr=2": {
+      "model": "guhs:block/park_plaquette"
+    },
+    "facing=north,nr=3": {
+      "model": "guhs:block/park_plaquette"
+    },
+    "facing=east,nr=1": {
+      "model": "guhs:block/park_plaquette",
+      "y": 90
+    },
+    "facing=east,nr=2": {
+      "model": "guhs:block/park_plaquette",
+      "y": 90
+    },
+    "facing=east,nr=3": {
+      "model": "guhs:block/park_plaquette",
+      "y": 90
+    },
+    "facing=south,nr=1": {
+      "model": "guhs:block/park_plaquette",
+      "y": 180
+    },
+    "facing=south,nr=2": {
+      "model": "guhs:block/park_plaquette",
+      "y": 180
+    },
+    "facing=south,nr=3": {
+      "model": "guhs:block/park_plaquette",
+      "y": 180
+    },
+    "facing=west,nr=1": {
+      "model": "guhs:block/park_plaquette",
+      "y": 270
+    },
+    "facing=west,nr=2": {
+      "model": "guhs:block/park_plaquette",
+      "y": 270
+    },
+    "facing=west,nr=3": {
+      "model": "guhs:block/park_plaquette",
+      "y": 270
+    }
+  }
+}

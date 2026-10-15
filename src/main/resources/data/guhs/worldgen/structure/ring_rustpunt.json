@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/ring_rustpunt",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:ring_rustpunt/start",
+  "start_jigsaw_name": "guhs:ring_rustpunt_midden",
+  "check_radius": 12,
+  "max_height_difference": 8,
+  "headroom": 6,
+  "keep_clear": 7
+}

@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,vorm=0": {
+      "model": "guhs:block/bonsai_pot_0"
+    },
+    "facing=east,vorm=0": {
+      "model": "guhs:block/bonsai_pot_0",
+      "y": 90
+    },
+    "facing=south,vorm=0": {
+      "model": "guhs:block/bonsai_pot_0",
+      "y": 180
+    },
+    "facing=west,vorm=0": {
+      "model": "guhs:block/bonsai_pot_0",
+      "y": 270
+    },
+    "facing=north,vorm=1": {
+      "model": "guhs:block/bonsai_pot_1"
+    },
+    "facing=east,vorm=1": {
+      "model": "guhs:block/bonsai_pot_1",
+      "y": 90
+    },
+    "facing=south,vorm=1": {
+      "model": "guhs:block/bonsai_pot_1",
+      "y": 180
+    },
+    "facing=west,vorm=1": {
+      "model": "guhs:block/bonsai_pot_1",
+      "y": 270
+    },
+    "facing=north,vorm=2": {
+      "model": "guhs:block/bonsai_pot_2"
+    },
+    "facing=east,vorm=2": {
+      "model": "guhs:block/bonsai_pot_2",
+      "y": 90
+    },
+    "facing=south,vorm=2": {
+      "model": "guhs:block/bonsai_pot_2",
+      "y": 180
+    },
+    "facing=west,vorm=2": {
+      "model": "guhs:block/bonsai_pot_2",
+      "y": 270
+    },
+    "facing=north,vorm=3": {
+      "model": "guhs:block/bonsai_pot_3"
+    },
+    "facing=east,vorm=3": {
+      "model": "guhs:block/bonsai_pot_3",
+      "y": 90
+    },
+    "facing=south,vorm=3": {
+      "model": "guhs:block/bonsai_pot_3",
+      "y": 180
+    },
+    "facing=west,vorm=3": {
+      "model": "guhs:block/bonsai_pot_3",
+      "y": 270
+    }
+  }
+}

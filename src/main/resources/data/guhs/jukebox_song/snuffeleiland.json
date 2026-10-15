@@ -1,0 +1,8 @@
+{
+  "sound_event": "guhs:music_disc.snuffeleiland",
+  "description": {
+    "translate": "jukebox_song.guhs.snuffeleiland"
+  },
+  "length_in_seconds": 75.0,
+  "comparator_output": 10
+}

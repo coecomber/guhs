@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "guhs:block/guhrio_vlag"
+  }
+}

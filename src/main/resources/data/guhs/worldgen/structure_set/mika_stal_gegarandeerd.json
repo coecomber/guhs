@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:mika_stal",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21300918,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 2,
+    "sectoren": 16
+  }
+}

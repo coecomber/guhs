@@ -1,0 +1,127 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/neerzetter_arm",
+    "arm": "guhs:block/neerzetter_arm"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5,
+        2.5,
+        -0.75
+      ],
+      "to": [
+        11.5,
+        6.5,
+        -0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            0,
+            7,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        3.5,
+        -0.25
+      ],
+      "to": [
+        9,
+        5.5,
+        7
+      ],
+      "faces": {
+        "west": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            9,
+            9,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            9,
+            9,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            9,
+            9,
+            10
+          ]
+        },
+        "down": {
+          "texture": "#arm",
+          "uv": [
+            0,
+            9,
+            9,
+            10
+          ]
+        }
+      }
+    }
+  ]
+}

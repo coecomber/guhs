@@ -20,7 +20,10 @@
       "conditions": {
         "player": {
           "location": {
-            "structures": "guhs:barbecueput"
+            "structures": [
+              "guhs:barbecueput",
+              "guhs:knabbelgouw"
+            ]
           }
         }
       }

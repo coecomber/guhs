@@ -354,6 +354,58 @@ public enum GuhClothes {
     GUHWAII_SURFPLANKJE(Slot.BACK, "outfit_guhwaii_surfplank"),
     // </guhwaii>
     //
+    // --- bbq2 (CONTRACT_130 5.4): the slices put their pieces between their own markers, each line ending with a comma ---
+    // <paleizen>
+    /** bbq2 (Mika-oma's reward, "Soep van Mika-oma"): a dark red knitted beanie with a cream rim and two little knitted Mika horns. */
+    PALEIZEN_MIKAMUTS(Slot.HEAD, "outfit_paleizen_muts"),
+    // </paleizen>
+    //
+    // <bestaand>
+    /** bbq2 (bestaand), the Wachter-guh's reward: a dark iron helmet with a nose guard and a saté skewer as its plume. */
+    BESTAAND_WACHTERSHELM(Slot.HEAD, "outfit_wachtershelm"),
+    /** bbq2 (bestaand), the Wachter-guh's reward: a charcoal cape with a glowing hem and a pink guh face on the back. */
+    BESTAAND_WACHTERSMANTEL(Slot.BODY, "outfit_cape"),
+    // </bestaand>
+    //
+    // <camping_markt>
+    /** bbq2 (camping-markt, the Kampbaas-guh's thank-you, source "camping_markt"): an olive bucket hat with a pink band. */
+    CAMPINGMARKT_HOEDJE(Slot.HEAD, "outfit_rain_hat"),
+    /** bbq2 (camping-markt): a scout's neckerchief, yellow with a red edge. */
+    CAMPINGMARKT_HALSDOEK(Slot.NECK, "outfit_scarf"),
+    /** bbq2 (camping-markt): a camping backpack with a rolled-up sleeping mat on top. */
+    CAMPINGMARKT_RUGZAK(Slot.BACK, "outfit_backpack"),
+    // </camping_markt>
+    //
+    // <toren_peper>
+    /** bbq2 (the Torenwachter-guh's thanks, Rookguh-vuurtoren): a navy keeper's coat with gold buttons and a red-and-white striped collar. */
+    TORENPEPER_WACHTERSJAS(Slot.BODY, "outfit_suit", "outfit_torenpeper_jas"),
+    /** bbq2 (the Peperteler-guh's thanks, Pepertuin): a string of red, green and pink peppers round the neck. */
+    TORENPEPER_PEPERSLINGER(Slot.NECK, "outfit_torenpeper_slinger"),
+    // </toren_peper>
+    //
+    // <ring>
+    /** bbq2 (ring-kern): the rewards of the Knabbelring. Guhdalf's pointy hat, with his beard. */
+    RING_GUHDALFHOED(Slot.HEAD, "outfit_ring_hoed", "outfit_ring_baard"),
+    /** The elf cloak of Guhladriel with its leaf pin. */
+    RING_ELFENMANTEL(Slot.BACK, "outfit_ring_mantel", "outfit_ring_speld"),
+    /** Hairy hobbit feet (over the four paws). */
+    RING_HOBBITVOETEN(Slot.BODY, "outfit_ring_voet"),
+    /** The ring on a chain round the neck. */
+    RING_RINGKETTING(Slot.NECK, "outfit_ring_ketting", "outfit_ring_ringetje"),
+    // </ring>
+    //
+    // <guhrio_beloning>
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): the red cap with a white badge (a G) and a big brown moustache under the nose. */
+    GUHRIOBELONING_RODE_PET(Slot.HEAD, "outfit_guhriobeloning_pet", "outfit_guhriobeloning_snor"),
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): the green cap of the other brother (an L on its badge), no moustache. */
+    GUHRIOBELONING_GROENE_PET(Slot.HEAD, "outfit_guhriobeloning_pet"),
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): a green turtle shell on the back, with a white rim. */
+    GUHRIOBELONING_SCHILD(Slot.BACK, "outfit_guhriobeloning_schild"),
+    /** bbq2 (guhrio-beloning, from Prinses Perzikguh after the duel): her little golden crown with a red and a blue jewel. */
+    GUHRIOBELONING_PRINSESSENKROON(Slot.HEAD, "outfit_guhriobeloning_kroon"),
+    /** bbq2 (guhrio-beloning, from Pad-guh for all 18 big vadsmunten): the cap in shining gold, a vadsmunt on its badge. */
+    GUHRIOBELONING_GOUDEN_PET(Slot.HEAD, "outfit_guhriobeloning_pet"),
+    // </guhrio_beloning>
     // einde2 (the Sponsguh story): the slice sponsguh_wezens adds its clothes ONLY between these two markers
     // <einde2_sponsguh>
     /** Sponsguh Kaasbroek: the square brown trousers with a belt and a white shirt (the suit bones), a white collar and a red tie. */
@@ -434,6 +486,13 @@ public enum GuhClothes {
     // </px_reisbureau>
     // <px_parkour>
     // </px_parkour>
+    // biomes3: the outfits of het weebhuisje (the slice bouw-dal adds them only between these two lines)
+    // <bio_bouw_dal>
+    JAPAN_KIMONO(Slot.BODY, "outfit_suit"),
+    JAPAN_HACHIMAKI(Slot.HEAD, "outfit_spelen_zweetband"),
+    JAPAN_KATTENOORTJES(Slot.OREN, "outfit_oren_balto"),
+    JAPAN_STRIKJE(Slot.NECK, "outfit_bowtie"),
+    // </bio_bouw_dal>
     ;
 
     /**

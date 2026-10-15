@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "papier": "guhs:block/botenhuisje_steigerlantaarn",
+    "paal": "guhs:block/bleekhout_gestript",
+    "paal_top": "guhs:block/bleekhout_gestript_top",
+    "roze": "guhs:block/guh_dakpan_roze",
+    "particle": "guhs:block/botenhuisje_steigerlantaarn"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        5,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        5,
+        4
+      ],
+      "to": [
+        12,
+        13,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal_top"
+        },
+        "up": {
+          "texture": "#paal_top"
+        },
+        "north": {
+          "texture": "#papier"
+        },
+        "south": {
+          "texture": "#papier"
+        },
+        "west": {
+          "texture": "#papier"
+        },
+        "east": {
+          "texture": "#papier"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        15,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#roze"
+        },
+        "up": {
+          "texture": "#roze"
+        },
+        "north": {
+          "texture": "#roze"
+        },
+        "south": {
+          "texture": "#roze"
+        },
+        "west": {
+          "texture": "#roze"
+        },
+        "east": {
+          "texture": "#roze"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        15,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#roze"
+        },
+        "up": {
+          "texture": "#roze"
+        },
+        "north": {
+          "texture": "#roze"
+        },
+        "south": {
+          "texture": "#roze"
+        },
+        "west": {
+          "texture": "#roze"
+        },
+        "east": {
+          "texture": "#roze"
+        }
+      }
+    }
+  ]
+}

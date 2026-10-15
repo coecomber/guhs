@@ -1,0 +1,43 @@
+# biomes3 slice dieren in the dev client: the koi (five colours, begging for koivoer), the wolkenschaapje (fluffy and shorn),
+# the lake kikkerguh on a lily pad, the Bloesemguh, the Tanukiguh and a Wolkguh, side by side. Needs no biome: a flat spot.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_dieren.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+wait 20
+
+section the guhs of the new biomes
+/summon guhs:guh ~2 ~ ~3 {Variant:"bloesemguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh ~0 ~ ~3 {Variant:"tanukiguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh ~-2 ~ ~3 {Variant:"wolk",NoAI:1b,PersistenceRequired:1b}
+look 0 10
+waitrender 100
+shot dieren_guhs
+
+section the wolkenschaapje
+/kill @e[type=guhs:guh,distance=..8]
+/summon guhs:wolkenschaapje ~1.5 ~ ~3 {NoAI:1b,PersistenceRequired:1b}
+/summon guhs:wolkenschaapje ~-1.5 ~ ~3 {NoAI:1b,PersistenceRequired:1b,Geschoren:1b,PluisTerug:6000}
+look 0 10
+waitrender 100
+shot dieren_wolkenschaapje
+
+section the koi and the kikkerguh
+/kill @e[type=guhs:wolkenschaapje,distance=..8]
+/fill ~-3 ~-3 ~2 ~3 ~-1 ~7 minecraft:glass
+/fill ~-2 ~-2 ~3 ~2 ~-1 ~6 minecraft:water
+/setblock ~0 ~ ~4 minecraft:lily_pad
+/summon guhs:koi ~-1.5 ~-1 ~4 {Kleur:"roodwit",FromBucket:1b}
+/summon guhs:koi ~-0.5 ~-1 ~5 {Kleur:"driekleur",FromBucket:1b}
+/summon guhs:koi ~0.5 ~-1 ~4 {Kleur:"roze",FromBucket:1b}
+/summon guhs:koi ~1.5 ~-1 ~5 {Kleur:"blauw",FromBucket:1b}
+/summon guhs:koi ~0 ~-1 ~3.5 {Kleur:"goud",FromBucket:1b}
+/summon guhs:kikkerguh ~0 ~0.2 ~4 {Tags:["guhs_bio_dieren_bladkikker"],PersistenceRequired:1b}
+/give @s guhs:koivoer 16
+look 0 35
+wait 100
+shot dieren_koi_bedelen

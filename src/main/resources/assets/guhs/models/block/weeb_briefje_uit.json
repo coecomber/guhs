@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "t": "guhs:block/weeb_briefje_uit",
+    "particle": "guhs:block/weeb_briefje_uit"
+  },
+  "elements": []
+}

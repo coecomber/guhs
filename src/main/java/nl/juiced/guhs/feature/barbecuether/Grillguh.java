@@ -111,6 +111,11 @@ public final class Grillguh implements NpcRole {
         if (step(player) >= DONE) {
             return;
         }
+        // bbq2 (oude-scenes): the first time, the lighting plays as a camera scene; the rest comes after it
+        if (nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(player, nl.juiced.guhs.feature.oudescenes.OudeScenes.GRILL, npc.blockPosition(),
+                s -> complete(s, npc))) {
+            return;
+        }
         setStep(player, DONE);
         for (String adv : new String[]{"grill_gevonden", "grill_frame", "grill_blokjes", "grill_aangestoken"}) {
             GuhAdvancements.grant(player, adv);

@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "stengel": "guhs:block/guh_bamboe",
+    "particle": "guhs:block/guh_bamboe"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            5,
+            3,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#stengel",
+          "uv": [
+            0,
+            5,
+            3,
+            8
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+# bbq2 verhalenpad, oude-scenes (AutoCheck, dev only): the six camera scenes of the older stories. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_oude-scenes.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs oudescenes stand | speel <scene> | vergeet <scene> | ga <scene>,
+#  feature/oudescenes/OudeScenesFeature.java)
+# For each scene the script puts the story's own template down unrotated (/place template: there is no structure start, so the
+# scene anchors on the block the player stands on, which is the template's anchor block) and plays the scene with
+# /guhs oudescenes speel. Shots at the beats of each script (tools/features/oude_scenes_scene.py).
+# NOT run by the slice itself (no game client in phase 2): this is for the visual check. What only a client shows and nobody
+# has seen yet: every camera, the cast in place, the white fog and the snow of the Balto scene, the rain, thunder, night and
+# lightning of the Mewtwo scene, the night and the picture book (an item display, laid flat) of the ohana scene, the beam and
+# the heart that starts to beat, the portal that is dark until the flame has run round, the front door that opens.
+# World anchors: template corner + the scene's anchor (Scenes.<KORT>_ANKER).
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+clearchat
+
+section timmer: the bouwplaats (22 x 26 x 33), anchor (15, 5, 16)
+/tp @s 9015.5 105 9016.5
+/forceload add 8990 8990 9040 9050
+wait 80
+/fill 8990 99 8990 9040 99 9050 minecraft:grass_block
+/place template guhs:knuffeldal_stadje/bouwplaats 9000 96 9000
+wait 40
+/tp @s 9015.5 101 9016.5 90 0
+wait 20
+/guhs oudescenes stand
+/guhs oudescenes speel timmer
+wait 40
+shot bbq2_oudescenes_timmer_1_dak gui
+wait 100
+shot bbq2_oudescenes_timmer_2_timmerguh gui
+wait 110
+shot bbq2_oudescenes_timmer_3_bewonertje gui
+wait 40
+shot bbq2_oudescenes_timmer_4_deur gui
+wait 90
+/forceload remove 8990 8990 9040 9050
+
+section grill: the big barbecueput (37 x 20 x 37), anchor (27, 5, 14); the frame mended and lit
+/tp @s 9227.5 110 9214.5
+/forceload add 9190 9190 9250 9250
+wait 80
+/fill 9190 99 9190 9250 99 9250 minecraft:stone
+/place template guhs:barbecueput_groot 9200 96 9200
+wait 40
+/setblock 9217 105 9226 guhs:grillkool
+/setblock 9218 101 9226 guhs:grillkool
+/setblock 9216 104 9226 guhs:grillkool
+/setblock 9219 103 9226 guhs:grillkool
+/fill 9217 102 9226 9218 104 9226 guhs:barbecuether_portaal
+/tp @s 9227.5 101 9214.5 90 0
+wait 20
+/guhs oudescenes speel grill
+wait 30
+shot bbq2_oudescenes_grill_1_frame_donker gui
+wait 40
+shot bbq2_oudescenes_grill_2_vlam gui
+wait 40
+shot bbq2_oudescenes_grill_3_brandt gui
+wait 50
+shot bbq2_oudescenes_grill_4_grillguh gui
+wait 110
+shot bbq2_oudescenes_grill_5_guhdalf gui
+wait 110
+/forceload remove 9190 9190 9250 9250
+
+section hemel: the Hemelkapelletje (41 x 70 x 43), anchor (20, 46, 10)
+/tp @s 9420.5 160 9010.5
+/forceload add 9390 8990 9450 9050
+wait 80
+/place template guhs:hemelkapelletje 9400 100 9000
+wait 60
+/tp @s 9420.5 146 9010.5 180 0
+wait 20
+/guhs oudescenes speel hemel
+wait 60
+shot bbq2_oudescenes_hemel_1_wolken gui
+wait 60
+shot bbq2_oudescenes_hemel_2_straal gui
+wait 90
+shot bbq2_oudescenes_hemel_3_bonk gui
+wait 70
+shot bbq2_oudescenes_hemel_4_hoeder gui
+wait 120
+/forceload remove 9390 8990 9450 9050
+
+section ohana: the paalhuisje (51 x 34 x 51), anchor (11, 5, 33)
+/tp @s 9611.5 110 9033.5
+/forceload add 9590 8990 9660 9060
+wait 80
+/place template guhs:guhwaii_ohana 9600 96 9000
+wait 60
+/tp @s 9611.5 101 9033.5 0 0
+wait 20
+/guhs oudescenes speel ohana
+wait 70
+shot bbq2_oudescenes_ohana_1_alleen gui
+wait 110
+shot bbq2_oudescenes_ohana_2_lilo gui
+wait 110
+shot bbq2_oudescenes_ohana_3_knuffel gui
+wait 100
+shot bbq2_oudescenes_ohana_4_sterren gui
+wait 60
+/forceload remove 9590 8990 9660 9060
+
+section mewtwo: the kloon-eiland (80 x 76 x 80), anchor (40, 38, 44)
+/tp @s 9840.5 150 9044.5
+/forceload add 9790 8990 9890 9090
+wait 100
+/place template guhs:kloon_eiland 9800 96 9000
+wait 80
+/tp @s 9840.5 134 9044.5 0 0
+wait 20
+/guhs oudescenes speel mewtwo
+wait 40
+shot bbq2_oudescenes_mewtwo_1_onweer gui
+wait 130
+shot bbq2_oudescenes_mewtwo_2_barst gui
+wait 50
+shot bbq2_oudescenes_mewtwo_3_ogen gui
+wait 70
+shot bbq2_oudescenes_mewtwo_4_guhtwo gui
+wait 80
+shot bbq2_oudescenes_mewtwo_5_mieuwguh gui
+wait 90
+/forceload remove 9790 8990 9890 9090
+
+section balto: Nomguh (224 x 76 x 224), anchor (184, 21, 12)
+/tp @s 10184.5 140 9012.5
+/forceload add 9990 8990 10230 9230
+wait 160
+/place template guhs:nomguh 10000 96 9000
+wait 160
+/tp @s 10184.5 117 9012.5 90 0
+wait 40
+/guhs oudescenes speel balto
+wait 40
+shot bbq2_oudescenes_balto_1_storm gui
+wait 70
+shot bbq2_oudescenes_balto_2_drie_blokken gui
+wait 90
+shot bbq2_oudescenes_balto_3_wolf gui
+wait 110
+shot bbq2_oudescenes_balto_4_huilen gui
+wait 70
+shot bbq2_oudescenes_balto_5_klaart_op gui
+wait 60
+/forceload remove 9990 8990 10230 9230
+
+section the Guhdex: the replay rows, and a scene as a picture book
+gui verhalen list
+wait 20
+shot bbq2_oudescenes_gids_lijst gui
+gui close
+/tp @s 9000 200 9500
+wait 20
+gui keep
+/guhs verhaal herbekijk scene oudescenes_hemel
+wait 60
+shot bbq2_oudescenes_prentenboek gui
+gui close
+/guhs oudescenes stand

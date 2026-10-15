@@ -1,0 +1,274 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/ringh1_vuurwerkkist",
+    "kist": "guhs:block/ringh1_vuurwerkkist",
+    "stro": "minecraft:block/hay_block_top",
+    "rood": "minecraft:block/red_concrete",
+    "blauw": "minecraft:block/light_blue_concrete",
+    "geel": "minecraft:block/yellow_concrete",
+    "wit": "minecraft:block/white_concrete"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kist"
+        },
+        "up": {
+          "texture": "#kist"
+        },
+        "north": {
+          "texture": "#kist"
+        },
+        "south": {
+          "texture": "#kist"
+        },
+        "west": {
+          "texture": "#kist"
+        },
+        "east": {
+          "texture": "#kist"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        10,
+        2
+      ],
+      "to": [
+        14,
+        10.5,
+        14
+      ],
+      "faces": {
+        "up": {
+          "texture": "#stro"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        10,
+        3
+      ],
+      "to": [
+        5,
+        16,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rood"
+        },
+        "up": {
+          "texture": "#rood"
+        },
+        "north": {
+          "texture": "#rood"
+        },
+        "south": {
+          "texture": "#rood"
+        },
+        "west": {
+          "texture": "#rood"
+        },
+        "east": {
+          "texture": "#rood"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        15,
+        3
+      ],
+      "to": [
+        5,
+        16,
+        5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#wit"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        10,
+        9
+      ],
+      "to": [
+        9,
+        15,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#blauw"
+        },
+        "up": {
+          "texture": "#blauw"
+        },
+        "north": {
+          "texture": "#blauw"
+        },
+        "south": {
+          "texture": "#blauw"
+        },
+        "west": {
+          "texture": "#blauw"
+        },
+        "east": {
+          "texture": "#blauw"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        14,
+        9
+      ],
+      "to": [
+        9,
+        15,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#wit"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        10,
+        4
+      ],
+      "to": [
+        13,
+        16,
+        6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#geel"
+        },
+        "up": {
+          "texture": "#geel"
+        },
+        "north": {
+          "texture": "#geel"
+        },
+        "south": {
+          "texture": "#geel"
+        },
+        "west": {
+          "texture": "#geel"
+        },
+        "east": {
+          "texture": "#geel"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        15,
+        4
+      ],
+      "to": [
+        13,
+        16,
+        6
+      ],
+      "faces": {
+        "up": {
+          "texture": "#wit"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        10,
+        11
+      ],
+      "to": [
+        12,
+        14,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rood"
+        },
+        "up": {
+          "texture": "#rood"
+        },
+        "north": {
+          "texture": "#rood"
+        },
+        "south": {
+          "texture": "#rood"
+        },
+        "west": {
+          "texture": "#rood"
+        },
+        "east": {
+          "texture": "#rood"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        10,
+        10
+      ],
+      "to": [
+        6,
+        13,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#geel"
+        },
+        "up": {
+          "texture": "#geel"
+        },
+        "north": {
+          "texture": "#geel"
+        },
+        "south": {
+          "texture": "#geel"
+        },
+        "west": {
+          "texture": "#geel"
+        },
+        "east": {
+          "texture": "#geel"
+        }
+      }
+    }
+  ]
+}

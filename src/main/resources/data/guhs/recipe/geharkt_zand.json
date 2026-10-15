@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ZZ"
+  ],
+  "key": {
+    "Z": "minecraft:sand"
+  },
+  "result": {
+    "id": "guhs:geharkt_zand",
+    "count": 2
+  }
+}

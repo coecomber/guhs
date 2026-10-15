@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MM"
+  ],
+  "key": {
+    "M": "guhs:klaterdal_mos"
+  },
+  "result": {
+    "id": "guhs:klaterdal_mos_tapijt",
+    "count": 3
+  }
+}

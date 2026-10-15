@@ -303,7 +303,9 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** A guh-palm on the beach: a trunk with a guh face, fronds that touch (they never decay), coconuts; the outfit sources. */
-    @GuhTest(template = "guhwaii_test_strand", batch = BATCH)
+    // (skyAccess: 26.1 puts a barrier ceiling on a test's box, here 8 above the sand: only the shortest of the four palm
+    //  heights fits under it, and with the walls in the way all twenty tries can fail: seen once at the merge of verhalenpad)
+    @GuhTest(template = "guhwaii_test_strand", batch = BATCH, skyAccess = true)
     public static void guhwaiiPalmEnKleding(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos grond = helper.absolutePos(new BlockPos(4, 1, 5));

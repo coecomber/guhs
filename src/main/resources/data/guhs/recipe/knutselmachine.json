@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XCI",
+    "GDG",
+    "SKS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:crafting_table",
+    "G": "guhs:grillspies",
+    "D": "guhs:guh_wire",
+    "S": "#minecraft:stone_crafting_materials",
+    "K": "guhs:kaas_knabbels",
+    "X": "guhs:techquest_recept_machines"
+  },
+  "result": {
+    "id": "guhs:knutselmachine"
+  }
+}

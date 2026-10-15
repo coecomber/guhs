@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:grillcamping",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301308,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 7,
+    "sectoren": 16
+  }
+}

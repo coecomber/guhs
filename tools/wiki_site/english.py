@@ -18,7 +18,8 @@ NAME_KEYS = ("item", "block", "entity", "structure", "biome", "effect", "dimensi
 # glossary sections that hold names (not the style rules, heart-level phrases, emotes or the word-builder)
 SKIP_SECTIONS = {1, 3, 4, 20}
 # Dutch words that are also English (or would turn an English sentence wrong)
-NOT_A_NAME = {"Mika's", "Variant", "medium", "Medium", "Guh!", "Brrr", "Hup hup!", "Ohana", "Aloha"}
+# (glossary 25 has the scene title "Naar huis" = Homeward: as a name it made the lobby's sign "Terug naar huis" into "Terug homeward")
+NOT_A_NAME = {"Mika's", "Variant", "medium", "Medium", "Guh!", "Brrr", "Hup hup!", "Ohana", "Aloha", "Naar huis"}
 # words the hand-written English texts use that are in no table (checked against en_us.json and the glossary)
 EXTRA = [("snoet", "snout"), ("snoetje", "snoot"), ("Knabbelberg", "Nibble Mountain"), ("knabbelsap", "nibble juice"),
          ("knabbelvlotje", "nibble raft"), ("Knabbelvlotje", "Nibble Raft"), ("kermisbonnen", "fair tickets"), ("kermisbon", "fair ticket"),
@@ -47,7 +48,7 @@ EXTRA = [("snoet", "snout"), ("snoetje", "snoot"), ("Knabbelberg", "Nibble Mount
          ("muisjesdansje", "mousie dance"), ("zoetdeeg", "sweet dough"), ("glazuur", "icing"), ("Sjoel", "Shuffleboard"),
          ("konijntjes", "bunnies"), ("Egeltje", "Hedgehog"), ("eekhoorntje", "squirrel"), ("huisje", "guh house"), ("Huisje", "Guh house"),
          ("the Knuffeldal", "Snuggledale"), ("The Knuffeldal", "Snuggledale"), ("plein", "square"), ("Burgemeester", "Mayor"),
-         ("pluizenbomen", "fluff trees"), ("Cosy", "Cozy"), ("cosy", "cozy")]
+         ("pluizenbomen", "fluff trees"), ("Cosy", "Cozy"), ("cosy", "cozy"), ("Terug naar huis", "Back home")]
 VOID = {"br", "img", "meta", "link", "input", "hr", "source", "wbr", "col", "area", "base", "embed", "param", "track"}
 RAW = {"script", "style", "title", "textarea", "option", "code"}
 TOKEN = re.compile(r"(<!--.*?-->|<[^>]+>)", re.S)

@@ -1,0 +1,35 @@
+# 1.4.2 Discord picture (dev only, Dutch client): the guaranteed Knabbelpark from elevated angles, daytime, HUD hidden.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/discord142.txt
+
+section setup
+/gamemode spectator
+/execute in guhs:guhmension run tp @s 0 160 0
+wait 60
+/time set 5000
+/weather clear
+/gamerule doDaylightCycle false
+mist off
+renderdistance 16
+
+section the park
+tplocate guhs:guhmension knabbelpark
+wait 100
+looktpl 50 34 50 16 2 16
+waitrender 400
+shot discord_park_zo
+looktpl -18 34 50 16 2 16
+waitrender 400
+shot discord_park_zw
+looktpl 16 42 66 16 2 16
+waitrender 400
+shot discord_park_zuid
+looktpl 60 30 -24 16 2 16
+waitrender 400
+shot discord_park_no
+looktpl -34 46 -34 16 2 16
+waitrender 400
+shot discord_park_nw
+looktpl 16 70 40 16 2 16
+waitrender 400
+shot discord_park_hoog
+quit

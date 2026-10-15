@@ -3,6 +3,7 @@ package nl.juiced.guhs.feature.guhoven;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -15,13 +16,19 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import nl.juiced.guhs.block.GuhWheelBlock;
 import nl.juiced.guhs.block.GuhWheelPartBlock;
 import nl.juiced.guhs.block.GuhWireBlock;
+import nl.juiced.guhs.block.entity.GuhWheelBlockEntity;
+import nl.juiced.guhs.feature.vadskracht.Snoet;
+import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
+import nl.juiced.guhs.feature.vadskracht.VadsKracht;
+import nl.juiced.guhs.feature.vadskracht.VadsNet;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.registry.ModBlocks;
 
 /**
- * Game tests of the Guhoven (1.2.5, batch "guhoven"): it smelts on guh power (a running Guhrad next to it, one of the wheel's
- * part blocks next to it, or Guhdraad powered by a wheel), it does nothing without power or with ordinary redstone (a lever,
- * a redstone block), and the fuel slot never takes or burns anything.
+ * Game tests of the Guhoven (1.2.5, batch "guhoven"): it smelts on vadskracht (bbq2: a Guhrad with a guh in it next to the
+ * oven, one of the wheel's part blocks next to it, or Guhdraad from a wheel), it does nothing without a source, with an empty
+ * wheel or with ordinary redstone (a lever, a redstone block), it stands still with everything else when the net is too
+ * heavy, its face shows how it is doing, and the fuel slot never takes or burns anything.
  */
 public class GuhovenGameTests {
     private static final String BATCH = "guhoven";
@@ -36,8 +43,18 @@ public class GuhovenGameTests {
         return be;
     }
 
+    /** A Guhrad (only its wheel block); running: with a guh in it (an empty wheel gives no vadskracht). */
     static void rad(GameTestHelper helper, BlockPos pos, boolean running) {
         helper.setBlock(pos, ModBlocks.GUH_WHEEL.get().defaultBlockState().setValue(GuhWheelBlock.RUNNING, running));
+        if (running) {
+            guhErin(helper, pos);
+        }
+    }
+
+    static void guhErin(GameTestHelper helper, BlockPos pos) {
+        CompoundTag guh = new CompoundTag();
+        guh.putString("Variant", "normal");
+        ((GuhWheelBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(pos))).insert(guh);
     }
 
     static void gebakken(GameTestHelper helper, GuhOvenBlockEntity be) {
@@ -84,9 +101,11 @@ public class GuhovenGameTests {
             nietGebakken(helper, be, ovenPos, "a wheel without a guh");
             helper.assertTrue(be.getItem(0).getCount() == 1, "still one raw iron");
             helper.setBlock(wiel, helper.getBlockState(wiel).setValue(GuhWheelBlock.RUNNING, true));
+            helper.runAfterDelay(2, () -> nietGebakken(helper, be, ovenPos, "a wheel that only looks like it runs (no guh in it)"));
         });
-        helper.runAtTickTime(45, () -> helper.assertTrue(be.bakt(), "the part block passes on the running wheel's guh power"));
-        helper.runAtTickTime(40 + BAKTIJD, () -> {
+        helper.runAtTickTime(44, () -> guhErin(helper, wiel));
+        helper.runAtTickTime(50, () -> helper.assertTrue(be.bakt(), "the part block passes on the running wheel's vadskracht"));
+        helper.runAtTickTime(50 + BAKTIJD, () -> {
             gebakken(helper, be);
             helper.succeed();
         });
@@ -102,9 +121,12 @@ public class GuhovenGameTests {
         for (int x = 1; x <= 3; x++) {
             helper.setBlock(new BlockPos(x, 1, 1), ModBlocks.GUH_WIRE.get());
         }
-        helper.assertBlockProperty(new BlockPos(3, 1, 1), GuhWireBlock.POWERED, true);
         BlockPos ovenPos = new BlockPos(4, 1, 1);
         GuhOvenBlockEntity be = oven(helper, ovenPos);
+        VadsNet net = VadsKracht.net(helper.getLevel(), helper.absolutePos(ovenPos));
+        helper.assertTrue(net.draait() && net.aanbod() == VadsGetallen.GUHRAD && net.vraag() == VadsGetallen.GUH_OVEN,
+                "one net: the wheel gives " + net.aanbod() + ", the oven asks " + net.vraag());
+        helper.assertBlockProperty(new BlockPos(3, 1, 1), GuhWireBlock.POWERED, true);
         helper.runAtTickTime(5, () -> helper.assertTrue(be.bakt(), "baking on guh power through the wire"));
         helper.runAtTickTime(BAKTIJD, () -> {
             gebakken(helper, be);
@@ -133,10 +155,56 @@ public class GuhovenGameTests {
                 .setValue(LeverBlock.POWERED, true));
         helper.setBlock(new BlockPos(2, 2, 2), Blocks.REDSTONE_TORCH);
         helper.assertTrue(helper.getLevel().hasNeighborSignal(helper.absolutePos(ovenPos)), "the oven does get a redstone signal");
-        helper.assertFalse(GuhovenFeature.guhKracht(helper.getLevel(), helper.absolutePos(ovenPos)), "but no guh power");
+        helper.assertFalse(GuhovenFeature.guhKracht(helper.getLevel(), helper.absolutePos(ovenPos)), "but no vadskracht");
+        helper.assertTrue(VadsKracht.net(helper.getLevel(), helper.absolutePos(ovenPos)).status() == VadsNet.Status.GEEN_BRON, "its net has no source");
         helper.runAtTickTime(BAKTIJD, () -> {
             nietGebakken(helper, be, ovenPos, "lever, torch and redstone block");
             helper.succeed();
+        });
+    }
+
+    /**
+     * bbq2: three ovens (3 x 5 VK) on one Guhrad (10 VK) is too heavy: not one of them bakes. Take one away and the other two
+     * bake. And the face: asleep without vadskracht, awake with it, surprised when the result slot is full.
+     */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
+    public static void teZwaarBaktNietEenOven(GameTestHelper helper) {
+        for (int x = 0; x <= 4; x++) {
+            helper.setBlock(new BlockPos(x, 0, 1), Blocks.STONE);
+        }
+        rad(helper, new BlockPos(0, 1, 1), true);
+        for (int x = 1; x <= 4; x++) {
+            helper.setBlock(new BlockPos(x, 1, 1), ModBlocks.GUH_WIRE.get());
+        }
+        BlockPos[] ovens = {new BlockPos(1, 1, 2), new BlockPos(3, 1, 2), new BlockPos(4, 1, 0)};
+        GuhOvenBlockEntity[] be = new GuhOvenBlockEntity[3];
+        for (int i = 0; i < 3; i++) {
+            be[i] = oven(helper, ovens[i]);
+        }
+        VadsNet net = VadsKracht.net(helper.getLevel(), helper.absolutePos(ovens[0]));
+        helper.assertTrue(net.status() == VadsNet.Status.TE_ZWAAR && net.vraag() == 3 * VadsGetallen.GUH_OVEN && net.tekort() == 5,
+                "too heavy: " + net.status() + " " + net.vraag() + "/" + net.aanbod());
+        helper.assertBlockProperty(new BlockPos(2, 1, 1), GuhWireBlock.POWERED, false);
+        helper.runAtTickTime(40, () -> {
+            for (int i = 0; i < 3; i++) {
+                nietGebakken(helper, be[i], ovens[i], "a net that is too heavy");
+                helper.assertBlockProperty(ovens[i], GuhOvenBlock.SNOET, Snoet.SLAAPT);
+            }
+            helper.setBlock(ovens[2], Blocks.AIR);
+            // the second oven's result slot is full: it has vadskracht but cannot bake, and looks surprised
+            be[1].setItem(2, new ItemStack(Items.IRON_INGOT, 64));
+        });
+        helper.runAtTickTime(46, () -> {
+            helper.assertTrue(be[0].bakt() && be[0].heeftKracht() && be[1].heeftKracht(), "two ovens on one wheel fit");
+            helper.assertFalse(be[1].bakt(), "the full oven does not bake");
+            helper.assertBlockProperty(new BlockPos(2, 1, 1), GuhWireBlock.POWERED, true);
+            helper.assertBlockProperty(ovens[0], GuhOvenBlock.SNOET, Snoet.WERKT);
+            helper.assertBlockProperty(ovens[1], GuhOvenBlock.SNOET, Snoet.VOL);
+        });
+        helper.runAtTickTime(46 + BAKTIJD, () -> {
+            gebakken(helper, be[0]);
+            helper.assertTrue(be[1].getItem(0).is(Items.RAW_IRON), "the full oven kept its raw iron");
+            helper.succeedWhen(() -> helper.assertBlockProperty(ovens[0], GuhOvenBlock.SNOET, Snoet.WERKT));   // done, awake, not lit
         });
     }
 

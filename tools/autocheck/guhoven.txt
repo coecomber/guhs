@@ -1,4 +1,4 @@
-# Guhoven (1.2.5) AutoCheck: a running Guhrad -> Guhdraad -> the Guhoven baking raw iron, and its screen. Run:
+# Guhoven (1.2.5) AutoCheck: a source of vadskracht -> Guhdraad -> the Guhoven baking raw iron, and its screen. Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/guhoven.txt
 # (commands: see autocheck.txt)
 
@@ -18,8 +18,9 @@ wait 80
 /tp @s 3000 140 3008
 wait 40
 
-section guhoven: wheel -> wire -> oven (baking) and an unpowered one next to it
-/setblock 2995 140 3000 guhs:guh_wheel[facing=east,running=true]
+section guhoven: source -> wire -> oven (baking) and an unpowered one next to it
+# (bbq2: an empty Guhrad gives nothing any more; the test source gives 10 VK, like a Guhrad with a guh in it)
+/setblock 2995 140 3000 guhs:vadskracht_testbron[kracht=1]
 /setblock 2996 140 3000 guhs:guh_wire
 /setblock 2997 140 3000 guhs:guh_wire
 /setblock 2998 140 3000 guhs:guh_wire

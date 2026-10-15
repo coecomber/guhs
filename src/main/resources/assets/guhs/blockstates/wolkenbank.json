@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/wolkenbank"
+    },
+    "facing=east": {
+      "model": "guhs:block/wolkenbank",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/wolkenbank",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/wolkenbank",
+      "y": 270
+    }
+  }
+}

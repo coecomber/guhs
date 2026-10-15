@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "WWW"
+  ],
+  "key": {
+    "R": "guhs:wolkenblok_roze",
+    "W": "guhs:wolkenblok_wit"
+  },
+  "result": {
+    "id": "guhs:wolkenbed"
+  }
+}

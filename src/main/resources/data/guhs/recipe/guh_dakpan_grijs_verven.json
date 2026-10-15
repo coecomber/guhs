@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PVP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#guhs:guh_dakpan",
+    "V": "minecraft:light_gray_dye"
+  },
+  "result": {
+    "id": "guhs:guh_dakpan_grijs",
+    "count": 8
+  }
+}

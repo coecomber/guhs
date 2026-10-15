@@ -1,0 +1,131 @@
+# bbq2, ring-sausuman (AutoCheck, dev only): the Toren van Sausuman. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-sausuman.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringsausuman stand|toren (toren: dev runs only),
+#  /guhs verhaal stap|scene|wis, /guhs ring hoofdstuk)
+# Shots: the tower from outside (the horns, the smoking sputterpijpen), the hall with Sausuman and the Ringenbakker, the
+# hover readout on a machine of the hall ("Te zwaar"), the three stations, the Pannantir, four frames of the baking scene
+# (the onion ring on the tray, Sausuman looking at it, Sam-guh, the sulk), Sausuman with his back to the player afterwards,
+# and the travel map with the tower's halte.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check. What nobody has seen
+# in the game yet: Sausuman's model at scale 1.2, his sulking pose per viewer, the onion ring (an item display actor) sliding
+# out of the machine, the smoke of the sputterpijpen, the block models of the sputterpijp and the Pannantir.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 7000 141 7000
+/forceload add 6970 6970 7040 7040
+wait 80
+/fill 6975 139 6975 7035 139 7035 guhs:houtskoolsteen
+/fill 6984 140 6978 7016 160 7012 minecraft:air
+/fill 6984 161 6978 7016 181 7012 minecraft:air
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..70]
+/guhs ring wis
+/guhs verhaal wis ring_sausuman @s
+wait 20
+# the tower: its corner at 6986 137 6980, so the spot outside the door (template 14 4 20) is 7000 141 7000
+/tp @s 7000 141 7000
+/guhs ringsausuman toren
+wait 60
+clearchat
+
+section the tower from outside
+/tp @s 7000.5 146 7026.5 180 -20
+wait 5
+/tp @s 7000.5 146 7026.5 180 -20
+wait 60
+shot bbq2_sausuman_toren_zuid world
+/tp @s 7022.5 158 7014.5 125 -5
+wait 5
+/tp @s 7022.5 158 7014.5 125 -5
+wait 60
+shot bbq2_sausuman_toren_hoog world
+/tp @s 6980.5 172 6974.5 -45 25
+wait 5
+/tp @s 6980.5 172 6974.5 -45 25
+wait 60
+shot bbq2_sausuman_toren_hoorns world
+
+section the hall: Sausuman, the Ringenbakker, the machines that stand still
+/gamemode survival
+/tp @s 7000.5 141 6996.5 180 0
+wait 5
+/tp @s 7000.5 141 6996.5 180 0
+wait 40
+shot bbq2_sausuman_hal world
+# the hover readout on the Knabbelaar (template 9 4 11 = world 6995 141 6991): "Deze opstelling gebruikt 38/10 vadskracht"
+/tp @s 6997.5 141 6991.5 90 10
+wait 5
+/tp @s 6997.5 141 6991.5 90 10
+wait 40
+shot bbq2_sausuman_te_zwaar world
+# Sausuman (template 11 4 10 = world 6997 141 6990), waiting by his machine
+/tp @s 6999.5 141 6992.5 130 5
+wait 5
+/tp @s 6999.5 141 6992.5 130 5
+wait 30
+shot bbq2_sausuman_wacht world
+
+section the stations and the Pannantir (floors 1, 2 and 3)
+/gamemode creative
+/tp @s 7000.5 148 6991.5 180 10
+wait 5
+/tp @s 7000.5 148 6991.5 180 10
+wait 30
+shot bbq2_sausuman_deegkneder world
+/tp @s 7000.5 153 6994.5 0 10
+wait 5
+/tp @s 7000.5 153 6994.5 0 10
+wait 30
+shot bbq2_sausuman_sauskraan world
+/tp @s 7000.5 158 6996.5 180 15
+wait 5
+/tp @s 7000.5 158 6996.5 180 15
+wait 30
+shot bbq2_sausuman_studeerkamer world
+
+section the baking scene (anchored on the Ringenbakker: stand on top of it)
+/guhs ring hoofdstuk 5
+/guhs verhaal stap ring_sausuman @s 2
+/tp @s 7000.5 143 6988.5 0 0
+wait 10
+/guhs verhaal scene ringsausuman_bakken 0
+wait 40
+shot bbq2_sausuman_scene_1 world
+wait 90
+shot bbq2_sausuman_scene_2 world
+wait 60
+shot bbq2_sausuman_scene_3_uienring world
+wait 70
+shot bbq2_sausuman_scene_4_ui world
+wait 70
+shot bbq2_sausuman_scene_5_sam world
+wait 70
+shot bbq2_sausuman_scene_6_mok world
+wait 80
+
+section afterwards: he sulks with his back to this player
+/guhs verhaal stap ring_sausuman @s 3
+/gamemode survival
+/tp @s 7000.5 141 6993.5 135 5
+wait 5
+/tp @s 7000.5 141 6993.5 135 5
+wait 60
+shot bbq2_sausuman_mokt world
+/guhs ringsausuman stand
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_sausuman_reiskaart gui
+gui close
+
+section cleanup
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..70]
+/fill 6984 137 6978 7016 160 7012 minecraft:air
+/fill 6984 161 6978 7016 181 7012 minecraft:air
+/forceload remove 6970 6970 7040 7040

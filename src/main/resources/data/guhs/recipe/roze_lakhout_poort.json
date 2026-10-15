@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "roze_lakhout_fence_gate",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "guhs:roze_lakhout_planken"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "guhs:roze_lakhout_poort"
+  }
+}

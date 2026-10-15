@@ -1,0 +1,99 @@
+# Het Guhpad (AutoCheck, dev only): the Guhdex tab Verhalen with the path map and the stories per world, the Superkompas
+# option "Mijn verhaal", what the grill portal says, and the chapter group "Het Guhpad" of the quest book. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhpad.txt
+# (commands: see autocheck.txt; /guhs guhpad: feature/guhpad/GuhpadCommands.java)
+# Shots: bbq2_guhpad_*: the tab for a new player (the Guhmensie open, the rest locked and folded shut), half way (some stories
+# ticked, the Guhbarbecuether open), with everything followed (three worlds open, Het echte Guheinde locked) and its second
+# screenful (the preview: silhouettes, riddles, the counter, layer 6); the Superkompas tabs (Mijn verhaal is the first option
+# of each); the chat line of the locked grill portal; the quest book.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doMobSpawning false
+wait 40
+clearchat
+
+section the Guhdex tab Verhalen: a new player (only the Guhmensie is open)
+/guhs guhpad vergeet @s alles
+/guhs guhpad stand
+wait 50
+gui verhalen list
+wait 20
+shot bbq2_guhpad_gids_nieuw gui
+gui verhalenscroll 1
+wait 5
+shot bbq2_guhpad_gids_nieuw_2 gui
+gui close
+
+section half way: three stories of the Guhmensie followed
+/guhs guhpad gedaan @s balto
+/guhs guhpad gedaan @s mewtwo
+/guhs guhpad gedaan @s hemel
+wait 50
+gui verhalen list
+wait 20
+shot bbq2_guhpad_gids_half gui
+gui close
+
+section the Guhmensie done and chapter 1 of the Knabbelring: the Guhbarbecuether opens
+/guhs guhpad gedaan @s alles
+/guhs guhpad vergeet @s knabbelring
+/guhs guhpad vergeet @s guhrio
+/guhs ring hoofdstuk 2
+wait 50
+/guhs guhpad stand
+gui verhalen list
+wait 20
+shot bbq2_guhpad_gids_barbecuether gui
+gui verhalenscroll 1
+wait 5
+shot bbq2_guhpad_gids_barbecuether_2 gui
+gui verhalenscroll 2
+wait 5
+shot bbq2_guhpad_gids_barbecuether_3 gui
+gui close
+
+section everything followed: three worlds open, Het echte Guheinde locked for everybody
+/guhs guhpad gedaan @s alles
+wait 50
+gui verhalen list
+wait 20
+shot bbq2_guhpad_gids_alles gui
+gui verhalenscroll 3
+wait 5
+shot bbq2_guhpad_gids_alles_4 gui
+gui verhalenscroll 5
+wait 5
+shot bbq2_guhpad_gids_alles_6 gui
+gui verhalenscroll 99
+wait 5
+shot bbq2_guhpad_gids_echt gui
+gui close
+
+section the Superkompas: "Mijn verhaal" is the first option of every tab
+/guhs guhpad vergeet @s alles
+/guhs ring wis
+wait 50
+gui superkompas bbq2_guhpad_superkompas
+
+section the locked grill portal says which stories are missing (the chat line)
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/fill -3 190 -3 3 190 3 minecraft:smooth_stone
+/tp @s 0.5 191 2.5 180 0
+wait 20
+/setblock 0 191 -1 guhs:barbecuether_portaal
+/gamemode survival
+/tp @s 0.5 191 -0.5 180 0
+wait 30
+shot bbq2_guhpad_grillportaal_dicht gui
+/gamemode creative
+/setblock 0 191 -1 minecraft:air
+/fill -3 190 -3 3 190 3 minecraft:air
+clearchat
+
+section the quest book: the group Het Guhpad at the end of the sidebar (four chapters, each with its lock quest)
+gui ftbquests bbq2_guhpad_ftb
+quit

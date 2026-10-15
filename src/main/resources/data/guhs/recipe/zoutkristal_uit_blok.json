@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:fossielmijn_zoutkristalblok"
+  ],
+  "result": {
+    "id": "guhs:zoutkristal",
+    "count": 4
+  }
+}

@@ -1,0 +1,171 @@
+# Knabbelbuizen, Opzuiger and sensors (bbq2, tech-buizen) AutoCheck: the tubes and their couplings, items rolling through
+# them, sorting with a Filterstuk (its face, its screen, its hover readout), the Opzuiger slurping, the four sensors with
+# their lamps and readouts. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-buizen.txt
+# (commands: see autocheck.txt; /guhs techbuis <x y z> says what a Richtingstuk / Filterstuk is doing and where it sends to)
+# What to look at in the pictures: the glass of the tubes is see-through and the items inside are small, lit and tumbling;
+# no z-fighting on the couplings; the Filterstuk's face is upright in all six directions; arrows point the way things go.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section a sorting line: chest - Richtingstuk - tubes - (near chest) - Filterstuk for wheat - far chest; a branch that goes up
+/setblock 2990 140 3000 minecraft:chest[facing=south]
+/data merge block 2990 140 3000 {Items:[{Slot:0b,id:"minecraft:wheat",count:64},{Slot:1b,id:"minecraft:cobblestone",count:64},{Slot:2b,id:"guhs:kaas_knabbels",count:64},{Slot:3b,id:"minecraft:diamond",count:64}]}
+/fill 2992 140 3000 2997 140 3000 guhs:knabbelbuis
+/setblock 2993 140 2999 minecraft:chest[facing=south]
+/setblock 2995 141 3000 guhs:knabbelbuis
+/setblock 2995 142 3000 guhs:knabbelbuis
+/setblock 2996 142 3000 guhs:knabbelbuis
+/setblock 2997 142 3000 minecraft:barrel
+/setblock 2998 140 3000 guhs:knabbelbuis_filter[facing=east]
+/data merge block 2998 140 3000 {Filter:{Items:[{Slot:0b,id:"minecraft:wheat",count:1}]}}
+/setblock 2999 140 3000 minecraft:chest[facing=south]
+/setblock 2998 140 3001 guhs:vadskracht_testbron[kracht=1]
+wait 20
+/setblock 2991 140 3000 guhs:knabbelbuis_richting[facing=east]
+wait 60
+/guhs techbuis 2991 140 3000
+/gamemode spectator
+camera 2994.5 142.2 3005.5 180 18
+waitrender 300
+shot techbuis_lijn
+camera 2993.5 141.2 3002.6 180 15
+wait 10
+shot techbuis_rollen_1
+wait 7
+shot techbuis_rollen_2
+camera 2997.2 141.0 3002.4 200 12
+wait 10
+shot techbuis_filterstuk
+camera 2994.5 144.5 3000.5 180 90
+wait 10
+shot techbuis_van_boven
+/gamemode creative
+
+section hover readout and screen of the Filterstuk; what the Richtingstuk says
+/tp @s 2998.5 140 3002.5 180 20
+wait 20
+/tp @s 2998.5 140 3002.5 180 20
+wait 30
+clearchat
+shot techbuis_hover_filter gui
+gui keep
+use 2998 140 3000
+wait 30
+widgets
+shot techbuis_scherm_filter gui
+gui close
+/tp @s 2991.5 140 3002.5 180 20
+wait 20
+use 2991 140 3000
+wait 10
+shot techbuis_richtingstuk_zegt gui
+
+section the six directions of both pieces (faces upright, arrows the right way), and a sleeping Filterstuk
+/setblock 3004 140 3000 guhs:knabbelbuis_filter[facing=north]
+/setblock 3006 140 3000 guhs:knabbelbuis_filter[facing=east]
+/setblock 3008 140 3000 guhs:knabbelbuis_filter[facing=south]
+/setblock 3010 140 3000 guhs:knabbelbuis_filter[facing=west]
+/setblock 3012 140 3000 guhs:knabbelbuis_filter[facing=up]
+/setblock 3014 140 3000 guhs:knabbelbuis_filter[facing=down]
+/fill 3004 140 3001 3014 140 3001 guhs:guh_wire
+/setblock 3003 140 3001 guhs:vadskracht_testbron[kracht=2]
+/setblock 3004 142 3000 guhs:knabbelbuis_richting[facing=north]
+/setblock 3006 142 3000 guhs:knabbelbuis_richting[facing=east]
+/setblock 3008 142 3000 guhs:knabbelbuis_richting[facing=south]
+/setblock 3010 142 3000 guhs:knabbelbuis_richting[facing=west]
+/setblock 3012 142 3000 guhs:knabbelbuis_richting[facing=up]
+/setblock 3014 142 3000 guhs:knabbelbuis_richting[facing=down]
+/setblock 3016 140 3000 guhs:knabbelbuis_filter[facing=east]
+wait 60
+/gamemode spectator
+camera 3009.5 142.0 3006.5 180 12
+waitrender 300
+shot techbuis_richtingen_zuid
+camera 3009.5 142.0 2994.5 0 12
+waitrender 300
+shot techbuis_richtingen_noord
+/gamemode creative
+
+section the Opzuiger: slurping (power), asleep (no power), and its screen
+/setblock 3000 140 2990 guhs:opzuiger[facing=south]
+/setblock 2999 140 2990 guhs:vadskracht_testbron[kracht=1]
+/setblock 3004 140 2990 guhs:opzuiger[facing=south]
+/summon minecraft:item 3000.5 140.2 2993.5 {Item:{id:"minecraft:wheat",count:16}}
+/summon minecraft:item 3002.5 140.2 2992.5 {Item:{id:"guhs:kaas_knabbels",count:8}}
+/summon minecraft:item 3004.5 140.2 2992.5 {Item:{id:"minecraft:wheat",count:16}}
+wait 12
+/gamemode spectator
+camera 3002.0 141.6 2995.0 180 18
+shot techbuis_opzuiger_slurpt
+wait 60
+shot techbuis_opzuiger_klaar
+/gamemode creative
+/tp @s 3000.5 140 2992.5 180 20
+wait 20
+gui keep
+use 3000 140 2990
+wait 30
+shot techbuis_scherm_opzuiger gui
+gui close
+
+section the sensors: Voorraadmeter on a chest (signal: lamp on), Snuffelsensor (smells the player), Guhklok, Guhteller behind it
+/setblock 3010 140 2989 minecraft:chest[facing=south]
+/data merge block 3010 140 2989 {Items:[{Slot:0b,id:"minecraft:wheat",count:32}]}
+/setblock 3010 140 2990 guhs:voorraadmeter[facing=south]
+/data merge block 3010 140 2990 {Filter:{Items:[{Slot:0b,id:"minecraft:wheat",count:1}],Getal:16}}
+/setblock 3012 140 2990 guhs:snuffelsensor[facing=south]
+/data merge block 3012 140 2990 {Wat:"spelers",Straal:8}
+/setblock 3014 140 2990 guhs:guhklok[facing=south]
+/data merge block 3014 140 2990 {Stand:0}
+/setblock 3014 140 2991 guhs:guhteller[facing=south]
+/data merge block 3014 140 2991 {Doel:3}
+/setblock 3016 140 2990 guhs:voorraadmeter[facing=south]
+/fill 3010 140 2992 3016 140 2992 guhs:guh_wire
+/setblock 3010 140 2991 guhs:guh_wire
+/setblock 3012 140 2991 guhs:guh_wire
+/setblock 3016 140 2991 guhs:guh_wire
+/setblock 3009 140 2992 guhs:vadskracht_testbron[kracht=2]
+/setblock 3011 140 2990 minecraft:redstone_lamp
+/setblock 3013 140 2990 minecraft:redstone_lamp
+/setblock 3015 140 2991 minecraft:redstone_lamp
+wait 60
+/tp @s 3013.5 140 2995.5 180 15
+wait 30
+shot techbuis_sensoren
+/tp @s 3010.5 140 2993.5 180 25
+wait 20
+/tp @s 3010.5 140 2993.5 180 25
+wait 30
+clearchat
+shot techbuis_hover_voorraadmeter gui
+/tp @s 3012.5 140 2993.5 180 25
+wait 30
+shot techbuis_hover_snuffelsensor gui
+/tp @s 3014.5 140 2994.5 180 25
+wait 30
+shot techbuis_hover_guhteller gui
+gui keep
+use 3010 140 2990
+wait 30
+widgets
+shot techbuis_scherm_voorraadmeter gui
+gui close
+use 3014 140 2990
+wait 10
+shot techbuis_guhklok_verzet gui
+quit

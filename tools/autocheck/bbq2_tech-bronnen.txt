@@ -1,0 +1,109 @@
+# Vadskracht sources (bbq2, tech-bronnen) AutoCheck: the Knuffelgenerator with guhs asleep on it, the Disco-dynamo with its
+# light show and dancers, the Blubkacheltje with a bobbing Sausblubje, the Gloeisterkern with its turning star, the
+# Knabbelbatterij, a Guhrad with a floating Guhtwo, and the hover readout on each. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-bronnen.txt
+# (/guhs techbron proef builds the row east of the player, fronts to the north: look at it from the north, yaw 0.
+#  It exists in dev runs only. NOT run by the slice itself: no game client was started.)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3000
+/forceload add 2980 2980 3040 3020
+wait 80
+/fill 2984 139 2984 3036 139 3016 minecraft:grass_block
+/fill 2984 140 2984 3036 150 3016 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3000
+wait 40
+
+section the row: cushion, dance floor, stove, kern, battery, Guhrad, Guhdraad to a Guhoven
+/guhs techbron proef
+# the guhs walk to the cushion and the floor and start to sleep / dance; the song starts
+wait 400
+/gamemode spectator
+camera 3012.5 149 2988.5 0 38
+waitrender 300
+shot techbron_rij
+camera 3012.5 143 3013.5 180 15
+wait 20
+shot techbron_rij_achter
+
+section the Knuffelgenerator: three guhs asleep on the cushion, the face awake
+camera 3003.0 143.2 2998.6 0 38
+wait 20
+shot techbron_knuffelgenerator
+camera 3006.5 141.2 3003.0 90 10
+wait 20
+shot techbron_knuffelgenerator_opzij
+
+section the Disco-dynamo: the heart of the mod's own disc beats on the floor, four dancers, the disc turns on the desk
+camera 3008.5 144.5 2997.0 0 42
+wait 20
+shot techbron_disco_dynamo
+wait 7
+shot techbron_disco_dynamo_tel2
+camera 3008.5 141.3 2999.6 0 20
+wait 20
+shot techbron_disco_desk
+# another disc, another show
+/data merge block 3008 140 3001 {Plaat:{id:"minecraft:music_disc_pigstep",count:1}}
+wait 60
+camera 3008.5 144.5 2997.0 0 42
+wait 20
+shot techbron_disco_pigstep
+/data merge block 3008 140 3001 {Plaat:{id:"minecraft:music_disc_otherside",count:1}}
+wait 60
+shot techbron_disco_otherside
+
+section the Blubkacheltje, the Gloeisterkern, the Knabbelbatterij
+camera 3015.5 141.6 3000.2 0 18
+wait 20
+shot techbron_kachel_kern_batterij
+camera 3013.5 141.2 3001.4 0 15
+wait 10
+shot techbron_blubkacheltje
+wait 5
+shot techbron_blubkacheltje_tel2
+camera 3015.5 141.4 3001.2 0 15
+wait 10
+shot techbron_gloeisterkern
+
+section the Guhrad with Guhtwo: he floats, the wheel turns by itself
+camera 3021.5 142.0 2997.5 0 5
+wait 20
+shot techbron_guhrad_guhtwo
+
+section hover readout on every source (and on a part of the cushion and of the floor)
+/gamemode creative
+/tp @s 3002.5 140 3000.5 0 35
+wait 20
+/tp @s 3002.5 140 3000.5 0 35
+wait 30
+clearchat
+shot techbron_hover_knuffelgenerator gui
+/tp @s 3009.5 140 2999.8 0 45
+wait 30
+shot techbron_hover_disco_deel gui
+/tp @s 3013.5 140 3001.2 0 25
+wait 30
+shot techbron_hover_blubkacheltje gui
+/tp @s 3015.5 140 3001.2 0 25
+wait 30
+shot techbron_hover_gloeisterkern gui
+/tp @s 3017.5 140 3001.2 0 25
+wait 30
+shot techbron_hover_knabbelbatterij gui
+/tp @s 3021.5 140 3000.5 0 10
+wait 30
+shot techbron_hover_guhrad gui
+/guhs vadskracht 3008 140 3001
+/guhs techbron mika
+
+section the items in the creative tab
+gui creative guhs
+quit

@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/pepertuin",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:pepertuin/start",
+  "start_jigsaw_name": "guhs:pepertuin_midden",
+  "check_radius": 26,
+  "max_height_difference": 8,
+  "headroom": 13,
+  "keep_clear": 16
+}

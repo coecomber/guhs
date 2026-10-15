@@ -1,5 +1,6 @@
 """
-Builds the "Guhs" chapter group for FTB Quests: fourteen themed chapters in src/main/resources/ftbquests/
+Builds the chapter groups for FTB Quests: the group "Guhs" with fifteen themed chapters and (guhpad) the group "Het Guhpad"
+with the four chapters of the big stories, in src/main/resources/ftbquests/
 (chapters/<file>.json5, lang/nl_nl/<file>.json5 and lang/en_us/<file>.json5, index.txt for the installer), plus their pictures
 (textures/ftbquests, drawn by tools/make_ftbquests_art.py). The mod copies them into config/ftbquests/quests when FTB Quests
 is installed (see compat/FtbQuestsChapter.java). Bump CHAPTER_VERSION when you change the chapters, so packs get them.
@@ -9,9 +10,23 @@ Which chapter a quest lands in (so quests added later find their place by themse
   2. the feature module's FTB_CHAPTER = "guhs_..." (optional; FTB_SECTION = "title" names its section), or MODULE_CHAPTER;
   3. the quest key's prefix (PREFIX_CHAPTER);
   4. otherwise: De Guhmensie (quests of this file) or Minigames & bijzondere plekken (quests of a feature module).
+A feature module may also declare its sections itself (bbq2, so nobody edits SECTIONS):
+  FTB_SECTIES = [(sid, title, portrait, keys or None), ...]   its sections, appended to its chapter in FEATURES order (None =
+                all quests of the module that no other entry names); the first quest of each comes after the chapter's intro;
+  FTB_LINEAIR = True    a story told in order (only the ring* modules), see below and linear();
+  FTB_SLOT = (title, portrait, [lines])   one extra picture at the END of its chapter with no quests under it (hover = the
+                lines): the preview of something that is still to come.
+  FTB_OP_SLOT = True    (guhpad) every quest of the module REALLY depends on its chapter's first quest (a preview nobody can
+                do yet: FTB Quests shows them locked);
+  ftb_sloten(fq)        (guhpad) -> {quest key: [tasks]}: the tasks of the lock quests of the chapters (see "slot" below);
+  FTB_PLAATJES = {file: (kind, args)}   (guhpad) extra pictures for make_ftbquests_art (e.g. a question-mark quest icon).
+Chapter groups (guhpad): GROEPEN lists them in sidebar order; a chapter names its group with groep="..." (default "guhs").
+A chapter with slot=dict(key=, titel=) starts with that LOCK QUEST in the place of "Hoe kom je hier?": its tasks (from
+ftb_sloten) show what to finish first. A task may carry "titel" (its own name in the quest book) and "task_icon".
 Quests that no section names get a section of their own at the end of their chapter (one per feature module), and a
 feature's quests without dependencies follow each other. Nothing is locked (1.1.3): only the stomach sizes (maag_64 ...
-maag_128) get real FTB Quests dependencies ("linear"). Every other quest has none, because a dependency also holds back
+maag_128) get real FTB Quests dependencies ("linear"), and (bbq2) the quests of a feature module that says FTB_LINEAIR = True
+(a story told in order: each of its quests really depends on the one before it, see linear()). Every other quest has none, because a dependency also holds back
 completion: FTB Quests remembers the progress of a quest whose dependencies aren't done yet, but only ticks it off through a
 fragile chain once they are (an un-claimed "Guh!" kept a whole Guhdex at 0). The logical order (deps) still places the
 quests and puts "Komt na: ..." on a section's header; compat/FtbQuestsRepair ticks off what older worlds left stuck.
@@ -27,7 +42,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 30   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje)
+CHAPTER_VERSION = 38   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings; 32 = verhalenpad: the chapter group "Het Guhpad" (four chapters with a lock quest, the chapters guhs_knabbelring and guhs_guhrio moved into guhs_pad_barbecuether), Het Snuffeleiland; 33 = biomes3 on its own branch; 34 = 1.4.0 with biomes3: the three new biomes, their five sections in De Guhmensie, twenty Reisbureau destinations; 35 = 1.4.1: the Guhstation quest text names the music disc "Het Snuffeleiland"; 36 = 1.4.2: Het Knabbelpark (park sections in Minigames), de Rookguh-vlucht; 37 = 1.4.3: the statue garden quest text names Suusvadsje; 38 = einde2 (1.5.0, merged onto 1.4.4): the sections of the outer islands in the Guheinde chapter (biome guhs, mikas, vesting, zwevers)
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -64,6 +79,21 @@ def kill(e, n=1):
     return {"type": "kill", "entity": e, "value": n}
 
 
+def stat(s, n):
+    """guhpad: a counter on a custom statistic (guhs:<s>): the quest book shows "n / <n>"."""
+    return {"type": "stat", "stat": s if ":" in s else f"guhs:{s}", "value": n}
+
+
+def met(task, titel=None, icon=None):
+    """guhpad: this task with a name of its own (instead of e.g. the id of a hidden advancement) and/or an icon item."""
+    task = dict(task)
+    if titel:
+        task["titel"] = titel
+    if icon:
+        task["task_icon"] = icon
+    return task
+
+
 QUESTS = []  # (key, title, description, icon, [tasks], [rewards], [deps], x, y, shape)
 
 
@@ -97,7 +127,9 @@ BIOMES = [("guh_fields", "Guhvelden"), ("knabbel_crumbs", "Knabbelkruimels"), ("
           # guhpixel: the nine biomes of dimension/guhmension.json that were missing here (new ids only; the ten above keep theirs)
           ("bleekwoud", "Bleekwoud"), ("gatenkaasgrotten", "Gatenkaasgrotten"), ("kaasmoeras", "Kaasmoeras"), ("vadswoud", "Vadswoud"),
           ("diepe_guhzee", "Diepe Guhzee"), ("knuffeldal", "Knuffeldal"), ("guhpolder", "Guhpolder"),
-          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i")]
+          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i"),
+          # biomes3 (new ids only, appended)
+          ("bloesemmeertje", "Bloesemmeertje"), ("klaterdal", "Klaterdal"), ("wolkenweide", "Wolkenweide")]
 for i, (b, name) in enumerate(BIOMES):
     # (the first ten in one row at y=6 as always; the new ones in a second row, clear of the fish at 6,7 and the slime block at 8,5.5)
     q(f"biome_{b}", name, f"Bezoek het bioom &d{name}&r in de Guhmensie.", "minecraft:filled_map", [biome(b)],
@@ -251,7 +283,9 @@ EXTRAS = [
     ("vads", "Super vahoege!", "Hak samengeperst super vahoege vads (ijzeren houweel) en smelt het.", "guhs:vahoege_vads_ingot",
      [item("guhs:vahoege_vads_ingot")]),
     ("paxel", "Vadspaxel", "Houweel, bijl en schep in een, en hij gaat nooit kapot.", "guhs:vahoege_vads_paxel", [item("guhs:vahoege_vads_paxel")]),
-    ("wheel", "Guhrad", "Zet je tamme guh in een guhrad: volle redstonestroom!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
+    ("wheel", "Guhrad", "Zet je tamme guh in een &dGuhrad&r: hij rent &dvadskracht&r bij elkaar voor je guhmachines, en moe wordt hij "
+     "nooit. Een blij guhtje rent extra hard! &dGuhdraad&r brengt de vadskracht naar je machines. Kijk naar het rad of de draad en je "
+     "leest hoeveel vadskracht je opstelling gebruikt. Njeg!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
     # 1.3.1 (appended: the quests above keep their places)
     ("schaar", "Vadsschaar", "Twee vahoege vads schuin boven elkaar, net als een gewone schaar. Hij knipt alles wat een schaar knipt en hij gaat nooit kapot.",
      "guhs:vahoege_vads_shears", [item("guhs:vahoege_vads_shears")]),
@@ -266,7 +300,7 @@ for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
 q("bank", "De Hongerige Guh", "Bij een &dguh-picknick&r in de Guhmensie zit de &dHongerige Guh&r. Voer hem 10 &egefrituurde kaasknabbels&r (uit de guh-koekenpan met Mika's vet) en je krijgt zijn vriendje de &dBank Guh&r. Iedere speler krijgt er een, en dit is de enige manier om aan een Bank Guh te komen: je kunt hem niet zelf maken. Wees er dus zuinig op!",
   "guhs:bank_guh", [adv("guhs:guhmension/feed_hungry_guh")], rewards=(("guhs:kaas_knabbels", 16),), deps=["struct_guh_picnic", "frying"],
   shape="gear", xp=200)
-q("bank_plaatsen", "Je eigen Bank Guh", "Zet je &dBank Guh&r neer en klik erop: er passen oneindig veel spullen in zijn buikje. Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
+q("bank_plaatsen", "Je eigen Bank Guh", "Zet je &dBank Guh&r neer en klik erop: van elke soort passen er wel &e256&r in zijn buikje (met het &dBodemloos Knabbelmaagje&r van de uitvinder-guh zelfs oneindig veel). Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
   "guhs:bank_guh", [item("guhs:bank_guh")], deps=["bank"], shape="rsquare")
 GROOT = {"bank"}   # drawn a bit bigger, like the "Hoe kom je hier?" quests
 
@@ -291,13 +325,22 @@ for _name, _module in zip(_features.FEATURES, _features.modules()):
 
 # --- the chapters ------------------------------------------------------------------------------------------------------------
 GROUP_TITLE = "&dGuhs"
+# guhpad: the chapter groups in sidebar order (id -> title). A chapter names its group with groep="..." (default "guhs").
+# "Het Guhpad" stands at the end of the sidebar: the big stories, in the order in which they open the worlds.
+GROEPEN = {"guhs": GROUP_TITLE, "guhpad": "&6Het Guhpad"}
 READING = ("&dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > "
-           "&5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
-           " > &dGuhverhalen&r > &aDiertjes&r > &dGuhpixel&r")
+           "&6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
+           " > &aDiertjes&r > &dGuhpixel&r > &bGuh-technologie&r. De grote verhalen staan helemaal onderaan bij elkaar, in de groep "
+           "&6Het Guhpad&r: &dVerhalen van de Guhmensie&r > &6Verhalen van de Guhbarbecuether&r > &5Verhalen van het Guheinde&r > "
+           "&7Het echte Guheinde&r")
+# guhpad: is the Snuffeleiland story in this tree (its own slice registers the module "snuffel")?
+SNUFFEL = "snuffel" in _features.FEATURES
 NIKS_OP_SLOT = ("Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. "
                 "De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!")
 # file: title, subtitle, ribbon colour, icon, banner renders (left, right), welcome picture (renders, structure behind them),
-#       links (the quests in other chapters this chapter comes after), the "Hoe kom je hier?" text (one paragraph per line)
+#       links (the quests in other chapters this chapter comes after), the "Hoe kom je hier?" text (one paragraph per line);
+#       guhpad: groep (its chapter group, default "guhs") and slot=dict(key, titel): the chapter starts with this lock quest
+#       in the place of "Hoe kom je hier?" (the intro text is its description; its tasks: a module's ftb_sloten)
 CHAPTERS = {
     "guhs_basis": dict(
         title="&dGuhs & basis", sub="Tem, kleed en knuffel je guh. VAHOEG!", colour="pink", icon="guh:normal",
@@ -305,7 +348,7 @@ CHAPTERS = {
         intro=["Je bent er al! Dit is het allereerste hoofdstuk: hier begint elk guh-avontuur, met een handje &6kaasknabbels&r.",
                "Lees de hoofdstukken van boven naar beneden: " + READING + ".",
                "Bovenaan elk hoofdstuk staat zo'n &dHoe kom je hier?&r-quest, met een linkje naar de quest in een ander hoofdstuk waar het begint.",
-               NIKS_OP_SLOT + " (Alleen de maaggroottes in De Guhmaag komen echt na elkaar.)"]),
+               NIKS_OP_SLOT + " (Alleen de maaggroottes in De Guhmaag komen echt na elkaar, en in &6Het Guhpad&r openen de grote verhalen de werelden: elk hoofdstuk begint daar met een slotquest.)"]),
     "guhs_guhmensie": dict(
         title="&dDe Guhmensie", sub="Roze wol, kaassaus en heel veel guhs", colour="magenta", icon="npc:reisguh",
         banner=("npc:reisguh", "geo:guh_bee:guh_bee"), welcome=(["npc:reisguh", "guh:starry", "geo:mika:mika"], "wiki:guh_portal"),
@@ -338,15 +381,23 @@ CHAPTERS = {
                "Zoek daar het &dVadsig-heiligdom&r (het heiligdomkompas wijst de weg) en help Moeder Vadsig haar kleine Guhbert terug te vinden. "
                "Als dank slikt ze je in: HAP!",
                "Dit is het enige hoofdstuk met een slotje: de maaggroottes (64 tot 128) komen echt na elkaar. Eerst smullen, dan groeien!"]),
+    # guhpad: the third stop of the Guhpad. The file, the quests and their ids are those of the chapter "Het Guheinde" that
+    # was released with 1.0.0 (so every player's progress stays); the title, the group and the first quest are new
     "guhs_guheinde": dict(
-        title="&5Het Guheinde", sub="Opper-Mika heeft alle knabbels, njeg!", colour="purple", icon="guh:ender",
+        groep="guhpad", title="&5Verhalen van het Guheinde", sub="Opper-Mika heeft alle knabbels, njeg!", colour="purple", icon="guh:ender",
         banner=("guh:vahoege_ender", "geo:mika:opper_mika"), welcome=(["guh:koning", "guh:ender", "geo:mika:mika"], "wiki:structure_guheinde_knabbelberg"),
         links=["big_mika", "kasteel"],
-        intro=["Dit hoofdstuk komt na twee quests in &dDe Guhmensie&r:",
-               "- &cHoe groter de Mika...&r: Mika's (vooral Grote Mika) huilen &5Mika-tranen&r. Die heb je nodig voor de Ogen van Vadsig.",
-               "- &dLang leve de Koning!&r: de Koningguh in het guhkasteel vertelt je waar alle kaasknabbels gebleven zijn.",
-               "Daarna: twaalf Ogen van Vadsig, de Knabbelkelder en... Opper-Mika. Zonder knabbels is je guh niet VAHOEG, dus haal ze terug! "
-               + NIKS_OP_SLOT]),
+        slot=dict(key="guhpad_slot_guheinde", titel="Slotje: eerst de Guhbarbecuether"),
+        intro=["&cDit hoofdstuk zit op slot.&r Het portaal in de Knabbelkelder laat je pas door als je &6In de ban van de Knabbelring&r "
+               "en &cSuper Guhrio&r hebt gevolgd en de &cAangebrande Mika&r hebt verslagen. Hieronder zie je wat je al hebt: een "
+               "vinkje per ding.",
+               "Was je al eens in het Guheinde? Wie er nog is mag er blijven, maar wie eruit stapt volgt eerst het Guhpad verder. "
+               "Alles wat je al gedaan hebt blijft gewoon bewaard, njeg.",
+               "Dit verhaal begint bij twee quests in &dDe Guhmensie&r: &cHoe groter de Mika...&r (Mika's, vooral Grote Mika, huilen "
+               "&5Mika-tranen&r: die heb je nodig voor de Ogen van Vadsig) en &dLang leve de Koning!&r (de Koningguh in het guhkasteel "
+               "vertelt je waar alle kaasknabbels gebleven zijn).",
+               "Daarna: twaalf Ogen van Vadsig, de Knabbelkelder en... Opper-Mika. Zonder knabbels is je guh niet VAHOEG, dus haal ze "
+               "terug! Hier komen later nog meer verhalen bij."]),
     "guhs_barbecuether": dict(
         title="&6De Guhbarbecuether", sub="Heet, heter, njeg! Help de Grillguh", colour="orange", icon="npc:grillguh",
         banner=("npc:grillguh", "wiki:rookguh"), welcome=(["npc:grillguh", "guh:asguh", "wiki:rookguh"], "wiki:structure_barbecueput_groot"),
@@ -397,17 +448,27 @@ CHAPTERS = {
                "Bouw een &dGuhhuisje&r (een huisje in de vorm van een guhhoofd): daar wonen je guhs en maatjes, slapen ze 's nachts "
                "en doen ze overdag klusjes. In je &dGuhdex&r (tab Mijn guhs) staat het dagboekje van elke guh.",
                NIKS_OP_SLOT]),
-    # 3.0 (Guhverhalen): the stories, and the little animals of the Guhmensie
+    # 3.0 (Guhverhalen): the stories, and the little animals of the Guhmensie.
+    # guhpad: the first stop of the Guhpad. The file, the quests and their ids are those of the chapter "Guhverhalen" that was
+    # released with 1.0.0 (so every player's progress stays); the title, the group and the first quest are new
     "guhs_verhalen": dict(
-        title="&dGuhverhalen", sub="Baltoguh, Guhtwo, 626-guh, het Knuffelhart en de Timmerguh. Njeg!", colour="pink", icon="guh:baltoguh",
+        groep="guhpad", title="&dVerhalen van de Guhmensie", sub="De grote verhalen van de roze wereld. Hier begint het Guhpad, njeg!",
+        colour="pink", icon="guh:baltoguh",
         banner=("guh:mewtwo", "guh:stitch626"),
         welcome=(["guh:baltoguh", "npc:timmerguh", "guh:mewtwo", "guh:stitch626"], None),
         links=["superkompas"],
-        intro=["Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar de nieuwe tab &dVerhalen&r.",
-               "Daar vind je de plekken van de grote guhverhalen: &fNomguh&r in de witte Sneeuwguhtoendra (Baltoguh!), het "
-               "&5kloon-eiland&r in de Diepe Guhzee (Guhtwo!), het &dHemelkapelletje&r hoog in de wolken, en de eilandjes van "
-               "&bGuhwai'i&r (626-guh!). En in elk Knuffeldal-stadje bouwt de &6Timmerguh&r een huisje.",
-               "Elk verhaal eindigt met een nieuwe vriend: een verhaalguh die je (per speler) één keer mag temmen. " + NIKS_OP_SLOT]),
+        slot=dict(key="guhpad_slot_guhmensie", titel="Het Guhpad begint hier"),
+        intro=["Dit is het begin van &6het Guhpad&r: de grote verhalen openen de werelden. Eerst de &dGuhmensie&r, dan de "
+               "&6Guhbarbecuether&r, dan het &5Guheinde&r. &dDit hoofdstuk zit niet op slot&r: stap door je guhportaal en je bent er.",
+               "Kies in je &6superkompas&r de keuze &dMijn verhaal&r: het wijst naar het dichtstbijzijnde verhaal dat je nog niet hebt "
+               "gedaan. De plekken zelf staan in de tab &dVerhalen&r.",
+               "De grote verhalen van de Guhmensie: &fNomguh&r in de witte Sneeuwguhtoendra (Baltoguh!), het &5kloon-eiland&r in de "
+               "Diepe Guhzee (Guhtwo!), het &dHemelkapelletje&r hoog in de wolken"
+               + (", de eilandjes van &bGuhwai'i&r (626-guh!) en het &6steigerhuisje&r aan het water, waar de boot naar &6Het "
+                  "Snuffeleiland&r vertrekt." if SNUFFEL else " en de eilandjes van &bGuhwai'i&r (626-guh!)."),
+               "Heb je ze allemaal gevolgd? Dan wacht &dGuhdalf&r op je met de Knabbelring en gaat het volgende hoofdstuk open. De "
+               "&6Timmerguh&r, het surfen en de andere rijtjes hier tellen daar niet voor mee: die zijn er voor de gezelligheid. "
+               "Hier kun je alles in elke volgorde doen."]),
     "guhs_diertjes": dict(
         title="&aDiertjes van de Guhmensie", sub="Vinkjes, eendjes, egeltjes en... Sjokkel?", colour="green", icon="item:minecraft:feather",
         banner=("item:minecraft:feather", "item:minecraft:sweet_berries"),
@@ -432,8 +493,88 @@ CHAPTERS = {
                "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis "
                "mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de "
                "Guhmensie. " + NIKS_OP_SLOT]),
+    # bbq2 (CONTRACT_130 5.5): Guh-technologie (written by features/tech_quests.py), the Knabbelring (features/ring*.py, the one
+    # chapter whose quests really depend on each other: FTB_LINEAIR) and Super Guhrio (features/guhrio*.py)
+    "guhs_techniek": dict(
+        title="&bGuh-technologie", sub="Vadskracht, buizen en knabbelende machines. Njeg, het werkt vanzelf!", colour="cyan",
+        icon="item:guhs:block/guh_oven_front_on",   # (the Guhrad has no flat picture; the oven's snoet says "machine with a face")
+        banner=("guh:normal", "guh:golden"),
+        welcome=(["guh:normal", "item:guhs:block/guh_oven_front_on", "item:guhs:guh_wire", "guh:mint"], None),
+        links=["wheel"],
+        intro=["Dit hoofdstuk komt na &dHet Guhrad&r in &dGuhs & basis&r: een guh die in een rad rent, maakt &bvadskracht&r.",
+               "Met &bGuhdraad&r breng je die kracht naar machines met een snoetje: ovens, buizen, knabbelaars... Elk rijtje "
+               "hieronder is een &6project&r, en na elk project werkt er iets vanzelf in je eigen wereld.",
+               "Kijk naar een rad, een draad of een machine en je ziet meteen hoeveel vadskracht je opstelling gebruikt. "
+               "Het allerlaatste stukje ontbreekt nog: dat hoort bij het &5Guheinde&r. " + NIKS_OP_SLOT]),
+    # guhpad: the second stop of the Guhpad: the two big stories of the Guhbarbecuether in one chapter, the Knabbelring
+    # (features/ring*.py, the one story whose quests really depend on each other: FTB_LINEAIR) and under it Super Guhrio
+    # (features/guhrio*.py). Before the Guhpad they were the chapters guhs_knabbelring and guhs_guhrio (never released; the
+    # quest keys, and so the quest ids, are the same; their texts keep those names in the English overlay: TEKST_HOOFDSTUK)
+    "guhs_pad_barbecuether": dict(
+        groep="guhpad", title="&6Verhalen van de Guhbarbecuether", sub="Eén knabbel om ze allemaal te delen, en een prinses in een ander kasteeldeel",
+        colour="gold", icon="npc:guhdalf",
+        banner=("npc:guhdalf", "npc:padguh"), welcome=(["npc:guhdalf", "guh:sam_guh", "npc:padguh", "guh:guhshi"], None),
+        links=["bbq_aan"],
+        slot=dict(key="guhpad_slot_barbecuether", titel="Slotje: eerst de Guhmensie"),
+        intro=["&cDit hoofdstuk zit op slot&r tot je de grote verhalen van de &dGuhmensie&r hebt gevolgd. Hieronder zie je welke je al "
+               "hebt: een vinkje per verhaal. Mis je er nog een? &dGuhdalf&r en het grillportaal zeggen het je ook, njeg.",
+               "Heb je ze allemaal, en brandt de barbecue van de Grillguh weer (&6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r)? "
+               "Dan staat er bezoek bij de grote barbecueput. &dGuhdalf&r heeft een ringvormige knabbel bij zich waar iedereen hebberig "
+               "van wordt. Hij moet naar de &6Frituurberg&r, diep in de Guhbarbecuether: niet om hem kapot te maken, maar om hem te "
+               "frituren en te delen. Pas na zijn feest laat het grillportaal je door.",
+               "&6In de ban van de Knabbelring&r is het enige verhaal waarin de quests &cecht na elkaar&r komen: volg ze van boven naar "
+               "beneden. Daaronder staat &cSuper Guhrio&r: in een frituursauszee staat het &cKasteel van de Grote Nether-Mika&r "
+               "(superkompas: Barbecue). Binnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks.",
+               "Je &dGuhdex&r (tab Verhalen) laat het hele Guhpad zien, en &dMijn verhaal&r in je superkompas wijst steeds de weg."]),
+    # guhpad: the last stop: a preview that is locked for everybody. Silhouettes, question marks, a few riddles, ONE counter
+    # and the question-mark row of layer 6 of the Guh-technologie (features/guhpad.py: FTB_OP_SLOT). No real content.
+    "guhs_pad_echt": dict(
+        groep="guhpad", title="&7Het echte Guheinde", sub="???", colour="nacht", icon="silhouet:guh:normal",
+        banner=("silhouet:guh:ender", "silhouet:guh:koning"),
+        welcome=(["silhouet:guh:normal", "silhouet:guh:brontosaurus", "silhouet:guh:ender", "silhouet:guh:teckel"], None),
+        links=[],
+        slot=dict(key="guhpad_slot_echt", titel="Verhalen gevolgd"),
+        intro=["&7Niemand weet wat hier ligt.&r",
+               "Het enige dat bekend is: je komt er alleen door &dalle verhalen&r van de &dGuhmensie&r, de &6Guhbarbecuether&r en het "
+               "&5Guheinde&r te volgen.",
+               "Alleen de grote verhalen tellen mee. De teller hieronder houdt het voor je bij. Njeg..."]),
 }
-ORDER = list(CHAPTERS)
+
+
+def groep_van(c):
+    """guhpad: the chapter group of a chapter."""
+    return CHAPTERS[c].get("groep", "guhs")
+
+
+def groep_id(groep):
+    """guhpad: the id of a chapter group (the group "Guhs" keeps the id it always had)."""
+    return qid("group") if groep == "guhs" else qid(f"group/{groep}")
+
+
+def intro_key(c):
+    """guhpad: the key of a chapter's first quest: its lock quest, else its "Hoe kom je hier?"."""
+    return CHAPTERS[c]["slot"]["key"] if CHAPTERS[c].get("slot") else f"intro_{c}"
+
+
+# guhpad: the chapters of the Guhpad, in the order of the path (the other chapters keep their order in the group "Guhs")
+PAD_ORDER = ["guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt"]
+ORDER = [c for g in GROEPEN for c in (PAD_ORDER if g == "guhpad" else list(CHAPTERS)) if groep_van(c) == g]
+assert sorted(ORDER) == sorted(CHAPTERS), "every chapter is in a known group, the Guhpad ones in PAD_ORDER"
+# guhpad: a module whose quests moved to another chapter keeps the chapter name it had in its text keys (ftb.<chapter>.q...
+# and ftb.<chapter>.section...: the English overlay in tools/lang/en and the wiki notes were written against those names)
+TEKST_HOOFDSTUK = {
+    "ring": "guhs_knabbelring", "ring_h1": "guhs_knabbelring", "ring_h2": "guhs_knabbelring", "ring_h3": "guhs_knabbelring",
+    "ring_h4": "guhs_knabbelring", "ring_h5": "guhs_knabbelring", "ring_h6": "guhs_knabbelring", "ring_sausuman": "guhs_knabbelring",
+    "guhrio": "guhs_guhrio", "guhrio_w1": "guhs_guhrio", "guhrio_w2": "guhs_guhrio", "guhrio_w3": "guhs_guhrio",
+    "guhrio_beloning": "guhs_guhrio",
+}
+# (for the docs step: the chapter where the sections of a chapter that is gone live now)
+VERHUISD = {"guhs_knabbelring": "guhs_pad_barbecuether", "guhs_guhrio": "guhs_pad_barbecuether"}
+
+
+def tekst_hoofdstuk(c, module):
+    """The chapter name in the text keys of a quest or section of this feature module (see TEKST_HOOFDSTUK)."""
+    return TEKST_HOOFDSTUK.get(module, c)
 
 MODULE_CHAPTER = {
     "beauty": "guhs_minigames", "race": "guhs_minigames", "meppen": "guhs_minigames", "disco": "guhs_minigames",
@@ -466,7 +607,22 @@ MODULE_CHAPTER = {
     "guhpixel": "guhs_guhpixel", "guhpixel_lobby": "guhs_guhpixel", "guhpixel_grap1": "guhs_guhpixel", "guhpixel_grap2": "guhs_guhpixel",
     "guhpixel_among": "guhs_guhpixel", "guhpixel_guhkade": "guhs_guhpixel", "guhpixel_kantoor": "guhs_guhpixel",
     "guhpixel_bioscoop": "guhs_guhpixel", "guhpixel_reisbureau": "guhs_guhpixel", "guhpixel_parkour": "guhs_guhpixel",
+    # bbq2 (CONTRACT_130 5.5; vadskracht: its quests stay next to the Guhrad in guhs_basis, the section "thuis")
+    "bank": "guhs_guhmensie", "vadskracht": "guhs_basis",
+    "tech_bronnen": "guhs_techniek", "tech_buizen": "guhs_techniek", "tech_machines": "guhs_techniek", "tech_vloeistof": "guhs_techniek",
+    "tech_bezorg": "guhs_techniek", "tech_klusjes": "guhs_techniek", "tech_quests": "guhs_techniek",
+    "paleizen": "guhs_barbecuether", "bestaand": "guhs_barbecuether", "fossiel_mijn": "guhs_barbecuether",
+    "sausdieren": "guhs_barbecuether", "camping_markt": "guhs_barbecuether", "toren_peper": "guhs_barbecuether",
+    # (guhpad: the two stories of the Guhbarbecuether are one chapter of the Guhpad now)
+    "ring": "guhs_pad_barbecuether", "ring_h1": "guhs_pad_barbecuether", "ring_h2": "guhs_pad_barbecuether", "ring_h3": "guhs_pad_barbecuether",
+    "ring_h4": "guhs_pad_barbecuether", "ring_h5": "guhs_pad_barbecuether", "ring_h6": "guhs_pad_barbecuether",
+    "ring_sausuman": "guhs_pad_barbecuether",
+    "guhrio": "guhs_pad_barbecuether", "guhrio_w1": "guhs_pad_barbecuether", "guhrio_w2": "guhs_pad_barbecuether",
+    "guhrio_w3": "guhs_pad_barbecuether", "guhrio_beloning": "guhs_pad_barbecuether",
+    # biomes3: no chapter of its own; its sections stand in SECTIONS["guhs_guhmensie"]
+    "bio_systemen": "guhs_guhmensie",
 }
+_BIO = MODULES["bio_systemen"]   # biomes3: which quest goes in which section (tools/features/bio_systemen.py)
 PREFIX_CHAPTER = [("maag", "guhs_maag"), ("heiligdom", "guhs_maag"), ("variant_", "guhs_basis"), ("emote", "guhs_basis"),
                   ("biome_", "guhs_guhmensie"), ("struct_", "guhs_guhmensie"), ("verstop", "guhs_minigames"), ("kermis", "guhs_minigames"),
                   ("onderwater", "guhs_onderwater"), ("diepzee", "guhs_onderwater"), ("guheinde", "guhs_guheinde"),
@@ -490,7 +646,8 @@ SECTIONS = {
         sec("emotes", "Emotes: kijk wat ik kan!", "guh:mint", module="emotes", upstream="tame"),
     ],
     "guhs_guhmensie": [
-        sec("portaal", "Het guhportaal", "wiki:guh_portal", keys=["portal_block", "guhmension", "pink_moon", "superkompas", "reisguhs"],
+        sec("portaal", "Het guhportaal", "wiki:guh_portal", keys=["portal_block", "guhmension", "pink_moon", "superkompas", "reisguhs"]
+            + _BIO.FTB_PORTAAL,   # biomes3: the Superkompas tab "Biomes"
             upstream="intro"),
         sec("biomen", "De biomen", "item:minecraft:filled_map", keys=[f"biome_{b}" for b, _ in BIOMES]),
         sec("wezens", "Wezens (en Mika's, njeg)", "geo:mika:mika",
@@ -502,6 +659,12 @@ SECTIONS = {
         sec("spullen", "Knabbels, kristal & vads", "item:guhs:guh_kristal",
             keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "schaar"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
+        # biomes3 (appended, so the sections above keep their places): the three new biomes, each after its biome quest
+        sec("bio_meer", "Het Bloesemmeertje", "npc:botenhuisje_visserguh", keys=_BIO.BIO_SECTIES["bio_meer"], upstream="biome_bloesemmeertje"),
+        sec("bio_dal", "Het Klaterdal", "guh:tanukiguh", keys=_BIO.BIO_SECTIES["bio_dal"], upstream="biome_klaterdal"),
+        sec("bio_weeb", "Het weebhuisje", "npc:weeb_evivads", keys=_BIO.BIO_SECTIES["bio_weeb"], upstream="biome_klaterdal"),
+        sec("bio_weide", "De Wolkenweide", "npc:wolkenhoeder", keys=_BIO.BIO_SECTIES["bio_weide"], upstream="biome_wolkenweide"),
+        sec("bio_lucht", "Hoog in de wolken", "npc:smidguh", keys=_BIO.BIO_SECTIES["bio_lucht"], upstream="biome_wolkenweide"),
     ],
     "guhs_minigames": [
         sec("beauty", "Guh Beauty Theater", "npc:showguh", module="beauty", upstream="intro"),
@@ -613,21 +776,35 @@ SECTIONS = {
 }
 COLUMNS = {"guhs_onderwater": 1, "guhs_maag": 1, "guhs_guheinde": 1}
 
-# the "Hoe kom je hier?" quests (new in 2.8; a checkmark to tick, nothing is locked); they come after the linked quests
+# the "Hoe kom je hier?" quests (new in 2.8; a checkmark to tick, nothing is locked); they come after the linked quests.
+# guhpad: a chapter with a slot starts with its lock quest instead: the same place and text, but its tasks show what to
+# finish first (they come from a module's ftb_sloten(fq) -> {quest key: [tasks]}; the quest ticks itself off)
+SLOT_TAKEN = {}
+for _module in MODULES.values():
+    if hasattr(_module, "ftb_sloten"):
+        SLOT_TAKEN.update(_module.ftb_sloten(sys.modules[__name__]))
 for _file, _c in CHAPTERS.items():
-    SOURCE[f"intro_{_file}"] = "core"
-    q(f"intro_{_file}", "Hoe kom je hier?", "\n\n".join(_c["intro"]), f"guhs:textures/ftbquests/icon_{_file}.png", [{"type": "checkmark"}],
+    _slot = _c.get("slot")
+    SOURCE[intro_key(_file)] = "core"
+    q(intro_key(_file), _slot["titel"] if _slot else "Hoe kom je hier?", "\n\n".join(_c["intro"]), f"guhs:textures/ftbquests/icon_{_file}.png",
+      SLOT_TAKEN.get(_slot["key"], [{"type": "checkmark"}]) if _slot else [{"type": "checkmark"}],
       rewards=(("guhs:kaas_knabbels", 4),), deps=list(_c["links"]), shape="gear")
+INTROS = {intro_key(_file) for _file in CHAPTERS}
+
+
+def module_chapter(name):
+    """The chapter of a feature module (its FTB_CHAPTER, else MODULE_CHAPTER), or None."""
+    mod = MODULES.get(name)
+    if getattr(mod, "FTB_CHAPTER", None) in CHAPTERS:
+        return mod.FTB_CHAPTER
+    return MODULE_CHAPTER.get(name)
 
 
 def chapter_of(key):
     src = SOURCE.get(key, "core")
     if src != "core":
-        mod = MODULES.get(src)
-        if getattr(mod, "FTB_CHAPTER", None) in CHAPTERS:
-            return mod.FTB_CHAPTER
-        if src in MODULE_CHAPTER:
-            return MODULE_CHAPTER[src]
+        if module_chapter(src):
+            return module_chapter(src)
     for prefix, chapter in PREFIX_CHAPTER:
         if key.startswith(prefix):
             return chapter
@@ -637,7 +814,7 @@ def chapter_of(key):
 def assign():
     """-> {chapter: [section dicts with 'quests': [keys]]}: every quest exactly once (the intros aside)."""
     keys = [x[0] for x in QUESTS]
-    known, done = set(keys), {f"intro_{c}" for c in CHAPTERS}
+    known, done = set(keys), set(INTROS)
     out = {c: [] for c in CHAPTERS}
     by_module = {}
     for k in keys:
@@ -659,6 +836,22 @@ def assign():
                 # 3.0: a module may give its section another picture (FTB_PORTRAIT = "<spec>")
                 portret = getattr(MODULES.get(s["module"]), "FTB_PORTRAIT", None) if isinstance(s["module"], str) else None
                 out[c].append(dict(s, quests=ks, **({"portrait": portret} if portret else {})))
+    # bbq2: the sections a module declares itself (FTB_SECTIES), appended to its chapter in FEATURES order
+    for name, mod in MODULES.items():
+        secties = getattr(mod, "FTB_SECTIES", None)
+        if not secties:
+            continue
+        c = module_chapter(name) or "guhs_minigames"
+        named = {k for _sid, _title, _portrait, ks in secties if ks for k in ks}
+        for sid, title, portrait, ks in secties:
+            if ks is None:
+                ks = [k for k in by_module.get(name, []) if k not in done and k not in named]
+            else:
+                ks = [k for k in ks if k in known and k not in done]
+            done.update(ks)
+            if ks:
+                out[c].append(dict(sec(sid, title, portrait, module=name, upstream="intro"), quests=ks,
+                                   lineair=bool(getattr(mod, "FTB_LINEAIR", False))))
     # the rest: a section per feature module (or "Nog meer guh-dingen") at the end of its chapter
     for k in keys:
         if k in done:
@@ -684,9 +877,20 @@ HEAD_W, HEAD_H = 10.0, 1.5625           # section header picture (1024x160)
 TITLE_W, TITLE_H = 12.0, 3.0            # title banner (1024x256)
 WELCOME_W, WELCOME_H = 6.0, 3.0         # welcome picture (768x384)
 MAX_LINE = 2.3                          # only lines between neighbours (longer ones would criss-cross the chapter)
+SLOT_W, SLOT_H = 10.0, 3.4375           # bbq2: an FTB_SLOT picture at the end of a chapter (1024x352)
 
 
-def layout(chapter, sections, deps):
+def slots():
+    """bbq2: {chapter: [(module, title, portrait, [lines])]}: the FTB_SLOT pictures, in FEATURES order."""
+    out = {c: [] for c in CHAPTERS}
+    for name, mod in MODULES.items():
+        slot = getattr(mod, "FTB_SLOT", None)
+        if slot:
+            out[module_chapter(name) or "guhs_minigames"].append((name, slot[0], slot[1], list(slot[2])))
+    return out
+
+
+def layout(chapter, sections, deps, einde=()):
     """Positions {key: (x, y)}, links [(key, x, y)], images [(name, x, y, w, h)] (x, y: the centre, like FTB Quests)."""
     pos, links, images = {}, [], []
     cols = COLUMNS.get(chapter, 2)
@@ -695,7 +899,7 @@ def layout(chapter, sections, deps):
     ls = CHAPTERS[chapter]["links"]
     for i, k in enumerate(ls):
         links.append((k, 0.0, 1.5 + (i - (len(ls) - 1) / 2) * 1.5))
-    pos[f"intro_{chapter}"] = (2.0 if ls else 0.0, 1.5)
+    pos[intro_key(chapter)] = (2.0 if ls else 0.0, 1.5)
     images.append(("welkom", (3.3 + right) / 2 if cols > 1 else 3.3 + WELCOME_W / 2, 1.5, WELCOME_W, WELCOME_H))
     y_row, bottoms = 4.0, []
     for i, s in enumerate(sections):
@@ -713,6 +917,10 @@ def layout(chapter, sections, deps):
             pos[k] = (x0 + c * DX, y0 + HEAD_H + 1.0 + r * DY)
         rows = (n + ROW - 1) // ROW
         bottoms.append(y0 + HEAD_H + 1.0 + (rows - 1) * DY + 1.4)
+    y = max(bottoms) if bottoms else y_row
+    for name, *_ in einde:                # bbq2: the FTB_SLOT pictures, under everything else
+        images.append((f"slot_{name}", -0.5 + SLOT_W / 2, y + SLOT_H / 2, SLOT_W, SLOT_H))
+        y += SLOT_H + 0.6
     return pos, links, images
 
 
@@ -811,11 +1019,20 @@ def json5(v, indent=0):
     return json.dumps(str(v), ensure_ascii=False)
 
 
+def task_titels(key, tasks):
+    """guhpad: [(task id, task number, Dutch name)] of the tasks of this quest that have a name of their own (see met())."""
+    return [(qid(f"{key}/task{n}"), n, t["titel"]) for n, t in enumerate(tasks) if t.get("titel")]
+
+
 def quest_nbt(key, icon, tasks, rewards, xp):
     task_list = []
     for n, t in enumerate(tasks):
         t = dict(t)
+        t.pop("titel", None)                 # (guhpad: a task's own name goes to the lang files, see task_titels)
+        task_icon = t.pop("task_icon", None)
         t["id"] = qid(f"{key}/task{n}")
+        if task_icon:
+            t["icon"] = {"id": task_icon}
         if t["type"] == "item":
             t["item"] = {"count": 1, "id": t["item"]}
             if t["count"] > 1:
@@ -848,9 +1065,10 @@ def plan():
     """Everything but the writing: ({chapter: dict(sections, pos, links, images, hidden, drawn)}, deps, where, info)."""
     info = {x[0]: x for x in QUESTS}
     sections = assign()
+    einde = slots()   # (bbq2: the FTB_SLOT pictures)
     where = {}
     for c, ss in sections.items():
-        where[f"intro_{c}"] = c
+        where[intro_key(c)] = c
         for s in ss:
             for k in s["quests"]:
                 where[k] = c
@@ -862,23 +1080,45 @@ def plan():
         src = SOURCE[key]
         if src != "core" and not deps[key]:
             before = previous.get(src)
-            deps[key] = [before if before and where[before] == where[key] else f"intro_{where[key]}"]
+            deps[key] = [before if before and where[before] == where[key] else intro_key(where[key])]
         previous[src] = key
     for c, ss in sections.items():
         for s in ss:
-            if s["upstream"]:
-                deps[s["quests"][0]] = [f"intro_{c}" if s["upstream"] == "intro" else s["upstream"]]
+            if s["upstream"] and not (s.get("lineair") and info[s["quests"][0]][6]):   # (bbq2: a story section keeps what its first quest names)
+                deps[s["quests"][0]] = [intro_key(c) if s["upstream"] == "intro" else s["upstream"]]
+    # bbq2: the quests of FTB_LINEAIR modules are one chain per chapter, in quest order (so also from one module to the next,
+    # e.g. the chapters of a story): a linear quest that doesn't name a linear quest itself comes after the one before it
+    last = {}
+    for key, *_ in QUESTS:
+        if linear(key):
+            c = where[key]
+            if c in last and not any(linear(d) for d in deps[key]):
+                deps[key] = [last[c]]
+            last[c] = key
     out = {}
     for c in ORDER:
-        pos, links, images = layout(c, sections[c], deps)
+        pos, links, images = layout(c, sections[c], deps, einde[c])
         hidden, drawn = visible_lines(pos, links, images, gates(deps))
-        out[c] = dict(sections=sections[c], pos=pos, links=links, images=images, hidden=hidden, drawn=drawn)
+        out[c] = dict(sections=sections[c], pos=pos, links=links, images=images, hidden=hidden, drawn=drawn, slots=einde[c])
     return out, deps, where, info
 
 
+def linear(key):
+    """bbq2: is this a quest of a feature module with FTB_LINEAIR = True (a story in order: real dependencies)?"""
+    return bool(getattr(MODULES.get(SOURCE.get(key)), "FTB_LINEAIR", False))
+
+
+def op_slot(key):
+    """guhpad: is this a quest of a feature module with FTB_OP_SLOT = True (a preview: it really hangs behind its chapter's lock quest)?"""
+    return bool(getattr(MODULES.get(SOURCE.get(key)), "FTB_OP_SLOT", False))
+
+
 def gates(deps):
-    """The dependencies FTB Quests really gets: only the stomach sizes come after each other (see the top)."""
-    return {k: (v if k.startswith("maag_") else []) for k, v in deps.items()}
+    """The dependencies FTB Quests really gets: the stomach sizes come after each other, (bbq2) the quests of an
+    FTB_LINEAIR module depend on the linear quests before them (see the top), and (guhpad) the quests of an FTB_OP_SLOT
+    module depend on the lock quest of their chapter. The rule for every other quest: none."""
+    return {k: (v if k.startswith("maag_") else [d for d in v if linear(d)] if linear(k)
+                else [intro_key(module_chapter(SOURCE[k]))] if op_slot(k) else []) for k, v in deps.items()}
 
 
 LOCALES = ("nl_nl", "en_us")   # ftbquests/lang/<locale>/<chapter>.json5; compat/FtbQuestsChapter installs both
@@ -888,7 +1128,17 @@ def build(force_art=False):
     import make_ftbquests_art as art
     chapters, deps, where, info = plan()
     locks = gates(deps)
-    group_id = qid("group")
+
+    def titel_key(c, wat):
+        """The overlay key of a chapter's title / subtitle (a chapter of the Guhpad has its own: its texts are new)."""
+        return f"ftb.{c}.{wat}" if groep_van(c) == "guhs" else f"ftb.{groep_van(c)}.{c}.{wat}"
+
+    def quest_key(key, wat):
+        """The overlay key of a quest's title / description (a quest that moved keeps its old chapter name: TEKST_HOOFDSTUK)."""
+        return f"ftb.{tekst_hoofdstuk(where[key], SOURCE.get(key))}.q.{key}.{wat}"
+
+    def sectie_key(c, sect):
+        return f"ftb.{tekst_hoofdstuk(c, sect['module'] if isinstance(sect['module'], str) else None)}.section.{sect['sid']}"
     # (1.2.0) the English overlay, also for the English pictures: <chapter>/en/title.png and en/kop_<sid>.png (with the
     # English text painted in; the client shows those instead with English chosen: compat/FtbQuestsTaal.image)
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -897,11 +1147,14 @@ def build(force_art=False):
     en_text = lambda key, nl: plain(overlay.get(key, nl))  # noqa: E731
     # the pictures (only redrawn when their recipe changes)
     jobs = {}
-    for i, (c, ch) in enumerate(chapters.items()):
+    for mod in MODULES.values():           # (guhpad: a module's own extra pictures)
+        jobs.update(getattr(mod, "FTB_PLAATJES", {}))
+    for c, ch in chapters.items():
         spec = CHAPTERS[c]
+        i = list(CHAPTERS).index(c)        # (the seed of the picture: a chapter keeps it wherever it stands in the sidebar)
         jobs[f"icon_{c}.png"] = ("icon", [spec["icon"], 64])
         jobs[f"{c}/title.png"] = ("title", [plain(spec["title"]), spec["colour"], spec["banner"][0], spec["banner"][1], i])
-        jobs[f"{c}/en/title.png"] = ("title", [en_text(f"ftb.{c}.title", spec["title"]), spec["colour"], spec["banner"][0],
+        jobs[f"{c}/en/title.png"] = ("title", [en_text(titel_key(c, "title"), spec["title"]), spec["colour"], spec["banner"][0],
                                                spec["banner"][1], i])
         jobs[f"{c}/welkom.png"] = ("welcome", [spec["welcome"][0], spec["colour"], i, spec["welcome"][1]])
         ch["komt_na"] = {}
@@ -910,19 +1163,23 @@ def build(force_art=False):
             sub = sub_en = None
             if deps[first] and deps[first][0] not in s["quests"] and not any(k == first for k, _ in ch["drawn"]):
                 u = deps[first][0]
-                if u == f"intro_{c}" and spec["links"]:
+                if u == intro_key(c) and spec["links"]:
                     u = spec["links"][0]          # (the intro itself comes after that quest in another chapter)
                 sub = ["Komt na: " + plain(info[u][1])]
-                q_en = en_text(f"ftb.{where[u]}.q.{u}.title", info[u][1])
+                q_en = en_text(quest_key(u, "title"), info[u][1])
                 sub_en = [plain(overlay.get("ftb.komt_na", "Komt na: %s")).replace("%s", q_en)]
                 if where.get(u) != c:
                     sub.insert(0, sub[0] + " (" + plain(CHAPTERS[where[u]]["title"]) + ")")
-                    ch_en = en_text(f"ftb.{where[u]}.title", CHAPTERS[where[u]]["title"])
+                    ch_en = en_text(titel_key(where[u], "title"), CHAPTERS[where[u]]["title"])
                     sub_en.insert(0, plain(overlay.get("ftb.komt_na_elders", "Komt na: %s (%s)")).replace("%s", q_en, 1).replace("%s", ch_en, 1))
             ch["komt_na"][s["sid"]] = sub
             colour = s["colour"] or spec["colour"]
             jobs[f"{c}/kop_{s['sid']}.png"] = ("header", [s["title"], s["portrait"], colour, sub])
-            jobs[f"{c}/en/kop_{s['sid']}.png"] = ("header", [en_text(f"ftb.{c}.section.{s['sid']}", s["title"]), s["portrait"], colour, sub_en])
+            jobs[f"{c}/en/kop_{s['sid']}.png"] = ("header", [en_text(sectie_key(c, s), s["title"]), s["portrait"], colour, sub_en])
+        for name, titel, portret, regels in ch["slots"]:   # bbq2: the preview pictures (in the colour of the Guheinde)
+            jobs[f"{c}/slot_{name}.png"] = ("slot", [plain(titel), portret, "purple", [plain(r) for r in regels]])
+            jobs[f"{c}/en/slot_{name}.png"] = ("slot", [en_text(f"ftb.{c}.slot.{name}.title", titel), portret, "purple",
+                                                        [en_text(f"ftb.{c}.slot.{name}.line.{i}", r) for i, r in enumerate(regels)]])
     drawn = art.make_art(jobs, force=force_art)
     print(f"FTB Quests pictures: {len(jobs)} ({drawn} drawn)")
 
@@ -944,37 +1201,48 @@ def build(force_art=False):
         for f in os.listdir(os.path.join(OUT, d)):  # chapters that are gone, the SNBT files before 1.1.0, lang/<c>.json5 before 1.2.0
             if os.path.isfile(os.path.join(OUT, d, f)) and (d == "lang" or not f.endswith(".json5") or f[:-6] not in CHAPTERS):
                 os.remove(os.path.join(OUT, d, f))
-    group_title = texts("ftb.group.title", GROUP_TITLE)
+    # (guhpad: every group's title goes into the lang file of its first chapter; the group "Guhs" keeps its key)
+    group_titles = {g: texts("ftb.group.title" if g == "guhs" else f"ftb.group.{g}.title", titel) for g, titel in GROEPEN.items()}
     texts("ftb.komt_na", "Komt na: %s")             # (painted on the section header pictures, not in the lang files yet)
     texts("ftb.komt_na_elders", "Komt na: %s (%s)")
-    index = [f"version {CHAPTER_VERSION}", f"group {group_id}"]
+    index = [f"version {CHAPTER_VERSION}"] + [f"group {groep_id(g)}" for g in GROEPEN]   # (the groups in sidebar order)
     total = 0
     for order, (c, ch) in enumerate(chapters.items()):
         spec = CHAPTERS[c]
         cid = qid(f"chapter/{c}")
-        title, sub = texts(f"ftb.{c}.title", spec["title"]), texts(f"ftb.{c}.sub", spec["sub"])
+        groep = groep_van(c)
+        nummer = [x for x in chapters if groep_van(x) == groep].index(c)   # (its place in its own group: the number it shows)
+        title, sub = texts(titel_key(c, "title"), spec["title"]), texts(titel_key(c, "sub"), spec["sub"])
         lang = {locale: {f"chapter.{cid}.title": ftb_text(title[locale]),
-                         f"chapter.{cid}.chapter_subtitle": [ftb_text(f"{order + 1}. " + sub[locale])]} for locale in LOCALES}
+                         f"chapter.{cid}.chapter_subtitle": [ftb_text(f"{nummer + 1}. " + sub[locale])]} for locale in LOCALES}
         for sect in ch["sections"]:                 # (only painted on the header pictures, not in the lang files yet)
-            texts(f"ftb.{c}.section.{sect['sid']}", sect["title"])
+            texts(sectie_key(c, sect), sect["title"])
+        for name, titel, _portret, regels in ch["slots"]:   # (bbq2: painted on the slot pictures)
+            texts(f"ftb.{c}.slot.{name}.title", titel)
+            for i, regel in enumerate(regels):
+                texts(f"ftb.{c}.slot.{name}.line.{i}", regel)
         quests = []
-        for key in [f"intro_{c}"] + [k for s in ch["sections"] for k in s["quests"]]:
+        for key in [intro_key(c)] + [k for s in ch["sections"] for k in s["quests"]]:
             _, title, desc, icon, tasks, rewards, _, _, _, shape, xp = info[key]
             qn = quest_nbt(key, icon, tasks, rewards, xp)
+            for task_id, n, titel in task_titels(key, tasks):   # (guhpad: a task with a name of its own)
+                tt = texts(quest_key(key, f"task{n}.title"), titel)
+                for locale in LOCALES:
+                    lang[locale][f"task.{task_id}.title"] = ftb_text(tt[locale])
             x, y = ch["pos"][key]
             qn["x"], qn["y"] = float(x), float(y)
             if locks[key]:
                 qn["dependencies"] = [qid(d) for d in locks[key]]
             if key in ch["hidden"]:
                 qn["hide_dependency_lines"] = True
-            if key.startswith("maag_"):
-                qn["progression_mode"] = "linear"   # the only lock: the stomach sizes come after each other
-            if key.startswith("intro_") or key in GROOT:
+            if key.startswith("maag_") or linear(key) and locks[key]:
+                qn["progression_mode"] = "linear"   # the only locks: the stomach sizes, and (bbq2) a story told in order
+            if key in INTROS or key in GROOT:
                 qn["size"] = 1.3
             if shape:
                 qn["shape"] = shape
             quests.append(qn)
-            qt, qd = texts(f"ftb.{c}.q.{key}.title", title), texts(f"ftb.{c}.q.{key}.desc", desc)
+            qt, qd = texts(quest_key(key, "title"), title), texts(quest_key(key, "desc"), desc)
             for locale in LOCALES:
                 lang[locale][f"quest.{qn['id']}.title"] = ftb_text(qt[locale])
                 lang[locale][f"quest.{qn['id']}.quest_desc"] = [ftb_text(line) for line in qd[locale].split("\n")]
@@ -985,10 +1253,12 @@ def build(force_art=False):
             sub = ch["komt_na"].get(name[4:]) if name.startswith("kop_") else None
             if sub:
                 img["hover"] = [ftb_text(sub[0])]
+            if name.startswith("slot_"):
+                img["hover"] = [ftb_text(regel) for slot in ch["slots"] if slot[0] == name[5:] for regel in slot[3]]
             images.append(img)
         links = [{"id": qid(f"link/{c}/{k}"), "linked_quest": qid(k), "shape": "hexagon", "x": float(x), "y": float(y)}
                  for k, x, y in ch["links"]]
-        chapter = {"default_hide_dependency_lines": False, "default_quest_shape": "circle", "filename": c, "group": group_id,
+        chapter = {"default_hide_dependency_lines": False, "default_quest_shape": "circle", "filename": c, "group": groep_id(groep),
                    "guhs_chapter_version": CHAPTER_VERSION,
                    "icon": {"components": {"ftbquests:icon": f"guhs:textures/ftbquests/icon_{c}.png"}, "id": "ftbquests:custom_icon"},
                    "id": cid, "images": images, "order_index": order, "progression_mode": "flexible", "quest_links": links,
@@ -996,7 +1266,7 @@ def build(force_art=False):
         with open(os.path.join(OUT, "chapters", c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
             f.write(json5(chapter) + "\n")
         for locale in LOCALES:
-            group_lang = {f"chapter_group.{group_id}.title": ftb_text(group_title[locale])} if order == 0 else {}
+            group_lang = {f"chapter_group.{groep_id(groep)}.title": ftb_text(group_titles[groep][locale])} if nummer == 0 else {}
             with open(os.path.join(OUT, "lang", locale, c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
                 f.write(json5(group_lang | lang[locale]) + "\n")
         index.append(f"chapter {c}")
@@ -1009,7 +1279,9 @@ def build(force_art=False):
     missing = sum(1 for k, v in source.items() if k not in overlay and en_overlay.needs_english(v))
     print(f"FTB Quests texts: {len(source)} keys, {missing} still Dutch in en_us (no English in tools/lang/en yet)")
     assert total == len(QUESTS) == len({x[0] for x in QUESTS}), (total, len(QUESTS))
-    print(f"FTB Quests: {len(chapters)} chapters, {total} quests ({total - len(CHAPTERS)} + {len(CHAPTERS)} 'Hoe kom je hier?')")
+    sloten = sum(1 for c in CHAPTERS if CHAPTERS[c].get("slot"))
+    print(f"FTB Quests: {len(chapters)} chapters in {len(GROEPEN)} groups, {total} quests ({total - len(CHAPTERS)} + "
+          f"{len(CHAPTERS) - sloten} 'Hoe kom je hier?' + {sloten} lock quests of the Guhpad)")
 
 
 if __name__ == "__main__":

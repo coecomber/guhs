@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:disco_dynamo"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_bronnen_disco.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_bronnen_disco.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/tech_bronnen_knuffel"
+}

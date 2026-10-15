@@ -52,6 +52,16 @@ public class AanmaakblokjeItem extends FlintAndSteelItem {
         return super.useOn(context);
     }
 
+    /**
+     * 1.4.2: does this stack, used with {@code inside} as the spot next to the clicked face, light a barbecue portal (an
+     * Aanmaakblokje in an empty grillkool frame)? Then it starts no fire, so the fire guard of the protected buildings
+     * ({@link nl.juiced.guhs.feature.Protected}) lets it through: the Knabbelgouw made the story's pit a protected building.
+     */
+    public static boolean lichtPortaal(Level level, ItemStack stack, BlockPos inside) {
+        // (in a dimension without barbecue portals it only says so, also no fire)
+        return stack.getItem() instanceof AanmaakblokjeItem && GrillPortalShape.findEmptyShape(level, inside).isPresent();
+    }
+
     /** Lights the portal (and tells a Grillguh nearby: his barbecue burns again). */
     public static void light(Level level, GrillPortalShape shape, BlockPos inside, @javax.annotation.Nullable ServerPlayer player) {
         shape.createPortalBlocks();

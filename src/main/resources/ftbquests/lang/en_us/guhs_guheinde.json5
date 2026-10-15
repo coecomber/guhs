@@ -1,17 +1,20 @@
 {
-  "chapter.4755484EAFF30E44.title": "&5The Guh End",
+  "chapter.4755484EAFF30E44.title": "&5Tales of the Guh End",
   "chapter.4755484EAFF30E44.chapter_subtitle": [
-    "6. Overlord Mika has all the nibbles, nyeg!",
+    "3. Overlord Mika has all the nibbles, nyeg!",
   ],
-  "quest.4755482CDD9DBAAA.title": "How Do You Get Here?",
-  "quest.4755482CDD9DBAAA.quest_desc": [
-    "This chapter comes after two quests in &dThe Guhmension&r:",
+  "task.475548837D6916B0.title": "The Lord of the Nibble Ring",
+  "task.47554864DEB36D85.title": "Super Guhrio",
+  "task.475548993527E0BB.title": "Beat the Burnt Mika",
+  "quest.4755482CB82CCF3D.title": "Lock: The Guhbarbecuether First",
+  "quest.4755482CB82CCF3D.quest_desc": [
+    "&cThis chapter is locked.&r The portal in the Nibble Cellar won't let you through until you've followed &6The Lord of the Nibble Ring&r and &cSuper Guhrio&r and have beaten the &cBurnt Mika&r. Below you can see what you already have: one tick per thing.",
     "",
-    "- &cThe Bigger the Mika...&r: Mikas (especially Big Mika) cry &5Mika Tears&r. You need those for the Eyes of Chonky.",
+    "Have you been to the Guh End before? Whoever is still there may stay, but whoever steps out follows the rest of the Guh Path first. Everything you've already done simply stays saved, nyeg.",
     "",
-    "- &dLong Live the King!&r: the King Guh in the Guh Castle tells you where all the cheese nibbles went.",
+    "This story starts with two quests in &dThe Guhmension&r: &cThe Bigger the Mika...&r (Mikas, especially Big Mika, cry &5Mika Tears&r: you need those for the Eyes of Chonky) and &dLong Live the King!&r (the King Guh in the Guh Castle tells you where all the cheese nibbles went).",
     "",
-    "After that: twelve Eyes of Chonky, the Nibble Cellar and... Overlord Mika. Without nibbles your guh isn't WAHOOG, so go get them back! Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it earlier. The headings show what logically comes after what. Tick this off and get chonky to work!",
+    "After that: twelve Eyes of Chonky, the Nibble Cellar and... Overlord Mika. Without nibbles your guh isn't WAHOOG, so go get them back! More stories will be added here later.",
   ],
   "quest.475548F95D32C0F4.title": "A Mika Cries",
   "quest.475548F95D32C0F4.quest_desc": [

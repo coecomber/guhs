@@ -1,5 +1,5 @@
 """
-Reisbureau "De Vadsvakantie": the models of the 32 souvenirs, the Gouden koffertje, the koffertje and the Reisbalie.
+Reisbureau "De Vadsvakantie": the models of the 40 souvenirs (32 + the eight of biomes3), the Gouden koffertje, the koffertje and the Reisbalie.
 
 Every model is a handful of coloured boxes. A box is (x0, y0, z0, x1, y1, z1, colour[, options]); the colours of one model
 are painted as 4 x 4 swatches on its own 16 x 16 texture (block/reisbureau_<id>.png) and every face of a box shows the swatch
@@ -32,6 +32,7 @@ KLEUR = {
     "blauw": (70, 110, 210), "blauw_licht": (130, 170, 240), "delfts": (236, 240, 250), "delfts_blauw": (70, 96, 190),
     "vlam": (255, 150, 40), "vlam_kern": (255, 232, 120), "glim": (220, 255, 140), "licht": (255, 244, 170),
     "huid": (250, 214, 190), "steen": (128, 124, 130), "bruin": (130, 84, 52), "bruin_licht": (170, 118, 74),
+    "wolk_wit": (252, 250, 255),   # biomes3
 }
 
 
@@ -273,6 +274,69 @@ EXTRA = {
         (6.6, 4.4, 1.4, 1, "wit"), (11.6, 4.4, 1, 1.4, "rood"))), {}, 0, ""),
 }
 
+# biomes3: the souvenirs of its four destinations. Kept apart (and LAST in alle()) so the swatch seeds of the 34 older
+# models (8600 + their index) stay what they were.
+def _potje(deksel):
+    return [b(4.5, 0, 4.5, 11.5, 9, 11.5, "wit", tex="#glas", uv=[0, 0, 16, 16]), b(6, 9, 6, 10, 11, 10, "kurk"),
+            b(6.5, 1, 4.4, 9.5, 2.4, 4.5, "creme")] + ([b(5.9, 9, 5.9, 10.1, 9.5, 10.1, deksel)] if deksel else [])
+
+
+def _regenboog():
+    out = []
+    for i, kleur in enumerate(("rood", "oranje", "geel", "groen", "blauw", "paars")):
+        d = 0.4 * i
+        out += [b(5.1 + d, 0.5, 7.6, 5.5 + d, 7.5 - d, 8.4, kleur, gloed=True), b(10.5 - d, 0.5, 7.6, 10.9 - d, 7.5 - d, 8.4, kleur, gloed=True),
+                b(5.5 + d, 7.1 - d, 7.6, 10.5 - d, 7.5 - d, 8.4, kleur, gloed=True)]
+    return out
+
+
+BIOMES3 = {
+    "souvenir_bloesemmeertje": ("vloer", [
+        b(6, 0, 6, 10, 5, 10, "delfts"), b(5.9, 1.5, 5.9, 10.1, 2.5, 10.1, "roze"), b(6.5, 5, 6.5, 9.5, 6, 9.5, "delfts"),
+        b(7.6, 6, 7.6, 8.4, 12, 8.4, "bruin"), b(8.4, 9, 7.7, 10.5, 9.6, 8.3, "bruin"), b(5.5, 10.5, 7.7, 7.6, 11.1, 8.3, "bruin"),
+        b(9.8, 9.2, 7.2, 11.4, 10.8, 8.8, "roze"), b(4.6, 10.8, 7.2, 6.2, 12.4, 8.8, "roze_licht"), b(7.2, 12, 7.2, 8.8, 13.6, 8.8, "roze"),
+        b(7.5, 13.6, 7.5, 8.5, 14.6, 8.5, "wit"), b(10.2, 10.8, 7.5, 11, 11.6, 8.3, "wit"), b(5, 12.4, 7.5, 5.8, 13.2, 8.3, "wit"),
+        b(10.5, 0, 9, 11.5, 0.2, 10, "roze_licht"), b(4.6, 0, 5.4, 5.4, 0.2, 6.2, "roze")], {}, 0, ""),
+    "zeldzaam_bloesemmeertje": ("vloer", [
+        b(4, 0, 4, 12, 1, 12, "hout_donker"), b(4.2, 1, 4.2, 11.8, 1.6, 11.8, "zand"), b(4.2, 5.8, 4.2, 11.8, 6, 11.8, "water_licht"),
+        b(6.5, 3, 7, 9.5, 4.6, 9, "goud"), b(9.5, 3.2, 7.6, 10.6, 4.4, 8.4, "goud_licht"), b(6.1, 3.5, 7.5, 6.5, 4.2, 8.5, "goud_donker"),
+        b(7, 3.9, 6.9, 7.4, 4.3, 7, "zwart"), b(7, 3.9, 9, 7.4, 4.3, 9.1, "zwart"), b(7.6, 4.6, 7.7, 8.6, 5.1, 8.3, "goud_licht"),
+        b(5, 1.6, 10, 5.6, 4.5, 10.6, "groen"), b(10.4, 1.6, 5.2, 11, 3.6, 5.8, "groen_donker"), b(8, 6, 5, 9, 6.1, 6, "roze_licht"),
+        b(3.5, 1, 3.5, 12.5, 8, 12.5, "wit", tex="#glas", uv=[0, 0, 16, 16]), b(3.4, 8, 3.4, 12.6, 8.6, 12.6, "goud")],
+        {"glas": f"guhs:block/{N}_glas"}, 0, "glinster"),
+    "souvenir_klaterdal": ("vloer", [
+        b(2, 0, 6, 8, 3, 12, "steen"), b(3, 2.6, 7, 7, 3.1, 11, "water"), b(2, 3, 6, 4, 3.4, 8, "mos"),
+        b(10, 0, 7, 11, 9, 8, "groen_donker"), b(10, 0, 10.5, 11, 9, 11.5, "groen_donker"), b(9.6, 7, 7, 11.4, 7.6, 11.5, "hout_donker"),
+        b(9, 7.6, 8.5, 14, 9.1, 10, "groen"), b(4.5, 6.2, 8.5, 9.5, 7.7, 10, "groen"), b(4.4, 6.1, 8.4, 5, 7.8, 10.1, "mos_licht"),
+        b(13, 9.1, 8.8, 14, 12, 9.7, "mos_licht"), b(13.2, 11.4, 9, 13.8, 12.1, 9.5, "water_licht"),
+        b(12, 0, 3, 14, 1.5, 5, "grijs_donker"), b(12.4, 1.5, 3.4, 13.6, 1.9, 4.6, "mos")], {}, 0, ""),
+    "zeldzaam_klaterdal": ("vloer", [
+        b(2, 0, 2, 14, 2, 14, "steen"), b(3, 2, 7, 13, 7, 14, "steen"), b(5, 7, 9, 12, 11, 14, "grijs_donker"), b(6, 11, 10, 10, 13, 14, "steen"),
+        b(7, 12.6, 9.5, 9, 13.1, 13, "water"), b(7, 7, 8.4, 9, 13, 9, "water_licht"), b(7, 7, 7, 9, 7.2, 8.4, "water"),
+        b(7, 2, 6.4, 9, 7.2, 7, "water_licht"), b(5, 2, 3, 11, 2.3, 7, "water"), b(6.5, 2.3, 5.6, 9.5, 2.8, 6.4, "wit"),
+        b(3, 7, 8, 5, 7.5, 10, "mos"), b(10, 11, 10.5, 12, 11.4, 12, "mos_licht"),
+        b(12.2, 7, 10, 12.8, 9, 10.6, "bruin"), b(11.4, 9, 9.2, 13.6, 10.8, 11.4, "roze"), b(11.9, 10.8, 9.7, 13.1, 11.6, 10.9, "roze_licht"),
+        b(3, 2, 4, 4.4, 3, 5.4, "grijs_donker")], {}, 0, "stoom"),
+    "souvenir_wolkenweide": ("vloer", _potje(None) + [
+        b(5.8, 3, 6.5, 10.2, 5.5, 9.5, "wolk_wit"), b(6.6, 5.5, 7, 9.4, 6.8, 9, "wolk_wit"), b(5.2, 3.4, 7, 5.8, 4.8, 9, "wol"),
+        b(10.2, 3.4, 7, 10.8, 4.8, 9, "wol")], {"glas": f"guhs:block/{N}_glas"}, 0, ""),
+    "zeldzaam_wolkenweide": ("vloer", _potje("goud") + _regenboog() + [
+        b(4.9, 0.4, 7, 6.6, 1.6, 9, "wolk_wit"), b(9.4, 0.4, 7, 11.1, 1.6, 9, "wolk_wit")], {"glas": f"guhs:block/{N}_glas"}, 8, "glinster"),
+    "souvenir_japan": ("vloer", [
+        b(1, 0, 6.5, 15, 0.6, 9.5, "grijs_donker"), b(1, 0.6, 6.8, 15, 0.9, 7.2, "ijzer"), b(1, 0.6, 8.8, 15, 0.9, 9.2, "ijzer"),
+        b(3.5, 1.2, 6.4, 14.5, 4.6, 9.6, "wit"), b(2, 1.2, 6.8, 3.5, 3.4, 9.2, "wit"), b(1.2, 1.2, 7.2, 2, 2.4, 8.8, "roze"),
+        b(3.4, 2.2, 6.3, 14.6, 2.8, 9.7, "blauw"), b(5, 3.2, 6.3, 13.5, 4, 9.7, "zwart"), b(3, 3.4, 7, 4.2, 4.4, 9, "zwart"),
+        b(4.5, 4.6, 6.9, 14, 5.1, 9.1, "grijs"), b(3.6, 4.6, 6.6, 4.6, 5.6, 7.2, "roze"), b(3.6, 4.6, 8.8, 4.6, 5.6, 9.4, "roze"),
+        b(4.5, 0.8, 6.5, 6, 1.2, 9.5, "zwart"), b(11.5, 0.8, 6.5, 13, 1.2, 9.5, "zwart")], {}, 0, ""),
+    "zeldzaam_japan": ("vloer", [
+        b(2, 0, 2, 14, 1, 14, "zwart"), b(3, 1, 3, 13, 4, 13, "goud"), b(4.5, 4, 4.5, 11.5, 7, 11.5, "goud"), b(6, 7, 6, 10, 9.5, 10, "goud"),
+        b(5.8, 9.5, 5.8, 10.2, 11, 10.2, "wit"), b(6, 8.6, 5.9, 7, 9.5, 6, "wit"), b(8.6, 8.9, 5.9, 9.6, 9.5, 6, "wit"),
+        b(5.6, 11, 7.4, 7, 12.2, 8.6, "goud_licht"), b(9, 11, 7.4, 10.4, 12.2, 8.6, "goud_licht"),
+        b(6.4, 5.4, 4.4, 7, 6.2, 4.5, "zwart"), b(9, 5.4, 4.4, 9.6, 6.2, 4.5, "zwart"), b(7.6, 4.9, 4.4, 8.4, 5.4, 4.5, "roze"),
+        b(5.6, 4.6, 4.4, 6.4, 5, 4.5, "roze_licht"), b(9.6, 4.6, 4.4, 10.4, 5, 4.5, "roze_licht"),
+        b(5.5, 0.2, 1.9, 10.5, 0.8, 2, "goud_donker"), b(11.5, 1, 2.2, 12.5, 1.8, 3, "roze")], {}, 0, "glinster"),
+}
+
 BALIE = [
     b(0, 0, 3, 16, 11, 13, "hout_licht"), b(0, 11, 2, 16, 12, 14, "roze"), b(0, 0, 2.6, 16, 1, 3, "hout_donker"),
     b(0, 0, 2.6, 0.8, 11, 3, "hout"), b(15.2, 0, 2.6, 16, 11, 3, "hout"),
@@ -372,6 +436,8 @@ def alle():
     for sid, spec in SOUVENIRS.items():
         out[f"{N}_{sid}"] = spec
     for sid, spec in EXTRA.items():
+        out[f"{N}_{sid}"] = spec
+    for sid, spec in BIOMES3.items():   # biomes3 (last: see BIOMES3)
         out[f"{N}_{sid}"] = spec
     return out
 

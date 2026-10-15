@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guh_wheel"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:block/pink_glazed_terracotta"
+  },
+  "criteria": {
+    "guh_wheel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guh_wheel"
+          }
+        ]
+      }
+    },
+    "guh_wire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guh_wire"
+          }
+        ]
+      }
+    },
+    "guh_oven": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guh_oven"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "guh_wheel",
+      "guh_wire",
+      "guh_oven"
+    ]
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "aan=true,open=true": {
+      "model": "guhs:block/guhrio_schakelblok_blauw_open"
+    },
+    "aan=true,open=false": {
+      "model": "guhs:block/guhrio_schakelblok_blauw"
+    },
+    "aan=false,open=true": {
+      "model": "guhs:block/guhrio_schakelblok_rood_open"
+    },
+    "aan=false,open=false": {
+      "model": "guhs:block/guhrio_schakelblok_rood"
+    }
+  }
+}

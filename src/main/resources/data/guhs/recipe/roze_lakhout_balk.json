@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "P",
+    "P"
+  ],
+  "key": {
+    "P": "guhs:roze_lakhout_planken"
+  },
+  "result": {
+    "id": "guhs:roze_lakhout_balk",
+    "count": 3
+  }
+}

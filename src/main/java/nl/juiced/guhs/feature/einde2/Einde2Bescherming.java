@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.einde2;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiPredicate;
@@ -9,13 +10,10 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.TriState;
@@ -33,8 +31,6 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
@@ -43,9 +39,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
-import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.Protected;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 
 /**
  * einde2: the big places of the outer islands can't be broken or built in, so every player finds them whole: no
@@ -56,8 +52,11 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
  * ({@link #taartBlijftHeel}: the first visitor would finish it for everybody after them), and what the builders put down
  * as decoration never hurts ({@link #doetGeenPijn}: a camp fire, a stalagmite, a hot floor).
  * <p>
- * hook fase B: the same shape as the sister update's {@code feature/wereld/Bescherming}; after the merge the bodies here
- * become a delegation to it. {@link #uitzondering} is where a quest lets a player change some blocks.
+ * Since the merge of origin/main (1.4.4) the protection itself is bbq2's {@link Bescherming}: {@link #registreer} and
+ * {@link #uitzondering} hand everything to it (so machines, pistons and a sluier know the einde2 places too), and the
+ * questions here answer "which einde2 place is this". What stays in this class: the beds, cakes and harmless decoration,
+ * a bucket emptied in the air, and the {@link #TEST_AREAS} of the game tests (only those boxes are guarded by the events
+ * below; every real place is guarded by Bescherming's own events).
  */
 public final class Einde2Bescherming {
     /** Extra protected boxes, only for the game tests (the test world has no generated structures). */
@@ -65,10 +64,9 @@ public final class Einde2Bescherming {
     /** The name the {@link #TEST_AREAS} are protected under (for {@link #uitzondering} in a test). */
     public static final String TEST = "einde2_test";
 
-    private record Regel(int rand, Predicate<StructureStart> welke) {
-    }
-
-    private static final Map<String, Regel> REGELS = new ConcurrentHashMap<>();
+    /** The structures einde2 registered with {@link Bescherming} (their names). */
+    private static final Set<String> EIGEN = ConcurrentHashMap.newKeySet();
+    /** The exceptions of the {@link #TEST} areas (the real ones live in Bescherming). */
     private static final Map<String, List<BiPredicate<ServerPlayer, BlockPos>>> UITZONDERINGEN = new ConcurrentHashMap<>();
 
     private Einde2Bescherming() {
@@ -81,12 +79,18 @@ public final class Einde2Bescherming {
 
     /** The same for only some copies (the modular Mika-vestingen: the ones generated before einde2 stay as they are). */
     public static void registreer(String structuur, int rand, Predicate<StructureStart> welke) {
-        REGELS.put(structuur, new Regel(rand, welke));
+        EIGEN.add(structuur);
+        // (the empty rim piece of a story structure keeps room free for the sluier of phase B: it protects nothing)
+        Bescherming.registreer(structuur, rand, welke, piece -> !(piece instanceof LeegteBouwStructure.Rand));
     }
 
-    /** hook fase B: blocks of this structure a player may change after all (a quest block, a door that opens for them). */
+    /** Blocks of this structure a player may change after all (a quest block, a door that opens for them): Bescherming's. */
     public static void uitzondering(String structuur, BiPredicate<ServerPlayer, BlockPos> mag) {
-        UITZONDERINGEN.computeIfAbsent(structuur, k -> new CopyOnWriteArrayList<>()).add(mag);
+        if (TEST.equals(structuur)) {
+            UITZONDERINGEN.computeIfAbsent(structuur, k -> new CopyOnWriteArrayList<>()).add(mag);
+        } else {
+            Bescherming.uitzondering(structuur, mag);
+        }
     }
 
     /** Is this spot part of a protected einde2 structure (server side; false on the client)? */
@@ -100,54 +104,33 @@ public final class Einde2Bescherming {
         if (!(level instanceof ServerLevel server)) {
             return null;
         }
+        if (testStructuur(pos) != null) {
+            return TEST;
+        }
+        if (EIGEN.isEmpty() || server.dimension() != GuheindeFeature.GUHEINDE) {
+            return null;
+        }
+        String structuur = Bescherming.structuurBij(server, pos);
+        return structuur != null && EIGEN.contains(structuur) ? structuur : null;
+    }
+
+    /** {@link #TEST} when the spot lies in one of the {@link #TEST_AREAS}, else null. */
+    @Nullable
+    private static String testStructuur(BlockPos pos) {
         for (BoundingBox box : TEST_AREAS) {
             if (box.isInside(pos)) {
                 return TEST;
             }
         }
-        if (REGELS.isEmpty() || server.dimension() != GuheindeFeature.GUHEINDE || !server.isLoaded(pos)) {
-            return null;
-        }
-        // (the chunk's structure references: every start whose box reaches into this chunk)
-        Map<Structure, LongSet> hier = server.structureManager().getAllStructuresAt(pos);
-        if (hier.isEmpty()) {
-            return null;
-        }
-        var registry = server.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        for (Map.Entry<Structure, LongSet> e : hier.entrySet()) {
-            Identifier key = registry.getKey(e.getKey());
-            Regel regel = key == null || !key.getNamespace().equals(Guhs.MODID) ? null : REGELS.get(key.getPath());
-            if (regel == null) {
-                continue;
-            }
-            boolean[] in = {false};
-            server.structureManager().fillStartsForStructure(e.getKey(), e.getValue(), start -> {
-                if (!in[0] && start.isValid() && regel.welke.test(start)) {
-                    for (StructurePiece piece : start.getPieces()) {
-                        if (!(piece instanceof LeegteBouwStructure.Rand) && binnen(piece.getBoundingBox(), pos, regel.rand)) {
-                            in[0] = true;
-                            return;
-                        }
-                    }
-                }
-            });
-            if (in[0]) {
-                return key.getPath();
-            }
-        }
         return null;
     }
 
-    private static boolean binnen(BoundingBox b, BlockPos p, int rand) {
-        return p.getX() >= b.minX() - rand && p.getX() <= b.maxX() + rand && p.getY() >= b.minY() - rand && p.getY() <= b.maxY() + rand
-                && p.getZ() >= b.minZ() - rand && p.getZ() <= b.maxZ() + rand;
-    }
-
+    /** (the {@link #TEST_AREAS} only: Bescherming guards every real place with its own events) */
     private static boolean denied(Player player, BlockPos pos, boolean quiet) {
-        if (player.getAbilities().instabuild) {
+        if (player.getAbilities().instabuild || player.level().isClientSide()) {
             return false;
         }
-        String structuur = structuurBij(player.level(), pos);
+        String structuur = testStructuur(pos);
         if (structuur == null) {
             return false;
         }
@@ -172,7 +155,8 @@ public final class Einde2Bescherming {
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onExplosion);
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onMobGriefing);
         NeoForge.EVENT_BUS.addListener(Einde2Bescherming::onDamage);
-        Protected.add(Einde2Bescherming::beschermd);
+        // (fire and fluids from outside: Bescherming adds its own places to Protected; the test areas are added here)
+        Protected.add((level, pos) -> level instanceof ServerLevel && testStructuur(pos) != null);
     }
 
     private static void onBreak(BreakBlockEvent event) {
@@ -183,7 +167,8 @@ public final class Einde2Bescherming {
 
     private static void onPlace(BlockEvent.EntityPlaceEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof Player player ? denied(player, event.getPos(), false) : entity != null && beschermd(entity.level(), event.getPos())) {
+        if (entity instanceof Player player ? denied(player, event.getPos(), false)
+                : entity != null && !entity.level().isClientSide() && testStructuur(event.getPos()) != null) {
             event.setCanceled(true);
         }
     }
@@ -251,21 +236,29 @@ public final class Einde2Bescherming {
         }
     }
 
+    /** A bucket emptied in the air while standing in an einde2 place (Bescherming only looks at a clicked block). */
     private static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem
-                && denied(event.getEntity(), event.getEntity().blockPosition(), false)) {
+        if (event.getLevel().isClientSide() || !(event.getItemStack().getItem() instanceof BucketItem)) {
+            return;
+        }
+        BlockPos pos = event.getEntity().blockPosition();
+        if (denied(event.getEntity(), pos, false)) {
+            event.setCanceled(true);
+        } else if (testStructuur(pos) == null && structuurBij(event.getLevel(), pos) != null && !Bescherming.mag(event.getEntity(), pos)) {
+            event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.einde2.beschermd").withStyle(ChatFormatting.LIGHT_PURPLE));
             event.setCanceled(true);
         }
     }
 
     private static void onExplosion(ExplosionEvent.Detonate event) {
-        if (event.getLevel() instanceof ServerLevel server) {
-            event.getAffectedBlocks().removeIf(pos -> beschermd(server, pos));
+        if (!TEST_AREAS.isEmpty() && event.getLevel() instanceof ServerLevel) {
+            event.getAffectedBlocks().removeIf(pos -> testStructuur(pos) != null);
         }
     }
 
     private static void onMobGriefing(EntityMobGriefingEvent event) {
-        if (event.getEntity() != null && !(event.getEntity() instanceof Player) && beschermd(event.getEntity().level(), event.getEntity().blockPosition())) {
+        if (!TEST_AREAS.isEmpty() && event.getEntity() != null && !(event.getEntity() instanceof Player)
+                && !event.getEntity().level().isClientSide() && testStructuur(event.getEntity().blockPosition()) != null) {
             event.setCanGrief(false);
         }
     }

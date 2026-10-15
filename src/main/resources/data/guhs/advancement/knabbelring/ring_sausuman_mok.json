@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:ringsausuman_uienring"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_sausuman_mok.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_sausuman_mok.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gekregen"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:fishing_rod",
+    "guhs:pindasausplasje"
+  ],
+  "result": {
+    "id": "guhs:sausdieren_pindasaus_stok"
+  }
+}

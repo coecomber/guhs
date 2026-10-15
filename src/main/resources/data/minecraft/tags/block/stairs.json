@@ -11,11 +11,19 @@
     "guhs:nomguh_sneeuwdak_trap",
     "guhs:tiki_rietdak_trap",
     "guhs:harsstenen_trap",
-    "guhs:kruimelrots_stenen_trap",
-    "guhs:schimmelkaas_stenen_trap",
-    "guhs:klipkaas_stenen_trap",
-    "guhs:knabbelkoorblok_trap",
-    "guhs:einde2_bouw_water_ijssteen_trap",
-    "guhs:maansteen_trap"
+    "guhs:campingmarkt_tentdoek_rood_trap",
+    "guhs:campingmarkt_tentdoek_geel_trap",
+    "guhs:campingmarkt_tentdoek_groen_trap",
+    "guhs:campingmarkt_tentdoek_blauw_trap",
+    "guhs:campingmarkt_tentdoek_creme_trap",
+    "guhs:guh_dakpan_roze_trap",
+    "guhs:guh_dakpan_wit_trap",
+    "guhs:guh_dakpan_grijs_trap",
+    "guhs:gladde_knuffelsteen_trap",
+    "guhs:wolkenblok_wit_trap",
+    "guhs:wolkenblok_roze_trap",
+    "guhs:regenboogblok_trap",
+    "guhs:bloesemmeertje_meertegels_trap",
+    "guhs:bliksemsmidse_wolk_trap"
   ]
 }

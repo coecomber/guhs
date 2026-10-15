@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/mika_ruilmarkt",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:mika_ruilmarkt/start",
+  "start_jigsaw_name": "guhs:mika_ruilmarkt_midden",
+  "check_radius": 30,
+  "max_height_difference": 8,
+  "headroom": 12,
+  "keep_clear": 23
+}

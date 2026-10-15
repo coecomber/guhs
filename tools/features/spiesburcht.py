@@ -50,11 +50,15 @@ def variants(rng, v):
 # =====================================================================================================================
 # spawns
 # =====================================================================================================================
+# 1.4.1: the weights only set the MIX within a biome. How many aggressive mobs walk around in the open is Drukte.MAX_BOOS (Java,
+# feature/spiesburcht/Drukte: the natural spawner filled vanilla's cap of 70 around a player, whatever the weights). The
+# Knekel-Mika of the Asdal went from 10 to 7 (Nether-Mika 8, features/barbecuether.py): with half the cap that leaves a bit
+# less than half of them (measured around a player: 17 -> 8).
 SPAWNS = {  # biome: (monsters to add, creatures)
     "houtskoolvlakte": ([("guhs:vonk_mika", 1, 1, 1)], [("guhs:rookguh", 6, 1, 1)]),
     "satebos": ([], []),
     "worstenwoud": ([], []),
-    "asdal": ([("guhs:knekel_mika", 10, 1, 2)], [("guhs:guh", 14, 2, 3), ("guhs:rookguh", 2, 1, 1)]),
+    "asdal": ([("guhs:knekel_mika", 7, 1, 2)], [("guhs:guh", 14, 2, 3), ("guhs:rookguh", 2, 1, 1)]),
     "rookdelta": ([("guhs:vonk_mika", 3, 1, 1)], [("guhs:rookguh", 10, 1, 2)]),
 }
 

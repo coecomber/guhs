@@ -11,7 +11,7 @@ import nl.juiced.guhs.taal.Tekst;
 /**
  * The Reisbureau's section of the Guhdex tab "Guhpixel &amp; uitjes" (also shown before the Guhpixel unlock): the questline
  * of the Reisagent-guh, who is away now, the reispas (trips, stamps, Gouden koffertjes) and the album: every ansichtkaart
- * and all 32 souvenirs, greyed out until the player has had them.
+ * and all souvenirs, greyed out until the player has had them.
  */
 public final class ReisGids implements GidsSectie {
     private static final String G = "gui.guhs.reisbureau.gids.";

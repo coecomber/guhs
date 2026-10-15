@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:as_aarde",
+    "guhs:as_blok",
+    "guhs:gloeikool",
+    "guhs:pindasaus_nylium",
+    "guhs:mosterd_nylium",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
+    "minecraft:magma_block"
+  ]
+}

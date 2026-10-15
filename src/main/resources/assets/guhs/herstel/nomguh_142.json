@@ -1,0 +1,37 @@
+{
+  "structuur": "nomguh",
+  "blokken": [
+    {
+      "pos": [
+        52,
+        20,
+        101
+      ],
+      "oud": [
+        "minecraft:air",
+        "minecraft:snow"
+      ],
+      "blok": "minecraft:spruce_slab",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    },
+    {
+      "pos": [
+        52,
+        20,
+        102
+      ],
+      "oud": [
+        "minecraft:air",
+        "minecraft:snow"
+      ],
+      "blok": "minecraft:spruce_slab",
+      "props": {
+        "type": "bottom",
+        "waterlogged": "false"
+      }
+    }
+  ]
+}

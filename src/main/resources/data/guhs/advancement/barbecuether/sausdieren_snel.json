@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:pindascheutjes"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.sausdieren_snel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.sausdieren_snel.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/sausdieren_stal"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/guh_dakpan_wit",
+    "side": "guhs:block/guh_dakpan_wit",
+    "top": "guhs:block/guh_dakpan_wit"
+  }
+}

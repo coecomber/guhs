@@ -28,14 +28,13 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.Band;
 import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.huisje.Huisje;
-import nl.juiced.guhs.feature.huisje.HuisjeOpslag;
 import nl.juiced.guhs.feature.huisje.Klus;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 
 /**
  * A chore as a little queue of steps ({@link Stap}): walk somewhere, work a while (looking at it, particles, sounds), do
- * the thing. What it collects ({@link #buit}) is carried (shown over its head) and brought to the Bank Guh / the chest
- * at the end ({@link HuisjeOpslag#lever}); if the chore is cut short (night, moved out...) the spoils are still delivered
+ * the thing. What it collects ({@link #buit}) is carried (shown over its head) and brought to the Bank Guh / a Hapluikje /
+ * the chest at the end ({@link Voorraad#lever}); if the chore is cut short (night, moved out...) the spoils are still delivered
  * straight away, nothing is ever lost. When the chore really did its job ({@link #gelukt()}) the resident is rewarded
  * once, at the end ({@link KlusBeloning#klaar}). While it runs the guh has the flag KLUSJE (the little carry icon).
  */
@@ -166,8 +165,12 @@ public abstract class StappenTaak implements KlusTaak {
                     mob.getNavigation().stop();
                     return true;
                 }
+                boolean staatStil = t > 1 && mob.getNavigation().isDone();
                 if (t == 1 || t % 20 == 0 || mob.getNavigation().isDone()) {
                     mob.getNavigation().moveTo(doel.getX() + 0.5, doel.getY(), doel.getZ() + 0.5, 1.0 * snel());
+                }
+                if (staatStil) {
+                    laatsteStap(Vec3.atBottomCenterOf(doel), bereik, 1.0 * snel());
                 }
                 if (t > 400) {
                     if (dichtbij(Vec3.atBottomCenterOf(doel), bereik + 1.5)) {
@@ -178,6 +181,21 @@ public abstract class StappenTaak implements KlusTaak {
                 return false;
             }
         };
+    }
+
+    /**
+     * The last step, straight at the goal. A path ends in a block NEXT to its goal, and a mob that comes in at an angle
+     * stops there up to one and a half blocks from the goal's middle: just out of a small {@code bereik}. Every new path
+     * from that spot is finished at once, so the resident stood still for twenty seconds next to its dig spot, or kept
+     * trying for ever to reach the apple it stood next to. (Found at the merge of tech-klusjes: two chore tests failed in
+     * some runs, depending on where the resident happened to come from.) Only when its path is finished and the goal is
+     * near; the 400 ticks of the step stay the way out.
+     */
+    private void laatsteStap(Vec3 doel, double bereik, double snelheid) {
+        double dx = doel.x - mob.getX(), dz = doel.z - mob.getZ(), ver = bereik + 1.5;
+        if (dx * dx + dz * dz <= ver * ver && Math.abs(doel.y - mob.getY()) <= 1.25) {
+            mob.getMoveControl().setWantedPosition(doel.x, doel.y, doel.z, snelheid);
+        }
     }
 
     /** Walks to an entity (it may move) until within {@code bereik}. */
@@ -197,8 +215,12 @@ public abstract class StappenTaak implements KlusTaak {
                     mob.getNavigation().stop();
                     return true;
                 }
+                boolean staatStil = t > 1 && mob.getNavigation().isDone();
                 if (t == 1 || t % 10 == 0) {
                     mob.getNavigation().moveTo(e, 1.15 * snel());
+                }
+                if (staatStil) {
+                    laatsteStap(e.position(), bereik, 1.15 * snel());
                 }
                 if (t > 400) {
                     afbreken();
@@ -234,9 +256,9 @@ public abstract class StappenTaak implements KlusTaak {
         };
     }
 
-    /** Brings the spoils to the Bank Guh / the chest / the door. */
+    /** Brings the spoils to the Bank Guh / a Hapluikje / the chest / the door. */
     private Stap breng() {
-        BlockPos plek = Voorraad.brengPlek(level, huisje);
+        BlockPos plek = Voorraad.afleverPlek(level, huisje);
         Stap heen = loop(plek, 2.3);
         return new Stap() {
             boolean daar;
@@ -259,22 +281,26 @@ public abstract class StappenTaak implements KlusTaak {
     }
 
     private void lever() {
-        boolean bank = HuisjeOpslag.heeftBankGuh(level, huisje);
-        boolean iets = false;
+        BlockPos p = Voorraad.afleverPlek(level, huisje);
+        boolean bank = false, luikje = false, iets = false;
         for (ItemStack s : buit) {
             if (!s.isEmpty()) {
-                HuisjeOpslag.lever(level, huisje, s);
+                Voorraad.Geleverd g = Voorraad.lever(level, huisje, s);
+                bank |= g.bank();
+                luikje |= g.luikje();
                 iets = true;
             }
         }
         buit.clear();
         toon(ItemStack.EMPTY);
         if (iets) {
-            BlockPos p = Voorraad.brengPlek(level, huisje);
             level.sendParticles(KlusjesFeature.STERRETJE.get(), p.getX() + 0.5, p.getY() + 1.1, p.getZ() + 0.5, 5, 0.3, 0.2, 0.3, 0.0);
             level.playSound(null, p, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.5f, 1.4f);
             if (bank) {
                 KlusBeloning.bankGesorteerd(mob);
+            }
+            if (luikje) {
+                KlusBeloning.luikje(mob);
             }
         }
     }

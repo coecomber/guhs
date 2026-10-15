@@ -189,6 +189,10 @@ public final class SpiesburchtFeature {
                         && reason != net.minecraft.world.entity.EntitySpawnReason.CHUNK_GENERATION, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         // guhs in the dark ash valley: the Asguh (a guh normally needs light to be born)
         event.register(ModEntities.GUH.get(), SpiesburchtEvents::asguhMaySpawn, RegisterSpawnPlacementsEvent.Operation.OR);
+        // 1.4.1: fewer aggressive mobs in the open Guhbarbecuether (not inside its buildings: see Drukte)
+        event.register(ModEntities.NETHER_MIKA.get(), Drukte::mikaMagKomen, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(VONK_MIKA.get(), Drukte::mikaMagKomen, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(KNEKEL_MIKA.get(), Drukte::mikaMagKomen, RegisterSpawnPlacementsEvent.Operation.AND);
     }
 
     public static void payloads(PayloadRegistrar registrar) {

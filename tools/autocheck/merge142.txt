@@ -1,0 +1,80 @@
+# 1.4.2 merge AutoCheck (dev only, Dutch client): the plekjes of park-plekjes b (no own script), two real Rookguh flights
+# between generated Knabbelring copies (where does the player land?), and the Knuffelbad with its new foam ledges.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/merge142.txt
+
+section setup: the Guhmensie, a clear noon
+/gamemode creative
+/execute in guhs:guhmension run tp @s 5000 200 5000
+wait 60
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision infinite 0 true
+renderdistance 12
+
+section the plekjes of park-plekjes b (each 30 blocks east of the one before; the tower is 20 high)
+/tp @s 5000 200 5000
+/guhs parkplek zet duivenvoer_oma
+/tp @s 5030 200 5000
+/guhs parkplek zet poppenkast
+/tp @s 5060 200 5000
+/guhs parkplek zet wensboom
+/tp @s 5090 200 5000
+/guhs parkplek zet mika_bankje
+/tp @s 5120 200 5000
+/guhs parkplek zet uitkijktoren
+/tp @s 5150 200 5000
+/guhs parkplek zet plek_b_vulsel
+/gamemode spectator
+wait 60
+/tp @s 5000 206 5010 180 25
+waitrender 200
+shot plekb_duivenvoer_oma
+/tp @s 5030 206 5010 180 25
+waitrender 200
+shot plekb_poppenkast
+/tp @s 5060 210 5014 180 20
+waitrender 200
+shot plekb_wensboom
+/tp @s 5090 205 5008 180 25
+waitrender 200
+shot plekb_mika_bankje
+/tp @s 5120 212 5018 180 15
+waitrender 200
+shot plekb_uitkijktoren
+/tp @s 5150 205 5008 180 30
+waitrender 200
+shot plekb_vulsel
+
+section the Knuffelbad and its foam ledges
+/gamemode spectator
+tplocate guhs:guhmension knuffelbad
+wait 40
+
+section Rookguh flights between real copies (story done: every stop reached)
+/gamemode survival
+/guhs ring hoofdstuk 7
+wait 20
+/guhs ringvlucht lijst
+/guhs ringvlucht waar gouw
+/guhs ringvlucht waar guhvendel
+/guhs ringvlucht vlieg guhvendel
+wait 260
+waitrender 300
+/guhs ringvlucht lijst
+shot rookguh_landing_guhvendel gui
+look 0 10
+waitrender 100
+shot rookguh_landing_guhvendel_zuid
+look 180 10
+waitrender 100
+shot rookguh_landing_guhvendel_noord
+/guhs ringvlucht vlieg gouw
+wait 260
+waitrender 300
+shot rookguh_landing_gouw gui
+look 90 10
+waitrender 100
+shot rookguh_landing_gouw_oost
+quit

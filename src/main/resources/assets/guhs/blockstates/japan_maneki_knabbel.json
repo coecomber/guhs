@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/japan_maneki_knabbel"
+    },
+    "facing=east": {
+      "model": "guhs:block/japan_maneki_knabbel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/japan_maneki_knabbel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/japan_maneki_knabbel",
+      "y": 270
+    }
+  }
+}

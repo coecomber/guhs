@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "axis=x,strook=heel": {
+      "model": "guhs:block/regenboogblok_heel_x"
+    },
+    "axis=z,strook=heel": {
+      "model": "guhs:block/regenboogblok_heel_z"
+    },
+    "axis=x,strook=a": {
+      "model": "guhs:block/regenboogblok_a_x"
+    },
+    "axis=z,strook=a": {
+      "model": "guhs:block/regenboogblok_a_z"
+    },
+    "axis=x,strook=b": {
+      "model": "guhs:block/regenboogblok_b_x"
+    },
+    "axis=z,strook=b": {
+      "model": "guhs:block/regenboogblok_b_z"
+    },
+    "axis=x,strook=c": {
+      "model": "guhs:block/regenboogblok_c_x"
+    },
+    "axis=z,strook=c": {
+      "model": "guhs:block/regenboogblok_c_z"
+    }
+  }
+}

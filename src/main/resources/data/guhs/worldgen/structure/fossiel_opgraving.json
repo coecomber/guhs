@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/fossiel_opgraving",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:fossiel_opgraving/start",
+  "start_jigsaw_name": "guhs:fossiel_opgraving_midden",
+  "check_radius": 28,
+  "max_height_difference": 8,
+  "headroom": 12,
+  "keep_clear": 21
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XGG",
+    "G G",
+    "ISI"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot",
+    "S": "guhs:grillspies",
+    "X": "guhs:techquest_recept_saus"
+  },
+  "result": {
+    "id": "guhs:blubkacheltje"
+  }
+}

@@ -254,7 +254,13 @@ public final class BaltoVerhaal {
             }
             case DIEPTEPUNT -> {
                 if (stap == TERUG) {
-                    wolfMoment(p);
+                    // bbq2 (oude-scenes): the first time, the meeting is a camera scene that ends with the howl
+                    if (!nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(p, nl.juiced.guhs.feature.oudescenes.OudeScenes.BALTO, p.blockPosition(), s -> {
+                        GuhDex.zie(s, GuhVariant.WITTE_WOLFGUH);
+                        huil(s);
+                    })) {
+                        wolfMoment(p);
+                    }
                 } else {
                     SleeTocht.verder(p);
                 }

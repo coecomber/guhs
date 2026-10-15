@@ -2,7 +2,7 @@
 Reisbureau "De Vadsvakantie": the drawn textures. The two souvenir pictures ("Huize Lingsesdijk 86": a Dutch dike house
 with a guh asleep in the garden; "Thuis is het ook vads": a guh on the couch), the "Balkonië" sign, the glass of the snow
 globes and the bottle, the animated snow and the turning golden globe, the counter's logo, and the item icons (the
-Reisstempel, the seventeen ansichtkaarten).
+Reisstempel, the twenty-one ansichtkaarten: biomes3 added four).
 """
 import json
 import math
@@ -279,6 +279,9 @@ KAART_KLEUREN = {
     "kaasmaan": ((30, 26, 60), (250, 206, 84), (246, 244, 240)), "wereldreis": ((130, 190, 240), (70, 140, 74), (250, 208, 70)),
     "cruise": ((150, 206, 250), (70, 110, 210), (246, 244, 240)), "balkonie": ((250, 222, 190), (92, 130, 214), (255, 150, 196)),
     "om_de_hoek": ((200, 226, 250), (150, 150, 158), (128, 124, 130)),
+    # biomes3
+    "bloesemmeertje": ((255, 214, 232), (95, 211, 214), (255, 150, 196)), "klaterdal": ((190, 230, 240), (134, 196, 104), (212, 58, 60)),
+    "wolkenweide": ((150, 196, 250), (255, 232, 242), (246, 244, 240)), "japan": ((255, 214, 232), (134, 196, 104), (150, 170, 220)),
 }
 
 
@@ -293,6 +296,22 @@ def kaart(bid):
     _px(a, 5, 5, accent)
     _px(a, 7, 9, (255, 150, 196))                             # a tiny guh in the picture
     _px(a, 8, 9, (255, 150, 196))
+    if bid == "japan":                                        # biomes3: the three of them: the guh, Evivads and Nielsvads at the mountain
+        _rect(a, 2, 4, 9, 11, lucht)
+        _rect(a, 2, 9, 9, 11, grond)
+        _rect(a, 6, 6, 9, 9, accent)                          # the mountain, with snow on top
+        _px(a, 6, 6, lucht)
+        _px(a, 8, 6, lucht)
+        _px(a, 7, 5, (246, 248, 252))
+        _px(a, 7, 6, (246, 248, 252))
+        for (x, top, haar, lijf) in ((3, 7, (250, 226, 120), (255, 150, 196)), (5, 6, (170, 118, 74), (70, 110, 210))):
+            _px(a, x, top, haar)                              # Evivads (blond, a little shorter) and Nielsvads (light brown)
+            _px(a, x, top + 1, (250, 214, 190))
+            for y in range(top + 2, 10):
+                _px(a, x, y, lijf)
+        _px(a, 7, 9, (255, 150, 196))                         # the guh, in front
+        _px(a, 8, 9, (255, 150, 196))
+        _px(a, 7, 8, (255, 150, 196))
     _rect(a, 12, 4, 14, 6, (214, 62, 58))                     # the stamp
     _px(a, 12, 4, (255, 214, 90))
     for y in (7, 9, 11):                                      # the address lines

@@ -7,6 +7,7 @@ The 2.4 features (minigames and rare structures), one module each. Every module 
   variants(rng, v)    extra guh variant textures: {id: (fur colour or None, {swatch: painter})} (like make_guh_variants.variants)
   CLOTHES             ids of its guh clothes (item models; same ids as the GuhClothes enum, lower case)
   icons(ic)           item icons of its guh clothes: {clothes id: image} (ic is make_clothes_icons)
+  FTB_CHAPTER, FTB_SECTION, FTB_PORTRAIT, and (bbq2) FTB_SECTIES, FTB_LINEAIR, FTB_SLOT: where its FTB quests land (make_ftbquests.py)
 """
 import importlib
 
@@ -39,6 +40,32 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # guhpixel: the kern, then its nine slices (each a stub until its slice fills it in)
             'guhpixel', 'guhpixel_lobby', 'guhpixel_grap1', 'guhpixel_grap2', 'guhpixel_among', 'guhpixel_guhkade', 'guhpixel_kantoor',
             'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour',
+            # bbq2 (CONTRACT_130 5.1): the skelet and its helper library, the three foundations, then the 27 slices (append only, see above).
+            # They stand AFTER guhpixel (released in 1.3.0, before bbq2): the index seeds a module's variant and clothes textures
+            # (make_guh_variants.py: 2000 + i, 1000 + i), and textures that are out in the world must not change
+            'bbq2', 'vadskracht', 'verhaal_motor', 'wereld', 'bank', 'tech_bronnen', 'tech_buizen', 'tech_machines', 'tech_vloeistof', 'tech_bezorg',
+            'tech_klusjes', 'tech_quests', 'paleizen', 'bestaand', 'fossiel_mijn', 'sausdieren', 'camping_markt', 'toren_peper', 'ring', 'ring_h1',
+            'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',
+            'guhrio_beloning',
+            # bbq2 phase 3 (append only): the winks at the older stories
+            'ring_knipogen',
+            # verhalenpad: het Guhpad (the stories open the worlds; lang, hidden advancements, two pictures, FTB lock quests)
+            'guhpad',
+            'oude_scenes',    # bbq2 verhalenpad: oude-scenes (append only, see above)
+            'snuffel',   # verhalenpad: snuffel-kern (Het Snuffeleiland; append only, see above)
+            'snuffel_steiger',   # verhalenpad: snuffel-steiger (the dock and the opening; after snuffel)
+            'snuffel_dorp',   # verhalenpad: snuffel-dorp (the island and the first series; after 'snuffel': it writes eiland.json again)
+            # biomes3 (merged into 1.4.0 after bbq2; append only; bio_wereld wraps the Guhmensie's final_density, so no module that
+            # writes the Guhmensie's terrain may come after it): the kern, then its slices, the blocks first (nothing here may
+            # depend on its index: variant and clothes painters take their rng from bio_lib.rng)
+            'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
+            'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen',
+            # 1.4.2 (append only, see above): the Rookguh-vlucht of the Knabbelring
+            'ring_vlucht',
+            # 1.4.2: Het Knabbelpark (park-kern, then park-plekjes in the same module; append only)
+            'park',
+            'park_plek_a',   # <park-a> 1.4.2: five random plekjes of the park (append only)
+            'park_plek_b',   # 1.4.2 park-plekjes b (after 'park': it writes the texts and models of its plekjes)
             # einde2 (the Guheinde expansion): what the update shares (the post-pass hook), then its seventeen slices (append only)
             'einde2', 'einde2_biomes', 'einde2_biomeguhs', 'einde2_mikas', 'einde2_zwevers', 'einde2_appa', 'einde2_vetbootje', 'einde2_vesting', 'einde2_deco',
             'einde2_bouw_lucht', 'einde2_bouw_water', 'einde2_bouw_aarde', 'einde2_bouw_vuur', 'einde2_bouw_zij1', 'einde2_bouw_zij2',

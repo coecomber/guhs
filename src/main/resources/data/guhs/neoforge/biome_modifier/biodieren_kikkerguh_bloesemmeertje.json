@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:bloesemmeertje"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:kikkerguh",
+      "weight": 20,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

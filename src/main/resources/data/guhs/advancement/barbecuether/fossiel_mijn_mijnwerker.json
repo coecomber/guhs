@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:fossielmijn_zoutkristalhouweel"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.fossiel_mijn_mijnwerker.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.fossiel_mijn_mijnwerker.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

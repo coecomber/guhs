@@ -138,6 +138,9 @@ public final class Protected {
             return;   // 1.5.0: the kaassaus goes INTO a Guhbrouwketel (nothing is poured out): the pepper brew of the protected kas
         }
         BlockPos target = event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace());
+        if (nl.juiced.guhs.feature.barbecuether.AanmaakblokjeItem.lichtPortaal(event.getLevel(), event.getItemStack(), target)) {
+            return;   // 1.4.2: an Aanmaakblokje in a grillkool frame lights the barbecue portal, no fire (the story's pit is protected)
+        }
         if (denied(event.getEntity(), target)) {
             event.setUseItem(TriState.FALSE);
             event.setCanceled(true);

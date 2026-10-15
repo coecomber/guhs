@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:sterrenwacht_ruine",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 4,
+    "separation": 0,
+    "salt": 21500811
+  }
+}

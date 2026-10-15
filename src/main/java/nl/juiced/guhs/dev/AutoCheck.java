@@ -105,6 +105,8 @@ public final class AutoCheck {
     private static Float lockYaw, lockPitch;
     /** 2.10.1: hold W (drive on / drive off). */
     private static boolean driveForward;
+    /** bbq2: keys held by 'key <name> on' (Super Guhrio's side view is played with the real keys). */
+    private static final java.util.Set<net.minecraft.client.KeyMapping> heldKeys = new java.util.LinkedHashSet<>();
     private static boolean opened; // a screen the script opened itself
     /** 2.9 visual QA: the box of the structure the last tplocate found (camrel / relcmd are relative to its min corner). */
     private static BoundingBox lastBox;
@@ -185,6 +187,25 @@ public final class AutoCheck {
     private static Vec3 expectedCam;
 
     private enum State { BOOT, CREATING, JOINING, RUNNING, QUITTING }
+
+    /**
+     * 1.4.0 (two-player check): -Dguhs.autocheck.server=host:port makes this client JOIN that (dedicated, offline-mode) server
+     * instead of making its own world. The script then runs "from a distance": a /command is sent as the player's own chat
+     * command (the player must be an op there), 'camera' is a /tp, and everything that needs the integrated server (npc,
+     * tplocate, use, the example-state commands) is reported as a problem and skipped. Two such clients keep step with
+     * 'signal <name>' / 'await <name> [ticks]' (files in -Dguhs.autocheck.sync=<dir>).
+     */
+    private static final String REMOTE = System.getProperty("guhs.autocheck.server");
+
+    private static boolean remote() {
+        return REMOTE != null && !REMOTE.isBlank();
+    }
+
+    private static File syncFile(String name) {
+        File dir = new File(System.getProperty("guhs.autocheck.sync", "autocheck_sync"));
+        dir.mkdirs();
+        return new File(dir, name.replaceAll("[^A-Za-z0-9_.\\-]", "_"));
+    }
 
     private AutoCheck() {
     }
@@ -282,12 +303,20 @@ public final class AutoCheck {
                     note("AutoCheck start " + new java.util.Date() + ", screen at boot: " + mc.screen.getClass().getSimpleName()
                             + (done.isEmpty() ? " (fresh round)" : " (RESUME: " + done.size()
                             + " items that were OK (done.txt) are skipped; -Dguhs.autocheck.fresh=true checks everything again)"));
-                    createWorld(mc);
+                    if (remote()) {
+                        note("REMOTE round: joining " + REMOTE + " as " + mc.getUser().getName());
+                        var adres = net.minecraft.client.multiplayer.resolver.ServerAddress.parseString(REMOTE);
+                        net.minecraft.client.gui.screens.ConnectScreen.startConnecting(new net.minecraft.client.gui.screens.TitleScreen(), mc, adres,
+                                new net.minecraft.client.multiplayer.ServerData("autocheck", REMOTE, net.minecraft.client.multiplayer.ServerData.Type.OTHER),
+                                false, null);
+                    } else {
+                        createWorld(mc);
+                    }
                     state(State.CREATING);
                 }
             }
             case CREATING, JOINING -> {
-                if (mc.player != null && mc.level != null && mc.getSingleplayerServer() != null
+                if (mc.player != null && mc.level != null && (remote() || mc.getSingleplayerServer() != null)
                         && !(mc.screen instanceof LevelLoadingScreen)) {
                     if (state == State.CREATING) {
                         state(State.JOINING);
@@ -295,7 +324,9 @@ public final class AutoCheck {
                     }
                     closeForeignScreen(mc);
                     if (stateTicks > 60) {
-                        applyRules(mc.getSingleplayerServer());
+                        if (!remote()) {
+                            applyRules(mc.getSingleplayerServer());
+                        }
                         state(State.RUNNING);
                     }
                 } else if (stateTicks > 20 * 180) {
@@ -304,7 +335,7 @@ public final class AutoCheck {
                 }
             }
             case RUNNING -> {
-                if (mc.player == null || mc.getSingleplayerServer() == null) {
+                if (mc.player == null || !remote() && mc.getSingleplayerServer() == null) {
                     problem("Left the world unexpectedly at script line " + scriptIndex);
                     startQuit(mc);
                     return;
@@ -318,6 +349,9 @@ public final class AutoCheck {
                 applyLock();
                 if (driveForward) {
                     mc.options.keyUp.setDown(true);
+                }
+                for (net.minecraft.client.KeyMapping k : heldKeys) {
+                    k.setDown(true);
                 }
                 for (int guard = 0; guard < 50; guard++) {
                     if (current == null) {
@@ -863,6 +897,90 @@ public final class AutoCheck {
                     mc2.options.keyUp.setDown(driveForward);
                     return true;
                 };
+            case "key":
+                // key <left|right|up|down|jump|sneak|sprint> on|off: (bbq2) hold a movement key until off;  key all off
+                return mc2 -> {
+                    var o = mc2.options;
+                    if (a[1].equalsIgnoreCase("all")) {
+                        heldKeys.forEach(k -> k.setDown(false));
+                        heldKeys.clear();
+                        return true;
+                    }
+                    net.minecraft.client.KeyMapping k = switch (a[1].toLowerCase(Locale.ROOT)) {
+                        case "left" -> o.keyLeft;
+                        case "right" -> o.keyRight;
+                        case "up" -> o.keyUp;
+                        case "down" -> o.keyDown;
+                        case "jump" -> o.keyJump;
+                        case "sneak" -> o.keyShift;
+                        case "sprint" -> o.keySprint;
+                        default -> null;
+                    };
+                    if (k == null) {
+                        problem("key: unknown key " + a[1]);
+                        return true;
+                    }
+                    boolean on = a.length < 3 || a[2].equalsIgnoreCase("on");
+                    if (on) {
+                        heldKeys.add(k);
+                    } else {
+                        heldKeys.remove(k);
+                    }
+                    k.setDown(on);
+                    return true;
+                };
+            case "guhriowacht": {
+                // guhriowacht <s> [maxTicks]: (bbq2) wait until the player is at least s blocks along the lane (or, with a
+                // minus sign, at most that far); gives up after maxTicks (default 200)
+                double doel = Double.parseDouble(a[1]);
+                int max = a.length > 2 ? Integer.parseInt(a[2]) : 200;
+                int[] t = {0};
+                return mc2 -> {
+                    double nu = nl.juiced.guhs.feature.guhrio.client.GuhrioClient.devS();
+                    boolean daar = doel >= 0 ? nu >= doel : nu <= -doel;
+                    if (!daar && ++t[0] > max) {
+                        problem("guhriowacht " + a[1] + ": not there after " + max + " ticks (s = " + nu + ")");
+                        return true;
+                    }
+                    return daar;
+                };
+            }
+            case "guhriosprong": {
+                // guhriosprong <ticks> [label]: (bbq2) hold space for that many ticks and note how high and far the jump went
+                int hold = Integer.parseInt(a[1]);
+                int[] t = {0};
+                double[] m = new double[4];
+                return mc2 -> {
+                    var p = mc2.player;
+                    if (t[0] == 0) {
+                        m[0] = p.getY();
+                        m[1] = p.getY();
+                        m[2] = p.getX();
+                        m[3] = p.getZ();
+                    }
+                    mc2.options.keyJump.setDown(t[0] < hold);
+                    m[1] = Math.max(m[1], p.getY());
+                    t[0]++;
+                    if (t[0] > 3 && (p.onGround() || t[0] > 80)) {
+                        mc2.options.keyJump.setDown(false);
+                        note("  guhriosprong " + rest + ": " + String.format(Locale.ROOT, "%.2f blocks high, %.2f blocks far, %d ticks in the air",
+                                m[1] - m[0], Math.abs(p.getX() - m[2]) + Math.abs(p.getZ() - m[3]), t[0] - 1));
+                        return true;
+                    }
+                    return false;
+                };
+            }
+            case "guhriopos":
+                // guhriopos [label]: (bbq2) where the player and the camera are, and what the player's game knows of the level
+                return mc2 -> {
+                    var cam = mc2.gameRenderer.getMainCamera();
+                    var p = mc2.player;
+                    note("  guhriopos " + rest + ": " + String.format(Locale.ROOT, "player %.2f %.2f %.2f yaw %.0f ground %s vel %.3f %.3f %.3f | camera %.2f %.2f %.2f yaw %.1f pitch %.1f | ",
+                            p.getX(), p.getY(), p.getZ(), p.getYRot(), p.onGround(), p.getDeltaMovement().x, p.getDeltaMovement().y, p.getDeltaMovement().z,
+                            cam.position().x, cam.position().y, cam.position().z, cam.yRot(), cam.xRot())
+                            + nl.juiced.guhs.feature.guhrio.client.GuhrioClient.devInfo());
+                    return true;
+                };
             case "racekart":
                 // racekart <x> <y> <z> <yaw> <makkelijk|medium|lastig> [nosprong]: (2.10.1) a race guh set up as in a race on
                 // the Regenboogbaan (size, step height, level, the rainbow jump unless nosprong), the player steering
@@ -1046,6 +1164,88 @@ public final class AutoCheck {
                 };
             case "seed":
                 return mc2 -> true; // (handled before world creation: see guhs.autocheck.seed)
+            // --- 1.4.0 two-player check: keeping step with another client, a real right-click, what this client was sent ---
+            case "signal":
+                // signal <name>: tell the other client(s) that this point of the script was reached
+                return mc2 -> {
+                    try {
+                        Files.writeString(syncFile(a[1]).toPath(), mc2.getUser().getName(), StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        problem("signal " + a[1] + ": " + e);
+                    }
+                    note("  signal " + a[1]);
+                    return true;
+                };
+            case "await": {
+                // await <name> [maxTicks]: wait until another client gave that signal (default: at most 6000 ticks)
+                int max = a.length > 2 ? Integer.parseInt(a[2]) : 6000;
+                int[] t = {0};
+                return mc2 -> {
+                    if (syncFile(a[1]).exists()) {
+                        note("  await " + a[1] + ": after " + t[0] + " ticks");
+                        return true;
+                    }
+                    if (++t[0] > max) {
+                        problem("await " + a[1] + ": no signal after " + max + " ticks");
+                        return true;
+                    }
+                    return false;
+                };
+            }
+            case "klik": {
+                // klik <entity type id|*> [radius] [name part]: a real right-click, sent by this client, on the nearest entity
+                // of that type the CLIENT knows (default within 8 blocks; also works on a server)
+                double r = a.length > 2 ? Double.parseDouble(a[2]) : 8;
+                String naam = a.length > 3 ? String.join(" ", java.util.Arrays.copyOfRange(a, 3, a.length)).toLowerCase(Locale.ROOT) : null;
+                return mc2 -> {
+                    Entity best = null;
+                    for (Entity e : mc2.level.entitiesForRendering()) {
+                        if (e == mc2.player || e.distanceTo(mc2.player) > r) {
+                            continue;
+                        }
+                        if (!a[1].equals("*") && !BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString().equals(a[1].contains(":") ? a[1] : "guhs:" + a[1])) {
+                            continue;
+                        }
+                        if (naam != null && !e.getName().getString().toLowerCase(Locale.ROOT).contains(naam)) {
+                            continue;
+                        }
+                        if (best == null || e.distanceToSqr(mc2.player) < best.distanceToSqr(mc2.player)) {
+                            best = e;
+                        }
+                    }
+                    if (best == null) {
+                        problem("klik " + rest + ": this client knows no such entity within " + r + " blocks");
+                        return true;
+                    }
+                    opened = true;
+                    var hit = new net.minecraft.world.phys.EntityHitResult(best, best.getBoundingBox().getCenter());
+                    // (26.1: one call for interact-at and interact, as a real right-click sends them)
+                    var uit = mc2.gameMode.interact(mc2.player, best, hit, net.minecraft.world.InteractionHand.MAIN_HAND);
+                    note("  klik " + best.getName().getString() + " (" + BuiltInRegistries.ENTITY_TYPE.getKey(best.getType()) + ", "
+                            + String.format(Locale.ROOT, "%.1f", best.distanceTo(mc2.player)) + " blocks) -> " + uit);
+                    return true;
+                };
+            }
+            case "ziet": {
+                // ziet <entity type id|*> [radius]: note which entities of that type THIS client knows (what the server sent it)
+                double r = a.length > 2 ? Double.parseDouble(a[2]) : 64;
+                return mc2 -> {
+                    java.util.Map<String, Integer> tel = new java.util.TreeMap<>();
+                    for (Entity e : mc2.level.entitiesForRendering()) {
+                        if (e == mc2.player || e.distanceTo(mc2.player) > r) {
+                            continue;
+                        }
+                        String id = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString();
+                        if (!a[1].equals("*") && !id.equals(a[1].contains(":") ? a[1] : "guhs:" + a[1])) {
+                            continue;
+                        }
+                        boolean naam = e.hasCustomName() || e instanceof net.minecraft.world.entity.player.Player;
+                        tel.merge(id + (naam ? " '" + e.getName().getString() + "'" : ""), 1, Integer::sum);
+                    }
+                    note("  ziet " + a[1] + " within " + r + ": " + (tel.isEmpty() ? "nothing" : tel.toString()));
+                    return true;
+                };
+            }
             case "quit":
                 queue.clear();
                 scriptIndex = scriptLines.size();
@@ -1162,6 +1362,12 @@ public final class AutoCheck {
         List<String> out = new ArrayList<>();
         boolean[] failed = {false};
         return mc -> {
+            if (remote()) {
+                // (the answer comes back as chat: it is in the screenshot and in the client's log, not in the report)
+                mc.player.connection.sendCommand(cmd);
+                note("  (remote) /" + cmd);
+                return true;
+            }
             if (f[0] == null) {
                 var server = mc.getSingleplayerServer();
                 f[0] = server.submit(() -> {
@@ -1223,6 +1429,10 @@ public final class AutoCheck {
     static <T> Action server(Function<net.minecraft.server.MinecraftServer, T> job, Consumer<T> then) {
         CompletableFuture<T>[] f = new CompletableFuture[1];
         return mc -> {
+            if (remote()) {
+                problem("script line " + scriptIndex + " needs the integrated server: skipped in a remote round");
+                return true;
+            }
             if (f[0] == null) {
                 var server = mc.getSingleplayerServer();
                 f[0] = server.submit(() -> job.apply(server));
@@ -1247,6 +1457,16 @@ public final class AutoCheck {
 
     /** Teleport (level null = stay) and hold that rotation. */
     static Action teleport(ResourceKey<Level> dim, Vec3 pos, float yaw, float pitch) {
+        if (remote()) {
+            return mc -> {
+                String tp = String.format(Locale.ROOT, "tp @s %.3f %.3f %.3f %.2f %.2f", pos.x, pos.y, pos.z, yaw, pitch);
+                mc.player.connection.sendCommand(dim == null ? tp : "execute in " + dim.identifier() + " run " + tp);
+                lockYaw = yaw;
+                lockPitch = pitch;
+                expectedCam = pos;
+                return true;
+            };
+        }
         return server(server -> {
             ServerPlayer sp = player(server);
             ServerLevel level = dim == null ? sp.level() : server.getLevel(dim);
@@ -1500,6 +1720,33 @@ public final class AutoCheck {
                     parkMouse(mc);
                     mc.setScreen(new nl.juiced.guhs.client.screen.SuperkompasScreen(net.minecraft.world.InteractionHand.MAIN_HAND, "sjoelhuisje"));
                     note("  opened the Superkompas (" + cats.size() + " tabs)");
+                    return true;
+                };
+            }
+            case "kompasverhalen": {
+                // gui kompasverhalen <name> [screenfuls]: (1.4.1) the Superkompas tab Verhalen (the stories per world), scrolled
+                // this many screenfuls down, one shot
+                String name = a.length > 2 ? a[2] : "gui_kompasverhalen";
+                double schermen = a.length > 3 ? Double.parseDouble(a[3]) : 0;
+                queue.addFirst(mc -> {
+                    mc.setScreen(null);
+                    opened = false;
+                    return true;
+                });
+                queue.addFirst(shot(name, true));
+                queue.addFirst(waitTicks(3));
+                return mc -> {
+                    opened = true;
+                    parkMouse(mc);
+                    var sk = new nl.juiced.guhs.client.screen.SuperkompasScreen(net.minecraft.world.InteractionHand.MAIN_HAND, "nomguh");
+                    mc.setScreen(sk);
+                    var cats = nl.juiced.guhs.item.SuperkompasItem.CATEGORIES;
+                    for (int i = 0; i < cats.size(); i++) {
+                        if (cats.get(i).id().equals(nl.juiced.guhs.feature.guhpad.KompasVerhalen.TAB)) {
+                            sk.showTab(i);
+                        }
+                    }
+                    sk.scrollLijst(schermen);
                     return true;
                 };
             }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "LCL",
+    "SSS"
+  ],
+  "key": {
+    "L": "#minecraft:logs",
+    "C": "minecraft:campfire",
+    "S": "guhs:houtskoolsteen_stenen"
+  },
+  "result": {
+    "id": "guhs:campingmarkt_kampvuur"
+  }
+}

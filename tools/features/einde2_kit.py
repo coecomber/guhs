@@ -25,9 +25,9 @@ from collections import deque
 
 from features import guheinde_bouw as gb
 
-# hook fase B (after the merge onto the sister update): every guaranteed einde2 set gets "alleen_nieuw": true, so its one
+# on since the merge of origin/main 1.4.4 (merge_main 2026-10-15): every guaranteed einde2 set gets "alleen_nieuw": true, so its one
 # copy only lands in terrain nobody has been to
-EINDE2_ALLEEN_NIEUW = False
+EINDE2_ALLEEN_NIEUW = True
 HOOG_MIN, HOOG_MAX, NATUUR_MAX, EILANDBOUW_MAX, TILE = 134, 253, 119, 127, 32
 # the deep band: inside the natural band, but only in a spot where the Guheinde has no terrain at all (the Sponsguh pair)
 LAAG_MIN, LAAG_MAX = 4, 117

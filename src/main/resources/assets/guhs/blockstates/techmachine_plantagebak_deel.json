@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "stuk=nw": {
+      "model": "guhs:block/plantagebak_hoek"
+    },
+    "stuk=no": {
+      "model": "guhs:block/plantagebak_hoek",
+      "y": 90
+    },
+    "stuk=zo": {
+      "model": "guhs:block/plantagebak_hoek",
+      "y": 180
+    },
+    "stuk=zw": {
+      "model": "guhs:block/plantagebak_hoek",
+      "y": 270
+    },
+    "stuk=n": {
+      "model": "guhs:block/plantagebak_rand"
+    },
+    "stuk=o": {
+      "model": "guhs:block/plantagebak_rand",
+      "y": 90
+    },
+    "stuk=z": {
+      "model": "guhs:block/plantagebak_rand",
+      "y": 180
+    },
+    "stuk=w": {
+      "model": "guhs:block/plantagebak_rand",
+      "y": 270
+    },
+    "stuk=midden": {
+      "model": "guhs:block/plantagebak_midden"
+    }
+  }
+}

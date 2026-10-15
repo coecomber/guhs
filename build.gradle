@@ -255,6 +255,17 @@ idea {
 // The dev-only autocheck tool is never shipped in the guhs jar.
 tasks.named('jar', Jar).configure {
     exclude 'nl/juiced/guhs/dev/**'
+    // bbq2 (PHASE3 R08): the files of the story engine's demo story (feature/verhaal/VerhaalDemo, only registered in a dev
+    // run). The dev runs and the game tests read build/resources, not the jar, so they keep them.
+    exclude 'assets/guhs/textures/gui/verhaal/kaart_demo.png'
+    exclude 'assets/guhs/textures/gui/verhaal/reiskaart_demo.png'
+    exclude 'data/guhs/advancement/quest/demo_stap_1.json'
+    exclude 'data/guhs/advancement/quest/demo_stap_2.json'
+    exclude 'data/guhs/advancement/quest/demo_stap_3.json'
+    exclude 'data/guhs/advancement/quest/demo_vervolg_stap_1.json'
+    // bbq2 (PHASE3 H02): the walker's routes are test data that only GuhrioRouteGameTests reads
+    // (data/guhs/guhrio_kasteel/hallen.json is production data and ships).
+    exclude 'data/guhs/guhrio_route/**'
 }
 
 // Let `gradlew runServer` read console commands (e.g. "/test runall", "stop") from the terminal.

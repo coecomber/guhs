@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:gladde_knuffelsteen",
+  "result": {
+    "id": "guhs:gladde_knuffelsteen_plaat",
+    "count": 2
+  }
+}

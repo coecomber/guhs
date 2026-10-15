@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "paneel": "guhs:block/shoji",
+    "rand": "guhs:block/shoji_rand",
+    "particle": "guhs:block/shoji"
+  },
+  "elements": [
+    {
+      "from": [
+        13,
+        0,
+        5
+      ],
+      "to": [
+        29,
+        16,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paneel",
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#paneel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            2,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#rand",
+          "uv": [
+            2,
+            0,
+            4,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            2,
+            16,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

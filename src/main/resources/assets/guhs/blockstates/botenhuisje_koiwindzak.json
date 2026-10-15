@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/botenhuisje_koiwindzak"
+    },
+    "facing=east": {
+      "model": "guhs:block/botenhuisje_koiwindzak",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/botenhuisje_koiwindzak",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/botenhuisje_koiwindzak",
+      "y": 270
+    }
+  }
+}

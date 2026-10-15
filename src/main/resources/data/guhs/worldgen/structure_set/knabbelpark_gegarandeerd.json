@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:knabbelpark",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21420908,
+    "min_afstand": 900,
+    "max_afstand": 2000,
+    "alleen_nieuw": true,
+    "sector": 11,
+    "sectoren": 16
+  }
+}

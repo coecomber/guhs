@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:bloesemmeertje"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:koi",
+      "weight": 12,
+      "minCount": 3,
+      "maxCount": 5
+    }
+  ]
+}

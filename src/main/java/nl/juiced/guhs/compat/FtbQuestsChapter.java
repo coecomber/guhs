@@ -17,9 +17,14 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 
 /**
- * If FTB Quests is installed, puts the "Guhs" chapter group (thirteen themed chapters, their texts and the group)
+ * If FTB Quests is installed, puts the "Guhs" chapter group (the themed chapters, their texts and the group)
  * into config/ftbquests/quests, so it shows up in the pack's quest book. The chapters are made by
  * tools/make_ftbquests.py; ftbquests/index.txt lists them (and the group id).
+ * <p>
+ * guhpad: there are two chapter groups now ("Guhs" and, at the end of the sidebar, "Het Guhpad": the big stories). The
+ * index lists every group ({@code group <id>}, in sidebar order); a chapter file names its own group. A chapter that we
+ * installed and no longer ship (its quests moved to another chapter, with the same quest ids) is taken away again, unless
+ * the pack changed it.
  * <p>
  * 1.1.0 (Minecraft 26.1.2): FTB Quests 26.1 reads only JSON5 (1.0.x wrote SNBT, which it ignores now). Everything goes
  * where FTB Quests saves it itself: chapters/&lt;name&gt;.json5, the texts in lang/&lt;locale&gt;/chapters/&lt;name&gt;.json5 (every
@@ -78,10 +83,10 @@ public final class FtbQuestsChapter {
             if (index == null) {
                 return false;
             }
-            String group = null;
+            List<String> groups = new ArrayList<>();   // (guhpad: every chapter group, in sidebar order)
             for (String line : index.split("\\R")) {
                 if (line.startsWith("group ")) {
-                    group = line.substring(6).trim();
+                    groups.add(line.substring(6).trim());
                 }
             }
             Path chapters = quests.resolve("chapters");
@@ -124,11 +129,32 @@ public final class FtbQuestsChapter {
                 }
                 wrote = true;
             }
+            // guhpad: a chapter of ours that is no longer shipped goes (the quests it had are in another chapter now, with
+            // the same ids: two copies would be double quests), unless the pack changed it
+            List<String> shipped = chapters();
+            for (String name : new ArrayList<>(installed.keySet())) {
+                if (shipped.contains(name)) {
+                    continue;
+                }
+                Path file = chapters.resolve(name + EXT);
+                if (Files.exists(file)) {
+                    String onDisk = Files.readString(file);
+                    if (version(onDisk) == 0 && !fingerprint(onDisk).equals(installed.get(name)[1])) {
+                        continue;                    // (the pack's own edit: leave it alone)
+                    }
+                    Files.delete(file);
+                    for (String locale : LOCALES) {
+                        Files.deleteIfExists(lang.resolve(locale).resolve("chapters").resolve(name + EXT));
+                    }
+                }
+                installed.remove(name);
+                wrote = true;
+            }
             if (!wrote) {
                 return false;
             }
             writeInstalled(quests.resolve(INSTALLED), installed);
-            if (group != null) {
+            for (String group : groups) {
                 addGroup(quests.resolve("chapter_groups" + EXT), group);
             }
             LOGGER.info("Installed the Guhs chapters for FTB Quests");

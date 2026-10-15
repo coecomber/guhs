@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:neerzetter"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_machines_neergezet.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_machines_neergezet.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/tech_machines_geknabbeld"
+}

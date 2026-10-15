@@ -354,7 +354,9 @@ public final class SleeRit {
                 }
             }
             case SleeEntity.PAUZE -> {
-                pauzeTicks++;
+                if (pauze == SleeEntity.RUST || !nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(player)) {
+                    pauzeTicks++;   // (1.4.4: a scene waits for its viewer's clicks: the sled waits for as long as it plays)
+                }
                 if (pauze == SleeEntity.RUST) {
                     warmte = Math.min(100, warmte + 1.6f);
                     if (pauzeTicks % 20 == 5) {

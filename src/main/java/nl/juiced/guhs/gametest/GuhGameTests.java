@@ -264,7 +264,11 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, false));
     }
 
-    /** 40 blocks of guh wire: a lamp at the far end still gets full power (redstone dust fades out after 15). */
+    /**
+     * 40 blocks of guh wire: a lamp at the far end still gets full power (redstone dust fades out after 15). bbq2: the wire
+     * carries vadskracht, so the power comes from a vadskracht source (not from redstone), and the wire gives a redstone
+     * signal while its net runs.
+     */
     @GuhTest(template = WIRE_ROOM, timeoutTicks = 60)
     public static void guhWireCarriesFullPowerOver40Blocks(GameTestHelper helper) {
         int length = 40;
@@ -276,12 +280,18 @@ public class GuhGameTests {
         }
         BlockPos lamp = new BlockPos(length + 1, 1, 1);
         helper.setBlock(lamp, Blocks.REDSTONE_LAMP);
+        BlockPos end = helper.absolutePos(new BlockPos(length, 1, 1));
         helper.setBlock(new BlockPos(0, 1, 1), Blocks.REDSTONE_BLOCK);
+        helper.assertFalse(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "redstone into the wire does nothing");
+        helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, false);
+        helper.setBlock(new BlockPos(0, 1, 1), nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.TESTBRON.get());
 
+        helper.assertTrue(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "the net of the wire runs");
         helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, true);
         helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, true);
         // and it switches off again: the wire must not keep itself powered
         helper.setBlock(new BlockPos(0, 1, 1), Blocks.AIR);
+        helper.assertFalse(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "no source any more");
         helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, false);
         helper.succeedWhen(() -> helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, false));
     }
@@ -362,16 +372,25 @@ public class GuhGameTests {
         helper.succeed();
     }
 
+    /** bbq2: at most 256 of one kind (the rest comes back to the caller); with the upgrade there is no limit (more: BankGameTests). */
     @GuhTest(template = EMPTY)
-    public static void bankGuhStoresInfinitelyAndKeepsItWhenBroken(GameTestHelper helper) {
+    public static void bankGuhStoresUpToTheCapAndKeepsItWhenBroken(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.BANK_GUH.get());
         BankGuhBlockEntity bank = helper.getBlockEntity(pos, BankGuhBlockEntity.class);
+        int terug = 0;
         for (int i = 0; i < 1000; i++) {
-            bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64));
+            terug += bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64)).getCount();
         }
-        bank.getStorage().insert(new ItemStack(Items.DIAMOND, 3));
-        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 64_000, "64,000 cobblestone should fit");
+        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 256 && terug == 64_000 - 256,
+                "256 cobblestone fit, the other " + (64_000 - 256) + " came back to the caller (got " + terug + ")");
+        bank.getStorage().setUpgraded(true);
+        for (int i = 0; i < 1000; i++) {
+            helper.assertTrue(bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64)).isEmpty(), "upgraded: every stack fits");
+        }
+        helper.assertTrue(bank.getStorage().insert(new ItemStack(Items.DIAMOND, 3)).isEmpty(), "three diamonds");
+        helper.assertTrue(bank.getStorage().extract(new ItemStack(Items.COBBLESTONE), 256).getCount() == 256, "(256 out again)");
+        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 64_000, "upgraded: 64,000 cobblestone fit");
         ItemStack taken = bank.getStorage().extract(new ItemStack(Items.COBBLESTONE), 64);
         helper.assertTrue(taken.getCount() == 64 && bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 63_936, "taking a stack");
 
@@ -731,8 +750,9 @@ public class GuhGameTests {
             if (v == nl.juiced.guhs.entity.GuhVariant.NORMAL) normal++;
         }
         helper.assertTrue(normal > 85_000, "normal guhs should be by far the most common: " + normal);
-        // 1.3.1: every variant a little rarer: 72 of 1000 guhs (was 90), and the note guh 1 in 500 (was 200)
-        helper.assertTrue(java.util.Arrays.stream(nl.juiced.guhs.entity.GuhVariant.values()).mapToInt(v -> v.weight).sum() == 72
+        // 1.3.1: every variant a little rarer: 67 of 1000 guhs (was 90; this line said 72 and failed on the released 1.3.1, corrected at
+        // the bbq2 merge: the weights are what is out in the world), and the note guh 1 in 500 (was 200)
+        helper.assertTrue(java.util.Arrays.stream(nl.juiced.guhs.entity.GuhVariant.values()).mapToInt(v -> v.weight).sum() == 67
                 && nl.juiced.guhs.entity.GuhVariant.MINT.weight == 17 && nl.juiced.guhs.entity.GuhVariant.CHOCO.weight == 17
                 && nl.juiced.guhs.entity.GuhVariant.SNOW.weight == 13 && GuhEntity.SECRET_NOTE_CHANCE == 500 && normal > 92_000, "the 1.3.1 odds: " + normal);
         helper.assertTrue(seen.size() == java.util.Arrays.stream(nl.juiced.guhs.entity.GuhVariant.values()).filter(v -> v.weight > 0 || v == nl.juiced.guhs.entity.GuhVariant.NORMAL).count(), "every variant can turn up (except brococolief, the ender guh: Guh Peaks only, the Koningguh: castle only, the Wolkguh: floating islands only...): " + seen);
@@ -1839,6 +1859,13 @@ public class GuhGameTests {
                 int locks = (int) java.util.regex.Pattern.compile("(?m)^\\s*\"?dependencies\"?\\s*:").matcher(chapter).results().count();
                 if (name.equals("guhs_maag")) {
                     helper.assertTrue(locks == 5, "the five stomach sizes come after each other, not " + locks);
+                } else if (name.equals("guhs_pad_barbecuether")) {
+                    // (bbq2: the one story that is told in order: its quests really depend on each other, FTB_LINEAIR;
+                    // guhpad: it is the first half of the chapter "Verhalen van de Guhbarbecuether" now)
+                    helper.assertTrue(locks >= 1, "the Knabbelring is told in order");
+                } else if (name.equals("guhs_pad_echt")) {
+                    // (guhpad: a preview nobody can do yet: everything hangs behind its lock quest)
+                    helper.assertTrue(locks == 8, "Het echte Guheinde is locked: " + locks);
                 } else {
                     helper.assertTrue(locks == 0, name + " has " + locks + " locked quests");
                 }
@@ -1863,15 +1890,20 @@ public class GuhGameTests {
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs the first time");
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
-                    "guhs_guheinde", "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_verhalen", "guhs_diertjes",
-                    "guhs_guhpixel")),
-                    "the fourteen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie; guhpixel: Guhpixel), in reading order: " + names);
+                    "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_diertjes",
+                    "guhs_guhpixel", "guhs_techniek", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt")),
+                    "the seventeen chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie), in reading order, and "
+                            + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "
+                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde, and Het echte Guheinde: " + names);
+            java.util.Set<String> guhpad = java.util.Set.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt");
             for (String name : names) {
                 helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
                 // 1.2.0: Dutch in nl_nl, English in en_us (the shipped file; keys without English yet stay Dutch), the same keys in both
                 String nl = java.nio.file.Files.readString(quests.resolve("lang").resolve("nl_nl").resolve("chapters").resolve(name + ".json5"));
                 String en = java.nio.file.Files.readString(quests.resolve("lang").resolve("en_us").resolve("chapters").resolve(name + ".json5"));
-                helper.assertTrue(nl.contains("Hoe kom je hier?"), "the Dutch texts of " + name + " in nl_nl");
+                // (guhpad: a chapter of the Guhpad starts with its lock quest in the place of "Hoe kom je hier?")
+                helper.assertTrue(nl.contains(guhpad.contains(name) ? "chapter_subtitle" : "Hoe kom je hier?") && nl.contains("\"quest."),
+                        "the Dutch texts of " + name + " in nl_nl");
                 helper.assertTrue(en.equals(ftbResource("ftbquests/lang/en_us/" + name + ".json5")) && nl.equals(ftbResource("ftbquests/lang/nl_nl/" + name + ".json5")),
                         "the texts of " + name + " are the shipped ones, per language");
                 helper.assertTrue(ftbLangKeys(en).equals(ftbLangKeys(nl)) && !ftbLangKeys(nl).isEmpty(), "every text of " + name + " is in both languages");
@@ -1881,6 +1913,7 @@ public class GuhGameTests {
             helper.assertTrue(g.contains("0123456789ABCDEF") && java.util.regex.Pattern.compile("id: \"475548[0-9A-F]{10}\"").matcher(g).find()
                     && g.indexOf("475548") > g.indexOf("icon: [1, 2]") && g.trim().endsWith("}") && g.contains("},\n    {"),
                     "our group is added after the pack's own: " + g);
+            helper.assertTrue(g.split("id: \"475548", -1).length - 1 == 2, "(guhpad) both our groups, Guhs and Het Guhpad: " + g);
             for (String locale : nl.juiced.guhs.compat.FtbQuestsChapter.LOCALES) {
                 String basis = java.nio.file.Files.readString(quests.resolve("lang").resolve(locale).resolve("chapters").resolve("guhs_basis.json5"));
                 helper.assertTrue(basis.contains("chapter_group.475548"), "group title with the first chapter in " + locale);
@@ -1981,7 +2014,9 @@ public class GuhGameTests {
                     helper.assertTrue(quests.add(m.group(1)) && chapter.contains("id: \"" + m.group(1) + "\""), "quest " + m.group(1) + " once, in " + name);
                     n++;
                 }
-                helper.assertTrue(n > 0 && lang.contains("Hoe kom je hier?"), name + " has quests and a Hoe kom je hier?");
+                // (guhpad: a chapter of the Guhpad has its lock quest in that place)
+                helper.assertTrue(n > 0 && (lang.contains("Hoe kom je hier?") || name.equals("guhs_verhalen") || name.startsWith("guhs_pad_")
+                        || name.equals("guhs_guheinde")), name + " has quests and a Hoe kom je hier?");
                 java.util.regex.Matcher l = java.util.regex.Pattern.compile("linked_quest: \"([0-9A-F]{16})\"").matcher(chapter);
                 while (l.find()) {
                     links.add(l.group(1));
@@ -1991,8 +2026,10 @@ public class GuhGameTests {
                     helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.class.getClassLoader().getResource("assets/guhs/" + img.group(1)) != null,
                             "picture " + img.group(1));
                 }
-                linear += chapter.split("progression_mode: \"linear\"", -1).length - 1;
-                helper.assertTrue(name.equals("guhs_maag") || !chapter.contains("\"linear\""), name + ": nothing locked");
+                // (bbq2: the one story told in order, FTB_LINEAIR; guhpad: in the chapter "Verhalen van de Guhbarbecuether")
+                boolean verhaal = name.equals("guhs_pad_barbecuether");
+                linear += verhaal ? 0 : chapter.split("progression_mode: \"linear\"", -1).length - 1;
+                helper.assertTrue(name.equals("guhs_maag") || verhaal || !chapter.contains("\"linear\""), name + ": nothing locked");
             }
             helper.assertTrue(quests.size() >= 429, "all quests (420 + 9 Hoe kom je hier?): " + quests.size());
             helper.assertTrue(quests.containsAll(links) && !links.isEmpty(), "the links point to our quests");

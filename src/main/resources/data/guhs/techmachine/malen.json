@@ -1,0 +1,46 @@
+{
+  "recepten": [
+    {
+      "in": "#guhs:knus/knabbelgraan",
+      "uit": "guhs:knabbelmeel",
+      "aantal": 1,
+      "ticks": 20
+    },
+    {
+      "in": "minecraft:bone",
+      "uit": "minecraft:bone_meal",
+      "aantal": 4,
+      "ticks": 30
+    },
+    {
+      "in": "minecraft:sugar_cane",
+      "uit": "minecraft:sugar",
+      "aantal": 2,
+      "ticks": 20
+    },
+    {
+      "in": "guhs:grillspies",
+      "uit": "guhs:grillspiespoeder",
+      "aantal": 3,
+      "ticks": 40
+    },
+    {
+      "in": "minecraft:blaze_rod",
+      "uit": "minecraft:blaze_powder",
+      "aantal": 3,
+      "ticks": 40
+    },
+    {
+      "in": "minecraft:cobblestone",
+      "uit": "minecraft:gravel",
+      "aantal": 1,
+      "ticks": 40
+    },
+    {
+      "in": "minecraft:gravel",
+      "uit": "minecraft:sand",
+      "aantal": 1,
+      "ticks": 40
+    }
+  ]
+}

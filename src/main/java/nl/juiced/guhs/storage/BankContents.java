@@ -10,7 +10,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * An immutable snapshot of what's inside a Bank Guh: item (count 1) + how many (a long, so practically infinite).
+ * An immutable snapshot of what's inside a Bank Guh: item (count 1) + how many (a long: an upgraded bank has no limit,
+ * and a bank from before the cap of {@link BankStorage#CAP} may hold more than the cap).
  * Used as the item data component (so a broken Bank Guh keeps its contents) and to sync the list to the screen.
  */
 public record BankContents(List<Entry> entries) {
@@ -26,6 +27,21 @@ public record BankContents(List<Entry> entries) {
                 ItemStack.STREAM_CODEC, Entry::item,
                 ByteBufCodecs.VAR_LONG, Entry::count,
                 Entry::new);
+
+        /**
+         * 1.4.2: equal by content. A record compares its ItemStack by identity, so a Bank Guh ITEM with a stomach (this
+         * record inside its BANK_CONTENTS component) never matched itself after a trip over the network or through a save:
+         * the screen asked for "that Bank Guh" and the stomach said it had none, so it could not be taken out again.
+         */
+        @Override
+        public boolean equals(Object o) {
+            return this == o || o instanceof Entry e && count == e.count && ItemStack.matches(item, e.item);
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * ItemStack.hashItemAndComponents(item) + Long.hashCode(count);
+        }
     }
 
     public static final Codec<BankContents> CODEC = Entry.CODEC.listOf().xmap(BankContents::new, BankContents::entries);

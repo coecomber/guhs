@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "Z",
+    "G",
+    "K"
+  ],
+  "key": {
+    "Z": "guhs:zoutkristal",
+    "G": "minecraft:gold_ingot",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:bank_sleutel"
+  }
+}

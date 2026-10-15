@@ -1,0 +1,150 @@
+# bbq2 tech-quests AutoCheck: the Oude Guhrad-centrale as a template on cleared land (how it lies in the real
+# Guhbarbecuether is the merge step's /guhs bouwcheck + tplocate oude_guhrad_centrale), the practice hall that
+# Centrale.java furnishes, the Uitvinder-guh, De Grote Knabbelmachine in every stage (drawn per player), the items.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-quests.txt
+# (commands: see autocheck.txt)   /guhs techquest proef only exists in a dev run.
+# The template's corner (0, 0, 0) lands on 3000 140 3000: template x, y, z = world - (3000, 140, 3000). Door: 3023 144 3031.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3023 144 3030
+/forceload add 2990 2990 3060 3060
+wait 80
+/fill 2996 136 2996 3051 139 3051 guhs:houtskoolsteen
+/fill 2996 140 2996 3051 147 3051 minecraft:air
+/fill 2996 148 2996 3051 155 3051 minecraft:air
+/fill 2996 156 2996 3051 163 3051 minecraft:air
+/fill 2996 164 2996 3051 171 3051 minecraft:air
+/fill 2996 172 2996 3051 178 3051 minecraft:air
+wait 20
+/guhs techquest proef
+wait 100
+
+section the building from outside
+camera 3023.5 158 3068.5 180 22
+waitrender 300
+shot centrale_zuid
+camera 3066.5 160 3050.5 135 24
+waitrender 200
+shot centrale_zuidoost
+camera 2980.5 160 2988.5 -45 24
+waitrender 200
+shot centrale_noordwest
+# the door, the wheel window, the name boards
+camera 3023.5 146.0 3044.5 180 -18
+waitrender 200
+shot centrale_gevel
+camera 3023.5 145.6 3036.5 180 -4
+waitrender 200
+shot centrale_deur
+
+section inside: the hall, the wheels, the practice hall
+camera 3023.5 147.0 3029.0 180 -6
+waitrender 200
+shot hal_vanaf_de_deur
+camera 3023.5 152.5 3020.0 180 22
+waitrender 200
+shot oefenhal_overzicht
+# the five wheels with their old guhs (the catwalk is at 3011..3037 148 3010)
+camera 3023.5 149.0 3014.0 180 14
+waitrender 200
+shot raderen
+# one picture per setup, standing in front of its bay
+camera 3011.5 146.2 3017.5 180 22
+waitrender 100
+shot opstelling_1_draad
+camera 3017.5 146.2 3017.5 180 22
+shot opstelling_2_te_zwaar
+camera 3023.5 146.2 3017.5 180 22
+shot opstelling_3_buis
+camera 3029.5 146.2 3017.5 180 22
+shot opstelling_4_filter
+camera 3035.5 146.2 3018.0 180 24
+shot opstelling_5_saus
+/guhs techquest opstelling
+
+section the vadskracht readout on a setup that is too heavy (look at the wire of setup 2)
+/gamemode creative
+/tp @s 3017.5 144 3014.5 180 60
+wait 30
+shot opstelling_2_uitlezing gui
+/gamemode spectator
+
+section the workshop and the Uitvinder-guh
+camera 3020.5 147.0 3026.5 90 14
+waitrender 200
+shot werkplaats
+npc uitvinderguh 3 0.4
+wait 10
+shot npc_uitvinderguh
+
+section De Grote Knabbelmachine: every stage (only this player sees these)
+/guhs techquest fase 0
+camera 3021.5 148.0 3024.5 -90 0
+waitrender 200
+wait 10
+shot machine_fase_0
+/guhs techquest fase 1
+wait 10
+shot machine_fase_1_steiger
+/guhs techquest fase 2
+wait 10
+shot machine_fase_2_fundering
+/guhs techquest fase 3
+wait 10
+shot machine_fase_3_ketel
+/guhs techquest fase 4
+wait 10
+shot machine_fase_4_maag
+/guhs techquest fase 5
+wait 10
+shot machine_fase_5_snoet
+/guhs techquest fase 6
+/guhs techquest dag
+wait 10
+shot machine_fase_6_af
+wait 7
+shot machine_fase_6_kaak
+# from the door, with the hall around it, and the bowl with the knabbel of today
+camera 3023.5 146.0 3030.0 -150 -14
+waitrender 100
+shot machine_in_de_hal
+camera 3026.2 146.3 3024.5 -90 30
+waitrender 100
+shot machine_bakje_met_knabbel
+/gamemode survival
+/tp @s 3026.5 145 3024.5 -90 20
+wait 10
+use 3028 145 3024
+wait 10
+shot machine_knabbel_gepakt gui
+use 3028 145 3024
+wait 10
+shot machine_morgen_weer gui
+/gamemode spectator
+
+section the statuette, the items
+/setblock 3024 144 3028 guhs:knabbelmachine_beeldje[facing=north]
+camera 3024.5 144.9 3026.6 0 14
+waitrender 100
+shot beeldje
+/setblock 3024 144 3028 minecraft:air
+gui creative guhs
+gui close
+
+section the questlines in the Guhdex and the quest book
+/guhs verhaal stap techniek @s 3
+/guhs verhaal stap knabbelmachine @s 2
+gui dexopen verhalen open
+wait 10
+shot guhdex_verhalen gui
+gui close
+gui ftbquests techniek
+gui close
+/guhs techquest proef weg
+quit

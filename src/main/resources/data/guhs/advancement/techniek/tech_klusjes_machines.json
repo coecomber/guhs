@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guh_oven"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_klusjes_machines.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_klusjes_machines.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:block/pink_wool"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

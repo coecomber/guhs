@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:sausuman_toren",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21302208,
+    "min_afstand": 200,
+    "max_afstand": 400,
+    "alleen_nieuw": true,
+    "sector": 0,
+    "sectoren": 1,
+    "rond": "guhs:guhladriel_boomstad_gegarandeerd"
+  }
+}

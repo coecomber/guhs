@@ -47,6 +47,15 @@ public enum GuhVariant {
     KAASMOERASGUH(0),
     /** De Asguh: grey and sooty with glowing cheeks, fire can't hurt it. Only born in the Asdal of the Barbecuether (spiesburcht feature). */
     ASGUH(0, "asguh"),
+    // <bio_dieren>
+    // biomes3: de Bloesemguh (petals in its fur, a blossom by its ear; only born in the Bloesemmeertje) and de Tanukiguh (a ringed
+    // bushy tail, a dark mask, a leaf on its head; only born in the Klaterdal): feature/bio/dieren/BiomeGuhs
+    BLOESEMGUH(0, "bloesem"), TANUKIGUH(0, "tanuki"),
+    // </bio_dieren>
+    // <park>
+    /** 1.4.2: het Hertguhtje: little antlers and white spots; only in the hertenkooi of Het Knabbelpark, and one of your own as its reward (feature/park). */
+    HERTGUHTJE(0, "hert"),
+    // </park>
     /** De Pluisguh (2.8): extra fluffy and pink, with a fluffy tuft and cheek fluff. Only born in the Knuffeldal (knuffeldal feature). */
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
@@ -124,6 +133,11 @@ public enum GuhVariant {
     PLUISEGELTJE(0), GUH_KONIJNTJE(0), PLUISEEKHOORNTJE(0), SHUCKLE(0),                    // creatures (landdiertjes)
     // --- 1.2.8 (het Bleekwoud): creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA ---
     KRAAKGUH(0), KRAAK_MIKA(0),
+    // --- bbq2 (CONTRACT_130 5.3): the story guhs Sam-guh and Guhshi (isVerhaalGuh), then four creature pages (their id is their
+    // entity id); all six count for "compleet" ---
+    // <bbq2>
+    SAM_GUH(0, "samguh"), GUHSHI(0, "guhshi"), SAUSBLUBJE(0), SAUSLOPER(0), WORSTZWIJNTJE(0), BEZORGGUHTJE(0),
+    // </bbq2>
     // <balto>
     // </balto>
     // <mewtwo>
@@ -132,10 +146,19 @@ public enum GuhVariant {
     // </guhwaii>
     // <guhwaiispellen>
     // </guhwaiispellen>
+    // <bio_dieren_wezens>
+    KOI(0), WOLKENSCHAAPJE(0),   // biomes3: creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA
+    // </bio_dieren_wezens>
+    // <park-b>
+    DUIFGUHTJE(0),   // 1.4.2 park-plekjes b: creature page (entity guhs:duifguhtje, feature/park/plek); a bonus page, see GuhDex.EXTRA
+    // </park-b>
     // <timmerguh>
     // </timmerguh>
     // <hemel>
     // </hemel>
+    // <park-a>
+    KNABBELKOI(0),   // 1.4.2: creature page (its id is its entity id) of the Knabbelkoi in the japanse tuin of Het Knabbelpark; a bonus page, see GuhDex.EXTRA
+    // </park-a>
     // <einde2>
     // einde2: creature pages of the outer islands (their id is their entity id); all bonus pages, see GuhDex.EXTRA
     ENDER_MIKA(0), KAASMIJT(0), SCHUILGUH(0), KRUIMELKWAL(0), LEEGTEWALVISGUH(0), VLEERMUIS_LEMURGUH(0), OTTER_PINGUINGUH(0), DAS_MOLGUH(0), SCHILDPAD_EENDGUH(0), APPA_GUH(0), MOMO_GUH(0),
@@ -154,7 +177,17 @@ public enum GuhVariant {
      * its own fur (tameable once per player through nl.juiced.guhs.feature.verhaal.VerhaalGuhs, never by kaas knabbels).
      */
     public boolean isVerhaalGuh() {
-        return this == BALTOGUH || this == MEWTWO || this == STITCH626;
+        return nl.juiced.guhs.feature.verhaal.VerhaalGuh.van(this) != null;   // (bbq2: also Sam-guh and Guhshi)
+    }
+
+    /** biomes3: the Bloesemguh and the Tanukiguh: real tameable variants, each bound to its biome (no plush, bonus Guhdex pages). */
+    public boolean isBioGuh() {
+        return this == BLOESEMGUH || this == TANUKIGUH;
+    }
+
+    /** No plush in the knuffelkast (biomes3: the biome guhs; 1.4.2: the park's Hertguhtje; einde2: the outer-island guhs), so a complete knuffelkast stays what it was. */
+    public boolean geenKnuffel() {
+        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh();
     }
 
     /** einde2: one of the six guhs of the Guheinde's outer islands (KORSTGUH .. KOORGUH): real tameable variants, each bound to its biome. */
@@ -191,7 +224,10 @@ public enum GuhVariant {
     public static final int ROLL_OUT_OF = 1000;
     /** Bone prefixes that only some variants show (all hidden on a normal guh). */
     public static final List<String> VARIANT_BONES = List.of("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh",
-            "balto", "mewtwo", "stitch", "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh");
+            "balto", "mewtwo", "stitch", "samguh", "guhshi",
+            "bloesem", "tanuki",   // biomes3
+            "hert",   // 1.4.2 (park)
+            "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh");   // einde2
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

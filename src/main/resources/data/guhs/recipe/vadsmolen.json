@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IMI",
+    "IDI",
+    "SKS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "M": "guhs:guh_molentje",
+    "D": "guhs:guh_wire",
+    "S": "#minecraft:stone_crafting_materials",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:vadsmolen"
+  }
+}

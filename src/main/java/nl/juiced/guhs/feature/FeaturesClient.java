@@ -79,8 +79,46 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.guhoven.client.GuhovenClient.init(modBus);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.client.BleekwoudClient.init(modBus);
+        nl.juiced.guhs.feature.bio.client.BioClient.init(modBus);   // biomes3
+        nl.juiced.guhs.feature.park.client.ParkClient.init(modBus);   // 1.4.2: Het Knabbelpark
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.client.GuhpixelClient.init(modBus);
+        // --- bbq2 ---
+        nl.juiced.guhs.feature.vadskracht.client.VadskrachtClient.init(modBus);
+        nl.juiced.guhs.feature.wereld.client.WereldClient.init(modBus);
+        nl.juiced.guhs.feature.bank.client.BankClient.init(modBus);
+        nl.juiced.guhs.feature.techbron.client.TechbronClient.init(modBus);
+        nl.juiced.guhs.feature.techbuis.client.TechbuisClient.init(modBus);
+        nl.juiced.guhs.feature.techmachine.client.TechmachineClient.init(modBus);
+        nl.juiced.guhs.feature.techsaus.client.TechsausClient.init(modBus);
+        nl.juiced.guhs.feature.techbezorg.client.TechbezorgClient.init(modBus);
+        nl.juiced.guhs.feature.techklus.client.TechklusClient.init(modBus);
+        nl.juiced.guhs.feature.techquest.client.TechquestClient.init(modBus);
+        nl.juiced.guhs.feature.paleizen.client.PaleizenClient.init(modBus);
+        nl.juiced.guhs.feature.bestaand.client.BestaandClient.init(modBus);
+        nl.juiced.guhs.feature.fossielmijn.client.FossielmijnClient.init(modBus);
+        nl.juiced.guhs.feature.sausdieren.client.SausdierenClient.init(modBus);
+        nl.juiced.guhs.feature.campingmarkt.client.CampingmarktClient.init(modBus);
+        nl.juiced.guhs.feature.torenpeper.client.TorenpeperClient.init(modBus);
+        nl.juiced.guhs.feature.ring.client.RingClient.init(modBus);
+        nl.juiced.guhs.feature.ringh1.client.RingH1Client.init(modBus);
+        nl.juiced.guhs.feature.ringh2.client.RingH2Client.init(modBus);
+        nl.juiced.guhs.feature.ringh3.client.RingH3Client.init(modBus);
+        nl.juiced.guhs.feature.ringh4.client.RingH4Client.init(modBus);
+        nl.juiced.guhs.feature.ringh5.client.RingH5Client.init(modBus);
+        nl.juiced.guhs.feature.ringh6.client.RingH6Client.init(modBus);
+        nl.juiced.guhs.feature.ringsausuman.client.RingSausumanClient.init(modBus);
+        nl.juiced.guhs.feature.guhrio.client.GuhrioClient.init(modBus);
+        nl.juiced.guhs.feature.guhriow1.client.GuhrioW1Client.init(modBus);
+        nl.juiced.guhs.feature.guhriow2.client.GuhrioW2Client.init(modBus);
+        nl.juiced.guhs.feature.guhriow3.client.GuhrioW3Client.init(modBus);
+        nl.juiced.guhs.feature.guhriobeloning.client.GuhrioBeloningClient.init(modBus);
+        nl.juiced.guhs.feature.ringknipoog.client.RingKnipoogClient.init(modBus);
+        nl.juiced.guhs.feature.guhpad.client.GuhpadClient.init(modBus);   // --- verhalenpad: het Guhpad ---
+        nl.juiced.guhs.feature.oudescenes.client.OudeScenesClient.init(modBus);   // bbq2 verhalenpad: oude-scenes
+        nl.juiced.guhs.feature.snuffel.client.SnuffelClient.init(modBus);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffelsteiger.client.SnuffelsteigerClient.init(modBus);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.ringvlucht.client.RingVluchtClient.init(modBus);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     private FeaturesClient() {

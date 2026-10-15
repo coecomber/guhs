@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "age=0,soort=groen": {
+      "model": "guhs:block/torenpeper_peperplant_0"
+    },
+    "age=0,soort=rood": {
+      "model": "guhs:block/torenpeper_peperplant_0"
+    },
+    "age=0,soort=roze": {
+      "model": "guhs:block/torenpeper_peperplant_0"
+    },
+    "age=1,soort=groen": {
+      "model": "guhs:block/torenpeper_peperplant_1"
+    },
+    "age=1,soort=rood": {
+      "model": "guhs:block/torenpeper_peperplant_1"
+    },
+    "age=1,soort=roze": {
+      "model": "guhs:block/torenpeper_peperplant_1"
+    },
+    "age=2,soort=groen": {
+      "model": "guhs:block/torenpeper_peperplant_2"
+    },
+    "age=2,soort=rood": {
+      "model": "guhs:block/torenpeper_peperplant_2"
+    },
+    "age=2,soort=roze": {
+      "model": "guhs:block/torenpeper_peperplant_2"
+    },
+    "age=3,soort=groen": {
+      "model": "guhs:block/torenpeper_peperplant_3_groen"
+    },
+    "age=3,soort=rood": {
+      "model": "guhs:block/torenpeper_peperplant_3_rood"
+    },
+    "age=3,soort=roze": {
+      "model": "guhs:block/torenpeper_peperplant_3_roze"
+    }
+  }
+}

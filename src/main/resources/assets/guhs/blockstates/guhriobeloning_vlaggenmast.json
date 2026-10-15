@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "deel=voet,facing=north": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_voet"
+    },
+    "deel=voet,facing=east": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_voet",
+      "y": 90
+    },
+    "deel=voet,facing=south": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_voet",
+      "y": 180
+    },
+    "deel=voet,facing=west": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_voet",
+      "y": 270
+    },
+    "deel=paal,facing=north": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_paal"
+    },
+    "deel=paal,facing=east": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_paal",
+      "y": 90
+    },
+    "deel=paal,facing=south": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_paal",
+      "y": 180
+    },
+    "deel=paal,facing=west": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_paal",
+      "y": 270
+    },
+    "deel=top,facing=north": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_top"
+    },
+    "deel=top,facing=east": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_top",
+      "y": 90
+    },
+    "deel=top,facing=south": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_top",
+      "y": 180
+    },
+    "deel=top,facing=west": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_top",
+      "y": 270
+    },
+    "deel=los,facing=north": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_los"
+    },
+    "deel=los,facing=east": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_los",
+      "y": 90
+    },
+    "deel=los,facing=south": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_los",
+      "y": 180
+    },
+    "deel=los,facing=west": {
+      "model": "guhs:block/guhriobeloning_vlaggenmast_los",
+      "y": 270
+    }
+  }
+}

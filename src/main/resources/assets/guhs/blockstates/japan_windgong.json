@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/japan_windgong"
+    },
+    "facing=east": {
+      "model": "guhs:block/japan_windgong",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/japan_windgong",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/japan_windgong",
+      "y": 270
+    }
+  }
+}

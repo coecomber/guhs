@@ -9,6 +9,8 @@ from it: when make_wiki.py gets new texts, the site gets them too. A section's b
   * figure chunks (<figure> in a gallery: a picture, a title with a subtitle, a text)
   * text   chunks (everything else under one heading: paragraphs, lists, tables, commands)
 Recipe grids are left out (the site draws every recipe from the recipe JSON itself).
+Inside one heading the cards and figures come before its text; a <!--S--> in the body starts a new part under the same heading
+(tools/make_wiki.py bbq2_sections writes one before a row of pictures that belongs after a paragraph).
 """
 import html
 import importlib.util
@@ -113,7 +115,9 @@ def extract(root):
         ctx = dict(section=sid, section_title=(s["en"], s["nl"]))
         head = None
         order = 0
-        for part in re.split(r"(<!--[EH]\d+-->)", s["body"]):
+        for part in re.split(r"(<!--[EH]\d+-->|<!--S-->)", s["body"]):
+            if part == "<!--S-->":      # (a new part under the same heading: what follows comes after the text before it)
+                continue
             m = re.fullmatch(r"<!--([EH])(\d+)-->", part)
             if m and m.group(1) == "H":
                 head = heads[int(m.group(2))]

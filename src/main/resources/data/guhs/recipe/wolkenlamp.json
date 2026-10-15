@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " P ",
+    "PKP",
+    " P "
+  ],
+  "key": {
+    "P": "guhs:wolkenpluis",
+    "K": "guhs:guh_kristal"
+  },
+  "result": {
+    "id": "guhs:wolkenlamp",
+    "count": 2
+  }
+}

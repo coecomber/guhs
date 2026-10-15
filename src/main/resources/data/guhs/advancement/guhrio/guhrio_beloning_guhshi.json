@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhrio_guhshi_ei"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhrio.guhrio_beloning_guhshi.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhrio.guhrio_beloning_guhshi.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guhrio/guhrio_duel"
+}

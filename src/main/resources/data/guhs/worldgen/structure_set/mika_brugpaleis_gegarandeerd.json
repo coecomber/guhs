@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:mika_brugpaleis",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21300928,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 3,
+    "sectoren": 16
+  }
+}

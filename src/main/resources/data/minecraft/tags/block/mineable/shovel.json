@@ -12,7 +12,15 @@
     "guhs:circuit_kaassaus",
     "guhs:nomguh_sneeuwspoor",
     "guhs:baltoslee_sneeuwguh",
-    "guhs:kruimelzand",
-    "guhs:kruimelzandlaag"
+    "guhs:fossielmijn_bottenzand",
+    "guhs:guhriow1_gras",
+    "guhs:guhriow1_aarde",
+    "guhs:geharkt_zand",
+    "guhs:geharkt_zand_ring",
+    "guhs:bloesemmeertje_meerzand",
+    "guhs:bloesemmeertje_meerslib_licht",
+    "guhs:bloesemmeertje_meerslib",
+    "guhs:bloesemmeertje_meerslib_diep",
+    "guhs:wolkenweide_gras"
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/wolkenweide_gras_top",
+    "side": "guhs:block/wolkenweide_gras_zij",
+    "bottom": "guhs:block/wolkenweide_steen"
+  }
+}

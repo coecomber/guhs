@@ -11,11 +11,19 @@
     "guhs:nomguh_sneeuwdak_plaat",
     "guhs:tiki_rietdak_plaat",
     "guhs:harsstenen_plaat",
-    "guhs:kruimelrots_stenen_plaat",
-    "guhs:schimmelkaas_stenen_plaat",
-    "guhs:klipkaas_stenen_plaat",
-    "guhs:knabbelkoorblok_plaat",
-    "guhs:einde2_bouw_water_ijssteen_plaat",
-    "guhs:maansteen_plaat"
+    "guhs:campingmarkt_tentdoek_rood_plaat",
+    "guhs:campingmarkt_tentdoek_geel_plaat",
+    "guhs:campingmarkt_tentdoek_groen_plaat",
+    "guhs:campingmarkt_tentdoek_blauw_plaat",
+    "guhs:campingmarkt_tentdoek_creme_plaat",
+    "guhs:guh_dakpan_roze_plaat",
+    "guhs:guh_dakpan_wit_plaat",
+    "guhs:guh_dakpan_grijs_plaat",
+    "guhs:gladde_knuffelsteen_plaat",
+    "guhs:wolkenblok_wit_plaat",
+    "guhs:wolkenblok_roze_plaat",
+    "guhs:regenboogblok_plaat",
+    "guhs:bloesemmeertje_meertegels_plaat",
+    "guhs:bliksemsmidse_wolk_plaat"
   ]
 }

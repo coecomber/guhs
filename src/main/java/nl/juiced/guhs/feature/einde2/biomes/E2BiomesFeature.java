@@ -219,6 +219,13 @@ public final class E2BiomesFeature {
         BIOME_SOURCES.register(modBus);
         SOUNDS.register(modBus);
         NeoForge.EVENT_BUS.addListener(E2BiomesCommando::register);
+        // merge_main: the six biomes in biomes3's Superkompas tab "Biomes", section Guheinde (after guhs:guheinde), each with its icon
+        String[][] tab = {{"gatenkaasheuvels", "guhs:klipkaas"}, {"korstwoestijn", "guhs:gebarsten_korst"}, {"kruimelwolken", "guhs:kruimelwolk"},
+                {"schimmelkaasvlakte", "guhs:schimmelpaddenstoel"}, {"kristalkaasklippen", "guhs:kristalkaas"}, {"knabbelkoorbos", "guhs:knabbelkoorvrucht"}};
+        for (String[] b : tab) {
+            nl.juiced.guhs.feature.bio.BiomeLijst.biome("guheinde", b[0]);
+            nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet(b[0], b[1]);
+        }
     }
 
     public static void payloads(PayloadRegistrar registrar) {

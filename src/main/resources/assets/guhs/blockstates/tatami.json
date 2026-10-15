@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,gekoppeld=false": {
+      "model": "guhs:block/tatami_los"
+    },
+    "facing=east,gekoppeld=false": {
+      "model": "guhs:block/tatami_los",
+      "y": 90
+    },
+    "facing=south,gekoppeld=false": {
+      "model": "guhs:block/tatami_los",
+      "y": 180
+    },
+    "facing=west,gekoppeld=false": {
+      "model": "guhs:block/tatami_los",
+      "y": 270
+    },
+    "facing=north,gekoppeld=true": {
+      "model": "guhs:block/tatami_kop"
+    },
+    "facing=east,gekoppeld=true": {
+      "model": "guhs:block/tatami_kop",
+      "y": 90
+    },
+    "facing=south,gekoppeld=true": {
+      "model": "guhs:block/tatami_kop",
+      "y": 180
+    },
+    "facing=west,gekoppeld=true": {
+      "model": "guhs:block/tatami_kop",
+      "y": 270
+    }
+  }
+}

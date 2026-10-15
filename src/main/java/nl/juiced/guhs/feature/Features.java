@@ -98,8 +98,47 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.register(modBus);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.register(modBus);
+        nl.juiced.guhs.feature.bio.BioFeature.register(modBus);   // biomes3: the kern and its slices
+        nl.juiced.guhs.feature.park.ParkFeature.register(modBus);   // 1.4.2: Het Knabbelpark
         // --- guhpixel: the kern and its nine slices ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.register(modBus);
+        // --- bbq2 ---
+        nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.register(modBus);
+        nl.juiced.guhs.feature.wereld.WereldFeature.register(modBus);
+        nl.juiced.guhs.feature.bank.BankFeature.register(modBus);
+        nl.juiced.guhs.feature.techbron.TechbronFeature.register(modBus);
+        nl.juiced.guhs.feature.techbuis.TechbuisFeature.register(modBus);
+        nl.juiced.guhs.feature.techmachine.TechmachineFeature.register(modBus);
+        nl.juiced.guhs.feature.techsaus.TechsausFeature.register(modBus);
+        nl.juiced.guhs.feature.techbezorg.TechbezorgFeature.register(modBus);
+        nl.juiced.guhs.feature.techklus.TechklusFeature.register(modBus);
+        nl.juiced.guhs.feature.techquest.TechquestFeature.register(modBus);
+        nl.juiced.guhs.feature.paleizen.PaleizenFeature.register(modBus);
+        nl.juiced.guhs.feature.bestaand.BestaandFeature.register(modBus);
+        nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature.register(modBus);
+        nl.juiced.guhs.feature.sausdieren.SausdierenFeature.register(modBus);
+        nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature.register(modBus);
+        nl.juiced.guhs.feature.torenpeper.TorenpeperFeature.register(modBus);
+        nl.juiced.guhs.feature.ring.RingFeature.register(modBus);
+        nl.juiced.guhs.feature.ringh1.RingH1Feature.register(modBus);
+        nl.juiced.guhs.feature.ringh2.RingH2Feature.register(modBus);
+        nl.juiced.guhs.feature.ringh3.RingH3Feature.register(modBus);
+        nl.juiced.guhs.feature.ringh4.RingH4Feature.register(modBus);
+        nl.juiced.guhs.feature.ringh5.RingH5Feature.register(modBus);
+        nl.juiced.guhs.feature.ringh6.RingH6Feature.register(modBus);
+        nl.juiced.guhs.feature.ringsausuman.RingSausumanFeature.register(modBus);
+        nl.juiced.guhs.feature.guhrio.GuhrioFeature.register(modBus);
+        nl.juiced.guhs.feature.guhriow1.GuhrioW1Feature.register(modBus);
+        nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.register(modBus);
+        nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.register(modBus);
+        nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.register(modBus);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.register(modBus);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.register(modBus);   // --- verhalenpad: het Guhpad ---
+        nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.register(modBus);   // bbq2 verhalenpad: oude-scenes
+        nl.juiced.guhs.feature.snuffel.SnuffelFeature.register(modBus);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.register(modBus);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.snuffeldorp.SnuffeldorpFeature.register(modBus);   // verhalenpad: snuffel-dorp
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.register(modBus);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -173,8 +212,46 @@ public final class Features {
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.payloads(registrar);
         // --- 1.2.0 ---
         nl.juiced.guhs.feature.weerder.WeerderFeature.payloads(registrar);
+        nl.juiced.guhs.feature.bio.BioFeature.payloads(registrar);   // biomes3
+        nl.juiced.guhs.feature.park.ParkFeature.payloads(registrar);   // 1.4.2
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.payloads(registrar);
+        // --- bbq2 ---
+        nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.payloads(registrar);
+        nl.juiced.guhs.feature.wereld.WereldFeature.payloads(registrar);
+        nl.juiced.guhs.feature.bank.BankFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techbron.TechbronFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techbuis.TechbuisFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techmachine.TechmachineFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techsaus.TechsausFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techbezorg.TechbezorgFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techklus.TechklusFeature.payloads(registrar);
+        nl.juiced.guhs.feature.techquest.TechquestFeature.payloads(registrar);
+        nl.juiced.guhs.feature.paleizen.PaleizenFeature.payloads(registrar);
+        nl.juiced.guhs.feature.bestaand.BestaandFeature.payloads(registrar);
+        nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature.payloads(registrar);
+        nl.juiced.guhs.feature.sausdieren.SausdierenFeature.payloads(registrar);
+        nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature.payloads(registrar);
+        nl.juiced.guhs.feature.torenpeper.TorenpeperFeature.payloads(registrar);
+        nl.juiced.guhs.feature.ring.RingFeature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh1.RingH1Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh2.RingH2Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh3.RingH3Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh4.RingH4Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh5.RingH5Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringh6.RingH6Feature.payloads(registrar);
+        nl.juiced.guhs.feature.ringsausuman.RingSausumanFeature.payloads(registrar);
+        nl.juiced.guhs.feature.guhrio.GuhrioFeature.payloads(registrar);
+        nl.juiced.guhs.feature.guhriow1.GuhrioW1Feature.payloads(registrar);
+        nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.payloads(registrar);
+        nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.payloads(registrar);
+        nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.payloads(registrar);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.payloads(registrar);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.payloads(registrar);   // --- verhalenpad: het Guhpad ---
+        nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.payloads(registrar);   // bbq2 verhalenpad: oude-scenes
+        nl.juiced.guhs.feature.snuffel.SnuffelFeature.payloads(registrar);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.payloads(registrar);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.payloads(registrar);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -250,8 +327,46 @@ public final class Features {
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.creative(output);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
+        nl.juiced.guhs.feature.bio.BioFeature.creative(output);   // biomes3
+        nl.juiced.guhs.feature.park.ParkFeature.creative(output);   // 1.4.2
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.creative(output);
+        // --- bbq2 ---
+        nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.creative(output);
+        nl.juiced.guhs.feature.wereld.WereldFeature.creative(output);
+        nl.juiced.guhs.feature.bank.BankFeature.creative(output);
+        nl.juiced.guhs.feature.techbron.TechbronFeature.creative(output);
+        nl.juiced.guhs.feature.techbuis.TechbuisFeature.creative(output);
+        nl.juiced.guhs.feature.techmachine.TechmachineFeature.creative(output);
+        nl.juiced.guhs.feature.techsaus.TechsausFeature.creative(output);
+        nl.juiced.guhs.feature.techbezorg.TechbezorgFeature.creative(output);
+        nl.juiced.guhs.feature.techklus.TechklusFeature.creative(output);
+        nl.juiced.guhs.feature.techquest.TechquestFeature.creative(output);
+        nl.juiced.guhs.feature.paleizen.PaleizenFeature.creative(output);
+        nl.juiced.guhs.feature.bestaand.BestaandFeature.creative(output);
+        nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature.creative(output);
+        nl.juiced.guhs.feature.sausdieren.SausdierenFeature.creative(output);
+        nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature.creative(output);
+        nl.juiced.guhs.feature.torenpeper.TorenpeperFeature.creative(output);
+        nl.juiced.guhs.feature.ring.RingFeature.creative(output);
+        nl.juiced.guhs.feature.ringh1.RingH1Feature.creative(output);
+        nl.juiced.guhs.feature.ringh2.RingH2Feature.creative(output);
+        nl.juiced.guhs.feature.ringh3.RingH3Feature.creative(output);
+        nl.juiced.guhs.feature.ringh4.RingH4Feature.creative(output);
+        nl.juiced.guhs.feature.ringh5.RingH5Feature.creative(output);
+        nl.juiced.guhs.feature.ringh6.RingH6Feature.creative(output);
+        nl.juiced.guhs.feature.ringsausuman.RingSausumanFeature.creative(output);
+        nl.juiced.guhs.feature.guhrio.GuhrioFeature.creative(output);
+        nl.juiced.guhs.feature.guhriow1.GuhrioW1Feature.creative(output);
+        nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.creative(output);
+        nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.creative(output);
+        nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.creative(output);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.creative(output);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.creative(output);   // --- verhalenpad: het Guhpad ---
+        nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.creative(output);   // bbq2 verhalenpad: oude-scenes
+        nl.juiced.guhs.feature.snuffel.SnuffelFeature.creative(output);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.creative(output);   // verhalenpad: snuffel-steiger
+        nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.creative(output);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

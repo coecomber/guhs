@@ -42,8 +42,12 @@ import nl.juiced.guhs.world.GuhWorldData;
  * <p>
  * The texts are lang keys {@code gui.guhs.verhalen.<id>.(naam|uitleg|stap.<i>|nu.<sleutel>|waar.<sleutel>)}, where the
  * sleutel is the step number, "klaar", or a variant of a step (e.g. "3_bewoner": the guh lives in the huisje, now go and
- * tell the Timmerguh). {@link #SLEUTELS} lists every sleutel per questline (the game test checks each exists in the lang).
+ * tell the Timmerguh). {@link #sleutels} lists every sleutel per questline (the game test checks each exists in the lang).
  * Resources: tools/features/gids_verhalen.py.
+ * <p>
+ * bbq2: besides the hard-coded lines below, every registered {@link nl.juiced.guhs.feature.verhaal.Verhaallijn} is a
+ * questline here by itself (shown first, group by group: {@link nl.juiced.guhs.feature.verhaal.Verhaallijnen}); its step
+ * count is added to {@link #STAPPEN} when it registers.
  */
 public final class VerhalenVoortgang {
     /** The questlines of 3.0 (Guhverhalen): shown first, under their own heading. */
@@ -59,13 +63,13 @@ public final class VerhalenVoortgang {
             "mewtwo", List.of("2_inbouwen", "klaar_tem"),
             "guhwaii", List.of("klaar_tem"),
             "knusfeest", List.of());
-    /** How many steps each questline has. */
-    public static final java.util.Map<String, Integer> STAPPEN = java.util.Map.ofEntries(
+    /** How many steps each questline has (bbq2: a registered Verhaallijn adds itself, see Verhaallijnen.voegToe). */
+    public static final java.util.Map<String, Integer> STAPPEN = new java.util.concurrent.ConcurrentHashMap<>(java.util.Map.ofEntries(
             java.util.Map.entry("timmerguh", 5), java.util.Map.entry("balto", 7), java.util.Map.entry("mewtwo", 4),
             java.util.Map.entry("hemel", 2), java.util.Map.entry("guhwaii", 6), java.util.Map.entry("vadsig", 4),
             java.util.Map.entry("slee", 2), java.util.Map.entry("knusfeest", 3), java.util.Map.entry("guheinde", 8),
             java.util.Map.entry("grillguh", 4), java.util.Map.entry("beroep_brandweer", 3), java.util.Map.entry("beroep_politie", 3),
-            java.util.Map.entry("beroep_apotheek", 3), java.util.Map.entry("beroep_bouw", 3));
+            java.util.Map.entry("beroep_apotheek", 3), java.util.Map.entry("beroep_bouw", 3)));
 
     /** Every sleutel of this questline (the test checks nu.&lt;s&gt; and waar.&lt;s&gt; exist for each). */
     public static List<String> sleutels(String id) {
@@ -75,12 +79,19 @@ public final class VerhalenVoortgang {
         }
         out.add("klaar");
         out.addAll(EXTRA.getOrDefault(id, List.of()));
+        nl.juiced.guhs.feature.verhaal.Verhaallijn lijn = nl.juiced.guhs.feature.verhaal.Verhaallijnen.van(id);
+        if (lijn != null) {
+            out.addAll(lijn.extraSleutels());
+        }
         return out;
     }
 
     /** All questlines of this player, in display order. */
     public static List<VerhaalStand> alle(ServerPlayer p) {
         List<VerhaalStand> out = new ArrayList<>();
+        for (nl.juiced.guhs.feature.verhaal.Verhaallijn l : nl.juiced.guhs.feature.verhaal.Verhaallijnen.alle()) {
+            out.add(l.stand(p));   // (bbq2: the registered lines first)
+        }
         out.add(timmerguh(p));
         out.add(balto(p));
         out.add(mewtwo(p));
@@ -388,8 +399,9 @@ public final class VerhalenVoortgang {
     // helpers
     // =====================================================================================================================
 
-    private static VerhaalStand stand(String id, String icoon, int stap, boolean begonnen, String sleutel, List<VerhaalStand.Nodig> nodig,
-                                      List<VerhaalStand.Beloning> bel, Object... args) {
+    /** A questline's state from its parts (bbq2: public, Verhaallijn.stand uses it). */
+    public static VerhaalStand stand(String id, String icoon, int stap, boolean begonnen, String sleutel, List<VerhaalStand.Nodig> nodig,
+                                     List<VerhaalStand.Beloning> bel, Object... args) {
         int stappen = STAPPEN.get(id);
         stap = Math.max(0, Math.min(stap, stappen));
         VerhaalStand.Status status = stap >= stappen ? VerhaalStand.Status.KLAAR : stap == 0 && !begonnen ? VerhaalStand.Status.NIET_BEGONNEN
@@ -449,7 +461,11 @@ public final class VerhalenVoortgang {
 
     /** All ids, in display order. */
     public static List<String> ids() {
-        List<String> out = new ArrayList<>(NIEUW);
+        List<String> out = new ArrayList<>();
+        for (nl.juiced.guhs.feature.verhaal.Verhaallijn l : nl.juiced.guhs.feature.verhaal.Verhaallijnen.alle()) {
+            out.add(l.id());
+        }
+        out.addAll(NIEUW);
         out.addAll(OUD);
         return out;
     }

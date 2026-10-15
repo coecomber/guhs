@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:bestaand_zielig_lantaarntje"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.bestaand_wachter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.bestaand_wachter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/bestaand_brugvuren"
+}

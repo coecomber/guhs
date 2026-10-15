@@ -107,7 +107,7 @@ public class EnderMikaEntity extends MikaEntity {
 
     /**
      * Players an Ender-Mika never steals from (it still flits away from their look).
-     * hook fase B: the merge onto the sister update adds the bearer of a Knabbelring ({@code Ring.onzichtbaarVoorMikas(p)}).
+     * The bearer of a Knabbelring ({@code Ring.onzichtbaarVoorMikas(p)}) is in it since the merge of origin/main (E2MikasFeature).
      */
     public static final List<Predicate<Player>> LAAT_MET_RUST = new CopyOnWriteArrayList<>();
     /** When each player was last robbed (game time): a pair of Ender-Mika's does not pick anyone clean. */

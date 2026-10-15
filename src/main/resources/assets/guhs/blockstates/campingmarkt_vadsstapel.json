@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=north,nummer=1": {
+      "model": "guhs:block/campingmarkt_vadsstapel_1"
+    },
+    "facing=north,nummer=2": {
+      "model": "guhs:block/campingmarkt_vadsstapel_2"
+    },
+    "facing=north,nummer=3": {
+      "model": "guhs:block/campingmarkt_vadsstapel_3"
+    },
+    "facing=north,nummer=4": {
+      "model": "guhs:block/campingmarkt_vadsstapel_4"
+    },
+    "facing=north,nummer=5": {
+      "model": "guhs:block/campingmarkt_vadsstapel_5"
+    },
+    "facing=east,nummer=1": {
+      "model": "guhs:block/campingmarkt_vadsstapel_1",
+      "y": 90
+    },
+    "facing=east,nummer=2": {
+      "model": "guhs:block/campingmarkt_vadsstapel_2",
+      "y": 90
+    },
+    "facing=east,nummer=3": {
+      "model": "guhs:block/campingmarkt_vadsstapel_3",
+      "y": 90
+    },
+    "facing=east,nummer=4": {
+      "model": "guhs:block/campingmarkt_vadsstapel_4",
+      "y": 90
+    },
+    "facing=east,nummer=5": {
+      "model": "guhs:block/campingmarkt_vadsstapel_5",
+      "y": 90
+    },
+    "facing=south,nummer=1": {
+      "model": "guhs:block/campingmarkt_vadsstapel_1",
+      "y": 180
+    },
+    "facing=south,nummer=2": {
+      "model": "guhs:block/campingmarkt_vadsstapel_2",
+      "y": 180
+    },
+    "facing=south,nummer=3": {
+      "model": "guhs:block/campingmarkt_vadsstapel_3",
+      "y": 180
+    },
+    "facing=south,nummer=4": {
+      "model": "guhs:block/campingmarkt_vadsstapel_4",
+      "y": 180
+    },
+    "facing=south,nummer=5": {
+      "model": "guhs:block/campingmarkt_vadsstapel_5",
+      "y": 180
+    },
+    "facing=west,nummer=1": {
+      "model": "guhs:block/campingmarkt_vadsstapel_1",
+      "y": 270
+    },
+    "facing=west,nummer=2": {
+      "model": "guhs:block/campingmarkt_vadsstapel_2",
+      "y": 270
+    },
+    "facing=west,nummer=3": {
+      "model": "guhs:block/campingmarkt_vadsstapel_3",
+      "y": 270
+    },
+    "facing=west,nummer=4": {
+      "model": "guhs:block/campingmarkt_vadsstapel_4",
+      "y": 270
+    },
+    "facing=west,nummer=5": {
+      "model": "guhs:block/campingmarkt_vadsstapel_5",
+      "y": 270
+    }
+  }
+}

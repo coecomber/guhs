@@ -1,0 +1,213 @@
+# Het Snuffeleiland, the island and its first series (bbq2 / verhalenpad, slice snuffel-dorp) AutoCheck: the island from
+# above and its places, the residents, the four scenes, the talking screens, a lesson, a good deed with the growth scene,
+# the exam's HUD, the roadblock, the trip home.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_snuffel-dorp.txt
+# (commands: see autocheck.txt; /guhs snuffel ... = feature/snuffel/SnuffelCommando, /guhs snuffeldorp ... = feature/snuffeldorp/DorpCommando)
+# NOTHING of this was ever seen in a client by the slice itself (it may not start one): every picture here is a first look.
+# World coordinates (the island's middle is 0, 0; the ground's top is y 64): the beach spot -27.5 64 62.5, the strandpoort
+# -14 64 36, the well 0 64 16, the weipoort 0 64 -2, the trainer -13 64 -20, the tree 13 66 -18, the roadblock 0 64 -48,
+# the harbour spot on the jetty 47.5 64 16.5, the lighthouse 32 67 -63.
+
+section setup: a known inventory at home, a choice
+/gamemode survival
+/time set noon
+/gamerule doDaylightCycle false
+/clear @s
+/give @s minecraft:diamond_pickaxe 1
+/give @s minecraft:cooked_beef 17
+wait 10
+/guhs snuffel wis
+/guhs snuffel kies golden goud b Snuffie
+
+section washed ashore: the waking scene (15 s: black with waves and gulls, Jutje's snout, your paws, she runs ahead)
+/guhs snuffel ga strand
+wait 30
+shot dorp_wakker_zwart
+wait 70
+shot dorp_wakker_snuit
+wait 60
+shot dorp_wakker_blaf
+wait 60
+shot dorp_wakker_pootjes
+wait 50
+shot dorp_wakker_kom
+wait 80
+shot dorp_strand_eerste_persoon gui
+
+section the island from above and its places (spectator; the dog form stays)
+/gamemode spectator
+camera 0.5 190 0.5 0 90
+waitrender 400
+shot dorp_eiland_boven
+camera -60 120 110 -150 38
+waitrender 300
+shot dorp_eiland_zuidwest
+camera -27 72 76 180 20
+waitrender 200
+shot dorp_strand
+camera -6 74 48 160 28
+waitrender 200
+shot dorp_strandpoort_en_juttershut
+camera 0 84 44 180 40
+waitrender 200
+shot dorp_dorp_van_zuid
+camera 12 70 30 140 22
+waitrender 200
+shot dorp_plein_met_put
+camera -6 68 20 110 12
+waitrender 200
+shot dorp_dokterspraktijk
+camera -8 68 26 80 12
+waitrender 200
+shot dorp_bakkerij
+camera 8 68 20 -150 12
+waitrender 200
+shot dorp_schooltje
+camera -2 68 34 100 14
+waitrender 200
+shot dorp_oma_wolletje
+camera 30 72 48 150 26
+waitrender 200
+shot dorp_moestuin
+camera 66 72 36 115 20
+waitrender 200
+shot dorp_haven_en_boot
+camera 40 67 12 -70 8
+waitrender 200
+shot dorp_steiger
+camera 0 82 20 180 34
+waitrender 200
+shot dorp_wei_van_zuid
+camera -4 68 -10 120 14
+waitrender 200
+shot dorp_snuffelschooltje
+camera 4 70 -8 -140 18
+waitrender 200
+shot dorp_boomheuvel
+camera 0 68 -36 180 8
+waitrender 200
+shot dorp_wegversperring
+camera 0 110 -20 180 30
+waitrender 300
+shot dorp_dichte_deel_met_vuurtoren
+
+section Jutje at the strandpoort and the doctor: the talking screens
+/gamemode survival
+/guhs snuffeldorp ga redder
+wait 20
+/guhs snuffeldorp praat redder
+wait 20
+shot dorp_praat_jutje gui
+gui close
+/guhs snuffeldorp ga dokter
+wait 20
+/guhs snuffeldorp praat dokter
+wait 20
+shot dorp_praat_dokter gui
+gui close
+shot dorp_dokter_binnen gui
+
+section the first lesson: the trainer, nose down to the bone, dig
+/guhs snuffeldorp ga trainer
+wait 20
+/guhs snuffeldorp praat trainer
+wait 20
+shot dorp_praat_trainer gui
+gui close
+/guhs snuffeldorp ga dorp_les_kluifje
+/guhs snuffel houding 1
+perspective back
+wait 30
+shot dorp_les_snuffelen gui
+/guhs snuffel graaf
+wait 15
+shot dorp_les_graven gui
+wait 40
+/guhs snuffel houding 0
+perspective first
+/guhs snuffeldorp stand
+
+section the companion appears: the bucket scene (15 s) on the plein
+/guhs snuffeldorp stap 5
+/guhs snuffeldorp ga plein
+wait 40
+shot dorp_emmer_rammelt
+wait 60
+shot dorp_emmer_valt
+wait 70
+shot dorp_maatje_boven_de_put
+wait 60
+shot dorp_maatje_ziet_je
+wait 60
+shot dorp_maatje_komt
+wait 60
+shot dorp_plein_met_maatje gui
+
+section a good deed: the baker asks, the rolling pin is dug up, the tree grows (the kern's growth scene, 6 s)
+/guhs snuffeldorp ga bakker
+wait 20
+/guhs snuffeldorp praat bakker
+wait 20
+shot dorp_praat_bakker gui
+gui close
+/guhs snuffeldorp ga dorp_deegroller
+/guhs snuffel graaf
+wait 45
+/guhs snuffeldorp ga bakker
+wait 10
+/guhs snuffeldorp praat bakker
+wait 30
+shot dorp_groei_begin
+wait 30
+shot dorp_groei_pop
+wait 40
+shot dorp_groei_eind
+wait 40
+/guhs snuffeldorp stand
+shot dorp_doelregel gui
+
+section the exam: the HUD counts
+/guhs snuffeldorp stap 7
+/guhs snuffeldorp ga trainer
+wait 20
+/guhs snuffeldorp praat trainer
+wait 20
+gui close
+wait 5
+shot dorp_examen_hud gui
+
+section the roadblock: a dog behind the line is put back
+/tp @s 0.5 64 -44.5 180 0
+wait 10
+shot dorp_voor_de_wegversperring gui
+/tp @s 0.5 66 -60.5 180 0
+wait 20
+shot dorp_teruggezet gui
+
+section the last beat: the twig at the tree, the scarf, the scene (10 s), the Guhstation
+/guhs snuffeldorp stap 8
+/guhs snuffeldorp ga dorp_papa_sjaal
+wait 30
+shot dorp_bloesem gui
+/guhs snuffel graaf
+wait 50
+shot dorp_spoor_graven
+wait 70
+shot dorp_spoor_sjaal
+wait 60
+shot dorp_spoor_wegversperring
+wait 60
+shot dorp_klaar gui
+
+section Kapitein Zoutsnoet sails you home (5 s)
+/guhs snuffeldorp ga havenkapitein
+wait 20
+/guhs snuffeldorp praat havenkapitein
+wait 20
+shot dorp_praat_kapitein gui
+/guhs snuffeldorp antwoord 1
+wait 30
+shot dorp_afvaart
+wait 110
+shot dorp_weer_thuis gui
+/guhs snuffel stand

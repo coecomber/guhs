@@ -1,0 +1,2543 @@
+{
+  "level": "kasteel_1_2",
+  "wereld": "1-2",
+  "start": [
+    2,
+    3
+  ],
+  "marge": 0.9,
+  "banen": [
+    "hoofd",
+    "muur",
+    "kas"
+  ],
+  "vadsmunten": {
+    "0": [
+      53,
+      7
+    ],
+    "1": [
+      93,
+      14
+    ],
+    "2": [
+      54,
+      18
+    ]
+  },
+  "ei": false,
+  "stappen": [
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        3,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        4,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        5,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        6,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        7,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        8,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        13,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        14,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        15,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        16,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        2,
+        0,
+        8,
+        1
+      ],
+      "naar": [
+        0,
+        19,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        24,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        29,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        34,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        35,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        36,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        37,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        38,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        39,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        40,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        41,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        42,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        43,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        44,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        48,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        49,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "bots",
+      "blok": [
+        49,
+        6
+      ],
+      "wat": "vraag",
+      "kracht": 1,
+      "naar": [
+        0,
+        49,
+        3
+      ],
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        50,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        51,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        52,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        53,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "bots",
+      "blok": [
+        53,
+        6
+      ],
+      "wat": "steen",
+      "kracht": 1,
+      "naar": [
+        0,
+        53,
+        3
+      ],
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        2,
+        0,
+        4,
+        0
+      ],
+      "raak": 0,
+      "cel": [
+        53,
+        7
+      ],
+      "punt": [
+        53.55,
+        4.412
+      ],
+      "naar": [
+        0,
+        53,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        54,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        55,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        56,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        57,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        58,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        59,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        60,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        61,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        65,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        66,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        67,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        68,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        69,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        70,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        8,
+        0
+      ],
+      "naar": [
+        0,
+        72,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        73,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        74,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        75,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        76,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        77,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        82,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        0,
+        87,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        90,
+        3
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "deur",
+      "cel": [
+        90,
+        3
+      ],
+      "naar": [
+        1,
+        3,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        4,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        5,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        6,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        7,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        8,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        9,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        10,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        14,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        15,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        16,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        17,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        18,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        4,
+        0,
+        8,
+        1
+      ],
+      "naar": [
+        1,
+        21,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        0,
+        7,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        25,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        8,
+        0
+      ],
+      "naar": [
+        1,
+        27,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        28,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        29,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        30,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        31,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        32,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        33,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        4,
+        4,
+        1
+      ],
+      "naar": [
+        1,
+        34,
+        14
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        1,
+        40,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        45,
+        14
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        46,
+        14
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        47,
+        14
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        52,
+        15
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        0,
+        2,
+        0,
+        8,
+        1
+      ],
+      "raak": 2,
+      "cel": [
+        54,
+        18
+      ],
+      "punt": [
+        53.977,
+        16.172
+      ],
+      "naar": [
+        1,
+        55,
+        12
+      ],
+      "kracht": 1,
+      "guhshi": false
+    },
+    {
+      "t": "opnieuw",
+      "naar": [
+        0,
+        2,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        3,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        4,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        5,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        6,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        7,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        8,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        13,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        14,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        15,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        16,
+        5
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        2,
+        0,
+        8,
+        1
+      ],
+      "naar": [
+        0,
+        19,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        24,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        29,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        34,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        35,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        36,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        37,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        38,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        39,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        40,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        41,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        42,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        43,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        44,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        48,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        49,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        50,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        51,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        52,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        53,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        54,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        55,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        56,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        57,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        58,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        59,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        60,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        61,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        65,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        66,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        67,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        68,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        69,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        4,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        74,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        75,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        76,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        0,
+        77,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        82,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        0,
+        87,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        0,
+        90,
+        3
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "deur",
+      "cel": [
+        90,
+        3
+      ],
+      "naar": [
+        1,
+        3,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        4,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        5,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        6,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        7,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        8,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        9,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        10,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        14,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        15,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        16,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        17,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        18,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        19,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        2,
+        0,
+        4,
+        1
+      ],
+      "naar": [
+        1,
+        20,
+        13
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        1,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        1,
+        25,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        29,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        30,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        31,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        32,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        4,
+        0,
+        4,
+        1
+      ],
+      "naar": [
+        1,
+        34,
+        14
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        1,
+        40,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        3,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        45,
+        14
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        46,
+        14
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "loop",
+      "naar": [
+        1,
+        47,
+        14
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        2,
+        99,
+        0,
+        14,
+        0
+      ],
+      "naar": [
+        1,
+        52,
+        15
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        0,
+        99,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        1,
+        57,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        0,
+        0,
+        5,
+        0,
+        8,
+        0
+      ],
+      "naar": [
+        1,
+        59,
+        14
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "sprong",
+      "p": [
+        1,
+        1,
+        0,
+        7,
+        0,
+        99,
+        0
+      ],
+      "naar": [
+        1,
+        64,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    },
+    {
+      "t": "mast",
+      "naar": [
+        1,
+        64,
+        12
+      ],
+      "kracht": 0,
+      "guhshi": false
+    }
+  ],
+  "krap": [
+    {
+      "wat": "vadsmunt 1 at (93, 14)",
+      "stappen": [
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            3,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            4,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            5,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            6,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            7,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            8,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            2,
+            99,
+            0,
+            14,
+            0
+          ],
+          "naar": [
+            0,
+            13,
+            5
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            14,
+            5
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            15,
+            5
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            16,
+            5
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            17,
+            5
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            3,
+            7,
+            0,
+            14,
+            0
+          ],
+          "naar": [
+            0,
+            23,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            3,
+            99,
+            0,
+            99,
+            0
+          ],
+          "naar": [
+            0,
+            29,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            3,
+            99,
+            0,
+            99,
+            0
+          ],
+          "naar": [
+            0,
+            35,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            36,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            37,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            38,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            39,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            40,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            41,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            42,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            43,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            44,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            1,
+            99,
+            0,
+            14,
+            0
+          ],
+          "naar": [
+            0,
+            48,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            99,
+            0
+          ],
+          "naar": [
+            0,
+            62,
+            3
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            0,
+            0,
+            2,
+            0,
+            4,
+            1
+          ],
+          "naar": [
+            0,
+            63,
+            4
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            0,
+            99,
+            0,
+            14,
+            0
+          ],
+          "naar": [
+            0,
+            67,
+            7
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "loop",
+          "naar": [
+            0,
+            68,
+            7
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "deur",
+          "cel": [
+            68,
+            7
+          ],
+          "naar": [
+            2,
+            78,
+            12
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            99,
+            0
+          ],
+          "naar": [
+            2,
+            92,
+            12
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "sprong",
+          "p": [
+            1,
+            0,
+            0,
+            2,
+            0,
+            4,
+            1
+          ],
+          "naar": [
+            2,
+            93,
+            13
+          ],
+          "kracht": 0,
+          "guhshi": false
+        },
+        {
+          "t": "raak",
+          "cel": [
+            93,
+            14
+          ],
+          "n": 1,
+          "naar": [
+            2,
+            93,
+            13
+          ],
+          "kracht": 0,
+          "guhshi": false
+        }
+      ]
+    }
+  ],
+  "mist": [],
+  "te_voet": [],
+  "te_voet_krap": []
+}

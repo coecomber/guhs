@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#guhs:is_barbecuether",
+  "features": "guhs:fossielmijn_zoutkristalerts",
+  "step": "underground_decoration"
+}

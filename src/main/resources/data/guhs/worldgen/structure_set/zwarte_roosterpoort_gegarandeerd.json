@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:zwarte_roosterpoort",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21302008,
+    "min_afstand": 250,
+    "max_afstand": 500,
+    "alleen_nieuw": true,
+    "sector": 0,
+    "sectoren": 1,
+    "rond": "guhs:guhladriel_boomstad_gegarandeerd"
+  }
+}

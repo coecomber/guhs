@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelmachine_beeldje"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_quests_knabbelmachine.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_quests_knabbelmachine.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/tech_quests_centrale"
+}

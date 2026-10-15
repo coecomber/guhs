@@ -1,7 +1,5 @@
 package nl.juiced.guhs.quest;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,8 +45,15 @@ import net.minecraft.world.entity.EntitySpawnReason;
  */
 public final class Reisguh {
     public static final int MAX_NAME = 32;
+    /**
+     * 1.4.2 (Het Knabbelpark): persistent-data flag of a Reisguh that belongs to her spot with her name (the one in the middle
+     * of a park): she can not be picked up and her name can not be changed.
+     */
+    public static final String VAST = "guhs_reis_vast";
     /** Actions from the screen. */
     public static final int RENAME = 0, TRAVEL = 1;
+    /** 1.4.2: star a row, move it up / down, sort the list (text = a Reisguh's id, for SORT the mode): {@link ReisVolgorde}. */
+    public static final int FAVORITE = 2, UP = 3, DOWN = 4, SORT = 5;
     /** 2.10.1: a wild Reisguh turns up with one in this many guh groups spawning in the Guhmension (was 250)... */
     public static final int WILD_EEN_OP = 120;
     /** ...but never closer than this to another Reisguh (was 200). */
@@ -109,6 +114,10 @@ public final class Reisguh {
     public static class Data extends SavedData {
         final Map<UUID, Point> points = new LinkedHashMap<>();
         final Map<UUID, Set<UUID>> discovered = new java.util.HashMap<>();
+        /** 1.4.2: per player their own order, favourites and sort mode (ReisVolgorde). */
+        final Map<UUID, List<UUID>> volgorde = new java.util.HashMap<>();
+        final Map<UUID, Set<UUID>> favorieten = new java.util.HashMap<>();
+        final Map<UUID, Integer> sortering = new java.util.HashMap<>();
 
         public static Data get(MinecraftServer server) {
             return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), Data.TYPE, "guhs_reisguhs");
@@ -135,6 +144,7 @@ public final class Reisguh {
                 players.put(player.toString(), ids);
             });
             tag.put("Discovered", players);
+            ReisVolgorde.save(this, tag);
             return tag;
         }
 
@@ -152,6 +162,7 @@ public final class Reisguh {
                 }
                 data.discovered.put(UUID.fromString(key), set);
             }
+            ReisVolgorde.load(data, tag);
             return data;
         }
 
@@ -224,8 +235,7 @@ public final class Reisguh {
         Data data = Data.get(level.getServer());
         data.points.putIfAbsent(npc.getUUID(), new Point(npc.getUUID(), name(npc), npc.blockPosition(), npc.getYRot()));
         Set<UUID> mine = data.of(player.getUUID());
-        if (mine.add(npc.getUUID())) {
-            data.setDirty();
+        if (ReisVolgorde.ontdek(data, player.getUUID(), npc.getUUID())) {      // (1.4.2: at the end of your own order)
             GuhQuests.say(player, npc, "quest.guhs.reis.discovered", name(npc));
             level.playSound(null, npc.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.6f, 1.6f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, npc.getX(), npc.getY() + 1.5, npc.getZ(), 12, 0.5, 0.5, 0.5, 0);
@@ -238,22 +248,18 @@ public final class Reisguh {
 
     private static void open(GuhNpcEntity npc, ServerPlayer player) {
         Data data = Data.get(player.level().getServer());
-        List<Point> list = new ArrayList<>();
-        for (UUID id : data.of(player.getUUID())) {
-            Point p = data.points.get(id);
-            if (p != null && !id.equals(npc.getUUID())) {
-                list.add(p);
-            }
-        }
-        list.sort(Comparator.comparingDouble(p -> p.pos().distSqr(npc.blockPosition())));
+        // 1.4.2: in the player's own order, favourites first; the screen sorts by distance or name itself (it reads the names)
+        List<Point> list = ReisVolgorde.rijen(data, player.getUUID(), npc.getUUID());
         CompoundTag tag = new CompoundTag();
         nl.juiced.guhs.taal.Tekst.put(tag, "Name", name(npc));
+        tag.putInt("Sort", ReisVolgorde.sortering(data, player.getUUID()));
         ListTag points = new ListTag();
         for (Point p : list) {
             CompoundTag c = new CompoundTag();
             c.store("Id", UUIDUtil.CODEC, p.id());
             nl.juiced.guhs.taal.Tekst.put(c, "Name", p.name());
             c.putInt("Distance", (int) Math.sqrt(p.pos().distSqr(npc.blockPosition())));
+            c.putBoolean("Fav", ReisVolgorde.favoriet(data, player.getUUID(), p.id()));
             points.add(c);
         }
         tag.put("Points", points);
@@ -270,6 +276,10 @@ public final class Reisguh {
             return;
         }
         if (action == RENAME) {
+            if (npc.getPersistentData().getBooleanOr(VAST, false)) {   // (1.4.2: her name belongs to her spot)
+                player.sendOverlayMessage(Component.translatable("quest.guhs.reis.vaste_naam", name(npc)).withStyle(ChatFormatting.LIGHT_PURPLE));
+                return;
+            }
             String name = text.strip();
             if (name.isEmpty() || name.length() > MAX_NAME) {
                 return;
@@ -293,6 +303,26 @@ public final class Reisguh {
             }
             travel(player, p);
             nl.juiced.guhs.feature.reisguh.ReisguhFluit.reis(npc, player.level(), target);   // (2.8: both conductors whistle)
+        } else if (action == SORT) {
+            try {
+                ReisVolgorde.zetSortering(data, player.getUUID(), Integer.parseInt(text));
+            } catch (NumberFormatException e) {
+                return;
+            }
+            open(npc, player);
+        } else if (action == FAVORITE || action == UP || action == DOWN) {
+            UUID target;
+            try {
+                target = UUID.fromString(text);
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            if (action == FAVORITE) {
+                ReisVolgorde.wisselFavoriet(data, player.getUUID(), target);
+            } else {
+                ReisVolgorde.schuif(data, player.getUUID(), npc.getUUID(), target, action == UP ? -1 : 1);
+            }
+            open(npc, player);
         }
     }
 
@@ -310,7 +340,8 @@ public final class Reisguh {
 
     public static void pickUp(GuhNpcEntity npc, ServerPlayer player) {
         // 1.2.1: a Reisguh that came with a building stays there (it can't be put down in a building again either)
-        if (player.level().structureManager().getStructureWithPieceAt(npc.blockPosition(), s -> true).isValid()) {
+        // (1.4.2: and one marked VAST stays wherever she is)
+        if (npc.getPersistentData().getBooleanOr(VAST, false) || player.level().structureManager().getStructureWithPieceAt(npc.blockPosition(), s -> true).isValid()) {
             player.sendOverlayMessage(Component.translatable("quest.guhs.reis.hoort_hier").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
@@ -374,17 +405,31 @@ public final class Reisguh {
         return npc;
     }
 
-    /** Next to a guh portal in the Guhmension there is always a Reisguh (within 5 blocks): put one there if there isn't. */
+    /**
+     * Next to a new guh portal in the Guhmension a Reisguh is put down (within 5 blocks), ONCE per portal ever (1.4.2,
+     * {@link ReisguhPortalen}): after she is picked up, going through again does not make another one.
+     */
     public static void nearPortal(ServerLevel level, BlockPos portal) {
-        if (level.dimension() != ModDimensions.GUHMENSION) {
+        if (level.dimension() == ModDimensions.GUHMENSION) {
+            nearPortalIn(level, portal);
+        }
+    }
+
+    /** (also for the tests, which have no Guhmension) {@link #nearPortal} in this level. */
+    static void nearPortalIn(ServerLevel level, BlockPos portal) {
+        ReisguhPortalen gehad = ReisguhPortalen.van(level);
+        if (gehad.gehad(portal)) {
             return;
         }
         level.getChunk(portal);
         // (the list, not the entities: a Reisguh just put down in a chunk that is still loading isn't visible as an entity yet)
-        if (Data.get(level.getServer()).points.values().stream().anyMatch(p -> p.pos().closerThan(portal, 8))
+        // (1.4.2: a portal from before that already has its Reisguh, or whose Reisguh was carried off, is remembered now)
+        if (Data.get(level.getServer()).points.values().stream().anyMatch(p -> p.pos().closerThan(portal, 8) || ReisguhPortalen.portaalNaamBij(p.name(), portal))
                 || !level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(portal).inflate(8), n -> n.getKind() == GuhNpcEntity.Kind.REISGUH).isEmpty()) {
+            gehad.onthoud(portal);
             return;
         }
+        gehad.onthoud(portal);
         for (int[] d : new int[][]{{3, 2}, {-3, 2}, {3, -2}, {-3, -2}, {0, 3}, {0, -3}, {4, 0}, {-4, 0}}) {
             BlockPos spot = portal.offset(d[0], 0, d[1]);
             for (int dy = -2; dy <= 2; dy++) {

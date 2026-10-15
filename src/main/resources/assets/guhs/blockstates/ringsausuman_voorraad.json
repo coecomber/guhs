@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,soort=deeg": {
+      "model": "guhs:block/ringsausuman_voorraad_deeg"
+    },
+    "facing=east,soort=deeg": {
+      "model": "guhs:block/ringsausuman_voorraad_deeg",
+      "y": 90
+    },
+    "facing=south,soort=deeg": {
+      "model": "guhs:block/ringsausuman_voorraad_deeg",
+      "y": 180
+    },
+    "facing=west,soort=deeg": {
+      "model": "guhs:block/ringsausuman_voorraad_deeg",
+      "y": 270
+    },
+    "facing=north,soort=saus": {
+      "model": "guhs:block/ringsausuman_voorraad_saus"
+    },
+    "facing=east,soort=saus": {
+      "model": "guhs:block/ringsausuman_voorraad_saus",
+      "y": 90
+    },
+    "facing=south,soort=saus": {
+      "model": "guhs:block/ringsausuman_voorraad_saus",
+      "y": 180
+    },
+    "facing=west,soort=saus": {
+      "model": "guhs:block/ringsausuman_voorraad_saus",
+      "y": 270
+    },
+    "facing=north,soort=kaas": {
+      "model": "guhs:block/ringsausuman_voorraad_kaas"
+    },
+    "facing=east,soort=kaas": {
+      "model": "guhs:block/ringsausuman_voorraad_kaas",
+      "y": 90
+    },
+    "facing=south,soort=kaas": {
+      "model": "guhs:block/ringsausuman_voorraad_kaas",
+      "y": 180
+    },
+    "facing=west,soort=kaas": {
+      "model": "guhs:block/ringsausuman_voorraad_kaas",
+      "y": 270
+    }
+  }
+}

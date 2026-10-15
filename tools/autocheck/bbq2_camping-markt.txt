@@ -1,0 +1,171 @@
+# bbq2 camping-markt AutoCheck: the Grillcamping and the Nether-Mika-ruilmarkt as templates on a flat floor (how they lie
+# in the real Guhbarbecuether is the merge step's /guhs bouwcheck + tplocate), a pitched tent, the burning camp fire with
+# the residents around it, the scales tipping, the characters, the blocks and items. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_camping-markt.txt
+# (commands: see autocheck.txt; /guhs campingmarkt bouw camping|markt exist in dev runs only: they put a template with its
+#  ground layer under your feet, its corner 22 blocks north-west of you; the gate of both buildings is in the south)
+
+section setup: two floors of houtskoolsteen (the camping around 3400 144 3400, the market around 3500 144 3400)
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/tp @s 3400 160 3400
+/forceload add 3360 3360 3540 3440
+wait 80
+/fill 3370 140 3370 3430 142 3430 guhs:houtskoolsteen
+/fill 3370 143 3370 3430 162 3430 minecraft:air
+/fill 3470 140 3370 3530 142 3430 guhs:houtskoolsteen
+/fill 3470 143 3370 3530 162 3430 minecraft:air
+/gamemode creative
+/tp @s 3400.5 144 3400.5
+wait 20
+/guhs campingmarkt bouw camping
+wait 80
+
+section the Grillcamping from its four corners
+/gamemode spectator
+camera 3372 164 3372 -45 32
+waitrender 300
+shot camping_noordwest
+camera 3428 164 3372 45 32
+waitrender 300
+shot camping_noordoost
+camera 3428 164 3428 135 32
+waitrender 300
+shot camping_zuidoost
+camera 3372 164 3428 -135 32
+waitrender 300
+shot camping_zuidwest
+
+section from the ground: the gate, the fire circle, the reception, the tents, the wood shed, the pitches
+camera 3400.5 145.6 3423.5 180 0
+waitrender 200
+shot camping_poort
+camera 3400.5 146.2 3409.5 180 8
+waitrender 200
+shot camping_vuurcirkel
+camera 3400.5 145.8 3393.5 180 -4
+waitrender 200
+shot camping_receptie
+npc kampbaasguh 3 0.4
+wait 10
+shot npc_kampbaasguh
+camera 3391.5 145.6 3396.5 135 2
+waitrender 200
+shot camping_tent_blauw
+camera 3392.5 146.0 3400.5 90 4
+waitrender 200
+shot camping_familietent
+camera 3406.5 145.8 3399.5 -90 2
+waitrender 200
+shot camping_houtschuur
+npc houthakkerguh 3 0.4
+wait 10
+shot npc_houthakkerguh
+camera 3400.5 147.5 3404.5 0 20
+waitrender 200
+shot camping_plekjes
+
+section a pitched tent (the pitch west of the path, its door east), seen from the path and from above
+/gamemode creative
+/guhs verhaal stap camping @s 1
+/give @s guhs:campingmarkt_tentzak
+/tp @s 3394.0 144 3409.5 90 37
+wait 20
+/tp @s 3394.0 144 3409.5 90 37
+wait 20
+use
+wait 30
+/gamemode spectator
+camera 3397.5 146.0 3409.5 90 14
+waitrender 200
+shot camping_tent_opgezet
+camera 3393.5 150.0 3404.5 -20 45
+waitrender 200
+shot camping_tent_boven
+
+section the camp fire party: the fire burns, the residents come to it
+/guhs campingmarkt vuur
+wait 200
+camera 3405.5 146.6 3406.5 135 12
+waitrender 200
+shot camping_feest
+camera 3400.5 152.0 3394.5 0 55
+waitrender 200
+shot camping_feest_boven
+
+section the Nether-Mika-ruilmarkt from its four corners
+/gamemode creative
+/tp @s 3500.5 144 3400.5
+wait 40
+/guhs campingmarkt bouw markt
+wait 80
+/gamemode spectator
+camera 3472 164 3372 -45 32
+waitrender 300
+shot markt_noordwest
+camera 3528 164 3372 45 32
+waitrender 300
+shot markt_noordoost
+camera 3528 164 3428 135 32
+waitrender 300
+shot markt_zuidoost
+camera 3472 164 3428 -135 32
+waitrender 300
+shot markt_zuidwest
+
+section from the ground: the gate, the Marktmeester before the Waag, the scales and the stacks, three stalls
+camera 3500.5 145.6 3423.5 180 0
+waitrender 200
+shot markt_poort
+camera 3500.5 146.0 3410.5 180 2
+waitrender 200
+shot markt_marktmeester
+npc marktmeester_mika 3 0.4
+wait 10
+shot npc_marktmeester_mika
+camera 3500.5 146.2 3403.0 180 12
+waitrender 200
+shot markt_waag_weegschaal
+camera 3500.5 146.6 3400.0 180 20
+waitrender 200
+shot markt_vadsstapels
+camera 3500.5 145.8 3390.5 180 2
+waitrender 200
+shot markt_kraam_noord
+camera 3490.5 145.8 3400.5 90 2
+waitrender 200
+shot markt_kraam_west
+camera 3505.5 145.8 3407.5 -160 2
+waitrender 200
+shot markt_kraam_zuidoost
+
+section the scales tip (your fake stack is number 2: stack 2 on the left pan, stack 4 on the right one)
+/gamemode creative
+/guhs verhaal stap ruilmarkt @s 2
+/guhs campingmarkt nep 2
+/tp @s 3499.5 144 3398.5 180 20
+wait 20
+/tp @s 3499.5 144 3398.5 180 20
+wait 20
+use
+wait 10
+/tp @s 3501.5 144 3398.5 180 20
+wait 20
+/tp @s 3501.5 144 3398.5 180 20
+wait 20
+use
+wait 10
+/gamemode spectator
+camera 3500.5 146.4 3403.0 180 14
+waitrender 100
+shot markt_weegschaal_zakt
+
+section blocks and items
+gui creative guhs
+gui close
+quit

@@ -15,6 +15,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.entity.GuhEntity;
+import nl.juiced.guhs.feature.vadskracht.BronSoort;
+import nl.juiced.guhs.feature.vadskracht.GuhradKracht;
+import nl.juiced.guhs.feature.vadskracht.VadsBron;
+import nl.juiced.guhs.feature.vadskracht.VadsKracht;
 import nl.juiced.guhs.registry.ModBlockEntities;
 
 import net.minecraft.core.UUIDUtil;
@@ -23,10 +27,20 @@ import net.minecraft.world.level.storage.ValueInput;
 /**
  * Holds the guh that's running in the wheel (stored as entity data, like bees in a beehive),
  * plus client-side animation state for the spinning wheel.
+ * <p>
+ * bbq2: the wheel is a source of vadskracht ({@link VadsBron}, kind GUHRAD): while a guh runs it gives what that guh's
+ * variant gives ({@link GuhradKracht}: 10 VK, a happy guh 15, the story guhs more). A guh never tires and needs no food.
+ * <p>
+ * bbq2 (tech-bronnen): every story guh does its rounds in its own way ({@link nl.juiced.guhs.feature.techbron.GuhradStijl}:
+ * the wheel's speed, a floating Guhtwo, a line in the hover readout), and the readout tips that a happy guh runs harder.
  */
-public class GuhWheelBlockEntity extends BlockEntity {
+public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
     @Nullable
     private CompoundTag guhData;
+    /** Was the guh "blij" when it was put in (then it runs extra hard for as long as it is in the wheel)? */
+    private boolean blij;
+    /** Does this wheel count in its net (false: one Guhrad too many)? Not saved: the net tells it at every evaluation. */
+    private boolean teltMee = true;
 
     // client-side only: a copy of the guh for rendering, and the wheel angle
     @Nullable
@@ -50,7 +64,9 @@ public class GuhWheelBlockEntity extends BlockEntity {
     /** Puts a (picked-up) guh into the wheel. */
     public void insert(CompoundTag guh) {
         guhData = guh.copy();
+        blij = level != null && GuhradKracht.isBlij(guhData, level.getGameTime());
         sync();
+        VadsKracht.veranderd(level, worldPosition);
     }
 
     /** Takes the guh out again, as picked-up guh data (or null if the wheel was empty). */
@@ -58,8 +74,70 @@ public class GuhWheelBlockEntity extends BlockEntity {
     public CompoundTag takeOut() {
         CompoundTag tag = guhData;
         guhData = null;
+        blij = false;
         sync();
+        VadsKracht.veranderd(level, worldPosition);
         return tag;
+    }
+
+    // --- vadskracht ---
+
+    @Override
+    public BlockPos vadsPlek() {
+        return worldPosition;
+    }
+
+    @Override
+    public BronSoort vadsSoort() {
+        return BronSoort.GUHRAD;
+    }
+
+    @Override
+    public int vadsAanbod() {
+        return guhData == null ? 0 : GuhradKracht.van(guhData, blij);
+    }
+
+    @Override
+    public void vadsTelt(boolean teltMee) {
+        this.teltMee = teltMee;
+    }
+
+    /** Does this wheel count in its net (false: there are more Guhraden than count)? */
+    public boolean teltMee() {
+        return teltMee;
+    }
+
+    /** Runs the guh in this wheel extra hard (it was happy when it was put in)? */
+    public boolean isBlij() {
+        return guhData != null && blij;
+    }
+
+    /** How the guh in this wheel does its rounds (tech-bronnen: the Baltoguh runs harder, Guhtwo floats...). Both sides. */
+    public nl.juiced.guhs.feature.techbron.GuhradStijl stijl() {
+        return nl.juiced.guhs.feature.techbron.GuhradStijl.van(guhData);
+    }
+
+    /** Would the guh in this wheel give more if it were happy (so the hover readout gives the tip)? */
+    public boolean kanBlijer() {
+        return guhData != null && !blij && GuhradKracht.van(guhData, true) > GuhradKracht.van(guhData, false);
+    }
+
+    @Override
+    public void vadsRegels(java.util.function.Consumer<net.minecraft.network.chat.Component> regels) {
+        if (guhData == null) {
+            regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.leeg").withStyle(net.minecraft.ChatFormatting.GRAY));
+            return;
+        }
+        // tech-bronnen: what is special about this guh (per variant), then its mood
+        net.minecraft.network.chat.Component stijl = stijl().regel();
+        if (stijl != null) {
+            regels.accept(stijl);
+        }
+        if (blij) {
+            regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.blij").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+        } else if (kanBlijer()) {
+            regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.techbron.guhrad.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
+        }
     }
 
     private void sync() {
@@ -77,11 +155,15 @@ public class GuhWheelBlockEntity extends BlockEntity {
             be.displayGuh = null;
             return;
         }
-        be.spin += 9f;
+        // tech-bronnen: the wheel turns as hard as its guh runs (per variant; a happy guh a bit faster still)
+        nl.juiced.guhs.feature.techbron.GuhradStijl stijl = be.stijl();
+        float tempo = stijl.tempo * (be.blij ? 1.25f : 1f);
+        be.spin += 9f * tempo;
         GuhEntity guh = be.getDisplayGuh();
         if (guh != null) {
             guh.tickCount++; // drives the GeckoLib animation clock
-            guh.walkAnimation.update(1.0f, 0.4f, guh.isBaby() ? 3.0f : 1.0f); // "moving" -> walk animation
+            // "moving" -> walk animation; a floating guh (Guhtwo) keeps its legs still
+            guh.walkAnimation.update(stijl.zweeft ? 0f : Math.min(1.6f, tempo), 0.4f, guh.isBaby() ? 3.0f : 1.0f);
         }
     }
 
@@ -111,6 +193,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
             displayGuh = null;
         }
         guhData = newData;
+        blij = tag.getBooleanOr("Blij", false);
     }
 
     @Override
@@ -119,6 +202,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
         // always write something: an empty update would be ignored by the client, and the wheel would keep
         // showing a guh that was already taken out
         tag.putBoolean("HasGuh", guhData != null);
+        tag.putBoolean("Blij", blij);
         if (guhData != null) {
             tag.store("Guh", CompoundTag.CODEC, guhData);
         }

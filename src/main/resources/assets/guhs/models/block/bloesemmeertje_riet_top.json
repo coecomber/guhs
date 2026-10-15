@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "guhs:block/bloesemmeertje_riet_top"
+  }
+}

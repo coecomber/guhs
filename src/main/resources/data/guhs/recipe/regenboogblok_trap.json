@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": "guhs:regenboogblok"
+  },
+  "result": {
+    "id": "guhs:regenboogblok_trap",
+    "count": 4
+  }
+}

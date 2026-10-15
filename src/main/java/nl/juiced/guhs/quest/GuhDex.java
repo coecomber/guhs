@@ -31,6 +31,8 @@ public final class GuhDex {
             GuhVariant.KAASMOERASGUH, GuhVariant.KIKKERGUH, GuhVariant.KAASMOT, GuhVariant.MOERASHEKS_MIKA,
             GuhVariant.BOSWACHTERGUH, GuhVariant.KNABBELPLUKKER,
             GuhVariant.GRILLGUH, GuhVariant.ASGUH, GuhVariant.ROOKGUH,   // (2.10.1: the Rookguh, with your saved-Rookguh count)
+            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH,   // biomes3
+            GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
             // 2.8 (Knuffeldal)
             GuhVariant.PLUISGUH, GuhVariant.PINGUH, GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
             GuhVariant.THEEGUH, GuhVariant.KAPPERGUH, GuhVariant.BOERINNEGUH, GuhVariant.GUHSCHAAPJE, GuhVariant.KNABBELKIPPETJE,
@@ -61,7 +63,11 @@ public final class GuhDex {
      * that needs a full Guhdex, the seen counter), so "alles verzameld" is exactly what it was in 2.10.0.
      */
     public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
-            GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,    // (1.2.8: the Bleekwoud is rare and they only come at night)
+            GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,   // (1.2.8: the Bleekwoud is rare and they only come at night)
+            GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3: the new biomes only exist in new chunks, far out
+            GuhVariant.HERTGUHTJE,   // 1.4.2: only in Het Knabbelpark (new chunks too)
+            GuhVariant.KNABBELKOI,   // <park-a> 1.4.2: only in the japanse tuin of a Knabbelpark
+            GuhVariant.DUIFGUHTJE,   // 1.4.2 park-plekjes b: only at Oma-guh's plekje of Het Knabbelpark
             // (einde2: every creature page of the outer islands is a bonus page: only the six tameable biome guhs count for
             // "compleet"; several of these are only met in a story or behind an optional questline)
             GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,
@@ -80,6 +86,47 @@ public final class GuhDex {
         return geteld(seen) >= TELLEND.size();
     }
 
+    /**
+     * bbq2: the pages that are new in this update (they count, see CONTRACT_130 §5.3): by name, so this compiles before the
+     * skeleton added them to GuhVariant.
+     */
+    public static final java.util.Set<String> NIEUW_BBQ2 = java.util.Set.of("SAM_GUH", "GUHSHI", "SAUSBLUBJE", "SAUSLOPER", "WORSTZWIJNTJE", "BEZORGGUHTJE");
+    /** GuhQuests.saved: this player had every page before the new ones came (they keep the Guhkenner title). */
+    public static final String KENNER_OUD = "guhs_guhkenner_oud", KENNER_GEKEKEN = "guhs_guhkenner_gekeken";
+
+    /**
+     * Every counting page except the six new ones seen? (einde2: nor the six biome guhs of {@link #TELLEND_EINDE2}, so a
+     * player with a full Guhdex from before 1.4.0 who first logs in with einde2 keeps the title too.)
+     */
+    public static boolean volZonderNieuw(java.util.Collection<GuhVariant> seen) {
+        return TELLEND.stream().filter(v -> !NIEUW_BBQ2.contains(v.name()) && !TELLEND_EINDE2.contains(v)).allMatch(seen::contains);
+    }
+
+    /**
+     * bbq2: a Guhkenner: a full Guhdex now, OR whoever had a full Guhdex before the six new pages came (the flag
+     * {@link #KENNER_OUD}, set at login by {@link #onthoudKenner}). The title Guhkenner uses this.
+     */
+    public static boolean kenner(ServerPlayer player) {
+        return vol(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen)
+                || GuhQuests.saved(player).getBooleanOr(KENNER_OUD, false);
+    }
+
+    /**
+     * (login) looked at ONCE per player, the first time they log in with this update: whoever has every page except the
+     * six new ones by then had a full Guhdex before and keeps the title for good. Later logins change nothing (a new
+     * player needs the six new pages too).
+     */
+    public static void onthoudKenner(ServerPlayer player) {
+        net.minecraft.nbt.CompoundTag saved = GuhQuests.saved(player);
+        if (saved.getBooleanOr(KENNER_GEKEKEN, false)) {
+            return;
+        }
+        saved.putBoolean(KENNER_GEKEKEN, true);
+        if (volZonderNieuw(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen)) {
+            saved.putBoolean(KENNER_OUD, true);
+        }
+    }
+
     /** The same, for the client's page ids. */
     public static int geteldIds(java.util.Collection<String> seenIds) {
         return (int) seenIds.stream().filter(id -> EXTRA.stream().noneMatch(v -> v.id().equals(id))).count();
@@ -93,7 +140,8 @@ public final class GuhDex {
             new Milestone(5, 0, () -> ModItems.clothingItem(GuhClothes.HEART_GLASSES)),
             new Milestone(8, 3, () -> ModItems.clothingItem(GuhClothes.MONOCLE)),
             new Milestone(TELLEND.size(), 0, () -> ModItems.GUH_KRISTAL_VERREKIJKER.get()),
-            new Milestone(TELLEND.size(), TAMEABLE.size(), () -> ModItems.clothingItem(GuhClothes.ROYAL_CROWN)));
+            // biomes3: a tameable bonus page (Bloesemguh, Tanukiguh) is not needed for the crown either
+            new Milestone(TELLEND.size(), (int) TAMEABLE.stream().filter(v -> !EXTRA.contains(v)).count(), () -> ModItems.clothingItem(GuhClothes.ROYAL_CROWN)));
 
     /** Creature pages (2.8): a page that isn't a guh or a guh character, filled in by standing near that entity. */
     private static final java.util.Map<GuhVariant, java.util.function.Supplier<? extends net.minecraft.world.entity.EntityType<?>>> CREATURES =
@@ -282,10 +330,10 @@ public final class GuhDex {
     /** Player data (GuhQuests.saved): the einde2 look at an older full Guhdex has been done for this player. */
     public static final String EINDE2_KENNER_GEKEKEN = "guhs_einde2_kenner_gekeken";
     /**
-     * Player data: "had a full Guhdex before new counting pages came". The sister update reads this very key for the title
-     * Guhkenner (its {@code GuhDex.kenner}); on this branch nothing reads it yet.
+     * Player data: "had a full Guhdex before new counting pages came": the very key {@link #KENNER_OUD} that
+     * {@link #kenner} (the title Guhkenner) reads.
      */
-    public static final String EINDE2_KENNER_OUD = "guhs_guhkenner_oud";
+    public static final String EINDE2_KENNER_OUD = KENNER_OUD;
 
     /** einde2: every counting page except the six biome guhs seen? */
     public static boolean volZonderEinde2(java.util.Collection<GuhVariant> seen) {
@@ -298,8 +346,8 @@ public final class GuhDex {
      * (DESIGN 3: "wie de titel al had houdt hem"). A flag the sister update set earlier stays as it is. Later logins change
      * nothing: a new player needs the six biome guhs too.
      * <p>
-     * hook merge (einde2 onto the sister update): its {@code kenner(player)} already honours {@link #EINDE2_KENNER_OUD};
-     * nothing else has to be wired.
+     * Since the merge of origin/main (1.4.4) {@link #kenner} honours {@link #EINDE2_KENNER_OUD} (the same key as
+     * {@link #KENNER_OUD}); nothing else has to be wired.
      */
     public static void onthoudKennerEinde2(ServerPlayer player) {
         net.minecraft.nbt.CompoundTag saved = GuhQuests.saved(player);

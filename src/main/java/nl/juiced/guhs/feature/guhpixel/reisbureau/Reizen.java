@@ -50,8 +50,8 @@ import nl.juiced.guhs.taal.Tekst;
  * Reisbureau "De Vadsvakantie": the trips (DESIGN_PX section 5).
  * <ul>
  *   <li><b>The offer</b> ({@link #aanbod}): every real day four trips, one per duration (1, 2, 8, 24 hours), the same for
- *   everyone: derived from {@code Klok.dag()} and the world seed, nothing stored. Within four days every destination of a
- *   duration comes by once.</li>
+ *   everyone: derived from {@code Klok.dag()} and the world seed, nothing stored. Every destination of a duration comes by
+ *   once in as many days as that duration has destinations (five since biomes3).</li>
  *   <li><b>Booking</b> ({@link #boek}): ONE guh per player at a time. The trip record is written at once; the guh walks off
  *   with its little suitcase ({@link Uitzwaaien}) and is then stored as data ({@link #opslaan}).</li>
  *   <li><b>Real time</b>: the record holds absolute {@code Klok.nu()} stamps; nothing ticks while the player is offline or
@@ -142,7 +142,7 @@ public final class Reizen {
         t.putInt(id, t.getIntOr(id, 0) + 1);
     }
 
-    /** How many of the 32 album souvenirs this player has had. */
+    /** How many of the album souvenirs this player has had. */
     public static int souvenirs(CompoundTag d) {
         int n = 0;
         for (Souvenirs.Soort s : Souvenirs.ALLE) {
@@ -171,17 +171,21 @@ public final class Reizen {
         return aanbod(server.overworld().getSeed(), Klok.dag());
     }
 
-    /** The four trips of a real day: one per duration; every block of four days shows all four destinations of a duration. */
+    /**
+     * The four trips of a real day: one per duration. A duration with n destinations shows all n in every block of n days
+     * (biomes3: n is the size of that duration's list, it was a fixed 4; five per duration now).
+     */
     public static List<Bestemming> aanbod(long seed, long dag) {
         List<Bestemming> out = new ArrayList<>();
         for (int g = 0; g < Bestemming.DUREN.length; g++) {
-            long blok = Math.floorDiv(dag, 4L);
+            long n = Bestemming.metDuur(Bestemming.DUREN[g]).size();   // biomes3
+            long blok = Math.floorDiv(dag, n);
             List<Bestemming> nu = geschud(seed, blok, g);
             List<Bestemming> vorige = geschud(seed, blok - 1, g);
-            if (nu.get(0) == vorige.get(3)) {
+            if (nu.size() > 1 && nu.get(0) == vorige.get(vorige.size() - 1)) {
                 Collections.swap(nu, 0, 1);   // (never the same destination two days in a row)
             }
-            out.add(nu.get((int) Math.floorMod(dag, 4L)));
+            out.add(nu.get((int) Math.floorMod(dag, n)));
         }
         return out;
     }

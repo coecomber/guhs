@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WKW",
+    "WWW"
+  ],
+  "key": {
+    "W": "guhs:wolkenblok_wit",
+    "K": "minecraft:gray_dye"
+  },
+  "result": {
+    "id": "guhs:bliksemsmidse_wolk",
+    "count": 8
+  }
+}

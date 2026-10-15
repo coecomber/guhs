@@ -214,12 +214,12 @@ VERHALEN = {
         "De Grillguh helpt",
         "De Grillguh droomt van de Barbecuether. Maak samen een grillkoolportaal en steek het aan!",
         ["Praat met de Grillguh", "Een grillkoolframe bouwen", "Een aanmaakblokje halen", "Het portaal aansteken"],
-        {"0": "Praat met de Grillguh bij de grote barbecueput.",
+        {"0": "Praat met de Grillguh bij de grote barbecueput (in nieuw land: midden in een Knabbelgouw).",
          "1": "Maak grillkool (kaassaus over een blok steenkool) en bouw een grillkoolframe bij de Grillguh. Praat dan weer met hem.",
          "2": "Haal een aanmaakblokje: de Mika's in een Mika-kamp laten er een vallen.",
          "3": "Steek het grillkoolframe aan met het aanmaakblokje. Wroemf!",
          "klaar": "Het portaal naar de Barbecuether brandt! De Grillguh gaf je zijn geheime recept, en zijn winkel is open."},
-        {"0": "De Grillguh bij de grote barbecueput (Guhmensie of Barbecuether)",
+        {"0": "De Grillguh bij de grote barbecueput (Guhmensie: ook midden in een Knabbelgouw; of in de Barbecuether)",
          "1": "Bij de barbecueput van de Grillguh",
          "2": "Een Mika-kamp in de Guhmensie",
          "3": "Het grillkoolframe bij de Grillguh",
@@ -289,6 +289,11 @@ def build(h):
         for k, t in waar.items():
             h.lang(f"{base}.waar.{k}", t, t)
     selfcheck()
+    # bbq2: the verhaal engine's own module (verhaal_motor: the registered questlines, cutscenes, narrator cards, the demo).
+    # The skeleton lists it in FEATURES; until then it is built from here, so its texts are never missing.
+    from features import FEATURES, verhaal_motor
+    if "verhaal_motor" not in FEATURES:
+        verhaal_motor.build(h)
 
 
 def java_tabel():

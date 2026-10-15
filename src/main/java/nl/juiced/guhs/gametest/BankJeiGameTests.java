@@ -13,7 +13,11 @@ import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.menu.BankGuhMenu;
 import nl.juiced.guhs.registry.ModBlocks;
 
-/** 1.2.5: JEI's "+" in the Bank Guh fills the crafting grid from the bank first, then from the player's inventory. */
+/**
+ * 1.2.5: JEI's "+" in the Bank Guh fills the crafting grid from the bank first, then from the player's inventory.
+ * (bbq2: the old grid goes back to the bank only as far as the cap allows, the rest to the inventory:
+ * feature/bank/BankGameTests#bankSchermHoudtDeRest.)
+ */
 public class BankJeiGameTests {
     private static final String EMPTY = "empty";
 

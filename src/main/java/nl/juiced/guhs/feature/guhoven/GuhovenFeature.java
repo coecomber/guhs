@@ -4,20 +4,18 @@ import java.util.function.Consumer;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -29,17 +27,19 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import nl.juiced.guhs.Guhs;
-import nl.juiced.guhs.block.GuhWheelBlock;
-import nl.juiced.guhs.block.GuhWheelPartBlock;
-import nl.juiced.guhs.block.GuhWireBlock;
-import nl.juiced.guhs.registry.ModBlocks;
+import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
+import nl.juiced.guhs.feature.vadskracht.VadsKracht;
+import nl.juiced.guhs.feature.vadskracht.VadskrachtFeature;
 
 /**
- * De Guhoven (1.2.5): a furnace that needs no fuel, it bakes on guh power. It smelts exactly like a vanilla furnace (the same
- * smelting recipes, 200 ticks, XP, hoppers, comparator, lit state, flames and crackle), but only while it gets guh power:
- * a running Guhrad next to it (the wheel block or any of its 3x3 part blocks) or powered Guhdraad next to it
- * ({@link #guhKracht}). Ordinary redstone (levers, torches, dust, a redstone block) does nothing. There is no fuel slot: the
- * screen ({@code client.GuhOvenScreen}) shows a little guh wheel there, and hoppers on the sides fill the input slot.
+ * De Guhoven (1.2.5): a furnace that needs no fuel, it bakes on vadskracht. It smelts exactly like a vanilla furnace (the same
+ * smelting recipes, 200 ticks, XP, hoppers, comparator, lit state, flames and crackle), but only while its vadskracht net
+ * runs (bbq2, feature/vadskracht): the oven is a consumer of {@link VadsGetallen#GUH_OVEN} VK, so it needs a real source (a
+ * Guhrad with a guh in it...) next to it or joined to it with Guhdraad, and it stands still with everything else when the net
+ * asks more than its sources give ({@link #guhKracht}). Ordinary redstone (levers, torches, dust, a redstone block) does
+ * nothing. Like every guh machine it has a face ({@code MachineBlock.SNOET}): asleep without vadskracht, awake with it,
+ * surprised when the result slot is full. There is no fuel slot: the screen ({@code client.GuhOvenScreen}) shows a little guh
+ * wheel there, and hoppers on the sides fill the input slot.
  * tools/features/guhoven.py makes the resources (textures, model, recipe, loot, texts, FTB quest).
  */
 public final class GuhovenFeature {
@@ -73,35 +73,18 @@ public final class GuhovenFeature {
         modBus.addListener(GuhovenFeature::capabilities);
     }
 
-    /** Pipes and hoppers (like a vanilla furnace): in from the top and the sides, out at the bottom. */
+    /** Pipes and hoppers (like a vanilla furnace): in from the top and the sides, out at the bottom. And the oven is a vadskracht knoop. */
     private static void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Item.BLOCK, GUH_OVEN_BE.get(), WorldlyContainerWrapper::new);
+        VadskrachtFeature.knoopCapability(event, GUH_OVEN_BE.get());
     }
 
     /**
-     * Does the oven at this spot get guh power? Only from a neighbour that really is guh-powered: a running Guhrad (its own block
-     * or one of its part blocks) or powered Guhdraad. Other redstone sources don't count, however strong.
+     * Does the oven at this spot get vadskracht: did its net run at the last evaluation? (bbq2: this used to look for a running
+     * Guhrad or powered Guhdraad next to the oven; now the net decides, {@link VadsKracht#heeftKracht}.)
      */
-    public static boolean guhKracht(BlockGetter level, BlockPos pos) {
-        for (Direction dir : Direction.values()) {
-            BlockPos n = pos.relative(dir);
-            BlockState s = level.getBlockState(n);
-            if (s.is(ModBlocks.GUH_WHEEL.get())) {
-                if (s.getValue(GuhWheelBlock.RUNNING)) {
-                    return true;
-                }
-            } else if (s.is(ModBlocks.GUH_WIRE.get())) {
-                if (s.getValue(GuhWireBlock.POWERED)) {
-                    return true;
-                }
-            } else if (s.is(ModBlocks.GUH_WHEEL_PART.get())) {
-                BlockState wiel = level.getBlockState(GuhWheelPartBlock.wheelPos(s, n));
-                if (wiel.is(ModBlocks.GUH_WHEEL.get()) && wiel.getValue(GuhWheelBlock.RUNNING)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public static boolean guhKracht(ServerLevel level, BlockPos pos) {
+        return VadsKracht.heeftKracht(level, pos);
     }
 
     public static void creative(Consumer<ItemStack> output) {

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "WGW"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "G": "minecraft:glowstone"
+  },
+  "result": {
+    "id": "guhs:park_lantaarn",
+    "count": 2
+  }
+}

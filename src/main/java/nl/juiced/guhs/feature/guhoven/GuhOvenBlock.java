@@ -15,19 +15,52 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import nl.juiced.guhs.feature.vadskracht.MachineBlock;
+import nl.juiced.guhs.feature.vadskracht.Snoet;
+import nl.juiced.guhs.feature.vadskracht.VadsKracht;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-/** The Guhoven block: a vanilla-style furnace block (FACING, LIT) whose block entity bakes on guh power (see {@link GuhovenFeature}). */
+/**
+ * The Guhoven block: a vanilla-style furnace block (FACING, LIT) whose block entity bakes on vadskracht (see
+ * {@link GuhovenFeature}), with the face of a guh machine ({@link #SNOET}: asleep / awake / surprised when full).
+ */
 public class GuhOvenBlock extends AbstractFurnaceBlock {
     public static final MapCodec<GuhOvenBlock> CODEC = simpleCodec(GuhOvenBlock::new);
+    public static final EnumProperty<Snoet> SNOET = MachineBlock.SNOET;
     private static final DustParticleOptions ROZE = new DustParticleOptions(0xFF73BF, 0.7f);
 
     public GuhOvenBlock(Properties properties) {
         super(properties);
+        registerDefaultState(defaultBlockState().setValue(SNOET, Snoet.SLAAPT));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(SNOET);
+    }
+
+    // --- vadskracht: the nets around the oven are rebuilt when it appears or disappears ---
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (!oldState.is(this)) {
+            VadsKracht.veranderd(level, pos);
+        }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+        VadsKracht.veranderd(level, pos);
     }
 
     @Override

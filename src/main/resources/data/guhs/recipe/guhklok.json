@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " Z ",
+    "DXD",
+    "SSS"
+  ],
+  "key": {
+    "Z": "guhs:zoutkristal",
+    "D": "guhs:guh_wire",
+    "X": "minecraft:clock",
+    "S": "minecraft:stone"
+  },
+  "result": {
+    "id": "guhs:guhklok"
+  }
+}

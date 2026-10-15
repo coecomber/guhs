@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_piep",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 30,
+  guhs_chapter_version: 37,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_piep.png",
@@ -43,7 +43,7 @@
       ],
     },
   ],
-  order_index: 9,
+  order_index: 8,
   progression_mode: "flexible",
   quest_links: [
     {

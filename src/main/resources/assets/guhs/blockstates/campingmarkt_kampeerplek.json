@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "bezet=false,facing=north": {
+      "model": "guhs:block/campingmarkt_kampeerplek"
+    },
+    "bezet=true,facing=north": {
+      "model": "guhs:block/campingmarkt_kampeerplek_bezet"
+    },
+    "bezet=false,facing=east": {
+      "model": "guhs:block/campingmarkt_kampeerplek",
+      "y": 90
+    },
+    "bezet=true,facing=east": {
+      "model": "guhs:block/campingmarkt_kampeerplek_bezet",
+      "y": 90
+    },
+    "bezet=false,facing=south": {
+      "model": "guhs:block/campingmarkt_kampeerplek",
+      "y": 180
+    },
+    "bezet=true,facing=south": {
+      "model": "guhs:block/campingmarkt_kampeerplek_bezet",
+      "y": 180
+    },
+    "bezet=false,facing=west": {
+      "model": "guhs:block/campingmarkt_kampeerplek",
+      "y": 270
+    },
+    "bezet=true,facing=west": {
+      "model": "guhs:block/campingmarkt_kampeerplek_bezet",
+      "y": 270
+    }
+  }
+}

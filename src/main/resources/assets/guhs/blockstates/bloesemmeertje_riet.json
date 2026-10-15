@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "guhs:block/bloesemmeertje_riet_bottom"
+    },
+    "half=upper": {
+      "model": "guhs:block/bloesemmeertje_riet_top"
+    }
+  }
+}

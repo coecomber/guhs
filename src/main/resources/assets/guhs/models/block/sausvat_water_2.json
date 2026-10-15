@@ -1,0 +1,8 @@
+{
+  "parent": "guhs:block/sausvat_vorm_2",
+  "textures": {
+    "voor": "guhs:block/sausvat_voor_werkt",
+    "zij": "guhs:block/sausvat_zij_water_2",
+    "saus": "guhs:block/techsaus_saus_water"
+  }
+}

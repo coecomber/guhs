@@ -1,0 +1,90 @@
+{
+  "textures": {
+    "koper": "guhs:block/techquest_km_koper",
+    "koper_donker": "guhs:block/techquest_km_koper_donker",
+    "ijzer": "guhs:block/techquest_km_ijzer",
+    "roze": "guhs:block/techquest_km_roze",
+    "roze_donker": "guhs:block/techquest_km_roze_donker",
+    "glas": "guhs:block/techquest_km_glas",
+    "gloei": "guhs:block/techquest_km_gloei",
+    "bek": "guhs:block/techquest_km_bek",
+    "tand": "guhs:block/techquest_km_tand",
+    "hout": "guhs:block/techquest_km_hout",
+    "knabbel": "guhs:block/techquest_km_knabbel",
+    "oog_dicht": "guhs:block/techquest_km_oog_dicht",
+    "oog_open": "guhs:block/techquest_km_oog_open",
+    "neus": "guhs:block/techquest_km_neus",
+    "blos": "guhs:block/techquest_km_blos",
+    "particle": "guhs:block/techquest_km_koper"
+  },
+  "elements": [
+    {
+      "from": [
+        -16,
+        26,
+        30
+      ],
+      "to": [
+        32,
+        32,
+        32
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            10.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            10.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            10.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            10.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            11.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            11.5,
+            12.0,
+            12.0
+          ],
+          "texture": "#koper_donker"
+        }
+      }
+    }
+  ]
+}

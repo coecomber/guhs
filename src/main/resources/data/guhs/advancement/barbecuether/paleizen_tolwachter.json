@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.paleizen_tolwachter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.paleizen_tolwachter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/paleizen_brugpaleis"
+}

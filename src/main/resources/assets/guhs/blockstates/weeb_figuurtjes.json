@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,soort=0": {
+      "model": "guhs:block/weeb_figuurtjes_0"
+    },
+    "facing=east,soort=0": {
+      "model": "guhs:block/weeb_figuurtjes_0",
+      "y": 90
+    },
+    "facing=south,soort=0": {
+      "model": "guhs:block/weeb_figuurtjes_0",
+      "y": 180
+    },
+    "facing=west,soort=0": {
+      "model": "guhs:block/weeb_figuurtjes_0",
+      "y": 270
+    },
+    "facing=north,soort=1": {
+      "model": "guhs:block/weeb_figuurtjes_1"
+    },
+    "facing=east,soort=1": {
+      "model": "guhs:block/weeb_figuurtjes_1",
+      "y": 90
+    },
+    "facing=south,soort=1": {
+      "model": "guhs:block/weeb_figuurtjes_1",
+      "y": 180
+    },
+    "facing=west,soort=1": {
+      "model": "guhs:block/weeb_figuurtjes_1",
+      "y": 270
+    },
+    "facing=north,soort=2": {
+      "model": "guhs:block/weeb_figuurtjes_2"
+    },
+    "facing=east,soort=2": {
+      "model": "guhs:block/weeb_figuurtjes_2",
+      "y": 90
+    },
+    "facing=south,soort=2": {
+      "model": "guhs:block/weeb_figuurtjes_2",
+      "y": 180
+    },
+    "facing=west,soort=2": {
+      "model": "guhs:block/weeb_figuurtjes_2",
+      "y": 270
+    },
+    "facing=north,soort=3": {
+      "model": "guhs:block/weeb_figuurtjes_3"
+    },
+    "facing=east,soort=3": {
+      "model": "guhs:block/weeb_figuurtjes_3",
+      "y": 90
+    },
+    "facing=south,soort=3": {
+      "model": "guhs:block/weeb_figuurtjes_3",
+      "y": 180
+    },
+    "facing=west,soort=3": {
+      "model": "guhs:block/weeb_figuurtjes_3",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/campingmarkt_hakblok_zij",
+    "zij": "guhs:block/campingmarkt_hakblok_zij",
+    "boven": "guhs:block/campingmarkt_hakblok_boven",
+    "stam": "minecraft:block/spruce_log",
+    "kop": "minecraft:block/spruce_log_top",
+    "binnen": "minecraft:block/stripped_spruce_log",
+    "ijzer": "guhs:block/campingmarkt_haring",
+    "steel": "guhs:block/campingmarkt_plank"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        9,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        9,
+        5
+      ],
+      "to": [
+        11,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            0.0,
+            11,
+            7.0
+          ],
+          "texture": "#stam"
+        },
+        "south": {
+          "uv": [
+            5,
+            0.0,
+            11,
+            7.0
+          ],
+          "texture": "#stam"
+        },
+        "west": {
+          "uv": [
+            5,
+            0.0,
+            11,
+            7.0
+          ],
+          "texture": "#stam"
+        },
+        "east": {
+          "uv": [
+            5,
+            0.0,
+            11,
+            7.0
+          ],
+          "texture": "#stam"
+        },
+        "up": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#kop"
+        },
+        "down": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#kop"
+        }
+      }
+    }
+  ]
+}

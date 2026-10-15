@@ -1,0 +1,203 @@
+{
+  "haltes": [
+    {
+      "id": "gouw",
+      "lijn": "ring_h1",
+      "structuur": "knabbelgouw",
+      "rookguh": null,
+      "ingangen": [],
+      "afstand": 7
+    },
+    {
+      "id": "guhvendel",
+      "lijn": "ring_h2",
+      "structuur": "guhvendel",
+      "rookguh": [
+        35,
+        10,
+        53
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            30,
+            9,
+            58
+          ],
+          "richting": [
+            0,
+            1
+          ]
+        }
+      ],
+      "afstand": 25
+    },
+    {
+      "id": "knabbelmoria",
+      "lijn": "ring_h3",
+      "structuur": "knabbelmoria",
+      "rookguh": [
+        72,
+        32,
+        63
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            35,
+            31,
+            62
+          ],
+          "richting": [
+            -1,
+            0
+          ]
+        }
+      ],
+      "afstand": 25
+    },
+    {
+      "id": "boomstad",
+      "lijn": "ring_h4",
+      "structuur": "guhladriel_boomstad",
+      "rookguh": [
+        183,
+        4,
+        52
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            4,
+            2,
+            48
+          ],
+          "richting": [
+            -1,
+            0
+          ]
+        }
+      ],
+      "afstand": 25
+    },
+    {
+      "id": "aanleg",
+      "lijn": "ring_h4",
+      "structuur": "guhladriel_boomstad",
+      "rookguh": null,
+      "ingangen": [
+        {
+          "plek": [
+            178,
+            3,
+            48
+          ],
+          "richting": [
+            1,
+            0
+          ]
+        }
+      ],
+      "afstand": 0
+    },
+    {
+      "id": "sausuman",
+      "lijn": "ring_sausuman",
+      "structuur": "sausuman_toren",
+      "rookguh": [
+        8,
+        5,
+        24
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            14,
+            4,
+            20
+          ],
+          "richting": [
+            0,
+            1
+          ]
+        }
+      ],
+      "afstand": 25
+    },
+    {
+      "id": "roosterpoort",
+      "lijn": "ring_h5",
+      "structuur": "zwarte_roosterpoort",
+      "rookguh": [
+        24,
+        8,
+        87
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            48,
+            7,
+            0
+          ],
+          "richting": [
+            0,
+            -1
+          ]
+        },
+        {
+          "plek": [
+            0,
+            7,
+            6
+          ],
+          "richting": [
+            -1,
+            0
+          ]
+        },
+        {
+          "plek": [
+            95,
+            7,
+            6
+          ],
+          "richting": [
+            1,
+            0
+          ]
+        }
+      ],
+      "afstand": 25
+    },
+    {
+      "id": "frituurberg",
+      "lijn": "ring_h6",
+      "structuur": "frituurberg",
+      "rookguh": [
+        52,
+        11,
+        89
+      ],
+      "ingangen": [
+        {
+          "plek": [
+            47,
+            10,
+            87
+          ],
+          "richting": [
+            0,
+            1
+          ]
+        }
+      ],
+      "afstand": 25
+    }
+  ],
+  "kamp_rookguh": [
+    2,
+    2,
+    9
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/ringsausuman_mikarad"
+    },
+    "facing=east": {
+      "model": "guhs:block/ringsausuman_mikarad",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/ringsausuman_mikarad",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/ringsausuman_mikarad",
+      "y": 270
+    }
+  }
+}

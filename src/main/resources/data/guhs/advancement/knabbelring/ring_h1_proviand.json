@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhbraadworst"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_h1_proviand.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_h1_proviand.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gekregen"
+}

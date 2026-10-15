@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "guhs:block/fossielmijn_puin"
+    },
+    "axis=x": {
+      "model": "guhs:block/fossielmijn_puin",
+      "y": 90
+    }
+  }
+}

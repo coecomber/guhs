@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "stam=true": {
+      "model": "guhs:block/campingmarkt_hakblok"
+    },
+    "stam=false": {
+      "model": "guhs:block/campingmarkt_hakblok_leeg"
+    }
+  }
+}

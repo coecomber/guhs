@@ -75,12 +75,12 @@ import nl.juiced.guhs.registry.ModItems;
  */
 public class KlusjesGameTests {
     private static final String TUIN = "klusjes_test_tuin";
-    private static final BlockPos HUISJE = new BlockPos(11, 2, 11);
+    public static final BlockPos HUISJE = new BlockPos(11, 2, 11);
     /** Right next to the huisje (east side). */
-    private static final BlockPos KIST = new BlockPos(12, 2, 11);
+    public static final BlockPos KIST = new BlockPos(12, 2, 11);
 
     @SuppressWarnings("removal")
-    static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
+    public static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
         ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
@@ -89,7 +89,7 @@ public class KlusjesGameTests {
         return p;
     }
 
-    static void weg(GameTestHelper helper, Huisje h, ServerPlayer... players) {
+    public static void weg(GameTestHelper helper, Huisje h, ServerPlayer... players) {
         HuisjeGoal.TEST_DAGDEEL.remove(h.pos());
         KlusGebied.TEST_GRENS.remove(h.pos());
         for (ServerPlayer p : players) {
@@ -97,7 +97,7 @@ public class KlusjesGameTests {
         }
     }
 
-    static Huisje huisje(GameTestHelper helper, ServerPlayer owner) {
+    public static Huisje huisje(GameTestHelper helper, ServerPlayer owner) {
         Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(HUISJE), Direction.SOUTH, HuisjeMaat.KLEIN, owner.getUUID());
         HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.DAG);
         KlusGebied.TEST_GRENS.put(h.pos(), helper.getBounds());   // (only chores inside this test, not in the neighbours')
@@ -105,14 +105,14 @@ public class KlusjesGameTests {
     }
 
     /** A tamed guh that moves in and only does this one chore (and never waits long between two tries). */
-    static GuhEntity bewoner(GameTestHelper helper, Huisje h, ServerPlayer owner, BlockPos at, String klus) {
+    public static GuhEntity bewoner(GameTestHelper helper, Huisje h, ServerPlayer owner, BlockPos at, String klus) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), at);
         guh.tame(owner);
         alleen(helper, h, guh, klus);
         return guh;
     }
 
-    static void alleen(GameTestHelper helper, Huisje h, Mob mob, String klus) {
+    public static void alleen(GameTestHelper helper, Huisje h, Mob mob, String klus) {
         helper.assertTrue(Huisjes.trekIn(h, mob), "moves in");
         for (Klus k : Klusjes.alle()) {
             h.zetKlus(Band.id(mob), k.id(), k.id().equals(klus));
@@ -120,12 +120,12 @@ public class KlusjesGameTests {
         helper.onEachTick(() -> mob.getPersistentData().remove("guhs_huisje_klus"));
     }
 
-    static ChestBlockEntity kist(GameTestHelper helper) {
+    public static ChestBlockEntity kist(GameTestHelper helper) {
         helper.setBlock(KIST, Blocks.CHEST);
         return (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(KIST));
     }
 
-    static int telKist(ChestBlockEntity kist, java.util.function.Predicate<ItemStack> wat) {
+    public static int telKist(ChestBlockEntity kist, java.util.function.Predicate<ItemStack> wat) {
         int n = 0;
         for (int i = 0; i < kist.getContainerSize(); i++) {
             ItemStack s = kist.getItem(i);
@@ -137,7 +137,7 @@ public class KlusjesGameTests {
     }
 
     /** Where it is and what it does (for the failure messages). */
-    static String staat(GameTestHelper helper, Mob mob) {
+    public static String staat(GameTestHelper helper, Mob mob) {
         String taak = "-";
         for (var w : mob.goalSelector.getAvailableGoals()) {
             if (w.getGoal() instanceof HuisjeGoal g) {
@@ -256,6 +256,10 @@ public class KlusjesGameTests {
         helper.setBlock(bank, ModBlocks.BANK_GUH.get());
         BankGuhBlockEntity be = (BankGuhBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(bank));
         ServerLevel level = helper.getLevel();
+        // bbq2: the bank is full of dirt (the cap) but for five: only five of the chest's dirt can be sorted, the rest stays
+        int cap = nl.juiced.guhs.storage.BankStorage.CAP;
+        be.getStorage().insert(new ItemStack(Items.DIRT), cap - 5);
+        kist.setItem(1, new ItemStack(Items.DIRT, 12));
         for (int i = 0; i < 3; i++) {
             Vec3 v = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(14 + i, 2, 16)));
             ItemEntity item = new ItemEntity(level, v.x, v.y, v.z, new ItemStack(Items.APPLE, 2));
@@ -268,7 +272,22 @@ public class KlusjesGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, h.gebied()).isEmpty(), "nothing lies around any more" + staat(helper, guh));
             helper.assertTrue(be.getStorage().count(new ItemStack(Items.APPLE)) == 6, "the apples are sorted into the Bank Guh");
-            helper.assertTrue(be.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 10 && kist.isEmpty(), "the chest is sorted into the Bank Guh");
+            helper.assertTrue(be.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 10 && telKist(kist, s -> s.is(Items.COBBLESTONE)) == 0,
+                    "the chest is sorted into the Bank Guh");
+            helper.assertTrue(be.getStorage().count(new ItemStack(Items.DIRT)) == cap && telKist(kist, s -> s.is(Items.DIRT)) == 7,
+                    "the bank took the five dirt it had room for, the other seven stay in the chest: " + be.getStorage().count(new ItemStack(Items.DIRT))
+                            + " / " + telKist(kist, s -> s.is(Items.DIRT)));
+            helper.assertTrue(!OpruimenKlus.heeftSorteerbaars(level, h, helper.absolutePos(KIST)), "nothing left that the bank has room for");
+            helper.assertTrue(nl.juiced.guhs.feature.huisje.HuisjeOpslag.bankRuimte(level, h, new ItemStack(Items.DIRT)) == 0, "the bank is full of dirt");
+            helper.assertTrue(Voorraad.past(level, h, new ItemStack(Items.DIRT, 64)), "past: the chest still has room for dirt");
+            for (int i = 0; i < kist.getContainerSize(); i++) {
+                if (kist.getItem(i).isEmpty()) {
+                    kist.setItem(i, new ItemStack(Items.STONE, 64));
+                }
+            }
+            helper.assertTrue(!Voorraad.past(level, h, new ItemStack(Items.DIRT, 64)) && Voorraad.past(level, h, new ItemStack(Items.DIRT, 57))
+                    && Voorraad.past(level, h, new ItemStack(Items.GRAVEL, 64)),
+                    "past: bank full of dirt and the chest has room for 57 only; gravel still fits in the bank");
             helper.assertTrue(guh.getHealth() >= leven, "(nobody got hurt)");
             weg(helper, h, p);
         });

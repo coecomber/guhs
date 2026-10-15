@@ -86,7 +86,8 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
         BlockState below = level.getBlockState(pos.below());
         boolean ground = below.is(KaasmoerasFeature.MODDERIG_KAASGRAS.get()) || below.is(KaasmoerasFeature.KAASMODDER.get())
                 || below.is(BlockTags.DIRT) || below.is(BlockTags.ANIMALS_SPAWNABLE_ON);
-        return ground && (EntitySpawnReason.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8);
+        return ground && (EntitySpawnReason.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8)
+                && nl.juiced.guhs.feature.bio.dieren.KikkerBlad.spawnMag(level, spawnType, pos);   // biomes3: by the lake only near water, a few together
     }
 
     @Override
@@ -138,6 +139,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0f));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        nl.juiced.guhs.feature.bio.dieren.KikkerBlad.doelen(this, this.goalSelector);   // biomes3: lily pads (only in the three new biomes)
     }
 
     @Override
@@ -286,7 +288,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
 
     @Override
     public int getAmbientSoundInterval() {
-        return 160;
+        return nl.juiced.guhs.feature.bio.dieren.KikkerBlad.kwaakInterval(this, 160);   // biomes3: an evening chorus by the lake (160 everywhere else)
     }
 
     @Override

@@ -1,0 +1,108 @@
+{
+  "textures": {
+    "particle": "guhs:block/disco_dynamo_lamp",
+    "lamp": "guhs:block/disco_dynamo_lamp"
+  },
+  "elements": [
+    {
+      "from": [
+        9,
+        4.02,
+        9
+      ],
+      "to": [
+        15,
+        4.02,
+        15
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "#lamp",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        4.02,
+        9
+      ],
+      "to": [
+        7,
+        4.02,
+        15
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "#lamp",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 1
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        4.02,
+        1
+      ],
+      "to": [
+        15,
+        4.02,
+        7
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "#lamp",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 2
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        4.02,
+        1
+      ],
+      "to": [
+        7,
+        4.02,
+        7
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "#lamp",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 3
+        }
+      }
+    }
+  ]
+}

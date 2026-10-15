@@ -52,7 +52,20 @@
         "maxCount": 2
       }
     ],
-    "creature": [],
+    "creature": [
+      {
+        "type": "guhs:sausloper",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "guhs:sausblubje",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
     "ambient": [],
     "axolotls": [],
     "underground_water_creature": [],

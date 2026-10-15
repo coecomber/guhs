@@ -1,0 +1,35 @@
+{
+  "wereld": "DUEL",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          37,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 7,
+      "onder": -4,
+      "boven": 13
+    }
+  ],
+  "uitgang": [
+    -1,
+    0,
+    0
+  ],
+  "ingang": [
+    -1,
+    0,
+    0
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/weeb_loket"
+    },
+    "facing=east": {
+      "model": "guhs:block/weeb_loket",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/weeb_loket",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/weeb_loket",
+      "y": 270
+    }
+  }
+}

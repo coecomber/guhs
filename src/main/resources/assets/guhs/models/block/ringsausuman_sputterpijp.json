@@ -1,0 +1,137 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "pijp": "guhs:block/ringsausuman_sputterpijp",
+    "gat": "guhs:block/ringsausuman_ringenbakker_boven",
+    "particle": "guhs:block/ringsausuman_sputterpijp"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4,
+            11,
+            16
+          ],
+          "texture": "#pijp"
+        },
+        "south": {
+          "uv": [
+            5,
+            4,
+            11,
+            16
+          ],
+          "texture": "#pijp"
+        },
+        "west": {
+          "uv": [
+            5,
+            4,
+            11,
+            16
+          ],
+          "texture": "#pijp"
+        },
+        "east": {
+          "uv": [
+            5,
+            4,
+            11,
+            16
+          ],
+          "texture": "#pijp"
+        },
+        "down": {
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ],
+          "texture": "#pijp"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        12,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#pijp"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#pijp"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#pijp"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            4
+          ],
+          "texture": "#pijp"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#pijp"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#gat"
+        }
+      }
+    }
+  ]
+}

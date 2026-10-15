@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhriobeloning_pijp"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhrio.guhrio_beloning_pijp.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhrio.guhrio_beloning_pijp.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guhrio/root"
+}

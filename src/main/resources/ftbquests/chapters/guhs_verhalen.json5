@@ -2,8 +2,8 @@
   default_hide_dependency_lines: false,
   default_quest_shape: "circle",
   filename: "guhs_verhalen",
-  group: "475548DB0F6F37EB",
-  guhs_chapter_version: 30,
+  group: "4755489B04766E01",
+  guhs_chapter_version: 37,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_verhalen.png",
@@ -126,8 +126,32 @@
         "Komt na: Het superkompas (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548A45485B089",
+      image: "guhs:textures/ftbquests/guhs_verhalen/kop_extra_snuffel.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 31.131249999999994,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548429C10754C",
+      image: "guhs:textures/ftbquests/guhs_verhalen/kop_extra_snuffel_dorp.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 31.131249999999994,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
-  order_index: 11,
+  order_index: 13,
   progression_mode: "flexible",
   quest_links: [
     {
@@ -140,7 +164,7 @@
   ],
   quests: [
     {
-      id: "47554866B1836808",
+      id: "475548976F9E59F7",
       icon: {
         components: {
           "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_verhalen.png",
@@ -149,13 +173,17 @@
       },
       tasks: [
         {
-          type: "checkmark",
-          id: "4755487A12DBD3D7",
+          type: "dimension",
+          dimension: "guhs:guhmension",
+          id: "4755487A079F405B",
+          icon: {
+            id: "guhs:block_of_kaasknabbels",
+          },
         },
       ],
       rewards: [
         {
-          id: "47554838AC453C99",
+          id: "475548F22D59387E",
           type: "item",
           item: {
             count: 1,
@@ -3401,6 +3429,612 @@
       x: 11.5,
       y: 28.949999999999996,
       shape: "rsquare",
+    },
+    {
+      id: "475548F0FC447BA7",
+      icon: {
+        id: "minecraft:lantern",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_1",
+          id: "47554816D000DF7E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F3D8C0318B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "47554840805681BB",
+      icon: {
+        id: "minecraft:oak_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_2",
+          id: "475548D60394F896",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554858E4F27CE8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548F335AD3977",
+      icon: {
+        id: "minecraft:sand",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_3",
+          id: "475548868CC9A5F2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A0A4A3E4A9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548661F0C965A",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_4",
+          id: "4755487269551071",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E4E4C5AAE7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548924BAE3631",
+      icon: {
+        id: "minecraft:bone",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_5",
+          id: "47554807355A761C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EB6D5A2FD4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755484ABFAF6563",
+      icon: {
+        id: "minecraft:bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_6",
+          id: "4755481221A792BB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CC50C72063",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755488745704E72",
+      icon: {
+        id: "minecraft:oak_sapling",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_7",
+          id: "475548F930717577",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483DF0BEEAB9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548189E89A494",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_8",
+          id: "47554866381948DE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E62F1A9182",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 34.412499999999994,
+    },
+    {
+      id: "47554894D344E0BD",
+      icon: {
+        id: "guhs:guhstation",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffeleiland_stap_9",
+          id: "4755483DEF271987",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548750305E8A1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548BC6D8543D0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 34.412499999999994,
+      shape: "gear",
+    },
+    {
+      id: "4755481D5724F8E0",
+      icon: {
+        id: "minecraft:bone",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_eerste_geur",
+          id: "475548AEDE8B4ADC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FAFE77AA18",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 11.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548C4F8FCAB3B",
+      icon: {
+        id: "minecraft:moss_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_maatje",
+          id: "4755482F2EC48924",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554873999D54A6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755487B4B1EBC52",
+      icon: {
+        id: "minecraft:bread",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_bakker",
+          id: "475548C62DBF64E3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ECFBB275D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 14.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755485AE67999A0",
+      icon: {
+        id: "minecraft:fishing_rod",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_visser",
+          id: "47554826A8A468FF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A28E98DCC3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 16.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755484143B2AFD0",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_juf",
+          id: "475548E27A6D1C66",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484E147F260D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 17.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548D392880ED4",
+      icon: {
+        id: "minecraft:purple_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_oma",
+          id: "475548F649CC0C00",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554811A7811179",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 19.0,
+      y: 32.912499999999994,
+    },
+    {
+      id: "475548A933E77E3D",
+      icon: {
+        id: "minecraft:bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_tuinder",
+          id: "4755485A654CF5B1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E521736EC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 32.912499999999994,
+    },
+    {
+      id: "4755484C0C6D6655",
+      icon: {
+        id: "minecraft:slime_ball",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_daad_pup",
+          id: "4755489CEEC5DFD8",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488CB8F0F85D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755487151437CA9",
+      icon: {
+        id: "minecraft:oak_sapling",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_boom",
+          id: "475548EECEE2A7A4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554881C547370A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755488A9783254C",
+      icon: {
+        id: "minecraft:cake",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_alle",
+          id: "47554888B9E32443",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554885D15B60C5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554805862BEBE4",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 17.5,
+      y: 34.412499999999994,
+      shape: "gear",
+    },
+    {
+      id: "47554829F0432F06",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_diploma",
+          id: "475548CC46434472",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C5947E747A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 34.412499999999994,
+    },
+    {
+      id: "475548887B999389",
+      icon: {
+        id: "minecraft:red_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_dorp_versperring",
+          id: "475548A0F64C75DB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548663F856216",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 14.5,
+      y: 34.412499999999994,
+    },
+    {
+      id: "4755488100662CF9",
+      icon: {
+        id: "guhs:guhstation",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/snuffel_guhstation",
+          id: "4755488486945F1E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481768C3C25D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 34.412499999999994,
     },
   ],
 }

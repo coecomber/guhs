@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "guhs:bliksemsmidse_wolk"
+  },
+  "result": {
+    "id": "guhs:bliksemsmidse_wolk_plaat",
+    "count": 6
+  }
+}

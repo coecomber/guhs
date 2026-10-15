@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:guhbloesem_leaves"
+  ],
+  "result": {
+    "id": "guhs:drijvende_bloesemblaadjes",
+    "count": 4
+  }
+}

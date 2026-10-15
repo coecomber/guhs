@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:campingmarkt_weegschaal"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.camping_markt_ruilmarkt.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.camping_markt_ruilmarkt.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "GKG",
+    "IGI"
+  ],
+  "key": {
+    "I": "guhs:roosterijzer_tralies",
+    "G": "minecraft:glass",
+    "K": "guhs:gloeikool"
+  },
+  "result": {
+    "id": "guhs:torenpeper_vuurtorenlamp"
+  }
+}

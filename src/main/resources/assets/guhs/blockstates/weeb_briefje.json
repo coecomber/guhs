@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,aan=true": {
+      "model": "guhs:block/weeb_briefje_aan"
+    },
+    "facing=east,aan=true": {
+      "model": "guhs:block/weeb_briefje_aan",
+      "y": 90
+    },
+    "facing=south,aan=true": {
+      "model": "guhs:block/weeb_briefje_aan",
+      "y": 180
+    },
+    "facing=west,aan=true": {
+      "model": "guhs:block/weeb_briefje_aan",
+      "y": 270
+    },
+    "facing=north,aan=false": {
+      "model": "guhs:block/weeb_briefje_uit"
+    },
+    "facing=east,aan=false": {
+      "model": "guhs:block/weeb_briefje_uit",
+      "y": 90
+    },
+    "facing=south,aan=false": {
+      "model": "guhs:block/weeb_briefje_uit",
+      "y": 180
+    },
+    "facing=west,aan=false": {
+      "model": "guhs:block/weeb_briefje_uit",
+      "y": 270
+    }
+  }
+}

@@ -62,6 +62,8 @@ import nl.juiced.guhs.feature.verhaal.VerhaalGuhs;
  * </ul>
  */
 public final class BaltoFeature {
+    /** 1.4.2: the repair of the Nomguhs built before (assets/guhs/herstel/nomguh_142.json, written by tools/features/balto.py). */
+    public static final String NOMGUH_HERSTEL = "nomguh_142";
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Guhs.MODID);
@@ -155,6 +157,7 @@ public final class BaltoFeature {
         NeoForge.EVENT_BUS.register(BaltoEvents.class);
         NeoForge.EVENT_BUS.register(NomguhProtection.class);
         Protected.add(NomguhProtection::protectedAt);
+        nl.juiced.guhs.feature.wereld.Reparaties.registreer(NOMGUH_HERSTEL);   // 1.4.2: the hole in the boat's deck of the Nomguhs built before
         for (GuhClothes c : KLEDING) {
             KledingBronnen.bron(c, BRON);
         }

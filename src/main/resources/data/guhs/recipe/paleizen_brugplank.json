@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "SKS"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "minecraft:string",
+    "K": "guhs:paleizen_recept_brug"
+  },
+  "result": {
+    "id": "guhs:paleizen_brugplank",
+    "count": 6
+  }
+}

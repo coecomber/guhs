@@ -1,0 +1,97 @@
+# biomes3 slice bouw-meer in a real generated world: a botenhuisje (from the land, from the jetty's end, the visser-guh, the
+# roeibootje in its berth, the lantern at dusk) and a picknickeilandje (the rug, the hanami guhs by day and asleep at night,
+# the lanterns in the tree), then the decorations side by side.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_bouw_meer.txt -PautocheckTimeout=40
+# (plek lokaal x y z = a spot of the structure's template: tools/features/bio_bouw_meer_bouw.py)
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section het botenhuisje
+ga botenhuisje
+# from the shore, a few blocks behind the landing
+plek lokaal 8 10 25
+tpplek 0 1.5 0
+plek lokaal 8 10 12
+unlock
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+hier
+shot botenhuisje_van_de_oever
+# from the lake, looking back at the jetty and the berth
+plek lokaal 2 10 -6
+tpplek 0 1.5 0
+plek lokaal 8 9 12
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot botenhuisje_van_het_meer
+# the visser-guh on the jetty's end, the lantern beside him
+plek lokaal 6 9 7
+tpplek 0 1.2 0
+plek lokaal 4 9 4
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 60
+shot botenhuisje_visserguh
+# the roeibootje in its berth (the mooring lays it ready when a player is near)
+/guhs bio bouw-meer zorg
+plek lokaal 5 9 15
+tpplek 0 1.2 0
+plek lokaal 8 8 15
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 60
+shot botenhuisje_roeibootje
+# dusk: the lantern lights
+/time set 12600
+/guhs bio bouw-meer zorg
+plek lokaal 6 9 9
+tpplek 0 1.2 0
+plek lokaal 2 10 4
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 120
+shot botenhuisje_lantaarn_avond
+
+section het picknickeilandje
+/time set noon
+ga picknickeilandje
+/guhs bio bouw-meer zorg
+plek lokaal 6 3 10
+tpplek 0 1.5 0
+plek lokaal 6 2 4
+unlock
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+hier
+shot picknick_dag
+plek lokaal 6 2 7
+tpplek 0 1.2 0
+plek lokaal 6 8 3
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 60
+shot picknick_lampionnen_in_de_boom
+/time set 14000
+/guhs bio bouw-meer zorg
+plek lokaal 10 3 9
+tpplek 0 1.5 0
+plek lokaal 6 1 5
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 160
+shot picknick_nacht_slapen
+
+section de drie spulletjes
+/time set noon
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+wait 20
+/setblock ~-2 ~ ~3 guhs:botenhuisje_steigerlantaarn[lit=true]
+/setblock ~0 ~ ~3 guhs:botenhuisje_hengelstandaard[facing=south]
+/setblock ~2 ~ ~3 guhs:botenhuisje_koiwindzak[facing=east]
+/give @s guhs:botenhuisje_steigerlantaarn 2
+/give @s guhs:botenhuisje_hengelstandaard
+/give @s guhs:botenhuisje_koiwindzak
+look 0 10
+waitrender 100
+shot bouw_meer_spulletjes

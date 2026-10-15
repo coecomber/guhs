@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "guhs:block/guh_dakpan_roze",
+    "side": "guhs:block/guh_dakpan_roze",
+    "top": "guhs:block/guh_dakpan_roze"
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/roosterijzer",
+    "ijzer": "guhs:block/roosterijzer",
+    "steen": "guhs:block/gebeitelde_houtskoolsteen_stenen",
+    "knop": "guhs:block/ringh3_hendel_knop"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        2,
+        0
+      ],
+      "to": [
+        12,
+        14,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steen"
+        },
+        "south": {
+          "texture": "#steen"
+        },
+        "east": {
+          "texture": "#steen"
+        },
+        "west": {
+          "texture": "#steen"
+        },
+        "up": {
+          "texture": "#steen"
+        },
+        "down": {
+          "texture": "#steen"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        3,
+        1.5
+      ],
+      "to": [
+        11,
+        13,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        7,
+        2.5
+      ],
+      "to": [
+        9.5,
+        9,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.25,
+        2.5,
+        3
+      ],
+      "to": [
+        8.75,
+        8,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.25,
+        2.5,
+        4.5
+      ],
+      "to": [
+        8.75,
+        4,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        1.75,
+        8
+      ],
+      "to": [
+        9.5,
+        4.75,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#knop"
+        },
+        "south": {
+          "texture": "#knop"
+        },
+        "east": {
+          "texture": "#knop"
+        },
+        "west": {
+          "texture": "#knop"
+        },
+        "up": {
+          "texture": "#knop"
+        },
+        "down": {
+          "texture": "#knop"
+        }
+      }
+    }
+  ]
+}

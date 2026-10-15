@@ -1,0 +1,702 @@
+package nl.juiced.guhs.feature.ringh6;
+
+import java.util.List;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import nl.juiced.guhs.entity.GuhEntity;
+import nl.juiced.guhs.feature.ring.Gaven;
+import nl.juiced.guhs.feature.ring.Negen;
+import nl.juiced.guhs.feature.ring.Ring;
+import nl.juiced.guhs.feature.ring.RingBeloning;
+import nl.juiced.guhs.feature.ring.RingFeature;
+import nl.juiced.guhs.feature.ring.Sam;
+import nl.juiced.guhs.feature.ring.Smikagol;
+import nl.juiced.guhs.feature.ring.SmikagolEntity;
+import nl.juiced.guhs.feature.ring.Zicht;
+import nl.juiced.guhs.feature.verhaal.Cutscene;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
+import nl.juiced.guhs.feature.verhaal.Doel;
+import nl.juiced.guhs.feature.verhaal.Rustpunten;
+import nl.juiced.guhs.feature.verhaal.Verhaallijn;
+import nl.juiced.guhs.feature.verhaal.Verteller;
+import nl.juiced.guhs.gametest.GuhMockPlayer;
+import nl.juiced.guhs.gametest.GuhTest;
+import nl.juiced.guhs.quest.GuhQuests;
+
+/**
+ * bbq2 (ring-h6): chapter 6, server side, on the small test mountain (template ringh6_test_berg: the same named spots as the
+ * real Frituurberg on a floor of 25 x 17 with the camp in a pit two blocks lower, tools/features/ring_h6_bouw.py test_berg). Mock players get no packets and are not
+ * ticked by the server: the tests call the chapter's once-a-second upkeep themselves and post the player tick event (that is
+ * what ends a cutscene a mock player "watches").
+ */
+public final class RingH6GameTests {
+    private static final String BERG = "ringh6_test_berg", BATCH = "ringh6";
+
+    private static ServerPlayer speler(GameTestHelper helper, Berg.Kopie berg, String plek) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        zet(p, berg, plek);
+        Ring.OVERAL = true;
+        Negen.OVERAL = true;
+        return p;
+    }
+
+    private static void zet(ServerPlayer p, Berg.Kopie berg, String plek) {
+        Vec3 daar = berg.midden(plek);
+        p.snapTo(daar.x, daar.y, daar.z);
+        p.setOnGround(true);
+        p.setDeltaMovement(Vec3.ZERO);
+    }
+
+    /** The test mountain of this test: the template's (0, 0, 0) is the test's (0, 1, 0). */
+    private static Berg.Kopie berg(GameTestHelper helper) {
+        Berg.wisTest(helper.getLevel());
+        return Berg.zetTest(helper.getLevel(), Berg.test(), helper.absolutePos(new BlockPos(0, 1, 0)));
+    }
+
+    /** The story up to this chapter is done, the ring and the gifts are in the pockets, the narrator card was read. */
+    private static void opStap(ServerPlayer p, int stap) {
+        Ring.lijn(1).begin(p);
+        for (int n = 1; n <= 5; n++) {
+            Verhaallijn l = Ring.lijn(n);
+            l.zet(p, l.stappen());
+        }
+        Ring.geef(p);
+        Gaven.geef(p);
+        GuhQuests.saved(p).putBoolean("guhs_kaart_" + Klim.KAART, true);
+        RingH6Feature.LIJN.begin(p);
+        RingH6Feature.LIJN.zet(p, stap);
+    }
+
+    private static void weg(GameTestHelper helper, ServerPlayer... ps) {
+        for (ServerPlayer p : ps) {
+            Ring.wis(p);
+            Klim.vergeet(p.getUUID());
+            Kolen.vergeet(p.getUUID());
+            Berg.vergeet(p.getUUID());
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        }
+        Berg.wisTest(helper.getLevel());
+        Thuis.testLevel = null;
+        Thuis.testPlek = null;
+    }
+
+    private static void tik(ServerPlayer p) {
+        NeoForge.EVENT_BUS.post(new PlayerTickEvent.Post(p));
+    }
+
+    /** The mountain's spots (both files), a turned copy, the questline's shape, the scenes and the card. */
+    @GuhTest(template = BERG, batch = BATCH)
+    public static void ringh6BergEnLijn(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (Berg.Gegevens g : List.of(Berg.echt(), Berg.test())) {
+            for (String plek : List.of("kamp", "kamp_vuur", "spleet", "rand", "frituur")) {
+                helper.assertTrue(g.plekken().containsKey(plek), "spot " + plek);
+            }
+            for (int n = 1; n <= 3; n++) {
+                for (String soort : List.of("richel", "vuur", "slot", "kooi", "haak", "start", "boven")) {
+                    helper.assertTrue(g.plekken().containsKey(soort + "_" + n), "spot " + soort + "_" + n);
+                }
+            }
+            helper.assertTrue(g.routes().getOrDefault("sam", List.of()).size() >= 4, "Sam-guh's route");
+        }
+        Berg.Gegevens echt = Berg.echt();
+        helper.assertTrue(echt.plek("rand").getY() > echt.plek("richel_3").getY() && echt.plek("richel_3").getY() > echt.plek("richel_2").getY()
+                && echt.plek("richel_2").getY() > echt.plek("richel_1").getY() && echt.plek("richel_1").getY() > echt.plek("kamp").getY(), "the climb goes up");
+        helper.assertTrue(echt.routes().get("sam").size() >= 12, "the real route is a road");
+        // a turned copy: a point of the template lies in the block the template's block lands in, whichever way it is turned
+        BlockPos anker = helper.absolutePos(new BlockPos(12, 2, 8));
+        for (Rotation draai : Rotation.values()) {
+            Berg.Kopie k = new Berg.Kopie(level, echt, anker, draai);
+            for (String plek : List.of("rand", "slot_2", "haak_3", "kamp")) {
+                BlockPos lokaal = echt.plek(plek);
+                BlockPos wereld = anker.offset(StructureTemplate.transform(lokaal.subtract(echt.anker()), Mirror.NONE, draai, BlockPos.ZERO));
+                helper.assertTrue(k.wereld(plek).equals(wereld), plek + " turned " + draai);
+                helper.assertTrue(BlockPos.containing(k.wereld(Vec3.atCenterOf(lokaal))).equals(wereld), "a point in " + plek + " turned " + draai);
+                helper.assertTrue(k.binnen(Vec3.atCenterOf(wereld), 0), plek + " lies in the box, turned " + draai);
+            }
+            helper.assertTrue(!k.binnen(Vec3.atCenterOf(k.wereld(new BlockPos(-9, 10, 48))), 4), "outside the box");
+        }
+        Berg.Kopie test = berg(helper);
+        helper.assertTrue(level.getBlockState(test.wereld("slot_2")).getBlock() instanceof KooislotBlock
+                && level.getBlockState(test.wereld("slot_2")).getValue(KooislotBlock.NR) == 2, "the test mountain has its locks");
+        helper.assertTrue(Berg.bij(level, test.wereld("kamp")) == test && Berg.bij(level, test.wereld("kamp").above(40)) == null, "found by a spot on it");
+        List<String> mis = Berg.controleer(test, false);
+        helper.assertTrue(mis.isEmpty(), "the test mountain has everything the story needs: " + mis);
+        level.setBlockAndUpdate(test.wereld("haak_2"), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+        helper.assertTrue(Berg.controleer(test, false).size() == 1 && Berg.controleer(test, true).size() == 2, "the check notices a missing hook (and Rookguhjes)");
+        // the questline, the scenes, the card
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        helper.assertTrue(lijn == Ring.lijn(6) && lijn.stappen() == 7 && "ring_h5".equals(lijn.na()) && lijn.doelregel(), "the questline of chapter 6");
+        helper.assertTrue(Finale.FRITUUR != null && Finale.FRITUUR.duur() > 1000 && Cutscene.van("ringh6_vlucht") == Finale.VLUCHT
+                && Cutscene.van("ringh6_feest") == Finale.FEEST, "the three scenes");
+        helper.assertTrue(Verteller.van(Klim.KAART) != null && Verteller.van(Klim.KAART).regels() == 4, "the narrator card");
+        Berg.wisTest(level);
+        helper.succeed();
+    }
+
+    /** The climb, step by step: the card, the camp, the cages in order, each player their own, the ring's weight. */
+    @GuhTest(template = BERG, batch = BATCH + "_klim", timeoutTicks = 300)
+    public static void ringh6KlimEnKooien(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "kamp"), vriend = speler(helper, berg, "kamp"), klaar = speler(helper, berg, "kamp");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        opStap(p, 0);
+        GuhQuests.saved(p).remove("guhs_kaart_" + Klim.KAART);
+        opStap(vriend, 0);
+        opStap(klaar, 7);
+        helper.assertTrue(lijn.klaar(klaar) && !lijn.klaar(p), "three players: one done, two at the start");
+        // the chapter opens with its card; then the camp
+        Klim.seconde(p);
+        helper.assertTrue(Cutscenes.bezig(p) && lijn.begonnen(p) && lijn.stap(p) == 0, "the narrator card shows first");
+        helper.onEachTick(() -> tik(p));
+        helper.runAfterDelay(50, () -> {
+            helper.assertTrue(Verteller.gezien(p, Klim.KAART) && !Cutscenes.bezig(p), "the card was read");
+            Klim.seconde(p);
+            helper.assertTrue(lijn.stap(p) == 1 && lijn.stap(vriend) == 0, "at the camp fire: step 1, for this player only");
+            GuhEntity sam = Sam.van(p);
+            SmikagolEntity smikagol = Smikagol.van(p);
+            helper.assertTrue(sam != null && smikagol != null && Zicht.magZien(p, smikagol) && !Zicht.magZien(vriend, smikagol), "Sam-guh and Smikagol are there");
+            Klim.seconde(p);
+            helper.assertTrue(Math.abs(Ring.zwaarte(p) - Klim.ZWAAR_VOET) < 0.01, "at the foot the ring is light: " + Ring.zwaarte(p));
+            // the cages: in order, only your own
+            BlockPos slot1 = berg.wereld("slot_1"), slot2 = berg.wereld("slot_2"), slot3 = berg.wereld("slot_3");
+            Klim.slot(p, slot2, 2);
+            helper.assertTrue(lijn.stap(p) == 1, "cage 2 before cage 1: locked");
+            Klim.slot(klaar, slot1, 1);
+            helper.assertTrue(lijn.stap(p) == 1 && lijn.stap(vriend) == 0, "somebody who is done opens nothing for anybody");
+            GekooideRookguhEntity gekooid = GekooideRookguhEntity.maak(level, berg.midden("kooi_1"), 1);
+            level.addFreshEntity(gekooid);
+            helper.assertTrue(Zicht.magZien(p, gekooid) && Zicht.magZien(vriend, gekooid) && !Zicht.magZien(klaar, gekooid), "the caged Rookguhje: for who still has to free it");
+            GekooideRookguhEntity thuis = GekooideRookguhEntity.thuis(level, berg.midden("kooi_2").add(0, 4, 0), 2);
+            level.addFreshEntity(thuis);
+            helper.assertTrue(thuis.isThuis() && Zicht.magZien(klaar, thuis) && !Zicht.magZien(p, thuis), "afterwards the Rookguhjes live there, for who is done");
+            thuis.discard();
+            Klim.slot(p, slot1, 1);
+            helper.assertTrue(lijn.stap(p) == 2 && lijn.stap(vriend) == 0, "the lock of cage 1: step 2");
+            helper.assertTrue(!Zicht.magZien(p, gekooid) && Zicht.magZien(vriend, gekooid), "gone for who freed it, still there for the friend");
+            List<GekooideRookguhEntity> vrij = level.getEntitiesOfClass(GekooideRookguhEntity.class, new AABB(slot1).inflate(6), GekooideRookguhEntity::isVrij);
+            helper.assertTrue(vrij.size() == 1 && p.getUUID().equals(Zicht.eigenaar(vrij.get(0))) && !vrij.get(0).shouldBeSaved(), "their own Rookguhje flies off");
+            Klim.slot(p, slot1, 1);
+            helper.assertTrue(lijn.stap(p) == 2, "a lock opens once");
+            // a friend walks to the camp by clicking the first lock straight away
+            Klim.slot(vriend, slot1, 1);
+            helper.assertTrue(lijn.stap(vriend) == 2 && lijn.stap(p) == 2, "the friend frees their own, later");
+            Klim.slot(p, slot3, 3);
+            helper.assertTrue(lijn.stap(p) == 2, "cage 3 waits for cage 2");
+            Klim.slot(p, slot2, 2);
+            Klim.slot(p, slot3, 3);
+            helper.assertTrue(lijn.stap(p) == 4, "all three free: Sam-guh's turn");
+            Klim.seconde(p);
+            helper.assertTrue(Ring.zwaarte(p) == 1.0, "the ring is as heavy as it gets");
+            // without a rope the chapter hands one out again
+            lijn.wis(vriend);
+            opStap(vriend, 2);
+            vriend.getInventory().clearContent();
+            Ring.geef(vriend);
+            Klim.seconde(vriend);
+            helper.assertTrue(Gaven.heeft(vriend, RingFeature.ELFENTOUW.get()), "a lost Elfentouw comes back on the rope stage");
+            gekooid.discard();
+            vrij.get(0).discard();
+            weg(helper, p, vriend, klaar);
+            helper.succeed();
+        });
+    }
+
+    /** A falling coal shoves and never hurts; nothing on the mountain hurts; a dip in the frituur puts back at the rest point. */
+    @GuhTest(template = BERG, batch = BATCH + "_kool", timeoutTicks = 300)
+    public static void ringh6KoolEnVeilig(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "start_1");
+        opStap(p, 1);
+        Klim.seconde(p);
+        helper.assertTrue(Berg.van(p) == berg, "the player is on the mountain");
+        float leven = p.getHealth();
+        // fire, the frituur and falls don't hurt here; off the mountain they do
+        p.hurtServer(level, level.damageSources().lava(), 4f);
+        p.hurtServer(level, level.damageSources().fall(), 6f);
+        p.hurtServer(level, level.damageSources().hotFloor(), 1f);
+        helper.assertTrue(p.getHealth() == leven, "no damage from fire, frituur or a fall on the mountain");
+        // back at the rest point after a dip
+        Vec3 rust = berg.midden("richel_1");
+        Rustpunten.zet(p, Ring.RUST, level.dimension(), rust, 0f);
+        Klim.red(p, berg, Klim.FRITUUR);
+        helper.assertTrue(p.position().distanceTo(rust) < 0.5 && p.getHealth() == leven && Ring.heeft(p), "fished out: at the rest point, unharmed, the ring still there");
+        // a visitor without a rest point here lands at the camp
+        ServerPlayer gast = speler(helper, berg, "rand");
+        Klim.seconde(gast);
+        Klim.red(gast, berg, Klim.FRITUUR);
+        helper.assertTrue(gast.position().distanceTo(berg.midden("kamp")) < 0.5, "a visitor is put at the camp");
+        // a coal
+        zet(p, berg, "start_1");
+        helper.assertTrue(Kolen.opDeFlank(p, berg), "on the flank coals fall");
+        zet(gast, berg, "kamp_vuur");
+        helper.assertTrue(!Kolen.opDeFlank(gast, berg), "at a Rustvuurtje no coals fall");
+        ValkoolEntity kool = Kolen.laatVallen(level, p.position(), p);
+        helper.assertTrue(kool != null && kool.getY() > p.getY() + 4, "a coal starts high above its target");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Kolen.geraaktAantal(p) == 1, "the coal reaches the player");
+            helper.assertTrue(kool.isRemoved(), "and is gone");
+            helper.assertTrue(p.getHealth() == leven && p.getRemainingFireTicks() <= 0, "a shove, no damage, no fire");
+            helper.assertTrue(p.getDeltaMovement().horizontalDistance() > 0.3, "shoved: " + p.getDeltaMovement());
+            Berg.wisTest(level);
+            p.hurtServer(level, level.damageSources().fall(), 2f);
+            helper.assertTrue(p.getHealth() < leven, "(off the mountain a fall hurts as always)");
+            weg(helper, p, gast);
+        });
+    }
+
+    /** Smikagol grabs at the ring: a shove, nothing more; a flash of the Lichtflesje stops him for a while. */
+    @GuhTest(template = BERG, batch = BATCH + "_smikagol")
+    public static void ringh6Smikagol(GameTestHelper helper) {
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "start_1");
+        opStap(p, 2);
+        Klim.seconde(p);
+        SmikagolEntity s = Smikagol.van(p);
+        helper.assertTrue(s != null, "Smikagol is called on the rope stage");
+        Vec3 naast = p.position().add(1.2, 0, 0);
+        s.snapTo(naast.x, naast.y, naast.z, 0f, 0f);
+        float leven = p.getHealth();
+        Klim.zetGraaiNu(p, true);
+        Klim.tik(p);
+        helper.assertTrue(p.getDeltaMovement().x < -0.3 && p.getHealth() == leven && Ring.heeft(p), "the grab: a shove away from him, the ring stays");
+        // far away he misses
+        p.setDeltaMovement(Vec3.ZERO);
+        zet(p, berg, "start_3");
+        Klim.zetGraaiNu(p, true);
+        Klim.tik(p);
+        helper.assertTrue(p.getDeltaMovement().lengthSqr() < 1e-6, "out of reach: he misses");
+        // the Lichtflesje
+        Vec3 bij = p.position().add(1.2, 0, 0);
+        s.snapTo(bij.x, bij.y, bij.z, 0f, 0f);
+        helper.assertTrue(!Klim.verblind(p), "(not blinded yet)");
+        Klim.licht(p, p.position());
+        helper.assertTrue(Klim.verblind(p), "a flash near him: blinded");
+        Klim.seconde(p);
+        Klim.tik(p);
+        helper.assertTrue(p.getDeltaMovement().lengthSqr() < 1e-6, "blinded: no grabbing");
+        weg(helper, p);
+        helper.succeed();
+    }
+
+    /** Step 4: a click on Sam-guh and he carries his player to the Frituurspleet. */
+    @GuhTest(template = BERG, batch = BATCH + "_sam", timeoutTicks = 900)
+    public static void ringh6SamDraagt(GameTestHelper helper) {
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "richel_1");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        opStap(p, 2);
+        Sam.roep(p);
+        GuhEntity sam = Sam.van(p);
+        helper.assertTrue(sam != null, "Sam-guh walks along");
+        Klim.seconde(p);
+        // the ring is heavy: on the rope stage he does not carry, and does not walk off towards the middle of the mountain
+        Ring.zetZwaarte(p, 0.9, 200);
+        helper.assertTrue(Klim.samKlik(sam, p, InteractionHand.MAIN_HAND) == InteractionResult.SUCCESS && p.getVehicle() == null, "not on the rope stage");
+        Ring.zetZwaarte(p, 0.1, 200);
+        helper.assertTrue(Klim.samKlik(sam, p, InteractionHand.MAIN_HAND) == InteractionResult.PASS, "a light ring: his usual talk (ring-kern's)");
+        lijn.zet(p, 4);
+        Klim.seconde(p);
+        helper.assertTrue(Klim.samKlik(sam, p, InteractionHand.MAIN_HAND) == InteractionResult.SUCCESS && p.getVehicle() == sam && Sam.doet(sam).equals(Sam.DRAAGT),
+                "step 4: on his back");
+        helper.assertTrue(lijn.stap(p) == 4, "not there yet");
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            if (++tel[0] % 20 == 0 && !p.isRemoved()) {
+                Klim.seconde(p);                              // (the run-up when a mob's path finder gives up is part of the ride)
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.stap(p) == 5, "Sam-guh arrives at the cleft: step 5");
+            helper.assertTrue(p.getVehicle() == null, "and puts his player down");
+            helper.assertTrue(sam.position().distanceTo(berg.midden("rand")) < 4, "at the balcony");
+            weg(helper, p);
+        });
+    }
+
+    /** The end: the ring is fried and gone, a piece to keep, the flight home, the feast, and ring-kern's rewards. */
+    @GuhTest(template = BERG, batch = BATCH + "_einde", timeoutTicks = 600)
+    public static void ringh6FinaleEnFeest(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "spleet");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        opStap(p, 4);
+        Thuis.testLevel = level;
+        Thuis.testPlek = berg.wereld("kamp");
+        // walking to the cleft yourself counts too
+        Klim.seconde(p);
+        helper.assertTrue(lijn.stap(p) == 5, "at the cleft on foot: step 5");
+        Klim.seconde(p);
+        helper.assertTrue(!Cutscenes.bezig(p) && Ring.heeft(p), "not on the balcony yet: nothing happens");
+        zet(p, berg, "rand");
+        Doel doel = lijn.doel(p);
+        helper.assertTrue(doel != null && Berg.STRUCTUUR.equals(doel.structuur()), "the goal is the mountain");
+        Klim.seconde(p);
+        helper.assertTrue(Cutscenes.bezig(p), "on the balcony: the finale plays");
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            tik(p);
+            p.setOnGround(true);
+            if (++tel[0] % 5 == 0) {
+                Klim.seconde(p);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.vlag(p, Finale.GEFRITUURD) && !Ring.heeft(p) && !Ring.kreeg(p), "the ring is fried and gone for good");
+            helper.assertTrue(GuhQuests.count(p, RingH6Feature.STUKJE.get()) == 1, "a piece of the fried ring, once");
+            helper.assertTrue(lijn.klaar(p), "the flight, the feast: the questline is done (step " + lijn.stap(p) + ")");
+            helper.assertTrue(Thuis.thuis(p) != null && Thuis.thuis(p).equals(Thuis.testPlek), "home was remembered");
+            helper.assertTrue(Cutscenes.gezien(p, "ringh6_frituur") && Cutscenes.gezien(p, "ringh6_vlucht") && Cutscenes.gezien(p, "ringh6_feest"), "all three scenes seen");
+            helper.assertTrue(Ring.klaar(p) && RingBeloning.gegeven(p) && Smikagol.heeftMaatje(p), "ring-kern gave the rewards of the story");
+            if (Smikagol.maatje(p) != null) {
+                Smikagol.maatje(p).discard();
+            }
+            weg(helper, p);
+        });
+    }
+
+    /**
+     * PHASE3 R15: the way to the mountain goes across the frituur sea. The ring bearer whose chapter this is is not burnt
+     * within the approach (where the ring gets heavy), on the mountain nobody is; a visitor on the way gets nothing special,
+     * and far from the mountain fire is fire.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_nader")
+    public static void ringh6VeiligOpWegNaarDeBerg(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        BlockPos nul = helper.absolutePos(BlockPos.ZERO);
+        // (the mountain's wall as its sluier has it; the players stand OFF the test mountain: beside its box)
+        nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Berg.STRUCTUUR);
+        nl.juiced.guhs.feature.verhaal.Sluiers.zetPlek(level, Berg.STRUCTUUR,
+                new net.minecraft.world.level.levelgen.structure.BoundingBox(nul.getX() + 200, nul.getY(), nul.getZ() + 200, nul.getX() + 230, nul.getY() + 30, nul.getZ() + 230));
+        ServerPlayer drager = speler(helper, berg, "kamp"), gast = speler(helper, berg, "kamp"), ver = speler(helper, berg, "kamp");
+        try {
+            opStap(drager, 1);
+            opStap(ver, 1);
+            Ring.lijn(1).begin(gast);
+            Ring.lijn(1).zet(gast, Ring.lijn(1).stappen());
+            Vec3 opWeg = new Vec3(nul.getX() + 150.5, nul.getY() + 40, nul.getZ() + 215.5), weg = new Vec3(nul.getX() - 300.5, nul.getY() + 40, nul.getZ() + 215.5);
+            drager.snapTo(opWeg.x, opWeg.y, opWeg.z);
+            gast.snapTo(opWeg.x, opWeg.y, opWeg.z);
+            ver.snapTo(weg.x, weg.y, weg.z);
+            helper.assertTrue(Berg.van(drager) == null && Klim.afstandTotBerg(drager) < Ring.ZWAAR_AFSTAND && Klim.afstandTotBerg(ver) > Ring.ZWAAR_AFSTAND,
+                    "off the mountain, 50 blocks from its wall: " + Klim.afstandTotBerg(drager));
+            helper.assertTrue(Klim.beschermdOpWeg(drager) && !Klim.beschermdOpWeg(gast) && !Klim.beschermdOpWeg(ver), "only the ring bearer of this chapter, only near the mountain");
+            // (the incoming-damage event itself: a mock player is spawn-invulnerable to everything but a fall, so its health says nothing)
+            helper.assertTrue(geweigerd(drager, level.damageSources().lava()) && geweigerd(drager, level.damageSources().inFire())
+                    && geweigerd(drager, level.damageSources().onFire()), "the frituur and fire do not burn the ring bearer on the way");
+            helper.assertTrue(!geweigerd(drager, level.damageSources().cactus()) && !geweigerd(drager, level.damageSources().fall())
+                    && !geweigerd(drager, level.damageSources().genericKill()), "(other damage is as always: this is no safe zone)");
+            helper.assertTrue(!geweigerd(gast, level.damageSources().lava()) && !geweigerd(ver, level.damageSources().lava()),
+                    "a visitor, and the ring bearer far from the mountain: fire is fire");
+        } finally {
+            nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Berg.STRUCTUUR);
+            weg(helper, drager, gast, ver);
+        }
+        helper.succeed();
+    }
+
+    /** Does the game refuse this damage for this player (the incoming-damage event is cancelled)? */
+    private static boolean geweigerd(ServerPlayer p, net.minecraft.world.damagesource.DamageSource bron) {
+        return net.neoforged.neoforge.common.CommonHooks.onEntityIncomingDamage(p, new net.neoforged.neoforge.common.damagesource.DamageContainer(bron, 4f));
+    }
+
+    /** Home: the feast looks for flat open ground; the goal of step 6 is the landing spot. */
+    @GuhTest(template = BERG, batch = BATCH)
+    public static void ringh6Thuis(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "kamp");
+        opStap(p, 6);
+        BlockPos kamp = berg.wereld("kamp");
+        BlockPos plek = Thuis.feestplek(level, kamp);
+        helper.assertTrue(level.getBlockState(plek.below()).blocksMotion() && !level.getBlockState(plek).blocksMotion() && plek.closerThan(kamp, 30),
+                "the feast stands on open ground nearby: " + plek);
+        BlockPos land = Thuis.landing(level, kamp);
+        helper.assertTrue(land != null && Thuis.staan(level, land), "a landing spot to stand on: " + land);
+        helper.assertTrue(Berg.STRUCTUUR.equals(Ring.STRUCTUREN.get(5)), "(ring-kern's name of the mountain)");
+        Thuis.testLevel = level;
+        Thuis.testPlek = kamp;
+        GuhQuests.saved(p).putLong(Thuis.THUIS, kamp.asLong());
+        Doel doel = RingH6Feature.LIJN.doel(p);
+        helper.assertTrue(doel != null && kamp.equals(doel.plek()) && doel.dim() == level.dimension(), "step 6 points at home");
+        // the player's own Gouw (chapter 1 wrote it down) comes first, but only when it is in the level of the feast
+        CompoundTag saved = GuhQuests.saved(p);
+        helper.assertTrue(Thuis.gouw(p, level) == null, "no Gouw known yet");
+        BlockPos gouw = berg.wereld("richel_1");
+        saved.putLong("guhs_ringh1_thuis", gouw.asLong());
+        saved.putString("guhs_ringh1_thuis_dim", "guhs:ergens_anders");
+        helper.assertTrue(Thuis.gouw(p, level) == null, "a Gouw in another dimension is not home here");
+        saved.putString("guhs_ringh1_thuis_dim", level.dimension().identifier().toString());
+        helper.assertTrue(gouw.equals(Thuis.gouw(p, level)), "the Gouw of chapter 1 is home");
+        Thuis.testPlek = null;
+        BlockPos bij = Thuis.plek(p);
+        helper.assertTrue(bij != null && bij.closerThan(gouw, 12) && level.getBlockState(bij.below()).blocksMotion(),
+                "the Rookguhs put the player down next to their Gouw: " + bij + " / " + gouw);
+        weg(helper, p);
+        helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // 1.4.1: home in chunks that are not loaded, a saved spot that is no place to stand, a death before the feast
+    // =====================================================================================================================
+
+    /**
+     * A column {@code dx, dz} chunks from this test whose chunk is NOT loaded (the test world is flat: bedrock, dirt, grass),
+     * at the height a player stands on there. That height is read from a neighbour chunk four chunks further on, which this
+     * loads; the column's own chunk stays unloaded.
+     */
+    private static BlockPos ver(GameTestHelper helper, int dx, int dz) {
+        ServerLevel level = helper.getLevel();
+        BlockPos nul = helper.absolutePos(BlockPos.ZERO);
+        int cx = (nul.getX() >> 4) + dx, cz = (nul.getZ() >> 4) + dz;
+        for (int i = 0; i < 40 && geladenRond(level, cx, cz); i++) {
+            cx += dx < 0 ? -5 : 5;
+        }
+        helper.assertTrue(!geladenRond(level, cx, cz), "(the test needs chunks nobody loaded around " + cx + ", " + cz + ")");
+        int ref = cx + (dx < 0 ? -4 : 4);
+        level.getChunk(ref, cz);
+        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (ref << 4) + 8, (cz << 4) + 8);
+        helper.assertTrue(y > level.getMinY() + 1, "(the test world has ground: " + y + ")");
+        helper.assertTrue(!geladenRond(level, cx, cz), "(reading the height next door loaded nothing here)");
+        return new BlockPos((cx << 4) + 8, y, (cz << 4) + 8);
+    }
+
+    private static boolean geladenRond(ServerLevel level, int cx, int cz) {
+        for (int x = cx - 1; x <= cx + 1; x++) {
+            for (int z = cz - 1; z <= cz + 1; z++) {
+                if (level.hasChunk(x, z)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Chapter 1 wrote down that this player's Gouw (Guhdalf's block) is here, in the level of the feast. */
+    private static void zetGouw(ServerPlayer p, ServerLevel level, BlockPos gouw) {
+        CompoundTag saved = GuhQuests.saved(p);
+        saved.putLong("guhs_ringh1_thuis", gouw.asLong());
+        saved.putString("guhs_ringh1_thuis_dim", level.dimension().identifier().toString());
+    }
+
+    /** As a respawn does: a new player entity that only has what the old one's saved data holds. */
+    private static ServerPlayer herboren(GameTestHelper helper, ServerPlayer oud, Vec3 waar) {
+        ServerPlayer nieuw = GuhMockPlayer.of(helper);
+        nieuw.setGameMode(GameType.SURVIVAL);
+        nieuw.getInventory().clearContent();
+        nieuw.getPersistentData().put("PlayerPersisted", GuhQuests.saved(oud).copy());
+        nieuw.snapTo(waar.x, waar.y, waar.z);
+        nieuw.setOnGround(true);
+        return nieuw;
+    }
+
+    /**
+     * 1.4.1 (A): the Rookguhs fly a player home while the chunks of home are not loaded (the player is still in the
+     * Guhbarbecuether). 1.4.0 read the height of such a column as the bottom of the world and put the player there. Now the
+     * chunks are loaded first, the spot has ground under it, the player stands on it and nothing hurts them while they arrive.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis")
+    public static void ringh6LandingInOngeladenChunk(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "rand");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        try {
+            opStap(p, 5);
+            lijn.vlag(p, Finale.GEFRITUURD, true);
+            BlockPos gouw = ver(helper, 40, 40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            helper.assertTrue(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gouw.getX() + 4, gouw.getZ()) == level.getMinY(),
+                    "(what 1.4.0 read: the height of an unloaded column is the bottom of the world)");
+            p.fallDistance = 30;
+            Thuis.breng(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(lijn.stap(p) == 6 && thuis != null, "the flight ends in step 6 with a saved home: " + thuis);
+            helper.assertTrue(level.hasChunk(gouw.getX() >> 4, gouw.getZ() >> 4), "the chunks of home were loaded to choose the spot");
+            helper.assertTrue(Thuis.staan(level, thuis) && level.getBlockState(thuis.below()).blocksMotion(), "home has solid ground under it: " + thuis);
+            helper.assertTrue(thuis.getY() == gouw.getY() && thuis.getY() > level.getMinY(), "on the surface, not at the bottom of the world: " + thuis);
+            double dx = thuis.getX() - gouw.getX(), dz = thuis.getZ() - gouw.getZ();
+            helper.assertTrue(dx * dx + dz * dz >= 4 && dx * dx + dz * dz <= 2.0 * Thuis.ZOEK * Thuis.ZOEK, "a few steps from Guhdalf: " + thuis + " / " + gouw);
+            helper.assertTrue(p.position().distanceTo(Vec3.atBottomCenterOf(thuis)) < 0.01 && p.fallDistance == 0, "the player stands exactly there: " + p.position());
+            helper.assertTrue(Thuis.netGeland(p) && geweigerd(p, level.damageSources().fall()) && geweigerd(p, level.damageSources().inWall())
+                    && geweigerd(p, level.damageSources().lava()), "nothing hurts a player who is just put down");
+            helper.assertTrue(!geweigerd(p, level.damageSources().genericKill()), "(/kill still works)");
+            Doel doel = lijn.doel(p);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()) && doel.dim() == level.dimension(), "the compass points at home");
+            // a spot whose own height says nothing (the middle of a structure, a spot saved at the bottom of the world)
+            BlockPos elders = ver(helper, -40, 40);
+            for (int y : new int[]{level.getMinY(), elders.getY() + 60}) {
+                BlockPos land = Thuis.landing(level, new BlockPos(elders.getX(), y, elders.getZ()));
+                helper.assertTrue(land != null && Thuis.staan(level, land) && land.getY() == elders.getY(), "from height " + y + ": the ground, " + land);
+            }
+            helper.assertTrue(!Thuis.staan(level, new BlockPos(elders.getX(), level.getMinY(), elders.getZ()))
+                    && !Thuis.staan(level, new BlockPos(elders.getX(), level.getMinY() - 5, elders.getZ()))
+                    && !Thuis.staan(level, elders.above(5)), "the bottom of the world, the void and thin air are no place to stand");
+        } finally {
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * 1.4.1 (B): a player whom 1.4.0 put down in the void has a saved home at the bottom of the world (the X and Z of their
+     * Guhdalf), and the feast asked for 40 blocks in 3D, so it never started. Now that spot is chosen again (wherever the
+     * player is), a saved spot in the air too once its chunk is loaded, and the feast starts when they stand near home.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis", timeoutTicks = 400)
+    public static void ringh6SlechtThuisWordtHersteld(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "kamp");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        boolean klaar = false;
+        try {
+            opStap(p, 6);
+            BlockPos gouw = ver(helper, 40, -40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            // exactly what 1.4.0 saved: Guhdalf's column, at the bottom of the world
+            BlockPos kapot = new BlockPos(gouw.getX(), level.getMinY(), gouw.getZ());
+            GuhQuests.saved(p).putLong(Thuis.THUIS, kapot.asLong());
+            helper.assertTrue(!Thuis.dichtbij(p, kapot), "(the player is far from home)");
+            Klim.seconde(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(thuis != null && !thuis.equals(kapot) && Thuis.staan(level, thuis) && thuis.getY() == gouw.getY(),
+                    "the saved spot is a place to stand again, on the ground at their Guhdalf: " + thuis);
+            helper.assertTrue(lijn.stap(p) == 6 && !Cutscenes.bezig(p), "far from home: no feast yet");
+            Doel doel = lijn.doel(p);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()), "the compass points at the repaired spot");
+            Klim.seconde(p);
+            helper.assertTrue(thuis.equals(Thuis.thuis(p)), "a good spot is left alone");
+            // a saved spot in thin air (no ground under it), its chunk loaded: chosen again
+            GuhQuests.saved(p).putLong(Thuis.THUIS, thuis.above(20).asLong());
+            Klim.seconde(p);
+            helper.assertTrue(thuis.equals(Thuis.thuis(p)), "a spot without ground is chosen again: " + Thuis.thuis(p));
+            // sideways is what counts: high above (or far under) home is at home; but the feast waits for the ground
+            p.snapTo(gouw.getX() + 2.5, gouw.getY() + 90, gouw.getZ() + 0.5);
+            helper.assertTrue(Thuis.dichtbij(p, kapot) && Thuis.dichtbij(p, thuis), "high above home counts as near (1.4.0 measured in 3D)");
+            p.setOnGround(false);
+            Klim.seconde(p);
+            helper.assertTrue(!Cutscenes.bezig(p), "in the air: the feast waits until they stand on the ground");
+            // the player walks to their Guhdalf, as the author did
+            p.snapTo(gouw.getX() + 2.5, gouw.getY(), gouw.getZ() + 0.5);
+            p.setOnGround(true);
+            Klim.seconde(p);
+            helper.assertTrue(Cutscenes.bezig(p), "at their Guhdalf, on the ground: the feast plays");
+            klaar = true;
+        } finally {
+            if (!klaar) {
+                weg(helper, p);
+            }
+        }
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            tik(p);
+            p.setOnGround(true);
+            if (++tel[0] % 5 == 0) {
+                Klim.seconde(p);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.klaar(p) && Cutscenes.gezien(p, "ringh6_feest"), "the feast was seen: the questline is done (step " + lijn.stap(p) + ")");
+            helper.assertTrue(Ring.klaar(p) && RingBeloning.gegeven(p), "ring-kern gave the rewards of the story");
+            if (Smikagol.maatje(p) != null) {
+                Smikagol.maatje(p).discard();
+            }
+            weg(helper, p);
+        });
+    }
+
+    /**
+     * 1.4.1 (B): between the flight and the feast a player dies, respawns far away (a new player entity: only the saved
+     * data comes along) and walks home later: the feast still starts when they stand near home on the ground.
+     */
+    @GuhTest(template = BERG, batch = BATCH + "_thuis", timeoutTicks = 400)
+    public static void ringh6FeestNaEenDood(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Berg.Kopie berg = berg(helper);
+        ServerPlayer p = speler(helper, berg, "rand");
+        Verhaallijn lijn = RingH6Feature.LIJN;
+        ServerPlayer[] nieuw = {null};
+        boolean klaar = false;
+        try {
+            opStap(p, 5);
+            lijn.vlag(p, Finale.GEFRITUURD, true);
+            BlockPos gouw = ver(helper, -40, -40);
+            Thuis.testLevel = level;
+            Thuis.testPlek = null;
+            zetGouw(p, level, gouw);
+            Thuis.breng(p);
+            BlockPos thuis = Thuis.thuis(p);
+            helper.assertTrue(lijn.stap(p) == 6 && thuis != null && Thuis.staan(level, thuis), "flown home: " + thuis);
+            // they die before the feast (it waits a moment after the landing)
+            p.setHealth(0f);
+            for (int i = 0; i < 5; i++) {
+                Klim.seconde(p);
+            }
+            helper.assertTrue(lijn.stap(p) == 6 && !Cutscenes.bezig(p), "dead: nothing happens, the step stays");
+            // the respawn: a new entity at their bed, far from home
+            ServerPlayer q = herboren(helper, p, Vec3.atBottomCenterOf(berg.wereld("kamp")));
+            nieuw[0] = q;
+            helper.assertTrue(lijn.stap(q) == 6 && thuis.equals(Thuis.thuis(q)), "the step and the home came along with the saved data");
+            Klim.seconde(q);
+            helper.assertTrue(!Cutscenes.bezig(q) && lijn.stap(q) == 6, "far from home: no feast, the step waits");
+            Doel doel = lijn.doel(q);
+            helper.assertTrue(doel != null && thuis.equals(doel.plek()) && doel.dim() == level.dimension(), "the compass still points at home");
+            // later they walk home: 30 blocks from the spot is near enough
+            q.snapTo(thuis.getX() + 30.5, thuis.getY(), thuis.getZ() + 0.5);
+            q.setOnGround(true);
+            Klim.seconde(q);
+            helper.assertTrue(Cutscenes.bezig(q), "back near home, on the ground: the feast plays");
+            klaar = true;
+        } finally {
+            if (!klaar) {
+                weg(helper, nieuw[0] == null ? new ServerPlayer[]{p} : new ServerPlayer[]{p, nieuw[0]});
+            }
+        }
+        ServerPlayer q = nieuw[0];
+        int[] tel = {0};
+        helper.onEachTick(() -> {
+            tik(q);
+            q.setOnGround(true);
+            if (++tel[0] % 5 == 0) {
+                Klim.seconde(q);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(lijn.klaar(q) && Cutscenes.gezien(q, "ringh6_feest"), "the feast was seen: the questline is done (step " + lijn.stap(q) + ")");
+            if (Smikagol.maatje(q) != null) {
+                Smikagol.maatje(q).discard();
+            }
+            weg(helper, p, q);
+        });
+    }
+
+    private RingH6GameTests() {
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WDW",
+    "WWW"
+  ],
+  "key": {
+    "W": "guhs:wolkenblok_wit",
+    "D": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:wolkenblok_roze",
+    "count": 8
+  }
+}

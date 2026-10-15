@@ -1,0 +1,18 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/mika_stal",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:mika_stal/start",
+  "start_jigsaw_name": "guhs:mika_stal_midden",
+  "check_radius": 26,
+  "max_height_difference": 8,
+  "headroom": 12,
+  "keep_clear": 23
+}

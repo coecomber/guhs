@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:rookguh_vuurtoren",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 34,
+    "separation": 12,
+    "salt": 21301401
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "guhs:regenboogblok"
+  },
+  "result": {
+    "id": "guhs:regenboogblok_plaat",
+    "count": 6
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:wolkenweide"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:wolkenschaapje",
+      "weight": 30,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

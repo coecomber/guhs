@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "facing=south,nr=0,om=false": {
+      "model": "guhs:block/ringh3_hendel"
+    },
+    "facing=south,nr=0,om=true": {
+      "model": "guhs:block/ringh3_hendel_om"
+    },
+    "facing=south,nr=1,om=false": {
+      "model": "guhs:block/ringh3_hendel"
+    },
+    "facing=south,nr=1,om=true": {
+      "model": "guhs:block/ringh3_hendel_om"
+    },
+    "facing=south,nr=2,om=false": {
+      "model": "guhs:block/ringh3_hendel"
+    },
+    "facing=south,nr=2,om=true": {
+      "model": "guhs:block/ringh3_hendel_om"
+    },
+    "facing=south,nr=3,om=false": {
+      "model": "guhs:block/ringh3_hendel"
+    },
+    "facing=south,nr=3,om=true": {
+      "model": "guhs:block/ringh3_hendel_om"
+    },
+    "facing=west,nr=0,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 90
+    },
+    "facing=west,nr=0,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 90
+    },
+    "facing=west,nr=1,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 90
+    },
+    "facing=west,nr=1,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 90
+    },
+    "facing=west,nr=2,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 90
+    },
+    "facing=west,nr=2,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 90
+    },
+    "facing=west,nr=3,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 90
+    },
+    "facing=west,nr=3,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 90
+    },
+    "facing=north,nr=0,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 180
+    },
+    "facing=north,nr=0,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 180
+    },
+    "facing=north,nr=1,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 180
+    },
+    "facing=north,nr=1,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 180
+    },
+    "facing=north,nr=2,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 180
+    },
+    "facing=north,nr=2,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 180
+    },
+    "facing=north,nr=3,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 180
+    },
+    "facing=north,nr=3,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 180
+    },
+    "facing=east,nr=0,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 270
+    },
+    "facing=east,nr=0,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 270
+    },
+    "facing=east,nr=1,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 270
+    },
+    "facing=east,nr=1,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 270
+    },
+    "facing=east,nr=2,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 270
+    },
+    "facing=east,nr=2,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 270
+    },
+    "facing=east,nr=3,om=false": {
+      "model": "guhs:block/ringh3_hendel",
+      "y": 270
+    },
+    "facing=east,nr=3,om=true": {
+      "model": "guhs:block/ringh3_hendel_om",
+      "y": 270
+    }
+  }
+}

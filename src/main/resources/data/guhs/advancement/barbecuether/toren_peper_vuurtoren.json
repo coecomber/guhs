@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:torenpeper_seinlantaarn"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.toren_peper_vuurtoren.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.toren_peper_vuurtoren.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

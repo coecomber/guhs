@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhrio_kasteel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 256,
+    "separation": 64,
+    "salt": 21302301,
+    "spread_type": "triangular"
+  }
+}

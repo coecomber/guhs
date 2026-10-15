@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XG ",
+    "SFS",
+    "IDI"
+  ],
+  "key": {
+    "G": "guhs:grillspies",
+    "S": "guhs:sausslang",
+    "F": "guhs:frying_pan",
+    "I": "minecraft:iron_ingot",
+    "D": "guhs:guh_wire",
+    "X": "guhs:techquest_recept_saus"
+  },
+  "result": {
+    "id": "guhs:frituurautomaat"
+  }
+}

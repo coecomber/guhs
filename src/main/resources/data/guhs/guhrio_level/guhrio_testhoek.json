@@ -1,0 +1,30 @@
+{
+  "wereld": "HOEK",
+  "banen": [
+    {
+      "id": "hoek",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          20,
+          0,
+          0
+        ],
+        [
+          20,
+          0,
+          20
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 5.5,
+      "onder": -3,
+      "boven": 8
+    }
+  ]
+}

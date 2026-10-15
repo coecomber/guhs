@@ -50,6 +50,8 @@ public class GuhWheelRenderer implements BlockEntityRenderer<GuhWheelBlockEntity
     /** How long (in blocks) the guh should look inside the wheel, whatever its real size. */
     private static final float GUH_LENGTH_IN_WHEEL = 0.75f;
     private static final float GUH_MODEL_LENGTH = 23f / 16f;
+    /** tech-bronnen: how high (in model units, before the wheel's own scale) a floating guh hangs above the ring's floor. */
+    private static final float ZWEEF = 2.5f / 16f;
 
     public static class State extends BlockEntityRenderState {
         Direction facing = Direction.NORTH;
@@ -57,6 +59,8 @@ public class GuhWheelRenderer implements BlockEntityRenderer<GuhWheelBlockEntity
         @Nullable
         EntityRenderState guh;
         float fit = 1f;
+        /** tech-bronnen: how high the guh floats above the wheel's floor (Guhtwo; 0 = it runs). */
+        float zweef;
     }
 
     private final EntityRenderDispatcher entityRenderer;
@@ -83,6 +87,7 @@ public class GuhWheelRenderer implements BlockEntityRenderer<GuhWheelBlockEntity
         state.facing = wheel.getBlockState().getValue(GuhWheelBlock.FACING);
         state.spin = wheel.getSpin(partialTick);
         state.guh = null;
+        state.zweef = 0f;
         GuhEntity guh = wheel.getDisplayGuh();
         if (guh != null) {
             // the guh, running "forwards" along the ring, shrunk (or grown) to fit
@@ -93,6 +98,10 @@ public class GuhWheelRenderer implements BlockEntityRenderer<GuhWheelBlockEntity
             state.guh = entityRenderer.extractEntity(guh, partialTick);
             state.guh.lightCoords = state.lightCoords;
             state.guh.shadowPieces.clear();                   // (was setRenderShadow(false))
+            if (wheel.stijl().zweeft) {
+                // Guhtwo does not run: it hovers in the middle of the ring, bobbing a little, and the wheel turns by itself
+                state.zweef = ZWEEF + 0.03f * (float) Math.sin((guh.tickCount + partialTick) * 0.12f);
+            }
         }
     }
 
@@ -119,7 +128,7 @@ public class GuhWheelRenderer implements BlockEntityRenderer<GuhWheelBlockEntity
 
         if (state.guh != null) {
             poseStack.pushPose();
-            poseStack.translate(0.5, FLOOR_Y, 0.5);
+            poseStack.translate(0.5, FLOOR_Y + state.zweef, 0.5);
             poseStack.scale(state.fit, state.fit, state.fit);
             entityRenderer.submit(state.guh, camera, 0, 0, 0, poseStack, collector);
             poseStack.popPose();

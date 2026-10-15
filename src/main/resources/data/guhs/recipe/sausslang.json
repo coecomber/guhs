@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KCK",
+    "KGK",
+    "KCK"
+  ],
+  "key": {
+    "K": "minecraft:dried_kelp",
+    "C": "minecraft:copper_ingot",
+    "G": "guhs:grillspies"
+  },
+  "result": {
+    "id": "guhs:sausslang",
+    "count": 8
+  }
+}

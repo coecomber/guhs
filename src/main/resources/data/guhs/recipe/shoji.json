@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BPB",
+    "BPB",
+    "BPB"
+  ],
+  "key": {
+    "B": "guhs:guh_bamboe",
+    "P": "minecraft:paper"
+  },
+  "result": {
+    "id": "guhs:shoji",
+    "count": 4
+  }
+}

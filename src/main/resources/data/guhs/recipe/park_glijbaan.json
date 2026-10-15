@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  P",
+    " P ",
+    "P  "
+  ],
+  "key": {
+    "P": "minecraft:pink_concrete"
+  },
+  "result": {
+    "id": "guhs:park_glijbaan",
+    "count": 3
+  }
+}

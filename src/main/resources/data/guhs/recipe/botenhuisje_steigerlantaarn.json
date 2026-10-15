@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "R",
+    "T",
+    "H"
+  ],
+  "key": {
+    "R": "minecraft:pink_carpet",
+    "T": "minecraft:torch",
+    "H": "guhs:bleekhout_hek"
+  },
+  "result": {
+    "id": "guhs:botenhuisje_steigerlantaarn",
+    "count": 2
+  }
+}

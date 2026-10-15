@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "soort=0": {
+      "model": "guhs:block/ringh1_proviand_0"
+    },
+    "soort=1": {
+      "model": "guhs:block/ringh1_proviand_1"
+    },
+    "soort=2": {
+      "model": "guhs:block/ringh1_proviand_2"
+    }
+  }
+}

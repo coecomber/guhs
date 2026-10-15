@@ -1,10 +1,13 @@
 package nl.juiced.guhs.feature.elftocht;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.chunk.LevelChunk;
 import nl.juiced.guhs.Guhs;
 
 /**
@@ -25,9 +28,20 @@ public final class ElftochtSchaatsen {
         return player.getMainHandItem().is(ElftochtFeature.SCHAATSEN.get()) || player.getOffhandItem().is(ElftochtFeature.SCHAATSEN.get());
     }
 
-    /** Standing on skating ice right now? */
+    /**
+     * Standing on skating ice right now? (1.4.0 client check: only a block whose chunk is LOADED is looked at. Right after a
+     * trip to another dimension a player still "stands on" the block of the world they left (the game keeps that spot
+     * until they move), so this question, asked every tick for every player, loaded or even generated the chunk at the
+     * OLD coordinates in the NEW world on the server thread: coming home from Het Snuffeleiland to a dock in the
+     * Guhmensie the game stood still for 17 seconds with an empty world around the player.)
+     */
     public static boolean opIJs(Player player) {
-        return player.onGround() && player.getBlockStateOn().is(ElftochtFeature.SCHAATSIJS);
+        if (!player.onGround()) {
+            return false;
+        }
+        BlockPos onder = player.getOnPos();
+        LevelChunk chunk = player.level().getChunkSource().getChunkNow(SectionPos.blockToSectionCoord(onder.getX()), SectionPos.blockToSectionCoord(onder.getZ()));
+        return chunk != null && chunk.getBlockState(onder).is(ElftochtFeature.SCHAATSIJS);
     }
 
     /** Skating: skates in hand, on the ice (or just jumped off it), not flying, riding or swimming. */

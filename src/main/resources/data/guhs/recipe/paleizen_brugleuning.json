@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TST",
+    "TKT"
+  ],
+  "key": {
+    "T": "minecraft:stick",
+    "S": "minecraft:string",
+    "K": "guhs:paleizen_recept_brug"
+  },
+  "result": {
+    "id": "guhs:paleizen_brugleuning",
+    "count": 4
+  }
+}

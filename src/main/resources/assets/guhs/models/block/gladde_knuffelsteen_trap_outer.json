@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/gladde_knuffelsteen",
+    "side": "guhs:block/gladde_knuffelsteen",
+    "top": "guhs:block/gladde_knuffelsteen"
+  }
+}

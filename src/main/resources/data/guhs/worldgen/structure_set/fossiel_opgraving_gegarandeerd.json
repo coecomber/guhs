@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:fossiel_opgraving",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301108,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 4,
+    "sectoren": 16
+  }
+}

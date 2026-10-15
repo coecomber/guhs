@@ -67,7 +67,8 @@ class Images:
         m = self._model(ref)
         if m is None or depth > 6:
             return {}
-        tex = dict(m.get("textures", {}))
+        tex = {k: (v.get("sprite", "") if isinstance(v, dict) else v)       # (26.1: {"sprite": ..., "force_translucent": true})
+               for k, v in m.get("textures", {}).items()}
         if "parent" in m:
             parent = self._model_textures(m["parent"], depth + 1)
             parent.update(tex)
@@ -101,6 +102,21 @@ class Images:
         ns, path = ref.split(":", 1)
         self.gen_src[gen] = os.path.join(self.assets, "textures", path + ".png")
         return gen
+
+    def spoiler_tile(self):
+        """'spoiler': the picture a list, card or search result shows instead of a page's own when that would give a story's
+        surprise away (a question mark on a dashed tile)."""
+        if "spoiler" in self.generated:
+            return "spoiler"
+        from PIL import ImageDraw
+        small = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+        d = ImageDraw.Draw(small)
+        d.rounded_rectangle((0, 0, 15, 15), radius=3, fill=(253, 227, 236, 255), outline=(184, 161, 212, 255))
+        for x, y in ((6, 3), (7, 3), (8, 3), (9, 3), (5, 4), (10, 4), (10, 5), (9, 6), (8, 7), (7, 8), (7, 9), (7, 12), (8, 12), (8, 8), (8, 9),
+                     (5, 5), (10, 6), (9, 7)):
+            small.putpixel((x, y), (217, 70, 122, 255))
+        self.generated["spoiler"] = small.resize((64, 64), Image.NEAREST)
+        return "spoiler"
 
     # --- use + write ----------------------------------------------------------------------------------------------------------
     def use(self, name, thumb=False):

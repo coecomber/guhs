@@ -39,7 +39,9 @@ import nl.juiced.guhs.registry.ModSounds;
 /**
  * Big pink guh running wheel (3x3 blocks; the other 8 blocks are invisible GuhWheelPartBlocks). Pick up your tamed guh (sneak + right-click it) and right-click the wheel with it to put
  * it in; right-click the running wheel to get your guh back (as the picked-up guh item).
- * While a guh runs, the wheel is a full-strength (15) redstone source. Use Guh Wire to carry that power any distance.
+ * bbq2: while a guh runs, the wheel gives vadskracht (the block entity is the source, see GuhWheelBlockEntity); Guhdraad
+ * carries it to the machines, and a machine right next to any of the wheel's 3x3 blocks gets it too. The wheel itself is
+ * still a full-strength (15) redstone source while a guh runs, as it always was.
  */
 public class GuhWheelBlock extends BaseEntityBlock {
     public static final MapCodec<GuhWheelBlock> CODEC = simpleCodec(GuhWheelBlock::new);
@@ -144,8 +146,11 @@ public class GuhWheelBlock extends BaseEntityBlock {
         nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.GUHWIEL, level.dimension(), pos, "",
                 level.getGameTime());   // 2.10: "waar is mijn guh": running in the wheel
         stack.consume(1, player);
-        level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1f);
+        level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, wheel.isBlij() ? 1.25f : 1f);
         level.setBlock(pos, state.setValue(RUNNING, true), 3);
+        // tech-bronnen: what this guh gives, said at once (a happy guh runs extra hard)
+        player.sendOverlayMessage(Component.translatable(wheel.isBlij() ? "gui.guhs.techbron.guhrad.rent_blij" : "gui.guhs.techbron.guhrad.rent",
+                wheel.vadsAanbod()));
         return InteractionResult.SUCCESS;
     }
 
@@ -174,6 +179,22 @@ public class GuhWheelBlock extends BaseEntityBlock {
     }
 
     // Breaking the wheel: see GuhWheelBlockEntity#preRemoveSideEffects (26.1: onRemove is gone)
+
+    // --- vadskracht: the nets around the wheel are rebuilt when it appears or disappears ---
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (!oldState.is(this)) {
+            nl.juiced.guhs.feature.vadskracht.VadsKracht.veranderd(level, pos);
+        }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+        nl.juiced.guhs.feature.vadskracht.VadsKracht.veranderd(level, pos);
+    }
 
     // --- redstone: full power in every direction while a guh is running ---
 

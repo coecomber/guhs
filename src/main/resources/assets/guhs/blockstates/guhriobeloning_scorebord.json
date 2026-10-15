@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhriobeloning_scorebord"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhriobeloning_scorebord",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhriobeloning_scorebord",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhriobeloning_scorebord",
+      "y": 270
+    }
+  }
+}

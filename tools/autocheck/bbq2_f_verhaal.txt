@@ -1,0 +1,94 @@
+# bbq2, the verhaal engine (AutoCheck, dev only): the demo story from the narrator card to the open sluier. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_f_verhaal.txt
+# (commands: see autocheck.txt; the demo: feature/verhaal/VerhaalDemo.java, /guhs verhaal demo)
+# Shots: the narrator card (first line / all lines), three frames of the cutscene (the glide, the cut, the close-up), the
+# objective line with the smoke wall behind it, the Guhdex tab Verhalen (list, travel map, the demo's page), the wall from
+# close by in survival, and the wall dissolving.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/gamemode creative
+/tp @s 3000.5 140 3000.5 0 0
+wait 40
+waitrender 300
+clearchat
+
+section the narrator card
+/guhs verhaal demo wis
+gui keep
+/guhs verhaal demo
+wait 20
+shot bbq2_verhaal_kaart_1 gui
+wait 80
+shot bbq2_verhaal_kaart_2 gui
+# the button "Verder" (its label depends on the language): the middle of the bottom of the card (640x360 at GUI scale 2)
+click 320 342
+
+section the cutscene (190 ticks)
+wait 40
+shot bbq2_verhaal_cutscene_1 gui
+wait 45
+shot bbq2_verhaal_cutscene_2 gui
+wait 35
+shot bbq2_verhaal_cutscene_3 gui
+wait 90
+
+section the objective line, the smoke wall ten blocks south
+/guhs verhaal doel
+wait 60
+shot bbq2_verhaal_doelregel gui
+
+section the Guhdex tab Verhalen
+gui verhalen list
+wait 20
+shot bbq2_verhaal_gids_lijst gui
+gui close
+gui verhalen @kaart:demo
+wait 20
+shot bbq2_verhaal_reiskaart gui
+gui verhalenscroll 1
+wait 5
+shot bbq2_verhaal_reiskaart_2 gui
+gui close
+gui verhalen demo
+wait 20
+shot bbq2_verhaal_gids_demo gui
+gui verhalenscroll 1
+wait 5
+shot bbq2_verhaal_gids_demo_2 gui
+gui close
+
+section Guhdalfs sluier in survival (pushed back), then open
+/gamemode survival
+/tp @s 3000.5 140 3004.5 0 5
+wait 80
+shot bbq2_verhaal_sluier gui
+/tp @s 3000.5 140 3010.5 0 5
+wait 20
+/guhs verhaal doel
+shot bbq2_verhaal_sluier_teruggezet gui
+/guhs verhaal demo open
+wait 50
+shot bbq2_verhaal_sluier_open gui
+gui verhalen @kaart:demo
+wait 20
+shot bbq2_verhaal_reiskaart_klaar gui
+gui close
+
+section Guhdalfs sluier around a real structure (worldgen): the wall is found from the chunks' structure references
+/gamemode spectator
+opnieuw
+tplocate auto mika_kamp
+/guhs verhaal demo proef mika_kamp
+wait 80
+shot bbq2_verhaal_sluier_structuur gui
+quit

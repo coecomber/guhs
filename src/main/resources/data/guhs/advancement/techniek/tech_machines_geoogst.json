@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:oogster"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_machines_geoogst.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_machines_geoogst.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/root"
+}

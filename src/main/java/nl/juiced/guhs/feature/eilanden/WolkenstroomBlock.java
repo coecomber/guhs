@@ -179,14 +179,8 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(3) == 0) {
-            double x = pos.getX() + random.nextDouble(), y = pos.getY() + random.nextDouble(), z = pos.getZ() + random.nextDouble();
-            level.addParticle(ParticleTypes.CLOUD, x, y, z, 0, state.getValue(DOWN) ? -0.12 : 0.18, 0);
-        }
-        if (random.nextInt(12) == 0) {
-            level.addParticle(ParticleTypes.END_ROD, pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble(),
-                    pos.getZ() + random.nextDouble(), 0, state.getValue(DOWN) ? -0.05 : 0.08, 0);
-        }
+        // biomes3: denser puffs and little arrows that show the way (it was one vanilla cloud puff in three calls)
+        nl.juiced.guhs.feature.bio.blokkenwolk.WolkenstroomPluis.animeer(state.getValue(DOWN), level, pos, random);
     }
 
     @Override

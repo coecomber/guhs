@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "nr=1": {
+      "model": "guhs:block/ringh6_kooislot"
+    },
+    "nr=2": {
+      "model": "guhs:block/ringh6_kooislot"
+    },
+    "nr=3": {
+      "model": "guhs:block/ringh6_kooislot"
+    }
+  }
+}

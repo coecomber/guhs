@@ -296,8 +296,20 @@ public final class KnuffelbadBlocks {
      * the Roze Trechter.
      */
     public static class Schuim extends Block {
+        /** How the foam slows you down while you sink into it (like soft snow; the vertical part makes a soft landing). */
+        public static final Vec3 ZACHT = new Vec3(0.85, 0.55, 0.85);
+
         public Schuim(Properties properties) {
             super(properties);
+        }
+
+        /**
+         * 1.4.2: the foam never holds you down. Sinking into it is slowed (a soft landing), but while you swim in the water
+         * under it or go up (a jump, swimming up) it lets you through: being stuck in a block resets your speed every
+         * tick, so before 1.4.2 you could never jump or swim out of a foam bath again.
+         */
+        public static boolean vrijOmhoog(Entity entity) {
+            return entity.isInWater() || entity.getDeltaMovement().y > 0;
         }
 
         @Override
@@ -324,7 +336,9 @@ public final class KnuffelbadBlocks {
         @Override
         protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
             if (entity instanceof LivingEntity || entity instanceof net.minecraft.world.entity.item.ItemEntity) {
-                entity.makeStuckInBlock(state, new Vec3(0.85, 0.55, 0.85));
+                if (!vrijOmhoog(entity)) {
+                    entity.makeStuckInBlock(state, ZACHT);
+                }
                 entity.resetFallDistance();
                 if (level.isClientSide() && level.getRandom().nextInt(4) == 0 && entity.getDeltaMovement().horizontalDistanceSqr() > 1e-4) {
                     level.addParticle(KnuffelbadFeature.SCHUIMVLOKJE.get(), entity.getX(), entity.getY() + 0.5, entity.getZ(),

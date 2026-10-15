@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "axis=x,strook=heel,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_heel_x"
+    },
+    "axis=x,strook=heel,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_heel_x"
+    },
+    "axis=x,strook=heel,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_heel_x"
+    },
+    "axis=z,strook=heel,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_heel_z"
+    },
+    "axis=z,strook=heel,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_heel_z"
+    },
+    "axis=z,strook=heel,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_heel_z"
+    },
+    "axis=x,strook=a,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_a_x"
+    },
+    "axis=x,strook=a,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_a_x"
+    },
+    "axis=x,strook=a,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_a_x"
+    },
+    "axis=z,strook=a,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_a_z"
+    },
+    "axis=z,strook=a,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_a_z"
+    },
+    "axis=z,strook=a,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_a_z"
+    },
+    "axis=x,strook=b,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_b_x"
+    },
+    "axis=x,strook=b,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_b_x"
+    },
+    "axis=x,strook=b,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_b_x"
+    },
+    "axis=z,strook=b,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_b_z"
+    },
+    "axis=z,strook=b,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_b_z"
+    },
+    "axis=z,strook=b,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_b_z"
+    },
+    "axis=x,strook=c,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_c_x"
+    },
+    "axis=x,strook=c,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_c_x"
+    },
+    "axis=x,strook=c,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_c_x"
+    },
+    "axis=z,strook=c,type=bottom": {
+      "model": "guhs:block/regenboogblok_plaat_bottom_c_z"
+    },
+    "axis=z,strook=c,type=top": {
+      "model": "guhs:block/regenboogblok_plaat_top_c_z"
+    },
+    "axis=z,strook=c,type=double": {
+      "model": "guhs:block/regenboogblok_plaat_double_c_z"
+    }
+  }
+}

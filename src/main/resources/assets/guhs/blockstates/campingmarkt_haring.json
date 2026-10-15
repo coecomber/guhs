@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "vast=false": {
+      "model": "guhs:block/campingmarkt_haring"
+    },
+    "vast=true": {
+      "model": "guhs:block/campingmarkt_haring_vast"
+    }
+  }
+}

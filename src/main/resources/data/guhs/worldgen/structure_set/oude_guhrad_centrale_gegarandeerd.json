@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:oude_guhrad_centrale",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21300808,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 0,
+    "sectoren": 16
+  }
+}

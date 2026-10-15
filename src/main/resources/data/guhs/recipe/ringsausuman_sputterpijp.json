@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "IKI",
+    "I I"
+  ],
+  "key": {
+    "I": "guhs:gepolijst_roosterijzer",
+    "K": "guhs:gloeikool"
+  },
+  "result": {
+    "id": "guhs:ringsausuman_sputterpijp",
+    "count": 4
+  }
+}

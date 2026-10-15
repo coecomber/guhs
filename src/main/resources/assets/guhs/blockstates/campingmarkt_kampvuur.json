@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "brandt=false": {
+      "model": "guhs:block/campingmarkt_kampvuur"
+    },
+    "brandt=true": {
+      "model": "guhs:block/campingmarkt_kampvuur_aan"
+    }
+  }
+}

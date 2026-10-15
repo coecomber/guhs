@@ -24,18 +24,26 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.Features;
+import nl.juiced.guhs.feature.bank.BankFeature;
+import nl.juiced.guhs.feature.bank.BankVolPayload;
 import nl.juiced.guhs.network.BankContentsPayload;
+import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModMenuTypes;
 import nl.juiced.guhs.storage.BankContents;
+import nl.juiced.guhs.storage.BankStorage;
 
 /**
  * Bank Guh screen contents: a 3x3 crafting grid + result, and the player inventory as normal slots.
- * The (infinite) storage itself isn't made of slots: the server sends the item list with {@link BankContentsPayload}
+ * The storage itself isn't made of slots: the server sends the item list with {@link BankContentsPayload}
  * and the screen asks for items with {@link nl.juiced.guhs.network.BankActionPayload}.
+ * <p>
+ * bbq2: the stomach holds at most {@link BankStorage#CAP} of one kind of item (until the bank is upgraded), so every way
+ * in goes through {@link #stop}, which gives back what did not fit: that remainder always stays where it was (the cursor,
+ * the inventory slot, the crafting grid) or goes to the player, never away. A refused item is told to the screen
+ * ({@link BankVolPayload}).
  * <p>
  * Slot indices: 0 = craft result, 1-9 = craft grid, 10-36 = inventory, 37-45 = hotbar.
  */
@@ -56,8 +64,16 @@ public class BankGuhMenu extends AbstractContainerMenu {
     private final CraftingContainer craftGrid = new TransientCraftingContainer(this, 3, 3);
     private final ResultContainer craftResult = new ResultContainer();
     private int sentVersion = -1;
-    /** Client side: the latest item list sent by the server. */
+    /** Client side: the latest item list sent by the server, and whether the bank has the upgrade (no cap). */
     private BankContents clientContents = BankContents.EMPTY;
+    private boolean clientUpgraded;
+    /** Client side: the item the bank refused last (it is full of it), and a counter so the screen sees a new refusal. */
+    private ItemStack clientVol = ItemStack.EMPTY;
+    private int clientVolTeller;
+    /** Server side: the first kind of item refused during the action that is being handled. */
+    private ItemStack geweigerd = ItemStack.EMPTY;
+    /** Server side: a kind of item reached the cap during the action that is being handled. */
+    private boolean vol;
 
     /** Server side. */
     public BankGuhMenu(int containerId, Inventory inventory, BankGuhBlockEntity bank) {
@@ -100,8 +116,28 @@ public class BankGuhMenu extends AbstractContainerMenu {
         return clientContents;
     }
 
-    public void setClientContents(BankContents contents) {
+    public void setClientContents(BankContents contents, boolean upgraded) {
         this.clientContents = contents;
+        this.clientUpgraded = upgraded;
+    }
+
+    /** Client side: does the open bank have the upgrade (no cap)? */
+    public boolean isClientUpgraded() {
+        return clientUpgraded;
+    }
+
+    public void setClientVol(ItemStack item) {
+        this.clientVol = item;
+        this.clientVolTeller++;
+    }
+
+    /** Client side: what the bank refused last because it is full of it (empty: nothing yet). */
+    public ItemStack getClientVol() {
+        return clientVol;
+    }
+
+    public int getClientVolTeller() {
+        return clientVolTeller;
     }
 
     // --- sync the stomach to the client whenever it changed ---
@@ -111,8 +147,46 @@ public class BankGuhMenu extends AbstractContainerMenu {
         super.broadcastChanges();
         if (bank != null && player instanceof ServerPlayer serverPlayer && bank.getStorage().version() != sentVersion) {
             sentVersion = bank.getStorage().version();
-            PacketDistributor.sendToPlayer(serverPlayer, new BankContentsPayload(containerId, bank.getStorage().snapshot()));
+            ModNetworking.sendTo(serverPlayer, new BankContentsPayload(containerId, bank.getStorage().snapshot(), bank.getStorage().isUpgraded()));
         }
+    }
+
+    // --- the one way into the stomach ---
+
+    /**
+     * Puts a stack into the stomach and returns what did NOT fit (the cap): the caller keeps that. Remembers the first
+     * kind that was refused, so {@link #meld} can tell the screen.
+     */
+    private ItemStack stop(ItemStack stack) {
+        if (bank == null || stack.isEmpty()) {
+            return stack;
+        }
+        ItemStack rest = bank.getStorage().insert(stack);
+        gestopt(stack, !rest.isEmpty());
+        return rest;
+    }
+
+    private void gestopt(ItemStack soort, boolean rest) {
+        if (rest && geweigerd.isEmpty()) {
+            geweigerd = soort.copyWithCount(1);
+        }
+        if (!bank.getStorage().isUpgraded() && bank.getStorage().isFull(soort)) {
+            vol = true;
+        }
+    }
+
+    /** After an action: tell the screen what was refused, and count the "my bank is full" quest. */
+    private void meld() {
+        if (player instanceof ServerPlayer serverPlayer) {
+            if (!geweigerd.isEmpty()) {
+                ModNetworking.sendTo(serverPlayer, new BankVolPayload(containerId, geweigerd));
+            }
+            if (vol) {
+                BankFeature.vol(serverPlayer);
+            }
+        }
+        geweigerd = ItemStack.EMPTY;
+        vol = false;
     }
 
     // --- actions from the screen (server side) ---
@@ -132,7 +206,7 @@ public class BankGuhMenu extends AbstractContainerMenu {
                 ItemStack taken = bank.getStorage().extract(item, amount);
                 if (shift) {
                     player.getInventory().add(taken);
-                    bank.getStorage().insert(taken); // whatever didn't fit goes back
+                    bank.getStorage().restore(taken); // whatever didn't fit goes back (it came out a moment ago: no cap)
                 } else {
                     setCarried(taken);
                 }
@@ -143,8 +217,7 @@ public class BankGuhMenu extends AbstractContainerMenu {
                 for (int i = INV_START; i < HOTBAR_START; i++) {
                     Slot slot = slots.get(i);
                     if (slot.hasItem() && !Features.isLoaned(slot.getItem())) {
-                        bank.getStorage().insert(slot.getItem());
-                        slot.set(ItemStack.EMPTY);
+                        slot.set(stop(slot.getItem()));       // (what the bank is full of stays in the inventory)
                     }
                 }
             }
@@ -152,12 +225,16 @@ public class BankGuhMenu extends AbstractContainerMenu {
                 for (int i = GRID_START; i < GRID_END; i++) {
                     Slot slot = slots.get(i);
                     if (slot.hasItem() && !Features.isLoaned(slot.getItem())) {
-                        bank.getStorage().insert(slot.getItem());
-                        slot.set(ItemStack.EMPTY);
+                        ItemStack rest = stop(slot.getItem());
+                        if (!rest.isEmpty()) {
+                            player.getInventory().add(rest);  // the bank is full of it: to the inventory (shrinks rest)
+                        }
+                        slot.set(rest.isEmpty() ? ItemStack.EMPTY : rest);   // (no room there either: it stays in the grid)
                     }
                 }
             }
         }
+        meld();
         broadcastChanges();
     }
 
@@ -170,6 +247,11 @@ public class BankGuhMenu extends AbstractContainerMenu {
             return;
         }
         handleAction(Action.CLEAR_GRID, ItemStack.EMPTY, 0, false);
+        for (int i = 0; i < 9; i++) {
+            if (!craftGrid.getItem(i).isEmpty()) {
+                return;                               // (the old grid fits nowhere: bank and inventory are full of it)
+            }
+        }
         ItemStack[] gekozen = new ItemStack[9];
         for (int i = 0; i < 9 && i < keuzes.size(); i++) {
             for (ItemStack kandidaat : keuzes.get(i)) {
@@ -260,11 +342,13 @@ public class BankGuhMenu extends AbstractContainerMenu {
             return;                                   // (a loaned golf club, rod... isn't yours to keep: not in the stomach)
         }
         if (button == 1) {
-            bank.getStorage().insert(carried, 1);
-            carried.shrink(1);
+            boolean erin = bank.getStorage().insert(carried, 1) > 0;
+            gestopt(carried, !erin);
+            if (erin) {
+                carried.shrink(1);
+            }
         } else {
-            bank.getStorage().insert(carried);
-            setCarried(ItemStack.EMPTY);
+            setCarried(stop(carried));                // (what the bank is full of stays on the cursor)
         }
     }
 
@@ -324,9 +408,13 @@ public class BankGuhMenu extends AbstractContainerMenu {
             return ItemStack.EMPTY;                   // (loaned things stay with you)
         }
         if (bank != null) {
-            bank.getStorage().insert(stack);
+            ItemStack rest = stop(stack);
+            if (!rest.isEmpty() && index >= GRID_START && index < GRID_END) {
+                moveItemStackTo(rest, INV_START, INV_END, false);   // out of the grid: what the bank is full of goes to the inventory
+            }
+            slot.set(rest.isEmpty() ? ItemStack.EMPTY : rest);   // (else it stays where it was)
+            meld();
         }
-        slot.set(ItemStack.EMPTY);
         return ItemStack.EMPTY;
     }
 
@@ -336,10 +424,12 @@ public class BankGuhMenu extends AbstractContainerMenu {
         // leftovers in the crafting grid go back into the stomach (or to the player if the bank is gone)
         if (bank != null && !bank.isRemoved()) {
             for (int i = 0; i < craftGrid.getContainerSize(); i++) {
-                if (Features.isLoaned(craftGrid.getItem(i))) {
-                    player.getInventory().placeItemBackInInventory(craftGrid.removeItemNoUpdate(i));
-                } else {
-                    bank.getStorage().insert(craftGrid.removeItemNoUpdate(i));
+                ItemStack stack = craftGrid.removeItemNoUpdate(i);
+                if (!Features.isLoaned(stack)) {
+                    stack = bank.getStorage().insert(stack);
+                }
+                if (!stack.isEmpty()) {
+                    player.getInventory().placeItemBackInInventory(stack);   // loaned, or the bank is full of it: back to the player
                 }
             }
         } else if (!player.level().isClientSide()) {

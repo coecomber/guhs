@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "guhs:block/roze_lakhout_planken",
+    "side": "guhs:block/roze_lakhout_planken",
+    "top": "guhs:block/roze_lakhout_planken"
+  }
+}

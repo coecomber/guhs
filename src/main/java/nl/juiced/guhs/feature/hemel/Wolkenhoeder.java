@@ -86,6 +86,11 @@ public class Wolkenhoeder implements NpcRole {
 
     /** All three brought: the heart beats (for this player), a scene, the outfits. */
     static void wordtWakker(@Nullable Entity spreker, ServerPlayer p, @Nullable BlockPos hart) {
+        // bbq2 (oude-scenes): the first time, the heart starts to beat in a camera scene; the rest comes after it
+        if (!HemelQuest.klopt(p) && nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(p, nl.juiced.guhs.feature.oudescenes.OudeScenes.HEMEL,
+                hart != null ? hart : p.blockPosition(), s -> wordtWakker(spreker, s, hart))) {
+            return;
+        }
         HemelQuest.wakker(p);
         if (hart != null && p.level() instanceof ServerLevel level) {
             double x = hart.getX() + 0.5, y = hart.getY() + 0.6, z = hart.getZ() + 0.5;

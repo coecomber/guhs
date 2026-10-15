@@ -77,6 +77,9 @@ public class GuhCompassItem extends Item {
         if (!(level instanceof ServerLevel server) || server.getGameTime() % 20 != 0) {
             return;
         }
+        if (nl.juiced.guhs.feature.bio.kompas.BiomeKompas.tick(stack, server, entity)) {   // biomes3: the Superkompas looks for a biome
+            return;   // biomes3
+        }   // biomes3
         CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         ResourceKey<Structure> target = target(stack);
         if (target == null) {

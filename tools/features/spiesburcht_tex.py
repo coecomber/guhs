@@ -20,7 +20,9 @@ IRON_L = (96, 96, 108)
 IRON_D = (26, 26, 30)
 
 BROUWSELS = {"bouillon": (242, 194, 60), "vahoegheid": (240, 140, 180), "rookloop": (240, 120, 42), "sluipknabbel": (126, 154, 90),
-             "guhsprong": (140, 210, 240)}
+             "guhsprong": (140, 210, 240),
+             # bbq2 (CONTRACT_130 5.4, the order of Brouwsel.java): blubroom (sausdieren), pepervuur and peperzoet (toren-peper)
+             "blubroom": (232, 162, 60), "pepervuur": (216, 50, 42), "peperzoet": (242, 122, 140)}
 
 
 def noise16(base, var, seed, size=16):

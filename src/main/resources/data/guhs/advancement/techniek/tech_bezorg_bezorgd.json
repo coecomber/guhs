@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:haltepaaltje"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_bezorg_bezorgd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_bezorg_bezorgd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/tech_bezorg_station"
+}

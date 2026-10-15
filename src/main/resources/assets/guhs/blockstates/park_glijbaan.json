@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/park_glijbaan"
+    },
+    "facing=east": {
+      "model": "guhs:block/park_glijbaan",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/park_glijbaan",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/park_glijbaan",
+      "y": 270
+    }
+  }
+}

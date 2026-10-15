@@ -1,15 +1,27 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,opgevoerd=false": {
       "model": "guhs:block/bank_guh"
     },
-    "facing=east": {
+    "facing=north,opgevoerd=true": {
       "model": "guhs:block/bank_guh"
     },
-    "facing=south": {
+    "facing=east,opgevoerd=false": {
       "model": "guhs:block/bank_guh"
     },
-    "facing=west": {
+    "facing=east,opgevoerd=true": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=south,opgevoerd=false": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=south,opgevoerd=true": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=west,opgevoerd=false": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=west,opgevoerd=true": {
       "model": "guhs:block/bank_guh"
     }
   }

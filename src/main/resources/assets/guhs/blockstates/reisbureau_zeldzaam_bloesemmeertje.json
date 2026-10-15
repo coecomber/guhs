@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/reisbureau_zeldzaam_bloesemmeertje"
+    },
+    "facing=east": {
+      "model": "guhs:block/reisbureau_zeldzaam_bloesemmeertje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/reisbureau_zeldzaam_bloesemmeertje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/reisbureau_zeldzaam_bloesemmeertje",
+      "y": 270
+    }
+  }
+}

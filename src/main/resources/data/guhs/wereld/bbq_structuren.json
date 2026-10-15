@@ -1,0 +1,32 @@
+{
+  "barbecue": [
+    "fossiel_opgraving",
+    "grillcamping",
+    "guhrio_kasteel",
+    "guhvendel",
+    "knabbelgouw",
+    "mika_brugpaleis",
+    "mika_ruilmarkt",
+    "mika_stal",
+    "mika_woonblokken",
+    "oude_guhrad_centrale",
+    "pepertuin",
+    "ring_rustpunt",
+    "rookguh_vuurtoren",
+    "sausloper_stal",
+    "sausuman_toren",
+    "zoutkristalmijn"
+  ],
+  "knus": [
+    "knabbelpark"
+  ],
+  "sluier": [
+    "frituurberg",
+    "guhladriel_boomstad",
+    "knabbelmoria",
+    "zwarte_roosterpoort"
+  ],
+  "verhalen": [
+    "steigerhuisje"
+  ]
+}

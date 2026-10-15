@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/guhriow2_warpbuis"
+    },
+    "axis=z": {
+      "model": "guhs:block/guhriow2_warpbuis",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/guhriow2_warpbuis",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

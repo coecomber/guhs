@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/bliksemsmidse_wolk_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/bliksemsmidse_wolk_0"
+    },
+    "type=top": {
+      "model": "guhs:block/bliksemsmidse_wolk_plaat_top"
+    }
+  }
+}

@@ -1,0 +1,114 @@
+# bbq2 (bestaand) AutoCheck: the Wachter-guh at a real Spiesburcht and the Knuffelmaker-guh at a real Mika-grillpaleis, with
+# what Bezetting brings there (the wachthokje, the four bridge fires, the naaihoek) and what only the player sees (a fire that
+# burns, the Mikakruid, an empty cage with its plush in the naaihoek). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_bestaand.txt
+# (commands: see autocheck.txt; /guhs bestaand stand | wis | vuur <0..3> | kooi <0..2> | ga <hokje|brug0..3|tuin|kooi0..2|naaihoek>,
+#  /guhs wereld bezetting = the copies around you get what they miss at once)
+# Look for: the hokje next to the statue with the Wachter-guh in it and the Zielig lantaarntje above his plume; a cold fire
+# bowl on a post on every bridge and the same bowl burning after "vuur"; six purple tufts on the paths of the tuintje; the
+# naaihoek in the fourth corner of the first floor with the Mikas' sign; cage 0 empty and the Knuffelguh in the naaihoek.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/guhs bestaand wis
+
+section the Spiesburcht: the wachthokje and the Wachter-guh
+tplocate guhs:barbecuether guhs:spiesburcht
+/gamemode spectator
+# (the middle of the hall: 60 from the corner of the build, the deck is 30 above its foot)
+relcmd /tp @s {x:60} {y:36} {z:60}
+wait 60
+/guhs wereld bezetting
+wait 20
+/guhs wereld bezetting
+/guhs bestaand stand
+/guhs bestaand ga hokje
+wait 20
+/guhs bestaand ga hokje
+waitrender 300
+shot bbq2_bestaand_wachthokje
+npc wachterguh 3.2 0.6
+wait 10
+shot bbq2_bestaand_wachter
+
+section the Wachter-guh's talk (the Praat screen)
+/gamemode creative
+gui keep
+interact npc
+wait 30
+shot bbq2_bestaand_wachter_praat gui
+gui close
+/gamemode spectator
+
+section a bridge fire: cold for everybody, burning for who lit it
+/guhs bestaand ga brug0
+wait 20
+/guhs bestaand ga brug0
+waitrender 300
+shot bbq2_bestaand_brugvuur_koud
+/guhs bestaand vuur 0
+wait 40
+shot bbq2_bestaand_brugvuur_brandt
+/guhs bestaand ga brug2
+wait 20
+/guhs bestaand ga brug2
+waitrender 300
+shot bbq2_bestaand_brugvuur_west_koud
+
+section the pindasaus-tuintje: Mikakruid for who must weed it
+/guhs verhaal stap wachter @s 3
+/guhs bestaand ga tuin
+wait 20
+/guhs bestaand ga tuin
+wait 40
+waitrender 300
+shot bbq2_bestaand_mikakruid
+/guhs verhaal stap wachter @s 4
+wait 40
+shot bbq2_bestaand_tuintje_gewied
+
+section the Mika-grillpaleis: the naaihoek and the Knuffelmaker-guh
+tplocate guhs:barbecuether guhs:mika_grillpaleis
+/gamemode spectator
+# (the middle of the first floor: 36 from the corner of the build, you stand 22 above its foot)
+relcmd /tp @s {x:36} {y:24} {z:36}
+wait 60
+/guhs wereld bezetting
+wait 20
+/guhs wereld bezetting
+/guhs bestaand ga naaihoek
+wait 20
+/guhs bestaand ga naaihoek
+waitrender 300
+shot bbq2_bestaand_naaihoek
+npc knuffelmakerguh 3.2 0.6
+wait 10
+shot bbq2_bestaand_knuffelmaker
+
+section a cage: full for everybody, empty for who freed its plush (which then sits in the naaihoek)
+/guhs bestaand ga kooi0
+wait 20
+/guhs bestaand ga kooi0
+waitrender 300
+shot bbq2_bestaand_kooi_vol
+/guhs bestaand kooi 0
+wait 40
+shot bbq2_bestaand_kooi_leeg
+/guhs bestaand kooi 1
+/guhs bestaand kooi 2
+/guhs bestaand ga naaihoek
+wait 20
+/guhs bestaand ga naaihoek
+wait 40
+shot bbq2_bestaand_naaihoek_met_knuffels
+
+section the blocks and the outfit
+/guhs bestaand wis
+/gamemode creative
+gui creative guhs
+gui close
+quit

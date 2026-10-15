@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "DRD",
+    " Z "
+  ],
+  "key": {
+    "T": "minecraft:redstone_torch",
+    "D": "guhs:guh_wire",
+    "R": "guhs:knabbelbuis_richting",
+    "Z": "guhs:zoutkristal"
+  },
+  "result": {
+    "id": "guhs:knabbelbuis_filter"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:steigerhuisje",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21305208,
+    "min_afstand": 900,
+    "max_afstand": 2000,
+    "alleen_nieuw": true,
+    "sector": 3,
+    "sectoren": 16
+  }
+}

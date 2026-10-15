@@ -361,7 +361,9 @@ public class SpiesburchtGameTests {
             helper.assertTrue(effects.get(0).getEffect().equals(MobEffects.INVISIBILITY), "invisibility without guhs:stil");
         }
         for (Brouwsel b : Brouwsel.values()) {
-            helper.assertTrue(b == Brouwsel.BOUILLON || (!b.drankje().isEmpty() && !b.effects().isEmpty()), "a drankje for " + b.id());
+            // (bbq2: BLUBROOM, PEPERVUUR and PEPERZOET get their drankje from their slice, Brouwsel.zetDrankje)
+            helper.assertTrue(b == Brouwsel.BOUILLON || b.ordinal() > Brouwsel.GUHSPRONG.ordinal()
+                    || (!b.drankje().isEmpty() && !b.effects().isEmpty()), "a drankje for " + b.id());
         }
         helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Guhs.id("grillspiespoeder"))).isPresent()
                 && helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Guhs.id("guhbrouwketel"))).isPresent(), "powder and ketel recipes");

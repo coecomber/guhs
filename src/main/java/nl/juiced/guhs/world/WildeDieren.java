@@ -26,6 +26,7 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature;
 import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
 import nl.juiced.guhs.feature.piep.PiepFeature;
+import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
 import nl.juiced.guhs.feature.spiesburcht.SpiesburchtFeature;
 import nl.juiced.guhs.feature.vogels.VogelsFeature;
 import nl.juiced.guhs.feature.vogels.Vogeltje;
@@ -78,7 +79,8 @@ public final class WildeDieren {
                     // einde2: the wild ones of the outer islands (their top-ups mark them; the Ender-Mika is a natural spawn)
                     E2MikasFeature.ENDER_MIKA.get(), E2MikasFeature.KAASMIJT.get(),
                     E2ZweversFeature.KRUIMELKWAL.get(), E2ZweversFeature.LEEGTEWALVISGUH.get(), E2ZweversFeature.VLEERMUIS_LEMURGUH.get(),
-                    E2ZweversFeature.OTTER_PINGUINGUH.get(), E2ZweversFeature.DAS_MOLGUH.get(), E2ZweversFeature.SCHILDPAD_EENDGUH.get());
+                    E2ZweversFeature.OTTER_PINGUINGUH.get(), E2ZweversFeature.DAS_MOLGUH.get(), E2ZweversFeature.SCHILDPAD_EENDGUH.get(),
+                    SausdierenFeature.SAUSLOPER.get(), SausdierenFeature.SAUSBLUBJE.get());
         }
         return soorten;
     }

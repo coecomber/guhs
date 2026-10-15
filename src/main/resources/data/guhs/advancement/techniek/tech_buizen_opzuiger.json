@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:opzuiger"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_buizen_opzuiger.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_buizen_opzuiger.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "opzuiger": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:opzuiger"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:techniek/tech_buizen_buis"
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/torenpeper_vuurtorenlamp"
+    },
+    "lit=true": {
+      "model": "guhs:block/torenpeper_vuurtorenlamp_aan"
+    }
+  }
+}

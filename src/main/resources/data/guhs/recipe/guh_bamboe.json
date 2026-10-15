@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bamboo",
+    "minecraft:pink_dye"
+  ],
+  "result": {
+    "id": "guhs:guh_bamboe"
+  }
+}

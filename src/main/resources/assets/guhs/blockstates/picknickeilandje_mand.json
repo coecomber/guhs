@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,versierd=false": {
+      "model": "guhs:block/picknickeilandje_mand"
+    },
+    "facing=east,versierd=false": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 90
+    },
+    "facing=south,versierd=false": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 180
+    },
+    "facing=west,versierd=false": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 270
+    },
+    "facing=north,versierd=true": {
+      "model": "guhs:block/picknickeilandje_mand"
+    },
+    "facing=east,versierd=true": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 90
+    },
+    "facing=south,versierd=true": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 180
+    },
+    "facing=west,versierd=true": {
+      "model": "guhs:block/picknickeilandje_mand",
+      "y": 270
+    }
+  }
+}

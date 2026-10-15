@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:cauldron",
+    "minecraft:pink_dye"
+  ],
+  "result": {
+    "id": "guhs:park_prullenbak"
+  }
+}

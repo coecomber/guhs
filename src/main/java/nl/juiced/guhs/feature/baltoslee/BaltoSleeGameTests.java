@@ -448,7 +448,16 @@ public class BaltoSleeGameTests {
             }
         }
         helper.assertTrue(met > 5, "test rides with a gust: " + met);
-        helper.assertTrue(ergste > 1.5, "without steering a gust blows you well off the middle: " + ergste);
+        // (bbq2 eindcontrole: this said "ergste > 1.5" since 1.3.1 and could never hold on THIS track: it is 44 blocks long, a
+        // gust starts in cell 1 at s = 28..35 and none blows in the last 10 blocks, so at most the first half of a gust (6 of
+        // its 12 blocks) acts here: 1.27 at best. So: half a gust on the test track pushes more than a block, and a whole one,
+        // as on the real track, well over 1.5.)
+        helper.assertTrue(ergste > 1.0, "without steering half a gust (all this short track has room for) blows you off the middle: " + ergste);
+        double heel = 0;
+        for (double s = 0; s <= SleeRijden.VLAAG_LENGTE; s += SleeRijden.TOP) {
+            heel += SleeRijden.windKracht(Math.sin(Math.PI * s / SleeRijden.VLAAG_LENGTE), SleeRit.TOCHT_STORM_TERUG);
+        }
+        helper.assertTrue(heel > 1.5, "without steering a whole gust blows you well off the middle: " + heel);
         helper.assertTrue(gehouden < 1.0 && gehouden < ergste, "steering against it keeps you near the middle: " + gehouden);
         // Steele-Mika: slower than a rider who warms up once, on every level (two legs of 304 blocks; a stop costs about 120 ticks)
         double jij = 2 * 304 / SleeRijden.TOP + 120 + 80;

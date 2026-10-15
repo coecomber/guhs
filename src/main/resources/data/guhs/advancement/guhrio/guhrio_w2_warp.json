@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhriow2_warppijp"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhrio.guhrio_w2_warp.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhrio.guhrio_w2_warp.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guhrio/guhrio_w2_uitgebroed"
+}

@@ -440,5 +440,109 @@
     ],
     "licht": 0,
     "effect": ""
+  },
+  "reisbureau_souvenir_bloesemmeertje": {
+    "muur": false,
+    "vorm": [
+      4.5,
+      0.0,
+      5.5,
+      11.5,
+      14.5,
+      10.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_bloesemmeertje": {
+    "muur": false,
+    "vorm": [
+      3.5,
+      0.0,
+      3.5,
+      12.5,
+      8.5,
+      12.5
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_klaterdal": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      3.0,
+      14.0,
+      12.0,
+      12.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_klaterdal": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      2.0,
+      14.0,
+      13.0,
+      14.0
+    ],
+    "licht": 0,
+    "effect": "stoom"
+  },
+  "reisbureau_souvenir_wolkenweide": {
+    "muur": false,
+    "vorm": [
+      4.5,
+      0.0,
+      4.5,
+      11.5,
+      11.0,
+      11.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_wolkenweide": {
+    "muur": false,
+    "vorm": [
+      4.5,
+      0.0,
+      4.5,
+      11.5,
+      11.0,
+      11.5
+    ],
+    "licht": 8,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_japan": {
+    "muur": false,
+    "vorm": [
+      1.0,
+      0.0,
+      6.5,
+      15.0,
+      5.5,
+      9.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_japan": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      2.0,
+      14.0,
+      12.0,
+      14.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
   }
 }

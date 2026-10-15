@@ -1,0 +1,49 @@
+# biomes3 wereld-wolk: the finished Wolkenweide in a real generated world (seed 20261007: stacks of islands
+# stand at -545 376, -464 376 and -545 294). What a still cannot show is listed in guhs_workbio/reports/slice_wereld-wolk.md section 3.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_wereld_wolk.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section de wei
+tpbiome guhs:guhmension guhs:wolkenweide
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 -12
+waitrender 400
+hier
+shot wolk_wei_laag
+look 135 -30
+wait 40
+shot wolk_wei_omhoog
+look 225 -55
+wait 40
+shot wolk_onderkanten
+
+section de stapel van opzij en van boven
+/tp @s ~-60 ~38 ~-60
+look -45 5
+waitrender 400
+shot wolk_stapel_wolkenzee
+/tp @s ~ ~45 ~
+look -45 25
+waitrender 300
+shot wolk_stapel_hoog
+/tp @s ~60 ~60 ~60
+look 45 75
+waitrender 300
+shot wolk_van_boven
+
+section zonsondergang en nacht
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+/time set 12600
+look 90 -8
+waitrender 200
+shot wolk_zonsondergang
+/time set 18000
+look 45 -45
+wait 100
+shot wolk_nacht_sterren
+/time set noon
