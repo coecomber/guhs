@@ -95,10 +95,25 @@ public final class E2ZijClient {
         return id == null || !BuiltInRegistries.ITEM.containsKey(id) ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.getValue(id));
     }
 
-    /** A power's name: {@code gui.guhs.einde2_kracht.<id>}, else the name of its icon. */
+    /** The chapter slices that may name their story powers {@code gui.guhs.einde2_<slice>.kracht.<id>} (h2_water does). */
+    private static final String[] HOOFDSTUKKEN = {"h1_lucht", "h2_water", "h3_aarde", "h4_vuur"};
+
+    /**
+     * A power's name: {@code gui.guhs.einde2_kracht.<id>}, else a chapter's {@code gui.guhs.einde2_<slice>.kracht.<id>},
+     * else the name of its icon.
+     */
     static Component naam(KrachtPayloads.Regel r) {
         String key = "gui.guhs.einde2_kracht." + r.id();
-        return I18n.exists(key) ? Component.translatable(key) : icoon(r).getHoverName();
+        if (I18n.exists(key)) {
+            return Component.translatable(key);
+        }
+        for (String h : HOOFDSTUKKEN) {
+            String k = "gui.guhs.einde2_" + h + ".kracht." + r.id();
+            if (I18n.exists(k)) {
+                return Component.translatable(k);
+            }
+        }
+        return icoon(r).getHoverName();
     }
 
     static void kies(String id) {
