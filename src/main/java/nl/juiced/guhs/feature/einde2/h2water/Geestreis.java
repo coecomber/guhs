@@ -73,6 +73,9 @@ public final class Geestreis {
         }
     }
 
+    /** (tests) Koh's test runs in any level, not only in the Geestenwereld. */
+    static volatile boolean OVERAL;
+
     private static final Map<UUID, Proef> PROEVEN = new ConcurrentHashMap<>();
     /** Players whose trip waits for its guests: until when (game time). */
     private static final Map<UUID, Long> VERTREK = new ConcurrentHashMap<>();
@@ -255,7 +258,7 @@ public final class Geestreis {
         if (proef == null) {
             return;
         }
-        if (!E2H2Water.aanZet(p, E2H2Water.KOH) || (!Geestenwereld.in(p) && E2H2Water.TEST == null)) {
+        if (!E2H2Water.aanZet(p, E2H2Water.KOH) || (!Geestenwereld.in(p) && !OVERAL)) {
             PROEVEN.remove(p.getUUID());
             return;
         }

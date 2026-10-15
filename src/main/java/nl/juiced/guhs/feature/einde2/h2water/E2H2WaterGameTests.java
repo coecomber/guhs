@@ -42,12 +42,17 @@ public class E2H2WaterGameTests {
         return p;
     }
 
+    /** A mock player is not ticked by a connection: the story engine's locks (cards, scenes) end on the player's tick. */
+    private static void tik(ServerPlayer p) {
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(p));
+    }
+
     private static void weg(GameTestHelper helper, ServerPlayer... ps) {
         for (ServerPlayer p : ps) {
             E2H2Water.wis(p);
             helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         }
-        E2H2Water.TEST = null;
+        // (E2H2Water.TEST stays: the tests of the batch run side by side, and only the chain test uses it)
     }
 
     /** The copy of the test: the marker aankomst_speler of the Waterstam lies on the test room's (2, 2, 2). */
@@ -77,6 +82,8 @@ public class E2H2WaterGameTests {
         helper.assertTrue(E2H2Water.binnen(p) && E2H2Water.binnen(vriend), "both stand in the copy");
         final int[] fase = {0};
         helper.succeedWhen(() -> {
+            tik(p);
+            tik(vriend);
             E2H2Water.seconde(p);
             E2H2Water.seconde(vriend);
             switch (fase[0]) {
@@ -127,8 +134,8 @@ public class E2H2WaterGameTests {
     @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 400)
     public static void einde2H2WaterKoh(GameTestHelper helper) {
         Verhaallijn lijn = E2H2Water.lijn();
-        kopie(helper);
         ServerPlayer stil = speler(helper, 2, 2), beweeg = speler(helper, 5, 2), spring = speler(helper, 8, 2);
+        Geestreis.OVERAL = true;
         for (ServerPlayer p : List.of(stil, beweeg, spring)) {
             E2VerhaalDev.zetTot(p, E2Verhaal.WATER, E2H2Water.KOH);
             p.getInventory().add(new ItemStack(ModItems.KAAS_KNABBELS.get(), 5));
@@ -181,8 +188,8 @@ public class E2H2WaterGameTests {
         p.setYRot(0f);
         p.setXRot(0f);
         p.getInventory().add(new ItemStack(E2H2WaterFeature.BOEMERANG.get()));
-        // a knabbel lies four blocks ahead (south), at the height the boemerang flies
-        BlockPos at = helper.absolutePos(new BlockPos(2, 3, 6));
+        // a knabbel lies two blocks ahead (south, inside the test room), at the height the boemerang flies
+        BlockPos at = helper.absolutePos(new BlockPos(2, 3, 4));
         ItemEntity knabbel = new ItemEntity(level, at.getX() + 0.5, p.getEyeY() - 0.1, at.getZ() + 0.5, new ItemStack(ModItems.KAAS_KNABBELS.get(), 3));
         knabbel.setDeltaMovement(Vec3.ZERO);
         knabbel.setNoGravity(true);
@@ -202,7 +209,9 @@ public class E2H2WaterGameTests {
         helper.assertTrue(E2H2WaterKrachten.brug(new BlockPos(150, 36, 87), new BlockPos(157, 36, 87)).size() == 18, "the ice bridge: 6 long, 3 wide");
         helper.succeedWhen(() -> {
             helper.assertTrue(!b.isAlive(), "the boemerang is back");
-            helper.assertTrue(GuhQuests.count(p, ModItems.KAAS_KNABBELS.get()) == 3, "it brought the knabbels it touched");
+            helper.assertTrue(GuhQuests.count(p, ModItems.KAAS_KNABBELS.get()) == 3, "it brought the knabbels it touched (the knabbel "
+                    + (knabbel.isAlive() ? "still lies at " + knabbel.position() : "is gone") + ", the boemerang ended at " + b.position()
+                    + ", the player stands at " + p.position() + ")");
             helper.assertTrue(GuhQuests.count(p, E2H2WaterFeature.BOEMERANG.get()) == 1, "the boemerang itself was never used up");
             helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(20)).isEmpty(),
                     "nothing left lying about");
