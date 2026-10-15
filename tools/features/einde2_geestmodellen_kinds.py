@@ -170,9 +170,25 @@ def build(h):
         h.w(os.path.join(h.A, "geckolib", "animations", "entity", f"guh_npc_{kind}.animation.json"), bestand(kind))
 
 
+def rijen():
+    """Every kind of the slice in the order of the Kind block: kind -> (doorzichtig, gloed, [(animation, ticks)], mix bones
+    [[set 0], ...], allowed prefixes of the extra bones). The two of phase A, then the echoes of phase B."""
+    from features import einde2_geestmodellen_echo as echo
+    out = {kind: (door, gloed, anims, [], (kind.split("_")[0] + "_",)) for kind, (door, gloed, anims) in KINDS.items()}
+    for kind in echo.ECHO:
+        out[kind] = (True, True, echo.animaties(kind), echo.MIXBOTTEN.get(kind, []), echo.bot_prefixen(kind))
+    return out
+
+
+def java_rij(kind, door, gloed, anims, mix):
+    return (f'GuhNpcEntity.Kind.{kind.upper()}, {str(door).lower()}, {str(gloed).lower()}, "' + ",".join(f"{n}:{t}" for n, t in anims)
+            + '", "' + "|".join(" ".join(s) for s in mix) + '"')
+
+
 def check(h):
     fout = []
-    for kind, (door, gloed, anims) in KINDS.items():
+    alle = rijen()
+    for kind, (door, gloed, anims, mix, prefixen) in alle.items():
         geo_pad = os.path.join(h.A, "geckolib", "models", "entity", f"guh_npc_{kind}.geo.json")
         an_pad = os.path.join(h.A, "geckolib", "animations", "entity", f"guh_npc_{kind}.animation.json")
         tex = os.path.join(h.TEX, "entity", f"npc_{kind}.png")
@@ -190,8 +206,11 @@ def check(h):
             if b not in botten:
                 fout.append(f"{kind}: base bone {b} is gone")
         for b in botten - set(ck.BASISBOTTEN["zit"]):
-            if not b.startswith(kind.split("_")[0] + "_"):
-                fout.append(f"{kind}: extra bone {b} is not named {kind.split('_')[0]}_<ding>")
+            if not b.startswith(tuple(prefixen)):
+                fout.append(f"{kind}: extra bone {b} is not named {' / '.join(prefixen)}<ding>")
+        mixen = sorted(b for b in botten if b.startswith("mix_"))
+        if sorted(sum(mix, [])) != mixen:
+            fout.append(f"{kind}: the mix bones {mixen} are not the table's")
         bestandje = json.load(open(an_pad, encoding="utf-8"))["animations"]
         for naam in ["idle"] + [n for n, _ in anims]:
             if P + naam not in bestandje:
@@ -200,6 +219,8 @@ def check(h):
             for b in a.get("bones", {}):
                 if b not in botten:
                     fout.append(f"{kind}: {naam} moves a missing bone {b}")
+                if b.startswith("mix_"):
+                    fout.append(f"{kind}: {naam} moves a mix bone")
         for naam, t in anims:
             lengte = bestandje.get(P + naam, {}).get("animation_length", 0)
             if t and abs(lengte * 20 - t) > 1:
@@ -208,8 +229,8 @@ def check(h):
                 fout.append(f"{kind}: {naam} must loop exactly when it is a pose")
     pad = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2", "geestwezens", "GeestKinds.java")
     java = open(pad, encoding="utf-8").read() if os.path.exists(pad) else ""
-    for kind, (door, gloed, anims) in KINDS.items():
-        wil = f'GuhNpcEntity.Kind.{kind.upper()}, {str(door).lower()}, {str(gloed).lower()}, "' + ",".join(f"{n}:{t}" for n, t in anims) + '"'
+    for kind, (door, gloed, anims, mix, _) in alle.items():
+        wil = java_rij(kind, door, gloed, anims, mix)
         m = re.search(r"^\s*" + kind.upper() + r"\((.*?)\)[,;]\s*$", java, re.M)
         if not m or " ".join(m.group(1).split()) != wil:
             fout.append(f"GeestKinds.{kind.upper()} does not say ({wil})")

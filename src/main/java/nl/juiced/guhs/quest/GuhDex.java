@@ -72,7 +72,10 @@ public final class GuhDex {
             // "compleet"; several of these are only met in a story or behind an optional questline)
             GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,
             GuhVariant.VLEERMUIS_LEMURGUH, GuhVariant.OTTER_PINGUINGUH, GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH,
-            GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT);
+            GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT,
+            // (einde2 phase B: the creatures of the Geestenwereld; most are only met in the story)
+            GuhVariant.KOH, GuhVariant.HEI_BAI_GUH, GuhVariant.FANG, GuhVariant.GEEST_KOI, GuhVariant.LIBELKONIJNGUH, GuhVariant.LANTAARNGEEST,
+            GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH);
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
@@ -322,7 +325,9 @@ public final class GuhDex {
      */
     public static final java.util.Set<String> NIEUW_EINDE2 = java.util.Set.of("KORSTGUH", "DUINGUH", "KRUIMELGUH", "SCHIMMELGUH", "KRISTALGUH", "KOORGUH",
             "ENDER_MIKA", "KAASMIJT", "SCHUILGUH", "KRUIMELKWAL", "LEEGTEWALVISGUH", "VLEERMUIS_LEMURGUH", "OTTER_PINGUINGUH", "DAS_MOLGUH",
-            "SCHILDPAD_EENDGUH", "APPA_GUH", "MOMO_GUH", "SPONSGUH", "GERRIT");
+            "SCHILDPAD_EENDGUH", "APPA_GUH", "MOMO_GUH", "SPONSGUH", "GERRIT",
+            // (phase B, geest_modellen: the ten creature pages of the Geestenwereld)
+            "KOH", "HEI_BAI_GUH", "FANG", "GEEST_KOI", "LIBELKONIJNGUH", "LANTAARNGEEST", "SCHADUWGEEST", "KENNISVOSJE", "MISTREIGER", "OUDE_REIGERGUH");
 
     /** einde2: the six of {@link #NIEUW_EINDE2} that count for a full Guhdex (the tameable biome guhs; the others are bonus pages). */
     public static final java.util.Set<GuhVariant> TELLEND_EINDE2 = java.util.Set.of(GuhVariant.KORSTGUH, GuhVariant.DUINGUH, GuhVariant.KRUIMELGUH,

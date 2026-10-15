@@ -33,6 +33,9 @@ public class SchaduwgeestEntity extends GeestWezen {
     /** The player it would shove now, or null. */
     @Nullable
     public Player doelwit() {
+        if (onzichtbaar()) {
+            return null;                                            // (a hidden spirit never shoves)
+        }
         Player p = level().getNearestPlayer(this, BEREIK);
         if (p == null || p.isSpectator() || p.getAbilities().instabuild || !p.isAlive()) {
             return null;

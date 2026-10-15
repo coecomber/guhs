@@ -505,7 +505,9 @@ public class VerhaalGameTests {
                         GuhVariant.DUIFGUHTJE,   // 1.4.2 (park-plekjes b)
                         GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,   // einde2
                         GuhVariant.VLEERMUIS_LEMURGUH, GuhVariant.OTTER_PINGUINGUH, GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH,
-                        GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT)),
+                        GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT,
+                        GuhVariant.KOH, GuhVariant.HEI_BAI_GUH, GuhVariant.FANG, GuhVariant.GEEST_KOI, GuhVariant.LIBELKONIJNGUH,   // einde2 phase B
+                        GuhVariant.LANTAARNGEEST, GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH)),
                 "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud, (biomes3) the four of the new biomes, (1.4.2) the park's three and (einde2) every creature page of the outer islands");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {

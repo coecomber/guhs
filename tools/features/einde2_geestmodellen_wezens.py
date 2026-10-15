@@ -923,6 +923,18 @@ def voorbeelden(alleen=None):
             hides = [()]
             if id == "hei_bai_guh":
                 namen, hides = [f"{id}_0", f"{id}_1"], [("groot",), ("klein",)]
+            if id == "geestreus":
+                vormen = _w2.REUS_VORMEN
+                namen, hides = [f"{id}_{i}" for i in range(len(vormen))], [tuple(v for v in vormen if v != vorm) for vorm in vormen]
             for naam, hide in zip(namen, hides):
                 uit.append((naam, model, atlas.img, atlas.glowmask(), hide, animaties()))
     return uit
+
+
+# =====================================================================================================================
+# phase B (CONTRACT_E2_B 7.7): the six new creatures (einde2_geestmodellen_wezens2) join both tables
+# =====================================================================================================================
+from features import einde2_geestmodellen_wezens2 as _w2  # noqa: E402
+
+WEZENS.update(_w2.WEZENS)
+MODELLEN.update(_w2.MODELLEN)

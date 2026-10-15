@@ -1,9 +1,10 @@
-# einde2 slice geestmodellen AutoCheck: the creatures of the Geestenwereld in every look (Koh with his six faces, Hei Bai-guh
-# small and as the giant, Fang, Tui and La, the libelkonijnguh, the four lantaarngeesten, the schaduwgeest) and the two kinds
-# (the Theegeest, the Bestelguh), in the rows of the dev command /guhs einde2 toon geest. Run:
+# einde2 slice geestmodellen AutoCheck: the creatures of the Geestenwereld in every look, and every spirit character (the
+# Theegeest, the Bestelguh, the echoes of the White Lotus, its members, Guru Pathik, three earlier Guhvatars), in the rows of
+# the dev command /guhs einde2 toon geest; then (phase B) the Oude Reigerguh waking, the twelve watching masks and the
+# eleven spirits in an arc (/guhs einde2 geestwezens ga ...). Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_geestmodellen.txt -PautocheckTimeout=30
 # (written by the slice, not run by it: the merge step runs it.) The rows stand 5 blocks and more in front of the player
-# (who looks south here), facing the player; /guhs einde2 toon weg takes them away.
+# (who looks south here), facing the player; /guhs einde2 toon weg and /guhs einde2 geestwezens wis take them away.
 
 section setup
 /gamemode creative
@@ -32,4 +33,25 @@ shot geestmodellen_rechts
 
 section away
 /guhs einde2 toon weg
+wait 20
+
+section phase B: the spirits in an arc, the masks, the heron
+/guhs einde2 geestwezens ga echo
+wait 40
+camera 0.5 122 -1.5 0 10
+waitrender 100
+shot geestmodellen_echos
+/guhs einde2 geestwezens wis
+/guhs einde2 geestwezens ga masker
+wait 40
+shot geestmodellen_maskers
+/guhs einde2 geestwezens wis
+/guhs einde2 geestwezens ga reiger
+wait 40
+camera 0.5 124 -3.5 0 10
+shot geestmodellen_reiger_slaapt
+/guhs einde2 geestwezens anim ontwaak
+wait 40
+shot geestmodellen_reiger_ontwaakt
+/guhs einde2 geestwezens wis
 wait 20

@@ -16,3 +16,21 @@ The names of contract 3.5 / 11.8 and of the other einde2 glossaries are used wor
 | de Bestelguh | the Order Guh | tech tier 5: the guh at the order counter (Bestelbalie) who runs the crafting orders |
 | Geestenwereld | Spirit World | the dimension of the Guhvatar story |
 | theepaviljoen | tea pavilion | |
+
+Phase B (geest_modellen):
+
+| Dutch | English | note |
+|---|---|---|
+| Kennisvosje / gouden kennisvosje | Knowledge Fox / golden Knowledge Fox | spirit fox with guh ears that leads to a secret |
+| Mistreiger | Mist Heron | small white heron on the roofs of the White Lotus |
+| Oude Reigerguh | Old Heron Guh | the huge crane spirit round the stone lotus |
+| Wan-guh | Wan Guh | the hooded figure, "the first" |
+| Geestreus | Spirit Giant | the far-away silhouettes of the geestentij |
+| Kijkmasker | Watching Mask | a mask of Koh's cave that turns to you |
+| Echo van ... | Echo of ... | the spirit echoes of the White Lotus masters (Echo of King Bumi Guh, Echo of Master Pakguh, Echo of Piandao Guh, Echo of Jeong Jeong Guh) |
+| Droom van Oom Miroh | Dream of Uncle Miroh | Miroh still lives: his echo is a dream |
+| Stichter / Lid van de Witte Lotus | Founder / Member of the White Lotus | |
+| Guru Pathik-guh | Guru Pathik Guh | |
+| Kuruk-guh, Yangchen-guh, Szeto-guh | Kuruk Guh, Yangchen Guh, Szeto Guh | earlier Guhvatars as spirits |
+| ui-banaansap | onion-banana juice | Guru Pathik's drink |
+| Gefluisterwoud / Hemelvijver / Hemelpad | Whispering Wood / Sky Pond / Sky Path | as used in the Guhdex pages (check against geest_bouw's glossary) |
