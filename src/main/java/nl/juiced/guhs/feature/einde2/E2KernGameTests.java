@@ -528,8 +528,8 @@ public class E2KernGameTests {
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void einde2KernSkelet(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
-        // the six guhs are real variants, the thirteen creatures are pages; all nineteen are named in NIEUW_EINDE2
-        helper.assertTrue(GuhDex.NIEUW_EINDE2.size() == 19, "nineteen new pages");
+        // the six guhs are real variants, the thirteen creatures (+ the ten spirits of phase B) are pages; all 29 are named in NIEUW_EINDE2
+        helper.assertTrue(GuhDex.NIEUW_EINDE2.size() == 29, "29 new pages");
         for (String naam : GuhDex.NIEUW_EINDE2) {
             GuhVariant v = GuhVariant.valueOf(naam);
             helper.assertTrue(GuhDex.ENTRIES.contains(v), naam + " is in the Guhdex");

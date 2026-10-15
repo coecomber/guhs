@@ -320,7 +320,7 @@ public final class GuhDex {
     }
 
     /**
-     * einde2: the names of the nineteen pages the Guheinde expansion adds (hook fase B: a title or reward that was earned
+     * einde2: the names of the 29 pages the Guheinde expansion adds (19 of phase A, the ten spirits of phase B) (hook fase B: a title or reward that was earned
      * with a full Guhdex before them may leave these out).
      */
     public static final java.util.Set<String> NIEUW_EINDE2 = java.util.Set.of("KORSTGUH", "DUINGUH", "KRUIMELGUH", "SCHIMMELGUH", "KRISTALGUH", "KOORGUH",
