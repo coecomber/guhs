@@ -29,6 +29,7 @@ import com.geckolib.animatable.GeoEntity;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
@@ -270,6 +271,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     private int speelTot = -1;
     /** Client: the last {@link #DATA_SPEEL_N} the controller started. */
     private int speelGezien;
+    /** Client: the cutscene animation ({@code Cutscenes.animatie}) the controller saw last ("" = none). */
+    private String sceneGezien = "";
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     /** The Maagenzym-guh belongs to one stomach. */
     @Nullable
@@ -630,7 +633,15 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>("main", 0, state -> {
-            String naam = speelt();
+            // a client-side cutscene actor never gets the synced speel(): a scene's Builder.animatie goes first
+            String scene = Cutscenes.animatie(this);
+            if (!scene.equals(sceneGezien)) {
+                sceneGezien = scene;
+                if (!scene.isEmpty()) {
+                    state.controller().reset();
+                }
+            }
+            String naam = !scene.isEmpty() && duur(scene) >= 0 ? scene : speelt();
             if (naam.isEmpty()) {
                 return state.setAndContinue(IDLE);
             }
