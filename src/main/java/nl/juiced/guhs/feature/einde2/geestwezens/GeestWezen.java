@@ -64,6 +64,10 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<String> DATA_HOUDING = SynchedEntityData.defineId(GeestWezen.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_SOORT = SynchedEntityData.defineId(GeestWezen.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_STIL = SynchedEntityData.defineId(GeestWezen.class, EntityDataSerializers.BOOLEAN);
+    /** phase B: hidden on purpose (saved "Weg"; the story or geest_spel: a giant outside the geestentij). */
+    private static final EntityDataAccessor<Boolean> DATA_WEG = SynchedEntityData.defineId(GeestWezen.class, EntityDataSerializers.BOOLEAN);
+    /** phase B: hidden by itself for now (not saved: Wan-guh after verdwijn, a giant someone came too close to). */
+    private static final EntityDataAccessor<Boolean> DATA_VERSCHOLEN = SynchedEntityData.defineId(GeestWezen.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     /** Never null: an entity type that is not in the table behaves like a lantaarngeest. */
@@ -101,8 +105,10 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
 
     /** Does it float (no gravity: Fang, the koi, the libelkonijnguh, the lantern)? */
     public boolean zweeft() {
-        return wezen == GeestWezens.FANG || wezen == GeestWezens.GEEST_KOI || wezen == GeestWezens.LIBELKONIJNGUH
-                || wezen == GeestWezens.LANTAARNGEEST;
+        return switch (wezen) {
+            case FANG, GEEST_KOI, LIBELKONIJNGUH, LANTAARNGEEST, MISTREIGER, OUDE_REIGERGUH, WAN_GUH, GEESTREUS, KIJKMASKER -> true;
+            default -> false;
+        };
     }
 
     // --- synced data, save -------------------------------------------------------------------------------------------------
@@ -113,6 +119,8 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
         builder.define(DATA_HOUDING, "idle");
         builder.define(DATA_SOORT, -1);
         builder.define(DATA_STIL, false);
+        builder.define(DATA_WEG, false);
+        builder.define(DATA_VERSCHOLEN, false);
     }
 
     @Override
@@ -122,6 +130,7 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
         tag.putBoolean("Stil", stil());
         tag.putInt("Honk", honk);
         tag.putBoolean("HonkGezet", honkGezet);
+        tag.putBoolean("Weg", isWeg());
         if (wezen.soorten > 0) {
             tag.putInt("Soort", soort());
         }
@@ -138,6 +147,7 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
         entityData.set(DATA_STIL, tag.getBooleanOr("Stil", false));
         honk = Math.max(0, tag.getIntOr("Honk", 0));
         honkGezet = tag.getBooleanOr("HonkGezet", false);
+        entityData.set(DATA_WEG, tag.getBooleanOr("Weg", false));
         if (wezen.soorten > 0) {
             int soort = tag.getIntOr("Soort", -1);
             if (soort >= 0) {
@@ -193,6 +203,29 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
         return entityData.get(DATA_STIL);
     }
 
+    /** phase B: hide it on purpose (saved), or show it again: a hidden spirit is not drawn, not clicked, never shoves. */
+    public void zetWeg(boolean weg) {
+        entityData.set(DATA_WEG, weg);
+    }
+
+    public boolean isWeg() {
+        return entityData.get(DATA_WEG);
+    }
+
+    /** Hidden by itself for now (not saved; Wan-guh, the giants). */
+    protected void zetVerscholen(boolean ja) {
+        entityData.set(DATA_VERSCHOLEN, ja);
+    }
+
+    public boolean isVerscholen() {
+        return entityData.get(DATA_VERSCHOLEN);
+    }
+
+    /** Not drawn right now (on purpose or by itself). */
+    public boolean onzichtbaar() {
+        return isWeg() || isVerscholen();
+    }
+
     /** Its look, 0 .. {@link GeestWezens#soorten} - 1 (always 0 for a creature with one look). */
     public int soort() {
         return wezen.soorten <= 0 ? 0 : Math.floorMod(Math.max(0, entityData.get(DATA_SOORT)), wezen.soorten);
@@ -238,7 +271,12 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
 
     /** Does it stroll around on the ground (the little Hei Bai-guh, a schaduwgeest)? */
     protected boolean loopt() {
-        return wezen == GeestWezens.SCHADUWGEEST || wezen == GeestWezens.HEI_BAI_GUH;
+        return wezen == GeestWezens.SCHADUWGEEST || wezen == GeestWezens.HEI_BAI_GUH || wezen == GeestWezens.KENNISVOSJE;
+    }
+
+    /** Does it turn its head to players (the giants and the masks turn in their own way; a sleeper does not)? */
+    protected boolean kijktNaarSpelers() {
+        return true;
     }
 
     @Override
@@ -263,8 +301,23 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
                 }
             });
         }
-        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, wezen == GeestWezens.KOH ? 16.0f : 10.0f));
-        goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, wezen == GeestWezens.KOH ? 16.0f : 10.0f) {
+            @Override
+            public boolean canUse() {
+                return kijktNaarSpelers() && super.canUse();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return kijktNaarSpelers() && super.canContinueToUse();
+            }
+        });
+        goalSelector.addGoal(8, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return kijktNaarSpelers() && super.canUse();
+            }
+        });
     }
 
     /** May it stroll right now (not on its mark, not in a pose)? */
@@ -299,6 +352,9 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.PASS;
+        }
+        if (onzichtbaar()) {
             return InteractionResult.PASS;
         }
         if (level().isClientSide()) {
@@ -353,6 +409,12 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
         return false;
     }
 
+    /** A hidden spirit can't be hit or clicked (nor can a giant: it is only ever far away). */
+    @Override
+    public boolean isPickable() {
+        return !onzichtbaar() && wezen != GeestWezens.GEESTREUS && super.isPickable();
+    }
+
     @Override
     protected void doPush(Entity other) {
     }
@@ -383,7 +445,8 @@ public class GeestWezen extends PathfinderMob implements GeoEntity {
     @Override
     public boolean shouldRenderAtSqrDistance(double afstand) {
         double ver = switch (wezen) {
-            case KOH, FANG, GEEST_KOI -> 160.0;
+            case KOH, FANG, GEEST_KOI, OUDE_REIGERGUH, WAN_GUH -> 160.0;
+            case GEESTREUS -> 512.0;
             case HEI_BAI_GUH -> 96.0;
             default -> 64.0;
         };

@@ -162,6 +162,8 @@ public enum GuhVariant {
     // <einde2>
     // einde2: creature pages of the outer islands (their id is their entity id); all bonus pages, see GuhDex.EXTRA
     ENDER_MIKA(0), KAASMIJT(0), SCHUILGUH(0), KRUIMELKWAL(0), LEEGTEWALVISGUH(0), VLEERMUIS_LEMURGUH(0), OTTER_PINGUINGUH(0), DAS_MOLGUH(0), SCHILDPAD_EENDGUH(0), APPA_GUH(0), MOMO_GUH(0),
+    // (phase B, geest_modellen: the creatures of the Geestenwereld, all bonus pages; before the Sponsguh pair, so GERRIT stays last)
+    KOH(0), HEI_BAI_GUH(0), FANG(0), GEEST_KOI(0), LIBELKONIJNGUH(0), LANTAARNGEEST(0), SCHADUWGEEST(0), KENNISVOSJE(0), MISTREIGER(0), OUDE_REIGERGUH(0),
     // (the buddy and the pet of the Sponsguh story: both bonus pages)
     SPONSGUH(0), GERRIT(0),
     // </einde2>

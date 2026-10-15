@@ -39,6 +39,7 @@ import nl.juiced.guhs.feature.einde2.geestwezens.HeiBaiGuhEntity;
  */
 public final class E2GeestWezensClient {
     static final DataTicket<Integer> SOORT = DataTicket.create("guhs_e2_geestmodellen_soort", Integer.class);
+    static final DataTicket<Boolean> WEG = DataTicket.create("guhs_e2_geestmodellen_weg", Boolean.class);
 
     public static void init(IEventBus modBus) {
         for (GuhNpcEntity.Kind kind : GeestKinds.kinds()) {
@@ -49,6 +50,21 @@ public final class E2GeestWezensClient {
             }
             if (GeestKinds.gloed(kind)) {
                 SittingGuhRenderers.NPC_GLOED.add(kind);
+            }
+            int sets = GeestKinds.mix(kind);
+            if (sets > 0) {                                         // (a crowd kind: one mix set, picked from where it stands)
+                SittingGuhRenderers.NPC_ANIMATORS.put(kind, (npc, tick) -> {
+                    int eigen = Math.floorMod(npc.getBlockX() * 31 + npc.getBlockZ() * 17, sets);
+                    return bones -> {
+                        for (int i = 0; i < sets; i++) {
+                            if (i != eigen) {
+                                for (String naam : GeestKinds.mixBotten(kind, i)) {
+                                    bones.ifPresent(naam, b -> b.skipRender(true).skipChildrenRender(true));
+                                }
+                            }
+                        }
+                    };
+                });
             }
         }
         modBus.addListener(E2GeestWezensClient::renderers);
@@ -79,6 +95,9 @@ public final class E2GeestWezensClient {
             this.wezen = wezen;
             this.shadowRadius = switch (wezen) {
                 case KOH -> 1.6f;
+                case OUDE_REIGERGUH -> 1.4f;
+                case KENNISVOSJE, MISTREIGER -> 0.3f;
+                case WAN_GUH -> 0.4f;
                 case HEI_BAI_GUH -> 0.5f;
                 case SCHADUWGEEST -> 0.4f;
                 case LANTAARNGEEST, LIBELKONIJNGUH -> 0.2f;
@@ -98,6 +117,13 @@ public final class E2GeestWezensClient {
         @Override
         public void addRenderData(GeestWezen geest, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
             state.addGeckolibData(SOORT, geest.soort());
+            state.addGeckolibData(WEG, geest.onzichtbaar());
+        }
+
+        /** A hidden spirit (on purpose, or Wan-guh / a giant hiding by itself) is not drawn at all. */
+        @Override
+        public boolean shouldRender(GeestWezen geest, net.minecraft.client.renderer.culling.Frustum frustum, double x, double y, double z) {
+            return !geest.onzichtbaar() && super.shouldRender(geest, frustum, x, y, z);
         }
 
         /** A see-through spirit is drawn translucent (its texture's alpha counts). */
@@ -118,6 +144,8 @@ public final class E2GeestWezensClient {
                 case FANG -> box.inflate(9.0, 2.0, 9.0);
                 case GEEST_KOI -> box.inflate(4.5, 1.5, 4.5);
                 case HEI_BAI_GUH -> box.inflate(2.0, 0.5, 2.0);
+                case OUDE_REIGERGUH -> box.inflate(4.0, 5.0, 4.0);
+                case GEESTREUS -> box.inflate(40.0, 30.0, 40.0);
                 case SCHADUWGEEST -> box.inflate(1.0, 0.2, 1.0);
                 default -> box.inflate(0.5);
             };
@@ -125,8 +153,16 @@ public final class E2GeestWezensClient {
 
         @Override
         public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
-            if (wezen != GeestWezens.GEEST_KOI) {
+            if (wezen != GeestWezens.GEEST_KOI && wezen != GeestWezens.GEESTREUS && wezen != GeestWezens.OUDE_REIGERGUH) {
                 DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+            }
+            if (wezen == GeestWezens.GEESTREUS) {                    // (one form per look)
+                int vorm = info.getGeckolibData(SOORT) instanceof Integer s ? s : 0;
+                for (int i = 0; i < 4; i++) {
+                    if (i != vorm) {
+                        bones.ifPresent("vorm_" + i, b -> b.skipRender(true).skipChildrenRender(true));
+                    }
+                }
             }
             if (wezen == GeestWezens.HEI_BAI_GUH) {
                 boolean boos = info.getGeckolibData(SOORT) instanceof Integer s && s == HeiBaiGuhEntity.BOOS;

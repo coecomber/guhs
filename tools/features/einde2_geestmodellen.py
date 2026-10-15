@@ -16,12 +16,14 @@ import re
 import sys
 
 try:
+    from features import einde2_geestmodellen_echo as echo
     from features import einde2_geestmodellen_kinds as kinds
     from features import einde2_geestmodellen_tekst as tekst
     from features import einde2_geestmodellen_wezens as wezens
     from features import einde2_kit as kit
 except ImportError:                                   # (run as a script from the project root)
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    from features import einde2_geestmodellen_echo as echo
     from features import einde2_geestmodellen_kinds as kinds
     from features import einde2_geestmodellen_tekst as tekst
     from features import einde2_geestmodellen_wezens as wezens
@@ -31,33 +33,11 @@ except ImportError:                                   # (run as a script from th
 TEST_VLOER = "einde2_geestmodellen_test_vloer"
 VLOER = 25
 
-# skelet B (CONTRACT_E2_B 7.7, 9 item 8): the Dutch names of what the skelet placed for this slice, until it writes its own:
-# the eleven new GuhNpcEntity kinds of the // <einde2_geest> block, and the six stand-in entity types of E2GeestWezensFeature
-# (Einde2.plaatshouder) with the names of their future spawn eggs. geest_modellen replaces both dicts.
-STUB_NAMEN = {
-    "jeong_jeong_guh_echo": "Echo van Jeong Jeong-guh", "oom_miroh_echo": "Droom van Oom Miroh", "bumi_guh_echo": "Echo van Bumi-guh",
-    "pakguh_echo": "Echo van Pakguh", "piandao_guh_echo": "Echo van Piandao-guh", "lotus_stichter_echo": "Stichter van de Witte Lotus",
-    "lotus_lid_echo": "Lid van de Witte Lotus", "guru_pathik_guh": "Guru Pathik-guh", "kuruk_guh": "Kuruk-guh",
-    "yangchen_guh": "Yangchen-guh", "szeto_guh": "Szeto-guh",
-}
-STUB_WEZENS = {
-    "kennisvosje": "Kennisvosje", "mistreiger": "Mistreiger", "oude_reigerguh": "Oude Reigerguh", "wan_guh": "Wan-guh",
-    "geestreus": "Geestreus", "kijkmasker": "Kijkmasker",
-}
-
-
-def stub_namen(h):
-    for kind, naam in STUB_NAMEN.items():
-        kit.lang(h, f"entity.guhs.guh_npc.{kind}", naam)
-    for id, naam in STUB_WEZENS.items():
-        kit.lang(h, f"entity.guhs.{id}", naam)
-        kit.lang(h, f"item.guhs.{id}_spawn_egg", f"{naam}-spawnei")
-        h.w(f"{h.D}/loot_table/entities/{id}.json", {"type": "minecraft:entity", "pools": []})
-
-
 def texts(h):
     for key, text in tekst.texts().items():
         kit.lang(h, key, text)
+    for id, (zeldzaam, info) in tekst.GUHDEX.items():                  # the creature pages (bonus pages, Java GuhDex.EXTRA)
+        kit.pagina(h, id, tekst.WEZENS[id][0], zeldzaam, info)
 
 
 def eieren(h):
@@ -78,9 +58,9 @@ def test_kamer(h):
 def build(h):
     wezens.build(h)
     kinds.build(h)
+    echo.build(h)
     texts(h)
     eieren(h)
-    stub_namen(h)
     test_kamer(h)
     selfcheck(h)
 
@@ -132,11 +112,17 @@ def selfcheck(h):
         for key in (f"entity.guhs.{id}", f"item.guhs.{id}_spawn_egg", f"{tekst.P}{id}.0", f"{tekst.P}{id}.1"):
             if key not in h.NL:
                 problems.append(f"no text {key}")
-    for kind in kinds.KINDS:
+    for id in tekst.GUHDEX:
+        for key in (f"gui.guhs.guhdex.rarity.{id}", f"gui.guhs.guhdex.info.{id}"):
+            if key not in h.NL:
+                problems.append(f"no text {key}")
+        if not os.path.exists(f"{h.D}/advancement/quest/seen_{id}.json"):
+            problems.append(f"no advancement quest/seen_{id}")
+    for kind in kinds.rijen():
         for key in (f"entity.guhs.guh_npc.{kind}", f"{tekst.P}{kind}.0", f"{tekst.P}{kind}.1"):
             if key not in h.NL:
                 problems.append(f"no text {key}")
-    if set(tekst.WEZENS) != set(wezens.WEZENS) or set(tekst.KINDS) != set(kinds.KINDS):
+    if set(tekst.WEZENS) != set(wezens.WEZENS) or set(tekst.KINDS) != set(kinds.rijen()):
         problems.append("the names (tekst) and the tables (wezens.WEZENS, kinds.KINDS) list other things")
     pad = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2", "geestwezens", "GeestWezens.java")
     java = open(pad, encoding="utf-8").read() if os.path.exists(pad) else ""
@@ -232,6 +218,24 @@ def preview(out, alleen=None):
             os.path.join(out, f"{kind}_poses.png"))
         namen.append(kind)
         del Image
+    for kind in echo.ECHO:                                              # phase B: the echoes (every mix set apart)
+        if alleen and kind not in alleen:
+            continue
+        echo.teken(vang, kind)
+        echo.bestand(vang, kind)
+        geo = vang.json[f"guh_npc_{kind}.geo.json"]
+        tex = np.asarray(vang.png[f"npc_{kind}.png"].convert("RGBA")).copy()
+        anims = {n.split(".")[-1]: a for n, a in vang.json[f"guh_npc_{kind}.animation.json"]["animations"].items()}
+        sets = echo.MIXBOTTEN.get(kind) or [[]]
+        rij = []
+        for i in range(len(sets)):
+            weg = tuple(b for j, s_ in enumerate(sets) if j != i for b in s_)
+            rij += tegels(geo, tex, op(anims["idle"], 0.0), weg, hoeken)
+        _strook(rij, maat).save(os.path.join(out, f"{kind}.png"))
+        poses = [(n, a) for n, a in anims.items() if n != "idle"]
+        _strook([tegels(geo, tex, op(a, a["animation_length"] * 0.5), sum(sets[1:], []), ((35, -16),))[0] for n, a in poses], maat).save(
+            os.path.join(out, f"{kind}_poses.png"))
+        namen.append(kind)
     return namen
 
 

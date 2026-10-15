@@ -29,7 +29,20 @@ public enum GeestWezens {
     /** A lantaarngeest: a floating paper lantern with a painted face; Soort 0..3 = red, amber, pink, blue. */
     LANTAARNGEEST(0.7f, 0.9f, 4, true, false, true, "praat:24", "knipoog:20"),
     /** A schaduwgeest: a dark, smoky, tall shape with two white eyes; it only ever shoves. */
-    SCHADUWGEEST(0.8f, 2.6f, 0, false, true, true, "praat:24", "duw:16");
+    SCHADUWGEEST(0.8f, 2.6f, 0, false, true, true, "praat:24", "duw:16"),
+    // phase B (CONTRACT_E2_B 7.7): the new creatures of the White Lotus and the mysteries
+    /** A kennisvosje: a spirit fox with guh ears and a scroll; Soort 0 silver-blue, 1 the rare golden one. Leads to a secret. */
+    KENNISVOSJE(0.6f, 0.7f, 2, true, true, true, "praat:24", "loop:0", "wijs:40", "snuffel:30"),
+    /** A mistreiger: a small white heron on the roofs; it flies up when you come close. */
+    MISTREIGER(0.5f, 0.9f, 0, false, false, true, "praat:24", "vlieg:0", "opvlieg:20", "poets:40"),
+    /** The Oude Reigerguh: a huge see-through crane spirit with guh ears, asleep round the stone lotus. */
+    OUDE_REIGERGUH(3.5f, 3.0f, 0, false, true, true, "praat:24", "slaap:0", "ontwaak:80", "spreek:0"),
+    /** Wan-guh: the hooded figure in the distance (no page). */
+    WAN_GUH(0.8f, 2.0f, 0, false, true, true, "praat:24", "verdwijn:30", "ontkap:0", "wijs:40"),
+    /** A geestreus: a giant silhouette, only ever far away; Soort 0..3 = four forms (bones vorm_0..3). No page. */
+    GEESTREUS(2.0f, 6.0f, 4, false, true, true, "praat:24", "verschijn:60", "drijf:0"),
+    /** A kijkmasker: a mask of Koh's cave that slowly turns its face to you; Soort 0..11 = the faces of the geestenmasker. No page. */
+    KIJKMASKER(0.8f, 0.9f, 12, true, false, true, "praat:24", "knipper:16");
 
     public final float breed, hoog;
     /** How many looks (NBT int Soort; 0: one look). */
@@ -85,6 +98,9 @@ public enum GeestWezens {
     public String beweegLoop() {
         if (animaties.contains("vlieg")) {
             return "vlieg";
+        }
+        if (animaties.contains("loop")) {
+            return "loop";
         }
         return animaties.contains("zwem") ? "zwem" : null;
     }

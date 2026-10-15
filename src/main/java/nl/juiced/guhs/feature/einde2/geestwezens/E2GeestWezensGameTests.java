@@ -107,7 +107,7 @@ public class E2GeestWezensGameTests {
     /** Every row: the type, its hitbox and spawn egg, the files (every name, every moved bone, a texture and glow mask per look). */
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
     public static void einde2GeestWezensTypes(GameTestHelper helper) {
-        helper.assertTrue(GeestWezens.values().length == 7, "seven creatures");
+        helper.assertTrue(GeestWezens.values().length == 13, "seven creatures of phase A and six of phase B");
         for (GeestWezens w : GeestWezens.values()) {
             EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getValue(Guhs.id(w.id()));
             helper.assertTrue(type == E2GeestWezensFeature.type(w), w + ": registered as guhs:" + w.id());
@@ -181,7 +181,7 @@ public class E2GeestWezensGameTests {
         float leven = player.getHealth();
         int x = 3;
         for (GeestWezens w : GeestWezens.values()) {
-            GeestWezen g = maak(helper, w, x + 0.5, 2, 12.5);
+            GeestWezen g = maak(helper, w, x % 21 + 3.5, 2, x < 21 ? 12.5 : 16.5);
             x += 3;
             float gl = g.getHealth();
             g.hurtServer(level, level.damageSources().playerAttack(player), 50f);
@@ -233,7 +233,7 @@ public class E2GeestWezensGameTests {
     public static void einde2GeestWezensAnimaties(GameTestHelper helper) {
         int x = 3;
         for (GeestWezens w : GeestWezens.values()) {
-            GeestWezen g = maak(helper, w, x + 0.5, 2, 4.5);
+            GeestWezen g = maak(helper, w, x % 21 + 3.5, 2, x < 21 ? 4.5 : 8.5);
             x += 3;
             g.zetStil(true);
             for (String an : w.animaties()) {
@@ -305,11 +305,12 @@ public class E2GeestWezensGameTests {
         ServerLevel level = helper.getLevel();
         ServerPlayer player = speler(helper, 12.5, 4.5);
         float leven = player.getHealth();
-        helper.assertTrue(GeestKinds.kinds().equals(List.of(GuhNpcEntity.Kind.THEEGEEST_GUH, GuhNpcEntity.Kind.BESTELGUH)), "the two kinds, in order");
+        helper.assertTrue(GeestKinds.kinds().size() == 13 && GeestKinds.kinds().subList(0, 2).equals(List.of(GuhNpcEntity.Kind.THEEGEEST_GUH, GuhNpcEntity.Kind.BESTELGUH)),
+                "the two kinds of phase A, then the eleven spirits of phase B, in order");
         int x = 6;
         for (GuhNpcEntity.Kind kind : GeestKinds.kinds()) {
             helper.assertTrue(NpcRollen.isVerhaalKind(kind), kind + " stands after TIMMERGUH (its role comes from NpcRollen)");
-            GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(x, 2, 8));
+            GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(x % 24, 2, x < 24 ? 8 : 12));
             x += 6;
             npc.setKind(kind);
             helper.assertTrue(Math.abs(npc.getAttributeValue(Attributes.SCALE) - kind.scale) < 1e-4, kind + ": its scale");
@@ -352,9 +353,12 @@ public class E2GeestWezensGameTests {
     /** The group "geest" of the dev rows: every creature in every look and the two kinds. */
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
     public static void einde2GeestWezensToon(GameTestHelper helper) {
-        int verwacht = GeestKinds.kinds().size();
+        int verwacht = 0;
+        for (GuhNpcEntity.Kind kind : GeestKinds.kinds()) {
+            verwacht += Math.max(1, GeestKinds.mix(kind));
+        }
         for (GeestWezens w : GeestWezens.values()) {
-            verwacht += Math.max(1, w.soorten);
+            verwacht += w == GeestWezens.GEESTREUS ? 0 : Math.max(1, w.soorten);   // (the giants hide from a row in front of you)
         }
         helper.assertTrue(GeestToon.aantal() == verwacht, "the row holds every look: " + GeestToon.aantal() + " of " + verwacht);
         Set<String> namen = new HashSet<>();
