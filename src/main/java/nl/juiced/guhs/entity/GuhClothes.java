@@ -437,6 +437,7 @@ public enum GuhClothes {
     // </einde2_h4_vuur>
     // einde2 phase B, zij: the clothes of the side places (the Kyoshi make-up); ONLY between these two markers, one constant per line
     // <einde2_zij>
+    EINDE2_ZIJ_KYOSHI_SCHMINK(Slot.EYES, "outfit_zij_schmink_wit", "outfit_zij_schmink_rood", "outfit_zij_schmink_goud"),
     // </einde2_zij>
     //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)

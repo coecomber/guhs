@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "guhs:schimmelpaddenstoel",
+    "guhs:kristalkaas_brokje",
+    "guhs:knabbelkoorvrucht"
+  ],
+  "result": {
+    "id": "guhs:einde2_zij_spijtsoep"
+  }
+}

@@ -1,0 +1,48 @@
+# einde2, slice zij, in a real world: the side places at the step where something shows (the open fire doors, the herd in its
+# pens, the harbour cook), the scenes of the slice, and the HUD icon of the lasting powers.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_zij.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/guhs einde2 zij ga krachten
+wait 20
+
+section the powers' icon next to the hotbar
+/guhs einde2 zij ga race
+wait 80
+waitrender 200
+shot zij_hud_kracht
+
+section Roku's fire doors open (step 2) and the sanctum
+/guhs einde2 zij ga vuurtempel_roku.2
+wait 80
+waitrender 200
+look 0 0
+shot zij_vuurdeuren_open
+
+section the herd in its pens (done)
+/guhs einde2 zij ga westelijke_luchttempel.4
+wait 80
+waitrender 200
+shot zij_kudde_thuis
+
+section the harbour cook (done)
+/guhs einde2 zij ga mika_kok.5
+wait 100
+waitrender 200
+shot zij_havenkok
+
+section the scenes
+/guhs einde2 zij scene roku
+wait 200
+shot zij_scene_roku
+/guhs einde2 zij scene zegen
+wait 200
+shot zij_scene_zegen
+/guhs einde2 zij scene mew
+wait 120
+shot zij_scene_mew
+/guhs einde2 zij scene opkomst
+wait 200
+shot zij_scene_opkomst
