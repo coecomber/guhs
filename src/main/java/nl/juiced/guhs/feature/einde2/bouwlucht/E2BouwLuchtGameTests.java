@@ -134,7 +134,9 @@ public class E2BouwLuchtGameTests {
         }
         helper.assertTrue(deur.pos().getX() == werk.pos().getX() - 1 && deur.pos().getY() == werk.pos().getY(), "the door stands in the workshop's west wall: " + deur.pos());
         // the five stages of the Vredesballon: on the anchor, all the same size, inside the yard
-        helper.assertTrue(blad.lagen().size() == 5, "five overlays: " + blad.lagen().keySet());
+        // (einde2 phase B, h1_lucht: plus Zuka's ship at the jetty, laag_zuka_schip on zuka_schip_anker)
+        helper.assertTrue(blad.lagen().size() == 6 && blad.lagen().containsKey("zuka_schip"), "five overlays and the ship: " + blad.lagen().keySet());
+        helper.assertTrue(blad.lagen().get("zuka_schip").pos().equals(p.get("zuka_schip_anker").pos()), "the ship lies on its anchor");
         Plekken.Plek anker = p.get("vredesballon_anker"), tuin = p.get("vredesballon_bouwplaats");
         for (int n = 1; n <= 5; n++) {
             Plekken.Laag laag = blad.lagen().get("vredesballon_" + n);

@@ -115,6 +115,7 @@ def structuur(h):
     if problems:
         raise SystemExit(f"{NAAM}: self-check found {len(problems)} problem(s):\n  " + "\n  ".join(problems[:40]))
     bouw.lagen(b)
+    bouw.zuka_schip_laag(b)
     nx, nz = b.save_tiles()
     kit.leegte_structuur(h, b, titel="Zuidelijke Luchttempel", tooltip="Een witte tempel met blauwgroene daken op een zwevende rots: hier woont de wind",
                          y=bouw.Y_WERELD, anker=bouw.ANKER)
@@ -147,7 +148,7 @@ def selfcheck(h):
             missing.append(f"texture {t}")
     for path in (f"{D}/worldgen/structure/{NAAM}.json", f"{D}/worldgen/structure_set/{NAAM}_gegarandeerd.json", f"{D}/einde2/plekken/{NAAM}.json",
                  f"{D}/tags/worldgen/biome/has_structure/{NAAM}.json", f"{D}/loot_table/{VOORRAAD}.json", f"{D}/structure/{S}_test_deur.nbt",
-                 f"{D}/structure/{S}_test_veld.nbt") + tuple(f"{D}/structure/{NAAM}/laag_vredesballon_{n}.nbt" for n in range(1, 6)):
+                 f"{D}/structure/{S}_test_veld.nbt", f"{D}/structure/{NAAM}/laag_zuka_schip.nbt") + tuple(f"{D}/structure/{NAAM}/laag_vredesballon_{n}.nbt" for n in range(1, 6)):
         if not os.path.exists(path):
             missing.append(path)
     if os.path.exists(f"{D}/worldgen/structure_set/{NAAM}.json"):
@@ -155,8 +156,8 @@ def selfcheck(h):
     if not missing:
         blad = json.load(open(f"{D}/einde2/plekken/{NAAM}.json", encoding="utf-8"))
         st = json.load(open(f"{D}/worldgen/structure/{NAAM}.json", encoding="utf-8"))
-        if sorted(blad.get("lagen", {})) != [f"vredesballon_{n}" for n in range(1, 6)]:
-            missing.append("the five overlays in the sidecar")
+        if sorted(blad.get("lagen", {})) != sorted([f"vredesballon_{n}" for n in range(1, 6)] + ["zuka_schip"]):
+            missing.append("the five overlays of the Vredesballon and Zuka's ship in the sidecar")
         if st["rand"] != 48 or st["size"] != [bouw.W, bouw.H, bouw.D] or st["y"] != bouw.Y_WERELD:
             missing.append(f"structure json: {st}")
         if not os.path.exists(f"{D}/structure/{NAAM}/stuk_{bouw.ANKER[0] // kit.TILE}_{bouw.ANKER[2] // kit.TILE}.nbt"):

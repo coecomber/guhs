@@ -1,0 +1,51 @@
+# einde2 phase B, slice h1_lucht, in a real generated world: chapter 1 of the Guhvatar story step by step with the dev
+# command /guhs einde2 h1 ga <stap> (it sets the line, teleports to the step's place and starts what the step starts).
+# Every scene is played once with /guhs einde2 h1 scene <naam>; scenes wait for a click after each line (1.4.4), so the
+# script clicks with "use" where a scene runs.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_h1_lucht.txt -PautocheckTimeout=90
+section setup
+/gamemode creative
+/guhs einde2 h1 wis
+/guhs einde2 h1 ga kaasbol
+wait 200
+waitrender 400
+shot e2_h1_kaasbol
+
+section the temple: arriving, the hall
+/guhs einde2 h1 ga hal
+wait 100
+waitrender 300
+shot e2_h1_poort
+
+section the luchtbal match
+/guhs einde2 h1 ga luchtbal
+wait 60
+shot e2_h1_taartenterras
+
+section the luchtscooter-baan
+/guhs einde2 h1 ga scooter
+wait 60
+shot e2_h1_baan
+
+section the zweefringen
+/guhs einde2 h1 ga zweven
+wait 60
+look 0 20
+shot e2_h1_balkon
+
+section Momo
+/guhs einde2 h1 ga momo
+wait 60
+shot e2_h1_voorplein
+
+section Zuka's ship at the jetty
+/guhs einde2 h1 ga vlucht_zuka
+wait 80
+look 90 0
+waitrender 300
+shot e2_h1_steiger_schip
+/guhs einde2 plek zuidelijke_luchttempel uitzicht
+wait 40
+look 180 5
+waitrender 300
+shot e2_h1_tempel_met_schip

@@ -119,8 +119,8 @@ TEXTS = {
     # --- the Koningguh ---
     "gui.guhs.guheinde.koning.verhaal1": "Guh... Welkom, held. Ik moet je iets vertellen. De kaasknabbels in mijn rijk raken op. Overal. Mijn guhs worden grauw en mager.",
     "gui.guhs.guheinde.koning.verhaal2": "Het is Opper-Mika, de baas van alle Mika's. Hij pikt ze in en brengt ze naar het Guheinde, een eiland ver weg. Zonder knabbels is geen guh vahoeg!",
-    "gui.guhs.guheinde.koning.verhaal3": "Maak een Oog van Vadsig: een guhkristal, een kaasknabbel en een Mika-traan. Mika's huilen soms, vooral Grote Mika en de Mika-baas. Gooi het oog in de Guhmensie: het vliegt naar een Knabbelkelder.",
-    "gui.guhs.guheinde.koning.verhaal4": "In de kelder is een portaal. Vul het met twaalf ogen en breng de knabbels terug. Hier, lees dit boek. Vads op, held!",
+    "gui.guhs.guheinde.koning.verhaal3": "Maak een Oog van Vadsig: een guhkristal, een kaasknabbel, een Mika-traan en grillspiespoeder uit de Barbecuether. Mika's huilen soms, vooral Grote Mika en de Mika-baas. Gooi het oog in de Guhmensie: het vliegt naar een Knabbelkelder.",
+    "gui.guhs.guheinde.koning.verhaal4": "In de kelder is een portaal. Vul het met twaalf ogen en breng de knabbels terug. Maar het laat alleen helden door die de Aangebrande Mika hebben verslagen. Hier, lees dit boek. Vads op, held!",
     "gui.guhs.guheinde.koning.hint_traan": "Nog geen Oog van Vadsig? Laat Mika's huilen: Grote Mika in de uitdagende guhgrotten huilt het hardst. Of versla de Mika-baas drie keer met VADS.",
     "gui.guhs.guheinde.koning.hint_oog": "Gooi je Oog van Vadsig in de Guhmensie en volg het. Waar het naar beneden duikt, graaf je naar de Knabbelkelder!",
     "gui.guhs.guheinde.koning.ridder1": "Je hebt het gedaan! Opper-Mika is gevadst en de knabbels komen terug. Kniel, held...",
@@ -736,13 +736,13 @@ def ftb(fq):
       "guhs:mika_traan", [fq.item("guhs:mika_traan")], x=-8, y=y1, shape="hexagon")
     q("guheinde_koning", "Een koninklijke opdracht", "Praat met een wilde &dKoningguh&r op zijn troon in het guhkasteel. Hij vertelt waar alle knabbels gebleven zijn. Njeg.",
       "guhs:guh_kristal", [adv("guheinde_opdracht")], x=-6, y=y1)
-    q("guheinde_ogen", "Twaalf Ogen van Vadsig", "Guhkristal + kaasknabbel + Mika-traan = een &6Oog van Vadsig&r. Je hebt er twaalf nodig voor het portaal (en een paar extra om te gooien, want ze gaan soms &5njeg&r kapot).",
+    q("guheinde_ogen", "Twaalf Ogen van Vadsig", "Guhkristal + kaasknabbel + Mika-traan + grillspiespoeder (uit de Spiesburcht in de Barbecuether) = een &6Oog van Vadsig&r. Je hebt er twaalf nodig voor het portaal (en een paar extra om te gooien, want ze gaan soms &5njeg&r kapot).",
       "guhs:oog_van_vadsig", [fq.item("guhs:oog_van_vadsig", 12)], rewards=(("guhs:guh_kristal", 6),), x=-4, y=y1)
     q("guheinde_kelder", "De Knabbelkelder", "Gooi een Oog van Vadsig in de Guhmensie en volg het. Duikt het naar beneden? Graven maar! Of gebruik het superkompas (Einde).",
       "guhs:kaaskorst_stenen", [fq.structure("knabbelkelder")], rewards=(("guhs:kaas_knabbels", 16),), x=-2, y=y1, shape="octagon", xp=150)
     q("guheinde_gered", "Guhbevrijder", "In de cellen van de Knabbelkelder zitten grauwe, magere guhs. Geef ze een kaasknabbel en ze worden meteen weer VAHOEG! Red er zes.",
       "guhs:kaas_knabbels", [adv("guheinde_bevrijder")], rewards=(("guhs:gefrituurde_kaasknabbels", 8),), x=0, y=y1, xp=150)
-    q("guheinde_portaal", "Twaalf ogen", "Stop een Oog van Vadsig in elk van de twaalf knabbelportaalframes in de portaalkamer. Pas op voor de Mika-larfjes!",
+    q("guheinde_portaal", "Twaalf ogen", "Stop een Oog van Vadsig in elk van de twaalf knabbelportaalframes in de portaalkamer. Pas op voor de Mika-larfjes! Het portaal laat je pas door als je de &6Aangebrande Mika&r in de Barbecuether hebt verslagen.",
       "guhs:knabbelportaalframe", [adv("guheinde_portaal")], x=2, y=y1)
     q("guheinde_binnen", "Het Guheinde", "Spring in het portaal. Welkom in het Guheinde: een eiland van kaaskorst, hoog boven het niets. Waar zijn al die knabbels?",
       "guhs:kaaskorst", [fq.dim("guhs:guheinde")], rewards=(("guhs:gefrituurde_kaasknabbels", 4),), x=4, y=y1, shape="octagon", xp=200)
