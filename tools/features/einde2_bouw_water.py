@@ -118,8 +118,14 @@ def texts(h):
         kit.lang(h, key, text)
 
 
+# the last build of this run (h2_water's self-check proves its cameras against it)
+GEBOUWD = None
+
+
 def structuur(h):
+    global GEBOUWD
     b, _ = bouw.bouw(h)
+    GEBOUWD = b
     kit.leegte_structuur(h, b, titel="Noordelijke Waterstam", tooltip="Een stad van ijs en grachten achter een reusachtige ijsmuur", y=bouw.WERELD_Y)
     # the sea of a Waterstam is blue: only the streken with blue-green water (Deviations: 6.4 says all six)
     h.w(f"{h.D}/tags/worldgen/biome/has_structure/{NAAM}.json", {"values": [f"guhs:{s}" for s in WATER_STREKEN]})

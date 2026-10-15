@@ -1,0 +1,53 @@
+# einde2, slice h2_water, in a real generated world (a dev run): chapter 2 of the Guhvatar story step by step with the dev
+# command /guhs einde2 h2 ga <stap> (it sets the story, gives Appa and Momo and puts you where the step starts) and the scenes
+# with /guhs einde2 h2 scene <naam>. Scenes wait for a click after every line: the script clicks through them.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_h2_water.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/guhs einde2 waar noordelijke_waterstam
+/guhs einde2 plek noordelijke_waterstam aankomst_speler
+wait 200
+
+section the training square: Pakguh, Katara, Sokka, the targets
+/guhs einde2 h2 ga zweep
+wait 60
+look 0 5
+waitrender 200
+shot e2_h2_plein
+
+section the ice bridge (shown to you alone)
+/guhs einde2 h2 ga ijsbrug
+wait 40
+/guhs einde2 verhaal kracht einde2_h2_water_ijsbrug
+wait 20
+shot e2_h2_ijsbrug
+
+section the sled and the gondola wait
+/guhs einde2 h2 ga slee
+wait 60
+shot e2_h2_slee
+/guhs einde2 h2 ga gondel
+wait 60
+shot e2_h2_gondel
+
+section the fleet seen during the siege, the grey world
+/guhs einde2 h2 ga mediteer
+wait 60
+shot e2_h2_grijs
+/guhs einde2 h2 ga golf
+wait 60
+look 0 15
+shot e2_h2_vloot
+
+section the blizzard on the snow plain
+/guhs einde2 h2 ga storm
+wait 100
+shot e2_h2_storm
+
+section the scenes (each one; click through)
+/guhs einde2 h2 scene aankomst
+wait 400
+/guhs einde2 h2 scene golf
+wait 1200
+/guhs einde2 h2 scene geest_reis
+wait 1200

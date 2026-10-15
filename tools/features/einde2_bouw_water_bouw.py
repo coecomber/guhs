@@ -165,13 +165,19 @@ def plekken(b, gr, haltes, sp):
           wie="Baltoguh sjokt met zijn slee de bovenstraat uit het plein op en weer terug")
     b.plek("knipoog_balto_stop", 98, T1 + 1, 89, yaw=180.0, wie="Baltoguh blijft staan en kijkt naar de ijsstad")
     b.camera("knipoog_balto", (104, T1 + 4, 96), (100, T1 + 2, 87), zicht=["knipoog_balto_stop", "pakguh"], wie="vanaf de grote trap over het plein")
+    # --- h2_water (phase B): the snow plain of the blizzard on the north-east glacier (apart from the city: you are dragged there) ---
+    cx, cz, rx, rz = g.VLAKTE
+    b.zone("sneeuwvlakte", cx - rx, g.VLAKTE_Y + 1, cz - rz, cx + rx, g.VLAKTE_Y + 8, cz + rz, wie="de sneeuwvlakte op de gletsjer: de sneeuwstorm")
+    b.prop("sneeuwstorm_start", *g.VLAKTE_START, wie="hier word je wakker in de storm, waar Zuka je vasthoudt", los=True)
+    b.prop("sneeuwstorm_vind", *g.VLAKTE_VIND, wie="hier vinden Katara-guh en Appa je terug", los=True)
 
 
 VERWACHT = ["ijsmuur_poort", "poortwachter", "ijsmuur_top", "gracht_route", "gondel_start", ("gondel_halte", 3), ("bewoner", 6), "trainingsplein",
             "pakguh", "katara", "sokka", ("zweep_doel", 5), "golf_bassin", "ijsbrug_a", "ijsbrug_b", "paleis", "hoofdman", "yue", "geestenoase",
             "oase_poort", "vis_maan", "vis_oceaan", "yue_maan", "slee_start", "slee_baan", "slee_finish", ("otter", 4), "haven", "zhao_schip", "zhao",
             "sluip_start", "sluip_route", ("sluip_wacht", 5), "maanvis_kooi", "golf_plek", "vloot", "vloot_anker", "knipoog_sjokkel",
-            "knipoog_sjokkel_camera", "knipoog_balto_route", "knipoog_balto_stop", "knipoog_balto_camera"]
+            "knipoog_sjokkel_camera", "knipoog_balto_route", "knipoog_balto_stop", "knipoog_balto_camera", "sneeuwvlakte", "sneeuwstorm_start",
+            "sneeuwstorm_vind"]
 
 
 # =====================================================================================================================
@@ -200,6 +206,17 @@ def rooster(b, gr):
             y = int(gr.G[x, z])
             if gr.zee[x, z] and blocks.get((x, y + 1, z), ("",))[0] == WATER and blocks.get((x, y, z), ("",))[0] != WATER:
                 blocks[(x, y, z)] = ("minecraft:sea_lantern", {}, None)
+
+
+def sneeuwlampen(b, gr):
+    """h2_water: the snow plain is apart from the city (verlicht() only lights what you can walk to): an ice lantern frozen
+    into its snow every seven blocks, so the blizzard is white and not black."""
+    blocks = b.s.blocks
+    y = g.VLAKTE_Y
+    for x in range(3, W, 7):
+        for z in range(3, D, 7):
+            if gr.vlakte_masker[x, z] and blocks.get((x, y, z), ("",))[0] == "minecraft:snow_block" and (x, y + 1, z) not in blocks:
+                blocks[(x, y, z)] = (stad.LANTAARN, {}, None)
 
 
 def verlicht(b, start, min_licht=6):
@@ -408,6 +425,7 @@ def bouw(h, opslaan=True, streng=True):
     b.connect()
     tralies(b)
     rooster(b, gr)
+    sneeuwlampen(b, gr)
     b.lampen = verlicht(b, START)
     problems = b.check(START, VERWACHT) + eigen_controle(b, gr, kit.Loper(b).bfs(START))
     b.problemen = problems

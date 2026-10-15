@@ -63,6 +63,11 @@ TRAP_ZIJ1 = [(72, 75), (149, 152)]       # side stairs T1 -> T2
 MUURTRAP = 18                # steps of the two stairs up the inside of the wall (east: x 127.., west: x 97..)
 SCHIP = (177, 187, 163, 204)             # the hull of Zhao's ship (x0, x1, z0, z1); the bow points north, at the shelf
 VLOOT = (48, 144, 170, 217)              # open sea in front of the wall: room for the fleet and for the great wave
+# h2_water (phase B): the snow plain on the north-east glacier where Zuka drags the Guhvatar into the blizzard
+VLAKTE = (188, 52, 15, 15)               # centre x, z and the two radii of the plain (only where the glacier is at least this high)
+VLAKTE_Y = SEA + 44                      # its snow floor (you stand one higher)
+VLAKTE_START = (178, VLAKTE_Y + 1, 55)   # where you wake up in the storm (Zuka keeps you here)
+VLAKTE_VIND = (199, VLAKTE_Y + 1, 46)    # where Katara-guh and Appa find you
 
 
 def ruis(naam, schaal, shape=(W, D)):
@@ -143,6 +148,7 @@ class Grond:
         self.slee()
         self.water()
         self.oase()
+        self.vlakte()
 
     # --- helpers ----------------------------------------------------------------------------------------------------------
     def leeg(self, x, y, z):
@@ -393,6 +399,29 @@ class Grond:
         self.doos(MX, MX, T2 - 2, T2 - 2, int(cz - r) + 1, int(vz - vr), ROTS)
         self.doos(MX - 1, MX + 1, T2 + 1, T2 + 3, int(cz + r) - 1, STAD2[2] - 1, LEEG)      # the tunnel
         self.doos(MX - 1, MX + 1, T2, T2, int(cz + r) - 1, STAD2[2] - 1, STEEN)
+
+    # --- h2_water: the snow plain of the blizzard, cut flat into the north-east glacier ------------------------------------------
+    def vlakte(self):
+        """A plain of snow on the glacier (flat, the glacier cut off at VLAKTE_Y wherever it stood higher), with low drifts and
+        a few needles of packed ice that loom up in the white-out; the spots of the start and of the finding stay clear."""
+        X, Z = self.X, self.Z
+        cx, cz, rx, rz = VLAKTE
+        ellips = ((X - cx) / rx) ** 2 + ((Z - cz) / rz) ** 2 <= 1.0
+        m = ellips & self.land & (self.G >= VLAKTE_Y)
+        self.kolommen(m, VLAKTE_Y + 1, H - 1, LEEG)
+        self.kolommen(m, VLAKTE_Y - 1, VLAKTE_Y, SNEEUW)
+        vrij = np.zeros_like(m)
+        for sx, _, sz in (VLAKTE_START, VLAKTE_VIND):
+            vrij |= np.hypot(X - sx, Z - sz) <= 3.5
+        drift = m & ~vrij & (ruis("vlakte_drift", 4) > 0.74)
+        self.kolommen(drift, VLAKTE_Y + 1, VLAKTE_Y + 1, SNEEUW)
+        naald = m & ~vrij & (ruis("vlakte_naald", 3) > 0.93) & (((X - cx) / rx) ** 2 + ((Z - cz) / rz) ** 2 <= 0.8)
+        hoogte = (3 + np.round(ruis("vlakte_naald_h", 2) * 4)).astype(np.int32)
+        self.kolommen(naald, VLAKTE_Y + 1, VLAKTE_Y + hoogte, PAK)
+        self.G = np.where(m, VLAKTE_Y, self.G)
+        self.vlakte_masker = m & ~drift & ~naald
+        for sx, sy, sz in (VLAKTE_START, VLAKTE_VIND):
+            assert m[sx, sz] and self.M[sx, sy, sz] == LEEG and self.M[sx, sy - 1, sz] == SNEEUW, f"the snow plain does not reach {(sx, sz)}"
 
     # --- into the template -----------------------------------------------------------------------------------------------------
     def emit(self, b):

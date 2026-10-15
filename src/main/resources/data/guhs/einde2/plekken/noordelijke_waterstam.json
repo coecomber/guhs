@@ -1117,6 +1117,38 @@
       ],
       "wie": "vanaf de grote trap over het plein"
     },
+    "sneeuwvlakte": {
+      "soort": "zone",
+      "pos": [
+        173,
+        75,
+        37
+      ],
+      "tot": [
+        203,
+        82,
+        67
+      ],
+      "wie": "de sneeuwvlakte op de gletsjer: de sneeuwstorm"
+    },
+    "sneeuwstorm_start": {
+      "soort": "prop",
+      "pos": [
+        178,
+        75,
+        55
+      ],
+      "wie": "hier word je wakker in de storm, waar Zuka je vasthoudt"
+    },
+    "sneeuwstorm_vind": {
+      "soort": "prop",
+      "pos": [
+        199,
+        75,
+        46
+      ],
+      "wie": "hier vinden Katara-guh en Appa je terug"
+    },
     "vloot_anker": {
       "soort": "prop",
       "pos": [
