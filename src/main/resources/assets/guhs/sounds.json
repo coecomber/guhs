@@ -4608,6 +4608,76 @@
     ],
     "subtitle": "subtitles.guhs.einde2_geestenwereld.tegel"
   },
+  "einde2_reizen.hoorn": {
+    "sounds": [
+      {
+        "name": "minecraft:item.goat_horn.sound.0",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:item.goat_horn.sound.4",
+        "type": "event",
+        "pitch": 0.55
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_reizen.hoorn"
+  },
+  "einde2_reizen.vuurbal": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.blaze.shoot",
+        "type": "event",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_reizen.vuurbal"
+  },
+  "einde2_reizen.vuurbal_plof": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.blast",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block.fire.extinguish",
+        "type": "event",
+        "pitch": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_reizen.vuurbal_plof"
+  },
+  "einde2_reizen.schip": {
+    "sounds": [
+      {
+        "name": "minecraft:item.goat_horn.sound.3",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_reizen.schip"
+  },
+  "einde2_reizen.proost": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "minecraft:entity.villager.celebrate",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_reizen.proost"
+  },
   "einde2_audio.muziek.lucht_1": {
     "sounds": [
       {
