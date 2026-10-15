@@ -4607,5 +4607,449 @@
       }
     ],
     "subtitle": "subtitles.guhs.einde2_geestenwereld.tegel"
+  },
+  "einde2_audio.muziek.lucht_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_lucht_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.lucht_1"
+  },
+  "einde2_audio.muziek.lucht_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_lucht_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.lucht_2"
+  },
+  "einde2_audio.muziek.water_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_water_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.water_1"
+  },
+  "einde2_audio.muziek.water_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_water_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.water_2"
+  },
+  "einde2_audio.muziek.aarde_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_aarde_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.aarde_1"
+  },
+  "einde2_audio.muziek.aarde_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_aarde_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.aarde_2"
+  },
+  "einde2_audio.muziek.vuur_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_vuur_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.vuur_1"
+  },
+  "einde2_audio.muziek.vuur_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_vuur_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.vuur_2"
+  },
+  "einde2_audio.muziek.geest_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_geest_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.geest_1"
+  },
+  "einde2_audio.muziek.geest_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/muziek_geest_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.muziek.geest_2"
+  },
+  "einde2_audio.moment.intro": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_intro",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.intro"
+  },
+  "einde2_audio.moment.appa": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_appa",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.appa"
+  },
+  "einde2_audio.moment.appa_achtervolging": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_appa_achtervolging",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.appa_achtervolging"
+  },
+  "einde2_audio.moment.golf": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_golf",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.golf"
+  },
+  "einde2_audio.moment.yue_maan": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_yue_maan",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.yue_maan"
+  },
+  "einde2_audio.moment.appa_verloren": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_appa_verloren",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.appa_verloren"
+  },
+  "einde2_audio.moment.lu_ten": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_lu_ten",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.lu_ten"
+  },
+  "einde2_audio.moment.val": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_val",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.val"
+  },
+  "einde2_audio.moment.zwarte_zon": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_zwarte_zon",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.zwarte_zon"
+  },
+  "einde2_audio.moment.tent": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_tent",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.tent"
+  },
+  "einde2_audio.moment.luchtvloot": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_luchtvloot",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.luchtvloot"
+  },
+  "einde2_audio.moment.agni_kai": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_agni_kai",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.agni_kai"
+  },
+  "einde2_audio.moment.duel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_duel",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.duel"
+  },
+  "einde2_audio.moment.duel_koor": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_duel_koor",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.duel_koor"
+  },
+  "einde2_audio.moment.kroning": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_kroning",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.kroning"
+  },
+  "einde2_audio.moment.aftiteling": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/moment_aftiteling",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.moment.aftiteling"
+  },
+  "einde2_audio.deuntje.theehuis": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_theehuis",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.theehuis"
+  },
+  "einde2_audio.deuntje.thee_ting": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_thee_ting"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.thee_ting"
+  },
+  "einde2_audio.deuntje.pai_sho": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_pai_sho",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.pai_sho"
+  },
+  "einde2_audio.deuntje.luchtscooter": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_luchtscooter",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.luchtscooter"
+  },
+  "einde2_audio.deuntje.momo": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_momo",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.momo"
+  },
+  "einde2_audio.deuntje.slee": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_slee",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.slee"
+  },
+  "einde2_audio.deuntje.monorail": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_monorail",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.monorail"
+  },
+  "einde2_audio.deuntje.glijbaan": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_glijbaan",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.glijbaan"
+  },
+  "einde2_audio.deuntje.dansfeest": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_dansfeest",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.dansfeest"
+  },
+  "einde2_audio.deuntje.waaierdans": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_waaierdans",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.waaierdans"
+  },
+  "einde2_audio.deuntje.ritmeduel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/deuntje_ritmeduel",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.deuntje.ritmeduel"
+  },
+  "einde2_audio.stinger.kolen": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_kolen"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.kolen"
+  },
+  "einde2_audio.stinger.toneel_fanfare": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_toneel_fanfare"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.toneel_fanfare"
+  },
+  "einde2_audio.stinger.feestje": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_feestje"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.feestje"
+  },
+  "einde2_audio.stinger.mijn_eer": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_mijn_eer"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.mijn_eer"
+  },
+  "einde2_audio.stinger.opgelost": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_opgelost"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.opgelost"
+  },
+  "einde2_audio.stinger.tegel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/stinger_tegel"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.stinger.tegel"
+  },
+  "einde2_audio.geest.koi_zang": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_koi_zang"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.koi_zang"
+  },
+  "einde2_audio.geest.koh_kraak": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_koh_kraak"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.koh_kraak"
+  },
+  "einde2_audio.geest.koh_stilte": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_koh_stilte"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.koh_stilte"
+  },
+  "einde2_audio.geest.lantaarn_tinkel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_lantaarn_tinkel"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.lantaarn_tinkel"
+  },
+  "einde2_audio.geest.klok": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_klok"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.klok"
+  },
+  "einde2_audio.geest.geestentij": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_geestentij"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.geestentij"
+  },
+  "einde2_audio.geest.maannacht": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_maannacht"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.maannacht"
+  },
+  "einde2_audio.geest.reiger": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_audio/geest_reiger"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_audio.geest.reiger"
   }
 }
