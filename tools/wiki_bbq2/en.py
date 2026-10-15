@@ -1260,7 +1260,7 @@ TEKST.update({
     ("bouwwerken/knabbelpark", "Wat er altijd is"): (
         "What is always there",
         "Three things are always attached to the square, so the Park Ranger Guh can always be helped: the statue garden with the "
-        "statues of Joostvadsje and trapguh, Liekguh and Lunde, and Grandpa Cheeseguh (each with a plaque to read), the deer pen with "
+        "statues of Joostvadsje, trapguh and Suusvadsje, Liekguh and Lunde, and Grandpa Cheeseguh (each with a plaque to read), the deer pen with "
         "three Fawnguhs and the Pen Keeper Guh, and the Park Ranger's little house."),
     ("bouwwerken/knabbelpark", "Waar vind je het?"): (
         "Where do you find it?",

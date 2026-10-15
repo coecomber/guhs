@@ -26,7 +26,7 @@ WIKI = {
          "Langs de paadjes liggen plekjes: een bloemenweide, een rustplekje, een bosje, een grote bloesemboom."),
         ("bouwwerken/knabbelpark", "Wat er altijd is",
          "Aan het plein vast liggen altijd drie dingen, zodat de parkwachter-guh altijd geholpen kan worden: de beeldentuin met de "
-         "beelden van Joostvadsje en trapguh, Liekguh en Lunde, en Opa Kaasguh (met een plaquette om te lezen), de hertenkooi met drie "
+         "beelden van Joostvadsje, trapguh en Suusvadsje, Liekguh en Lunde, en Opa Kaasguh (met een plaquette om te lezen), de hertenkooi met drie "
          "Hertguhtjes en de kooi-verzorger-guh, en het huisje van de parkwachter."),
         ("bouwwerken/knabbelpark", "Waar vind je het?",
          "Het Knabbelpark staat alleen in de Guhmensie, op droog en zacht glooiend land. Er is er altijd één binnen een flink stukje "

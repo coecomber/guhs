@@ -547,7 +547,7 @@ BEELDENTUIN = (29, 11, 17)
 HERTENKOOI = (23, 9, 23)
 PARKWACHTER = (17, 11, 15)
 # the three statues: (block x, z, soort) on their pedestals, the plaque (x, z, nr) in front (the texts: park.PLAQUETTE_TEKST)
-BEELDEN = [(6, 6, "joostvadsje"), (8, 6, "trapguh"), (13, 6, "liekguh"), (15, 6, "lunde"), (21, 6, "opa_kaasguh")]
+BEELDEN = [(5, 6, "joostvadsje"), (7, 6, "trapguh"), (9, 6, "suusvadsje"), (13, 6, "liekguh"), (15, 6, "lunde"), (21, 6, "opa_kaasguh")]
 SOKKELS = [(5, 9), (12, 16), (20, 22)]          # x ranges of the three pedestals (z 5..6)
 PLAQUETTES = [(7, 9, 1), (14, 9, 2), (21, 9, 3)]
 
@@ -581,7 +581,7 @@ def beeldentuin(h, plekken):
     for (x, z, soort) in BEELDEN:
         s.set(x, LOOP + 1, z, "guhs:park_beeld", {"facing": "south", "beeld": soort})
     for (x, z, nr) in PLAQUETTES:
-        s.set(x, LOOP, z, "guhs:park_plaquette", {"facing": "south", "nr": str(nr)})
+        s.set(x, LOOP, z, "guhs:park_plaquette", {"facing": "north", "nr": str(nr)})
         s.set(x, G, z, "minecraft:polished_andesite")
     for (x0, x1) in SOKKELS:
         for x in range(x0 - 1, x1 + 2):

@@ -98,9 +98,10 @@ TEXTS = {
     "gui.guhs.park.plaquette.2": PLAQUETTE_TEKST[2],
     "gui.guhs.park.plaquette.3": PLAQUETTE_TEKST[3],
     "gui.guhs.park.beeld.joostvadsje": "Joostvadsje, in brons. Hij kijkt heel trots naar trapguh.",
-    "gui.guhs.park.beeld.trapguh": "Trapguh, klein en in brons, op het trapje van de sokkel. Zo schattig!",
+    "gui.guhs.park.beeld.suusvadsje": "Suusvadsje, in brons, met een strikje op haar hoofd. Samen met Joostvadsje past ze op trapguh.",
+    "gui.guhs.park.beeld.trapguh": "Trapguh, klein en in brons, tussen Joostvadsje en Suusvadsje in. Zo schattig!",
     "gui.guhs.park.beeld.liekguh": "Liekguh, in wit steen, met haar gouden neusringetje.",
-    "gui.guhs.park.beeld.lunde": "Lunde, in wit steen, met een hartje op zijn voorhoofd. Hij past op alle guhs.",
+    "gui.guhs.park.beeld.lunde": "Lunde, in wit steen, met een hartje op haar voorhoofd. Zij past op alle guhs.",
     "gui.guhs.park.beeld.opa_kaasguh": "Opa Kaasguh, in oud brons, op zijn beroemde kaasje.",
     "gui.guhs.park.gelezen": "Plaquettes gelezen: %s van de %s",
     "gui.guhs.park.gevoerd": "Hertguhtjes gevoerd: %s van de %s",
@@ -250,7 +251,7 @@ def ftb(fq):
     wereld.ftb_questlijn(fq, NAME, STRUCTUUR, [
         ("De parkwachter", "In zijn huisje zit de &dparkwachter-guh&r. Praat met hem: hij kan wel een handje hulp gebruiken.",
          "guhs:park_bankje"),
-        ("De beeldentuin", "Lees de drie &6plaquettes&r bij de beelden van Joostvadsje en trapguh, Liekguh en Lunde, en Opa Kaasguh. "
+        ("De beeldentuin", "Lees de drie &6plaquettes&r bij de beelden van Joostvadsje, trapguh en Suusvadsje, Liekguh en Lunde, en Opa Kaasguh. "
          "Rechtsklik op een plaquette.", "minecraft:oak_sign"),
         ("Hertguhtjes voeren", "In de hertenkooi wonen drie &dHertguhtjes&r. Geef ze elk een kaasknabbel, over het hek heen.",
          "guhs:kaas_knabbels"),

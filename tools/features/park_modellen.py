@@ -10,6 +10,7 @@
                      joostvadsje  bronze, a bow tie (he is a vadsje: the renderer draws him extra round)
                      trapguh      bronze, small (he sits beside Joostvadsje, on the step of the pedestal)
                      liekguh      white stone, with her little golden nose ring
+                     suusvadsje   bronze, a bow on her head (a vadsje: drawn extra round, trapguh between her and Joostvadsje)
                      lunde        white stone, a heart on the forehead
                      opa_kaasguh  old bronze with green patina, round glasses and a moustache (on his kaasje)
   blocks           park_bankje, park_lantaarn, park_prullenbak, park_plaquette, park_beeld (the plinth; the cheese plinth
@@ -123,7 +124,7 @@ MATERIAAL = {
     "oud_brons": [(54, 46, 30), (120, 96, 58), (176, 150, 96), (214, 200, 150)],
     "steen": [(118, 116, 122), (176, 174, 180), (222, 220, 224), (246, 244, 246)],
 }
-BEELDEN = {"joostvadsje": "brons", "trapguh": "brons", "liekguh": "steen", "lunde": "steen", "opa_kaasguh": "oud_brons"}
+BEELDEN = {"joostvadsje": "brons", "trapguh": "brons", "liekguh": "steen", "lunde": "steen", "opa_kaasguh": "oud_brons", "suusvadsje": "brons"}
 GOUD = (250, 210, 90)
 
 
@@ -158,6 +159,11 @@ def beeld_textuur(base, g, soort, rng):
         d.polygon([(cx, cy), (cx - 12, cy - 7), (cx - 12, cy + 7)], fill=donker)
         d.polygon([(cx, cy), (cx + 12, cy - 7), (cx + 12, cy + 7)], fill=donker)
         d.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=licht)
+    elif soort == "suusvadsje":
+        cx, cy = fx0 + fw // 2, fy0 + 2                                         # (a bow on her head)
+        d.polygon([(cx, cy), (cx - 9, cy - 5), (cx - 9, cy + 5)], fill=donker)
+        d.polygon([(cx, cy), (cx + 9, cy - 5), (cx + 9, cy + 5)], fill=donker)
+        d.ellipse([cx - 2, cy - 2, cx + 2, cy + 2], fill=licht)
     elif soort == "liekguh":
         sx0, sy0, sx1, sy1 = snoet
         cx = (sx0 + sx1) // 2

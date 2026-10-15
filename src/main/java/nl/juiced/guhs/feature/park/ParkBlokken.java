@@ -61,7 +61,7 @@ public final class ParkBlokken {
 
     /** Which statue: its texture, scale and plinth (BeeldRenderer). */
     public enum Soort implements StringRepresentable {
-        JOOSTVADSJE, TRAPGUH, LIEKGUH, LUNDE, OPA_KAASGUH;
+        JOOSTVADSJE, TRAPGUH, LIEKGUH, LUNDE, OPA_KAASGUH, SUUSVADSJE;
 
         @Override
         public String getSerializedName() {

@@ -68,7 +68,7 @@ public class BeeldRenderer extends GeoBlockRenderer<BeeldBlockEntity, BlockEntit
         ParkBlokken.Soort soort = state.hasProperty(ParkBlokken.BEELD) ? state.getValue(ParkBlokken.BEELD) : ParkBlokken.Soort.LUNDE;
         Identifier tex = Guhs.id("textures/entity/beeld_" + soort.getSerializedName() + ".png");
         return switch (soort) {
-            case JOOSTVADSJE -> new Vorm(0.95f, 1.35f, 10 / 16f, tex);   // (a vadsje: extra round)
+            case JOOSTVADSJE, SUUSVADSJE -> new Vorm(0.95f, 1.35f, 10 / 16f, tex);   // (a vadsje: extra round)
             case TRAPGUH -> new Vorm(0.5f, 1f, 10 / 16f, tex);
             case OPA_KAASGUH -> new Vorm(0.9f, 1.1f, 11 / 16f, tex);
             default -> new Vorm(0.85f, 1f, 10 / 16f, tex);

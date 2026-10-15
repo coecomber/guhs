@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.4.3 — Minecraft 26.1.2
+
+Quick fixes in Nibble Park.
+
+- The statue of Joostvadsje now has Suusvadsje beside him, with trapguh sitting between the two of them.
+- Lunde is a she: her statue's text now says so.
+- The plaques in front of the statues face the path the right way round.
+
 ## 1.4.2 — Minecraft 26.1.2
 
 A new park, an easier trip around the Nibble Ring, a tidier Travel Guh menu and a handful of bug fixes. Same requirements as 1.4.1 and no world reset: the new park only grows in chunks that were not generated yet, and the fixes to buildings also mend the copies that already exist.
