@@ -1818,6 +1818,97 @@
       "yaw": -138.0,
       "entity": "guhs:vleermuis_lemurguh"
     },
+    "rustpunt_5": {
+      "soort": "prop",
+      "pos": [
+        131,
+        41,
+        171
+      ],
+      "wie": "rustpunt aan het begin van de steiger: wie bij de ontsnapping gepakt wordt, staat weer hier"
+    },
+    "steiger_zone": {
+      "soort": "zone",
+      "pos": [
+        129,
+        41,
+        165
+      ],
+      "tot": [
+        166,
+        45,
+        177
+      ],
+      "wie": "de steiger met zijn kop"
+    },
+    "steiger": {
+      "soort": "prop",
+      "pos": [
+        155,
+        41,
+        171
+      ],
+      "wie": "hier sta je als Zuka's schip de steiger ramt"
+    },
+    "zuka_confrontatie": {
+      "soort": "npc",
+      "pos": [
+        163,
+        41,
+        171
+      ],
+      "yaw": 90.0,
+      "wie": "Zuka springt hier van zijn schip op de steiger (kijkt naar het westen)"
+    },
+    "ontsnap_wacht_1": {
+      "soort": "npc",
+      "pos": [
+        125,
+        41,
+        174
+      ],
+      "yaw": -90.0,
+      "wie": "een Vuurnatie-Mika van Zuka op het landingsterras (de ontsnapping)"
+    },
+    "ontsnap_wacht_2": {
+      "soort": "npc",
+      "pos": [
+        116,
+        41,
+        167
+      ],
+      "yaw": -90.0,
+      "wie": "een Vuurnatie-Mika van Zuka op het landingsterras (de ontsnapping)"
+    },
+    "ontsnap_wacht_3": {
+      "soort": "npc",
+      "pos": [
+        106,
+        41,
+        175
+      ],
+      "yaw": -90.0,
+      "wie": "een Vuurnatie-Mika van Zuka op het landingsterras (de ontsnapping)"
+    },
+    "ontsnap_wacht_4": {
+      "soort": "npc",
+      "pos": [
+        95,
+        41,
+        168
+      ],
+      "yaw": -90.0,
+      "wie": "een Vuurnatie-Mika van Zuka op het landingsterras (de ontsnapping)"
+    },
+    "zuka_schip_anker": {
+      "soort": "prop",
+      "pos": [
+        167,
+        28,
+        165
+      ],
+      "wie": "de oorsprong van de laag laag_zuka_schip (Zuka's schip tegen de kop van de steiger)"
+    },
     "zweefring_01": {
       "soort": "ring",
       "pos": [
@@ -2104,6 +2195,19 @@
         25,
         42,
         25
+      ]
+    },
+    "zuka_schip": {
+      "template": "guhs:zuidelijke_luchttempel/laag_zuka_schip",
+      "pos": [
+        167,
+        28,
+        165
+      ],
+      "grootte": [
+        25,
+        22,
+        13
       ]
     }
   }
