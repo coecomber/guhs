@@ -188,6 +188,8 @@ public final class E2H2Water {
     static final class Speler {
         boolean binnen;
         int hurk;
+        @Nullable
+        Vec3 hurkPlek;
         int toestand = -1;
         long brugTot;
         int stormGeluid;
@@ -520,7 +522,7 @@ public final class E2H2Water {
 
     /** On the harbour at their step: caught, into the brig of Zhao's ship, and the Blue Spirit comes. */
     static boolean gevangen(ServerPlayer p, Oord o) {
-        if (!aanZet(p, HAVEN)) {
+        if (!aanZet(p, HAVEN) || Cutscenes.bezig(p)) {
             return false;
         }
         Vec3 cel = Sluipen.cel(o);
@@ -582,7 +584,10 @@ public final class E2H2Water {
             s.hurk = 0;
             return;
         }
-        if (!p.isShiftKeyDown() || p.getDeltaMovement().horizontalDistanceSqr() > 0.003) {
+        Vec3 vorige = s.hurkPlek;
+        s.hurkPlek = p.position();
+        boolean bewogen = vorige != null && vorige.distanceToSqr(p.position()) > 0.3 * 0.3;
+        if (!p.isShiftKeyDown() || bewogen) {
             if (s.hurk > 0) {
                 balk(p, "quest.guhs.einde2_h2_water.mediteer.weg");
             }
@@ -693,6 +698,9 @@ public final class E2H2Water {
             return;
         }
         if (!o.in(p.position(), "sneeuwvlakte", 6)) {
+            if (Cutscenes.bezig(p)) {
+                return;
+            }
             // the storm does not let go: back in the snow, where Zuka keeps you
             verteller(p, "quest.guhs.einde2_h2_water.storm.terug");
             Duwtje.terug(p, o.level().dimension(), start, 90f);
