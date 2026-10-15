@@ -176,6 +176,15 @@
     "guhs:einde2_bouw_schelpenstad_stopcontact",
     "guhs:einde2_bouw_schelpenstad_sproeier",
     "guhs:einde2_bouw_schelpenstad_neon",
-    "guhs:einde2_bouw_schelpenstad_kaartenrek"
+    "guhs:einde2_bouw_schelpenstad_kaartenrek",
+    "guhs:maansteen",
+    "guhs:maansteen_tegels",
+    "guhs:maansteen_trap",
+    "guhs:maansteen_plaat",
+    "guhs:geestenaarde",
+    "guhs:geestengras",
+    "guhs:meditatiesteen",
+    "guhs:gedenksteen",
+    "guhs:lotuspuzzeltegel"
   ]
 }

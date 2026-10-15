@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "draai=0,stuk=hoek": {
+      "model": "guhs:block/lotuspuzzeltegel_hoek"
+    },
+    "draai=1,stuk=hoek": {
+      "model": "guhs:block/lotuspuzzeltegel_hoek",
+      "y": 90
+    },
+    "draai=2,stuk=hoek": {
+      "model": "guhs:block/lotuspuzzeltegel_hoek",
+      "y": 180
+    },
+    "draai=3,stuk=hoek": {
+      "model": "guhs:block/lotuspuzzeltegel_hoek",
+      "y": 270
+    },
+    "draai=0,stuk=rand": {
+      "model": "guhs:block/lotuspuzzeltegel_rand"
+    },
+    "draai=1,stuk=rand": {
+      "model": "guhs:block/lotuspuzzeltegel_rand",
+      "y": 90
+    },
+    "draai=2,stuk=rand": {
+      "model": "guhs:block/lotuspuzzeltegel_rand",
+      "y": 180
+    },
+    "draai=3,stuk=rand": {
+      "model": "guhs:block/lotuspuzzeltegel_rand",
+      "y": 270
+    },
+    "draai=0,stuk=midden": {
+      "model": "guhs:block/lotuspuzzeltegel_midden"
+    },
+    "draai=1,stuk=midden": {
+      "model": "guhs:block/lotuspuzzeltegel_midden",
+      "y": 90
+    },
+    "draai=2,stuk=midden": {
+      "model": "guhs:block/lotuspuzzeltegel_midden",
+      "y": 180
+    },
+    "draai=3,stuk=midden": {
+      "model": "guhs:block/lotuspuzzeltegel_midden",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/geestpaddenstoel_steel"
+    },
+    "axis=z": {
+      "model": "guhs:block/geestpaddenstoel_steel_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/geestpaddenstoel_steel_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

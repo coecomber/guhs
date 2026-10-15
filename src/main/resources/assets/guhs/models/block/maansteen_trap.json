@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/maansteen_tegels",
+    "top": "guhs:block/maansteen_tegels",
+    "side": "guhs:block/maansteen_tegels"
+  }
+}

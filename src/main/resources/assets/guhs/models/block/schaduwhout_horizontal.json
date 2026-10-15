@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "guhs:block/schaduwhout",
+    "end": "guhs:block/schaduwhout_top"
+  }
+}

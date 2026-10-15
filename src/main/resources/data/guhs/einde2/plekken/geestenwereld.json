@@ -1,0 +1,2089 @@
+{
+  "structuur": "geestenwereld",
+  "soort": "vast",
+  "grootte": [
+    608,
+    160,
+    608
+  ],
+  "plekken": {
+    "lantaarnboom": {
+      "soort": "prop",
+      "pos": [
+        304,
+        50,
+        304
+      ],
+      "wie": "de lantaarnboom (stam)"
+    },
+    "lantaarnboom_haak_1": {
+      "soort": "prop",
+      "pos": [
+        310,
+        61,
+        304
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_2": {
+      "soort": "prop",
+      "pos": [
+        298,
+        61,
+        304
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_3": {
+      "soort": "prop",
+      "pos": [
+        304,
+        60,
+        310
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_4": {
+      "soort": "prop",
+      "pos": [
+        304,
+        61,
+        298
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_5": {
+      "soort": "prop",
+      "pos": [
+        308,
+        60,
+        308
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_6": {
+      "soort": "prop",
+      "pos": [
+        300,
+        61,
+        308
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_7": {
+      "soort": "prop",
+      "pos": [
+        308,
+        63,
+        300
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarnboom_haak_8": {
+      "soort": "prop",
+      "pos": [
+        300,
+        60,
+        300
+      ],
+      "wie": "een leeg haakje: hier hangt een teruggebrachte lantaarngeest"
+    },
+    "lantaarngeest_1": {
+      "soort": "npc",
+      "pos": [
+        307,
+        50,
+        304
+      ],
+      "yaw": 0.0,
+      "wie": "een lantaarngeest bij de lantaarnboom",
+      "entity": "guhs:lantaarngeest"
+    },
+    "lantaarngeest_2": {
+      "soort": "npc",
+      "pos": [
+        301,
+        50,
+        304
+      ],
+      "yaw": 0.0,
+      "wie": "een lantaarngeest bij de lantaarnboom",
+      "entity": "guhs:lantaarngeest"
+    },
+    "lantaarngeest_3": {
+      "soort": "npc",
+      "pos": [
+        304,
+        50,
+        307
+      ],
+      "yaw": 0.0,
+      "wie": "een lantaarngeest bij de lantaarnboom",
+      "entity": "guhs:lantaarngeest"
+    },
+    "lantaarngeest_4": {
+      "soort": "npc",
+      "pos": [
+        304,
+        50,
+        301
+      ],
+      "yaw": 0.0,
+      "wie": "een lantaarngeest bij de lantaarnboom",
+      "entity": "guhs:lantaarngeest"
+    },
+    "lijf": {
+      "soort": "prop",
+      "pos": [
+        306,
+        50,
+        307
+      ],
+      "wie": "waar je lijf mediteert (cutscene)"
+    },
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        300,
+        50,
+        322
+      ],
+      "tot": [
+        308,
+        53,
+        330
+      ],
+      "wie": "aankomst: hier landt je ziel"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        304,
+        50,
+        326
+      ],
+      "wie": "waar je aankomt (kijkt naar het noorden, naar de lantaarnboom)"
+    },
+    "plek_meditatiecirkel": {
+      "soort": "prop",
+      "pos": [
+        304,
+        50,
+        326
+      ]
+    },
+    "meditatiesteen_meditatiecirkel": {
+      "soort": "prop",
+      "pos": [
+        298,
+        50,
+        326
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_meditatiecirkel": {
+      "soort": "prop",
+      "pos": [
+        310,
+        50,
+        326
+      ],
+      "wie": "gedenksteen: De Meditatiecirkel"
+    },
+    "lore_geestenwereld": {
+      "soort": "prop",
+      "pos": [
+        298,
+        50,
+        330
+      ],
+      "wie": "gedenksteen: De Geestenwereld"
+    },
+    "lore_lantaarnboom": {
+      "soort": "prop",
+      "pos": [
+        306,
+        50,
+        301
+      ],
+      "wie": "gedenksteen: De Lantaarnboom"
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        304,
+        84,
+        368
+      ],
+      "wie": "uitzicht: van het zuiden over de Meditatiecirkel"
+    },
+    "libelkonijnguh_1": {
+      "soort": "npc",
+      "pos": [
+        314,
+        50,
+        324
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "zone_meditatiecirkel": {
+      "soort": "zone",
+      "pos": [
+        269,
+        30,
+        269
+      ],
+      "tot": [
+        339,
+        80,
+        339
+      ]
+    },
+    "plek_gefluisterwoud": {
+      "soort": "prop",
+      "pos": [
+        198,
+        48,
+        330
+      ]
+    },
+    "meditatiesteen_gefluisterwoud": {
+      "soort": "prop",
+      "pos": [
+        196,
+        48,
+        334
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_gefluisterwoud": {
+      "soort": "prop",
+      "pos": [
+        196,
+        48,
+        326
+      ],
+      "wie": "gedenksteen: Het Gefluisterwoud"
+    },
+    "eikel_plek": {
+      "soort": "prop",
+      "pos": [
+        146,
+        48,
+        340
+      ],
+      "wie": "hier plant je de knabbelkoor-eikel (zijquest Hei Bai-guh)"
+    },
+    "hei_bai": {
+      "soort": "npc",
+      "pos": [
+        141,
+        48,
+        343
+      ],
+      "yaw": -90.0,
+      "wie": "Hei Bai-guh, de bosgeest",
+      "entity": "guhs:hei_bai_guh"
+    },
+    "lore_hei_bai": {
+      "soort": "prop",
+      "pos": [
+        148,
+        48,
+        335
+      ],
+      "wie": "gedenksteen: Hei Bai-guh"
+    },
+    "schaduwgeest_1": {
+      "soort": "npc",
+      "pos": [
+        118,
+        48,
+        371
+      ],
+      "yaw": 0.0,
+      "wie": "een schaduwgeest in de donkere rand (duwt alleen)",
+      "entity": "guhs:schaduwgeest"
+    },
+    "schaduwgeest_2": {
+      "soort": "npc",
+      "pos": [
+        104,
+        48,
+        324
+      ],
+      "yaw": 0.0,
+      "wie": "een schaduwgeest in de donkere rand (duwt alleen)",
+      "entity": "guhs:schaduwgeest"
+    },
+    "schaduwgeest_3": {
+      "soort": "npc",
+      "pos": [
+        131,
+        48,
+        292
+      ],
+      "yaw": 0.0,
+      "wie": "een schaduwgeest in de donkere rand (duwt alleen)",
+      "entity": "guhs:schaduwgeest"
+    },
+    "schaduwgeest_4": {
+      "soort": "npc",
+      "pos": [
+        149,
+        48,
+        384
+      ],
+      "yaw": 0.0,
+      "wie": "een schaduwgeest in de donkere rand (duwt alleen)",
+      "entity": "guhs:schaduwgeest"
+    },
+    "libelkonijnguh_2": {
+      "soort": "npc",
+      "pos": [
+        170,
+        48,
+        322
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "libelkonijnguh_3": {
+      "soort": "npc",
+      "pos": [
+        128,
+        48,
+        318
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "verdwaalde_lantaarn_1": {
+      "soort": "prop",
+      "pos": [
+        110,
+        48,
+        366
+      ],
+      "wie": "verdwaalde lantaarngeest (in de donkere rand)"
+    },
+    "verdwaalde_lantaarn_2": {
+      "soort": "prop",
+      "pos": [
+        158,
+        48,
+        374
+      ],
+      "wie": "verdwaalde lantaarngeest (tussen de bomen)"
+    },
+    "zone_gefluisterwoud": {
+      "soort": "zone",
+      "pos": [
+        84,
+        22,
+        270
+      ],
+      "tot": [
+        216,
+        78,
+        402
+      ]
+    },
+    "woud_rand": {
+      "soort": "zone",
+      "pos": [
+        92,
+        48,
+        278
+      ],
+      "tot": [
+        208,
+        52,
+        394
+      ],
+      "wie": "de donkere rand: buiten 72 % van de straal (schaduwgeesten)"
+    },
+    "masker_mika": {
+      "soort": "prop",
+      "pos": [
+        163,
+        42,
+        165
+      ],
+      "wie": "het mika-masker tussen de gezichten (knipoog)"
+    },
+    "masker_guhdalf": {
+      "soort": "prop",
+      "pos": [
+        174,
+        42,
+        164
+      ],
+      "wie": "het guhdalf-masker tussen de gezichten (knipoog)"
+    },
+    "masker_sponsguh": {
+      "soort": "prop",
+      "pos": [
+        158,
+        41,
+        162
+      ],
+      "wie": "het sponsguh-masker tussen de gezichten (knipoog)"
+    },
+    "masker_blauwe_geest": {
+      "soort": "prop",
+      "pos": [
+        177,
+        41,
+        163
+      ],
+      "wie": "het blauwe_geest-masker tussen de gezichten (knipoog)"
+    },
+    "koh": {
+      "soort": "npc",
+      "pos": [
+        168,
+        40,
+        148
+      ],
+      "yaw": 0.0,
+      "wie": "Koh de Gezichtenrover (duizendpoot, ~12 blokken)",
+      "entity": "guhs:koh"
+    },
+    "koh_raadsel": {
+      "soort": "prop",
+      "pos": [
+        168,
+        40,
+        156
+      ],
+      "wie": "waar je staat voor Koh's praatmoment / de raadselronde (geen emotie tonen)"
+    },
+    "grot_ingang": {
+      "soort": "prop",
+      "pos": [
+        168,
+        40,
+        170
+      ],
+      "wie": "de ingang van Koh's Grot"
+    },
+    "verdwaalde_lantaarn_3": {
+      "soort": "prop",
+      "pos": [
+        158,
+        40,
+        144
+      ],
+      "wie": "verdwaalde lantaarngeest (tussen de maskers)"
+    },
+    "koh_kamer": {
+      "soort": "zone",
+      "pos": [
+        153,
+        40,
+        135
+      ],
+      "tot": [
+        183,
+        51,
+        165
+      ],
+      "wie": "de kamer met de maskers"
+    },
+    "plek_koh_grot": {
+      "soort": "prop",
+      "pos": [
+        168,
+        40,
+        173
+      ]
+    },
+    "meditatiesteen_koh_grot": {
+      "soort": "prop",
+      "pos": [
+        173,
+        40,
+        173
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_koh": {
+      "soort": "prop",
+      "pos": [
+        163,
+        40,
+        173
+      ],
+      "wie": "gedenksteen: Koh de Gezichtenrover"
+    },
+    "zone_koh_grot": {
+      "soort": "zone",
+      "pos": [
+        116,
+        16,
+        98
+      ],
+      "tot": [
+        220,
+        113,
+        202
+      ]
+    },
+    "poort": {
+      "soort": "prop",
+      "pos": [
+        338,
+        56,
+        160
+      ],
+      "wie": "de poort van de Witte Lotus (gaat in fase B dicht tot de puzzel klopt)"
+    },
+    "poort_doorgang": {
+      "soort": "zone",
+      "pos": [
+        336,
+        56,
+        160
+      ],
+      "tot": [
+        340,
+        61,
+        161
+      ],
+      "wie": "de doorgang van de poort"
+    },
+    "tegel_1": {
+      "soort": "prop",
+      "pos": [
+        337,
+        55,
+        166
+      ],
+      "wie": "puzzeltegel hoek (rij 1, kolom 1); goed bij draai 0"
+    },
+    "tegel_2": {
+      "soort": "prop",
+      "pos": [
+        338,
+        55,
+        166
+      ],
+      "wie": "puzzeltegel rand (rij 1, kolom 2); goed bij draai 0"
+    },
+    "tegel_3": {
+      "soort": "prop",
+      "pos": [
+        339,
+        55,
+        166
+      ],
+      "wie": "puzzeltegel hoek (rij 1, kolom 3); goed bij draai 1"
+    },
+    "tegel_6": {
+      "soort": "prop",
+      "pos": [
+        339,
+        55,
+        167
+      ],
+      "wie": "puzzeltegel rand (rij 2, kolom 3); goed bij draai 1"
+    },
+    "tegel_9": {
+      "soort": "prop",
+      "pos": [
+        339,
+        55,
+        168
+      ],
+      "wie": "puzzeltegel hoek (rij 3, kolom 3); goed bij draai 2"
+    },
+    "tegel_8": {
+      "soort": "prop",
+      "pos": [
+        338,
+        55,
+        168
+      ],
+      "wie": "puzzeltegel rand (rij 3, kolom 2); goed bij draai 2"
+    },
+    "tegel_7": {
+      "soort": "prop",
+      "pos": [
+        337,
+        55,
+        168
+      ],
+      "wie": "puzzeltegel hoek (rij 3, kolom 1); goed bij draai 3"
+    },
+    "tegel_4": {
+      "soort": "prop",
+      "pos": [
+        337,
+        55,
+        167
+      ],
+      "wie": "puzzeltegel rand (rij 2, kolom 1); goed bij draai 3"
+    },
+    "tegel_5": {
+      "soort": "prop",
+      "pos": [
+        338,
+        55,
+        167
+      ],
+      "wie": "puzzeltegel midden (rij 2, kolom 2); goed bij draai 0 (de middelste: elke draai is goed)"
+    },
+    "lore_witte_lotus": {
+      "soort": "prop",
+      "pos": [
+        343,
+        56,
+        167
+      ],
+      "wie": "gedenksteen: De Witte Lotus"
+    },
+    "plek_lotus_ruines": {
+      "soort": "prop",
+      "pos": [
+        338,
+        56,
+        174
+      ]
+    },
+    "meditatiesteen_lotus_ruines": {
+      "soort": "prop",
+      "pos": [
+        333,
+        56,
+        172
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "libelkonijnguh_4": {
+      "soort": "npc",
+      "pos": [
+        350,
+        56,
+        172
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "hal": {
+      "soort": "zone",
+      "pos": [
+        329,
+        56,
+        110
+      ],
+      "tot": [
+        347,
+        62,
+        159
+      ],
+      "wie": "de Hal van de Voorgangers"
+    },
+    "lore_aang": {
+      "soort": "prop",
+      "pos": [
+        331,
+        57,
+        114
+      ],
+      "wie": "gedenksteen: Aang-guh, Luchtnomade"
+    },
+    "lore_roku": {
+      "soort": "prop",
+      "pos": [
+        345,
+        57,
+        114
+      ],
+      "wie": "gedenksteen: Roku-guh, Vuurnatie"
+    },
+    "lore_kyoshi": {
+      "soort": "prop",
+      "pos": [
+        331,
+        57,
+        120
+      ],
+      "wie": "gedenksteen: Kyoshi-guh, Aardrijk"
+    },
+    "lore_kuruk": {
+      "soort": "prop",
+      "pos": [
+        345,
+        57,
+        120
+      ],
+      "wie": "gedenksteen: Kuruk-guh, Waterstam"
+    },
+    "lore_yangchen": {
+      "soort": "prop",
+      "pos": [
+        331,
+        57,
+        126
+      ],
+      "wie": "gedenksteen: Yangchen-guh, Luchtnomade"
+    },
+    "lore_szeto": {
+      "soort": "prop",
+      "pos": [
+        345,
+        57,
+        126
+      ],
+      "wie": "gedenksteen: Szeto-guh, Vuurnatie"
+    },
+    "lore_wan": {
+      "soort": "prop",
+      "pos": [
+        331,
+        57,
+        132
+      ],
+      "wie": "gedenksteen: Wan-guh, de eerste"
+    },
+    "lore_leeg": {
+      "soort": "prop",
+      "pos": [
+        345,
+        57,
+        132
+      ],
+      "wie": "gedenksteen: Een lege steen"
+    },
+    "fresco": {
+      "soort": "prop",
+      "pos": [
+        338,
+        56,
+        112
+      ],
+      "wie": "het fresco: twee geesten in elkaar gedraaid, licht en donker"
+    },
+    "verdwaalde_lantaarn_4": {
+      "soort": "prop",
+      "pos": [
+        330,
+        56,
+        111
+      ],
+      "wie": "verdwaalde lantaarngeest (een hoek van de hal)"
+    },
+    "hemeltrap": {
+      "soort": "pad",
+      "punten": [
+        [
+          349,
+          56,
+          111
+        ],
+        [
+          351,
+          56,
+          111
+        ],
+        [
+          353,
+          57,
+          111
+        ],
+        [
+          354,
+          57,
+          109
+        ],
+        [
+          355,
+          58,
+          108
+        ],
+        [
+          356,
+          59,
+          106
+        ],
+        [
+          357,
+          59,
+          104
+        ],
+        [
+          358,
+          60,
+          102
+        ],
+        [
+          358,
+          60,
+          100
+        ],
+        [
+          360,
+          61,
+          101
+        ],
+        [
+          361,
+          61,
+          101
+        ],
+        [
+          362,
+          62,
+          102
+        ],
+        [
+          364,
+          62,
+          102
+        ],
+        [
+          365,
+          62,
+          102
+        ],
+        [
+          367,
+          63,
+          102
+        ],
+        [
+          368,
+          63,
+          101
+        ],
+        [
+          369,
+          64,
+          100
+        ],
+        [
+          370,
+          64,
+          99
+        ],
+        [
+          371,
+          65,
+          98
+        ],
+        [
+          372,
+          65,
+          96
+        ],
+        [
+          372,
+          65,
+          95
+        ],
+        [
+          372,
+          66,
+          93
+        ],
+        [
+          372,
+          66,
+          92
+        ],
+        [
+          371,
+          67,
+          90
+        ],
+        [
+          370,
+          67,
+          89
+        ],
+        [
+          369,
+          68,
+          88
+        ],
+        [
+          368,
+          68,
+          87
+        ],
+        [
+          367,
+          68,
+          86
+        ],
+        [
+          365,
+          69,
+          86
+        ],
+        [
+          364,
+          69,
+          86
+        ],
+        [
+          362,
+          70,
+          86
+        ],
+        [
+          361,
+          70,
+          87
+        ],
+        [
+          359,
+          71,
+          87
+        ],
+        [
+          358,
+          71,
+          88
+        ],
+        [
+          357,
+          71,
+          90
+        ],
+        [
+          357,
+          72,
+          91
+        ],
+        [
+          356,
+          72,
+          92
+        ],
+        [
+          356,
+          73,
+          94
+        ],
+        [
+          356,
+          73,
+          95
+        ],
+        [
+          357,
+          74,
+          97
+        ],
+        [
+          357,
+          74,
+          98
+        ],
+        [
+          358,
+          74,
+          99
+        ],
+        [
+          359,
+          75,
+          100
+        ],
+        [
+          361,
+          75,
+          101
+        ],
+        [
+          362,
+          76,
+          102
+        ],
+        [
+          363,
+          76,
+          102
+        ],
+        [
+          365,
+          77,
+          102
+        ],
+        [
+          366,
+          77,
+          102
+        ],
+        [
+          368,
+          77,
+          101
+        ],
+        [
+          369,
+          78,
+          100
+        ],
+        [
+          370,
+          78,
+          99
+        ],
+        [
+          371,
+          79,
+          98
+        ],
+        [
+          372,
+          79,
+          96
+        ],
+        [
+          372,
+          80,
+          95
+        ],
+        [
+          372,
+          80,
+          93
+        ],
+        [
+          372,
+          80,
+          92
+        ],
+        [
+          371,
+          81,
+          91
+        ],
+        [
+          370,
+          81,
+          89
+        ],
+        [
+          369,
+          82,
+          88
+        ],
+        [
+          368,
+          82,
+          87
+        ],
+        [
+          367,
+          83,
+          87
+        ],
+        [
+          365,
+          83,
+          86
+        ],
+        [
+          364,
+          83,
+          86
+        ],
+        [
+          362,
+          84,
+          86
+        ],
+        [
+          361,
+          84,
+          87
+        ],
+        [
+          360,
+          85,
+          87
+        ],
+        [
+          358,
+          85,
+          88
+        ],
+        [
+          357,
+          85,
+          89
+        ],
+        [
+          357,
+          86,
+          91
+        ],
+        [
+          356,
+          86,
+          92
+        ],
+        [
+          356,
+          87,
+          94
+        ],
+        [
+          356,
+          87,
+          95
+        ],
+        [
+          356,
+          88,
+          97
+        ],
+        [
+          357,
+          88,
+          98
+        ],
+        [
+          358,
+          88,
+          99
+        ],
+        [
+          359,
+          89,
+          100
+        ],
+        [
+          360,
+          89,
+          101
+        ],
+        [
+          362,
+          90,
+          102
+        ],
+        [
+          363,
+          90,
+          102
+        ],
+        [
+          365,
+          91,
+          102
+        ],
+        [
+          366,
+          91,
+          102
+        ],
+        [
+          368,
+          91,
+          101
+        ],
+        [
+          369,
+          92,
+          100
+        ],
+        [
+          370,
+          92,
+          99
+        ],
+        [
+          371,
+          93,
+          98
+        ],
+        [
+          372,
+          93,
+          97
+        ],
+        [
+          372,
+          94,
+          95
+        ],
+        [
+          372,
+          94,
+          94
+        ],
+        [
+          372,
+          94,
+          92
+        ],
+        [
+          371,
+          95,
+          91
+        ],
+        [
+          371,
+          95,
+          90
+        ],
+        [
+          370,
+          96,
+          88
+        ],
+        [
+          368,
+          96,
+          87
+        ],
+        [
+          367,
+          97,
+          87
+        ],
+        [
+          366,
+          97,
+          86
+        ],
+        [
+          364,
+          97,
+          86
+        ],
+        [
+          363,
+          98,
+          86
+        ],
+        [
+          361,
+          98,
+          86
+        ],
+        [
+          360,
+          99,
+          87
+        ],
+        [
+          359,
+          99,
+          88
+        ],
+        [
+          358,
+          100,
+          89
+        ],
+        [
+          357,
+          100,
+          90
+        ],
+        [
+          356,
+          100,
+          92
+        ],
+        [
+          356,
+          101,
+          93
+        ],
+        [
+          356,
+          101,
+          95
+        ],
+        [
+          356,
+          102,
+          96
+        ],
+        [
+          357,
+          102,
+          98
+        ],
+        [
+          358,
+          103,
+          99
+        ],
+        [
+          359,
+          103,
+          100
+        ],
+        [
+          360,
+          103,
+          101
+        ],
+        [
+          361,
+          104,
+          102
+        ],
+        [
+          363,
+          104,
+          102
+        ],
+        [
+          364,
+          105,
+          102
+        ],
+        [
+          366,
+          105,
+          102
+        ],
+        [
+          367,
+          106,
+          101
+        ],
+        [
+          369,
+          106,
+          101
+        ],
+        [
+          370,
+          106,
+          100
+        ],
+        [
+          371,
+          107,
+          98
+        ],
+        [
+          371,
+          107,
+          97
+        ],
+        [
+          372,
+          108,
+          96
+        ],
+        [
+          372,
+          108,
+          94
+        ],
+        [
+          372,
+          109,
+          93
+        ],
+        [
+          371,
+          109,
+          91
+        ],
+        [
+          371,
+          109,
+          90
+        ],
+        [
+          370,
+          110,
+          89
+        ],
+        [
+          369,
+          110,
+          88
+        ],
+        [
+          367,
+          111,
+          87
+        ],
+        [
+          366,
+          111,
+          86
+        ],
+        [
+          365,
+          112,
+          86
+        ],
+        [
+          364,
+          112,
+          86
+        ],
+        [
+          364,
+          112,
+          84
+        ],
+        [
+          364,
+          112,
+          82
+        ],
+        [
+          364,
+          112,
+          80
+        ],
+        [
+          364,
+          112,
+          78
+        ],
+        [
+          364,
+          112,
+          76
+        ],
+        [
+          364,
+          112,
+          74
+        ],
+        [
+          364,
+          112,
+          72
+        ],
+        [
+          364,
+          112,
+          70
+        ],
+        [
+          363,
+          112,
+          68
+        ],
+        [
+          362,
+          112,
+          67
+        ],
+        [
+          361,
+          112,
+          65
+        ],
+        [
+          360,
+          112,
+          63
+        ],
+        [
+          360,
+          112,
+          61
+        ]
+      ],
+      "wie": "de Hemeltrap: van de hal omhoog naar de Top der Voorgangers"
+    },
+    "zone_lotus_ruines": {
+      "soort": "zone",
+      "pos": [
+        282,
+        30,
+        84
+      ],
+      "tot": [
+        394,
+        76,
+        196
+      ]
+    },
+    "roku": {
+      "soort": "npc",
+      "pos": [
+        353,
+        112,
+        50
+      ],
+      "yaw": 0.0,
+      "wie": "Roku-guh als geest (h4: raad voor de finale)",
+      "kind": "ROKU_GUH"
+    },
+    "kyoshi": {
+      "soort": "npc",
+      "pos": [
+        359,
+        112,
+        50
+      ],
+      "yaw": 0.0,
+      "wie": "Kyoshi-guh als geest (h4: raad voor de finale)",
+      "kind": "KYOSHI_GUH"
+    },
+    "fang_landing": {
+      "soort": "prop",
+      "pos": [
+        356,
+        112,
+        58
+      ],
+      "wie": "waar Fang je neerzet"
+    },
+    "plek_top_voorgangers": {
+      "soort": "prop",
+      "pos": [
+        356,
+        112,
+        60
+      ]
+    },
+    "meditatiesteen_top_voorgangers": {
+      "soort": "prop",
+      "pos": [
+        362,
+        112,
+        58
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_top": {
+      "soort": "prop",
+      "pos": [
+        350,
+        112,
+        58
+      ],
+      "wie": "gedenksteen: De Top der Voorgangers"
+    },
+    "verdwaalde_lantaarn_5": {
+      "soort": "prop",
+      "pos": [
+        363,
+        112,
+        45
+      ],
+      "wie": "verdwaalde lantaarngeest (heel hoog)"
+    },
+    "top": {
+      "soort": "zone",
+      "pos": [
+        341,
+        112,
+        37
+      ],
+      "tot": [
+        371,
+        118,
+        67
+      ],
+      "wie": "de top"
+    },
+    "zone_top_voorgangers": {
+      "soort": "zone",
+      "pos": [
+        335,
+        92,
+        31
+      ],
+      "tot": [
+        377,
+        128,
+        73
+      ]
+    },
+    "koi_cirkel": {
+      "soort": "pad",
+      "punten": [
+        [
+          488,
+          72,
+          300
+        ],
+        [
+          487,
+          72,
+          305
+        ],
+        [
+          484,
+          72,
+          308
+        ],
+        [
+          481,
+          72,
+          311
+        ],
+        [
+          476,
+          72,
+          312
+        ],
+        [
+          471,
+          72,
+          311
+        ],
+        [
+          468,
+          72,
+          308
+        ],
+        [
+          465,
+          72,
+          305
+        ],
+        [
+          464,
+          72,
+          300
+        ],
+        [
+          465,
+          72,
+          295
+        ],
+        [
+          468,
+          72,
+          292
+        ],
+        [
+          471,
+          72,
+          289
+        ],
+        [
+          476,
+          72,
+          288
+        ],
+        [
+          481,
+          72,
+          289
+        ],
+        [
+          484,
+          72,
+          292
+        ],
+        [
+          487,
+          72,
+          295
+        ]
+      ],
+      "wie": "de cirkel die Tui en La zwemmen (yin-yang), boven de vijver"
+    },
+    "koi_tui": {
+      "soort": "npc",
+      "pos": [
+        464,
+        72,
+        300
+      ],
+      "yaw": 180.0,
+      "wie": "Tui, de maangeest (witte koi met zwarte vlek)",
+      "entity": "guhs:geest_koi"
+    },
+    "koi_la": {
+      "soort": "npc",
+      "pos": [
+        488,
+        72,
+        300
+      ],
+      "yaw": 0.0,
+      "wie": "La, de oceaangeest (zwarte koi met witte vlek)",
+      "entity": "guhs:geest_koi"
+    },
+    "vijver": {
+      "soort": "zone",
+      "pos": [
+        447,
+        58,
+        271
+      ],
+      "tot": [
+        505,
+        65,
+        329
+      ],
+      "wie": "het water van de Hemelvijver"
+    },
+    "plek_hemelvijver": {
+      "soort": "prop",
+      "pos": [
+        445,
+        66,
+        300
+      ]
+    },
+    "meditatiesteen_hemelvijver": {
+      "soort": "prop",
+      "pos": [
+        445,
+        66,
+        304
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_hemelvijver": {
+      "soort": "prop",
+      "pos": [
+        445,
+        66,
+        296
+      ],
+      "wie": "gedenksteen: De Hemelvijver"
+    },
+    "libelkonijnguh_5": {
+      "soort": "npc",
+      "pos": [
+        476,
+        66,
+        332
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "verdwaalde_lantaarn_6": {
+      "soort": "prop",
+      "pos": [
+        507,
+        66,
+        303
+      ],
+      "wie": "verdwaalde lantaarngeest (op de rand van de vijver)"
+    },
+    "zone_hemelvijver": {
+      "soort": "zone",
+      "pos": [
+        436,
+        36,
+        260
+      ],
+      "tot": [
+        516,
+        112,
+        340
+      ]
+    },
+    "theetafel": {
+      "soort": "prop",
+      "pos": [
+        436,
+        55,
+        470
+      ],
+      "wie": "de theetafel met de pot"
+    },
+    "theegeest": {
+      "soort": "npc",
+      "pos": [
+        436,
+        55,
+        468
+      ],
+      "yaw": 0.0,
+      "wie": "de Theegeest (zit aan zijn theetafel)",
+      "kind": "THEEGEEST_GUH"
+    },
+    "plek_theepaviljoen": {
+      "soort": "prop",
+      "pos": [
+        436,
+        54,
+        456
+      ]
+    },
+    "meditatiesteen_theepaviljoen": {
+      "soort": "prop",
+      "pos": [
+        441,
+        54,
+        456
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_theepaviljoen": {
+      "soort": "prop",
+      "pos": [
+        431,
+        54,
+        456
+      ],
+      "wie": "gedenksteen: Het Theepaviljoen"
+    },
+    "libelkonijnguh_6": {
+      "soort": "npc",
+      "pos": [
+        450,
+        54,
+        476
+      ],
+      "yaw": 0.0,
+      "wie": "libelkonijnguh",
+      "entity": "guhs:libelkonijnguh"
+    },
+    "verdwaalde_lantaarn_7": {
+      "soort": "prop",
+      "pos": [
+        422,
+        54,
+        480
+      ],
+      "wie": "verdwaalde lantaarngeest (in de theetuin)"
+    },
+    "zone_theepaviljoen": {
+      "soort": "zone",
+      "pos": [
+        403,
+        34,
+        437
+      ],
+      "tot": [
+        469,
+        74,
+        503
+      ]
+    },
+    "fang": {
+      "soort": "npc",
+      "pos": [
+        496,
+        84,
+        142
+      ],
+      "yaw": 0.0,
+      "wie": "Fang, de geestdraak van Roku-guh (wacht hier, zadel)",
+      "entity": "guhs:fang"
+    },
+    "fang_opstap": {
+      "soort": "prop",
+      "pos": [
+        496,
+        84,
+        148
+      ],
+      "wie": "waar je op Fang stapt"
+    },
+    "plek_fang_pad": {
+      "soort": "prop",
+      "pos": [
+        496,
+        84,
+        154
+      ]
+    },
+    "meditatiesteen_fang_pad": {
+      "soort": "prop",
+      "pos": [
+        500,
+        84,
+        154
+      ],
+      "wie": "meditatiesteen: rechtsklik = terug naar je lijf"
+    },
+    "lore_fang": {
+      "soort": "prop",
+      "pos": [
+        492,
+        84,
+        154
+      ],
+      "wie": "gedenksteen: Fang's Hemelpad"
+    },
+    "verdwaalde_lantaarn_8": {
+      "soort": "prop",
+      "pos": [
+        503,
+        84,
+        144
+      ],
+      "wie": "verdwaalde lantaarngeest (bij Fang)"
+    },
+    "fang_vlucht": {
+      "soort": "pad",
+      "punten": [
+        [
+          496,
+          86,
+          142
+        ],
+        [
+          494,
+          90,
+          134
+        ],
+        [
+          492,
+          94,
+          126
+        ],
+        [
+          490,
+          98,
+          118
+        ],
+        [
+          488,
+          102,
+          111
+        ],
+        [
+          485,
+          105,
+          104
+        ],
+        [
+          482,
+          108,
+          97
+        ],
+        [
+          479,
+          111,
+          91
+        ],
+        [
+          475,
+          114,
+          85
+        ],
+        [
+          471,
+          116,
+          79
+        ],
+        [
+          467,
+          119,
+          74
+        ],
+        [
+          462,
+          120,
+          70
+        ],
+        [
+          456,
+          122,
+          66
+        ],
+        [
+          450,
+          122,
+          63
+        ],
+        [
+          443,
+          123,
+          60
+        ],
+        [
+          436,
+          123,
+          58
+        ],
+        [
+          429,
+          123,
+          57
+        ],
+        [
+          421,
+          123,
+          56
+        ],
+        [
+          412,
+          122,
+          55
+        ],
+        [
+          403,
+          121,
+          55
+        ],
+        [
+          394,
+          120,
+          55
+        ],
+        [
+          385,
+          118,
+          55
+        ],
+        [
+          375,
+          116,
+          56
+        ],
+        [
+          366,
+          115,
+          57
+        ],
+        [
+          356,
+          113,
+          58
+        ]
+      ],
+      "wie": "Fang's vlucht van zijn rustplek naar de Top der Voorgangers (h4)"
+    },
+    "zone_fang_pad": {
+      "soort": "zone",
+      "pos": [
+        477,
+        68,
+        131
+      ],
+      "tot": [
+        515,
+        98,
+        169
+      ]
+    }
+  },
+  "dimensie": "guhs:geestenwereld",
+  "oorsprong": [
+    -304,
+    32,
+    -304
+  ],
+  "tiles": [
+    19,
+    19
+  ],
+  "zones": [
+    "meditatiecirkel",
+    "gefluisterwoud",
+    "koh_grot",
+    "lotus_ruines",
+    "top_voorgangers",
+    "hemelvijver",
+    "theepaviljoen",
+    "fang_pad"
+  ]
+}

@@ -3535,5 +3535,49 @@
       }
     ],
     "subtitle": "subtitles.guhs.einde2_sponsguh_wezens.bellen"
+  },
+  "einde2_geestenwereld.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_geestenwereld/sfeer",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_geestenwereld.sfeer"
+  },
+  "einde2_geestenwereld.gefluister": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_geestenwereld/gefluister1",
+        "stream": false
+      },
+      {
+        "name": "guhs:einde2_geestenwereld/gefluister2",
+        "stream": false
+      },
+      {
+        "name": "guhs:einde2_geestenwereld/gefluister3",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_geestenwereld.gefluister"
+  },
+  "einde2_geestenwereld.meditatie": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_geestenwereld/meditatie",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_geestenwereld.meditatie"
+  },
+  "einde2_geestenwereld.tegel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_geestenwereld/tegel",
+        "stream": false
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_geestenwereld.tegel"
   }
 }
