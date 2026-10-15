@@ -170,7 +170,7 @@ public class E2GeestModellenGameTests {
         ServerPlayer p = speler(helper, 20.5, 4.5);
         WanGuhEntity wan = maak(helper, GeestWezens.WAN_GUH, 20.5, 2, 20.5);
         GeestreusEntity reus = maak(helper, GeestWezens.GEESTREUS, 4.5, 6, 20.5);
-        KijkmaskerEntity masker = maak(helper, GeestWezens.KIJKMASKER, 4.5, 3, 4.5);
+        KijkmaskerEntity masker = maak(helper, GeestWezens.KIJKMASKER, 9.5, 3, 4.5);
         masker.snapTo(masker.getX(), masker.getY(), masker.getZ(), 0f, 0f);
         helper.succeedWhen(() -> {
             helper.assertTrue(wan.isVerscholen() && wan.onzichtbaar(), "Wan-guh faded when the player came close");
