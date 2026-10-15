@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,spiegel=false": {
+      "model": "guhs:block/guhvatar_beeld"
+    },
+    "facing=north,spiegel=true": {
+      "model": "guhs:block/guhvatar_beeld"
+    },
+    "facing=east,spiegel=false": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 90
+    },
+    "facing=east,spiegel=true": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 90
+    },
+    "facing=south,spiegel=false": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 180
+    },
+    "facing=south,spiegel=true": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 180
+    },
+    "facing=west,spiegel=false": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 270
+    },
+    "facing=west,spiegel=true": {
+      "model": "guhs:block/guhvatar_beeld",
+      "y": 270
+    }
+  }
+}
