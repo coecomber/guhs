@@ -152,11 +152,15 @@ public class E2BouwVuurGameTests {
         Plekken.Blad blad = Plekken.blad(BOUW);
         Plekken.Laag laag = blad.lagen().get(E2BouwVuurFeature.LAAG_LEEUWSCHILDPAD);
         BlockPos at = helper.absolutePos(new BlockPos(0, HOOG_LAAG, 0));
-        // (an overlay only goes down where the chunks are loaded: it is wider than a test's own spot)
+        // (an overlay only goes down where the chunks are loaded: it is wider than a test's own spot; only the chunks this
+        // test forced are let go again: a neighbour test's forced chunk that is let go never loads and its test never starts)
         BlockPos tot = at.offset(laag.grootte());
+        List<net.minecraft.world.level.ChunkPos> vast = new ArrayList<>();
         for (int cx = at.getX() >> 4; cx <= tot.getX() >> 4; cx++) {
             for (int cz = at.getZ() >> 4; cz <= tot.getZ() >> 4; cz++) {
-                level.setChunkForced(cx, cz, true);
+                if (level.setChunkForced(cx, cz, true)) {
+                    vast.add(new net.minecraft.world.level.ChunkPos(cx, cz));
+                }
                 level.getChunk(cx, cz);
             }
         }
@@ -179,10 +183,8 @@ public class E2BouwVuurGameTests {
         for (BlockPos p : BlockPos.betweenClosed(at, at.offset(laag.grootte().getX() - 1, laag.grootte().getY() - 1, laag.grootte().getZ() - 1))) {
             helper.assertTrue(level.getBlockState(p).isAir(), "nothing is left at " + p);
         }
-        for (int cx = at.getX() >> 4; cx <= tot.getX() >> 4; cx++) {
-            for (int cz = at.getZ() >> 4; cz <= tot.getZ() >> 4; cz++) {
-                level.setChunkForced(cx, cz, false);
-            }
+        for (net.minecraft.world.level.ChunkPos c : vast) {
+            level.setChunkForced(c.x(), c.z(), false);
         }
         helper.succeed();
     }
