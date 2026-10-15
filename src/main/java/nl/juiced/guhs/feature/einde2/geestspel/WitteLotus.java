@@ -154,17 +154,24 @@ public final class WitteLotus {
         if (stap == GeestLijnen.L_POORT) {
             lijn().begin(p);
             if (GeestPlek.in(p, "poort_doorgang")) {
-                duwTerug(p);
+                if (puzzelGoed(p.level())) {
+                    // the lotus lies right (somebody just laid it): whoever stands at the gate now may pass too
+                    opgelost(p, p.level());
+                } else {
+                    duwTerug(p);
+                }
             }
-        } else if (stap == GeestLijnen.L_HOF && GeestPlek.in(p, "lotus_hof")) {
+        } else if (stap == GeestLijnen.L_HOF && (GeestPlek.in(p, "lotus_hof") || GeestPlek.doos("lotus_hof") == null)) {
             lijn().zet(p, GeestLijnen.L_TEGELS);
             GuhAdvancements.grant(p, "einde2_geest_spel_lotus_hof");
+            GeestSpel.geluid(p, "deuntje.pai_sho", 0.8f, 1.0f);
             GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.lotus.hof");
             GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.lotus.hof2");
         } else if (stap == GeestLijnen.L_TEGELS && GeestLijnen.meesterTegels(p) == GeestLijnen.MEESTERS.size()) {
             lijn().zet(p, GeestLijnen.L_LEDEN);
             GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.lotus.vijf");
-        } else if (stap == GeestLijnen.L_ARCHIEF && (GeestPlek.in(p, GeestToegang.ARCHIEF) || GeestPlek.bij(p, "archief_ingang", 2.5))) {
+        } else if (stap == GeestLijnen.L_ARCHIEF && (GeestPlek.in(p, GeestToegang.ARCHIEF) || GeestPlek.bij(p, "archief_ingang", 2.5)
+                || GeestPlek.doos(GeestToegang.ARCHIEF) == null && GeestPlek.pos("archief_ingang") == null)) {
             archief(p);
         }
         if (stap >= GeestLijnen.L_VOETSTUKKEN) {

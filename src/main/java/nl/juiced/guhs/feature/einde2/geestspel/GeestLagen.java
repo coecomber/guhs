@@ -40,7 +40,7 @@ import nl.juiced.guhs.feature.einde2.geestenwereld.Geestenwereld;
 public final class GeestLagen {
     public static final String WOUD = "laag_woud_bloei", BOOM = "laag_lantaarnboom_licht", PAD_8 = "laag_pad_8";
     /** Only overlay blocks this near the player are shown (the client has the rest of the chunks too, but a second is fine). */
-    public static final int STRAAL = 56;
+    public static final int STRAAL = 40;
 
     /** overlay -> its blocks in the world (not air, not structure_void); empty when the build has no such overlay. */
     private static final Map<String, Map<BlockPos, BlockState>> BLOKKEN = new ConcurrentHashMap<>();
