@@ -80,12 +80,24 @@
     },
     {
       height: 1.5625,
+      id: "475548464BBB4D7B",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_einde2_geest_spel.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "475548E38EB7A3F8",
       image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_biomes.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 20.63125,
+      y: 27.59375,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -97,7 +109,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 26.09375,
+      y: 33.05625,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -109,7 +121,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 30.05625,
+      y: 37.01875,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -121,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 34.01875,
+      y: 40.981249999999996,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -133,7 +145,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 37.981249999999996,
+      y: 44.943749999999994,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -145,7 +157,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 41.943749999999994,
+      y: 48.90624999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -157,7 +169,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 45.90624999999999,
+      y: 52.86874999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -169,7 +181,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 49.86874999999999,
+      y: 56.83124999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -181,7 +193,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 53.83124999999999,
+      y: 60.79374999999999,
       hover: [
         "Komt na: Hoe groter de Mika... (De Guhmensie)",
       ],
@@ -901,6 +913,522 @@
       y: 18.450000000000003,
     },
     {
+      id: "4755488CEC34A26C",
+      icon: {
+        id: "guhs:geestengras",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_binnen",
+          id: "475548CA4C73564B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489DC07D5253",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548FA342863EA",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+      shape: "gear",
+    },
+    {
+      id: "475548E095604FDD",
+      icon: {
+        id: "guhs:geestlantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_lantaarns_stap_8",
+          id: "4755485137A932B2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D831506FAD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554854E91DD8C2",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548FC54B92300",
+      icon: {
+        id: "guhs:einde2_geest_spel_knabbelkoor_eikel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_hei_bai_stap_2",
+          id: "475548A574A1C6EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548404E9385AB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554849429AE0EC",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+    },
+    {
+      id: "47554878348BDDEB",
+      icon: {
+        id: "guhs:einde2_geest_spel_koh_masker",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_koh_stap_3",
+          id: "475548DD5B317E0D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C0312D11F7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486F690F2983",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+    },
+    {
+      id: "47554868937E9EFF",
+      icon: {
+        id: "minecraft:white_tulip",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_1",
+          id: "47554861F2B9932F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548871677ED8B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548692258D3C6",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+    },
+    {
+      id: "47554854851697D4",
+      icon: {
+        id: "guhs:pai_sho_tegel_miroh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_3",
+          id: "475548304947A803",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483A1F371A1E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481333FB0E3B",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+    },
+    {
+      id: "475548883279F8B9",
+      icon: {
+        id: "guhs:pai_sho_tegel_witte_lotus",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_4",
+          id: "475548F53FE521BF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554838EA0C0A55",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C1F8C54A6E",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 9.0,
+      y: 22.4125,
+    },
+    {
+      id: "475548605E9ECEBF",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_5",
+          id: "475548FA5EDC3445",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554899FCBF7C72",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488D3E1188FC",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 9.0,
+      y: 23.9125,
+    },
+    {
+      id: "47554832AE162A32",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_6",
+          id: "47554833FF58BE12",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481404E47759",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548393C989AAE",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 23.9125,
+      shape: "gear",
+    },
+    {
+      id: "475548DB1C0FEC54",
+      icon: {
+        id: "minecraft:amethyst_shard",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_chakra_stap_7",
+          id: "475548EB0238AFD7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F4C73E0964",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B1A2E80196",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 6.0,
+      y: 23.9125,
+      shape: "gear",
+    },
+    {
+      id: "47554872C6D30D87",
+      icon: {
+        id: "guhs:einde2_geest_spel_maandruppel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_verschijningen_stap_4",
+          id: "475548B133EE55A7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481F1AF0BE5D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F3F0381630",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 4.5,
+      y: 23.9125,
+    },
+    {
+      id: "475548683696358B",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_klok",
+          id: "47554836437C447B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CBB1243D3A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CFAC029051",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 3.0,
+      y: 23.9125,
+    },
+    {
+      id: "4755482100A4485C",
+      icon: {
+        id: "minecraft:glow_berries",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_voetstappen",
+          id: "475548A7F21BD34B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C11B12283D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554898E373994A",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 1.5,
+      y: 23.9125,
+    },
+    {
+      id: "47554875171DB06C",
+      icon: {
+        id: "minecraft:glass_pane",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_spiegel",
+          id: "47554869E3CCD62E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548487B94479C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755484BCDD93483",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 0.0,
+      y: 23.9125,
+    },
+    {
+      id: "4755483638B9BB2C",
+      icon: {
+        id: "guhs:einde2_geest_spel_mediteerkussen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_kussen",
+          id: "475548DCA5FC948E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554878341B6084",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A678536418",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 0.0,
+      y: 25.4125,
+    },
+    {
+      id: "475548717216D0BE",
+      icon: {
+        id: "guhs:einde2_geest_spel_eerste_knabbel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_wan_stap_3",
+          id: "47554885CCF934EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548656B40E0FF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548FBB7A4383C",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 25.4125,
+      shape: "gear",
+    },
+    {
       id: "47554853B36716B7",
       icon: {
         id: "minecraft:filled_map",
@@ -924,7 +1452,7 @@
         },
       ],
       x: 0.0,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -951,7 +1479,7 @@
         },
       ],
       x: 1.5,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -978,7 +1506,7 @@
         },
       ],
       x: 3.0,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -1005,7 +1533,7 @@
         },
       ],
       x: 4.5,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -1032,7 +1560,7 @@
         },
       ],
       x: 6.0,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -1059,7 +1587,7 @@
         },
       ],
       x: 7.5,
-      y: 22.4125,
+      y: 29.375,
       shape: "circle",
     },
     {
@@ -1090,7 +1618,7 @@
         },
       ],
       x: 9.0,
-      y: 22.4125,
+      y: 29.375,
       shape: "diamond",
     },
     {
@@ -1120,7 +1648,7 @@
         },
       ],
       x: 9.0,
-      y: 23.9125,
+      y: 30.875,
     },
     {
       id: "475548F9822BE5AD",
@@ -1159,7 +1687,7 @@
         },
       ],
       x: 7.5,
-      y: 23.9125,
+      y: 30.875,
     },
     {
       id: "4755481C21C11078",
@@ -1189,7 +1717,7 @@
         },
       ],
       x: 6.0,
-      y: 23.9125,
+      y: 30.875,
       shape: "rsquare",
     },
     {
@@ -1222,7 +1750,7 @@
         },
       ],
       x: 0.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548CEE65ECAF0",
@@ -1254,7 +1782,7 @@
         },
       ],
       x: 1.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548AEAF6A3954",
@@ -1286,7 +1814,7 @@
         },
       ],
       x: 3.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "4755481074B8D283",
@@ -1318,7 +1846,7 @@
         },
       ],
       x: 4.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "47554826934AB4E3",
@@ -1350,7 +1878,7 @@
         },
       ],
       x: 6.0,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548762616D09E",
@@ -1382,7 +1910,7 @@
         },
       ],
       x: 7.5,
-      y: 27.875,
+      y: 34.8375,
     },
     {
       id: "475548D40EDC0FD6",
@@ -1444,7 +1972,7 @@
         },
       ],
       x: 9.0,
-      y: 27.875,
+      y: 34.8375,
       shape: "gear",
     },
     {
@@ -1477,7 +2005,7 @@
         },
       ],
       x: 0.0,
-      y: 31.8375,
+      y: 38.8,
       shape: "gear",
     },
     {
@@ -1512,7 +2040,7 @@
         },
       ],
       x: 1.5,
-      y: 31.8375,
+      y: 38.8,
     },
     {
       id: "4755481CB9AB65EB",
@@ -1544,7 +2072,7 @@
         },
       ],
       x: 3.0,
-      y: 31.8375,
+      y: 38.8,
     },
     {
       id: "47554806DC2A1289",
@@ -1576,7 +2104,7 @@
         },
       ],
       x: 4.5,
-      y: 31.8375,
+      y: 38.8,
       shape: "circle",
     },
     {
@@ -1611,7 +2139,7 @@
         },
       ],
       x: 6.0,
-      y: 31.8375,
+      y: 38.8,
     },
     {
       id: "475548EFBFE1D433",
@@ -1645,7 +2173,7 @@
         },
       ],
       x: 7.5,
-      y: 31.8375,
+      y: 38.8,
       shape: "gear",
     },
     {
@@ -1678,7 +2206,7 @@
         },
       ],
       x: 0.0,
-      y: 35.8,
+      y: 42.762499999999996,
       shape: "gear",
     },
     {
@@ -1713,7 +2241,7 @@
         },
       ],
       x: 1.5,
-      y: 35.8,
+      y: 42.762499999999996,
     },
     {
       id: "475548A9F00BDC3A",
@@ -1745,7 +2273,7 @@
         },
       ],
       x: 3.0,
-      y: 35.8,
+      y: 42.762499999999996,
     },
     {
       id: "4755484B866D6CF8",
@@ -1777,7 +2305,7 @@
         },
       ],
       x: 4.5,
-      y: 35.8,
+      y: 42.762499999999996,
     },
     {
       id: "475548360D83FBB8",
@@ -1809,7 +2337,7 @@
         },
       ],
       x: 6.0,
-      y: 35.8,
+      y: 42.762499999999996,
     },
     {
       id: "47554827FF086DFC",
@@ -1841,7 +2369,7 @@
         },
       ],
       x: 7.5,
-      y: 35.8,
+      y: 42.762499999999996,
     },
     {
       id: "4755485707A6ACE1",
@@ -1867,7 +2395,7 @@
         },
       ],
       x: 0.0,
-      y: 39.762499999999996,
+      y: 46.724999999999994,
       shape: "octagon",
     },
     {
@@ -1895,7 +2423,7 @@
         },
       ],
       x: 1.5,
-      y: 39.762499999999996,
+      y: 46.724999999999994,
     },
     {
       id: "475548EAE15A258B",
@@ -1922,7 +2450,7 @@
         },
       ],
       x: 3.0,
-      y: 39.762499999999996,
+      y: 46.724999999999994,
       shape: "diamond",
     },
     {
@@ -1949,7 +2477,7 @@
         },
       ],
       x: 0.0,
-      y: 43.724999999999994,
+      y: 50.68749999999999,
       shape: "octagon",
     },
     {
@@ -1976,7 +2504,7 @@
         },
       ],
       x: 1.5,
-      y: 43.724999999999994,
+      y: 50.68749999999999,
       shape: "octagon",
     },
     {
@@ -2003,7 +2531,7 @@
         },
       ],
       x: 3.0,
-      y: 43.724999999999994,
+      y: 50.68749999999999,
       shape: "octagon",
     },
     {
@@ -2030,7 +2558,7 @@
         },
       ],
       x: 0.0,
-      y: 47.68749999999999,
+      y: 54.64999999999999,
       shape: "circle",
     },
     {
@@ -2057,7 +2585,7 @@
         },
       ],
       x: 1.5,
-      y: 47.68749999999999,
+      y: 54.64999999999999,
     },
     {
       id: "475548A01F3BD331",
@@ -2083,7 +2611,7 @@
         },
       ],
       x: 3.0,
-      y: 47.68749999999999,
+      y: 54.64999999999999,
     },
     {
       id: "475548A73C3D36BC",
@@ -2109,7 +2637,7 @@
         },
       ],
       x: 4.5,
-      y: 47.68749999999999,
+      y: 54.64999999999999,
       shape: "diamond",
     },
     {
@@ -2136,7 +2664,7 @@
         },
       ],
       x: 6.0,
-      y: 47.68749999999999,
+      y: 54.64999999999999,
       shape: "rsquare",
     },
     {
@@ -2163,7 +2691,7 @@
         },
       ],
       x: 0.0,
-      y: 51.64999999999999,
+      y: 58.61249999999999,
       shape: "circle",
     },
     {
@@ -2190,7 +2718,7 @@
         },
       ],
       x: 0.0,
-      y: 55.61249999999999,
+      y: 62.57499999999999,
       shape: "circle",
     },
   ],
