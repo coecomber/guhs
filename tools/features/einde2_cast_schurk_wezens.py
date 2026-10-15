@@ -7,8 +7,10 @@ Java class nl.juiced.guhs.feature.einde2.castschurk.CastWezen (table: Wezens), w
   bosco               beer Bosco: an ordinary brown bear, guh ears and the guh's pink nose, a little green hat and a vest
   wan_shi_guh         the huge owl of the library: black, a white heart face that is the guh face, the guh ears as tufts
   vosguh              a small fox with the guh face and ears; `vosguh_rol` (the scroll in its mouth) shows with Draagt
-  leeuwschildpad_guh  the MOVING parts of the Leeuwschildpad-guh laid over the block head (lids, brows, lip and beard, ear
-                      tips, the claws of the raised paw): look 0 on the island's head, look 1 on the overlay's head
+  leeuwschildpad_guh  the HEAD and the raised PAW of the Leeuwschildpad-guh as one big model where the island's block head and
+                      claws were: the guh's own head blown up, the mane, the beard on a jaw that talks, heavy lids that
+                      blink, four claws that curl for the blessing; look 0 on the island (marker kop), look 1 (the
+                      overlay in the Vuurnatie-hoofdstad) the same at the vanilla scale SCHILDPAD_SCHAAL[1] without the paw
   flopsie             the goat-gorilla: shaggy white on its knuckles, goat horns, floppy guh ears, a silly tongue
   luchtbizon_guh      Appa-guh's model without saddle, its animations without jipjip, five re-tinted textures (looks 0-4)
   maanvis, oceaanvis  Tui and La: koi with veil fins (one model written twice, two textures)
@@ -16,7 +18,7 @@ Java class nl.juiced.guhs.feature.einde2.castschurk.CastWezen (table: Wezens), w
 WEZENS: id -> (hitbox width, height, looks, [(animation besides idle, ticks; 0 = a pose that lasts)]) - the same table as
 the Java enum Wezens (java_rij gives a row's arguments; einde2_cast_schurk_modellen.check compares them).
 Every creature's file holds idle and praat and every name of its row (plain names, as the Sponsguh cast); the lion turtle
-also soort_0 / soort_1 (the poses that show one head's parts).
+also soort_0 / soort_1 (look 0 with the paw, look 1 without it).
 """
 import json
 import math
@@ -400,120 +402,272 @@ def vos_animaties():
 
 
 # =====================================================================================================================
-# leeuwschildpad_guh: the moving parts over the two block heads
+# leeuwschildpad_guh: the HEAD and the raised PAW of the Leeuwschildpad-guh as one big model (DESIGN 5, 2026-10-15)
 # =====================================================================================================================
-# Look 0, the head of leeuwschildpad_eiland. Measured (read-only) in tools/features/einde2_bouw_zij2_schildpad.py, kop(b):
-# the guh model's head + ears voxelised at KOP_SCHAAL 1.7 with its low corner at template (CX - 17, R0 - 8, 113) = (39, 22, 113),
-# facing south (naar_zuid); the voxel box is 22 deep (make_structures.voxel_guh of the bones head/ear_left/ear_right) and
-# the guh model's low corner of those bones is (-11.5, 1, -12.75). The marker `kop` (the entity's spot) is the nose,
-# naar(0, 6.2, -12.4) = block (58, 30, 134); the eyes are the GUH_OOG voxels around guh (+-3.8, 9.5, -11.9) (radius about 2.2
-# x 2.4 guh pixels, measured by voxelising), the ears' tops at guh y 16-17; the raised paw: PALM = (57, 141) with its top
-# at R0 = 30 and four claws of bone blocks at 55, 85, 115 and 145 degrees, 6 to 9.5 blocks out (arm(b)).
-KOP0_SCHAAL, KOP0_HOEK, KOP0_DIEP, KOP0_LO = 1.7, (39, 22, 113), 22, (-11.5, 1, -12.75)
-KOP0_NEUS = (58, 30, 134)
-KOP0_PALM, KOP0_KLAUWEN = (57, 30, 141), (55, 85, 115, 145)
-# Look 1, the head of the overlay laag_leeuwschildpad: tools/features/einde2_bouw_vuur_buiten.py, leeuwschildpad(b), in the
-# overlay's own coordinates: cx = 22, the water line wy = 14, the face plane hz1 = 56; the nose is the magenta block
-# (22, wy + 2, 56), the eyes the black blocks (22 -+ 3, wy + 3 .. wy + 4, 56), the mouth the row (20 .. 24, wy - 1 .. wy, 56), the
-# ears the 3 x 3 blocks at (22 -+ 5 (+-1), wy + 8 .. wy + 10, 48). It has no raised paw (its flippers lie in the water).
-KOP1_NEUS = (22, 16, 56)
-KOP1_OGEN, KOP1_OREN = ((19, 17, 56), (25, 17, 56)), ((17, 22, 48), (27, 22, 48))
+# The island (tools/features/einde2_bouw_zij2_schildpad.py) keeps its shell, body, neck, arm and palm of blocks; where its
+# head of blocks was (the guh model's head and ears voxelised at KOP_SCHAAL, the mane, the beard) and where the claws of the
+# raised paw were, this model stands. Its origin is the marker `kop` (the nose block, Bewoners puts the entity at its bottom
+# middle), it looks south (yaw 0). The head IS the guh model's own head (guh.geo.json: head, ear_left, ear_right with
+# their uv) blown up by KOP_SCHAAL blocks per guh pixel, so it sits exactly where the block head was; around it the lion's
+# mane, under it the white beard on a jaw that moves when he talks, over the eyes two heavy lids (the slow blink) and the
+# white brows; before the face, around the palm, the four claws that curl and open for the blessing (bone `poot`).
+# Look 1 (the overlay laag_leeuwschildpad of the Vuurnatie-hoofdstad) is the same model at the vanilla scale attribute
+# SCHILDPAD_SCHAAL[1] without the paw (pose soort_1); its origin is the overlay's marker leeuwschildpad_kop.
+SCHILDPAD_SCHAAL = (1.0, 0.48)                   # (Java: CastWezen.SCHILDPAD_SCHAAL)
+GUH_BOTTEN = ("head", "ear_left", "ear_right")
 SCHILDPAD_GROEN, SCHILDPAD_LICHT = (104, 140, 64), (150, 182, 86)
+MANEN = 24                                       # tufts in the mane
+KLAUWEN = 4
 
 
-def _w0(px, py, pz):
-    """A point of the guh model on the island's head -> the entity model (bedrock px, the entity at the nose block's middle,
-    facing south: world +x = model +x, world +z (south, his front) = model -z)."""
-    sx = KOP0_HOEK[0] + (px - KOP0_LO[0]) * KOP0_SCHAAL
-    sy = KOP0_HOEK[1] + (py - KOP0_LO[1]) * KOP0_SCHAAL
-    sz = KOP0_HOEK[2] + KOP0_DIEP - (pz - KOP0_LO[2]) * KOP0_SCHAAL
-    return _blok(sx, sy, sz, KOP0_NEUS)
+def _bron():
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "main", "resources", "assets", "guhs")
 
 
-def _blok(x, y, z, neus):
-    """A world point (in blocks, template coordinates) -> the entity model, relative to the middle bottom of the nose block."""
-    return [round((x - neus[0] - 0.5) * 16, 2), round((y - neus[1]) * 16, 2), round(-(z - neus[2] - 0.5) * 16, 2)]
+def _guh_geo():
+    return json.load(open(os.path.join(_bron(), "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
 
 
-def _doos(lo, hi):
-    """origin + size of the box between two model points."""
-    o = [min(lo[i], hi[i]) for i in range(3)]
-    return o, [round(abs(hi[i] - lo[i]), 2) for i in range(3)]
+def _kop_naar():
+    """(model(p): a point of the guh model -> the entity model, blok(x, y, z): a template point of the island -> the
+    entity model, the nose block). The same sums as gereedschap.voxel_guh_in / make_structures.voxel_guh, which put the
+    block head there."""
+    from features import einde2_bouw_zij2_schildpad as eiland
+    geo = _guh_geo()
+    kubussen = [c for b in geo["bones"] if b["name"] in GUH_BOTTEN for c in b.get("cubes", [])]
+    lo = [min(c["origin"][i] for c in kubussen) for i in range(3)]
+    hi = [max(c["origin"][i] + c["size"][i] for c in kubussen) for i in range(3)]
+    s = eiland.KOP_SCHAAL
+    ox, oy, oz = eiland.KOP_HOEK
+    nz = int(math.ceil((hi[2] - lo[2]) * s))
+
+    def wereld(x, y, z):
+        return ox + (x - lo[0]) * s, oy + (y - lo[1]) * s, oz + nz - (z - lo[2]) * s
+    neus = tuple(int(math.floor(v)) for v in wereld(*eiland.KOP_NEUS_GUH))
+
+    def blok(x, y, z):
+        return [round((x - neus[0] - 0.5) * 16, 3), round((y - neus[1]) * 16, 3), round(-(z - neus[2] - 0.5) * 16, 3)]
+
+    def model(x, y, z):
+        return blok(*wereld(x, y, z))
+    return model, blok, neus
 
 
-def leeuwschildpad_guh(a):
-    lid, brauw = plain(SCHILDPAD_GROEN, 6), vacht((214, 120, 40), (250, 190, 80), 20)
-    lip, baard = plain((236, 140, 160), 6), vacht((248, 246, 240), (214, 210, 204), 12)
-    oor, klauw = plain((236, 128, 168), 6), plain((236, 226, 196), 6)
-    bones = [bone("root", None, [0, 0, 0], []), bone("body", "root", [0, 0, 0], []), bone("head", "body", [0, 0, 0], []),
-             bone("kop_0", "head", [0, 0, 0], []), bone("kop_1", "head", [0, 0, 0], [])]
-    # look 0: the island's head, in guh model pixels (x 1.7 blocks)
-    for side, sx in (("left", 1), ("right", -1)):
-        lo, hi = _w0(sx * 1.4, 7.0, -12.15), _w0(sx * 6.2, 12.2, -12.45)
-        o, s = _doos(lo, hi)
-        bones.append(bone(f"lid0_{side}", "kop_0", [o[0] + s[0] / 2, o[1] + s[1], o[2] + s[2] / 2], [cube(a, o, s, lid)]))
-        o, s = _doos(_w0(sx * 1.2, 12.3, -12.2), _w0(sx * 6.4, 13.2, -12.6))
-        bones.append(bone(f"brauw0_{side}", "kop_0", [o[0] + s[0] / 2, o[1], o[2]], [cube(a, o, s, brauw)]))
-        o, s = _doos(_w0(sx * 5.2, 15.4, -6.6), _w0(sx * 10.8, 17.3, -4.6))
-        bones.append(bone(f"oor0_{side}", "kop_0", [o[0] + s[0] / 2, o[1], o[2] + s[2] / 2], [cube(a, o, s, oor)]))
-    o, s = _doos(_w0(-3.0, 3.6, -12.3), _w0(3.0, 4.6, -12.7))
-    bones.append(bone("lip0", "kop_0", [0, o[1] + s[1], o[2]], [cube(a, o, s, lip)]))
-    o, s = _doos(_w0(-2.4, 0.2, -12.2), _w0(2.4, 3.7, -12.9))
-    bones.append(bone("baard0", "lip0", [0, o[1] + s[1], o[2]], [cube(a, o, s, baard)]))
-    px, py, pz = KOP0_PALM
-    for i, graden in enumerate(KOP0_KLAUWEN):
+def _recolour(a, nh, sat, val, smax):
+    """The guh's lavender fur (guh.png) in another hue: HSV, only the fur pixels (purple to pink, not grey or blue)."""
+    rgb = a[..., :3].astype(np.float32) / 255
+    mx, mn = rgb.max(-1), rgb.min(-1)
+    s = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0)
+    d = np.maximum(mx - mn, 1e-6)
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    h = np.where(mx == r, ((g - b) / d) % 6, np.where(mx == g, (b - r) / d + 2, (r - g) / d + 4)) / 6
+    roze = ((h > 0.70) | (h < 0.05)) & (s > 0.08)
+    ns, nv = np.clip(s * sat, 0, smax), np.clip(mx * val, 0, 1)
+    i = np.floor(nh * 6).astype(int) % 6
+    f = nh * 6 - np.floor(nh * 6)
+    p, q, t = nv * (1 - ns), nv * (1 - f * ns), nv * (1 - (1 - f) * ns)
+    keuze = [(nv, t, p), (q, nv, p), (p, nv, t), (p, q, nv), (t, p, nv), (nv, p, q)][i]
+    out = a.copy()
+    groen = np.stack(keuze, -1)
+    out[roze, :3] = np.clip(groen[roze] * 255, 0, 255).astype(np.uint8)
+    return out
+
+
+def _lokken(rgb, stap=5):
+    """Hanging locks: thin upright stripes in a second colour."""
+    def p(block):
+        for i in range(2, 32, stap):
+            block[:, i:i + 1, :3] = rgb
+    return p
+
+
+def _vlak(c, naam):
+    """The pixel box (x, y, w, h) of one face of a cube on a 512 sheet of 128 uv units."""
+    (u, v), (w, h) = c["uv"][naam]["uv"], c["uv"][naam]["uv_size"]
+    return int(round(u * 4)), int(round(v * 4)), max(1, int(round(w * 4))), max(1, int(round(h * 4)))
+
+
+class Schildpad:
+    """The model and its own 512 sheet: the guh's head texture (in green; ears and nose stay pink) plus swatches in the
+    free 8 x 8 cells (knuffeldal_npcs._paint / _cube)."""
+
+    def __init__(self):
+        from features import knuffeldal_npcs as kn
+        self.kn = kn
+        self.model, self.blok, self.neus = _kop_naar()
+        self.rng = kit.rng("cast_schurk/leeuwschildpad_guh")
+        geo = _guh_geo()
+        self.guh = {b["name"]: b for b in geo["bones"] if b["name"] in GUH_BOTTEN}
+        bron = np.asarray(Image.open(os.path.join(_bron(), "textures", "entity", "guh.png")).convert("RGBA")).copy()
+        self.img = np.zeros_like(bron)
+        groen = _recolour(bron, 0.24, 2.6, 0.74, 0.62)                   # turtle green, like the island's terracotta
+        roze = _recolour(bron, 0.94, 1.9, 1.08, 0.45)                    # the ears and the little nose stay a guh's pink
+        for naam, b in self.guh.items():
+            for i, c in enumerate(b["cubes"]):
+                for vlak in c["uv"]:
+                    x, y, w, h = _vlak(c, vlak)
+                    self.img[y:y + h, x:x + w] = (roze if naam != "head" or i == 4 else groen)[y:y + h, x:x + w]
+        self.bones = []
+        self.vrij = None
+        self.staal = {}
+
+    def _vrij(self):
+        if self.vrij is None:
+            gebruikt = self.kn._used({"bones": [dict(b) for b in self.guh.values()]})
+            S = self.kn.SW
+            self.vrij = [(x, y) for y in range(0, self.kn.UV - S + 1, S) for x in range(0, self.kn.UV - S + 1, S)
+                         if not gebruikt[y:y + S, x:x + S].any()]
+        return self.vrij
+
+    def kleur(self, naam, rgb, var=6, patroon=None):
+        if naam not in self.staal:
+            s = self._vrij().pop(0)
+            self.staal[naam] = s
+            self.kn._paint(self.img, s, rgb, self.rng, var, patroon)
+        return naam
+
+    def k(self, lo, hi, naam):
+        """A cube between two entity model points, sampling one swatch."""
+        o = [min(lo[i], hi[i]) for i in range(3)]
+        return self.kn._cube([round(v, 3) for v in o], [round(abs(hi[i] - lo[i]), 3) for i in range(3)], self.staal[naam])
+
+    def kg(self, lo, hi, naam):
+        """The same between two points of the GUH model (blown up like the head)."""
+        return self.k(self.model(*lo), self.model(*hi), naam)
+
+    def bot(self, naam, ouder, pivot, kubussen=(), rotatie=None):
+        b = {"name": naam, "pivot": [round(v, 3) for v in pivot], "cubes": list(kubussen)}
+        if ouder:
+            b["parent"] = ouder
+        if rotatie:
+            b["rotation"] = [float(v) for v in rotatie]
+        self.bones.append(b)
+        return b
+
+    def guh_bot(self, naam, ouder):
+        """A bone of the guh model, blown up: every cube keeps its own uv on the copied texture."""
+        b = self.guh[naam]
+        s = 16 * self._schaal()
+        kub = []
+        for c in b["cubes"]:
+            o = self.model(*c["origin"])
+            hoek = self.model(*[c["origin"][i] + c["size"][i] for i in range(3)])
+            kub.append({"origin": [round(min(o[i], hoek[i]), 3) for i in range(3)], "size": [round(c["size"][i] * s, 3) for i in range(3)],
+                        "uv": {f: dict(v) for f, v in c["uv"].items()}})
+        return self.bot(naam, ouder, self.model(*b["pivot"]), kub)
+
+    def _schaal(self):
+        from features import einde2_bouw_zij2_schildpad as eiland
+        return eiland.KOP_SCHAAL
+
+
+def leeuwschildpad_guh(a=None):
+    """The model (and its sheet in .img): see the comment above SCHILDPAD_SCHAAL."""
+    t = Schildpad()
+    vel = t.kleur("vel", SCHILDPAD_GROEN, 5)
+    t.kleur("wit", (246, 244, 238), 6)
+    t.kleur("baard", (248, 246, 240), 7, _lokken((214, 210, 204)))
+    t.kleur("mond", (70, 30, 40), 4)
+    t.kleur("lip", (120, 156, 76), 5)
+    t.kleur("manen_0", (214, 120, 40), 9)
+    t.kleur("manen_1", (238, 172, 62), 9)
+    t.kleur("manen_2", (156, 94, 44), 9)
+    t.kleur("klauw", (236, 226, 196), 5)
+    t.kleur("klauw_punt", (178, 164, 130), 5)
+    t.kleur("vinger", SCHILDPAD_LICHT, 6)
+    t.bot("root", None, [0, 0, 0])
+    t.bot("body", "root", [0, 0, 0])
+    t.guh_bot("head", "body")
+    t.guh_bot("ear_left", "head")
+    t.guh_bot("ear_right", "head")
+    # the eyes: heavy lids (scaled in y round their top edge: open = LID_OPEN), white brows that droop at the ends
+    for kant, sx in (("left", 1), ("right", -1)):
+        lo, hi = (sx * 1.0, 7.6, -12.38), (sx * 7.15, 12.7, -12.05)
+        t.bot(f"lid_{kant}", "head", t.model(sx * 4.1, 12.7, -12.2), [t.kg(lo, hi, vel)])
+        t.bot(f"brauw_{kant}", "head", t.model(sx * 1.0, 13.1, -12.4), [
+            t.kg((sx * 0.8, 12.5, -12.9), (sx * 7.4, 13.7, -12.0), "wit"),
+            t.kg((sx * 6.4, 10.8, -12.6), (sx * 7.7, 12.6, -12.0), "wit")])
+    # the mouth behind the jaw; the jaw (the lip) and the beard on it move when he talks
+    t.bot("mond", "head", t.model(0, 4.0, -12.05), [t.kg((-2.6, 3.2, -12.07), (2.6, 4.8, -12.01), "mond")])
+    t.bot("kaak", "head", t.model(0, 4.9, -12.3), [t.kg((-3.4, 3.0, -12.75), (3.4, 4.9, -12.09), "lip")])
+    t.bot("baard", "kaak", t.model(0, 3.0, -11.5), [
+        t.kg((-3.6, 1.4, -12.7), (3.6, 3.4, -10.2), "baard"),
+        t.kg((-3.0, -0.6, -12.4), (3.0, 1.6, -10.4), "baard"),
+        t.kg((-2.2, -2.6, -12.1), (2.2, -0.4, -10.6), "baard"),
+        t.kg((-1.3, -4.4, -11.8), (1.3, -2.4, -10.8), "baard"),
+        t.kg((-0.6, -5.6, -11.6), (0.6, -4.2, -11.0), "baard")])
+    # the lion's mane: a ring of tufts behind the head (each a bone turned round the face axis)
+    midden = t.model(0, 8.5, -3.2)
+    t.bot("manen", "head", midden)
+    for i in range(MANEN):
+        lengte = (18.0 + 2.5 * math.sin(i / MANEN * math.tau * 3) + float(t.rng.uniform(-1.2, 1.6))) * 16
+        diep = (3.2 + 0.8 * (i % 2)) * 16
+        mx, my, mz = midden
+        kleur_ = f"manen_{i % 3}"
+        kub = [t.k((mx - 2.1 * 16, my + 8 * 16, mz), (mx + 2.1 * 16, my + 14 * 16, mz + diep), kleur_),
+               t.k((mx - 1.8 * 16, my + 13 * 16, mz + 0.4 * 16), (mx + 1.8 * 16, my + lengte - 2 * 16, mz + diep - 0.4 * 16), kleur_),
+               t.k((mx - 1.1 * 16, my + lengte - 3 * 16, mz + 0.8 * 16), (mx + 1.1 * 16, my + lengte, mz + diep - 0.8 * 16), kleur_)]
+        t.bot(f"manen_{i}", "manen", midden, kub, rotatie=(0, 0, round(i * 360.0 / MANEN + 7.5, 3)))
+    # the raised paw (look 0 only): the island keeps its arm and palm of blocks (you stand on it); round the far rim of the
+    # palm stand four big claws on short fingers, KLAUW_HOEK degrees (template: cos -> +x, sin -> +z south)
+    from features import einde2_bouw_zij2_schildpad as eiland
+    px, pz = eiland.PALM
+    palm = t.blok(px + 0.5, eiland.R0 + 1, pz + 0.5)
+    t.bot("poot", "root", palm)
+    R = 6.0 * 16
+    for i, graden in enumerate(KLAUW_HOEK):
         h = math.radians(graden)
-        mx, mz = px + 0.5 + math.cos(h) * 7.8, pz + 0.5 + math.sin(h) * 7.8
-        c = _blok(mx, py + 0.05, mz, KOP0_NEUS)
-        bones.append(bone(f"klauw0_{i + 1}", "kop_0", c, [cube(a, [c[0] - 9, c[1], c[2] - 9], [18, 16, 18], klauw)]))
-    # look 1: the overlay's head, in blocks
-    for (side, sx), (ex, ey, ez) in zip((("left", 1), ("right", -1)), sorted(KOP1_OGEN, key=lambda e: -e[0])):
-        o, s = _doos(_blok(ex - 0.6, ey, ez + 1.05, KOP1_NEUS), _blok(ex + 1.6, ey + 2.1, ez + 1.25, KOP1_NEUS))
-        bones.append(bone(f"lid1_{side}", "kop_1", [o[0] + s[0] / 2, o[1] + s[1], o[2] + s[2] / 2], [cube(a, o, s, lid)]))
-        o, s = _doos(_blok(ex - 0.8, ey + 2.25, ez + 1.05, KOP1_NEUS), _blok(ex + 1.8, ey + 2.75, ez + 1.35, KOP1_NEUS))
-        bones.append(bone(f"brauw1_{side}", "kop_1", [o[0] + s[0] / 2, o[1], o[2]], [cube(a, o, s, brauw)]))
-    for (side, sx), (ox_, oy_, oz_) in zip((("left", 1), ("right", -1)), sorted(KOP1_OREN, key=lambda e: -e[0])):
-        o, s = _doos(_blok(ox_ - 0.2, oy_ + 2.0, oz_ - 0.2, KOP1_NEUS), _blok(ox_ + 3.2, oy_ + 3.3, oz_ + 1.2, KOP1_NEUS))
-        bones.append(bone(f"oor1_{side}", "kop_1", [o[0] + s[0] / 2, o[1], o[2] + s[2] / 2], [cube(a, o, s, oor)]))
-    n0, n1, n2 = KOP1_NEUS
-    o, s = _doos(_blok(n0 - 2.5, n1 - 2.6, n2 + 1.05, KOP1_NEUS), _blok(n0 + 3.5, n1 - 2.0, n2 + 1.3, KOP1_NEUS))
-    bones.append(bone("lip1", "kop_1", [0, o[1] + s[1], o[2]], [cube(a, o, s, lip)]))
-    o, s = _doos(_blok(n0 - 1.8, n1 - 5.2, n2 + 1.05, KOP1_NEUS), _blok(n0 + 2.8, n1 - 2.6, n2 + 1.5, KOP1_NEUS))
-    bones.append(bone("baard1", "lip1", [0, o[1] + s[1], o[2]], [cube(a, o, s, baard)]))
-    return geo("leeuwschildpad_guh", bones, 34, 24, [0, 4, 0])
+        draai = round(math.degrees(math.atan2(-math.cos(h), math.sin(h))), 3)
+        x0, y0, z0 = palm
+        t.bot(f"klauw_{i + 1}", "poot", palm, [t.k((x0 - 1.0 * 16, y0 - 1.4 * 16, z0 - R + 1.6 * 16), (x0 + 1.0 * 16, y0 + 0.5 * 16, z0 - R - 1.3 * 16), "vinger")],
+              rotatie=(0, draai, 0))
+        voet = (x0, y0 + 0.2 * 16, z0 - R - 0.2 * 16)
+        t.bot(f"klauw_{i + 1}_buig", f"klauw_{i + 1}", voet, [
+            t.k((x0 - 0.8 * 16, y0 + 0.2 * 16, z0 - R - 1.0 * 16), (x0 + 0.8 * 16, y0 + 3.6 * 16, z0 - R + 0.6 * 16), "klauw")])
+        top = (x0, y0 + 3.6 * 16, z0 - R - 0.2 * 16)
+        t.bot(f"klauw_{i + 1}_punt", f"klauw_{i + 1}_buig", top, [
+            t.k((x0 - 0.6 * 16, y0 + 3.4 * 16, z0 - R - 0.8 * 16), (x0 + 0.6 * 16, y0 + 5.0 * 16, z0 - R + 0.4 * 16), "klauw"),
+            t.k((x0 - 0.4 * 16, y0 + 5.0 * 16, z0 - R - 0.6 * 16), (x0 + 0.4 * 16, y0 + 6.0 * 16, z0 - R + 0.2 * 16), "klauw_punt")],
+            rotatie=(-35, 0, 0))
+    model = {"format_version": "1.12.0", "minecraft:geometry": [{
+        "description": {"identifier": "geometry.leeuwschildpad_guh", "texture_width": 128, "texture_height": 128,
+                        "visible_bounds_width": 48, "visible_bounds_height": 48, "visible_bounds_offset": [0, 2, 0]},
+        "bones": t.bones}]}
+    return t, model
+
+
+KLAUW_HOEK = (55, 85, 115, 145)
+LID_OPEN = 0.32                                  # (heavy: the lids hang over the top third of the eyes)
 
 
 def schildpad_animaties():
     L = 9.0
-    sets = ("0", "1")
-    lids = [f"lid{k}_{s}" for k in sets for s in ("left", "right")]
-    klauwen = [f"klauw0_{i}" for i in range(1, 5)]
-    LID = 0.42                                                       # (heavy: the lids rest over the top of the eyes)
-    idle = {n: {"scale": kf([(0, [1, LID, 1]), (L * 0.55, [1, LID, 1]), (L * 0.6, [1, 1, 1]), (L * 0.66, [1, 1, 1]), (L * 0.72, [1, LID, 1]), (L, [1, LID, 1])])}
-            for n in lids}
-    for k in sets:
-        idle[f"baard{k}"] = {"rotation": golf(2, 3, L / 2)}
-    praat = {n: {"scale": [1, LID, 1]} for n in lids}
-    for k in sets:
-        praat[f"lip{k}"] = {"rotation": kf([(0, [0, 0, 0]), (0.6, [-14, 0, 0]), (1.2, [0, 0, 0]), (1.9, [-10, 0, 0]), (2.6, [0, 0, 0]), (3.0, [0, 0, 0])])}
-        praat[f"baard{k}"] = {"rotation": golf(2, 5, 1.5)}
-    ontwaak = {n: {"scale": kf([(0, [1, 1, 1]), (1.0, [1, 1, 1]), (2.2, [1, 0.6, 1]), (2.4, [1, 0.8, 1]), (3.0, [1, LID, 1])])} for n in lids}
-    for k in sets:
-        for s, sx in (("left", 1), ("right", -1)):
-            ontwaak[f"brauw{k}_{s}"] = {"position": kf([(0, [0, -6, 0]), (1.6, [0, -6, 0]), (2.6, [0, 4, 0]), (3.0, [0, 0, 0])])}
-            ontwaak[f"oor{k}_{s}"] = {"rotation": kf([(0, [0, 0, 0]), (2.4, [0, 0, -12 * sx]), (3.0, [0, 0, 0])])}
-    zegen = {n: {"scale": [1, LID, 1]} for n in lids}
-    neus_palm = _blok(KOP0_PALM[0] + 0.5, KOP0_PALM[1] + 1.0, KOP0_PALM[2] + 0.5, KOP0_NEUS)
-    for i, graden in enumerate(KOP0_KLAUWEN):
-        h = math.radians(graden)
-        tip = _blok(KOP0_PALM[0] + 0.5 + math.cos(h) * 7.8, KOP0_PALM[1], KOP0_PALM[2] + 0.5 + math.sin(h) * 7.8, KOP0_NEUS)
-        naar = [round((neus_palm[j] - tip[j]) * 0.55 + (40 if j == 1 else 0), 2) for j in range(3)]
-        zegen[f"klauw0_{i + 1}"] = {"position": kf([(0, [0, 0, 0]), (0.8, [n * 0.5 + (24 if j == 1 else 0) for j, n in enumerate(naar)]),
-                                                     (1.3, naar), (1.9, naar), (2.5, [0, 0, 0])])}
-    s0 = {"kop_1": {"scale": WEG}}
-    s1 = {"kop_0": {"scale": WEG}}
+    lids = ("lid_left", "lid_right")
+    open_ = [1, LID_OPEN, 1]
+    idle = {n: {"scale": kf([(0, open_), (L * 0.55, open_), (L * 0.6, [1, 1, 1]), (L * 0.66, [1, 1, 1]), (L * 0.72, open_), (L, open_)])} for n in lids}
+    idle["baard"] = {"rotation": golf(2, 2.5, L / 2)}
+    idle["manen"] = {"rotation": golf(2, 0.8, L)}
+    idle["head"] = {"rotation": kf([(0, [0, 0, 0]), (L * 0.25, [1.5, 0.8, 0]), (L * 0.5, [0, 0, 0]), (L * 0.75, [-1.0, -0.8, 0]), (L, [0, 0, 0])])}
+    idle.update(oor_idle(L, 10))
+    for i in range(1, KLAUWEN + 1):
+        idle[f"klauw_{i}_buig"] = {"rotation": kf([(0, [0, 0, 0]), (L * 0.3 + i * 0.3, [-4, 0, 0]), (L * 0.6 + i * 0.2, [0, 0, 0]), (L, [0, 0, 0])])}
+    praat = {n: {"scale": open_} for n in lids}
+    praat["kaak"] = {"position": kf([(0, [0, 0, 0]), (0.5, [0, -30, 0]), (1.0, [0, -6, 0]), (1.5, [0, -26, 0]), (2.1, [0, -4, 0]), (2.6, [0, -22, 0]), (3.0, [0, 0, 0])])}
+    praat["baard"] = {"rotation": golf(2, 4, 1.5)}
+    praat["head"] = {"rotation": kf([(0, [0, 0, 0]), (0.8, [2, 0, 0]), (1.6, [-1, 0, 0]), (2.4, [1.5, 0, 0]), (3.0, [0, 0, 0])])}
+    ontwaak = {n: {"scale": kf([(0, [1, 1, 1]), (1.0, [1, 1, 1]), (2.2, [1, 0.6, 1]), (2.4, [1, 0.75, 1]), (3.0, open_)])} for n in lids}
+    for kant, sx in (("left", 1), ("right", -1)):
+        ontwaak[f"brauw_{kant}"] = {"position": kf([(0, [0, -10, 0]), (1.6, [0, -10, 0]), (2.6, [0, 8, 0]), (3.0, [0, 0, 0])])}
+        ontwaak[f"ear_{kant}"] = {"rotation": kf([(0, [0, 0, 0]), (2.4, [0, 0, -10 * sx]), (3.0, [0, 0, 0])])}
+    ontwaak["head"] = {"position": kf([(0, [0, -24, 0]), (1.4, [0, -24, 0]), (2.6, [0, 4, 0]), (3.0, [0, 0, 0])])}
+    zegen = {n: {"scale": kf([(0, open_), (0.6, [1, 0.6, 1]), (1.9, [1, 0.6, 1]), (2.5, open_)])} for n in lids}
+    zegen["head"] = {"rotation": kf([(0, [0, 0, 0]), (0.6, [6, 0, 0]), (1.9, [6, 0, 0]), (2.5, [0, 0, 0])])}
+    for i in range(1, KLAUWEN + 1):
+        d = (i - 1) * 0.08
+        zegen[f"klauw_{i}_buig"] = {"rotation": kf([(0, [0, 0, 0]), (0.5 + d, [-30, 0, 0]), (1.0 + d, [-62, 0, 0]), (1.8, [-62, 0, 0]), (2.5, [0, 0, 0])])}
+        zegen[f"klauw_{i}_punt"] = {"rotation": kf([(0, [0, 0, 0]), (0.7 + d, [-25, 0, 0]), (1.1 + d, [-45, 0, 0]), (1.8, [-45, 0, 0]), (2.5, [0, 0, 0])])}
     return {"idle": anim(L, idle), "praat": anim(3.0, praat), "ontwaak": anim(3.0, ontwaak, False), "zegen": anim(2.5, zegen, False),
-            "soort_0": anim(1.0, s0), "soort_1": anim(1.0, s1)}
+            "soort_0": anim(1.0, {"poot": {"scale": [1, 1, 1]}}), "soort_1": anim(1.0, {"poot": {"scale": WEG}})}
 
 
 # =====================================================================================================================
@@ -720,7 +874,7 @@ MODELLEN = {
     "bosco": (bosco, 1.0, bosco_animaties),
     "wan_shi_guh": (wan_shi_guh, 0.75, uil_animaties),
     "vosguh": (vosguh, 1.5, vos_animaties),
-    "leeuwschildpad_guh": (leeuwschildpad_guh, 0.07, schildpad_animaties),
+    "leeuwschildpad_guh": (leeuwschildpad_guh, None, schildpad_animaties),
     "flopsie": (flopsie, 0.75, flopsie_animaties),
     "maanvis": ((lambda a: vis(a, "maanvis")), 2.0, (lambda: vis_animaties(True))),
     "oceaanvis": ((lambda a: vis(a, "oceaanvis")), 2.0, (lambda: vis_animaties(False))),
@@ -729,6 +883,8 @@ MODELLEN = {
 
 def _maak(id, soort=0):
     maker, k, _ = MODELLEN[id]
+    if id == "leeuwschildpad_guh":
+        return leeuwschildpad_guh()                                  # (its own sheet: the guh's head texture + swatches)
     atlas = Vel(id, k)
     model = draakguh(atlas, soort) if id == "draakguh" else maker(atlas)
     return atlas, model
@@ -770,6 +926,12 @@ def check(h, model_check):
                 problems.append(f"{id}: no texture {tex}.png")
     if len(BIZON_SCHAAL) != WEZENS["luchtbizon_guh"][2] or len(BIZON_KLEUR) != len(BIZON_SCHAAL):
         problems.append("luchtbizon_guh: a scale and a colour per look")
+    if len(SCHILDPAD_SCHAAL) != WEZENS["leeuwschildpad_guh"][2]:
+        problems.append("leeuwschildpad_guh: a scale per look")
+    java = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2", "castschurk", "CastWezen.java")
+    wil = "SCHILDPAD_SCHAAL = {" + ", ".join(f"{v}f" for v in SCHILDPAD_SCHAAL) + "}"
+    if os.path.exists(java) and wil not in open(java, encoding="utf-8").read():
+        problems.append(f"CastWezen.java does not say {wil}")
     return problems
 
 
@@ -784,10 +946,10 @@ def voorbeelden(vang, alleen=None):
             atlas, model = _maak(id, soort)
             tex = Image.fromarray(atlas.img)
             if id == "leeuwschildpad_guh":
-                for k in (0, 1):
-                    hide = tuple(b["name"] for b in model["minecraft:geometry"][0]["bones"]
-                                 if b.get("parent") == f"kop_{1 - k}" or b.get("parent", "").startswith(("lip" + str(1 - k))))
-                    uit.append((f"{id}_{k}", model, tex, hide, None))
+                poot = tuple(b["name"] for b in model["minecraft:geometry"][0]["bones"] if b["name"] == "poot" or b["name"].startswith("klauw_"))
+                lids = ("lid_left", "lid_right")                  # (the renders show the eyes open: in game the lids hang at LID_OPEN)
+                uit.append((f"{id}_0", model, tex, lids, None))
+                uit.append((f"{id}_1", model, tex, lids + poot, None))
                 continue
             hide = ("draak_vuur",) if id == "draakguh" else ("bosco_honing",) if id == "bosco" else ()
             uit.append((f"{id}_{soort}" if id == "draakguh" else id, model, tex, hide, None))

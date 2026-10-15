@@ -2092,11 +2092,20 @@
       ],
       "wie": "waar je wakker wordt op zijn rug"
     },
+    "leeuwschildpad_kop": {
+      "soort": "prop",
+      "pos": [
+        228,
+        45,
+        61
+      ],
+      "wie": "de snuit: de oorsprong van het model van zijn kop (guhs:leeuwschildpad_guh, Soort 1, yaw 0)"
+    },
     "leeuwschildpad": {
       "soort": "npc",
       "pos": [
         228,
-        51,
+        52,
         60
       ],
       "yaw": 0.0,

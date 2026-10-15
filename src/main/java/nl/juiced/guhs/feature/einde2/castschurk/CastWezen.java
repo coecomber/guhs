@@ -61,6 +61,13 @@ public class CastWezen extends PathfinderMob implements GeoEntity {
     public static final List<BiFunction<CastWezen, ServerPlayer, Boolean>> BIJ_KLIK = new CopyOnWriteArrayList<>();
     /** The vanilla scale of each look of the luchtbizon-guh: cream, sandy, grey, dark brown, the calf. */
     public static final float[] BIZON_SCHAAL = {1.0f, 0.9f, 1.1f, 0.8f, 0.55f};
+    /**
+     * The vanilla scale of each look of the Leeuwschildpad-guh: 0 = the head on the island (the model is drawn at the size of
+     * the island's head), 1 = the head of the overlay laag_leeuwschildpad in the Vuurnatie-hoofdstad (the same model, smaller).
+     */
+    public static final float[] SCHILDPAD_SCHAAL = {1.0f, 0.48f};
+    /** How far away the Leeuwschildpad-guh is still drawn (its hitbox is one block, its head some 30 across). */
+    static final double SCHILDPAD_ZICHT = 192.0;
     /** How long a click's talk lasts when "praat" is a pose of its own (the Leeuwschildpad-guh talks slowly). */
     static final int PRAAT_HOUDING = 60;
 
@@ -206,13 +213,27 @@ public class CastWezen extends PathfinderMob implements GeoEntity {
         }
         int s = Math.floorMod(soort, wezen.soorten);
         entityData.set(DATA_SOORT, s);
-        if (wezen == Wezens.LUCHTBIZON_GUH) {
+        float[] schalen = wezen == Wezens.LUCHTBIZON_GUH ? BIZON_SCHAAL : wezen == Wezens.LEEUWSCHILDPAD_GUH ? SCHILDPAD_SCHAAL : null;
+        if (schalen != null) {
             AttributeInstance schaal = getAttribute(Attributes.SCALE);
             if (schaal != null) {
-                schaal.setBaseValue(BIZON_SCHAAL[s]);
+                schaal.setBaseValue(schalen[s]);
                 refreshDimensions();
             }
         }
+    }
+
+    /**
+     * The Leeuwschildpad-guh is a head of some 30 blocks on a hitbox of one: vanilla would stop drawing it 64 blocks away
+     * (the size of the hitbox times 64), so the island would have no head seen from its back.
+     */
+    @Override
+    public boolean shouldRenderAtSqrDistance(double afstand) {
+        if (wezen == Wezens.LEEUWSCHILDPAD_GUH) {
+            double zicht = SCHILDPAD_ZICHT * Math.max(0.5, getScale()) * getViewScale();
+            return afstand < zicht * zicht;
+        }
+        return super.shouldRenderAtSqrDistance(afstand);
     }
 
     /** How far it strays from where it was put (0: no home). */

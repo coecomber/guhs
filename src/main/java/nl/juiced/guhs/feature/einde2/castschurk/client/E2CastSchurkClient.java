@@ -12,9 +12,12 @@ import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -32,7 +35,8 @@ import nl.juiced.guhs.feature.einde2.castschurk.Wezens;
  * ({@link SittingGuhRenderers#NPC_MODELEN}, one model per kind, one animation file per character), the Vuurnatie-Mika's show
  * one of their three mix sets (picked from where they stand), and one GeckoLib renderer draws every creature
  * ({@link WezenRenderer}: its texture per look, the vosguh's scroll only while it carries one, a culling box that fits the
- * model: the dragon's flying ring, the lion turtle's face). Models: tools/features/einde2_cast_schurk_modellen.py.
+ * model: the dragon's flying ring, the lion turtle's head; the lion turtle takes its light round its face, not from the nose
+ * block it stands in). Models: tools/features/einde2_cast_schurk_modellen.py.
  */
 public final class E2CastSchurkClient {
     static final DataTicket<Integer> SOORT = DataTicket.create("guhs_e2_cast_schurk_soort", Integer.class);
@@ -91,17 +95,45 @@ public final class E2CastSchurkClient {
             state.addGeckolibData(DRAAGT, dier instanceof VosguhEntity vos && vos.draagt());
         }
 
-        /** The dragon flies a ring of radius 9 around its spot, the lion turtle's parts lie all over a head of 24 blocks. */
+        /** The dragon flies a ring of radius 9 around its spot; the lion turtle's head with its mane and paw is some 44 blocks across. */
         @Override
         protected AABB getBoundingBoxForCulling(CastWezen dier) {
             AABB box = dier.getBoundingBox();
             return switch (wezen) {
                 case DRAAKGUH -> box.inflate(11.0, 0, 11.0).expandTowards(0, 6.0, 0);
-                case LEEUWSCHILDPAD_GUH -> box.inflate(16.0, 12.0, 16.0);
+                case LEEUWSCHILDPAD_GUH -> box.inflate(26.0 * dier.getScale());
                 case LUCHTBIZON_GUH, WAN_SHI_GUH -> box.inflate(1.5);
                 default -> box.inflate(0.5);
             };
         }
+
+        /**
+         * The Leeuwschildpad-guh stands with its origin in the nose block of the island (and the palm under it): the light
+         * there is 0, which would draw the whole head black. It takes the brightest light round its face instead, and never
+         * less than {@link #SCHILDPAD_GLOED} block light (the block head had glowing eyes of sea lanterns that lit it).
+         */
+        @Override
+        protected int getBlockLightLevel(CastWezen dier, BlockPos pos) {
+            return wezen == Wezens.LEEUWSCHILDPAD_GUH ? rondKop(dier, pos, LightLayer.BLOCK) : super.getBlockLightLevel(dier, pos);
+        }
+
+        @Override
+        protected int getSkyLightLevel(CastWezen dier, BlockPos pos) {
+            return wezen == Wezens.LEEUWSCHILDPAD_GUH ? rondKop(dier, pos, LightLayer.SKY) : super.getSkyLightLevel(dier, pos);
+        }
+
+        private static int rondKop(CastWezen dier, BlockPos pos, LightLayer laag) {
+            Direction voor = Direction.fromYRot(dier.getYRot());
+            int stap = Math.max(1, Math.round(4 * dier.getScale()));
+            int licht = dier.level().getBrightness(laag, pos);
+            for (BlockPos p : new BlockPos[] {pos.above(stap), pos.above(2 * stap), pos.relative(voor, stap).above(stap), pos.relative(voor, 2).above(1)}) {
+                licht = Math.max(licht, dier.level().getBrightness(laag, p));
+            }
+            return laag == LightLayer.BLOCK ? Math.max(licht, SCHILDPAD_GLOED) : licht;
+        }
+
+        /** The least block light the Leeuwschildpad-guh's head is drawn with. */
+        static final int SCHILDPAD_GLOED = 7;
 
         @Override
         public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {

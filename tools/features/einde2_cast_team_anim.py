@@ -1,8 +1,9 @@
 """
 einde2, slice cast_team - the animations of its characters (CONTRACT_E2 11.2 E): one file per CHARACTER, shared by its
 looks: `idle` (a 12 second loop with the character's first signature move woven in once), `praat` (24 ticks) and the
-named moves of CONTRACT_E2 11.4. A pose that lasts ("houding") is a slow loop. A prop that only shows during a move is a
-bone scaled to 0 in every other animation (PROPS).
+named moves of CONTRACT_E2 11.4. A character whose looks stand on two bodies has a second file for the other body with
+the same names and lengths (LIJVEN: Zuka's guh looks play guh_npc_zuka_zit). A pose that lasts ("houding") is a slow
+loop. A prop that only shows during a move is a bone scaled to 0 in every other animation (PROPS).
 
 Signs (GeckoLib, model space): a negative x turn lifts what points forward (a paw, a chin); a positive y turn swings what
 points forward towards the character's right; positions are model units.
@@ -36,7 +37,10 @@ NAMEN = {
     "kapiteinguh": ("verhaal",),
     "ringenraceguh": ("vlag",),
 }
-MIKAS = ("zuka", "oom_miroh")
+# the body of the base look of a character: "mika" for these, "zit" for the rest; a character whose looks stand on two
+# bodies has a second file for the other one (LIJVEN; guh_npc_<basis>_<lijf>.animation.json, the same names and lengths)
+MIKAS = ("zuka",)
+LIJVEN = {"zuka": ("mika", "zit")}
 
 
 def _praat_zit():
@@ -190,12 +194,49 @@ def _zuka():
     }
 
 
+def _zuka_zit():
+    """Zuka's moves on the sitting guh (ZUKA_TEAM, ZUKA_VUURHEER): the same names and lengths as his Mika moves."""
+    schud = [(0.5 + i * 0.2, -160, 0, 18 if i % 2 else -18) for i in range(7)]
+    return {
+        "mijn_eer": (2.4, {
+            "body": {"position": T((0, 0, 0, 0), (0.35, 0, 2.4, 0), (1.9, 0, 2.4, 0), (2.3, 0, 0, 0), (2.4, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.35, -160, 0, 0), *schud, (2.0, -160, 0, 0), (2.3, 0, 0, 0)),
+                          "position": T((0, 0, 0, 0), (0.35, 0, 1.5, 0), (1.9, 0, 1.5, 0), (2.3, 0, 0, 0))},
+            "arm_left": {"rotation": T((0, 0, 0, 0), (0.35, -20, 20, 0), (1.9, -20, 20, 0), (2.3, 0, 0, 0))},
+            "head": {"rotation": T((0, 0, 0, 0), (0.35, -20, 0, 0), (1.1, -24, 0, 4), (1.9, -20, 0, -4), (2.3, 0, 0, 0))},
+            "ear_left": {"rotation": T((0, 0, 0, 0), (0.35, 0, 0, -14), (1.9, 0, 0, -14), (2.3, 0, 0, 0))},
+            "ear_right": {"rotation": T((0, 0, 0, 0), (0.35, 0, 0, 14), (1.9, 0, 0, 14), (2.3, 0, 0, 0))},
+            "tail": {"rotation": T((0, 0, -10, 0), (0.4, 0, 20, 0), (0.8, 0, -20, 0), (1.2, 0, 20, 0), (1.6, 0, -20, 0), (2.4, 0, -10, 0))}}),
+        "zucht": (2.4, {
+            "head": {"rotation": T((0, 0, 0, 0), (0.3, -6, 0, 0), (0.9, 14, 0, 0), (1.9, 14, 0, 0), (2.4, 0, 0, 0))},
+            "body": {"scale": T((0, 1, 1, 1), (0.3, 1.05, 1.06, 1.05), (1.0, 0.98, 0.95, 0.98), (1.9, 0.98, 0.95, 0.98), (2.4, 1, 1, 1))},
+            "arm_left": {"rotation": T((0, 0, 0, 0), (0.9, 20, 0, 0), (1.9, 20, 0, 0), (2.4, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.9, 20, 0, 0), (1.9, 20, 0, 0), (2.4, 0, 0, 0))},
+            "ear_left": {"rotation": T((0, 0, 0, 0), (0.9, 0, 0, -16), (1.9, 0, 0, -16), (2.4, 0, 0, 0))},
+            "ear_right": {"rotation": T((0, 0, 0, 0), (0.9, 0, 0, 16), (1.9, 0, 0, 16), (2.4, 0, 0, 0))}}),
+        "vuur": (1.6, {
+            "zuka_vlam": {"scale": T((0, 0), (0.5, 0), (0.65, 1.1), (0.9, 0.8), (1.1, 0.4), (1.25, 0), (1.6, 0)),
+                          "position": T((0, 0, 0, 0), (0.5, 0, 0, 0), (1.2, 0, 1.5, -3.0), (1.6, 0, 0, 0))},
+            "head": {"rotation": T((0, 0, 0, 0), (0.4, -12, 0, 0), (0.6, 6, 0, 0), (1.2, 4, 0, 0), (1.6, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.4, -50, 0, 0), (0.65, -80, 0, 0), (1.2, -60, 0, 0), (1.6, 0, 0, 0))},
+            "body": {"scale": T((0, 1, 1, 1), (0.4, 1.06, 1.08, 1.06), (0.65, 0.98, 0.96, 0.98), (1.6, 1, 1, 1))}}),
+        "buig": (2.0, {
+            "head": {"rotation": T((0, 0, 0, 0), (0.5, 24, 0, 0), (1.4, 24, 0, 0), (2.0, 0, 0, 0))},
+            "body": {"rotation": T((0, 0, 0, 0), (0.5, 10, 0, 0), (1.4, 10, 0, 0), (2.0, 0, 0, 0))},
+            "arm_left": {"rotation": T((0, 0, 0, 0), (0.5, -30, -20, 0), (1.4, -30, -20, 0), (2.0, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.5, -30, 20, 0), (1.4, -30, 20, 0), (2.0, 0, 0, 0))},
+            "ear_left": {"rotation": T((0, 0, 0, 0), (0.5, 0, 0, -10), (1.4, 0, 0, -10), (2.0, 0, 0, 0))},
+            "ear_right": {"rotation": T((0, 0, 0, 0), (0.5, 0, 0, 10), (1.4, 0, 0, 10), (2.0, 0, 0, 0))}}),
+    }
+
+
 def _miroh():
+    """Oom Miroh on the sitting guh: the cup is on his left paw (miroh_kopje), the Pai Sho tile on the floor."""
     return {
         "thee": (3.2, {
-            "leg_front_left": {"rotation": T((0, 0, 0, 0), (0.6, -30, 0, 0), (2.3, -30, 0, 0), (2.8, 0, 0, 0), (3.2, 0, 0, 0)),
-                               "position": T((0, 0, 0, 0), (0.6, 0, 1.6, 0), (2.3, 0, 1.6, 0), (2.8, 0, 0, 0), (3.2, 0, 0, 0))},
-            "head": {"rotation": T((0, 0, 0, 0), (0.6, 0, 0, 0), (1.0, 9, 0, 0), (1.4, 9, 0, 0), (1.7, -5, 0, 0), (2.2, -5, 0, 0), (2.8, -10, 0, 0), (3.2, 0, 0, 0))},
+            "arm_left": {"rotation": T((0, 0, 0, 0), (0.6, -45, -25, 0), (2.3, -45, -25, 0), (2.8, 0, 0, 0), (3.2, 0, 0, 0)),
+                         "position": T((0, 0, 0, 0), (0.6, 0, 4.6, -1.2), (2.3, 0, 4.6, -1.2), (2.8, 0, 0, 0), (3.2, 0, 0, 0))},
+            "head": {"rotation": T((0, 0, 0, 0), (0.6, 0, 0, 0), (1.0, 10, 0, 0), (1.4, 10, 0, 0), (1.7, -4, 0, 0), (2.2, -4, 0, 0), (2.8, -10, 0, 0), (3.2, 0, 0, 0))},
             "body": {"scale": T((0, 1, 1, 1), (2.3, 1, 1, 1), (2.8, 1.05, 1.07, 1.05), (3.2, 1, 1, 1))},
             "ear_left": {"rotation": T((0, 0, 0, 0), (2.5, 0, 0, 0), (2.8, 0, 0, -12), (3.2, 0, 0, 0))},
             "ear_right": {"rotation": T((0, 0, 0, 0), (2.5, 0, 0, 0), (2.8, 0, 0, 12), (3.2, 0, 0, 0))}}),
@@ -204,17 +245,20 @@ def _miroh():
                                 (0.75, 1.06, 0.94, 1.06), (0.9, 0.97, 1.06, 0.97), (1.05, 1.05, 0.95, 1.05), (1.2, 0.98, 1.04, 0.98), (1.5, 1, 1, 1), (1.8, 1, 1, 1))},
             "head": {"rotation": T((0, 0, 0, 0), (0.2, -14, 0, 0), (0.6, -16, 0, 4), (1.0, -14, 0, -4), (1.4, -6, 0, 0), (1.8, 0, 0, 0)),
                      "position": T((0, 0, 0, 0), (0.15, 0, 0.8, 0), (0.3, 0, 0, 0), (0.45, 0, 0.8, 0), (0.6, 0, 0, 0), (0.75, 0, 0.8, 0), (0.9, 0, 0, 0), (1.8, 0, 0, 0))},
-            "tail": {"rotation": T((0, 0, -16, 0), (0.3, 0, 26, 0), (0.6, 0, -26, 0), (0.9, 0, 26, 0), (1.2, 0, -26, 0), (1.8, 0, -16, 0))}}),
+            "arm_left": {"rotation": T((0, 0, 0, 0), (0.25, 30, 25, 0), (1.5, 30, 25, 0), (1.8, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.25, 30, -25, 0), (1.5, 30, -25, 0), (1.8, 0, 0, 0))},
+            "tail": {"rotation": T((0, 0, -10, 0), (0.3, 0, 20, 0), (0.6, 0, -20, 0), (0.9, 0, 20, 0), (1.2, 0, -20, 0), (1.8, 0, -10, 0))}}),
         "wijsheid": (2.2, {
-            "leg_front_right": {"rotation": T((0, 0, 0, 0), (0.35, -105, 0, 0), (0.7, -95, 0, 0), (1.05, -105, 0, 0), (1.8, -100, 0, 0), (2.2, 0, 0, 0)),
-                                "scale": T((0, 1), (0.35, 1.4), (1.8, 1.4), (2.2, 1))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.35, -150, 0, 0), (0.7, -140, 0, 0), (1.05, -150, 0, 0), (1.8, -145, 0, 0), (2.2, 0, 0, 0)),
+                          "position": T((0, 0, 0, 0), (0.35, 0, 1.4, 0), (1.8, 0, 1.4, 0), (2.2, 0, 0, 0))},
             "head": {"rotation": T((0, 0, 0, 0), (0.35, -6, 0, -6), (1.8, -6, 0, -6), (2.2, 0, 0, 0))}}),
         "pai_sho": (2.4, {
             "miroh_tegel": {"scale": T((0, 0), (0.3, 0), (0.45, 1), (2.0, 1), (2.2, 0), (2.4, 0)),
-                            "position": T((0, 2.5, 5.0, 3.0), (0.45, 2.5, 5.0, 3.0), (0.9, 0, 0, 0), (2.4, 0, 0, 0))},
-            "leg_front_right": {"rotation": T((0, 0, 0, 0), (0.45, -70, 0, 0), (0.9, -5, 0, 0), (1.2, 0, 0, 0), (2.4, 0, 0, 0))},
-            "head": {"rotation": T((0, 0, 0, 0), (0.9, 8, 0, 0), (1.3, 8, 0, 0), (1.6, -6, 0, 5), (2.0, -6, 0, 5), (2.4, 0, 0, 0))},
-            "body": {"scale": T((0, 1, 1, 1), (1.4, 1, 1, 1), (1.7, 1.04, 1.05, 1.04), (2.4, 1, 1, 1))}}),
+                            "position": T((0, 0, 7.6, 3.6), (0.45, 0, 7.6, 3.6), (0.9, 0, 0, 0), (2.4, 0, 0, 0))},
+            "arm_right": {"rotation": T((0, 0, 0, 0), (0.45, -40, 0, 0), (0.9, 20, 0, 0), (1.2, 10, 0, 0), (1.5, 0, 0, 0), (2.4, 0, 0, 0))},
+            "body": {"rotation": T((0, 0, 0, 0), (0.45, 4, 0, 0), (0.9, 14, 0, 0), (1.3, 10, 0, 0), (1.6, 0, 0, 0), (2.4, 0, 0, 0)),
+                     "scale": T((0, 1, 1, 1), (1.4, 1, 1, 1), (1.7, 1.04, 1.05, 1.04), (2.4, 1, 1, 1))},
+            "head": {"rotation": T((0, 0, 0, 0), (0.9, 12, 0, 0), (1.3, 12, 0, 0), (1.6, -6, 0, 5), (2.0, -6, 0, 5), (2.4, 0, 0, 0))}}),
     }
 
 
@@ -313,6 +357,8 @@ def _racemeester():
         "head": {"rotation": T((0, 0, 0, 0), (0.3, -8, 0, 0), (1.7, -8, 0, 0), (2.0, 0, 0, 0))}})}
 
 
+# the moves of a character on its other body (LIJVEN)
+ANDER_LIJF = {("zuka", "zit"): _zuka_zit}
 MAKERS = {"aang_guh": _aang, "katara_guh": _katara, "sokka_guh": _sokka, "toph_guh": _toph, "zuka": _zuka, "oom_miroh": _miroh,
           "suki_guh": _suki, "yue_guh": _yue, "veerguh": _veerguh, "scheepsbouwerguh": _scheepsbouwer, "kroegbaasguh": _kroegbaas,
           "kapiteinguh": _kapitein, "ringenraceguh": _racemeester}
@@ -328,11 +374,32 @@ ALTIJD = {
 }
 
 
-def animaties(basis):
-    """{short name: animation} of a character: idle, praat and its named moves."""
-    lijf = "mika" if basis in MIKAS else "zit"
+def lijf_van(basis):
+    """The body of a character's base look."""
+    return "mika" if basis in MIKAS else "zit"
+
+
+def lijven(basis):
+    """Every body the looks of a character stand on, its own first."""
+    return LIJVEN.get(basis, (lijf_van(basis),))
+
+
+def bestand_naam(basis, lijf=None):
+    """The animation file (without .animation.json) of a character on a body: guh_npc_<basis>, or guh_npc_<basis>_<lijf>
+    for its other body."""
+    lijf = lijf or lijf_van(basis)
+    return f"guh_npc_{basis}" if lijf == lijf_van(basis) else f"guh_npc_{basis}_{lijf}"
+
+
+def _zetten(basis, lijf):
+    return MAKERS[basis]() if lijf == lijf_van(basis) else ANDER_LIJF[(basis, lijf)]()
+
+
+def animaties(basis, lijf=None):
+    """{short name: animation} of a character (on one of its bodies): idle, praat and its named moves."""
+    lijf = lijf or lijf_van(basis)
     props = PROPS.get(basis, ())
-    zetten = MAKERS[basis]()
+    zetten = _zetten(basis, lijf)
     out = {}
     for naam in NAMEN[basis]:
         lengte, botten = zetten[naam]
@@ -343,14 +410,14 @@ def animaties(basis):
     return {"idle": idle, "praat": praat, **out}
 
 
-def bestand(basis):
-    """The animation file of a character (GeckoLib)."""
+def bestand(basis, lijf=None):
+    """The animation file of a character on a body (GeckoLib)."""
     return {"format_version": "1.8.0",
-            "animations": {f"animation.guh_sitting.{naam}": a for naam, a in animaties(basis).items()}}
+            "animations": {f"animation.guh_sitting.{naam}": a for naam, a in animaties(basis, lijf).items()}}
 
 
 def duur(basis, naam):
-    """Ticks of a move; 0 for a pose that lasts."""
+    """Ticks of a move; 0 for a pose that lasts (the same on every body of the character)."""
     if (basis, naam) in HOUDINGEN:
         return 0
     if naam == "praat":

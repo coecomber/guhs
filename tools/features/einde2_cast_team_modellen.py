@@ -4,7 +4,8 @@ einde2, slice cast_team - the models of Team Guhvatar and their friends (CONTRAC
 
   CAST       the table (the same rows as the Java enum feature/einde2/castteam/CastTeam; check() compares the two)
   build(h)   per Kind  geckolib/models/entity/guh_npc_<kind>.geo.json + textures/entity/npc_<kind>.png (+ _glowmask.png),
-             per CHARACTER  geckolib/animations/entity/guh_npc_<basis>.animation.json
+             per CHARACTER  geckolib/animations/entity/guh_npc_<basis>.animation.json, and per other body of its looks
+             guh_npc_<basis>_<lijf>.animation.json (Zuka: guh_npc_zuka_zit for ZUKA_TEAM and ZUKA_VUURHEER)
   check(h)   every file is there, every animation holds idle, praat and the names of its row, every bone an animation
              moves exists in every look of the character, no base bone was lost, the Java table says the same
   preview(out)   offline renders (einde2_cast_team_kit.quads + render): per Kind the idle pose from the
@@ -32,13 +33,13 @@ CAST = {
     "toph_guh": ("toph_guh", "zit", 0.8, False, False),
     "zuka": ("zuka", "mika", 1.0, False, False),
     "zuka_prins": ("zuka", "mika", 1.0, False, False),
-    "zuka_vuurheer": ("zuka", "mika", 1.05, False, False),
+    "zuka_vuurheer": ("zuka", "zit", 1.05, False, False),
     "zuka_balling": ("zuka", "mika", 1.0, False, False),
     "zuka_blauwe_geest": ("zuka", "mika", 1.0, False, False),
-    "zuka_team": ("zuka", "mika", 1.0, False, False),
-    "oom_miroh": ("oom_miroh", "mika", 1.0, False, False),
-    "oom_miroh_gevangene": ("oom_miroh", "mika", 1.0, False, False),
-    "oom_miroh_lotus": ("oom_miroh", "mika", 1.0, False, False),
+    "zuka_team": ("zuka", "zit", 1.0, False, False),
+    "oom_miroh": ("oom_miroh", "zit", 1.0, False, False),
+    "oom_miroh_gevangene": ("oom_miroh", "zit", 1.0, False, False),
+    "oom_miroh_lotus": ("oom_miroh", "zit", 1.0, False, False),
     "suki_guh": ("suki_guh", "zit", 1.0, False, False),
     "suki_guh_gevangene": ("suki_guh", "zit", 1.0, False, False),
     "yue_guh": ("yue_guh", "zit", 0.95, False, False),
@@ -63,22 +64,26 @@ def _geo(h, kind):
     return os.path.join(h.A, "geckolib", "models", "entity", f"guh_npc_{kind}.geo.json")
 
 
-def _anim(h, basis):
-    return os.path.join(h.A, "geckolib", "animations", "entity", f"guh_npc_{basis}.animation.json")
+def _anim(h, basis, lijf=None):
+    return os.path.join(h.A, "geckolib", "animations", "entity", f"{an.bestand_naam(basis, lijf)}.animation.json")
 
 
 def build(h):
     for kind in CAST:
         fig.teken(h, kind)
     for basis in BASISSEN:
-        h.w(_anim(h, basis), an.bestand(basis))
+        for lijf in an.lijven(basis):
+            h.w(_anim(h, basis, lijf), an.bestand(basis, lijf))
 
 
 def check(h):
     fout = []
     for kind, (basis, lijf, schaal, doorzichtig, gloed) in CAST.items():
         tex = os.path.join(h.TEX, "entity", f"npc_{kind}.png")
-        ontbreekt = [pad for pad in (_geo(h, kind), tex, _anim(h, basis)) if not os.path.exists(pad)]
+        if lijf not in an.lijven(basis):
+            fout.append(f"{kind}: body {lijf}, but its character has animations for {an.lijven(basis)} only")
+            continue
+        ontbreekt = [pad for pad in (_geo(h, kind), tex, _anim(h, basis, lijf)) if not os.path.exists(pad)]
         fout += [f"{kind}: {pad} is missing" for pad in ontbreekt]
         if gloed != os.path.exists(os.path.join(h.TEX, "entity", f"npc_{kind}_glowmask.png")):
             fout.append(f"{kind}: its glowmask is {'missing' if gloed else 'not expected'}")
@@ -94,12 +99,14 @@ def check(h):
         for b in botten - set(ck.BASISBOTTEN[lijf]):
             if b.startswith("mix_") or "_" not in b:
                 fout.append(f"{kind}: bone {b} is not named <basis>_<ding>")
-        anims = json.load(open(_anim(h, basis), encoding="utf-8"))["animations"]
+        anims = json.load(open(_anim(h, basis, lijf), encoding="utf-8"))["animations"]
         for naam in ("idle",) + namen(kind):
             a = anims.get(f"animation.guh_sitting.{naam}")
             if a is None:
                 fout.append(f"{kind}: animation {naam} is missing")
                 continue
+            if naam != "idle" and int(round(a["animation_length"] * 20)) != (an.duur(basis, naam) or int(round(a["animation_length"] * 20))):
+                fout.append(f"{kind}: animation {naam} on its {lijf} body is not as long as the table says")
             for b in a["bones"]:
                 if b not in botten:
                     fout.append(f"{kind}: animation {naam} moves bone {b}, which the model does not have")
@@ -186,7 +193,7 @@ def preview(out, alleen=None):
             continue
         basis = CAST[kind][0]
         geo, tex = _model(kind)
-        anims = an.animaties(basis)
+        anims = an.animaties(basis, CAST[kind][1])
         rust = ck.quads(geo, tex, ck.op(anims["idle"], 0.0))
         tegels = [ck.render(rust, yaw, pitch, MAAT, margin=0.05) for yaw, pitch in ((0, -8), (35, -14), (205, -16))]
         eerste = an.NAMEN[basis][0]
@@ -194,7 +201,7 @@ def preview(out, alleen=None):
         strook = _strip(tegels)
         strook.save(os.path.join(out, f"{kind}.png"))
         stroken.append(strook)
-        if kind == basis:
+        if kind == basis or kind == next(k for k, r in CAST.items() if r[0] == basis and r[1] == CAST[kind][1]):
             zetten = [ck.render(ck.quads(geo, tex, ck.op(anims[n], anims[n]["animation_length"] * (0.5 if n != "praat" else 0.25))), 30, -12, MAAT, margin=0.05)
                       for n in namen(kind)]
             _strip(zetten).save(os.path.join(out, f"{kind}_moves.png"))

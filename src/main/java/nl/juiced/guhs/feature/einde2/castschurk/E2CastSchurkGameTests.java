@@ -278,6 +278,10 @@ public class E2CastSchurkGameTests {
         helper.assertTrue(bizon.soort() == 4 && Math.abs(bizon.getAttributeValue(Attributes.SCALE) - CastWezen.BIZON_SCHAAL[4]) < 1e-4, "the calf is small");
         helper.assertTrue(vos.draagt(), "Draagt from NBT");
         helper.assertTrue(kop.soort() == 1 && kop.noPhysics && kop.isNoGravity(), "the lion turtle: look 1, no collision, no gravity");
+        helper.assertTrue(Math.abs(kop.getAttributeValue(Attributes.SCALE) - CastWezen.SCHILDPAD_SCHAAL[1]) < 1e-4,
+                "the lion turtle's look 1 is the same head, smaller (the overlay)");
+        helper.assertTrue(kop.shouldRenderAtSqrDistance(90.0 * 90.0) && !bosco.shouldRenderAtSqrDistance(90.0 * 90.0),
+                "the lion turtle's head is drawn from far away (its hitbox is one block)");
         helper.assertTrue(bosco.houding().equals("idle"), "an unknown pose from NBT is idle");
         CompoundTag tag = Nbt.saveWithoutId(draak);
         helper.assertTrue(tag.getIntOr("Soort", -1) == 1 && tag.getBooleanOr("Stil", false) && tag.getStringOr("Houding", "").equals("slaap"), "and saved again: " + tag);

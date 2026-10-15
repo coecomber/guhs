@@ -5,8 +5,8 @@ einde2, slice cast_team - every Dutch text of the slice (the source language; En
   PRAATJES   kind id -> its two lines of small talk (quest.guhs.einde2_cast_team.praatje.<kind>.0 / .1): Dutch with the guh /
              vads / njeg humour, one of the two with the character's catchphrase of the show, guh-ified (CONTRACT_E2 11.2 G)
 
-Phase A has no story text: the lines are a wink at who someone is, nothing of the plot. Guhs are always lief; Zuka and
-Oom Miroh are Mika's, and Zuka grumbles at most.
+Phase A has no story text: the lines are a wink at who someone is, nothing of the plot. Guhs are always lief; Oom Miroh
+is a good guh, Zuka is a Mika until he turns good (ZUKA_TEAM, ZUKA_VUURHEER are guhs), and he grumbles at most.
 """
 P = "quest.guhs.einde2_cast_team.praatje."
 
