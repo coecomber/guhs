@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -160,6 +162,78 @@ public final class Bewoners {
         ANDERS.put("leeuwschildpad_eiland/kop", new Anders(null, "guhs:leeuwschildpad_guh", 0, true, 0, null, 0f));
     }
 
+    // <einde2_geestenwereld> (CONTRACT_E2 10, [geestenwereld]: a build at a fixed spot of a dimension of its own)
+    /** A build at a fixed spot of its own dimension (no structure): the name of its sidecar, its dimension, its template 0,0,0. */
+    public record Vast(String structuur, ResourceKey<Level> dim, BlockPos oorsprong) {
+    }
+
+    private static final Map<String, Vast> VAST = new ConcurrentHashMap<>();
+    private static volatile Map<String, List<Bewoner>> vastTabel;
+
+    /** (a slice's register) The residents of this build come from its sidecar, at {@code oorsprong + marker}, in {@code dim}. */
+    public static void vast(String structuur, ResourceKey<Level> dim, BlockPos oorsprong) {
+        VAST.put(structuur, new Vast(structuur, dim, oorsprong));
+        vastTabel = null;
+    }
+
+    /** (a slice's register) The creature of the marker {@code <structuur>/<plek>} with this look, still or walking about its spot. */
+    public static void anders(String naam, String entity, int soort, boolean stil, int honk) {
+        ANDERS.put(naam, new Anders(null, entity, soort, stil, honk, null, null));
+        tabel = null;
+        vastTabel = null;
+    }
+
+    /** The residents of the builds at a fixed spot ({@link #vast}), per build (apart from {@link #tabel}: those are structures). */
+    public static Map<String, List<Bewoner>> vasteTabel() {
+        Map<String, List<Bewoner>> t = vastTabel;
+        if (t == null) {
+            Map<String, List<Bewoner>> nieuw = new LinkedHashMap<>();
+            for (String structuur : VAST.keySet()) {
+                List<Bewoner> rij = new ArrayList<>();
+                for (Plekken.Plek p : Plekken.van(structuur).values()) {
+                    Bewoner b = bewoner(structuur, p);
+                    if (b != null && (b.entity() == null || BuiltInRegistries.ENTITY_TYPE.containsKey(b.entity()))) {
+                        rij.add(b);
+                    } else if (b != null && GEMELD.add(b.naam())) {
+                        LOGGER.info("Guhs einde2: the marker {} names {}: not there (yet), no resident", b.naam(), b.entity());
+                    }
+                }
+                nieuw.put(structuur, List.copyOf(rij));
+            }
+            vastTabel = t = Collections.unmodifiableMap(nieuw);
+        }
+        return t;
+    }
+
+    /** The residents of the fixed builds of this level near this spot; returns how many were made. */
+    public static int controleerVast(ServerLevel level, BlockPos bij) {
+        int gemaakt = 0;
+        for (Map.Entry<String, List<Bewoner>> e : vasteTabel().entrySet()) {
+            Vast v = VAST.get(e.getKey());
+            if (v == null || v.dim() != level.dimension()) {
+                continue;
+            }
+            ChunkPos start = ChunkPos.containing(v.oorsprong());
+            for (Bewoner b : e.getValue()) {
+                BlockPos pos = v.oorsprong().offset(lokaal(Plekken.plek(b.structuur(), b.plek())));
+                if (pos.distSqr(bij) <= (double) (BEREIK + b.zoek()) * (BEREIK + b.zoek())) {
+                    gemaakt += plek(level, tag(b.id(), start), pos, Rotation.NONE, b) ? 1 : 0;
+                }
+            }
+        }
+        return gemaakt;
+    }
+
+    private static boolean inVast(ServerLevel level) {
+        for (Vast v : VAST.values()) {
+            if (v.dim() == level.dimension()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // </einde2_geestenwereld>
+
     /** Every structure whose markers are read: the fourteen big places and the Mika-vesting. */
     public static final List<String> STRUCTUREN;
 
@@ -255,6 +329,9 @@ public final class Bewoners {
         if (event.getEntity() instanceof ServerPlayer p && (p.tickCount + p.getId()) % CHECK_TICKS == 0 && !p.isSpectator()
                 && GuheindeFeature.isGuheinde(p.level())) {
             controleer(p.level(), p.blockPosition());
+        } else if (event.getEntity() instanceof ServerPlayer p && (p.tickCount + p.getId()) % CHECK_TICKS == 0 && !p.isSpectator()
+                && inVast(p.level())) {
+            controleerVast(p.level(), p.blockPosition());      // <einde2_geestenwereld/>
         }
     }
 
@@ -407,6 +484,28 @@ public final class Bewoners {
                 w.zetSoort(b.soort());
             }
             w.zetStil(b.stil());
+        } else if (b.soort() >= 0 || b.honk() > 0 || b.houding() != null) {
+            // <einde2_geestenwereld> a creature class this rule does not know (the spirits): its look and its spot as NBT
+            net.minecraft.nbt.CompoundTag nbt = new net.minecraft.nbt.CompoundTag();
+            nbt.putString("id", b.entity().toString());
+            if (b.soort() >= 0) {
+                nbt.putInt("Soort", b.soort());
+            }
+            nbt.putBoolean("Stil", b.stil());
+            if (b.honk() > 0) {
+                nbt.putInt("Honk", b.honk());
+            }
+            if (b.houding() != null) {
+                nbt.putString("Houding", b.houding());
+            }
+            Entity geladen = EntityType.loadEntityRecursive(nbt, level, EntitySpawnReason.STRUCTURE, x -> x);
+            if (geladen != null) {
+                e.discard();
+                e = geladen;
+                zet(e, plek, b.yaw(), draai);
+                e.getPersistentData().putString(PLEK, b.naam());
+            }
+            // </einde2_geestenwereld>
         }
         return e;
     }

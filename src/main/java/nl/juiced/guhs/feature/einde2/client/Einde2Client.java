@@ -32,6 +32,7 @@ public final class Einde2Client {
         nl.juiced.guhs.feature.einde2.castvolk.client.E2CastVolkClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.client.E2BouwSchelpenstadClient.init(modBus);
         nl.juiced.guhs.feature.einde2.castteam.client.E2CastTeamClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.geestenwereld.client.E2GeestenwereldClient.init(modBus);   // <einde2_geestenwereld/>
         // the merge step of the cast (CONTRACT_E2 11.7 M2): the see-through and the glowing kinds of the three tables
         for (nl.juiced.guhs.entity.GuhNpcEntity.Kind kind : nl.juiced.guhs.feature.einde2.CastTabellen.kinds()) {
             if (nl.juiced.guhs.feature.einde2.CastTabellen.doorzichtig(kind)) {
