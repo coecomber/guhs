@@ -19,7 +19,9 @@ import nl.juiced.guhs.feature.einde2.Plekken;
  *   <li>{@code /guhs einde2 geest plek <zone>}: to a zone (meditatiecirkel, gefluisterwoud, koh_grot, lotus_ruines,
  *       top_voorgangers, hemelvijver, theepaviljoen, fang_pad), or to any other marker of the build by its id;</li>
  *   <li>{@code /guhs einde2 geest terug}: back to your body (what a meditatiesteen does);</li>
- *   <li>{@code /guhs einde2 geest plekken}: the markers of the build near you (16 blocks), with their world positions.</li>
+ *   <li>{@code /guhs einde2 geest plekken}: the markers of the build near you (16 blocks), with their world positions;</li>
+ *   <li>{@code /guhs einde2 geest laag <naam> aan|uit}: puts an overlay of the build into the world for everyone, or takes it
+ *       away (pad_8, woud_bloei, lantaarnboom_licht; to look at them: the story shows them per player, geest_spel).</li>
  * </ul>
  */
 public final class GeestCommando {
@@ -37,7 +39,11 @@ public final class GeestCommando {
                                 .suggests((c, b) -> SharedSuggestionProvider.suggest(namen(), b))
                                 .executes(c -> ga(c.getSource(), naarMarker(StringArgumentType.getString(c, "plek"))))))
                         .then(Commands.literal("terug").executes(c -> terug(c.getSource())))
-                        .then(Commands.literal("plekken").executes(c -> plekken(c.getSource()))))));
+                        .then(Commands.literal("plekken").executes(c -> plekken(c.getSource())))
+                        .then(Commands.literal("laag").then(Commands.argument("laag", StringArgumentType.word())
+                                .suggests((c, b) -> SharedSuggestionProvider.suggest(Geestenwereld.LAGEN, b))
+                                .then(Commands.literal("aan").executes(c -> laag(c.getSource(), StringArgumentType.getString(c, "laag"), false)))
+                                .then(Commands.literal("uit").executes(c -> laag(c.getSource(), StringArgumentType.getString(c, "laag"), true))))))));
     }
 
     /** The zones first, then every other marker. */
@@ -68,6 +74,16 @@ public final class GeestCommando {
 
     private static int terug(CommandSourceStack source) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         return Geestenwereld.terug(source.getPlayerOrException()) ? 1 : 0;
+    }
+
+    private static int laag(CommandSourceStack source, String naam, boolean weg) {
+        var level = Geestenwereld.level(source.getServer());
+        if (level == null || !Geestenwereld.laag(level, naam, weg)) {
+            source.sendFailure(Component.literal("Geestenwereld: no overlay '" + naam + "' (or its chunks are not loaded: stand near it)"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.literal("Geestenwereld: overlay " + naam + (weg ? " taken away" : " put down")), false);
+        return 1;
     }
 
     private static int plekken(CommandSourceStack source) throws com.mojang.brigadier.exceptions.CommandSyntaxException {

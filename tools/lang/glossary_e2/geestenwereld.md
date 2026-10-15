@@ -26,3 +26,18 @@
 | geestenmasker | spirit mask | |
 | geestpaddenstoel | spirit mushroom | |
 | Raava en Vaatu? Nooit van gehoord. | Raava and Vaatu? Never heard of them. | the fresco sign (Legend of Korra wink) |
+| (geest_bouw, phase B) | | |
+| Trap der meesters | Stair of Masters | the road of five statues to the White Lotus |
+| heiligdom / Lotusarchief | sanctuary / Lotus Archive | |
+| de oude leden / de stichter | the old members / the founder | of the White Lotus |
+| Gang der Gezichten | Passage of Faces | Koh's corridor |
+| Geestenklok | Spirit Bell | |
+| theetuin / roddelclub | tea garden / gossip club | |
+| het mistige moeras | the Misty Swamp | |
+| schrijntje / zwevend raadsel | little shrine / floating riddle | |
+| Bumi-guh, de gekke koning | Bumi Guh, the Mad King | |
+| Jeong Jeong-guh, de weggelopen meester | Jeong Jeong Guh, the Runaway Master | |
+| Oom Miroh, de Grote Lotus | Uncle Miroh, the Grand Lotus | |
+| Denk als een gekke oude koning | Think like a mad old king | Bumi's wing sign (DESIGN's line) |
+| Het ijs onthoudt alles | The ice remembers all | Pakguh's wing sign |
+| Vuur is een rivier, niet een fakkel | Fire is a river, not a torch | Jeong Jeong's wing sign (own words) |

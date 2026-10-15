@@ -67,6 +67,82 @@ look 180 5
 waitrender 300
 shot e2_geest_fang
 
+section geest_bouw: the White Lotus (court, wings, sanctuary, archive), the Stair of Masters
+/guhs einde2 geest plek lotus_hof
+look 180 20
+waitrender 300
+shot e2_geest_lotus_hof
+/guhs einde2 geest plek echo_bumi
+look 90 0
+waitrender 200
+shot e2_geest_bumi
+/guhs einde2 geest plek proef_pakguh_start
+look -90 0
+waitrender 200
+shot e2_geest_pakguh
+/guhs einde2 geest plek ritme_plek
+look 180 0
+waitrender 200
+shot e2_geest_piandao
+/guhs einde2 geest plek echo_jeong_jeong
+look -90 10
+waitrender 200
+shot e2_geest_jeong_jeong
+/guhs einde2 geest plek proef_miroh_start
+look 180 10
+waitrender 200
+shot e2_geest_miroh
+/guhs einde2 geest plek lid_stichter
+look 180 5
+waitrender 200
+shot e2_geest_heiligdom
+/guhs einde2 geest plek kennisvos_1
+look 180 0
+waitrender 200
+shot e2_geest_archief
+/guhs einde2 geest plek meesterbeeld_3
+look 0 -20
+waitrender 300
+shot e2_geest_trap
+/guhs einde2 geest plek top_speler
+look 180 0
+waitrender 200
+shot e2_geest_top_hal
+
+section geest_bouw: Koh's corridor, the islet by Tui and La, the tea garden, the bell, the swamp and the 8th island
+/guhs einde2 geest plek pad_8_anker
+look 30 0
+waitrender 300
+shot e2_geest_eiland_8
+/guhs einde2 geest plek moeras_visioen
+look 0 10
+waitrender 200
+shot e2_geest_moeras
+/guhs einde2 geest plek chakra_3
+look 90 0
+waitrender 200
+shot e2_geest_koh_gang
+/guhs einde2 geest plek tui_la_speler
+look 90 -20
+waitrender 300
+shot e2_geest_tui_la
+/guhs einde2 geest plek theetuin
+look 180 10
+waitrender 200
+shot e2_geest_theetuin
+/guhs einde2 geest plek geestenklok
+look 180 -40
+waitrender 300
+shot e2_geest_klok
+/guhs einde2 geest laag woud_bloei aan
+/guhs einde2 geest laag lantaarnboom_licht aan
+/guhs einde2 geest ga
+look 180 0
+waitrender 300
+shot e2_geest_lantaarnboom_licht
+/guhs einde2 geest laag lantaarnboom_licht uit
+/guhs einde2 geest laag woud_bloei uit
+
 section back to the body
 /guhs einde2 geest terug
 wait 40

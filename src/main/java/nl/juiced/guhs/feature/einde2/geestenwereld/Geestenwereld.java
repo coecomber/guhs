@@ -63,6 +63,13 @@ public final class Geestenwereld {
      */
     public static final List<java.util.function.BiFunction<ServerPlayer, BlockPos, Boolean>> MEDITATIESTEEN = new CopyOnWriteArrayList<>();
 
+    /**
+     * geest_bouw (CONTRACT_E2_B 4.5): the overlays of the build, blocks only, that only fill air: {@code pad_8} (the path from
+     * the swamp to the 8th island), {@code woud_bloei} (the woud in bloom), {@code lantaarnboom_licht} (the lantern tree all
+     * lit). geest_spel shows them per player ({@link #laagBlokken} into {@code Schijn}) or puts one down for real ({@link #laag}).
+     */
+    public static final List<String> LAGEN = List.of("pad_8", "woud_bloei", "lantaarnboom_licht");
+
     /** Asks {@link #MEDITATIESTEEN}: true = a listener handled this click. */
     public static boolean meditatiesteen(ServerPlayer p, BlockPos pos) {
         for (java.util.function.BiFunction<ServerPlayer, BlockPos, Boolean> f : MEDITATIESTEEN) {
@@ -129,6 +136,46 @@ public final class Geestenwereld {
     public static BlockPos wereld(String plek) {
         Plekken.Plek p = Plekken.plek(NAAM, plek);
         return p == null ? null : OORSPRONG.offset(p.pos());
+    }
+
+    /** An overlay of the build by its name ({@link #LAGEN}), or null. */
+    @Nullable
+    public static Plekken.Laag laag(String naam) {
+        return Plekken.blad(NAAM).lagen().get(naam);
+    }
+
+    /** Puts an overlay into the world for everyone ({@code weg}: takes it away again); false: unknown or not loaded. */
+    public static boolean laag(ServerLevel level, String naam, boolean weg) {
+        Plekken.Laag l = laag(naam);
+        return l != null && Plekken.laag(level, l, OORSPRONG.offset(l.pos()), weg);
+    }
+
+    /** The blocks of an overlay at their world positions (air left out): what one player is shown through {@code Schijn}. */
+    public static java.util.Map<BlockPos, net.minecraft.world.level.block.state.BlockState> laagBlokken(ServerLevel level, String naam) {
+        java.util.Map<BlockPos, net.minecraft.world.level.block.state.BlockState> uit = new java.util.HashMap<>();
+        Plekken.Laag l = laag(naam);
+        var template = l == null ? null : level.getStructureManager().get(l.template()).orElse(null);
+        if (template == null) {
+            return uit;
+        }
+        CompoundTag tag = template.save(new CompoundTag());
+        var blocks = level.holderLookup(Registries.BLOCK);
+        net.minecraft.nbt.ListTag palette = tag.getListOrEmpty("palette");
+        List<net.minecraft.world.level.block.state.BlockState> states = new java.util.ArrayList<>();
+        for (int i = 0; i < palette.size(); i++) {
+            states.add(net.minecraft.nbt.NbtUtils.readBlockState(blocks, palette.getCompoundOrEmpty(i)));
+        }
+        BlockPos at = OORSPRONG.offset(l.pos());
+        net.minecraft.nbt.ListTag lijst = tag.getListOrEmpty("blocks");
+        for (int i = 0; i < lijst.size(); i++) {
+            CompoundTag e = lijst.getCompoundOrEmpty(i);
+            net.minecraft.nbt.ListTag pos = e.getListOrEmpty("pos");
+            int s = e.getIntOr("state", 0);
+            if (s >= 0 && s < states.size() && !states.get(s).isAir()) {
+                uit.put(at.offset(pos.getIntOr(0, 0), pos.getIntOr(1, 0), pos.getIntOr(2, 0)), states.get(s));
+            }
+        }
+        return uit;
     }
 
     /** The marker at this world position (the first of the sidecar's order), or null. */

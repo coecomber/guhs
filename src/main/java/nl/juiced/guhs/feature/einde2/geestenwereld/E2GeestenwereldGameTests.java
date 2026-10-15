@@ -187,7 +187,7 @@ public class E2GeestenwereldGameTests {
                 "the standard markers");
         int lore = 0, lantaarns = 0, haken = 0, tegels = 0;
         for (Plekken.Plek p : plekken.values()) {
-            if (!p.soort().equals(Plekken.PAD) && !p.soort().equals(Plekken.ZONE) && !p.id().equals("uitzicht")) {
+            if (!p.soort().equals(Plekken.PAD) && !p.soort().equals(Plekken.ZONE) && !p.id().equals("uitzicht") && !p.id().startsWith("geestreus_")) {
                 helper.assertTrue(t.bestaat(p.pos()), "the tile of " + p.id() + " exists");
             }
             if (p.id().startsWith("lore_")) {
@@ -200,10 +200,10 @@ public class E2GeestenwereldGameTests {
                 // (the template says minecraft:chain; 26.1 reads it as minecraft:iron_chain)
                 helper.assertTrue(t.blok(p.pos().above()).replace("iron_chain", "chain").startsWith("minecraft:chain"),
                         "an empty hook (a chain) over " + p.id() + ": " + t.blok(p.pos().above()));
-            } else if (p.id().startsWith("tegel_")) {
+            } else if (p.id().startsWith("tegel_") && !p.id().startsWith("tegel_voetstuk_")) {
                 tegels++;
                 helper.assertTrue(is(t.blok(p.pos()), "guhs:lotuspuzzeltegel"), "a puzzle tile at " + p.id());
-            } else if (p.soort().equals(Plekken.NPC) && !"guhs:geest_koi".equals(p.entity())) {
+            } else if (p.soort().equals(Plekken.NPC) && !"guhs:geest_koi".equals(p.entity()) && !"guhs:kijkmasker".equals(p.entity())) {
                 helper.assertTrue(t.blok(p.pos()).equals("minecraft:air") && t.blok(p.pos().above()).equals("minecraft:air")
                         && !t.blok(p.pos().below()).equals("minecraft:air"), "the spot of " + p.id() + " is free, on a floor: " + t.blok(p.pos().below()));
             }
@@ -313,6 +313,98 @@ public class E2GeestenwereldGameTests {
         } finally {
             Geestenwereld.testGebiedWeg(g);
             weg(helper, p);
+        }
+        helper.succeed();
+    }
+
+    // --- geest_bouw: the revamp ---------------------------------------------------------------------------------------------------
+
+    /** CONTRACT_E2_B 4.5: id -> at least this many (0: the id itself). */
+    private static final Map<String, Integer> REVAMP = new java.util.LinkedHashMap<>();
+
+    static {
+        for (String id : List.of("lotus_hof", "heiligdom", "stenen_lotus", "reiger", "lotusarchief", "archief_ingang", "lid_stichter",
+                "trap_der_meesters", "poort_doorgang", "lotuspuzzel", "ijs_stroom", "verlovingsketting", "ritme_plek", "smidse", "meteoriet",
+                "theetuin_tafel", "roku", "kyoshi", "top_landing", "top_speler", "top_camera", "koh_gang", "tui_la_eilandje", "tui_la_speler",
+                "theetuin", "eiland_8", "pad_8_anker", "wan_onthulling", "wan_camera", "moeras", "moeras_visioen", "geestenklok", "klok",
+                "guru_pathik")) {
+            REVAMP.put(id, 0);
+        }
+        for (String m : List.of("bumi", "pakguh", "piandao", "jeong_jeong", "miroh")) {
+            for (String id : List.of("vleugel_" + m, "echo_" + m, "proef_" + m + "_start", "proef_" + m + "_einde")) {
+                REVAMP.put(id, 0);
+            }
+        }
+        Object[][] rijen = {{"lid", 3}, {"meesterbeeld", 5}, {"bumi_kamer", 3}, {"bumi_draai", 3}, {"ijs_spiegel", 6}, {"ijs_platform", 4},
+                {"kaars", 8}, {"lotusblad", 8}, {"geest_gast", 3}, {"theepot", 3}, {"tegel_voetstuk", 6}, {"bezienswaardigheid", 8},
+                {"roddel", 4}, {"wan", 5}, {"spiegelvijver", 4}, {"voetstappen", 3}, {"geheim", 3}, {"kijkmasker", 12}, {"chakra", 7},
+                {"kennisvos", 4}, {"mistreiger", 6}, {"geestreus", 4}};
+        for (Object[] r : rijen) {
+            REVAMP.put((String) r[0], (Integer) r[1]);
+        }
+        for (String z : List.of("gefluisterwoud", "koh_grot", "lotus_ruines", "top_voorgangers", "hemelvijver", "theepaviljoen", "fang_pad")) {
+            REVAMP.put("padlantaarn_" + z, 3);
+        }
+    }
+
+    /**
+     * geest_bouw: every marker of CONTRACT_E2_B 4.5 is in the sidecar; the echo masters, old members and Guru Pathik are their
+     * Kinds; the stone lotus, the pedestals, the path lanterns and the bell's rope stand in the tiles; the three overlays are
+     * there, hold blocks and only fill air; the watching masks are residents, each with its own face.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 400)
+    public static void einde2GeestenwereldRevamp(GameTestHelper helper) {
+        Map<String, Plekken.Plek> plekken = Plekken.van(Geestenwereld.NAAM);
+        for (Map.Entry<String, Integer> e : REVAMP.entrySet()) {
+            if (e.getValue() == 0) {
+                helper.assertTrue(plekken.containsKey(e.getKey()), "marker " + e.getKey());
+            } else {
+                long n = plekken.keySet().stream().filter(k -> k.matches(java.util.regex.Pattern.quote(e.getKey()) + "_\\d+")).count();
+                helper.assertTrue(n >= e.getValue(), e.getKey() + "_*: " + n + " of at least " + e.getValue());
+            }
+        }
+        Map<String, String> kinds = Map.of("echo_bumi", "BUMI_GUH_ECHO", "echo_pakguh", "PAKGUH_ECHO", "echo_piandao", "PIANDAO_GUH_ECHO",
+                "echo_jeong_jeong", "JEONG_JEONG_GUH_ECHO", "echo_miroh", "OOM_MIROH_ECHO", "lid_stichter", "LOTUS_STICHTER_ECHO", "lid_1", "LOTUS_LID_ECHO",
+                "guru_pathik", "GURU_PATHIK_GUH");
+        kinds.forEach((id, kind) -> helper.assertTrue(kind.equals(plekken.get(id).kind()), id + " is " + kind));
+        helper.assertTrue("guhs:oude_reigerguh".equals(plekken.get("reiger").entity()) && "guhs:kijkmasker".equals(plekken.get("kijkmasker_1").entity()),
+                "the heron and the masks");
+        Tegels t = new Tegels(helper.getLevel());
+        helper.assertTrue(is(t.blok(plekken.get("stenen_lotus").pos()), "minecraft:quartz_pillar"), "the stone lotus: " + t.blok(plekken.get("stenen_lotus").pos()));
+        for (int i = 1; i <= 6; i++) {
+            BlockPos v = plekken.get("tegel_voetstuk_" + i).pos();
+            helper.assertTrue(is(t.blok(v), "minecraft:chiseled_quartz_block"), "pedestal " + i + ": " + t.blok(v));
+        }
+        int lampen = 0;
+        for (Plekken.Plek p : plekken.values()) {
+            if (p.id().startsWith("padlantaarn_")) {
+                lampen++;
+                helper.assertTrue(is(t.blok(p.pos()), "guhs:geestlantaarn"), "a lantern at " + p.id() + ": " + t.blok(p.pos()));
+            }
+        }
+        helper.assertTrue(lampen >= 21, "path lanterns: " + lampen);
+        helper.assertTrue(t.blok(plekken.get("geestenklok").pos()).replace("iron_chain", "chain").startsWith("minecraft:chain"), "the bell's rope");
+        // the overlays: there, with blocks, only where the build is air
+        ServerLevel level = helper.getLevel();
+        for (String naam : Geestenwereld.LAGEN) {
+            Plekken.Laag l = Geestenwereld.laag(naam);
+            helper.assertTrue(l != null, "overlay " + naam);
+            Map<BlockPos, BlockState> blokken = Geestenwereld.laagBlokken(level, naam);
+            helper.assertTrue(blokken.size() > 20, "overlay " + naam + " holds blocks: " + blokken.size());
+            int n = 0;
+            for (BlockPos w : blokken.keySet()) {
+                if (n++ % 7 == 0) {
+                    BlockPos lokaal = w.subtract(Geestenwereld.OORSPRONG);
+                    helper.assertTrue(t.blok(lokaal).equals("minecraft:air") || t.blok(lokaal).isEmpty(), naam + " only fills air: " + lokaal + " " + t.blok(lokaal));
+                }
+            }
+        }
+        // the watching masks: residents, each its own face
+        List<Bewoners.Bewoner> rij = Bewoners.vasteTabel().getOrDefault(Geestenwereld.NAAM, List.of());
+        for (int i = 1; i <= 12; i++) {
+            String id = "kijkmasker_" + i;
+            int soort = i - 1;
+            helper.assertTrue(rij.stream().anyMatch(b -> b.plek().equals(id) && b.soort() == soort && b.stil()), id + ": a resident with face " + soort);
         }
         helper.succeed();
     }
