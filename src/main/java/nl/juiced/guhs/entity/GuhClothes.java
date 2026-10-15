@@ -428,6 +428,10 @@ public enum GuhClothes {
     // </einde2_h1_lucht>
     // einde2 phase B, h2_water: the clothes of chapter 2 (the Waterstam parka, the Blue Spirit mask); ONLY between these two markers, one constant per line
     // <einde2_h2_water>
+    /** Chapter 2: the Waterstam parka: deep blue with white fur at the edges (the suit bones) and a thick fur collar (the scarf bones). */
+    WATERSTAM_PARKA(Slot.BODY, "outfit_suit", "outfit_scarf"),
+    /** Chapter 2: the Blue Spirit mask: a blue demon face with a white grin and dark eyes over the guh's face (its own bones). */
+    BLAUWE_GEEST_MASKER(Slot.EYES, "outfit_blauwe_geest_masker", "outfit_blauwe_geest_masker_hoorns"),
     // </einde2_h2_water>
     // einde2 phase B, h3_aarde: the clothes of chapter 3 (the Aarderijk hat, the Blinde Bandiet belt); ONLY between these two markers, one constant per line
     // <einde2_h3_aarde>
