@@ -1,0 +1,243 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": {
+      "sprite": "guhs:block/luchtscooter_voet",
+      "force_translucent": true
+    },
+    "voet": {
+      "sprite": "guhs:block/luchtscooter_voet",
+      "force_translucent": true
+    },
+    "wind": {
+      "sprite": "guhs:block/luchtscooter",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        9,
+        5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        5,
+        4
+      ],
+      "to": [
+        12,
+        13,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind"
+        },
+        "south": {
+          "texture": "#wind"
+        },
+        "east": {
+          "texture": "#wind"
+        },
+        "west": {
+          "texture": "#wind"
+        },
+        "up": {
+          "texture": "#wind"
+        },
+        "down": {
+          "texture": "#wind"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        6,
+        3
+      ],
+      "to": [
+        11,
+        12,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind"
+        },
+        "south": {
+          "texture": "#wind"
+        },
+        "east": {
+          "texture": "#wind"
+        },
+        "west": {
+          "texture": "#wind"
+        },
+        "up": {
+          "texture": "#wind"
+        },
+        "down": {
+          "texture": "#wind"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        6,
+        12
+      ],
+      "to": [
+        11,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind"
+        },
+        "south": {
+          "texture": "#wind"
+        },
+        "east": {
+          "texture": "#wind"
+        },
+        "west": {
+          "texture": "#wind"
+        },
+        "up": {
+          "texture": "#wind"
+        },
+        "down": {
+          "texture": "#wind"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        6,
+        5
+      ],
+      "to": [
+        4,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind"
+        },
+        "south": {
+          "texture": "#wind"
+        },
+        "east": {
+          "texture": "#wind"
+        },
+        "west": {
+          "texture": "#wind"
+        },
+        "up": {
+          "texture": "#wind"
+        },
+        "down": {
+          "texture": "#wind"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        6,
+        5
+      ],
+      "to": [
+        13,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wind"
+        },
+        "south": {
+          "texture": "#wind"
+        },
+        "east": {
+          "texture": "#wind"
+        },
+        "west": {
+          "texture": "#wind"
+        },
+        "up": {
+          "texture": "#wind"
+        },
+        "down": {
+          "texture": "#wind"
+        }
+      }
+    }
+  ]
+}

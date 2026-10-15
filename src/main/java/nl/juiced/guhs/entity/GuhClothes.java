@@ -425,6 +425,8 @@ public enum GuhClothes {
     // </einde2_sponsguh>
     // einde2 phase B, h1_lucht: the clothes of chapter 1 (the Luchtnomade outfit); ONLY between these two markers, one constant per line
     // <einde2_h1_lucht>
+    /** The Guhvatar, chapter 1: the air nomads' robe in orange and yellow (the suit bones) and the blue arrow over the head. */
+    GUHVATAR_LUCHTNOMADE(Slot.BODY, "outfit_suit", "outfit_luchtnomade_pijl"),
     // </einde2_h1_lucht>
     // einde2 phase B, h2_water: the clothes of chapter 2 (the Waterstam parka, the Blue Spirit mask); ONLY between these two markers, one constant per line
     // <einde2_h2_water>

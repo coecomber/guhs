@@ -1525,6 +1525,159 @@ def tuin(b):
                 b.set(x, t + 1, z, "guhs:korstgras")
 
 
+# =====================================================================================================================
+# einde2 phase B (slice h1_lucht, CONTRACT_E2_B 4.1): the pier where Zuka's ship rams the temple, and the escape to Appa
+# =====================================================================================================================
+STEIGER_X0, STEIGER_X1 = 129, 166           # the deck from the east rim of the landing terrace to the end of the pier
+STEIGER_Z0, STEIGER_Z1 = 169, 173           # 5 wide: a beam of logs on each side, planks between
+KOP = (154, 165, 166, 177)                  # the head of the pier: x0, z0, x1, z1 (Zuka's ship lies against its east side)
+SCHIP = (167, A - 12, 165)                  # zuka_schip_anker: the origin of the overlay laag_zuka_schip
+WACHTEN = [(125, 174), (116, 167), (106, 175), (95, 168)]   # ontsnap_wacht_1..4: Zuka's men on the terrace (y A + 1)
+
+
+def steiger(b):
+    """The pier on the east side of the landing terrace (DESIGN 5 "Zuka's boog": his ship rams it in chapter 1). A plank
+    deck on log beams with a railing, posts hanging under it, lamps, a rest point at its root (rustpunt_5: a player caught in
+    the escape is put back here) and a wider head at the end where Zuka jumps off his ship. The ship itself is an overlay
+    (zuka_schip_laag): only the player whose story it is sees it."""
+    y = A
+    plank, log, hek = "spruce_planks", "stripped_spruce_log", "spruce_fence"
+    x0, z0, x1, z1 = KOP
+    for x in range(STEIGER_X0, x1 + 1):
+        kop = x >= x0
+        for z in range(z0 if kop else STEIGER_Z0, (z1 if kop else STEIGER_Z1) + 1):
+            rand = (z in (STEIGER_Z0, STEIGER_Z1) and not kop) or (kop and (z in (z0, z1) or x in (x0, x1)))
+            if rand:
+                b.set(x, y, z, log, {"axis": "x" if z in (STEIGER_Z0, STEIGER_Z1, z0, z1) else "z"})
+            else:
+                b.set(x, y, z, plank)
+            b.leeg(x, y + 1, z, x, y + 5, z)
+    # the railing: along both sides of the deck and round the head, open where the deck meets the head and on the east side
+    # of the head (Zuka's ship lies there: no railing left there after the bump)
+    for x in range(STEIGER_X0 + 1, x0):
+        for z in (STEIGER_Z0, STEIGER_Z1):
+            b.set(x, y + 1, z, hek)
+    for x in range(x0, x1):
+        for z in (z0, z1):
+            b.set(x, y + 1, z, hek)
+    for z in range(z0, z1 + 1):
+        if not STEIGER_Z0 <= z <= STEIGER_Z1:
+            b.set(x0, y + 1, z, hek)
+    # posts under the deck (piles that hang down: the pier was built from the island outwards)
+    for x in range(STEIGER_X0 + 3, x1 + 1, 7):
+        for z in ((STEIGER_Z0, STEIGER_Z1) if x < x0 else (z0, z1)):
+            for yy in range(y - 6, y):
+                b.set(x, yy, z, log, {"axis": "y"})
+    # lamps: posts on the railing of the deck, one on each corner of the head
+    for x in range(STEIGER_X0 + 6, x0 - 1, 9):
+        for z in (STEIGER_Z0, STEIGER_Z1):
+            b.lantaarn(x, z, y=y + 1)
+    for x, z in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
+        b.lantaarn(x, z, y=y + 1)
+    # bollards on the head (where a ship would tie up... if it came politely)
+    for x, z in ((x1 - 1, z0 + 1), (x1 - 1, z1 - 1)):
+        b.set(x, y + 1, z, log, {"axis": "y"})
+        b.set(x, y + 2, z, "spruce_trapdoor", {"facing": "north", "half": "bottom", "open": "false", "powered": "false", "waterlogged": "false"})
+    # the rest point at the root of the pier: a square of temple tiles, a lamp and a sign
+    rx, rz = STEIGER_X0 + 2, (STEIGER_Z0 + STEIGER_Z1) // 2
+    for x in range(rx - 1, rx + 2):
+        for z in range(STEIGER_Z0 + 1, STEIGER_Z1):
+            b.set(x, y, z, TEGEL if (x, z) != (rx, rz) else "chiseled_quartz_block")
+    b.prop("rustpunt_5", rx, y + 1, rz, wie="rustpunt aan het begin van de steiger: wie bij de ontsnapping gepakt wordt, staat weer hier")
+    b.bord(STEIGER_X0, y + 1, STEIGER_Z0, "north", ["Steiger", "Alleen voor", "vriendelijke", "schepen, njeg."], wall=False)
+    b.bord(x0 + 1, y + 1, z0 + 1, "south", ["Niet rammen.", "Echt niet.", "Ook niet als je", "een prins bent."], wall=False)
+    # the markers of the story (h1_lucht: the scene zuka_steiger, the escape)
+    b.zone("steiger_zone", STEIGER_X0, y + 1, z0, x1, y + 5, z1, wie="de steiger met zijn kop")
+    b.prop("steiger", x0 + 1, y + 1, (z0 + z1) // 2, wie="hier sta je als Zuka's schip de steiger ramt")
+    b.plek("zuka_confrontatie", x1 - 3, y + 1, (z0 + z1) // 2, yaw=90.0, wie="Zuka springt hier van zijn schip op de steiger (kijkt naar het westen)")
+    for nr, (x, z) in enumerate(WACHTEN, 1):
+        b.leeg(x, y + 1, z, x, y + 3, z)
+        b.plek(f"ontsnap_wacht_{nr}", x, y + 1, z, yaw=-90.0, wie="een Vuurnatie-Mika van Zuka op het landingsterras (de ontsnapping)")
+    b.prop("zuka_schip_anker", *SCHIP, wie="de oorsprong van de laag laag_zuka_schip (Zuka's schip tegen de kop van de steiger)", los=True)
+
+
+def zuka_schip_laag(b):
+    """Zuka's ship as the overlay laag_zuka_schip at zuka_schip_anker: a small Vuurnatie warship (25 long) whose ram-bow
+    lies against the east side of the pier's head, splinters of the railing on the deck. Blocks only, and only blocks that
+    draw themselves from their block state (CONTRACT_E2 6.6): one player sees it (Schijn). Its cells only fill air."""
+    import math as m
+    sx, sy, sz = 25, 22, 13
+    s = b.h.Structure((sx, sy, sz))
+    mid = sz // 2
+    romp, rand, dek, ijzer = "minecraft:polished_blackstone_bricks", "minecraft:red_nether_bricks", "minecraft:dark_oak_planks", "minecraft:iron_block"
+    dek_y = 14                                                     # the deck (world template y A + 2): two above the pier
+    bodem_y = 4
+
+    def breedte(x, yy):
+        """Half the width of the hull at length x (0 = the bow, against the pier) and height yy."""
+        voor = min(1.0, (x + 0.5) / 7.0)                           # the bow narrows to a point
+        achter = min(1.0, (sx - x + 0.5) / 3.0)
+        hoog = min(1.0, (yy - bodem_y + 1.0) / 6.0)                # rounder towards the keel
+        return (mid - 0.3) * m.sqrt(max(0.0, voor)) * achter ** 0.3 * (0.35 + 0.65 * hoog)
+
+    for x in range(sx):
+        for yy in range(bodem_y, dek_y + 1):
+            w = breedte(x, yy)
+            for z in range(sz):
+                d = abs(z - mid)
+                if d > w + 0.5:
+                    continue
+                schil = d > w - 0.7 or yy == bodem_y or yy == dek_y
+                if not schil:
+                    continue
+                if yy == dek_y and d <= w - 0.7:
+                    s.set(x, yy, z, dek)
+                elif yy in (dek_y, dek_y - 1):
+                    s.set(x, yy, z, rand)                        # the red band under the railing
+                else:
+                    s.set(x, yy, z, romp)
+        # the railing of the deck
+        w = breedte(x, dek_y)
+        for z in range(sz):
+            if abs(abs(z - mid) - w) < 0.6 and x > 1:
+                s.set(x, dek_y + 1, z, "minecraft:polished_blackstone_brick_wall")
+    # the ram: an iron point in front of the bow, just above the pier's deck
+    for i, (yy, n) in enumerate(((dek_y - 2, 1), (dek_y - 3, 0))):
+        for z in range(mid - n, mid + n + 1):
+            s.set(0, yy, z, ijzer)
+    # the bridge tower (at the stern), its windows, the flags and the chimney
+    for x in range(15, 22):
+        for z in range(mid - 3, mid + 4):
+            for yy in range(dek_y + 1, dek_y + 5):
+                rand_ = x in (15, 21) or z in (mid - 3, mid + 3)
+                if not rand_:
+                    continue
+                raam = yy == dek_y + 3 and (x in (15, 21) and abs(z - mid) <= 1 or z in (mid - 3, mid + 3) and 17 <= x <= 19)
+                s.set(x, yy, z, "minecraft:red_stained_glass" if raam else romp)
+            s.set(x, dek_y + 5, z, rand)
+    for yy in range(dek_y + 6, sy - 1):
+        for x, z in ((18, mid), (19, mid)):
+            s.set(x, yy, z, "minecraft:polished_blackstone")
+    s.set(18, sy - 1, mid, "minecraft:magma_block")
+    s.set(19, sy - 1, mid, "minecraft:magma_block")
+    for x in (6, 11):                                              # two masts with red pennants (wool, no banners: no block entities)
+        for yy in range(dek_y + 1, dek_y + 7):
+            s.set(x, yy, mid, "minecraft:stripped_dark_oak_log", {"axis": "y"})
+        for i, yy in enumerate(range(dek_y + 4, dek_y + 7)):
+            for zz in range(mid + 1, mid + 4 - i):
+                s.set(x, yy, zz, "minecraft:red_wool")
+        s.set(x, dek_y + 7, mid, "minecraft:gold_block")
+    # the Vuurnatie emblem on both sides of the bow (a flame: orange over red, on the hull's outer cells)
+    for x, yy in ((5, 10), (5, 9), (4, 9), (6, 9), (5, 8)):
+        for z in range(sz):
+            c = s.blocks.get((x, yy, z))
+            if c and c[0] == romp:
+                s.set(x, yy, z, "minecraft:orange_concrete" if yy == 10 else "minecraft:red_concrete")
+    # (the splinters of the railing on the head are particles of the scene: the overlay's box starts east of the head)
+    # only air: whatever of the build stands in the box stays the build's
+    ax, ay, az = SCHIP
+    for c in list(s.blocks):
+        if b.s.blocks.get((ax + c[0], ay + c[1], az + c[2]), (gb.AIR,))[0] != gb.AIR:
+            del s.blocks[c]
+    b.laag("zuka_schip", s, ax, ay, az)
+    return s
+
+
 def rotsen(b):
     """Pinnacles of kruimelrots on the open ground (the temple stands on a mountain top): only where nothing is built."""
     for x, z, r, hoog in ((42, 56, 4, 13), (36, 68, 3, 8), (50, 148, 4, 11), (58, 152, 3, 7), (152, 68, 4, 12), (160, 74, 3, 7), (130, 150, 3, 9),
@@ -1729,7 +1882,9 @@ VERWACHT = ["aang", "poort", "hal", ("beeld", 8), "kyoshi_beeld", "roku_beeld", 
             ("luchtbal_paal", 12), "luchtbal_doel_speler", "luchtbal_doel_aang", "luchtbal_start_speler", "luchtbal_start_aang", "scooter_start",
             "scooter_finish", "scooter_baan", "zweef_start", ("zweefring", 10), "appa_stal", "appa", "zadel", "appels", "momo", "momo_route",
             "momo_eind", "monnikenverblijf", "bed_speler", "werkplaatsdeur", "werkplaats", "werktuigguh", "werkbank", ("oefen", 6),
-            "vredesballon_bouwplaats", "vredesballon_anker", "vredesballon_teller", "knipoog_sjokkel", "knipoog_sjokkel_camera"]
+            "vredesballon_bouwplaats", "vredesballon_anker", "vredesballon_teller", "knipoog_sjokkel", "knipoog_sjokkel_camera",
+            # einde2 phase B (h1_lucht): the pier, Zuka's ship and the escape
+            "steiger", "steiger_zone", "zuka_confrontatie", "zuka_schip_anker", "rustpunt_5", ("ontsnap_wacht", 4)]
 
 
 def maak(h):
@@ -1755,6 +1910,7 @@ def maak(h):
     bouwplaats(b)
     rotsen(b)
     tuin(b)
+    steiger(b)
     zweefringen(b)
     route = momo_route(b, monnik, wind, dak)
     b.binnen_start = [(141, G + 1, 96)]
