@@ -20,6 +20,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.einde2.Plekken;
 import nl.juiced.guhs.feature.einde2.appa.E2AppaFeature;
 import nl.juiced.guhs.feature.einde2.audio.E2Audio;
+import nl.juiced.guhs.feature.einde2.audio.LuTenLied;
 import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
 import nl.juiced.guhs.feature.mewtwo.MewtwoFeature;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
@@ -51,8 +52,8 @@ public final class H3Scenes {
     /** Every scene of the chapter by its short name (the dev command: {@code /guhs einde2 h3 scene <naam>}). */
     public static final Map<String, Scene> ALLE = new LinkedHashMap<>();
 
-    /** The song of {@link #LU_TEN}: the tick each caption starts at (8 lines; own words, own tune, CONTRACT_E2_B 6.3). */
-    public static final int[] LIED = {240, 362, 484, 606, 728, 850, 972, 1094};
+    /** Miroh's lullaby ends its captions here, before his one spoken line of {@link #LU_TEN}. */
+    private static final int LIED_EINDE = 1400;
 
     public static final Scene AANKOMST = aankomst();
     public static final Scene LOKET = loket();
@@ -393,8 +394,12 @@ public final class H3Scenes {
         for (int t = 300; t < 1400; t += 160) {
             b.deeltjes(t, ParticleTypes.CHERRY_LEAVES, plus(boom, 0, 4, 0), 10, 3.0);
         }
-        for (int i = 0; i < LIED.length; i++) {
-            b.lied(LIED[i], "lied." + i, 116);
+        // the song is audio's (LuTenLied: its bars of moment.lu_ten, which speelMetMuziek starts with the scene); the words are
+        // under this scene's own keys lied.<neuriet|1..8> (a scene caption is always scene.guhs.<id>.<key>), same text as audio's
+        for (LuTenLied.Regel r : LuTenLied.REGELS) {
+            if (r.tick() < LIED_EINDE) {
+                b.lied(r.tick(), "lied." + r.key().substring(r.key().lastIndexOf('.') + 1), Math.min(r.ticks(), LIED_EINDE - r.tick()));
+            }
         }
         return reg("lu_ten", b.animatie("miroh", 1404, "wijsheid").zeg(1410, "miroh", "delen", 84), a);
     }

@@ -9,6 +9,8 @@ young soldier guh coming home (no line, image or melody of the series' song).
 # =====================================================================================================================
 # the questline (verhaal_motor.verhaallijn): (stapnaam, nu, waar) per step; index = step
 # =====================================================================================================================
+from features.einde2_audio import LIED as _AUDIO_LIED
+
 LIJN_NAAM = "Hoofdstuk 3: Ba Sing Guh"
 LIJN_UITLEG = ("Het Aarderijk: een stad met drie ringen muren, een strenge loketguh, een blinde kampioen, een theehuis waar het "
                "naar jasmijn ruikt... en een geheim dat niemand hardop zegt. Leer aardesturen, vind Appa-guh terug en overleef de "
@@ -135,14 +137,8 @@ SCENES = {
         "jipjip": "Jip jip!",
     }, {}),
     "lu_ten": ("Een lied voor Lu Ten", {
-        "lied.0": "Het water zingt zacht op het vuur,",
-        "lied.1": "de lantaarn brandt nog bij de poort.",
-        "lied.2": "Een jonge soldaat-guh loopt over de heuvels,",
-        "lied.3": "zijn oortjes laag, zijn voetstap moe.",
-        "lied.4": "Hier ligt je deken, hier staat je kom,",
-        "lied.5": "je knabbels heb ik voor je bewaard.",
-        "lied.6": "De weg was lang, de avond is zacht,",
-        "lied.7": "en thuis... heeft altijd op je gewacht.",
+        # Miroh's lullaby: the words are audio's (einde2_audio.LIED), timed to moment.lu_ten; here under the scene's own keys
+        **{"lied." + k: v for k, v in _AUDIO_LIED.items()},
         "delen": "Sommige knabbels deel je, ook als er niemand meer is om ze mee te delen.",
     }, {}),
     "val": ("De val van Ba Sing Guh", {
