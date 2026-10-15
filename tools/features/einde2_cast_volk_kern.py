@@ -69,6 +69,18 @@ def _herkleur(a, hue, sat, val, masker):
     return a
 
 
+def _patroon_sleutel(patroon):
+    """A key that names what a pattern paints: where its function is written and what it captured (never its address: a
+    fresh closure can get the address of a dead one, which made the swatches depend on what ran before in the process)."""
+    if patroon is None:
+        return None
+    code = getattr(patroon, "__code__", None)
+    if code is None:
+        return (repr(patroon),)
+    cellen = tuple(_patroon_sleutel(v) if callable(v) else repr(v) for v in (c.cell_contents for c in (patroon.__closure__ or ())))
+    return (os.path.basename(code.co_filename), code.co_firstlineno, code.co_name, cellen, repr(patroon.__defaults__))
+
+
 class Pop:
     """One character: its model (base body + extra bones) and its 512 px sheet."""
 
@@ -178,7 +190,7 @@ class Pop:
     # --- extra bones --------------------------------------------------------------------------------------------------------
     def kl(self, rgb, patroon=None, var=6):
         """The swatch of a colour (with an optional pattern function over the 32 x 32 px block), made on first use."""
-        key = (tuple(rgb), getattr(patroon, "__name__", None) if patroon else None, id(patroon) if patroon else 0)
+        key = (tuple(rgb), _patroon_sleutel(patroon))
         if key not in self.sw:
             if not self.cellen:
                 raise SystemExit(f"einde2_cast_volk: no free texture space on the sheet of {self.kind}")
