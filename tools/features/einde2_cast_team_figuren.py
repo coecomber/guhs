@@ -1,8 +1,9 @@
 """
 einde2, slice cast_team - how every character looks (CONTRACT_E2 11.4): one function per CHARACTER, with the look as an
 argument, each drawing one Kind with einde2_cast_team_kit.Figuur. Guhs are the sitting guh ("zit") with its own head, face
-and ears; Zuka and Oom Miroh are the ordinary Mika. Clothes are painted on the body in model space (so a hem runs round
-at one height) and get their relief from a few cubes; hair is a painted cap plus cubes; props are bones of their own.
+and ears, Oom Miroh and the good Zuka (ZUKA_TEAM, ZUKA_VUURHEER) too; Zuka's earlier looks are the ordinary Mika.
+Clothes are painted on the body in model space (so a hem runs round at one height) and get their relief from a few
+cubes; hair is a painted cap plus cubes; props are bones of their own.
 
 Coordinates (model units, the front is -z, the character's left is +x):
   zit    body y 1..13, head y 12..26 (face at z -7, eyes at x +-4, y 21.5), ears y 23..30, arms in front at y 7..10.5
@@ -343,8 +344,9 @@ def toph(h, kind="toph_guh"):
 
 
 # =====================================================================================================================
-# Zuka (a Mika), six looks through the story (CONTRACT_E2 11.9): the banished prince (balling), the Blue Spirit (geest), the
-# exile who waits tables (ober, the kind ZUKA), the prince back home (prins), one of the team (team), the Vuurheer
+# Zuka, six looks through the story (CONTRACT_E2 11.9): the banished prince (balling), the Blue Spirit (geest), the exile
+# who waits tables (ober, the kind ZUKA) and the prince back home (prins) are a Mika (zuka()); once he is good he is a guh
+# on the sitting body (zuka_guh(), DESIGN 5 of 2026-10-15): one of the team (team) and the Vuurheer
 # =====================================================================================================================
 ZUKA_BOTTEN = ("zuka_litteken", "zuka_knot", "zuka_schort", "zuka_dienblad", "zuka_harnas", "zuka_kroon", "zuka_vlam",
                "zuka_staart", "zuka_masker", "zuka_zwaarden", "zuka_zwaard_links", "zuka_zwaard_rechts", "zuka_kraag")
@@ -376,35 +378,11 @@ def _mika_ogen(f, iris, licht, streep=None):
     px[lichtrood, :3] = licht
 
 
-def _mika_wenkbrauwen(f, bewaard, rgb, vorm):
-    """Replaces the angry brows: vorm(u, v) says for a pixel of the face (u 0..1 from the nose outward, v = rows from the
-    top) whether it is brow. The old brow pixels above the eyes become fur."""
-    px, W, H = f.gezicht()
-    masker, oud = bewaard
-    vacht = np.median(oud[..., :3][masker].reshape(-1, 3), axis=0)
-    c = px[..., :3].astype(np.int32)
-    wenk = (~masker) & (c.max(-1) < 90) & (np.arange(H)[:, None] < 18)
-    oog = (c[..., 0] > 150) & (c[..., 1] < 120)
-    # brow pixels: dark ones that are not the outline of an eye (no eye pixel right below or beside them)
-    naast = np.zeros_like(oog)
-    naast[:-1] |= oog[1:]
-    naast[1:] |= oog[:-1]
-    naast[:, 1:] |= oog[:, :-1]
-    naast[:, :-1] |= oog[:, 1:]
-    weg = wenk & ~naast & (np.arange(H)[:, None] < 14)
-    px[weg, :3] = np.clip(vacht + f.rng.normal(0, 2, (int(weg.sum()), 1)), 0, 255).astype(np.uint8)
-    yy, xx = np.mgrid[0:H, 0:W]
-    u = np.abs(xx + 0.5 - W / 2) / (W / 2)
-    px[vorm(u, yy) & (~oog), :3] = rgb
-
-
 def zuka(h, kind="zuka", look="ober"):
     f = ck.Figuur(h, kind, "mika", (0.985, 0.72, 1.06))
     bewaard = _vacht_masker(f)
     goud, rood = (236, 190, 66), (170, 40, 40)
     _mika_ogen(f, (226, 150, 40), (250, 204, 96))
-    if look == "vuurheer":                                   # a calmer face: level brows
-        _mika_wenkbrauwen(f, bewaard, MIKA_HAAR, lambda u, v: (v >= 9) & (v <= 11) & (u > 0.12) & (u < 0.86))
     # the scar over his LEFT eye (+x), up to the ear, which is burnt too
     f.kleur("litteken", (150, 52, 50), 5, _litteken)
     f.kleur("litteken_zij", (132, 44, 44), 9)
@@ -542,54 +520,88 @@ def zuka(h, kind="zuka", look="ober"):
                 f.k((-0.5, 10.3, -1.0), (1.0, 0.5, 9.0), "staal"),               # the broad blade
                 f.k((-1.3, 10.2, 7.8), (2.6, 0.7, 0.6), "gevest"),               # the guard
                 f.k((-0.45, 10.25, 8.4), (0.9, 0.6, 3.0), "gevest")], rotatie=(0, hoek, 0))
-    elif look == "team":
-        # one of the team: short shaggy hair (no knot), a plain red tunic with a gold edge, no armour, a shy, softer face
-        haarkap(f, MIKA_HAAR, voor=lambda X: 11.4 + 0.6 * np.sin(X * 1.7), zij=9.0, achter=4.0, var=10)
-        _ogen_terug(f, bewaard, 30)
-        _mika_ogen(f, (226, 150, 40), (250, 204, 96))
-        # soft brows that rise towards the middle (shy, a little unsure)
-        _mika_wenkbrauwen(f, bewaard, MIKA_HAAR, lambda u, v: (u > 0.12) & (u < 0.86) & (np.abs(v - (8.6 + 2.4 * u)) <= 0.9))
-        rood = (176, 44, 42)
-        gewaad(f, [(0, 1.8, goud), (1.8, 12, rood)])
-        f.kleur("rood", rood, 6, rand(goud, 3))
-        f.bot("zuka_knot", "head", (0, 14, -6), [
-            f.k((-6.0, 13.5, -10.6), (12.0, 1.1, 9.2), "haar"),
-            f.k((-4.6, 14.4, -9.8), (9.2, 1.0, 7.4), "haar"),
-            f.k((-5.6, 11.6, -12.7), (3.0, 2.4, 0.9), "haar"),                  # a shaggy fringe
-            f.k((-2.4, 11.2, -12.7), (2.6, 2.8, 0.9), "haar"),
-            f.k((0.4, 11.5, -12.7), (2.8, 2.5, 0.9), "haar"),
-            f.k((3.4, 11.9, -12.7), (2.4, 2.1, 0.9), "haar"),
-            f.k((-6.4, 9.6, -3.2), (12.8, 4.4, 1.4), "haar")])                  # the back of his neck
-        f.bot("zuka_kraag", "body", (0, 6, 0), [f.k((-7.0, 7.4, -2.6), (14.0, 2.4, 1.6), "rood")])
     else:
-        robe = (150, 34, 38)
-        haarkap(f, MIKA_HAAR, voor=11.9, zij=8.6, achter=3.0, var=8)
+        raise ValueError(f"zuka(): {look} is not a Mika look (team and vuurheer are zuka_guh)")
+    lege_botten(f, ZUKA_BOTTEN)
+    f.bewaar()
+
+
+def _zuka_guh_gezicht(f, bewaard):
+    """Zuka as a guh: golden eyes, and the burn scar over his LEFT eye (the viewer's right on the face), the eye in it
+    narrowed; painted on the face, with a thin cube of scar over it for relief."""
+    px, W, H = f.gezicht()
+    rgb = px[..., :3].astype(np.int32)
+    iris = (~bewaard[0]) & (rgb[..., 2] > rgb[..., 0] + 25)
+    px[iris, :3] = (222, 150, 40)
+    px[iris & (np.arange(H)[:, None] >= 16), :3] = (244, 196, 84)
+    f.kleur("litteken", (150, 52, 50), 5, _litteken)
+    f.bot("zuka_litteken", "head", (3.9, 21, -7), [f.k((0.7, 17.4, -7.32), (6.4, 7.0, 0.34), "litteken")])
+
+    def oor(vlak, X, Y, Z, zet):                                             # the burnt left ear
+        zet(Y < 27.5, (150, 60, 60), 12)
+    f.verf("ear_left", oor)
+
+
+def zuka_guh(h, kind="zuka_team", look="team"):
+    """Zuka once he is good (DESIGN 5, 2026-10-15): the sitting guh, upright like the other good guhs, clearly Zuka: the scar
+    over his left eye and his hair. team = short shaggy hair and the plain red tunic with a gold edge; vuurheer = the
+    topknot with the five-point flame crown and the Vuurheer robe. Same bones as his Mika looks (zuka_*)."""
+    f = ck.Figuur(h, kind, "zit", (0.02, 0.62, 1.05))
+    bewaard = _vacht_masker(f)
+    goud, rood = (236, 190, 66), (176, 44, 42)
+    f.kleur("haar", MIKA_HAAR, 9)
+    f.kleur("goud", goud, 6)
+    f.kleur("vlam", (250, 150, 40), 8, stip((255, 232, 120), 10))
+    f.kleur("vlam_l", (255, 226, 110), 6, stip((255, 250, 220), 8))
+    if look == "team":
+        # short shaggy hair: a cap over the head, a ragged fringe over the forehead, the back of his neck
+        haarkap(f, MIKA_HAAR, voor=lambda X: 23.2 + 0.5 * np.sin(X * 1.9), zij=lambda Z: np.where(Z > -3.0, 17.0, 21.4), achter=14.0, var=10)
         _ogen_terug(f, bewaard, 30)
-        _mika_ogen(f, (226, 150, 40), (250, 204, 96))
-        _mika_wenkbrauwen(f, bewaard, MIKA_HAAR, lambda u, v: (v >= 9) & (v <= 11) & (u > 0.12) & (u < 0.86))
-        gewaad(f, [(0, 2.0, goud), (2.0, 12, robe)])
+        gewaad(f, [(0, 1.8, goud), (1.8, 14, rood)], voor=lambda X, Y, zet: zet((np.abs(X) <= 0.5) & (Y > 8.0), goud, 4))
+        mouwen(f, rood, goud)
+        f.kleur("rood", rood, 6, rand(goud, 3))
+        f.bot("zuka_knot", "head", (0, 26, 0), [
+            f.k((-6.4, 25.4, -6.6), (12.8, 1.3, 11.6), "haar"),
+            f.k((-4.4, 26.5, -5.0), (8.8, 0.9, 8.4), "haar"),
+            f.k((-6.0, 22.2, -7.7), (3.0, 2.6, 0.9), "haar"),                   # the shaggy fringe
+            f.k((-2.6, 21.8, -7.7), (2.6, 3.0, 0.9), "haar"),
+            f.k((0.3, 22.1, -7.7), (2.8, 2.7, 0.9), "haar"),
+            f.k((3.4, 22.5, -7.7), (2.6, 2.3, 0.9), "haar")])
+        f.bot("zuka_kraag", "body", (0, 12, 0), [f.k((-5.6, 11.0, -4.9), (11.2, 2.0, 9.8), "rood")])
+    else:
+        robe, donkerrood = (150, 34, 38), (112, 24, 30)
+        haarkap(f, MIKA_HAAR, voor=23.9, zij=lambda Z: np.where(Z > -2.0, 15.0, 22.0), achter=12.0, var=8)
+        _ogen_terug(f, bewaard, 30)
+        gewaad(f, [(0, 2.0, goud), (2.0, 14, robe)], voor=lambda X, Y, zet: zet((np.abs(np.abs(X) - (13.6 - Y) * 0.45) <= 0.5) & (Y > 6.0), goud, 4))
+        mouwen(f, robe, goud)
         f.kleur("mantel", robe, 6, rand(goud, 3))
-        f.kleur("mantel_d", (112, 24, 30), 6)
-        f.bot("zuka_knot", "head", (0, 14, -6), [
-            f.k((-5.8, 13.7, -10.3), (11.6, 0.9, 8.8), "haar"),
-            f.k((-1.9, 14.5, -7.9), (3.8, 2.6, 3.8), "haar"),
-            f.k((-6.9, 6.0, -1.4), (13.8, 6.6, 1.4), "haar")])                  # his hair down his neck
-        f.bot("zuka_kroon", "zuka_knot", (0, 15, -8), [                          # the five-point flame
-            f.k((-3.3, 14.6, -8.6), (6.6, 1.1, 0.7), "goud"),
-            f.k((-0.6, 15.6, -8.6), (1.2, 4.6, 0.7), "goud"),
-            f.k((-1.95, 15.6, -8.6), (1.1, 3.2, 0.7), "goud"), f.k((0.85, 15.6, -8.6), (1.1, 3.2, 0.7), "goud"),
-            f.k((-3.3, 15.6, -8.6), (1.1, 1.9, 0.7), "goud"), f.k((2.2, 15.6, -8.6), (1.1, 1.9, 0.7), "goud")])
-        f.bot("zuka_harnas", "body", (0, 6, 0), [
-            f.k((-8.8, 0.2, -2.9), (17.6, 11.6, 2.4), "mantel"),
-            f.k((-9.6, 9.0, -2.7), (2.6, 3.6, 2.0), "mantel"), f.k((7.0, 9.0, -2.7), (2.6, 3.6, 2.0), "mantel"),
-            f.k((-7.4, 5.6, -0.6), (14.8, 5.2, 7.0), "mantel"),
-            f.k((-7.0, 0.4, 6.4), (14.0, 5.4, 1.0), "mantel_d")])
+        f.kleur("mantel_d", donkerrood, 6)
+        f.bot("zuka_knot", "head", (0, 26, 0), [
+            f.k((-6.2, 25.6, -6.4), (12.4, 0.8, 11.2), "haar"),
+            f.k((-1.9, 26.2, -2.4), (3.8, 2.6, 3.8), "haar"),                     # the topknot
+            f.k((-6.6, 13.0, 4.0), (13.2, 9.0, 1.2), "haar")])                   # his hair down his neck
+        f.bot("zuka_kroon", "zuka_knot", (0, 27, -2.6), [                         # the five-point flame in the knot
+            f.k((-3.3, 26.8, -3.1), (6.6, 1.1, 0.7), "goud"),
+            f.k((-0.6, 27.8, -3.1), (1.2, 4.6, 0.7), "goud"),
+            f.k((-1.95, 27.8, -3.1), (1.1, 3.2, 0.7), "goud"), f.k((0.85, 27.8, -3.1), (1.1, 3.2, 0.7), "goud"),
+            f.k((-3.3, 27.8, -3.1), (1.1, 1.9, 0.7), "goud"), f.k((2.2, 27.8, -3.1), (1.1, 1.9, 0.7), "goud")])
+        f.bot("zuka_harnas", "body", (0, 12, 0), [                               # the robe's wide shoulders and collar
+            f.k((-6.2, 10.6, -5.2), (12.4, 2.2, 10.4), "mantel"),
+            f.k((-7.6, 8.6, -2.6), (2.4, 3.6, 5.2), "mantel"), f.k((5.2, 8.6, -2.6), (2.4, 3.6, 5.2), "mantel"),
+            f.k((-5.4, 1.0, 4.4), (10.8, 9.6, 0.8), "mantel_d")])
+    _zuka_guh_gezicht(f, bewaard)
+    # the little lukewarm flame in front of his mouth (scale 0 outside "vuur")
+    f.bot("zuka_vlam", "head", (0, 16, -9), [
+        f.k((-1.4, 14.6, -10.8), (2.8, 2.8, 2.8), "vlam"),
+        f.k((-0.9, 17.0, -10.3), (1.8, 2.0, 1.8), "vlam_l"),
+        f.k((-0.45, 18.6, -9.85), (0.9, 1.2, 0.9), "vlam_l")])
     lege_botten(f, ZUKA_BOTTEN)
     f.bewaar()
 
 
 # =====================================================================================================================
-# Oom Miroh (a round old Mika): tea house owner, prisoner, the Witte Lotus
+# Oom Miroh (a GOOD guh, DESIGN 5 "Miroh, de start en samen reizen"): a round old guh on the sitting body in all three
+# looks: tea house owner, prisoner, the Witte Lotus. Grey beard and sideburns, a small topknot, kind eyes, his tea.
 # =====================================================================================================================
 MIROH_BOTTEN = ("miroh_baard", "miroh_knot", "miroh_kopje", "miroh_stoom", "miroh_schort", "miroh_kraag", "miroh_tegel", "miroh_lotus")
 GRIJS = (206, 204, 206)
@@ -608,96 +620,116 @@ def _lotus(block):
     block[r > 15.5, 3] = 0
 
 
+def _zachte_wenkbrauwen(f, rgb, boog=2.2):
+    """Soft brows that arch over the eyes (kind, never cross): painted on the face above each eye."""
+    px, W, H = f.gezicht()
+    yy, xx = np.mgrid[0:H, 0:W]
+    for cx in (11.0, 44.0):
+        u = (xx - cx) / 11.0
+        lijn = 2.2 - boog * (1 - u ** 2)
+        px[(np.abs(u) <= 1.0) & (np.abs(yy - lijn) <= 1.1) & (yy >= 0), :3] = rgb
+
+
 def miroh(h, kind="oom_miroh", look="thee"):
-    f = ck.Figuur(h, kind, "mika", (0.035, 0.62, 0.98))
+    f = ck.Figuur(h, kind, "zit", (0.035, 0.55, 1.0))
     bewaard = _vacht_masker(f)
     goud = (232, 190, 70)
-    f.breder("body", 1.25, 1.12, 1.04, om=(0, 0, 4))                   # ROUND
-    f.breder("leg_back_left", 1.1, 1.0, 1.0, om=(7.6, 0, 8))
-    f.breder("leg_back_right", 1.1, 1.0, 1.0, om=(-7.6, 0, 8))
-    for been, sx in (("leg_back_left", 1), ("leg_back_right", -1)):
-        for c in f.botten[been]["cubes"]:
-            c["origin"][0] += 1.6 * sx
-    # kind eyes: warm amber, and soft grey brows that arch instead of frown
-    _mika_ogen(f, (214, 150, 60), (246, 206, 120))
-    _mika_wenkbrauwen(f, bewaard, GRIJS, lambda u, v: (u > 0.14) & (u < 0.9) & (np.abs(v - (9.0 - 3.2 * np.sin((u - 0.14) / 0.76 * np.pi))) <= 1.3))
+    f.breder("body", 1.26, 1.04, 1.24, om=(0, 0, 0))                    # ROUND: a big soft belly
     wild = look == "gevangene"
     baard = (150, 148, 152) if wild else GRIJS
-    f.kleur("baard", baard, 12 if wild else 7, strepen(donker(baard, 0.86), 5, 2, True))
-    # grey hair round the back of his head, bald in front
-    haarkap(f, baard, voor=99, zij=lambda Z: np.where(Z > -6.0, 7.0, 99), achter=1.0, var=10)
+    # bald on top and in front; grey hair round the back of his head, down to the ears
+    vacht = tuple(int(v) for v in np.median(bewaard[1][..., :3][bewaard[0]].reshape(-1, 3), axis=0))
 
     def kruin(vlak, X, Y, Z, zet):
         if vlak == "up":
-            zet(Z < -5.6, tuple(int(v) for v in np.median(bewaard[1][..., :3][bewaard[0]].reshape(-1, 3), axis=0)), 5)
+            zet(Z > 1.5, baard, 10)
+        elif vlak == "south":
+            zet(Y >= 13.0, baard, 10)
+        elif vlak in ("east", "west"):
+            zet((Z > -1.0) & (Y >= 15.5), baard, 10)
     f.verf("head", kruin, KOP)
-    stukken = paar(f.k((6.5, 1.0, -12.7), (1.6, 6.4, 1.6), "baard"),             # the sideburns
-                   f.k((3.6, 0.2, -12.9), (3.2, 2.2, 1.2), "baard"))
-    stukken += [f.k((-3.4, 0.0, -13.2), (6.8, 2.6, 1.4), "baard"), f.k((-2.0, 0.0, -14.0), (4.0, 1.7, 1.0), "baard")]
+    _zachte_wenkbrauwen(f, donker(baard, 0.92))
+    _ogen_terug(f, bewaard, 23)
+    f.kleur("baard", baard, 12 if wild else 7, strepen(donker(baard, 0.86), 5, 2, True))
+    f.kleur("vacht", vacht, 5)
+    # the beard: sideburns down the cheeks, a moustache that hides his mouth, a full beard on his chest
+    stukken = paar(f.k((6.3, 14.0, -6.9), (1.3, 6.6, 3.2), "baard"),             # the sideburns
+                   f.k((3.4, 12.6, -7.7), (3.4, 2.6, 1.2), "baard"),             # the cheeks of the beard
+                   f.k((0.3, 15.7, -8.3), (3.3, 1.0, 0.8), "baard"))             # the moustache
+    stukken += [f.k((-2.9, 11.2, -7.9), (5.8, 3.4, 1.4), "baard"),               # the chin
+                f.k((-2.6, 9.0, -7.6), (5.2, 2.4, 1.2), "baard"),
+                f.k((-1.4, 7.8, -7.3), (2.8, 1.4, 1.0), "baard")]
     if wild:                                                               # tangled: it sticks out everywhere
-        stukken += [f.k((-5.6, 0.0, -13.6), (2.2, 3.4, 1.2), "baard"), f.k((3.0, 0.0, -14.2), (2.4, 2.8, 1.2), "baard"),
-                    f.k((-1.0, 0.0, -15.0), (2.4, 1.2, 1.2), "baard"), f.k((7.6, 4.0, -11.0), (1.2, 3.0, 2.6), "baard"),
-                    f.k((-8.8, 2.4, -11.4), (1.2, 3.6, 2.2), "baard")]
-    f.bot("miroh_baard", "head", (0, 2, -12), stukken)
+        stukken += [f.k((-5.0, 10.6, -8.4), (2.2, 2.6, 1.2), "baard"), f.k((2.8, 10.0, -8.6), (2.4, 2.4, 1.2), "baard"),
+                    f.k((-0.8, 6.8, -7.9), (1.8, 1.4, 1.0), "baard"), f.k((7.3, 17.0, -4.2), (1.2, 3.0, 2.4), "baard"),
+                    f.k((-8.5, 16.0, -4.8), (1.2, 3.6, 2.2), "baard")]
+    f.bot("miroh_baard", "head", (0, 14, -7), stukken)
     f.kleur("goud", goud, 6)
     f.kleur("stoom", (250, 250, 252), 3)
     f.kleur("tegel", (236, 226, 200), 4, _lotus)
-    f.bot("miroh_tegel", "root", (-7.5, 0.4, -16), [f.k((-9.2, 0.0, -17.6), (3.4, 0.7, 3.4), "tegel")])
+    # the Pai Sho tile on the floor in front of his right paw (scale 0 outside "pai_sho")
+    f.bot("miroh_tegel", "root", (-3.0, 0.2, -10.5), [f.k((-4.6, 0.0, -12.1), (3.2, 0.6, 3.2), "tegel")])
+    knot = [f.k((-1.4, 25.6, 1.4), (2.8, 1.8, 2.8), "baard"), f.k((-1.8, 26.0, 2.6), (3.6, 0.5, 0.6), "goud")]
     if look == "thee":
         groen = (88, 132, 74)
-        gewaad(f, [(0, 2.4, goud), (2.4, 13, groen)])
+        gewaad(f, [(0, 2.4, goud), (2.4, 14, groen)])
+        mouwen(f, groen, goud)
         f.kleur("schort", (238, 230, 204), 5, rand((204, 190, 150), 3))
         f.kleur("kopje", (246, 244, 236), 4, strepen((70, 130, 170), 32, 5))
         f.kleur("thee", (168, 128, 54), 4)
-        f.bot("miroh_knot", "head", (0, 14, -5), [
-            f.k((-1.6, 14.0, -5.6), (3.2, 2.0, 3.2), "baard"),
-            f.k((-2.0, 14.4, -4.4), (4.0, 0.5, 0.8), "goud")])
-        f.bot("miroh_schort", "body", (0, 6, 4), [
-            f.k((-8.5, 0.2, 1.2), (17.0, 11.6, 5.6), "schort"),
-            f.k((-1.6, 11.6, 3.0), (3.2, 1.4, 1.8), "schort")])
-        kop = [f.k((2.4, 2.0, -16.2), (2.8, 2.5, 2.8), "kopje"), f.k((2.8, 4.3, -15.8), (2.0, 0.25, 2.0), "thee")]
+        f.bot("miroh_knot", "head", (0, 26, 2), knot)
+        f.bot("miroh_schort", "body", (0, 6, -5), [                         # the apron over his belly, its band round him
+            f.k((-4.6, 1.2, -5.7), (9.2, 8.6, 0.6), "schort"),
+            f.k((-5.8, 9.4, -5.5), (11.6, 0.8, 11.0), "schort"),
+            f.k((-1.4, 7.4, 5.0), (2.8, 2.0, 0.8), "schort")])
+        kop = [f.k((3.2, 10.4, -8.7), (2.6, 2.4, 2.6), "kopje"), f.k((3.5, 12.6, -8.4), (2.0, 0.3, 2.0), "thee")]
     elif look == "gevangene":
         vod = (128, 122, 116)
-        gewaad(f, [(0, 13, vod)])
+        gewaad(f, [(0, 14, vod)])
+        mouwen(f, vod)
 
         def gaten(vlak, X, Y, Z, zet):                                    # torn: holes and a ragged hem
-            if vlak in ("east", "west", "south"):
-                zet((Y < 2.2 + 1.3 * (np.sin(Z * 2.3 + X) > 0.1)), (96, 90, 86), 5)
-                zet((np.hypot(Z - 3.0, Y - 6.0) < 1.3) | (np.hypot(Z - 8.0, Y - 4.4) < 1.0), (188, 150, 140), 6)
+            if vlak in ("east", "west", "south", "north"):
+                zet((Y < 2.6 + 1.3 * (np.sin(Z * 2.3 + X * 1.7) > 0.1)), (96, 90, 86), 5)
+                zet((np.hypot(X - 2.6, Y - 6.0) < 1.1) | (np.hypot(Z - 2.0, Y - 4.6) < 1.0) | (np.hypot(X + 3.0, Y - 9.4) < 0.9),
+                    (188, 150, 140), 6)
         f.verf("body", gaten)
         f.kleur("tin", (150, 156, 164), 8, rand((104, 110, 120), 3))
         f.kleur("thee", (120, 104, 84), 4)
-        f.bot("miroh_knot", "head", (0, 14, -5), [                         # his hair has come loose
-            f.k((-4.6, 13.8, -5.0), (9.2, 1.0, 3.6), "baard"), f.k((2.0, 14.6, -4.0), (2.6, 1.0, 2.0), "baard"),
-            f.k((-7.6, 8.0, -1.6), (15.2, 5.0, 1.6), "baard")])
-        kop = [f.k((2.5, 2.0, -16.1), (2.6, 2.9, 2.6), "tin"), f.k((5.1, 2.6, -15.3), (0.9, 1.7, 1.0), "tin"),
-               f.k((2.9, 4.7, -15.7), (1.8, 0.2, 1.8), "thee")]
+        f.bot("miroh_knot", "head", (0, 26, 2), [                          # his hair has come loose
+            f.k((-4.4, 25.4, 0.6), (8.8, 1.0, 4.2), "baard"), f.k((1.8, 26.2, 1.6), (2.6, 1.0, 2.0), "baard"),
+            f.k((-6.6, 14.0, 3.9), (13.2, 8.0, 1.2), "baard")])
+        kop = [f.k((3.3, 10.4, -8.6), (2.4, 2.8, 2.4), "tin"), f.k((5.7, 10.9, -7.9), (0.8, 1.6, 1.0), "tin"),
+               f.k((3.6, 13.0, -8.3), (1.8, 0.2, 1.8), "thee")]
     else:
         blauw, wit = (62, 104, 176), (244, 244, 248)
-        gewaad(f, [(0, 2.4, blauw), (2.4, 13, wit)])
+        gewaad(f, [(0, 2.4, blauw), (2.4, 14, wit)])
+        mouwen(f, wit, blauw)
 
         def bloem(vlak, X, Y, Z, zet):                                    # the lotus on both flanks and on his back
             if vlak in ("east", "west"):
-                r, a = np.hypot(Z - 5.0, Y - 6.2), np.arctan2(Y - 6.2, Z - 5.0)
-                zet(r < 3.6, blauw, 4)
-                zet((r < 1.4 + 1.6 * np.abs(np.cos(a * 4))) & (r > 0.8), wit, 3)
-                zet(r <= 0.8, goud, 3)
+                r, a = np.hypot(Z - 0.0, Y - 6.4), np.arctan2(Y - 6.4, Z - 0.0)
+            elif vlak == "south":
+                r, a = np.hypot(X, Y - 6.4), np.arctan2(Y - 6.4, X)
+            else:
+                return
+            zet(r < 2.9, blauw, 4)
+            zet((r < 1.1 + 1.3 * np.abs(np.cos(a * 4))) & (r > 0.6), wit, 3)
+            zet(r <= 0.6, goud, 3)
         f.verf("body", bloem)
         f.kleur("kraag", blauw, 6, rand(wit, 4))
         f.kleur("kopje", (246, 244, 236), 4, strepen((70, 130, 170), 32, 5))
         f.kleur("thee", (168, 128, 54), 4)
-        f.bot("miroh_knot", "head", (0, 14, -5), [
-            f.k((-1.6, 14.0, -5.6), (3.2, 2.0, 3.2), "baard"),
-            f.k((-2.0, 14.4, -4.4), (4.0, 0.5, 0.8), "goud")])
-        f.bot("miroh_kraag", "body", (0, 6, 0), [                          # the high collar of the Witte Lotus
-            f.k((-9.4, 0.2, -3.0), (18.8, 12.6, 2.6), "kraag"),
-            f.k((-9.0, 6.2, -0.6), (18.0, 5.4, 6.0), "kraag")])
-        f.bot("miroh_lotus", "root", (-7.5, 0.4, -16), [f.k((-9.4, 0.0, -17.8), (3.8, 0.8, 3.8), "tegel")])
-        kop = [f.k((2.4, 2.0, -16.2), (2.8, 2.5, 2.8), "kopje"), f.k((2.8, 4.3, -15.8), (2.0, 0.25, 2.0), "thee")]
-    f.bot("miroh_kopje", "leg_front_left", (4, 2, -14), kop)
-    f.bot("miroh_stoom", "miroh_kopje", (3.8, 5, -14.8), [] if wild else [
-        f.k((3.4, 5.2, -15.2), (0.8, 1.4, 0.8), "stoom"), f.k((4.0, 7.0, -14.8), (0.7, 1.2, 0.7), "stoom"),
-        f.k((3.3, 8.6, -15.0), (0.6, 1.0, 0.6), "stoom")])
+        f.bot("miroh_knot", "head", (0, 26, 2), knot)
+        f.bot("miroh_kraag", "body", (0, 12, 0), [                         # the high collar of the Witte Lotus
+            f.k((-6.2, 11.0, -5.6), (12.4, 2.4, 11.2), "kraag"),
+            f.k((-6.2, 12.4, 4.0), (12.4, 3.2, 1.6), "kraag")])
+        f.bot("miroh_lotus", "body", (0, 7, -5.8), [f.k((-1.9, 5.0, -6.3), (3.8, 3.8, 0.6), "tegel")])   # the tile on his chest
+        kop = [f.k((3.2, 10.4, -8.7), (2.6, 2.4, 2.6), "kopje"), f.k((3.5, 12.6, -8.4), (2.0, 0.3, 2.0), "thee")]
+    f.bot("miroh_kopje", "arm_left", (4.5, 10.4, -7.4), kop)                 # the cup on his left paw, before his beard
+    f.bot("miroh_stoom", "miroh_kopje", (4.5, 13, -7.4), [] if wild else [
+        f.k((4.1, 13.2, -7.8), (0.8, 1.4, 0.8), "stoom"), f.k((4.7, 15.0, -7.4), (0.7, 1.2, 0.7), "stoom"),
+        f.k((4.0, 16.6, -7.6), (0.6, 1.0, 0.6), "stoom")])
     lege_botten(f, MIROH_BOTTEN)
     f.bewaar()
 
@@ -1020,8 +1052,8 @@ def racemeester(h, kind="ringenraceguh"):
 # what draws every Kind of the slice: kind id -> (function, look)
 TEKEN = {
     "aang_guh": (aang, None), "katara_guh": (katara, None), "sokka_guh": (sokka, None), "toph_guh": (toph, None),
-    "zuka": (zuka, "ober"), "zuka_prins": (zuka, "prins"), "zuka_vuurheer": (zuka, "vuurheer"),
-    "zuka_balling": (zuka, "balling"), "zuka_blauwe_geest": (zuka, "geest"), "zuka_team": (zuka, "team"),
+    "zuka": (zuka, "ober"), "zuka_prins": (zuka, "prins"), "zuka_vuurheer": (zuka_guh, "vuurheer"),
+    "zuka_balling": (zuka, "balling"), "zuka_blauwe_geest": (zuka, "geest"), "zuka_team": (zuka_guh, "team"),
     "oom_miroh": (miroh, "thee"), "oom_miroh_gevangene": (miroh, "gevangene"), "oom_miroh_lotus": (miroh, "lotus"),
     "suki_guh": (suki, "krijger"), "suki_guh_gevangene": (suki, "gevangene"),
     "yue_guh": (yue, "prinses"), "yue_guh_maan": (yue, "maan"),

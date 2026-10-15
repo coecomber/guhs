@@ -399,7 +399,7 @@ VERWACHT = [
     ("gevangene", 5), "directeur", "koelcel", "ty_lee", "azula_gondel",
     "sintelstrand", "strandhuis", "theater", "toneel", "publiek_speler", ("acteur", 5),
     "lotus_kamp", "lotus_tent", "miroh_tent", "verzoening_zuka", "bumi", "pakguh_lotus", "piandao",
-    "leeuwschildpad_anker", "leeuwschildpad_rug", "leeuwschildpad", "duel_arena", ("pilaar", 12), "duel_speler", "duel_mikai", "ronde_lucht",
+    "leeuwschildpad_anker", "leeuwschildpad_rug", "leeuwschildpad_kop", "leeuwschildpad", "duel_arena", ("pilaar", 12), "duel_speler", "duel_mikai", "ronde_lucht",
     "ronde_water", "ronde_aarde", "ronde_vuur", "komeet_zicht", "komeetscherf", "kroning", "kroning_zuka",
     "knipoog_sjokkel", "knipoog_sjokkel_finish", "knipoog_sjokkel_camera", "knipoog_stitch_paneel", "knipoog_stitch_bewaker",
     ("knipoog_stitch_celdeur", 3), "knipoog_stitch_camera",

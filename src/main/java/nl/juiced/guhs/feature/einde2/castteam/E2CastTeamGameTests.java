@@ -75,7 +75,14 @@ public class E2CastTeamGameTests {
                 "the block stands after TIMMERGUH");
         for (GuhNpcEntity.Kind zuka : List.of(GuhNpcEntity.Kind.ZUKA, GuhNpcEntity.Kind.ZUKA_PRINS, GuhNpcEntity.Kind.ZUKA_VUURHEER,
                 GuhNpcEntity.Kind.ZUKA_BALLING, GuhNpcEntity.Kind.ZUKA_BLAUWE_GEEST, GuhNpcEntity.Kind.ZUKA_TEAM)) {
-            helper.assertTrue(CastTeam.basis(zuka) == GuhNpcEntity.Kind.ZUKA && CastTeam.lijf(zuka).equals("mika"), "Zuka has six looks: " + zuka);
+            boolean goed = zuka == GuhNpcEntity.Kind.ZUKA_TEAM || zuka == GuhNpcEntity.Kind.ZUKA_VUURHEER;
+            helper.assertTrue(CastTeam.basis(zuka) == GuhNpcEntity.Kind.ZUKA && CastTeam.lijf(zuka).equals(goed ? "zit" : "mika")
+                    && CastTeam.animatieBestand(zuka).equals(goed ? "guh_npc_zuka_zit" : "guh_npc_zuka"),
+                    "Zuka has six looks, a guh once he is good: " + zuka);
+        }
+        for (GuhNpcEntity.Kind miroh : List.of(GuhNpcEntity.Kind.OOM_MIROH, GuhNpcEntity.Kind.OOM_MIROH_GEVANGENE, GuhNpcEntity.Kind.OOM_MIROH_LOTUS)) {
+            helper.assertTrue(CastTeam.lijf(miroh).equals("zit") && CastTeam.animatieBestand(miroh).equals("guh_npc_oom_miroh"),
+                    "Oom Miroh is a good guh in every look: " + miroh);
         }
         helper.assertTrue(CastTeam.basis(GuhNpcEntity.Kind.OOM_MIROH_LOTUS) == GuhNpcEntity.Kind.OOM_MIROH
                 && CastTeam.basis(GuhNpcEntity.Kind.SUKI_GUH_GEVANGENE) == GuhNpcEntity.Kind.SUKI_GUH
@@ -126,7 +133,7 @@ public class E2CastTeamGameTests {
             helper.assertTrue(botten.stream().noneMatch(b -> b.startsWith("mix_")), kind + ": no mix bones");
             helper.assertTrue(bestaat("/assets/guhs/textures/entity/npc_" + kind.id() + ".png"), kind + ": its texture");
             helper.assertTrue(!CastTeam.gloed(kind) || bestaat("/assets/guhs/textures/entity/npc_" + kind.id() + "_glowmask.png"), kind + ": its glowmask");
-            JsonObject anims = bron("/assets/guhs/geckolib/animations/entity/guh_npc_" + CastTeam.basis(kind).id() + ".animation.json");
+            JsonObject anims = bron("/assets/guhs/geckolib/animations/entity/" + CastTeam.animatieBestand(kind) + ".animation.json");
             helper.assertTrue(anims != null, kind + ": the animation file of its character");
             JsonObject alle = anims.getAsJsonObject("animations");
             helper.assertTrue(alle.has("animation.guh_sitting.idle"), kind + ": idle");

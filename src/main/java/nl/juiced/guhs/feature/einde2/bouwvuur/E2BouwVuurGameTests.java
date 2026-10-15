@@ -54,7 +54,7 @@ public class E2BouwVuurGameTests {
                     "ronde_vuur", "kroning"},
             {Plekken.PROP, "aankomst_speler", "uitzicht", "appa_kamp", "rustpunt#3", "havenpoort", "schoolbank_speler", "portret_mikai", "dans_speler", "troon",
                     "brood", "bunker_ingang", "bunker_troon", "zuka_vader", "trap_onder", "trap_boven", "eeuwige_vlam", "gondel_onder", "gondel_boven", "cel_suki",
-                    "koelcel", "azula_gondel", "publiek_speler", "verzoening_zuka", "leeuwschildpad_anker", "leeuwschildpad_rug", "pilaar#12", "duel_speler",
+                    "koelcel", "azula_gondel", "publiek_speler", "verzoening_zuka", "leeuwschildpad_anker", "leeuwschildpad_rug", "leeuwschildpad_kop", "pilaar#12", "duel_speler",
                     "duel_mikai", "komeet_zicht", "komeetscherf", "kroning_zuka", "knipoog_sjokkel_finish", "knipoog_stitch_paneel", "knipoog_stitch_celdeur#3"},
             {Plekken.NPC, "team_aang", "team_momo", "team_katara", "team_sokka", "team_toph", "team_zuka", "poortwacht_1", "poortwacht_2", "bewoner#8", "juf",
                     "leerling#5", "muzikant#3", "mikai", "azula_bunker", "zonnekrijger", "draak_rood", "draak_blauw", "suki", "gevangene#5", "directeur", "ty_lee",

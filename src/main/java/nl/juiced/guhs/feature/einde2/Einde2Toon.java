@@ -66,12 +66,33 @@ public final class Einde2Toon {
     /**
      * One thing of a row: how it is made, its crowd set ({@code mix} sets, this one {@code set}; 0 and -1: none), the room
      * it takes along the row ({@code breed}) and in depth ({@code diep}, the row behind it starts at least that far back),
-     * how far behind the row line it stands ({@code achter}) and whether it stands in a row of its own.
+     * how far behind the row line it stands ({@code achter}), whether it stands in a row of its own, and how far above the
+     * ground ({@code hoog}: the Leeuwschildpad-guh's origin is its nose, its beard hangs far below it).
      */
-    record Ding(String naam, Function<ServerLevel, Entity> maak, int mix, int set, int breed, int diep, int achter, boolean alleen) {
+    record Ding(String naam, Function<ServerLevel, Entity> maak, int mix, int set, int breed, int diep, int achter, boolean alleen, int hoog) {
+        Ding(String naam, Function<ServerLevel, Entity> maak, int mix, int set, int breed, int diep, int achter, boolean alleen) {
+            this(naam, maak, mix, set, breed, diep, achter, alleen, 0);
+        }
+
         static Ding van(String naam, Function<ServerLevel, Entity> maak) {
             return new Ding(naam, maak, 0, -1, AFSTAND, RIJ, 0, false);
         }
+    }
+
+    /**
+     * The Leeuwschildpad-guh per look: the room of its head with the mane (44 blocks across at scale 1), its depth (the head
+     * reaches 22 blocks behind the nose, the paw 10 before it), and the height of its nose (the beard hangs 18 below it).
+     */
+    static Ding schildpad(int soort) {
+        float s = CastWezen.SCHILDPAD_SCHAAL[soort];
+        return new Ding("leeuwschildpad_guh " + soort, level -> {
+            CastWezen c = E2CastSchurkFeature.type(Wezens.LEEUWSCHILDPAD_GUH).create(level, EntitySpawnReason.COMMAND);
+            if (c != null) {
+                c.zetSoort(soort);
+                c.zetStil(true);
+            }
+            return c;
+        }, 0, -1, Math.round(46 * s), Math.round(36 * s), Math.round(11 * s), true, Math.round(19 * s));
     }
 
     private Einde2Toon() {
@@ -88,6 +109,12 @@ public final class Einde2Toon {
             case "schurk" -> {
                 kinds(uit, CastTabellen.Groep.SCHURK);
                 for (Wezens w : Wezens.values()) {
+                    if (w == Wezens.LEEUWSCHILDPAD_GUH) {
+                        for (int s = 0; s < w.soorten; s++) {
+                            uit.add(schildpad(s));                      // (a head of some 30 blocks: a row of its own)
+                        }
+                        continue;
+                    }
                     for (int s = 0; s < Math.max(1, w.soorten); s++) {
                         int soort = s;
                         boolean draak = w == Wezens.DRAAKGUH;
@@ -213,7 +240,7 @@ public final class Einde2Toon {
                     if (e == null) {
                         continue;
                     }
-                    e.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, 0f);
+                    e.snapTo(pos.getX() + 0.5, pos.getY() + d.hoog(), pos.getZ() + 0.5, yaw, 0f);
                     if (e instanceof LivingEntity le) {
                         le.setYHeadRot(yaw);
                         le.setYBodyRot(yaw);

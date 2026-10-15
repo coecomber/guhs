@@ -1094,10 +1094,14 @@ def kade(b):
     b.prop("rustpunt_11", kx, V, kz + 3, wie="rustpunt: de kade")
 
 
+KOP_Z = 55                 # the row (overlay z) of the nose of the Leeuwschildpad-guh's model in the overlay
+
+
 def leeuwschildpad(b):
     """The overlay laag_leeuwschildpad (45 x 33 x 57, blocks only): the Leeuwschildpad-guh surfacing in the bite of the rim,
-    head to the south with its chin against the quay. A shell with a little wood on it, a guh's face with a mane, four
-    flippers. Returns the Structure; its markers are recorded in the build's coordinates."""
+    head to the south with its chin against the quay. A shell with a little wood on it and four flippers of blocks; the
+    head with the guh's face and the mane is the model guhs:leeuwschildpad_guh (look 1) at the marker leeuwschildpad_kop.
+    Returns the Structure; its markers are recorded in the build's coordinates."""
     s = b.h.Structure((45, 33, 57))
     ox, oy, oz = LAAG
     cx, cz, wy = 22, 26, 14                 # the middle of the shell and the "water line" (the world's ground level)
@@ -1136,37 +1140,14 @@ def leeuwschildpad(b):
     for dx in (-1, 0, 1):
         for dz in (-1, 0, 1):
             s.set(cx + dx, top[(cx, cz)], cz + dz, gb.mc(GLOEI) if (dx or dz) else "minecraft:sea_lantern")
-    # the head: a big guh's face (pink, round ears, black eyes) with a lion's mane, the chin stretched out to the quay
-    hz0, hz1 = 44, 56
-    for x in range(cx - 6, cx + 7):
-        for z in range(hz0, hz1 + 1):
-            for y in range(wy - 4, wy + 9):
-                d2 = ((x - cx) / 6.4) ** 2 + ((z - 50) / 6.6) ** 2 + ((y - (wy + 2)) / 6.2) ** 2
-                if d2 <= 1.0:
-                    s.set(x, y, z, "minecraft:pink_concrete" if d2 > 0.5 else "minecraft:pink_terracotta")
-    for x in range(cx - 8, cx + 9):
-        for y in range(wy - 3, wy + 11):
-            for z in (hz0 - 1, hz0, hz0 + 1):
-                d = math.hypot(x - cx, y - (wy + 3))
-                if 6.0 <= d <= 8.4 and y >= wy - 2:
-                    s.set(x, y, z, "minecraft:orange_wool" if (x + y) % 3 else "minecraft:yellow_wool")
-    for ex in (cx - 5, cx + 5):
-        for dx in (-1, 0, 1):
-            for dy in (0, 1, 2):
-                s.set(ex + dx, wy + 8 + dy, 48, "minecraft:pink_concrete" if (dx, dy) != (0, 1) else "minecraft:magenta_concrete")
-    for ex in (cx - 3, cx + 3):
-        for dy in (0, 1):
-            s.set(ex, wy + 3 + dy, hz1, "minecraft:black_concrete")
-    s.set(cx, wy + 2, hz1, "minecraft:magenta_concrete")
-    for dx in (-2, -1, 0, 1, 2):
-        s.set(cx + dx, wy, hz1, "minecraft:black_concrete" if abs(dx) == 2 else "minecraft:pink_terracotta")
-        s.set(cx + dx, wy - 1, hz1, "minecraft:black_concrete" if abs(dx) < 2 else "minecraft:pink_concrete")
-    # the neck between the shell and the head
-    for x in range(cx - 3, cx + 4):
-        for z in range(cz + 19, hz0 + 2):
-            for y in range(wy - 3, wy + 4):
-                if ((x - cx) / 3.4) ** 2 + ((y - wy) / 3.6) ** 2 <= 1.0:
-                    s.set(x, y, z, "minecraft:pink_terracotta")
+    # the head is no longer of blocks (DESIGN 5, 2026-10-15): the model guhs:leeuwschildpad_guh, look 1 (the vanilla scale
+    # 0.48 of the island's head), stands at the marker leeuwschildpad_kop, its nose at (cx, wy + 1, KOP_Z), its face to the
+    # quay; it reaches back into the front of the shell. You talk to it standing on its snout: a few barrier blocks under the
+    # top of the model's head carry you there (the overlay holds blocks only; they go with it when it dives).
+    neus = (cx, wy + 1, KOP_Z)
+    for x in (cx - 1, cx, cx + 1):
+        for z in (KOP_Z - 2, KOP_Z - 1):
+            s.set(x, wy + 7, z, "minecraft:barrier")
     # four flippers
     for fx, fz, lang in ((cx - 15, cz + 12, -1), (cx + 15, cz + 12, 1), (cx - 14, cz - 14, -1), (cx + 14, cz - 14, 1)):
         for k in range(7):
@@ -1182,10 +1163,11 @@ def leeuwschildpad(b):
             s.set(rug[0] + dx, rug[1], rug[2] + dz, "minecraft:moss_block")
             for dy in (1, 2, 3):
                 s.blocks.pop((rug[0] + dx, rug[1] + dy, rug[2] + dz), None)
-    snuit_y = max(y for (x, y, z) in s.blocks if x == cx and z == hz1 - 2)
     b.prop("leeuwschildpad_anker", ox, oy, oz, wie="de oorsprong van de laag laag_leeuwschildpad (in de hap uit de rand)", los=True)
     b.prop("leeuwschildpad_rug", ox + rug[0], oy + rug[1] + 1, oz + rug[2], wie="waar je wakker wordt op zijn rug", los=True)
-    b.plek("leeuwschildpad", ox + cx, oy + snuit_y + 1, oz + hz1 - 2, yaw=0.0, wie="de Leeuwschildpad-guh: boven op zijn snuit, bij zijn gezicht",
+    b.prop("leeuwschildpad_kop", ox + neus[0], oy + neus[1], oz + neus[2],
+           wie="de snuit: de oorsprong van het model van zijn kop (guhs:leeuwschildpad_guh, Soort 1, yaw 0)", los=True)
+    b.plek("leeuwschildpad", ox + cx, oy + wy + 8, oz + KOP_Z - 1, yaw=0.0, wie="de Leeuwschildpad-guh: boven op zijn snuit, bij zijn gezicht",
            kind="LEEUWSCHILDPAD_GUH", los=True)
     return s
 

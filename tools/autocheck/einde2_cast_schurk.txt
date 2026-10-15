@@ -1,6 +1,6 @@
 # einde2 slice cast_schurk AutoCheck: the twelve Mika kinds of the Guhvatar story (the Vuurnatie-Mika once per mix set) in one
 # row, and every creature in every look in a row behind it (the draakguhs Ran and Shaw, beer Bosco, Wan Shi Guh, a vosguh,
-# the two heads of the Leeuwschildpad-guh's moving parts, Flopsie, the five luchtbizon-guhs, Tui and La). Run:
+# the Leeuwschildpad-guh's head in both looks, Flopsie, the five luchtbizon-guhs, Tui and La). Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_cast_schurk.txt -PautocheckTimeout=30
 # (written by the slice, not run by it: the merge step runs it.) /guhs einde2 cast_schurk toon puts the rows 5 and 16 blocks
 # in front of the player (who looks south here), facing the player; /guhs einde2 cast_schurk weg takes them away.

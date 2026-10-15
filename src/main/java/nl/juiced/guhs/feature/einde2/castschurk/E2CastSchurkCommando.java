@@ -99,7 +99,8 @@ final class E2CastSchurkCommando {
             double r = ruimte(w);
             BlockPos at = rij2.relative(zij, (int) Math.round(plek + r / 2));
             plek += r;
-            w.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, yaw, 0f);
+            double hoog = w.wezens() == Wezens.LEEUWSCHILDPAD_GUH ? Math.round(19 * w.getScale()) : 0;   // (its beard hangs below its nose)
+            w.snapTo(at.getX() + 0.5, at.getY() + hoog, at.getZ() + 0.5, yaw, 0f);
             w.setYHeadRot(yaw);
             w.zetStil(true);
             w.addTag(TAG);
@@ -109,10 +110,13 @@ final class E2CastSchurkCommando {
         return n;
     }
 
-    /** Room a creature gets in its row (the dragon's coil is 9 blocks wide). */
+    /** Room a creature gets in its row (the dragon's coil is 9 blocks wide, the lion turtle's head with its mane 44). */
     private static double ruimte(Mob w) {
         if (w instanceof CastWezen c && c.wezens() == Wezens.DRAAKGUH) {
             return 11;
+        }
+        if (w instanceof CastWezen c && c.wezens() == Wezens.LEEUWSCHILDPAD_GUH) {
+            return Math.round(46 * c.getScale());
         }
         return Math.max(3, Math.ceil(w.getBbWidth()) + 2);
     }

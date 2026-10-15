@@ -4,9 +4,10 @@ and the one blessing per player are a later phase, which reads the markers.
 
 The island IS the creature: a lion-turtle guh floating in the void, looking south. Its shell is a dome of scutes, 68 wide
 and 80 long, with earth and a forest of guhbloesem and oak on its back; under the rim hang the pale belly, a tail, two
-hind flippers and the right front flipper. Its head is a guh's head (the guh model itself, in turtle green, the eyes
-glowing), with a lion's mane behind it and a white beard under the chin. Its LEFT front flipper is raised and curls
-around in front of its face: the palm, with its pink pads, is where you stand to be spoken to.
+hind flippers and the right front flipper. Its head is a guh's head with a lion's mane behind it and a white beard under
+the chin: since 2026-10-15 a big moving MODEL (the entity guhs:leeuwschildpad_guh at the marker `kop`), no longer blocks.
+Its LEFT front flipper is raised and curls around in front of its face: the palm, with its pink pads, is where you stand
+to be spoken to; the claws round the palm are the model's too.
 
 You land in a clearing on the back of the shell, walk through the forest over the top (the old stone ring), down a trail
 along the flank to the left shoulder, and along the arm to the palm.
@@ -31,6 +32,8 @@ HUID = [("lime_terracotta", 62), ("green_terracotta", 30), ("moss_block", 8)]
 HUID_ONDER = [("yellow_terracotta", 70), ("lime_terracotta", 30)]
 PAD = [("mossy_cobblestone", 45), ("cobblestone", 20), ("mossy_stone_bricks", 25), ("coarse_dirt", 10)]
 KOP_SCHAAL = 1.7
+KOP_HOEK = (CX - 17, R0 - 8, 113)         # the low corner of the box of the guh's head at KOP_SCHAAL (looking south)
+KOP_NEUS_GUH = (0, 6.2, -12.4)            # the nose in the guh model: the marker `kop`, the origin of the model of the head
 PALM = (57, 141)                          # the middle of the palm (x, z); its top is at R0
 
 
@@ -128,7 +131,7 @@ def lijf(b):
 
 def arm(b):
     """The left front flipper, raised: from the shoulder out and around to the palm in front of the face. Its back is
-    flat (the way to the palm); the palm has pink pads and four claws."""
+    flat (the way to the palm); the palm has pink pads; its four claws are the model's (they move)."""
     rng = random.Random(kit.seed(NAAM + "/arm"))
     huid = lambda x, y, z, boven: gb.pick(rng, HUID) if boven or y >= R0 - 1 else gb.pick(rng, HUID_ONDER)   # noqa: E731
     lijn = [(CX + 24, R0 - 2, 88), (CX + 37, R0 - 2, 102), (CX + 38, R0 - 2, 120), (CX + 26, R0 - 2, 135), (PALM[0] + 6, R0 - 2, PALM[1])]
@@ -144,17 +147,7 @@ def arm(b):
                         b.set(x, y, z, "pink_terracotta" if kussen else gb.pick(rng, HUID))
                     elif d > 5.6 or y == R0 - 3:
                         b.set(x, y, z, gb.pick(rng, HUID_ONDER) if y == R0 - 3 else gb.pick(rng, HUID))
-    for graden in (55, 85, 115, 145):                         # the claws, on the far side: each curls down over the rim
-        hoek = math.radians(graden)
-        vorige = None
-        for r10 in range(60, 96, 3):
-            x, z = int(round(px + math.cos(hoek) * r10 / 10)), int(round(pz + math.sin(hoek) * r10 / 10))
-            if vorige and vorige[0] != x and vorige[1] != z:
-                b.set(x, R0, vorige[1], "bone_block", {"axis": "y"})          # (a corner step: fill it, the claw is one piece)
-            vorige = (x, z)
-            for dy in ((0,) if r10 < 80 else (0, -1) if r10 < 90 else (-1, -2)):
-                if r10 > 70 or b.get(x, R0 + dy, z) is None:
-                    b.set(x, R0 + dy, z, "bone_block", {"axis": "y"})
+    # (the four claws on the far side are the model's: guhs:leeuwschildpad_guh curls them for the blessing)
     b.prop("zegen_plek", px, R0, pz, wie="het middelste kussentje van de handpalm: hier sta je voor de zegen")
     b.plek("leeuwschildpad", px - 2, R0 + 1, pz - 5, yaw=20.0, wie="de Leeuwschildpad-guh: de praatplek op de palm, vlak voor zijn snuit", kind="LEEUWSCHILDPAD_GUH")
     b.sign(px + 5, R0 + 1, pz - 2, "west", ["Stil staan.", "Hij denkt na.", "Dat duurt", "even. Njeg."], wall=False)
@@ -164,40 +157,15 @@ def arm(b):
 
 
 def kop(b):
-    """The head: the guh's own head in turtle green with glowing eyes, the mane, the beard."""
-    def huid(deel, pm, blok):
-        if blok in g.GUH_OOG:
-            return "sea_lantern" if blok in ("minecraft:white_concrete", "minecraft:white_wool") else blok
-        if deel == "oor":                                     # (pink, so they show against the mane: a guh's ears)
-            return "pink_terracotta" if blok == "minecraft:purpur_block" else "pink_concrete"
-        if pm[2] < -12:
-            return "pink_concrete"                            # (the little nose stays a guh's)
-        return "lime_terracotta" if blok == "minecraft:purpur_block" else "green_terracotta"
-
-    oy, oz = R0 - 8, 113
-    (nx, ny, nz), naar = g.voxel_guh_in(b, CX - 17, oy, oz, KOP_SCHAAL, botten=("head", "ear_left", "ear_right"), naar_zuid=True, kleur=huid)
-    # the mane: a collar of tufts behind the head, longest on top
-    rng = random.Random(kit.seed(NAAM + "/manen"))
-    mx, my, mz = naar(0, 8.5, -3.2)
-    lengte = [18.0 + 3.0 * math.sin(k / 40 * math.tau) + rng.uniform(-1.5, 2.0) for k in range(40)]
-    for dx in range(-24, 25):
-        for dy in range(-24, 25):
-            r = math.hypot(dx / 1.05, dy / 0.95)
-            lang = lengte[int((math.atan2(dy, dx) % math.tau) / math.tau * 40) % 40]
-            if 6 <= r <= lang:
-                for dz in (0, -1, -2, -3):
-                    # (the front layer is whole, so every tuft hangs on the collar; the layers behind it thin out)
-                    if dz == 0 or (r < lang - 1.5 * -dz and rng.random() < 0.8):
-                        b.set(mx + dx, my + dy, mz + dz, gb.pick(rng, [("orange_wool", 50), ("yellow_wool", 25), ("brown_wool", 25)]))
-    # the beard: a white tuft under the chin
-    kx, ky, kz = naar(0, 1.0, -9.5)
-    for dy, r in ((0, 2.2), (-1, 2.0), (-2, 1.6), (-3, 1.2), (-4, 0.8), (-5, 0.5)):
-        for dx in range(-3, 4):
-            for dz in range(-2, 3):
-                if math.hypot(dx, dz) <= r:
-                    b.set(kx + dx, ky - 1 + dy, kz + dz, "white_wool")
-    nx_, ny_, nz_ = naar(0, 6.2, -12.4)
-    b.prop("kop", nx_, ny_, nz_, wie="de snuit van de Leeuwschildpad-guh (zijn roze neusje)")
+    """The head is no longer of blocks (DESIGN 5, 2026-10-15): the entity guhs:leeuwschildpad_guh (look 0, a resident at the
+    marker `kop`) IS the head, a big moving model with the guh's face, the mane and the beard, exactly where the guh's head
+    voxelised at KOP_SCHAAL with its low corner at KOP_HOEK used to be (tools/features/einde2_cast_schurk_wezens.py does the
+    same sums). Here only the marker: the nose, the model's origin. Returns naar(xm, ym, zm): a guh model point -> cell."""
+    ox, oy, oz = KOP_HOEK
+    _maat, naar = g.voxel_guh_in(b, ox, oy, oz, KOP_SCHAAL, botten=("head", "ear_left", "ear_right"), naar_zuid=True,
+                                 kleur=lambda deel, pm, blok: None)          # (no block: the model stands there)
+    nx_, ny_, nz_ = naar(*KOP_NEUS_GUH)
+    b.prop("kop", nx_, ny_, nz_, wie="de snuit van de Leeuwschildpad-guh: hier staat het model van zijn kop (guhs:leeuwschildpad_guh)")
     return naar
 
 
@@ -374,11 +342,12 @@ VERWACHT = ["kop", "leeuwschildpad", "zegen_plek", "bos", "schild_top"]
 
 
 def eigen_check(b):
-    """It must read as a creature: a head with two glowing eyes that looks south, the forest on its back."""
+    """It must read as a creature: the head (the model) has room where it stands, the forest is on its back."""
     p = []
-    ogen = [c for c, bl in b.s.blocks.items() if bl[0] == "minecraft:sea_lantern" and c[2] > 125]
-    if len(ogen) < 6:
-        p.append(f"de kop heeft geen ogen ({len(ogen)} lichtblokken)")
+    nx, ny, nz = b.plekken["kop"]["pos"]
+    in_de_kop = [c for c in b.s.blocks if nx - 12 <= c[0] <= nx + 12 and ny + 1 <= c[1] <= ny + 14 and nz - 8 <= c[2] <= nz]
+    if in_de_kop:
+        p.append(f"{len(in_de_kop)} blokken staan waar het model van de kop staat, bv. {sorted(in_de_kop)[:4]}")
     los = [c for c, bl in b.s.blocks.items() if "leaves" in bl[0] and bl[1].get("persistent") != "true"]
     if los:
         p.append(f"{len(los)} bladeren zijn niet persistent (ze vallen af, de tegels krijgen geen buur-updates), bv. {los[:3]}")
