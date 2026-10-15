@@ -103,13 +103,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "4755487E02547563",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_einde2_trap5_machines.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 21.16875,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 22.10625,
+      y: 27.568749999999998,
       hover: [
         "Hier ontbreekt nog een stukje. Njeg!",
         "De laatste uitvindingen liggen diep in het &5Guheinde&r:",
@@ -2060,6 +2072,361 @@
       x: 17.5,
       y: 18.9875,
       shape: "diamond",
+    },
+    {
+      id: "4755486C9C3A3914",
+      icon: {
+        id: "guhs:einde2_trap5_machines_bouwplan",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_1",
+          id: "475548DA8D421C36",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DBB830B78D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "47554873483EFD79",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 0.0,
+      y: 22.95,
+      shape: "gear",
+    },
+    {
+      id: "475548B31FFA7754",
+      icon: {
+        id: "guhs:vadszender",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_2",
+          id: "475548E1B6ABCD60",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488B58EAC6AF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F898C9E72F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 22.95,
+    },
+    {
+      id: "4755484919B04299",
+      icon: {
+        id: "guhs:guhterminal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_3",
+          id: "475548B3F3753B68",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D11DDC3FB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548A1A3AA7EBB",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 22.95,
+    },
+    {
+      id: "4755485469FDB005",
+      icon: {
+        id: "guhs:bestelbalie",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_4",
+          id: "4755488262589A96",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548547D2FB49F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548EAD235CB5B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 22.95,
+    },
+    {
+      id: "475548ED2949994A",
+      icon: {
+        id: "guhs:knabbelpoort_buis",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_5",
+          id: "475548727A0E1690",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CB27820CEF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554800CC65E08E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 22.95,
+    },
+    {
+      id: "475548FF921ACE73",
+      icon: {
+        id: "guhs:thuispoort",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_6",
+          id: "475548C60B8BDE5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486AADB377F3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755482C89387D28",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 22.95,
+    },
+    {
+      id: "475548650E14A004",
+      icon: {
+        id: "guhs:vuurkorf",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_7",
+          id: "4755480D80DED04A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DED4E105C6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755485990F72F9D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 22.95,
+    },
+    {
+      id: "4755489AF6F07054",
+      icon: {
+        id: "guhs:enderguhrad",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_trap5_machines_p_enderguhrad",
+          id: "47554806A3B27FD1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480EA4349572",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554899F312329D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 24.45,
+    },
+    {
+      id: "47554838F636EE19",
+      icon: {
+        id: "guhs:komeetkern",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_trap5_machines_komeet_gepakt",
+          id: "475548293C5A71D5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D418E1C67",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548F25FBC8C9D",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 7.5,
+      y: 24.45,
+      shape: "gear",
+    },
+    {
+      id: "475548534CAE17DB",
+      icon: {
+        id: "guhs:komeetkern",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_8",
+          id: "47554834E8CDAA1D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C216E7F2CB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548CEE913BE6C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 24.45,
+    },
+    {
+      id: "4755480F23D80288",
+      icon: {
+        id: "guhs:einde2_trap5_machines_diploma",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/werktuigguh_stap_9",
+          id: "4755481BD92C9F44",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554848A8B526CD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "47554851C10BFFB3",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 4.5,
+      y: 24.45,
+      shape: "gear",
     },
   ],
 }

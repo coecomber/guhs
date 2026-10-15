@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/guh_wheel_stand",
+  "textures": {
+    "particle": "guhs:block/enderguhrad_stand",
+    "stand": "guhs:block/enderguhrad_stand"
+  }
+}

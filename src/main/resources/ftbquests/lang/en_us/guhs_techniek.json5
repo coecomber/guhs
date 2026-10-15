@@ -271,4 +271,48 @@
   "quest.4755481356D8732B.quest_desc": [
     "Put the &dNibble Machine Statuette&r down where everyone can see it. Click it: it nibbles.",
   ],
+  "quest.4755486C9C3A3914.title": "The Workshop Opens",
+  "quest.4755486C9C3A3914.quest_desc": [
+    "After the finale of the Guhvatar story the door of the workshop in the &dSouthern Air Temple&r opens. Talk to the &6Mechanist Guh&r: he gives you his &6Blueprint&r, for all the machines of tier 5.",
+  ],
+  "quest.475548B31FFA7754.title": "Power Through the Air",
+  "quest.475548B31FFA7754.quest_desc": [
+    "A &6Chonk Transmitter&r sends the chonk power of its net to &6Chonk Receivers&r within 32 blocks. Together they are one net: short anywhere = everything still.",
+  ],
+  "quest.4755484919B04299.title": "Your Bank, Everywhere",
+  "quest.4755484919B04299.quest_desc": [
+    "A &6Guh Terminal&r is a little window into your Bank Guh. Link it with the &6Bank Key&r. Search, sort, take, put in: with the rules of your bank.",
+  ],
+  "quest.4755485469FDB005.title": "The Order Guh",
+  "quest.4755485469FDB005.quest_desc": [
+    "The &6Order Guh&r works at an &6Order Counter&r next to your Tinker Machines. Order, and he takes everything out of the bank, runs the machines and brings the receipt.",
+  ],
+  "quest.475548ED2949994A.title": "Mail Through the Gate",
+  "quest.475548ED2949994A.quest_desc": [
+    "A &6Nibble Gate Tube&r sends what goes in to its buddy, even in another dimension.",
+  ],
+  "quest.475548FF921ACE73.title": "Home in One Step",
+  "quest.475548FF921ACE73.quest_desc": [
+    "Your own network of &6Home Gates&r. Choose where you jump to; your guhs on a lead and your mount come along.",
+  ],
+  "quest.475548650E14A004.title": "The Four Elements",
+  "quest.475548650E14A004.quest_desc": [
+    "&6Air Blower&r, &6Water Bearer&r, &6Crust Pusher&r and &6Fire Basket&r: let each of them do its thing.",
+  ],
+  "quest.4755489AF6F07054.title": "The Enderguh Wheel",
+  "quest.4755489AF6F07054.quest_desc": [
+    "A &5Wahoog Enderguh&r flies rounds in a giant wheel: 50 chonk power. One per setup counts.",
+  ],
+  "quest.47554838F636EE19.title": "A Little Tail of the Comet",
+  "quest.47554838F636EE19.quest_desc": [
+    "The shard of the nibble comet lies by the duel square of the Fire Nation Capital, only for you. The &6Comet Core&r: 500 chonk power, the strongest source so far.",
+  ],
+  "quest.475548534CAE17DB.title": "New Sources",
+  "quest.475548534CAE17DB.quest_desc": [
+    "A turning Enderguh Wheel and a glowing Comet Core, both in your own net.",
+  ],
+  "quest.4755480F23D80288.title": "All Done",
+  "quest.4755480F23D80288.quest_desc": [
+    "Tell the Mechanist Guh. For the first time in a hundred years he finishes something: a diploma, for you. And he has one more big plan...",
+  ],
 }

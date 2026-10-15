@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "FXF",
+    "SSS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "S": "guhs:doosschil",
+    "F": "guhs:flitskruimel",
+    "P": "minecraft:feather"
+  },
+  "result": {
+    "id": "guhs:luchtblazer"
+  }
+}

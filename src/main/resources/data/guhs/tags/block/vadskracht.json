@@ -36,6 +36,18 @@
     "guhs:frituurautomaat",
     "guhs:grillkoolpers",
     "guhs:stepstation",
-    "guhs:ringsausuman_mikarad"
+    "guhs:ringsausuman_mikarad",
+    "guhs:vadszender",
+    "guhs:vadsontvanger",
+    "guhs:guhterminal",
+    "guhs:bestelbalie",
+    "guhs:knabbelpoort_buis",
+    "guhs:thuispoort",
+    "guhs:luchtblazer",
+    "guhs:waterdrager",
+    "guhs:korstduwer",
+    "guhs:vuurkorf",
+    "guhs:komeetkern",
+    "guhs:enderguhrad"
   ]
 }

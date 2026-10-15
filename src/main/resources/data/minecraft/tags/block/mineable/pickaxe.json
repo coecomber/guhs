@@ -289,6 +289,18 @@
     "guhs:geestengras",
     "guhs:meditatiesteen",
     "guhs:gedenksteen",
-    "guhs:lotuspuzzeltegel"
+    "guhs:lotuspuzzeltegel",
+    "guhs:vadszender",
+    "guhs:vadsontvanger",
+    "guhs:guhterminal",
+    "guhs:bestelbalie",
+    "guhs:knabbelpoort_buis",
+    "guhs:thuispoort",
+    "guhs:luchtblazer",
+    "guhs:waterdrager",
+    "guhs:korstduwer",
+    "guhs:vuurkorf",
+    "guhs:komeetkern",
+    "guhs:enderguhrad"
   ]
 }

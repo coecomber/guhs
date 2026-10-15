@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CEC",
+    "SXS",
+    "SFS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "S": "guhs:doosschil",
+    "F": "guhs:flitskruimel",
+    "C": "guhs:gepofte_knabbelkoorvrucht",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "guhs:thuispoort"
+  }
+}

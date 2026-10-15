@@ -1,0 +1,106 @@
+{
+  "variants": {
+    "facing=north,omhoog=false,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt"
+    },
+    "facing=north,omhoog=false,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt"
+    },
+    "facing=north,omhoog=false,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol"
+    },
+    "facing=north,omhoog=true,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "x": 270
+    },
+    "facing=north,omhoog=true,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "x": 270
+    },
+    "facing=north,omhoog=true,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "x": 270
+    },
+    "facing=east,omhoog=false,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "y": 90
+    },
+    "facing=east,omhoog=false,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "y": 90
+    },
+    "facing=east,omhoog=false,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "y": 90
+    },
+    "facing=east,omhoog=true,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "x": 270,
+      "y": 90
+    },
+    "facing=east,omhoog=true,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "x": 270,
+      "y": 90
+    },
+    "facing=east,omhoog=true,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "x": 270,
+      "y": 90
+    },
+    "facing=south,omhoog=false,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "y": 180
+    },
+    "facing=south,omhoog=false,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "y": 180
+    },
+    "facing=south,omhoog=false,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "y": 180
+    },
+    "facing=south,omhoog=true,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "x": 270,
+      "y": 180
+    },
+    "facing=south,omhoog=true,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "x": 270,
+      "y": 180
+    },
+    "facing=south,omhoog=true,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "x": 270,
+      "y": 180
+    },
+    "facing=west,omhoog=false,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "y": 270
+    },
+    "facing=west,omhoog=false,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "y": 270
+    },
+    "facing=west,omhoog=false,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "y": 270
+    },
+    "facing=west,omhoog=true,snoet=slaapt": {
+      "model": "guhs:block/luchtblazer_slaapt",
+      "x": 270,
+      "y": 270
+    },
+    "facing=west,omhoog=true,snoet=werkt": {
+      "model": "guhs:block/luchtblazer_werkt",
+      "x": 270,
+      "y": 270
+    },
+    "facing=west,omhoog=true,snoet=vol": {
+      "model": "guhs:block/luchtblazer_vol",
+      "x": 270,
+      "y": 270
+    }
+  }
+}
