@@ -1,0 +1,83 @@
+Guhs - einde2 - music credits
+
+Real pieces of music, used under their licences (mono, loudness evened out;
+pieces marked 'trimmed' were shortened with a fade-out):
+
+muziek.lucht_1: "Ishikari Lore" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100192
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+muziek.lucht_2: "RPG - Misty Mountains" by Hitctrl
+    https://opengameart.org/content/rpg-misty-mountains
+    Licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/)
+muziek.water_1: "Ripples" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100691
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+muziek.water_2: "Eastminster" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100719
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+muziek.aarde_1: "Mountain Emperor" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700012
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+muziek.aarde_2: "Eastern Thought" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100682
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+muziek.vuur_1: "Shenyang" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600066
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+muziek.vuur_2: "Views From Atop the Jade Kings Throne" by Hitctrl
+    https://opengameart.org/content/views-from-atop-the-jade-kings-throne
+    Licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/)
+muziek.geest_1: "River Fire" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700055
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+muziek.geest_2: "Himalayan Atmosphere" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100204
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.intro: "Our Story Begins" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100856
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.appa: "Frozen Star" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100356
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.appa_achtervolging: "Chase" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100399
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.golf: "Five Armies" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100875
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.yue_maan: "Heart of Nowhere" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400045
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.appa_verloren: "Heavy Heart" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600002
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+moment.val: "Hero Down" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100880
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.zwarte_zon: "Crusade" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100884
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.tent: "Rumination" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100354
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.luchtvloot: "Full On" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300005
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.agni_kai: "Dark Times" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100747
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.duel: "Colossus" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100358
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.duel_koor: "Magistar" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1900003
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.kroning: "Long Road Ahead" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100588
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.aftiteling: "The Parting" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100638
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+
+Made by the Guhs mod itself: Miroh's lullaby (own melody and words), the tunes, the stingers ('Happy Birthday'
+is a public-domain melody) and the sounds of the Geestenwereld.
