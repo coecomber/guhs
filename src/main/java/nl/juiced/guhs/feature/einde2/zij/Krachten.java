@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
@@ -31,7 +32,13 @@ public final class Krachten {
                          BiConsumer<ServerPlayer, Vec3> gebruik) {
     }
 
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
     private static final Map<String, Kracht> ALLE = new LinkedHashMap<>();
+    /**
+     * (zij) told right after a power was used, with the power: the side quests listen here (a wind corridor that sings, a
+     * fire lock that lights, a trial that sees your pillar). A listener that throws is logged and skipped.
+     */
+    public static final List<BiConsumer<ServerPlayer, Kracht>> NA_GEBRUIK = new CopyOnWriteArrayList<>();
     /** Per player: power id -> the game time from which it can be used again. */
     private static final Map<UUID, Map<String, Long>> KLAAR_OP = new ConcurrentHashMap<>();
 
@@ -89,6 +96,14 @@ public final class Krachten {
         }
         KLAAR_OP.computeIfAbsent(p.getUUID(), u -> new ConcurrentHashMap<>()).put(id, p.level().getGameTime() + Math.max(0, k.afkoelTicks()));
         k.gebruik().accept(p, p.position());
+        for (BiConsumer<ServerPlayer, Kracht> l : NA_GEBRUIK) {
+            try {
+                l.accept(p, k);
+            } catch (RuntimeException ex) {
+                LOGGER.warn("Guhs einde2: a listener of the power {} failed", k.id(), ex);
+            }
+        }
+        KrachtPayloads.gebruikt(p);
         return true;
     }
 
