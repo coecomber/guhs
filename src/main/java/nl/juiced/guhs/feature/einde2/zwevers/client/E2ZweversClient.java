@@ -86,6 +86,39 @@ public final class E2ZweversClient {
         protected boolean affectedByCulling(LeegtewalvisguhEntity walvis) {
             return false;
         }
+
+        // einde2 phase B (reizen): the furniture of an own whale: the bones inr_<part> (bits of reizen.Walvis.DELEN) and the
+        // cloth of the flag in its colour (inr_vlag_<0..5>); a wild whale shows none of them
+        private static final com.geckolib.constant.dataticket.DataTicket<Integer> INRICHTING =
+                com.geckolib.constant.dataticket.DataTicket.create("guhs_einde2_walvis_inrichting", Integer.class);
+        private static final com.geckolib.constant.dataticket.DataTicket<Integer> VLAG =
+                com.geckolib.constant.dataticket.DataTicket.create("guhs_einde2_walvis_vlag", Integer.class);
+        /** = reizen.Walvis.DELEN (the bone names inr_<part>), and how many flag colours there are. */
+        public static final String[] DELEN = {"huisje", "kisten", "bed", "tuin", "lantaarns", "vlag"};
+        public static final int VLAGGEN = 6;
+
+        @Override
+        public void addRenderData(LeegtewalvisguhEntity walvis, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
+            super.addRenderData(walvis, related, state, partialTick);
+            state.addGeckolibData(INRICHTING, walvis.inrichting());
+            state.addGeckolibData(VLAG, walvis.vlag());
+        }
+
+        @Override
+        public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+            Integer delen = info.getGeckolibData(INRICHTING);
+            Integer vlag = info.getGeckolibData(VLAG);
+            int d = delen == null ? 0 : delen;
+            for (int i = 0; i < DELEN.length; i++) {
+                boolean aan = (d & (1 << i)) != 0;
+                bones.ifPresent("inr_" + DELEN[i], b -> b.skipRender(!aan).skipChildrenRender(!aan));
+            }
+            int kleur = vlag == null ? 0 : Math.floorMod(vlag, VLAGGEN);
+            for (int i = 0; i < VLAGGEN; i++) {
+                boolean deze = i == kleur;
+                bones.ifPresent("inr_vlag_" + i, b -> b.skipRender(!deze));
+            }
+        }
     }
 
     private E2ZweversClient() {

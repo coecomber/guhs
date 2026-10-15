@@ -1,0 +1,44 @@
+# einde2 phase B reizen: the story flights (team on Appa, Zuka's ship), the whistle list, the campfire team, the whale
+# questline (scenes), an own whale with all its furniture.
+# Run (merge step, in a world with the Guheinde explored near its structures):
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_reizen.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section a story flight with the team and Zuka's chase
+/guhs einde2 reizen ga vlucht_h2_h3
+wait 200
+shot reizen_team_op_appa
+wait 900
+shot reizen_zuka_schip
+wait 600
+shot reizen_vuurballen
+/guhs einde2 reizen land
+wait 40
+
+section the campfire team
+/guhs einde2 reizen ga team_ba_sing_guh
+wait 120
+shot reizen_kampvuur
+
+section the whistle list
+/guhs einde2 reizen ga fluit
+wait 60
+shot reizen_fluitlijst
+
+section the whale scenes
+/guhs einde2 reizen ga walvis_1
+wait 400
+shot reizen_walvis_opdoemen
+wait 400
+/guhs einde2 reizen scene walvis_kroeg
+wait 200
+shot reizen_kroeg
+
+section an own, furnished whale
+/guhs einde2 reizen ga walvis_4
+wait 120
+shot reizen_walvis_rug

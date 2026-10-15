@@ -58,7 +58,9 @@ public class AppaFluitjeItem extends Item {
         } else if (Appa.isWeg(p)) {
             zeg(p, Component.translatable("gui.guhs.einde2_appa.fluitje.weg"));
         } else if (p.getVehicle() instanceof AppaGuhEntity appa && appa.isEigenaar(p)) {
-            zeg(p, Component.translatable("gui.guhs.einde2_appa.fluitje.zit_al"));
+            if (!Appa.OP_ZIJN_KOP.test(p)) {                        // (einde2 phase B: the list of places to fly to)
+                zeg(p, Component.translatable("gui.guhs.einde2_appa.fluitje.zit_al"));
+            }
         } else {
             AppaGuhEntity appa = Appa.roep(p);
             if (appa != null) {

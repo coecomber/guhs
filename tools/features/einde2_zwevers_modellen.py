@@ -581,7 +581,156 @@ def leegtewalvisguh(atlas):
             cubes.append(cube(atlas, [x - 1 + dx * 2, RUG_Y + op, z - 1 + dz * 2], [2, 2, 2], koorstengel))
             cubes.append(cube(atlas, [x - 1.1 + dx * 2, RUG_Y + op + 2, z - 1.1 + dz * 2], [2.2, 2.2, 2.2], koorbloem))
         bones.append(bone(f"koor_{i + 1}", "body", [x, RUG_Y, z], cubes))
+    bones += walvis_meubels(atlas)
     return geo("leegtewalvisguh", bones, 30, 14)
+
+
+# =====================================================================================================================
+# einde2 phase B (slice reizen): the furniture on the back of an OWN whale (reizen.Walvis.DELEN; E2ZweversClient shows the
+# bones inr_<part> that its owner chose, a wild whale none of them). Model pixels are blocks here (scale 16), so every
+# face gets a small patch stretched over it (`kubus`): the atlas has little room left, and the whale's own patches keep
+# exactly their old places (these come after them). The spots match reizen.Walvis (KIST_1, BED, TUIN, HUISJE ...): keep
+# both the same. Guh details: round ears on the roof and on the flag, a guh face on the house's door.
+# =====================================================================================================================
+HOUT = (176, 122, 78)
+HOUT_DONKER = (122, 82, 54)
+DAK = (214, 92, 112)                # a pink roof
+DAK_DONKER = (170, 64, 88)
+MUUR = (250, 232, 196)
+RAAM = (255, 214, 120)
+KIST_BESLAG = (240, 200, 90)
+DEKEN = (120, 170, 230)
+DEKEN_RAND = (250, 244, 230)
+KUSSEN_WIT = (255, 250, 244)
+AARDE = (110, 74, 48)
+LANTAARN = (255, 220, 120)          # glows
+IJZER = (70, 66, 80)
+# the six flag colours (= client.InrichtingScherm.KLEUREN, gui.guhs.einde2_reizen.inrichting.kleur.<n>)
+VLAG_KLEUREN = [(216, 52, 58), (58, 108, 216), (242, 196, 58), (76, 174, 76), (154, 80, 216), (242, 154, 196)]
+
+
+def kubus(atlas, origin, size, paint, maat=2.0, overrides=None):
+    """A cube whose faces each get a patch of at most maat x maat model pixels, stretched over the face."""
+    uv = {}
+    for f in bd.FACES:
+        w, h = bd.face_size(f, size)
+        pw, ph = min(max(w, 0.5), maat), min(max(h, 0.5), maat)
+        uv[f] = atlas.patch(pw, ph, (overrides or {}).get(f, paint))
+    return {"origin": origin, "size": size, "uv": uv}
+
+
+def _planken(kleur, donker):
+    """Planks: the colour with darker seams."""
+    def extra(W, H, rng, a):
+        for y in range(0, H, max(3, H // 4)):
+            a[y:y + 1, :, :3] = donker
+    return plain(kleur, 8, extra)
+
+
+def _deur(W, H, rng):
+    """The house's front: plaster, a round-topped door with a tiny guh face, a lit window."""
+    a = plain(MUUR, 6)(W, H, rng).astype(np.float32)
+    dx0, dx1, dy0 = int(W * 0.36), int(W * 0.64), int(H * 0.35)
+    a[dy0:, dx0:dx1, :3] = HOUT_DONKER
+    disc(a, (dx0 + dx1) / 2, dy0, (dx1 - dx0) / 2, HOUT_DONKER)
+    disc(a, (dx0 + dx1) / 2 - W * 0.04, H * 0.62, max(1, W * 0.018), (30, 20, 20))
+    disc(a, (dx0 + dx1) / 2 + W * 0.04, H * 0.62, max(1, W * 0.018), (30, 20, 20))
+    for wx in (int(W * 0.1), int(W * 0.74)):
+        a[int(H * 0.3):int(H * 0.55), wx:wx + int(W * 0.16), :3] = RAAM
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def _raam(W, H, rng):
+    a = plain(MUUR, 6)(W, H, rng).astype(np.float32)
+    a[int(H * 0.3):int(H * 0.6), int(W * 0.35):int(W * 0.65), :3] = RAAM
+    a[int(H * 0.3):int(H * 0.6), int(W * 0.49):int(W * 0.51) + 1, :3] = HOUT_DONKER
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def _kist(W, H, rng):
+    a = _planken(HOUT, HOUT_DONKER)(W, H, rng).astype(np.float32)
+    a[int(H * 0.38):int(H * 0.48), :, :3] = HOUT_DONKER
+    a[int(H * 0.36):int(H * 0.6), int(W * 0.42):int(W * 0.58), :3] = KIST_BESLAG
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def _deken(W, H, rng):
+    a = plain(DEKEN, 6)(W, H, rng).astype(np.float32)
+    a[:max(1, H // 8), :, :3] = DEKEN_RAND
+    for x in range(0, W, max(3, W // 5)):
+        a[:, x:x + 1, :3] = (96, 146, 210)
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def _aarde(W, H, rng):
+    a = plain(AARDE, 14)(W, H, rng).astype(np.float32)
+    for _ in range(max(2, W * H // 30)):
+        x, y = int(rng.uniform(0, W)), int(rng.uniform(0, H))
+        a[y, x, :3] = (84, 56, 36)
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def _vlagdoek(kleur):
+    """A flag cloth in this colour with a white guh head (round ears) in the middle."""
+    def paint(W, H, rng):
+        a = plain(kleur, 6)(W, H, rng).astype(np.float32)
+        cx, cy, r = W * 0.5, H * 0.56, min(W, H) * 0.24
+        disc(a, cx - r * 0.75, cy - r * 0.8, r * 0.42, (255, 250, 246))
+        disc(a, cx + r * 0.75, cy - r * 0.8, r * 0.42, (255, 250, 246))
+        disc(a, cx, cy, r, (255, 250, 246))
+        disc(a, cx - r * 0.35, cy - r * 0.1, max(1, r * 0.13), (40, 30, 40))
+        disc(a, cx + r * 0.35, cy - r * 0.1, max(1, r * 0.13), (40, 30, 40))
+        return np.clip(a, 0, 255).astype(np.uint8)
+    return paint
+
+
+def walvis_meubels(atlas):
+    """The bones inr_huisje, inr_kisten, inr_bed, inr_tuin, inr_lantaarns, inr_vlag (+ inr_vlag_0..5), on the back (RUG_Y)."""
+    Y = RUG_Y
+    hout, dak, muur = _planken(HOUT, HOUT_DONKER), plain(DAK, 8), plain(MUUR, 6)
+    oor = plain(DAK_DONKER, 6, lambda W, H, rng, a: disc(a, W / 2, H / 2, W * 0.3, OOR_BINNEN))
+    bones = []
+    # the little house (x -2.5..2.5, z 2..7): plaster walls, a door with a guh face towards the head, a pink stepped roof
+    # with two round guh ears and a chimney
+    bones.append(bone("inr_huisje", "body", [0, Y, 4.5], [
+        kubus(atlas, [-2.5, Y, 2.0], [5.0, 0.3, 5.0], hout),
+        kubus(atlas, [-2.3, Y + 0.3, 2.2], [4.6, 3.0, 4.6], muur, overrides={"north": _deur, "east": _raam, "west": _raam, "south": _raam}),
+        kubus(atlas, [-2.8, Y + 3.3, 1.7], [5.6, 0.8, 5.6], dak),
+        kubus(atlas, [-2.0, Y + 4.1, 2.5], [4.0, 0.8, 4.0], dak),
+        kubus(atlas, [-1.2, Y + 4.9, 3.3], [2.4, 0.7, 2.4], dak),
+        kubus(atlas, [-1.7, Y + 5.4, 4.2], [0.9, 0.9, 0.3], oor), kubus(atlas, [0.8, Y + 5.4, 4.2], [0.9, 0.9, 0.3], oor),
+        kubus(atlas, [1.1, Y + 4.4, 5.2], [0.6, 1.8, 0.6], plain((150, 140, 150), 8))]))
+    # two chests that really keep items (KIST_1, KIST_2)
+    bones.append(bone("inr_kisten", "body", [3.6, Y, -7.5], [
+        kubus(atlas, [2.4, Y, -8.1], [1.2, 1.0, 1.2], _kist, maat=1.0),
+        kubus(atlas, [3.7, Y, -8.1], [1.2, 1.0, 1.2], _kist, maat=1.0)]))
+    # the bed (BED): a wooden frame, a mattress, a blanket, a pillow at the head end
+    bones.append(bone("inr_bed", "body", [-4.0, Y, -3.0], [
+        kubus(atlas, [-4.6, Y, -4.1], [1.2, 0.45, 2.2], hout, maat=1.0),
+        kubus(atlas, [-4.5, Y + 0.45, -3.4], [1.0, 0.25, 1.45], _deken, maat=1.0),
+        kubus(atlas, [-4.45, Y + 0.45, -4.0], [0.9, 0.3, 0.55], plain(KUSSEN_WIT, 5), maat=1.0)]))
+    # the garden (TUIN): a planter with soil and four knabbelkoor sprouts
+    tuin = [kubus(atlas, [-6.1, Y, 6.3], [3.2, 0.6, 2.4], hout, overrides={"up": _aarde})]
+    for i, (x, z) in enumerate(((-5.5, 6.9), (-4.4, 7.8), (-3.6, 6.8), (-5.1, 8.1))):
+        tuin.append(kubus(atlas, [x - 0.1, Y + 0.6, z - 0.1], [0.2, 0.7 + 0.15 * i, 0.2], plain(KOOR, 8), maat=0.5))
+        tuin.append(kubus(atlas, [x - 0.25, Y + 1.3 + 0.15 * i, z - 0.25], [0.5, 0.5, 0.5], plain(KOOR_KNABBEL if i % 2 else KOOR_BLOEM, 8), maat=0.5))
+    bones.append(bone("inr_tuin", "body", [-4.5, Y, 7.5], tuin))
+    # four lanterns on posts at the corners of the walkable middle (they glow)
+    lampen = []
+    glas = gloeit(plain(LANTAARN, 6))
+    for x, z in ((8.6, -1.0), (-8.6, -1.0), (8.4, 12.4), (-8.4, 12.4)):
+        lampen.append(kubus(atlas, [x - 0.1, Y, z - 0.1], [0.2, 2.4, 0.2], plain(IJZER, 6), maat=0.5))
+        lampen.append(kubus(atlas, [x - 0.3, Y + 2.4, z - 0.3], [0.6, 0.7, 0.6], glas, maat=0.5))
+        lampen.append(kubus(atlas, [x - 0.35, Y + 3.1, z - 0.35], [0.7, 0.15, 0.7], plain(IJZER, 6), maat=0.5))
+    bones.append(bone("inr_lantaarns", "body", [0, Y, 0], lampen))
+    # the flag: a pole with a knob and a cloth in one of six colours (only the chosen one shows)
+    bones.append(bone("inr_vlag", "body", [-2.5, Y, -10.0], [
+        kubus(atlas, [-2.6, Y, -10.1], [0.2, 6.0, 0.2], hout, maat=0.5),
+        kubus(atlas, [-2.75, Y + 6.0, -10.25], [0.5, 0.5, 0.5], plain(KIST_BESLAG, 6), maat=0.5)]))
+    for i, kleur in enumerate(VLAG_KLEUREN):
+        bones.append(bone(f"inr_vlag_{i}", "inr_vlag", [-2.5, Y + 4.6, -10.0], [
+            kubus(atlas, [-2.4, Y + 3.6, -10.05], [3.0, 2.0, 0.1], _vlagdoek(kleur), maat=1.5)]))
+    return bones
 
 
 def leegtewalvisguh_anims():
@@ -602,9 +751,11 @@ def leegtewalvisguh_anims():
                                                     (L, [0, 0, hoek * math.sin(f * 6.28)])])}
         return out
     oren = lm.oortjes(8.0, 10)
-    idle = {**staart(8.0, 5.0), **koor(8.0, 2.5), **oren}
+    vlag = {f"inr_vlag_{i}": {"rotation": kf([(0, [0, -6, 0]), (1.0, [0, 8, 0]), (2.0, [0, -6, 0]), (3.0, [0, 5, 0]), (4.0, [0, -6, 0]),
+                                                (5.0, [0, 8, 0]), (6.0, [0, -6, 0]), (7.0, [0, 5, 0]), (8.0, [0, -6, 0])])} for i in range(6)}
+    idle = {**staart(8.0, 5.0), **koor(8.0, 2.5), **oren, **vlag}
     # singing: the jaw opens on every long note (LeegtewalvisguhEntity.ZANG: a note every 2 seconds), the knabbelkoor sways along
-    zing = {**staart(8.0, 6.0), **koor(2.0, 7.0), **lm.oortjes(8.0, 16),
+    zing = {**staart(8.0, 6.0), **koor(2.0, 7.0), **lm.oortjes(8.0, 16), **vlag,
             "jaw": {"rotation": kf([(0, [0, 0, 0]), (0.3, [15, 0, 0]), (1.5, [12, 0, 0]), (1.9, [0, 0, 0]), (2.0, [0, 0, 0]), (2.3, [18, 0, 0]),
                                     (3.5, [14, 0, 0]), (3.9, [0, 0, 0]), (4.0, [0, 0, 0]), (4.3, [13, 0, 0]), (5.5, [10, 0, 0]), (5.9, [0, 0, 0]),
                                     (6.0, [0, 0, 0]), (6.3, [20, 0, 0]), (7.6, [14, 0, 0]), (8.0, [0, 0, 0])])},
@@ -872,7 +1023,7 @@ DIEREN = [("kruimelkwal", kruimelkwal, kruimelkwal_anims, bd.S),
           ("schildpad_eendguh", schildpad_eendguh, schildpad_eendguh_anims, bd.S)]
 # the animations the Java side plays (KruimelkwalEntity, LeegtewalvisguhEntity, Elementdier and its four)
 NODIG = {"kruimelkwal": ["idle", "zwem", "stuiter", "blij"],
-         "leegtewalvisguh": ["idle", "zing", "eet"],
+         "leegtewalvisguh": ["idle", "zing", "eet"],   # (+ the furniture bones of MEUBEL_BOTTEN)
          "vleermuis_lemurguh": ["idle", "walk", "vlieg", "hang", "blij", "eet"],
          "otter_pinguinguh": ["idle", "walk", "glij", "blij", "eet"],
          "das_molguh": ["idle", "walk", "graaf_in", "onder", "snuffel", "blij", "eet"],

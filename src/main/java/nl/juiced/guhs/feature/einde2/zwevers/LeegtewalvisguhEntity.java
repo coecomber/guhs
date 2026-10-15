@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -117,6 +123,25 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     public static final String PAREL_DAG = "guhs_einde2_zwevers_parel_dag";
 
     private static final EntityDataAccessor<Boolean> DATA_ZINGT = SynchedEntityData.defineId(LeegtewalvisguhEntity.class, EntityDataSerializers.BOOLEAN);
+    /** einde2 phase B (reizen): the furniture on the back of an own whale (bits of {@code Walvis.DELEN}) and the flag's colour. */
+    private static final EntityDataAccessor<Integer> DATA_INRICHTING = SynchedEntityData.defineId(LeegtewalvisguhEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_VLAG = SynchedEntityData.defineId(LeegtewalvisguhEntity.class, EntityDataSerializers.INT);
+
+    // --- einde2 phase B (slice reizen): an own whale -----------------------------------------------------------------------------
+    /** Blocks per tick of an own whale: steered by its owner, and coming when called with the horn. */
+    public static final double STUUR_VAART = 0.2, KOM_VAART = 0.42;
+    /** Degrees per tick an own whale turns when steered or called; blocks per tick it climbs or sinks. */
+    public static final float STUUR_DRAAI = 1.4f;
+    public static final double KLIM = 0.05;
+    /** Fed by a player who sees it (after the pearl/thank-you): the whale questline counts this. */
+    public static final List<BiConsumer<LeegtewalvisguhEntity, ServerPlayer>> GEVOERD = new CopyOnWriteArrayList<>();
+    /** A click on the whale or its back that is not food (the furniture of an own whale). PASS: nothing. */
+    public static volatile BiFunction<LeegtewalvisguhEntity, Player, InteractionResult> RUG_KLIK = (w, p) -> InteractionResult.PASS;
+    /** Does this player steer this (own) whale right now (on its back with the horn in hand)? */
+    public static volatile BiPredicate<LeegtewalvisguhEntity, ServerPlayer> STUURT = (w, p) -> false;
+    /** Called about once a second by every own whale (its owner's data decides whether it is the current one). */
+    public static volatile Consumer<LeegtewalvisguhEntity> MELD = w -> {
+    };
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation ZING = RawAnimation.begin().thenLoop("zing");
     /** The boxes of the deep band's big places, per level (pure functions of the world: looked up once). */
@@ -135,6 +160,13 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     private float vorigeKoers;
     /** (Client) how far the song is. */
     private int zangTik;
+    /** An own whale: whose, which generation (an older copy steps aside), where it was called to (null: it hangs still). */
+    @Nullable
+    private UUID eigenaar;
+    private int gen;
+    @Nullable
+    private Vec3 roepDoel;
+    private int stopMelding;
 
     public LeegtewalvisguhEntity(EntityType<? extends Mob> type, Level level) {
         super(type, level);
@@ -168,6 +200,8 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ZINGT, false);
+        builder.define(DATA_INRICHTING, 0);
+        builder.define(DATA_VLAG, 0);
     }
 
     @Override
@@ -356,10 +390,17 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
             draaiKant = random.nextBoolean() ? 1 : -1;
             koersGezet = true;
         }
-        stuur(level);
-        koers = Mth.approachDegrees(koers, doelKoers, DRAAI);
-        Vec3 f = vooruit(koers);
-        setPos(getX() + f.x * VAART, getY(), getZ() + f.z * VAART);
+        if (eigenaar != null) {
+            eigenAi(level);
+            if (isRemoved()) {
+                return;
+            }
+        } else {
+            stuur(level);
+            koers = Mth.approachDegrees(koers, doelKoers, DRAAI);
+            Vec3 f = vooruit(koers);
+            setPos(getX() + f.x * VAART, getY(), getZ() + f.z * VAART);
+        }
         setYRot(koers);
         setXRot(0);
         yBodyRot = koers;
@@ -382,6 +423,110 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
                     GuhAdvancements.grant(p, "einde2_zwevers_walvisrug");
                 }
             });
+        }
+    }
+
+    /**
+     * einde2 phase B (reizen): an own whale does not wander. Its owner on its back with the horn in hand steers it (where
+     * they look, slowly; looking up or down climbs or sinks within its band); called with the horn it comes to the spot it
+     * was called to; otherwise it hangs still where it was left. It stops for what lies ahead where a wild one turns away.
+     */
+    private void eigenAi(ServerLevel level) {
+        if (tickCount % 20 == 0) {
+            MELD.accept(this);
+            if (isRemoved()) {
+                return;
+            }
+        }
+        ServerPlayer baas = baas();
+        if (baas != null && baas.level() == level && STUURT.test(this, baas)) {
+            roepDoel = null;
+            doelKoers = baas.getYRot();
+            koers = Mth.approachDegrees(koers, doelKoers, STUUR_DRAAI);
+            Vec3 f = vooruit(koers);
+            double dy = baas.getXRot() < -35 ? KLIM : baas.getXRot() > 35 ? -KLIM : 0;
+            double y = Mth.clamp(getY() + dy, MIN_Y, MAX_Y);
+            if (inDeWeg(level, getX() + f.x * 22, getZ() + f.z * 22)) {
+                if (stopMelding-- <= 0) {
+                    stopMelding = 60;
+                    baas.sendOverlayMessage(Component.translatable("gui.guhs.einde2_zwevers.walvis.remt").withStyle(ChatFormatting.LIGHT_PURPLE));
+                }
+                setPos(getX(), y, getZ());
+                return;
+            }
+            setPos(getX() + f.x * STUUR_VAART, y, getZ() + f.z * STUUR_VAART);
+            return;
+        }
+        if (roepDoel != null) {
+            Vec3 d = roepDoel.subtract(position());
+            double ver = Math.sqrt(d.x * d.x + d.z * d.z);
+            if (ver < 3 && Math.abs(d.y) < 0.5) {
+                roepDoel = null;
+                zing();
+                return;
+            }
+            if (ver > 0.5) {
+                doelKoers = (float) (Mth.atan2(d.z, d.x) * Mth.RAD_TO_DEG) - 90f;
+                koers = Mth.approachDegrees(koers, doelKoers, STUUR_DRAAI * 2);
+            }
+            Vec3 f = vooruit(koers);
+            double tempo = Math.min(KOM_VAART, 0.06 + ver * 0.02);
+            double y = getY() + Mth.clamp(d.y, -KLIM * 2, KLIM * 2);
+            setPos(getX() + f.x * tempo, Mth.clamp(y, MIN_Y, MAX_Y), getZ() + f.z * tempo);
+        }
+    }
+
+    /** The owner of an own whale, when online. */
+    @Nullable
+    public ServerPlayer baas() {
+        return eigenaar == null || level().getServer() == null ? null : level().getServer().getPlayerList().getPlayer(eigenaar);
+    }
+
+    /** einde2 phase B (reizen): whose own whale this is (null: a wild one). */
+    @Nullable
+    public UUID eigenaar() {
+        return eigenaar;
+    }
+
+    public int gen() {
+        return gen;
+    }
+
+    /** Makes it an own whale of this player (it is saved from now on and never leaves by itself). */
+    public void zetEigenaar(UUID speler, int generatie) {
+        eigenaar = speler;
+        gen = generatie;
+        removeTag(WildeDieren.KOM_EN_GA);
+        setPersistenceRequired();
+        koers = doelKoers = getYRot();
+        koersGezet = true;
+    }
+
+    /** It flies to this spot (null: it stops and hangs where it is). */
+    public void roep(@Nullable Vec3 doel) {
+        roepDoel = doel;
+    }
+
+    @Nullable
+    public Vec3 roepDoel() {
+        return roepDoel;
+    }
+
+    /** The furniture on its back (bits) and the flag's colour. */
+    public int inrichting() {
+        return entityData.get(DATA_INRICHTING);
+    }
+
+    public int vlag() {
+        return entityData.get(DATA_VLAG);
+    }
+
+    public void zetInrichting(int delen, int vlag) {
+        if (delen != inrichting()) {
+            entityData.set(DATA_INRICHTING, delen);
+        }
+        if (vlag != vlag()) {
+            entityData.set(DATA_VLAG, vlag);
         }
     }
 
@@ -464,7 +609,7 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     /** A come-and-go whale of the top-up leaves when nobody who sees it is around any more. */
     @Override
     public void checkDespawn() {
-        if (WildeDieren.isKomEnGa(this) && !iemandZiet(WEG)) {
+        if (eigenaar == null && WildeDieren.isKomEnGa(this) && !iemandZiet(WEG)) {
             discard();
         }
     }
@@ -518,7 +663,13 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     public InteractionResult klik(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!isVoer(stack)) {
-            return InteractionResult.PASS;
+            if (hand != InteractionHand.MAIN_HAND) {
+                return InteractionResult.PASS;
+            }
+            if (level().isClientSide()) {
+                return inrichting() != 0 ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            }
+            return RUG_KLIK.apply(this, player);                  // (einde2 phase B: the furniture of an own whale)
         }
         if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -542,6 +693,9 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
         kijkers(64, p -> level.sendParticles(p, ParticleTypes.HEART, true, false, player.getX(), player.getY() + 2.2, player.getZ(), 6, 0.8, 0.5, 0.8, 0));
         zing();
         GuhAdvancements.grant(player, "einde2_zwevers_walvis_gevoerd");
+        for (BiConsumer<LeegtewalvisguhEntity, ServerPlayer> l : GEVOERD) {
+            l.accept(this, player);
+        }
         CompoundTag saved = GuhQuests.saved(player);
         long dag = GuhTime.day(level);
         if (saved.getLongOr(PAREL_DAG, Long.MIN_VALUE) == dag) {
@@ -620,6 +774,12 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putFloat("Koers", koers);
+        if (eigenaar != null) {
+            tag.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
+            tag.putInt("Gen", gen);
+            tag.putInt("Inrichting", inrichting());
+            tag.putInt("Vlag", vlag());
+        }
     }
 
     @Override
@@ -630,13 +790,19 @@ public class LeegtewalvisguhEntity extends Mob implements GeoEntity {
             koers = doelKoers = k;
             koersGezet = true;
         }
+        tag.read("Eigenaar", UUIDUtil.CODEC).ifPresent(u -> {
+            eigenaar = u;
+            gen = tag.getIntOr("Gen", 0);
+            zetInrichting(tag.getIntOr("Inrichting", 0), tag.getIntOr("Vlag", 0));
+        });
     }
 
     // --- GeckoLib -----------------------------------------------------------------------------------------------------------------
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<LeegtewalvisguhEntity>("beweeg", 20, state -> state.setAndContinue(isZingend() ? ZING : IDLE)));
+        controllers.add(new AnimationController<LeegtewalvisguhEntity>("beweeg", 20, state -> state.setAndContinue(isZingend()
+                || "zing".equals(nl.juiced.guhs.feature.verhaal.Cutscenes.animatie(this)) ? ZING : IDLE)));
         controllers.add(new AnimationController<LeegtewalvisguhEntity>("actie", 4, state -> PlayState.STOP)
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet")));
     }

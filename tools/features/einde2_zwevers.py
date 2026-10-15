@@ -43,8 +43,9 @@ DEX = {  # page -> (name, rarity, info)
     "leegtewalvisguh": ("Leegtewalvisguh", "Legendarisch, tussen de buiteneilanden (alleen voor wie de kapitein gelooft)",
                         "Reusachtig, traag en vadsig tevreden zweeft hij tussen de eilanden, en hij zingt zo laag dat je knabbels ervan "
                         "trillen. Op zijn rug groeit knabbelkoor en er is plek zat om te landen en een eindje mee te zweven. Voer hem een "
-                        "knabbelkoorvrucht en hij bedankt je met een leegteparel (eentje per dag, hij is zuinig). Temmen kan niet: "
-                        "probeer jij maar eens een eiland aan de lijn te doen. De oude kapitein in de havenkroeg zei het altijd al."),
+                        "knabbelkoorvrucht en hij bedankt je met een leegteparel (eentje per dag, hij is zuinig). Een eiland aan de lijn doe je "
+                        "niet, maar wie de oude kapitein in de havenkroeg gelooft en een walvis vaak voert, krijgt er een voor zichzelf: "
+                        "een vliegend thuis met een huisje op zijn rug."),
     "vleermuis_lemurguh": ("Vleermuis-lemurguh", "Zeldzaam in de Kruimelwolken (en bij de luchttempels)",
                            "Half vleermuis, half lemur, helemaal guh: enorme oren, een ringstaart en vliesvleugeltjes. Hij fladdert in "
                            "korte hupjes van plekje naar plekje en hangt het liefst ondersteboven aan een plafond te dutten, vleugels om "
@@ -82,6 +83,8 @@ LANG = {
     # the whale
     "gui.guhs.einde2_zwevers.walvis.parel": "De Leegtewalvisguh zingt dankjewel en laat een leegteparel voor je achter!",
     "gui.guhs.einde2_zwevers.walvis.morgen": "Smakelijk, zingt de walvis. Zijn parel van vandaag heb je al: morgen weer, njeg.",
+    # (einde2 phase B, reizen: an own whale steered into something big)
+    "gui.guhs.einde2_zwevers.walvis.remt": "Je walvis remt af: er hangt iets groots voor zijn snoet. Kijk een andere kant op.",
     # op commands
     "gui.guhs.einde2_zwevers.commando.walviszicht_aan": "%s ziet nu de Leegtewalvisguh.",
     "gui.guhs.einde2_zwevers.commando.walviszicht_uit": "%s ziet de Leegtewalvisguh niet meer.",
