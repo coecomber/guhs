@@ -276,6 +276,11 @@ public final class Cutscene {
             return this;
         }
 
+        /** (tests) the scene without registering it. */
+        public Cutscene bouw() {
+            return new Cutscene(this);
+        }
+
         /** Registers the scene (common code: both sides know it by id). */
         public Cutscene registreer() {
             Cutscene s = new Cutscene(this);
@@ -536,6 +541,29 @@ public final class Cutscene {
             }
         }
         return nu;
+    }
+
+    /**
+     * 1.4.4: the ticks at which the scene waits for a click ({@link Klikklok}): for every subtitle the last tick it is on
+     * the screen (its own end, or the tick before the next line takes over), never at or after the scene's end. A line
+     * that the next one replaces at the very same tick, or one that starts after the end, has no pause. The parts between
+     * the lines (no text) run on by themselves.
+     */
+    public int[] pauzes() {
+        List<Integer> uit = new ArrayList<>();
+        for (int i = 0; i < zinnen.size(); i++) {
+            Zeg z = zinnen.get(i);
+            int einde = z.t() + z.ticks();
+            if (i + 1 < zinnen.size()) {
+                einde = Math.min(einde, zinnen.get(i + 1).t());
+            }
+            einde = Math.min(einde, duur);
+            int p = einde - 1;
+            if (p >= Math.max(1, z.t()) && (uit.isEmpty() || uit.get(uit.size() - 1) != p)) {
+                uit.add(p);
+            }
+        }
+        return uit.stream().mapToInt(Integer::intValue).toArray();
     }
 
     // =====================================================================================================================

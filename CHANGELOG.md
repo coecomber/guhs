@@ -3,6 +3,15 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.4.4 — Minecraft 26.1.2
+
+Every story scene now waits for you. Same requirements as 1.4.3, no world reset.
+
+- **Click to continue:** after every line of a cutscene the scene stands still: the camera stops, everybody in it rests, and "Click to continue" shows in the corner. One click (left or right mouse button, or space) and it goes on. The parts without talking (flying, chasing, a look over the land) simply play on. This holds for every scene of the mod: The Lord of the Nibble Ring, Super Guhrio, Sniff Island, the old stories of the Guh Path (Baltoguh, Guhtwo, Ohana, the Cloud Chapel, the Grill Guh and the Carpenter Guh) and every scene you watch again from the Guhdex.
+- **Narrator cards and picture books** work the same way: the next line appears when you click.
+- **Seen it before? Hold to skip.** A scene or narrator card you have already watched to the end can be skipped as a whole by holding the button for a moment ("Hold to skip" shows top right, with a little bar). A scene you see for the first time can never be skipped.
+- **On a server everyone clicks for themselves:** your scene only waits for you, and nothing of the story (Sam-guh, the sled of Baltoguh, the Eye over the Ash Field) runs ahead while you are still reading.
+
 ## 1.4.3 — Minecraft 26.1.2
 
 Quick fixes in Nibble Park.

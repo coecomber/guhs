@@ -57,6 +57,11 @@ final class Vast {
         final boolean ontvangt;
         /** Runs on a normal end (not on a break-off). */
         final Consumer<ServerPlayer> einde;
+        /** 1.4.4: may the viewer skip it (a scene or card seen before): the client's end is then taken at any time. */
+        boolean overslaan;
+        /** 1.4.4: the viewer's clock stands still at a line (klik om verder te gaan), and how many ticks it stood still. */
+        boolean gepauzeerd;
+        long pauze;
 
         Slot(ServerPlayer p, String soort, String id, int min, int max, boolean ontvangt, Consumer<ServerPlayer> einde) {
             this.soort = soort;
@@ -71,7 +76,24 @@ final class Vast {
             this.ontvangt = ontvangt;
             this.einde = einde;
         }
+
+        /** Marks the lock as skippable (a scene or card the player saw before). */
+        Slot overslaan(boolean mag) {
+            this.overslaan = mag;
+            return this;
+        }
+
+        /**
+         * The viewer's time: server ticks since the start without the ticks the viewer's clock stood still at a line (at
+         * most {@link #MAX_PAUZE} of them, so a client that never goes on cannot hold a player forever).
+         */
+        long duurt(long nu) {
+            return nu - begin - Math.min(pauze, MAX_PAUZE);
+        }
     }
+
+    /** 1.4.4: at most this many ticks of waiting at lines count as standing still (30 minutes); after that the time-out runs again. */
+    static final long MAX_PAUZE = 20L * 60 * 30;
 
     private static final Map<UUID, Slot> SLOTEN = new ConcurrentHashMap<>();
     /** Until which server tick a player is still looked after. */
@@ -155,8 +177,19 @@ final class Vast {
     /** The client says the scene or card is over (ignored when it is not this one, or too early). */
     static void klaar(ServerPlayer p, String soort, String id) {
         Slot s = SLOTEN.get(p.getUUID());
-        if (s != null && s.soort.equals(soort) && s.id.equals(id) && p.level().getServer().getTickCount() - s.begin >= s.min) {
+        if (s != null && s.soort.equals(soort) && s.id.equals(id) && (s.overslaan || s.duurt(p.level().getServer().getTickCount()) >= s.min)) {
             eindig(p, s);
+        }
+    }
+
+    /**
+     * 1.4.4: the client says its clock stands still at a line (aan) or goes on again (uit). While it stands still the
+     * lock's time-out does not run: the server follows the viewer's own clock. Ignored when it is not this lock.
+     */
+    static void pauze(ServerPlayer p, String soort, String id, boolean aan) {
+        Slot s = SLOTEN.get(p.getUUID());
+        if (s != null && s.soort.equals(soort) && s.id.equals(id)) {
+            s.gepauzeerd = aan;
         }
     }
 
@@ -210,7 +243,10 @@ final class Vast {
             p.closeContainer();
         }
         houd(p, s);
-        long duurt = p.level().getServer().getTickCount() - s.begin;
+        if (s.gepauzeerd) {
+            s.pauze++;
+        }
+        long duurt = s.duurt(p.level().getServer().getTickCount());
         if (duurt >= s.max || !s.ontvangt && duurt >= MOCK_TICKS) {
             if (s.ontvangt) {
                 ModNetworking.sendTo(p, new VerhaalPayloads.Stop(s.soort, s.id));   // (the client never said it was over)

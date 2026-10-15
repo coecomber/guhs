@@ -66,6 +66,9 @@ ALGEMEEN = {
     "gui.guhs.verhalen.herbekijk.kaart": "Klik om deze vertelkaart opnieuw te lezen",
     # narrator cards and cutscenes
     "gui.guhs.verhaal.verder": "Verder »",
+    # 1.4.4: every scene and card waits for a click after each line; a seen one is skipped by holding the button
+    "gui.guhs.verhaal.klik": "Klik om verder te gaan",
+    "gui.guhs.verhaal.overslaan": "Houd ingedrukt om over te slaan",
     # the Superkompas: "Mijn verhaal"
     "structure.guhs.@doel": "Mijn verhaal",
     "structure.guhs.@doel.tooltip": "Het kompas wijst vanzelf naar het volgende doel van het verhaal dat je volgt. Moet je naar een andere wereld, dan wijst het naar het portaal.",

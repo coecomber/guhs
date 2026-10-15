@@ -266,6 +266,11 @@ public final class Sam {
                 return;
             }
         }
+        if (nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(p) && WACHT.equals(sam.getPersistentData().getStringOr(DOET, ""))) {
+            // 1.4.4: a scene waits for its viewer's clicks, so it can last longer than its script: while his player still
+            // watches, a Sam-guh that waits for the scene keeps waiting
+            sam.getPersistentData().putLong(TOT, Math.max(sam.getPersistentData().getLongOr(TOT, 0L), sam.level().getGameTime() + 40));
+        }
         String doet = doet(sam);
         if (!Ring.magOm(p) && !doet.equals(DRAAGT)) {
             // (PHASE3 R09) his player is in a game (a level of Super Guhrio, a race): Sam-guh waits where he stands, at the

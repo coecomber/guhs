@@ -807,5 +807,7 @@
   "sign.guhs.guhwaii.experiment_626": "EXPERIMENT 626",
   "sign.guhs.guhwaii.niet_aanraken": "DO NOT TOUCH!",
   "sign.guhs.guhwaii.behalve_als_je": "(unless you",
-  "sign.guhs.guhwaii.een_guh_bent": "are a guh)"
+  "sign.guhs.guhwaii.een_guh_bent": "are a guh)",
+  "gui.guhs.verhaal.klik": "Click to continue",
+  "gui.guhs.verhaal.overslaan": "Hold to skip"
 }

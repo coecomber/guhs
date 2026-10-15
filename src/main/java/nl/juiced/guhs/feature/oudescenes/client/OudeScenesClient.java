@@ -66,6 +66,8 @@ public final class OudeScenesClient {
 
     private static OudeScene actief;
     private static int laatsteTijd;
+    /** 1.4.4: is this a tick of the script that did not come before (false while the scene waits for a click)? */
+    private static boolean nieuweTik;
     // where the scene stands
     private static boolean plekBekend;
     private static BlockPos anker = BlockPos.ZERO;
@@ -131,6 +133,7 @@ public final class OudeScenesClient {
             return;
         }
         int t = CutsceneSpeler.tijd();
+        nieuweTik = t != laatsteTijd;   // (1.4.4: while the scene waits for a click the same tick comes again)
         laatsteTijd = t;
         Effecten e = actief.effecten();
         if (!plekBekend) {
@@ -172,7 +175,7 @@ public final class OudeScenesClient {
         zetTerug(level);
         // (a heart that started to beat in a scene that was watched to the end keeps beating: the server says so right after;
         // one that was broken off goes back to what it was)
-        if (hartGezet && s != null && laatsteTijd < s.scene().duur() - 2) {
+        if (hartGezet && s != null && laatsteTijd < s.scene().duur() - 2 && !CutsceneSpeler.laatsteAfgemaakt()) {   // (1.4.4: a skipped scene counts as watched)
             HemelClient.status(hartEcht);
         }
         hartGezet = false;
@@ -307,7 +310,7 @@ public final class OudeScenesClient {
             dag(level);
         }
         for (int flits : e.flitsen()) {
-            if (flits == t) {
+            if (flits == t && nieuweTik) {
                 level.setSkyFlashTime(3);
             }
         }

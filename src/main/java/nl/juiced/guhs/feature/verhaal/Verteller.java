@@ -13,7 +13,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 
 /**
  * bbq2 (verhaal engine, CONTRACT_130 §6.2.3): the narrator card at the start of a chapter: a full-screen card with a
- * drawn map, a title and lines that appear one by one, "Verder" after the last. The same lock as a cutscene
+ * drawn map, a title and lines that appear one by one (1.4.4: each next line on a click), "Verder" after the last. The same lock as a cutscene
  * ({@link Vast}); {@code daarna} runs on the server when the player clicked "Verder". Seen cards can be read again from the
  * Guhdex. Register from common code, show from the server:
  * <pre>
@@ -37,6 +37,11 @@ public final class Verteller {
 
     /** Ticks a line takes to appear on the client; the server does not accept "Verder" much sooner than the lines took. */
     public static final int TICKS_PER_REGEL = 25;
+    /**
+     * 1.4.4: the next line comes on a click, but not before the line before it was on the paper this many ticks (it fades
+     * in); the server does not accept "Verder" of an unread card sooner than half of that per line.
+     */
+    public static final int MIN_TICKS_PER_REGEL = 12;
 
     private static final Map<String, Kaart> ALLE = new LinkedHashMap<>();
 
@@ -81,7 +86,8 @@ public final class Verteller {
         if (k == null) {
             return false;
         }
-        int min = herhaling ? 0 : (k.regels() - 1) * TICKS_PER_REGEL / 2, max = k.regels() * TICKS_PER_REGEL + 20 * 300;
+        boolean overslaan = herhaling || gezien(p, id);
+        int min = overslaan ? 0 : (k.regels() - 1) * MIN_TICKS_PER_REGEL / 2, max = k.regels() * TICKS_PER_REGEL + 20 * 300;
         if (!Vast.zet(p, new Vast.Slot(p, VerhaalPayloads.KAART, id, min, max, Vast.ontvangt(p), speler -> {
             if (!herhaling) {
                 GuhQuests.saved(speler).putBoolean(key(id), true);
@@ -90,10 +96,10 @@ public final class Verteller {
                     daarna.accept(speler);
                 }
             }
-        }))) {
+        }).overslaan(overslaan))) {
             return false;
         }
-        ModNetworking.sendTo(p, new VerhaalPayloads.Kaart(VerhaalPayloads.KAART, id));
+        ModNetworking.sendTo(p, new VerhaalPayloads.Kaart(VerhaalPayloads.KAART, id, overslaan));
         return true;
     }
 

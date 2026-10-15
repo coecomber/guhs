@@ -27,7 +27,9 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
 /**
  * bbq2 (verhaal engine): the narrator card ({@link Verteller}): a parchment over the whole screen with a drawn map
  * ({@code textures/gui/verhaal/kaart_<id>.png}, 256x160), the chapter's title and its lines, which appear one by one;
- * after the last one the button "Verder". Esc does nothing (the card is part of the story). The same screen shows a
+ * after the last one the button "Verder". 1.4.4: the next line comes on a click (left or right mouse button, space or
+ * enter) once the line before it is on the paper, with the hint "Klik om verder te gaan"; a card read before (and every
+ * picture book) is skipped by holding the button. Esc does nothing (the card is part of the story). The same screen shows a
  * cutscene as a picture book ({@code Cutscenes.herbekijk} far from where the scene played): the scene's subtitles as the
  * lines, over the map of its narrator card.
  */
@@ -40,6 +42,11 @@ public final class VertelScherm extends Screen {
     private static VertelScherm open;
 
     private final String soort, id;
+    /** 1.4.4: may it be skipped by holding the button; how many lines show; the tick each line appeared; the hold. */
+    private final boolean overslaan;
+    private int getoond = 1, houd;
+    private final List<Integer> verschenen = new ArrayList<>(List.of(0));
+    private boolean gemeldWacht;
     private final List<Component> regels = new ArrayList<>();
     private final Component titel;
     @Nullable
@@ -49,10 +56,11 @@ public final class VertelScherm extends Screen {
     @Nullable
     private Button verder;
 
-    private VertelScherm(String soort, String id) {
+    private VertelScherm(String soort, String id, boolean overslaan) {
         super(Component.empty());
         this.soort = soort;
         this.id = id;
+        this.overslaan = overslaan;
         if (VerhaalPayloads.BOEK.equals(soort)) {
             Cutscene s = Cutscene.van(id);
             this.titel = Component.translatable(s == null ? "scene.guhs." + id + ".titel" : s.titelKey());
@@ -88,7 +96,7 @@ public final class VertelScherm extends Screen {
             return;
         }
         CutsceneSpeler.stop(false);
-        open = new VertelScherm(p.soort(), p.id());
+        open = new VertelScherm(p.soort(), p.id(), p.overslaan());
         VerhaalClient.zetBezig();
         mc.setScreen(open);
         mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 0.9f));
@@ -124,11 +132,54 @@ public final class VertelScherm extends Screen {
 
     /** How many lines show now. */
     private int zichtbaar() {
-        return Math.min(regels.size(), 1 + ticks / Verteller.TICKS_PER_REGEL);
+        return Math.min(regels.size(), getoond);
+    }
+
+    /** 1.4.4: the newest line is on the paper: the card waits for a click (the next line, or "Verder" after the last). */
+    private boolean wacht() {
+        return !klaar && ticks - verschenen.get(verschenen.size() - 1) >= Verteller.MIN_TICKS_PER_REGEL;
     }
 
     private boolean alles() {
-        return zichtbaar() >= regels.size() && ticks >= (regels.size() - 1) * Verteller.TICKS_PER_REGEL + 12;
+        return zichtbaar() >= regels.size() && wacht();
+    }
+
+    /** 1.4.4: a click: the next line, or after the last one "Verder". */
+    private void klik() {
+        if (!wacht()) {
+            return;
+        }
+        if (zichtbaar() < regels.size()) {
+            getoond++;
+            verschenen.add(ticks);
+            meld(false);
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.3f, 0.4f));
+        } else {
+            verder();
+        }
+    }
+
+    /** 1.4.4: tells the server that the card waits for a click (its time-out stands still) or goes on. */
+    private void meld(boolean wacht) {
+        if (wacht == gemeldWacht) {
+            return;
+        }
+        gemeldWacht = wacht;
+        if (Minecraft.getInstance().getConnection() != null) {
+            ClientPacketDistributor.sendToServer(new VerhaalPayloads.Pauze(soort, id, wacht));
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean dubbel) {
+        if (super.mouseClicked(event, dubbel)) {
+            return true;   // (the button "Verder")
+        }
+        if (event.button() == org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT || event.button() == org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            klik();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -158,11 +209,17 @@ public final class VertelScherm extends Screen {
             }
             return;
         }
-        int voor = zichtbaar();
         ticks++;
-        if (zichtbaar() > voor) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.3f, 0.4f));
+        // 1.4.4: a card read before is skipped by holding the button
+        if (overslaan && CutsceneSpeler.knopIngedruktInScherm()) {
+            if (++houd >= nl.juiced.guhs.feature.verhaal.Klikklok.HOUD_TICKS) {
+                verder();
+                return;
+            }
+        } else {
+            houd = 0;
         }
+        meld(wacht());
         if (verder != null) {
             verder.visible = alles();
         }
@@ -212,7 +269,7 @@ public final class VertelScherm extends Screen {
         int eerste = n - blokken.size();
         for (int i = 0; i < blokken.size(); i++) {
             int nr = eerste + i;
-            float sinds = ticks + partialTick - nr * Verteller.TICKS_PER_REGEL;
+            float sinds = ticks + partialTick - verschenen.get(Math.min(nr, verschenen.size() - 1));
             int alpha = (int) (Mth.clamp(sinds / 12f, 0.05f, 1f) * 255);
             int kleur = (alpha << 24) | ((nr == n - 1 ? INKT : INKT_ZACHT) & 0xFFFFFF);
             for (FormattedCharSequence regel : blokken.get(i)) {
@@ -221,13 +278,28 @@ public final class VertelScherm extends Screen {
             }
             y += 4;
         }
+        // 1.4.4: the hints
+        if (wacht() && zichtbaar() < regels.size()) {
+            int alpha = 150 + (int) (105 * (0.5 + 0.5 * Math.sin((ticks + partialTick) * 0.25)));
+            Component klik = Component.translatable(VerhaalHud.KLIK).append(" ▶");
+            g.text(font, klik, px + pw - 10 - font.width(klik), py + ph - 14, (alpha << 24) | (TITEL & 0xFFFFFF), false);
+        }
+        if (overslaan) {
+            Component houdTekst = Component.translatable(VerhaalHud.OVERSLAAN);
+            int w = font.width(houdTekst), x = width - 6 - w;
+            g.text(font, houdTekst, x, 2, 0xB0FFFFFF, true);
+            if (houd > 0) {
+                g.fill(x, 12, x + w, 14, 0x60FFFFFF);
+                g.fill(x, 12, x + Math.round(w * Math.min(1f, houd / (float) nl.juiced.guhs.feature.verhaal.Klikklok.HOUD_TICKS)), 14, 0xFFF7D27A);
+            }
+        }
     }
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (alles() && (event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER || event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE
-                || event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_KP_ENTER)) {
-            verder();
+        if (event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER || event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE
+                || event.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_KP_ENTER) {
+            klik();
             return true;
         }
         return super.keyPressed(event);

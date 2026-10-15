@@ -11631,6 +11631,8 @@
   "gui.guhs.verhalen.herbekijk": "opnieuw »",
   "gui.guhs.verhalen.herbekijk.scene": "Klik om dit filmpje opnieuw te bekijken",
   "gui.guhs.verhalen.herbekijk.kaart": "Klik om deze vertelkaart opnieuw te lezen",
+  "gui.guhs.verhaal.klik": "Klik om verder te gaan",
+  "gui.guhs.verhaal.overslaan": "Houd ingedrukt om over te slaan",
   "structure.guhs.@doel": "Mijn verhaal",
   "structure.guhs.@doel.tooltip": "Het kompas wijst vanzelf naar het volgende doel van het verhaal dat je volgt. Moet je naar een andere wereld, dan wijst het naar het portaal.",
   "gui.guhs.verhaal.kompas.geen": "Je verhaal wijst nu nergens heen",

@@ -11631,6 +11631,8 @@
   "gui.guhs.verhalen.herbekijk": "again »",
   "gui.guhs.verhalen.herbekijk.scene": "Click to watch this scene again",
   "gui.guhs.verhalen.herbekijk.kaart": "Click to read this story card again",
+  "gui.guhs.verhaal.klik": "Click to continue",
+  "gui.guhs.verhaal.overslaan": "Hold to skip",
   "structure.guhs.@doel": "My Story",
   "structure.guhs.@doel.tooltip": "The compass automatically points to the next objective of the story you're following. If you need to go to another world, it points to the portal.",
   "gui.guhs.verhaal.kompas.geen": "Your story isn't pointing anywhere right now",

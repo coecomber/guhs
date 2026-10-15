@@ -104,6 +104,12 @@ public final class Blik {
     private int betrapt;
     /** Until this game time the light sweeps het Asveld whoever is there (the scene on the ridge shows it). */
     private long toonVeldTot;
+    /**
+     * 1.4.4: the viewers of a scene that shows what the Eye does (true: the sweep of het Asveld, false: the stare of
+     * {@link #zet}). A scene waits for its viewer's clicks, so it can last longer than its script: while one of them still
+     * watches, the show goes on.
+     */
+    private final Map<UUID, Boolean> kijkers = new HashMap<>();
 
     /** The spot the Eye looks at right now (world; null: it sleeps or has not looked yet). */
     @Nullable
@@ -161,6 +167,20 @@ public final class Blik {
             lijnA = Lijn.van(t.route(Plekken.BLIK_A), false);
             lijnB = Lijn.van(t.route(Plekken.BLIK_B), false);
             lijnRust = Lijn.van(t.route(Plekken.BLIK_RUST), true);
+        }
+        if (!kijkers.isEmpty()) {
+            kijkers.entrySet().removeIf(e -> {
+                ServerPlayer k = level.getServer().getPlayerList().getPlayer(e.getKey());
+                if (k == null || !nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(k)) {
+                    return true;
+                }
+                if (e.getValue()) {
+                    toonVeldTot = Math.max(toonVeldTot, level.getGameTime() + 1);
+                } else {
+                    treuzel = Math.max(treuzel, 20);
+                }
+                return false;
+            });
         }
         List<ServerPlayer> spelers = aanwezig(level, t, oog);
         if (spelers.isEmpty() && toonVeldTot <= level.getGameTime() && treuzel <= 0) {
@@ -358,6 +378,11 @@ public final class Blik {
     /** The light sweeps het Asveld until this game time, also when nobody is in it (a scene shows how it goes). */
     public void toonVeld(long totGameTime) {
         toonVeldTot = totGameTime;
+    }
+
+    /** 1.4.4: the show of {@link #toonVeld} (veld) or {@link #zet} goes on at least as long as this player watches a scene. */
+    public void zolangKijkt(ServerPlayer p, boolean veld) {
+        kijkers.put(p.getUUID(), veld);
     }
 
     /** (a scene, tests, the dev command) the light jumps here and stays for a while. */

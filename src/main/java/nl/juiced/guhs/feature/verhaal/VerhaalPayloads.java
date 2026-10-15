@@ -20,7 +20,8 @@ import nl.juiced.guhs.Guhs;
  *   <li>{@code guhs:verhaal_cutscene} (to the client): play this scene at this anchor;</li>
  *   <li>{@code guhs:verhaal_kaart} (to the client): show this narrator card, or a scene as a picture book;</li>
  *   <li>{@code guhs:verhaal_stop} (to the client): what you are watching ends now (the lock was broken off);</li>
- *   <li>{@code guhs:verhaal_klaar} (to the server): the scene or card is over;</li>
+ *   <li>{@code guhs:verhaal_klaar} (to the server): the scene or card is over (1.4.4: or was skipped by holding the button);</li>
+ *   <li>{@code guhs:verhaal_pauze} (to the server, 1.4.4): the viewer's clock stands still at a line / goes on again;</li>
  *   <li>{@code guhs:verhaal_herbekijk} (to the server): the Guhdex button "watch again";</li>
  *   <li>{@code guhs:verhaal_sluiers} (to the client): the smoke walls near you.</li>
  * </ul>
@@ -38,10 +39,12 @@ public final class VerhaalPayloads {
     public static volatile Consumer<Rook> rookOntvanger = p -> {
     };
 
-    public record Speel(String id, BlockPos anker, int draai) implements CustomPacketPayload {
+    /** overslaan (1.4.4): the player saw this scene before, so holding the button skips it. */
+    public record Speel(String id, BlockPos anker, int draai, boolean overslaan) implements CustomPacketPayload {
         public static final Type<Speel> TYPE = new Type<>(Guhs.id("verhaal_cutscene"));
         public static final StreamCodec<FriendlyByteBuf, Speel> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8, Speel::id, BlockPos.STREAM_CODEC, Speel::anker, ByteBufCodecs.VAR_INT, Speel::draai, Speel::new);
+                ByteBufCodecs.STRING_UTF8, Speel::id, BlockPos.STREAM_CODEC, Speel::anker, ByteBufCodecs.VAR_INT, Speel::draai,
+                ByteBufCodecs.BOOL, Speel::overslaan, Speel::new);
 
         public Rotation rotatie() {
             return Rotation.values()[Math.floorMod(draai, Rotation.values().length)];
@@ -57,11 +60,14 @@ public final class VerhaalPayloads {
         }
     }
 
-    /** soort: {@link #KAART} (id = a narrator card) or {@link #BOEK} (id = a scene, shown as a picture book). */
-    public record Kaart(String soort, String id) implements CustomPacketPayload {
+    /**
+     * soort: {@link #KAART} (id = a narrator card) or {@link #BOEK} (id = a scene, shown as a picture book); overslaan
+     * (1.4.4): read before, so holding the button skips it.
+     */
+    public record Kaart(String soort, String id, boolean overslaan) implements CustomPacketPayload {
         public static final Type<Kaart> TYPE = new Type<>(Guhs.id("verhaal_kaart"));
         public static final StreamCodec<FriendlyByteBuf, Kaart> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8, Kaart::soort, ByteBufCodecs.STRING_UTF8, Kaart::id, Kaart::new);
+                ByteBufCodecs.STRING_UTF8, Kaart::soort, ByteBufCodecs.STRING_UTF8, Kaart::id, ByteBufCodecs.BOOL, Kaart::overslaan, Kaart::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
@@ -101,6 +107,24 @@ public final class VerhaalPayloads {
         public static void handle(Klaar p, IPayloadContext context) {
             if (context.player() instanceof ServerPlayer sp) {
                 context.enqueueWork(() -> Vast.klaar(sp, p.soort(), p.id()));
+            }
+        }
+    }
+
+    /** 1.4.4: the viewer's clock of this scene or card stands still at a line (aan) or goes on again. */
+    public record Pauze(String soort, String id, boolean aan) implements CustomPacketPayload {
+        public static final Type<Pauze> TYPE = new Type<>(Guhs.id("verhaal_pauze"));
+        public static final StreamCodec<FriendlyByteBuf, Pauze> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.STRING_UTF8, Pauze::soort, ByteBufCodecs.STRING_UTF8, Pauze::id, ByteBufCodecs.BOOL, Pauze::aan, Pauze::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(Pauze p, IPayloadContext context) {
+            if (context.player() instanceof ServerPlayer sp) {
+                context.enqueueWork(() -> Vast.pauze(sp, p.soort(), p.id(), p.aan()));
             }
         }
     }
@@ -151,6 +175,7 @@ public final class VerhaalPayloads {
         registrar.playToClient(Stop.TYPE, Stop.STREAM_CODEC, Stop::handle);
         registrar.playToClient(Rook.TYPE, Rook.STREAM_CODEC, Rook::handle);
         registrar.playToServer(Klaar.TYPE, Klaar.STREAM_CODEC, Klaar::handle);
+        registrar.playToServer(Pauze.TYPE, Pauze.STREAM_CODEC, Pauze::handle);
         registrar.playToServer(Herbekijk.TYPE, Herbekijk.STREAM_CODEC, Herbekijk::handle);
     }
 

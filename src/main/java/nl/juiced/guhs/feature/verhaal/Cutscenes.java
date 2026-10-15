@@ -18,9 +18,14 @@ import nl.juiced.guhs.quest.GuhQuests;
 /**
  * bbq2 (verhaal engine, CONTRACT_130 §6.2.2): plays a {@link Cutscene} for one player. The actors are client-side
  * entities of the viewer only, so two players can watch at the same spot and the real NPCs stay where they are. While it
- * plays the player is locked ({@link Vast}); it cannot be skipped. It ends when the client reports the end or after
- * {@code duur + 100} ticks, and only then {@code daarna} runs on the server: advance the story step THERE, so a
+ * plays the player is locked ({@link Vast}). It ends when the client reports the end or after {@code duur + 100} ticks
+ * of the viewer's own time, and only then {@code daarna} runs on the server: advance the story step THERE, so a
  * disconnect in the middle simply replays the scene next time.
+ * <p>
+ * 1.4.4: after every line the viewer's scene stands still until they click ({@link Klikklok}); the client tells the
+ * server ({@code guhs:verhaal_pauze}) and the time-out does not run while it waits, so nothing of the scene happens on
+ * the server before the viewer is there. A scene the player saw before (and every replay) can be skipped by holding the
+ * button; {@code daarna} then runs at once.
  * <pre>
  * if (LIJN.stap(p) == 2) {
  *     Cutscenes.speel(p, AANKOMST, anker, draai, speler -&gt; LIJN.verder(speler, 2));
@@ -41,6 +46,8 @@ public final class Cutscenes {
 
     /** Client: the animation each actor plays now (entity id to name), for the actors' own renderers. */
     private static final Map<Integer, Animatie> ANIMATIES = new ConcurrentHashMap<>();
+    /** Client (1.4.4): the scene stands still at a line since this game time (-1: it runs). */
+    private static volatile long pauzeSinds = -1;
 
     private static String key(String id) {
         return "guhs_scene_" + id;
@@ -56,6 +63,7 @@ public final class Cutscenes {
 
     private static boolean start(ServerPlayer p, Cutscene s, BlockPos anker, Rotation draai, boolean herhaling, @Nullable Consumer<ServerPlayer> daarna) {
         boolean ontvangt = Vast.ontvangt(p);
+        boolean overslaan = herhaling || gezien(p, s.id());
         Vast.Slot slot = new Vast.Slot(p, VerhaalPayloads.SCENE, s.id(), Math.max(0, s.duur() - MARGE), s.duur() + UITLOOP, ontvangt, speler -> {
             if (!herhaling) {
                 CompoundTag t = GuhQuests.saved(speler).getCompoundOrEmpty(key(s.id())).copy();
@@ -66,7 +74,7 @@ public final class Cutscenes {
                     daarna.accept(speler);
                 }
             }
-        });
+        }).overslaan(overslaan);
         if (!Vast.zet(p, slot)) {
             return false;
         }
@@ -78,7 +86,7 @@ public final class Cutscenes {
             t.putInt("Draai", draai.ordinal());
             GuhQuests.saved(p).put(key(s.id()), t);
         }
-        ModNetworking.sendTo(p, new VerhaalPayloads.Speel(s.id(), anker, draai.ordinal()));
+        ModNetworking.sendTo(p, new VerhaalPayloads.Speel(s.id(), anker, draai.ordinal(), overslaan));
         return true;
     }
 
@@ -112,11 +120,11 @@ public final class Cutscenes {
             start(p, s, anker, draai, true, null);
             return;
         }
-        // too far away (or another dimension): the picture book
+        // too far away (or another dimension): the picture book (a replay: may always be skipped)
         int max = s.zinnen().size() * 60 + 20 * 120;
         if (Vast.zet(p, new Vast.Slot(p, VerhaalPayloads.BOEK, id, 0, max, Vast.ontvangt(p), speler -> {
-        }))) {
-            ModNetworking.sendTo(p, new VerhaalPayloads.Kaart(VerhaalPayloads.BOEK, id));
+        }).overslaan(true))) {
+            ModNetworking.sendTo(p, new VerhaalPayloads.Kaart(VerhaalPayloads.BOEK, id, true));
         }
     }
 
@@ -136,13 +144,32 @@ public final class Cutscenes {
      */
     public static String animatie(Entity e) {
         Animatie a = ANIMATIES.get(e.getId());
-        return a == null ? "" : a.naam();
+        return a == null || pauzeSinds >= 0 ? "" : a.naam();   // (1.4.4: while the scene waits for a click every actor rests)
     }
 
-    /** Client: how many ticks ago that animation started (0 when none). */
+    /** Client: how many ticks ago that animation started (0 when none); the time the scene stood still does not count. */
     public static int animatieTicks(Entity e) {
         Animatie a = ANIMATIES.get(e.getId());
-        return a == null ? 0 : (int) Math.max(0, e.level().getGameTime() - a.sinds());
+        return a == null || pauzeSinds >= 0 ? 0 : (int) Math.max(0, e.level().getGameTime() - a.sinds());
+    }
+
+    /**
+     * Client (1.4.4, the client player of scenes): the scene stands still at a line (every actor rests) or goes on again (nu:
+     * the client level's game time); the animations then go on where they were (the waiting time is added to their start).
+     */
+    public static void zetGepauzeerd(boolean aan, long nu) {
+        if (aan && pauzeSinds < 0) {
+            pauzeSinds = nu;
+        } else if (!aan && pauzeSinds >= 0) {
+            long dt = Math.max(0, nu - pauzeSinds);
+            ANIMATIES.replaceAll((id, a) -> new Animatie(a.naam(), a.sinds() + dt));
+            pauzeSinds = -1;
+        }
+    }
+
+    /** Client (1.4.4): does the scene stand still at a line now (the actors rest)? */
+    public static boolean gepauzeerd() {
+        return pauzeSinds >= 0;
     }
 
     /** (the client player of scenes) an actor starts an animation ("" = stops). */

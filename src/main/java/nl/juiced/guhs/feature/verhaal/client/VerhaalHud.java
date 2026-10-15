@@ -54,7 +54,33 @@ public final class VerhaalHud {
                 y += 10;
             }
         }
+        hints(g, mc, sw, sh, balk);
     }
+
+    /** 1.4.4: the hint "Klik om verder te gaan" when the scene waits at a line, and "Houd ingedrukt om over te slaan" for a seen scene. */
+    private static void hints(GuiGraphicsExtractor g, Minecraft mc, int sw, int sh, int balk) {
+        Font font = mc.font;
+        if (CutsceneSpeler.wacht()) {
+            long tijd = mc.level == null ? 0 : mc.level.getGameTime();
+            int alpha = 150 + (int) (105 * (0.5 + 0.5 * Math.sin(tijd * 0.25)));
+            Component klik = Component.translatable(KLIK).append(" ▶");
+            int x = sw - 6 - font.width(klik), y = sh - Math.max(10, Math.min(balk, 14) / 2 + 9);
+            g.text(font, klik, x, y, (alpha << 24) | 0xF7D27A, true);
+        }
+        if (CutsceneSpeler.magOverslaan()) {
+            Component houd = Component.translatable(OVERSLAAN);
+            int w = font.width(houd), x = sw - 6 - w, y = 4;
+            g.text(font, houd, x, y, 0xB0FFFFFF, true);
+            float v = CutsceneSpeler.houdVoortgang();
+            if (v > 0) {
+                g.fill(x, y + 10, x + w, y + 12, 0x60FFFFFF);
+                g.fill(x, y + 10, x + Math.round(w * v), y + 12, 0xFFF7D27A);
+            }
+        }
+    }
+
+    /** 1.4.4: the hints of a scene or card that waits for a click (tools/features/verhaal_motor.py). */
+    public static final String KLIK = "gui.guhs.verhaal.klik", OVERSLAAN = "gui.guhs.verhaal.overslaan";
 
     /** The lang key of the objective of the followed line (null: nothing to show). */
     static String doelKey() {

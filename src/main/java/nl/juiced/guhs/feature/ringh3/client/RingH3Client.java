@@ -289,7 +289,7 @@ public final class RingH3Client {
         if (CutsceneSpeler.scene() != Scenes.BRUG) {
             return;
         }
-        float tijd = CutsceneSpeler.tijd() + (float) event.getPartialTick();
+        float tijd = CutsceneSpeler.tijd((float) event.getPartialTick());
         for (float[] l : Scenes.LENZEN) {
             if (tijd >= l[0] && tijd < l[1]) {
                 event.setFOV(l[2] + (l[3] - l[2]) * (tijd - l[0]) / Math.max(1f, l[1] - l[0]));
@@ -303,7 +303,7 @@ public final class RingH3Client {
         if (scene != Scenes.BRUG) {
             return;
         }
-        float tijd = CutsceneSpeler.tijd() + event.getPartialTick().getGameTimeDeltaPartialTick(false);
+        float tijd = CutsceneSpeler.tijd(event.getPartialTick().getGameTimeDeltaPartialTick(false));
         float sterkst = 0;
         for (int[] f : Scenes.FLITSEN) {
             float dt = tijd - f[0];

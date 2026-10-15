@@ -536,6 +536,162 @@ public class VerhaalMotorGameTests {
         helper.succeed();
     }
 
+    // =====================================================================================================================
+    // 1.4.4: klik om verder te gaan
+    // =====================================================================================================================
+
+    /**
+     * 1.4.4: the clock of a scene: it halts at the end of every line until a click, goes on after it, runs on by itself
+     * through the parts without text, and only a seen scene is skipped by holding the button.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void verhaalMotorKlikklok(GameTestHelper helper) {
+        Cutscene s = VerhaalDemo.scene();
+        int[] p = s.pauzes();
+        helper.assertTrue(java.util.Arrays.equals(p, new int[] {67, 133, 177}), "a pause at the last tick of every line: " + java.util.Arrays.toString(p));
+        for (int i = 0; i < p.length; i++) {
+            Cutscene.Zeg z = s.zinOp(p[i]);
+            helper.assertTrue(z != null && z.key().equals(s.zinnen().get(i).key()) && s.zinOp(p[i] + 1) != z,
+                    "pause " + p[i] + " is the last tick its own line is on the screen");
+        }
+        // a script: lines that overlap, one replaced at the same tick, one past the end
+        Cutscene x = Cutscene.maak("verhaal_klikklok_test").duur(100)
+                .zeg(10, "", "a", 40).zeg(30, "", "b", 20).zeg(30, "", "c", 30).zeg(90, "", "d", 40).zeg(120, "", "e", 20).bouw();
+        helper.assertTrue(java.util.Arrays.equals(x.pauzes(), new int[] {29, 59, 99}),
+                "overlapping lines wait before the next one takes over, a line replaced at once has no pause, never at or past the end: "
+                        + java.util.Arrays.toString(x.pauzes()));
+
+        // the clock of an unseen scene
+        Klikklok k = new Klikklok(p, false);
+        int n = 0;
+        while (!k.wacht() && n < 500) {
+            helper.assertTrue(k.tik(false, false) == Klikklok.Stap.LOOPT, "the time runs by itself before the first line ends");
+            n++;
+        }
+        helper.assertTrue(k.wacht() && k.tijd() == 67, "it halts at the end of the first line (" + k.tijd() + ")");
+        for (int i = 0; i < 400; i++) {
+            helper.assertTrue(k.tik(false, i % 2 == 0) == Klikklok.Stap.WACHT && k.tijd() == 67, "without a click it stands still (holding does nothing for an unseen scene)");
+        }
+        helper.assertTrue(k.houdVoortgang() == 0f && !k.overgeslagen(), "an unseen scene is never skipped");
+        helper.assertTrue(k.tik(true, true) == Klikklok.Stap.VERDER && !k.wacht() && k.tijd() == 68, "one click: it goes on");
+        // the part without text (68..87) and the second line run on by themselves until the end of that line
+        for (int i = 68; i < 133; i++) {
+            helper.assertTrue(k.tik(false, false) == Klikklok.Stap.LOOPT && k.tijd() == i + 1, "the part without text runs on (" + i + ")");
+        }
+        helper.assertTrue(k.wacht() && k.tijd() == 133, "it halts at the second line");
+        helper.assertTrue(k.tik(false, false) == Klikklok.Stap.WACHT && k.tik(true, false) == Klikklok.Stap.VERDER, "and goes on after a click");
+        int veilig = 0;
+        while (!k.wacht() && veilig++ < 500) {
+            k.tik(false, false);
+        }
+        helper.assertTrue(k.tijd() == 177 && k.wacht(), "the third line (" + k.tijd() + ")");
+        k.tik(true, false);
+        for (int i = 0; i < 40; i++) {
+            helper.assertTrue(k.tik(false, false) == Klikklok.Stap.LOOPT, "after the last line nothing waits any more");
+        }
+        helper.assertTrue(!k.wacht() && k.tijd() == 218, "the time ran on (" + k.tijd() + ")");
+
+        // a click while a line is still being read does nothing
+        Klikklok vroeg = new Klikklok(p, false);
+        for (int i = 0; i < 20; i++) {
+            vroeg.tik(true, false);
+        }
+        helper.assertTrue(vroeg.tijd() == 20 && !vroeg.wacht(), "a click before the pause neither skips nor speeds up");
+
+        // a seen scene: holding the button skips it, a short press only goes on
+        Klikklok gezien = new Klikklok(p, true);
+        for (int i = 0; i < Klikklok.HOUD_TICKS - 1; i++) {
+            helper.assertTrue(gezien.tik(false, true) == Klikklok.Stap.LOOPT, "holding: not yet");
+        }
+        gezien.tik(false, false);
+        helper.assertTrue(!gezien.overgeslagen() && gezien.houdVoortgang() == 0f, "letting go too early starts the hold again");
+        Klikklok.Stap laatste = null;
+        for (int i = 0; i < Klikklok.HOUD_TICKS; i++) {
+            laatste = gezien.tik(false, true);
+        }
+        helper.assertTrue(laatste == Klikklok.Stap.OVERGESLAGEN && gezien.overgeslagen(), "held for 1.5 seconds: skipped");
+        helper.succeed();
+    }
+
+    /** A lock that a real client holds: its time-out stands still while the viewer's clock waits at a line; skipping only for a seen one. */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 260)
+    public static void verhaalMotorPauzeServer(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        int[] daarna = {0};
+        // (a mock player's client receives nothing: a lock as a real client's, with a short script: min 20, time-out 30 ticks)
+        Vast.Slot slot = new Vast.Slot(p, VerhaalPayloads.SCENE, "verhaal_demo", 20, 30, true, s -> daarna[0]++);
+        helper.assertTrue(Vast.zet(p, slot) && !slot.overslaan, "locked, an unseen scene");
+        Vast.klaar(p, VerhaalPayloads.SCENE, "verhaal_demo");
+        helper.assertTrue(Cutscenes.bezig(p) && daarna[0] == 0, "an unseen scene can't be ended early (skipping is only for a seen one)");
+        Vast.pauze(p, VerhaalPayloads.SCENE, "andere_scene", true);
+        helper.assertTrue(!slot.gepauzeerd, "a pause of another scene is ignored");
+        Vast.pauze(p, VerhaalPayloads.SCENE, "verhaal_demo", true);
+        helper.assertTrue(slot.gepauzeerd, "the viewer's clock waits at a line");
+        helper.onEachTick(() -> {
+            if (Vast.van(p) != null) {
+                tik(p);
+            }
+        });
+        helper.runAfterDelay(60, () -> {
+            helper.assertTrue(Cutscenes.bezig(p) && daarna[0] == 0 && slot.pauze >= 55, "60 ticks waiting at a line: no time-out (the script is 30 ticks)");
+            Vast.klaar(p, VerhaalPayloads.SCENE, "verhaal_demo");
+            helper.assertTrue(Cutscenes.bezig(p), "the viewer's own time is still short of the script's: no early end");
+            Vast.pauze(p, VerhaalPayloads.SCENE, "verhaal_demo", false);
+        });
+        helper.runAfterDelay(100, () -> {
+            helper.assertTrue(!Cutscenes.bezig(p) && daarna[0] == 1, "after the click the time runs again and the scene ends as before: daarna once");
+            // a seen scene: holding the button ends it at once (daarna runs)
+            Vast.Slot zien = new Vast.Slot(p, VerhaalPayloads.SCENE, "verhaal_demo", 20, 30, true, s -> daarna[0]++).overslaan(true);
+            helper.assertTrue(Vast.zet(p, zien), "locked again");
+            Vast.klaar(p, VerhaalPayloads.SCENE, "verhaal_demo");
+            helper.assertTrue(!Cutscenes.bezig(p) && daarna[0] == 2, "a seen scene is skipped at once, daarna runs");
+        });
+        helper.runAfterDelay(110, () -> {
+            // the engine marks it: a scene seen before (and a replay) is skippable, an unseen scene or unread card is not
+            Cutscene s = VerhaalDemo.scene();
+            Cutscenes.vergeet(p, s.id());
+            helper.assertTrue(Cutscenes.speel(p, s, p.blockPosition(), Rotation.NONE, null) && !Vast.van(p).overslaan, "unseen: not skippable");
+            Vast.breekAf(p, false);
+            CompoundTag g = new CompoundTag();
+            g.putBoolean("Gezien", true);
+            GuhQuests.saved(p).put("guhs_scene_" + s.id(), g);
+            helper.assertTrue(Cutscenes.gezien(p, s.id()) && Cutscenes.speel(p, s, p.blockPosition(), Rotation.NONE, null) && Vast.van(p).overslaan,
+                    "seen before: skippable");
+            Vast.breekAf(p, false);
+            Cutscenes.vergeet(p, s.id());
+            Verteller.vergeet(p, "demo");
+            helper.assertTrue(Verteller.toon(p, "demo", null) && !Vast.van(p).overslaan, "an unread card: not skippable");
+            Vast.breekAf(p, false);
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
+
+    /** A player who leaves (logout, death) while their scene waits at a line: unlocked, no daarna, it replays; a late pause message is ignored. */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void verhaalMotorPauzeWeg(GameTestHelper helper) {
+        ServerPlayer p = speler(helper), q = speler(helper);
+        int[] daarna = {0};
+        Vast.Slot a = new Vast.Slot(p, VerhaalPayloads.SCENE, "verhaal_demo", 20, 30, true, s -> daarna[0]++);
+        Vast.Slot b = new Vast.Slot(q, VerhaalPayloads.SCENE, "verhaal_demo", 20, 30, true, s -> daarna[0] += 10);
+        helper.assertTrue(Vast.zet(p, a) && Vast.zet(q, b), "two viewers of the same scene, each with their own lock");
+        Vast.pauze(p, VerhaalPayloads.SCENE, "verhaal_demo", true);
+        helper.assertTrue(a.gepauzeerd && !b.gepauzeerd, "every viewer waits for their own click");
+        Vast.onLogout(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent(p));
+        helper.assertTrue(!Cutscenes.bezig(p) && daarna[0] == 0, "logged out while it waited: unlocked, no daarna (the scene replays next time)");
+        Vast.pauze(p, VerhaalPayloads.SCENE, "verhaal_demo", false);
+        Vast.klaar(p, VerhaalPayloads.SCENE, "verhaal_demo");
+        helper.assertTrue(!Cutscenes.bezig(p) && daarna[0] == 0 && Vast.van(p) == null, "a late pause or end of the gone lock does nothing");
+        helper.assertTrue(Cutscenes.bezig(q) && Vast.van(q) == b, "the other viewer still watches");
+        Vast.pauze(q, VerhaalPayloads.SCENE, "verhaal_demo", true);
+        Vast.onDeath(new LivingDeathEvent(q, helper.getLevel().damageSources().genericKill()));
+        helper.assertTrue(!Cutscenes.bezig(q) && daarna[0] == 0, "died while it waited: unlocked, no daarna");
+        helper.assertTrue(Vast.zet(p, new Vast.Slot(p, VerhaalPayloads.SCENE, "verhaal_demo", 20, 30, true, s -> daarna[0]++)), "and it can play again");
+        Vast.breekAf(p, false);
+        weg(helper, p, q);
+        helper.succeed();
+    }
+
     /** Every text and data file of the engine and of the demo exists. */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void verhaalMotorTekstenBestaan(GameTestHelper helper) {
@@ -546,7 +702,7 @@ public class VerhaalMotorGameTests {
                 "gui.guhs.verhalen.volg.tooltip", "gui.guhs.verhalen.volgt", "gui.guhs.verhalen.geheim", "gui.guhs.verhalen.geheim.tooltip",
                 "gui.guhs.verhalen.reiskaart", "gui.guhs.verhalen.reiskaart.tooltip", "gui.guhs.verhalen.kaart.hier", "gui.guhs.verhalen.kaart.nu",
                 "gui.guhs.verhalen.kaart.klaar", "gui.guhs.verhalen.herbekijk", "gui.guhs.verhalen.herbekijk.scene", "gui.guhs.verhalen.herbekijk.kaart",
-                "gui.guhs.verhaal.verder", "structure.guhs." + SuperkompasItem.DOEL, "structure.guhs." + SuperkompasItem.DOEL + ".tooltip",
+                "gui.guhs.verhaal.verder", "gui.guhs.verhaal.klik", "gui.guhs.verhaal.overslaan", "structure.guhs." + SuperkompasItem.DOEL, "structure.guhs." + SuperkompasItem.DOEL + ".tooltip",
                 "gui.guhs.verhaal.kompas.geen", "gui.guhs.verhaal.kompas.afstand", "gui.guhs.verhaal.kompas.portaal", "gui.guhs.verhaal.kompas.elders",
                 "gui.guhs.verhaal.kompas.zoek", Sluiers.BERICHT, Sluiers.BESCHERMD, "guhs.configuration.objectiveLine", "guhs.configuration.objectiveLine.tooltip")) {
             helper.assertTrue(lang.has(k), "text " + k);

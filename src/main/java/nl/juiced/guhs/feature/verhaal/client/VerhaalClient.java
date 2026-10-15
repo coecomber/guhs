@@ -82,6 +82,19 @@ public final class VerhaalClient {
                 event.setCanceled(true);
             }
         });
+        // 1.4.4: one click (left or right mouse button, or space) lets a scene that waits at a line go on
+        NeoForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
+            if (CutsceneSpeler.actief() && event.getAction() == org.lwjgl.glfw.GLFW.GLFW_PRESS
+                    && (event.getButton() == org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT || event.getButton() == org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT)
+) {
+                CutsceneSpeler.klik();   // (not cancelled: the game's own use of the click is already off while a scene plays)
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((InputEvent.Key event) -> {
+            if (CutsceneSpeler.actief() && event.getAction() == org.lwjgl.glfw.GLFW.GLFW_PRESS && event.getKey() == org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) {
+                CutsceneSpeler.klik();
+            }
+        });
         NeoForge.EVENT_BUS.addListener((ScreenEvent.Opening event) -> {
             if (CutsceneSpeler.actief() && geweerd(event.getNewScreen())) {
                 event.setCanceled(true);

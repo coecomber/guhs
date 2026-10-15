@@ -331,11 +331,13 @@ public final class Hoofdstuk {
         OogEntity oog = oog(p.level(), t);
         if (scene == Scenes.OOG && oog != null) {
             oog.blik().toonVeld(p.level().getGameTime() + scene.duur());
+            oog.blik().zolangKijkt(p, true);   // (1.4.4: the scene waits for clicks; the sweep lasts as long as it plays)
         } else if (scene == Scenes.GUHDALF) {
             Ring.doeOm(p, false);
             Negen.einde(p);
             if (oog != null) {
                 oog.blik().zet(t.midden(Plekken.DEUR_SCENE.offset(0, 18, 3)), scene.duur() + 20);
+                oog.blik().zolangKijkt(p, false);
             }
         }
         return true;

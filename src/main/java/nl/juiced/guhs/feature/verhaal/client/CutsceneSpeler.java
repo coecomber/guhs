@@ -40,6 +40,7 @@ import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
+import nl.juiced.guhs.feature.verhaal.Klikklok;
 import nl.juiced.guhs.feature.verhaal.VerhaalPayloads;
 import nl.juiced.guhs.storage.Nbt;
 
@@ -51,6 +52,12 @@ import nl.juiced.guhs.storage.Nbt;
  * pinned. The HUD is replaced by the black bars and the subtitles ({@link VerhaalHud}); every key except Esc (the pause
  * menu), the screenshot key and fullscreen does nothing. At the end the client tells the server
  * ({@code guhs:verhaal_klaar}), which then runs what comes after.
+ * <p>
+ * 1.4.4 (klik om verder te gaan): the scene's time is a {@link Klikklok}. After every line it stands still (camera, actors,
+ * everything; the actors' own animations rest) with the hint "Klik om verder te gaan" until the viewer clicks once (left
+ * or right mouse button, or space); the parts without text run on. The server is told when the clock stands still and
+ * goes on ({@code guhs:verhaal_pauze}), so its time-out follows this viewer's clock. A scene seen before is skipped by
+ * holding the button ("Houd ingedrukt om over te slaan").
  */
 public final class CutsceneSpeler {
     /** Ticks the bars take to slide in and out. */
@@ -63,6 +70,12 @@ public final class CutsceneSpeler {
     @Nullable
     private static ClientLevel level;
     private static int t;
+    /** 1.4.4: the clock of the scene (null: none), a fresh click since the last tick, what the server last heard. */
+    @Nullable
+    private static Klikklok klok;
+    private static boolean klikGezien, gemeldWacht;
+    /** 1.4.4: the last scene ended normally (watched to the end, or skipped by holding the button), not broken off. */
+    private static boolean afgemaakt;
     private static final Map<String, Entity> ACTEURS = new HashMap<>();
     private static final Set<Integer> ACTEUR_IDS = new HashSet<>();
     private static final Map<String, Integer> SPRONG = new HashMap<>();
@@ -97,6 +110,54 @@ public final class CutsceneSpeler {
         return t;
     }
 
+    /** The scene's time this frame (ticks + the frame's part of a tick; 1.4.4: still while the scene waits for a click). */
+    public static float tijd(float partial) {
+        return t + (wacht() ? 0f : partial);
+    }
+
+    /** 1.4.4: did the last scene end normally (to the end or skipped), and not broken off? */
+    public static boolean laatsteAfgemaakt() {
+        return afgemaakt;
+    }
+
+    /** 1.4.4: does the scene stand still at a line, waiting for a click? */
+    public static boolean wacht() {
+        return scene != null && klok != null && klok.wacht();
+    }
+
+    /** 1.4.4: may this scene be skipped by holding the button (seen before)? */
+    static boolean magOverslaan() {
+        return scene != null && klok != null && klok.magOverslaan();
+    }
+
+    /** 1.4.4: how far the hold to skip is (0..1). */
+    static float houdVoortgang() {
+        return klok == null ? 0f : klok.houdVoortgang();
+    }
+
+    /** 1.4.4 (the input events): the viewer pressed the left or right mouse button or space. True: it was ours. */
+    static boolean klik() {
+        if (scene == null || Minecraft.getInstance().screen != null) {
+            return false;
+        }
+        klikGezien = true;
+        return true;
+    }
+
+    /** 1.4.4: is the button (left or right mouse button, or space) down now? */
+    static boolean knopIngedrukt() {
+        return Minecraft.getInstance().screen == null && knopIngedruktInScherm();
+    }
+
+    /** The same, also while a screen (the narrator card) is open. */
+    static boolean knopIngedruktInScherm() {
+        Minecraft mc = Minecraft.getInstance();
+        com.mojang.blaze3d.platform.Window w = mc.getWindow();
+        return com.mojang.blaze3d.platform.InputConstants.isKeyDown(w, org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE)
+                || org.lwjgl.glfw.GLFW.glfwGetMouseButton(w.handle(), org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS
+                || org.lwjgl.glfw.GLFW.glfwGetMouseButton(w.handle(), org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
+    }
+
     /** The subtitle to show now (null: none). */
     @Nullable
     static Component ondertitel() {
@@ -108,13 +169,16 @@ public final class CutsceneSpeler {
         if (scene == null) {
             return 0;
         }
+        if (wacht()) {
+            partial = 0;
+        }
         float in = (t + partial) / BALK_TICKS, uit = (scene.duur() - t - partial) / BALK_TICKS;
         return Mth.clamp(Math.min(in, uit), 0, 1);
     }
 
     /** How black the screen is (0..1). */
     static float zwart(float partial) {
-        return scene == null ? 0 : scene.zwartOp(t + partial);
+        return scene == null ? 0 : scene.zwartOp(t + (wacht() ? 0 : partial));
     }
 
     // =====================================================================================================================
@@ -139,6 +203,11 @@ public final class CutsceneSpeler {
         draai = p.rotatie();
         level = mc.level;
         t = 0;
+        afgemaakt = false;
+        klok = new Klikklok(s.pauzes(), p.overslaan());
+        klikGezien = false;
+        gemeldWacht = false;
+        Cutscenes.zetGepauzeerd(false, spelTijd());
         schud = 0;
         ondertitel = null;
         LocalPlayer speler = mc.player;
@@ -208,6 +277,11 @@ public final class CutsceneSpeler {
             return;
         }
         scene = null;
+        afgemaakt = meld;
+        klok = null;
+        klikGezien = false;
+        gemeldWacht = false;
+        Cutscenes.zetGepauzeerd(false, spelTijd());
         Minecraft mc = Minecraft.getInstance();
         if (level != null) {
             for (Entity e : ACTEURS.values()) {
@@ -284,7 +358,28 @@ public final class CutsceneSpeler {
         }
         speler.setDeltaMovement(Vec3.ZERO);
         speler.fallDistance = 0;
-        t++;
+        // 1.4.4: the clock: after a line it stands still until a click; a seen scene is skipped by holding the button
+        Klikklok k = klok;
+        Klikklok.Stap stap = k == null ? Klikklok.Stap.LOOPT : k.tik(klikGezien, knopIngedrukt());
+        klikGezien = false;
+        if (stap == Klikklok.Stap.OVERGESLAGEN) {
+            stop(true);
+            return;
+        }
+        if (stap == Klikklok.Stap.WACHT) {
+            // everything stands still: the actors on their spot (their own animations rest), the camera, no shaking
+            for (Map.Entry<String, Entity> e : ACTEURS.entrySet()) {
+                beweeg(s, e.getKey(), e.getValue());
+            }
+            schud = 0;
+            if (camera != null) {
+                camera.setOldPosAndRot();
+            }
+            meldWacht(s, true);
+            return;
+        }
+        meldWacht(s, k != null && k.wacht());
+        t = k == null ? t + 1 : k.tijd();
         for (Cutscene.Animatie a : s.animaties()) {
             if (a.t() == t) {
                 animeer(a);
@@ -329,6 +424,26 @@ public final class CutsceneSpeler {
         }
         if (t >= s.duur()) {
             stop(true);
+        }
+    }
+
+    private static long spelTijd() {
+        ClientLevel l = Minecraft.getInstance().level;
+        return l == null ? 0 : l.getGameTime();
+    }
+
+    /** 1.4.4: tells the server (once per change) that the clock stands still at a line or goes on, and rests the actors' animations. */
+    private static void meldWacht(Cutscene s, boolean wacht) {
+        if (wacht == gemeldWacht) {
+            return;
+        }
+        gemeldWacht = wacht;
+        Cutscenes.zetGepauzeerd(wacht, spelTijd());
+        if (wacht) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK.value(), 1.6f, 0.08f));
+        }
+        if (Minecraft.getInstance().getConnection() != null) {
+            ClientPacketDistributor.sendToServer(new VerhaalPayloads.Pauze(VerhaalPayloads.SCENE, s.id(), wacht));
         }
     }
 
@@ -437,7 +552,7 @@ public final class CutsceneSpeler {
             return;
         }
         float pt = (float) event.getPartialTick();
-        if (schud > 0.01f) {
+        if (schud > 0.01f && !wacht()) {
             double tijd = t + pt;
             float k = schud * schud;
             event.setYaw(event.getYaw() + (float) (Math.sin(tijd * 1.9) * k * 1.4));
