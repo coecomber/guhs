@@ -63,6 +63,9 @@ public final class GeestBlokken {
                 p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_geestenwereld.niet_hier").withStyle(ChatFormatting.LIGHT_PURPLE));
                 return InteractionResult.SUCCESS;
             }
+            if (Geestenwereld.meditatiesteen(p, pos)) {
+                return InteractionResult.SUCCESS;   // (hook fase B: a story slice handled the click)
+            }
             ((ServerLevel) level).sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 20, 0.4, 0.6, 0.4, 0.04);
             Geestenwereld.terug(p);
             return InteractionResult.SUCCESS;

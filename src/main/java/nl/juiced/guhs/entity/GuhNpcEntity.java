@@ -138,7 +138,28 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // einde2, geestmodellen: the Theegeest of the Geestenwereld, and the Bestelguh of tech tier 5 (its model; phase C gives it its work)
         // <einde2_geest>
         THEEGEEST_GUH(1.0f), BESTELGUH(1.0f),
+        // (skelet B, CONTRACT_E2_B 7.7: the echoes of the White Lotus masters, Guru Pathik and earlier Guhvatars; geest_modellen gives them their looks)
+        JEONG_JEONG_GUH_ECHO(1.0f), OOM_MIROH_ECHO(1.0f), BUMI_GUH_ECHO(1.0f), PAKGUH_ECHO(1.0f), PIANDAO_GUH_ECHO(1.0f),
+        LOTUS_STICHTER_ECHO(1.05f), LOTUS_LID_ECHO(1.0f), GURU_PATHIK_GUH(0.9f), KURUK_GUH(1.1f), YANGCHEN_GUH(1.0f), SZETO_GUH(1.0f),
         // </einde2_geest>
+        // einde2 phase B, h1_lucht (CONTRACT_E2_B 1.2): the kinds of chapter 1 (only between its own two markers, after the lines there)
+        // <einde2_h1_lucht>
+        // </einde2_h1_lucht>
+        // einde2 phase B, h2_water: the kinds of chapter 2
+        // <einde2_h2_water>
+        // </einde2_h2_water>
+        // einde2 phase B, h3_aarde: the kinds of chapter 3
+        // <einde2_h3_aarde>
+        // </einde2_h3_aarde>
+        // einde2 phase B, h4_vuur: the kinds of chapter 4 and the finale (the Sintelstrand theatre included)
+        // <einde2_h4_vuur>
+        // </einde2_h4_vuur>
+        // einde2 phase B, zij: the kinds of the side places
+        // <einde2_zij>
+        // </einde2_zij>
+        // einde2 phase C, trap5_machines / trap5_ballon: the kinds of tech tier 5
+        // <einde2_trap5>
+        // </einde2_trap5>
         // <hemel>
         // </hemel>
         // <guhwaii>

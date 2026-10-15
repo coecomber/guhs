@@ -70,6 +70,10 @@ def getal(naam):
     return _GETALLEN[naam]
 
 
+# kinds of BronSoort whose names another module writes (einde2 tier 5: features/einde2_trap5_machines.py, after this one)
+ELDERS = {"enderguhrad", "komeetkern"}
+
+
 def bron_max():
     """{kind id: how many count per net} from BronSoort.java, e.g. {"guhrad": 4, ...}."""
     src = open(os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "vadskracht", "BronSoort.java"), encoding="utf-8").read()
@@ -383,7 +387,8 @@ def selfcheck(h):
     missing += [k for k in TEXTS if k not in h.NL]
     for naam in ("GUHRAD", "GUHRAD_BLIJ", "GUH_OVEN", "BATTERIJ", "MAX_NET"):
         getal(naam)
-    missing += [K + "soort." + soort + e for soort in bron_max() for e in ("", ".enkel") if K + "soort." + soort + e not in TEXTS]
+    missing += [K + "soort." + soort + e for soort in bron_max() for e in ("", ".enkel")
+                if K + "soort." + soort + e not in TEXTS and soort not in ELDERS]
     if missing:
         raise SystemExit(f"vadskracht: missing {missing}")
 

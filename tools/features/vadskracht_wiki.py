@@ -26,7 +26,7 @@ WIKI = {
          "een machine wat die gebruikt."),
         ("systemen/vadskracht", "Niet te veel van hetzelfde",
          "Per opstelling tellen hooguit "
-         + ", ".join(f"{n} {v.TEXTS[v.K + 'soort.' + soort + ('.enkel' if n == 1 else '')]}" for soort, n in v.bron_max().items())
+         + ", ".join(f"{n} {v.TEXTS[v.K + 'soort.' + soort + ('.enkel' if n == 1 else '')]}" for soort, n in v.bron_max().items() if soort not in v.ELDERS)
          + ". Zet je er meer neer, dan doen de extra's niks ('telt niet mee'). De sterkste tellen het eerst."),
         ("systemen/vadskracht", "De snoet van een machine",
          "Elke guhmachine heeft een snoet. Slaapt hij, dan heeft hij geen vadskracht. Kijkt hij blij, dan heeft hij vadskracht. Kijkt "

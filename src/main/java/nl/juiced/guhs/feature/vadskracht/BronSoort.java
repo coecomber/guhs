@@ -10,7 +10,9 @@ import net.minecraft.network.chat.Component;
  * {@code gui.guhs.vadskracht.soort.<id>}, the singular {@code ...<id>.enkel} (tools/features/vadskracht.py).
  */
 public enum BronSoort {
-    GUHRAD(4), KNUFFELGENERATOR(2), DISCO_DYNAMO(2), BLUBKACHELTJE(4), GLOEISTERKERN(1);
+    GUHRAD(4), KNUFFELGENERATOR(2), DISCO_DYNAMO(2), BLUBKACHELTJE(4), GLOEISTERKERN(1),
+    // einde2 tier 5 (CONTRACT_E2_B 1.2 and 9 item 7, owner trap5_machines, texts in tools/features/einde2_trap5_machines.py)
+    ENDERGUHRAD(1), KOMEETKERN(1);
 
     /** How many of this kind count in one net. */
     public final int max;

@@ -423,6 +423,21 @@ public enum GuhClothes {
     /** Sponsguh Kaasbroek: the hero cape of Zeemeerman and Mosselguh (the cape bones, on the back). */
     SPONSGUH_HELDENCAPE(Slot.BACK, "outfit_cape"),
     // </einde2_sponsguh>
+    // einde2 phase B, h1_lucht: the clothes of chapter 1 (the Luchtnomade outfit); ONLY between these two markers, one constant per line
+    // <einde2_h1_lucht>
+    // </einde2_h1_lucht>
+    // einde2 phase B, h2_water: the clothes of chapter 2 (the Waterstam parka, the Blue Spirit mask); ONLY between these two markers, one constant per line
+    // <einde2_h2_water>
+    // </einde2_h2_water>
+    // einde2 phase B, h3_aarde: the clothes of chapter 3 (the Aarderijk hat, the Blinde Bandiet belt); ONLY between these two markers, one constant per line
+    // <einde2_h3_aarde>
+    // </einde2_h3_aarde>
+    // einde2 phase B, h4_vuur: the clothes of chapter 4 (the Vuurnatie disguise, Zuka's scar); ONLY between these two markers, one constant per line
+    // <einde2_h4_vuur>
+    // </einde2_h4_vuur>
+    // einde2 phase B, zij: the clothes of the side places (the Kyoshi make-up); ONLY between these two markers, one constant per line
+    // <einde2_zij>
+    // </einde2_zij>
     //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
     // <px_lobby>

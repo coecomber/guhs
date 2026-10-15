@@ -83,6 +83,12 @@ public final class Bewoners {
     public static final int BEREIK = 48;
     /** A resident is looked for this far around its spot (12; 16 for a creature). */
     public static final int ZOEK_NPC = 12, ZOEK_WEZEN = 16;
+    /**
+     * hook fase B (CONTRACT_E2_B 3, 4.3): told right after a resident is made and put in the world, with its spot
+     * {@code "<structuur>/<plek>"} (the structures and the fixed builds alike). A story slice hides it for some players
+     * ({@code Zicht.alleenBij}) or changes it here; listeners only, each slice its own spots.
+     */
+    public static final List<java.util.function.BiConsumer<Entity, String>> BIJ_MAKEN = new java.util.concurrent.CopyOnWriteArrayList<>();
     /** The six creature names a marker uses as its kind (CONTRACT_E2 11.2 A): the entity id is the name in lower case. */
     public static final Set<String> WEZEN_NAMEN = Set.of("DRAAKGUH", "BOSCO", "WAN_SHI_GUH", "VOSGUH", "LEEUWSCHILDPAD_GUH", "FLOPSIE");
 
@@ -445,6 +451,13 @@ public final class Bewoners {
         bescherm(e);
         level.addFreshEntity(e);
         level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.6, e.getZ(), 6, 0.3, 0.3, 0.3, 0.02);
+        for (java.util.function.BiConsumer<Entity, String> luisteraar : BIJ_MAKEN) {
+            try {
+                luisteraar.accept(e, b.naam());
+            } catch (RuntimeException ex) {
+                LOGGER.warn("Guhs einde2: a BIJ_MAKEN listener failed for {}", b.naam(), ex);
+            }
+        }
         return true;
     }
 

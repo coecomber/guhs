@@ -49,6 +49,9 @@ VERHALEN = {
     "knabbelring": ("barbecuether", "guhmensie", "In de ban van de Knabbelring", "guhs:knabbelring"),
     "guhrio": ("barbecuether", "barbecuether", "Super Guhrio", "guhs:guhrio_vadsmunt"),
 }
+# big stories that another module registers (not in GroteVerhalen.java): id -> that module. They count in the ONE counter
+# as soon as the module is in FEATURES; their name and advancement are that module's (einde2: E2Verhaal, "De Legende van Guh")
+ANDERE = {"guhvatar": "einde2_verhaal"}
 WERELDEN = {   # id -> (name, short name on the path map, what the tooltip says)
     "guhmensie": ("De Guhmensie", "Guhmensie", "Waar elk guh-avontuur begint. Hier mag iedereen meteen naartoe."),
     "barbecuether": ("De Guhbarbecuether", "Barbecuether",
@@ -162,7 +165,7 @@ def ftb_sloten(fq):
         "guhpad_slot_guheinde": [verhaal(v) for v in verhalen("barbecuether")]
                                 + [fq.met(fq.adv("guhpad_mika"), TEXTS["gui.guhs.guhpad.eis.aangebrande_mika"], "guhs:gloeister")],
         # the ONE counter ("Verhalen gevolgd: n van m": a stat task shows n / m), and the lock nobody can open yet
-        "guhpad_slot_echt": [fq.met(fq.stat("verhalen_gevolgd", len(verhalen())), TEXTS["stat.guhs.verhalen_gevolgd"], "guhs:guhdex"),
+        "guhpad_slot_echt": [fq.met(fq.stat("verhalen_gevolgd", len(verhalen()) + sum(1 for m in ANDERE.values() if m in FEATURES)), TEXTS["stat.guhs.verhalen_gevolgd"], "guhs:guhdex"),
                              fq.met(fq.adv("guhpad_echt"), "???")],
     }
 

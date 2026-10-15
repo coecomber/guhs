@@ -61,7 +61,11 @@ public final class Cutscene {
     public record Animatie(String acteur, int t, String naam) {
     }
 
-    public record Zeg(int t, String spreker, String key, int ticks) {
+    /** A subtitle; {@code lied} = a sung line or a credit roll ({@link Builder#lied}): it never waits for a click. */
+    public record Zeg(int t, String spreker, String key, int ticks, boolean lied) {
+        public Zeg(int t, String spreker, String key, int ticks) {
+            this(t, spreker, key, ticks, false);
+        }
     }
 
     public record Geluid(int t, Supplier<SoundEvent> geluid, float volume, float pitch) {
@@ -221,6 +225,16 @@ public final class Cutscene {
         /** A subtitle under the bars: "&lt;name&gt;: text" (spreker = an actor name, or "" for the narrator); lang scene.guhs.&lt;id&gt;.&lt;key&gt;. */
         public Builder zeg(int t, String spreker, String key, int ticks) {
             zinnen.add(new Zeg(t, spreker, key, Math.max(10, ticks)));
+            return this;
+        }
+
+        /**
+         * einde2 (CONTRACT_E2_B 5, 12a): a caption under the bars that does NOT wait for a click: only for sung lyrics (Miroh's
+         * lullaby) and credit rolls. Drawn like a line without a speaker; {@link #pauzes()} skips it, so the scene runs on.
+         * Every spoken line stays a {@link #zeg}. Lang scene.guhs.&lt;id&gt;.&lt;key&gt;.
+         */
+        public Builder lied(int t, String key, int ticks) {
+            zinnen.add(new Zeg(t, "", key, Math.max(10, ticks), true));
             return this;
         }
 
@@ -547,12 +561,15 @@ public final class Cutscene {
      * 1.4.4: the ticks at which the scene waits for a click ({@link Klikklok}): for every subtitle the last tick it is on
      * the screen (its own end, or the tick before the next line takes over), never at or after the scene's end. A line
      * that the next one replaces at the very same tick, or one that starts after the end, has no pause. The parts between
-     * the lines (no text) run on by themselves.
+     * the lines (no text) run on by themselves, and so do the captions of {@link Builder#lied} (einde2).
      */
     public int[] pauzes() {
         List<Integer> uit = new ArrayList<>();
         for (int i = 0; i < zinnen.size(); i++) {
             Zeg z = zinnen.get(i);
+            if (z.lied()) {
+                continue;   // (einde2: a sung line or a credit roll never waits)
+            }
             int einde = z.t() + z.ticks();
             if (i + 1 < zinnen.size()) {
                 einde = Math.min(einde, zinnen.get(i + 1).t());

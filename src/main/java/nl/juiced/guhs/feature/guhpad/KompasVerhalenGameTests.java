@@ -91,7 +91,10 @@ public class KompasVerhalenGameTests {
             helper.assertTrue(rest.kop() == null && ids(rest.plekken()).equals(List.of("guhrio_kasteel")) && "guhrio".equals(rest.plekken().get(0).verhaal()),
                     "Super Guhrio: the castle");
             // the Guheinde: what is there now; the real Guheinde: only its locked line
-            helper.assertTrue(ids(groep(groepen, Wereld.GUHEINDE).plekken()).equals(List.of("knabbelkelder", "guheinde_terugpoort")), "the Guheinde");
+            // (einde2: the Guhvatar story's four places first, under its own heading)
+            List<String> einde = new ArrayList<>(GroteVerhalen.van("guhvatar") == null ? List.of() : GroteVerhalen.van("guhvatar").plekken());
+            einde.addAll(List.of("knabbelkelder", "guheinde_terugpoort"));
+            helper.assertTrue(ids(groep(groepen, Wereld.GUHEINDE).plekken()).equals(einde), "the Guheinde: " + ids(groep(groepen, Wereld.GUHEINDE).plekken()));
             Groep echt = groep(groepen, Wereld.ECHT);
             helper.assertTrue(echt.opSlot() && echt.plekken().isEmpty(), "Het echte Guheinde: locked, nothing in it");
             // one source: every place of every big story of GroteVerhalen is listed once, under the story's own world

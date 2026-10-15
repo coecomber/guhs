@@ -210,6 +210,7 @@ public final class GuheindeEvents {
             player.getInventory().placeItemBackInInventory(Guhboek.GUHEINDE.stack());
             saved.putInt(KONING, 1);
             advancement(player, "guheinde_opdracht");
+            nl.juiced.guhs.feature.einde2.h1lucht.E2H1Lucht.koningguh(player, koning);
         } else if (wins > 0 && state < 2) {
             GuhQuests.say(player, koning, "gui.guhs.guheinde.koning.ridder1");
             GuhQuests.say(player, koning, "gui.guhs.guheinde.koning.ridder2");

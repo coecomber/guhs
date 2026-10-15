@@ -141,15 +141,19 @@ public class GuhpadGameTests {
     /** The one registry: the seven big stories with their worlds, where every questline of the Guhdex belongs, no doubles. */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void guhpadRegister(GameTestHelper helper) {
-        helper.assertTrue(ids(GroteVerhalen.geregistreerd()).equals(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland", "knabbelring", "guhrio")),
+        // (einde2: the Guheinde has its own big story, the Guhvatar story, registered by feature/einde2/verhaal/E2Verhaal)
+        List<String> einde = GroteVerhalen.van("guhvatar") != null ? List.of("guhvatar") : List.of();
+        List<String> alle = new java.util.ArrayList<>(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland", "knabbelring", "guhrio"));
+        alle.addAll(einde);
+        helper.assertTrue(ids(GroteVerhalen.geregistreerd()).equals(alle),
                 "the big stories, the worlds in order: " + ids(GroteVerhalen.geregistreerd()));
         boolean standIn = metSnuffeleiland();
         try {
             helper.assertTrue(ids(GroteVerhalen.van(Wereld.GUHMENSIE)).equals(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland")),
                     "the five of the Guhmensie");
             helper.assertTrue(ids(GroteVerhalen.van(Wereld.BARBECUETHER)).equals(List.of("knabbelring", "guhrio")), "the two of the Guhbarbecuether");
-            helper.assertTrue(GroteVerhalen.van(Wereld.GUHEINDE).isEmpty() && GroteVerhalen.van(Wereld.ECHT).isEmpty() && GroteVerhalen.totaal() == 7,
-                    "none in the Guheinde yet: seven in all");
+            helper.assertTrue(ids(GroteVerhalen.van(Wereld.GUHEINDE)).equals(einde) && GroteVerhalen.van(Wereld.ECHT).isEmpty()
+                    && GroteVerhalen.totaal() == 7 + einde.size(), "the Guheinde: " + einde + ", " + (7 + einde.size()) + " in all");
         } finally {
             if (standIn) {
                 GroteVerhalen.standIn(GroteVerhalen.SNUFFEL, false);
@@ -157,7 +161,7 @@ public class GuhpadGameTests {
         }
         // a story of another slice only counts when it is really there: the Verhaallijn with the fixed id
         boolean lijn = Verhaallijnen.van(GroteVerhalen.SNUFFELEILAND) != null;
-        helper.assertTrue(GroteVerhalen.SNUFFEL.isEr() == lijn && GroteVerhalen.totaal() == (lijn ? 7 : 6), "the Snuffeleiland counts when its line is registered");
+        helper.assertTrue(GroteVerhalen.SNUFFEL.isEr() == lijn && GroteVerhalen.totaal() == (lijn ? 7 : 6) + einde.size(), "the Snuffeleiland counts when its line is registered");
         if (GuhpadGameTests.class.getClassLoader().getResource("nl/juiced/guhs/feature/snuffel") != null) {
             helper.assertTrue(lijn, "the Snuffeleiland slice is in this tree: its Verhaallijn must be registered as \"" + GroteVerhalen.SNUFFELEILAND + "\"");
         }
@@ -179,7 +183,7 @@ public class GuhpadGameTests {
         } catch (IllegalStateException e) {
             gooit = true;
         }
-        helper.assertTrue(gooit && GroteVerhalen.geregistreerd().size() == 7, "a second story with the same id is a mistake");
+        helper.assertTrue(gooit && GroteVerhalen.geregistreerd().size() == 7 + einde.size(), "a second story with the same id is a mistake");
         // every questline of the Guhdex tab Verhalen has its world
         Map<String, Wereld> waar = Map.of("balto", Wereld.GUHMENSIE, "timmerguh", Wereld.GUHMENSIE, "vadsig", Wereld.GUHMENSIE, "grillguh", Wereld.GUHMENSIE,
                 "beroep_bouw", Wereld.GUHMENSIE, "ring_h3", Wereld.BARBECUETHER, "ring_sausuman", Wereld.BARBECUETHER, "guhrio_beloning", Wereld.BARBECUETHER,
@@ -246,6 +250,11 @@ public class GuhpadGameTests {
             helper.assertTrue(GroteVerhalen.SNUFFEL.klaar(p), "the Snuffeleiland: its line is done");
         } else {
             helper.assertTrue(!GroteVerhalen.SNUFFEL.klaar(p) && !GroteVerhalen.alle().contains(GroteVerhalen.SNUFFEL), "a story that is not there is never done and never asked");
+        }
+        // (einde2: the Guhvatar story is a game of its own; here an op's mark stands for it)
+        GrootVerhaal guhvatar = GroteVerhalen.van("guhvatar");
+        if (guhvatar != null) {
+            GroteVerhalen.zetGedaan(p, guhvatar, true);
         }
         helper.assertTrue(GroteVerhalen.gevolgd(p) == m, "all " + m + " followed");
         // what follows: the advancements for the quest book, the statistic, what the client is told

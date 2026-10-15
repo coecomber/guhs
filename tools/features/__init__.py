@@ -71,7 +71,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'einde2_bouw_lucht', 'einde2_bouw_water', 'einde2_bouw_aarde', 'einde2_bouw_vuur', 'einde2_bouw_zij1', 'einde2_bouw_zij2',
             'einde2_sponsguh_wezens', 'einde2_bouw_bikinibodem', 'einde2_bouw_schelpenstad',
             'einde2_cast_team', 'einde2_cast_volk', 'einde2_cast_schurk',
-            'einde2_geestmodellen', 'einde2_geestenwereld']
+            'einde2_geestmodellen', 'einde2_geestenwereld',
+            # einde2 phase B + C (CONTRACT_E2_B 1.2): the story state, then the ten slices (this order = the order of the FTB sections)
+            'einde2_verhaal', 'einde2_h1_lucht', 'einde2_h2_water', 'einde2_h3_aarde', 'einde2_h4_vuur', 'einde2_geest_spel', 'einde2_zij',
+            'einde2_reizen', 'einde2_audio', 'einde2_trap5_machines', 'einde2_trap5_ballon']
 
 
 def modules():

@@ -31,6 +31,29 @@ except ImportError:                                   # (run as a script from th
 TEST_VLOER = "einde2_geestmodellen_test_vloer"
 VLOER = 25
 
+# skelet B (CONTRACT_E2_B 7.7, 9 item 8): the Dutch names of what the skelet placed for this slice, until it writes its own:
+# the eleven new GuhNpcEntity kinds of the // <einde2_geest> block, and the six stand-in entity types of E2GeestWezensFeature
+# (Einde2.plaatshouder) with the names of their future spawn eggs. geest_modellen replaces both dicts.
+STUB_NAMEN = {
+    "jeong_jeong_guh_echo": "Echo van Jeong Jeong-guh", "oom_miroh_echo": "Droom van Oom Miroh", "bumi_guh_echo": "Echo van Bumi-guh",
+    "pakguh_echo": "Echo van Pakguh", "piandao_guh_echo": "Echo van Piandao-guh", "lotus_stichter_echo": "Stichter van de Witte Lotus",
+    "lotus_lid_echo": "Lid van de Witte Lotus", "guru_pathik_guh": "Guru Pathik-guh", "kuruk_guh": "Kuruk-guh",
+    "yangchen_guh": "Yangchen-guh", "szeto_guh": "Szeto-guh",
+}
+STUB_WEZENS = {
+    "kennisvosje": "Kennisvosje", "mistreiger": "Mistreiger", "oude_reigerguh": "Oude Reigerguh", "wan_guh": "Wan-guh",
+    "geestreus": "Geestreus", "kijkmasker": "Kijkmasker",
+}
+
+
+def stub_namen(h):
+    for kind, naam in STUB_NAMEN.items():
+        kit.lang(h, f"entity.guhs.guh_npc.{kind}", naam)
+    for id, naam in STUB_WEZENS.items():
+        kit.lang(h, f"entity.guhs.{id}", naam)
+        kit.lang(h, f"item.guhs.{id}_spawn_egg", f"{naam}-spawnei")
+        h.w(f"{h.D}/loot_table/entities/{id}.json", {"type": "minecraft:entity", "pools": []})
+
 
 def texts(h):
     for key, text in tekst.texts().items():
@@ -57,6 +80,7 @@ def build(h):
     kinds.build(h)
     texts(h)
     eieren(h)
+    stub_namen(h)
     test_kamer(h)
     selfcheck(h)
 

@@ -518,7 +518,7 @@ public final class CutsceneSpeler {
         }
     }
 
-    /** "<name>: text" (the narrator: only the text, slanted). */
+    /** "<name>: text" (the narrator, and einde2's sung lines and credit rolls ({@code Cutscene.Builder.lied}): only the text, slanted). */
     static Component regel(Cutscene s, Cutscene.Zeg z) {
         Component tekst = Component.translatable(s.tekstKey(z.key()));
         if (z.spreker().isEmpty()) {

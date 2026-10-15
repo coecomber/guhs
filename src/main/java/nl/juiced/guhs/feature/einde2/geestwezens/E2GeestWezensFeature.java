@@ -20,6 +20,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
+import nl.juiced.guhs.feature.einde2.Einde2;
+import nl.juiced.guhs.feature.einde2.Einde2Plaatshouder;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.registry.ModItems;
 
@@ -52,6 +54,15 @@ public final class E2GeestWezensFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<LibelkonijnguhEntity>> LIBELKONIJNGUH = wezen(GeestWezens.LIBELKONIJNGUH, LibelkonijnguhEntity::new);
     public static final DeferredHolder<EntityType<?>, EntityType<LantaarngeestEntity>> LANTAARNGEEST = wezen(GeestWezens.LANTAARNGEEST, LantaarngeestEntity::new);
     public static final DeferredHolder<EntityType<?>, EntityType<SchaduwgeestEntity>> SCHADUWGEEST = wezen(GeestWezens.SCHADUWGEEST, SchaduwgeestEntity::new);
+
+    // --- skelet B (CONTRACT_E2_B 7.7, 9 item 6): stand-ins under the ids of the six new creatures until this slice registers
+    //     the real entity types (then these lines go; Einde2.plaatshouder gives them attributes, renderer and page meanwhile)
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> KENNISVOSJE = Einde2.plaatshouder(ENTITY_TYPES, "kennisvosje");
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> MISTREIGER = Einde2.plaatshouder(ENTITY_TYPES, "mistreiger");
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> OUDE_REIGERGUH = Einde2.plaatshouder(ENTITY_TYPES, "oude_reigerguh");
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> WAN_GUH = Einde2.plaatshouder(ENTITY_TYPES, "wan_guh");
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> GEESTREUS = Einde2.plaatshouder(ENTITY_TYPES, "geestreus");
+    public static final DeferredHolder<EntityType<?>, EntityType<Einde2Plaatshouder>> KIJKMASKER = Einde2.plaatshouder(ENTITY_TYPES, "kijkmasker");
 
     /** One creature: its entity type (hitbox from the table) and its spawn egg {@code <id>_spawn_egg}. */
     private static <T extends GeestWezen> DeferredHolder<EntityType<?>, EntityType<T>> wezen(GeestWezens w, EntityType.EntityFactory<T> maker) {

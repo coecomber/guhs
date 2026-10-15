@@ -56,6 +56,22 @@ public final class Geestenwereld {
     public static final String AANKOMST = "aankomst_speler";
     /** The player's saved data: where your body stayed (dimension, position, look). */
     public static final String TERUG = "guhs_einde2_geestenwereld_terug";
+    /**
+     * hook fase B (CONTRACT_E2_B 3): asked on a right-click of a meditatiesteen in the Geestenwereld, before the soul goes
+     * back to its body: the first listener that answers true has handled the click (fast travel, a trial...); nobody: back
+     * to the body as always. Listeners only; each returns false unless ITS condition holds.
+     */
+    public static final List<java.util.function.BiFunction<ServerPlayer, BlockPos, Boolean>> MEDITATIESTEEN = new CopyOnWriteArrayList<>();
+
+    /** Asks {@link #MEDITATIESTEEN}: true = a listener handled this click. */
+    public static boolean meditatiesteen(ServerPlayer p, BlockPos pos) {
+        for (java.util.function.BiFunction<ServerPlayer, BlockPos, Boolean> f : MEDITATIESTEEN) {
+            if (Boolean.TRUE.equals(f.apply(p, pos))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /** A box of a (test) level that counts as Geestenwereld, with its own arrival and void line. */
     public record TestGebied(ResourceKey<Level> dim, AABB doos, Vec3 aankomst, int leegteY) {
