@@ -86,7 +86,84 @@ LORE = {
     "fang": ("Fang's Hemelpad",
              "Fang, de geestdraak van Roku-guh. Hij vliegt alleen met wie Roku-guh vertrouwt. En met wie lekker ruikt. Was je "
              "oortjes even, voor de zekerheid."),
+    # geest_bouw (phase B): the White Lotus with its five wings, the sanctuary and the archive, the road of statues, and the
+    # new places of the revamp (wisdoms in own words; nothing of the series quoted)
+    "bumi": ("Bumi-guh, de gekke koning",
+             "Koning van een stad op een berg, en nog gekker dan hij eruitzag. Hij at kristalkaas met schil en al en noemde het "
+             "ontbijt. Zijn les: als iedereen links gaat, kijk dan eerst even rechts. En daarna omhoog. En dan nog een keer "
+             "links, voor de grap."),
+    "pakguh": ("Pakguh, meester van het water",
+               "Streng als winterijs, zei iedereen. Maar onder het ijs stroomt altijd water. Lang geleden sneed hij een "
+               "verlovingsketting voor iemand van wie hij heel veel hield. Zij koos een ander pad, en hij bewaarde het steentje. "
+               "Het ijs onthoudt alles, njeg. Ook wat zacht was."),
+    "piandao": ("Piandao-guh, de zwaardmeester",
+                "Woonde in een kasteel vol zwaarden en had nog nooit iemand pijn gedaan. Zijn mooiste zwaard smeedde hij uit een "
+                "vallende ster. Zijn les: een zwaard is een verlengstuk van je arm, en je arm een verlengstuk van je hart. Zorg "
+                "dus dat je hart een beetje opgeruimd is."),
+    "jeong_jeong": ("Jeong Jeong-guh, de weggelopen meester",
+                    "Een vuurmeester die wegliep, omdat vuur te vaak werd gebruikt om te branden in plaats van om te warmen. Hij "
+                    "leert je eerst geduld, dan nog meer geduld, en dan pas een vonkje. Steek de kaarsen aan, maar laat elk "
+                    "lotusblad heel."),
+    "miroh": ("Oom Miroh, de Grote Lotus",
+              "Hier zit hij niet echt: Oom Miroh leeft nog en drinkt ergens thee. Dit is een droom van hem, door de Witte Lotus "
+              "bewaard. Hij zegt: een goede kop thee lost niet alle problemen op. Wel de meeste. En de rest bekijk je daarna "
+              "een stuk rustiger."),
+    "heiligdom": ("Het heiligdom",
+                  "Zes voetstukken rond een stenen lotus die nog nooit iemand open zag gaan. Vijf tegels van de meesters, en een "
+                  "zesde: de Witte Lotus zelf. Ernaast slaapt een reiger, zo oud als de orde. Niet wakker maken. Of juist wel, als "
+                  "je zover bent."),
+    "archief": ("Het Lotusarchief",
+                "Elke rol hier is een geheim dat de orde bewaarde: kaarten van oude wegen, recepten voor thee die niemand meer "
+                "kent, Pai Sho-zetten die een oorlog hebben voorkomen. Een kennisvosje legt ze steeds op een andere plek. Het "
+                "noemt dat opruimen."),
+    "leden": ("De oude leden",
+              "Voor er meesters waren, waren er gewone guhs die thee schonken voor wie verdwaald was. Zo begon de Witte Lotus: met "
+              "een kopje, een potje Pai Sho en een plek om te slapen. De stichter kwam uit de tijd van Roku-guh. Zijn naam is "
+              "vergeten, zijn theepot niet."),
+    "trap_meesters": ("De Trap der meesters",
+                      "Vijf reuzenbeelden van de meesters van de Witte Lotus staan langs de weg, half overgroeid, met oortjes van "
+                      "steen. Wie hier loopt, loopt tussen hun lessen door. Groet ze even. Ze zeggen niks terug, maar ze zien het "
+                      "heus."),
+    "koh_gang": ("De Gang der Gezichten",
+                 "Elke boog hier heeft een gezicht. Ze kijken. Ze knipperen niet. Loop rustig door en denk aan iets saais, zoals "
+                 "de formulieren van Szeto-guh. Wie hier lacht, krijgt van Koh misschien een nieuw gezicht. Of geen."),
+    "tui_la": ("Tui en La",
+               "Duwen en trekken, maan en oceaan: wit met een zwarte vlek, zwart met een witte. Bij dit eilandje zwemmen ze zo "
+               "dichtbij dat je hun schubben hoort ruisen. Blijf even stil staan. Ze zwemmen al duizend jaar dezelfde rondjes en "
+               "hebben nog nooit ruzie gehad."),
+    "theetuin": ("De theetuin",
+                 "Hier komt elke dag de roddelclub van het Gefluisterwoud samen. Ze praten over wie er verdwaald is, wie er een "
+                 "nieuw gezicht heeft en wie de laatste knabbel heeft opgegeten. Dat laatste is meestal de Theegeest zelf."),
+    "moeras": ("Het mistige moeras",
+               "Alles hier is met alles verbonden, zeggen de wortels. Soms zie je in het stille poeltje iemand die je kent. Of "
+               "iemand die je nog gaat kennen. Kijk niet te lang: het moeras roddelt graag. En ergens achter de mist ligt iets "
+               "dat je nog niet kunt zien."),
+    "geestenklok": ("De Geestenklok",
+                    "Een klok zo groot als een huisje, gegoten toen nog niemand iets kon onthouden. Wie aan het touw trekt, maakt "
+                    "de Geestenwereld heel even stil. Alle geesten kijken op. En dan gebeurt er iets kleins en vreemds. Wat "
+                    "precies? Dat weet zelfs de klok niet."),
+    "schrijn": ("Een schrijntje",
+                "Een klein schrijntje voor wie over de geestenpaden reist, met een knabbel als offer. Niemand weet wie hier elke "
+                "dag een verse knabbel neerlegt. De geesten verdenken elkaar. Het is vast de Theegeest."),
+    "raadsel_1": ("Een zwevend raadsel",
+                  "Ik heb een gezicht maar geen hoofd, ik kijk je aan maar zie je niet, en ik woon bij iemand die er duizend "
+                  "heeft. Wat ben ik? (Heel klein onderaan: een masker.)"),
+    "raadsel_2": ("Nog een zwevend raadsel",
+                  "Ik val omhoog, ik ben nat maar niet koud, je loopt door me heen en ik blijf gewoon staan. Wat ben ik? (Heel klein "
+                  "onderaan: nevelwater, njeg.)"),
+    "geheim_1": ("Een geheimpje",
+                 "Gevonden! Iets onzichtbaars legt hier elke dag een knabbel neer. Misschien voor jou. Misschien voor de Guhvatar "
+                 "na jou. Niet opeten: hij is van klei."),
+    "geheim_2": ("De holle boom",
+                 "Hier slaapt een kennisvosje als niemand kijkt. Het bewaart er zijn mooiste boekrol: een recept voor knabbels die "
+                 "nooit op raken. Het is nog nooit gelukt. Het vosje blijft het proberen."),
+    "geheim_3": ("Het bankje aan de rand",
+                 "Het mooiste uitzicht van de Geestenwereld, zegt de Theegeest. Hij komt hier als hij even weg wil van de "
+                 "roddelclub. Niet verder vertellen."),
 }
+
+# the masters of the White Lotus (marker texts)
+MEESTER_NAAM = {"bumi": "Bumi-guh", "pakguh": "Pakguh", "piandao": "Piandao-guh", "jeong_jeong": "Jeong Jeong-guh", "miroh": "Oom Miroh"}
 
 BERICHTEN = {
     "terug": "Je ziel snuffelt terug naar je lijf. Welkom terug, njeg.",

@@ -145,6 +145,17 @@ public final class E2GeestenwereldFeature {
         for (int i = 1; i <= 6; i++) {
             Bewoners.anders(Geestenwereld.NAAM + "/libelkonijnguh_" + i, "guhs:libelkonijnguh", -1, false, 8);
         }
+        // geest_bouw (CONTRACT_E2_B 4.5): the masks that watch you in Koh's cave (each its own face), the knowledge foxes
+        // that walk about, and the looks of the lantern spirits at the tea, at Miroh's table and at the fishing jetty
+        for (int i = 1; i <= 12; i++) {
+            Bewoners.anders(Geestenwereld.NAAM + "/kijkmasker_" + i, "guhs:kijkmasker", i - 1, true, 0);
+        }
+        for (int i = 1; i <= 4; i++) {
+            Bewoners.anders(Geestenwereld.NAAM + "/kennisvos_" + i, "guhs:kennisvosje", -1, false, 8);
+        }
+        Bewoners.anders(Geestenwereld.NAAM + "/roddel_1", "guhs:lantaarngeest", 1, true, 0);
+        Bewoners.anders(Geestenwereld.NAAM + "/geest_gast_1", "guhs:lantaarngeest", 2, true, 0);
+        Bewoners.anders(Geestenwereld.NAAM + "/visgeest_1", "guhs:lantaarngeest", 3, true, 0);
     }
 
     public static void register(IEventBus modBus) {

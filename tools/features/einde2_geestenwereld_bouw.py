@@ -37,8 +37,8 @@ ZONES = ["meditatiecirkel", "gefluisterwoud", "koh_grot", "lotus_ruines", "top_v
 M = dict(x=304, z=304, f=50, r=31)
 WOUD = dict(x=150, z=336, f=48, r=58)
 KOH = dict(x=168, z=150, f=40, r=44)
-LOTUS = dict(x=338, z=140, f=56, r=48)
-TOP = dict(x=356, z=52, f=112, r=15)
+LOTUS = dict(x=338, z=128, f=56, r=62)       # geest_bouw: bigger, for the compound with the five wings
+TOP = dict(x=356, z=52, f=112, r=24)         # geest_bouw: bigger, the Hall moved here
 VIJVER = dict(x=476, z=300, f=66, r=34)
 THEE = dict(x=436, z=470, f=54, r=27)
 FANG = dict(x=496, z=150, f=84, r=13)
@@ -69,6 +69,10 @@ class Geest(kit.Bouw):
         self.los_cellen = set()          # decoration that floats on purpose (islets, loose lotus leaves, the koi's mist)
         self.vrij = []                   # (x, z, r): keep trees and decoration out of these circles
         self.licht_kamer = []            # cells that must have block light (Koh's room)
+        self.paden = []                  # every pad() made: {"midden", "totaal", "lantaarns", "punten"} (sights, path lanterns)
+        self.pad_info = {}               # name -> (b.paden entry, zone at its start, zone at its end) of the paths between zones
+        self.mistreiger = []             # (x, z): roofs where a mistreiger sits (on the highest block there)
+        self.hemeltrap_pad = None
 
     def leeg(self, x, y, z):
         return (x, y, z) not in self.s.blocks
@@ -232,6 +236,33 @@ def gedenksteen(b, id, x, f, z, facing, naam_regels):
     b.prop(f"lore_{id}", x, f, z, wie=f"gedenksteen: {tekst.LORE[id][0]}")
 
 
+def chakra_mat(b, x, f, z):
+    """A meditation mat for the chakra path: a lotus leaf sunk into the ground, four little candles round it."""
+    b.set(x, f - 1, z, LOTUSBLAD)
+    b.zet(x, f - 2, z, AARDE)
+    for dx, dz in ((2, 0), (-2, 0), (0, 2), (0, -2)):
+        if not b.leeg(x + dx, f - 1, z + dz) and b.leeg(x + dx, f, z + dz):
+            b.set(x + dx, f, z + dz, "minecraft:candle", {"candles": "1", "lit": "true", "waterlogged": "false"})
+
+
+def spiegelvijver(b, id, x, f, z, r=2):
+    """A still mirror pond: dark water in a rim of tiles (it shows another place, or yourself glowing: geest_spel)."""
+    for dx in range(-r - 1, r + 2):
+        for dz in range(-r - 1, r + 2):
+            d = math.hypot(dx, dz)
+            if d <= r + 0.3:
+                b.set(x + dx, f - 1, z + dz, WATER, {"level": "0"})
+                b.set(x + dx, f - 2, z + dz, "minecraft:polished_blackstone")
+                b.zet(x + dx, f - 3, z + dz, STEEN)
+                for y in range(f, f + 3):
+                    b.s.blocks.pop((x + dx, y, z + dz), None)
+            elif d <= r + 1.3:
+                b.set(x + dx, f - 1, z + dz, TEGEL)
+                b.zet(x + dx, f - 2, z + dz, STEEN)
+    b.zone(id, x - r, f - 1, z - r, x + r, f, z + r, wie="een spiegelvijver: stil donker water dat een andere plek laat zien")
+    b.vrij.append((x, z, r + 3))
+
+
 def meditatiesteen(b, zone, x, f, z):
     b.set(x, f, z, MEDITATIE)
     b.prop(f"meditatiesteen_{zone}", x, f, z, wie="meditatiesteen: rechtsklik = terug naar je lijf")
@@ -239,7 +270,8 @@ def meditatiesteen(b, zone, x, f, z):
 
 def pad(b, punten, ya, yb, half=1, lantaarn_elke=16, lotus_elke=34, seed=0, wie=""):
     """A floating path of maansteen tiles along the points (x, z), from height ya to yb (the y you stand at, by halves:
-    a half step is a slab). Lotus leaves widen it now and then, lanterns on posts stand beside it. Never overwrites."""
+    a half step is a slab). Lotus leaves widen it now and then, lanterns on posts stand beside it. Never overwrites.
+    Recorded in b.paden (the middle line, its length and every lantern with its distance along the path)."""
     seg = list(zip(punten, punten[1:]))
     lengtes = [math.hypot(bx - ax, bz - az) for (ax, az), (bx, bz) in seg]
     totaal = sum(lengtes)
@@ -292,6 +324,7 @@ def pad(b, punten, ya, yb, half=1, lantaarn_elke=16, lotus_elke=34, seed=0, wie=
                             b.set(x, laag, z, LOTUSBLAD)
                             b.zet(x, laag - 1, z, STEEN)
     # lanterns: on a tile beside the path, the sides taking turns
+    lantaarns = []
     volgende, kant = lantaarn_elke * 0.5, 1
     for px, pz, h2, nx, nz, dd in midden:
         if lantaarn_elke and dd >= volgende and 6 < dd < totaal - 6:
@@ -304,6 +337,7 @@ def pad(b, punten, ya, yb, half=1, lantaarn_elke=16, lotus_elke=34, seed=0, wie=
                 b.set(x, basis, z, TEGEL)
                 b.zet(x, basis - 1, z, STEEN)
                 lantaarnpaal(b, x, basis + 1, z)
+                lantaarns.append(((x, basis + 3, z), dd))
                 # (tiles from the post's foot to the path, face to face: on a diagonal the foot touches it only by an edge)
                 mx, mz = int(round(px)), int(round(pz))
                 ox, oz = x, z
@@ -317,7 +351,13 @@ def pad(b, punten, ya, yb, half=1, lantaarn_elke=16, lotus_elke=34, seed=0, wie=
                     if not b.leeg(ox, basis, oz) or not b.leeg(ox, basis - 1, oz):
                         break
                     b.set(ox, basis - 1, oz, TEGEL)
-    return [(round(px), h2 // 2, round(pz)) for px, pz, h2, _, _, _ in midden[::8]]
+            elif b.s.blocks.get((x, basis, z), ("",))[0] in (GRAS, AARDE, TEGEL, STEEN, LOTUSBLAD) and all(b.leeg(x, y, z) for y in range(basis + 1, basis + 4)):
+                # (geest_bouw) on an island the lantern stands on the ground itself
+                lantaarnpaal(b, x, basis + 1, z)
+                lantaarns.append(((x, basis + 3, z), dd))
+    uit = [(round(px), h2 // 2, round(pz)) for px, pz, h2, _, _, _ in midden[::8]]
+    b.paden.append({"midden": midden, "totaal": totaal, "lantaarns": lantaarns, "punten": uit})
+    return uit
 
 
 # =====================================================================================================================
@@ -607,147 +647,7 @@ def fresco(b, x0, y0, z):
     b.set(x0 + 10, y0 + 4, z, "minecraft:light_blue_concrete")
 
 
-def lotus_ruines(b):
-    cx, cz, f, r = LOTUS["x"], LOTUS["z"], LOTUS["f"], LOTUS["r"]
-    eiland(b, cx, cz, f, r, 22, 404)
-    # the floor of the temple: courtyard (south) and hall (north), tiles with grass breaking through
-    for x in range(cx - 20, cx + 21):
-        for z in range(cz - 36, cz + 44):
-            if b.s.blocks.get((x, f - 1, z), ("",))[0] in (GRAS, AARDE) and _hash(x, z, 41) < 0.86:
-                b.set(x, f - 1, z, TEGEL)
-    # the gate (z = cz + 20): an arch with a lotus over it, an opening 5 wide and 6 high
-    gz = cz + 20
-    for x in range(cx - 8, cx + 9):
-        for y in range(f, f + 10):
-            if not (abs(x - cx) <= 2 and y < f + 6):
-                b.set(x, y, gz, TEGEL)
-                b.set(x, y, gz + 1, TEGEL)
-    for dx, dy in ((0, 7), (-1, 8), (1, 8), (0, 8), (0, 9), (-2, 9), (2, 9)):
-        b.set(cx + dx, f + dy, gz + 2, "minecraft:white_concrete")
-        b.zet(cx + dx, f + dy, gz + 1, TEGEL)
-    b.set(cx, f + 8, gz + 2, "minecraft:pink_concrete")
-    b.prop("poort", cx, f, gz, wie="de poort van de Witte Lotus (gaat in fase B dicht tot de puzzel klopt)")
-    b.zone("poort_doorgang", cx - 2, f, gz, cx + 2, f + 5, gz + 1, wie="de doorgang van de poort")
-    # the puzzle before the gate: 3 x 3 tiles in the floor, turned wrong
-    for (rij, kol), (stuk, goed) in TEGELS.items():
-        x, z = cx - 1 + kol, gz + 6 + rij
-        draai = (goed + 1 + int(_hash(rij, kol, 44) * 3)) % 4
-        b.set(x, f - 1, z, PUZZEL, {"stuk": stuk, "draai": str(draai)})
-        n = rij * 3 + kol + 1
-        b.prop(f"tegel_{n}", x, f - 1, z, wie=f"puzzeltegel {stuk} (rij {rij + 1}, kolom {kol + 1}); goed bij draai {goed}"
-                                               + (" (de middelste: elke draai is goed)" if stuk == "midden" else ""))
-    for x in range(cx - 2, cx + 3):                                   # a rim of dark tiles round the puzzle
-        for z in range(gz + 5, gz + 10):
-            if b.s.blocks.get((x, f - 1, z), ("",))[0] != PUZZEL:
-                b.set(x, f - 1, z, "minecraft:polished_deepslate")
-    gedenksteen(b, "witte_lotus", cx + 5, f, gz + 7, "west", ["Witte Lotus"])
-    b.prop("plek_lotus_ruines", cx, f, gz + 14)
-    meditatiesteen(b, "lotus_ruines", cx - 5, f, gz + 12)
-    b.plek("libelkonijnguh_4", cx + 12, f, gz + 12, wie="libelkonijnguh", wezen="guhs:libelkonijnguh")
-    # broken columns in the courtyard
-    for k, (dx, dz) in enumerate(((-12, 8), (12, 8), (-12, 16), (12, 16), (-16, 24), (16, 24))):
-        if b.leeg(cx + dx, f - 1, gz + dz):
-            continue                                                  # (no ground there: the island's edge)
-        for y in range(f, f + 3 + int(_hash(k, 45) * 6)):
-            b.set(cx + dx, y, gz + dz, TEGEL if y % 3 else STEEN)
-        b.zet(cx + dx + 1, f, gz + dz, TEGEL)                           # a fallen piece
-    # the Hal van de Voorgangers: from the gate north to the fresco wall (z = cz - 32)
-    hz0, hz1 = cz - 31, gz - 1
-    for z in range(hz0, hz1 + 1):
-        for x in (cx - 10, cx + 10):
-            if (z - hz0) % 5 == 0:
-                hoog = 8 if _hash(x, z, 46) < 0.75 else 3 + int(_hash(x, z, 47) * 4)
-                for y in range(f, f + hoog):
-                    b.set(x, y, z, TEGEL)
-    for z in range(hz0, hz1 + 1):                                     # the roof: slabs, with holes where it fell in
-        for x in range(cx - 11, cx + 12):
-            # (rows 0 and 2 of every five are whole, so every slab of the other rows touches one of them)
-            if (z - hz0) % 5 in (0, 2) or _hash(x, z, 48) < 0.55:
-                b.zet(x, f + 8, z, PLAAT, {"type": "bottom", "waterlogged": "false"})
-    for z in range(hz0, hz1 + 1, 5):
-        for x in range(cx - 10, cx + 11):
-            b.set(x, f + 7, z, PLANK)
-    b.zone("hal", cx - 9, f, hz0 + 1, cx + 9, f + 6, hz1, wie="de Hal van de Voorgangers")
-    # the eight memorial stones: four along each side, the text side to the aisle
-    for i, id in enumerate(VOORGANGERS):
-        kant = -1 if i % 2 == 0 else 1
-        z = hz0 + 5 + (i // 2) * 6
-        x = cx + kant * 7
-        facing = "east" if kant < 0 else "west"
-        b.set(x, f, z, TEGEL)
-        b.set(x, f + 1, z, GEDENK, {"facing": facing})
-        b.sign(x, f + 2, z, facing, VOORGANGER_BORD[id], wall=False)
-        b.prop(f"lore_{id}", x, f + 1, z, wie=f"gedenksteen: {tekst.LORE[id][0]}")
-        b.los.add(f"lore_{id}")                                       # (on a plinth: you stand before it, in the aisle)
-        b.set(x + (1 if kant < 0 else -1), f, z, "minecraft:candle", {"candles": "3", "lit": "true", "waterlogged": "false"})
-    # the fresco on the north wall and its sign
-    wz = hz0 - 1
-    for x in range(cx - 11, cx + 12):
-        for y in range(f, f + 13):
-            b.set(x, y, wz, TEGEL)
-    fresco(b, cx - 7, f + 1, wz + 1)
-    b.set(cx, f, wz + 2, TEGEL)
-    b.sign(cx, f, wz + 3, "south", ["Raava en Vaatu?", "Nooit van", "gehoord."], wall=True)
-    b.prop("fresco", cx, f, wz + 4, wie="het fresco: twee geesten in elkaar gedraaid, licht en donker")
-    b.prop("verdwaalde_lantaarn_4", cx - 8, f, hz0 + 2, wie="verdwaalde lantaarngeest (een hoek van de hal)")
-    # the Hemeltrap: a spiral of floating steps round a column of rising mist, up to the Top der Voorgangers
-    sx, sz, sr = cx + 26, cz - 46, 8
-    for y in range(f - 6, TOP["f"] + 6):
-        b.set(sx, y, sz, NEVEL)
-    b.set(sx, f - 7, sz, STEEN)
-    b.los_cellen |= {(sx, y, sz) for y in range(f - 7, TOP["f"] + 6)}
-    start = (cx + 11, hz0 + 2)
-    th0 = math.atan2(start[1] - sz, start[0] - sx)
-    hoogte = TOP["f"] - f
-    lengte_nodig = hoogte / 0.42
-    omwentelingen = lengte_nodig / (2 * math.pi * sr)
-    # end where the bridge to the Top leaves (north side)
-    th_eind = -math.pi / 2
-    n_turn = math.ceil(omwentelingen)
-    th1 = th_eind - 2 * math.pi * n_turn
-    if th1 > th0:
-        th1 -= 2 * math.pi
-    while th0 - th1 < 2 * math.pi * omwentelingen:
-        th1 -= 2 * math.pi
-    stappen = 240
-    spiraal = [(cx + 11, hz0 + 2), (cx + 15, hz0 + 2)]
-    for i in range(stappen + 1):
-        th = th0 + (th1 - th0) * i / stappen
-        spiraal.append((sx + math.cos(th) * sr, sz + math.sin(th) * sr))
-    # (the spiral starts with a short level walk from the door, then climbs)
-    route = pad(b, spiraal, f, TOP["f"], half=1, lantaarn_elke=18, lotus_elke=0, seed=405)
-    eind = spiraal[-1]
-    brug = pad(b, [eind, (eind[0], TOP["z"] + 18), (TOP["x"] + 3, TOP["z"] + 8)], TOP["f"], TOP["f"], half=1, lantaarn_elke=0,
-               lotus_elke=0, seed=406)
-    b.pad("hemeltrap", route + brug, wie="de Hemeltrap: van de hal omhoog naar de Top der Voorgangers")
-    b.zone("zone_lotus_ruines", cx - r - 8, f - 26, cz - r - 8, cx + r + 8, f + 20, cz + r + 8)
-    return (cx, gz + 26)
-
-
-def top_voorgangers(b):
-    cx, cz, f, r = TOP["x"], TOP["z"], TOP["f"], TOP["r"]
-    eiland(b, cx, cz, f, r, 16, 505)
-    for k in range(10):                                               # a circle of standing stones
-        th = k * 6.283 / 10
-        x, z = cx + round(math.cos(th) * 10), cz + round(math.sin(th) * 10)
-        if z > cz + 6 and abs(x - cx) < 4:
-            continue                                                  # (the way in, south)
-        for y in range(f, f + 3 + k % 2):
-            b.set(x, y, z, TEGEL)
-        b.set(x, f + 3 + k % 2, z, LANTAARN, {"hanging": "false", "waterlogged": "false"})
-    for x in range(cx - 4, cx + 5):
-        for z in range(cz - 4, cz + 5):
-            if math.hypot(x - cx, z - cz) <= 4.3:
-                b.set(x, f - 1, z, TEGEL if (x + z) % 2 else STEEN)
-    b.plek("roku", cx - 3, f, cz - 2, yaw=YAW["south"], wie="Roku-guh als geest (h4: raad voor de finale)", kind="ROKU_GUH")
-    b.plek("kyoshi", cx + 3, f, cz - 2, yaw=YAW["south"], wie="Kyoshi-guh als geest (h4: raad voor de finale)", kind="KYOSHI_GUH")
-    b.prop("fang_landing", cx, f, cz + 6, wie="waar Fang je neerzet")
-    b.prop("plek_top_voorgangers", cx, f, cz + 8)
-    meditatiesteen(b, "top_voorgangers", cx + 6, f, cz + 6)
-    gedenksteen(b, "top", cx - 6, f, cz + 6, "south", ["Top der", "Voorgangers"])
-    b.prop("verdwaalde_lantaarn_5", cx + 7, f, cz - 7, wie="verdwaalde lantaarngeest (heel hoog)")
-    b.zone("top", cx - r, f, cz - r, cx + r, f + 6, cz + r, wie="de top")
-    b.zone("zone_top_voorgangers", cx - r - 6, f - 20, cz - r - 6, cx + r + 6, f + 16, cz + r + 6)
+# (geest_bouw: the White Lotus and the Top der Voorgangers are built in einde2_geestenwereld_lotus.py)
 
 
 # =====================================================================================================================
@@ -937,36 +837,71 @@ def eilandjes(b):
 
 # =====================================================================================================================
 def maak(h):
+    from features import einde2_geestenwereld_extra as extra
+    from features import einde2_geestenwereld_lotus as lotus
     b = Geest(h)
+    extra.vooraf(b)
     # (the clearings of the markers first: trees keep out of them)
     meditatiecirkel(b)
     woud_ingang = woud(b)
     koh_ingang = koh_grot(b)
-    lotus_poort = lotus_ruines(b)
-    top_voorgangers(b)
+    lotus_poort = lotus.witte_lotus(b)
+    lotus.top_voorgangers(b)
+    gaten = lotus.hemeltrap(b)
+    b.pad_info["hemeltrap"] = (b.hemeltrap_pad, "lotus_ruines", "top_voorgangers")
     vijver_west = hemelvijver(b)
     thee_noord = theepaviljoen(b)
     fang_pad(b)
     mx, mz, mf = M["x"], M["z"], M["f"]
-    # the paths between the zones
-    pad(b, [(mx - 30, mz), (mx - 60, mz + 4), (woud_ingang[0] + 4, woud_ingang[1] + 2), (woud_ingang[0] - 2, woud_ingang[1])],
-        mf, WOUD["f"], seed=1)
-    pad(b, [(mx, mz - 30), (mx + 6, mz - 70), (lotus_poort[0], lotus_poort[1] + 18), (lotus_poort[0], lotus_poort[1] - 4)],
-        mf, LOTUS["f"], seed=2)
-    pad(b, [(mx + 30, mz), (mx + 80, mz - 6), (vijver_west[0] - 6, vijver_west[1]), (vijver_west[0] + 2, vijver_west[1])],
-        mf, VIJVER["f"], seed=3)
-    pad(b, [(mx + 20, mz + 22), (mx + 70, mz + 80), (thee_noord[0] - 10, thee_noord[1] - 20), (thee_noord[0], thee_noord[1] + 2)],
-        mf, THEE["f"], seed=4)
-    pad(b, [(WOUD["x"] + 4, WOUD["z"] - WOUD["r"] + 4), (WOUD["x"] + 10, WOUD["z"] - 100), (koh_ingang[0], koh_ingang[1] + 6),
-            (koh_ingang[0], koh_ingang[1] - 2)], WOUD["f"], KOH["f"], seed=5)
-    pad(b, [(LOTUS["x"] - LOTUS["r"] + 4, LOTUS["z"] + 6), (LOTUS["x"] - 80, LOTUS["z"] + 10), (KOH["x"] + KOH["r"] - 2, KOH["z"] + 8)],
-        LOTUS["f"], KOH["f"], seed=6)
-    pad(b, [(VIJVER["x"], VIJVER["z"] - VIJVER["r"] + 2), (VIJVER["x"] + 10, VIJVER["z"] - 80), (FANG["x"], FANG["z"] + FANG["r"] - 2)],
-        VIJVER["f"], FANG["f"], seed=7)
-    pad(b, [(THEE["x"] + 18, THEE["z"] - 18), (VIJVER["x"] - 4, VIJVER["z"] + 90), (VIJVER["x"], VIJVER["z"] + VIJVER["r"] - 3)],
-        THEE["f"], VIJVER["f"], seed=8)
+    LX, LZ = LOTUS["x"], LOTUS["z"]
+
+    def verbind(naam, za, zb, *args, **kw):
+        pad(b, *args, **kw)
+        b.pad_info[naam] = (b.paden[-1], za, zb)
+    # the paths between the zones (their lengths as in phase A)
+    verbind("m_woud", "meditatiecirkel", "gefluisterwoud",
+            [(mx - 30, mz), (mx - 60, mz + 4), (woud_ingang[0] + 4, woud_ingang[1] + 2), (woud_ingang[0] - 2, woud_ingang[1])], mf, WOUD["f"], seed=1)
+    verbind("m_lotus", "meditatiecirkel", "lotus_ruines",
+            [(mx, mz - 30), (mx + 6, mz - 70), (lotus_poort[0], lotus_poort[1] + 18), (lotus_poort[0], lotus_poort[1] - 4)], mf, LOTUS["f"], seed=2)
+    lotus.trap_der_meesters(b, b.paden[-1])
+    verbind("m_vijver", "meditatiecirkel", "hemelvijver",
+            [(mx + 30, mz), (mx + 80, mz - 6), (vijver_west[0] - 6, vijver_west[1]), (vijver_west[0] + 2, vijver_west[1])], mf, VIJVER["f"], seed=3)
+    verbind("m_thee", "meditatiecirkel", "theepaviljoen",
+            [(mx + 20, mz + 22), (mx + 70, mz + 80), (thee_noord[0] - 10, thee_noord[1] - 20), (thee_noord[0], thee_noord[1] + 2)], mf, THEE["f"], seed=4)
+    verbind("woud_koh", "gefluisterwoud", "koh_grot",
+            [(WOUD["x"] + 4, WOUD["z"] - WOUD["r"] + 4), (WOUD["x"] + 10, WOUD["z"] - 100), (koh_ingang[0], koh_ingang[1] + 6),
+             (koh_ingang[0], koh_ingang[1] - 2)], WOUD["f"], KOH["f"], lantaarn_elke=13, seed=5)
+    verbind("lotus_koh", "lotus_ruines", "koh_grot",
+            [(LX - 30, LZ + 46), (LX - 56, LZ + 48), (LX - 110, LZ + 34), (KOH["x"] + KOH["r"] - 2, KOH["z"] + 8)], LOTUS["f"], KOH["f"], lantaarn_elke=11, seed=6)
+    verbind("vijver_fang", "hemelvijver", "fang_pad",
+            [(VIJVER["x"], VIJVER["z"] - VIJVER["r"] + 2), (VIJVER["x"] + 10, VIJVER["z"] - 80), (FANG["x"], FANG["z"] + FANG["r"] - 2)],
+            VIJVER["f"], FANG["f"], lantaarn_elke=13, seed=7)
+    verbind("thee_vijver", "theepaviljoen", "hemelvijver",
+            [(THEE["x"] + 18, THEE["z"] - 18), (VIJVER["x"] - 4, VIJVER["z"] + 90), (VIJVER["x"], VIJVER["z"] + VIJVER["r"] - 3)],
+            THEE["f"], VIJVER["f"], lantaarn_elke=13, seed=8)
+    lotus.muur(b, LX, LZ, LOTUS["f"], LZ + 36, gaten)
+    # the revamp outside the White Lotus
+    extra.koh_gang(b)
+    extra.kijkmaskers(b)
+    extra.tui_la(b)
+    extra.theetuin(b)
+    extra.moeras(b)
+    extra.eiland_8(b)
+    extra.geestenklok(b, b.pad_info["m_vijver"][0])
+    extra.bezienswaardigheden(b)
+    extra.padlantaarns(b)
+    extra.geheimen(b)
+    extra.chakras(b)
     eilandjes(b)
+    extra.wan_plekken(b)
+    extra.geestreuzen(b)
+    extra.mistreigers(b)
+    extra.heuvels(b)
     opruimen(b)
+    # the overlays (blocks only, where the build is air): the path to the 8th island, the woud in bloom, the lit tree
+    extra.laag_pad_8(b)
+    extra.laag_bloei(b)
+    extra.laag_lantaarnboom(b)
     b.connect()
     return b
 
@@ -981,6 +916,22 @@ def opruimen(b):
             del b.s.blocks[c]
 
 
+# geest_bouw: every marker of CONTRACT_E2_B 4.5 (an id, or (name, at least n))
+VERWACHT_B = ["lotus_hof", "heiligdom", "stenen_lotus", "reiger", "lotusarchief", "archief_ingang", "lid_stichter", ("lid", 3),
+              "trap_der_meesters", ("meesterbeeld", 5), "poort_doorgang", "lotuspuzzel",
+              ("bumi_kamer", 3), ("bumi_draai", 3), ("ijs_spiegel", 6), "ijs_stroom", ("ijs_platform", 4), "verlovingsketting",
+              "ritme_plek", "smidse", "meteoriet", ("kaars", 8), ("lotusblad", 8), "theetuin_tafel", ("geest_gast", 3), ("theepot", 3),
+              ("tegel_voetstuk", 6), "roku", "kyoshi", "top_landing", "top_speler", "top_camera", ("bezienswaardigheid", 8),
+              "koh_gang", "tui_la_eilandje", "tui_la_speler", "theetuin", ("roddel", 4), "eiland_8", "pad_8_anker", "wan_onthulling",
+              "wan_camera", ("wan", 5), "moeras", "moeras_visioen", "geestenklok", "klok", ("spiegelvijver", 4), ("voetstappen", 3),
+              ("geheim", 3), ("kijkmasker", 12), ("chakra", 7), "guru_pathik", ("kennisvos", 4), ("mistreiger", 6), ("geestreus", 4)]
+VERWACHT_B += [f"vleugel_{m}" for m in ("bumi", "pakguh", "piandao", "jeong_jeong", "miroh")]
+VERWACHT_B += [f"echo_{m}" for m in ("bumi", "pakguh", "piandao", "jeong_jeong", "miroh")]
+VERWACHT_B += [f"proef_{m}_{k}" for m in ("bumi", "pakguh", "piandao", "jeong_jeong", "miroh") for k in ("start", "einde")]
+VERWACHT_B += [(f"padlantaarn_{z}", 3) for z in ("gefluisterwoud", "koh_grot", "lotus_ruines", "top_voorgangers", "hemelvijver", "theepaviljoen", "fang_pad")]
+LAGEN_B = ["pad_8", "woud_bloei", "lantaarnboom_licht"]
+
+
 def controleer(b):
     """The kit's check (markers, reach from the arrival, floating blocks, signs and lanterns hanging on something) plus
     light in Koh's room and every marker the Java side asks for."""
@@ -989,9 +940,11 @@ def controleer(b):
                                                          ("lantaarngeest", 4), ("schaduwgeest", 4), ("libelkonijnguh", 6)]
     verwacht += ["hei_bai", "koh", "koi_tui", "koi_la", "theegeest", "roku", "kyoshi", "fang", "poort", "fresco", "hemeltrap",
                  "fang_vlucht", "koi_cirkel", "eikel_plek", "lantaarnboom", "theetafel", "fang_landing"]
+    verwacht += VERWACHT_B
     start = tuple(b.plekken["aankomst_speler"]["pos"])
     onder = b.los_cellen
     problems = b.check(start, verwacht=verwacht, min_licht=0, zwevend_ok=lambda c: c in onder)
+    problems += [f"laag {l} ontbreekt" for l in LAGEN_B if l not in b.lagen]
     licht = b.licht()
     donker = [c for c in b.licht_kamer if licht.get(c, 0) < 2]
     if donker:
