@@ -110,13 +110,14 @@ final class E2CastSchurkCommando {
         return n;
     }
 
-    /** Room a creature gets in its row (the dragon's coil is 9 blocks wide, the lion turtle's head with its mane 44). */
+    /**
+     * Room a creature gets in its row (the dragon's coil is 9 blocks wide). The lion turtle's head (44 across with its mane)
+     * overlaps its neighbours here: this slice row must stay in the loaded chunks of its test; /guhs einde2 toon schurk gives
+     * it rows of its own.
+     */
     private static double ruimte(Mob w) {
         if (w instanceof CastWezen c && c.wezens() == Wezens.DRAAKGUH) {
             return 11;
-        }
-        if (w instanceof CastWezen c && c.wezens() == Wezens.LEEUWSCHILDPAD_GUH) {
-            return Math.round(46 * c.getScale());
         }
         return Math.max(3, Math.ceil(w.getBbWidth()) + 2);
     }
