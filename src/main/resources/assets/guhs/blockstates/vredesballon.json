@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vredesballon"
+    },
+    "facing=east": {
+      "model": "guhs:block/vredesballon",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vredesballon",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vredesballon",
+      "y": 270
+    }
+  }
+}

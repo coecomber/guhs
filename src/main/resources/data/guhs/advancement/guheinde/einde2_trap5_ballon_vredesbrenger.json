@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/guheinde_winst",
+  "display": {
+    "icon": {
+      "id": "guhs:vredesballon"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_trap5_ballon_vredesbrenger.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_trap5_ballon_vredesbrenger.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -271,4 +271,48 @@
   "quest.4755481356D8732B.quest_desc": [
     "Put the &dNibble Machine Statuette&r down where everyone can see it. Click it: it nibbles.",
   ],
+  "quest.475548E71D7409D9.title": "A Plan with Little Ears",
+  "quest.475548E71D7409D9.quest_desc": [
+    "The &dMechanist Guh&r has one more big plan. On the &6building site&r behind his workshop in the Southern Air Temple hangs a board: click it. Everyone builds their own balloon, and only you see yours grow.",
+  ],
+  "quest.475548A570C5F8D9.title": "The Cloth",
+  "quest.475548A570C5F8D9.quest_desc": [
+    "Bring 128 &dtent canvas&r (any color) and 64 &dGuh Wire&r. Tip: a Tinker Machine with a Blueprint of tent canvas.",
+  ],
+  "quest.4755485FD93F0316.title": "The Basket",
+  "quest.4755485FD93F0316.quest_desc": [
+    "Bring 256 &dlogs&r and 16 &dbox shells&r. Tip: a forest in a tub, and a &dHidey Guh&r pushes you a box shell every day for a cheese nibble.",
+  ],
+  "quest.47554879788DCD2C.title": "The Burner",
+  "quest.47554879788DCD2C.quest_desc": [
+    "Bring 2 &dFire Baskets&r, 1 &dChonk Receiver&r, 96 &dgrill coal&r and 16 &dcrystal cheese&r. The burner runs on &bchonk power&r from your own factory: no coal, no smoke.",
+  ],
+  "quest.4755488B9692F09D.title": "The Nibble Supply",
+  "quest.4755488B9692F09D.quest_desc": [
+    "Bring 512 &dcheese nibbles&r and 128 &dfried cheese nibbles&r. Tip: the frying line and a field that harvests itself.",
+  ],
+  "quest.4755486E1D362EDF.title": "The Decorations",
+  "quest.4755486E1D362EDF.quest_desc": [
+    "Bring 64 &dlight rods&r and 32 &dflash crumbs&r. Then the Mechanist Guh puts ears on it.",
+  ],
+  "quest.4755486223397A6F.title": "Takeoff!",
+  "quest.4755486223397A6F.quest_desc": [
+    "Click the board and let the &dPeace Balloon&r take off. You get the &dPeace Balloon Statuette&r, your own &dhot air balloon&r and the title &6Peacebringer&r.",
+  ],
+  "quest.475548E931E5CAA0.title": "A Balloon on the Shelf",
+  "quest.475548E931E5CAA0.quest_desc": [
+    "Put the &dPeace Balloon Statuette&r where everyone can see it. Click it: a tiny crumb floats out of the little basket.",
+  ],
+  "quest.47554884FF4B91D1.title": "Floating Yourself",
+  "quest.47554884FF4B91D1.quest_desc": [
+    "Put your own &dhot air balloon&r on the ground and step in. Hold jump: the burner roars and you rise. The wind does the rest. Lost it? Sneak and click the board on the building site.",
+  ],
+  "quest.4755481EB48408C2.title": "Nibble Rain Every Day",
+  "quest.4755481EB48408C2.quest_desc": [
+    "The Peace Balloon makes a round over the Guh End every day. Drop by the board on the building site afterwards: there's still a little bag of nibbles in the basket, just for you.",
+  ],
+  "quest.475548A95CB45E8A.title": "Peacebringer",
+  "quest.475548A95CB45E8A.quest_desc": [
+    "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
+  ],
 }
