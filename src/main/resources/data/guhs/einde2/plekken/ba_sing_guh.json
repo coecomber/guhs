@@ -12,6 +12,49 @@
     120
   ],
   "plekken": {
+    "lu_ten_heuvel": {
+      "soort": "zone",
+      "pos": [
+        5,
+        46,
+        101
+      ],
+      "tot": [
+        19,
+        57,
+        115
+      ],
+      "wie": "de heuvel met de boom op de landingslob (Miroh's lied voor Lu Ten)"
+    },
+    "lu_ten_boom": {
+      "soort": "prop",
+      "pos": [
+        12,
+        50,
+        108
+      ],
+      "wie": "de voet van de kersenboom op de heuvel: hier legt Miroh zijn knabbel neer"
+    },
+    "lu_ten_miroh": {
+      "soort": "npc",
+      "pos": [
+        13,
+        50,
+        109
+      ],
+      "yaw": 90.0,
+      "wie": "Oom Miroh, onder de boom, met zijn rug naar de stad",
+      "kind": "OOM_MIROH"
+    },
+    "lu_ten_speler": {
+      "soort": "prop",
+      "pos": [
+        15,
+        48,
+        110
+      ],
+      "wie": "hier sta je als je Miroh hoort zingen"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
@@ -1342,6 +1385,410 @@
         168
       ],
       "wie": "de bovenring met het paleis"
+    },
+    "lu_ten_dicht_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          10,
+          51,
+          111
+        ],
+        [
+          13,
+          51,
+          109
+        ]
+      ],
+      "wie": "dichtbij Miroh onder de boom"
+    },
+    "lu_ten_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          9,
+          52,
+          111
+        ],
+        [
+          6,
+          54,
+          105
+        ],
+        [
+          3,
+          57,
+          96
+        ],
+        [
+          1,
+          61,
+          86
+        ],
+        [
+          12,
+          51,
+          108
+        ]
+      ],
+      "wie": "de camera trekt langzaam terug, over de leegte"
+    },
+    "h3_aankomst_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          2,
+          54,
+          128
+        ],
+        [
+          6,
+          50,
+          128
+        ],
+        [
+          22,
+          49,
+          128
+        ]
+      ],
+      "wie": "het eerste shot op de buitenpoort"
+    },
+    "h3_loket_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          25,
+          48,
+          127
+        ],
+        [
+          27,
+          47,
+          123
+        ]
+      ],
+      "wie": "schuin op het raampje van de loketguh"
+    },
+    "h3_aardrommel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          81,
+          48,
+          196
+        ],
+        [
+          90,
+          43,
+          205
+        ]
+      ],
+      "wie": "hoog over de ring"
+    },
+    "h3_aardrommel_toph_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          87,
+          43,
+          199
+        ],
+        [
+          90,
+          43,
+          202
+        ]
+      ],
+      "wie": "laag op De Blinde Bandiet"
+    },
+    "h3_thee_buiten_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          80,
+          53,
+          129
+        ],
+        [
+          80,
+          53,
+          137
+        ]
+      ],
+      "wie": "voor de deur, onder de drakenkop"
+    },
+    "h3_thee_binnen_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          84,
+          51,
+          139
+        ],
+        [
+          80,
+          50,
+          145
+        ]
+      ],
+      "wie": "binnen, schuin op de toonbank"
+    },
+    "h3_thee_zuka_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          82,
+          50,
+          139
+        ],
+        [
+          79,
+          50,
+          141
+        ]
+      ],
+      "wie": "op Zuka met zijn kopje"
+    },
+    "h3_appa_kamp_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          10,
+          50,
+          146
+        ],
+        [
+          17,
+          47,
+          151
+        ]
+      ],
+      "wie": "op Appa bij het kamp"
+    },
+    "h3_appa_stad_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          6,
+          76,
+          104
+        ],
+        [
+          40,
+          66,
+          104
+        ]
+      ],
+      "wie": "de stad bij nacht, over de buitenmuur"
+    },
+    "h3_appa_leeg_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          13,
+          48,
+          148
+        ],
+        [
+          17,
+          46,
+          151
+        ]
+      ],
+      "wie": "het lege kamp"
+    },
+    "laogai_long_feng": {
+      "soort": "npc",
+      "pos": [
+        218,
+        28,
+        134
+      ],
+      "yaw": -90.0,
+      "wie": "Long Feng-Mika stapt hier uit de schaduw (de gang naar de lampkamer)",
+      "kind": "LONG_FENG_MIKA"
+    },
+    "laogai_team": {
+      "soort": "npc",
+      "pos": [
+        222,
+        28,
+        131
+      ],
+      "yaw": 0.0,
+      "wie": "hier komt het team aanrennen (de gang met de cellen)"
+    },
+    "h3_laogai_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          226,
+          30,
+          133
+        ],
+        [
+          222,
+          29,
+          136
+        ]
+      ],
+      "wie": "in de dwarsgang, op de tralies"
+    },
+    "h3_laogai_long_feng_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          221,
+          29,
+          135
+        ],
+        [
+          218,
+          29,
+          134
+        ]
+      ],
+      "wie": "dichtbij Long Feng"
+    },
+    "h3_weerzien_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          218,
+          31,
+          141
+        ],
+        [
+          222,
+          29,
+          138
+        ]
+      ],
+      "wie": "in Appa's kamer, op de kapotte tralies"
+    },
+    "h3_koning_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          140,
+          59,
+          129
+        ],
+        [
+          146,
+          58,
+          128
+        ]
+      ],
+      "wie": "voor de troon"
+    },
+    "val_katara_cel": {
+      "soort": "prop",
+      "pos": [
+        122,
+        17,
+        138
+      ],
+      "wie": "Katara-guh in de kristalcel"
+    },
+    "val_zuka_cel": {
+      "soort": "prop",
+      "pos": [
+        123,
+        17,
+        138
+      ],
+      "wie": "Zuka in de kristalcel"
+    },
+    "val_appa_boven": {
+      "soort": "prop",
+      "pos": [
+        161,
+        40,
+        127
+      ],
+      "wie": "Appa-guh in de Koningsput, op weg naar beneden"
+    },
+    "h3_val_wijd_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          159,
+          26,
+          139
+        ],
+        [
+          147,
+          18,
+          127
+        ]
+      ],
+      "wie": "over de hele kristalkamer"
+    },
+    "h3_val_zuka_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          150,
+          19,
+          136
+        ],
+        [
+          146,
+          18,
+          133
+        ]
+      ],
+      "wie": "op Zuka's keuze"
+    },
+    "h3_val_bliksem_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          154,
+          20,
+          121
+        ],
+        [
+          149,
+          19,
+          127
+        ]
+      ],
+      "wie": "de bliksem"
+    },
+    "h3_val_katara_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          156,
+          19,
+          129
+        ],
+        [
+          153,
+          18,
+          126
+        ]
+      ],
+      "wie": "Katara-guh en het geestenwater"
+    },
+    "h3_val_schacht_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          155,
+          20,
+          121
+        ],
+        [
+          161,
+          34,
+          127
+        ]
+      ],
+      "wie": "omhoog de Koningsput in"
     }
   },
   "lagen": {

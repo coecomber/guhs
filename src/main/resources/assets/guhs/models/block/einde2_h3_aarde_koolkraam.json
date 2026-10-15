@@ -1,0 +1,487 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hout": "guhs:block/einde2_h3_aarde_koolkraam",
+    "kool": "guhs:block/einde2_bouw_aarde_kool",
+    "doek": "guhs:block/einde2_h3_aarde_koolkraam_doek",
+    "particle": "guhs:block/einde2_h3_aarde_koolkraam"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        3
+      ],
+      "to": [
+        16,
+        8,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            16,
+            16
+          ],
+          "texture": "#hout"
+        },
+        "south": {
+          "uv": [
+            0,
+            8,
+            16,
+            16
+          ],
+          "texture": "#hout"
+        },
+        "east": {
+          "uv": [
+            3,
+            8,
+            13,
+            16
+          ],
+          "texture": "#hout"
+        },
+        "west": {
+          "uv": [
+            3,
+            8,
+            13,
+            16
+          ],
+          "texture": "#hout"
+        },
+        "up": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#hout"
+        },
+        "down": {
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ],
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8,
+        4
+      ],
+      "to": [
+        5,
+        11,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            5,
+            5,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "south": {
+          "uv": [
+            1,
+            5,
+            5,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "up": {
+          "uv": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "down": {
+          "uv": [
+            1,
+            4,
+            5,
+            8
+          ],
+          "texture": "#kool"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        8,
+        5
+      ],
+      "to": [
+        10,
+        11.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            4.5,
+            10,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "south": {
+          "uv": [
+            6,
+            4.5,
+            10,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "east": {
+          "uv": [
+            5,
+            4.5,
+            9,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "west": {
+          "uv": [
+            5,
+            4.5,
+            9,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "up": {
+          "uv": [
+            6,
+            5,
+            10,
+            9
+          ],
+          "texture": "#kool"
+        },
+        "down": {
+          "uv": [
+            6,
+            5,
+            10,
+            9
+          ],
+          "texture": "#kool"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        8,
+        4
+      ],
+      "to": [
+        15,
+        11,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            5,
+            15,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "south": {
+          "uv": [
+            11,
+            5,
+            15,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "up": {
+          "uv": [
+            11,
+            4,
+            15,
+            8
+          ],
+          "texture": "#kool"
+        },
+        "down": {
+          "uv": [
+            11,
+            4,
+            15,
+            8
+          ],
+          "texture": "#kool"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8,
+        10
+      ],
+      "to": [
+        1.5,
+        15,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1,
+            1.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "south": {
+          "uv": [
+            0,
+            1,
+            1.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "east": {
+          "uv": [
+            10,
+            1,
+            11.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "west": {
+          "uv": [
+            10,
+            1,
+            11.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            1.5,
+            11.5
+          ],
+          "texture": "#hout"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            1.5,
+            11.5
+          ],
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        14.5,
+        8,
+        10
+      ],
+      "to": [
+        16,
+        15,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            1,
+            16,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            1,
+            16,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "east": {
+          "uv": [
+            10,
+            1,
+            11.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "west": {
+          "uv": [
+            10,
+            1,
+            11.5,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "up": {
+          "uv": [
+            14.5,
+            10,
+            16,
+            11.5
+          ],
+          "texture": "#hout"
+        },
+        "down": {
+          "uv": [
+            14.5,
+            10,
+            16,
+            11.5
+          ],
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        -1,
+        15,
+        1
+      ],
+      "to": [
+        17,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "east": {
+          "uv": [
+            1,
+            0,
+            12,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "west": {
+          "uv": [
+            1,
+            0,
+            12,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "up": {
+          "uv": [
+            0,
+            1,
+            16,
+            12
+          ],
+          "texture": "#doek"
+        },
+        "down": {
+          "uv": [
+            0,
+            1,
+            16,
+            12
+          ],
+          "texture": "#doek"
+        }
+      }
+    }
+  ]
+}
