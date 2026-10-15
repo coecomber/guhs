@@ -95240,6 +95240,91 @@
           ]
         },
         {
+          "name": "outfit_zuka_litteken",
+          "parent": "head",
+          "pivot": [
+            0,
+            6,
+            -2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -7.6,
+                6.4,
+                -12.66
+              ],
+              "size": [
+                7.0,
+                7.0,
+                0.3
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    8,
+                    88
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
           "name": "outfit_zij_schmink_wit",
           "parent": "head",
           "pivot": [
