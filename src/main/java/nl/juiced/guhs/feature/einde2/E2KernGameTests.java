@@ -446,6 +446,12 @@ public class E2KernGameTests {
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void einde2KernOntdektEnHaken(GameTestHelper helper) {
         ServerPlayer a = speler(helper), b = speler(helper);
+        // (phase B: the skelet wired VERBORGEN to the real veils, so a fresh player does not find a story structure yet;
+        // this test checks the discovery itself, so it lifts the veils and puts the real hook back at the end)
+        var sluiers = Einde2Haken.VERBORGEN;
+        helper.assertTrue(sluiers.test(b, Einde2Ids.BA_SING_GUH) && !sluiers.test(b, Einde2Ids.LEEGTEHAVEN),
+                "the real veil hides a story structure from a fresh player, not an outer island");
+        Einde2Haken.VERBORGEN = (p, id) -> false;
         try {
             helper.assertTrue(Einde2Ontdekt.ontdekt(a).isEmpty() && !Einde2Ontdekt.heeft(a, Einde2Ids.LEEGTEHAVEN), "nothing found yet");
             helper.assertTrue(Einde2Ontdekt.ontdek(a, Einde2Ids.LEEGTEHAVEN) && !Einde2Ontdekt.ontdek(a, Einde2Ids.LEEGTEHAVEN), "new once");
@@ -518,6 +524,7 @@ public class E2KernGameTests {
                 Einde2Haken.VERHAAL_KLAAR = oud;
             }
         } finally {
+            Einde2Haken.VERBORGEN = sluiers;
             weg(helper, a);
             weg(helper, b);
         }
