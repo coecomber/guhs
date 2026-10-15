@@ -21,6 +21,7 @@ from features import einde2_bouw_aarde_bouw as bouw
 from features import einde2_bouw_aarde_onder as onder
 from features import einde2_bouw_aarde_stad as boven
 from features import einde2_bouw_aarde_tex as tex
+from features import einde2_bouw_aarde_verhaal as verhaal
 
 NAAM = bouw.NAAM
 WERELD_Y = 138                   # the world y of template y 0: the streets of the lower ring lie at y 184
@@ -52,7 +53,7 @@ VERWACHT = ["buitenpoort", "loket", "loketguh", "ring_onder", "ring_midden", "ri
             "long_feng", "meer_laogai", "basis_ingang", "basis", "sluip_start", "sluip_route", ("sluip_wacht", 6), ("cel", 4), "lampkamer",
             "appa_kamer", "appa_gevangen", "catacomben_ingang", "catacomben", "kristalkamer", "azula", "bliksem_speler", "bliksem_azula",
             "zuka_keuze", "katara_redt", "miroh_gevangen", "vlucht_gat", "knipoog_sjokkel", "knipoog_sjokkel_camera", "knipoog_mewtwo_tank",
-            "knipoog_mewtwo_dai_li", "knipoog_mewtwo_mew", "knipoog_mewtwo_camera", ("das_molguh", 2), ("rustpunt", 4)]
+            "knipoog_mewtwo_dai_li", "knipoog_mewtwo_mew", "knipoog_mewtwo_camera", ("das_molguh", 2), ("rustpunt", 4)] + verhaal.MARKERS
 
 
 # =====================================================================================================================
@@ -68,6 +69,7 @@ def stad(h):
     """Builds Ba Sing Guh from the ground up (nothing is saved or checked here)."""
     b = bouw.Stad(h)
     bouw.eiland(b)
+    verhaal.heuvel(b)            # (phase B, h3_aarde: the hill of Miroh's song; before the city takes its columns)
     boven.wegen(b)
     boven.muren(b)
     boven.plein(b)
@@ -91,6 +93,7 @@ def stad(h):
     onder.basis(b, schuur)
     onder.catacomben(b, oude_poort)
     boven.volk(b)
+    verhaal.plekken(b)           # (phase B, h3_aarde: the cameras of the story scenes)
     x, z = boven.KRAMEN[0]
     b.laag("koolkraam_heel", koolkraam(h, True), x, bouw.ONDER + 1, z)
     b.laag("koolkraam_kapot", koolkraam(h, False), x, bouw.ONDER + 1, z)

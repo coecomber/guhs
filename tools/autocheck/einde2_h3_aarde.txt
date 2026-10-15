@@ -1,0 +1,58 @@
+# einde2 phase B, slice h3_aarde: chapter 3 in a real generated world (dev run). Every step through the dev command
+# /guhs einde2 h3 ga <stap> (which sets the state and teleports to the step's start), and the scenes through
+# /guhs einde2 h3 scene <naam>. The cutscenes wait for a click after every spoken line (1.4.4): a shot catches the first line.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_h3_aarde.txt -PautocheckTimeout=90
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+
+section The hill of Lu Ten and the landing lobe
+/guhs einde2 h3 ga lu_ten
+/guhs einde2 plek ba_sing_guh lu_ten_speler
+look 135 5
+waitrender 300
+shot e2_h3_heuvel
+
+section The passport desk with the closed gate (step loket)
+/guhs einde2 h3 ga loket
+look -90 0
+waitrender 200
+shot e2_h3_poort_dicht
+
+section The blindfold course (step blinddoek, after Toph's talk)
+/guhs einde2 h3 ga blinddoek
+/guhs einde2 verhaal vlag guhvatar_aarde baan aan
+/guhs einde2 plek ba_sing_guh tril_doel_1
+wait 120
+shot e2_h3_blinddoek
+
+section The monorail car at the outer wall
+/guhs einde2 h3 ga monorail
+look 90 10
+wait 60
+shot e2_h3_monorail
+
+section The cabbage stalls (whole, then the first one broken)
+/guhs einde2 h3 ga aardrommel
+/guhs einde2 plek ba_sing_guh koolkraam_1
+look 0 30
+wait 60
+shot e2_h3_kool_1
+
+section The Pai Sho board (with Miroh)
+/guhs einde2 h3 paisho
+wait 40
+shot e2_h3_pai_sho
+
+section The scenes (each one plays; a shot halfway)
+/guhs einde2 h3 ga aankomst
+/guhs einde2 h3 scene aardrommel
+wait 200
+shot e2_h3_scene_aardrommel
+/guhs einde2 h3 scene lu_ten
+wait 600
+shot e2_h3_scene_lu_ten
+/guhs einde2 h3 scene val
+wait 700
+shot e2_h3_scene_val

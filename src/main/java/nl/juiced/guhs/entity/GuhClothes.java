@@ -431,6 +431,10 @@ public enum GuhClothes {
     // </einde2_h2_water>
     // einde2 phase B, h3_aarde: the clothes of chapter 3 (the Aarderijk hat, the Blinde Bandiet belt); ONLY between these two markers, one constant per line
     // <einde2_h3_aarde>
+    /** Guhvatar chapter 3: the Aarderijk hat, a wide straw hat in steps like a little pagoda with a green band (its own cone bones). */
+    AARDERIJK_HOED(Slot.HEAD, "outfit_aarderijk_hoed", "outfit_aarderijk_hoed_band"),
+    /** Guhvatar chapter 3: the champion's belt of De Blinde Bandiet, Toph-guh's Aardrommel belt with a big golden buckle (BODY). */
+    BLINDE_BANDIET_RIEM(Slot.BODY, "outfit_bandiet_riem", "outfit_bandiet_gesp"),
     // </einde2_h3_aarde>
     // einde2 phase B, h4_vuur: the clothes of chapter 4 (the Vuurnatie disguise, Zuka's scar); ONLY between these two markers, one constant per line
     // <einde2_h4_vuur>
