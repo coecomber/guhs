@@ -198,21 +198,23 @@ public final class E2Hervat {
     }
 
     /**
-     * A spot near {@code pos} where a player can stand: up out of blocks (at most 16), then down onto ground (at most 6);
-     * when there is no ground there at all (a marker over the void), the nearest column within 6 blocks that has some.
+     * A spot near {@code pos} where a player can stand: first on the same level (the marker itself, else the nearest free
+     * spot with ground at most 3 below within 6 blocks: a marker on a door or a statue puts you next to it, not on its roof),
+     * then by climbing out of blocks (at most 16) and down onto ground (at most 6); nothing found: {@code pos} itself.
      */
     public static Vec3 veilig(ServerLevel level, Vec3 pos) {
-        BlockPos b = BlockPos.containing(pos);
-        laad(level, b);
-        for (int r = 0; r <= 6; r++) {
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dz = -r; dz <= r; dz++) {
-                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
-                        continue;
-                    }
-                    Vec3 q = staan(level, new Vec3(pos.x + dx, pos.y, pos.z + dz));
-                    if (q != null) {
-                        return q;
+        laad(level, BlockPos.containing(pos));
+        for (int klim : new int[] {0, 16}) {
+            for (int r = 0; r <= 6; r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                            continue;
+                        }
+                        Vec3 q = staan(level, new Vec3(pos.x + dx, pos.y, pos.z + dz), klim, klim == 0 ? 3 : 6);
+                        if (q != null) {
+                            return q;
+                        }
                     }
                 }
             }
@@ -221,15 +223,15 @@ public final class E2Hervat {
     }
 
     @Nullable
-    private static Vec3 staan(ServerLevel level, Vec3 pos) {
+    private static Vec3 staan(ServerLevel level, Vec3 pos, int klim, int zak) {
         Vec3 q = pos;
-        for (int up = 0; up <= 16 && !vrij(level, q); up++) {
+        for (int up = 0; up < klim && !vrij(level, q); up++) {
             q = q.add(0, 1, 0);
         }
         if (!vrij(level, q)) {
             return null;
         }
-        for (int down = 0; down <= 6; down++) {
+        for (int down = 0; down <= zak; down++) {
             Vec3 f = q.add(0, -down, 0);
             if (!vrij(level, f)) {
                 return null;
@@ -316,7 +318,8 @@ public final class E2Hervat {
         }
         LAATST.put(p.getUUID(), nu);
         boolean inGuheinde = GuheindeFeature.isGuheinde(p.level());
-        if (waarom == Waarom.TERUG && inGuheinde) {
+        BlockPos bolHier = inGuheinde ? KAASBOL.apply(p.level()) : null;
+        if (waarom == Waarom.TERUG && bolHier != null && bolHier.closerToCenterThan(p.position(), 96)) {
             // (back through the portal: the kaasbol is right here)
             p.sendSystemMessage(waarZin(p, l).withStyle(ChatFormatting.GOLD));
             p.sendSystemMessage(Component.translatable(P + "kaasbol_hier").withStyle(ChatFormatting.YELLOW));
