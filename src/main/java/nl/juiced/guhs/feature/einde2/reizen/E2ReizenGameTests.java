@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.appa.AppaGuhEntity;
 import nl.juiced.guhs.feature.einde2.biomes.E2BiomesFeature;
@@ -137,6 +138,77 @@ public class E2ReizenGameTests {
         GuhQuests.saved(gelovige).remove(Walvis.KEY);
         Walviszicht.zet(gelovige, false);
         weg(helper, gelovige, ander);
+        helper.succeed();
+    }
+
+    /**
+     * einde2 fix-reizen (playtest 1, items 2, 4 and 12): at each of the four main buildings Appa's landing spot
+     * ({@link Landingen#HOOFDGEBOUWEN}) is real free space on the landing place of the structure itself: the tiles of its
+     * template ({@code <structuur>/stuk_i_j}) are put down far away, and there his box is free, every block under him is
+     * solid, the column around him is free up to the top of the build (he comes straight down), the spot lies in the
+     * {@code aankomst} zone, and the rider's spot {@code aankomst_speler} is free with ground under it. And who rides along
+     * follows from the story alone: Aang-guh from chapter 1 step 1 on, nobody before.
+     */
+    @GuhTest(template = WEI, batch = "einde2_reizen", timeoutTicks = 400)
+    public static void einde2ReizenLandingen(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var appaType = nl.juiced.guhs.feature.einde2.appa.E2AppaFeature.APPA_GUH.get();
+        var manager = level.getStructureManager();
+        BlockPos basis = helper.absolutePos(BlockPos.ZERO).offset(640, 8, 640);
+        int k = 0;
+        for (var e : Landingen.HOOFDGEBOUWEN.entrySet()) {
+            String s = e.getKey();
+            Landingen.Plek plek = e.getValue();
+            nl.juiced.guhs.feature.einde2.Plekken.Plek speler = nl.juiced.guhs.feature.einde2.Plekken.plek(s, "aankomst_speler");
+            nl.juiced.guhs.feature.einde2.Plekken.Plek zone = nl.juiced.guhs.feature.einde2.Plekken.plek(s, "aankomst");
+            helper.assertTrue(speler != null && zone != null && zone.tot() != null, s + ": the sidecar has aankomst and aankomst_speler");
+            BlockPos o = basis.offset(k++ * 320, 0, 0);
+            int hoogte = nl.juiced.guhs.feature.einde2.Plekken.blad(s).grootte().getY();
+            double ax = speler.pos().getX() + plek.x(), ay = speler.pos().getY() + plek.y(), az = speler.pos().getZ() + plek.z();
+            // the tiles around Appa's spot and the rider's spot
+            Set<java.util.List<Integer>> tegels = new java.util.HashSet<>();
+            for (double[] c : new double[][]{{ax, az}, {speler.pos().getX(), speler.pos().getZ()}}) {
+                for (int dx = -4; dx <= 4; dx += 4) {
+                    for (int dz = -4; dz <= 4; dz += 4) {
+                        tegels.add(java.util.List.of(Math.floorDiv((int) Math.floor(c[0]) + dx, 32), Math.floorDiv((int) Math.floor(c[1]) + dz, 32)));
+                    }
+                }
+            }
+            for (java.util.List<Integer> t : tegels) {
+                int i = t.get(0), j = t.get(1);
+                var tegel = manager.get(nl.juiced.guhs.Guhs.id(s + "/stuk_" + i + "_" + j));
+                if (tegel.isPresent()) {
+                    BlockPos at = o.offset(i * 32, 0, j * 32);
+                    tegel.get().placeInWorld(level, at, at, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
+                            level.getRandom(), 2);
+                }
+            }
+            Vec3 a = new Vec3(o.getX() + ax, o.getY() + ay, o.getZ() + az);
+            var doos = appaType.getSpawnAABB(a.x, a.y, a.z);
+            helper.assertTrue(level.noCollision(doos), s + ": Appa's box is free at his landing spot " + a);
+            for (int x = (int) Math.floor(doos.minX); x <= (int) Math.floor(doos.maxX - 1e-6); x++) {
+                for (int z = (int) Math.floor(doos.minZ); z <= (int) Math.floor(doos.maxZ - 1e-6); z++) {
+                    BlockPos onder = BlockPos.containing(x, a.y - 1, z);
+                    helper.assertTrue(!level.getBlockState(onder).getCollisionShape(level, onder).isEmpty(), s + ": solid under Appa at " + onder);
+                }
+            }
+            var kolom = new net.minecraft.world.phys.AABB(a.x - 3, a.y, a.z - 3, a.x + 3, o.getY() + hoogte, a.z + 3);
+            helper.assertTrue(level.noCollision(kolom), s + ": free up to the top around his spot (he comes straight down)");
+            BlockPos z0 = zone.pos(), z1 = zone.tot();
+            helper.assertTrue(ax >= Math.min(z0.getX(), z1.getX()) && ax <= Math.max(z0.getX(), z1.getX()) + 1
+                    && az >= Math.min(z0.getZ(), z1.getZ()) && az <= Math.max(z0.getZ(), z1.getZ()) + 1, s + ": his spot lies in the aankomst zone");
+            Vec3 sp = new Vec3(o.getX() + speler.pos().getX() + 0.5, o.getY() + speler.pos().getY(), o.getZ() + speler.pos().getZ() + 0.5);
+            var spelerDoos = net.minecraft.world.entity.EntityType.PLAYER.getDimensions().makeBoundingBox(sp);
+            helper.assertTrue(level.noCollision(spelerDoos) && !level.noCollision(spelerDoos.move(0, -0.5, 0)), s + ": the rider's spot is free, on solid ground");
+        }
+        // the team on Appa's back: from the story state alone
+        ServerPlayer p = speler(helper, new BlockPos(4, 2, 4));
+        nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev.wis(p, nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal.LUCHT);
+        helper.assertTrue(!E2Team.opAppa(p).contains(E2Team.Lid.AANG), "before the kaasbol nobody rides along");
+        nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev.zetTot(p, nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal.LUCHT, 1);
+        helper.assertTrue(E2Team.opAppa(p).contains(E2Team.Lid.AANG), "from chapter 1 step 1 (the first flight) Aang-guh rides along");
+        nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev.wis(p, nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal.LUCHT);
+        weg(helper, p);
         helper.succeed();
     }
 }

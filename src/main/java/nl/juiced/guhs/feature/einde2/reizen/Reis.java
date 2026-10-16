@@ -81,6 +81,8 @@ final class Reis {
     final String structuur;
     final E2Reizen.Vlucht soort;
     final Vec3 doel;
+    /** einde2 fix-reizen: where Appa lands (his spot, the rider's spot, the area that counts as arrived). */
+    final Appa.Landing landing;
     @Nullable
     Consumer<ServerPlayer> daarna;
     Vec3 start = Vec3.ZERO;
@@ -100,22 +102,23 @@ final class Reis {
     Jacht jacht;
     private boolean jachtGehad;
 
-    Reis(ServerPlayer p, String structuur, E2Reizen.Vlucht soort, Vec3 doel, @Nullable Consumer<ServerPlayer> daarna) {
+    Reis(ServerPlayer p, String structuur, E2Reizen.Vlucht soort, Appa.Landing landing, @Nullable Consumer<ServerPlayer> daarna) {
         this.speler = p.getUUID();
         this.structuur = structuur;
         this.soort = soort;
-        this.doel = doel;
+        this.doel = landing.appa();
+        this.landing = landing;
         this.daarna = daarna;
         this.gezegd = new boolean[REGELS.getOrDefault(soort, List.of()).size()];
     }
 
-    /** The team of this flight: the player's team, and on the very first flight Aang-guh who just rolled out of the kaasbol. */
+    /**
+     * The team on Appa's back for this flight: who travels with the player NOW according to the story
+     * ({@link E2Team#opAppa}), the same whichever flight it is and however the player got to this step (playtest 1: the
+     * first flight showed nobody, a dev jump to a later step showed Aang-guh).
+     */
     static List<E2Team.Lid> ledenVoor(ServerPlayer p, E2Reizen.Vlucht soort) {
-        List<E2Team.Lid> leden = new ArrayList<>(E2Team.leden(p));
-        if ((soort == E2Reizen.Vlucht.START || soort == E2Reizen.Vlucht.H1_H2) && !leden.contains(E2Team.Lid.AANG)) {
-            leden.add(0, E2Team.Lid.AANG);
-        }
-        return leden;
+        return E2Team.opAppa(p);
     }
 
     void begin(AppaGuhEntity appa) {
@@ -125,28 +128,67 @@ final class Reis {
         }
         start = p.position();
         totaal = Math.max(1, horizontaal(start, doel));
-        ServerLevel level = (ServerLevel) appa.level();
         for (E2Team.Lid l : ledenVoor(p, soort)) {
-            GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
-            if (npc == null) {
-                continue;
-            }
-            npc.setKind(l.kind(p));
-            npc.snapTo(appa.getX(), appa.getY() + 2.5, appa.getZ(), appa.getYRot(), 0);
-            npc.setInvulnerable(true);
-            npc.addTag(TIJDELIJK);
-            level.addFreshEntity(npc);
-            if (appa.zetTeam(npc)) {
-                team.add(npc.getUUID());
-                aanBoord.add(l);
-            } else {
-                npc.discard();
-            }
+            zetOp(p, appa, l);
         }
         for (ServerPlayer k : kijkers(p)) {
             E2Audio.moment(k, "appa");
         }
     }
+
+    /** One team member onto a team seat of Appa (made fresh; false: no seat, or it could not be made). */
+    private boolean zetOp(ServerPlayer p, AppaGuhEntity appa, E2Team.Lid l) {
+        ServerLevel level = (ServerLevel) appa.level();
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
+        if (npc == null) {
+            return false;
+        }
+        npc.setKind(l.kind(p));
+        npc.snapTo(appa.getX(), appa.getY() + 2.5, appa.getZ(), appa.getYRot(), 0);
+        npc.setInvulnerable(true);
+        npc.addTag(TIJDELIJK);
+        level.addFreshEntity(npc);
+        if (npc.isRemoved() || !appa.zetTeam(npc)) {
+            npc.discard();
+            LOGGER.warn("[reizen] {} could not sit on Appa's back (removed: {})", l.id(), npc.getRemovalReason());
+            return false;
+        }
+        team.add(npc.getUUID());
+        if (!aanBoord.contains(l)) {
+            aanBoord.add(l);
+        }
+        return true;
+    }
+
+    /**
+     * Once a second while flying (einde2 fix-reizen): every member who belongs on Appa's back sits there. One that is gone
+     * (removed by something else, got off) gets a fresh copy; this is logged, so a cause can be found.
+     */
+    private void teamWacht(ServerPlayer p, AppaGuhEntity appa) {
+        if (tik % 20 != 7 || !(appa.level() instanceof ServerLevel level)) {
+            return;
+        }
+        for (E2Team.Lid l : ledenVoor(p, soort)) {
+            boolean zit = false;
+            for (UUID id : team) {
+                Entity e = level.getEntity(id);
+                if (e instanceof GuhNpcEntity npc && e.isAlive() && e.getVehicle() == appa && npc.getKind() == l.kind(p)) {
+                    zit = true;
+                    break;
+                }
+            }
+            if (!zit) {
+                LOGGER.warn("[reizen] {} was missing from Appa's back on the flight to {}: seated again", l.id(), structuur);
+                team.removeIf(id -> {
+                    Entity e = level.getEntity(id);
+                    return e == null || !e.isAlive() || e.getVehicle() != appa;
+                });
+                zetOp(p, appa, l);
+            }
+        }
+    }
+
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
 
     /** The player and whoever rides in their Appa's basket. */
     List<ServerPlayer> kijkers(ServerPlayer p) {
@@ -187,6 +229,9 @@ final class Reis {
         AppaGuhEntity appa = Appa.geladen(p);
         boolean rijdt = appa != null && p.getVehicle() == appa;
         boolean vliegt = rijdt && appa.vluchtDoel() != null;
+        if (!vliegt && !rijdt && appa != null && appa.vluchtDoel() != null) {
+            return;                                               // (the rider was just taken off: Appa decides this tick)
+        }
         if (!vliegt) {
             if (dichtbij(p, 24) && (!rijdt || !appa.isLucht())) {
                 E2Reizen.klaar(p, this);                          // (there: Appa landed, or the player came another way)
@@ -214,6 +259,7 @@ final class Reis {
             return;
         }
         wachtNu = false;
+        teamWacht(p, appa);
         if (jacht != null) {
             if (!jacht.tick(p, appa, this)) {
                 jacht = null;

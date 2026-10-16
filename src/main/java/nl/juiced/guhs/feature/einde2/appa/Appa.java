@@ -48,11 +48,50 @@ public final class Appa {
      * places to fly to opened); false = the old line "you are sitting on him already".
      */
     public static volatile java.util.function.Predicate<ServerPlayer> OP_ZIJN_KOP = p -> false;
+    /**
+     * einde2 fix-reizen: his owner right-clicks him (not sneaking, not sitting on him). True = it was handled (his menu "Waar
+     * vliegen we heen?" opened); false = they climb on as before.
+     */
+    public static volatile java.util.function.Predicate<ServerPlayer> KLIK = p -> false;
     /** The player's saved Appa: Heeft, Gen, Weg, Naam, Items. */
     public static final String KEY = "guhs_einde2_appa_appa";
 
+    /**
+     * einde2 fix-reizen: where a flight ends. {@code appa}: the spot he lands on (his feet), looking {@code yaw} (NaN: as he
+     * comes in); {@code speler}: where his rider is set down (null: a free spot beside him); {@code gebied}: when his rider
+     * is taken off him inside it (a cutscene of the place began while he was still on the way), he lands on his spot at
+     * once (null: he just stops); {@code afstappen}: his rider gets off onto their spot when he has landed.
+     */
+    public record Landing(Vec3 appa, float yaw, @Nullable Vec3 speler, @Nullable net.minecraft.world.phys.AABB gebied, boolean afstappen) {
+        /** Just a spot: he lands on it as he comes in, the rider stays on. */
+        public static Landing op(Vec3 doel) {
+            return new Landing(doel, Float.NaN, null, null, false);
+        }
+
+        /** Where the rider of this Appa is set down: their own spot when it is free, else a free spot beside him. */
+        public Vec3 spelerOf(AppaGuhEntity appa, ServerPlayer p) {
+            if (speler != null) {
+                Vec3 vrij = vrijePlek(appa.level(), p.getType(), speler, 3, true);
+                if (vrij != null) {
+                    return vrij;
+                }
+            }
+            return appa.getDismountLocationForPassenger(p);
+        }
+    }
+
     /** Server: owner -> their loaded Appa (the newest one; see {@link #meld}). */
     private static final Map<UUID, AppaGuhEntity> GELADEN = new ConcurrentHashMap<>();
+
+    /** einde2 fix-reizen: a player who got off him in the air and is set down here once they are free (see {@link #zetNeer}). */
+    private record Neer(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim, Vec3 waar, Vec3 van, int tot) {
+    }
+
+    private static final Map<UUID, Neer> NEER = new ConcurrentHashMap<>();
+    /** Player -> until which server tick a fall or a wall does them no harm (just set down). */
+    private static final Map<UUID, Integer> ZACHT = new ConcurrentHashMap<>();
+    /** How long (ticks) a {@link #zetNeer} waits for a cutscene or card to let the player go. */
+    private static final int NEER_WACHT = 20 * 60 * 20;
 
     // --- the saved state --------------------------------------------------------------------------------------------------------
 
@@ -155,6 +194,103 @@ public final class Appa {
     /** Server stopped: nothing is loaded any more. */
     static void leeg() {
         GELADEN.clear();
+        NEER.clear();
+        ZACHT.clear();
+    }
+
+    // --- getting off safely (einde2 fix-reizen) ------------------------------------------------------------------------------
+
+    /**
+     * This player got off their Appa up in the air (a cutscene took them off, a teleport): as soon as nothing holds them
+     * any more (no cutscene or card) and they still hang near where they got off, they are put on a free spot at
+     * {@code waar} (on solid ground, never in a wall), and a fall or a wall does them no harm for a few seconds. A later
+     * call replaces an earlier one. Nothing happens when they got on something again, flew away (creative) or were taken
+     * somewhere else (more than 10 blocks from where they got off: a teleport of the story).
+     */
+    public static void zetNeer(ServerPlayer p, Vec3 waar) {
+        MinecraftServer server = p.level().getServer();
+        int nu = server == null ? 0 : server.getTickCount();
+        NEER.put(p.getUUID(), new Neer(p.level().dimension(), waar, p.position(), nu + NEER_WACHT));
+        ZACHT.put(p.getUUID(), nu + NEER_WACHT);
+    }
+
+    /** Every tick for every player: a waiting {@link #zetNeer}. */
+    static void neerTick(ServerPlayer p) {
+        Neer n = NEER.get(p.getUUID());
+        if (n == null || p.level().getServer() == null) {
+            return;
+        }
+        int nu = p.level().getServer().getTickCount();
+        if (nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(p)) {
+            return;                                            // (a scene holds them: afterwards)
+        }
+        boolean weg = p.level().dimension() != n.dim() || p.isPassenger() || nu > n.tot() || p.position().distanceToSqr(n.van()) > 10 * 10
+                || p.getAbilities().flying || p.isSpectator() || !p.isAlive();
+        NEER.remove(p.getUUID(), n);
+        if (weg) {
+            ZACHT.put(p.getUUID(), nu + 40);
+            return;
+        }
+        Vec3 w = vrijePlek(p.level(), p.getType(), n.waar(), 4, true);
+        if (w == null) {
+            w = n.waar();
+        }
+        p.teleportTo(w.x, w.y, w.z);
+        p.resetFallDistance();
+        p.setDeltaMovement(Vec3.ZERO);
+        ZACHT.put(p.getUUID(), nu + 60);
+    }
+
+    /** Is this player just set down (or about to be), so a fall or a wall must not hurt them? */
+    static boolean zacht(ServerPlayer p) {
+        Integer tot = ZACHT.get(p.getUUID());
+        if (tot == null || p.level().getServer() == null) {
+            return false;
+        }
+        if (p.level().getServer().getTickCount() > tot) {
+            ZACHT.remove(p.getUUID(), tot);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * A free spot for an entity of this type near {@code bij} (the nearest first, within {@code straal} blocks sideways and
+     * a few up and down): its box free of blocks and liquid, and with {@code opGrond} something solid right under it. Null:
+     * none (or the chunks are not there).
+     */
+    @Nullable
+    public static Vec3 vrijePlek(net.minecraft.world.level.Level level, net.minecraft.world.entity.EntityType<?> type, Vec3 bij, int straal,
+                                 boolean opGrond) {
+        var maat = type.getDimensions();
+        int bx = net.minecraft.util.Mth.floor(bij.x), by = net.minecraft.util.Mth.floor(bij.y + 0.01), bz = net.minecraft.util.Mth.floor(bij.z);
+        int[] hoogtes = {0, 1, -1, 2, -2, 3, 4};
+        for (int r = 0; r <= straal; r++) {
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    for (int dy : hoogtes) {
+                        double x = r == 0 ? bij.x : bx + dx + 0.5, z = r == 0 ? bij.z : bz + dz + 0.5;
+                        double y = r == 0 && dy == 0 ? bij.y : by + dy;
+                        if (!level.hasChunkAt(net.minecraft.core.BlockPos.containing(x, y, z))) {
+                            continue;
+                        }
+                        var doos = maat.makeBoundingBox(x, y, z);
+                        if (!level.noCollision(doos) || level.containsAnyLiquid(doos)) {
+                            continue;
+                        }
+                        var onder = new net.minecraft.world.phys.AABB(x - 0.25, y - 0.99, z - 0.25, x + 0.25, y - 0.01, z + 0.25);
+                        if (opGrond && level.noCollision(onder)) {
+                            continue;
+                        }
+                        return new Vec3(x, y, z);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /** Takes an Appa out of the world (everybody steps off first; his chest is safe in the owner's data). */
@@ -316,6 +452,15 @@ public final class Appa {
      * @return false when the flight can't start (no Appa, he is kept away, or the player can't get on)
      */
     public static boolean vlieg(ServerPlayer p, Vec3 doel, boolean spelerStuurt) {
+        return vlieg(p, Landing.op(doel), spelerStuurt);
+    }
+
+    /**
+     * einde2 fix-reizen: as {@link #vlieg(ServerPlayer, Vec3, boolean)}, onto a {@link Landing}: he lands on its spot looking
+     * its way, sets his rider down on theirs when it says so, and lands at once when his rider is taken off him inside its
+     * {@code gebied}. On the way he flies at journey speed ({@link AppaGuhEntity#REIS_SNELHEID}).
+     */
+    public static boolean vlieg(ServerPlayer p, Landing landing, boolean spelerStuurt) {
         AppaGuhEntity appa = roep(p);
         if (appa == null) {
             return false;
@@ -326,7 +471,7 @@ public final class Appa {
                 return false;
             }
         }
-        appa.vliegNaar(p, doel, spelerStuurt);
+        appa.vliegNaar(p, landing, spelerStuurt);
         return true;
     }
 
@@ -346,7 +491,8 @@ public final class Appa {
 
     /**
      * Where he lands when called: a free spot on the ground a few blocks in front of or around the player, else in the air
-     * right above them (he sinks down by himself when there is ground).
+     * right above them (he sinks down by himself when there is ground); einde2 fix-reizen: the first height above them where
+     * he is free of blocks, so nobody who climbs on him ends up in a roof.
      */
     private static Vec3 landplek(ServerPlayer p) {
         ServerLevel level = p.level();
@@ -362,6 +508,12 @@ public final class Appa {
                         return at;
                     }
                 }
+            }
+        }
+        for (int dy = 4; dy <= 32; dy++) {
+            Vec3 at = p.position().add(0, dy, 0);
+            if (level.noCollision(type.getSpawnAABB(at.x, at.y, at.z).expandTowards(0, 2, 0))) {
+                return at;
             }
         }
         return p.position().add(0, 3.5, 0);

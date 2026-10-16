@@ -440,4 +440,37 @@ public class E2AppaGameTests {
             weg(helper, p);
         });
     }
+
+    /**
+     * einde2 fix-reizen (playtest 1, items 4 and 9): off Appa up in the air, between two walls, a player is never put inside
+     * blocks: where they get off is free space, and once nothing holds them they are set down on the ground under them
+     * (free, solid underfoot), and a fall or a wall does them no harm then.
+     */
+    @GuhTest(template = WEI, batch = "einde2_appa", timeoutTicks = 200)
+    public static void einde2AppaVeiligAf(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // a shaft three blocks wide (x 5..7), walls on both sides from y 3 up to y 12
+        for (int y = 3; y <= 12; y++) {
+            for (int z = 2; z <= 14; z++) {
+                for (int x : new int[]{2, 3, 4, 8, 9, 10, 11}) {
+                    helper.setBlock(new BlockPos(x, y, z), net.minecraft.world.level.block.Blocks.STONE);
+                }
+            }
+        }
+        ServerPlayer p = speler(helper, new BlockPos(6, 2, 2));
+        AppaGuhEntity appa = appaOp(helper, p, new BlockPos(6, 7, 8));
+        helper.assertTrue(p.startRiding(appa, true, false), "the player climbs on");
+        helper.runAfterDelay(5, () -> {
+            helper.assertTrue(appa.isLucht(), "Appa hangs in the air in the shaft");
+            p.stopRiding();
+            helper.assertTrue(!p.isPassenger() && level.noCollision(p, p.getBoundingBox()), "got off into free space, not into a wall (" + p.position() + ")");
+            Appa.neerTick(p);
+            BlockPos grond = helper.absolutePos(new BlockPos(6, 2, 8));
+            helper.assertTrue(Math.abs(p.getY() - grond.getY()) < 0.1 && level.noCollision(p, p.getBoundingBox())
+                    && !level.noCollision(p.getBoundingBox().move(0, -0.5, 0)), "set down on the ground under them (" + p.position() + ")");
+            helper.assertTrue(Appa.zacht(p), "no fall or wall damage right after");
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
 }
