@@ -57,6 +57,8 @@ public class E2GeestSpelGameTests {
         helper.assertTrue(GeestToegang.regel("gefluisterwoud", false, false, true, false) && GeestToegang.regel("theepaviljoen", false, false, true, false)
                 && !GeestToegang.regel(GeestToegang.EILAND_8, true, true, true, false) && !GeestToegang.regel(GeestToegang.ARCHIEF, true, true, true, false)
                 && GeestToegang.regel(GeestToegang.ARCHIEF, false, false, false, true), "the finale: every zone; the archive and the island only by their own rule");
+        helper.assertTrue(Geestenwereld.LAGEN.containsAll(java.util.List.of(GeestLagen.WOUD, GeestLagen.BOOM, GeestLagen.PAD_8)),
+                "the three overlays are named as the build names them");
         ServerPlayer gids = speler(helper), gast = speler(helper);
         BlockPos o = helper.absolutePos(BlockPos.ZERO);
         Geestenwereld.TestGebied gebied = new Geestenwereld.TestGebied(helper.getLevel().dimension(), new AABB(o).inflate(40), Vec3.atBottomCenterOf(o), -64);
