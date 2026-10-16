@@ -52,10 +52,10 @@ public final class E2H1Lucht {
     /** The steps (tools/features/einde2_h1_lucht.py checks this number). */
     public static final int STAPPEN = 10;
     public static final int KAASBOL = 0, VLUCHT = 1, HAL = 2, LUCHTBAL = 3, SCOOTER = 4, ZWEVEN = 5, MOMO = 6, STAL = 7, DEUR = 8, ZUKA = 9;
-    /** Flags of the line (besides E2Verhaal.V_GELEERD): the escape is on; Zuka's ship lies at the pier; the saddle is whole. */
+    /** Flags of the line (besides E2Verhaal.V_GELEERD): the escape is on; Zuka's ship lies at the pier; the saddle is on Appa. */
     public static final String V_VLUCHT = "vlucht", V_SCHIP = "schip", V_ZADEL = "zadel";
-    /** Counters: how far the saddle is mended, how many apples Appa ate. */
-    public static final String T_ZADEL = "zadel", T_APPELS = "appels";
+    /** Counter: how many apples Appa ate (fix round 1: the saddle is taken off its trestle and put on Appa, flag V_ZADEL). */
+    public static final String T_APPELS = "appels";
     /** The lang prefixes of the slice. */
     public static final String P = "gui.guhs.einde2_h1_lucht.", Q = "quest.guhs.einde2_h1_lucht.";
     /** The narrator card of the chapter and the travel map of the whole story. */
@@ -95,6 +95,23 @@ public final class E2H1Lucht {
             ServerLevel g = guheinde(p.level().getServer());
             BlockPos bol = g == null ? null : Kaasbol.plek(g);
             return bol == null ? null : Doel.plek(GuheindeFeature.GUHEINDE, bol, Component.translatable(P + "doel.kaasbol"));
+        }
+        // fix round 1: inside the temple the compass points at the spot of the step itself (the start, the balcony's wind, ...)
+        String plek = switch (stap) {
+            case HAL -> "roku_beeld";
+            case LUCHTBAL -> "guhatso";
+            case SCOOTER -> "scooter_start";
+            case ZWEVEN -> "zweef_landing";
+            case MOMO -> "monnikenverblijf";
+            case STAL -> "zadel";
+            case DEUR -> "werkplaatsdeur";
+            case ZUKA -> LIJN.vlag(p, V_VLUCHT) ? "appa_kamp" : "steiger";
+            default -> null;
+        };
+        ServerLevel g = plek == null ? null : guheinde(p.level().getServer());
+        BlockPos waar = g == null ? null : plek(g, plek);
+        if (waar != null) {
+            return Doel.plek(GuheindeFeature.GUHEINDE, waar, Component.translatable(P + "doel.stap." + sleutel(p, stap)));
         }
         return Doel.structuur(GuheindeFeature.GUHEINDE, STRUCTUUR, Component.translatable(P + "doel.tempel"));
     }
@@ -170,6 +187,23 @@ public final class E2H1Lucht {
         }
         BoundingBox doos = Plekken.doos(p.level(), STRUCTUUR);
         return doos != null && doos.inflatedBy(2).isInside(pos);
+    }
+
+    /** A big title (and an optional subtitle) for this player only (fix round 1: start, finish, a ring, a goal). */
+    public static void titel(ServerPlayer p, Component titel, @Nullable Component onder, int blijf) {
+        if (p.connection == null) {
+            return;
+        }
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket(4, blijf, 8));
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket(onder == null ? Component.empty() : onder));
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket(titel));
+    }
+
+    /** Particles this player sees from far away (a beacon over a start, a lit ring): Schijn's are only seen up close. */
+    public static void ver(ServerPlayer p, net.minecraft.core.particles.ParticleOptions deeltje, Vec3 plek, int aantal, double spreiding, double snelheid) {
+        if (p.connection != null && !(p instanceof net.neoforged.neoforge.common.util.FakePlayer)) {
+            p.level().sendParticles(p, deeltje, true, true, plek.x, plek.y, plek.z, aantal, spreiding, spreiding, spreiding, snelheid);
+        }
     }
 
     /** Puts the player at a marker of the temple (dev, a failed course), looking that way. */

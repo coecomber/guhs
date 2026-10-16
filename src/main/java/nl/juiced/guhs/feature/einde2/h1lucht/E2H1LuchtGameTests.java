@@ -122,6 +122,57 @@ public class E2H1LuchtGameTests {
         }
     }
 
+    /**
+     * fix round 1 (playtest 1): the match ball never falls (it floats at its height and settles above the nearest pole), and
+     * the luchtscooter carries its rider: held still during the countdown, then it rides on where the rider looks.
+     */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 400)
+    public static void einde2H1LuchtBalEnScooter(GameTestHelper helper) {
+        net.minecraft.server.level.ServerLevel level = helper.getLevel();
+        net.minecraft.core.BlockPos paal = new net.minecraft.core.BlockPos(11, 1, 7);
+        helper.setBlock(paal, net.minecraft.world.level.block.Blocks.STRIPPED_SPRUCE_LOG);
+        net.minecraft.world.phys.Vec3 top = net.minecraft.world.phys.Vec3.atLowerCornerOf(helper.absolutePos(paal));
+        double hoogte = top.y + 1 + Luchtbal.BOVEN_PAAL;
+        LuchtbalEntity bal = E2H1LuchtFeature.LUCHTBAL.get().create(level, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        net.minecraft.world.phys.Vec3 b0 = helper.absoluteVec(new net.minecraft.world.phys.Vec3(6.5, 0, 7.5));
+        bal.snapTo(b0.x, hoogte + 1.5, b0.z, 0f, 0f);
+        bal.zweef(hoogte, List.of(top));
+        bal.setDeltaMovement(0.15, 0.2, 0);
+        level.addFreshEntity(bal);
+        for (int x = 0; x <= 5; x++) {
+            for (int y = 1; y <= 3; y++) {
+                helper.setBlock(new net.minecraft.core.BlockPos(x, y, 12), net.minecraft.world.level.block.Blocks.STONE);   // (the end of its road)
+            }
+        }
+        ServerPlayer p = speler(helper);
+        LuchtbalEntity sc = E2H1LuchtFeature.LUCHTBAL.get().create(level, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        net.minecraft.world.phys.Vec3 s0 = helper.absoluteVec(new net.minecraft.world.phys.Vec3(2.5, 1, 1.5));
+        sc.scooter(20);
+        sc.snapTo(s0.x, s0.y, s0.z, 0f, 0f);
+        level.addFreshEntity(sc);
+        p.snapTo(s0.x, s0.y + 0.8, s0.z, 0f, 0f);
+        helper.assertTrue(p.startRiding(sc, true, true) && p.getVehicle() == sc, "the rider stands on the scooter");
+        double[] verst = {0};
+        boolean[] laag = {false};
+        helper.onEachTick(() -> {
+            verst[0] = Math.max(verst[0], sc.getZ() - s0.z);
+            laag[0] |= bal.getY() < top.y + 1.0;                 // (never down at the pole, let alone in the cloud)
+        });
+        helper.runAfterDelay(12, () -> helper.assertTrue(Math.abs(sc.getZ() - s0.z) < 0.3 && !sc.los(), "held still during the countdown"));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(verst[0] > 6 && p.getVehicle() == sc, "then it rode on south, the way the rider looks: " + verst[0]);
+            double naast = Math.hypot(bal.getX() - (top.x + 0.5), bal.getZ() - (top.z + 0.5));
+            helper.assertTrue(!laag[0] && Math.abs(bal.getY() - hoogte) < 0.35 && naast < 0.7,
+                    "the ball floats at its height above the pole: " + bal.position() + " (" + naast + ")");
+            p.stopRiding();
+            sc.discard();
+            bal.discard();
+            p.discard();
+        });
+    }
+
+    private static final String VLOER = "einde2_cast_schurk_test_vloer";
+
     private static ItemStack item(String id) {
         return new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(Guhs.id(id)));
     }

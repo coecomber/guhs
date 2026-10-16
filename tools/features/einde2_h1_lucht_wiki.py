@@ -18,7 +18,7 @@ WIKI = {
          "Versla eerst Opper-Mika op de Knabbelberg. Kom je daarna terug in het Guheinde, dan drijft er bij de plek waar het "
          "portaal je neerzet iets gloeiends aan. Alleen jij ziet jouw kaasbol: iedere speler heeft er een eigen. Tik hem open."),
         ("guhvatar_lucht", "Spelen in de Luchttempel",
-         "In de tempel speel je luchtbal op palen, race je over de luchtscooter-baan en zweef je door ringen rond de torens. "
+         "In de tempel speel je luchtbal op palen, race je op een luchtscooter over de baan en zweef je vanaf de grote toren door zes ringen. "
          "Verlies je, dan probeer je het gewoon nog een keer: falen kost nooit iets, en vallen doet in de tempel geen pijn."),
         ("guhvatar_lucht", "Wat houd je eraan over?",
          "Een luchtnomadengewaad voor je guh en twee luchtscooters: speelgoed waar je guhs zoeeef rondjes op rijden, ook in hun "

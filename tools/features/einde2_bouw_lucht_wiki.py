@@ -29,8 +29,8 @@ WIKI = {
         ("zuidelijke_luchttempel", "Oefenen als een luchtnomade",
          "In het westen ligt het luchtbalveld: een verdiept veld vol palen in een bed van kruimelwolk. Wie van een paal valt zakt "
          "zacht door de wolk en loopt via de trap weer naar boven. Erboven ligt het taartenterras. Langs de rand van de rots loopt "
-         "de luchtscooter-baan, van het zuidwesten om het noorden heen naar het noordoosten. En rond de torens hangen veertien "
-         "gloeiende zweefringen, van het hoogste balkon van de grote toren omlaag naar het voorplein."),
+         "de luchtscooter-baan, van het zuidwesten om het noorden heen naar het noordoosten. En vanaf het zuidbalkon "
+         "van de grote toren hangen zes gloeiende zweefringen in een boog naar het westen, boven het plein."),
         ("zuidelijke_luchttempel", "De werkplaats",
          "In het oosten staat een werkplaats met een dichte deur. Op het bordje staat: nog niet af, njeg. Daarnaast ligt een "
          "ommuurde bouwplaats, open naar de lucht. Wat daar gebouwd wordt zie je vanzelf, als het zover is."),

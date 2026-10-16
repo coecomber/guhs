@@ -150,8 +150,8 @@ public final class H1Commando {
             case E2H1Lucht.VLUCHT -> Kaasbol.vlieg(p);
             case E2H1Lucht.HAL -> E2H1Lucht.zetNaar(p, "poort", 180f);
             case E2H1Lucht.LUCHTBAL -> E2H1Lucht.zetNaar(p, "taartenbank", 90f);
-            case E2H1Lucht.SCOOTER -> E2H1Lucht.zetNaar(p, "rustpunt_3", 180f);
-            case E2H1Lucht.ZWEVEN -> E2H1Lucht.zetNaar(p, "zweef_start", 0f);
+            case E2H1Lucht.SCOOTER -> E2H1Lucht.zetNaar(p, "scooter_start", 6, 0, 0, 90f);   // (fix round 1: next to the start)
+            case E2H1Lucht.ZWEVEN -> Training.naarBalkon(p);
             case E2H1Lucht.MOMO -> {
                 E2H1Lucht.zetNaar(p, "zweef_landing", 180f);
                 MomoJacht.jat(p);
