@@ -253,6 +253,9 @@ public final class E2Verhaal {
         Einde2Haken.VERHAAL_KLAAR = (p, id) -> klaar(p, id);
         NeoForge.EVENT_BUS.addListener(E2Verhaal::opTick);
         NeoForge.EVENT_BUS.addListener(E2VerhaalCommando::register);
+        // fix round 1 (fix-kern): the hints per step and "Verder met het verhaal" (both also load the look scene, both sides)
+        StapHint.register();
+        E2Hervat.register();
     }
 
     /** Puts the wide veil round each story structure as soon as the spot of its guaranteed copy is known. */

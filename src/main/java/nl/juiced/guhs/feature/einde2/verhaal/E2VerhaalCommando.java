@@ -28,7 +28,10 @@ import nl.juiced.guhs.feature.verhaal.Verhaallijnen;
  *   <li>{@code /guhs einde2 verhaal vlag <lijn> <naam> <aan|uit>};</li>
  *   <li>{@code /guhs einde2 verhaal wis <lijn|alles>};</li>
  *   <li>{@code /guhs einde2 verhaal kracht <id>}: uses a power without the key ({@link Krachten#gebruik});</li>
- *   <li>{@code /guhs einde2 verhaal open <structuur|zone>}: what the veil and the Geestenwereld zones answer for you.</li>
+ *   <li>{@code /guhs einde2 verhaal open <structuur|zone>}: what the veil and the Geestenwereld zones answer for you;</li>
+ *   <li>{@code /guhs einde2 verhaal verder}: "Verder met het verhaal" as the kaasbol does it ({@link E2Hervat#verder}; no step change);</li>
+ *   <li>{@code /guhs einde2 verhaal waar}: your current story line, step and resume location ({@link E2Hervat#waar});</li>
+ *   <li>{@code /guhs einde2 verhaal hint [lijn]}: shows the hint of your current step ({@link StapHint#toon}).</li>
  * </ul>
  * Each slice has its own {@code /guhs einde2 <cmd> ga|scene|wis} besides this.
  */
@@ -66,7 +69,11 @@ public final class E2VerhaalCommando {
                                 .executes(c -> kracht(c.getSource(), StringArgumentType.getString(c, "id")))))
                         .then(Commands.literal("open").then(Commands.argument("waar", StringArgumentType.word())
                                 .suggests((c, b) -> SharedSuggestionProvider.suggest(waar(), b))
-                                .executes(c -> open(c.getSource(), StringArgumentType.getString(c, "waar"))))))));
+                                .executes(c -> open(c.getSource(), StringArgumentType.getString(c, "waar")))))
+                        .then(Commands.literal("verder").executes(c -> E2Hervat.verder(c.getSource().getPlayerOrException()) ? 1 : 0))
+                        .then(Commands.literal("waar").executes(c -> waarNu(c.getSource())))
+                        .then(Commands.literal("hint").executes(c -> hint(c.getSource(), null))
+                                .then(lijn().executes(c -> hint(c.getSource(), StringArgumentType.getString(c, "lijn"))))))));
     }
 
     private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String> lijn() {
@@ -152,6 +159,27 @@ public final class E2VerhaalCommando {
         boolean gedaan = Krachten.gebruik(p, id);
         source.sendSuccess(() -> Component.literal("Power " + id + (gedaan ? ": used" : ": not now (not here, or cooling down)")), false);
         return gedaan ? 1 : 0;
+    }
+
+    private static int waarNu(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        Verhaallijn l = E2Hervat.huidig(p);
+        E2Hervat.Plek w = l == null ? null : E2Hervat.waar(p, l);
+        String regel = l == null ? "no story line on" : l.id() + " step " + l.stap(p) + " (" + l.sleutel(p) + "), hint "
+                + (StapHint.hint(l.id(), l.stap(p)) != null) + ", resume " + (w == null ? "none" : w.soort() + " " + w.dim().identifier()
+                + " " + (w.pos() == null ? "-" : (int) w.pos().x + " " + (int) w.pos().y + " " + (int) w.pos().z));
+        source.sendSuccess(() -> Component.literal(regel), false);
+        return 1;
+    }
+
+    private static int hint(CommandSourceStack source, @javax.annotation.Nullable String lijn) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        Verhaallijn l = lijn != null ? E2Verhaal.lijn(lijn) : E2Hervat.huidig(p);
+        if (l == null || !StapHint.toon(p, l.id(), true)) {
+            source.sendFailure(Component.literal("no hint to show" + (l == null ? "" : " for " + l.id() + " step " + l.stap(p))));
+            return 0;
+        }
+        return 1;
     }
 
     private static int open(CommandSourceStack source, String waar) throws CommandSyntaxException {
