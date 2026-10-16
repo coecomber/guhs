@@ -129,10 +129,27 @@ final class Finale {
         if (E2H4Vuur.FINALE == null || E2H4Vuur.FINALE.stap(p) != E2H4Vuur.F_TOP || !E2H4Vuur.FINALE.vlag(p, E2Verhaal.V_WITTE_LOTUS)) {
             return;
         }
+        if (Fang.vliegt(p)) {
+            return;                                              // (fix2-h4: already on Fang's back; before, a second flight could start)
+        }
         String opstap = eerste(OPSTAP);
         BlockPos b = opstap == null ? null : Geestenwereld.wereld(opstap);
-        if (b != null && Vec3.atBottomCenterOf(b).distanceToSqr(p.position()) < 36) {
+        if (b == null) {
+            return;
+        }
+        Vec3 plek = Vec3.atBottomCenterOf(b);
+        if (plek.distanceToSqr(p.position()) < 36) {
             fang(p);
+        } else {
+            // (fix2-h4) somewhere else in the Geestenwereld at this step (back after logging out): where Fang waits
+            p.level().sendParticles(p, net.minecraft.core.particles.ParticleTypes.END_ROD, true, true, plek.x, plek.y + 5, plek.z, 6, 0.1, 2.6,
+                    0.1, 0.0);
+            if (p.tickCount % 600 >= 10) {
+                return;
+            }
+            p.sendSystemMessage(net.minecraft.network.chat.Component.literal("➜ ").withStyle(net.minecraft.ChatFormatting.GOLD)
+                    .append(net.minecraft.network.chat.Component.translatable(E2H4Vuur.Q + "finale.fang_wacht",
+                            nl.juiced.guhs.feature.einde2.verhaal.Richting.van(p.position(), plek)).withStyle(net.minecraft.ChatFormatting.YELLOW)));
         }
     }
 

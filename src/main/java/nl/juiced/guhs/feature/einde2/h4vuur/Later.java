@@ -25,7 +25,7 @@ final class Later {
 
     /** Runs {@code wat} for this player in {@code ticks} ticks (their own ticks: only while they are online). */
     static void plan(ServerPlayer p, int ticks, Consumer<ServerPlayer> wat) {
-        TAKEN.computeIfAbsent(p.getUUID(), u -> new ArrayList<>()).add(new Taak(p.tickCount + Math.max(1, ticks), wat));
+        TAKEN.computeIfAbsent(p.getUUID(), u -> new ArrayList<>()).add(new Taak(nu(p) + Math.max(1, ticks), wat));
     }
 
     /** Is something planned for this player? (the story waits for it) */
@@ -40,9 +40,10 @@ final class Later {
         if (l == null || l.isEmpty()) {
             return;
         }
+        long tijd = nu(p);
         List<Taak> nu = new ArrayList<>();
         l.removeIf(t -> {
-            if (p.tickCount >= t.op()) {
+            if (tijd >= t.op()) {
                 nu.add(t);
                 return true;
             }
@@ -51,6 +52,14 @@ final class Later {
         for (Taak t : nu) {
             t.wat().accept(p);
         }
+    }
+
+    /**
+     * The clock: the server's ticks (fix2-h4: it was the player's own {@code tickCount}, which starts again at 0 for the new
+     * player object after a respawn, so a job planned before dying waited minutes and the story stood still meanwhile).
+     */
+    private static long nu(ServerPlayer p) {
+        return p.level().getServer() == null ? p.tickCount : p.level().getServer().getTickCount();
     }
 
     static void vergeet(UUID speler) {

@@ -23,7 +23,8 @@ import nl.juiced.guhs.feature.einde2.audio.E2Audio;
  * simply goes on, and a lost party starts again when you step back on the floor.
  */
 public final class Dansfeest {
-    public static final int RONDES = 12, NODIG = 8, TELLEN = 4;
+    /** (fix2-h4: 7 of the 12 bars win, was 8: kinder, as the h1 lessons ask) */
+    public static final int RONDES = 12, NODIG = 7, TELLEN = 4;
     /** The floor: template x/z of the corner, the floor blocks' y (one under where you stand) and its size. */
     private static final String VLOER = "dansvloer";
     private static final BlockState[] LICHT = {Blocks.PEARLESCENT_FROGLIGHT.defaultBlockState(), Blocks.OCHRE_FROGLIGHT.defaultBlockState(),
@@ -66,7 +67,8 @@ public final class Dansfeest {
         BlockPos hoek = o.offset(vloer.pos()).below();
         SPELLEN.put(p.getUUID(), new Spel(hoek, beatTicks()));
         Schijn.geluid(p, E2Audio.geluid("deuntje.dansfeest").get(), p.blockPosition(), 1.0f, 1.0f);
-        E2H4Vuur.zeg(p, "dans.start");
+        E2H4Vuur.zeg(p, "dans.start", NODIG, RONDES);
+        E2H4Vuur.titel(p, "dans.titel", "dans.sub");
     }
 
     static void tick(ServerPlayer p) {
@@ -148,6 +150,7 @@ public final class Dansfeest {
         Schijn.deeltjes(p, ParticleTypes.FIREWORK, p.position().add(0, 2, 0), 40, 1.5, 0.1);
         Schijn.geluid(p, SoundEvents.PLAYER_LEVELUP, p.blockPosition(), 0.8f, 1.3f);
         if (E2H4Vuur.VUUR.verder(p, E2H4Vuur.V_DANS)) {
+            E2H4Vuur.titel(p, "dans.titel_gewonnen", "dans.sub_gewonnen", s.raak, RONDES);
             E2H4Vuur.zeg(p, "dans.gewonnen");
             E2H4Vuur.zeg(p, "dans.juf");
         }

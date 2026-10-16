@@ -104,15 +104,18 @@ public final class E2H4Vuur {
                 .registreer();
         Verteller.registreer(KAART, 5, E2Verhaal.VUUR);
         Scenes.registreer();
+        H4Hints.registreer();
         VUUR.opStap((p, oud, nieuw) -> {
             Look.sync(p);
             Zicht.kijkOpnieuw(p);
+            H4Hints.gestart(p, E2Verhaal.VUUR, nieuw);
             if (nieuw >= V_STAPPEN) {
                 vuurKlaar(p);
             }
         });
         FINALE.opStap((p, oud, nieuw) -> {
             Zicht.kijkOpnieuw(p);
+            H4Hints.gestart(p, E2Verhaal.FINALE, nieuw);
             if (nieuw >= F_STAPPEN) {
                 finaleKlaar(p);
             }
@@ -129,6 +132,8 @@ public final class E2H4Vuur {
         NeoForge.EVENT_BUS.addListener(E2H4Vuur::opTick);
         NeoForge.EVENT_BUS.addListener(E2H4Vuur::opKlik);
         NeoForge.EVENT_BUS.addListener(E2H4Vuur::opWeg);
+        NeoForge.EVENT_BUS.addListener(E2H4Vuur::opRespawn);
+        NeoForge.EVENT_BUS.addListener(E2H4Vuur::opDimensie);
         NeoForge.EVENT_BUS.addListener(E2H4Vuur::opBinnen);
         NeoForge.EVENT_BUS.addListener(E2H4VuurCommando::register);
         NeoForge.EVENT_BUS.addListener(Look::opVolgen);
@@ -203,9 +208,15 @@ public final class E2H4Vuur {
             return;
         }
         if (!VUUR.klaar(p)) {
-            hoofdstuk(p, VUUR.stap(p));
+            H4Hints.nader(p, VUUR);
+            if (!bezig(p)) {
+                hoofdstuk(p, VUUR.stap(p));
+            }
         } else if (!FINALE.klaar(p)) {
-            Finale.regie(p, FINALE.stap(p));
+            H4Hints.nader(p, FINALE);
+            if (!bezig(p)) {
+                Finale.regie(p, FINALE.stap(p));
+            }
         }
     }
 
@@ -257,8 +268,13 @@ public final class E2H4Vuur {
                 }
             }
             case V_TONEEL -> {
-                if (Plek.bij(p, "publiek_speler", 5)) {
-                    speel(p, Scenes.TONEEL, "publiek_speler", q -> VUUR.verder(q, V_TONEEL));
+                // (fix2-h4: walking into the theatre is enough; before, only within 5 blocks of one seat on the third row)
+                if (Plek.in(p, "theater") || Plek.bij(p, "publiek_speler", 6)) {
+                    speel(p, Scenes.TONEEL, "publiek_speler", q -> {
+                        if (VUUR.verder(q, V_TONEEL)) {
+                            zeg(q, "toneel.daarna");
+                        }
+                    });
                 }
             }
             case V_TENT -> {
@@ -435,6 +451,12 @@ public final class E2H4Vuur {
             p.sendSystemMessage(Component.translatable(Q + "beloning.vuur").withStyle(ChatFormatting.GOLD));
         }
         p.sendSystemMessage(Component.translatable(Q + "hint.finale").withStyle(ChatFormatting.GOLD));
+        // (fix2-h4) the finale's first step has no step start of its own: its hint (Oom Miroh, right here) a moment later
+        nl.juiced.guhs.feature.einde2.verhaal.StapHint.later(p, 60, q -> {
+            if (!FINALE.klaar(q) && FINALE.stap(q) == F_TOP) {
+                nl.juiced.guhs.feature.einde2.verhaal.StapHint.toon(q, E2Verhaal.FINALE);
+            }
+        });
     }
 
     private static void finaleKlaar(ServerPlayer p) {
@@ -461,6 +483,17 @@ public final class E2H4Vuur {
     /** A line of the story in the chat (gold: what to do; plain: someone talks). */
     static void zeg(ServerPlayer p, String key, Object... args) {
         p.sendSystemMessage(Component.translatable(Q + key, args).withStyle(ChatFormatting.GOLD));
+    }
+
+    /** A big title in the middle of the screen (a start or a win), with an optional subtitle. */
+    static void titel(ServerPlayer p, String key, @Nullable String sub, Object... args) {
+        if (p.connection == null) {
+            return;
+        }
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket(8, 50, 14));
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket(sub == null ? Component.empty()
+                : Component.translatable(Q + sub, args).withStyle(ChatFormatting.YELLOW)));
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket(Component.translatable(Q + key).withStyle(ChatFormatting.GOLD)));
     }
 
     /** A short line above the hotbar. */
@@ -510,6 +543,34 @@ public final class E2H4Vuur {
         }
     }
 
+    /**
+     * (fix2-h4) After dying, a running minigame of the old life stops (it would wait for a player who is not there any more),
+     * and what was planned is forgotten: the story starts the step again where you come back ("Verder met het verhaal").
+     */
+    private static void opRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p && !event.isEndConquered()) {
+            stopSpellen(p);
+            Lagen.weg(p);
+            Later.vergeet(p.getUUID());
+        }
+    }
+
+    /** (fix2-h4) Leaving the Guheinde (also into the Geestenwereld) stops a running minigame; planned moments stay (the Top). */
+    private static void opDimensie(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p && event.getFrom() == GuheindeFeature.GUHEINDE) {
+            stopSpellen(p);
+        }
+    }
+
+    /** Stops every minigame of this slice for the player (nothing is lost: the step simply starts it again). */
+    static void stopSpellen(ServerPlayer p) {
+        Dansfeest.stop(p, false);
+        Drakendans.stop(p, false);
+        Rotsblok.stop(p);
+        Luchtvloot.stop(p, false);
+        Duel.stop(p);
+    }
+
     /** (dev, tests) every bit of this slice's own state of a player that is not in the lines. */
     static void wisEigen(ServerPlayer p) {
         Dansfeest.stop(p, false);
@@ -519,6 +580,7 @@ public final class E2H4Vuur {
         Duel.stop(p);
         Lagen.weg(p);
         Later.vergeet(p.getUUID());
+        H4Hints.vergeet(p.getUUID());
         GuhQuests.saved(p).remove(TRAKTATIE);
         List<String> scenes = new ArrayList<>();
         for (Cutscene s : Cutscene.alle()) {

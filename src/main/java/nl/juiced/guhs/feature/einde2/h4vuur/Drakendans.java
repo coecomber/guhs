@@ -25,8 +25,8 @@ import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
  * and after it Zuka is one of the team ({@code zuka_team}) and you can firebend ({@code geleerd}).
  */
 public final class Drakendans {
-    /** Ticks you have for each step. */
-    public static final int TIJD = 80;
+    /** Ticks you have for each step (fix2-h4: 5 s, was 4). */
+    public static final int TIJD = 100;
 
     private static final class Dans {
         final List<Vec3> jij, zuka;
@@ -58,6 +58,7 @@ public final class Drakendans {
         d.zukaActeur = E2H4Vuur.npc(p, GuhNpcEntity.Kind.ZUKA_PRINS, zuka.get(0), 180f);
         DANSEN.put(p.getUUID(), d);
         E2H4Vuur.zeg(p, "drakendans.start");
+        E2H4Vuur.titel(p, "drakendans.titel", "drakendans.sub");
         licht(p, d);
     }
 
@@ -95,15 +96,10 @@ public final class Drakendans {
             return;
         }
         if (--d.over <= 0) {
-            // too late: start again from the first step
+            // too late (fix2-h4: no more back to the first step): the flames flicker, the same tile lights up again
             Schijn.geluid(p, SoundEvents.FIRE_EXTINGUISH, p.blockPosition(), 0.6f, 1.0f);
             E2H4Vuur.balk(p, "drakendans.opnieuw");
-            d.stap = 0;
             d.over = TIJD + 20;
-            if (d.zukaActeur != null) {
-                Vec3 z = d.zuka.get(0);
-                d.zukaActeur.snapTo(z.x, z.y, z.z, d.zukaActeur.getYRot(), 0);
-            }
             licht(p, d);
         } else if (d.over % 10 == 0) {
             Schijn.deeltjes(p, ParticleTypes.SMALL_FLAME, doel.add(0, 0.1, 0), 6, 0.3, 0.01);
@@ -117,6 +113,8 @@ public final class Drakendans {
 
     private static void klaar(ServerPlayer p) {
         stop(p, true);
+        Schijn.geluid(p, SoundEvents.PLAYER_LEVELUP, p.blockPosition(), 0.8f, 1.2f);
+        E2H4Vuur.titel(p, "drakendans.titel_klaar", null);
         E2H4Vuur.speel(p, Scenes.DRAKEN, "trap_boven", q -> {
             E2H4Vuur.VUUR.vlag(q, E2Verhaal.V_ZUKA_TEAM, true);
             E2H4Vuur.VUUR.vlag(q, E2Verhaal.V_GELEERD, true);

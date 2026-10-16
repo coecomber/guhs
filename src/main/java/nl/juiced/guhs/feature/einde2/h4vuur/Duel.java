@@ -42,7 +42,8 @@ import nl.juiced.guhs.feature.verhaal.Duwtje;
  */
 public final class Duel {
     public static final int LUCHT = 1, WATER = 2, AARDE = 3, VUUR = 4, STAAT = 5;
-    public static final int LUCHT_STOTEN = 8, VUUR_TERUG = 3, STAAT_TERUG = 3, STAAT_VLAMMEN = 2, RAAK_MAX = 3, RONDE_TIJD = 20 * 75;
+    /** (fix2-h4: four shoves before a round starts again, was three; no hidden round clock any more) */
+    public static final int LUCHT_STOTEN = 8, VUUR_TERUG = 3, STAAT_TERUG = 3, STAAT_VLAMMEN = 2, RAAK_MAX = 4;
     /** The pillar each round starts on, and the low pillars of the water round, and the summit of the earth round. */
     private static final String[] START = {"", "duel_speler", "pilaar_11", "pilaar_13", "pilaar_12", "pilaar_12"};
     private static final String[] WATERPILAREN = {"pilaar_01", "pilaar_02", "pilaar_10", "pilaar_03"};
@@ -106,6 +107,7 @@ public final class Duel {
         s.schot = 0;
         naarStart(p, s);
         E2H4Vuur.zeg(p, "duel.ronde." + ronde);
+        E2H4Vuur.titel(p, "duel.titel." + ronde, "duel.sub." + ronde);
         if (ronde == WATER) {
             for (String pilaar : WATERPILAREN) {
                 Vec3 top = stand(p, pilaar);
@@ -144,6 +146,10 @@ public final class Duel {
         if (s == null || s.pauze || Cutscenes.bezig(p)) {
             return;
         }
+        if (Plek.guheinde(p) == null) {
+            stop(p);                                             // (left the Guheinde: the arena starts it again)
+            return;
+        }
         if (!Plek.in(p, "duel_arena")) {
             naarStart(p, s);                                     // (walked or flew out of the arena: back on the pillar)
             return;
@@ -155,11 +161,6 @@ public final class Duel {
         if (laag != null && p.getY() < laag.y - 0.5) {
             E2H4Vuur.balk(p, "duel.plons");
             naarStart(p, s);
-            return;
-        }
-        if (s.t > RONDE_TIJD && s.ronde != STAAT) {
-            E2H4Vuur.zeg(p, "duel.tijd");
-            begin(p, s, s.ronde);
             return;
         }
         Vec3 jij = p.position().add(0, 1, 0);
@@ -188,6 +189,10 @@ public final class Duel {
                     vonk(p, s, jij);
                 }
                 Vec3 top = Plek.staan(p, TOP);
+                if (top != null && s.t % 10 == 0) {
+                    // (fix2-h4) the summit you climb to, lit for you
+                    p.level().sendParticles(p, ParticleTypes.END_ROD, true, true, top.x, top.y + 4, top.z, 6, 0.1, 2.6, 0.1, 0.0);
+                }
                 if (top != null && p.getY() >= top.y + 0.9 && Math.hypot(p.getX() - top.x, p.getZ() - top.z) < 2.5) {
                     gewonnen(p, s);
                     return;
@@ -273,7 +278,7 @@ public final class Duel {
     private static void vlam(ServerPlayer p, Spel s, Vec3 waar) {
         VuurbalEntity b = bal(p, s, waar, VuurbalEntity.VLAM);
         if (b != null) {
-            b.leven = 20 * 120;
+            b.leven = 20 * 60 * 30;                              // (fix2-h4: a flame waits for you; before, it went out after 2 minutes)
             b.bijKlik = (bal, speler) -> blus(speler, s, bal);
         }
     }
