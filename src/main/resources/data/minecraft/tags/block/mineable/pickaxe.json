@@ -291,6 +291,18 @@
     "guhs:gedenksteen",
     "guhs:lotuspuzzeltegel",
     "guhs:theeset",
-    "guhs:guhvatar_beeld"
+    "guhs:guhvatar_beeld",
+    "guhs:vadszender",
+    "guhs:vadsontvanger",
+    "guhs:guhterminal",
+    "guhs:bestelbalie",
+    "guhs:knabbelpoort_buis",
+    "guhs:thuispoort",
+    "guhs:luchtblazer",
+    "guhs:waterdrager",
+    "guhs:korstduwer",
+    "guhs:vuurkorf",
+    "guhs:komeetkern",
+    "guhs:enderguhrad"
   ]
 }
