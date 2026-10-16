@@ -2,12 +2,16 @@ package nl.juiced.guhs.feature.einde2.h1lucht;
 
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.appa.AppaGuhEntity;
+import nl.juiced.guhs.feature.einde2.geestenwereld.Geestenwereld;
+import nl.juiced.guhs.feature.einde2.geestspel.GeestLijnen;
+import nl.juiced.guhs.feature.einde2.h2water.E2H2Water;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Hervat;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev;
@@ -29,7 +33,9 @@ import nl.juiced.guhs.quest.GuhQuests;
  *       story; at step 0 it is still the opening;</li>
  *   <li>{@code einde2KernHints}: the hints of chapter 1's steps 2-9 and their look scenes (short, no click waits), the
  *       hint waits for its step's start, the airbending lesson after the luchtbal match comes once, and the direction
- *       phrases.</li>
+ *       phrases;</li>
+ *   <li>{@code einde2Fix2HervatGeest} (merge_fix2): no resume into the Geestenwereld for a player outside it;</li>
+ *   <li>{@code einde2Fix2HintRij} (merge_fix2): the hints of several lines wait side by side and never come twice.</li>
  * </ul>
  */
 public class E2KernHervatGameTests {
@@ -109,6 +115,57 @@ public class E2KernHervatGameTests {
             check(helper, Richting.keys(o, new Vec3(2, 80, 1)), List.of("recht_boven"));
             check(helper, Richting.keys(o, new Vec3(1, 65, 2)), List.of("hier"));
             check(helper, Richting.keys(o, new Vec3(-400, 64, -390)), List.of("nw", "heel_ver"));
+            helper.succeed();
+        } finally {
+            weg(p);
+        }
+    }
+
+    /**
+     * merge_fix2: "Verder met het verhaal" never resumes into the Geestenwereld for a player outside it. h2's Koh and
+     * Hemelvijver point into the Geestenwereld but resume beside the oasis pond (allowed); the Geestenwereld lines' hints
+     * have a resume spot in it (passed over); so is any hint whose only spot lies in it.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2Fix2HervatGeest(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        try {
+            helper.assertTrue(p.level().dimension() != Geestenwereld.DIM, "the test player is outside the Geestenwereld");
+            for (int stap : new int[] {E2H2Water.KOH, E2H2Water.HEMELVIJVER}) {
+                StapHint.Hint h = StapHint.hint(E2Verhaal.WATER, stap);
+                helper.assertTrue(h != null && h.doel().dim() == Geestenwereld.DIM && !E2Hervat.geestDicht(p, h),
+                        "h2 step " + stap + ": the target is in the Geestenwereld, the resume spot (the oasis pond) is not");
+            }
+            StapHint.Hint poort = StapHint.hint(GeestLijnen.WITTE_LOTUS, GeestLijnen.L_POORT);
+            helper.assertTrue(poort != null && E2Hervat.geestDicht(p, poort), "a Geestenwereld line's hint is never a resume spot from outside");
+            StapHint.Hint los = StapHint.naar(StapHint.plek(Geestenwereld.DIM, (s, l) -> BlockPos.ZERO));
+            helper.assertTrue(E2Hervat.geestDicht(p, los) && !E2Hervat.geestDicht(p, null), "a hint with only a Geestenwereld spot is passed over");
+            helper.succeed();
+        } finally {
+            weg(p);
+        }
+    }
+
+    /**
+     * merge_fix2: the hints of different lines wait side by side (one per line, the newest step of a line wins) instead of
+     * pushing each other out, and a hint shown now takes its line's waiting start hint along, so it never comes twice.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2Fix2HintRij(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        try {
+            StapHint.vergeet(p.getUUID());
+            String scooter = E2Verhaal.LUCHT + "/" + E2H1Lucht.SCOOTER, zweven = E2Verhaal.LUCHT + "/" + E2H1Lucht.ZWEVEN;
+            String pakguh = E2Verhaal.WATER + "/" + E2H2Water.PAKGUH;
+            E2VerhaalDev.zetTot(p, E2Verhaal.LUCHT, E2H1Lucht.LUCHTBAL);
+            E2H1Lucht.LIJN.verder(p, E2H1Lucht.LUCHTBAL);
+            Verhaallijn water = E2Verhaal.lijn(E2Verhaal.WATER);
+            helper.assertTrue(water != null && water.verder(p, E2H2Water.AANKOMST), "chapter 2 steps on (test set-up)");
+            helper.assertTrue(StapHint.wachtAlle(p.getUUID()).equals(List.of(scooter, pakguh)), "two lines wait side by side: " + StapHint.wachtAlle(p.getUUID()));
+            E2H1Lucht.LIJN.verder(p, E2H1Lucht.SCOOTER);
+            helper.assertTrue(StapHint.wachtAlle(p.getUUID()).equals(List.of(pakguh, zweven)), "the newest step of a line replaces its own: " + StapHint.wachtAlle(p.getUUID()));
+            StapHint.toon(p, E2Verhaal.WATER);
+            helper.assertTrue(StapHint.wachtAlle(p.getUUID()).equals(List.of(zweven)), "shown now: no second time later: " + StapHint.wachtAlle(p.getUUID()));
             helper.succeed();
         } finally {
             weg(p);

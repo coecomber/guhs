@@ -77,6 +77,10 @@ public final class StapHint {
     public static final int START_VERTRAGING = 30;
     /** A hint that waits (the player is watching something) gives up after this many ticks. */
     public static final int GEDULD = 20 * 90;
+    /** merge_fix2: a hint asked for while a scene runs waits this long at most (a story scene with clicks can be long). */
+    public static final int GEDULD_SCENE = 20 * 60 * 5;
+    /** merge_fix2: the rest (ticks) between two hints that waited, so two look scenes never run back to back. */
+    public static final int RUST = 20;
 
     // =====================================================================================================================
     // targets
@@ -313,6 +317,14 @@ public final class StapHint {
         if (l == null || l.klaar(p)) {
             return false;
         }
+        // merge_fix2: one at a time. A scene runs (a story scene, another hint's look): this hint waits for it to end; and a
+        // start hint of this line that still waits is now shown here, so it never comes twice.
+        if (Cutscenes.bezig(p)) {
+            wachtOp(p, new Wacht(lijn, l.stap(p), tijd, tijd + GEDULD_SCENE, kijken));
+            return true;
+        }
+        haalWeg(p.getUUID(), lijn);
+        LAATST.put(p.getUUID(), tijd);
         Hint h = hint(lijn, l.stap(p));
         BlockPos doel = h == null ? null : h.doel().blok(p);
         boolean hier = h != null && doel != null && p.level().dimension() == h.doel().dim();
@@ -354,14 +366,20 @@ public final class StapHint {
     // the step listener, the waiting hints, the markers, a tiny scheduler
     // =====================================================================================================================
 
-    private record Wacht(String lijn, int stap, long vanaf, long tot) {
+    private record Wacht(String lijn, int stap, long vanaf, long tot, boolean kijken) {
     }
 
     private record Later(long op, Consumer<ServerPlayer> wat) {
     }
 
-    /** The hints that wait to be shown (per player: one at a time, the newest wins). */
-    private static final Map<UUID, Wacht> WACHT = new ConcurrentHashMap<>();
+    /**
+     * The hints that wait to be shown, per player: at most one per line (the newest step of a line wins), shown one at a
+     * time in the order they came, never while a scene runs ({@code merge_fix2}: hints of different chapters / side lines no
+     * longer push each other out, and their look scenes never overlap).
+     */
+    private static final Map<UUID, List<Wacht>> WACHT = new ConcurrentHashMap<>();
+    /** When the player last got a hint (server ticks of this class): the queue keeps {@value #RUST} ticks between two. */
+    private static final Map<UUID, Long> LAATST = new ConcurrentHashMap<>();
     /** Small delayed jobs per player (run with the player as they are then; dropped when they left). */
     private static final Map<UUID, List<Later>> LATER = new ConcurrentHashMap<>();
     private static volatile long tijd;
@@ -380,7 +398,9 @@ public final class StapHint {
         l.opStap((p, oud, nieuw) -> {
             Hint h = hint(lijn, nieuw);
             if (h != null && h.bijStartAan() && nieuw < l.stappen()) {
-                WACHT.put(p.getUUID(), new Wacht(lijn, nieuw, tijd + h.vertraging(), tijd + h.vertraging() + GEDULD));
+                wachtOp(p, new Wacht(lijn, nieuw, tijd + h.vertraging(), tijd + h.vertraging() + GEDULD, true));
+            } else {
+                haalWeg(p.getUUID(), lijn);                       // (a hint of the step before must not show any more)
             }
         });
     }
@@ -416,20 +436,36 @@ public final class StapHint {
                 LATER.remove(e.getKey(), lijst);
             }
         }
-        // the hints that wait for their step's start
-        for (Map.Entry<UUID, Wacht> e : WACHT.entrySet()) {
-            Wacht w = e.getValue();
+        // the hints that wait (for their step's start, or for a scene to end): at most one per player per tick
+        for (Map.Entry<UUID, List<Wacht>> e : WACHT.entrySet()) {
+            List<Wacht> lijst = e.getValue();
             ServerPlayer p = server.getPlayerList().getPlayer(e.getKey());
-            Verhaallijn l = Verhaallijnen.van(w.lijn());
-            if (p == null || l == null || l.stap(p) != w.stap() || tijd > w.tot()) {
-                WACHT.remove(e.getKey(), w);
+            if (p == null) {
+                WACHT.remove(e.getKey(), lijst);
                 continue;
             }
-            if (tijd < w.vanaf() || Cutscenes.bezig(p) || p.isPassenger() && p.getVehicle() != null && p.getVehicle().getDeltaMovement().lengthSqr() > 0.01) {
+            for (Wacht w : lijst) {
+                Verhaallijn l = Verhaallijnen.van(w.lijn());
+                if (l == null || l.klaar(p) || l.stap(p) != w.stap() || tijd > w.tot()) {
+                    lijst.remove(w);
+                }
+            }
+            if (lijst.isEmpty()) {
+                WACHT.remove(e.getKey(), lijst);
                 continue;
             }
-            WACHT.remove(e.getKey(), w);
-            toon(p, w.lijn(), true);
+            Long laatst = LAATST.get(e.getKey());
+            if (Cutscenes.bezig(p) || laatst != null && tijd - laatst < RUST
+                    || p.isPassenger() && p.getVehicle() != null && p.getVehicle().getDeltaMovement().lengthSqr() > 0.01) {
+                continue;
+            }
+            for (Wacht w : lijst) {
+                if (tijd >= w.vanaf()) {
+                    lijst.remove(w);
+                    toon(p, w.lijn(), w.kijken());
+                    break;
+                }
+            }
         }
         // the markers
         if (tijd % 10 == 0) {
@@ -467,17 +503,39 @@ public final class StapHint {
         }
     }
 
+    /** Puts a hint in the player's queue (one per line: it replaces a waiting one of the same line). */
+    private static void wachtOp(ServerPlayer p, Wacht w) {
+        List<Wacht> lijst = WACHT.computeIfAbsent(p.getUUID(), u -> new CopyOnWriteArrayList<>());
+        lijst.removeIf(o -> o.lijn().equals(w.lijn()));
+        lijst.add(w);
+    }
+
+    private static void haalWeg(UUID speler, String lijn) {
+        List<Wacht> lijst = WACHT.get(speler);
+        if (lijst != null) {
+            lijst.removeIf(o -> o.lijn().equals(lijn));
+        }
+    }
+
     /** (dev, tests) forgets what waits for this player. */
     public static void vergeet(UUID speler) {
         WACHT.remove(speler);
         LATER.remove(speler);
+        LAATST.remove(speler);
     }
 
-    /** (tests) the hint that waits for this player: "lijn/stap", or null. */
+    /** (tests) the newest hint that waits for this player: "lijn/stap", or null. */
     @Nullable
     public static String wacht(UUID speler) {
-        Wacht w = WACHT.get(speler);
+        List<Wacht> lijst = WACHT.get(speler);
+        Wacht w = lijst == null || lijst.isEmpty() ? null : lijst.get(lijst.size() - 1);
         return w == null ? null : w.lijn() + "/" + w.stap();
+    }
+
+    /** (tests) every hint that waits for this player, oldest first: "lijn/stap". */
+    public static List<String> wachtAlle(UUID speler) {
+        List<Wacht> lijst = WACHT.get(speler);
+        return lijst == null ? List.of() : lijst.stream().map(w -> w.lijn() + "/" + w.stap()).toList();
     }
 
     /** (tests) every declared hint as "lijn/stap". */
