@@ -50,7 +50,8 @@ import nl.juiced.guhs.feature.verhaal.Verhaallijnen;
  *       {@code terug} spot, else its target); else from the line's own {@code doel}: a structure -> its {@code aankomst}
  *       (Appa's landing spot); a spot inside a chapter's structure -> that chapter structure's {@code aankomst}; any
  *       other spot in the Guheinde -> that spot; a step in the Geestenwereld -> the chapter's structure, with the line
- *       "mediteer opnieuw" (the way into the Geestenwereld stays the story's own); a line without any place -> nothing.</li>
+ *       "mediteer opnieuw" (the way into the Geestenwereld stays the story's own); a line without any place -> nothing.
+ *       A hint whose resume spot lies in the Geestenwereld is never used for a player outside it (merge_fix2).</li>
  * </ul>
  * The current story ({@link #huidig}): the followed line ({@code Verhaallijnen.gevolgd}) when it is an einde2 line that is
  * on, else the first chapter that is not done (once it is open). Texts: {@code gui.guhs.einde2_verhaal.hervat.*}.
@@ -135,7 +136,11 @@ public final class E2Hervat {
         }
         ServerLevel guheinde = p.level().getServer() == null ? null : p.level().getServer().getLevel(GuheindeFeature.GUHEINDE);
         StapHint.Hint h = StapHint.hint(l.id(), l.stap(p));
-        if (h != null) {
+        // merge_fix2: never resume INTO the Geestenwereld for a player outside it (that would skip Geestenwereld.stuur: the
+        // body that stays behind, the guests). Such a hint is passed over; a chapter then uses its structure's spot with
+        // the "mediteer opnieuw" line, any other line its own doel (or "kijk in je Guhdex").
+        boolean geestDicht = geestDicht(p, h);
+        if (h != null && !geestDicht) {
             StapHint.Doel t = h.terugDoel();
             BlockPos b = t.blok(p);
             ServerLevel level = p.level().getServer().getLevel(t.dim());
@@ -164,6 +169,10 @@ public final class E2Hervat {
                 soort = "geest";
             }
         }
+        if (geestDicht && hoofdstuk) {
+            structuur = E2Verhaal.structuurVan(l.id());
+            soort = "geest";
+        }
         if (structuur == null || guheinde == null) {
             return null;
         }
@@ -184,6 +193,14 @@ public final class E2Hervat {
         BoundingBox doos = Plekken.doos(guheinde, structuur);
         Vec3 midden = doos == null ? a : Vec3.atCenterOf(doos.getCenter());
         return new Plek(GuheindeFeature.GUHEINDE, veilig(guheinde, a), yawNaar(a, midden), soort);
+    }
+
+    /**
+     * merge_fix2: true when this hint's resume spot lies in the Geestenwereld and the player is outside it: "Verder" must
+     * not use it (the way in stays meditation / the cushion, through {@code Geestenwereld.stuur}).
+     */
+    public static boolean geestDicht(ServerPlayer p, @Nullable StapHint.Hint h) {
+        return h != null && h.terugDoel().dim() == Geestenwereld.DIM && p.level().dimension() != Geestenwereld.DIM;
     }
 
     private static float yawNaar(Vec3 van, Vec3 naar) {
