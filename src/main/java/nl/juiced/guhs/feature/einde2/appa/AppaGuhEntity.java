@@ -503,17 +503,8 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
 
     /** Server: where a rider who got off up here lands safely: the ground under them, else the ground he last stood on. */
     private Vec3 veiligeGrondOnder(ServerPlayer p) {
-        BlockPos kolom = p.blockPosition();
-        if (level().hasChunkAt(kolom)) {
-            int y = level().getHeight(Heightmap.Types.MOTION_BLOCKING, kolom.getX(), kolom.getZ());
-            if (y > level().getMinY() + 1 && y <= p.getY() + 0.5) {
-                Vec3 grond = Appa.vrijePlek(level(), p.getType(), new Vec3(p.getX(), y, p.getZ()), 4, true);
-                if (grond != null) {
-                    return grond;
-                }
-            }
-        }
-        return laatsteGrond != null ? laatsteGrond : p.position();
+        Vec3 grond = Appa.grondOnder(level(), p.getType(), p.position());
+        return grond != null ? grond : laatsteGrond != null ? laatsteGrond : p.position();
     }
 
     @Nullable

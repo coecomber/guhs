@@ -233,6 +233,9 @@ public final class Appa {
         }
         Vec3 w = vrijePlek(p.level(), p.getType(), n.waar(), 4, true);
         if (w == null) {
+            w = grondOnder(p.level(), p.getType(), n.waar());
+        }
+        if (w == null) {
             w = n.waar();
         }
         p.teleportTo(w.x, w.y, w.z);
@@ -252,6 +255,29 @@ public final class Appa {
             return false;
         }
         return true;
+    }
+
+    /**
+     * The first free spot with solid ground under it straight below {@code van} (under an overhang or a bridge too: it looks
+     * down, not at the heightmap), else a free spot on the ground near the heightmap top of that column. Null: only void.
+     */
+    @Nullable
+    public static Vec3 grondOnder(net.minecraft.world.level.Level level, net.minecraft.world.entity.EntityType<?> type, Vec3 van) {
+        var maat = type.getDimensions();
+        int top = net.minecraft.util.Mth.floor(van.y);
+        if (!level.hasChunkAt(net.minecraft.core.BlockPos.containing(van))) {
+            return null;
+        }
+        for (int y = top; y > level.getMinY() + 1; y--) {
+            var doos = maat.makeBoundingBox(van.x, y, van.z);
+            var onder = new net.minecraft.world.phys.AABB(van.x - 0.25, y - 0.99, van.z - 0.25, van.x + 0.25, y - 0.01, van.z + 0.25);
+            if (!level.noCollision(onder) && level.noCollision(doos) && !level.containsAnyLiquid(doos)) {
+                return new Vec3(van.x, y, van.z);
+            }
+        }
+        int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, net.minecraft.util.Mth.floor(van.x),
+                net.minecraft.util.Mth.floor(van.z));
+        return y > level.getMinY() + 1 ? vrijePlek(level, type, new Vec3(van.x, y, van.z), 4, true) : null;
     }
 
     /**
