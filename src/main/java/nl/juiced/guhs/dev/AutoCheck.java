@@ -1095,6 +1095,35 @@ public final class AutoCheck {
                     lockPitch = rot[1];
                     note(String.format(Locale.ROOT, "  kijknaar %s: %.1f blocks away", a[1], r[0].distanceTo(r[1])));
                 });
+            case "hier":
+                // hier: (einde2) notes where the player stands: dimension, block and biome (the einde2 scripts of phase A use it)
+                return server(server -> {
+                    ServerPlayer sp = player(server);
+                    String biome = sp.level().getBiome(sp.blockPosition()).unwrapKey().map(k -> k.identifier().toString()).orElse("?");
+                    return sp.level().dimension().identifier() + " " + sp.blockPosition().toShortString() + " " + biome;
+                }, s -> note("  hier: " + s));
+            case "sla":
+                // sla [entity type]: (einde2) the player hits the nearest entity (of that type) within 12 blocks, as a left click
+                return server(server -> {
+                    ServerPlayer sp = player(server);
+                    Entity best = null;
+                    for (Entity e : sp.level().getEntities(sp, sp.getBoundingBox().inflate(12),
+                            e -> e.isAlive() && (a.length < 2 || net.minecraft.world.entity.EntityType.getKey(e.getType()).toString().equals(a[1])))) {
+                        if (best == null || e.distanceToSqr(sp) < best.distanceToSqr(sp)) {
+                            best = e;
+                        }
+                    }
+                    if (best != null) {
+                        sp.attack(best);
+                    }
+                    return best == null ? null : net.minecraft.world.entity.EntityType.getKey(best.getType()).toString();
+                }, s -> {
+                    if (s == null) {
+                        problem("sla " + (a.length > 1 ? a[1] : "") + ": nothing within 12 blocks");
+                    } else {
+                        note("  sla: hit " + s);
+                    }
+                });
             case "titelnaam":
                 // titelnaam: notes the name the CLIENT shows above this player's head (PlayerEvent.NameFormat with the server's
                 // guhs:titels_actief list; other players' clients compute the same)
