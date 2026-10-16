@@ -487,8 +487,10 @@ public class GuhpadGameTests {
                     "the Guhbarbecuether: the five stories and Guhdalf's party");
             helper.assertTrue(sleutels(Guhpad.ontbreekt(p, Wereld.GUHEINDE)).equals(List.of("gui.guhs.guhpad.verhaal.knabbelring", "gui.guhs.guhpad.verhaal.guhrio",
                     Guhpad.EIS_MIKA)), "the Guheinde: the two stories and the Mika");
-            helper.assertTrue(Guhpad.eisen(p, Wereld.ECHT).size() == 8 && sleutels(Guhpad.ontbreekt(p, Wereld.ECHT)).get(7).equals(Guhpad.EIS_ECHT),
-                    "the real Guheinde: all seven and itself");
+            // (einde2: the Guhvatar story is the eighth big story, so: every big story of the game and itself)
+            int alle = GroteVerhalen.totaal();
+            helper.assertTrue(Guhpad.eisen(p, Wereld.ECHT).size() == alle + 1 && sleutels(Guhpad.ontbreekt(p, Wereld.ECHT)).get(alle).equals(Guhpad.EIS_ECHT),
+                    "the real Guheinde: all " + alle + " big stories and itself");
             for (Guhpad.Eis e : Guhpad.eisen(p, Wereld.ECHT)) {
                 helper.assertTrue(NlTekst.has(e.sleutel()) && BuiltInRegistries.ITEM.getValue(Identifier.parse(e.icoon())) != Items.AIR, "a text and an icon for " + e.sleutel());
             }
@@ -677,10 +679,12 @@ public class GuhpadGameTests {
             helper.assertTrue(quests == 9 && achterSlot == 8, "eight question marks behind the lock quest: " + quests + " quests, " + achterSlot + " locked");
             helper.assertTrue(echt.split("guhs:quest/guhpad_echt", -1).length - 1 == 9, "every one of them asks the advancement nobody gets");
             helper.assertTrue(bron("ftbquests/lang/nl_nl/guhs_pad_echt.json5").contains("Gaat pas open in &7het echte Guheinde"), "layer 6: only in the real Guheinde");
-            // the Knabbelring is still told in order, in its new chapter; the stories of the Guhmensie and the Guheinde are still free
+            // the Knabbelring is still told in order, in its new chapter; the stories of the Guhmensie are still free (einde2: the
+            // Guhvatar sections of the Guheinde chapter run in order on purpose, CONTRACT_E2_B 7.1 FTB_LINEAIR, so that chapter is
+            // no longer free of dependencies)
             String ringBoek = bron("ftbquests/chapters/guhs_pad_barbecuether.json5");
-            helper.assertTrue(ringBoek.contains("progression_mode: \"linear\"") && !bron("ftbquests/chapters/guhs_verhalen.json5").contains("dependencies:")
-                    && !bron("ftbquests/chapters/guhs_guheinde.json5").contains("dependencies:"), "only the Knabbelring is locked quest by quest");
+            helper.assertTrue(ringBoek.contains("progression_mode: \"linear\"") && !bron("ftbquests/chapters/guhs_verhalen.json5").contains("dependencies:"),
+                    "only the Knabbelring (and the Guhvatar sections) are locked quest by quest");
             // a pack that has the old chapters: ours go, an edited one stays, the two groups are added in order
             Path quests2 = Files.createTempDirectory("guhs-guhpad");
             Files.createDirectories(quests2.resolve("chapters"));

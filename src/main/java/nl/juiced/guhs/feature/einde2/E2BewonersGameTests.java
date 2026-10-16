@@ -73,7 +73,8 @@ public class E2BewonersGameTests {
                         "the spot lies in the build: " + b.naam() + " " + l.toShortString());
             }
         }
-        helper.assertTrue(n == 200, "two hundred residents: " + n);
+        // (phase B/C: +7, h3's lu_ten_miroh and laogai_long_feng, and zij's herd westelijke_luchttempel/bizon_1..5 through Bewoners.anders)
+        helper.assertTrue(n == 207, "two hundred and seven residents: " + n);
         // not a resident
         for (String niet : List.of("zuidelijke_luchttempel/momo", "vuurnatie_hoofdstad/mikai_bunker", "vuurnatie_hoofdstad/leeuwschildpad",
                 "leegtehaven/mika_kok", "leeuwschildpad_eiland/leeuwschildpad", "bikinibodem/neptuguh", "bikinibodem/sponsguh", "bikinibodem/octo",
