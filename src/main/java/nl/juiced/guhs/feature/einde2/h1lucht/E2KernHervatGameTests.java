@@ -27,7 +27,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  *   <li>{@code einde2KernKaasbolHoudtStap}: a player in the middle of chapter 1 who clicks the kaasbol twice (and a late
  *       "ball opened") stays at their step; the ball is theirs to come back with; after chapter 1 the next chapter is the
  *       story; at step 0 it is still the opening;</li>
- *   <li>{@code einde2KernHints}: the three example hints of chapter 1 and their look scenes (short, no click waits), the
+ *   <li>{@code einde2KernHints}: the hints of chapter 1's steps 2-9 and their look scenes (short, no click waits), the
  *       hint waits for its step's start, the airbending lesson after the luchtbal match comes once, and the direction
  *       phrases.</li>
  * </ul>
@@ -84,10 +84,11 @@ public class E2KernHervatGameTests {
     public static void einde2KernHints(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         try {
-            for (int stap : new int[] {E2H1Lucht.SCOOTER, E2H1Lucht.ZWEVEN, E2H1Lucht.DEUR}) {
+            // merge_fix1: every step inside the temple (2..9) has a hint with its own look scene (fix-h1's steps shine themselves)
+            for (int stap = E2H1Lucht.HAL; stap <= E2H1Lucht.ZUKA; stap++) {
                 StapHint.Hint h = StapHint.hint(E2Verhaal.LUCHT, stap);
                 Cutscene s = h == null ? null : h.kijk();
-                helper.assertTrue(h != null && h.bijStartAan() && h.bakenAan() && h.tekst() != null && s != null, "hint of step " + stap);
+                helper.assertTrue(h != null && h.bijStartAan() && h.tekst() != null && s != null && s != StapHint.KIJK, "hint of step " + stap);
                 helper.assertTrue(Cutscene.van(s.id()) == s && s.duur() == StapHint.KIJK_DUUR && s.pauzes().length == 0
                         && s.zinnen().size() == 1 && s.zinnen().get(0).lied(), "look scene " + s.id() + ": 3 s, one run-on caption, no click wait");
             }

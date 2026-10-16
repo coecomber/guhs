@@ -80,6 +80,13 @@ def texts(h):
     vm.reiskaart(h, "guhvatar", modellen.kaart_reis(vm), tekst.REISKAART)
     for naam, (titel, regels, namen) in tekst.SCENES.items():
         vm.scene(h, f"einde2_h1_lucht_{naam}", titel, regels, namen)
+    # fix round 1 (merge_fix1): the step hints, their look scenes and the airbending lesson (H1Hints)
+    for k, v in tekst.HINTS.items():
+        kit.lang(h, f"{tekst.P}.hint.{k}", v)
+    for k, v in tekst.LES.items():
+        kit.lang(h, f"{tekst.P}.les.{k}", v)
+    for naam, (titel, regel) in tekst.KIJK.items():
+        vm.scene(h, f"einde2_h1_lucht_kijk_{naam}", titel, {"tekst": regel})
     vm.sluier(h, "zuidelijke_luchttempel")
     kit.zichtbaar(h, "einde2_h1_lucht_geleerd", "guheinde_winst", "guhs:luchtscooter", "goal",
                   tekst.TEXTS["advancements.guhs.guheinde.einde2_h1_lucht_geleerd.title"],
@@ -130,6 +137,10 @@ def selfcheck(h):
     for naam in SCENES:
         if f"scene.guhs.einde2_h1_lucht_{naam}.titel" not in h.NL:
             problems.append(f"no title of the scene {naam}")
+    # the hints: a text and a look scene per step, the same list as H1Hints.KIJK
+    for naam in tekst.KIJK:
+        if f"scene.guhs.einde2_h1_lucht_kijk_{naam}.tekst" not in h.NL or f"{tekst.P}.hint.{naam}" not in h.NL:
+            problems.append(f"no hint text or look scene {naam}")
     recept = json.load(open(f"{D}/recipe/oog_van_vadsig.json", encoding="utf-8"))
     if sorted(recept.get("ingredients", [])) != sorted(OOG):
         problems.append(f"the Oog van Vadsig recipe is {recept.get('ingredients')}")
@@ -138,6 +149,9 @@ def selfcheck(h):
     lucht = open(os.path.join(J, "feature", "einde2", "h1lucht", "E2H1Lucht.java"), encoding="utf-8").read()
     if f"STAPPEN = {STAPPEN};" not in lucht:
         problems.append(f"E2H1Lucht.STAPPEN is not {STAPPEN}")
+    hints = open(os.path.join(J, "feature", "einde2", "h1lucht", "H1Hints.java"), encoding="utf-8").read()
+    if "KIJK = {" + ", ".join(f'"{n}"' for n in tekst.KIJK) + "}" not in hints:
+        problems.append("H1Hints.KIJK does not list the look scenes of einde2_h1_lucht_tekst.KIJK")
     scenes = open(os.path.join(J, "feature", "einde2", "h1lucht", "H1Scenes.java"), encoding="utf-8").read()
     for naam in SCENES:
         if f'maak("{naam}")' not in scenes:

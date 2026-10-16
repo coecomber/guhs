@@ -33,19 +33,5 @@
   "gui.guhs.einde2_verhaal.richting.hier": "right here",
   "gui.guhs.einde2_verhaal.richting.zin2": "%1$s, %2$s",
   "gui.guhs.einde2_verhaal.richting.zin3": "%1$s, %2$s and %3$s",
-  "gui.guhs.einde2_verhaal.h1.scooter": "The start of the Air Scooter Track is %s, southwest of the forecourt.",
-  "gui.guhs.einde2_verhaal.h1.zweven": "The south balcony at the top of the Great Tower is %s. Jump off: you glide and slowly sink. Steer through the rings in the shortest line you can.",
-  "gui.guhs.einde2_verhaal.h1.deur": "The closed door of the workshop is %s, in the building east of the hall. Just walk into it.",
-  "gui.guhs.einde2_verhaal.h1.les.1": "Did you see that? That ball didn't fly because of your hand, but because of the wind you gave it. That was airbending! A tiny bit, nyeg.",
-  "gui.guhs.einde2_verhaal.h1.les.2": "Now without a ball. Press %s, pick Air Leap in your power wheel and jump on the wind!",
-  "gui.guhs.einde2_verhaal.h1.les.3": "Air Leap and Air Ball work everywhere in the temple. Go on, try them!",
-  "gui.guhs.einde2_verhaal.h1.les.sprong": "Whoa, did you see how high? Air doesn't push, air lifts you up. Now try Air Ball: a gust wherever you look.",
-  "gui.guhs.einde2_verhaal.h1.les.bal": "Whoosh! That's it! Air is light and free. You'll learn the rest on the way: running, gliding... and maybe one day blowing away a fireball.",
-  "scene.guhs.einde2_verhaal_kijk.titel": "Look there!",
-  "scene.guhs.einde2_verhaal_kijk_h1_scooter.titel": "The start of the track",
-  "scene.guhs.einde2_verhaal_kijk_h1_scooter.tekst": "This is where the Air Scooter Track begins.",
-  "scene.guhs.einde2_verhaal_kijk_h1_zweven.titel": "The south balcony",
-  "scene.guhs.einde2_verhaal_kijk_h1_zweven.tekst": "The south balcony. Jump, and trust the wind.",
-  "scene.guhs.einde2_verhaal_kijk_h1_deur.titel": "The closed door",
-  "scene.guhs.einde2_verhaal_kijk_h1_deur.tekst": "Something is ticking... behind that door."
+  "scene.guhs.einde2_verhaal_kijk.titel": "Look there!"
 }

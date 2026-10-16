@@ -5,6 +5,7 @@ tools/lang/en/c92_e2_h1_lucht.json). Read by einde2_h1_lucht.build(h).
   LIJN        the questline guhvatar_lucht (verhaal_motor.verhaallijn: name, explanation, the ten steps, the variant 9_vlucht)
   KAART       the narrator card of the chapter (verhaal_motor.vertelkaart)
   SCENES      the eight cutscenes: {naam: (titel, {key: tekst}, {acteur: naam})} (Java: H1Scenes; scene.guhs.einde2_h1_lucht_<naam>.*)
+  HINTS/KIJK  fix round 1: the step hints and their look scenes (H1Hints); LES: the airbending lesson
   TEXTS       everything else: the hints, the talks of Aang-guh, Guhatso, Roku-guh and Kyoshi-guh, the minigames, the rewards
   FTB         the FTB section "De Guhvatar: Lucht": (key, titel, tekst, icon, stap)
 
@@ -307,6 +308,40 @@ TEXTS = {
     "gui.guhs.kledingbron.einde2_h1_lucht": "De Guhvatar: Lucht",
     # --- the luchtbal ball --------------------------------------------------------------------------------------------------
     "entity.guhs.einde2_h1_lucht_luchtbal": "Luchtbal",
+}
+
+# =====================================================================================================================
+# fix round 1 (playtest 1: "ietsjes meer hints"; kern's StapHint, merge_fix1): one hint per step inside the temple (H1Hints).
+# HINTS: the chat line after the look scene (%s = the direction, "in het noorden, een eindje verder"); it says WHERE, the
+# step's own nu text and fix-h1's lines on the spot say WHAT. KIJK: the look scenes einde2_h1_lucht_kijk_<naam>, (titel,
+# the one run-on caption). LES: Aang-guh's airbending lesson after the luchtbal match.
+# =====================================================================================================================
+HINTS = {
+    "hal": "De geesten van Roku-guh en Kyoshi-guh wachten %s, in de grote witte Hal: de trap op, door de poort, over het plein.",
+    "luchtbal": "Monnik Guhatso staat %s, bij de taarten boven het luchtbalveld. Praat met hem.",
+    "scooter": "De oranje-gele startboog staat %s, aan de zuidrand van de tempel. Stap op de streep eronder.",
+    "zweven": "De eerste ring hangt %s. Daarna licht steeds de volgende ring blauw op.",
+    "momo": "Het lemurguhtje vlucht naar de monnikentoren, %s. Kwijt? De deur zit aan de zuidkant van de toren.",
+    "stal": "Appa's stal met het groene dak staat %s. De deur zit aan de zuidkant.",
+    "deur": "De dichte deur van de werkplaats is %s, in de westmuur van het lange gebouw oost van de Hal.",
+    "zuka": "De steiger is %s: de grote trap af, aan de oostkant van het landingsterras.",
+}
+KIJK = {
+    "hal": ("De Hal van de Guhvatars", "De Hal van de Guhvatars. Twee geesten wachten op je."),
+    "luchtbal": ("Monnik Guhatso", "Monnik Guhatso. Hij heeft een spelletje voor je, en taart."),
+    "scooter": ("De start van de baan", "Hier begint de luchtscooter-baan."),
+    "zweven": ("De eerste ring", "De eerste ring. Spring, en vertrouw de wind."),
+    "momo": ("De monnikentoren", "De monnikentoren. Daar wil dat lemurguhtje heen!"),
+    "stal": ("Appa's stal", "Appa's oude stal. Hij heeft honger, njeg."),
+    "deur": ("De dichte deur", "Daar tikt iets... achter die deur."),
+    "zuka": ("De steiger", "De steiger. Daar ligt iets... iets groots."),
+}
+LES = {
+    "1": "Zag je dat? Die bal vloog niet door je hand, maar door de wind die je hem meegaf. Dat was luchtsturen! Een klein beetje, njeg.",
+    "2": "Nu zonder bal. Druk op %s, kies Luchtsprong in je krachtwiel en spring op de wind!",
+    "3": "Luchtsprong en Luchtbal werken overal in de tempel. Probeer ze maar!",
+    "sprong": "Whoa, zag je hoe hoog? Lucht duwt niet, lucht tilt je op. Probeer nu Luchtbal: een windstoot waar je kijkt.",
+    "bal": "Woesj! Dat is het! Lucht is licht en vrij. De rest leer je onderweg: rennen, zweven... en ooit misschien een vuurbal wegblazen.",
 }
 
 # =====================================================================================================================

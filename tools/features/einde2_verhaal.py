@@ -7,7 +7,6 @@ Java: nl.juiced.guhs.feature.einde2.verhaal (E2Verhaal, E2VerhaalDev, E2VerhaalC
             gui.guhs.einde2_verhaal.hervat.*      fix round 1: "Verder met het verhaal" (E2Hervat: respawn / login lines, the kaasbol)
             gui.guhs.einde2_verhaal.hint.*        fix round 1: the step hints (StapHint)
             gui.guhs.einde2_verhaal.richting.*    fix round 1: the direction phrases (Richting)
-            gui.guhs.einde2_verhaal.h1.*          fix round 1: chapter 1's example hints and the airbending lesson (H1Hints)
             scene.guhs.einde2_verhaal_kijk*       fix round 1: the look scenes (StapHint.kijkScene)
   data      advancement/quest/guhpad_klaar_guhvatar   hidden, granted by GuhpadEvents when the finale is done
             kaart/verborgen.json                  Guhdalfs sluier: the four story structures are hidden on the live map
@@ -54,36 +53,20 @@ RICHTING = {
     "recht_boven": "recht boven je", "recht_onder": "recht onder je", "hier": "hier vlakbij",
     "zin2": "%1$s, %2$s", "zin3": "%1$s, %2$s en %3$s",
 }
-# chapter 1's three example hints (H1Hints) and the airbending lesson after the luchtbal match
-H1 = {
-    "scooter": "De start van de luchtscooter-baan ligt %s, zuidwest van het voorplein.",
-    "zweven": "Het zuidbalkon boven op de grote toren ligt %s. Spring eraf: je zweeft en zakt langzaam. "
-              "Stuur door de ringen, in een zo kort mogelijke lijn.",
-    "deur": "De dichte deur van de werkplaats ligt %s, in het gebouw oost van de hal. Loop er gewoon tegenaan.",
-    "les.1": "Zag je dat? Die bal vloog niet door je hand, maar door de wind die je hem meegaf. Dat was luchtsturen! Een klein beetje, njeg.",
-    "les.2": "Nu zonder bal. Druk op %s, kies Luchtsprong in je krachtwiel en spring op de wind!",
-    "les.3": "Luchtsprong en Luchtbal werken overal in de tempel. Probeer ze maar!",
-    "les.sprong": "Whoa, zag je hoe hoog? Lucht duwt niet, lucht tilt je op. Probeer nu Luchtbal: een windstoot waar je kijkt.",
-    "les.bal": "Woesj! Dat is het! Lucht is licht en vrij. De rest leer je onderweg: rennen, zweven... en ooit misschien een vuurbal wegblazen.",
-}
 KIJK = {
     "einde2_verhaal_kijk": ("Kijk daar!", {}),
-    "einde2_verhaal_kijk_h1_scooter": ("De start van de baan", {"tekst": "Hier begint de luchtscooter-baan."}),
-    "einde2_verhaal_kijk_h1_zweven": ("Het zuidbalkon", {"tekst": "Het zuidbalkon. Spring, en vertrouw de wind."}),
-    "einde2_verhaal_kijk_h1_deur": ("De dichte deur", {"tekst": "Daar tikt iets... achter die deur."}),
 }
 
 
 def kern(h):
-    """fix round 1 (fix-kern): the texts of E2Hervat, StapHint, Richting and H1Hints, and the look scenes."""
+    """fix round 1 (fix-kern): the texts of E2Hervat, StapHint and Richting, and the caption-less look scene (merge_fix1: chapter 1's
+    hints, look scenes and airbending lesson moved to einde2_h1_lucht_tekst.py, under h1's prefixes)."""
     for k, v in HERVAT.items():
         kit.lang(h, f"gui.guhs.einde2_verhaal.hervat.{k}", v)
     for k, v in HINT.items():
         kit.lang(h, f"gui.guhs.einde2_verhaal.hint.{k}", v)
     for k, v in RICHTING.items():
         kit.lang(h, f"gui.guhs.einde2_verhaal.richting.{k}", v)
-    for k, v in H1.items():
-        kit.lang(h, f"gui.guhs.einde2_verhaal.h1.{k}", v)
     for sid, (titel, regels) in KIJK.items():
         verhaal_motor.scene(h, sid, titel, regels)
 
