@@ -414,19 +414,19 @@
   ],
   "quest.47554887D6B9327B.title": "A Mad Old King",
   "quest.47554887D6B9327B.quest_desc": [
-    "Talk to King Bumi Guh in the throne room of Omashguh.",
+    "Talk to King Bumi Guh in the throne room at the top of the palace of Omashguh.",
   ],
   "quest.4755489CB959FD72.title": "The Key in the Waterfall",
   "quest.4755489CB959FD72.quest_desc": [
-    "Get the key out of the waterfall of glass (trial 1). Climbing won't work: use your earth power in the room.",
+    "Get the key out of the waterfall of glass (trial 1, on the west side below the throne room). Climbing won't work: use your earth power in the room.",
   ],
   "quest.475548E2084227C9.title": "Where Is Flopsie?",
   "quest.475548E2084227C9.quest_desc": [
-    "Find Flopsie, the king's pet. The hutch of trial 2 is awfully small...",
+    "Find Flopsie, the king's pet. The hutch of trial 2 (on the east side below the throne room) is awfully small...",
   ],
   "quest.4755482F56F4058B.title": "Choose Your Opponent",
   "quest.4755482F56F4058B.quest_desc": [
-    "Go to the arena of trial 3, choose your opponent and answer the king's last question.",
+    "Go to the arena of trial 3 (in the middle below the throne room), choose your opponent and answer the king's last question.",
   ],
   "quest.475548E37348514E.title": "Faster than the Mail",
   "quest.475548E37348514E.quest_desc": [
@@ -434,15 +434,15 @@
   ],
   "quest.4755489579E347D3.title": "The Air Nun",
   "quest.4755489579E347D3.quest_desc": [
-    "Talk to the air nun guh in the hanging hall of the Western Air Temple.",
+    "Talk to the air nun guh by the stairs in the hanging hall: the temple hangs upside down below the island.",
   ],
   "quest.4755484C8EF34C78.title": "Let the Temple Sing",
   "quest.4755484C8EF34C78.quest_desc": [
-    "Stand on the balcony at the end of each of the five wind corridors and use your air power there.",
+    "Stand on the balcony at the end of each of the five wind corridors and use your air power there. Four corridors run from the hall to the four sides, the fifth is the organ pipe at the bottom.",
   ],
   "quest.475548EFBFFB21B0.title": "The Stray Herd",
   "quest.475548EFBFFB21B0.quest_desc": [
-    "Five sky bison guhs drift lost around the island. Fly to them (on Appa or with your wings) and click them: they fly to their own pen.",
+    "Five sky bison guhs drift lost around the island. Fly to them (on Appa or with your wings) and click them, or aim your Air Ball at them from a distance: they fly to their own pen.",
   ],
   "quest.4755484AECCB89D1.title": "Back to the Air Nun",
   "quest.4755484AECCB89D1.quest_desc": [
@@ -450,7 +450,7 @@
   ],
   "quest.475548223B104367.title": "The Friendly Fire Sage",
   "quest.475548223B104367.quest_desc": [
-    "Talk to Shyu, the friendly Fire Sage by the hatch behind the altar.",
+    "Talk to Shyu, the friendly Fire Sage by the hatch behind the altar, on the ground floor of the tower.",
   ],
   "quest.4755489C23D6BB22.title": "Five Fire Doors",
   "quest.4755489C23D6BB22.quest_desc": [
@@ -458,7 +458,7 @@
   ],
   "quest.4755483E3CA71054.title": "The Sanctum",
   "quest.4755483E3CA71054.quest_desc": [
-    "The doors are open, just for you. Walk into the sanctum.",
+    "The doors are open, just for you. Walk straight at a fire door: you step through it, into the sanctum.",
   ],
   "quest.475548424323ED27.title": "Roku Guh",
   "quest.475548424323ED27.quest_desc": [
@@ -466,23 +466,23 @@
   ],
   "quest.4755481216FCF0F5.title": "The Leader",
   "quest.4755481216FCF0F5.quest_desc": [
-    "Talk to the leader of the Kyoshi Warrior Guhs in the dojo.",
+    "Talk to the leader of the Kyoshi Warrior Guhs in the dojo, before the wall of fans.",
   ],
   "quest.4755484A2201DCCD.title": "The Fan Dance",
   "quest.4755484A2201DCCD.quest_desc": [
-    "Stand on the golden tile in the middle of the dance floor and follow the calls on the beat: DUCK, JUMP or TURN. Twelve right is enough.",
+    "Stand on the golden tile in the middle of the dance floor and follow the calls on the beat: DUCK (shift), JUMP or TURN (look sideways). Ten right is enough.",
   ],
   "quest.4755484F555F7BA8.title": "Painted Like a Warrior",
   "quest.4755484F555F7BA8.quest_desc": [
-    "Go to the makeup table under the mirror in the dojo (click it, or crouch in front of it).",
+    "Go to the makeup table under the mirror in the southwest corner of the dojo (click it, or crouch in front of it).",
   ],
   "quest.475548482494C628.title": "The Biggest Fan",
   "quest.475548482494C628.quest_desc": [
-    "Show yourself to the foaming fan guh by the gate.",
+    "Show yourself to the foaming fan guh by the gate: click him.",
   ],
   "quest.475548E099759FE7.title": "The Owl's Rules",
   "quest.475548E099759FE7.quest_desc": [
-    "Talk to Wan Shi Guh in the owl hall, at the very bottom of the library.",
+    "Talk to Wan Shi Guh in the owl hall, at the very bottom of the library. You get in through the window in the spire and then keep going down.",
   ],
   "quest.47554833C30980E8.title": "A Piece of Knowledge",
   "quest.47554833C30980E8.quest_desc": [
@@ -494,7 +494,7 @@
   ],
   "quest.475548E332B34235.title": "The Planetarium",
   "quest.475548E332B34235.quest_desc": [
-    "Turn the wheel of the planetarium, next to Professor Zei Guh.",
+    "Turn the wheel of the planetarium, next to Professor Zei Guh: the side hall on the west side, at the height of hall 1.",
   ],
   "quest.4755483BDD833ABF.title": "Over the Shell",
   "quest.4755483BDD833ABF.quest_desc": [
@@ -502,7 +502,7 @@
   ],
   "quest.4755480FD9808A2D.title": "The Raised Paw",
   "quest.4755480FD9808A2D.quest_desc": [
-    "Go down along his flank and stand on the palm of his raised paw.",
+    "Go down along his flank, to the front below his head, and stand on the palm of his raised paw.",
   ],
   "quest.47554866CA8F2D61.title": "A Nibble as an Offering",
   "quest.47554866CA8F2D61.quest_desc": [
@@ -522,7 +522,7 @@
   ],
   "quest.4755483610C29FF1.title": "Distract the Captain",
   "quest.4755483610C29FF1.quest_desc": [
-    "Talk to the fortress captain on the ground floor and come up with something that works.",
+    "Talk to the fortress captain behind his desk on the ground floor and come up with something that works.",
   ],
   "quest.475548BAED7542BD.title": "The Secret Soup",
   "quest.475548BAED7542BD.quest_desc": [
@@ -530,7 +530,7 @@
   ],
   "quest.475548A807E2530A.title": "A Kitchen of His Own",
   "quest.475548A807E2530A.quest_desc": [
-    "Visit the cook in his new kitchen in the Void Harbor: The Sorry Spatula.",
+    "Visit the cook in his new kitchen in the Void Harbor: The Sorry Spatula, on the quay.",
   ],
   "quest.4755484E751BC639.title": "The Note",
   "quest.4755484E751BC639.quest_desc": [
@@ -538,7 +538,7 @@
   ],
   "quest.4755486EBDACD359.title": "To the Shipyard",
   "quest.4755486EBDACD359.quest_desc": [
-    "Bring the shipwright guh in the Void Harbor 24 planks, 8 wool, 4 Mika's Grease and 2 flash crumbs. Then he builds your boat.",
+    "Bring the shipwright guh at the shipyard on the west side of the Void Harbor 24 planks, 8 wool, 4 Mika's Grease and 2 flash crumbs. Then he builds your boat.",
   ],
   "quest.475548CE6FC5177F.title": "Christen Your Boat",
   "quest.475548CE6FC5177F.quest_desc": [
