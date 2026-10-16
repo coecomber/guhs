@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import nl.juiced.guhs.feature.einde2.Plekken;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.appa.Momo;
+import nl.juiced.guhs.feature.einde2.verhaal.E2Hervat;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev;
 import nl.juiced.guhs.feature.guheinde.GuheindeGevecht;
@@ -29,7 +30,8 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
  * <ul>
  *   <li>{@code /guhs einde2 h1 ga <stap>}: puts you at that step of {@value E2Verhaal#LUCHT} (Opper-Mika won, the line wiped
  *       and set; Appa and Momo where the story has given them), teleports you to its place and starts what it starts. Steps:
- *       {@code kaasbol vlucht hal luchtbal scooter zweven momo stal deur zuka vlucht_zuka klaar} (or 0..10);</li>
+ *       {@code kaasbol vlucht hal luchtbal scooter zweven momo stal deur zuka vlucht_zuka klaar} (or 0..10); {@code ga kaasbol} for
+ *       a player who is in the story only takes them to the kaasbol (nothing wiped: fix round 1);</li>
  *   <li>{@code /guhs einde2 h1 scene <naam>}: forgets and plays that scene where you would see it;</li>
  *   <li>{@code /guhs einde2 h1 wis}: forgets the whole chapter (the scenes and the card too);</li>
  *   <li>{@code /guhs einde2 h1 goal}: (luchtbal) a goal for you.</li>
@@ -104,6 +106,18 @@ public final class H1Commando {
         if (stap > E2H1Lucht.KAASBOL && !Plekken.bekend(g, E2H1Lucht.STRUCTUUR)) {
             Plekken.zoekVooruit(g);
             return fout(src, "the spot of the Zuidelijke Luchttempel is still being worked out: try again in a few seconds");
+        }
+        if (stap == E2H1Lucht.KAASBOL && E2Hervat.kanVerder(p)) {
+            // fix round 1 (playtest 1 item 11): "ga kaasbol" was the way back after dying, and it wiped the chapter. A player who is
+            // in the story keeps everything: only the trip to the kaasbol, whose click brings them back to their step.
+            BlockPos bol = Kaasbol.plek(g);
+            int x = bol != null ? bol.getX() - 6 : GuheindeGevecht.ARRIVAL_X, z = bol != null ? bol.getZ() - 4 : GuheindeGevecht.ARRIVAL_Z;
+            int y = bol != null ? bol.getY() : g.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            p.teleportTo(g, x + 0.5, y + 0.1, z + 0.5, Set.of(), -60f, 0f, true);
+            net.minecraft.server.level.ServerPlayer s = p;
+            src.sendSuccess(() -> Component.literal("h1: you are in the story (" + E2Hervat.huidig(s).id() + " step " + E2Hervat.huidig(s).stap(s)
+                    + "): nothing wiped. Click the kaasbol to go back to your step. A fresh start: /guhs einde2 h1 wis, then ga kaasbol."), false);
+            return 1;
         }
         opruimen(p);
         if (stap == E2H1Lucht.STAPPEN) {

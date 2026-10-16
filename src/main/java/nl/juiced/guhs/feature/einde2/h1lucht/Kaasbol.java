@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.audio.E2Audio;
 import nl.juiced.guhs.feature.einde2.reizen.E2Reizen;
+import nl.juiced.guhs.feature.einde2.verhaal.E2Hervat;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.guheinde.GuheindeGevecht;
@@ -32,6 +33,10 @@ import nl.juiced.guhs.feature.verhaal.Cutscenes;
  * where the portal sets you down ({@code GuheindeGevecht.ARRIVAL_X/Z}), at the shore east of it; only they see it
  * ({@code Zicht.alleenVoor}), so any number of players can open theirs at the same spot. A click: the scene kaasbol, the
  * opening film (intro), then step 1, Appa-guh, and the flight to the Zuidelijke Luchttempel ({@code E2Reizen.vlieg}).
+ * <p>
+ * fix round 1 (fix-kern, playtest 1): the ball stays for every player who is IN the story ({@code E2Hervat.kanVerder}),
+ * right where the portal sets you down: then a click never plays the intro again and never touches a step, it brings the
+ * player back to their current step ({@code E2Hervat.verder}). Only a player at step 0 gets the opening.
  */
 public final class Kaasbol {
     /** How far from the arrival (blocks east) the shore is looked for, and how far from the ball a player gets one. */
@@ -44,9 +49,17 @@ public final class Kaasbol {
     private Kaasbol() {
     }
 
-    /** May this player get a ball: Opper-Mika beaten, and the chapter not begun past step 0. */
+    /** May this player open a ball (the opening of the story): Opper-Mika beaten, and the chapter not begun past step 0. */
     public static boolean mag(ServerPlayer p) {
         return E2Verhaal.magBeginnen(p) && E2H1Lucht.LIJN.stap(p) == E2H1Lucht.KAASBOL;
+    }
+
+    /**
+     * Does this player see a ball: to open it (step 0), or as the way back into the story they are in ({@code E2Hervat};
+     * not while they ride, e.g. on Appa's back flying off after the opening).
+     */
+    public static boolean zichtbaar(ServerPlayer p) {
+        return mag(p) || p.getVehicle() == null && E2Hervat.kanVerder(p);
     }
 
     /**
@@ -86,7 +99,7 @@ public final class Kaasbol {
 
     /** (every second, players in the Guheinde) puts this player's ball down when they are near, or takes it away. */
     static void tick(ServerPlayer p) {
-        if (!GuheindeFeature.isGuheinde(p.level()) || !mag(p)) {
+        if (!GuheindeFeature.isGuheinde(p.level()) || !zichtbaar(p)) {
             weg(p);
             return;
         }
@@ -108,7 +121,7 @@ public final class Kaasbol {
             g.addFreshEntity(bol);
             BOLLEN.put(p.getUUID(), bol);
         }
-        if (E2H1Lucht.LIJN.eenmalig(p, "kaasbol_melding")) {
+        if (mag(p) && E2H1Lucht.LIJN.eenmalig(p, "kaasbol_melding")) {
             p.sendSystemMessage(Component.translatable(E2H1Lucht.P + "kaasbol.melding").withStyle(ChatFormatting.GOLD));
         }
     }
@@ -135,14 +148,32 @@ public final class Kaasbol {
         return BOLLEN.get(p.getUUID());
     }
 
-    /** A click on a ball: the two scenes, then {@link #geopend}. */
+    /** A click on a ball: {@link #klik}. */
     static void open(ServerPlayer p, Entity bol) {
-        if (BOLLEN.get(p.getUUID()) != bol || !mag(p) || Cutscenes.bezig(p)) {
+        if (BOLLEN.get(p.getUUID()) != bol || Cutscenes.bezig(p)) {
             return;
         }
+        klik(p, bol.blockPosition());
+    }
+
+    /** What a click on the ball does: "intro" (step 0: the opening), "verder" (back to the current step), or "" (nothing). */
+    static String klik(ServerPlayer p, BlockPos anker) {
+        if (mag(p)) {
+            opening(p, anker);
+            return "intro";
+        }
+        if (E2Hervat.kanVerder(p)) {
+            // (in the story already: never the intro again, never a step back; fix round 1, playtest 1 item 11)
+            E2Hervat.verder(p);
+            return "verder";
+        }
+        return "";
+    }
+
+    /** Step 0: the two scenes, then {@link #geopend}. */
+    private static void opening(ServerPlayer p, BlockPos anker) {
         E2H1Lucht.LIJN.begin(p);
         p.sendOverlayMessage(Component.translatable(E2H1Lucht.P + "kaasbol.klik").withStyle(ChatFormatting.YELLOW));
-        BlockPos anker = bol.blockPosition();
         // the music of the opening film runs under both scenes (CONTRACT_E2_B 5: moment right before, stop in daarna)
         E2Audio.moment(p, "intro");
         if (!Cutscenes.speel(p, H1Scenes.KAASBOL, anker, Rotation.NONE, s -> {
@@ -160,7 +191,9 @@ public final class Kaasbol {
 
     /** The ball is open (both scenes seen): step 1, the ball goes, Appa-guh is yours, and he flies you to the temple. */
     static void geopend(ServerPlayer p) {
-        E2H1Lucht.LIJN.verder(p, E2H1Lucht.KAASBOL);
+        if (!E2H1Lucht.LIJN.verder(p, E2H1Lucht.KAASBOL)) {
+            return;                       // (only ever from step 0: a late second call must not fly a player back to the temple)
+        }
         weg(p);
         Appa.geef(p);
         vlieg(p);

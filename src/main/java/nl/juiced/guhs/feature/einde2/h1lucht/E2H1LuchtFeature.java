@@ -107,6 +107,7 @@ public final class E2H1LuchtFeature {
         NpcRollen.zet(GuhNpcEntity.Kind.ROKU_GUH, s + "roku_beeld", new Tempel.GeestRol("roku"));
         NpcRollen.zet(GuhNpcEntity.Kind.KYOSHI_GUH, s + "kyoshi_beeld", new Tempel.GeestRol("kyoshi"));
         H1Krachten.registreer();
+        H1Hints.registreer();   // fix round 1 (fix-kern): the kaasbol's way back, the step hints, the airbending lesson
         Schijn.registreer(Ontsnapping::vul);
         KledingBronnen.bron(GuhClothes.GUHVATAR_LUCHTNOMADE, KLEDINGBRON);
         Speelgoed.registreer(LuchtscooterBlock.SOORT);
