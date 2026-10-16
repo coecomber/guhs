@@ -175,6 +175,7 @@ public class DiscoDynamoBlockEntity extends BronBlockEntity {
         int nu = 0;
         if (liedje().isPresent()) {
             nu = groep.kijk(level, worldPosition, zone(), zone(0), plekken(), getBlockState().getValue(BronBlock.FACING).toYRot());
+            nu = nl.juiced.guhs.feature.einde2.trap5.KoorDisco.dansers(groep.bezig(), nu); // a Koorguh sings along: counts twice (einde2 trap5)
             for (GuhEntity guh : groep.bezig()) {
                 if (guh.getRandom().nextInt(3) == 0) {
                     level.sendParticles(ParticleTypes.NOTE, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 0,
