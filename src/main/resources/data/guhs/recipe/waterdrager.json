@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SBS",
+    "KXK",
+    "SSS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "K": "guhs:kristalkaas",
+    "S": "guhs:doosschil",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "id": "guhs:waterdrager"
+  }
+}

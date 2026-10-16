@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "KXK",
+    "SFS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "K": "guhs:kristalkaas",
+    "S": "guhs:doosschil",
+    "F": "guhs:flitskruimel",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:bestelbalie"
+  }
+}

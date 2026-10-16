@@ -1,0 +1,8 @@
+{
+  "parent": "guhs:block/guh_wheel_ring",
+  "textures": {
+    "particle": "guhs:block/enderguhrad_ring",
+    "coral": "guhs:block/enderguhrad_ring",
+    "stand": "guhs:block/enderguhrad_stand"
+  }
+}

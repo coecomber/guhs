@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/einde2_trap5_machines_halverwege",
+  "display": {
+    "icon": {
+      "id": "guhs:einde2_trap5_machines_diploma"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_trap5_machines_klaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_trap5_machines_klaar.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

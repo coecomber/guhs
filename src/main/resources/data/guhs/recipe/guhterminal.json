@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "KXK",
+    "SFS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "K": "guhs:kristalkaas",
+    "S": "guhs:doosschil",
+    "F": "guhs:flitskruimel",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "guhs:guhterminal"
+  }
+}

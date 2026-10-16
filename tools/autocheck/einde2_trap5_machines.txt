@@ -1,0 +1,34 @@
+# einde2 trap5_machines: the Werktuigguh's workshop (the door scene, the six practice setups) and the comet shard.
+# Run (dev run, a world where the Zuidelijke Luchttempel is generated):
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_trap5_machines.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section the door scene
+/guhs einde2 trap5 ga deur
+wait 200
+shot trap5_deur_scene_begin
+wait 300
+shot trap5_deur_scene_werktuigguh
+
+section the workshop and the practice setups
+/guhs einde2 trap5 ga praat
+/guhs einde2 trap5 richt
+wait 60
+waitrender 200
+shot trap5_werkplaats
+look 90 10
+wait 40
+shot trap5_oefenopstellingen
+
+section the comet shard (only for this player)
+/guhs einde2 trap5 ga komeet
+wait 60
+waitrender 200
+shot trap5_komeetscherf
+
+section the state
+/guhs einde2 trap5 stand

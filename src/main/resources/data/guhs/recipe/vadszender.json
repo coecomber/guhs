@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " K ",
+    "SXS",
+    "SFS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "K": "guhs:kristalkaas",
+    "S": "guhs:doosschil",
+    "F": "guhs:flitskruimel"
+  },
+  "result": {
+    "id": "guhs:vadszender"
+  }
+}

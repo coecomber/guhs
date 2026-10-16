@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CKC",
+    "KWK",
+    "SXS"
+  ],
+  "key": {
+    "X": "guhs:einde2_trap5_machines_bouwplan",
+    "K": "guhs:kristalkaas",
+    "S": "guhs:doosschil",
+    "C": "guhs:gepofte_knabbelkoorvrucht",
+    "W": "guhs:guh_wheel"
+  },
+  "result": {
+    "id": "guhs:enderguhrad"
+  }
+}
