@@ -16,38 +16,51 @@ LIJN_UITLEG = ("Het Aarderijk: een stad met drie ringen muren, een strenge loket
                "naar jasmijn ruikt... en een geheim dat niemand hardop zegt. Leer aardesturen, vind Appa-guh terug en overleef de "
                "val van Ba Sing Guh.")
 STAPPEN = [
-    ("Aankomst in Ba Sing Guh", "Land met Appa-guh op de landingslob voor de grote buitenmuur van Ba Sing Guh.",
-     "De landingslob aan de westkant van Ba Sing Guh"),
-    ("Het paspoortloket", "Niemand komt Ba Sing Guh binnen zonder stempel. Praat met de strenge loketguh bij de buitenpoort.",
-     "Het loket in het poortgebouw van de buitenmuur"),
-    ("De Aardrommel", "Iedereen in de onderring praat over de Aardrommel. Ga naar de arena in het zuidwesten van de onderring.",
-     "De arena van de Aardrommel, onderring zuidwest"),
-    ("Zien met je voeten", "De Blinde Bandiet wil je iets leren. Praat met Toph-guh in de arena.",
+    # (fix2-h3: every nu text says WHAT and WHERE, with a direction and a landmark you can see)
+    ("Aankomst in Ba Sing Guh", "Vlieg met Appa-guh naar Ba Sing Guh en land op de landingslob: het grasveld aan de westkant, voor de grote "
+                                "buitenmuur.", "De landingslob, het grasveld voor de westpoort van Ba Sing Guh"),
+    ("Het paspoortloket", "Niemand komt Ba Sing Guh binnen zonder stempel. Loop van de landingslob naar de grote poort in de buitenmuur "
+                          "(oost). In de doorgang, links, zit de strenge loketguh achter zijn raampje: praat met hem.",
+     "Het loket in de doorgang van de buitenpoort"),
+    ("De Aardrommel", "Iedereen in de stad praat over de Aardrommel. Ga door de poort de stad in en loop naar het zuidoosten, naar de "
+                      "grote arena met de tribunes en de bel. Loop de arena in.", "De arena van de Aardrommel, zuidoost van de poort"),
+    ("Zien met je voeten", "De Blinde Bandiet wil je iets leren. Ga de tribune af en praat met Toph-guh, beneden in de ring van de arena.",
      "Toph-guh, in de ring van de Aardrommel"),
-    ("De monorail", "Neem de monorail naar de middenring. Je stapt in op het perron boven op de buitenmuur; spring om de wagen met "
-                    "aardesturen te duwen.", "Het perron van de monorail op de buitenmuur"),
-    ("De Jasmijn Draak", "Er zou in de middenring een theehuis zijn waar de thee naar de hemel smaakt. Zoek De Jasmijn Draak.",
-     "De Jasmijn Draak, middenring west"),
-    ("Thee met Oom Miroh", "Oom Miroh leert je thee zetten. Klik op de grote ketel in de keuken, en nog eens als het meterje in het "
-                           "groen staat.", "De keuken van De Jasmijn Draak"),
-    ("Een spelletje Pai Sho", "Speel een potje Pai Sho met Oom Miroh: praat met hem in het theehuis.", "Oom Miroh, in De Jasmijn Draak"),
-    ("Geen knabbeltekort", "Joo Dee-guh, de gids van de stad, wil je graag rondleiden. Zij woont in het noorden van de middenring.",
+    ("De monorail", "Neem de monorail naar de middenring. Loop terug naar de buitenpoort: links ervan (noord), binnen de muur, staat de "
+                    "traptoren met het bordje 'Naar de muur en de monorail'. Boven wacht de wagen: ga erin staan en spring om hem met "
+                    "aardesturen te duwen.", "De wagen van de monorail, boven op de buitenmuur bij de poort"),
+    ("De Jasmijn Draak", "Er zou in de middenring een theehuis zijn waar de thee naar de hemel smaakt. Loop vanaf station Middenring de "
+                         "trap af en dan naar het zuiden: De Jasmijn Draak heeft een groen dak en een draak boven de deur. Ga naar binnen.",
+     "De Jasmijn Draak, zuid van station Middenring"),
+    ("Thee met Oom Miroh", "Oom Miroh leert je thee zetten. Ga achter de toonbank de keuken in (achterin, zuidkant) en rechtsklik op de "
+                           "grote ketel op het fornuis. Klik nog eens telkens als het meterje in het groen staat.",
+     "De keuken van De Jasmijn Draak, achter de toonbank"),
+    ("Een spelletje Pai Sho", "Speel een potje Pai Sho met Oom Miroh: praat met hem, achter de toonbank van het theehuis.",
+     "Oom Miroh, in De Jasmijn Draak"),
+    ("Geen knabbeltekort", "Joo Dee-guh, de gids van de stad, wil je graag rondleiden. Ze staat voor haar huis in het noorden van de "
+                           "middenring (een huis dat links en rechts precies gelijk is). Praat met haar.",
      "Het huis van Joo Dee-guh, middenring noord"),
-    ("Terug naar het kamp", "Tijd om Appa-guh en Momo-guh op te zoeken. Ga terug naar jullie kamp op de landingslob.",
-     "Het kamp op de landingslob"),
-    ("De Aardekoning", "Appa is weg! Misschien weet de Aardekoning-guh meer. Ga naar de troonzaal in de bovenring.",
-     "De troonzaal van het paleis, bovenring"),
-    ("Meer Laogai", "Bosco rook iets bij Meer Laogai. Sluip de basis onder het meer binnen, via de botenschuur. Gezien = terug naar de hal, "
-                    "dus: bukken, wachten, gaan.", "De botenschuur aan Meer Laogai, onderring oost"),
-    ("De heuvel met de boom", "Oom Miroh is niet in zijn theehuis. Zuka weet waar hij is... of zoek de heuvel met de kersenboom op de "
-                              "landingslob.", "De heuvel met de boom op de landingslob"),
-    ("De kristalcatacomben", "De Dai Li hebben Katara-guh meegenomen, diep onder het paleis. Ga met Oom Miroh door de oude poort in de "
-                             "paleistuin naar beneden.", "De oude poort in de paleistuin, bovenring"),
-    ("Een nieuw teamlid", "Ba Sing Guh is gevallen. Bij het kamp wacht iemand op je die met jullie mee wil.", "Het kamp op de landingslob"),
+    ("Terug naar het kamp", "Tijd om Appa-guh en Momo-guh op te zoeken. Ga door de buitenpoort naar buiten, naar jullie kamp aan de "
+                            "zuidkant van de landingslob, waar Appa landde.", "Het kamp op de landingslob"),
+    ("De Aardekoning", "Appa is weg! Misschien weet de Aardekoning-guh meer. Hij zit in de troonzaal van het grote gouden paleis, midden "
+                       "in de stad (de bovenring). Praat met hem.", "De troonzaal van het gouden paleis, midden in de stad"),
+    ("Meer Laogai", "Bosco rook iets bij Meer Laogai, het meer in het oosten van de stad. Aan de noordkant ervan staat een houten "
+                    "botenschuur met een groen dak ('Botenverhuur GESLOTEN'): ga erin en de trap af naar de basis. Daar: bukken, wachten "
+                    "tot de wachters wegkijken, en gaan. Gezien = terug naar het begin, verder niets.",
+     "De botenschuur aan de noordkant van Meer Laogai, oost in de stad"),
+    ("De heuvel met de boom", "Oom Miroh is niet in zijn theehuis. Zuka weet waar hij is: op de heuvel met de kersenboom op de "
+                              "landingslob, buiten de buitenmuur (noord van waar Appa landt). Appa is terug: fluit hem, of loop.",
+     "De heuvel met de kersenboom op de landingslob"),
+    ("De kristalcatacomben", "De Dai Li hebben Katara-guh meegenomen, diep onder het paleis. Oom Miroh gaat met je mee. Ga naar de oude "
+                             "poort in de paleistuin, aan de oostkant van het gouden paleis (een mossig poortgebouw, 'Verboden toegang'), "
+                             "en volg de gang omlaag naar de kristalkamer.", "De oude poort in de paleistuin, oostkant van het paleis"),
+    ("Een nieuw teamlid", "Ba Sing Guh is gevallen. Bij het kamp op de landingslob zit iemand op je te wachten, met haar voeten in het gras: "
+                          "praat met Toph-guh.", "Het kamp op de landingslob"),
 ]
 KLAAR = ("Aardesturen geleerd, Appa-guh terug, Toph-guh in het team. Op naar de Vuurnatie!", "Op Appa's rug, op weg naar de Vuurnatie")
-EXTRA = {"3_baan": ("Doe je ogen dicht: ga in de oefenbaan naast de arena staan. Bukken is stampen. Vind de zes aardemunten in de vloer.",
-                    "De ommuurde oefenbaan naast de arena")}
+EXTRA = {"3_baan": ("Ogen dicht: Toph's oefenbaan is het ommuurde veld direct oost van de arena (ingang aan de westkant, bij het bordje "
+                    "'Blinddoekbaan'). Ga erin: bukken is stampen. Loop naar het felste licht en sta op alle zes aardemunten.",
+                    "De ommuurde oefenbaan direct oost van de arena")}
 KORT = {"0": "Land bij Ba Sing Guh", "1": "Praat met de loketguh", "2": "Ga naar de Aardrommel", "3": "Praat met Toph-guh",
         "3_baan": "Vind de zes aardemunten, blind", "4": "Duw de monorail naar de middenring", "5": "Zoek De Jasmijn Draak",
         "6": "Zet thee bij de grote ketel", "7": "Speel Pai Sho met Oom Miroh", "8": "Praat met Joo Dee-guh", "9": "Terug naar het kamp",
@@ -337,7 +350,7 @@ QUEST = {
     "klant.2": "Ze zeggen dat de oude baas ooit een hele beroemde generaal was. Nee joh. Moet je hem zien met die theepot.",
     "klant.3": "Psst. Er is geen knabbeltekort. Zeggen ze.",
     # the sneak through the base
-    "sluip.begin": "De basis onder Meer Laogai. Overal Dai Li-Mika's die heen en weer kijken. Bukken maakt je stil; achter hun rug langs is veilig.",
+    "sluip.begin": "De basis onder Meer Laogai. Overal Dai Li-Mika's die heen en weer kijken: de stofbundel voor hun neus laat zien waar. Bukken maakt je stil (dan zien ze alleen het oranje stukje); achter hun rug langs is veilig. Appa's kamer is aan het eind van de gang met de cellen, naar het zuiden.",
     "sluip.halt.0": "Halt! Terug naar de hal, burger.",
     "sluip.halt.1": "Wie is daar? ...Terug jij. Hup.",
     "sluip.halt.2": "Hier is niets te zien. Echt niet. Terug.",
@@ -358,7 +371,7 @@ GUI = {
     "verteller": "Verteller",
     "tril.gevonden": "Aardemunt gevonden! %s van de %s",
     "monorail.uitleg": "Spring (spatie) om de wagen met aardesturen te duwen. Bukken = uitstappen.",
-    "monorail.stand": "Monorail: %s%% van de rit   %s",
+    "monorail.stand": "Monorail: %s%% van de rit   %s   (spatie = duwen)",
     "monorail.aan": "Station! Je hebt %s keer geduwd. Vahoeg!",
     "thee.meter.0": "Water:",
     "thee.meter.1": "Blaadjes:",
@@ -400,4 +413,83 @@ BLOKKEN = {
     "item.guhs.blinde_bandiet_riem": "Riem van De Blinde Bandiet",
     "gui.guhs.kledingbron.einde2_h3_aarde": "Hoofdstuk 3 van de Guhvatar: Ba Sing Guh",
     "gui.guhs.verhalen.guhvatar_aarde.beloning.koolkraam": "De kraam van de koolman (als je hem drie keer hebt zien breken)",
+}
+
+
+# =====================================================================================================================
+# fix round 1 stage 2 (fix2-h3, playtest 1: "ietsjes meer hints, een duidelijkere aansluiting"): the step hints (H3Hints)
+# HINTS gui.guhs.einde2_h3_aarde.hint.<naam>: the chat line after the look scene (%s = the direction, "in het oosten, een
+#   eindje verder"); it says WHERE, the step's own nu text says WHAT. Step 3 (Toph) has no line of its own: its nu text
+#   (and 3_baan) is shown, so it follows the lesson.
+# KIJK scene.guhs.einde2_h3_aarde_kijk_<naam>: the ~3 s look scenes (titel, the one run-on caption), the list of H3Hints.KIJK.
+# TEAM gui.guhs.einde2_h3_aarde.team.<naam>: (wie, line) a team member says why we go there next, when the step starts;
+#   wie = E2Team.Lid id, only said when that member is in the player's team.
+# TITELS gui.guhs.einde2_h3_aarde.*: the start and finish titles of the games, the way through the base and the catacombs.
+# =====================================================================================================================
+HINTS = {
+    "loket": "De strenge loketguh zit %s, in de doorgang van de grote poort, links achter zijn raampje. Praat met hem.",
+    "aardrommel": "De arena van de Aardrommel ligt %s: door de poort de stad in, naar de arena met de tribunes en de bel. Loop er gewoon in.",
+    "baan": "Toph's oefenbaan ligt %s: het ommuurde veld naast de arena, ingang bij het bordje 'Blinddoekbaan'. Ga erin en zoek met je "
+            "voeten de zes aardemunten.",
+    "monorail": "De wagen van de monorail wacht %s, boven op de buitenmuur. De traptoren omhoog staat binnen de muur, links (noord) van de "
+                "poort: bordje 'Naar de muur en de monorail'.",
+    "theehuis": "De Jasmijn Draak staat %s: de trap van het station af, naar het groene dak met de draak boven de deur. Loop naar binnen.",
+    "thee": "De grote ketel staat %s, achterin de keuken achter de toonbank. Rechtsklik erop om te beginnen.",
+    "pai_sho": "Oom Miroh staat %s, achter de toonbank. Praat met hem voor een potje Pai Sho.",
+    "joo_dee": "Joo Dee-guh staat %s, voor haar huis in het noorden van de middenring. Praat met haar.",
+    "kamp": "Het kamp ligt %s: door de buitenpoort naar buiten, op de landingslob, naast waar Appa landde.",
+    "koning": "De Aardekoning-guh zit %s, in de troonzaal van het grote gouden paleis midden in de stad. Praat met hem.",
+    "laogai": "De botenschuur staat %s, aan de noordkant van Meer Laogai: houten schuur, groen dak, bordje 'Botenverhuur GESLOTEN'. "
+              "Binnen gaat de trap omlaag naar de basis.",
+    "lu_ten": "De heuvel met de kersenboom ligt %s, op de landingslob buiten de buitenmuur. Loop de heuvel op.",
+    "val": "De oude poort staat %s, in de paleistuin aan de oostkant van het gouden paleis: een mossig poortgebouw met het bordje "
+           "'Verboden toegang'. Daarachter gaat de trap omlaag.",
+    "toph": "Toph-guh zit %s, bij het kamp in het gras. Praat met haar.",
+}
+KIJK = {
+    "loket": ("Het paspoortloket", "Het paspoortloket. Zonder stempel kom je er niet in."),
+    "aardrommel": ("De Aardrommel", "De arena van de Aardrommel. Hoor je dat gejuich?"),
+    "baan": ("De blinddoekbaan", "Toph's oefenbaan. Ogen dicht, voeten open."),
+    "monorail": ("De monorail", "De wagen van de monorail. Stap in, en duw!"),
+    "theehuis": ("De Jasmijn Draak", "De Jasmijn Draak. Het ruikt hier naar jasmijn."),
+    "joo_dee": ("Joo Dee-guh", "Joo Dee-guh, de gids van de stad. Ze glimlacht al."),
+    "kamp": ("Het kamp", "Jullie kamp op de landingslob. Appa en Momo wachten daar."),
+    "koning": ("Het paleis", "Het paleis van de Aardekoning. Ergens daarbinnen zit hij."),
+    "laogai": ("De botenschuur", "De botenschuur aan Meer Laogai. 'Er is hier geen basis.' Vast niet."),
+    "lu_ten": ("De heuvel met de boom", "De heuvel met de kersenboom. Daar zit iemand."),
+    "val": ("De oude poort", "De oude poort in de paleistuin. Daaronder: de catacomben."),
+    "toph": ("Bij het kamp", "Toph-guh. Ze zat al op je te wachten."),
+}
+TEAM = {
+    "aardrommel": ("sokka", "Hoor je dat gejuich? Iedereen heeft het over de Aardrommel. Kom, even kijken!"),
+    "monorail": ("sokka", "Iemand zei dat er in de middenring een theehuis is waar de thee naar de hemel smaakt. En die monorail gaat "
+                          "erheen! Duwen met aardesturen... dat kun jij nu, toch?"),
+    "theehuis": ("aang", "Ruik je dat? Jasmijn! Dat moet dat theehuis zijn, daar beneden."),
+    "pai_sho": ("aang", "Oom Miroh heeft een spelbord klaarstaan. Pai Sho! Vraag maar of hij een potje wil spelen."),
+    "joo_dee": ("katara", "Die gids, Joo Dee-guh, zoekt ons al de hele dag. Laten we met haar praten: misschien weet zij hoe we de "
+                          "Aardekoning kunnen spreken."),
+    "kamp": ("sokka", "Ik heb hier geen goed gevoel over. Die twee Dai Li-Mika's lopen ons de hele tijd achterna. Kom, terug naar Appa "
+                      "en Momo."),
+    "koning": ("sokka", "De Aardekoning moet dit weten. Als iemand ons kan helpen Appa te vinden, is hij het. Naar het paleis!"),
+    "laogai": ("katara", "Bosco keek naar het meer. Meer Laogai! Daar is Appa, ik weet het zeker. En dat bordje bij de botenschuur liegt."),
+    "lu_ten": ("aang", "Appa is terug! ...Maar waar is Oom Miroh eigenlijk? Zijn theehuis is dicht. Zuka weet het vast."),
+    "val": ("sokka", "Katara-guh is weg! Dai Li-Mika's namen haar mee, het paleis in en naar beneden. Zuka zegt: in de oude catacomben "
+                     "onder het paleis. Snel!"),
+}
+TITELS = {
+    "baan.titel": "Zien met je voeten",
+    "baan.onder": "Bukken = stampen · loop naar het felste licht · %s/%s",
+    "baan.klaar": "Aardesturen geleerd!",
+    "baan.klaar_onder": "Alle zes aardemunten gevonden",
+    "monorail.titel": "De monorail",
+    "monorail.onder": "Tik op spatie = duwen · bukken = uitstappen",
+    "monorail.station": "Station!",
+    "thee.titel": "Thee zetten",
+    "thee.onder": "Klik op de ketel als het meterje in het groen staat",
+    "thee.klaar": "Perfecte thee!",
+    "thee.klaar_onder": "De theeset van Oom Miroh is van jou",
+    "sluip.titel": "Sluip naar Appa",
+    "sluip.onder": "Bukken = stil · blijf uit hun stofbundel",
+    "pad.appa": "Appa's kamer: %s. Volg de gang met de cellen.",
+    "pad.kristal": "Volg de gang en de lichtjes omlaag: de kristalkamer is %s.",
 }

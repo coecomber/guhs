@@ -74,6 +74,8 @@ public final class H3Thee {
         Spel s = SPELLEN.get(p.getUUID());
         if (s == null) {
             SPELLEN.put(p.getUUID(), new Spel(0, p.tickCount));
+            H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.thee.titel").withStyle(ChatFormatting.GREEN),
+                    Component.translatable("gui.guhs.einde2_h3_aarde.thee.onder").withStyle(ChatFormatting.YELLOW), 50);
             uitleg(p, 0);
             return;
         }
@@ -151,6 +153,8 @@ public final class H3Thee {
     /** All three right: the ting, Miroh's joy, his theeset. */
     static void gelukt(ServerPlayer p, E2H3Aarde.Stad stad) {
         E2Audio.stinger(p, "deuntje.thee_ting");
+        H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.thee.klaar").withStyle(ChatFormatting.GOLD),
+                Component.translatable("gui.guhs.einde2_h3_aarde.thee.klaar_onder").withStyle(ChatFormatting.YELLOW), 60);
         miroh(p, stad, "thee.gelukt");
         Minigames.give(p, new ItemStack(E2H3AardeFeature.THEESET_ITEM.get()));
         E2H3Aarde.LIJN.verder(p, E2H3Aarde.THEE);

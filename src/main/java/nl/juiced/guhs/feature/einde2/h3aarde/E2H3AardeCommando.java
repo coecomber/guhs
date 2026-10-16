@@ -118,6 +118,7 @@ public final class E2H3AardeCommando {
         Verteller.vergeet(p, E2H3Aarde.KAART);
         PaiShoSpel.vergeet(p);
         H3Verloop.vergeet(p);
+        H3Hints.vergeet(p);
         H3Acteurs.wegAlle(p, "");
         H3Monorail.uit(p);
         H3Blinddoek.stop(p);

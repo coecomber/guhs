@@ -159,6 +159,9 @@ public final class H3Monorail {
         }
         RITTEN.put(p.getUUID(), echt);
         p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_h3_aarde.monorail.uitleg").withStyle(ChatFormatting.GREEN));
+        H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.monorail.titel").withStyle(ChatFormatting.GREEN),
+                Component.translatable("gui.guhs.einde2_h3_aarde.monorail.onder").withStyle(ChatFormatting.YELLOW), 70);
+        p.sendSystemMessage(Component.translatable("gui.guhs.einde2_h3_aarde.monorail.uitleg").withStyle(ChatFormatting.GREEN));
         E2Audio.stinger(p, "deuntje.monorail");
         return true;
     }
@@ -277,6 +280,8 @@ public final class H3Monorail {
     /** Arrived: in the story the wink with Sjokkel plays on the platform, then the step moves on. */
     private static void aangekomen(ServerPlayer p, E2H3Aarde.Stad stad, int duwen) {
         p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_h3_aarde.monorail.aan", duwen).withStyle(ChatFormatting.GOLD));
+        H3Hints.gelukt(p, "monorail.station", Component.translatable("gui.guhs.einde2_h3_aarde.monorail.aan", duwen).withStyle(ChatFormatting.YELLOW),
+                SoundEvents.PLAYER_LEVELUP);
         if (E2H3Aarde.stap(p) == E2H3Aarde.MONORAIL) {
             E2H3Aarde.LIJN.verder(p, E2H3Aarde.MONORAIL);
             H3Knipogen.sjokkel(p, stad);

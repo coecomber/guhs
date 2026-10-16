@@ -27,7 +27,11 @@ import nl.juiced.guhs.gametest.GuhTest;
  *   <li>{@link #einde2H3AardePaiSho}: Guh Pai Sho's rules and its guh (a lotus wins, it finishes its own and stops yours,
  *       a game of two guhs always ends);</li>
  *   <li>{@link #einde2H3AardeSluipen}: what a guard of the base sees (in front near: yes; behind, far, crouching at a
- *       distance: no) and that his head only turns within its sweep.</li>
+ *       distance: no) and that his head only turns within its sweep;</li>
+ *   <li>{@link #einde2H3AardeHints} (fix2-h3): every step after the arrival has a hint whose target is a spot of the city,
+ *       outdoors with a 3 s look scene, the team lines are said by members of the team, step 3 follows Toph's lesson, the
+ *       trail of the catacombs runs from the foot of the stair into the crystal chamber, and Katara-guh is not at the
+ *       campfire while the Dai Li hold her.</li>
  * </ul>
  */
 public class E2H3AardeGameTests {
@@ -153,5 +157,65 @@ public class E2H3AardeGameTests {
         }
         helper.assertTrue(binnen, "a guard's head stays within its sweep");
         helper.succeed();
+    }
+
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2H3AardeHints(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        Plekken.Plek aankomst = Plekken.plek(E2H3Aarde.STRUCTUUR, "aankomst_speler");
+        BlockPos o = p.blockPosition().subtract(aankomst.pos());
+        var oud = E2H3Aarde.oorsprong;
+        E2H3Aarde.oorsprong = level -> level == helper.getLevel() ? o : null;
+        try {
+            E2H3Aarde.Stad stad = E2H3Aarde.Stad.van(helper.getLevel());
+            String lijn = E2H3Aarde.LIJN.id();
+            for (int stap = E2H3Aarde.LOKET; stap < E2H3Aarde.STAPPEN; stap++) {
+                nl.juiced.guhs.feature.einde2.verhaal.StapHint.Hint h = nl.juiced.guhs.feature.einde2.verhaal.StapHint.hint(lijn, stap);
+                helper.assertTrue(h != null && h.bakenAan(), "step " + stap + " has a hint with a light column");
+                BlockPos doel = h.doel().waar().apply(p, helper.getLevel()), terug = h.terugDoel().waar().apply(p, helper.getLevel());
+                helper.assertTrue(doel != null && terug != null && stad.doos(0).contains(Vec3.atCenterOf(doel)), "step " + stap + ": its target and resume spot lie in the city");
+                boolean binnen = stap == E2H3Aarde.THEE || stap == E2H3Aarde.PAI_SHO;
+                var kijk = h.kijk();
+                helper.assertTrue(binnen == (kijk == null) && (kijk == null || kijk.duur() == nl.juiced.guhs.feature.einde2.verhaal.StapHint.KIJK_DUUR
+                        && kijk.pauzes().length == 0), "step " + stap + ": a 3 s look scene outdoors, none in the tea house");
+                String team = H3Hints.teamLijn(stap);
+                helper.assertTrue(team == null ? h.bijStartAan() : !h.bijStartAan(), "step " + stap + ": the hint comes once (by itself, or after the team line)");
+                helper.assertTrue(team == null || h.tekst() != null, "step " + stap + ": a line of its own");
+            }
+            // step 3 follows the lesson: Toph-guh, then the opening of her course (west of its zone)
+            E2VerhaalDev.zetTot(p, E2Verhaal.AARDE, E2H3Aarde.BLINDDOEK);
+            var drie = nl.juiced.guhs.feature.einde2.verhaal.StapHint.hint(lijn, E2H3Aarde.BLINDDOEK).doel();
+            BlockPos toph = drie.waar().apply(p, helper.getLevel());
+            E2H3Aarde.LIJN.vlag(p, E2H3Aarde.V_BAAN, true);
+            BlockPos baan = drie.waar().apply(p, helper.getLevel());
+            var zone = stad.zone("blinddoek_baan", 0);
+            helper.assertTrue(toph != null && toph.equals(stad.pos("toph")) && baan != null && baan.getX() == (int) zone.minX - 1
+                    && baan.getZ() > zone.minZ && baan.getZ() < zone.maxZ, "step 3: Toph, then her course");
+            // the team lines: members of the team, said after chapter 2
+            for (int stap = 0; stap < E2H3Aarde.STAPPEN; stap++) {
+                String t = H3Hints.teamLijn(stap);
+                helper.assertTrue(t == null || nl.juiced.guhs.feature.einde2.reizen.E2Team.leden(p).stream().anyMatch(l -> t.startsWith(l.id() + "/")),
+                        "team line of step " + stap + " (" + t + ") is said by a member of the team after chapter 2");
+            }
+            // the trail of the catacombs: from the foot of the old gate's stair into the crystal chamber
+            int[] a = H3Hints.CATACOMBEN[0], z = H3Hints.CATACOMBEN[H3Hints.CATACOMBEN.length - 1];
+            helper.assertTrue(Plekken.plek(E2H3Aarde.STRUCTUUR, "rustpunt_4").pos().equals(new BlockPos(a[0], a[1], a[2]))
+                    && stad.zone("kristalkamer", 0).contains(Vec3.atBottomCenterOf(o.offset(z[0], z[1], z[2])).add(0, 0.5, 0)), "the trail of the catacombs");
+            // Katara-guh is not at the campfire while the Dai Li hold her
+            E2VerhaalDev.zetTot(p, E2Verhaal.AARDE, E2H3Aarde.VAL);
+            boolean weg = nl.juiced.guhs.feature.einde2.reizen.E2Team.AFWEZIG.stream()
+                    .anyMatch(f -> f.weg(p, E2H3Aarde.STRUCTUUR, nl.juiced.guhs.feature.einde2.reizen.E2Team.Lid.KATARA));
+            E2VerhaalDev.zetTot(p, E2Verhaal.AARDE, E2H3Aarde.LU_TEN);
+            boolean daar = nl.juiced.guhs.feature.einde2.reizen.E2Team.AFWEZIG.stream()
+                    .noneMatch(f -> f.weg(p, E2H3Aarde.STRUCTUUR, nl.juiced.guhs.feature.einde2.reizen.E2Team.Lid.KATARA));
+            helper.assertTrue(weg && daar, "Katara-guh: away at the fall, at the camp before it");
+            helper.succeed();
+        } finally {
+            E2H3Aarde.oorsprong = oud;
+            E2VerhaalDev.wis(p, E2Verhaal.AARDE);
+            nl.juiced.guhs.feature.einde2.verhaal.StapHint.vergeet(p.getUUID());
+            H3Hints.vergeet(p);
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        }
     }
 }
