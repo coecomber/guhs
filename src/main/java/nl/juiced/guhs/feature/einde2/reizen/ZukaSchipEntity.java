@@ -40,8 +40,8 @@ import com.geckolib.util.GeckoLibUtil;
 public class ZukaSchipEntity extends Entity implements GeoEntity {
     /** How much bigger than its model it is drawn (E2ReizenClient). */
     public static final float SCHAAL = 4f;
-    /** Blocks per tick it may move at most (Appa does 0.46, 0.6 when he hurries). */
-    public static final double MAX_VAART = 0.95;
+    /** Blocks per tick it may move at most (Appa does 0.92 on a journey, 1.2 when he hurries: einde2 fix-reizen). */
+    public static final double MAX_VAART = 1.6;
     /** Where Zuka stands: on the bow, in the ship's own frame (+z forward), blocks. */
     static final Vec3 BOEG = new Vec3(0, 2.1, 3.6);
     /** Where the fireballs leave from (the bow cannon), in the ship's own frame. */

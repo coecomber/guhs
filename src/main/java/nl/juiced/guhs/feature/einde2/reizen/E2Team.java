@@ -122,6 +122,20 @@ public final class E2Team {
         return uit;
     }
 
+    /**
+     * einde2 fix-reizen: who rides along on Appa's back now, from the story state alone: the team of {@link #leden}, and
+     * Aang-guh from the moment he rolled out of the kaasbol (chapter 1 past its step 0: he flies with you to his temple and
+     * stays with you), however the player got to that step. Katara- and Sokka-guh join when chapter 2 is done, Toph-guh
+     * after chapter 3, Zuka-guh with the flag {@code zuka_team} (all as in {@link #leden}).
+     */
+    public static List<Lid> opAppa(ServerPlayer p) {
+        List<Lid> uit = leden(p);
+        if (!uit.contains(Lid.AANG) && (E2Verhaal.stap(p, E2Verhaal.LUCHT) >= 1 || E2Verhaal.klaar(p, E2Verhaal.LUCHT))) {
+            uit.add(0, Lid.AANG);
+        }
+        return uit;
+    }
+
     /** The members of this player's team (their looks). */
     public static List<GuhNpcEntity.Kind> team(ServerPlayer p) {
         List<GuhNpcEntity.Kind> uit = new ArrayList<>();

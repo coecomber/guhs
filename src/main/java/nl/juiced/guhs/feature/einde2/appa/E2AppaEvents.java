@@ -24,6 +24,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -65,8 +67,27 @@ public final class E2AppaEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer player && player.tickCount % Momo.STAP == 0) {
-            Momo.spelerTick(player);
+        if (event.getEntity() instanceof ServerPlayer player) {
+            Appa.neerTick(player);
+            if (player.tickCount % Momo.STAP == 0) {
+                Momo.spelerTick(player);
+            }
+        }
+    }
+
+    /**
+     * einde2 fix-reizen: a rider of an Appa-guh never suffocates in a wall (the seat on his head sticks out of his box), and a
+     * player who was just set down after getting off him in the air takes no fall or wall damage ({@link Appa#zetNeer}).
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onDamage(LivingIncomingDamageEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        var bron = event.getSource();
+        boolean muur = bron.is(DamageTypes.IN_WALL), val = bron.is(DamageTypes.FALL);
+        if (muur && player.getVehicle() instanceof AppaGuhEntity || (muur || val) && Appa.zacht(player)) {
+            event.setCanceled(true);
         }
     }
 

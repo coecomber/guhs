@@ -104,7 +104,7 @@ final class Jacht {
             z.startRiding(s, true, false);
             zuka = z.getUUID();
         }
-        Appa.vlieg(p, reis.doel, false);
+        Appa.vlieg(p, reis.landing, false);
         for (ServerPlayer k : reis.kijkers(p)) {
             E2Audio.moment(k, "appa_achtervolging");
         }
@@ -251,7 +251,7 @@ final class Jacht {
     /** Over: the player steers again, the travel tune comes back, and they hear how they did. */
     private void klaar(ServerPlayer p, AppaGuhEntity appa, Reis reis) {
         if (p.getVehicle() == appa && appa.vluchtDoel() != null) {
-            Appa.vlieg(p, reis.doel, true);
+            Appa.vlieg(p, reis.landing, true);
         }
         for (ServerPlayer k : reis.kijkers(p)) {
             E2Audio.moment(k, "appa");

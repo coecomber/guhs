@@ -70,6 +70,7 @@ public final class E2Reizen {
     static void register() {
         Appa.AANGEKOMEN.add(E2Reizen::geland);
         Appa.OP_ZIJN_KOP = Fluitlijst::opZijnKop;
+        Appa.KLIK = Fluitlijst::klik;
     }
 
     // =====================================================================================================================
@@ -86,15 +87,15 @@ public final class E2Reizen {
         if (guheinde == null || p.level() != guheinde || !Plekken.bekend(guheinde, structuur)) {
             return false;
         }
-        Vec3 naar = Plekken.aankomst(guheinde, structuur);
-        if (naar == null || !Appa.heeft(p) || Appa.isWeg(p)) {
+        Appa.Landing landing = Landingen.van(guheinde, structuur, soort != Vlucht.VRIJ);
+        if (landing == null || !Appa.heeft(p) || Appa.isWeg(p)) {
             return false;
         }
         Reis oud = REIZEN.remove(p.getUUID());
         if (oud != null) {
             oud.ruimOp(p.level().getServer());
         }
-        if (!Appa.vlieg(p, naar, true)) {
+        if (!Appa.vlieg(p, landing, true)) {
             return false;
         }
         AppaGuhEntity appa = Appa.geladen(p);
@@ -108,7 +109,7 @@ public final class E2Reizen {
                 g.startRiding(appa, true, false);
             }
         }
-        Reis r = new Reis(p, structuur, soort, naar, daarna);
+        Reis r = new Reis(p, structuur, soort, landing, daarna);
         REIZEN.put(p.getUUID(), r);
         if (soort != Vlucht.VRIJ) {
             CompoundTag t = new CompoundTag();
@@ -155,12 +156,54 @@ public final class E2Reizen {
         return vlieg(p, w[0], soort, r == null ? null : r.daarna);
     }
 
-    /** Appa landed after an auto flight (Appa.AANGEKOMEN). */
+    /**
+     * Appa landed after an auto flight (Appa.AANGEKOMEN). einde2 fix-reizen: it is Appa who must be there, not the player: a
+     * cutscene of the place may hold the player up in the air while he lands on his spot (they are set down after it).
+     */
     private static void geland(ServerPlayer p) {
         Reis r = REIZEN.get(p.getUUID());
-        if (r != null && r.dichtbij(p, 16)) {
+        AppaGuhEntity appa = Appa.geladen(p);
+        if (r != null && (r.dichtbij(p, 16) || appa != null && Reis.horizontaal(appa.position(), r.doel) <= 16)) {
             r.geland = true;
         }
+    }
+
+    /**
+     * einde2 fix-reizen: the player reached this place another way (Appa took them through the void from another dimension,
+     * {@link AppaReis}): a story flight that waited for it is done now ({@code daarna} runs, once); one of before a restart
+     * is forgotten.
+     */
+    static void aangekomenZonderVlucht(ServerPlayer p, String structuur) {
+        Reis r = REIZEN.get(p.getUUID());
+        if (r != null && r.structuur.equals(structuur)) {
+            klaar(p, r);
+            return;
+        }
+        CompoundTag t = GuhQuests.saved(p).getCompoundOrEmpty(REIS_KEY);
+        if (structuur.equals(t.getStringOr("Structuur", ""))) {
+            GuhQuests.saved(p).remove(REIS_KEY);
+        }
+    }
+
+    /**
+     * einde2 fix-reizen: the place the story wants this player at now (the main building of the chapter they are in), or
+     * null (the story has not begun, it is done, or the chapter's place is not unlocked). A story flight that has not
+     * landed yet always counts first.
+     */
+    @Nullable
+    public static String verhaalDoel(ServerPlayer p) {
+        String[] w = wachtend(p);
+        if (w != null) {
+            return w[0];
+        }
+        for (String lijn : E2Verhaal.HOOFDSTUKKEN) {
+            if (E2Verhaal.klaar(p, lijn)) {
+                continue;
+            }
+            String s = E2Verhaal.structuurVan(lijn);
+            return E2Verhaal.ontgrendeld(p, s) ? s : null;
+        }
+        return null;
     }
 
     /** Lands it now: the team climbs off, the music fades, daarna runs (once), guests keep being guests in that structure. */
@@ -185,8 +228,9 @@ public final class E2Reizen {
         }
     }
 
-    /** Every server tick: the flights; every 10 ticks: the guests. */
+    /** Every server tick: the flights and Appa's trips through the void; every 10 ticks: the guests. */
     static void tick(MinecraftServer server) {
+        AppaReis.tick(server);
         for (Map.Entry<UUID, Reis> e : REIZEN.entrySet()) {
             ServerPlayer p = server.getPlayerList().getPlayer(e.getKey());
             Reis r = e.getValue();
@@ -204,6 +248,7 @@ public final class E2Reizen {
 
     /** A player left the game: their flight waits in their data, their guests are nobody's any more. */
     static void weg(ServerPlayer p) {
+        AppaReis.vergeet(p.getUUID());
         Reis r = REIZEN.remove(p.getUUID());
         if (r != null) {
             r.ruimOp(p.level().getServer());
@@ -215,6 +260,7 @@ public final class E2Reizen {
     static void leeg() {
         REIZEN.clear();
         GASTEN.clear();
+        AppaReis.leeg();
     }
 
     // =====================================================================================================================

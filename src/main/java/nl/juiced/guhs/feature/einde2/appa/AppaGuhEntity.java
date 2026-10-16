@@ -89,8 +89,19 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     public static final int KIST_VAKKEN = 27;
     /** Blocks per tick in the air (an Enderguh does 0.6, Guhvleugels far more), sprinting, and straight up or down. */
     public static final double SNELHEID = 0.46, SPRINT = 0.6, STIJGEN = 0.3;
-    /** Flying by himself: this far above the goal and above the ground under him, and from this close he comes down. */
-    private static final double KRUISHOOGTE = 10, DAALAFSTAND = 14;
+    /**
+     * einde2 fix-reizen: on a journey (a flight to a place: a story flight, a pick from his menu) he goes about twice as fast,
+     * whether he flies himself or his rider steers, and climbs faster.
+     */
+    public static final double REIS_SNELHEID = 0.92, REIS_SPRINT = 1.2, REIS_STIJGEN = 0.55;
+    /**
+     * Flying by himself: at least this far above the goal; at least {@value #MARGE} blocks above the highest ground or roof
+     * he will pass over in the next blocks ({@link #VOORUIT}); and only right above his landing spot (closer than
+     * {@value #BOVEN_PAD} blocks) does he go straight down onto it.
+     */
+    private static final double KRUISHOOGTE = 10, MARGE = 7, BOVEN_PAD = 2.5;
+    /** How far ahead (blocks along the way, and 3.5 to either side) he looks at the heightmap. */
+    private static final double[] VOORUIT = {0, 4, 8, 14, 22, 32, 44, 58};
     /** Ticks without a key before he takes over a flight the player may steer. */
     public static final int LOSLATEN = 60;
 
@@ -99,6 +110,8 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Boolean> DATA_LUCHT = SynchedEntityData.defineId(AppaGuhEntity.class, EntityDataSerializers.BOOLEAN);
     /** The entity ids of the passengers on the team seats, "12,40,7" (the client seats them by it). */
     private static final EntityDataAccessor<String> DATA_TEAM = SynchedEntityData.defineId(AppaGuhEntity.class, EntityDataSerializers.STRING);
+    /** einde2 fix-reizen: he is on a journey (a flight to a place), so his rider steers at the journey speed. */
+    private static final EntityDataAccessor<Boolean> DATA_REIS = SynchedEntityData.defineId(AppaGuhEntity.class, EntityDataSerializers.BOOLEAN);
 
     /** Seats, in his own space (x = to his left, y = up, z = forward), in blocks. */
     private static final Vec3 KOP = new Vec3(0, 2.44, 2.25);
@@ -148,18 +161,23 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     private static final class Vlucht {
         final UUID speler;
         final Vec3 doel;
+        final Appa.Landing landing;
         final boolean spelerStuurt;
         int stil;
         int klok;
         double beste = Double.MAX_VALUE;
         int vast;
 
-        Vlucht(UUID speler, Vec3 doel, boolean spelerStuurt) {
+        Vlucht(UUID speler, Appa.Landing landing, boolean spelerStuurt) {
             this.speler = speler;
-            this.doel = doel;
+            this.doel = landing.appa();
+            this.landing = landing;
             this.spelerStuurt = spelerStuurt;
         }
     }
+
+    /** Server: a rider's box hit something on the last move (he climbs over it, as over a wall in his own way). */
+    private boolean ruiterBotste;
 
     public AppaGuhEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -178,6 +196,7 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         builder.define(DATA_ZELF, false);
         builder.define(DATA_LUCHT, false);
         builder.define(DATA_TEAM, "");
+        builder.define(DATA_REIS, false);
     }
 
     @Override
@@ -447,6 +466,11 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         }
         if (isLucht() && passenger instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 0, false, false));
+            if (passenger instanceof ServerPlayer sp && !uitstappen) {
+                // einde2 fix-reizen: off him in the air (a cutscene took them, a teleport): as soon as they are free again
+                // and still hanging there, they are put down on solid ground, never in a wall (Appa#zetNeer)
+                Appa.zetNeer(sp, veiligeGrondOnder(sp));
+            }
         }
         if (isTeam(passenger)) {
             schrijfTeam(passenger.getId(), false);
@@ -466,7 +490,21 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
                 }
             }
         }
-        return position().add(kanten[0].yRot(-getYRot() * Mth.DEG_TO_RAD));     // (in the air: beside him, they float down)
+        // (in the air: beside him, they float down; einde2 fix-reizen: never into a wall)
+        for (Vec3 kant : kanten) {
+            Vec3 at = position().add(kant.yRot(-getYRot() * Mth.DEG_TO_RAD));
+            if (level().noCollision(passenger, passenger.getDimensions(passenger.getPose()).makeBoundingBox(at))) {
+                return at;
+            }
+        }
+        Vec3 vrij = Appa.vrijePlek(level(), passenger.getType(), position(), 6, false);
+        return vrij != null ? vrij : position().add(0, getBbHeight(), 0);
+    }
+
+    /** Server: where a rider who got off up here lands safely: the ground under them, else the ground he last stood on. */
+    private Vec3 veiligeGrondOnder(ServerPlayer p) {
+        Vec3 grond = Appa.grondOnder(level(), p.getType(), p.position());
+        return grond != null ? grond : laatsteGrond != null ? laatsteGrond : p.position();
     }
 
     @Nullable
@@ -538,26 +576,58 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         Vec3 look = rider.getLookAngle();
         Vec3 links = new Vec3(look.z, 0, -look.x);
         links = links.lengthSqr() < 1e-6 ? Vec3.ZERO : links.normalize();
-        double speed = rider.isSprinting() ? SPRINT : SNELHEID;
+        boolean reis = isReis();
+        double speed = reis ? rider.isSprinting() ? REIS_SPRINT : REIS_SNELHEID : rider.isSprinting() ? SPRINT : SNELHEID;
+        double stijgen = reis ? REIS_STIJGEN : STIJGEN;
         Vec3 want = look.scale(input.z * speed).add(links.scale(input.x * speed));
         if (op) {
-            want = want.add(0, STIJGEN, 0);
+            want = want.add(0, stijgen, 0);
         }
         if (neer) {
-            want = want.add(0, -STIJGEN, 0);
+            want = want.add(0, -stijgen, 0);
         }
         vlieg(getDeltaMovement().scale(0.86).add(want.scale(0.14)));
     }
 
-    /** One tick of flight with this motion (he never sinks out of the world). */
+    /**
+     * One tick of flight with this motion (he never sinks out of the world). einde2 fix-reizen: he never carries a rider
+     * into a wall or a roof either. His own box does not cover the seat on his head, so a move that would push a player's
+     * box from free space into blocks is taken back (only its climb or sink is tried); a rider already stuck may move out.
+     */
     private void vlieg(Vec3 motion) {
         if (getY() + motion.y < level().getMinY() + 2 && motion.y < 0) {
             motion = new Vec3(motion.x, 0, motion.z);
         }
+        Vec3 van = position();
         setDeltaMovement(motion);
         move(MoverType.SELF, motion);
+        if (ruiterRaakt(position().subtract(van))) {
+            setPos(van);
+            move(MoverType.SELF, new Vec3(0, motion.y, 0));
+            if (ruiterRaakt(position().subtract(van))) {
+                setPos(van);
+            }
+            setDeltaMovement(new Vec3(0, getDeltaMovement().y * 0.5, 0));
+            ruiterBotste = true;
+        }
         calculateEntityAnimation(true);
         resetFallDistance();
+    }
+
+    /** Would this shift of him push a rider (a player) out of free space into blocks? */
+    private boolean ruiterRaakt(Vec3 verschuiving) {
+        if (verschuiving.lengthSqr() < 1.0e-8) {
+            return false;
+        }
+        for (Entity e : getPassengers()) {
+            if (e instanceof Player speler) {
+                var doos = speler.getBoundingBox();
+                if (level().noCollision(speler, doos) && !level().noCollision(speler, doos.move(verschuiving))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -609,9 +679,21 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
      * points the way until the player lets go for {@value #LOSLATEN} ticks (and hands the reins back when they steer again);
      * the last few blocks he always does himself. Replaces a flight that was going on.
      */
-    void vliegNaar(ServerPlayer speler, Vec3 doel, boolean spelerStuurt) {
-        vlucht = new Vlucht(speler.getUUID(), doel, spelerStuurt);
+    void vliegNaar(ServerPlayer speler, Appa.Landing landing, boolean spelerStuurt) {
+        vlucht = new Vlucht(speler.getUUID(), landing, spelerStuurt);
         entityData.set(DATA_ZELF, !spelerStuurt);
+        entityData.set(DATA_REIS, true);
+    }
+
+    /** On a journey (a flight to a place) right now? Synced: his rider steers at the journey speed. */
+    public boolean isReis() {
+        return entityData.get(DATA_REIS);
+    }
+
+    /** Server: the landing of the flight he is on, or null. */
+    @Nullable
+    public Appa.Landing vluchtLanding() {
+        return vlucht == null ? null : vlucht.landing;
     }
 
     /** Server: the goal of the flight he is on, or null. */
@@ -624,6 +706,7 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
     void stopVlucht() {
         vlucht = null;
         entityData.set(DATA_ZELF, false);
+        entityData.set(DATA_REIS, false);
     }
 
     private void vluchtTick() {
@@ -636,6 +719,14 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         }
         ServerPlayer p = level().getServer() == null ? null : level().getServer().getPlayerList().getPlayer(v.speler);
         if (p == null || p.getVehicle() != this) {
+            if (p != null && v.landing.gebied() != null && v.landing.gebied().contains(position())) {
+                // einde2 fix-reizen: taken off him on the last stretch (the arrival scene of the place began): he lands on
+                // his spot of the landing place at once, and his rider is set down beside him once the scene lets them go
+                zetOpLanding(v.landing);
+                Appa.zetNeer(p, v.landing.spelerOf(this, p));
+                land();
+                return;
+            }
             stopVlucht();                          // nobody to fly for any more
             return;
         }
@@ -643,7 +734,7 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         double dx = v.doel.x - getX(), dz = v.doel.z - getZ();
         double ver = Math.sqrt(dx * dx + dz * dz);
         boolean zelf = true;
-        if (v.spelerStuurt && !(ver < 6 && Math.abs(v.doel.y - getY()) < 10)) {
+        if (v.spelerStuurt && ver >= 12) {         // (the last blocks and the landing are always his)
             Input in = p.getLastClientInput();
             if (in.forward() || in.backward() || in.left() || in.right() || in.jump() || in.shift()) {
                 v.stil = 0;
@@ -688,66 +779,117 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
         return new String[]{"↑", "↗", "→", "↘", "↓", "↙", "←", "↖"}[k];
     }
 
-    /** One tick of his own flight: up to cruising height, towards the goal, down onto it. */
+    /**
+     * One tick of his own flight (einde2 fix-reizen): at journey speed and at a safe height over everything on the way
+     * (the heightmap ahead and to both sides, {@link #VOORUIT}), slowing down on the last stretch, then straight down onto
+     * his landing spot once he is right above it. Where the chunks ahead are not there yet he slows down, and he waits in
+     * the air while the very next ones are missing, so he never flies into the unknown.
+     */
     private void vliegZelf() {
         Vlucht v = vlucht;
         double dx = v.doel.x - getX(), dz = v.doel.z - getZ();
         double ver = Math.sqrt(dx * dx + dz * dz);
         double dy = v.doel.y - getY();
-        if (ver < 0.7 && (onGround() || Math.abs(dy) < 0.35)) {
+        if (ver < 1.0 && (onGround() || Math.abs(dy) < 0.35)) {
             land();
             return;
         }
-        double hoogte;
-        double tempo = SNELHEID;
-        if (ver > DAALAFSTAND) {
-            hoogte = Math.max(v.doel.y + KRUISHOOGTE, grond() + KRUISHOOGTE * 0.6);
+        Vec3 want;
+        float yawDoel;
+        if (ver > BOVEN_PAD) {
+            double[] h = veiligeHoogte(dx / ver, dz / ver, ver);
+            double hoogte = Math.min(level().getMaxY() - 6, Math.max(v.doel.y + KRUISHOOGTE, h[0] + MARGE));
+            double tempo = Math.min(REIS_SNELHEID, 0.08 + ver * 0.045);     // (full speed until ~18 blocks out)
+            if (h[1] > 1) {
+                tempo = 0;                                                  // (the chunks right ahead are not there yet)
+            } else if (h[1] > 0) {
+                tempo = Math.min(tempo, SNELHEID * 0.6);
+            }
+            double klim = hoogte - getY();
+            double vy = Mth.clamp(klim * 0.12, -REIS_STIJGEN, REIS_STIJGEN);
+            if (klim > 3) {
+                tempo *= 0.3;                                               // (well below the safe height: mostly up first)
+            }
+            want = new Vec3(dx / ver * tempo, vy, dz / ver * tempo);
+            yawDoel = (float) Math.toDegrees(Math.atan2(-dx, dz));
         } else {
-            hoogte = v.doel.y + Math.max(0, ver - 1.5) * 0.7;        // the glide down
-            tempo = Math.min(SNELHEID, 0.1 + ver * 0.05);
+            // right above the landing spot: centre on it and go straight down (the landing spots are free up to the sky)
+            want = new Vec3(dx * 0.15, Mth.clamp(dy * 0.1, -0.45, 0.2), dz * 0.15);
+            yawDoel = Float.isNaN(v.landing.yaw()) ? getYRot() : v.landing.yaw();
         }
-        double vy = Mth.clamp((hoogte - getY()) * 0.12, -STIJGEN, STIJGEN);
-        // still far below cruising height: mostly up first (out of a courtyard, over a wall)
-        double vooruit = ver > DAALAFSTAND && hoogte - getY() > 4 ? tempo * 0.35 : tempo;
-        Vec3 want = ver < 1e-3 ? new Vec3(0, vy, 0) : new Vec3(dx / ver * vooruit, vy, dz / ver * vooruit);
-        if (horizontalCollision) {
-            want = new Vec3(want.x, STIJGEN, want.z);              // something in the way: over it
+        if (horizontalCollision || ruiterBotste) {
+            want = new Vec3(want.x * 0.2, REIS_STIJGEN, want.z * 0.2);   // something in the way: over it
         }
+        ruiterBotste = false;
         vlieg(getDeltaMovement().scale(0.8).add(want.scale(0.2)));
-        if (ver > 0.5) {
-            float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
-            yaw = Mth.approachDegrees(getYRot(), yaw, 5f);
-            setRot(yaw, 0);
-            this.yBodyRot = this.yHeadRot = yaw;
-        }
-        // stuck for good (a cave roof, a cage)? then he "knows a shortcut": straight to the goal
+        float yaw = Mth.approachDegrees(getYRot(), yawDoel, 5f);
+        setRot(yaw, 0);
+        this.yBodyRot = this.yHeadRot = yaw;
+        // stuck for good (a cave roof, a cage)? then he "knows a shortcut": straight onto his landing spot
         double afstand = position().distanceTo(v.doel);
         if (afstand < v.beste - 0.5) {
             v.beste = afstand;
             v.vast = 0;
         } else if (++v.vast > 160) {
-            setPos(v.doel.x, v.doel.y + 0.1, v.doel.z);
-            setDeltaMovement(Vec3.ZERO);
+            zetOpLanding(v.landing);
             land();
         }
     }
 
-    /** The ground height under him (the bottom of the world when there is none: the void between the islands). */
-    private double grond() {
-        if (!level().hasChunkAt(blockPosition())) {
-            return level().getMinY();
+    /**
+     * The highest ground or roof under his way: {heightmap top, unknown}, where unknown is 0 (all there), 1 (chunks further
+     * ahead are missing) or 2 (the chunks of the next 8 blocks are missing).
+     */
+    private double[] veiligeHoogte(double nx, double nz, double ver) {
+        double hoogste = level().getMinY();
+        int onbekend = 0;
+        for (double d : VOORUIT) {
+            if (d > ver + 3) {
+                break;
+            }
+            for (double opzij : new double[]{-3.5, 0, 3.5}) {
+                int x = Mth.floor(getX() + nx * d - nz * opzij), z = Mth.floor(getZ() + nz * d + nx * opzij);
+                if (!level().hasChunkAt(new BlockPos(x, getBlockY(), z))) {
+                    onbekend = Math.max(onbekend, d <= 8 ? 2 : 1);
+                    continue;
+                }
+                hoogste = Math.max(hoogste, level().getHeight(Heightmap.Types.MOTION_BLOCKING, x, z));
+            }
         }
-        return level().getHeight(Heightmap.Types.MOTION_BLOCKING, getBlockX(), getBlockZ());
+        return new double[]{hoogste, onbekend};
     }
 
-    /** Server: he is there. */
+    /** Server: puts him on his landing spot, looking its way (loads its chunk when needed). */
+    private void zetOpLanding(Appa.Landing landing) {
+        Vec3 a = landing.appa();
+        if (level() instanceof ServerLevel server) {
+            server.getChunk(BlockPos.containing(a));
+        }
+        float yaw = Float.isNaN(landing.yaw()) ? getYRot() : landing.yaw();
+        snapTo(a.x, a.y + 0.05, a.z, yaw, 0);
+        this.yBodyRot = this.yHeadRot = yaw;
+        setDeltaMovement(Vec3.ZERO);
+    }
+
+    /** Server: he is there. On a landing that says so, his rider gets off onto its spot (einde2 fix-reizen). */
     private void land() {
         Vlucht v = vlucht;
-        vlucht = null;
-        entityData.set(DATA_ZELF, false);
+        stopVlucht();
         setDeltaMovement(Vec3.ZERO);
         brul();
         ServerPlayer p = v == null || level().getServer() == null ? null : level().getServer().getPlayerList().getPlayer(v.speler);
+        if (p != null && v.landing.afstappen() && p.getVehicle() == this) {
+            Vec3 naar = v.landing.spelerOf(this, p);
+            uitstappen = true;
+            try {
+                p.stopRiding();
+            } finally {
+                uitstappen = false;
+            }
+            p.teleportTo(naar.x, naar.y, naar.z);
+            p.resetFallDistance();
+            p.setDeltaMovement(Vec3.ZERO);
+        }
         if (p != null) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_appa.aangekomen", getDisplayName()).withStyle(ChatFormatting.AQUA));
             Appa.AANGEKOMEN.forEach(h -> h.accept(p));
@@ -851,6 +993,8 @@ public class AppaGuhEntity extends PathfinderMob implements GeoEntity {
             }
             if (player.isSecondaryUseActive()) {
                 openKist(sp);
+            } else if (Appa.KLIK.test(sp)) {
+                return InteractionResult.SUCCESS;              // (einde2 fix-reizen: his menu "Waar vliegen we heen?" opened)
             } else if (!hasPassenger(sp) && sp.startRiding(this)) {
                 zeg(sp, Component.translatable("gui.guhs.einde2_appa.opstappen", getDisplayName()));
             }
