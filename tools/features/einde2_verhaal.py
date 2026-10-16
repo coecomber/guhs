@@ -35,6 +35,8 @@ HERVAT = {
     "kaasbol_hier": "De kaasbol gloeit hier vlakbij. Klik erop en je bent meteen terug bij je verhaal.",
     "kaasbol_balk": "Klik op de kaasbol: verder met je verhaal!",
     "verder": "De kaasbol gloeit fel... en brengt je terug naar je verhaal!",
+    # merge_fix1: the same from the row "Verder met het verhaal" in Appa's menu
+    "verder_appa": "Appa bromt, zwiept met zijn staart... en een windvlaag brengt je terug naar je verhaal!",
     "geest": "Deze stap speelt in de Geestenwereld: mediteer opnieuw op de plek waar je de vorige keer mediteerde.",
     "wacht": "De wind zoekt de weg nog. Probeer het zo nog eens, njeg.",
     "geen_plek": "Voor deze stap weet de kaasbol geen plek. Kijk in je Guhdex (Verhalen) waar je heen moet.",

@@ -258,6 +258,14 @@ public final class E2Hervat {
      * says why not (no story on, the place is still being worked out, a Geestenwereld step, they watch a scene).
      */
     public static boolean verder(ServerPlayer p) {
+        return verder(p, "verder");
+    }
+
+    /**
+     * The same, with its own first line ({@code gui.guhs.einde2_verhaal.hervat.<bericht>}): merge_fix1, the row "Verder met het
+     * verhaal" in Appa's menu says {@code verder_appa} instead of the kaasbol's line.
+     */
+    public static boolean verder(ServerPlayer p, String bericht) {
         Verhaallijn l = huidig(p);
         if (l == null) {
             p.sendSystemMessage(Component.translatable(P + "niets").withStyle(ChatFormatting.GRAY));
@@ -275,7 +283,7 @@ public final class E2Hervat {
             p.stopRiding();
         }
         Duwtje.terug(p, w.dim(), w.pos(), w.yaw());
-        p.sendSystemMessage(Component.translatable(P + "verder").withStyle(ChatFormatting.LIGHT_PURPLE));
+        p.sendSystemMessage(Component.translatable(P + bericht).withStyle(ChatFormatting.LIGHT_PURPLE));
         p.sendSystemMessage(waarZin(p, l).withStyle(ChatFormatting.GOLD));
         if (w.soort().equals("geest")) {
             p.sendSystemMessage(Component.translatable(P + "geest").withStyle(ChatFormatting.AQUA));

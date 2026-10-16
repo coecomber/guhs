@@ -98,6 +98,8 @@ final class Reis {
     private int naJacht = -1;
     private int volgendeVrij = 400;
     private int herinner;
+    /** merge_fix1: the first reminder of a waiting story flight after this many ticks, then every {@link #HERINNER_DAARNA}. */
+    static final int HERINNER_EERST = 20 * 60, HERINNER_DAARNA = 20 * 60 * 5;
     @Nullable
     Jacht jacht;
     private boolean jachtGehad;
@@ -239,7 +241,7 @@ final class Reis {
             }
             if (!wachtNu) {
                 wachtNu = true;
-                herinner = 0;
+                herinner = HERINNER_EERST;
                 if (jacht != null) {
                     jacht.stop(p.level().getServer());
                     jacht = null;
@@ -247,8 +249,10 @@ final class Reis {
                     naJacht = tik;
                 }
             }
-            if (herinner-- <= 0 && soort != E2Reizen.Vlucht.VRIJ) {
-                herinner = 20 * 45;
+            // merge_fix1 (fix-kern's finding: it kept coming in the overworld after a death): only in the Guheinde, rarely,
+            // and it names the ways back (Appa's menu: the star or "Verder met het verhaal"; the kaasbol)
+            if (herinner-- <= 0 && soort != E2Reizen.Vlucht.VRIJ && GuheindeFeature.isGuheinde(p.level())) {
+                herinner = HERINNER_DAARNA;
                 p.sendSystemMessage(Component.translatable("gui.guhs.einde2_reizen.wacht", Component.translatable("structure.guhs." + structuur))
                         .withStyle(ChatFormatting.GOLD));
             }

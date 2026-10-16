@@ -19,7 +19,7 @@ import nl.juiced.guhs.feature.einde2.reizen.E2ReizenPayloads;
  * einde2 phase B, slice reizen: Appa's menu, "Waar vliegen we heen?": one button per building the player knows (the server's
  * list, with the distance), and "Blijf hier". einde2 fix-reizen: opened by a right-click on him it starts with "Opstappen"
  * (just climb on); the place where the story goes on comes first, gold, with a star and a gold frame; from another dimension
- * the places say "door de leegte". A click sends the choice; the server checks it again and Appa takes off. Long lists
+ * the places say "door de leegte". merge_fix1: under the star, "↻ Verder met het verhaal" (straight to the step, no flight). A click sends the choice; the server checks it again and Appa takes off. Long lists
  * scroll with the mouse wheel.
  */
 public class FluitScherm extends Screen {
@@ -60,17 +60,21 @@ public class FluitScherm extends Screen {
             boolean verder = h.getBooleanOr("Verder", false);
             boolean verhaal = h.getBooleanOr("Verhaal", false) || verder;
             boolean opstappen = h.getBooleanOr("Opstappen", false);
+            boolean hervat = h.getBooleanOr("Hervat", false);
             int afstand = h.getIntOr("Afstand", -1);
             MutableComponent tekst = Component.empty();
             if (verhaal) {
                 tekst.append(Component.literal("★ ").withStyle(ChatFormatting.GOLD));
                 verhaalY = y;
             }
+            if (hervat) {
+                tekst.append(Component.literal("↻ ").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
             tekst.append(Component.translatable(h.getStringOr("Naam", ""))
-                    .withStyle(verhaal ? ChatFormatting.GOLD : opstappen ? ChatFormatting.AQUA : ChatFormatting.WHITE));
+                    .withStyle(verhaal ? ChatFormatting.GOLD : opstappen ? ChatFormatting.AQUA : hervat ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE));
             if (afstand >= 0) {
                 tekst.append(Component.literal("  ")).append(Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand).withStyle(ChatFormatting.GRAY));
-            } else if (!opstappen && h.getBooleanOr("Leegte", false)) {
+            } else if (!opstappen && !hervat && h.getBooleanOr("Leegte", false)) {
                 tekst.append(Component.literal("  ")).append(Component.translatable("gui.guhs.einde2_reizen.fluit.leegte").withStyle(ChatFormatting.GRAY));
             }
             if (verhaal) {

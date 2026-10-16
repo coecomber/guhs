@@ -14,6 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.einde2.Plekken;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.appa.AppaGuhEntity;
+import nl.juiced.guhs.feature.einde2.verhaal.E2Hervat;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.network.ModNetworking;
@@ -28,12 +29,15 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  * how far it is; the place where their story goes on ({@link E2Reizen#verhaalDoel}: a story flight that has not landed yet,
  * else the main building of their chapter) comes first, highlighted with a star. Right-clicked from the ground, the first
  * row is "Opstappen": just climb on and fly yourself. Pick a place and Appa flies you there (you may steer; let go and he
- * flies himself), your team on his back. In another dimension the same list works: Appa takes you through the void
+ * flies himself), your team on his back. Under the star, "Verder met het verhaal" (merge_fix1, {@link E2Hervat#verder}) puts
+ * you straight at your current step, without a flight. In another dimension the same list works: Appa takes you through the void
  * ({@link AppaReis}); in the Geestenwereld he cannot follow you.
  */
 public final class Fluitlijst {
     /** The id of the row "Opstappen" (climb on, no flight). */
     static final String OPSTAPPEN = "";
+    /** merge_fix1: the id of the row "Verder met het verhaal" (fix-kern's {@link E2Hervat#verder}: straight to the step). */
+    static final String VERDER = "#verder";
     /** How far (blocks) from Appa a pick from his menu still counts (he is big, and they just clicked him). */
     static final double BEREIK = 16;
 
@@ -78,6 +82,16 @@ public final class Fluitlijst {
         if (verhaal != null && guheinde != null && Plekken.bekend(guheinde, verhaal) && Plekken.aankomst(guheinde, verhaal) != null) {
             lijst.add(rij(guheinde, hier, p, verhaal, wacht != null && wacht[0].equals(verhaal), true));
         }
+        // merge_fix1: "Verder met het verhaal" (kern): no flight, straight to the current step's spot (the gold row above flies
+        // to the chapter's building; this one puts you where the step is, e.g. on the balcony of the rings)
+        if (E2Hervat.kanVerder(p) && E2Hervat.huidig(p) != null) {
+            CompoundTag verder = new CompoundTag();
+            verder.putString("Id", VERDER);
+            verder.putString("Naam", "gui.guhs.einde2_reizen.fluit.hervat");
+            verder.putInt("Afstand", -1);
+            verder.putBoolean("Hervat", true);
+            lijst.add(verder);
+        }
         for (String s : bestemmingen) {
             if (!s.equals(verhaal)) {
                 lijst.add(rij(guheinde, hier, p, s, false, false));
@@ -117,6 +131,10 @@ public final class Fluitlijst {
         boolean op = p.getVehicle() instanceof AppaGuhEntity appa && appa.isEigenaar(p);
         AppaGuhEntity appa = Appa.geladen(p);
         boolean dichtbij = appa != null && appa.level() == p.level() && appa.distanceTo(p) <= BEREIK;
+        if (structuur.equals(VERDER)) {
+            E2Hervat.verder(p, "verder_appa");                  // (checks itself: a story on, a place known, no scene)
+            return;
+        }
         if (structuur.equals(OPSTAPPEN)) {
             if (!op && dichtbij && p.startRiding(appa)) {
                 p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_appa.opstappen", appa.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
