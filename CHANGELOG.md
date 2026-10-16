@@ -3,7 +3,52 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.5.0 — Minecraft 26.1.2 (in progress)
+## 1.5.0 — the Guh End update — Minecraft 26.1.2 (in progress)
+
+The Guheinde (Guh End) grows far beyond its main island: new outer islands, a whole new story in four chapters, a dimension of its own, side places, music and tech tier 5. No world reset: the new islands and buildings grow in Guh End land that was not generated yet.
+
+### Read this first
+
+- **The Oog van Vadsig (Eye of Chonky) has a fourth ingredient:** guh crystal + cheese nibble + Mika Tear + **grillspiespoeder (grill skewer powder)** from the Skewer Keep in the Guhbarbecuether. Eyes you already have, and filled portal frames, keep working.
+
+### The outer islands
+
+- **Six new biomes:** Holey Cheese Hills, Rind Desert, Crumb Clouds, Blue Cheese Plains, Crystal Cheese Cliffs and the Nibble Chorus Forest, with Crystal Cheese, Nibble Chorus and Crumb Clouds to gather.
+- **New creatures:** six biome guhs, Ender Mikas, Cheese Mites, the shy Hidey Guh, Crumb Jellies, four element animals and the Void Whale Guh (only for those who believe).
+- **Mika Fortresses** that grow in a different shape every time, with cells to open, and small buildings all over the islands.
+
+### The Legend of Guh
+
+- **A new big story in four chapters**, from the **Southern Air Temple** via the **Northern Water Tribe** and **Ba Sing Guh** to the **Fire Nation Capital**. It begins after you beat the Overlord Mika: keep an eye on the shore near the Nibble Mountain.
+- **You are the Guhvatar.** Learn air, water, earth and fire. Four light powers stay with you (a double jump, walking on water, a small earth pillar, a paw flame): one key (H), tap to use, hold for the element wheel.
+- **Appa Guh** flies you from chapter to chapter (steer yourself, or let him fly), and **Momo Guh** rides on your shoulder. Blow the **Appa Whistle** while sitting on Appa's head to fly to any story place you have unlocked.
+- **Together:** friends who ride along in Appa's saddle travel with you and may visit your places as your guests; everyone keeps their own story.
+- The story buildings stay hidden in smoke until you get that far. Every scene waits for your click, and minigames, sneaking and chases never hurt you.
+- **Keepsakes:** outfits, a Pai Sho Table you can really play, Uncle Miroh's Tea Set, Sokka's Boomerang, the Air Scooter toy for your guhs, a cabbage stall, the title Guhvatar and a statue of yourself.
+
+### The Spirit World (Geestenwereld)
+
+- **A small dimension of its own**: pastel mist, islands, waterfalls that fall upward. Nothing can hurt you there.
+- **The White Lotus** with five trials, the **Lost Lanterns**, **Koh's Riddles**, **Hei Bai Guh's Acorn**, the **Chakra Path**, mirror ponds, the Spirit Clock and **rare sightings** for your Guhdex. Somewhere in the mist lies an island you cannot reach... yet.
+- After the story you can travel from its meditation stones, and a **Meditation Cushion** takes you there from home.
+
+### Side places
+
+- **Omashguh**, the **Western Air Temple**, the **Fire Temple of Roku Guh**, **Kyoshi Village**, **Wan Shi Guh's Library** and **Lion Turtle Island**, each with its own questline.
+- The **Void Harbor** (Leegtehaven): a market of Ender Mika traders, a free ferry to every place you know, a sorry Mika cook, a shipwright who builds you a little boat, and an old captain with a tale nobody believes.
+- The **Guh Wing Ring Race**: eighteen rings, a landing strip and a record on the wall.
+
+### Music
+
+- **Own music for the Guh End:** background pieces per area (air, water, earth, fire and the Spirit World) and music under the big moments of the story. Every maker is credited in the book *De Muziek van het Guheinde* (The Music of the Guh End).
+
+### Guh Technology: tier 5
+
+- After the story the **Mechanist Guh** opens his workshop in the Southern Air Temple: a new questline of projects, each one leaving something that works in your own world.
+- **New machines:** Chonk Transmitter and Chonk Receiver, Guh Terminal (your bank from anywhere), Order Counter with its Order Guh, Nibble Gate Tube, Home Gate, the four element machines (Air Blower, Water Bearer, Crust Pusher, Fire Basket) and two new sources: the **Enderguh Wheel** and the **Comet Core**.
+- **The Peace Balloon:** the big project after that. Your factory delivers, the Mechanist Guh sews and screws. And tier 6? To be continued...
+
+### Bug fixes
 
 - **Fixed: two Vahoege Vads pieces combine in an anvil again.** Two enchanted pieces of the same vads gear (helmet, chestplate, leggings, boots, sword, pickaxe, axe, shovel, hoe, Vadspaxel or Vahoege-vadsschaar) left the anvil's result slot empty, because the gear never breaks. Now they merge like ordinary tools: equal levels go up one (two helmets with Protection III give Protection IV), otherwise the highest level stays, and enchantments that do not fit or clash are skipped. The XP cost, the "Too Expensive!" limit and renaming work as usual. The gear stays unbreakable.
 - **Fixed: you can make pepper soup again.** Pouring a bucket of kaassaus (Bucket of Cheese Sauce) into a Guhbrouwketel (Guh Brewing Cauldron) inside or next to a guh building always said "Geen vuur of emmers naast een guhgebouw, njeg!" (No fire or buckets next to a guh building), so the pepper brew in the Peperteler-guh's kas could not be started. The sauce goes into the cauldron now. Pouring buckets out next to guh buildings is still not allowed.

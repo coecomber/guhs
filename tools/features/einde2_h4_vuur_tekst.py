@@ -13,7 +13,7 @@ G = "gui.guhs.einde2_h4_vuur."
 # =====================================================================================================================
 # the two questlines (verhaal_motor.verhaallijn): (stapnaam, nu, waar) per step
 # =====================================================================================================================
-VUUR_NAAM = "Hoofdstuk 4: Vuur"
+VUUR_NAAM = "Hoofdstuk 4: De Vuurnatie"
 VUUR_UITLEG = ("De Vuurnatie-hoofdstad, in de krater van een vulkaan van aangebrande kaaskorst. Je komt vermomd binnen, je "
                "leert de Vuurnatie kennen van binnenuit, en op de Dag van de Zwarte Zon kiest Zuka eindelijk zijn eigen weg. "
                "Daarna: goedmaken, vuur leren bij de draken, een heel slecht toneelstuk en een tent vol thee.")
@@ -67,7 +67,7 @@ FINALE_KORT = {
 }
 
 # the narrator card of the chapter (Verteller, 5 lines; its map: einde2_h4_vuur.kaart)
-KAART_TITEL = "Hoofdstuk 4: Vuur"
+KAART_TITEL = "Hoofdstuk 4: De Vuurnatie"
 KAART_REGELS = [
     "Ba Sing Guh is gevallen. Oom Miroh is gevangen. En jij bent nog moe.",
     "Appa-guh brengt het team naar het hart van de Vuurnatie: een hoofdstad in een krater.",

@@ -244,7 +244,7 @@ public final class E2Verhaal {
     public static void register() {
         GroteVerhalen.zetGroep(GROEP, GroteVerhalen.Wereld.GUHEINDE);
         groot = GroteVerhalen.registreer(new GroteVerhalen.GrootVerhaal(GROOT, GroteVerhalen.Wereld.GUHEINDE, GroteVerhalen.Wereld.GUHEINDE,
-                "guhs:oog_van_vadsig", Einde2Ids.VERHAAL_STRUCTUREN, HOOFDSTUKKEN, () -> true, p -> klaar(p, FINALE)));
+                "guhs:guhvatar_beeld", Einde2Ids.VERHAAL_STRUCTUREN, HOOFDSTUKKEN, () -> true, p -> klaar(p, FINALE)));
         for (String s : Einde2Ids.VERHAAL_STRUCTUREN) {
             Sluiers.registreer(s, 0, p -> open(p, s));
         }

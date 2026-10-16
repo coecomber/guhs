@@ -84,6 +84,7 @@ public class E2ToonGameTests {
         verwacht.put("sponsguh", sponsguh);
         verwacht.put("wezens", Einde2Toon.WEZENS.size() + Einde2Toon.BIOMEGUHS.size() + 1);
         verwacht.put("geest", nl.juiced.guhs.feature.einde2.geestwezens.GeestToon.aantal());   // (geestmodellen)
+        verwacht.put("verhaal", Einde2Toon.VERHAAL.size());   // (integratie_b)
         for (String groep : Einde2Toon.GROEPEN) {
             int n = Einde2Toon.toon(level, at, Direction.SOUTH, List.of(groep));
             helper.assertTrue(n == verwacht.get(groep) && n == Einde2Toon.aantal(List.of(groep)), groep + ": everything stands: " + n + " of " + verwacht.get(groep));

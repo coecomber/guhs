@@ -76,6 +76,8 @@ public final class E2BallonFeature {
                 p -> Vredesballon.LIJN.klaar(p)));
         Schijn.registreer(BallonLagen::vul);
         Vredesballon.luister();
+        // integratie_b: after his own line the Werktuigguh points to the board himself while the balloon is not up yet
+        nl.juiced.guhs.feature.einde2.trap5.WerktuigguhRol.NA_KLAAR.add((npc, p) -> Vredesballon.wijsNaarBord(p));
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, true, PlayerInteractEvent.RightClickBlock.class, BallonBord::opKlik);
         NeoForge.EVENT_BUS.addListener(BallonBord::opJoin);
         NeoForge.EVENT_BUS.addListener(E2BallonFeature::opSpelerTick);

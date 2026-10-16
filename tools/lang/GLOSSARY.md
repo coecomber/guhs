@@ -2458,3 +2458,395 @@ the Trench). New here:
 | De Brullende Mika's | The Roaring Mikas | the band on the bar's poster |
 | baby'tje | baby | "Wie hier een bel blaast is een baby'tje" = "Whoever blows a bubble here is a baby" (the film's bubble-blowing baby) |
 | Groetjes uit Schelpenstad | Greetings from Shell City | advancement, postcards |
+
+## 27. einde2 phase B/C (the Guhvatar story, the Spirit World, travel, audio, tech tier 5) and the einde2 cast
+
+The slices' own glossaries (`tools/lang/glossary_e2/<slice>.md`), folded in by the merge step (integratie_b). The cast and
+Spirit World rows of phase A come first; they were not in section 26 yet. Where two slices named the same thing, it is
+settled here, and the English chunks follow it:
+
+| Dutch | English | settled |
+|---|---|---|
+| Leeuwschildpad-guh | Lion Turtle Guh | as bouw_vuur, bouw_zij2 and cast_schurk; never "Lion Turtle-guh" (h4_vuur's c95 changed) |
+| Sjokkel | Shuckly | as section 24 (the Shuckle nod); never "Shuckle" (h3_aarde's c94 and h4_vuur's c95 changed) |
+| Top der Voorgangers | Peak of the Predecessors | the place's own name (geestenwereld, c74); never "Summit" (h4_vuur's c95 changed) |
+| Hei Bai-guh | Hei Bai Guh | "<name>-guh" = "<Name> Guh"; the lang already says Hei Bai Guh |
+| Vuurkorf / Vadsontvanger | Fire Basket / Chonk Receiver | trap5_machines' names; trap5_ballon proposed the same |
+| Luchtnon-guh | air nun guh | ("the" is the sentence's) |
+
+### cast_team
+
+| Dutch | English | note |
+|---|---|---|
+| Toph-guh | Toph Guh | contract 11.8 |
+| Suki-guh | Suki Guh | contract 11.8 |
+| Prins Zuka | Prince Zuka | contract 11.8 |
+| Vuurheer Zuka | Fire Lord Zuka | contract 11.8 |
+| Prins Zuka, verbannen | Banished Prince Zuka | contract 11.9 (the look ZUKA_BALLING) |
+| De Blauwe Geest | The Blue Spirit | contract 11.9 (the look ZUKA_BLAUWE_GEEST), as the show |
+| Yue-guh, de Maangeest | Yue Guh, the Moon Spirit | the look YUE_GUH_MAAN |
+| MIJN EER! | MY HONOR! | Zuka's catchphrase (contract 11.8) |
+| veerman-guh | Ferry Guh | contract 11.8 |
+| scheepsbouwer-guh | Shipwright Guh | contract 11.8 |
+| kroegbaas | Innkeeper | contract 11.8 |
+| oude kapitein-guh | Old Captain Guh | contract 11.8 |
+| racemeester-guh | Race Master Guh | contract 11.8 |
+| vuurstuurderen | firebending | as aardestuurders = earthbenders |
+| krijgster van Kyoshi | Kyoshi Warrior | |
+| Noordelijke Waterstam | Northern Water Tribe | |
+| knabbelsap | nibble juice | |
+| Jip jip! | Yip yip! | the show's line |
+
+### cast_volk
+
+The masters, rulers and townsfolk of the Guhvatar story (CONTRACT_E2 11.5). Names that the bouw slices already fixed (now in
+GLOSSARY.md) are used word for word; these are the new ones.
+| Dutch | English | Notes |
+|---|---|---|
+| monnik Guhatso | Monk Guhatso | |
+| Piandao-guh | Piandao Guh | |
+| Guhvatar Roku-guh / Kyoshi-guh | Guhvatar Roku Guh / Guhvatar Kyoshi Guh | the spirits who give advice |
+| Beeld van Roku-guh / Kyoshi-guh | Statue of Roku Guh / Statue of Kyoshi Guh | |
+| Omroeper van de Aardrommel | Earth Rumble Announcer | |
+| schuimbekkende fan-guh | Foaming Fan Guh | |
+| Dorpsoudste van Kyoshi | Kyoshi Village Elder | |
+| Kyoshi-krijgsterguh | Kyoshi Warrior Guh | |
+| Waterstam-guh | Water Tribe Guh | |
+| Poortwachter-guh | Gate Guard Guh | |
+| Burger van Ba Sing Guh / Omashguh / de Vuurnatie | Citizen of Ba Sing Guh / Citizen of Omashguh / Fire Nation Citizen | |
+| Dorpsguh van Kyoshi | Kyoshi Villager | |
+| Gevangene | Prisoner | |
+| Zonnekrijger-guh | Sun Warrior Guh | |
+| Vuurwijze / Vuurwijze Shyu | Fire Sage / Fire Sage Shyu | |
+| de juf / leerling | The Teacher / Student | |
+| Toneelspeler (Aang-guh) ... | Ember Island Player (Aang Guh) ... | the troupe of Sintelstrand, one name per costume |
+| De Blinde Bandiet | The Blind Bandit | as GLOSSARY.md |
+| De Kei-guh voelt zich... verscheurd. | The Boulder Guh feels... conflicted. | the show's line |
+| MIJN EER! | MY HONOR! | contract 11.8 (the stage Zuka) |
+
+### cast_schurk
+
+The names of contract 3.5 / 11.8 and of the bouw glossaries are used word for word; new here:
+
+| Dutch | English | note |
+|---|---|---|
+| Feniks-koning Mikai | Phoenix King Mikai | Vuurheer Mikai with the power of the knabbelkomeet (the show's Phoenix King) |
+| Vadsige Mikai | Chonky Mikai | Vuurheer Mikai after the finale: round, content, a nibble in his paws |
+| de gevangenisdirecteur | the Warden | of Het Kokend Rotsblok = The Boiling Rock |
+| de spijtige Mika-kok | the Sorry Mika Cook | as the vesting glossary |
+| de vesting-kapitein | the Fortress Captain | as the vesting glossary |
+| Vuurnatie-Mika | Fire Nation Mika | soldiers, guards, marines |
+| duwstok | shoving stick | a soldier's spear: it only shoves |
+| knabbelkomeet | nibble comet | Sozin's comet |
+| vuurvlokken | fire flakes | the show's snack |
+| Draakguh (Ran, Shaw) | Dragon Guh (Ran, Shaw) | Ran is red, Shaw is blue |
+| Beer Bosco | Bosco the Bear | "Gewoon een beer." = "Just a bear." |
+| Hij Die Tienduizend Dingen Weet | He Who Knows Ten Thousand Things | Wan Shi Guh's title |
+| Vosguh | Fox Guh | the knowledge seekers (kenniszoeker = Knowledge Seeker) |
+| Leeuwschildpad-guh | Lion Turtle Guh | |
+| Luchtbizon-guh | Sky Bison Guh | |
+| Maanvis Tui / Oceaanvis La | Tui the Moon Fish / La the Ocean Fish | |
+
+### geestenwereld
+
+| Dutch | English | note |
+|---|---|---|
+| Geestenwereld | Spirit World | the dimension (Avatar's Spirit World) |
+| Meditatiecirkel | Meditation Circle | the arrival zone |
+| Lantaarnboom | Lantern Tree | |
+| lantaarngeest / lantaarngeesten | lantern spirit / lantern spirits | |
+| Gefluisterwoud | Whispering Wood | |
+| Hei Bai-guh | Hei Bai Guh | the forest spirit; stays |
+| schaduwgeest | shadow spirit | |
+| Koh's Grot / Koh de Gezichtenrover | Koh's Cave / Koh the Face Stealer | |
+| Witte Lotus / Witte Lotus-ruines | White Lotus / White Lotus Ruins | |
+| Hal van de Voorgangers | Hall of the Predecessors | |
+| Top der Voorgangers | Peak of the Predecessors | |
+| Hemelvijver | Sky Pond | Tui and La circle above it |
+| Theepaviljoen / Theegeest | Tea Pavilion / Tea Spirit | |
+| Fang's Hemelpad | Fang's Sky Path | Fang, Roku-guh's spirit dragon |
+| Hemeltrap | Sky Stair | the spiral up to the Peak |
+| gedenksteen / meditatiesteen | memorial stone / meditation stone | |
+| geestengras / geestenaarde / geestenhout / schaduwhout | spirit grass / spirit soil / spirit wood / shadow wood | |
+| gloeibladeren / schaduwbladeren | glow leaves / shadow leaves | |
+| maansteen | moonstone | |
+| nevelwater | mist water | falls up |
+| lotusblad / lotuspuzzeltegel | lotus leaf / lotus puzzle tile | |
+| geestenmasker | spirit mask | |
+| geestpaddenstoel | spirit mushroom | |
+| Raava en Vaatu? Nooit van gehoord. | Raava and Vaatu? Never heard of them. | the fresco sign (Legend of Korra wink) |
+| (geest_bouw, phase B) | | |
+| Trap der meesters | Stair of Masters | the road of five statues to the White Lotus |
+| heiligdom / Lotusarchief | sanctuary / Lotus Archive | |
+| de oude leden / de stichter | the old members / the founder | of the White Lotus |
+| Gang der Gezichten | Passage of Faces | Koh's corridor |
+| Geestenklok | Spirit Bell | |
+| theetuin / roddelclub | tea garden / gossip club | |
+| het mistige moeras | the Misty Swamp | |
+| schrijntje / zwevend raadsel | little shrine / floating riddle | |
+| Bumi-guh, de gekke koning | Bumi Guh, the Mad King | |
+| Jeong Jeong-guh, de weggelopen meester | Jeong Jeong Guh, the Runaway Master | |
+| Oom Miroh, de Grote Lotus | Uncle Miroh, the Grand Lotus | |
+| Denk als een gekke oude koning | Think like a mad old king | Bumi's wing sign (DESIGN's line) |
+| Het ijs onthoudt alles | The ice remembers all | Pakguh's wing sign |
+| Vuur is een rivier, niet een fakkel | Fire is a river, not a torch | Jeong Jeong's wing sign (own words) |
+
+### geestmodellen
+
+The names of contract 3.5 / 11.8 and of the other einde2 glossaries are used word for word; new here:
+
+| Dutch | English | note |
+|---|---|---|
+| Koh de Gezichtenrover | Koh the Face Stealer | the show's Koh the Face Stealer |
+| Hei Bai-guh | Hei Bai Guh | the forest spirit of the show; the little panda and the angry giant are one name |
+| Fang | Fang | Roku's dragon in the show; unchanged |
+| Geest-koi | Spirit Koi | Tui and La as spirits of the Hemelvijver |
+| Tui, de maangeest / La, de oceaangeest | Tui, the Moon Spirit / La, the Ocean Spirit | the two looks of the Spirit Koi |
+| Libelkonijnguh | Dragonfly Bunny Guh | the show's dragonfly bunny spirits |
+| Lantaarngeest | Lantern Spirit | a floating paper lantern with a face |
+| Schaduwgeest | Shadow Spirit | dark spirit that only pushes |
+| de Theegeest | the Tea Spirit | the spirit guh of the tea pavilion |
+| de Bestelguh | the Order Guh | tech tier 5: the guh at the order counter (Bestelbalie) who runs the crafting orders |
+| Geestenwereld | Spirit World | the dimension of the Guhvatar story |
+| theepaviljoen | tea pavilion | |
+
+Phase B (geest_modellen):
+
+| Dutch | English | note |
+|---|---|---|
+| Kennisvosje / gouden kennisvosje | Knowledge Fox / golden Knowledge Fox | spirit fox with guh ears that leads to a secret |
+| Mistreiger | Mist Heron | small white heron on the roofs of the White Lotus |
+| Oude Reigerguh | Old Heron Guh | the huge crane spirit round the stone lotus |
+| Wan-guh | Wan Guh | the hooded figure, "the first" |
+| Geestreus | Spirit Giant | the far-away silhouettes of the geestentij |
+| Kijkmasker | Watching Mask | a mask of Koh's cave that turns to you |
+| Echo van ... | Echo of ... | the spirit echoes of the White Lotus masters (Echo of King Bumi Guh, Echo of Master Pakguh, Echo of Piandao Guh, Echo of Jeong Jeong Guh) |
+| Droom van Oom Miroh | Dream of Uncle Miroh | Miroh still lives: his echo is a dream |
+| Stichter / Lid van de Witte Lotus | Founder / Member of the White Lotus | |
+| Guru Pathik-guh | Guru Pathik Guh | |
+| Kuruk-guh, Yangchen-guh, Szeto-guh | Kuruk Guh, Yangchen Guh, Szeto Guh | earlier Guhvatars as spirits |
+| ui-banaansap | onion-banana juice | Guru Pathik's drink |
+| Gefluisterwoud / Hemelvijver / Hemelpad | Whispering Wood / Sky Pond / Sky Path | as used in the Guhdex pages (check against geest_bouw's glossary) |
+
+### audio
+
+| Dutch | English | note |
+|---|---|---|
+| Muziekboekje van het Guheinde / De Muziek van het Guheinde | Music Booklet of the Guheinde / The Music of the Guheinde | the credits book (a written book) |
+| Miroh's wiegenlied | Miroh's lullaby | own song (moment.lu_ten); never "Leaves from the Vine" |
+| Geestenklok | Spirit Bell | the bell of the Geestenwereld (sound geest.klok) |
+| geestentij | spirit tide | sound geest.geestentij |
+| Dag van de Zwarte Zon | Day of Black Sun | as the show |
+| Guhvatar-staat | Guhvatar State | as "Avatar State" |
+| luchtvloot | airship fleet | |
+
+### reizen
+
+| Dutch | English | note |
+|---|---|---|
+| De grote zingende | The Great Singing One | the whale questline (line `leegtewalvis`) and its first scene |
+| Opa Walvis | Grandpa Whale | what the pub calls the old captain |
+| Witte Knabbel | White Nibble | the captain's old quest (a Moby Dick wink) |
+| knabbelsap | nibble juice | what the pub pours |
+| Hoorn van de kapitein | The Captain's Horn | item `einde2_reizen_walvishoorn` |
+| walviskist | whale chest | a chest on the back of an own whale |
+| de rug van je walvis | your whale's back | the furniture screen |
+| Zuka's schip | Zuka's Ship | entity `einde2_reizen_zuka_schip` |
+| noodvisje | emergency fish | Sokka's |
+| Bizonbert | Bisonbert | Sokka's name for a sky bison of his own |
+| fluitlijstje | whistle list | Appa's list of places |
+| gast / gastheer | guest / host | co-op: who travels along on someone's Appa |
+| jonkie | youngster | the captain's word for the player |
+
+### zij
+
+| Dutch | English | note |
+|---|---|---|
+| vadskunst / de vier blijvende vadskunsten | chonk art / the four lasting chonk arts | the bending powers that stay after the story; one key |
+| elementenwiel | Element Wheel | hold the key |
+| Luchtsprong / Over water lopen / Aardzuiltje / Handvlam | Air Leap / Water Walk / Earth Pillar (Little Earth Pillar for the block) / Paw Flame | the four lasting powers |
+| luchtsturen / watersturen / aardesturen / vuursturen | airbending / waterbending / earthbending / firebending | as the show |
+| Kristalsnoep-ring | Crystal Candy Ring | Omashguh's reward |
+| koning Kristalsnoep | King Crystal Candy | a wrong answer of Bumi's riddle |
+| De Kei-kolos / Het Kristalbeest | The Boulder Colossus / The Crystal Beast | Bumi's fake opponents |
+| luchtnon-guh | air nun guh | (cast_volk) |
+| Schub van de Leeuwschildpad | Scale of the Lion Turtle | catches you above the void |
+| Spijtsoep | Sorry Soup | the Mika cook's recipe |
+| de spijtige Mika-kok | the Sorry Mika Cook | (contract 11.8) |
+| vesting-kapitein | Fortress Captain | (contract 11.8) |
+| Kyoshi-schmink | Kyoshi Makeup | guh clothes (EYES) |
+| Kraam van een Ender-Mika | Stall of an Ender Mika | the trade screen |
+| Vestingbevrijder | Fortress Liberator | title |
+| Ringenracer | Ring Racer | title |
+| Knabbelberg | Nibble Mountain | the main island of the Guh End (the Opper-Mika's) |
+| De Roze Stem / De Gouden Stem | The Pink Voice / The Golden Voice | the two voices of the poem |
+| De drie proeven van Omashguh | The Three Trials of Omashguh | line |
+| De stille tempel | The Silent Temple | line |
+| Het vuur van Roku-guh | The Fire of Roku Guh | line |
+| De waaiers van Kyoshi | The Fans of Kyoshi | line |
+| Kennis voor kennis | Knowledge for Knowledge | line |
+| De zegen van de Leeuwschildpad | The Blessing of the Lion Turtle | line |
+| Een eigen vetbootje | A Little Grease Boat of Your Own | line |
+| Zijpaden van de Guhvatar | Side Paths of the Guhvatar | FTB section |
+| De Leegtehaven en de Mika-vesting | The Void Harbor and the Mika Fortress | FTB section |
+| De dag dat de zon even ging vadsen | The Day the Sun Went for a Chonk | a book (the eclipse) |
+| BUK / SPRING / DRAAI | DUCK / JUMP / TURN | the calls of the fan dance |
+
+### h1_lucht
+
+| Dutch | English | note |
+|---|---|---|
+| De Guhvatar: Lucht | The Guhvatar: Air | the questline guhvatar_lucht, also its FTB section and the clothes source |
+| Hoofdstuk 1: Lucht | Chapter 1: Air | the narrator card |
+| De reis van de Guhvatar | The Journey of the Guhvatar | the travel map of the whole story (Reiskaart "guhvatar") |
+| kaasbol (de gloeiende) | (the glowing) cheese ball | as cast_team: "went for a chonk in a cheese ball" |
+| Luchtscooter (speelgoed) | Air Scooter | the toy block for guhs (as the Air Scooter Track) |
+| Luchtnomadengewaad | Air Nomad Robe | clothes GUHVATAR_LUCHTNOMADE |
+| luchtsturen | airbending | as the show |
+| Luchtbal (kracht, bal) | Air Ball | the story power and the ball of the airball match ("luchtbal" the game = airball) |
+| Luchtsprong | Air Leap | the second story power |
+| lemurguhtje | lemur guh | the Bat-Lemur Guh of the chase before it is Momo Guh |
+| grillspiespoeder | grill skewer powder | the item is Grill Skewer Powder (c01) |
+| steiger (van de tempel) | jetty | as bouw_zij2: steiger = Jetty |
+| "Eindelijk, de Guhvatar" | "Finally, the Guhvatar" | Zuka's line at the jetty (a paraphrase of the show's "the Avatar") |
+| "Je heet toch niet Korra?" | "Your name isn't Korra, is it?" | the Korra joke of DESIGN 5 |
+| Water. Aarde. Vuur. Lucht. | Water. Earth. Fire. Air. | the opening film; its next two lines are the DESIGN's approved parody (vadsigheid = chonkiness, trek kreeg = got peckish) |
+
+### h2_water
+
+The names of contract 3.5 / 11.8 and of the other einde2 glossaries (bouw_water, cast_*, geestenwereld, geestmodellen, appa,
+zwevers) are used word for word; new here:
+
+| Dutch | English | note |
+|---|---|---|
+| De Noordelijke Waterstam (hoofdstuk 2) | The Northern Water Tribe (chapter 2) | the line guhvatar_water |
+| De Blauwe Geest | The Blue Spirit | Zuka in his mask; he never speaks |
+| Blauwe Geest-masker | Blue Spirit Mask | clothes (EYES) |
+| Waterstam-parka | Water Tribe Parka | clothes (BODY) |
+| Boemerang | Boomerang | Sokka Guh's; always comes back |
+| Waterzweep / Watergolf / IJsbrug / Waterstroom | Water Whip / Water Wave / Ice Bridge / Water Current | the four story powers of chapter 2 |
+| otter-surfen | otter surfing | the sled run |
+| Glijkansel | Slide Pulpit | the top of the sled run (cf. Golfkansel = Wave Pulpit) |
+| Slee-otter | Sled Otter | the otter-penguin guh you ride |
+| Gondel | Gondola | |
+| maanvis / maangeest | moon fish / Moon Spirit | Tui |
+| Yue-guh, de maangeest | Yue Guh, the Moon Spirit | YUE_GUH_MAAN |
+| Hemelvijver | Sky Pond | (geestenwereld glossary) |
+| GEFELICIVADS! | CONGRACHONKULATIONS! | the banner of the surprise party (gefeliciteerd + vads) |
+| JOOSTVADSJE EN SUUSVADSJE | JOOSTCHONKY AND SUUSCHONKY | the party's (wrong) guests of honour |
+| Weer verkeerd afgevadst. | Wrong chonk-turn again. | Baltoguh's wink line |
+| Iedereen | Everyone | a speaker in the party scene |
+| plaksnorren | stick-on moustaches | (bouw_water glossary) |
+
+### h3_aarde
+
+| Dutch | English | note |
+|---|---|---|
+| Hoofdstuk 3: Ba Sing Guh | Chapter 3: Ba Sing Guh | the questline guhvatar_aarde |
+| aardesturen | earthbending | as bouw_aarde and the show |
+| De Blinde Bandiet / De Kei-guh / de Aardrommel | The Blind Bandit / The Boulder Guh / the Earth Rumble | as bouw_aarde |
+| aardemunt | earth coin | the six stones of the blindfold course |
+| oefenbaan / blinddoekbaan | training course / blindfold course | |
+| Pai Sho (Guh Pai Sho) / lotus / tegel | Pai Sho (Guh Pai Sho) / lotus / tile | the simple guh version (12a.4) |
+| Pai Sho-tafel | Pai Sho Table | reward block |
+| Theeset van Oom Miroh | Uncle Miroh's Tea Set | reward block |
+| Kraam van de koolman | Cabbage Man's Stall | reward block; "MIJN KOLEN!" = "MY CABBAGES!" |
+| Aarderijk-hoed | Earth Kingdom Hat | guh clothes |
+| Riem van De Blinde Bandiet | The Blind Bandit's Belt | guh clothes |
+| Appa's verloren dagen | Appa's Lost Days | the scene (the show's episode title) |
+| Een lied voor Lu Ten | A Song for Lu Ten | the scene; Miroh's own lullaby (own words, no line of the show's song) |
+| De val van Ba Sing Guh | The Fall of Ba Sing Guh | the scene |
+| Guhvatar-staat | Guhvatar State | the show's "Avatar State" |
+| geestenwater | spirit water | |
+| kristalcatacomben | crystal catacombs | as bouw_aarde |
+| Er is geen knabbeltekort in Ba Sing Guh | There is no nibble shortage in Ba Sing Guh | as bouw_aarde |
+| een guh van het huis | a guh of the house | the AI opponent at a Pai Sho table |
+| jip jip | yip yip | as the appa slice |
+
+### h4_vuur
+
+| Dutch | English | note |
+|---|---|---|
+| Hoofdstuk 4: Vuur | Chapter 4: Fire | the questline guhvatar_vuur |
+| De komeet van Mikai | Mikai's Comet | the questline guhvatar_finale (the show: Sozin's Comet) |
+| knabbelkomeet | nibble comet | |
+| Guhvatar-staat | Guhvatar State | the show: Avatar State |
+| Top der Voorgangers | Peak of the Predecessors | in the Spirit World |
+| Leeuwschildpad-guh | Lion Turtle Guh | as bouw_vuur and cast_schurk |
+| luchtvloot / luchtschip | airship fleet / airship | |
+| Vuurnatie-vermomming | Fire Nation Disguise | guh clothes and the player's look in chapter 4 |
+| Zuka's litteken | Zuka's Scar | guh clothes |
+| Guhvatar-standbeeld | Guhvatar Statue | the block guhvatar_beeld |
+| Vuurhoofd | Hothead | Toph's nickname for Zuka (the show: Sparky) |
+| Vuurheerin | Fire Lady | Azula's wish |
+| Zonnekrijgers | Sun Warriors | as the show |
+| luchtsprong / aardesprong | air jump / earth jump | the duel's own moves |
+| Vuurstoot | Fire Blast | the entity einde2_h4_vuur_vuurbal |
+| De Jasmijn Draak | the Jasmine Dragon | Miroh's tea house |
+| Sjokkel | Shuckly | wink 1 (section 24's name) |
+| 626-guh | 626-guh | wink 4, never translated |
+| njeg | nyeg | the guh word, as everywhere |
+
+### geest_spel
+
+| Dutch | English | note |
+|---|---|---|
+| Pai Sho-tegel van Bumi-guh (Pakguh, Piandao-guh, Jeong Jeong-guh, Oom Miroh) | Bumi Guh's (Pakguh's, Piandao Guh's, Jeong Jeong Guh's, Uncle Miroh's) Pai Sho Tile | the five master tiles |
+| Witte Lotus-tegel | White Lotus Tile | as bouw_vuur / deco |
+| de Oude Reiger(guh) | the Old Heron | the giant crane spirit of the White Lotus |
+| Lotusarchief | Lotus Archive | |
+| "Uit het Lotusarchief" | "From the Lotus Archive" | the written book |
+| Wen-Li-guh, Sao-guh, Mei-guh, Pao-guh | Wen-Li Guh, Sao Guh, Mei Guh, Pao Guh | the founder and three old members (invented) |
+| De Vadsige Lotus | The Chonky Lotus | Pao-guh's Pai Sho opening |
+| Kanna-guh | Kanna Guh | Pakku's lost love, guh-ified |
+| de Valgeest / Tunnelgeest / Kluizenaarsgeest | the Falling Spirit / Tunnel Spirit / Hermit Spirit | Miroh's three tea guests |
+| Knabbelkoor-eikel | Nibble Chorus Acorn | |
+| Masker van Koh | Koh's Mask | cosmetic head item |
+| Veer van de witte reiger / Gouden boekrol / Schubje van Koh / Maandruppel | White Heron Feather / Golden Scroll / Koh's Scale / Moon Drop | keepsakes of the rare sightings |
+| De eerste knabbel | The First Nibble | Wan-guh's keepsake |
+| Mediteerkussen | Meditation Cushion | the block for free visits |
+| kennisvosje | knowledge fox | as geest_modellen |
+| Guhvatar-gloed | Guhvatar glow | |
+| chakra-pad / chakra-steen | Chakra Path / chakra stone | |
+| maannacht / geestentij | moon night / spirit tide | |
+| spiegelvijver | mirror pond | |
+| Geestenklok | Spirit Bell | |
+| het achtste eiland | the eighth island | |
+| Wan-guh, de eerste | Wan Guh, the first | |
+| Zeldzame verschijningen | Rare Sightings | |
+
+### trap5_machines
+
+| Dutch | English | note |
+|---|---|---|
+| Vadszender / Vadsontvanger | Chonk Transmitter / Chonk Receiver | one net in the rule; one jump only |
+| Guhterminal | Guh Terminal | a block, never a tablet |
+| Bestelbalie / Bestelguh | Order Counter / Order Guh | the guh with the apron; *bonnetje* = *receipt* |
+| Knabbelpoort-buis | Nibble Gate Tube | *maatje* (its linked partner) = *buddy* |
+| Thuispoort | Home Gate | *toelaten / weigeren* = *let in / keep out*; *lading* = *charge* |
+| Enderguhrad | Enderguh Wheel | source, a Wahoog Enderguh flies in it |
+| Komeetkern / scherf van de knabbelkomeet | Comet Core / shard of the nibble comet | the strongest source *so far* (never "the strongest") |
+| Luchtblazer / Waterdrager / Korstduwer / Vuurkorf | Air Blower / Water Bearer / Crust Pusher / Fire Basket | the four element machines |
+| Bouwplan van de Werktuigguh | Mechanist Guh's Blueprint | the recipe card of tier 5 (stays in the grid) |
+| Diploma van de Werktuigguh | Mechanist Guh's Diploma | the keepsake at the end of the line |
+| oefenopstelling | practice setup | the six bays in the workshop |
+| De werkplaats gaat open | The Workshop Opens | the door scene |
+
+### trap5_ballon
+
+| Dutch | English | note |
+|---|---|---|
+| Vredesballon | Peace Balloon | bouw_lucht's name; the tier-5 big project, never "the last" or "final" |
+| Vredesballon-beeldje | Peace Balloon Statuette | the reward block `guhs:vredesballon` |
+| Vredesbrenger | Peacebringer | the title |
+| de Werktuigguh | the Mechanist Guh | as bouw_lucht / cast_volk |
+| de bouwplaats | the building site | the walled yard behind the workshop |
+| het doek / de mand / de brander / de knabbelvoorraad / de versiering | the cloth / the basket / the burner / the nibble supply / the decorations | the five stages |
+| tentdoek | tent canvas | campingmarkt's blocks ("Red Tent Canvas") |
+| doosschil | box shell | mikas' item |
+| Vuurkorf | Fire Basket | trap5_machines' element machine: trap5_machines' name |
+| Vadsontvanger | Chonk Receiver | trap5_machines' receiver: trap5_machines' name |
+| een zakje knabbels | a little bag of nibbles | the daily gift after the story |
+| Wordt vervolgd... | To Be Continued... | the tier-6 picture at the end of Guh Technology (FTB_SLOT of tech_quests) |
+| Trap 6 | Tier 6 | the open end |
+| oortjes | little ears | the Mechanist's droop when he sees a balloon |

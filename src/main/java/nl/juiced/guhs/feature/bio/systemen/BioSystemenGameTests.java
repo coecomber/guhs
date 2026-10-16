@@ -338,9 +338,17 @@ public class BioSystemenGameTests {
                 GuhVariant.HERTGUHTJE,   // (1.4.2: the park's Hertguhtje is a bonus page too)
                 GuhVariant.KNABBELKOI,   // <park-a> (1.4.2: and the Knabbelkoi of its japanse tuin)
                 GuhVariant.DUIFGUHTJE);   // (1.4.2 park-plekjes b: the Duifguhtje too)
+        // einde2 (1.5.0) adds bonus pages of its own (GuhDex.NIEUW_EINDE2 minus its six counting biome guhs): not biomes3's
+        Set<GuhVariant> einde2Bonus = new java.util.HashSet<>();
+        for (GuhVariant v : GuhDex.EXTRA) {
+            if (GuhDex.NIEUW_EINDE2.contains(v.name())) {
+                einde2Bonus.add(v);
+            }
+        }
         // what counted before biomes3: every page that is not new, minus the bonus pages there were
-        List<GuhVariant> voorheen = GuhDex.ENTRIES.stream().filter(v -> !nieuw.contains(v) && !oudeBonus.contains(v)).toList();
-        helper.assertTrue(GuhDex.ENTRIES.containsAll(nieuw) && GuhDex.EXTRA.containsAll(nieuw) && GuhDex.EXTRA.size() == oudeBonus.size() + nieuw.size(),
+        List<GuhVariant> voorheen = GuhDex.ENTRIES.stream().filter(v -> !nieuw.contains(v) && !oudeBonus.contains(v) && !einde2Bonus.contains(v)).toList();
+        helper.assertTrue(GuhDex.ENTRIES.containsAll(nieuw) && GuhDex.EXTRA.containsAll(nieuw)
+                        && GuhDex.EXTRA.size() == oudeBonus.size() + nieuw.size() + einde2Bonus.size(),
                 "the four new pages exist and are bonus pages");
         helper.assertTrue(GuhDex.TELLEND.equals(voorheen), "the counting pages are exactly those of before: " + GuhDex.TELLEND.size() + " / " + voorheen.size());
         int tembaar = (int) voorheen.stream().filter(v -> !v.isCharacter()).count();

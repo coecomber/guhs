@@ -444,6 +444,26 @@ public final class Vredesballon {
     }
 
     /** A chat line of the Werktuigguh, only for this player. */
+    /**
+     * (WerktuigguhRol.NA_KLAAR, integratie_b) talked to after his own line: while this player's balloon is not up yet, the
+     * Werktuigguh points to the board himself (where to start, the stage that is next, or the launch); true = he answered.
+     * After the launch his own tips come back.
+     */
+    public static boolean wijsNaarBord(ServerPlayer p) {
+        if (LIJN.klaar(p) || !magBeginnen(p)) {
+            return false;
+        }
+        int stap = LIJN.stap(p);
+        if (stap <= 0) {
+            zeg(p, "wg.wijs_begin");
+        } else if (stap >= KLAAR) {
+            zeg(p, "wg.wijs_klaar");
+        } else {
+            zeg(p, "wg.wijs_fase", stap, Component.translatable(T + "fase." + stap));
+        }
+        return true;
+    }
+
     static void zeg(ServerPlayer p, String key, Object... args) {
         MutableComponent naam = Component.translatable("entity.guhs.guh_npc.werktuigguh");
         p.sendSystemMessage(Component.literal("<").append(naam).append("> ").withStyle(ChatFormatting.LIGHT_PURPLE)

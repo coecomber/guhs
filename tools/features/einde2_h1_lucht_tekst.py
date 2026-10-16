@@ -20,7 +20,7 @@ LIJN_ID = "guhvatar_lucht"
 # the questline (step i = index i; 10 steps, done at 10)
 # =====================================================================================================================
 LIJN = dict(
-    naam="De Guhvatar: Lucht",
+    naam="Hoofdstuk 1: De Zuidelijke Luchttempel",
     uitleg="Een gloeiende kaasbol spoelt aan bij de Knabbelberg. Erin: Aang-guh, de vorige Guhvatar, en zijn luchtbizon "
            "Appa-guh. En jij blijkt de nieuwe Guhvatar te zijn. Eerst: luchtsturen leren in de Zuidelijke Luchttempel.",
     stappen=[
@@ -247,7 +247,7 @@ TEXTS = {
 # =====================================================================================================================
 # FTB: the section "De Guhvatar: Lucht" (one quest per step; quest i is done when step i + 1 is reached)
 # =====================================================================================================================
-FTB_TITEL = "De Guhvatar: Lucht"
+FTB_TITEL = "Hoofdstuk 1: De Zuidelijke Luchttempel"
 FTB = [
     ("einde2_h1_lucht_kaasbol", "De kaasbol", "Wie Opper-Mika heeft verslagen, ziet bij de Knabbelberg een &6gloeiende kaasbol&r aanspoelen. "
      "Tik hem open en kijk wie erin zat.", "guhs:oog_van_vadsig", 0),
