@@ -9,9 +9,11 @@
     "type": "guhs:gegarandeerd",
     "salt": 21401208,
     "min_afstand": 2000,
-    "max_afstand": 3200,
-    "sector": 12,
+    "max_afstand": 2800,
+    "sector": 9,
     "sectoren": 16,
-    "alleen_nieuw": true
+    "alleen_nieuw": true,
+    "rond": "guhs:ba_sing_guh_gegarandeerd",
+    "max_ver": 4500
   }
 }
