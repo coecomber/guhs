@@ -181,11 +181,33 @@ public final class GeestToegang {
         return gids != null && Geestenwereld.in(gids) && Geestenwereld.in(p) ? gids : null;
     }
 
+    /** The walled compound of the White Lotus (its wings, court, sanctuary, gate doorway), the part of the island that 2.3 closes. */
+    static final List<String> COMPOUND = List.of("lotus_hof", "vleugel_bumi", "vleugel_pakguh", "vleugel_piandao", "vleugel_jeong_jeong",
+            "vleugel_miroh", "ledenhof", "heiligdom", "lotusarchief", "poort_doorgang");
+
+    /**
+     * Is the player inside the walled compound of the White Lotus? A closed {@code lotus_ruines} only closes that (2.3: "the
+     * five wings"): the courtyard before the gate and the road along the island stay open, because the only path from the
+     * arrival to Koh's cave that does not cross the Gefluisterwoud (lotus_koh) starts in that courtyard. No compound markers
+     * (an older build): the whole zone, as before.
+     */
+    static boolean inCompound(ServerPlayer p) {
+        AABB samen = null;
+        for (String id : COMPOUND) {
+            AABB d = GeestPlek.doos(id);
+            if (d != null) {
+                samen = samen == null ? d : samen.minmax(d);
+            }
+        }
+        return samen == null || samen.inflate(2, 4, 2).contains(p.position());
+    }
+
     /** The zone marker a player stands in that is closed for them (null: none). */
     @Nullable
     static String geslotenZone(ServerPlayer p) {
         for (String z : Geestenwereld.ZONES) {
-            if (!"meditatiecirkel".equals(z) && GeestPlek.in(p, "zone_" + z) && !zoneOpen(p, z)) {
+            if (!"meditatiecirkel".equals(z) && GeestPlek.in(p, "zone_" + z) && !zoneOpen(p, z)
+                    && (!"lotus_ruines".equals(z) || inCompound(p))) {
                 return z;
             }
         }
