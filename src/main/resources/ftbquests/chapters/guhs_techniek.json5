@@ -115,6 +115,18 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "475548270B70DD8A",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_einde2_trap5_ballon.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 21.16875,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
@@ -123,10 +135,10 @@
       x: 4.5,
       y: 27.568749999999998,
       hover: [
-        "Hier ontbreekt nog een stukje. Njeg!",
-        "De laatste uitvindingen liggen diep in het &5Guheinde&r:",
-        "de Bestelguh, draadloze vadskracht en de Guhterminal.",
-        "Die komen in een volgende update. Bouw vast een mooie fabriek!",
+        "De Werktuigguh krabt achter zijn oortjes.",
+        "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
+        "Daar liggen uitvindingen die zelfs ik nog niet snap.\"",
+        "Trap 6 komt in een volgende update. Njeg!",
       ],
     },
   ],
@@ -2427,6 +2439,313 @@
       x: 4.5,
       y: 24.45,
       shape: "gear",
+    },
+    {
+      id: "475548E71D7409D9",
+      icon: {
+        id: "guhs:vredesballon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_1",
+          id: "475548A961505D7A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BB7B6D4815",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 22.95,
+    },
+    {
+      id: "475548A570C5F8D9",
+      icon: {
+        id: "guhs:campingmarkt_tentdoek_geel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_2",
+          id: "4755485EEF7BAC5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821D633EF0F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 22.95,
+    },
+    {
+      id: "4755485FD93F0316",
+      icon: {
+        id: "minecraft:oak_log",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_3",
+          id: "475548CF7D3405C4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482B1C7766C5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 22.95,
+    },
+    {
+      id: "47554879788DCD2C",
+      icon: {
+        id: "guhs:grillkool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_4",
+          id: "47554803CC6F49D1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F46536CDD3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 22.95,
+    },
+    {
+      id: "4755488B9692F09D",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_5",
+          id: "4755482826AFD310",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487AA6DAD12B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 22.95,
+    },
+    {
+      id: "4755486E1D362EDF",
+      icon: {
+        id: "guhs:lichtstaafje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_6",
+          id: "4755485F5ECD635C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482B206747B1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 22.95,
+    },
+    {
+      id: "4755486223397A6F",
+      icon: {
+        id: "guhs:vredesballon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vredesballon_stap_7",
+          id: "475548857BFE9D33",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EF2653606C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548EE655497A9",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 22.95,
+      shape: "gear",
+    },
+    {
+      id: "475548E931E5CAA0",
+      icon: {
+        id: "guhs:vredesballon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_trap5_ballon_beeldje",
+          id: "475548F0E1C35A58",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487A9F5532CE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 24.45,
+      shape: "diamond",
+    },
+    {
+      id: "47554884FF4B91D1",
+      icon: {
+        id: "guhs:heteluchtballon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_vetbootje_ballon",
+          id: "4755481F2FFEA7F7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FCDC88D967",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 24.45,
+      shape: "circle",
+    },
+    {
+      id: "4755481EB48408C2",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_trap5_ballon_dagelijks",
+          id: "475548BEE8903C96",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484C6C13BA16",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 24.45,
+      shape: "circle",
+    },
+    {
+      id: "475548A95CB45E8A",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/einde2_trap5_ballon_vredesbrenger",
+          id: "47554865613A57BF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489B09446771",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 24.45,
+      shape: "rsquare",
     },
   ],
 }
