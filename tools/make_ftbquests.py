@@ -505,7 +505,8 @@ CHAPTERS = {
                "Met &bGuhdraad&r breng je die kracht naar machines met een snoetje: ovens, buizen, knabbelaars... Elk rijtje "
                "hieronder is een &6project&r, en na elk project werkt er iets vanzelf in je eigen wereld.",
                "Kijk naar een rad, een draad of een machine en je ziet meteen hoeveel vadskracht je opstelling gebruikt. "
-               "Het allerlaatste stukje ontbreekt nog: dat hoort bij het &5Guheinde&r. " + NIKS_OP_SLOT]),
+               "&6Trap 5&r vind je in het &5Guheinde&r, in de werkplaats van de Werktuigguh, en daarna bouw je er de &6Vredesballon&r. "
+               "En trap 6? Die komt nog! " + NIKS_OP_SLOT]),
     # guhpad: the second stop of the Guhpad: the two big stories of the Guhbarbecuether in one chapter, the Knabbelring
     # (features/ring*.py, the one story whose quests really depend on each other: FTB_LINEAIR) and under it Super Guhrio
     # (features/guhrio*.py). Before the Guhpad they were the chapters guhs_knabbelring and guhs_guhrio (never released; the
