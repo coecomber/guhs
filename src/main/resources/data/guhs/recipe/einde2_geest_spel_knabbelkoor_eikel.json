@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:knabbelkoorvrucht",
+    "guhs:kaas_knabbels"
+  ],
+  "result": {
+    "id": "guhs:einde2_geest_spel_knabbelkoor_eikel"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "WWW"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "W": "minecraft:purple_wool"
+  },
+  "result": {
+    "id": "guhs:einde2_geest_spel_mediteerkussen"
+  }
+}

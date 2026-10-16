@@ -1,0 +1,55 @@
+# einde2, slice geest_spel: the play of the Geestenwereld in a real world (dev run only).
+# /guhs einde2 geestspel ga <stap> sets the state and takes you to the step's marker.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_geest_spel.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/guhs einde2 geestspel ga binnen
+wait 200
+waitrender 400
+shot e2_geest_spel_binnen
+
+section the lotus gate and a trial (Bumi-guh)
+/guhs einde2 geestspel ga lotus
+wait 60
+waitrender 300
+shot e2_geest_spel_poort
+/guhs einde2 geestspel ga bumi
+wait 60
+waitrender 300
+shot e2_geest_spel_bumi
+
+section the mirrors of Pakguh (the moonbeam needs survival to be seen as the player)
+/gamemode adventure
+/guhs einde2 geestspel ga pakguh
+wait 80
+waitrender 300
+shot e2_geest_spel_pakguh
+/gamemode creative
+
+section the pedestals and the Oude Reiger
+/guhs einde2 geestspel ga voetstukken
+wait 60
+waitrender 300
+shot e2_geest_spel_voetstukken
+
+section the moods: spirit tide and moon night
+/guhs einde2 geestspel ga geestentij
+wait 120
+waitrender 300
+shot e2_geest_spel_geestentij
+/guhs einde2 geestspel ga maannacht
+wait 200
+waitrender 300
+shot e2_geest_spel_maannacht
+
+section the lantern tree lit, the wood blooming
+/guhs einde2 geestspel ga bloei
+wait 80
+waitrender 300
+shot e2_geest_spel_bloei
+
+section the path to the eighth island
+/guhs einde2 geestspel ga pad_8
+wait 80
+waitrender 300
+shot e2_geest_spel_pad8
