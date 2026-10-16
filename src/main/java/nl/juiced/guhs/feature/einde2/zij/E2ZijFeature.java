@@ -74,6 +74,7 @@ public final class E2ZijFeature {
         Leegtehaven.register();
         Ringenrace.register();
         ZijScenes.register();
+        ZijHints.registreer();
         ZijEvents.register();
         Titels.registreer(new Titels.Titel(TITEL_VESTING, "gui.guhs.titel." + TITEL_VESTING, ChatFormatting.GOLD, "minecraft:iron_bars",
                 p -> VestingCellen.bevrijd(p) >= VestingCellen.BEVRIJDER));

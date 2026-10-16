@@ -160,6 +160,7 @@ public final class E2GeestSpelFeature {
         KohRaadsels.register();
         Chakras.register();
         Snelreis.register();
+        GeestHints.registreer();
         GeestWezen.BIJ_KLIK.add(GeestSpel::opWezenKlik);
         Schijn.registreer(GeestToegang::lantaarnsUit);
         Schijn.registreer(GeestLagen::vul);
@@ -173,7 +174,6 @@ public final class E2GeestSpelFeature {
         NeoForge.EVENT_BUS.addListener(GeestSpel::opEntityKlik);
         NeoForge.EVENT_BUS.addListener(GeestLagen::opTick);
         NeoForge.EVENT_BUS.addListener(Snelreis::kussenTick);
-        NeoForge.EVENT_BUS.addListener(WitteLotus::levelTick);
         NeoForge.EVENT_BUS.addListener(Verschijningen::levelTick);
         NeoForge.EVENT_BUS.addListener(GeestActeurs::opLaden);
         NeoForge.EVENT_BUS.addListener(GeestSpelCommando::register);

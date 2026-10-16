@@ -106,6 +106,7 @@ public final class GeestSpel {
             return;
         }
         WitteLotus.tick(p);
+        GeestHints.tick(p);
         Proeven.tick(p);
         Lantaarns.tick(p);
         HeiBai.tick(p);
@@ -184,6 +185,12 @@ public final class GeestSpel {
     /** A short line over the hotbar. */
     public static void balk(ServerPlayer p, String key, Object... args) {
         p.sendOverlayMessage(Component.translatable(key, args).withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
+    /** A big title and subtitle for this player only (fix round 1: a trial's success must register clearly). */
+    public static void titel(ServerPlayer p, String titelKey, @Nullable String subKey, Object... args) {
+        nl.juiced.guhs.feature.einde2.zij.Zij.titel(p, Component.translatable(titelKey).withStyle(ChatFormatting.LIGHT_PURPLE),
+                subKey == null ? null : Component.translatable(subKey, args).withStyle(ChatFormatting.WHITE), 6, 50, 14);
     }
 
     /** One item into the player's bag (or at their feet when it is full). */

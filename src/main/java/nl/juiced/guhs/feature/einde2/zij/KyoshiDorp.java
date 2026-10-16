@@ -41,7 +41,8 @@ import nl.juiced.guhs.registry.ModItems;
 public final class KyoshiDorp {
     static final String Q = Zij.Q + "kyoshi.";
     static final String S = Einde2Ids.KYOSHI_DORP;
-    public static final int ZETTEN = 16, GOED = 12;
+    /** fix round 1: 10 of the 16 calls pass (was 12): the turn and the jump read late over a network. */
+    public static final int ZETTEN = 16, GOED = 10;
     /** Before the first call: two bars of the tune. */
     public static final int VOORAF_TELLEN = 4;
 

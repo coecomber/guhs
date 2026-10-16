@@ -119,6 +119,11 @@ def texts(h):
             kit.lang(h, f"book.guhs.einde2_zij.{bid}.{i}", p)
     for key, text in tekst.TEKST.items():
         kit.lang(h, key, text)
+    # fix round 1 (fix2-geestzij): the step hints and their look scenes (ZijHints.java)
+    for k, v in tekst.HINTS.items():
+        kit.lang(h, f"gui.guhs.einde2_zij.hint.{k}", v)
+    for naam, (titel, onder) in tekst.KIJK.items():
+        verhaal_motor.scene(h, f"einde2_zij_kijk_{naam}", titel, {"tekst": onder})
     for name in VERBORGEN:
         kit.verborgen(h, name)
 
@@ -164,6 +169,13 @@ def selfcheck(h):
                         problems.append(f"{f}: no key starting with {key}")
                 elif key not in h.NL:
                     problems.append(f"{f}: no key {key}")
+    hints = open(os.path.join(JAVA, "ZijHints.java"), encoding="utf-8").read()
+    for k in re.findall(r'T \+ "([a-z_.0-9]+)"', hints):
+        if f"gui.guhs.einde2_zij.hint.{k}" not in h.NL:
+            problems.append(f"ZijHints.java: no hint text {k}")
+    for k in re.findall(r'kijk\("([a-z_0-9]+)"\)', hints):
+        if f"scene.guhs.einde2_zij_kijk_{k}.titel" not in h.NL:
+            problems.append(f"ZijHints.java: no look scene {k}")
     for p in ("textures/item/einde2_zij_kristalsnoep_ring.png", "textures/item/einde2_zij_zegenschub.png", "textures/item/einde2_zij_spijtsoep.png"):
         if not os.path.exists(os.path.join(h.A, p)):
             problems.append("missing " + p)

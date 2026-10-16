@@ -106,6 +106,9 @@ public final class KohRaadsels {
         if (t > 0 && t % 20 < 10) {
             GeestSpel.geluid(p, "geest.koh_stilte", 0.4f, 1.0f + (t / 20) * 0.05f);
         }
+        // fix round 1: the stillness is no hidden timer: dots above the hotbar fill while you stand still
+        int bolletjes = (int) Math.min(5, t * 5 / STIL_TICKS);
+        GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.koh.stil_teller", "●".repeat(bolletjes) + "○".repeat(5 - bolletjes));
         if (t >= STIL_TICKS) {
             WACHT.remove(p.getUUID());
             vraag(p);

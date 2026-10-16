@@ -159,6 +159,10 @@ public final class Luchttempel {
     // --- step 1: the wind corridors ------------------------------------------------------------------------------------------
 
     static void kracht(ServerPlayer p, Krachten.Kracht k) {
+        if (k.element() == Einde2Ids.Element.LUCHT && ln().stap(p) == 2) {
+            blaasNaarHuis(p);
+            return;
+        }
         if (k.element() != Einde2Ids.Element.LUCHT || ln().stap(p) != 1) {
             return;
         }
@@ -181,6 +185,7 @@ public final class Luchttempel {
                 for (int j = 1; j <= KUDDE; j++) {
                     zing(p, kopie, j);
                 }
+                Zij.titel(p, net.minecraft.network.chat.Component.translatable(Q + "fluit_titel").withStyle(net.minecraft.ChatFormatting.AQUA), null, 4, 40, 10);
                 Zij.stem(p, Q + "naam.luchtnon", Q + "fluit_klaar");
                 Zij.hint(p, Q + "hint.kudde");
             } else {
@@ -210,6 +215,44 @@ public final class Luchttempel {
 
     // --- step 2: the herd ------------------------------------------------------------------------------------------------------
 
+    /** How far an air power reaches a stray (fix round 1: the strays are hard to reach, a gust from afar sends one home). */
+    static final double BLAAS_BEREIK = 40, BLAAS_HOEK = 12;
+
+    /**
+     * fix round 1 (fix2-geestzij): an air power aimed at one of your own strays (within {@value #BLAAS_BEREIK} blocks, within
+     * {@value #BLAAS_HOEK} degrees of where you look) sends it home as a click does: no need to fly right up to a cloud.
+     */
+    static void blaasNaarHuis(ServerPlayer p) {
+        UUID[] eigen = EIGEN.get(p.getUUID());
+        if (eigen == null) {
+            return;
+        }
+        Vec3 oog = p.getEyePosition();
+        Vec3 kijk = p.getViewVector(1f);
+        CastWezen best = null;
+        double bestCos = Math.cos(Math.toRadians(BLAAS_HOEK));
+        for (UUID u : eigen) {
+            Entity e = u == null ? null : p.level().getEntity(u);
+            if (!(e instanceof CastWezen w) || VLIEGT.containsKey(u)) {
+                continue;
+            }
+            Vec3 naar = w.position().add(0, w.getBbHeight() / 2, 0).subtract(oog);
+            double d = naar.length();
+            if (d > BLAAS_BEREIK || d < 0.01) {
+                continue;
+            }
+            double cos = naar.normalize().dot(kijk);
+            if (cos >= bestCos) {
+                bestCos = cos;
+                best = w;
+            }
+        }
+        if (best != null) {
+            p.level().sendParticles(p, ParticleTypes.GUST, true, false, best.getX(), best.getY() + 1, best.getZ(), 3, 0.5, 0.5, 0.5, 0);
+            klik(best, p);
+        }
+    }
+
     /** A click on one of the player's own strays: it flies home. */
     static boolean klik(CastWezen w, ServerPlayer p) {
         if (!w.entityTags().contains(TAG)) {
@@ -231,6 +274,8 @@ public final class Luchttempel {
         VLIEGT.put(w.getUUID(), new Vlucht(w.position(), naar, w.level().getGameTime()));
         int n = thuis(p);
         if (n >= KUDDE && ln().verder(p, 2)) {
+            Zij.titel(p, net.minecraft.network.chat.Component.translatable(Q + "kudde_titel").withStyle(net.minecraft.ChatFormatting.AQUA), null, 4, 40, 10);
+            Zij.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.7f, 1.2f);
             Zij.stem(p, Q + "naam.luchtnon", Q + "kudde_klaar");
             Zij.hint(p, Q + "hint.terug");
         } else {

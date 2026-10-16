@@ -144,6 +144,7 @@ public final class Omashguh {
         Zij.geluid(p, SoundEvents.GLASS_BREAK, 1f, 0.8f);
         Zij.geluid(p, SoundEvents.CHAIN_FALL, 1f, 1.2f);
         if (ln().verder(p, 1)) {
+            geslaagd(p, 1);
             Zij.stem(p, naam(), Q + "proef1_klaar");
             Zij.hint(p, Q + "hint.proef2");
             giechel(level, kopie);
@@ -160,6 +161,7 @@ public final class Omashguh {
         w.level().playSound(null, w.blockPosition(), SoundEvents.GOAT_SCREAMING_AMBIENT, net.minecraft.sounds.SoundSource.NEUTRAL, 0.8f, 1.4f);
         ((ServerLevel) w.level()).sendParticles(ParticleTypes.HEART, w.getX(), w.getY() + 2.2, w.getZ(), 6, 0.6, 0.4, 0.6, 0);
         if (ln().verder(p, 2)) {
+            geslaagd(p, 2);
             Zij.stem(p, naam(), Q + "proef2_klaar");
             Zij.hint(p, Q + "hint.proef3");
         }
@@ -203,10 +205,37 @@ public final class Omashguh {
         }
         if (ln().verder(p, 3)) {
             Praat.sluit(p);
+            geslaagd(p, 3);
             Zij.stem(p, naam(), Q + "proef3_klaar");
             Zij.hint(p, Q + "hint.race");
             Zij.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.8f, 1.2f);
         }
+    }
+
+    /** fix round 1: a trial's success registers clearly: a title and a sound. */
+    private static void geslaagd(ServerPlayer p, int proef) {
+        Zij.titel(p, Component.translatable(Q + "proef_titel", proef).withStyle(ChatFormatting.GOLD), Component.translatable(Q + "proef_sub." + proef), 4, 45, 10);
+        Zij.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.7f, 1.1f);
+    }
+
+    /**
+     * fix round 1: a run that was too slow (or lost) costs no walk back up the mountain: a moment later the post lift
+     * carries you to the loading platform at the top, ready for the next try.
+     */
+    private static void lift(ServerPlayer p, ZijPlek.Kopie kopie) {
+        Vec3 start = kopie.midden("glijbaan_start");
+        if (start == null) {
+            return;
+        }
+        ZijEvents.later(50, () -> {
+            if (!p.isAlive() || p.hasDisconnected() || ln().stap(p) != 4 || RACE.containsKey(p.getUUID())) {
+                return;
+            }
+            p.teleportTo(p.level(), start.x, start.y, start.z, java.util.Set.of(), p.getYRot(), 0f, true);
+            p.level().sendParticles(p, ParticleTypes.CLOUD, true, false, start.x, start.y + 1, start.z, 20, 0.5, 0.6, 0.5, 0.02);
+            Zij.geluid(p, SoundEvents.CHAIN_PLACE, 0.8f, 0.8f);
+            Zij.melding(p, Q + "lift");
+        });
     }
 
     // --- every few ticks: zones and the race ---------------------------------------------------------------------------------
@@ -271,10 +300,12 @@ public final class Omashguh {
                 gewonnen(p, kopie, (int) tijd);
             } else {
                 Zij.stem(p, naam(), Q + "race_te_laat", nl.juiced.guhs.quest.Highscores.tijd((int) tijd));
+                lift(p, kopie);
             }
         } else if (tijd > RACE_TICKS + 20 * 20) {
             RACE.remove(id);
             Zij.melding(p, Q + "race_kwijt");
+            lift(p, kopie);
         }
     }
 

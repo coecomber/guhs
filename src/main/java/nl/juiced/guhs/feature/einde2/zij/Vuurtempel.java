@@ -187,6 +187,8 @@ public final class Vuurtempel {
             Zij.geluid(p, SoundEvents.BLAZE_SHOOT, 0.6f, 1.2f);
             int n = aan(p);
             if (n >= DEUREN && ln().verder(p, 1)) {
+                Zij.titel(p, net.minecraft.network.chat.Component.translatable(Q + "deuren_titel").withStyle(net.minecraft.ChatFormatting.GOLD),
+                        net.minecraft.network.chat.Component.translatable(Q + "deuren_sub"), 4, 50, 10);
                 Zij.geluid(p, SoundEvents.IRON_DOOR_OPEN, 1f, 0.5f);
                 Zij.geluid(p, SoundEvents.BLAZE_AMBIENT, 0.7f, 0.6f);
                 Schijn.straks(p);

@@ -38,6 +38,8 @@ public final class Ringenrace {
     static final String Q = Zij.Q + "race.";
     static final String S = Einde2Ids.GUHVLEUGEL_RINGENRACE;
     public static final String BORD = "einde2_zij_ringenrace", BESTE = "guhs_einde2_zij_race_beste";
+    /** fix round 1: how far outside a ring's own radius a pass still counts (was 0.6): eighteen rings, so a near miss counts. */
+    static final double RAND = 1.5;
     /** Ticks of the count-down; the time limit of a run; the par time of the title. */
     public static final int AFTEL = 60, MAX = 20 * 180, PAR = 20 * 45;
 
@@ -133,7 +135,7 @@ public final class Ringenrace {
         if (run.ring < ringen.size()) {
             Plekken.Plek ring = ringen.get(run.ring);
             BlockPos c = Plekken.wereld(run.kopie.start(), ring);
-            if (c != null && door(run.vorige, nuPos, Vec3.atCenterOf(c), ring.as(), ring.straal() + 0.6)) {
+            if (c != null && door(run.vorige, nuPos, Vec3.atCenterOf(c), ring.as(), ring.straal() + RAND)) {
                 run.ring++;
                 Zij.geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP, 1f, 0.8f + 0.06f * run.ring);
                 level.sendParticles(p, ParticleTypes.HAPPY_VILLAGER, true, false, c.getX() + 0.5, c.getY() + 0.5, c.getZ() + 0.5, 30, 2, 2, 2, 0.1);
@@ -154,7 +156,26 @@ public final class Ringenrace {
                 && !p.isFallFlying() && !p.isPassenger() && t > 40 && !run.kopie.in("start", p.position(), 2))) {
             RUNS.remove(p.getUUID());
             Zij.melding(p, Q + "mis");
+            terugNaarStart(p, run.kopie);
         }
+    }
+
+    /** fix round 1: a run that ended costs no long flight back: a moment later the wind sets you on the start platform. */
+    private static void terugNaarStart(ServerPlayer p, ZijPlek.Kopie kopie) {
+        Vec3 plek = kopie.midden("start");
+        if (plek == null) {
+            return;
+        }
+        ZijEvents.later(40, () -> {
+            if (!p.isAlive() || p.hasDisconnected() || RUNS.containsKey(p.getUUID()) || p.level() != kopie.level()) {
+                return;
+            }
+            p.stopFallFlying();
+            p.teleportTo(p.level(), plek.x, plek.y, plek.z, java.util.Set.of(), p.getYRot(), 0f, true);
+            p.setDeltaMovement(Vec3.ZERO);
+            p.level().sendParticles(p, ParticleTypes.CLOUD, true, false, plek.x, plek.y + 1, plek.z, 20, 0.5, 0.6, 0.5, 0.02);
+            Zij.melding(p, Q + "terug");
+        });
     }
 
     /** Did the line from a to b cross the ring's plane within this radius of its centre? */

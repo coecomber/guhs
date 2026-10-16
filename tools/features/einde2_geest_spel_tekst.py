@@ -9,48 +9,61 @@ P = "gui.guhs.einde2_geest_spel."
 # =====================================================================================================================
 # the seven lines (verhaal_motor.verhaallijn): id -> (naam, uitleg, [(stapnaam, nu, waar)], klaar)
 # =====================================================================================================================
+CHAKRA_WAAR = ["bij de aankomst, naast Guru Pathik-guh", "het Gefluisterwoud, ten westen van de aankomst",
+               "bij Koh's Grot, onder de grote zwarte boom", "de rand van de Hemelvijver, ten oosten van de aankomst",
+               "de tuin bij het Theepaviljoen, ten zuidoosten", "de tuin van de oude leden van de Witte Lotus",
+               "de Top der Voorgangers, boven aan de Hemeltrap"]
 LIJNEN = {
     "geest_witte_lotus": (
         "De Witte Lotus",
         "Achter de poort met de draaipuzzel ligt het oude hof van de Witte Lotus: vijf vleugels, vijf meesters, vijf proeven. "
         "En ergens daarachter slaapt iets heel groots.",
-        [("De poort", "Leg de negen tegels voor de poort als een witte lotus.", "Witte Lotus-ruines, Geestenwereld"),
-         ("Het binnenhof", "Loop door de poort naar het binnenhof met het grote Pai Sho-bord.", "Witte Lotus-ruines, Geestenwereld"),
-         ("Vijf proeven", "Verdien de tegel van elke meester: Bumi-guh, Pakguh, Piandao-guh, Jeong Jeong-guh en Oom Miroh.",
-          "de vijf vleugels van de Witte Lotus"),
-         ("De oude leden", "Luister naar de drie oude leden en de stichter van de orde.", "het binnenhof van de Witte Lotus"),
-         ("Zes tegels", "Leg de zes tegels op de voetstukken voor de stenen lotus.", "het heiligdom van de Witte Lotus"),
-         ("Het Lotusarchief", "Ga het Lotusarchief binnen.", "achter de stenen lotus")],
+        [("De poort", "Draai de negen tegels voor de poort (klik erop) tot ze samen een witte lotus vormen. Een tegel die goed "
+                      "ligt, glinstert groen.", "de Witte Lotus-ruines, ten noorden van de aankomst"),
+         ("Het binnenhof", "Loop door de open poort naar het noorden, het binnenhof met het grote Pai Sho-bord in.",
+          "de Witte Lotus-ruines, achter de poort"),
+         ("Vijf proeven", "Verdien de tegel van elke meester: klik op zijn gloeiende echo in zijn vleugel. Bumi-guh (west), Pakguh "
+                          "(oost), Piandao-guh (noordwest), Jeong Jeong-guh (noordoost) en Oom Miroh (de theetuin, zuidoost).",
+          "de vijf vleugels rond het binnenhof"),
+         ("De oude leden", "Luister naar de drie oude leden in hun tuin (de zuidwesthoek van het hof), en dan naar de stichter "
+                           "voor het heiligdom.", "het binnenhof van de Witte Lotus"),
+         ("Zes tegels", "Klik op elk van de zes voetstukken voor de stenen lotus: zo leg je je tegels erop.",
+          "het heiligdom, aan de noordkant van het binnenhof"),
+         ("Het Lotusarchief", "Loop de trap af achter de open stenen lotus, het Lotusarchief in.", "achter de stenen lotus, in het heiligdom")],
         ("De orde vertrouwt je. De Oude Reiger ook. Vahoeg!", "het Lotusarchief")),
     "geest_lantaarns": (
         "Verdwaalde lantaarns",
         "Acht lantaarngeestjes zijn van de Lantaarnboom weggedwaald. Klik op een verdwaalde lantaarn, dan volgt hij je. Breng "
         "hem terug naar de boom in de Meditatiecirkel.",
-        [(f"Lantaarn {i + 1}", f"Breng de verdwaalde lantaarns terug naar de Lantaarnboom ({i} van 8 hangen er weer).",
+        [(f"Lantaarn {i + 1}", f"Breng de verdwaalde lantaarns terug naar de Lantaarnboom bij de aankomst ({i} van 8 hangen er "
+                                f"weer). Klik op een lantaarn, dan volgt hij je; een lichtzuil wijst de volgende aan.",
           "overal in de Geestenwereld") for i in range(8)],
         ("Alle acht hangen weer aan de boom. Hij gloeit, en er reist een libelkonijnguhtje met je mee.", "de Lantaarnboom")),
     "geest_hei_bai": (
         "Het eikeltje van Hei Bai-guh",
         "In het Gefluisterwoud woont Hei Bai-guh, een bosgeest die heel groot en heel boos is geworden. Er is iets met zijn bos "
         "in de echte wereld.",
-        [("De boze bosgeest", "Zoek Hei Bai-guh in het Gefluisterwoud.", "Gefluisterwoud, Geestenwereld"),
-         ("Een eikel van thuis", "Maak een knabbelkoor-eikel (knabbelkoorvrucht + kaasknabbel) en plant hem bij de verbrande "
-          "stronk.", "het Knabbelkoorbos, dan het Gefluisterwoud")],
+        [("De boze bosgeest", "Zoek Hei Bai-guh op de open plek met de verbrande stronk en klik op hem.",
+          "het Gefluisterwoud, ten westen van de aankomst"),
+         ("Een eikel van thuis", "Maak een knabbelkoor-eikel in je knutseltafel (knabbelkoorvrucht + kaasknabbel) en klik ermee "
+          "op de verbrande stronk.", "het Knabbelkoorbos in het Guheinde, dan het Gefluisterwoud")],
         ("Hei Bai-guh is weer klein en lief, en het woud bloeit.", "Gefluisterwoud")),
     "geest_koh": (
         "De raadsels van Koh",
         "Koh de Gezichtenrover heeft raadsels. Hij stelt ze alleen aan wie geen enkele emotie toont. Niet bewegen. Niet "
         "springen. Niet niezen.",
-        [("Het eerste raadsel", "Ga voor Koh staan, klik op hem en sta doodstil.", "Koh's Grot"),
-         ("Het tweede raadsel", "Nog een raadsel. Nog steeds niet bewegen.", "Koh's Grot"),
-         ("Het derde raadsel", "Het laatste raadsel. Je gezicht is nog van jou: houd het zo.", "Koh's Grot")],
+        [("Het eerste raadsel", "Ga op de plek voor Koh staan, klik op hem en sta doodstil tot de bolletjes boven je balk vol "
+                                "zijn.", "Koh's Grot, onder de grote zwarte boom (noordwest)"),
+         ("Het tweede raadsel", "Nog een raadsel. Nog steeds niet bewegen.", "Koh's Grot, onder de grote zwarte boom (noordwest)"),
+         ("Het derde raadsel", "Het laatste raadsel. Je gezicht is nog van jou: houd het zo.",
+          "Koh's Grot, onder de grote zwarte boom (noordwest)")],
         ("Koh gaf je een masker. Je eigen gezicht mocht je houden.", "Koh's Grot")),
     "geest_chakra": (
         "Het chakra-pad",
         "Guru Pathik-guh wacht bij de eerste meditatiesteen. Zeven poortjes in je ziel, verstopt achter oude kruimels: open ze "
         "een voor een.",
-        [(f"Chakra {i + 1}", f"Mediteer bij chakra-steen {i + 1}. Zit stil, adem, en laat los.", "de zones van de Geestenwereld")
-         for i in range(7)],
+        [(f"Chakra {i + 1}", f"Mediteer bij chakra-steen {i + 1}: klik erop, zit stil tot de bolletjes vol zijn, en laat los.",
+          CHAKRA_WAAR[i]) for i in range(7)],
         ("Alle zeven poortjes staan open. De Guhvatar-gloed is van jou.", "de Geestenwereld")),
     "geest_verschijningen": (
         "Zeldzame verschijningen",
@@ -64,9 +77,11 @@ LIJNEN = {
         "De eerste",
         "Een guh met een kap staat soms ver weg en kijkt naar je. Kom je dichterbij, dan is hij weg.",
         [("Een gestalte met een kap", "Kijk goed naar de gestalte met de kap als hij er is.", "in de verte, overal"),
-         ("Het achtste eiland", "Ver in de mist ligt een eiland dat niemand bereikt. Er moet een weg zijn... later.",
-          "de mist rond de Geestenwereld"),
-         ("Het pad in de mist", "Er is een pad verschenen. Volg het naar het achtste eiland.", "het achtste eiland")],
+         ("Het achtste eiland", "Ver in de mist ligt een eiland dat niemand bereikt. Het pad ernaartoe verschijnt pas als je alle "
+                                "zes Pai Sho-tegels hebt en alle zeven chakra's open zijn (of na het hele verhaal).",
+          "de mist in het zuidwesten, voorbij het Gefluisterwoud"),
+         ("Het pad in de mist", "Er is een pad verschenen, voorbij het Gefluisterwoud. Volg het naar het achtste eiland.",
+          "het achtste eiland, in het zuidwesten")],
         ("Je weet nu waar het allemaal begon.", "het achtste eiland")),
 }
 
@@ -117,6 +132,10 @@ TEKST = {
     "lotus.vijf": "Vijf tegels. De oude leden van de orde fluisteren in het binnenhof. Ze willen je iets vertellen.",
     "lotus.naar_voetstukken": "Zes tegels. Voor de stenen lotus staan zes lege voetstukken. Leg ze er een voor een op.",
     "lotus.ligt_al": "%s ligt hier al.",
+    "lotus.tegels_om": "Kraak... de negen tegels draaien zich om. De poort wil weten of jij ook een vriend bent: draai ze tot ze samen een witte lotus vormen.",
+    "lotus.puzzel_goed": "Tegels goed: %s van %s (de middelste is altijd goed)",
+    "lotus.poort_titel": "De poort gaat open!",
+    "lotus.poort_sub": "De negen tegels vormen een witte lotus",
     "lotus.voetstuk_wacht": "Hier hoort %s. Die heb je nog niet.",
     "lotus.gelegd": "Tegel gelegd: %s van %s.",
     "lotus.lotus_dicht": "Een stenen lotus, dicht als een knop. Eromheen ligt, opgerold, iets heel groots te slapen.",
@@ -153,15 +172,17 @@ TEKST = {
     # the trials
     "proef.niet_nu": "De echo's van de Witte Lotus wachten op wie door de poort is gekomen.",
     "proef.tegel": "Je krijgt %s! (%s van de %s meestertegels)",
+    "proef.tegel_titel": "Tegel verdiend!",
+    "proef.tegel_sub": "%s (%s van %s)",
     "proef.einde_klaar": "Deze proef heb je gehaald. De meester knikt tevreden.",
     "proef.einde_nog": "Hier eindigt een proef. Begin hem bij de echo van de meester.",
     # Bumi
     "proef.bumi.dicht": "Hehehe. Eerst door de poort, jongedje. Dan praten we.",
     "proef.bumi.intro.1": "HA! Bezoek! Ik ben de echo van Bumi-guh, koning van Omashguh. Of ik ben het echt, en jij bent de echo. Wie zal het zeggen?",
     "proef.bumi.intro.2": "Mijn proef: drie kamers die draaien. In elke kamer is het antwoord dat het meest voor de hand ligt... fout.",
-    "proef.bumi.intro.3": "Denk als een gekke oude koning! Klik op de hendel in de eerste kamer.",
+    "proef.bumi.intro.3": "Denk als een gekke oude koning! Klik op de glinsterende draaisteen in de eerste kamer.",
     "proef.bumi.begin": "Ik denk als een gekke oude koning!",
-    "proef.bumi.start": "Bumi-guh grinnikt. Klik op de hendel in de eerste kamer.",
+    "proef.bumi.start": "Bumi-guh grinnikt. Klik op de glinsterende draaisteen in de eerste kamer.",
     "proef.bumi.klaar": "De kamers draaien nog wat na. Bumi-guh lacht nog steeds.",
     "proef.bumi.al_gedaan": "Deze kamer heb je al gehad. Je moet naar kamer %s.",
     "proef.bumi.eerst": "Eerst kamer %s, njeg. Zelfs Bumi-guh begint bij het begin. Meestal.",
@@ -208,9 +229,14 @@ TEKST = {
     "proef.piandao.dicht": "Een duel begint met een buiging. En met door de poort lopen.",
     "proef.piandao.intro.1": "Welkom. Ik ben de echo van Piandao-guh, zwaardmeester. Een zwaard is geen wapen, maar een pen. Je schrijft er je karakter mee.",
     "proef.piandao.intro.2": "We duelleren op de maat van de muziek. Als ik mijn zwaard hef, hoor je het suizen. Klik precies op de volgende tel: dat is een parade.",
-    "proef.piandao.intro.3": "Drie rondes, elke ronde sneller. Pareer er tien van de twaalf. Klaar? Ga op de duelplek staan.",
+    "proef.piandao.intro.3": "Drie rondes, elke ronde sneller. Pareer er acht van de twaalf. Klaar? Dan zet ik je op de duelplek.",
     "proef.piandao.begin": "Ik ben er klaar voor.",
     "proef.piandao.start": "Piandao-guh buigt. Luister naar de maat... en klik als zijn zwaard valt.",
+    "proef.piandao.titel": "Ritmeduel",
+    "proef.piandao.titel_sub": "Klik een tel na het suizen, als zijn zwaard valt. %s van %s is genoeg.",
+    "proef.piandao.gewonnen_titel": "Duel gewonnen!",
+    "proef.piandao.naar_smidse_kort": "Til de meteoriet op en breng hem naar de smidse",
+    "proef.piandao.nog_eens": "Nog een duel? Je staat al op de goede plek. Luister naar het suizen, en klik op de tel daarna.",
     "proef.piandao.ronde": "Ronde %s!",
     "proef.piandao.pareer": "Pareer! (%s van %s)",
     "proef.piandao.tik": "Tik! Een tikje op je oortje. Het deed geen pijn.",
@@ -232,17 +258,17 @@ TEKST = {
     # Jeong Jeong
     "proef.jeong_jeong.dicht": "Vuur wacht. Jij ook. Eerst de poort.",
     "proef.jeong_jeong.intro.1": "Ik ben de echo van Jeong Jeong-guh. Ik ben weggelopen uit het leger van de Vuurnatie, omdat ik vuur te goed begreep.",
-    "proef.jeong_jeong.intro.2": "Vuur is leven, maar het wil ook alles opeten. Steek de kaarsen aan, een voor een. Maar wacht tot elke vlam rustig is voor je de volgende aansteekt.",
-    "proef.jeong_jeong.intro.3": "Een wilde vlam likt aan de lotusbladeren. Dan gaan ze allemaal uit, en begin je opnieuw. Er verbrandt niets. Behalve je geduld.",
+    "proef.jeong_jeong.intro.2": "Vuur is leven, maar het wil ook alles opeten. Steek de kaarsen aan, een voor een. Wacht tot de vlam rustig is (je hoort een zacht belletje) voor je de volgende aansteekt.",
+    "proef.jeong_jeong.intro.3": "Ben je te snel, dan likt de wilde vlam aan een lotusblad en gaat hij weer uit. Er verbrandt niets. Behalve je geduld.",
     "proef.jeong_jeong.begin": "Ik steek ze aan. Rustig.",
     "proef.jeong_jeong.start": "Klik op een kaars om hem aan te steken. Adem. Wacht. Dan de volgende.",
     "proef.jeong_jeong.aan": "Kaars %s van %s brandt.",
     "proef.jeong_jeong.brandt_al": "Deze brandt al.",
     "proef.jeong_jeong.wild": "De vlam is nog wild... adem in... adem uit...",
     "proef.jeong_jeong.rustig": "De vlammen zijn rustig. Je mag de volgende aansteken.",
-    "proef.jeong_jeong.te_snel.0": "Te snel. Zie je hoe het lotusblad krult? Vuur zonder geduld wordt een brand. Opnieuw.",
-    "proef.jeong_jeong.te_snel.1": "Je wilde te veel tegelijk. Dat wilde ik vroeger ook. Opnieuw, rustig.",
-    "proef.jeong_jeong.te_snel.2": "Hm. Rook. Geen ramp, alleen een les. Begin weer bij de eerste.",
+    "proef.jeong_jeong.te_snel.0": "Te snel. Zie je hoe het lotusblad krult? Die laatste vlam is weer uit. Wacht op het belletje en steek hem opnieuw aan.",
+    "proef.jeong_jeong.te_snel.1": "Je wilde te veel tegelijk. Dat wilde ik vroeger ook. Die laatste vlam is uit: rustig, nog eens.",
+    "proef.jeong_jeong.te_snel.2": "Hm. Rook. Geen ramp, alleen een les. Steek die kaars nog eens aan, als het belletje klinkt.",
     "proef.jeong_jeong.gewonnen": "Alle kaarsen branden, en geen blad is geschroeid. Jij beheerst het vuur. Het vuur beheerst jou niet. Dat is alles.",
     "proef.jeong_jeong.klaar": "De kaarsen branden rustig. Jeong Jeong-guh glimlacht bijna.",
     "proef.jeong_jeong.na.0": "Heb je honger? Ik ook altijd. Vuur maakt hongerig.",
@@ -313,6 +339,7 @@ TEKST = {
     "koh.welkom": "Een bezoeker... met een gezicht. Wat een mooi gezicht. Wil je mijn raadsels horen? Dan mag je niets voelen. Helemaal niets.",
     "koh.dichterbij": "Kom voor Koh staan, op de plek van de raadsels.",
     "koh.stil": "Koh's gezichten wisselen... Niet bewegen. Niet springen. Niets voelen.",
+    "koh.stil_teller": "Sta stil... %s",
     "koh.emotie.0": "\"Ah... daar was iets. Een trilling van je oortje.\" Koh draait zijn kop weg. Probeer het opnieuw.",
     "koh.emotie.1": "\"Je bewoog. Bewegen is voelen.\" Koh tikt met duizend pootjes. Opnieuw.",
     "koh.emotie.2": "\"Interessant... angst? Ongeduld? Ik verzamel ze allemaal.\" Nee hoor, je gezicht is er nog. Opnieuw.",
@@ -425,6 +452,73 @@ TEKST = {
     "vosje.snuffel": "Het kennisvosje snuffelt, draait drie rondjes, en wijst met zijn snuitje: daarheen!",
     "vosje.niets": "Het kennisvosje snuffelt aan je en gaapt. Er is niets meer dat je nog niet gevonden hebt.",
     "bloei": "Overal in de Geestenwereld voel je het: het woud bloeit, de Lantaarnboom gloeit, en er komen nieuwsgierige geestjes kijken wie dat allemaal gedaan heeft.",
+}
+
+# =====================================================================================================================
+# fix round 1 (fix2-geestzij): the step hints (gui.guhs.einde2_geest_spel.hint.*, %s = the direction) and the look scenes
+# =====================================================================================================================
+HINTS = {
+    "lotus.poort": "De poort van de Witte Lotus ligt %s: volg het pad met de lantaarns naar het noorden, naar de ruines met de "
+                   "gebroken zuilen. Voor de poort liggen negen tegels in de vloer. Klik op een tegel om hem te draaien; een "
+                   "tegel die goed ligt, glinstert groen. Liggen ze samen als een witte lotus, dan gaat de poort open.",
+    "lotus.hof": "De poort staat open. Loop erdoor naar het noorden, het binnenhof in (%s): de vloer is een groot Pai Sho-bord.",
+    "lotus.proeven": "De volgende proef wacht %s. Klik op de echo van de meester (een doorschijnende, gloeiende guh) om te beginnen.",
+    "lotus.volgende.bumi": "Volgende proef: %1$s, in de westvleugel van het binnenhof (%2$s). Drie kamers die draaien: klik op hem om te beginnen.",
+    "lotus.volgende.pakguh": "Volgende proef: %1$s, in de oostvleugel van het binnenhof (%2$s). Spiegels van ijs en maanlicht: klik op hem om te beginnen.",
+    "lotus.volgende.piandao": "Volgende proef: %1$s, in de noordwestvleugel bij de smidse (%2$s). Een duel op de maat: klik op hem om te beginnen.",
+    "lotus.volgende.jeong_jeong": "Volgende proef: %1$s, in de noordoostvleugel met de kaarsen (%2$s). Klik op hem om te beginnen.",
+    "lotus.volgende.miroh": "Volgende proef: %1$s, in de theetuin in de zuidoosthoek van het hof (%2$s). Klik op hem om te beginnen.",
+    "meester.bumi": "Bumi-guh", "meester.pakguh": "Pakguh", "meester.piandao": "Piandao-guh", "meester.jeong_jeong": "Jeong Jeong-guh",
+    "meester.miroh": "Oom Miroh",
+    "lotus.leden": "De oude leden van de orde wachten %s, in hun tuin in de zuidwesthoek van het hof. Klik op alle drie, en ga daarna "
+                   "naar de stichter Wen-Li-guh, voor het heiligdom aan de noordkant.",
+    "lotus.voetstukken": "Het heiligdom ligt %s, aan de noordkant van het binnenhof. Klik op elk van de zes voetstukken voor de stenen "
+                         "lotus: zo leg je er een tegel op.",
+    "lotus.archief": "De stenen lotus staat open. De trap naar het Lotusarchief ligt %s, achter de lotus. Loop naar beneden.",
+    "lantaarn": "Een verdwaald lantaarngeestje zweeft %s (de lichtzuil wijst het aan). Klik erop, dan volgt het je; breng het naar de "
+                "Lantaarnboom bij de aankomst. Zweeft er al een achter je aan, dan wijst de zuil naar de boom.",
+    "hei_bai": "Hei Bai-guh staat %s, op een open plek met een verbrande stronk in het Gefluisterwoud: het woud met de zwart-wit "
+               "gestreepte bomen, ten westen van de aankomst. Klik op hem.",
+    "eikel": "De verbrande stronk staat %s. Maak eerst een knabbelkoor-eikel in je knutseltafel (een knabbelkoorvrucht uit het "
+             "Knabbelkoorbos van het Guheinde en een kaasknabbel) en klik daarmee op de stronk.",
+    "koh": "Koh's Grot ligt %s, onder de grote zwarte boom (de ingang aan de zuidkant). Ga op de plek voor Koh staan, klik op hem "
+           "en sta doodstil: als de bolletjes boven je balk vol zijn, stelt hij zijn raadsel.",
+    "chakra.1": "Chakra-steen 1 staat %s, vlak bij de aankomst, naast Guru Pathik-guh. Praat eerst met hem; klik dan op de steen "
+                "en zit stil tot de vijf bolletjes vol zijn.",
+    "chakra.2": "Chakra-steen 2 staat %s, in het Gefluisterwoud (de zwart-wit gestreepte bomen, ten westen van de aankomst). "
+                "Klik erop en zit stil.",
+    "chakra.3": "Chakra-steen 3 staat %s, bij Koh's Grot onder de grote zwarte boom. Klik erop en zit stil.",
+    "chakra.4": "Chakra-steen 4 staat %s, op de rand van de Hemelvijver: de vijver die in de lucht hangt, ten oosten van de "
+                "aankomst. Klik erop en zit stil.",
+    "chakra.5": "Chakra-steen 5 staat %s, in de tuin bij het Theepaviljoen, ten zuidoosten van de aankomst. Klik erop en zit stil.",
+    "chakra.6": "Chakra-steen 6 staat %s, in de tuin van de oude leden, achter de poort van de Witte Lotus (de zuidwesthoek van "
+                "het binnenhof). Klik erop en zit stil.",
+    "chakra.7": "De laatste chakra-steen staat %s, hoog op de Top der Voorgangers: klim de Hemeltrap op bij de Witte Lotus-ruines. "
+                "Klik erop en zit stil.",
+    "wan.pad": "Het achtste eiland ligt ver in de mist in het zuidwesten. Het pad ernaartoe begint %s, voorbij het Gefluisterwoud, "
+               "maar het verschijnt pas als je alle zes Pai Sho-tegels hebt en alle zeven chakra's open zijn (of na het hele "
+               "Guhvatar-verhaal).",
+    "wan.eiland": "Het pad in de mist is er! Het begint %s, voorbij het Gefluisterwoud. Volg de stenen naar het achtste eiland, tot "
+                  "aan de voet van de oude boom.",
+}
+# (id: (titel, caption)): StapHint.kijkScene, 3.2 s, one run-on caption
+KIJK = {
+    "einde2_geest_spel_kijk_puzzel": ("De poort van de Witte Lotus", "Negen tegels. Draai ze tot ze samen een witte lotus vormen."),
+    "einde2_geest_spel_kijk_hof": ("Het binnenhof", "Het binnenhof: vijf vleugels, vijf meesters."),
+    "einde2_geest_spel_kijk_leden": ("De oude leden", "Ze willen je iets vertellen. Luister naar alle drie."),
+    "einde2_geest_spel_kijk_voetstukken": ("Het heiligdom", "Zes lege voetstukken voor de stenen lotus."),
+    "einde2_geest_spel_kijk_archief": ("Het Lotusarchief", "De trap naar beneden, achter de stenen lotus."),
+    "einde2_geest_spel_kijk_hei_bai": ("Hei Bai-guh", "Groot, boos... en verdrietig."),
+    "einde2_geest_spel_kijk_eikel": ("De verbrande stronk", "Hier hoort iets te groeien."),
+    "einde2_geest_spel_kijk_koh": ("Koh's Grot", "Sta hier, klik op Koh, en voel niets."),
+    "einde2_geest_spel_kijk_chakra": ("Een chakra-steen", "Klik op de steen en zit stil."),
+    "einde2_geest_spel_kijk_pad": ("Het achtste eiland", "Hier begint ooit een pad, de mist in."),
+    "einde2_geest_spel_kijk_pad_open": ("Het pad in de mist", "Steen voor steen, naar het achtste eiland."),
+    "einde2_geest_spel_kijk_vleugel_bumi": ("De vleugel van Bumi-guh", "Bumi-guh: drie kamers die draaien."),
+    "einde2_geest_spel_kijk_vleugel_pakguh": ("De vleugel van Pakguh", "Pakguh: spiegels van ijs en maanlicht."),
+    "einde2_geest_spel_kijk_vleugel_piandao": ("De vleugel van Piandao-guh", "Piandao-guh: een duel op de maat."),
+    "einde2_geest_spel_kijk_vleugel_jeong_jeong": ("De vleugel van Jeong Jeong-guh", "Jeong Jeong-guh: kaarsen, met geduld."),
+    "einde2_geest_spel_kijk_vleugel_miroh": ("De theetuin van Oom Miroh", "Oom Miroh: thee en wijsheden."),
 }
 
 # =====================================================================================================================

@@ -107,7 +107,14 @@ public final class Proeven {
         }
         GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.tegel", Component.translatable("item.guhs.pai_sho_tegel_" + meester),
                 GeestLijnen.meesterTegels(p), GeestLijnen.MEESTERS.size());
+        // fix round 1: the success registers clearly (a title and a sound), and the next trial's wing is shown
+        GeestSpel.titel(p, "gui.guhs.einde2_geest_spel.proef.tegel_titel", "gui.guhs.einde2_geest_spel.proef.tegel_sub",
+                Component.translatable("item.guhs.pai_sho_tegel_" + meester), GeestLijnen.meesterTegels(p), GeestLijnen.MEESTERS.size());
+        GeestSpel.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.7f, 1.1f);
         nl.juiced.guhs.feature.verhaal.VerhaalSync.sync(p);
+        if (GeestLijnen.meesterTegels(p) < GeestLijnen.MEESTERS.size()) {
+            nl.juiced.guhs.feature.einde2.verhaal.StapHint.later(p, 100, GeestHints::volgendeProef);
+        }
     }
 
     /** Stops whatever trial runs for this player (they left). */
@@ -260,6 +267,14 @@ public final class Proeven {
 
     /** Every 10 ticks: the moonbeam of the mirrors, the flames of the candles. */
     static void tick(ServerPlayer p) {
+        Integer kamer = BUMI.get(p.getUUID());
+        if (kamer != null) {
+            // fix round 1: the turning stone of the room you are in sparkles (the intro speaks of the handle)
+            Vec3 v = GeestPlek.midden("bumi_draai_" + kamer);
+            if (v != null && p.position().closerThan(v, 24)) {
+                p.level().sendParticles(p, ParticleTypes.WAX_ON, false, false, v.x, v.y + 1.3, v.z, 3, 0.2, 0.25, 0.2, 0.0);
+            }
+        }
         if (PAKGUH.containsKey(p.getUUID())) {
             straal(p);
         }
@@ -488,9 +503,11 @@ public final class Proeven {
     static final int[] RONDES = {0, 12, 20};
     static final int EINDE = 28;
     /** How many parries win, how many clicks out of the beat lose. */
-    static final int NODIG = 10, MAX_MIS = 5;
-    /** How far a click may be from the blow (ticks). */
-    static final int VENSTER = 5;
+    static final int NODIG = 8, MAX_MIS = 8;
+    /** How far a click may be from the blow (ticks). fix round 1: 6 (was 5), 8 of 12 win (was 10), 8 clicks off the beat (was 5). */
+    static final int VENSTER = 6;
+    /** The pause before the first beat (ticks): time to read the title. */
+    static final int VOORAF = 50;
 
     static final class Duel {
         final long start;
@@ -522,10 +539,11 @@ public final class Proeven {
             float yaw = echo == null ? p.getYRot() : (float) (Math.toDegrees(Math.atan2(echo.getZ() - plek.z, echo.getX() - plek.x)) - 90.0);
             p.teleportTo(p.level(), plek.x, plek.y, plek.z, Set.of(), yaw, 0f, true);
         }
-        Duel d = new Duel(p.level().getGameTime() + 20);
+        Duel d = new Duel(p.level().getGameTime() + VOORAF);
         DUELS.put(p.getUUID(), d);
         ModNetworking.sendTo(p, new GeestSpelPayloads.Ritme(true));
         GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.piandao.start");
+        GeestSpel.titel(p, "gui.guhs.einde2_geest_spel.proef.piandao.titel", "gui.guhs.einde2_geest_spel.proef.piandao.titel_sub", NODIG, SLAGEN.length);
     }
 
     private static void duelTick(ServerPlayer p, Duel d) {
@@ -594,6 +612,7 @@ public final class Proeven {
             DUELS.remove(p.getUUID());
             ModNetworking.sendTo(p, new GeestSpelPayloads.Ritme(false));
             GeestSpel.zeg(p, WitteLotus.echo(p, "piandao"), "entity.guhs.guh_npc.piandao_guh_echo", "gui.guhs.einde2_geest_spel.proef.piandao.maat_kwijt");
+            nogEens(p);
         }
     }
 
@@ -605,10 +624,21 @@ public final class Proeven {
         if (d.gepareerd() >= NODIG) {
             lijn().vlag(p, "piandao_duel", true);
             GeestSpel.zeg(p, echo, n, "gui.guhs.einde2_geest_spel.proef.piandao.gewonnen", d.gepareerd(), SLAGEN.length);
+            GeestSpel.titel(p, "gui.guhs.einde2_geest_spel.proef.piandao.gewonnen_titel", "gui.guhs.einde2_geest_spel.proef.piandao.naar_smidse_kort");
+            GeestSpel.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.7f, 1.3f);
             GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.piandao.naar_smidse");
         } else {
             GeestSpel.zeg(p, echo, n, "gui.guhs.einde2_geest_spel.proef.piandao.verloren", d.gepareerd(), NODIG);
+            nogEens(p);
         }
+    }
+
+    /** fix round 1: a lost duel offers a new one at once, right where you stand (no walk, no intro again). */
+    private static void nogEens(ServerPlayer p) {
+        INTRO.put(p.getUUID(), "piandao");
+        Entity echo = WitteLotus.echo(p, "piandao");
+        GeestSpel.praat(p, S_INTRO, List.of(GeestSpel.regel(echo, "entity.guhs.guh_npc.piandao_guh_echo", "gui.guhs.einde2_geest_spel.proef.piandao.nog_eens")),
+                new Praat.Optie(1, "gui.guhs.einde2_geest_spel.proef.piandao.begin"), new Praat.Optie(2, "gui.guhs.einde2_geest_spel.optie.straks"));
     }
 
     private static void meteoriet(ServerPlayer p) {
@@ -650,12 +680,15 @@ public final class Proeven {
     // Jeong Jeong-guh: the candles
     // =====================================================================================================================
 
-    /** How long a new flame is wild (ticks): light the next one only after this. */
-    static final int WILD = 50;
+    /** How long a new flame is wild (ticks): light the next one only after this. fix round 1: 40 (was 50), and a chime when it calms. */
+    static final int WILD = 40;
 
     static final class Kaarsen {
         final Set<Integer> aan = new HashSet<>();
         long laatste = -1000;
+        /** The candle lit last (its flame is the wild one); whether its calming was heard. */
+        int nieuwste = -1;
+        boolean rustGemeld = true;
     }
 
     private static final Map<UUID, Kaarsen> KAARSEN = new ConcurrentHashMap<>();
@@ -681,6 +714,8 @@ public final class Proeven {
         }
         k.aan.add(n);
         k.laatste = nu;
+        k.nieuwste = n;
+        k.rustGemeld = false;
         BlockPos at = GeestPlek.pos("kaars_" + n);
         if (at != null) {
             BlockState s = p.level().getBlockState(at);
@@ -698,7 +733,10 @@ public final class Proeven {
         }
     }
 
-    /** Too fast: the wild flame licks at the nearest lotus leaf; every candle goes out (the leaf only smoulders). */
+    /**
+     * Too fast: the wild flame licks at the nearest lotus leaf (it only smoulders). fix round 1: only the wild flame goes out
+     * (one step back), not every candle: the lesson stays, the long redo is gone.
+     */
     private static void verschroei(ServerPlayer p, Kaarsen k, int n) {
         Vec3 kaars = GeestPlek.midden("kaars_" + n);
         Vec3 blad = null;
@@ -714,8 +752,12 @@ public final class Proeven {
             p.level().sendParticles(p, ParticleTypes.LARGE_SMOKE, false, false, blad.x, blad.y + 0.4, blad.z, 14, 0.3, 0.2, 0.3, 0.01);
         }
         GeestSpel.geluid(p, SoundEvents.FIRE_EXTINGUISH, 0.7f, 1.0f);
-        k.aan.clear();
+        if (k.nieuwste > 0) {
+            k.aan.remove(k.nieuwste);
+        }
+        k.nieuwste = -1;
         k.laatste = -1000;
+        k.rustGemeld = true;
         Schijn.straks(p);
         GeestSpel.zeg(p, WitteLotus.echo(p, "jeong_jeong"), "entity.guhs.guh_npc.jeong_jeong_guh_echo",
                 "gui.guhs.einde2_geest_spel.proef.jeong_jeong.te_snel." + p.getRandom().nextInt(3));
@@ -733,6 +775,11 @@ public final class Proeven {
         }
         if (!k.aan.isEmpty()) {
             GeestSpel.balk(p, wild ? "gui.guhs.einde2_geest_spel.proef.jeong_jeong.wild" : "gui.guhs.einde2_geest_spel.proef.jeong_jeong.rustig");
+        }
+        if (!wild && !k.rustGemeld) {
+            // fix round 1: the hidden timer is heard: a soft chime the moment the flame calms down
+            k.rustGemeld = true;
+            GeestSpel.geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME, 0.9f, 1.4f);
         }
     }
 
@@ -881,5 +928,22 @@ public final class Proeven {
     @Nullable
     static Duel duel(ServerPlayer p) {
         return DUELS.get(p.getUUID());
+    }
+
+    /** (tests) a click on candle n; the newest flame calms at once; the candles that burn. */
+    static void testKaars(ServerPlayer p, int n) {
+        kaars(p, n);
+    }
+
+    static void testKalm(ServerPlayer p) {
+        Kaarsen k = KAARSEN.get(p.getUUID());
+        if (k != null) {
+            k.laatste = -1000;
+        }
+    }
+
+    static Set<Integer> kaarsenAan(ServerPlayer p) {
+        Kaarsen k = KAARSEN.get(p.getUUID());
+        return k == null ? Set.of() : Set.copyOf(k.aan);
     }
 }
