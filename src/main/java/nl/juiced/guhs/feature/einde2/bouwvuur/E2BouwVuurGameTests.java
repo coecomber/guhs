@@ -75,7 +75,11 @@ public class E2BouwVuurGameTests {
         helper.assertTrue(bouw.rand() == 48 && bouw.leeg().isEmpty() && bouw.bij().isEmpty() && !bouw.ruim(), "a story structure: a rim of 48, nothing of the deep band");
         var structures = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
         helper.assertTrue(structures.get(Guhs.id(BOUW)).orElseThrow().is(Einde2Ids.VERHAAL), "tagged as a story structure");
-        helper.assertTrue(Einde2Ids.VERHAAL_STRUCTUREN.contains(BOUW) && !SuperkompasItem.allowed(BOUW), "protected with the story structures, in no compass");
+        // merge_fix1: since 1.4.1 (fix141 kompas) the places of a big story are in the Superkompas tab Verhalen on purpose,
+        // shown as "???" while Guhdalfs sluier hides them; the Guhvatar story registers its four stops as its places
+        helper.assertTrue(Einde2Ids.VERHAAL_STRUCTUREN.contains(BOUW) && SuperkompasItem.allowed(BOUW)
+                && nl.juiced.guhs.feature.guhpad.KompasVerhalen.isPlek(BOUW),
+                "protected with the story structures, in the compass only as a place of the big story (1.4.1 tab Verhalen)");
         int tegels = 0;
         for (int i = 0; i < bouw.tilesX(); i++) {
             for (int j = 0; j < bouw.tilesZ(); j++) {
