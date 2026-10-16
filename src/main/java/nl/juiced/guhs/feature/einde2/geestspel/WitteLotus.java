@@ -23,7 +23,6 @@ import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.einde2.geestenwereld.GeestBlokken;
@@ -38,8 +37,9 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  * einde2 phase B, slice geest_spel: the line {@value GeestLijnen#WITTE_LOTUS} (DESIGN 5 "De Witte Lotus, vijf vleugels"):
  * <ol start="0">
  *   <li>the gate: lay the nine puzzle tiles as a lotus ({@link Lotuspuzzel#OPGELOST}); until then the doorway sends you
- *       back. The puzzle is shared: whoever solves it opens it for everyone of this step who stands by, and when nobody is
- *       near any more it turns itself back, so the next visitor gets to lay it too;</li>
+ *       back. The puzzle is shared: whoever solves it opens it for everyone of this step who stands by; it turns back only
+ *       when a newcomer of this step arrives while nobody else is at it, so the next visitor gets to lay it too (fix round 1:
+ *       no timer any more, see {@link #AANKOMST});</li>
  *   <li>the court with the Pai Sho board (zone {@code lotus_hof});</li>
  *   <li>the five trials ({@link Proeven}), a tile each;</li>
  *   <li>the old members: the founder and three members tell the history of the order; with all five tiles the founder
@@ -56,8 +56,6 @@ public final class WitteLotus {
     public static final String STICHTER = "lid_stichter";
     private static final String SLEUTEL_LID = "einde2_geest_spel_lid";
 
-    /** When the puzzle was last solved (game time), per level; 0 = it is not solved by anyone now. */
-    private static final Map<ServerLevel, Long> OPGELOST_SINDS = new ConcurrentHashMap<>();
     /** The players who were told the gate is closed a moment ago (no spam). */
     private static final Set<UUID> GEZEGD = ConcurrentHashMap.newKeySet();
 
@@ -88,12 +86,15 @@ public final class WitteLotus {
 
     /** The puzzle was solved by p: the gate opens for p and everyone of step 0 who stands by. */
     private static void opgelost(ServerPlayer p, ServerLevel level) {
-        OPGELOST_SINDS.put(level, level.getGameTime());
         for (ServerPlayer q : level.players()) {
             if ((q == p || q.distanceToSqr(p) <= 16 * 16) && magLotus(q) && lijn().stap(q) == GeestLijnen.L_POORT) {
                 lijn().zet(q, GeestLijnen.L_HOF);
+                BIJ_PUZZEL.remove(q.getUUID());
+                GETELD.remove(q.getUUID());
+                GeestSpel.titel(q, "gui.guhs.einde2_geest_spel.lotus.poort_titel", "gui.guhs.einde2_geest_spel.lotus.poort_sub");
                 GeestSpel.verteller(q, "gui.guhs.einde2_geest_spel.lotus.poort_open");
                 GeestSpel.geluid(q, "stinger.opgelost", 0.9f, 1.0f);
+                GeestSpel.geluid(q, SoundEvents.PLAYER_LEVELUP, 0.6f, 1.2f);
             }
         }
     }
@@ -107,27 +108,37 @@ public final class WitteLotus {
     }
 
     /**
-     * When nobody stood near the solved puzzle for half a minute, it turns itself back (each tile a quarter past its right
-     * turn), so the next player can lay it too. A puzzle, like a door that closes behind you; no player's story changes.
+     * fix round 1 (fix2-geestzij): the shared puzzle is forgiving. It never turns back on a timer any more (the old rule
+     * turned it back half a minute after nobody stood near, so a player who walked off to read a stone could find it
+     * scrambled). Instead it turns back only when a player of step 0 ARRIVES at it (comes within {@value #AANKOMST} blocks)
+     * while it lies solved and nobody else stands at it ({@value #ANDER} blocks), with a sound and a line, so the newcomer
+     * sees it happen and lays the lotus themselves. While a step-0 player stands near, the tiles that lie right sparkle for
+     * them and the count shows above the hotbar; the doorway still lets them pass whenever the lotus lies right.
      */
-    static void levelTick(LevelTickEvent.Post event) {
-        if (!(event.getLevel() instanceof ServerLevel level) || level.dimension() != Geestenwereld.DIM || level.getGameTime() % 100 != 17) {
-            return;
-        }
-        BlockPos midden = Geestenwereld.wereld("tegel_5");
-        if (midden == null || !level.isLoaded(midden)) {
-            return;
-        }
-        for (ServerPlayer q : level.players()) {
-            if (q.blockPosition().closerThan(midden, 24)) {
-                OPGELOST_SINDS.put(level, level.getGameTime());
-                return;
+    static final int AANKOMST = 20, ANDER = 12, BIJ = 14;
+    /** The step-0 players who are at the puzzle now (to see who arrives), and the count of right tiles each saw last. */
+    private static final Set<UUID> BIJ_PUZZEL = ConcurrentHashMap.newKeySet();
+    private static final Map<UUID, Integer> GETELD = new ConcurrentHashMap<>();
+
+    /** How many of the eight tiles that have a right turn lie right (the round middle one does not count). */
+    static int goedeTegels(ServerLevel level) {
+        int n = 0;
+        for (int i = 1; i <= 9; i++) {
+            BlockPos at = Geestenwereld.wereld("tegel_" + i);
+            int goed = Lotuspuzzel.GOED[i - 1];
+            if (at == null || goed < 0) {
+                continue;
+            }
+            BlockState s = level.getBlockState(at);
+            if (s.hasProperty(GeestBlokken.Lotuspuzzeltegel.DRAAI) && s.getValue(GeestBlokken.Lotuspuzzeltegel.DRAAI) == goed) {
+                n++;
             }
         }
-        Long sinds = OPGELOST_SINDS.get(level);
-        if (sinds == null || level.getGameTime() - sinds < 600 || !puzzelGoed(level)) {
-            return;
-        }
+        return n;
+    }
+
+    /** Turns the tiles back (each a quarter or more past its right turn), with a rumble and a puff over the puzzle. */
+    static void draaiTerug(ServerLevel level) {
         for (int n = 1; n <= 9; n++) {
             BlockPos at = Geestenwereld.wereld("tegel_" + n);
             int goed = Lotuspuzzel.GOED[n - 1];
@@ -139,7 +150,59 @@ public final class WitteLotus {
                 level.setBlock(at, s.setValue(GeestBlokken.Lotuspuzzeltegel.DRAAI, (goed + 1 + (n % 3)) % 4), Block.UPDATE_ALL);
             }
         }
-        OPGELOST_SINDS.remove(level);
+        BlockPos midden = Geestenwereld.wereld("tegel_5");
+        if (midden != null) {
+            level.sendParticles(ParticleTypes.CLOUD, midden.getX() + 0.5, midden.getY() + 1.0, midden.getZ() + 0.5, 30, 1.4, 0.2, 1.4, 0.02);
+            level.playSound(null, midden, SoundEvents.GRINDSTONE_USE, net.minecraft.sounds.SoundSource.BLOCKS, 0.8f, 0.7f);
+        }
+    }
+
+    /** Every 10 ticks for a player of step 0: arriving at the puzzle, the sparkle of the right tiles, the count. */
+    private static void bijPuzzel(ServerPlayer p) {
+        ServerLevel level = p.level();
+        Vec3 midden = GeestPlek.midden("tegel_5");
+        if (midden == null) {
+            return;
+        }
+        double d = p.position().distanceTo(midden);
+        UUID u = p.getUUID();
+        if (d > AANKOMST + 8) {
+            BIJ_PUZZEL.remove(u);
+            GETELD.remove(u);
+            return;
+        }
+        if (d <= AANKOMST && BIJ_PUZZEL.add(u) && puzzelGoed(level)) {
+            boolean ander = false;
+            for (ServerPlayer q : level.players()) {
+                if (q != p && q.position().closerThan(midden, ANDER)) {
+                    ander = true;
+                    break;
+                }
+            }
+            if (!ander) {
+                draaiTerug(level);
+                GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.lotus.tegels_om");
+            }
+        }
+        if (d > BIJ) {
+            return;
+        }
+        for (int i = 1; i <= 9; i++) {
+            BlockPos at = Geestenwereld.wereld("tegel_" + i);
+            int goed = Lotuspuzzel.GOED[i - 1];
+            if (at == null || goed < 0) {
+                continue;
+            }
+            BlockState s = level.getBlockState(at);
+            if (s.hasProperty(GeestBlokken.Lotuspuzzeltegel.DRAAI) && s.getValue(GeestBlokken.Lotuspuzzeltegel.DRAAI) == goed) {
+                level.sendParticles(p, ParticleTypes.HAPPY_VILLAGER, false, false, at.getX() + 0.5, at.getY() + 1.15, at.getZ() + 0.5, 2, 0.25, 0.05, 0.25, 0.0);
+            }
+        }
+        int n = goedeTegels(level);
+        Integer was = GETELD.put(u, n);
+        if (was == null || was != n) {
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.lotus.puzzel_goed", n, 8);
+        }
     }
 
     // =====================================================================================================================
@@ -152,7 +215,10 @@ public final class WitteLotus {
         }
         int stap = lijn().stap(p);
         if (stap == GeestLijnen.L_POORT) {
-            lijn().begin(p);
+            if (lijn().begin(p)) {
+                GeestHints.lotusBegonnen(p);
+            }
+            bijPuzzel(p);
             if (GeestPlek.in(p, "poort_doorgang")) {
                 if (puzzelGoed(p.level())) {
                     // the lotus lies right (somebody just laid it): whoever stands at the gate now may pass too

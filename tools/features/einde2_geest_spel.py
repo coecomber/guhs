@@ -58,6 +58,11 @@ def teksten(h):
     kit.lang(h, key + ".lore", lore)
     for sid, (titel, regels, namen) in tekst.SCENES.items():
         verhaal_motor.scene(h, sid, titel, regels, namen)
+    # fix round 1 (fix2-geestzij): the step hints and their look scenes (GeestHints.java)
+    for k, v in tekst.HINTS.items():
+        kit.lang(h, tekst.P + "hint." + k, v)
+    for sid, (titel, onder) in tekst.KIJK.items():
+        verhaal_motor.scene(h, sid, titel, {"tekst": onder})
 
 
 def lijnen(h):
@@ -266,6 +271,23 @@ def selfcheck(h):
     for m in TEGELS:
         if f"item.guhs.pai_sho_tegel_{m}" not in h.NL:
             problems.append(f"no name for the tile {m}")
+    # fix round 1: every hint key and look scene GeestHints.java names
+    import re
+    java = open(os.path.join(os.path.dirname(__file__), "..", "..", "src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2",
+                             "geestspel", "GeestHints.java"), encoding="utf-8").read()
+    for k in re.findall(r'T \+ "([a-z_.]+)"', java):
+        if not k.endswith(".") and f"{tekst.P}hint.{k}" not in h.NL:
+            problems.append(f"no hint text {k}")
+    for m in ["bumi", "pakguh", "piandao", "jeong_jeong", "miroh"]:
+        for k in (f"lotus.volgende.{m}", f"meester.{m}"):
+            if f"{tekst.P}hint.{k}" not in h.NL:
+                problems.append(f"no hint text {k}")
+    for i in range(1, 8):
+        if f"{tekst.P}hint.chakra.{i}" not in h.NL:
+            problems.append(f"no hint text chakra.{i}")
+    for k in re.findall(r'K \+ "([a-z_]+)"', java):
+        if not k.endswith("_") and f"scene.guhs.einde2_geest_spel_kijk_{k}.titel" not in h.NL:
+            problems.append(f"no look scene {k}")
     if not 12 <= len(tekst.FTB) <= 16:
         problems.append(f"{len(tekst.FTB)} FTB quests (12-16)")
     if problems:

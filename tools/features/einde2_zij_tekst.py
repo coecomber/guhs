@@ -22,12 +22,13 @@ LIJNEN = {
         uitleg="Koning Bumi-guh van Omashguh is meer dan honderd jaar oud en nog steeds heerlijk gek. Zijn proeven werken anders "
                "dan je denkt.",
         stappen=[
-            ("Een gekke oude koning", "Praat met koning Bumi-guh in de troonzaal van Omashguh.", "Omashguh, de troonzaal"),
-            ("De sleutel in de waterval", "Haal de sleutel uit de waterval van glas (proef 1). Klimmen lukt niet: gebruik je aardekracht "
-                                          "in de kamer.", "Omashguh, proef 1"),
-            ("Waar is Flopsie?", "Zoek Flopsie, het huisdier van de koning. Het hokje van proef 2 is wel erg klein...", "Omashguh"),
-            ("Kies je tegenstander", "Ga naar de arena van proef 3, kies je tegenstander en beantwoord de laatste vraag van de koning.",
-             "Omashguh, proef 3"),
+            ("Een gekke oude koning", "Praat met koning Bumi-guh in de troonzaal boven in het paleis van Omashguh.", "Omashguh, de troonzaal"),
+            ("De sleutel in de waterval", "Haal de sleutel uit de waterval van glas (proef 1, aan de westkant onder de troonzaal). "
+                                          "Klimmen lukt niet: gebruik je aardekracht in de kamer.", "Omashguh, proef 1 (west, onder de troonzaal)"),
+            ("Waar is Flopsie?", "Zoek Flopsie, het huisdier van de koning. Het hokje van proef 2 (aan de oostkant onder de troonzaal) "
+                                 "is wel erg klein...", "Omashguh, proef 2 (oost, onder de troonzaal)"),
+            ("Kies je tegenstander", "Ga naar de arena van proef 3 (in het midden onder de troonzaal), kies je tegenstander en "
+                                     "beantwoord de laatste vraag van de koning.", "Omashguh, proef 3 (midden, onder de troonzaal)"),
             ("Sneller dan de post", "Spring op het laadplatform voor het paleis in een postgoot en glij binnen 40 seconden naar het "
                                     "postkantoor.", "Omashguh, de postglijbanen"),
         ],
@@ -39,11 +40,14 @@ LIJNEN = {
         uitleg="De Westelijke Luchttempel hangt ondersteboven onder een eiland. Vroeger floot de wind door de gangen en woonde er "
                "een kudde luchtbizon-guhs. Nu is het er stil.",
         stappen=[
-            ("De luchtnon", "Praat met de luchtnon-guh in de hangende hal van de Westelijke Luchttempel.", "Westelijke Luchttempel"),
-            ("Laat de tempel zingen", "Ga op het balkon aan het eind van elk van de vijf windgangen staan en gebruik daar je luchtkracht.",
+            ("De luchtnon", "Praat met de luchtnon-guh bij de trap in de hangende hal: de tempel hangt ondersteboven onder het eiland.",
+             "Westelijke Luchttempel, de hangende hal"),
+            ("Laat de tempel zingen", "Ga op het balkon aan het eind van elk van de vijf windgangen staan en gebruik daar je luchtkracht. "
+                                      "Vier gangen lopen van de hal naar de vier kanten, de vijfde is de orgelpijp onderin.",
              "Westelijke Luchttempel, de windgangen"),
             ("De verdwaalde kudde", "Vijf luchtbizon-guhs zweven verdwaald rond het eiland. Vlieg naar ze toe (met Appa of je vleugels) "
-                                    "en klik ze: ze vliegen naar hun eigen hok.", "Rond de Westelijke Luchttempel"),
+                                    "en klik ze, of richt van een afstand je Luchtbal op ze: ze vliegen naar hun eigen hok.",
+             "Rond de Westelijke Luchttempel"),
             ("Terug naar de luchtnon", "De kudde is thuis en de tempel zingt. Vertel het de luchtnon-guh.", "Westelijke Luchttempel"),
         ],
         klaar=("De tempel zingt weer en de kudde is thuis.", "Westelijke Luchttempel"),
@@ -55,10 +59,12 @@ LIJNEN = {
         uitleg="Op een halvemaaneiland staat de tempel van Guhvatar Roku-guh. Achter vijf vuurdeuren wacht zijn beeld, en "
                "misschien meer dan dat.",
         stappen=[
-            ("De vriendelijke Vuurwijze", "Praat met Shyu, de vriendelijke Vuurwijze bij het luik achter het altaar.", "Vuurtempel van Roku-guh"),
+            ("De vriendelijke Vuurwijze", "Praat met Shyu, de vriendelijke Vuurwijze bij het luik achter het altaar, op de begane grond "
+                                          "van de toren.", "Vuurtempel van Roku-guh, de begane grond"),
             ("Vijf vuurdeuren", "Ga boven in de toren voor elke vuurdeur staan en gebruik je vuurkracht: steek alle vijf de sloten aan.",
              "Vuurtempel, de bovenste verdieping"),
-            ("Het heiligdom", "De deuren zijn open, alleen voor jou. Loop het heiligdom in.", "Vuurtempel, het heiligdom"),
+            ("Het heiligdom", "De deuren zijn open, alleen voor jou. Loop recht op een vuurdeur af: je stapt erdoor, het heiligdom in.",
+             "Vuurtempel, achter de vuurdeuren boven in de toren"),
             ("Roku-guh", "Praat met de geest van Guhvatar Roku-guh in het heiligdom.", "Vuurtempel, het heiligdom"),
         ],
         klaar=("Roku-guh heeft je zijn verhaal verteld. Het eeuwige vlammetje is van jou.", "Vuurtempel van Roku-guh"),
@@ -70,12 +76,13 @@ LIJNEN = {
         uitleg="In het Kyoshi-dorp trainen de Kyoshi-krijgsterguhs met waaiers onder het reuzenbeeld van Guhvatar Kyoshi-guh. En "
                "bij de poort staat haar grootste fan.",
         stappen=[
-            ("De leidster", "Praat met de leidster van de Kyoshi-krijgsterguhs in de dojo.", "Kyoshi-dorp, de dojo"),
-            ("De waaierdans", "Ga op de gouden tegel midden op de dansvloer staan en volg de roep op de maat: BUK, SPRING of DRAAI. "
-                              "Twaalf goed is genoeg.", "Kyoshi-dorp, de dansvloer"),
-            ("Geschminkt als een krijgster", "Ga naar de schminktafel onder de spiegel in de dojo (klik erop, of buk ervoor).",
-             "Kyoshi-dorp, de schminktafel"),
-            ("De grootste fan", "Laat je zien aan de schuimbekkende fan-guh bij de poort.", "Kyoshi-dorp, de poort"),
+            ("De leidster", "Praat met de leidster van de Kyoshi-krijgsterguhs in de dojo, voor de wand met waaiers.",
+             "Kyoshi-dorp, de dojo aan de oostkant"),
+            ("De waaierdans", "Ga op de gouden tegel midden op de dansvloer staan en volg de roep op de maat: BUK (shift), SPRING of "
+                              "DRAAI (kijk opzij). Tien goed is genoeg.", "Kyoshi-dorp, de dansvloer in de dojo"),
+            ("Geschminkt als een krijgster", "Ga naar de schminktafel onder de spiegel in de zuidwesthoek van de dojo (klik erop, of "
+                                             "buk ervoor).", "Kyoshi-dorp, de schminktafel"),
+            ("De grootste fan", "Laat je zien aan de schuimbekkende fan-guh bij de poort: klik op hem.", "Kyoshi-dorp, de poort bij de landingsplek"),
         ],
         klaar=("De fan is nog steeds van zijn stokje. Je Kyoshi-schmink staat je guh prachtig.", "Kyoshi-dorp"),
         extra={"0_element": ("De leidster wacht op iemand die kan watersturen. Dat leer je in het verhaal van de Guhvatar.", "Kyoshi-dorp")},
@@ -85,11 +92,13 @@ LIJNEN = {
         uitleg="Half onder het korstzand ligt de bibliotheek van Wan Shi Guh, de uil die alles weet. Wie er iets leert, brengt er "
                "ook iets mee.",
         stappen=[
-            ("De regels van de uil", "Praat met Wan Shi Guh in de uilenzaal, helemaal onderin de bibliotheek.", "Bibliotheek, de uilenzaal"),
+            ("De regels van de uil", "Praat met Wan Shi Guh in de uilenzaal, helemaal onderin de bibliotheek. Je komt binnen door het "
+                                     "raam in de torenspits en gaat dan steeds verder naar beneden.", "Bibliotheek, de uilenzaal"),
             ("Een stukje kennis", "Breng Wan Shi Guh drie stukjes kennis: een kaart, een kompas, een klok, een verrekijker of een boek. "
                                   "Houd het vast en klik op hem.", "Bibliotheek, de uilenzaal"),
             ("Een boek voor jou", "Een vos-guh brengt het boek dat bij jou past. Zoek er een en klik erop.", "Bibliotheek van Wan Shi Guh"),
-            ("Het planetarium", "Draai aan het wiel van het planetarium, bij professor Zei-guh.", "Bibliotheek, het planetarium"),
+            ("Het planetarium", "Draai aan het wiel van het planetarium, bij professor Zei-guh: de zijzaal aan de westkant, op de "
+                                "hoogte van zaal 1.", "Bibliotheek, het planetarium"),
         ],
         klaar=("Wan Shi Guh ruilt elke dag een stukje kennis voor een boek.", "Bibliotheek van Wan Shi Guh"),
     ),
@@ -99,8 +108,8 @@ LIJNEN = {
                "zegen per guh. Of per speler.",
         stappen=[
             ("Over het schild", "Wandel over het schild van het eiland naar de steenkring helemaal bovenop.", "Leeuwschildpad-eiland"),
-            ("De opgeheven poot", "Loop langs zijn flank naar beneden en ga op de handpalm van zijn opgeheven poot staan.",
-             "Leeuwschildpad-eiland, de poot"),
+            ("De opgeheven poot", "Loop langs zijn flank naar beneden, naar de voorkant onder zijn kop, en ga op de handpalm van zijn "
+                                  "opgeheven poot staan.", "Leeuwschildpad-eiland, de poot"),
             ("Een knabbel als offer", "Houd een kaasknabbel vast en klik op zijn snuit, terwijl je op zijn handpalm staat.",
              "Leeuwschildpad-eiland, de poot"),
         ],
@@ -114,9 +123,11 @@ LIJNEN = {
             ("Een zuchtende kok", "Praat met de Mika-kok in de keuken van een Mika-vesting.", "Een Mika-vesting, de keuken"),
             ("Ingrediënten", "Breng de kok 2 schimmelpaddenstoelen, 2 kristalkaasbrokjes, 2 knabbelkoorvruchten en 1 kruimelwolk "
                              "uit de buiteneilanden.", "De buiteneilanden"),
-            ("Leid de kapitein af", "Praat met de vesting-kapitein op de begane grond en verzin iets dat werkt.", "Een Mika-vesting"),
+            ("Leid de kapitein af", "Praat met de vesting-kapitein achter zijn bureau op de begane grond en verzin iets dat werkt.",
+             "Een Mika-vesting, de begane grond"),
             ("De geheime soep", "Terug naar de kok in de keuken.", "Een Mika-vesting, de keuken"),
-            ("Een eigen keukentje", "Zoek de kok op in zijn nieuwe keuken in de Leegtehaven: De Spijtige Spatel.", "Leegtehaven"),
+            ("Een eigen keukentje", "Zoek de kok op in zijn nieuwe keuken in de Leegtehaven: De Spijtige Spatel, aan de kade.",
+             "Leegtehaven, de kade"),
         ],
         klaar=("De kok heeft een eigen keukentje en jij het recept van de Spijtsoep.", "Leegtehaven, De Spijtige Spatel"),
     ),
@@ -125,13 +136,78 @@ LIJNEN = {
         uitleg="Aan de steiger van elke Mika-vesting hangt een havenbord. Er hangt een briefje op voor wie een eigen schip wil.",
         stappen=[
             ("Het briefje", "Lees het briefje op het havenbord aan de steiger van een Mika-vesting (klik erop).", "Een Mika-vesting, de steiger"),
-            ("Naar de werf", "Breng de scheepsbouwer-guh in de Leegtehaven: 24 planken, 8 wol, 4 Mika's vet en 2 flitskruimels. Daarna "
-                             "bouwt hij je bootje.", "Leegtehaven, de scheepswerf"),
+            ("Naar de werf", "Breng de scheepsbouwer-guh op de scheepswerf aan de westkant van de Leegtehaven: 24 planken, 8 wol, "
+                             "4 Mika's vet en 2 flitskruimels. Daarna bouwt hij je bootje.", "Leegtehaven, de scheepswerf (west)"),
             ("Doop je bootje", "Je vetbootje is klaar. Praat met de scheepsbouwer-guh en geef het een kleur, een zeil en een naam.",
              "Leegtehaven, de scheepswerf"),
         ],
         klaar=("Je hebt een eigen vetbootje. Het vetfluitje roept het altijd terug.", "Leegtehaven"),
     ),
+}
+
+# =====================================================================================================================
+# fix round 1 (fix2-geestzij): the step hints (gui.guhs.einde2_zij.hint.*, %s = the direction) and the look scenes
+# =====================================================================================================================
+HINTS = {
+    "omash.0": "Koning Bumi-guh zit %s, op zijn troon in de troonzaal boven in het paleis van Omashguh.",
+    "omash.1": "Proef 1 begint %s: de kamer met de waterval van glas, aan de westkant onder de troonzaal. Ga erin en gebruik daar "
+               "je aardekracht (je krachttoets, standaard H).",
+    "omash.2": "Proef 2 begint %s, aan de oostkant onder de troonzaal: het hokje van Flopsie. Kijk eens goed hoe groot die "
+               "pootafdrukken zijn...",
+    "omash.3": "De arena van proef 3 ligt %s, in het midden onder de troonzaal. Loop erin en kies je tegenstander.",
+    "omash.4": "Het laadplatform van de postglijbanen ligt %s, voor het paleis. Stap in een postgoot: de klok loopt vanaf het eerste "
+               "stukje glijbaan. Te laat? Dan brengt de postlift je terug naar boven.",
+    "lucht.0": "De luchtnon-guh staat %s, bij de trap in de hangende hal: de tempel hangt ondersteboven onder het eiland.",
+    "lucht.1": "Het balkon van een stille windgang ligt %s (de lichtzuil wijst het aan). Ga op het balkon staan en gebruik daar je "
+               "luchtkracht. Vier gangen lopen van de hal naar de vier kanten, de vijfde is de orgelpijp onderin.",
+    "lucht.2": "Een verdwaalde luchtbizon-guh zweeft %s (de lichtzuil wijst hem aan). Vlieg erheen en klik hem, of richt van een "
+               "afstand je Luchtbal op hem: dan vliegt hij naar zijn hok.",
+    "lucht.3": "De kudde is thuis. De luchtnon-guh wacht %s, bij de trap in de hangende hal.",
+    "vuur.0": "Shyu staat %s, bij het luik achter het altaar op de begane grond van de toren.",
+    "vuur.1": "De vijf vuurdeuren staan %s, op een rij boven in de toren. Ga recht voor een deur staan en gebruik je vuurkracht: het "
+              "slot gaat branden. De lichtzuil wijst de volgende deur aan.",
+    "vuur.2": "De vuurdeuren staan open, alleen voor jou (%s). Loop recht op een deur af: je stapt erdoor, het heiligdom in.",
+    "vuur.3": "De geest van Roku-guh staat %s, voor zijn beeld in het heiligdom. Klik op hem.",
+    "kyoshi.0": "De leidster van de Kyoshi-krijgsterguhs staat %s, in de dojo aan de oostkant van het dorp, voor de wand met waaiers.",
+    "kyoshi.1": "De gouden tegel ligt %s, midden op de dansvloer in de dojo. Ga erop staan, dan begint de dans vanzelf. Doe wat er "
+                "groot in beeld staat: BUK (shift), SPRING of DRAAI (kijk opzij). Tien van de zestien goed is genoeg.",
+    "kyoshi.2": "De schminktafel staat %s, onder de spiegel in de zuidwesthoek van de dojo. Klik erop.",
+    "kyoshi.3": "De schuimbekkende fan-guh staat %s, naast zijn fanclubkraam bij de poort, vlak bij de landingsplek. Klik op hem.",
+    "bieb.0": "Wan Shi Guh zit %s, helemaal onderin de bibliotheek, in de uilenzaal. Je komt binnen door het raam in de torenspits "
+              "en gaat dan steeds verder naar beneden.",
+    "bieb.1": "Wan Shi Guh zit %s, in de uilenzaal. Houd een kaart, kompas, klok, verrekijker of boek in je hand en klik op hem.",
+    "bieb.2": "Een vos-guh met een boek staat %s, naast de verhoging van de uil. Klik op hem.",
+    "bieb.3": "Het planetarium ligt %s: de zijzaal aan de westkant, op de hoogte van zaal 1. Klik op de magneetsteen van het wiel, "
+              "naast professor Zei-guh.",
+    "schildpad.0": "Het hoogste punt van zijn schild ligt %s: loop door het bos op zijn rug naar de steenkring.",
+    "schildpad.1": "Zijn opgeheven poot ligt %s, aan de voorkant onder zijn kop. Loop langs zijn flank naar beneden en ga op het "
+                   "middelste kussentje van zijn handpalm staan.",
+    "schildpad.2": "Zijn snuit is %s. Houd een kaasknabbel in je hand en klik erop, terwijl je op zijn handpalm staat.",
+    "kok.0": "De Mika-kok staat %s, bij zijn soepketel in de keuken van de Mika-vesting.",
+    "kok.2": "De vesting-kapitein zit %s, achter zijn bureau op de begane grond van de vesting. Praat met hem.",
+    "kok.4": "De Spijtige Spatel, het nieuwe keukentje van de kok, ligt %s, aan de kade van de Leegtehaven.",
+    "bootje.1": "De scheepsbouwer-guh staat %s, op de scheepswerf aan de westkant van de Leegtehaven, bij de helling.",
+}
+# (naam: (titel, caption)) -> scene einde2_zij_kijk_<naam> (StapHint.kijkScene, 3.2 s, one run-on caption)
+KIJK = {
+    "omash_proef1": ("Proef 1: de waterval van glas", "Ga naar binnen en gebruik je aardekracht."),
+    "omash_proef2": ("Proef 2: waar is Flopsie?", "Dat hokje is wel erg klein..."),
+    "omash_proef3": ("Proef 3: de arena", "Hier kies je je tegenstander."),
+    "omash_glijbaan": ("De postglijbanen", "Stap in een postgoot en glij naar beneden!"),
+    "lucht_windfluit": ("Een stille windgang", "Ga op het balkon staan en laat de wind zingen."),
+    "lucht_kudde": ("Een verdwaalde luchtbizon", "Klik hem, of blaas er met Luchtbal naartoe."),
+    "vuur_deuren": ("De vijf vuurdeuren", "Sta voor een deur en gebruik je vuurkracht."),
+    "vuur_heiligdom": ("Het heiligdom", "De deuren staan open. Alleen voor jou."),
+    "kyoshi_dans": ("De gouden tegel", "Sta hier, en volg de roep op de maat."),
+    "kyoshi_schmink": ("De schminktafel", "Onder de spiegel in de dojo."),
+    "kyoshi_fan": ("De grootste fan", "Hij wacht al jaren op een echte krijgster."),
+    "bieb_vos": ("Een vos-guh", "Hij heeft een boek voor je."),
+    "bieb_planetarium": ("Het planetarium", "Draai aan het wiel bij professor Zei-guh."),
+    "schildpad_top": ("De steenkring", "Het hoogste punt van zijn schild."),
+    "schildpad_poot": ("De opgeheven poot", "Ga op zijn handpalm staan."),
+    "schildpad_kop": ("De snuit", "Een kaasknabbel in je hand, en klik."),
+    "haven_kok": ("De Spijtige Spatel", "Zijn eigen keukentje, aan de kade."),
+    "haven_werf": ("De scheepswerf", "De scheepsbouwer-guh wacht bij de helling."),
 }
 
 # =====================================================================================================================
@@ -287,8 +363,13 @@ TEKST = {
     Q + "omash.race_klaar": "Spring in een postgoot! De tijd loopt zodra je glijdt.",
     Q + "omash.race_titel": "GLIJDEN!",
     Q + "omash.race_tijd": "Tijd: %s",
-    Q + "omash.race_te_laat": "Hehe, %s! De post was eerder. Nog een keer, boven beginnen!",
-    Q + "omash.race_kwijt": "Je bent van de glijbaan geraakt. Begin gewoon opnieuw bovenaan!",
+    Q + "omash.race_te_laat": "Hehe, %s! De post was eerder. Nog een keer: de postlift brengt je zo naar boven!",
+    Q + "omash.race_kwijt": "Je bent van de glijbaan geraakt. Geeft niks: de postlift brengt je zo weer naar boven.",
+    Q + "omash.lift": "De postlift zet je terug op het laadplatform. Spring in een goot en probeer het nog eens!",
+    Q + "omash.proef_titel": "Proef %s gehaald!",
+    Q + "omash.proef_sub.1": "De sleutel valt uit de waterval",
+    Q + "omash.proef_sub.2": "Flopsie is gevonden",
+    Q + "omash.proef_sub.3": "Jij koos de gekste tegenstander",
     Q + "omash.race_gewonnen": "Sneller dan de post!",
     Q + "omash.klaar": "HAHAHA! Sneller dan de post! Hier, mijn kristalsnoep-ring. Lik er maar aan. Niet alles tegelijk, njeg.",
     Q + "omash.dank.0": "Hehehe! Kom je weer eens kristalsnoep eten?",
@@ -335,7 +416,9 @@ TEKST = {
     Q + "lucht.dank.1": "De kudde eet weer goed. Vooral de kleinste. Die eet voor drie.",
     Q + "lucht.dank.2": "Een luchtnomade bezit niets, behalve een goede wind. En nu dus ook die van jou, njeg.",
     Q + "lucht.hint.fluit": "Gebruik je luchtkracht op het balkon aan het eind van elke windgang (5).",
-    Q + "lucht.hint.kudde": "Vlieg naar de verdwaalde luchtbizon-guhs rond het eiland en klik ze (5).",
+    Q + "lucht.hint.kudde": "Vlieg naar de verdwaalde luchtbizon-guhs rond het eiland en klik ze, of richt van een afstand je Luchtbal op ze (5).",
+    Q + "lucht.fluit_titel": "De tempel zingt!",
+    Q + "lucht.kudde_titel": "De kudde is thuis!",
     Q + "lucht.hint.terug": "Ga terug naar de luchtnon-guh in de hangende hal.",
 
     # --- the Vuurtempel van Roku-guh ---
@@ -350,6 +433,8 @@ TEKST = {
     Q + "vuur.deur_al": "Dit slot brandt al.",
     Q + "vuur.deur_een": "Het slot gloeit! (%s van de %s)",
     Q + "vuur.deuren_open": "Ze zijn open! Alle vijf! Ga naar binnen, Guhvatar. Ik houd de anderen wel bezig met thee.",
+    Q + "vuur.deuren_titel": "De vuurdeuren gaan open!",
+    Q + "vuur.deuren_sub": "Loop recht op een deur af",
     Q + "vuur.open": "De deuren zijn open, voor jou. Ga het heiligdom in.",
     Q + "vuur.roku_wacht": "Hij is er echt? Roku-guh? Ga, ga! Laat hem niet wachten.",
     Q + "vuur.shyu_dank.0": "Mijn opa zou zo trots zijn. En ook een beetje jaloers.",
@@ -377,7 +462,7 @@ TEKST = {
     Q + "kyoshi.optie.wie": "Wie was Kyoshi-guh?",
     Q + "kyoshi.uitleg": "De Guhvatar met de grootste voeten van het Guheinde. Ze stichtte dit dorp. Haar beeld kijkt nog steeds of we goed oefenen.",
     Q + "kyoshi.dans": "Ga op de gouden tegel midden op de dansvloer staan. Roep ik BUK, dan buk je. SPRING, dan spring je. DRAAI, dan draai je om.",
-    Q + "kyoshi.dans_nog": "De gouden tegel wacht. Twaalf van de zestien goed, dan ben je een van ons.",
+    Q + "kyoshi.dans_nog": "De gouden tegel wacht. Tien van de zestien goed, dan ben je een van ons.",
     Q + "kyoshi.dans_titel": "De waaierdans",
     Q + "kyoshi.dans_sub": "Luister naar de maat...",
     Q + "kyoshi.zet.buk": "BUK!",
@@ -544,7 +629,8 @@ TEKST = {
     Q + "race.klaar": "Op je plaatsen...",
     Q + "race.vlieg": "VLIEG!",
     Q + "race.ring": "Ring %s / %s  -  %s",
-    Q + "race.mis": "Uit de race! Praat met de racemeester-guh om opnieuw te beginnen.",
+    Q + "race.mis": "Uit de race! De wind zet je zo terug op het startplatform; praat dan met de racemeester-guh om opnieuw te beginnen.",
+    Q + "race.terug": "Terug op het startplatform. Praat met de racemeester-guh voor een nieuwe ronde!",
     Q + "race.finish": "Geland!",
     Q + "race.finish_record": "Nieuw eigen record: %s",
     Q + "race.finish_tijd": "Tijd: %s",

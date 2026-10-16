@@ -169,4 +169,57 @@ public class E2GeestSpelGameTests {
         }
         helper.succeed();
     }
+
+    /**
+     * fix round 1 (fix2-geestzij): every step of the Geestenwereld lines and of the side lines that needs a hint has one, its
+     * look scene is the short 3.2 s kind, no Geestenwereld hint has a resume spot (no "Verder" teleport into the spirit
+     * world), and Jeong Jeong-guh's too-fast flame only puts out the newest candle.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2Fix2GeestZijHints(GameTestHelper helper) {
+        java.util.Map<String, int[]> nodig = new java.util.LinkedHashMap<>();
+        nodig.put(GeestLijnen.WITTE_LOTUS, new int[]{0, 1, 2, 3, 4, 5});
+        nodig.put(GeestLijnen.LANTAARNS, new int[]{0, 1, 2, 3, 4, 5, 6, 7});
+        nodig.put(GeestLijnen.HEI_BAI, new int[]{0, 1});
+        nodig.put(GeestLijnen.KOH, new int[]{0, 1, 2});
+        nodig.put(GeestLijnen.CHAKRA, new int[]{0, 1, 2, 3, 4, 5, 6});
+        nodig.put(GeestLijnen.WAN, new int[]{1, 2});
+        nodig.put("omashguh", new int[]{0, 1, 2, 3, 4});
+        nodig.put("westelijke_luchttempel", new int[]{0, 1, 2, 3});
+        nodig.put("vuurtempel_roku", new int[]{0, 1, 2, 3});
+        nodig.put("kyoshi_dorp", new int[]{0, 1, 2, 3});
+        nodig.put("bibliotheek_wan_shi_guh", new int[]{0, 1, 2, 3});
+        nodig.put("leeuwschildpad", new int[]{0, 1, 2});
+        nodig.put("mika_kok", new int[]{0, 2, 3, 4});
+        nodig.put("vetbootje", new int[]{1, 2});
+        ServerPlayer p = speler(helper);
+        try {
+            for (var e : nodig.entrySet()) {
+                for (int stap : e.getValue()) {
+                    var h = nl.juiced.guhs.feature.einde2.verhaal.StapHint.hint(e.getKey(), stap);
+                    helper.assertTrue(h != null && h.tekst() != null, "a hint with a text for " + e.getKey() + "/" + stap);
+                    Cutscene k = h.kijk();
+                    helper.assertTrue(k == null || k.duur() == nl.juiced.guhs.feature.einde2.verhaal.StapHint.KIJK_DUUR,
+                            "a short look scene for " + e.getKey() + "/" + stap);
+                    if (e.getKey().startsWith("geest_")) {
+                        helper.assertTrue(h.doel().dim() == Geestenwereld.DIM && h.terugDoel().blok(p) == null,
+                                "a Geestenwereld hint without a resume spot: " + e.getKey() + "/" + stap);
+                    }
+                }
+            }
+            helper.assertTrue(nl.juiced.guhs.feature.einde2.verhaal.StapHint.hint(GeestLijnen.VERSCHIJNINGEN, 0) == null,
+                    "the rare sightings (random) have no hint");
+            // Jeong Jeong-guh: two calm candles, then one too fast: only the newest goes out
+            Proeven.testKaars(p, 1);
+            Proeven.testKalm(p);
+            Proeven.testKaars(p, 2);
+            Proeven.testKaars(p, 3);
+            helper.assertTrue(Proeven.kaarsenAan(p).equals(java.util.Set.of(1)), "too fast: one step back, not all out: " + Proeven.kaarsenAan(p));
+            helper.assertTrue(Proeven.NODIG == 8 && Proeven.VENSTER == 6 && Proeven.WILD == 40, "the forgiving duel and candle numbers");
+        } finally {
+            wis(p);
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        }
+        helper.succeed();
+    }
 }
