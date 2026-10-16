@@ -28,6 +28,8 @@ FTB_LINEAIR = True
 FTB_SECTIES = [("einde2_h1_lucht", tekst.FTB_TITEL, "npc:aang_guh", None)]
 
 BONES = modellen.BONES
+# the clothes pieces with an item model (make_resources; integratie_b: check_assets missed the robe's item model)
+CLOTHES = ["guhvatar_luchtnomade"]
 clothes = modellen.clothes
 icons = modellen.icons
 

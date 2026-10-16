@@ -39,6 +39,8 @@ KAART = "einde2_h4_vuur"
 BEELD = "guhvatar_beeld"
 SCHIP = "einde2_h4_vuur_luchtschip"
 
+# the clothes pieces with an item model (make_resources; integratie_b: check_assets missed both item models)
+CLOTHES = ["vuurnatie_vermomming", "zuka_litteken"]
 # the scar of Zuka on a guh: a bone of its own over one eye, painted with the (existing) eyepatch swatch
 BONES = {
     "outfit_zuka_litteken": ("head", [0, 6, -2], "eyepatch", [([-7.6, 6.4, -12.66], [7.0, 7.0, 0.3], 0)]),
