@@ -273,6 +273,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     private int speelGezien;
     /** Client: the cutscene animation ({@code Cutscenes.animatie}) the controller saw last ("" = none). */
     private String sceneGezien = "";
+    /** Client: the age of that animation the controller saw last (it goes back when the same name starts again). */
+    private int sceneTicks;
+    /** Client: a new scene animation began; the controller starts it from its first frame. */
+    private boolean sceneOpnieuw;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     /** The Maagenzym-guh belongs to one stomach. */
     @Nullable
@@ -634,14 +638,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>("main", 0, state -> {
             // a client-side cutscene actor never gets the synced speel(): a scene's Builder.animatie goes first
-            String scene = Cutscenes.animatie(this);
-            if (!scene.equals(sceneGezien)) {
-                sceneGezien = scene;
-                if (!scene.isEmpty()) {
-                    state.controller().reset();
-                }
-            }
+            String scene = sceneAnimatie();
             String naam = !scene.isEmpty() && duur(scene) >= 0 ? scene : speelt();
+            if (sceneBegonnen() && !scene.isEmpty()) {
+                state.controller().reset();                         // (a new Builder.animatie: from its start)
+            }
             if (naam.isEmpty()) {
                 return state.setAndContinue(IDLE);
             }
@@ -653,6 +654,35 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             return state.setAndContinue(duur(naam) == 0 ? RawAnimation.begin().thenPlayAndHold(ANIMATIE + naam)
                     : RawAnimation.begin().thenPlay(ANIMATIE + naam).thenLoop(ANIMATIE + "idle"));
         }));
+    }
+
+    /**
+     * Client (einde2 integratie_b): the scene animation this actor plays ({@code Cutscenes.animatie}), held while the scene
+     * waits for a click. {@code Cutscenes.animatie} answers "" while the scene stands still (1.4.4, every actor rests), and
+     * read as it is, the actors dropped to idle at every line's end and every click started each actor's last one-shot again
+     * from its first frame (a cheer, a bow or a jump played once per click). A GeckoLib animation cannot be frozen, so here it simply runs its
+     * course during the wait (a one-shot ends in idle, a pose holds) and is never restarted by a click; only a new
+     * {@code Builder.animatie} (another name, or the same name again: its age goes back) starts it from the top.
+     */
+    public String sceneAnimatie() {
+        if (Cutscenes.gepauzeerd()) {
+            return sceneGezien;
+        }
+        String scene = Cutscenes.animatie(this);
+        int ticks = Cutscenes.animatieTicks(this);
+        if (!scene.equals(sceneGezien) || (!scene.isEmpty() && ticks < sceneTicks)) {
+            sceneGezien = scene;
+            sceneOpnieuw = true;
+        }
+        sceneTicks = ticks;
+        return scene;
+    }
+
+    /** Client: did a new scene animation begin since the last ask (once; the controller then starts it from its top)? */
+    public boolean sceneBegonnen() {
+        boolean b = sceneOpnieuw;
+        sceneOpnieuw = false;
+        return b;
     }
 
     @Override
