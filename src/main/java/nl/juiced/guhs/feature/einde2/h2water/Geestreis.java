@@ -43,7 +43,8 @@ import nl.juiced.guhs.feature.verhaal.Verhaallijn;
  *       {@code GeestToegang.stuur(p, "aankomst_speler")} once the guests are done watching.</li>
  *   <li>Koh ({@link E2H2Water#KOH}): walking into his chamber (zone {@code koh_kamer}) plays {@code koh}, then the test is
  *       play: for {@link #PROEF_TICKS} ticks no move, jump or click while he changes faces. Fail: your face goes blank for a
- *       while (a client layer, also seen by the players around you) and you are back at the arrival; never any harm.</li>
+ *       while (a client layer, also seen by the players around you) and you are back at the mouth of his cave (fix2-h2: a quick
+ *       retry); never any harm.</li>
  *   <li>The Hemelvijver ({@link E2H2Water#HEMELVIJVER}): near it the scene {@code la_woede} (a vision of the angry ocean
  *       spirit), then back to the body ({@code Geestenwereld.terug}).</li>
  * </ol>
@@ -150,14 +151,20 @@ public final class Geestreis {
             return;
         }
         E2H2Water.zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.geest.aang");
-        E2H2Water.hint(p, "quest.guhs.einde2_h2_water.hint.koh");
+        toonHint(p);
     }
 
     /** At Koh's or the Hemelvijver's step, but the soul went back to its body: meditating again takes you straight in. */
     static void terugIn(ServerPlayer p) {
         if (GeestToegang.stuur(p, Geestenwereld.AANKOMST)) {
             E2H2Water.balk(p, "quest.guhs.einde2_h2_water.geest.weer");
+            toonHint(p);
         }
+    }
+
+    /** fix2-h2: the step's hint (H2Hints: where Koh's cave or the Hemelvijver lies from here) a moment after the soul arrived. */
+    static void toonHint(ServerPlayer p) {
+        H2Hints.naScene(p, 40, s -> nl.juiced.guhs.feature.einde2.verhaal.StapHint.toon(s, E2Verhaal.WATER));
     }
 
     // =====================================================================================================================
@@ -199,6 +206,7 @@ public final class Geestreis {
                 }
             } else {
                 wijsNaar(p, "koh");
+                H2Hints.geestRichting(p, "grot_ingang", "quest.guhs.einde2_h2_water.doel.koh");
             }
         } else if (stap == E2H2Water.HEMELVIJVER) {
             BlockPos vijver = plek("plek_hemelvijver");
@@ -211,6 +219,7 @@ public final class Geestreis {
                 Cutscenes.speel(p, E2H2WaterScenes.LA_WOEDE, vijver, Rotation.NONE, Geestreis::naLaWoede);
             } else {
                 wijsNaar(p, "plek_hemelvijver");
+                H2Hints.geestRichting(p, "plek_hemelvijver", "quest.guhs.einde2_h2_water.doel.hemelvijver");
             }
         }
     }
@@ -229,8 +238,7 @@ public final class Geestreis {
             return;
         }
         E2H2Water.zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.la.aang");
-        Geestenwereld.terug(p);
-        E2H2Water.hint(p, "quest.guhs.einde2_h2_water.hint.vis_halen");
+        Geestenwereld.terug(p);   // (the step's hint follows by itself: H2Hints)
     }
 
     // =====================================================================================================================
@@ -314,13 +322,13 @@ public final class Geestreis {
         E2H2Water.zegAls(p, naam, "quest.guhs.einde2_h2_water.koh.goed.2");
         E2H2Water.zegAls(p, naam, "quest.guhs.einde2_h2_water.koh.goed.3");
         if (E2H2Water.lijn().verder(p, E2H2Water.KOH)) {
+            H2Hints.gehaald(p, "koh");
             p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 0.7f);
             E2H2Water.zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.koh.aang");
-            E2H2Water.hint(p, "quest.guhs.einde2_h2_water.hint.hemelvijver");
         }
     }
 
-    /** Failed: Koh takes your face for a while (a blank face, seen by you and the players around), back to the arrival. */
+    /** Failed: Koh takes your face for a while (a blank face, seen by you and the players around), back to his cave mouth. */
     static void faal(ServerPlayer p, String wat) {
         if (PROEVEN.remove(p.getUUID()) == null) {
             return;
@@ -335,7 +343,9 @@ public final class Geestreis {
         E2H2WaterPayloads.blanco(p, BLANCO_TICKS);
         p.sendSystemMessage(Component.translatable("quest.guhs.einde2_h2_water.koh.fout").withStyle(ChatFormatting.LIGHT_PURPLE));
         if (Geestenwereld.in(p)) {
-            Vec3 a = Geestenwereld.aankomst(p.level(), p.getX(), p.getZ());
+            // fix2-h2: a quick retry - back at the mouth of his cave (a few steps from the chamber), not at the arrival 200+ blocks away
+            BlockPos ingang = plek("grot_ingang");
+            Vec3 a = ingang != null ? Vec3.atBottomCenterOf(ingang) : Geestenwereld.aankomst(p.level(), p.getX(), p.getZ());
             Duwtje.terug(p, p.level().dimension(), a, 180f);
         }
     }

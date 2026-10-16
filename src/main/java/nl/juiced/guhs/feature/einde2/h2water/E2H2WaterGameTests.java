@@ -17,6 +17,9 @@ import nl.juiced.guhs.feature.einde2.Einde2Ids;
 import nl.juiced.guhs.feature.einde2.Plekken;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev;
+import nl.juiced.guhs.feature.einde2.verhaal.StapHint;
+import nl.juiced.guhs.feature.einde2.geestenwereld.Geestenwereld;
+import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
@@ -217,5 +220,37 @@ public class E2H2WaterGameTests {
                     "nothing left lying about");
             weg(helper, p);
         });
+    }
+
+    /**
+     * fix2-h2: every step after the arrival has a hint (a text, a resume spot), the steps whose place is not in view have
+     * their own 3.2 s look scene, the two Geestenwereld steps point into the Geestenwereld but resume beside the pond in the
+     * Guheinde, the step-start hint waits for its step (Pakguh -> the whip), and the storm and Koh show theirs themselves.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 60)
+    public static void einde2H2WaterHints(GameTestHelper helper) {
+        for (int stap = E2H2Water.PAKGUH; stap < E2H2Water.STAPPEN; stap++) {
+            StapHint.Hint h = StapHint.hint(E2Verhaal.WATER, stap);
+            helper.assertTrue(h != null && h.tekst() != null && h.tekst().startsWith(H2Hints.T) && h.bakenAan(), "step " + stap + ": a hint with a text and a marker");
+            if (h.kijk() != null) {
+                helper.assertTrue(h.kijk().id().startsWith("einde2_h2_water_kijk_") && h.kijk().duur() == StapHint.KIJK_DUUR,
+                        "step " + stap + ": its own look scene of 3.2 s");
+            }
+            boolean geest = stap == E2H2Water.KOH || stap == E2H2Water.HEMELVIJVER;
+            helper.assertTrue((h.doel().dim() == Geestenwereld.DIM) == geest && h.terugDoel().dim() == GuheindeFeature.GUHEINDE,
+                    "step " + stap + ": the Geestenwereld only for Koh and the Hemelvijver; resume always in the Guheinde");
+        }
+        helper.assertTrue(StapHint.hint(E2Verhaal.WATER, E2H2Water.AANKOMST) == null, "the arrival: Appa's landing spot (kern's default)");
+        helper.assertTrue(!StapHint.hint(E2Verhaal.WATER, E2H2Water.STORM).bijStartAan() && !StapHint.hint(E2Verhaal.WATER, E2H2Water.KOH).bijStartAan(),
+                "the storm and Koh show their hint themselves (after the scene of Zuka, after the soul arrived)");
+        helper.assertTrue(H2Hints.KIJK.length == 14, "fourteen look scenes");
+        ServerPlayer p = speler(helper, 2, 2);
+        E2VerhaalDev.zetTot(p, E2Verhaal.WATER, E2H2Water.PAKGUH);
+        E2H2Water.naPakguh(p);
+        helper.assertTrue(E2H2Water.lijn().stap(p) == E2H2Water.ZWEEP && (E2Verhaal.WATER + "/" + E2H2Water.ZWEEP).equals(StapHint.wacht(p.getUUID())),
+                "after Pakguh the whip's hint waits for its turn");
+        StapHint.vergeet(p.getUUID());
+        weg(helper, p);
+        helper.succeed();
     }
 }

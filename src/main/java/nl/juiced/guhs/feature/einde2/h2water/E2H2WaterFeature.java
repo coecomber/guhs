@@ -88,6 +88,8 @@ public final class E2H2WaterFeature {
         KledingBronnen.bron(GuhClothes.BLAUWE_GEEST_MASKER, KLEDINGBRON);
         Bewoners.BIJ_MAKEN.add(Toneel::markeer);
         OtterPinguinguhEntity.OPGESTAPT.add(Toneel::opgestapt);
+        OtterPinguinguhEntity.AFGESTAPT.add(Toneel::afgestapt);
+        H2Hints.registreer();
         Schijn.registreer(E2H2WaterKrachten::schijnBrug);
         Schijn.registreer(Vloot::schijn);
         NeoForge.EVENT_BUS.addListener(E2H2WaterFeature::opTick);
@@ -154,6 +156,7 @@ public final class E2H2WaterFeature {
         if (event.getEntity() instanceof ServerPlayer p) {
             Toneel.weg(p);
             Geestreis.vergeet(p);
+            H2Hints.vergeet(p.getUUID());
             E2H2Water.vergeet(p.getUUID());
         }
     }

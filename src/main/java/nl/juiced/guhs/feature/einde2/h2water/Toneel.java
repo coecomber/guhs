@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +21,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
+import nl.juiced.guhs.feature.bestaand.Schijn;
 import nl.juiced.guhs.feature.einde2.Bewoners;
 import nl.juiced.guhs.feature.einde2.audio.E2Audio;
 import nl.juiced.guhs.feature.einde2.castschurk.CastWezen;
@@ -27,6 +29,8 @@ import nl.juiced.guhs.feature.einde2.castschurk.E2CastSchurkFeature;
 import nl.juiced.guhs.feature.einde2.zwevers.E2ZweversFeature;
 import nl.juiced.guhs.feature.einde2.zwevers.OtterPinguinguhEntity;
 import nl.juiced.guhs.feature.ring.Zicht;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
+import nl.juiced.guhs.feature.verhaal.Duwtje;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.registry.ModEntities;
 
@@ -248,7 +252,7 @@ public final class Toneel {
         Eigen eigen = eigen(p);
         Entity otter = levend(level, eigen.otter);
         if (p.getVehicle() instanceof OtterPinguinguhEntity rijdt && rijdt.isSlee()) {
-            if (finish.distanceToSqr(p.position()) < 5.5 * 5.5) {
+            if (finish.distanceToSqr(p.position()) < SLEE_FINISH * SLEE_FINISH) {
                 p.stopRiding();
                 E2H2Water.sleeKlaar(p);
                 weg(level, eigen.otter);
@@ -275,6 +279,36 @@ public final class Toneel {
         }
     }
 
+    /** How near the snow heap at the bottom counts as the finish (blocks; on the otter, or just got off it). */
+    static final double SLEE_FINISH = 7.0;
+
+    /**
+     * fix2-h2: somebody got off an otter-pinguinguh. A player of the sled step who got off their own sled near the finish
+     * (stopped just short of it) has done it; anywhere else on the run (fell off, got off halfway) they are back at the top
+     * two seconds later, with a kind line: a quick retry instead of the long climb up the wall.
+     */
+    static void afgestapt(OtterPinguinguhEntity otter, ServerPlayer p) {
+        if (!E2H2Water.aanZet(p, E2H2Water.SLEE) || !otter.entityTags().contains(EIGEN) || Cutscenes.bezig(p)) {
+            return;
+        }
+        E2H2Water.Oord o = E2H2Water.oordVan(p);
+        Vec3 start = o == null ? null : o.midden("slee_start"), finish = o == null ? null : o.midden("slee_finish");
+        if (start == null || finish == null) {
+            return;
+        }
+        if (finish.distanceToSqr(p.position()) < SLEE_FINISH * SLEE_FINISH) {
+            E2H2Water.sleeKlaar(p);
+            return;
+        }
+        nl.juiced.guhs.feature.einde2.verhaal.StapHint.later(p, 40, s -> {
+            if (!E2H2Water.aanZet(s, E2H2Water.SLEE) || s.getVehicle() != null || Cutscenes.bezig(s) || start.distanceToSqr(s.position()) < 6 * 6) {
+                return;
+            }
+            Duwtje.terug(s, o.level().dimension(), start, 90f);
+            E2H2Water.balk(s, "quest.guhs.einde2_h2_water.slee.opnieuw");
+        });
+    }
+
     /** Somebody got on an otter-pinguinguh: the sled tune for a player at the sled step. */
     static void opgestapt(OtterPinguinguhEntity otter, ServerPlayer p) {
         if (E2H2Water.aanZet(p, E2H2Water.SLEE) && otter.entityTags().contains(EIGEN)) {
@@ -293,15 +327,37 @@ public final class Toneel {
         Eigen eigen = eigen(p);
         Entity boot = levend(level, eigen.boot);
         if (boot != null && p.getVehicle() == boot) {
+            Vec3 naaste = null;
+            int naasteNr = 0;
             for (int i = 1; i <= E2H2Water.HALTES; i++) {
                 Vec3 h = o.midden("gondel_halte_" + i);
                 if (h != null && Math.hypot(h.x - boot.getX(), h.z - boot.getZ()) < 6.5) {
                     E2H2Water.halte(p, i);
                 }
+                // fix2-h2: every stop still to pass shows a column of light; the nearest one is named over the hotbar
+                if (h != null && !E2H2Water.lijn().vlag(p, E2H2Water.V_HALTE + i)) {
+                    for (int dy = 1; dy <= 6; dy += 1) {
+                        Schijn.deeltjes(p, ParticleTypes.END_ROD, h.add(0, dy, 0), 1, 0.05, 0.0);
+                    }
+                    if (naaste == null || h.distanceToSqr(p.position()) < naaste.distanceToSqr(p.position())) {
+                        naaste = h;
+                        naasteNr = i;
+                    }
+                }
+            }
+            if (naaste != null && E2H2Water.aanZet(p, E2H2Water.GONDEL) && (p.tickCount / 20) % 3 == 0) {
+                p.sendOverlayMessage(Component.translatable("gui.guhs.einde2_h2_water.hint.halte_balk",
+                        Component.translatable("gui.guhs.einde2_h2_water.halte." + naasteNr),
+                        nl.juiced.guhs.feature.einde2.verhaal.Richting.van(p.position(), naaste))
+                        .withStyle(net.minecraft.ChatFormatting.AQUA));
             }
             return;
         }
-        E2H2Water.wijs(p, o, "gondel_start");
+        if (boot != null && boot.distanceToSqr(p) < 48 * 48) {
+            Schijn.deeltjes(p, ParticleTypes.GLOW, boot.position().add(0, 2.0, 0), 4, 0.25, 0.02);   // (fix2-h2: your gondola is there)
+        } else {
+            E2H2Water.wijs(p, o, "gondel_start");
+        }
         BlockPos start = o.wereld("gondel_start");
         if (boot == null && start != null && start.distToCenterSqr(p.position()) < 24 * 24) {
             Vec3 water = water(level, start);
