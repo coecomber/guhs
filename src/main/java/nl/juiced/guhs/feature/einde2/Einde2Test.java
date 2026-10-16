@@ -164,9 +164,21 @@ public final class Einde2Test {
         if (chunk == null) {
             return List.of("no spot for the guaranteed copy");
         }
-        double d = Math.hypot(chunk.getMinBlockX(), chunk.getMinBlockZ());
+        // (fix round 1: a story stop's ring lies around the stop before it, "rond", instead of around 0,0)
+        int mx = 0, mz = 0;
+        String midden = "0,0";
+        if (ring != null && ring.rond().isPresent()) {
+            midden = ring.rond().get().getPath().replaceFirst("_gegarandeerd$", "");
+            ChunkPos vorige = gegarandeerd(w, midden);
+            if (vorige == null) {
+                return List.of("the stop its ring lies around, " + midden + ", has no spot");
+            }
+            mx = vorige.getMinBlockX();
+            mz = vorige.getMinBlockZ();
+        }
+        double d = Math.hypot(chunk.getMinBlockX() - mx, chunk.getMinBlockZ() - mz);
         if (bouw.bij().isEmpty() && (d < ring.minAfstand() || d > ring.maxAfstand())) {
-            fouten.add("not in its ring: " + (int) d + " blocks from 0,0");
+            fouten.add("not in its ring: " + (int) d + " blocks from " + midden);
         }
         StructureStart start = start(w, structuur, chunk);
         if (start == null) {

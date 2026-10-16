@@ -69,6 +69,12 @@ import nl.juiced.guhs.registry.ModStructureTypes;
  *       ever after. In a brand-new world nothing exists yet, so the search finds what it always found.</li>
  *   <li>{@code "rond": "guhs:<other set>"}: the ring lies around the guaranteed copy of that set instead of around 0,0 (a
  *       chain of story places a walk apart). That set must go first (a higher voorrang), else nothing is placed.</li>
+ *   <li>einde2 fix round 1: {@code "max_ver": <blocks>} (optional, 0 = none): a hard ceiling for the wider rings of an
+ *       alleen_nieuw set. Each wider ring is cut off at this distance from its middle, and when none of them has a spot the
+ *       last try is the whole ring from {@code min_afstand} to {@code max_ver}; never further. For a chain of story stops
+ *       that must stay a short flight apart (the Guhvatar story: never more than 5000 blocks between two stops): without
+ *       it the last resort of {@link #RUIMER} could put a stop 4x as far away. An operator's {@link #zoekRond} is not
+ *       limited.</li>
  * </ul>
  * bbq2, phase 3: the search never runs on the server thread by itself ({@link #vooruit} has its own thread, and while that
  * thread is busy a question from the server thread, e.g. a compass, gets "not known yet" instead of waiting for it:
@@ -91,12 +97,17 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
      * bbq2: only in terrain that does not exist yet (alleen_nieuw), and around the guaranteed copy of another set instead of
      * 0,0 (rond: that structure set's id); flat fields in the placement JSON, both optional.
      */
-    public record Nieuw(boolean alleenNieuw, Optional<Identifier> rond) {
-        public static final Nieuw GEEN = new Nieuw(false, Optional.empty());
+    public record Nieuw(boolean alleenNieuw, Optional<Identifier> rond, int maxVer) {
+        public static final Nieuw GEEN = new Nieuw(false, Optional.empty(), 0);
         public static final MapCodec<Nieuw> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
                 Codec.BOOL.optionalFieldOf("alleen_nieuw", false).forGetter(Nieuw::alleenNieuw),
-                Identifier.CODEC.optionalFieldOf("rond").forGetter(Nieuw::rond)
+                Identifier.CODEC.optionalFieldOf("rond").forGetter(Nieuw::rond),
+                Codec.intRange(0, 100000).optionalFieldOf("max_ver", 0).forGetter(Nieuw::maxVer)
         ).apply(i, Nieuw::new));
+
+        public Nieuw(boolean alleenNieuw, Optional<Identifier> rond) {
+            this(alleenNieuw, rond, 0);
+        }
     }
 
     /** (the slice of the ring and the bbq2 fields together: the codec builder takes three more fields at most) */
@@ -171,6 +182,36 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
 
     public int minAfstand() {
         return minAfstand;
+    }
+
+    /** einde2 fix round 1: the hard ceiling of the wider rings (blocks from the ring's middle; 0: none, see the class doc). */
+    public int maxVer() {
+        return nieuw.maxVer();
+    }
+
+    /**
+     * The rings the search walks through, {min, max} in blocks from the ring's middle: the own ring, then (an alleen_nieuw
+     * set in a world where chunks exist) the wider ones of {@code ruimerLijst}, cut off at {@link #maxVer} when it is set
+     * (then the whole band min..maxVer as the last one). Pure: the tests check the bounds of a chain with it.
+     */
+    public List<int[]> ringen(double[] ruimerLijst) {
+        List<int[]> uit = new ArrayList<>();
+        int cap = maxVer() > 0 ? Math.max(maxVer(), maxAfstand) : Integer.MAX_VALUE;
+        for (double ruimer : ruimerLijst) {
+            int min = (int) Math.round(minAfstand * ruimer), max = (int) Math.min((long) Math.round(maxAfstand * ruimer), cap);
+            if (max - min >= 64) {
+                uit.add(new int[]{min, max});
+            }
+        }
+        if (maxVer() > 0 && ruimerLijst.length > 1 && cap > maxAfstand) {
+            uit.add(new int[]{minAfstand, cap});
+        }
+        return uit;
+    }
+
+    /** The rings of {@link #ringen(double[])} for a search in a world where chunks exist already (the widest case). */
+    public List<int[]> ringenOoit() {
+        return ringen(RUIMER);
     }
 
     public int maxAfstand() {
@@ -755,8 +796,13 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         double midden = draai(w.seed) + Math.PI * 2 * sector / sectoren, half = Math.PI / sectoren;
         SplittableRandom rng = new SplittableRandom(mix(w.seed * 31 + salt()));
         int tries = 0, biomeOk = 0, vlakOk = 0, nieuwOk = 0;
-        for (double ruimer : terrein == null ? new double[]{1.0} : ruimerLijst) {
-            int min = (int) Math.round(minAfstand * ruimer), max = (int) Math.round(maxAfstand * ruimer);
+        // (a plain set: its own ring; hand: the whole disc; this set's own min/max else, so the rings of ringen() apply)
+        List<int[]> rings = hand || minAfstand != this.minAfstand || maxAfstand != this.maxAfstand
+                ? ruimerRingen(minAfstand, maxAfstand, terrein == null ? new double[]{1.0} : ruimerLijst)
+                : ringen(terrein == null ? new double[]{1.0} : ruimerLijst);
+        for (int[] ring : rings) {
+            int min = ring[0], max = ring[1];
+            double ruimer = (double) max / maxAfstand;
             for (int[] ronde : RONDES) {
                 Set<ChunkPos> gehad = new HashSet<>();
                 for (int k = 0; k < ronde[0]; k++) {
@@ -814,6 +860,15 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
                     minAfstand, maxAfstand, tries, biomeOk, vlakOk);
         }
         return Optional.empty();
+    }
+
+    /** The wider rings without a ceiling (an operator's search, {@link #zoekRond}). */
+    private static List<int[]> ruimerRingen(int minAfstand, int maxAfstand, double[] ruimerLijst) {
+        List<int[]> uit = new ArrayList<>();
+        for (double ruimer : ruimerLijst) {
+            uit.add(new int[]{(int) Math.round(minAfstand * ruimer), (int) Math.round(maxAfstand * ruimer)});
+        }
+        return uit;
     }
 
     /**

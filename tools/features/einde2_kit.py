@@ -72,9 +72,10 @@ ZIJ = ["omashguh", "westelijke_luchttempel", "vuurtempel_roku", "kyoshi_dorp", "
 SPONS = ["bikinibodem", "schelpenstad"]                                                              # (the Sponsguh story)
 
 
-def _plek(slice_, salt, sector, ring, voorrang, biomes=None, rand=0, spreiding=None, kompas=None, band="hoog", leeg=None, bij=None):
+def _plek(slice_, salt, sector, ring, voorrang, biomes=None, rand=0, spreiding=None, kompas=None, band="hoog", leeg=None, bij=None, rond=None,
+          max_ver=None):
     return {"slice": slice_, "salt": salt, "sector": sector, "ring": ring, "voorrang": voorrang, "biomes": biomes or list(BUITEN), "rand": rand,
-            "spreiding": spreiding, "kompas": kompas, "band": band, "leeg": leeg, "bij": bij}
+            "spreiding": spreiding, "kompas": kompas, "band": band, "leeg": leeg, "bij": bij, "rond": rond, "max_ver": max_ver}
 
 
 # the placement of the fourteen big places (build contract 6.4). ring = blocks from 0,0 of the one guaranteed copy, sector = its
@@ -84,10 +85,11 @@ def _plek(slice_, salt, sector, ring, voorrang, biomes=None, rand=0, spreiding=N
 # leeg = (x, z): this box from the build's origin must be free of terrain; bij = (structure, dx, dz): the build has no spot of
 # its own, it stands at that offset from the origin of the one guaranteed copy of that structure.
 STRUCTUREN = {
-    "zuidelijke_luchttempel": _plek("bouw_lucht", 21400901, 0, (2000, 3200), 400, rand=48),
-    "noordelijke_waterstam": _plek("bouw_water", 21401001, 4, (2000, 3200), 399, rand=48),
-    "ba_sing_guh": _plek("bouw_aarde", 21401101, 8, (2000, 3200), 398, rand=48),
-    "vuurnatie_hoofdstad": _plek("bouw_vuur", 21401201, 12, (2000, 3200), 397, rand=48),
+    # fix round 1 (playtest 1, item 8): the four story stops are a CHAIN, each ring around the stop before it (rond), see VERHAAL_KETEN
+    "zuidelijke_luchttempel": _plek("bouw_lucht", 21400901, 0, (1800, 2600), 400, rand=48, max_ver=3500),
+    "noordelijke_waterstam": _plek("bouw_water", 21401001, 4, (2000, 2800), 399, rand=48, rond="zuidelijke_luchttempel", max_ver=4500),
+    "ba_sing_guh": _plek("bouw_aarde", 21401101, 7, (2000, 2800), 398, rand=48, rond="noordelijke_waterstam", max_ver=4500),
+    "vuurnatie_hoofdstad": _plek("bouw_vuur", 21401201, 9, (2000, 2800), 397, rand=48, rond="ba_sing_guh", max_ver=4500),
     "omashguh": _plek("bouw_zij1", 21401301, 2, (1300, 2600), 300, ["kristalkaasklippen"], spreiding=(96, 40), kompas="einde"),
     "westelijke_luchttempel": _plek("bouw_zij1", 21401311, 6, (1300, 2600), 299, ["kruimelwolken"], spreiding=(96, 40), kompas="einde"),
     "vuurtempel_roku": _plek("bouw_zij1", 21401321, 10, (1300, 2600), 298, ["knabbelkoorbos"], spreiding=(96, 40), kompas="einde"),
@@ -99,6 +101,38 @@ STRUCTUREN = {
     "bikinibodem": _plek("bouw_bikinibodem", 21401601, 3, (1600, 3000), 302, kompas="einde", band="laag", leeg=(480, 224)),
     "schelpenstad": _plek("bouw_schelpenstad", 21401701, None, None, 293, band="laag", bij=("bikinibodem", 224, 64)),
 }
+
+# fix round 1 (playtest 1, item 8): the Guhvatar story flies Luchttempel -> Waterstam -> Ba Sing Guh -> Vuurnatie, and between two
+# consecutive stops there must ALWAYS be at least 1500 and at most 5000 blocks (aim: 2000-2800). So the Luchttempel keeps a ring around
+# 0,0 (1800-2600, the START flight from the main island) and every next stop has its ring around the stop before it ("rond"): the
+# distance between two stops is then the ring itself, whatever the seed. The sector turns the chain around the main island (seen from
+# the stop before: 90, 157.5 and 202.5 degrees past the Luchttempel's own direction): all four stay 1800-4700 blocks from 0,0 and at
+# least 2000 apart. max_ver is the hard ceiling of the wider rings of alleen_nieuw (GegarandeerdPlacement): without it a world with
+# much explored terrain could push a stop 4x as far. check_keten() asserts the bounds at every build, landing spots included.
+VERHAAL_KETEN = dict(min=1500, max=5000)
+# the landing spot (aankomst) of a build lies at most this far from its anchor (the chunk middle the ring is measured to): every tile
+# lies within MAX_ANKER / MAX_VOORBIJ_ANKER of the anchor in x and in z
+_AANKOMST_SPEL = math.ceil(math.hypot(136, 136))
+
+
+def check_keten():
+    """Asserts the bounds of VERHAAL_KETEN for every two consecutive stops, for any seed and any world: the next stop lies around the
+    one before (rond), and every ring GegarandeerdPlacement.ringen() can ever search (the own ring, the wider rings of alleen_nieuw cut
+    off at max_ver, the last band min..max_ver), widened by both landing spots, stays inside min..max."""
+    lo_ok, hi_ok = VERHAAL_KETEN["min"], VERHAAL_KETEN["max"]
+    for vorige, naam in zip(VERHAAL, VERHAAL[1:]):
+        info = STRUCTUREN[naam]
+        assert info["rond"] == vorige, f"{naam}: its ring must lie around {vorige} (rond), not around 0,0"
+        assert info["max_ver"] or not EINDE2_ALLEEN_NIEUW, f"{naam}: an alleen_nieuw stop needs max_ver (else its ring may grow 4x)"
+        lo, hi = info["ring"]
+        verst = max(hi, info["max_ver"] or hi)
+        assert lo - 2 * _AANKOMST_SPEL >= lo_ok, f"{vorige} -> {naam}: landing spots may lie {lo - 2 * _AANKOMST_SPEL} apart (< {lo_ok})"
+        assert verst + 2 * _AANKOMST_SPEL <= hi_ok, f"{vorige} -> {naam}: landing spots may lie {verst + 2 * _AANKOMST_SPEL} apart (> {hi_ok})"
+    assert STRUCTUREN[VERHAAL[0]]["rond"] is None and STRUCTUREN[VERHAAL[0]]["max_ver"], f"{VERHAAL[0]}: a ring around 0,0 with a ceiling"
+    return True
+
+
+check_keten()   # (at every import: every build of the resources)
 
 # the road at the seam between Bikinibodem (its east face) and Schelpenstad (its west face), in template coordinates (both
 # builds have y 4, so the same template y is the same world y): 9 wide; the two outer columns are the kerb (dek at y with a
@@ -707,6 +741,13 @@ def leegte_structuur(h, b, *, titel, tooltip, y, anker=None, zonder_leeg=False):
                      "sectoren": SECTOREN}
         if EINDE2_ALLEEN_NIEUW:
             placement["alleen_nieuw"] = True
+        if info["rond"]:
+            vorige = STRUCTUREN[info["rond"]]
+            assert vorige["ring"] and vorige["voorrang"] > info["voorrang"], f"{name}: rond={info['rond']!r} needs a ring of its own and a higher voorrang"
+            placement["rond"] = f"guhs:{info['rond']}_gegarandeerd"
+        if info["max_ver"]:
+            assert info["max_ver"] >= hi, f"{name}: max_ver {info['max_ver']} is less than its ring"
+            placement["max_ver"] = info["max_ver"]
         h.w(gegarandeerd, {"structures": [{"structure": f"guhs:{name}", "weight": 1}], "placement": placement})
         if info["spreiding"]:
             spacing, separation = info["spreiding"]

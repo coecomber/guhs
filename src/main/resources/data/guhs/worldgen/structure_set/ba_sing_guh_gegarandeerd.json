@@ -9,9 +9,11 @@
     "type": "guhs:gegarandeerd",
     "salt": 21401108,
     "min_afstand": 2000,
-    "max_afstand": 3200,
-    "sector": 8,
+    "max_afstand": 2800,
+    "sector": 7,
     "sectoren": 16,
-    "alleen_nieuw": true
+    "alleen_nieuw": true,
+    "rond": "guhs:noordelijke_waterstam_gegarandeerd",
+    "max_ver": 4500
   }
 }
