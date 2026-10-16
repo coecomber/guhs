@@ -29,6 +29,7 @@ import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.bestaand.Schijn;
 import nl.juiced.guhs.feature.einde2.Bewoners;
 import nl.juiced.guhs.feature.einde2.audio.E2Audio;
+import nl.juiced.guhs.feature.einde2.reizen.E2Reizen;
 import nl.juiced.guhs.feature.einde2.reizen.E2Team;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.gids.GidsFeature;
@@ -277,8 +278,8 @@ public final class E2H4Vuur {
 
     /** Step 0: the chapter's narrator card, then the arrival in disguise. */
     private static void aankomst(ServerPlayer p) {
-        if (!Plek.in(p, "aankomst") && !Plek.in(p, "kamp")) {
-            return;
+        if (!Plek.in(p, "aankomst") && !Plek.in(p, "kamp") || E2Reizen.landtNog(p)) {
+            return;                                                 // (merge_fix1: first Appa lands on his spot)
         }
         Verteller.toon(p, KAART, q -> speel(q, Scenes.AANKOMST, "aankomst_speler", r -> {
             if (VUUR.verder(r, V_AANKOMST)) {

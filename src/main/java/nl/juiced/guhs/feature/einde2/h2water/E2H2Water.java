@@ -291,7 +291,11 @@ public final class E2H2Water {
         }
         Toneel.seconde(p, o, stap);
         switch (stap) {
-            case AANKOMST -> aankomst(p);
+            case AANKOMST -> {
+                if (!E2Reizen.landtNog(p)) {           // (merge_fix1: first Appa lands on his spot, then the card and the scene)
+                    aankomst(p);
+                }
+            }
             case PAKGUH -> wijs(p, o, "pakguh");
             case ZWEEP -> E2H2WaterKrachten.toonDoelen(p, o);
             case GOLFOEFENING -> wijs(p, o, "golf_bassin");

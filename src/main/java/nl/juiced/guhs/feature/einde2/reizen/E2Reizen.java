@@ -128,6 +128,17 @@ public final class E2Reizen {
         return r == null ? null : r.soort;
     }
 
+    /**
+     * einde2 merge_fix1 (playtest 1 items 4 + 12): is p still on Appa's back on a flight of this slice that has not landed?
+     * The chapters wait with their arrival card and scene while this is true (they start them on entering the structure's
+     * box, which a flight crosses up to ~170 blocks before the landing place): Appa lands on his spot first and sets his
+     * rider down on {@code aankomst_speler}, where the scene stands them, and the scene plays after that. Someone who got
+     * off on the way (a waiting flight, on foot) is not held up.
+     */
+    public static boolean landtNog(ServerPlayer p) {
+        return REIZEN.containsKey(p.getUUID()) && p.getVehicle() instanceof AppaGuhEntity;
+    }
+
     /** The story flight that has not landed yet (also one of before a restart): {structuur, soort}, or null. */
     @Nullable
     static String[] wachtend(ServerPlayer p) {

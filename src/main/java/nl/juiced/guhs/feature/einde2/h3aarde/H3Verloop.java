@@ -13,6 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
+import nl.juiced.guhs.feature.einde2.reizen.E2Reizen;
 import nl.juiced.guhs.feature.einde2.reizen.E2Team;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
@@ -110,7 +111,7 @@ public final class H3Verloop {
         }
         switch (stap) {
             case E2H3Aarde.AANKOMST -> {
-                if (inDoos && p.onGround()) {
+                if (inDoos && p.onGround() && !E2Reizen.landtNog(p)) {   // (merge_fix1: after Appa landed)
                     aankomst(p, stad);
                 }
             }

@@ -76,7 +76,11 @@ public final class Tempel {
         ServerLevel g = p.level();
         baken(p, g, stap);
         switch (stap) {
-            case E2H1Lucht.VLUCHT -> aangekomen(p);
+            case E2H1Lucht.VLUCHT -> {
+                if (!E2Reizen.landtNog(p)) {                        // (merge_fix1: the flight's daarna starts it once Appa landed)
+                    aangekomen(p);
+                }
+            }
             case E2H1Lucht.STAL -> stalTick(p, g);
             case E2H1Lucht.DEUR -> {
                 BlockPos deur = E2H1Lucht.plek(g, "werkplaatsdeur");
