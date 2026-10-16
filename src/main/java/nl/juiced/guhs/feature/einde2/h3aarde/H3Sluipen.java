@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -74,6 +75,8 @@ public final class H3Sluipen {
         if (rust != null && Rustpunten.van(p, SOORT) == null) {
             Rustpunten.zet(p, SOORT, GuheindeFeature.GUHEINDE, rust, 180f);
             p.sendSystemMessage(Component.translatable("quest.guhs.einde2_h3_aarde.sluip.begin").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.sluip.titel").withStyle(ChatFormatting.GREEN),
+                    Component.translatable("gui.guhs.einde2_h3_aarde.sluip.onder").withStyle(ChatFormatting.YELLOW), 70);
         }
         for (int nr = 1; nr <= WACHTERS; nr++) {
             if (H3Acteurs.van(p, "wacht_" + nr) == null) {
@@ -117,6 +120,9 @@ public final class H3Sluipen {
             if (w instanceof GuhNpcEntity npc) {
                 npc.setYBodyRot(yaw);
             }
+            if (p.tickCount % BUNDEL_TIK == nr % BUNDEL_TIK && w.distanceToSqr(p) < 24 * 24) {
+                bundel(p, w, yaw);
+            }
             if (p.tickCount < rust || !nl.juiced.guhs.feature.verhaal.Duwtje.mag(p)) {
                 continue;
             }
@@ -124,6 +130,31 @@ public final class H3Sluipen {
             if (ziet(w.position(), yaw, p.position(), p.isShiftKeyDown()) && vrijeLijn(p, oog)) {
                 betrapt(p, w);
                 return;
+            }
+        }
+    }
+
+    /** (fix2-h3) How often (ticks) a guard's beam of dust is drawn. */
+    static final int BUNDEL_TIK = 4;
+    private static final DustParticleOptions BUNDEL_VER = new DustParticleOptions(0xE8D890, 0.7f);
+    private static final DustParticleOptions BUNDEL_DICHT = new DustParticleOptions(0xF08A30, 0.9f);
+
+    /**
+     * (fix2-h3, playtest 1: "hidden triggers must be visible") what a guard sees, drawn for the sneaking player: a beam of
+     * dust on the floor along the middle and both edges of his cone, orange as far as he sees you when you crouch, pale
+     * yellow up to where he sees you walking. It stops at a wall, as his sight does.
+     */
+    static void bundel(ServerPlayer p, Entity wacht, float yaw) {
+        Vec3 voet = wacht.position().add(0, 0.25, 0);
+        for (float hoek : new float[] {-(float) HOEK, 0f, (float) HOEK}) {
+            Vec3 r = Vec3.directionFromRotation(0, yaw + hoek);
+            for (double d = 1.2; d <= ZICHT; d += hoek == 0 ? 0.9 : 1.3) {
+                Vec3 punt = voet.add(r.scale(d));
+                net.minecraft.core.BlockPos b = net.minecraft.core.BlockPos.containing(punt.x, punt.y + 0.5, punt.z);
+                if (!p.level().getBlockState(b).getCollisionShape(p.level(), b).isEmpty()) {
+                    break;
+                }
+                Schijn.deeltjes(p, d <= ZICHT_GEBUKT ? BUNDEL_DICHT : BUNDEL_VER, punt, 1, 0.02, 0);
             }
         }
     }

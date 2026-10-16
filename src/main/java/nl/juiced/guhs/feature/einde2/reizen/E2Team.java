@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.Nullable;
 
@@ -83,6 +84,19 @@ public final class E2Team {
 
     private static final Map<UUID, Plaatsing> GEZET = new ConcurrentHashMap<>();
     static final TeamRol ROL = new TeamRol();
+
+    /** (fix2-h3) A member who is somewhere else in the story right now: no copy of them at the campfire of that structure. */
+    @FunctionalInterface
+    public interface Afwezig {
+        boolean weg(ServerPlayer p, String structuur, Lid lid);
+    }
+
+    /**
+     * (fix2-h3) The chapters' "this member is not here now" rules (e.g. h3: Katara-guh, carried off by the Dai Li during the
+     * fall of Ba Sing Guh). Only the campfire copies ({@link #zetInStructuur} and the tick); the team itself
+     * ({@link #leden}, Appa's back) stays the same.
+     */
+    public static final List<Afwezig> AFWEZIG = new CopyOnWriteArrayList<>();
 
     private E2Team() {
     }
@@ -193,7 +207,7 @@ public final class E2Team {
         for (Lid l : Lid.values()) {
             UUID id = pl.leden().get(l);
             Entity e = id == null ? null : level.getEntity(id);
-            boolean hoort = leden.contains(l);
+            boolean hoort = leden.contains(l) && AFWEZIG.stream().noneMatch(a -> a.weg(wiens, structuur, l));
             if (!hoort) {
                 if (e != null) {
                     e.discard();

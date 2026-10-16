@@ -131,6 +131,15 @@ def texts(h):
         kit.lang(h, f"gui.guhs.einde2_h3_aarde.{key}", text)
     for key, text in tekst.BLOKKEN.items():
         kit.lang(h, key, text)
+    # fix2-h3: the step hints, their look scenes, the team's lines and the games' titles (H3Hints)
+    for key, text in tekst.HINTS.items():
+        kit.lang(h, f"gui.guhs.einde2_h3_aarde.hint.{key}", text)
+    for naam, (titel, regel) in tekst.KIJK.items():
+        verhaal_motor.scene(h, f"{SCENE}kijk_{naam}", titel, {"tekst": regel})
+    for key, (_wie, text) in tekst.TEAM.items():
+        kit.lang(h, f"gui.guhs.einde2_h3_aarde.team.{key}", text)
+    for key, text in tekst.TITELS.items():
+        kit.lang(h, f"gui.guhs.einde2_h3_aarde.{key}", text)
     verhaal_motor.sluier(h, STRUCTUUR)
 
 
@@ -380,6 +389,16 @@ def selfcheck(h):
     for naam, (_, regels, _n) in tekst.SCENES.items():
         if f"scene.guhs.{SCENE}{naam}.titel" not in h.NL:
             problems.append(f"no title of scene {naam}")
+    # fix2-h3: H3Hints names exactly these look scenes and team lines, and only team members that exist
+    hints = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "main", "java", "nl", "juiced", "guhs", "feature",
+                              "einde2", "h3aarde", "H3Hints.java"), encoding="utf-8").read()
+    if "KIJK = {" + ", ".join(f'"{n}"' for n in tekst.KIJK) + "}" not in hints:
+        problems.append("H3Hints.KIJK does not list the look scenes of einde2_h3_aarde_tekst.KIJK")
+    for key, (wie, _t) in tekst.TEAM.items():
+        if wie not in ("aang", "katara", "sokka", "toph", "zuka"):
+            problems.append(f"team line {key}: no member {wie}")
+        if f'team("{key}", "{wie}",' not in hints:
+            problems.append(f"H3Hints does not say the team line {key} ({wie})")
     if len(tekst.STAPPEN) != 15 or len(tekst.DOELEN) != 15 or len(FTB) != 15:
         problems.append("fifteen steps, fifteen goals, fifteen quests")
     if problems:

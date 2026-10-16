@@ -88,6 +88,7 @@ public final class H3Rollen {
                 E2H3Aarde.LIJN.vlag(p, E2H3Aarde.V_BAAN, true);
                 nl.juiced.guhs.feature.verhaal.VerhaalSync.sync(p);
                 GuhQuests.hint(p, "gui.guhs.verhalen.guhvatar_aarde.kort.3_baan");
+                H3Hints.baan(p);
             }
         });
         Praat.luister(PAI_SHO, (p, spreker, optie) -> {

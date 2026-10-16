@@ -61,6 +61,11 @@ public final class H3Blinddoek {
             return;
         }
         p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0, false, false, false));
+        if (!STAND.containsKey(p.getUUID())) {
+            // (fix2-h3) stepping in: what to do, in one line
+            H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.baan.titel").withStyle(ChatFormatting.GREEN),
+                    Component.translatable("gui.guhs.einde2_h3_aarde.baan.onder", Integer.bitCount(gevonden(p)), DOELEN).withStyle(ChatFormatting.YELLOW), 60);
+        }
         Stand s = STAND.getOrDefault(p.getUUID(), new Stand(-RITME, false));
         boolean stamp = p.isShiftKeyDown() && !s.gebukt() && p.tickCount - s.laatste() >= STAMP_RUST;
         if (stamp || p.tickCount - s.laatste() >= RITME) {
@@ -129,6 +134,8 @@ public final class H3Blinddoek {
         E2H3Aarde.LIJN.vlag(p, E2Verhaal.V_GELEERD, true);
         stop(p);
         p.removeEffect(MobEffects.DARKNESS);
+        H3Hints.gelukt(p, "baan.klaar", Component.translatable("gui.guhs.einde2_h3_aarde.baan.klaar_onder").withStyle(ChatFormatting.YELLOW),
+                SoundEvents.PLAYER_LEVELUP);
         H3Rollen.tophGeleerd(p);
     }
 

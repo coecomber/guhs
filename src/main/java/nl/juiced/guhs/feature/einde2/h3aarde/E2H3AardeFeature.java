@@ -72,6 +72,7 @@ public final class E2H3AardeFeature {
         H3Scenes.registreer();
         H3Rollen.registreer();
         H3Schijn.registreer();
+        H3Hints.registreer();
         for (GuhClothes c : E2H3Aarde.KLEDING) {
             KledingBronnen.bron(c, E2H3Aarde.KLEDINGBRON);
         }
