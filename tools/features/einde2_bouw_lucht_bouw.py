@@ -8,8 +8,8 @@ from south to north: the landing terrace with the team's camp (y 40), the stairs
 north of it (the monnikentoren and the windtoren, each with a bridge to the roof of the hall) and Appa's stable between
 them. West: Guhatso's taartenterras above the luchtbalveld (a sunken court of poles in a bed of cloud). East: the
 Werktuigguh's workshop behind its closed door, with the building site of the Vredesballon in a walled yard. The
-luchtscooter-baan runs along the rim from the south-west round the north to the north-east; the zweefringen hang in a
-wide loop around the towers.
+luchtscooter-baan runs along the rim from the south-west round the north to the north-east; the six zweefringen hang in
+a short arc from the great tower's south balcony to the west (fix round 1).
 
 No story logic and no characters: every spot a later phase needs is a marker (build contract 6.7), written to
 data/guhs/einde2/plekken/zuidelijke_luchttempel.json. The five stages of the Vredesballon are overlay templates
@@ -1469,13 +1469,15 @@ def lagen(b):
 # the zweefringen
 # =====================================================================================================================
 RINGEN = [  # the middle of each ring and the axis it faces along, in flying order
-    (96, 92, 121, "z"), (84, 89, 130, "x"), (68, 86, 125, "x"), (58, 84, 108, "z"), (58, 82, 88, "z"), (58, 80, 68, "z"), (57, 78, 46, "z"),
-    (76, 76, 32, "x"), (96, 74, 27, "x"), (116, 72, 32, "x"), (132, 69, 48, "z"), (131, 66, 72, "z"), (128, 62, 112, "z"), (112, 57, 134, "x"),
+    # fix round 1 (playtest 1: "as short a route as possible, easier"): six rings in a short, gently sinking arc from the
+    # south balcony of the great tower to the west (about 90 blocks of gliding, 10 s), each about 15 blocks after the last
+    # and one block lower; the old loop of fourteen rings round all the towers is gone
+    (96, 95, 122, "z"), (90, 94, 137, "z"), (78, 93, 147, "x"), (63, 92, 145, "x"), (51, 91, 135, "z"), (46, 90, 121, "z"),
 ]
 
 
 def zweefringen(b):
-    """Fourteen glowing rings (radius 4) in a wide loop around the towers, from the jump balcony down to the forecourt."""
+    """Six glowing rings (radius 4) in a short arc from the jump balcony to the west, over the square (fix round 1)."""
     for nr, (x, y, z, as_) in enumerate(RINGEN, 1):
         for da in range(-5, 6):
             for dy in range(-5, 6):
@@ -1880,7 +1882,7 @@ def eigen_controle(b, start, route):
 
 VERWACHT = ["aang", "poort", "hal", ("beeld", 8), "kyoshi_beeld", "roku_beeld", "voetstuk_leeg", "guhatso", "taartenbank", "luchtbal_veld",
             ("luchtbal_paal", 12), "luchtbal_doel_speler", "luchtbal_doel_aang", "luchtbal_start_speler", "luchtbal_start_aang", "scooter_start",
-            "scooter_finish", "scooter_baan", "zweef_start", ("zweefring", 10), "appa_stal", "appa", "zadel", "appels", "momo", "momo_route",
+            "scooter_finish", "scooter_baan", "zweef_start", ("zweefring", 6), "appa_stal", "appa", "zadel", "appels", "momo", "momo_route",
             "momo_eind", "monnikenverblijf", "bed_speler", "werkplaatsdeur", "werkplaats", "werktuigguh", "werkbank", ("oefen", 6),
             "vredesballon_bouwplaats", "vredesballon_anker", "vredesballon_teller", "knipoog_sjokkel", "knipoog_sjokkel_camera",
             # einde2 phase B (h1_lucht): the pier, Zuka's ship and the escape

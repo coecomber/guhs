@@ -74,13 +74,16 @@ public final class Tempel {
             return;
         }
         ServerLevel g = p.level();
+        baken(p, g, stap);
         switch (stap) {
             case E2H1Lucht.VLUCHT -> aangekomen(p);
             case E2H1Lucht.STAL -> stalTick(p, g);
             case E2H1Lucht.DEUR -> {
                 BlockPos deur = E2H1Lucht.plek(g, "werkplaatsdeur");
-                if (deur != null && deur.closerToCenterThan(p.position(), 3.5)) {
+                if (deur != null && deur.closerToCenterThan(p.position(), 4.5)) {
                     deur(p, g, deur);
+                } else if (deur != null && deur.closerToCenterThan(p.position(), 24) && g.getGameTime() % 100 < 5) {
+                    p.sendOverlayMessage(tekst("deur.hier").withStyle(ChatFormatting.GOLD));
                 }
             }
             case E2H1Lucht.ZUKA -> {
@@ -131,16 +134,71 @@ public final class Tempel {
     }
 
     // =====================================================================================================================
-    // step 7: Appa's stable
+    // every step shows where to go: a soft column of light over the one to talk to, the thing to click, the place to be
+    // (fix round 1, playtest 1: "no idea where"); the track, the rings and Momo shine in their own classes
+    // =====================================================================================================================
+    private static void baken(ServerPlayer p, ServerLevel g, int stap) {
+        java.util.List<String> waar = switch (stap) {
+            case E2H1Lucht.HAL -> java.util.List.of("roku_beeld", "kyoshi_beeld");
+            case E2H1Lucht.LUCHTBAL -> Luchtbal.bezig(p) ? java.util.List.of() : java.util.List.of("guhatso");
+            case E2H1Lucht.DEUR -> java.util.List.of("werkplaatsdeur");
+            case E2H1Lucht.ZUKA -> java.util.List.of(E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_VLUCHT) ? "appa_kamp" : "steiger");
+            default -> java.util.List.of();
+        };
+        long nu = g.getGameTime();
+        for (String id : waar) {
+            Vec3 m = E2H1Lucht.midden(g, id);
+            if (m != null) {
+                straal(p, m.add(0, id.endsWith("_beeld") || id.equals("guhatso") ? 2.3 : 0.4, 0), nu);
+            }
+        }
+    }
+
+    /** A soft rising column of light (seen from afar) at this spot. */
+    static void straal(ServerPlayer p, Vec3 plek, long nu) {
+        for (int i = 0; i < 3; i++) {
+            E2H1Lucht.ver(p, ParticleTypes.END_ROD, plek.add(0, ((nu / 5 + i * 3) % 9) * 0.7, 0), 1, 0.12, 0.0);
+        }
+    }
+
+    // =====================================================================================================================
+    // step 7: Appa's stable (fix round 1, playtest 1: "no idea what was expected"). Three plain things, each one shines:
+    // take the saddle off its trestle (a right click: you get Appa's saddle), click Appa with it (it goes on), and give him
+    // three apples from the barrel by the door. Saddle and apples in any order; nothing can be lost (the trestle and the
+    // barrel give again).
     // =====================================================================================================================
     private static void stalTick(ServerPlayer p, ServerLevel g) {
         AABB stal = E2H1Lucht.zone(g, "appa_stal");
         Vec3 plek = E2H1Lucht.midden(g, "appa");
-        if (stal == null || plek == null || !stal.inflate(2).contains(p.position()) || !Appa.heeft(p)) {
+        if (stal == null || plek == null) {
             return;
         }
-        AppaGuhEntity appa = Appa.geladen(p);
         long nu = g.getGameTime();
+        boolean op = E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL);
+        boolean zadelMee = heeftZadel(p);
+        int appelsNodig = 3 - E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_APPELS);
+        boolean appelsMee = GuhQuests.count(p, Items.APPLE) >= Math.max(1, appelsNodig);
+        Vec3 zadel = E2H1Lucht.midden(g, "zadel"), appels = E2H1Lucht.midden(g, "appels");
+        if (!op && !zadelMee && zadel != null) {
+            straal(p, zadel.add(0, 1.2, 0), nu);
+            E2H1Lucht.ver(p, ParticleTypes.HAPPY_VILLAGER, zadel.add(0, 1.2, -0.5), 3, 0.6, 0.0);
+        }
+        if (appelsNodig > 0 && !appelsMee && appels != null) {
+            straal(p, appels.add(0, 1.4, 0), nu);
+        }
+        AppaGuhEntity appa = Appa.geladen(p);
+        if (appa != null && appa.level() == g && ((zadelMee && !op) || (appelsNodig > 0 && GuhQuests.count(p, Items.APPLE) > 0))) {
+            E2H1Lucht.ver(p, ParticleTypes.HEART, appa.position().add(0, appa.getBbHeight() + 0.6, 0), 1, 0.5, 0.0);
+        }
+        boolean binnen = stal.inflate(2).contains(p.position());
+        if (binnen && nu % 100 < 5) {
+            String wat = !op && !zadelMee ? "stal.doe_zadel" : !op ? "stal.doe_op_appa" : !appelsMee ? "stal.doe_appels" : "stal.doe_voeren";
+            p.sendOverlayMessage(tekst(wat).withStyle(ChatFormatting.GOLD));
+        }
+        // Appa comes into his stable when you are there
+        if (!binnen || !Appa.heeft(p)) {
+            return;
+        }
         if ((appa == null || appa.level() != g || appa.position().distanceTo(plek) > 10) && nu - APPA_GEROEPEN.getOrDefault(p.getUUID(), -1000L) > 200) {
             APPA_GEROEPEN.put(p.getUUID(), nu);
             appa = Appa.roep(p);
@@ -151,68 +209,119 @@ public final class Tempel {
         }
     }
 
-    /** A right-click on a block: the saddle or the apple barrel in the stable (step 7). */
+    /** Does the player carry a saddle (Appa's, or any)? */
+    static boolean heeftZadel(ServerPlayer p) {
+        return GuhQuests.count(p, Items.SADDLE) > 0;
+    }
+
+    /** Is pos within this box around a marker (x from dx0 to dx1, y from one below to dy1 above, z within dz)? */
+    private static boolean bij(BlockPos pos, @Nullable BlockPos m, int dx0, int dx1, int dy1, int dz) {
+        return m != null && pos.getX() >= m.getX() + dx0 && pos.getX() <= m.getX() + dx1 && pos.getY() >= m.getY() - 1
+                && pos.getY() <= m.getY() + dy1 && Math.abs(pos.getZ() - m.getZ()) <= dz;
+    }
+
+    /** A right-click on a block: the saddle's trestle or the apple barrel in the stable (step 7), the closed door (step 8). */
     static void opBlok(PlayerInteractEvent.RightClickBlock event) {
-        if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != InteractionHand.MAIN_HAND
-                || E2H1Lucht.LIJN.stap(p) != E2H1Lucht.STAL || !E2H1Lucht.inTempel(p)) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != InteractionHand.MAIN_HAND || !E2H1Lucht.inTempel(p)) {
             return;
         }
+        int stap = E2H1Lucht.LIJN.stap(p);
         ServerLevel g = p.level();
-        BlockPos zadel = E2H1Lucht.plek(g, "zadel"), appels = E2H1Lucht.plek(g, "appels");
         BlockPos pos = event.getPos();
-        if (zadel != null && pos.distManhattan(zadel) <= 1) {
+        if (stap == E2H1Lucht.DEUR) {
+            BlockPos deur = E2H1Lucht.plek(g, "werkplaatsdeur");
+            if (bij(pos, deur, -1, 1, 3, 2)) {
+                deur(p, g, deur);
+            }
+            return;
+        }
+        if (stap != E2H1Lucht.STAL) {
+            return;
+        }
+        BlockPos zadel = E2H1Lucht.plek(g, "zadel"), appels = E2H1Lucht.plek(g, "appels");
+        if (bij(pos, zadel, -3, 3, 2, 2)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             if (E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL)) {
+                p.sendOverlayMessage(tekst("stal.zadel_zit_al").withStyle(ChatFormatting.GRAY));
                 return;
             }
-            int n = Math.min(3, E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_ZADEL) + 1);
-            E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_ZADEL, n);
-            g.playSound(null, zadel, SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 0.35f, 1.4f);
-            g.sendParticles(ParticleTypes.WAX_ON, zadel.getX() + 0.5, zadel.getY() + 1.0, zadel.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.02);
-            if (n >= 3) {
-                E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL, true);
-                p.sendOverlayMessage(tekst("stal.zadel_klaar").withStyle(ChatFormatting.GREEN));
-                stalKlaar(p);
-            } else {
-                p.sendOverlayMessage(tekst("stal.zadel", n).withStyle(ChatFormatting.YELLOW));
+            if (heeftZadel(p)) {
+                p.sendOverlayMessage(tekst("stal.doe_op_appa").withStyle(ChatFormatting.GOLD));
+                return;
             }
-        } else if (appels != null && pos.distManhattan(appels) <= 1) {
+            ItemStack z = new ItemStack(Items.SADDLE);
+            z.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, tekst("stal.zadel_naam").withStyle(ChatFormatting.GOLD));
+            Minigames.give(p, z);
+            g.playSound(null, zadel, SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            g.sendParticles(ParticleTypes.WAX_ON, zadel.getX() + 0.5, zadel.getY() + 1.0, zadel.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.02);
+            p.sendSystemMessage(tekst("stal.zadel_gepakt").withStyle(ChatFormatting.YELLOW));
+        } else if (bij(pos, appels, -1, 2, 1, 1)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             int heb = GuhQuests.count(p, Items.APPLE);
             int nodig = 3 - E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_APPELS);
-            if (heb < nodig) {
+            if (nodig <= 0) {
+                p.sendOverlayMessage(tekst("stal.vol").withStyle(ChatFormatting.GRAY));
+            } else if (heb < nodig) {
                 Minigames.give(p, new ItemStack(Items.APPLE, nodig - heb));
                 g.playSound(null, appels, SoundEvents.BARREL_OPEN, SoundSource.PLAYERS, 0.7f, 1.0f);
-                p.sendOverlayMessage(tekst("stal.appels").withStyle(ChatFormatting.YELLOW));
+                p.sendSystemMessage(tekst("stal.appels").withStyle(ChatFormatting.YELLOW));
+            } else {
+                p.sendOverlayMessage(tekst("stal.doe_voeren").withStyle(ChatFormatting.GOLD));
             }
         }
     }
 
-    /** A right-click on an entity: an apple for the player's own Appa (step 7). */
+    /** A right-click on an entity: the saddle or an apple for the player's own Appa (step 7). */
     static void opEntity(PlayerInteractEvent.EntityInteractSpecific event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != InteractionHand.MAIN_HAND
-                || !event.getItemStack().is(Items.APPLE) || E2H1Lucht.LIJN.stap(p) != E2H1Lucht.STAL) {
+                || E2H1Lucht.LIJN.stap(p) != E2H1Lucht.STAL) {
             return;
         }
         AppaGuhEntity appa = Appa.van(event.getTarget());
         if (appa == null || !appa.isEigenaar(p) || !E2H1Lucht.inTempel(p)) {
             return;
         }
+        ServerLevel g = p.level();
+        ItemStack hand = event.getItemStack();
+        if (hand.is(Items.SADDLE)) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            if (E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL)) {
+                p.sendOverlayMessage(tekst("stal.zadel_zit_al").withStyle(ChatFormatting.GRAY));
+                return;
+            }
+            hand.shrink(1);
+            E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL, true);
+            g.playSound(null, appa, SoundEvents.HORSE_SADDLE.value(), SoundSource.NEUTRAL, 1.0f, 0.8f);
+            g.sendParticles(ParticleTypes.WAX_ON, appa.getX(), appa.getY() + appa.getBbHeight(), appa.getZ(), 12, 0.8, 0.3, 0.8, 0.02);
+            p.sendSystemMessage(tekst("stal.zadel_klaar").withStyle(ChatFormatting.GREEN));
+            stalKlaar(p);
+            return;
+        }
+        if (!hand.is(Items.APPLE)) {
+            // (no cancel: Appa's own click stays; only say what he wants)
+            boolean op = E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL);
+            p.sendOverlayMessage(tekst(!op && !heeftZadel(p) ? "stal.doe_zadel" : !op ? "stal.doe_op_appa" : "stal.doe_appels").withStyle(ChatFormatting.GOLD));
+            return;
+        }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         int n = E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_APPELS);
         if (n >= 3) {
+            p.sendOverlayMessage(tekst("stal.vol").withStyle(ChatFormatting.GRAY));
             return;
         }
-        event.getItemStack().shrink(1);
+        hand.shrink(1);
         E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_APPELS, n + 1);
-        ServerLevel g = p.level();
         g.sendParticles(ParticleTypes.HEART, appa.getX(), appa.getY() + appa.getBbHeight() + 0.3, appa.getZ(), 4, 0.6, 0.2, 0.6, 0.02);
         g.playSound(null, appa, SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 1.0f, 0.7f);
         p.sendOverlayMessage(tekst("stal.voer", n + 1).withStyle(ChatFormatting.YELLOW));
         if (n + 1 >= 3) {
+            if (!E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL)) {
+                p.sendSystemMessage(tekst(heeftZadel(p) ? "stal.doe_op_appa" : "stal.doe_zadel").withStyle(ChatFormatting.GOLD));
+            }
             stalKlaar(p);
         }
     }
@@ -221,6 +330,7 @@ public final class Tempel {
         if (E2H1Lucht.LIJN.vlag(p, E2H1Lucht.V_ZADEL) && E2H1Lucht.LIJN.teller(p, E2H1Lucht.T_APPELS) >= 3
                 && E2H1Lucht.LIJN.verder(p, E2H1Lucht.STAL)) {
             p.sendSystemMessage(tekst("stal.klaar").withStyle(ChatFormatting.GREEN));
+            E2H1Lucht.titel(p, tekst("stal.titel").withStyle(ChatFormatting.GREEN), tekst("stal.titel_onder").withStyle(ChatFormatting.YELLOW), 50);
             AppaGuhEntity appa = Appa.geladen(p);
             if (appa != null) {
                 p.level().playSound(null, appa, nl.juiced.guhs.feature.einde2.appa.E2AppaFeature.BRUL.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
@@ -242,6 +352,7 @@ public final class Tempel {
         BlockPos gong = E2H1Lucht.plek(g, "steiger");
         g.playSound(null, gong == null ? deur : gong, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.0f, 0.6f);
         p.sendSystemMessage(tekst("deur.gong").withStyle(ChatFormatting.AQUA));
+        E2H1Lucht.titel(p, tekst("deur.titel").withStyle(ChatFormatting.GOLD), tekst("deur.titel_onder").withStyle(ChatFormatting.YELLOW), 60);
     }
 
     // =====================================================================================================================

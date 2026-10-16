@@ -17,3 +17,7 @@
 | "Eindelijk, de Guhvatar" | "Finally, the Guhvatar" | Zuka's line at the jetty (a paraphrase of the show's "the Avatar") |
 | "Je heet toch niet Korra?" | "Your name isn't Korra, is it?" | the Korra joke of DESIGN 5 |
 | Water. Aarde. Vuur. Lucht. | Water. Earth. Fire. Air. | the opening film; its next two lines are the DESIGN's approved parody (vadsigheid = chonkiness, trek kreeg = got peckish) |
+| windzuil | column of wind | fix round 1: the lift to the balcony of the glide rings, in the middle of the square in front of the Hall |
+| startboog / streep | start arch / line | fix round 1: the start of the Air Scooter Track (orange-and-yellow arch, black-and-white line) |
+| de hoge toren (op de Hal) | the tall tower (on the Hall) | a plain description of the Great Tower in the step texts |
+| Appa's zadel | Appa's Saddle | the named saddle of step 7 |

@@ -106,7 +106,7 @@ public class E2BouwLuchtGameTests {
             Plekken.Plek plek = p.get(e.getKey());
             helper.assertTrue(plek != null && plek.soort().equals(e.getValue()), "marker " + e.getKey() + " (" + e.getValue() + "): " + plek);
         }
-        for (Map.Entry<String, Integer> e : Map.of("beeld_", 8, "luchtbal_paal_", 12, "zweefring_", 10, "oefen_", 6, "rustpunt_", 3).entrySet()) {
+        for (Map.Entry<String, Integer> e : Map.of("beeld_", 8, "luchtbal_paal_", 12, "zweefring_", 6, "oefen_", 6, "rustpunt_", 3).entrySet()) {
             long n = p.keySet().stream().filter(k -> k.startsWith(e.getKey())).count();
             helper.assertTrue(n >= e.getValue(), "at least " + e.getValue() + " of " + e.getKey() + "*: " + n);
         }
