@@ -1,0 +1,69 @@
+# einde2, slice trap5_ballon, in a real world: the building site of the Vredesballon in its stages (each player sees their
+# own balloon), the board with its text, the launch scene (the balloon rising, the flight, the knabbel rain over the camp)
+# and the statuette.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_trap5_ballon.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/guhs einde2 ballon ga 0
+wait 100
+/guhs einde2 ballon ga 0
+wait 100
+waitrender 200
+
+section the empty building site and the board
+look 180 0
+shot ballon_bord_begin
+/tp @s ~ ~ ~6 0 -25
+wait 40
+shot ballon_bouwplaats_leeg
+
+section the stages one by one
+/guhs einde2 ballon ga 2
+wait 60
+/tp @s ~ ~2 ~14 160 -20
+wait 40
+shot ballon_fase_1_doek
+/guhs einde2 ballon ga 3
+wait 60
+/tp @s ~ ~2 ~14 160 -20
+wait 40
+shot ballon_fase_2_mand
+/guhs einde2 ballon ga 4
+wait 60
+/tp @s ~ ~2 ~14 160 -20
+wait 40
+shot ballon_fase_3_brander
+/guhs einde2 ballon ga 5
+wait 60
+/tp @s ~ ~2 ~14 160 -20
+wait 40
+shot ballon_fase_4_knabbels
+/guhs einde2 ballon ga 6
+wait 60
+/tp @s ~ ~2 ~14 160 -20
+wait 40
+shot ballon_fase_5_af
+look 180 0
+/guhs einde2 ballon ga 6
+wait 60
+shot ballon_bord_klaar
+
+section the launch (the scene; the first lines wait for a click: shots at its start)
+/guhs einde2 ballon scene vredesballon
+wait 40
+shot ballon_scene_start
+wait 140
+shot ballon_scene_brander
+wait 200
+shot ballon_scene_omhoog
+
+section the statuette
+/guhs einde2 ballon ga 7
+wait 60
+/setblock ~2 ~ ~ guhs:vredesballon[facing=south]
+wait 20
+/tp @s ~2 ~ ~2 180 20
+wait 30
+shot ballon_beeldje

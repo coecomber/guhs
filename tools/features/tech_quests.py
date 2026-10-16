@@ -38,11 +38,13 @@ FTB_SECTIES = tech_quests_ftb.SECTIES
 # One picture at the very END of the chapter with no quests under it (make_ftbquests.py FTB_SLOT): the preview that the
 # last part of the Guh-technologie is not there yet and belongs to the Guheinde (the Bestelguh, draadloze vadskracht and
 # the Guhterminal come with the next update).
-FTB_SLOT = ("Wordt vervolgd in het Guheinde...", "guh:ender",
-            ["Hier ontbreekt nog een stukje. Njeg!",
-             "De laatste uitvindingen liggen diep in het &5Guheinde&r:",
-             "de Bestelguh, draadloze vadskracht en de Guhterminal.",
-             "Die komen in een volgende update. Bouw vast een mooie fabriek!"])
+# einde2 (trap5_ballon, CONTRACT_E2_B 7.12): tier 5 is in the chapter now (sections of einde2_trap5_machines and
+# einde2_trap5_ballon); the picture is the next open end, tier 6. Nothing is "the last": there is always a place further on.
+FTB_SLOT = ("Wordt vervolgd...", "silhouet:guh:ender",
+            ["De Werktuigguh krabt achter zijn oortjes.",
+             "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
+             "Daar liggen uitvindingen die zelfs ik nog niet snap.\"",
+             "Trap 6 komt in een volgende update. Njeg!"])
 
 # recipe card -> the recipes it goes into (its place: the top-left cell). The machines of tech_machines go through its own
 # hook; the others are recipes that the modules before this one wrote (FEATURES order), patched in place.
