@@ -54,6 +54,7 @@ public final class MomoJacht {
         p.sendSystemMessage(Component.translatable(E2H1Lucht.P + "momo.jat").withStyle(ChatFormatting.GOLD));
         p.sendSystemMessage(Component.translatable(E2H1Lucht.P + "momo.keuken").withStyle(ChatFormatting.YELLOW));
         Schijn.deeltjes(p, ParticleTypes.CRIT, p.position().add(0, 1.6, 0), 8, 0.3, 0.1);
+        nl.juiced.guhs.feature.einde2.audio.E2Audio.stinger(p, "deuntje.momo");   // (integratie_b: audio's tune of the chase)
     }
 
     /** Every tick, for a player at step 6 in the temple. */

@@ -11,8 +11,10 @@ import nl.juiced.guhs.feature.verhaal.Cutscene;
  * words (16-23), a hummed end (24-30), 81 s in all. The ticks below count from the first tick of the moment (the tune and
  * these captions start together when the scene calls {@link E2Audio#moment} right before it plays).
  * <p>
- * For h3_aarde's {@code lu_ten} scene (a helper, not part of the cross-slice API: copying the numbers works just as well):
- * {@code LuTenLied.zing(builder, 0)} adds every line as a {@code Builder.lied} caption that does not wait for a click.
+ * For h3_aarde's {@code lu_ten} scene (a helper, not part of the cross-slice API). Note (integratie_b): {@link #zing} passes
+ * the full {@code gui.guhs.einde2_audio.lied.lu_ten.*} keys, but a scene always reads {@code scene.guhs.<id>.<key>}, so its
+ * captions do not resolve in a real scene. h3 therefore walks {@link #REGELS} (the ticks and lengths) with keys of its own
+ * whose Dutch comes from {@code einde2_audio.LIED}; nothing calls {@code zing} now.
  * The texts are {@code gui.guhs.einde2_audio.lied.lu_ten.<n>} (tools/features/einde2_audio.py).
  */
 public final class LuTenLied {

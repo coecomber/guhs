@@ -114,6 +114,7 @@ public final class Training {
                 p.addEffect(new MobEffectInstance(MobEffects.SPEED, BAAN_SECONDEN * 20 + 40, 2, false, false, true));
                 p.sendOverlayMessage(tekst("scooter.zoef").withStyle(ChatFormatting.AQUA));
                 Schijn.geluid(p, SoundEvents.FIREWORK_ROCKET_LAUNCH, p.blockPosition(), 1.0f, 1.2f);
+                nl.juiced.guhs.feature.einde2.audio.E2Audio.stinger(p, "deuntje.luchtscooter");   // (integratie_b: audio's tune of the track)
             }
             return;
         }
