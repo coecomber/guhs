@@ -63,6 +63,8 @@ def texts(h):
     verhaal_motor.vertelkaart(h, KAART, tekst.KAART_TITEL, tekst.KAART_REGELS, kaart)
     for naam, (titel, regels, namen) in tekst.SCENES.items():
         verhaal_motor.scene(h, SCENE + naam, titel, regels, namen)
+    for naam, (titel, regel) in tekst.KIJK.items():       # fix2-h4: the look scenes of the hints (H4Hints)
+        verhaal_motor.scene(h, SCENE + "kijk_" + naam, titel, {"tekst": regel})
     verhaal_motor.sluier(h, "vuurnatie_hoofdstad")
     a = "advancements.guhs.guheinde.einde2_h4_vuur_guhvatar."
     kit.zichtbaar(h, "einde2_h4_vuur_guhvatar", "guheinde_winst", "guhs:guhvatar_beeld", "challenge", tekst.TEKSTEN[a + "title"],
@@ -424,6 +426,9 @@ def selfcheck(h):
                 "item.guhs.vuurnatie_vermomming", "item.guhs.zuka_litteken", f"gui.guhs.verhalen.{VUUR}.naam", f"gui.guhs.verhalen.{FINALE}.naam"):
         if key not in h.NL:
             problems.append(f"no text {key}")
+    for naam in tekst.KIJK:
+        if f"scene.guhs.{SCENE}kijk_{naam}.tekst" not in h.NL:
+            problems.append(f"look scene {naam}: no caption")
     if len(tekst.VUUR_STAPPEN) != 12 or len(tekst.FINALE_STAPPEN) != 7:
         problems.append("the step counts differ from E2H4Vuur (12 and 7)")
     if problems:

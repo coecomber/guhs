@@ -10,8 +10,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.einde2.Einde2Ids;
+import nl.juiced.guhs.feature.einde2.Plekken;
 import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
 import nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev;
+import nl.juiced.guhs.feature.einde2.verhaal.StapHint;
 import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 import nl.juiced.guhs.feature.titels.Titels;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
@@ -135,8 +137,34 @@ public class E2H4VuurGameTests {
                 helper.assertTrue(z.t() + z.ticks() <= s.duur(), "the line ends in time: " + e.getKey() + "." + z.key());
             }
         }
-        long eigen = Cutscene.alle().stream().filter(s -> s.id().startsWith(Scenes.ID)).count();
+        long eigen = Cutscene.alle().stream().filter(s -> s.id().startsWith(Scenes.ID) && !s.id().startsWith(H4Hints.KIJK)).count();
         helper.assertTrue(eigen == Scenes.LENGTES.size(), "18 scenes, not " + eigen);
+        helper.succeed();
+    }
+
+    /**
+     * fix2-h4: every step after the arrival has a hint (where, a text, the resume spot) whose markers are in the build, and
+     * the look scenes are 3.2 s with one run-on caption (no click wait).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void einde2H4VuurHints(GameTestHelper helper) {
+        for (int s = E2H4Vuur.V_SCHOOL; s < E2H4Vuur.V_STAPPEN; s++) {
+            helper.assertTrue(StapHint.hint(E2Verhaal.VUUR, s) != null, "a hint for chapter 4 step " + s);
+        }
+        for (int s = 0; s < E2H4Vuur.F_STAPPEN; s++) {
+            helper.assertTrue(StapHint.hint(E2Verhaal.FINALE, s) != null, "a hint for finale step " + s);
+        }
+        helper.assertTrue(H4Hints.MARKERS.size() == E2H4Vuur.V_STAPPEN - 1 + E2H4Vuur.F_STAPPEN, "one marker set per step: " + H4Hints.MARKERS.size());
+        for (Map.Entry<String, String[]> e : H4Hints.MARKERS.entrySet()) {
+            for (String m : e.getValue()) {
+                helper.assertTrue(Plekken.plek(Plek.STRUCTUUR, m) != null, "marker " + m + " of hint " + e.getKey() + " is in the build");
+            }
+        }
+        for (Cutscene k : new Cutscene[] {H4Hints.kijkSchool, H4Hints.kijkDans, H4Hints.kijkEendjes, H4Hints.kijkStrand, H4Hints.kijkKamp,
+                H4Hints.kijkDrakendans, H4Hints.kijkToneel, H4Hints.kijkTent, H4Hints.kijkKroning, H4Hints.kijkSuki}) {
+            helper.assertTrue(k != null && Cutscene.van(k.id()) == k && k.duur() == StapHint.KIJK_DUUR && k.zinnen().size() == 1
+                    && k.zinnen().get(0).lied(), "look scene " + (k == null ? "?" : k.id()) + ": 3.2 s, one run-on caption");
+        }
         helper.succeed();
     }
 }

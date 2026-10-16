@@ -84,6 +84,12 @@ public final class Rotsblok {
             E2H4Vuur.VUUR.vlag(q, E2H4Vuur.V_BINNEN, true);
             nl.juiced.guhs.feature.verhaal.VerhaalSync.sync(q);
             E2H4Vuur.zeg(q, "rotsblok.binnen");
+            E2H4Vuur.titel(q, "rotsblok.titel", "rotsblok.sub");
+            // (fix2-h4) a look at where you must go: Suki-guh's cell across the yard
+            net.minecraft.core.BlockPos cel = Plek.blok(q, "cel_suki");
+            if (cel != null) {
+                Later.plan(q, 50, r -> nl.juiced.guhs.feature.einde2.verhaal.StapHint.speelKijk(r, H4Hints.kijkSuki, cel, null));
+            }
         });
     }
 
@@ -144,6 +150,19 @@ public final class Rotsblok {
         }
         if (Plek.bij(p, "cel_suki", 2.5)) {
             gelukt(p);
+            return;
+        }
+        // (fix2-h4) the sneaking route lit up softly for you: over the roof, down, round the yard to the cell
+        if (p.tickCount % 20 == 0) {
+            for (Vec3 punt : Plek.pad(p, "inbraak_route")) {
+                if (punt.distanceToSqr(p.position()) < 30 * 30) {
+                    Schijn.deeltjes(p, ParticleTypes.WAX_OFF, punt.add(0, 0.3, 0), 3, 0.25, 0.0);
+                }
+            }
+            Vec3 cel = Plek.staan(p, "cel_suki");
+            if (cel != null) {
+                Schijn.deeltjes(p, ParticleTypes.END_ROD, cel.add(0, 1.2, 0), 4, 0.2, 0.01);
+            }
         }
     }
 
@@ -181,6 +200,8 @@ public final class Rotsblok {
     private static void gelukt(ServerPlayer p) {
         stop(p);
         Schijn.deeltjes(p, ParticleTypes.HAPPY_VILLAGER, p.position().add(0, 1, 0), 12, 0.6, 0.0);
+        Schijn.geluid(p, SoundEvents.PLAYER_LEVELUP, p.blockPosition(), 0.8f, 1.3f);
+        E2H4Vuur.titel(p, "rotsblok.titel_gevonden", null);
         Runnable ontsnap = () -> E2H4Vuur.speel(p, Scenes.KOKEND_ROTSBLOK, "gondel_onder", q -> {
             if (E2H4Vuur.VUUR.verder(q, E2H4Vuur.V_ROTSBLOK)) {
                 Plek.breng(q, "rustpunt_5", 90f);
