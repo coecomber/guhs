@@ -14,24 +14,40 @@ LIJN_NAAM = "Hoofdstuk 2: De Noordelijke Waterstam"
 LIJN_UITLEG = ("Aan de rand van het Guheinde drijft een stad van ijs. Daar leer je watersturen van de strengste meester met de "
                "langste snor, ontmoet je de Blauwe Geest, reis je naar de Geestenwereld en maak je een golf zo hoog als een muur.")
 STAPPEN = [
-    ("Aankomst", "Vlieg met Appa naar de Noordelijke Waterstam.", "De Noordelijke Waterstam"),
-    ("Meester Pakguh", "Praat met Meester Pakguh op het trainingsplein.", "Het trainingsplein"),
-    ("De waterzweep", "Raak de vijf doelen met je waterzweep.", "Het trainingsplein"),
-    ("De golf", "Maak drie golven in het golfbassin.", "Het golfbassin"),
-    ("De ijsbrug", "Bevries een brug naar het eilandje in het golfbassin en loop eroverheen.", "Het golfbassin"),
-    ("Otter-surfen", "Glijd op een otter-pinguinguh van de ijsmuur naar beneden.", "De sleebaan op de ijsmuur"),
-    ("De gondel", "Duw de gondel met watersturen langs de drie haltes.", "De grachten"),
-    ("Prinses Yue-guh", "Breng een bezoek aan prinses Yue-guh in het paleis.", "Het paleis"),
-    ("De haven", "Ga naar de haven: Sokka-guh heeft iets gezien.", "De haven"),
-    ("De Blauwe Geest", "Sluip van het schip van Zhao-Mika af, terug naar de haven.", "De VNS Schroeiplek"),
-    ("De maanvis", "Ga naar de geestenoase achter het paleis.", "De geestenoase"),
-    ("Mediteren", "Ga bij de vijver in de oase zitten (sluipen) en mediteer met Aang-guh.", "De geestenoase"),
-    ("Koh", "Zoek Koh de Gezichtenrover in de Geestenwereld. Toon geen emotie.", "Koh's grot"),
-    ("De Hemelvijver", "Ga naar de Hemelvijver, waar Tui en La horen te zwemmen.", "De Hemelvijver"),
-    ("Tui terughalen", "Sluip het schip van Zhao-Mika op en haal de maanvis uit de kooi.", "De VNS Schroeiplek"),
-    ("De maan", "Breng de maanvis terug naar de vijver in de oase.", "De geestenoase"),
-    ("De grote golf", "Ga op de Golfkansel boven de poort staan.", "De Golfkansel"),
-    ("De sneeuwstorm", "Loop door de sneeuwstorm naar het lichtje.", "De gletsjer"),
+    # fix2-h2 (playtest 1): every "nu" text says WHAT to do and WHERE, with a direction and a landmark
+    ("Aankomst", "Vlieg met Appa naar de Noordelijke Waterstam. Zit je niet op Appa? Klik op hem en kies de gouden ster.", "De Noordelijke Waterstam"),
+    ("Meester Pakguh", "Praat met Meester Pakguh op het trainingsplein: door de poort in de ijsmuur, langs de grote gracht naar het noorden en de grote trap op.",
+     "Het trainingsplein (boven de grote trap)"),
+    ("De waterzweep", "Raak de vijf doelen aan de oostrand van het trainingsplein met je kracht Waterzweep (houd de krachtentoets ingedrukt en kies hem).",
+     "Het trainingsplein"),
+    ("De golf", "Maak drie golven met Watergolf in het golfbassin: het verzonken bad met de steiger, net oost van het trainingsplein.",
+     "Het golfbassin (oost van het plein)"),
+    ("De ijsbrug", "Ga op het eind van de steiger in het golfbassin staan, kijk naar het eilandje en gebruik IJsbrug. Loop dan over de brug naar het eilandje.",
+     "Het golfbassin"),
+    ("Otter-surfen", "Klim op de ijsmuur west van de poort naar de Glijkansel, klik met een lege hand op een otter-pinguinguh en glijd naar de sneeuwhoop beneden.",
+     "De Glijkansel (op de ijsmuur, west van de poort)"),
+    ("De gondel", "Stap in de gondel in het bekken onder de grote trap en duw hem met Waterstroom langs de drie lichtende haltes: bij de poort, aan de "
+     "westgracht en aan de oostgracht.", "De grachten van de benedenstad"),
+    ("Prinses Yue-guh", "Ga helemaal naar boven, naar het paleis in het noorden van de stad, door de grote deur, en praat met prinses Yue-guh in de troonzaal.",
+     "Het paleis (boven in de stad)"),
+    ("De haven", "Ga naar de haven buiten de poort, aan de oostkant, waar het zwarte schip van Zhao-Mika ligt: Sokka-guh heeft iets gezien.",
+     "De haven (buiten de poort, oost)"),
+    ("De Blauwe Geest", "Sluip van het schip van Zhao-Mika af, terug naar de tonnen op de haven. Blijf uit de vlammetjes-kegels van de wachters; gebukt zien "
+     "ze je minder ver.", "De VNS Schroeiplek"),
+    ("De maanvis", "Ga naar de geestenoase: helemaal boven, achter het paleis, door het kleine deurtje in het ijs.", "De geestenoase (achter het paleis)"),
+    ("Mediteren", "Ga in de geestenoase bij de vijver staan, houd sluipen ingedrukt en blijf drie tellen stil: dan mediteer je met Aang-guh.",
+     "De geestenoase"),
+    ("Koh", "Volg in de Geestenwereld de padlantaarns naar Koh's grot. Als Koh je aankijkt: niet bewegen, niet springen, nergens op klikken. Weer in je "
+     "lijf? Mediteer opnieuw bij de vijver in de geestenoase.", "Koh's grot (Geestenwereld)"),
+    ("De Hemelvijver", "Volg in de Geestenwereld de padlantaarns naar de Hemelvijver, waar Tui en La horen te zwemmen. Weer in je lijf? Mediteer opnieuw "
+     "bij de vijver in de geestenoase.", "De Hemelvijver (Geestenwereld)"),
+    ("Tui terughalen", "Ga naar de haven buiten de poort (oost), sluip het schip van Zhao-Mika op en haal de maanvis uit de kooi in de cel achter in het ruim.",
+     "De VNS Schroeiplek (in de haven)"),
+    ("De maan", "Breng de maanvis terug naar het eilandje in de vijver van de geestenoase, achter het paleis.", "De geestenoase"),
+    ("De grote golf", "Klim via de trap aan de binnenkant van de ijsmuur naar de Golfkansel, het balkonnetje midden boven de poort, en ga op het lichtje staan.",
+     "De Golfkansel (boven de poort)"),
+    ("De sneeuwstorm", "Loop door de sneeuwstorm op de gletsjer naar het lichtje en luister naar Appa's brul. Loop je de storm uit, dan haalt Zuka je terug.",
+     "De gletsjer"),
 ]
 LIJN_KLAAR = ("Klaar! Je kunt watersturen, njeg. Katara-guh en Sokka-guh reizen met je mee naar Ba Sing Guh.", "Op weg naar Ba Sing Guh")
 LIJN_KORT = {
@@ -40,6 +56,70 @@ LIJN_KORT = {
     "8": "Naar de haven", "9": "Sluip van het schip", "10": "Naar de geestenoase", "11": "Mediteer bij de vijver", "12": "Naar Koh",
     "13": "Naar de Hemelvijver", "14": "Haal de maanvis", "15": "Breng Tui naar de vijver", "16": "Naar de Golfkansel",
     "17": "Volg het licht",
+}
+
+# --- fix2-h2: the step hints (H2Hints) --------------------------------------------------------------------------------------------------
+# HINTS: the chat line of a step (gui.guhs.einde2_h2_water.hint.<naam>, %s = the direction, "in het noorden, een eindje verder"); it says
+# WHAT and WHERE with a landmark. KIJK: the look scenes einde2_h2_water_kijk_<naam> (titel, the one run-on caption), the same list as
+# H2Hints.KIJK. TITELS: the big title when a part is done (gui.guhs.einde2_h2_water.titel.<naam> + .onder). HALTES: the gondola stops.
+HINTS = {
+    "pakguh": "Meester Pakguh staat %s, op het trainingsplein: door de poort in de ijsmuur, langs de grote gracht naar het noorden en de grote trap op. "
+              "Praat met hem (rechtsklik).",
+    "zweep": "De vijf doelen staan %s, op een rij aan de oostrand van het plein. Kies Waterzweep, kijk recht naar een doel (van dichtbij) en gebruik je "
+             "kracht. Elk doel telt een keer.",
+    "golf": "Het golfbassin ligt %s: het verzonken bad met de steiger, net oost van de doelen. Ga aan de rand of op de steiger staan, kies Watergolf en "
+            "maak drie golven.",
+    "ijsbrug": "Het eilandje met het paviljoen ligt %s. Loop over de steiger tot het eind, kijk naar het eilandje, kies IJsbrug en gebruik hem. Loop dan "
+               "over de brug: hij blijft een minuut staan.",
+    "slee": "De Glijkansel is %s, boven op de ijsmuur, west van de poort. Neem de trap aan de binnenkant van de muur omhoog, klik met een lege hand op een "
+            "otter-pinguinguh en stuur met kijken (W duwt, S remt). Val je eraf, dan sta je zo weer boven.",
+    "gondel": "De gondel ligt %s, in het bekken onder aan de grote trap. Stap in, kies Waterstroom en duw hem waar je kijkt, langs de drie haltes. De "
+              "volgende halte licht op. Peddelen mag ook.",
+    "yue": "De grote deur van het paleis is %s, helemaal boven in de stad. Ga naar binnen: prinses Yue-guh staat in de troonzaal, bij de zetel van haar "
+           "vader. Praat met haar.",
+    "haven": "De haven is %s: door de poort naar buiten en dan naar het oosten, waar het grote zwarte schip van Zhao-Mika ligt. Loop de haven op.",
+    "ontsnap": "Je zit op het schip. De haven is %s: de trap achter de toren op, achter de tonnen langs om de schoorsteen, en de ladder af naar de "
+               "steiger. Blijf uit de vlammetjes-kegels van de wachters en sluip.",
+    "oase": "De geestenoase is %s: helemaal boven, achter het paleis. Loop om het paleis heen en ga door het kleine deurtje in het ijs.",
+    "mediteer": "De vijver is %s. Ga ergens in de oase staan, houd sluipen ingedrukt en blijf drie tellen stil. Boven je hotbar tellen de tellen af.",
+    "koh": "Koh's grot is %s: volg de padlantaarns naar de holle wortels van de oeroude boom en loop de Gang der Gezichten in. Als Koh je aankijkt: niet "
+           "bewegen, niet springen, nergens op klikken. Weer in je lijf? Mediteer opnieuw bij de vijver in de geestenoase.",
+    "hemelvijver": "De Hemelvijver is %s: volg de padlantaarns naar het grote water. Weer in je lijf? Mediteer opnieuw bij de vijver in de geestenoase.",
+    "vis_halen": "Terug in je lijf! De haven is %s, buiten de poort aan de oostkant. Begin achter de tonnen, klim de ladder aan de zijkant van het schip op, "
+                 "sluip om de schoorsteen en de trap achter de toren af naar de cel achter in het ruim. Daar hangt de maanvis in een kooi.",
+    "vis_terug": "Breng Tui snel terug: het eilandje in de vijver van de geestenoase is %s, achter het paleis. Loop er gewoon heen.",
+    "golf_kansel": "De Golfkansel is %s: het balkonnetje midden boven de poort in de ijsmuur. Neem de trap aan de binnenkant van de muur omhoog en ga op "
+                   "het lichtje staan.",
+    "storm": "Het lichtje is %s. Loop er recht op af door de sneeuw en luister naar Appa's brul. Loop je de storm uit, dan haalt Zuka je terug.",
+    "geest_balk": "➜ %s: %s",
+    "halte_balk": "Volgende halte %s: %s",
+}
+HALTES = {"1": "bij de poort", "2": "aan de westgracht", "3": "aan de oostgracht"}
+KIJK = {
+    "pakguh": ("Meester Pakguh", "Meester Pakguh. De langste snor van het Guheinde."),
+    "zweep": ("De vijf doelen", "Vijf doelen. Een waterzweep per doel."),
+    "golf": ("Het golfbassin", "Het golfbassin. Golven, geen gespetter."),
+    "slee": ("De Glijkansel", "De Glijkansel. De otters staan al klaar."),
+    "gondel": ("De gondel", "De gondel, in het bekken onder de grote trap."),
+    "yue": ("Het paleis", "Het paleis. Yue-guh wacht binnen."),
+    "haven": ("De haven", "De haven. Daar ligt het schip van Zhao-Mika."),
+    "ontsnap": ("De weg naar buiten", "Daar is de haven. Sluip erheen."),
+    "oase": ("De geestenoase", "Het deurtje naar de geestenoase."),
+    "mediteer": ("De vijver", "De vijver van de maan en de oceaan."),
+    "vis_halen": ("De haven", "De haven. Begin achter de tonnen."),
+    "vis_terug": ("De vijver", "Terug naar de vijver. Tui heeft haast."),
+    "golf_kansel": ("De Golfkansel", "De Golfkansel. Hier wacht de oceaan op je."),
+    "storm": ("Een lichtje", "Daar! Een lichtje in de storm."),
+}
+TITELS = {
+    "zweep": ("Vijf van de vijf!", "Pakguh's snor trilt van trots"),
+    "golf": ("Drie golven!", "Golven, geen gespetter"),
+    "ijsbrug": ("Over het ijs!", "De lessen van Pakguh zijn klaar"),
+    "slee": ("WAAAHOE!", "Otter-surfen gelukt"),
+    "gondel": ("Alle haltes!", "Mooi gevaren"),
+    "ontsnap": ("Ontsnapt!", "Niemand heeft je gezien"),
+    "koh": ("Geen enkele rimpel!", "Koh laat je gaan"),
+    "vis": ("De maanvis!", "Snel, terug naar de oase"),
 }
 
 # --- the narrator card ----------------------------------------------------------------------------------------------------------------
@@ -181,52 +261,44 @@ SCENES = {
 # --- everything else: chat lines of the story, the characters' small talk, items, names --------------------------------------------------
 TEKSTEN = {
     # the story in the chat
-    Q + "aankomst.klaar": "Je staat in de Noordelijke Waterstam. Overal ijs, grachten en guhs in dikke jassen.",
-    Q + "hint.pakguh": "zoek Meester Pakguh op het trainingsplein (de middelste laag van de stad) en praat met hem.",
+    Q + "aankomst.klaar": "Je staat op het landingsijs voor de poort van de Noordelijke Waterstam. Overal ijs, grachten en guhs in dikke jassen.",
+    Q + "aankomst.aang": "Kijk, een stad van ijs! Boven aan de grote trap ligt het trainingsplein. Daar woont de beste watersturer van het Guheinde. Kom!",
     Q + "pakguh.zweep": "Eerste les: de waterzweep. Daar staan vijf doelen. Raak ze alle vijf. Ik kijk. Mijn snor kijkt ook.",
-    Q + "hint.zweep": "raak de vijf doelen op het trainingsplein met je kracht Waterzweep.",
-    Q + "kracht.uitleg": "Je hebt nieuwe krachten! Gebruik ze met de krachtentoets (tikken = gebruiken, ingedrukt houden = het wiel).",
+    Q + "kracht.uitleg": "Nieuwe kracht: %1$s! Houd %2$s ingedrukt en kies hem in je krachtwiel. Tik daarna op %2$s om hem te gebruiken.",
     Q + "zweep.teller": "Raak! %s van de %s doelen.",
     Q + "zweep.klaar": "Niet slecht. Helemaal niet slecht. Voor een guh zonder snor.",
-    Q + "hint.golf": "ga bij het golfbassin naast het plein staan en maak drie golven met je kracht Watergolf.",
     Q + "golf.teller": "Een golf! %s van de %s.",
     Q + "golf.klaar": "Je golven worden mooier dan de mijne. Zeg dat niet tegen Pakguh.",
-    Q + "hint.ijsbrug": "ga op het eind van de steiger in het golfbassin staan, kijk naar het eilandje en gebruik IJsbrug. Loop dan naar de overkant.",
     Q + "ijsbrug.staat": "Een brug van ijs, alleen voor jou. Snel, hij blijft een minuut staan!",
     Q + "ijsbrug.klaar": "Water kan stromen en water kan stil staan. Jij kunt nu allebei. Mijn lessen zijn voor vandaag voorbij.",
-    Q + "slee.sokka": "Psst! Klaar met de les? Dan gaan we OTTER-SURFEN. Op de ijsmuur, links van de poort. Neem een lege poot mee.",
-    Q + "hint.slee": "klim op de ijsmuur links van de poort, stap met een lege poot op de otter-pinguinguh bij de Glijkansel en glijd naar beneden.",
+    Q + "slee.sokka": "Psst! Klaar met de les? Dan gaan we OTTER-SURFEN. Boven op de ijsmuur, west van de poort. Neem een lege poot mee.",
     Q + "slee.op": "Hou je oortjes vast!",
+    Q + "slee.opnieuw": "Bijna! De otter wacht weer boven op je. Nog een keer!",
     Q + "slee.klaar": "WAAAHOE! Nog een keer! ...Ik bedoel: heel volwassen en nuttig was dat.",
     Q + "gondel.katara": "Als jullie klaar zijn met rondglijden: er ligt een gondel in het bekken onder de grote trap. Duw hem met watersturen door de grachten.",
-    Q + "hint.gondel": "stap in de gondel in het bekken onder de grote trap en duw hem met Waterstroom langs de haltes bij de poort, aan de westgracht en aan de oostgracht.",
     Q + "gondel.teller": "Halte! %s van de %s.",
     Q + "gondel.klaar": "Mooi gevaren! Zeg... heb je prinses Yue-guh al ontmoet? In het paleis? Ik ga mee. Om... het paleis te zien.",
-    Q + "hint.yue": "breng een bezoek aan prinses Yue-guh in het paleis boven in de stad.",
     Q + "yue.1": "Welkom, Guhvatar. Ik heb veel over je gehoord. Vooral van Sokka-guh. Hij praat heel veel.",
     Q + "yue.2": "Ik? Veel praten? Nee hoor. Nauwelijks. Bijna nooit. Mooi paleis trouwens. Mooie... muren.",
     Q + "yue.3": "Je bent grappig, Sokka-guh. ...Maar luister. Vanochtend zagen onze verkenners rook boven de zee.",
     Q + "yue.4": "Rook? Zoals van een kampvuur? Een gezellig, klein, onschuldig kampvuur?",
     Q + "yue.5": "Zoals van een vloot. De Vuurnatie komt eraan. Admiraal Zhao-Mika ligt al met zijn schip in de haven.",
     Q + "yue.6": "Iedereen naar zijn post. Guhvatar: kijk op de haven wat Zhao-Mika van plan is. En wees voorzichtig.",
-    Q + "hint.haven": "ga naar de haven buiten de poort, naar het schip van Zhao-Mika.",
     Q + "haven.net": "Er valt een net over je heen. Vuurnatie-Mika's springen achter de tonnen vandaan. Alles wordt donker...",
-    Q + "hint.ontsnap": "sluip van het schip af, terug naar de haven. Blijf uit het licht van de wachters (sluipen helpt).",
-    Q + "sluip.uitleg": "De wachters zien je in hun lichtkegel. Gebukt zien ze je minder ver.",
+    Q + "sluip.uitleg": "De wachters zien alles in hun kegel (de vlammetjes). Sluip erlangs: gebukt zien ze je minder ver. Gezien? Dan begin je weer bij je laatste rustpunt.",
     Q + "sluip.gezien.0": "HE! Een guh! Terug jij!",
     Q + "sluip.gezien.1": "Wie loopt daar? ...Terug naar je plek, kleintje!",
     Q + "sluip.gezien.2": "Halt! Hier wordt niet gesnuffeld!",
     Q + "sluip.terug": "Gezien! Je wordt teruggezet. Probeer het nog eens.",
     Q + "ontsnap.klaar": "Je bent van het schip af! Niemand heeft je gezien. Van de Blauwe Geest is geen spoor meer.",
     Q + "ontsnap.masker": "Op de steiger ligt een blauw maskertje. Precies op maat voor een guh. Raar.",
-    Q + "hint.oase": "ga naar de geestenoase, achter het paleis, door het deurtje in het ijs.",
+    Q + "ontsnap.aang": "Daar ben je! Snel, naar de geestenoase achter het paleis. Ik voel dat er iets mis is met de maan.",
     Q + "maanvis.aang": "Ik voel de maan zwakker worden. Kom zitten bij de vijver. We gaan mediteren.",
-    Q + "hint.mediteer": "ga bij de vijver in de geestenoase zitten (sluipen) en blijf even stil zitten.",
     Q + "mediteer.weg": "Je concentratie is weg. Ga weer rustig zitten.",
     Q + "mediteer.bezig": "Mediteren... nog %s tel.",
+    Q + "mediteer.hoe": "Houd sluipen ingedrukt en blijf stil staan om te mediteren.",
     Q + "geest.geen_wereld": "De Geestenwereld is er in deze wereld niet. Het verhaal gaat verder zonder.",
     Q + "geest.aang": "We zijn er! De echte Geestenwereld deze keer. Kijk niet te lang naar de lucht, die doet raar.",
-    Q + "hint.koh": "volg het pad naar Koh's grot, onder de holle wortels van de oeroude boom.",
     Q + "geest.weer": "Je ziel snuffelt weer verder in de Geestenwereld.",
     Q + "koh.titel": "Toon geen emotie",
     Q + "koh.ondertitel": "Niet bewegen. Niet springen. Nergens op klikken.",
@@ -242,21 +314,16 @@ TEKSTEN = {
     Q + "koh.goed.2": "De maan en de oceaan houden elkaar vast. Duw er een weg, en de ander verliest zich in woede.",
     Q + "koh.goed.3": "Ga naar de Hemelvijver, Guhvatar. Kijk wat er gebeurt als het evenwicht verdwijnt.",
     Q + "koh.aang": "Je deed het! Je trok helemaal geen gezicht! Ik had bijna zelf gelachen.",
-    Q + "hint.hemelvijver": "volg het pad naar de Hemelvijver, waar Tui en La horen te zwemmen.",
     Q + "koh.fout.beweeg": "Ah! Je bewoog. Dat was een gevoel. Mag ik dat gezichtje even lenen? Ik geef het straks terug, njeg.",
     Q + "koh.fout.spring": "Een sprongetje! Van schrik, of van plezier? Allebei mooi. Allebei van mij.",
     Q + "koh.fout.klik": "Je hand schoot uit. Wat een mooie zenuwen. Wat een mooi gezicht.",
-    Q + "koh.fout": "Koh heeft je gezicht geleend. Je bent terug bij de aankomst. Het komt vanzelf terug. Probeer het nog eens.",
+    Q + "koh.fout": "Koh heeft je gezicht geleend. Het komt vanzelf terug. Je staat weer bij de ingang van zijn grot: loop naar binnen en probeer het nog eens.",
     Q + "la.aang": "Snel! Terug naar ons lijf. We moeten Tui terugbrengen voordat La de hele zee boos maakt.",
-    Q + "hint.vis_halen": "sluip het schip van Zhao-Mika op en haal de maanvis uit de kooi in het ruim.",
     Q + "vis.gepakt": "Je haalt de zak met de maanvis voorzichtig uit de kooi. Tui is slap en grijs. Snel!",
     Q + "vis.katara": "Ik leid de wachters af! Ga, breng Tui naar de vijver!",
-    Q + "hint.vis_terug": "breng de maanvis naar de vijver in de geestenoase.",
     Q + "yue_maan.klaar": "De maan gloeit weer. De kleuren zijn terug. Maar de vloot ligt nog voor de muur.",
-    Q + "hint.golf_kansel": "klim naar de Golfkansel boven de poort (via de trappen van de ijsmuur) en ga daar staan.",
     Q + "storm.gegrepen": "Terwijl iedereen juicht, grijpt iemand je in je nek. Een hete adem. Dan alleen nog sneeuw...",
     Q + "storm.terug": "De sneeuwstorm laat je niet gaan. Je bent weer bij Zuka.",
-    Q + "hint.storm": "volg het lichtje door de storm. Luister naar Appa.",
     Q + "klaar.1": "Hoofdstuk 2 is klaar! Je kunt watersturen. Katara-guh en Sokka-guh reizen voortaan met je mee.",
     Q + "klaar.boemerang": "Hier, neem mijn boemerang. Ik heb er nog een. Hij komt altijd terug. Net als ik. En net als jij.",
     Q + "klaar.2": "Je krijgt een Waterstam-parka voor je guh en Sokka-guh's boemerang. Appa brengt jullie naar Ba Sing Guh.",
@@ -283,7 +350,7 @@ TEKSTEN = {
     Q + "rol.katara.golf": "Ga naar de Golfkansel boven de poort. Ik voel het: de oceaan wacht op je.",
     Q + "rol.katara.klaar": "Ik ga met je mee, Guhvatar. Iemand moet je leren hoe je je eigen sokken wast. Met water.",
     Q + "rol.sokka.0": "Watersturen is niks voor mij. Ik heb een boemerang. Een boemerang komt altijd terug. Een boemerang laat je nooit in de steek.",
-    Q + "rol.sokka.slee": "Otter-surfen! Klim op de ijsmuur, links van de poort. Bovenaan wacht een otter-pinguinguh. Lege poten erop, en GAAN!",
+    Q + "rol.sokka.slee": "Otter-surfen! Klim op de ijsmuur, west van de poort. Bovenaan wacht een otter-pinguinguh. Lege poten erop, en GAAN!",
     Q + "rol.sokka.gondel": "Gondelen is net als otter-surfen. Maar dan natter. En langzamer. En zonder otter.",
     Q + "rol.sokka.yue": "Heb je prinses Yue-guh gezien? In het paleis? Zei ze iets over mij? Zeg dat ik grappig ben. En lang.",
     Q + "rol.sokka.beleg": "Ik heb een plan voor de belegering. Stap een: niet gevangen worden. Stap twee: ...daar werk ik nog aan.",

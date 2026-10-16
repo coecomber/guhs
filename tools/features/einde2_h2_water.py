@@ -170,7 +170,20 @@ def texts(h):
     vm.vertelkaart(h, KAART, tekst.KAART_TITEL, tekst.KAART_REGELS, kaart)
     for naam, (titel, regels, namen) in tekst.SCENES.items():
         vm.scene(h, f"einde2_h2_water_{naam}", titel, regels, namen)
+    # fix2-h2: the step hints, their look scenes, the titles and the gondola stops (H2Hints)
+    for k, v in tekst.HINTS.items():
+        kit.lang(h, f"{HINT_P}hint.{k}", v)
+    for k, v in tekst.HALTES.items():
+        kit.lang(h, f"{HINT_P}halte.{k}", v)
+    for k, (titel, onder) in tekst.TITELS.items():
+        kit.lang(h, f"{HINT_P}titel.{k}", titel)
+        kit.lang(h, f"{HINT_P}titel.{k}.onder", onder)
+    for naam, (titel, regel) in tekst.KIJK.items():
+        vm.scene(h, f"einde2_h2_water_kijk_{naam}", titel, {"tekst": regel})
     vm.sluier(h, "noordelijke_waterstam")
+
+
+HINT_P = "gui.guhs.einde2_h2_water."
 
 
 # =====================================================================================================================
@@ -185,7 +198,7 @@ FTB_QUESTS = [
     ("golf", "Golven, geen gespetter", "Maak &6drie golven&r in het golfbassin naast het plein met &bWatergolf&r.", "minecraft:heart_of_the_sea"),
     ("ijsbrug", "De ijsbrug", "Ga op het eind van de steiger staan, kijk naar het eilandje en bevries een brug met &bIJsbrug&r. Loop dan naar de overkant.",
      "minecraft:packed_ice"),
-    ("slee", "Otter-surfen", "Klim op de ijsmuur links van de poort. Stap met een lege poot op de &dotter-pinguinguh&r bij de Glijkansel en glijd naar beneden.",
+    ("slee", "Otter-surfen", "Klim op de ijsmuur west van de poort. Stap met een lege poot op de &dotter-pinguinguh&r bij de Glijkansel en glijd naar beneden.",
      "minecraft:snowball"),
     ("gondel", "De gondel", "Stap in de gondel in het bekken onder de grote trap en duw hem met &bWaterstroom&r langs de &6drie haltes&r.",
      "minecraft:oak_boat"),
@@ -344,6 +357,23 @@ def selfcheck(h):
     from features import einde2_bouw_water
     if einde2_bouw_water.GEBOUWD is not None:
         problems += controleer_cameras(einde2_bouw_water.GEBOUWD, scenes)
+    # fix2-h2: H2Hints - a text per hint, a look scene per name of H2Hints.KIJK, a title per gehaald("..."), the markers it points at
+    hints = _java("H2Hints.java")
+    if "KIJK = {" + ", ".join(f'"{n}"' for n in tekst.KIJK) not in hints.replace("\n           ", ""):
+        problems.append("H2Hints.KIJK does not list the look scenes of einde2_h2_water_tekst.KIJK")
+    for naam in tekst.KIJK:
+        if f'kijk("{naam}")' not in hints:
+            problems.append(f"H2Hints never uses the look scene {naam}")
+    for naam in re.findall(r'tekst\(T \+ "(\w+)"\)', hints) + ["geest_balk", "halte_balk"]:
+        if f"{HINT_P}hint.{naam}" not in h.NL:
+            problems.append(f"no Dutch text for the hint {naam}")
+    alles = "".join(_java(n) for n in os.listdir(JAVA) if n.endswith(".java"))
+    for naam in set(re.findall(r'H2Hints\.gehaald\(p, "(\w+)"\)', alles)):
+        if f"{HINT_P}titel.{naam}" not in h.NL or f"{HINT_P}titel.{naam}.onder" not in h.NL:
+            problems.append(f"no title for gehaald({naam})")
+    for m in re.findall(r'marker\("(\w+)"\)', hints):
+        if m not in kit_plekken():
+            problems.append(f"H2Hints points at the marker {m}, which the Waterstam does not have")
     for m in ("sneeuwvlakte", "sneeuwstorm_start", "sneeuwstorm_vind", "sluip_route", "maanvis_kooi", "golf_plek", "yue_maan"):
         if m not in kit_plekken():
             problems.append(f"the Waterstam has no marker {m}")

@@ -290,6 +290,7 @@ public final class E2H2Water {
             return;
         }
         Toneel.seconde(p, o, stap);
+        H2Hints.seconde(p, stap);   // (fix2-h2: the look scene of a far target, once, when the player comes near)
         switch (stap) {
             case AANKOMST -> {
                 if (!E2Reizen.landtNog(p)) {           // (merge_fix1: first Appa lands on his spot, then the card and the scene)
@@ -373,7 +374,7 @@ public final class E2H2Water {
     static void naAankomst(ServerPlayer p) {
         if (lijn().verder(p, AANKOMST)) {
             verteller(p, "quest.guhs.einde2_h2_water.aankomst.klaar");
-            hint(p, "quest.guhs.einde2_h2_water.hint.pakguh");
+            zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.aankomst.aang");   // (the step's hint follows: H2Hints)
         }
     }
 
@@ -394,9 +395,7 @@ public final class E2H2Water {
 
     static void naPakguh(ServerPlayer p) {
         if (lijn().verder(p, PAKGUH)) {
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.pakguh.zweep");
-            hint(p, "quest.guhs.einde2_h2_water.hint.zweep");
-            balk(p, "quest.guhs.einde2_h2_water.kracht.uitleg");
+            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.pakguh.zweep");   // (the hint and the power line: H2Hints)
         }
     }
 
@@ -412,8 +411,9 @@ public final class E2H2Water {
         int n = doelenGeraakt(p);
         balk(p, "quest.guhs.einde2_h2_water.zweep.teller", n, DOELEN);
         if (n >= DOELEN && l.verder(p, ZWEEP)) {
+            H2Hints.gehaald(p, "zweep");
             zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.zweep.klaar");
-            hint(p, "quest.guhs.einde2_h2_water.hint.golf");
+            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.rol.pakguh.golf");
         }
     }
 
@@ -435,8 +435,9 @@ public final class E2H2Water {
         l.teller(p, T_GOLVEN, n);
         balk(p, "quest.guhs.einde2_h2_water.golf.teller", n, GOLVEN);
         if (n >= GOLVEN && l.verder(p, GOLFOEFENING)) {
+            H2Hints.gehaald(p, "golf");
             zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.golf.klaar");
-            hint(p, "quest.guhs.einde2_h2_water.hint.ijsbrug");
+            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.rol.pakguh.ijsbrug");
         }
     }
 
@@ -466,10 +467,9 @@ public final class E2H2Water {
             return;
         }
         if (lijn().verder(p, IJSBRUG)) {
-            p.level().playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.PLAYERS, 0.6f, 1.4f);
+            H2Hints.gehaald(p, "ijsbrug");
             zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.ijsbrug.klaar");
             zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.slee.sokka");
-            hint(p, "quest.guhs.einde2_h2_water.hint.slee");
         }
     }
 
@@ -478,9 +478,9 @@ public final class E2H2Water {
     /** Down the sled run on an otter: at the finish (Toneel.slee). */
     static void sleeKlaar(ServerPlayer p) {
         if (lijn().verder(p, SLEE)) {
+            H2Hints.gehaald(p, "slee");
             zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.slee.klaar");
             zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.gondel.katara");
-            hint(p, "quest.guhs.einde2_h2_water.hint.gondel");
         }
     }
 
@@ -498,8 +498,8 @@ public final class E2H2Water {
         p.level().playSound(null, p.blockPosition(), SoundEvents.BELL_BLOCK, net.minecraft.sounds.SoundSource.PLAYERS, 0.5f, 1.6f);
         balk(p, "quest.guhs.einde2_h2_water.gondel.teller", n, HALTES);
         if (n >= HALTES && l.verder(p, GONDEL)) {
+            H2Hints.gehaald(p, "gondel");
             zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.gondel.klaar");
-            hint(p, "quest.guhs.einde2_h2_water.hint.yue");
         }
     }
 
@@ -517,8 +517,7 @@ public final class E2H2Water {
         zeg(p, GuhNpcEntity.Kind.YUE_GUH, "quest.guhs.einde2_h2_water.yue.5");
         zeg(p, GuhNpcEntity.Kind.ARNOOK_GUH, "quest.guhs.einde2_h2_water.yue.6");
         lijn().verder(p, YUE);
-        Schijn.straks(p);   // (the fleet is there now)
-        hint(p, "quest.guhs.einde2_h2_water.hint.haven");
+        Schijn.straks(p);   // (the fleet is there now; the step's hint: H2Hints)
         return true;
     }
 
@@ -541,8 +540,7 @@ public final class E2H2Water {
 
     static void naBlauweGeest(ServerPlayer p) {
         if (lijn().verder(p, HAVEN)) {
-            hint(p, "quest.guhs.einde2_h2_water.hint.ontsnap");
-            balk(p, "quest.guhs.einde2_h2_water.sluip.uitleg");
+            verteller(p, "quest.guhs.einde2_h2_water.sluip.uitleg");   // (the step's hint: H2Hints)
         }
     }
 
@@ -553,12 +551,13 @@ public final class E2H2Water {
             return;
         }
         Rustpunten.wis(p, RUST);
+        H2Hints.gehaald(p, "ontsnap");
         verteller(p, "quest.guhs.einde2_h2_water.ontsnap.klaar");
         if (l.eenmalig(p, E_MASKER)) {
             Minigames.give(p, new ItemStack(ModItems.clothingItem(GuhClothes.BLAUWE_GEEST_MASKER)));
             verteller(p, "quest.guhs.einde2_h2_water.ontsnap.masker");
         }
-        hint(p, "quest.guhs.einde2_h2_water.hint.oase");
+        zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.ontsnap.aang");
     }
 
     // --- 10, 11: the moon fish, the meditation ----------------------------------------------------------------------------------
@@ -575,7 +574,6 @@ public final class E2H2Water {
         if (lijn().verder(p, MAANVIS)) {
             stuurToestand(p, GRIJS);
             zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.maanvis.aang");
-            hint(p, "quest.guhs.einde2_h2_water.hint.mediteer");
         }
     }
 
@@ -598,6 +596,9 @@ public final class E2H2Water {
             s.hurk = 0;
             if (stap == MEDITEER) {
                 wijs(p, o, "yue_maan");
+                if (!p.isShiftKeyDown() && (p.tickCount / 20) % 6 == 0) {
+                    balk(p, "quest.guhs.einde2_h2_water.mediteer.hoe");   // (fix2-h2: no hidden timer: say how, now and then)
+                }
             }
             return;
         }
@@ -626,9 +627,9 @@ public final class E2H2Water {
         l.vlag(p, V_VIS, true);
         if (l.verder(p, VIS_HALEN)) {
             Rustpunten.wis(p, RUST);
+            H2Hints.gehaald(p, "vis");
             verteller(p, "quest.guhs.einde2_h2_water.vis.gepakt");
             zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.vis.katara");
-            hint(p, "quest.guhs.einde2_h2_water.hint.vis_terug");
         }
     }
 
@@ -653,7 +654,7 @@ public final class E2H2Water {
             l.vlag(p, V_VIS, false);
             stuurToestand(p, GEWOON);
             verteller(p, "quest.guhs.einde2_h2_water.yue_maan.klaar");
-            hint(p, "quest.guhs.einde2_h2_water.hint.golf_kansel");
+            zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.rol.katara.golf");
         }
     }
 
@@ -711,7 +712,9 @@ public final class E2H2Water {
             return;
         }
         if (!Cutscenes.gezien(p, E2H2WaterScenes.STORM.id())) {
-            speel(p, E2H2WaterScenes.STORM, "sneeuwstorm_start", speler -> hint(speler, "quest.guhs.einde2_h2_water.hint.storm"));
+            // (fix2-h2: after the scene, the light's look scene and its hint)
+            speel(p, E2H2WaterScenes.STORM, "sneeuwstorm_start", speler -> H2Hints.naScene(speler, 10,
+                    q -> nl.juiced.guhs.feature.einde2.verhaal.StapHint.toon(q, E2Verhaal.WATER)));
             return;
         }
         // the light of Katara-guh's lantern and Appa's call show the way
@@ -805,6 +808,7 @@ public final class E2H2Water {
         stuurToestand(p, GEWOON);
         Toneel.weg(p);
         Geestreis.vergeet(p);
+        H2Hints.vergeet(p.getUUID());
         Schijn.straks(p);
     }
 }
