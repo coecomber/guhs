@@ -6,11 +6,11 @@ Zuka's ship (guhs:einde2_reizen_zuka_schip) is a story prop, not a creature: it 
 
 WIKI = {
     "verhalen": {
-        "leegtewalvis": (
-            "De grote zingende", "entity:guhs:leegtewalvisguh",
-            "De questline van de oude kapitein-guh in havenkroeg De Vadsige Walvis (Leegtehaven): geloof hem, wacht in de leegte tot "
+        "leegtewalvis": dict(           # (a story page takes the dict shape of wiki_bbq2's "verhalen", not the systemen tuple)
+            nl="De grote zingende", img="entity:guhs:leegtewalvisguh",
+            lead_nl="De questline van de oude kapitein-guh in havenkroeg De Vadsige Walvis (Leegtehaven): geloof hem, wacht in de leegte tot "
             "de walvis opdoemt, breng bewijs naar de kroeg en tem een Leegtewalvisguh voor jezelf.",
-            ["leegtewalvisguh", "leegteparel", "einde2_reizen_walvishoorn", "leegtehaven"]),
+            related=["leegtewalvisguh", "leegteparel", "einde2_reizen_walvishoorn", "leegtehaven"]),
     },
     "systemen": {
         "reizen-met-appa": (

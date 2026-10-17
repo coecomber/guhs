@@ -12,8 +12,11 @@ Not part of make_resources.py (the OGGs are committed like the other sounds). Ne
 import os
 
 import numpy as np
-import soundfile as sf
-from scipy.signal import butter, lfilter
+try:                                    # (only needed to MAKE the sounds; the wiki build runs without them)
+    import soundfile as sf
+    from scipy.signal import butter, lfilter
+except ImportError:
+    sf = butter = lfilter = None
 
 SR = 44100
 OUT = os.path.join("src", "main", "resources", "assets", "guhs", "sounds", "einde2_biomes")
