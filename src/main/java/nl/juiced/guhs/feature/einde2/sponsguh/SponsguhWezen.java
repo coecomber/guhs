@@ -66,6 +66,10 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Boolean> DATA_VLAG = SynchedEntityData.defineId(SponsguhWezen.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_SOORT = SynchedEntityData.defineId(SponsguhWezen.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_STIL = SynchedEntityData.defineId(SponsguhWezen.class, EntityDataSerializers.BOOLEAN);
+    /** sp_cast: the story looks that are on (bit i = {@link Cast#LOOKS}.get(i)); saved as "Looks" (names, comma separated). */
+    private static final EntityDataAccessor<Integer> DATA_LOOKS = SynchedEntityData.defineId(SponsguhWezen.class, EntityDataSerializers.INT);
+    /** sp_cast: the persistent data key of a look in SpCast's stand-in (a scene's actor NBT may still carry it). */
+    public static final String STANDIN_LOOK = "guhs_einde2_sp_cast_look_";
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     /** Never null: an entity type that is not in the table behaves like a plain citizen. */
@@ -77,6 +81,14 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
     private String eenmalig = "";
     private long eenmaligTot;
     private long laatsteKlik = Long.MIN_VALUE / 2;
+    /** sp_cast: the stand-in's looks (persistent data) were taken over (once). */
+    private boolean standInGelezen;
+    /** Client (sp_cast): the scene animation the controller saw last, its age, and whether a new one began. */
+    private String sceneGezien = "";
+    private int sceneTicks;
+    private boolean sceneOpnieuw;
+    /** Client (sp_cast): the game time a scene's "zwaai" (the engine's own: a swing) reached this actor. */
+    private long zwaaiSinds = Long.MIN_VALUE / 2;
 
     public SponsguhWezen(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -103,6 +115,7 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
         builder.define(DATA_VLAG, false);
         builder.define(DATA_SOORT, -1);
         builder.define(DATA_STIL, false);
+        builder.define(DATA_LOOKS, 0);
     }
 
     @Override
@@ -117,6 +130,9 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
         }
         if (cast.soorten > 0) {
             tag.putInt("Soort", soort());
+        }
+        if (looks() != 0) {
+            tag.putString("Looks", String.join(",", lookNamen()));
         }
     }
 
@@ -133,6 +149,101 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
         }
         if (cast.soorten > 0) {
             entityData.set(DATA_SOORT, tag.getIntOr("Soort", -1));
+        }
+        int mask = 0;
+        for (String look : tag.getStringOr("Looks", "").split(",")) {
+            int bit = Cast.LOOKS.indexOf(look.trim());
+            if (bit >= 0 && cast.kanLook(look.trim())) {
+                mask |= 1 << bit;
+            }
+        }
+        entityData.set(DATA_LOOKS, mask);
+        leesStandIn();                                                   // (NeoForgeData is read before this)
+    }
+
+    // --- sp_cast: the story looks (CONTRACT_E2_C 7.2; the API is SpCast) -----------------------------------------------------
+
+    /** The looks that are on, as a mask over {@link Cast#LOOKS}. */
+    public int looks() {
+        return entityData.get(DATA_LOOKS);
+    }
+
+    /** The names of the looks that are on. */
+    public java.util.List<String> lookNamen() {
+        java.util.List<String> uit = new java.util.ArrayList<>();
+        int mask = looks();
+        for (int i = 0; i < Cast.LOOKS.size(); i++) {
+            if ((mask & (1 << i)) != 0) {
+                uit.add(Cast.LOOKS.get(i));
+            }
+        }
+        return uit;
+    }
+
+    public boolean heeftLook(String look) {
+        int bit = Cast.LOOKS.indexOf(look);
+        return bit >= 0 && (looks() & (1 << bit)) != 0;
+    }
+
+    /** Switches a look on or off; a look this character's model does not have does nothing. */
+    public void zetLook(String look, boolean aan) {
+        int bit = Cast.LOOKS.indexOf(look);
+        if (bit < 0 || !cast.kanLook(look)) {
+            return;
+        }
+        int mask = looks();
+        entityData.set(DATA_LOOKS, aan ? mask | (1 << bit) : mask & ~(1 << bit));
+    }
+
+    /** The looks a scene actor carried in SpCast's stand-in form (persistent data {@value #STANDIN_LOOK}&lt;look&gt;). */
+    private void leesStandIn() {
+        standInGelezen = true;
+        net.minecraft.nbt.CompoundTag data = getPersistentData();
+        for (String look : Cast.LOOKS) {
+            if (data.getBooleanOr(STANDIN_LOOK + look, false)) {
+                zetLook(look, true);
+                data.remove(STANDIN_LOOK + look);
+            }
+        }
+    }
+
+    // --- sp_cast: the scene animations (a cutscene actor, client) ------------------------------------------------------------
+
+    /**
+     * Client: the scene animation this actor plays ({@code Cutscenes.animatie}, set by {@code Cutscene.Builder.animatie}),
+     * held while the scene waits for a click, like {@code GuhNpcEntity.sceneAnimatie} (1.4.4). The engine plays "zwaai"
+     * itself as a swing: a character with a "zwaai" of its own plays that instead. "" = none.
+     */
+    public String sceneAnimatie() {
+        if (nl.juiced.guhs.feature.verhaal.Cutscenes.gepauzeerd()) {
+            return sceneGezien;
+        }
+        String scene = nl.juiced.guhs.feature.verhaal.Cutscenes.animatie(this);
+        int ticks = nl.juiced.guhs.feature.verhaal.Cutscenes.animatieTicks(this);
+        if (scene.isEmpty() && cast.heeft("zwaai") && level().getGameTime() - zwaaiSinds < Cast.duur("zwaai")) {
+            scene = "zwaai";
+            ticks = (int) (level().getGameTime() - zwaaiSinds);
+        }
+        if (!scene.equals(sceneGezien) || (!scene.isEmpty() && ticks < sceneTicks)) {
+            sceneGezien = scene;
+            sceneOpnieuw = true;
+        }
+        sceneTicks = ticks;
+        return scene;
+    }
+
+    /** Client: did a new scene animation begin since the last ask (once)? */
+    public boolean sceneBegonnen() {
+        boolean b = sceneOpnieuw;
+        sceneOpnieuw = false;
+        return b;
+    }
+
+    @Override
+    public void swing(InteractionHand hand, boolean updateSelf) {
+        super.swing(hand, updateSelf);
+        if (level().isClientSide()) {
+            zwaaiSinds = level().getGameTime();                         // (a scene's "zwaai": the engine swings the actor)
         }
     }
 
@@ -281,6 +392,9 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+        if (!standInGelezen) {
+            leesStandIn();
+        }
         if (level().isClientSide()) {
             return;
         }
@@ -438,6 +552,17 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
             }
         }
         controllers.add(actie);
+        // sp_cast: a cutscene's animation (Cutscene.Builder.animatie) on an actor, over everything else while it plays
+        controllers.add(new AnimationController<SponsguhWezen>("scene", 2, state -> {
+            String naam = sceneAnimatie();
+            if (naam.isEmpty() || !cast.heeft(naam)) {
+                return PlayState.STOP;
+            }
+            if (sceneBegonnen()) {
+                state.controller().reset();
+            }
+            return state.setAndContinue(Cast.DOORLOPEND.contains(naam) ? RawAnimation.begin().thenLoop(naam) : RawAnimation.begin().thenPlay(naam));
+        }));
     }
 
     @Override

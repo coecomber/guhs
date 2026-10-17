@@ -16,23 +16,23 @@ import net.minecraft.world.entity.EntityType;
  * game test einde2SponsguhCast compare the animation files with this table).
  */
 public enum Cast {
-    SPONSGUH(0.7f, 1.25f, 1.0f, null, 0, false, "bak", "zuig"),
-    PATGUH(0.8f, 1.6f, 0.95f, null, 0, false, "slaap"),
-    MENEER_KRABGUH(1.0f, 1.25f, 1.1f, "Bevroren", 0, false, "tel_geld"),
+    SPONSGUH(0.7f, 1.25f, 1.0f, null, 0, false, "bak", "zuig", "zing", "rennen", "huil_blij", "salueer", "slurp", "knipper"),
+    PATGUH(0.8f, 1.6f, 0.95f, null, 0, false, "slaap", "zing", "nies", "trots"),
+    MENEER_KRABGUH(1.0f, 1.25f, 1.1f, "Bevroren", 0, false, "tel_geld", "knuffel", "paniek"),
     PAREL_GUH(0.9f, 2.5f, 2.0f, null, 0, true, "huil"),
     SANDY_GUH(0.7f, 1.6f, 1.1f, null, 0, true, "karate"),
     GERRIT(0.45f, 0.55f, 0.45f, null, 0, false, "njeg"),
-    OCTO_MIKA(0.6f, 2.9f, 2.6f, null, 0, true, "speel", "zucht", "flauw"),
-    OCTOLIAM(0.6f, 2.9f, 2.6f, null, 0, true, "speel", "zucht", "flauw"),
-    PLANKMIKA(0.3f, 0.5f, 0.3f, null, 0, false, "plan"),
-    JUF_PUFGUH(0.8f, 1.15f, 0.7f, "Opgeblazen", 0, false, "blaas_op"),
-    NEPTUGUH(1.0f, 3.1f, 2.5f, "Kroon", 0, true, "bevries"),
-    MINDY_GUH(0.7f, 1.7f, 1.35f, null, 0, true, "zwaai"),
-    DENNIS_MIKA(0.9f, 2.2f, 1.7f, "OpMotor", 0, true, "rij"),
-    CYCLOOP_MIKA(0.9f, 2.25f, 1.75f, null, 0, true, "grijp"),
-    DAVID_HASSELGUH(3.0f, 1.9f, 1.2f, null, 0, false, "zwem"),
-    LOOPGRAAFMONSTER(1.2f, 2.1f, 1.6f, null, 3, true, "brul", "zing"),
-    BIKINIBODEM_GUH(0.6f, 1.3f, 0.95f, null, 6, true),
+    OCTO_MIKA(0.6f, 2.9f, 2.6f, null, 0, true, "speel", "zucht", "flauw", "trommel_tel", "buig"),
+    OCTOLIAM(0.6f, 2.9f, 2.6f, null, 0, true, "speel", "zucht", "flauw", "trommel_tel", "buig"),
+    PLANKMIKA(0.3f, 0.5f, 0.3f, null, 0, false, "plan", "lach_kwaad", "vlucht"),
+    JUF_PUFGUH(0.8f, 1.15f, 0.7f, "Opgeblazen", 0, false, "blaas_op", "zucht"),
+    NEPTUGUH(1.0f, 3.1f, 2.5f, "Kroon", 0, true, "bevries", "blaas"),
+    MINDY_GUH(0.7f, 1.7f, 1.35f, null, 0, true, "zwaai", "geef"),
+    DENNIS_MIKA(0.9f, 2.2f, 1.7f, "OpMotor", 0, true, "rij", "remmen", "plat"),
+    CYCLOOP_MIKA(0.9f, 2.25f, 1.75f, null, 0, true, "grijp", "nat"),
+    DAVID_HASSELGUH(3.0f, 1.9f, 1.2f, null, 0, false, "zwem", "zwaai"),
+    LOOPGRAAFMONSTER(1.2f, 2.1f, 1.6f, null, 3, true, "brul", "zing", "wieg"),
+    BIKINIBODEM_GUH(0.6f, 1.3f, 0.95f, null, 6, true, "dans"),
     SPOOKKAPITEIN(0.8f, 2.1f, 1.6f, null, 0, true, "spook"),
     ZEEMEERMAN_GUH(0.7f, 1.4f, 1.0f, null, 0, true, "held"),
     MOSSELGUH(0.6f, 1.05f, 0.75f, null, 0, true, "held");
@@ -43,7 +43,16 @@ public enum Cast {
      * The animations that go on until another one is set (a pose, a loop); every other one plays once and the character
      * goes back to what it did. Ticks of the one-shots: {@link #duur}.
      */
-    public static final Set<String> DOORLOPEND = Set.of("idle", "loop", "slaap", "tel_geld", "huil", "speel", "flauw", "plan", "rij", "zwem", "zing");
+    public static final Set<String> DOORLOPEND = Set.of("idle", "loop", "slaap", "tel_geld", "huil", "speel", "flauw", "plan", "rij", "zwem", "zing",
+            // sp_cast: the story poses and loops (CONTRACT_E2_C 7.2)
+            "rennen", "knuffel", "paniek", "vlucht", "plat", "nat", "wieg", "dans");
+
+    /**
+     * sp_cast (CONTRACT_E2_C 7.2): the eight story looks, in the order of {@code SpCast.LOOKS} (the bit of each in the synced
+     * looks mask of {@link SponsguhWezen}). The models draw them as bones {@code look_<look>} (tools/features/einde2_sp_cast_looks.py);
+     * {@code droog} has no bone (the renderer tints and shrinks the model).
+     */
+    public static final List<String> LOOKS = List.of("snor", "emmer", "droog", "ijsje", "netje", "petje", "manager", "kroon_vast");
 
     public final float breed, hoog, oog;
     /** The NBT name of its synced flag (null: it has none). */
@@ -75,6 +84,21 @@ public enum Cast {
         return this == OCTOLIAM ? OCTO_MIKA.id() : id();
     }
 
+    /** sp_cast: the looks this character's model has (einde2_sp_cast_looks.LOOKS says the same; Octoliam wears Octo's model). */
+    public List<String> looks() {
+        return switch (this) {
+            case SPONSGUH -> LOOKS;
+            case PATGUH -> List.of("snor", "emmer", "droog", "ijsje", "netje");
+            case MENEER_KRABGUH, PAREL_GUH, SANDY_GUH, OCTO_MIKA, OCTOLIAM, BIKINIBODEM_GUH -> List.of("emmer");
+            default -> List.of();
+        };
+    }
+
+    /** sp_cast: can this character show this look? */
+    public boolean kanLook(String look) {
+        return looks().contains(look);
+    }
+
     /** Can {@link SponsguhWezen#zetAnimatie} play this name on this character? */
     public boolean heeft(String animatie) {
         return BASIS.contains(animatie) || eigen.contains(animatie);
@@ -97,7 +121,10 @@ public enum Cast {
     /** How long a one-shot animation plays, in ticks (the lengths the models module gives them). */
     public static int duur(String animatie) {
         return switch (animatie) {
-            case "schrik", "njeg", "blaas_op" -> 16;
+            case "schrik", "njeg", "blaas_op", "knipper" -> 16;
+            case "remmen" -> 24;
+            case "huil_blij", "trommel_tel" -> 48;
+            case "lach_kwaad" -> 40;
             case "praat", "zuig", "karate", "grijp" -> 24;
             case "juich", "zwaai", "brul", "bevries" -> 28;
             case "spook" -> 40;

@@ -2,5 +2,16 @@
   "entity.guhs.guh_npc.kroeg_barman_mika": "Barman Mika",
   "entity.guhs.guh_npc.kroeg_uitsmijter_mika": "Bouncer Mika",
   "entity.guhs.guh_npc.slapende_mika": "Sleeping Mika",
-  "entity.guhs.guh_npc.stoere_mika": "Tough Mika"
+  "entity.guhs.guh_npc.stoere_mika": "Tough Mika",
+  "entity.guhs.guh_npc.stoere_mika_2": "Tough Mika",
+  "gui.guhs.einde2_sp_cast.praatje.kroeg_barman_mika.0": "What'll it be? Jelly juice, jelly juice or... jelly juice.",
+  "gui.guhs.einde2_sp_cast.praatje.kroeg_barman_mika.1": "I've been polishing this mug since Tuesday. It just won't get clean, njeg.",
+  "gui.guhs.einde2_sp_cast.praatje.kroeg_uitsmijter_mika.0": "Only real tough types get in. You are... small. Fine, come on in.",
+  "gui.guhs.einde2_sp_cast.praatje.kroeg_uitsmijter_mika.1": "I'm the bouncer. I bounce people out. Very gently, mind you.",
+  "gui.guhs.einde2_sp_cast.praatje.stoere_mika.0": "I'm so tough I drink my jelly juice without a straw.",
+  "gui.guhs.einde2_sp_cast.praatje.stoere_mika.1": "See this tattoo? An anchor. I've never been on a boat.",
+  "gui.guhs.einde2_sp_cast.praatje.stoere_mika_2.0": "The eye patch? Just for style. I can see fine, njeg.",
+  "gui.guhs.einde2_sp_cast.praatje.stoere_mika_2.1": "I once petted a sea urchin. With my bare paw. Yep. Tough, huh.",
+  "gui.guhs.einde2_sp_cast.praatje.slapende_mika.0": "Zzzz... five more minutes, mum... zzzz...",
+  "gui.guhs.einde2_sp_cast.praatje.slapende_mika.1": "Mmmh... don't touch my little key... zzzz..."
 }
