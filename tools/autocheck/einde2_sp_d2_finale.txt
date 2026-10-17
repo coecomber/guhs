@@ -1,0 +1,44 @@
+# einde2 "Sponsguh", sp_d2_finale (AutoCheck, dev only): part 2 steps 9-11 (David Hasselguh, the bucket helmets, the song).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d2_finale.txt
+# Commands: /guhs einde2 sponsguh ga sponsguh_kroon <9|10|11> | /guhs einde2 sponsguh d2finale scene <naam> | spel emmers | spel rit | vrij | klaar | wis
+# Every scene waits for a click after its first line (1.4.4): a shot shows the opening frame. NOT run by the slice itself
+# (no game client in a slice): this is for the merge step.
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:guheinde run tp @s 0 200 0
+wait 60
+tplocate guhs:guheinde guhs:bikinibodem
+/guhs einde2 sponsguh d2finale wis
+
+section step 9: the pier of Schelpenstad, the scene and the ride
+/guhs einde2 sponsguh ga sponsguh_kroon 9
+wait 100
+waitrender 200
+shot einde2_sp_d2_finale_pier
+/guhs einde2 sponsguh d2finale scene hasselguh
+wait 40
+shot einde2_sp_d2_finale_hasselguh
+
+section step 10: home, the bucket helmets
+/guhs einde2 sponsguh d2finale scene thuis
+wait 60
+shot einde2_sp_d2_finale_thuis
+/guhs einde2 sponsguh d2finale spel emmers
+wait 80
+waitrender 200
+shot einde2_sp_d2_finale_emmers
+
+section step 11: the stage, the song
+/guhs einde2 sponsguh ga sponsguh_kroon 11
+wait 80
+waitrender 200
+shot einde2_sp_d2_finale_bellenkom
+/guhs einde2 sponsguh d2finale scene guhfy_guhber
+wait 40
+shot einde2_sp_d2_finale_guhfy_guhber
+/guhs einde2 sponsguh d2finale scene bedankt
+wait 40
+shot einde2_sp_d2_finale_bedankt
