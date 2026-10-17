@@ -1,0 +1,49 @@
+# einde2 Sponsguh, sp_d2_heen (AutoCheck, dev only): part 2 steps 0-4 (the manager, the ice cream, the frozen Krabguh, the drive,
+# De Ruige Kroeg). Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d2_heen.txt
+# Commands of the slice: /guhs einde2 sponsguh ga sponsguh_kroon <0-4> | d2heen scene <naam> | d2heen kaart | d2heen spel kroeg |
+# d2heen rit | d2heen wis. Every scene waits for a click after its first line (1.4.4): a shot shows the opening frame of each.
+# NOT run by the slice itself (no game client in a slice): this is for the merge step. Look in Dutch only.
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:guheinde run tp @s 0 200 0
+wait 60
+tplocate guhs:guheinde guhs:bikinibodem
+/guhs einde2 sponsguh d2heen wis
+
+section the narrator card of part 2
+/guhs einde2 sponsguh d2heen kaart
+wait 80
+shot einde2_sp_d2_heen_kaart
+key escape
+
+section the scenes at their spots (opening frames)
+/guhs einde2 sponsguh ga sponsguh_kroon 0
+wait 120
+shot einde2_sp_d2_heen_manager
+/guhs einde2 sponsguh d2heen scene ijssalon
+wait 120
+shot einde2_sp_d2_heen_ijssalon
+/guhs einde2 sponsguh d2heen scene knipoog_ijs
+wait 60
+shot einde2_sp_d2_heen_knipoog_ijs
+/guhs einde2 sponsguh d2heen scene bevroren
+wait 120
+shot einde2_sp_d2_heen_bevroren
+/guhs einde2 sponsguh d2heen scene rit
+wait 60
+shot einde2_sp_d2_heen_rit
+
+section the drive and De Ruige Kroeg
+/guhs einde2 sponsguh d2heen rit
+wait 60
+shot einde2_sp_d2_heen_achter_het_stuur
+tplocate guhs:guheinde guhs:schelpenstad
+/guhs einde2 sponsguh d2heen scene kroeg
+wait 120
+shot einde2_sp_d2_heen_kroeg
+/guhs einde2 sponsguh d2heen spel kroeg
+wait 80
+shot einde2_sp_d2_heen_stilstaan

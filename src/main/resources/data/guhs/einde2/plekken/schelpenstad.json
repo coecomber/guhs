@@ -1133,6 +1133,56 @@
         ]
       ],
       "wie": "de achtervolging over de weg de stad in (3 breed)"
+    },
+    "d2h_kroeg_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          47,
+          19,
+          46
+        ],
+        [
+          36,
+          17,
+          37
+        ]
+      ],
+      "wie": "de camera van de scene 'kroeg'"
+    },
+    "d2h_binnen_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          40,
+          19,
+          31
+        ],
+        [
+          30,
+          17,
+          26
+        ]
+      ],
+      "wie": "de camera van de scene 'baby'"
+    },
+    "d2h_sponsguh_deur": {
+      "soort": "prop",
+      "pos": [
+        33,
+        16,
+        33
+      ],
+      "wie": "jouw Sponsguh wacht binnen bij de klapdeurtjes (het stilstaan-spel)"
+    },
+    "d2h_patguh_deur": {
+      "soort": "prop",
+      "pos": [
+        34,
+        16,
+        33
+      ],
+      "wie": "jouw Patguh wacht naast hem"
     }
   }
 }
