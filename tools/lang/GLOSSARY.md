@@ -2850,3 +2850,107 @@ zwevers) are used word for word; new here:
 | Wordt vervolgd... | To Be Continued... | the tier-6 picture at the end of Guh Technology (FTB_SLOT of tech_quests) |
 | Trap 6 | Tier 6 | the open end |
 | oortjes | little ears | the Mechanist's droop when he sees a balloon |
+
+## 28. einde2 Sponsguh story (contract C: the slices sp_cast .. sp_zij, first merge merge_sp1)
+
+The slices' own glossaries (`tools/lang/glossary_e2/sp_<slice>.md`), folded in by the merge step (merge_sp1). sp_cast has no
+own file (its names are section 26's `sponsguh_wezens`). sp_d1_stad and sp_d2_weg follow with the next merge. Settled here:
+
+| Dutch | English | settled |
+|---|---|---|
+| Werknemer van de Week | Employee of the Week | as "Werknemer van de maand" (section 23); d1_start's "Medewerker van de Week" now says it too (Dutch only, the English was the same) |
+| De Verteller | The Narrator | one narrator in every slice; his French bits ("mes amis", "mon ami", "allez", "voilà", "vous voyez", "Et voilà") stay French in English |
+| Zoete Knabbelzege | Sweet Nibble Victory | sp_audio and sp_d1_recept agree; never "Sweet Victory" |
+| Ik ben een Guhfy Guhber | I'm a Guhfy Guhber | sp_audio and sp_d2_finale agree (DESIGN's own title) |
+| rustpunt | rest point | the sneak (d1_recept) and the stand-still game (d2_heen) alike |
+
+### sp_audio
+
+| Dutch | English | note |
+|---|---|---|
+| Zoete Knabbelzege | Sweet Nibble Victory | own song title of part 1's finale (moment.zoete_zege); never "Sweet Victory" |
+| Ik ben een Guhfy Guhber | I'm a Guhfy Guhber | own song title and refrain of part 2's finale (DESIGN's own); the verses differ from the film's song |
+| Het lied van de loopgraaf | The Song of the Trench | the monsters' own sweet waltz (moment.monsters) |
+| emmertjesmars | little bucket march | deuntje.emmers |
+| de band speelt een beat | the band plays a beat | deuntje.trommel (the drum game, 112 BPM) |
+| njeg / NJEG | nyeg / NYEG | as everywhere |
+
+### sp_d1_start
+
+| Dutch | English | note |
+|---|---|---|
+| bubbelbrief | Bubble Letter | the soap bubble with the job ad that starts part 1 |
+| knabbelbakker | nibble cook | the job at the grill (fry cook) |
+| De Verteller | The Narrator | the narrator with the French touch ("mon ami", "allez" stay French) |
+| bonnetje | order ticket | over the grill |
+| zeesla | sea lettuce | a part of the Nibble Patty |
+| Werknemer van de Week | Employee of the Week | Sponsguh's pride (settled above) |
+
+### sp_d1_recept
+
+| Dutch | English | note |
+|---|---|---|
+| De Verteller | The Narrator | the narrator with a French touch; "mes amis" stays French in both languages |
+| Professor Knabbelkloon | Professor Nibbleclone | wink 6 (the Knabbelkloon Kind of mewtwo) |
+| Zoete Knabbelzege | Sweet Nibble Victory | the own title of the part-1 song (CONTRACT_E2_C 6.2) |
+| Plan Z | Plan Z | |
+| "Bedankt Karen, mijn computervrouw." | "Thank you Karen, my computer wife." | DESIGN's required line (plan_z) |
+| schat (Karen tegen Plankmika) | honey | |
+| rustpunt | rest point | the sneak: where you start again when Karen sees you |
+| vetballetjes | grease balls | The Grease Bucket's menu |
+| sluipheld | sneaking hero | |
+| njeg | nyeg | as everywhere |
+
+### sp_d2_heen
+
+| Dutch | English | note |
+|---|---|---|
+| De Krokante Knabbel 2 | The Krusty Nibble 2 | Krabguh's second restaurant ("door de muur") |
+| Werknemer van de Week | Employee of the Week | Spongeguh's 312 times in a row |
+| Guhfy Guhber Knabbeltoren | Guhfy Guhber Nibble Tower | the towering sundae |
+| zeg.. hoort hier geen poppetje bij? | Say.. isn't there supposed to be a little toy with this? | THE line of the user (CONTRACT_E2_C 5.3): verbatim in Dutch, this English fixed by the contract |
+| kroonkussentje | crown cushion | the empty cushion Plankmika leaves on Krabguh's desk |
+| koude straf | cold punishment | Neptuguh freezes Krabguh |
+| voorlopig rijbewijs | provisional licence | Spongeguh's boating exam of part 1 |
+| baby'tje | baby | "Wie was het baby'tje?" = "Who was the baby?" |
+| het stilstaan-spel | the stand-still game | the minigame in The Thug Tug |
+| rustpunt | rest point | a checkpoint of the stand-still game |
+| sleuteltje | little key | the key of the Patty Wagon |
+| mes amis / voilà | mes amis / voilà | the narrator's French touch: kept in English too |
+
+### sp_d2_finale
+
+| Dutch | English | note |
+|---|---|---|
+| bellenblazer | bubble blaster | the item einde2_sp_d2_finale_bellenblazer (the block bellenblaas = Bubble Blower) |
+| emmerhelm | bucket helmet | Plankmika's mind-control buckets |
+| Ik ben een Guhfy Guhber | I'm a Guhfy Guhber | the part-2 rock song (DESIGN's own title) |
+| Guhfy Guhber (titel) | Guhfy Guhber | the title of part 2 |
+| zeepbelzon | bubble sun | Neptuguh's deadline ("before the bubble sun sets"); no real timer |
+| stoet | parade | the freed guhs walking with you |
+| De Verteller | The Narrator | French touch: "Et voilà, njeg" stays "Et voilà, nyeg" |
+| Hoofdstraat / Bellenlaan | High Street / Bubble Lane | the streets of Bikinibodem |
+| stadspoort | town gate | |
+| steiger | jetty | David Hasselguh's landing |
+| manager | manager | Sponsguh's new job |
+
+### sp_zij
+
+| Dutch | English | note |
+|---|---|---|
+| Bikinibodem: zijdingen | Bikini Bottom: Side Quests | FTB section and clothes source |
+| boomkoepel (van Sandy-guh) | tree dome | the show's word |
+| luchtsluis | airlock | |
+| luchthelm | air helmet | Sandy's Air Helmet (clothes) |
+| karatemat | karate mat | |
+| neuskegel / straalpijp / antenne | nose cone / exhaust pipe / antenna | the three rocket parts |
+| de spookkapitein | the Ghost Captain | of The Flying Guhchman |
+| aanlegplaats | mooring | (bouw_bikinibodem) |
+| De Nacht van de Hakkende Hakker | The Night of the Chopping Chopper | the ghost captain's scary story (own words; it was onions) |
+| spooklantaarn | Ghost Lantern | (kern) |
+| onzichtbare bootmobiel | invisible boatmobile | |
+| heldenriem | hero belt | Zeemeerman's belt |
+| heldenlunch | heroes' lunch | |
+| heldencape | Hero Cape | (kern) |
+| jonge held | young hero | how the heroes call you |
+| De Verteller | The Narrator | the narrator with the French touch ("mes amis", "vous voyez") |

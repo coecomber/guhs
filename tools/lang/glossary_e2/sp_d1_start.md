@@ -7,4 +7,4 @@
 | De Verteller | The Narrator | the narrator with the French touch ("mon ami", "allez" stay French) |
 | bonnetje | order ticket | over the grill |
 | zeesla | sea lettuce | a part of the Nibble Patty |
-| Medewerker van de Week | Employee of the Week | Sponsguh's pride |
+| Werknemer van de Week | Employee of the Week | Sponsguh's pride (GLOSSARY 28 settled it; was "Medewerker") |

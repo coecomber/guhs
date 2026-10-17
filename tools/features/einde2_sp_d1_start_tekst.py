@@ -47,7 +47,7 @@ SCENES = {
     }, V),
     "welkom": ("Welkom in Bikinibodem", {
         "hallo": "HALLO! Ben jij het? Jij bent het! Jij bent het echt! De nieuwe knabbelbakker!",
-        "ik_ben": "Ik ben Sponsguh Kaasbroek! Vierkant, vol gaatjes, en al negenhonderd weken op rij Medewerker van de Week!",
+        "ik_ben": "Ik ben Sponsguh Kaasbroek! Vierkant, vol gaatjes, en al negenhonderd weken op rij Werknemer van de Week!",
         "njeg": "Njeg.",
         "gerrit": "Dat is Gerrit, mijn slak. Hij zegt dat je er heel bekwaam uitziet. En dat hij honger heeft. Dat zegt hij altijd.",
         "patguh": "Hoi! Ik ben Patguh. Ik woon onder een rots. Ik heb ook een baan, hoor: ik lig. Heel goed, zelfs.",
