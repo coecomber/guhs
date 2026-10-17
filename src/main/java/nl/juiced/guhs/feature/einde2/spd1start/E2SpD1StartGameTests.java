@@ -63,7 +63,7 @@ public class E2SpD1StartGameTests {
         }
     }
 
-    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 200)
     public static void einde2SpD1StartGrill(GameTestHelper helper) {
         // the rules alone
         GrillSpel r = new GrillSpel(0);
@@ -107,12 +107,15 @@ public class E2SpD1StartGameTests {
             helper.assertTrue(Bakken.maakBestelling(p), "order " + (i + 1) + " can be made");
         }
         helper.assertTrue(s.klaar && SpVerhaal.RECEPT_LIJN.teller(p, E2SpD1Start.T_BESTE_TIJD) > 0, "five orders: done, with a time as a score");
-        helper.succeedWhen(() -> {
-            helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_BAKKEN + 1, "after the end scene the line is at step 5");
-            helper.assertTrue(Bakken.spel(p) == null && SpVerhaal.RECEPT_LIJN.teller(p, E2SpD1Start.T_BESTELD) == 0,
-                    "the game's things and its counter are gone");
-            weg(helper, p);
-        });
+        // (a mock player is not ticked, so its scenes never end by themselves: the end scene's daarna is called here)
+        Bakken.afronden(p);
+        helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_BAKKEN + 1, "after the end scene the line is at step 5");
+        helper.assertTrue(Bakken.spel(p) == null && SpVerhaal.RECEPT_LIJN.teller(p, E2SpD1Start.T_BESTELD) == 0,
+                "the game's things and its counter are gone");
+        Bakken.afronden(p);
+        helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_BAKKEN + 1, "the step moves on once");
+        weg(helper, p);
+        helper.succeed();
     }
 
     @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 200)
@@ -158,10 +161,13 @@ public class E2SpD1StartGameTests {
                         "the speaker of " + sc.id() + "." + z.key());
             }
         }
-        helper.succeedWhen(() -> {
-            helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_REIS && SpVerhaal.stap(q, SpVerhaal.RECEPT) == SpVerhaal.R_SOLLICITATIE,
-                    "after the scene brief only p is at step 1");
-            weg(helper, p, q);
-        });
+        // (a mock player is not ticked, so the scene brief never ends by itself: its daarna is called here)
+        helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_BRIEF, "during the scene p is still at step 0");
+        Bubbelbrief.gelezen(p);
+        Bubbelbrief.gelezen(p);
+        helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_REIS && SpVerhaal.stap(q, SpVerhaal.RECEPT) == SpVerhaal.R_SOLLICITATIE,
+                "after the scene brief only p is at step 1, once");
+        weg(helper, p, q);
+        helper.succeed();
     }
 }

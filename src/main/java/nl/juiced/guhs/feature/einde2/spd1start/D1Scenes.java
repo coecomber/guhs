@@ -10,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.einde2.appa.E2AppaFeature;
 import nl.juiced.guhs.feature.einde2.spaudio.SpAudio;
 import nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal;
@@ -135,6 +136,8 @@ public final class D1Scenes {
     // =====================================================================================================================
     public static final Cutscene AANKOMST = maak("aankomst").duur(560).verbergEcht(8)
             .speler(v(0.5, 0, 0.5), 180f)
+            // Appa-guh where he really landed (Landingen: template 110.5, 108, 112.5, facing west), so the scene ends as the world is
+            .acteur("appa", E2AppaFeature.APPA_GUH, v(4.5, 0, 0.5), 90f)
             .zwart(0, 16)
             // the island and the bubble from outside
             .camera(0, v(26, 16, 36), v(0.5, -4, -2))
