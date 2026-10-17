@@ -76,8 +76,9 @@ public class E2SpD1ReceptGameTests {
         }
         helper.assertTrue(!m.tik(t++, false, false) && m.meter == Sluipen.METER - 2, "out of sight the meter runs down");
         helper.assertTrue(!m.tik(t++, true, false) && m.tik(t++, true, false) && m.gezien == 1, "a full meter: seen");
-        helper.assertTrue(!m.tik(t + 1, true, true) && !m.tik(t + Sluipen.RUST - 1, true, true), "after being sent back nothing sees you for a while");
-        helper.assertTrue(m.tik(t + Sluipen.RUST, false, true) && m.gezien == 2, "a laser that is on: seen at once");
+        long gezienOp = t - 1;
+        helper.assertTrue(!m.tik(gezienOp + 1, true, true) && !m.tik(gezienOp + Sluipen.RUST - 1, true, true), "after being sent back nothing sees you for a while");
+        helper.assertTrue(m.tik(gezienOp + Sluipen.RUST, false, true) && m.gezien == 2, "a laser that is on: seen at once");
         // the lasers: on half the time, and off long enough to walk through (a block and a player in under 15 ticks)
         for (int nr = 0; nr < Sluipen.LASERS.size(); nr++) {
             int uit = 0, langste = 0;
