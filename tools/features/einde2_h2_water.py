@@ -200,18 +200,22 @@ FTB_QUESTS = [
      "minecraft:packed_ice"),
     ("slee", "Otter-surfen", "Klim op de ijsmuur west van de poort. Stap met een lege poot op de &dotter-pinguinguh&r bij de Glijkansel en glijd naar beneden.",
      "minecraft:snowball"),
-    ("gondel", "De gondel", "Stap in de gondel in het bekken onder de grote trap en duw hem met &bWaterstroom&r langs de &6drie haltes&r.",
+    ("gondel", "De gondel", "Vanavond is het &6Maanfeest&r. Stap in de gondel in het bekken onder de grote trap en breng met &bWaterstroom&r de "
+     "maanlantaarns naar de &6drie haltes&r.",
      "minecraft:oak_boat"),
     ("yue", "Prinses Yue-guh", "Breng een bezoek aan &dprinses Yue-guh&r in het paleis. &dSokka-guh&r gaat mee. Toevallig.", "minecraft:white_wool"),
-    ("haven", "Rook boven de zee", "Ga naar de haven, naar het schip van &cZhao-Mika&r. Kijk uit voor netten.", "minecraft:campfire"),
+    ("haven", "Rook boven de zee", "Hoofdman Arnook-guh stuurt je naar de haven: kijk wat &cZhao-Mika&r met zijn schip van plan is. Kijk uit voor "
+     "netten.", "minecraft:campfire"),
     ("blauwe_geest", "De Blauwe Geest", "Iemand met een blauw masker heeft je cel opengedaan. Sluip van het schip af. Blijf uit het licht van de wachters.",
      "guhs:blauwe_geest_masker"),
     ("maanvis", "De maanvis", "Ga naar de &6geestenoase&r achter het paleis, door het deurtje in het ijs.", "minecraft:tropical_fish"),
     ("mediteer", "Mediteren", "Ga bij de vijver zitten (sluipen) en mediteer met &dAang-guh&r. Pas op voor verkeerde dimensies.", "minecraft:lily_pad"),
-    ("koh", "Toon geen emotie", "Zoek &dKoh de Gezichtenrover&r in de Geestenwereld. Als hij je aankijkt: niet bewegen, niet springen, nergens op klikken.",
+    ("koh", "Toon geen emotie", "Zoek &dKoh de Gezichtenrover&r in de Geestenwereld: het pad zonder roze nevel leidt naar hem. Als hij je aankijkt: "
+     "niet bewegen, niet springen, nergens op klikken.",
      "minecraft:carved_pumpkin"),
     ("hemelvijver", "De Hemelvijver", "Ga naar de &6Hemelvijver&r, waar Tui en La horen te zwemmen. Er zwemt er maar een.", "minecraft:prismarine_crystals"),
-    ("vis_halen", "Tui terughalen", "Sluip het schip van &cZhao-Mika&r op en haal de maanvis uit de kooi in het ruim.", "minecraft:iron_bars"),
+    ("vis_halen", "Tui terughalen", "&6Tui, de maanvis&r, zit in een kooi aan boord van het schip van &cZhao-Mika&r. Sluip aan boord en steel hem "
+     "terug.", "minecraft:iron_bars"),
     ("vis_terug", "De maan", "Breng de maanvis terug naar de vijver in de oase. &dYue-guh&r wacht daar.", "minecraft:sea_lantern"),
     ("golf_kansel", "De grote golf", "Klim naar de &6Golfkansel&r boven de poort. De oceaan wacht. Zachtjes, he.", "minecraft:trident"),
     ("storm", "De sneeuwstorm", "Volg het lichtje door de storm. Luister naar &dAppa&r. Hoofdstuk 2 is dan klaar: &dKatara-guh&r en &dSokka-guh&r reizen met je mee.",

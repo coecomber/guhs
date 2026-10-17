@@ -181,6 +181,55 @@ public class E2H2WaterGameTests {
     }
 
     /**
+     * fix3-h2 (playtest 2, item 2): the pink mist of the Geestenwereld closes exactly the paths that are not for now (at Koh's
+     * step every way but the one to Koh, at the Hemelvijver's the way east opens), a wall pushes towards its open side, and
+     * Koh faces the player squarely for the whole test (no looking round) and is let go afterwards. Item 3: the sneak for the
+     * fish waits until the scene on the harbour told the player that the fish is aboard.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 100)
+    public static void einde2H2WaterNevelEnKoh(GameTestHelper helper) {
+        // the walls per step
+        List<Geestnevel.Nevel> koh = Geestnevel.dicht(E2H2Water.KOH), vijver = Geestnevel.dicht(E2H2Water.HEMELVIJVER);
+        helper.assertTrue(koh.containsAll(List.of(Geestnevel.LOTUS, Geestnevel.VIJVER, Geestnevel.THEE, Geestnevel.LOTUS_KOH)),
+                "at Koh's step the paths north, east and south-east of the start islet are closed, and the Lotus path at Koh");
+        helper.assertTrue(!vijver.contains(Geestnevel.VIJVER) && vijver.contains(Geestnevel.LOTUS) && vijver.contains(Geestnevel.THEE),
+                "at the Hemelvijver's step the way east opens, the others stay closed");
+        helper.assertTrue(Geestnevel.dicht(E2H2Water.MEDITEER).isEmpty() && Geestnevel.dicht(E2H2Water.VIS_HALEN).isEmpty()
+                && Geestnevel.dicht(E2H2Water.STAPPEN).isEmpty(), "no walls at any other step, nor after the chapter");
+        for (Geestnevel.Nevel n : Geestnevel.ALLE) {
+            net.minecraft.world.phys.Vec3 m = n.midden(), uit = n.buiten(m);
+            helper.assertTrue(n.binnen(m) && !n.binnen(uit) && n.terug().lengthSqr() > 0.9, n.id() + ": a box with an open side to push towards");
+            helper.assertTrue(n.diepte(m) > 0 && n.diepte(uit) < 0, n.id() + ": the middle is inside, the spot at the open side outside");
+        }
+        // Koh faces the player during the test, and only then
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, 2, 6);
+        E2VerhaalDev.zetTot(p, E2Verhaal.WATER, E2H2Water.KOH);
+        nl.juiced.guhs.feature.einde2.geestwezens.KohEntity k = nl.juiced.guhs.feature.einde2.geestwezens.E2GeestWezensFeature.KOH.get()
+                .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        BlockPos kp = helper.absolutePos(new BlockPos(8, 2, 2));
+        k.snapTo(kp.getX() + 0.5, kp.getY(), kp.getZ() + 0.5, 0f, 0f);
+        level.addFreshEntity(k);
+        Geestreis.OVERAL = true;
+        Geestreis.start(p, 0);
+        helper.assertTrue(k.kijktStrak() && k.stil(), "the test begins: Koh stands still and looks at the player");
+        k.tick();
+        float naar = (float) Math.toDegrees(Math.atan2(p.getZ() - k.getZ(), p.getX() - k.getX())) - 90f;
+        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(k.getYRot() - naar)) < 1f
+                && Math.abs(net.minecraft.util.Mth.wrapDegrees(k.getYHeadRot() - naar)) < 1f, "body and head turned to the player");
+        Geestreis.faal(p, "beweeg");
+        helper.assertTrue(!k.kijktStrak(), "after the test Koh may look round again");
+        // the fish: the sneak waits for the scene on the harbour
+        E2VerhaalDev.zetTot(p, E2Verhaal.WATER, E2H2Water.VIS_HALEN);
+        nl.juiced.guhs.feature.verhaal.Cutscenes.vergeet(p, E2H2WaterScenes.VIS_AAN_BOORD.id());
+        helper.assertTrue(E2H2Water.wachtOpVis(p, E2H2Water.VIS_HALEN) && !E2H2Water.wachtOpVis(p, E2H2Water.ONTSNAP),
+                "the sneak for the fish waits for the scene that says the fish is aboard");
+        k.discard();
+        weg(helper, p);
+        helper.succeed();
+    }
+
+    /**
      * The boemerang always comes back, with what it touched on the way, and is never used up; and the pure maths of the
      * chapter: the whip's aim, a guard's cone, the cells of the ice bridge.
      */
