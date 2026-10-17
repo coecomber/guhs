@@ -2664,7 +2664,7 @@ Phase B (geest_modellen):
 |---|---|---|
 | vadskunst / de vier blijvende vadskunsten | chonk art / the four lasting chonk arts | the bending powers that stay after the story; one key |
 | elementenwiel | Element Wheel | hold the key |
-| Luchtsprong / Over water lopen / Rotszuil (bukken: rotsmuur) / Vuurschicht | Air Leap / Water Walk / Rock Pillar (sneak: Rock Wall) / Fire Bolt | the four lasting powers (fix4; the block: Gestuurde rots = Bent Rock) |
+| Luchtsprong / Over water lopen / Rotszuil (bukken: rotsmuur) / Vuurschicht | Air Leap / Water Walk / Rock Pillar (sneak: Rock Wall) / Fire Bolt | the four lasting powers (fix4; the block: Gestuurde rots = Earthbent Rock) |
 | luchtsturen / watersturen / aardesturen / vuursturen | airbending / waterbending / earthbending / firebending | as the show |
 | Kristalsnoep-ring | Crystal Candy Ring | Omashguh's reward |
 | koning Kristalsnoep | King Crystal Candy | a wrong answer of Bumi's riddle |
