@@ -4,18 +4,24 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.einde2.Einde2Ids;
 import nl.juiced.guhs.feature.einde2.appa.Appa;
 import nl.juiced.guhs.feature.einde2.appa.AppaGuhEntity;
 import nl.juiced.guhs.feature.einde2.biomes.E2BiomesFeature;
+import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
+import nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev;
 import nl.juiced.guhs.feature.einde2.zwevers.E2ZweversFeature;
 import nl.juiced.guhs.feature.einde2.zwevers.LeegtewalvisguhEntity;
 import nl.juiced.guhs.feature.einde2.zwevers.Leegtewalvissen;
@@ -210,5 +216,47 @@ public class E2ReizenGameTests {
         nl.juiced.guhs.feature.einde2.verhaal.E2VerhaalDev.wis(p, nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal.LUCHT);
         weg(helper, p);
         helper.succeed();
+    }
+
+    /**
+     * einde2 fix3-reizen (playtest 2 item 4): Appa's menu has ONE story row, the chapter's main building (a flight to its
+     * landing spot), and no row that puts the player straight at the step; an old "#verder" pick never teleports them.
+     */
+    @GuhTest(template = WEI, batch = "einde2_reizen", timeoutTicks = 100)
+    public static void einde2ReizenVerhaalRij(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(4, 2, 4));
+        try {
+            E2VerhaalDev.zetTot(p, E2Verhaal.LUCHT, 3);
+            helper.assertTrue(Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL.equals(verhaalRij(helper, p)), "chapter 1: the gold row is the temple");
+            E2VerhaalDev.klaar(p, E2Verhaal.LUCHT);
+            helper.assertTrue(Einde2Ids.NOORDELIJKE_WATERSTAM.equals(verhaalRij(helper, p)), "chapter 2: the gold row is the Waterstam");
+            Vec3 voor = p.position();
+            Fluitlijst.kies(p, Fluitlijst.VERDER);
+            helper.assertTrue(p.position().distanceTo(voor) < 0.01, "an old '#verder' pick never puts the player at the step");
+        } finally {
+            E2VerhaalDev.wis(p, E2Verhaal.LUCHT);
+            E2VerhaalDev.wis(p, E2Verhaal.WATER);
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /** The id of the menu's one gold story row (and checks there is exactly one, and no "straight to your step" row). */
+    private static String verhaalRij(GameTestHelper helper, ServerPlayer p) {
+        ListTag rijen = Fluitlijst.rijen(p);
+        String verhaal = null;
+        int n = 0;
+        for (Tag t : rijen) {
+            CompoundTag c = (CompoundTag) t;
+            String id = c.getStringOr("Id", "");
+            helper.assertTrue(!id.equals(Fluitlijst.VERDER) && !c.getBooleanOr("Hervat", false), "no 'meteen naar je stap' row any more");
+            if (c.getBooleanOr("Verhaal", false)) {
+                verhaal = id;
+                n++;
+            }
+        }
+        helper.assertTrue(n == 1, "exactly one story row (" + n + ")");
+        helper.assertTrue(verhaal.equals(E2Reizen.verhaalDoel(p)), "the story row is the story's place");
+        return verhaal;
     }
 }
