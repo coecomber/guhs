@@ -11,7 +11,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -20,7 +19,6 @@ import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaalDev;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
-import nl.juiced.guhs.quest.GuhQuests;
 
 /**
  * einde2 "Sponsguh" (CONTRACT_E2_C 8.2), slice sp_d2_finale: the dev commands (a dev run only, operators), under
@@ -71,9 +69,7 @@ final class E2SpD2FinaleCommando {
 
     /** Marks a scene as seen (so the step logic does not play it). */
     private static void gezien(ServerPlayer p, Cutscene s) {
-        CompoundTag t = GuhQuests.saved(p).getCompoundOrEmpty("guhs_scene_" + s.id()).copy();
-        t.putBoolean("Gezien", true);
-        GuhQuests.saved(p).put("guhs_scene_" + s.id(), t);
+        E2SpD2Finale.gezien(p, s);
     }
 
     private static boolean naar(ServerPlayer p, String structuur, String plek) {

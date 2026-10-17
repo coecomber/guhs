@@ -177,6 +177,13 @@ public final class E2SpD2Finale {
         return a != null && Cutscenes.speel(p, scene, a, Rotation.NONE, daarna);
     }
 
+    /** Marks a scene as seen for this player (the 1.4.4 engine keeps it per player: "guhs_scene_<id>"). */
+    static void gezien(ServerPlayer p, Cutscene scene) {
+        net.minecraft.nbt.CompoundTag t = nl.juiced.guhs.quest.GuhQuests.saved(p).getCompoundOrEmpty("guhs_scene_" + scene.id()).copy();
+        t.putBoolean("Gezien", true);
+        nl.juiced.guhs.quest.GuhQuests.saved(p).put("guhs_scene_" + scene.id(), t);
+    }
+
     /** Is the player busy (a scene, a ride, dead, a spectator)? */
     static boolean bezig(ServerPlayer p) {
         return Cutscenes.bezig(p) || Hasselguh.draagt(p) || !p.isAlive() || p.isSpectator();
@@ -246,6 +253,7 @@ public final class E2SpD2Finale {
                 return;
             }
             SpAudio.stopMoment(p, 0);
+            gezien(p, D2fScenes.HASSELGUH);                                  // (it could not play: never try it every half second)
         }
         p.sendSystemMessage(Component.translatable(G + "rit.weer").withStyle(ChatFormatting.AQUA));
         opDeRug(p);
@@ -269,6 +277,7 @@ public final class E2SpD2Finale {
         }
         D2fStoet.metJe(p, true);
         if (!speel(p, D2fScenes.THUIS, SpVerhaal.BIKINIBODEM, D2fScenes.ANKER_THUIS, D2fEmmers::start)) {
+            gezien(p, D2fScenes.THUIS);                                      // (it could not play: the game starts, once)
             D2fEmmers.start(p);
         }
     }
@@ -286,8 +295,8 @@ public final class E2SpD2Finale {
         D2fStoet.metJe(p, true);
         D2fEmmers.geefBlazer(p, true);
         D2fEmmers.tick(p, g, nu);
-        if (D2fEmmers.alleVrij(p) && inZone(p, SpVerhaal.BIKINIBODEM, "bellenkom") && D2fEmmers.inBellenkom(p)) {
-            D2fStoet.ruimEmmersOp(p);
+        if (D2fEmmers.alleVrij(p) && inZone(p, SpVerhaal.BIKINIBODEM, "bellenkom")) {
+            D2fEmmers.inBellenkom(p);                                        // (step 11: the freed ones keep walking along to the stage)
         }
     }
 
@@ -307,6 +316,8 @@ public final class E2SpD2Finale {
         }
         D2fStoet.metJe(p, true);
         D2fStoet.Sessie s = D2fStoet.van(p);
+        s.vrij.removeIf(w -> !D2fStoet.levend(w, p));
+        s.vrij.forEach(w -> D2fStoet.volg(p, w));
         if (!D2fStoet.levend(s.plankmika, p)) {
             BlockPos midden = blok(p, SpVerhaal.BIKINIBODEM, D2fScenes.ANKER_PODIUM);
             if (midden != null) {

@@ -83,8 +83,8 @@ final class D2fEmmers {
             }
             if (!D2fStoet.levend(s.emmers[i], p)) {
                 BlockPos b = Plekken.wereld(g, SpVerhaal.BIKINIBODEM, marker(i));
-                if (b == null) {
-                    continue;
+                if (b == null || b.distSqr(p.blockPosition()) > 128 * 128) {
+                    continue;                                                // (made when the player comes nearer: its chunk is loaded then)
                 }
                 SponsguhWezen w = D2fStoet.maak(p, E2SponsguhFeature.BIKINIBODEM_GUH.get(), Vec3.atBottomCenterOf(b), (i * 67) % 360 - 180);
                 if (w != null) {

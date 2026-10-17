@@ -137,25 +137,6 @@ final class D2fStoet {
         ruimOp(p.getUUID());
     }
 
-    /** Only the guhs of the bucket game go (the step moved on, the finale scene takes over). */
-    static void ruimEmmersOp(ServerPlayer p) {
-        Sessie s = als(p);
-        if (s == null) {
-            return;
-        }
-        for (int i = 0; i < s.emmers.length; i++) {
-            weg(s.emmers[i]);
-            s.emmers[i] = null;
-        }
-        s.vrij.forEach(D2fStoet::weg);
-        s.vrij.clear();
-    }
-
-    /** (tests, dev) does this player have entities of the finale right now? */
-    static boolean heeftIets(ServerPlayer p) {
-        return SESSIES.containsKey(p.getUUID());
-    }
-
     // =====================================================================================================================
     // Sponsguh and Patguh with you
     // =====================================================================================================================
