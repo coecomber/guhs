@@ -159,6 +159,15 @@ public class BioKompasGameTests {
         if (json.has("biomes")) {
             json.getAsJsonArray("biomes").forEach(b -> uit.add(b.getAsJsonObject().get("biome").getAsString()));
         }
+        // einde2: the Guheinde's own source guhs:guheinde_biomes (the main island, then the common and the rare outer biomes)
+        if (json.has("midden")) {
+            uit.add(json.get("midden").getAsString());
+        }
+        for (String veld : new String[]{"gewoon", "zeldzaam"}) {
+            if (json.has(veld)) {
+                json.getAsJsonArray(veld).forEach(b -> uit.add(b.getAsString()));
+            }
+        }
         return uit;
     }
 

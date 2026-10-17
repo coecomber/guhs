@@ -277,7 +277,9 @@ public class GuhpolderGameTests {
             helper.assertTrue(!Pinguh.decide(g, true), "only decided once");
             g.discard();
         }
-        helper.assertTrue(pinguhs >= n * 0.3 && pinguhs <= n * 0.7, "about half of them: " + pinguhs + " of " + n);
+        // (1.3.1: KANS is a third, was half; +-0.15 is about 3.5 standard deviations at n = 120)
+        helper.assertTrue(pinguhs >= n * (Pinguh.KANS - 0.15) && pinguhs <= n * (Pinguh.KANS + 0.15),
+                "about a third of them: " + pinguhs + " of " + n);
         GuhEntity buiten = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 2, 3));
         buiten.getPersistentData().remove(Pinguh.CHECKED);
         buiten.setVariant(GuhVariant.NORMAL);

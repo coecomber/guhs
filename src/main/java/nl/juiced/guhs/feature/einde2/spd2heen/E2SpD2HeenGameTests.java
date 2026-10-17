@@ -102,7 +102,8 @@ public class E2SpD2HeenGameTests {
             String[] m = D2Hints.MARKERS.get(s);
             helper.assertTrue(m != null && Plekken.van(m[0]).containsKey(m[1]) && Plekken.van(m[0]).containsKey(m[2]), "step " + s + ": its hint's markers");
         }
-        helper.assertTrue(!SpStappen.isEcht(k, SpVerhaal.K_SNOR), "step 5 is not this slice's");
+        // step 5 (SNOR) is d2_weg's: merged into the same tree, it is real too (no stand-in), but this slice gives it no hint markers
+        helper.assertTrue(SpStappen.isEcht(k, SpVerhaal.K_SNOR) && !D2Hints.MARKERS.containsKey(SpVerhaal.K_SNOR), "step 5 is d2_weg's, not this slice's");
         // every marker this slice names in its builds and scenes
         for (String id : List.of("d2h_knabbel", "d2h_zaal", "d2h_manager_camera", "d2h_ijs_camera", "d2h_plein_camera", "d2h_mobiel_camera",
                 "ijs_speler", "ijs_sponsguh", "ijs_patguh", "ijsverkoper", "knipoog_ijs_coupe", "knipoog_ijs_balto", "knipoog_ijs_kistje",

@@ -195,6 +195,10 @@ public class PiepMenuGameTests {
         List<PiepMaatje> maatjes = List.of(muis, s, schilly);
         for (PiepMaatje m : maatjes) {
             m.dier().tame(p);
+        }
+        // (einde2 1.5.0: no hide-and-seek here - a random Verstoppertje walk of 3-5 blocks made "follows again" flaky)
+        muis.zet(PiepInstelling.VERSTOPPEN, false);
+        for (PiepMaatje m : maatjes) {
             helper.assertTrue(PiepMenu.doe(p, m, PiepMenu.Actie.WISSEL, PiepInstelling.RONDVADSEN.ordinal(), ""), "the owner switches it");
             helper.assertTrue(!m.aan(PiepInstelling.RONDVADSEN) && m.dier().isOrderedToSit() && m.dier().isInSittingPose(), "rondvadsen uit: it sits");
         }
@@ -213,7 +217,8 @@ public class PiepMenuGameTests {
             }
             double muisVoor = muis.distanceTo(p), schillyVoor = s.distanceTo(p);
             helper.succeedWhen(() -> {
-                helper.assertTrue(muis.distanceTo(p) < muisVoor - 2, "the muisje follows again: " + muis.distanceTo(p));
+                helper.assertTrue(muis.distanceTo(p) < muisVoor - 2, "the muisje follows again: " + muis.distanceTo(p)
+                        + " (hidden " + muis.isVerstopt() + ")");
                 helper.assertTrue(s.distanceTo(p) < schillyVoor - 2, "Poepschilly follows again: " + s.distanceTo(p));
                 for (PiepMaatje m : maatjes) {
                     m.dier().discard();

@@ -59,7 +59,7 @@ import nl.juiced.guhs.world.ModDimensions;
  * kern, dock and village): the seams between them, which no branch could test because none held the others (batch
  * "verhalenpadsamen").
  * <ul>
- *     <li>the Guhpad's registry finds the REAL Verhaallijn {@code snuffeleiland} (no stand-in): seven big stories;</li>
+ *     <li>the Guhpad's registry finds the REAL Verhaallijn {@code snuffeleiland} (no stand-in): seven big stories (plus the Guheinde's);</li>
  *     <li>the lock on the Knabbelring takes a player who really finished the first series of the Snuffeleiland
  *     ({@code Snuffel.rondAf}, the first and only sniff rank of this update), and not a player one step before it;</li>
  *     <li>"Mijn verhaal" points to a steigerhuisje for a player who misses that story, also when a later story stands
@@ -118,15 +118,19 @@ public class VerhalenpadSamenGameTests {
         Ohana.zet(p, Ohana.KLAAR);
     }
 
-    /** The Guhpad finds the Snuffeleiland by its real questline: seven big stories, five of them in the Guhmensie. */
+    /** The Guhpad finds the Snuffeleiland by its real questline: seven big stories (plus the Guheinde's), five of them in the Guhmensie. */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void verhalenpadsamenRegisterVindtSnuffeleiland(GameTestHelper helper) {
         Verhaallijn lijn = Verhaallijnen.van(GroteVerhalen.SNUFFELEILAND);
         helper.assertTrue(lijn != null && lijn == SnuffelFeature.LIJN && GroteVerhalen.SNUFFELEILAND.equals(lijn.groep()),
                 "the Verhaallijn snuffeleiland of the kern is the one the Guhpad looks up");
         helper.assertTrue(GroteVerhalen.SNUFFEL.bestaat().getAsBoolean() && GroteVerhalen.SNUFFEL.isEr(), "the story is there by itself, without a stand-in");
-        helper.assertTrue(GroteVerhalen.totaal() == 7 && ids(GroteVerhalen.alle()).equals(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland",
-                "knabbelring", "guhrio")), "seven big stories: " + ids(GroteVerhalen.alle()));
+        // (einde2: the Guheinde's Guhvatar and Sponsguh stories come after the seven)
+        List<String> einde = java.util.stream.Stream.of("guhvatar", "sponsguh").filter(id -> GroteVerhalen.van(id) != null).toList();
+        List<String> alle = new java.util.ArrayList<>(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland", "knabbelring", "guhrio"));
+        alle.addAll(einde);
+        helper.assertTrue(GroteVerhalen.totaal() == 7 + einde.size() && ids(GroteVerhalen.alle()).equals(alle),
+                (7 + einde.size()) + " big stories: " + ids(GroteVerhalen.alle()));
         helper.assertTrue(ids(GroteVerhalen.van(Wereld.GUHMENSIE)).equals(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland")),
                 "five of them in the Guhmensie");
         helper.assertTrue(GroteVerhalen.vanLijn(lijn.id()) == GroteVerhalen.SNUFFEL && GroteVerhalen.wereldVan(lijn.id()) == Wereld.GUHMENSIE,
@@ -148,8 +152,8 @@ public class VerhalenpadSamenGameTests {
         ServerPlayer p = speler(helper);
         helper.assertTrue(VerhalenVoortgang.alle(p).stream().anyMatch(v -> v.id().equals(lijn.id())), "the Guhdex has the page snuffeleiland");
         GuhpadPayloads.Stand stand = GuhpadPayloads.stand(p);
-        helper.assertTrue(stand.totaal() == 7 && stand.gevolgd() == 0 && stand.isGroot(lijn.id()) && stand.verhalen(Wereld.GUHMENSIE).size() == 5,
-                "what the client is told: 0 of 7, five stories in the Guhmensie");
+        helper.assertTrue(stand.totaal() == GroteVerhalen.totaal() && stand.gevolgd() == 0 && stand.isGroot(lijn.id()) && stand.verhalen(Wereld.GUHMENSIE).size() == 5,
+                "what the client is told: 0 of " + GroteVerhalen.totaal() + ", five stories in the Guhmensie");
         weg(helper, p);
         helper.succeed();
     }
@@ -295,7 +299,8 @@ public class VerhalenpadSamenGameTests {
                     && bron("ftbquests/lang/nl_nl/guhs_pad_barbecuether.json5").contains("\"Het Snuffeleiland\""), "the lock quest of the Guhbarbecuether asks Het Snuffeleiland");
             Matcher teller = Pattern.compile("stat: \"guhs:" + GuhpadFeature.STATISTIEK + "\",\\s*value: (\\d+)|value: (\\d+),\\s*stat: \"guhs:" + GuhpadFeature.STATISTIEK + "\"")
                     .matcher(bron("ftbquests/chapters/guhs_pad_echt.json5"));
-            helper.assertTrue(teller.find() && "7".equals(teller.group(1) != null ? teller.group(1) : teller.group(2)), "the counter of Het echte Guheinde counts to 7");
+            helper.assertTrue(teller.find() && String.valueOf(GroteVerhalen.totaal()).equals(teller.group(1) != null ? teller.group(1) : teller.group(2)),
+                    "the counter of Het echte Guheinde counts to " + GroteVerhalen.totaal());
         } catch (IOException e) {
             helper.fail("io: " + e);
         }
