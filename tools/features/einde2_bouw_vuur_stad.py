@@ -864,11 +864,12 @@ def vijver(b):
     b.zone("paleisvijver", cx - 5, F - 1, cz - 6, cx + 5, V + 2, cz + 6, wie="de vijver van de schildpad-eendguhs")
     for k, (x, z) in enumerate(((cx - 1, cz - 2), (cx + 1, cz), (cx - 2, cz + 2), (cx + 2, cz + 3)), 1):
         b.wezen(f"eendguh_{k}", x, V, z, "guhs:schildpad_eendguh", yaw=90.0 * k, honk=6)
-    # the feeding spot with its basket, the bench, the sign
-    b.set(cx - 6, V, cz, "barrel", {"facing": "up", "open": "true"})
-    b.prop("brood", cx - 6, V, cz, wie="de broodmand bij de vijver")
-    b.set(cx - 7, V, cz + 2, "guhs:guh_bank", {"facing": "east"})
-    b.sign(cx - 6, V, cz - 2, "east", ["Eendguhs voeren", "Alleen brood,", "geen vuurvlokken", "njeg"], wall=False)
+    # the feeding spot with its basket, the bench, the sign (fix3-h4: on the open south rim of the pond, seen from the street
+    # south of the garden; it stood at cx - 6, inside the palace wall, where nobody could find it)
+    b.set(cx, V, z1 - 1, "barrel", {"facing": "up", "open": "true"})
+    b.prop("brood", cx, V, z1 - 1, wie="de broodmand aan de zuidkant van de vijver")
+    b.set(cx + 2, V, z1 - 1, "guhs:guh_bank", {"facing": "north"})
+    b.sign(cx - 2, V, z1 - 1, "south", ["Eendguhs voeren", "Alleen brood,", "geen vuurvlokken", "njeg"], wall=False)
     bloesemboom(b, x1 - 2, V, z0 + 3)
     # stone lanterns
     for x, z in ((x0 + 1, z0 + 1), (x0 + 1, z1 - 1), (x1 - 1, z1 - 1)):

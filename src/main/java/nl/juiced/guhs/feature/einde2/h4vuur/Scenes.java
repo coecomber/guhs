@@ -31,6 +31,12 @@ public final class Scenes {
 
     public static Cutscene AANKOMST, SCHOOL, ZWARTE_ZON, GEVANGENIS, KAMP, KOKEND_ROTSBLOK, DRAKEN, TONEEL, TENT, TOP, LEEUWSCHILDPAD,
             AGNI_KAI, OMSLAG, TREK_WEG, KRONING, AFTITELING, KNIPOOG_STITCH, KNIPOOG_SJOKKEL;
+    /**
+     * fix3-h4 (playtest 2, items 1, 11-14): the story scenes that tell WHY before a task: the team's plan on arrival, the pond
+     * before the turtle-ducks, who sits in Het Kokend Rotsblok, the Zonnekrijgers before the Drakendans, the White Lotus tile
+     * after the play, and the morning of the comet before the fleet.
+     */
+    public static Cutscene PLAN, VIJVER, ROTSBLOK_PLAN, ZONNEKRIJGERS, LOTUS_TEGEL, VLOOT_PLAN;
     /** The marker of the Geestenwereld the Top scene is anchored to (top_landing once geest_bouw has it). */
     public static String TOP_ANKER = "fang_landing";
     /** Scene name -> {least, most} seconds it may last (the contract's bounds; checked by the game test). */
@@ -43,7 +49,11 @@ public final class Scenes {
             java.util.Map.entry("leeuwschildpad", new int[] {45, 60}), java.util.Map.entry("agni_kai", new int[] {45, 75}),
             java.util.Map.entry("omslag", new int[] {30, 45}), java.util.Map.entry("trek_weg", new int[] {30, 45}),
             java.util.Map.entry("kroning", new int[] {45, 90}), java.util.Map.entry("aftiteling", new int[] {60, 90}),
-            java.util.Map.entry("knipoog_stitch", new int[] {5, 10}), java.util.Map.entry("knipoog_sjokkel_finish", new int[] {5, 10}));
+            java.util.Map.entry("knipoog_stitch", new int[] {5, 10}), java.util.Map.entry("knipoog_sjokkel_finish", new int[] {5, 10}),
+            // fix3-h4: the why-scenes (normal scenes, 15-30 s; the Rotsblok plan may run to 32 s: it introduces Suki-guh)
+            java.util.Map.entry("plan", new int[] {15, 30}), java.util.Map.entry("vijver", new int[] {12, 25}),
+            java.util.Map.entry("rotsblok_plan", new int[] {20, 33}), java.util.Map.entry("zonnekrijgers", new int[] {20, 30}),
+            java.util.Map.entry("lotus_tegel", new int[] {20, 30}), java.util.Map.entry("vloot_plan", new int[] {20, 30}));
 
     private Scenes() {
     }
@@ -69,6 +79,12 @@ public final class Scenes {
         AFTITELING = aftiteling();
         KNIPOOG_STITCH = knipoogStitch();
         KNIPOOG_SJOKKEL = knipoogSjokkel();
+        PLAN = plan();
+        VIJVER = vijver();
+        ROTSBLOK_PLAN = rotsblokPlan();
+        ZONNEKRIJGERS = zonnekrijgers();
+        LOTUS_TEGEL = lotusTegel();
+        VLOOT_PLAN = vlootPlan();
     }
 
     // =====================================================================================================================
@@ -320,8 +336,7 @@ public final class Scenes {
             }
             int n = stappen.size();
             midden = new Vec3(x / n - ap.getX() + 0.5, y / n - ap.getY(), z / n - ap.getZ() + 0.5);
-            BlockPos l = Plekken.plek(S, "drakendans_speler").punten().get(Plekken.plek(S, "drakendans_speler").punten().size() - 1);
-            laatste = new Vec3(l.getX() - ap.getX() + 0.5, l.getY() - ap.getY(), l.getZ() - ap.getZ() + 0.5);
+            laatste = laatsteStap(ap);
         }
         Cutscene.Builder b = vuur("draken", 1000).verbergEcht(26)
                 .speler(laatste.add(-0.8, 0, 0), 0)
@@ -358,6 +373,254 @@ public final class Scenes {
                 .zeg(736, "zuka", "dank", 80)
                 .cameraKnip(820, midden.add(0, 12, 14), midden.add(0, 0, 0)).zeg(822, "", "vuur_van_jou", 70)
                 .zwart(965, 1000);
+        return b.registreer();
+    }
+
+    /**
+     * Where the two dancers stand after the last step, seen from the anchor: between the last tile of each route (fix3-h4: the
+     * routes used to end on ONE shared tile; now they end a couple of blocks apart).
+     */
+    private static Vec3 laatsteStap(BlockPos ap) {
+        double x = 0, y = 0, z = 0;
+        int n = 0;
+        for (String route : new String[] {"drakendans_speler", "drakendans_zuka"}) {
+            Plekken.Plek p = Plekken.plek(S, route);
+            if (p != null && !p.punten().isEmpty()) {
+                BlockPos l = p.punten().get(p.punten().size() - 1);
+                x += l.getX();
+                y += l.getY();
+                z += l.getZ();
+                n++;
+            }
+        }
+        return n == 0 ? v(0.5, 0, 0.5) : new Vec3(x / n - ap.getX() + 0.5, y / n - ap.getY(), z / n - ap.getZ() + 0.5);
+    }
+
+    /**
+     * A camera spot in front of a speaker who faces {@code naar}: {@code afstand} blocks towards it, {@code opzij} to the side,
+     * {@code hoog} up (so a close shot shows the face, not the back of the head).
+     */
+    private static Vec3 voor(Vec3 wie, Vec3 naar, double afstand, double opzij, double hoog) {
+        Vec3 d = new Vec3(naar.x - wie.x, 0, naar.z - wie.z);
+        d = d.lengthSqr() < 1e-6 ? v(0, 0, 1) : d.normalize();
+        return wie.add(d.scale(afstand)).add(-d.z * opzij, hoog, d.x * opzij);
+    }
+
+    /** The middle of the dance terrace (the average of every tile of both routes), seen from the anchor. */
+    private static Vec3 terrasMidden(String anker) {
+        BlockPos ap = pos(S, anker);
+        double x = 0, y = 0, z = 0;
+        int n = 0;
+        for (String route : new String[] {"drakendans_speler", "drakendans_zuka"}) {
+            Plekken.Plek p = Plekken.plek(S, route);
+            if (p != null) {
+                for (BlockPos q : p.punten()) {
+                    x += q.getX();
+                    y += q.getY();
+                    z += q.getZ();
+                    n++;
+                }
+            }
+        }
+        return ap == null || n == 0 ? v(0.5, 0, -6.5) : new Vec3(x / n - ap.getX() + 0.5, y / n - ap.getY(), z / n - ap.getZ() + 0.5);
+    }
+
+    // =====================================================================================================================
+    // fix3-h4: the why-scenes (playtest 2: "waarom doen we dit?")
+    // =====================================================================================================================
+
+    /**
+     * Right after the arrival, on the landing field: the team in a circle tells why we are here (Azula thinks the Guhvatar is
+     * gone; the comet; the Day of Black Sun) and why in disguise to a school (anchor aankomst_speler). 29 s.
+     */
+    private static Cutscene plan() {
+        Vec3 m = v(0.5, 0, 0.5);
+        Vec3 aang = v(-1.0, 0, -1.3), sokka = v(2.4, 0, -0.4), katara = v(-1.6, 0, 1.8), toph = v(1.9, 0, 2.3);
+        Cutscene.Builder b = vuur("plan", 580).verbergEcht(14)
+                .speler(m, Cutscene.yawVan(v(0.2, 0, 1)))
+                .npc("aang", Kind.AANG_GUH, aang, Cutscene.yawVan(m.subtract(aang)))
+                .npc("sokka", Kind.SOKKA_GUH, sokka, Cutscene.yawVan(m.subtract(sokka)))
+                .npc("katara", Kind.KATARA_GUH, katara, Cutscene.yawVan(m.subtract(katara)))
+                .npc("toph", Kind.TOPH_GUH, toph, Cutscene.yawVan(m.subtract(toph)))
+                .acteur("appa", E2AppaFeature.APPA_GUH, v(-5.0, 0, 4.5), 180).acteur("momo", E2AppaFeature.MOMO_GUH, v(0.4, 0, 1.6), 0);
+        b.zwart(0, 14)
+                .camera(0, v(5.5, 4.0, 6.5), v(0.5, 0.8, 0.5)).camera(110, v(4.0, 2.6, 5.0), v(0.5, 1.0, 0.5))
+                .animatie(Cutscene.SPELER, 4, "buk").animatie("momo", 30, "spring")
+                .zeg(16, "", "kring", 60)
+                .cameraKnipVolgt(80, voor(katara, m, 2.2, 0.8, 1.6), "katara").zeg(82, "katara", "geheim", 80).animatie("katara", 82, "praat")
+                .cameraKnipVolgt(166, voor(sokka, m, 2.0, 0.8, 1.6), "sokka").zeg(168, "sokka", "komeet", 75).animatie("sokka", 168, "plan")
+                .deeltjes(200, ParticleTypes.FLAME, v(10, 30, -40), 40, 8).zeg(246, "sokka", "zwarte_zon", 75)
+                .cameraKnipVolgt(325, voor(toph, m, 2.0, -0.8, 1.4), "toph").zeg(327, "toph", "tot_dan", 60).animatie("toph", 327, "stamp")
+                // the camera turns to the city beyond the crater gate: the school stands in front of the palace
+                .cameraKnip(390, v(0.5, 2.6, 4.0), r("aankomst_speler", "kraterpoort", 0, 6, 0))
+                .zeg(392, "sokka", "school", 80).animatie("sokka", 392, "praat")
+                .cameraKnipVolgt(476, voor(aang, m, 2.0, -0.8, 1.5), "aang").zeg(478, "aang", "kuzon", 80).animatie("aang", 478, "lach")
+                .animatie(Cutscene.SPELER, 500, "sta").zwart(565, 580);
+        return b.registreer();
+    }
+
+    /**
+     * After the dance party, in the palace garden: the team hides by the pond the night before the Black Sun, Aang-guh tells why
+     * you feed turtle-ducks, Sokka-guh names the beach; the camera ends on the bread basket (anchor brood). 18.5 s.
+     */
+    private static Cutscene vijver() {
+        Vec3 mand = v(0.5, 0, 0.5), vijver = v(0.5, 0, -5.5);
+        Vec3 jij = v(0.5, 0, 1.6), aang = v(-1.6, 0, 1.4), katara = v(2.6, 0, 1.2), sokka = v(-3.2, 0, 0.8), toph = v(3.8, 0, 1.6);
+        // (only the real entities right at the basket are hidden: the turtle-ducks in the pond stay in the picture)
+        Cutscene.Builder b = vuur("vijver", 370).verbergEcht(2.5)
+                .speler(jij, 180)
+                .npc("aang", Kind.AANG_GUH, aang, Cutscene.yawVan(vijver.subtract(aang)))
+                .npc("katara", Kind.KATARA_GUH, katara, Cutscene.yawVan(vijver.subtract(katara)))
+                .npc("sokka", Kind.SOKKA_GUH, sokka, Cutscene.yawVan(vijver.subtract(sokka)))
+                .npc("toph", Kind.TOPH_GUH, toph, Cutscene.yawVan(mand.subtract(toph)));
+        b.zwart(0, 12)
+                .camera(0, v(5.0, 4.5, 6.0), vijver.add(0, 0.5, 0)).camera(80, v(3.5, 3.0, 4.5), vijver.add(0, 0.5, 2))
+                .deeltjes(10, ParticleTypes.SPLASH, vijver.add(0, 1.0, 0), 20, 2.0)
+                .zeg(14, "", "verstopt", 65)
+                .cameraKnipVolgt(80, voor(aang, vijver, 2.2, 0.6, 1.5), "aang").zeg(82, "aang", "eendjes", 70).animatie("aang", 82, "lach")
+                .cameraKnipVolgt(154, voor(katara, vijver, 2.2, -0.6, 1.5), "katara").zeg(156, "katara", "morgen", 65).animatie("katara", 156, "praat")
+                .cameraKnipVolgt(223, voor(sokka, vijver, 2.2, 0.6, 1.6), "sokka").zeg(225, "sokka", "strand", 65).animatie("sokka", 225, "plan")
+                // the basket, close: this is what you click
+                .cameraKnip(292, v(2.2, 1.7, 2.6), mand.add(0, 0.6, 0))
+                .deeltjes(294, ParticleTypes.HAPPY_VILLAGER, mand.add(0, 1.2, 0), 12, 0.4).deeltjes(330, ParticleTypes.HAPPY_VILLAGER, mand.add(0, 1.2, 0), 12, 0.4)
+                .zeg(296, "toph", "mand", 60).animatie("toph", 296, "wijs")
+                .kijk(Cutscene.SPELER, 292, mand.add(0, 0.6, 0));
+        return b.registreer();
+    }
+
+    /**
+     * In the camp after the making-up: who sits in Het Kokend Rotsblok (Suki-guh and the guhs of the fleet, caught covering
+     * our retreat on the Day of Black Sun), why it matters, and the plan; a look at the prison across the lake (anchor
+     * appa_kamp). 32.5 s: the first time Suki-guh is named, so she gets a line of her own.
+     */
+    private static Cutscene rotsblokPlan() {
+        String a = "appa_kamp";
+        Vec3 vuur = r(a, "team_zuka", -0.5, 0, -2.5);
+        Vec3 plein = r(a, "gevangenis_plein", 0, 0, 0);
+        Cutscene.Builder b = vuur("rotsblok_plan", 650).verbergEcht(16)
+                .speler(r(a, "team_zuka", -2.0, 0, 1.0), 200)
+                .npc("aang", Kind.AANG_GUH, r(a, "team_aang", 0, 0, 0), 0).npc("katara", Kind.KATARA_GUH, r(a, "team_katara", 0, 0, 0), 60)
+                .npc("sokka", Kind.SOKKA_GUH, r(a, "team_sokka", 0, 0, 0), 90).npc("toph", Kind.TOPH_GUH, r(a, "team_toph", 0, 0, 0), -60)
+                .npc("zuka", Kind.ZUKA_PRINS, r(a, "team_zuka", 0, 0, 0), 180)
+                .acteur("appa", E2AppaFeature.APPA_GUH, v(0.5, 0, 0.5), 90).acteur("momo", E2AppaFeature.MOMO_GUH, r(a, "team_momo", 0, 0, 0), 0);
+        b.zwart(0, 14)
+                .camera(0, vuur.add(-5, 4, 6), vuur).camera(70, vuur.add(-3.5, 2.5, 4.5), vuur)
+                .deeltjes(8, ParticleTypes.CAMPFIRE_COSY_SMOKE, vuur, 6, 0.3).deeltjes(8, ParticleTypes.FLAME, vuur, 10, 0.3)
+                .zeg(16, "", "stil", 60)
+                .cameraKnipVolgt(80, voor(r(a, "team_sokka", 0, 0, 0), vuur, 2.2, 0.7, 1.6), "sokka").zeg(82, "sokka", "suki", 85).animatie("sokka", 82, "praat")
+                .cameraKnipVolgt(170, voor(r(a, "team_katara", 0, 0, 0), vuur, 2.2, -0.7, 1.6), "katara").zeg(172, "katara", "wie", 65).animatie("katara", 172, "praat")
+                .cameraKnipVolgt(240, voor(r(a, "team_toph", 0, 0, 0), vuur, 2.2, 0.7, 1.4), "toph").zeg(242, "toph", "hart", 55).animatie("toph", 242, "lach")
+                .cameraKnipVolgt(300, voor(r(a, "team_zuka", 0, 0, 0), vuur, 2.0, 0.8, 1.6), "zuka").zeg(302, "zuka", "rotsblok", 85).animatie("zuka", 302, "praat")
+                // across the boiling lake: the prison on its rock, the gondola cable from the crater rim
+                .cameraKnip(390, r(a, "gondel_boven", -3, 7, 5), plein.add(0, 3, 0))
+                .deeltjes(392, ParticleTypes.CLOUD, r(a, "gondel_onder", 6, -6, 0), 30, 4)
+                .zeg(392, "zuka", "gondel", 80)
+                .cameraKnipVolgt(476, voor(r(a, "team_sokka", 0, 0, 0), vuur, 2.2, -0.7, 1.6), "sokka").zeg(478, "sokka", "plan", 85).animatie("sokka", 478, "plan")
+                .cameraKnipVolgt(566, voor(r(a, "team_aang", 0, 0, 0), vuur, 2.2, 0.7, 1.6), "aang").zeg(568, "aang", "mee", 60).animatie("aang", 568, "lach")
+                .zwart(635, 650);
+        return b.registreer();
+    }
+
+    /**
+     * On the terrace at the top of the long stair, before the Drakendans: Zuka's fire has gone weak, the head of the Zonnekrijgers
+     * tells what the dance is (an old fire test, before the masters), the two dragons wake in their caves (anchor trap_boven).
+     * 27.5 s; the dance starts right after it.
+     */
+    private static Cutscene zonnekrijgers() {
+        String a = "trap_boven";
+        Vec3 rood = r(a, "draak_rood", 0, 0, 0), blauw = r(a, "draak_blauw", 0, 0, 0);
+        Vec3 midden = terrasMidden(a);
+        Vec3 jij = v(-0.3, 0, -0.5), zuka = v(1.3, 0, -0.5), hoofd = midden.add(0, 0, 1.5);
+        Cutscene.Builder b = vuur("zonnekrijgers", 550).verbergEcht(26)
+                .speler(jij, 180)
+                .npc("zuka", Kind.ZUKA_PRINS, zuka, 180)
+                .npc("zonnekrijger", Kind.ZONNEKRIJGER_GUH, hoofd, 0)
+                .acteur("rood", E2CastSchurkFeature.DRAAKGUH, rood, -90, t -> t.putInt("Soort", 0))
+                .acteur("blauw", E2CastSchurkFeature.DRAAKGUH, blauw, 90, t -> t.putInt("Soort", 1));
+        b.zwart(0, 14)
+                .animatie("rood", 0, "slaap").animatie("blauw", 0, "slaap")
+                .camera(0, midden.add(0, 10, 13), midden.add(0, 1, 0)).camera(120, midden.add(0, 5, 10), midden.add(0, 1, 0))
+                .zeg(16, "", "terras", 65)
+                .cameraKnipVolgt(84, zuka.add(1.8, 1.6, -2.5), "zuka").zeg(86, "zuka", "zwak", 80).animatie("zuka", 90, "vuur")
+                .deeltjes(100, ParticleTypes.SMOKE, zuka.add(0, 1.3, -0.8), 8, 0.1).deeltjes(102, ParticleTypes.SMALL_FLAME, zuka.add(0, 1.3, -0.8), 2, 0.05)
+                .geluid(100, () -> SoundEvents.FIRE_EXTINGUISH, 0.5f, 1.6f)
+                .cameraKnipVolgt(170, hoofd.add(-1.5, 1.6, 3.0), "zonnekrijger").zeg(172, "zonnekrijger", "brandstof", 85)
+                .animatie("zonnekrijger", 172, "zonnegroet")
+                .zeg(260, "zonnekrijger", "dans", 85)
+                .deeltjes(262, ParticleTypes.FLAME, midden.add(0, 0.3, 0), 60, 3.0)
+                // the masters wake in their caves
+                .cameraKnip(348, midden.add(-4, 3, 3), rood.add(0, 1.5, 0))
+                .animatie("rood", 348, "praat").animatie("blauw", 356, "praat")
+                .geluid(350, () -> SoundEvents.ENDER_DRAGON_GROWL, 0.3f, 1.3f).schud(350, 0.4f, 20)
+                .deeltjes(352, ParticleTypes.FLAME, rood.add(2, 1.5, 0), 30, 0.6).deeltjes(360, ParticleTypes.SOUL_FIRE_FLAME, blauw.add(-2, 1.5, 0), 30, 0.6)
+                .zeg(352, "", "meesters", 70)
+                .cameraKnipVolgt(424, zuka.add(-1.5, 1.6, -2.5), "zuka").zeg(426, "zuka", "als_niet", 40).animatie("zuka", 426, "zucht")
+                .cameraKnipVolgt(468, hoofd.add(1.5, 1.6, 3.0), "zonnekrijger").zeg(470, "zonnekrijger", "teleurgesteld", 70)
+                .animatie("zonnekrijger", 470, "zonnegroet");
+        return b.registreer();
+    }
+
+    /**
+     * After the Sintelstrand play: Piandao-guh, Zuka's old sword master, brings the White Lotus tile: Miroh broke out on the Day
+     * of Black Sun and waits in the east. Why the team goes to the Lotus camp (anchor publiek_speler). 27 s.
+     */
+    private static Cutscene lotusTegel() {
+        Vec3 zuka = v(3.5, 0, 0.5), piandaoDaar = v(4.2, -1, 2.6);
+        Cutscene.Builder b = vuur("lotus_tegel", 540).verbergEcht(18)
+                .speler(v(0.5, 0, 0.5), 0)
+                .npc("aang", Kind.AANG_GUH, v(-0.5, 0, 0.5), 0).npc("katara", Kind.KATARA_GUH, v(-1.5, 0, 0.5), 0)
+                .npc("sokka", Kind.SOKKA_GUH, v(1.5, 0, 0.5), 0).npc("toph", Kind.TOPH_GUH, v(2.5, 0, 0.5), 0)
+                .npc("zuka", Kind.ZUKA_TEAM, zuka, 0)
+                .npc("piandao", Kind.PIANDAO_GUH, v(11.5, -1, 2.6), -90);
+        b.zwart(0, 12)
+                .camera(0, v(4.0, 2.4, 7.0), v(2.5, 1.0, 1.0))
+                .loop("piandao", 14, 80, piandaoDaar)
+                .zeg(14, "", "na_afloop", 65)
+                .kijk("zuka", 80, piandaoDaar.add(0, 1.4, 0)).kijk("piandao", 82, zuka.add(0, 1.4, 0))
+                .cameraKnipVolgt(84, voor(piandaoDaar, zuka, 1.3, 1.3, 1.7), "piandao").zeg(86, "piandao", "prins", 55)
+                .cameraKnipVolgt(146, zuka.add(-1.2, 1.5, 2.6), "zuka").zeg(148, "zuka", "meester", 55).animatie("zuka", 148, "praat")
+                .cameraKnipVolgt(208, voor(piandaoDaar, zuka, 1.3, -1.3, 1.7), "piandao").zeg(210, "piandao", "oom", 75)
+                .zeg(290, "piandao", "tegel", 75)
+                .deeltjes(300, ParticleTypes.END_ROD, piandaoDaar.lerp(zuka, 0.5).add(0, 1.2, 0), 14, 0.2)
+                .geluid(300, () -> SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f, 1.2f)
+                .cameraKnipVolgt(370, zuka.add(-1.0, 1.5, 2.4), "zuka").zeg(372, "zuka", "bang", 50).animatie("zuka", 372, "zucht")
+                .kijk("katara", 424, zuka.add(0, 1.2, 0)).kijk("aang", 424, zuka.add(0, 1.2, 0))
+                .cameraKnip(426, v(-0.5, 1.6, 3.5), v(-1.5, 1.2, 0.5)).zeg(428, "katara", "ga", 45).animatie("katara", 428, "armen")
+                .cameraKnip(476, v(1.5, 2.2, 5.0), v(1.0, 1.0, 0.5)).zeg(478, "aang", "thee", 45).animatie("aang", 478, "lach")
+                .zwart(525, 540);
+        return b.registreer();
+    }
+
+    /**
+     * The morning of the comet, on the quay after the Leeuwschildpad-guh: why the fleet (Mikai burns every nibble field), why
+     * Zuka and Katara-guh go to the palace (Azula's coronation: the Agni Kai), who takes the ships, and you against Mikai
+     * (anchor leeuwschildpad_kade). 28 s.
+     */
+    private static Cutscene vlootPlan() {
+        Vec3 m = v(0.5, 0, 0.5);
+        Vec3 aang = v(-0.8, 0, 2.4), katara = v(-2.4, 0, 2.0), zuka = v(-3.3, 0, 3.3), sokka = v(1.9, 0, 2.3), suki = v(3.1, 0, 3.4),
+                toph = v(0.6, 0, 3.9);
+        Cutscene.Builder b = finale("vloot_plan", 560).verbergEcht(14)
+                .speler(m, 0)
+                .npc("aang", Kind.AANG_GUH, aang, Cutscene.yawVan(m.subtract(aang)))
+                .npc("katara", Kind.KATARA_GUH, katara, Cutscene.yawVan(m.subtract(katara)))
+                .npc("zuka", Kind.ZUKA_TEAM, zuka, Cutscene.yawVan(m.subtract(zuka)))
+                .npc("sokka", Kind.SOKKA_GUH, sokka, Cutscene.yawVan(m.subtract(sokka)))
+                .npc("suki", Kind.SUKI_GUH, suki, Cutscene.yawVan(m.subtract(suki)))
+                .npc("toph", Kind.TOPH_GUH, toph, Cutscene.yawVan(m.subtract(toph)));
+        b.zwart(0, 14)
+                .camera(0, v(0.5, 9, -6), v(-10, 25, -30)).camera(80, v(0.5, 3.5, -3.5), v(0.5, 1.0, 2.5))
+                .deeltjes(10, ParticleTypes.FLAME, v(-12, 30, -30), 80, 12).deeltjes(50, ParticleTypes.LARGE_SMOKE, v(-12, 28, -30), 40, 10)
+                .zeg(16, "", "ochtend", 60)
+                .cameraKnipVolgt(80, voor(sokka, m, 1.8, 0.9, 1.6), "sokka").zeg(82, "sokka", "vloot", 80).animatie("sokka", 82, "plan")
+                .cameraKnipVolgt(166, voor(zuka, m, 2.0, -0.9, 1.6), "zuka").zeg(168, "zuka", "azula", 80).animatie("zuka", 168, "praat")
+                .kijk("zuka", 250, katara.add(0, 1.2, 0)).kijk("katara", 250, zuka.add(0, 1.2, 0))
+                .cameraKnipVolgt(252, voor(katara, zuka, 1.0, 1.2, 1.5), "katara").zeg(254, "katara", "ja", 45).animatie("katara", 254, "armen")
+                .cameraKnipVolgt(302, voor(suki, m, 2.0, 0.9, 1.6), "suki").zeg(304, "suki", "schepen", 80).animatie("suki", 304, "waaier")
+                .cameraKnipVolgt(388, voor(toph, m, 2.0, -0.9, 1.4), "toph").zeg(390, "toph", "vliegen", 65).animatie("toph", 390, "stamp")
+                .cameraKnip(458, v(-1.2, 1.7, -1.6), aang.add(0, 1.2, 0)).zeg(460, "aang", "mikai", 70).animatie("aang", 460, "lach")
+                .kijk(Cutscene.SPELER, 456, aang.add(0, 1.4, 0))
+                .zwart(545, 560);
         return b.registreer();
     }
 

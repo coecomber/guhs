@@ -717,7 +717,9 @@ def terras(b):
     b.zone("drakendans", tx - 9, ty + 1, tz - 9, tx + 9, ty + 8, tz + 9, wie="het ronde terras van de Drakendans")
     west, oost = [], []
     for k in range(7):
-        a = math.radians(90 + 30 * k)               # from the south, by the west, to the north
+        # from the south, by the west, to the north; fix3-h4: 100..260 degrees, not 90..270: at 90 and 270 both halves met in
+        # ONE tile (the first and the last step of both dancers were the same block, which crashed the dance)
+        a = math.radians(100 + 160 * k / 6)
         dx, dz = 5 * math.cos(a), 5 * math.sin(a)
         west.append((int(round(tx + dx)), ty + 1, int(round(tz + dz))))
         oost.append((int(round(tx - dx)), ty + 1, int(round(tz + dz))))

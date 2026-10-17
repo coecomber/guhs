@@ -2,12 +2,20 @@ package nl.juiced.guhs.feature.einde2.h4vuur;
 
 import java.util.Map;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.einde2.Einde2Ids;
 import nl.juiced.guhs.feature.einde2.Plekken;
@@ -121,6 +129,83 @@ public class E2H4VuurGameTests {
         helper.succeed();
     }
 
+    /**
+     * fix3-h4 (the crash of playtest 2: "duplicate key BlockPos" in Drakendans.licht): the two tiles of the capital that hold the
+     * dance terrace are put down in the test world, the capital's origin points there, and the Drakendans starts for real: both
+     * routes are as long, never share a tile, the first step lights two different blocks, a danced tile moves the dance on, and a
+     * shared tile (an old build) lights one block instead of throwing.
+     */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
+    public static void einde2H4VuurDrakendans(GameTestHelper helper) {
+        // the tiles never share a block, and a shared one does not throw
+        Plekken.Plek jij = Plekken.plek(Plek.STRUCTUUR, "drakendans_speler"), zuka = Plekken.plek(Plek.STRUCTUUR, "drakendans_zuka"),
+                zone = Plekken.plek(Plek.STRUCTUUR, "drakendans");
+        helper.assertTrue(jij != null && zuka != null && zone != null && jij.punten().size() == 7 && zuka.punten().size() == 7, "two routes of seven steps");
+        for (int i = 0; i < jij.punten().size(); i++) {
+            for (BlockPos z : zuka.punten()) {
+                helper.assertTrue(!jij.punten().get(i).equals(z), "your step " + i + " is never one of Zuka's tiles: " + z);
+            }
+        }
+        Vec3 een = new Vec3(3.5, 70, 3.5);
+        helper.assertTrue(Drakendans.tegels(een, een).size() == 1 && Drakendans.tegels(een, een.add(2, 0, 0)).size() == 2, "a shared tile lights one block");
+        // the two tiles of the capital with the terrace, put down above the test's own spot
+        ServerLevel level = helper.getLevel();
+        BlockPos a = zone.pos(), b = zone.tot();
+        BlockPos at = helper.absolutePos(new BlockPos(0, 70, 0));
+        int i0 = a.getX() / 32, i1 = b.getX() / 32, j0 = a.getZ() / 32, j1 = b.getZ() / 32;
+        BlockPos oorsprong = at.offset(-i0 * 32, 0, -j0 * 32);
+        java.util.List<net.minecraft.world.level.ChunkPos> vast = new java.util.ArrayList<>();
+        for (int cx = at.getX() >> 4; cx <= (at.getX() + (i1 - i0 + 1) * 32) >> 4; cx++) {
+            for (int cz = at.getZ() >> 4; cz <= (at.getZ() + (j1 - j0 + 1) * 32) >> 4; cz++) {
+                if (level.setChunkForced(cx, cz, true)) {
+                    vast.add(new net.minecraft.world.level.ChunkPos(cx, cz));
+                }
+                level.getChunk(cx, cz);
+            }
+        }
+        for (int i = i0; i <= i1; i++) {
+            for (int j = j0; j <= j1; j++) {
+                StructureTemplate tegel = level.getStructureManager().get(Guhs.id(Plek.STRUCTUUR + "/stuk_" + i + "_" + j)).orElseThrow();
+                BlockPos hier = oorsprong.offset(i * 32, 0, j * 32);
+                tegel.placeInWorld(level, hier, hier, new StructurePlaceSettings().setKnownShape(true), level.getRandom(), 2);
+            }
+        }
+        ServerPlayer p = speler(helper);
+        var oud = Plek.testOorsprong;
+        Plek.testOorsprong = q -> q == p ? oorsprong : null;
+        try {
+            BlockPos eerste = oorsprong.offset(jij.punten().get(0));
+            helper.assertTrue(!level.getBlockState(eerste.below()).isAir(), "the terrace has a floor under the first step: " + level.getBlockState(eerste.below()));
+            p.teleportTo(eerste.getX() + 0.5, eerste.getY(), eerste.getZ() + 0.5);
+            helper.assertTrue(Plek.in(p, "drakendans"), "the player stands on the terrace");
+            E2VerhaalDev.zetTot(p, E2Verhaal.VUUR, E2H4Vuur.V_DRAKENDANS);
+            Drakendans.start(p);
+            helper.assertTrue(Drakendans.actief(p) && Drakendans.stap(p) == 0, "the dance starts (no duplicate key)");
+            Map<BlockPos, BlockState> licht = Oplichten.van(p);
+            helper.assertTrue(licht.size() == 2 && licht.containsValue(Blocks.SHROOMLIGHT.defaultBlockState())
+                    && licht.containsValue(Blocks.SEA_LANTERN.defaultBlockState()) && licht.containsKey(eerste.below()), "two tiles lit: " + licht);
+            // dancing every step (the player steps on each lit tile) ends the dance
+            for (int stap = 0; stap < 6; stap++) {
+                Drakendans.tick(p);
+                helper.assertTrue(Drakendans.stap(p) == stap + 1, "step " + stap + " danced: " + Drakendans.stap(p));
+                Vec3 volgende = Drakendans.doel(p);
+                p.teleportTo(volgende.x, volgende.y, volgende.z);
+                helper.assertTrue(Oplichten.van(p).size() == 2, "step " + (stap + 1) + ": two tiles lit");
+            }
+        } finally {
+            Plek.testOorsprong = oud;
+            E2H4Vuur.wisEigen(p);
+            for (String l : E2Verhaal.HOOFDSTUKKEN) {
+                E2VerhaalDev.wis(p, l);
+            }
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+            for (net.minecraft.world.level.ChunkPos c : vast) {
+                level.setChunkForced(c.x(), c.z(), false);
+            }
+        }
+        helper.succeed();
+    }
+
     /** Every scene of the slice is registered, lasts what the contract allows, and only the credits run on without clicks. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void einde2H4VuurScenes(GameTestHelper helper) {
@@ -138,7 +223,7 @@ public class E2H4VuurGameTests {
             }
         }
         long eigen = Cutscene.alle().stream().filter(s -> s.id().startsWith(Scenes.ID) && !s.id().startsWith(H4Hints.KIJK)).count();
-        helper.assertTrue(eigen == Scenes.LENGTES.size(), "18 scenes, not " + eigen);
+        helper.assertTrue(eigen == Scenes.LENGTES.size(), Scenes.LENGTES.size() + " scenes (18 + the six fix3-h4 why-scenes), not " + eigen);
         helper.succeed();
     }
 

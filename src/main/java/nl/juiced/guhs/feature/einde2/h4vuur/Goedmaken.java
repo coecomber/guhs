@@ -75,7 +75,8 @@ final class Goedmaken {
             E2H4Vuur.VUUR.vlag(p, E2H4Vuur.V_KATARA, true);
             E2H4Vuur.zeg(p, "goedmaken.katara.goed");
             if (E2H4Vuur.VUUR.vlag(p, E2H4Vuur.V_TOPH) && E2H4Vuur.VUUR.verder(p, E2H4Vuur.V_GOEDMAKEN)) {
-                E2H4Vuur.zeg(p, "goedmaken.sokka");
+                // (fix3-h4) the plan of Het Kokend Rotsblok is a scene in the camp now (who sits there and why), before the hint
+                Later.plan(p, 10, E2H4Vuur::rotsblokPlan);
             }
         } else {
             E2H4Vuur.zeg(p, "goedmaken.katara.fout" + optie);

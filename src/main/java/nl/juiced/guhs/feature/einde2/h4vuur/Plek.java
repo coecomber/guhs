@@ -36,9 +36,20 @@ public final class Plek {
         return GuheindeFeature.isGuheinde(p.level()) ? p.level() : null;
     }
 
+    /**
+     * (fix3-h4, game tests only) Where template 0,0,0 of the capital stands for a player outside the Guheinde: a test that put
+     * tiles of the capital down in its own world sets this; null in the game.
+     */
+    @Nullable
+    static volatile java.util.function.Function<ServerPlayer, BlockPos> testOorsprong;
+
     /** Template 0,0,0 of the capital in the player's Guheinde (null: not in the Guheinde, or not known yet). */
     @Nullable
     public static BlockPos oorsprong(ServerPlayer p) {
+        java.util.function.Function<ServerPlayer, BlockPos> test = testOorsprong;
+        if (test != null && test.apply(p) != null) {
+            return test.apply(p);
+        }
         ServerLevel g = guheinde(p);
         return g == null ? null : Plekken.oorsprong(g, STRUCTUUR);
     }

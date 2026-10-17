@@ -237,11 +237,14 @@ public final class E2H4Vuur {
                 }
             }
             case V_EENDJES -> {
-                if (Plek.bij(p, "brood", 6)) {
-                    BlockPos brood = Plek.blok(p, "brood");
-                    if (brood != null) {
-                        Schijn.deeltjes(p, ParticleTypes.HAPPY_VILLAGER, Vec3.atCenterOf(brood).add(0, 0.6, 0), 3, 0.3, 0.0);
-                    }
+                BlockPos brood = Plek.blok(p, "brood");
+                if (brood != null && (Plek.in(p, "paleistuin") || Plek.bij(p, "brood", 10)) && !Cutscenes.gezien(p, Scenes.VIJVER.id())) {
+                    // (fix3-h4) the team by the pond first: why feed turtle-ducks the night before the Black Sun
+                    speel(p, Scenes.VIJVER, "brood", q -> balk(q, "eendjes.klik"));
+                } else if (brood != null && Plek.bij(p, "brood", 16)) {
+                    // (fix3-h4: the basket stands on the open south rim now; marked further away and brighter)
+                    Schijn.deeltjes(p, ParticleTypes.HAPPY_VILLAGER, Vec3.atCenterOf(brood).add(0, 0.7, 0), 4, 0.3, 0.0);
+                    Schijn.deeltjes(p, ParticleTypes.END_ROD, Vec3.atCenterOf(brood).add(0, 1.6, 0), 2, 0.1, 0.02);
                 }
             }
             case V_ZWARTE_ZON -> {
@@ -260,10 +263,20 @@ public final class E2H4Vuur {
                     Goedmaken.praat(p);
                 }
             }
-            case V_ROTSBLOK -> Rotsblok.regie(p);
+            case V_ROTSBLOK -> {
+                if (!VUUR.vlag(p, V_BINNEN) && Plek.in(p, "kamp") && !Cutscenes.gezien(p, Scenes.ROTSBLOK_PLAN.id())) {
+                    rotsblokPlan(p);
+                } else {
+                    Rotsblok.regie(p);
+                }
+            }
             case V_DRAKENDANS -> {
                 if (Plek.in(p, "drakendans")) {
-                    Drakendans.start(p);
+                    if (Cutscenes.gezien(p, Scenes.ZONNEKRIJGERS.id())) {
+                        Drakendans.start(p);
+                    } else {
+                        speel(p, Scenes.ZONNEKRIJGERS, "trap_boven", Drakendans::start);    // (fix3-h4: what the dance is, and why)
+                    }
                 } else if (Plek.in(p, "zonnekrijger_ruine") && Plek.bij(p, "zonnekrijger", 8) && VUUR.eenmalig(p, "zonnekrijger")) {
                     zeg(p, "drakendans.zonnekrijger");
                 }
@@ -271,11 +284,11 @@ public final class E2H4Vuur {
             case V_TONEEL -> {
                 // (fix2-h4: walking into the theatre is enough; before, only within 5 blocks of one seat on the third row)
                 if (Plek.in(p, "theater") || Plek.bij(p, "publiek_speler", 6)) {
-                    speel(p, Scenes.TONEEL, "publiek_speler", q -> {
-                        if (VUUR.verder(q, V_TONEEL)) {
-                            zeg(q, "toneel.daarna");
-                        }
-                    });
+                    if (Cutscenes.gezien(p, Scenes.TONEEL.id())) {
+                        lotusTegel(p);                                     // (the play was seen, the tile not yet: logged out)
+                    } else {
+                        speel(p, Scenes.TONEEL, "publiek_speler", E2H4Vuur::lotusTegel);
+                    }
                 }
             }
             case V_TENT -> {
@@ -297,12 +310,48 @@ public final class E2H4Vuur {
         if (!Plek.in(p, "aankomst") && !Plek.in(p, "kamp") || E2Reizen.landtNog(p)) {
             return;                                                 // (merge_fix1: first Appa lands on his spot)
         }
-        Verteller.toon(p, KAART, q -> speel(q, Scenes.AANKOMST, "aankomst_speler", r -> {
-            if (VUUR.verder(r, V_AANKOMST)) {
-                E2Team.zetInStructuur(r, Plek.STRUCTUUR);
-                zeg(r, "aankomst.vermomd");
-            }
-        }));
+        Verteller.toon(p, KAART, q -> speel(q, Scenes.AANKOMST, "aankomst_speler", E2H4Vuur::plan));
+    }
+
+    /**
+     * (fix3-h4, playtest 2 item 11) Right after the arrival: the team's plan on the landing field, WHY we are in the Vuurnatie
+     * and why in disguise to a school. Then the step moves on (and the school's hint follows the scene).
+     */
+    private static void plan(ServerPlayer p) {
+        if (!speel(p, Scenes.PLAN, "aankomst_speler", E2H4Vuur::naPlan)) {
+            naPlan(p);
+        }
+    }
+
+    private static void naPlan(ServerPlayer p) {
+        if (VUUR.verder(p, V_AANKOMST)) {
+            E2Team.zetInStructuur(p, Plek.STRUCTUUR);
+            zeg(p, "aankomst.vermomd");
+        }
+    }
+
+    /**
+     * (fix3-h4, item 13) After the making-up, in the camp: who sits in Het Kokend Rotsblok and why we go (Suki-guh and the guhs
+     * of the fleet), and the plan. Then Sokka-guh names the way to the gondola.
+     */
+    static void rotsblokPlan(ServerPlayer p) {
+        if (VUUR.stap(p) != V_ROTSBLOK || VUUR.vlag(p, V_BINNEN) || Cutscenes.bezig(p)) {
+            return;
+        }
+        speel(p, Scenes.ROTSBLOK_PLAN, "appa_kamp", q -> zeg(q, "goedmaken.sokka"));
+    }
+
+    /** (fix3-h4, items 1 and 8-style) After the play: Piandao-guh brings the White Lotus tile; then the step moves on. */
+    private static void lotusTegel(ServerPlayer p) {
+        if (!speel(p, Scenes.LOTUS_TEGEL, "publiek_speler", E2H4Vuur::naToneel)) {
+            naToneel(p);
+        }
+    }
+
+    private static void naToneel(ServerPlayer p) {
+        if (VUUR.verder(p, V_TONEEL)) {
+            zeg(p, "toneel.daarna");
+        }
     }
 
     /** Step 4: the invasion. The scene plays from just inside the crater gate (the whole city within reach of the client). */
