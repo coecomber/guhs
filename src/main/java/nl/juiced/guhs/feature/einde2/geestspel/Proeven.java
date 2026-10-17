@@ -122,6 +122,7 @@ public final class Proeven {
         UUID u = p.getUUID();
         BUMI.remove(u);
         PAKGUH.remove(u);
+        PAKGUH_MIS.remove(u);
         if (DUELS.remove(u) != null) {
             ModNetworking.sendTo(p, new GeestSpelPayloads.Ritme(false));
         }
@@ -177,8 +178,12 @@ public final class Proeven {
                 GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.bumi.start");
             }
             case "pakguh" -> {
-                spiegels(p);
-                GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.pakguh.start");
+                // fix4-lotus: the first time, Pakguh shows how it works in a short scene (then the trial starts)
+                if (!nl.juiced.guhs.feature.verhaal.Cutscenes.gezien(p, GeestScenes.PAKGUH)) {
+                    GeestScenes.speel(p, GeestScenes.PAKGUH, Proeven::startPakguh);
+                } else {
+                    startPakguh(p);
+                }
             }
             case "piandao" -> startDuel(p);
             case "jeong_jeong" -> {
@@ -277,6 +282,7 @@ public final class Proeven {
         }
         if (PAKGUH.containsKey(p.getUUID())) {
             straal(p);
+            pakguhBalk(p);
         }
         Kaarsen k = KAARSEN.get(p.getUUID());
         if (k != null) {
@@ -353,6 +359,19 @@ public final class Proeven {
     private static final Map<UUID, int[]> PAKGUH = new ConcurrentHashMap<>();
     /** The four directions: south, west, north, east. */
     private static final int[][] DX = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+    /**
+     * fix4-lotus: how a player does in the mirrors: clicks that did not help (a mirror that stays wrong, a mirror the light
+     * has not reached, the dark necklace), until when the hint's light column stands, until when the action bar is busy.
+     */
+    static final class PakStand {
+        int mis;
+        long zuilTot;
+        long balkTot;
+    }
+
+    private static final Map<UUID, PakStand> PAKGUH_MIS = new ConcurrentHashMap<>();
+    /** After this many clicks that did not help Pakguh gives a hint; after every this many more he turns the mirror himself. */
+    static final int HINT_NA = 4, HELP_NA = 4;
 
     /** The mirrors of the build, then the necklace (the beam's last target). */
     static List<String> spiegelIds() {
@@ -386,34 +405,140 @@ public final class Proeven {
         });
     }
 
+    private static PakStand stand(ServerPlayer p) {
+        return PAKGUH_MIS.computeIfAbsent(p.getUUID(), u -> new PakStand());
+    }
+
+    /** After the intro (or the scene): the mirrors are set, the explanation stays readable in the chat. */
+    private static void startPakguh(ServerPlayer p) {
+        spiegels(p);
+        stand(p);
+        GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.pakguh.start");
+        GeestSpel.titel(p, "gui.guhs.einde2_geest_spel.proef.pakguh.titel", "gui.guhs.einde2_geest_spel.proef.pakguh.titel_sub");
+    }
+
+    /** How many mirrors in a row, from the first, point right (the light gets as far as mirror bereik + 1). Pure logic. */
+    static int bereik(int[] o, List<String> ids) {
+        int n = 0;
+        for (int i = 0; i < ids.size() && i < o.length; i++) {
+            if (o[i] != goed(i, ids)) {
+                break;
+            }
+            n++;
+        }
+        return n;
+    }
+
+    /** "the north" etc. (DX order: south, west, north, east). */
+    private static Component kant(int r) {
+        return Component.translatable("gui.guhs.einde2_geest_spel.proef.pakguh.r." + Math.floorMod(r, 4));
+    }
+
+    /** What mirror i must send the light to: "mirror n" or "the necklace". */
+    private static Component doel(int i, List<String> ids) {
+        return i + 1 < ids.size() ? Component.translatable("gui.guhs.einde2_geest_spel.proef.pakguh.doel_spiegel", i + 2)
+                : Component.translatable("gui.guhs.einde2_geest_spel.proef.pakguh.doel_ketting");
+    }
+
     private static void draaiSpiegel(ServerPlayer p, int n) {
         if (GeestLijnen.heeftTegel(p, "pakguh")) {
             GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.klaar");
             return;
         }
+        List<String> ids = spiegelIds();
         int[] o = spiegels(p);
-        if (n < 1 || n > o.length) {
+        if (n < 1 || n > o.length || o.length != ids.size()) {
+            return;
+        }
+        PakStand st = stand(p);
+        long nu = p.level().getGameTime();
+        int beurt = bereik(o, ids);
+        // fix4-lotus: a mirror that already passes the light on stays put (one click could break the whole chain before)
+        if (n - 1 < beurt) {
+            st.balkTot = nu + 60;
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.staat_goed", n);
+            GeestSpel.geluid(p, SoundEvents.AMETHYST_BLOCK_STEP, 0.6f, 1.4f);
+            return;
+        }
+        // ... and a mirror the light has not reached yet does not turn: first the glinting one
+        if (n - 1 > beurt) {
+            st.balkTot = nu + 60;
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.nog_niet", beurt + 1);
+            mis(p, o, ids);
             return;
         }
         o[n - 1] = (o[n - 1] + 1) % 4;
         GeestSpel.geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME, 1.0f, 0.8f + n * 0.1f);
-        int bereikt = straal(p);
+        int bereikt = bereik(o, ids);
+        straal(p);
+        st.balkTot = nu + 60;
         if (bereikt == o.length) {
-            GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.pakguh.bevroren");
-            GeestSpel.geluid(p, SoundEvents.GLASS_PLACE, 1.0f, 0.6f);
-            for (Vec3 v : GeestPlek.pad("ijs_stroom")) {
-                p.level().sendParticles(p, ParticleTypes.SNOWFLAKE, false, false, v.x, v.y + 0.6, v.z, 6, 0.4, 0.2, 0.4, 0.01);
-            }
-            for (String id : GeestPlek.reeks("ijs_platform_")) {
-                Vec3 v = GeestPlek.midden(id);
-                if (v != null) {
-                    p.level().sendParticles(p, ParticleTypes.SNOWFLAKE, false, false, v.x, v.y + 1, v.z, 20, 0.6, 0.3, 0.6, 0.02);
-                }
+            bevries(p);
+            return;
+        }
+        if (bereikt > beurt) {
+            st.mis = 0;
+            GeestSpel.geluid(p, SoundEvents.AMETHYST_BLOCK_RESONATE, 0.8f, 1.3f);
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.springt", doel(n - 1, ids), bereikt + 1);
+        } else {
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.wijst", n, kant(o[n - 1]), kant(goed(n - 1, ids)), doel(n - 1, ids));
+            mis(p, o, ids);
+        }
+    }
+
+    /** All mirrors right: the stream freezes. */
+    private static void bevries(ServerPlayer p) {
+        GeestSpel.verteller(p, "gui.guhs.einde2_geest_spel.proef.pakguh.bevroren");
+        GeestSpel.geluid(p, SoundEvents.GLASS_PLACE, 1.0f, 0.6f);
+        GeestSpel.titel(p, "gui.guhs.einde2_geest_spel.proef.pakguh.bevroren_titel", "gui.guhs.einde2_geest_spel.proef.pakguh.bevroren_sub");
+        for (Vec3 v : GeestPlek.pad("ijs_stroom")) {
+            p.level().sendParticles(p, ParticleTypes.SNOWFLAKE, false, false, v.x, v.y + 0.6, v.z, 6, 0.4, 0.2, 0.4, 0.01);
+        }
+        for (String id : GeestPlek.reeks("ijs_platform_")) {
+            Vec3 v = GeestPlek.midden(id);
+            if (v != null) {
+                p.level().sendParticles(p, ParticleTypes.SNOWFLAKE, false, false, v.x, v.y + 1, v.z, 20, 0.6, 0.3, 0.6, 0.02);
             }
         }
     }
 
-    /** Draws the moonbeam for this player as far as the mirrors carry it; returns how many mirrors point right in a row. */
+    /**
+     * fix4-lotus: a click that did not help. After {@link #HINT_NA} Pakguh says exactly which mirror and which way (and a
+     * column of light stands on it); after every {@link #HELP_NA} more he blows on that mirror and it turns right by itself.
+     */
+    private static void mis(ServerPlayer p, int[] o, List<String> ids) {
+        PakStand st = stand(p);
+        st.mis++;
+        int beurt = bereik(o, ids);
+        if (beurt >= o.length) {
+            return;
+        }
+        Entity pak = WitteLotus.echo(p, "pakguh");
+        String naam = "entity.guhs.guh_npc.pakguh_echo";
+        if (st.mis == HINT_NA) {
+            st.zuilTot = p.level().getGameTime() + 300;
+            GeestSpel.zeg(p, pak, naam, "gui.guhs.einde2_geest_spel.proef.pakguh.hint", beurt + 1, kant(goed(beurt, ids)), doel(beurt, ids));
+        } else if (st.mis >= HINT_NA + HELP_NA) {
+            st.mis = HINT_NA;
+            o[beurt] = Math.max(0, goed(beurt, ids));
+            GeestSpel.zeg(p, pak, naam, "gui.guhs.einde2_geest_spel.proef.pakguh.help", beurt + 1);
+            GeestSpel.geluid(p, SoundEvents.POWDER_SNOW_STEP, 1.0f, 0.8f);
+            Vec3 v = GeestPlek.midden(ids.get(beurt));
+            if (v != null) {
+                p.level().sendParticles(p, ParticleTypes.SNOWFLAKE, false, false, v.x, v.y + 1.2, v.z, 30, 0.4, 0.6, 0.4, 0.05);
+            }
+            if (bereik(o, ids) == o.length) {
+                bevries(p);
+            }
+        }
+    }
+
+    /**
+     * Draws the moonbeam for this player as far as the mirrors carry it; returns how many mirrors point right in a row.
+     * fix4-lotus: every mirror shows where it points (a short arrow: bright where the light is, frosty where it is not yet);
+     * the light runs out of the mirror whose turn it is in the way it points now; that mirror glints, the spot it must aim
+     * at glows, and the necklace (the goal) always has a blue glow.
+     */
     static int straal(ServerPlayer p) {
         List<String> ids = spiegelIds();
         int[] o = PAKGUH.get(p.getUUID());
@@ -421,37 +546,79 @@ public final class Proeven {
             return 0;
         }
         Vec3 eerste = GeestPlek.midden(ids.get(0));
+        int goed = bereik(o, ids);
         if (eerste == null || !p.position().closerThan(eerste, 48)) {
-            return 0;
+            return goed;
         }
         // the moonlight falls on the first mirror from above
         lijn(p, eerste.add(0, 8, 0), eerste.add(0, 1, 0), ParticleTypes.END_ROD);
-        int goed = 0;
         for (int i = 0; i < ids.size(); i++) {
             Vec3 a = GeestPlek.midden(ids.get(i));
             if (a == null) {
                 break;
             }
-            int g = goed(i, ids);
-            if (o[i] == g) {
+            int[] d = DX[Math.floorMod(o[i], 4)];
+            Vec3 bij = a.add(0, 1, 0);
+            if (i < goed) {
                 Vec3 b = GeestPlek.midden(i + 1 < ids.size() ? ids.get(i + 1) : "verlovingsketting");
                 if (b != null) {
-                    lijn(p, a.add(0, 1, 0), b.add(0, 1, 0), ParticleTypes.END_ROD);
+                    lijn(p, bij, b.add(0, 1, 0), ParticleTypes.END_ROD);
                 }
-                goed++;
+            } else if (i == goed) {
+                // the light leaves this mirror the way it points now: you see where it goes wrong
+                lijn(p, bij, bij.add(d[0] * 3.5, 0, d[1] * 3.5), ParticleTypes.END_ROD);
+                pijlpunt(p, bij.add(d[0] * 3.5, 0, d[1] * 3.5), d, ParticleTypes.END_ROD);
+                p.level().sendParticles(p, ParticleTypes.WAX_ON, false, false, a.x, a.y + 1.3, a.z, 4, 0.3, 0.5, 0.3, 0.0);
+                Vec3 doel = GeestPlek.midden(i + 1 < ids.size() ? ids.get(i + 1) : "verlovingsketting");
+                if (doel != null) {
+                    p.level().sendParticles(p, ParticleTypes.GLOW, false, false, doel.x, doel.y + 1.2, doel.z, 3, 0.25, 0.5, 0.25, 0.0);
+                }
+                PakStand st = PAKGUH_MIS.get(p.getUUID());
+                if (st != null && st.zuilTot > p.level().getGameTime()) {
+                    lijn(p, a.add(0, 1, 0), a.add(0, 7, 0), ParticleTypes.END_ROD);
+                }
             } else {
-                int[] d = DX[o[i]];
-                lijn(p, a.add(0, 1, 0), a.add(d[0] * 3, 1, d[1] * 3), ParticleTypes.SNOWFLAKE);
-                break;
+                // not lit yet: a frosty little arrow, so you can already see which way it points
+                lijn(p, bij, bij.add(d[0] * 1.4, 0, d[1] * 1.4), ParticleTypes.SNOWFLAKE);
             }
         }
-        if (goed == ids.size()) {
-            Vec3 k = GeestPlek.midden("verlovingsketting");
-            if (k != null) {
-                p.level().sendParticles(p, ParticleTypes.GLOW, false, false, k.x, k.y + 1, k.z, 6, 0.2, 0.2, 0.2, 0.01);
-            }
+        Vec3 k = GeestPlek.midden("verlovingsketting");
+        if (k != null) {
+            p.level().sendParticles(p, goed == ids.size() ? ParticleTypes.GLOW : ParticleTypes.SOUL_FIRE_FLAME, false, false, k.x, k.y + 1, k.z,
+                    goed == ids.size() ? 6 : 2, 0.2, 0.2, 0.2, 0.01);
         }
         return goed;
+    }
+
+    /** The head of an arrow: two dots back and to the sides of the tip. */
+    private static void pijlpunt(ServerPlayer p, Vec3 punt, int[] d, ParticleOptions deeltje) {
+        double zx = -d[1], zz = d[0];
+        for (int s = -1; s <= 1; s += 2) {
+            Vec3 q = punt.add(-d[0] * 0.6 + zx * 0.45 * s, 0, -d[1] * 0.6 + zz * 0.45 * s);
+            p.level().sendParticles(p, deeltje, false, false, q.x, q.y, q.z, 1, 0, 0, 0, 0);
+        }
+    }
+
+    /** fix4-lotus (every 10 ticks while the mirrors run): the action bar says whose turn it is and which way, now and then. */
+    private static void pakguhBalk(ServerPlayer p) {
+        int[] o = PAKGUH.get(p.getUUID());
+        List<String> ids = spiegelIds();
+        if (o == null || ids.isEmpty() || o.length != ids.size() || GeestLijnen.heeftTegel(p, "pakguh")) {
+            return;
+        }
+        Vec3 eerste = GeestPlek.midden(ids.get(0));
+        PakStand st = stand(p);
+        long nu = p.level().getGameTime();
+        if (eerste == null || !p.position().closerThan(eerste, 32) || nu < st.balkTot || nu % 40 >= 10) {
+            return;
+        }
+        int beurt = bereik(o, ids);
+        if (beurt < ids.size()) {
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.beurt", beurt + 1, kant(o[beurt]), kant(goed(beurt, ids)), doel(beurt, ids),
+                    beurt, ids.size());
+        } else {
+            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.naar_ketting");
+        }
     }
 
     private static void lijn(ServerPlayer p, Vec3 van, Vec3 naar, ParticleOptions deeltje) {
@@ -470,12 +637,16 @@ public final class Proeven {
         }
         List<String> ids = spiegelIds();
         int[] o = PAKGUH.get(p.getUUID());
-        boolean opgelost = o != null && !ids.isEmpty() && straal(p) == ids.size();
+        boolean opgelost = o != null && !ids.isEmpty() && o.length == ids.size() && bereik(o, ids) == ids.size();
         if (ids.isEmpty()) {
             opgelost = true;   // (a build without mirrors: the necklace alone)
         }
         if (!opgelost) {
-            GeestSpel.balk(p, "gui.guhs.einde2_geest_spel.proef.pakguh.donker");
+            GeestSpel.balk(p, o == null ? "gui.guhs.einde2_geest_spel.proef.pakguh.eerst_praten" : "gui.guhs.einde2_geest_spel.proef.pakguh.donker");
+            if (o != null) {
+                stand(p).balkTot = p.level().getGameTime() + 60;
+                mis(p, o, ids);
+            }
             return;
         }
         Entity pak = WitteLotus.echo(p, "pakguh");
@@ -484,7 +655,31 @@ public final class Proeven {
                 GeestSpel.regel(pak, n, "gui.guhs.einde2_geest_spel.proef.pakguh.ketting.2"),
                 GeestSpel.regel(pak, n, "gui.guhs.einde2_geest_spel.proef.pakguh.ketting.3")), new Praat.Optie(2, "gui.guhs.einde2_geest_spel.optie.dank"));
         PAKGUH.remove(p.getUUID());
+        PAKGUH_MIS.remove(p.getUUID());
         tegel(p, "pakguh");
+    }
+
+    /** (tests) start the mirrors for this player as the trial does; a click on mirror n; the turns; the misses. */
+    static void testPakguh(ServerPlayer p) {
+        PAKGUH.remove(p.getUUID());
+        PAKGUH_MIS.remove(p.getUUID());
+        spiegels(p);
+        stand(p);
+    }
+
+    static void testSpiegel(ServerPlayer p, int n) {
+        draaiSpiegel(p, n);
+    }
+
+    @Nullable
+    static int[] testStanden(ServerPlayer p) {
+        int[] o = PAKGUH.get(p.getUUID());
+        return o == null ? null : o.clone();
+    }
+
+    static int testMis(ServerPlayer p) {
+        PakStand st = PAKGUH_MIS.get(p.getUUID());
+        return st == null ? 0 : st.mis;
     }
 
     // =====================================================================================================================

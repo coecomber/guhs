@@ -963,6 +963,77 @@ def controleer_oprit(b):
     return p
 
 
+# fix4-lotus (playtest 3: Jeong Jeong-guh's wing could be walked into but not out of: the Hemeltrap ran 1.5 blocks up in
+# front of its door). The kit's reach check only asks "can you get there"; this one asks "and back again". A player jumps
+# at most 1 block: the walker's step up of one cell is refused when the half blocks (bottom slabs) make it more than that,
+# and out of water you may climb onto a ledge one block above the surface (the game lets you).
+class _Terugloper(kit.Loper):
+    def _half(self, x, y, z):
+        c = self.b.s.blocks.get((x, y, z))
+        return bool(c) and (c[0].endswith("_slab") or c[0] == PLAAT) and (c[1] or {}).get("type") == "bottom"
+
+    def _stand(self, c):
+        x, y, z = c
+        return y - (0.5 if self._half(x, y - 1, z) else 0.0)
+
+    def moves(self, c):
+        x, y, z = c
+        klimt = self.klim(c) or self.klim((x, y + 1, z)) or self.fluid(c)
+        out = [n for n in super().moves(c) if klimt or self._stand(n) - self._stand(c) <= 1.01]
+        if self.fluid(c) and not self.fluid((x, y + 1, z)) and self.passable((x, y + 1, z)) and self.passable((x, y + 2, z)):
+            for dx, dz in ((0, -1), (0, 1), (1, 0), (-1, 0)):
+                n = (x + dx, y + 2, z + dz)
+                if self.standable(n) and n not in out:
+                    out.append(n)
+        return out
+
+
+def controleer_uitgangen(b, start):
+    """Every spot you can walk to from the arrival, you can also walk back from (no house you cannot leave, no ledge you
+    jump down onto and never get off). Returns problems, one per trapped area (with the markers in or near it)."""
+    from collections import deque, defaultdict
+    w = _Terugloper(b)
+    if not w.standable(start):
+        return []
+    heen, terug_van = {start}, defaultdict(list)
+    todo = deque([start])
+    while todo:
+        c = todo.popleft()
+        for n in w.moves(c):
+            terug_van[n].append(c)
+            if n not in heen:
+                heen.add(n)
+                todo.append(n)
+    terug = {start}
+    todo = deque([start])
+    while todo:
+        c = todo.popleft()
+        for q in terug_van[c]:
+            if q not in terug:
+                terug.add(q)
+                todo.append(q)
+    vast = heen - terug
+    p, gezien = [], set()
+    markers = [(tuple(e["pos"]), id) for id, e in b.plekken.items() if "pos" in e]
+    for c in sorted(vast):
+        if c in gezien:
+            continue
+        stuk, todo = [], deque([c])
+        gezien.add(c)
+        while todo:
+            a = todo.popleft()
+            stuk.append(a)
+            for n in w.moves(a) + terug_van[a]:
+                if n in vast and n not in gezien:
+                    gezien.add(n)
+                    todo.append(n)
+        lo = [min(q[i] for q in stuk) for i in range(3)]
+        hi = [max(q[i] for q in stuk) for i in range(3)]
+        bij = [id for (x, y, z), id in markers if lo[0] - 1 <= x <= hi[0] + 1 and lo[2] - 1 <= z <= hi[2] + 1 and lo[1] - 2 <= y <= hi[1] + 2][:4]
+        p.append(f"uitgang: {len(stuk)} plekken {tuple(lo)}..{tuple(hi)} kun je in maar niet meer uit (een stap van meer dan 1 blok?) {bij}")
+    return p
+
+
 def opruimen(b):
     """Leaves that ended up alone (a hole in a crown can cut a few off): taken away."""
     from features import guheinde_bouw as gb
@@ -1003,6 +1074,7 @@ def controleer(b):
     problems = b.check(start, verwacht=verwacht, min_licht=0, zwevend_ok=lambda c: c in onder)
     problems += [f"laag {l} ontbreekt" for l in LAGEN_B if l not in b.lagen]
     problems += controleer_oprit(b)
+    problems += controleer_uitgangen(b, start)
     licht = b.licht()
     donker = [c for c in b.licht_kamer if licht.get(c, 0) < 2]
     if donker:
