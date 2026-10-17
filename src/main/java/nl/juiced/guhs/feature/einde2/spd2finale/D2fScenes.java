@@ -173,7 +173,7 @@ public final class D2fScenes {
         String B = SpVerhaal.BIKINIBODEM, a = ANKER_THUIS;
         Vec3 poort = r(B, a, "stadspoort", 0, 0, 0);
         Vec3 m1 = poort.add(-5.0, 0, -1.0), m2 = poort.add(-8.0, 0, 1.0), m3 = poort.add(-11.0, 0, -1.0);
-        Cutscene.Builder b = scene("thuis", 480).verbergEcht(16)
+        Cutscene.Builder b = scene("thuis", 514).verbergEcht(16)
                 .speler(v(0.5, 0, 0.5), 135)
                 .acteur("sponsguh", E2SponsguhFeature.SPONSGUH, v(-0.8, 0, 1.8), 135, looks(SpCast.KROON_VAST))
                 .acteur("patguh", E2SponsguhFeature.PATGUH, v(1.8, 0, -0.4), 135, looks())
@@ -182,29 +182,31 @@ public final class D2fScenes {
                 .acteur("emmer_2", E2SponsguhFeature.BIKINIBODEM_GUH, m2, 90, soort(2, SpCast.EMMER))
                 .acteur("emmer_3", E2SponsguhFeature.BIKINIBODEM_GUH, m3, 90, soort(4, SpCast.EMMER));
         kaartje(b, 0, 52, "titel");
+        // the three look north-west, at the gate: a camera on that side sees their faces
+        Vec3 voorSponsguh = v(-2.4, 1.6, -0.8), voorPatguh = v(0.2, 1.6, -2.4);
         b.camera(0, v(6.0, 3.0, 6.0), v(0.5, 1.0, 0.5))
-                // behind the three: through the gate, the town
-                .cameraKnip(52, v(3.4, 2.2, 3.6), poort.add(0, 1.5, 0)).camera(104, v(2.6, 2.0, 2.8), poort.add(-2, 1.4, 0))
-                .zeg(56, "sponsguh", "ruik", 44).animatie("sponsguh", 56, "lach")
-                .loop("emmer_1", 60, 420, m1.add(-30, 0, 0)).loop("emmer_2", 60, 420, m2.add(-30, 0, 0)).loop("emmer_3", 60, 420, m3.add(-30, 0, 0))
-                // nearer: the marching buckets
-                .cameraKnip(106, poort.add(4.0, 1.8, 3.5), m2.add(-6, 1.0, 0)).camera(150, poort.add(2.0, 1.6, 3.0), m2.add(-10, 1.0, 0))
-                .zeg(108, "patguh", "mode", 40).animatie("patguh", 108, "schrik")
-                // the loudspeaker: Karen and Plankmika (voices only)
-                .geluid(150, SpAudio.geluid("stinger.karen"), 1.0f, 1.0f)
-                .cameraKnip(152, v(1.0, 1.4, -2.2), poort.add(-6, 4.0, 0)).camera(330, v(0.4, 1.6, -1.6), poort.add(-10, 5.0, 0))
-                .zeg(154, "karen", "piep", 44)
-                .zeg(200, "plankmika_stem", "muahaha", 44).schud(202, 0.15f, 20)
-                .zeg(246, "karen", "limonade", 44)
-                .zeg(292, "plankmika_stem", "karen", 34)
-                // back to the three: Sponsguh's plan (their faces: the camera in front of them)
-                .kijk("sponsguh", 330, v(-1.6, 1.6, -1.2)).kijk("patguh", 330, v(-1.6, 1.6, -1.2)).kijk(Cutscene.SPELER, 330, v(-0.8, 1.2, 1.8))
-                .cameraKnipVolgt(332, v(-1.6, 1.6, -1.2), "sponsguh")
-                .zeg(334, "sponsguh", "blazer", 46).animatie("sponsguh", 334, "salueer")
-                .deeltjes(350, ParticleTypes.BUBBLE_POP, v(-0.2, 1.3, 1.2), 12, 0.3)
-                .zeg(382, "sponsguh", "plan", 40)
-                .cameraKnipVolgt(424, v(0.2, 1.6, -2.4), "patguh").zeg(426, "patguh", "aanmoedigen", 40).animatie("patguh", 428, "juich")
-                .zwart(466, 480);
+                // behind the three: through the gate, the town (no line: just the view home)
+                .cameraKnip(52, v(3.4, 2.2, 3.6), poort.add(0, 1.5, 0)).camera(88, v(2.6, 2.0, 2.8), poort.add(-2, 1.4, 0))
+                .loop("emmer_1", 60, 460, m1.add(-30, 0, 0)).loop("emmer_2", 60, 460, m2.add(-30, 0, 0)).loop("emmer_3", 60, 460, m3.add(-30, 0, 0))
+                .cameraKnip(90, voorSponsguh, v(-0.8, 1.0, 1.8)).zeg(92, "sponsguh", "ruik", 44).animatie("sponsguh", 92, "lach")
+                .cameraKnipVolgt(136, voorPatguh, "patguh").zeg(138, "patguh", "mode", 40).animatie("patguh", 138, "schrik")
+                // the marching buckets, and the loudspeaker: Karen and Plankmika (voices only)
+                .cameraKnip(180, poort.add(4.0, 1.8, 3.5), m2.add(-12, 1.0, 0)).camera(276, poort.add(2.0, 1.6, 3.0), m2.add(-22, 1.0, 0))
+                .geluid(186, SpAudio.geluid("stinger.karen"), 1.0f, 1.0f)
+                .zeg(188, "karen", "piep", 44)
+                .zeg(234, "plankmika_stem", "muahaha", 44).schud(236, 0.15f, 20)
+                .cameraKnip(278, v(1.0, 1.4, -2.2), poort.add(-6, 4.0, 0)).camera(360, v(0.4, 1.6, -1.6), poort.add(-10, 5.0, 0))
+                .zeg(280, "karen", "limonade", 44)
+                .zeg(326, "plankmika_stem", "karen", 34)
+                // back to the three: Sponsguh's plan
+                .kijk("sponsguh", 360, voorSponsguh).kijk("patguh", 360, voorSponsguh).kijk(Cutscene.SPELER, 360, v(-0.8, 1.2, 1.8))
+                .cameraKnipVolgt(362, voorSponsguh, "sponsguh")
+                .zeg(366, "sponsguh", "blazer", 46).animatie("sponsguh", 366, "salueer")
+                .deeltjes(382, ParticleTypes.BUBBLE_POP, v(-0.2, 1.3, 1.2), 12, 0.3)
+                .zeg(414, "sponsguh", "plan", 40)
+                .kijk("patguh", 454, voorPatguh)
+                .cameraKnipVolgt(456, voorPatguh, "patguh").zeg(458, "patguh", "aanmoedigen", 40).animatie("patguh", 460, "juich")
+                .zwart(500, 514);
         return b.registreer();
     }
 
@@ -218,6 +220,8 @@ public final class D2fScenes {
         Vec3 poort = r(B, a, "d2f_bellenkom_poort", 0, 0, 0);
         Vec3 nept = v(-1.5, -2, 6.5), ijs = v(2.0, -2, 7.5), plank = v(0.5, 0, 0.0), patguh = v(-0.5, 0, 2.0);
         Vec3 sponsRand = v(-1.5, 0, 3.2);
+        // Neptuguh and Krabguh face the stage (north): the cameras of their lines stand on the stage edge, in front of them
+        Vec3 voorNept = v(-1.0, 1.4, 3.6), voorKrab = v(2.8, 0.4, 5.2);
         Cutscene.Builder b = scene("guhfy_guhber", 2000).verbergEcht(34)
                 .speler(trommel, 0)
                 .acteur("sponsguh", E2SponsguhFeature.SPONSGUH, zanger, 0, looks(SpCast.KROON_VAST))
@@ -245,9 +249,9 @@ public final class D2fScenes {
                 .camera(0, v(0.5, 2.0, 16.0), v(0.5, 1.0, 0.5))
                 .cameraKnip(14, v(0.5, 0.7, 3.4), v(0.5, 0.35, 0.0))
                 .zeg(16, "plankmika", "te_laat", 52).animatie("plankmika", 16, "lach_kwaad")
-                .cameraKnipVolgt(70, v(-2.5, 1.5, 6.0), "sponsguh").zeg(72, "sponsguh", "zes", 40).kijk("sponsguh", 70, plank)
+                .cameraKnipVolgt(70, v(-2.5, 1.5, 6.0), "sponsguh").zeg(72, "sponsguh", "zes", 40)
                 .cameraKnip(114, v(0.5, 0.7, 3.4), v(0.5, 0.35, 0.0)).zeg(116, "plankmika", "honderden", 44)
-                .cameraKnipVolgt(162, v(0.0, 1.6, 5.8), "patguh").zeg(164, "patguh", "wat", 30).kijk("patguh", 160, plank)
+                .cameraKnipVolgt(162, v(0.0, 1.6, 5.8), "patguh").zeg(164, "patguh", "wat", 30)
                 .cameraKnip(196, v(0.5, 0.7, 3.4), v(0.5, 0.35, 0.0)).zeg(198, "plankmika", "onzin", 42).animatie("plankmika", 198, "lach_kwaad")
                 // the idea: Sponsguh looks at the player
                 .kijk("sponsguh", 240, trommel.add(0, 1.4, 0)).animatie("sponsguh", 242, "knipper")
@@ -301,7 +305,7 @@ public final class D2fScenes {
                 // Sponsguh to the edge of the stage, the crown held up
                 .loop("sponsguh", e + 100, e + 130, sponsRand).kijk("sponsguh", e + 132, nept.add(0, 2.5, 0))
                 .cameraKnip(e + 132, v(-4.5, 0.6, 7.5), sponsRand.add(0, 1.0, 0)).zeg(e + 134, "sponsguh", "uw_kroon", 46)
-                .cameraKnip(e + 182, v(-0.5, 1.0, 10.5), nept.add(0, 2.5, 0)).zeg(e + 184, "neptuguh", "maar_wie", 46)
+                .cameraKnip(e + 182, voorNept, nept.add(0, 2.4, 0)).zeg(e + 184, "neptuguh", "maar_wie", 46)
                 // Karen tells: the camera finds the little one
                 .geluid(e + 230, SpAudio.geluid("stinger.karen"), 1.0f, 1.0f)
                 .kijk("neptuguh", e + 230, plank).kijk("patguh", e + 230, plank).kijk(Cutscene.SPELER, e + 230, plank)
@@ -313,13 +317,12 @@ public final class D2fScenes {
                 // the crown on the king's head (cut), and the thaw
                 .loop("neptuguh", e + 348, e + 349, nept.add(0, -40, 0)).loop("neptuguh_k", e + 348, e + 349, nept)
                 .loop("sponsguh", e + 348, e + 360, zanger)
-                .cameraKnip(e + 350, v(-0.5, 1.0, 11.0), nept.add(0, 2.5, 0)).zeg(e + 352, "neptuguh_k", "vrij", 44).animatie("neptuguh_k", e + 352, "lach")
+                .cameraKnip(e + 350, voorNept, nept.add(0, 2.4, 0)).zeg(e + 352, "neptuguh_k", "vrij", 44).animatie("neptuguh_k", e + 352, "lach")
                 .animatie("neptuguh_k", e + 398, "blaas").geluid(e + 400, s(SoundEvents.GLASS_BREAK), 0.9f, 0.7f)
                 .deeltjes(e + 400, ParticleTypes.SNOWFLAKE, ijs.add(0, 1.0, 0), 50, 0.8)
                 .loop("ijs", e + 402, e + 403, ijs.add(0, -40, 0)).loop("krabguh", e + 402, e + 403, ijs)
-                .cameraKnip(e + 404, ijs.add(1.5, 1.4, 3.0), ijs.add(0, 0.9, 0)).zeg(e + 406, "krabguh", "brrr", 42).animatie("krabguh", e + 406, "paniek")
-                .kijk("krabguh", e + 450, zanger.add(0, 1.0, 0))
-                .cameraKnip(e + 450, ijs.add(-2.0, 1.6, 3.5), zanger.add(0, 1.0, 0)).zeg(e + 452, "krabguh", "manager", 48)
+                .cameraKnip(e + 404, voorKrab, ijs.add(0, 1.0, 0)).zeg(e + 406, "krabguh", "brrr", 42).animatie("krabguh", e + 406, "paniek")
+                .cameraKnip(e + 450, ijs.add(-1.2, 1.8, -2.6), ijs.add(0, 1.0, 0)).zeg(e + 452, "krabguh", "manager", 48)
                 // Sponsguh, manager: the cap (cut to the one with the manager's cap)
                 .loop("sponsguh", e + 500, e + 501, zanger.add(0, -40, 0)).loop("sponsguh_m", e + 500, e + 501, zanger)
                 .deeltjes(e + 500, ParticleTypes.HAPPY_VILLAGER, zanger.add(0, 1.2, 0), 20, 0.6)
@@ -327,7 +330,7 @@ public final class D2fScenes {
                 .geluid(e + 506, SpAudio.geluid("stinger.lach"), 1.0f, 1.0f)
                 .cameraKnipVolgt(e + 554, v(0.5, 1.6, 6.0), "patguh").zeg(e + 556, "patguh", "klant", 36).animatie("patguh", e + 556, "trots")
                 // Octo, freed, in the back row
-                .cameraKnip(e + 594, v(5.5, 1.2, 18.5), v(7.5, 0.7, 14.5)).kijk("octo_vrij", e + 594, v(5.5, 1.2, 18.5))
+                .cameraKnip(e + 594, v(6.0, 1.4, 10.5), v(7.5, 0.6, 14.5)).kijk("octo_vrij", e + 594, v(6.0, 1.4, 10.5))
                 .zeg(e + 596, "octo_vrij", "emmer_terug", 46).animatie("octo_vrij", e + 596, "zucht")
                 // everybody cheers, the camera pulls back over the field
                 .cameraKnip(e + 644, v(0.5, 2.0, 8.0), v(0.5, 1.0, 1.0)).camera(e + 700, v(0.5, 6.0, 19.0), v(0.5, 1.0, 2.0))
