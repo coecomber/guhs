@@ -27,9 +27,11 @@ from PIL import Image
 
 try:
     from features import boerderij_dieren as bd
+    from features import einde2_sp_cast_looks as looks
 except ImportError:                                   # (run as a script from the project root)
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     from features import boerderij_dieren as bd
+    from features import einde2_sp_cast_looks as looks
 
 plain, guh_face, cube, bone, round_ear = bd.plain, bd.guh_face, bd.cube, bd.bone, bd.round_ear
 S = bd.S
@@ -1403,6 +1405,7 @@ def animaties(id, namen):
         A["idle"]["bones"]["body"]["rotation"] = [6, 0, 0]                     # (a bit bent with age)
     if id == "mosselguh":
         A["idle"]["bones"]["cape"] = {"rotation": golf(0, -5, 3.0)}
+    looks.animaties(id, A, namen)                                               # sp_cast: the story animations
     return {"format_version": "1.8.0", "animations": A}
 
 
@@ -1440,6 +1443,8 @@ CAST = {
     "mosselguh": (mosselguh, 1.0, ["held"]),
 }
 BASIS = ["idle", "loop", "praat", "lach", "schrik", "juich"]
+for _id, _namen in looks.STORY.items():            # sp_cast: the story animations (Java: Cast.eigen)
+    CAST[_id][2].extend(n for n in _namen if n not in CAST[_id][2])
 NODIG = {id: BASIS + extra for id, (_, _, extra) in CAST.items()}
 NODIG["knabbelburgermobiel"] = ["idle", "rij"]
 # the extra textures on a model of another id: texture -> (model, maker)
@@ -1452,7 +1457,7 @@ GLOED = ("loopgraafmonster", "loopgraafmonster_0", "loopgraafmonster_1", "loopgr
 def _maak(id):
     maker, k, _ = CAST[id] if id in CAST else (knabbelburgermobiel, 0.4, None)
     atlas = Vel(id, k)
-    return atlas, maker(atlas)
+    return atlas, looks.voeg_toe(id, atlas, maker(atlas))    # (sp_cast: the look bones, painted after the model's own patches)
 
 
 def build(h):
@@ -1467,7 +1472,7 @@ def build(h):
             h.save(Image.fromarray(atlas.gloed), "entity", f"{id}_glowmask.png")
     for tex, (model, maker) in EXTRA_TEXTUREN.items():
         atlas = Vel(model, CAST[model][1])        # (the same seed and sizes as the model: the same layout)
-        maker(atlas)
+        looks.voeg_toe(model, atlas, maker(atlas))
         h.save(Image.fromarray(atlas.img), "entity", f"{tex}.png")
         if tex in GLOED:
             h.save(Image.fromarray(atlas.gloed), "entity", f"{tex}_glowmask.png")
@@ -1502,6 +1507,9 @@ def check(h):
                     problems.append(f"{id}: animation {an} moves a missing bone {bn}")
         if not os.path.exists(f"{h.A}/textures/entity/{id}.png"):
             problems.append(f"{id}: no texture")
+        for lb in looks.botten(id):
+            if lb not in names:
+                problems.append(f"{id}: no look bone {lb}")
     for tex in EXTRA_TEXTUREN:
         if not os.path.exists(f"{h.A}/textures/entity/{tex}.png"):
             problems.append(f"missing texture {tex}.png")
@@ -1549,7 +1557,7 @@ def preview(out, alleen=None):
                     b["rotation"] = pose[b["name"]]
             pad = os.path.join(out, "_pose.geo.json")
             json.dump(g, open(pad, "w", encoding="utf-8"))
-        q = wr.geo_quads(pad, f"guhs:entity/{tex}", hide=hide)
+        q = wr.geo_quads(pad, f"guhs:entity/{tex}", hide=tuple(hide) + tuple(looks.botten(model)))
         for yaw, pitch in ((28, -14), (205, -16)):
             tiles.append(wr.render(q, yaw, pitch, 300, margin=0.06))
     for s in range(0, len(tiles), 16):

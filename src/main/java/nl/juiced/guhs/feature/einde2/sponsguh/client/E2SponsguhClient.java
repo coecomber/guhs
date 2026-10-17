@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.einde2.sponsguh.client;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.geckolib.constant.DataTickets;
@@ -38,6 +40,11 @@ import nl.juiced.guhs.feature.einde2.sponsguh.SponsguhWezen;
 public final class E2SponsguhClient {
     /** The character's look (render state ticket; the model picks the texture from it). */
     static final DataTicket<Integer> SOORT = DataTicket.create("guhs_e2_sponsguh_soort", Integer.class);
+    /** sp_cast: the story looks that are on (the mask of SponsguhWezen.looks(), bits in the order of Cast.LOOKS). */
+    static final DataTicket<Integer> LOOKS = DataTicket.create("guhs_e2_sponsguh_looks", Integer.class);
+    /** sp_cast: the colour a dried-out character is drawn in (grey-brown) and how big it is then. */
+    static final int DROOG_KLEUR = 0xFFB4A088;
+    static final float DROOG_MAAT = 0.85f;
 
     public static void init(IEventBus modBus) {
         modBus.addListener(E2SponsguhClient::renderers);
@@ -75,6 +82,14 @@ public final class E2SponsguhClient {
         @Override
         public void addRenderData(SponsguhWezen wezen, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
             state.addGeckolibData(SOORT, wezen.soort());
+            state.addGeckolibData(LOOKS, wezen.looks());
+        }
+
+        /** sp_cast: a dried-out character (look droog) is grey-brown. */
+        @Override
+        public int getRenderColor(SponsguhWezen wezen, @Nullable Void related, float partialTick) {
+            int kleur = super.getRenderColor(wezen, related, partialTick);
+            return wezen.heeftLook("droog") ? DROOG_KLEUR & kleur : kleur;
         }
 
         /** David Hasselguh is far longer than his hitbox, Neptuguh's trident far taller. */
@@ -96,6 +111,23 @@ public final class E2SponsguhClient {
         public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
             if (cast.kijkt) {
                 DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+            }
+            // sp_cast: the story looks: every look bone of a look that is off is hidden; some looks hide bones of the model
+            List<String> looks = cast.looks();
+            if (looks.isEmpty()) {
+                return;
+            }
+            int mask = info.getGeckolibData(LOOKS) == null ? 0 : info.getGeckolibData(LOOKS);
+            for (String look : looks) {
+                boolean aan = (mask & (1 << Cast.LOOKS.indexOf(look))) != 0;
+                if (!aan) {
+                    bones.ifPresent("look_" + look, b -> b.skipRender(true).skipChildrenRender(true));
+                } else if (look.equals("kroon_vast")) {
+                    bones.ifPresent("arm_left", b -> b.skipRender(true).skipChildrenRender(true));
+                    bones.ifPresent("arm_right", b -> b.skipRender(true).skipChildrenRender(true));
+                } else if (look.equals("droog")) {
+                    bones.ifPresent("root", b -> b.setScale(DROOG_MAAT, DROOG_MAAT * 0.94f, DROOG_MAAT));
+                }
             }
         }
     }
