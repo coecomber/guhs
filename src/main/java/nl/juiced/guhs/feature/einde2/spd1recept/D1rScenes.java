@@ -188,7 +188,7 @@ final class D1rScenes {
         String a = "vetemmer_ingang";
         Cam kantoor = cam(a, "d1r_kantoor"), kantoor2 = cam(a, "d1r_kantoor_2"), lab = cam(a, "d1r_lab"), straat = cam(a, "d1r_straat");
         Vec3 krab = op(a, "kluis", -1, 0, 2), spons = op(a, "krabguh", 0.5, 0, 2.4), sponsIn = op(a, "krabguh", 0.5, 0, 1.2);
-        Vec3 speler = op(a, "krabguh", -1.5, 0, -0.6), octo = op(a, "krabguh", 2.5, 0, 2.3);
+        Vec3 speler = op(a, "krabguh", -1.5, 0, -0.6), octo = op(a, "krabguh", 2.1, 0, 1.1);
         Vec3 plank = op(a, "plan_z_plankmika"), kast = op(a, "plan_z_kast", 0, 0.8, 0), karen = op(a, "karen", 0, 0.8, 0);
         Vec3 buiten = op(a, a, 0, 0, -0.6), kkDeur = op(a, "d1r_kk_deur", 0, 0, -0.4);
         Cutscene.Builder b = maak("plan_z").duur(1400).verbergEcht(48)
@@ -309,7 +309,7 @@ final class D1rScenes {
     private static Scene feest() {
         String a = "krabguh";
         Cam kantoor = cam(a, "d1r_kantoor"), kantoor2 = cam(a, "d1r_kantoor_2");
-        Vec3 krab = op(a, a, 1, 0, -1), speler = op(a, a, -1.5, 0, -0.7), spons = op(a, a, 0.5, 0, 1.6), octo = op(a, a, 0.5, 0, 2.4);
+        Vec3 krab = op(a, a, 1, 0, -1), speler = op(a, a, -1.5, 0, -0.7), spons = op(a, a, 0.1, 0, 0.9), octo = op(a, a, 2.1, 0, 1.1);
         return reg("feest", maak("feest").duur(650).verbergEcht(14)
                 .acteur("krabguh", E2SponsguhFeature.MENEER_KRABGUH, krab, 90f)
                 .acteur("sponsguh", E2SponsguhFeature.SPONSGUH, spons, 180f)

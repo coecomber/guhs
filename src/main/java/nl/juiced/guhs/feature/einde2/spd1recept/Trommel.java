@@ -218,7 +218,7 @@ final class Trommel {
         }
         // the beat: a soft hi-hat; the count-in big on the screen
         double b = beat();
-        int tel = (int) Math.floor(t / b);
+        int tel = (int) Math.round(t / b);
         if ((int) Math.round(tel * b) == t) {
             Schijn.geluid(p, SoundEvents.NOTE_BLOCK_HAT.value(), trommel, 0.35f, 1.0f);
             if (tel < TEL) {
