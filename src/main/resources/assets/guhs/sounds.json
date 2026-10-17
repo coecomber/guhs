@@ -5121,5 +5121,249 @@
       }
     ],
     "subtitle": "subtitles.guhs.einde2_audio.geest.reiger"
+  },
+  "einde2_sp_audio.muziek.bikinibodem_1": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/muziek_bikinibodem_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.muziek.bikinibodem_1"
+  },
+  "einde2_sp_audio.muziek.bikinibodem_2": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/muziek_bikinibodem_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.muziek.bikinibodem_2"
+  },
+  "einde2_sp_audio.muziek.schelpenstad": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/muziek_schelpenstad",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.muziek.schelpenstad"
+  },
+  "einde2_sp_audio.muziek.loopgraaf": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/muziek_loopgraaf",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.muziek.loopgraaf"
+  },
+  "einde2_sp_audio.moment.zoete_zege": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_zoete_zege",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.zoete_zege"
+  },
+  "einde2_sp_audio.moment.guhfy_guhber": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_guhfy_guhber",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.guhfy_guhber"
+  },
+  "einde2_sp_audio.moment.monsters": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_monsters",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.monsters"
+  },
+  "einde2_sp_audio.moment.plan_z": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_plan_z",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.plan_z"
+  },
+  "einde2_sp_audio.moment.bevroren": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_bevroren",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.bevroren"
+  },
+  "einde2_sp_audio.moment.cycloop": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_cycloop",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.cycloop"
+  },
+  "einde2_sp_audio.moment.hasselguh": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_hasselguh",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.hasselguh"
+  },
+  "einde2_sp_audio.moment.dennis": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/moment_dennis",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.moment.dennis"
+  },
+  "einde2_sp_audio.deuntje.bakken": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_bakken",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.bakken"
+  },
+  "einde2_sp_audio.deuntje.kwallen": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_kwallen",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.kwallen"
+  },
+  "einde2_sp_audio.deuntje.examen": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_examen",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.examen"
+  },
+  "einde2_sp_audio.deuntje.sluipen": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_sluipen",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.sluipen"
+  },
+  "einde2_sp_audio.deuntje.trommel": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_trommel",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.trommel"
+  },
+  "einde2_sp_audio.deuntje.kroeg": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_kroeg",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.kroeg"
+  },
+  "einde2_sp_audio.deuntje.ijssalon": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_ijssalon",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.ijssalon"
+  },
+  "einde2_sp_audio.deuntje.emmers": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/deuntje_emmers",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.deuntje.emmers"
+  },
+  "einde2_sp_audio.stinger.verteller": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_verteller"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.verteller"
+  },
+  "einde2_sp_audio.stinger.klarinet": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_klarinet"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.klarinet"
+  },
+  "einde2_sp_audio.stinger.karen": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_karen"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.karen"
+  },
+  "einde2_sp_audio.stinger.bevries": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_bevries"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.bevries"
+  },
+  "einde2_sp_audio.stinger.snor": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_snor"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.snor"
+  },
+  "einde2_sp_audio.stinger.opgelost": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_opgelost"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.opgelost"
+  },
+  "einde2_sp_audio.stinger.mislukt": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_mislukt"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.mislukt"
+  },
+  "einde2_sp_audio.stinger.lach": {
+    "sounds": [
+      {
+        "name": "guhs:einde2_sp_audio/stinger_lach"
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.lach"
   }
 }
