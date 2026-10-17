@@ -206,6 +206,114 @@ public class E2H4VuurGameTests {
         helper.succeed();
     }
 
+    /**
+     * fix4-finale (playtest 3: "I dodged the 8 blasts long ago, but round 1 of the duel never ends"): the duel runs for real in
+     * the test world (the capital's origin points there; only the markers are needed, no blocks). The first blast hits the
+     * player (a shove: it does not count); after that the player steps aside from every blast. Round 1 must end at the eighth
+     * dodge with round 2, and Mikai must stop firing once the blasts that are still needed are in the air (one hit + eight
+     * dodges = nine blasts). On the old code the round never ended (it waited for an empty sky while Mikai kept firing).
+     */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 1400)
+    public static void einde2H4VuurDuelLucht(GameTestHelper helper) {
+        Plekken.Plek start = Plekken.plek(Plek.STRUCTUUR, "duel_speler"), mikai = Plekken.plek(Plek.STRUCTUUR, "duel_mikai");
+        helper.assertTrue(start != null && mikai != null && Plekken.plek(Plek.STRUCTUUR, "duel_arena") != null, "the duel's markers are in the build");
+        ServerLevel level = helper.getLevel();
+        BlockPos at = helper.absolutePos(new BlockPos(1, 20, 1));
+        BlockPos oorsprong = at.subtract(start.pos());
+        java.util.List<net.minecraft.world.level.ChunkPos> vast = new java.util.ArrayList<>();
+        for (int cx = (at.getX() - 48) >> 4; cx <= (at.getX() + 48) >> 4; cx++) {
+            for (int cz = (at.getZ() - 48) >> 4; cz <= (at.getZ() + 48) >> 4; cz++) {
+                if (level.setChunkForced(cx, cz, true)) {
+                    vast.add(new net.minecraft.world.level.ChunkPos(cx, cz));
+                }
+                level.getChunk(cx, cz);
+            }
+        }
+        ServerPlayer p = speler(helper);
+        Plek.testOorsprong = q -> q == p ? oorsprong : null;
+        Duel.start(p);
+        helper.assertTrue(Duel.actief(p) && Duel.ronde(p) == Duel.LUCHT && Plek.in(p, "duel_arena"), "round 1 starts, on the first pillar");
+        Vec3 thuis = p.position();
+        Vec3 naarMikai = Vec3.atBottomCenterOf(oorsprong.offset(mikai.pos())).subtract(thuis).multiply(1, 0, 1).normalize();
+        Vec3 opzij = new Vec3(-naarMikai.z, 0, naarMikai.x);
+        // per blast: the spot (-1, 0, 1: three blocks apart) the player stood on when it was fired
+        Map<Integer, Integer> doel = new java.util.HashMap<>();
+        java.util.Set<Integer> alle = new java.util.HashSet<>();
+        int[] plek = {0}, meest = {0};
+        boolean[] eersteRaak = {false};
+        StringBuilder log = new StringBuilder();
+        int[] tik = {0}, vorig = {0};
+        int[] eerste = {-1};
+        helper.onEachTick(() -> {
+            if (!Duel.actief(p) || Duel.ronde(p) != Duel.LUCHT) {
+                return;
+            }
+            Duel.tick(p);
+            if (Duel.ronde(p) != Duel.LUCHT) {
+                return;
+            }
+            tik[0]++;
+            if (Duel.ontweken(p) != vorig[0]) {
+                log.append(" t").append(tik[0]).append(":dodge").append(Duel.ontweken(p));
+                vorig[0] = Duel.ontweken(p);
+            }
+            meest[0] = Math.max(meest[0], Duel.ontweken(p));
+            java.util.List<VuurbalEntity> stoten = Duel.stoten(p);
+            java.util.Set<Integer> nu = new java.util.HashSet<>();
+            for (VuurbalEntity b : stoten) {
+                nu.add(b.getId());
+                alle.add(b.getId());
+                if (doel.putIfAbsent(b.getId(), plek[0]) == null) {
+                    log.append(" t").append(tik[0]).append(":fire@").append(plek[0]);
+                }
+            }
+            for (Integer id : doel.keySet()) {
+                if (!nu.contains(id)) {
+                    log.append(" t").append(tik[0]).append(":gone");
+                }
+            }
+            doel.keySet().retainAll(nu);
+            if (!eersteRaak[0]) {
+                // the first blast: stand still and take the shove
+                if (eerste[0] < 0 && !alle.isEmpty()) {
+                    eerste[0] = alle.iterator().next();
+                }
+                if (eerste[0] >= 0 && !nu.contains(eerste[0])) {
+                    helper.assertTrue(Duel.ontweken(p) == 0, "a blast that hits you is not a dodge: " + Duel.ontweken(p));
+                    eersteRaak[0] = true;
+                }
+                return;
+            }
+            Vec3 jij = p.position().add(0, 1, 0);
+            for (VuurbalEntity b : stoten) {
+                if (doel.get(b.getId()) == plek[0] && b.position().distanceTo(jij) < 7) {
+                    for (int k = -1; k <= 1; k++) {
+                        if (!doel.containsValue(k)) {
+                            plek[0] = k;
+                            Vec3 naar = thuis.add(opzij.scale(3.0 * k));
+                            p.teleportTo(naar.x, naar.y, naar.z);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Duel.ronde(p) == Duel.WATER, "round 1 over: round 2 (dodged so far: " + Duel.ontweken(p) + ", blasts: " + alle.size() + ")");
+            helper.assertTrue(eersteRaak[0] && meest[0] == Duel.LUCHT_STOTEN - 1 && alle.size() == Duel.LUCHT_STOTEN + 1,
+                    "the first blast hit (" + eersteRaak[0] + "), the counter went up to 7 before the eighth dodge won (" + meest[0]
+                            + "), and Mikai fired one hit + eight dodges = 9 blasts, not " + alle.size() + ";" + log);
+            Duel.stop(p);
+            Plek.testOorsprong = null;
+            E2H4Vuur.wisEigen(p);
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+            for (net.minecraft.world.level.ChunkPos c : vast) {
+                level.setChunkForced(c.x(), c.z(), false);
+            }
+        });
+    }
+
     /** Every scene of the slice is registered, lasts what the contract allows, and only the credits run on without clicks. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void einde2H4VuurScenes(GameTestHelper helper) {
@@ -223,7 +331,7 @@ public class E2H4VuurGameTests {
             }
         }
         long eigen = Cutscene.alle().stream().filter(s -> s.id().startsWith(Scenes.ID) && !s.id().startsWith(H4Hints.KIJK)).count();
-        helper.assertTrue(eigen == Scenes.LENGTES.size(), Scenes.LENGTES.size() + " scenes (18 + the six fix3-h4 why-scenes), not " + eigen);
+        helper.assertTrue(eigen == Scenes.LENGTES.size(), Scenes.LENGTES.size() + " scenes (18 + the six fix3-h4 why-scenes + the fix4-finale duel_begin), not " + eigen);
         helper.succeed();
     }
 

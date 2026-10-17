@@ -41,6 +41,8 @@ public class VuurbalEntity extends Entity {
     @Nullable
     BiConsumer<VuurbalEntity, ServerPlayer> bijSlag, bijKlik;
     int leven = 200;
+    /** (fix4-finale) Server: this blast was already counted by the duel (dodged, a hit, or hit back). */
+    boolean geteld;
 
     public VuurbalEntity(EntityType<? extends VuurbalEntity> type, Level level) {
         super(type, level);

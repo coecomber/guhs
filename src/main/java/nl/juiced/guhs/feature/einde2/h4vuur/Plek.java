@@ -43,6 +43,19 @@ public final class Plek {
     @Nullable
     static volatile java.util.function.Function<ServerPlayer, BlockPos> testOorsprong;
 
+    /**
+     * (fix4-finale) The level the spots of the capital are in for this player: the Guheinde, or (game tests) the test world
+     * while {@link #testOorsprong} points the capital there. Null: neither.
+     */
+    @Nullable
+    public static ServerLevel wereld(ServerPlayer p) {
+        java.util.function.Function<ServerPlayer, BlockPos> test = testOorsprong;
+        if (test != null && test.apply(p) != null) {
+            return p.level();
+        }
+        return guheinde(p);
+    }
+
     /** Template 0,0,0 of the capital in the player's Guheinde (null: not in the Guheinde, or not known yet). */
     @Nullable
     public static BlockPos oorsprong(ServerPlayer p) {

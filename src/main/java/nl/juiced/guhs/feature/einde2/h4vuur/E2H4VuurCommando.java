@@ -57,7 +57,9 @@ public final class E2H4VuurCommando {
                 {"aftiteling", "kroning_zuka"}, {"knipoog_stitch", "knipoog_stitch_paneel"}, {"knipoog_sjokkel_finish", "knipoog_sjokkel_finish"},
                 // fix3-h4: the why-scenes
                 {"plan", "aankomst_speler"}, {"vijver", "brood"}, {"rotsblok_plan", "appa_kamp"}, {"zonnekrijgers", "trap_boven"},
-                {"lotus_tegel", "publiek_speler"}, {"vloot_plan", "leeuwschildpad_kade"}};
+                {"lotus_tegel", "publiek_speler"}, {"vloot_plan", "leeuwschildpad_kade"},
+                // fix4-finale: before the duel
+                {"duel_begin", "duel_speler"}};
         for (String[] a : ankers) {
             ANKER.put(a[0], a[1]);
         }
