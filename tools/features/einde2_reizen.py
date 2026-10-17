@@ -226,14 +226,13 @@ LANG = {
     "gui.guhs.einde2_reizen.hoorn.niet_hier": "Je walvis zwemt alleen in de leegte van het Guheinde. Daar hoort hij je.",
     "gui.guhs.einde2_reizen.hoorn.komt": "Je toetert op de hoorn. Ver weg antwoordt een laag lied: je walvis komt eraan!",
     # a story flight that waits
-    "gui.guhs.einde2_reizen.wacht": "Je verhaalvlucht naar %s wacht nog. Klik op Appa en kies de ster om verder te vliegen, of "
-                                    "\"Verder met het verhaal\". Appa kwijt? Blaas op je Appa-fluitje, of klik op de kaasbol bij de Knabbelberg.",
+    "gui.guhs.einde2_reizen.wacht": "Je verhaalvlucht naar %s wacht nog. Klik op Appa en kies de ster, \"Verder met het "
+                                    "verhaal\", om verder te vliegen. Appa kwijt? Blaas op je Appa-fluitje, of klik op de kaasbol bij de Knabbelberg.",
     # the whistle list
     "gui.guhs.einde2_reizen.fluit.titel": "Waar vliegen we heen?",
-    "gui.guhs.einde2_reizen.fluit.uitleg": "Kies, en Appa vliegt erheen (sturen mag). ★ = je hoofdstuk, ↻ = meteen naar je stap.",
+    "gui.guhs.einde2_reizen.fluit.uitleg": "Kies, en Appa vliegt erheen en landt op het landingsplein (sturen mag). ★ = verder met je verhaal.",
     "gui.guhs.einde2_reizen.fluit.leeg": "Je kent nog geen gebouwen in het Guheinde. Ga op ontdekking, dan onthoudt Appa ze.",
     "gui.guhs.einde2_reizen.fluit.afstand": "%s blokken",
-    "gui.guhs.einde2_reizen.fluit.verder": "(je verhaalvlucht, vlieg verder)",
     "gui.guhs.einde2_reizen.fluit.blijf": "Blijf hier",
     "gui.guhs.einde2_reizen.fluit.niet_hier": "In de Geestenwereld kan Appa je niet volgen. Keer eerst terug naar je lichaam.",
     "gui.guhs.einde2_reizen.fluit.niet_op_appa": "Ga eerst op Appa's kop zitten, njeg.",
@@ -241,9 +240,8 @@ LANG = {
     "gui.guhs.einde2_reizen.fluit.op_weg": "Jip jip! Op weg naar %s.",
     # einde2 fix-reizen: his menu on a right-click, the story's place, through the void from another dimension
     "gui.guhs.einde2_reizen.fluit.opstappen": "Opstappen (zelf vliegen)",
-    "gui.guhs.einde2_reizen.fluit.verhaal": "(vlieg naar je hoofdstuk)",
-    # merge_fix1: kern's "Verder met het verhaal" as a row (E2Hervat.verder: no flight, straight to the step)
-    "gui.guhs.einde2_reizen.fluit.hervat": "Verder met het verhaal (meteen naar je stap)",
+    # fix3-reizen (playtest 2 item 4): ONE story row, a normal flight to the chapter building's landing spot
+    "gui.guhs.einde2_reizen.fluit.verhaal_rij": "Verder met het verhaal: vlieg naar %s",
     "gui.guhs.einde2_reizen.fluit.leegte": "(door de leegte)",
     "gui.guhs.einde2_reizen.fluit.ver": "Appa staat te ver weg. Roep hem eerst met het Appa-fluitje.",
     "gui.guhs.einde2_reizen.fluit.nog_niet": "Appa snuffelt de weg daarheen nog uit. Probeer het zo nog eens.",

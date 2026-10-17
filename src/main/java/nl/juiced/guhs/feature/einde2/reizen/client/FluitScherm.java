@@ -19,11 +19,12 @@ import nl.juiced.guhs.feature.einde2.reizen.E2ReizenPayloads;
  * einde2 phase B, slice reizen: Appa's menu, "Waar vliegen we heen?": one button per building the player knows (the server's
  * list, with the distance), and "Blijf hier". einde2 fix-reizen: opened by a right-click on him it starts with "Opstappen"
  * (just climb on); the place where the story goes on comes first, gold, with a star and a gold frame; from another dimension
- * the places say "door de leegte". merge_fix1: under the star, "↻ Verder met het verhaal" (straight to the step, no flight). A click sends the choice; the server checks it again and Appa takes off. Long lists
- * scroll with the mouse wheel.
+ * the places say "door de leegte". fix3-reizen (playtest 2 item 4): the story row is one clear row, "★ Verder met het
+ * verhaal: vlieg naar <gebouw>" (a normal flight to that building's landing spot; the old "↻ meteen naar je stap" row is
+ * gone). A click sends the choice; the server checks it again and Appa takes off. Long lists scroll with the mouse wheel.
  */
 public class FluitScherm extends Screen {
-    private static final int W = 270, RIJ = 22, KOP = 46, MAX_RIJEN = 9;
+    private static final int W = 330, RIJ = 22, KOP = 46, MAX_RIJEN = 9;
     private static final int PANEL = 0xF0202A3A, BORDER = 0xFFF2C46B, TEXT = 0xFFFFF2DC;
     private final List<CompoundTag> haltes = new ArrayList<>();
     private int left, top, eerste;
@@ -57,29 +58,25 @@ public class FluitScherm extends Screen {
         for (int i = eerste; i < haltes.size() && i < eerste + MAX_RIJEN; i++) {
             CompoundTag h = haltes.get(i);
             String id = h.getStringOr("Id", "");
-            boolean verder = h.getBooleanOr("Verder", false);
-            boolean verhaal = h.getBooleanOr("Verhaal", false) || verder;
+            boolean verhaal = h.getBooleanOr("Verhaal", false) || h.getBooleanOr("Verder", false);
             boolean opstappen = h.getBooleanOr("Opstappen", false);
-            boolean hervat = h.getBooleanOr("Hervat", false);
             int afstand = h.getIntOr("Afstand", -1);
             MutableComponent tekst = Component.empty();
             if (verhaal) {
                 tekst.append(Component.literal("★ ").withStyle(ChatFormatting.GOLD));
+                tekst.append(Component.translatable("gui.guhs.einde2_reizen.fluit.verhaal_rij", Component.translatable(h.getStringOr("Naam", "")))
+                        .withStyle(ChatFormatting.GOLD));
                 verhaalY = y;
+            } else {
+                tekst.append(Component.translatable(h.getStringOr("Naam", "")).withStyle(opstappen ? ChatFormatting.AQUA : ChatFormatting.WHITE));
             }
-            if (hervat) {
-                tekst.append(Component.literal("↻ ").withStyle(ChatFormatting.LIGHT_PURPLE));
-            }
-            tekst.append(Component.translatable(h.getStringOr("Naam", ""))
-                    .withStyle(verhaal ? ChatFormatting.GOLD : opstappen ? ChatFormatting.AQUA : hervat ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE));
-            if (afstand >= 0) {
-                tekst.append(Component.literal("  ")).append(Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand).withStyle(ChatFormatting.GRAY));
-            } else if (!opstappen && !hervat && h.getBooleanOr("Leegte", false)) {
-                tekst.append(Component.literal("  ")).append(Component.translatable("gui.guhs.einde2_reizen.fluit.leegte").withStyle(ChatFormatting.GRAY));
-            }
-            if (verhaal) {
-                tekst.append(Component.literal("  ")).append(Component.translatable(verder ? "gui.guhs.einde2_reizen.fluit.verder"
-                        : "gui.guhs.einde2_reizen.fluit.verhaal").withStyle(ChatFormatting.GOLD));
+            Component extra = afstand >= 0 ? Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand)
+                    : !opstappen && h.getBooleanOr("Leegte", false) ? Component.translatable("gui.guhs.einde2_reizen.fluit.leegte") : null;
+            if (extra != null) {
+                MutableComponent met = tekst.copy().append(Component.literal("  ")).append(extra.copy().withStyle(ChatFormatting.GRAY));
+                if (font.width(met) <= W - 28) {                     // (the story row is long: the distance only when it fits)
+                    tekst = met;
+                }
             }
             addRenderableWidget(Button.builder(tekst, b -> kies(id)).bounds(left + 10, y, W - 20, 20).build());
             y += RIJ;
