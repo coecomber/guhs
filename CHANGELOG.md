@@ -69,7 +69,7 @@ The Guheinde (Guh End) grows far beyond its main island: new outer islands, **tw
 
 ### Quest book
 
-- The Guh End chapter is split into four chapters in the group **Het Guhpad (The Guh Path)**: 3. **Verhalen van het Guheinde (Tales of the Guh End)**, 3.1 **De Guhvatar (The Guhvatar)**, 3.2 **Guhvatar: zijpaden (Guhvatar: Side Paths)** and 3.3 **Sponsguh (Spongeguh)** (part 1, part 2 and the side lines of Bikinibodem). Each one starts with "Hoe kom je hier?" (How do you get here?).
+- The Guh End chapter is split into four chapters in the group **Het Guhpad (The Guh Path)**: 3. **Guheinde: algemeen (Guheinde: general)**, 3.1 **Guheinde: Guhvatar**, 3.2 **Guheinde: Guhvatar extra (Guheinde: Guhvatar extras)** and 3.3 **Guheinde: Sponsguh** (part 1, part 2 and the side lines of Bikinibodem). Each one starts with "Hoe kom je hier?" (How do you get here?).
 
 ### Music
 
