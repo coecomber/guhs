@@ -1682,7 +1682,8 @@ deeds*, *The sniffing exam*. Scene, quest and advancement titles with the same D
 | padkaart / halte | path map / stop | the map at the top of the Tales tab |
 | Verhalen van de Guhmensie | Tales of the Guhmension | FTB chapter (was *Guhverhalen* = *Guh Tales*) |
 | Verhalen van de Guhbarbecuether | Tales of the Guhbarbecuether | FTB chapter (holds the Nibble Ring and Super Guhrio) |
-| Verhalen van het Guheinde | Tales of the Guh End | FTB chapter (was *Het Guheinde*) |
+| Verhalen van het Guheinde | Tales of the Guh End | the Guheinde heading of the Tales tab (until 1.5.0 also the FTB chapter, was *Het Guheinde*) |
+| Guheinde: algemeen / Guheinde: Guhvatar / Guheinde: Guhvatar extra / Guheinde: Sponsguh | Guheinde: general / Guheinde: Guhvatar / Guheinde: Guhvatar extras / Guheinde: Sponsguh | the four FTB chapters of the Guheinde (3. / 3.1 / 3.2 / 3.3, 1.5.0; the user's names, "Guheinde" kept in English) |
 | Het echte Guheinde / het echte Guheinde | The Real Guh End / the real Guh End | the locked last chapter; mysterious, no spoilers |
 | Verhalen gevolgd | Stories Followed | statistic and quest title; the counter is *Stories followed: %s of %s* |
 | groot verhaal / de grote verhalen | big story / the big stories | the seven that count for the Guh Path |

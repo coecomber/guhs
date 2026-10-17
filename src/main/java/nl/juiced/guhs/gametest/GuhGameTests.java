@@ -1901,8 +1901,8 @@ public class GuhGameTests {
                     "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt")),
                     "the seventeen chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie), in reading order, and "
                             + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "
-                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde (einde2 ftb: with its three sub-chapters De "
-                            + "Guhvatar, Guhvatar: zijpaden and Sponsguh right under it), and Het echte Guheinde: " + names);
+                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde (einde2 ftb: Guheinde: algemeen, with its three sub-chapters "
+                            + "Guheinde: Guhvatar, Guheinde: Guhvatar extra and Guheinde: Sponsguh right under it), and Het echte Guheinde: " + names);
             java.util.Set<String> guhpad = java.util.Set.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
                     "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt");
             for (String name : names) {

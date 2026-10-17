@@ -22,7 +22,7 @@ A feature module may also declare its sections itself (bbq2, so nobody edits SEC
   FTB_PLAATJES = {file: (kind, args)}   (guhpad) extra pictures for make_ftbquests_art (e.g. a question-mark quest icon).
 Chapter groups (guhpad): GROEPEN lists them in sidebar order; a chapter names its group with groep="..." (default "guhs").
 Sub-chapters (einde2 ftb): FTB Quests has no chapters inside chapters, so a chapter with deel_van="<chapter>" stands right under
-  that chapter in the sidebar (PAD_ORDER) and is numbered "<n>.<k>." (Verhalen van het Guheinde = 3., De Guhvatar = 3.1.); its
+  that chapter in the sidebar (PAD_ORDER) and is numbered "<n>.<k>." (Guheinde: algemeen = 3., Guheinde: Guhvatar = 3.1.); its
   quests and sections keep the text keys of the parent (ftb.guhs_guheinde.q.<key>, tekst_hoofdstuk) and their ids (qid(key)).
   Which einde2 module goes to which part of the Guheinde: GUHEINDE_DELEN, and every module with "spons" in its name goes to
   the chapter Sponsguh by itself (also when it says FTB_CHAPTER = "guhs_guheinde"), and so does every einde2_sp_<slice> module
@@ -48,7 +48,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 40   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings; 32 = verhalenpad: the chapter group "Het Guhpad" (four chapters with a lock quest, the chapters guhs_knabbelring and guhs_guhrio moved into guhs_pad_barbecuether), Het Snuffeleiland; 33 = biomes3 on its own branch; 34 = 1.4.0 with biomes3: the three new biomes, their five sections in De Guhmensie, twenty Reisbureau destinations; 35 = 1.4.1: the Guhstation quest text names the music disc "Het Snuffeleiland"; 36 = 1.4.2: Het Knabbelpark (park sections in Minigames), de Rookguh-vlucht; 37 = 1.4.3: the statue garden quest text names Suusvadsje; 38 = einde2 (1.5.0, merged onto 1.4.4): the sections of the outer islands in the Guheinde chapter (biome guhs, mikas, vesting, zwevers), and phase B/C: the Guhvatar story sections (four chapters, the finale, the Spirit World, travel, the side places) in the Guheinde chapter and tier 5 + the Peace Balloon in Guh Technology (still 38: 1.5.0 is not released); 39 = einde2 ftb: the Guheinde chapter split in four chapters of the group Het Guhpad (Verhalen van het Guheinde, De Guhvatar, Guhvatar: zijpaden, Sponsguh; same quest ids), 39 so worlds that installed 38 drop the einde2 quests from guhs_guheinde instead of having them twice; 40 = einde2 1.5.0: the chapter guhs_sponsguh grew to the whole Sponsguh story (part 1, part 2, the side lines of the town), so worlds that installed 39 pick up its quests
+CHAPTER_VERSION = 41   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings; 32 = verhalenpad: the chapter group "Het Guhpad" (four chapters with a lock quest, the chapters guhs_knabbelring and guhs_guhrio moved into guhs_pad_barbecuether), Het Snuffeleiland; 33 = biomes3 on its own branch; 34 = 1.4.0 with biomes3: the three new biomes, their five sections in De Guhmensie, twenty Reisbureau destinations; 35 = 1.4.1: the Guhstation quest text names the music disc "Het Snuffeleiland"; 36 = 1.4.2: Het Knabbelpark (park sections in Minigames), de Rookguh-vlucht; 37 = 1.4.3: the statue garden quest text names Suusvadsje; 38 = einde2 (1.5.0, merged onto 1.4.4): the sections of the outer islands in the Guheinde chapter (biome guhs, mikas, vesting, zwevers), and phase B/C: the Guhvatar story sections (four chapters, the finale, the Spirit World, travel, the side places) in the Guheinde chapter and tier 5 + the Peace Balloon in Guh Technology (still 38: 1.5.0 is not released); 39 = einde2 ftb: the Guheinde chapter split in four chapters of the group Het Guhpad (Verhalen van het Guheinde, De Guhvatar, Guhvatar: zijpaden, Sponsguh; same quest ids), 39 so worlds that installed 38 drop the einde2 quests from guhs_guheinde instead of having them twice; 40 = einde2 1.5.0: the chapter guhs_sponsguh grew to the whole Sponsguh story (part 1, part 2, the side lines of the town), so worlds that installed 39 pick up its quests; 41 = einde2 1.5.0 fix: the four Guheinde chapters renamed (Guheinde: algemeen, Guheinde: Guhvatar, Guheinde: Guhvatar extra, Guheinde: Sponsguh; same ids), so worlds that installed 40 get the new titles (they live in the chapters' lang files, installed with the chapter)
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -337,8 +337,8 @@ GROEPEN = {"guhs": GROUP_TITLE, "guhpad": "&6Het Guhpad"}
 READING = ("&dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > "
            "&6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
            " > &aDiertjes&r > &dGuhpixel&r > &bGuh-technologie&r. De grote verhalen staan helemaal onderaan bij elkaar, in de groep "
-           "&6Het Guhpad&r: &dVerhalen van de Guhmensie&r > &6Verhalen van de Guhbarbecuether&r > &5Verhalen van het Guheinde&r > "
-           "&7Het echte Guheinde&r")
+           "&6Het Guhpad&r: &dVerhalen van de Guhmensie&r > &6Verhalen van de Guhbarbecuether&r > &5Guheinde: algemeen&r > "
+           "&5Guheinde: Guhvatar&r > &5Guheinde: Guhvatar extra&r > &eGuheinde: Sponsguh&r > &7Het echte Guheinde&r")
 # guhpad: is the Snuffeleiland story in this tree (its own slice registers the module "snuffel")?
 SNUFFEL = "snuffel" in _features.FEATURES
 NIKS_OP_SLOT = ("Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. "
@@ -390,7 +390,7 @@ CHAPTERS = {
     # guhpad: the third stop of the Guhpad. The file, the quests and their ids are those of the chapter "Het Guheinde" that
     # was released with 1.0.0 (so every player's progress stays); the title, the group and the first quest are new
     "guhs_guheinde": dict(
-        groep="guhpad", title="&5Verhalen van het Guheinde", sub="Opper-Mika heeft alle knabbels, njeg!", colour="purple", icon="guh:ender",
+        groep="guhpad", title="&5Guheinde: algemeen", sub="Opper-Mika heeft alle knabbels, njeg!", colour="purple", icon="guh:ender",
         banner=("guh:vahoege_ender", "geo:mika:opper_mika"), welcome=(["guh:koning", "guh:ender", "geo:mika:mika"], "wiki:structure_guheinde_knabbelberg"),
         links=["big_mika", "kasteel"],
         slot=dict(key="guhpad_slot_guheinde", titel="Slotje: eerst de Guhbarbecuether"),
@@ -550,32 +550,32 @@ CHAPTERS = {
     # in place. 1: Verhalen van het Guheinde (Opper-Mika, the outer islands, their biomes and creatures), 2: the Guhvatar
     # story in order, 3: what you do beside and after it, 4: Sponsguh (its places now, its story drops in: guheinde_deel)
     "guhs_guhvatar": dict(
-        groep="guhpad", deel_van="guhs_guheinde", title="&5De Guhvatar", sub="De Legende van Guh: lucht, water, aarde en vuur",
+        groep="guhpad", deel_van="guhs_guheinde", title="&5Guheinde: Guhvatar", sub="De Legende van Guh: lucht, water, aarde en vuur",
         colour="purple", icon="npc:aang_guh",
         banner=("npc:aang_guh", "npc:zuka_prins"), welcome=(["npc:aang_guh", "npc:katara_guh", "npc:sokka_guh", "npc:toph_guh"], None),
         links=["guheinde_winst"],
-        intro=["Dit hoofdstuk hoort bij &5Verhalen van het Guheinde&r en komt na &dOPPER-GEVADST!&r: heb je Opper-Mika verslagen, "
+        intro=["Dit hoofdstuk hoort bij &5Guheinde: algemeen&r en komt na &dOPPER-GEVADST!&r: heb je Opper-Mika verslagen, "
                "dan wacht er een gloeiende &6kaasbol&r op je in het Guheinde.",
                "Hieronder staat het grote verhaal van de &5Guhvatar&r, van boven naar beneden: lucht, water, aarde, vuur en de komeet. "
                "Deze quests komen &cecht na elkaar&r.",
                "Alles wat je ernaast en daarna kunt doen (de Geestenwereld, de Witte Lotus, de zijpaden, Appa en de walvis) staat in "
-               "&5Guhvatar: zijpaden&r."]),
+               "&5Guheinde: Guhvatar extra&r."]),
     "guhs_guhvatar_zij": dict(
-        groep="guhpad", deel_van="guhs_guheinde", title="&5Guhvatar: zijpaden", sub="Geestenwereld, Witte Lotus, verre plekken en een vliegende walvis",
+        groep="guhpad", deel_van="guhs_guheinde", title="&5Guheinde: Guhvatar extra", sub="Geestenwereld, Witte Lotus, verre plekken en een vliegende walvis",
         colour="blue", icon="npc:oom_miroh_lotus",
         banner=("npc:oom_miroh_lotus", "geo:appa_guh:appa_guh"), welcome=(["npc:oom_miroh", "npc:bumi_guh", "npc:kapiteinguh"], None),
         links=["einde2_h1_lucht_kaasbol"],
-        intro=["Dit hoofdstuk hoort bij &5Verhalen van het Guheinde&r en komt na &6De kaasbol&r in &5De Guhvatar&r.",
+        intro=["Dit hoofdstuk hoort bij &5Guheinde: algemeen&r en komt na &6De kaasbol&r in &5Guheinde: Guhvatar&r.",
                "Hier staat alles naast het grote verhaal: de &bGeestenwereld&r en de &fWitte Lotus&r, de zijpaden van de Guhvatar "
                "(Omashguh, de tempels, Kyoshi, de bibliotheek, de Leeuwschildpad), de Leegtehaven en reizen op Appa.",
                "Sommige dingen kun je al tijdens het verhaal doen; na de komeet van Mikai gaat alles open. " + NIKS_OP_SLOT]),
     "guhs_sponsguh": dict(
-        groep="guhpad", deel_van="guhs_guheinde", title="&eSponsguh", sub="Diep onder de leegte: Bikinibodem en Schelpenstad",
+        groep="guhpad", deel_van="guhs_guheinde", title="&eGuheinde: Sponsguh", sub="Diep onder de leegte: Bikinibodem en Schelpenstad",
         colour="gold", icon="geo:sponsguh:sponsguh",
         banner=("geo:sponsguh:sponsguh", "geo:patguh:patguh"),
         welcome=(["geo:sponsguh:sponsguh", "geo:patguh:patguh", "geo:octo_mika:octo_mika"], None),
         links=["guheinde_poort"],
-        intro=["Dit hoofdstuk hoort bij &5Verhalen van het Guheinde&r en komt na &dDoor de Knabbelpoort&r: diep onder de "
+        intro=["Dit hoofdstuk hoort bij &5Guheinde: algemeen&r en komt na &dDoor de Knabbelpoort&r: diep onder de "
                "buiteneilanden, op de bodem van de leegte, ligt &eBikinibodem&r.",
                "Hier staat alles van &eSponsguh Kaasbroek&r en zijn vriendjes, en de plekken in en rond Bikinibodem. " + NIKS_OP_SLOT]),
 }

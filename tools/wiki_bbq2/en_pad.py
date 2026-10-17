@@ -75,9 +75,10 @@ TEKST = {
         "big story you have not done yet. If that is in another world, it points to the portal you last came through."),
     ("systemen/het-guhpad", "In het questboek"): (
         "In the quest book",
-        "At the bottom of the quest book's sidebar is the group The Guh Path with four chapters: Tales of the Guhmension, Tales of the "
-        "Guhbarbecuether, Tales of the Guh End and The Real Guh End. Every chapter starts with a lock quest: with a check mark per story "
-        "it shows what you still have to do first."),
+        "At the bottom of the quest book's sidebar is the group The Guh Path: Tales of the Guhmension, Tales of the Guhbarbecuether, "
+        "the Guh End in four chapters (Guheinde: general, Guheinde: Guhvatar, Guheinde: Guhvatar extras and Guheinde: Sponsguh) "
+        "and The Real Guh End. Every stop of the path starts with a lock quest: with a check mark per story it shows what you still "
+        "have to do first."),
     ("systemen/het-guhpad", "Het echte Guheinde"): (
         "The Real Guh End",
         "A chapter full of black shadows and question marks. The only thing that is known: you only get there by following all the "

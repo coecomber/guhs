@@ -48,9 +48,10 @@ WIKI = {
          "naar het dichtstbijzijnde grote verhaal dat je nog niet hebt gedaan. Is dat in een andere wereld, dan wijst het naar het "
          "portaal waar je het laatst doorheen kwam."),
         ("systemen/het-guhpad", "In het questboek",
-         "Onderaan de zijbalk van het questboek staat de groep Het Guhpad met vier hoofdstukken: Verhalen van de Guhmensie, Verhalen van "
-         "de Guhbarbecuether, Verhalen van het Guheinde en Het echte Guheinde. Elk hoofdstuk begint met een slotquest: die laat met een "
-         "vinkje per verhaal zien wat je eerst nog moet doen."),
+         "Onderaan de zijbalk van het questboek staat de groep Het Guhpad: Verhalen van de Guhmensie, Verhalen van de Guhbarbecuether, "
+         "het Guheinde in vier hoofdstukken (Guheinde: algemeen, Guheinde: Guhvatar, Guheinde: Guhvatar extra en Guheinde: Sponsguh) "
+         "en Het echte Guheinde. Elke stop van het pad begint met een slotquest: die laat met een vinkje per verhaal zien wat je eerst "
+         "nog moet doen."),
         ("systemen/het-guhpad", "Het echte Guheinde",
          "Een hoofdstuk vol zwarte schimmen en vraagtekens. Het enige dat bekend is: je komt er alleen door alle verhalen van de "
          "Guhmensie, de Guhbarbecuether en het Guheinde te volgen. Eén teller houdt het bij: 'Verhalen gevolgd'. Onderaan staat een rijtje "
