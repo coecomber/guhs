@@ -37,6 +37,37 @@ public final class E2ReizenClient {
         Minecraft.getInstance().setScreen(new FluitScherm(data));
     }
 
+    /** (payload, fix4-appa) on Appa, ready to leave: the "Yip yip!" dialog. */
+    public static void vertrek(CompoundTag data) {
+        Minecraft.getInstance().setScreen(new YipYipScherm(data));
+    }
+
+    /** The name of a row of Appa's menu: a building, or "<naam>s Appa-platform". */
+    static net.minecraft.network.chat.MutableComponent naam(CompoundTag rij) {
+        if (rij.getBooleanOr("Platform", false)) {
+            return nl.juiced.guhs.feature.einde2.reizen.AppaPlatform.naam(rij.getStringOr("Speler", "")).copy();
+        }
+        return net.minecraft.network.chat.Component.translatable(rij.getStringOr("Naam", ""));
+    }
+
+    /** What a row adds in grey: the distance, or the dimension of a platform there / "door de leegte". Null: nothing. */
+    @Nullable
+    static net.minecraft.network.chat.Component extra(CompoundTag rij) {
+        int afstand = rij.getIntOr("Afstand", -1);
+        if (afstand >= 0) {
+            return net.minecraft.network.chat.Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand);
+        }
+        if (rij.getBooleanOr("Platform", false)) {
+            String dim = rij.getStringOr("Dim", "");
+            return net.minecraft.network.chat.Component.translatable("gui.guhs.einde2_reizen.platform.daar",
+                    net.minecraft.network.chat.Component.translatableWithFallback(nl.juiced.guhs.feature.einde2.reizen.AppaPlatform.dimSleutel(dim), dim));
+        }
+        if (!rij.getBooleanOr("Opstappen", false) && rij.getBooleanOr("Leegte", false)) {
+            return net.minecraft.network.chat.Component.translatable("gui.guhs.einde2_reizen.fluit.leegte");
+        }
+        return null;
+    }
+
     /** (payload) the furniture screen. */
     public static void inrichting(CompoundTag data) {
         Minecraft.getInstance().setScreen(new InrichtingScherm(data));

@@ -52,7 +52,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  */
 public final class E2ReizenCommando {
     static final List<String> STAPPEN = List.of("vlucht_start", "vlucht_h1_h2", "vlucht_h2_h3", "vlucht_h3_h4", "team_zuidelijke_luchttempel",
-            "team_noordelijke_waterstam", "team_ba_sing_guh", "team_vuurnatie_hoofdstad", "fluit", "walvis_0", "walvis_1", "walvis_2", "walvis_3",
+            "team_noordelijke_waterstam", "team_ba_sing_guh", "team_vuurnatie_hoofdstad", "fluit", "fluit_alles", "platform", "walvis_0", "walvis_1", "walvis_2", "walvis_3",
             "walvis_4");
 
     private E2ReizenCommando() {
@@ -100,6 +100,19 @@ public final class E2ReizenCommando {
                 return 0;
             }
             zeg(src, "Hele team: kijk bij het kampvuur (team_*). Klik ze voor hun praatjes.");
+            return 1;
+        }
+        if (stap.equals("platform")) {
+            return platform(src, p);
+        }
+        if (stap.equals("fluit_alles")) {
+            E2VerhaalDev.zetTot(p, E2Verhaal.FINALE, 0);    // (fix4-appa: the story done, every einde2 building on the list)
+            E2VerhaalDev.klaar(p, E2Verhaal.FINALE);
+            if (p.level() != guheinde) {
+                naarAankomst(p, guheinde, Einde2Ids.LEEGTEHAVEN);
+            }
+            opAppa(p);
+            Fluitlijst.open(p);
             return 1;
         }
         if (stap.equals("fluit")) {
@@ -166,6 +179,35 @@ public final class E2ReizenCommando {
         boolean ok = E2Reizen.vlieg(p, naar, soort, speler -> speler.sendSystemMessage(Component.literal("[dev] daarna: geland bij " + naar)));
         zeg(src, ok ? "Vlucht " + soort + " naar " + naar + " gestart." : "Vlucht kon niet starten (plek onbekend?).");
         return ok ? 1 : 0;
+    }
+
+    /**
+     * fix4-appa: the story done, and a complete Appa-platform (5x5 smooth stone with the platform block in the middle, 3
+     * blocks of air above) right under the player, in this dimension; the player stands on its edge.
+     */
+    private static int platform(CommandSourceStack src, ServerPlayer p) {
+        E2VerhaalDev.zetTot(p, E2Verhaal.FINALE, 0);
+        E2VerhaalDev.klaar(p, E2Verhaal.FINALE);
+        Appa.houdWeg(p, false);
+        Appa.geef(p);
+        ServerLevel level = p.level();
+        BlockPos midden = p.blockPosition().below();
+        for (int dx = -AppaPlatform.HALF; dx <= AppaPlatform.HALF; dx++) {
+            for (int dz = -AppaPlatform.HALF; dz <= AppaPlatform.HALF; dz++) {
+                BlockPos q = midden.offset(dx, 0, dz);
+                level.setBlockAndUpdate(q, dx == 0 && dz == 0 ? E2ReizenFeature.APPA_PLATFORM.get().defaultBlockState()
+                        : net.minecraft.world.level.block.Blocks.SMOOTH_STONE.defaultBlockState());
+                for (int dy = 1; dy <= AppaPlatform.LUCHT; dy++) {
+                    level.setBlockAndUpdate(q.above(dy), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        AppaPlatform.zet(p, level.dimension(), midden);
+        p.teleportTo(midden.getX() + 0.5, midden.getY() + 1, midden.getZ() + 0.5 - AppaPlatform.HALF);
+        AppaPlatform.meld(p, level, midden, AppaPlatform.controleer(level, midden));
+        zeg(src, "Appa-platform onder je in " + level.dimension().identifier() + ". Loop meer dan " + (int) AppaPlatform.BEREIK
+                + " blokken weg en fluit (hij komt niet), kom terug en fluit (hij landt erop). Haal een vloerblok weg en klik het platform: wat mist er?");
+        return 1;
     }
 
     private static int walvis(CommandSourceStack src, ServerPlayer p, ServerLevel guheinde, int stap) {

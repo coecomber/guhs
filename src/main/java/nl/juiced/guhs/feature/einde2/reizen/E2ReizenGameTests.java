@@ -259,4 +259,105 @@ public class E2ReizenGameTests {
         helper.assertTrue(verhaal.equals(E2Reizen.verhaalDoel(p)), "the story row is the story's place");
         return verhaal;
     }
+
+    // =====================================================================================================================
+    // fix4-appa (playtest 3): the own Appa-platform
+    // =====================================================================================================================
+
+    /** Lays a complete platform with its middle at {@code midden} (relative): smooth stone around, 3 blocks of air above. */
+    private static BlockPos legPlatform(GameTestHelper helper, BlockPos midden) {
+        ServerLevel level = helper.getLevel();
+        BlockPos m = helper.absolutePos(midden);
+        for (int dx = -AppaPlatform.HALF; dx <= AppaPlatform.HALF; dx++) {
+            for (int dz = -AppaPlatform.HALF; dz <= AppaPlatform.HALF; dz++) {
+                BlockPos q = m.offset(dx, 0, dz);
+                level.setBlockAndUpdate(q, dx == 0 && dz == 0 ? E2ReizenFeature.APPA_PLATFORM.get().defaultBlockState()
+                        : net.minecraft.world.level.block.Blocks.SMOOTH_STONE.defaultBlockState());
+                for (int dy = 1; dy <= AppaPlatform.LUCHT; dy++) {
+                    level.setBlockAndUpdate(q.above(dy), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        return m;
+    }
+
+    /**
+     * fix4-appa: the 5x5 rule of the Appa-platform. A complete square is ok; every missing floor block and every block in the
+     * 3 blocks of air above the square is named; without the platform block itself it is no platform. Placing it counts only
+     * after the whole story; and the name is good Dutch (Joosts, Anna's, Max').
+     */
+    @GuhTest(template = WEI, batch = "einde2_reizen", timeoutTicks = 100)
+    public static void einde2ReizenPlatform5x5(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos m = legPlatform(helper, new BlockPos(8, 1, 8));
+        helper.assertTrue(AppaPlatform.controleer(level, m).ok(), "a complete 5x5 square is ok");
+        level.setBlockAndUpdate(m.offset(-2, 0, -2), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+        level.setBlockAndUpdate(m.offset(2, 0, 1), net.minecraft.world.level.block.Blocks.WATER.defaultBlockState());
+        level.setBlockAndUpdate(m.offset(0, 0, 2), net.minecraft.world.level.block.Blocks.OAK_SLAB.defaultBlockState());
+        level.setBlockAndUpdate(m.offset(1, 3, -1), net.minecraft.world.level.block.Blocks.OAK_FENCE.defaultBlockState());
+        AppaPlatform.Controle c = AppaPlatform.controleer(level, m);
+        helper.assertTrue(c.blok() && !c.ok(), "a square with holes is not ok");
+        helper.assertTrue(c.vloer().size() == 3 && c.vloer().contains(m.offset(-2, 0, -2)) && c.vloer().contains(m.offset(2, 0, 1))
+                && c.vloer().contains(m.offset(0, 0, 2)), "the three missing floor blocks are named (air, water, a low slab): " + c.vloer());
+        helper.assertTrue(c.inDeWeg().size() == 1 && c.inDeWeg().contains(m.offset(1, 3, -1)), "the fence in the air above is named: " + c.inDeWeg());
+        legPlatform(helper, new BlockPos(8, 1, 8));
+        level.setBlockAndUpdate(m, net.minecraft.world.level.block.Blocks.HAY_BLOCK.defaultBlockState());
+        helper.assertTrue(!AppaPlatform.controleer(level, m).blok(), "without the Appa-platform block in the middle it is no platform");
+        legPlatform(helper, new BlockPos(8, 1, 8));
+        // placing it counts only after the whole story
+        ServerPlayer p = speler(helper, new BlockPos(8, 2, 5));
+        E2VerhaalDev.wis(p, E2Verhaal.FINALE);
+        GuhQuests.saved(p).remove(AppaPlatform.KEY);
+        AppaPlatform.geplaatst(p, level, m);
+        helper.assertTrue(AppaPlatform.van(p, level.dimension()) == null, "before the end of the story it is nobody's platform");
+        E2VerhaalDev.zetTot(p, E2Verhaal.FINALE, 0);
+        E2VerhaalDev.klaar(p, E2Verhaal.FINALE);
+        AppaPlatform.geplaatst(p, level, m);
+        helper.assertTrue(m.equals(AppaPlatform.van(p, level.dimension())), "after the story it is the player's platform in this dimension");
+        helper.assertTrue(Fluitlijst.rijen(p).getCompound(0).map(t -> t.getBooleanOr("Platform", false)).orElse(false),
+                "the own platform is the top row of Appa's menu");
+        helper.assertTrue(AppaPlatform.vorm("Joost").equals("s") && AppaPlatform.vorm("Anna").equals("as") && AppaPlatform.vorm("Max").equals("a")
+                && AppaPlatform.vorm("Steve_").equals("as") && AppaPlatform.vorm("Thomas").equals("a"), "Joosts, Anna's, Max', Steve_'s, Thomas'");
+        GuhQuests.saved(p).remove(AppaPlatform.KEY);
+        weg(helper, p);
+        helper.succeed();
+    }
+
+    /**
+     * fix4-appa: the whistle outside the Guheinde (the game test level is the overworld). Without a platform, or more than
+     * {@value AppaPlatform#BEREIK} blocks from it, Appa does not come; near an unfinished one he does not come either; near
+     * a complete one he appears above its middle and sinks down onto it.
+     */
+    @GuhTest(template = WEI, batch = "einde2_reizen", timeoutTicks = 260)
+    public static void einde2ReizenFluitBereik(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, new BlockPos(8, 2, 3));
+        GuhQuests.saved(p).remove(AppaPlatform.KEY);
+        Appa.houdWeg(p, false);
+        Appa.geef(p);
+        Appa.geladen(p).discard();
+        nl.juiced.guhs.feature.einde2.appa.AppaFluitjeItem.blaas(p, false);
+        helper.assertTrue(Appa.geladen(p) == null, "no platform here: the whistle does not bring him outside the Guheinde");
+        BlockPos m = legPlatform(helper, new BlockPos(8, 1, 8));
+        AppaPlatform.zet(p, level.dimension(), m);
+        p.teleportTo(m.getX() + 0.5 + AppaPlatform.BEREIK + 5, m.getY() + 1, m.getZ() + 0.5);
+        nl.juiced.guhs.feature.einde2.appa.AppaFluitjeItem.blaas(p, false);
+        helper.assertTrue(Appa.geladen(p) == null, "more than " + (int) AppaPlatform.BEREIK + " blocks from the platform: he does not come");
+        p.teleportTo(m.getX() + 0.5, m.getY() + 1, m.getZ() + 0.5 - 5);
+        level.setBlockAndUpdate(m.offset(2, 0, 2), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+        nl.juiced.guhs.feature.einde2.appa.AppaFluitjeItem.blaas(p, false);
+        helper.assertTrue(Appa.geladen(p) == null, "near an unfinished platform: he does not come (it says what is missing)");
+        legPlatform(helper, new BlockPos(8, 1, 8));
+        nl.juiced.guhs.feature.einde2.appa.AppaFluitjeItem.blaas(p, false);
+        AppaGuhEntity appa = Appa.geladen(p);
+        helper.assertTrue(appa != null && Math.abs(appa.getX() - (m.getX() + 0.5)) < 0.01 && Math.abs(appa.getZ() - (m.getZ() + 0.5)) < 0.01
+                && appa.getY() > m.getY() + 1.5, "within range of the complete platform: he appears above its middle");
+        helper.runAfterDelay(200, () -> {
+            helper.assertTrue(!appa.isRemoved() && Math.abs(appa.getY() - (m.getY() + 1)) < 0.6 && Math.abs(appa.getX() - (m.getX() + 0.5)) < 1.0
+                    && Math.abs(appa.getZ() - (m.getZ() + 0.5)) < 1.0, "and lands on it (" + appa.position() + ")");
+            GuhQuests.saved(p).remove(AppaPlatform.KEY);
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
 }

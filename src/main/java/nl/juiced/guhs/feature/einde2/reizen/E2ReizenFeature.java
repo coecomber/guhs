@@ -7,12 +7,18 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -48,6 +54,16 @@ public final class E2ReizenFeature {
     public static final DeferredItem<WalvishoornItem> WALVISHOORN = ITEMS.registerItem("einde2_reizen_walvishoorn", WalvishoornItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 
+    /**
+     * einde2 fix4-appa: the Appa-platform, the middle of your own Appa landing place in your base (5x5, see
+     * {@link AppaPlatform}); given at the end of the story, also craftable.
+     */
+    public static final DeferredBlock<AppaPlatformBlok> APPA_PLATFORM = BLOCKS.registerBlock("einde2_reizen_appa_platform", AppaPlatformBlok::new,
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.HAY_BLOCK).mapColor(MapColor.COLOR_BROWN).strength(1.0f).sound(SoundType.WOOL));
+    public static final DeferredItem<BlockItem> APPA_PLATFORM_ITEM = ITEMS.registerItem("einde2_reizen_appa_platform",
+            p -> new nl.juiced.guhs.feature.balto.BaltoBlocks.LoreBlock(APPA_PLATFORM.get(), p),
+            () -> new Item.Properties().useBlockDescriptionPrefix().rarity(Rarity.RARE));
+
     // --- sounds (vanilla sounds, pitched, in sounds.json) ---------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> HOORN = sound("einde2_reizen.hoorn");
     public static final DeferredHolder<SoundEvent, SoundEvent> VUURBAL = sound("einde2_reizen.vuurbal");
@@ -77,6 +93,7 @@ public final class E2ReizenFeature {
 
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(WALVISHOORN.get()));
+        output.accept(new ItemStack(APPA_PLATFORM.get()));
     }
 
     private E2ReizenFeature() {

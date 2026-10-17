@@ -22,6 +22,8 @@ import nl.juiced.guhs.feature.einde2.reizen.E2ReizenPayloads;
  * the places say "door de leegte". fix3-reizen (playtest 2 item 4): the story row is one clear row, "★ Verder met het
  * verhaal: vlieg naar <gebouw>" (a normal flight to that building's landing spot; the old "↻ meteen naar je stap" row is
  * gone). A click sends the choice; the server checks it again and Appa takes off. Long lists scroll with the mouse wheel.
+ * fix4-appa: your own Appa-platforms are the top rows ("⌂ <naam>s Appa-platform"); a click seats you on Appa and the server
+ * opens the "Yip yip!" dialog ({@link YipYipScherm}) instead of taking off at once.
  */
 public class FluitScherm extends Screen {
     private static final int W = 330, RIJ = 22, KOP = 46, MAX_RIJEN = 9;
@@ -60,9 +62,12 @@ public class FluitScherm extends Screen {
             String id = h.getStringOr("Id", "");
             boolean verhaal = h.getBooleanOr("Verhaal", false) || h.getBooleanOr("Verder", false);
             boolean opstappen = h.getBooleanOr("Opstappen", false);
-            int afstand = h.getIntOr("Afstand", -1);
+            boolean platform = h.getBooleanOr("Platform", false);
             MutableComponent tekst = Component.empty();
-            if (verhaal) {
+            if (platform) {                                          // (fix4-appa: your own platform, always on top)
+                tekst.append(Component.literal("⌂ ").withStyle(ChatFormatting.LIGHT_PURPLE));
+                tekst.append(E2ReizenClient.naam(h).withStyle(ChatFormatting.LIGHT_PURPLE));
+            } else if (verhaal) {
                 tekst.append(Component.literal("★ ").withStyle(ChatFormatting.GOLD));
                 tekst.append(Component.translatable("gui.guhs.einde2_reizen.fluit.verhaal_rij", Component.translatable(h.getStringOr("Naam", "")))
                         .withStyle(ChatFormatting.GOLD));
@@ -70,8 +75,7 @@ public class FluitScherm extends Screen {
             } else {
                 tekst.append(Component.translatable(h.getStringOr("Naam", "")).withStyle(opstappen ? ChatFormatting.AQUA : ChatFormatting.WHITE));
             }
-            Component extra = afstand >= 0 ? Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand)
-                    : !opstappen && h.getBooleanOr("Leegte", false) ? Component.translatable("gui.guhs.einde2_reizen.fluit.leegte") : null;
+            Component extra = E2ReizenClient.extra(h);
             if (extra != null) {
                 MutableComponent met = tekst.copy().append(Component.literal("  ")).append(extra.copy().withStyle(ChatFormatting.GRAY));
                 if (font.width(met) <= W - 28) {                     // (the story row is long: the distance only when it fits)

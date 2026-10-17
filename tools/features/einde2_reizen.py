@@ -230,7 +230,7 @@ LANG = {
                                     "verhaal\", om verder te vliegen. Appa kwijt? Blaas op je Appa-fluitje, of klik op de kaasbol bij de Knabbelberg.",
     # the whistle list
     "gui.guhs.einde2_reizen.fluit.titel": "Waar vliegen we heen?",
-    "gui.guhs.einde2_reizen.fluit.uitleg": "Kies, en Appa vliegt erheen en landt op het landingsplein (sturen mag). ★ = verder met je verhaal.",
+    "gui.guhs.einde2_reizen.fluit.uitleg": "Kies een plek, dan Yip yip! en Appa vliegt erheen (sturen mag). ★ = je verhaal, ⌂ = je eigen Appa-platform.",
     "gui.guhs.einde2_reizen.fluit.leeg": "Je kent nog geen gebouwen in het Guheinde. Ga op ontdekking, dan onthoudt Appa ze.",
     "gui.guhs.einde2_reizen.fluit.afstand": "%s blokken",
     "gui.guhs.einde2_reizen.fluit.blijf": "Blijf hier",
@@ -247,6 +247,44 @@ LANG = {
     "gui.guhs.einde2_reizen.fluit.nog_niet": "Appa snuffelt de weg daarheen nog uit. Probeer het zo nog eens.",
     "gui.guhs.einde2_reizen.leegte.op_weg": "Appa bromt, zwiept met zijn staart en duikt met je de leegte in, op weg naar %s...",
     "gui.guhs.einde2_reizen.leegte.aangekomen": "Daar zijn jullie: %s!",
+    # fix4-appa (playtest 3): the own Appa-platform and the "Yip yip!" dialog
+    "block.guhs.einde2_reizen_appa_platform": "Appa-platform",
+    "block.guhs.einde2_reizen_appa_platform.lore": "Het midden van je eigen Appa-stal. Leg er een vloer van 5x5 omheen, met 3 blokken lucht erboven.",
+    "gui.guhs.einde2_reizen.platform.naam.s": "%ss Appa-platform",
+    "gui.guhs.einde2_reizen.platform.naam.as": "%s's Appa-platform",
+    "gui.guhs.einde2_reizen.platform.naam.a": "%s' Appa-platform",
+    "gui.guhs.einde2_reizen.platform.klaar": "%s is klaar! Fluit binnen %s blokken op je Appa-fluitje, dan landt Appa er netjes op.",
+    "gui.guhs.einde2_reizen.platform.vloer": "%s is nog niet af: er missen %s vloerblokken in het vierkant van 5x5 rond het platform (bijvoorbeeld bij %s). Boze wolkjes laten zien waar.",
+    "gui.guhs.einde2_reizen.platform.ruimte": "Boven %s staat nog iets in de weg: %s blokken (bijvoorbeeld bij %s). Appa heeft boven het hele vierkant van 5x5 %s blokken vrije lucht nodig.",
+    "gui.guhs.einde2_reizen.platform.weg": "Je Appa-platform in deze dimensie is er niet meer. Zet een nieuw neer.",
+    "gui.guhs.einde2_reizen.platform.geen": "Daar heb je geen Appa-platform (meer).",
+    "gui.guhs.einde2_reizen.platform.te_vroeg": "Appa kent dit platform nog niet. Speel eerst het verhaal van de Guhvatar helemaal uit, njeg.",
+    "gui.guhs.einde2_reizen.platform.verplaatst": "Dit is nu je Appa-platform in deze dimensie. Het oude telt niet meer.",
+    "gui.guhs.einde2_reizen.platform.van_jou": "Dit is nu ook %s.",
+    "gui.guhs.einde2_reizen.platform.opgeruimd": "Je hebt je Appa-platform opgeruimd. Zet het ergens anders weer neer, dan vindt Appa het wel.",
+    "gui.guhs.einde2_reizen.platform.alleen_guheinde": "Appa kun je alleen in het Guheinde overal roepen. In andere dimensies moet je echt je eigen Appa-stal maken: een Appa-platform met een vloer van 5x5. Daar hoort hij je fluitje wel.",
+    "gui.guhs.einde2_reizen.platform.te_ver": "%s staat %s blokken verderop. Kom binnen %s blokken en fluit nog eens.",
+    "gui.guhs.einde2_reizen.platform.komt": "%s hoort je fluitje en landt op %s. Jip jip!",
+    "gui.guhs.einde2_reizen.platform.daar": "(in %s, door de leegte)",
+    "gui.guhs.einde2_reizen.platform.dim.minecraft.overworld": "de Bovenwereld",
+    "gui.guhs.einde2_reizen.platform.dim.minecraft.the_nether": "de Nether",
+    "gui.guhs.einde2_reizen.platform.dim.minecraft.the_end": "het End",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.guheinde": "het Guheinde",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.guhmension": "de Guhmensie",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.barbecuether": "de Guhbarbecuether",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.guhmaag": "de Guhmaag",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.guhpixel": "Guhpixel",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.snuffeleiland": "het Snuffeleiland",
+    "gui.guhs.einde2_reizen.platform.dim.guhs.huisje_binnen": "een Guhhuisje",
+    "gui.guhs.einde2_reizen.platform.geschenk.1": "Hier, voor jou: een Appa-platform! Bouw thuis een vloer van 5x5 met dit in het midden, dan weet Appa altijd waar hij moet landen. Ook buiten het Guheinde, njeg.",
+    "gui.guhs.einde2_reizen.platform.geschenk.2": "Appa snuffelt aan het platform, niest één keer en kijkt je goedkeurend aan. Je hebt een Appa-platform gekregen.",
+    "gui.guhs.einde2_reizen.yip.titel": "Klaar voor vertrek!",
+    "gui.guhs.einde2_reizen.yip.naar": "Op naar %s",
+    "gui.guhs.einde2_reizen.yip.aan_boord": "Spelers aan boord: %s. Vrienden kunnen nog instappen: rechtsklik op Appa.",
+    "gui.guhs.einde2_reizen.yip.knop": "Yip yip!",
+    "gui.guhs.einde2_reizen.yip.niet": "Toch niet",
+    "gui.guhs.einde2_reizen.yip.blijft": "Appa blijft hier. Blaas op je fluitje op zijn kop om een plek te kiezen.",
+    "gui.guhs.einde2_reizen.yip.niet_op": "Je zit niet meer op Appa. Kies opnieuw.",
     # the whale questline: where to go, waiting in the void
     "gui.guhs.einde2_reizen.doel.kroeg": "naar de havenkroeg van de Leegtehaven",
     "gui.guhs.einde2_reizen.doel.wachten": "naar de plek van de kapitein, boven de leegte",
@@ -360,8 +398,21 @@ def texts(h):
         verhaal_motor.scene(h, sid, titel, regels, namen)
 
 
+PLATFORM = "einde2_reizen_appa_platform"
+
+
 def items_and_sounds(h):
     h.item_model("einde2_reizen_walvishoorn")
+    # fix4-appa: the Appa-platform block (fur pad on top, hay planks on the sides), drops itself, craftable
+    A = h.A
+    h.w(f"{A}/models/block/{PLATFORM}.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+        "top": f"guhs:block/{PLATFORM}_top", "bottom": f"guhs:block/{PLATFORM}_onder", "side": f"guhs:block/{PLATFORM}_zij"}})
+    h.w(f"{A}/blockstates/{PLATFORM}.json", {"variants": {"": {"model": f"guhs:block/{PLATFORM}"}}})
+    h.w(f"{A}/models/item/{PLATFORM}.json", {"parent": f"guhs:block/{PLATFORM}"})
+    h.self_drop(PLATFORM)
+    h.add_tag("minecraft/tags/block/mineable/axe", [f"guhs:{PLATFORM}"])
+    h.shaped(PLATFORM, ["WBW", "HFH", "HHH"], {"W": "minecraft:white_wool", "B": "minecraft:blue_dye", "H": "minecraft:hay_block",
+                                                 "F": "minecraft:leather"}, f"guhs:{PLATFORM}")
 
     def patch(d):
         for event, entries in SOUNDS.items():
@@ -394,6 +445,13 @@ def selfcheck(h):
                 problems.append(f"open ends: {key} says '{woord}'")
     for key in ("entity.guhs.einde2_reizen_zuka_schip", "item.guhs.einde2_reizen_walvishoorn", f"gui.guhs.verhalen.{LIJN}.naam",
                 f"scene.guhs.{SCENE_WALVIS[0]}.titel", f"scene.guhs.{SCENE_KROEG[0]}.titel"):
+        if key not in h.NL:
+            problems.append(f"missing lang {key}")
+    for kant in ("top", "zij", "onder"):
+        if not os.path.exists(f"{h.A}/textures/block/{PLATFORM}_{kant}.png"):
+            problems.append(f"missing texture {PLATFORM}_{kant}")
+    for key in (f"block.guhs.{PLATFORM}", f"block.guhs.{PLATFORM}.lore", "gui.guhs.einde2_reizen.platform.alleen_guheinde",
+                "gui.guhs.einde2_reizen.yip.knop"):
         if key not in h.NL:
             problems.append(f"missing lang {key}")
     for p in (f"{h.A}/models/item/einde2_reizen_walvishoorn.json", f"{h.A}/textures/item/einde2_reizen_walvishoorn.png",

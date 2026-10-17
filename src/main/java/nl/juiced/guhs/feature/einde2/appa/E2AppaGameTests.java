@@ -126,7 +126,7 @@ public class E2AppaGameTests {
         // dead (only /kill does that): the fluitje makes him again, the same Appa
         appa.kill(level);
         helper.assertTrue(Appa.geladen(p) == null, "killed: gone");
-        AppaFluitjeItem.blaas(p, false);
+        Appa.roep(p);                              // (fix4-appa: the whistle itself only calls him everywhere in the Guheinde)
         AppaGuhEntity nieuw = Appa.geladen(p);
         helper.assertTrue(nieuw != null && nieuw != appa && nieuw.isAlive(), "the fluitje brings a new one");
         helper.assertTrue(nieuw.kist().getItem(3).is(Items.APPLE) && nieuw.kist().getItem(3).getCount() == 7, "with the same chest");
@@ -247,7 +247,7 @@ public class E2AppaGameTests {
             AppaFluitjeItem.blaas(p, false);
             helper.assertTrue(Appa.roep(p) == null && Appa.geladen(p) == null && Appa.geef(p) == null, "nothing brings him while he is kept away");
             Appa.houdWeg(p, false);
-            AppaFluitjeItem.blaas(p, false);
+            Appa.roep(p);                          // (fix4-appa: outside the Guheinde the whistle needs a platform)
             helper.assertTrue(Appa.geladen(p) != null, "let go: the fluitje brings him again");
             weg(helper, p);
             helper.succeed();
