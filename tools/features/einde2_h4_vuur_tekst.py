@@ -92,7 +92,7 @@ TEAM = {"aang": "Aang-guh", "katara": "Katara-guh", "sokka": "Sokka-guh", "toph"
 SCENES = {
     "aankomst": ("Vermomd in de Vuurnatie", {
         "verteller": "De Vuurnatie-hoofdstad. Een krater vol rook, vlaggen en heel veel boze vlammetjes.",
-        "plan": "Plan Vermomming! Rode kleren, gouden randjes, en niemand zegt het woord 'Guhvatar'. Niemand. Njeg.",
+        "plan": "Plan Vermomming, zoals afgesproken boven de wolken! Gouden randjes erbij, en niemand zegt het woord 'Guhvatar'. Niemand. Njeg.",
         "moe": "Jij bent nog moe van Ba Sing Guh. Doe het rustig aan, oké? Wij letten op je.",
         "schoenen": "Rood? Ik zie toch niks. Ik voel alleen dat deze schoenen knellen.",
         "welkom": "Welkom in de Vuurnatie! Ze schijnen hier de lekkerste vuurvlokken te hebben. Denk ik. Hoop ik.",
@@ -292,12 +292,12 @@ SCENES = {
     }, {}),
     # --- fix3-h4: the why-scenes (playtest 2): before a task, WHY we do it ---------------------------------------------
     "plan": ("Het plan van het team", {
-        "kring": "Achter Appa-guh, op het landingsveld, gaat het team in een kring zitten. Eerst het plan. Fluisterend.",
-        "geheim": "Azula denkt dat haar bliksem jou in Ba Sing Guh heeft uitgeschakeld. Iedereen denkt dat de Guhvatar weg is. Dat is ons geheime wapen.",
+        "kring": "Achter Appa-guh, op het landingsveld, gaat het team in een kring zitten. De Vuurnatie in: dat staat vast. Nu het hoe. Fluisterend.",
+        "geheim": "Zoals we in de lucht besloten: niemand mag weten wie je bent. En dat is makkelijker dan het klinkt. Azula denkt dat haar bliksem jou in Ba Sing Guh heeft uitgeschakeld. Iedereen denkt dat de Guhvatar weg is. Dat is ons geheime wapen.",
         "komeet": "Over een paar weken komt de knabbelkomeet. Met die kracht wil Mikai alles opeten wat er te eten valt. Alles. Voor altijd.",
         "zwarte_zon": "Maar eerst komt de Dag van de Zwarte Zon: acht minuten lang geen vuur. Dan komt onze vloot, en dan moet jij erbij zijn. Uitgerust.",
-        "tot_dan": "En tot die tijd zijn we gewone Vuurnatie-kinderen. Saai, rood, en we buigen voor elk vlammetje.",
-        "school": "Gewone kinderen gaan naar school. En dat schooltje staat vlak voor het paleis: daar leren we de stad kennen, en hoe we straks binnenkomen.",
+        "tot_dan": "En tot die tijd zijn we gewone Vuurnatie-kinderen. Saai, rood, en we buigen voor elk vlammetje. Mijn nepsnor zit al. Een kleintje, zoals afgesproken.",
+        "school": "En dat schooltje van daarboven was geen grapje, Aang-guh. Het staat vlak voor het paleis: daar leren we de stad kennen, en hoe we straks binnenkomen.",
         "kuzon": "Honderd jaar geleden had ik hier een vriend. Kuzon-guh. Niet iedereen in de Vuurnatie is gemeen, echt niet. Misschien zien we dat nog.",
     }, {k: TEAM[k] for k in ("aang", "sokka", "katara", "toph")}),
     "vijver": ("Bij de paleisvijver", {
@@ -309,8 +309,8 @@ SCENES = {
     }, {k: TEAM[k] for k in ("aang", "katara", "sokka", "toph")}),
     "rotsblok_plan": ("Wie zit er in Het Kokend Rotsblok?", {
         "stil": "Na het goedmaken is het stil in het kamp. Sokka-guh staart al een uur in het vuur.",
-        "suki": "Op de Dag van de Zwarte Zon hield Suki-guh de wachters tegen, zodat wij konden vluchten. Zij en de guhs van onze vloot. Ze zijn allemaal gepakt.",
-        "wie": "Suki-guh is de aanvoerder van de Kyoshi-krijgsters. Ze vechten met waaiers, en ze zijn héél snel. Ze hielp ons al eens, lang voordat jij ons vond.",
+        "suki": "Op de Dag van de Zwarte Zon, toen wij van het paleis terugrenden, hield Suki-guh op het strand de wachters tegen, zodat wij konden vluchten. Zij en de guhs van onze vloot. Ze zijn allemaal gepakt.",
+        "wie": "Jij kent haar nog niet. Suki-guh is de aanvoerder van de Kyoshi-krijgsters, uit het dorp onder het grote beeld van Kyoshi-guh. Ze vechten met waaiers, en ze zijn héél snel. Lang voordat jij bij ons kwam, vochten we daar samen. Ze hielp ons uit de brand. Letterlijk.",
         "hart": "En Sokka-guh is een beetje verliefd. Ik voel zijn hart helemaal tot hier bonken.",
         "rotsblok": "Ik weet waar ze zijn. Het Kokend Rotsblok: een gevangenis op een eiland in een meer van kokende kaassaus. Er is nog nooit iemand ontsnapt.",
         "gondel": "Er is maar één weg naar binnen: de gondel op de kraterrand. Ik ga met je mee, Sokka-guh. Dat ben ik je schuldig.",
