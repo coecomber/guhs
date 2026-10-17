@@ -3,55 +3,89 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.5.0 — the Guh End update — Minecraft 26.1.2 (in progress)
+## 1.5.0 — the Guh End update — Minecraft 26.1.2
 
-The Guheinde (Guh End) grows far beyond its main island: new outer islands, a whole new story in four chapters, a dimension of its own, side places, music and tech tier 5. No world reset: the new islands and buildings grow in Guh End land that was not generated yet.
+The Guheinde (Guh End) grows far beyond its main island: new outer islands, **two** big new stories (the Guhvatar and Sponsguh Kaasbroek), a dimension of its own, a town under the void, side places, music and tech tier 5. No world reset: the new islands and buildings grow in Guh End land that was not generated yet.
 
 ### Read this first
 
 - **The Oog van Vadsig (Eye of Chonky) has a fourth ingredient:** guh crystal + cheese nibble + Mika Tear + **grillspiespoeder (grill skewer powder)** from the Skewer Keep in the Guhbarbecuether. Eyes you already have, and filled portal frames, keep working.
+- **"Het echte Guheinde" (The Real Guh End)** on the Guh Path now counts the two new stories too: its lock names De Legende van Guh (The Legend of Guh) and Sponsguh Kaasbroek (Spongeguh Cheesepants).
+- **The quest book was rebuilt:** the Guh End stories are now four chapters in the group Het Guhpad (The Guh Path). Your progress stays; the chapters replace the old long one by themselves.
 
 ### The outer islands
 
 - **Six new biomes:** Holey Cheese Hills, Rind Desert, Crumb Clouds, Blue Cheese Plains, Crystal Cheese Cliffs and the Nibble Chorus Forest, with Crystal Cheese, Nibble Chorus and Crumb Clouds to gather.
 - **New creatures:** six biome guhs, Ender Mikas, Cheese Mites, the shy Hidey Guh, Crumb Jellies, four element animals and the Void Whale Guh (only for those who believe).
-- **Mika Fortresses** that grow in a different shape every time, with cells to open, and small buildings all over the islands.
+- **Biome guhs have a trick once tamed:** the Korstguh rolls into a ball, the Duinguh digs in, the Kruimelguh floats down slowly, the Schimmelguh is a lamp, the Kristalguh finds Crystal Cheese Nuggets and the Koorguh sings along with a jukebox. They count for a complete Guhdex (if you already had the Guhkenner title, you keep it).
+- **Mika Fortresses** that grow in a different shape every time: open the cells and free six skinny guhs for the title **Vestingbevrijder (Fortress Liberator)**. Watch out for Schuilguhs on the walls, and taste the sorry Mika cook's **Spijtsoep (Sorry Soup)**.
+- **Small buildings** all over the islands, and new deco blocks: **Windgong (Wind Chime)**, **Eeuwige vlam (Eternal Flame)**, **Witte lotustegel (White Lotus Tile)** and **Kool (Cabbage)**.
+- **A new sky:** the Guh End sky is a lighter pink, with a faint guh-face constellation and a soft guh moon.
 
-### The Legend of Guh
+### The Legend of Guh (De Legende van Guh)
 
-- **A new big story in four chapters**, from the **Southern Air Temple** via the **Northern Water Tribe** and **Ba Sing Guh** to the **Fire Nation Capital**. It begins after you beat the Overlord Mika: keep an eye on the shore near the Nibble Mountain.
-- **You are the Guhvatar.** Learn air, water, earth and fire. Four light powers stay with you (a double jump, walking on water, a small earth pillar, a paw flame): one key (H), tap to use, hold for the element wheel.
-- **Appa Guh** flies you from chapter to chapter (steer yourself, or let him fly), and **Momo Guh** rides on your shoulder. Blow the **Appa Whistle** while sitting on Appa's head to fly to any story place you have unlocked.
+- **A new big story in four chapters**, from the **Southern Air Temple** via the **Northern Water Tribe** and **Ba Sing Guh** to the **Fire Nation Capital**, and a finale. It begins after you beat the Overlord Mika: keep an eye on the shore near the Nibble Mountain.
+- **You are the Guhvatar.** Learn air, water, earth and fire. One key (H): tap to use the power you picked, hold for the **Element Wheel**, which now explains every power:
+  - **Luchtsprong (Air Leap):** a high jump, once more in mid-air, and a soft landing.
+  - **Over water lopen (Water Walk):** 15 seconds on water; sneak to sink.
+  - **Rotszuil (Rock Pillar):** a pillar of rock bursts up where you look (up to 12 blocks) and throws monsters into the air. Look at your feet and it lifts you. Sneak + tap for a **Rotsmuur (Rock Wall)** that shoves monsters back. The rock crumbles after a few seconds, plants come back, and it never breaks anything.
+  - **Vuurschicht (Fire Bolt):** a little bolt of fire for monsters that lights campfires and candles, but never sets a block on fire.
+  - Guhs, NPCs and animals are never hit.
+- **Story help:** every step has a hint with a direction, a light column and a short "look here" scene. Lost after dying or a teleport? Click the glowing **Kaasbol (Cheese Ball)** or pick **★ Verder met het verhaal (On with the story)** in Appa's menu.
 - **Together:** friends who ride along in Appa's saddle travel with you and may visit your places as your guests; everyone keeps their own story.
-- The story buildings stay hidden in smoke until you get that far. Every scene waits for your click, and minigames, sneaking and chases never hurt you.
-- **Keepsakes:** outfits, a Pai Sho Table you can really play, Uncle Miroh's Tea Set, Sokka's Boomerang, the Air Scooter toy for your guhs, a cabbage stall, the title Guhvatar and a statue of yourself.
+- The story buildings stay hidden in smoke until you get that far. Every scene waits for your click, and minigames, sneaking, chases and duels never hurt you.
+- **Keepsakes:** outfits, a Pai Sho Table you can really play, Uncle Miroh's Tea Set, Sokka's Boomerang, the Air Scooter toy for your guhs, a cabbage stall, the title **Guhvatar** and a statue of yourself.
+
+### Appa Guh and Momo Guh
+
+- **Appa Guh** flies you from chapter to chapter (steer yourself, or let him fly), about twice as fast as before, and lands on each building's own landing place. You never take fall damage getting off. **Momo Guh** rides on your shoulder.
+- **Appa's menu** (click him, or blow the **Appa-fluitje (Appa Whistle)** on his head) has a fixed order: your own platforms, the gold story row, the four main buildings, the Guhvatar side places (unvisited ones marked "nog niet bezocht" (not visited yet)), and under the heading **Overige plekken (Other places)** Bikinibodem, Schelpenstad, the Void Harbor and the ring race. After the finale all places are on it, visited or not.
+- **Yip yip!** Picking a place seats you on Appa and opens a small dialog: friends can climb on first, then you click **Yip yip!** (or **Toch niet** (Never mind)).
+- **Your own Appa-platform (Appa Platform):** you get one when the story is done, and you can craft more. Put it in the middle of a sturdy 5x5 floor with 3 blocks of air above; click it to see what is missing. In the Guh End you can whistle for Appa anywhere; in other dimensions only within 20 blocks of your own platform. Flights to another dimension go through the void, with your riders.
 
 ### The Spirit World (Geestenwereld)
 
 - **A small dimension of its own**: pastel mist, islands, waterfalls that fall upward. Nothing can hurt you there.
-- **The White Lotus** with five trials, the **Lost Lanterns**, **Koh's Riddles**, **Hei Bai Guh's Acorn**, the **Chakra Path**, mirror ponds, the Spirit Clock and **rare sightings** for your Guhdex. Somewhere in the mist lies an island you cannot reach... yet.
+- **The White Lotus** with five trials, each explained in a scene and forgiving (hints after a few mistakes), plus the **Lost Lanterns**, **Koh's Riddles**, **Hei Bai Guh's Acorn**, the **Chakra Path**, mirror ponds, the Spirit Clock and **rare sightings** for your Guhdex. Somewhere in the mist lies an island you cannot reach... yet.
+- **Rewards:** the Pai Sho tiles of the White Lotus masters, **De Witte Lotus-tegel (The White Lotus Tile)**, **Masker van Koh (Koh's Mask)**, **Maandruppel (Moon Drop)**, **Gouden boekrol (Golden Scroll)**, **Veer van de witte reiger (White Heron Feather)**, **Knabbelkoor-eikel (Nibble Chorus Acorn)** and **De eerste knabbel (The First Nibble)**.
 - After the story you can travel from its meditation stones, and a **Meditation Cushion** takes you there from home.
 
 ### Side places
 
-- **Omashguh**, the **Western Air Temple**, the **Fire Temple of Roku Guh**, **Kyoshi Village**, **Wan Shi Guh's Library** and **Lion Turtle Island**, each with its own questline.
-- The **Void Harbor** (Leegtehaven): a market of Ender Mika traders, a free ferry to every place you know, a sorry Mika cook, a shipwright who builds you a little boat, and an old captain with a tale nobody believes.
-- The **Guh Wing Ring Race**: eighteen rings, a landing strip and a record on the wall.
+- **Omashguh**, the **Western Air Temple**, the **Fire Temple of Roku Guh**, **Kyoshi Village**, **Wan Shi Guh's Library** and **Lion Turtle Island**, each with its own questline and keepsakes like the **Kristalsnoep-ring (Crystal Candy Ring)**, **Kyoshi-schmink (Kyoshi Makeup)** and the **Schub van de Leeuwschildpad (Scale of the Lion Turtle)**.
+- The **Void Harbor** (Leegtehaven): a market of Ender Mika traders, a free ferry to every place you know, an old captain with a tale nobody believes, and a shipwright who builds you the **Vetbootje (Little Grease Boat)**: find the note on the harbour board of a Mika Fortress pier and bring him the materials. It has a chest and two cushions for guhs; pick its colour, sail and name in the **Werfboekje (Shipyard Booklet)** and call it back with the **Vetfluitje (Grease Whistle)**.
+- The **Guh Wing Ring Race**: eighteen rings, a landing strip, a record on the wall and the title **Ringenracer (Ring Racer)** for a fast run.
+
+### Sponsguh Kaasbroek (Spongeguh Cheesepants)
+
+- **The second big story of the Guh End**, after the Legend of Guh. Until then pink smoke hides the way; once the Guhvatar story is done, a **Bubbelbrief (Bubble Letter)** with a job advert floats to you, and **Bikinibodem onder de leegte (Bikini Bottom Under the Void)** joins Appa's menu.
+- **Two places:** Bikinibodem with De Krokante Knabbel (The Krusty Nibble), De Vetemmer (The Grease Bucket) and the Bellenkom (Bubble Bowl), and far across the void **Schelpenstad (Shell City)**, with De Ruige Kroeg (The Thug Tug) and the loopgraaf (the Trench) on the way.
+- **Part 1, "Het geheime recept" (The Secret Recipe), 11 steps:** a job at the grill, jellyfishing with Patguh (with your own **Kwallennetje (Jelly Net)**), a boating exam with Juf Pufguh (Mrs. Puffguh) in her **Lesbootje (Practice Boat)**, a sneaky mission, and a drum game on a big stage.
+- **Part 2, "De kroon van koning Neptuguh" (King Neptuguh's Crown), 12 steps:** a road trip in the **Knabbelburgermobiel (Patty Wagon)**, a stand-still game, a moustache disguise, a chase, a very wet minigame, the **Bellenblazer (Bubble Blaster)** (a toy you keep), and a ride home you will not forget.
+- **Three side lines in town** (open after your job interview): Sandy-guh's tree dome (karate!), De Vliegende Guhlander (The Flying Guhchman), Zeemeerman and Mosselguh (Mermaid Guh and Barnacle Guh), and a visit to Octo's house.
+- **Three own songs:** **Zoete Knabbelzege (Sweet Nibble Victory)**, **Ik ben een Guhfy Guhber (I'm a Guhfy Guhber)** and **Het lied van de loopgraaf (The Song of the Trench)**, plus background music for Bikinibodem, Schelpenstad and the Trench, and tunes for every minigame.
+- **Rewards:** the clothes Square Pants with Tie, Krusty Nibble Cap, Patguh's Flower Trunks, Guhfy Guhber Ice Cream Hat, Nibble Chorus Moustache, Plankmika Antennas, Sandy's Air Helmet and Hero Cape; Jelly Jam, the Ghost Lantern and its recipe, **Knabbelburgers (Nibble Patties)** that Mr. Krabguh sells you for 3 cheese nibbles, Sponsguh and Gerrit (Gary) as buddies, and the title **Guhfy Guhber**.
+- **The cast:** Sponsguh, Patguh Star, Mr. Krabguh, Pearl, Sandy Guh, Gerrit (Gary), Octo (Squidmika), Octoliam (Squilliam), Plankmika, Karen, Mrs. Puffguh, King Neptuguh, Princess Mindy Guh, Dennis Mika, the Cyclops, David Hasselguh and the Mikas of the Thug Tug.
+
+### Quest book
+
+- The Guh End chapter is split into four chapters in the group **Het Guhpad (The Guh Path)**: 3. **Verhalen van het Guheinde (Tales of the Guh End)**, 3.1 **De Guhvatar (The Guhvatar)**, 3.2 **Guhvatar: zijpaden (Guhvatar: Side Paths)** and 3.3 **Sponsguh (Spongeguh)** (part 1, part 2 and the side lines of Bikinibodem). Each one starts with "Hoe kom je hier?" (How do you get here?).
 
 ### Music
 
-- **Own music for the Guh End:** background pieces per area (air, water, earth, fire and the Spirit World) and music under the big moments of the story. Every maker is credited in the book *De Muziek van het Guheinde* (The Music of the Guh End).
+- **Own music for the Guh End:** background pieces per area (air, water, earth, fire, the Spirit World, Bikinibodem, Schelpenstad and the Trench) and music under the big moments of both stories. Every maker is credited in the book *De Muziek van het Guheinde* (The Music of the Guh End), which now has two pages for Sponsguh.
 
 ### Guh Technology: tier 5
 
-- After the story the **Mechanist Guh** opens his workshop in the Southern Air Temple: a new questline of projects, each one leaving something that works in your own world.
+- After the story the **Mechanist Guh** opens his workshop in the Southern Air Temple: a new questline of projects, each one leaving something that works in your own world, and the **Diploma van de Werktuigguh (Mechanist Guh's Diploma)**.
 - **New machines:** Chonk Transmitter and Chonk Receiver, Guh Terminal (your bank from anywhere), Order Counter with its Order Guh, Nibble Gate Tube, Home Gate, the four element machines (Air Blower, Water Bearer, Crust Pusher, Fire Basket) and two new sources: the **Enderguh Wheel** and the **Comet Core**.
-- **The Peace Balloon:** the big project after that. Your factory delivers, the Mechanist Guh sews and screws. And tier 6? To be continued...
+- **The Peace Balloon (Vredesballon):** the big project after that. Your factory delivers, the Mechanist Guh sews and screws, and you get your own **Heteluchtballon (Hot Air Balloon)** that drifts on the wind, the **Vredesballon-beeldje (Peace Balloon Statuette)** and the title **Vredesbrenger (Peacebringer)**. And tier 6? To be continued...
 
 ### Bug fixes
 
 - **Fixed: two Vahoege Vads pieces combine in an anvil again.** Two enchanted pieces of the same vads gear (helmet, chestplate, leggings, boots, sword, pickaxe, axe, shovel, hoe, Vadspaxel or Vahoege-vadsschaar) left the anvil's result slot empty, because the gear never breaks. Now they merge like ordinary tools: equal levels go up one (two helmets with Protection III give Protection IV), otherwise the highest level stays, and enchantments that do not fit or clash are skipped. The XP cost, the "Too Expensive!" limit and renaming work as usual. The gear stays unbreakable.
 - **Fixed: you can make pepper soup again.** Pouring a bucket of kaassaus (Bucket of Cheese Sauce) into a Guhbrouwketel (Guh Brewing Cauldron) inside or next to a guh building always said "Geen vuur of emmers naast een guhgebouw, njeg!" (No fire or buckets next to a guh building), so the pepper brew in the Peperteler-guh's kas could not be started. The sauce goes into the cauldron now. Pouring buckets out next to guh buildings is still not allowed.
+
 ## 1.4.4 — Minecraft 26.1.2
 
 Every story scene now waits for you. Same requirements as 1.4.3, no world reset.

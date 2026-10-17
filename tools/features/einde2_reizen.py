@@ -245,6 +245,8 @@ LANG = {
     "gui.guhs.einde2_reizen.fluit.leegte": "(door de leegte)",
     # merge_fix4 (user request): a Guhvatar side building the player has not visited yet (after the story)
     "gui.guhs.einde2_reizen.fluit.nieuw": "nog niet bezocht",
+    # merge_sp2: the heading over the rest of the menu (Sponsguh's start, the Leegtehaven, the ring race)
+    "gui.guhs.einde2_reizen.fluit.kop_overig": "Overige plekken",
     "gui.guhs.einde2_reizen.fluit.ver": "Appa staat te ver weg. Roep hem eerst met het Appa-fluitje.",
     "gui.guhs.einde2_reizen.fluit.nog_niet": "Appa snuffelt de weg daarheen nog uit. Probeer het zo nog eens.",
     "gui.guhs.einde2_reizen.leegte.op_weg": "Appa bromt, zwiept met zijn staart en duikt met je de leegte in, op weg naar %s...",

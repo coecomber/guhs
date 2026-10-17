@@ -160,6 +160,7 @@
   "gui.guhs.einde2_reizen.fluit.verhaal_rij": "On with the story: fly to %s",
   "gui.guhs.einde2_reizen.fluit.leegte": "(through the void)",
   "gui.guhs.einde2_reizen.fluit.nieuw": "not visited yet",
+  "gui.guhs.einde2_reizen.fluit.kop_overig": "Other places",
   "gui.guhs.einde2_reizen.fluit.ver": "Appa is too far away. Call him with the Appa Whistle first.",
   "gui.guhs.einde2_reizen.fluit.nog_niet": "Appa is still sniffing out the way there. Try again in a moment.",
   "gui.guhs.einde2_reizen.leegte.op_weg": "Appa rumbles, swishes his tail and dives into the void with you, on the way to %s...",

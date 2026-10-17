@@ -53,6 +53,8 @@ public final class Fluitlijst {
      * screen still open) now flies to the story's place like the gold row, never straight to the step.
      */
     static final String VERDER = "#verder";
+    /** The id of the heading row "Overige plekken" (merge_sp2): never sent back, the screen draws it as a label. */
+    static final String KOP = "#kop";
     /** How far (blocks) from Appa a pick from his menu still counts (he is big, and they just clicked him). */
     static final double BEREIK = 16;
 
@@ -117,8 +119,23 @@ public final class Fluitlijst {
         // merge_fix4 (user request): the four main buildings, then the Guhvatar side buildings (not yet visited first, "nog niet bezocht"),
         // then the rest (the start of the other story lines: Sponsguh; the Leegtehaven, the ring race)
         java.util.Set<String> ontdekt = nl.juiced.guhs.feature.einde2.Einde2Ontdekt.ontdekt(p);
+        boolean guhvatar = false, kop = false;
         for (String s : volgorde(bestemmingen(p), ontdekt)) {
             if (!s.equals(verhaal)) {
+                if (overig(s)) {
+                    if (guhvatar && !kop) {
+                        // (merge_sp2: a heading "Overige plekken" over group 3, under the Guhvatar's buildings; not a pick)
+                        CompoundTag k = new CompoundTag();
+                        k.putString("Id", KOP);
+                        k.putString("Naam", "gui.guhs.einde2_reizen.fluit.kop_overig");
+                        k.putInt("Afstand", -1);
+                        k.putBoolean("Kop", true);
+                        lijst.add(k);
+                        kop = true;
+                    }
+                } else {
+                    guhvatar = true;
+                }
                 CompoundTag t = rij(guheinde, hier, p, s, false, false);
                 if (nieuw(s, ontdekt)) {
                     t.putBoolean("Nieuw", true);
@@ -161,6 +178,11 @@ public final class Fluitlijst {
             }
         }
         return uit;
+    }
+
+    /** Group 3 of {@link #volgorde}: not one of the four main buildings, not a Guhvatar side building (Sponsguh, the rest). */
+    static boolean overig(String s) {
+        return !Einde2Ids.VERHAAL_STRUCTUREN.contains(s) && !E2Verhaal.GUHVATAR_ZIJ.contains(s);
     }
 
     /** A Guhvatar side building the player has not visited yet (its row says "nog niet bezocht"). */
@@ -231,6 +253,9 @@ public final class Fluitlijst {
 
     /** The player picked a row of the menu: checked again, then climbing on or the flight. */
     static void kies(ServerPlayer p, String structuur) {
+        if (structuur.equals(KOP)) {
+            return;                                             // (the heading is no place)
+        }
         boolean op = p.getVehicle() instanceof AppaGuhEntity appa && appa.isEigenaar(p);
         AppaGuhEntity appa = Appa.geladen(p);
         boolean dichtbij = appa != null && appa.level() == p.level() && appa.distanceTo(p) <= BEREIK;

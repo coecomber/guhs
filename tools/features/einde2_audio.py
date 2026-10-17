@@ -22,6 +22,8 @@ G = "gui.guhs.einde2_audio."
 SUB = "subtitles.guhs.einde2_audio."
 JAVA = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "einde2", "audio")
 LEDGER = os.path.join("tools", "features", "einde2_audio_licenties.json")
+# merge_sp2: the Sponsguh story's own ledger (sp_audio); its pieces get the last two pages of the book
+SP_LEDGER = os.path.join("tools", "features", "einde2_sp_audio_licenties.json")
 # licences the user allowed (12a.2): CC0, CC BY (any version) and the Pixabay licence; never NC or ND
 TOEGESTAAN = re.compile(r"^(CC0|CC BY [34]\.0|Pixabay)$")
 MUZIEK_MAX_MB = 42.0
@@ -119,6 +121,14 @@ def boek_paginas():
     licenties = sorted({(s["licentie"], s["licentie_url"]) for s in stukken})
     paginas.append("Makers\n" + "\n".join(makers) + "\n\nLicenties\n" + "\n".join(f"{l}: {u.replace('https://', '')}" for l, u in licenties)
                    + "\n\nBronnen: incompetech.com, opengameart.org")
+    # merge_sp2: the Sponsguh story (Bikinibodem, Schelpenstad): its real pieces as a list, then what the guhs made themselves
+    sp = json.load(open(SP_LEDGER, encoding="utf-8"))["stukken"]
+    titels = [s["titel"] for s in sp]
+    sp_makers = sorted({s["maker"].replace(" (incompetech.com)", "") for s in sp})
+    sp_lic = sorted({s["licentie"] for s in sp})
+    paginas.append(f"Sponsguh Kaasbroek\n\nIn Bikinibodem en Schelpenstad hoor je muziek van {' en '.join(sp_makers)} "
+                   f"({', '.join(sp_lic)}):\n\n" + "\n".join(titels[:4]))
+    paginas.append("\n".join(titels[4:]) + "\n\nDe drie liedjes, de deuntjes en de geluidjes van Sponsguh maakten de guhs zelf.")
     return paginas
 
 

@@ -65,6 +65,14 @@ public class FluitScherm extends Screen {
             boolean verhaal = h.getBooleanOr("Verhaal", false) || h.getBooleanOr("Verder", false);
             boolean opstappen = h.getBooleanOr("Opstappen", false);
             boolean platform = h.getBooleanOr("Platform", false);
+            if (h.getBooleanOr("Kop", false)) {                     // (merge_sp2: the heading "Overige plekken", not a pick)
+                Button kop = Button.builder(Component.translatable(h.getStringOr("Naam", "")).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+                        b -> { }).bounds(left + 10, y, W - 20, 20).build();
+                kop.active = false;
+                addRenderableWidget(kop);
+                y += RIJ;
+                continue;
+            }
             MutableComponent tekst = Component.empty();
             if (platform) {                                          // (fix4-appa: your own platform, always on top)
                 tekst.append(Component.literal("⌂ ").withStyle(ChatFormatting.LIGHT_PURPLE));

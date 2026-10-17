@@ -63,7 +63,8 @@ public final class SpCommando {
             return 1;
         }));
         groep(event, Commands.literal("poort").executes(c -> poort(c.getSource()))
-                .then(Commands.literal("uitleg").executes(c -> SpPoort.vertel(c.getSource().getPlayerOrException(), Long.MAX_VALUE / 2) ? 1 : 0)));
+                .then(Commands.literal("uitleg").executes(c -> SpPoort.vertel(c.getSource().getPlayerOrException(), Long.MAX_VALUE / 2) ? 1 : 0))
+                .then(Commands.literal("open").executes(c -> poortOpen(c.getSource()))));
     }
 
     private static int stand(CommandSourceStack src) throws CommandSyntaxException {
@@ -122,6 +123,19 @@ public final class SpCommando {
                 + ", schelpenstad open=" + Sluiers.open(p, SpVerhaal.SCHELPENSTAD) + ", passes as creative op=" + Sluiers.passeert(p)
                 + ", Appa rows=" + SpVerhaal.gebouwen(p);
         src.sendSuccess(() -> Component.literal(uit), false);
+        return 1;
+    }
+
+    /**
+     * merge_sp2 (the quick test of the QUICKGUIDE): the Guhvatar story done (the finale, as after the credits) and both Sponsguh
+     * lines forgotten, so the gate is open and the real start follows: the bubble letter finds you in the Guheinde.
+     */
+    private static int poortOpen(CommandSourceStack src) throws CommandSyntaxException {
+        ServerPlayer p = src.getPlayerOrException();
+        SpVerhaalDev.guhvatarKlaar(p);
+        SpVerhaalDev.wis(p);
+        src.sendSuccess(() -> Component.literal("Sponsguh: the Guhvatar story is done, the gate is open (open=" + SpVerhaal.open(p)
+                + "); in the Guheinde the bubble letter finds you in about 10 s"), false);
         return 1;
     }
 

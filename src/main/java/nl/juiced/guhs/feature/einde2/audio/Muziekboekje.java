@@ -33,7 +33,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  */
 public final class Muziekboekje {
     /** The pages of the book (tools/features/einde2_audio.py checks this number). */
-    public static final int PAGINAS = 16;
+    public static final int PAGINAS = 18;                     // (merge_sp2: +2 Sponsguh pages)
     /** Per player: the book was given ({@code GuhQuests.saved}). */
     public static final String GEGEVEN = "guhs_einde2_audio_boek";
     public static final String TAG = "GuhsMuziekboekje";
