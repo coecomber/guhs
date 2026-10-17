@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -40,17 +41,26 @@ import nl.juiced.guhs.registry.ModEntities;
  * Running time (without the waits): aankomst 15 s, pakguh 28 s, blauwe_geest 29 s, maanvis 26 s, <b>geest_reis 54 s</b>,
  * koh 21 s, la_woede 14 s, <b>yue_maan 53.5 s</b>, <b>golf 50.5 s</b>, sneeuwstorm 26 s, team 20 s, knipoog_balto 9.8 s,
  * knipoog_sjokkel 8.5 s.
+ * <p>
+ * fix3-h2 (playtest 2, "waarom doen we dit?"): eleven story scenes more (without the waits): welkom 34.5 s, les_zweep 16.5 s,
+ * les_golf 14 s, les_ijsbrug 14.5 s, otters 18.5 s, maanfeest 21.5 s, paleis 29 s, kade 17.5 s, vis_aan_boord 19 s,
+ * geest_aankomst 15.5 s, koh_raad 17 s.
  */
 public final class E2H2WaterScenes {
     public static Cutscene AANKOMST, PAKGUH, BLAUWE_GEEST, MAANVIS, GEEST_REIS, KOH, LA_WOEDE, YUE_MAAN, GOLF, STORM, TEAM, KNIPOOG_BALTO,
             KNIPOOG_SJOKKEL;
+    /** fix3-h2 (playtest 2): the story thread: a scene with its reason before every task, the Water Tribe, the way through the Geestenwereld. */
+    public static Cutscene WELKOM, LES_ZWEEP, LES_GOLF, LES_IJSBRUG, OTTERS, MAANFEEST, PALEIS, KADE, VIS_AAN_BOORD, GEEST_AANKOMST, KOH_RAAD;
+    /** fix3-h2: the pink spirit mist in a scene (the same colour as {@link Geestnevel}). */
+    static final ParticleOptions ROZE_NEVEL = new DustParticleOptions(0xFF8AD2, 3.0f);
 
     private E2H2WaterScenes() {
     }
 
     /** Every scene of the chapter (dev command, wipe). */
     public static List<Cutscene> alle() {
-        return List.of(AANKOMST, PAKGUH, BLAUWE_GEEST, MAANVIS, GEEST_REIS, KOH, LA_WOEDE, YUE_MAAN, GOLF, STORM, TEAM, KNIPOOG_BALTO, KNIPOOG_SJOKKEL);
+        return List.of(AANKOMST, PAKGUH, BLAUWE_GEEST, MAANVIS, GEEST_REIS, KOH, LA_WOEDE, YUE_MAAN, GOLF, STORM, TEAM, KNIPOOG_BALTO, KNIPOOG_SJOKKEL,
+                WELKOM, LES_ZWEEP, LES_GOLF, LES_IJSBRUG, OTTERS, MAANFEEST, PALEIS, KADE, VIS_AAN_BOORD, GEEST_AANKOMST, KOH_RAAD);
     }
 
     /** Registers them (E2H2WaterFeature.register, both sides). */
@@ -68,6 +78,17 @@ public final class E2H2WaterScenes {
         TEAM = team();
         KNIPOOG_BALTO = knipoogBalto();
         KNIPOOG_SJOKKEL = knipoogSjokkel();
+        WELKOM = welkom();
+        LES_ZWEEP = lesZweep();
+        LES_GOLF = lesGolf();
+        LES_IJSBRUG = lesIjsbrug();
+        OTTERS = otters();
+        MAANFEEST = maanfeest();
+        PALEIS = paleis();
+        KADE = kade();
+        VIS_AAN_BOORD = visAanBoord();
+        GEEST_AANKOMST = geestAankomst();
+        KOH_RAAD = kohRaad();
     }
 
     // =====================================================================================================================
@@ -860,6 +881,301 @@ public final class E2H2WaterScenes {
                 .zeg(270, "aang", "team", 50)
                 .zeg(320, "katara", "ja", 40)
                 .anim("sokka", 358, "plan").zeg(360, "sokka", "plan", 30);
+        return s.klaar();
+    }
+
+    // =====================================================================================================================
+    // fix3-h2 (playtest 2, item 1): the story thread of the Waterstam. Every task gets a short scene with its reason, the
+    // Water Tribe gets its introduction, and the threat (the Fire Nation, the moon spirit) builds up step by step.
+    // =====================================================================================================================
+
+    /** fix3-h2: after the arrival: Katara-guh and Sokka-guh meet you at the landing (who, why we are here, what is coming). */
+    private static Cutscene welkom() {
+        S s = new S("welkom", 690, 126, 31, 159);
+        s.speler(126.5, 31, 159.5, 180)
+                .npc("aang", Kind.AANG_GUH, 128.0, 31, 160.0, 160)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, 124.8, 31, 160.5, 180, null)
+                .npc("wachter", Kind.WATERSTAM_WACHTER, 117.5, 31, 155.5, -66)
+                .npc("katara", Kind.KATARA_GUH, 119.5, 31, 154.5, -60)
+                .npc("sokka", Kind.SOKKA_GUH, 118.5, 31, 156.5, -70)
+                .verberg(12)
+                .zwart(-8, 4);
+        // 1. two guhs in thick blue coats come from the gate
+        s.cam(0, 133.5, 34.5, 165.5, 122.5, 32.2, 156.5).cam(110, 132.0, 34.0, 164.0, 123.0, 32.2, 157.5)
+                .loop("katara", 4, 60, 123.5, 31, 157.0).loop("sokka", 8, 70, 123.0, 31, 160.0)
+                .zeg(10, "", "intro", 60)
+                .kijk("katara", 76, 126.5, 32.5, 159.5).kijk("sokka", 76, 126.5, 32.5, 159.5)
+                .kijk(Cutscene.SPELER, 76, 123.5, 32.5, 157.0).kijk("aang", 76, 123.5, 32.5, 157.0);
+        // 2. Katara-guh and her brother
+        s.knip(76, 128.8, 32.8, 161.5, 123.5, 32.6, 157.0)
+                .anim("katara", 78, "praat").zeg(78, "katara", "wie", 66)
+                .knip(150, 125.5, 32.7, 162.0, 123.0, 32.5, 159.8)
+                .anim("sokka", 150, "boemerang").zeg(152, "sokka", "krijger", 60);
+        // 3. why we are here
+        s.knip(218, 124.5, 32.8, 157.5, 128.0, 32.5, 160.0)
+                .anim("aang", 218, "praat").zeg(220, "aang", "leren", 60);
+        // 4. the moon and the ocean in the oasis up in the city
+        s.knip(286, 127.5, 32.8, 156.0, 123.5, 32.6, 157.0)
+                .kijk("katara", 286, 112.5, 45, 60).zeg(288, "katara", "maan", 70)
+                .knip(364, 124.0, 64.0, 166.0, 112.5, 62.0, 66.0)
+                .zeg(366, "sokka", "druk", 50);
+        // 5. smoke over the sea
+        s.knip(420, 129.5, 33.0, 157.0, 123.5, 32.6, 157.0)
+                .kijk("katara", 420, 126.5, 32.5, 159.5).anim("katara", 420, "armen").zeg(422, "katara", "rook", 76)
+                .geluid(424, () -> SoundEvents.AMBIENT_BASALT_DELTAS_MOOD.value(), 0.6f, 1.2f);
+        // 6. the best teacher, and his rule
+        s.knip(504, 128.8, 32.8, 161.5, 123.5, 32.6, 157.0)
+                .zeg(506, "katara", "pakguh", 64)
+                .knip(576, 125.5, 32.7, 162.0, 123.0, 32.5, 159.8)
+                .anim("sokka", 576, "praat").zeg(578, "sokka", "snor", 56)
+                .zwart(672, 689);
+        return s.klaar();
+    }
+
+    /** fix3-h2: before the whip: Pakguh's first lesson and why a waterbender trains on targets. */
+    private static Cutscene lesZweep() {
+        S s = new S("les_zweep", 330, 112, 37, 79);
+        s.speler(122.5, 37, 84.5, -90)
+                .npc("pakguh", Kind.PAKGUH, 126.0, 37, 82.5, 110)
+                .npc("katara", Kind.KATARA_GUH, 121.5, 37, 87.5, -120)
+                .npc("aang", Kind.AANG_GUH, 121.0, 37, 82.0, -70)
+                .verberg(18)
+                .zwart(-8, 4);
+        s.cam(0, 118.0, 39.6, 90.0, 127.5, 38.0, 83.5).cam(80, 118.5, 39.4, 89.0, 127.5, 38.2, 83.5)
+                .kijk(Cutscene.SPELER, 0, 126.0, 38.5, 82.5).kijk("katara", 0, 126.0, 38.5, 82.5).kijk("aang", 0, 126.0, 38.5, 82.5)
+                .anim("pakguh", 10, "praat").zeg(10, "pakguh", "geduld", 64);
+        // a little whip at the middle target, to show it
+        s.knip(80, 127.5, 39.0, 88.5, 131.5, 38.6, 84.5)
+                .kijk("pakguh", 80, 132.5, 38.5, 84.5).anim("pakguh", 84, "waterzweep")
+                .deeltjes(92, ParticleTypes.SPLASH, 132.5, 38.6, 84.5, 30, 0.5).deeltjes(98, ParticleTypes.SPLASH, 132.5, 38.8, 84.5, 20, 0.4)
+                .geluid(92, () -> SoundEvents.GENERIC_SPLASH, 1.0f, 1.3f)
+                .zeg(104, "pakguh", "doelen", 60);
+        s.knip(170, 124.5, 38.7, 90.0, 121.5, 38.4, 87.5)
+                .kijk("pakguh", 170, 122.5, 38.5, 84.5).kijk("katara", 170, 122.5, 38.5, 84.5)
+                .anim("katara", 172, "praat").zeg(172, "katara", "waarom", 66)
+                .knip(244, 123.0, 38.9, 80.5, 126.0, 38.4, 82.5)
+                .anim("pakguh", 246, "snor").zeg(246, "pakguh", "vuurnatie", 64);
+        return s.klaar();
+    }
+
+    /** fix3-h2: after the targets: the second lesson, why a city on the ice needs waves. */
+    private static Cutscene lesGolf() {
+        S s = new S("les_golf", 280, 112, 37, 79);
+        s.speler(136.5, 37, 86.5, -90)
+                .npc("pakguh", Kind.PAKGUH, 138.5, 37, 84.0, 120)
+                .npc("katara", Kind.KATARA_GUH, 139.0, 37, 89.0, 60)
+                .npc("aang", Kind.AANG_GUH, 134.5, 37, 84.5, -60)
+                .verberg(20)
+                .zwart(-8, 4);
+        s.cam(0, 131.5, 39.5, 91.5, 139.5, 37.6, 86.0).cam(70, 132.0, 39.4, 91.0, 139.5, 37.8, 86.0)
+                .kijk(Cutscene.SPELER, 0, 138.5, 38.5, 84.0).kijk("aang", 0, 138.5, 38.5, 84.0).kijk("katara", 0, 136.5, 38.5, 86.5)
+                .anim("pakguh", 10, "snor").zeg(10, "pakguh", "slecht", 50);
+        s.knip(70, 134.5, 38.8, 82.0, 138.5, 38.4, 84.0)
+                .anim("pakguh", 72, "praat").zeg(72, "pakguh", "zee", 70);
+        s.knip(150, 140.0, 40.5, 93.5, 153.5, 37.2, 87.0)
+                .kijk("katara", 150, 152.5, 36, 87).deeltjes(156, ParticleTypes.SPLASH, 152.5, 36.2, 87.5, 40, 2.0)
+                .geluid(156, () -> SoundEvents.GENERIC_SPLASH, 0.7f, 1.0f)
+                .zeg(152, "katara", "bassin", 56)
+                .knip(216, 135.0, 38.8, 89.5, 138.5, 38.4, 84.0)
+                .kijk("katara", 216, 138.5, 38.5, 84.0).anim("pakguh", 218, "neus_op").zeg(218, "pakguh", "dweilt", 44);
+        return s.klaar();
+    }
+
+    /** fix3-h2: after the waves: the last lesson, why a waterbender freezes a bridge. */
+    private static Cutscene lesIjsbrug() {
+        S s = new S("les_ijsbrug", 290, 150, 36, 87);
+        s.speler(149.5, 37, 87.5, -90)
+                .npc("katara", Kind.KATARA_GUH, 146.5, 37, 86.5, -90)
+                .npc("pakguh", Kind.PAKGUH, 144.5, 37, 88.0, -90)
+                .npc("aang", Kind.AANG_GUH, 147.5, 37, 88.4, -90)
+                .verberg(16)
+                .zwart(-8, 4);
+        s.cam(0, 145.0, 39.8, 93.0, 152.0, 37.5, 87.0).cam(70, 145.5, 39.6, 92.5, 152.0, 37.6, 87.0)
+                .kijk("katara", 0, 149.5, 38.5, 87.5).kijk("aang", 0, 149.5, 38.5, 87.5)
+                .anim("katara", 10, "praat").zeg(10, "katara", "mooier", 54);
+        s.knip(70, 147.5, 38.6, 90.5, 144.5, 38.4, 88.0)
+                .kijk("katara", 70, 144.5, 38.5, 88.0).anim("pakguh", 72, "neus_op").zeg(72, "pakguh", "hoorde", 50);
+        s.knip(130, 152.5, 39.0, 91.5, 158.5, 37.5, 87.5)
+                .kijk("pakguh", 130, 158.5, 37.5, 87.5).kijk(Cutscene.SPELER, 130, 158.5, 37.5, 87.5)
+                .deeltjes(134, ParticleTypes.SNOWFLAKE, 154.0, 37.0, 87.5, 30, 1.6)
+                .zeg(132, "pakguh", "brug", 76);
+        s.knip(216, 151.5, 38.6, 85.0, 147.5, 38.4, 88.4)
+                .anim("aang", 218, "lach").zeg(218, "aang", "glad", 50);
+        return s.klaar();
+    }
+
+    /** fix3-h2: on the islet: the lessons are done; Sokka-guh: otter-surfing is how the kids learn balance on the ice. */
+    private static Cutscene otters() {
+        S s = new S("otters", 370, 157, 36, 87);
+        s.speler(157.5, 37, 87.5, 90)
+                .npc("pakguh", Kind.PAKGUH, 150.0, 37, 87.5, -90)
+                .npc("katara", Kind.KATARA_GUH, 148.5, 37, 86.4, -90)
+                .npc("aang", Kind.AANG_GUH, 148.0, 37, 88.5, -90)
+                .npc("sokka", Kind.SOKKA_GUH, 141.5, 37, 87.5, -90)
+                .verberg(18)
+                .zwart(-8, 4);
+        s.cam(0, 153.5, 39.2, 92.5, 151.5, 37.8, 87.5).cam(80, 153.8, 39.0, 92.0, 151.5, 37.9, 87.5)
+                .anim("pakguh", 10, "praat").zeg(10, "pakguh", "voorbij", 64);
+        s.knip(80, 154.5, 38.6, 89.0, 150.0, 38.4, 87.5)
+                .anim("pakguh", 82, "snor").zeg(82, "pakguh", "pinguin", 54);
+        // Sokka-guh comes running down the jetty
+        s.loop("sokka", 100, 132, 146.0, 37, 87.5)
+                .kijk("katara", 132, 146.0, 38.5, 87.5).kijk("aang", 132, 146.0, 38.5, 87.5)
+                .knip(140, 149.0, 38.8, 91.5, 146.0, 38.3, 87.5)
+                .anim("sokka", 142, "plan").zeg(142, "sokka", "surfen", 70)
+                .knip(216, 151.0, 38.6, 84.0, 148.5, 38.3, 86.4)
+                .anim("katara", 218, "armen").zeg(218, "katara", "waar", 70)
+                .knip(292, 149.0, 38.8, 91.5, 146.0, 38.3, 87.5)
+                .anim("sokka", 294, "praat").zeg(294, "sokka", "muur", 56);
+        return s.klaar();
+    }
+
+    /** fix3-h2: at the foot of the sled run: the Moon Festival tonight, the lanterns for the canal stops, Yue-guh's invitation. */
+    private static Cutscene maanfeest() {
+        S s = new S("maanfeest", 430, 90, 31, 163);
+        s.speler(96.5, 31, 163.0, 180)
+                .npc("katara", Kind.KATARA_GUH, 98.5, 31, 161.5, 120)
+                .npc("sokka", Kind.SOKKA_GUH, 94.8, 31, 160.0, -150)
+                .npc("aang", Kind.AANG_GUH, 99.0, 31, 164.5, 120)
+                .verberg(14)
+                .zwart(-8, 4);
+        s.cam(0, 101.5, 33.2, 167.5, 96.5, 32.4, 162.0).cam(70, 101.0, 33.0, 167.0, 96.5, 32.4, 162.0)
+                .kijk(Cutscene.SPELER, 0, 94.8, 32.5, 160.0)
+                .anim("sokka", 10, "plan").zeg(10, "sokka", "nog", 56);
+        s.knip(76, 96.0, 32.6, 165.5, 98.5, 32.4, 161.5)
+                .kijk(Cutscene.SPELER, 76, 98.5, 32.5, 161.5).kijk("katara", 76, 96.5, 32.5, 163.0)
+                .anim("katara", 78, "praat").zeg(78, "katara", "feest", 60)
+                .knip(146, 97.0, 32.6, 165.0, 96.0, 80.0, 160.0)
+                .zeg(148, "", "maan", 56);
+        s.knip(212, 96.0, 32.6, 165.5, 98.5, 32.4, 161.5)
+                .zeg(214, "katara", "lantaarns", 76)
+                .knip(298, 97.5, 32.6, 158.5, 94.8, 32.4, 160.0)
+                .kijk("sokka", 298, 96.5, 32.5, 163.0).anim("sokka", 300, "praat").zeg(300, "sokka", "yue", 60)
+                .knip(368, 96.0, 32.6, 166.5, 99.0, 32.4, 164.5)
+                .anim("aang", 370, "lach").zeg(370, "aang", "gondel", 44);
+        return s.klaar();
+    }
+
+    /** fix3-h2: the throne hall (it was six chat lines): Yue-guh and the light of the moon, the smoke, the chief's errand. */
+    private static Cutscene paleis() {
+        S s = new S("paleis", 580, 115, 47, 42);
+        s.npc("yue", Kind.YUE_GUH, 115.5, 47, 42.5, 0)
+                .npc("hoofdman", Kind.ARNOOK_GUH, 112.5, 47, 42.5, 0)
+                .speler(112.5, 45, 50.5, 180)
+                .npc("sokka", Kind.SOKKA_GUH, 114.8, 45, 49.5, 160)
+                .npc("katara", Kind.KATARA_GUH, 110.2, 45, 50.0, 200)
+                .npc("aang", Kind.AANG_GUH, 108.5, 45, 51.2, 200)
+                .verberg(14)
+                .zwart(-8, 4);
+        s.cam(0, 112.5, 49.5, 58.5, 113.5, 47.5, 43.0).cam(70, 112.5, 49.0, 57.0, 113.5, 47.5, 43.0)
+                .kijk("yue", 0, 112.5, 46.5, 50.5)
+                .anim("yue", 10, "buig").zeg(10, "yue", "welkom", 60);
+        s.knip(76, 116.5, 47.0, 47.5, 114.8, 46.5, 49.5)
+                .kijk("sokka", 76, 115.5, 48.5, 42.5).anim("sokka", 78, "praat").zeg(78, "sokka", "nauwelijks", 60);
+        s.knip(142, 114.0, 48.4, 46.0, 115.5, 48.3, 42.5)
+                .anim("yue", 144, "praat").zeg(144, "yue", "licht", 80)
+                .zeg(230, "yue", "onrustig", 56);
+        s.knip(290, 116.5, 47.0, 47.5, 114.8, 46.5, 49.5)
+                .zeg(292, "sokka", "kampvuur", 56)
+                .knip(352, 114.0, 48.4, 46.0, 115.5, 48.3, 42.5)
+                .zeg(354, "yue", "vloot", 60);
+        s.knip(418, 111.0, 48.4, 46.0, 112.5, 48.3, 42.5)
+                .kijk("hoofdman", 418, 112.5, 46.5, 50.5).anim("hoofdman", 420, "knik").zeg(420, "hoofdman", "post", 80)
+                .knip(504, 108.0, 46.8, 47.0, 110.2, 46.4, 50.0)
+                .kijk("katara", 504, 112.5, 46.5, 50.5).anim("katara", 506, "praat").zeg(506, "katara", "voorzichtig", 60);
+        return s.klaar();
+    }
+
+    /** fix3-h2: off the ship: the team finds you on the quay; Zhao-Mika marched up to the oasis with his soldiers. */
+    private static Cutscene kade() {
+        S s = new S("kade", 350, 170, 31, 157);
+        s.speler(174.5, 31, 156.5, 90)
+                .npc("aang", Kind.AANG_GUH, 176.8, 31, 157.5, 100)
+                .npc("katara", Kind.KATARA_GUH, 176.5, 31, 155.0, 70)
+                .npc("sokka", Kind.SOKKA_GUH, 173.0, 31, 154.2, 20)
+                .verberg(14)
+                .zwart(-8, 4);
+        s.cam(0, 180.5, 33.4, 160.5, 175.0, 32.3, 156.0).cam(60, 180.0, 33.2, 160.0, 175.0, 32.3, 156.0)
+                .kijk(Cutscene.SPELER, 0, 176.8, 32.5, 157.5).kijk("katara", 0, 174.5, 32.5, 156.5).kijk("sokka", 0, 174.5, 32.5, 156.5)
+                .anim("aang", 10, "lach").zeg(10, "aang", "daar", 54);
+        s.knip(70, 177.5, 32.6, 160.0, 174.5, 32.4, 156.5)
+                .zeg(72, Cutscene.SPELER, "masker", 56)
+                .knip(132, 172.5, 32.6, 159.5, 173.0, 32.4, 154.2)
+                .anim("sokka", 134, "praat").zeg(134, "sokka", "typisch", 50);
+        s.knip(188, 179.5, 32.8, 154.5, 176.5, 32.4, 155.0)
+                .anim("katara", 190, "armen").zeg(190, "katara", "zhao", 76)
+                .knip(270, 179.0, 32.6, 159.5, 176.8, 32.4, 157.5)
+                .kijk("aang", 270, 112.5, 50, 20).zeg(272, "aang", "oase", 70);
+        return s.klaar();
+    }
+
+    /** fix3-h2 (playtest 2, item 3): on the harbour: the moon fish is aboard Zhao-Mika's ship; Katara-guh's plan to steal it back. */
+    private static Cutscene visAanBoord() {
+        S s = new S("vis_aan_boord", 380, 170, 31, 154);
+        s.speler(170.5, 31, 154.5, 0)
+                .npc("sokka", Kind.SOKKA_GUH, 168.5, 31, 155.2, -30)
+                .npc("katara", Kind.KATARA_GUH, 172.6, 31, 155.0, 30)
+                .npc("aang", Kind.AANG_GUH, 171.5, 31, 152.6, 0)
+                .verberg(12)
+                .zwart(-8, 4);
+        // 1. behind the barrels; out there lies the black ship
+        s.cam(0, 169.5, 34.2, 152.2, 181.5, 38.5, 166.0).cam(70, 169.8, 34.0, 152.6, 181.5, 39.0, 166.0)
+                .kijk("sokka", 0, 170.5, 32.5, 154.5).anim("sokka", 10, "praat").zeg(10, "sokka", "zak", 60);
+        // 2. Tui is in a cage in the hold
+        s.knip(76, 166.5, 32.8, 152.5, 172.6, 32.4, 155.0)
+                .kijk("katara", 76, 170.5, 32.5, 154.5).zeg(78, "katara", "kooi", 76)
+                .knip(158, 168.0, 32.6, 152.4, 171.5, 32.4, 152.6)
+                .kijk("aang", 158, 170.5, 32.5, 154.5).zeg(160, "aang", "la", 64);
+        // 3. the plan
+        s.knip(228, 166.5, 32.8, 152.5, 172.6, 32.4, 155.0)
+                .anim("katara", 230, "armen").zeg(230, "katara", "plan", 76)
+                .knip(310, 166.5, 32.8, 157.5, 168.5, 32.4, 155.2)
+                .anim("sokka", 312, "boemerang").zeg(312, "sokka", "opnieuw", 60);
+        return s.klaar();
+    }
+
+    /** fix3-h2 (item 2): the soul arrives in the Geestenwereld: Aang-guh shows the pink mist over the paths, and the way to Koh. */
+    private static Cutscene geestAankomst() {
+        S s = S.rel("geest_aankomst", 310);
+        s.speler(0.5, 0, 0.5, 180)
+                .npc("aang", Kind.AANG_GUH, 2.5, 0, 0.8, 170)
+                .zwart(-8, 4);
+        s.cam(0, 4.0, 3.0, 5.5, 0.5, 1.5, -6.0)
+                .anim("aang", 10, "lach").zeg(10, "aang", "echt", 54);
+        // the mist over the paths north, east and south-east (the real walls stand there too; these are for the camera)
+        s.knip(70, 0.5, 14.0, 8.0, 20.0, 2.0, -15.0);
+        for (int t = 70; t <= 150; t += 10) {
+            s.deeltjes(t, ROZE_NEVEL, 1.0, 2.5, -57.5, 30, 2.5).deeltjes(t, ROZE_NEVEL, 35.0, 2.5, -23.0, 30, 2.5)
+                    .deeltjes(t, ROZE_NEVEL, 26.0, 2.5, 6.5, 30, 2.5);
+        }
+        s.zeg(72, "", "nevel", 70)
+                .knip(150, 1.0, 1.9, -2.5, 2.5, 1.6, 0.8)
+                .kijk("aang", 150, 0.5, 1.6, -2.5).anim("aang", 152, "praat").zeg(152, "aang", "bazig", 60)
+                .knip(216, 2.5, 2.2, 3.0, -30.0, 1.5, -22.0)
+                .kijk("aang", 216, -30.0, 1.5, -22.0).kijk(Cutscene.SPELER, 216, -30.0, 1.5, -22.0)
+                .zeg(218, "aang", "koh", 70);
+        return s.klaar();
+    }
+
+    /** fix3-h2: Koh's test passed: his advice (it was chat lines), and the mist towards the Hemelvijver lifts. */
+    private static Cutscene kohRaad() {
+        S s = S.rel("koh_raad", 340);
+        s.speler(0.5, 0, 9.5, 180)
+                .npc("aang", Kind.AANG_GUH, 2.5, 0, 10.0, 170)
+                .acteur("koh", E2GeestWezensFeature.KOH, 0.5, 0, 0.5, 0, soort(KohEntity.MASKER))
+                .verberg(16)
+                .zwart(-8, 4);
+        s.cam(0, 0.0, 2.0, 7.5, 0.5, 3.4, 0.5)
+                .anim("koh", 8, "praat").zeg(10, "koh", "rimpel", 56)
+                .zeg(70, "koh", "evenwicht", 70);
+        s.knip(144, 1.5, 1.4, 6.5, 0.5, 3.0, 0.5)
+                .geluid(146, E2Audio.geluid("geest.koh_kraak"), 0.8f, 1.0f)
+                .zeg(146, "koh", "vijver", 60);
+        s.knip(208, 3.5, 1.8, 11.5, 1.5, 1.4, 9.5)
+                .anim("aang", 210, "lach").zeg(210, "aang", "gedaan", 50)
+                .knip(262, 4.5, 3.0, 13.5, 0.5, 2.0, 1.0)
+                .geluid(264, () -> SoundEvents.AMETHYST_BLOCK_RESONATE, 0.8f, 1.2f)
+                .zeg(264, "", "nevel", 64);
         return s.klaar();
     }
 

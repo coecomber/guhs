@@ -150,7 +150,17 @@ public final class Geestreis {
             E2H2Water.verteller(p, "quest.guhs.einde2_h2_water.geest.geen_wereld");
             return;
         }
-        E2H2Water.zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.geest.aang");
+        // fix3-h2: a scene on the arrival lawn: Aang-guh shows the pink mist over the paths that are closed, and the way to Koh
+        //          (a moment after the soul arrived: the client first loads the new world)
+        nl.juiced.guhs.feature.einde2.verhaal.StapHint.later(p, 30, s -> {
+            BlockPos aankomst = plek(Geestenwereld.AANKOMST);
+            if (!E2H2Water.aanZet(s, E2H2Water.KOH)) {
+                return;
+            }
+            if (aankomst == null || !Geestenwereld.in(s) || !Cutscenes.speel(s, E2H2WaterScenes.GEEST_AANKOMST, aankomst, Rotation.NONE, null)) {
+                E2H2Water.zeg(s, GuhNpcEntity.Kind.AANG_GUH, "scene.guhs.einde2_h2_water_geest_aankomst.echt");
+            }
+        });
         toonHint(p);
     }
 
@@ -251,8 +261,34 @@ public final class Geestreis {
             return;
         }
         PROEVEN.put(p.getUUID(), new Proef(p.level().getGameTime() + vooraf, p.position()));
+        // fix3-h2: Koh stands still and faces you for the whole test, and you face him: his faces are right in front of you
+        KohEntity koh = koh(p);
+        if (koh != null) {
+            koh.kijkStrak(p);
+            kijkNaar(p, koh);
+        }
         titel(p, "quest.guhs.einde2_h2_water.koh.titel", "quest.guhs.einde2_h2_water.koh.ondertitel");
         E2Audio.stinger(p, "geest.koh_stilte");
+    }
+
+    /** fix3-h2: turns the player (where they stand) towards Koh's head. */
+    static void kijkNaar(ServerPlayer p, KohEntity koh) {
+        Vec3 oog = p.getEyePosition(), hoofd = koh.getEyePosition();
+        double dx = hoofd.x - oog.x, dy = hoofd.y - oog.y, dz = hoofd.z - oog.z, vlak = Math.sqrt(dx * dx + dz * dz);
+        if (vlak < 0.5) {
+            return;
+        }
+        float yaw = (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90.0);
+        float pitch = (float) Math.max(-40, Math.min(40, -Math.toDegrees(Math.atan2(dy, vlak))));
+        p.teleportTo(p.level(), p.getX(), p.getY(), p.getZ(), java.util.Set.of(), yaw, pitch, false);
+    }
+
+    /** fix3-h2: the test is over (passed, failed, left): Koh may look round again. */
+    static void laatKohLos(ServerPlayer p) {
+        KohEntity koh = koh(p);
+        if (koh != null && koh.kijktStrak()) {
+            koh.kijkStrak(null);
+        }
     }
 
     /** Is a test of Koh running for this player? */
@@ -268,6 +304,7 @@ public final class Geestreis {
         }
         if (!E2H2Water.aanZet(p, E2H2Water.KOH) || (!Geestenwereld.in(p) && !OVERAL)) {
             PROEVEN.remove(p.getUUID());
+            laatKohLos(p);
             return;
         }
         long nu = p.level().getGameTime();
@@ -317,14 +354,18 @@ public final class Geestreis {
         if (koh != null) {
             koh.wissel(KohEntity.MASKER);
         }
-        String naam = "quest.guhs.einde2_h2_water.naam.koh";
-        E2H2Water.zegAls(p, naam, "quest.guhs.einde2_h2_water.koh.goed.1");
-        E2H2Water.zegAls(p, naam, "quest.guhs.einde2_h2_water.koh.goed.2");
-        E2H2Water.zegAls(p, naam, "quest.guhs.einde2_h2_water.koh.goed.3");
+        laatKohLos(p);
         if (E2H2Water.lijn().verder(p, E2H2Water.KOH)) {
             H2Hints.gehaald(p, "koh");
             p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 0.7f);
-            E2H2Water.zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.koh.aang");
+            // fix3-h2: Koh's advice and the mist that lifts towards the Hemelvijver are a scene now (they were chat lines)
+            BlockPos plek = plek("koh");
+            if (plek == null || !Geestenwereld.in(p) || !Cutscenes.speel(p, E2H2WaterScenes.KOH_RAAD, plek, Rotation.NONE, null)) {
+                String naam = "quest.guhs.einde2_h2_water.naam.koh";
+                E2H2Water.zegAls(p, naam, "scene.guhs.einde2_h2_water_koh_raad.rimpel");
+                E2H2Water.zegAls(p, naam, "scene.guhs.einde2_h2_water_koh_raad.evenwicht");
+                E2H2Water.zegAls(p, naam, "scene.guhs.einde2_h2_water_koh_raad.vijver");
+            }
         }
     }
 
@@ -337,6 +378,7 @@ public final class Geestreis {
         if (koh != null) {
             koh.zetAnimatie("steel");
             koh.wissel(KohEntity.BLANCO);
+            koh.kijkStrak(null);
         }
         p.level().playSound(null, p.blockPosition(), SoundEvents.ALLAY_ITEM_TAKEN, SoundSource.PLAYERS, 1f, 0.6f);
         E2H2Water.zegAls(p, "quest.guhs.einde2_h2_water.naam.koh", "quest.guhs.einde2_h2_water.koh.fout." + wat);
@@ -361,7 +403,9 @@ public final class Geestreis {
 
     /** (logout, wipe) forget what runs for this player. */
     static void vergeet(ServerPlayer p) {
-        PROEVEN.remove(p.getUUID());
+        if (PROEVEN.remove(p.getUUID()) != null) {
+            laatKohLos(p);
+        }
         VERTREK.remove(p.getUUID());
     }
 

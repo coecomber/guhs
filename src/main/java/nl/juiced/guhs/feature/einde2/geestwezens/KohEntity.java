@@ -1,5 +1,10 @@
 package nl.juiced.guhs.feature.einde2.geestwezens;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
@@ -26,6 +31,9 @@ public class KohEntity extends GeestWezen {
     /** Server: the face that comes at {@link #wisselOp} (-1: none waiting). */
     private int nieuwGezicht = -1;
     private long wisselOp;
+    /** einde2 fix3-h2: server, during a test: he faces this player squarely and looks nowhere else (null: free). */
+    @Nullable
+    private UUID strak;
 
     public KohEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -41,6 +49,45 @@ public class KohEntity extends GeestWezen {
         wisselOp = level().getGameTime() + WISSEL_MIDDEN;
     }
 
+    /**
+     * einde2 fix3-h2 (playtest 2: "tijdens de test was hij 90 graden gedraaid ... ik zag zijn veranderde hoofden helemaal niet"):
+     * while somebody takes his test he stands still and faces that player, body and head, every tick; no looking round.
+     * {@code null} lets him go again.
+     */
+    public void kijkStrak(@Nullable Entity wie) {
+        strak = wie == null ? null : wie.getUUID();
+        if (wie != null) {
+            zetStil(true);
+            richtOp(wie);
+        }
+    }
+
+    /** Is he facing somebody for a test now? */
+    public boolean kijktStrak() {
+        return strak != null;
+    }
+
+    private void richtOp(Entity wie) {
+        double dx = wie.getX() - getX(), dz = wie.getZ() - getZ();
+        if (dx * dx + dz * dz < 1.0e-4) {
+            return;
+        }
+        float yaw = (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90.0);
+        setYRot(yaw);
+        yRotO = yaw;
+        setYBodyRot(yaw);
+        yBodyRotO = yaw;
+        setYHeadRot(yaw);
+        yHeadRotO = yaw;
+        setXRot(0f);
+        getNavigation().stop();
+    }
+
+    @Override
+    protected boolean kijktNaarSpelers() {
+        return strak == null && super.kijktNaarSpelers();
+    }
+
     /** The face that he wears now (the same as {@link #soort()}). */
     public int gezicht() {
         return soort();
@@ -49,6 +96,14 @@ public class KohEntity extends GeestWezen {
     @Override
     public void tick() {
         super.tick();
+        if (!level().isClientSide() && strak != null) {
+            Entity wie = level() instanceof net.minecraft.server.level.ServerLevel sl ? sl.getEntity(strak) : null;
+            if (wie == null || !wie.isAlive() || wie.distanceToSqr(this) > 48 * 48) {
+                strak = null;
+            } else {
+                richtOp(wie);
+            }
+        }
         if (!level().isClientSide() && nieuwGezicht >= 0 && level().getGameTime() >= wisselOp) {
             zetSoort(nieuwGezicht);
             nieuwGezicht = -1;

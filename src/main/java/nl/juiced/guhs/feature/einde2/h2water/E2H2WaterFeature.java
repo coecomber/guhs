@@ -140,8 +140,10 @@ public final class E2H2WaterFeature {
             return;
         }
         Geestreis.tick(p);
+        Geestnevel.tick(p);   // (fix3-h2: the pink mist over the paths of the Geestenwereld that are not for now)
         int stap = LIJN.stap(p);
-        if ((stap == E2H2Water.ONTSNAP || stap == E2H2Water.VIS_HALEN) && p.tickCount % 2 == 0 && LIJN.aanDeBeurt(p)) {
+        if ((stap == E2H2Water.ONTSNAP || stap == E2H2Water.VIS_HALEN) && p.tickCount % 2 == 0 && LIJN.aanDeBeurt(p)
+                && !E2H2Water.wachtOpVis(p, stap)) {
             E2H2Water.Oord o = E2H2Water.oordVan(p);
             if (o != null) {
                 Sluipen.tick(p, o, stap);
@@ -156,6 +158,7 @@ public final class E2H2WaterFeature {
         if (event.getEntity() instanceof ServerPlayer p) {
             Toneel.weg(p);
             Geestreis.vergeet(p);
+            Geestnevel.vergeet(p.getUUID());
             H2Hints.vergeet(p.getUUID());
             E2H2Water.vergeet(p.getUUID());
         }

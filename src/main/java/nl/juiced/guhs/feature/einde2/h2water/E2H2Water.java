@@ -309,7 +309,12 @@ public final class E2H2Water {
                     gevangen(p, o);
                 }
             }
-            case ONTSNAP, VIS_HALEN -> Sluipen.seconde(p, o, stap);
+            case ONTSNAP -> Sluipen.seconde(p, o, stap);
+            case VIS_HALEN -> {
+                if (!visAanBoord(p, o)) {
+                    Sluipen.seconde(p, o, stap);
+                }
+            }
             case MAANVIS -> {
                 if (o.in(p.position(), "geestenoase", 0)) {
                     maanvisGestolen(p);
@@ -362,6 +367,15 @@ public final class E2H2Water {
         return speel(p, E2H2WaterScenes.AANKOMST, "aankomst_speler", E2H2Water::naAankomst) || naZonderScene(p, E2H2Water::naAankomst);
     }
 
+    /**
+     * fix3-h2 (playtest 2, item 1: "er is niet echt dialoog of cutscene die verklaart waarom we alles doen"): a story scene of
+     * this chapter at a marker, right after its step moved on. The step's hint (StapHint) waits until the scene is over; a
+     * player who is busy (another scene) or a world without the marker just goes on without it.
+     */
+    static void verhaal(ServerPlayer p, Cutscene scene, String anker) {
+        speel(p, scene, anker, null);
+    }
+
     /** Where the scene cannot play (no marker in this world), the story still goes on. */
     private static boolean naZonderScene(ServerPlayer p, java.util.function.Consumer<ServerPlayer> daarna) {
         if (oord(p.level().getServer()) != null) {
@@ -373,8 +387,8 @@ public final class E2H2Water {
 
     static void naAankomst(ServerPlayer p) {
         if (lijn().verder(p, AANKOMST)) {
-            verteller(p, "quest.guhs.einde2_h2_water.aankomst.klaar");
-            zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.aankomst.aang");   // (the step's hint follows: H2Hints)
+            // fix3-h2: Katara-guh and Sokka-guh meet you at the landing: who they are, why we are here, what is coming
+            verhaal(p, E2H2WaterScenes.WELKOM, "aankomst_speler");   // (the step's hint follows: H2Hints)
         }
     }
 
@@ -395,7 +409,7 @@ public final class E2H2Water {
 
     static void naPakguh(ServerPlayer p) {
         if (lijn().verder(p, PAKGUH)) {
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.pakguh.zweep");   // (the hint and the power line: H2Hints)
+            verhaal(p, E2H2WaterScenes.LES_ZWEEP, "pakguh");   // (fix3-h2: the first lesson; the hint and the power line: H2Hints)
         }
     }
 
@@ -412,8 +426,7 @@ public final class E2H2Water {
         balk(p, "quest.guhs.einde2_h2_water.zweep.teller", n, DOELEN);
         if (n >= DOELEN && l.verder(p, ZWEEP)) {
             H2Hints.gehaald(p, "zweep");
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.zweep.klaar");
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.rol.pakguh.golf");
+            verhaal(p, E2H2WaterScenes.LES_GOLF, "pakguh");   // (fix3-h2: why waves)
         }
     }
 
@@ -436,8 +449,7 @@ public final class E2H2Water {
         balk(p, "quest.guhs.einde2_h2_water.golf.teller", n, GOLVEN);
         if (n >= GOLVEN && l.verder(p, GOLFOEFENING)) {
             H2Hints.gehaald(p, "golf");
-            zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.golf.klaar");
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.rol.pakguh.ijsbrug");
+            verhaal(p, E2H2WaterScenes.LES_IJSBRUG, "ijsbrug_a");   // (fix3-h2: why a bridge of ice)
         }
     }
 
@@ -468,8 +480,7 @@ public final class E2H2Water {
         }
         if (lijn().verder(p, IJSBRUG)) {
             H2Hints.gehaald(p, "ijsbrug");
-            zeg(p, GuhNpcEntity.Kind.PAKGUH, "quest.guhs.einde2_h2_water.ijsbrug.klaar");
-            zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.slee.sokka");
+            verhaal(p, E2H2WaterScenes.OTTERS, "ijsbrug_b");   // (fix3-h2: otter-surfing is how the kids learn balance on ice)
         }
     }
 
@@ -479,8 +490,7 @@ public final class E2H2Water {
     static void sleeKlaar(ServerPlayer p) {
         if (lijn().verder(p, SLEE)) {
             H2Hints.gehaald(p, "slee");
-            zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.slee.klaar");
-            zeg(p, GuhNpcEntity.Kind.KATARA_GUH, "quest.guhs.einde2_h2_water.gondel.katara");
+            verhaal(p, E2H2WaterScenes.MAANFEEST, "slee_finish");   // (fix3-h2: the Moon Festival, the lanterns, Yue-guh's invitation)
         }
     }
 
@@ -505,20 +515,21 @@ public final class E2H2Water {
 
     // --- 7: Yue-guh -------------------------------------------------------------------------------------------------------------
 
-    /** The talk in the palace (E2H2WaterRol): Yue-guh, Sokka-guh trying very hard, the warning; then to the harbour. */
+    /**
+     * The talk in the palace (E2H2WaterRol): fix3-h2: a scene now (it was six chat lines): Yue-guh and the light of the moon,
+     * Sokka-guh trying very hard, the smoke over the sea; the chief sends you to the harbour.
+     */
     static boolean yue(ServerPlayer p) {
         if (!aanZet(p, YUE)) {
             return false;
         }
-        zeg(p, GuhNpcEntity.Kind.YUE_GUH, "quest.guhs.einde2_h2_water.yue.1");
-        zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.yue.2");
-        zeg(p, GuhNpcEntity.Kind.YUE_GUH, "quest.guhs.einde2_h2_water.yue.3");
-        zeg(p, GuhNpcEntity.Kind.SOKKA_GUH, "quest.guhs.einde2_h2_water.yue.4");
-        zeg(p, GuhNpcEntity.Kind.YUE_GUH, "quest.guhs.einde2_h2_water.yue.5");
-        zeg(p, GuhNpcEntity.Kind.ARNOOK_GUH, "quest.guhs.einde2_h2_water.yue.6");
-        lijn().verder(p, YUE);
-        Schijn.straks(p);   // (the fleet is there now; the step's hint: H2Hints)
-        return true;
+        return speel(p, E2H2WaterScenes.PALEIS, "yue", E2H2Water::naYue) || naZonderScene(p, E2H2Water::naYue);
+    }
+
+    static void naYue(ServerPlayer p) {
+        if (lijn().verder(p, YUE)) {
+            Schijn.straks(p);   // (the fleet is there now; the step's hint: H2Hints)
+        }
     }
 
     // --- 8, 9: caught on the harbour, the Blue Spirit, the escape ---------------------------------------------------------------
@@ -557,7 +568,31 @@ public final class E2H2Water {
             Minigames.give(p, new ItemStack(ModItems.clothingItem(GuhClothes.BLAUWE_GEEST_MASKER)));
             verteller(p, "quest.guhs.einde2_h2_water.ontsnap.masker");
         }
-        zeg(p, GuhNpcEntity.Kind.AANG_GUH, "quest.guhs.einde2_h2_water.ontsnap.aang");
+        verhaal(p, E2H2WaterScenes.KADE, "sluip_start");   // (fix3-h2: the team finds you; Zhao-Mika marched to the oasis)
+    }
+
+    // --- 14: the moon fish is aboard (fix3-h2) ------------------------------------------------------------------------------
+
+    /**
+     * fix3-h2 (playtest 2, item 3): on the harbour at the step of the fish, before the sneak: Sokka-guh saw the soldiers carry
+     * Tui aboard the VNS Schroeiplek; Katara-guh will draw the guards away; you steal him back. Then the step's hint again.
+     * True while the scene still has to be seen (the sneak waits for it).
+     */
+    static boolean visAanBoord(ServerPlayer p, Oord o) {
+        if (Cutscenes.gezien(p, E2H2WaterScenes.VIS_AAN_BOORD.id())) {
+            return false;
+        }
+        if (Cutscenes.bezig(p) || !(o.in(p.position(), "haven", 0) || o.bij(p.position(), "rustpunt_2", 14))) {
+            return true;
+        }
+        speel(p, E2H2WaterScenes.VIS_AAN_BOORD, "rustpunt_2", speler -> H2Hints.naScene(speler, 10,
+                q -> nl.juiced.guhs.feature.einde2.verhaal.StapHint.toon(q, E2Verhaal.WATER)));
+        return true;
+    }
+
+    /** Must the sneak of this step still wait for the scene on the harbour? */
+    static boolean wachtOpVis(ServerPlayer p, int stap) {
+        return stap == VIS_HALEN && !Cutscenes.gezien(p, E2H2WaterScenes.VIS_AAN_BOORD.id());
     }
 
     // --- 10, 11: the moon fish, the meditation ----------------------------------------------------------------------------------
@@ -808,6 +843,7 @@ public final class E2H2Water {
         stuurToestand(p, GEWOON);
         Toneel.weg(p);
         Geestreis.vergeet(p);
+        Geestnevel.vergeet(p.getUUID());
         H2Hints.vergeet(p.getUUID());
         Schijn.straks(p);
     }

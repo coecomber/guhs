@@ -897,6 +897,7 @@ def maak(h):
     extra.geestreuzen(b)
     extra.mistreigers(b)
     extra.heuvels(b)
+    oprit_lotus_koh(b)
     opruimen(b)
     # the overlays (blocks only, where the build is air): the path to the 8th island, the woud in bloom, the lit tree
     extra.laag_pad_8(b)
@@ -904,6 +905,62 @@ def maak(h):
     extra.laag_lantaarnboom(b)
     b.connect()
     return b
+
+
+# fix3-h2 (playtest 2: "op de terugweg is er ergens een pad waar je niet op kan, omdat het meer dan 1 blok hoogte verschil is"):
+# the path from Koh's island to the Witte Lotus comes out from under the Lotus island 2 to 2.5 blocks below its courtyard
+# (pad() never overwrites, so under the island the path is hidden). From Koh's side you could not climb up. A ramp of half
+# steps, three wide, from the path up to the courtyard. Template coordinates (world - OORSPRONG).
+OPRIT_RIJEN = (174, 175, 176)          # world z -130, -129, -128
+OPRIT_VAN = 300                         # the scan starts on the courtyard (world x -4) and goes west
+
+
+def _staan(b, x, z, y0=62, y1=44):
+    """The height you stand at on top of column (x, z), in half blocks (None: nothing in the window)."""
+    for y in range(y0, y1, -1):
+        c = b.s.blocks.get((x, y, z))
+        if not c or c[0] in (NEVEL, WATER, MASKER, LANTAARN) or c[0].endswith(("_sign", "candle", "carpet", "chain", "lily_pad")):
+            continue
+        if c[0] == LOTUSBLAD or c[0] == PLAAT and (c[1] or {}).get("type") == "bottom":
+            return 2 * y + 1
+        return 2 * y + 2
+    return None
+
+
+def oprit_lotus_koh(b):
+    for z in OPRIT_RIJEN:
+        hoog = _staan(b, OPRIT_VAN, z)
+        x = OPRIT_VAN
+        while x > OPRIT_VAN - 20 and _staan(b, x - 1, z) == hoog:
+            x -= 1
+        doel = hoog
+        for xx in range(x - 1, x - 12, -1):
+            nu = _staan(b, xx, z)
+            doel -= 1
+            if nu is None or doel <= nu:
+                break
+            s = doel // 2
+            boven = s if doel % 2 else s - 1          # the block the feet stand on
+            if doel % 2:
+                b.set(xx, s, z, PLAAT, {"type": "bottom", "waterlogged": "false"})
+            b.set(xx, s - 1, z, TEGEL)
+            for y in range(s - 2, nu // 2 - 2, -1):    # down to (and over) the old path: steen
+                b.set(xx, y, z, STEEN)
+            for y in range(boven + 1, boven + 4):       # head room
+                if (xx, y, z) in b.s.blocks:
+                    del b.s.blocks[(xx, y, z)]
+
+
+def controleer_oprit(b):
+    """Along every row of the ramp no step up of more than half a block between the path and the courtyard."""
+    p = []
+    for z in OPRIT_RIJEN:
+        rij = [_staan(b, x, z) for x in range(OPRIT_VAN - 14, OPRIT_VAN + 1)]
+        for a, c in zip(rij, rij[1:]):
+            if a is not None and c is not None and abs(c - a) > 1:
+                p.append(f"oprit lotus-koh: a step of {abs(c - a) / 2} blocks in row z={z} ({rij})")
+                break
+    return p
 
 
 def opruimen(b):
@@ -945,6 +1002,7 @@ def controleer(b):
     onder = b.los_cellen
     problems = b.check(start, verwacht=verwacht, min_licht=0, zwevend_ok=lambda c: c in onder)
     problems += [f"laag {l} ontbreekt" for l in LAGEN_B if l not in b.lagen]
+    problems += controleer_oprit(b)
     licht = b.licht()
     donker = [c for c in b.licht_kamer if licht.get(c, 0) < 2]
     if donker:

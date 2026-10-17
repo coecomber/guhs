@@ -164,10 +164,20 @@ final class E2H2WaterCommando {
             source.sendFailure(Component.literal("Its anchor is not in this world"));
             return 0;
         }
-        if (s == E2H2WaterScenes.KOH || s == E2H2WaterScenes.LA_WOEDE) {
+        if (s == E2H2WaterScenes.KOH || s == E2H2WaterScenes.LA_WOEDE || s == E2H2WaterScenes.KOH_RAAD || s == E2H2WaterScenes.GEEST_AANKOMST) {
             ServerLevel geest = Geestenwereld.level(source.getServer());
             if (geest != null && p.level() != geest) {
-                Geestenwereld.stuur(p, s == E2H2WaterScenes.KOH ? "plek_koh_grot" : "plek_hemelvijver");
+                Geestenwereld.stuur(p, s == E2H2WaterScenes.LA_WOEDE ? "plek_hemelvijver" : s == E2H2WaterScenes.GEEST_AANKOMST ? Geestenwereld.AANKOMST
+                        : "plek_koh_grot");
+                // (a moment later, once the client has the Geestenwereld)
+                nl.juiced.guhs.feature.einde2.verhaal.StapHint.later(p, 40, q -> {
+                    BlockPos a = anker(source, s);
+                    if (a != null) {
+                        Cutscenes.speel(q, s, a, Rotation.NONE, null);
+                    }
+                });
+                source.sendSuccess(() -> Component.literal("To the Geestenwereld; " + s.id() + " plays in a moment"), false);
+                return 1;
             }
         }
         boolean ok = Cutscenes.speel(p, s, anker, Rotation.NONE, null);
@@ -177,8 +187,11 @@ final class E2H2WaterCommando {
 
     /** The anchor of a scene in this world. */
     static BlockPos anker(CommandSourceStack source, Cutscene s) {
-        if (s == E2H2WaterScenes.KOH) {
+        if (s == E2H2WaterScenes.KOH || s == E2H2WaterScenes.KOH_RAAD) {
             return Geestenwereld.wereld("koh");
+        }
+        if (s == E2H2WaterScenes.GEEST_AANKOMST) {
+            return Geestenwereld.wereld(Geestenwereld.AANKOMST);
         }
         if (s == E2H2WaterScenes.LA_WOEDE) {
             return Geestenwereld.wereld("plek_hemelvijver");
@@ -200,6 +213,22 @@ final class E2H2WaterCommando {
             marker = "sneeuwstorm_start";
         } else if (s == E2H2WaterScenes.TEAM) {
             marker = "sneeuwstorm_vind";
+        } else if (s == E2H2WaterScenes.WELKOM) {
+            marker = "aankomst_speler";
+        } else if (s == E2H2WaterScenes.LES_ZWEEP || s == E2H2WaterScenes.LES_GOLF) {
+            marker = "pakguh";
+        } else if (s == E2H2WaterScenes.LES_IJSBRUG) {
+            marker = "ijsbrug_a";
+        } else if (s == E2H2WaterScenes.OTTERS) {
+            marker = "ijsbrug_b";
+        } else if (s == E2H2WaterScenes.MAANFEEST) {
+            marker = "slee_finish";
+        } else if (s == E2H2WaterScenes.PALEIS) {
+            marker = "yue";
+        } else if (s == E2H2WaterScenes.KADE) {
+            marker = "sluip_start";
+        } else if (s == E2H2WaterScenes.VIS_AAN_BOORD) {
+            marker = "rustpunt_2";
         } else if (s == E2H2WaterScenes.KNIPOOG_BALTO || s == E2H2WaterScenes.KNIPOOG_SJOKKEL) {
             var punten = o.punten(s == E2H2WaterScenes.KNIPOOG_BALTO ? "knipoog_balto_camera" : "knipoog_sjokkel_camera");
             return punten.isEmpty() ? null : punten.get(punten.size() - 1);
