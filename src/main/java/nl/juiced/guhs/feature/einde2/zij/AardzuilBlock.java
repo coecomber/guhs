@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * einde2 zij: one block of the small earth pillar of the lasting earth power ({@link ZijKrachten#AARDZUIL}). It is
- * never an item, drops nothing and crumbles by itself: every block has its own scheduled tick (saved with the chunk, so a
- * pillar never outlives a restart for long).
+ * einde2 zij: one block of the rock pillar or rock wall of the lasting earth power ({@link ZijKrachten#AARDZUIL}). It is
+ * never an item, drops nothing, can't be mined and crumbles by itself: every block has its own scheduled tick (saved with
+ * the chunk); what stood there (a plant) comes back ({@link ZijKrachten#terug}), and a server stop crumbles them all.
  */
 public class AardzuilBlock extends Block {
     public static final MapCodec<AardzuilBlock> CODEC = simpleCodec(AardzuilBlock::new);
@@ -32,10 +32,11 @@ public class AardzuilBlock extends Block {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), UPDATE_ALL);
-        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PACKED_MUD.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5,
-                pos.getZ() + 0.5, 12, 0.3, 0.3, 0.3, 0.05);
-        level.playSound(null, pos, SoundEvents.ROOTED_DIRT_BREAK, SoundSource.BLOCKS, 0.7f, 0.8f + random.nextFloat() * 0.2f);
+        level.setBlock(pos, ZijKrachten.terug(level, pos), UPDATE_ALL);
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.TUFF.defaultBlockState()), pos.getX() + 0.5, pos.getY() + 0.5,
+                pos.getZ() + 0.5, 14, 0.3, 0.3, 0.3, 0.05);
+        level.sendParticles(ParticleTypes.DUST_PLUME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3, 0.3, 0.3, 0.3, 0.01);
+        level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.7f, 0.7f + random.nextFloat() * 0.2f);
     }
 
     @Override

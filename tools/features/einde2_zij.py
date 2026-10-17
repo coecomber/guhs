@@ -5,7 +5,7 @@ Java: nl.juiced.guhs.feature.einde2.zij (E2ZijFeature). Texts: einde2_zij_tekst.
 tools/lang/en/c96_e2_zij.json. Wiki: einde2_zij_wiki.py. Chunk c96_e2_zij.
 
   lang      the eight lines (verhaal_motor), the five scenes, the books, dialogue, items, block, titles, the key, the powers
-  assets    item textures + models (kristalsnoep-ring, zegenschub, spijtsoep), the aardzuiltje block (vanilla packed mud)
+  assets    item textures + models (kristalsnoep-ring, zegenschub, spijtsoep), the rock block of the earth power (vanilla tuff, coarse dirt on top)
   data      recipe einde2_zij_spijtsoep; hidden advancements quest/einde2_zij_* (the FTB tasks of the extra quests)
   clothes   EINDE2_ZIJ_KYOSHI_SCHMINK (white face paint, red eye shadow, a golden crest): BONES + clothes() + icons()
   ftb       two sections in the Guheinde chapter: "Zijpaden van de Guhvatar" and "De Leegtehaven en de Mika-vesting"
@@ -98,8 +98,9 @@ def textures(h):
 def blocks_and_items(h):
     for item in ("einde2_zij_kristalsnoep_ring", "einde2_zij_zegenschub", "einde2_zij_spijtsoep"):
         h.item_model(item)
-    # the earth pillar: vanilla packed mud, no item, drops nothing (the Java block has no loot table)
-    h.w(f"{h.A}/models/block/einde2_zij_aardzuil.json", {"parent": "minecraft:block/cube_all", "textures": {"all": "minecraft:block/packed_mud"}})
+    # the rock of the earth power (pillar and wall): vanilla tuff with coarse dirt on top, no item, drops nothing
+    h.w(f"{h.A}/models/block/einde2_zij_aardzuil.json", {"parent": "minecraft:block/cube_column",
+                                                         "textures": {"side": "minecraft:block/tuff", "end": "minecraft:block/coarse_dirt"}})
     h.w(f"{h.A}/blockstates/einde2_zij_aardzuil.json", {"variants": {"": {"model": "guhs:block/einde2_zij_aardzuil"}}})
     h.shapeless("einde2_zij_spijtsoep", ["minecraft:bowl", "guhs:schimmelpaddenstoel", "guhs:kristalkaas_brokje", "guhs:knabbelkoorvrucht"],
                 "guhs:einde2_zij_spijtsoep")

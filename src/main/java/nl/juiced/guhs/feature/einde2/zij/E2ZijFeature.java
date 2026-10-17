@@ -42,10 +42,10 @@ public final class E2ZijFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
 
-    /** The small earth pillar of the lasting earth power (no item, no drops, crumbles by itself). */
+    /** The rock of the lasting earth power's pillar and wall (no item, no drops, can't be mined, crumbles by itself). */
     public static final DeferredBlock<AardzuilBlock> AARDZUIL = BLOCKS.registerBlock("einde2_zij_aardzuil", AardzuilBlock::new,
-            () -> BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.6f).sound(SoundType.PACKED_MUD).noLootTable()
-                    .pushReaction(PushReaction.DESTROY));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(-1f, 3600000f).sound(SoundType.TUFF).noLootTable()
+                    .pushReaction(PushReaction.BLOCK).isValidSpawn((st, l, pos, t) -> false));
 
     public static final DeferredItem<ZijItems.KristalsnoepRing> KRISTALSNOEP_RING = ITEMS.registerItem("einde2_zij_kristalsnoep_ring",
             ZijItems.KristalsnoepRing::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));

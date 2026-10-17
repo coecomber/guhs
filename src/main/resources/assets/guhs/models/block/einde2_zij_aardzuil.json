@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "minecraft:block/packed_mud"
+    "side": "minecraft:block/tuff",
+    "end": "minecraft:block/coarse_dirt"
   }
 }

@@ -107,6 +107,14 @@ public final class Krachten {
         return true;
     }
 
+    /** (fix4) the power is ready again at once (it found nothing to work on: no cooldown for a miss). */
+    public static void klaar(ServerPlayer p, String id) {
+        Map<String, Long> m = KLAAR_OP.get(p.getUUID());
+        if (m != null) {
+            m.remove(id);
+        }
+    }
+
     /** (logout, tests) forgets this player's cooldowns. */
     public static void vergeet(UUID speler) {
         KLAAR_OP.remove(speler);
