@@ -1,0 +1,70 @@
+# einde2 "Sponsguh", slice sp_d1_stad, in a real generated world: part 1 steps 5-6 (jellyfishing with Patguh, the boating
+# exam) with the dev commands of the slice. Scenes wait for a click after each line (1.4.4), so the script clicks with "use"
+# where a scene runs. Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d1_stad.txt -PautocheckTimeout=90
+section setup
+/gamemode creative
+/guhs einde2 sponsguh wis
+
+section step 5: Patguh at his rock, the scene patguh
+/guhs einde2 sponsguh ga sponsguh_recept 5
+wait 200
+waitrender 400
+shot e2_sp_d1_stad_patguh
+use
+use
+use
+use
+use
+use
+wait 100
+
+section step 5_b: the jelly field (wink 7 the first time), Patguh with the net
+/guhs einde2 sponsguh d1stad spel kwallen
+wait 200
+waitrender 400
+shot e2_sp_d1_stad_kwallenveld
+use
+use
+use
+use
+wait 100
+shot e2_sp_d1_stad_kwallen_spel
+
+section step 6: juf Pufguh at the boating school, the scene pufguh
+/guhs einde2 sponsguh ga sponsguh_recept 6
+wait 200
+waitrender 400
+shot e2_sp_d1_stad_pufguh
+use
+use
+use
+use
+use
+use
+use
+wait 100
+
+section step 6_b: the lesbootje at the start line, Sponsguh beside it
+/guhs einde2 sponsguh d1stad spel examen
+wait 200
+waitrender 400
+shot e2_sp_d1_stad_lesboot
+
+section the scenes once each
+/guhs einde2 sponsguh d1stad scene knipoog_guhdalf
+wait 60
+shot e2_sp_d1_stad_knipoog_guhdalf
+use
+use
+use
+wait 80
+/guhs einde2 sponsguh d1stad scene examen_klaar
+wait 60
+shot e2_sp_d1_stad_examen_klaar
+use
+use
+use
+use
+use
+use
+wait 80
