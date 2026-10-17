@@ -1,0 +1,137 @@
+{
+ "_uitleg": "einde2 sp_audio (CONTRACT_E2_C 6.3, C-B 6.3): every real piece of music of the Sponsguh story. Licence checked on 2026-10-17 on incompetech.com/music/royalty-free/licenses/ (CC BY 4.0) and the catalogue (title, isrc); the files were downloaded once into guhs_workeinde2/scratch/sp_audio/bron/ and turned into assets/guhs/sounds/einde2_sp_audio/<soort>_<naam>.ogg by tools/features/einde2_sp_audio_geluid.py --muziek. The three songs, the tunes and the stingers are made by the mod itself (own melodies, own words) and are not here.",
+ "stukken": [
+  {
+   "naam": "muziek.bikinibodem_1",
+   "titel": "Island Meet and Greet",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2000004",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Island Meet and Greet.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken, ingekort tot 3:00 met uitfade",
+   "knip": [
+    0,
+    180
+   ],
+   "waarom": "steel drum, marimba, ukulele: the town under the bubble"
+  },
+  {
+   "naam": "muziek.bikinibodem_2",
+   "titel": "Carefree",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Carefree.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken, ingekort tot 3:00 met uitfade",
+   "knip": [
+    0,
+    180
+   ],
+   "waarom": "ukulele and glockenspiel: a sunny day in town"
+  },
+  {
+   "naam": "muziek.schelpenstad",
+   "titel": "Funin and Sunin",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700011",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Funin and Sunin.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken, ingekort tot 3:00 met uitfade",
+   "knip": [
+    0,
+    180
+   ],
+   "waarom": "surf organ and guitar: the beach town"
+  },
+  {
+   "naam": "muziek.loopgraaf",
+   "titel": "Graveyard Shift",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700044",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Graveyard Shift.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken, ingekort tot 3:00 met uitfade",
+   "knip": [
+    0,
+    180
+   ],
+   "waarom": "theremin and choir: comic-spooky, the trench"
+  },
+  {
+   "naam": "moment.plan_z",
+   "titel": "Scheming Weasel (faster version)",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100085",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Scheming Weasel faster.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken",
+   "knip": null,
+   "waarom": "cartoonish scheming: Plankmika's plan"
+  },
+  {
+   "naam": "moment.bevroren",
+   "titel": "Moonlight Hall",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200095",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Moonlight Hall.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken, ingekort tot 2:00 met uitfade",
+   "knip": [
+    0,
+    120
+   ],
+   "waarom": "mysterious and frantic: the crown, the freeze"
+  },
+  {
+   "naam": "moment.cycloop",
+   "titel": "Hidden Agenda",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200102",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Hidden Agenda.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken",
+   "knip": null,
+   "waarom": "humorous suspense: the souvenir shop"
+  },
+  {
+   "naam": "moment.hasselguh",
+   "titel": "Heroic Age",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100848",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Heroic Age.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken",
+   "knip": null,
+   "waarom": "bright and heroic: the swim home"
+  },
+  {
+   "naam": "moment.dennis",
+   "titel": "Le Grand Chase",
+   "maker": "Kevin MacLeod (incompetech.com)",
+   "bron_url": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1800021",
+   "licentie": "CC BY 4.0",
+   "licentie_url": "https://creativecommons.org/licenses/by/4.0/",
+   "bestand": "km_Le Grand Chase.mp3",
+   "datum": "2026-10-17",
+   "bewerkt": "mono, 44,1 kHz, luidheid gelijkgetrokken",
+   "knip": null,
+   "waarom": "comic chase with a car horn: Dennis on his motorbike"
+  }
+ ]
+}
