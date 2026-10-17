@@ -241,6 +241,36 @@ public class E2ReizenGameTests {
         helper.succeed();
     }
 
+    /**
+     * merge_fix4 (user request): the order of Appa's menu under the platforms and the story row: the four main buildings, then
+     * the Guhvatar side buildings (not yet visited first, those say "nog niet bezocht"), then the rest with Sponsguh's start first.
+     */
+    @GuhTest(template = WEI, batch = "einde2_reizen", timeoutTicks = 20)
+    public static void einde2ReizenMenuVolgorde(GameTestHelper helper) {
+        // a shuffled list as bestemmingen could give it after the story; the player visited the Kyoshi village and Omashguh
+        java.util.List<String> namen = java.util.List.of(Einde2Ids.LEEGTEHAVEN, Einde2Ids.SCHELPENSTAD, Einde2Ids.KYOSHI_DORP,
+                Einde2Ids.VUURNATIE_HOOFDSTAD, Einde2Ids.OMASHGUH, Einde2Ids.BIKINIBODEM, Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL,
+                Einde2Ids.LEEUWSCHILDPAD_EILAND, Einde2Ids.GUHVLEUGEL_RINGENRACE, Einde2Ids.NOORDELIJKE_WATERSTAM, Einde2Ids.BA_SING_GUH,
+                Einde2Ids.WESTELIJKE_LUCHTTEMPEL, Einde2Ids.VUURTEMPEL_ROKU, Einde2Ids.BIBLIOTHEEK_WAN_SHI_GUH);
+        Set<String> ontdekt = Set.of(Einde2Ids.KYOSHI_DORP, Einde2Ids.OMASHGUH, Einde2Ids.LEEGTEHAVEN, Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL);
+        java.util.List<String> verwacht = java.util.List.of(
+                Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL, Einde2Ids.NOORDELIJKE_WATERSTAM, Einde2Ids.BA_SING_GUH, Einde2Ids.VUURNATIE_HOOFDSTAD,
+                Einde2Ids.WESTELIJKE_LUCHTTEMPEL, Einde2Ids.VUURTEMPEL_ROKU, Einde2Ids.BIBLIOTHEEK_WAN_SHI_GUH, Einde2Ids.LEEUWSCHILDPAD_EILAND,
+                Einde2Ids.OMASHGUH, Einde2Ids.KYOSHI_DORP,
+                Einde2Ids.BIKINIBODEM, Einde2Ids.SCHELPENSTAD, Einde2Ids.LEEGTEHAVEN, Einde2Ids.GUHVLEUGEL_RINGENRACE);
+        java.util.List<String> uit = Fluitlijst.volgorde(namen, ontdekt);
+        helper.assertTrue(uit.equals(verwacht), "main four, unvisited side buildings, visited side buildings, Sponsguh, rest: " + uit);
+        helper.assertTrue(Fluitlijst.nieuw(Einde2Ids.VUURTEMPEL_ROKU, ontdekt) && !Fluitlijst.nieuw(Einde2Ids.KYOSHI_DORP, ontdekt)
+                && !Fluitlijst.nieuw(Einde2Ids.BIKINIBODEM, ontdekt) && !Fluitlijst.nieuw(Einde2Ids.BA_SING_GUH, ontdekt),
+                "only an unvisited Guhvatar side building is 'nog niet bezocht'");
+        // during the story: only what is known, nothing added, the same groups
+        java.util.List<String> tijdens = Fluitlijst.volgorde(java.util.List.of(Einde2Ids.KYOSHI_DORP, Einde2Ids.NOORDELIJKE_WATERSTAM,
+                Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL), Set.of(Einde2Ids.KYOSHI_DORP));
+        helper.assertTrue(tijdens.equals(java.util.List.of(Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL, Einde2Ids.NOORDELIJKE_WATERSTAM, Einde2Ids.KYOSHI_DORP)),
+                "during the story: " + tijdens);
+        helper.succeed();
+    }
+
     /** The id of the menu's one gold story row (and checks there is exactly one, and no "straight to your step" row). */
     private static String verhaalRij(GameTestHelper helper, ServerPlayer p) {
         ListTag rijen = Fluitlijst.rijen(p);

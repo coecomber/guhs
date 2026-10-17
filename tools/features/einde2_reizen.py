@@ -243,6 +243,8 @@ LANG = {
     # fix3-reizen (playtest 2 item 4): ONE story row, a normal flight to the chapter building's landing spot
     "gui.guhs.einde2_reizen.fluit.verhaal_rij": "Verder met het verhaal: vlieg naar %s",
     "gui.guhs.einde2_reizen.fluit.leegte": "(door de leegte)",
+    # merge_fix4 (user request): a Guhvatar side building the player has not visited yet (after the story)
+    "gui.guhs.einde2_reizen.fluit.nieuw": "nog niet bezocht",
     "gui.guhs.einde2_reizen.fluit.ver": "Appa staat te ver weg. Roep hem eerst met het Appa-fluitje.",
     "gui.guhs.einde2_reizen.fluit.nog_niet": "Appa snuffelt de weg daarheen nog uit. Probeer het zo nog eens.",
     "gui.guhs.einde2_reizen.leegte.op_weg": "Appa bromt, zwiept met zijn staart en duikt met je de leegte in, op weg naar %s...",

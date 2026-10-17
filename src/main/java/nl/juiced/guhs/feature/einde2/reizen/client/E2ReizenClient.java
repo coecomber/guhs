@@ -53,6 +53,18 @@ public final class E2ReizenClient {
     /** What a row adds in grey: the distance, or the dimension of a platform there / "door de leegte". Null: nothing. */
     @Nullable
     static net.minecraft.network.chat.Component extra(CompoundTag rij) {
+        net.minecraft.network.chat.Component basis = extraBasis(rij);
+        if (!rij.getBooleanOr("Nieuw", false)) {
+            return basis;
+        }
+        // merge_fix4: a Guhvatar side building not visited yet
+        net.minecraft.network.chat.MutableComponent nieuw = net.minecraft.network.chat.Component.translatable("gui.guhs.einde2_reizen.fluit.nieuw")
+                .withStyle(net.minecraft.ChatFormatting.GREEN);
+        return basis == null ? nieuw : nieuw.append(net.minecraft.network.chat.Component.literal("  ")).append(basis.copy().withStyle(net.minecraft.ChatFormatting.GRAY));
+    }
+
+    @Nullable
+    private static net.minecraft.network.chat.Component extraBasis(CompoundTag rij) {
         int afstand = rij.getIntOr("Afstand", -1);
         if (afstand >= 0) {
             return net.minecraft.network.chat.Component.translatable("gui.guhs.einde2_reizen.fluit.afstand", afstand);

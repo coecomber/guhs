@@ -23,7 +23,9 @@ import nl.juiced.guhs.feature.einde2.reizen.E2ReizenPayloads;
  * verhaal: vlieg naar <gebouw>" (a normal flight to that building's landing spot; the old "↻ meteen naar je stap" row is
  * gone). A click sends the choice; the server checks it again and Appa takes off. Long lists scroll with the mouse wheel.
  * fix4-appa: your own Appa-platforms are the top rows ("⌂ <naam>s Appa-platform"); a click seats you on Appa and the server
- * opens the "Yip yip!" dialog ({@link YipYipScherm}) instead of taking off at once.
+ * opens the "Yip yip!" dialog ({@link YipYipScherm}) instead of taking off at once. merge_fix4: the server sends the rows in
+ * the fixed order (platforms, the story, the main four, the Guhvatar side buildings, the rest); an unvisited side building
+ * says "nog niet bezocht" in green.
  */
 public class FluitScherm extends Screen {
     private static final int W = 330, RIJ = 22, KOP = 46, MAX_RIJEN = 9;
@@ -77,7 +79,8 @@ public class FluitScherm extends Screen {
             }
             Component extra = E2ReizenClient.extra(h);
             if (extra != null) {
-                MutableComponent met = tekst.copy().append(Component.literal("  ")).append(extra.copy().withStyle(ChatFormatting.GRAY));
+                MutableComponent met = tekst.copy().append(Component.literal("  "))
+                        .append(h.getBooleanOr("Nieuw", false) ? extra.copy() : extra.copy().withStyle(ChatFormatting.GRAY));
                 if (font.width(met) <= W - 28) {                     // (the story row is long: the distance only when it fits)
                     tekst = met;
                 }

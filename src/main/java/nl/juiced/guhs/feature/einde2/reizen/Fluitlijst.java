@@ -40,6 +40,10 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  * the player on Appa and opens a small dialog with "Yip yip!" ({@link #VERTREK}, {@link #yipYip}). Until they click it other
  * players can climb on and ride along; closing the dialog or getting off cancels it. The story flights themselves
  * ({@link E2Reizen#vlieg} from the chapters) do not wait for it.
+ * <p>
+ * merge_fix4 (user request): the order under the platforms, "Opstappen" and the gold story row is fixed ({@link #volgorde}):
+ * the four main buildings, the Guhvatar side buildings (unvisited ones first, marked "nog niet bezocht"), then the rest (Sponsguh's
+ * start first).
  */
 public final class Fluitlijst {
     /** The id of the row "Opstappen" (climb on, no flight). */
@@ -110,12 +114,58 @@ public final class Fluitlijst {
             // (also when its place is not worked out yet: the pick then says "nog niet" and starts the search)
             lijst.add(rij(guheinde, hier, p, verhaal, wacht != null && wacht[0].equals(verhaal), true));
         }
-        for (String s : bestemmingen(p)) {
+        // merge_fix4 (user request): the four main buildings, then the Guhvatar side buildings (not yet visited first, "nog niet bezocht"),
+        // then the rest (the start of the other story lines: Sponsguh; the Leegtehaven, the ring race)
+        java.util.Set<String> ontdekt = nl.juiced.guhs.feature.einde2.Einde2Ontdekt.ontdekt(p);
+        for (String s : volgorde(bestemmingen(p), ontdekt)) {
             if (!s.equals(verhaal)) {
-                lijst.add(rij(guheinde, hier, p, s, false, false));
+                CompoundTag t = rij(guheinde, hier, p, s, false, false);
+                if (nieuw(s, ontdekt)) {
+                    t.putBoolean("Nieuw", true);
+                }
+                lijst.add(t);
             }
         }
         return lijst;
+    }
+
+    /**
+     * merge_fix4 (user request, playtest 3): the order of the places in Appa's menu, under the own platforms and the gold story
+     * row: (1) the four main buildings, in chapter order; (2) the Guhvatar side buildings ({@link E2Verhaal#GUHVATAR_ZIJ}), the
+     * ones the player has not visited yet first (they only appear after the story, see {@link #bestemmingen}); (3) everything
+     * else: the start of the other story lines first ({@link Einde2Ids#SPONS_STRUCTUREN}), then the other places (the
+     * Leegtehaven, the ring race, ...) in their old order.
+     */
+    static List<String> volgorde(List<String> namen, java.util.Set<String> ontdekt) {
+        List<String> uit = new java.util.ArrayList<>();
+        for (String s : Einde2Ids.VERHAAL_STRUCTUREN) {
+            if (namen.contains(s)) {
+                uit.add(s);
+            }
+        }
+        for (boolean bezocht : new boolean[] {false, true}) {
+            for (String s : E2Verhaal.GUHVATAR_ZIJ) {
+                if (namen.contains(s) && ontdekt.contains(s) == bezocht) {
+                    uit.add(s);
+                }
+            }
+        }
+        for (String s : Einde2Ids.SPONS_STRUCTUREN) {
+            if (namen.contains(s)) {
+                uit.add(s);
+            }
+        }
+        for (String s : namen) {
+            if (!uit.contains(s)) {
+                uit.add(s);
+            }
+        }
+        return uit;
+    }
+
+    /** A Guhvatar side building the player has not visited yet (its row says "nog niet bezocht"). */
+    static boolean nieuw(String s, java.util.Set<String> ontdekt) {
+        return E2Verhaal.GUHVATAR_ZIJ.contains(s) && !ontdekt.contains(s);
     }
 
     /**
