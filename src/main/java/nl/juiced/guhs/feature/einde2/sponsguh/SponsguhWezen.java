@@ -555,13 +555,14 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
         // sp_cast: a cutscene's animation (Cutscene.Builder.animatie) on an actor, over everything else while it plays
         controllers.add(new AnimationController<SponsguhWezen>("scene", 2, state -> {
             String naam = sceneAnimatie();
-            if (naam.isEmpty() || !cast.heeft(naam)) {
-                return PlayState.STOP;
+            boolean doorlopend = Cast.DOORLOPEND.contains(naam);
+            if (naam.isEmpty() || !cast.heeft(naam) || (!doorlopend && !sceneOpnieuw && sceneTicks > Cast.duur(naam) + 2)) {
+                return PlayState.STOP;                                  // (a one-shot that has played: back to the pose below)
             }
             if (sceneBegonnen()) {
                 state.controller().reset();
             }
-            return state.setAndContinue(Cast.DOORLOPEND.contains(naam) ? RawAnimation.begin().thenLoop(naam) : RawAnimation.begin().thenPlay(naam));
+            return state.setAndContinue(doorlopend ? RawAnimation.begin().thenLoop(naam) : RawAnimation.begin().thenPlay(naam));
         }));
     }
 
