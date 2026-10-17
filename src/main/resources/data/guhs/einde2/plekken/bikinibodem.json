@@ -1971,6 +1971,241 @@
         ]
       ],
       "wie": "de camera van knipoog_rookguh"
+    },
+    "zij_lantaarn_1": {
+      "soort": "prop",
+      "pos": [
+        156,
+        16,
+        172
+      ],
+      "wie": "spooklantaarn 1 van de spookkapitein: tussen de Kruimelkwallen, oost van de aanlegplaats"
+    },
+    "zij_lantaarn_2": {
+      "soort": "prop",
+      "pos": [
+        139,
+        16,
+        151
+      ],
+      "wie": "spooklantaarn 2 van de spookkapitein: achter De Vetemmer, noord van de aanlegplaats"
+    },
+    "zij_lantaarn_3": {
+      "soort": "prop",
+      "pos": [
+        76,
+        16,
+        172
+      ],
+      "wie": "spooklantaarn 3 van de spookkapitein: bij de knabbelkoorvrucht van Sponsguh, in het westen"
+    },
+    "zij_sandy_1_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          176,
+          18,
+          138
+        ],
+        [
+          172,
+          17,
+          135
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy, shot 1"
+    },
+    "zij_sandy_2_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          173,
+          17,
+          139
+        ],
+        [
+          172,
+          17,
+          133
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy, shot 2"
+    },
+    "zij_sandy_3_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          172,
+          17,
+          140
+        ],
+        [
+          172,
+          17,
+          137
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy, shot 3"
+    },
+    "zij_sandy_4_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          176,
+          18,
+          138
+        ],
+        [
+          172,
+          17,
+          135
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy, shot 4"
+    },
+    "zij_sandy_raket_1_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          177,
+          18,
+          135
+        ],
+        [
+          172,
+          18,
+          129
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy_raket, shot 1"
+    },
+    "zij_sandy_raket_2_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          175,
+          17,
+          132
+        ],
+        [
+          173,
+          17,
+          130
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy_raket, shot 2"
+    },
+    "zij_sandy_raket_3_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          176,
+          17,
+          134
+        ],
+        [
+          171,
+          21,
+          128
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy_raket, shot 3"
+    },
+    "zij_sandy_raket_4_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          177,
+          18,
+          135
+        ],
+        [
+          172,
+          18,
+          129
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_sandy_raket, shot 4"
+    },
+    "zij_guhlander_1_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          145,
+          18,
+          173
+        ],
+        [
+          139,
+          22,
+          163
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_guhlander, shot 1"
+    },
+    "zij_guhlander_2_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          141,
+          17,
+          170
+        ],
+        [
+          139,
+          17,
+          166
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_guhlander, shot 2"
+    },
+    "zij_helden_1_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          168,
+          18,
+          92
+        ],
+        [
+          168,
+          17,
+          88
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_helden, shot 1"
+    },
+    "zij_helden_2_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          166,
+          17,
+          90
+        ],
+        [
+          169,
+          17,
+          88
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_helden, shot 2"
+    },
+    "zij_helden_3_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          167,
+          17,
+          87
+        ],
+        [
+          169,
+          17,
+          88
+        ]
+      ],
+      "wie": "de camera van scene einde2_sp_zij_helden, shot 3"
     }
   },
   "lagen": {
