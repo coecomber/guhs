@@ -44,6 +44,8 @@ public final class H3Rollen {
             TOPH_MEE = "einde2_h3_aarde_toph_mee", KOOL = "einde2_h3_aarde_kool";
     /** How many answers each question of the passport desk has. */
     static final int LOKET_VRAGEN = 3, LOKET_OPTIES = 3;
+    /** A step no player ever has: a resident with this range is never seen. */
+    static final int NOOIT = 900;
 
     private H3Rollen() {
     }
@@ -138,7 +140,8 @@ public final class H3Rollen {
         String lijn = E2H3Aarde.LIJN.id();
         switch (m) {
             case "miroh" -> Zicht.alleenBij(e, lijn, 0, E2H3Aarde.LU_TEN - 1);       // (under the tree, then caught in the fall; after the finale: his own reopened tea house)
-            case "zuka_ober" -> Zicht.alleenBij(e, lijn, 0, E2H3Aarde.VAL);          // (he chose his side)
+            case "zuka_ober" -> Zicht.alleenBij(e, lijn, 0, E2H3Aarde.LU_TEN);       // (fix3-h3: at VAL the Dai Li hold him, with Katara)
+            case "lu_ten_miroh" -> Zicht.alleenBij(e, lijn, NOOIT, NOOIT);          // (fix3-h3, playtest 2 item 7: H3Personen's own Miroh is the one under the tree, only at LU_TEN)
             case "long_feng" -> Zicht.alleenBij(e, lijn, 0, E2H3Aarde.KONING);       // (unmasked in the base)
             case "azula" -> Zicht.alleenBij(e, lijn, E2H3Aarde.VAL, E2H3Aarde.VAL);  // (only when she waits in the crystal chamber)
             case "toph" -> Zicht.alleenBij(e, lijn, 0, E2H3Aarde.VAL);               // (then at the camp, then in your team)
@@ -146,6 +149,19 @@ public final class H3Rollen {
                 if (m.startsWith("sluip_wacht_")) {
                     Zicht.alleenBij(e, lijn, 0, E2H3Aarde.KONING);                   // (your own guards during the sneak; after it the base is empty)
                 }
+            }
+        }
+    }
+
+    /**
+     * fix3-h3: a resident of Ba Sing Guh that was made before (saved with the chunk) gets the rules of now when it comes back
+     * into the world (playtest 2 item 7: the old Miroh under the tree was saved for everybody).
+     */
+    static void opBinnenkomst(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide() && event.getEntity() instanceof GuhNpcEntity npc && npc.getPersistentData().contains(Bewoners.TAG)) {
+            String plek = npc.roleData.getStringOr(NpcRollen.PLEK, "");
+            if (plek.startsWith(E2H3Aarde.STRUCTUUR + "/")) {
+                bijMaken(npc, plek);
             }
         }
     }

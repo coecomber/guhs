@@ -31,8 +31,14 @@ import org.slf4j.Logger;
  *   <li>the outer gate shut with bars until your passport is stamped (step {@link E2H3Aarde#LOKET} and before);</li>
  *   <li>the cabbage man's three stalls: whole, or wrecked once they broke for you ({@link H3Kool}); after the chapter he has
  *       built all three again;</li>
- *   <li>Appa's bars in the base under Meer Laogai: bent open once you freed him (the flag {@link #V_TRALIES}).</li>
+ *   <li>Appa's bars in the base under Meer Laogai: shut until you freed him (the flag {@link #V_TRALIES}), then a bent
+ *       frame you walk through.</li>
  * </ul>
+ * fix3-h3 (playtest 2 item 6: "de tralies zijn weg maar ik kan er niet door"): Schijn can only ADD a block that blocks
+ * you. A block it takes away is still there for the server, which pushes you back from it (the bars used to be real and
+ * were only hidden for one player). So Appa's bars are now like the outer gate: in the world the gate of his chamber is
+ * open ({@link #traliesWeg} takes the build's real bars out, once per copy of the city), and every player who did not free
+ * him yet gets the bars sent as a shown block, which their own game does not walk through.
  * The two stall overlays come as a list of blocks from the chain (data/guhs/einde2/h3_aarde/koolkraam.json, written by
  * tools/features/einde2_h3_aarde.py from the same builder as the build's overlay templates).
  */
@@ -101,17 +107,51 @@ public final class H3Schijn {
             }
         }
         BlockPos poort = stad.pos("appa_poort");
-        if (poort != null && Schijn.dichtbij(p, poort) && (E2H3Aarde.LIJN.vlag(p, V_TRALIES) || stap > E2H3Aarde.LAOGAI)) {
+        if (poort != null && Schijn.dichtbij(p, poort)) {
+            boolean open = E2H3Aarde.LIJN.vlag(p, V_TRALIES) || stap > E2H3Aarde.LAOGAI;
             for (int dx = -TRALIES_HALF; dx <= TRALIES_HALF; dx++) {
                 for (int dy = 0; dy < TRALIES_HOOG; dy++) {
                     BlockPos b = poort.offset(dx, dy, 0);
-                    if (level.getBlockState(b).getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock) {
-                        // bent open: the middle three columns are gone, the rest stays (a broken frame)
-                        gewenst.put(b, Math.abs(dx) <= 2 || dy >= 3 ? Blocks.AIR.defaultBlockState() : tralie(false, false));
+                    // shut: the whole gate; bent open: only the outer columns, low (a broken frame); the rest is the open world
+                    if ((!open || Math.abs(dx) == TRALIES_HALF && dy < 3) && level.getBlockState(b).isAir()) {
+                        gewenst.put(b, tralie(false, false));
                     }
                 }
             }
         }
+    }
+
+    /** The copies of the city whose real bars are out (level + spot of the gate); not saved: once per server run is enough. */
+    private static final java.util.Set<String> OPEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+    /**
+     * Takes the build's real iron bars out of the gate of Appa's chamber in this copy of the city (only while its chunk is
+     * loaded; asked every half second by H3Verloop for a player nearby). After this the gate is open in the world; who may
+     * not pass yet sees and bumps into the bars of {@link #vul}.
+     */
+    static void traliesWeg(E2H3Aarde.Stad stad) {
+        BlockPos poort = stad.pos("appa_poort");
+        if (poort == null) {
+            return;
+        }
+        String sleutel = stad.level().dimension().identifier() + "@" + poort.asLong();
+        if (OPEN.contains(sleutel) || !stad.level().isLoaded(poort)) {
+            return;
+        }
+        for (int dx = -TRALIES_HALF; dx <= TRALIES_HALF; dx++) {
+            for (int dy = 0; dy < TRALIES_HOOG; dy++) {
+                BlockPos b = poort.offset(dx, dy, 0);
+                if (stad.level().getBlockState(b).getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock) {
+                    stad.level().setBlock(b, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                }
+            }
+        }
+        OPEN.add(sleutel);
+    }
+
+    /** (tests) forgets which copies were opened. */
+    static void vergeetOpen() {
+        OPEN.clear();
     }
 
     /** An iron bar of a wall that runs north-south (along z) or east-west. */

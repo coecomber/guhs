@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,8 +36,10 @@ import org.slf4j.Logger;
  * <p>
  * Lengths (running time without the waits for a click; CONTRACT_E2_B 5): aankomst 17 s, loket 14 s, aardrommel 26 s,
  * jasmijn_draak 27 s, <b>appa_ontvoerd 55 s</b>, long_feng 26 s, weerzien 23 s, <b>lu_ten 75 s</b> (only the song's
- * captions and one line at the end), <b>val 84 s</b>, knipoog_mewtwo 9 s, knipoog_sjokkel 8 s. Texts:
- * scene.guhs.einde2_h3_aarde_*.
+ * captions and one line at the end), <b>val 96 s</b> (fix3-h3: 12 s more for Zuka's choice), knipoog_mewtwo 9 s,
+ * knipoog_sjokkel 8 s; fix3-h3 (playtest 2: the reason for every step, in scenes): leraar 20 s, middenring 24 s,
+ * uitnodiging 22 s, gevolgd 18 s, na_appa 22 s, waarom_miroh 28 s, katara_weg 30 s, <b>kristalcel 38 s</b>,
+ * <b>miroh_gevangen 32 s</b>, ontsnapping 25 s, koers 26 s. Texts: scene.guhs.einde2_h3_aarde_*.
  */
 public final class H3Scenes {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -55,6 +58,9 @@ public final class H3Scenes {
     /** Miroh's lullaby ends its captions here, before his one spoken line of {@link #LU_TEN}. */
     private static final int LIED_EINDE = 1400;
 
+    /** Appa's flight out over the outer wall to the camp and away (template spots: Appa's feet). */
+    private static final double[][] VLUCHT = {{48, 82, 134}, {18, 70, 143}, {15.5, 50, 145.5}, {0, 60, 138}, {-40, 70, 128}};
+
     public static final Scene AANKOMST = aankomst();
     public static final Scene LOKET = loket();
     public static final Scene AARDROMMEL = aardrommel();
@@ -66,6 +72,18 @@ public final class H3Scenes {
     public static final Scene VAL = val();
     public static final Scene KNIPOOG_MEWTWO = knipoogMewtwo();
     public static final Scene KNIPOOG_SJOKKEL = knipoogSjokkel();
+    // fix3-h3 (playtest 2): the story between the steps, Zuka in the crystal cell, Miroh's capture, the escape with Toph
+    public static final Scene LERAAR = leraar();
+    public static final Scene MIDDENRING = middenring();
+    public static final Scene UITNODIGING = uitnodiging();
+    public static final Scene GEVOLGD = gevolgd();
+    public static final Scene NA_APPA = naAppa();
+    public static final Scene WAAROM_MIROH = waaromMiroh();
+    public static final Scene KATARA_WEG = kataraWeg();
+    public static final Scene KRISTALCEL = kristalcel();
+    public static final Scene MIROH_GEVANGEN = mirohGevangen();
+    public static final Scene ONTSNAPPING = ontsnapping();
+    public static final Scene KOERS = koers();
 
     private H3Scenes() {
     }
@@ -406,9 +424,18 @@ public final class H3Scenes {
 
     /**
      * The fall of Ba Sing Guh: Azula-Mika, Zuka's choice, the Guhvatar state, the lightning (it stuns, nothing more),
-     * Katara-guh's spirit water, Miroh holding them off, the flight up the Koningsput on Appa. 84 s (the big moment of the
-     * chapter).
+     * Katara-guh's spirit water, Miroh holding them off, the flight up the Koningsput on Appa. 96 s (the big moment of the
+     * chapter). fix3-h3 (playtest 2 item 8): {@link #VAL_EXTRA} ticks more in the middle of Zuka's choice, from tick
+     * {@link #VAL_IN} on: Azula offers him his home back, Zuka wavers, Miroh asks him to be good without anyone's pride, Zuka
+     * says sorry; everything after it (from "keuze" on) runs as before, only later ({@link #vt}).
      */
+    private static final int VAL_IN = 470, VAL_EXTRA = 240;
+
+    /** A tick of the first version of {@link #val}: from {@link #VAL_IN} on it comes {@link #VAL_EXTRA} ticks later. */
+    private static int vt(int t) {
+        return t < VAL_IN ? t : t + VAL_EXTRA;
+    }
+
     private static Scene val() {
         String a = "bliksem_speler";
         Cam wijd = cam(a, "h3_val_wijd"), zuka = cam(a, "h3_val_zuka"), bliksem = cam(a, "h3_val_bliksem"), katara = cam(a, "h3_val_katara"),
@@ -416,7 +443,7 @@ public final class H3Scenes {
         Vec3 sp = op(a, a, 2, 0, 2), azula = op(a, "azula"), keuze = op(a, "zuka_keuze"), redt = op(a, "katara_redt"), miroh = op(a, a, 3, 0, 4),
                 gevangen = op(a, "miroh_gevangen"), appaBoven = op(a, "val_appa_boven"), appaOnder = plus(appaBoven, 0, -22, 0),
                 bazula = op(a, "bliksem_azula");
-        Cutscene.Builder b = maak("val").duur(1680).verbergEcht(24)
+        Cutscene.Builder b = maak("val").duur(vt(1680)).verbergEcht(24)
                 .speler(sp, 90f)
                 .npc("katara", Kind.KATARA_GUH, plus(sp, 0, 0, 2), 90f)
                 .npc("aang", Kind.AANG_GUH, plus(sp, 1.5, 0, -1), 90f)
@@ -425,60 +452,65 @@ public final class H3Scenes {
                 .npc("azula", Kind.AZULA_MIKA, plus(azula, -10, 0, 0), -90f)
                 .acteur("appa", E2AppaFeature.APPA_GUH, appaBoven, 0f)
                 .camera(0, wijd.oog(0), wijd.kijk()).camera(320, plus(wijd.oog(0), -1, -1, -1), wijd.kijk())
-                .cameraKnipVolgt(324, zuka.oog(0), "zuka").camera(516, plus(zuka.oog(0), 0.4, 0, 0.4), zuka.kijk())
-                .cameraKnip(520, wijd.oog(0), wijd.kijk()).camera(756, plus(wijd.oog(0), -2, -1, -1), wijd.kijk())
-                .cameraKnip(760, bliksem.oog(0), bliksem.kijk()).camera(950, plus(bliksem.oog(0), 0.5, 0.4, -0.5), bliksem.kijk())
-                .cameraKnip(1012, katara.oog(0), katara.kijk()).camera(1240, plus(katara.oog(0), 0.4, 0, 0.4), katara.kijk())
-                .cameraKnip(1244, schacht.oog(0), schacht.kijk()).camera(1420, plus(schacht.oog(0), 0.5, 0.5, 0.5), schacht.kijk())
-                .camera(1560, plus(appaOnder, -2.5, 24, -2.5), plus(appaOnder, 0, 34, 0))
-                .camera(1680, plus(appaOnder, -2.0, 30, -2.0), plus(appaOnder, 0, 40, 0))
+                .cameraKnipVolgt(324, zuka.oog(0), "zuka").camera(vt(516), plus(zuka.oog(0), 0.4, 0, 0.4), zuka.kijk())
+                .cameraKnip(vt(520), wijd.oog(0), wijd.kijk()).camera(vt(756), plus(wijd.oog(0), -2, -1, -1), wijd.kijk())
+                .cameraKnip(vt(760), bliksem.oog(0), bliksem.kijk()).camera(vt(950), plus(bliksem.oog(0), 0.5, 0.4, -0.5), bliksem.kijk())
+                .cameraKnip(vt(1012), katara.oog(0), katara.kijk()).camera(vt(1240), plus(katara.oog(0), 0.4, 0, 0.4), katara.kijk())
+                .cameraKnip(vt(1244), schacht.oog(0), schacht.kijk()).camera(vt(1420), plus(schacht.oog(0), 0.5, 0.5, 0.5), schacht.kijk())
+                .camera(vt(1560), plus(appaOnder, -2.5, 24, -2.5), plus(appaOnder, 0, 34, 0))
+                .camera(vt(1680), plus(appaOnder, -2.0, 30, -2.0), plus(appaOnder, 0, 40, 0))
                 .zeg(10, "", "kristal", 64)
                 .loop("azula", 60, 120, azula).animatie("azula", 80, "grijns").zeg(82, "azula", "reunie", 64)
                 .animatie("azula", 158, "lok").zeg(160, "azula", "zuka", 74)
                 .kijk("miroh", 244, plus(sp, -2, 0, 2.5)).animatie("miroh", 246, "wijsheid").zeg(250, "miroh", "weg", 84)
                 .zeg(340, "", "stil", 62)
-                .loop("zuka", 410, 470, keuze).kijk("zuka", 472, op(a, a, 2, 0, 2))
+                .loop("zuka", 410, 470, keuze).kijk("zuka", vt(472), op(a, a, 2, 0, 2))
                 .zeg(430, "miroh", "zuka_naam", 40)
-                .zeg(480, "", "keuze", 52);
+                // (fix3-h3, playtest 2 item 8: the choice with more heart: what Azula offers him, what Miroh asks of him)
+                .kijk("zuka", 470, azula).animatie("azula", 470, "lok").zeg(472, "azula", "thuis", 66)
+                .animatie("zuka", 542, "zucht").zeg(546, "zuka", "eer", 50)
+                .kijk("zuka", 600, miroh).animatie("miroh", 600, "wijsheid").zeg(604, "miroh", "trots", 72)
+                .zeg(680, "zuka", "sorry", 36)
+                .zeg(vt(480), "", "keuze", 52);
         double[][] dl = {{-5, -4}, {-5, 8}, {-10, 2}};
         for (int i = 0; i < dl.length; i++) {
             String n = "dai_li_" + (i + 1);
             Vec3 plek = plus(sp, dl[i][0], 0, dl[i][1]);
-            b.npc(n, Kind.DAI_LI_MIKA, plus(plek, 0, -3, 0), -90f).loop(n, 540 + i * 6, 560 + i * 6, plek).animatie(n, 566, "stenen_hand");
+            b.npc(n, Kind.DAI_LI_MIKA, plus(plek, 0, -3, 0), -90f).loop(n, vt(540) + i * 6, vt(560) + i * 6, plek).animatie(n, vt(566), "stenen_hand");
         }
-        b.schud(540, 0.8f, 16).geluid(540, () -> SoundEvents.ROOTED_DIRT_BREAK, 1f, 0.5f)
-                .animatie("aang", 560, "zweef").zeg(562, "aang", "nu", 62)
-                .loop("speler", 640, 700, plus(sp, 0, 3, 0))
-                .deeltjes(640, ParticleTypes.END_ROD, plus(sp, 0, 1.5, 0), 40, 1.0).deeltjes(680, ParticleTypes.END_ROD, plus(sp, 0, 4, 0), 50, 1.4)
-                .geluid(640, () -> SoundEvents.BEACON_ACTIVATE, 1f, 1.2f)
-                .zeg(704, "", "staat", 62)
-                .loop("azula", 760, 776, bazula).kijk("azula", 776, plus(sp, 0, 3, 0)).animatie("azula", 778, "bliksem").zeg(780, "azula", "bliksem", 30)
-                .geluid(810, () -> SoundEvents.LIGHTNING_BOLT_THUNDER, 0.7f, 1.3f).schud(810, 2.6f, 18).zwart(808, 812)
-                .deeltjes(810, ParticleTypes.ELECTRIC_SPARK, plus(sp, 0, 4, 0), 80, 1.2)
-                .deeltjes(810, ParticleTypes.ELECTRIC_SPARK, plus(bazula, 0, 1.5, 0).add(plus(sp, 0, 4, 0)).scale(0.5), 60, 2.5)
-                .loop("speler", 820, 880, plus(redt, 0, 0, 0.6))
-                .zeg(900, "", "val", 62)
-                .zwart(960, 1010)
-                .loop("katara", 958, 1010, plus(redt, 1, 0, 0.6)).kijk("katara", 1010, redt)
-                .animatie("katara", 1018, "genees").zeg(1020, "katara", "water", 76)
-                .deeltjes(1030, ParticleTypes.GLOW, plus(redt, 0, 0.6, 0.6), 30, 0.5).deeltjes(1080, ParticleTypes.GLOW, plus(redt, 0, 0.6, 0.6), 30, 0.5)
-                .zeg(1100, "", "ogen", 56)
-                .loop("miroh", 1150, 1180, plus(sp, -3, 0, 1)).kijk("miroh", 1180, azula)
-                .deeltjes(1176, ParticleTypes.FLAME, plus(sp, -4, 1, 1), 40, 1.2)
-                .animatie("miroh", 1170, "wijsheid").zeg(1172, "miroh", "ga", 66)
-                .loop("appa", 1250, 1340, appaOnder).geluid(1250, E2AppaFeature.BRUL::get, 1f, 1f)
-                .animatie("aang", 1258, "lach").zeg(1260, "aang", "appa", 44)
-                .loop("speler", 1350, 1400, plus(appaOnder, 0, 0, 1.5)).loop("katara", 1350, 1404, plus(appaOnder, 1, 0, 1.5))
-                .loop("aang", 1350, 1400, plus(appaOnder, -1, 0, 1.5))
-                .loop("miroh", 1340, 1380, gevangen).kijk("miroh", 1382, appaOnder)
-                .deeltjes(1384, ParticleTypes.HAPPY_VILLAGER, plus(gevangen, 0, 1, 0), 40, 0.9)
-                .zeg(1380, "", "miroh", 70);
+        b.schud(vt(540), 0.8f, 16).geluid(vt(540), () -> SoundEvents.ROOTED_DIRT_BREAK, 1f, 0.5f)
+                .animatie("aang", vt(560), "zweef").zeg(vt(562), "aang", "nu", 62)
+                .loop("speler", vt(640), vt(700), plus(sp, 0, 3, 0))
+                .deeltjes(vt(640), ParticleTypes.END_ROD, plus(sp, 0, 1.5, 0), 40, 1.0).deeltjes(vt(680), ParticleTypes.END_ROD, plus(sp, 0, 4, 0), 50, 1.4)
+                .geluid(vt(640), () -> SoundEvents.BEACON_ACTIVATE, 1f, 1.2f)
+                .zeg(vt(704), "", "staat", 62)
+                .loop("azula", vt(760), vt(776), bazula).kijk("azula", vt(776), plus(sp, 0, 3, 0)).animatie("azula", vt(778), "bliksem").zeg(vt(780), "azula", "bliksem", 30)
+                .geluid(vt(810), () -> SoundEvents.LIGHTNING_BOLT_THUNDER, 0.7f, 1.3f).schud(vt(810), 2.6f, 18).zwart(vt(808), vt(812))
+                .deeltjes(vt(810), ParticleTypes.ELECTRIC_SPARK, plus(sp, 0, 4, 0), 80, 1.2)
+                .deeltjes(vt(810), ParticleTypes.ELECTRIC_SPARK, plus(bazula, 0, 1.5, 0).add(plus(sp, 0, 4, 0)).scale(0.5), 60, 2.5)
+                .loop("speler", vt(820), vt(880), plus(redt, 0, 0, 0.6))
+                .zeg(vt(900), "", "val", 62)
+                .zwart(vt(960), vt(1010))
+                .loop("katara", vt(958), vt(1010), plus(redt, 1, 0, 0.6)).kijk("katara", vt(1010), redt)
+                .animatie("katara", vt(1018), "genees").zeg(vt(1020), "katara", "water", 76)
+                .deeltjes(vt(1030), ParticleTypes.GLOW, plus(redt, 0, 0.6, 0.6), 30, 0.5).deeltjes(vt(1080), ParticleTypes.GLOW, plus(redt, 0, 0.6, 0.6), 30, 0.5)
+                .zeg(vt(1100), "", "ogen", 56)
+                .loop("miroh", vt(1150), vt(1180), plus(sp, -3, 0, 1)).kijk("miroh", vt(1180), azula)
+                .deeltjes(vt(1176), ParticleTypes.FLAME, plus(sp, -4, 1, 1), 40, 1.2)
+                .animatie("miroh", vt(1170), "wijsheid").zeg(vt(1172), "miroh", "ga", 66)
+                .loop("appa", vt(1250), vt(1340), appaOnder).geluid(vt(1250), E2AppaFeature.BRUL::get, 1f, 1f)
+                .animatie("aang", vt(1258), "lach").zeg(vt(1260), "aang", "appa", 44)
+                .loop("speler", vt(1350), vt(1400), plus(appaOnder, 0, 0, 1.5)).loop("katara", vt(1350), vt(1404), plus(appaOnder, 1, 0, 1.5))
+                .loop("aang", vt(1350), vt(1400), plus(appaOnder, -1, 0, 1.5))
+                .loop("miroh", vt(1340), vt(1380), gevangen).kijk("miroh", vt(1382), appaOnder)
+                .deeltjes(vt(1384), ParticleTypes.HAPPY_VILLAGER, plus(gevangen, 0, 1, 0), 40, 0.9)
+                .zeg(vt(1380), "", "miroh", 70);
         for (String n : List.of("appa", "speler", "katara", "aang")) {
             Vec3 van = n.equals("appa") ? appaOnder : n.equals("speler") ? plus(appaOnder, 0, 0, 1.5)
                     : n.equals("katara") ? plus(appaOnder, 1, 0, 1.5) : plus(appaOnder, -1, 0, 1.5);
-            b.loop(n, 1420, 1600, plus(van, 0, 34, 0));
+            b.loop(n, vt(1420), vt(1600), plus(van, 0, 34, 0));
         }
-        return reg("val", b.geluid(1420, E2AppaFeature.JIP_JIP::get, 1f, 1f).zeg(1590, "", "gevallen", 84), a);
+        return reg("val", b.geluid(vt(1420), E2AppaFeature.JIP_JIP::get, 1f, 1f).zeg(vt(1590), "", "gevallen", 84), a);
     }
 
     /** Wink 3 (DESIGN 5c): Mewtwo-guh sits in his tank of his own free will; Mew-guh giggles past. 9 s. */
@@ -513,5 +545,393 @@ public final class H3Scenes {
                 .camera(0, c.oog(0), c.kijk()).camera(160, plus(c.oog(0), 0.3, 0, -0.3), c.kijk())
                 .loop("sjokkel", 10, 150, van.lerp(naar, 0.6))
                 .zeg(20, "", "sjokkel", 74), a);
+    }
+
+    // =====================================================================================================================
+    // fix3-h3 (playtest 2 items 1, 8, 9, 10): the story between the steps. Every task gets its reason in a short scene with
+    // the team (who, why, what is at stake); positions are template spots (t), cameras are free points that step out of a
+    // wall by themselves (cameraOntwijkt) or the build's proven camera pads.
+    // =====================================================================================================================
+
+    /** A template spot (block x + fraction, feet y, block z + fraction) relative to the anchor marker. */
+    private static Vec3 t(String anker, double x, double y, double z) {
+        BlockPos a = m(anker);
+        return new Vec3(x - a.getX(), y - a.getY(), z - a.getZ());
+    }
+
+    /**
+     * After the gate (step 2, Aardrommel): in the passage of the outer gate. Aang needs an earth teacher; Sokka has a
+     * flyer of the Aardrommel, where the strongest earth benders of the city fight. 20 s.
+     */
+    private static Scene leraar() {
+        String a = "loket";
+        Vec3 sp = t(a, 27.5, 46, 126.6), aang = t(a, 29.6, 46, 126.6), katara = t(a, 29.2, 46, 128.9), sokka = t(a, 30.6, 46, 128.0),
+                momo = t(a, 29.5, 46, 125.7);
+        Vec3 camA = t(a, 24.6, 48.6, 129.8), kijkA = t(a, 29.0, 47.2, 127.6), camS = t(a, 27.4, 48.0, 130.4), camC = t(a, 25.5, 49.0, 128.5),
+                stadKijk = t(a, 46.5, 50.0, 128.5);
+        return reg("leraar", maak("leraar").duur(400).verbergEcht(8).cameraOntwijkt()
+                .speler(sp, -90f)
+                .npc("loketguh", Kind.LOKETGUH, op(a, "loketguh"), 0f)
+                .npc("aang", Kind.AANG_GUH, aang, 90f)
+                .npc("katara", Kind.KATARA_GUH, katara, 120f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, 90f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, momo, 90f)
+                .camera(0, camA, kijkA).camera(130, plus(camA, 0.4, 0, -0.3), kijkA)
+                .cameraKnipVolgt(134, camS, "sokka").camera(300, plus(camS, 0.3, 0, -0.2), kijkA)
+                .cameraKnip(316, camC, stadKijk).camera(400, plus(camC, 1.5, 0, 0), stadKijk)
+                .animatie("aang", 8, "lach").zeg(10, "aang", "binnen", 60)
+                .kijk("katara", 70, aang).zeg(74, "katara", "geduld", 58)
+                .animatie("sokka", 136, "plan").zeg(138, "sokka", "affiche", 72)
+                .animatie("aang", 212, "lach").zeg(214, "aang", "kampioen", 48)
+                .animatie("sokka", 264, "honger").zeg(266, "sokka", "pauze", 44)
+                .geluid(318, () -> SoundEvents.GENERIC_EXPLODE.value(), 0.25f, 0.6f).schud(318, 0.4f, 10)
+                .zeg(322, "", "arena", 60)
+                .loop("aang", 330, 400, plus(aang, 7, 0, 1.5)).loop("katara", 334, 400, plus(katara, 7, 0, -0.5))
+                .loop("sokka", 330, 400, plus(sokka, 6, 0, 0.3)).loop("momo", 326, 380, plus(momo, 8, 0, 2)), a);
+    }
+
+    /**
+     * After the lesson (step 4, monorail): in the ring of the Aardrommel. Earth bending learnt; now the Aardekoning must hear
+     * of the Fire Nation, but nobody reaches him. Toph sends you up with the monorail to wait in the middle ring. 24 s.
+     */
+    private static Scene middenring() {
+        String a = "toph";
+        Cam laag = cam(a, "h3_aardrommel_toph");
+        Vec3 toph = op(a, a), sp = t(a, 88.5, 42, 205.4), aang = t(a, 90.4, 42, 205.6), katara = t(a, 92.0, 42, 204.6), sokka = t(a, 91.6, 42, 206.6),
+                momo = t(a, 89.6, 42, 206.4), midden = t(a, 90.6, 43, 204.4), zuid = t(a, 89.6, 43.6, 208.4);
+        return reg("middenring", maak("middenring").duur(470).verbergEcht(10).cameraOntwijkt()
+                .npc("toph", Kind.TOPH_GUH, toph, 0f)
+                .speler(sp, 180f)
+                .npc("aang", Kind.AANG_GUH, aang, 180f)
+                .npc("katara", Kind.KATARA_GUH, katara, 170f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, 190f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, momo, 180f)
+                .camera(0, laag.oog(0), midden).camera(196, plus(laag.oog(0), -0.4, 0.2, -0.3), midden)
+                .cameraKnipVolgt(200, zuid, "toph").camera(330, plus(zuid, 0.6, 0, 0), toph.add(0, 1, 0))
+                .cameraKnip(334, laag.oog(0), midden).camera(470, plus(laag.oog(0), -0.6, 0.3, -0.4), midden)
+                .animatie("toph", 8, "lach").zeg(10, "toph", "kiezel", 56)
+                .zeg(74, "katara", "koning", 62)
+                .animatie("toph", 138, "wijs").zeg(140, "toph", "muren", 64)
+                .animatie("sokka", 208, "plan").zeg(210, "sokka", "afspraak", 50)
+                .animatie("toph", 266, "stamp").schud(272, 0.6f, 8).zeg(270, "toph", "monorail", 74)
+                .zeg(350, "aang", "mee", 42)
+                .animatie("toph", 398, "lach").zeg(400, "toph", "titel", 62), a);
+    }
+
+    /**
+     * After Pai Sho (step 8, Joo Dee): in De Jasmijn Draak. Miroh warns, softly, that in this city even the cups have ears:
+     * the Dai Li keep the peace a little too well. Katara: our guide Joo Dee-guh can take us to the king. 22 s.
+     */
+    private static Scene uitnodiging() {
+        String a = "miroh";
+        Cam binnen = cam(a, "h3_thee_binnen"), zuka = cam(a, "h3_thee_zuka");
+        Vec3 sp = op(a, a, 0, 0, -5.5), aang = plus(sp, 1.2, 0, 0.6), katara = plus(sp, -1.2, 0, 0.4), sokka = plus(sp, 0.6, 0, -1.0);
+        return reg("uitnodiging", maak("uitnodiging").duur(440).verbergEcht(12)
+                .npc("miroh", Kind.OOM_MIROH, op(a, a), 180f)
+                .npc("zuka", Kind.ZUKA, op(a, "zuka_ober"), 90f)
+                .npc("klant_1", Kind.BA_SING_GUH_BURGER, op(a, "klant_1"), 180f)
+                .npc("klant_2", Kind.BA_SING_GUH_BURGER, op(a, "klant_2"), 180f)
+                .speler(sp, 0f)
+                .npc("aang", Kind.AANG_GUH, aang, 0f)
+                .npc("katara", Kind.KATARA_GUH, katara, 0f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, 0f)
+                .camera(0, binnen.oog(0), binnen.kijk()).camera(336, plus(binnen.oog(0), -0.6, 0, 0.6), binnen.kijk())
+                .cameraKnipVolgt(340, zuka.oog(0), "zuka").camera(440, plus(zuka.oog(0), 0.4, 0, 0.3), zuka.kijk())
+                .animatie("miroh", 8, "thee").zeg(10, "miroh", "oren", 70)
+                .zeg(84, "sokka", "wie", 40)
+                .animatie("miroh", 128, "wijsheid").zeg(130, "miroh", "dai_li", 76)
+                .zeg(210, "katara", "gids", 64)
+                .animatie("miroh", 278, "praat").zeg(280, "miroh", "luister", 56)
+                .kijk("zuka", 330, sp).animatie("zuka", 344, "zucht").zeg(346, "", "zuka", 70), a);
+    }
+
+    /**
+     * After Joo Dee (step 9, the camp): in front of her house. She smiles and smiles; two Dai Li-Mika's stand by the wall and
+     * look away. Appa and Momo are alone at the camp. 18 s.
+     */
+    private static Scene gevolgd() {
+        String a = "joo_dee";
+        Vec3 jd = op(a, a), sp = op(a, a, 0, 0, 3), aang = op(a, a, 1.6, 0, 3.6), katara = op(a, a, -1.4, 0, 3.8), sokka = op(a, a, 0.8, 0, 5.0),
+                dl1 = op(a, "dai_li_4"), dl2 = op(a, "dai_li_4", -0.6, 0, 1.8);
+        Vec3 camA = op(a, a, 3.4, 2.4, 7.6), kijkA = op(a, a, 0, 1, 2.6), camD = op(a, a, 1.6, 2.0, 6.0);
+        return reg("gevolgd", maak("gevolgd").duur(360).verbergEcht(12).cameraOntwijkt()
+                .npc("joo_dee", Kind.JOO_DEE_GUH, jd, 0f)
+                .npc("dai_li_1", Kind.DAI_LI_MIKA, dl1, 0f)
+                .npc("dai_li_2", Kind.DAI_LI_MIKA, dl2, 0f)
+                .speler(sp, 180f)
+                .npc("aang", Kind.AANG_GUH, aang, 160f)
+                .npc("katara", Kind.KATARA_GUH, katara, 200f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, 180f)
+                .camera(0, camA, kijkA).camera(136, plus(camA, -0.5, 0, 0.3), kijkA)
+                .cameraKnipVolgt(140, camD, "dai_li_1").camera(212, plus(camD, -0.3, 0, 0.2), dl1.add(0, 1, 0))
+                .cameraKnip(216, camA, kijkA).camera(360, plus(camA, 0.6, 0.2, 0.4), kijkA)
+                .animatie("joo_dee", 6, "glimlach").zeg(10, "", "glimlach", 60)
+                .animatie("sokka", 72, "plan").zeg(74, "sokka", "raar", 60)
+                .kijk("dai_li_1", 140, sp).kijk("dai_li_2", 140, sp)
+                .kijk("dai_li_1", 170, plus(dl1, -3, 0, -2)).kijk("dai_li_2", 172, plus(dl2, -3, 0, 2))
+                .animatie("katara", 148, "armen").zeg(150, "katara", "miroh", 58)
+                .zeg(220, "aang", "appa", 60)
+                .animatie("sokka", 286, "boemerang").zeg(290, "sokka", "kamp", 50), a);
+    }
+
+    /**
+     * After "Appa's verloren dagen" (step 10, the king): the empty camp. Whose stone hands were these? The Dai Li serve the
+     * city, so the king. No more forms: to the palace. 22 s.
+     */
+    private static Scene naAppa() {
+        String a = "appa_kamp";
+        Cam leeg = cam(a, "h3_appa_leeg"), kamp = cam(a, "h3_appa_kamp");
+        Vec3 appa = op(a, a), sp = op(a, a, -1.6, 0, -1.6), aang = op(a, a, -0.4, 0, -0.6), katara = op(a, a, -2.4, 0, 0.4), sokka = op(a, a, 1.2, 0, -2.2),
+                momo = op(a, a, -1.0, 0, -2.6);
+        return reg("na_appa", maak("na_appa").duur(440).verbergEcht(10)
+                .speler(sp, 45f)
+                .npc("aang", Kind.AANG_GUH, aang, 0f)
+                .npc("katara", Kind.KATARA_GUH, katara, 90f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, -30f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, momo, 0f)
+                .camera(0, leeg.oog(0), leeg.kijk()).camera(212, plus(leeg.oog(0), 0.4, 0.1, 0.3), leeg.kijk())
+                .cameraKnip(216, kamp.oog(0), kamp.kijk()).camera(440, plus(kamp.oog(0), 1.0, -0.4, 1.0), kamp.kijk())
+                .animatie("aang", 6, "buk").zeg(10, "aang", "schuld", 60)
+                .animatie("katara", 70, "armen").zeg(76, "katara", "stenen", 66)
+                .deeltjes(80, ParticleTypes.WHITE_ASH, plus(appa, 0, 0.3, 0), 14, 0.8)
+                .animatie("aang", 140, "sta").animatie("sokka", 148, "plan").zeg(150, "sokka", "dai_li", 62)
+                .zeg(220, "katara", "koning", 64)
+                .animatie("sokka", 288, "boemerang").zeg(290, "sokka", "paleis", 60)
+                .loop("momo", 350, 362, plus(sp, 0.3, 1.6, 0)).geluid(352, E2AppaFeature.MOMO::get, 0.7f, 1.1f)
+                .zeg(364, "", "momo", 66), a);
+    }
+
+    /**
+     * After the reunion (step 12, Miroh): at Appa's bent bars. Long Feng dropped a letter: "A" is coming for the banished
+     * prince Zuka and his uncle, who hide in De Jasmijn Draak. The waiter was Zuka, the prince who chases us since the Air
+     * Temple; the round guh with the tea was on his ship. But Miroh was kind to us: we warn him, at the hill. 28 s.
+     */
+    private static Scene waaromMiroh() {
+        String a = "appa_poort";
+        Cam c = cam(a, "h3_laogai"), dicht = cam(a, "h3_laogai_long_feng"), kamer = cam(a, "h3_weerzien");
+        Vec3 sp = op(a, a, 0, 0, -1.2), team = op(a, "laogai_team"), lf = op(a, "laogai_long_feng"), aang = plus(team, -1, 0, 3), katara = plus(team, 1, 0, 3),
+                sokka = plus(team, 0, 0, 2);
+        return reg("waarom_miroh", maak("waarom_miroh").duur(560).verbergEcht(12)
+                .speler(sp, 0f)
+                .acteur("appa", E2AppaFeature.APPA_GUH, op(a, a, 0, 0, 2.0), 180f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, plus(sp, 1.2, 0, -0.4), 0f)
+                .npc("aang", Kind.AANG_GUH, aang, 0f)
+                .npc("katara", Kind.KATARA_GUH, katara, 0f)
+                .npc("sokka", Kind.SOKKA_GUH, sokka, 0f)
+                .camera(0, c.oog(0), c.kijk()).camera(36, plus(c.oog(0), -0.3, 0, 0.2), c.kijk())
+                .cameraKnipVolgt(40, dicht.oog(0), "sokka").camera(196, plus(dicht.oog(0), 0.3, 0, 0.3), dicht.kijk())
+                .cameraKnip(200, c.oog(0), c.kijk()).camera(400, plus(c.oog(0), -0.6, 0.1, 0.4), c.kijk())
+                .cameraKnip(404, kamer.oog(0), kamer.kijk()).camera(560, plus(kamer.oog(0), 0.5, 0, 0.5), kamer.kijk())
+                .deeltjes(6, ParticleTypes.END_ROD, plus(lf, 0, 0.3, 0), 6, 0.2)
+                .zeg(10, "", "brief", 50)
+                .loop("sokka", 40, 80, plus(lf, 0.6, 0, 0)).animatie("sokka", 82, "buk").animatie("sokka", 100, "sta")
+                .kijk("sokka", 102, plus(lf, -1, 1, 0)).zeg(104, "sokka", "lees", 90)
+                .loop("sokka", 196, 230, plus(team, 0, 0, 4.5)).kijk("sokka", 232, sp)
+                .animatie("katara", 198, "armen").zeg(200, "katara", "zuka", 66)
+                .animatie("sokka", 268, "plan").zeg(270, "sokka", "oom", 62)
+                .zeg(340, "aang", "aardig", 64)
+                .zeg(410, "katara", "heuvel", 66)
+                .animatie("aang", 482, "lach").zeg(484, "aang", "waarschuwen", 62)
+                .geluid(500, E2AppaFeature.BRUL::get, 0.6f, 1.2f), a);
+    }
+
+    /**
+     * After Miroh's song (step 13, the catacombs): on the hill. Sokka runs up: Katara went to warn Zuka, and the Dai Li took
+     * them both, deep under the palace. Miroh tells who Zuka is (sent away by his father, he hunts a home, not you) and goes
+     * with you; Sokka will keep Appa ready. 30 s.
+     */
+    private static Scene kataraWeg() {
+        String a = "lu_ten_boom";
+        Vec3 miroh = op(a, "lu_ten_miroh"), sp = op(a, "lu_ten_speler"), sokkaStart = t(a, 17.5, 46, 116.5), sokka = t(a, 16.5, 48, 109.5),
+                aang = t(a, 14.5, 48, 111.5);
+        Vec3 camA = t(a, 10.5, 52.0, 113.5), kijkA = t(a, 14.2, 49.4, 110.0);
+        Cam dicht = cam(a, "lu_ten_dicht");
+        return reg("katara_weg", maak("katara_weg").duur(600).verbergEcht(10).cameraOntwijkt()
+                .npc("miroh", Kind.OOM_MIROH, miroh, 90f)
+                .speler(sp, 135f)
+                .npc("aang", Kind.AANG_GUH, aang, 160f)
+                .npc("sokka", Kind.SOKKA_GUH, sokkaStart, 180f)
+                .camera(0, camA, kijkA).camera(150, plus(camA, 0.4, 0, -0.3), kijkA)
+                .cameraKnipVolgt(154, dicht.oog(0), "miroh").camera(470, plus(dicht.oog(0), -0.4, 0.2, 0.3), dicht.kijk())
+                .cameraKnip(474, camA, kijkA).camera(600, plus(camA, -0.5, 0.3, 0.4), kijkA)
+                .zeg(10, "", "rennen", 50)
+                .loop("sokka", 10, 70, sokka).kijk("sokka", 72, sp)
+                .animatie("sokka", 76, "plan").zeg(78, "sokka", "katara", 72)
+                .kijk("miroh", 150, sokka).zeg(156, "miroh", "neefje", 40)
+                .zeg(200, "aang", "waarom", 56)
+                .kijk("miroh", 254, sp).animatie("miroh", 256, "wijsheid").zeg(258, "miroh", "vader", 84)
+                .animatie("miroh", 346, "praat").zeg(348, "miroh", "thuis", 64)
+                .zeg(416, "miroh", "azula", 72)
+                .animatie("sokka", 490, "boemerang").zeg(492, "sokka", "appa", 60)
+                .loop("sokka", 556, 600, sokkaStart), a);
+    }
+
+    /**
+     * In the catacombs (step 13), before the fall: at the crystal cell. You hear Katara and Zuka talking in the dark: his
+     * scar, his father, the home he hunts. Miroh melts the crystal: his nephew sees his uncle at the Guhvatar's side. That
+     * is why Zuka stands with you when the crystal chamber lights up. 38 s.
+     */
+    private static Scene kristalcel() {
+        String a = "kristalcel";
+        Vec3 katara = t(a, 121.6, 17, 139.2), zuka = t(a, 123.6, 17, 137.4), sp = t(a, 128.5, 17, 138.5), miroh = t(a, 128.6, 17, 137.1),
+                aang = t(a, 128.4, 17, 139.9), opening = t(a, 125.7, 17, 138.5);
+        Vec3 camGang = t(a, 128.6, 19.3, 143.4), kijkGang = t(a, 126.0, 18.0, 138.5), camCel = t(a, 124.5, 19.4, 136.5), kijkCel = t(a, 122.6, 17.9, 138.3),
+                camUit = t(a, 121.5, 19.4, 137.5), kijkUit = t(a, 126.2, 18.0, 138.5);
+        return reg("kristalcel", maak("kristalcel").duur(760).verbergEcht(8).cameraOntwijkt()
+                .npc("katara", Kind.KATARA_GUH, katara, -60f)
+                .npc("zuka", Kind.ZUKA, zuka, 160f)
+                .speler(sp, 90f)
+                .npc("miroh", Kind.OOM_MIROH, miroh, 90f)
+                .npc("aang", Kind.AANG_GUH, aang, 90f)
+                .camera(0, camGang, kijkGang).camera(66, plus(camGang, 0, -0.2, -0.6), kijkGang)
+                .cameraKnip(70, camCel, kijkCel).camera(426, plus(camCel, -0.3, -0.1, 0.3), kijkCel)
+                .cameraKnip(430, camUit, kijkUit).camera(664, plus(camUit, 0.4, 0, 0.2), kijkUit)
+                .cameraKnip(668, camGang, kijkGang).camera(760, plus(camGang, 0, 0, -0.8), kijkGang)
+                .zeg(10, "", "stemmen", 56)
+                .kijk("katara", 70, zuka).zeg(74, "katara", "oor", 66)
+                .animatie("zuka", 144, "zucht").zeg(146, "zuka", "vader", 70)
+                .zeg(222, "zuka", "thuis", 70)
+                .animatie("katara", 296, "genees").zeg(298, "katara", "water", 66)
+                .kijk("zuka", 366, katara).zeg(370, "zuka", "dank", 52)
+                .loop("miroh", 424, 452, opening)
+                .deeltjes(454, ParticleTypes.FLAME, plus(opening, -0.6, 1.0, 0), 30, 0.5).geluid(454, () -> SoundEvents.FIRECHARGE_USE, 0.8f, 1.0f)
+                .deeltjes(462, ParticleTypes.HAPPY_VILLAGER, plus(opening, -0.6, 1.0, 0), 20, 0.6)
+                .animatie("miroh", 456, "lach").zeg(458, "miroh", "neefje", 66)
+                .kijk("zuka", 520, opening).loop("zuka", 520, 548, plus(opening, -1.4, 0, -0.4)).zeg(530, "zuka", "oom", 50)
+                .animatie("miroh", 592, "wijsheid").zeg(594, "miroh", "harten", 68)
+                .schud(668, 0.7f, 14).geluid(668, () -> SoundEvents.ROOTED_DIRT_BREAK, 0.8f, 0.5f)
+                .zeg(672, "", "kamer", 60)
+                .zwart(740, 760), a);
+    }
+
+    /**
+     * After the flight up the Koningsput (finale of step 13): deep under the city, Oom Miroh in his cage of crystal. Azula
+     * sends him to the Fire Nation; Zuka steps forward, and for the first time his uncle has no wise word for him. 32 s.
+     */
+    private static Scene mirohGevangen() {
+        String a = "miroh_gevangen";
+        Vec3 miroh = op(a, a), azula = t(a, 146.5, 17, 124.6), zuka = t(a, 148.6, 17, 125.6), zukaVoor = t(a, 147.6, 17, 122.4),
+                dl1 = t(a, 143.6, 17, 121.6), dl2 = t(a, 149.6, 17, 121.2), dl3 = t(a, 145.0, 17, 126.4), weg = t(a, 158.5, 17, 121.5);
+        Vec3 camWijd = t(a, 146.5, 19.6, 128.0), kijkWijd = t(a, 146.5, 18.0, 120.5), camMiroh = t(a, 144.6, 18.6, 122.6), camZuka = t(a, 150.6, 18.8, 123.2);
+        DustParticleOptions kristal = new DustParticleOptions(0x6BE07A, 1.4f);
+        Cutscene.Builder b = maak("miroh_gevangen").duur(640).verbergEcht(12).cameraOntwijkt()
+                .npc("miroh", Kind.OOM_MIROH, miroh, 0f)
+                .npc("azula", Kind.AZULA_MIKA, azula, 180f)
+                .npc("zuka", Kind.ZUKA, zuka, 180f)
+                .npc("dai_li_1", Kind.DAI_LI_MIKA, dl1, -120f)
+                .npc("dai_li_2", Kind.DAI_LI_MIKA, dl2, 120f)
+                .npc("dai_li_3", Kind.DAI_LI_MIKA, dl3, 180f)
+                .zwart(0, 24)
+                .camera(0, camWijd, kijkWijd).camera(142, plus(camWijd, 0, -0.3, -0.8), kijkWijd)
+                .cameraKnipVolgt(146, camMiroh, "miroh").camera(288, plus(camMiroh, 0.3, 0, -0.2), miroh.add(0, 1.2, 0))
+                .cameraKnipVolgt(292, camZuka, "zuka").camera(450, plus(camZuka, 0.3, 0, 0.3), zukaVoor.add(0, 1.2, 0))
+                .cameraKnip(454, camWijd, kijkWijd).camera(640, plus(camWijd, 0, 0.6, 1.2), kijkWijd)
+                .zeg(12, "", "stilte", 56)
+                .animatie("dai_li_1", 64, "stenen_hand").animatie("dai_li_2", 66, "stenen_hand")
+                .deeltjes(70, kristal, plus(miroh, 0, 1.0, 0), 50, 0.9).geluid(70, () -> SoundEvents.AMETHYST_CLUSTER_PLACE, 1f, 0.7f)
+                .animatie("azula", 78, "grijns").zeg(80, "azula", "kooi", 62)
+                .animatie("miroh", 148, "wijsheid").zeg(150, "miroh", "thee", 70)
+                .animatie("azula", 224, "praat").zeg(226, "azula", "vader", 62)
+                .loop("zuka", 292, 322, zukaVoor).kijk("zuka", 324, miroh).zeg(326, "zuka", "oom", 40)
+                .kijk("miroh", 368, zukaVoor).zeg(372, "", "blik", 80)
+                .animatie("zuka", 454, "zucht").kijk("azula", 456, zukaVoor).zeg(458, "azula", "huis", 56);
+        b.loop("dai_li_1", 530, 620, plus(weg, -1, 0, -1)).loop("dai_li_2", 530, 620, plus(weg, -1, 0, 1)).loop("miroh", 536, 626, weg)
+                .deeltjes(536, kristal, plus(miroh, 0, 1.0, 0), 30, 0.8).zwart(610, 640);
+        return reg("miroh_gevangen", b, a);
+    }
+
+
+    /** Where each rider sits on Appa's back (from his feet). */
+    private static Vec3 rug(String wie) {
+        return switch (wie) {
+            case "speler" -> new Vec3(0.4, 2.6, 0.6);
+            case "aang" -> new Vec3(-0.7, 2.6, -0.6);
+            case "katara" -> new Vec3(0.7, 2.6, -0.5);
+            case "sokka" -> new Vec3(0, 2.6, -1.7);
+            case "momo" -> new Vec3(0.5, 2.9, 1.4);
+            default -> new Vec3(-0.6, 2.6, 1.1);   // toph
+        };
+    }
+
+    private static Vec3 vlucht(String anker, int i) {
+        return t(anker, VLUCHT[i][0], VLUCHT[i][1], VLUCHT[i][2]);
+    }
+
+    /** Appa and his riders fly to waypoint naar between t0 and t1. */
+    private static void vlieg(Cutscene.Builder b, String anker, List<String> rijders, int naar, int t0, int t1) {
+        b.loop("appa", t0, t1, vlucht(anker, naar));
+        for (String r : rijders) {
+            b.loop(r, t0, t1, vlucht(anker, naar).add(rug(r)));
+        }
+    }
+
+    /**
+     * The escape (step 14, playtest 2 item 9): Appa shoots out of the city, over the outer wall, low over the camp; there
+     * Toph-guh stamps, a pillar of rock throws her onto Appa's back, and she says she will help you, and the Guhvatar.
+     * 25 s; {@link #KOERS} follows at once.
+     */
+    private static Scene ontsnapping() {
+        String a = "appa_kamp";
+        List<String> rijders = List.of("speler", "aang", "katara", "sokka", "momo");
+        Vec3 w0 = vlucht(a, 0), w2 = vlucht(a, 2), toph = op(a, "team_toph");
+        Vec3 camA = t(a, 4.5, 50.5, 157.5), camB = t(a, 8.5, 48.2, 152.5), camC = plus(w2, -5.5, 3.0, 5.0);
+        Cutscene.Builder b = maak("ontsnapping").duur(500).verbergEcht(16).cameraOntwijkt()
+                .acteur("appa", E2AppaFeature.APPA_GUH, w0, 90f)
+                .speler(w0.add(rug("speler")), 90f)
+                .npc("aang", Kind.AANG_GUH, w0.add(rug("aang")), 90f)
+                .npc("katara", Kind.KATARA_GUH, w0.add(rug("katara")), 90f)
+                .npc("sokka", Kind.SOKKA_GUH, w0.add(rug("sokka")), 90f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, w0.add(rug("momo")), 90f)
+                .npc("toph", Kind.TOPH_GUH, toph, -160f)
+                .zwart(0, 24)
+                .cameraVolgt(0, camA, "appa").cameraVolgt(196, plus(camA, 0.5, -0.3, 0), "appa")
+                .cameraKnipVolgt(204, camB, "toph").cameraVolgt(286, plus(camB, 0.4, 0.6, 0), "toph")
+                .cameraKnipVolgt(290, camC, "appa").cameraVolgt(500, plus(camC, 0.5, 0.3, -0.4), "appa")
+                .geluid(4, E2AppaFeature.BRUL::get, 1f, 1f)
+                .zeg(10, "", "vlucht", 70);
+        vlieg(b, a, rijders, 1, 0, 120);
+        vlieg(b, a, rijders, 2, 120, 200);
+        Vec3 tophOp = w2.add(rug("toph"));
+        b.kijk("toph", 202, w2.add(0, 2, 0)).zeg(206, "toph", "wacht", 50)
+                .animatie("toph", 260, "stamp").schud(266, 1.4f, 12).geluid(266, () -> SoundEvents.GENERIC_EXPLODE.value(), 0.5f, 1.3f)
+                .deeltjes(266, ParticleTypes.CLOUD, toph.add(0, 0.3, 0), 30, 0.9)
+                .deeltjes(270, ParticleTypes.CLOUD, toph.lerp(tophOp, 0.5), 20, 0.6)
+                .loop("toph", 268, 286, tophOp).kijk("toph", 288, w2.add(0, 2.6, -3))
+                .animatie("toph", 292, "lach").zeg(294, "toph", "hier", 58)
+                .kijk("katara", 350, tophOp).zeg(356, "katara", "vliegen", 40)
+                .animatie("toph", 398, "wijs").zeg(400, "toph", "help", 84);
+        return reg("ontsnapping", b, a);
+    }
+
+    /**
+     * In flight, right after {@link #ONTSNAPPING}: where now? Ba Sing Guh fell, Azula takes Miroh to the Fire Nation, and
+     * the Guhvatar still has to learn fire: so the Fire Nation it is, in disguise (maybe even to school). Into chapter 4.
+     * 26 s.
+     */
+    private static Scene koers() {
+        String a = "appa_kamp";
+        List<String> rijders = List.of("speler", "aang", "katara", "sokka", "momo", "toph");
+        Vec3 w2 = vlucht(a, 2), w3 = vlucht(a, 3), w4 = vlucht(a, 4);
+        Vec3 naast = new Vec3(-5.5, 3.0, 5.0);
+        Cutscene.Builder b = maak("koers").duur(520).verbergEcht(16).cameraOntwijkt()
+                .acteur("appa", E2AppaFeature.APPA_GUH, w2, 90f)
+                .speler(w2.add(rug("speler")), 90f)
+                .npc("aang", Kind.AANG_GUH, w2.add(rug("aang")), 90f)
+                .npc("katara", Kind.KATARA_GUH, w2.add(rug("katara")), 90f)
+                .npc("sokka", Kind.SOKKA_GUH, w2.add(rug("sokka")), 90f)
+                .acteur("momo", E2AppaFeature.MOMO_GUH, w2.add(rug("momo")), 90f)
+                .npc("toph", Kind.TOPH_GUH, w2.add(rug("toph")), 90f)
+                .cameraVolgt(0, w2.add(naast), "appa").cameraVolgt(140, w3.add(naast), "appa").cameraVolgt(520, w4.add(naast), "appa")
+                .geluid(2, E2AppaFeature.JIP_JIP::get, 1f, 1f);
+        vlieg(b, a, rijders, 3, 0, 140);
+        vlieg(b, a, rijders, 4, 140, 520);
+        b.animatie("sokka", 8, "plan").zeg(10, "sokka", "waarheen", 66)
+                .zeg(80, "aang", "miroh", 60)
+                .zeg(146, "katara", "vuur", 66)
+                .animatie("sokka", 214, "plan").zeg(216, "sokka", "vermomming", 84)
+                .animatie("toph", 304, "stamp").zeg(306, "toph", "snor", 52)
+                .animatie("aang", 362, "lach").zeg(364, "aang", "school", 50)
+                .zeg(420, "", "west", 84);
+        return reg("koers", b, a);
     }
 }

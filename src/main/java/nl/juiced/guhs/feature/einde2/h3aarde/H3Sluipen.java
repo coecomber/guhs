@@ -32,9 +32,18 @@ import nl.juiced.guhs.feature.verhaal.Rustpunten;
  */
 public final class H3Sluipen {
     public static final int WACHTERS = 6;
-    public static final double ZICHT = 7.5, ZICHT_GEBUKT = 3.2, HOEK = 38, ZWAAI = 75, DOEL = 1.9;
-    /** After being sent back the guards give you this many ticks to breathe. */
-    public static final int RUST = 60;
+    /**
+     * fix3-h3 (playtest 2 item 5: "ik kom niet voorbij de derde Dai Li-Mika"): crouched they see you only up to
+     * {@link #ZICHT_GEBUKT} = 1.8 blocks. The corridor is three wide and every guard stands against one of its walls, so
+     * crouching along the other wall (two blocks from him) always gets you past; walking past still needs his head turned
+     * away. It was 3.2: then a guard saw a crouching player at the far wall, and the third one (and the one at Appa's bars)
+     * could only be passed in a short gap of his sweep.
+     */
+    public static final double ZICHT = 7.5, ZICHT_GEBUKT = 1.8, HOEK = 38, ZWAAI = 75, DOEL = 1.9;
+    /** After being sent back the guards give you this many ticks to breathe (and to crouch). */
+    public static final int RUST = 80;
+    /** The way you face on the rest point: south, down the corridor towards Appa (yaw 0), not at the stair you came down. */
+    public static final float RUST_YAW = 0f;
     public static final String SOORT = "einde2_h3_aarde";
 
     private static final Map<UUID, Integer> RUST_TOT = new ConcurrentHashMap<>();
@@ -72,8 +81,12 @@ public final class H3Sluipen {
             return;
         }
         Vec3 rust = stad.voet("rustpunt_3");
-        if (rust != null && Rustpunten.van(p, SOORT) == null) {
-            Rustpunten.zet(p, SOORT, GuheindeFeature.GUHEINDE, rust, 180f);
+        Rustpunten.Punt punt = Rustpunten.van(p, SOORT);
+        if (rust != null && punt != null && punt.yaw() != RUST_YAW) {
+            Rustpunten.zet(p, SOORT, GuheindeFeature.GUHEINDE, rust, RUST_YAW);   // (a rest point of before fix3-h3 faced the stair)
+        }
+        if (rust != null && punt == null) {
+            Rustpunten.zet(p, SOORT, GuheindeFeature.GUHEINDE, rust, RUST_YAW);
             p.sendSystemMessage(Component.translatable("quest.guhs.einde2_h3_aarde.sluip.begin").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             H3Hints.titel(p, Component.translatable("gui.guhs.einde2_h3_aarde.sluip.titel").withStyle(ChatFormatting.GREEN),
                     Component.translatable("gui.guhs.einde2_h3_aarde.sluip.onder").withStyle(ChatFormatting.YELLOW), 70);
