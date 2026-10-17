@@ -53,6 +53,12 @@ public final class Appa {
      * vliegen we heen?" opened); false = they climb on as before.
      */
     public static volatile java.util.function.Predicate<ServerPlayer> KLIK = p -> false;
+    /**
+     * einde2 fix4-appa (playtest 3): the whistle blown (not on his head) by a player who has an Appa that is not kept away.
+     * True = it was handled (outside the Guheinde: he only comes to the player's own Appa-platform, else a line why not);
+     * false = he comes to the player, wherever they are (the Guheinde).
+     */
+    public static volatile java.util.function.Predicate<ServerPlayer> FLUIT = p -> false;
     /** The player's saved Appa: Heeft, Gen, Weg, Naam, Items. */
     public static final String KEY = "guhs_einde2_appa_appa";
 
@@ -412,6 +418,15 @@ public final class Appa {
      */
     @Nullable
     public static AppaGuhEntity roep(ServerPlayer p) {
+        return roepNaar(p, null);
+    }
+
+    /**
+     * einde2 fix4-appa: as {@link #roep}, but he appears at {@code plek} (in the player's level; null: a free spot near the
+     * player, as {@link #roep}). The Appa-platform uses it: he appears above it and sinks down onto it.
+     */
+    @Nullable
+    public static AppaGuhEntity roepNaar(ServerPlayer p, @Nullable Vec3 waar) {
         if (!heeft(p) || isWeg(p)) {
             return null;
         }
@@ -420,7 +435,7 @@ public final class Appa {
             return appa;                            // (they sit on him)
         }
         ServerLevel level = p.level();
-        Vec3 plek = landplek(p);
+        Vec3 plek = waar != null ? waar : landplek(p);
         if (appa != null && appa.level() == level) {
             appa.stopVlucht();
             // (a guest or a guh that would drop into the void comes along to where he lands, when that is on the ground)

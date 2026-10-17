@@ -16,6 +16,8 @@ import nl.juiced.guhs.Guhs;
  *   <li>{@code guhs:einde2_reizen_bestemmingen} (server to client): Appa's whistle list ({@link Fluitlijst});</li>
  *   <li>{@code guhs:einde2_reizen_kies} (client to server): the place picked (checked again);</li>
  *   <li>{@code guhs:einde2_reizen_inrichting} (server to client): the furniture screen of an own whale ({@link Walvis});</li>
+ *   <li>{@code guhs:einde2_reizen_vertrek} / {@code guhs:einde2_reizen_yip_yip} (fix4-appa): the "Yip yip!" dialog after a
+ *       pick, and its answer;</li>
  *   <li>{@code guhs:einde2_reizen_inrichting_zet} (client to server): a part on or off ({@code waarde} 1/0), or the flag's
  *       colour ({@code deel} = "vlag_kleur").</li>
  * </ul>
@@ -26,6 +28,42 @@ public final class E2ReizenPayloads {
         registrar.playToServer(Kies.TYPE, Kies.STREAM_CODEC, Kies::handle);
         registrar.playToClient(Inrichting.TYPE, Inrichting.STREAM_CODEC, Inrichting::handle);
         registrar.playToServer(InrichtingZet.TYPE, InrichtingZet.STREAM_CODEC, InrichtingZet::handle);
+        registrar.playToClient(Vertrek.TYPE, Vertrek.STREAM_CODEC, Vertrek::handle);
+        registrar.playToServer(YipYip.TYPE, YipYip.STREAM_CODEC, YipYip::handle);
+    }
+
+    /** fix4-appa: (server to client) on Appa, ready to leave: the small "Yip yip!" dialog. data: Doel = the row of the place. */
+    public record Vertrek(CompoundTag data) implements CustomPacketPayload {
+        public static final Type<Vertrek> TYPE = new Type<>(Guhs.id("einde2_reizen_vertrek"));
+        public static final StreamCodec<FriendlyByteBuf, Vertrek> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.COMPOUND_TAG, Vertrek::data, Vertrek::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(Vertrek payload, IPayloadContext context) {
+            nl.juiced.guhs.feature.einde2.reizen.client.E2ReizenClient.vertrek(payload.data());
+        }
+    }
+
+    /** fix4-appa: (client to server) the "Yip yip!" dialog answered: gaan = take off, else stay. */
+    public record YipYip(boolean gaan) implements CustomPacketPayload {
+        public static final Type<YipYip> TYPE = new Type<>(Guhs.id("einde2_reizen_yip_yip"));
+        public static final StreamCodec<FriendlyByteBuf, YipYip> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.BOOL, YipYip::gaan, YipYip::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(YipYip payload, IPayloadContext context) {
+            if (context.player() instanceof ServerPlayer p) {
+                Fluitlijst.yipYip(p, payload.gaan());
+            }
+        }
     }
 
     /** data: "Haltes" = a list of {Id, Naam (lang key), Afstand (blocks, -1 unknown), Verder (the waiting story flight)}. */

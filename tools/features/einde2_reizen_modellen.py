@@ -12,6 +12,9 @@ glow mask) and the item picture of the old captain's horn.
                              Animations: vaar (propeller spins, a gentle roll, the pennant flutters), sputter (the propeller
                              coughs, the nose dips, it lists to one side).
   walvishoorn (item)         the captain's old horn: a curled shell horn with a brass mouthpiece and a leather strap.
+  einde2_reizen_appa_platform (block, fix4-appa) the middle of an own Appa landing place: on top a cream fur pad in a
+                             brown wooden frame with the blue arrow of the luchtnomaden (like Appa's forehead); the sides
+                             hay-brown planks with a blue band and two little hoof prints; the bottom plain planks.
 
   build(h)       writes geo/animations/textures + the item picture
   check(h)       every bone the animations move exists; the animations the Java side plays exist
@@ -222,6 +225,57 @@ def build(h):
     h.save(tex, "entity", f"{SCHIP}.png")
     h.save(glow, "entity", f"{SCHIP}_glowmask.png")
     h.save(walvishoorn(), "item", "einde2_reizen_walvishoorn.png")
+    for kant, img in appa_platform().items():
+        h.save(img, "block", f"einde2_reizen_appa_platform_{kant}.png")
+
+
+PLATFORM_HOUT, PLATFORM_HOUT_DONKER = (150, 104, 62), (112, 74, 42)
+PLATFORM_VACHT, PLATFORM_BLAUW, PLATFORM_HOOI = (238, 230, 214), (64, 140, 214), (196, 160, 84)
+
+
+def appa_platform():
+    """fix4-appa: the three faces of the Appa-platform block (16 x 16, fixed seed)."""
+    import random
+    rng = random.Random(4815)
+
+    def ruis(kleur, var):
+        img = Image.new("RGBA", (16, 16))
+        for y in range(16):
+            for x in range(16):
+                v = rng.randint(-var, var)
+                img.putpixel((x, y), tuple(max(0, min(255, c + v)) for c in kleur) + (255,))
+        return img
+
+    top = ruis(PLATFORM_VACHT, 6)
+    for i in range(16):                                   # the wooden frame
+        for c in ((i, 0), (i, 15), (0, i), (15, i)):
+            top.putpixel(c, PLATFORM_HOUT_DONKER + (255,))
+        for c in ((i, 1), (i, 14), (1, i), (14, i)):
+            if 1 <= i <= 14:
+                top.putpixel(c, PLATFORM_HOUT + (255,))
+    # the arrow of the luchtnomaden: a shaft with a head pointing up (north)
+    for y in range(7, 13):
+        for x in (7, 8):
+            top.putpixel((x, y), PLATFORM_BLAUW + (255,))
+    for i, y in enumerate(range(3, 8)):
+        for x in range(7 - i, 9 + i):
+            if 3 <= x <= 12:
+                top.putpixel((x, y), PLATFORM_BLAUW + (255,))
+    zij = ruis(PLATFORM_HOOI, 8)
+    for y in (4, 9, 15):                                  # plank seams
+        for x in range(16):
+            zij.putpixel((x, y), PLATFORM_HOUT_DONKER + (255,))
+    for x in range(16):                                   # the blue band
+        for y in (1, 2):
+            zij.putpixel((x, y), PLATFORM_BLAUW + (255,))
+    for hx in (4, 11):                                    # two little hoof prints
+        for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1), (-1, -1), (2, -1)):
+            zij.putpixel((hx + dx, 11 + dy), PLATFORM_HOUT_DONKER + (255,))
+    onder = ruis(PLATFORM_HOUT, 7)
+    for y in (5, 10):
+        for x in range(16):
+            onder.putpixel((x, y), PLATFORM_HOUT_DONKER + (255,))
+    return {"top": top, "zij": zij, "onder": onder}
 
 
 def check(h):

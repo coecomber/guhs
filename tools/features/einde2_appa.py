@@ -44,7 +44,7 @@ TEXTS = {
     # the fluitje and the spawn eggs
     "item.guhs.appa_fluitje": "Appa-fluitje",
     "item.guhs.appa_fluitje.lore": "Je hoort er niets van. Eén heel grote, heel pluizige vriend wel.",
-    "item.guhs.appa_fluitje.tooltip": "Blaas: je Appa-guh komt naar je toe, waar hij ook is.",
+    "item.guhs.appa_fluitje.tooltip": "Blaas: je Appa-guh komt naar je toe. In het Guheinde overal, elders alleen bij je eigen Appa-platform.",
     "item.guhs.appa_fluitje.tooltip.momo": "Sluip + blaas: je Momo-guh komt terug op je schouder.",
     # the Appa-guh
     "gui.guhs.einde2_appa.jip_jip": "Jip jip!",

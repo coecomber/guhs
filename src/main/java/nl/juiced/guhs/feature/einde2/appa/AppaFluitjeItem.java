@@ -17,7 +17,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * einde2, slice appa: the Appa-fluitje. Blow it and your Appa-guh comes, wherever he is (dead, far away, in another
- * dimension: {@link Appa#roep}); blow it while sneaking and your Momo-guh comes back to your shoulder ({@link Momo#roep}).
+ * dimension: {@link Appa#roep}); einde2 fix4-appa: that is in the Guheinde; in any other dimension he only comes down onto
+ * your own Appa-platform when you are near it ({@link Appa#FLUIT}). Blow it while sneaking and your Momo-guh comes back to your shoulder ({@link Momo#roep}).
  * Without an Appa it only makes a sound nobody hears; while he is kept away ({@link Appa#houdWeg}) it says so.
  */
 public class AppaFluitjeItem extends Item {
@@ -61,6 +62,8 @@ public class AppaFluitjeItem extends Item {
             if (!Appa.OP_ZIJN_KOP.test(p)) {                        // (einde2 phase B: the list of places to fly to)
                 zeg(p, Component.translatable("gui.guhs.einde2_appa.fluitje.zit_al"));
             }
+        } else if (Appa.FLUIT.test(p)) {
+            // (einde2 fix4-appa: outside the Guheinde he only comes down onto your own Appa-platform; handled there)
         } else {
             AppaGuhEntity appa = Appa.roep(p);
             if (appa != null) {

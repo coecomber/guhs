@@ -71,6 +71,7 @@ public final class E2Reizen {
         Appa.AANGEKOMEN.add(E2Reizen::geland);
         Appa.OP_ZIJN_KOP = Fluitlijst::opZijnKop;
         Appa.KLIK = Fluitlijst::klik;
+        Appa.FLUIT = AppaPlatform::fluit;
     }
 
     // =====================================================================================================================
@@ -254,12 +255,19 @@ public final class E2Reizen {
         }
         if (server.getTickCount() % 10 == 3) {
             gastenTick(server);
+            Fluitlijst.vertrekTick(server);
+        }
+        if (server.getTickCount() % 40 == 17) {
+            for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+                AppaPlatform.geschenkTick(p);                   // (fix4-appa: the platform at the story's end, once)
+            }
         }
     }
 
     /** A player left the game: their flight waits in their data, their guests are nobody's any more. */
     static void weg(ServerPlayer p) {
         AppaReis.vergeet(p.getUUID());
+        Fluitlijst.VERTREK.remove(p.getUUID());
         Reis r = REIZEN.remove(p.getUUID());
         if (r != null) {
             r.ruimOp(p.level().getServer());
@@ -271,6 +279,7 @@ public final class E2Reizen {
     static void leeg() {
         REIZEN.clear();
         GASTEN.clear();
+        Fluitlijst.VERTREK.clear();
         AppaReis.leeg();
     }
 
