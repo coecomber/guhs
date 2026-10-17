@@ -92,7 +92,7 @@ public final class Fluitlijst {
         }
         String[] wacht = E2Reizen.wachtend(p);
         String verhaal = E2Reizen.verhaalDoel(p);
-        if (verhaal != null && guheinde != null) {
+        if (verhaal != null) {
             // (also when its place is not worked out yet: the pick then says "nog niet" and starts the search)
             lijst.add(rij(guheinde, hier, p, verhaal, wacht != null && wacht[0].equals(verhaal), true));
         }
