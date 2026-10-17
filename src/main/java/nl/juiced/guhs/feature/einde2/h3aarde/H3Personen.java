@@ -11,8 +11,8 @@ import nl.juiced.guhs.feature.verhaal.Cutscene;
 /**
  * The characters of the chapter that stand somewhere for ONE player at one step ({@link H3Acteurs}): the two Dai Li-Mika's
  * who follow you after Joo Dee-guh (step {@link E2H3Aarde#KAMP}: they keep their distance and look away when you look at
- * them), Oom Miroh under the tree on the hill ({@link E2H3Aarde#LU_TEN}), Toph-guh at the camp after the fall
- * ({@link E2H3Aarde#TOPH}), and, once the whole story is over, Oom Miroh in his reopened tea house (tea any time).
+ * them), Oom Miroh under the tree on the hill ({@link E2H3Aarde#LU_TEN}; the only Miroh there: the resident on that
+ * marker is hidden, {@link H3Rollen#bijMaken}), and, once the whole story is over, Oom Miroh in his reopened tea house (tea any time).
  */
 public final class H3Personen {
     /** How far behind you the two Dai Li-Mika's walk (blocks). */
@@ -28,7 +28,7 @@ public final class H3Personen {
             H3Acteurs.wegAlle(p, "volger");
         }
         zet(p, stad, "miroh_heuvel", stap == E2H3Aarde.LU_TEN, Kind.OOM_MIROH, "lu_ten_miroh", 90f);
-        zet(p, stad, "toph_kamp", stap == E2H3Aarde.TOPH, Kind.TOPH_GUH, "team_toph", -160f);
+        H3Acteurs.weg(p, "toph_kamp");   // (fix3-h3: Toph jumps onto Appa in the escape scene; nobody waits at the camp any more)
         boolean thee = E2Verhaal.finaleKlaar(p) && stad.bij(p, "miroh", 48);
         zetOp(p, stad, "miroh_thee", thee, Kind.OOM_MIROH, "miroh", "miroh_thee", 180f);
     }

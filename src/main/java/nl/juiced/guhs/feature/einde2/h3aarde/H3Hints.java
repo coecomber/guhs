@@ -37,7 +37,8 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  *       spot for "Verder met het verhaal". Step {@value E2H3Aarde#BLINDDOEK} follows the lesson: Toph-guh in the ring,
  *       then (flag {@link E2H3Aarde#V_BAAN}) the opening of her course, with a look scene of its own ({@link #baan});</li>
  *   <li>the way in between: when a step starts, a team member says why we go there next ({@link #TEAM_LIJNEN}, only a
- *       member who is in the player's {@link E2Team}), and then the hint shows;</li>
+ *       member who is in the player's {@link E2Team}), and then the hint shows; fix3-h3: where the reason carries story, a
+ *       short scene with the team instead ({@link #BRUGGEN});</li>
  *   <li>far targets: a look scene can only play within {@link StapHint#KIJK_BEREIK} blocks, and most steps of the city
  *       start further away. So when the player was far from the target during the step and then comes within
  *       {@link #NABIJ} blocks, the hint (with its look scene) shows once more, once per step;</li>
@@ -68,6 +69,13 @@ public final class H3Hints {
     }
 
     static final Map<Integer, TeamLijn> TEAM_LIJNEN = new ConcurrentHashMap<>();
+    /**
+     * fix3-h3 (playtest 2 item 1: "waarom doen we dit?"): the story scene that opens a step, in place of a team line in the
+     * chat: the team (and whoever the step is about) says why we go there next, who the people are and what is at stake.
+     * It plays once, where the step before it ended (within {@link #BRUG_BEREIK} blocks of its anchor), then the hint.
+     */
+    static final Map<Integer, H3Scenes.Scene> BRUGGEN = new ConcurrentHashMap<>();
+    static final double BRUG_BEREIK = 64;
 
     private H3Hints() {
     }
@@ -159,21 +167,23 @@ public final class H3Hints {
         StapHint.naar(m("basis_ingang")).tekst(T + "laogai").kijk(kijk("laogai")).baken().zet(lijn, E2H3Aarde.LAOGAI);
         StapHint.naar(m("lu_ten_boom")).tekst(T + "lu_ten").kijk(kijk("lu_ten")).baken().zet(lijn, E2H3Aarde.LU_TEN);
         StapHint.naar(m("catacomben_ingang")).tekst(T + "val").kijk(kijk("val")).baken().zet(lijn, E2H3Aarde.VAL);
-        StapHint.naar(m("team_toph")).tekst(T + "toph").kijk(kijk("toph")).bijStart(40).baken().zet(lijn, E2H3Aarde.TOPH);
+        // 14 (fix3-h3): the escape runs by itself after the fall; the hint only matters for a player who left in the middle
+        StapHint.naar(m("aankomst_speler")).tekst(T + "toph").kijk(kijk("toph")).baken().zet(lijn, E2H3Aarde.TOPH);
 
         // the way in between: a team member says why we go there next, then the hint (steps without bijStart above)
-        team("aardrommel", "sokka", E2H3Aarde.AARDROMMEL);
-        team("monorail", "sokka", E2H3Aarde.MONORAIL);
+        // (fix3-h3: the steps whose reason carries story open with a scene, BRUGGEN; the small hops keep their line)
         team("theehuis", "aang", E2H3Aarde.THEEHUIS);
         team("pai_sho", "aang", E2H3Aarde.PAI_SHO);
-        team("joo_dee", "katara", E2H3Aarde.JOO_DEE);
-        team("kamp", "sokka", E2H3Aarde.KAMP);
-        team("koning", "sokka", E2H3Aarde.KONING);
         team("laogai", "katara", E2H3Aarde.LAOGAI);
-        team("lu_ten", "aang", E2H3Aarde.LU_TEN);
-        team("val", "sokka", E2H3Aarde.VAL);
+        BRUGGEN.put(E2H3Aarde.AARDROMMEL, H3Scenes.LERAAR);
+        BRUGGEN.put(E2H3Aarde.MONORAIL, H3Scenes.MIDDENRING);
+        BRUGGEN.put(E2H3Aarde.JOO_DEE, H3Scenes.UITNODIGING);
+        BRUGGEN.put(E2H3Aarde.KAMP, H3Scenes.GEVOLGD);
+        BRUGGEN.put(E2H3Aarde.KONING, H3Scenes.NA_APPA);
+        BRUGGEN.put(E2H3Aarde.LU_TEN, H3Scenes.WAAROM_MIROH);
+        BRUGGEN.put(E2H3Aarde.VAL, H3Scenes.KATARA_WEG);
         E2H3Aarde.LIJN.opStap((p, oud, nieuw) -> {
-            if (TEAM_LIJNEN.containsKey(nieuw)) {
+            if (heeftAansluiting(nieuw)) {
                 StapHint.later(p, TEAM_WACHT, s -> aansluiting(s, nieuw, 0));
             }
         });
@@ -185,13 +195,28 @@ public final class H3Hints {
         NeoForge.EVENT_BUS.addListener(H3Hints::opTick);
     }
 
-    /** The team line of a step (when the player is free: not in a scene or a talk), then the step's hint. */
+    /** Does a step open with a scene or a team line of its own (then its hint waits for that, it never shows by itself)? */
+    static boolean heeftAansluiting(int stap) {
+        return TEAM_LIJNEN.containsKey(stap) || BRUGGEN.containsKey(stap);
+    }
+
+    /** The scene or team line of a step (when the player is free: not in a scene or a talk), then the step's hint. */
     static void aansluiting(ServerPlayer p, int stap, int poging) {
         if (E2H3Aarde.stap(p) != stap) {
             return;
         }
-        if ((Cutscenes.bezig(p) || Praat.bezig(p)) && poging < 60) {
+        H3Scenes.Scene brug = BRUGGEN.get(stap);
+        if ((Cutscenes.bezig(p) || Praat.bezig(p) || brug != null && !H3Verloop.vrij(p)) && poging < 60) {
             StapHint.later(p, 10, s -> aansluiting(s, stap, poging + 1));
+            return;
+        }
+        if (brug != null) {
+            E2H3Aarde.Stad stad = E2H3Aarde.Stad.van(p.level());
+            if (stad != null && !Cutscenes.gezien(p, brug.id()) && stad.bij(p, brug.anker(), BRUG_BEREIK) && H3Verloop.vrij(p)
+                    && H3Verloop.brug(p, stad, brug, stap, s -> StapHint.toon(s, E2H3Aarde.LIJN.id()))) {
+                return;
+            }
+            StapHint.toon(p, E2H3Aarde.LIJN.id());
             return;
         }
         TeamLijn t = TEAM_LIJNEN.get(stap);

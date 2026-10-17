@@ -22,11 +22,11 @@ STAPPEN = [
     ("Het paspoortloket", "Niemand komt Ba Sing Guh binnen zonder stempel. Loop van de landingslob naar de grote poort in de buitenmuur "
                           "(oost). In de doorgang, links, zit de strenge loketguh achter zijn raampje: praat met hem.",
      "Het loket in de doorgang van de buitenpoort"),
-    ("De Aardrommel", "Iedereen in de stad praat over de Aardrommel. Ga door de poort de stad in en loop naar het zuidoosten, naar de "
+    ("De Aardrommel", "Aang-guh heeft een aardeleraar nodig, en de sterkste aardesturers van de stad vechten in de Aardrommel. Ga door de poort de stad in en loop naar het zuidoosten, naar de "
                       "grote arena met de tribunes en de bel. Loop de arena in.", "De arena van de Aardrommel, zuidoost van de poort"),
     ("Zien met je voeten", "De Blinde Bandiet wil je iets leren. Ga de tribune af en praat met Toph-guh, beneden in de ring van de arena.",
      "Toph-guh, in de ring van de Aardrommel"),
-    ("De monorail", "Neem de monorail naar de middenring. Loop terug naar de buitenpoort: links ervan (noord), binnen de muur, staat de "
+    ("De monorail", "Toph-guh stuurt je naar de middenring: daar wacht je tot de Aardekoning je wil ontvangen. Neem de monorail. Loop terug naar de buitenpoort: links ervan (noord), binnen de muur, staat de "
                     "traptoren met het bordje 'Naar de muur en de monorail'. Boven wacht de wagen: ga erin staan en spring om hem met "
                     "aardesturen te duwen.", "De wagen van de monorail, boven op de buitenmuur bij de poort"),
     ("De Jasmijn Draak", "Er zou in de middenring een theehuis zijn waar de thee naar de hemel smaakt. Loop vanaf station Middenring de "
@@ -37,25 +37,26 @@ STAPPEN = [
      "De keuken van De Jasmijn Draak, achter de toonbank"),
     ("Een spelletje Pai Sho", "Speel een potje Pai Sho met Oom Miroh: praat met hem, achter de toonbank van het theehuis.",
      "Oom Miroh, in De Jasmijn Draak"),
-    ("Geen knabbeltekort", "Joo Dee-guh, de gids van de stad, wil je graag rondleiden. Ze staat voor haar huis in het noorden van de "
+    ("Geen knabbeltekort", "Joo Dee-guh, de gids van de stad, kan jullie misschien bij de Aardekoning brengen. Ze staat voor haar huis in het noorden van de "
                            "middenring (een huis dat links en rechts precies gelijk is). Praat met haar.",
      "Het huis van Joo Dee-guh, middenring noord"),
-    ("Terug naar het kamp", "Tijd om Appa-guh en Momo-guh op te zoeken. Ga door de buitenpoort naar buiten, naar jullie kamp aan de "
+    ("Terug naar het kamp", "Twee Dai Li-Mika's volgen je, en Appa-guh en Momo-guh zijn alleen bij het kamp. Ga door de buitenpoort naar buiten, naar jullie kamp aan de "
                             "zuidkant van de landingslob, waar Appa landde.", "Het kamp op de landingslob"),
-    ("De Aardekoning", "Appa is weg! Misschien weet de Aardekoning-guh meer. Hij zit in de troonzaal van het grote gouden paleis, midden "
+    ("De Aardekoning", "Appa is weg, meegenomen door de Dai Li! Alleen de Aardekoning-guh kan ze bevelen hem terug te geven. Hij zit in de troonzaal van het grote gouden paleis, midden "
                        "in de stad (de bovenring). Praat met hem.", "De troonzaal van het gouden paleis, midden in de stad"),
     ("Meer Laogai", "Bosco rook iets bij Meer Laogai, het meer in het oosten van de stad. Aan de noordkant ervan staat een houten "
                     "botenschuur met een groen dak ('Botenverhuur GESLOTEN'): ga erin en de trap af naar de basis. Daar: bukken, wachten "
                     "tot de wachters wegkijken, en gaan. Gezien = terug naar het begin, verder niets.",
      "De botenschuur aan de noordkant van Meer Laogai, oost in de stad"),
-    ("De heuvel met de boom", "Oom Miroh is niet in zijn theehuis. Zuka weet waar hij is: op de heuvel met de kersenboom op de "
-                              "landingslob, buiten de buitenmuur (noord van waar Appa landt). Appa is terug: fluit hem, of loop.",
+    ("De heuvel met de boom", "Oom Miroh is in gevaar: 'A' komt hem en zijn neef Zuka halen. Hij zei dat hij vandaag naar de heuvel "
+                              "met de kersenboom gaat, op de landingslob buiten de buitenmuur (noord van waar Appa landt). Waarschuw hem. "
+                              "Appa is terug: fluit hem, of loop.",
      "De heuvel met de kersenboom op de landingslob"),
-    ("De kristalcatacomben", "De Dai Li hebben Katara-guh meegenomen, diep onder het paleis. Oom Miroh gaat met je mee. Ga naar de oude "
+    ("De kristalcatacomben", "De Dai Li hebben Katara-guh en Zuka meegenomen, diep onder het paleis. Oom Miroh gaat met je mee. Ga naar de oude "
                              "poort in de paleistuin, aan de oostkant van het gouden paleis (een mossig poortgebouw, 'Verboden toegang'), "
-                             "en volg de gang omlaag naar de kristalkamer.", "De oude poort in de paleistuin, oostkant van het paleis"),
-    ("Een nieuw teamlid", "Ba Sing Guh is gevallen. Bij het kamp op de landingslob zit iemand op je te wachten, met haar voeten in het gras: "
-                          "praat met Toph-guh.", "Het kamp op de landingslob"),
+                             "en volg de gang omlaag naar de kristalcel en de kristalkamer.", "De oude poort in de paleistuin, oostkant van het paleis"),
+    ("De ontsnapping", "Ba Sing Guh is gevallen. Vlucht op Appa-guh: dat gaat vanzelf, meteen na de val. Ben je er tussenuit "
+                       "gegaan en sta je nog in de stad? Loop dan naar het kamp op de landingslob.", "Het kamp op de landingslob"),
 ]
 KLAAR = ("Aardesturen geleerd, Appa-guh terug, Toph-guh in het team. Op naar de Vuurnatie!", "Op Appa's rug, op weg naar de Vuurnatie")
 EXTRA = {"3_baan": ("Ogen dicht: Toph's oefenbaan is het ommuurde veld direct oost van de arena (ingang aan de westkant, bij het bordje "
@@ -64,8 +65,8 @@ EXTRA = {"3_baan": ("Ogen dicht: Toph's oefenbaan is het ommuurde veld direct oo
 KORT = {"0": "Land bij Ba Sing Guh", "1": "Praat met de loketguh", "2": "Ga naar de Aardrommel", "3": "Praat met Toph-guh",
         "3_baan": "Vind de zes aardemunten, blind", "4": "Duw de monorail naar de middenring", "5": "Zoek De Jasmijn Draak",
         "6": "Zet thee bij de grote ketel", "7": "Speel Pai Sho met Oom Miroh", "8": "Praat met Joo Dee-guh", "9": "Terug naar het kamp",
-        "10": "Naar de Aardekoning", "11": "Sluip naar Meer Laogai", "12": "Zoek Oom Miroh", "13": "Naar de kristalcatacomben",
-        "14": "Praat met Toph-guh bij het kamp"}
+        "10": "Naar de Aardekoning", "11": "Sluip naar Meer Laogai", "12": "Waarschuw Oom Miroh", "13": "Red Katara-guh in de catacomben",
+        "14": "Ontsnap op Appa-guh"}
 # the Superkompas name of the goal of each step (E2H3Aarde.doel)
 DOELEN = ["de landingslob van Ba Sing Guh", "het paspoortloket", "de Aardrommel", "Toph-guh", "het monorailperron", "De Jasmijn Draak",
           "de theeketel", "Oom Miroh", "Joo Dee-guh", "het kamp", "de Aardekoning", "Meer Laogai", "de heuvel met de boom",
@@ -161,6 +162,11 @@ SCENES = {
         "weg": "Zuka. Is het jouw eigen weg, of een weg die een ander je oplegt?",
         "stil": "Het is heel stil in de kristalkamer. Zuka kijkt naar zijn oom. Dan naar zijn zus.",
         "zuka_naam": "...Zuka.",
+        # fix3-h3 (playtest 2 item 8): the choice with more heart
+        "thuis": "Vader mist je, Zuka. Echt. Kom mee, en je mag weer thuis wonen. Dan mogen je oortjes eindelijk weer omhoog.",
+        "eer": "Thuis... Mijn eer terug...",
+        "trots": "Je hoeft niemands trots te verdienen om goed te zijn, neefje. Ook niet die van je vader. Alleen die van jezelf.",
+        "sorry": "...Het spijt me, oom.",
         "keuze": "Hij kiest de verkeerde kant.",
         "nu": "Ze zijn met te veel! Guhvatar, de Guhvatar-staat. NU!",
         "staat": "Je ogen gloeien. De lucht om je heen zoemt. Heel even voel je alle Guhvatars van voor jou.",
@@ -172,6 +178,104 @@ SCENES = {
         "appa": "Appa! Iedereen erop!",
         "miroh": "Achter jullie sluiten de Dai Li-Mika's Oom Miroh in, in een kooi van groen kristal. Hij kijkt jullie na. En knikt.",
         "gevallen": "Ba Sing Guh was gevallen. Maar de Guhvatar leefde nog, en vloog weg op de rug van een luchtbizon.",
+    }, {}),
+    # fix3-h3 (playtest 2 items 1, 8, 9, 10): the story between the steps (H3Hints.BRUGGEN), the crystal cell, Miroh's
+    # capture, the escape with Toph and the talk in flight (H3Verloop.finale)
+    "leraar": ("Een leraar voor de Guhvatar", {
+        "binnen": "We zijn binnen! Lucht kan ik al, water leer ik van Katara... nu nog aarde. Maar wie leert mij dat?",
+        "geduld": "Iemand die heel sterk is. En heel veel geduld heeft met een Guhvatar die overal tegenaan vliegt, njeg.",
+        "affiche": "Kijk wat er bij de poort hing: 'De Aardrommel! Vanavond: de sterkste aardesturers van Ba Sing Guh!' Als er ergens een leraar zit, dan daar.",
+        "kampioen": "Een kampioen als leraar? Ja! Daar wil ik heen!",
+        "pauze": "En er staat: knabbels in de pauze. Dat is ook belangrijk. Voor het plan.",
+        "arena": "Ergens in het zuidoosten juicht een arena. De grond dreunt zachtjes mee onder je pootjes.",
+    }, {}),
+    "middenring": ("Op naar de middenring", {
+        "kiezel": "Niet slecht, kiezel. Voor een luchtsturder.",
+        "koning": "Dank je, Toph. Nu moeten we de Aardekoning spreken. Hij moet weten wat de Vuurnatie van plan is.",
+        "muren": "De koning? Die zit in de bovenring, achter drie muren en duizend formulieren. Daar komt niemand zomaar binnen.",
+        "afspraak": "Dan vragen we een afspraak aan. En terwijl we wachten...",
+        "monorail": "...duw jij de monorail naar de middenring. Met aardesturen. Goede oefening. Daar is een theehuis waar de thee naar de hemel smaakt, zeggen ze.",
+        "mee": "Ga je niet mee, Toph?",
+        "titel": "Ik heb een titel te verdedigen. En ik vind jullie heus wel terug. Jullie lopen als een kudde luchtbizons.",
+    }, {}),
+    "uitnodiging": ("Oren in de muren", {
+        "oren": "Jullie willen de Aardekoning spreken, zeiden jullie? Zachtjes, njeg. In deze stad hebben zelfs de theekopjes oren.",
+        "wie": "Oren? Van wie dan?",
+        "dai_li": "Van de Dai Li. De stille guhs met de groene hoeden. Ze houden de stad rustig. Soms een beetje té rustig.",
+        "gids": "Onze gids, Joo Dee-guh, zoekt ons al de hele dag. Zij kan ons vast bij de koning brengen.",
+        "luister": "Ga dan maar naar haar toe. En luister goed naar wat ze niet zegt.",
+        "zuka": "Achter de toonbank poetst Zuka hetzelfde kopje voor de twintigste keer. Hij heeft alles gehoord.",
+    }, {}),
+    "gevolgd": ("Twee schaduwen", {
+        "glimlach": "Joo Dee-guh glimlacht. Ze glimlacht nog steeds. Ze heeft nog geen één keer met haar ogen geknipperd.",
+        "raar": "Oké. Dit is raar. Ze gaf op geen enkele vraag antwoord. En kijk eens wie daar bij de muur staan.",
+        "miroh": "Dai Li. Ze lopen al achter ons aan sinds het theehuis. Oom Miroh had gelijk.",
+        "appa": "Appa en Momo zijn helemaal alleen bij het kamp... Als die Dai Li ons volgen, wie let er dan op hen?",
+        "kamp": "Precies wat ik dacht. Terug naar het kamp. Nu meteen.",
+    }, {}),
+    "na_appa": ("Het lege kamp", {
+        "schuld": "Appa... Ik had hier moeten zijn. Ik had hem nooit alleen mogen laten.",
+        "stenen": "Het is niet jouw schuld. Kijk: handen van steen, in de grond gedrukt. Dit waren de Dai Li.",
+        "dai_li": "De stille guhs met de groene hoeden. Die werken voor de stad. Dus eigenlijk werken ze voor...",
+        "koning": "...de Aardekoning. Als iemand ze kan bevelen Appa terug te geven, is hij het.",
+        "paleis": "Geen formulieren meer, geen afspraken. We gaan naar het paleis. Vandaag nog.",
+        "momo": "Momo-guh klimt op je schouder en houdt zich stevig vast. Zijn oortjes staan weer een heel klein beetje rechtop.",
+    }, {}),
+    "waarom_miroh": ("Een brief met een rood zegel", {
+        "brief": "Waar Long Feng-Mika stond, ligt een opgerolde brief. Er zit een rood zegel op, met een vlammetje.",
+        "lees": "'Aan Long Feng. In theehuis De Jasmijn Draak verstoppen zich twee verraders van de Vuurnatie: de verbannen prins Zuka en zijn oom. Houd ze vast tot ik er ben. A.'",
+        "zuka": "Zuka?! De ober met het litteken... dat is Zuka! De prins die ons al achternazit sinds de Luchttempel!",
+        "oom": "En die ronde guh met de theepot is zijn oom. Die stond elke keer op dat schip. Met thee.",
+        "aardig": "Maar Oom Miroh was aardig voor ons. Hij schonk ons thee toen niemand ons wilde zien. Als 'A' hem komt halen...",
+        "heuvel": "Hij zei dat hij vandaag naar de heuvel buiten de muur ging. Naar de kersenboom. 'Voor iemand die ik mis.'",
+        "waarschuwen": "Dan gaan we hem waarschuwen. Een vriend is een vriend. Ook als zijn neefje ons achternazit.",
+    }, {}),
+    "katara_weg": ("Katara is weg", {
+        "rennen": "Beneden aan de heuvel klinkt gehijg. Sokka-guh komt naar boven rennen, helemaal buiten adem.",
+        "katara": "Katara is weg! Ze ging naar het theehuis om Zuka te waarschuwen... en de Dai Li namen ze allebei mee. Diep onder het paleis!",
+        "neefje": "Mijn neefje ook...",
+        "waarom": "Oom Miroh... we weten wie Zuka is. Hij zit al achter ons aan sinds de Luchttempel. Waarom eigenlijk?",
+        "vader": "Omdat zijn vader hem wegstuurde. Zuka zei ooit iets op het verkeerde moment, en kreeg vuur in zijn gezicht. Daar komt dat litteken vandaan. En zijn ene oortje staat sindsdien nooit meer helemaal rechtop.",
+        "thuis": "Hij mag pas naar huis als hij de Guhvatar meebrengt. Hij jaagt niet op jou. Hij jaagt op een thuis.",
+        "azula": "En 'A' is mijn nichtje Azula. Als zij hier is, valt deze stad. De Dai Li brengen hun gevangenen naar de oude catacomben onder het paleis. Ik ga met je mee.",
+        "appa": "Ik haal Appa en houd de lucht vrij. Als jullie Katara hebben: fluiten. Hard!",
+    }, {}),
+    "kristalcel": ("De kristalcel", {
+        "stemmen": "Uit de kristalcel komen stemmen. Jullie blijven even staan, in het donker, en luisteren.",
+        "oor": "Ik dacht altijd dat jij gewoon een boze Mika was die ons achternazat. Maar je oor... en dat litteken... wat is er gebeurd?",
+        "vader": "Mijn vader. Ik zei iets op de verkeerde dag, tegen de verkeerde guh. Hij noemde het een les. Daarna stuurde hij me weg.",
+        "thuis": "Ik mag pas terug als ik de Guhvatar breng. Dan krijg ik mijn eer terug. Mijn thuis. En misschien... dat hij trots op me is.",
+        "water": "Ik heb water van de Noordpool bij me. Geestenwater. Misschien kan het je litteken helen...",
+        "dank": "...Het hoort bij me. Maar... dank je. Echt.",
+        "neefje": "Neefje! Een oude generaal kent nog een paar trucjes met vuur, njeg. Dit kristal smelt als suiker in de thee.",
+        "oom": "Oom? Jij... met de Guhvatar?",
+        "harten": "Ik ben waar de thee warm is en de harten ook. Kom, allemaal. Hier is het niet veilig.",
+        "kamer": "Verderop, in de grote kristalkamer, gloeit iets groen op. Iemand wacht daar al op jullie.",
+    }, {}),
+    "miroh_gevangen": ("Oom Miroh gevangen", {
+        "stilte": "Diep onder de stad, in de stilte na de bliksem. Het kristal groeit verder.",
+        "kooi": "Kijk eens aan. Oompje, in een kooi van kristal. Het staat je goed.",
+        "thee": "Kristal of klei, nichtje. Thee smaakt overal hetzelfde, zolang je hem deelt.",
+        "vader": "Dai Li, breng hem naar de Vuurnatie. Vader zal blij zijn. Een verrader minder om thee mee te drinken.",
+        "oom": "Oom, ik...",
+        "blik": "Oom Miroh kijkt zijn neefje lang aan. Hij zegt niets. Voor het eerst heeft hij geen wijsheid voor Zuka. Alleen een blik die meer pijn doet dan bliksem.",
+        "huis": "Kom, broertje. We gaan naar huis. Dat wilde je toch?",
+    }, {}),
+    "ontsnapping": ("De ontsnapping", {
+        "vlucht": "Appa-guh schiet uit de Koningsput omhoog, over de muren van Ba Sing Guh. Achter jullie gaan de lichten van de stad een voor een uit.",
+        "wacht": "Hé! Wacht eens even, jullie!",
+        "hier": "Dachten jullie dat je zonder mij kon wegvliegen? Ik voelde jullie al aankomen bij de muur.",
+        "vliegen": "Toph! Maar je haat vliegen!",
+        "help": "Ik háát vliegen, njeg. Maar de Guhvatar kan nog geen kiezel rechtop zetten. Ik ga mee. Ik help jullie. En de Guhvatar.",
+    }, {}),
+    "koers": ("Koers naar het westen", {
+        "waarheen": "Oké. Ba Sing Guh is gevallen, de koning is gevlucht met Bosco. Dus... waar gaan we heen?",
+        "miroh": "Ze hebben Oom Miroh. Azula neemt hem mee naar de Vuurnatie.",
+        "vuur": "En de Guhvatar moet nog vuur leren. Er is maar één plek waar dat kan.",
+        "vermomming": "Recht het hol van de Mika in. ...In vermomming dan. Rode kleren, nepnamen. Misschien moet de Guhvatar zelfs naar school, dan valt hij helemaal niet op.",
+        "snor": "Ik doe geen nepsnor op. ...Oké. Een kleintje.",
+        "school": "Naar school? Ik ben nog nooit naar school geweest! Leuk!",
+        "west": "Appa-guh draait naar het westen, waar de lucht rood kleurt. Achter jullie wordt Ba Sing Guh kleiner en kleiner. Op naar de Vuurnatie.",
     }, {}),
     "knipoog_mewtwo": ("Iemand in de tank", {
         "vrijwillig": "Die zit hier vrijwillig. Echt. We krijgen hem er niet meer uit.",
@@ -188,7 +292,6 @@ SCENES = {
 # =====================================================================================================================
 QUEST = {
     # the narrator, in the chat
-    "val.na": "Appa vliegt je terug naar het kamp. Iemand zit daar al op je te wachten, met haar voeten in het gras.",
     "klaar": "Hoofdstuk 3 is klaar: Ba Sing Guh. Toph-guh hoort bij het team. Appa-guh zet koers naar de Vuurnatie...",
     "aarde_geleerd": "Je hebt aardesturen geleerd! Je voelt de grond onder je pootjes, en de grond voelt jou.",
     # the passport desk
@@ -444,7 +547,7 @@ HINTS = {
     "lu_ten": "De heuvel met de kersenboom ligt %s, op de landingslob buiten de buitenmuur. Loop de heuvel op.",
     "val": "De oude poort staat %s, in de paleistuin aan de oostkant van het gouden paleis: een mossig poortgebouw met het bordje "
            "'Verboden toegang'. Daarachter gaat de trap omlaag.",
-    "toph": "Toph-guh zit %s, bij het kamp in het gras. Praat met haar.",
+    "toph": "Het kamp ligt %s, op de landingslob. Daar staat Appa-guh klaar om te ontsnappen.",
 }
 KIJK = {
     "loket": ("Het paspoortloket", "Het paspoortloket. Zonder stempel kom je er niet in."),
@@ -458,23 +561,12 @@ KIJK = {
     "laogai": ("De botenschuur", "De botenschuur aan Meer Laogai. 'Er is hier geen basis.' Vast niet."),
     "lu_ten": ("De heuvel met de boom", "De heuvel met de kersenboom. Daar zit iemand."),
     "val": ("De oude poort", "De oude poort in de paleistuin. Daaronder: de catacomben."),
-    "toph": ("Bij het kamp", "Toph-guh. Ze zat al op je te wachten."),
+    "toph": ("Bij het kamp", "Het kamp. Appa-guh staat klaar om weg te vliegen."),
 }
 TEAM = {
-    "aardrommel": ("sokka", "Hoor je dat gejuich? Iedereen heeft het over de Aardrommel. Kom, even kijken!"),
-    "monorail": ("sokka", "Iemand zei dat er in de middenring een theehuis is waar de thee naar de hemel smaakt. En die monorail gaat "
-                          "erheen! Duwen met aardesturen... dat kun jij nu, toch?"),
     "theehuis": ("aang", "Ruik je dat? Jasmijn! Dat moet dat theehuis zijn, daar beneden."),
     "pai_sho": ("aang", "Oom Miroh heeft een spelbord klaarstaan. Pai Sho! Vraag maar of hij een potje wil spelen."),
-    "joo_dee": ("katara", "Die gids, Joo Dee-guh, zoekt ons al de hele dag. Laten we met haar praten: misschien weet zij hoe we de "
-                          "Aardekoning kunnen spreken."),
-    "kamp": ("sokka", "Ik heb hier geen goed gevoel over. Die twee Dai Li-Mika's lopen ons de hele tijd achterna. Kom, terug naar Appa "
-                      "en Momo."),
-    "koning": ("sokka", "De Aardekoning moet dit weten. Als iemand ons kan helpen Appa te vinden, is hij het. Naar het paleis!"),
     "laogai": ("katara", "Bosco keek naar het meer. Meer Laogai! Daar is Appa, ik weet het zeker. En dat bordje bij de botenschuur liegt."),
-    "lu_ten": ("aang", "Appa is terug! ...Maar waar is Oom Miroh eigenlijk? Zijn theehuis is dicht. Zuka weet het vast."),
-    "val": ("sokka", "Katara-guh is weg! Dai Li-Mika's namen haar mee, het paleis in en naar beneden. Zuka zegt: in de oude catacomben "
-                     "onder het paleis. Snel!"),
 }
 TITELS = {
     "baan.titel": "Zien met je voeten",

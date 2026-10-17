@@ -352,10 +352,10 @@ FTB = [
     ("koning", "De Aardekoning", "Misschien weet de &dAardekoning-guh&r iets. Of zijn beer Bosco.", "minecraft:honeycomb", 11),
     ("laogai", "Meer Laogai", "Sluip de basis onder het meer binnen. Gezien worden = terug naar de hal, verder niets. Bukken helpt.",
      "minecraft:iron_bars", 12),
-    ("lu_ten", "Een lied voor Lu Ten", "Oom Miroh is niet in zijn theehuis. Zoek de heuvel met de kersenboom.", "minecraft:cherry_sapling", 13),
-    ("val", "De val van Ba Sing Guh", "De Dai Li hebben Katara-guh meegenomen naar de kristalcatacomben onder het paleis.",
+    ("lu_ten", "Een lied voor Lu Ten", "Oom Miroh is in gevaar. Waarschuw hem: hij is naar de heuvel met de kersenboom.", "minecraft:cherry_sapling", 13),
+    ("val", "De val van Ba Sing Guh", "De Dai Li hebben Katara-guh en Zuka meegenomen naar de kristalcatacomben onder het paleis.",
      "guhs:einde2_bouw_aarde_groen_kristal", 14),
-    ("toph", "Een nieuw teamlid", "Bij het kamp wacht iemand met haar voeten in het gras. Daarna: op naar de Vuurnatie.", "minecraft:mud_bricks", 15),
+    ("toph", "De ontsnapping", "Ba Sing Guh valt. Op Appa's rug vlucht je weg... en bij het kamp springt er nog iemand op. Daarna: op naar de Vuurnatie.", "minecraft:mud_bricks", 15),
 ]
 
 

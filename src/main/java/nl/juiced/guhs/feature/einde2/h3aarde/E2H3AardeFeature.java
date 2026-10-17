@@ -94,6 +94,7 @@ public final class E2H3AardeFeature {
         NeoForge.EVENT_BUS.addListener(PaiShoSpel::opTick);
         NeoForge.EVENT_BUS.addListener(H3Theebezoek::opTick);
         NeoForge.EVENT_BUS.addListener(H3Acteurs::opBinnenkomst);
+        NeoForge.EVENT_BUS.addListener(H3Rollen::opBinnenkomst);
         NeoForge.EVENT_BUS.addListener(H3Acteurs::opUitloggen);
         NeoForge.EVENT_BUS.addListener(E2H3AardeCommando::register);
     }

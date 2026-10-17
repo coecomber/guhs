@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -89,6 +88,7 @@ public final class H3Verloop {
         } else if (!inDoos && BINNEN.remove(p.getUUID())) {
             E2Team.weg(p, E2H3Aarde.STRUCTUUR);
         }
+        H3Schijn.traliesWeg(stad);   // (fix3-h3: the gate of Appa's chamber is open in the world; the bars are shown per player)
         int stap = E2H3Aarde.stap(p);
         H3Kool.tik(p, stad, stap);
         H3Knipogen.tik(p, stad, stap);
@@ -136,10 +136,11 @@ public final class H3Verloop {
                 }
             }
             case E2H3Aarde.VAL -> {
-                if (stad.in(p, "kristalkamer", 0) || stad.bij(p, "kristalcel", 5)) {
+                if (stad.in(p, "kristalkamer", 0) || stad.bij(p, "kristalcel", 7)) {
                     val(p, stad);
                 }
             }
+            case E2H3Aarde.TOPH -> finale(p, stad);   // (fix3-h3: only when the chain after the fall was broken off)
             default -> {
             }
         }
@@ -212,19 +213,83 @@ public final class H3Verloop {
         }
     }
 
-    /** Step 13: the fall; afterwards Appa has flown you out to the camp, where Toph waits. */
+    /**
+     * Step 13: at the crystal cell first the scene of Katara and Zuka in the cell (fix3-h3, playtest 2 item 8: why Zuka
+     * stands with you), then the fall. After it (step 14) the finale runs on by itself ({@link #finale}).
+     */
     static void val(ServerPlayer p, E2H3Aarde.Stad stad) {
         BEZIG.put(p.getUUID(), nu(p));
+        if (Cutscenes.gezien(p, H3Scenes.KRISTALCEL.id())) {
+            valZelf(p, stad);
+        } else if (!H3Scenes.speel(p, stad, H3Scenes.KRISTALCEL, speler -> valZelf(speler, stad))) {
+            BEZIG.remove(p.getUUID());
+        }
+    }
+
+    private static void valZelf(ServerPlayer p, E2H3Aarde.Stad stad) {
+        BEZIG.put(p.getUUID(), nu(p));
         if (!H3Scenes.speelMetMuziek(p, stad, H3Scenes.VAL, "val", speler -> {
-            Vec3 kamp = stad.voet("aankomst_speler");
-            if (kamp != null && speler.level() instanceof ServerLevel) {
-                Duwtje.terug(speler, stad.level().dimension(), kamp, -90f);
-            }
             klaar(speler, E2H3Aarde.VAL, null);
-            E2H3Aarde.verteller(speler, "val.na");
+            finale(speler, stad);
         })) {
             BEZIG.remove(p.getUUID());
         }
+    }
+
+    /**
+     * Step 14 (fix3-h3, playtest 2 items 9 and 10), it runs by itself: Miroh is caught in the crystal chamber (only when you
+     * are still down there: right after the fall), then the escape on Appa over the camp, where Toph-guh jumps on, and the
+     * talk in flight about where to go. Then Toph is in the team and Appa flies on to the Fire Nation ({@link H3Rollen#klaar}).
+     * There is nothing to talk to: a player who left in the middle gets the rest when back in the city.
+     */
+    static void finale(ServerPlayer p, E2H3Aarde.Stad stad) {
+        if (E2H3Aarde.stap(p) != E2H3Aarde.TOPH) {
+            BEZIG.remove(p.getUUID());
+            return;
+        }
+        BEZIG.put(p.getUUID(), nu(p));
+        if (!Cutscenes.gezien(p, H3Scenes.MIROH_GEVANGEN.id()) && stad.bij(p, "miroh_gevangen", 80)
+                && H3Scenes.speel(p, stad, H3Scenes.MIROH_GEVANGEN, speler -> ontsnap(speler, stad))) {
+            return;
+        }
+        ontsnap(p, stad);
+    }
+
+    private static void ontsnap(ServerPlayer p, E2H3Aarde.Stad stad) {
+        BEZIG.put(p.getUUID(), nu(p));
+        Vec3 kamp = stad.voet("aankomst_speler");
+        if (kamp != null && !stad.bij(p, "aankomst_speler", 40)) {
+            Duwtje.terug(p, stad.level().dimension(), kamp, -90f);   // (out of the catacombs: the escape plays over the camp)
+        }
+        if (!H3Scenes.speel(p, stad, H3Scenes.ONTSNAPPING, speler -> {
+            BEZIG.put(speler.getUUID(), nu(speler));
+            if (!H3Scenes.speel(speler, stad, H3Scenes.KOERS, s2 -> {
+                BEZIG.remove(s2.getUUID());
+                H3Rollen.klaar(s2);
+            })) {
+                BEZIG.remove(speler.getUUID());
+            }
+        })) {
+            BEZIG.remove(p.getUUID());
+        }
+    }
+
+    /**
+     * fix3-h3 (playtest 2 item 1): the story scene that opens a step (H3Hints: why we go there, who the people are), then
+     * the step's hint. False: it could not start now (the caller shows the hint).
+     */
+    static boolean brug(ServerPlayer p, E2H3Aarde.Stad stad, H3Scenes.Scene s, int stap, java.util.function.Consumer<ServerPlayer> daarna) {
+        BEZIG.put(p.getUUID(), nu(p));
+        if (H3Scenes.speel(p, stad, s, speler -> {
+            BEZIG.remove(speler.getUUID());
+            if (E2H3Aarde.stap(speler) == stap) {
+                daarna.accept(speler);
+            }
+        })) {
+            return true;
+        }
+        BEZIG.remove(p.getUUID());
+        return false;
     }
 
     private static int nu(ServerPlayer p) {
