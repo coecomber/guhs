@@ -38,7 +38,14 @@ import nl.juiced.guhs.feature.verhaal.Duwtje;
  *       {@link #STAAT} with everything at once; then you take his endless appetite away ({@link Scenes#TREK_WEG}).</li>
  * </ol>
  * Nobody gets hurt: a blast or a spark only shoves, a fall ends in the warm water under the pillars and puts you back on the
- * pillar of the round; three blasts in a row, or the time of a round over, and that round simply starts again.
+ * pillar of the round; {@link #RAAK_MAX} blasts in a row (a dodged blast starts the row again), and that round simply starts
+ * again.
+ * <p>
+ * fix4-finale (playtest 3: "I dodged 8 blasts long ago, but round 1 never ends"): round 1 used to count every blast Mikai
+ * FIRED, kept firing after the eighth, and only ended when no blast was in the air at all, which never happened (a new one
+ * every two seconds, each flying seven seconds); meanwhile every hit since the start of the round added up to a restart. Now
+ * a blast counts as dodged once it has flown past you (or burns out) without touching you, Mikai stops after the blasts that
+ * are still needed, the round ends at the eighth dodge, and the action bar keeps "Ontweken: n/8" in view.
  */
 public final class Duel {
     public static final int LUCHT = 1, WATER = 2, AARDE = 3, VUUR = 4, STAAT = 5;
@@ -51,6 +58,8 @@ public final class Duel {
 
     private static final class Spel {
         int ronde = LUCHT, t, raak, gedaan, gedaan2, schot;
+        /** (fix4-finale) the blasts of this round that flew past without touching you. */
+        int ontweken;
         boolean wasGrond = true, wasSluip;
         double laatsteY;
         @Nullable
@@ -105,6 +114,7 @@ public final class Duel {
         s.gedaan = 0;
         s.gedaan2 = 0;
         s.schot = 0;
+        s.ontweken = 0;
         naarStart(p, s);
         E2H4Vuur.zeg(p, "duel.ronde." + ronde);
         E2H4Vuur.titel(p, "duel.titel." + ronde, "duel.sub." + ronde);
@@ -126,7 +136,7 @@ public final class Duel {
     private static void naarStart(ServerPlayer p, Spel s) {
         Vec3 jij = stand(p, START[s.ronde]);
         Vec3 mikai = Plek.staan(p, "duel_mikai");
-        ServerLevel g = Plek.guheinde(p);
+        ServerLevel g = Plek.wereld(p);
         if (jij != null && g != null) {
             float yaw = mikai == null ? p.getYRot() : nl.juiced.guhs.feature.verhaal.Cutscene.yawVan(mikai.subtract(jij));
             Duwtje.terug(p, g.dimension(), jij, yaw);
@@ -146,7 +156,7 @@ public final class Duel {
         if (s == null || s.pauze || Cutscenes.bezig(p)) {
             return;
         }
-        if (Plek.guheinde(p) == null) {
+        if (Plek.wereld(p) == null) {
             stop(p);                                             // (left the Guheinde: the arena starts it again)
             return;
         }
@@ -166,13 +176,12 @@ public final class Duel {
         Vec3 jij = p.position().add(0, 1, 0);
         switch (s.ronde) {
             case LUCHT -> {
-                if (s.t - s.schot > 40) {
+                // (fix4-finale) only as many blasts as are still needed: dodged + in the air < 8
+                if (s.t - s.schot > 40 && s.gedaan + inDeLucht(s) < LUCHT_STOTEN) {
                     stoot(p, s, jij, 0.5);
-                    s.gedaan++;
                 }
-                if (s.gedaan >= LUCHT_STOTEN && s.ballen.isEmpty()) {
-                    gewonnen(p, s);
-                    return;
+                if (s.t % 20 == 0) {
+                    E2H4Vuur.balk(p, "duel.ontweken", s.gedaan, LUCHT_STOTEN);
                 }
             }
             case WATER -> {
@@ -311,6 +320,12 @@ public final class Duel {
     private static void ballen(ServerPlayer p, Spel s, Vec3 jij) {
         for (VuurbalEntity b : List.copyOf(s.ballen)) {
             if (b.isRemoved()) {
+                if (b.soort() == VuurbalEntity.STOOT && !b.geteld) {
+                    b.geteld = true;                             // (burnt out without touching you: dodged too)
+                    if (ontweken(p, s)) {
+                        return;
+                    }
+                }
                 s.ballen.remove(b);
                 continue;
             }
@@ -328,7 +343,15 @@ public final class Duel {
                 continue;
             }
             double raakAfstand = b.soort() == VuurbalEntity.VONK ? 1.3 : 1.5;
+            if (b.soort() == VuurbalEntity.STOOT && !b.geteld && voorbij(b, jij, raakAfstand)) {
+                b.geteld = true;                                 // (fix4-finale) it flew past you: dodged
+                if (ontweken(p, s)) {
+                    return;
+                }
+                continue;
+            }
             if (b.position().distanceTo(jij) < raakAfstand) {
+                b.geteld = true;
                 b.discard();
                 s.raak++;
                 Duwtje.duw(p, b.getDeltaMovement(), b.soort() == VuurbalEntity.VONK ? 0.5 : 0.9);
@@ -338,9 +361,48 @@ public final class Duel {
                     begin(p, s, s.ronde);
                     return;
                 }
-                E2H4Vuur.balk(p, "duel.duw");
+                if (s.ronde == LUCHT) {
+                    E2H4Vuur.balk(p, "duel.duw_lucht", s.gedaan, LUCHT_STOTEN);
+                } else {
+                    E2H4Vuur.balk(p, "duel.duw");
+                }
             }
         }
+    }
+
+    /** (fix4-finale) Has this blast flown past the player (it is beyond them along its flight, and out of reach)? */
+    static boolean voorbij(VuurbalEntity b, Vec3 jij, double raakAfstand) {
+        Vec3 v = b.getDeltaMovement();
+        return v.lengthSqr() > 1e-6 && jij.subtract(b.position()).dot(v) < 0 && b.position().distanceTo(jij) >= raakAfstand;
+    }
+
+    /** (fix4-finale) The blasts of Mikai that are still flying and not counted yet. */
+    private static int inDeLucht(Spel s) {
+        int n = 0;
+        for (VuurbalEntity b : s.ballen) {
+            n += !b.isRemoved() && b.soort() == VuurbalEntity.STOOT && !b.geteld ? 1 : 0;
+        }
+        return n;
+    }
+
+    /**
+     * (fix4-finale) A blast dodged: the row of hits starts again (every round), and in round 1 it counts. True: the round was
+     * won (the caller stops looking at the blasts).
+     */
+    private static boolean ontweken(ServerPlayer p, Spel s) {
+        s.raak = 0;
+        s.ontweken++;
+        if (s.ronde != LUCHT) {
+            return false;
+        }
+        s.gedaan++;
+        Schijn.geluid(p, SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), p.blockPosition(), 0.4f, 1.6f);
+        E2H4Vuur.balk(p, "duel.ontweken", s.gedaan, LUCHT_STOTEN);
+        if (s.gedaan >= LUCHT_STOTEN) {
+            gewonnen(p, s);
+            return true;
+        }
+        return false;
     }
 
     private static void slaTerug(ServerPlayer p, Spel s, VuurbalEntity bal) {
@@ -348,6 +410,7 @@ public final class Duel {
             return;
         }
         bal.zetSoort(VuurbalEntity.TERUG);
+        bal.geteld = true;
         bal.leven = 100;
         Vec3 naar = s.mikai != null ? s.mikai.position().add(0, 1.5, 0) : bal.position().add(bal.getDeltaMovement().scale(-10));
         bal.setDeltaMovement(naar.subtract(bal.position()).normalize().scale(0.9));
@@ -439,6 +502,18 @@ public final class Duel {
             }
             Look.sync(p);
         }
+    }
+
+    /** (fix4-finale, tests) The blasts this player dodged in the round (round 1: the counter "Ontweken: n/8"). */
+    static int ontweken(ServerPlayer p) {
+        Spel s = SPELLEN.get(p.getUUID());
+        return s == null ? 0 : s.ontweken;
+    }
+
+    /** (fix4-finale, tests) Mikai's blasts flying at this player now. */
+    static List<VuurbalEntity> stoten(ServerPlayer p) {
+        Spel s = SPELLEN.get(p.getUUID());
+        return s == null ? List.of() : s.ballen.stream().filter(b -> !b.isRemoved() && b.soort() == VuurbalEntity.STOOT).toList();
     }
 
     /** (dev, tests) jump to a round (the duel starts when it isn't running). */

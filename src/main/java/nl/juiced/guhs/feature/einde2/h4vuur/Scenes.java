@@ -31,6 +31,8 @@ public final class Scenes {
 
     public static Cutscene AANKOMST, SCHOOL, ZWARTE_ZON, GEVANGENIS, KAMP, KOKEND_ROTSBLOK, DRAKEN, TONEEL, TENT, TOP, LEEUWSCHILDPAD,
             AGNI_KAI, OMSLAG, TREK_WEG, KRONING, AFTITELING, KNIPOOG_STITCH, KNIPOOG_SJOKKEL;
+    /** fix4-finale (playtest 3): the scene before the duel (why four rounds, and how it must end). */
+    public static Cutscene DUEL_BEGIN;
     /**
      * fix3-h4 (playtest 2, items 1, 11-14): the story scenes that tell WHY before a task: the team's plan on arrival, the pond
      * before the turtle-ducks, who sits in Het Kokend Rotsblok, the Zonnekrijgers before the Drakendans, the White Lotus tile
@@ -46,14 +48,16 @@ public final class Scenes {
             java.util.Map.entry("kamp", new int[] {20, 30}), java.util.Map.entry("kokend_rotsblok", new int[] {20, 30}),
             java.util.Map.entry("draken", new int[] {45, 60}), java.util.Map.entry("toneel", new int[] {45, 60}),
             java.util.Map.entry("tent", new int[] {45, 75}), java.util.Map.entry("top", new int[] {30, 45}),
-            java.util.Map.entry("leeuwschildpad", new int[] {45, 60}), java.util.Map.entry("agni_kai", new int[] {45, 75}),
+            java.util.Map.entry("leeuwschildpad", new int[] {45, 90}), java.util.Map.entry("agni_kai", new int[] {45, 75}),
             java.util.Map.entry("omslag", new int[] {30, 45}), java.util.Map.entry("trek_weg", new int[] {30, 45}),
             java.util.Map.entry("kroning", new int[] {45, 90}), java.util.Map.entry("aftiteling", new int[] {60, 90}),
             java.util.Map.entry("knipoog_stitch", new int[] {5, 10}), java.util.Map.entry("knipoog_sjokkel_finish", new int[] {5, 10}),
             // fix3-h4: the why-scenes (normal scenes, 15-30 s; the Rotsblok plan may run to 32 s: it introduces Suki-guh)
             java.util.Map.entry("plan", new int[] {15, 30}), java.util.Map.entry("vijver", new int[] {12, 25}),
             java.util.Map.entry("rotsblok_plan", new int[] {20, 33}), java.util.Map.entry("zonnekrijgers", new int[] {20, 30}),
-            java.util.Map.entry("lotus_tegel", new int[] {20, 30}), java.util.Map.entry("vloot_plan", new int[] {20, 30}));
+            java.util.Map.entry("lotus_tegel", new int[] {20, 30}), java.util.Map.entry("vloot_plan", new int[] {20, 30}),
+            // fix4-finale: before the duel (the Leeuwschildpad-guh grew to 85 s above: it now says what it is for)
+            java.util.Map.entry("duel_begin", new int[] {20, 30}));
 
     private Scenes() {
     }
@@ -85,6 +89,7 @@ public final class Scenes {
         ZONNEKRIJGERS = zonnekrijgers();
         LOTUS_TEGEL = lotusTegel();
         VLOOT_PLAN = vlootPlan();
+        DUEL_BEGIN = duelBegin();
     }
 
     // =====================================================================================================================
@@ -737,38 +742,118 @@ public final class Scenes {
         return b.registreer();
     }
 
-    /** The night on the back of the Leeuwschildpad-guh: energy bending (anchor leeuwschildpad_rug). 52 s. */
+    /**
+     * The night on the back of the Leeuwschildpad-guh: energy bending (anchor leeuwschildpad_rug). 85 s.
+     * <p>
+     * fix4-finale (playtest 3: "its head is not visible, and it is not clear what it adds"): the model's head stands at the
+     * marker leeuwschildpad_kop with its face to the SOUTH (yaw 0, towards the quay), and it sits lower than the top of the
+     * shell; every shot used to look at it from the back, from the shell, so only a strip of mane showed over the shell. Now
+     * you climb down to the quay in a fade, and every shot of the head is taken from the quay side, in front of its face (a
+     * wide one some 17 blocks out that holds the whole head and mane, close ones on the face, a reverse one on you). The
+     * lines say what the scene is for: it called you, energy bending, Mikai's fire burns on his hunger, take the HUNGER and
+     * his fire becomes a small warm flame (nobody dies), but first tire him with the four elements (the four rounds of the
+     * duel). Every line of the old scene is still there.
+     */
     private static Cutscene leeuwschildpad() {
         String a = "leeuwschildpad_rug";
-        Vec3 kop = r(a, "leeuwschildpad_kop", 0, 0, 0), gezicht = r(a, "leeuwschildpad", 0, 0, 0);
-        Cutscene.Builder b = finale("leeuwschildpad", 1040)
-                .speler(v(0.5, 0, 0.5), Cutscene.yawVan(gezicht.subtract(v(0.5, 0, 0.5))))
-                .acteur("schildpad", E2CastSchurkFeature.LEEUWSCHILDPAD_GUH, kop, 0, t -> t.putInt("Soort", 1));
+        Vec3 kop = r(a, "leeuwschildpad_kop", 0, 0, 0);
+        Vec3 kade = r(a, "leeuwschildpad_kade", 0, 0, 0);
+        if (kade.distanceToSqr(kop) < 1e-6) {
+            kade = kop.add(0, 0, 3);                            // (an older build without the quay marker: in front of the nose)
+        }
+        // the face looks south (+z, yaw 0): its middle is 3.5 above the nose block, its eyes 5 above
+        Vec3 gezicht = kop.add(0, 3.5, -0.6), ogen = kop.add(0, 5.0, -0.5);
+        Vec3 wijd = kop.add(0, 4.5, 17.0), dicht = kop.add(2.5, 3.5, 9.0), dicht2 = kop.add(-2.6, 3.0, 8.5), schuin = kop.add(6.0, 6.0, 15.0);
         Vec3 jij = v(0.5, 0, 0.5);
-        Vec3 naarKop = gezicht.subtract(jij).normalize();
+        Vec3 midden = jij.lerp(kop, 0.4).add(0, -6, 0);         // (the middle of the whole animal, for the wide shots)
+        Cutscene.Builder b = finale("leeuwschildpad", 1700)
+                .speler(jij, Cutscene.yawVan(kop.subtract(jij)))
+                .acteur("schildpad", E2CastSchurkFeature.LEEUWSCHILDPAD_GUH, kop, 0, t -> t.putInt("Soort", 1));
         b.zwart(0, 40)
+                // waking up on its back
                 .camera(0, jij.add(1.5, 1.2, -1.5), jij.add(0, 0.6, 0)).camera(110, jij.add(2.0, 1.8, -2.0), jij.add(0, 1.0, 0))
                 .animatie(Cutscene.SPELER, 0, "buk").schud(40, 0.25f, 80)
                 .zeg(44, "", "wakker", 70)
                 .animatie(Cutscene.SPELER, 116, "sta")
-                .cameraKnip(120, jij.add(-6, 10, -6), gezicht.add(0, 2, 0)).camera(220, jij.add(-12, 22, -10), gezicht.add(0, 2, 0))
+                // the whole animal, from the front and the side: the shell, and the head on the quay
+                .cameraKnip(120, kop.add(-24, 14, 20), midden).camera(194, kop.add(-20, 11, 23), midden)
                 .zeg(122, "", "schildpad", 70)
-                .animatie("schildpad", 150, "ontwaak").geluid(150, () -> SoundEvents.ELDER_GUARDIAN_AMBIENT, 0.6f, 0.5f)
-                .cameraKnip(198, jij.add(naarKop.scale(4)).add(0, 2.0, 0), gezicht.add(0, 3, 0))
-                .zeg(200, "schildpad", "bang", 80).animatie("schildpad", 200, "praat")
-                .zeg(284, "schildpad", "hart", 80)
-                .cameraKnip(366, jij.add(naarKop.scale(-2)).add(1.5, 1.8, 0), jij.add(naarKop.scale(6)).add(0, 2, 0))
-                .zeg(368, "schildpad", "vroeger", 110)
-                .zeg(482, "schildpad", "honger", 110)
-                .animatie("schildpad", 596, "zegen")
-                .cameraKnipVolgt(596, jij.add(2.0, 1.6, 2.0), Cutscene.SPELER)
-                .deeltjes(600, ParticleTypes.END_ROD, jij.add(0, 1.6, 0), 40, 0.4).deeltjes(630, ParticleTypes.END_ROD, jij.add(0, 1.0, 0), 50, 0.6)
-                .deeltjes(660, ParticleTypes.GLOW, jij.add(0, 1.2, 0), 50, 0.8).geluid(602, () -> SoundEvents.BEACON_ACTIVATE, 0.8f, 1.2f)
-                .zeg(604, "", "licht", 80)
-                .cameraKnip(688, jij.add(naarKop.scale(3)).add(-1.5, 2.2, 0), gezicht.add(0, 3, 0)).zeg(690, "schildpad", "eten", 70)
-                .cameraKnip(764, jij.add(-14, 18, -14), gezicht).camera(990, jij.add(-20, 28, -18), gezicht)
-                .zeg(766, "", "zakt", 70).schud(840, 0.4f, 120).geluid(840, () -> SoundEvents.GENERIC_SPLASH, 1.0f, 0.4f)
-                .zwart(990, 1040);
+                .geluid(150, () -> SoundEvents.ELDER_GUARDIAN_AMBIENT, 0.6f, 0.5f)
+                // down to the quay, in front of its face
+                .zwart(196, 222).loop(Cutscene.SPELER, 208, 209, kade).kijk(Cutscene.SPELER, 210, ogen)
+                .cameraKnip(224, kade.add(1.3, 2.0, 2.8), gezicht.add(0, 1.0, 0))
+                .zeg(226, "", "klimt", 80)
+                .cameraKnip(308, wijd, kop.add(0, 3.0, 0))
+                .animatie("schildpad", 310, "ontwaak").geluid(310, () -> SoundEvents.ELDER_GUARDIAN_AMBIENT, 0.8f, 0.4f).schud(310, 0.3f, 40)
+                .zeg(312, "", "oog", 60)
+                .cameraKnip(374, dicht, gezicht)
+                .zeg(376, "schildpad", "bang", 80).animatie("schildpad", 376, "praat")
+                .zeg(458, "schildpad", "geroepen", 95)
+                // what you carry: stop him, but how without hurting him?
+                .cameraKnip(555, kop.add(1.6, 3.2, 1.6), kade.add(0, 1.5, 0))
+                .zeg(557, "", "vraag", 100)
+                .cameraKnip(659, dicht2, gezicht)
+                .zeg(661, "schildpad", "hart", 80)
+                .zeg(743, "schildpad", "vroeger", 110)
+                // his fire burns on his hunger: take the hunger, and the fire is only a little warm flame
+                .cameraKnip(855, schuin, kop.add(0, 3.0, 0))
+                .zeg(857, "schildpad", "vuur", 110)
+                .cameraKnip(969, dicht, gezicht)
+                .zeg(971, "schildpad", "honger", 110)
+                .zeg(1083, "schildpad", "gevaar", 110)
+                .zeg(1195, "schildpad", "voel", 60)
+                // the blessing: its light on your forehead and your heart
+                .animatie("schildpad", 1257, "zegen")
+                .cameraKnipVolgt(1257, kade.add(2.0, 1.6, 2.0), Cutscene.SPELER)
+                .deeltjes(1261, ParticleTypes.END_ROD, kade.add(0, 1.6, 0), 40, 0.4).deeltjes(1291, ParticleTypes.END_ROD, kade.add(0, 1.0, 0), 50, 0.6)
+                .deeltjes(1321, ParticleTypes.GLOW, kade.add(0, 1.2, 0), 50, 0.8).geluid(1263, () -> SoundEvents.BEACON_ACTIVATE, 0.8f, 1.2f)
+                .zeg(1265, "", "licht", 80)
+                .cameraKnip(1347, dicht, gezicht).zeg(1349, "schildpad", "eten", 70)
+                // it sinks back into the mist
+                .cameraKnip(1421, kop.add(-18, 16, 30), kop.add(0, 0, -10)).camera(1650, kop.add(-24, 24, 38), kop.add(0, -2, -10))
+                .zeg(1423, "", "zakt", 70).schud(1500, 0.4f, 120).geluid(1500, () -> SoundEvents.GENERIC_SPLASH, 1.0f, 0.4f)
+                .zwart(1650, 1700);
+        return b.registreer();
+    }
+
+    /**
+     * fix4-finale: before the duel (the brief: a scene before every task). On the pillars under the comet, Aang-guh on Appa-guh
+     * beside you: why four rounds (the Leeuwschildpad-guh's warning: tire his fire first, then your light), and Mikai's boast
+     * (anchor duel_speler). 27 s.
+     */
+    private static Cutscene duelBegin() {
+        String a = "duel_speler";
+        Vec3 jij = v(0.5, 0, 0.5);
+        Vec3 mikai = r(a, "duel_mikai", 0, 0, 0);
+        Vec3 naarMikai = mikai.subtract(jij).multiply(1, 0, 1);
+        naarMikai = naarMikai.lengthSqr() < 1e-6 ? v(0, 0, 1) : naarMikai.normalize();
+        Vec3 opzij = v(-naarMikai.z, 0, naarMikai.x);
+        Vec3 appa = jij.subtract(naarMikai.scale(1.5)).add(opzij.scale(3.6)).add(0, -0.8, 0);
+        Vec3 aang = appa.add(0, 2.4, 0);
+        Vec3 weg = appa.add(opzij.scale(6)).add(0, 9, 0);
+        Cutscene.Builder b = finale("duel_begin", 540)
+                .speler(jij, Cutscene.yawVan(naarMikai))
+                .npc("mikai", Kind.VUURHEER_MIKAI_KOMEET, mikai, Cutscene.yawVan(naarMikai.scale(-1)))
+                .acteur("appa", E2AppaFeature.APPA_GUH, appa, Cutscene.yawVan(naarMikai))
+                .npc("aang", Kind.AANG_GUH, aang, Cutscene.yawVan(jij.subtract(aang)));
+        b.zwart(0, 15)
+                .camera(0, jij.subtract(naarMikai.scale(8)).add(opzij.scale(-4)).add(0, 5, 0), mikai.add(0, 3, 0))
+                .camera(90, jij.subtract(naarMikai.scale(5)).add(opzij.scale(-2.5)).add(0, 3, 0), mikai.add(0, 2, 0))
+                .deeltjes(10, ParticleTypes.FLAME, mikai.add(0, 30, 0), 80, 10).deeltjes(50, ParticleTypes.LARGE_SMOKE, mikai.add(0, 28, 0), 40, 8)
+                .zeg(18, "", "pilaren", 70)
+                .cameraKnipVolgt(92, voor(mikai, jij, 3.2, 0.8, 2.2), "mikai").zeg(94, "mikai", "komeet", 85).animatie("mikai", 94, "brul")
+                .deeltjes(96, ParticleTypes.FLAME, mikai.add(0, 2, 0), 40, 0.8)
+                .cameraKnipVolgt(183, voor(aang, jij, 2.4, -0.6, 0.4), "aang").zeg(185, "aang", "les", 95).animatie("aang", 185, "praat")
+                .kijk(Cutscene.SPELER, 183, aang.add(0, 1.2, 0))
+                .zeg(284, "aang", "vier", 100)
+                .kijk(Cutscene.SPELER, 386, mikai.add(0, 2, 0))
+                .cameraKnipVolgt(386, voor(mikai, jij, 3.0, -0.9, 2.2), "mikai").zeg(388, "mikai", "pijn", 65).animatie("mikai", 388, "vuurstoot")
+                .deeltjes(392, ParticleTypes.FLAME, mikai.add(naarMikai.scale(-2)).add(0, 2, 0), 60, 0.8)
+                .geluid(392, () -> SoundEvents.BLAZE_SHOOT, 0.8f, 0.8f)
+                .cameraKnip(457, jij.subtract(naarMikai.scale(4)).add(opzij.scale(1.5)).add(0, 2.5, 0), mikai.add(0, 2, 0))
+                .zeg(459, "aang", "ga", 55).animatie("aang", 459, "lach")
+                .loop("appa", 470, 525, weg).loop("aang", 470, 525, weg.add(0, 2.4, 0))
+                .zwart(520, 540);
         return b.registreer();
     }
 
@@ -867,14 +952,14 @@ public final class Scenes {
         return b.registreer();
     }
 
-    /** You take Mikai's endless appetite away: a round, content Mika (anchor duel_speler). 34 s. */
+    /** You take Mikai's endless appetite away: a round, content Mika (anchor duel_speler). 39 s. */
     private static Cutscene trekWeg() {
         String a = "duel_speler";
         Vec3 jij = v(0.5, 0, 0.5);
         Vec3 mikai = r(a, "duel_mikai", 0, 0, 0);
         Vec3 naarMikai = mikai.subtract(jij).multiply(1, 0, 1).normalize();
         Vec3 ligt = jij.add(naarMikai.scale(1.8));
-        Cutscene.Builder b = finale("trek_weg", 680)
+        Cutscene.Builder b = finale("trek_weg", 780)
                 .speler(jij, Cutscene.yawVan(naarMikai))
                 .npc("mikai", Kind.VUURHEER_MIKAI_KOMEET, ligt, Cutscene.yawVan(naarMikai.scale(-1)))
                 .npc("mikai_vadsig", Kind.VUURHEER_MIKAI_VADSIG, ligt.add(0, -20, 0), Cutscene.yawVan(naarMikai.scale(-1)));
@@ -897,17 +982,21 @@ public final class Scenes {
                 .cameraKnipVolgt(352, ligt.add(zij.scale(2)).add(0, 1.3, 0), "mikai_vadsig")
                 .zeg(356, "mikai_vadsig", "vol", 60).animatie("mikai_vadsig", 356, "smul")
                 .zeg(420, "", "tevreden", 100)
-                .zeg(524, "mikai_vadsig", "dutje", 60).animatie("mikai_vadsig", 560, "boer")
-                .cameraKnip(590, jij.add(zij.scale(6)).add(0, 4, 0), ligt).zeg(592, "", "snurkt", 60)
-                .zwart(655, 680);
+                // fix4-finale: what is left of his fire (the Leeuwschildpad-guh's promise kept: his power is gone, nobody hurt)
+                .deeltjes(526, ParticleTypes.SMALL_FLAME, ligt.add(zij.scale(0.6)).add(0, 1.3, 0), 6, 0.05)
+                .deeltjes(560, ParticleTypes.SMALL_FLAME, ligt.add(zij.scale(0.6)).add(0, 1.3, 0), 6, 0.05)
+                .zeg(524, "", "vlammetje", 100)
+                .zeg(624, "mikai_vadsig", "dutje", 60).animatie("mikai_vadsig", 660, "boer")
+                .cameraKnip(690, jij.add(zij.scale(6)).add(0, 4, 0), ligt).zeg(692, "", "snurkt", 60)
+                .zwart(755, 780);
         return b.registreer();
     }
 
-    /** The coronation of Zuka on the palace forecourt (anchor kroning_zuka). 65 s. */
+    /** The coronation of Zuka on the palace forecourt (anchor kroning_zuka). 70 s (fix4-finale: Zuka on his father). */
     private static Cutscene kroning() {
         Vec3 zuka = v(0.5, 0, 0.5);
         Vec3 plein = v(0.5, -2, 5.5);
-        Cutscene.Builder b = finale("kroning", 1300).verbergEcht(26)
+        Cutscene.Builder b = finale("kroning", 1404).verbergEcht(26)
                 .speler(plein, 180)
                 .npc("zuka", Kind.ZUKA_VUURHEER, zuka, 0).npc("miroh", Kind.OOM_MIROH_LOTUS, zuka.add(-2.0, 0, 0.3), 30)
                 .npc("aang", Kind.AANG_GUH, plein.add(-1.4, 0, -0.2), 180).npc("katara", Kind.KATARA_GUH, plein.add(-2.8, 0, 0.3), 180)
@@ -928,25 +1017,27 @@ public final class Scenes {
                 .cameraKnipVolgt(182, zuka.add(1.5, 1.4, 4.0), "zuka").zeg(184, "zuka", "voorbij", 90).animatie("zuka", 184, "praat")
                 .zeg(278, "zuka", "proberen", 90)
                 .zeg(372, "zuka", "oom", 60).animatie("miroh", 380, "lach")
-                .cameraKnip(436, plein.add(0, 4, 10), plein.add(0, 1, 2))
-                .animatie("burger_1", 438, "groet").animatie("burger_3", 438, "juich").animatie("burger_5", 440, "dans").animatie("burger_4", 440, "zonnegroet")
-                .deeltjes(440, ParticleTypes.FIREWORK, plein.add(0, 10, -4), 80, 6).geluid(440, () -> SoundEvents.FIREWORK_ROCKET_TWINKLE, 1.0f, 1.0f)
-                .cameraKnipVolgt(444, plein.add(2.5, 1.6, -2.0), "sokka").zeg(446, "sokka", "plan", 70).animatie("sokka", 446, "plan")
-                .cameraKnipVolgt(518, plein.add(4.0, 1.4, -2.0), "toph").zeg(520, "toph", "voeten", 55).animatie("toph", 520, "lach")
-                .cameraKnipVolgt(577, plein.add(-4.0, 1.6, -2.0), "katara").zeg(579, "katara", "samen", 55).animatie("katara", 579, "armen")
-                .cameraKnip(636, plein.add(-1.0, 1.6, -2.5), plein.add(-0.7, 1.2, 0)).kijk("aang", 634, plein.add(0, 1, 0))
-                .zeg(638, "aang", "juiste_guh", 90).animatie("aang", 638, "lach")
-                .loop("zuka", 728, 780, plein.add(0, 0, -1.6)).cameraKnip(730, plein.add(1.5, 1.7, -4.0), plein.add(0, 1.4, -1.0))
-                .zeg(782, "zuka", "dank", 90).kijk("zuka", 780, plein.add(0, 1, 0)).animatie("zuka", 782, "buig")
-                .cameraKnipVolgt(876, zuka.add(-3.5, 1.6, 3.0), "miroh").zeg(878, "miroh", "mooiste_dag", 100).animatie("miroh", 878, "thee")
-                .zeg(980, "miroh", "theehuis", 70).animatie("miroh", 980, "lach")
-                .cameraKnip(1054, plein.add(0, 5, 16), zuka.add(0, 2, 0)).camera(1250, plein.add(0, 18, 30), zuka.add(0, 4, 0))
-                .zeg(1056, "", "zo", 80)
-                .deeltjes(1140, ParticleTypes.FIREWORK, zuka.add(-6, 14, -4), 100, 7).deeltjes(1170, ParticleTypes.FIREWORK, zuka.add(6, 16, -4), 100, 7)
-                .deeltjes(1200, ParticleTypes.FIREWORK, zuka.add(0, 20, -8), 140, 9)
-                .geluid(1140, () -> SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, 1.0f, 1.0f).geluid(1170, () -> SoundEvents.FIREWORK_ROCKET_BLAST, 1.0f, 0.9f)
-                .geluid(1200, () -> SoundEvents.FIREWORK_ROCKET_TWINKLE_FAR, 1.0f, 1.0f)
-                .zwart(1262, 1300);
+                // fix4-finale: what became of Vuurheer Mikai (his hunger is gone, nobody was hurt; set up by the Leeuwschildpad-guh)
+                .zeg(436, "zuka", "vader", 100).animatie("zuka", 436, "praat")
+                .cameraKnip(540, plein.add(0, 4, 10), plein.add(0, 1, 2))
+                .animatie("burger_1", 542, "groet").animatie("burger_3", 542, "juich").animatie("burger_5", 544, "dans").animatie("burger_4", 544, "zonnegroet")
+                .deeltjes(544, ParticleTypes.FIREWORK, plein.add(0, 10, -4), 80, 6).geluid(544, () -> SoundEvents.FIREWORK_ROCKET_TWINKLE, 1.0f, 1.0f)
+                .cameraKnipVolgt(548, plein.add(2.5, 1.6, -2.0), "sokka").zeg(550, "sokka", "plan", 70).animatie("sokka", 550, "plan")
+                .cameraKnipVolgt(622, plein.add(4.0, 1.4, -2.0), "toph").zeg(624, "toph", "voeten", 55).animatie("toph", 624, "lach")
+                .cameraKnipVolgt(681, plein.add(-4.0, 1.6, -2.0), "katara").zeg(683, "katara", "samen", 55).animatie("katara", 683, "armen")
+                .cameraKnip(740, plein.add(-1.0, 1.6, -2.5), plein.add(-0.7, 1.2, 0)).kijk("aang", 738, plein.add(0, 1, 0))
+                .zeg(742, "aang", "juiste_guh", 90).animatie("aang", 742, "lach")
+                .loop("zuka", 832, 884, plein.add(0, 0, -1.6)).cameraKnip(834, plein.add(1.5, 1.7, -4.0), plein.add(0, 1.4, -1.0))
+                .zeg(886, "zuka", "dank", 90).kijk("zuka", 884, plein.add(0, 1, 0)).animatie("zuka", 886, "buig")
+                .cameraKnipVolgt(980, zuka.add(-3.5, 1.6, 3.0), "miroh").zeg(982, "miroh", "mooiste_dag", 100).animatie("miroh", 982, "thee")
+                .zeg(1084, "miroh", "theehuis", 70).animatie("miroh", 1084, "lach")
+                .cameraKnip(1158, plein.add(0, 5, 16), zuka.add(0, 2, 0)).camera(1354, plein.add(0, 18, 30), zuka.add(0, 4, 0))
+                .zeg(1160, "", "zo", 80)
+                .deeltjes(1244, ParticleTypes.FIREWORK, zuka.add(-6, 14, -4), 100, 7).deeltjes(1274, ParticleTypes.FIREWORK, zuka.add(6, 16, -4), 100, 7)
+                .deeltjes(1304, ParticleTypes.FIREWORK, zuka.add(0, 20, -8), 140, 9)
+                .geluid(1244, () -> SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, 1.0f, 1.0f).geluid(1274, () -> SoundEvents.FIREWORK_ROCKET_BLAST, 1.0f, 0.9f)
+                .geluid(1304, () -> SoundEvents.FIREWORK_ROCKET_TWINKLE_FAR, 1.0f, 1.0f)
+                .zwart(1366, 1404);
         return b.registreer();
     }
 

@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.einde2.Plekken;
@@ -56,16 +58,16 @@ final class Finale {
                         E2Audio.stopMoment(q, 40);
                         if (E2H4Vuur.FINALE.verder(q, E2H4Vuur.F_AGNI_KAI)) {
                             E2H4Vuur.zeg(q, "duel.naar");
-                            Duel.start(q);
+                            duel(q);
                         }
                     });
                 }
             }
             case E2H4Vuur.F_DUEL -> {
                 if (Plek.in(p, "duel_arena")) {
-                    Duel.start(p);
+                    duel(p);
                 } else if (Plek.bij(p, "trap_arena", 6) || Plek.bij(p, "rustpunt_8", 6)) {
-                    Duel.start(p);
+                    duel(p);
                 }
             }
             case E2H4Vuur.F_KRONING -> {
@@ -170,24 +172,62 @@ final class Finale {
 
     // --- step 1: the night, the Leeuwschildpad-guh -----------------------------------------------------------------------------
 
-    /** Back in the capital after the Top: night falls, you wake on the back of the Leeuwschildpad-guh. */
+    /**
+     * Back in the capital after the Top: night falls, you wake on the back of the Leeuwschildpad-guh.
+     * <p>
+     * fix4-finale: you fall asleep (a few seconds of blindness), and while your eyes are closed you are put on the quay in
+     * front of its head. The overlay of its body is sent as block updates, which a client drops for chunks it has not loaded,
+     * and the scene's shots of the head are taken from the quay: from the far side of the capital neither would show.
+     */
     private static void nacht(ServerPlayer p) {
         E2H4Vuur.balk(p, "schildpad.slaap");
+        p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 110, 0, false, false, false));
         Later.plan(p, 60, q -> {
             if (E2H4Vuur.FINALE.stap(q) != E2H4Vuur.F_SCHILDPAD || !Plek.inHoofdstad(q)) {
+                q.removeEffect(MobEffects.BLINDNESS);
                 return;
             }
-            boolean laag = Lagen.toon(q);
-            if (!E2H4Vuur.speel(q, Scenes.LEEUWSCHILDPAD, "leeuwschildpad_rug", r -> {
-                Lagen.weg(r);
-                if (E2H4Vuur.FINALE.verder(r, E2H4Vuur.F_SCHILDPAD)) {
-                    Plek.breng(r, "leeuwschildpad_kade", 180f);
-                    E2H4Vuur.zeg(r, "schildpad.wakker");
-                }
-            }) && laag) {
-                Lagen.weg(q);
-            }
+            Plek.breng(q, "leeuwschildpad_kade", 180f);
+            Later.plan(q, 30, Finale::schildpad);
         });
+    }
+
+    /** The scene of the Leeuwschildpad-guh (its body shown to this player only, for as long as it lasts). */
+    private static void schildpad(ServerPlayer q) {
+        q.removeEffect(MobEffects.BLINDNESS);
+        if (E2H4Vuur.FINALE.stap(q) != E2H4Vuur.F_SCHILDPAD || !Plek.inHoofdstad(q)) {
+            return;
+        }
+        boolean laag = Lagen.toon(q);
+        if (!E2H4Vuur.speel(q, Scenes.LEEUWSCHILDPAD, "leeuwschildpad_rug", r -> {
+            Lagen.weg(r);
+            if (E2H4Vuur.FINALE.verder(r, E2H4Vuur.F_SCHILDPAD)) {
+                Plek.breng(r, "leeuwschildpad_kade", 180f);
+                E2H4Vuur.zeg(r, "schildpad.wakker");
+            }
+        }) && laag) {
+            Lagen.weg(q);
+        }
+    }
+
+    // --- step 4: the duel ------------------------------------------------------------------------------------------------------
+
+    /**
+     * fix4-finale: into the duel. The first time, the scene before it ({@link Scenes#DUEL_BEGIN}: why four rounds, and how it
+     * must end); you are put on your pillar first, so the arena is loaded around you while the scene fades in.
+     */
+    static void duel(ServerPlayer p) {
+        if (Duel.actief(p)) {
+            return;
+        }
+        if (Cutscenes.gezien(p, Scenes.DUEL_BEGIN.id())) {
+            Duel.start(p);
+            return;
+        }
+        Plek.breng(p, "duel_speler", 0f);
+        if (!E2H4Vuur.speel(p, Scenes.DUEL_BEGIN, "duel_speler", Duel::start)) {
+            Duel.start(p);
+        }
     }
 
     // --- steps 5 and 6: the coronation and the credits ---------------------------------------------------------------------
