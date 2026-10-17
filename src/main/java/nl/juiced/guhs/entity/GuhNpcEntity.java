@@ -163,6 +163,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </einde2_trap5>
         // einde2 Sponsguh, sp_cast: the kinds of the Sponsguh story (the Mikas of De Ruige Kroeg ...); the cast itself are SponsguhWezens
         // <einde2_sp_cast>
+        // (skelet C, CONTRACT_E2_C 7.2: the Mikas of De Ruige Kroeg; sp_cast gives them their looks)
+        KROEG_BARMAN_MIKA(1.0f), KROEG_UITSMIJTER_MIKA(1.25f), STOERE_MIKA(1.1f), SLAPENDE_MIKA(1.05f),
         // </einde2_sp_cast>
         // <hemel>
         // </hemel>

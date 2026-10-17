@@ -1,1 +1,6 @@
-{}
+{
+  "entity.guhs.guh_npc.kroeg_barman_mika": "Barman Mika",
+  "entity.guhs.guh_npc.kroeg_uitsmijter_mika": "Bouncer Mika",
+  "entity.guhs.guh_npc.slapende_mika": "Sleeping Mika",
+  "entity.guhs.guh_npc.stoere_mika": "Tough Mika"
+}

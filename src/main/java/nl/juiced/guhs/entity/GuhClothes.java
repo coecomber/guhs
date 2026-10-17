@@ -456,6 +456,9 @@ public enum GuhClothes {
     // einde2 Sponsguh, sp_cast: new guh clothes of the Sponsguh story (the seven of 5b are in <einde2_sponsguh>); ONLY between these two markers, one constant per line
     // <einde2_sp_cast>
     // </einde2_sp_cast>
+    // einde2 Sponsguh, sp_d2_weg: the guh clothes of the loopgraaf (the knabbelkoordraad moustache); ONLY between these two markers, one constant per line
+    // <einde2_sp_d2_weg>
+    // </einde2_sp_d2_weg>
     //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
     // <px_lobby>
