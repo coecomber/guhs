@@ -1,0 +1,51 @@
+# einde2 "Sponsguh", slice sp_d1_recept: part 1 steps 7-10 in a real generated world (dev run). Every step through the generic
+# /guhs einde2 sponsguh ga sponsguh_recept <7..10> (sets the state and puts you at the step's start), the scenes through
+# /guhs einde2 sponsguh d1recept scene <naam>, the minigames through d1recept spel sluipen|trommel. The cutscenes wait for a
+# click after every spoken line (1.4.4): a shot catches the first line.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d1_recept.txt -PautocheckTimeout=90
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+
+section Step 7: in front of De Krokante Knabbel, the hint to the office
+/guhs einde2 sponsguh ga sponsguh_recept 7
+waitrender 200
+shot e2_d1r_stap7
+
+section Plan Z (the office, the lab, the street)
+/guhs einde2 sponsguh d1recept scene plan_z
+waitrender 60
+shot e2_d1r_planz_kantoor
+
+section Step 8: the door of De Vetemmer
+/guhs einde2 sponsguh ga sponsguh_recept 8
+waitrender 200
+shot e2_d1r_vetemmer
+
+section The sneak: cameras and lasers drawn for you
+/guhs einde2 sponsguh d1recept spel sluipen
+look -90 10
+waitrender 200
+shot e2_d1r_sluipen
+
+section The safe (recept)
+/guhs einde2 sponsguh d1recept scene recept
+waitrender 60
+shot e2_d1r_recept
+
+section Step 9: feest in the office
+/guhs einde2 sponsguh d1recept scene feest
+waitrender 60
+shot e2_d1r_feest
+
+section Step 10: the stage of the Bellenkom, your band
+/guhs einde2 sponsguh d1recept spel trommel
+look 0 20
+waitrender 200
+shot e2_d1r_trommel
+
+section The song
+/guhs einde2 sponsguh d1recept scene zoete_zege
+waitrender 60
+shot e2_d1r_zege
