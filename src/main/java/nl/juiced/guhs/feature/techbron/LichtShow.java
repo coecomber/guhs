@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
  * The light show of a Disco-dynamo: every disc has its own. The dance floor has {@link #RASTER} x {@link #RASTER} lamps;
  * a show is a pattern, a tempo and a few colours, and {@link #kleur} says what colour a lamp has at a moment (the client
  * draws it, {@code client.DiscoDynamoRenderer}; pure arithmetic, so the server and the game tests know the shows too).
- * The vanilla discs and the mod's own disc have a hand-picked show ({@link #VAST}); a disc of another mod gets one made
+ * The vanilla discs and the mod's own discs have a hand-picked show ({@link #VAST}); a disc of another mod gets one made
  * from its name, so that one is always the same too.
  */
 public record LichtShow(Patroon patroon, int tempo, int[] kleuren) {
@@ -76,6 +76,8 @@ public record LichtShow(Patroon patroon, int tempo, int[] kleuren) {
         vast("music_disc_tears", Patroon.HARTSLAG, 10, 0xFFFFFFFF, 0xFFB0BEC5, 0xFFFF8A80);
         vast("music_disc_lava_chicken", Patroon.SPIRAAL, 5, 0xFFFF7A1A, 0xFFF2C94C, 0xFFE0352B);
         vast("guhs:music_disc_ze_hangen", Patroon.HART, 10, 0xFFFF6FB1, 0xFFFFC1DC, 0xFFB57BFF);
+        // (1.4.1 disc "Het Snuffeleiland": sea, sand and island green, rolling like the waves)
+        vast("guhs:music_disc_snuffeleiland", Patroon.GOLF, 12, 0xFF2BA8E0, 0xFFF2DFA0, 0xFF5BC85B);
     }
 
     /** The discs with a hand-picked show. */
