@@ -93,6 +93,10 @@ public class KompasVerhalenGameTests {
             // the Guheinde: what is there now; the real Guheinde: only its locked line
             // (einde2: the Guhvatar story's four places first, under its own heading)
             List<String> einde = new ArrayList<>(GroteVerhalen.van("guhvatar") == null ? List.of() : GroteVerhalen.van("guhvatar").plekken());
+            // (einde2 Sponsguh: then the Sponsguh story's place, Bikinibodem, under its own heading)
+            if (GroteVerhalen.van("sponsguh") != null) {
+                einde.addAll(GroteVerhalen.van("sponsguh").plekken());
+            }
             einde.addAll(List.of("knabbelkelder", "guheinde_terugpoort"));
             helper.assertTrue(ids(groep(groepen, Wereld.GUHEINDE).plekken()).equals(einde), "the Guheinde: " + ids(groep(groepen, Wereld.GUHEINDE).plekken()));
             Groep echt = groep(groepen, Wereld.ECHT);

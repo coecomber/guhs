@@ -60,6 +60,13 @@ public final class E2Hervat {
     public static final String P = "gui.guhs.einde2_verhaal.hervat.";
     /** The non-chapter lines of the Guheinde story that live in another group. */
     public static final List<String> EXTRA = List.of("werktuigguh", "vredesballon");
+    /** einde2 sp_verhaal (CONTRACT_E2_C 4.4): more Verhaallijn groups that belong to the Guheinde story (the Sponsguh story: "sponsguh"). */
+    public static final java.util.Set<String> EXTRA_GROEPEN = ConcurrentHashMap.newKeySet();
+    /**
+     * einde2 sp_verhaal: lines that are "the story" once the five chapters are done, in this order (the Sponsguh story's two
+     * parts); {@link #huidig} takes the first that is on.
+     */
+    public static final List<String> NA_HOOFDSTUKKEN = new java.util.concurrent.CopyOnWriteArrayList<>();
     /** A step farther than this (blocks) gets "klik op de kaasbol" instead of only the direction. */
     public static final int VER = 160;
     /** Not more than one "where am I" line on leaving / login per player in this many ticks (dimension changes come in a row). */
@@ -83,7 +90,7 @@ public final class E2Hervat {
 
     /** Is this one of the Guheinde story's lines? */
     public static boolean isEinde2(Verhaallijn l) {
-        return E2Verhaal.GROEP.equals(l.groep()) || EXTRA.contains(l.id());
+        return E2Verhaal.GROEP.equals(l.groep()) || EXTRA.contains(l.id()) || EXTRA_GROEPEN.contains(l.groep());
     }
 
     /** Is the line on for the player: not done, and begun (or open because the line before it is done)? */
@@ -107,6 +114,12 @@ public final class E2Hervat {
                 continue;
             }
             return actief(p, l) ? l : null;
+        }
+        for (String id : NA_HOOFDSTUKKEN) {
+            Verhaallijn l = Verhaallijnen.van(id);
+            if (l != null && actief(p, l)) {
+                return l;
+            }
         }
         return null;
     }

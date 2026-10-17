@@ -51,7 +51,7 @@ VERHALEN = {
 }
 # big stories that another module registers (not in GroteVerhalen.java): id -> that module. They count in the ONE counter
 # as soon as the module is in FEATURES; their name and advancement are that module's (einde2: E2Verhaal, "De Legende van Guh")
-ANDERE = {"guhvatar": "einde2_verhaal"}
+ANDERE = {"guhvatar": "einde2_verhaal", "sponsguh": "einde2_sp_verhaal"}   # (einde2 Sponsguh: SpVerhaal, "Sponsguh Kaasbroek")
 WERELDEN = {   # id -> (name, short name on the path map, what the tooltip says)
     "guhmensie": ("De Guhmensie", "Guhmensie", "Waar elk guh-avontuur begint. Hier mag iedereen meteen naartoe."),
     "barbecuether": ("De Guhbarbecuether", "Barbecuether",

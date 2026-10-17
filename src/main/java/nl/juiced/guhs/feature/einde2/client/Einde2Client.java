@@ -44,6 +44,15 @@ public final class Einde2Client {
         nl.juiced.guhs.feature.einde2.audio.client.E2AudioClient.init(modBus);   // <einde2_audio/>
         nl.juiced.guhs.feature.einde2.trap5.client.E2Trap5Client.init(modBus);   // <einde2_trap5_machines/>
         nl.juiced.guhs.feature.einde2.ballon.client.E2BallonClient.init(modBus);   // <einde2_trap5_ballon/>
+        nl.juiced.guhs.feature.einde2.spcast.client.E2SpCastClient.init(modBus);   // <einde2_sp_cast/>
+        nl.juiced.guhs.feature.einde2.spd1start.client.E2SpD1StartClient.init(modBus);   // <einde2_sp_d1_start/>
+        nl.juiced.guhs.feature.einde2.spd1stad.client.E2SpD1StadClient.init(modBus);   // <einde2_sp_d1_stad/>
+        nl.juiced.guhs.feature.einde2.spd1recept.client.E2SpD1ReceptClient.init(modBus);   // <einde2_sp_d1_recept/>
+        nl.juiced.guhs.feature.einde2.spd2heen.client.E2SpD2HeenClient.init(modBus);   // <einde2_sp_d2_heen/>
+        nl.juiced.guhs.feature.einde2.spd2weg.client.E2SpD2WegClient.init(modBus);   // <einde2_sp_d2_weg/>
+        nl.juiced.guhs.feature.einde2.spd2finale.client.E2SpD2FinaleClient.init(modBus);   // <einde2_sp_d2_finale/>
+        nl.juiced.guhs.feature.einde2.spaudio.client.E2SpAudioClient.init(modBus);   // <einde2_sp_audio/>
+        nl.juiced.guhs.feature.einde2.spzij.client.E2SpZijClient.init(modBus);   // <einde2_sp_zij/>
         // the merge step of the cast (CONTRACT_E2 11.7 M2): the see-through and the glowing kinds of the three tables
         for (nl.juiced.guhs.entity.GuhNpcEntity.Kind kind : nl.juiced.guhs.feature.einde2.CastTabellen.kinds()) {
             if (nl.juiced.guhs.feature.einde2.CastTabellen.doorzichtig(kind)) {
