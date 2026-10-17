@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_sponsguh",
   group: "4755489B04766E01",
-  guhs_chapter_version: 39,
+  guhs_chapter_version: 40,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_sponsguh.png",
@@ -310,6 +310,78 @@
       progression_mode: "linear",
     },
     {
+      id: "475548AEB55150D9",
+      icon: {
+        id: "guhs:einde2_sp_d1_stad_kwallennet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_6",
+          id: "4755487CB909A71C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A5DBCD5B8F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548A8D731C733",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+      dependencies: [
+        "47554893B0F6518C",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548B519B8E134",
+      icon: {
+        id: "guhs:einde2_bouw_bikinibodem_pylon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_7",
+          id: "47554844DA5243A1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F65DF6ADF3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548F73A3E6647",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      dependencies: [
+        "475548AEB55150D9",
+      ],
+      progression_mode: "linear",
+    },
+    {
       id: "475548B2F33AB9DC",
       icon: {
         id: "guhs:einde2_bouw_bikinibodem_kluis",
@@ -333,10 +405,10 @@
           count: 8,
         },
       ],
-      x: 7.5,
-      y: 6.5625,
+      x: 9.0,
+      y: 8.0625,
       dependencies: [
-        "47554893B0F6518C",
+        "475548B519B8E134",
       ],
       progression_mode: "linear",
     },
@@ -364,8 +436,8 @@
           count: 8,
         },
       ],
-      x: 9.0,
-      y: 6.5625,
+      x: 7.5,
+      y: 8.0625,
       dependencies: [
         "475548B2F33AB9DC",
       ],
@@ -395,7 +467,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 6.0,
       y: 8.0625,
       dependencies: [
         "47554834560B5CC9",
@@ -426,7 +498,7 @@
           count: 12,
         },
       ],
-      x: 7.5,
+      x: 4.5,
       y: 8.0625,
       dependencies: [
         "4755480098D1FEC8",
@@ -591,6 +663,130 @@
       progression_mode: "linear",
     },
     {
+      id: "4755487F7B812C94",
+      icon: {
+        id: "guhs:einde2_sp_d2_weg_snor",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_6",
+          id: "47554803B09C5D5C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481326722425",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      dependencies: [
+        "475548DF620FD5F0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548683662C1B1",
+      icon: {
+        id: "guhs:loopgraafmonster_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_7",
+          id: "475548EA216647FA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484753560C48",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+      dependencies: [
+        "4755487F7B812C94",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BF5B675EDC",
+      icon: {
+        id: "guhs:dennis_mika_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_8",
+          id: "4755489A2D5EC8FA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554876A533CE37",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 13.525,
+      dependencies: [
+        "475548683662C1B1",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554804282E51F2",
+      icon: {
+        id: "guhs:cycloop_mika_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_9",
+          id: "4755480855D02EAA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487D599B93DE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 13.525,
+      dependencies: [
+        "475548BF5B675EDC",
+      ],
+      progression_mode: "linear",
+    },
+    {
       id: "4755485F1E8DE6D9",
       icon: {
         id: "guhs:david_hasselguh_spawn_egg",
@@ -614,10 +810,10 @@
           count: 4,
         },
       ],
-      x: 7.5,
-      y: 12.025,
+      x: 6.0,
+      y: 13.525,
       dependencies: [
-        "475548DF620FD5F0",
+        "47554804282E51F2",
       ],
       progression_mode: "linear",
     },
@@ -645,8 +841,8 @@
           count: 4,
         },
       ],
-      x: 9.0,
-      y: 12.025,
+      x: 4.5,
+      y: 13.525,
       dependencies: [
         "4755485F1E8DE6D9",
       ],
@@ -681,7 +877,7 @@
           xp: 200,
         },
       ],
-      x: 9.0,
+      x: 3.0,
       y: 13.525,
       dependencies: [
         "47554811D49FC409",
