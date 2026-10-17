@@ -1971,6 +1971,246 @@
         ]
       ],
       "wie": "de camera van knipoog_rookguh"
+    },
+    "d1s_krat_1": {
+      "soort": "prop",
+      "pos": [
+        132,
+        16,
+        84
+      ],
+      "wie": "sp_d1_start: krat 1 van het grillspel (per speler, een display)"
+    },
+    "d1s_krat_2": {
+      "soort": "prop",
+      "pos": [
+        132,
+        16,
+        86
+      ],
+      "wie": "sp_d1_start: krat 2 van het grillspel (per speler, een display)"
+    },
+    "d1s_krat_3": {
+      "soort": "prop",
+      "pos": [
+        134,
+        16,
+        87
+      ],
+      "wie": "sp_d1_start: krat 3 van het grillspel (per speler, een display)"
+    },
+    "d1s_krat_4": {
+      "soort": "prop",
+      "pos": [
+        136,
+        16,
+        86
+      ],
+      "wie": "sp_d1_start: krat 4 van het grillspel (per speler, een display)"
+    },
+    "d1s_krat_5": {
+      "soort": "prop",
+      "pos": [
+        138,
+        16,
+        85
+      ],
+      "wie": "sp_d1_start: krat 5 van het grillspel (per speler, een display)"
+    },
+    "d1s_knabbel_deur": {
+      "soort": "prop",
+      "pos": [
+        139,
+        16,
+        108
+      ],
+      "wie": "sp_d1_start: op de Hoofdstraat voor de deur van De Krokante Knabbel (hint stap 3)"
+    },
+    "d1s_aankomst_stad_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          120,
+          64,
+          142
+        ],
+        [
+          112,
+          46,
+          132
+        ],
+        [
+          108,
+          16,
+          110
+        ]
+      ],
+      "wie": "de camera van d1s_aankomst_stad"
+    },
+    "d1s_aankomst_knabbel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          126,
+          24,
+          120
+        ],
+        [
+          132,
+          22,
+          116
+        ],
+        [
+          139,
+          16,
+          106
+        ]
+      ],
+      "wie": "de camera van d1s_aankomst_knabbel"
+    },
+    "d1s_aankomst_bubbel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          103,
+          110,
+          116
+        ],
+        [
+          106,
+          109,
+          108
+        ]
+      ],
+      "wie": "de camera van d1s_aankomst_bubbel"
+    },
+    "d1s_welkom_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          102,
+          18,
+          115
+        ],
+        [
+          112,
+          17,
+          110
+        ]
+      ],
+      "wie": "de camera van d1s_welkom"
+    },
+    "d1s_sollicitatie_tellen_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          145,
+          17,
+          86
+        ],
+        [
+          147,
+          16,
+          87
+        ]
+      ],
+      "wie": "de camera van d1s_sollicitatie_tellen"
+    },
+    "d1s_sollicitatie_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          145,
+          18,
+          89
+        ],
+        [
+          147,
+          16,
+          87
+        ]
+      ],
+      "wie": "de camera van d1s_sollicitatie"
+    },
+    "d1s_sollicitatie_octo_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          140,
+          18,
+          96
+        ],
+        [
+          140,
+          18,
+          91
+        ]
+      ],
+      "wie": "de camera van d1s_sollicitatie_octo"
+    },
+    "d1s_bakken_uitleg_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          131,
+          18,
+          88
+        ],
+        [
+          135,
+          16,
+          84
+        ]
+      ],
+      "wie": "de camera van d1s_bakken_uitleg"
+    },
+    "d1s_bakken_kratten_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          134,
+          18,
+          83
+        ],
+        [
+          134,
+          16,
+          86
+        ]
+      ],
+      "wie": "de camera van d1s_bakken_kratten"
+    },
+    "d1s_bakken_klaar_octo_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          134,
+          18,
+          87
+        ],
+        [
+          135,
+          18,
+          91
+        ]
+      ],
+      "wie": "de camera van d1s_bakken_klaar_octo"
+    },
+    "d1s_bakken_klaar_patguh_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          137,
+          18,
+          113
+        ],
+        [
+          139,
+          17,
+          108
+        ]
+      ],
+      "wie": "de camera van d1s_bakken_klaar_patguh"
     }
   },
   "lagen": {
