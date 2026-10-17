@@ -640,7 +640,18 @@ public class GuhpadGameTests {
             List<String> hoofdstukken = FtbQuestsChapter.chapters();
             List<String> pad = List.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt");
             helper.assertTrue(groepen.size() == 2 && !groepen.get(0).equals(groepen.get(1)), "two chapter groups: " + groepen);
-            helper.assertTrue(hoofdstukken.subList(hoofdstukken.size() - 4, hoofdstukken.size()).equals(pad), "the four chapters of the Guhpad last, in order: " + hoofdstukken);
+            // (einde2 ftb: the Guheinde has three sub-chapters right under it; they are no stop of the path: numbered 3.1 to 3.3)
+            List<String> delen = List.of("guhs_guhvatar", "guhs_guhvatar_zij", "guhs_sponsguh");
+            List<String> achteraan = new java.util.ArrayList<>(pad);
+            achteraan.addAll(3, delen);
+            helper.assertTrue(hoofdstukken.subList(hoofdstukken.size() - achteraan.size(), hoofdstukken.size()).equals(achteraan),
+                    "the four chapters of the Guhpad last, in order, the Guheinde's sub-chapters under it: " + hoofdstukken);
+            for (int i = 0; i < delen.size(); i++) {
+                String naam = delen.get(i), nl = bron("ftbquests/lang/nl_nl/" + naam + ".json5");
+                helper.assertTrue(groep(bron("ftbquests/chapters/" + naam + ".json5")).equals(groepen.get(1)), naam + " is in the group Het Guhpad");
+                helper.assertTrue(nl.contains("\"Hoe kom je hier?\"") && Pattern.compile("chapter_subtitle\": \\[\\s*\"3\\." + (i + 1) + "\\. ").matcher(nl).find(),
+                        naam + " is sub-chapter 3." + (i + 1) + " with a Hoe kom je hier?");
+            }
             helper.assertTrue(!hoofdstukken.contains("guhs_knabbelring") && !hoofdstukken.contains("guhs_guhrio") && bron("ftbquests/chapters/guhs_knabbelring.json5") == null,
                     "the two story chapters of the Guhbarbecuether are one chapter of the Guhpad now");
             helper.assertTrue(groep(bron("ftbquests/chapters/guhs_basis.json5")).equals(groepen.get(0)), "Guhs & basis is in the first group");

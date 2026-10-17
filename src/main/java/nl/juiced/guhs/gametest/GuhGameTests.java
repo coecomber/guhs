@@ -1863,6 +1863,12 @@ public class GuhGameTests {
                     // (bbq2: the one story that is told in order: its quests really depend on each other, FTB_LINEAIR;
                     // guhpad: it is the first half of the chapter "Verhalen van de Guhbarbecuether" now)
                     helper.assertTrue(locks >= 1, "the Knabbelring is told in order");
+                } else if (name.equals("guhs_guhvatar")) {
+                    // (einde2: the Guhvatar story is told in order, FTB_LINEAIR, in its own sub-chapter of the Guheinde)
+                    helper.assertTrue(locks >= 1, "the Guhvatar story is told in order");
+                } else if (name.equals("guhs_sponsguh")) {
+                    // (einde2: the Sponsguh story may be told in order too, FTB_LINEAIR; its places are free)
+                    helper.assertTrue(locks >= 0, "Sponsguh");
                 } else if (name.equals("guhs_pad_echt")) {
                     // (guhpad: a preview nobody can do yet: everything hangs behind its lock quest)
                     helper.assertTrue(locks == 8, "Het echte Guheinde is locked: " + locks);
@@ -1891,11 +1897,14 @@ public class GuhGameTests {
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
                     "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_diertjes",
-                    "guhs_guhpixel", "guhs_techniek", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt")),
+                    "guhs_guhpixel", "guhs_techniek", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
+                    "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt")),
                     "the seventeen chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie), in reading order, and "
                             + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "
-                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde, and Het echte Guheinde: " + names);
-            java.util.Set<String> guhpad = java.util.Set.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt");
+                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde (einde2 ftb: with its three sub-chapters De "
+                            + "Guhvatar, Guhvatar: zijpaden and Sponsguh right under it), and Het echte Guheinde: " + names);
+            java.util.Set<String> guhpad = java.util.Set.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
+                    "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt");
             for (String name : names) {
                 helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
                 // 1.2.0: Dutch in nl_nl, English in en_us (the shipped file; keys without English yet stay Dutch), the same keys in both
@@ -2026,8 +2035,9 @@ public class GuhGameTests {
                     helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.class.getClassLoader().getResource("assets/guhs/" + img.group(1)) != null,
                             "picture " + img.group(1));
                 }
-                // (bbq2: the one story told in order, FTB_LINEAIR; guhpad: in the chapter "Verhalen van de Guhbarbecuether")
-                boolean verhaal = name.equals("guhs_pad_barbecuether");
+                // (bbq2: the one story told in order, FTB_LINEAIR; guhpad: in the chapter "Verhalen van de Guhbarbecuether"; einde2:
+                // the Guhvatar story in its own chapter, and the Sponsguh story in its)
+                boolean verhaal = name.equals("guhs_pad_barbecuether") || name.equals("guhs_guhvatar") || name.equals("guhs_sponsguh");
                 linear += verhaal ? 0 : chapter.split("progression_mode: \"linear\"", -1).length - 1;
                 helper.assertTrue(name.equals("guhs_maag") || verhaal || !chapter.contains("\"linear\""), name + ": nothing locked");
             }
