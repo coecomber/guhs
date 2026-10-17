@@ -103,15 +103,7 @@ public final class D2Scenes {
 
     /** Entity data of a cast actor with these story looks on (CONTRACT_E2_C 7.2: an actor's NBT carries the look state). */
     static Consumer<CompoundTag> look(String... looks) {
-        return tag -> {
-            // hook: sp_cast keeps the looks as synced state of SponsguhWezen; until then the stand-in of SpCast reads them from the
-            // persistent data (NeoForgeData), which an actor's save tag carries just the same
-            CompoundTag data = tag.getCompoundOrEmpty("NeoForgeData").copy();
-            for (String l : looks) {
-                data.putBoolean("guhs_einde2_sp_cast_look_" + l, true);
-            }
-            tag.put("NeoForgeData", data);
-        };
+        return SpCast.nbt(looks);                                    // (merge_sp1: sp_cast's own NBT form, "Looks")
     }
 
     private static Consumer<CompoundTag> vlag(String naam, boolean aan) {

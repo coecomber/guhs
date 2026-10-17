@@ -32,10 +32,15 @@ public final class Zicht {
     public static final String MERK = "guhs_ring_zicht";
     /** Persistent data: the UUID (string) of the only player who sees it. */
     public static final String ALLEEN = "guhs_ring_alleen";
-    /** Persistent data: "lijn:van-tot": only players whose step of that questline is van..tot (inclusive). */
+    /** Persistent data: "lijn:van-tot": only players whose step of that questline is van..tot (inclusive); "lijn:van-tot,van2-tot2":
+     *  either range (einde2 merge_sp1, {@link #alleenBij(Entity, String, int, int, int, int)}). */
     public static final String BIJ = "guhs_ring_bij";
 
-    private record Bereik(String lijn, int van, int tot) {
+    /** One questline and one or two step ranges (van2 = -1: no second range). */
+    private record Bereik(String lijn, int van, int tot, int van2, int tot2) {
+        boolean binnen(int stap) {
+            return (stap >= van && stap <= tot) || (van2 >= 0 && stap >= van2 && stap <= tot2);
+        }
     }
 
     private static final Map<String, Bereik> BEREIKEN = new ConcurrentHashMap<>();
@@ -50,6 +55,15 @@ public final class Zicht {
     public static void alleenBij(Entity e, String lijn, int van, int tot) {
         e.addTag(MERK);
         e.getPersistentData().putString(BIJ, lijn + ":" + van + "-" + tot);
+    }
+
+    /**
+     * Two step ranges of one questline (einde2 merge_sp1): only players whose step is van..tot OR van2..tot2 (inclusive; 99 = on
+     * to done) see the entity, e.g. a resident hidden for the middle steps: {@code alleenBij(e, lijn, 0, 2, 12, 99)}.
+     */
+    public static void alleenBij(Entity e, String lijn, int van, int tot, int van2, int tot2) {
+        e.addTag(MERK);
+        e.getPersistentData().putString(BIJ, lijn + ":" + van + "-" + tot + "," + van2 + "-" + tot2);
     }
 
     /** Everybody sees the entity again. */
@@ -94,8 +108,7 @@ public final class Zicht {
             Bereik b = BEREIKEN.computeIfAbsent(bij, Zicht::lees);
             Verhaallijn lijn = Verhaallijnen.van(b.lijn());
             if (lijn != null) {
-                int stap = lijn.stap(p);
-                return stap >= b.van() && stap <= b.tot();
+                return b.binnen(lijn.stap(p));
             }
         }
         return true;
@@ -103,11 +116,18 @@ public final class Zicht {
 
     private static Bereik lees(String s) {
         try {
-            int dubbel = s.lastIndexOf(':'), streep = s.lastIndexOf('-');
-            return new Bereik(s.substring(0, dubbel), Integer.parseInt(s.substring(dubbel + 1, streep)), Integer.parseInt(s.substring(streep + 1)));
+            int dubbel = s.lastIndexOf(':');
+            String[] delen = s.substring(dubbel + 1).split(",");
+            int[] een = paar(delen[0]), twee = delen.length > 1 ? paar(delen[1]) : new int[] {-1, -1};
+            return new Bereik(s.substring(0, dubbel), een[0], een[1], twee[0], twee[1]);
         } catch (RuntimeException ex) {
-            return new Bereik("", 0, 99);
+            return new Bereik("", 0, 99, -1, -1);
         }
+    }
+
+    private static int[] paar(String vanTot) {
+        int streep = vanTot.lastIndexOf('-');
+        return new int[] {Integer.parseInt(vanTot.substring(0, streep).trim()), Integer.parseInt(vanTot.substring(streep + 1).trim())};
     }
 
     /** The tracker looks again for this player right now (their story moved on: cast appears or goes). */

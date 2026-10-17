@@ -387,7 +387,7 @@ final class D1rScenes {
                 b.deeltjes(t + 20, ParticleTypes.END_ROD, op(a, "licht_" + i, 0, -1.5, 0), 16, 0.6);
             }
         }
-        for (int t = t0 + 4; t < e; t += 22) {
+        for (int t = t0 + 6; t < e; t += 24) {                          // (merge_sp1: on beats 1 and 3 of the song, 100 BPM = 12 ticks a beat from t0 + 6)
             b.animatie("speler", t, "zwaai");
             b.geluid(t, SoundEvents.NOTE_BLOCK_BASEDRUM::value, 0.5f, 1.0f);
         }

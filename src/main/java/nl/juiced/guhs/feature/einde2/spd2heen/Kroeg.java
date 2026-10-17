@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
-import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +22,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.phys.Vec3;
-import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.bestaand.Schijn;
 import nl.juiced.guhs.feature.einde2.Plekken;
@@ -352,9 +350,7 @@ public final class Kroeg {
     }
 
     private static void stopMuziek(ServerPlayer p) {
-        if (p.connection != null) {
-            p.connection.send(new ClientboundStopSoundPacket(Guhs.id("einde2_sp_audio." + MUZIEK), null));
-        }
+        SpAudio.stopDeuntje(p);                                         // (merge_sp1: sp_audio's stop, also clears its server state)
     }
 
     static void vergeet(UUID u) {

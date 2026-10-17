@@ -70,6 +70,8 @@ public final class SpD2Heen {
     static final String SLEUTEL = "sp_d2_heen_sleutel";
     /** The resident spot of the frozen Krabguh. */
     static final String BEVROREN_PLEK = D2Plek.BB + "/bevroren_krabguh";
+    /** The live Krabguh resident (this slice owns its visibility, CONTRACT_E2_C 4.3). */
+    static final String KRABGUH_PLEK = D2Plek.BB + "/krabguh";
     /** The resident spots of De Ruige Kroeg (sp_cast makes them residents; this slice decides when they are seen). */
     static final Set<String> KROEG_PLEKKEN = Set.of(D2Plek.SP + "/barman", D2Plek.SP + "/uitsmijter", D2Plek.SP + "/stoere_mika_1",
             D2Plek.SP + "/stoere_mika_2", D2Plek.SP + "/stoere_mika_3", D2Plek.SP + "/stoere_mika_4", D2Plek.SP + "/stoere_mika_5",
@@ -315,7 +317,11 @@ public final class SpD2Heen {
             }
             Zicht.alleenBij(e, SpVerhaal.KROON, SpVerhaal.K_RIT, SpVerhaal.K_GUHFY);
         } else if (KROEG_PLEKKEN.contains(plek)) {
-            Zicht.alleenBij(e, SpVerhaal.KROON, SpVerhaal.K_SNOR, 99);
+            // (merge_sp1, two ranges: everywhere but K_SLEUTEL, where the player's own copies play the stand-still game)
+            Zicht.alleenBij(e, SpVerhaal.KROON, 0, SpVerhaal.K_RIT, SpVerhaal.K_SNOR, 99);
+        } else if (plek.equals(KRABGUH_PLEK)) {
+            // (merge_sp1, two ranges: the live Krabguh is gone while he is frozen; the frozen copy stands K_RIT..K_GUHFY)
+            Zicht.alleenBij(e, SpVerhaal.KROON, 0, SpVerhaal.K_KROON, SpVerhaal.K_STAPPEN, 99);
         }
     }
 

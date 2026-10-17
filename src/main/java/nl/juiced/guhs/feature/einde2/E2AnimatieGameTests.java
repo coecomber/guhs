@@ -60,6 +60,9 @@ public class E2AnimatieGameTests {
         if (GeestKinds.rij(kind) != null) {
             return "guh_npc_" + GeestKinds.basis(kind).id();
         }
+        if (nl.juiced.guhs.feature.einde2.spcast.KroegMikas.rij(kind) != null) {
+            return "guh_npc_" + kind.id();                     // the Mikas of De Ruige Kroeg (sp_cast): one file per Kind
+        }
         return null;
     }
 

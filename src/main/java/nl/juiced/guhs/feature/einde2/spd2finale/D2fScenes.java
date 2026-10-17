@@ -78,18 +78,11 @@ public final class D2fScenes {
         return Cutscene.maak(ID + naam).duur(duur).bij(SpVerhaal.KROON).cameraOntwijkt();
     }
 
-    /** The entity data of a cast actor: its looks (SpCast; hook: the stand-in keeps them in the persistent data, sp_cast's
-     *  real looks read the same), and more (a flag, its Soort, standing still). */
+    /** The entity data of a cast actor: its looks ({@link SpCast#nbt(CompoundTag, String...)}), and more (a flag, its Soort, standing still). */
     static Consumer<CompoundTag> nbt(String[] looks, Consumer<CompoundTag> meer) {
         return tag -> {
             tag.putBoolean("Stil", true);
-            if (looks.length > 0) {
-                CompoundTag data = tag.getCompoundOrEmpty("NeoForgeData").copy();
-                for (String look : looks) {
-                    data.putBoolean("guhs_einde2_sp_cast_look_" + look, true);     // (= SpCast's stand-in key; hook: sp_cast's own NBT)
-                }
-                tag.put("NeoForgeData", data);
-            }
+            SpCast.nbt(tag, looks);                                     // (merge_sp1: sp_cast's own NBT form, "Looks")
             if (meer != null) {
                 meer.accept(tag);
             }

@@ -448,8 +448,8 @@ public final class E2SpD2Finale {
      * bikinibodem/gerrit}: at home until the story is done (then he lives with the player). {@code schelpenstad/hasselguh}:
      * David Hasselguh beside the pier only from the step after his ride on (the player's own David carries him; before that
      * nobody called him). The townsfolk ({@code bewoner_*}, {@code klant_*}, {@code ijsverkoper}, {@code parel}, {@code patguh})
-     * stay for everybody: the bucket-helmet guhs of step 10 stand on markers of their own (Zicht has one step range per
-     * entity: "hidden at 10 only" cannot be said; the Deviations line of this slice).
+     * are hidden at step 10 only (merge_sp1: Zicht's two ranges), while the bucket-helmet guhs of step 10 stand on markers
+     * of their own.
      */
     static void bijMaken(Entity e, String plek) {
         switch (plek) {
@@ -457,8 +457,22 @@ public final class E2SpD2Finale {
             case "bikinibodem/gerrit" -> Zicht.alleenBij(e, SpVerhaal.KROON, 0, SpVerhaal.K_GUHFY);
             case "schelpenstad/hasselguh" -> Zicht.alleenBij(e, SpVerhaal.KROON, SpVerhaal.K_EMMERS, 99);
             default -> {
+                if (isStadsvolk(plek)) {
+                    // (merge_sp1, two ranges: the townsfolk are gone at K_EMMERS only, the player's bucket guhs stand in town)
+                    Zicht.alleenBij(e, SpVerhaal.KROON, 0, SpVerhaal.K_HASSELGUH, SpVerhaal.K_GUHFY, 99);
+                }
             }
         }
+    }
+
+    /** The townsfolk of Bikinibodem hidden at step 10 ({@code bewoner_*}, {@code klant_*}, {@code ijsverkoper}, {@code parel}, {@code patguh}). */
+    static boolean isStadsvolk(String plek) {
+        String bb = SpVerhaal.BIKINIBODEM + "/";
+        if (!plek.startsWith(bb)) {
+            return false;
+        }
+        String n = plek.substring(bb.length());
+        return n.startsWith("bewoner_") || n.startsWith("klant_") || n.equals("ijsverkoper") || n.equals("parel") || n.equals("patguh");
     }
 
     /** The same rule for residents that stood before (saved in an older run), and the stale entities of the finale. */
