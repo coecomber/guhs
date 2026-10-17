@@ -458,6 +458,8 @@ public enum GuhClothes {
     // </einde2_sp_cast>
     // einde2 Sponsguh, sp_d2_weg: the guh clothes of the loopgraaf (the knabbelkoordraad moustache); ONLY between these two markers, one constant per line
     // <einde2_sp_d2_weg>
+    /** Sponsguh, part 2 (the loopgraaf): Mindy-guh's moustache of knabbelkoordraad, a curly twist under the nose (bone on the head). */
+    EINDE2_SP_D2_WEG_SNOR(Slot.EYES, "outfit_einde2_sp_d2_weg_snor"),
     // </einde2_sp_d2_weg>
     //
     // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)

@@ -1,0 +1,55 @@
+# einde2 Sponsguh, sp_d2_weg (AutoCheck, dev only): part 2 steps 5-8 (the road from De Ruige Kroeg to Schelpenstad).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d2_weg.txt
+# Commands of the slice: /guhs einde2 sponsguh ga sponsguh_kroon <5-8> | d2weg scene <naam> | d2weg spel jacht|traan | d2weg win | d2weg wis.
+# Every scene waits for a click after its first line (1.4.4): a shot shows the opening frame of each scene; the two minigames
+# get a shot of their start. NOT run by the slice itself (no game client in a slice): this is for the merge step.
+
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in guhs:guheinde run tp @s 0 200 0
+wait 60
+tplocate guhs:guheinde guhs:schelpenstad
+/guhs einde2 sponsguh d2weg wis
+
+section the scenes (opening frames)
+/guhs einde2 sponsguh ga sponsguh_kroon 5
+wait 100
+/guhs einde2 sponsguh d2weg scene knipoog_appa
+wait 60
+shot einde2_sp_d2_weg_knipoog_appa
+wait 260
+/guhs einde2 sponsguh d2weg scene snor
+wait 60
+shot einde2_sp_d2_weg_snor
+wait 600
+/guhs einde2 sponsguh d2weg scene monsters
+wait 60
+shot einde2_sp_d2_weg_monsters
+wait 700
+/guhs einde2 sponsguh d2weg scene dennis_snor
+wait 60
+shot einde2_sp_d2_weg_dennis_snor
+wait 800
+/guhs einde2 sponsguh d2weg scene laars
+wait 60
+shot einde2_sp_d2_weg_laars
+wait 400
+/guhs einde2 sponsguh d2weg scene cycloop
+wait 60
+shot einde2_sp_d2_weg_cycloop
+wait 760
+/guhs einde2 sponsguh d2weg scene sproeier
+wait 60
+shot einde2_sp_d2_weg_sproeier
+wait 760
+
+section the two minigames
+/guhs einde2 sponsguh d2weg spel jacht
+wait 80
+shot einde2_sp_d2_weg_jacht
+/guhs einde2 sponsguh d2weg spel traan
+wait 80
+shot einde2_sp_d2_weg_traan
+/guhs einde2 sponsguh d2weg wis
