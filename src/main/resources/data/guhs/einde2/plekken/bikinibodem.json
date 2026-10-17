@@ -1971,6 +1971,93 @@
         ]
       ],
       "wie": "de camera van knipoog_rookguh"
+    },
+    "d2h_knabbel": {
+      "soort": "zone",
+      "pos": [
+        128,
+        16,
+        83
+      ],
+      "tot": [
+        151,
+        21,
+        105
+      ],
+      "wie": "De Krokante Knabbel van binnen: de zaal, de keuken en het kantoor"
+    },
+    "d2h_zaal": {
+      "soort": "prop",
+      "pos": [
+        140,
+        16,
+        99
+      ],
+      "wie": "het midden van de zaal van De Krokante Knabbel"
+    },
+    "d2h_manager_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          146,
+          19,
+          104
+        ],
+        [
+          140,
+          17,
+          95
+        ]
+      ],
+      "wie": "de camera van de scene 'manager'"
+    },
+    "d2h_ijs_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          78,
+          18,
+          86
+        ],
+        [
+          77,
+          17,
+          90
+        ]
+      ],
+      "wie": "de camera van de scene 'ijssalon'"
+    },
+    "d2h_plein_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          100,
+          19,
+          118
+        ],
+        [
+          92,
+          18,
+          127
+        ]
+      ],
+      "wie": "de camera van de scene 'bevroren'"
+    },
+    "d2h_mobiel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          145,
+          18,
+          117
+        ],
+        [
+          139,
+          17,
+          112
+        ]
+      ],
+      "wie": "de camera van de scene 'rit'"
     }
   },
   "lagen": {
