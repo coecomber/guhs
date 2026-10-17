@@ -57,6 +57,13 @@ public final class E2Verhaal {
     public static final List<String> GUHVATAR_ZIJ = List.of(Einde2Ids.OMASHGUH, Einde2Ids.WESTELIJKE_LUCHTTEMPEL, Einde2Ids.VUURTEMPEL_ROKU,
             Einde2Ids.KYOSHI_DORP, Einde2Ids.BIBLIOTHEEK_WAN_SHI_GUH, Einde2Ids.LEEUWSCHILDPAD_EILAND);
 
+    /**
+     * einde2 sp_verhaal (CONTRACT_E2_C 4.4): more places a player may fly to with Appa ({@link #bekendeGebouwen} with
+     * {@code alleenGuhvatar} false), after the story structures and the discovered buildings (the Sponsguh story: Bikinibodem
+     * once its gate is open, also before the first visit). A place behind a sluier that is closed for the player is never listed.
+     */
+    public static final List<Function<ServerPlayer, List<String>>> EXTRA_GEBOUWEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     /** (tests) step counts of lines that are not registered (yet): they are then read straight from main's keys. */
     static final Map<String, Integer> STAND_IN = new ConcurrentHashMap<>();
     /** (tests) who a player is the guest of; the real answer is reizen's. */
@@ -220,8 +227,17 @@ public final class E2Verhaal {
             if (!ontdekt.contains(s) || uit.contains(s) || Einde2Ids.VERHAAL_STRUCTUREN.contains(s)) {
                 continue;
             }
-            if (!alleenGuhvatar || GUHVATAR_ZIJ.contains(s)) {
+            if ((!alleenGuhvatar || GUHVATAR_ZIJ.contains(s)) && !Sluiers.isVerborgen(p, s)) {
                 uit.add(s);
+            }
+        }
+        if (!alleenGuhvatar) {
+            for (Function<ServerPlayer, List<String>> extra : EXTRA_GEBOUWEN) {
+                for (String s : extra.apply(p)) {
+                    if (!uit.contains(s) && !Sluiers.isVerborgen(p, s)) {
+                        uit.add(s);
+                    }
+                }
             }
         }
         return uit;

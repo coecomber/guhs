@@ -76,6 +76,11 @@ public final class Sluiers {
     public static final double DUW_DIEPTE = 1.5;
     /** (BESCHERMD: the old text of the sluier's own protection; Bescherming says gui.guhs.wereld.beschermd now.) */
     public static final String BERICHT = "quest.guhs.verhaal.sluier", BESCHERMD = "gui.guhs.verhaal.beschermd";
+    /**
+     * einde2 sp_verhaal (CONTRACT_E2_C 4.2): the message over the hotbar per structure, instead of Guhdalf's {@link #BERICHT}
+     * (structure id -> lang key; set from a Feature.register). A structure without an entry keeps Guhdalf's line.
+     */
+    public static final Map<String, String> BERICHTEN = new ConcurrentHashMap<>();
 
     private record Sluier(String structuur, int rand, Predicate<ServerPlayer> open) {
     }
@@ -464,7 +469,7 @@ public final class Sluiers {
         Long gezegd = BERICHT_OP.get(p.getUUID());
         if (gezegd == null || nu - gezegd >= BERICHT_TICKS) {
             BERICHT_OP.put(p.getUUID(), nu);
-            p.sendOverlayMessage(Component.translatable(BERICHT).withStyle(ChatFormatting.LIGHT_PURPLE));
+            p.sendOverlayMessage(Component.translatable(BERICHTEN.getOrDefault(zone.structuur(), BERICHT)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 

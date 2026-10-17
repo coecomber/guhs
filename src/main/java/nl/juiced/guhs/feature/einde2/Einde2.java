@@ -123,10 +123,22 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.audio.E2AudioFeature.register(modBus);   // <einde2_audio/>
         nl.juiced.guhs.feature.einde2.trap5.E2Trap5Feature.register(modBus);   // <einde2_trap5_machines/>
         nl.juiced.guhs.feature.einde2.ballon.E2BallonFeature.register(modBus);   // <einde2_trap5_ballon/>
+        // the Sponsguh story (CONTRACT_E2_C 1.2): the nine slices, one line each
+        nl.juiced.guhs.feature.einde2.spcast.E2SpCastFeature.register(modBus);   // <einde2_sp_cast/>
+        nl.juiced.guhs.feature.einde2.spd1start.E2SpD1StartFeature.register(modBus);   // <einde2_sp_d1_start/>
+        nl.juiced.guhs.feature.einde2.spd1stad.E2SpD1StadFeature.register(modBus);   // <einde2_sp_d1_stad/>
+        nl.juiced.guhs.feature.einde2.spd1recept.E2SpD1ReceptFeature.register(modBus);   // <einde2_sp_d1_recept/>
+        nl.juiced.guhs.feature.einde2.spd2heen.E2SpD2HeenFeature.register(modBus);   // <einde2_sp_d2_heen/>
+        nl.juiced.guhs.feature.einde2.spd2weg.E2SpD2WegFeature.register(modBus);   // <einde2_sp_d2_weg/>
+        nl.juiced.guhs.feature.einde2.spd2finale.E2SpD2FinaleFeature.register(modBus);   // <einde2_sp_d2_finale/>
+        nl.juiced.guhs.feature.einde2.spaudio.E2SpAudioFeature.register(modBus);   // <einde2_sp_audio/>
+        nl.juiced.guhs.feature.einde2.spzij.E2SpZijFeature.register(modBus);   // <einde2_sp_zij/>
         // the merge step of the cast (CONTRACT_E2 11.7, 11.9): residents at the markers, named animations on demand, the dev rows
         Bewoners.register();
         // phase B (CONTRACT_E2_B 9): the story state, the big story of the Guhpad, the veils, the hooks, the dev command
         nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal.register();
+        // the Sponsguh story (CONTRACT_E2_C 9): its two lines with stand-in steps, the gate, its big story, the dev command group
+        nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal.register();
         CastTabellen.registreer();
         NeoForge.EVENT_BUS.addListener(Einde2Toon::register);
         // the stand-ins that are left: attributes, and their Guhdex page (the page's name is the entity id)
@@ -175,6 +187,15 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.audio.E2AudioFeature.payloads(registrar);   // <einde2_audio/>
         nl.juiced.guhs.feature.einde2.trap5.E2Trap5Feature.payloads(registrar);   // <einde2_trap5_machines/>
         nl.juiced.guhs.feature.einde2.ballon.E2BallonFeature.payloads(registrar);   // <einde2_trap5_ballon/>
+        nl.juiced.guhs.feature.einde2.spcast.E2SpCastFeature.payloads(registrar);   // <einde2_sp_cast/>
+        nl.juiced.guhs.feature.einde2.spd1start.E2SpD1StartFeature.payloads(registrar);   // <einde2_sp_d1_start/>
+        nl.juiced.guhs.feature.einde2.spd1stad.E2SpD1StadFeature.payloads(registrar);   // <einde2_sp_d1_stad/>
+        nl.juiced.guhs.feature.einde2.spd1recept.E2SpD1ReceptFeature.payloads(registrar);   // <einde2_sp_d1_recept/>
+        nl.juiced.guhs.feature.einde2.spd2heen.E2SpD2HeenFeature.payloads(registrar);   // <einde2_sp_d2_heen/>
+        nl.juiced.guhs.feature.einde2.spd2weg.E2SpD2WegFeature.payloads(registrar);   // <einde2_sp_d2_weg/>
+        nl.juiced.guhs.feature.einde2.spd2finale.E2SpD2FinaleFeature.payloads(registrar);   // <einde2_sp_d2_finale/>
+        nl.juiced.guhs.feature.einde2.spaudio.E2SpAudioFeature.payloads(registrar);   // <einde2_sp_audio/>
+        nl.juiced.guhs.feature.einde2.spzij.E2SpZijFeature.payloads(registrar);   // <einde2_sp_zij/>
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -210,6 +231,15 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.audio.E2AudioFeature.creative(output);   // <einde2_audio/>
         nl.juiced.guhs.feature.einde2.trap5.E2Trap5Feature.creative(output);   // <einde2_trap5_machines/>
         nl.juiced.guhs.feature.einde2.ballon.E2BallonFeature.creative(output);   // <einde2_trap5_ballon/>
+        nl.juiced.guhs.feature.einde2.spcast.E2SpCastFeature.creative(output);   // <einde2_sp_cast/>
+        nl.juiced.guhs.feature.einde2.spd1start.E2SpD1StartFeature.creative(output);   // <einde2_sp_d1_start/>
+        nl.juiced.guhs.feature.einde2.spd1stad.E2SpD1StadFeature.creative(output);   // <einde2_sp_d1_stad/>
+        nl.juiced.guhs.feature.einde2.spd1recept.E2SpD1ReceptFeature.creative(output);   // <einde2_sp_d1_recept/>
+        nl.juiced.guhs.feature.einde2.spd2heen.E2SpD2HeenFeature.creative(output);   // <einde2_sp_d2_heen/>
+        nl.juiced.guhs.feature.einde2.spd2weg.E2SpD2WegFeature.creative(output);   // <einde2_sp_d2_weg/>
+        nl.juiced.guhs.feature.einde2.spd2finale.E2SpD2FinaleFeature.creative(output);   // <einde2_sp_d2_finale/>
+        nl.juiced.guhs.feature.einde2.spaudio.E2SpAudioFeature.creative(output);   // <einde2_sp_audio/>
+        nl.juiced.guhs.feature.einde2.spzij.E2SpZijFeature.creative(output);   // <einde2_sp_zij/>
     }
 
     private Einde2() {

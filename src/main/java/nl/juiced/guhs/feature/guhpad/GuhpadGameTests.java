@@ -142,7 +142,8 @@ public class GuhpadGameTests {
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void guhpadRegister(GameTestHelper helper) {
         // (einde2: the Guheinde has its own big story, the Guhvatar story, registered by feature/einde2/verhaal/E2Verhaal)
-        List<String> einde = GroteVerhalen.van("guhvatar") != null ? List.of("guhvatar") : List.of();
+        // (einde2 Sponsguh: and the Sponsguh story after it, feature/einde2/spverhaal/SpVerhaal)
+        List<String> einde = java.util.stream.Stream.of("guhvatar", "sponsguh").filter(id -> GroteVerhalen.van(id) != null).toList();
         List<String> alle = new java.util.ArrayList<>(List.of("balto", "mewtwo", "hemel", "guhwaii", "snuffeleiland", "knabbelring", "guhrio"));
         alle.addAll(einde);
         helper.assertTrue(ids(GroteVerhalen.geregistreerd()).equals(alle),
@@ -252,9 +253,11 @@ public class GuhpadGameTests {
             helper.assertTrue(!GroteVerhalen.SNUFFEL.klaar(p) && !GroteVerhalen.alle().contains(GroteVerhalen.SNUFFEL), "a story that is not there is never done and never asked");
         }
         // (einde2: the Guhvatar story is a game of its own; here an op's mark stands for it)
-        GrootVerhaal guhvatar = GroteVerhalen.van("guhvatar");
-        if (guhvatar != null) {
-            GroteVerhalen.zetGedaan(p, guhvatar, true);
+        for (String id : List.of("guhvatar", "sponsguh")) {   // (einde2 Sponsguh: the second story of the Guheinde too)
+            GrootVerhaal einde2 = GroteVerhalen.van(id);
+            if (einde2 != null) {
+                GroteVerhalen.zetGedaan(p, einde2, true);
+            }
         }
         helper.assertTrue(GroteVerhalen.gevolgd(p) == m, "all " + m + " followed");
         // what follows: the advancements for the quest book, the statistic, what the client is told

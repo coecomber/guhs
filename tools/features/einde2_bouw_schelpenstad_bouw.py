@@ -272,6 +272,9 @@ def bouw(h):
     stad_.stad(b)
     weg_plekken(b, omlaag, omhoog)
     rand_borden(b)
+    # einde2 Sponsguh (CONTRACT_E2_C 4.1): the story slices' markers, scene cameras and small props (einde2_sp_<slice>_plekken)
+    from features import einde2_sp_plekken
+    einde2_sp_plekken.schelpenstad(b)
     start = tuple(b.plekken["aankomst_speler"]["pos"])
     w = kit.Loper(b)
     lopen = w.bfs(start)

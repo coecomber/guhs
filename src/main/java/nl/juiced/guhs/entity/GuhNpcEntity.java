@@ -161,6 +161,9 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // einde2 phase C, trap5_machines / trap5_ballon: the kinds of tech tier 5
         // <einde2_trap5>
         // </einde2_trap5>
+        // einde2 Sponsguh, sp_cast: the kinds of the Sponsguh story (the Mikas of De Ruige Kroeg ...); the cast itself are SponsguhWezens
+        // <einde2_sp_cast>
+        // </einde2_sp_cast>
         // <hemel>
         // </hemel>
         // <guhwaii>
