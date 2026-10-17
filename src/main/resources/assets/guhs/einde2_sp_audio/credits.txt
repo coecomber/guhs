@@ -1,0 +1,35 @@
+Guhs - einde2 - the Sponsguh story - music credits
+
+Real pieces of music, used under their licences (mono, loudness evened out; pieces marked 'trimmed' were
+shortened with a fade-out):
+
+muziek.bikinibodem_1: "Island Meet and Greet" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN2000004
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+muziek.bikinibodem_2: "Carefree" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+muziek.schelpenstad: "Funin and Sunin" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700011
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+muziek.loopgraaf: "Graveyard Shift" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700044
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+moment.plan_z: "Scheming Weasel (faster version)" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100085
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.bevroren: "Moonlight Hall" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200095
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); trimmed
+moment.cycloop: "Hidden Agenda" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200102
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.hasselguh: "Heroic Age" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100848
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+moment.dennis: "Le Grand Chase" by Kevin MacLeod (incompetech.com)
+    https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1800021
+    Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+
+Made by the Guhs mod itself (own melodies, own Dutch words): the songs "Zoete Knabbelzege", "Ik ben een
+Guhfy Guhber" and the song of the loopgraaf monsters, the minigame tunes and the stingers.
