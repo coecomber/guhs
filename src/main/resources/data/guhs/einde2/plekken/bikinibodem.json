@@ -1971,6 +1971,94 @@
         ]
       ],
       "wie": "de camera van knipoog_rookguh"
+    },
+    "d2f_emmer_1": {
+      "soort": "prop",
+      "pos": [
+        196,
+        16,
+        113
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 1"
+    },
+    "d2f_emmer_2": {
+      "soort": "prop",
+      "pos": [
+        176,
+        16,
+        111
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 2"
+    },
+    "d2f_emmer_3": {
+      "soort": "prop",
+      "pos": [
+        154,
+        16,
+        113
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 3"
+    },
+    "d2f_emmer_4": {
+      "soort": "prop",
+      "pos": [
+        126,
+        16,
+        109
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 4"
+    },
+    "d2f_emmer_5": {
+      "soort": "prop",
+      "pos": [
+        111,
+        16,
+        97
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 5"
+    },
+    "d2f_emmer_6": {
+      "soort": "prop",
+      "pos": [
+        104,
+        16,
+        78
+      ],
+      "wie": "sp_d2_finale: hier staat een guh met een emmerhelm (stap 10), nr. 6"
+    },
+    "d2f_podium_trap": {
+      "soort": "prop",
+      "pos": [
+        96,
+        16,
+        48
+      ],
+      "wie": "sp_d2_finale: voor het trapje links vooraan het podium van de Bellenkom"
+    },
+    "d2f_bellenkom_poort": {
+      "soort": "prop",
+      "pos": [
+        106,
+        16,
+        66
+      ],
+      "wie": "sp_d2_finale: de zuidpoort van de Bellenkom"
+    },
+    "d2f_guhfy_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          106,
+          20,
+          58
+        ],
+        [
+          106,
+          19,
+          43
+        ]
+      ],
+      "wie": "sp_d2_finale: het grote shot van Ik ben een Guhfy Guhber, vanaf het veld op het podium"
     }
   },
   "lagen": {
