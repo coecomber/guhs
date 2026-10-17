@@ -1183,6 +1183,15 @@
         33
       ],
       "wie": "jouw Patguh wacht naast hem"
+    },
+    "d2f_hasselguh_start": {
+      "soort": "prop",
+      "pos": [
+        242,
+        14,
+        55
+      ],
+      "wie": "sp_d2_finale: hier drijft jouw David Hasselguh naast de pierkop als de rit begint"
     }
   }
 }

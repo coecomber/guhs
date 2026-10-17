@@ -32,12 +32,48 @@
     },
     {
       height: 1.5625,
+      id: "4755487E4F6D3530",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/kop_einde2_sp_deel1.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Door de Knabbelpoort (Verhalen van het Guheinde)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548085CE31D32",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/kop_einde2_sp_deel2.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 10.24375,
+      hover: [
+        "Komt na: Zoete Knabbelzege",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755482B5F69FF63",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/kop_einde2_sp_zij.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Ik ben een Guhfy Guhber",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "475548F890E0F36C",
       image: "guhs:textures/ftbquests/guhs_sponsguh/kop_extra_einde2_bouw_bikinibodem.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 4.78125,
+      y: 21.16875,
       hover: [
         "Komt na: Door de Knabbelpoort (Verhalen van het Guheinde)",
       ],
@@ -49,7 +85,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 8.74375,
+      y: 25.131249999999998,
       hover: [
         "Komt na: Door de Knabbelpoort (Verhalen van het Guheinde)",
       ],
@@ -98,6 +134,953 @@
       shape: "gear",
     },
     {
+      id: "475548B9CAAAD17A",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_1",
+          id: "4755485AC5C2BF31",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816CB1B2804",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "4755485A2286BA5C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548591008C816",
+      icon: {
+        id: "guhs:zeepbel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_2",
+          id: "475548B0E529D298",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486866D73FAF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "4755484185ABD527",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+      dependencies: [
+        "475548B9CAAAD17A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548416FE9C723",
+      icon: {
+        id: "guhs:bubbelstroom",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_3",
+          id: "475548F0E5523F48",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554889BD589A7A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548FA6BE11D15",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+      dependencies: [
+        "475548591008C816",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A64F91417D",
+      icon: {
+        id: "guhs:meneer_krabguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_4",
+          id: "4755481B4492E3E6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484803F8AC56",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548E6218EEAD9",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+      dependencies: [
+        "475548416FE9C723",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554893B0F6518C",
+      icon: {
+        id: "guhs:knabbelburger",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_5",
+          id: "475548A4E96F1B21",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E6DC749ED9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548F63F954808",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      dependencies: [
+        "475548A64F91417D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548B2F33AB9DC",
+      icon: {
+        id: "guhs:einde2_bouw_bikinibodem_kluis",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_8",
+          id: "47554886170CB365",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554825C420234E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+      dependencies: [
+        "47554893B0F6518C",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554834560B5CC9",
+      icon: {
+        id: "guhs:einde2_bouw_bikinibodem_camera",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_9",
+          id: "475548F9360BFAC2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D9CFE72180",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      dependencies: [
+        "475548B2F33AB9DC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480098D1FEC8",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_10",
+          id: "47554872B334271E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F6C1FA86D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+      dependencies: [
+        "47554834560B5CC9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554867FA4451C9",
+      icon: {
+        id: "minecraft:note_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_recept_stap_11",
+          id: "4755484CB614F626",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CCC685E320",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 7.5,
+      y: 8.0625,
+      dependencies: [
+        "4755480098D1FEC8",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "47554869C384F7D1",
+      icon: {
+        id: "guhs:sponsguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_1",
+          id: "475548D684397194",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548033A1C38A7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 0.0,
+      y: 12.025,
+      dependencies: [
+        "47554867FA4451C9",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480760ED0A5D",
+      icon: {
+        id: "guhs:patguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_2",
+          id: "475548D90A912185",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486F3B20FAAF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 1.5,
+      y: 12.025,
+      dependencies: [
+        "47554869C384F7D1",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548156E8CE6EE",
+      icon: {
+        id: "guhs:neptuguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_3",
+          id: "475548C7E8B6A4E3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480410E42B46",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 3.0,
+      y: 12.025,
+      dependencies: [
+        "4755480760ED0A5D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548F726BC6227",
+      icon: {
+        id: "guhs:knabbelburger",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_4",
+          id: "475548423ADDB718",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D7DF4B5692",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 4.5,
+      y: 12.025,
+      dependencies: [
+        "475548156E8CE6EE",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548DF620FD5F0",
+      icon: {
+        id: "minecraft:tripwire_hook",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_5",
+          id: "47554880DDC65773",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554822657DA86B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 6.0,
+      y: 12.025,
+      dependencies: [
+        "475548F726BC6227",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755485F1E8DE6D9",
+      icon: {
+        id: "guhs:david_hasselguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_10",
+          id: "475548FC9A06B240",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554807513CDD5A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      dependencies: [
+        "475548DF620FD5F0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554811D49FC409",
+      icon: {
+        id: "guhs:einde2_sp_d2_finale_bellenblazer",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_11",
+          id: "47554805ADAF5B9E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C989301AB5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+      dependencies: [
+        "4755485F1E8DE6D9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548CBC1ACC4D9",
+      icon: {
+        id: "guhs:knabbelburger",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sponsguh_kroon_stap_12",
+          id: "4755483EA8599E31",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554883629F1F33",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554835D84ED3FE",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 9.0,
+      y: 13.525,
+      dependencies: [
+        "47554811D49FC409",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "4755489DD367E445",
+      icon: {
+        id: "guhs:sponsguh_luchthelm",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sandy_boomkoepel_stap_1",
+          id: "475548329D666011",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548763F104A3E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      dependencies: [
+        "475548CBC1ACC4D9",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "47554889D996207A",
+      icon: {
+        id: "guhs:sponsguh_luchthelm",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sandy_boomkoepel_stap_2",
+          id: "47554892DCCD4FA2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B4F26C9CC7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+      dependencies: [
+        "4755489DD367E445",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755483E3A63CE60",
+      icon: {
+        id: "guhs:sponsguh_luchthelm",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sandy_boomkoepel_stap_3",
+          id: "4755484D0B0AC176",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ACECAB2F2A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+      dependencies: [
+        "47554889D996207A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554893212F0CC8",
+      icon: {
+        id: "guhs:sponsguh_luchthelm",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sandy_boomkoepel_stap_4",
+          id: "4755481118ADEFA3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E013EBC5F6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554880732DC420",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+      dependencies: [
+        "4755483E3A63CE60",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "47554849CCF3BD71",
+      icon: {
+        id: "guhs:spooklantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vliegende_guhlander_stap_1",
+          id: "47554800E51FA3BE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554897E2D5640E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+      dependencies: [
+        "47554893212F0CC8",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548AF8F540F3F",
+      icon: {
+        id: "guhs:spooklantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vliegende_guhlander_stap_2",
+          id: "475548E6840E84BB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483D9034ACDD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+      dependencies: [
+        "47554849CCF3BD71",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548E202833828",
+      icon: {
+        id: "guhs:spooklantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vliegende_guhlander_stap_3",
+          id: "475548F38022DD26",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C69015810C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+      dependencies: [
+        "475548AF8F540F3F",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755485229766082",
+      icon: {
+        id: "guhs:spooklantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vliegende_guhlander_stap_4",
+          id: "4755485BC5AB3E15",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ED2EEA8E72",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755486290825FB3",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 18.9875,
+      dependencies: [
+        "475548E202833828",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548E30AD037B2",
+      icon: {
+        id: "guhs:sponsguh_heldencape",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/zeemeerman_stap_1",
+          id: "475548AADC2B962B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C84833CFFA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+      dependencies: [
+        "4755485229766082",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548262E102DBF",
+      icon: {
+        id: "guhs:sponsguh_heldencape",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/zeemeerman_stap_2",
+          id: "4755481714782545",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B1CA55C303",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 18.9875,
+      dependencies: [
+        "475548E30AD037B2",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480A7F185FD1",
+      icon: {
+        id: "guhs:sponsguh_heldencape",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/zeemeerman_stap_3",
+          id: "4755484965B91605",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554805F5FA01A4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 18.9875,
+      dependencies: [
+        "475548262E102DBF",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755482FCA3FD97B",
+      icon: {
+        id: "guhs:sponsguh_heldencape",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/zeemeerman_stap_4",
+          id: "475548BA8C43030B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484D556E9F0D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548B927FCD64A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 18.9875,
+      dependencies: [
+        "4755480A7F185FD1",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
       id: "475548DCC194C801",
       icon: {
         id: "guhs:zeepbel",
@@ -121,7 +1104,7 @@
         },
       ],
       x: 0.0,
-      y: 6.5625,
+      y: 22.95,
       shape: "circle",
     },
     {
@@ -148,7 +1131,7 @@
         },
       ],
       x: 0.0,
-      y: 10.525,
+      y: 26.912499999999998,
       shape: "circle",
     },
   ],
