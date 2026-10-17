@@ -25,7 +25,8 @@ Sub-chapters (einde2 ftb): FTB Quests has no chapters inside chapters, so a chap
   that chapter in the sidebar (PAD_ORDER) and is numbered "<n>.<k>." (Verhalen van het Guheinde = 3., De Guhvatar = 3.1.); its
   quests and sections keep the text keys of the parent (ftb.guhs_guheinde.q.<key>, tekst_hoofdstuk) and their ids (qid(key)).
   Which einde2 module goes to which part of the Guheinde: GUHEINDE_DELEN, and every module with "spons" in its name goes to
-  the chapter Sponsguh by itself (also when it says FTB_CHAPTER = "guhs_guheinde"), see guheinde_deel().
+  the chapter Sponsguh by itself (also when it says FTB_CHAPTER = "guhs_guheinde"), and so does every einde2_sp_<slice> module
+  of the Sponsguh story (CONTRACT_E2_C), see guheinde_deel().
 A chapter with slot=dict(key=, titel=) starts with that LOCK QUEST in the place of "Hoe kom je hier?": its tasks (from
 ftb_sloten) show what to finish first. A task may carry "titel" (its own name in the quest book) and "task_icon".
 Quests that no section names get a section of their own at the end of their chapter (one per feature module), and a
@@ -542,7 +543,7 @@ CHAPTERS = {
         slot=dict(key="guhpad_slot_echt", titel="Verhalen gevolgd"),
         intro=["&7Niemand weet wat hier ligt.&r",
                "Het enige dat bekend is: je komt er alleen door &dalle verhalen&r van de &dGuhmensie&r, de &6Guhbarbecuether&r en het "
-               "&5Guheinde&r te volgen.",
+               "&5Guheinde&r te volgen. In het &5Guheinde&r zijn dat er twee: &5De Legende van Guh&r en &eSponsguh Kaasbroek&r.",
                "Alleen de grote verhalen tellen mee. De teller hieronder houdt het voor je bij. Njeg..."]),
     # einde2 ftb: the Guheinde chapter was one long list; its stories are three sub-chapters right under it now (deel_van, see
     # the top). They stand at the END of this dict so the chapters above keep the seed of their pictures; PAD_ORDER puts them
@@ -636,8 +637,8 @@ for _c in CHAPTERS:   # (a sub-chapter stands in the same group, after its paren
 
 # einde2 ftb: which part of the Guheinde an einde2 module's quests go to (its own FTB_CHAPTER says "guhs_guheinde"; the
 # modules not named here stay in Verhalen van het Guheinde: Opper-Mika, the outer islands, biomes, creatures, the Mika-vesting).
-# A module with "spons" in its name goes to the chapter Sponsguh by itself (the Sponsguh story: CONTRACT_E2_C), and a module
-# may also say FTB_CHAPTER = "guhs_guhvatar" / "guhs_guhvatar_zij" / "guhs_sponsguh" itself.
+# A module with "spons" in its name, or named einde2_sp_<slice>, goes to the chapter Sponsguh by itself (the Sponsguh story:
+# CONTRACT_E2_C), and a module may also say FTB_CHAPTER = "guhs_guhvatar" / "guhs_guhvatar_zij" / "guhs_sponsguh" itself.
 GUHEINDE_DELEN = {
     # the Guhvatar story, in order (FTB_LINEAIR: one chain per chapter, so it runs from h1 to the finale here)
     "einde2_verhaal": "guhs_guhvatar", "einde2_h1_lucht": "guhs_guhvatar", "einde2_h2_water": "guhs_guhvatar",
@@ -657,7 +658,8 @@ def guheinde_deel(name):
     """einde2 ftb: the chapter of a module that says FTB_CHAPTER = "guhs_guheinde" (see GUHEINDE_DELEN)."""
     if name in GUHEINDE_DELEN:
         return GUHEINDE_DELEN[name]
-    return "guhs_sponsguh" if "spons" in name else "guhs_guheinde"
+    # (merge_skelet: the Sponsguh story's modules are einde2_sp_<slice>, CONTRACT_E2_C 1.1)
+    return "guhs_sponsguh" if "spons" in name or name.startswith("einde2_sp_") else "guhs_guheinde"
 
 MODULE_CHAPTER = {
     "beauty": "guhs_minigames", "race": "guhs_minigames", "meppen": "guhs_minigames", "disco": "guhs_minigames",

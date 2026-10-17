@@ -34,7 +34,8 @@ import nl.juiced.guhs.feature.einde2.verhaal.E2Verhaal;
  *   <li>Vuurnatie-hoofdstad: {@code einde2_h4_vuur_aankomst} has him at (-5.0, 0, +4.5) on the landing field by the harbour
  *       (template 104.0, 45, 198.5), looking north.</li>
  * </ul>
- * Any other place: the middle of its {@code aankomst} zone, his rider beside him. A spot that is not free at run time (a
+ * Bikinibodem and Schelpenstad (the Sponsguh story, merge_skelet) have a spot of their own in the same table, checked the
+ * same way by {@code einde2ReizenLandingen}. Any other place: the middle of its {@code aankomst} zone, his rider beside him. A spot that is not free at run time (a
  * player built on it) gives way to the nearest free spot in the zone.
  */
 public final class Landingen {
@@ -46,7 +47,13 @@ public final class Landingen {
             Einde2Ids.ZUIDELIJKE_LUCHTTEMPEL, new Plek(-5.0, 0, 3.5, 180f),
             Einde2Ids.NOORDELIJKE_WATERSTAM, new Plek(1.5, 0, 3.5, 180f),
             Einde2Ids.BA_SING_GUH, new Plek(-5.5, 0, 0.5, -90f),
-            Einde2Ids.VUURNATIE_HOOFDSTAD, new Plek(-5.0, 0, 4.5, 180f));
+            Einde2Ids.VUURNATIE_HOOFDSTAD, new Plek(-5.0, 0, 4.5, 180f),
+            // merge_skelet (CONTRACT_E2_C 4.4): the two places of the Sponsguh story ("Verder met het verhaal" flies there), so
+            // Appa does not land on his rider. Bikinibodem: on the paved landing square of the island above the dome, east of
+            // the rider (template 110.5, 108, 112.5; between the two bubble columns), looking west at him. Schelpenstad: on
+            // the square, north of the rider (template 184.5, 14, 42.5, the middle of the shell paving), looking south at him.
+            Einde2Ids.BIKINIBODEM, new Plek(4.5, 0, 0.5, 90f),
+            Einde2Ids.SCHELPENSTAD, new Plek(0.5, 0, -3.5, 0f));
 
     /** How far (blocks) around a place's box his rider being taken off him still counts as "arrived" (the veil's edge and more). */
     static final int AANKOMST_RAND = E2Verhaal.SLUIER_RAND + 24;

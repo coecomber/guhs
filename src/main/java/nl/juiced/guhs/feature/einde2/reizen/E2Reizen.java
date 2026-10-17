@@ -200,7 +200,9 @@ public final class E2Reizen {
     /**
      * einde2 fix-reizen: the place the story wants this player at now (the main building of the chapter they are in), or
      * null (the story has not begun, it is done, or the chapter's place is not unlocked). A story flight that has not
-     * landed yet always counts first.
+     * landed yet always counts first. merge_skelet (CONTRACT_E2_C 4.4): once the Guhvatar story is done (the finale), the
+     * place where the Sponsguh story goes on ({@link nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal#reisDoel}: Bikinibodem,
+     * or Schelpenstad for the steps that play there), so Appa's gold row also flies to that story's landing spot.
      */
     @Nullable
     public static String verhaalDoel(ServerPlayer p) {
@@ -215,7 +217,7 @@ public final class E2Reizen {
             String s = E2Verhaal.structuurVan(lijn);
             return E2Verhaal.ontgrendeld(p, s) ? s : null;
         }
-        return null;
+        return nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal.reisDoel(p);
     }
 
     /** Lands it now: the team climbs off, the music fades, daarna runs (once), guests keep being guests in that structure. */

@@ -693,6 +693,11 @@ public class GuhpadGameTests {
             helper.assertTrue(quests == 9 && achterSlot == 8, "eight question marks behind the lock quest: " + quests + " quests, " + achterSlot + " locked");
             helper.assertTrue(echt.split("guhs:quest/guhpad_echt", -1).length - 1 == 9, "every one of them asks the advancement nobody gets");
             helper.assertTrue(bron("ftbquests/lang/nl_nl/guhs_pad_echt.json5").contains("Gaat pas open in &7het echte Guheinde"), "layer 6: only in the real Guheinde");
+            // (einde2 merge_skelet: the lock text names every big story of the Guheinde: De Legende van Guh and Sponsguh Kaasbroek)
+            for (GrootVerhaal v : GroteVerhalen.van(Wereld.GUHEINDE)) {
+                helper.assertTrue(bron("ftbquests/lang/nl_nl/guhs_pad_echt.json5").contains(NlTekst.get(v.naamSleutel()))
+                        && NlTekst.get("gui.guhs.guhpad.echt.bekend").contains(NlTekst.get(v.naamSleutel())), "the lock of Het echte Guheinde names " + v.id());
+            }
             // the Knabbelring is still told in order, in its new chapter; the stories of the Guhmensie are still free (einde2: the
             // Guhvatar sections of the Guheinde chapter run in order on purpose, CONTRACT_E2_B 7.1 FTB_LINEAIR, so that chapter is
             // no longer free of dependencies)

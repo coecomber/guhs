@@ -64,7 +64,7 @@ RAADSELS = ["Voorbij het einde ligt nog een einde.",
             "Wie alle verhalen volgt, hoort er nog eentje fluisteren.",
             "Het laatste knabbeltje is nooit het laatste. Njeg?"]
 BEKEND = ("Het enige dat bekend is: je komt er alleen door alle verhalen van de Guhmensie, de Guhbarbecuether en het Guheinde "
-          "te volgen.")
+          "te volgen. In het Guheinde zijn dat er twee: De Legende van Guh en Sponsguh Kaasbroek.")   # (einde2 merge_skelet)
 
 TEXTS = {
     # --- the Guhdex tab Verhalen -------------------------------------------------------------------------------------------

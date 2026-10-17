@@ -69,7 +69,8 @@ TEXTS = {
 }
 
 # FTB (CONTRACT_E2_C 6): the story's two sections; the quests are the step owners' (one per step, key fixed here)
-FTB_CHAPTER = "guhs_guheinde"
+FTB_CHAPTER = "guhs_guheinde"      # (make_ftbquests.guheinde_deel sends every einde2_sp_* module to the chapter guhs_sponsguh)
+FTB_LINEAIR = True                 # (merge_skelet: the two sections are this module's, so the story-in-order flag is needed HERE)
 QUESTS = {
     RECEPT: [f"einde2_sp_d1_start_r{i}" for i in range(0, 5)] + [f"einde2_sp_d1_stad_r{i}" for i in range(5, 7)]
             + [f"einde2_sp_d1_recept_r{i}" for i in range(7, 11)],

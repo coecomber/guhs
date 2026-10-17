@@ -179,7 +179,11 @@ public final class Fluitlijst {
         ServerLevel level = p.level().getServer().getLevel(GuheindeFeature.GUHEINDE);
         List<String> namen = new java.util.ArrayList<>(E2Verhaal.bekendeGebouwen(p, false));
         if (E2Verhaal.finaleKlaar(p)) {
+            // (merge_skelet, CONTRACT_E2_C 4.4: the Sponsguh pair is not "every building": it comes through the Sponsguh story's own
+            // rule in E2Verhaal.bekendeGebouwen, Bikinibodem from the gate on, Schelpenstad from part 2's road trip or a visit)
             List<String> alle = new java.util.ArrayList<>(Einde2Ids.LEEGTE_STRUCTUREN);
+            List<String> bekend = namen;
+            alle.removeIf(s -> Einde2Ids.SPONS_STRUCTUREN.contains(s) && !bekend.contains(s));
             for (String s : namen) {
                 if (!alle.contains(s)) {
                     alle.add(s);
