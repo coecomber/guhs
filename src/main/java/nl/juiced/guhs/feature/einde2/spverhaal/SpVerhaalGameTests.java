@@ -70,6 +70,7 @@ public class SpVerhaalGameTests {
             SpVerhaal.RECEPT_LIJN.begin(p);
             helper.assertTrue(E2Hervat.huidig(p) == SpVerhaal.RECEPT_LIJN && E2Hervat.isEinde2(SpVerhaal.RECEPT_LIJN)
                     && SpVerhaal.reisDoel(p).equals(bb) && !SpVerhaal.actief(p, SpVerhaal.KROON), "part 1 begun: it is the story now");
+            helper.assertTrue(bb.equals(E2Reizen.verhaalDoel(p)), "merge_skelet: Appa's gold row (Verder met het verhaal) flies to Bikinibodem");
             // part 1, every step, each exactly once
             for (int s = 0; s < SpVerhaal.R_STAPPEN; s++) {
                 helper.assertTrue(SpVerhaal.kentRecept(p) == (s > SpVerhaal.R_TERUG), "the recipe known only after step " + SpVerhaal.R_TERUG + " (at " + s + ")");
@@ -83,7 +84,8 @@ public class SpVerhaalGameTests {
             // part 2
             for (int s = 0; s < SpVerhaal.K_STAPPEN; s++) {
                 String doel = SpVerhaal.reisDoel(p);
-                helper.assertTrue(doel.equals(s >= SpVerhaal.K_SLEUTEL && s <= SpVerhaal.K_HASSELGUH ? sp : bb), "part 2 step " + s + ": Appa's place " + doel);
+                helper.assertTrue(doel.equals(s >= SpVerhaal.K_SLEUTEL && s <= SpVerhaal.K_HASSELGUH ? sp : bb) && doel.equals(E2Reizen.verhaalDoel(p)),
+                        "part 2 step " + s + ": Appa's place (and his gold row) " + doel);
                 helper.assertTrue(SpVerhaal.gebouwen(p).contains(sp) == (s >= SpVerhaal.K_RIT), "Schelpenstad on Appa's list from the drive on (at " + s + ")");
                 helper.assertTrue(verder(p, SpVerhaal.KROON, s) && !verder(p, SpVerhaal.KROON, s), "part 2 step " + s + " moves on once");
             }
@@ -91,7 +93,7 @@ public class SpVerhaalGameTests {
             helper.assertTrue(SpVerhaal.klaar(p) && groot != null && groot == SpVerhaal.grootVerhaal() && groot.klaar(p) && !groot.klaar(gast)
                     && groot.wereld() == GroteVerhalen.Wereld.GUHEINDE && groot.lijnen().equals(SpVerhaal.LIJNEN) && groot.structuren().equals(List.of(bb))
                     && GroteVerhalen.wereldVan(SpVerhaal.KROON) == GroteVerhalen.Wereld.GUHEINDE, "the whole story: the big story of the Guhpad is done");
-            helper.assertTrue(E2Hervat.huidig(p) == null && SpVerhaal.reisDoel(p) == null && Einde2Haken.groteVerhalenKlaar(p) >= 2,
+            helper.assertTrue(E2Hervat.huidig(p) == null && SpVerhaal.reisDoel(p) == null && E2Reizen.verhaalDoel(p) == null && Einde2Haken.groteVerhalenKlaar(p) >= 2,
                     "everything done: no story on, both parts count");
             // the dev state helpers
             SpVerhaalDev.zetTot(p, SpVerhaal.KROON, SpVerhaal.K_DENNIS);
