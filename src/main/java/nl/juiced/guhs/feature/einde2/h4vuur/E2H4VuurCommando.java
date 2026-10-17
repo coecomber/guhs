@@ -54,7 +54,10 @@ public final class E2H4VuurCommando {
                 {"gevangenis", "miroh_cel"}, {"kamp", "appa_kamp"}, {"kokend_rotsblok", "gondel_onder"}, {"draken", "trap_boven"},
                 {"toneel", "publiek_speler"}, {"tent", "verzoening_zuka"}, {"top", ""}, {"leeuwschildpad", "leeuwschildpad_rug"},
                 {"agni_kai", "agni_kai_midden"}, {"omslag", "duel_speler"}, {"trek_weg", "duel_speler"}, {"kroning", "kroning_zuka"},
-                {"aftiteling", "kroning_zuka"}, {"knipoog_stitch", "knipoog_stitch_paneel"}, {"knipoog_sjokkel_finish", "knipoog_sjokkel_finish"}};
+                {"aftiteling", "kroning_zuka"}, {"knipoog_stitch", "knipoog_stitch_paneel"}, {"knipoog_sjokkel_finish", "knipoog_sjokkel_finish"},
+                // fix3-h4: the why-scenes
+                {"plan", "aankomst_speler"}, {"vijver", "brood"}, {"rotsblok_plan", "appa_kamp"}, {"zonnekrijgers", "trap_boven"},
+                {"lotus_tegel", "publiek_speler"}, {"vloot_plan", "leeuwschildpad_kade"}};
         for (String[] a : ankers) {
             ANKER.put(a[0], a[1]);
         }

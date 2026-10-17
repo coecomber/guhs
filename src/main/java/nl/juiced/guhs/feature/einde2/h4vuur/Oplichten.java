@@ -29,6 +29,11 @@ final class Oplichten {
         Schijn.straks(p);
     }
 
+    /** (tests) the blocks this player sees lit now (empty: none). */
+    static Map<BlockPos, BlockState> van(ServerPlayer p) {
+        return NU.getOrDefault(p.getUUID(), Map.of());
+    }
+
     static void wis(ServerPlayer p) {
         if (NU.remove(p.getUUID()) != null) {
             Schijn.straks(p);

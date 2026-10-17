@@ -40,7 +40,12 @@ final class Finale {
             case E2H4Vuur.F_SCHILDPAD -> nacht(p);
             case E2H4Vuur.F_VLOOT -> {
                 if (Plek.in(p, "kade") || Plek.bij(p, "leeuwschildpad_kade", 6)) {
-                    Luchtvloot.start(p);
+                    if (Cutscenes.gezien(p, Scenes.VLOOT_PLAN.id())) {
+                        Luchtvloot.start(p);
+                    } else {
+                        // (fix3-h4) the morning of the comet: why the fleet, why Zuka and Katara-guh go to the palace
+                        E2H4Vuur.speel(p, Scenes.VLOOT_PLAN, "leeuwschildpad_kade", Luchtvloot::start);
+                    }
                 }
             }
             case E2H4Vuur.F_AGNI_KAI -> {
