@@ -1,0 +1,49 @@
+# einde2 Sponsguh, slice sp_zij, in a real world: the five scenes of the side lines and the spots of their minigames.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_zij.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/guhs einde2 sponsguh zij ga sandy_boomkoepel 0
+wait 80
+waitrender 200
+shot sp_zij_koepel
+
+section Sandy's welcome
+/guhs einde2 sponsguh zij scene sandy
+wait 160
+shot sp_zij_scene_sandy
+
+section the karate mat
+/guhs einde2 sponsguh zij spel karate
+wait 120
+waitrender 200
+shot sp_zij_karate
+
+section the rocket
+/guhs einde2 sponsguh zij ga sandy_boomkoepel 3
+wait 60
+/guhs einde2 sponsguh zij scene sandy_raket
+wait 300
+shot sp_zij_scene_raket
+
+section the ghost ship
+/guhs einde2 sponsguh zij ga vliegende_guhlander 0
+wait 60
+/guhs einde2 sponsguh zij scene guhlander
+wait 120
+shot sp_zij_scene_guhlander_mist
+wait 100
+shot sp_zij_scene_guhlander_kapitein
+
+section the scary story on deck
+/guhs einde2 sponsguh zij scene hakker
+wait 150
+shot sp_zij_scene_hakker
+
+section the old heroes
+/guhs einde2 sponsguh zij ga zeemeerman 0
+wait 60
+/guhs einde2 sponsguh zij scene helden
+wait 120
+shot sp_zij_scene_helden
