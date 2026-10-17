@@ -764,6 +764,13 @@ def hemeltrap(b):
     b.set(sx, f - 7, sz, STEEN)
     b.los_cellen |= {(sx, y, sz) for y in range(f - 7, TOP["f"] + 6)}
     start, voor = (cx + 16, cz - 12), (cx + 64, cz - 16)
+    # fix4-lotus (playtest 3: "in het gebouw van de echo van Jeong Jeong-guh kan ik het huis niet uit, de trap loopt voor
+    # de voordeur"): the stair began to climb at once, right along Jeong Jeong-guh's front door (cx + 22..24, cz - 15), so
+    # outside the door it already stood 1.5 to 2 blocks up. Now it runs flat at the courtyard's height past the whole wing
+    # (its east wall is cx + 34) and only then begins to climb.
+    vlak = (cx + 38, cz - 12)
+    vlak_route = g.pad(b, [start, vlak], f, f, half=1, lantaarn_elke=0, lotus_elke=0, seed=404)
+    start = vlak
     th0 = math.atan2(voor[1] - sz, voor[0] - sx)
     hoogte = TOP["f"] - f
     omwentelingen = (hoogte / 0.42) / (2 * math.pi * sr)
@@ -778,8 +785,8 @@ def hemeltrap(b):
     eind = spiraal[-1]
     brug = g.pad(b, [eind, (eind[0] - 14, TOP["z"] + 12), (TOP["x"] + 20, TOP["z"] + 3)], TOP["f"], TOP["f"], half=1, lantaarn_elke=0,
                  lotus_elke=0, seed=406)
-    b.pad("hemeltrap", route + brug, wie="de Hemeltrap: van de Witte Lotus omhoog naar de Top der Voorgangers")
-    return [(start[0], start[1], 3), (cx + 45, cz - 14, 6)]
+    b.pad("hemeltrap", vlak_route + route + brug, wie="de Hemeltrap: van de Witte Lotus omhoog naar de Top der Voorgangers")
+    return [(cx + 16, cz - 12, 3), (start[0], start[1], 3), (cx + 45, cz - 14, 6)]
 
 
 # =====================================================================================================================

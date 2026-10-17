@@ -218,7 +218,38 @@ public final class GeestSpel {
 
     /** Opens the talking screen: pages of (speaker, name key, text key); options last. */
     public static void praat(ServerPlayer p, String sleutel, List<Praat.Regel> regels, Praat.Optie... opties) {
-        Praat.scene(p, sleutel, regels, opties);
+        Praat.scene(p, sleutel, dichtbij(p, regels), opties);
+    }
+
+    /** How far a speaker may stand before its page is shown without it (the talking screen closes past 12 blocks). */
+    static final double PRAAT_AFSTAND = 10.0;
+
+    /**
+     * fix4-lotus: the talking screen (PraatScherm) closes itself in its first tick when its first speaker stands more than
+     * 12 blocks away. Bumi-guh's echo stands in room 1, so the question of room 2 and 3 opened and shut at once. A page
+     * whose speaker is far (or in another level) is now shown with only the speaker's name (no portrait): the screen stays.
+     */
+    static List<Praat.Regel> dichtbij(ServerPlayer p, List<Praat.Regel> regels) {
+        List<Praat.Regel> uit = new java.util.ArrayList<>(regels.size());
+        for (Praat.Regel r : regels) {
+            Entity s = r.spreker();
+            if (s != null && (s.level() != p.level() || s.distanceTo(p) > PRAAT_AFSTAND)) {
+                String naam = r.naamKey() != null && !r.naamKey().isEmpty() ? r.naamKey() : naamKey(s);
+                uit.add(new Praat.Regel(null, naam, r.tekstKey(), r.args()));
+            } else {
+                uit.add(r);
+            }
+        }
+        return uit;
+    }
+
+    /** The lang key of an entity's name (its translatable custom name, as every guh NPC has, else its type's name). */
+    static String naamKey(Entity e) {
+        Component c = e.getCustomName();
+        if (c != null && c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t) {
+            return t.getKey();
+        }
+        return e.getType().getDescriptionId();
     }
 
     /** A page of a speaker (the resident at this marker when it is there, else a page with just the name). */

@@ -30,19 +30,21 @@ import nl.juiced.guhs.feature.verhaal.Cutscenes;
  *   <li>{@value #WAN} (big, 58 s): the eighth island, Wan-guh, the first: the origin;</li>
  *   <li>{@value #HEI_BAI} (21 s): the acorn, Hei Bai-guh calms down, the wood blooms;</li>
  *   <li>{@value #KLOK} (13 s): the Geestenklok, then silence, and every spirit looks at you;</li>
- *   <li>{@value #MAAN} (14 s): the moon night: Tui comes down through the mist.</li>
+ *   <li>{@value #MAAN} (14 s): the moon night: Tui comes down through the mist;</li>
+ *   <li>{@value #PAKGUH} (fix4-lotus, 22 s): before the ice mirrors, Pakguh's echo shows the moonlight, the arrows, the
+ *       glinting mirror whose turn it is and the necklace that is the goal.</li>
  * </ul>
  * Texts: tools/features/einde2_geest_spel_tekst.py ({@code scene.guhs.einde2_geest_spel_*}).
  */
 public final class GeestScenes {
     public static final String REIGER = "einde2_geest_spel_reiger", WAN = "einde2_geest_spel_wan", HEI_BAI = "einde2_geest_spel_hei_bai_bloei",
-            KLOK = "einde2_geest_spel_geestenklok", MAAN = "einde2_geest_spel_maannacht";
+            KLOK = "einde2_geest_spel_geestenklok", MAAN = "einde2_geest_spel_maannacht", PAKGUH = "einde2_geest_spel_pakguh_uitleg";
     /** The anchor marker of each scene. */
     public static final String ANKER_REIGER = "stenen_lotus", ANKER_WAN = "wan_onthulling", ANKER_HEI_BAI = "eikel_plek", ANKER_KLOK = "geestenklok",
-            ANKER_MAAN = "plek_hemelvijver";
-    public static final List<String> ALLE = List.of(REIGER, WAN, HEI_BAI, KLOK, MAAN);
+            ANKER_MAAN = "plek_hemelvijver", ANKER_PAKGUH = "proef_pakguh_start";
+    public static final List<String> ALLE = List.of(REIGER, WAN, HEI_BAI, KLOK, MAAN, PAKGUH);
 
-    private static Cutscene reiger, wan, heiBai, klok, maan;
+    private static Cutscene reiger, wan, heiBai, klok, maan, pakguh;
 
     private GeestScenes() {
     }
@@ -64,6 +66,7 @@ public final class GeestScenes {
             case WAN -> ANKER_WAN;
             case HEI_BAI -> ANKER_HEI_BAI;
             case KLOK -> ANKER_KLOK;
+            case PAKGUH -> ANKER_PAKGUH;
             default -> ANKER_MAAN;
         };
     }
@@ -94,6 +97,7 @@ public final class GeestScenes {
         heiBai = heiBai();
         klok = klok();
         maan = maan();
+        pakguh = pakguh();
     }
 
     /** The marker {@code naar} seen from the marker {@code van} (template = world offsets); null when one is missing. */
@@ -323,6 +327,80 @@ public final class GeestScenes {
                 .deeltjes(150, ParticleTypes.END_ROD, doel, 80, 4.0).deeltjes(200, ParticleTypes.GLOW, doel.add(0, -2, 0), 60, 6.0)
                 .kijk(Cutscene.SPELER, 0, boven)
                 .registreer();
+    }
+
+    /**
+     * fix4-lotus (playtest 3: "ik snap de puzzel van Pakguh niet zo goed... hoe werkt hij en wat is de lichtrichting"): before
+     * the first try Pakguh's echo shows it in the hall itself. Anchored at {@code proef_pakguh_start} (the antechamber); the
+     * mirrors and the necklace are read from the sidecar, so the shots and the light fall on the real ones. The hall is 6
+     * high and the maze walls 3, so the high shots float over the maze, under the roof.
+     */
+    private static Cutscene pakguh() {
+        Vec3 a = new Vec3(0.5, 0, 0.5);
+        Vec3 echo = rel(ANKER_PAKGUH, "echo_pakguh");
+        if (echo == null) {
+            echo = a.add(-2, 0, 6);
+        }
+        Vec3 s1 = rel(ANKER_PAKGUH, "ijs_spiegel_1"), s2 = rel(ANKER_PAKGUH, "ijs_spiegel_2"), ketting = rel(ANKER_PAKGUH, "verlovingsketting");
+        if (s1 == null) {
+            s1 = a.add(5, 0, -8);
+        }
+        if (s2 == null) {
+            s2 = s1.add(6, 0, -3);
+        }
+        if (ketting == null) {
+            ketting = s1.add(16, 1, 0);
+        }
+        Vec3 speler = a;
+        Vec3 kop = echo.add(0, 1.3, 0);
+        Vec3 r = richting(echo);
+        Vec3 opzij = new Vec3(-r.z, 0, r.x);
+        Vec3 midden = speler.add(echo).scale(0.5);
+        Vec3 l1 = s1.add(0, 1.2, 0), l2 = s2.add(0, 1.2, 0), k = ketting.add(0, 0.6, 0);
+        Cutscene.Builder b = Cutscene.maak(PAKGUH).duur(450).bij(GeestLijnen.WITTE_LOTUS).cameraOntwijkt().verbergEcht(10)
+                .speler(speler, yawNaar(speler, echo))
+                .npc("pakguh", nl.juiced.guhs.entity.GuhNpcEntity.Kind.PAKGUH_ECHO, echo, yawNaar(echo, speler))
+                .kijk(Cutscene.SPELER, 0, kop)
+                // who and why: the two of them in the antechamber
+                .camera(0, midden.add(opzij.scale(4.5)).add(0, 2.2, 0), midden.add(0, 1.2, 0))
+                .camera(95, midden.add(opzij.scale(3.2)).add(r.scale(0.8)).add(0, 1.9, 0), kop)
+                .zeg(15, "pakguh", "p1", 75)
+                // the moonlight on the first mirror, from over the maze
+                .cameraKnip(100, l1.add(-4.5, 3.6, 3.5), l1)
+                .zeg(110, "pakguh", "p2", 80)
+                .kijk("pakguh", 100, l1)
+                // the arrow and the jump to the next mirror
+                .camera(200, l1.add(l2.subtract(l1).scale(0.5)).add(-3.5, 3.8, 4.0), l1.add(l2.subtract(l1).scale(0.5)))
+                .zeg(205, "pakguh", "p3", 85)
+                // the goal: the necklace in the far corner
+                .cameraKnip(300, k.add(-4.0, 3.0, 3.5), k)
+                .zeg(305, "pakguh", "p4", 75)
+                // back to him: the hint and a little joke
+                .cameraKnipVolgt(385, speler.add(opzij.scale(-2.2)).add(r.scale(1.2)).add(0, 1.8, 0), "pakguh")
+                .kijk("pakguh", 385, speler.add(0, 1.4, 0))
+                .animatie("pakguh", 390, "zwaai")
+                .zeg(390, "pakguh", "p5", 55)
+                .geluid(100, () -> net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 0.9f, 0.9f)
+                .geluid(300, () -> net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_RESONATE, 0.9f, 1.2f);
+        // the moonbeam falls on mirror 1, then a white arrow points on and the light jumps to mirror 2; the goal glows blue
+        for (int t = 100; t < 300; t += 20) {
+            for (int i = 0; i <= 8; i++) {
+                b.deeltjes(t, ParticleTypes.END_ROD, l1.add(0, 7 - i * 0.8, 0), 1, 0.02);
+            }
+        }
+        Vec3 d = l2.subtract(l1);
+        for (int t = 210; t < 300; t += 15) {
+            int n = Math.max(4, (int) (d.length() * 2));
+            for (int i = 0; i <= n; i++) {
+                b.deeltjes(t + i / 3, ParticleTypes.END_ROD, l1.add(d.scale(i / (double) n)), 1, 0.02);
+            }
+        }
+        b.deeltjes(150, ParticleTypes.WAX_ON, l1, 12, 0.35).deeltjes(170, ParticleTypes.WAX_ON, l1, 12, 0.35);
+        for (int t = 300; t < 385; t += 12) {
+            b.deeltjes(t, ParticleTypes.GLOW, k, 8, 0.3);
+            b.deeltjes(t, ParticleTypes.SOUL_FIRE_FLAME, k.add(0, 1.4, 0), 2, 0.15);
+        }
+        return b.registreer();
     }
 
     /** (tests, report) the running time of a scene in seconds (without the clicks). */

@@ -467,6 +467,9 @@ def schrijn(b, n, info, frac, kant):
     b.set(bx - vx, y + 2, bz - vz, "minecraft:pink_concrete")
     b.set(bx + vx, y + 1, bz + vz, "minecraft:pink_concrete")
     b.set(bx - vx, y + 1, bz - vz, "minecraft:pink_concrete")
+    # fix4-lotus (the exits check): over the pot and the head you could drop into the strip behind the guh and never get out
+    # (the gaps under its cheeks are one block high); the back of its head is a step now
+    b.set(bx + ux, y, bz + uz, TEGEL)
     b.set(bx - ux, y, bz - uz, "minecraft:decorated_pot", {"facing": facing, "waterlogged": "false", "cracked": "false"})
     b.set(bx - ux + vx * 2, y, bz - uz + vz * 2, "minecraft:candle", {"candles": "3", "lit": "true", "waterlogged": "false"})
     b.set(bx - ux - vx * 2, y, bz - uz - vz * 2, "minecraft:candle", {"candles": "2", "lit": "true", "waterlogged": "false"})

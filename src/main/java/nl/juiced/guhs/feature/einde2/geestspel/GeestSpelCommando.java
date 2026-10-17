@@ -24,7 +24,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  * <ul>
  *   <li>{@code /guhs einde2 geestspel ga <stap>}: sets the state for that step (chapter progress, flags, tiles, lanterns ...),
  *       takes you to its marker in the Geestenwereld and starts what the step starts ({@link #STAPPEN});</li>
- *   <li>{@code /guhs einde2 geestspel scene <reiger|wan|hei_bai_bloei|geestenklok|maannacht>}: forget the scene and play it;</li>
+ *   <li>{@code /guhs einde2 geestspel scene <reiger|wan|hei_bai_bloei|geestenklok|maannacht|pakguh_uitleg>}: forget the scene and play it;</li>
  *   <li>{@code /guhs einde2 geestspel wis}: forgets everything of this slice for you;</li>
  *   <li>{@code /guhs einde2 geestspel stand}: your seven lines, tiles, lanterns, secrets.</li>
  * </ul>
@@ -37,7 +37,7 @@ public final class GeestSpelCommando {
             "voetstukken", "reiger", "archief", "lantaarns", "lantaarns_7", "hei_bai", "eikel", "koh", "chakra", "chakra_7", "zicht_reiger",
             "zicht_vosje", "zicht_koh", "maannacht", "geestentij", "klok", "voetstappen", "spiegel", "moeras", "wan_glimp", "pad_8", "wan",
             "snelreis", "kussen", "bloei", "alles");
-    public static final List<String> SCENES = List.of("reiger", "wan", "hei_bai_bloei", "geestenklok", "maannacht");
+    public static final List<String> SCENES = List.of("reiger", "wan", "hei_bai_bloei", "geestenklok", "maannacht", "pakguh_uitleg");
 
     private GeestSpelCommando() {
     }

@@ -155,8 +155,8 @@ public class E2GeestSpelGameTests {
             }
             helper.assertTrue(GeestLijnen.lantaarns().klaar(p) && Lantaarns.volgers(p).isEmpty() && GeestLagen.ziet(p, GeestLagen.BOOM)
                     && !GeestLagen.ziet(p, GeestLagen.WOUD), "eight lanterns home: the line done, the tree lit, the wood not (yet)");
-            // the five scenes: registered, with the lengths of CONTRACT_E2_B 5
-            double[][] lengte = {{45, 75}, {45, 75}, {15, 25}, {10, 15}, {10, 15}};
+            // the scenes: registered, with the lengths of CONTRACT_E2_B 5 (fix4-lotus: + Pakguh's explanation, 15-25 s)
+            double[][] lengte = {{45, 75}, {45, 75}, {15, 25}, {10, 15}, {10, 15}, {15, 25}};
             for (int i = 0; i < GeestScenes.ALLE.size(); i++) {
                 String id = GeestScenes.ALLE.get(i);
                 Cutscene s = Cutscene.van(id);
@@ -217,6 +217,71 @@ public class E2GeestSpelGameTests {
             helper.assertTrue(Proeven.kaarsenAan(p).equals(java.util.Set.of(1)), "too fast: one step back, not all out: " + Proeven.kaarsenAan(p));
             helper.assertTrue(Proeven.NODIG == 8 && Proeven.VENSTER == 6 && Proeven.WILD == 40, "the forgiving duel and candle numbers");
         } finally {
+            wis(p);
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * fix4-lotus (playtest 3): the two blockers in the trials and the mirrors made understandable.
+     * <ul>
+     *   <li>a talking-screen page whose speaker stands far away (Bumi-guh's echo, seen from room 2 and 3; Pakguh's echo,
+     *       seen from the necklace) is sent without that speaker: the screen closed itself past 12 blocks;</li>
+     *   <li>Pakguh's mirrors: a mirror the light has not reached does not turn, a right one stays right (one click broke
+     *       the chain before), clicks that do not help count, and after the hint Pakguh turns the mirror himself; clicking
+     *       the glinting mirror solves it.</li>
+     * </ul>
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2Fix4LotusProeven(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        net.minecraft.world.entity.decoration.ArmorStand ver = null, bij = null;
+        try {
+            wis(p);
+            Vec3 o = p.position();
+            ver = new net.minecraft.world.entity.decoration.ArmorStand(helper.getLevel(), o.x + 20, o.y, o.z);
+            bij = new net.minecraft.world.entity.decoration.ArmorStand(helper.getLevel(), o.x + 3, o.y, o.z);
+            helper.getLevel().addFreshEntity(ver);
+            helper.getLevel().addFreshEntity(bij);
+            var uit = GeestSpel.dichtbij(p, java.util.List.of(GeestSpel.regel(ver, "entity.guhs.guh_npc.bumi_guh_echo", "a"),
+                    GeestSpel.regel(bij, "entity.guhs.guh_npc.bumi_guh_echo", "b")));
+            helper.assertTrue(uit.get(0).spreker() == null && !uit.get(0).naamKey().isEmpty(), "a far speaker: its page without it, with its name");
+            helper.assertTrue(uit.get(1).spreker() == bij, "a near speaker stays on its page");
+            // Pakguh's mirrors
+            java.util.List<String> ids = Proeven.spiegelIds();
+            helper.assertTrue(ids.size() >= 3, "the mirrors of the build: " + ids);
+            Proeven.testPakguh(p);
+            int beurt = Proeven.bereik(Proeven.testStanden(p), ids);
+            helper.assertTrue(beurt == 0, "at the start no mirror is right (the first one has to be turned)");
+            int[] voor = Proeven.testStanden(p);
+            Proeven.testSpiegel(p, 3);
+            helper.assertTrue(java.util.Arrays.equals(voor, Proeven.testStanden(p)) && Proeven.testMis(p) == 1,
+                    "a mirror the light has not reached does not turn, and counts as a miss");
+            for (int k = 0; k < 4 && Proeven.bereik(Proeven.testStanden(p), ids) == 0; k++) {
+                Proeven.testSpiegel(p, 1);
+            }
+            helper.assertTrue(Proeven.bereik(Proeven.testStanden(p), ids) >= 1, "clicking the glinting mirror turns it right");
+            voor = Proeven.testStanden(p);
+            Proeven.testSpiegel(p, 1);
+            helper.assertTrue(java.util.Arrays.equals(voor, Proeven.testStanden(p)), "a right mirror stays right");
+            int vooraf = Proeven.bereik(Proeven.testStanden(p), ids);
+            for (int k = 0; k < Proeven.HINT_NA + Proeven.HELP_NA + 1 && Proeven.bereik(Proeven.testStanden(p), ids) == vooraf; k++) {
+                Proeven.testSpiegel(p, Math.min(ids.size(), vooraf + 2));
+            }
+            helper.assertTrue(Proeven.bereik(Proeven.testStanden(p), ids) > vooraf, "after the hint, Pakguh turns the glinting mirror himself");
+            for (int k = 0; k < 4 * ids.size() && Proeven.bereik(Proeven.testStanden(p), ids) < ids.size(); k++) {
+                Proeven.testSpiegel(p, Proeven.bereik(Proeven.testStanden(p), ids) + 1);
+            }
+            helper.assertTrue(Proeven.bereik(Proeven.testStanden(p), ids) == ids.size(), "only the glinting mirror, again and again: solved");
+        } finally {
+            if (ver != null) {
+                ver.discard();
+            }
+            if (bij != null) {
+                bij.discard();
+            }
+            Proeven.stop(p);
             wis(p);
             helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         }
