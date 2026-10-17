@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_guhvatar_zij",
   group: "4755489B04766E01",
-  guhs_chapter_version: 40,
+  guhs_chapter_version: 41,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhvatar_zij.png",
@@ -39,7 +39,7 @@
       x: 4.5,
       y: 4.78125,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
     {
@@ -51,7 +51,7 @@
       x: 16.0,
       y: 4.78125,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
     {
@@ -63,7 +63,7 @@
       x: 4.5,
       y: 13.24375,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
     {
@@ -75,7 +75,7 @@
       x: 16.0,
       y: 13.24375,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
     {
@@ -87,7 +87,7 @@
       x: 4.5,
       y: 18.706249999999997,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
     {
@@ -99,7 +99,7 @@
       x: 16.0,
       y: 18.706249999999997,
       hover: [
-        "Komt na: De kaasbol (De Guhvatar)",
+        "Komt na: De kaasbol (Guheinde: Guhvatar)",
       ],
     },
   ],
