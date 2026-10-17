@@ -1,0 +1,2189 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_guhvatar_zij",
+  group: "4755489B04766E01",
+  guhs_chapter_version: 39,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhvatar_zij.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755489D4C7A85C8",
+  images: [
+    {
+      height: 3.0,
+      id: "475548C72085AC98",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548BAC2D11658",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "475548A4D1C87A8E",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_einde2_geest_spel.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548D8DC08C149",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_einde2_zij.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554855162BD871",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_einde2_zij_haven.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 13.24375,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755484784A3A444",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_einde2_reizen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 13.24375,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554872892ADAFF",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_extra_einde2_bouw_zij1.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 18.706249999999997,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755482A37220A76",
+      image: "guhs:textures/ftbquests/guhs_guhvatar_zij/kop_extra_einde2_bouw_zij2.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 18.706249999999997,
+      hover: [
+        "Komt na: De kaasbol (De Guhvatar)",
+      ],
+    },
+  ],
+  order_index: 17,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "4755482631E1B866",
+      linked_quest: "475548C7558482E0",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "47554851E3F09992",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhvatar_zij.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548232B8A1FC6",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486A0130F71E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "4755488CEC34A26C",
+      icon: {
+        id: "guhs:geestengras",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_binnen",
+          id: "475548CA4C73564B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489DC07D5253",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548FA342863EA",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "475548E095604FDD",
+      icon: {
+        id: "guhs:geestlantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_lantaarns_stap_8",
+          id: "4755485137A932B2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D831506FAD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554854E91DD8C2",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548FC54B92300",
+      icon: {
+        id: "guhs:einde2_geest_spel_knabbelkoor_eikel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_hei_bai_stap_2",
+          id: "475548A574A1C6EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548404E9385AB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554849429AE0EC",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554878348BDDEB",
+      icon: {
+        id: "guhs:einde2_geest_spel_koh_masker",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_koh_stap_3",
+          id: "475548DD5B317E0D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C0312D11F7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486F690F2983",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554868937E9EFF",
+      icon: {
+        id: "minecraft:white_tulip",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_1",
+          id: "47554861F2B9932F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548871677ED8B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548692258D3C6",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554854851697D4",
+      icon: {
+        id: "guhs:pai_sho_tegel_miroh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_3",
+          id: "475548304947A803",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483A1F371A1E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481333FB0E3B",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548883279F8B9",
+      icon: {
+        id: "guhs:pai_sho_tegel_witte_lotus",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_4",
+          id: "475548F53FE521BF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554838EA0C0A55",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C1F8C54A6E",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548605E9ECEBF",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_5",
+          id: "475548FA5EDC3445",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554899FCBF7C72",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488D3E1188FC",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+    },
+    {
+      id: "47554832AE162A32",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_witte_lotus_stap_6",
+          id: "47554833FF58BE12",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481404E47759",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548393C989AAE",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "475548DB1C0FEC54",
+      icon: {
+        id: "minecraft:amethyst_shard",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_chakra_stap_7",
+          id: "475548EB0238AFD7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F4C73E0964",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B1A2E80196",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 6.0,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "47554872C6D30D87",
+      icon: {
+        id: "guhs:einde2_geest_spel_maandruppel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_verschijningen_stap_4",
+          id: "475548B133EE55A7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481F1AF0BE5D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F3F0381630",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 4.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548683696358B",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_klok",
+          id: "47554836437C447B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CBB1243D3A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CFAC029051",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 3.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755482100A4485C",
+      icon: {
+        id: "minecraft:glow_berries",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_voetstappen",
+          id: "475548A7F21BD34B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C11B12283D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554898E373994A",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 1.5,
+      y: 8.0625,
+    },
+    {
+      id: "47554875171DB06C",
+      icon: {
+        id: "minecraft:glass_pane",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_spiegel",
+          id: "47554869E3CCD62E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548487B94479C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755484BCDD93483",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 0.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755483638B9BB2C",
+      icon: {
+        id: "guhs:einde2_geest_spel_mediteerkussen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_geest_spel_kussen",
+          id: "475548DCA5FC948E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554878341B6084",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A678536418",
+          type: "xp",
+          xp: 75,
+        },
+      ],
+      x: 0.0,
+      y: 9.5625,
+    },
+    {
+      id: "475548717216D0BE",
+      icon: {
+        id: "guhs:einde2_geest_spel_eerste_knabbel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/geest_wan_stap_3",
+          id: "47554885CCF934EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548656B40E0FF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548FBB7A4383C",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 9.5625,
+      shape: "gear",
+    },
+    {
+      id: "47554887D6B9327B",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_1",
+          id: "475548D35B4C342A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EA57ADCED1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755489CB959FD72",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_2",
+          id: "4755489756F383F9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DCD315D584",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548E2084227C9",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_3",
+          id: "475548A261619691",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489FE7F288E7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755482F56F4058B",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_4",
+          id: "475548ACCF73428C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830C8D0DE4B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548E37348514E",
+      icon: {
+        id: "guhs:einde2_zij_kristalsnoep_ring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/omashguh_stap_5",
+          id: "475548A0CC932408",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484A81EFC7B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548054B11CB06",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "4755489579E347D3",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_1",
+          id: "47554834AA21B0BA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482CA23A48D7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755484C8EF34C78",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_2",
+          id: "4755484A2E9D79C6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548907EDC9620",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548EFBFFB21B0",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_3",
+          id: "475548AB3C484292",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487F64B3B9FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+    },
+    {
+      id: "4755484AECCB89D1",
+      icon: {
+        id: "guhs:einde2_deco_windgong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/westelijke_luchttempel_stap_4",
+          id: "4755483733B31596",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E84C84F710",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554823DE3D58BA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "475548223B104367",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_1",
+          id: "47554878A49003DF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489F06F92994",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 8.0625,
+    },
+    {
+      id: "4755489C23D6BB22",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_2",
+          id: "47554813D419791E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AEC2861034",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755483E3CA71054",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_3",
+          id: "475548685F937CCC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D5ED97560B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548424323ED27",
+      icon: {
+        id: "guhs:einde2_deco_eeuwige_vlam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtempel_roku_stap_4",
+          id: "4755480CFBF275D2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D56DF51EEE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B9B143C434",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "4755481216FCF0F5",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_1",
+          id: "475548C4096FE021",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484DB324211E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 8.0625,
+    },
+    {
+      id: "4755484A2201DCCD",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_2",
+          id: "475548C20F682872",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489EE0BC8746",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 9.5625,
+    },
+    {
+      id: "4755484F555F7BA8",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_3",
+          id: "4755486BDAAC7CB7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A247D8F2C8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 9.5625,
+    },
+    {
+      id: "475548482494C628",
+      icon: {
+        id: "guhs:einde2_zij_kyoshi_schmink",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kyoshi_dorp_stap_4",
+          id: "47554879C1B1A3EA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C8B28C4699",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548C5FD6C2D53",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 9.5625,
+      shape: "gear",
+    },
+    {
+      id: "475548E099759FE7",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_1",
+          id: "475548BADC6BE238",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F694E5C7AF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 9.5625,
+    },
+    {
+      id: "47554833C30980E8",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_2",
+          id: "475548FE258F2D72",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DC29DA57C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 9.5625,
+    },
+    {
+      id: "4755482E062506EA",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_3",
+          id: "47554835DF9FD30F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485D200B90CE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 9.5625,
+    },
+    {
+      id: "475548E332B34235",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bibliotheek_wan_shi_guh_stap_4",
+          id: "475548E51B718BA6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480B3EB8A623",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548188BE9D97F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 9.5625,
+      shape: "gear",
+    },
+    {
+      id: "4755483BDD833ABF",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_1",
+          id: "47554841B85B3106",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548285C12242B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 11.0625,
+    },
+    {
+      id: "4755480FD9808A2D",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_2",
+          id: "47554804AF879AAE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548450F7797BA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 11.0625,
+    },
+    {
+      id: "47554866CA8F2D61",
+      icon: {
+        id: "guhs:einde2_zij_zegenschub",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leeuwschildpad_stap_3",
+          id: "475548E8836667C9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554835AD1E1430",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F2DA892C6C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 11.0625,
+      shape: "gear",
+    },
+    {
+      id: "475548ED95DCF284",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_kracht",
+          id: "4755487FF7A6E34C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BF12DE20FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 16.0,
+      y: 11.0625,
+      shape: "diamond",
+    },
+    {
+      id: "475548846B7F300D",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_1",
+          id: "475548FF16E15C72",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E5AEB39CFE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 15.025,
+    },
+    {
+      id: "475548EF06519287",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_2",
+          id: "47554888CF5B523A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816528E98D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 15.025,
+    },
+    {
+      id: "4755483610C29FF1",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_3",
+          id: "4755489250A248AA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554809AF0F8BE3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 15.025,
+    },
+    {
+      id: "475548BAED7542BD",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_4",
+          id: "4755488F93474F78",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554839226C9910",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 15.025,
+    },
+    {
+      id: "475548A807E2530A",
+      icon: {
+        id: "guhs:einde2_zij_spijtsoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_kok_stap_5",
+          id: "475548F120C265C5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488BB2DAB303",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548572B097974",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 15.025,
+      shape: "gear",
+    },
+    {
+      id: "4755484E751BC639",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_1",
+          id: "475548C832DCE9E2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487FE2516A4E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 15.025,
+    },
+    {
+      id: "4755486EBDACD359",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_2",
+          id: "4755483717CB97E4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B53207BB56",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 15.025,
+    },
+    {
+      id: "475548CE6FC5177F",
+      icon: {
+        id: "guhs:vetbootje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vetbootje_stap_3",
+          id: "475548C05FC8FCE9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486F7277900B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554843294AE665",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 16.525,
+      shape: "gear",
+    },
+    {
+      id: "47554893C0F629AC",
+      icon: {
+        id: "guhs:flitskruimel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_handel",
+          id: "475548924885FA5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485F7C838B67",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 7.5,
+      y: 16.525,
+      shape: "diamond",
+    },
+    {
+      id: "47554800DEC3D562",
+      icon: {
+        id: "minecraft:oak_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_veer",
+          id: "4755485E2A885EDA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481206861470",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 6.0,
+      y: 16.525,
+      shape: "diamond",
+    },
+    {
+      id: "475548AD6006E2DD",
+      icon: {
+        id: "guhs:guhvleugels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_zij_ringenrace",
+          id: "475548FF1A11EC85",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484587D7CBEC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 4.5,
+      y: 16.525,
+      shape: "diamond",
+    },
+    {
+      id: "475548200AAB2DA1",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_vesting_bevrijder",
+          id: "4755483D34CCC062",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554882ED4F9C9B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 3.0,
+      y: 16.525,
+      shape: "diamond",
+    },
+    {
+      id: "4755481CB9D16CCF",
+      icon: {
+        id: "guhs:appa_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_reizen_fluitvlucht",
+          id: "475548277B7AF4AE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554893E60864BA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755480537ECF8A3",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 11.5,
+      y: 15.025,
+      shape: "gear",
+    },
+    {
+      id: "475548CC98A7A492",
+      icon: {
+        id: "guhs:appa_guh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_reizen_gast",
+          id: "475548D340A8383C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CB65DCB0C2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482FA0752315",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 13.0,
+      y: 15.025,
+    },
+    {
+      id: "475548F410D4474E",
+      icon: {
+        id: "minecraft:fire_charge",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_reizen_jacht",
+          id: "475548BB6C25681E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484685ACC2F5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755480FC9364595",
+          type: "xp",
+          xp: 80,
+        },
+      ],
+      x: 14.5,
+      y: 15.025,
+    },
+    {
+      id: "4755485210EC91BC",
+      icon: {
+        id: "guhs:leegtewalvisguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leegtewalvis_stap_1",
+          id: "475548A14490FE8C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FEB820BEA8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E743B2CDEB",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 16.0,
+      y: 15.025,
+    },
+    {
+      id: "475548B37C0518EC",
+      icon: {
+        id: "guhs:leegteparel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leegtewalvis_stap_2",
+          id: "4755485A59347A75",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486B1DCC8C2C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorvrucht",
+          },
+          count: 4,
+        },
+        {
+          id: "475548506422C68C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 15.025,
+    },
+    {
+      id: "4755488C256867F2",
+      icon: {
+        id: "guhs:leegteparel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leegtewalvis_stap_3",
+          id: "4755481BA74EA46F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548110C01C85E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755483D042E71E1",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 19.0,
+      y: 15.025,
+    },
+    {
+      id: "475548E7961EE6D3",
+      icon: {
+        id: "guhs:einde2_reizen_walvishoorn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/leegtewalvis_stap_4",
+          id: "4755482C9B63B4DF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483D9D15D153",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorvrucht",
+          },
+          count: 8,
+        },
+        {
+          id: "47554825EEE39E30",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 20.5,
+      y: 15.025,
+      shape: "gear",
+    },
+    {
+      id: "475548E1F760F260",
+      icon: {
+        id: "minecraft:red_bed",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/einde2_reizen_ingericht",
+          id: "4755485499B67192",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480FBD45F963",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554800923BF8F3",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 16.525,
+    },
+    {
+      id: "4755487D45B59819",
+      icon: {
+        id: "guhs:einde2_bouw_zij1_postgoot",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:omashguh",
+          id: "4755489036AD4BB2",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488517EC65BE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 0.0,
+      y: 20.487499999999997,
+      shape: "octagon",
+    },
+    {
+      id: "475548CDE98316BF",
+      icon: {
+        id: "guhs:kruimelwolk",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:westelijke_luchttempel",
+          id: "4755480469E6C6DE",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B0D17C9891",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 1.5,
+      y: 20.487499999999997,
+      shape: "octagon",
+    },
+    {
+      id: "47554838803BAAC0",
+      icon: {
+        id: "guhs:lichtstaafje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:vuurtempel_roku",
+          id: "47554865DCD35601",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548858546543B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 3.0,
+      y: 20.487499999999997,
+      shape: "octagon",
+    },
+    {
+      id: "4755488735CCDD7C",
+      icon: {
+        id: "minecraft:lantern",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:leegtehaven",
+          id: "475548BA043E560A",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B1BA2EAE87",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 11.5,
+      y: 20.487499999999997,
+      shape: "circle",
+    },
+    {
+      id: "475548AB8D2D044A",
+      icon: {
+        id: "minecraft:green_banner",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:kyoshi_dorp",
+          id: "475548DC704CB0D8",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480512F05636",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 13.0,
+      y: 20.487499999999997,
+    },
+    {
+      id: "475548A01F3BD331",
+      icon: {
+        id: "minecraft:bookshelf",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:bibliotheek_wan_shi_guh",
+          id: "4755480F330F1389",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554834548DC0CC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 14.5,
+      y: 20.487499999999997,
+    },
+    {
+      id: "475548A73C3D36BC",
+      icon: {
+        id: "minecraft:turtle_scute",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:leeuwschildpad_eiland",
+          id: "4755484FA491991A",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D38E69023",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 16.0,
+      y: 20.487499999999997,
+      shape: "diamond",
+    },
+    {
+      id: "475548D9018EFF87",
+      icon: {
+        id: "guhs:ringenrace_ring",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:guhvleugel_ringenrace",
+          id: "4755485D485AA203",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482EEC8A948C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 17.5,
+      y: 20.487499999999997,
+      shape: "rsquare",
+    },
+  ],
+}
