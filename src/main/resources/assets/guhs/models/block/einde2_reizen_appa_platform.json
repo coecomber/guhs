@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/einde2_reizen_appa_platform_top",
+    "bottom": "guhs:block/einde2_reizen_appa_platform_onder",
+    "side": "guhs:block/einde2_reizen_appa_platform_zij"
+  }
+}

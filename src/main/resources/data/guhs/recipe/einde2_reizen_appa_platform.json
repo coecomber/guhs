@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WBW",
+    "HFH",
+    "HHH"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "B": "minecraft:blue_dye",
+    "H": "minecraft:hay_block",
+    "F": "minecraft:leather"
+  },
+  "result": {
+    "id": "guhs:einde2_reizen_appa_platform"
+  }
+}
