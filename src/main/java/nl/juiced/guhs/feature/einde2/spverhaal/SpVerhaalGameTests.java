@@ -89,7 +89,7 @@ public class SpVerhaalGameTests {
             }
             GroteVerhalen.GrootVerhaal groot = GroteVerhalen.van(SpVerhaal.GROOT);
             helper.assertTrue(SpVerhaal.klaar(p) && groot != null && groot == SpVerhaal.grootVerhaal() && groot.klaar(p) && !groot.klaar(gast)
-                    && groot.wereld() == GroteVerhalen.Wereld.GUHEINDE && groot.lijnen().equals(SpVerhaal.LIJNEN)
+                    && groot.wereld() == GroteVerhalen.Wereld.GUHEINDE && groot.lijnen().equals(SpVerhaal.LIJNEN) && groot.structuren().equals(List.of(bb))
                     && GroteVerhalen.wereldVan(SpVerhaal.KROON) == GroteVerhalen.Wereld.GUHEINDE, "the whole story: the big story of the Guhpad is done");
             helper.assertTrue(E2Hervat.huidig(p) == null && SpVerhaal.reisDoel(p) == null && Einde2Haken.groteVerhalenKlaar(p) >= 2,
                     "everything done: no story on, both parts count");

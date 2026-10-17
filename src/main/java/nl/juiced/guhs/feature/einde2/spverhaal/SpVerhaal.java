@@ -206,7 +206,7 @@ public final class SpVerhaal {
         KROON_LIJN.id();
         GroteVerhalen.zetGroep(GROEP, GroteVerhalen.Wereld.GUHEINDE);
         groot = GroteVerhalen.registreer(new GroteVerhalen.GrootVerhaal(GROOT, GroteVerhalen.Wereld.GUHEINDE, GroteVerhalen.Wereld.GUHEINDE,
-                "guhs:knabbelburger", List.of(), LIJNEN, () -> true, SpVerhaal::klaar));
+                "guhs:knabbelburger", List.of(BIKINIBODEM), LIJNEN, () -> true, SpVerhaal::klaar));   // (a big story needs a place: GuhpadGameTests)
         for (String s : Einde2Ids.SPONS_STRUCTUREN) {
             Sluiers.registreer(s, SLUIER_RAND, SpVerhaal::open);
             Sluiers.BERICHTEN.put(s, P + "poort.balk");
