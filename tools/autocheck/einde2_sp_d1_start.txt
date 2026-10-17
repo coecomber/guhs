@@ -1,0 +1,65 @@
+# einde2 "Sponsguh", slice sp_d1_start, in a real generated world: part 1 steps 0-4 step by step with the skelet's dev command
+# /guhs einde2 sponsguh ga sponsguh_recept <stap> (it finishes the Guhvatar story for you, sets the line, teleports to the step's
+# place and runs this slice's start), and the scenes with /guhs einde2 sponsguh d1start scene <naam>. Scenes wait for a click
+# after each line (1.4.4): the script clicks with "use" where a scene runs.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_sp_d1_start.txt -PautocheckTimeout=90
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 90 0
+wait 80
+/guhs einde2 waar bikinibodem
+/guhs einde2 sponsguh wis
+
+section step 0: the bubble letter comes to you
+/guhs einde2 sponsguh ga sponsguh_recept 0
+/guhs einde2 sponsguh d1start brief
+wait 60
+shot e2_sp_d1s_bubbelbrief
+
+section step 1: the arrival on the island (narrator card, then the scene aankomst)
+/guhs einde2 sponsguh ga sponsguh_recept 1
+wait 60
+shot e2_sp_d1s_kaart
+use
+use
+use
+use
+use
+wait 200
+shot e2_sp_d1s_aankomst
+
+section step 2: on top of the bubbelstroom, then the welcome on the plein
+/guhs einde2 sponsguh ga sponsguh_recept 2
+wait 60
+look 180 30
+shot e2_sp_d1s_bubbel_boven
+/guhs einde2 sponsguh d1start scene welkom
+wait 60
+shot e2_sp_d1s_welkom
+
+section step 3: the office, the interview
+/guhs einde2 sponsguh ga sponsguh_recept 3
+wait 40
+shot e2_sp_d1s_kantoor
+/guhs einde2 sponsguh d1start scene sollicitatie
+wait 30
+shot e2_sp_d1s_sollicitatie_tellen
+use
+wait 40
+shot e2_sp_d1s_sollicitatie_krabguh
+
+section step 4: the grill lesson and the game (crates, ticket, the burger)
+/guhs einde2 sponsguh ga sponsguh_recept 4
+wait 60
+shot e2_sp_d1s_bakken_uitleg
+/guhs einde2 sponsguh d1start spel bakken
+wait 40
+look 0 20
+shot e2_sp_d1s_grill_bon
+look 180 30
+shot e2_sp_d1s_kratten
+/guhs einde2 sponsguh d1start spel bestelling
+wait 20
+/guhs einde2 sponsguh d1start scene bakken_klaar
+wait 40
+shot e2_sp_d1s_bakken_klaar_octo
