@@ -432,7 +432,7 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
             return InteractionResult.SUCCESS;
         }
         laatsteKlik = level().getGameTime();
-        for (BiFunction<SponsguhWezen, ServerPlayer, Boolean> klik : BIJ_KLIK) {
+        for (BiFunction<SponsguhWezen, ServerPlayer, Boolean> klik : verhaalKlikken()) {
             if (Boolean.TRUE.equals(klik.apply(this, sp))) {
                 return InteractionResult.SUCCESS;                           // hook fase B: the story took the click
             }
@@ -441,6 +441,14 @@ public class SponsguhWezen extends PathfinderMob implements GeoEntity {
             praatje(sp);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * The story listeners asked for a click on this one: {@link #BIJ_KLIK}; a stand-in that is not the character itself (the
+     * frozen Krabguh of part 2) has its own list, so a story that matches by cast never takes it for the real one.
+     */
+    protected List<BiFunction<SponsguhWezen, ServerPlayer, Boolean>> verhaalKlikken() {
+        return BIJ_KLIK;
     }
 
     /** A click nobody of {@link #BIJ_KLIK} took: something of the character's own (true), or the fixed line. */

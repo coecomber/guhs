@@ -1,5 +1,9 @@
 package nl.juiced.guhs.feature.einde2.sponsguh;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
+
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
@@ -14,6 +18,12 @@ import net.minecraft.sounds.SoundEvents;
  * hook fase B: the second part of the Sponsguh story freezes and thaws him with {@link #setBevroren}.
  */
 public class MeneerKrabguhEntity extends SponsguhWezen {
+    /**
+     * (fix 1.5.0) Asked for a click on a FROZEN Krabguh instead of {@link #BIJ_KLIK}: the block of ice is not the Krabguh of
+     * De Krokante Knabbel, so no step that wants "click Meneer Krabguh" (e.g. part 1's job interview) may count it.
+     */
+    public static final List<BiFunction<SponsguhWezen, ServerPlayer, Boolean>> BIJ_IJS_KLIK = new CopyOnWriteArrayList<>();
+
     public MeneerKrabguhEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
     }
@@ -44,6 +54,11 @@ public class MeneerKrabguhEntity extends SponsguhWezen {
     @Override
     protected String beweging(boolean beweegt) {
         return isBevroren() ? "idle" : super.beweging(beweegt);
+    }
+
+    @Override
+    protected List<BiFunction<SponsguhWezen, ServerPlayer, Boolean>> verhaalKlikken() {
+        return isBevroren() ? BIJ_IJS_KLIK : BIJ_KLIK;
     }
 
     @Override

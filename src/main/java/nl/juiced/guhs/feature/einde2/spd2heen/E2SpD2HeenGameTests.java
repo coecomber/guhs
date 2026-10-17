@@ -11,10 +11,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.einde2.Plekken;
+import nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature;
+import nl.juiced.guhs.feature.einde2.sponsguh.MeneerKrabguhEntity;
+import nl.juiced.guhs.feature.einde2.sponsguh.SponsguhWezen;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpStappen;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaalDev;
 import nl.juiced.guhs.feature.einde2.verhaal.StapHint;
+import nl.juiced.guhs.feature.ring.Zicht;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
@@ -138,6 +142,73 @@ public class E2SpD2HeenGameTests {
         Set<String> klik = Set.of("sponsguh", "patguh", "meneer_krabguh", "octo_mika");
         SpD2Heen.KLIKKEN.forEach((cast, stappen) -> stappen.forEach(s -> helper.assertTrue(klik.contains(cast)
                 && NlTekst.has(SpD2Heen.G + "klik." + cast + "." + s), "the click line " + cast + "." + s)));
+        helper.succeed();
+    }
+
+    /**
+     * (fix 1.5.0) The frozen Krabguh on the square: an old resident (a mark without the strict flag) gets today's rule when it
+     * joins the level; seen only from the freeze (K_RIT) to the finale (K_GUHFY), also not by a creative operator; and a
+     * click on him never reaches the story listeners of the real Meneer Krabguh (part 1 step 3, the job interview, matched
+     * by cast), while the real one still does.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2SpD2HeenIjsKrabguh(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        net.minecraft.server.level.ServerLevel level = helper.getLevel();
+        MeneerKrabguhEntity ijs = E2SponsguhFeature.MENEER_KRABGUH.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        MeneerKrabguhEntity echt = E2SponsguhFeature.MENEER_KRABGUH.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        int[] gehoord = {0, 0};
+        java.util.function.BiFunction<SponsguhWezen, ServerPlayer, Boolean> proef = (w, q) -> {
+            if (q == p && w == ijs) {
+                gehoord[0]++;
+            } else if (q == p && w == echt) {
+                gehoord[1]++;
+                return true;
+            }
+            return false;
+        };
+        try {
+            Vec3 a = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(1, 1, 1)));
+            ijs.snapTo(a.x, a.y, a.z, 0f, 0f);
+            echt.snapTo(a.x + 3, a.y, a.z, 0f, 0f);
+            // an old resident: the one-range mark of before 1.5.0, not frozen yet, no strict flag
+            ijs.getPersistentData().putString(nl.juiced.guhs.feature.einde2.Bewoners.TAG, "einde2_" + D2Plek.BB + "_bevroren_krabguh@0");
+            Zicht.alleenBij(ijs, SpVerhaal.KROON, SpVerhaal.K_RIT, SpVerhaal.K_GUHFY);
+            level.addFreshEntity(ijs);
+            level.addFreshEntity(echt);
+            helper.assertTrue(ijs.isBevroren() && ijs.entityTags().contains(Zicht.STRENG) && ijs.entityTags().contains(Zicht.MERK),
+                    "joining the level: frozen, marked and strict");
+            // part 1, step 3 (the job interview): not there
+            SpVerhaalDev.zetTot(p, SpVerhaal.RECEPT, SpVerhaal.R_SOLLICITATIE);
+            helper.assertTrue(!Zicht.magZien(p, ijs) && Zicht.magZien(p, echt), "part 1: no frozen Krabguh, the real one is there");
+            // the click: not one story listener of the real Krabguh is asked for the ice; the real one still reaches them
+            SponsguhWezen.BIJ_KLIK.add(0, proef);
+            ijs.mobInteract(p, net.minecraft.world.InteractionHand.MAIN_HAND);
+            echt.mobInteract(p, net.minecraft.world.InteractionHand.MAIN_HAND);
+            helper.assertTrue(gehoord[0] == 0 && gehoord[1] == 1, "the ice is never the real Krabguh for a step: " + gehoord[0] + ", " + gehoord[1]);
+            helper.assertTrue(SpVerhaal.stap(p, SpVerhaal.RECEPT) == SpVerhaal.R_SOLLICITATIE, "the job interview did not start from the ice");
+            // part 2: before the freeze not, from K_RIT to the finale yes, after it not
+            int[][] wanneer = {{SpVerhaal.K_MANAGER, 0}, {SpVerhaal.K_KROON, 0}, {SpVerhaal.K_RIT, 1}, {SpVerhaal.K_EMMERS, 1},
+                    {SpVerhaal.K_GUHFY, 1}, {SpVerhaal.K_STAPPEN, 0}};
+            for (int[] w : wanneer) {
+                SpVerhaalDev.zetTot(p, SpVerhaal.KROON, w[0]);
+                helper.assertTrue(Zicht.magZien(p, ijs) == (w[1] == 1), "part 2 step " + w[0] + ": frozen Krabguh seen " + (w[1] == 1));
+            }
+            // strict: a creative operator does not see him outside his steps either (spectators see everything)
+            p.setGameMode(GameType.CREATIVE);
+            if (nl.juiced.guhs.feature.verhaal.Sluiers.passeert(p)) {
+                helper.assertTrue(!Zicht.magZien(p, ijs) && Zicht.magZien(p, echt), "creative operator after the finale: no frozen Krabguh");
+            }
+            p.setGameMode(GameType.SPECTATOR);
+            helper.assertTrue(Zicht.magZien(p, ijs), "a spectator sees him");
+        } finally {
+            SponsguhWezen.BIJ_KLIK.remove(proef);
+            ijs.discard();
+            echt.discard();
+            SpVerhaalDev.wis(p);
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        }
         helper.succeed();
     }
 

@@ -124,6 +124,7 @@ public final class SpD2Heen {
         Bewoners.anders(BEVROREN_PLEK, "guhs:meneer_krabguh", -1, true, 0);
         Bewoners.BIJ_MAKEN.add(SpD2Heen::bijMaken);
         SponsguhWezen.BIJ_KLIK.add(SpD2Heen::klik);
+        MeneerKrabguhEntity.BIJ_IJS_KLIK.add(SpD2Heen::ijsKlik);
         NeoForge.EVENT_BUS.addListener(SpD2Heen::opTick);
         NeoForge.EVENT_BUS.addListener(SpD2Heen::opWeg);
         NeoForge.EVENT_BUS.addListener(SpD2Heen::opRespawn);
@@ -315,7 +316,10 @@ public final class SpD2Heen {
                 k.setBevroren(true);
                 k.zetStil(true);
             }
+            // (fix 1.5.0) only while he is frozen in the story: from the freeze (K_RIT, after scene bevroren) to the finale's
+            // thaw (scene guhfy_guhber at K_GUHFY); strict, so a creative operator does not see him before or after either
             Zicht.alleenBij(e, SpVerhaal.KROON, SpVerhaal.K_RIT, SpVerhaal.K_GUHFY);
+            Zicht.streng(e);
         } else if (KROEG_PLEKKEN.contains(plek)) {
             // (merge_sp1, two ranges: everywhere but K_SLEUTEL, where the player's own copies play the stand-still game)
             Zicht.alleenBij(e, SpVerhaal.KROON, 0, SpVerhaal.K_RIT, SpVerhaal.K_SNOR, 99);
@@ -325,7 +329,11 @@ public final class SpD2Heen {
         }
     }
 
-    /** A resident that stood before this slice (made by an older build of the mod): the same rules when it is loaded. */
+    /**
+     * A resident of this slice when it joins a level (fresh or loaded): the rules of {@link #bijMaken} again (idempotent), so
+     * a resident made by an older build (no mark, an old one-range mark, the frozen Krabguh without the strict mark of 1.5.0)
+     * gets today's rule.
+     */
     private static void opBinnen(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) {
             return;
@@ -336,7 +344,7 @@ public final class SpD2Heen {
             return;
         }
         String tag = e.getPersistentData().getStringOr(Bewoners.TAG, "");
-        if (tag.isEmpty() || e.entityTags().contains(Zicht.MERK)) {
+        if (tag.isEmpty()) {
             return;
         }
         int at = tag.indexOf('@');
@@ -357,10 +365,6 @@ public final class SpD2Heen {
         if (stap > SpVerhaal.K_SLEUTEL) {
             return false;
         }
-        if (w instanceof MeneerKrabguhEntity k && k.isBevroren()) {
-            p.sendSystemMessage(Component.translatable(G + "klik.bevroren").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-            return true;
-        }
         Cast c = w.cast();
         Set<Integer> stappen = KLIKKEN.get(c.id());
         if (stappen == null || !stappen.contains(stap)) {
@@ -369,6 +373,18 @@ public final class SpD2Heen {
         w.getLookControl().setLookAt(p);
         w.zetAnimatie("praat");
         GuhQuests.say(p, w, G + "klik." + c.id() + "." + stap);
+        return true;
+    }
+
+    /**
+     * (fix 1.5.0) A click on the FROZEN Krabguh ({@link MeneerKrabguhEntity#BIJ_IJS_KLIK}, never {@code BIJ_KLIK}): a narration
+     * line while part 2 is under way, else nothing (the ice tinkles).
+     */
+    static Boolean ijsKlik(SponsguhWezen w, ServerPlayer p) {
+        if (!SpVerhaal.receptKlaar(p) || SpVerhaal.klaar(p)) {
+            return false;
+        }
+        p.sendSystemMessage(Component.translatable(G + "klik.bevroren").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
         return true;
     }
 

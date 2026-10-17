@@ -36,6 +36,9 @@ public final class Zicht {
      *  either range (einde2 merge_sp1, {@link #alleenBij(Entity, String, int, int, int, int)}). */
     public static final String BIJ = "guhs_ring_bij";
 
+    /** (einde2 fix 1.5.0) Entity tag: the marks hold for creative operators too (only spectators see it anyway), {@link #streng}. */
+    public static final String STRENG = "guhs_ring_zicht_streng";
+
     /** One questline and one or two step ranges (van2 = -1: no second range). */
     private record Bereik(String lijn, int van, int tot, int van2, int tot2) {
         boolean binnen(int stap) {
@@ -66,9 +69,18 @@ public final class Zicht {
         e.getPersistentData().putString(BIJ, lijn + ":" + van + "-" + tot + "," + van2 + "-" + tot2);
     }
 
+    /**
+     * The marks of this entity hold for creative operators too (only spectators pass): a story prop that must not stand in the
+     * world outside its steps for anyone, e.g. the frozen Krabguh of the Sponsguh story (einde2 fix 1.5.0).
+     */
+    public static void streng(Entity e) {
+        e.addTag(STRENG);
+    }
+
     /** Everybody sees the entity again. */
     public static void voorIedereen(Entity e) {
         e.removeTag(MERK);
+        e.removeTag(STRENG);
         e.getPersistentData().remove(ALLEEN);
         e.getPersistentData().remove(BIJ);
     }
@@ -95,7 +107,10 @@ public final class Zicht {
         if (!Sluiers.magZien(p, e)) {
             return false;
         }
-        if (!e.entityTags().contains(MERK) || Sluiers.passeert(p)) {
+        if (!e.entityTags().contains(MERK)) {
+            return true;
+        }
+        if (Sluiers.passeert(p) && (p.isSpectator() || !e.entityTags().contains(STRENG))) {
             return true;
         }
         var data = e.getPersistentData();
