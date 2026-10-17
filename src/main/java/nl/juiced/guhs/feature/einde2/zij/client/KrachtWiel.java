@@ -85,6 +85,15 @@ public class KrachtWiel extends Screen {
         }
         Component midden = gewezen >= 0 && gewezen < n ? E2ZijClient.naam(l.get(gewezen)) : Component.translatable("gui.guhs.einde2_zij.kracht.kies");
         g.centeredText(font, midden, cx, cy - 4, 0xFFFFF0E0);
+        Component uitleg = gewezen >= 0 && gewezen < n ? E2ZijClient.uitleg(l.get(gewezen))
+                : gekozen != null ? E2ZijClient.uitleg(gekozen) : null;
+        if (uitleg != null) {                                           // (fix4: what the power does, under the wheel)
+            int y = cy + STRAAL + VAK + 6;
+            for (net.minecraft.util.FormattedCharSequence regel : font.split(uitleg, Math.min(260, width - 32))) {
+                g.centeredText(font, regel, cx, y, 0xFFE8DCC8);
+                y += font.lineHeight + 1;
+            }
+        }
         super.extractRenderState(g, mouseX, mouseY, partialTick);
     }
 

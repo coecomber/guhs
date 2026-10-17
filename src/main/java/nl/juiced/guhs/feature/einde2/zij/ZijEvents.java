@@ -40,6 +40,7 @@ public final class ZijEvents {
     static void register() {
         NeoForge.EVENT_BUS.addListener(ZijEvents::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(ZijEvents::onServerTick);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppingEvent e) -> ZijKrachten.allesTerug(e.getServer()));
         NeoForge.EVENT_BUS.addListener(ZijEvents::onLogout);
         NeoForge.EVENT_BUS.addListener(ZijEvents::onRightClickBlock);
         NeoForge.EVENT_BUS.addListener(Leegtehaven::opKlik);
@@ -74,6 +75,7 @@ public final class ZijEvents {
                 com.mojang.logging.LogUtils.getLogger().warn("Guhs einde2 zij: a timed task failed", ex);
             }
         }
+        ZijKrachten.serverTick();
         MinecraftServer server = event.getServer();
         ServerLevel guheinde = server.getLevel(GuheindeFeature.GUHEINDE);
         if (guheinde != null) {

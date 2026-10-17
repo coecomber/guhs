@@ -116,6 +116,13 @@ public final class E2ZijClient {
         return icoon(r).getHoverName();
     }
 
+    /** (fix4) one line on what a power does: {@code gui.guhs.einde2_kracht.<id>.uitleg} (null: none). */
+    @Nullable
+    static Component uitleg(KrachtPayloads.Regel r) {
+        String key = "gui.guhs.einde2_kracht." + r.id() + ".uitleg";
+        return I18n.exists(key) ? Component.translatable(key) : null;
+    }
+
     static void kies(String id) {
         gekozen = id;
     }

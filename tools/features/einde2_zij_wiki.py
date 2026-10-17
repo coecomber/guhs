@@ -10,7 +10,8 @@ WIKI = {
         "vadskunsten": (
             "De vier blijvende vadskunsten", "item:minecraft:feather",
             "Elk element dat je leert in het verhaal van de Guhvatar laat iets blijvends achter: een luchtsprong, over water lopen, "
-            "een klein aardzuiltje en een handvlam. Eén toets: tikken gebruikt, vasthouden opent het elementenwiel.",
+            "een rotszuil die monsters de lucht in gooit (bukken: een rotsmuur die even blijft staan) en een vuurschicht die "
+            "monsters een tik geeft en kampvuren aansteekt. Guhs raken ze nooit, en de rots brokkelt altijd weer weg. Eén toets: tikken gebruikt, vasthouden opent het elementenwiel.",
             ["omashguh", "westelijke_luchttempel", "vuurtempel_roku", "kyoshi_dorp"]),
         "zijpaden_guhvatar": (
             "Zijpaden van de Guhvatar", "item:guhs:einde2_zij_kristalsnoep_ring",

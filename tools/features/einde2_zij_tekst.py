@@ -642,11 +642,19 @@ TEKST = {
     G + "kracht.geen": "Je kent hier nog geen vadskunst.",
     G + "kracht.wacht": "%s moet nog even afkoelen.",
     G + "kracht.wiel": "Elementenwiel",
+    G + "kracht.aarde_mis": "Geen grond binnen bereik: kijk naar de grond waar de rotszuil moet komen.",
+    G + "kracht.aarde_hier": "Hier is geen plek voor een rotsmuur.",
     G + "kracht.kies": "Kies...",
     "gui.guhs.einde2_kracht.zij_luchtsprong": "Luchtsprong",
     "gui.guhs.einde2_kracht.zij_waterloop": "Over water lopen",
-    "gui.guhs.einde2_kracht.zij_aardzuil": "Aardzuiltje",
-    "gui.guhs.einde2_kracht.zij_handvlam": "Handvlam",
+    "gui.guhs.einde2_kracht.zij_aardzuil": "Rotszuil",
+    "gui.guhs.einde2_kracht.zij_handvlam": "Vuurschicht",
+    "gui.guhs.einde2_kracht.zij_luchtsprong.uitleg": "Spring hoog op de wind, en in de lucht nog één keer. Je landt altijd zacht.",
+    "gui.guhs.einde2_kracht.zij_waterloop.uitleg": "Loop vijftien tellen over water. Bukken = zakken. Je landt ook zacht.",
+    "gui.guhs.einde2_kracht.zij_aardzuil.uitleg": "Een rotszuil schiet omhoog waar je kijkt (tot 12 blokken) en gooit monsters de lucht in. "
+        "Kijk naar je voeten: hij tilt jou op. Bukken: een rotsmuur voor je neus. Alles brokkelt na een paar tellen weer weg.",
+    "gui.guhs.einde2_kracht.zij_handvlam.uitleg": "Schiet een vuurschicht 10 blokken ver. Een monster krijgt een tik en vat even vlam. "
+        "Kampvuren en kaarsen steekt hij aan; verder vat er niets vlam, en guhs raakt hij nooit.",
     "key.guhs.einde2_kracht": "Vadskunst (tikken: gebruiken, vasthouden: elementenwiel)",
 
     # --- the Guhdex lists (needs, rewards) ---
@@ -671,7 +679,7 @@ TEKST = {
     "item.guhs.einde2_zij_zegenschub.lore": "Val je in de leegte van het Guheinde, dan vangt de oude schildpad je op.",
     "item.guhs.einde2_zij_spijtsoep": "Spijtsoep",
     "item.guhs.einde2_zij_spijtsoep.lore": "Van de spijtige Mika-kok. Sorry dat hij zo lekker is.",
-    "block.guhs.einde2_zij_aardzuil": "Aardzuiltje",
+    "block.guhs.einde2_zij_aardzuil": "Gestuurde rots",
     "item.guhs.einde2_zij_kyoshi_schmink": "Kyoshi-schmink",
     "gui.guhs.kledingbron.einde2_zij": "Kyoshi-dorp",
 
@@ -685,8 +693,9 @@ TEKST = {
 # the FTB quests (key -> (title, text)); the step quests come from LIJNEN through wereld.ftb_questlijn
 FTB_EXTRA = {
     "krachten": ("Vier blijvende vadskunsten", "Elk element dat je in het verhaal van de Guhvatar leert, laat iets blijvends achter: een "
-                 "&6luchtsprong&r (ook in de lucht), &6over water lopen&r, een &6aardzuiltje&r en een &6handvlam&r. Eén toets (standaard "
-                 "&dH&r): tikken = gebruiken, vasthouden = het elementenwiel."),
+                 "&6luchtsprong&r (ook in de lucht), &6over water lopen&r, een &6rotszuil&r die monsters de lucht in gooit (bukken: een "
+                 "&6rotsmuur&r) en een &6vuurschicht&r die monsters een tik geeft. Guhs raken ze nooit. Eén toets (standaard &dH&r): "
+                 "tikken = gebruiken, vasthouden = het elementenwiel."),
     "handel": ("Ruilen met Ender-Mika's", "Op de markt van de Leegtehaven staan Ender-Mika's achter hun kraam. Hun aanbod wisselt elke "
                "dag. Klik er een aan om te ruilen."),
     "veer": ("De Vadsige Golf", "De veerman-guh in de Leegtehaven vaart je gratis naar elke plek van het Guheinde die je kent, en naar "
