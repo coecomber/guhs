@@ -5,7 +5,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.5.0 — the Guh End update — Minecraft 26.1.2
 
-The Guheinde (Guh End) grows far beyond its main island: new outer islands, **two** big new stories (the Guhvatar and Sponsguh Kaasbroek), a dimension of its own, a town under the void, side places, music and tech tier 5. No world reset: the new islands and buildings grow in Guh End land that was not generated yet.
+The Guheinde (Guh End) grows far beyond its main island: new outer islands, **two** big new stories (the Guhvatar and Sponsguh Kaasbroek), a dimension of its own, a town under the void, side places, music and tech tier 5. On the official server the Guheinde is regenerated for 1.5.0. In singleplayer the new islands only grow in Guh End land that was not generated yet, so for the guaranteed buildings you need a fresh Guheinde (or a new world).
 
 ### Read this first
 
@@ -85,6 +85,7 @@ The Guheinde (Guh End) grows far beyond its main island: new outer islands, **tw
 
 - **Fixed: two Vahoege Vads pieces combine in an anvil again.** Two enchanted pieces of the same vads gear (helmet, chestplate, leggings, boots, sword, pickaxe, axe, shovel, hoe, Vadspaxel or Vahoege-vadsschaar) left the anvil's result slot empty, because the gear never breaks. Now they merge like ordinary tools: equal levels go up one (two helmets with Protection III give Protection IV), otherwise the highest level stays, and enchantments that do not fit or clash are skipped. The XP cost, the "Too Expensive!" limit and renaming work as usual. The gear stays unbreakable.
 - **Fixed: you can make pepper soup again.** Pouring a bucket of kaassaus (Bucket of Cheese Sauce) into a Guhbrouwketel (Guh Brewing Cauldron) inside or next to a guh building always said "Geen vuur of emmers naast een guhgebouw, njeg!" (No fire or buckets next to a guh building), so the pepper brew in the Peperteler-guh's kas could not be started. The sauce goes into the cauldron now. Pouring buckets out next to guh buildings is still not allowed.
+- **Fixed: the music disc Het Snuffeleiland (1.4.1) now has its own light show on the dance floor.**
 
 ## 1.4.4 — Minecraft 26.1.2
 
