@@ -1,0 +1,2126 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_guhvatar",
+  group: "4755489B04766E01",
+  guhs_chapter_version: 39,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhvatar.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "475548BDEF1269EC",
+  images: [
+    {
+      height: 3.0,
+      id: "47554853D2D1BB68",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 4.5,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "4755482FB5E89EA6",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 6.3,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "4755481A437CEF2A",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/kop_einde2_h1_lucht.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: OPPER-GEVADST! (Verhalen van het Guheinde)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755483BB5C4193B",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/kop_einde2_h2_water.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 10.24375,
+      hover: [
+        "Komt na: Eindelijk, de Guhvatar",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548F9CEC01DCC",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/kop_einde2_h3_aarde.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 17.20625,
+      hover: [
+        "Komt na: De sneeuwstorm",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548BD9496A7F8",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/kop_einde2_h4_vuur.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 24.16875,
+      hover: [
+        "Komt na: De ontsnapping",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548734AFE157A",
+      image: "guhs:textures/ftbquests/guhs_guhvatar/kop_einde2_h4_vuur_finale.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 29.631249999999998,
+      hover: [
+        "Komt na: De tent van de Witte Lotus",
+      ],
+    },
+  ],
+  order_index: 16,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "4755485045B9CE4C",
+      linked_quest: "4755488B952685DE",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "4755489ACAE0D18E",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhvatar.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "4755482441572C14",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485D76A26184",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548C7558482E0",
+      icon: {
+        id: "guhs:oog_van_vadsig",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_1",
+          id: "4755480D855A6331",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489C7C90F400",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "4755486712EA7A9C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548A9701734ED",
+      icon: {
+        id: "guhs:appa_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_2",
+          id: "475548CBDD40F42E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AF989E014C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "47554893E58C9701",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+      dependencies: [
+        "475548C7558482E0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755481AEA21FDF5",
+      icon: {
+        id: "minecraft:chiseled_quartz_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_3",
+          id: "4755488833D80FF3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CB46A987D1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "47554825D12BC87D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+      dependencies: [
+        "475548A9701734ED",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554839AA2D25C8",
+      icon: {
+        id: "minecraft:snowball",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_4",
+          id: "47554851B3FC0D4C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554834158248E3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548ADE6FA17AD",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+      dependencies: [
+        "4755481AEA21FDF5",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755482D09C7C42F",
+      icon: {
+        id: "guhs:luchtscooter",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_5",
+          id: "47554863492E0593",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480513D20D68",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "47554878479C5BB2",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      dependencies: [
+        "47554839AA2D25C8",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BD32FFB82C",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_6",
+          id: "47554853DCAB0501",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485EC232BDF0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548CCDB5D96A1",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482D09C7C42F",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554888BF921F00",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_7",
+          id: "47554857292EDC21",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554847AFE4791A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548C2168DDACA",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      dependencies: [
+        "475548BD32FFB82C",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BCD2AA528A",
+      icon: {
+        id: "minecraft:apple",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_8",
+          id: "475548F322A58A86",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554810ACECAA9B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548C3939F0630",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+      dependencies: [
+        "47554888BF921F00",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480446808BF8",
+      icon: {
+        id: "guhs:werkplaatsdeur",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_9",
+          id: "475548F8F8AE68E0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554884744EA975",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "47554878DE66B4CD",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 8.0625,
+      dependencies: [
+        "475548BCD2AA528A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548B7ECBA1C3E",
+      icon: {
+        id: "guhs:luchtscooter",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_lucht_stap_10",
+          id: "475548BA9DF34308",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D02406CA1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548C4139121F8",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 6.0,
+      y: 8.0625,
+      dependencies: [
+        "4755480446808BF8",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "47554818784F7192",
+      icon: {
+        id: "guhs:einde2_bouw_water_ijssteen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_1",
+          id: "475548779C443511",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554870C6B520CD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 12.025,
+      dependencies: [
+        "475548B7ECBA1C3E",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "47554882EDE700F2",
+      icon: {
+        id: "minecraft:water_bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_2",
+          id: "4755483384BC2684",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830DF237B36",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 12.025,
+      dependencies: [
+        "47554818784F7192",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548053FBAF427",
+      icon: {
+        id: "minecraft:target",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_3",
+          id: "4755482A9FF5BC97",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554855A615F617",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 12.025,
+      dependencies: [
+        "47554882EDE700F2",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C3DDB96B7A",
+      icon: {
+        id: "minecraft:heart_of_the_sea",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_4",
+          id: "4755485628658EDE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D9C8AC8DF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 4.5,
+      y: 12.025,
+      dependencies: [
+        "475548053FBAF427",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548352E8F0A9E",
+      icon: {
+        id: "minecraft:packed_ice",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_5",
+          id: "47554879A6B7C298",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554836EDCF7E85",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 6.0,
+      y: 12.025,
+      dependencies: [
+        "475548C3DDB96B7A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548377CF07D17",
+      icon: {
+        id: "minecraft:snowball",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_6",
+          id: "475548E64EF5CF7A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485D461E9552",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      dependencies: [
+        "475548352E8F0A9E",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755484FD8C1D113",
+      icon: {
+        id: "minecraft:oak_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_7",
+          id: "47554803FED4BCDF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EC59F8A56F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+      dependencies: [
+        "475548377CF07D17",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548CD0DCFB668",
+      icon: {
+        id: "minecraft:white_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_8",
+          id: "4755489C648AB437",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B18189458",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 13.525,
+      dependencies: [
+        "4755484FD8C1D113",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554876D9117935",
+      icon: {
+        id: "minecraft:campfire",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_9",
+          id: "4755486C8483A025",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CE9AB455BE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 13.525,
+      dependencies: [
+        "475548CD0DCFB668",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554858C3983DE7",
+      icon: {
+        id: "guhs:blauwe_geest_masker",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_10",
+          id: "475548730FDBCE3D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554825EC40520C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 6.0,
+      y: 13.525,
+      dependencies: [
+        "47554876D9117935",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554834E0FDC094",
+      icon: {
+        id: "minecraft:tropical_fish",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_11",
+          id: "475548058FCF2E19",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B0D8D5043A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 4.5,
+      y: 13.525,
+      dependencies: [
+        "47554858C3983DE7",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554877FCB1E593",
+      icon: {
+        id: "minecraft:lily_pad",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_12",
+          id: "475548EB48E80E22",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548937593C4AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 13.525,
+      dependencies: [
+        "47554834E0FDC094",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C4C3942FDD",
+      icon: {
+        id: "minecraft:carved_pumpkin",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_13",
+          id: "475548441AB911A9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A551F939E9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 13.525,
+      dependencies: [
+        "47554877FCB1E593",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755481C5436C7EC",
+      icon: {
+        id: "minecraft:prismarine_crystals",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_14",
+          id: "47554825FFE9B0FF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484F64E112C3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 13.525,
+      dependencies: [
+        "475548C4C3942FDD",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A06C4A2DF3",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_15",
+          id: "47554897FBE15675",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481A3CBB2935",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 15.025,
+      dependencies: [
+        "4755481C5436C7EC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554824937D9A6D",
+      icon: {
+        id: "minecraft:sea_lantern",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_16",
+          id: "47554898A04C63E5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A33CE6523A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 1.5,
+      y: 15.025,
+      dependencies: [
+        "475548A06C4A2DF3",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548284C705674",
+      icon: {
+        id: "minecraft:trident",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_17",
+          id: "475548E70F46E198",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AC60048A86",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 3.0,
+      y: 15.025,
+      dependencies: [
+        "47554824937D9A6D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C02FD04BE1",
+      icon: {
+        id: "guhs:boemerang",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_water_stap_18",
+          id: "475548931C2D4C59",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485AF987335E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F456F51D0A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 15.025,
+      dependencies: [
+        "475548284C705674",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "47554889B2CF7719",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_stadssteen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_1",
+          id: "47554821640ADD0D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483485EE92F3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 18.9875,
+      dependencies: [
+        "475548C02FD04BE1",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548705EE469FC",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_2",
+          id: "475548E4A3CF9728",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554858440DC517",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 18.9875,
+      dependencies: [
+        "47554889B2CF7719",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755480E121C1882",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_aardemunt",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_3",
+          id: "4755484336118FA3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FE5AAA86C2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 18.9875,
+      dependencies: [
+        "475548705EE469FC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548551324C288",
+      icon: {
+        id: "minecraft:sculk_sensor",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_4",
+          id: "47554895175BA7C4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FA57997CCD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 18.9875,
+      dependencies: [
+        "4755480E121C1882",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C1090ADAB6",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_spoor",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_5",
+          id: "4755489BF2378940",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830C4C9C358",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 18.9875,
+      dependencies: [
+        "475548551324C288",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548312D6883B4",
+      icon: {
+        id: "guhs:theepotje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_6",
+          id: "475548F1E8AF0AE7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B054DC2FCE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+      dependencies: [
+        "475548C1090ADAB6",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755486207C044D9",
+      icon: {
+        id: "guhs:theeset",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_7",
+          id: "475548D2D296B5CC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482247460C56",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 18.9875,
+      dependencies: [
+        "475548312D6883B4",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BA2CF7E327",
+      icon: {
+        id: "guhs:pai_sho_tafel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_8",
+          id: "47554840B87EC925",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480692AD1F93",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 20.4875,
+      dependencies: [
+        "4755486207C044D9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554869E62D4E81",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_9",
+          id: "47554883D5908EB4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482AD0C50754",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 20.4875,
+      dependencies: [
+        "475548BA2CF7E327",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A1AFBC1C26",
+      icon: {
+        id: "guhs:appa_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_10",
+          id: "475548F6CB207E70",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489D3BFD2DA1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 20.4875,
+      dependencies: [
+        "47554869E62D4E81",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548E5D95592E9",
+      icon: {
+        id: "minecraft:honeycomb",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_11",
+          id: "4755489D5C3B5578",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554810BE5F5051",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 20.4875,
+      dependencies: [
+        "475548A1AFBC1C26",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554821B209F985",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_12",
+          id: "475548135717B41F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487ED92577EA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 20.4875,
+      dependencies: [
+        "475548E5D95592E9",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548725E4BDD62",
+      icon: {
+        id: "minecraft:cherry_sapling",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_13",
+          id: "47554878B636D266",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B840017647",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 20.4875,
+      dependencies: [
+        "47554821B209F985",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548CF40A57A51",
+      icon: {
+        id: "guhs:einde2_bouw_aarde_groen_kristal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_14",
+          id: "475548D9DB7A4E9D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487E410756BD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 20.4875,
+      dependencies: [
+        "475548725E4BDD62",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755489691C7FA24",
+      icon: {
+        id: "minecraft:mud_bricks",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_aarde_stap_15",
+          id: "475548FC88308BD6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B5B03E52AD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 21.9875,
+      dependencies: [
+        "475548CF40A57A51",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548835D6D9A9D",
+      icon: {
+        id: "guhs:einde2_bouw_vuur_embleem",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_1",
+          id: "475548BD8384CF7B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821D5C1720D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 25.95,
+      dependencies: [
+        "4755489691C7FA24",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "4755482FC8904FAA",
+      icon: {
+        id: "minecraft:book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_2",
+          id: "4755487DF608DE13",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489BCE712E1C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 25.95,
+      dependencies: [
+        "475548835D6D9A9D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548D68D3B9409",
+      icon: {
+        id: "minecraft:note_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_3",
+          id: "4755483CF19AD491",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E72E480C11",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 25.95,
+      dependencies: [
+        "4755482FC8904FAA",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548371940A5C5",
+      icon: {
+        id: "minecraft:bread",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_4",
+          id: "475548950032E5B0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548661557AF7E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 25.95,
+      dependencies: [
+        "475548D68D3B9409",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548F643FFE2C0",
+      icon: {
+        id: "minecraft:black_concrete",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_5",
+          id: "47554892BA634BEE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554804CC17C5E2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 25.95,
+      dependencies: [
+        "475548371940A5C5",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548C1114AC00C",
+      icon: {
+        id: "minecraft:iron_bars",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_6",
+          id: "4755481D6D96E71E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485925C80D6D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 25.95,
+      dependencies: [
+        "475548F643FFE2C0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755481DEF87598E",
+      icon: {
+        id: "minecraft:campfire",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_7",
+          id: "4755483287DA0D8C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548942C3B2CAB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 25.95,
+      dependencies: [
+        "475548C1114AC00C",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A4E9C6BA06",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_8",
+          id: "4755487226F01C70",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554829E87F3343",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 27.45,
+      dependencies: [
+        "4755481DEF87598E",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548FB6DD13D31",
+      icon: {
+        id: "minecraft:iron_chain",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_9",
+          id: "475548516FAF9E06",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F780B9D504",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 27.45,
+      dependencies: [
+        "475548A4E9C6BA06",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755489278ED0186",
+      icon: {
+        id: "guhs:einde2_bouw_vuur_zonnesteen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_10",
+          id: "47554884AA4816DE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548487390FE71",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 27.45,
+      dependencies: [
+        "475548FB6DD13D31",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548398C88BE7E",
+      icon: {
+        id: "minecraft:painting",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_11",
+          id: "475548C0DFACBBC2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488DA3A847C2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 27.45,
+      dependencies: [
+        "4755489278ED0186",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755481FA42DC90A",
+      icon: {
+        id: "guhs:einde2_bouw_vuur_lotustegel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_vuur_stap_12",
+          id: "475548FA0F26D2CC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554835A330FBBE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 27.45,
+      dependencies: [
+        "475548398C88BE7E",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755483042E6095D",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_1",
+          id: "475548461E001477",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548066ACB64B9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 31.412499999999998,
+      dependencies: [
+        "4755481FA42DC90A",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548A9BBA4973D",
+      icon: {
+        id: "minecraft:turtle_scute",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_2",
+          id: "475548C125104499",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548513DFAD9F5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 31.412499999999998,
+      dependencies: [
+        "4755483042E6095D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755485759E156A0",
+      icon: {
+        id: "minecraft:fire_charge",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_3",
+          id: "475548E7D4FC3184",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E452BEF7DC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 31.412499999999998,
+      dependencies: [
+        "475548A9BBA4973D",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548BFADB59513",
+      icon: {
+        id: "minecraft:blue_ice",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_4",
+          id: "475548BAEE4440D9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554851BD63C10E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 31.412499999999998,
+      dependencies: [
+        "4755485759E156A0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554894CE5BF026",
+      icon: {
+        id: "minecraft:nether_star",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_5",
+          id: "475548FA6CC6057D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C0744FCEBB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 31.412499999999998,
+      dependencies: [
+        "475548BFADB59513",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548756C242427",
+      icon: {
+        id: "minecraft:golden_helmet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_6",
+          id: "475548C17861B59F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A8670E4394",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 31.412499999999998,
+      dependencies: [
+        "47554894CE5BF026",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554851C0E1AD79",
+      icon: {
+        id: "guhs:guhvatar_beeld",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhvatar_finale_stap_7",
+          id: "4755488F063980E9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554856E30F9A3B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548F0A19B9EB6",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 9.0,
+      y: 31.412499999999998,
+      dependencies: [
+        "475548756C242427",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+  ],
+}

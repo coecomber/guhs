@@ -1,0 +1,155 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_sponsguh",
+  group: "4755489B04766E01",
+  guhs_chapter_version: 39,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_sponsguh.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755484752399400",
+  images: [
+    {
+      height: 3.0,
+      id: "475548BCF5604ACA",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 4.5,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "4755481C49FE86CA",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 6.3,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "475548F890E0F36C",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/kop_extra_einde2_bouw_bikinibodem.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Door de Knabbelpoort (Verhalen van het Guheinde)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755488DDC2B990B",
+      image: "guhs:textures/ftbquests/guhs_sponsguh/kop_extra_einde2_bouw_schelpenstad.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 8.74375,
+      hover: [
+        "Komt na: Door de Knabbelpoort (Verhalen van het Guheinde)",
+      ],
+    },
+  ],
+  order_index: 18,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548ABCBA7E69C",
+      linked_quest: "4755489D1C3345E2",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548A98B4F231A",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_sponsguh.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "4755486EC3EC182E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A24DDB0C27",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548DCC194C801",
+      icon: {
+        id: "guhs:zeepbel",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:bikinibodem",
+          id: "4755482BE967199F",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554814A632C641",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548B44B8692E1",
+      icon: {
+        id: "guhs:einde2_bouw_schelpenstad_schelpsteen",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:schelpenstad",
+          id: "475548EDD86C88EC",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E626F787BC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 0.0,
+      y: 10.525,
+      shape: "circle",
+    },
+  ],
+}
