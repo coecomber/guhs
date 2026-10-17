@@ -36,8 +36,8 @@ import nl.juiced.guhs.feature.verhaal.Cutscene;
  * ({@link SpAudio#lied}). Real residents within the scene's reach are hidden while it plays ({@code verbergEcht}), and so are
  * the player's own walking companions ({@link Volgers}): the actors stand in for them.
  * <p>
- * The looks of the cast ({@link SpCast}: the moustache, dried) go into an actor's NBT the way the stand-in keeps them
- * (persistent data, {@link #look}); a look that changes in the middle of a scene is a second actor that takes over (one is
+ * The looks of the cast ({@link SpCast}: the moustache, dried) go into an actor's NBT through {@link SpCast#nbt}
+ * ({@link #look}); a look that changes in the middle of a scene is a second actor that takes over (one is
  * moved away, the other in, on the same tick, under a puff of particles).
  */
 public final class D2WegScenes {
@@ -206,15 +206,9 @@ public final class D2WegScenes {
         };
     }
 
-    /**
-     * A look of {@link SpCast} in an actor's NBT. hook: sp_cast decides how a look travels in NBT; this writes the stand-in's
-     * form (the entity's persistent data, key {@code guhs_einde2_sp_cast_look_<look>}), which an actor loads like a saved
-     * entity. If sp_cast stores looks elsewhere, this one method changes at the merge.
-     */
+    /** A look of {@link SpCast} in an actor's NBT (merge_sp2: sp_cast's own NBT form, "Looks", as d2_heen / d2_finale). */
     static void look(CompoundTag tag, String look) {
-        CompoundTag data = tag.getCompoundOrEmpty("NeoForgeData").copy();
-        data.putBoolean("guhs_einde2_sp_cast_look_" + look, true);
-        tag.put("NeoForgeData", data);
+        SpCast.nbt(tag, look);
     }
 
     /** An item display (always facing the camera, fully lit) of this item at this scale. */
@@ -369,7 +363,8 @@ public final class D2WegScenes {
             double[] m = MONSTER[i];
             s.loop("monster_" + (i + 1), 205, 230, m[0] + (105.7 - m[0]) * 0.25, 4, m[1] + (57.6 - m[1]) * 0.25);
         }
-        s.geluid(232, E2SponsguhFeature.MONSTER_ZING, 1.0f, 0.7f).anim("monster_1", 232, "zing");
+        // (merge_sp2: the recording opens with one monster humming a phrase; no extra MONSTER_ZING hum on top of it)
+        s.anim("monster_1", 244, "zing");
         int lied = SpAudio.lied(s.b, "monsters", 244);
         int t = 244;
         for (int i = 0; i < MONSTER.length; i++) {

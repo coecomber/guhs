@@ -81,7 +81,7 @@ SCENES = {
         "natuurtalent": "VIJF! Vijf perfecte Knabbelburgers! Je bent een natuurtalent! Een knabbelwonder! Een... ik ben door "
                         "mijn woorden heen!",
         "twee": "Zucht. Fantastisch. Nu zijn er twee van.",
-        "kwallen": "Hé! Hé! Ben je klaar met bakken? Ik heb netjes! Kom KWALLEN VANGEN! Kom dan, kom dan, kom dan!",
+        "kwallen": "Hé! Hé! Ben je klaar met bakken? Ik heb netjes! Kom KWALLEN VANGEN! Ik wacht bij mijn rots! Kom dan, kom dan, kom dan!",
     }, {"sponsguh": "Sponsguh", "octo": "Octo", "patguh": "Patguh"}),
 }
 

@@ -29,12 +29,14 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.einde2.sponsguh.Cast;
 import nl.juiced.guhs.feature.einde2.sponsguh.SponsguhWezen;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpStappen;
 import nl.juiced.guhs.feature.einde2.spverhaal.SpVerhaal;
 import nl.juiced.guhs.feature.einde2.verhaal.StapHint;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
+import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Doel;
 
@@ -75,6 +77,8 @@ public final class E2SpD1StadFeature {
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
         D1StadScenes.registreer();
+        // the story hands out Patguh's flowered trousers (merge_sp2: own source, like d1_start / d2_finale / sp_zij)
+        KledingBronnen.bron(GuhClothes.SPONSGUH_BLOEMETJESBROEK, "einde2_sp_d1_stad");
         String lijn = D1Stad.LIJN;
         for (int stap : new int[] {D1Stad.KWALLEN, D1Stad.EXAMEN}) {
             SpStappen.echt(lijn, stap);

@@ -17,10 +17,11 @@ VERTELLER = "De Verteller"
 
 SCENES = {
     "patguh": ("Patguh wordt wakker", {
-        "intro": "Ah, Patguh Ster. Hij slaapt graag. En als hij klaar is met slapen... slaapt hij nog een keertje. Magnifique.",
+        "intro": "Ah, Patguh Ster. Hij rende naar zijn rots om op je te wachten. Maar wachten is zo vermoeiend... Hij slaapt "
+                 "graag. En als hij klaar is met slapen... slaapt hij nog een keertje. Magnifique.",
         "snurk": "Zzzz... nog vijf minuutjes... zzzz... nog vijf kwalletjes...",
         "wakker": "Huh?! Is het al morgen? O nee, het is nog steeds vandaag. Gelukkig, daar was ik net aan gewend.",
-        "jam": "Hé, jij bent de nieuwe van De Krokante Knabbel! Meneer Krabguh wil kwallenjam op de Knabbelburgers. "
+        "jam": "Hé, daar ben je! Ik was even mijn ogen aan het rusten. Meneer Krabguh wil kwallenjam op de Knabbelburgers. "
                "En ik weet alles van kwallen. Bijna alles. Ik weet dat ze kwal heten.",
         "net": "Hier, een netje voor jou! Gewoon zachtjes tikken, dan floep, zit hij in de pot. Acht kwallen, dan is de pot vol.",
         "veld": "De Kwallenvelden zijn aan het eind van de straat, naar het westen. Wie het laatst is, is een rotte kwal! Njeg!",
@@ -116,6 +117,8 @@ TEXTS = {
     "item.guhs.einde2_sp_d1_stad_kwallennet": "Kwallennetje",
     "item.guhs.einde2_sp_d1_stad_kwallennet.lore": "Van Patguh gekregen. Zachtjes tikken, dan floep!",
     "entity.guhs.einde2_sp_d1_stad_lesboot": "Lesbootje",
+    # where Patguh's flowered trousers come from (the guh clothes screen)
+    "gui.guhs.kledingbron.einde2_sp_d1_stad": "Sponsguh deel 1: kwallen vangen met Patguh",
 }
 
 # FTB: one quest per step (quest i is done when the player reaches step i + 1)
