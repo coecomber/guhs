@@ -565,15 +565,21 @@ public class E2SponsguhGameTests {
         });
     }
 
-    /** The seven clothes: all from the one source of the story, each with its item. */
+    /**
+     * The seven clothes: all from the Sponsguh story, each with its item. The source is the story's own ({@code einde2_sponsguh})
+     * or the source of the story slice that hands the piece out ({@code einde2_sp_<slice>}: the cap d1_start, the antennas
+     * d2_finale, the air helmet and the hero cape sp_zij; merge_sp1).
+     */
     @GuhTest(template = "empty", batch = BATCH)
     public static void einde2SponsguhKleding(GameTestHelper helper) {
         helper.assertTrue(E2SponsguhFeature.KLEDING.size() == 7, "seven pieces");
         for (GuhClothes stuk : E2SponsguhFeature.KLEDING) {
-            helper.assertTrue(E2SponsguhFeature.KLEDINGBRON.equals(KledingBronnen.bron(stuk)), stuk + " comes from the Sponsguh story");
+            String bron = KledingBronnen.bron(stuk);
+            helper.assertTrue(E2SponsguhFeature.KLEDINGBRON.equals(bron) || (bron != null && bron.startsWith("einde2_sp_")),
+                    stuk + " comes from the Sponsguh story: " + bron);
             helper.assertTrue(ModItems.CLOTHES.get(stuk) != null && stuk.id().startsWith("sponsguh_"), stuk + " has its item");
         }
-        helper.assertTrue(KledingBronnen.van(E2SponsguhFeature.KLEDINGBRON).equals(E2SponsguhFeature.KLEDING), "and nothing else does");
+        helper.assertTrue(E2SponsguhFeature.KLEDING.containsAll(KledingBronnen.van(E2SponsguhFeature.KLEDINGBRON)), "and nothing else does");
         helper.assertTrue(GuhClothes.SPONSGUH_VIERKANTE_BROEK.slot == GuhClothes.Slot.BODY && GuhClothes.SPONSGUH_ANTENNES.slot == GuhClothes.Slot.OREN
                 && GuhClothes.SPONSGUH_HELDENCAPE.slot == GuhClothes.Slot.BACK && GuhClothes.SPONSGUH_LUCHTHELM.slot == GuhClothes.Slot.HEAD, "their slots");
         helper.succeed();

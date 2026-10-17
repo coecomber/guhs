@@ -135,9 +135,9 @@ public final class D2fScenes {
                 .zeg(148, "mindy", "haast", 46)
                 .cameraKnipVolgt(196, v(1.4, 1.5, 2.6), "sponsguh").kijk("sponsguh", 196, v(1.4, 1.5, 2.6))
                 .zeg(198, "sponsguh", "paniek", 40).animatie("sponsguh", 198, "rennen").animatie("patguh", 200, "schrik")
-                // Mindy blows her shell horn
+                // Mindy calls her friend: she waves out over the void (her own zwaai, sp_cast; she has no "blaas"), the horn sounds
                 .cameraKnip(240, v(1.2, 1.4, 4.2), v(-1.5, 1.4, 2.0)).kijk("mindy", 238, v(1.2, 1.4, 4.2))
-                .zeg(242, "mindy", "vriend", 26).animatie("mindy", 244, "blaas")
+                .zeg(242, "mindy", "vriend", 26).animatie("mindy", 244, "zwaai")
                 .geluid(250, s(SoundEvents.FIRECHARGE_USE), 0.2f, 0.4f)
                 .geluid(252, E2SponsguhFeature.HASSELGUH_PLONS::get, 1.0f, 0.6f)
                 // David rises out of the void mist

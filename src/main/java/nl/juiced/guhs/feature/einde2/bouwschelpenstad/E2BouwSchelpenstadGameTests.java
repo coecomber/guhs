@@ -167,6 +167,9 @@ public class E2BouwSchelpenstadGameTests {
     private static final Map<String, String> WIE = Map.of("cycloop", "guhs:cycloop_mika", "hasselguh", "guhs:david_hasselguh", "mindy", "guhs:mindy_guh",
             "mindy_strand", "guhs:mindy_guh", "dennis", "guhs:dennis_mika", "knipoog_appa_sponsguh", "guhs:sponsguh", "knipoog_appa_patguh", "guhs:patguh",
             "monster_1", "guhs:loopgraafmonster", "barman", "guhs:mika", "bewoner_1", "guhs:bikinibodem_guh");
+    /** The markers of the Sponsguh story slices' build hooks (CONTRACT_E2_C 4.1: d1s_, d1t_, d1r_, d2h_, d2w_, d2f_, zij_). */
+    private static final java.util.regex.Pattern HAAK = java.util.regex.Pattern.compile("(d1s|d1t|d1r|d2h|d2w|d2f|zij)_");
+
     /** Spots that are apart on purpose: the monsters high on the walls, David in the void, things on the table and the ceiling. */
     private static final Set<String> LOS = Set.of("monster_1", "monster_2", "monster_3", "monster_4", "hasselguh", "droogtafel_sponsguh",
             "droogtafel_patguh", "drooglamp", "sproeier");
@@ -192,7 +195,10 @@ public class E2BouwSchelpenstadGameTests {
             helper.assertTrue(n >= (int) g[1], g[0] + "_*: " + n + " of at least " + g[1]);
             geteld += n;
         }
-        helper.assertTrue(blad.plekken().size() == geteld, "no marker beyond the list: " + blad.plekken().size() + " vs " + geteld);
+        // (merge_sp1: the Sponsguh story slices add their own markers through the build hook, each id with its slice's short
+        // name, CONTRACT_E2_C 4.1; those are theirs, not this list's)
+        long eigen = blad.plekken().keySet().stream().filter(k -> !HAAK.matcher(k).lookingAt()).count();
+        helper.assertTrue(eigen == geteld, "no marker beyond the list: " + eigen + " vs " + geteld);
         for (Map.Entry<String, String> e : WIE.entrySet()) {
             helper.assertTrue(e.getValue().equals(blad.plekken().get(e.getKey()).entity()), e.getKey() + " is " + e.getValue());
         }
