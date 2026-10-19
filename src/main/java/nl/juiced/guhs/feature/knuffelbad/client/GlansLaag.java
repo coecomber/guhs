@@ -56,9 +56,9 @@ final class GlansLaag {
             String own = "armor_" + frame.armour.name().toLowerCase(Locale.ROOT);
             return name.equals(own) || name.equals(own + "_body");
         }
-        if (GuhVariant.VARIANT_BONES.stream().anyMatch(name::startsWith)) {
+        if (GuhVariant.isVariantBone(name)) {
             for (GuhClothes.Slot slot : frame.clothes.keySet()) {
-                if (GuhClothes.slotBones(slot).stream().anyMatch(name::startsWith)) {
+                if (GuhClothes.slotCovers(slot, name)) {
                     return false;
                 }
             }

@@ -60,8 +60,8 @@ import net.minecraft.world.level.storage.ValueInput;
  *       always with "Lief kijken"). Tamed it follows you. Sneak + right-click (owner): pick it up as the
  *       {@link MuisjeItem pieppiepmuisje_item} (name and all); use that item on a block to put it down, in the air to put it
  *       on your shoulder ({@link Schouder}).</li>
- *   <li>Verstoppertje ({@link Verstoppertje}): now and then a tamed muisje hides in a pot, basket or flower pot nearby (or
- *       in the grass) and peeps until you find it by right-clicking there.</li>
+ *   <li>Verstoppertje ({@link Verstoppertje}): now and then a tamed muisje hides in a pot, basket or flower pot nearby
+ *       and peeps until you find it by right-clicking there.</li>
  * </ul>
  * GeckoLib bones/animations: see blockbench/pieppiepmuisje.bbmodel and PIEP_NOTES.md (idle, walk, blij, eet, piep, zit).
  */

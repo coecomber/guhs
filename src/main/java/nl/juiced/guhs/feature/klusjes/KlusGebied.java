@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import nl.juiced.guhs.block.KnabbelkorfBlock;
 import nl.juiced.guhs.feature.bakkerij.KnabbelovenBlock;
 import nl.juiced.guhs.feature.boerderij.KippennestjeBlock;
 import nl.juiced.guhs.feature.guhpolder.MolentjeBlock;
@@ -290,8 +289,10 @@ public final class KlusGebied {
                 && s.getValue(net.minecraft.world.level.block.DoublePlantBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER;
     }
 
+    /** A full knabbelkorf, or (1.5.2) a full vanilla beehive / bee nest. */
     public static boolean volleKorf(BlockState s) {
-        return s.getBlock() instanceof KnabbelkorfBlock && s.getValue(BeehiveBlock.HONEY_LEVEL) >= BeehiveBlock.MAX_HONEY_LEVELS;
+        return s.getBlock() instanceof BeehiveBlock && s.hasProperty(BeehiveBlock.HONEY_LEVEL)
+                && s.getValue(BeehiveBlock.HONEY_LEVEL) >= BeehiveBlock.MAX_HONEY_LEVELS;
     }
 
     public static boolean nestMetEieren(BlockState s) {
@@ -401,7 +402,7 @@ public final class KlusGebied {
         if (s.getBlock() instanceof KnabbelbessenstruikBlock || s.getBlock() instanceof SweetBerryBushBlock) {
             return Soort.STRUIK;
         }
-        if (s.getBlock() instanceof KippennestjeBlock || s.getBlock() instanceof KnabbelkorfBlock) {
+        if (s.getBlock() instanceof KippennestjeBlock || s.getBlock() instanceof BeehiveBlock) {   // (1.5.2: vanilla hives too)
             return Soort.DIER_LATER;
         }
         if (s.is(net.minecraft.world.level.block.Blocks.JUKEBOX)) {

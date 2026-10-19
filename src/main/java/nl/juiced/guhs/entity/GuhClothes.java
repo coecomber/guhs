@@ -576,12 +576,38 @@ public enum GuhClothes {
     }
 
     public boolean shows(String bone) {
-        return bones.stream().anyMatch(bone::startsWith);
+        for (String prefix : bones) {
+            if (bone.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Every bone prefix any piece in this slot can show (so a worn piece can hide a variant's own bones there). */
     public static List<String> slotBones(Slot slot) {
-        return java.util.Arrays.stream(values()).filter(c -> c.slot == slot).flatMap(c -> c.bones.stream()).distinct().toList();
+        return SlotBones.PER_SLOT.get(slot);
+    }
+
+    /** Whether a piece in this slot can show this bone (so wearing one hides the variant's own bone there). */
+    public static boolean slotCovers(Slot slot, String bone) {
+        for (String prefix : slotBones(slot)) {
+            if (bone.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 1.5.2: {@link #slotBones} once per slot (it was rebuilt from all pieces for every bone of every guh, every frame). */
+    private static final class SlotBones {
+        static final java.util.Map<Slot, List<String>> PER_SLOT = new java.util.EnumMap<>(Slot.class);
+
+        static {
+            for (Slot slot : Slot.values()) {
+                PER_SLOT.put(slot, java.util.Arrays.stream(values()).filter(c -> c.slot == slot).flatMap(c -> c.bones.stream()).distinct().toList());
+            }
+        }
     }
 
     @Nullable

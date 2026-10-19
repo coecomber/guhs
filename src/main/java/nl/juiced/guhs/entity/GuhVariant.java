@@ -270,10 +270,25 @@ public enum GuhVariant {
 
     /** Whether this variant shows a bone (non-variant bones always show). */
     public boolean shows(String bone) {
-        if (VARIANT_BONES.stream().noneMatch(bone::startsWith)) {
+        if (!isVariantBone(bone)) {
             return true;
         }
-        return bones.stream().anyMatch(bone::startsWith);
+        for (String prefix : bones) {
+            if (bone.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Whether a bone belongs to some variant or outfit ({@link #VARIANT_BONES}); hidden unless something shows it. */
+    public static boolean isVariantBone(String bone) {
+        for (String prefix : VARIANT_BONES) {
+            if (bone.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** A random variant for a guh born in the Guhmension: usually NORMAL. */

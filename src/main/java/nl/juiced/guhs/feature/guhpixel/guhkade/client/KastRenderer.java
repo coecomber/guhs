@@ -120,6 +120,50 @@ public class KastRenderer implements BlockEntityRenderer<KastBlockEntity, KastRe
         }
         state.facing = block.getValue(HorizontalDirectionalBlock.FACING);
         long tijd = kast.getLevel().getGameTime();
+        // 1.5.2 (client FPS): the picture only changes once per game tick, so draw it once per tick and reuse it in between
+        Beeld beeld = BEELDEN.computeIfAbsent(kast, k -> new Beeld());
+        if (beeld.tijd == tijd && beeld.modus == kast.modus()) {
+            beeld.naar(state);
+            return;
+        }
+        teken(kast, state, tijd);
+        beeld.tijd = tijd;
+        beeld.modus = kast.modus();
+        beeld.van(state);
+    }
+
+    /** The last drawn picture of a cabinet (game tick, mode and its quads). */
+    private static final class Beeld {
+        long tijd = Long.MIN_VALUE;
+        int modus = -1;
+        float[] quads = new float[0];
+        int[] kleuren = new int[0];
+        int aantal;
+
+        void van(State state) {
+            aantal = state.aantal;
+            if (quads.length < aantal * 8) {
+                quads = new float[state.quads.length];
+                kleuren = new int[state.kleuren.length];
+            }
+            System.arraycopy(state.quads, 0, quads, 0, aantal * 8);
+            System.arraycopy(state.kleuren, 0, kleuren, 0, aantal);
+        }
+
+        void naar(State state) {
+            if (state.quads.length < aantal * 8) {
+                state.quads = new float[quads.length];
+                state.kleuren = new int[kleuren.length];
+            }
+            System.arraycopy(quads, 0, state.quads, 0, aantal * 8);
+            System.arraycopy(kleuren, 0, state.kleuren, 0, aantal);
+            state.aantal = aantal;
+        }
+    }
+
+    private static final java.util.Map<KastBlockEntity, Beeld> BEELDEN = new java.util.WeakHashMap<>();
+
+    private static void teken(KastBlockEntity kast, State state, long tijd) {
         Spel spel = kast.spel();
         Sim sim = kast.scherm(tijd);
         var top = kast.top();

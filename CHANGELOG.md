@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.5.2 — fixes — Minecraft 26.1.2
+
+- **Much better FPS around guhs:** drawing a guh got a lot cheaper, especially guhs wearing clothes. Bases with a few dozen (dressed) guhs dropped to 10-15 fps; the guh model now works out once which of its ~415 bones to show for each look and reuses that, and every piece of clothing only walks its own bones. Guh wheels, office desks and every other place that draws a guh benefit too. The Guhkade cabinets draw their screen once per game tick instead of every frame. Nothing looks different.
+- **Huisje (Guh House):** new buttons "Alles aan" and "Alles uit" turn every chore of every resident on or off at once.
+- **Chore "Dieren & bijen verzorgen":** also harvests full vanilla beehives and bee nests: honeycomb, or a honey bottle when there is an empty bottle in the chest. The bees stay calm.
+- **Pieppiepmuisje:** only hides in its special hiding blocks (flower pots, baskets, barrels, decorated pots...), no longer just somewhere on the ground. Muisjes that are hidden on the ground right now still come out as usual.
+
 ## 1.5.1 — fixes — Minecraft 26.1.2
 
 - **Plantagebak (Plantation Bed):** a sapling on the bed no longer grows by itself (while the bed had no vadskracht) or with bone meal (which is no longer used up there). Such a tree made the bed think it was empty for good: "De bak is leeg". A bed with a tree like that on it now takes the tree over by itself, so an axe on the bed or a chore guh fells it as usual.

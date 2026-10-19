@@ -201,26 +201,23 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         }
     }
 
+    private static final String[] ARMOR_BONES = java.util.Arrays.stream(GuhArmorItem.Tier.values())
+            .map(t -> "armor_" + t.name().toLowerCase(Locale.ROOT)).toArray(String[]::new);
+
     /** Which bones the main pass shows: saddle, the worn armour tier, and the variant's clothes / neck. */
     static void applyVisibility(BakedGeoModel model, BoneSnapshots bones, GuhRenderFrame frame) {
         hideWithChildren(bones, "saddle", !frame.saddled);
         for (GuhArmorItem.Tier tier : GuhArmorItem.Tier.values()) {
-            String name = "armor_" + tier.name().toLowerCase(Locale.ROOT);
             boolean hidden = tier != frame.armour;
-            hideWithChildren(bones, name, hidden);
-            hideWithChildren(bones, name + "_body", hidden);
+            hideWithChildren(bones, ARMOR_BONES[tier.ordinal()], hidden);
+            hideWithChildren(bones, ARMOR_BONES[tier.ordinal()] + "_body", hidden);
         }
-        for (GeoBone bone : model.boneLookup().get().values()) {
-            String name = bone.name();
-            if (GuhVariant.VARIANT_BONES.stream().anyMatch(name::startsWith)) {
-                boolean covered = false;
-                for (Map.Entry<GuhClothes.Slot, GuhClothes> worn : frame.clothes.entrySet()) {
-                    if (GuhClothes.slotBones(worn.getKey()).stream().anyMatch(name::startsWith)) {
-                        covered = true;
-                    }
-                }
-                // (only the bone's own cubes: its child bones decide for themselves)
-                bones.get(bone).skipRender(covered || !frame.variant.shows(name));
+        // (1.5.2: from a mask made once per variant + worn slots; only the bone's own cubes, its child bones decide for themselves)
+        GuhBoneMasks.Masks masks = GuhBoneMasks.of(model);
+        boolean[] hidden = masks.hidden(frame.variant, frame.clothes.keySet());
+        for (int i = 0; i < masks.bones.length; i++) {
+            if (masks.variantBone(i)) {
+                bones.get(masks.bones[i]).skipRender(hidden[i]);
             }
         }
     }
@@ -244,6 +241,15 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         if (!info.willRender()) {
             return;
         }
+        submitPass(info, collector, type, light, colour, GuhBoneMasks.of(info.model()).of(shows));
+    }
+
+    /** {@link #submitPass(RenderPassInfo, OrderedSubmitNodeCollector, RenderType, int, int, Predicate)} with a ready mask. */
+    static <R extends GeoRenderState> void submitPass(RenderPassInfo<R> info, OrderedSubmitNodeCollector collector, RenderType type,
+                                                     int light, int colour, GuhBoneMasks.Mask mask) {
+        if (!info.willRender()) {
+            return;
+        }
         BakedGeoModel model = info.model();
         int overlay = info.packedOverlay();
         collector.submitCustomGeometry(info.poseStack(), type, (pose, buffer) -> {
@@ -251,36 +257,39 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
             poseStack.pushPose();
             poseStack.last().pose().set(pose.pose());
             poseStack.last().normal().set(pose.normal());
-            info.renderPosed(() -> withVisibility(model, shows, () -> model.render(info, buffer, light, overlay, colour)));
+            info.renderPosed(() -> withVisibility(model, mask, () -> model.render(info, buffer, light, overlay, colour)));
             poseStack.popPose();
         });
     }
 
-    /** Run {@code render} with every bone's own visibility set by {@code shows}; puts everything back afterwards. */
-    private static void withVisibility(BakedGeoModel model, Predicate<String> shows, Runnable render) {
-        var all = model.boneLookup().get().values();
-        GeoBone[] changed = new GeoBone[all.size()];
-        boolean[][] was = new boolean[all.size()][];
-        int n = 0;
-        for (GeoBone bone : all) {
+    /**
+     * Run {@code render} with every bone's own visibility set by the mask; puts everything back afterwards.
+     * 1.5.2: a bone with nothing visible below it also skips its children, so a pass for one hat does not walk all bones.
+     */
+    private static void withVisibility(BakedGeoModel model, GuhBoneMasks.Mask mask, Runnable render) {
+        GeoBone[] all = GuhBoneMasks.of(model).bones;
+        int n = all.length;
+        // per bone: 0 = had no snapshot (removed again below), else 1 + hidden + 2 * children hidden
+        byte[] was = new byte[n];
+        for (int i = 0; i < n; i++) {
+            GeoBone bone = all[i];
             BoneSnapshot snap = bone.frameSnapshot;
             if (snap == null) {
                 bone.frameSnapshot = snap = BoneSnapshot.create(bone);
-                was[n] = null;                                    // temporary: removed again below
             } else {
-                was[n] = new boolean[]{snap.isHidden(), snap.areChildrenHidden()};
+                was[i] = (byte) (1 + (snap.isHidden() ? 1 : 0) + (snap.areChildrenHidden() ? 2 : 0));
             }
-            changed[n++] = bone;
-            snap.skipRender(!shows.test(bone.name())).skipChildrenRender(false);
+            snap.skipRender(!mask.own()[i]).skipChildrenRender(!mask.below()[i]);
         }
         try {
             render.run();
         } finally {
             for (int i = 0; i < n; i++) {
-                if (was[i] == null) {
-                    changed[i].frameSnapshot = null;
+                if (was[i] == 0) {
+                    all[i].frameSnapshot = null;
                 } else {
-                    changed[i].frameSnapshot.skipRender(was[i][0]).skipChildrenRender(was[i][1]);
+                    int w = was[i] - 1;
+                    all[i].frameSnapshot.skipRender((w & 1) != 0).skipChildrenRender((w & 2) != 0);
                 }
             }
         }
@@ -317,7 +326,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
                 // (2.8: hair is tinted with the guh's hair colour, -1 = its own colours)
                 int colour = e.getKey() == GuhClothes.Slot.HAAR && frame.haarkleur >= 0 ? 0xFF000000 | frame.haarkleur : 0xFFFFFFFF;
                 submitPass(info, collector.order(1), RenderTypes.entityCutout(worn.texture()), info.packedLight(), colour,
-                        name -> worn.shows(name) && (kruin || !name.endsWith("_kruin")));
+                        GuhBoneMasks.of(info.model()).clothes(worn, kruin));
             }
         }
     }

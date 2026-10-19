@@ -333,7 +333,7 @@ KLUSSEN = {  # the chore names + the tips of the huisje screen (what it needs ne
     "opruimen": ("Opruimen & sorteren", "Raapt spulletjes op die rondslingeren en brengt ze naar de kist. Staat er een Bank Guh in de "
                  "klus-area? Dan wordt alles gesorteerd, ook wat er in de kist ligt. Nodig: een kist of Bank Guh. (Guhs en muisjes)"),
     "dieren": ("Dieren & bijen verzorgen", "Aait en voert guhschaapjes, knabbelkippetjes en guhkoeien, raapt wol en eitjes op en haalt "
-               "eieren uit de kippennestjes. Oogst volle knabbelkorven. Leg knabbelvoer en lege flesjes (voor kaasmelk) in de kist! (Guhs)"),
+               "eieren uit de kippennestjes. Oogst volle knabbelkorven en bijenkasten (honingraat, of honing als er lege flesjes in de kist liggen). Leg knabbelvoer en lege flesjes (voor kaasmelk) in de kist! (Guhs)"),
     "bakken": ("Bakken & molen", "Brengt knabbelgraan uit de kist naar een guh-molentje en het meel terug, en bakt lekkers in een "
                "knabbeloven als de kist alles voor een recept heeft. Knabbelmeel = dubbel zoveel! (Guhs)"),
     "vissen": ("Vissen", "Vist guhvissen en schelpjes als er een vijvertje (3+ waterblokjes) in de klus-area is. Heel soms een Gouden "

@@ -48,6 +48,8 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  */
 public class HuisjeScreen extends Screen {
     private static final int W = 320, H = 230, RIJ = 28;
+    /** Width of the "Alles aan" / "Alles uit" buttons. */
+    private static final int ALLES_B = 50;
     private static final int PANEEL = 0xF0FFF4F8, RAND = 0xFFF7B6CB, DONKER = 0xFF3A1C30, TEKST = 0xFF5A3A4A, LICHT = 0xFFB0708A, ROZE = 0xFF7A2848;
 
     private CompoundTag data;
@@ -206,6 +208,20 @@ public class HuisjeScreen extends Screen {
             rijen.add(new BewonerRij(lijst.getCompoundOrEmpty(i)));
         }
         bewoners.zet(rijen);
+        // 1.5.2: "Alles aan" / "Alles uit": every chore of every resident at once (next to the chores header)
+        if (!nieuw && mag) {
+            boolean iemand = !lijst.isEmpty();
+            for (boolean aan : new boolean[]{true, false}) {
+                Button alles = Button.builder(Component.translatable(aan ? "gui.guhs.huisje.alles_aan" : "gui.guhs.huisje.alles_uit"),
+                        b -> stuur(HuisjePayloads.Actie.ALLE_KLUSSEN, "", "", aan, 0))
+                        .bounds(left + W - 8 - (aan ? 2 * ALLES_B + 2 : ALLES_B), top + 49, ALLES_B, 14)
+                        .tooltip(mag ? net.minecraft.client.gui.components.Tooltip.create(
+                                Component.translatable(aan ? "gui.guhs.huisje.alles_aan.tooltip" : "gui.guhs.huisje.alles_uit.tooltip")) : alleenKijken())
+                        .build();
+                alles.active = mag && iemand;
+                addRenderableWidget(alles);
+            }
+        }
         rechts.plaats(left + 146, top + 64, W - 146 - 8, H - 64 - 30);
         rechts.zet(nieuw ? kandidaten() : klussen());
         int by = top + H - 25;
@@ -303,7 +319,7 @@ public class HuisjeScreen extends Screen {
         Component kop = nieuw ? Component.translatable("gui.guhs.huisje.kop.nieuw")
                 : gekozen != null && bewoner(gekozen) != null ? Component.translatable("gui.guhs.huisje.kop.klusjes_van", nl.juiced.guhs.taal.Tekst.get(bewoner(gekozen), "Naam"))
                 : Component.translatable("gui.guhs.huisje.kop.klusjes");
-        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), left + 146, top + 53, W - 146 - 8, 0.875f, ROZE, false);
+        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), left + 146, top + 53, W - 146 - 8 - (nieuw || !mag() ? 0 : 2 * ALLES_B + 4), 0.875f, ROZE, false);
         if (lijst("Bewoners").isEmpty()) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.huisje.leeg"), left + 12, top + 68, 124, 0.75f, LICHT);
         }

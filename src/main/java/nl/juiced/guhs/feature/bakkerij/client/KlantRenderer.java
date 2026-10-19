@@ -102,7 +102,7 @@ public class KlantRenderer extends GeoEntityRenderer<BakkerijKlant, LivingEntity
         DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
         for (GeoBone bone : info.model().boneLookup().get().values()) {
             String name = bone.name();
-            if (name.equals("saddle") || name.startsWith("armor_") || GuhVariant.VARIANT_BONES.stream().anyMatch(name::startsWith)) {
+            if (name.equals("saddle") || name.startsWith("armor_") || GuhVariant.isVariantBone(name)) {
                 bones.get(bone).skipRender(true).skipChildrenRender(true);
             }
         }

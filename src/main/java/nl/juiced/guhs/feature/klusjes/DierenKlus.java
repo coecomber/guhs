@@ -32,7 +32,8 @@ import nl.juiced.guhs.registry.ModItems;
  * AAIEN) and feeds them knabbelvoer from the huisje's chest (VOEREN): two kinds of care make an animal content, and then
  * the guhschaapje gives pluiswol and the knabbelkippetje lays a knabbelei, which the guh picks up. A content guhkoe is
  * milked with an empty bottle from the chest (kaasmelk). It also empties the kippennestjes and harvests full knabbelkorven
- * (kaasknabbels, or kaashoning when there is a bottle for it). Up to three animals per trip. Guhs only.
+ * (kaasknabbels, or kaashoning when there is a bottle for it) and, 1.5.2, full vanilla beehives and bee nests (honeycomb,
+ * or a honey bottle when there is a bottle). Up to three animals per trip. Guhs only.
  */
 public class DierenKlus extends BasisKlus {
     public static final int PER_KEER = 3;
@@ -161,6 +162,21 @@ public class DierenKlus extends BasisKlus {
                 }
                 level.gameEvent(mob, GameEvent.SHEAR, blok);
                 korf.resetHoneyLevel(level, s, blok);        // (guh bees never get angry: nobody gets stung)
+                sprankel(Vec3.atCenterOf(blok.above()), 4);
+                aantal++;
+                gelukt();
+            } else if (KlusGebied.volleKorf(s) && s.getBlock() instanceof BeehiveBlock kast) {
+                // 1.5.2: a vanilla beehive or bee nest: honey in a bottle from the chest (when there is one), else honeycomb
+                ItemStack fles = Voorraad.neem(level, huisje, x -> x.is(Items.GLASS_BOTTLE), 1);
+                if (!fles.isEmpty()) {
+                    level.playSound(null, blok, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1f, 1f);
+                    pak(new ItemStack(Items.HONEY_BOTTLE));
+                } else {
+                    level.playSound(null, blok, SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1f, 1f);
+                    pak(new ItemStack(Items.HONEYCOMB, 3));
+                }
+                level.gameEvent(mob, GameEvent.SHEAR, blok);
+                kast.resetHoneyLevel(level, s, blok);        // (a guh harvests gently: the bees stay calm, like with a campfire)
                 sprankel(Vec3.atCenterOf(blok.above()), 4);
                 aantal++;
                 gelukt();

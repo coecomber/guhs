@@ -250,7 +250,7 @@ KLUSSEN = {
     "opgraven": ("Kaasknabbels opgraven", "Graaft kaasknabbels op in zand, aarde of gras rond het huisje. Soms iets zeldzaams, njeg!"),
     "farmen": ("Farmen", "Oogst rijpe gewassen en plant ze opnieuw: tarwe, wortels, kaasknabbelplantjes en guhtuintjes in de buurt."),
     "opruimen": ("Opruimen & sorteren", "Raapt spulletjes van de grond op en stopt ze in de kist. Met een Bank Guh erbij wordt alles gesorteerd."),
-    "dieren": ("Dieren & bijen verzorgen", "Voert guhschaapjes, knabbelkippetjes en guhkoeien en haalt hun spulletjes op. Oogst volle knabbelkorven."),
+    "dieren": ("Dieren & bijen verzorgen", "Voert guhschaapjes, knabbelkippetjes en guhkoeien en haalt hun spulletjes op. Oogst volle knabbelkorven en bijenkasten (honingraat, of honing als er lege flesjes in de kist liggen)."),
     "bakken": ("Bakken & molen", "Maalt knabbelgraan in een guh-molentje en bakt in een knabbeloven. Zet ze vlak bij het huisje!"),
     "vissen": ("Vissen", "Vist guhvissen en schelpjes als er water bij het huisje is."),
     "waken": ("Wachten & waarschuwen", "Piept en rent naar jou als er een Mika of monster komt, en duwt Mika's heel zachtjes weg. Nooit vechten!"),

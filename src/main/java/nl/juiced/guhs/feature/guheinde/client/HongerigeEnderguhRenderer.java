@@ -55,7 +55,7 @@ public class HongerigeEnderguhRenderer extends GeoEntityRenderer<HongerigeEnderg
             String name = bone.name();
             if (name.equals("saddle") || name.startsWith("armor_")) {
                 bones.get(bone).skipRender(true).skipChildrenRender(true);
-            } else if (GuhVariant.VARIANT_BONES.stream().anyMatch(name::startsWith)) {
+            } else if (GuhVariant.isVariantBone(name)) {
                 bones.get(bone).skipRender(!GuhVariant.ENDER.shows(name));
             }
         }

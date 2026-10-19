@@ -302,6 +302,9 @@ public class KlusjesGameTests {
         helper.setBlock(nest, BoerderijFeature.KIPPENNESTJE.get().defaultBlockState().setValue(KippennestjeBlock.EIEREN, 2));
         BlockPos korf = new BlockPos(16, 2, 8);
         helper.setBlock(korf, ModBlocks.KNABBELKORF.get().defaultBlockState().setValue(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.MAX_HONEY_LEVELS));
+        // 1.5.2: a vanilla beehive is harvested too (no bottle in the chest: honeycomb)
+        BlockPos kast = new BlockPos(18, 2, 8);
+        helper.setBlock(kast, net.minecraft.world.level.block.Blocks.BEEHIVE.defaultBlockState().setValue(BeehiveBlock.HONEY_LEVEL, BeehiveBlock.MAX_HONEY_LEVELS));
         GuhschaapjeEntity schaap = helper.spawn(BoerderijFeature.GUHSCHAAPJE.get(), new BlockPos(7, 2, 16));
         schaap.vergeetZorg();
         schaap.setNoAi(true);
@@ -310,6 +313,8 @@ public class KlusjesGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(helper.getBlockState(nest).getValue(KippennestjeBlock.EIEREN) == 0, "the eggs are taken out of the nest");
             helper.assertTrue(helper.getBlockState(korf).getValue(BeehiveBlock.HONEY_LEVEL) == 0, "the knabbelkorf is harvested");
+            helper.assertTrue(helper.getBlockState(kast).getValue(BeehiveBlock.HONEY_LEVEL) == 0, "the vanilla beehive is harvested");
+            helper.assertTrue(telKist(kist, s -> s.is(Items.HONEYCOMB)) >= 3, "the beehive's honeycomb");
             helper.assertTrue(schaap.heeftZorg(BoerderijDier.Zorg.AAIEN) && schaap.heeftZorg(BoerderijDier.Zorg.VOEREN), "the schaapje was petted and fed"
                     + staat(helper, guh));
             helper.assertTrue(telKist(kist, s -> s.is(BoerderijFeature.KNABBELEI.get())) == 2, "two knabbeleieren in the chest");

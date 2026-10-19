@@ -44,7 +44,8 @@ public final class HuisjePayloads {
     };
 
     /** (Append only: sent by ordinal.) 1.3.2 BINNEN: the button "Naar binnen", for the owner and for visitors. */
-    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN, BINNEN }
+    /** (1.5.2: ALLE_KLUSSEN = every chore of every resident on/off at once, {@code aan}) */
+    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN, BINNEN, ALLE_KLUSSEN }
 
     /** Client: the door fade of going in or out (set by client.HuisjeClient). */
     public static volatile Consumer<BinnenFx> fade = p -> {
@@ -277,6 +278,13 @@ public final class HuisjePayloads {
             case MELDINGEN -> {
                 h.zetMeldingen(p.aan());
                 Huisjes.dirty();
+            }
+            case ALLE_KLUSSEN -> {
+                for (UUID id : h.bewoners()) {
+                    for (Klus k : Klusjes.alle()) {
+                        h.zetKlus(id, k.id(), p.aan());
+                    }
+                }
             }
             case BINNEN -> {
                 // (handled above)

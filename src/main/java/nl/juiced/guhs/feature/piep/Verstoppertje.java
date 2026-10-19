@@ -22,8 +22,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Verstoppertje: now and then a tamed muisje (its owner close by) sneaks off and hides in a nearby hiding place
- * (block tag {@code guhs:piep/verstopplekken}: flower pots, baskets, barrels, decorated pots...) or, when there is none,
- * in the grass a few blocks away. Hidden it is invisible and peeps now and then (little piepje particles). Right-click
+ * (block tag {@code guhs:piep/verstopplekken}: flower pots, baskets, barrels, decorated pots...); no such block nearby,
+ * no hiding. Hidden it is invisible and peeps now and then (little piepje particles). Right-click
  * that spot (or the muisje) to find it: hearts, a spin, and the counter "gevonden" (Guhdex). Nobody found it after
  * {@link #MAX_VERSTOPT} ticks? It comes out by itself, a bit proud.
  */
@@ -123,7 +123,7 @@ public final class Verstoppertje {
         };
     }
 
-    /** Picks a hiding place: a hiding block nearby, else a grassy spot a few blocks off. */
+    /** Picks a hiding place: a hiding block nearby (none: false, it does not hide). */
     boolean kiesPlek() {
         ServerLevel level = (ServerLevel) muis.level();
         BlockPos base = muis.blockPosition();
@@ -138,16 +138,6 @@ public final class Verstoppertje {
             plek = blokken.get(muis.getRandom().nextInt(blokken.size()));
             inBlok = true;
             return true;
-        }
-        for (int i = 0; i < 12; i++) {
-            BlockPos p = base.offset(muis.getRandom().nextInt(11) - 5, 0, muis.getRandom().nextInt(11) - 5);
-            p = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, p);
-            if (Math.abs(p.getY() - base.getY()) <= 3 && p.distSqr(base) >= 9 && level.getBlockState(p.below()).isSolid()
-                    && level.getFluidState(p).isEmpty()) {
-                plek = p;
-                inBlok = false;
-                return true;
-            }
         }
         return false;
     }
