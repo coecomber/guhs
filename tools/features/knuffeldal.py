@@ -335,7 +335,7 @@ def blocks_and_items(h):
                 {"function": "minecraft:set_count", "count": 2, "conditions": [{"condition": "minecraft:block_state_property", "block": f"guhs:{slab}",
                                                                                  "properties": {"type": "double"}}]},
                 {"function": "minecraft:explosion_decay"}]}]}]})
-    shears = {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}
+    shears = {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}
     w(f"{D}/loot_table/blocks/pluisgras.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
         {"type": "minecraft:item", "name": "guhs:pluisgras", "conditions": [shears]}]}]})
     leaves = wereld.vanilla_json("data/minecraft/loot_table/blocks/cherry_leaves.json")

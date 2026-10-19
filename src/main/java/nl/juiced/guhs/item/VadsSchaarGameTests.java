@@ -51,6 +51,25 @@ public class VadsSchaarGameTests {
         }
         helper.assertTrue(schaar.isCorrectToolForDrops(Blocks.COBWEB.defaultBlockState()) && schaar.getDestroySpeed(Blocks.OAK_LEAVES.defaultBlockState()) > 1f,
                 "cuts cobweb and leaves");
+        // what shears cut off as itself (the mod's leaves and grasses, vanilla leaves) the vadsschaar does too (1.5.1)
+        net.minecraft.server.level.ServerLevel level = helper.getLevel();
+        BlockPos knip = helper.absolutePos(new BlockPos(1, 1, 1));
+        int geknipt = 0;
+        for (var block : net.minecraft.core.registries.BuiltInRegistries.BLOCK) {
+            String ns = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block).getNamespace();
+            if ((!ns.equals("guhs") && block != Blocks.OAK_LEAVES) || block.asItem() == Items.AIR) {
+                continue;
+            }
+            var state = block.defaultBlockState();
+            boolean metSchaar = net.minecraft.world.level.block.Block.getDrops(state, level, knip, null, null, gewoon).stream().anyMatch(s -> s.is(block.asItem()));
+            boolean zonder = net.minecraft.world.level.block.Block.getDrops(state, level, knip, null, null, ItemStack.EMPTY).stream().anyMatch(s -> s.is(block.asItem()));
+            if (metSchaar && !zonder) {
+                helper.assertTrue(net.minecraft.world.level.block.Block.getDrops(state, level, knip, null, null, schaar).stream().anyMatch(s -> s.is(block.asItem())),
+                        "the vadsschaar cuts off " + block + " like shears");
+                geknipt++;
+            }
+        }
+        helper.assertTrue(geknipt >= 13, "the leaves and grasses only shears cut off: " + geknipt);
         helper.assertTrue(schaar.is(nl.juiced.guhs.event.KeepOnDeathHandler.KEEP_ON_DEATH), "vads gear: kept on death");
         helper.assertTrue(DispenserBlock.DISPENSER_REGISTRY.get(schaar.getItem()) instanceof net.minecraft.core.dispenser.ShearsDispenseItemBehavior,
                 "a dispenser uses it like shears");

@@ -1727,7 +1727,7 @@ def deco_and_food():
     w(f"{A}/blockstates/roze_gras.json", {"variants": {"": {"model": "guhs:block/roze_gras"}}})
     item_model("roze_gras", "guhs:block/roze_gras")
     w(f"{D}/loot_table/blocks/roze_gras.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:alternatives", "children": [
-        {"type": "minecraft:item", "name": "guhs:roze_gras", "conditions": [{"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}]},
+        {"type": "minecraft:item", "name": "guhs:roze_gras", "conditions": [{"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}]},
         {"type": "minecraft:item", "name": "guhs:kaasknabbelzaadjes", "conditions": [{"condition": "minecraft:random_chance", "chance": 0.15}]}]}]}]})
     for age in range(8):
         img = rehue(vanilla(f"block/wheat_stage{age}"), 0.13 if age < 7 else 0.1, 1.2)
@@ -2054,7 +2054,7 @@ def guhbloesem():
     for b in ("guhbloesem_log", "guhbloesem_planks", "guhbloesem_sapling"):
         self_drop(b)
     silk_or_shears = {"condition": "minecraft:any_of", "terms": [
-        {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}},
+        {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"},
         {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
             {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}
     w(f"{D}/loot_table/blocks/guhbloesem_leaves.json", {"type": "minecraft:block", "pools": [

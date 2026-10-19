@@ -304,7 +304,7 @@ def blocks(h):
     h.self_drop("kaasmodder")
     silk = {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
         {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}
-    shears = {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}
+    shears = {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}
     h.w(f"{D}/loot_table/blocks/modderig_kaasgras.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
         {"type": "minecraft:alternatives", "children": [
             {"type": "minecraft:item", "name": "guhs:modderig_kaasgras", "conditions": [silk]},

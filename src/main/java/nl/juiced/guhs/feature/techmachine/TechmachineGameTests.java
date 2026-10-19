@@ -762,6 +762,67 @@ public class TechmachineGameTests {
     }
 
     /**
+     * A sapling on the bak only grows when the bak lets it: not by itself while the bak has no vadskracht (what a random
+     * tick does), not on another piece of the bed, not with bone meal (which is not used up). Beside the bak it grows.
+     */
+    @GuhTest(template = BOS, batch = "techmachine_bak", timeoutTicks = 100, skyAccess = true)
+    public static void techmachinePlantagebakGroeitNietVanzelf(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        PlantagebakBlockEntity bak = bak(helper);
+        helper.setBlock(BAK.north(), Blocks.AIR);
+        BlockPos buiten = new BlockPos(2, 3, 14);
+        helper.setBlock(buiten.below(), Blocks.GRASS_BLOCK);
+        BlockState zaailing = Blocks.OAK_SAPLING.defaultBlockState().setValue(net.minecraft.world.level.block.SaplingBlock.STAGE, 1);
+        for (BlockPos q : List.of(PLANT, PLANT.east().south(), buiten)) {
+            helper.setBlock(q, zaailing);
+            for (int i = 0; i < 5 && helper.getBlockState(q).is(Blocks.OAK_SAPLING); i++) {
+                ((net.minecraft.world.level.block.SaplingBlock) Blocks.OAK_SAPLING).advanceTree(level, helper.absolutePos(q), helper.getBlockState(q), level.getRandom());
+            }
+        }
+        helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT);
+        helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT.east().south());
+        helper.assertTrue(helper.getBlockState(buiten).is(BlockTags.LOGS), "beside the bak a sapling grows: " + helper.getBlockState(buiten));
+        ItemStack meel = new ItemStack(Items.BONE_MEAL, 3);
+        helper.assertFalse(net.minecraft.world.item.BoneMealItem.applyBonemeal(meel, level, helper.absolutePos(PLANT), null), "bone meal does nothing on the bak");
+        helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT);
+        gelijk(helper, 3, meel.getCount(), "and is not used up");
+        gelijk(helper, PlantagebakBlockEntity.Stand.LEEG, bak.stand(), "(no vadskracht: the bak has not looked yet)");
+        helper.succeed();
+    }
+
+    /**
+     * A tree on the plant spot that the bak did not grow (a sapling that grew by itself before 1.5.1, and the bak thought
+     * it was empty for good): the bak takes it over, and the axe fells all of it but a log beside it that is no tree's.
+     */
+    @GuhTest(template = BOS, batch = "techmachine_bak", timeoutTicks = 300, skyAccess = true)
+    public static void techmachinePlantagebakNeemtBoomOver(GameTestHelper helper) {
+        PlantagebakBlockEntity bak = bak(helper);
+        bak.plant(new ItemStack(Items.OAK_SAPLING, 2));
+        for (int y = 0; y < 5; y++) {
+            helper.setBlock(PLANT.above(y), Blocks.OAK_LOG);
+        }
+        for (BlockPos q : BlockPos.betweenClosed(PLANT.offset(-2, 3, -2), PLANT.offset(2, 5, 2))) {
+            if (helper.getBlockState(q).isAir()) {
+                helper.setBlock(q, Blocks.OAK_LEAVES);
+            }
+        }
+        helper.setBlock(PLANT.offset(4, 0, 0), Blocks.OAK_LOG);
+        gelijk(helper, PlantagebakBlockEntity.Stand.LEEG, bak.stand(), "the bak knows nothing of the tree");
+        helper.runAfterDelay(30, () -> {
+            helper.assertTrue(bak.heeftBoom() && bak.stand() == PlantagebakBlockEntity.Stand.BOOM, "the bak took the tree over");
+            gelijk(helper, 5, bak.stam().size(), "the trunk");
+            helper.assertTrue(lees(helper, BAK).stream().anyMatch(r -> r.startsWith("De boom staat!")), "the hover: " + lees(helper, BAK));
+            gelijk(helper, 2, bak.voorraad().getCount(), "no sapling was used");
+            List<ItemStack> buit = bak.hak(null);
+            gelijk(helper, 5, buit.stream().filter(s -> s.is(Items.OAK_LOG)).mapToInt(ItemStack::getCount).sum(), "every log of the trunk is in the harvest");
+            gelijk(helper, 0, telBlokken(helper, s -> s.is(BlockTags.LEAVES)), "the leaves are gone too");
+            gelijk(helper, 1, telBlokken(helper, s -> s.is(BlockTags.LOGS)), "only the log beside it is left");
+            gelijk(helper, PlantagebakBlockEntity.Stand.LEEG, bak.stand(), "ready for the next tree");
+            helper.succeedWhen(() -> helper.assertBlockPresent(Blocks.OAK_SAPLING, PLANT));
+        });
+    }
+
+    /**
      * EVERY sapling of the game (vanilla, the mod's trees, the sate- and worstzwammetje, mushrooms, azalea) grows into a
      * tree on the bak and is chopped clean again. One after the other on the same bak, four in the slot (a kind that
      * only grows with four gets them).

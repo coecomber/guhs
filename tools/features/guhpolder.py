@@ -200,7 +200,7 @@ def blocks_and_items(h):
     # --- loot ---
     for blk in ("rijpgras", "guh_ijsbloempje", "polderijs", "knotwilg_stam", "ijspegelguh_kristal", "guh_molentje"):
         h.self_drop(blk)
-    shears = {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}
+    shears = {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}
     w(f"{D}/loot_table/blocks/rijpsprietjes.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
         {"type": "minecraft:item", "name": "guhs:rijpsprietjes", "conditions": [shears]}]}]})
     silk_or_shears = {"condition": "minecraft:any_of", "terms": [shears, {"condition": "minecraft:match_tool", "predicate": {

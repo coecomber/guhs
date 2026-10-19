@@ -27,6 +27,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.BeehiveBlock;
@@ -35,6 +36,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.GrowingPlantBlock;
+import net.minecraft.world.level.block.HugeMushroomBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.MushroomBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,6 +48,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
@@ -67,7 +71,8 @@ import nl.juiced.guhs.feature.wereld.Bescherming;
  * </ol>
  * The bak remembers exactly which blocks the tree put there ({@link #stam}, the rest of it in {@code kroon}), so
  * {@link #hak} never touches a log cabin next to it. Nothing grows where its owner may not build
- * ({@link Bescherming#magWijzigen}).
+ * ({@link Bescherming#magWijzigen}). A sapling on the bak only grows when the bak lets it (not by itself, not with bone
+ * meal: {@link #groeit}, {@link #opDeBak}); a tree that stands on the plant spot anyway is taken over ({@link #neemOver}).
  */
 public class PlantagebakBlockEntity extends TechBlockEntity {
     /** Ticks of work until the tree stands: 45 seconds ("within a minute"). */
@@ -334,7 +339,7 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
             stand = Stand.LEEG;
             setChanged();
         }
-        if (stand == Stand.GROEIT && !isZaailingBlok(daar)) {
+        if (stand == Stand.GROEIT && !isZaailingBlok(daar) && !neemOver(server, plek, daar)) {
             stand = Stand.LEEG;
             voortgang = 0;
             wilNiet = false;
@@ -345,6 +350,10 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
                 stand = Stand.GROEIT;   // (somebody planted one by hand: fine)
                 voortgang = 0;
                 setChanged();
+            } else if (isStamBlok(daar)) {
+                if (server.getGameTime() % STAM_KIJK == 0) {
+                    neemOver(server, plek, daar);
+                }
             } else if (vakken().getAmountAsInt(0) > 0 && daar.canBeReplaced() && magHier(server, plek)) {
                 BlockState zaailing = zaailingBlok(vakken().getResource(0).toStack());
                 if (zaailing != null && zaailing.canSurvive(server, plek)) {
@@ -502,6 +511,10 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
      */
     static void groeit(BlockGrowFeatureEvent event) {
         PlantagebakBlockEntity bak = bezigMetGroeien;
+        if (bak == null && event.getLevel() instanceof Level level && Plantagebakken.bij(level, event.getPos().below()) != null) {
+            event.setCanceled(true);   // on the bak only the bak lets a sapling grow (see opDeBak)
+            return;
+        }
         Holder<ConfiguredFeature<?, ?>> feature = event.getFeature();
         if (bak == null || feature == null || event.getLevel() != bak.level || !event.getPos().equals(bak.plantPlek())) {
             return;
@@ -514,6 +527,17 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
         } else if (config instanceof HugeMushroomFeatureConfiguration paddenstoel) {
             event.setFeature(met(feature.value(), new HugeMushroomFeatureConfiguration(paddenstoel.capProvider(), paddenstoel.stemProvider(),
                     paddenstoel.foliageRadius(), BlockPredicate.alwaysTrue())));
+        }
+    }
+
+    /**
+     * (game bus) Bone meal on a sapling on the bak does nothing (and is not used up). A sapling on the bak never grows by
+     * itself either ({@link #groeit} cancels it): a tree the bak did not grow would be a tree it does not know, and it
+     * would think it was empty for good.
+     */
+    static void opDeBak(BonemealEvent event) {
+        if (isZaailingBlok(event.getState()) && Plantagebakken.bij(event.getLevel(), event.getPos().below()) != null) {
+            event.setSuccessful(false);
         }
     }
 
@@ -591,6 +615,89 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
         }
         boom = new Boom(List.copyOf(palet), plekken.stream().mapToLong(Long::longValue).toArray(), soort.stream().mapToInt(Integer::intValue).toArray());
         stamBlok = server.getBlockState(plek).getBlock();
+    }
+
+    // --- a tree the bak did not grow itself ------------------------------------------------------------------------------
+
+    /** Leaves are at most this many steps from a log (as with leaf decay). */
+    private static final int BLAD_AFSTAND = 6;
+
+    /** The bottom of a trunk: a log (or a stem of the nether), or the stem of a huge mushroom. */
+    private static boolean isStamBlok(BlockState state) {
+        return state.is(BlockTags.LOGS) || state.is(Blocks.MUSHROOM_STEM);
+    }
+
+    /** The crown of a tree: leaves that decay by themselves, wart blocks, shroomlight, the cap of a huge mushroom. */
+    private static boolean isKroon(BlockState state) {
+        return (state.getBlock() instanceof LeavesBlock && !state.getValue(LeavesBlock.PERSISTENT)) || state.is(BlockTags.WART_BLOCKS)
+                || state.is(Blocks.SHROOMLIGHT) || state.getBlock() instanceof HugeMushroomBlock;
+    }
+
+    /**
+     * A tree stands on the plant spot that the bak did not grow itself: before 1.5.1 a sapling on the bak could grow by
+     * itself (while the bak had no vadskracht, or with bone meal), and the bak then thought it was empty for good. It takes
+     * the tree over now, as if it grew it: the logs of the trunk's kind that hang together from the plant spot, and the
+     * crown around them ({@link #isKroon}, at most {@link #BLAD_AFSTAND} steps from a log), all inside the box of a tree.
+     * Then an axe on the bak or a chore guh fells it as usual. False: no trunk there, or the owner may not build there.
+     */
+    private boolean neemOver(ServerLevel server, BlockPos plek, BlockState daar) {
+        if (!isStamBlok(daar) || !magHier(server, plek)) {
+            return false;
+        }
+        Block stam = daar.getBlock();
+        BlockPos hoek = hoek(plek);
+        int b = breedte(), h = ONDER + BOVEN + 1;
+        java.util.function.Predicate<BlockPos> binnen = p -> p.getX() >= hoek.getX() && p.getX() < hoek.getX() + b && p.getZ() >= hoek.getZ()
+                && p.getZ() < hoek.getZ() + b && p.getY() >= hoek.getY() && p.getY() < hoek.getY() + h && server.isLoaded(p);
+        java.util.Map<BlockPos, Integer> gevonden = new java.util.LinkedHashMap<>();   // spot -> steps from a log (0 = a log)
+        java.util.ArrayDeque<BlockPos> rij = new java.util.ArrayDeque<>();
+        gevonden.put(plek, 0);
+        rij.add(plek);
+        // first the trunk and its branches (logs touch each other along an edge or a corner too), then the crown
+        for (boolean kroon : new boolean[] {false, true}) {
+            if (kroon) {
+                rij.addAll(gevonden.keySet());
+            }
+            while (!rij.isEmpty()) {
+                BlockPos p = rij.poll();
+                int stap = gevonden.get(p);
+                if (kroon && stap >= BLAD_AFSTAND) {
+                    continue;
+                }
+                for (BlockPos q : BlockPos.betweenClosed(p.offset(-1, -1, -1), p.offset(1, 1, 1))) {
+                    if (gevonden.containsKey(q) || !binnen.test(q)) {
+                        continue;
+                    }
+                    BlockState s = server.getBlockState(q);
+                    if (s.hasBlockEntity() || !(kroon ? isKroon(s) : s.is(stam))) {
+                        continue;
+                    }
+                    BlockPos vast = q.immutable();
+                    gevonden.put(vast, kroon ? stap + 1 : 0);
+                    rij.add(vast);
+                }
+            }
+        }
+        List<BlockPos> plekken = new ArrayList<>(gevonden.keySet());
+        plekken.sort(Comparator.comparingInt(BlockPos::getY));   // (from the bottom up, as boek writes it down)
+        List<BlockState> palet = new ArrayList<>();
+        int[] soort = new int[plekken.size()];
+        for (int i = 0; i < soort.length; i++) {
+            BlockState s = server.getBlockState(plekken.get(i));
+            int nr = palet.indexOf(s);
+            if (nr < 0) {
+                nr = palet.size();
+                palet.add(s);
+            }
+            soort[i] = nr;
+        }
+        boom = new Boom(List.copyOf(palet), plekken.stream().mapToLong(BlockPos::asLong).toArray(), soort);
+        stamBlok = stam;
+        stand = Stand.BOOM;
+        wilNiet = false;
+        voortgang = 0;
+        setChanged();
+        return true;
     }
 
     // =====================================================================================================================

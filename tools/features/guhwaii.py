@@ -617,7 +617,7 @@ def blocks_and_items(h):
         {"type": "minecraft:item", "name": "guhs:kokosnoot"}], "conditions": [rijp, {"condition": "minecraft:survives_explosion"}]}]})
     w(f"{D}/loot_table/blocks/guhwaii_palm_kiemplant.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
         {"type": "minecraft:item", "name": "guhs:kokosnoot"}], "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
-    shears = {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}
+    shears = {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}
     silk_or_shears = {"condition": "minecraft:any_of", "terms": [shears, {"condition": "minecraft:match_tool", "predicate": {
         "predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}
     w(f"{D}/loot_table/blocks/guhwaii_palm_blad.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{

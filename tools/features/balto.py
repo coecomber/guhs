@@ -208,7 +208,7 @@ def blocks(h):
             {"function": "minecraft:set_count", "count": 2, "conditions": [{"condition": "minecraft:block_state_property",
                                                                              "block": "guhs:nomguh_sneeuwdak_plaat", "properties": {"type": "double"}}]},
             {"function": "minecraft:explosion_decay"}]}]}]})
-    shears = {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}
+    shears = {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}
     silk_or_shears = {"condition": "minecraft:any_of", "terms": [shears, {"condition": "minecraft:match_tool", "predicate": {
         "predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}
     w(f"{D}/loot_table/blocks/sneeuwguhspar_naalden.json", {"type": "minecraft:block", "pools": [

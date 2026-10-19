@@ -144,6 +144,7 @@ public final class TechmachineFeature {
         modBus.addListener(TechmachineFeature::capabilities);
         NeoForge.EVENT_BUS.addListener((AddServerReloadListenersEvent event) -> event.addListener(Guhs.id("techmachine_malen"), Maalrecepten.LADER));
         NeoForge.EVENT_BUS.addListener((BlockGrowFeatureEvent event) -> PlantagebakBlockEntity.groeit(event));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.BonemealEvent event) -> PlantagebakBlockEntity.opDeBak(event));
         NeoForge.EVENT_BUS.addListener(TechmachineFeature::commands);
     }
 

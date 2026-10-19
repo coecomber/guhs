@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.5.1 — fixes — Minecraft 26.1.2
+
+- **Plantagebak (Plantation Bed):** a sapling on the bed no longer grows by itself (while the bed had no vadskracht) or with bone meal (which is no longer used up there). Such a tree made the bed think it was empty for good: "De bak is leeg". A bed with a tree like that on it now takes the tree over by itself, so an axe on the bed or a chore guh fells it as usual.
+- **Vahoege-vadsschaar (Vahoege Vads Shears):** cuts the mod's leaves and grasses (Guh Blossom, Palewood, maple, willow, palm, snow spruce, vads wood, fluff tree, marsh grass and more) off as blocks, like vanilla shears. Shears of other mods do too now.
+
 ## 1.5.0 — the Guh End update — Minecraft 26.1.2
 
 The Guheinde (Guh End) grows far beyond its main island: new outer islands, **two** big new stories (the Guhvatar and Sponsguh Kaasbroek), a dimension of its own, a town under the void, side places, music and tech tier 5. On the official server the Guheinde is regenerated for 1.5.0. In singleplayer the new islands only grow in Guh End land that was not generated yet, so for the guaranteed buildings you need a fresh Guheinde (or a new world).
