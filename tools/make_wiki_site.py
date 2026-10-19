@@ -82,6 +82,9 @@ def main():
         print(f"    {CATEGORIES[cat][1]:<12} {counts[cat]:>4}")
     print(f"  knowledge base: {len(chunks)} chunks, {builder.report['assigned']} on a page, {builder.report['dropped']} left out on purpose, "
           f"{len(builder.report['unassigned'])} without a page")
+    n_uit, n_ok, _ = builder.report["blokuitleg"]
+    print(f"  blocks you can do something with: {n_uit}, {n_ok} with a \"Zo werkt het\", {n_uit - n_ok} without "
+          f"(the blokuitleg notes below; tools/wiki_site/blokuitleg.py)")
     print(f"  pictures: {len(images.used)} + {len(images.thumbs)} thumbnails ({n_img} (re)written), "
           f"{len(images.generated)} icons made from textures")
     print(f"  search index: {res['index']} entries; sitemap: {len(written)} urls")

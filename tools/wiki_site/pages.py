@@ -5,6 +5,7 @@ Builds every page of the site from the game data (gamedata.Game), the knowledge 
 import html
 import re
 
+from . import blokuitleg as BU
 from . import topics as T
 from .kb import plain, split_t
 from .site import MOD_VERSION, CATEGORIES, CAT_ICON, Page, Site, esc, fold, p, slug, t
@@ -37,6 +38,19 @@ RECIPE_KIND = {"smelting": ("furnace", "oven"), "blasting": ("blast furnace", "h
 def L(pid, label=None):
     """A link to a page (label None: the page's own title, filled in by render.py)."""
     return f'<a href="@@{pid}@@">{"@T@" if label is None else label}</a>'
+
+
+def uitleg_html(text):
+    """A blokuitleg.py text -> paragraphs and lists (a blank line starts a paragraph, "- " lines make a list)."""
+    out = []
+    for para in re.split(r"\n\s*\n", text.strip()):
+        lines = [x.strip() for x in para.split("\n") if x.strip()]
+        rest, items = [x for x in lines if not x.startswith("- ")], [x[2:] for x in lines if x.startswith("- ")]
+        if rest:
+            out.append(f"<p>{esc(' '.join(rest))}</p>")
+        if items:
+            out.append("<ul>" + "".join(f"<li>{esc(x)}</li>" for x in items) + "</ul>")
+    return "".join(out)
 
 
 def rarity_label(spacing):
@@ -216,6 +230,7 @@ class Builder:
         self.add(ServerPage(self).build())
         self.site.index_claims()
         self.assign_chunks()
+        self.check_uitleg()
         self.table_rows()
         self.finish()
         return self.site
@@ -579,6 +594,7 @@ class Builder:
             pg.lead_nl = esc(lead)
             if lead:
                 pg.data["lead_is_game_text"] = True
+            self.uitleg(pg, iid)
             made = by_result.get(iid, [])
             if made:
                 pg.add_section("recipe", "How to make it", "Zo maak je het", '<div class="recipes">' + "".join(self.recipe_html(r) for r in made) + "</div>")
@@ -607,6 +623,41 @@ class Builder:
             pg.columns["recipe"] = (1 if made else 0, t("yes", "ja") if made else "")
             pg.data["sort"] = it["name"]
             self.add(pg)
+
+    def uitleg(self, pg, iid):
+        """The "Zo werkt het" section of a block (tools/wiki_site/blokuitleg.py), the first one on its page."""
+        meer = ""
+        if iid in BU.UITLEG:
+            u = BU.UITLEG[iid]
+            body = f'<div lang="en">{uitleg_html(u["en"])}</div><div lang="nl">{uitleg_html(u["nl"])}</div>'
+            if u.get("meer"):
+                meer = "<p>" + t("More about it: ", "Meer uitleg: ") + ", ".join(L(x) for x in u["meer"]) + "</p>"
+        elif iid in BU.LINK:
+            links = ", ".join(L(x) for x in BU.LINK[iid])
+            body = p(f"This block belongs to {links}: that page tells how it works.", f"Dit blok hoort bij {links}: daar lees je hoe het werkt.")
+        else:
+            return
+        pg.add_section("werkt", "How it works", "Zo werkt het", body + meer)
+
+    def check_uitleg(self):
+        """Every block you can do something with has a "Zo werkt het" (blokuitleg.py) or a knowledge-base text on its page;
+        the ones without go into the build's notes."""
+        missing, n = [], 0
+        for bid in sorted(self.g.interactive_blocks):
+            pid = self.item_page.get(bid)
+            pg = self.site.pages.get(pid) if pid else None
+            if pg is None:
+                continue
+            n += 1
+            if bid not in BU.UITLEG and bid not in BU.LINK and not any(c.kind in ("entry", "text", "card", "figure") for c in pg.chunks):
+                missing.append(bid)
+        for bid in sorted(set(BU.UITLEG) | set(BU.LINK)):
+            if bid not in self.item_page:
+                self.report["notes"].append(f"blokuitleg: {bid} has a text in tools/wiki_site/blokuitleg.py but no wiki page")
+        for bid in missing:
+            self.report["notes"].append(f"blokuitleg: {bid} ({self.g.interactive_blocks[bid]}) does something but its page has no "
+                                        f"\"Zo werkt het\": add it to tools/wiki_site/blokuitleg.py")
+        self.report["blokuitleg"] = (n, n - len(missing), missing)
 
     def loot_table_link(self, table):
         sid = T.LOOT_STRUCTURE.get(table, table)

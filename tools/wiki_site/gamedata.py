@@ -547,6 +547,92 @@ class Game:
             out[iid] = dict(id=iid, name=v, block=kind == "block" or iid in self.blockstates, lore=lore)
         return out
 
+    @cached_property
+    def interactive_blocks(self):
+        """The blocks you can do something with: {block id: block class}. A block counts when its own class (or one of the
+        mod's classes above it) overrides useItemOn / useWithoutItem / getMenuProvider: right-click it, put something in
+        it, open a screen. Blocks that only have vanilla behaviour (doors, chests, buttons) don't count. The wiki wants a
+        "Zo werkt het" for each of them (tools/wiki_site/blokuitleg.py); pages.Builder lists the ones without."""
+        masked_re = re.compile(r'"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'')
+        class_re = re.compile(r"\bclass\s+(\w+)\s*(?:<[^{]*?>)?\s*extends\s+([\w.]+)[^{]*\{")
+        use_re = re.compile(r"\b(?:public|protected)\s+[\w<>?,. ]+\s+(?:useItemOn|useWithoutItem|getMenuProvider)\s*\(")
+        import_re = re.compile(r"^import\s+(?:static\s+)?([\w.]+)\.(\w+)\s*;", re.M)
+        classes = {}            # (file, simple name) -> dict(sup=reference as written, outer=simple name or None, own=interacts itself)
+        by_name = {}            # simple name -> [(file, simple name)]
+        files = {}              # file -> (source, {imported simple name: package})
+        for f in self.java_files:
+            if os.sep + "gametest" + os.sep in f or f.endswith("GameTests.java"):
+                continue
+            src = self.java_stripped(f)
+            masked = masked_re.sub(lambda m: '"' + " " * (len(m.group(0)) - 2) + '"', src)
+            files[f] = (src, {m.group(2): m.group(1) for m in import_re.finditer(src)})
+            spans = []
+            for m in class_re.finditer(masked):
+                depth, end = 0, len(masked)
+                for i in range(m.end() - 1, len(masked)):
+                    if masked[i] == "{":
+                        depth += 1
+                    elif masked[i] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            end = i
+                            break
+                spans.append((m.group(1), m.group(2), m.end(), end))
+            for name, sup, start, end in spans:
+                inner = [(s, e) for _, _, s, e in spans if start < s and e <= end]
+                outer = [n for n, _, s, e in spans if s < start and end <= e]
+                body = masked[start:end]
+                for s, e in sorted(inner, reverse=True):
+                    body = body[:s - start] + body[e - start:]
+                key = (f, name)
+                classes.setdefault(key, dict(sup=sup, outer=outer[-1] if outer else None, own=bool(use_re.search(body))))
+                by_name.setdefault(name, []).append(key)
+
+        def resolve(ref, f):
+            """A class reference as written in file f ('X', 'Outer.X', 'a.b.X') -> its key, or None (not the mod's)."""
+            parts = ref.split(".")
+            name = parts[-1]
+            imports = files[f][1]
+            if len(parts) == 1 and name in imports and not imports[name].startswith("nl.juiced"):
+                return None                         # (an imported vanilla / library class with the same name)
+            cands = by_name.get(name, [])
+            if len(parts) > 1 and parts[-2][:1].isupper():
+                cands = [k for k in cands if classes[k]["outer"] == parts[-2]] or cands
+            here = [k for k in cands if k[0] == f]
+            if here:
+                return here[0]
+            if len(parts) == 1 and name not in imports:     # (same package)
+                cands = [k for k in cands if os.path.dirname(k[0]) == os.path.dirname(f)] or cands
+            if len(parts) == 1 and name in imports:
+                pkg = imports[name].replace(".", os.sep)
+                cands = [k for k in cands if os.path.dirname(k[0]).endswith(pkg) or k[0].endswith(os.path.join(pkg, name) + ".java")] or cands
+            return cands[0] if len(cands) == 1 else None
+
+        def interacts(key, depth=0):
+            if key is None or depth > 20:
+                return False
+            c = classes[key]
+            return c["own"] or interacts(resolve(c["sup"], key[0]), depth + 1)
+
+        reg_re = re.compile(r'\b\w*BLOCKS\.register(?:Block)?\(\s*"([a-z0-9_]+)"\s*,')
+        ctor_re = re.compile(r"([\w.]+)::new|\bnew\s+([\w.]+)\s*[(<]")
+        out = {}
+        for f, (src, _) in files.items():
+            for m in reg_re.finditer(src):
+                depth, i = 1, m.end()
+                while i < len(src) and depth:
+                    depth += {"(": 1, ")": -1}.get(src[i], 0)
+                    i += 1
+                for c in ctor_re.finditer(src, m.end(), i):
+                    ref = c.group(1) or c.group(2)
+                    if ref.split(".")[-1].endswith("Properties"):
+                        continue
+                    key = resolve(ref, f)
+                    if interacts(key):
+                        out.setdefault(m.group(1), key[1])
+                    break
+        return out
+
     # --- recipes --------------------------------------------------------------------------------------------------------------
     @cached_property
     def recipes(self):
