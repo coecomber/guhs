@@ -44,11 +44,29 @@ def zones_json(park):
             "uitleg": "raster[cz * breedte + cx] = index in zones ('.' = decor buiten het park); cel 16x16 kolommen"}
 
 
+def zone_modules():
+    """Every tools/features/safari_park/zone_<naam>.py (landmarks of one zone, the entreedorp too), in name order.
+    A module has bouw(park, log) and may have plekken(park, plekken) to adjust the animal homes of its zone."""
+    import glob
+    import importlib
+    map_ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "safari_park")
+    return [importlib.import_module("safari_park." + os.path.basename(f)[:-3])
+            for f in sorted(glob.glob(os.path.join(map_, "zone_*.py")))]
+
+
 def maak(root=".", preview=False, log=print):
     t0 = time.time()
     park = kit.Park()
     terrein.bouw(park, log)
+    modules = zone_modules()
+    for m in modules:
+        t1 = time.time()
+        m.bouw(park, log)
+        log(f"  {m.__name__.split('.')[-1]}: {time.time() - t1:.0f}s")
     plekken = plk.maak(park)
+    for m in modules:
+        if hasattr(m, "plekken"):
+            m.plekken(park, plekken)
     totaal = plk.controleer(plekken)
     log(f"  plekken: {len(plekken)} huizen, {totaal} dieren")
     stats = park.schrijf(root)
