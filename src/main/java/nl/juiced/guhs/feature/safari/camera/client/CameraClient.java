@@ -55,7 +55,7 @@ public final class CameraClient {
         flitsTot = nu + FLITS;
         kaartTot = nu + KAART;
         laatste = u;
-        mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.SPYGLASS_STOP_USING, 2.0f, 0.7f));
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(nl.juiced.guhs.feature.safari.spullen.SafariGeluid.CAMERA.get(), 1.0f, 0.9f));
         if (!u.foto().isEmpty() && u.foto().getIntOr("Sterren", 1) > u.vorige()) {
             mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_CHIME.value(), 1.0f + 0.2f * u.foto().getIntOr("Sterren", 1), 0.6f));
         }

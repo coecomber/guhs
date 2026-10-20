@@ -26860,5 +26860,6 @@
   "gui.guhs.safari.olifant.meloen": "a slice of melon",
   "gui.guhs.safari.olifant.bord": "Dikkie lives here",
   "commands.guhs.safari.quest": "Quest %s is now at: %s",
-  "commands.guhs.safari.quests": "Disguised guh: %s · Too vah elephant: %s · Secrets: %s/%s · Beaver dams: %s"
+  "commands.guhs.safari.quests": "Disguised guh: %s · Too vah elephant: %s · Secrets: %s/%s · Beaver dams: %s",
+  "gui.guhs.safari.bordbon.ingewisseld": "Board voucher redeemed: the Golden dikdik's habitat sign! Sparkle sparkle, njeg."
 }

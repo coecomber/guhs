@@ -107,6 +107,7 @@ public class TruckEntity extends SchemaRit {
                     rondes++;
                 }
                 Ritten.aanDeHalte(this, d.haltes.get(s.halte()));
+                level().playSound(null, this, nl.juiced.guhs.feature.safari.spullen.SafariGeluid.TRUCK_TOETER.get(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.9f, 1.0f);
             }
             vorigeHalte = s.halte();
             int b = (int) Math.min(basisBezoekers(), STOELEN - spelers());

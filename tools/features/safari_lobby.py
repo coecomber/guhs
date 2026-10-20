@@ -154,18 +154,21 @@ TEKSTEN = {
 
 # the giftshop's item list: S6 makes these items (an entry whose item does not exist is not shown)
 WINKEL = [
-    {"id": "kleding_safarihoed", "groep": "kleding", "item": "guhs:safari_hoed", "prijs": 25, "max": 1},
-    {"id": "kleding_verrekijker", "groep": "kleding", "item": "guhs:safari_verrekijker", "prijs": 40, "max": 1},
-    {"id": "kleding_hoedje", "groep": "kleding", "item": "guhs:safari_hoedje", "prijs": 15},
-    {"id": "kleding_vestje", "groep": "kleding", "item": "guhs:kaki_vestje", "prijs": 20},
-    {"id": "kleding_rangerpet", "groep": "kleding", "item": "guhs:rangerpet", "prijs": 15},
+    # (ids of slice S6, checked at the step-2 integration; the paintings are Java offers in SafariKoppelingen)
+    {"id": "kleding_safarihoed", "groep": "kleding", "item": "guhs:safarihoed", "prijs": 25, "max": 1},
+    {"id": "kleding_verrekijker", "groep": "kleding", "item": "guhs:verrekijker", "prijs": 40, "max": 1},
+    {"id": "kleding_guh_hoedje", "groep": "kleding", "item": "guhs:safari_hoedje", "prijs": 15},
+    {"id": "kleding_guh_vestje", "groep": "kleding", "item": "guhs:safari_vestje", "prijs": 20},
+    {"id": "kleding_guh_rangerpet", "groep": "kleding", "item": "guhs:safari_rangerpet", "prijs": 15},
+    {"id": "kleding_guh_verrekijker", "groep": "kleding", "item": "guhs:safari_verrekijker", "prijs": 20},
     {"id": "voer_safarivoer", "groep": "voer", "item": "guhs:safarivoer", "prijs": 5, "aantal": 4},
     {"id": "blok_rieten_dak", "groep": "blokken", "item": "guhs:rieten_dak", "prijs": 5, "aantal": 16},
+    {"id": "blok_rieten_dak_trap", "groep": "blokken", "item": "guhs:rieten_dak_trap", "prijs": 5, "aantal": 16},
+    {"id": "blok_rieten_dak_plaat", "groep": "blokken", "item": "guhs:rieten_dak_plaat", "prijs": 5, "aantal": 16},
     {"id": "blok_bamboewand", "groep": "blokken", "item": "guhs:bamboewand", "prijs": 5, "aantal": 16},
-    {"id": "blok_safarihek", "groep": "blokken", "item": "guhs:safarihek", "prijs": 5, "aantal": 16},
+    {"id": "blok_bamboe_omheining", "groep": "blokken", "item": "guhs:bamboe_omheining", "prijs": 5, "aantal": 16},
+    {"id": "blok_safari_acaciaplanken", "groep": "blokken", "item": "guhs:safari_acaciaplanken", "prijs": 5, "aantal": 16},
     {"id": "blok_dierentuinbordje", "groep": "blokken", "item": "guhs:dierentuinbordje", "prijs": 8, "aantal": 4},
-    {"id": "kunst_poster", "groep": "kunst", "item": "guhs:safari_poster", "prijs": 10},
-    {"id": "kunst_schilderij", "groep": "kunst", "item": "guhs:safari_schilderij", "prijs": 30},
 ]
 
 

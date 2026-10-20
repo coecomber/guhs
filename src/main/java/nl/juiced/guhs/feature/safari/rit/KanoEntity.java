@@ -128,7 +128,7 @@ public class KanoEntity extends Entity implements GeoEntity {
             }
             entityData.set(DATA_VAART, afstand(t) > 0 ? (float) RIT_SNELHEID : 0f);
             if (tickCount % 30 == 0 && afstand(t) > 0) {
-                level().playSound(null, this, SoundEvents.BOAT_PADDLE_WATER, SoundSource.NEUTRAL, 0.6f, 0.8f + random.nextFloat() * 0.3f);
+                level().playSound(null, this, nl.juiced.guhs.feature.safari.spullen.SafariGeluid.KANO.get(), SoundSource.NEUTRAL, 0.6f, 0.85f + random.nextFloat() * 0.3f);
             }
             if (pad == null || afstand(t) >= pad.lengte() - 0.01) {
                 eindig();
@@ -178,7 +178,7 @@ public class KanoEntity extends Entity implements GeoEntity {
         }
         entityData.set(DATA_VAART, (float) snelheid);
         if (tickCount % 34 == 0 && Math.abs(snelheid) > 0.03) {
-            level().playSound(null, this, SoundEvents.BOAT_PADDLE_WATER, SoundSource.NEUTRAL, 0.5f, 0.9f);
+            level().playSound(null, this, nl.juiced.guhs.feature.safari.spullen.SafariGeluid.KANO.get(), SoundSource.NEUTRAL, 0.5f, 0.9f);
         }
     }
 

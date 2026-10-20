@@ -2,34 +2,40 @@
   {
     "id": "kleding_safarihoed",
     "groep": "kleding",
-    "item": "guhs:safari_hoed",
+    "item": "guhs:safarihoed",
     "prijs": 25,
     "max": 1
   },
   {
     "id": "kleding_verrekijker",
     "groep": "kleding",
-    "item": "guhs:safari_verrekijker",
+    "item": "guhs:verrekijker",
     "prijs": 40,
     "max": 1
   },
   {
-    "id": "kleding_hoedje",
+    "id": "kleding_guh_hoedje",
     "groep": "kleding",
     "item": "guhs:safari_hoedje",
     "prijs": 15
   },
   {
-    "id": "kleding_vestje",
+    "id": "kleding_guh_vestje",
     "groep": "kleding",
-    "item": "guhs:kaki_vestje",
+    "item": "guhs:safari_vestje",
     "prijs": 20
   },
   {
-    "id": "kleding_rangerpet",
+    "id": "kleding_guh_rangerpet",
     "groep": "kleding",
-    "item": "guhs:rangerpet",
+    "item": "guhs:safari_rangerpet",
     "prijs": 15
+  },
+  {
+    "id": "kleding_guh_verrekijker",
+    "groep": "kleding",
+    "item": "guhs:safari_verrekijker",
+    "prijs": 20
   },
   {
     "id": "voer_safarivoer",
@@ -46,6 +52,20 @@
     "aantal": 16
   },
   {
+    "id": "blok_rieten_dak_trap",
+    "groep": "blokken",
+    "item": "guhs:rieten_dak_trap",
+    "prijs": 5,
+    "aantal": 16
+  },
+  {
+    "id": "blok_rieten_dak_plaat",
+    "groep": "blokken",
+    "item": "guhs:rieten_dak_plaat",
+    "prijs": 5,
+    "aantal": 16
+  },
+  {
     "id": "blok_bamboewand",
     "groep": "blokken",
     "item": "guhs:bamboewand",
@@ -53,9 +73,16 @@
     "aantal": 16
   },
   {
-    "id": "blok_safarihek",
+    "id": "blok_bamboe_omheining",
     "groep": "blokken",
-    "item": "guhs:safarihek",
+    "item": "guhs:bamboe_omheining",
+    "prijs": 5,
+    "aantal": 16
+  },
+  {
+    "id": "blok_safari_acaciaplanken",
+    "groep": "blokken",
+    "item": "guhs:safari_acaciaplanken",
     "prijs": 5,
     "aantal": 16
   },
@@ -65,17 +92,5 @@
     "item": "guhs:dierentuinbordje",
     "prijs": 8,
     "aantal": 4
-  },
-  {
-    "id": "kunst_poster",
-    "groep": "kunst",
-    "item": "guhs:safari_poster",
-    "prijs": 10
-  },
-  {
-    "id": "kunst_schilderij",
-    "groep": "kunst",
-    "item": "guhs:safari_schilderij",
-    "prijs": 30
   }
 ]

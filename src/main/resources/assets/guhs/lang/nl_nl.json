@@ -26860,5 +26860,6 @@
   "gui.guhs.safari.olifant.meloen": "een stukje meloen",
   "gui.guhs.safari.olifant.bord": "Hier woont Dikkie",
   "commands.guhs.safari.quest": "Quest %s staat nu op: %s",
-  "commands.guhs.safari.quests": "Vermomde guh: %s · Te vahe olifant: %s · Geheimpjes: %s/%s · Beverdammen: %s"
+  "commands.guhs.safari.quests": "Vermomde guh: %s · Te vahe olifant: %s · Geheimpjes: %s/%s · Beverdammen: %s",
+  "gui.guhs.safari.bordbon.ingewisseld": "Bordbon ingewisseld: het verblijfsbord van de Gouden dikdik! Glinster glinster, njeg."
 }

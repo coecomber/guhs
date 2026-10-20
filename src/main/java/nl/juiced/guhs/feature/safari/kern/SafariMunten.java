@@ -46,7 +46,7 @@ public final class SafariMunten {
         ServerPlayer p = server.getPlayerList().getPlayer(id);
         if (p != null) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.safari.munten.erbij", n).withStyle(ChatFormatting.GOLD));
-            p.level().playSound(null, p.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.6f, 1.4f);
+            p.level().playSound(null, p.blockPosition(), nl.juiced.guhs.feature.safari.spullen.SafariGeluid.MUNT.get(), SoundSource.PLAYERS, 0.6f, 1.0f);
             SafariSync.stuur(p);
         }
         SafariEvents.munten(server, id, n, reden);

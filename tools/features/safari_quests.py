@@ -28,6 +28,7 @@ ADVANCEMENTS = ["safari_eerste_foto", "safari_drie_sterren", "safari_dex_10", "s
                 "safari_vermomde_guh", "safari_vahe_olifant", "safari_aaihoek"]
 
 TEKSTEN = {
+    "gui.guhs.safari.bordbon.ingewisseld": "Bordbon ingewisseld: het verblijfsbord van de Gouden dikdik! Glinster glinster, njeg.",
     # blocks and items
     "block.guhs.olifantenloopband": "Olifantenloopband",
     "block.guhs.olifantenloopband.lore": "Rennen, Dikkie, rennen! (Hij is niet te vads. Wel een beetje te vah.)",

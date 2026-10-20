@@ -53,6 +53,7 @@ public final class SafariFeature {
         nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.register(modBus);   // step 2, S5: verblijfsbord + animals at home
         nl.juiced.guhs.feature.safari.rit.SafariRitten.register(modBus);   // S3: truck, kano, kabelbaan, struisvogelrace, momenten
         nl.juiced.guhs.feature.safari.quests.SafariQuests.register(modBus);   // S4: quests, geheimpjes, titles, dex rewards
+        SafariKoppelingen.register();   // step 2 integration: the hooks between the slices
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {

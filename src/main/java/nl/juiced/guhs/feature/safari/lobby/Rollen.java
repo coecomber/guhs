@@ -58,6 +58,10 @@ public final class Rollen {
         return ItemStack.EMPTY;
     };
 
+    /** (S6) the painting a zone expert hands out with the badge (EMPTY: none); set by SafariKoppelingen. */
+    public static volatile java.util.function.BiFunction<net.minecraft.server.MinecraftServer, String, ItemStack> zoneSchilderij =
+            (server, zone) -> ItemStack.EMPTY;
+
     private static boolean haken(String npc, GuhNpcEntity e, ServerPlayer p) {
         for (Haak h : HAKEN) {
             if (h.npc().equals(npc) && h.haak().test(e, p)) {
@@ -260,12 +264,9 @@ public final class Rollen {
         }
         if (p != null) {
             Minigames.give(p, new ItemStack(LobbyItems.BADGES.get(zone).get()));
-            for (String id : List.of("guhs:safari_schilderij_" + zone, "guhs:safari_zoneschilderij_" + zone)) {
-                Item s = SafariWinkel.item(id);
-                if (s != null) {
-                    Minigames.give(p, new ItemStack(s));
-                    break;
-                }
+            ItemStack schilderij = zoneSchilderij.apply(server, zone);
+            if (!schilderij.isEmpty()) {
+                Minigames.give(p, schilderij);
             }
         }
         SafariMunten.verdienEens(server, speler, "zone_compleet:" + zone, 100, "zone");

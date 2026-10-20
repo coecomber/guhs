@@ -120,6 +120,12 @@ public final class SafariClient {
         @Override
         public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
             DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+            // the stork's parcel only shows while a home stork delivers (VerblijfClient turns it back on); never in the park
+            for (com.geckolib.cache.model.GeoBone bone : info.model().boneLookup().get().values()) {
+                if (bone.name().equals("bundeltje")) {
+                    bones.get(bone).skipRender(true).skipChildrenRender(true);
+                }
+            }
         }
     }
 

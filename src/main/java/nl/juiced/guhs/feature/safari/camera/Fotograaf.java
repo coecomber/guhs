@@ -55,7 +55,7 @@ public final class Fotograaf {
     @Nullable
     public static Foto klik(ServerPlayer p, boolean zoom) {
         ServerLevel level = p.level();
-        level.playSound(null, p.blockPosition(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, 0.8f, 1.8f);
+        level.playSound(p, p.blockPosition(), nl.juiced.guhs.feature.safari.spullen.SafariGeluid.CAMERA.get(), SoundSource.PLAYERS, 0.8f, 1.0f);   // (the photographer hears it via the client)
         Foto f = kijk(level, p.getEyePosition(), p.getLookAngle(), zoom);
         if (f == null) {
             ModNetworking.sendTo(p, new CameraPayloads.Uitslag(new CompoundTag(), 0, 0, 0));
@@ -148,6 +148,14 @@ public final class Fotograaf {
         int zelfde = (int) inBeeld.stream().filter(d -> d.soort().equals(onderwerp.soort())).count();
         int soorten = (int) inBeeld.stream().map(SafariDier::soort).distinct().count();
         boolean extra = onderwerp.isBaby() || zelfde >= 2 || soorten >= 2;
+        if (nl.juiced.guhs.feature.safari.momenten.Momenten.noorderlicht(level, onderwerp.blockPosition())) {
+            // under the northern lights (IJskust at night): one bonus point (the extra point, or the action point when
+            // the extra one is there already)
+            if (extra) {
+                bijzonder = true;
+            }
+            extra = true;
+        }
         ParkData.Soort info = ParkData.get().soort(onderwerp.soort());
         String zone = info == null || info.zone() == null ? "" : info.zone();
         boolean water = onderwerp.isInWater();

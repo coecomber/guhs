@@ -113,6 +113,10 @@ public final class Aaihoek {
         if (SafariSpeler.telDag(server, speler, "aaihoek:" + klus, 1, 1) == 0) {
             return -1;     // this chore was done already today
         }
+        net.minecraft.server.level.ServerPlayer sp = server.getPlayerList().getPlayer(speler);
+        if (sp != null) {
+            nl.juiced.guhs.feature.safari.quests.SafariQuests.aaihoekKlusje(sp);   // S4: the FTB quest "Aaien maar!"
+        }
         int loon = SafariMunten.verdienDagelijks(server, speler, "aaihoek", LOON, LOON * PER_DAG, "aaihoek");
         if (loon > 0 && bonus) {
             loon += SafariMunten.verdienDagelijks(server, speler, "aaihoek_bonus", 1, PER_DAG, "aaihoek");
