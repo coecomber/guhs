@@ -6,6 +6,11 @@ en de truckhalte met overdekt uitkijkplatform bij de brug naar de delta (zoals d
 Also the shared little helpers of the zone modules (zone_delta imports them): finding a free spot, levelling a column,
 a lookout tower, a hide, a sign with text (kept on park.bordjes for the tile writer, see _bord).
 Escape-proof rule (design 4.5c): anything that stands more than 1 block above the ground keeps >= 4 blocks from a fence.
+
+Round 2 (user test): the drinkpoel is bigger with gently sloping banks and at most 2 deep (the elephants wade, they do
+not vanish under water); the hide is the new standard kijkhut (a raised hut with a wide band of Eenrichtingsvadsglas,
+placed where its window sees the animals; see kijkhut / kies_kijkhut / zicht); the route bridges are raised to
+BRUG_DEK (3 free blocks over the water for the canoe route, see bruggen_ophogen).
 """
 import math
 
@@ -251,6 +256,411 @@ def zet_plek(plekken, soort, nr, centrum, straal=None):
 
 
 # ======================================================================================================================
+# round 2 (user feedback): sightlines, the standard kijkhut, raised bridges (also used by zone_delta; other zones may copy)
+_DOORZICHTIG = ("minecraft:air", "minecraft:cave_air", "minecraft:water", "minecraft:glass", "guhs:eenrichtingsglas",
+                "minecraft:glass_pane", "minecraft:light", "minecraft:lantern", "minecraft:lily_pad", "minecraft:seagrass",
+                "minecraft:tall_seagrass", "minecraft:kelp", "minecraft:kelp_plant")
+GLAS = "guhs:eenrichtingsglas"          # Eenrichtingsvadsglas: the standard viewing window of every kijkhut
+
+
+def opaak_lut(park):
+    """bool per palette id: True when the block blocks the view (air, water, glass, plants, corals do not)."""
+    lut = np.ones(len(park.pal) + 1, bool)
+    for i, s in enumerate(park.pal):
+        n = s.split("[")[0]
+        if n in _DOORZICHTIG or is_plant(s) or n.endswith(("_glass", "_glass_pane", "_carpet", "_coral", "_coral_fan")):
+            lut[i] = False
+    return lut
+
+
+def zicht(park, oog, doelen, lut=None, stap=0.25):
+    """Which targets can be seen from oog (x, y, z as floats, block coordinates): the straight line passes only
+    see-through blocks. Returns (fraction visible, [bool per target])."""
+    if lut is None:
+        lut = opaak_lut(park)
+    oog = np.asarray(oog, float)
+    zie = []
+    for d in doelen:
+        d = np.asarray(d, float)
+        n = max(int(np.linalg.norm(d - oog) / stap), 2)
+        ts = np.linspace(0.0, 1.0, n)[1:-1]
+        p = np.floor(oog[None] + (d - oog)[None] * ts[:, None]).astype(int)
+        ok = (p[:, 0] >= 0) & (p[:, 0] < W) & (p[:, 1] >= 0) & (p[:, 1] < kit.H) & (p[:, 2] >= 0) & (p[:, 2] < W)
+        p = p[ok]
+        zie.append(not lut[park.v[p[:, 0], p[:, 1], p[:, 2]]].any())
+    return (sum(zie) / len(zie) if zie else 0.0), zie
+
+
+def _hut_raster(x, z, f, diep):
+    """local (a across, b from the front wall backwards; b < 0 is in front of the hut) -> world (x, z)."""
+    vx, vz = STAP[f]
+    sx, sz = (1, 0) if vx == 0 else (0, 1)
+    bc = (diep - 1) // 2
+    return lambda a, b: (x + sx * a - vx * (b - bc), z + sz * a - vz * (b - bc))
+
+
+def _hut_cellen(x, z, f, breed, diep, verhoogd):
+    """All (x, z) the hut, its levelled margin and its entrance steps use."""
+    w = _hut_raster(x, z, f, diep)
+    hw = breed // 2
+    return [w(a, b) for a in range(-hw - 1, hw + 2) for b in range(-1, diep + verhoogd + 1)]
+
+
+def oog_van(x, z, g, f, diep=5, verhoogd=2):
+    """The eye of a standing player at the window of a kijkhut (front row, beside the verrekijker)."""
+    w = _hut_raster(x, z, f, diep)
+    ex, ez = w(1, 1)
+    return (ex + 0.5, g + verhoogd + 2.62, ez + 0.5)
+
+
+def kies_kijkhut(park, zone, doelen, dmin, dmax, breed=7, diep=5, verhoogd=2, minhek=6, weg_van=(), weg_r=0,
+                 ideaal=None, max_hoek=28):
+    """The best spot (x, z, g, facing) for a kijkhut looking at doelen (list of (x, y, z) points where the animals
+    are): on a ring dmin..dmax round the targets' middle, facing them (the axis within max_hoek degrees), the footprint
+    dry, flat, free of trees and paths, in the zone, minhek from fences; scored on how many targets the window sees."""
+    zone_i = zi(zone) if isinstance(zone, str) else zone
+    tx = sum(d[0] for d in doelen) / len(doelen)
+    tz = sum(d[2] for d in doelen) / len(doelen)
+    pd = pad_afstand(park)
+    lut = opaak_lut(park)
+    ideaal = ideaal or (dmin + dmax) / 2
+    best = None
+    for r in range(int(dmin), int(dmax) + 1, 2):
+        for k in range(36):
+            a = 2 * math.pi * k / 36
+            x, z = int(round(tx + math.cos(a) * r)), int(round(tz + math.sin(a) * r))
+            f = kijk_richting(tx - x, tz - z)
+            vx, vz = STAP[f]
+            hoek = math.degrees(math.acos(max(-1.0, min(1.0, ((tx - x) * vx + (tz - z) * vz) / (math.hypot(tx - x, tz - z) or 1)))))
+            if hoek > max_hoek:
+                continue
+            cellen = _hut_cellen(x, z, f, breed, diep, verhoogd)
+            if any(not (2 <= cx_ < W - 2 and 2 <= cz_ < W - 2) for cx_, cz_ in cellen):
+                continue
+            xs = np.array([c[0] for c in cellen])
+            zs = np.array([c[1] for c in cellen])
+            if (park.zone[xs, zs] != zone_i).any() or not park.binnen[xs, zs].all():
+                continue
+            if (park.hek_afstand[xs, zs] < minhek).any() or park.water[xs, zs].any() or (pd[xs, zs] < 2).any():
+                continue
+            hs = park.hoogte[xs, zs]
+            if hs.max() - hs.min() > 2:
+                continue
+            if any(math.hypot(x - p, z - q) < weg_r for p, q in weg_van):
+                continue
+            if not vrij_van_hout(park, int(xs.min()), int(zs.min()), int(xs.max()), int(zs.max()), hoog=10):
+                continue
+            g = int(np.median(hs))
+            frac, _ = zicht(park, oog_van(x, z, g, f, diep, verhoogd), doelen, lut)
+            score = frac * 10 - hoek * 0.03 - abs(r - ideaal) * 0.08 - min(pd[x, z], 30) * 0.03
+            if best is None or score > best[0]:
+                best = (score, x, z, g, f, frac)
+    if best is None:
+        return None
+    return best[1:]
+
+
+def kijkhut(park, x, z, g, kijk_naar=None, richting=None, hout="spruce", dak="hay_block", basis="minecraft:mud_bricks",
+            breed=7, diep=5, verhoogd=2, titel=("Kijkhut", "", "Stil zijn,", "dan zie je meer!"), plantje=None):
+    """The standard kijkhut (round 2): a raised hut (floor `verhoogd` above the ground at y g) whose front and the front
+    halves of its sides are a band of Eenrichtingsvadsglas two high above a plank sill, so you look out wide at eye
+    level (the animals do not see you, njeg). Inside: the verrekijker in the middle of the window, a bench behind it, a
+    lantern, a sign with titel on the back wall; steps up to a door at the back. Faces `richting` or kijk_naar (x, z).
+    The view in front is cleared of plants and low leaves. Returns dict(f, F, oog, voor) (voor = the cell in front)."""
+    x, z, g = int(x), int(z), int(g)
+    f = richting or kijk_richting(kijk_naar[0] - x, kijk_naar[1] - z)
+    achter = TEGENOVER[f]
+    w = _hut_raster(x, z, f, diep)
+    hw = breed // 2
+    F = g + verhoogd
+    log = kit.state(f"{hout}_log", axis="y")
+    planks = f"minecraft:{hout}_planks"
+    # site: level the footprint, a margin and the entrance
+    for a in range(-hw - 1, hw + 2):
+        for b in range(-1, diep + verhoogd + 1):
+            X, Z = w(a, b)
+            vlak(park, X, Z, g, top="coarse_dirt" if b < diep else "dirt_path", vrij=verhoogd + 9)
+    for a in range(-hw, hw + 1):
+        for b in range(0, diep):
+            X, Z = w(a, b)
+            rand = abs(a) == hw or b in (0, diep - 1)
+            for y in range(g + 1, F):
+                park.set(X, y, Z, log if (abs(a) == hw and b in (0, diep - 1)) else (planks if rand else basis))
+            park.set(X, F, Z, planks)
+            if not rand:
+                continue
+            for y in range(F + 1, F + 4):
+                hoek = abs(a) == hw and b in (0, diep - 1)
+                if hoek:
+                    blok = log
+                elif b == 0 or (abs(a) == hw and b <= 1):            # the window band: front + front halves of the sides
+                    blok = planks if y == F + 1 else GLAS
+                elif b == diep - 1 and a == 0 and y <= F + 2:          # the door at the back
+                    blok = None
+                else:
+                    blok = planks
+                if blok is None:
+                    park.v[X, y, Z] = 0
+                else:
+                    park.set(X, y, Z, blok)
+    # roof: hay with an overhang, a second layer on top
+    for a in range(-hw - 1, hw + 2):
+        for b in range(-1, diep + 1):
+            X, Z = w(a, b)
+            park.set(X, F + 4, Z, kit.state(dak, axis="y") if dak.endswith(("hay_block", "_log")) else dak)
+            if -hw < a < hw and 0 < b < diep - 1:
+                park.set(X, F + 5, Z, kit.state(dak, axis="y") if dak.endswith(("hay_block", "_log")) else dak)
+    # inside: verrekijker in the middle of the window row, bench behind it, lantern, sign, a plant
+    X, Z = w(0, 1)
+    park.set(X, F + 1, Z, "guhs:park_verrekijker", facing=f)
+    for a in range(-hw + 1, hw):
+        if a != 0:
+            X, Z = w(a, 2)
+            park.set(X, F + 1, Z, trap(f"minecraft:{hout}_stairs", achter))
+    X, Z = w(0, 2)
+    park.set(X, F + 3, Z, "minecraft:lantern", hanging="true", waterlogged="false")
+    X, Z = w(hw - 1, diep - 2)
+    park.set(X, F + 2, Z, f"minecraft:{hout}_wall_sign", facing=f, waterlogged="false")
+    if not hasattr(park, "bordjes"):
+        park.bordjes = []
+    park.bordjes.append({"pos": [int(X), int(F + 2), int(Z)], "tekst": list(titel)})
+    if plantje:
+        X, Z = w(-hw + 1, diep - 2)
+        park.set(X, F + 1, Z, plantje)
+    # entrance: a landing at floor height behind the door, then steps down to the ground
+    for a in (-1, 0, 1):
+        X, Z = w(a, diep)
+        for y in range(g + 1, F):
+            park.set(X, y, Z, basis)
+        park.set(X, F, Z, planks)
+        ruim(park, X, Z, F + 1, F + 4)
+        for k in range(verhoogd):
+            X, Z = w(a, diep + 1 + k)
+            y = F - 1 - k
+            for yy in range(g + 1, y):
+                park.set(X, yy, Z, basis)
+            park.set(X, y, Z, trap(f"minecraft:{hout}_stairs", f))
+            ruim(park, X, Z, y + 1, y + 4)
+    # the view: no plants / low leaves in a widening cone in front of the window (fences and trunks stay)
+    for dist in range(1, 26):
+        half = int(1 + dist * 0.75)
+        for a in range(-hw - half, hw + half + 1):
+            X, Z = w(a, -dist)
+            if not (0 <= X < W and 0 <= Z < W) or park.hek[X, Z] or not park.binnen[X, Z]:
+                continue
+            gx = int(park.hoogte[X, Z])
+            for y in range(gx + 1, min(F + 6, kit.H)):
+                s = park.get(X, y, Z)
+                if is_plant(s) or ("_leaves" in s and y <= F + 4):
+                    park.v[X, y, Z] = 0
+                    if s.endswith("half=lower]") or "half=lower" in s:
+                        park.v[X, y + 1, Z] = 0
+    return {"f": f, "F": F, "oog": oog_van(x, z, g, f, diep, verhoogd), "voor": w(0, -1)}
+
+
+def paadje(park, van, max_r=30, blok="dirt_path"):
+    """A trodden little path from van (x, z) to the nearest route path cell (stops at water and fences)."""
+    x0, z0 = int(van[0]), int(van[1])
+    pxs, pzs = np.nonzero(park.pad[max(x0 - max_r, 0):x0 + max_r + 1, max(z0 - max_r, 0):z0 + max_r + 1])
+    if not len(pxs):
+        return
+    ox, oz = max(x0 - max_r, 0), max(z0 - max_r, 0)
+    i = int(np.argmin(np.hypot(pxs + ox - x0, pzs + oz - z0)))
+    tx, tz = int(pxs[i] + ox), int(pzs[i] + oz)
+    n = int(math.hypot(tx - x0, tz - z0)) + 1
+    for k in range(n + 1):
+        x = int(round(x0 + (tx - x0) * k / n))
+        z = int(round(z0 + (tz - z0) * k / n))
+        if park.pad[x, z] or park.hek[x, z] or park.water[x, z]:
+            break
+        g = int(park.hoogte[x, z])
+        if park.get(x, g, z).split("[")[0] in ("minecraft:grass_block", "minecraft:coarse_dirt", "minecraft:dirt",
+                                                "minecraft:sand", "minecraft:mud", "minecraft:podzol", "minecraft:red_sand"):
+            park.set(x, g, z, blok)
+            s = park.get(x, g + 1, z)
+            if is_plant(s):
+                park.v[x, g + 1, z] = 0
+                if "half=lower" in s:
+                    park.v[x, g + 2, z] = 0
+
+
+def los_blad_weg(park, x0, x1, z0, z1):
+    """Leaves with no log/wood within 3 blocks (crowns cut off by digging) go."""
+    from scipy.ndimage import binary_dilation
+    x0, z0 = max(x0, 0), max(z0, 0)
+    x1, z1 = min(x1, W), min(z1, W)
+    sub = park.v[x0:x1, :, z0:z1]
+    blad = np.zeros(len(park.pal) + 1, bool)
+    hout = np.zeros(len(park.pal) + 1, bool)
+    for i, s in enumerate(park.pal):
+        n = s.split("[")[0]
+        blad[i] = n.endswith("_leaves")
+        hout[i] = n.endswith(("_log", "_wood")) or n == "minecraft:mangrove_roots"
+    houtm = binary_dilation(hout[sub], structure=np.ones((3, 3, 3), bool), iterations=3)
+    weg = blad[sub] & ~houtm
+    sub[weg] = 0
+
+
+def drijvend_hout_weg(park, zones, log=print):
+    """Trees cut off by digging (a crown or branch with nothing under it) go: every connected group of log/wood/leaf/
+    vine blocks that mostly lies in `zones` and stands on nothing solid is removed."""
+    from scipy.ndimage import label, maximum
+    zset = [zi(n) for n in zones]
+    zmask = np.isin(park.zone, zset)
+    xs, zs = np.nonzero(zmask)
+    if not len(xs):
+        return 0
+    x0, x1 = max(int(xs.min()) - 6, 0), min(int(xs.max()) + 7, W)
+    z0, z1 = max(int(zs.min()) - 6, 0), min(int(zs.max()) + 7, W)
+    y0 = max(WATER_Y - 12, 1)
+    sub = park.v[x0:x1, y0:, z0:z1]
+    hout = np.zeros(len(park.pal) + 1, bool)
+    vast = np.zeros(len(park.pal) + 1, bool)
+    for i, st in enumerate(park.pal):
+        n = st.split("[")[0]
+        hout[i] = n.endswith(("_log", "_wood", "_leaves")) or n in ("minecraft:vine", "minecraft:mangrove_roots",
+                                                                    "minecraft:muddy_mangrove_roots")
+        vast[i] = i != 0 and not hout[i] and n != "minecraft:water" and not is_plant(st)
+    h = hout[sub]
+    onder = np.zeros_like(h)
+    onder[:, 1:, :] = vast[sub[:, :-1, :]]
+    onder[:, 0, :] = vast[park.v[x0:x1, y0 - 1, z0:z1]]
+    # a group is held when one of its blocks stands on something solid (a trunk on the ground, a post on the bed)
+    steun = h & onder
+    lab, n = label(h, structure=np.ones((3, 3, 3), bool))
+    if n == 0:
+        return 0
+    gesteund = maximum(steun, lab, index=np.arange(1, n + 1)).astype(bool)
+    zm = zmask[x0:x1, z0:z1][:, None, :] & np.ones_like(h)
+    in_zone = maximum(zm & h, lab, index=np.arange(1, n + 1)).astype(bool)
+    weg = np.zeros(n + 1, bool)
+    weg[1:] = ~gesteund & in_zone
+    m = weg[lab]
+    sub[m] = 0
+    log(f"    los hout weg ({', '.join(zones)}): {int(weg.sum())} groepjes, {int(m.sum())} blokken")
+    return int(weg.sum())
+
+
+BRUG_DEK = WATER_Y + 4          # the deck block of a raised bridge: y 63..65 stay free above the water (kano route)
+
+
+def bruggen_ophogen(park, zones, log=print):
+    """Raise the route bridges whose water cells lie mostly in `zones`: the deck goes up to BRUG_DEK in the middle
+    (3 free blocks above the water for the canoe route), with half-block steps (spruce slabs) up from both banks, the
+    railing on top, no pillars in the river (posts only at the banks). Idempotent: a bridge already at that height
+    (or higher) is left alone."""
+    from scipy.ndimage import label, binary_dilation
+    zset = {zi(n) for n in zones}
+    lab, n = label(park.pad & park.water)
+    surf_top = BRUG_DEK + 1
+    plaat = kit.state("spruce_slab", type="bottom", waterlogged="false")
+    planks = "minecraft:spruce_planks"
+    gedaan = 0
+    for i in range(1, n + 1):
+        xs, zs = np.nonzero(lab == i)
+        if len(xs) < 4:
+            continue
+        zv = park.zone[xs, zs]
+        zv = zv[zv >= 0]
+        if not len(zv) or int(np.bincount(zv).argmax()) not in zset:
+            continue
+        hoog = 0
+        for x, z in zip(xs, zs):
+            nz = np.nonzero(park.v[x, WATER_Y + 1:WATER_Y + 10, z])[0]
+            if len(nz):
+                hoog = max(hoog, WATER_Y + 1 + int(nz[-1]))
+        if hoog >= BRUG_DEK:
+            continue
+        x0, z0 = max(int(xs.min()) - 6, 0), max(int(zs.min()) - 6, 0)
+        x1, z1 = min(int(xs.max()) + 7, W), min(int(zs.max()) + 7, W)
+        cel = lab[x0:x1, z0:z1] == i
+        rand = binary_dilation(cel) & ~park.pad[x0:x1, z0:z1] & park.water[x0:x1, z0:z1]
+        brug = [(int(x), int(z)) for x, z in zip(xs, zs)]
+        rnd = [(x0 + int(a), z0 + int(b)) for a, b in zip(*np.nonzero(rand))]
+        # away with the old low deck, its railing and the pillars in the river
+        for x, z in brug + rnd:
+            for y in range(WATER_Y + 1, WATER_Y + 4):
+                park.v[x, y, z] = 0
+            for y in range(int(park.hoogte[x, z]) + 1, WATER_Y + 1):
+                park.set(x, y, z, "minecraft:water", level=0)
+        cx, cz = xs.mean(), zs.mean()
+        c = np.cov(np.vstack([xs - cx, zs - cz]))
+        _, v = np.linalg.eigh(c)
+        ax, az = v[:, 1]
+        tt = lambda x, z: (x - cx) * ax + (z - cz) * az
+        ts = np.array([tt(x, z) for x, z in brug])
+        tmin, tmax = float(ts.min()), float(ts.max())
+        # the walking surface of the path on both banks
+        land = park.pad[x0:x1, z0:z1] & ~park.water[x0:x1, z0:z1] & binary_dilation(cel, iterations=3)
+        sa, sb = [], []
+        for a, b in zip(*np.nonzero(land)):
+            x, z = x0 + int(a), z0 + int(b)
+            t = tt(x, z)
+            (sa if t < (tmin + tmax) / 2 else sb).append(int(park.hoogte[x, z]) + 1)
+        sA = max(sa) if sa else WATER_Y + 2
+        sB = max(sb) if sb else WATER_Y + 2
+
+        # the ramps lie on the land approaches (half a block up per block), so the deck is at full height over the
+        # whole river (the canoe passes anywhere under it)
+        LA = int(math.ceil(2 * max(0.0, surf_top - sA)))
+        LB = int(math.ceil(2 * max(0.0, surf_top - sB)))
+
+        def surf(t):
+            ua = sA + 0.5 * (1 + math.floor(t - (tmin - LA)))
+            ub = sB + 0.5 * (1 + math.floor((tmax + LB) - t))
+            return min(float(surf_top), ua, ub)
+
+        # the approaches: path cells on land in line with the bridge, up to LA / LB beyond its ends
+        bx0, bz0 = max(x0 - max(LA, LB) - 4, 0), max(z0 - max(LA, LB) - 4, 0)
+        bx1, bz1 = min(x1 + max(LA, LB) + 4, W), min(z1 + max(LA, LB) + 4, W)
+        for a_, b_ in zip(*np.nonzero(park.pad[bx0:bx1, bz0:bz1] & ~park.water[bx0:bx1, bz0:bz1])):
+            x, z = bx0 + int(a_), bz0 + int(b_)
+            t = tt(x, z)
+            dwars = abs(-(x - cx) * az + (z - cz) * ax)
+            if dwars > 3.5 or not ((tmin - LA - 0.5 <= t < tmin) or (tmax < t <= tmax + LB + 0.5)):
+                continue
+            g = int(park.hoogte[x, z])
+            sn = surf(t)
+            if sn <= g + 1:
+                continue
+            k = math.floor(sn)
+            top_y = k - 1 if sn == k else k
+            for y in range(g + 1, top_y):
+                park.set(x, y, z, "minecraft:dirt")
+            park.set(x, top_y, z, planks if sn == k else plaat)
+            if sn != k:
+                park.set(x, top_y - 1, z, "minecraft:dirt")
+            ruim(park, x, z, top_y + 1, top_y + 4)
+            park.hoogte[x, z] = top_y
+
+        bodem = {}
+        for (x, z) in brug + rnd:
+            s = surf(tt(x, z))
+            k = math.floor(s)
+            if (x, z) in rnd:
+                dy = math.ceil(s) - 1
+                park.set(x, dy, z, planks)
+                park.set(x, dy + 1, z, "minecraft:spruce_fence")
+            elif s == k:
+                dy = k - 1
+                park.set(x, dy, z, planks)
+            else:
+                dy = k
+                park.set(x, dy, z, plaat)
+            ruim(park, x, z, max(dy + 1, WATER_Y + 1) + (1 if (x, z) in rnd else 0), dy + 4)
+            bodem[(x, z)] = dy
+        # posts only at the banks: deck cells with dry land next to them
+        for (x, z), dy in bodem.items():
+            if any(not park.water[x + dx, z + dz] and not park.pad[x + dx, z + dz]
+                   for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                for y in range(int(park.hoogte[x, z]) + 1, dy):
+                    park.set(x, y, z, kit.state("stripped_spruce_log", axis="y"))
+        gedaan += 1
+    log(f"    bruggen opgehoogd ({', '.join(zones)}): {gedaan}")
+    return gedaan
+
+
+# ======================================================================================================================
 # savanne landmarks
 RNG = np.random.default_rng(kit.SEED + 101)
 SPOTS = {}          # naam -> (x, y, z), for plekken()
@@ -330,41 +740,72 @@ def trotse_rots(park):
 
 
 def baobab_en_poel(park):
-    """The big drinkpoel (surface y 62) and the Vadse Baobab beside it: a fat 5x5 round trunk, short thick branches,
-    flat acacia-leaf crowns."""
+    """The big drinkpoel (surface y 62, at most 2 deep, a wide 1-deep rim where the elephants wade) with gently sloping
+    banks up to the plain, and the Vadse Baobab beside it: a fat round trunk, short thick branches, flat acacia crowns."""
     cx, cz, r, _ = kit.RESERVERINGEN["vadse_baobab_poel"]
-    # poel: west/north part of the spot, baobab east/south
-    px, pz = cx - 5, cz - 3
-    rx, rz = 9.5, 7.0
-    for x in range(px - 12, px + 13):
-        for z in range(pz - 10, pz + 11):
-            d = math.hypot((x - px) / rx, (z - pz) / rz) + (RNG.random() - 0.5) * 0.08
+    sav = zi("savanne")
+    pd = pad_afstand(park)
+    px, pz = cx - 6, cz - 2
+    rx, rz = 14.0, 10.5
+    ok = lambda x, z: (park.zone[x, z] == sav and park.binnen[x, z] and park.hek_afstand[x, z] >= 6 and pd[x, z] >= 3)
+    X0, X1 = px - int(rx * 1.8) - 2, px + int(rx * 1.8) + 3
+    Z0, Z1 = pz - int(rz * 1.8) - 2, pz + int(rz * 1.8) + 3
+    ruis = {}
+    for x in range(X0, X1):
+        for z in range(Z0, Z1):
+            ruis[x, z] = (RNG.random() - 0.5) * 0.08
+    # trees over the poel and its banks go (trunk and crown); loose leaves of trees outside are cleaned up below
+    for x in range(X0, X1):
+        for z in range(Z0, Z1):
+            if not ok(x, z) or math.hypot((x - px) / rx, (z - pz) / rz) > 1.75:
+                continue
+            g = int(park.hoogte[x, z])
+            for y in range(g + 1, min(g + 30, kit.H)):
+                if park.v[x, y, z] and (is_hout(park.get(x, y, z)) or is_plant(park.get(x, y, z))):
+                    park.v[x, y, z] = 0
+    for x in range(X0, X1):
+        for z in range(Z0, Z1):
+            if not ok(x, z):
+                continue
+            d = math.hypot((x - px) / rx, (z - pz) / rz) + ruis[x, z]
             if d <= 1.0:
-                diepte = 1 + int((1 - d) * 3.2)            # 1..4
+                diepte = 2 if d < 0.45 else 1
                 bed = WATER_Y - diepte
                 ruim(park, x, z, bed + 1, park.hoogte[x, z] + 3)
                 onderbouw(park, x, z, bed)
-                park.set(x, bed, z, "minecraft:clay" if diepte > 2 else "minecraft:sand")
+                park.set(x, bed, z, "minecraft:clay" if diepte == 2 else "minecraft:sand")
                 for y in range(bed + 1, WATER_Y + 1):
                     park.set(x, y, z, "minecraft:water", level=0)
                 park.hoogte[x, z] = bed
                 park.water[x, z] = True
-            elif d <= 1.35:
-                # the muddy rim, flat at the water level + a few reeds
-                vlak(park, x, z, WATER_Y if d < 1.15 else max(WATER_Y, int(park.hoogte[x, z])),
-                     top="mud" if d < 1.15 else "coarse_dirt", onder="dirt", vrij=4)
-                if RNG.random() < 0.12:
+                if diepte == 1 and RNG.random() < 0.03:
+                    park.set(x, WATER_Y + 1, z, "minecraft:lily_pad")
+            elif d <= 1.7:
+                g0 = int(park.hoogte[x, z])
+                t = (d - 1.0) / 0.7
+                y = WATER_Y + int(round(t * max(0, g0 - WATER_Y)))
+                y = max(WATER_Y, min(y, g0))
+                top = "mud" if d < 1.12 else ("coarse_dirt" if d < 1.3 else "grass_block")
+                vlak(park, x, z, y, top=top, onder="dirt", vrij=5)
+                if d > 1.12 and RNG.random() < 0.10:
                     park.set(x, park.hoogte[x, z] + 1, z, "minecraft:short_grass")
-    # make sure the rim around the water is at least water level (no leaks)
-    for x in range(px - 13, px + 14):
-        for z in range(pz - 11, pz + 12):
-            if not park.water[x, z] and park.hoogte[x, z] < WATER_Y:
-                nb = park.water[x - 1:x + 2, z - 1:z + 2].any()
-                if nb:
-                    vlak(park, x, z, WATER_Y, top="mud", vrij=3)
+    # the rim round the water is never lower than the water (no leaks)
+    for x in range(X0, X1):
+        for z in range(Z0, Z1):
+            if not park.water[x, z] and park.hoogte[x, z] < WATER_Y and park.water[x - 1:x + 2, z - 1:z + 2].any():
+                vlak(park, x, z, WATER_Y, top="mud", vrij=3)
+    los_blad_weg(park, X0 - 4, X1 + 4, Z0 - 4, Z1 + 4)
     SPOTS["poel"] = (px, WATER_Y, pz)
-    # baobab
-    bx, bz = cx + 8, cz + 6
+    SPOTS["poel_r"] = (rx, rz)
+    # baobab: dry flat land east of the poel, clear of the water and the path
+    bx, bz = px + int(rx) + 9, pz + 5
+    for rr in range(0, 14):
+        kand = [(x, z) for x in range(bx - rr, bx + rr + 1) for z in range(bz - rr, bz + rr + 1)
+                if max(abs(x - bx), abs(z - bz)) == rr and ok(x, z) and pd[x, z] >= 6 and park.hek_afstand[x, z] >= 8
+                and not park.water[x - 7:x + 8, z - 7:z + 8].any()]
+        if kand:
+            bx, bz = kand[0]
+            break
     g = int(park.hoogte[bx, bz])
     for dx in range(-4, 5):
         for dz in range(-4, 5):
@@ -382,13 +823,13 @@ def baobab_en_poel(park):
                              axis="y")
     top = g + h
     for k in range(6):
-        a = k * math.pi / 3 + 0.3
+        a_ = k * math.pi / 3 + 0.3
         for t in range(1, 6):
-            x = int(round(bx + math.cos(a) * (2 + t)))
-            z = int(round(bz + math.sin(a) * (2 + t)))
+            x = int(round(bx + math.cos(a_) * (2 + t)))
+            z = int(round(bz + math.sin(a_) * (2 + t)))
             y = top + (t // 2)
-            park.set(x, y, z, kit.state("jungle_log", axis="x" if abs(math.cos(a)) > abs(math.sin(a)) else "z"))
-        ex, ez = int(round(bx + math.cos(a) * 7)), int(round(bz + math.sin(a) * 7))
+            park.set(x, y, z, kit.state("jungle_log", axis="x" if abs(math.cos(a_)) > abs(math.sin(a_)) else "z"))
+        ex, ez = int(round(bx + math.cos(a_) * 7)), int(round(bz + math.sin(a_) * 7))
         park.blob(ex, top + 3, ez, 3.2, 1.3, 3.2, park.leaves("acacia"))
     park.blob(bx, top + 2, bz, 3.5, 1.4, 3.5, park.leaves("acacia"))
     park.bomen.append((bx, top + 4, bz, "baobab"))
@@ -466,22 +907,42 @@ def trekvlakte(park):
     SPOTS["trekvlakte"] = (cx, int(park.hoogte[cx, cz]) + 1, cz)
 
 
+def _rand_punten(park, px, pz, rx, rz, d=1.08, n=24, water_ok=False):
+    """Points on the rim of the poel (d times its radii), at animal head height (dry ones unless water_ok)."""
+    uit = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        x, z = int(round(px + math.cos(a) * rx * d)), int(round(pz + math.sin(a) * rz * d))
+        if 0 <= x < W and 0 <= z < W and park.zone[x, z] == zi("savanne") and (water_ok or not park.water[x, z]):
+            uit.append((x + 0.5, park.hoogte[x, z] + 1.6, z + 0.5))
+    return uit
+
+
 def toren_en_hut(park):
     px, _, pz = SPOTS["poel"]
+    rx, rz = SPOTS["poel_r"]
     tx, tz, _, _ = kit.RESERVERINGEN["trekvlakte"]
+    bx, _, bz = SPOTS.get("baobab", (px, 0, pz))
     # tower between the poel and the trekvlakte, near the path (visitors walk to it), looking over the poel
     mid = ((px + tx) // 2, (pz + tz) // 2)
-    t = zoek(park, "savanne", mid, 30, 3, minhek=8, pad_min=3, pad_max=14, weg_van=[(px, pz)], weg_r=14)
+    t = zoek(park, "savanne", mid, 30, 3, minhek=8, pad_min=3, pad_max=14, weg_van=[(px, pz), (bx, bz)], weg_r=18)
     if t:
         x, z, g = t
         uitkijktoren(park, x, z, g, (px, pz), hout="acacia")
         SPOTS["toren"] = (x, g, z)
-    # hide at the poel: 12-16 from the poel centre, facing it
-    h = zoek(park, "savanne", (px + 12, pz + 8), 14, 3, minhek=6, pad_min=3, weg_van=[(px, pz)], weg_r=12)
-    if h:
-        x, z, g = h
-        schuilhut(park, x, z, g, (px, pz), hout="spruce")
+    # the kijkhut: looks over the water at the rim where the elephants wade (targets: the water and the rim)
+    doelen = [(px + 0.5, WATER_Y + 1.2, pz + 0.5)] + _rand_punten(park, px, pz, rx, rz)
+    k = kies_kijkhut(park, "savanne", doelen, int(max(rx, rz)) + 4, int(max(rx, rz)) + 14,
+                     weg_van=[(bx, bz)] + ([SPOTS["toren"][::2]] if "toren" in SPOTS else []), weg_r=9)
+    if k:
+        x, z, g, f, frac = k
+        info = kijkhut(park, x, z, g, richting=f, hout="acacia", dak="hay_block", basis="minecraft:packed_mud",
+                       titel=("Kijkhut", "De Drinkpoel", "Olifanten, zebra's", "en giraffen"),
+                       plantje="minecraft:potted_dead_bush")
+        paadje(park, _hut_raster(x, z, f, 5)(0, 5 + 2 + 1))
         SPOTS["hut"] = (x, g, z)
+        SPOTS["hut_info"] = info
+        SPOTS["hut_zicht"] = frac
 
 
 def brug_halte(park):
@@ -512,7 +973,7 @@ def brug_halte(park):
     w, v = np.linalg.eigh(c)
     ax, az = v[:, 1]
     nx, nz = -az, ax
-    DECK = WATER_Y + 1
+    DECK = BRUG_DEK
     # try both sides; take the side with more water (over the river) and no path
     for zijde in (1, -1):
         ox, oz = cx + nx * zijde * 5.5, cz + nz * zijde * 5.5
@@ -595,33 +1056,66 @@ def brug_halte(park):
 
 
 def bouw(park, log=print):
+    bruggen_ophogen(park, ["savanne"], log)
     trotse_rots(park)
     baobab_en_poel(park)
     termietenheuvels(park)
     trekvlakte(park)
     toren_en_hut(park)
     brug_halte(park)
+    drijvend_hout_weg(park, ["savanne"], log)
     park._pad_d = None
     log(f"    savanne: {', '.join(sorted(SPOTS))}")
 
 
+def _in_beeld(park, info, afstand, opzij=0, water_ok=False):
+    """A dry (or wet) ground spot `afstand` in front of the kijkhut window, `opzij` to the side: (x, y, z)."""
+    f = info["f"]
+    vx, vz = STAP[f]
+    sx, sz = (1, 0) if vx == 0 else (0, 1)
+    fx, fz = info["voor"]
+    for extra in range(0, 10):
+        for sgn in (1, -1):
+            x = int(fx + vx * (afstand + extra) + sx * opzij * sgn)
+            z = int(fz + vz * (afstand + extra) + sz * opzij * sgn)
+            if 0 <= x < W and 0 <= z < W and park.zone[x, z] == zi("savanne") and park.hek_afstand[x, z] >= 4 \
+                    and (water_ok or not park.water[x, z]):
+                return (x, int(park.hoogte[x, z]) + 1, z)
+    return None
+
+
 def plekken(park, plekken):
-    """Leeuwen on the Trotse Rots, one giraffe and one zebra home at the drinkpoel (the olifanten are anchored there)."""
+    """Leeuwen on the Trotse Rots; olifanten, a giraffe and a zebra family round the drinkpoel, right where the kijkhut
+    window looks (the elephants on the 1-deep rim they wade through)."""
     if "trotse_rots_top" in SPOTS:
         for i in range(2):
             zet_plek(plekken, "leeuw", i, SPOTS["trotse_rots_top"], straal=12)
-    if "poel" in SPOTS:
-        px, _, pz = SPOTS["poel"]
+    if "poel" not in SPOTS:
+        return
+    px, _, pz = SPOTS["poel"]
+    rx, rz = SPOTS["poel_r"]
+    info = SPOTS.get("hut_info")
+    if info:
+        # the near half of the poel seen from the hut: elephants at the rim (wading in the 1-deep edge)
+        hx, hz = info["voor"]
+        rand = sorted(((math.hypot(x - hx, z - hz), x, z) for x, _, z in _rand_punten(park, px, pz, rx, rz, d=1.12, n=48)),
+                      key=lambda t: t[0])
+        voor = [(int(x), int(z)) for _, x, z in rand[:12]]
+        for i in range(2):
+            if i < len(voor):
+                x, z = voor[i * 5 % len(voor)]
+                zet_plek(plekken, "olifant", i, (x, int(park.hoogte[x, z]) + 1, z), straal=9)
+        p = _in_beeld(park, info, 9, opzij=6)
+        if p:
+            zet_plek(plekken, "zebra", 0, p, straal=10)
+        p = _in_beeld(park, info, 12, opzij=-7)
+        if p:
+            zet_plek(plekken, "giraffe", 0, p, straal=10)
+    else:
         for soort in ("giraffe", "zebra"):
-            # the nearest dry land 12 east of the poel
-            for d in range(12, 24):
+            for d in range(int(rx) + 2, int(rx) + 14):
                 x, z = px + d, pz
                 if not park.water[x, z]:
                     zet_plek(plekken, soort, 0, (x, int(park.hoogte[x, z]) + 1, z), straal=16)
                     break
             pz += 6
-        for i in range(2):
-            p = zet_plek(plekken, "olifant", i, (px + 13, WATER_Y + 1, SPOTS["poel"][2] - 2), straal=16)
-            if p:
-                x, _, z = p["centrum"]
-                p["centrum"][1] = int(park.hoogte[x, z]) + 1

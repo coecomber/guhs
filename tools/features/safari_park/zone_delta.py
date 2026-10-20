@@ -3,6 +3,11 @@ Zone module delta (design 1.4): de mangrovevlonders (een vlonderdoolhofje tussen
 de nijlpaardenpoel met een glazen onderwaterkijkhut (ook de zeekoeien zwemmen hier), het roze flamingomeer, de
 krokodillenzandbank met het bordje "Niet aaien (ze willen wel)", een uitkijktoren, een schuilhut en het geheimpje (de
 verloren zonnebril, in een kistje tussen de mangroves). Helpers come from zone_savanne.
+
+Round 2 (user test): the hide at the flamingo lake is the standard kijkhut (wide Eenrichtingsvadsglas band, placed and
+scored on what its window sees, the flamingo homes in that view); the underwater kijkhut at the hippo pool has
+Eenrichtingsvadsglas and a deep trench in front of the glass (water to look into instead of the mud bank); the route
+bridge in the delta is raised (3 free blocks over the river for the canoe route).
 """
 import math
 
@@ -11,7 +16,8 @@ from scipy.ndimage import distance_transform_edt
 
 from . import kit
 from .zone_savanne import (W, WATER_Y, zi, pad_afstand, vlak, ruim, onderbouw, zoek, bord, trap, kijk_richting, STAP,
-                           TEGENOVER, uitkijktoren, schuilhut, geheimpje, zet_plek, vrij_van_hout)
+                           TEGENOVER, uitkijktoren, schuilhut, geheimpje, zet_plek, vrij_van_hout, kijkhut,
+                           kies_kijkhut, paadje, bruggen_ophogen, GLAS, _hut_raster, drijvend_hout_weg)
 
 RNG = np.random.default_rng(kit.SEED + 202)
 SPOTS = {}
@@ -140,7 +146,7 @@ def nijlpaardenpoel(park):
                 if y == vloer:
                     park.set(x, y, z, "minecraft:spruce_planks")
                 elif dd == 0 and abs(k) < 3 and y <= WATER_Y + 1:
-                    park.set(x, y, z, "minecraft:glass")
+                    park.set(x, y, z, GLAS)
                 elif wand or y >= WATER_Y + 2:
                     park.set(x, y, z, "minecraft:mud_bricks" if y <= WATER_Y + 1 else "minecraft:spruce_planks")
                 else:
@@ -167,9 +173,27 @@ def nijlpaardenpoel(park):
                     park.set(x, yy, z, "minecraft:mud_bricks")
         if y >= WATER_Y + 3 or y - 1 >= int(park.hoogte[ex - ax * (3 + t), ez - az * (3 + t)]):
             break
+    # a deep trench in front of the glass: water down to the room floor, so the window looks into water (and at the
+    # hippos), not at the muddy pool bank
+    for dd in range(1, 9):
+        for k in range(-4 - dd // 3, 5 + dd // 3):
+            x = ex + sx * k + ax * dd
+            z = ez + sz * k + az * dd
+            if park.zone[x, z] != dz_ or pd[x, z] < 2 or park.hek_afstand[x, z] < 5:
+                continue
+            bed = min(int(park.hoogte[x, z]), vloer)
+            ruim(park, x, z, bed + 1, max(int(park.hoogte[x, z]), WATER_Y) + 3)
+            for y in range(bed + 1, WATER_Y + 1):
+                park.set(x, y, z, "minecraft:water", level=0)
+            park.set(x, bed, z, "minecraft:mud")
+            onderbouw(park, x, z, bed, "minecraft:mud")
+            park.hoogte[x, z] = bed
+            park.water[x, z] = True
+    _dicht_rand(park, ex - 14, ez - 14, ex + 14, ez + 14)
     # lanterns in the room
     park.set(ex - ax * 2, WATER_Y + 1, ez - az * 2, "minecraft:lantern", hanging="true", waterlogged="false")
     SPOTS["kijkhut"] = (ex, vloer, ez)
+    SPOTS["kijkhut_voor"] = (ex + ax * 4, vloer + 1, ez + az * 4)
 
 
 def mangrovevlonders(park):
@@ -323,14 +347,26 @@ def toren_en_hut(park):
         x, z, g = t
         uitkijktoren(park, x, z, g, (mx, mz), hout="mangrove", dak="hay_block")
         SPOTS["toren"] = (x, g, z)
-    h = zoek(park, "delta", (mx - 14, mz + 10), 16, 3, minhek=6, pad_min=3, weg_van=[(mx, mz)], weg_r=13)
-    if h:
-        x, z, g = h
-        schuilhut(park, x, z, g, (mx, mz), hout="mangrove")
+    # the kijkhut at the flamingo lake: targets = the lake (flamingos stand in its shallow water)
+    doelen = [(mx + 0.5, WATER_Y + 1.4, mz + 0.5)]
+    for k in range(16):
+        a_ = 2 * math.pi * k / 16
+        doelen.append((mx + math.cos(a_) * 7 + 0.5, WATER_Y + 1.4, mz + math.sin(a_) * 5 + 0.5))
+    weg = [(mx, mz)] + ([SPOTS["toren"][::2]] if "toren" in SPOTS else [])
+    k = kies_kijkhut(park, "delta", doelen, 15, 26, weg_van=weg[1:], weg_r=8)
+    if k:
+        x, z, g, f, frac = k
+        info = kijkhut(park, x, z, g, richting=f, hout="mangrove", dak="hay_block", basis="minecraft:mud_bricks",
+                       titel=("Kijkhut", "Het Flamingomeer", "Roze, op een pootje", "(meestal)"),
+                       plantje="minecraft:potted_pink_tulip")
+        paadje(park, _hut_raster(x, z, f, 5)(0, 8))
         SPOTS["hut"] = (x, g, z)
+        SPOTS["hut_info"] = info
+        SPOTS["hut_zicht"] = frac
 
 
 def bouw(park, log=print):
+    bruggen_ophogen(park, ["delta"], log)
     flamingomeer(park)
     nijlpaardenpoel(park)
     park._pad_d = None
@@ -338,6 +374,7 @@ def bouw(park, log=print):
     park._pad_d = None
     krokodillenbank(park)
     toren_en_hut(park)
+    drijvend_hout_weg(park, ["delta"], log)
     park._pad_d = None
     log(f"    delta: {', '.join(sorted(SPOTS))}")
 
@@ -350,11 +387,29 @@ def plekken(park, plekken):
         for i in range(3):
             zet_plek(plekken, "nijlpaard", i, (x, bed + 1, z), straal=8)
         zet_plek(plekken, "zeekoe", 0, (x, bed + 1, z), straal=7)
+    if "kijkhut_voor" in SPOTS:
+        # one hippo family right in front of the underwater window
+        zet_plek(plekken, "nijlpaard", 0, SPOTS["kijkhut_voor"], straal=6)
     if "meer" in SPOTS:
         x, _, z = SPOTS["meer"]
-        for i in range(4):
-            zet_plek(plekken, "flamingo", i, (x + (i % 2) * 3 - 1, int(park.hoogte[x, z]) + 1, z + (i // 2) * 3 - 1),
-                     straal=10)
+        info = SPOTS.get("hut_info")
+        if info:
+            # the flamingos in the half of the lake that faces the kijkhut window
+            hx, hz = info["voor"]
+            d = math.hypot(x - hx, z - hz) or 1.0
+            ux, uz = (x - hx) / d, (z - hz) / d
+            for i in range(4):
+                t = d - 5 + (i % 2) * 3
+                zij = (i // 2) * 4 - 2
+                fx = int(round(hx + ux * t - uz * zij))
+                fz = int(round(hz + uz * t + ux * zij))
+                if not park.water[fx, fz]:
+                    fx, fz = x, z
+                zet_plek(plekken, "flamingo", i, (fx, int(park.hoogte[fx, fz]) + 1, fz), straal=7)
+        else:
+            for i in range(4):
+                zet_plek(plekken, "flamingo", i, (x + (i % 2) * 3 - 1, int(park.hoogte[x, z]) + 1, z + (i // 2) * 3 - 1),
+                         straal=10)
     if "zandbank" in SPOTS:
         x, y, z = SPOTS["zandbank"]
         for i in range(2):
