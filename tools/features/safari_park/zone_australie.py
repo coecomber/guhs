@@ -16,7 +16,8 @@ import math
 import numpy as np
 
 from . import kit
-from .zone_europa import kap, vlak, zet_grond, grond_y, toren, schuilhut, zet_huizen, ver_van_hek, _naam
+from .zone_europa import (kap, vlak, zet_grond, grond_y, toren, kijkhut, zet_huizen, extra_huis, ver_van_hek, _naam,
+                          dicht_water)
 
 W, WATER_Y = kit.W, kit.WATER_Y
 R = kit.RESERVERINGEN
@@ -29,6 +30,7 @@ POST = (296, 428)      # well away from the europa border fence
 SCHADUW = (240, 445)
 PRIEEL = (338, 482)
 TOREN = (318, 448)
+BILLA_HUT = (302, 481)          # round 2: front wall of the kijkhut south of the billabong, looks north over the water
 
 
 def eucalyptusbos(park):
@@ -127,7 +129,6 @@ def billabong(park):
     # a water trough at the foot
     for dx in (2, 3):
         park.set(wx + dx, g + 1, wz + 2, "cauldron")
-    schuilhut(park, x - 10, z + 8, kijk="north", hout="acacia", dak="hay_block")
 
 
 def quokka_eiland(park):
@@ -224,10 +225,16 @@ def postkantoortje(park):
     for dz in (-3, 3):
         for y in range(g + 1, g + 4):
             park.set(x - 5, y, z + dz, "spruce_fence")
-    park.set(x - 3, g + 1, z, "air")
-    park.set(x - 3, g + 2, z, "air")
-    park.set(x - 3, g + 1, z + 1, "glass_pane")
-    park.set(x - 3, g + 2, z - 1, "glass_pane")
+    # round 2: a proper door (the old opening with two loose panes looked broken) and two real windows beside it
+    park.set(x - 3, g + 1, z, "spruce_door", facing="east", half="lower", hinge="left", open="false", powered="false")
+    park.set(x - 3, g + 2, z, "spruce_door", facing="east", half="upper", hinge="left", open="false", powered="false")
+    for dz in (-1, 1):
+        park.set(x - 3, g + 1, z + dz, "light_gray_terracotta")
+        park.set(x - 3, g + 2, z + dz, "glass")
+    for dx in (-1, 1):
+        park.set(x + dx, g + 2, z - 2, "glass")
+        park.set(x + dx, g + 2, z + 2, "glass")
+    park.set(x - 4, g, z, "spruce_slab", type="top", waterlogged="false")       # a step onto the veranda
     # counter + the lost postcard spot (geheimpje): a chest behind the counter
     park.fill(x, g + 1, z - 1, x, g + 1, z + 1, "spruce_planks")
     park.set(x + 2, g + 1, z + 1, "chest", facing="west", type="single", waterlogged="false")
@@ -291,8 +298,13 @@ def bouw(park, log=print):
     kap(park, TOREN[0], TOREN[1], 6)
     vlak(park, TOREN[0], TOREN[1], 3.5, int(park.hoogte[TOREN[0], TOREN[1]]), "coarse_dirt", "dirt")
     toren(park, TOREN[0], TOREN[1], hout="acacia", hoogte=8, dakblok="iron_block")
+    # round 2: the billabong kijkhut (raised, one-way glass, the kangaroos drink on the north bank right in front)
+    kijkhut(park, BILLA_HUT[0], BILLA_HUT[1], kijk="north", hout="acacia", dak="acacia", naam="billabong-kijkhut",
+            zicht=16)
+    dicht_water(park, ["australie"], log)
     for naam, (x, z, r) in {"wombat": (WOMBAT[0], WOMBAT[1], 9), "billabong": (BILLABONG[0], BILLABONG[1], 10),
-                             "post": (POST[0], POST[1], 6), "toren": (TOREN[0], TOREN[1], 5)}.items():
+                             "post": (POST[0], POST[1], 6), "toren": (TOREN[0], TOREN[1], 5),
+                             "kijkhut": (BILLA_HUT[0], BILLA_HUT[1] + 3, 6)}.items():
         if not ver_van_hek(park, x, z, r):
             log(f"  LET OP australie: {naam} ligt dicht bij een hek")
     from . import preview
@@ -304,8 +316,8 @@ def bouw(park, log=print):
 def plekken(park, plekken_):
     zet_huizen(park, plekken_, "koala", [(EUCALYPTUS[0] + 3, EUCALYPTUS[1] - 2), (EUCALYPTUS[0] - 5, EUCALYPTUS[1] + 4)],
                "australie")
-    zet_huizen(park, plekken_, "kangoeroe", [(BILLABONG[0] - 4, BILLABONG[1] - 10), (BILLABONG[0] + 6, BILLABONG[1] + 9)],
-               "australie")
+    zet_huizen(park, plekken_, "kangoeroe", [(BILLABONG[0] - 3, BILLABONG[1] - 9)], "australie")
+    extra_huis(park, plekken_, "kangoeroe", (BILLABONG[0] + 6, BILLABONG[1] - 8), "australie")      # round 2: in view
     zet_huizen(park, plekken_, "quokka", [QUOKKA], "australie")
     zet_huizen(park, plekken_, "wombat", [(WOMBAT[0] + 5, WOMBAT[1] + 1)], "australie")
     zet_huizen(park, plekken_, "prieelvogel", [(PRIEEL[0], PRIEEL[1] + 3)], "australie")
