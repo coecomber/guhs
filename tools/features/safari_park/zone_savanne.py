@@ -224,7 +224,7 @@ def schuilhut(park, x, z, g, kijk_naar, hout="spruce", dak="hay_block"):
     for k in (-1, 0, 1):
         bx = x + vx * 1 + (k if vx == 0 else 0)
         bz = z + vz * 1 + (k if vz == 0 else 0)
-        park.set(bx, g + 1, bz, trap(f"minecraft:{hout}_stairs", achter))
+        kit.stoel(park, bx, g + 1, bz, TEGENOVER[achter])          # guh chairs looking out of the slits
     # roof: hay, flat with a ridge
     for dx in range(-3, 4):
         for dz in range(-3, 4):
@@ -416,7 +416,7 @@ def kijkhut(park, x, z, g, kijk_naar=None, richting=None, hout="spruce", dak="ha
     for a in range(-hw + 1, hw):
         if a != 0:
             X, Z = w(a, 2)
-            park.set(X, F + 1, Z, trap(f"minecraft:{hout}_stairs", achter))
+            kit.stoel(park, X, F + 1, Z, TEGENOVER[achter])         # guh chairs looking through the glass
     X, Z = w(0, 2)
     park.set(X, F + 3, Z, "minecraft:lantern", hanging="true", waterlogged="false")
     X, Z = w(hw - 1, diep - 2)
@@ -1028,7 +1028,7 @@ def brug_halte(park):
     f = kijk_richting(-nx * zijde, -nz * zijde)          # the bench faces the bridge
     for c, pr in proj.items():
         if pr > verst - 0.75:
-            park.set(c[0], DECK + 1, c[1], trap("minecraft:spruce_stairs", TEGENOVER[f]))
+            kit.stoel(park, c[0], DECK + 1, c[1], f)                 # guh chairs looking at the bridge
     # 'Halte' board beside the path at the savanne bridgehead: two fence posts, a yellow board, the sign on top
     pd = pad_afstand(park)
     kand = [(math.hypot(x - cx, z - cz), x, z) for x in range(int(cx) - 30, int(cx) + 31)

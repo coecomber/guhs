@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 from safari_park import kit, terrein, plekken as plk          # noqa: E402
 
-VERSIE = 4      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
+VERSIE = 5      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
 
 
 def _json(root, rel, data):

@@ -639,7 +639,7 @@ def _dorp(kruising_cellen):
     thatch(SX1, SZ1, SX2, SZ2, G + 7, overhang=1)
     S.fill(SX1 + 1, G + 1, SZ2, SX2 - 1, G + 1, SZ2, slab("minecraft:smooth_sandstone_slab", "top"))
     for x in range(SX1 + 2, SX2 - 1, 4):
-        S.set(x, G + 1, SZ2 - 1, stairs("minecraft:spruce_stairs", "south"))
+        S.set(x, G + 1, SZ2 - 1, "guhs:guh_stoel[facing=north]")             # guh chairs on the platform
     S.fill(SX1 - 2, G + 1, SZ2 + 1, SX1 - 2, G + 3, SZ2 + 1, "minecraft:spruce_fence")
     S.fill(SX1 - 3, G + 4, SZ2 + 1, SX1 - 1, G + 4, SZ2 + 1, "minecraft:yellow_concrete")
     S.set(SX1 - 2, G + 5, SZ2 + 1, "minecraft:yellow_concrete")
@@ -790,7 +790,7 @@ def _dorp(kruising_cellen):
     # a bus stop sign + bench on the forecourt
     S.fill(CX + 4, G + 1, GZ + 6, CX + 4, G + 3, GZ + 6, "minecraft:spruce_fence")
     S.set(CX + 4, G + 4, GZ + 6, "minecraft:yellow_concrete")
-    S.fill(CX - 4, G + 1, GZ + 5, CX - 2, G + 1, GZ + 5, stairs("minecraft:spruce_stairs", "west"))
+    S.fill(CX - 4, G + 1, GZ + 5, CX - 2, G + 1, GZ + 5, "guhs:guh_stoel[facing=east]")   # bus stop chairs (looking the same way the old bench did)
 
     # ---- the park gates where the route crosses the fence: an open arch (posts, beam, sign), no loose gap ----
     BORDJES = []

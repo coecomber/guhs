@@ -161,8 +161,8 @@ def schuilhut(park, x, z, kijk="north", hout="spruce", dak="hay_block"):
         park.set(wx, g + 2, wz, "glass")
     park.set(x + dx_, g + 1, z + dz_, "air")
     park.set(x + dx_, g + 2, z + dz_, "air")
-    park.set(x, g + 1, z, "spruce_slab", type="bottom", waterlogged="false")          # a little bench
-    park.set(x + (1 if not ox else 0), g + 1, z + (1 if ox else 0), "spruce_slab", type="bottom", waterlogged="false")
+    kit.stoel(park, x, g + 1, z, kijk)                                                # two guh chairs at the slit
+    kit.stoel(park, x + (1 if not ox else 0), g + 1, z + (1 if ox else 0), kijk)
 
 
 KIJKGLAS = "guhs:eenrichtingsglas"
@@ -220,8 +220,7 @@ def kijkhut(park, x, z, kijk="north", hout="spruce", dak="spruce", breed=7, diep
     for u in range(-h + 1, h):
         if u != 0:
             cx, cz = w2(u, -1)
-            park.set(cx, F + 1, cz, f"{hout}_stairs", facing=_TEGEN[kijk], half="bottom", shape="straight",
-                     waterlogged="false")
+            kit.stoel(park, cx, F + 1, cz, kijk)                   # guh chairs looking through the glass
     cx, cz = w2(0, -2)
     park.set(cx, F + 4, cz, "lantern", hanging="true", waterlogged="false")
     # door in the back wall + steps down to the ground
@@ -774,8 +773,7 @@ def dassenheuvel(park):
             park.set(xx, g + 4, zz, kit.state("spruce_log", axis="x"))
     for xx in range(x - 3, x + 4):
         if xx not in (x, x + 1):
-            park.set(xx, g + 1, z + 5, "spruce_stairs", facing="south", half="bottom", shape="straight",
-                     waterlogged="false")
+            kit.stoel(park, xx, g + 1, z + 5, "north")              # guh chairs facing the burrow glass
     for lx in (x - 3, x + 3):
         park.set(lx, g + 3, z + 4, "lantern", hanging="true", waterlogged="false")
     # the entrance tunnel south, 2 wide, out of the hill; a little timber frame at the mouth

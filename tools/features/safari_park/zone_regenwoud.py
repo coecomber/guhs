@@ -219,7 +219,7 @@ def schuilhut(park, x, z, kijk="north", hout="spruce", log=print):
                                   powered="false"))
     park.set(bx, g + 2, bz, state(f"{hout}_door", facing=tegen, half="upper", hinge="left", open="false",
                                   powered="false"))
-    park.set(x, g + 1, z, state(f"{hout}_slab", type="bottom", waterlogged="false"))   # a bench
+    kit.stoel(park, x, g + 1, z, kijk)                      # a guh chair looking out of the slit
     park.set(x, g + 3, z, state("lantern", hanging="true", waterlogged="false"))
     return g
 

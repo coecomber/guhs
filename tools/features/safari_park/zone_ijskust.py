@@ -169,7 +169,7 @@ def schuilhut(park, cx, cz, kijk=(0, -1), hout="spruce", muur=None, dak=None):
     dx, dz = -kx, -kz                                       # the door
     for i in (1, 2):
         park.set(cx + 2 * dx, y + i, cz + 2 * dz, "minecraft:air")
-    park.set(cx, y + 1, cz, f"minecraft:{hout}_slab[type=bottom,waterlogged=false]")   # a bench
+    kit.stoel(park, cx, y + 1, cz, (kx, kz))                # a guh chair looking out of the slit
     return y
 
 
@@ -403,7 +403,7 @@ def kijkhut(park, cx, cz, kijk, hout="spruce", verhoog=1, B=3, D=2, glas="guhs:e
     terug = _richting((-kx, -kz))
     for w in (-2, -1, 1, 2):
         bx, bz = W(0, w)
-        park.set(bx, F + 1, bz, f"minecraft:{hout}_stairs[facing={terug},half=bottom,shape=straight,waterlogged=false]")
+        kit.stoel(park, bx, F + 1, bz, (kx, kz))                 # guh chairs looking through the glass
     lx, lz = W(0, 0)
     park.set(lx, F + 4, lz, "minecraft:lantern[hanging=true,waterlogged=false]")
     # the view: clear the cone in front
@@ -794,7 +794,7 @@ def onderwatertunnel(park, rng, sx, sz):
             if park.get(x, y, z) == "minecraft:glass":
                 park.set(x, y, z, "minecraft:packed_ice")
     park.set(bx, VLOER, bz, "minecraft:sea_lantern")
-    park.set(bx, VLOER + 1, bz, "minecraft:spruce_slab[type=bottom,waterlogged=false]")       # a bench
+    kit.stoel(park, bx, VLOER + 1, bz, (round(ux), round(uz)) if (round(ux), round(uz)) in kit._KIJK else "north")
     langs = [(int(round(ax + ux * s)), int(round(az + uz * s))) for s in range(8, int(lengte), 5)]
     return (bx, VLOER, bz), langs
 

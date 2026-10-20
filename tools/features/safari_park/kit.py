@@ -365,6 +365,18 @@ class Park:
         return stats
 
 
+STOEL = "guhs:guh_stoel"
+_KIJK = {(0, -1): "north", (0, 1): "south", (1, 0): "east", (-1, 0): "west"}
+
+
+def stoel(park, x, y, z, kijk):
+    """A guh chair (guhs:guh_stoel) to sit on, looking toward `kijk` ("north".. or a (dx, dz) unit step): the chair's
+    facing is the way the sitter looks (its backrest is on the other side)."""
+    if not isinstance(kijk, str):
+        kijk = _KIJK[(int((kijk[0] > 0) - (kijk[0] < 0)), int((kijk[1] > 0) - (kijk[1] < 0)))]
+    park.set(x, y, z, STOEL, facing=kijk)
+
+
 def _strval(s):
     b = s.encode("utf-8")
     return struct.pack(">H", len(b)) + b
