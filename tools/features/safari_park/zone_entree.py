@@ -186,11 +186,18 @@ def inside(x, z):
 
 
 INS = {(x, z) for x in range(X) for z in range(Z) if inside(x, z)}
-EDGE = [(x, z) for (x, z) in INS if any((x + a, z + b) not in INS for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+# the fence ring: every inside cell with an outside cell among its 8 neighbours. That ring is 4-connected (a ring of
+# only 4-neighbour edge cells steps diagonally, so fences and bars stood as loose posts with gaps between them).
+EDGE = [(x, z) for (x, z) in INS
+        if any((x + a, z + b) not in INS for a in (-1, 0, 1) for b in (-1, 0, 1) if a or b)]
 GZ = max(z for (x, z) in INS if x == CX)          # the park gate (south)
 
 
 # ----------------------------------------------------------------------------------------------- the village
+# the aaihoek pens (x0, z0, animal): 6 x 7, gate on the side facing the square paths
+PENS = [(94, 52, "geitje"), (120, 50, "alpaca"), (90, 72, "cavia"), (106, 74, "ezeltje")]
+
+
 def _dorp(kruising_cellen):
     """Builds the village in a local scene. kruising_cellen: edge cells (local) where the park route crosses the
     outline. Returns (S, info)."""
@@ -355,21 +362,24 @@ def _dorp(kruising_cellen):
                         PATHS.add((x, z))
 
     path([(CX, CZ + SQ_R), (CX - 3, CZ + 26), (CX + 2, CZ + 38), (CX, GZ + 7)], w=2.6)         # square -> gate
+    # (test round 2: every building sits at least 4 inside the outline; the rangerstation, its tower, the truck station
+    # and the aaihoek stood partly outside it, so they were cut off at the back)
     path([(CX - SQ_R, CZ + 2), (CX - 22, CZ + 6), (49, 61)])                                  # -> giftshop
-    path([(CX - 11, CZ - 11), (CX - 18, CZ - 17), (50, 38), (44, 35)])                       # -> rangerstation
-    path([(CX + 2, CZ - SQ_R), (CX + 5, CZ - 22), (78, 36)])                                 # -> watergat
-    path([(CX + 11, CZ - 10), (CX + 22, CZ - 16), (98, 42), (104, 40)])                      # -> truck station
-    path([(CX + SQ_R, CZ + 1), (CX + 24, CZ + 4), (96, 62), (100, 60)])                      # -> aaihoek
-    path([(CX + 9, CZ + 12), (CX + 20, CZ + 22), (96, 86), (100, 92)])                       # -> picknick
+    path([(CX - 11, CZ - 11), (52, 45), (48, 41), (46, 40)])                                 # -> rangerstation door
+    path([(CX + 2, CZ - SQ_R), (CX + 5, CZ - 22), (74, 38)])                                 # -> watergat
+    path([(CX + 11, CZ - 10), (82, 49), (88, 47)])                                           # -> truck station
+    path([(CX + SQ_R, CZ + 1), (CX + 24, CZ + 4), (100, 65), (103, 66)])                     # -> aaihoek (barn door)
+    path([(CX + 9, CZ + 12), (CX + 20, CZ + 22), (90, 84), (93, 86)])                        # -> picknick
     path([(CX - 9, CZ + 12), (CX - 18, CZ + 20), (46, 78), (44, 80)])                        # -> lodges (deck)
-    ALPACA_LOOP = [(112, 58), (120, 54), (126, 62), (122, 72), (113, 72), (110, 66)]
+    ALPACA_LOOP = [(120, 60), (126, 59), (130, 64), (127, 72), (121, 74), (119, 67)]
     path(ALPACA_LOOP + [ALPACA_LOOP[0]], w=1.2, mats=["minecraft:dirt_path", "minecraft:coarse_dirt"])
-    # where the park route crosses the outline: a path to the village paths (north: around Het Watergat)
+    # where the park route crosses the outline: a clear park gate there, and the path runs from it to the truck
+    # station (east of Het Watergat, never past its terrace), and from the station to the square
     for (kx, kz) in kruising_cellen:
         if kz < 20 and kx < 92:
-            path([(kx, kz + 1), (90, 13), (95, 24), (93, 36), (90, 44)], w=2.0)
+            path([(kx, kz + 1), (kx + 1, kz + 4), (85, 13), (88, 19), (90, 27), (91, 34), (93, 39)], w=2.2)
         else:
-            path([(kx, kz + 1), ((kx + 104) / 2, (kz + 40) / 2), (104, 40)], w=2.0)
+            path([(kx, kz + 1), ((kx + 98) / 2, kz + 3), (98, 39)], w=2.2)
     # bus forecourt in front of the gate
     for x in range(CX - 6, CX + 7):
         for z in range(GZ - 2, GZ + 9):
@@ -481,7 +491,8 @@ def _dorp(kruising_cellen):
     claim(GX1, GZ1, GX2 + 3, GZ2 + 6)
 
     # ---- rangerstation (NW) + map + dex board + lookout tower ----
-    RX1, RZ1, RX2, RZ2 = 24, 22, 44, 36
+    RX1, RZ1, RX2, RZ2 = 26, 33, 44, 46
+    DOOR_Z = RZ1 + 6                     # the door (east wall, 2 wide), the stairs run along the wall north of it
     box(RX1, G + 1, RZ1, RX2, G + 9, RZ2, "minecraft:spruce_planks", floor="minecraft:spruce_planks")
     S.fill(RX1, G + 5, RZ1, RX2, G + 5, RZ2, "minecraft:stripped_spruce_log[axis=x]")
     S.air(RX1 + 1, G + 5, RZ1 + 1, RX2 - 1, G + 5, RZ2 - 1)
@@ -492,7 +503,8 @@ def _dorp(kruising_cellen):
             S.set(sx, G + 1 + i, RZ1 + 6 - i, stairs("minecraft:spruce_stairs", "north"))
     windows(RX1, G + 3, RZ1, RX2, RZ2, every=3)
     windows(RX1, G + 7, RZ1, RX2, RZ2, every=3)
-    door(RX2, G + 1, 30, 2)
+    door(RX2, G + 1, DOOR_Z, 2)
+    S.set(RX2 + 1, G, DOOR_Z, "minecraft:spruce_planks")
     thatch(RX1, RZ1, RX2, RZ2, G + 10, overhang=1)
     for z in range(RZ1 + 1, RZ2):
         S.set(RX2 + 1, G, z, "minecraft:spruce_planks"); S.set(RX2 + 2, G, z, "minecraft:spruce_planks")
@@ -511,12 +523,17 @@ def _dorp(kruising_cellen):
     S.fill(MX0 - 1, G + 1, RZ2 + 1, MX0 - 1, G + 9, RZ2 + 1, POST)
     S.fill(MX0 + 10, G + 1, RZ2 + 1, MX0 + 10, G + 9, RZ2 + 1, POST)
     S.fill(MX0 - 1, G + 9, RZ2 + 1, MX0 + 10, G + 9, RZ2 + 1, slab("minecraft:dark_oak_slab"))
-    for i in range(24):                                           # the dex board (the west wall)
-        zz, yy = 24 + (i % 8), G + 8 - (i // 8) * 2
-        S.set(RX1 - 1, yy, zz + 2, rnd.choice(["minecraft:yellow_terracotta", "minecraft:orange_terracotta",
-                                              "minecraft:light_gray_concrete", "minecraft:brown_concrete",
-                                              "minecraft:pink_terracotta"]))
-    TX, TZ = RX1 - 2, RZ1 - 6
+    # the dex board: on the front beside the map (it hung on the back wall, facing the fence), in a frame of posts
+    DX0 = MX0 + 12
+    S.fill(DX0 - 1, G + 1, RZ2 + 1, DX0 - 1, G + 9, RZ2 + 1, POST)
+    S.fill(DX0 + 5, G + 1, RZ2 + 1, DX0 + 5, G + 9, RZ2 + 1, POST)
+    S.fill(DX0 - 1, G + 9, RZ2 + 1, DX0 + 5, G + 9, RZ2 + 1, slab("minecraft:dark_oak_slab"))
+    S.fill(DX0, G + 3, RZ2 + 1, DX0 + 4, G + 8, RZ2 + 1, "minecraft:spruce_planks")
+    for i in range(15):
+        S.set(DX0 + (i % 5), G + 8 - (i // 5) * 2, RZ2 + 1,
+              rnd.choice(["minecraft:yellow_terracotta", "minecraft:orange_terracotta", "minecraft:light_gray_concrete",
+                          "minecraft:brown_concrete", "minecraft:pink_terracotta"]))
+    TX, TZ = RX1 + 5, RZ1 - 6
     for (a, b) in ((0, 0), (4, 0), (0, 4), (4, 4)):
         S.fill(TX + a, G + 1, TZ + b, TX + a, G + 17, TZ + b, LOG)
     for yy in (G + 6, G + 12):
@@ -536,7 +553,7 @@ def _dorp(kruising_cellen):
     claim(TX, TZ, RX2 + 2, RZ2 + 1)
 
     # ---- expertenpaviljoen (next to the rangerstation): octagon, 8 counters in the zone colours ----
-    PVX, PVZ, PVR = 53, 29, 5.5
+    PVX, PVZ, PVR = 54, 37, 5.5
     EXPERTS = ["minecraft:yellow_wool", "minecraft:cyan_wool", "minecraft:green_wool", "minecraft:lime_wool",
                "minecraft:light_blue_wool", "minecraft:light_gray_wool", "minecraft:green_terracotta", "minecraft:orange_wool"]
     for x in range(int(PVX - PVR) - 2, int(PVX + PVR) + 3):
@@ -567,7 +584,7 @@ def _dorp(kruising_cellen):
     S.fill(PVX - 3, G + 4, PVZ + 8, PVX + 3, G + 5, PVZ + 8, "minecraft:yellow_concrete")
     S.fill(PVX - 2, G + 4, PVZ + 8, PVX + 2, G + 4, PVZ + 8, "minecraft:orange_concrete")
     S.set(PVX, G + 5, PVZ + 8, "knuffelsteen_gezicht[facing=south,stemming=1]")
-    path([(50, 38), (52, 36), (PVX, PVZ + 7)], w=1.6)
+    path([(60, 50), (56, 47), (PVX, PVZ + 7)], w=1.6)
     claim(int(PVX - PVR) - 1, int(PVZ - PVR) - 1, int(PVX + PVR) + 1, PVZ + 9, m=1)
 
     # ---- Het Watergat (N), terrace to the north over the savanne ----
@@ -586,7 +603,7 @@ def _dorp(kruising_cellen):
     S.fill(78, G + 1, WZ2 + 3, 78, G + 8, WZ2 + 3, LOG)
     S.set(73, G + 8, WZ2 + 3, "knuffelsteen_gezicht[facing=south,stemming=1]")
     TERR = []
-    for x in range(WX1 - 2, WX2 + 3):
+    for x in range(WX1 - 2, 81):
         for z in range(15, WZ1):
             if (x, z) in INS:
                 S.set(x, G + 1, z, "minecraft:spruce_planks")
@@ -594,10 +611,10 @@ def _dorp(kruising_cellen):
                 TERR.append((x, z))
     TS = set(TERR)
     for (x, z) in TERR:
-        if any((x + a, z + b) not in TS for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1))) and z < WZ1 - 1:
-            S.set(x, G + 2, z, "minecraft:spruce_fence")
+        if any((x + a, z + b) not in TS for a in (-1, 0, 1) for b in (-1, 0, 1)) and z < WZ1 - 1:
+            S.set(x, G + 2, z, "minecraft:spruce_fence")      # 8-neighbour edge: a closed, 4-connected railing
     PARA = ["minecraft:orange_wool", "minecraft:white_wool", "minecraft:red_wool"]
-    for i, (x, z) in enumerate(((65, 18), (72, 17), (79, 18), (84, 20))):
+    for i, (x, z) in enumerate(((63, 18), (69, 17), (75, 18))):
         S.set(x, G + 2, z, "minecraft:spruce_fence")
         S.set(x, G + 3, z, "minecraft:white_carpet")
         for (a, b, f) in ((-1, 0, "east"), (1, 0, "west"), (0, -1, "south"), (0, 1, "north")):
@@ -607,10 +624,10 @@ def _dorp(kruising_cellen):
             for b in range(-1, 4):
                 if (a - 1) ** 2 + (b - 1) ** 2 <= 4:
                     S.set(x + a, G + 6, z + b, PARA[(a + b + i) % 3])
-    claim(WX1 - 2, 14, WX2 + 2, WZ2 + 3)
+    claim(WX1 - 2, 14, WX2, WZ2 + 3)
 
     # ---- truck station (NE): roof, platform, benches, sign (the trucks come later as entities) ----
-    SX1, SZ1, SX2, SZ2 = 100, 38, 118, 50
+    SX1, SZ1, SX2, SZ2 = 88, 38, 106, 49
     for x in range(SX1, SX2 + 1):
         for z in range(SZ1, SZ2 + 1):
             S.set(x, G, z, "minecraft:smooth_sandstone" if z > SZ2 - 3 else "minecraft:dirt_path")
@@ -629,15 +646,14 @@ def _dorp(kruising_cellen):
     claim(SX1, SZ1, SX2, SZ2)
 
     # ---- aaihoek (E): red barn + four pens (fences 2 high: nothing inside can be climbed over) ----
-    BX1, BZ1, BX2, BZ2 = 98, 58, 110, 70
+    BX1, BZ1, BX2, BZ2 = 104, 58, 116, 70
     box(BX1, G + 1, BZ1, BX2, G + 5, BZ2, "minecraft:red_terracotta", floor="minecraft:spruce_planks")
     for x in range(BX1, BX2 + 1):
         S.set(x, G + 5, BZ1, "minecraft:white_terracotta"); S.set(x, G + 5, BZ2, "minecraft:white_terracotta")
-    door(BX1, G + 1, 63, 3)
+    door(BX1, G + 1, 65, 3)
     windows(BX1, G + 3, BZ1, BX2, BZ2, every=4)
     gable(BX1, BZ1, BX2, BZ2, G + 6, mat="minecraft:dark_oak_stairs", ridge_axis="x", gablewall="minecraft:red_terracotta")
-    S.set(BX1 - 1, G + 5, 64, "knuffelsteen_gezicht[facing=west,stemming=0]")
-    PENS = [(86, 48, "geitje"), (93, 46, "alpaca"), (85, 70, "cavia"), (92, 73, "ezeltje")]
+    S.set(BX1 - 1, G + 5, 66, "knuffelsteen_gezicht[facing=west,stemming=0]")
     for (x0, z0, fn) in PENS:
         for x in range(x0, x0 + 6):
             for z in range(z0, z0 + 7):
@@ -652,12 +668,11 @@ def _dorp(kruising_cellen):
         S.set(x0 + 4, G + 1, z0 + 1 if z0 < 60 else z0 + 5, "minecraft:hay_block[axis=y]")
         S.set(x0 + 4, G + 1, z0 + 4 if z0 < 60 else z0 + 2, "minecraft:cauldron")
         claim(x0, z0, x0 + 5, z0 + 6, m=1)
-    S.set(96, G + 1, 66, "minecraft:composter[level=0]")
+    S.set(BX1 - 2, G + 1, 62, "minecraft:composter[level=0]")
     claim(BX1, BZ1, BX2, BZ2)
-    S.fill(120, G + 1, 66, 120, G + 2, 66, "minecraft:oak_fence")
 
     # ---- lodge huts on stilts in the pond (SW): gable roofs ----
-    HUTS = [(20, 82, "x"), (31, 92, "z"), (22, 97, "x"), (42, 86, "z"), (40, 98, "x")]
+    HUTS = [(20, 82, "x"), (30, 90, "z"), (20, 92, "x"), (42, 84, "z"), (40, 94, "x")]
     for (hx, hz, ax) in HUTS:
         FY = G + 3
         for (a, b) in ((0, 0), (5, 0), (0, 5), (5, 5)):
@@ -692,12 +707,14 @@ def _dorp(kruising_cellen):
         if rnd.random() < 0.05 and S.is_air(x, G + 1, z):
             S.set(x, G + 1, z, "minecraft:lily_pad")
     for (x, z) in SAND:
-        if 0 <= x < X and 0 <= z < Z and rnd.random() < 0.18 and S.is_air(x, HGT[(x, z)] + 1, z):
+        naast_water = any((x + a, z + b) in POND for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        if 0 <= x < X and 0 <= z < Z and naast_water and rnd.random() < 0.18 and S.is_air(x, HGT[(x, z)] + 1, z) \
+                and S.get(x, HGT[(x, z)], z) == "minecraft:sand":
             S.set(x, HGT[(x, z)] + 1, z, "minecraft:sugar_cane")
             S.set(x, HGT[(x, z)] + 2, z, "minecraft:sugar_cane")
 
     # ---- picnic spot (SE) ----
-    PKX, PKZ = 98, 90
+    PKX, PKZ = 92, 86
     for (dx, dz) in ((0, 0), (8, 3), (3, 8)):
         x, z = PKX + dx, PKZ + dz
         S.fill(x, G + 1, z, x + 2, G + 1, z, slab("minecraft:spruce_slab", "top"))
@@ -775,8 +792,41 @@ def _dorp(kruising_cellen):
     S.set(CX + 4, G + 4, GZ + 6, "minecraft:yellow_concrete")
     S.fill(CX - 4, G + 1, GZ + 5, CX - 2, G + 1, GZ + 5, stairs("minecraft:spruce_stairs", "west"))
 
+    # ---- the park gates where the route crosses the fence: an open arch (posts, beam, sign), no loose gap ----
+    BORDJES = []
+    for (kx, kz) in kruising_cellen:
+        gat = [(x, z) for (x, z) in gaps if math.hypot(x - kx, z - kz) <= 3.5]
+        palen = [p for p in poortpalen if math.hypot(p[0] - kx, p[1] - kz) <= 5.5]
+        if len(palen) < 2 or not gat:
+            continue
+        a, b = max(((p, q) for p in palen for q in palen), key=lambda pq: math.hypot(pq[0][0] - pq[1][0], pq[0][1] - pq[1][1]))
+        for (x, z) in (a, b):
+            S.fill(x, G + 1, z, x, G + 8, z, POST)
+            S.set(x, G + 9, z, "minecraft:dark_oak_fence")
+            S.set(x, G + 10, z, "park_lantaarn")
+        # the beam: a straight line of logs between the two posts at G+8
+        n = max(abs(a[0] - b[0]), abs(a[1] - b[1]))
+        as_ = "x" if abs(a[0] - b[0]) >= abs(a[1] - b[1]) else "z"
+        for i in range(1, n):
+            x = round(a[0] + (b[0] - a[0]) * i / n)
+            z = round(a[1] + (b[1] - a[1]) * i / n)
+            S.set(x, G + 8, z, f"minecraft:dark_oak_log[axis={as_}]")
+            S.air(x, G + 1, z, x, G + 6, z)
+        mx, mz = round((a[0] + b[0]) / 2), round((a[1] + b[1]) / 2)
+        S.fill(mx - (1 if as_ == "x" else 0), G + 7, mz - (0 if as_ == "x" else 1),
+               mx + (1 if as_ == "x" else 0), G + 7, mz + (0 if as_ == "x" else 1), "minecraft:yellow_concrete")
+        # a sign beside the path on the village side
+        kand = [(a[0] + dx, a[1] + dz) for (dx, dz) in ((2, 0), (-2, 0), (0, 2), (0, -2), (2, 2), (-2, 2), (2, -2), (-2, -2))]
+        kand = [(x, z) for (x, z) in kand if (x, z) in INS and (x, z) not in PATHS and S.is_air(x, G + 1, z)
+                and S.get(x, G, z) != AIR]
+        if kand:
+            sx, sz = max(kand, key=lambda c: rand_d[c[0], c[1]])          # the village side of the post
+            rot = 0 if as_ == "x" else 4
+            S.set(sx, G + 1, sz, f"minecraft:spruce_sign[rotation={rot},waterlogged=false]")
+            BORDJES.append(((sx, G + 1, sz), ["", "Het park in", "Safaripark", "Vadse Bergen"]))
+
     # ---- rock groups along the fence (inside, kept 3 away from it: escape rule) ----
-    for (rx, rz, r) in ((16, 52, 2.6), (20, 42, 2.0), (114, 82, 2.4), (122, 74, 1.8), (34, 16, 2.0), (56, 104, 1.6)):
+    for (rx, rz, r) in ((16, 52, 2.6), (20, 42, 2.0), (112, 84, 2.4), (34, 16, 2.0), (56, 104, 1.6)):
         if (rx, rz) not in INS or rand_d[rx, rz] < r + 3:
             continue
         S.ellipsoid(rx, G, rz, r, r * 0.8, r * 0.9, "minecraft:granite" if rx % 2 else "minecraft:andesite")
@@ -806,6 +856,8 @@ def _dorp(kruising_cellen):
         y = HGT[(x, z)]
         if not S.is_air(x, y + 1, z):
             continue
+        if S.get(x, y, z).split("[")[0] not in ("minecraft:grass_block", "minecraft:coarse_dirt", "minecraft:dirt"):
+            continue
         r = rnd.random()
         if r < 0.030 and free(x, z, 2) and rand_d[x, z] > 5:
             palm(x, z, y=y); take(x, z, 2)
@@ -830,7 +882,7 @@ def _dorp(kruising_cellen):
             S.set(x + 1, G + 1, z + 1, stairs("minecraft:spruce_stairs", f))
 
     S.fix_connections()
-    info = {"POND": POND, "PATHS": PATHS, "EXTRA": EXTRA, "PENS": PENS, "TS": TS}
+    info = {"POND": POND, "PATHS": PATHS, "EXTRA": EXTRA, "PENS": PENS, "TS": TS, "BORDJES": BORDJES}
     return S, info
 
 
@@ -870,19 +922,7 @@ def bouw(park, log=print):
     for (x, z) in INS | info["EXTRA"]:
         schrijf[OX + x, OZ + z] = True
 
-    # trees whose trunk is in the village area lose their whole crown (no floating leaves outside the outline)
-    weg = [(x, top, z) for (x, top, z, _) in park.bomen if schrijf[x, z]]
-    hout = tuple(("_leaves", "_log", "_wood", "vine", "palm"))
-    for (tx, ttop, tz) in weg:
-        for x in range(max(tx - 8, 0), min(tx + 9, W)):
-            for z in range(max(tz - 8, 0), min(tz + 9, W)):
-                if schrijf[x, z]:
-                    continue
-                g = int(park.hoogte[x, z])
-                for y in range(g + 1, min(ttop + 4, kit.H)):
-                    if park.get(x, y, z).split("[")[0].endswith(hout):
-                        park.v[x, y, z] = 0
-    park.bomen = [b for b in park.bomen if not schrijf[b[0], b[2]]]
+    _bomen_weg(park, schrijf)
 
     # copy the local columns
     lut = np.array([park.id(_naam(s)) if i else 0 for i, s in enumerate(S.pal)], np.uint16)
@@ -914,20 +954,62 @@ def bouw(park, log=print):
     for (x, z) in info["EXTRA"]:
         if S.get(x, G + 1, z).split("[")[0] in ("minecraft:iron_bars", "minecraft:dark_oak_log"):
             park.hek[OX + x, OZ + z] = True
+    # the sign texts (the tile writer puts them in as block entities)
+    if not hasattr(park, "bordjes"):
+        park.bordjes = []
+    for ((x, y, z), regels) in info["BORDJES"]:
+        park.bordjes.append({"pos": [OX + x, OY + y, OZ + z], "tekst": list(regels)})
 
     # blend around the village, but keep clear of the fences that remain outside it (their strip is flat already)
     park.hek_afstand = distance_transform_edt(~(park.hek & ~park.water & ~schrijf))
     _overgang(park, schrijf, log)
     park.hek_afstand = distance_transform_edt(~(park.hek & ~park.water))
+    _bruggen(park, schrijf, log)
+    _kade(park, schrijf)
+    doos = (OX - 45, OZ - 45, OX + X + 45, OZ + Z + 45)
+    _vul_gaten(park, doos, log)
+    _vaste_bladeren(park, doos)
     park.plein = (OX + CX, OY + G, OZ + CZ)
     park.ingang = (OX + CX + 0.5, OY + G + 1, OZ + CZ + 11.5, 180.0)
     log(f"    entreedorp at world {OX}..{OX + X}, {OZ}..{OZ + Z}; route gaps at {[(OX + a, OZ + b) for a, b in kruising]}")
 
 
+HOUT = ("_leaves", "_log", "_wood", "vine", "palm", "mangrove_roots", "propagule")
+
+
+def _bomen_weg(park, schrijf):
+    """Trees whose trunk is in the village area go, crown and all. A leaf or branch belongs to the NEAREST trunk, so
+    the crowns of the trees that stay outside are left whole (cutting a radius around the trunk took bites out of
+    the neighbouring trees: half crowns, leaves without a log that broke)."""
+    W = kit.W
+    weg = [b for b in park.bomen if schrijf[b[0], b[2]]]
+    if not weg:
+        return
+    stammen = np.array([(b[0], b[2]) for b in park.bomen], float)
+    weg_idx = {i for i, b in enumerate(park.bomen) if schrijf[b[0], b[2]]}
+    hout_ids = np.array([i for i, s in enumerate(park.pal) if s.split("[")[0].endswith(HOUT)], np.int64)
+    for i in sorted(weg_idx):
+        tx, ttop, tz = park.bomen[i][0], park.bomen[i][1], park.bomen[i][2]
+        x0, x1 = max(tx - 9, 0), min(tx + 10, W)
+        z0, z1 = max(tz - 9, 0), min(tz + 10, W)
+        for x in range(x0, x1):
+            for z in range(z0, z1):
+                if schrijf[x, z]:
+                    continue                        # the village columns are replaced anyway
+                d = np.hypot(stammen[:, 0] - x, stammen[:, 1] - z)
+                if int(np.argmin(d)) not in weg_idx:
+                    continue
+                g = int(park.hoogte[x, z])
+                kol = park.v[x, g + 1:min(ttop + 5, kit.H), z]
+                kol[np.isin(kol, hout_ids)] = 0
+    park.bomen = [b for b in park.bomen if not schrijf[b[0], b[2]]]
+
+
 def _overgang(park, schrijf, log):
     """Blend 9 blocks around the village to its height (24 on the decor side outside the park): the 3 nearest flat
-    (escape rule), then a ramp to the old ground. Not near existing fences (their strip is already flat at their own height) and not over water."""
-    W = kit.W
+    (escape rule), then a ramp to the old ground. Not near existing fences (their strip is already flat at their own
+    height), not over water and not under a tree trunk. Crowns hanging over a blended column stay (only the ground
+    and the plants on it change)."""
     d = distance_transform_edt(~schrijf)
     doel = OY + G
     xs, zs = np.nonzero((d > 0) & (d <= 24))
@@ -948,9 +1030,13 @@ def _overgang(park, schrijf, log):
         top = park.v[x, oud, z]
         if top == 0:
             continue
-        for y in range(min(oud, nieuw) + 1, kit.H):                     # everything above goes (plants, cut trees)
-            if park.v[x, y, z] and park.get(x, y, z).split("[")[0].endswith(("_log", "_wood")):
-                break                                                   # a trunk of a tree outside: keep it
+        if park.get(x, oud + 1, z).split("[")[0].endswith(("_log", "_wood")):
+            continue                                    # a trunk stands here: leave its ground alone
+        # the old surface and the plants on it go; leaves higher up (a crown over the column) stay
+        for y in range(min(oud, nieuw) + 1, min(max(oud, nieuw) + 3, kit.H)):
+            naam = park.get(x, y, z).split("[")[0]
+            if naam.endswith(("_log", "_wood", "_leaves")) and y > nieuw:
+                continue
             park.v[x, y, z] = 0
         for y in range(oud, nieuw):
             park.v[x, y, z] = dirt
@@ -960,9 +1046,173 @@ def _overgang(park, schrijf, log):
     log(f"    entreedorp: {n} columns blended around the village")
 
 
+def _bruggen(park, schrijf, log):
+    """The route bridges right by the village (test round 2: they lay flat on the water, 1 below the ground, and a
+    canoe could not pass): a plank deck at water + 3 (two blocks of air above the water), railings on the water cells
+    alongside, posts every few blocks, and steps up at both ends."""
+    from scipy.ndimage import label
+    W = kit.W
+    wy = kit.WATER_Y
+    dek_y = wy + 3
+    brug = park.pad & park.water & ~schrijf
+    lab, n = label(brug)
+    if not n:
+        return
+    dicht = distance_transform_edt(~schrijf) <= 4
+    water_id = park.id("minecraft:water", level="0")
+    planks = park.id("minecraft:spruce_planks")
+    hek = park.id("minecraft:spruce_fence", east="false", west="false", north="false", south="false",
+                  waterlogged="false")
+    paal = park.id("minecraft:stripped_spruce_log", axis="y")
+    lantaarn = park.id("guhs:park_lantaarn")
+    vast = ("sand", "dirt", "gravel", "clay", "stone", "mud", "grass_block", "coarse_dirt", "andesite", "granite",
+            "diorite", "sandstone", "terracotta", "podzol", "rooted_dirt", "moss_block", "deepslate", "tuff")
+    gedaan = 0
+    for k in range(1, n + 1):
+        cel = lab == k
+        if not (cel & dicht).any():
+            continue                                    # only the bridges at the village
+        xs, zs = np.nonzero(cel)
+        x0, x1, z0, z1 = max(xs.min() - 3, 0), min(xs.max() + 4, W), max(zs.min() - 3, 0), min(zs.max() + 4, W)
+        dek = set(zip(xs.tolist(), zs.tolist()))
+        # railings: water cells (not deck) that touch the deck, 8-neighbourhood (a closed, 4-connected railing)
+        reling = set()
+        for (x, z) in dek:
+            for a in (-1, 0, 1):
+                for b in (-1, 0, 1):
+                    c = (x + a, z + b)
+                    if c not in dek and 0 <= c[0] < W and 0 <= c[1] < W and park.water[c] and not schrijf[c]:
+                        reling.add(c)
+        for (x, z) in dek | reling:
+            # the old deck goes, water back up to the water line, then the new deck
+            for y in range(wy + 1, min(wy + 10, kit.H)):
+                park.v[x, y, z] = 0
+            y = wy
+            while y > 0:
+                naam = park.get(x, y, z).split("[")[0].split(":")[1]
+                if park.v[x, y, z] != 0 and any(naam == v or naam.endswith(v) for v in vast):
+                    break
+                park.v[x, y, z] = water_id
+                y -= 1
+            park.v[x, dek_y, z] = planks
+        for (x, z) in reling:
+            park.v[x, dek_y + 1, z] = hek
+            if (x * 7 + z * 3) % 4 == 0:                # a post down into the water now and then
+                y = dek_y - 1
+                while y > 0 and park.get(x, y, z).split("[")[0] in ("minecraft:water", "minecraft:air"):
+                    park.v[x, y, z] = paal
+                    y -= 1
+                if (x + z) % 3 == 0:
+                    park.v[x, dek_y + 2, z] = lantaarn
+        # steps at both ends: the path cells beside the deck get a stair up to it, the next ring is raised to y-1
+        trap = {}
+        for (x, z) in dek:
+            for (a, b, f) in ((1, 0, "west"), (-1, 0, "east"), (0, 1, "north"), (0, -1, "south")):
+                c = (x + a, z + b)
+                if c in dek or c in reling or not (0 <= c[0] < W and 0 <= c[1] < W) or park.water[c]:
+                    continue
+                if park.pad[c] or schrijf[c]:
+                    trap.setdefault(c, f)
+        for (x, z), f in trap.items():
+            g = int(park.hoogte[x, z])
+            if g >= dek_y:
+                continue
+            for y in range(g + 1, dek_y):
+                park.v[x, y, z] = planks
+            park.v[x, dek_y, z] = park.id("minecraft:spruce_stairs", facing=f, half="bottom", shape="straight",
+                                         waterlogged="false")
+            for y in range(dek_y + 1, min(dek_y + 5, kit.H)):
+                park.v[x, y, z] = 0
+            for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                c = (x + a, z + b)
+                if c in dek or c in trap or c in reling or not (0 <= c[0] < W and 0 <= c[1] < W) or park.water[c]:
+                    continue
+                if (park.pad[c] or schrijf[c]) and int(park.hoogte[c]) < dek_y - 1:
+                    h = int(park.hoogte[c])
+                    top = park.v[c[0], h, c[1]]
+                    for y in range(h, dek_y - 1):
+                        park.v[c[0], y, c[1]] = park.id("minecraft:dirt")
+                    park.v[c[0], dek_y - 1, c[1]] = top if top else park.id("minecraft:dirt_path")
+                    for y in range(dek_y, min(dek_y + 4, kit.H)):
+                        if park.get(c[0], y, c[1]).split("[")[0] not in ("minecraft:dark_oak_log", "minecraft:iron_bars"):
+                            park.v[c[0], y, c[1]] = 0
+                    park.hoogte[c] = dek_y - 1
+        gedaan += 1
+    log(f"    entreedorp: {gedaan} bridge(s) by the village raised to y {dek_y}")
+
+
+def _kade(park, schrijf):
+    """Where the village edge meets open water outside it, its side is a stone quay instead of a dirt wall."""
+    W = kit.W
+    mix = [park.id("minecraft:stone_bricks"), park.id("minecraft:mossy_stone_bricks"), park.id("minecraft:stone_bricks"),
+           park.id("minecraft:cracked_stone_bricks")]
+    wy = kit.WATER_Y
+    xs, zs = np.nonzero(schrijf)
+    for x, z in zip(xs, zs):
+        if park.water[x, z]:
+            continue
+        aan_water = False
+        for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            c = (x + a, z + b)
+            if 0 <= c[0] < W and 0 <= c[1] < W and not schrijf[c] and park.water[c]:
+                aan_water = True
+        if not aan_water:
+            continue
+        for y in range(wy - 2, OY + G):
+            if park.v[x, y, z] != 0:
+                park.v[x, y, z] = mix[(x * 3 + y * 5 + z) % len(mix)]
+
+
+def _vul_gaten(park, doos, log):
+    """Every column in the box reaches down to 2 below its lowest neighbour, so nowhere a side shows the void under
+    the ground (the blended slopes and the decor hill in front of the gate had such holes)."""
+    W, H = kit.W, kit.H
+    x0, z0, x1, z1 = max(doos[0], 0), max(doos[1], 0), min(doos[2], W), min(doos[3], W)
+    v = park.v[x0:x1, :, z0:z1]
+    nz = v != 0
+    heeft = nz.any(axis=1)
+    bot = np.where(heeft, np.argmax(nz, axis=1), H)
+    top = np.where(heeft, H - 1 - np.argmax(nz[:, ::-1, :], axis=1), -1)
+    laag = top.copy()
+    for (a, b) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nb = np.full_like(top, H)
+        sx = slice(max(a, 0), top.shape[0] + min(a, 0))
+        tx = slice(max(-a, 0), top.shape[0] + min(-a, 0))
+        sz = slice(max(b, 0), top.shape[1] + min(b, 0))
+        tz = slice(max(-b, 0), top.shape[1] + min(-b, 0))
+        nb[tx, tz] = top[sx, sz]
+        nb[nb < 0] = H
+        laag = np.minimum(laag, nb)
+    stone = park.id("minecraft:stone")
+    dirt = park.id("minecraft:dirt")
+    n = 0
+    for i, k in zip(*np.nonzero(heeft & (bot > laag - 2))):
+        tot = max(int(laag[i, k]) - 2, 0)
+        for y in range(tot, int(bot[i, k])):
+            v[i, y, k] = dirt if y >= int(top[i, k]) - 3 else stone
+        park.vloer[x0 + i, z0 + k] = min(int(park.vloer[x0 + i, z0 + k]), tot)
+        n += 1
+    log(f"    entreedorp: {n} columns filled down (no void under the ground)")
+
+
+def _vaste_bladeren(park, doos):
+    """All leaves around the village are persistent (no decaying leaves dropping saplings and sticks)."""
+    W = kit.W
+    x0, z0, x1, z1 = max(doos[0], 0), max(doos[1], 0), min(doos[2], W), min(doos[3], W)
+    vervang = {}
+    for i, s in enumerate(park.pal):
+        if s.split("[")[0].endswith("_leaves") and "persistent=false" in s:
+            vervang[i] = park.id(s.replace("persistent=false", "persistent=true"))
+    if not vervang:
+        return
+    v = park.v[x0:x1, :, z0:z1]
+    for oud, nieuw in vervang.items():
+        v[v == oud] = nieuw
+
+
 def plekken(park, plekken_):
     """The four aaihoek animals live in their pens (1 adult + 1 young each)."""
-    pens = {fn: (x0, z0) for (x0, z0, fn) in ((86, 48, "geitje"), (93, 46, "alpaca"), (85, 70, "cavia"), (92, 73, "ezeltje"))}
+    pens = {fn: (x0, z0) for (x0, z0, fn) in PENS}
     for p in plekken_:
         if p["soort"] in pens:
             x0, z0 = pens[p["soort"]]
