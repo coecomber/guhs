@@ -622,13 +622,13 @@ def zweven(park, herstel, max_weg=400):
 
 
 def kano(park):
-    """River / lake columns at the surface with something 1-3 blocks above the water (canoe cannot pass)."""
+    """River / lake columns at the surface with something 1-2 blocks above the water (canoe cannot pass)."""
     nat_id, _ = _water_masks(park)
     opp = nat_id[park.v[:, WATER_Y, :]]
     if getattr(park, "water", None) is not None:
         opp &= park.water
     vrij = np.ones((W, W), bool)
-    for y in range(WATER_Y + 1, WATER_Y + 4):
+    for y in range(WATER_Y + 1, WATER_Y + 3):     # 2 free blocks: a boat with a seated guh/player fits (deck at water + 3)
         laag = park.v[:, y, :]
         vrij &= (laag == 0) | np.isin(laag, [park.idx.get("minecraft:lily_pad", -1)])
     blok = opp & ~vrij
