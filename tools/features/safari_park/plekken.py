@@ -174,6 +174,21 @@ def _natuurlijk(park, x, z):
     return True
 
 
+def cel_zone(park, cel=16):
+    """Per column the zone the GAME sees there: the majority zone of its 16x16 cell, exactly like zones.json
+    (safari_park.zones_json: '.' = -1 when less than a quarter of the cell is park). A home must lie in a column where
+    this equals its own zone, else the game keeps the animals in another zone than the generator meant."""
+    n = kit.W // cel
+    uit = np.full((kit.W, kit.W), -1, dtype=np.int16)
+    for cz in range(n):
+        for cx in range(n):
+            blok = park.zone[cx * cel:(cx + 1) * cel, cz * cel:(cz + 1) * cel]
+            binnen = blok[blok >= 0]
+            if binnen.size >= cel * cel * 0.25:
+                uit[cx * cel:(cx + 1) * cel, cz * cel:(cz + 1) * cel] = int(np.bincount(binnen).argmax())
+    return uit
+
+
 def vermenigvuldig(park, plekken, log=print):
     """After the zone hooks: land animals never live with their centre in water, luiaards hang near a path where people
     can see them, and every normal home gets EXTRA_HUIZEN clones spread over the zone (right terrain per species)."""
@@ -183,23 +198,28 @@ def vermenigvuldig(park, plekken, log=print):
     land = park.binnen & ~park.water & (park.hek_afstand > 4) & ~park.pad
     diep_water = park.water & (park.hoogte <= kit.WATER_Y - 3) & park.binnen
     bomen = [(int(x), int(z)) for x, _, z, _ in park.bomen]
+    cz = cel_zone(park)
+
+    def inzone(zi):
+        return (park.zone == zi) & (cz == zi)
 
     def soortplek(soort):
         return SOORTEN.get(soort, (None, 0, "land", 10))[2]
 
     def masker(soort, zi):
-        inzone = park.zone == zi
+        inzone_ = inzone(zi)
         if soort in WATERDIER:
-            m = inzone & diep_water
-            return m if m.any() else inzone & park.water
+            m = inzone_ & diep_water
+            return m if m.any() else inzone_ & park.water
         if soort in HALFWATER:
-            return inzone & land & (water_d >= 1) & (water_d <= 5)
+            return inzone_ & land & (water_d >= 1) & (water_d <= 5)
         if soortplek(soort) == "open":
-            return inzone & land & (pad_d > 5)
-        return inzone & land
+            return inzone_ & land & (pad_d > 5)
+        return inzone_ & land
 
     def boom_plekken(zi, bij_pad=None):
-        uit = [(x, z) for x, z in bomen if park.zone[x, z] == zi and park.binnen[x, z]]
+        uit = [(x, z) for x, z in bomen if park.zone[x, z] == zi and park.binnen[x, z]
+               and 0 <= x + 1 < kit.W and cz[x + 1, z] == zi]          # the home sits at x + 1
         if bij_pad is not None:
             dicht = [(x, z) for x, z in uit if pad_d[x, z] <= bij_pad]
             uit = dicht or uit
@@ -232,7 +252,7 @@ def vermenigvuldig(park, plekken, log=print):
         if s in WATERDIER or s in HALFWATER or not (0 <= x < kit.W and 0 <= z < kit.W) or not park.water[x, z]:
             continue
         zi = ZONES.index(p["zone"])
-        m = (park.zone == zi) & land
+        m = inzone(zi) & land
         xs, zs = np.nonzero(m)
         if len(xs):
             i = int(np.argmin(np.hypot(xs - x, zs - z)))
@@ -283,6 +303,27 @@ def vermenigvuldig(park, plekken, log=print):
             eigen.append((x, z))
             alle.append((x, z))
     plekken.extend(extra)
+
+    # 4. every home (zone hooks and clones) where the game sees its own zone (zones.json cell), else the nearest such spot
+    #    of the right terrain (round 2 log: a zeekoe home in regenwoud, an octopus home in europa, a toekan home in delta)
+    for p in plekken:
+        x, _, z = p["centrum"]
+        zi = ZONES.index(p["zone"])
+        if 0 <= x < kit.W and 0 <= z < kit.W and cz[x, z] == zi:
+            continue
+        s = p["soort"]
+        if p.get("boom") or soortplek(s) == "boom":
+            kand = [(bx + 1, bz) for bx, bz in boom_plekken(zi)]
+        else:
+            xs, zs = np.nonzero(masker(s, zi))
+            kand = list(zip(xs.tolist(), zs.tolist()))
+        if not kand:
+            xs, zs = np.nonzero(inzone(zi) & park.binnen)
+            kand = list(zip(xs.tolist(), zs.tolist()))
+        nx, nz = min(kand, key=lambda c: (c[0] - x) ** 2 + (c[1] - z) ** 2)
+        ny = int(park.hoogte[nx, nz]) + 1 if s in WATERDIER else _staan_y(park, nx, nz)
+        log(f"    {s}: thuis lag in een andere zone ({x},{z}) -> ({nx},{nz}) in {p['zone']}")
+        p["centrum"] = [nx, ny, nz]
     return plekken
 
 

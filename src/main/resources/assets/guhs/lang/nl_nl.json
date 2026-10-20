@@ -26141,5 +26141,8 @@
   "entity.guhs.safari.geitje": "Geitje",
   "entity.guhs.safari.alpaca": "Alpaca",
   "entity.guhs.safari.cavia": "Cavia",
-  "entity.guhs.safari.ezeltje": "Ezeltje"
+  "entity.guhs.safari.ezeltje": "Ezeltje",
+  "gui.guhs.safari.munten.erbij": "+%s Safarimunten! Vahoeg!",
+  "commands.guhs.safari.munten": "Je hebt %s Safarimunten.",
+  "commands.guhs.safari.wis": "Alles wat je in het safaripark deed is vergeten (dex, munten, geheimpjes...)."
 }

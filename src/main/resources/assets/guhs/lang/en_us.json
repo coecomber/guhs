@@ -26141,5 +26141,8 @@
   "entity.guhs.safari.geitje": "Little Goat",
   "entity.guhs.safari.alpaca": "Alpaca",
   "entity.guhs.safari.cavia": "Guinea Pig",
-  "entity.guhs.safari.ezeltje": "Little Donkey"
+  "entity.guhs.safari.ezeltje": "Little Donkey",
+  "gui.guhs.safari.munten.erbij": "+%s Safari coins! Vahoeg!",
+  "commands.guhs.safari.munten": "You have %s Safari coins.",
+  "commands.guhs.safari.wis": "Everything you did in the safari park is forgotten (dex, coins, secrets...)."
 }

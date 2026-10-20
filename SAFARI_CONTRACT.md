@@ -55,3 +55,46 @@ camera/dex, lobby npcs/shop, truck, quests, verblijfsbord, building help. Entry 
   `/guhs safari herbouw` (force re-stamp), `/guhs safari dieren` (respawn populations).
 - NL + EN lang for everything (Dutch with guh humour; EN only needs to exist).
 - Relevant gametests only (full suite once at the end of the update).
+
+## Stap 2 API (S0, the shared safari core) - all safari slices build on this
+User (2026-10-20): "ga door met alle andere functionaliteit binnen de guh safari" (not the building overhaul except what
+the safari needs, not the Guhmension bus station structure).
+
+Package `nl.juiced.guhs.feature.safari.kern` (wired by `SafariKern.register()` from `SafariFeature.register`, payloads
+via `SafariFeature.payloads` in Features.java):
+- `SafariData` (SavedData `guhs:safari_spelers`, one tag per player, offline too). Slices never touch it directly.
+- `SafariSpeler` (every method as `(MinecraftServer, UUID, ...)`; most also `(ServerPlayer, ...)`):
+  - dex: `dex(..., soort) -> DexRegel(gezien, sterren 0..3, foto tag)`, `spot(...)`, `registreerFoto(..., soort, sterren 1..3,
+    CompoundTag foto) -> previous best stars` (kept only when better; fires dexNieuw and, when a zone gets full, zoneCompleet),
+    `gefotografeerd(...)`, `zoneCompleet(..., zone)`, `telt(soort)` (dex species: not aaihoek, not gouden_dikdik).
+    The `foto` tag is owned by S1 (camera): put whatever the album needs in it.
+  - `vindGeheimpje(..., id) -> new?` (fires geheimpje), `geheimpjes(...)`; `claimBadge(..., zone)`, `heeftBadge`;
+    `vlag/zetVlag(..., naam)` (e.g. `welkom`, `lodge`); `quest/zetQuest(..., key, stand)` (free strings, S4 owns the keys);
+    `vandaag/telDag(..., teller, n, max)` (per REAL day, guhpixel `Klok`); `bordVrijOp/kanBordKopen/bordGekocht(..., soort)`
+    (7 real days, `BORD_COOLDOWN`); `wis(...)` (dev/tests).
+- `SafariMunten` (balance number like guhpixel Muntjes, NOT an item): `saldo`, `totaal`, `geef(..., n, reden)` (overlay
+  "+n Safarimunten" + sound), `kan`, `neem` (false = nothing taken), `verdienEens(..., sleutel, n, reden)` (key pays once
+  forever), `verdienDagelijks(..., pot, n, dagMax, reden)`, `zet` (dev). Amounts: design 1.8, passed in by the slices.
+- `SafariEvents.opDexNieuw / opZoneCompleet / opGeheimpje / opMunten(listener)`: register in your slice's register().
+- `SafariSync`: the whole player tag goes to the client (`guhs:safari_stand`) on login, dimension change and every change;
+  client reads `SafariSync.stand` (CompoundTag) and may set `SafariSync.ontvanger`. Tag keys: `Dex.<soort>.{Gezien,Sterren,
+  Foto}`, `Munten`, `MuntenTotaal`, `MuntenEens`, `Geheimpjes`, `Badges`, `Vlaggen`, `Quests`, `Dag` (+`DagNr`), `Bord`.
+- Dev (ops): `/guhs safari munten [n]`, `/guhs safari wis`.
+- Gametests: `SafariKernGameTests` (munten, dex + board cooldown).
+- Park: `plekken.vermenigvuldig` keeps every home in the zone the GAME sees (zones.json cell, `plekken.cel_zone`); park VERSIE 4.
+
+### File ownership in step 2 (parallel slices, each in its own worktree `op-safari-s<N>` from `op-safari` after S0)
+| Slice | Owns |
+|---|---|
+| S1 camera, dex, Guhdex | `feature/safari/camera/` (+client), the Guhdex screen (`client/screen/GuhDexScreen.java` + its tabs), the `picked_up_guh` tooltip, guh numbering by tame order (F3b) |
+| S2 lobby | `feature/safari/lobby/` (+client): NPC roles (`NpcRole`), giftshop UI + stock, expertenpaviljoen (badges via `claimBadge`), aaihoek chores, lodge (spawn + vroege-vogel), welcome cutscene, visitor guhs, ranger tips |
+| S3 vervoer & momenten | `feature/safari/rit/` + `feature/safari/momenten/` (+client): truck (hop-on hop-off), kano, kabelbaan, voedertijden, rangerpraatje, nachtsafari, dierenverjaardag, schemabord + meldingen, weather/ambience per zone |
+| S4 quests & extra's | `feature/safari/quests/` (+client): vermomde guh, te vahe olifant, geheimpjes (blocks/logic, park markers), titles Speurneus/Beverbaas (`Titels`), the FTB chapter, pootafdrukken |
+| S5 verblijfsbord & thuisdieren | `feature/safari/verblijf/` (+client): the board block + menu (all tabs except the Bouwopdracht content), family of 4, petting/feeding/toys/friendships, cooldown via `SafariSpeler.bord*`, ooievaar delivery, struisvogel riding/race/egg, narwal water home |
+| S6 assets | `tools/features/safari_geluid*.py` (all sounds), safari clothes (BONES for guhs + player hat/verrekijker items), safari blocks + posters/paintings, the safarivoer item (`tools/features/safari_blokken.py`, `feature/safari/spullen/`) |
+| everyone | may only APPEND to shared files: lang json (`tools/features/safari.py` TEKSTEN or own generator + `tools/lang/en/c16x_*.json`), `Features.java`/`FeaturesClient.java` registration lines, `SafariFeature.register` (one line per slice) |
+
+Merge order: S0 → S6 (assets other slices may reference) → S1 → S2 → S5 → S3 → S4 (quests use the most). Shared-file
+conflicts are solved at the merge. The park generator (tools/features/safari_park*) stays owned by the park round fixes;
+a slice that needs a block/marker in the park adds a zone hook in a NEW file `tools/features/safari_park/zone_<slice>_*.py`
+and raises nothing (VERSIE is raised at the merge).

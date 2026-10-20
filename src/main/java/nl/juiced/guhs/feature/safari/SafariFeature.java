@@ -46,6 +46,11 @@ public final class SafariFeature {
         Protected.add(Safari::in);   // (fire and fluids)
         NeoForge.EVENT_BUS.register(SafariRegels.class);
         NeoForge.EVENT_BUS.addListener(SafariCommando::register);
+        nl.juiced.guhs.feature.safari.kern.SafariKern.register();   // step 2: per-player data, safarimunten, events, sync
+    }
+
+    public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {
+        nl.juiced.guhs.feature.safari.kern.SafariKern.payloads(registrar);
     }
 
     private SafariFeature() {

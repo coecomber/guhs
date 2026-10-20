@@ -253,6 +253,7 @@ public final class Features {
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.payloads(registrar);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.payloads(registrar);   // verhalenpad: snuffel-steiger
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.payloads(registrar);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
+        nl.juiced.guhs.feature.safari.SafariFeature.payloads(registrar);   // 1.6.0 Op Safari!
     }
 
     public static void creative(Consumer<ItemStack> output) {

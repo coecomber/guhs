@@ -60,6 +60,9 @@ TEKSTEN = {
     "commands.guhs.safari.herbouw": "Het safaripark wordt helemaal opnieuw neergezet; daarna komen alle dieren terug.",
     "commands.guhs.safari.dieren": "Alle %s dierenverblijven worden opnieuw gevuld.",
     "commands.guhs.safari.status": "Park versie %s (gebouwd: %s, bezig: %s) · dieren generatie %s (%s) · %s",
+    "gui.guhs.safari.munten.erbij": "+%s Safarimunten! Vahoeg!",
+    "commands.guhs.safari.munten": "Je hebt %s Safarimunten.",
+    "commands.guhs.safari.wis": "Alles wat je in het safaripark deed is vergeten (dex, munten, geheimpjes...).",
 }
 
 
