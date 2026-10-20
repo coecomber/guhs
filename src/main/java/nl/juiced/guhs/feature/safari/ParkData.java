@@ -44,7 +44,7 @@ public final class ParkData {
     public static final String DECOR = "decor";
 
     public record Soort(String naam, String zone, float breedte, float hoogte, float babySchaal, boolean man, Set<String> gedrag,
-                        List<String> animaties, double snelheid, boolean glow) {
+                        List<String> animaties, double snelheid, boolean glow, Map<String, Float> idleMix) {
         public boolean heeft(String g) {
             return gedrag.contains(g);
         }
@@ -57,6 +57,16 @@ public final class ParkData {
         /** Likes water and land (hippos, crocodiles, otters...). */
         public boolean water() {
             return heeft("water") && !zee();
+        }
+
+        /** A land animal that may wade into 1-deep water at the edge, never deeper (the elephant at the pond). */
+        public boolean wadend() {
+            return heeft("wadend");
+        }
+
+        /** Hangs from a branch (the sloth): a tree animal with a "hang" animation. Hangs still, never strolls. */
+        public boolean hangt() {
+            return heeft("boom") && animaties.contains("hang");
         }
 
         /** The extra animations it can play now and then (not idle/walk). */
@@ -216,7 +226,7 @@ public final class ParkData {
             }
         } else {
             for (String[] s : FALLBACK_SOORTEN) {
-                soorten.put(s[0], new Soort(s[0], s[1], 0.9f, 1.2f, 0.55f, false, Set.of(), List.of("idle", "walk", "blij", "eet"), 0.2, false));
+                soorten.put(s[0], new Soort(s[0], s[1], 0.9f, 1.2f, 0.55f, false, Set.of(), List.of("idle", "walk", "blij", "eet"), 0.2, false, Map.of()));
             }
         }
 
@@ -269,11 +279,19 @@ public final class ParkData {
         if (anim.isEmpty()) {
             anim.addAll(List.of("idle", "walk"));
         }
+        Map<String, Float> mix = new LinkedHashMap<>();
+        if (o.has("idle_mix") && o.get("idle_mix").isJsonObject()) {
+            for (Map.Entry<String, JsonElement> e : o.getAsJsonObject("idle_mix").entrySet()) {
+                if (anim.contains(e.getKey())) {
+                    mix.put(e.getKey(), e.getValue().getAsFloat());
+                }
+            }
+        }
         return new Soort(naam, str(o, "zone", "savanne"),
                 o.has("breedte") ? o.get("breedte").getAsFloat() : 0.9f, o.has("hoogte") ? o.get("hoogte").getAsFloat() : 1.2f,
                 o.has("baby_schaal") ? o.get("baby_schaal").getAsFloat() : 0.55f, o.has("man") && o.get("man").getAsBoolean(),
                 Set.copyOf(gedrag), List.copyOf(anim), o.has("snelheid") ? o.get("snelheid").getAsDouble() : 0.2,
-                o.has("glow") && o.get("glow").getAsBoolean());
+                o.has("glow") && o.get("glow").getAsBoolean(), Map.copyOf(mix));
     }
 
     @Nullable

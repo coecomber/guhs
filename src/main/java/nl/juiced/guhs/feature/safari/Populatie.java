@@ -7,8 +7,11 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.slf4j.Logger;
 
 /**
@@ -91,13 +94,58 @@ public final class Populatie {
                 z = p.centrum().getZ();
             }
             level.getChunk(x >> 4, z >> 4);
-            BlockPos plek = p.boom() ? boom(level, x, z) : dier.grond(level, x, z);
+            BlockPos plek = null;
+            if (soort != null && soort.hangt()) {
+                // the sloth hangs under a low branch near its home (visible from the ground and the paths)
+                plek = hangPlek(level, x, z, Mth.ceil(dier.getBbHeight()));
+                if (plek != null) {
+                    dier.hang(plek);
+                }
+            }
+            if (plek == null) {
+                plek = p.boom() ? boom(level, x, z) : dier.grond(level, x, z);
+            }
             dier.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, rnd.nextFloat() * 360f, 0f);
             if (level.addFreshEntity(dier)) {
                 n++;
             }
         }
         return n;
+    }
+
+    /** A spot to hang under the lowest leaves near x,z (2..14 above the ground, with room below): its feet position. */
+    @javax.annotation.Nullable
+    static BlockPos hangPlek(ServerLevel level, int x, int z, int hoogte) {
+        for (int r = 0; r <= 4; r++) {
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    int cx = x + dx, cz = z + dz;
+                    level.getChunk(cx >> 4, cz >> 4);
+                    int grond = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
+                    for (int y = grond + 2; y < grond + 14; y++) {
+                        BlockPos b = new BlockPos(cx, y, cz);
+                        if (level.getBlockState(b).is(BlockTags.LEAVES)) {
+                            int voet = y - hoogte;
+                            boolean vrij = voet > grond;
+                            for (int k = voet; vrij && k < y; k++) {
+                                vrij = level.getBlockState(new BlockPos(cx, k, cz)).isAir();
+                            }
+                            if (vrij) {
+                                return new BlockPos(cx, voet, cz);
+                            }
+                            break;
+                        }
+                        if (!level.getBlockState(b).isAir()) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /** On top of whatever stands here, leaves included (tree animals start on their branch). */

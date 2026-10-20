@@ -30,7 +30,7 @@ import nl.juiced.guhs.feature.safari.SafariFeature;
  * Draws a {@link SafariDier} with the files of its species and variant (SAFARI_CONTRACT.md): for variant v of species s it
  * takes {@code safari/s_v} when that exists (geo, texture and animations each on their own), else {@code safari/s}; the
  * female is the base. A baby without its own model is the base at the species' baby scale. A species with a
- * {@code s[_v]_glow.png} gets a glowing layer (the glimworm's tail). Which files exist is looked up once per name (cleared
+ * {@code s[_v]_glowmask.png} (GeckoLib's name) gets a glowing layer (the glimworm's tail). Which files exist is looked up once per name (cleared
  * on a resource reload), never per frame. A species without any model shows the pluisegeltje, so a gap is visible.
  */
 public final class SafariClient {
@@ -80,7 +80,7 @@ public final class SafariClient {
                     ParkData.Soort info = ParkData.get().soort(soort);
                     boolean kleineBaby = variant.equals("baby") && !g.endsWith("_baby");
                     state.addGeckolibData(SCHAAL, kleineBaby ? (info == null ? 0.55f : info.babySchaal()) : 1f);
-                    state.addGeckolibData(GLOED, textuur(t + "_glow"));
+                    state.addGeckolibData(GLOED, textuur(t + "_glowmask"));      // GeckoLib's emissive name (RenderUtil.getEmissiveResource)
                 }
 
                 @Override

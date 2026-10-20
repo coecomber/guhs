@@ -48,6 +48,32 @@ public class SafariGameTests {
         });
     }
 
+    /** A land animal that ends up in deep water (2 deep) gets out of it by itself, or is put back home (test round 2: the
+     *  elephant walked under water in the savanne pond). */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 260)
+    public static void uitHetDiepe(GameTestHelper helper) {
+        // a pool 4 x 5, 2 deep, inside the lion's home (centre 4,1,8, radius 7), with a stone rim
+        for (int x = 8; x <= 13; x++) {
+            for (int z = 5; z <= 11; z++) {
+                boolean rand = x == 8 || x == 13 || z == 5 || z == 11;
+                for (int y = 1; y <= 2; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), rand ? net.minecraft.world.level.block.Blocks.STONE.defaultBlockState()
+                            : net.minecraft.world.level.block.Blocks.WATER.defaultBlockState());
+                }
+            }
+        }
+        BlockPos thuis = new BlockPos(4, 1, 8);
+        SafariDier d = dier(helper, thuis, 7);
+        BlockPos in = helper.absolutePos(new BlockPos(10, 1, 8));
+        d.teleportTo(in.getX() + 0.5, in.getY(), in.getZ() + 0.5);
+        helper.runAfterDelay(5, () -> helper.assertTrue(d.isInWater(), "the lion starts in the pool"));
+        helper.succeedWhen(() -> {
+            BlockPos p = d.blockPosition();
+            int diep = Math.max(SafariDier.waterDiepte(d.level(), p), SafariDier.waterDiepte(d.level(), p.above()) + (d.isInWater() ? 1 : 0));
+            helper.assertTrue(!d.isRemoved() && (!d.isInWater() || diep < 2), "the lion is out of the deep water");
+        });
+    }
+
     /** The zone raster: the entrance lies in the park, the corner of the stamped area outside it; every column has a biome zone. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void zones(GameTestHelper helper) {

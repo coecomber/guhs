@@ -8,7 +8,7 @@ game needs into the assets:
 
     assets/guhs/geckolib/models/entity/safari/<soort>[_man|_baby].geo.json
     assets/guhs/geckolib/animations/entity/safari/<soort>.animation.json
-    assets/guhs/textures/entity/safari/<soort>[_man|_baby][_glow].png
+    assets/guhs/textures/entity/safari/<soort>[_man|_baby][_glowmask].png
 
 and writes data/guhs/safari/soorten.json (SAFARI_CONTRACT.md): zone, hitbox (measured from the geo), baby scale, own male
 model, behaviour flags, the animations that exist, speed, glow, verblijfsbord price class.
@@ -43,19 +43,22 @@ MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7",
 #   hang         hangs (from a branch/thread) nacht      more active at night (night safari)
 #   aaihoek      petting-corner animal      geheim       not in the park (dex reward)   zeldzaam   very rare sighting
 #   rijdier / bezorger / bouwdier           (step-2 roles, kept here so the data is complete)
+#   wadend       a land animal that may wade into 1-deep water at the edge (never deeper)
+# idle_mix = {animation: share}: how much of its standing time a species spends in that animation instead of idle
 # snelheid = movement speed attribute (vanilla scale: 0.25 = cow-ish)
 # ---------------------------------------------------------------------------------------------------------------------
 DATA = {
     # savanne
     "leeuw":          dict(zone="savanne", gedrag=[], snelheid=0.22, bord="middel"),
     "luipaard":       dict(zone="savanne", gedrag=["verstopper", "boom"], snelheid=0.24, bord="middel"),
-    "olifant":        dict(zone="savanne", gedrag=["kudde", "water"], snelheid=0.18, bord="middel"),
+    "olifant":        dict(zone="savanne", gedrag=["kudde", "wadend"], snelheid=0.18, bord="middel"),
     "neushoorn":      dict(zone="savanne", gedrag=[], snelheid=0.2, bord="middel"),
     "kafferbuffel":   dict(zone="savanne", gedrag=["kudde"], snelheid=0.2, bord="gewoon"),
     "dikdik":         dict(zone="savanne", gedrag=["verstopper"], snelheid=0.28, bord="middel"),
     "giraffe":        dict(zone="savanne", gedrag=["kudde"], snelheid=0.2, bord="middel"),
     "zebra":          dict(zone="savanne", gedrag=["kudde"], snelheid=0.24, bord="gewoon"),
-    "stokstaartje":   dict(zone="savanne", gedrag=["kudde", "verstopper"], snelheid=0.26, bord="gewoon"),
+    "stokstaartje":   dict(zone="savanne", gedrag=["kudde", "verstopper"], snelheid=0.26, bord="gewoon",
+                           idle_mix={"wacht": 0.7}),      # test round 2: mostly upright on guard, looking around
     "jachtluipaard":  dict(zone="savanne", gedrag=[], snelheid=0.3, bord="middel"),
     "struisvogel":    dict(zone="savanne", gedrag=["kudde", "rijdier"], snelheid=0.3, bord="middel"),
     # rivierdelta
@@ -167,7 +170,13 @@ def kopieer(soorten):
             elif f.endswith(".animation.json"):
                 shutil.copyfile(os.path.join(bron, f), os.path.join(ANIM_DIR, f))
             elif f.endswith(".png") and not f.endswith("_voorstel.png") and not f.startswith("batch"):
-                shutil.copyfile(os.path.join(bron, f), os.path.join(TEX_DIR, f))
+                # GeckoLib 5's AutoGlowingGeoLayer looks for <texture>_glowmask.png (RenderUtil.getEmissiveResource); the
+                # studio writes <texture>_glow.png, which made the glimworm draw the missing texture
+                doel = f[:-len("_glow.png")] + "_glowmask.png" if f.endswith("_glow.png") else f
+                shutil.copyfile(os.path.join(bron, f), os.path.join(TEX_DIR, doel))
+                oud = os.path.join(TEX_DIR, f)
+                if doel != f and os.path.exists(oud):
+                    os.remove(oud)
 
 
 def _geo_maat(pad):
@@ -212,9 +221,11 @@ def schrijf_soorten():
             "gedrag": d["gedrag"],
             "animaties": namen,
             "snelheid": d["snelheid"],
-            "glow": os.path.exists(os.path.join(TEX_DIR, f"{s}_glow.png")),
+            "glow": os.path.exists(os.path.join(TEX_DIR, f"{s}_glowmask.png")),
             "bord": d["bord"],
         }
+        if d.get("idle_mix"):
+            uit[s]["idle_mix"] = d["idle_mix"]
     os.makedirs(os.path.dirname(SOORTEN_JSON), exist_ok=True)
     with open(SOORTEN_JSON, "w", encoding="utf-8", newline="\n") as f:
         json.dump(uit, f, indent=1, ensure_ascii=False)

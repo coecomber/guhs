@@ -53,7 +53,7 @@
   "baby_model": true,
   "gedrag": [
    "kudde",
-   "water"
+   "wadend"
   ],
   "animaties": [
    "blij",
@@ -195,7 +195,10 @@
   ],
   "snelheid": 0.26,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "idle_mix": {
+   "wacht": 0.7
+  }
  },
  "jachtluipaard": {
   "zone": "savanne",
