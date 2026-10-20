@@ -289,7 +289,7 @@ ANDERE_BBQ2 = {"paleizen", "bestaand", "camping_markt", "toren_peper", "ring", "
 def _eigen_bron(marker):
     if (marker or "").startswith("bio_"):   # biomes3: a slice registers the sources of its own pieces, as px_ does
         return True
-    return marker in ANDERE_29 or marker in ANDERE_30 or marker in ANDERE_BBQ2 or (marker or "").startswith(("px_", "einde2_"))
+    return marker in ANDERE_29 or marker in ANDERE_30 or marker in ANDERE_BBQ2 or (marker or "").startswith(("px_", "einde2_", "safari"))   # 1.6.0: the safari slices register their own pieces too
 
 
 EIGEN_LOOT = {("boerderij_zakdoek", "guhboerderij.json")}

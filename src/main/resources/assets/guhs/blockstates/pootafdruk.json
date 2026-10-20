@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/pootafdruk"
+    },
+    "facing=east": {
+      "model": "guhs:block/pootafdruk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/pootafdruk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/pootafdruk",
+      "y": 270
+    }
+  }
+}

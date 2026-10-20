@@ -531,6 +531,13 @@ public enum GuhClothes {
     JAPAN_KATTENOORTJES(Slot.OREN, "outfit_oren_balto"),
     JAPAN_STRIKJE(Slot.NECK, "outfit_bowtie"),
     // </bio_bouw_dal>
+    // 1.6.0 Op Safari! slice S4 (feature/safari/quests): the disguise suits of de vermomde guh (the zebrapakje is the reward;
+    // the panda and penguin suits are only worn in the park). Saved by number: at the merge they go AFTER S6's safari clothes.
+    // <safari_quests>
+    ZEBRAPAKJE(Slot.BODY, "outfit_suit"),
+    PANDAPAKJE(Slot.BODY, "outfit_suit"),
+    PINGUINPAKJE(Slot.BODY, "outfit_suit"),
+    // </safari_quests>
     ;
 
     /**

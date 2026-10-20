@@ -1,0 +1,129 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/fotolijstje_lijst",
+    "lijst": "guhs:block/fotolijstje_lijst",
+    "foto": "guhs:block/fotolijstje_foto"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        9
+      ],
+      "to": [
+        14,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "down": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1,
+        9
+      ],
+      "to": [
+        14,
+        13,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "down": {
+          "texture": "#lijst"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        2,
+        8.9
+      ],
+      "to": [
+        13,
+        12,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#foto",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        10
+      ],
+      "to": [
+        9,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lijst"
+        },
+        "south": {
+          "texture": "#lijst"
+        },
+        "east": {
+          "texture": "#lijst"
+        },
+        "west": {
+          "texture": "#lijst"
+        },
+        "up": {
+          "texture": "#lijst"
+        },
+        "down": {
+          "texture": "#lijst"
+        }
+      }
+    }
+  ]
+}

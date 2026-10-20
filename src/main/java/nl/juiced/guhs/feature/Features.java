@@ -369,6 +369,7 @@ public final class Features {
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.creative(output);   // verhalenpad: snuffel-kern
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.creative(output);   // verhalenpad: snuffel-steiger
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.creative(output);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
+        nl.juiced.guhs.feature.safari.quests.SafariQuests.creative(output);   // 1.6.0 Op Safari! S4
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
