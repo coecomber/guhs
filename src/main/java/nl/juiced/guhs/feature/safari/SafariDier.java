@@ -76,6 +76,8 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private static final RawAnimation SLAAP = RawAnimation.begin().thenLoop("slaap");
     /** How far outside its home an animal may stray before it is put back at once. */
     static final int TELEPORT_MARGE = 8, LOOP_MARGE = 2;
+    /** (S3) True while this animal is calm and does not hide from players (the feeding time of its zone). */
+    public static java.util.function.Predicate<SafariDier> KALM = d -> false;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private BlockPos thuis = BlockPos.ZERO;
@@ -203,7 +205,8 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 e -> e instanceof Player p && !p.isCrouching() && !p.isSpectator()) {
             @Override
             public boolean canUse() {
-                return info != null && info.heeft("verstopper") && hangPlek == null && !slaapt() && super.canUse();
+                return info != null && info.heeft("verstopper") && hangPlek == null && !slaapt() && !KALM.test(SafariDier.this)
+                        && super.canUse();
             }
         });
         goalSelector.addGoal(5, new ThuisStroll());

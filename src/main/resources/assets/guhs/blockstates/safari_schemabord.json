@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/safari_schemabord"
+    },
+    "facing=east": {
+      "model": "guhs:block/safari_schemabord",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/safari_schemabord",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/safari_schemabord",
+      "y": 270
+    }
+  }
+}

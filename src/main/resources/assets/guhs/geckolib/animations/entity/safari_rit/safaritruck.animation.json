@@ -1,0 +1,81 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.safaritruck.rijden": {
+      "loop": true,
+      "animation_length": 0.8,
+      "bones": {
+        "wiel_lv": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.8": [
+              360,
+              0,
+              0
+            ]
+          }
+        },
+        "wiel_rv": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.8": [
+              360,
+              0,
+              0
+            ]
+          }
+        },
+        "wiel_la": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.8": [
+              360,
+              0,
+              0
+            ]
+          }
+        },
+        "wiel_ra": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.8": [
+              360,
+              0,
+              0
+            ]
+          }
+        },
+        "aanhanger_wielen": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.8": [
+              360,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

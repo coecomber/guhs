@@ -124,6 +124,8 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.safari.camera.client.CameraClient.init(modBus);   // 1.6.0 Op Safari! S1: camera frame, flash, photo card
         nl.juiced.guhs.feature.safari.lobby.client.LobbyClient.init(modBus);   // 1.6.0 Op Safari! S2 (lobby)
         nl.juiced.guhs.feature.safari.verblijf.client.VerblijfClient.init(modBus);   // 1.6.0 Op Safari! S5
+        nl.juiced.guhs.feature.safari.rit.client.RitClient.init(modBus);   // 1.6.0 S3: truck, kano, kabelbaan, struisvogelrace
+        nl.juiced.guhs.feature.safari.momenten.client.SfeerClient.init(modBus);   // 1.6.0 S3: weather + atmosphere per zone
     }
 
     private FeaturesClient() {

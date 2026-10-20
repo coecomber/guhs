@@ -158,3 +158,15 @@ Java: `nl.juiced.guhs.feature.safari.spullen` (`SafariSpullen`, `SafariGeluid`, 
 - Lobby spots: `data/guhs/safari/lobby.json` from `tools/features/safari_park/zone_s2_lobby.py` (also puts a bed in the
   five lodge huts: re-stamp needed, raise VERSIE at the merge).
 - Visitor guhs: wild `GuhEntity` with tag `guhs_safari_bezoeker` (can not be picked up/tamed), 8 around the square.
+### S3 API (vervoer & momenten) - for the other slices
+- `momenten.Momenten` (server and client): `noorderlicht(Level, BlockPos)` (IJskust at night, most nights: S1's bonus star),
+  `muntFactor(MinecraftServer, soort)` (2 for today's birthday species: S1 doubles photo coins), `jarigeSoort()`,
+  `voedertijd(Level, zone)` (shy animals of that zone stop hiding: `SafariDier.KALM`), `nachtsafari(Level)`, `schema(Level)`.
+- Day plan in `momenten.MomentSchema` (pure; feeding 07:24..17:24 one zone after another, talks 12:00 + 15:36, night safari
+  every 3rd night). Moment rangers are `GuhNpcEntity` BOSWACHTERGUH tagged `guhs_safari_ranger` (clicks only talk).
+- Rides in `rit/`: `TruckEntity` (hop-on hop-off loop, guide + visitor guhs drawn client-side, own guhs in the trailer),
+  `KanoEntity` (moored at the village jetty; click = guided trip, sneak-click = free canoe), `GondelEntity` (kabelbaan
+  IJskust-Bamboebergen), `RaceStruisvogelEntity` (Struisvogelrace, Scorebord board `safari_struisvogelrace`; S3 owns the race
+  - S5 keeps ostrich RIDING at home and the egg). Paths: `assets/guhs/safari/{route,kano,kabelbaan,race,sfeer}.json`
+  (written by `tools/features/safari_park/zone_s3_rit.py` + `route_data.py`), read by `rit.RitData` on both sides.
+- Visitor guhs on the truck wear `GuhClothes.SAFARIHOEDJE`/`VERREKIJKER` when S6 adds them (looked up by name), else stand-ins.
