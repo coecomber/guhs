@@ -48,10 +48,12 @@ public final class SafariFeature {
         NeoForge.EVENT_BUS.addListener(SafariCommando::register);
         nl.juiced.guhs.feature.safari.kern.SafariKern.register();   // step 2: per-player data, safarimunten, events, sync
         nl.juiced.guhs.feature.safari.spullen.SafariSpullen.register(modBus);   // step 2 S6: sounds, clothes, safari blocks, items
+        nl.juiced.guhs.feature.safari.camera.CameraFeature.register(modBus);   // S1: camera, photos, Safari tab of the Guhdex
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {
         nl.juiced.guhs.feature.safari.kern.SafariKern.payloads(registrar);
+        nl.juiced.guhs.feature.safari.camera.CameraFeature.payloads(registrar);   // S1
     }
 
     private SafariFeature() {

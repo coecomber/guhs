@@ -37,6 +37,8 @@ public class PickedUpGuhItem extends Item {
 
     /** (item data, 1.2.10) the band hearts at the moment it was picked up; only read by the tooltip. */
     public static final String HARTJES = "GuhHartjes";
+    /** (item data, 1.6.0 F3b) its owner (UUID string and name) and its number in the owner's Guhdex; read by the tooltip. */
+    public static final String EIGENAAR = "GuhEigenaar", EIGENAAR_NAAM = "GuhEigenaarNaam", NUMMER = "GuhdexNr";
 
     /** Takes the guh out of the world and returns it as an item. */
     public static ItemStack pickUp(GuhEntity guh) {
@@ -49,6 +51,20 @@ public class PickedUpGuhItem extends Item {
         }
         if (guh.hasCustomName()) {
             nl.juiced.guhs.taal.Tekst.put(tag, "GuhDisplayName", guh.getCustomName());   // (1.2.0: the name itself, any language)
+        }
+        java.util.UUID eigenaar = guh.getOwnerUUID();
+        if (eigenaar != null && guh.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+            // 1.6.0 (F3b): whose guh this is, and its number in that owner's Guhdex
+            tag.putString(EIGENAAR, eigenaar.toString());
+            String naam = guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().name()
+                    : net.neoforged.neoforge.common.UsernameCache.getLastKnownUsername(eigenaar);
+            if (naam != null) {
+                tag.putString(EIGENAAR_NAAM, naam);
+            }
+            int nr = nl.juiced.guhs.quest.GuhNummers.nummer(sl.getServer(), eigenaar, nl.juiced.guhs.feature.band.Band.id(guh));
+            if (nr > 0) {
+                tag.putInt(NUMMER, nr);
+            }
         }
         guh.discard();
         ItemStack stack = of(tag);
@@ -139,6 +155,20 @@ public class PickedUpGuhItem extends Item {
                 scale = attribute.getDoubleOr("base", 0.0);
             } else if (attribute.getStringOr("id", "").endsWith("max_health")) {
                 maxHealth = attribute.getDoubleOr("base", 0.0);
+            }
+        }
+        // 1.6.0 (F3b): your own guh shows its number in your Guhdex, someone else's guh whose it is
+        String eigenaar = data.getStringOr(EIGENAAR, "");
+        if (!eigenaar.isEmpty()) {
+            java.util.UUID ik = nl.juiced.guhs.feature.safari.camera.Lokaal.speler();
+            if (ik != null && eigenaar.equals(ik.toString())) {
+                int nr = data.getIntOr(NUMMER, 0);
+                if (nr > 0) {
+                    tooltip.accept(Component.translatable("item.guhs.picked_up_guh.nummer", nr).withStyle(ChatFormatting.AQUA));
+                }
+            } else {
+                String naam = data.getStringOr(EIGENAAR_NAAM, "");
+                tooltip.accept(Component.translatable("item.guhs.picked_up_guh.van", naam.isEmpty() ? "?" : naam).withStyle(ChatFormatting.GOLD));
             }
         }
         // 1.2.10: what kind of guh this is and how close you are (the name is the item's own name)

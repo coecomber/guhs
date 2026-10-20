@@ -81,7 +81,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0 Op Safari! (append only, see above): the kern of the safari park
             'safari', 'safari_dieren',   # (safari_park is NOT a feature: the package safari_park/ shadows safari_park.py; the park is built on its own)
             # 1.6.0 step 2 (append only)
-            'safari_blokken']
+            'safari_blokken', 'safari_camera']
 
 
 def modules():

@@ -2154,7 +2154,7 @@ public final class AutoCheck {
             out.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Guh(java.util.UUID.nameUUIDFromBytes(("voorbeeld" + i).getBytes()),
                     net.minecraft.network.chat.Component.literal(soorten[i][2]), looks, hartjes[i], niveau.ordinal(), volgende == null ? -1 : volgende.drempel(), fav, vrienden,
                     net.minecraft.network.chat.Component.literal(i >= 2 ? "Villa Vahoeg" : ""), klussen, plek, stats, eerste, wist, 0, false,
-                    i == 3 ? "item_kist" : "wereld"));
+                    i == 3 ? "item_kist" : "wereld", i + 1));
         }
         return out;
     }

@@ -128,3 +128,11 @@ Java: `nl.juiced.guhs.feature.safari.spullen` (`SafariSpullen`, `SafariGeluid`, 
 - **Generators**:
   - `tools/features/safari_blokken.py` (make_resources);
   - by hand: `tools/features/safari_geluid.py` (OGGs) and `safari_schilderijen.py` (painting PNGs).
+### S1 hooks (camera, dex) for the other slices
+- `camera.CameraFeature.CAMERA` (item `guhs:safaricamera`): S2 gives it at the welcome (and the fotograaf-guh may sell/replace it).
+- `camera.Fotograaf.JARIG` (`Predicate<String>`): S3 sets it to "is this species today's birthday species" → photo coins x2.
+- `camera.Fotograaf.VROEGE_VOGEL` (flag `vroege_vogel` via `SafariSpeler.zetVlag`): S2 sets it when a player wakes in the lodge;
+  the first photo after that pays double (or 10 when it pays nothing), then the camera clears it.
+- `camera.Fotograaf.kijk(level, eye, look, zoom)` → `Foto` (or null): reusable "is this animal in view" (S4 pootafdrukken etc.).
+- Daily missions: `camera.Missies.van(Klok.dag())`, done flags in the day counters `missie0..2`. Home animals (S5) count.
+- Guh numbers (F3b): `quest.GuhNummers.nummer(server, owner, bandId)` / `getemd(...)`.

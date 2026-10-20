@@ -923,6 +923,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             nl.juiced.guhs.quest.GuhDex.onTamed(serverPlayer, this);
             nl.juiced.guhs.feature.band.BandEvents.getemd(this, serverPlayer);   // 2.10: the hartjesmeter starts
+            nl.juiced.guhs.quest.GuhNummers.getemd(serverPlayer.level().getServer(), serverPlayer.getUUID(),
+                    nl.juiced.guhs.feature.band.Band.id(this));   // 1.6.0 (F3b): its number in the Guhdex
         }
     }
 

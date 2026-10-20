@@ -37,7 +37,11 @@ public final class MijnGuhsCache {
     /** One of your guhs as the tab shows it. */
     public record Guh(UUID id, Component naam, CompoundTag looks, int hartjes, int niveau, int volgende, List<Fav> fav, List<Vriend> vrienden,
                       Component huisje, List<Component> klussen, Component plek, Map<String, Long> stats, List<Eerste> eerste, List<Wist> wist,
-                      long sinds, boolean dood, String plekSoort) {
+                      long sinds, boolean dood, String plekSoort, int nr) {
+        /** 1.6.0 (F3b): "#7 " before the name (empty without a number). */
+        public Component nummer() {
+            return nr > 0 ? Component.literal("#" + nr + " ").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE) : Component.empty();
+        }
     }
 
     /** 1.2.10: one of your other tamed critters (the tab "Mijn andere vadsjes"); naam is empty when it has no name of its own. */
@@ -187,7 +191,7 @@ public final class MijnGuhsCache {
         }
         return new Guh(UUID.fromString(t.getStringOr("Id", "")), nl.juiced.guhs.taal.Tekst.get(t, "Naam"), t.getCompoundOrEmpty("Looks"), t.getIntOr("Hartjes", 0), t.getIntOr("Niveau", 0),
                 t.getIntOr("Volgende", 0), fav, vrienden, nl.juiced.guhs.taal.Tekst.get(t, "Huisje"), klussen, tekst(t.getStringOr("Plek", ""), reg), stats, eerste, wist,
-                t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false), t.getStringOr("PlekSoort", ""));
+                t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false), t.getStringOr("PlekSoort", ""), t.getIntOr("Nr", 0));
     }
 
     private static Component tekst(String json, HolderLookup.Provider reg) {
