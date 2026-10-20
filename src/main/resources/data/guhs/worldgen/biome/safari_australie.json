@@ -1,0 +1,31 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/fog_color": "#f5d8b8",
+    "minecraft:visual/sky_color": "#9ad0ff",
+    "minecraft:visual/water_fog_color": "#2f6a80"
+  },
+  "has_precipitation": false,
+  "temperature": 0.5,
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#4a9ab8",
+    "foliage_color": "#8a9a50",
+    "grass_color": "#c09a50"
+  },
+  "spawners": {},
+  "spawn_costs": {},
+  "carvers": [],
+  "features": []
+}

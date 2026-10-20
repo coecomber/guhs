@@ -1,0 +1,22 @@
+{
+  "type": "guhs:safaripark",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "guhs:safaripark",
+    "biome_source": {
+      "type": "guhs:safari_zones",
+      "zones": {
+        "entree": "guhs:safari_entree",
+        "savanne": "guhs:safari_savanne",
+        "delta": "guhs:safari_delta",
+        "regenwoud": "guhs:safari_regenwoud",
+        "bamboe": "guhs:safari_bamboe",
+        "ijskust": "guhs:safari_ijskust",
+        "oertijd": "guhs:safari_oertijd",
+        "europa": "guhs:safari_europa",
+        "australie": "guhs:safari_australie"
+      },
+      "decor": "guhs:safari_decor"
+    }
+  }
+}

@@ -77,7 +77,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'einde2_reizen', 'einde2_audio', 'einde2_trap5_machines', 'einde2_trap5_ballon',
             # einde2 Sponsguh (CONTRACT_E2_C 1.2): the skelet, then the nine slices (this order = the story order of the FTB chain)
             'einde2_sp_verhaal', 'einde2_sp_cast', 'einde2_sp_d1_start', 'einde2_sp_d1_stad', 'einde2_sp_d1_recept', 'einde2_sp_d2_heen',
-            'einde2_sp_d2_weg', 'einde2_sp_d2_finale', 'einde2_sp_audio', 'einde2_sp_zij']
+            'einde2_sp_d2_weg', 'einde2_sp_d2_finale', 'einde2_sp_audio', 'einde2_sp_zij',
+            # 1.6.0 Op Safari! (append only, see above): the kern of the safari park
+            'safari']
 
 
 def modules():
