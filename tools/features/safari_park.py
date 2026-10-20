@@ -67,6 +67,7 @@ def maak(root=".", preview=False, log=print):
     for m in modules:
         if hasattr(m, "plekken"):
             m.plekken(park, plekken)
+    plk.vermenigvuldig(park, plekken, log)      # test round 2: ~3x the animals, spread over their zones
     totaal = plk.controleer(plekken)
     log(f"  plekken: {len(plekken)} huizen, {totaal} dieren")
     stats = park.schrijf(root)

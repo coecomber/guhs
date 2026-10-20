@@ -45,7 +45,7 @@ SOORTEN = {
     "cavia": ("entree", 2, "aaihoek", 3), "ezeltje": ("entree", 2, "aaihoek", 4),
 }
 WATERDIER = {"zeekoe", "narwal", "octopus"}
-HALFWATER = {"nijlpaard", "krokodil", "flamingo", "capibara", "zeehond", "otter", "bever", "pinguin", "ooievaar"}
+HALFWATER = {"nijlpaard", "krokodil", "flamingo", "capibara", "zeehond", "otter", "bever", "pinguin", "ooievaar", "ijsbeer"}
 BOOMDIER = {"luipaard", "rode_panda", "gibbon", "luiaard", "toekan", "gekko", "koala", "specht", "prieelvogel"}
 
 
@@ -147,11 +147,153 @@ def maak(park):
     return plekken
 
 
+# --- test round 2: more animals, spread over their zone -------------------------------------------------------------
+# rare / hard-to-find species and the aaihoek keep their numbers; every other home gets EXTRA_HUIZEN clones elsewhere in
+# its zone (each its own home with its own wandering range), so the park has ~3x the animals.
+ZELDZAAM = {"narwal", "okapi", "sabeltandtijger", "quokka", "vuursalamander", "das", "glimworm", "bever", "gouden_dikdik"}
+EXTRA_HUIZEN = 2
+PLANTEN = ("minecraft:short_grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:large_fern", "minecraft:snow",
+           "minecraft:dead_bush", "minecraft:short_dry_grass", "minecraft:tall_dry_grass", "minecraft:bush",
+           "minecraft:firefly_bush", "minecraft:leaf_litter", "minecraft:pink_petals", "minecraft:wildflowers")
+
+
+def _staan_y(park, x, z):
+    """y to stand on in this column: on top of the ground and of anything solid on it (rocks), not inside plants."""
+    y = int(park.hoogte[x, z]) + 1
+    while y < kit.H - 2 and park.v[x, y, z] != 0 and not park.get(x, y, z).startswith(PLANTEN + ("minecraft:water",)):
+        y += 1
+    return y
+
+
+def _natuurlijk(park, x, z):
+    """Nothing built or grown over this column (no building, tree crown or landmark within 4 above the ground)."""
+    h = int(park.hoogte[x, z])
+    for y in range(h + 1, min(h + 5, kit.H)):
+        if park.v[x, y, z] != 0 and not park.get(x, y, z).startswith(PLANTEN):
+            return False
+    return True
+
+
+def vermenigvuldig(park, plekken, log=print):
+    """After the zone hooks: land animals never live with their centre in water, luiaards hang near a path where people
+    can see them, and every normal home gets EXTRA_HUIZEN clones spread over the zone (right terrain per species)."""
+    rng = np.random.default_rng(kit.SEED + 31)
+    pad_d = distance_transform_edt(~park.pad)
+    water_d = distance_transform_edt(~park.water)
+    land = park.binnen & ~park.water & (park.hek_afstand > 4) & ~park.pad
+    diep_water = park.water & (park.hoogte <= kit.WATER_Y - 3) & park.binnen
+    bomen = [(int(x), int(z)) for x, _, z, _ in park.bomen]
+
+    def soortplek(soort):
+        return SOORTEN.get(soort, (None, 0, "land", 10))[2]
+
+    def masker(soort, zi):
+        inzone = park.zone == zi
+        if soort in WATERDIER:
+            m = inzone & diep_water
+            return m if m.any() else inzone & park.water
+        if soort in HALFWATER:
+            return inzone & land & (water_d >= 1) & (water_d <= 5)
+        if soortplek(soort) == "open":
+            return inzone & land & (pad_d > 5)
+        return inzone & land
+
+    def boom_plekken(zi, bij_pad=None):
+        uit = [(x, z) for x, z in bomen if park.zone[x, z] == zi and park.binnen[x, z]]
+        if bij_pad is not None:
+            dicht = [(x, z) for x, z in uit if pad_d[x, z] <= bij_pad]
+            uit = dicht or uit
+        return uit
+
+    def kies(kandidaten, eigen, alle, min_eigen):
+        """The candidate farthest from the species' own homes (at least min_eigen if possible), not on top of others."""
+        best, best_d = None, -1.0
+        for x, z in kandidaten:
+            d_eigen = min((math.hypot(x - a, z - b) for a, b in eigen), default=999.0)
+            d_alle = min((math.hypot(x - a, z - b) for a, b in alle), default=999.0)
+            if d_alle < 8:
+                continue
+            score = min(d_eigen, min_eigen * 2.5)
+            if score > best_d:
+                best, best_d = (x, z), score
+        return best
+
+    def steekproef(mask, n=160):
+        xs, zs = np.nonzero(mask)
+        if not len(xs):
+            return []
+        idx = rng.choice(len(xs), size=min(n, len(xs)), replace=False)
+        return [(int(xs[i]), int(zs[i])) for i in idx]
+
+    # 1. land animals never live in the water (the olifant walked under water in the savanne pond)
+    for p in plekken:
+        s = p["soort"]
+        x, _, z = p["centrum"]
+        if s in WATERDIER or s in HALFWATER or not (0 <= x < kit.W and 0 <= z < kit.W) or not park.water[x, z]:
+            continue
+        zi = ZONES.index(p["zone"])
+        m = (park.zone == zi) & land
+        xs, zs = np.nonzero(m)
+        if len(xs):
+            i = int(np.argmin(np.hypot(xs - x, zs - z)))
+            nx, nz = int(xs[i]), int(zs[i])
+            log(f"    {s}: thuis uit het water ({x},{z}) -> ({nx},{nz})")
+            p["centrum"] = [nx, _staan_y(park, nx, nz), nz]
+
+    # 2. luiaards hang in trees next to a path (visible from the ground / the boomkronenpad)
+    for p in plekken:
+        if p["soort"] != "luiaard":
+            continue
+        x, _, z = p["centrum"]
+        if pad_d[x, z] <= 6:
+            continue
+        zi = ZONES.index(p["zone"])
+        bij = boom_plekken(zi, bij_pad=6)
+        if bij:
+            bx, bz = min(bij, key=lambda b: math.hypot(b[0] - x, b[1] - z))
+            p["centrum"] = [bx + 1, _staan_y(park, bx + 1, bz), bz]
+            p["straal"] = min(p["straal"], 5)
+
+    # 3. clones, spread over the zone
+    alle = [(p["centrum"][0], p["centrum"][2]) for p in plekken]
+    extra = []
+    for p in list(plekken):
+        s = p["soort"]
+        if s in ZELDZAAM or p["zone"] == "entree":
+            continue
+        zi = ZONES.index(p["zone"])
+        eigen = [(q["centrum"][0], q["centrum"][2]) for q in plekken + extra if q["soort"] == s]
+        min_eigen = max(24, 2 * p["straal"])
+        for _ in range(EXTRA_HUIZEN):
+            if p.get("boom") or soortplek(s) == "boom":
+                kand = boom_plekken(zi, bij_pad=6 if s == "luiaard" else None)
+                kand = [kand[i] for i in rng.permutation(len(kand))[:200]] if kand else []
+                kand = [(x + 1, z) for x, z in kand if 0 <= x + 1 < kit.W]
+            else:
+                kand = [(x, z) for x, z in steekproef(masker(s, zi), 240)
+                        if s in WATERDIER or _natuurlijk(park, x, z)]
+            plek = kies(kand, eigen, alle, min_eigen)
+            if plek is None:
+                log(f"    {s}: geen extra plek in {p['zone']}")
+                break
+            x, z = plek
+            y = int(park.hoogte[x, z]) + 1 if s in WATERDIER else _staan_y(park, x, z)
+            q = dict(p, centrum=[x, y, z])
+            extra.append(q)
+            eigen.append((x, z))
+            alle.append((x, z))
+    plekken.extend(extra)
+    return plekken
+
+
 def controleer(plekken):
     tel = {}
     for p in plekken:
         tel[p["soort"]] = tel.get(p["soort"], 0) + p["volwassenen"] + p["jongen"]
     for soort, (_, n, _, _) in SOORTEN.items():
-        assert tel.get(soort) == n, (soort, tel.get(soort), n)
+        if soort in ZELDZAAM or SOORTEN[soort][0] == "entree":
+            assert tel.get(soort) == n, (soort, tel.get(soort), n)
+        else:
+            assert tel.get(soort, 0) >= n, (soort, tel.get(soort), n)     # at least the sheet's number (clones on top)
     assert "gouden_dikdik" not in tel
     return sum(tel.values())

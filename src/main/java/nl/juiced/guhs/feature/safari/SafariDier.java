@@ -88,6 +88,13 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     @Nullable
     private ParkData.Soort info;
     private boolean geregeld;
+    /** Where a hanging animal (the sloth) hangs under a branch; null: it walks. Saved. */
+    @Nullable
+    private BlockPos hangPlek;
+    /** How many checks in a row a land animal was in deep water (2+ blocks). */
+    private int diepTel;
+    /** Ticks until a species with an idle_mix picks its next standing animation. */
+    private int mixPauze = 40;
 
     public SafariDier(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -132,9 +139,22 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             this.lookControl = new LookControl(this);
             setPathfindingMalus(PathType.WATER, 0f);
         } else {
+            // land animals stay out of the water; a wading one (the elephant) may step into it at the edge, never into
+            // deep water (kiesDoel never picks a deep target, and bewaak pulls it out)
             this.navigation = new GroundPathNavigation(this, level());
-            setPathfindingMalus(PathType.WATER, -1f);
+            setPathfindingMalus(PathType.WATER, info.wadend() ? 8f : -1f);
         }
+        setNoGravity(hangPlek != null);
+    }
+
+    /** Hangs this animal still under a branch at {@code plek} (its feet; the "hang" animation hangs from its top). */
+    public void hang(BlockPos plek) {
+        hangPlek = plek.immutable();
+        setNoGravity(true);
+    }
+
+    public boolean hangt() {
+        return hangPlek != null;
     }
 
     @Override
@@ -149,7 +169,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 e -> e instanceof Player p && !p.isCrouching() && !p.isSpectator()) {
             @Override
             public boolean canUse() {
-                return info != null && info.heeft("verstopper") && !slaapt() && super.canUse();
+                return info != null && info.heeft("verstopper") && hangPlek == null && !slaapt() && super.canUse();
             }
         });
         goalSelector.addGoal(5, new ThuisStroll());
@@ -250,12 +270,30 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         if (isPassenger()) {
             stopRiding();
         }
-        if ((tickCount + getId()) % 10 == 0) {
+        if (hangPlek != null) {
+            hangStil();
+        } else if ((tickCount + getId()) % 10 == 0) {
             bewaak(level);
+        }
+        if ((tickCount + getId()) % 10 == 0) {
             slaap(level);
         }
         if (actieTot > 0 && --actieTot == 0) {
             entityData.set(DATA_ACTIE, "");
+        }
+        if (hangPlek == null && info != null && !info.idleMix().isEmpty() && actie().isEmpty() && !slaapt()
+                && getNavigation().isDone() && --mixPauze <= 0) {
+            // most of its standing time in one of these poses (the meerkat upright on guard, looking around)
+            mixPauze = 20 + random.nextInt(40);
+            float r = random.nextFloat(), som = 0f;
+            for (java.util.Map.Entry<String, Float> e : info.idleMix().entrySet()) {
+                som += e.getValue();
+                if (r < som) {
+                    entityData.set(DATA_ACTIE, e.getKey());
+                    actieTot = 120 + random.nextInt(200);
+                    break;
+                }
+            }
         }
         if (--volgendeActie <= 0) {
             volgendeActie = 200 + random.nextInt(600);
@@ -267,8 +305,47 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         }
     }
 
+    /** A hanging animal stays exactly where it hangs (no gravity, no drifting) and plays "hang". */
+    private void hangStil() {
+        setDeltaMovement(Vec3.ZERO);
+        getNavigation().stop();
+        if (distanceToSqr(hangPlek.getX() + 0.5, hangPlek.getY(), hangPlek.getZ() + 0.5) > 0.25) {
+            teleportTo(hangPlek.getX() + 0.5, hangPlek.getY(), hangPlek.getZ() + 0.5);
+        }
+        if (!"hang".equals(actie())) {
+            entityData.set(DATA_ACTIE, "hang");
+        }
+        actieTot = 0;
+    }
+
+    /** How many water blocks stand on top of each other from {@code p} down (0: dry), at most 3. */
+    static int waterDiepte(Level level, BlockPos p) {
+        int n = 0;
+        while (n < 3 && !level.getFluidState(p.below(n)).isEmpty()) {
+            n++;
+        }
+        return n;
+    }
+
     /** Keeps the animal home: walk back when a little outside, be put back when far outside, fallen, or out of its zone. */
     void bewaak(ServerLevel level) {
+        if (info != null && !info.zee() && !info.water()) {
+            // a land animal in deep water (2+): out of it, to its home; still in it after ~5 s: put back home
+            int diep = isInWater() ? Math.max(waterDiepte(level, blockPosition()), waterDiepte(level, blockPosition().above()) + 1) : 0;
+            if (diep >= 2) {
+                if (++diepTel > 10) {
+                    diepTel = 0;
+                    terugNaarHuis(level);
+                    return;
+                }
+                if (getNavigation().isDone()) {
+                    BlockPos g = grond(level, thuis.getX(), thuis.getZ());
+                    getNavigation().moveTo(g.getX() + 0.5, g.getY(), g.getZ() + 0.5, 1.2);
+                }
+            } else {
+                diepTel = 0;
+            }
+        }
         double dx = getX() - (thuis.getX() + 0.5), dz = getZ() - (thuis.getZ() + 0.5);
         double afstand = Math.sqrt(dx * dx + dz * dz);
         boolean uitZone = zone >= 0 && Safari.echt(level) && ParkData.get().zone(getBlockX(), getBlockZ()) != zone;
@@ -384,6 +461,11 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         tag.putInt("Zone", zone);
         tag.putInt("Plek", plek);
         tag.putInt("Generatie", generatie);
+        if (hangPlek != null) {
+            tag.putInt("HangX", hangPlek.getX());
+            tag.putInt("HangY", hangPlek.getY());
+            tag.putInt("HangZ", hangPlek.getZ());
+        }
     }
 
     @Override
@@ -396,6 +478,8 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         zone = tag.getIntOr("Zone", -1);
         plek = tag.getIntOr("Plek", -1);
         generatie = tag.getIntOr("Generatie", 0);
+        int hy = tag.getIntOr("HangY", Integer.MIN_VALUE);
+        hangPlek = hy == Integer.MIN_VALUE ? null : new BlockPos(tag.getIntOr("HangX", 0), hy, tag.getIntOr("HangZ", 0));
         geregeld = false;
     }
 
@@ -405,6 +489,9 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<SafariDier>("beweeg", 4, state -> {
             String a = actie();
+            if ("hang".equals(a)) {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("hang"));
+            }
             if (slaapt() && info != null && info.animaties().contains("slaap")) {
                 return state.setAndContinue(SLAAP);
             }
@@ -432,7 +519,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
 
         @Override
         public boolean canUse() {
-            if (slaapt() || info == null || !(level() instanceof ServerLevel level)) {
+            if (slaapt() || info == null || hangPlek != null || !(level() instanceof ServerLevel level)) {
                 return false;
             }
             if (pauze > 0) {
@@ -442,6 +529,9 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             int kans = info.heeft("boom") ? 600 : info.zee() ? 60 : 120;
             if (random.nextInt(kans) != 0) {
                 return false;
+            }
+            if (!level.hasNearbyAlivePlayer(getX(), getY(), getZ(), 48)) {
+                return false;          // nobody to see it: no pathfinding (about 450 animals in the park)
             }
             BlockPos doel = kiesDoel(level);
             if (doel == null) {
@@ -481,8 +571,14 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 BlockPos p = grond(level, x, z);
                 FluidState f = level.getFluidState(p.below());
                 boolean nat = !f.isEmpty() || !level.getFluidState(p).isEmpty();
-                if (info.zee() && !nat || !info.zee() && !info.water() && nat) {
+                if (info.zee() && !nat) {
                     continue;
+                }
+                if (!info.zee() && !info.water() && nat) {
+                    // a wading animal may stand in 1-deep water at the edge; nothing else goes into the water
+                    if (!info.wadend() || waterDiepte(level, p.below()) + waterDiepte(level, p) > 1) {
+                        continue;
+                    }
                 }
                 return p;
             }
