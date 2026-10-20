@@ -68,9 +68,11 @@ public final class Populatie {
     public static int vul(ServerLevel level, ParkData.Plek p, int generatie) {
         ParkData d = ParkData.get();
         ParkData.Soort soort = d.soort(p.soort());
-        int zone = d.zoneIndex(p.zone().isEmpty() && soort != null ? soort.zone() : p.zone());
-        if (zone >= 0 && d.zone(p.centrum().getX(), p.centrum().getZ()) < 0) {
-            zone = -1;            // (a home whose centre lies outside the zone raster: no zone check rather than a stuck animal)
+        // the zone of the home is where its centre lies (outside the raster: no zone check rather than a stuck animal)
+        int zone = d.zone(p.centrum().getX(), p.centrum().getZ());
+        String gevraagd = p.zone().isEmpty() && soort != null ? soort.zone() : p.zone();
+        if (zone >= 0 && !gevraagd.isEmpty() && zone != d.zoneIndex(gevraagd) && !d.testPlateau) {
+            LOGGER.warn("Safari: home {} of {} lies in zone {}, not in {}", p.id(), p.soort(), d.zoneNaam(zone), gevraagd);
         }
         RandomSource rnd = RandomSource.create(p.id() * 7919L + generatie);
         int n = 0;

@@ -68,7 +68,7 @@ public final class ParkData {
     public record Plek(int id, String soort, String zone, BlockPos centrum, int straal, int volwassenen, int jongen, boolean water, boolean boom) {
     }
 
-    private static ParkData data;
+    private static volatile ParkData data;
 
     public final int versie;
     public final BlockPos ingang;
@@ -96,11 +96,17 @@ public final class ParkData {
         this.dichtst = dichtste(raster, breedte);
     }
 
-    public static synchronized ParkData get() {
-        if (data == null) {
-            data = laad();
+    public static ParkData get() {
+        ParkData d = data;
+        if (d == null) {
+            synchronized (ParkData.class) {
+                if (data == null) {
+                    data = laad();
+                }
+                d = data;
+            }
         }
-        return data;
+        return d;
     }
 
     /** Forget the cached data (tests, a dev reload). */
