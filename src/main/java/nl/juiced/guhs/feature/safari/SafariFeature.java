@@ -47,6 +47,7 @@ public final class SafariFeature {
         NeoForge.EVENT_BUS.register(SafariRegels.class);
         NeoForge.EVENT_BUS.addListener(SafariCommando::register);
         nl.juiced.guhs.feature.safari.kern.SafariKern.register();   // step 2: per-player data, safarimunten, events, sync
+        nl.juiced.guhs.feature.safari.rit.SafariRitten.register(modBus);   // S3: truck, kano, kabelbaan, struisvogelrace, momenten
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {

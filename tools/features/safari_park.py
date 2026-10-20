@@ -50,8 +50,9 @@ def zone_modules():
     import glob
     import importlib
     map_ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "safari_park")
-    return [importlib.import_module("safari_park." + os.path.basename(f)[:-3])
+    mods = [importlib.import_module("safari_park." + os.path.basename(f)[:-3])
             for f in sorted(glob.glob(os.path.join(map_, "zone_*.py")))]
+    return sorted(mods, key=lambda m: bool(getattr(m, "NA_ZONES", False)))     # (stable: name order otherwise)
 
 
 def maak(root=".", preview=False, log=print):
@@ -71,6 +72,7 @@ def maak(root=".", preview=False, log=print):
     totaal = plk.controleer(plekken)
     log(f"  plekken: {len(plekken)} huizen, {totaal} dieren")
     stats = park.schrijf(root)
+    __import__("safari_park.route_data").route_data.schrijf(root, park, log)   # S3: ride data (assets/guhs/safari)
     log(f"  tegels geschreven {time.time() - t0:.0f}s: {sum(n for _, n in stats)} blokken")
     x, y, z, yaw = park.ingang
     _json(root, "park.json", {"versie": VERSIE, "tegels": kit.TEGELS, "tegelgrootte": kit.TEGEL, "hoogte": kit.H,
