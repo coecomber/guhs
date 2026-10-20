@@ -1,0 +1,13 @@
+{
+ "versie": 1,
+ "tegels": 6,
+ "tegelgrootte": 128,
+ "hoogte": 160,
+ "waterhoogte": 62,
+ "ingang": [
+  190.5,
+  65,
+  605.5
+ ],
+ "ingang_yaw": 180.0
+}
