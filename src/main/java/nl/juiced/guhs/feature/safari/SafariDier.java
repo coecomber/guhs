@@ -157,6 +157,23 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         return hangPlek != null;
     }
 
+    /** (Step 2, lobby) plays a named animation of its species now, for {@code ticks} ticks (e.g. "blij", "eet", "spuug"). */
+    public void speelActie(String actie, int ticks) {
+        entityData.set(DATA_ACTIE, actie);
+        actieTot = Math.max(1, ticks);
+    }
+
+    /** (Step 2, lobby) moves its home for a while (the alpaca walking along with a player); zone -1: no zone check. */
+    public void zetThuis(BlockPos thuis, int straal, int zone) {
+        this.thuis = thuis.immutable();
+        this.straal = Math.max(2, straal);
+        this.zone = zone;
+    }
+
+    public int zoneIndex() {
+        return zone;
+    }
+
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this) {

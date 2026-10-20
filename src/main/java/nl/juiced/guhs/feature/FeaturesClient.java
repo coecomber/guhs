@@ -120,6 +120,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.snuffelsteiger.client.SnuffelsteigerClient.init(modBus);   // verhalenpad: snuffel-steiger
         nl.juiced.guhs.feature.ringvlucht.client.RingVluchtClient.init(modBus);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
         nl.juiced.guhs.feature.safari.client.SafariClient.init(modBus);   // 1.6.0 Op Safari!
+        nl.juiced.guhs.feature.safari.lobby.client.LobbyClient.init(modBus);   // 1.6.0 Op Safari! S2 (lobby)
     }
 
     private FeaturesClient() {

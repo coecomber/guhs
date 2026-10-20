@@ -248,6 +248,22 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         MOKMIKA(0.9f),
         GUHKINDJE(0.6f),
         // </park-b>
+        // <safari-lobby>
+        /** 1.6.0 Op Safari! (feature/safari/lobby): the lobby's guhs in ranger/work uniform and the eight zone experts. */
+        SAFARI_HOOFDRANGER(1.05f),
+        SAFARI_FOTOGRAAF(1.0f),
+        SAFARI_VERZORGER(1.0f),
+        SAFARI_VERKOPER(1.0f),
+        SAFARI_LODGEBEHEERDER(1.0f),
+        SAFARI_EXPERT_SAVANNE(1.0f),
+        SAFARI_EXPERT_DELTA(1.0f),
+        SAFARI_EXPERT_REGENWOUD(1.0f),
+        SAFARI_EXPERT_BAMBOE(1.0f),
+        SAFARI_EXPERT_IJSKUST(1.0f),
+        SAFARI_EXPERT_OERTIJD(1.0f),
+        SAFARI_EXPERT_EUROPA(1.0f),
+        SAFARI_EXPERT_AUSTRALIE(1.0f),
+        // </safari-lobby>
         ;
 
         public final float scale;

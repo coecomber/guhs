@@ -98,3 +98,26 @@ Merge order: S0 → S6 (assets other slices may reference) → S1 → S2 → S5 
 conflicts are solved at the merge. The park generator (tools/features/safari_park*) stays owned by the park round fixes;
 a slice that needs a block/marker in the park adds a zone hook in a NEW file `tools/features/safari_park/zone_<slice>_*.py`
 and raises nothing (VERSIE is raised at the merge).
+
+### S2 lobby: hooks for the other slices (`nl.juiced.guhs.feature.safari.lobby`)
+- `Rollen.camera` (Supplier<ItemStack>): the camera the fotograaf/welcome hands out. Default: the first existing item of
+  `guhs:safari_camera`, `guhs:safaricamera`, `guhs:camera`. S1 may set its own supplier.
+- `Rollen.haak(npcId, (npc, player) -> handled)`: runs before a lobby character's own talk (npc ids: `hoofdranger`,
+  `fotograaf`, `verzorger`, `verkoper`, `lodgebeheerder`, `expert_<zone>`). S4 hangs its quests on `hoofdranger`.
+- `SafariLobby.VROEGE_VOGEL` (`"vroege_vogel"`): a SafariSpeler flag set when waking up in a lodge hut. S1 doubles the
+  first photo of the day and clears it.
+- Giftshop (`SafariWinkel`):
+  - `data/guhs/safari/winkel.json` (written by tools/features/safari_lobby.py WINKEL) lists items by registry id; an
+    entry whose item does not exist is hidden. Ids promised for S6: `guhs:safari_hoed`, `guhs:safari_verrekijker`,
+    `guhs:safari_hoedje`, `guhs:kaki_vestje`, `guhs:rangerpet`, `guhs:safarivoer`, `guhs:rieten_dak`, `guhs:bamboewand`,
+    `guhs:safarihek`, `guhs:dierentuinbordje`, `guhs:safari_poster`, `guhs:safari_schilderij` (rename freely in WINKEL).
+  - `SafariWinkel.aanbod(id)...registreer()`: an offer with its own delivery.
+  - `SafariWinkel.borden` (Function<soort, ItemStack>): the board item per species (S5). Default `guhs:verblijfsbord_<soort>`
+    or `guhs:verblijfsbord`. The shop shows one board per dex species (price by soorten.json "bord": 100/175/300) and
+    calls `SafariSpeler.bordGekocht` itself.
+  - The zone experts also give `guhs:safari_schilderij_<zone>` (or `guhs:safari_zoneschilderij_<zone>`) when S6 makes it.
+- `SafariDier.speelActie(actie, ticks)`, `SafariDier.zetThuis(pos, straal, zone)`, `SafariDier.zoneIndex()` (added for
+  the aaihoek; usable by S3/S5).
+- Lobby spots: `data/guhs/safari/lobby.json` from `tools/features/safari_park/zone_s2_lobby.py` (also puts a bed in the
+  five lodge huts: re-stamp needed, raise VERSIE at the merge).
+- Visitor guhs: wild `GuhEntity` with tag `guhs_safari_bezoeker` (can not be picked up/tamed), 8 around the square.
