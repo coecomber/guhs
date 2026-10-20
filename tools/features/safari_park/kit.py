@@ -327,7 +327,7 @@ class Park:
         path = os.path.join(root, OUT_STRUCT, f"park_{tx}_{tz}.nbt")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "wb") as f:
-            f.write(gzip.compress(data, 6))
+            f.write(gzip.compress(data, 6, mtime=0))   # mtime 0: identical park = identical files (no git churn)
         return path, n
 
     def schrijf(self, root):
