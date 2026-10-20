@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:safari_speelbal"
+  }
+}

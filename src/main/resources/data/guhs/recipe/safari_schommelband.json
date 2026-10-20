@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    " S ",
+    " K "
+  ],
+  "key": {
+    "L": "#minecraft:logs",
+    "S": "minecraft:string",
+    "K": "minecraft:black_dye"
+  },
+  "result": {
+    "id": "guhs:safari_schommelband"
+  }
+}

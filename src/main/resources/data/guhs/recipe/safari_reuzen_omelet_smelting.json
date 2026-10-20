@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "ingredient": "guhs:safari_reuzen_ei",
+  "result": {
+    "id": "guhs:safari_reuzen_omelet"
+  },
+  "experience": 0.5,
+  "cookingtime": 200
+}
