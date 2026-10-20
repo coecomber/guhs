@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_grote_trek",
+  "width": 4,
+  "height": 2,
+  "title": {
+    "translate": "painting.guhs.safari_grote_trek.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

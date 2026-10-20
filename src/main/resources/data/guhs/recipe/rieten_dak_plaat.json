@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD"
+  ],
+  "key": {
+    "D": "guhs:rieten_dak"
+  },
+  "result": {
+    "id": "guhs:rieten_dak_plaat",
+    "count": 6
+  }
+}

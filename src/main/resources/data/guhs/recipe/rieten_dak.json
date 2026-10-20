@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HW",
+    "WH"
+  ],
+  "key": {
+    "H": "minecraft:hay_block",
+    "W": "minecraft:wheat"
+  },
+  "result": {
+    "id": "guhs:rieten_dak",
+    "count": 4
+  }
+}

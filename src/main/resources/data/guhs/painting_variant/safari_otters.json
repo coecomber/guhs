@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_otters",
+  "width": 2,
+  "height": 1,
+  "title": {
+    "translate": "painting.guhs.safari_otters.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

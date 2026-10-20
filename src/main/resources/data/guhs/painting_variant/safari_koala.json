@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_koala",
+  "width": 1,
+  "height": 1,
+  "title": {
+    "translate": "painting.guhs.safari_koala.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

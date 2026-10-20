@@ -2,6 +2,20 @@
   "replace": false,
   "values": [
     "guhs:guh_stapel",
-    "guhs:vadsigheidsniveau"
+    "guhs:vadsigheidsniveau",
+    "guhs:safari_rode_panda",
+    "guhs:safari_pinguin",
+    "guhs:safari_koala",
+    "guhs:safari_stokstaartje",
+    "guhs:safari_giraffe",
+    "guhs:safari_flamingo",
+    "guhs:safari_pinguinfamilie",
+    "guhs:safari_otters",
+    "guhs:safari_leeuwenfamilie",
+    "guhs:safari_reuzenpanda",
+    "guhs:safari_savanne",
+    "guhs:safari_regenwoud",
+    "guhs:safari_olifant",
+    "guhs:safari_grote_trek"
   ]
 }

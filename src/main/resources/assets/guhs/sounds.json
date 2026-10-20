@@ -5365,5 +5365,345 @@
       }
     ],
     "subtitle": "subtitles.guhs.einde2_sp_audio.stinger.lach"
+  },
+  "safari.dier.grote_kat": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/grote_kat1"
+      },
+      {
+        "name": "guhs:safari/dier/grote_kat2"
+      },
+      {
+        "name": "guhs:safari/dier/grote_kat3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.grote_kat"
+  },
+  "safari.dier.olifant": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/olifant1"
+      },
+      {
+        "name": "guhs:safari/dier/olifant2"
+      },
+      {
+        "name": "guhs:safari/dier/olifant3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.olifant"
+  },
+  "safari.dier.grazer": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/grazer1"
+      },
+      {
+        "name": "guhs:safari/dier/grazer2"
+      },
+      {
+        "name": "guhs:safari/dier/grazer3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.grazer"
+  },
+  "safari.dier.klein": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/klein1"
+      },
+      {
+        "name": "guhs:safari/dier/klein2"
+      },
+      {
+        "name": "guhs:safari/dier/klein3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.klein"
+  },
+  "safari.dier.vogel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/vogel1"
+      },
+      {
+        "name": "guhs:safari/dier/vogel2"
+      },
+      {
+        "name": "guhs:safari/dier/vogel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.vogel"
+  },
+  "safari.dier.groot_vogel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/groot_vogel1"
+      },
+      {
+        "name": "guhs:safari/dier/groot_vogel2"
+      },
+      {
+        "name": "guhs:safari/dier/groot_vogel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.groot_vogel"
+  },
+  "safari.dier.pinguin": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/pinguin1"
+      },
+      {
+        "name": "guhs:safari/dier/pinguin2"
+      },
+      {
+        "name": "guhs:safari/dier/pinguin3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.pinguin"
+  },
+  "safari.dier.zee": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/zee1"
+      },
+      {
+        "name": "guhs:safari/dier/zee2"
+      },
+      {
+        "name": "guhs:safari/dier/zee3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.zee"
+  },
+  "safari.dier.beer": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/beer1"
+      },
+      {
+        "name": "guhs:safari/dier/beer2"
+      },
+      {
+        "name": "guhs:safari/dier/beer3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.beer"
+  },
+  "safari.dier.aap": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/aap1"
+      },
+      {
+        "name": "guhs:safari/dier/aap2"
+      },
+      {
+        "name": "guhs:safari/dier/aap3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.aap"
+  },
+  "safari.dier.reptiel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/reptiel1"
+      },
+      {
+        "name": "guhs:safari/dier/reptiel2"
+      },
+      {
+        "name": "guhs:safari/dier/reptiel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.reptiel"
+  },
+  "safari.dier.nijlpaard": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/nijlpaard1"
+      },
+      {
+        "name": "guhs:safari/dier/nijlpaard2"
+      },
+      {
+        "name": "guhs:safari/dier/nijlpaard3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.nijlpaard"
+  },
+  "safari.dier.geit": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/geit1"
+      },
+      {
+        "name": "guhs:safari/dier/geit2"
+      },
+      {
+        "name": "guhs:safari/dier/geit3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.geit"
+  },
+  "safari.dier.ezel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/ezel1"
+      },
+      {
+        "name": "guhs:safari/dier/ezel2"
+      },
+      {
+        "name": "guhs:safari/dier/ezel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.ezel"
+  },
+  "safari.dier.cavia": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/cavia1"
+      },
+      {
+        "name": "guhs:safari/dier/cavia2"
+      },
+      {
+        "name": "guhs:safari/dier/cavia3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.cavia"
+  },
+  "safari.sfeer.savanne": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/savanne",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.delta": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/delta",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.regenwoud": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/regenwoud",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.bamboe": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/bamboe",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.ijskust": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/ijskust",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.oertijd": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/oertijd",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.europa": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/europa",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.australie": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/australie",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.entree": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/entree",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.muziek.lobby": {
+    "sounds": [
+      {
+        "name": "guhs:safari/muziek_lobby",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.muziek"
+  },
+  "safari.camera": {
+    "sounds": [
+      {
+        "name": "guhs:safari/camera"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.camera"
+  },
+  "safari.munt": {
+    "sounds": [
+      {
+        "name": "guhs:safari/munt"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.munt"
+  },
+  "safari.truck.motor": {
+    "sounds": [
+      {
+        "name": "guhs:safari/truck_motor"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.truck.motor"
+  },
+  "safari.truck.toeter": {
+    "sounds": [
+      {
+        "name": "guhs:safari/truck_toeter"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.truck.toeter"
+  },
+  "safari.kano": {
+    "sounds": [
+      {
+        "name": "guhs:safari/kano"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.kano"
   }
 }

@@ -17,7 +17,8 @@
   ],
   "snelheid": 0.22,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grote_kat"
  },
  "luipaard": {
   "zone": "savanne",
@@ -40,7 +41,8 @@
   ],
   "snelheid": 0.24,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grote_kat"
  },
  "olifant": {
   "zone": "savanne",
@@ -63,7 +65,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.olifant"
  },
  "neushoorn": {
   "zone": "savanne",
@@ -83,7 +86,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grazer"
  },
  "kafferbuffel": {
   "zone": "savanne",
@@ -105,7 +109,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.grazer"
  },
  "dikdik": {
   "zone": "savanne",
@@ -127,7 +132,8 @@
   ],
   "snelheid": 0.28,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.klein"
  },
  "giraffe": {
   "zone": "savanne",
@@ -149,7 +155,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grazer"
  },
  "zebra": {
   "zone": "savanne",
@@ -171,7 +178,8 @@
   ],
   "snelheid": 0.24,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.grazer"
  },
  "stokstaartje": {
   "zone": "savanne",
@@ -196,6 +204,7 @@
   "snelheid": 0.26,
   "glow": false,
   "bord": "gewoon",
+  "geluid": "safari.dier.klein",
   "idle_mix": {
    "wacht": 0.7
   }
@@ -218,7 +227,8 @@
   ],
   "snelheid": 0.3,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grote_kat"
  },
  "struisvogel": {
   "zone": "savanne",
@@ -243,7 +253,8 @@
   ],
   "snelheid": 0.3,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.groot_vogel"
  },
  "zeekoe": {
   "zone": "delta",
@@ -266,7 +277,8 @@
   ],
   "snelheid": 0.12,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.zee"
  },
  "nijlpaard": {
   "zone": "delta",
@@ -290,7 +302,8 @@
   ],
   "snelheid": 0.17,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.nijlpaard"
  },
  "flamingo": {
   "zone": "delta",
@@ -313,7 +326,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.groot_vogel"
  },
  "capibara": {
   "zone": "delta",
@@ -335,7 +349,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein"
  },
  "krokodil": {
   "zone": "delta",
@@ -358,7 +373,8 @@
   ],
   "snelheid": 0.15,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.reptiel"
  },
  "rode_panda": {
   "zone": "bamboe",
@@ -381,7 +397,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.klein"
  },
  "reuzenpanda": {
   "zone": "bamboe",
@@ -401,7 +418,8 @@
   ],
   "snelheid": 0.15,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.beer"
  },
  "gibbon": {
   "zone": "bamboe",
@@ -426,7 +444,8 @@
   ],
   "snelheid": 0.22,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.aap"
  },
  "luiaard": {
   "zone": "regenwoud",
@@ -451,7 +470,8 @@
   ],
   "snelheid": 0.06,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.aap"
  },
  "okapi": {
   "zone": "regenwoud",
@@ -474,7 +494,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.grazer"
  },
  "orang_oetan": {
   "zone": "regenwoud",
@@ -496,7 +517,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.aap"
  },
  "toekan": {
   "zone": "regenwoud",
@@ -520,7 +542,8 @@
   ],
   "snelheid": 0.22,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.vogel"
  },
  "gekko": {
   "zone": "regenwoud",
@@ -544,7 +567,8 @@
   ],
   "snelheid": 0.22,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel"
  },
  "glimworm": {
   "zone": "regenwoud",
@@ -569,7 +593,8 @@
   ],
   "snelheid": 0.08,
   "glow": true,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel"
  },
  "pinguin": {
   "zone": "ijskust",
@@ -592,7 +617,8 @@
   ],
   "snelheid": 0.16,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.pinguin"
  },
  "ijsbeer": {
   "zone": "ijskust",
@@ -614,7 +640,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.beer"
  },
  "zeehond": {
   "zone": "ijskust",
@@ -638,7 +665,8 @@
   ],
   "snelheid": 0.14,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.zee"
  },
  "narwal": {
   "zone": "ijskust",
@@ -663,7 +691,8 @@
   ],
   "snelheid": 0.16,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.zee"
  },
  "octopus": {
   "zone": "ijskust",
@@ -688,7 +717,8 @@
   ],
   "snelheid": 0.12,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.zee"
  },
  "sabeltandtijger": {
   "zone": "oertijd",
@@ -711,7 +741,8 @@
   ],
   "snelheid": 0.24,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.grote_kat"
  },
  "mammoet": {
   "zone": "oertijd",
@@ -733,7 +764,8 @@
   ],
   "snelheid": 0.17,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.olifant"
  },
  "wolharige_neushoorn": {
   "zone": "oertijd",
@@ -753,7 +785,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.grazer"
  },
  "bever": {
   "zone": "europa",
@@ -777,7 +810,8 @@
   ],
   "snelheid": 0.17,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.klein"
  },
  "vuursalamander": {
   "zone": "europa",
@@ -801,7 +835,8 @@
   ],
   "snelheid": 0.1,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.reptiel"
  },
  "egel": {
   "zone": "europa",
@@ -825,7 +860,8 @@
   ],
   "snelheid": 0.16,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein"
  },
  "otter": {
   "zone": "europa",
@@ -848,7 +884,8 @@
   ],
   "snelheid": 0.22,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein"
  },
  "das": {
   "zone": "europa",
@@ -872,7 +909,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.klein"
  },
  "edelhert": {
   "zone": "europa",
@@ -894,7 +932,8 @@
   ],
   "snelheid": 0.24,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.grazer"
  },
  "ooievaar": {
   "zone": "europa",
@@ -919,7 +958,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.groot_vogel"
  },
  "specht": {
   "zone": "europa",
@@ -944,7 +984,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.vogel"
  },
  "koala": {
   "zone": "australie",
@@ -967,7 +1008,8 @@
   ],
   "snelheid": 0.1,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.beer"
  },
  "kangoeroe": {
   "zone": "australie",
@@ -989,7 +1031,8 @@
   ],
   "snelheid": 0.28,
   "glow": false,
-  "bord": "gewoon"
+  "bord": "gewoon",
+  "geluid": "safari.dier.grazer"
  },
  "wombat": {
   "zone": "australie",
@@ -1011,7 +1054,8 @@
   ],
   "snelheid": 0.16,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.klein"
  },
  "quokka": {
   "zone": "australie",
@@ -1034,7 +1078,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "zeldzaam"
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.klein"
  },
  "prieelvogel": {
   "zone": "australie",
@@ -1058,7 +1103,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": "middel"
+  "bord": "middel",
+  "geluid": "safari.dier.vogel"
  },
  "gouden_dikdik": {
   "zone": null,
@@ -1080,7 +1126,8 @@
   ],
   "snelheid": 0.28,
   "glow": false,
-  "bord": null
+  "bord": null,
+  "geluid": "safari.dier.klein"
  },
  "geitje": {
   "zone": "entree",
@@ -1103,7 +1150,8 @@
   ],
   "snelheid": 0.2,
   "glow": false,
-  "bord": null
+  "bord": null,
+  "geluid": "safari.dier.geit"
  },
  "alpaca": {
   "zone": "entree",
@@ -1126,7 +1174,8 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": null
+  "bord": null,
+  "geluid": "safari.dier.geit"
  },
  "cavia": {
   "zone": "entree",
@@ -1149,7 +1198,8 @@
   ],
   "snelheid": 0.16,
   "glow": false,
-  "bord": null
+  "bord": null,
+  "geluid": "safari.dier.cavia"
  },
  "ezeltje": {
   "zone": "entree",
@@ -1172,6 +1222,7 @@
   ],
   "snelheid": 0.18,
   "glow": false,
-  "bord": null
+  "bord": null,
+  "geluid": "safari.dier.ezel"
  }
 }

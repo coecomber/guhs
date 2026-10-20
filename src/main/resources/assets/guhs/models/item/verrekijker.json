@@ -1,0 +1,172 @@
+{
+  "textures": {
+    "z": "guhs:item/verrekijker_zwart",
+    "l": "guhs:item/verrekijker_lens",
+    "particle": "guhs:item/verrekijker_zwart"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        6,
+        5
+      ],
+      "to": [
+        7,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#l"
+        },
+        "south": {
+          "texture": "#l"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        6,
+        5
+      ],
+      "to": [
+        12,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#l"
+        },
+        "south": {
+          "texture": "#l"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        7,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "scale": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -20,
+        0
+      ],
+      "translation": [
+        1,
+        1,
+        0
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "fixed": {
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:wheat",
+    "minecraft:carrot",
+    "minecraft:wheat_seeds"
+  ],
+  "result": {
+    "id": "guhs:safarivoer",
+    "count": 4
+  }
+}

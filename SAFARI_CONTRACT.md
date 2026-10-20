@@ -98,3 +98,33 @@ Merge order: S0 → S6 (assets other slices may reference) → S1 → S2 → S5 
 conflicts are solved at the merge. The park generator (tools/features/safari_park*) stays owned by the park round fixes;
 a slice that needs a block/marker in the park adds a zone hook in a NEW file `tools/features/safari_park/zone_<slice>_*.py`
 and raises nothing (VERSIE is raised at the merge).
+
+### S6 assets (ids the other slices use)
+Java: `nl.juiced.guhs.feature.safari.spullen` (`SafariSpullen`, `SafariGeluid`, `DunBlok`, client `SafariSfeer`).
+- **Sounds** (`SafariGeluid`, events `guhs:<name>`):
+  - `safari.dier.<groep>`: per-species calls; every species plays its own via soorten.json `"geluid"` (SafariDier ambient).
+    Groups: grote_kat, olifant, grazer, klein, vogel, groot_vogel, pinguin, zee, beer, aap, reptiel, nijlpaard, geit, ezel, cavia.
+  - `safari.sfeer.<zone>` (savanne, delta, regenwoud, bamboe, ijskust, oertijd, europa, australie, entree): played by the
+    client `SafariSfeer` from the biome under the player. S3 does NOT need to play ambience, only weather/particles.
+  - `safari.muziek.lobby`: played by `SafariSfeer` in the entree zone.
+  - `safari.camera` (S1), `safari.munt` (S0 may switch its "+n" sound to it), `safari.truck.motor` (loop) +
+    `safari.truck.toeter` (S3), `safari.kano` (S3).
+  - Java holders: `SafariGeluid.CAMERA/MUNT/TRUCK_MOTOR/TRUCK_TOETER/KANO/MUZIEK_LOBBY`, `SafariGeluid.DIER.get(groep)`,
+    `SafariGeluid.SFEER.get(zone)`, `SafariGeluid.voorSoort(soort)`.
+- **Items**:
+  - `guhs:safarivoer` (tag `#guhs:safarivoer`, S5 home-animal feeding counts double);
+  - `guhs:safarihoed` (player hat, head slot);
+  - `guhs:verrekijker` (zooms like a spyglass; SpyglassItem).
+- **Guh clothes**: `GuhClothes.SAFARI_HOEDJE`, `SAFARI_RANGERPET`, `SAFARI_VESTJE`, `SAFARI_VERREKIJKER` (items `guhs:safari_hoedje`,
+  `safari_rangerpet`, `safari_vestje`, `safari_verrekijker`; KledingBronnen source `safari`). S2 dresses the visitor guhs and
+  NPCs with them, and sells them.
+- **Blocks**: `guhs:rieten_dak`, `rieten_dak_trap`, `rieten_dak_plaat`, `bamboewand`, `bamboe_omheining`, `safari_acaciaplanken`,
+  `dierentuinbordje` (`SafariSpullen.*`, all craftable; S2 sells them too).
+- **Paintings**: painting variants `guhs:safari_<naam>` (placeable, title with the size, e.g. "Rode panda (1×1)"):
+  rode_panda, pinguin, koala, stokstaartje (1×1), giraffe, flamingo (1×2), pinguinfamilie, otters (2×1), leeuwenfamilie,
+  reuzenpanda (2×2), savanne, regenwoud (3×2), olifant (3×3), grote_trek (4×2). S2 sells a painting item with the
+  `minecraft:painting/variant` component.
+- **Dierpatronen** (later pattern brush): PNGs in `tools/features/safari_patronen/` only.
+- **Generators**:
+  - `tools/features/safari_blokken.py` (make_resources);
+  - by hand: `tools/features/safari_geluid.py` (OGGs) and `safari_schilderijen.py` (painting PNGs).

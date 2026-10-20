@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_regenwoud",
+  "width": 3,
+  "height": 2,
+  "title": {
+    "translate": "painting.guhs.safari_regenwoud.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

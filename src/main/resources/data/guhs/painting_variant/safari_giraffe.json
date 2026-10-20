@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_giraffe",
+  "width": 1,
+  "height": 2,
+  "title": {
+    "translate": "painting.guhs.safari_giraffe.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}
