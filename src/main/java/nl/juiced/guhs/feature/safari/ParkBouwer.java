@@ -30,7 +30,7 @@ import org.slf4j.Logger;
  */
 public final class ParkBouwer {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final int PAUZE = 5;
+    private static final int PAUZE = 40;   // (a tile takes ~1 s; the server runs normally in between)
     private static int wacht;
 
     public static Identifier template(int tx, int tz) {
