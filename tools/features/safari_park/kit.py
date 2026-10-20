@@ -10,6 +10,7 @@ clears the box before a re-stamp). Fences, iron bars and gates get their connect
 (fix_connections) before writing, because the stamp places blocks without neighbour updates.
 """
 import gzip
+import json
 import math
 import os
 import struct
@@ -309,6 +310,25 @@ class Park:
         xs, ys, zs = np.nonzero(box)
         ids = box[xs, ys, zs]
         uniq, inv = np.unique(ids, return_inverse=True)
+        # blocks with a block entity (sign texts) get their own compound with an "nbt" tag, after the plain ones
+        be = {(x - x0, y, z - z0): payload for (x, y, z), payload in getattr(self, "block_nbt", {}).items()
+              if x0 <= x < x0 + TEGEL and z0 <= z < z0 + TEGEL}
+        extra = b""
+        n_be = 0
+        if be:
+            sleutel = xs.astype(np.int64) * 1_000_000 + ys.astype(np.int64) * 1000 + zs.astype(np.int64)
+            gezocht = np.array([a * 1_000_000 + b * 1000 + c for a, b, c in be], dtype=np.int64)
+            treffers = np.nonzero(np.isin(sleutel, gezocht))[0]
+            plain = np.ones(len(xs), dtype=bool)
+            for i in treffers:
+                plain[i] = False
+                p = (int(xs[i]), int(ys[i]), int(zs[i]))
+                extra += (b"\x09" + _name("pos") + b"\x03" + struct.pack(">iiii", 3, *p)
+                          + b"\x03" + _name("state") + struct.pack(">i", int(inv[i]))
+                          + b"\x0a" + _name("nbt") + be[p] + b"\x00"
+                          + b"\x00")
+                n_be += 1
+            xs, ys, zs, inv = xs[plain], ys[plain], zs[plain], inv[plain]
         n = len(xs)
         # every block compound has the same 36-byte layout: pos (list of 3 ints) + state (int) + end
         rec = np.zeros(n, dtype=[("t1", "u1"), ("l1", ">u2"), ("n1", "S3"), ("lt", "u1"), ("ln", ">i4"),
@@ -317,7 +337,7 @@ class Park:
         rec["t1"], rec["l1"], rec["n1"], rec["lt"], rec["ln"] = 9, 3, b"pos", 3, 3
         rec["x"], rec["y"], rec["z"] = xs, ys, zs
         rec["t2"], rec["l2"], rec["n2"], rec["s"] = 3, 5, b"state", inv
-        blocks = b"\x0a" + struct.pack(">i", n) + rec.tobytes()
+        blocks = b"\x0a" + struct.pack(">i", n + n_be) + rec.tobytes() + extra
         body = (b"\x03" + _name("DataVersion") + struct.pack(">i", DATA_VERSION)
                 + b"\x09" + _name("size") + b"\x03" + struct.pack(">iiii", 3, TEGEL, H, TEGEL)
                 + b"\x09" + _name("palette") + self.palette_nbt(uniq)
@@ -330,13 +350,34 @@ class Park:
             f.write(gzip.compress(data, 6, mtime=0))   # mtime 0: identical park = identical files (no git churn)
         return path, n
 
+    def bord_nbt(self, x, y, z, regels):
+        """Sign text (front and back) for the sign at x,y,z: max 4 lines, as plain strings (checked in game on 26.1.2)."""
+        regels = (list(regels) + ["", "", "", ""])[:4]
+
+        def kant(lines):
+            msgs = b"".join(_strval(t) for t in lines)   # plain strings: in 26.1 a string IS a literal text component (the DataFixer left JSON strings as raw text)
+            return (b"\x09" + _name("messages") + b"\x08" + struct.pack(">i", 4) + msgs
+                    + _str_tag("color", "black") + b"\x01" + _name("has_glowing_text") + b"\x00" + b"\x00")
+        payload = (b"\x0a" + _name("front_text") + kant(regels) + b"\x0a" + _name("back_text") + kant(regels)
+                   + b"\x01" + _name("is_waxed") + b"\x01")
+        if not hasattr(self, "block_nbt"):
+            self.block_nbt = {}
+        self.block_nbt[(int(x), int(y), int(z))] = payload
+
     def schrijf(self, root):
+        for b in getattr(self, "bordjes", []):
+            self.bord_nbt(*b["pos"], b["tekst"])
         self.fix_connections()
         stats = []
         for tx in range(TEGELS):
             for tz in range(TEGELS):
                 stats.append(self.schrijf_tegel(tx, tz, root))
         return stats
+
+
+def _strval(s):
+    b = s.encode("utf-8")
+    return struct.pack(">H", len(b)) + b
 
 
 def _name(s):
