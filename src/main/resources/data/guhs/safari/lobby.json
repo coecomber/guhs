@@ -1,0 +1,301 @@
+{
+ "npcs": [
+  {
+   "id": "verkoper",
+   "kind": "safari_verkoper",
+   "pos": [
+    178,
+    65,
+    603
+   ],
+   "yaw": -90.0
+  },
+  {
+   "id": "hoofdranger",
+   "kind": "safari_hoofdranger",
+   "pos": [
+    175,
+    65,
+    587
+   ],
+   "yaw": -110.6
+  },
+  {
+   "id": "fotograaf",
+   "kind": "safari_fotograaf",
+   "pos": [
+    198,
+    65,
+    612
+   ],
+   "yaw": 0.0
+  },
+  {
+   "id": "verzorger",
+   "kind": "safari_verzorger",
+   "pos": [
+    238,
+    65,
+    609
+   ],
+   "yaw": 119.7
+  },
+  {
+   "id": "lodgebeheerder",
+   "kind": "safari_lodgebeheerder",
+   "pos": [
+    187,
+    66,
+    622
+   ],
+   "yaw": 50.2
+  },
+  {
+   "id": "expert_savanne",
+   "kind": "safari_expert_savanne",
+   "pos": [
+    193,
+    65,
+    585
+   ],
+   "yaw": 146.3,
+   "zone": "savanne",
+   "balie": [
+    194,
+    65,
+    585
+   ]
+  },
+  {
+   "id": "expert_delta",
+   "kind": "safari_expert_delta",
+   "pos": [
+    191,
+    65,
+    586
+   ],
+   "yaw": 180.0,
+   "zone": "delta",
+   "balie": [
+    191,
+    65,
+    587
+   ]
+  },
+  {
+   "id": "expert_regenwoud",
+   "kind": "safari_expert_regenwoud",
+   "pos": [
+    187,
+    65,
+    585
+   ],
+   "yaw": -126.9,
+   "zone": "regenwoud",
+   "balie": [
+    188,
+    65,
+    585
+   ]
+  },
+  {
+   "id": "expert_bamboe",
+   "kind": "safari_expert_bamboe",
+   "pos": [
+    187,
+    65,
+    582
+   ],
+   "yaw": -90.0,
+   "zone": "bamboe",
+   "balie": [
+    186,
+    65,
+    582
+   ]
+  },
+  {
+   "id": "expert_ijskust",
+   "kind": "safari_expert_ijskust",
+   "pos": [
+    187,
+    65,
+    579
+   ],
+   "yaw": -53.1,
+   "zone": "ijskust",
+   "balie": [
+    188,
+    65,
+    579
+   ]
+  },
+  {
+   "id": "expert_oertijd",
+   "kind": "safari_expert_oertijd",
+   "pos": [
+    191,
+    65,
+    578
+   ],
+   "yaw": 0.0,
+   "zone": "oertijd",
+   "balie": [
+    191,
+    65,
+    577
+   ]
+  },
+  {
+   "id": "expert_europa",
+   "kind": "safari_expert_europa",
+   "pos": [
+    193,
+    65,
+    579
+   ],
+   "yaw": 33.7,
+   "zone": "europa",
+   "balie": [
+    194,
+    65,
+    579
+   ]
+  },
+  {
+   "id": "expert_australie",
+   "kind": "safari_expert_australie",
+   "pos": [
+    195,
+    65,
+    582
+   ],
+   "yaw": 90.0,
+   "zone": "australie",
+   "balie": [
+    196,
+    65,
+    582
+   ]
+  }
+ ],
+ "pennen": [
+  {
+   "soort": "geitje",
+   "min": [
+    231,
+    597
+   ],
+   "max": [
+    236,
+    603
+   ]
+  },
+  {
+   "soort": "alpaca",
+   "min": [
+    257,
+    595
+   ],
+   "max": [
+    262,
+    601
+   ]
+  },
+  {
+   "soort": "cavia",
+   "min": [
+    227,
+    617
+   ],
+   "max": [
+    232,
+    623
+   ]
+  },
+  {
+   "soort": "ezeltje",
+   "min": [
+    243,
+    619
+   ],
+   "max": [
+    248,
+    625
+   ]
+  }
+ ],
+ "alpaca_lus": [
+  [
+   257,
+   605
+  ],
+  [
+   263,
+   604
+  ],
+  [
+   267,
+   609
+  ],
+  [
+   264,
+   617
+  ],
+  [
+   258,
+   619
+  ],
+  [
+   256,
+   612
+  ]
+ ],
+ "lodge": {
+  "min": [
+   155,
+   63,
+   625
+  ],
+  "max": [
+   186,
+   73,
+   646
+  ],
+  "bedden": [
+   [
+    158,
+    68,
+    628
+   ],
+   [
+    168,
+    68,
+    636
+   ],
+   [
+    158,
+    68,
+    638
+   ],
+   [
+    180,
+    68,
+    630
+   ],
+   [
+    178,
+    68,
+    640
+   ]
+  ]
+ },
+ "plein": {
+  "centrum": [
+   205,
+   65,
+   605
+  ],
+  "straal": 21
+ }
+}

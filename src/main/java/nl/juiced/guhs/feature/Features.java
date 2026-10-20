@@ -332,6 +332,7 @@ public final class Features {
         nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
         nl.juiced.guhs.feature.bio.BioFeature.creative(output);   // biomes3
         nl.juiced.guhs.feature.park.ParkFeature.creative(output);   // 1.4.2
+        nl.juiced.guhs.feature.safari.lobby.SafariLobby.creative(output);   // 1.6.0 Op Safari! S2
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.GuhpixelFeature.creative(output);
         // --- bbq2 ---
