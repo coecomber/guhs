@@ -1,0 +1,267 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/olifantenloopband_voet",
+    "voet": "guhs:block/olifantenloopband_voet",
+    "band": "guhs:block/olifantenloopband_band",
+    "knop": "guhs:block/olifantenloopband_knop"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        2,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        2,
+        2
+      ],
+      "to": [
+        15,
+        3,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#band"
+        },
+        "south": {
+          "texture": "#band"
+        },
+        "east": {
+          "texture": "#band"
+        },
+        "west": {
+          "texture": "#band"
+        },
+        "up": {
+          "texture": "#band"
+        },
+        "down": {
+          "texture": "#band"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        1
+      ],
+      "to": [
+        1,
+        4,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        15,
+        2,
+        1
+      ],
+      "to": [
+        16,
+        4,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        3,
+        1
+      ],
+      "to": [
+        2,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        3,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        12,
+        0
+      ],
+      "to": [
+        15,
+        14,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        0
+      ],
+      "to": [
+        10,
+        15,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#knop"
+        },
+        "south": {
+          "texture": "#knop"
+        },
+        "east": {
+          "texture": "#knop"
+        },
+        "west": {
+          "texture": "#knop"
+        },
+        "up": {
+          "texture": "#knop"
+        },
+        "down": {
+          "texture": "#knop"
+        }
+      }
+    }
+  ]
+}

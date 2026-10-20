@@ -10,3 +10,15 @@ Op Safari! (1.6.0) - the park generator: Safaripark Vadse Bergen as 6 x 6 struct
 
 Run from the project root:  python tools/features/safari_park.py [--preview] [--snel]
 """
+
+
+def build(h):
+    """make_resources hook: FEATURES names "safari_park", and the import features.safari_park finds THIS package (it shadows
+    tools/features/safari_park.py), so the hook lives here and runs the generator script (from the project root)."""
+    import importlib.util
+    import os
+    pad = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "safari_park.py")
+    spec = importlib.util.spec_from_file_location("safari_park_generator", pad)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.maak(".")

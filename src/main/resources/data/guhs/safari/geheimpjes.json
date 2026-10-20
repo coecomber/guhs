@@ -1,0 +1,77 @@
+{
+ "geheimpjes": [
+  {
+   "id": "savanne",
+   "zone": "savanne",
+   "pos": [
+    521,
+    63,
+    620
+   ]
+  },
+  {
+   "id": "delta",
+   "zone": "delta",
+   "pos": [
+    603,
+    65,
+    458
+   ]
+  },
+  {
+   "id": "regenwoud",
+   "zone": "regenwoud",
+   "pos": [
+    583,
+    65,
+    278
+   ]
+  },
+  {
+   "id": "bamboe",
+   "zone": "bamboe",
+   "pos": [
+    566,
+    81,
+    152
+   ]
+  },
+  {
+   "id": "ijskust",
+   "zone": "ijskust",
+   "pos": [
+    195,
+    59,
+    182
+   ]
+  },
+  {
+   "id": "oertijd",
+   "zone": "oertijd",
+   "pos": [
+    394,
+    72,
+    170
+   ]
+  },
+  {
+   "id": "europa",
+   "zone": "europa",
+   "pos": [
+    284,
+    65,
+    351
+   ]
+  },
+  {
+   "id": "australie",
+   "zone": "australie",
+   "pos": [
+    298,
+    66,
+    429
+   ]
+  }
+ ],
+ "uitleg": "per zone het geheimpje (S4): rechtsklik op dit blok in het safaripark"
+}

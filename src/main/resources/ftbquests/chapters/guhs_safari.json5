@@ -1,0 +1,477 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_safari",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 42,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_safari.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755486A3E24121B",
+  images: [
+    {
+      height: 3.0,
+      id: "475548AE6580BD97",
+      image: "guhs:textures/ftbquests/guhs_safari/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "4755485B502D411C",
+      image: "guhs:textures/ftbquests/guhs_safari/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "4755488EDD7BA131",
+      image: "guhs:textures/ftbquests/guhs_safari/kop_extra_safari_quests.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+  ],
+  order_index: 13,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548ABBEA09DB2",
+      linked_quest: "4755486E9E523698",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548780A582533",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_safari.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548C2A6DFFE55",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488F98348A74",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548BB24B5BA99",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_eerste_foto",
+          id: "47554810C735CD3A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554872B2062C4D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E729334BD2",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548174D26C1D7",
+      icon: {
+        id: "minecraft:nether_star",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_drie_sterren",
+          id: "4755480F3B4FF232",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483F4AE9402F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B38EA4611D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755481DCDDF52C9",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_dex_10",
+          id: "475548039AB5BF21",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483D8880E4BD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755484D7D6FE493",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548D28F06B055",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_dex_25",
+          id: "47554818C6168D40",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ACB26D5036",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554855BACFA1D6",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548246548F7DC",
+      icon: {
+        id: "minecraft:map",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_zone_vol",
+          id: "4755482AF9FEEAF3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EF44221480",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483E90BCDD1E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548B2A168B47B",
+      icon: {
+        id: "guhs:gouden_safaricamera",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_spoorzoeker",
+          id: "47554893F8D74AD7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481EC8B7028B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481A086CDE94",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548B969EAD2F7",
+      icon: {
+        id: "guhs:gouden_safaricamera",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_dex_vol",
+          id: "4755484CD51E6A25",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554849F9222F8F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483820D33DB8",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "4755481736717BEB",
+      icon: {
+        id: "minecraft:chest",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_geheimpje",
+          id: "47554859689ECD0E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548052B73B772",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B4BC5FFAED",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+      shape: "circle",
+    },
+    {
+      id: "475548FD3C08F646",
+      icon: {
+        id: "guhs:geheimpjes_trofee",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_geheimpjes_alle",
+          id: "475548ABEEE43B83",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B7D61DA3F2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755485856119907",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 7.5,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "475548D4CE0B5125",
+      icon: {
+        id: "guhs:zebrapakje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_vermomde_guh",
+          id: "475548521340D01D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487639FBC2A6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CF985377A3",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755488A3766AA63",
+      icon: {
+        id: "guhs:olifantenloopband",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_vahe_olifant",
+          id: "4755486AF48F8FD1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554832A1246E50",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755485C2614A7DA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548692580E122",
+      icon: {
+        id: "minecraft:wheat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/safari_aaihoek",
+          id: "475548ABAAF700DF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B72F673807",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482D45BD020A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 8.0625,
+    },
+  ],
+}

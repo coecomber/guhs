@@ -170,3 +170,17 @@ Java: `nl.juiced.guhs.feature.safari.spullen` (`SafariSpullen`, `SafariGeluid`, 
   - S5 keeps ostrich RIDING at home and the egg). Paths: `assets/guhs/safari/{route,kano,kabelbaan,race,sfeer}.json`
   (written by `tools/features/safari_park/zone_s3_rit.py` + `route_data.py`), read by `rit.RitData` on both sides.
 - Visitor guhs on the truck wear `GuhClothes.SAFARIHOEDJE`/`VERREKIJKER` when S6 adds them (looked up by name), else stand-ins.
+### S4 (quests & extra's) - hooks for the other slices (feature/safari/quests)
+- S2 head ranger: on click call `SafariQuests.hoofdranger(player)` (true = it spoke about de vermomde guh). S2 aaihoek: after a
+  chore call `SafariQuests.aaihoekKlusje(player)` (FTB quest "Aaien maar!").
+- Building help (bever helpers): `SafariQuests.beverdamGebouwd(player)` per finished dam (5 = title Beverbaas).
+- S6 verrekijker: set `SafariQuests.VERREKIJKER = p -> ...` (client; a vanilla spyglass always lights the pootafdrukken).
+- S5 giftshop/board: the full dex gives `guhs:bordbon_gouden_dikdik` (redeem it for the Gouden dikdik's board) and the
+  flags `safarikoning` / `gouden_camera` (`SafariSpeler.vlag`); S1 may give the golden camera's photos golden frames.
+- Park: `tools/features/safari_park/zone_zz_s4.py` builds Dikkie's stal + olifantenloopband, places the pootafdrukken on
+  the trails to the hiders and writes `geheimpjes.json` (8, one per zone) and `quests.json`.
+- GuhClothes: ZEBRAPAKJE, PANDAPAKJE, PINGUINPAKJE (marker `<safari_quests>`), saved by number: at the merge they stay
+  AFTER S6's safari clothes.
+- Shared tool fixes: taal.py skips feature/safari (the safari generators write their own command texts, like guhpixel);
+  kleding.py: markers starting with "safari" register their own clothes sources.
+- FTB: chapter `guhs_safari` (make_ftbquests.py CHAPTERS, last; CHAPTER_VERSION 42), quests in features/safari_quests.py.

@@ -1,0 +1,170 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/trofee_voet",
+    "voet": "guhs:block/trofee_voet",
+    "goud": "guhs:block/trofee_goud"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        3,
+        6
+      ],
+      "to": [
+        10,
+        7,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "down": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        7,
+        3
+      ],
+      "to": [
+        13,
+        14,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "down": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        9,
+        7
+      ],
+      "to": [
+        3,
+        13,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "down": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        9,
+        7
+      ],
+      "to": [
+        15,
+        13,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "down": {
+          "texture": "#goud"
+        }
+      }
+    }
+  ]
+}

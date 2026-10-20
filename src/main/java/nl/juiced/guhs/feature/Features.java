@@ -373,6 +373,7 @@ public final class Features {
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.creative(output);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
         nl.juiced.guhs.feature.safari.spullen.SafariSpullen.creative(output);   // 1.6.0 Op Safari! S6: safari blocks + items
         nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.creative(output);   // 1.6.0 Op Safari! S5: verblijfsborden, toys
+        nl.juiced.guhs.feature.safari.quests.SafariQuests.creative(output);   // 1.6.0 Op Safari! S4
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
