@@ -174,6 +174,7 @@ class Park:
             cx, cz = x, z
             for i in range(1, h + 1):
                 if i == h - 2:
+                    self.set(cx + dx, y + i - 1, cz + dz, self.log("acacia"))   # the bend: no diagonal-only joint
                     cx, cz = cx + dx, cz + dz
                 self.set(cx, y + i, cz, self.log("acacia"))
             top = y + h
@@ -274,22 +275,9 @@ class Park:
 
     # --- fences -----------------------------------------------------------------------------------------------------
     def fix_connections(self):
-        """Fences / iron bars connect to their own family, posts (logs) and gates; gates face along the line."""
-        fam_ids = {i for i, s in enumerate(self.pal) if split_state(s)[0] in FENCE_FAMILY}
-        verbind = {i for i, s in enumerate(self.pal)
-                   if split_state(s)[0] in FENCE_FAMILY or split_state(s)[0].endswith(("_log", "_fence_gate"))}
-        if not fam_ids:
-            return
-        lut = np.zeros(len(self.pal) + 64, bool)
-        lut[list(verbind)] = True
-        xs, ys, zs = np.nonzero(np.isin(self.v, list(fam_ids)))
-        for x, y, z in zip(xs, ys, zs):
-            name = split_state(self.pal[self.v[x, y, z]])[0]
-            con = {}
-            for k, (dx, dz) in (("north", (0, -1)), ("south", (0, 1)), ("east", (1, 0)), ("west", (-1, 0))):
-                nx, nz = x + dx, z + dz
-                con[k] = "true" if (0 <= nx < W and 0 <= nz < W and lut[self.v[nx, y, nz]]) else "false"
-            self.v[x, y, z] = self.id(state(name, waterlogged="false", **con))
+        """Every fence, wall, pane, bar and gate gets the connections the game computes (controle.verbindingen)."""
+        from . import controle
+        controle.verbindingen(self, True)
 
     # --- export ------------------------------------------------------------------------------------------------------
     def palette_nbt(self, ids):
@@ -364,10 +352,12 @@ class Park:
             self.block_nbt = {}
         self.block_nbt[(int(x), int(y), int(z))] = payload
 
-    def schrijf(self, root):
+    def schrijf(self, root, log=print):
+        """Check + repair (controle.herstel: fences, leaves, support, water, holes...) and write all tiles."""
+        from . import controle
         for b in getattr(self, "bordjes", []):
             self.bord_nbt(*b["pos"], b["tekst"])
-        self.fix_connections()
+        controle.herstel(self, log)
         stats = []
         for tx in range(TEGELS):
             for tz in range(TEGELS):

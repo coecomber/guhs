@@ -308,6 +308,19 @@ def _catmull(punten, n=40):
     return uit
 
 
+DEK_Y = WATER_Y + 4      # bridge deck: y 63..65 stay free above the water (the canoe route)
+
+
+def _route_richting(park, x, z):
+    """Direction (dx, dz) of the route line nearest to x,z."""
+    lijn = getattr(park, "route_lijn", None)
+    if not lijn:
+        return (0, 1)
+    i = min(range(len(lijn)), key=lambda k: (lijn[k][0] - x) ** 2 + (lijn[k][1] - z) ** 2)
+    a, b = lijn[max(i - 2, 0)], lijn[min(i + 2, len(lijn) - 1)]
+    return (b[0] - a[0], b[1] - a[1])
+
+
 def route(park):
     """Footpath = truck route (3 wide): through the zone centres in plattegrond C's order, gates where it crosses a
     fence, a plank bridge with railings over water."""
@@ -338,34 +351,68 @@ def route(park):
     h = park.hoogte
     padblok = park.id("dirt_path")
     planks = park.id("spruce_planks")
-    xs, zs = np.nonzero(pad)
-    # smooth the path height along its neighbours (no 2-steps)
-    for x, z in zip(xs, zs):
-        if park.water[x, z]:
-            park.v[x, WATER_Y + 1, z] = planks
-            # pillars every few blocks
-            if (x + z) % 5 == 0:
-                for y in range(h[x, z] + 1, WATER_Y + 1):
-                    park.set(x, y, z, "minecraft:spruce_log", axis="y")
-        else:
-            park.v[x, h[x, z], z] = padblok
-            for y in range(h[x, z] + 1, h[x, z] + 4):         # clear anything above
-                park.v[x, y, z] = 0
-    # bridge railings: water cells next to the bridge deck that are not deck themselves
+    slab = park.id(state("spruce_slab", type="bottom", waterlogged="false"))
     deck = pad & park.water
+    # bridges: the deck at DEK_Y leaves 3 free blocks above the water (the canoe route); ramps on both banks climb half a
+    # block per block (a slab step), so walking and the truck never need a jump
+    d_deck = distance_transform_edt(~deck)
+    park.bruggen = []
+    xs, zs = np.nonzero(pad)
+    for x, z in zip(xs, zs):
+        if deck[x, z]:
+            park.v[x, DEK_Y, z] = planks
+            for y in range(DEK_Y + 1, DEK_Y + 4):
+                park.v[x, y, z] = 0
+            # pillars only at the banks (never in the open water the canoes use)
+            oever = any(not park.water[min(max(x + dx, 0), W - 1), min(max(z + dz, 0), W - 1)]
+                        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            if oever:
+                for y in range(h[x, z] + 1, DEK_Y):
+                    park.set(x, y, z, "minecraft:spruce_log", axis="y")
+            continue
+        g = int(h[x, z])
+        s2 = 2 * (DEK_Y + 1) - int(math.floor(d_deck[x, z]))       # ramp surface in half blocks
+        if s2 > 2 * (g + 1):
+            top_vol = s2 // 2 - 1                                  # highest full block
+            for y in range(g + 1, top_vol + 1):
+                park.v[x, y, z] = planks
+            boven = top_vol + 1
+            if s2 % 2:
+                park.v[x, top_vol + 1, z] = slab
+                boven = top_vol + 2
+            for y in range(boven, boven + 3):
+                park.v[x, y, z] = 0
+        else:
+            park.v[x, g, z] = padblok
+            for y in range(g + 1, g + 4):         # clear anything above
+                park.v[x, y, z] = 0
+    # bridge railings: water cells next to the deck that are not deck themselves
     rand = binary_dilation(deck) & ~pad & park.water
     for x, z in zip(*np.nonzero(rand)):
-        park.set(x, WATER_Y + 1, z, "minecraft:spruce_planks")
-        park.set(x, WATER_Y + 2, z, "minecraft:spruce_fence")
+        park.set(x, DEK_Y, z, "minecraft:spruce_planks")
+        park.set(x, DEK_Y + 1, z, "minecraft:spruce_fence")
+    from scipy.ndimage import label as _label
+    lab, n = _label(deck)
+    for i in range(1, n + 1):
+        bx, bz = np.nonzero(lab == i)
+        cx, cz = int(bx.mean()), int(bz.mean())
+        park.bruggen.append((cx, cz, ZONES[int(park.zone_vol[cx, cz])]))
     # gates where the path crosses a fence: the fence cells on the path become gates, the mesh above them goes
     for x, z in zip(*np.nonzero(pad & park.hek & ~park.water)):
         g = h[x, z]
         for y in range(g + 1, g + 7):
             park.v[x, y, z] = 0
-        # direction of the path here: compare with neighbouring path cells
-        ns = (pad[x, z - 1] if z > 0 else False) or (pad[x, z + 1] if z < W - 1 else False)
-        ew = (pad[x - 1, z] if x > 0 else False) or (pad[x + 1, z] if x < W - 1 else False)
-        facing = "north" if ns and not ew else "east"
+        # the gate spans the fence line: a line along x -> facing north/south; along z -> east/west (the path is 3
+        # wide, so the path's own neighbours cannot tell the direction)
+        lijn_x = (x > 0 and park.hek[x - 1, z]) or (x < W - 1 and park.hek[x + 1, z])
+        lijn_z = (z > 0 and park.hek[x, z - 1]) or (z < W - 1 and park.hek[x, z + 1])
+        if lijn_x and not lijn_z:
+            facing = "north"
+        elif lijn_z and not lijn_x:
+            facing = "east"
+        else:
+            rdx, rdz = _route_richting(park, x, z)
+            facing = "north" if abs(rdz) >= abs(rdx) else "east"
         park.set(x, g + 1, z, kit.GATE, facing=facing, in_wall="false", open="false", powered="false")
         park.set(x, g + 4, z, "minecraft:dark_oak_log", axis="x" if facing == "north" else "z")
 
@@ -494,12 +541,17 @@ def begroeiing(park):
                     continue
                 onder = park.get(x, g, z)
                 if soort == "sneeuw":
-                    park.set(x, g + 1, z, "minecraft:snow", layers=1)
+                    if not onder.startswith(("minecraft:ice", "minecraft:packed_ice", "minecraft:blue_ice")):
+                        park.set(x, g + 1, z, "minecraft:snow", layers=1)     # (snow never lies on ice)
                     continue
-                grondig = onder.startswith(("minecraft:grass_block", "minecraft:podzol", "minecraft:moss_block",
-                                            "minecraft:coarse_dirt", "minecraft:rooted_dirt", "minecraft:dirt",
-                                            "minecraft:mud", "minecraft:red_sand", "minecraft:sand"))
-                if not grondig:
+                onder_naam = onder.split("[")[0]
+                aarde = onder_naam in ("minecraft:grass_block", "minecraft:podzol", "minecraft:moss_block",
+                                       "minecraft:coarse_dirt", "minecraft:rooted_dirt", "minecraft:dirt",
+                                       "minecraft:mud")
+                zand = onder_naam in ("minecraft:sand", "minecraft:red_sand")
+                if not aarde and not (zand and soort in ("dor", "riet")):
+                    if zand and soort == "gras":
+                        park.set(x, g + 1, z, "minecraft:dead_bush")     # dry tufts on the sand instead of grass
                     continue
                 if soort == "gras":
                     park.v[x, g + 1, z] = park.id(gras)

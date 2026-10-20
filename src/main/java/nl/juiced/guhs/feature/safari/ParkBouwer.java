@@ -11,6 +11,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.Guhs;
@@ -31,7 +34,10 @@ import org.slf4j.Logger;
 public final class ParkBouwer {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int PAUZE = 40;   // (a tile takes ~1 s; the server runs normally in between)
+    /** Ticks after the last tile when the park is swept once more for items (leaves/water settling right after a stamp). */
+    private static final int NAVEEG = 200;
     private static int wacht;
+    private static int naveeg = -1;
 
     public static Identifier template(int tx, int tz) {
         return Guhs.id("safari/park_" + tx + "_" + tz);
@@ -99,6 +105,12 @@ public final class ParkBouwer {
 
     static void tick(MinecraftServer server) {
         SafariOpslag s = SafariOpslag.get(server);
+        if (naveeg >= 0 && naveeg-- == 0) {
+            ServerLevel l = Safari.level(server);
+            if (l != null) {
+                veeg(l, heelPark());
+            }
+        }
         if (s.bezig == 0) {
             Populatie.tick(server);
             return;
@@ -113,6 +125,8 @@ public final class ParkBouwer {
         }
         int volgende = volgende(s.klaar);
         if (volgende < 0) {
+            veeg(level, heelPark());
+            naveeg = NAVEEG;
             s.gebouwd = s.bezig;
             s.bezig = 0;
             s.klaar = 0;
@@ -126,6 +140,31 @@ public final class ParkBouwer {
         stempelTegel(level, volgende, s.herbouw);
         s.klaar |= 1L << volgende;
         s.setDirty();
+        veeg(level, heelPark());            // items dropped by the previous tiles' settling (should be none)
+    }
+
+    private static AABB heelPark() {
+        return new AABB(0, 0, 0, Safari.MAAT, Safari.HOOGTE, Safari.MAAT);
+    }
+
+    /**
+     * Removes loose items in the box: a stamp places without neighbour updates, but a block the park generator got wrong
+     * (a plant without soil, water touching a torch) can still break on its first tick and drop something. The park
+     * generator's check (tools/features/safari_park/controle.py) keeps that at zero; this is the safety net.
+     */
+    static int veeg(ServerLevel level, AABB doos) {
+        List<ItemEntity> weg = level.getEntitiesOfClass(ItemEntity.class, doos);
+        weg.forEach(Entity::discard);
+        if (!weg.isEmpty()) {
+            StringBuilder wat = new StringBuilder();
+            for (int i = 0; i < Math.min(8, weg.size()); i++) {
+                ItemEntity e = weg.get(i);
+                wat.append(' ').append(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(e.getItem().getItem()))
+                        .append('@').append(e.blockPosition().toShortString());
+            }
+            LOGGER.info("Safari: removed {} loose items after stamping:{}", weg.size(), wat);
+        }
+        return weg.size();
     }
 
     /** The next tile to stamp: the nearest to the entrance that is not done yet (-1: all done). */
@@ -155,10 +194,11 @@ public final class ParkBouwer {
         }
         Identifier id = template(tx, tz);
         if (level.getStructureManager().get(id).isPresent()) {
-            Stempel.plaats(level, id, min);
+            Stempel.plaats(level, id, min);      // flag 2: no neighbour updates, no drops (see Stempel)
         } else {
             plateau(level, min);
         }
+        veeg(level, Stempel.doos(min, maat));
     }
 
     /** The test plateau for one tile (no template yet). */
