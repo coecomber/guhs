@@ -531,6 +531,17 @@ public enum GuhClothes {
     JAPAN_KATTENOORTJES(Slot.OREN, "outfit_oren_balto"),
     JAPAN_STRIKJE(Slot.NECK, "outfit_bowtie"),
     // </bio_bouw_dal>
+    // Op Safari! (1.6.0, slice S6): the safari outfits (giftshop, the visitor guhs; tools/features/safari_blokken.py)
+    // <safari>
+    /** A khaki safari hat with a brown band. */
+    SAFARI_HOEDJE(Slot.HEAD, "outfit_safari_hat", "outfit_safari_hat_band"),
+    /** An olive ranger cap with a golden badge. */
+    SAFARI_RANGERPET(Slot.HEAD, "outfit_ranger_cap", "outfit_ranger_badge"),
+    /** A khaki vest with little pockets. */
+    SAFARI_VESTJE(Slot.BODY, "outfit_safari_vest"),
+    /** Binoculars on a leather strap around the neck. */
+    SAFARI_VERREKIJKER(Slot.NECK, "outfit_binoculars", "outfit_binoculars_strap"),
+    // </safari>
     ;
 
     /**

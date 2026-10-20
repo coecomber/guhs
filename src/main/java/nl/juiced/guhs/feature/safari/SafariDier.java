@@ -403,6 +403,22 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         super.travelInWater(input, baseGravity, isFalling, oldY);
     }
 
+    /** S6: every species its own cute call (soorten.json "geluid"; babies higher, as vanilla does for babies). */
+    @Override
+    protected net.minecraft.sounds.SoundEvent getAmbientSound() {
+        return nl.juiced.guhs.feature.safari.spullen.SafariGeluid.voorSoort(soort());
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        return 300;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.6f;
+    }
+
     @Override
     public boolean canBreatheUnderwater() {
         return true;

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "top": "guhs:block/rieten_dak",
+    "bottom": "guhs:block/rieten_dak",
+    "side": "guhs:block/rieten_dak"
+  }
+}

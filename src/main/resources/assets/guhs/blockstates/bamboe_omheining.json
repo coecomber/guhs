@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/bamboe_omheining"
+    },
+    "facing=east": {
+      "model": "guhs:block/bamboe_omheining",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/bamboe_omheining",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/bamboe_omheining",
+      "y": 270
+    }
+  }
+}

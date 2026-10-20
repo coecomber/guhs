@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:acacia_planks",
+    "minecraft:acacia_planks",
+    "minecraft:acacia_planks",
+    "minecraft:acacia_planks",
+    "minecraft:brown_dye"
+  ],
+  "result": {
+    "id": "guhs:safari_acaciaplanken",
+    "count": 4
+  }
+}

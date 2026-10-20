@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_savanne",
+  "width": 3,
+  "height": 2,
+  "title": {
+    "translate": "painting.guhs.safari_savanne.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

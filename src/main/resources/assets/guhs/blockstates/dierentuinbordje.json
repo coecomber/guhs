@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/dierentuinbordje"
+    },
+    "facing=east": {
+      "model": "guhs:block/dierentuinbordje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/dierentuinbordje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/dierentuinbordje",
+      "y": 270
+    }
+  }
+}

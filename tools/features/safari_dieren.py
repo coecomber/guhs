@@ -47,6 +47,25 @@ MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7",
 # idle_mix = {animation: share}: how much of its standing time a species spends in that animation instead of idle
 # snelheid = movement speed attribute (vanilla scale: 0.25 = cow-ish)
 # ---------------------------------------------------------------------------------------------------------------------
+# S6 (step 2): which call group (sounds/safari/dier/<groep>1-3, event guhs:safari.dier.<groep>) every species uses
+GELUID = {
+    "leeuw": "grote_kat", "luipaard": "grote_kat", "jachtluipaard": "grote_kat", "sabeltandtijger": "grote_kat",
+    "olifant": "olifant", "mammoet": "olifant",
+    "neushoorn": "grazer", "kafferbuffel": "grazer", "zebra": "grazer", "giraffe": "grazer", "okapi": "grazer", "edelhert": "grazer",
+    "wolharige_neushoorn": "grazer", "kangoeroe": "grazer", "dikdik": "klein", "gouden_dikdik": "klein",
+    "stokstaartje": "klein", "capibara": "klein", "bever": "klein", "das": "klein", "egel": "klein", "wombat": "klein",
+    "quokka": "klein", "otter": "klein", "rode_panda": "klein",
+    "toekan": "vogel", "specht": "vogel", "prieelvogel": "vogel",
+    "flamingo": "groot_vogel", "struisvogel": "groot_vogel", "ooievaar": "groot_vogel",
+    "pinguin": "pinguin",
+    "zeekoe": "zee", "zeehond": "zee", "narwal": "zee", "octopus": "zee",
+    "ijsbeer": "beer", "reuzenpanda": "beer", "koala": "beer",
+    "orang_oetan": "aap", "gibbon": "aap", "luiaard": "aap",
+    "krokodil": "reptiel", "gekko": "reptiel", "vuursalamander": "reptiel", "glimworm": "reptiel",
+    "nijlpaard": "nijlpaard",
+    "geitje": "geit", "alpaca": "geit", "ezeltje": "ezel", "cavia": "cavia",
+}
+
 DATA = {
     # savanne
     "leeuw":          dict(zone="savanne", gedrag=[], snelheid=0.22, bord="middel"),
@@ -223,6 +242,7 @@ def schrijf_soorten():
             "snelheid": d["snelheid"],
             "glow": os.path.exists(os.path.join(TEX_DIR, f"{s}_glowmask.png")),
             "bord": d["bord"],
+            "geluid": "safari.dier." + GELUID[s],
         }
         if d.get("idle_mix"):
             uit[s]["idle_mix"] = d["idle_mix"]

@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_pinguin",
+  "width": 1,
+  "height": 1,
+  "title": {
+    "translate": "painting.guhs.safari_pinguin.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

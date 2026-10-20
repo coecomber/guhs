@@ -1,0 +1,13 @@
+{
+  "asset_id": "guhs:safari_leeuwenfamilie",
+  "width": 2,
+  "height": 2,
+  "title": {
+    "translate": "painting.guhs.safari_leeuwenfamilie.title",
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari.author",
+    "color": "gray"
+  }
+}

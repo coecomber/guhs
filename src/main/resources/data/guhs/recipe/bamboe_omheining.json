@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SBS",
+    "SBS"
+  ],
+  "key": {
+    "B": "guhs:bamboewand",
+    "S": "minecraft:bamboo"
+  },
+  "result": {
+    "id": "guhs:bamboe_omheining",
+    "count": 6
+  }
+}
