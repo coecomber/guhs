@@ -1,0 +1,1174 @@
+{
+ "leeuw": {
+  "zone": "savanne",
+  "breedte": 1.36,
+  "hoogte": 1.32,
+  "baby_breedte": 0.92,
+  "baby_hoogte": 0.89,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.22,
+  "glow": false,
+  "bord": "middel"
+ },
+ "luipaard": {
+  "zone": "savanne",
+  "breedte": 1.95,
+  "hoogte": 1.31,
+  "baby_breedte": 1.27,
+  "baby_hoogte": 0.89,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.24,
+  "glow": false,
+  "bord": "middel"
+ },
+ "olifant": {
+  "zone": "savanne",
+  "breedte": 1.72,
+  "hoogte": 1.66,
+  "baby_breedte": 1.16,
+  "baby_hoogte": 1.11,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "kudde",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "middel"
+ },
+ "neushoorn": {
+  "zone": "savanne",
+  "breedte": 1.61,
+  "hoogte": 1.41,
+  "baby_breedte": 1.09,
+  "baby_hoogte": 0.96,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "kafferbuffel": {
+  "zone": "savanne",
+  "breedte": 1.38,
+  "hoogte": 1.31,
+  "baby_breedte": 0.93,
+  "baby_hoogte": 0.75,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "dikdik": {
+  "zone": "savanne",
+  "breedte": 0.95,
+  "hoogte": 1.29,
+  "baby_breedte": 0.66,
+  "baby_hoogte": 0.89,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.28,
+  "glow": false,
+  "bord": "middel"
+ },
+ "giraffe": {
+  "zone": "savanne",
+  "breedte": 1.27,
+  "hoogte": 2.91,
+  "baby_breedte": 0.83,
+  "baby_hoogte": 1.83,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "zebra": {
+  "zone": "savanne",
+  "breedte": 1.27,
+  "hoogte": 2.23,
+  "baby_breedte": 0.85,
+  "baby_hoogte": 1.44,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.24,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "stokstaartje": {
+  "zone": "savanne",
+  "breedte": 1.38,
+  "hoogte": 0.75,
+  "baby_breedte": 0.93,
+  "baby_hoogte": 0.53,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde",
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "wacht",
+   "walk"
+  ],
+  "snelheid": 0.26,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "jachtluipaard": {
+  "zone": "savanne",
+  "breedte": 1.89,
+  "hoogte": 1.42,
+  "baby_breedte": 1.22,
+  "baby_hoogte": 0.95,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.3,
+  "glow": false,
+  "bord": "middel"
+ },
+ "struisvogel": {
+  "zone": "savanne",
+  "breedte": 1.15,
+  "hoogte": 2.62,
+  "baby_breedte": 0.65,
+  "baby_hoogte": 1.39,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde",
+   "rijdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "ren",
+   "walk",
+   "zit"
+  ],
+  "snelheid": 0.3,
+  "glow": false,
+  "bord": "middel"
+ },
+ "zeekoe": {
+  "zone": "delta",
+  "breedte": 1.87,
+  "hoogte": 0.62,
+  "baby_breedte": 1.19,
+  "baby_hoogte": 0.41,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "middel"
+ },
+ "nijlpaard": {
+  "zone": "delta",
+  "breedte": 1.65,
+  "hoogte": 1.28,
+  "baby_breedte": 1.1,
+  "baby_hoogte": 0.84,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "gaap",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.17,
+  "glow": false,
+  "bord": "middel"
+ },
+ "flamingo": {
+  "zone": "delta",
+  "breedte": 1.09,
+  "hoogte": 2.12,
+  "baby_breedte": 0.69,
+  "baby_hoogte": 1.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "capibara": {
+  "zone": "delta",
+  "breedte": 1.28,
+  "hoogte": 1.01,
+  "baby_breedte": 0.87,
+  "baby_hoogte": 0.68,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "krokodil": {
+  "zone": "delta",
+  "breedte": 2.2,
+  "hoogte": 0.53,
+  "baby_breedte": 1.48,
+  "baby_hoogte": 0.38,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.15,
+  "glow": false,
+  "bord": "middel"
+ },
+ "rode_panda": {
+  "zone": "bamboe",
+  "breedte": 1.75,
+  "hoogte": 1.2,
+  "baby_breedte": 1.19,
+  "baby_hoogte": 0.87,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "reuzenpanda": {
+  "zone": "bamboe",
+  "breedte": 1.51,
+  "hoogte": 1.57,
+  "baby_breedte": 0.97,
+  "baby_hoogte": 1.03,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.15,
+  "glow": false,
+  "bord": "middel"
+ },
+ "gibbon": {
+  "zone": "bamboe",
+  "breedte": 0.65,
+  "hoogte": 1.18,
+  "baby_breedte": 0.37,
+  "baby_hoogte": 0.76,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "hang",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "slinger",
+   "walk"
+  ],
+  "snelheid": 0.22,
+  "glow": false,
+  "bord": "middel"
+ },
+ "luiaard": {
+  "zone": "regenwoud",
+  "breedte": 1.11,
+  "hoogte": 1.22,
+  "baby_breedte": 0.76,
+  "baby_hoogte": 0.81,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "boom",
+   "hang"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hang",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.06,
+  "glow": false,
+  "bord": "middel"
+ },
+ "okapi": {
+  "zone": "regenwoud",
+  "breedte": 1.24,
+  "hoogte": 2.16,
+  "baby_breedte": 0.82,
+  "baby_hoogte": 1.37,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "orang_oetan": {
+  "zone": "regenwoud",
+  "breedte": 0.94,
+  "hoogte": 1.72,
+  "baby_breedte": 0.62,
+  "baby_hoogte": 1.14,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "middel"
+ },
+ "toekan": {
+  "zone": "regenwoud",
+  "breedte": 1.27,
+  "hoogte": 1.16,
+  "baby_breedte": 0.91,
+  "baby_hoogte": 0.78,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "vlieg",
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "vlieg",
+   "walk"
+  ],
+  "snelheid": 0.22,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "gekko": {
+  "zone": "regenwoud",
+  "breedte": 1.2,
+  "hoogte": 0.31,
+  "baby_breedte": 0.78,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "klim",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "klim",
+   "walk"
+  ],
+  "snelheid": 0.22,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "glimworm": {
+  "zone": "regenwoud",
+  "breedte": 0.73,
+  "hoogte": 0.25,
+  "baby_breedte": 0.5,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "hang",
+   "nacht",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hang",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.08,
+  "glow": true,
+  "bord": "gewoon"
+ },
+ "pinguin": {
+  "zone": "ijskust",
+  "breedte": 0.75,
+  "hoogte": 1.56,
+  "baby_breedte": 0.52,
+  "baby_hoogte": 1.04,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "ijsbeer": {
+  "zone": "ijskust",
+  "breedte": 1.54,
+  "hoogte": 1.4,
+  "baby_breedte": 1.04,
+  "baby_hoogte": 0.95,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "zeehond": {
+  "zone": "ijskust",
+  "breedte": 1.56,
+  "hoogte": 0.75,
+  "baby_breedte": 1.06,
+  "baby_hoogte": 0.53,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "water",
+   "zwemmer"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "narwal": {
+  "zone": "ijskust",
+  "breedte": 1.9,
+  "hoogte": 0.65,
+  "baby_breedte": 1.11,
+  "baby_hoogte": 0.46,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer",
+   "zeldzaam"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "octopus": {
+  "zone": "ijskust",
+  "breedte": 1.05,
+  "hoogte": 0.89,
+  "baby_breedte": 0.69,
+  "baby_hoogte": 0.67,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk",
+   "zwaai"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "middel"
+ },
+ "sabeltandtijger": {
+  "zone": "oertijd",
+  "breedte": 1.42,
+  "hoogte": 1.35,
+  "baby_breedte": 0.95,
+  "baby_hoogte": 0.92,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.24,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "mammoet": {
+  "zone": "oertijd",
+  "breedte": 1.69,
+  "hoogte": 1.88,
+  "baby_breedte": 1.14,
+  "baby_hoogte": 1.26,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.17,
+  "glow": false,
+  "bord": "middel"
+ },
+ "wolharige_neushoorn": {
+  "zone": "oertijd",
+  "breedte": 1.59,
+  "hoogte": 1.38,
+  "baby_breedte": 1.08,
+  "baby_hoogte": 0.85,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "middel"
+ },
+ "bever": {
+  "zone": "europa",
+  "breedte": 1.65,
+  "hoogte": 0.91,
+  "baby_breedte": 1.1,
+  "baby_hoogte": 0.63,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.17,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "vuursalamander": {
+  "zone": "europa",
+  "breedte": 1.33,
+  "hoogte": 0.38,
+  "baby_breedte": 0.88,
+  "baby_hoogte": 0.27,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "egel": {
+  "zone": "europa",
+  "breedte": 0.98,
+  "hoogte": 0.75,
+  "baby_breedte": 0.66,
+  "baby_hoogte": 0.45,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "opgerold",
+   "walk"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "otter": {
+  "zone": "europa",
+  "breedte": 1.78,
+  "hoogte": 0.68,
+  "baby_breedte": 1.14,
+  "baby_hoogte": 0.46,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "drijf",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.22,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "das": {
+  "zone": "europa",
+  "breedte": 1.24,
+  "hoogte": 0.67,
+  "baby_breedte": 0.82,
+  "baby_hoogte": 0.47,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "edelhert": {
+  "zone": "europa",
+  "breedte": 1.27,
+  "hoogte": 1.97,
+  "baby_breedte": 0.81,
+  "baby_hoogte": 1.19,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.24,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "ooievaar": {
+  "zone": "europa",
+  "breedte": 1.28,
+  "hoogte": 1.84,
+  "baby_breedte": 0.83,
+  "baby_hoogte": 1.16,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "vlieg",
+   "water",
+   "bezorger"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "vlieg",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "specht": {
+  "zone": "europa",
+  "breedte": 0.46,
+  "hoogte": 1.09,
+  "baby_breedte": 0.35,
+  "baby_hoogte": 0.79,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "klim",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "tik",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "middel"
+ },
+ "koala": {
+  "zone": "australie",
+  "breedte": 1.1,
+  "hoogte": 1.41,
+  "baby_breedte": 0.9,
+  "baby_hoogte": 1.0,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "middel"
+ },
+ "kangoeroe": {
+  "zone": "australie",
+  "breedte": 1.23,
+  "hoogte": 1.97,
+  "baby_breedte": 0.69,
+  "baby_hoogte": 1.16,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.28,
+  "glow": false,
+  "bord": "gewoon"
+ },
+ "wombat": {
+  "zone": "australie",
+  "breedte": 1.12,
+  "hoogte": 0.93,
+  "baby_breedte": 0.77,
+  "baby_hoogte": 0.66,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "middel"
+ },
+ "quokka": {
+  "zone": "australie",
+  "breedte": 1.09,
+  "hoogte": 1.23,
+  "baby_breedte": 0.76,
+  "baby_hoogte": 0.88,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "territorium"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "zeldzaam"
+ },
+ "prieelvogel": {
+  "zone": "australie",
+  "breedte": 0.89,
+  "hoogte": 0.89,
+  "baby_breedte": 0.63,
+  "baby_hoogte": 0.62,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "vlieg",
+   "bouwdier"
+  ],
+  "animaties": [
+   "blij",
+   "dans",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel"
+ },
+ "gouden_dikdik": {
+  "zone": null,
+  "breedte": 0.95,
+  "hoogte": 1.29,
+  "baby_breedte": 0.66,
+  "baby_hoogte": 0.89,
+  "baby_schaal": 1.0,
+  "man": true,
+  "baby_model": true,
+  "gedrag": [
+   "geheim"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.28,
+  "glow": false,
+  "bord": null
+ },
+ "geitje": {
+  "zone": "entree",
+  "breedte": 1.03,
+  "hoogte": 1.4,
+  "baby_breedte": 0.7,
+  "baby_hoogte": 0.84,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "aaihoek"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "knabbel",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": null
+ },
+ "alpaca": {
+  "zone": "entree",
+  "breedte": 1.04,
+  "hoogte": 2.31,
+  "baby_breedte": 0.69,
+  "baby_hoogte": 1.53,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "aaihoek"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "spuug",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": null
+ },
+ "cavia": {
+  "zone": "entree",
+  "breedte": 0.86,
+  "hoogte": 0.59,
+  "baby_breedte": 0.57,
+  "baby_hoogte": 0.4,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "aaihoek"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "piep",
+   "walk"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": null
+ },
+ "ezeltje": {
+  "zone": "entree",
+  "breedte": 1.16,
+  "hoogte": 1.79,
+  "baby_breedte": 0.77,
+  "baby_hoogte": 1.33,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "aaihoek"
+  ],
+  "animaties": [
+   "balk",
+   "blij",
+   "eet",
+   "idle",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": null
+ }
+}
