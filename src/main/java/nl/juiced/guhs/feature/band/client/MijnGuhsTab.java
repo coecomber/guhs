@@ -59,7 +59,9 @@ public final class MijnGuhsTab {
     @Nullable
     private Button roepKnop;
     private List<Component> roepTip = List.of();
-    private static final int ROEP_Y = 188, ROEP_H = 14;
+    private static final int ROEP_H = 14;
+    /** 1.6.0 (bigger Guhdex): the picture column's width and the picture's bottom follow the Guhdex size (98 / 140 at 300 x 210). */
+    private int kolom = 98, beeldOnder = 140;
 
     /** (AutoCheck) open this guh's page (null: the list). */
     public static void open(@Nullable UUID id) {
@@ -75,6 +77,8 @@ public final class MijnGuhsTab {
         this.w = w;
         this.h = h;
         this.herbouw = herbouw;
+        this.kolom = Math.max(98, Math.round((w - 16) * 0.33f));
+        this.beeldOnder = Math.max(140, h - 70);
         if (versie != MijnGuhsCache.versie()) {
             versie = MijnGuhsCache.versie();
             poppen.clear();
@@ -97,11 +101,11 @@ public final class MijnGuhsTab {
                 paginaScroll = lijst.scroll();
                 open = null;
                 this.herbouw.run();
-            }).bounds(left + 8, top + 28, 98, 14).build());
+            }).bounds(left + 8, top + 28, kolom, 14).build());
             // 1.2.5: call this guh over, wherever it is (grey when it is picked up, in a Guh Wheel or in the wolkjes)
             Roepen.Uitkomst niet = Roepen.nietRoepbaar(PlekSoort.byId(guh.plekSoort()), guh.dood());
             roepKnop = Button.builder(Component.translatable("gui.guhs.mijnguhs.roep"),
-                    b -> ClientPacketDistributor.sendToServer(new BandPayloads.Roep(guh.id()))).bounds(left + 8, top + ROEP_Y, 98, ROEP_H).build();
+                    b -> ClientPacketDistributor.sendToServer(new BandPayloads.Roep(guh.id()))).bounds(left + 8, top + h - 22, kolom, ROEP_H).build();
             roepKnop.active = niet == null;
             Component uitleg = Component.translatable(niet == null ? "gui.guhs.mijnguhs.roep.tip" : switch (niet) {
                 case DOOD -> "gui.guhs.mijnguhs.roep.dood";
@@ -111,7 +115,7 @@ public final class MijnGuhsTab {
             }, guh.naam());
             roepTip = regels(uitleg, niet == null ? ChatFormatting.GRAY : ChatFormatting.GOLD);
             knop.accept(roepKnop);
-            lijst.plaats(left + 112, top + 28, w - 118, h - 34);
+            lijst.plaats(left + 14 + kolom, top + 28, w - 20 - kolom, h - 34);
             lijst.zet(pagina(guh));
             lijst.scrollNaar(paginaScroll);
         }
@@ -149,7 +153,7 @@ public final class MijnGuhsTab {
             return;
         }
         // the picture (drag to turn it)
-        int px1 = left + 8, py1 = top + 45, px2 = left + 106, py2 = top + 140;
+        int px1 = left + 8, py1 = top + 45, px2 = left + 8 + kolom, py2 = top + beeldOnder;
         g.fill(px1, py1, px2, py2, 0x30F7B6CB);
         g.fill(px1, py2 - 1, px2, py2, 0x60D27A9C);
         LivingEntity pop = pop(guh);
@@ -159,7 +163,7 @@ public final class MijnGuhsTab {
         GidsTekst.schaal(g, Component.translatable("gui.guhs.mijnguhs.draai"), px1 + 2, py2 - 8, 0.5f, LICHT, false);
         // name, variant, personality, level + bar
         int y = py2 + 3;
-        GidsTekst.passend(g, guh.naam().copy().withStyle(ChatFormatting.BOLD), px1, y, px2 - px1, 1f, DONKER, false);
+        GidsTekst.passend(g, guh.nummer().copy().append(guh.naam().copy().withStyle(ChatFormatting.BOLD)), px1, y, px2 - px1, 1f, DONKER, false);
         y += 10;
         GidsTekst.passend(g, soortRegel(guh), px1, y, px2 - px1, 0.75f, TEKST, false);
         y += 8;
@@ -202,7 +206,7 @@ public final class MijnGuhsTab {
     }
 
     public boolean klik(double mx, double my, int button) {
-        if (open != null && button == 0 && mx >= left + 8 && mx < left + 106 && my >= top + 45 && my < top + 140) {
+        if (open != null && button == 0 && mx >= left + 8 && mx < left + 8 + kolom && my >= top + 45 && my < top + beeldOnder) {
             draaien = true;
             return true;
         }
@@ -242,7 +246,10 @@ public final class MijnGuhsTab {
 
     private List<GidsLijst.Regel> lijstRegels() {
         List<GidsLijst.Regel> out = new ArrayList<>();
-        for (MijnGuhsCache.Guh guh : MijnGuhsCache.guhs()) {
+        // 1.6.0 (F3b): in Guhdex-number order (the order they were tamed); a guh without a number at the end
+        List<MijnGuhsCache.Guh> guhs = new ArrayList<>(MijnGuhsCache.guhs());
+        guhs.sort(java.util.Comparator.comparingInt(g -> g.nr() > 0 ? g.nr() : Integer.MAX_VALUE));
+        for (MijnGuhsCache.Guh guh : guhs) {
             out.add(new GuhRij(guh));
         }
         return out;
@@ -271,8 +278,8 @@ public final class MijnGuhsTab {
             BandNiveau niveau = BandNiveau.byIndex(guh.niveau());
             int tx = x + 38, rechts = x + w - 4;
             int breed = Math.min(110, w / 3);
-            Component naamRegel = guh.dood() ? Component.literal("☁ ").append(guh.naam().copy().withStyle(ChatFormatting.BOLD))
-                    : guh.naam().copy().withStyle(ChatFormatting.BOLD);   // (3.0: in de wolkjes)
+            Component naamRegel = guh.nummer().copy().append(guh.dood() ? Component.literal("☁ ").append(guh.naam().copy().withStyle(ChatFormatting.BOLD))
+                    : guh.naam().copy().withStyle(ChatFormatting.BOLD));   // (3.0: in de wolkjes; 1.6.0: its number first)
             GidsTekst.passend(g, naamRegel, tx, y + 4, rechts - breed - tx - 6, 1f, DONKER, false);
             // 1.2.6: where the guh is (short), instead of its personality (that's on its page)
             GidsTekst.passend(g, plekRegel(guh), tx, y + 16, rechts - breed - tx - 6, 0.75f, TEKST, false);

@@ -47,7 +47,10 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * The Minigames and Kleding tabs scroll (mouse wheel or the bar); what is folded open is remembered while the game runs.
  */
 public class GuhDexScreen extends Screen {
-    private static final int W = 300, H = 210;
+    /** 1.6.0: the Guhdex grows with the window (300 x 210 at least, at most {@link #MAX_W} x {@link #MAX_H}); every page
+     *  lays itself out from W and H. */
+    private int W = 300, H = 210;
+    private static final int MIN_W = 300, MIN_H = 210, MAX_W = 400, MAX_H = 262;
     private MaagPayloads.GuhDexData data;
     private int page;
     private int left, top;
@@ -72,17 +75,24 @@ public class GuhDexScreen extends Screen {
     private final nl.juiced.guhs.feature.titels.client.GidsTitelsTab titels = new nl.juiced.guhs.feature.titels.client.GidsTitelsTab();
     /** guhpixel: the tab "Guhpixel & uitjes" (muntjes, rank and the sections of the slices). */
     private final nl.juiced.guhs.feature.guhpixel.client.GidsGuhpixelTab guhpixel = new nl.juiced.guhs.feature.guhpixel.client.GidsGuhpixelTab();
+    /** 1.6.0 Op Safari!: the Safari-dex tab. */
+    private final nl.juiced.guhs.feature.safari.camera.client.SafariDexTab safari = new nl.juiced.guhs.feature.safari.camera.client.SafariDexTab();
     /**
      * Layout of a guh page: the picture (with the page arrows and the page number under it) on the left, the text column
      * on the right down to TEXT_BOTTOM, then the rewards. Everything stays inside its own box: long texts are wrapped
      * and, when they still don't fit, drawn smaller (see {@link #fitText}).
      */
-    private static final int PIC_TOP = 28, PIC_BOTTOM = 118, NAV_Y = 121, TEXT_X = 130, TEXT_W = W - TEXT_X - 8,
-            TEXT_BOTTOM = 137, REWARDS_Y = 142, MILESTONE_Y = 154;
+    private static final int PIC_TOP = 28;
+    /** (1.6.0: from W and H, see {@link #maat}; these are the values at 300 x 210 with four milestones.) */
+    private int PIC_W = 110, PIC_BOTTOM = 118, NAV_Y = 121, TEXT_X = 130, TEXT_W = 300 - 130 - 8, TEXT_BOTTOM = 137, REWARDS_Y = 142,
+            MILESTONE_Y = 154;
 
     /** The four tabs (2.9): icon (item id, vanilla stand-in) and name (gui.guhs.guhdex.tab.&lt;id&gt;). */
     public enum Tab {
         GUHS("guhs:guh_spawn_egg", net.minecraft.world.item.Items.PINK_DYE),
+        /** 1.6.0 Op Safari!: the Safari-dex (photos of the park animals, the day's missions, the geheimpjes;
+         *  feature.safari.camera.client.SafariDexTab). */
+        SAFARI("guhs:safaricamera", net.minecraft.world.item.Items.SPYGLASS),
         KNUS("guhs:knuffel_normal", net.minecraft.world.item.Items.PINK_BED),
         MINIGAMES("guhs:discomunt", net.minecraft.world.item.Items.JUKEBOX),
         KLEDING("guhs:party_hat", net.minecraft.world.item.Items.LEATHER_HELMET),
@@ -129,8 +139,8 @@ public class GuhDexScreen extends Screen {
     private static String knusVerzameling;
     private static String knusGekozen;
     private static int knusPage;
-    private static final int KNUS_TOP = 27, KNUS_ROW = 12, MIJLPAAL_ROW = 19, MIJLPALEN_PER_PAGE = 4, CELL = 20, CELLS_PER_ROW = 13,
-            CELL_ROWS = 4;
+    private static final int KNUS_TOP = 27, KNUS_ROW = 12, MIJLPAAL_ROW = 19, CELL = 20;
+    private int MIJLPALEN_PER_PAGE = 4, CELLS_PER_ROW = 13, CELL_ROWS = 4;
 
     public GuhDexScreen(MaagPayloads.GuhDexData data) {
         super(Component.translatable("gui.guhs.guhdex.title"));
@@ -239,7 +249,28 @@ public class GuhDexScreen extends Screen {
     }
 
     /** (AutoCheck) one screenful of the list, minus a little overlap. */
-    private static final int LIJST_STAP = H - LIST_TOP - 6 - 24;
+    private int LIJST_STAP = 210 - LIST_TOP - 6 - 24;
+
+    /** 1.6.0: the size of the book and of everything on its pages, from the window size. */
+    private void maat() {
+        W = Math.max(MIN_W, Math.min(MAX_W, width - 24));
+        H = Math.max(MIN_H, Math.min(MAX_H, height - 44));
+        LIJST_STAP = H - LIST_TOP - 6 - 24;
+        // a guh page: the picture left (its arrows and page number under it), the text right, the milestones at the bottom
+        int mijlpalen = GuhDex.MILESTONES.size();
+        MILESTONE_Y = H - 8 - mijlpalen * 12;
+        REWARDS_Y = MILESTONE_Y - 12;
+        TEXT_BOTTOM = REWARDS_Y - 5;
+        NAV_Y = TEXT_BOTTOM - 16;
+        PIC_BOTTOM = NAV_Y - 3;
+        PIC_W = Math.round((W - 20) * 0.39f);
+        TEXT_X = 10 + PIC_W + 10;
+        TEXT_W = W - TEXT_X - 8;
+        // the Knus tab: more milestones per page and more collection cells when there is room
+        MIJLPALEN_PER_PAGE = Math.max(4, (H - 120) / MIJLPAAL_ROW);
+        CELLS_PER_ROW = Math.max(13, (W - 40) / CELL);
+        CELL_ROWS = Math.max(4, (H - 130) / CELL);
+    }
 
     private GuhVariant current() {
         return GuhDex.ENTRIES.get(page);
@@ -255,6 +286,7 @@ public class GuhDexScreen extends Screen {
 
     @Override
     protected void init() {
+        maat();
         left = (width - W) / 2;
         top = (height - H) / 2;
         preview = ModEntities.GUH.get().create(minecraft.level, EntitySpawnReason.TRIGGERED);
@@ -274,6 +306,7 @@ public class GuhDexScreen extends Screen {
             case VERHALEN -> verhalen.init(left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
             case TITELS -> titels.init(left, top, W, H);
             case GUHPIXEL -> guhpixel.init(left, top, W, H);
+            case SAFARI -> safari.init(font, left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
             default -> initGuhs();
         }
     }
@@ -293,7 +326,7 @@ public class GuhDexScreen extends Screen {
     private void initGuhs() {
         // the page arrows sit under the picture, with the page number between them (clear of the text and the rewards)
         addRenderableWidget(Button.builder(Component.literal("<"), b -> turn(-1)).bounds(left + 10, top + NAV_Y, 20, 14).build());
-        addRenderableWidget(Button.builder(Component.literal(">"), b -> turn(1)).bounds(left + 100, top + NAV_Y, 20, 14).build());
+        addRenderableWidget(Button.builder(Component.literal(">"), b -> turn(1)).bounds(left + 10 + PIC_W - 20, top + NAV_Y, 20, 14).build());
         for (int i = 0; i < GuhDex.MILESTONES.size(); i++) {
             GuhDex.Milestone m = GuhDex.MILESTONES.get(i);
             int index = i;
@@ -336,6 +369,7 @@ public class GuhDexScreen extends Screen {
             case VERHALEN -> verhalen.teken(g, mouseX, mouseY);
             case TITELS -> titels.teken(g, mouseX, mouseY);
             case GUHPIXEL -> guhpixel.teken(g, mouseX, mouseY);
+            case SAFARI -> safari.teken(g, mouseX, mouseY);
             default -> renderGuhs(g, mouseX, mouseY);
         }
     }
@@ -348,8 +382,9 @@ public class GuhDexScreen extends Screen {
         if (hover >= 0) {
             g.setTooltipForNextFrame(font, Tab.values()[hover].naam(), mouseX, mouseY);
         } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.ANDERE_VADSJES || tab == Tab.VERHALEN
-                || tab == Tab.TITELS || tab == Tab.GUHPIXEL) {
+                || tab == Tab.TITELS || tab == Tab.GUHPIXEL || tab == Tab.SAFARI) {
             List<Component> tip = tab == Tab.MIJN_GUHS ? mijnGuhs.tip(mouseX, mouseY) : tab == Tab.ANDERE_VADSJES ? andereVadsjes.tip(mouseX, mouseY)
+                    : tab == Tab.SAFARI ? safari.tip(mouseX, mouseY)
                     : tab == Tab.VERHALEN ? verhalen.tip(mouseX, mouseY)
                     : tab == Tab.TITELS ? titels.tip(mouseX, mouseY) : tab == Tab.GUHPIXEL ? guhpixel.tip(mouseX, mouseY) : lijst.tip(mouseX, mouseY);
             if (tip != null && !tip.isEmpty()) {
@@ -377,6 +412,9 @@ public class GuhDexScreen extends Screen {
             return true;
         }
         if (tab == Tab.GUHPIXEL && guhpixel.wiel(mouseX, mouseY, scrollY)) {
+            return true;
+        }
+        if (tab == Tab.SAFARI && safari.wiel(mouseX, mouseY, scrollY)) {
             return true;
         }
         if (tab == Tab.GUHS && mouseX >= left && mouseX < left + W && mouseY >= top + BODY && mouseY < top + H && scrollY != 0) {
@@ -409,6 +447,9 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.GUHPIXEL && guhpixel.sleep(mouseY)) {
             return true;
         }
+        if (tab == Tab.SAFARI && safari.sleep(mouseX)) {
+            return true;
+        }
         return super.mouseDragged(event, dragX, dragY);
     }
 
@@ -422,6 +463,7 @@ public class GuhDexScreen extends Screen {
         verhalen.los();
         titels.los();
         guhpixel.los();
+        safari.los();
         return super.mouseReleased(event);
     }
 
@@ -431,7 +473,8 @@ public class GuhDexScreen extends Screen {
         GuhVariant v = current();
         boolean seen = seen(v);
         // the guh itself (a dark silhouette when not seen yet)
-        g.fill(left + 10, top + PIC_TOP, left + 120, top + PIC_BOTTOM, seen ? 0x30F7B6CB : 0xFF2A1420);
+        int picX2 = left + 10 + PIC_W, picMid = left + 10 + PIC_W / 2;
+        g.fill(left + 10, top + PIC_TOP, picX2, top + PIC_BOTTOM, seen ? 0x30F7B6CB : 0xFF2A1420);
         if (preview != null) {
             preview.setVariant(v);
             net.minecraft.world.entity.LivingEntity shown = preview;
@@ -442,12 +485,13 @@ public class GuhDexScreen extends Screen {
                 shown = character;
             }
             if (seen && shown != null) {
-                InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 10, top + PIC_TOP, left + 120, top + PIC_BOTTOM, 32, 0.0625f, mouseX, mouseY, shown);
+                int schaal = Math.round(32 * Math.min(PIC_W / 110f, (PIC_BOTTOM - PIC_TOP) / 90f));
+                InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 10, top + PIC_TOP, picX2, top + PIC_BOTTOM, schaal, 0.0625f, mouseX, mouseY, shown);
             } else if (seen) {
                 // 3.0: a page whose creature isn't in the game (yet): a big pink flower instead of a picture
-                scaled(g, Component.literal("✿"), left + 65 - 12, top + (PIC_TOP + PIC_BOTTOM) / 2 - 14, 3f, 0xFFF7A8CC, false);
+                scaled(g, Component.literal("✿"), picMid - 12, top + (PIC_TOP + PIC_BOTTOM) / 2 - 14, 3f, 0xFFF7A8CC, false);
             } else {
-                g.centeredText(font, "???", left + 65, top + (PIC_TOP + PIC_BOTTOM) / 2 - 4, 0xFF8A6A7A);
+                g.centeredText(font, "???", picMid, top + (PIC_TOP + PIC_BOTTOM) / 2 - 4, 0xFF8A6A7A);
             }
         }
         int tx = left + TEXT_X, bottom = top + TEXT_BOTTOM;
@@ -471,7 +515,7 @@ public class GuhDexScreen extends Screen {
         } else {
             fitText(g, Component.translatable("gui.guhs.guhdex.unknown"), tx, y, TEXT_W, bottom - y, 0xFF9A8090);
         }
-        g.centeredText(font, (page + 1) + " / " + GuhDex.ENTRIES.size(), left + 65, top + NAV_Y + 3, 0xFF7A2848);
+        g.centeredText(font, (page + 1) + " / " + GuhDex.ENTRIES.size(), picMid, top + NAV_Y + 3, 0xFF7A2848);
         // milestones
         g.fill(left + 10, top + REWARDS_Y - 4, left + W - 10, top + REWARDS_Y - 3, 0x60F7B6CB);
         g.text(font, Component.translatable("gui.guhs.guhdex.rewards"), left + 10, top + REWARDS_Y, 0xFF7A2848, false);
@@ -731,6 +775,9 @@ public class GuhDexScreen extends Screen {
         }
         if (tab == Tab.GUHPIXEL) {
             return guhpixel.klik(mouseX, mouseY, button);
+        }
+        if (tab == Tab.SAFARI) {
+            return safari.klik(mouseX, mouseY, button, this::rebuildWidgets);
         }
         if (tab != Tab.KNUS || button != 0) {
             return false;

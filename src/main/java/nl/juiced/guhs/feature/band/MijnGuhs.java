@@ -57,6 +57,7 @@ public final class MijnGuhs {
         for (BandData.Rec r : data.guhsVan(player.getUUID())) {
             CompoundTag t = new CompoundTag();
             t.putString("Id", r.id.toString());
+            t.putInt("Nr", nl.juiced.guhs.quest.GuhNummers.nummer(s, player.getUUID(), r.id));   // 1.6.0 (F3b): its Guhdex number
             nl.juiced.guhs.taal.Tekst.put(t, "Naam", r.weergave());   // (1.2.0: Components, read on the client)
             t.put("Looks", r.looks.copy());
             t.putInt("Hartjes", r.hartjes);

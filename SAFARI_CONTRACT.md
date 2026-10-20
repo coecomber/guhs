@@ -98,3 +98,12 @@ Merge order: S0 → S6 (assets other slices may reference) → S1 → S2 → S5 
 conflicts are solved at the merge. The park generator (tools/features/safari_park*) stays owned by the park round fixes;
 a slice that needs a block/marker in the park adds a zone hook in a NEW file `tools/features/safari_park/zone_<slice>_*.py`
 and raises nothing (VERSIE is raised at the merge).
+
+### S1 hooks (camera, dex) for the other slices
+- `camera.CameraFeature.CAMERA` (item `guhs:safaricamera`): S2 gives it at the welcome (and the fotograaf-guh may sell/replace it).
+- `camera.Fotograaf.JARIG` (`Predicate<String>`): S3 sets it to "is this species today's birthday species" → photo coins x2.
+- `camera.Fotograaf.VROEGE_VOGEL` (flag `vroege_vogel` via `SafariSpeler.zetVlag`): S2 sets it when a player wakes in the lodge;
+  the first photo after that pays double (or 10 when it pays nothing), then the camera clears it.
+- `camera.Fotograaf.kijk(level, eye, look, zoom)` → `Foto` (or null): reusable "is this animal in view" (S4 pootafdrukken etc.).
+- Daily missions: `camera.Missies.van(Klok.dag())`, done flags in the day counters `missie0..2`. Home animals (S5) count.
+- Guh numbers (F3b): `quest.GuhNummers.nummer(server, owner, bandId)` / `getemd(...)`.
