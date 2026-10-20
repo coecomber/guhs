@@ -1,0 +1,311 @@
+"""
+Zone module: Australië (design 1.4, zone table).
+
+  eucalyptusbos       a dense grove of eucalyptus trees (koala's), a few fallen branches
+  billabong           a quiet waterhole with an old windpomp (the kangoeroes drink here) and the schuilhut
+  quokka_eiland       the island in the quokka pond: bushes, a little tree, stepping stones half under water
+  outback             red outback with spinifex tussocks and the wombatholletjesheuvel (burrow holes)
+  postkantoortje      a corrugated-iron outback post office with a red mailbox (geheimpje: the lost postcard)
+  schaduwboom         a shade tree with a hammock
+  prieel              the bower of the prieelvogel: an avenue of sticks with blue treasures
+  uitkijktoren
+Helpers come from zone_europa.py.
+"""
+import math
+
+import numpy as np
+
+from . import kit
+from .zone_europa import kap, vlak, zet_grond, grond_y, toren, schuilhut, zet_huizen, ver_van_hek, _naam
+
+W, WATER_Y = kit.W, kit.WATER_Y
+R = kit.RESERVERINGEN
+
+EUCALYPTUS = (R["eucalyptusbos"][0], R["eucalyptusbos"][1])      # 183, 433
+BILLABONG = (302, 470)          # moved east of the reserved spot: the footpath runs through 278,478
+QUOKKA = (R["quokka_eiland"][0], R["quokka_eiland"][1])           # 343, 428 (the pond is made by terrein.py)
+WOMBAT = (205, 472)             # moved: the reserved spot sat on the south fence
+POST = (296, 428)      # well away from the europa border fence
+SCHADUW = (240, 445)
+PRIEEL = (338, 482)
+TOREN = (318, 448)
+
+
+def eucalyptusbos(park):
+    x, z = EUCALYPTUS
+    rng = np.random.default_rng(kit.SEED + 81)
+    r = R["eucalyptusbos"][2]
+    gezet = []
+    for _ in range(200):
+        if len(gezet) >= 11:
+            break
+        a = rng.random() * 2 * math.pi
+        d = math.sqrt(rng.random()) * r
+        bx, bz = int(x + math.cos(a) * d), int(z + math.sin(a) * d)
+        if any(math.hypot(bx - ox, bz - oz) < 4.5 for ox, oz in gezet):
+            continue
+        if park.water[bx, bz] or park.pad[bx, bz] or park.hek_afstand[bx, bz] < 6:
+            continue
+        g = int(park.hoogte[bx, bz])
+        top = park.boom("eucalyptus", bx, g, bz, grootte=float(rng.uniform(0.8, 1.5)))
+        park.bomen.append((bx, top, bz, "eucalyptus"))
+        gezet.append((bx, bz))
+    # fallen bark and twigs on the ground
+    for _ in range(14):
+        a = rng.random() * 2 * math.pi
+        d = rng.random() * r
+        bx, bz = int(x + math.cos(a) * d), int(z + math.sin(a) * d)
+        g = int(park.hoogte[bx, bz])
+        if park.v[bx, g + 1, bz] == 0 and not park.water[bx, bz]:
+            park.set(bx, g + 1, bz, "brown_carpet")
+    for _ in range(3):
+        a = rng.random() * 2 * math.pi
+        bx, bz = int(x + math.cos(a) * r * 0.7), int(z + math.sin(a) * r * 0.7)
+        for t in range(3):
+            g = int(park.hoogte[bx + t, bz])
+            if park.v[bx + t, g + 1, bz] == 0:
+                park.set(bx + t, g + 1, bz, "stripped_birch_log", axis="x")
+
+
+def billabong(park):
+    x, z = BILLABONG
+    kap(park, x, z, 12)
+    g = int(park.hoogte[x, z])
+    for xx in range(x - 10, x + 11):
+        for zz in range(z - 10, z + 11):
+            d = math.hypot((xx - x) / 1.3, zz - z)
+            if park.pad[xx, zz] or park.hek[xx, zz]:
+                continue
+            if d <= 6:
+                diep = WATER_Y - 3 if d < 3.5 else WATER_Y - 1
+                zet_grond(park, xx, zz, diep, "mud" if d < 4 else "sand", "dirt")
+                for y in range(diep + 1, WATER_Y + 1):
+                    park.set(xx, y, zz, "water", level=0)
+                park.water[xx, zz] = True
+            elif d <= 8 and park.hoogte[xx, zz] > WATER_Y + 1:
+                zet_grond(park, xx, zz, WATER_Y + 1, "sand", "sand")
+            elif d <= 8 and park.hoogte[xx, zz] < WATER_Y + 1:
+                zet_grond(park, xx, zz, WATER_Y + 1, "sand", "sand")
+    # reeds and lily pads
+    for a in range(0, 360, 25):
+        xx = x + round(math.cos(math.radians(a)) * 6.6 * 1.3)
+        zz = z + round(math.sin(math.radians(a)) * 6.6)
+        if not park.water[xx, zz]:
+            g2 = int(park.hoogte[xx, zz])
+            if park.v[xx, g2 + 1, zz] == 0:
+                park.set(xx, g2 + 1, zz, "sugar_cane", age=0)
+                park.set(xx, g2 + 2, zz, "sugar_cane", age=0)
+    for dx, dz in ((1, 2), (-3, -1), (2, -2)):
+        park.set(x + dx, WATER_Y + 1, z + dz, "lily_pad")
+    # the windpomp: a 3x3 lattice tower of spruce fences, a platform, a wheel of trapdoors and a tail vane
+    wx, wz = x + 12, z - 4
+    g = int(park.hoogte[wx, wz])
+    vlak(park, wx, wz, 2.5, g, "coarse_dirt", "dirt")
+    hoog = 9
+    for y in range(g + 1, g + hoog):
+        for dx, dz in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+            park.set(wx + dx, y, wz + dz, "spruce_fence")
+        if (y - g) % 3 == 0:
+            for dx, dz in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                park.set(wx + dx, y, wz + dz, "spruce_fence")
+    park.fill(wx - 1, g + hoog, wz - 1, wx + 1, g + hoog, wz + 1, "spruce_slab", type="bottom", waterlogged="false")
+    hub_y = g + hoog + 3
+    park.set(wx, g + hoog + 1, wz, kit.state("spruce_log", axis="y"))
+    park.set(wx, g + hoog + 2, wz, kit.state("spruce_log", axis="y"))
+    park.set(wx, hub_y, wz - 1, "iron_block")
+    for a in range(0, 360, 30):
+        for rr in (1, 2, 3):
+            yy = hub_y + round(math.sin(math.radians(a)) * rr)
+            xx = wx + round(math.cos(math.radians(a)) * rr)
+            park.set(xx, yy, wz - 2, "iron_trapdoor" if rr == 3 else "iron_bars",
+                     **({"facing": "north", "half": "bottom", "open": "true", "powered": "false",
+                         "waterlogged": "false"} if rr == 3 else {}))
+    for t in range(1, 4):
+        park.set(wx, hub_y, wz + t, kit.state("spruce_log", axis="z"))
+    park.set(wx, hub_y, wz + 4, "red_wool")
+    park.set(wx, hub_y + 1, wz + 4, "red_wool")
+    # a water trough at the foot
+    for dx in (2, 3):
+        park.set(wx + dx, g + 1, wz + 2, "cauldron")
+    schuilhut(park, x - 10, z + 8, kijk="north", hout="acacia", dak="hay_block")
+
+
+def quokka_eiland(park):
+    x, z = QUOKKA
+    rng = np.random.default_rng(kit.SEED + 82)
+    # the island = the dry cells near the pond centre
+    eiland = [(xx, zz) for xx in range(x - 6, x + 7) for zz in range(z - 6, z + 7)
+              if not park.water[xx, zz] and math.hypot(xx - x, zz - z) <= 6]
+    for (xx, zz) in eiland:
+        g = int(park.hoogte[xx, zz])
+        for y in range(g + 1, g + 4):
+            if park.v[xx, y, zz] and _naam(park, xx, y, zz).endswith(("dead_bush", "short_grass")):
+                park.v[xx, y, zz] = 0
+        park.set(xx, g, zz, "grass_block", snowy="false")
+        if park.v[xx, g + 1, zz] == 0:
+            r = rng.random()
+            if r < 0.25:
+                park.set(xx, g + 1, zz, "short_grass")
+            elif r < 0.3:
+                park.set(xx, g + 1, zz, "dandelion")
+    if eiland:
+        g = int(park.hoogte[x, z])
+        top = park.boom("acacia", x, g, z, grootte=0.6)
+        park.bomen.append((x, top, z, "acacia"))
+        for dx, dz in ((2, 1), (-2, -1), (1, -2)):
+            if (x + dx, z + dz) in eiland:
+                park.blob(x + dx, int(park.hoogte[x + dx, z + dz]) + 1, z + dz, 1.2, 0.9, 1.2, park.leaves("acacia"))
+    # stepping stones half under water from the west shore (visitors may look, quokka's stay)
+    for k, dx in enumerate((-8, -10, -12)):
+        sx, sz = x + dx, z + (k % 2)
+        if park.water[sx, sz]:
+            park.set(sx, WATER_Y, sz, "smooth_stone_slab", type="top", waterlogged="false")
+
+
+def outback(park):
+    """Spinifex tussocks over the open red outback (east half of the zone) and the wombat burrow hill."""
+    rng = np.random.default_rng(kit.SEED + 83)
+    au = 8
+    xs, zs = np.nonzero((park.zone == au) & ~park.water & ~park.pad & (park.hek_afstand > 4))
+    for _ in range(900):
+        i = int(rng.integers(0, len(xs)))
+        x, z = int(xs[i]), int(zs[i])
+        if math.hypot(x - EUCALYPTUS[0], z - EUCALYPTUS[1]) < 18:
+            continue
+        g = int(park.hoogte[x, z])
+        if park.v[x, g + 1, z] != 0 and not _naam(park, x, g + 1, z).endswith(("dead_bush", "short_grass")):
+            continue
+        if rng.random() < 0.5:
+            park.set(x, g + 1, z, "tall_grass", half="lower")
+            park.set(x, g + 2, z, "tall_grass", half="upper")
+        else:
+            park.set(x, g + 1, z, "short_grass")
+    # wombat hill: a low round hill with burrow holes
+    x, z = WOMBAT
+    kap(park, x, z, 10)
+    g = int(park.hoogte[x, z])
+    r = 8
+    for xx in range(x - r, x + r + 1):
+        for zz in range(z - r, z + r + 1):
+            d = math.hypot(xx - x, zz - z)
+            if d <= r and not park.pad[xx, zz] and not park.hek[xx, zz] and not park.water[xx, zz]:
+                top = g + int(round(3 * math.cos(d / r * math.pi / 2)))
+                if top > park.hoogte[xx, zz]:
+                    zet_grond(park, xx, zz, top, "red_sand", "red_sandstone")
+    for a in (20, 140, 260):
+        hx = x + round(math.cos(math.radians(a)) * 4)
+        hz = z + round(math.sin(math.radians(a)) * 4)
+        top = int(park.hoogte[hx, hz])
+        park.set(hx, top, hz, "air")
+        park.set(hx, top - 1, hz, "air")
+        park.set(hx, top - 2, hz, "coarse_dirt")
+
+
+def postkantoortje(park):
+    x, z = POST
+    kap(park, x, z, 7)
+    g = int(park.hoogte[x, z])
+    vlak(park, x, z, 5.5, g, "coarse_dirt", "dirt")
+    for dx in range(-3, 4):
+        for dz in range(-2, 3):
+            rand = abs(dx) == 3 or abs(dz) == 2
+            hoek = abs(dx) == 3 and abs(dz) == 2
+            park.set(x + dx, g, z + dz, "spruce_planks")
+            for y in range(g + 1, g + 4):
+                if rand:
+                    park.set(x + dx, y, z + dz, kit.state("stripped_spruce_log", axis="y") if hoek else
+                             "light_gray_terracotta")
+                else:
+                    park.set(x + dx, y, z + dz, "air")
+    # corrugated roof (iron) with an overhang over a veranda on the west (path) side
+    for dx in range(-5, 4):
+        for dz in range(-3, 4):
+            park.set(x + dx, g + 4, z + dz, "iron_block" if (dz % 2 == 0) else "smooth_stone")
+    for dz in (-3, 3):
+        for y in range(g + 1, g + 4):
+            park.set(x - 5, y, z + dz, "spruce_fence")
+    park.set(x - 3, g + 1, z, "air")
+    park.set(x - 3, g + 2, z, "air")
+    park.set(x - 3, g + 1, z + 1, "glass_pane")
+    park.set(x - 3, g + 2, z - 1, "glass_pane")
+    # counter + the lost postcard spot (geheimpje): a chest behind the counter
+    park.fill(x, g + 1, z - 1, x, g + 1, z + 1, "spruce_planks")
+    park.set(x + 2, g + 1, z + 1, "chest", facing="west", type="single", waterlogged="false")
+    park.set(x + 2, g + 1, z - 1, "barrel", facing="up", open="false")
+    # the red mailbox on a post in front
+    mx, mz = x - 7, z + 2
+    gm = int(park.hoogte[mx, mz])
+    park.set(mx, gm + 1, mz, "spruce_fence")
+    park.set(mx, gm + 2, mz, "red_terracotta")
+    park.set(mx, gm + 3, mz, "red_carpet")
+    # sign-like name board on the roof edge
+    for dz in (-1, 0, 1):
+        park.set(x - 4, g + 5, z + dz, "yellow_terracotta")
+
+
+def schaduwboom(park):
+    x, z = SCHADUW
+    kap(park, x, z, 8)
+    g = int(park.hoogte[x, z])
+    a = (x - 3, z)
+    b = (x + 4, z)
+    for (tx, tz) in (a, b):
+        top = park.boom("acacia", tx, int(park.hoogte[tx, tz]), tz, grootte=1.2)
+        park.bomen.append((tx, top, tz, "acacia"))
+    # hammock between the two trunks, sagging one block in the middle
+    for xx in range(a[0] + 1, b[0]):
+        mid = abs(xx - (a[0] + b[0]) / 2) < 2
+        park.set(xx, g + (2 if mid else 3), z, "white_wool")
+    for (tx, tz) in (a, b):
+        park.set(tx, g + 3, tz, kit.state("acacia_log", axis="y"))
+
+
+def prieel(park):
+    x, z = PRIEEL
+    kap(park, x, z, 6)
+    g = int(park.hoogte[x, z])
+    vlak(park, x, z, 4.5, g, "grass_block", "dirt")
+    # the avenue: two walls of sticks (fences + dead bushes) leaning in, a court with blue treasures in front
+    for dz in range(-2, 3):
+        for side in (-1, 1):
+            park.set(x + side, g + 1, z + dz, "spruce_fence")
+            park.set(x + side, g + 2, z + dz, "dead_bush" if dz % 2 else "spruce_fence")
+    rng = np.random.default_rng(kit.SEED + 84)
+    blauw = ["cornflower", "blue_orchid", "cornflower"]
+    for dx in range(-3, 4):
+        for dz in range(3, 6):
+            if rng.random() < 0.6 and park.v[x + dx, g + 1, z + dz] == 0:
+                park.set(x + dx, g + 1, z + dz, blauw[int(rng.integers(0, 3))])
+    park.set(x, g + 1, z + 4, "light_blue_carpet")
+    park.set(x + 2, g + 1, z + 5, "blue_carpet")
+
+
+def bouw(park, log=print):
+    eucalyptusbos(park)
+    billabong(park)
+    quokka_eiland(park)
+    outback(park)
+    postkantoortje(park)
+    schaduwboom(park)
+    prieel(park)
+    kap(park, TOREN[0], TOREN[1], 6)
+    vlak(park, TOREN[0], TOREN[1], 3.5, int(park.hoogte[TOREN[0], TOREN[1]]), "coarse_dirt", "dirt")
+    toren(park, TOREN[0], TOREN[1], hout="acacia", hoogte=8, dakblok="iron_block")
+    for naam, (x, z, r) in {"wombat": (WOMBAT[0], WOMBAT[1], 9), "billabong": (BILLABONG[0], BILLABONG[1], 10),
+                             "post": (POST[0], POST[1], 6), "toren": (TOREN[0], TOREN[1], 5)}.items():
+        if not ver_van_hek(park, x, z, r):
+            log(f"  LET OP australie: {naam} ligt dicht bij een hek")
+    from . import preview
+    for spot in (("park_iso_australie", 290 - 128, 455 - 128),):
+        if spot not in preview.SPOTS:
+            preview.SPOTS.append(spot)
+
+
+def plekken(park, plekken_):
+    zet_huizen(park, plekken_, "koala", [(EUCALYPTUS[0] + 3, EUCALYPTUS[1] - 2), (EUCALYPTUS[0] - 5, EUCALYPTUS[1] + 4)],
+               "australie")
+    zet_huizen(park, plekken_, "kangoeroe", [(BILLABONG[0] - 4, BILLABONG[1] - 10), (BILLABONG[0] + 6, BILLABONG[1] + 9)],
+               "australie")
+    zet_huizen(park, plekken_, "quokka", [QUOKKA], "australie")
+    zet_huizen(park, plekken_, "wombat", [(WOMBAT[0] + 5, WOMBAT[1] + 1)], "australie")
+    zet_huizen(park, plekken_, "prieelvogel", [(PRIEEL[0], PRIEEL[1] + 3)], "australie")
