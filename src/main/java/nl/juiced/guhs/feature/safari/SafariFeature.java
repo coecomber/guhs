@@ -47,10 +47,12 @@ public final class SafariFeature {
         NeoForge.EVENT_BUS.register(SafariRegels.class);
         NeoForge.EVENT_BUS.addListener(SafariCommando::register);
         nl.juiced.guhs.feature.safari.kern.SafariKern.register();   // step 2: per-player data, safarimunten, events, sync
+        nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.register(modBus);   // step 2, S5: verblijfsbord + animals at home
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {
         nl.juiced.guhs.feature.safari.kern.SafariKern.payloads(registrar);
+        nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.payloads(registrar);   // S5
     }
 
     private SafariFeature() {

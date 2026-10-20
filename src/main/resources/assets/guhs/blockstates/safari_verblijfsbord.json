@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/safari_verblijfsbord"
+    },
+    "facing=south": {
+      "model": "guhs:block/safari_verblijfsbord"
+    },
+    "facing=east": {
+      "model": "guhs:block/safari_verblijfsbord"
+    },
+    "facing=west": {
+      "model": "guhs:block/safari_verblijfsbord"
+    }
+  }
+}

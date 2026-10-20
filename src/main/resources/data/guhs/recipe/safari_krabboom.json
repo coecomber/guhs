@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W",
+    "L",
+    "W"
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "L": "#minecraft:logs"
+  },
+  "result": {
+    "id": "guhs:safari_krabboom"
+  }
+}

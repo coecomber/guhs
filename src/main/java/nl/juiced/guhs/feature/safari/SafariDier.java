@@ -147,6 +147,23 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         setNoGravity(hangPlek != null);
     }
 
+    /** (Step 2, S5: a verblijfsbord animal at home) moves its home; the animal walks there by itself. */
+    public void zetThuis(BlockPos thuis, int straal) {
+        this.thuis = thuis.immutable();
+        this.straal = Math.max(2, straal);
+    }
+
+    /** Does x,z lie in this animal's home? The park: a circle around the centre (a home animal may have another shape). */
+    protected boolean binnenThuis(int x, int z) {
+        return Math.hypot(x - thuis.getX(), z - thuis.getZ()) <= straal;
+    }
+
+    /** Plays one of its animations for a while (petting, friends meeting...). */
+    public void doeActie(String animatie, int ticks) {
+        entityData.set(DATA_ACTIE, animatie);
+        actieTot = Math.max(1, ticks);
+    }
+
     /** Hangs this animal still under a branch at {@code plek} (its feet; the "hang" animation hangs from its top). */
     public void hang(BlockPos plek) {
         hangPlek = plek.immutable();
@@ -328,7 +345,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     }
 
     /** Keeps the animal home: walk back when a little outside, be put back when far outside, fallen, or out of its zone. */
-    void bewaak(ServerLevel level) {
+    protected void bewaak(ServerLevel level) {
         if (info != null && !info.zee() && !info.water()) {
             // a land animal in deep water (2+): out of it, to its home; still in it after ~5 s: put back home
             int diep = isInWater() ? Math.max(waterDiepte(level, blockPosition()), waterDiepte(level, blockPosition().above()) + 1) : 0;
@@ -358,7 +375,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     }
 
     /** Straight back to a free spot at home (its centre). */
-    void terugNaarHuis(ServerLevel level) {
+    protected void terugNaarHuis(ServerLevel level) {
         getNavigation().stop();
         setDeltaMovement(Vec3.ZERO);
         BlockPos p = grond(level, thuis.getX(), thuis.getZ());
@@ -367,7 +384,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     }
 
     /** The spot to stand at in this column: water animals in the water, others on the ground (not on leaves). */
-    BlockPos grond(ServerLevel level, int x, int z) {
+    public BlockPos grond(ServerLevel level, int x, int z) {
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
         if (y <= level.getMinY()) {
             return thuis;
@@ -559,7 +576,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 double hoek = random.nextDouble() * Mth.TWO_PI, d = Math.sqrt(random.nextDouble()) * r;
                 int x = (boom ? getBlockX() : thuis.getX()) + (int) Math.round(Math.cos(hoek) * d);
                 int z = (boom ? getBlockZ() : thuis.getZ()) + (int) Math.round(Math.sin(hoek) * d);
-                if (Math.hypot(x - thuis.getX(), z - thuis.getZ()) > straal) {
+                if (!binnenThuis(x, z)) {
                     continue;
                 }
                 if (zone >= 0 && Safari.echt(level) && ParkData.get().zone(x, z) != zone) {
