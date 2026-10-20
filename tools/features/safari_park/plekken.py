@@ -152,6 +152,6 @@ def controleer(plekken):
     for p in plekken:
         tel[p["soort"]] = tel.get(p["soort"], 0) + p["volwassenen"] + p["jongen"]
     for soort, (_, n, _, _) in SOORTEN.items():
-        assert tel.get(soort) == n, (soort, tel.get(soort), n)
+        assert (tel.get(soort) or 0) >= n, (soort, tel.get(soort), n)   # zone modules may add families (round 2)
     assert "gouden_dikdik" not in tel
     return sum(tel.values())

@@ -720,24 +720,59 @@ def uitkijk_en_hut(park, log):
         dek = toren(park, t[0], t[1], hout="jungle", hoogte=13, dak="jungle")
         PLAATS["uitkijktoren"] = (t[0], dek + 1, t[1])
         log(f"    uitkijktoren bij {t}, dek y{dek}")
-    h = zoek(park, "regenwoud", (470, 375), 140, hek=7, pad=(4, None), water=(2, 9), zonder=vermijd, dicht=2)
+    # test round 2: a real viewing hut at the river (one-way glass, raised floor), looking over deeper clear water to
+    # the far bank, where toekans and luiaards get trees of their own (the old hide looked at a mud bank)
+    from .zone_ijskust import kijkhut
+    h = zoek(park, "regenwoud", (470, 378), 140, hek=7, pad=(4, None), water=(3, 10), zonder=vermijd, dicht=2)
     if h:
-        # look towards the water
-        wd = park._water_d
-        best = min(((wd[h[0] + dx * 4, h[1] + dz * 4], k) for k, (dx, dz) in
-                    {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}.items()))[1]
-        schuilhut(park, h[0], h[1], kijk=best, hout="jungle")
-        PLAATS["schuilhut"] = (h[0], int(park.hoogte[h[0], h[1]]) + 1, h[1])
-        log(f"    schuilhut bij {h}, kijkt {best}")
+        richtingen = {(0, -1): "north", (0, 1): "south", (-1, 0): "west", (1, 0): "east"}
+
+        def score(k):                       # most water in a cone of 6..22 blocks, then land again (the far bank)
+            dx, dz = k
+            w = sum(park.water[h[0] + dx * t + q * -dz, h[1] + dz * t + q * dx]
+                    for t in range(6, 23) for q in range(-3, 4))
+            return w
+        k = max(richtingen, key=score)
+        F, oog, punten = kijkhut(park, h[0], h[1], kijk=k, hout="jungle", verhoog=1, kegel=24,
+                                 bodem="minecraft:sand", oever_blok="minecraft:coarse_dirt", blad="jungle", log=log)
+        PLAATS["schuilhut"] = (h[0], F + 1, h[1])
+        PLAATS["kijkhut_kijk"] = (k, punten)
+        # trees on the far bank, in the view: the first land beyond the water along the view axis
+        vx, vz = h
+        oever = None
+        for t in range(8, 40):
+            x, z = vx + k[0] * t, vz + k[1] * t
+            if park.water[x - k[0], z - k[1]] and not park.water[x, z]:
+                oever = t
+                break
+        bomen = []
+        if oever:
+            for (t, q) in ((oever + 3, -4), (oever + 4, 3), (oever + 6, 0)):
+                x, z = vx + k[0] * t - k[1] * q, vz + k[1] * t + k[0] * q
+                if (0 <= x < kit.W and 0 <= z < kit.W and not park.water[x, z]
+                        and park.zone[x, z] == ZONES.index("regenwoud") and park.hek_afstand[x, z] > 5):
+                    ruim(park, x, z, 2.5, extra=0)
+                    top = park.boom("jungle", x, int(park.hoogte[x, z]), z, grootte=0.55)
+                    park.bomen.append((x, top, z, "jungle"))
+                    bomen.append((x, int(park.hoogte[x, z]) + 1, z))
+        PLAATS["kijkhut_bomen"] = bomen
+        log(f"    kijkhut bij {h}, kijkt {richtingen[k]}, overkant {oever}, {len(bomen)} kijkbomen")
 
 
 def bouw(park, log=print):
+    from .zone_ijskust import vul_laagtes, dicht_water, bruggen
     log("  regenwoud:")
+    n = vul_laagtes(park, "regenwoud", top="minecraft:coarse_dirt", sub="minecraft:dirt")
+    log(f"    {n} droge kolommen onder de waterlijn opgehoogd")
+    park._water_d = park._pad_d = None
     waterval_grot(park, log)
     reuzenboom(park, log)
     ruine(park, log)
     okapi_dal(park, log)
     uitkijk_en_hut(park, log)
+    bruggen(park, ["regenwoud"], log=log)
+    n = dicht_water(park, ["regenwoud"], grond="minecraft:dirt", oever="minecraft:coarse_dirt")
+    log(f"    {n} waterlekken gedicht")
 
 
 def _zet(p, xyz, straal=None):
@@ -766,3 +801,10 @@ def plekken(park, plekken):
             _zet(p, (x + (2 if i == 0 else -2), y, z), 7)
         elif s == "okapi" and "okapi_dal" in PLAATS:
             _zet(p, PLAATS["okapi_dal"], 7)
+    # test round 2: animals in the view of the viewing hut (toekans and a luiaard in the trees on the far bank)
+    bomen = PLAATS.get("kijkhut_bomen") or []
+    for i, (x, y, z) in enumerate(bomen):
+        soort = "luiaard" if i == 1 else "toekan"
+        plekken.append({"soort": soort, "zone": "regenwoud", "centrum": [int(x), int(y), int(z)],
+                        "straal": 5 if soort == "luiaard" else 8, "volwassenen": 2, "jongen": 1,
+                        "water": False, "boom": True})
