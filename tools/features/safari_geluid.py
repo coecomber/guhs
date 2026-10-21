@@ -6,7 +6,7 @@ Op Safari! (1.6.0), slice S6 - all safari sounds, synthesized (mono OGG, 44.1 kH
                       snort + soft hum), klein (squeak / chirp), vogel (twitter), groot_vogel (honk / boom), pinguin (a bray),
                       zee (a bubbly wet "mmrrp"), beer (a grumbly "mrrf"), aap (a hoot "oe-oe"), reptiel (a tiny hiss +
                       click), nijlpaard (a deep giggly grunt), geit ("mèh"), ezel ("iiee-aah"), cavia ("wheek")
-  sfeer/<zone>        an ambience loop per zone (about 12 s): savanne (krekels + far birds), delta (frogs + water), regenwoud
+  sfeer/<zone>        an ambience loop per zone (about 12 s): savanne (32 s: breeze, far doves, a zebra, an elephant), delta (frogs + water), regenwoud
                       (jungle calls + drips), bamboe (wind chimes + leaves), ijskust (icy wind + waves), oertijd (deep wind),
                       europa (forest birds + brook), australie (dry wind + kookaburra-ish laugh), entree (cheerful murmur)
   muziek_lobby        a cheerful safari lobby loop (marimba, shaker, soft bass), about 24 s
@@ -18,6 +18,7 @@ Op Safari! (1.6.0), slice S6 - all safari sounds, synthesized (mono OGG, 44.1 kH
 
 Not part of make_resources.py (the OGGs are committed, like the other sounds). Needs numpy, scipy and soundfile:
     python tools/features/safari_geluid.py        (from the project root)
+    python tools/features/safari_geluid.py --savanne   (round 4: only sfeer/savanne)
 The sound events are registered by tools/features/safari_blokken.py (sounds.json) and feature/safari/spullen/SafariGeluid.
 """
 import os
@@ -208,9 +209,48 @@ def gonggong(dur, n):
                       for _ in range(n)])
 
 
+def savanne(dur=32.0):
+    """Round 4 (test round 4: the savanne ambience was "helemaal niks"): a calm, warm savanne. A soft breeze that swells and
+    settles, far-away doves and a hornbill-ish two-note call, once a distant zebra bark and once a far elephant rumble,
+    and only a faint cricket bed under it all. No music, nothing sharp; a longer loop so it does not feel repetitive."""
+    r = np.random.default_rng(20261021)
+    t = t_(dur)
+    # the breeze: low warm noise, slowly swelling (whole periods over the loop, so it loops cleanly)
+    golf = 0.55 + 0.25 * np.sin(2 * np.pi * t / dur * 2) + 0.2 * np.sin(2 * np.pi * t / dur * 5 + 1.3)
+    bries = low(band(r.standard_normal(len(t)), 90, 700), 500) * golf
+    ruisel = band(r.standard_normal(len(t)), 1500, 4000) * np.maximum(0, golf - 0.6) * 0.25     # grass rustling on the gusts
+    # far-away doves ("roe-koe-koe"): soft low hoots, muffled by the distance
+    duif = []
+    for s0 in (3.0, 15.5, 25.0):
+        for k, (f, d) in enumerate(((520, 0.32), (470, 0.22), (470, 0.38))):
+            duif.append((s0 + [0, 0.42, 0.72][k], toon(f, d, glij=-0.06, harm=(1, 0.15), a=0.06, r=0.12), 0.11))
+    # a hornbill-ish call: two notes, a little higher, twice
+    neushoornvogel = [(s0 + 0.28 * k, toon(760 if k % 2 == 0 else 640, 0.18, glij=-0.1, harm=(1, 0.3, 0.1), a=0.02, r=0.08), 0.06)
+                      for s0 in (9.0, 21.0) for k in range(4)]
+    # little songbirds, few and soft
+    vogels = []
+    for _ in range(5):
+        s0 = r.uniform(1.0, dur - 2.0)
+        f = r.uniform(2000, 3000)
+        for k in range(int(r.integers(2, 4))):
+            vogels.append((s0 + 0.12 * k, toon(f * r.uniform(0.92, 1.1), 0.08, glij=r.uniform(-0.3, 0.5), harm=(1, 0.1), a=0.01, r=0.04), 0.035))
+    # a distant zebra bark ("kwa-ha"), heavily muffled
+    zebra = mix(1.2, (0, toon(620, 0.16, glij=0.3, harm=(1, 0.8, 0.5)), 1.0), (0.22, toon(540, 0.2, glij=-0.2, harm=(1, 0.8, 0.5)), 0.9),
+                (0.48, toon(500, 0.18, glij=-0.2, harm=(1, 0.8, 0.5)), 0.7))
+    zebra = low(zebra, 1400)
+    # a far elephant rumble: a deep swell, more felt than heard
+    olifant = toon(70, 2.6, glij=0.12, vib=0.02, vibf=3, harm=(1, 0.6, 0.3), a=0.8, r=1.2) + 0.2 * low(r.standard_normal(int(2.6 * SR)), 250)
+    # the faint cricket bed (slow, soft pulses, never the old harsh hiss)
+    puls = (0.5 + 0.5 * np.sin(2 * np.pi * 3.0 * t)) ** 6
+    krekel = band(r.standard_normal(len(t)), 3800, 4400) * puls * 0.05
+    return (bries * 0.9 + ruisel + krekel
+            + mix(dur, *duif) + mix(dur, *neushoornvogel) + mix(dur, *vogels)
+            + mix(dur, (12.0, zebra, 0.07), (27.0, olifant, 0.22)))
+
+
 def sfeer(zone, dur=12.0):
     if zone == "savanne":
-        return krekels(dur) + vogeltjes(dur, 5, 1800, 3200) * 0.6 + wind(dur, 150, 500) * 0.2
+        return savanne()
     if zone == "delta":
         kwak = mix(dur, *[(rng.uniform(0, dur - 0.3), toon(rng.uniform(220, 320), 0.18, harm=(1, 0.8, 0.5)) * (1 + 0.8 * np.sin(2 * np.pi * 30 * t_(0.18))), 0.25)
                           for _ in range(10)])
@@ -296,6 +336,10 @@ def kano():
 
 
 def main():
+    import sys
+    if "--savanne" in sys.argv:            # round 4: only the new savanne ambience (the other OGGs stay as they are)
+        save("sfeer/savanne", savanne(), 0.45, loop=True)
+        return
     for g in DIER_GROEPEN:
         for v in (1, 2, 3):
             save(f"dier/{g}{v}", dier(g, v), 0.7)

@@ -38,6 +38,8 @@ public final class SafariClient {
     static final DataTicket<String> TEXTUUR = DataTicket.create("guhs_safari_dier_textuur", String.class);
     static final DataTicket<Float> SCHAAL = DataTicket.create("guhs_safari_dier_schaal", Float.class);
     static final DataTicket<Boolean> GLOED = DataTicket.create("guhs_safari_dier_gloed", Boolean.class);
+    /** Round 4: the animation it plays now (prop bones "prop_<actie>" only show during that actie). */
+    static final DataTicket<String> ACTIE = DataTicket.create("guhs_safari_dier_actie", String.class);
     private static final Map<String, Boolean> BESTAAT = new ConcurrentHashMap<>();
 
     public static void init(IEventBus modBus) {
@@ -77,11 +79,16 @@ public final class SafariClient {
                     state.addGeckolibData(MODEL, geo(g) ? g : "");
                     String t = kies(soort, variant, SafariClient::textuur);
                     // round 3: asleep (at night or a nap) with its eyes shut, when the species has a _slaap texture
-                    state.addGeckolibData(TEXTUUR, !textuur(t) ? "" : dier.slaapt() && textuur(t + "_slaap") ? t + "_slaap" : t);
+                    String gekozen = !textuur(t) ? "" : dier.slaapt() && textuur(t + "_slaap") ? t + "_slaap" : t;
+                    state.addGeckolibData(TEXTUUR, gekozen);
                     ParkData.Soort info = ParkData.get().soort(soort);
                     boolean kleineBaby = variant.equals("baby") && !g.endsWith("_baby");
-                    state.addGeckolibData(SCHAAL, kleineBaby ? (info == null ? 0.55f : info.babySchaal()) : 1f);
-                    state.addGeckolibData(GLOED, textuur(t + "_glowmask"));      // GeckoLib's emissive name (RenderUtil.getEmissiveResource)
+                    float soortSchaal = info == null ? 1f : info.schaal();          // round 4: giraffe/olifant 1.5x
+                    state.addGeckolibData(SCHAAL, (kleineBaby ? (info == null ? 0.55f : info.babySchaal()) : 1f) * soortSchaal);
+                    // GeckoLib's emissive name is the DRAWN texture + _glowmask (RenderUtil.getEmissiveResource): asleep that is
+                    // <naam>_slaap_glowmask (round 4: the sleeping glimworm drew the missing texture when only <naam>_glowmask existed)
+                    state.addGeckolibData(GLOED, !gekozen.isEmpty() && textuur(gekozen + "_glowmask"));
+                    state.addGeckolibData(ACTIE, dier.actie());
                 }
 
                 @Override
@@ -122,8 +129,12 @@ public final class SafariClient {
         public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
             DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
             // the stork's parcel only shows while a home stork delivers (VerblijfClient turns it back on); never in the park
+            String actie = info.getOrDefaultGeckolibData(ACTIE, "");
             for (com.geckolib.cache.model.GeoBone bone : info.model().boneLookup().get().values()) {
                 if (bone.name().equals("bundeltje")) {
+                    bones.get(bone).skipRender(true).skipChildrenRender(true);
+                } else if (bone.name().startsWith("prop_") && !bone.name().substring(5).equals(actie)) {
+                    // round 4: a prop (the beaver's branch, the otter's shell, the giraffe's leaf) only during its own actie
                     bones.get(bone).skipRender(true).skipChildrenRender(true);
                 }
             }

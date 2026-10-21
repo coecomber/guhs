@@ -57,6 +57,7 @@ TEKSTEN = {
     "gui.guhs.safari.beschermd": "Dit is Safaripark Vadse Bergen, njeg: hier mag je niks slopen of bouwen!",
     "gui.guhs.safari.storing": "Het safaripark is even dicht (storing). Probeer het straks nog eens.",
     "gui.guhs.safari.welkom": "Welkom in Safaripark Vadse Bergen! Kijk goed om je heen: de diertjes verstoppen zich graag. Vahoeg!",
+    "gui.guhs.safari.guhdex_gekregen": "Je had nog geen Guhdex, njeg! Hier, eentje van de rangers: daarin staat je Safari-dex.",
     "commands.guhs.safari.herbouw": "Het safaripark wordt helemaal opnieuw neergezet; daarna komen alle dieren terug.",
     "commands.guhs.safari.dieren": "Alle %s dierenverblijven worden opnieuw gevuld.",
     "commands.guhs.safari.status": "Park versie %s (gebouwd: %s, bezig: %s) · dieren generatie %s (%s) · %s",

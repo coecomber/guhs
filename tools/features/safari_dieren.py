@@ -15,6 +15,8 @@ model, behaviour flags, the animations that exist, speed, glow, verblijfsbord pr
 
     python tools/features/safari_dieren.py [soort ...] [--vellen] [--check]
         no soort: all 51; --vellen: also the proposal sheets (build/safari_atelier/); --check: only the self-check
+    python tools/features/safari_dieren.py [soort ...] --afwerken
+        only the steps on the copied files (show animations, props, sleep glowmasks) and soorten.json, no studio run
 build(h) does the same for make_resources (all soorten, no sheets).
 """
 import json
@@ -35,7 +37,7 @@ SOORTEN_JSON = os.path.join(RES, "data", "guhs", "safari", "soorten.json")
 BEWONERS_JSON = os.path.join(RES, "data", "guhs", "safari", "bewoners.json")
 
 # the studio module that makes each soort (batch 1 = dieren.py)
-MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9"]
+MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "batch10", "batch11"]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # species data (design 1.6 soortenblad + ronde 38-39). gedrag flags:
@@ -66,6 +68,10 @@ GELUID = {
     "krokodil": "reptiel", "gekko": "reptiel", "vuursalamander": "reptiel", "glimworm": "reptiel",
     "nijlpaard": "nijlpaard",
     "geitje": "geit", "alpaca": "geit", "ezeltje": "ezel", "cavia": "cavia",
+    # round 4: the Kriebelhuis animals (batch 10/11)
+    "kameleon": "reptiel", "reuzenschildpad": "reptiel", "slang": "reptiel", "hoornkikker": "reptiel", "kiwi": "vogel",
+    "schubdier": "klein", "spookdiertje": "aap", "plompe_lori": "aap", "zeepaardje": "zee", "pijlstaartrog": "zee",
+    "zeeschildpad": "zee", "pelikaan": "groot_vogel",
 }
 
 DATA = {
@@ -131,7 +137,24 @@ DATA = {
     "alpaca":         dict(zone="entree", gedrag=["aaihoek"], snelheid=0.18, bord=None),
     "cavia":          dict(zone="entree", gedrag=["aaihoek"], snelheid=0.16, bord=None),
     "ezeltje":        dict(zone="entree", gedrag=["aaihoek"], snelheid=0.18, bord=None),
+    # round 4 (test round 4, design ch. 6): the Kriebelhuis animals (batch 10/11). Data and animations only: they get no
+    # park homes yet (the Kriebelhuis comes later), and the dex only lists the park's own zones, so they stay out of it.
+    "kameleon":       dict(zone="kriebelhuis", gedrag=["boom", "verstopper"], snelheid=0.08, bord="middel"),
+    "reuzenschildpad": dict(zone="kriebelhuis", gedrag=[], snelheid=0.06, bord="gewoon"),
+    "slang":          dict(zone="kriebelhuis", gedrag=["verstopper"], snelheid=0.1, bord="middel"),
+    "hoornkikker":    dict(zone="kriebelhuis", gedrag=["verstopper", "water"], snelheid=0.12, bord="gewoon"),
+    "kiwi":           dict(zone="kriebelhuis", gedrag=["verstopper", "nacht"], snelheid=0.18, bord="zeldzaam"),
+    "schubdier":      dict(zone="kriebelhuis", gedrag=["verstopper", "nacht"], snelheid=0.14, bord="zeldzaam"),
+    "spookdiertje":   dict(zone="kriebelhuis", gedrag=["boom", "nacht"], snelheid=0.16, bord="middel"),
+    "plompe_lori":    dict(zone="kriebelhuis", gedrag=["boom", "nacht"], snelheid=0.06, bord="middel"),
+    "zeepaardje":     dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.06, bord="middel"),
+    "pijlstaartrog":  dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.14, bord="gewoon"),
+    "zeeschildpad":   dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.12, bord="middel"),
+    "pelikaan":       dict(zone="kriebelhuis", gedrag=["water", "vlieg"], snelheid=0.2, bord="gewoon"),
 }
+
+# round 4 (test round 4: giraffes and elephants ~1.5x bigger): model and hitbox scale (soorten.json "schaal", default 1)
+SCHAAL = {"giraffe": 1.5, "olifant": 1.5}
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -155,7 +178,26 @@ ACTIES = {
     "bever": ["zwem", "draag", "burcht"], "das": ["tunnel"], "otter": ["zwem"],
     "nijlpaard": ["zwem"], "krokodil": ["zwem"], "capibara": ["zwem", "drink"], "flamingo": ["zwem"],
     "ijsbeer": ["zwem"], "zeehond": ["zwem"], "leeuw": ["drink"], "neushoorn": ["drink"], "jachtluipaard": ["drink"],
+    "hoornkikker": ["zwem"], "pelikaan": ["zwem"], "reuzenschildpad": ["drink"],
 }
+
+# round 4: the generated one-shot "show" animations (safari_atelier/gedrag_anims.py SHOWS) per call group, plus a few
+# species of their own; each only when the model has the bones (they become "anim:<naam>" acties like the own ones)
+SHOWS_GROEP = {
+    "grote_kat": ["brul", "gaap", "rek"], "beer": ["gaap", "rek", "snuffel"], "grazer": ["schud", "snuffel", "rondkijk"],
+    "olifant": ["schud", "rondkijk"], "klein": ["huppel", "krab", "snuffel"], "vogel": ["schud", "rondkijk"],
+    "groot_vogel": ["schud", "rondkijk"], "pinguin": ["schud", "rondkijk"], "zee": ["schud"],
+    "aap": ["krab", "rondkijk", "rek"], "reptiel": ["rondkijk", "snuffel"], "nijlpaard": ["gaap", "schud"],
+    "geit": ["huppel", "schud"], "ezel": ["schud", "rondkijk"], "cavia": ["huppel", "snuffel"],
+}
+SHOWS_SOORT = {
+    "giraffe": ["pluk", "schud", "rondkijk"], "otter": ["schelp", "schud", "huppel"], "bever": ["schud", "snuffel", "krab"],
+    "stokstaartje": ["rondkijk", "krab", "huppel"], "krokodil": ["gaap"], "kangoeroe": ["krab", "rondkijk"],
+}
+
+
+def shows(soort):
+    return SHOWS_SOORT.get(soort, SHOWS_GROEP.get(GELUID.get(soort), []))
 # own animations that are no behaviour of their own (the base set, poses the AI sets itself, and the generated ones)
 GEEN_ACTIE_ANIM = {"idle", "walk", "blij", "eet", "hang", "slaap", "rust", "ren", "buikglij", "spuit", "draag", "zit"}
 
@@ -229,7 +271,7 @@ def maak(soorten=None, vellen=False):
         for m in mods:
             m.UIT = STAGING
     kopieer(soorten)
-    extra_animaties(soorten)
+    afwerken(soorten)
     if vellen:
         for m in mods:
             mine = [s for s in m.SOORTEN if s in soorten]
@@ -243,6 +285,26 @@ def maak(soorten=None, vellen=False):
     schrijf_bewoners()
 
 
+def afwerken(soorten):
+    """Everything done to the copied files (also on its own: --afwerken, without running the studio again)."""
+    slaap_glowmasks()
+    extra_animaties(soorten)
+    import props
+    for s in soorten:
+        props.voeg_toe(s, GEO_DIR, TEX_DIR)
+
+
+def slaap_glowmasks():
+    """Round 4: GeckoLib looks for the DRAWN texture + _glowmask, so asleep <naam>_slaap_glowmask.png (the sleeping
+    glimworm drew the purple-black missing texture): a copy of <naam>_glowmask.png for every <naam>_slaap.png."""
+    for f in os.listdir(TEX_DIR):
+        if not f.endswith("_glowmask.png") or f.endswith("_slaap_glowmask.png"):
+            continue
+        naam = f[:-len("_glowmask.png")]
+        if os.path.exists(os.path.join(TEX_DIR, naam + "_slaap.png")):
+            shutil.copyfile(os.path.join(TEX_DIR, f), os.path.join(TEX_DIR, naam + "_slaap_glowmask.png"))
+
+
 def extra_animaties(soorten):
     """Round 3: slaap/rust and the behaviour animations (safari_atelier/gedrag_anims.py) into the copied animation files."""
     import gedrag_anims
@@ -252,7 +314,7 @@ def extra_animaties(soorten):
         if not (os.path.exists(pad) and os.path.exists(geo)):
             continue
         anims = json.load(open(pad, encoding="utf-8"))
-        if gedrag_anims.voeg_toe(s, json.load(open(geo, encoding="utf-8")), anims):
+        if gedrag_anims.voeg_toe(s, json.load(open(geo, encoding="utf-8")), anims, shows(s)):
             with open(pad, "w", encoding="utf-8") as f:
                 json.dump(anims, f, indent=1)
 
@@ -332,6 +394,8 @@ def schrijf_soorten():
             "bord": d["bord"],
             "geluid": "safari.dier." + GELUID[s],
         }
+        if s in SCHAAL:
+            uit[s]["schaal"] = SCHAAL[s]
         if d.get("idle_mix"):
             uit[s]["idle_mix"] = d["idle_mix"]
         acties = ["rust"] + [a for a in ACTIES.get(s, []) if a != "rust"]
@@ -369,6 +433,11 @@ def check():
             for a in ("idle", "walk"):
                 if a not in namen:
                     problemen.append(f"{s}: basisanimatie {a} ontbreekt")
+        # round 4: a texture that glows must also glow asleep (else GeckoLib draws the missing texture)
+        for v in ("", "_man", "_baby"):
+            if os.path.exists(os.path.join(TEX_DIR, f"{s}{v}_glowmask.png")) and os.path.exists(os.path.join(TEX_DIR, f"{s}{v}_slaap.png")) \
+                    and not os.path.exists(os.path.join(TEX_DIR, f"{s}{v}_slaap_glowmask.png")):
+                problemen.append(f"{s}: {s}{v}_slaap_glowmask.png ontbreekt")
     if problemen:
         raise SystemExit("safari_dieren check failed:\n  " + "\n  ".join(problemen))
     print(f"safari_dieren check: {len(soorten)} soorten ok")
@@ -381,6 +450,12 @@ def build(h):
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    if "--check" not in sys.argv:
+    if "--afwerken" in sys.argv:
+        # round 4: only the steps on the copied files (show animations, props, sleep glowmasks) + soorten.json
+        sys.path.insert(0, ATELIER)
+        afwerken(args or list(DATA))
+        schrijf_soorten()
+        schrijf_bewoners()
+    elif "--check" not in sys.argv:
         maak(args or None, vellen="--vellen" in sys.argv)
     check()
