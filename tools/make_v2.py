@@ -1342,7 +1342,15 @@ def bees_slimes_mikas():
             variants[f"facing={f},honey_level={lvl}"] = v
     w(f"{A}/blockstates/knabbelkorf.json", {"variants": variants})
     w(f"{A}/models/item/knabbelkorf.json", {"parent": "guhs:block/knabbelkorf"})
-    self_drop("knabbelkorf")
+    # 1.6.0 (F0-fix): like the vanilla beehive, silk touch keeps the bees and the honey level
+    w(f"{D}/loot_table/blocks/knabbelkorf.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "bonus_rolls": 0, "entries": [
+        {"type": "minecraft:alternatives", "children": [
+            {"type": "minecraft:item", "name": "guhs:knabbelkorf",
+             "conditions": [{"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
+                 {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}],
+             "functions": [{"function": "minecraft:copy_components", "include": ["minecraft:bees"], "source": "block_entity"},
+                           {"function": "minecraft:copy_state", "block": "guhs:knabbelkorf", "properties": ["honey_level"]}]},
+            {"type": "minecraft:item", "name": "guhs:knabbelkorf"}]}]}], "random_sequence": "guhs:blocks/knabbelkorf"})
     add_tag("minecraft/tags/point_of_interest_type/bee_home", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/beehives", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/mineable/axe", ["guhs:knabbelkorf"])

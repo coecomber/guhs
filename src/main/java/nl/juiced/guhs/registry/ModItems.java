@@ -312,7 +312,12 @@ public final class ModItems {
     }
 
     static {
-        ITEMS.registerSimpleBlockItem(ModBlocks.KNABBELKORF);
+        // 1.6.0 (F0-fix): like the vanilla beehive item, so the bees picked up with silk touch come back when placed
+        ITEMS.registerItem("knabbelkorf", props -> new BlockItem(ModBlocks.KNABBELKORF.get(), props), () -> new Item.Properties()
+                .component(net.minecraft.core.component.DataComponents.BEES, net.minecraft.world.item.component.Bees.EMPTY)
+                .component(net.minecraft.core.component.DataComponents.BLOCK_STATE,
+                        net.minecraft.world.item.component.BlockItemStateProperties.EMPTY.with(net.minecraft.world.level.block.BeehiveBlock.HONEY_LEVEL, 0))
+                .useBlockDescriptionPrefix());
         ITEMS.registerSimpleBlockItem(ModBlocks.EENRICHTINGSGLAS);
         ITEMS.registerSimpleBlockItem(ModBlocks.KONINGSTROON);
         ITEMS.registerSimpleBlockItem(ModBlocks.GUHBLOESEM_LOG);
