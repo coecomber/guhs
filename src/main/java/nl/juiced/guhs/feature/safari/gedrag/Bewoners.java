@@ -16,7 +16,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -108,8 +107,9 @@ public final class Bewoners {
             return;
         }
         SafariSpeler.zetVlag(p, vlag, true);
-        p.sendSystemMessage(Component.translatable("gui.guhs.safari.bewoner.gefotografeerd", dier.getCustomName() == null
-                ? Component.literal(dier.bewoner()) : dier.getCustomName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        // (test round 4: in the talking screen, the resident itself drawn; it waits until the photo is taken)
+        nl.juiced.guhs.feature.safari.quests.SafariDialoog.zeg(p, dier, "", "gui.guhs.safari.bewoner.gefotografeerd",
+                dier.getCustomName() == null ? Component.literal(dier.bewoner()) : dier.getCustomName());
         p.level().playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.6f, 1.4f);
     }
 

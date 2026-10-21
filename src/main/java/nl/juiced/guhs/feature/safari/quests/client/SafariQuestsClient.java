@@ -15,13 +15,17 @@ import nl.juiced.guhs.feature.safari.quests.SafariQuests;
 /**
  * Client side of slice S4: the pootafdrukken light up while you look through a spyglass (or S6's verrekijker,
  * {@link SafariQuests#VERREKIJKER}): every few ticks the prints in front of you (within 32 blocks, in your view) get a
- * few glowing particles, so a trail to a hider shows up from afar.
+ * few glowing particles, so a trail to a hider shows up from afar. Test round 4: also the quest tracker
+ * ({@link QuestTrackerHud}).
  */
 public final class SafariQuestsClient {
     private static final int BEREIK = 32;
 
     public static void init(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tick());
+        // test round 4: the quest tracker in the top right corner (QuestTrackerHud)
+        modBus.addListener((net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) ->
+                event.registerAboveAll(nl.juiced.guhs.Guhs.id("safari_quest_tracker"), QuestTrackerHud::extractRenderState));
     }
 
     private static void tick() {

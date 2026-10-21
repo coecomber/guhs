@@ -1,69 +1,121 @@
 package nl.juiced.guhs.feature.safari.momenten;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
-import nl.juiced.guhs.feature.knus.GuhHooks;
-import nl.juiced.guhs.feature.safari.ParkData;
+import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.safari.Safari;
 import nl.juiced.guhs.feature.safari.SafariDier;
 import nl.juiced.guhs.feature.safari.SafariFeature;
-import nl.juiced.guhs.feature.safari.lobby.Beleving;
 import nl.juiced.guhs.feature.safari.rit.Pad;
-import nl.juiced.guhs.feature.safari.rit.RitData;
+import nl.juiced.guhs.feature.safari.spullen.SafariGeluid;
+import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.world.GuhTime;
 
 /**
- * The pinguïnparade (test round 3, design ronde 45): once a day ({@link MomentSchema#PARADE_VAN}, on the schemabord)
- * a little row of penguins waddles in a scripted group, with a tune of note-block flutes, along two walks:
- * <ul>
- *   <li>the truck road through the IJskust (the part of the route that lies in the IJskust);</li>
- *   <li>a loop through the village: from the gate by the truck station round the fountain and back
- *       ({@link Beleving#paradeDorp}). Visitor guhs on the square walk along behind the last penguin.</li>
- * </ul>
- * The parade penguins are extra animals (tag {@link #TAG}, no home, no zone): they come with a puff when the parade
- * begins and leave with a puff when it is over (also after a restart in the middle of it).
+ * The pinguïnparade (test round 3, redone in test round 4, design ronde 47): once a day ({@link MomentSchema#PARADE_VAN},
+ * on the schemabord) a little stoet walks, just like the vadsparade, along two walks ({@link ParadeRoute}): the truck road
+ * through the IJskust and a loop through the village.
+ * <p>
+ * The stoet ({@link #opstelling}): in front the tamboer-guh (sjako, paradejasje, trommeltje) and the vlaggendrager (flag
+ * cape, safari hat), then the penguins in a neat row, at the back dancing guhs with balloons. Everyone is scripted: each
+ * tick member k stands {@code k * }{@link #AFSTAND} blocks behind the leader along the walk ({@link #posities}), so they
+ * never clip into each other. The penguins waddle (a little sway and bob) and now and then do a belly-slide hop; the
+ * dancers hop and twirl. The parade has its own tune (flute and drum, {@link SafariGeluid#PARADE}, phrase after phrase at
+ * the tamboer). Confetti when it sets off and at the finish, then everybody leaves with a puff.
+ * <p>
+ * The members are extra entities (penguins: tag {@link #TAG}; guhs: tag {@link #GUH_TAG}, nobody can pick them up), never
+ * kept: they leave when the parade is over (also after a restart in the middle of it).
  * <p>
  * The hook for the animal behaviour (J1): {@link #actief} (a parade is on in this level) and {@link #isParadeDier}
- * (this animal walks in it: leave its movement alone; its {@code thuis} moves along every half second).
+ * (this animal walks in it: leave its movement alone).
  */
 public final class Parade {
     public static final String TAG = "guhs_safari_parade";
-    static final int PINGUINS = 5, ACHTER = 25, STAP = 10;
-    private static final float[] DEUNTJE = {1.0f, 1.26f, 1.5f, 1.26f, 1.0f, 1.12f, 1.33f, 1.68f};
+    public static final String GUH_TAG = "guhs_safari_parade_guh";
+    /** Blocks between two members of the stoet, measured along the walk. */
+    public static final double AFSTAND = 2.0;
+    static final int PINGUINS = 6, DANSERS = 3;
+    /** Walking speed (blocks per tick): normally {@link #SNEL}, a little faster for a long walk, never faster than {@link #MAX_SNEL}. */
+    static final double SNEL = 0.075, MAX_SNEL = 0.11;
+    /** Ticks of one phrase of the parade tune (the OGGs are exactly this long). */
+    static final int FRASE = 80;
+    /** Ticks of the finale (confetti, cheering) before everybody leaves. */
+    static final int FINALE = 70;
 
-    /** A walking group: its waypoints and per penguin how far it got (index into the waypoints). */
-    private static final class Groep {
+    private static final DustParticleOptions[] CONFETTI = {
+            new DustParticleOptions(0xFF73BF, 1.2f), new DustParticleOptions(0xFFD940, 1.2f), new DustParticleOptions(0x8CE6BF, 1.2f),
+            new DustParticleOptions(0x80B2FF, 1.2f), new DustParticleOptions(0xBF80FF, 1.2f)};
+
+    /** Who walks where in the stoet. */
+    public enum Rol {
+        TAMBOER, VLAG, PINGUIN, DANSER
+    }
+
+    /** The order of the stoet, front to back. */
+    public static List<Rol> opstelling() {
+        List<Rol> uit = new ArrayList<>();
+        uit.add(Rol.TAMBOER);
+        uit.add(Rol.VLAG);
+        for (int i = 0; i < PINGUINS; i++) {
+            uit.add(Rol.PINGUIN);
+        }
+        for (int i = 0; i < DANSERS; i++) {
+            uit.add(Rol.DANSER);
+        }
+        return uit;
+    }
+
+    /** Where the n members stand when the leader is {@code s} blocks along the walk: each {@link #AFSTAND} behind the one in front. */
+    public static List<Vec3> posities(Pad pad, double s, int n) {
+        List<Vec3> uit = new ArrayList<>(n);
+        for (int k = 0; k < n; k++) {
+            uit.add(pad.op(s - k * AFSTAND));
+        }
+        return uit;
+    }
+
+    /** One walking stoet. */
+    private static final class Stoet {
         final String naam;
-        final List<BlockPos> punten;
-        final Map<UUID, Integer> stand = new HashMap<>();
-        final Map<UUID, Integer> vast = new HashMap<>();
-        boolean gemaakt;
+        final Pad pad;
+        final List<Rol> rollen = opstelling();
+        final UUID[] leden = new UUID[rollen.size()];
+        final double[] y = new double[rollen.size()];
+        final int[] glij = new int[rollen.size()];
+        double s, snel = SNEL, eind;
+        boolean gemaakt, weg;
+        int ticks, finale;
 
-        Groep(String naam, List<BlockPos> punten) {
+        Stoet(String naam, List<Vec3> punten) {
             this.naam = naam;
-            this.punten = punten;
+            this.pad = new Pad(punten, false);
+            this.eind = pad.lengte();
         }
     }
 
-    private static final List<Groep> GROEPEN = new ArrayList<>();
+    private static final List<Stoet> STOETEN = new ArrayList<>();
     private static long dagGestart = Long.MIN_VALUE;
-    private static int noot;
 
     /** Is the penguin parade on in this level now? */
     public static boolean actief(net.minecraft.world.level.Level level) {
@@ -75,167 +127,284 @@ public final class Parade {
         return e instanceof SafariDier && e.entityTags().contains(TAG);
     }
 
-    static void tick(MinecraftServer server) {
-        if (server.getTickCount() % STAP != 5) {
-            return;
+    static boolean isParadeGuh(Entity e) {
+        return e instanceof GuhEntity && e.entityTags().contains(GUH_TAG);
+    }
+
+    /** The parade guhs are nobody's: no picking up, no feeding, no clothes (Momenten forwards both interact events). */
+    static void opInteractie(PlayerInteractEvent event, Entity doel) {
+        if (isParadeGuh(doel) && event instanceof net.neoforged.bus.api.ICancellableEvent c) {
+            c.setCanceled(true);
+            if (event instanceof PlayerInteractEvent.EntityInteract ei) {
+                ei.setCancellationResult(InteractionResult.SUCCESS);
+            } else if (event instanceof PlayerInteractEvent.EntityInteractSpecific es) {
+                es.setCancellationResult(InteractionResult.SUCCESS);
+            }
         }
+    }
+
+    static void tick(MinecraftServer server) {
         ServerLevel level = Safari.level(server);
         if (level == null) {
             return;
         }
-        boolean aan = actief(level) && !level.players().isEmpty();
-        long dag = GuhTime.day(level);
-        if (!aan) {
-            if (!GROEPEN.isEmpty() || server.getTickCount() % 400 == 5) {
+        if (server.getTickCount() % 10 == 5) {
+            boolean aan = actief(level) && !level.players().isEmpty();
+            if (!aan) {
+                if (!STOETEN.isEmpty() || server.getTickCount() % 400 == 5) {
+                    stop(level);
+                }
+                return;
+            }
+            long dag = GuhTime.day(level);
+            if (dagGestart != dag) {
                 stop(level);
+                dagGestart = dag;
+                int over = MomentSchema.PARADE_VAN + MomentSchema.PARADE_DUUR - (int) GuhTime.timeOfDay(level);
+                maak("ijskust", ParadeRoute.ijskust(), over);
+                maak("dorp", ParadeRoute.dorp(), over);
             }
-            return;
         }
-        if (dagGestart != dag) {
-            stop(level);
-            dagGestart = dag;
-            GROEPEN.add(new Groep("ijskust", ijskustPad()));
-            GROEPEN.add(new Groep("dorp", Beleving.get().paradeDorp));
-        }
-        for (Groep g : GROEPEN) {
-            loop(level, g);
+        for (Stoet st : STOETEN) {
+            loop(level, st);
         }
     }
 
-    /** The waypoints of the IJskust walk: every 4th route point that lies in the IJskust, in route order. */
-    static List<BlockPos> ijskustPad() {
-        List<BlockPos> uit = new ArrayList<>();
-        Pad route = RitData.get().route;
-        ParkData d = ParkData.get();
-        int zone = d.zoneIndex("ijskust");
-        if (route == null || zone < 0) {
-            return uit;
+    /** A new stoet on this walk, with a speed (and if needed a shorter walk) so it reaches the end within the parade time. */
+    private static void maak(String naam, List<Vec3> punten, int over) {
+        if (punten.size() < 2) {
+            return;
         }
-        // the longest run of route points in the IJskust (the loop may start in the middle of it)
-        int n = (int) Math.floor(route.lengte() / 1.5);
-        List<BlockPos> run = new ArrayList<>();
-        for (int i = 0; i < n * 2 && i < 4000; i++) {
-            Vec3 p = route.op((i % n) * 1.5);
-            if (d.zone((int) Math.floor(p.x), (int) Math.floor(p.z)) == zone) {
-                run.add(BlockPos.containing(p));
-            } else {
-                if (run.size() > uit.size()) {
-                    uit = run;
-                }
-                run = new ArrayList<>();
-            }
+        Stoet st = new Stoet(naam, punten);
+        double begin = (st.rollen.size() - 1) * AFSTAND;
+        if (st.eind <= begin + 4) {
+            return;
         }
-        if (run.size() > uit.size()) {
-            uit = run;
-        }
-        List<BlockPos> om = new ArrayList<>();
-        for (int i = 0; i < uit.size(); i += 4) {
-            om.add(uit.get(i));
-        }
-        return om;
+        int tijd = Math.max(200, over - FINALE - 120);
+        st.snel = Mth.clamp((st.eind - begin) / tijd, SNEL, MAX_SNEL);
+        st.eind = Math.min(st.eind, begin + st.snel * tijd);
+        st.s = begin;
+        STOETEN.add(st);
     }
 
-    private static void loop(ServerLevel level, Groep g) {
-        if (g.punten.size() < 2) {
+    private static void loop(ServerLevel level, Stoet st) {
+        if (st.weg) {
             return;
         }
-        BlockPos start = g.punten.get(0);
-        if (!level.isLoaded(start)) {
-            return;
+        Vec3 kop = st.pad.op(st.s);
+        if (!level.isLoaded(BlockPos.containing(kop)) || !level.isLoaded(BlockPos.containing(st.pad.op(0)))) {
+            return;                                       // (nobody near: the stoet waits)
         }
-        if (!g.gemaakt) {
-            g.gemaakt = true;
-            for (int i = 0; i < PINGUINS; i++) {
-                SafariDier p = SafariFeature.DIER.get().create(level, EntitySpawnReason.EVENT);
-                if (p == null) {
-                    return;
-                }
-                BlockPos plek = grond(level, start);
-                p.zet("pinguin", i % 2 == 0 ? "man" : "vrouw", plek, 3, -1, -1, 0);
-                p.addTag(TAG);
-                p.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, 0f, 0f);
-                level.addFreshEntity(p);
-                level.sendParticles(ParticleTypes.POOF, p.getX(), p.getY() + 0.4, p.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
-                // one after the other: the later ones start a little further back
-                g.stand.put(p.getUUID(), -i);
+        if (!st.gemaakt) {
+            st.gemaakt = true;
+            if (!stel(level, st)) {
+                weg(level, st);
+                return;
+            }
+            confetti(level, st.pad.op(st.s - st.rollen.size() * AFSTAND / 2), 3.0);
+            level.playSound(null, kop.x, kop.y, kop.z, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.RECORDS, 2f, 1.1f);
+        }
+        st.ticks++;
+        if (st.finale == 0) {
+            st.s = Math.min(st.eind, st.s + st.snel);
+            if (st.s >= st.eind) {
+                st.finale = 1;
             }
         }
-        SafariDier eerste = null;
-        SafariDier laatste = null;
-        for (Map.Entry<UUID, Integer> e : g.stand.entrySet()) {
-            if (!(level.getEntity(e.getKey()) instanceof SafariDier p) || p.isRemoved()) {
+        List<Vec3> plek = posities(st.pad, st.s, st.rollen.size());
+        Entity tamboer = null;
+        for (int k = 0; k < st.leden.length; k++) {
+            Entity e = st.leden[k] == null ? null : level.getEntity(st.leden[k]);
+            if (e == null || e.isRemoved()) {
                 continue;
             }
-            int i = e.getValue();
-            if (i < 0) {
-                e.setValue(i + 1);
-                continue;
+            if (k == 0) {
+                tamboer = e;
             }
-            BlockPos doel = g.punten.get(Math.min(i, g.punten.size() - 1));
-            if (i < g.punten.size() - 1 && p.distanceToSqr(doel.getX() + 0.5, p.getY(), doel.getZ() + 0.5) < 2.5 * 2.5) {
-                e.setValue(++i);
-                g.vast.remove(e.getKey());
-                doel = g.punten.get(i);
-            } else if (i < g.punten.size() - 1 && g.vast.merge(e.getKey(), 1, Integer::sum) > 20) {
-                // stuck for 10 seconds: hop to the waypoint
-                g.vast.remove(e.getKey());
-                BlockPos t = grond(level, doel);
-                p.teleportTo(t.getX() + 0.5, t.getY(), t.getZ() + 0.5);
+            zet(level, st, k, e, plek.get(k));
+        }
+        if (st.finale == 0 && tamboer != null && st.ticks % FRASE == 1) {
+            int frase = (st.ticks / FRASE) % SafariGeluid.PARADE.size();
+            level.playSound(null, tamboer.getX(), tamboer.getY(), tamboer.getZ(), SafariGeluid.PARADE.get(frase).get(), SoundSource.RECORDS, 2.5f, 1f);
+        }
+        if (tamboer != null && st.finale == 0 && st.ticks % 20 == 0) {
+            level.sendParticles(ParticleTypes.NOTE, tamboer.getX(), tamboer.getY() + 1.4, tamboer.getZ(), 1, 0.2, 0.1, 0.2, 0.5);
+        }
+        if (st.finale > 0) {
+            finale(level, st);
+        }
+    }
+
+    /** Puts member k on its spot of the walk: penguins waddle (now and then a belly-slide hop), dancers hop and twirl. */
+    private static void zet(ServerLevel level, Stoet st, int k, Entity e, Vec3 p) {
+        Rol rol = st.rollen.get(k);
+        double doelY = grondY(level, p);
+        st.y[k] = Math.abs(doelY - st.y[k]) > 3 ? doelY : st.y[k] + Mth.clamp(doelY - st.y[k], -0.35, 0.6);
+        float yaw = st.pad.richting(st.s - k * AFSTAND, e.getYRot());
+        double hop = 0;
+        float draai = 0;
+        double t = st.ticks;
+        boolean loopt = st.finale == 0;
+        switch (rol) {
+            case TAMBOER -> {
             }
-            p.zetThuis(doel, 3, -1);
-            if (i >= g.punten.size() - 1) {
-                if (p.getRandom().nextInt(4) == 0) {
-                    p.speelActie("blij", 40);
+            case VLAG -> hop = loopt ? 0.04 * Math.abs(Math.sin(t * Math.PI / 10)) : 0;
+            case PINGUIN -> {
+                if (loopt && st.glij[k] == 0 && e instanceof SafariDier d && d.getRandom().nextInt(500) == 0) {
+                    st.glij[k] = 16;
+                    d.speelActie("buikglij", 16);
                 }
-            } else {
-                p.getNavigation().moveTo(doel.getX() + 0.5, doel.getY(), doel.getZ() + 0.5, 1.0);
+                if (st.glij[k] > 0) {
+                    hop = 0.35 * Math.sin(Math.PI * (16 - st.glij[k]) / 16.0);
+                    st.glij[k]--;
+                } else if (loopt) {
+                    hop = 0.05 * Math.abs(Math.sin(t * Math.PI / 6 + k));
+                    draai = (float) (9 * Math.sin(t * Math.PI / 6 + k));
+                }
             }
-            if (eerste == null || i > g.stand.getOrDefault(eerste.getUUID(), 0)) {
-                eerste = p;
-            }
-            if (laatste == null || i < g.stand.getOrDefault(laatste.getUUID(), 0)) {
-                laatste = p;
+            case DANSER -> {
+                hop = 0.2 * Math.abs(Math.sin(t * Math.PI / 10 - k * 0.7));
+                draai = (float) (35 * Math.sin(t * Math.PI / 40 + k));
+                if (e instanceof GuhEntity g && (st.ticks + k * 13) % 40 == 0) {
+                    g.triggerAnim("action", "happy");
+                }
             }
         }
-        if (eerste != null && level.getGameTime() % 20 < STAP) {
-            level.playSound(null, eerste.getX(), eerste.getY(), eerste.getZ(), SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.RECORDS,
-                    1.2f, DEUNTJE[noot++ % DEUNTJE.length]);
-            level.sendParticles(ParticleTypes.NOTE, eerste.getX(), eerste.getY() + 1.2, eerste.getZ(), 1, 0.2, 0.1, 0.2, 0.5);
+        e.setPos(p.x, st.y[k] + hop, p.z);
+        e.setDeltaMovement(Vec3.ZERO);
+        e.setYRot(yaw + draai);
+        if (e instanceof net.minecraft.world.entity.LivingEntity le) {
+            le.setYBodyRot(yaw + draai);
+            le.setYHeadRot(yaw + draai);
         }
-        if (laatste != null && "dorp".equals(g.naam)) {
-            meelopen(level, laatste);
-        }
-    }
-
-    /** Visitor guhs near the village walk follow the last penguin. */
-    private static void meelopen(ServerLevel level, SafariDier laatste) {
-        int n = 0;
-        for (GuhEntity guh : level.getEntitiesOfClass(GuhEntity.class, new AABB(laatste.blockPosition()).inflate(18, 6, 18),
-                g -> g.entityTags().contains("guhs_safari_bezoeker") && !g.isPassenger())) {
-            if (n++ >= 4) {
-                break;
-            }
-            GuhHooks.bezig(guh, 40);
-            if (guh.distanceToSqr(laatste) > 3 * 3) {
-                guh.getNavigation().moveTo(laatste.getX(), laatste.getY(), laatste.getZ(), 1.0);
-            }
+        if (e instanceof SafariDier d && st.ticks % 10 == 0) {
+            d.zetThuis(e.blockPosition(), 3, -1);
         }
     }
 
-    /** The parade is over (or was cut off by a restart): the penguins go home with a puff. */
-    private static void stop(ServerLevel level) {
-        GROEPEN.clear();
-        dagGestart = Long.MIN_VALUE;
-        for (Entity e : level.getAllEntities()) {
-            if (isParadeDier(e)) {
+    /** Makes the members, all on their spot, with a puff. False when an entity could not be made. */
+    private static boolean stel(ServerLevel level, Stoet st) {
+        List<Vec3> plek = posities(st.pad, st.s, st.rollen.size());
+        int pinguin = 0, danser = 0;
+        for (int k = 0; k < st.rollen.size(); k++) {
+            Vec3 p = plek.get(k);
+            Entity e = switch (st.rollen.get(k)) {
+                case PINGUIN -> pinguin(level, BlockPos.containing(p), pinguin++);
+                case TAMBOER -> guh(level, 1.15f, GuhClothes.VADSPARADE_SJAKO, GuhClothes.VADSPARADE_JASJE, GuhClothes.VADSPARADE_TROMMELTJE);
+                case VLAG -> guh(level, 1.05f, GuhClothes.CIRCUIT_VLAGCAPE, GuhClothes.SAFARI_HOEDJE);
+                case DANSER -> guh(level, 0.95f, GuhClothes.MEW_BALLONNETJE, danser++ % 2 == 0 ? GuhClothes.PARTY_HAT : GuhClothes.BALLONPET);
+            };
+            if (e == null) {
+                return false;
+            }
+            st.y[k] = grondY(level, p);
+            e.snapTo(p.x, st.y[k], p.z, st.pad.richting(st.s - k * AFSTAND, 0f), 0f);
+            level.addFreshEntity(e);
+            st.leden[k] = e.getUUID();
+            level.sendParticles(ParticleTypes.POOF, p.x, st.y[k] + 0.4, p.z, 6, 0.2, 0.2, 0.2, 0.02);
+        }
+        return true;
+    }
+
+    private static SafariDier pinguin(ServerLevel level, BlockPos plek, int i) {
+        SafariDier p = SafariFeature.DIER.get().create(level, EntitySpawnReason.EVENT);
+        if (p != null) {
+            p.zet("pinguin", i % 2 == 0 ? "man" : "vrouw", plek, 3, -1, -1, 0);
+            p.addTag(TAG);
+            p.setNoAi(true);
+            p.setNoGravity(true);
+            p.setInvulnerable(true);
+        }
+        return p;
+    }
+
+    private static GuhEntity guh(ServerLevel level, float schaal, GuhClothes... kleren) {
+        GuhEntity g = ModEntities.GUH.get().create(level, EntitySpawnReason.EVENT);
+        if (g != null) {
+            g.setVariant(GuhVariant.NORMAL);
+            g.setGuhScale(schaal);
+            for (GuhClothes c : kleren) {
+                g.wear(c);
+            }
+            g.setNoAi(true);
+            g.setNoGravity(true);
+            g.setInvulnerable(true);
+            g.addTag(GUH_TAG);
+        }
+        return g;
+    }
+
+    /** The finish: confetti and cheering, then everybody leaves with a puff. */
+    private static void finale(ServerLevel level, Stoet st) {
+        Vec3 kop = st.pad.op(st.s);
+        if (st.finale == 1) {
+            level.playSound(null, kop.x, kop.y, kop.z, SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.RECORDS, 2.5f, 1f);
+            level.playSound(null, kop.x, kop.y, kop.z, SoundEvents.PLAYER_LEVELUP, SoundSource.RECORDS, 1.2f, 1.2f);
+            for (UUID id : st.leden) {
+                Entity e = id == null ? null : level.getEntity(id);
+                if (e instanceof GuhEntity g) {
+                    g.triggerAnim("action", "happy");
+                } else if (e instanceof SafariDier d) {
+                    d.speelActie("blij", FINALE);
+                }
+            }
+        }
+        if (st.finale % 20 == 1) {
+            confetti(level, kop, 3.0);
+            confetti(level, st.pad.op(st.s - st.rollen.size() * AFSTAND / 2), 3.0);
+        }
+        if (++st.finale > FINALE) {
+            weg(level, st);
+        }
+    }
+
+    private static void weg(ServerLevel level, Stoet st) {
+        st.weg = true;
+        for (UUID id : st.leden) {
+            Entity e = id == null ? null : level.getEntity(id);
+            if (e != null) {
                 level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.4, e.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
                 e.discard();
             }
         }
     }
 
-    private static BlockPos grond(ServerLevel level, BlockPos p) {
-        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, p);
+    private static void confetti(ServerLevel level, Vec3 c, double straal) {
+        for (DustParticleOptions kleur : CONFETTI) {
+            level.sendParticles(kleur, c.x, c.y + 2.0, c.z, 14, straal / 2, 1.0, straal / 2, 0.15);
+        }
+        level.sendParticles(ParticleTypes.FIREWORK, c.x, c.y + 2.5, c.z, 16, straal / 2, 0.6, straal / 2, 0.08);
+    }
+
+    /** The parade is over (or was cut off by a restart): everybody goes home with a puff. */
+    private static void stop(ServerLevel level) {
+        STOETEN.clear();
+        dagGestart = Long.MIN_VALUE;
+        for (Entity e : level.getAllEntities()) {
+            if (isParadeDier(e) || isParadeGuh(e)) {
+                level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.4, e.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
+                e.discard();
+            }
+        }
+    }
+
+    /** The walking surface near this point of the walk (under an arch or a roof too), else the top of the terrain. */
+    static double grondY(ServerLevel level, Vec3 p) {
+        int x = Mth.floor(p.x), z = Mth.floor(p.z), y0 = Mth.floor(p.y + 0.01);
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        for (int y = y0 + 2; y >= y0 - 4; y--) {
+            m.set(x, y, z);
+            if (!level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                continue;
+            }
+            m.set(x, y - 1, z);
+            BlockState onder = level.getBlockState(m);
+            VoxelShape vorm = onder.getCollisionShape(level, m);
+            if (!vorm.isEmpty()) {
+                return y - 1 + vorm.max(Direction.Axis.Y);
+            }
+        }
+        return level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
     }
 
     private Parade() {

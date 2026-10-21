@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -48,19 +47,28 @@ public final class VermomdeGuh {
             new Plek("reuzenpanda", GuhClothes.PANDAPAKJE, "panda"),
             new Plek("pinguin", GuhClothes.PINGUINPAKJE, "pinguin"));
 
-    /** S2's head ranger: tells about the quest. */
-    static boolean ranger(ServerPlayer p) {
+    /** Flag: the head ranger already thanked this player after the quest. */
+    static final String BEDANKT = "vermomd_bedankt";
+
+    /**
+     * S2's head ranger (the speaker, may be null): asks for help the first time, thanks once after the quest; otherwise
+     * false, so his own talk (the tip of the day...) comes (the quest tracker already shows where you are).
+     */
+    static boolean ranger(ServerPlayer p, @Nullable Entity ranger) {
         MinecraftServer server = p.level().getServer();
         String stand = SafariSpeler.quest(server, p.getUUID(), QUEST);
-        switch (stand) {
-            case "" -> {
-                SafariSpeler.zetQuest(server, p.getUUID(), QUEST, "gevraagd");
-                SafariQuests.zeg(p, "gui.guhs.safari.vermomd.ranger");
-            }
-            case "klaar" -> SafariQuests.zeg(p, "gui.guhs.safari.vermomd.ranger_klaar");
-            default -> SafariQuests.zeg(p, "gui.guhs.safari.vermomd.ranger_bezig");
+        if (stand.isEmpty()) {
+            SafariSpeler.zetQuest(server, p.getUUID(), QUEST, "gevraagd");
+            SafariDialoog.zeg(p, ranger, SafariDialoog.RANGER, "gui.guhs.safari.vermomd.ranger");
+            SafariDialoog.zeg(p, ranger, SafariDialoog.RANGER, "gui.guhs.safari.vermomd.ranger_2");
+            return true;
         }
-        return true;
+        if (stand.equals("klaar") && !SafariSpeler.vlag(server, p.getUUID(), BEDANKT)) {
+            SafariSpeler.zetVlag(server, p.getUUID(), BEDANKT, true);
+            SafariDialoog.zeg(p, ranger, SafariDialoog.RANGER, "gui.guhs.safari.vermomd.ranger_klaar");
+            return true;
+        }
+        return false;
     }
 
     /** A right click on an entity: true when it was one of the disguised guhs. */
@@ -87,11 +95,11 @@ public final class VermomdeGuh {
             default -> -1;
         };
         if (nu != i) {
-            p.sendSystemMessage(Component.translatable("gui.guhs.safari.vermomd.niet_nu",
-                    Component.translatable("gui.guhs.safari.vermomd." + PLEKKEN.get(i).woord())).withStyle(ChatFormatting.GRAY));
+            SafariDialoog.zeg(p, e, SafariDialoog.VERKLEED, "gui.guhs.safari.vermomd.niet_nu",
+                    Component.translatable("gui.guhs.safari.vermomd." + PLEKKEN.get(i).woord()));
             return;
         }
-        SafariQuests.zeg(p, "gui.guhs.safari.vermomd." + (i + 1));
+        SafariDialoog.zeg(p, e, SafariDialoog.VERKLEED, "gui.guhs.safari.vermomd." + (i + 1));
         if (e != null && p.level() instanceof ServerLevel level) {
             level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.5, e.getZ(), 14, 0.3, 0.3, 0.3, 0.02);
             level.playSound(null, e.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.2f);
@@ -121,7 +129,7 @@ public final class VermomdeGuh {
         }
         Aandenken.kleding(p, GuhClothes.ZEBRAPAKJE, GuhClothes.PANDAPAKJE, GuhClothes.PINGUINPAKJE);   // (all three: none stays out of reach)
         SafariMunten.verdienEens(p, "quest_" + QUEST, MUNTEN, "vermomde guh");
-        SafariQuests.zeg(p, "gui.guhs.safari.vermomd.klaar", MUNTEN);
+        SafariDialoog.zeg(p, null, SafariDialoog.VERKLEED, "gui.guhs.safari.vermomd.klaar", MUNTEN);
         Beloningen.adv(p, "safari_vermomde_guh");
     }
 

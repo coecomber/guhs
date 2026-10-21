@@ -47,7 +47,7 @@ import nl.juiced.guhs.feature.safari.kern.SafariSync;
  * Everything comes from the synced safari state ({@link SafariSync#stand}); the species list from {@link ParkData}.
  */
 public final class SafariDexTab {
-    private enum Weergave { DIEREN, MISSIES, GEHEIMPJES, BEWONERS }
+    private enum Weergave { DIEREN, MISSIES, GEHEIMPJES, BEWONERS, QUESTS }
 
     private static final int TEKST = 0xFF5A3A4A, DONKER = 0xFF3A1C30, ROZE = 0xFF7A2848, LICHT = 0xFFB0708A;
     private static final int GEHEIMPJES = 8, CEL = 30;
@@ -84,7 +84,7 @@ public final class SafariDexTab {
         int bx = left + 8;
         for (Weergave v : Weergave.values()) {
             Component naam = Component.translatable("gui.guhs.safari.dex.weergave." + v.name().toLowerCase(java.util.Locale.ROOT));
-            int bw = Math.max(54, font.width(naam) + 10);
+            int bw = Math.max(44, font.width(naam) + 8);
             Button b = Button.builder(naam, btn -> {
                 weergave = v;
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.2f));
@@ -208,6 +208,7 @@ public final class SafariDexTab {
             case MISSIES -> tekenMissies(g);
             case GEHEIMPJES -> tekenGeheimpjes(g);
             case BEWONERS -> tekenBewoners(g);
+            case QUESTS -> tekenQuests(g);
             default -> tekenDieren(g, mouseX, mouseY);
         }
     }
@@ -348,6 +349,22 @@ public final class SafariDexTab {
             GidsTekst.passend(g, tekst, cx + 4, cy + (rij - 3) / 2 - 3, cw - 8, 0.75f, heeft ? DONKER : 0xFF8A6A7A, false);
         }
         GidsTekst.alinea(g, Component.translatable("gui.guhs.safari.dex.bewoners.uitleg"), x, top + h - 22, bw, 0.625f, LICHT);
+    }
+
+    /** Test round 4: the safari quests and where you are in them (quests.QuestTracker; the tracker shows the busy ones). */
+    private void tekenQuests(GuiGraphicsExtractor g) {
+        List<nl.juiced.guhs.feature.safari.quests.QuestTracker.Quest> quests = nl.juiced.guhs.feature.safari.quests.QuestTracker.overzicht(stand());
+        int x = left + 12, y = gy + 2, bw = w - 24;
+        y += GidsTekst.passend(g, Component.translatable("gui.guhs.safari.dex.quests.kop").withStyle(ChatFormatting.BOLD), x, y, bw, 1f, DONKER, false) + 4;
+        for (var q : quests) {
+            g.fill(x - 2, y - 2, x + bw + 2, y + 26, q.klaar() ? 0x3868D88A : 0x22F7B6CB);
+            Component kop = Component.literal(q.klaar() ? "✔ " : "○ ").withStyle(q.klaar() ? ChatFormatting.DARK_GREEN : ChatFormatting.GRAY)
+                    .append(q.naam().copy().withStyle(ChatFormatting.BOLD));
+            GidsTekst.passend(g, kop, x + 2, y + 1, bw - 4, 0.875f, q.klaar() ? 0xFF2A7A48 : DONKER, false);
+            GidsTekst.passend(g, q.stand(), x + 12, y + 13, bw - 16, 0.75f, TEKST, false);
+            y += 32;
+        }
+        GidsTekst.alinea(g, Component.translatable("gui.guhs.safari.dex.quests.uitleg"), x, top + h - 22, bw, 0.625f, LICHT);
     }
 
     private void tekenGeheimpjes(GuiGraphicsExtractor g) {

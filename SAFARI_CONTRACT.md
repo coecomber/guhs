@@ -253,3 +253,7 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - The points run from the burrow chamber through the tunnel (2 wide, 1-1.5 high, rising half a block per block, so players cannot follow) to the hill top. y = the standing surface.
   - The das home (straal 8) covers the chamber and the mouth. The viewpoint's favourite `burchtkamer` lies INSIDE the chamber.
   - Any other zone path can use the same `pad` field on its viewpoint (e.g. `glijbaan` for the pinguïns).
+- **Round 4 note: the village walk of the pinguïnparade (`data/guhs/safari/parade.json`, for the new lobby)**:
+  - Format: `{"dorp": [[x, y, z], ...]}`: block positions in walking order, y = the walking surface (a point may also be `{"x":..,"y":..,"z":..}`). At least ~30 blocks long (the stoet is 20 blocks: tamboer, flag, 6 penguins, 3 dancers, 2 blocks apart), at least 3 wide, no stairs steeper than 1 block per step.
+  - The lobby generator writes it. Without the file the old loop `beleving.json` `parade_dorp` is used. The IJskust walk stays fixed (the truck route in the IJskust).
+  - Reader: `momenten/ParadeRoute`; walker: `momenten/Parade` (members scripted 2 blocks apart along the walk; guhs tagged `guhs_safari_parade_guh`, penguins `guhs_safari_parade`).

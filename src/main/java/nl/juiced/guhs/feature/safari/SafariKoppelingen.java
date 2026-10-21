@@ -64,7 +64,7 @@ public final class SafariKoppelingen {
 
     public static void register() {
         Fotograaf.JARIG = soort -> soort != null && soort.equals(Momenten.jarigeSoort());
-        Rollen.haak("hoofdranger", (npc, p) -> SafariQuests.hoofdranger(p));
+        Rollen.haak("hoofdranger", (npc, p) -> SafariQuests.hoofdranger(p, npc));
         // S5 → S2: the giftshop's board per species is S5's verblijfsbord item (the shop itself checks dex, price, cooldown)
         SafariWinkel.borden = soort -> nl.juiced.guhs.feature.safari.verblijf.VerblijfData.dier(soort) == null ? ItemStack.EMPTY
                 : nl.juiced.guhs.feature.safari.verblijf.VerblijfsbordItem.bord(soort);
