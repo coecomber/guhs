@@ -266,3 +266,20 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - New block ids it may use (L3 makes them): `guhs:terrariumglas`, `guhs:kasglas`, `guhs:mierenboerderij`, `guhs:infobord`, `guhs:warmtelamp`, `guhs:nepkoraal`, `guhs:glimpaddenstoel`, `guhs:sterrenplafond`, `guhs:schorsplaat`, `guhs:glasvloer`.
 - **L3 blocks** (owns those blocks: Java + tools generator) + the weerder test fix (radius steps 24/32/48/64/128).
 - **L4 Kriebelhuis animals** (owns soorten.json entries for the 36 new species, their behaviour, the dex chapter "Kriebelhuis" with subsections + the 9th expert, terrarium boards; plus the guhs critters spawning in the aquarium/vlindertuin/kikkerhoek).
+
+### L2 Kriebelhuis: what zone_kriebelhuis.py reads and writes
+- **Reads `park.lobby`** (set by zone_entree.bouw, L1): `{"oorsprong": [20, 64, 530], "g": 16, "draai": 0}`. A lobby2 local position (x, y, z) maps to world (ox + x, oy + (y - g), oz + z). Without it, it falls back to that same origin and logs it.
+- **Builds** in the local plot x 0..182, z 0..96, plus the aai-lagune (24..56 × 92..112), the exit + shop (60..86 × 88..108) and the strip between them.
+  - It never places anything at x ≥ 183, because of the truck road; `Lokaal.mag` enforces this.
+  - It deepens L1's pond around the tube to depth 10, and dresses only the columns it deepened.
+- **Homes**: `plekken.json` homes for 35 Kriebelhuis species.
+  - Each has zone `"entree"`, an extra field `"afdeling"` (terrarium / kriebelzaal / nachtzaal / diepzeezaal / rif-lagune / kelpbos) and a small `straal`. There are no clones.
+  - Aquatic ones are added to `plekken.WATERDIER` at run time.
+  - The **pelikaan** (delta) is NOT homed here.
+- **Writes `data/guhs/safari/kriebelhuis.json`**:
+  - `secties`: name → `[x1, y1, z1, x2, y2, z2]`;
+  - `ingang`;
+  - `critters`: `{entity, variant, afdeling, pos, straal, water}`. These are the guhs critters for L4 to spawn: koi, knabbelkoi, guh_vis, kruimelkwal, guhxolotl, kikkerguh, knabbelvlindertje, lieveheersbeestje, guh_bee;
+  - `infoborden`: `{pos, soort}`. Each also carries block NBT `Soort` via `park.infobord_nbt` when L3's kit has it, otherwise the same string tag directly.
+- **NPCs**: appends `{id, kind, pos, yaw}` to `park.lobby_npcs_extra` for the ticket guh (`safari_kriebelhuis_balie`) and the shop guh (`safari_kriebelhuis_winkel`). The lobby.json writer should include them.
+- **Viewpoint**: the kelp viewing cave is the kijkplek `kriebelhuis_kijkgrot`, with a guh chair (a kijk-guh) and 3 favourite spots.
