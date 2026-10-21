@@ -233,8 +233,8 @@
   },
   {
    "pos": [
-    209,
-    54,
+    206,
+    55,
     195
    ],
    "facing": "west",
@@ -251,6 +251,15 @@
   },
   {
    "pos": [
+    322,
+    69,
+    203
+   ],
+   "facing": "north",
+   "zone": "ijskust"
+  },
+  {
+   "pos": [
     366,
     67,
     334
@@ -260,20 +269,20 @@
   },
   {
    "pos": [
-    377,
-    69,
-    251
+    392,
+    73,
+    244
    ],
-   "facing": "east",
+   "facing": "north",
    "zone": "oertijd"
   },
   {
    "pos": [
-    418,
-    66,
-    594
+    439,
+    67,
+    616
    ],
-   "facing": "east",
+   "facing": "north",
    "zone": "savanne"
   },
   {
@@ -287,8 +296,17 @@
   },
   {
    "pos": [
+    469,
+    73,
+    579
+   ],
+   "facing": "west",
+   "zone": "savanne"
+  },
+  {
+   "pos": [
     500,
-    67,
+    66,
     526
    ],
    "facing": "south",
@@ -296,11 +314,47 @@
   },
   {
    "pos": [
-    588,
-    66,
-    398
+    507,
+    82,
+    322
+   ],
+   "facing": "west",
+   "zone": "regenwoud"
+  },
+  {
+   "pos": [
+    529,
+    58,
+    446
    ],
    "facing": "east",
+   "zone": "delta"
+  },
+  {
+   "pos": [
+    561,
+    92,
+    158
+   ],
+   "facing": "west",
+   "zone": "bamboe"
+  },
+  {
+   "pos": [
+    589,
+    67,
+    394
+   ],
+   "facing": "east",
+   "zone": "delta"
+  },
+  {
+   "pos": [
+    594,
+    72,
+    421
+   ],
+   "facing": "north",
    "zone": "delta"
   },
   {

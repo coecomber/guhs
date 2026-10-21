@@ -34,7 +34,7 @@ SOORTEN = {
     "zeehond": ("ijskust", 4, "oever", 10), "narwal": ("ijskust", 2, "diep", 14), "octopus": ("ijskust", 2, "diep", 8),
     "sabeltandtijger": ("oertijd", 2, "verstop:ijsgrot_fossiel", 7), "mammoet": ("oertijd", 3, "open", 18),
     "wolharige_neushoorn": ("oertijd", 2, "open", 16),
-    "bever": ("europa", 2, "verstop:beverdam", 6), "vuursalamander": ("europa", 2, "verstop", 5),
+    "bever": ("europa", 9, "verstop:beverdam", 6), "vuursalamander": ("europa", 2, "verstop", 5),
     "egel": ("europa", 6, "land", 8), "otter": ("europa", 3, "oever", 10), "das": ("europa", 2, "verstop:dassenheuvel", 6),
     "edelhert": ("europa", 4, "open", 16), "ooievaar": ("europa", 3, "oever", 12), "specht": ("europa", 2, "boom", 8),
     "koala": ("australie", 2, "plek:eucalyptusbos", 8), "kangoeroe": ("australie", 4, "open", 18),
