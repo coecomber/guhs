@@ -110,6 +110,10 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     int bezoekStraal;
     /** Round 3: how long a guh may still ride along (the capybara). */
     private int rijdtTot;
+    /** Round 4: the custom name currently is the debug label. */
+    private boolean debugNaam, zichtbaarVoorDebug;
+    @Nullable
+    private Component naamVoorDebug;
     /** (Tests) act even without a player nearby (and stay awake at night; favourites outside the park). */
     public static boolean ALTIJD_ACTIEF = false;
     @Nullable
@@ -355,7 +359,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     protected EntityDimensions getDefaultDimensions(Pose pose) {
         ParkData.Soort s = info != null ? info : ParkData.get().soort(soort());
         float w = s == null ? 0.9f : s.breedte(), h = s == null ? 1.2f : s.hoogte();
-        float f = isBaby() ? (s == null ? 0.55f : s.babySchaal()) : 1f;
+        float f = (isBaby() ? (s == null ? 0.55f : s.babySchaal()) : 1f) * (s == null ? 1f : s.schaal());
         return EntityDimensions.scalable(w * f, h * f);
     }
 
@@ -371,6 +375,17 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     public void aiStep() {
         super.aiStep();
         if (!(level() instanceof ServerLevel level)) {
+            if ("narwal".equals(soort()) && (tickCount + getId()) % 5 == 0) {
+                // round 4: the narwhal, the rarest park animal, glitters softly (also under water) so you know it is special
+                double r = getBbWidth() * 0.8;
+                level().addParticle(net.minecraft.core.particles.ParticleTypes.GLOW, getX() + (random.nextDouble() - 0.5) * r * 2,
+                        getY() + random.nextDouble() * getBbHeight(), getZ() + (random.nextDouble() - 0.5) * r * 2, 0, 0.01, 0);
+                if (random.nextInt(3) == 0) {
+                    level().addParticle(net.minecraft.core.particles.ParticleTypes.END_ROD, getX() + (random.nextDouble() - 0.5) * r * 2,
+                            getY() + getBbHeight() * (0.5 + random.nextDouble() * 0.6), getZ() + (random.nextDouble() - 0.5) * r * 2,
+                            0, 0.005, 0);
+                }
+            }
             if (slaapt() && (tickCount + getId()) % 30 == 10) {
                 // round 3: zzz over its head, just like a sleeping guh
                 level().addParticle(nl.juiced.guhs.feature.emotes.EmotesFeature.GUH_ZZZ.get(), getX(), getY() + getBbHeight() + 0.1, getZ(),
@@ -422,6 +437,64 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         if ((tickCount + getId()) % 40 == 0 && !slaapt() && level.hasNearbyAlivePlayer(getX(), getY(), getZ(), 24)) {
             nl.juiced.guhs.feature.safari.gedrag.GuhReacties.kijk(level, this);
         }
+        if ((tickCount + getId()) % 60 == 0 && !slaapt() && hangPlek == null) {
+            nieuwsgierig(level);
+        }
+        debug();
+    }
+
+    /** Round 4: the debug label and the measurement (SafariDebug). */
+    private void debug() {
+        if (nl.juiced.guhs.feature.safari.gedrag.SafariDebug.meten) {
+            double dx = getX() - xo, dz = getZ() - zo;
+            nl.juiced.guhs.feature.safari.gedrag.SafariDebug.tik(soort(), getId(), Math.sqrt(dx * dx + dz * dz), slaapt(),
+                    bezigheid() != null && !BezigheidGoal.rustig(bezigheid()));
+        }
+        boolean aan = nl.juiced.guhs.feature.safari.gedrag.SafariDebug.labels;
+        if (aan && (tickCount + getId()) % 10 == 0) {
+            BezigheidGoal.Soort b = bezigheid();
+            String t = (b == null ? "-" : b.name().toLowerCase(java.util.Locale.ROOT))
+                    + (bezigheid != null && !bezigheid.actie().isEmpty() ? " " + bezigheid.actie() : "")
+                    + (actie().isEmpty() ? "" : " [" + actie() + "]") + (slaapt() ? " zzz" : "")
+                    + (getNavigation().isDone() ? "" : " >");
+            if (!debugNaam) {
+                naamVoorDebug = getCustomName();
+                zichtbaarVoorDebug = isCustomNameVisible();
+            }
+            setCustomName(Component.literal(t));
+            setCustomNameVisible(true);
+            debugNaam = true;
+        } else if (!aan && debugNaam) {
+            debugNaam = false;
+            setCustomName(naamVoorDebug);
+            setCustomNameVisible(zichtbaarVoorDebug);
+        }
+    }
+
+    /** Round 4: reactions to a player close by. A curious animal (not a hider) now and then stops, turns to look at you and
+     *  plays a happy or a look-around animation; a hider darts away (its AvoidEntityGoal). Once in a while per animal. */
+    private void nieuwsgierig(ServerLevel level) {
+        if (info == null || info.heeft("verstopper") || !actie().isEmpty() || random.nextInt(4) != 0) {
+            return;
+        }
+        Player p = level.getNearestPlayer(this, 6);
+        if (p == null || p.isSpectator() || (bezigheid() != null && bezigheid() == BezigheidGoal.Soort.GEDRAG)) {
+            return;
+        }
+        getNavigation().stop();
+        getLookControl().setLookAt(p, 30f, 30f);
+        String a = info.animaties().contains("rondkijk") && random.nextBoolean() ? "rondkijk" : info.animaties().contains("blij") ? "blij" : "";
+        if (!a.isEmpty()) {
+            zetActie(a, 50);
+        }
+        if (random.nextInt(3) == 0) {
+            roep();
+        }
+    }
+
+    /** Round 4: its own call, now (shows, curiosity). */
+    void roep() {
+        playAmbientSound();
     }
 
     /** A hanging animal stays exactly where it hangs (no gravity, no drifting) and plays "hang". */
@@ -507,7 +580,10 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         boolean nacht = info != null && info.heeft("nacht");
         boolean donker = level.isDarkOutside();
         // most animals sleep in the dark (nocturnal ones by day), but not all of them at once
-        boolean moet = !ALTIJD_ACTIEF && (nacht != donker) && Math.floorMod(getUUID().hashCode(), 10) < 7 && bezoek == null || dutTot > 0;
+        // round 4: nocturnal species sleep by day only in part (4 in 10), so in the park you still see badgers, hedgehogs
+        // and salamanders; the others sleep at night as before (7 in 10)
+        int deel = nacht && !donker ? 4 : 7;
+        boolean moet = !ALTIJD_ACTIEF && (nacht != donker) && Math.floorMod(getUUID().hashCode(), 10) < deel && bezoek == null || dutTot > 0;
         if (moet != slaapt()) {
             entityData.set(DATA_SLAAPT, moet);
             if (moet) {

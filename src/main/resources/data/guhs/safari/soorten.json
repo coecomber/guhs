@@ -11,8 +11,11 @@
   "gedrag": [],
   "animaties": [
    "blij",
+   "brul",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
    "walk"
@@ -23,7 +26,10 @@
   "geluid": "safari.dier.grote_kat",
   "acties": [
    "rust",
-   "drink"
+   "drink",
+   "anim:brul",
+   "anim:gaap",
+   "anim:rek"
   ]
  },
  "luipaard": {
@@ -41,8 +47,11 @@
   ],
   "animaties": [
    "blij",
+   "brul",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
    "walk"
@@ -52,7 +61,10 @@
   "bord": "middel",
   "geluid": "safari.dier.grote_kat",
   "acties": [
-   "rust"
+   "rust",
+   "anim:brul",
+   "anim:gaap",
+   "anim:rek"
   ]
  },
  "olifant": {
@@ -72,7 +84,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "spuit",
    "walk"
@@ -81,11 +95,14 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.olifant",
+  "schaal": 1.5,
   "acties": [
    "rust",
    "spuit",
    "drink",
-   "kudde_ren"
+   "kudde_ren",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "neushoorn": {
@@ -102,8 +119,11 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -112,7 +132,10 @@
   "geluid": "safari.dier.grazer",
   "acties": [
    "rust",
-   "drink"
+   "drink",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "kafferbuffel": {
@@ -132,8 +155,11 @@
    "eet",
    "idle",
    "ren",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -143,7 +169,10 @@
   "acties": [
    "rust",
    "kudde_ren",
-   "drink"
+   "drink",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "dikdik": {
@@ -161,9 +190,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.28,
@@ -171,12 +203,15 @@
   "bord": "middel",
   "geluid": "safari.dier.klein",
   "acties": [
-   "rust"
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "giraffe": {
   "zone": "savanne",
-  "breedte": 1.27,
+  "breedte": 1.57,
   "hoogte": 2.91,
   "baby_breedte": 0.83,
   "baby_hoogte": 1.83,
@@ -190,8 +225,11 @@
    "blij",
    "eet",
    "idle",
+   "pluk",
    "ren",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -199,10 +237,14 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.grazer",
+  "schaal": 1.5,
   "acties": [
    "rust",
    "kudde_ren",
-   "drink"
+   "drink",
+   "anim:pluk",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "zebra": {
@@ -222,8 +264,11 @@
    "eet",
    "idle",
    "ren",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.24,
@@ -233,7 +278,10 @@
   "acties": [
    "rust",
    "kudde_ren",
-   "drink"
+   "drink",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "stokstaartje": {
@@ -252,7 +300,10 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
+   "rondkijk",
    "rust",
    "slaap",
    "wacht",
@@ -267,6 +318,9 @@
   },
   "acties": [
    "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:rondkijk",
    "anim:wacht"
   ]
  },
@@ -282,8 +336,11 @@
   "gedrag": [],
   "animaties": [
    "blij",
+   "brul",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
    "walk"
@@ -294,7 +351,10 @@
   "geluid": "safari.dier.grote_kat",
   "acties": [
    "rust",
-   "drink"
+   "drink",
+   "anim:brul",
+   "anim:gaap",
+   "anim:rek"
   ]
  },
  "struisvogel": {
@@ -315,7 +375,9 @@
    "eet",
    "idle",
    "ren",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk",
    "zit"
@@ -326,7 +388,9 @@
   "geluid": "safari.dier.groot_vogel",
   "acties": [
    "rust",
-   "kudde_ren"
+   "kudde_ren",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "zeekoe": {
@@ -347,6 +411,7 @@
    "eet",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -355,7 +420,8 @@
   "bord": "middel",
   "geluid": "safari.dier.zee",
   "acties": [
-   "rust"
+   "rust",
+   "anim:schud"
   ]
  },
  "nijlpaard": {
@@ -377,6 +443,7 @@
    "gaap",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -387,7 +454,8 @@
   "acties": [
    "rust",
    "zwem",
-   "anim:gaap"
+   "anim:gaap",
+   "anim:schud"
   ]
  },
  "flamingo": {
@@ -407,7 +475,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -417,7 +487,9 @@
   "geluid": "safari.dier.groot_vogel",
   "acties": [
    "rust",
-   "zwem"
+   "zwem",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "capibara": {
@@ -435,9 +507,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.18,
@@ -447,7 +522,10 @@
   "acties": [
    "rust",
    "zwem",
-   "drink"
+   "drink",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "krokodil": {
@@ -466,6 +544,7 @@
   "animaties": [
    "blij",
    "eet",
+   "gaap",
    "idle",
    "rust",
    "slaap",
@@ -477,7 +556,8 @@
   "geluid": "safari.dier.reptiel",
   "acties": [
    "rust",
-   "zwem"
+   "zwem",
+   "anim:gaap"
   ]
  },
  "rode_panda": {
@@ -496,9 +576,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -506,7 +589,10 @@
   "bord": "middel",
   "geluid": "safari.dier.klein",
   "acties": [
-   "rust"
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "reuzenpanda": {
@@ -522,9 +608,12 @@
   "animaties": [
    "blij",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.15,
@@ -532,7 +621,10 @@
   "bord": "middel",
   "geluid": "safari.dier.beer",
   "acties": [
-   "rust"
+   "rust",
+   "anim:gaap",
+   "anim:rek",
+   "anim:snuffel"
   ]
  },
  "gibbon": {
@@ -553,6 +645,7 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
    "slaap",
    "slinger",
@@ -564,6 +657,7 @@
   "geluid": "safari.dier.aap",
   "acties": [
    "rust",
+   "anim:rondkijk",
    "anim:slinger"
   ]
  },
@@ -586,6 +680,9 @@
    "eet",
    "hang",
    "idle",
+   "krab",
+   "rek",
+   "rondkijk",
    "rust",
    "slaap",
    "walk"
@@ -595,7 +692,10 @@
   "bord": "middel",
   "geluid": "safari.dier.aap",
   "acties": [
-   "rust"
+   "rust",
+   "anim:krab",
+   "anim:rek",
+   "anim:rondkijk"
   ]
  },
  "okapi": {
@@ -615,8 +715,11 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -624,7 +727,10 @@
   "bord": "zeldzaam",
   "geluid": "safari.dier.grazer",
   "acties": [
-   "rust"
+   "rust",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "orang_oetan": {
@@ -643,6 +749,9 @@
    "blij",
    "eet",
    "idle",
+   "krab",
+   "rek",
+   "rondkijk",
    "rust",
    "slaap",
    "walk"
@@ -652,7 +761,10 @@
   "bord": "middel",
   "geluid": "safari.dier.aap",
   "acties": [
-   "rust"
+   "rust",
+   "anim:krab",
+   "anim:rek",
+   "anim:rondkijk"
   ]
  },
  "toekan": {
@@ -672,7 +784,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "vlieg",
    "walk"
@@ -683,6 +797,8 @@
   "geluid": "safari.dier.vogel",
   "acties": [
    "rust",
+   "anim:rondkijk",
+   "anim:schud",
    "anim:vlieg"
   ]
  },
@@ -704,8 +820,10 @@
    "eet",
    "idle",
    "klim",
+   "rondkijk",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.22,
@@ -714,7 +832,9 @@
   "geluid": "safari.dier.reptiel",
   "acties": [
    "rust",
-   "anim:klim"
+   "anim:klim",
+   "anim:rondkijk",
+   "anim:snuffel"
   ]
  },
  "glimworm": {
@@ -736,8 +856,10 @@
    "eet",
    "hang",
    "idle",
+   "rondkijk",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.08,
@@ -745,7 +867,9 @@
   "bord": "gewoon",
   "geluid": "safari.dier.reptiel",
   "acties": [
-   "rust"
+   "rust",
+   "anim:rondkijk",
+   "anim:snuffel"
   ]
  },
  "pinguin": {
@@ -766,7 +890,9 @@
    "buikglij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -778,7 +904,9 @@
    "rust",
    "buikglij",
    "glijbaan",
-   "zwem"
+   "zwem",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "ijsbeer": {
@@ -796,9 +924,12 @@
   "animaties": [
    "blij",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -807,7 +938,10 @@
   "geluid": "safari.dier.beer",
   "acties": [
    "rust",
-   "zwem"
+   "zwem",
+   "anim:gaap",
+   "anim:rek",
+   "anim:snuffel"
   ]
  },
  "zeehond": {
@@ -829,6 +963,7 @@
    "eet",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -838,7 +973,8 @@
   "geluid": "safari.dier.zee",
   "acties": [
    "rust",
-   "zwem"
+   "zwem",
+   "anim:schud"
   ]
  },
  "narwal": {
@@ -860,6 +996,7 @@
    "eet",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "walk",
    "zwem"
@@ -870,6 +1007,7 @@
   "geluid": "safari.dier.zee",
   "acties": [
    "rust",
+   "anim:schud",
    "anim:zwem"
   ]
  },
@@ -892,6 +1030,7 @@
    "eet",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "walk",
    "zwaai"
@@ -902,6 +1041,7 @@
   "geluid": "safari.dier.zee",
   "acties": [
    "rust",
+   "anim:schud",
    "anim:zwaai"
   ]
  },
@@ -920,8 +1060,11 @@
   ],
   "animaties": [
    "blij",
+   "brul",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
    "walk"
@@ -931,7 +1074,10 @@
   "bord": "zeldzaam",
   "geluid": "safari.dier.grote_kat",
   "acties": [
-   "rust"
+   "rust",
+   "anim:brul",
+   "anim:gaap",
+   "anim:rek"
   ]
  },
  "mammoet": {
@@ -950,7 +1096,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "spuit",
    "walk"
@@ -962,7 +1110,9 @@
   "acties": [
    "rust",
    "spuit",
-   "kudde_ren"
+   "kudde_ren",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "wolharige_neushoorn": {
@@ -979,8 +1129,11 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.18,
@@ -989,12 +1142,15 @@
   "geluid": "safari.dier.grazer",
   "acties": [
    "rust",
-   "drink"
+   "drink",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "bever": {
   "zone": "europa",
-  "breedte": 1.65,
+  "breedte": 1.71,
   "hoogte": 0.91,
   "baby_breedte": 1.1,
   "baby_hoogte": 0.63,
@@ -1011,8 +1167,11 @@
    "draag",
    "eet",
    "idle",
+   "krab",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.17,
@@ -1023,7 +1182,10 @@
    "rust",
    "zwem",
    "draag",
-   "burcht"
+   "burcht",
+   "anim:krab",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "vuursalamander": {
@@ -1044,8 +1206,10 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.1,
@@ -1053,7 +1217,9 @@
   "bord": "zeldzaam",
   "geluid": "safari.dier.reptiel",
   "acties": [
-   "rust"
+   "rust",
+   "anim:rondkijk",
+   "anim:snuffel"
   ]
  },
  "egel": {
@@ -1072,10 +1238,13 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "opgerold",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.16,
@@ -1084,7 +1253,10 @@
   "geluid": "safari.dier.klein",
   "acties": [
    "rust",
-   "anim:opgerold"
+   "anim:huppel",
+   "anim:krab",
+   "anim:opgerold",
+   "anim:snuffel"
   ]
  },
  "otter": {
@@ -1103,8 +1275,11 @@
    "blij",
    "drijf",
    "eet",
+   "huppel",
    "idle",
    "rust",
+   "schelp",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -1115,7 +1290,10 @@
   "acties": [
    "rust",
    "zwem",
-   "anim:drijf"
+   "anim:drijf",
+   "anim:huppel",
+   "anim:schelp",
+   "anim:schud"
   ]
  },
  "das": {
@@ -1135,9 +1313,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.18,
@@ -1146,7 +1327,10 @@
   "geluid": "safari.dier.klein",
   "acties": [
    "rust",
-   "tunnel"
+   "tunnel",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "edelhert": {
@@ -1166,8 +1350,11 @@
    "eet",
    "idle",
    "ren",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.24,
@@ -1177,7 +1364,10 @@
   "acties": [
    "rust",
    "kudde_ren",
-   "drink"
+   "drink",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
   ]
  },
  "ooievaar": {
@@ -1198,7 +1388,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "vlieg",
    "walk"
@@ -1209,6 +1401,8 @@
   "geluid": "safari.dier.groot_vogel",
   "acties": [
    "rust",
+   "anim:rondkijk",
+   "anim:schud",
    "anim:vlieg"
   ]
  },
@@ -1230,7 +1424,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "tik",
    "walk"
@@ -1241,6 +1437,8 @@
   "geluid": "safari.dier.vogel",
   "acties": [
    "rust",
+   "anim:rondkijk",
+   "anim:schud",
    "anim:tik"
   ]
  },
@@ -1260,9 +1458,12 @@
   "animaties": [
    "blij",
    "eet",
+   "gaap",
    "idle",
+   "rek",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.1,
@@ -1270,7 +1471,10 @@
   "bord": "middel",
   "geluid": "safari.dier.beer",
   "acties": [
-   "rust"
+   "rust",
+   "anim:gaap",
+   "anim:rek",
+   "anim:snuffel"
   ]
  },
  "kangoeroe": {
@@ -1289,6 +1493,7 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
    "slaap",
    "walk"
@@ -1300,7 +1505,8 @@
   "acties": [
    "rust",
    "spring",
-   "drink"
+   "drink",
+   "anim:rondkijk"
   ]
  },
  "wombat": {
@@ -1318,9 +1524,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.16,
@@ -1328,7 +1537,10 @@
   "bord": "middel",
   "geluid": "safari.dier.klein",
   "acties": [
-   "rust"
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "quokka": {
@@ -1347,9 +1559,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.2,
@@ -1358,7 +1573,10 @@
   "geluid": "safari.dier.klein",
   "acties": [
    "rust",
-   "spring"
+   "spring",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "prieelvogel": {
@@ -1379,7 +1597,9 @@
    "dans",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -1389,7 +1609,9 @@
   "geluid": "safari.dier.vogel",
   "acties": [
    "rust",
-   "anim:dans"
+   "anim:dans",
+   "anim:rondkijk",
+   "anim:schud"
   ]
  },
  "gouden_dikdik": {
@@ -1407,9 +1629,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
+   "krab",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.28,
@@ -1417,7 +1642,10 @@
   "bord": null,
   "geluid": "safari.dier.klein",
   "acties": [
-   "rust"
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel"
   ]
  },
  "geitje": {
@@ -1435,9 +1663,11 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
    "knabbel",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -1447,7 +1677,9 @@
   "geluid": "safari.dier.geit",
   "acties": [
    "rust",
-   "anim:knabbel"
+   "anim:huppel",
+   "anim:knabbel",
+   "anim:schud"
   ]
  },
  "alpaca": {
@@ -1465,8 +1697,10 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
    "rust",
+   "schud",
    "slaap",
    "spuug",
    "walk"
@@ -1477,6 +1711,8 @@
   "geluid": "safari.dier.geit",
   "acties": [
    "rust",
+   "anim:huppel",
+   "anim:schud",
    "anim:spuug"
   ]
  },
@@ -1495,10 +1731,12 @@
   "animaties": [
    "blij",
    "eet",
+   "huppel",
    "idle",
    "piep",
    "rust",
    "slaap",
+   "snuffel",
    "walk"
   ],
   "snelheid": 0.16,
@@ -1507,7 +1745,9 @@
   "geluid": "safari.dier.cavia",
   "acties": [
    "rust",
-   "anim:piep"
+   "anim:huppel",
+   "anim:piep",
+   "anim:snuffel"
   ]
  },
  "ezeltje": {
@@ -1527,7 +1767,9 @@
    "blij",
    "eet",
    "idle",
+   "rondkijk",
    "rust",
+   "schud",
    "slaap",
    "walk"
   ],
@@ -1537,7 +1779,430 @@
   "geluid": "safari.dier.ezel",
   "acties": [
    "rust",
-   "anim:balk"
+   "anim:balk",
+   "anim:rondkijk",
+   "anim:schud"
+  ]
+ },
+ "kameleon": {
+  "zone": "kriebelhuis",
+  "breedte": 1.28,
+  "hoogte": 0.74,
+  "baby_breedte": 0.82,
+  "baby_hoogte": 0.51,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "kijk",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.08,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.reptiel",
+  "acties": [
+   "rust",
+   "anim:kijk",
+   "anim:rondkijk",
+   "anim:snuffel"
+  ]
+ },
+ "reuzenschildpad": {
+  "zone": "kriebelhuis",
+  "breedte": 1.2,
+  "hoogte": 0.84,
+  "baby_breedte": 0.65,
+  "baby_hoogte": 0.42,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "verstop",
+   "walk"
+  ],
+  "snelheid": 0.06,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel",
+  "acties": [
+   "rust",
+   "drink",
+   "anim:rondkijk",
+   "anim:snuffel",
+   "anim:verstop"
+  ]
+ },
+ "slang": {
+  "zone": "kriebelhuis",
+  "breedte": 0.61,
+  "hoogte": 0.6,
+  "baby_breedte": 0.36,
+  "baby_hoogte": 0.38,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "kopje",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.reptiel",
+  "acties": [
+   "rust",
+   "anim:kopje",
+   "anim:rondkijk",
+   "anim:snuffel"
+  ]
+ },
+ "hoornkikker": {
+  "zone": "kriebelhuis",
+  "breedte": 0.74,
+  "hoogte": 0.66,
+  "baby_breedte": 0.44,
+  "baby_hoogte": 0.44,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hop",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel",
+  "acties": [
+   "rust",
+   "zwem",
+   "anim:hop",
+   "anim:rondkijk",
+   "anim:snuffel"
+  ]
+ },
+ "kiwi": {
+  "zone": "kriebelhuis",
+  "breedte": 1.0,
+  "hoogte": 0.72,
+  "baby_breedte": 0.74,
+  "baby_hoogte": 0.49,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "schud",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.18,
+  "glow": false,
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.vogel",
+  "acties": [
+   "rust",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:snuffel"
+  ]
+ },
+ "schubdier": {
+  "zone": "kriebelhuis",
+  "breedte": 1.27,
+  "hoogte": 0.5,
+  "baby_breedte": 0.81,
+  "baby_hoogte": 0.3,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "krab",
+   "oprollen",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.klein",
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:oprollen",
+   "anim:snuffel"
+  ]
+ },
+ "spookdiertje": {
+  "zone": "kriebelhuis",
+  "breedte": 1.05,
+  "hoogte": 0.94,
+  "baby_breedte": 0.63,
+  "baby_hoogte": 0.66,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "draai",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "spring",
+   "walk"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.aap",
+  "acties": [
+   "rust",
+   "anim:draai",
+   "anim:rondkijk",
+   "anim:spring"
+  ]
+ },
+ "plompe_lori": {
+  "zone": "kriebelhuis",
+  "breedte": 0.7,
+  "hoogte": 0.95,
+  "baby_breedte": 0.41,
+  "baby_hoogte": 0.63,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "nacht"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "knuffel",
+   "krab",
+   "rek",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "walk"
+  ],
+  "snelheid": 0.06,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.aap",
+  "acties": [
+   "rust",
+   "anim:knuffel",
+   "anim:krab",
+   "anim:rek",
+   "anim:rondkijk"
+  ]
+ },
+ "zeepaardje": {
+  "zone": "kriebelhuis",
+  "breedte": 0.44,
+  "hoogte": 1.03,
+  "baby_breedte": 0.32,
+  "baby_hoogte": 0.68,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "krul",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.06,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.zee",
+  "acties": [
+   "rust",
+   "anim:krul",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "pijlstaartrog": {
+  "zone": "kriebelhuis",
+  "breedte": 1.22,
+  "hoogte": 0.25,
+  "baby_breedte": 0.67,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "vliegen",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.zee",
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:vliegen"
+  ]
+ },
+ "zeeschildpad": {
+  "zone": "kriebelhuis",
+  "breedte": 1.16,
+  "hoogte": 0.33,
+  "baby_breedte": 0.58,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "zwemmer"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.zee",
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "pelikaan": {
+  "zone": "kriebelhuis",
+  "breedte": 1.41,
+  "hoogte": 1.39,
+  "baby_breedte": 0.94,
+  "baby_hoogte": 0.82,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water",
+   "vlieg"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "schud",
+   "slaap",
+   "slok",
+   "vlieg",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.groot_vogel",
+  "acties": [
+   "rust",
+   "zwem",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:slok",
+   "anim:vlieg"
   ]
  }
 }

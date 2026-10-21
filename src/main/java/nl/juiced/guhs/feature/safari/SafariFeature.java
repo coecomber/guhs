@@ -55,6 +55,9 @@ public final class SafariFeature {
         nl.juiced.guhs.feature.safari.rit.SafariRitten.register(modBus);   // S3: truck, kano, kabelbaan, struisvogelrace, momenten
         nl.juiced.guhs.feature.safari.quests.SafariQuests.register(modBus);   // S4: quests, geheimpjes, titles, dex rewards
         SafariKoppelingen.register();   // step 2 integration: the hooks between the slices
+        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.feature.safari.gedrag.SafariDebug::register);    // round 4: /guhs safari debug
+        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.feature.safari.gedrag.SafariDebug::serverTick);
+        nl.juiced.guhs.feature.safari.gedrag.GuhdexBijBinnenkomst.register();   // round 4: a Guhdex for whoever enters without one
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {

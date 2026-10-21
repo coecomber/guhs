@@ -124,10 +124,19 @@ public final class Kijkguhs {
         }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND) {
-            return;
+        if (event.getEntity() instanceof ServerPlayer p && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
+            praat(p, event.getTarget());
         }
-        Entity guh = event.getTarget();
+    }
+
+    /** What the kijk-guh says. (Round 4: it said nothing, because the specific interaction below swallowed the click on
+     *  both sides, so the plain one never came; now both paths talk, once per click.) */
+    static void praat(ServerPlayer p, Entity guh) {
+        long nu = p.level().getGameTime();
+        if (LAATST.getOrDefault(p.getUUID(), -100L) > nu - 5) {
+            return;                          // (one click can fire both interactions)
+        }
+        LAATST.put(p.getUUID(), nu);
         int r = Math.floorMod(guh.getUUID().hashCode() + (int) (p.level().getGameTime() / 60), 8);
         ParkData d = ParkData.get();
         if (r < 2) {
@@ -152,8 +161,13 @@ public final class Kijkguhs {
         if (isKijkguh(event.getTarget())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
+            if (event.getEntity() instanceof ServerPlayer p && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                praat(p, event.getTarget());
+            }
         }
     }
+
+    private static final java.util.Map<java.util.UUID, Long> LAATST = new java.util.concurrent.ConcurrentHashMap<>();
 
     /** The nearest home in front of this window (within 60 degrees of the view, at most 56 blocks away): its species. */
     static String inBeeld(ParkData d, Vec3 van, float yaw) {

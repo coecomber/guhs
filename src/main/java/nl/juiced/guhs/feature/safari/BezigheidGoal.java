@@ -46,8 +46,14 @@ public final class BezigheidGoal extends Goal {
 
     /** One draw of the next activity (pure: the weights of design ronde 40). */
     public static Soort kies(RandomSource r, boolean favorieten, boolean gedrag, boolean boom) {
-        int scharrel = boom ? 6 : 22, fav = favorieten ? 30 : 0, ged = gedrag ? 18 : 0;
-        int eet = 7, speel = 4, kijk = 10, rust = boom ? 30 : 20;
+        return kies(r, favorieten, gedrag, boom, false);
+    }
+
+    /** Round 4 (test round 4: "nog passief"): more of the species' own behaviour and play, less lying about; inside the
+     *  view of a viewpoint the own behaviour weighs even more (that is where you look). */
+    public static Soort kies(RandomSource r, boolean favorieten, boolean gedrag, boolean boom, boolean inZicht) {
+        int scharrel = boom ? 6 : 24, fav = favorieten ? 30 : 0, ged = gedrag ? (inZicht ? 45 : 30) : 0;
+        int eet = 8, speel = 8, kijk = 10, rust = boom ? 24 : inZicht ? 10 : 20;
         int som = scharrel + fav + ged + eet + speel + kijk + rust;
         int n = r.nextInt(som);
         if ((n -= scharrel) < 0) {
@@ -71,6 +77,11 @@ public final class BezigheidGoal extends Goal {
         return Soort.RUST;
     }
 
+    /** Round 4: the generated one-shot "show" animations (tools/features/safari_atelier/gedrag_anims.py SHOWS) and their
+     *  length in ticks. */
+    public static final Map<String, Integer> SHOW = Map.of("brul", 50, "gaap", 50, "rek", 50, "schud", 36, "snuffel", 60,
+            "rondkijk", 70, "huppel", 30, "pluk", 70, "schelp", 90, "krab", 50);
+
     /** A herd's current destination: key = level + home, until = game time. */
     private record Kudde(BlockPos doel, long tot, boolean ren) {
     }
@@ -82,7 +93,12 @@ public final class BezigheidGoal extends Goal {
     private Soort nu;
     @Nullable
     private Soort geforceerd;
-    private int duur, pauze = 40;
+    @Nullable
+    private String geforceerdeActie;
+    private int duur;
+    /** Round 4: the game time before which it starts nothing new (was a countdown in canUse, which vanilla only calls every
+     *  other tick: the breaks between activities were twice as long as meant). */
+    private long volgende;
     /** The behaviour being done (GEDRAG) and its stage. */
     private String actie = "";
     private int fase, vast;
@@ -102,10 +118,21 @@ public final class BezigheidGoal extends Goal {
         return nu;
     }
 
+    /** (Debug labels) the behaviour being done ("" when none). */
+    public String actie() {
+        return actie;
+    }
+
     /** (Tests) the next activity will be this one, at once. */
     public void forceer(Soort s) {
         geforceerd = s;
-        pauze = 0;
+        volgende = 0;
+    }
+
+    /** Round 4 (tests, debug): the next activity is this behaviour of its species ("glijbaan", "draag", "anim:brul"). */
+    public void forceerGedrag(String a) {
+        forceer(Soort.GEDRAG);
+        geforceerdeActie = a;
     }
 
     @Override
@@ -119,15 +146,17 @@ public final class BezigheidGoal extends Goal {
         if (!dier.geregeld || dier.slaapt() || info == null || dier.hangt() || !(dier.level() instanceof ServerLevel level)) {
             return false;
         }
-        if (pauze > 0) {
-            pauze--;
+        if (level.getGameTime() < volgende) {
             return false;
         }
-        if (!SafariDier.ALTIJD_ACTIEF && !level.hasNearbyAlivePlayer(dier.getX(), dier.getY(), dier.getZ(), 48)) {
-            pauze = 60;          // nobody to see it: no pathfinding (about 450 animals in the park)
+        if (!SafariDier.ALTIJD_ACTIEF && !level.hasNearbyAlivePlayer(dier.getX(), dier.getY(), dier.getZ(), 48)
+                && !nl.juiced.guhs.feature.safari.gedrag.SafariDebug.waarnemer(level, dier.getX(), dier.getY(), dier.getZ(), 48)) {
+            volgende = level.getGameTime() + 60;   // nobody to see it: no pathfinding (about 580 animals in the park)
             return false;
         }
-        return begin(level, info);
+        boolean ok = begin(level, info);
+        nl.juiced.guhs.feature.safari.gedrag.SafariDebug.begon(dier.soort(), nu, ok, actie);
+        return ok;
     }
 
     @Override
@@ -144,7 +173,7 @@ public final class BezigheidGoal extends Goal {
         actie = "";
         dier.bezoek = null;
         dier.getNavigation().stop();
-        pauze = 20 + dier.getRandom().nextInt(60);
+        volgende = dier.level().getGameTime() + 15 + dier.getRandom().nextInt(35);   // a short breath between activities
     }
 
     // =====================================================================================================================
@@ -156,7 +185,8 @@ public final class BezigheidGoal extends Goal {
         // (the favourites are park coordinates: not for animals elsewhere, such as the home animals; tests excepted)
         List<Kijkplekken.Favoriet> favs = Safari.echt(level) || SafariDier.ALTIJD_ACTIEF ? favorieten(level) : List.of();
         List<String> acties = info.acties().stream().filter(a -> !a.equals("rust")).toList();
-        Soort s = geforceerd != null ? geforceerd : kies(r, !favs.isEmpty(), !acties.isEmpty(), info.heeft("boom"));
+        boolean inZicht = Safari.echt(level) && Kijkplekken.get().inZicht(dier.getX(), dier.getY(), dier.getZ());
+        Soort s = geforceerd != null ? geforceerd : kies(r, !favs.isEmpty(), !acties.isEmpty(), info.heeft("boom"), inZicht);
         geforceerd = null;
         if (s == Soort.FAVORIET && favs.isEmpty()) {
             s = Soort.SCHARREL;
@@ -195,7 +225,15 @@ public final class BezigheidGoal extends Goal {
                 return loop(level, Soort.FAVORIET, d, 1.0, "", 900);
             }
             case GEDRAG -> {
-                return gedrag(level, info, acties.get(r.nextInt(acties.size())));
+                // round 4: its own behaviours (glijbaan, draag, spuit, ...) twice as often as the generated shows
+                if (geforceerdeActie != null) {
+                    String a = geforceerdeActie;
+                    geforceerdeActie = null;
+                    return gedrag(level, info, a);
+                }
+                List<String> eigen = acties.stream().filter(x -> !x.startsWith("anim:")).toList();
+                boolean kiesEigen = !eigen.isEmpty() && (eigen.size() == acties.size() || r.nextInt(3) > 0);
+                return gedrag(level, info, kiesEigen ? eigen.get(r.nextInt(eigen.size())) : acties.get(r.nextInt(acties.size())));
             }
             case EET -> {
                 dier.getNavigation().stop();
@@ -221,7 +259,7 @@ public final class BezigheidGoal extends Goal {
                 return true;
             }
             default -> {
-                return rust(info, 300 + r.nextInt(500));
+                return rust(info, 160 + r.nextInt(220));
             }
         }
     }
@@ -233,7 +271,7 @@ public final class BezigheidGoal extends Goal {
         if (heeft(info, "rust")) {
             dier.zetActie("rust", duur);
         }
-        if (dier.getRandom().nextInt(4) == 0 && !dier.level().isDarkOutside()) {
+        if (dier.getRandom().nextInt(7) == 0 && !dier.level().isDarkOutside()) {
             dier.dutTot = duur;            // a nap: eyes shut (SafariDier sleeps while dutTot > 0)
         }
         return true;
@@ -260,8 +298,13 @@ public final class BezigheidGoal extends Goal {
         if (a.startsWith("anim:")) {
             String anim = a.substring(5);
             dier.getNavigation().stop();
-            duur = 60 + r.nextInt(100);
+            // round 4: a one-shot "show" (brul, gaap, rek, schud, pluk, ...) plays once (its length); a looping pose a while
+            Integer lengte = SHOW.get(anim);
+            duur = lengte != null ? lengte : 60 + r.nextInt(100);
             dier.zetActie(anim, duur);
+            if (lengte != null && r.nextInt(3) > 0) {
+                dier.roep();                 // most shows come with the species' call (the lion's roar, the elephant's trumpet)
+            }
             return true;
         }
         switch (a) {
@@ -289,7 +332,7 @@ public final class BezigheidGoal extends Goal {
                 }
                 dier.getNavigation().stop();
                 dier.setYRot(r.nextFloat() * 360f);
-                duur = 30 + r.nextInt(20);
+                duur = 60 + r.nextInt(40);          // round 4: long enough to be seen (was 30-50 ticks)
                 dier.zetActie("buikglij", duur);
                 return true;
             }
@@ -305,7 +348,9 @@ public final class BezigheidGoal extends Goal {
             }
             case "zwem" -> {
                 BlockPos d = waterDoel(level);
-                return loop(level, Soort.GEDRAG, d, 1.0, "", 300);
+                // round 4: a beaver often swims with a branch in its mouth (prop_draag shows during "draag")
+                String met = heeft(info, "draag") && r.nextBoolean() ? "draag" : "";
+                return loop(level, Soort.GEDRAG, d, 1.0, met, 300);
             }
             case "drink" -> {
                 BlockPos d = oever(level);
@@ -519,7 +564,7 @@ public final class BezigheidGoal extends Goal {
             return;
         }
         Vec3 v = dier.getDeltaMovement();
-        dier.setDeltaMovement(kijk.x * 0.28, v.y, kijk.z * 0.28);
+        dier.setDeltaMovement(kijk.x * 0.3, v.y, kijk.z * 0.3);
         if (dier.isInWater() && dier.tickCount % 5 == 0) {
             level.sendParticles(ParticleTypes.SPLASH, dier.getX(), dier.getY() + 0.3, dier.getZ(), 6, 0.3, 0.1, 0.3, 0.1);
         } else if (dier.tickCount % 4 == 0) {
