@@ -1,0 +1,60 @@
+{
+  "textures": {
+    "particle": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    },
+    "zij": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    },
+    "boven": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    },
+    "onder": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#zij",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#zij",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#zij",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#boven",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#onder",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

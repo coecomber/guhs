@@ -1,0 +1,139 @@
+{
+  "textures": {
+    "particle": "guhs:block/safari/glimpaddenstoel_hoed",
+    "steel": "guhs:block/safari/glimpaddenstoel_steel",
+    "hoed": "guhs:block/safari/glimpaddenstoel_hoed"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        4,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        4,
+        5
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        10.5,
+        0,
+        4
+      ],
+      "to": [
+        11.5,
+        2,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        2,
+        3.5
+      ],
+      "to": [
+        12,
+        3,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

@@ -1335,6 +1335,20 @@ UITLEG = {
            "running alongside it are through.\n"
            "- Players and guhs may go through an open gate, the animals never: that way every animal stays in its own "
            "zone."),
+    "infobord": dict(
+        nl="Een bordje op een paaltje, zoals bij de verblijven en terraria in het safaripark. Rechtsklik erop en het "
+           "bordje vertelt je wat over het dier dat daar woont, met de tekst uit de Guhdex.\n"
+           "\n"
+           "Een bordje dat je zelf maakt hoort nog bij geen enkel dier: dat staat dan geduldig te wachten.",
+        en="A little sign on a post, like the ones at the homes and terraria in the safari park. Right-click it and the "
+           "sign tells you something about the animal that lives there, with the text from the Guhdex.\n"
+           "\n"
+           "A sign you craft yourself doesn't belong to an animal yet: it just waits patiently."),
+    "nepkoraal": dict(
+        nl="Koraal dat nooit doodgaat, in of uit het water. Rechtsklik erop met een lege hand en het krijgt de "
+           "volgende kleur: roze, geel, blauw, oranje en paars. Het geeft ook een klein beetje licht.",
+        en="Coral that never dies, in or out of water. Right-click it with an empty hand to give it the next colour: "
+           "pink, yellow, blue, orange and purple. It also gives off a little light."),
 }
 
 LINK = {

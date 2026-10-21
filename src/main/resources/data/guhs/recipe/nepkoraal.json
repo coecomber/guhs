@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " B ",
+    "BCB"
+  ],
+  "key": {
+    "B": "minecraft:bone_meal",
+    "C": "minecraft:clay_ball"
+  },
+  "result": {
+    "id": "guhs:nepkoraal",
+    "count": 3
+  }
+}

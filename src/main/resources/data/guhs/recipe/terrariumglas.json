@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "GSG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "minecraft:spruce_planks"
+  },
+  "result": {
+    "id": "guhs:terrariumglas",
+    "count": 8
+  }
+}

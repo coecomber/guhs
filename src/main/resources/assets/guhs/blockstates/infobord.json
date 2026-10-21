@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/infobord"
+    },
+    "facing=east": {
+      "model": "guhs:block/infobord",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/infobord",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/infobord",
+      "y": 270
+    }
+  }
+}

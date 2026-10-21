@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "G",
+    "M"
+  ],
+  "key": {
+    "G": "minecraft:glow_berries",
+    "M": "minecraft:brown_mushroom"
+  },
+  "result": {
+    "id": "guhs:glimpaddenstoel",
+    "count": 2
+  }
+}

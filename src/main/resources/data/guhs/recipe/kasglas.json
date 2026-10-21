@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "GWG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "W": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "guhs:kasglas",
+    "count": 8
+  }
+}

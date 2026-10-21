@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "kleur=roze": {
+      "model": "guhs:block/nepkoraal_roze"
+    },
+    "kleur=geel": {
+      "model": "guhs:block/nepkoraal_geel"
+    },
+    "kleur=blauw": {
+      "model": "guhs:block/nepkoraal_blauw"
+    },
+    "kleur=oranje": {
+      "model": "guhs:block/nepkoraal_oranje"
+    },
+    "kleur=paars": {
+      "model": "guhs:block/nepkoraal_paars"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " N ",
+    "IGI",
+    " O "
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "I": "minecraft:copper_ingot",
+    "G": "minecraft:glowstone",
+    "O": "minecraft:orange_dye"
+  },
+  "result": {
+    "id": "guhs:warmtelamp",
+    "count": 2
+  }
+}

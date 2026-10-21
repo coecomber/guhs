@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LL"
+  ],
+  "key": {
+    "L": "minecraft:spruce_log"
+  },
+  "result": {
+    "id": "guhs:schorsplaat",
+    "count": 6
+  }
+}
