@@ -228,3 +228,8 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - Register kijkplekken + favorieten.
   - Specials: dome higher + sea lanterns + entrance + iglo walls + east edge closed (ijskust); beverburcht landscape + dassentunnel (europa); soft banks (australie, everywhere).
   - Never their own water/bridge fixes.
+- **Z4 note, the `dassentunnel` format (for J1)**:
+  - It is in `kijkplekken.json`, on the viewpoint `dassen-kijkkamer`, as the field `pad = {"naam": "dassentunnel", "soorten": ["das"], "punten": [[x, y, z], ...]}`.
+  - The points run from the burrow chamber through the tunnel (2 wide, 1-1.5 high, rising half a block per block, so players cannot follow) to the hill top. y = the standing surface.
+  - The das home (straal 8) covers the chamber and the mouth. The viewpoint's favourite `burchtkamer` lies INSIDE the chamber.
+  - Any other zone path can use the same `pad` field on its viewpoint (e.g. `glijbaan` for the pinguïns).
