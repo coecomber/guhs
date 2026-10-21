@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.safari.Safari;
@@ -28,10 +29,11 @@ import nl.juiced.guhs.feature.safari.momenten.Momenten;
 import nl.juiced.guhs.quest.Scorebord;
 
 /**
- * Keeps the rides of the park running (S3): the trucks on their loop (one about every minute at every stop), the two
- * gondolas, the moored canoe at the jetty and the two race ostriches at the start, all only where the park is loaded and
- * only while somebody is in it (the rides are never saved, so after a restart they simply come back). Also the guide's
- * facts at the stops, renting a canoe, getting off (your guhs come with you) and the race's scoreboard.
+ * Keeps the rides of the park running (S3): the trucks on their loop (one about every minute at every stop), the
+ * gondolas on the kabelbaan loop, the glass-bottom boats, the moored canoe at the jetty and the two race ostriches at the
+ * start, all only where the park is loaded and only while somebody is in it (the rides are never saved, so after a
+ * restart they simply come back). Also the guide's facts and quiz at the stops, renting a canoe, getting off (your guhs
+ * come with you), the race's scoreboard, and: nobody gets hurt while riding (no suffocation in a leaf, no fall damage).
  */
 public final class Ritten {
     private static final Map<String, UUID> RITTEN = new HashMap<>();
@@ -86,6 +88,11 @@ public final class Ritten {
             p.sendOverlayMessage(Component.translatable("gui.guhs.safari.kabel.blijf_zitten").withStyle(ChatFormatting.AQUA));
             return;
         }
+        if (rit instanceof BootEntity b && !b.staatStil() && !b.isRemoved() && p.isAlive() && !p.isRemoved()) {
+            event.setCanceled(true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.safari.boot.blijf_zitten").withStyle(ChatFormatting.AQUA));
+            return;
+        }
         if (rit instanceof SchemaRit s) {
             s.zetGuhsAf(p);
         } else if (rit instanceof KanoEntity k) {
@@ -94,6 +101,15 @@ public final class Ritten {
                     guh.stopRiding();
                 }
             }
+        }
+    }
+
+    /** Riders of the rides cannot get hurt (a route that brushes a leaf or a gate beam never chokes or bumps anybody). */
+    @SubscribeEvent
+    public static void onDamage(LivingIncomingDamageEvent event) {
+        Entity rit = event.getEntity().getVehicle();
+        if (rit instanceof SchemaRit || rit instanceof KanoEntity) {
+            event.setCanceled(true);
         }
     }
 
@@ -113,11 +129,16 @@ public final class Ritten {
                 }
             }
         }
-        if (d.kabelA != null && d.kabelB != null) {
-            for (int k = 0; k < 2; k++) {
-                double[] g = RitSchema.gondel(t, k, d.kabelA.distanceTo(d.kabelB));
-                zorg(level, "gondel" + k, d.kabelA.lerp(d.kabelB, g[0]), SafariRitten.GONDEL.get(), k, 2);
+        if (d.kabel != null) {
+            List<Double> stations = GondelEntity.stationAfstanden(d);
+            for (int k = 0; k < RitSchema.GONDELS; k++) {
+                RitSchema.Stand s = RitSchema.gondel(t, k, d.kabel.lengte(), stations);
+                zorg(level, "gondel" + k, d.kabel.op(s.afstand()), SafariRitten.GONDEL.get(), k, RitSchema.GONDELS);
             }
+        }
+        for (int i = 0; i < d.boten.size(); i++) {
+            Pad pad = d.boten.get(i).pad();
+            zorg(level, "boot" + i, pad.op(RitSchema.boot(t, pad.lengte()).afstand()), SafariRitten.BOOT.get(), i, 1);
         }
         if (d.kanoStart != null) {
             KanoEntity lig = zorg(level, "kano", d.kanoStart, SafariRitten.KANO.get(), 0, 1);
@@ -186,6 +207,9 @@ public final class Ritten {
         for (ServerPlayer p : level.players()) {
             if (p.getVehicle() == truck || p.distanceToSqr(truck) < 12 * 12) {
                 p.sendSystemMessage(tekst);
+            }
+            if (p.getVehicle() == truck) {
+                SafariQuiz.vraag(p, halte.zone(), level.getGameTime(), truck.getRandom());
             }
         }
     }

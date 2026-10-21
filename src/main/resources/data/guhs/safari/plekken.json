@@ -45,9 +45,9 @@
   "soort": "neushoorn",
   "zone": "savanne",
   "centrum": [
-   333,
-   65,
-   610
+   334,
+   63,
+   506
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -59,9 +59,9 @@
   "soort": "kafferbuffel",
   "zone": "savanne",
   "centrum": [
-   312,
+   313,
    65,
-   645
+   532
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -73,9 +73,9 @@
   "soort": "kafferbuffel",
   "zone": "savanne",
   "centrum": [
-   538,
+   539,
    64,
-   619
+   573
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -89,7 +89,7 @@
   "centrum": [
    583,
    65,
-   500
+   556
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -185,9 +185,9 @@
   "soort": "jachtluipaard",
   "zone": "savanne",
   "centrum": [
-   530,
-   64,
-   562
+   547,
+   65,
+   532
   ],
   "straal": 14,
   "volwassenen": 2,
@@ -200,8 +200,8 @@
   "zone": "savanne",
   "centrum": [
    338,
-   66,
-   569
+   64,
+   621
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -451,7 +451,7 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   234,
+   233,
    63,
    217
   ],
@@ -550,8 +550,8 @@
   "zone": "oertijd",
   "centrum": [
    421,
-   71,
-   181
+   76,
+   189
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -1025,9 +1025,9 @@
   "soort": "leeuw",
   "zone": "savanne",
   "centrum": [
-   422,
-   64,
-   589
+   423,
+   65,
+   530
   ],
   "straal": 12,
   "volwassenen": 2,
@@ -1039,9 +1039,9 @@
   "soort": "leeuw",
   "zone": "savanne",
   "centrum": [
-   489,
+   490,
    63,
-   544
+   552
   ],
   "straal": 12,
   "volwassenen": 2,
@@ -1082,8 +1082,8 @@
   "zone": "savanne",
   "centrum": [
    304,
-   66,
-   545
+   67,
+   563
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1096,8 +1096,8 @@
   "zone": "savanne",
   "centrum": [
    539,
-   64,
-   543
+   65,
+   623
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1110,8 +1110,8 @@
   "zone": "savanne",
   "centrum": [
    598,
-   65,
-   545
+   66,
+   576
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -1123,9 +1123,9 @@
   "soort": "neushoorn",
   "zone": "savanne",
   "centrum": [
-   281,
-   67,
-   548
+   353,
+   64,
+   590
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -1139,7 +1139,7 @@
   "centrum": [
    364,
    65,
-   570
+   627
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -1151,23 +1151,23 @@
   "soort": "kafferbuffel",
   "zone": "savanne",
   "centrum": [
-   629,
-   64,
-   613
-  ],
-  "straal": 18,
-  "volwassenen": 2,
-  "jongen": 2,
-  "water": false,
-  "boom": false
- },
- {
-  "soort": "kafferbuffel",
-  "zone": "savanne",
-  "centrum": [
-   606,
+   610,
    66,
-   513
+   505
+  ],
+  "straal": 18,
+  "volwassenen": 2,
+  "jongen": 2,
+  "water": false,
+  "boom": false
+ },
+ {
+  "soort": "kafferbuffel",
+  "zone": "savanne",
+  "centrum": [
+   405,
+   64,
+   541
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -1179,9 +1179,9 @@
   "soort": "kafferbuffel",
   "zone": "savanne",
   "centrum": [
-   268,
-   66,
-   513
+   624,
+   65,
+   632
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -1195,7 +1195,7 @@
   "centrum": [
    638,
    65,
-   620
+   621
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1207,9 +1207,9 @@
   "soort": "dikdik",
   "zone": "savanne",
   "centrum": [
-   432,
-   65,
-   578
+   433,
+   64,
+   536
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1251,7 +1251,7 @@
   "centrum": [
    576,
    65,
-   508
+   560
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1263,9 +1263,9 @@
   "soort": "zebra",
   "zone": "savanne",
   "centrum": [
-   487,
-   63,
-   553
+   332,
+   65,
+   602
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1277,9 +1277,9 @@
   "soort": "zebra",
   "zone": "savanne",
   "centrum": [
-   310,
-   64,
-   632
+   640,
+   66,
+   641
   ],
   "straal": 20,
   "volwassenen": 2,
@@ -1291,9 +1291,9 @@
   "soort": "zebra",
   "zone": "savanne",
   "centrum": [
-   323,
+   267,
    64,
-   522
+   523
   ],
   "straal": 20,
   "volwassenen": 2,
@@ -1305,9 +1305,9 @@
   "soort": "stokstaartje",
   "zone": "savanne",
   "centrum": [
-   436,
-   63,
-   610
+   437,
+   65,
+   554
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1321,7 +1321,7 @@
   "centrum": [
    639,
    65,
-   522
+   523
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1334,8 +1334,8 @@
   "zone": "savanne",
   "centrum": [
    307,
-   66,
-   555
+   67,
+   573
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1347,9 +1347,9 @@
   "soort": "stokstaartje",
   "zone": "savanne",
   "centrum": [
-   291,
-   65,
-   620
+   615,
+   64,
+   632
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1361,9 +1361,9 @@
   "soort": "stokstaartje",
   "zone": "savanne",
   "centrum": [
-   430,
-   65,
-   520
+   344,
+   63,
+   509
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1375,9 +1375,9 @@
   "soort": "stokstaartje",
   "zone": "savanne",
   "centrum": [
-   523,
-   63,
-   525
+   387,
+   65,
+   629
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -1390,8 +1390,8 @@
   "zone": "savanne",
   "centrum": [
    352,
-   66,
-   557
+   64,
+   607
   ],
   "straal": 14,
   "volwassenen": 2,
@@ -1403,9 +1403,9 @@
   "soort": "jachtluipaard",
   "zone": "savanne",
   "centrum": [
-   598,
+   394,
    65,
-   527
+   517
   ],
   "straal": 14,
   "volwassenen": 2,
@@ -1417,9 +1417,9 @@
   "soort": "struisvogel",
   "zone": "savanne",
   "centrum": [
-   479,
+   480,
    64,
-   603
+   609
   ],
   "straal": 18,
   "volwassenen": 2,
@@ -1431,8 +1431,8 @@
   "soort": "struisvogel",
   "zone": "savanne",
   "centrum": [
-   614,
-   65,
+   563,
+   66,
    518
   ],
   "straal": 18,
@@ -1473,9 +1473,9 @@
   "soort": "nijlpaard",
   "zone": "delta",
   "centrum": [
-   545,
-   63,
-   376
+   610,
+   64,
+   390
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -1487,9 +1487,9 @@
   "soort": "nijlpaard",
   "zone": "delta",
   "centrum": [
-   610,
+   515,
    64,
-   473
+   391
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -1503,7 +1503,7 @@
   "centrum": [
    535,
    64,
-   443
+   447
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1517,7 +1517,7 @@
   "centrum": [
    536,
    63,
-   378
+   382
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1543,9 +1543,9 @@
   "soort": "flamingo",
   "zone": "delta",
   "centrum": [
-   647,
+   646,
    63,
-   403
+   404
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1559,7 +1559,7 @@
   "centrum": [
    532,
    65,
-   456
+   467
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1572,8 +1572,8 @@
   "zone": "delta",
   "centrum": [
    614,
-   64,
-   368
+   63,
+   369
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1587,7 +1587,7 @@
   "centrum": [
    606,
    63,
-   382
+   383
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -1601,7 +1601,7 @@
   "centrum": [
    602,
    64,
-   476
+   478
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -1642,8 +1642,8 @@
   "zone": "bamboe",
   "centrum": [
    518,
-   65,
-   210
+   64,
+   214
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1655,9 +1655,9 @@
   "soort": "reuzenpanda",
   "zone": "bamboe",
   "centrum": [
-   630,
-   78,
-   229
+   500,
+   86,
+   117
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1727,7 +1727,7 @@
   "centrum": [
    515,
    64,
-   261
+   243
   ],
   "straal": 12,
   "volwassenen": 2,
@@ -1740,8 +1740,8 @@
   "zone": "regenwoud",
   "centrum": [
    589,
-   71,
-   310
+   73,
+   316
   ],
   "straal": 12,
   "volwassenen": 2,
@@ -1811,7 +1811,7 @@
   "centrum": [
    241,
    66,
-   170
+   172
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -1823,7 +1823,7 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   275,
+   276,
    65,
    255
   ],
@@ -1851,9 +1851,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   165,
+   164,
    66,
-   212
+   210
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -1865,9 +1865,9 @@
   "soort": "ijsbeer",
   "zone": "ijskust",
   "centrum": [
-   216,
+   214,
    66,
-   148
+   147
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1879,9 +1879,9 @@
   "soort": "ijsbeer",
   "zone": "ijskust",
   "centrum": [
-   273,
+   256,
    63,
-   242
+   255
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -1893,9 +1893,9 @@
   "soort": "zeehond",
   "zone": "ijskust",
   "centrum": [
-   258,
+   273,
    63,
-   249
+   242
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -1907,9 +1907,9 @@
   "soort": "zeehond",
   "zone": "ijskust",
   "centrum": [
-   204,
+   220,
    63,
-   232
+   228
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -1949,9 +1949,9 @@
   "soort": "mammoet",
   "zone": "oertijd",
   "centrum": [
-   374,
+   431,
    71,
-   180
+   178
   ],
   "straal": 14,
   "volwassenen": 2,
@@ -1963,9 +1963,9 @@
   "soort": "mammoet",
   "zone": "oertijd",
   "centrum": [
-   438,
-   76,
-   146
+   477,
+   82,
+   117
   ],
   "straal": 14,
   "volwassenen": 2,
@@ -1977,9 +1977,9 @@
   "soort": "wolharige_neushoorn",
   "zone": "oertijd",
   "centrum": [
-   410,
+   429,
    63,
-   267
+   295
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -1991,9 +1991,9 @@
   "soort": "wolharige_neushoorn",
   "zone": "oertijd",
   "centrum": [
-   476,
-   80,
-   125
+   471,
+   77,
+   123
   ],
   "straal": 16,
   "volwassenen": 2,
@@ -2005,9 +2005,9 @@
   "soort": "egel",
   "zone": "europa",
   "centrum": [
-   303,
-   65,
-   292
+   236,
+   68,
+   308
   ],
   "straal": 8,
   "volwassenen": 0,
@@ -2033,9 +2033,9 @@
   "soort": "egel",
   "zone": "europa",
   "centrum": [
-   237,
-   67,
-   395
+   230,
+   68,
+   380
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -2047,9 +2047,9 @@
   "soort": "egel",
   "zone": "europa",
   "centrum": [
-   242,
-   69,
-   314
+   324,
+   64,
+   280
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -2061,9 +2061,9 @@
   "soort": "otter",
   "zone": "europa",
   "centrum": [
-   242,
+   226,
    64,
-   381
+   283
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -2075,9 +2075,9 @@
   "soort": "otter",
   "zone": "europa",
   "centrum": [
-   198,
-   69,
-   336
+   374,
+   66,
+   331
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -2091,7 +2091,7 @@
   "centrum": [
    166,
    66,
-   321
+   314
   ],
   "straal": 16,
   "volwassenen": 1,
@@ -2103,9 +2103,9 @@
   "soort": "edelhert",
   "zone": "europa",
   "centrum": [
-   298,
-   65,
-   269
+   248,
+   66,
+   297
   ],
   "straal": 16,
   "volwassenen": 1,
@@ -2117,9 +2117,9 @@
   "soort": "ooievaar",
   "zone": "europa",
   "centrum": [
-   266,
-   64,
-   386
+   339,
+   65,
+   381
   ],
   "straal": 12,
   "volwassenen": 0,
@@ -2131,9 +2131,9 @@
   "soort": "ooievaar",
   "zone": "europa",
   "centrum": [
-   180,
-   67,
-   323
+   297,
+   64,
+   259
   ],
   "straal": 12,
   "volwassenen": 0,
@@ -2202,8 +2202,8 @@
   "zone": "australie",
   "centrum": [
    145,
-   62,
-   512
+   63,
+   506
   ],
   "straal": 18,
   "volwassenen": 1,
@@ -2215,9 +2215,9 @@
   "soort": "kangoeroe",
   "zone": "australie",
   "centrum": [
-   196,
+   215,
    66,
-   417
+   409
   ],
   "straal": 18,
   "volwassenen": 1,
@@ -2229,9 +2229,9 @@
   "soort": "wombat",
   "zone": "australie",
   "centrum": [
-   303,
-   65,
-   443
+   153,
+   64,
+   441
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -2244,8 +2244,8 @@
   "zone": "australie",
   "centrum": [
    365,
-   64,
-   480
+   63,
+   489
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -2257,9 +2257,9 @@
   "soort": "prieelvogel",
   "zone": "australie",
   "centrum": [
-   139,
-   63,
-   502
+   170,
+   65,
+   429
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -2271,9 +2271,9 @@
   "soort": "prieelvogel",
   "zone": "australie",
   "centrum": [
-   178,
-   66,
-   421
+   245,
+   65,
+   445
   ],
   "straal": 8,
   "volwassenen": 2,
@@ -2287,7 +2287,7 @@
   "centrum": [
    379,
    64,
-   401
+   404
   ],
   "straal": 18,
   "volwassenen": 1,
@@ -2300,8 +2300,8 @@
   "zone": "australie",
   "centrum": [
    397,
-   66,
-   491
+   65,
+   493
   ],
   "straal": 18,
   "volwassenen": 1,
@@ -2313,9 +2313,9 @@
   "soort": "ooievaar",
   "zone": "europa",
   "centrum": [
-   324,
-   63,
-   266
+   184,
+   68,
+   332
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2327,9 +2327,9 @@
   "soort": "ooievaar",
   "zone": "europa",
   "centrum": [
-   339,
+   249,
    65,
-   378
+   387
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2341,9 +2341,9 @@
   "soort": "edelhert",
   "zone": "europa",
   "centrum": [
-   235,
-   68,
-   385
+   300,
+   65,
+   233
   ],
   "straal": 16,
   "volwassenen": 1,
@@ -2355,9 +2355,9 @@
   "soort": "edelhert",
   "zone": "europa",
   "centrum": [
-   231,
-   65,
-   296
+   222,
+   70,
+   378
   ],
   "straal": 16,
   "volwassenen": 1,
@@ -2369,9 +2369,9 @@
   "soort": "egel",
   "zone": "europa",
   "centrum": [
-   346,
+   345,
    64,
-   366
+   347
   ],
   "straal": 5,
   "volwassenen": 2,
@@ -2383,9 +2383,9 @@
   "soort": "egel",
   "zone": "europa",
   "centrum": [
-   319,
-   64,
-   237
+   274,
+   68,
+   269
   ],
   "straal": 5,
   "volwassenen": 2,
@@ -2411,9 +2411,9 @@
   "soort": "specht",
   "zone": "europa",
   "centrum": [
-   270,
-   67,
-   289
+   346,
+   66,
+   369
   ],
   "straal": 8,
   "volwassenen": 1,
@@ -2426,36 +2426,36 @@
   "zone": "ijskust",
   "centrum": [
    246,
-   64,
-   190
-  ],
-  "straal": 6,
-  "volwassenen": 2,
-  "jongen": 1,
-  "water": true,
-  "boom": false
- },
- {
-  "soort": "zeehond",
-  "zone": "ijskust",
-  "centrum": [
-   231,
-   67,
-   156
-  ],
-  "straal": 6,
-  "volwassenen": 2,
-  "jongen": 1,
-  "water": true,
-  "boom": false
- },
- {
-  "soort": "zeehond",
-  "zone": "ijskust",
-  "centrum": [
-   174,
    66,
-   221
+   184
+  ],
+  "straal": 6,
+  "volwassenen": 2,
+  "jongen": 1,
+  "water": true,
+  "boom": false
+ },
+ {
+  "soort": "zeehond",
+  "zone": "ijskust",
+  "centrum": [
+   179,
+   66,
+   228
+  ],
+  "straal": 6,
+  "volwassenen": 2,
+  "jongen": 1,
+  "water": true,
+  "boom": false
+ },
+ {
+  "soort": "zeehond",
+  "zone": "ijskust",
+  "centrum": [
+   225,
+   67,
+   153
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2469,7 +2469,7 @@
   "centrum": [
    196,
    64,
-   142
+   143
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2483,53 +2483,11 @@
   "centrum": [
    160,
    66,
-   184
+   183
   ],
   "straal": 6,
   "volwassenen": 2,
   "jongen": 2,
-  "water": true,
-  "boom": false
- },
- {
-  "soort": "pinguin",
-  "zone": "ijskust",
-  "centrum": [
-   252,
-   63,
-   255
-  ],
-  "straal": 6,
-  "volwassenen": 2,
-  "jongen": 2,
-  "water": true,
-  "boom": false
- },
- {
-  "soort": "zeehond",
-  "zone": "ijskust",
-  "centrum": [
-   228,
-   63,
-   223
-  ],
-  "straal": 7,
-  "volwassenen": 2,
-  "jongen": 1,
-  "water": true,
-  "boom": false
- },
- {
-  "soort": "zeehond",
-  "zone": "ijskust",
-  "centrum": [
-   164,
-   65,
-   204
-  ],
-  "straal": 7,
-  "volwassenen": 2,
-  "jongen": 1,
   "water": true,
   "boom": false
  },
@@ -2539,25 +2497,39 @@
   "centrum": [
    239,
    63,
-   195
+   194
   ],
-  "straal": 9,
+  "straal": 6,
   "volwassenen": 2,
   "jongen": 2,
   "water": true,
   "boom": false
  },
  {
-  "soort": "pinguin",
+  "soort": "zeehond",
   "zone": "ijskust",
   "centrum": [
-   216,
+   232,
+   63,
+   205
+  ],
+  "straal": 7,
+  "volwassenen": 2,
+  "jongen": 1,
+  "water": true,
+  "boom": false
+ },
+ {
+  "soort": "zeehond",
+  "zone": "ijskust",
+  "centrum": [
+   201,
    63,
    228
   ],
-  "straal": 9,
+  "straal": 7,
   "volwassenen": 2,
-  "jongen": 2,
+  "jongen": 1,
   "water": true,
   "boom": false
  },
@@ -2565,9 +2537,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   224,
-   67,
-   152
+   261,
+   63,
+   244
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -2579,9 +2551,37 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   185,
+   211,
+   63,
+   231
+  ],
+  "straal": 9,
+  "volwassenen": 2,
+  "jongen": 2,
+  "water": true,
+  "boom": false
+ },
+ {
+  "soort": "pinguin",
+  "zone": "ijskust",
+  "centrum": [
+   186,
    64,
-   146
+   147
+  ],
+  "straal": 9,
+  "volwassenen": 2,
+  "jongen": 2,
+  "water": true,
+  "boom": false
+ },
+ {
+  "soort": "pinguin",
+  "zone": "ijskust",
+  "centrum": [
+   232,
+   66,
+   158
   ],
   "straal": 9,
   "volwassenen": 2,

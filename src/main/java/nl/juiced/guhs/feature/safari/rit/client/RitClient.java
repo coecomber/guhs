@@ -7,9 +7,19 @@ import javax.annotation.Nullable;
 
 import com.geckolib.constant.DataTickets;
 import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.model.DefaultedBlockGeoModel;
 import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoBlockRenderer;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.NeoForge;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -26,9 +36,11 @@ import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhVariant;
+import nl.juiced.guhs.feature.safari.rit.BootEntity;
 import nl.juiced.guhs.feature.safari.rit.GondelEntity;
 import nl.juiced.guhs.feature.safari.rit.KanoEntity;
 import nl.juiced.guhs.feature.safari.rit.RaceStruisvogelEntity;
+import nl.juiced.guhs.feature.safari.rit.SafariPoortBlockEntity;
 import nl.juiced.guhs.feature.safari.rit.SafariRitten;
 import nl.juiced.guhs.feature.safari.rit.TruckEntity;
 import nl.juiced.guhs.registry.ModEntities;
@@ -45,7 +57,10 @@ public final class RitClient {
             event.registerEntityRenderer(SafariRitten.KANO.get(), c -> new SimpelRenderer<KanoEntity>(c, "safari_rit/kano", 0.6f));
             event.registerEntityRenderer(SafariRitten.GONDEL.get(), c -> new SimpelRenderer<GondelEntity>(c, "safari_rit/gondel", 0f));
             event.registerEntityRenderer(SafariRitten.STRUISVOGEL.get(), c -> new SimpelRenderer<RaceStruisvogelEntity>(c, "safari/struisvogel", 0.5f));
+            event.registerEntityRenderer(SafariRitten.BOOT.get(), c -> new SimpelRenderer<BootEntity>(c, "safari_rit/glasboot", 0f));
+            event.registerBlockEntityRenderer(SafariRitten.POORT_BE.get(), PoortRenderer::new);
         });
+        NeoForge.EVENT_BUS.addListener(SafariFm::tick);
     }
 
     /** A plain ride model, turned along its yaw. */
@@ -116,7 +131,7 @@ public final class RitClient {
             if (gids != null) {
                 uit[0] = gast(gids, truck, truckState, stoel(TruckEntity.ZIT[0], yaw), yaw, partialTick);
             }
-            while (bezoekers.size() < TruckEntity.STOELEN) {
+            while (bezoekers.size() < TruckEntity.STOELEN) {   // (at most STOELEN - VRIJ ride at once)
                 GuhEntity g = ModEntities.GUH.get().create(truck.level(), EntitySpawnReason.TRIGGERED);
                 if (g == null) {
                     break;
@@ -167,6 +182,37 @@ public final class RitClient {
             s.lightCoords = truckState.lightCoords;
             s.shadowPieces.clear();
             return new Gast(s, plek);
+        }
+    }
+
+    /** The safaripoort: the centred model moved to the middle of its four blocks, turned for a gate along z. */
+    public static class PoortRenderer extends GeoBlockRenderer<SafariPoortBlockEntity, BlockEntityRenderState> {
+        private static final DataTicket<Boolean> LANGS_Z = DataTicket.create("guhs_safaripoort_langs_z", Boolean.class);
+
+        public PoortRenderer(BlockEntityRendererProvider.Context context) {
+            super(context, new DefaultedBlockGeoModel<SafariPoortBlockEntity>(Guhs.id("safaripoort")));
+        }
+
+        @Override
+        public void addRenderData(SafariPoortBlockEntity be, @Nullable Void related, BlockEntityRenderState state, float partialTick) {
+            state.addGeckolibData(LANGS_Z, be.as() == Direction.Axis.Z);
+        }
+
+        @Override
+        public void adjustRenderPose(RenderPassInfo<BlockEntityRenderState> info) {
+            PoseStack pose = info.poseStack();
+            if (info.getOrDefaultGeckolibData(LANGS_Z, false)) {
+                pose.translate(0, 0, 1.5);
+                pose.mulPose(Axis.YP.rotationDegrees(90));
+            } else {
+                pose.translate(1.5, 0, 0);
+            }
+        }
+
+        @Override
+        public AABB getRenderBoundingBox(SafariPoortBlockEntity be) {
+            BlockPos p = be.getBlockPos();
+            return new AABB(p).expandTowards(be.as() == Direction.Axis.X ? 3 : 0, 6, be.as() == Direction.Axis.Z ? 3 : 0).inflate(2.5, 0.5, 2.5);
         }
     }
 
