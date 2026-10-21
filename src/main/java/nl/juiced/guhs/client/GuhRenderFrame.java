@@ -62,6 +62,8 @@ public final class GuhRenderFrame {
 
     // --- what the guh is ---------------------------------------------------------------------------------------------
     public final GuhVariant variant;
+    /** See-through (the ghost guh, or a feature's: {@link GuhRenderer#doorzichtig}). */
+    public final boolean doorzichtig;
     public final boolean saddled;
     public final GuhArmorItem.Tier armour;
     /** Worn clothes per slot (absent = nothing in that slot). */
@@ -87,6 +89,7 @@ public final class GuhRenderFrame {
 
     GuhRenderFrame(GuhEntity guh, float partialTick) {
         this.variant = guh.getVariant();
+        this.doorzichtig = GuhRenderer.isDoorzichtig(guh);
         this.saddled = guh.isSaddled();
         this.armour = guh.getArmorTier();
         if (guh.isWearingClothes()) {

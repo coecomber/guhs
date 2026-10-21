@@ -1,0 +1,63 @@
+{
+  "textures": {
+    "particle": "guhs:block/block_of_kaasknabbels",
+    "kaas": "guhs:block/block_of_kaasknabbels",
+    "portaal": {
+      "sprite": "guhs:block/knabbelportaal_2",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        4
+      ],
+      "to": [
+        16,
+        16,
+        12
+      ],
+      "shade": false,
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#portaal"
+        },
+        "north": {
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ],
+          "texture": "#portaal"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            16
+          ],
+          "texture": "#kaas"
+        },
+        "up": {
+          "uv": [
+            0,
+            4,
+            16,
+            12
+          ],
+          "texture": "#kaas"
+        }
+      }
+    }
+  ]
+}

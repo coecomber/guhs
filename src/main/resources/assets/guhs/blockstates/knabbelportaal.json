@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "axis=x,deel=0": {
+      "model": "guhs:block/knabbelportaal_0"
+    },
+    "axis=x,deel=1": {
+      "model": "guhs:block/knabbelportaal_1"
+    },
+    "axis=x,deel=2": {
+      "model": "guhs:block/knabbelportaal_2"
+    },
+    "axis=x,deel=3": {
+      "model": "guhs:block/knabbelportaal_3"
+    },
+    "axis=z,deel=0": {
+      "model": "guhs:block/knabbelportaal_0",
+      "y": 90
+    },
+    "axis=z,deel=1": {
+      "model": "guhs:block/knabbelportaal_1",
+      "y": 90
+    },
+    "axis=z,deel=2": {
+      "model": "guhs:block/knabbelportaal_2",
+      "y": 90
+    },
+    "axis=z,deel=3": {
+      "model": "guhs:block/knabbelportaal_3",
+      "y": 90
+    }
+  }
+}

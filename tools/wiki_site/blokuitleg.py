@@ -891,6 +891,30 @@ UITLEG = {
            "\n"
            "The bees don't get angry about it.",
         meer=["diertjes/guh_bee"]),
+    "knabbelportaal": dict(
+        nl="Een lijstje van kaasknabbelblokken met een draaiend roze-geel kaaswolkje erin. Je zet het als 2 bij 2 neer; "
+           "breek je een stukje, dan gaat het hele portaal mee.\n"
+           "\n"
+           "Rechtsklik erop en je ziet links je guhs thuis en rechts de guhs in De Eeuwige Knabbelvelden. Klik guhs aan "
+           "(meerdere mag) en:\n"
+           "- met de pijl naar rechts gaan ze met pensioen, waar ze ook zijn (ook ver weg of in een Guhrad). Is een guh "
+           "ergens mee bezig, zoals wonen in een Guhhuisje, dan vraagt het portaal het eerst.\n"
+           "- met de pijl naar links komen ze terug als opgepakte guh in je zakken (vol? dan bij het portaal).\n"
+           "\n"
+           "Met de knop Naar de Knabbelvelden ga je zelf kijken: daar zweven je guhs als lieve spookguhjes met een "
+           "aureooltje rond. Aaien mag; sluip + rechtsklik om er een mee naar huis te nemen. Njeg, niet dood hoor, gewoon "
+           "met pensioen!",
+        en="A frame of Cheese Nibble blocks with a swirling pink-and-yellow cheese cloud inside. It is placed as 2 by 2; "
+           "break one piece and the whole portal goes.\n"
+           "\n"
+           "Right-click it to see your guhs at home on the left and the guhs in the Eternal Nibble Fields on the right. "
+           "Click guhs (several is fine) and:\n"
+           "- the arrow to the right sends them into retirement, wherever they are (far away or in a Guh Wheel too). If a "
+           "guh is busy, like living in a Guh House, the portal asks you first.\n"
+           "- the arrow to the left brings them back as a picked-up guh in your pockets (full? then at the portal).\n"
+           "\n"
+           "The button To the Nibble Fields takes you there yourself: your guhs float around as sweet little ghosts with "
+           "a halo. You can pet them; sneak + right-click to take one home. Nyeg, not dead at all, just retired!"),
     "knabbeloven": dict(
         nl="Een roze guh-oven om zelf te bakken. Rechtsklik erop: kies een deeg, een vorm en een topping, schuif het "
            "erin en haal het eruit op het goede moment. Laat je het te lang staan, dan verbrandt het.\n"

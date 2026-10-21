@@ -109,7 +109,7 @@ public final class Roepen {
         return switch (soort) {
             case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND -> Uitkomst.OPGEPAKT;
             case GUHWIEL -> Uitkomst.GUHWIEL;
-            case OP_VAKANTIE, OP_KANTOOR -> Uitkomst.NIET_THUIS;   // (guhpixel: stored as data; its own balie / Prikklok brings it back)
+            case OP_VAKANTIE, OP_KANTOOR, IN_DE_KNABBELVELDEN -> Uitkomst.NIET_THUIS;   // (guhpixel: stored as data; its own balie / Prikklok brings it back)
             default -> null;
         };
     }

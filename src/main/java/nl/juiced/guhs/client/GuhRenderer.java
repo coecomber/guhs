@@ -82,6 +82,26 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         HOOKS.add(hook);
     }
 
+    /** 1.6.0: features that make some guhs see-through like the ghost guh (the Knabbelvelden's retired guhs). */
+    private static final List<java.util.function.Predicate<GuhEntity>> DOORZICHTIG = new CopyOnWriteArrayList<>();
+
+    public static void doorzichtig(java.util.function.Predicate<GuhEntity> wie) {
+        DOORZICHTIG.add(wie);
+    }
+
+    /** See-through: the ghost guh, or a guh a feature made see-through. */
+    public static boolean isDoorzichtig(GuhEntity guh) {
+        if (guh.getVariant() == GuhVariant.GHOST) {
+            return true;
+        }
+        for (java.util.function.Predicate<GuhEntity> wie : DOORZICHTIG) {
+            if (wie.test(guh)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Asleep: the SLAPEN emote (a nap, the night) or in a guh nest; 1.2.0: also eyes happily shut while being petted. */
     public static boolean slaapt(GuhEntity guh) {
         return guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.SLAPEN
@@ -136,11 +156,11 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         return BASE_SHADOW * state.scale * state.ageScale;
     }
 
-    /** The ghost guh is see-through. */
+    /** The ghost guh is see-through (1.6.0: and the guhs of {@link #doorzichtig}). */
     @Override
     public int getRenderColor(GuhEntity guh, @Nullable Void related, float partialTick) {
         int colour = super.getRenderColor(guh, related, partialTick);
-        return guh.getVariant() == GuhVariant.GHOST ? (colour & 0x00FFFFFF) | (Math.min(0x88, colour >>> 24) << 24) : colour;
+        return isDoorzichtig(guh) ? (colour & 0x00FFFFFF) | (Math.min(0x88, colour >>> 24) << 24) : colour;
     }
 
     // --- submit ------------------------------------------------------------------------------------------------------
@@ -148,7 +168,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
     @Override
     public @Nullable RenderType getRenderType(LivingEntityRenderState state, Identifier texture) {
         GuhRenderFrame frame = frame(state);
-        if (frame != null && frame.variant == GuhVariant.GHOST && !state.isInvisible) {
+        if (frame != null && frame.doorzichtig && !state.isInvisible) {
             return RenderTypes.entityTranslucent(texture);
         }
         return super.getRenderType(state, texture);
