@@ -101,10 +101,52 @@ public final class Rollen {
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_VERZORGER, VERZORGER);
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_VERKOPER, VERKOPER);
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_LODGEBEHEERDER, LODGE);
+        NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_IJSVERKOPER, IJSVERKOPER);
+        NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_VERTELLER, Kampvuur.VERTELLER);
         for (String zone : LobbyItems.BADGES.keySet()) {
             NpcRollen.zet(GuhNpcEntity.Kind.valueOf("SAFARI_EXPERT_" + zone.toUpperCase(java.util.Locale.ROOT)), new Expert(zone));
         }
     }
+
+    // --- the ijsverkoper of the ijskraam: animal ice creams for Safarimunten (test round 3) --------------------------------
+
+    static final int IJSJE_PRIJS = 3;
+
+    static final NpcRole IJSVERKOPER = new NpcRole() {
+        @Override
+        public void talk(GuhNpcEntity npc, ServerPlayer p) {
+            if (haken("ijsverkoper", npc, p)) {
+                return;
+            }
+            List<Praat.Optie> opties = new ArrayList<>();
+            for (int i = 0; i < LobbyItems.IJSJES.size(); i++) {
+                opties.add(new Praat.Optie(10 + i, LobbyItems.IJSJES.get(i).get().getDescriptionId()));
+            }
+            opties.add(new Praat.Optie(3, "gui.guhs.safari.optie.doei"));
+            Praat.open(p, npc, null, "gui.guhs.safari.ijsverkoper.hallo", new Object[]{IJSJE_PRIJS, SafariMunten.saldo(p)},
+                    opties.toArray(Praat.Optie[]::new));
+        }
+
+        @Override
+        public void antwoord(GuhNpcEntity npc, ServerPlayer p, int optie) {
+            if (optie == 4) {
+                talk(npc, p);
+                return;
+            }
+            int i = optie - 10;
+            if (i < 0 || i >= LobbyItems.IJSJES.size()) {
+                return;
+            }
+            Item ijsje = LobbyItems.IJSJES.get(i).get();
+            if (!SafariMunten.neem(p, IJSJE_PRIJS)) {
+                Praat.open(p, npc, null, "gui.guhs.safari.ijsverkoper.arm", new Object[]{IJSJE_PRIJS}, new Praat.Optie(3, "gui.guhs.safari.optie.doei"));
+                return;
+            }
+            Minigames.give(p, new ItemStack(ijsje));
+            Praat.open(p, npc, null, "gui.guhs.safari.ijsverkoper.alsjeblieft." + i, new Object[0],
+                    new Praat.Optie(4, "gui.guhs.safari.ijsverkoper.optie.nog"), new Praat.Optie(3, "gui.guhs.safari.optie.dank"));
+        }
+    };
 
     // --- the hoofdranger: S4's quests (hook), the tip of the day, what you can do here ------------------------------------
 

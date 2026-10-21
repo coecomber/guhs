@@ -45,6 +45,7 @@ public final class SafariFeature {
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(DIER.get(), SafariDier.createAttributes().build()));
         Protected.add(Safari::in);   // (fire and fluids)
         NeoForge.EVENT_BUS.register(SafariRegels.class);
+        SafariVeilig.register();   // test round 3: no damage, no hunger, no void for players in the park
         NeoForge.EVENT_BUS.addListener(SafariCommando::register);
         nl.juiced.guhs.feature.safari.kern.SafariKern.register();   // step 2: per-player data, safarimunten, events, sync
         nl.juiced.guhs.feature.safari.spullen.SafariSpullen.register(modBus);   // step 2 S6: sounds, clothes, safari blocks, items

@@ -52,11 +52,13 @@ import nl.juiced.guhs.storage.GuhSavedData;
 /**
  * The moments of Safaripark Vadse Bergen (S3, design ronde 26), run by the server from {@link MomentSchema}:
  * <ul>
- *   <li>a notice to everybody in the park a minute before and at the start ("Over 1 minuut: voedertijd bij de pinguïns!");</li>
+ *   <li>a notice to everybody in the park before it begins, within the park-wide budget of {@link Meldingen} (one line per
+ *       2.5 minutes that names what is coming; no catch-up of moments that already began);</li>
  *   <li>voedertijd: a ranger guh stands at the zone's feeding spot, the fed animals come to him, the shy animals of the zone
  *       stop hiding ({@link #voedertijd}: also the 3-star chance of the camera);</li>
  *   <li>rangerpraatje: a ranger at a truck stop tells four facts; whoever listened to the end gets a few Safarimunten;</li>
  *   <li>nachtsafari: the trucks carry lanterns ({@link #nachtsafari});</li>
+ *   <li>pinguïnparade (test round 3): {@link Parade};</li>
  *   <li>dierenverjaardag: the birthday species of the real day gets a cake and garlands at its homes, and its photos pay
  *       double ({@link #muntFactor}).</li>
  * </ul>
@@ -69,7 +71,8 @@ public final class Momenten {
     /** Server: the ranger of each running moment ("voeder:zone" / "praatje:s") and who listened from the start. */
     private static final Map<String, UUID> RANGERS = new HashMap<>();
     private static final Map<String, Set<UUID>> LUISTERAARS = new HashMap<>();
-    private static final Set<String> GEMELD = new HashSet<>();
+    /** Server: the park-wide message budget. */
+    private static final Meldingen MELDINGEN = new Meldingen();
     private static final Set<String> JARIG_GEMELD = new HashSet<>();
 
     // --- the API -----------------------------------------------------------------------------------------------------------------
@@ -127,6 +130,7 @@ public final class Momenten {
     @SubscribeEvent
     public static void onTick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();
+        Parade.tick(server);
         if (server.getTickCount() % 20 != 13) {
             return;
         }
@@ -140,13 +144,18 @@ public final class Momenten {
         }
         long dag = dag(level);
         int t = tijd(level);
+        for (MomentSchema.Moment m : MomentSchema.aankondigen(dag, t)) {
+            MELDINGEN.bied((dag * MomentSchema.DAG + m.van()) + ":" + m.soort() + ":" + m.zone(), kortTekst(m), level.getGameTime() + m.van() - t);
+        }
+        Component regel = MELDINGEN.volgende(level.getGameTime());
+        if (regel != null) {
+            for (ServerPlayer p : level.players()) {
+                p.sendSystemMessage(regel);
+            }
+        }
         for (MomentSchema.Moment m : MomentSchema.dag(dag)) {
             String sleutel = m.soort() + ":" + m.zone() + ":" + m.van();
-            if (t >= m.van() - MomentSchema.MELDING && t < m.van() - MomentSchema.MELDING + 20) {
-                melding(level, dag + ":vooraf:" + sleutel, voorafTekst(m));
-            }
             if (m.bezig(t)) {
-                melding(level, dag + ":begin:" + sleutel, beginTekst(m));
                 switch (m.soort()) {
                     case VOEDERTIJD -> voeren(level, m, t);
                     case PRAATJE -> praatje(level, m, t, dag);
@@ -160,43 +169,21 @@ public final class Momenten {
         if (server.getTickCount() % 200 == 13) {
             opruimen(level);
         }
-        if (GEMELD.size() > 512) {
-            GEMELD.clear();
-        }
-    }
-
-    private static void melding(ServerLevel level, String sleutel, @Nullable Component tekst) {
-        if (tekst == null || !GEMELD.add(sleutel)) {
-            return;
-        }
-        for (ServerPlayer p : level.players()) {
-            p.sendSystemMessage(tekst);
-        }
     }
 
     private static Component dieren(String zone) {
         return Component.translatable("gui.guhs.safari.voeder.dieren." + zone);
     }
 
-    @Nullable
-    private static Component voorafTekst(MomentSchema.Moment m) {
+    /** The short part of the announcement line: what, where, at what o'clock. */
+    private static Component kortTekst(MomentSchema.Moment m) {
+        String klok = MomentSchema.klok(m.van() % MomentSchema.DAG);
         return switch (m.soort()) {
-            case VOEDERTIJD -> Component.translatable("gui.guhs.safari.moment.voeder_straks", dieren(m.zone()),
-                    Component.translatable("gui.guhs.safari.zone." + m.zone())).withStyle(ChatFormatting.YELLOW);
-            case PRAATJE -> Component.translatable("gui.guhs.safari.moment.praatje_straks",
-                    Component.translatable("gui.guhs.safari.zone." + m.zone())).withStyle(ChatFormatting.YELLOW);
-            case NACHTSAFARI -> Component.translatable("gui.guhs.safari.moment.nacht_straks").withStyle(ChatFormatting.LIGHT_PURPLE);
-        };
-    }
-
-    @Nullable
-    private static Component beginTekst(MomentSchema.Moment m) {
-        return switch (m.soort()) {
-            case VOEDERTIJD -> Component.translatable("gui.guhs.safari.moment.voeder_nu", dieren(m.zone()),
-                    Component.translatable("gui.guhs.safari.zone." + m.zone())).withStyle(ChatFormatting.GOLD);
-            case PRAATJE -> Component.translatable("gui.guhs.safari.moment.praatje_nu",
-                    Component.translatable("gui.guhs.safari.zone." + m.zone())).withStyle(ChatFormatting.GOLD);
-            case NACHTSAFARI -> Component.translatable("gui.guhs.safari.moment.nacht_nu").withStyle(ChatFormatting.LIGHT_PURPLE);
+            case VOEDERTIJD -> Component.translatable("gui.guhs.safari.melding.voeder", dieren(m.zone()),
+                    Component.translatable("gui.guhs.safari.zone." + m.zone()), klok);
+            case PRAATJE -> Component.translatable("gui.guhs.safari.melding.praatje", Component.translatable("gui.guhs.safari.zone." + m.zone()), klok);
+            case NACHTSAFARI -> Component.translatable("gui.guhs.safari.melding.nacht", klok);
+            case PARADE -> Component.translatable("gui.guhs.safari.melding.parade", klok);
         };
     }
 
@@ -451,6 +438,7 @@ public final class Momenten {
                 case VOEDERTIJD -> Component.translatable("gui.guhs.safari.schema.voeder", dieren(m.zone()), Component.translatable("gui.guhs.safari.zone." + m.zone()));
                 case PRAATJE -> Component.translatable("gui.guhs.safari.schema.praatje", Component.translatable("gui.guhs.safari.zone." + m.zone()));
                 case NACHTSAFARI -> Component.translatable("gui.guhs.safari.schema.nacht");
+                case PARADE -> Component.translatable("gui.guhs.safari.schema.parade");
             };
             ChatFormatting kleur = status.equals("nu") ? ChatFormatting.GREEN : status.equals("geweest") ? ChatFormatting.GRAY : ChatFormatting.WHITE;
             uit.append("\n").append(Component.literal(MomentSchema.klok(m.van()) + "  ").withStyle(kleur)).append(wat.copy().withStyle(kleur))
