@@ -1,0 +1,210 @@
+{
+ "format_version": "1.12.0",
+ "minecraft:geometry": [
+  {
+   "description": {
+    "identifier": "geometry.regenboogvis_baby",
+    "texture_width": 128,
+    "texture_height": 128,
+    "visible_bounds_width": 0.24,
+    "visible_bounds_height": 0.24,
+    "visible_bounds_offset": [
+     0,
+     0.12,
+     0
+    ]
+   },
+   "bones": [
+    {
+     "name": "root",
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "cubes": []
+    },
+    {
+     "name": "body",
+     "pivot": [
+      0.0,
+      1.2,
+      0.0
+     ],
+     "cubes": [
+      {
+       "origin": [
+        -0.48,
+        0.6,
+        -1.32
+       ],
+       "size": [
+        0.96,
+        1.32,
+        2.64
+       ],
+       "uv": {
+        "north": {
+         "uv": [
+          0,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          2.2
+         ]
+        },
+        "south": {
+         "uv": [
+          2,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          2.2
+         ]
+        },
+        "east": {
+         "uv": [
+          4,
+          0
+         ],
+         "uv_size": [
+          4.4,
+          2.2
+         ]
+        },
+        "west": {
+         "uv": [
+          9,
+          0
+         ],
+         "uv_size": [
+          4.4,
+          2.2
+         ]
+        },
+        "up": {
+         "uv": [
+          14,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          4.4
+         ]
+        },
+        "down": {
+         "uv": [
+          16,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          4.4
+         ]
+        }
+       }
+      }
+     ],
+     "parent": "root"
+    },
+    {
+     "name": "head",
+     "pivot": [
+      0.0,
+      1.2,
+      -1.32
+     ],
+     "cubes": [],
+     "parent": "body"
+    },
+    {
+     "name": "tail",
+     "pivot": [
+      0.0,
+      1.26,
+      1.32
+     ],
+     "cubes": [
+      {
+       "origin": [
+        -0.06,
+        0.54,
+        1.32
+       ],
+       "size": [
+        0.12,
+        1.44,
+        0.96
+       ],
+       "uv": {
+        "north": {
+         "uv": [
+          18,
+          0
+         ],
+         "uv_size": [
+          0.5,
+          2.4
+         ]
+        },
+        "south": {
+         "uv": [
+          19,
+          0
+         ],
+         "uv_size": [
+          0.5,
+          2.4
+         ]
+        },
+        "east": {
+         "uv": [
+          20,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          2.4
+         ]
+        },
+        "west": {
+         "uv": [
+          22,
+          0
+         ],
+         "uv_size": [
+          1.6,
+          2.4
+         ]
+        },
+        "up": {
+         "uv": [
+          24,
+          0
+         ],
+         "uv_size": [
+          0.5,
+          1.6
+         ]
+        },
+        "down": {
+         "uv": [
+          25,
+          0
+         ],
+         "uv_size": [
+          0.5,
+          1.6
+         ]
+        }
+       }
+      }
+     ],
+     "parent": "body"
+    }
+   ]
+  }
+ ]
+}
