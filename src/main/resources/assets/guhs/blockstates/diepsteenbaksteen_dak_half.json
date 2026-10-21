@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "deel=0,facing=north": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_0"
+    },
+    "deel=0,facing=east": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_0",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=0,facing=south": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_0",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=0,facing=west": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_0",
+      "y": 270,
+      "uvlock": true
+    },
+    "deel=1,facing=north": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_1"
+    },
+    "deel=1,facing=east": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_1",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=1,facing=south": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_1",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=1,facing=west": {
+      "model": "guhs:block/diepsteenbaksteen_dak_half_1",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

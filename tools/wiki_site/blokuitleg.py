@@ -1388,3 +1388,47 @@ LINK = {
     "torenpeper_kweekbak": ["verhalen/pepertuin", "bouwwerken/pepertuin"],
     "wolkenkasteeltje_schat": ["bouwwerken/wolkenkasteeltje"],
 }
+
+# 1.6.0 Op Safari! deel 2 (F11): the building blocks of tools/features/bouwhulp_blokken.py. The roofs, frames, shutters
+# and benches come in many materials and colours: one text for each kind.
+_DAK = dict(
+    nl="Een stukje schuin dak. Je legt het met je gezicht naar de hoge kant. Bouw je verder omhoog de helling op, dan "
+       "kiest elk nieuw stukje zelf het volgende deel, zodat het dak mooi doorloopt.\n"
+       "\n"
+       "- Halve helling: 2 delen per blok hoogte.\n"
+       "- Kwart helling: 4 delen per blok hoogte, voor een heel flauw dak.\n"
+       "\n"
+       "Klopt een stukje net niet? Rechtsklik erop en het wordt het volgende deel.",
+    en="A piece of sloped roof. Place it facing the high side. Keep building up the slope and every new piece picks the "
+       "next part by itself, so the roof runs on nicely.\n"
+       "\n"
+       "- Half slope: 2 parts per block of height.\n"
+       "- Quarter slope: 4 parts per block of height, for a very gentle roof.\n"
+       "\n"
+       "A piece not quite right? Right-click it and it becomes the next part.")
+_KOZIJN = dict(
+    nl="Een raamkozijn voor je guhhuisje. De buitenkant wijst naar jou als je het neerzet. Rechtsklik erop met een lege "
+       "hand voor de volgende versiering: oortjes, een bloembak, gordijntjes of helemaal kaal.",
+    en="A window frame for your guh house. The outside faces you when you place it. Right-click it with an empty hand "
+       "for the next decoration: little ears, a window box, curtains or nothing at all.")
+_LUIK = dict(
+    nl="Een luik met een hartje erin. Zet het tegen de muur naast of voor je raam. Rechtsklik erop en het zwaait open, "
+       "net als een deur; nog een keer en het gaat weer dicht.",
+    en="A shutter with a little heart in it. Put it against the wall beside or in front of your window. Right-click it "
+       "and it swings open like a door; once more and it closes again.")
+_BANKJE = dict(
+    nl="Een bankje met oortjes op de leuning. Rechtsklik erop en je gaat lekker zitten. Opstaan doe je met sluipen.",
+    en="A bench with little ears on the backrest. Right-click it to sit down. Sneak to get up again.")
+for _m in ("eiken", "sparren", "berken", "jungle", "acacia", "donkereiken", "mangrove", "kersen", "bleekeiken", "bamboe", "karmozijn",
+           "verwrongen", "baksteen", "steenbaksteen", "diepsteenbaksteen", "modderbaksteen", "dakpan_roze", "dakpan_kersrood",
+           "dakpan_hemelsblauw", "dakpan_mint", "dakpan_lavendel", "dakpan_perzik"):
+    UITLEG[f"{_m}_dak_half"] = UITLEG[f"{_m}_dak_kwart"] = _DAK
+for _k in ("wit", "roze", "mint", "hemelsblauw"):
+    UITLEG[f"guh_kozijn_{_k}"] = _KOZIJN
+    UITLEG[f"guh_luik_{_k}"] = _LUIK
+UITLEG["guh_bankje_hout"] = UITLEG["guh_bankje_roze"] = _BANKJE
+UITLEG["guh_schoorsteen"] = dict(
+    nl="Een guhschoorsteen met oortjes. Zet hem op je dak en er komt gezellig rook uit. Rechtsklik erop om het vuurtje "
+       "uit te doen, en nog een keer om het weer aan te steken.",
+    en="A guh chimney with little ears. Put it on your roof and cosy smoke comes out. Right-click it to put the fire "
+       "out, and once more to light it again.")

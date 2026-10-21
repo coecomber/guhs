@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "particle": "minecraft:block/stripped_oak_log",
+    "zij": "minecraft:block/stripped_oak_log",
+    "eind": "minecraft:block/stripped_oak_log_top"
+  },
+  "elements": [
+    {
+      "from": [
+        5.0,
+        5.0,
+        0
+      ],
+      "to": [
+        11.0,
+        11.0,
+        5.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#eind",
+          "cullface": "north"
+        },
+        "east": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "west": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}

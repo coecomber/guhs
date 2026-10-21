@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pastelbaksteen_framboos"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_framboos_plaat",
+    "count": 6
+  }
+}

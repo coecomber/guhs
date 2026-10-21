@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_roze",
+  "result": {
+    "id": "guhs:dakpan_roze_trap"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/pleister_roze_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/pleister_roze_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/pleister_roze"
+    }
+  }
+}

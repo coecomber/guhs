@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/deepslate_bricks",
+    "zij": "minecraft:block/deepslate_bricks",
+    "boven": "minecraft:block/deepslate_bricks",
+    "onder": "minecraft:block/deepslate_bricks"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#zij",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#boven",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#onder",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

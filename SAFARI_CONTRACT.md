@@ -312,3 +312,13 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
   - `infoborden`: `{pos, soort}`. Each also carries block NBT `Soort` via `park.infobord_nbt` when L3's kit has it, otherwise the same string tag directly.
 - **NPCs**: appends `{id, kind, pos, yaw}` to `park.lobby_npcs_extra` for the ticket guh (`safari_kriebelhuis_balie`) and the shop guh (`safari_kriebelhuis_winkel`). The lobby.json writer should include them.
 - **Viewpoint**: the kelp viewing cave is the kijkplek `kriebelhuis_kijkgrot`, with a guh chair (a kijk-guh) and 3 favourite spots.
+
+### F11 blocks: what the others can use
+- The `BouwBlokken.PER_ID` / `BouwBlokken.blok(id)` registry: every id is listed in the generated `BouwLijst.ALLE`.
+- Id scheme:
+  - `<mat>_vplaat`, `<mat>_hoekje` (mat = wood, stone, `pastelbaksteen_<kleur>`, `pleister_<kleur>`, `dakpan_<kleur>`);
+  - `<hout>_paal`, `<hout>_balk`;
+  - `<mat>_dak_half` (deel 0..1), `<mat>_dak_kwart` (deel 0..3), with facing = the high side.
+- Shapes/templates for F9/F10 can use these ids directly.
+- The creative tab "Guhs: Bouwen" (`BouwBlokken.TAB`): add tools via `BouwBlokken.TAB_EXTRA.add(out -> out.accept(stack))` in a static init / register().
+- Small self-made choices go in `BOUWHULP_KEUZES.md` (one line per choice, prefixed with the slice); at the merge they move to design doc chapter 9.

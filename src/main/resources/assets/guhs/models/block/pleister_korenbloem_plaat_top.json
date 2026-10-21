@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pleister_korenbloem",
+    "top": "guhs:block/bouwhulp/pleister_korenbloem",
+    "side": "guhs:block/bouwhulp/pleister_korenbloem"
+  }
+}

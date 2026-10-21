@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pastelbaksteen_lavendel"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_lavendel_plaat",
+    "count": 6
+  }
+}

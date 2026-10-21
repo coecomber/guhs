@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_vanille",
+  "result": {
+    "id": "guhs:pleister_vanille_trap"
+  }
+}

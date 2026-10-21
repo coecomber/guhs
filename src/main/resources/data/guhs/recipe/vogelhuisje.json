@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " P ",
+    "PFP",
+    " S "
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "F": "minecraft:feather",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:vogelhuisje"
+  }
+}

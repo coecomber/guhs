@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_aqua",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_aqua",
+    "side": "guhs:block/bouwhulp/pastelbaksteen_aqua"
+  }
+}

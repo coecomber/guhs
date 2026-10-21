@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:glasinlood_hartje"
+  },
+  "result": {
+    "id": "guhs:glasinlood_hartje_ruit",
+    "count": 16
+  }
+}

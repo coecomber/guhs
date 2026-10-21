@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:behang_streepjes_roze",
+  "result": {
+    "id": "guhs:behang_wolkjes_roze"
+  }
+}

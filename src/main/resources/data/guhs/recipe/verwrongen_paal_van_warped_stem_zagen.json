@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:warped_stem",
+  "result": {
+    "id": "guhs:verwrongen_paal",
+    "count": 4
+  }
+}

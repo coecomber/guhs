@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "decor=kaal,facing=north": {
+      "model": "guhs:block/guh_kozijn_wit_kaal"
+    },
+    "decor=kaal,facing=east": {
+      "model": "guhs:block/guh_kozijn_wit_kaal",
+      "y": 90
+    },
+    "decor=kaal,facing=south": {
+      "model": "guhs:block/guh_kozijn_wit_kaal",
+      "y": 180
+    },
+    "decor=kaal,facing=west": {
+      "model": "guhs:block/guh_kozijn_wit_kaal",
+      "y": 270
+    },
+    "decor=oortjes,facing=north": {
+      "model": "guhs:block/guh_kozijn_wit_oortjes"
+    },
+    "decor=oortjes,facing=east": {
+      "model": "guhs:block/guh_kozijn_wit_oortjes",
+      "y": 90
+    },
+    "decor=oortjes,facing=south": {
+      "model": "guhs:block/guh_kozijn_wit_oortjes",
+      "y": 180
+    },
+    "decor=oortjes,facing=west": {
+      "model": "guhs:block/guh_kozijn_wit_oortjes",
+      "y": 270
+    },
+    "decor=bloembak,facing=north": {
+      "model": "guhs:block/guh_kozijn_wit_bloembak"
+    },
+    "decor=bloembak,facing=east": {
+      "model": "guhs:block/guh_kozijn_wit_bloembak",
+      "y": 90
+    },
+    "decor=bloembak,facing=south": {
+      "model": "guhs:block/guh_kozijn_wit_bloembak",
+      "y": 180
+    },
+    "decor=bloembak,facing=west": {
+      "model": "guhs:block/guh_kozijn_wit_bloembak",
+      "y": 270
+    },
+    "decor=gordijn,facing=north": {
+      "model": "guhs:block/guh_kozijn_wit_gordijn"
+    },
+    "decor=gordijn,facing=east": {
+      "model": "guhs:block/guh_kozijn_wit_gordijn",
+      "y": 90
+    },
+    "decor=gordijn,facing=south": {
+      "model": "guhs:block/guh_kozijn_wit_gordijn",
+      "y": 180
+    },
+    "decor=gordijn,facing=west": {
+      "model": "guhs:block/guh_kozijn_wit_gordijn",
+      "y": 270
+    }
+  }
+}

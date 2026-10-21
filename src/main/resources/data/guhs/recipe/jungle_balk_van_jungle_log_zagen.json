@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:jungle_log",
+  "result": {
+    "id": "guhs:jungle_balk",
+    "count": 2
+  }
+}

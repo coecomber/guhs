@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    "PWP",
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "W": "minecraft:lime_wool"
+  },
+  "result": {
+    "id": "guhs:behang_bloemetjes_mint",
+    "count": 8
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "rookt=true": {
+      "model": "guhs:block/guh_schoorsteen"
+    },
+    "rookt=false": {
+      "model": "guhs:block/guh_schoorsteen"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kwarts_hoekje"
+    },
+    "facing=east": {
+      "model": "guhs:block/kwarts_hoekje",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "guhs:block/kwarts_hoekje",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "guhs:block/kwarts_hoekje",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

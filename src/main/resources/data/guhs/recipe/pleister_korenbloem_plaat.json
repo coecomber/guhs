@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_korenbloem"
+  },
+  "result": {
+    "id": "guhs:pleister_korenbloem_plaat",
+    "count": 6
+  }
+}

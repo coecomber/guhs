@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "plint=false": {
+      "model": "guhs:block/behang_wolkjes_mint"
+    },
+    "plint=true": {
+      "model": "guhs:block/behang_wolkjes_mint_plint"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_muisgrijs",
+  "result": {
+    "id": "guhs:pastelbaksteen_muisgrijs_plaat",
+    "count": 2
+  }
+}

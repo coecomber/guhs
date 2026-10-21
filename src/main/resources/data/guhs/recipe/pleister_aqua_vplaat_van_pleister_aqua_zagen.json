@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_aqua",
+  "result": {
+    "id": "guhs:pleister_aqua_vplaat",
+    "count": 2
+  }
+}

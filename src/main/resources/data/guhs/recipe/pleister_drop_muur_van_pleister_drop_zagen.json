@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_drop",
+  "result": {
+    "id": "guhs:pleister_drop_muur"
+  }
+}

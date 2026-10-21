@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:dakpan_hemelsblauw"
+  },
+  "result": {
+    "id": "guhs:dakpan_hemelsblauw_trap",
+    "count": 4
+  }
+}

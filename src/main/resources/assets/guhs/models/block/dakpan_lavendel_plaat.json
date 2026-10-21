@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/dakpan_lavendel",
+    "top": "guhs:block/bouwhulp/dakpan_lavendel",
+    "side": "guhs:block/bouwhulp/dakpan_lavendel"
+  }
+}

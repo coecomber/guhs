@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/deurmat_welkom"
+    },
+    "facing=east": {
+      "model": "guhs:block/deurmat_welkom",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/deurmat_welkom",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/deurmat_welkom",
+      "y": 270
+    }
+  }
+}

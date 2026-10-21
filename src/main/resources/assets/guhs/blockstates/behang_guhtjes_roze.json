@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "plint=false": {
+      "model": "guhs:block/behang_guhtjes_roze"
+    },
+    "plint=true": {
+      "model": "guhs:block/behang_guhtjes_roze_plint"
+    }
+  }
+}

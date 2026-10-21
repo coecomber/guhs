@@ -1,0 +1,271 @@
+{
+  "textures": {
+    "particle": "guhs:block/bouwhulp/lantaarn_paal",
+    "p": "guhs:block/bouwhulp/lantaarn_paal",
+    "lamp": "guhs:block/bouwhulp/lantaarn_glas",
+    "kap": "guhs:block/bouwhulp/dakpan_roze",
+    "oor": "guhs:block/bouwhulp/oor"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        6,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#p"
+        },
+        "south": {
+          "texture": "#p"
+        },
+        "east": {
+          "texture": "#p"
+        },
+        "west": {
+          "texture": "#p"
+        },
+        "up": {
+          "texture": "#p"
+        },
+        "down": {
+          "texture": "#p",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        6,
+        4
+      ],
+      "to": [
+        12,
+        7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#p"
+        },
+        "south": {
+          "texture": "#p"
+        },
+        "east": {
+          "texture": "#p"
+        },
+        "west": {
+          "texture": "#p"
+        },
+        "up": {
+          "texture": "#p"
+        },
+        "down": {
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        7,
+        4.5
+      ],
+      "to": [
+        11.5,
+        13,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp"
+        },
+        "south": {
+          "texture": "#lamp"
+        },
+        "east": {
+          "texture": "#lamp"
+        },
+        "west": {
+          "texture": "#lamp"
+        },
+        "up": {
+          "texture": "#lamp"
+        },
+        "down": {
+          "texture": "#lamp"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        14.5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        14.5,
+        4.5
+      ],
+      "to": [
+        11.5,
+        16,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        16,
+        7
+      ],
+      "to": [
+        7,
+        18.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        16,
+        7
+      ],
+      "to": [
+        11.5,
+        18.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        5.1,
+        16.4,
+        6.9
+      ],
+      "to": [
+        6.4,
+        18,
+        6.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        }
+      }
+    },
+    {
+      "from": [
+        9.6,
+        16.4,
+        6.9
+      ],
+      "to": [
+        10.9,
+        18,
+        6.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+# Bouwhulp: zelf gekozen (te controleren)
+Each slice appends its own small choices here; they go to design doc chapter 9 at the merge.
+
+- [F11] An own creative tab "Guhs: Bouwen" (itemGroup.guhs.bouwen) holding all 407 building blocks. They are NOT in the big Guhs tab. The other bouwhulp slices add their tools through `BouwBlokken.TAB_EXTRA`. (alternatief: alles in de gewone Guhs-tab)
+- [F11] Vormhulp materials:
+  - 12 woods (eiken … verwrongen, incl. bleekeiken/bamboe/karmozijn);
+  - 13 stones (steen, keien, stenen bakstenen, bemoste, gladde steen, zandsteen, bakstenen, 3× gepolijst, diepsteenbakstenen, kwarts, modderbakstenen);
+  - all pastel bricks, plaster and roof tiles.
+  - (alternatief: minder of meer materialen, bv. ook beton/terracotta)
+- [F11] A verticale plaat goes against the clicked block; on a floor, at the far side. A hoekje is a quarter column in the clicked corner. There is no "two vertical slabs make one block". (alternatief: dubbele verticale plaat zoals gewone platen)
+- [F11] Palen (thin, 6 px, always upright, arms to other palen/balken) and balken (thick, 10 px, arms to everything solid) exist for the 12 woods, in the stripped log texture. Stonecutter: 1 log → 4 palen / 2 balken. (alternatief: ook stenen palen, of de schors-textuur)
+- [F11] Schuine daken are built from little steps (4 per block, stepped look):
+  - "halve helling" climbs 1 block in 2 parts, "kwart" climbs 1 block in 4 parts;
+  - the parts pick themselves when you build up the slope, and right-click gives the next part;
+  - they exist for the woods, 4 stones (bakstenen, stenen bakstenen, diepsteen, modder) and the dakpannen;
+  - there are no special corner pieces (use vanilla stairs at corners).
+  - (alternatief: gladde schuine modellen; hoek-/nokstukken)
+- [F11] The 16 pastel colours follow the 16 vanilla dyes: vanille, wolkjesgrijs, muisgrijs, drop, mokka, framboos, perzik, boter, pistache, salie, aqua, hemelsblauw, korenbloem, lavendel, orchidee, roze. Recipes: 8 bakstenen (or white terracotta for pleister) + 1 dye → 8; everything else via the stonecutter or the usual stairs/slab/wall recipes. (alternatief: andere kleurnamen/tinten)
+- [F11] Dakpannen (new, for roofs) come in 6 colours: roze, kersrood, hemelsblauw, mint, lavendel, perzik. Each has block, trap, plaat, daken, vplaat and hoekje. Recipe: 4 terracotta → 4. (alternatief: geen aparte dakpannen, alleen pastelbaksteen-daken)
+- [F11] Guh-tegels are full blocks + plaat, all made in the stonecutter from white concrete. (alternatief: ook trap)
+- [F11] Behang comes in 4 patterns × 2 colours (roze, mint). The plint appears by itself on the bottom row. Recipe: 8 paper + wool → 8, then the stonecutter switches between patterns of the same colour. (alternatief: meer kleuren)
+- [F11] Knuffelblokken:
+  - 8 pastels + 4 safari animal patterns (zebra, giraffe, tijger, panda) from safari_patronen;
+  - the patterns are freely craftable: vanille knuffelblok + dye/bamboo;
+  - bounce = half the fall speed, 80% less fall damage, a squeak = the bath duck squeak; sneaking means no bounce.
+  - (alternatief: dierpatronen pas via de dex ontgrendelen, zoals de patroonkwast)
+- [F11] Guh-kozijn: ONE block per colour (wit, roze, mint, hemelsblauw); right-click switches oortjes → bloembak → gordijntjes → kaal. (alternatief: aparte blokken per versiering)
+- [F11] Guh-luik: opens like a door (perpendicular to the wall, hinge on the clicked side) and has a cut-out heart. (alternatief: luiken die plat tegen de muur naast het raam klappen)
+- [F11] Glas-in-lood comes in 4 designs (guh, hartje, bloem, regenboog) + ruiten (panes). Patrijspoorten come in koper, zilver and goud. (alternatief: andere ontwerpen)
+- [F11] Dakgoot and regenpijp are in zinc grey. The guh-schoorsteen is pink brick with ears; right-click puts the smoke out/on. The dakkapel comes in roze (pink tiles) and wit (blue tiles). (alternatief: pastel goot)
+- [F11] Tuin & straat:
+  - guhhekjes + poortjes in the 4 paint colours;
+  - the lantaarnpaal is 2 blocks high, mint, with a pink guh cap;
+  - the deurmat says "WELKOM GUH" also in English;
+  - 2 bankjes (hout, roze) you can sit on;
+  - in the vogelhuisje a little bird now and then sings (sounds from the vogels feature).
+- [F11] Safari bouwblokken (rieten dak, bamboe-/safarihekken etc. from design 1.8/2.9) were NOT redone here; they already come from S6 (SafariSpullen). The posters/schilderijen also stay with S6.

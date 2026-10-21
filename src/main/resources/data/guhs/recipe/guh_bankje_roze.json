@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "D P",
+    "PPP",
+    "S S"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick",
+    "D": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:guh_bankje_roze"
+  }
+}

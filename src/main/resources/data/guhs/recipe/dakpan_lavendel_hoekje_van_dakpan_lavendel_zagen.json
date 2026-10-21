@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_lavendel",
+  "result": {
+    "id": "guhs:dakpan_lavendel_hoekje",
+    "count": 4
+  }
+}

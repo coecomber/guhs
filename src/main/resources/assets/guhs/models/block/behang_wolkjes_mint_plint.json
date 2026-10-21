@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "guhs:block/bouwhulp/behang_wolkjes_mint_plint",
+    "top": "guhs:block/bouwhulp/behang_wolkjes_mint",
+    "bottom": "guhs:block/bouwhulp/behang_wolkjes_mint"
+  }
+}

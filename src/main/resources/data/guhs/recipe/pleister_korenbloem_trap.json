@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_korenbloem"
+  },
+  "result": {
+    "id": "guhs:pleister_korenbloem_trap",
+    "count": 4
+  }
+}

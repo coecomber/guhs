@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pastelbaksteen_perzik"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_perzik_muur",
+    "count": 6
+  }
+}

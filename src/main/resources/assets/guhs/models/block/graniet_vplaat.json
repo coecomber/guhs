@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/polished_granite",
+    "zij": "minecraft:block/polished_granite",
+    "boven": "minecraft:block/polished_granite",
+    "onder": "minecraft:block/polished_granite"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#zij",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#boven",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#onder",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

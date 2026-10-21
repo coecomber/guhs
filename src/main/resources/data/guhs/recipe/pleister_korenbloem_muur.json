@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_korenbloem"
+  },
+  "result": {
+    "id": "guhs:pleister_korenbloem_muur",
+    "count": 6
+  }
+}

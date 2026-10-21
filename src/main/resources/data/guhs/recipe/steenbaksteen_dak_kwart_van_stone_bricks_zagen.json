@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:stone_bricks",
+  "result": {
+    "id": "guhs:steenbaksteen_dak_kwart",
+    "count": 2
+  }
+}

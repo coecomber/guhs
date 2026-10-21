@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SDS",
+    "SPS"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick",
+    "D": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "guhs:guh_poortje_wit"
+  }
+}

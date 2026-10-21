@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": {
+      "sprite": "guhs:block/bouwhulp/patrijspoort_koper",
+      "force_translucent": true
+    }
+  }
+}

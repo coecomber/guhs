@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:bamboo_planks",
+  "result": {
+    "id": "guhs:bamboe_dak_kwart",
+    "count": 2
+  }
+}

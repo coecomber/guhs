@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "deel=0,facing=north": {
+      "model": "guhs:block/jungle_dak_kwart_0"
+    },
+    "deel=0,facing=east": {
+      "model": "guhs:block/jungle_dak_kwart_0",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=0,facing=south": {
+      "model": "guhs:block/jungle_dak_kwart_0",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=0,facing=west": {
+      "model": "guhs:block/jungle_dak_kwart_0",
+      "y": 270,
+      "uvlock": true
+    },
+    "deel=1,facing=north": {
+      "model": "guhs:block/jungle_dak_kwart_1"
+    },
+    "deel=1,facing=east": {
+      "model": "guhs:block/jungle_dak_kwart_1",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=1,facing=south": {
+      "model": "guhs:block/jungle_dak_kwart_1",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=1,facing=west": {
+      "model": "guhs:block/jungle_dak_kwart_1",
+      "y": 270,
+      "uvlock": true
+    },
+    "deel=2,facing=north": {
+      "model": "guhs:block/jungle_dak_kwart_2"
+    },
+    "deel=2,facing=east": {
+      "model": "guhs:block/jungle_dak_kwart_2",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=2,facing=south": {
+      "model": "guhs:block/jungle_dak_kwart_2",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=2,facing=west": {
+      "model": "guhs:block/jungle_dak_kwart_2",
+      "y": 270,
+      "uvlock": true
+    },
+    "deel=3,facing=north": {
+      "model": "guhs:block/jungle_dak_kwart_3"
+    },
+    "deel=3,facing=east": {
+      "model": "guhs:block/jungle_dak_kwart_3",
+      "y": 90,
+      "uvlock": true
+    },
+    "deel=3,facing=south": {
+      "model": "guhs:block/jungle_dak_kwart_3",
+      "y": 180,
+      "uvlock": true
+    },
+    "deel=3,facing=west": {
+      "model": "guhs:block/jungle_dak_kwart_3",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

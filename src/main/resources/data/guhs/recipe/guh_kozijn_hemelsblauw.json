@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " D ",
+    "SGS",
+    " S "
+  ],
+  "key": {
+    "D": "minecraft:light_blue_dye",
+    "S": "minecraft:stick",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "guhs:guh_kozijn_hemelsblauw",
+    "count": 2
+  }
+}

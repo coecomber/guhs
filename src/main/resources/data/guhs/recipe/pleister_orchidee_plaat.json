@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_orchidee"
+  },
+  "result": {
+    "id": "guhs:pleister_orchidee_plaat",
+    "count": 6
+  }
+}

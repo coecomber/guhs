@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_mokka",
+  "result": {
+    "id": "guhs:pleister_mokka_trap"
+  }
+}

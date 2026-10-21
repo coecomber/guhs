@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_kersrood",
+  "result": {
+    "id": "guhs:dakpan_kersrood_trap"
+  }
+}

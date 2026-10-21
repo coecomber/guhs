@@ -1,0 +1,43 @@
+{
+  "textures": {
+    "particle": "minecraft:block/stripped_warped_stem",
+    "zij": "minecraft:block/stripped_warped_stem",
+    "eind": "minecraft:block/stripped_warped_stem_top"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        5.0,
+        5.0
+      ],
+      "to": [
+        5.0,
+        11.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "south": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "west": {
+          "texture": "#eind",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "down": {
+          "texture": "#zij",
+          "rotation": 90
+        }
+      }
+    }
+  ]
+}

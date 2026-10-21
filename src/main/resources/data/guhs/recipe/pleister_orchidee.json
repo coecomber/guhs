@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:white_terracotta",
+    "D": "minecraft:magenta_dye"
+  },
+  "result": {
+    "id": "guhs:pleister_orchidee",
+    "count": 8
+  }
+}

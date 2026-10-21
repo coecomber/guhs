@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BCB",
+    "B B"
+  ],
+  "key": {
+    "B": "minecraft:brick",
+    "C": "minecraft:campfire"
+  },
+  "result": {
+    "id": "guhs:guh_schoorsteen",
+    "count": 2
+  }
+}

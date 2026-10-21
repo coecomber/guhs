@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_pistache",
+  "result": {
+    "id": "guhs:pastelbaksteen_pistache_trap"
+  }
+}

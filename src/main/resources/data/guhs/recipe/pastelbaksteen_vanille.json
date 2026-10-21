@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:bricks",
+    "D": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_vanille",
+    "count": 8
+  }
+}

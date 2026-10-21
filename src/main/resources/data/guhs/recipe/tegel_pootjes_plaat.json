@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:tegel_pootjes"
+  },
+  "result": {
+    "id": "guhs:tegel_pootjes_plaat",
+    "count": 6
+  }
+}

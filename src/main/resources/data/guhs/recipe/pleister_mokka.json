@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:white_terracotta",
+    "D": "minecraft:brown_dye"
+  },
+  "result": {
+    "id": "guhs:pleister_mokka",
+    "count": 8
+  }
+}

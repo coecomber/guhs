@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": "minecraft:yellow_wool",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:knuffelblok_boter",
+    "count": 4
+  }
+}

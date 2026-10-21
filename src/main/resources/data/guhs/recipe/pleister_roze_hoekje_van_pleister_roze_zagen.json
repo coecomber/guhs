@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_roze",
+  "result": {
+    "id": "guhs:pleister_roze_hoekje",
+    "count": 4
+  }
+}

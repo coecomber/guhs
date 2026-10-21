@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "plint=false": {
+      "model": "guhs:block/behang_streepjes_mint"
+    },
+    "plint=true": {
+      "model": "guhs:block/behang_streepjes_mint_plint"
+    }
+  }
+}

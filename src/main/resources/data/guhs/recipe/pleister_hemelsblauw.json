@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:white_terracotta",
+    "D": "minecraft:light_blue_dye"
+  },
+  "result": {
+    "id": "guhs:pleister_hemelsblauw",
+    "count": 8
+  }
+}

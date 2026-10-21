@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:smooth_stone",
+  "result": {
+    "id": "guhs:gladde_steen_vplaat",
+    "count": 2
+  }
+}

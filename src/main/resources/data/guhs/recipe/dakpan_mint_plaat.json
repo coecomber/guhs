@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:dakpan_mint"
+  },
+  "result": {
+    "id": "guhs:dakpan_mint_plaat",
+    "count": 6
+  }
+}

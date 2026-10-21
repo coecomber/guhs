@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_lavendel",
+  "result": {
+    "id": "guhs:pastelbaksteen_lavendel_muur"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PDP",
+    "PSP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick",
+    "D": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "guhs:guh_hekje_wit",
+    "count": 3
+  }
+}

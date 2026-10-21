@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "guhs:knuffelblok_vanille",
+    "minecraft:brown_dye"
+  ],
+  "result": {
+    "id": "guhs:knuffelblok_giraffe"
+  }
+}

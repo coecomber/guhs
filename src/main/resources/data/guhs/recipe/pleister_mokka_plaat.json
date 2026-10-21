@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_mokka"
+  },
+  "result": {
+    "id": "guhs:pleister_mokka_plaat",
+    "count": 6
+  }
+}

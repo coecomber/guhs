@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PDP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "D": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:guh_luik_roze",
+    "count": 4
+  }
+}

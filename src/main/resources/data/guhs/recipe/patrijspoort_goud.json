@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " I ",
+    "IGI",
+    " I "
+  ],
+  "key": {
+    "I": "minecraft:gold_ingot",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "guhs:patrijspoort_goud",
+    "count": 2
+  }
+}

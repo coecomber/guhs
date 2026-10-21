@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_perzik",
+  "result": {
+    "id": "guhs:pleister_perzik_vplaat",
+    "count": 2
+  }
+}

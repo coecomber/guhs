@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:cherry_log",
+  "result": {
+    "id": "guhs:kersen_paal",
+    "count": 4
+  }
+}

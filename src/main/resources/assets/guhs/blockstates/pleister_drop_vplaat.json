@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/pleister_drop_vplaat"
+    },
+    "facing=east": {
+      "model": "guhs:block/pleister_drop_vplaat",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "guhs:block/pleister_drop_vplaat",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "guhs:block/pleister_drop_vplaat",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

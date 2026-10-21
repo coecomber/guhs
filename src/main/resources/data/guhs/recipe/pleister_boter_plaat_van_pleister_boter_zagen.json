@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_boter",
+  "result": {
+    "id": "guhs:pleister_boter_plaat",
+    "count": 2
+  }
+}

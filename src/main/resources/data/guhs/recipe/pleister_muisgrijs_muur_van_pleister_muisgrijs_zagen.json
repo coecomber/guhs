@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_muisgrijs",
+  "result": {
+    "id": "guhs:pleister_muisgrijs_muur"
+  }
+}

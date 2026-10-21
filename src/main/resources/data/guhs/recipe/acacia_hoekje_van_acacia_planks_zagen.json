@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:acacia_planks",
+  "result": {
+    "id": "guhs:acacia_hoekje",
+    "count": 4
+  }
+}

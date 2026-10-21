@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/tegel_hartjes",
+    "top": "guhs:block/bouwhulp/tegel_hartjes",
+    "side": "guhs:block/bouwhulp/tegel_hartjes"
+  }
+}

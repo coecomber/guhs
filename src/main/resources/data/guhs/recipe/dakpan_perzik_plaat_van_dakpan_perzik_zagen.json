@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_perzik",
+  "result": {
+    "id": "guhs:dakpan_perzik_plaat",
+    "count": 2
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/regenpijp"
+    },
+    "facing=east": {
+      "model": "guhs:block/regenpijp",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/regenpijp",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/regenpijp",
+      "y": 270
+    }
+  }
+}
