@@ -15,6 +15,8 @@ import nl.juiced.guhs.feature.safari.ParkData;
  *   <li><b>Rangerpraatje</b>: twice a day ({@link #PRAATJES}) at the truck stop of a zone that changes every day.</li>
  *   <li><b>Nachtsafari</b>: every third night ({@link #nachtsafariNacht}), lantern trucks from {@link #NACHT_VAN} to
  *       {@link #NACHT_TOT}.</li>
+ *   <li><b>Pinguïnparade</b> (test round 3): once a day from {@link #PARADE_VAN}, {@link #PARADE_DUUR} ticks, over the
+ *       truck road through the IJskust and a loop through the village ({@code Parade}).</li>
  *   <li><b>Noorderlicht</b>: above the IJskust on most nights ({@link #noorderlichtNacht}).</li>
  *   <li><b>Dierenverjaardag</b>: one dex species per REAL day ({@link #jarig}).</li>
  * </ul>
@@ -23,12 +25,16 @@ public final class MomentSchema {
     public static final int DAG = 24000, DUUR = 900, MELDING = 1200;
     public static final int[] PRAATJES = {6000, 9600};
     public static final int NACHT_VAN = 13500, NACHT_TOT = 22500;
+    /** The penguin parade: after the IJskust's feeding time (7650..8550), 90 seconds. */
+    public static final int PARADE_VAN = 8700, PARADE_DUUR = 1800;
+    /** A moment is announced (in the {@link Meldingen} budget) from this many ticks before it begins until it begins. */
+    public static final int VOORUIT = 3600;
     public static final Map<String, String> VOEDER_SOORT = Map.of("entree", "geitje", "savanne", "olifant", "delta", "nijlpaard",
             "regenwoud", "orang_oetan", "bamboe", "reuzenpanda", "ijskust", "pinguin", "oertijd", "mammoet", "europa", "otter",
             "australie", "kangoeroe");
 
     public enum Soort {
-        VOEDERTIJD, PRAATJE, NACHTSAFARI
+        VOEDERTIJD, PRAATJE, NACHTSAFARI, PARADE
     }
 
     /** One moment of a day: what, in which zone, from..to (time of day). */
@@ -75,10 +81,34 @@ public final class MomentSchema {
         for (int s = 0; s < PRAATJES.length; s++) {
             uit.add(new Moment(Soort.PRAATJE, praatjeZone(dag, s), PRAATJES[s], PRAATJES[s] + DUUR));
         }
+        uit.add(new Moment(Soort.PARADE, "ijskust", PARADE_VAN, PARADE_VAN + PARADE_DUUR));
         if (nachtsafariNacht(dag)) {
             uit.add(new Moment(Soort.NACHTSAFARI, "", NACHT_VAN, NACHT_TOT));
         }
         uit.sort((a, b) -> Integer.compare(a.van(), b.van()));
+        return uit;
+    }
+
+    public static boolean parade(int tijd) {
+        return tijd >= PARADE_VAN && tijd < PARADE_VAN + PARADE_DUUR;
+    }
+
+    /** The moments of day d to announce at time t: those beginning within {@link #VOORUIT} ticks (never one that began). */
+    public static List<Moment> aankondigen(long dag, int tijd) {
+        List<Moment> uit = new ArrayList<>();
+        for (Moment m : dag(dag)) {
+            if (tijd >= m.van() - VOORUIT && tijd < m.van()) {
+                uit.add(m);
+            }
+        }
+        // the first moments of tomorrow, late in the evening
+        if (tijd + VOORUIT > DAG) {
+            for (Moment m : dag(dag + 1)) {
+                if (m.van() + DAG - VOORUIT <= tijd) {
+                    uit.add(new Moment(m.soort(), m.zone(), m.van() + DAG, m.tot() + DAG));
+                }
+            }
+        }
         return uit;
     }
 

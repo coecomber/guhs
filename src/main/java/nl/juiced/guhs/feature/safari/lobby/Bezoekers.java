@@ -76,6 +76,11 @@ public final class Bezoekers {
     }
 
     static void maak(ServerLevel level, BlockPos p) {
+        maak(level, p, TAG);
+    }
+
+    /** A visitor guh in safari clothes with this tag (the square's visitors, or the speeltuin's players). */
+    static void maak(ServerLevel level, BlockPos p, String tag) {
         GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return;
@@ -91,14 +96,14 @@ public final class Bezoekers {
                 }
             }
         }
-        guh.addTag(TAG);
+        guh.addTag(tag);
         guh.setPersistenceRequired();
         guh.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0f);
         level.addFreshEntity(guh);
     }
 
     static boolean isBezoeker(Entity e) {
-        return e instanceof GuhEntity && e.entityTags().contains(TAG);
+        return e instanceof GuhEntity && (e.entityTags().contains(TAG) || e.entityTags().contains(Speeltuin.TAG));
     }
 
     static void opInteractie(PlayerInteractEvent.EntityInteract event) {

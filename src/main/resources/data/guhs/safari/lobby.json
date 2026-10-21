@@ -45,10 +45,20 @@
    "kind": "safari_lodgebeheerder",
    "pos": [
     187,
-    66,
+    65,
     622
    ],
    "yaw": 50.2
+  },
+  {
+   "id": "ijsverkoper",
+   "kind": "safari_ijsverkoper",
+   "pos": [
+    214,
+    65,
+    610
+   ],
+   "yaw": 90.0
   },
   {
    "id": "expert_savanne",

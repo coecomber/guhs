@@ -34,7 +34,9 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  *   <li>the lodge: sleeping there sets your spawn (the dimension's bed rule) and the flag {@code vroege_vogel} (S1 doubles
  *       the coins of the first photo of the day and clears it);</li>
  *   <li>the welcome at the first visit (the hoofdranger, the camera, "njeg, veel spotplezier!");</li>
- *   <li>the visitor guhs ({@link Bezoekers}).</li>
+ *   <li>the visitor guhs ({@link Bezoekers});</li>
+ *   <li>test round 3 (J3): the ijskraam (the ijsverkoper's animal ice creams), the guh-speeltuin ({@link Speeltuin}), the
+ *       kampvuuravond ({@link Kampvuur}) and the kijk-guhs on the lookouts ({@link Kijkguhs}); spots in {@link Beleving}.</li>
  * </ul>
  */
 public final class SafariLobby {
@@ -48,6 +50,7 @@ public final class SafariLobby {
         NeoForge.EVENT_BUS.addListener(SafariLobby::tick);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opInteractie);
         NeoForge.EVENT_BUS.addListener(Bezoekers::opInteractieSpecifiek);
+        NeoForge.EVENT_BUS.addListener(Kijkguhs::opInteractieSpecifiek);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opWakker);
     }
 
@@ -65,6 +68,9 @@ public final class SafariLobby {
         }
         Aaihoek.opInteractie(event);
         if (!event.isCanceled()) {
+            Kijkguhs.opInteractie(event);
+        }
+        if (!event.isCanceled()) {
             Bezoekers.opInteractie(event);
         }
     }
@@ -74,6 +80,9 @@ public final class SafariLobby {
         SafariNpcs.tick(server);
         Aaihoek.tick(server);
         Bezoekers.tick(server);
+        Kijkguhs.tick(server);
+        Speeltuin.tick(server);
+        Kampvuur.tick(server);
         if (server.getTickCount() % 20 == 3) {
             welkom(server);
         }

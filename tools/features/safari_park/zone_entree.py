@@ -198,6 +198,285 @@ GZ = max(z for (x, z) in INS if x == CX)          # the park gate (south)
 PENS = [(94, 52, "geitje"), (120, 50, "alpaca"), (90, 72, "cavia"), (106, 74, "ezeltje")]
 
 
+KNUFFELS = ["knuffel_normal", "knuffel_mint", "knuffel_choco", "knuffel_snow", "knuffel_pinguh", "knuffel_wolk",
+            "knuffel_pluisguh", "knuffel_glitter", "knuffel_rainbow", "knuffel_teckel", "knuffel_brontosaurus",
+            "reisbureau_souvenir_knuffeldal", "knuffel_koning", "knuffel_zeemeerguh"]
+LAMPION = ["lampion_geel[hanging=true]", "lampion_roze[hanging=true]", "lampion_mint[hanging=true]"]
+
+
+def _vrij_vlak(bad, w, d):
+    """Top-left corners (x, z) of every w x d window of `bad` that holds no bad cell (summed-area table)."""
+    c = np.pad(np.cumsum(np.cumsum(bad.astype(np.int32), 0), 1), ((1, 0), (1, 0)))
+    s = c[w:, d:] - c[:-w, d:] - c[w:, :-d] + c[:-w, :-d]
+    return np.argwhere(s == 0)
+
+
+def _beleving(S, rnd, G, claim, path, OCC, PATHS, POND, rand_d, HGT, geb):
+    """Test round 3 (design chapter 5, rounds 43 and 45; slice J3): the interiors of the village buildings (light, warm,
+    guhs furniture: no dark bare wood), and the new spots: the ijskraam on the square, the guh-speeltuin and the
+    kampvuur by the lodge. Returns the spots the game needs (local coordinates) and the sign texts."""
+    bordjes = []
+
+    def hang(x, z, y0, blok=None, tot=10):
+        """A hanging lantern under the first block above (x, y0, z)."""
+        blok = blok or rnd.choice(LAMPION)
+        for y in range(y0 + 1, y0 + tot):
+            if not S.is_air(x, y, z):
+                if y - 1 > y0 and S.is_air(x, y - 1, z):
+                    S.set(x, y - 1, z, blok)
+                return
+
+    def tapijt(x1, z1, x2, z2, y, kleur, rand=None):
+        for x in range(x1, x2 + 1):
+            for z in range(z1, z2 + 1):
+                if S.is_air(x, y, z) and not S.is_air(x, y - 1, z):
+                    k = rand if rand and (x in (x1, x2) or z in (z1, z2)) else kleur
+                    S.set(x, y, z, f"minecraft:{k}_carpet")
+
+    def knuffel(x, y, z, f, i):
+        S.set(x, y, z, f"{KNUFFELS[i % len(KNUFFELS)]}[facing={f}]")
+
+    # ---- giftshop: light and sweet, shelves full of merchandise, a counter, a clothes corner, a plush room ----
+    GX1, GZ1, GX2, GZ2 = geb["giftshop"]
+    ramen = {GZ1 + 2 + 3 * k for k in range(6)}
+    i = 0
+    for z in range(GZ1 + 1, GZ2):                     # shelves along the west wall (not in front of the windows)
+        x = GX1 + 1
+        if z in ramen:
+            S.set(x, G + 1, z, "guh_bloempot")
+            continue
+        S.set(x, G + 1, z, "minecraft:birch_planks")
+        knuffel(x, G + 2, z, "east", i)
+        S.set(x, G + 3, z, "minecraft:birch_slab[type=top,waterlogged=false]")
+        S.set(x, G + 4, z, rnd.choice(["reisbureau_koffertje[facing=east]", "guh_bloempot", "minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]",
+                                         f"{KNUFFELS[(i + 5) % len(KNUFFELS)]}[facing=east]"]))
+        S.set(x, G + 5, z, "minecraft:birch_slab[type=top,waterlogged=false]")
+        i += 1
+    for z in range(56, 61):                           # the counter, the seller stands behind it (x 41)
+        S.set(GX2 - 2, G + 1, z, "minecraft:pink_terracotta")
+    S.set(GX2 - 2, G + 2, 56, "klusjes_guhlampje[facing=east,lit=true]")
+    S.set(GX2 - 2, G + 2, 57, "knuffel_golden[facing=east]")
+    S.set(GX2 - 2, G + 2, 60, "minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]")
+    # the clothes corner (north wall): a rack with ranger hats and the "mannequin" (a guh plush in the shop window)
+    S.fill(GX1 + 3, G + 1, GZ1 + 1, GX1 + 3, G + 2, GZ1 + 1, "minecraft:birch_fence")
+    S.fill(GX1 + 7, G + 1, GZ1 + 1, GX1 + 7, G + 2, GZ1 + 1, "minecraft:birch_fence")
+    S.fill(GX1 + 3, G + 3, GZ1 + 1, GX1 + 7, G + 3, GZ1 + 1, "minecraft:stripped_birch_log[axis=x]")
+    for x in range(GX1 + 4, GX1 + 7):
+        S.set(x, G + 4, GZ1 + 1, "minecraft:brown_carpet")
+    S.set(GX1 + 9, G + 1, GZ1 + 1, "minecraft:birch_planks")
+    S.set(GX1 + 9, G + 2, GZ1 + 1, "knuffel_normal[facing=south]")
+    S.set(GX1 + 10, G + 1, GZ1 + 1, "minecraft:birch_sign[rotation=0,waterlogged=false]")
+    bordjes.append(((GX1 + 10, G + 1, GZ1 + 1), ["Safarikleding!", "hoedjes, vestjes", "en verrekijkers", "njeg, zo stoer"]))
+    for (tx, tz) in ((GX1 + 7, 58), (GX1 + 7, 62), (GX1 + 11, 58), (GX1 + 11, 62)):
+        S.set(tx, G + 1, tz, "guh_tafel[facing=north]")
+    tapijt(GX1 + 5, 55, GX2 - 4, 64, G + 1, "pink", rand="yellow")
+    for (hx, hz) in ((GX1 + 5, 57), (GX1 + 9, 60), (GX1 + 13, 57), (GX1 + 5, 63), (GX1 + 13, 63), (GX1 + 8, 69)):
+        hang(hx, hz, G + 1)
+    # the plush room (the annex): three tiers of plushies against the back wall
+    for x in range(GX1 + 5, GX1 + 12):
+        S.fill(x, G + 1, GZ2 + 5, x, G + 2, GZ2 + 5, "minecraft:birch_planks")
+        knuffel(x, G + 3, GZ2 + 5, "north", x)
+        S.set(x, G + 1, GZ2 + 4, "minecraft:birch_planks")
+        knuffel(x, G + 2, GZ2 + 4, "north", x + 3)
+        knuffel(x, G + 1, GZ2 + 3, "north", x + 7)
+    tapijt(GX1 + 5, GZ2 + 1, GX1 + 11, GZ2 + 2, G + 1, "white")
+
+    # ---- rangerstation: a cosy mini nature museum (display cases), the hoofdranger's office and reading corner upstairs ----
+    RX1, RZ1, RX2, RZ2, TRAP = geb["ranger"]
+
+    def vitrine(cx, cz, obj):
+        for a in (-1, 0, 1):
+            for b in (-1, 0, 1):
+                S.set(cx + a, G + 1, cz + b, "minecraft:birch_slab[type=top,waterlogged=false]" if (a or b) else "minecraft:polished_diorite")
+                S.set(cx + a, G + 2, cz + b, "minecraft:glass_pane" if (a or b) else obj)
+                S.set(cx + a, G + 3, cz + b, "minecraft:glass")
+    vitrine(RX1 + 6, RZ1 + 3, "fossielmijn_fossielbeeldje[facing=south]")
+    vitrine(RX1 + 10, RZ1 + 3, "guhrio_guhshi_ei")
+    vitrine(RX1 + 14, RZ1 + 3, "knuffel_brontosaurus[facing=south]")
+    for k, (x, obj) in enumerate(((RX1 + 5, "knuffel_pinguh"), (RX1 + 7, "reisbureau_souvenir_knuffeldal"), (RX1 + 9, "knuffel_teckel"),
+                                  (RX1 + 11, "knuffel_wolk"))):
+        S.set(x, G + 1, RZ2 - 1, "minecraft:birch_slab[type=top,waterlogged=false]")
+        S.set(x, G + 2, RZ2 - 1, f"{obj}[facing=north]")
+    S.fill(RX1 + 4, G + 1, RZ2 - 3, RX1 + 4, G + 1, RZ2 - 1, "minecraft:bone_block[axis=y]")       # a little skeleton
+    S.set(RX1 + 4, G + 2, RZ2 - 2, "minecraft:bone_block[axis=x]")
+    S.set(RX1 + 11, G + 1, RZ1 + 9, "guhkantoor_bureautje[facing=east,bezet=false]")              # behind the hoofdranger
+    S.set(RX2 - 2, G + 1, RZ1 + 3, "minecraft:birch_sign[rotation=12,waterlogged=false]")
+    bordjes.append(((RX2 - 2, G + 1, RZ1 + 3), ["Guhmbo's", "mini-", "natuurmuseum", "niet aaien, njeg"]))
+    tapijt(RX1 + 5, RZ1 + 6, RX2 - 2, RZ2 - 3, G + 1, "light_blue", rand="white")
+    for x in range(RX1 + 11, RX1 + 14):                # the hoofdranger's spot (38, 42) stays free (no carpet)
+        for z in range(RZ1 + 8, RZ1 + 11):
+            if S.get(x, G + 1, z).endswith("_carpet"):
+                S.set(x, G + 1, z, AIR)
+    for (hx, hz) in ((RX1 + 6, RZ1 + 7), (RX1 + 11, RZ1 + 7), (RX1 + 15, RZ1 + 10), (RX1 + 8, RZ2 - 2)):
+        S.set(hx, G + 4, hz, rnd.choice(LAMPION))
+    # upstairs: map, desk, dex wall, coat rack, reading corner
+    MAP = ["EEEEiiiBBR", "EAAAERRRDD", "AA~~~~~~~D"]
+    COL = {"i": "minecraft:light_gray_concrete", "B": "minecraft:lime_concrete", "E": "minecraft:green_concrete",
+           "R": "minecraft:green_terracotta", "D": "minecraft:cyan_terracotta", "A": "minecraft:orange_terracotta",
+           "~": "minecraft:light_blue_concrete"}
+    for r, row in enumerate(MAP):
+        for c, ch in enumerate(row):
+            S.set(RX1 + 5 + c, G + 8 - r, RZ1 + 1, COL[ch])
+    S.set(RX1 + 10, G + 6, RZ1 + 5, "guhkantoor_bureautje[facing=north,bezet=false]")
+    S.set(RX1 + 10, G + 6, RZ1 + 6, "guh_stoel[facing=north]")
+    S.set(RX1 + 11, G + 6, RZ1 + 5, "klusjes_guhlampje[facing=south,lit=true]")
+    for z in range(RZ1 + 3, RZ1 + 7):                 # the dex wall (east): little frames of every colour
+        for y in (G + 6, G + 7, G + 8):
+            S.set(RX2 - 1, y, z, rnd.choice(["minecraft:yellow_terracotta", "minecraft:orange_terracotta", "minecraft:pink_terracotta",
+                                             "minecraft:light_blue_terracotta", "minecraft:lime_terracotta"]))
+    for z in (RZ2 - 1, RZ2 - 3):                      # coat rack with ranger hats
+        S.fill(RX2 - 2, G + 6, z, RX2 - 2, G + 7, z, "minecraft:birch_fence")
+        S.set(RX2 - 2, G + 8, z, "minecraft:brown_carpet")
+    for z in range(RZ1 + 2, RZ1 + 7):                 # bookshelves along the west wall (north of the stairwell)
+        S.fill(RX1 + 1, G + 6, z, RX1 + 1, G + 7, z, "minecraft:bookshelf")
+    S.set(RX1 + 6, G + 6, RZ2 - 2, "bieb_guhfauteuil[facing=north]")
+    S.set(RX1 + 8, G + 6, RZ2 - 2, "bieb_guhfauteuil[facing=north]")
+    S.set(RX1 + 7, G + 6, RZ2 - 4, "guh_tafel[facing=north]")
+    S.set(RX1 + 5, G + 6, RZ2 - 4, "pink_kussen[facing=east]")
+    S.set(RX1 + 9, G + 6, RZ2 - 4, "yellow_kussen[facing=west]")
+    tapijt(RX1 + 5, RZ2 - 5, RX1 + 9, RZ2 - 1, G + 6, "yellow", rand="orange")
+    for (hx, hz) in ((RX1 + 7, RZ2 - 3), (RX1 + 10, RZ1 + 5), (RX1 + 14, RZ1 + 9), (RX1 + 14, RZ2 - 2)):
+        hang(hx, hz, G + 6)
+
+    # ---- Het Watergat: tables with guh chairs, the buffet, lanterns ----
+    WX1, WZ1, WX2, WZ2 = geb["watergat"]
+    for (tx, tz) in ((WX1 + 4, WZ1 + 4), (WX1 + 4, WZ1 + 8), (WX2 - 6, WZ1 + 4), (WX2 - 6, WZ1 + 8)):
+        S.set(tx, G + 1, tz, "guh_tafel[facing=north]")
+        S.set(tx - 1, G + 1, tz, "guh_stoel[facing=east]")
+        S.set(tx + 1, G + 1, tz, "guh_stoel[facing=west]")
+        hang(tx, tz, G + 1)
+    for z in range(WZ1 + 3, WZ2 - 2):
+        S.set(WX2 - 2, G + 1, z, "feestbuffettafel[facing=west,gedekt=true]")
+    for (px, pz) in ((WX1 + 1, WZ1 + 1), (WX1 + 1, WZ2 - 1), (WX2 - 1, WZ1 + 1), (WX2 - 1, WZ2 - 1)):
+        S.set(px, G + 1, pz, "guh_bloempot")
+
+    # ---- expertenpaviljoen: a round rug, flowers in the middle, a lantern under the roof ----
+    PVX, PVZ, PVR = geb["paviljoen"]
+    for x in range(PVX - 3, PVX + 4):
+        for z in range(PVZ - 3, PVZ + 4):
+            d = math.hypot(x - PVX, z - PVZ)
+            if d <= 2.4 and S.is_air(x, G + 1, z):
+                S.set(x, G + 1, z, "minecraft:yellow_carpet" if d > 1.4 else "minecraft:white_carpet")
+    S.set(PVX, G + 1, PVZ, "guh_bloempot")
+    hang(PVX, PVZ, G + 1, "lampion_geel[hanging=true]", tot=14)
+
+    # ---- the lodge huts: a rug, a lamp, a cushion, a plant (the bed comes from zone_s2_lobby) ----
+    for (hx, hz, _) in geb["huts"]:
+        fy = G + 4
+        for x in range(hx + 1, hx + 5):
+            for z in range(hz + 1, hz + 5):
+                if (x, z) not in ((hx + 1, hz + 1), (hx + 1, hz + 2)) and S.is_air(x, fy, z):
+                    S.set(x, fy, z, "minecraft:light_blue_carpet")
+        S.set(hx + 4, fy, hz + 4, "klusjes_guhlampje[facing=west,lit=true]")
+        S.set(hx + 1, fy, hz + 4, "pink_kussen[facing=east]")
+        S.set(hx + 4, fy, hz + 1, "guh_bloempot")
+
+    # ---- the aaihoek barn: hay, a cupboard for the brushes, a bench, lanterns, straw ----
+    BX1, BZ1, BX2, BZ2 = geb["barn"]
+    for z in range(BZ1 + 1, BZ1 + 5):
+        S.fill(BX2 - 1, G + 1, z, BX2 - 1, G + 2, z, "minecraft:hay_block[axis=y]")
+    S.set(BX2 - 1, G + 3, BZ1 + 2, "reisbureau_souvenir_knuffeldal[facing=west]")
+    S.set(BX2 - 1, G + 1, BZ2 - 1, "minecraft:barrel[facing=up,open=false]")
+    S.set(BX2 - 1, G + 1, BZ2 - 2, "minecraft:barrel[facing=up,open=false]")
+    S.set(BX2 - 1, G + 1, BZ1 + 6, "guh_kast[facing=west,open=false]")
+    S.set(BX1 + 2, G + 1, BZ1 + 1, "park_bankje[facing=south]")
+    tapijt(BX1 + 5, BZ1 + 2, BX2 - 3, BZ2 - 2, G + 1, "yellow")
+    for (hx, hz) in ((BX1 + 4, BZ1 + 4), (BX1 + 8, BZ1 + 8), (BX1 + 4, BZ2 - 2)):
+        hang(hx, hz, G + 1, "minecraft:lantern[hanging=true,waterlogged=false]")
+
+    # ---- the ijskraam on the square (east of the fountain): a counter, a freezer, a striped awning ----
+    IX, IZ = CX + 7, CZ + 3                           # the counter's west side, the kiosk runs to IX+3, IZ+4
+    for (a, b) in ((0, 0), (0, 4), (3, 0), (3, 4)):
+        S.air(IX + a, G + 1, IZ + b, IX + a, G + 3, IZ + b)
+        S.fill(IX + a, G + 1, IZ + b, IX + a, G + 3, IZ + b, "minecraft:birch_fence")
+    for b in (1, 2, 3):
+        S.set(IX, G + 1, IZ + b, "minecraft:light_blue_concrete")
+        S.set(IX + 3, G + 1, IZ + b, "minecraft:white_concrete")
+        S.set(IX + 3, G + 2, IZ + b, "minecraft:light_blue_stained_glass")
+        S.air(IX + 1, G + 1, IZ + b, IX + 2, G + 3, IZ + b)
+    S.set(IX, G + 2, IZ + 1, "minecraft:cake[bites=0]")
+    S.set(IX, G + 2, IZ + 3, "knuffel_snow[facing=west]")
+    for a in range(-1, 5):
+        for b in range(-1, 6):
+            S.set(IX + a, G + 4, IZ + b, "minecraft:pink_wool" if (a + 10) % 2 else "minecraft:white_wool")
+    S.set(IX - 1, G + 1, IZ + 5, "minecraft:birch_sign[rotation=4,waterlogged=false]")
+    bordjes.append(((IX - 1, G + 1, IZ + 5), ["IJskraam", "Pandaijsje,", "Zebrastreep ...", "3 Safarimunten"]))
+    claim(IX - 1, IZ - 1, IX + 4, IZ + 5, m=0)
+    ijs = dict(verkoper=(IX + 2, IZ + 2), kijk=(IX - 2, IZ + 2))
+
+    # ---- the guh-speeltuin: a fenced sand square with three toys (placed by the game: they are multi-blocks) ----
+    W_, D_ = 13, 11
+    bad = np.ones((X, Z), bool)
+    for x in range(X):
+        for z in range(Z):
+            bad[x, z] = not ((x, z) in INS and rand_d[x, z] >= 4 and (x, z) not in OCC and (x, z) not in POND
+                             and (x, z) not in PATHS and HGT[(x, z)] == G and S.is_air(x, G + 1, z)
+                             and S.get(x, G, z).split("[")[0] in ("minecraft:grass_block", "minecraft:coarse_dirt"))
+    kand = _vrij_vlak(bad, W_, D_)
+    speeltuin = None
+    if len(kand):
+        doel = np.array([CX + 16, CZ + 20])
+        x0, z0 = min(kand.tolist(), key=lambda p: math.hypot(p[0] + W_ / 2 - doel[0], p[1] + D_ / 2 - doel[1]))
+        x1, z1 = x0 + W_ - 1, z0 + D_ - 1
+        cx, cz = x0 + W_ // 2, z0 + D_ // 2
+        # the nearest village path: the entrance there
+        pad = min(PATHS, key=lambda p: math.hypot(p[0] - cx, p[1] - cz))
+        ix = min(max(pad[0], x0 + 1), x1 - 1)
+        iz = min(max(pad[1], z0 + 1), z1 - 1)
+        if abs(pad[0] - cx) > abs(pad[1] - cz):
+            ix = x0 if pad[0] < cx else x1
+        else:
+            iz = z0 if pad[1] < cz else z1
+        for x in range(x0, x1 + 1):
+            for z in range(z0, z1 + 1):
+                rand = x in (x0, x1) or z in (z0, z1)
+                S.set(x, G, z, "minecraft:smooth_sandstone" if rand else "minecraft:sand")
+                if rand and math.hypot(x - ix, z - iz) > 1.1:
+                    S.set(x, G + 1, z, "minecraft:birch_fence")
+        for (x, z) in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
+            S.set(x, G + 2, z, "park_lantaarn")
+        path([pad, (ix, iz)], w=1.2)
+        S.set(x0 + 1, G + 1, z1 - 1, "park_bankje[facing=north]")
+        S.set(x1 - 1, G + 1, z1 - 1, "park_bankje[facing=north]")
+        speelgoed = [dict(soort="schommel", pos=(cx - 3, G + 1, cz - 2), facing="south"),
+                     dict(soort="glijbaantje", pos=(cx + 3, G + 1, cz - 1), facing="south"),
+                     dict(soort="wip", pos=(cx, G + 1, cz + 3), facing="east")]
+        bx, bz = (ix + (1 if ix == x0 else -1 if ix == x1 else 0)), (iz + (1 if iz == z0 else -1 if iz == z1 else 0))
+        sx, sz = (bx, bz + 1) if ix in (x0, x1) else (bx + 1, bz)
+        S.set(sx, G + 1, sz, "minecraft:birch_sign[rotation=8,waterlogged=false]")
+        bordjes.append(((sx, G + 1, sz), ["", "Guh-speeltuin", "voor guhs en", "vadsjes"]))
+        claim(x0, z0, x1, z1, m=1)
+        speeltuin = dict(centrum=(cx, cz), min=(x0, z0), max=(x1, z1), ingang=(ix, iz), speelgoed=speelgoed)
+
+    # ---- the kampvuur by the lodge: a fire, four log benches, a storyteller's spot ----
+    bad2 = bad.copy()
+    for (x, z) in OCC:
+        if 0 <= x < X and 0 <= z < Z:
+            bad2[x, z] = True
+    kand = _vrij_vlak(bad2, 9, 9)
+    kampvuur = None
+    if len(kand):
+        x0, z0 = min(kand.tolist(), key=lambda p: math.hypot(p[0] + 4 - 56, p[1] + 4 - 74))
+        kx, kz = x0 + 4, z0 + 4
+        for a in range(-4, 5):
+            for b in range(-4, 5):
+                if math.hypot(a, b) <= 3.6:
+                    S.set(kx + a, G, kz + b, "minecraft:coarse_dirt" if math.hypot(a, b) > 1.5 else "minecraft:gravel")
+        S.set(kx, G + 1, kz, "minecraft:campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+        for b in (-1, 0, 1):
+            S.set(kx + b, G + 1, kz - 3, "minecraft:stripped_oak_log[axis=x]")
+            S.set(kx + b, G + 1, kz + 3, "minecraft:stripped_oak_log[axis=x]")
+            S.set(kx - 3, G + 1, kz + b, "minecraft:stripped_oak_log[axis=z]")
+        S.set(kx - 2, G + 1, kz + 2, "reisbureau_zeldzaam_camping[facing=north]")
+        for (x, z) in ((kx + 4, kz - 4), (kx - 4, kz + 4)):
+            S.fill(x, G + 1, z, x, G + 2, z, "minecraft:birch_fence")
+            S.set(x, G + 3, z, "park_lantaarn")
+        claim(kx - 4, kz - 4, kx + 4, kz + 4, m=0)
+        kampvuur = dict(centrum=(kx, kz), verteller=(kx + 3, kz), kijk=(kx, kz))
+
+    return dict(bordjes=bordjes, ijskraam=ijs, speeltuin=speeltuin, kampvuur=kampvuur)
+
+
 def _dorp(kruising_cellen):
     """Builds the village in a local scene. kruising_cellen: edge cells (local) where the park route crosses the
     outline. Returns (S, info)."""
@@ -466,15 +745,17 @@ def _dorp(kruising_cellen):
     # ---- giftshop (W), L-shape ----
     GX1, GZ1, GX2, GZ2 = 26, 52, 44, 66
     STRIPES = ["minecraft:pink_terracotta", "minecraft:yellow_terracotta", "minecraft:light_blue_terracotta"]
-    box(GX1, G + 1, GZ1, GX2, G + 6, GZ2, "minecraft:white_terracotta", floor="minecraft:oak_planks")
-    box(GX1 + 4, G + 1, GZ2, GX1 + 12, G + 5, GZ2 + 6, "minecraft:white_terracotta", floor="minecraft:oak_planks")
+    box(GX1, G + 1, GZ1, GX2, G + 6, GZ2, "minecraft:white_terracotta", floor="minecraft:birch_planks")
+    box(GX1 + 4, G + 1, GZ2, GX1 + 12, G + 5, GZ2 + 6, "minecraft:white_terracotta", floor="minecraft:birch_planks")
     S.air(GX1 + 5, G + 1, GZ2, GX1 + 11, G + 5, GZ2)
     for x in range(GX1, GX2 + 1):
         for z in range(GZ1, GZ2 + 7):
             for y in range(G + 1, G + 3):
                 if S.get(x, y, z) == "minecraft:white_terracotta":
                     S.set(x, y, z, STRIPES[((x + z) // 2) % 3])
-    windows(GX1, G + 3, GZ1, GX2, GZ2, every=3)
+    for wy in (G + 3, G + 4):                         # (test round 3) 2-high windows: a light shop
+        windows(GX1, wy, GZ1, GX2, GZ2, every=3)
+    S.air(GX1 + 5, G + 1, GZ2, GX1 + 11, G + 5, GZ2)  # (no window panes floating in the opening to the annex)
     door(GX2, G + 1, 58, 3)
     top = thatch(GX1, GZ1, GX2, GZ2, G + 7, overhang=1)
     thatch(GX1 + 4, GZ2 + 1, GX1 + 12, GZ2 + 6, G + 6, overhang=1)
@@ -492,17 +773,27 @@ def _dorp(kruising_cellen):
 
     # ---- rangerstation (NW) + map + dex board + lookout tower ----
     RX1, RZ1, RX2, RZ2 = 26, 33, 44, 46
-    DOOR_Z = RZ1 + 6                     # the door (east wall, 2 wide), the stairs run along the wall north of it
-    box(RX1, G + 1, RZ1, RX2, G + 9, RZ2, "minecraft:spruce_planks", floor="minecraft:spruce_planks")
-    S.fill(RX1, G + 5, RZ1, RX2, G + 5, RZ2, "minecraft:stripped_spruce_log[axis=x]")
+    DOOR_Z = RZ1 + 6                     # the door (east wall, 2 wide)
+    # (test round 3: light birch instead of dark spruce; the stairs moved from right in front of the door to the west
+    # wall, so the entrance is free, and their stairwell is exactly as long as the flight: no 2x1 hole at the top)
+    box(RX1, G + 1, RZ1, RX2, G + 9, RZ2, "minecraft:birch_planks", floor="minecraft:birch_planks")
+    S.fill(RX1, G + 5, RZ1, RX2, G + 5, RZ2, "minecraft:stripped_birch_log[axis=x]")
     S.air(RX1 + 1, G + 5, RZ1 + 1, RX2 - 1, G + 5, RZ2 - 1)
-    S.fill(RX1 + 1, G + 5, RZ1 + 1, RX2 - 1, G + 5, RZ2 - 1, "minecraft:spruce_planks")    # upper floor
-    S.air(RX2 - 3, G + 5, RZ1 + 2, RX2 - 2, G + 5, RZ1 + 5)                                   # stairwell
-    for i in range(4):
-        for sx in (RX2 - 3, RX2 - 2):
-            S.set(sx, G + 1 + i, RZ1 + 6 - i, stairs("minecraft:spruce_stairs", "north"))
-    windows(RX1, G + 3, RZ1, RX2, RZ2, every=3)
-    windows(RX1, G + 7, RZ1, RX2, RZ2, every=3)
+    S.fill(RX1 + 1, G + 5, RZ1 + 1, RX2 - 1, G + 5, RZ2 - 1, "minecraft:birch_planks")    # upper floor
+    TRAP = [(RZ2 - 2 - i) for i in range(4)]          # z of the four steps (44..41), rising to the north
+    S.air(RX1 + 1, G + 5, TRAP[-1], RX1 + 2, G + 5, TRAP[0])                               # stairwell = the flight
+    for i, z in enumerate(TRAP):
+        for sx in (RX1 + 1, RX1 + 2):
+            S.set(sx, G + 1 + i, z, stairs("minecraft:birch_stairs", "north"))
+            for y in range(G + 1, G + 1 + i):
+                S.set(sx, y, z, "minecraft:birch_planks")                                    # filled under the steps
+    for z in range(TRAP[-1], TRAP[0] + 1):
+        S.set(RX1 + 3, G + 6, z, "minecraft:birch_fence")                                    # railing along the well
+    S.set(RX1 + 3, G + 6, TRAP[0] + 1, "minecraft:birch_fence")
+    for wy in (G + 2, G + 3):                         # 2-high windows (were single panes)
+        windows(RX1, wy, RZ1, RX2, RZ2, every=3)
+    for wy in (G + 6, G + 7):
+        windows(RX1, wy, RZ1, RX2, RZ2, every=3)
     door(RX2, G + 1, DOOR_Z, 2)
     S.set(RX2 + 1, G, DOOR_Z, "minecraft:spruce_planks")
     thatch(RX1, RZ1, RX2, RZ2, G + 10, overhang=1)
@@ -647,7 +938,7 @@ def _dorp(kruising_cellen):
 
     # ---- aaihoek (E): red barn + four pens (fences 2 high: nothing inside can be climbed over) ----
     BX1, BZ1, BX2, BZ2 = 104, 58, 116, 70
-    box(BX1, G + 1, BZ1, BX2, G + 5, BZ2, "minecraft:red_terracotta", floor="minecraft:spruce_planks")
+    box(BX1, G + 1, BZ1, BX2, G + 5, BZ2, "minecraft:red_terracotta", floor="minecraft:birch_planks")
     for x in range(BX1, BX2 + 1):
         S.set(x, G + 5, BZ1, "minecraft:white_terracotta"); S.set(x, G + 5, BZ2, "minecraft:white_terracotta")
     door(BX1, G + 1, 65, 3)
@@ -677,8 +968,8 @@ def _dorp(kruising_cellen):
         FY = G + 3
         for (a, b) in ((0, 0), (5, 0), (0, 5), (5, 5)):
             S.fill(hx + a, G - 2, hz + b, hx + a, FY, hz + b, LOG)
-        S.fill(hx - 1, FY, hz - 1, hx + 6, FY, hz + 6, "minecraft:spruce_planks")
-        box(hx, FY + 1, hz, hx + 5, FY + 3, hz + 5, "minecraft:stripped_spruce_log[axis=y]", corner=LOG)
+        S.fill(hx - 1, FY, hz - 1, hx + 6, FY, hz + 6, "minecraft:birch_planks")                 # (round 3: light)
+        box(hx, FY + 1, hz, hx + 5, FY + 3, hz + 5, "minecraft:stripped_birch_log[axis=y]", corner=LOG)
         for (a, b) in ((2, 0), (3, 0), (2, 5), (3, 5), (0, 2), (5, 3)):
             S.set(hx + a, FY + 2, hz + b, "minecraft:glass_pane")
         S.air(hx + 5, FY + 1, hz + 2, hx + 5, FY + 2, hz + 2)
@@ -744,6 +1035,10 @@ def _dorp(kruising_cellen):
         thatch(kx, GZ - 9, kx + 4, GZ - 5, G + 4, overhang=1)
         claim(kx, GZ - 9, kx + 4, GZ - 5)
     claim(CX - 10, GZ - 2, CX + 10, GZ + 2)
+
+    J3 = _beleving(S, rnd, G, claim, path, OCC, PATHS, POND, rand_d, HGT,
+                   dict(giftshop=(GX1, GZ1, GX2, GZ2), ranger=(RX1, RZ1, RX2, RZ2, TRAP), watergat=(WX1, WZ1, WX2, WZ2),
+                        paviljoen=(PVX, PVZ, PVR), huts=HUTS, barn=(BX1, BZ1, BX2, BZ2)))
 
     # ---- safari fence along the organic outline, gaps for the gate and the park route ----
     gaps = set()
@@ -882,7 +1177,8 @@ def _dorp(kruising_cellen):
             S.set(x + 1, G + 1, z + 1, stairs("minecraft:spruce_stairs", f))
 
     S.fix_connections()
-    info = {"POND": POND, "PATHS": PATHS, "EXTRA": EXTRA, "PENS": PENS, "TS": TS, "BORDJES": BORDJES}
+    info = {"POND": POND, "PATHS": PATHS, "EXTRA": EXTRA, "PENS": PENS, "TS": TS, "BORDJES": BORDJES + J3["bordjes"],
+            "J3": J3, "KRUISING": list(kruising_cellen)}
     return S, info
 
 
@@ -914,9 +1210,14 @@ def _naam(s):
     return s if ":" in s.split("[")[0] else "guhs:" + s
 
 
+INFO = {}           # (round 3, J3) the last build's village info: zone_s2_lobby reads the new lobby spots from it
+
+
 def bouw(park, log=print):
     kruising = _kruisingen(park)
     S, info = _dorp(kruising)
+    INFO.clear()
+    INFO.update(info)
     W = kit.W
     schrijf = np.zeros((W, W), bool)
     for (x, z) in INS | info["EXTRA"]:

@@ -35,9 +35,72 @@ NPCS = {
     "safari_verzorger": ("Dierenverzorger Knuffelien", 0.30, 0.45, 0.7),
     "safari_verkoper": ("Giftshop-guh Kassie", 0.12, 0.35, 0.95),
     "safari_lodgebeheerder": ("Lodgebeheerder Snurkguh", 0.08, 0.45, 0.65),
+    # test round 3 (J3): the ijskraam and the kampvuur
+    "safari_ijsverkoper": ("IJsverkoper Smeltje", 0.90, 0.35, 1.0),
+    "safari_verteller": ("Verteller Opa Knor", 0.05, 0.5, 0.6),
 }
 for _z in ZONES:
     NPCS[f"safari_expert_{_z}"] = (f"Expert {ZONE_NAAM[_z]}",) + ZONE_KLEUR[_z][0]
+
+# test round 3 (J3): the ijskraam, the kampvuuravond, the kijk-guhs, the penguin parade and the message budget
+J3_TEKSTEN = {
+    # ijskraam
+    "item.guhs.safari_pandaijsje": "Pandaijsje",
+    "item.guhs.safari_pandaijsje.lore": "Vanille met chocoladeoortjes. Even lekker snel!",
+    "item.guhs.safari_pandaijsje.op": "Mmm, pandaijsje! Je voetjes gaan vanzelf sneller.",
+    "item.guhs.safari_zebrastreep": "Zebrastreep",
+    "item.guhs.safari_zebrastreep.lore": "Zwart, wit, zwart, wit... en dan hup!",
+    "item.guhs.safari_zebrastreep.op": "Zebrastreep op! Je springt als een vrolijke zebra.",
+    "item.guhs.safari_pinguinijsje": "Pinguïnijsje",
+    "item.guhs.safari_pinguinijsje.lore": "Zo koud dat je ervan gaat zwemmen.",
+    "item.guhs.safari_pinguinijsje.op": "Brrr! Je zwemt nu als een pinguïn, njeg.",
+    "item.guhs.safari_flamingosorbet": "Flamingosorbet",
+    "item.guhs.safari_flamingosorbet.lore": "Roze, zoet, en je ziet er 's nachts alles mee.",
+    "item.guhs.safari_flamingosorbet.op": "Flamingosorbet! Je ogen glinsteren in het donker.",
+    "item.guhs.safari_marshmallow": "Geroosterde marshmallow",
+    "item.guhs.safari_marshmallow.lore": "Van het kampvuur. Buiten krokant, binnen vads.",
+    "item.guhs.safari_marshmallow.op": "Kleverig en warm... heerlijk!",
+    "gui.guhs.safari.ijsverkoper.hallo": "Welkom bij het IJskraam! Ik ben Smeltje. Elk dierenijsje kost %1$s Safarimunten (je hebt er %2$s). Wat wordt het, vads?",
+    "gui.guhs.safari.ijsverkoper.arm": "Oei, daar heb je niet genoeg munten voor. Een ijsje kost %s Safarimunten. Maak een paar mooie foto's en kom terug, njeg!",
+    "gui.guhs.safari.ijsverkoper.alsjeblieft.0": "Eén pandaijsje! Pas op, hij kijkt je aan met zijn chocoladeoogjes.",
+    "gui.guhs.safari.ijsverkoper.alsjeblieft.1": "Eén zebrastreep! Of was hij wit met zwarte strepen? Niemand weet het.",
+    "gui.guhs.safari.ijsverkoper.alsjeblieft.2": "Eén pinguïnijsje! Snel opeten, voor hij wegwaggelt.",
+    "gui.guhs.safari.ijsverkoper.alsjeblieft.3": "Eén flamingosorbet! Op één been eten mag ook.",
+    "gui.guhs.safari.ijsverkoper.optie.nog": "Nog eentje!",
+    # kampvuur
+    "gui.guhs.safari.verteller.welkom": "Kom erbij zitten, vads, het vuurtje is warm. Hier, drie marshmallows om te roosteren. Luister...\n\n%s",
+    "gui.guhs.safari.verteller.optie.nog": "Nog een verhaal!",
+    "gui.guhs.safari.verteller.verhaal.0": "Er was eens een giraf die een geheimpje wilde fluisteren. Maar tegen de tijd dat het geheimpje zijn hele nek af was, was hij vergeten wat het was. Nu fluistert hij gewoon \"guh\". Iedereen vindt dat een prima geheimpje.",
+    "gui.guhs.safari.verteller.verhaal.1": "De pinguïns hebben eens een dansfeest gehouden. Ze dansten de hele nacht, maar niemand zag het verschil met gewoon lopen. \"Dat ís onze dans,\" zei de oudste pinguïn trots.",
+    "gui.guhs.safari.verteller.verhaal.2": "Een nijlpaard probeerde zich ooit te verstoppen achter een rietje. Heel stil. Héél stil. De ranger liep er drie keer langs en zei: \"Goedemorgen, nijlpaard.\" Het nijlpaard is nog steeds beledigd.",
+    "gui.guhs.safari.verteller.verhaal.3": "De kangoeroe vond eens een guh in haar buidel. \"Hoe kom jij daar?\" vroeg ze. \"Geen idee,\" zei de guh, \"maar het is hier warm en er liggen koekkruimels.\" Ze zijn nu beste vrienden.",
+    "gui.guhs.safari.verteller.verhaal.4": "De mammoet had het een keer warm. Hij wilde zijn jas uittrekken, maar dat ging niet, want hij wás zijn jas. Sindsdien woont hij in de IJstijd. Vahoeg, zegt hij, veel beter.",
+    "gui.guhs.safari.verteller.verhaal.5": "Een zebra liep eens per ongeluk langs een vers geverfd hek. Nu heeft ze één witte streep te veel. Niemand heeft het gemerkt, behalve de zebra zelf. Ze telt ze elke ochtend.",
+    "gui.guhs.safari.verteller.verhaal.6": "De luiaard begon op maandag aan een grap. Op vrijdag kwam de clou. Iedereen was het begin vergeten, maar ze lachten toch. Zo beleefd zijn ze hier.",
+    "gui.guhs.safari.verteller.verhaal.7": "Er was eens een panda die geen zin had in bamboe. \"Wat wil je dan?\" vroeg de verzorger. De panda dacht heel lang na en zei: \"...bamboe.\" Het was een lange dag.",
+    "gui.guhs.safari.verteller.verhaal.8": "De flamingo's houden elke avond een wedstrijd: wie het langst op één been kan staan. Er is nog nooit een winnaar geweest, want ze vallen allemaal tegelijk in slaap. Njeg.",
+    # kijk-guhs
+    "gui.guhs.safari.kijkguh.ziet.0": "Sst! Daar, door mijn verrekijker... een %s! Hij weet niet dat ik hem zie. Hihi.",
+    "gui.guhs.safari.kijkguh.ziet.1": "Ik zit hier al sinds het ontbijt. Net zag ik een %s. Of was het een struik? Nee, toch een %1$s. Denk ik.",
+    "gui.guhs.safari.kijkguh.ziet.2": "Kijk, kijk! Een %s! Ik heb al zeventien foto's. Allemaal een beetje wazig, maar met heel veel liefde.",
+    "gui.guhs.safari.kijkguh.ziet.3": "Mijn verrekijker zegt: %s. Mijn buik zegt: lunch. Ik luister eerst naar de verrekijker.",
+    "gui.guhs.safari.kijkguh.ziet.4": "Een %s! Die keek net recht naar mij. Ik heb heel beleefd teruggezwaaid, vads.",
+    "gui.guhs.safari.kijkguh.ziet.5": "Daar loopt een %s. Ik geef hem een tien voor stijl en een negen voor waggelen.",
+    "gui.guhs.safari.kijkguh.hint.0": "Psst... gisteren zag ik héél in de verte een %s, in de %s. Zeldzaam, hoor! Niet verder vertellen. Behalve aan jou.",
+    "gui.guhs.safari.kijkguh.hint.1": "Weet je wat ik nog nooit gezien heb? Een %s. Ze zeggen dat hij zich verstopt in de %s. Als jij hem vindt, zeg je het dan?",
+    "gui.guhs.safari.kijkguh.hint.2": "Tip van een oude kijkguh: wie stil is in de %2$s, ziet misschien een %1$s. Ik ben nooit stil. Daarom zie ik hem nooit.",
+    "gui.guhs.safari.kijkguh.niks": "Ik zie... gras. Heel mooi gras, hoor. Ik wacht nog even, er komt vast zo een dier langs.",
+    # message budget and the parade
+    "gui.guhs.safari.melding.samen": "Straks in het park: %s",
+    "gui.guhs.safari.melding.komma": ", ",
+    "gui.guhs.safari.melding.en": " en ",
+    "gui.guhs.safari.melding.meer": " en nog %s",
+    "gui.guhs.safari.melding.voeder": "voedertijd bij %s (%s, %s)",
+    "gui.guhs.safari.melding.praatje": "een rangerpraatje bij de halte %s (%s)",
+    "gui.guhs.safari.melding.nacht": "de nachtsafari met lampiontrucks (%s)",
+    "gui.guhs.safari.melding.parade": "de pinguïnparade door de IJskust en het dorp (%s)",
+    "gui.guhs.safari.schema.parade": "Pinguïnparade (IJskust en dorp)",
+}
 
 TEKSTEN = {
     # --- characters ---
@@ -150,6 +213,7 @@ TEKSTEN = {
     "item.guhs.safari_komkommer": "Komkommer",
     "item.guhs.safari_paprika": "Paprika",
     **{f"item.guhs.safari_badge_{z}": f"Zonebadge: {ZONE_NAAM[z]}" for z in ZONES},
+    **J3_TEKSTEN,
 }
 
 # the giftshop's item list: S6 makes these items (an entry whose item does not exist is not shown)
@@ -208,6 +272,68 @@ def _paprika():
     return img
 
 
+def _ijsje(bol, extra):
+    """An ice cream cone with a scoop of colour bol; extra(d) draws the animal on top."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.polygon([(5, 8), (11, 8), (8, 15)], fill=(215, 160, 85, 255), outline=(150, 100, 45, 255))
+    d.line([(6, 10), (9, 13)], fill=(170, 115, 55, 255))
+    d.line([(10, 10), (8, 12)], fill=(170, 115, 55, 255))
+    d.ellipse([4, 2, 12, 10], fill=bol + (255,), outline=tuple(int(c * 0.6) for c in bol) + (255,))
+    extra(d)
+    return img
+
+
+def _panda(d):
+    for (x, y) in ((4, 2), (11, 2)):
+        d.rectangle([x, y, x + 1, y + 1], fill=(30, 30, 35, 255))
+    d.rectangle([6, 5, 7, 6], fill=(30, 30, 35, 255))
+    d.rectangle([9, 5, 10, 6], fill=(30, 30, 35, 255))
+    d.point((8, 8), fill=(30, 30, 35, 255))
+
+
+def _zebra(d):
+    for x in (5, 7, 9, 11):
+        d.line([(x, 3), (x - 1, 9)], fill=(25, 25, 30, 255))
+
+
+def _pinguin(d):
+    d.ellipse([6, 4, 10, 10], fill=(250, 250, 250, 255))
+    d.point((7, 5), fill=(20, 20, 30, 255))
+    d.point((9, 5), fill=(20, 20, 30, 255))
+    d.point((8, 6), fill=(250, 150, 30, 255))
+
+
+def _flamingosorbet():
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rectangle([7, 10, 8, 15], fill=(230, 205, 160, 255))
+    d.rounded_rectangle([4, 1, 11, 11], radius=3, fill=(250, 130, 170, 255), outline=(190, 70, 110, 255))
+    d.line([(6, 3), (6, 9)], fill=(255, 190, 210, 255))
+    d.point((9, 3), fill=(30, 30, 30, 255))
+    d.line([(10, 4), (11, 5)], fill=(40, 40, 40, 255))
+    return img
+
+
+def _marshmallow():
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.line([(1, 15), (9, 7)], fill=(120, 85, 50, 255), width=1)
+    d.rounded_rectangle([8, 2, 14, 8], radius=2, fill=(250, 240, 225, 255), outline=(170, 110, 60, 255))
+    d.line([(9, 7), (13, 7)], fill=(200, 140, 70, 255))
+    d.point((12, 3), fill=(220, 170, 100, 255))
+    return img
+
+
+IJSJES = {
+    "safari_pandaijsje": lambda: _ijsje((245, 245, 240), _panda),
+    "safari_zebrastreep": lambda: _ijsje((240, 240, 240), _zebra),
+    "safari_pinguinijsje": lambda: _ijsje((40, 45, 60), _pinguin),
+    "safari_flamingosorbet": _flamingosorbet,
+    "safari_marshmallow": _marshmallow,
+}
+
+
 def build(h):
     for k, v in TEKSTEN.items():
         h.NL[k] = v
@@ -221,6 +347,9 @@ def build(h):
     h.item_model("safari_komkommer")
     h.save(_paprika(), "item", "safari_paprika.png")
     h.item_model("safari_paprika")
+    for naam, maak in IJSJES.items():
+        h.save(maak(), "item", f"{naam}.png")
+        h.item_model(naam)
     for z in ZONES:
         h.save(_badge(ZONE_KLEUR[z][1]), "item", f"safari_badge_{z}.png")
         h.item_model(f"safari_badge_{z}")
@@ -275,7 +404,7 @@ def _direct():
         with open(p, "w", encoding="utf-8", newline="\n") as f:
             json.dump(d, f, indent=2, ensure_ascii=False)
             f.write("\n")
-    print(f"safari_lobby: {len(H.NL)} texts, {len(NPCS)} skins, {2 + len(ZONES)} items")
+    print(f"safari_lobby: {len(H.NL)} texts, {len(NPCS)} skins, {2 + len(ZONES) + len(IJSJES)} items")
 
 
 if __name__ == "__main__" and "--direct" in __import__("sys").argv:

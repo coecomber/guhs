@@ -78,6 +78,10 @@ def bouw(park, log=print):
     npc("verzorger", "safari_verzorger", 101, 64, kijk=(94, 60))
     # the lodgebeheerder where the deck to the huts begins
     npc("lodgebeheerder", "safari_lodgebeheerder", 50, 77, kijk=(44, 82))
+    # (round 3, J3) the ijsverkoper inside the ijskraam on the square, looking at the fountain
+    ijs = (E.INFO.get("J3") or {}).get("ijskraam")
+    if ijs:
+        npc("ijsverkoper", "safari_ijsverkoper", *ijs["verkoper"], kijk=ijs["kijk"])
     # the eight zone experts behind their counters in the expertenpaviljoen (same geometry as zone_entree)
     zones = ["savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie"]
     pvx, pvz, pvr = 54, 37, 5.5
