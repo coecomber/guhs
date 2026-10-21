@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "ZKZ",
+    "III"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "Z": "guhs:zoutkristal",
+    "K": "guhs:kaas_knabbels",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "guhs:bouwkeet_upgrade_zout",
+    "count": 1
+  }
+}

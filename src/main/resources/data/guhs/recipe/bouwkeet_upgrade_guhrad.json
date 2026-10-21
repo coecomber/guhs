@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IDI",
+    "DKD",
+    "IRI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "D": "guhs:guh_wire",
+    "K": "guhs:kaas_knabbels",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "guhs:bouwkeet_upgrade_guhrad",
+    "count": 1
+  }
+}

@@ -146,6 +146,16 @@ public final class VadsNet {
         return draden.size();
     }
 
+    /** (1.6.0, the Bouwkeet's "draadloos materiaal") Is this block part of the net (a piece of Guhdraad or a machine block)? */
+    public boolean bevat(BlockPos pos) {
+        return plekken.contains(pos.asLong());
+    }
+
+    /** (1.6.0) Every block of the net, as {@link BlockPos#asLong} (read only: do not change it). */
+    public it.unimi.dsi.fastutil.longs.LongSet blokken() {
+        return it.unimi.dsi.fastutil.longs.LongSets.unmodifiable(plekken);
+    }
+
     // =====================================================================================================================
     // building (VadsNetten)
     // =====================================================================================================================
