@@ -182,7 +182,7 @@ public final class Blauwdrukken {
                 if (!p.getInventory().add(item)) {
                     p.drop(item, false);
                 }
-                p.level().playSound(null, p.blockPosition(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.PLAYERS, 0.8f, 1f);
+                p.level().playSound(null, p.blockPosition(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.PAPIER.get(), SoundSource.PLAYERS, 0.8f, 1f);   // F12
             }
             case DUIMPJE -> Bibliotheek.van(server).duimpje(tekst, p.getUUID());
             case VERWIJDER -> {

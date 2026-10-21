@@ -75,6 +75,7 @@ public final class Plaatsen {
             return null;
         }
         Spookbouw.zetNaam(p.level(), s, naam);
+        p.level().playSound(null, p.blockPosition(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.ZWIEP.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.6f, 0.9f + p.getRandom().nextFloat() * 0.2f);   // F12: a stroke
         Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
         if (!b.begonnen()) {
             Spookbouw.toonBediening(p, s);

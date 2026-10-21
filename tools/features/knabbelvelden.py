@@ -115,6 +115,7 @@ def dimension(h):
     D = h.D
     h.w(f"{D}/worldgen/biome/knabbelvelden.json", {
         "attributes": {
+            "minecraft:audio/ambient_sounds": {"loop": "guhs:knabbelvelden.sfeer"},   # F12: a dreamy, slow pad
             "minecraft:audio/background_music": {
                 "default": {"sound": "guhs:hemel.muziek", "min_delay": 600, "max_delay": 2400, "replace_current_music": True},
                 "creative": {"sound": "guhs:hemel.muziek", "min_delay": 600, "max_delay": 2400, "replace_current_music": True},

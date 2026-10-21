@@ -96,6 +96,7 @@ public final class BouwhulpFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
+        BouwGeluid.register(modBus);   // F12
         modBus.addListener((RegisterCapabilitiesEvent event) -> VadskrachtFeature.machineCapabilities(event, BOUWKEET_BE.get()));
         KeetTabs.register();
         Bouwguhs.register();

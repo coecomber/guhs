@@ -279,10 +279,14 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         if (!bouwt) {
             bouwt = true;
             sync();
+            level.playSound(null, getBlockPos(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.KRAAN.get(), SoundSource.BLOCKS, 0.7f, 1f);   // F12: the crane starts
         }
         if (++geplaatstSindsGeluid >= 6) {
             geplaatstSindsGeluid = 0;
-            level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.4f, 1.1f + level.getRandom().nextFloat() * 0.3f);
+            level.playSound(null, pos, nl.juiced.guhs.feature.bouwhulp.BouwGeluid.PLONK.get(), SoundSource.BLOCKS, 0.45f, 0.9f + level.getRandom().nextFloat() * 0.3f);
+            if (level.getRandom().nextInt(8) == 0) {
+                level.playSound(null, getBlockPos(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.KRAAN.get(), SoundSource.BLOCKS, 0.5f, 0.9f + level.getRandom().nextFloat() * 0.2f);
+            }
         }
     }
 

@@ -76,7 +76,7 @@ public final class VastlegDienst {
                     return;
                 }
                 DOOS.remove(u);
-                p.level().playSound(null, p.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 0.8f, 1f);
+                p.level().playSound(null, p.blockPosition(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.PAPIER.get(), SoundSource.PLAYERS, 0.8f, 1f);   // F12
                 p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.vastleg.bewaard", naam, o.aantal()));
                 GereedschapPayloads.sluitVastleg(p);
             }
