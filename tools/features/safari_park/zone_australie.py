@@ -301,7 +301,7 @@ def bouw(park, log=print):
     # round 2: the billabong kijkhut (raised, one-way glass, the kangaroos drink on the north bank right in front)
     kijkhut(park, BILLA_HUT[0], BILLA_HUT[1], kijk="north", hout="acacia", dak="acacia", naam="billabong-kijkhut",
             zicht=16)
-    dicht_water(park, ["australie"], log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: leaks are sealed generically by controle.lekken)
     for naam, (x, z, r) in {"wombat": (WOMBAT[0], WOMBAT[1], 9), "billabong": (BILLABONG[0], BILLABONG[1], 10),
                              "post": (POST[0], POST[1], 6), "toren": (TOREN[0], TOREN[1], 5),
                              "kijkhut": (BILLA_HUT[0], BILLA_HUT[1] + 3, 6)}.items():

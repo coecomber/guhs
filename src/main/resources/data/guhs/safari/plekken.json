@@ -438,7 +438,7 @@
   "zone": "ijskust",
   "centrum": [
    257,
-   72,
+   69,
    224
   ],
   "straal": 6,
@@ -451,9 +451,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   234,
-   63,
-   217
+   241,
+   62,
+   218
   ],
   "straal": 10,
   "volwassenen": 2,
@@ -522,7 +522,7 @@
   "zone": "oertijd",
   "centrum": [
    463,
-   63,
+   57,
    235
   ],
   "straal": 4,
@@ -1572,7 +1572,7 @@
   "zone": "delta",
   "centrum": [
    614,
-   64,
+   63,
    368
   ],
   "straal": 10,
@@ -1894,7 +1894,7 @@
   "zone": "ijskust",
   "centrum": [
    258,
-   63,
+   62,
    249
   ],
   "straal": 8,
@@ -1908,7 +1908,7 @@
   "zone": "ijskust",
   "centrum": [
    204,
-   63,
+   62,
    232
   ],
   "straal": 8,
@@ -2467,9 +2467,9 @@
   "soort": "zeehond",
   "zone": "ijskust",
   "centrum": [
-   196,
-   64,
-   142
+   232,
+   63,
+   218
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2481,9 +2481,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   160,
-   66,
-   184
+   218,
+   61,
+   229
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2495,9 +2495,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   252,
-   63,
-   255
+   160,
+   66,
+   182
   ],
   "straal": 6,
   "volwassenen": 2,
@@ -2509,9 +2509,9 @@
   "soort": "zeehond",
   "zone": "ijskust",
   "centrum": [
-   228,
-   63,
-   223
+   196,
+   64,
+   142
   ],
   "straal": 7,
   "volwassenen": 2,
@@ -2537,9 +2537,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   239,
-   63,
-   195
+   251,
+   61,
+   254
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -2551,9 +2551,9 @@
   "soort": "pinguin",
   "zone": "ijskust",
   "centrum": [
-   216,
+   238,
    63,
-   228
+   196
   ],
   "straal": 9,
   "volwassenen": 2,
@@ -2664,7 +2664,7 @@
   "zone": "regenwoud",
   "centrum": [
    444,
-   63,
+   57,
    298
   ],
   "straal": 8,

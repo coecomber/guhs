@@ -189,6 +189,7 @@ def uitkijktoren(park, x, z, g, kijk_naar, hout="acacia", dak="hay_block", hoogt
     f = kijk_richting(kijk_naar[0] - x, kijk_naar[1] - z)
     sx, sz = STAP[f]
     park.set(x + sx, deck + 1, z + sz, "guhs:park_verrekijker", facing=f)
+    kit.toren_kijkplek(park, x, z, deck)
     return deck
 
 
@@ -541,7 +542,7 @@ def drijvend_hout_weg(park, zones, log=print):
     return int(weg.sum())
 
 
-BRUG_DEK = WATER_Y + 4          # the deck block of a raised bridge: y 63..65 stay free above the water (kano route)
+BRUG_DEK = kit.BRUG_Y          # the deck block of a bridge (round 3: the one bridge builder's height): y 63..65 stay free above the water (kano route)
 
 
 def bruggen_ophogen(park, zones, log=print):
@@ -1056,7 +1057,7 @@ def brug_halte(park):
 
 
 def bouw(park, log=print):
-    bruggen_ophogen(park, ["savanne"], log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges)
     trotse_rots(park)
     baobab_en_poel(park)
     termietenheuvels(park)

@@ -366,7 +366,7 @@ def toren_en_hut(park):
 
 
 def bouw(park, log=print):
-    bruggen_ophogen(park, ["delta"], log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: the route bridges are built at the right height already)
     flamingomeer(park)
     nijlpaardenpoel(park)
     park._pad_d = None

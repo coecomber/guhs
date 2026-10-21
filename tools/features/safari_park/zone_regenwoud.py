@@ -186,6 +186,7 @@ def toren(park, x, z, hout="spruce", hoogte=12, dak="spruce", log=print):
             park.fill(x - r + 1, y, z - r + 1, x + r - 1, y, z + r - 1, state(f"{dak}_planks"))
     park.set(x, dek + 7, z, state(f"{dak}_planks"))
     park.set(x, dek + 3, z, state("lantern", hanging="true", waterlogged="false"))
+    kit.toren_kijkplek(park, x, z, dek)
     return dek
 
 
@@ -762,17 +763,14 @@ def uitkijk_en_hut(park, log):
 def bouw(park, log=print):
     from .zone_ijskust import vul_laagtes, dicht_water, bruggen
     log("  regenwoud:")
-    n = vul_laagtes(park, "regenwoud", top="minecraft:coarse_dirt", sub="minecraft:dirt")
-    log(f"    {n} droge kolommen onder de waterlijn opgehoogd")
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges)
     park._water_d = park._pad_d = None
     waterval_grot(park, log)
     reuzenboom(park, log)
     ruine(park, log)
     okapi_dal(park, log)
     uitkijk_en_hut(park, log)
-    bruggen(park, ["regenwoud"], log=log)
-    n = dicht_water(park, ["regenwoud"], grond="minecraft:dirt", oever="minecraft:coarse_dirt")
-    log(f"    {n} waterlekken gedicht")
+    pass
 
 
 def _zet(p, xyz, straal=None):

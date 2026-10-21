@@ -1,0 +1,673 @@
+{
+ "kijkplekken": [
+  {
+   "naam": "toren_australie_318_448",
+   "zone": "australie",
+   "oog": [
+    318.5,
+    73.6,
+    448.5
+   ],
+   "richting": null,
+   "stoel": [
+    318,
+    72,
+    448
+   ],
+   "favorieten": [
+    {
+     "naam": "toren_australie_318_448_wombat",
+     "pos": [
+      307,
+      65,
+      444
+     ],
+     "soorten": [
+      "wombat"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "toren_australie_318_448_kangoeroe",
+     "pos": [
+      310,
+      64,
+      459
+     ],
+     "soorten": [
+      "kangoeroe"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "toren_delta_566_427",
+   "zone": "delta",
+   "oog": [
+    566.5,
+    73.6,
+    427.5
+   ],
+   "richting": null,
+   "stoel": [
+    566,
+    72,
+    427
+   ],
+   "favorieten": []
+  },
+  {
+   "naam": "toren_europa_300_300",
+   "zone": "europa",
+   "oog": [
+    300.5,
+    73.6,
+    300.5
+   ],
+   "richting": null,
+   "stoel": [
+    300,
+    72,
+    300
+   ],
+   "favorieten": [
+    {
+     "naam": "toren_europa_300_300_egel",
+     "pos": [
+      302,
+      64,
+      295
+     ],
+     "soorten": [
+      "egel"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "toren_ijskust_274_168",
+   "zone": "ijskust",
+   "oog": [
+    274.5,
+    79.6,
+    168.5
+   ],
+   "richting": null,
+   "stoel": [
+    274,
+    78,
+    168
+   ],
+   "favorieten": []
+  },
+  {
+   "naam": "toren_oertijd_422_193",
+   "zone": "oertijd",
+   "oog": [
+    422.5,
+    92.6,
+    193.5
+   ],
+   "richting": null,
+   "stoel": [
+    422,
+    91,
+    193
+   ],
+   "favorieten": [
+    {
+     "naam": "toren_oertijd_422_193_wolharige_neushoorn",
+     "pos": [
+      421,
+      73,
+      185
+     ],
+     "soorten": [
+      "wolharige_neushoorn"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "toren_regenwoud_508_323",
+   "zone": "regenwoud",
+   "oog": [
+    508.5,
+    83.6,
+    323.5
+   ],
+   "richting": null,
+   "stoel": [
+    508,
+    82,
+    323
+   ],
+   "favorieten": [
+    {
+     "naam": "toren_regenwoud_508_323_luiaard",
+     "pos": [
+      509,
+      69,
+      321
+     ],
+     "soorten": [
+      "luiaard"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "toren_savanne_469_579",
+   "zone": "savanne",
+   "oog": [
+    469.5,
+    73.6,
+    579.5
+   ],
+   "richting": null,
+   "stoel": [
+    469,
+    72,
+    579
+   ],
+   "favorieten": [
+    {
+     "naam": "toren_savanne_469_579_struisvogel",
+     "pos": [
+      478,
+      64,
+      599
+     ],
+     "soorten": [
+      "struisvogel"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "toren_savanne_469_579_luipaard",
+     "pos": [
+      468,
+      64,
+      603
+     ],
+     "soorten": [
+      "luipaard"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_australie_300_482",
+   "zone": "australie",
+   "oog": [
+    300.5,
+    68.6,
+    482.5
+   ],
+   "richting": [
+    0.0,
+    -1.0
+   ],
+   "stoel": [
+    300,
+    67,
+    482
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_australie_300_482_kangoeroe",
+     "pos": [
+      299,
+      62,
+      465
+     ],
+     "soorten": [
+      "kangoeroe"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_bamboe_598_197",
+   "zone": "bamboe",
+   "oog": [
+    598.5,
+    68.6,
+    197.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    598,
+    67,
+    197
+   ],
+   "favorieten": []
+  },
+  {
+   "naam": "kijkhut_delta_588_398",
+   "zone": "delta",
+   "oog": [
+    588.5,
+    67.6,
+    398.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    588,
+    66,
+    398
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_delta_588_398_flamingo",
+     "pos": [
+      599,
+      62,
+      400
+     ],
+     "soorten": [
+      "flamingo"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_delta_588_398_krokodil",
+     "pos": [
+      603,
+      64,
+      385
+     ],
+     "soorten": [
+      "krokodil"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_europa_157_355",
+   "zone": "europa",
+   "oog": [
+    157.5,
+    70.6,
+    355.5
+   ],
+   "richting": [
+    0.0,
+    -1.0
+   ],
+   "stoel": [
+    157,
+    69,
+    355
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_europa_157_355_das",
+     "pos": [
+      159,
+      76,
+      351
+     ],
+     "soorten": [
+      "das"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_europa_198_308",
+   "zone": "europa",
+   "oog": [
+    198.5,
+    71.6,
+    308.5
+   ],
+   "richting": [
+    0.0,
+    1.0
+   ],
+   "stoel": [
+    198,
+    70,
+    308
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_europa_198_308_bever",
+     "pos": [
+      204,
+      68,
+      315
+     ],
+     "soorten": [
+      "bever"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_europa_198_308_ooievaar",
+     "pos": [
+      183,
+      67,
+      321
+     ],
+     "soorten": [
+      "ooievaar"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_europa_366_334",
+   "zone": "europa",
+   "oog": [
+    366.5,
+    68.6,
+    334.5
+   ],
+   "richting": [
+    0.0,
+    -1.0
+   ],
+   "stoel": [
+    366,
+    67,
+    334
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_europa_366_334_ooievaar",
+     "pos": [
+      369,
+      60,
+      320
+     ],
+     "soorten": [
+      "ooievaar"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_europa_366_334_edelhert",
+     "pos": [
+      383,
+      67,
+      318
+     ],
+     "soorten": [
+      "edelhert"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_ijskust_209_195",
+   "zone": "ijskust",
+   "oog": [
+    209.5,
+    55.6,
+    195.5
+   ],
+   "richting": [
+    -1.0,
+    0.0
+   ],
+   "stoel": [
+    209,
+    54,
+    195
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_ijskust_209_195_zeehond",
+     "pos": [
+      200,
+      54,
+      181
+     ],
+     "soorten": [
+      "zeehond"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_ijskust_209_195_ijsbeer",
+     "pos": [
+      192,
+      56,
+      203
+     ],
+     "soorten": [
+      "ijsbeer"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_ijskust_156_197",
+   "zone": "ijskust",
+   "oog": [
+    156.5,
+    72.6,
+    197.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    156,
+    71,
+    197
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_ijskust_156_197_zeehond",
+     "pos": [
+      161,
+      67,
+      202
+     ],
+     "soorten": [
+      "zeehond"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_ijskust_156_197_pinguin",
+     "pos": [
+      163,
+      66,
+      209
+     ],
+     "soorten": [
+      "pinguin"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_oertijd_377_251",
+   "zone": "oertijd",
+   "oog": [
+    377.5,
+    70.6,
+    251.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    377,
+    69,
+    251
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_oertijd_377_251_mammoet",
+     "pos": [
+      396,
+      69,
+      247
+     ],
+     "soorten": [
+      "mammoet"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_regenwoud_468_378",
+   "zone": "regenwoud",
+   "oog": [
+    468.5,
+    67.6,
+    378.5
+   ],
+   "richting": [
+    0.0,
+    -1.0
+   ],
+   "stoel": [
+    468,
+    66,
+    378
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_regenwoud_468_378_toekan",
+     "pos": [
+      466,
+      59,
+      362
+     ],
+     "soorten": [
+      "toekan"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_regenwoud_468_378_luiaard",
+     "pos": [
+      483,
+      65,
+      360
+     ],
+     "soorten": [
+      "luiaard"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_savanne_418_594",
+   "zone": "savanne",
+   "oog": [
+    418.5,
+    67.6,
+    594.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    418,
+    66,
+    594
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_savanne_418_594_leeuw",
+     "pos": [
+      421,
+      64,
+      591
+     ],
+     "soorten": [
+      "leeuw"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_savanne_418_594_olifant",
+     "pos": [
+      423,
+      64,
+      595
+     ],
+     "soorten": [
+      "olifant"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_savanne_500_526",
+   "zone": "savanne",
+   "oog": [
+    500.5,
+    67.6,
+    526.5
+   ],
+   "richting": [
+    0.0,
+    1.0
+   ],
+   "stoel": [
+    500,
+    66,
+    526
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_savanne_500_526_leeuw",
+     "pos": [
+      491,
+      63,
+      541
+     ],
+     "soorten": [
+      "leeuw"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "kijkhut_savanne_500_526_zebra",
+     "pos": [
+      489,
+      63,
+      549
+     ],
+     "soorten": [
+      "zebra"
+     ],
+     "straal": 3
+    }
+   ]
+  }
+ ],
+ "uitleg": "per kijkplek: oog, kijkrichting (null = rondom, een toren), stoel (de kijk-guh), favorieten = plekken in beeld waar de dieren af en toe heen gaan"
+}

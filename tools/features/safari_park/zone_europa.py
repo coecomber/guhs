@@ -134,6 +134,7 @@ def toren(park, x, z, hout="spruce", dak="spruce", hoogte=8, dakblok=None):
     park.set(x, p + 1, z, "lantern", hanging="false", waterlogged="false")
     # a spyglass stand: a lectern-like post (the verrekijker block comes with the lobby slice); mark with a lightning rod
     park.set(x + 1, p + 1, z - 1, "lightning_rod", facing="up", powered="false", waterlogged="false")
+    kit.toren_kijkplek(park, x, z, p)
     return p
 
 
@@ -524,16 +525,14 @@ def beek(park):
                     continue
                 gezien.add((x, z))
                 if park.pad[x, z]:
-                    # the stone bridge (round 2): deck at least 3 above the water, open air under it (no water above
-                    # the water level), ramps on the path both sides (see below)
-                    deck = max(int(park.hoogte[x, z]), WATER_Y + 3)
+                    # the brook under the path: water only (round 3: the bridge is built by the one bridge builder,
+                    # terrein.bruggen_nalopen -> kit.brug_cellen, after the zone modules)
                     park.set(x, WATER_Y - 3, z, "gravel")
                     for y in range(WATER_Y - 2, WATER_Y + 1):
                         park.set(x, y, z, "water", level=0)
-                    for y in range(WATER_Y + 1, deck):
+                    for y in range(WATER_Y + 1, int(park.hoogte[x, z]) + 5):
                         park.set(x, y, z, "air")
-                    park.set(x, deck, z, "stone_bricks")
-                    park.hoogte[x, z] = deck
+                    park.hoogte[x, z] = WATER_Y - 3
                     park.water[x, z] = True
                     continue
                 kap_blok = park.hoogte[x, z]
@@ -554,7 +553,7 @@ def beek(park):
                     continue
                 if park.hoogte[xx, zz] < WATER_Y + 1:
                     zet_grond(park, xx, zz, WATER_Y + 1)
-    brug = [(x, z) for (x, z) in gezien if park.pad[x, z]]
+    brug = []         # (round 3: the bridge and its ramps come from the one bridge builder)
     if brug:
         # ramps: path cells near the bridge climb to the deck, 1 per block (round 2: deck 3 above the water)
         deck = max(int(park.hoogte[x, z]) for x, z in brug)
@@ -1040,7 +1039,7 @@ def bouw(park, log=print):
     kijkhut(park, HUT[0], HUT[1], kijk="south", hout="spruce", dak="dark_oak", naam="bever-kijkhut", zicht=20)
     kap(park, OOST_HUT[0], OOST_HUT[1] + 4, 7)
     kijkhut(park, OOST_HUT[0], OOST_HUT[1], kijk="north", hout="oak", dak="spruce", naam="vijver-kijkhut", zicht=15)
-    dicht_water(park, ["europa"], log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: leaks are sealed generically by controle.lekken)
     for naam, (x, z, r) in {"toren": (TOREN[0], TOREN[1], 5), "das": (DAS[0], DAS[1], 11),
                              "bever": (BEVER[0], BEVER[1], 11), "ruine": (RUINE[0], RUINE[1], 11),
                              "vijver": (VIJVER[0], VIJVER[1], 10)}.items():

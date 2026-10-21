@@ -964,7 +964,7 @@ def bouw(park, log=print):
     park.hek_afstand = distance_transform_edt(~(park.hek & ~park.water & ~schrijf))
     _overgang(park, schrijf, log)
     park.hek_afstand = distance_transform_edt(~(park.hek & ~park.water))
-    _bruggen(park, schrijf, log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: the route bridge by the village comes from terrein.route / kit.brug_cellen)
     _kade(park, schrijf)
     doos = (OX - 45, OZ - 45, OX + X + 45, OZ + Z + 45)
     _vul_gaten(park, doos, log)

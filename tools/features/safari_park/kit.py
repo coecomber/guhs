@@ -23,6 +23,7 @@ TEGEL = 128             # tile size
 TEGELS = W // TEGEL     # 6
 PARK_OFFSET = 128       # plattegrond park coords + 128 = world
 WATER_Y = 62            # sea / river surface
+BRUG_Y = WATER_Y + 3    # bridge deck block: y 63 and 64 stay free above the water (boats, the canoe, the glass boat)
 DATA_VERSION = 3955     # 1.21.1 block names, like tools/make_structures.py (26.1.2 upgrades on load)
 SEED = 20261019
 
@@ -88,6 +89,49 @@ class Park:
         self.pad = None         # bool [x, z] path column
         self.bomen = []         # (x, y_top, z, soort) of every tree
         self.ingang = None      # (x, y, z, yaw)
+        # round 3: viewpoints (kijkplekken.json), their favourite spots, lights, seats and every bridge built
+        self.kijkplekken = []   # dicts: naam, zone, oog [x,y,z], richting [dx,dz] | None, stoel [x,y,z] | None, favorieten
+        self.lampen = []        # (x, y, z, soort)
+        self.stoelen = []       # (x, y, z, kijkrichting) of every guh chair (kit.stoel)
+        self.bruggen = []       # (x, z, zone) middle of every bridge
+
+    # --- round 3: viewpoints, favourite spots, lights ---------------------------------------------------------------
+    def kijkplek(self, naam, zone, oog, richting=None, stoel=None):
+        """Register a viewpoint (hut window, tower deck, dome). oog = the eye position, richting = (dx, dz) the view
+        direction (None = all round, a tower), stoel = the seat the kijk-guh sits on. Returns the dict (favorieten
+        are added with favoriet())."""
+        if richting is not None:
+            n = math.hypot(richting[0], richting[1]) or 1.0
+            richting = [round(richting[0] / n, 3), round(richting[1] / n, 3)]
+        k = {"naam": naam, "zone": zone, "oog": [round(float(c), 2) for c in oog], "richting": richting,
+             "stoel": [int(c) for c in stoel] if stoel is not None else None, "favorieten": []}
+        self.kijkplekken.append(k)
+        return k
+
+    def favoriet(self, naam, kijkplek, pos, soorten=(), straal=3):
+        """A favourite spot in a viewpoint's view: animals of `soorten` nearby walk there now and then (the AI reads
+        kijkplekken.json). kijkplek: the dict from kijkplek() or its naam."""
+        if isinstance(kijkplek, str):
+            kijkplek = next((k for k in self.kijkplekken if k["naam"] == kijkplek), None)
+            if kijkplek is None:
+                return None
+        f = {"naam": naam, "pos": [int(c) for c in pos], "soorten": list(soorten), "straal": int(straal)}
+        kijkplek["favorieten"].append(f)
+        return f
+
+    LAMP = {"lantaarn": "minecraft:lantern[hanging=false,waterlogged=false]",
+            "lantaarn_hangend": "minecraft:lantern[hanging=true,waterlogged=false]",
+            "guhlamp": "guhs:klusjes_guhlampje[facing=south,lit=true]",
+            "fakkel": "minecraft:torch", "ijslantaarn": "minecraft:sea_lantern", "kampvuur": "minecraft:campfire[lit=true,"
+            "signal_fire=false,waterlogged=false,facing=north]", "glow_lichen": "minecraft:glow_lichen[down=true,east=false,"
+            "north=false,south=false,up=false,waterlogged=false,west=false]", "froglight": "minecraft:pearlescent_froglight[axis=y]"}
+
+    def lamp(self, x, y, z, soort="lantaarn"):
+        """Place a light (a LAMP key or any block state) and register it (lights are listed for the checks / later
+        passes)."""
+        blok = self.LAMP.get(soort, soort)
+        self.set(int(x), int(y), int(z), blok)
+        self.lampen.append((int(x), int(y), int(z), soort))
 
     # --- palette / blocks -----------------------------------------------------------------------------------------
     def id(self, s, **props):
@@ -375,6 +419,137 @@ def stoel(park, x, y, z, kijk):
     if not isinstance(kijk, str):
         kijk = _KIJK[(int((kijk[0] > 0) - (kijk[0] < 0)), int((kijk[1] > 0) - (kijk[1] < 0)))]
     park.set(x, y, z, STOEL, facing=kijk)
+    if hasattr(park, "stoelen"):
+        park.stoelen.append((int(x), int(y), int(z), kijk))
+
+
+def toren_kijkplek(park, x, z, dek, naam=None):
+    """A lookout tower deck (standing on dek + 1) as an all-round viewpoint (round 3: every tower registers itself)."""
+    from .terrein import ZONES
+    zi = int(park.zone_vol[int(x), int(z)]) if getattr(park, "zone_vol", None) is not None else -1
+    zone = ZONES[zi] if zi >= 0 else "?"
+    park.kijkplek(naam or f"toren_{zone}_{int(x)}_{int(z)}", zone, (x + 0.5, dek + 2.6, z + 0.5), None,
+                  (int(x), int(dek) + 1, int(z)))
+
+
+# ======================================================================================================================
+# round 3: the ONE bridge builder (every route / path crossing and every zone's own bridge goes through here)
+BRUG_STIJL = {   # zone -> (deck block, slab, fence, post log)
+    "hout": ("spruce_planks", "spruce_slab", "spruce_fence", "spruce_log"),
+    "savanne": ("acacia_planks", "acacia_slab", "acacia_fence", "acacia_log"),
+    "australie": ("acacia_planks", "acacia_slab", "acacia_fence", "stripped_acacia_log"),
+    "delta": ("mangrove_planks", "mangrove_slab", "mangrove_fence", "mangrove_log"),
+    "regenwoud": ("jungle_planks", "jungle_slab", "jungle_fence", "jungle_log"),
+    "bamboe": ("bamboe_planks", "bamboo_slab", "bamboo_fence", "stripped_bamboo_block"),
+    "ijskust": ("spruce_planks", "spruce_slab", "spruce_fence", "stripped_spruce_log"),
+    "oertijd": ("stone_bricks", "stone_brick_slab", "stone_brick_wall", "cobblestone"),
+    "europa": ("stone_bricks", "stone_brick_slab", "stone_brick_wall", "mossy_stone_bricks"),
+    "entree": ("dark_oak_planks", "dark_oak_slab", "dark_oak_fence", "dark_oak_log"),
+}
+
+
+def _stijl(stijl):
+    d = BRUG_STIJL.get(stijl, BRUG_STIJL["hout"])
+    plank = d[0].replace("bamboe_planks", "bamboo_planks")
+    return plank, d[1], d[2], d[3]
+
+
+def brug_cellen(park, cellen, stijl="hout", lantaarn_elke=6):
+    """Build a bridge over the given deck cells [(x, z)] (path cells over water): the deck at BRUG_Y (2 free blocks
+    above the water), railings on the water cells beside the deck (an edge block + fence/wall), posts only at the
+    banks, lanterns on the railing every few cells. Idempotent (a second call rebuilds the same)."""
+    plank, slab, hek, post = _stijl(stijl)
+    cellen = set((int(x), int(z)) for x, z in cellen)
+    if not cellen:
+        return
+    paal = state(post, axis="y") if post.endswith(("_log", "_block")) else post
+    is_muur = hek.endswith("_wall")
+    for x, z in cellen:
+        park.set(x, BRUG_Y, z, plank)
+        for y in range(WATER_Y + 1, BRUG_Y):
+            park.v[x, y, z] = 0
+        for y in range(BRUG_Y + 1, BRUG_Y + 5):
+            park.v[x, y, z] = 0
+        if getattr(park, "hoogte", None) is not None:
+            pass                                   # (the column stays water: park.hoogte keeps the bed)
+    rand = set()
+    for x, z in cellen:
+        for dx in (-1, 0, 1):
+            for dz in (-1, 0, 1):
+                c = (x + dx, z + dz)
+                if c in cellen or not (0 <= c[0] < W and 0 <= c[1] < W):
+                    continue
+                if getattr(park, "pad", None) is not None and park.pad[c]:
+                    continue
+                if park.water is not None and not park.water[c]:
+                    continue
+                rand.add(c)
+    for i, (x, z) in enumerate(sorted(rand)):
+        park.set(x, BRUG_Y, z, plank)
+        for y in range(WATER_Y + 1, BRUG_Y):
+            park.v[x, y, z] = 0
+        if is_muur:
+            park.set(x, BRUG_Y + 1, z, hek, up="true", north="none", south="none", east="none", west="none",
+                     waterlogged="false")
+        else:
+            park.set(x, BRUG_Y + 1, z, hek, north="false", south="false", east="false", west="false",
+                     waterlogged="false")
+        bij_oever = any(not park.water[min(max(x + a, 0), W - 1), min(max(z + b, 0), W - 1)]
+                        for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        if bij_oever:
+            bed = int(park.hoogte[x, z]) if getattr(park, "hoogte", None) is not None else WATER_Y - 3
+            for y in range(bed + 1, BRUG_Y):
+                park.set(x, y, z, paal)
+        if lantaarn_elke and (x * 7 + z * 13) % lantaarn_elke == 0:
+            park.set(x, BRUG_Y + 2, z, "minecraft:lantern", hanging="false", waterlogged="false")
+            park.lampen.append((x, BRUG_Y + 2, z, "lantaarn")) if hasattr(park, "lampen") else None
+    xs = [c[0] for c in cellen]
+    zs = [c[1] for c in cellen]
+    from .terrein import ZONES
+    cx, cz = int(sum(xs) / len(xs)), int(sum(zs) / len(zs))
+    zv = getattr(park, "zone_vol", None)
+    park.bruggen.append((cx, cz, ZONES[int(zv[cx, cz])] if zv is not None else stijl))
+
+
+def brug(park, a, b, stijl="hout", breed=3, oprit=6):
+    """A zone's own straight bridge between bank points a=(x, z) and b=(x, z): the cells over water become deck
+    (brug_cellen), the path cells beyond both ends climb to it as a gentle ramp of slabs (half a block per block).
+    The cells are marked as path (park.pad)."""
+    plank, slab, _, _ = _stijl(stijl)
+    ax, az = a
+    bx, bz = b
+    lengte = max(1.0, math.hypot(bx - ax, bz - az))
+    ux, uz = (bx - ax) / lengte, (bz - az) / lengte
+    half = breed // 2
+    dek = set()
+    oprit_cellen = {}
+    for i in range(-oprit * 2, int(lengte * 2) + oprit * 2 + 1):
+        t = i / 2
+        fx, fz = ax + ux * t, az + uz * t
+        for k in range(-half, half + 1):
+            x, z = int(round(fx - uz * k)), int(round(fz + ux * k))
+            if not (0 <= x < W and 0 <= z < W):
+                continue
+            if park.water[x, z]:
+                dek.add((x, z))
+            else:
+                d = -t if t < 0 else (t - lengte if t > lengte else 0)
+                oprit_cellen[(x, z)] = min(oprit_cellen.get((x, z), 1e9), d)
+            if getattr(park, "pad", None) is not None:
+                park.pad[x, z] = True
+    brug_cellen(park, dek, stijl)
+    for (x, z), d in oprit_cellen.items():
+        doel2 = 2 * (BRUG_Y + 1) - int(math.floor(d * 2 + 1))        # walking height in half blocks
+        g = int(park.hoogte[x, z])
+        if doel2 <= 2 * (g + 1):
+            continue
+        top_vol = doel2 // 2 - 1
+        for y in range(g + 1, top_vol + 1):
+            park.set(x, y, z, plank)
+        if doel2 % 2:
+            park.set(x, top_vol + 1, z, slab, type="bottom", waterlogged="false")
+        for y in range(top_vol + 1 + (doel2 % 2), top_vol + 5):
+            park.v[x, y, z] = 0
 
 
 def _strval(s):

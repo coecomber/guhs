@@ -144,6 +144,7 @@ def toren(park, cx, cz, hout="spruce", dak="minecraft:spruce_slab[type=bottom,wa
     park.set(cx, y + hoog + 4, cz, "minecraft:lantern[hanging=true,waterlogged=false]")
     # the 'verrekijker' on the rail (a lightning rod lying down looks like a telescope)
     park.set(cx + 1, y + hoog + 2, cz - 2, "minecraft:lightning_rod[facing=north,powered=false,waterlogged=false]")
+    kit.toren_kijkplek(park, cx, cz, y + hoog)
     return y + hoog
 
 
@@ -997,9 +998,8 @@ def kust_pad(park, log=print):
 def bouw(park, log=print):
     rng = np.random.default_rng(kit.SEED + 501)
     park._ijskust = {}
-    n = vul_laagtes(park, ZONE, sneeuw=0.3, rng=np.random.default_rng(kit.SEED + 502))
-    log(f"    ijskust: {n} droge kolommen onder de waterlijn opgehoogd")
-    kust_pad(park, log)
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: no raising of dry columns here any more)
+    # (round 3: the coast path is laid by terrein.route; kust_pad tore the bridge down)
     zee, sx, sz = _zee(park)
     ijsbergkliffen(park, rng)
     park._ijskust["zeehonden"] = zeehondenrotsen(park, rng, zee, sx, sz)
@@ -1022,10 +1022,8 @@ def bouw(park, log=print):
                                             blad="spruce", diep_water=False, log=log)
     park._ijskust["ijsveld"] = _ijsveld(park, zee)
     # the river crossing on the ijskust / europa border (its banks are partly ijskust): high enough for a canoe
-    bruggen(park, [ZONE], oever_aandeel=0.25, log=log)
-    n = dicht_water(park, [ZONE], grond="minecraft:stone", oever="minecraft:snow_block")
     log(f"    ijskust: zee {sx},{sz} tunnel {park._ijskust['tunnel'][0]} glijbaan {park._ijskust['glijbaan']}"
-        f" toren {t} kijkhut {h}, {n} lekken gedicht")
+        f" toren {t} kijkhut {h}")
 
 
 def _ijsveld(park, zee):

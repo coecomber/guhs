@@ -343,8 +343,7 @@ def bouw(park, log=print):
     from .zone_ijskust import vul_laagtes, dicht_water
     rng = np.random.default_rng(kit.SEED + 601)
     park._oertijd = {}
-    # test round 2: dry ground below the water line along the river floods in the game; raise it first
-    n_laag = vul_laagtes(park, ZONE, top="minecraft:coarse_dirt", sub="minecraft:stone")
+    # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: the old "raise every low column" made the coarse-dirt plate with buried trees)
     park._oertijd["grot"], ingang = ijsgrot(park, rng)
     park._oertijd["waterval"] = bevroren_waterval(park, rng)
     park._oertijd["bronnen"] = warme_bronnen(park, rng)
@@ -359,10 +358,8 @@ def bouw(park, log=print):
     h = zoek(park, ZONE, (bx - 12, bz + 4), r=3, max_helling=3, max_r=30)
     if h:
         schuilhut(park, *h, kijk=(1, 0) if bx > h[0] else (-1, 0))
-    n_lek = dicht_water(park, [ZONE], grond="minecraft:stone", oever="minecraft:coarse_dirt")
     log(f"    oertijd: grot {park._oertijd['grot']} ingang {ingang} waterval {park._oertijd['waterval']}"
-        f" wolhoop {park._oertijd['wolhoop']} kampje {park._oertijd['kampje']} toren {t} hut {h},"
-        f" {n_laag} laagtes opgehoogd, {n_lek} lekken gedicht")
+        f" wolhoop {park._oertijd['wolhoop']} kampje {park._oertijd['kampje']} toren {t} hut {h}")
 
 
 def plekken(park, plekken):

@@ -120,10 +120,13 @@ def hoogtes(park):
     water = d_riv < w_riv
     diepte = np.where(water, 2 + 2.2 * (1 - d_riv / np.maximum(w_riv, 1)), 0)
     xx, zz = np.mgrid[0:W, 0:W].astype(float)
-    for (cx, cz), r, dp in MEREN + [QUOKKA_MEER]:
+    park.zee = np.zeros((W, W), bool)
+    for mi, ((cx, cz), r, dp) in enumerate(MEREN + [QUOKKA_MEER]):
         wx, wz = P(cx, cz)
         d = np.hypot(xx - wx, zz - wz) + ruis(rng, 6) * 1.5
         meer = d < r
+        if mi == 2:
+            park.zee = meer.copy()            # the ijskust sea (the route runs along its shore, see route())
         water |= meer
         diepte = np.maximum(diepte, np.where(meer, 1.5 + dp * np.clip(1 - d / r, 0, 1) ** 0.7, 0))
         d_riv = np.minimum(d_riv, np.maximum(d - r + w_riv.mean(), 0))
@@ -140,7 +143,15 @@ def hoogtes(park):
     eil = np.hypot(xx - qx, zz - qz) < 4.5
     water &= ~eil
     h = np.where(eil, WATER_Y + 1.6, h)
-    park.water = water & (np.round(h) < WATER_Y + 1)
+    water &= np.round(h) < WATER_Y + 1
+    # round 3: THE banks. Land next to water never lies below the water line (else the water runs out in the game and
+    # the zones had to "raise every dry column", which made flat plates with buried trees): within 2 blocks of any
+    # water the ground is at least the water line (a flush beach where animals drink), further away it may sink again
+    # gently (0.8 per block), so a ravine or a low meadow stays a natural slope instead of a plate.
+    d_w = distance_transform_edt(~water)
+    laag = WATER_Y - np.clip(d_w - 2.0, 0, None) * 0.8
+    h = np.where(water, h, np.maximum(h, laag))
+    park.water = water
     park.hoogte = np.clip(np.round(h), 4, kit.H - 30).astype(int)
     park.hoogte[park.water] = np.minimum(park.hoogte[park.water], WATER_Y - 1)
 
@@ -308,7 +319,7 @@ def _catmull(punten, n=40):
     return uit
 
 
-DEK_Y = WATER_Y + 4      # bridge deck: y 63..65 stay free above the water (the canoe route)
+BRUG_Y = kit.BRUG_Y        # bridge deck block (y 63, 64 free above the water)
 
 
 def _route_richting(park, x, z):
@@ -321,14 +332,22 @@ def _route_richting(park, x, z):
     return (b[0] - a[0], b[1] - a[1])
 
 
+def _zone_stijl(park, x, z):
+    zi = int(park.zone_vol[int(x), int(z)])
+    return ZONES[zi] if zi >= 0 else "hout"
+
+
 def route(park):
-    """Footpath = truck route (3 wide): through the zone centres in plattegrond C's order, gates where it crosses a
-    fence, a plank bridge with railings over water."""
+    """Footpath = truck route (3 wide), through the zone centres in plattegrond C's order (round 3):
+    - one height PROFILE along the line: the deck of a bridge is fixed at kit.BRUG_Y, the land follows the ground but
+      never drops more than 1 block per block (half a block per block within 8 blocks of a bridge: a ramp), and the
+      profile only ever raises the ground (an embankment), it never cuts into a slope;
+    - every cell of the 3-wide path takes the height of its nearest line point, so the path has no steps sideways;
+    - path over water = a bridge from kit.brug_cellen (one design per zone), gates where the path crosses a fence."""
     zcent = {}
     for zi, k in enumerate(ZONES):
         xs, zs = np.nonzero(park.zone == zi)
         zcent[k] = (xs.mean(), zs.mean())
-    # the entree centre is its plaza; nudge the route points away from the exact centres a bit for the curves
     pts = [zcent[k] for k in ROUTE]
     ruw = _catmull(pts, 60)
     lijn = []
@@ -339,71 +358,106 @@ def route(park):
             lijn.append((ax + (bx - ax) * t, az + (bz - az) * t))
     lijn.append(ruw[-1])
     park.route_lijn = lijn
+    n = len(lijn)
+    cel = [(int(round(x)), int(round(z))) for x, z in lijn]
+    h = park.hoogte
+    # the 3-wide path: every cell takes its nearest line point
     pad = np.zeros((W, W), bool)
-    for x, z in lijn:
+    doel = {}
+    for i, ((fx, fz), (cx, cz)) in enumerate(zip(lijn, cel)):
         for dx in (-1, 0, 1):
             for dz in (-1, 0, 1):
-                xi, zi = int(round(x)) + dx, int(round(z)) + dz
-                if 0 <= xi < W and 0 <= zi < W:
-                    pad[xi, zi] = True
-    pad &= park.binnen
+                xi, zi = cx + dx, cz + dz
+                if not (0 <= xi < W and 0 <= zi < W) or not park.binnen[xi, zi]:
+                    continue
+                d = (xi - fx) ** 2 + (zi - fz) ** 2
+                if (xi, zi) not in doel or d < doel[(xi, zi)][0]:
+                    doel[(xi, zi)] = (d, i)
+                pad[xi, zi] = True
     park.pad = pad
-    h = park.hoogte
+    # where the route runs along the ijskust sea shore (not across a river): the sea under and beside the path becomes
+    # real shore (stone, snow, the path on top) - a coast path, not a long bridge in the sea (round 3: this replaces the
+    # zone's own 'kust_pad' fix, which tore the bridge down)
+    zee = getattr(park, "zee", None)
+    if zee is not None:
+        kruis = pad & park.water & zee
+        if kruis.any():
+            strook = binary_dilation(kruis, iterations=3) & park.water & zee
+            steen = park.id("stone")
+            for x, z in zip(*np.nonzero(strook)):
+                for y in range(int(h[x, z]) + 1, WATER_Y):
+                    park.v[x, y, z] = steen
+                park.set(x, WATER_Y, z, "snow_block")
+                for y in range(WATER_Y + 1, WATER_Y + 5):
+                    park.v[x, y, z] = 0
+                park.water[x, z] = False
+                h[x, z] = WATER_Y
+    # --- the profile (in blocks: the y of the top block you walk on) ---
+    nat = np.array([bool(park.water[c]) for c in cel])
+    t = np.array([float(BRUG_Y) if nat[i] else float(h[c]) for i, c in enumerate(cel)])
+    # distance (in samples) to the nearest bridge sample: ramps near bridges are gentler
+    idx = np.nonzero(nat)[0]
+    if len(idx):
+        d_brug = np.min(np.abs(np.arange(n)[:, None] - idx[None, :]), axis=1) / 2.0
+    else:
+        d_brug = np.full(n, 1e9)
+    stap = np.where(d_brug <= 8, 0.25, 0.5)                 # max drop per sample (samples are half a block apart)
+    for _ in range(3):
+        for i in range(1, n):                               # raise only: no drop bigger than stap
+            t[i] = max(t[i], t[i - 1] - stap[i])
+        for i in range(n - 2, -1, -1):
+            t[i] = max(t[i], t[i + 1] - stap[i])
+        t[nat] = BRUG_Y
+    # quantize: half blocks near a bridge (slabs), whole blocks elsewhere
+    t = np.where(d_brug <= 8, np.ceil(t * 2) / 2, np.ceil(t))
+    park.route_profiel = t
     padblok = park.id("dirt_path")
-    planks = park.id("spruce_planks")
-    slab = park.id(state("spruce_slab", type="bottom", waterlogged="false"))
-    deck = pad & park.water
-    # bridges: the deck at DEK_Y leaves 3 free blocks above the water (the canoe route); ramps on both banks climb half a
-    # block per block (a slab step), so walking and the truck never need a jump
-    d_deck = distance_transform_edt(~deck)
-    park.bruggen = []
-    xs, zs = np.nonzero(pad)
-    for x, z in zip(xs, zs):
-        if deck[x, z]:
-            park.v[x, DEK_Y, z] = planks
-            for y in range(DEK_Y + 1, DEK_Y + 4):
-                park.v[x, y, z] = 0
-            # pillars only at the banks (never in the open water the canoes use)
-            oever = any(not park.water[min(max(x + dx, 0), W - 1), min(max(z + dz, 0), W - 1)]
-                        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)))
-            if oever:
-                for y in range(h[x, z] + 1, DEK_Y):
-                    park.set(x, y, z, "minecraft:spruce_log", axis="y")
+    dek = []
+    for (x, z), (_, i) in doel.items():
+        if park.water[x, z]:
+            dek.append((x, z))
             continue
+        ty = float(t[i])
         g = int(h[x, z])
-        s2 = 2 * (DEK_Y + 1) - int(math.floor(d_deck[x, z]))       # ramp surface in half blocks
-        if s2 > 2 * (g + 1):
-            top_vol = s2 // 2 - 1                                  # highest full block
-            for y in range(g + 1, top_vol + 1):
-                park.v[x, y, z] = planks
-            boven = top_vol + 1
-            if s2 % 2:
-                park.v[x, top_vol + 1, z] = slab
-                boven = top_vol + 2
-            for y in range(boven, boven + 3):
-                park.v[x, y, z] = 0
+        vol = int(math.floor(ty))
+        half = ty - vol >= 0.5
+        if d_brug[i] <= 8 and (ty > g or half):
+            plank, slab, _, _ = kit._stijl(_zone_stijl(park, x, z))
+            for y in range(g + 1, vol + 1):
+                park.set(x, y, z, plank)
+            if vol <= g:
+                park.v[x, g, z] = park.id(plank) if half else padblok
+            if half:
+                park.set(x, vol + 1, z, slab, type="bottom", waterlogged="false")
+            boven = vol + 1 + (1 if half else 0)
+            h[x, z] = max(vol, g)
         else:
-            park.v[x, g, z] = padblok
-            for y in range(g + 1, g + 4):         # clear anything above
-                park.v[x, y, z] = 0
-    # bridge railings: water cells next to the deck that are not deck themselves
-    rand = binary_dilation(deck) & ~pad & park.water
-    for x, z in zip(*np.nonzero(rand)):
-        park.set(x, DEK_Y, z, "minecraft:spruce_planks")
-        park.set(x, DEK_Y + 1, z, "minecraft:spruce_fence")
+            sub = park.id("dirt")
+            for y in range(g + 1, vol):
+                park.v[x, y, z] = sub
+            park.v[x, max(vol, g), z] = padblok
+            boven = max(vol, g) + 1
+            h[x, z] = max(vol, g)
+        for y in range(boven, min(boven + 4, kit.H)):         # 4 free above the path (the truck)
+            park.v[x, y, z] = 0
+    # bridges: one per connected stretch of path over water, in its zone's style
     from scipy.ndimage import label as _label
-    lab, n = _label(deck)
-    for i in range(1, n + 1):
-        bx, bz = np.nonzero(lab == i)
-        cx, cz = int(bx.mean()), int(bz.mean())
-        park.bruggen.append((cx, cz, ZONES[int(park.zone_vol[cx, cz])]))
+    dekmask = np.zeros((W, W), bool)
+    for c in dek:
+        dekmask[c] = True
+    lab, nb = _label(dekmask, structure=np.ones((3, 3), bool))
+    park.bruggen = []
+    for k in range(1, nb + 1):
+        bx, bz = np.nonzero(lab == k)
+        stijl = _zone_stijl(park, int(bx.mean()), int(bz.mean()))
+        kit.brug_cellen(park, list(zip(bx.tolist(), bz.tolist())), stijl)
+    # the embankments: the ground beside a raised path slopes down to the land (no wall, no hole beside the path)
+    _bermen(park)
     # gates where the path crosses a fence: the fence cells on the path become gates, the mesh above them goes
     for x, z in zip(*np.nonzero(pad & park.hek & ~park.water)):
-        g = h[x, z]
+        g = int(park.hoogte[x, z])                  # the path surface (not the top of a fence post standing here)
         for y in range(g + 1, g + 7):
             park.v[x, y, z] = 0
-        # the gate spans the fence line: a line along x -> facing north/south; along z -> east/west (the path is 3
-        # wide, so the path's own neighbours cannot tell the direction)
         lijn_x = (x > 0 and park.hek[x - 1, z]) or (x < W - 1 and park.hek[x + 1, z])
         lijn_z = (z > 0 and park.hek[x, z - 1]) or (z < W - 1 and park.hek[x, z + 1])
         if lijn_x and not lijn_z:
@@ -415,6 +469,111 @@ def route(park):
             facing = "north" if abs(rdz) >= abs(rdx) else "east"
         park.set(x, g + 1, z, kit.GATE, facing=facing, in_wall="false", open="false", powered="false")
         park.set(x, g + 4, z, "minecraft:dark_oak_log", axis="x" if facing == "north" else "z")
+
+
+def _pad_top(park, x, z):
+    """y of the highest solid block of a path column (the surface you walk on, slabs included)."""
+    col = park.v[x, :, z]
+    ys = np.nonzero(col)[0]
+    return int(ys[-1]) if len(ys) else int(park.hoogte[x, z])
+
+
+def _bermen(park, breed=3):
+    """Beside a path that was raised above the ground: the cells next to it get ground up to (path - 1 per block), so
+    a raised path has sloping sides (a berm), not a wall with a drop."""
+    pad = park.pad
+    d, (ix, iz) = distance_transform_edt(~pad, return_indices=True)
+    rand = (d > 0) & (d <= breed) & ~park.water & ~park.hek & park.binnen
+    h = park.hoogte
+    for x, z in zip(*np.nonzero(rand)):
+        px, pz = ix[x, z], iz[x, z]
+        if park.water[px, pz]:
+            continue
+        doel = int(h[px, pz]) - int(math.ceil(d[x, z]))
+        g = int(h[x, z])
+        if doel <= g:
+            continue
+        top = park.v[x, g, z]
+        for y in range(g, doel):
+            park.v[x, y, z] = park.id("dirt")
+        park.v[x, doel, z] = top if top else park.id("dirt")
+        h[x, z] = doel
+        # plants / snow standing on the old ground are buried: clear what is in the new ground's way
+        for y in range(doel + 1, doel + 3):
+            if park.v[x, y, z] and park.pal[park.v[x, y, z]].split("[")[0] in (
+                    "minecraft:short_grass", "minecraft:snow", "minecraft:fern", "minecraft:dead_bush"):
+                park.v[x, y, z] = 0
+
+
+_OEVER_GROND = ("grass_block", "dirt", "coarse_dirt", "sand", "red_sand", "mud", "clay", "podzol", "moss_block",
+                "snow_block", "gravel", "rooted_dirt")
+
+
+def oeverlijn(park, log=print, max_meer=4000):
+    """Round 3, the oeverlijn rule: every pond / lake / drinking pool (a water body smaller than max_meer columns: the
+    billabong, the savanne poel, the delta pools, the brook ponds; not the river or the sea) gets soft banks: a bank
+    column right next to the water whose top is 1 above the water becomes a beach at the water line, one that is 2 above
+    steps down by 1 - so animals walk in and out (the kangaroos could not leave the billabong). Only plain ground; paths,
+    fences and buildings stay."""
+    from scipy.ndimage import label as _label
+    lab, n = _label(park.water)
+    if not n:
+        return 0
+    grootte = np.bincount(lab.ravel())
+    klein = np.zeros(n + 1, bool)
+    klein[1:] = grootte[1:] < max_meer
+    plas = klein[lab]
+    rand = binary_dilation(plas) & ~park.water & park.binnen & ~park.pad & ~park.hek
+    if getattr(park, "hek_afstand", None) is not None:
+        rand &= park.hek_afstand > 2.5
+    h = park.hoogte
+    grond = np.array([s.split("[")[0].split(":")[-1] in _OEVER_GROND for s in park.pal], bool)
+    n_aan = 0
+    for x, z in zip(*np.nonzero(rand)):
+        g = int(h[x, z])
+        if g <= WATER_Y or g > WATER_Y + 2:
+            continue
+        if not grond[park.v[x, g, z]] or (park.v[x, g + 1, z] and park.pal[park.v[x, g + 1, z]].split("[")[0].split(":")[-1]
+                                          not in ("short_grass", "fern", "snow", "dead_bush", "tall_grass")):
+            continue
+        top = park.v[x, g, z]
+        nieuw = g - 1
+        for y in range(nieuw + 1, g + 3):
+            if y < kit.H and park.v[x, y, z] and not park.pal[park.v[x, y, z]].endswith("_leaves"):
+                park.v[x, y, z] = 0
+        park.v[x, nieuw, z] = top
+        h[x, z] = nieuw
+        n_aan += 1
+    if n_aan:
+        log(f"  oeverlijn: {n_aan} oeverkolommen van plassen verlaagd (dieren kunnen erin en eruit)")
+    return n_aan
+
+
+def bruggen_nalopen(park, log=print):
+    """After the zone modules (round 3): every stretch of path over water must have a bridge deck; a stretch that has
+    none (a zone made new water under the path, e.g. a brook) gets one from kit.brug_cellen. Zones never build or raise
+    route bridges themselves."""
+    from scipy.ndimage import label as _label
+    dekmask = park.pad & park.water
+    lab, nb = _label(dekmask, structure=np.ones((3, 3), bool))
+    nieuw = 0
+    for k in range(1, nb + 1):
+        bx, bz = np.nonzero(lab == k)
+        heeft = sum(1 for x, z in zip(bx.tolist(), bz.tolist()) if park.v[x, BRUG_Y, z] != 0)
+        if heeft >= len(bx) * 0.9:
+            continue
+        stijl = _zone_stijl(park, int(bx.mean()), int(bz.mean()))
+        kit.brug_cellen(park, list(zip(bx.tolist(), bz.tolist())), stijl)
+        nieuw += 1
+    if nieuw:
+        log(f"  bruggen nagelopen: {nieuw} brug(gen) gebouwd onder het pad")
+    oeverlijn(park, log)
+    # the path after the zone modules (a village, a brook, a coast path): no jump > 1 block, BEFORE the rides read the
+    # path heights (zone_s3_rit runs after this)
+    from . import controle
+    n = controle.padsprongen(park, True)
+    if n:
+        log(f"  padsprongen na de zones: {n} (opgehoogd)")
 
 
 # ======================================================================================================================

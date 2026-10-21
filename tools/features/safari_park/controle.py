@@ -19,6 +19,11 @@ Categories:
   gat          terrain columns whose underside can be seen from a lower neighbour (you look into the void); filled down
   zweef        small floating bits (tree pieces, plants) not connected to the terrain; removed when only plants/wood,
                else reported
+  padsprong    neighbouring path columns whose walking heights differ > 1 block; the lower one is raised
+  void         columns near the park that are empty or end below y 20 (void view / falling off); filled
+  plaat        big unnatural flat regions (one height + one top block, >= 300 columns, outside the entreedorp); reported
+  ingegraven   columns with a log / leaves right under terrain ground (a buried tree); reported per zone
+  doorgang     clearance along the rides (truck route, kano, boot, kabelbaan): leaves/plants removed, rest reported
   kano         river columns (water at the surface y 62, river or lakes) with a block 1-3 above the water: the canoe
                cannot pass under; reported (bridges are built with 3 free blocks by terrein.route)
 """
@@ -649,6 +654,267 @@ def kano(park):
     return plekken
 
 
+
+# --- round 3: plates, buried trees, path jumps, void, free passage ------------------------------------------------------
+_GROND_WOORDEN = ("grass_block", "dirt", "coarse_dirt", "rooted_dirt", "podzol", "mud", "clay", "sand", "red_sand",
+                  "gravel", "snow_block", "stone", "andesite", "diorite", "granite", "packed_ice", "red_sandstone",
+                  "sandstone", "terracotta", "moss_block", "dirt_path", "tuff", "deepslate", "calcite")
+_HOUT_BLAD = ("_log", "_leaves", "_wood")
+
+
+def _grond_lut(park):
+    return np.array([soort(s) == "vast" and _naam(s) in _GROND_WOORDEN for s in park.pal], bool)
+
+
+def _boom_lut(park):
+    return np.array([_naam(s).endswith(_HOUT_BLAD) for s in park.pal], bool)
+
+
+def _bovenste(mask):
+    """Highest y where mask[x, y, z] (-1 if none), per column."""
+    heeft = mask.any(axis=1)
+    return np.where(heeft, H - 1 - np.argmax(mask[:, ::-1, :], axis=1), -1)
+
+
+def _zone_naam(park, x, z):
+    from .terrein import ZONES
+    zv = getattr(park, "zone_vol", None)
+    return ZONES[int(zv[x, z])] if zv is not None else "?"
+
+
+def platen(park, min_opp=300):
+    """Big unnaturally flat areas: 4-connected land regions inside the park with one ground height AND one top block,
+    bigger than min_opp columns (the old 'raise every dry column below the water line' fixes made these). The
+    entreedorp (flat by design), paths and water are left out. Reported, not repaired (the cause is fixed instead)."""
+    if getattr(park, "binnen", None) is None:
+        return 0, []
+    gl = _grond_lut(park)
+    gm = gl[park.v]
+    top = _bovenste(gm)
+    ids = park.v[np.arange(W)[:, None], np.clip(top, 0, H - 1), np.arange(W)[None, :]]
+    from .terrein import ZONES
+    m = park.binnen & ~park.water & ~park.pad & (top > 0) & (park.zone != ZONES.index("entree"))
+    sleutel = top.astype(np.int64) * 100000 + ids.astype(np.int64)
+    gezien = np.zeros((W, W), bool)
+    uit = []
+    # a region = same key, 4-connected: label per distinct key among the masked cells (only keys that occur often)
+    vals, tel = np.unique(sleutel[m], return_counts=True)
+    for v in vals[tel >= min_opp]:
+        lab, n = label(m & (sleutel == v))
+        if not n:
+            continue
+        gr = np.bincount(lab.ravel())
+        gr[0] = 0
+        for i in np.nonzero(gr >= min_opp)[0]:
+            xs, zs = np.nonzero(lab == i)
+            x, z = int(xs.mean()), int(zs.mean())
+            uit.append((x, z, int(gr[i]), _naam(park.pal[int(v % 100000)]), int(v // 100000), _zone_naam(park, x, z)))
+    return len(uit), uit
+
+
+def ingegraven(park, herstel=False):
+    """Tree pieces (logs, leaves) with terrain ground right above them in the same column: a tree buried by ground that
+    was raised later (a hill or a meadow built over it). Repaired: the buried wood/leaves become dirt, and what still
+    sticks out of the new ground within 3 blocks of a buried column (a crown 'growing out of the hill') is removed."""
+    gm = _grond_lut(park)[park.v]
+    bm = _boom_lut(park)[park.v]
+    onder_grond = np.zeros_like(bm)
+    onder_grond[:, :-1, :] = gm[:, 1:, :]
+    hit = (bm & onder_grond).any(axis=1)
+    if herstel and hit.any():
+        from scipy.ndimage import binary_dilation as _dil
+        dirt = park.id("minecraft:dirt")
+        top_grond = _bovenste(gm)
+        for x, z in zip(*np.nonzero(hit)):
+            col_b = bm[x, :, z]
+            for y in np.nonzero(col_b)[0].tolist():
+                if y < top_grond[x, z]:
+                    park.v[x, y, z] = dirt
+        rond = _dil(hit, iterations=3)
+        for x, z in zip(*np.nonzero(rond)):
+            col_b = bm[x, :, z]
+            for y in np.nonzero(col_b)[0].tolist():
+                if y > top_grond[x, z]:
+                    park.v[x, y, z] = 0
+        gm = _grond_lut(park)[park.v]
+        bm = _boom_lut(park)[park.v]
+        onder_grond = np.zeros_like(bm)
+        onder_grond[:, :-1, :] = gm[:, 1:, :]
+        hit2 = (bm & onder_grond).any(axis=1)
+        per = {"_voor": int(hit.sum())}
+        hit = hit2
+    else:
+        per = {}
+    for x, z in zip(*np.nonzero(hit)):
+        k = _zone_naam(park, x, z)
+        per[k] = per.get(k, 0) + 1
+    return int(hit.sum()), per
+
+
+def _loop_hoogte(park, x, z, lut_loop):
+    """Walking height (y of the surface you stand on, bottom slabs counted half) of a column, or None: the lowest
+    solid block at or above the ground (park.hoogte - 2) with two passable blocks above it (so a gate's lintel or a
+    lantern post over the path is not taken for the ground)."""
+    col = park.v[x, :, z]
+    vast = lut_loop[col]
+    y0 = max(int(park.hoogte[x, z]) - 2, 1) if getattr(park, "hoogte", None) is not None else 1
+    for y in range(y0, H - 2):
+        if vast[y] and not vast[y + 1] and not vast[y + 2]:
+            st = park.pal[int(col[y])]
+            half = "_slab" in st and "type=bottom" in st
+            return y + (0.5 if half else 1.0)
+    return None
+
+
+def padsprongen(park, herstel, max_rondes=8):
+    """Path columns next to each other whose walking heights differ by more than 1 block (a 2-3 block drop or wall in
+    the path). Repaired by raising the lower column with ground + a path top (never cutting: buildings may stand on a
+    higher side); repeated, so a slope of at most 1 block per block results."""
+    if getattr(park, "pad", None) is None:
+        return 0
+    kl = np.array([soort(s) for s in park.pal])
+    lut = np.isin(kl, ["vast"]) & ~np.array([_naam(s) in ("barrier", "light", "structure_void") for s in park.pal])
+    from .terrein import ZONES
+    # (the entreedorp lays its own streets and plaza over the old route cells: its paths are its own design)
+    m = park.pad & ~park.water
+    if getattr(park, "zone_vol", None) is not None:
+        m &= park.zone_vol != ZONES.index("entree")
+    xs, zs = np.nonzero(m)
+    eerste = None
+    for ronde in range(max_rondes if herstel else 1):
+        if len(lut) < len(park.pal):
+            kl = np.array([soort(s) for s in park.pal])
+            lut = np.isin(kl, ["vast"])
+        hoog = {}
+        for x, z in zip(xs.tolist(), zs.tolist()):
+            hoog[(x, z)] = _loop_hoogte(park, x, z, lut)
+        sprong = []
+        for (x, z), h in hoog.items():
+            if h is None:
+                continue
+            for dx, dz in ((1, 0), (0, 1)):
+                h2 = hoog.get((x + dx, z + dz))
+                if h2 is not None and abs(h2 - h) > 1.01:
+                    sprong.append(((x, z), h, (x + dx, z + dz), h2))
+        if eerste is None:
+            eerste = len(sprong)
+        if not herstel or not sprong:
+            break
+        grond = park.id("minecraft:dirt")
+        padb = park.id("minecraft:dirt_path")
+        for a, ha, b, hb in sprong:
+            laag, hl, hh = (a, ha, hb) if ha < hb else (b, hb, ha)
+            hoog_c = b if laag == a else a
+            hy = int(np.ceil(hh)) - 1
+            top_hoog = _naam(park.pal[int(park.v[hoog_c[0], hy, hoog_c[1]])])
+            if not (top_hoog in ("dirt_path", "gravel", "coarse_dirt", "grass_block", "dirt", "packed_ice", "snow_block",
+                                 "sand", "red_sand", "mud", "stone_bricks", "cobblestone")
+                    or top_hoog.endswith(("_planks", "_slab"))):
+                continue                      # the higher side is a structure, not a path: report only
+            x, z = laag
+            doel = int(np.ceil(hh - 1.0))           # new walking height >= hh - 1
+            top = int(np.floor(hl)) - 1
+            if doel - 1 <= top:
+                continue
+            for y in range(max(top + 1, 1), doel):
+                park.v[x, y, z] = grond
+            park.v[x, doel - 1, z] = padb
+            for y in range(doel, min(doel + 3, H)):
+                if soort(park.pal[int(park.v[x, y, z])]) in ("plant", "lucht", "staand", "blad", "rank"):
+                    park.v[x, y, z] = 0
+            if getattr(park, "hoogte", None) is not None:
+                park.hoogte[x, z] = max(int(park.hoogte[x, z]), doel - 1)
+    return eerste or 0
+
+
+def void(park, herstel):
+    """Columns near the park (the park + 40 blocks around it, everything you can see from walkable ground) that are
+    empty or reach no higher than y 20: you would look into the void (or fall). Filled up to the lowest neighbour."""
+    if getattr(park, "binnen", None) is None:
+        return 0
+    from scipy.ndimage import binary_dilation as _dil
+    gebied = _dil(park.binnen, iterations=40)
+    vast = park.v != 0
+    top = _bovenste(vast)
+    kuil = gebied & (top < 20)
+    n = int(kuil.sum())
+    if herstel and n:
+        stone = park.id("minecraft:stone")
+        h = getattr(park, "hoogte", None)
+        for x, z in zip(*np.nonzero(kuil)):
+            buren = [int(top[x2, z2]) for x2, z2 in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1))
+                     if 0 <= x2 < W and 0 <= z2 < W and top[x2, z2] >= 20]
+            doel = min(buren) if buren else (int(h[x, z]) if h is not None else WATER_Y)
+            for y in range(1, max(doel, 2)):
+                if park.v[x, y, z] == 0:
+                    park.v[x, y, z] = stone
+    return n
+
+
+# vehicle clearance boxes: (half width, blocks below the path point, blocks above it)
+_RIT_DOOS = {"route": (1, 0, 3), "kano": (0, 0, 2), "boot": (1, 0, 2), "kabelbaan": (1, 3, 0)}
+
+
+def _rit_punten(park, naam):
+    s3 = getattr(park, "_s3", None) or {}
+    d = s3.get(naam)
+    if not d:
+        return []
+    if isinstance(d, dict) and d.get("punten"):
+        return [tuple(p[:3]) for p in d["punten"]]
+    if isinstance(d, dict) and d.get("a") and d.get("b"):
+        a, b = d["a"], d["b"]
+        n = max(2, int(np.hypot(b[0] - a[0], b[2] - a[2])))
+        return [tuple(a[k] + (b[k] - a[k]) * i / n for k in range(3)) for i in range(n + 1)]
+    if isinstance(d, dict) and d.get("lussen"):
+        uit = []
+        for lus in d["lussen"]:
+            uit += [tuple(p[:3]) for p in lus.get("punten", [])]
+        return uit
+    return []
+
+
+def doorgang(park, herstel):
+    """Free passage along the rides (park._s3: route = truck, kano, boot, kabelbaan): every sample point's clearance box
+    must be free of solid blocks (gates and the ride's own path/deck under it are fine). Leaves and plants in a box are
+    removed; the rest is reported per ride (x, y, z, block)."""
+    kl = np.array([soort(s) for s in park.pal])
+    hard = np.isin(kl, ["vast", "hek", "muur", "ruit", "deur"])
+    zacht = np.isin(kl, ["blad", "plant", "rank", "staand", "lelie"])
+    totaal, rapport = 0, {}
+    for naam, (hb, onder, boven) in _RIT_DOOS.items():
+        pts = _rit_punten(park, naam)
+        geblokt = []
+        for (px, py, pz) in pts:
+            # the ride's own ground under the point is not in the box; a truck climbs a 1-block bump (smoothed points)
+            y0 = int(np.ceil(py - 0.01)) - onder + (1 if naam == "route" else 0)
+            y1 = int(np.ceil(py - 0.01)) + boven - 1
+            x0, z0 = int(np.floor(px)), int(np.floor(pz))
+            hit = None
+            for x in range(x0 - hb, x0 + hb + 1):
+                for z in range(z0 - hb, z0 + hb + 1):
+                    for y in range(max(y0, 0), min(y1, H - 1) + 1):
+                        if not (0 <= x < W and 0 <= z < W):
+                            continue
+                        if naam == "route" and getattr(park, "pad", None) is not None and not park.pad[x, z]:
+                            continue                   # the truck drives on the path: only the path cells count
+                        i = int(park.v[x, y, z])
+                        if i >= len(hard):
+                            kl = np.array([soort(s) for s in park.pal])
+                            hard = np.isin(kl, ["vast", "hek", "muur", "ruit", "deur"])
+                            zacht = np.isin(kl, ["blad", "plant", "rank", "staand", "lelie"])
+                        if zacht[i] and herstel:
+                            park.v[x, y, z] = 0
+                        elif hard[i]:
+                            hit = (x, y, z, _naam(park.pal[i]))
+            if hit:
+                geblokt.append(hit)
+        totaal += len(geblokt)
+        if geblokt:
+            rapport[naam] = geblokt
+    return totaal, rapport
+
+
 # ======================================================================================================================
 def rapport(park):
     return _loop(park, herstel=False)
@@ -657,7 +923,13 @@ def rapport(park):
 def herstel(park, log=print):
     voor = _loop(park, herstel=True, log=log)
     na = _loop(park, herstel=False)
-    log("  controle (voor -> na): " + ", ".join(f"{k} {voor[k]}->{na[k]}" for k in voor if k not in ("_kano", "_zweef")))
+    log("  controle (voor -> na): " + ", ".join(f"{k} {voor[k]}->{na[k]}" for k in voor if not k.startswith("_")))
+    if na["_platen"]:
+        log("  platen (x, z, kolommen, blok, y, zone): " + "; ".join(str(p) for p in na["_platen"][:20]))
+    if na["_ingegraven"]:
+        log(f"  ingegraven bomen per zone: {na['_ingegraven']}")
+    for rit, lijst in na["_doorgang"].items():
+        log(f"  {rit} geblokt ({len(lijst)} punten), eerste: {lijst[:8]}")
     if na["_zweef"]:
         log(f"  zwevende stukken (niet weggehaald, x y z blokken): {na['_zweef'][:12]}")
     if na["_kano"]:
@@ -668,6 +940,12 @@ def herstel(park, log=print):
 def _loop(park, herstel, log=None):
     uit = {}
     uit["blad"] = blad(park, herstel)
+    # round 3: the shape repairs first (they add / remove blocks the later checks look at)
+    n, per = ingegraven(park, herstel)
+    uit["ingegraven"] = per.pop("_voor", n) if herstel else n
+    uit["_ingegraven"] = per
+    uit["padsprong"] = padsprongen(park, herstel)
+    uit["void"] = void(park, herstel)
     uit["hekgat"] = hekgaten(park, herstel)
     uit["steun"] = steun(park, herstel)
     if herstel:
@@ -685,4 +963,10 @@ def _loop(park, herstel, log=None):
     k = kano(park)
     uit["kano"] = len(k)
     uit["_kano"] = k
+    n, lijst = platen(park)
+    uit["plaat"] = n
+    uit["_platen"] = lijst
+    n, rap = doorgang(park, herstel)
+    uit["doorgang"] = n
+    uit["_doorgang"] = rap
     return uit
