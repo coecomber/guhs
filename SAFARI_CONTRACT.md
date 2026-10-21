@@ -266,3 +266,33 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - New block ids it may use (L3 makes them): `guhs:terrariumglas`, `guhs:kasglas`, `guhs:mierenboerderij`, `guhs:infobord`, `guhs:warmtelamp`, `guhs:nepkoraal`, `guhs:glimpaddenstoel`, `guhs:sterrenplafond`, `guhs:schorsplaat`, `guhs:glasvloer`.
 - **L3 blocks** (owns those blocks: Java + tools generator) + the weerder test fix (radius steps 24/32/48/64/128).
 - **L4 Kriebelhuis animals** (owns soorten.json entries for the 36 new species, their behaviour, the dex chapter "Kriebelhuis" with subsections + the 9th expert, terrarium boards; plus the guhs critters spawning in the aquarium/vlindertuin/kikkerhoek).
+
+## Deel 2: bouwhulp (design doc part 2, chapters 2.1-2.10 + rounds B1-B13, 29-30)
+Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features/bouwhulp*.py`. Merge order: F8 → F11 (∥) → F9 → F10.
+- **F8 kern** (owner: bouwhulp/kern, bouwhulp/keet):
+  - the `Spookbouw` API: a project = a block map (relative positions → states) + origin + rotation/mirror + owner;
+  - ghost rendering (client, translucent, visible to all, weak);
+  - shortage list; material from inventory → linked Bank Guh → (level ≥1) all chests on the vadsnet;
+  - "alsnog bouwen" (missing stays ghost) after a yes/no; undo 5; open ghosts list; place block by block over ticks (budget per tick);
+  - never in Protected structures.
+  - The Bouwkeet (3×3×3 multiblock, yellow-pink, crane bones), the tabbed menu shell (Vormen | Daken | Blauwdrukken | Bouwguhs | Materiaal | Niveau);
+  - levels 0-4 with tier upgrades (the upgrade items' names/recipes are Claude's choice → doc chapter 9), VK consumption;
+  - bouwguhs (max 4, via the existing guh hooks), sfeer (whistling guhs, the crane turning, a progress bar, a party), Pof! at level 4.
+  - API for the others: `Spookbouw.start(ServerPlayer, Ontwerp, BlockPos, Rotation, Mirror)`, `Ontwerp` (a block map + size), `Materiaal.zoek/neem`, `BouwNiveau.van(keet)`.
+- **F9 gereedschap** (owner: bouwhulp/vormen, bouwhulp/blauwdruk, bouwhulp/kwast):
+  - the vormstaf (radial menu + screen), all shapes, roofs (dakmal), the kwasten (vervang/mix/verloop+patroon/verweren; animal patterns unlocked via the safari dex), capture (2 corners + auto);
+  - own blueprints, the catalogue (~25 + placeholders, preview renders), the server library (SavedData, maker name, likes, max 10/player);
+  - egaliseerder (lvl 2), verfmachine + tunnelboor (lvl 3).
+  - Name: "Ontwerpbureau" (not Tekentafel).
+- **F11 blokken** (owner: bouwhulp/blokken):
+  - vertical slabs + corners, beams & posts (auto-connect), sloped roof parts (½, ¼);
+  - guh window frames & shutters, pastel bricks/plaster (16), guh tiles, wallpaper + skirting, plush blocks, stained-glass guh windows + portholes, gutter/chimney/dormer;
+  - garden & street (hekjes with ears, lamppost with guh cap, a "Welkom guh" doormat, bench, birdhouse);
+  - pattern textures from tools/features/safari_patronen.
+- **F10 helpers** (owner: bouwhulp/helpers + the verblijfsbord Bouwopdracht tab + Beverbeek biome generator):
+  - adaptive templates per helper animal (beaver dam with the water level, graafploeg, olifant, orang-oetan, pinguïn, capibara, zebra paths, koala/toekan planting, neushoorn demolishing, otter, flamingo, kangoeroe, mammoet);
+  - build animals (specht, octopus, gibbon, gekko, glimworm, prieelvogel);
+  - 1 project per board, up to 48 blocks;
+  - the "Bouw passend verblijf" button;
+  - Beverbaas (SafariQuests.beverdamGebouwd);
+  - the Beverbeek biome + a ranger post with a pettable beaver (Guhmension, new chunks only).
