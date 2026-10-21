@@ -124,10 +124,12 @@ public final class SafariSpeler {
         return iets;
     }
 
-    /** Species that count for the dex (the park's safari animals: not the aaihoek, not the secret gouden dikdik). */
+    /** Species that count for the dex (the park's safari animals: not the aaihoek, not the secret gouden dikdik; round 4: not
+     *  the anemone (decoration), and a group counts once, by its leader: the sea urchins count with the starfish). */
     public static boolean telt(String soort) {
         ParkData.Soort s = ParkData.get().soort(soort);
-        return s != null && s.zone() != null && !s.zone().isEmpty() && !s.zone().equals("entree") && !soort.equals("gouden_dikdik");
+        return s != null && s.zone() != null && !s.zone().isEmpty() && !s.zone().equals("entree") && !soort.equals("gouden_dikdik")
+                && !s.decor() && s.dexSoort().equals(soort);
     }
 
     // --- geheimpjes, badges, vlaggen, quests ----------------------------------------------------------------------------

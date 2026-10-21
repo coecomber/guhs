@@ -133,15 +133,20 @@ public final class SafariDexTab {
         return dexRegel(soort).getIntOr("Sterren", 0);
     }
 
-    /** The dex species in zone order (the park's zones, then the species' order in soorten.json); the gouden dikdik last,
-     *  only once photographed. */
+    /** The dex species in chapter order (the park's zones, then the Kriebelhuis by its sections; within those the species'
+     *  order in soorten.json); the gouden dikdik last, only once photographed. */
     static List<String> soorten() {
         ParkData d = ParkData.get();
         List<String> uit = new ArrayList<>();
-        for (String zone : d.zones) {
-            for (ParkData.Soort s : d.soorten.values()) {
-                if (zone.equals(s.zone()) && SafariSpeler.telt(s.naam())) {
-                    uit.add(s.naam());
+        for (String zone : d.dexHoofdstukken()) {
+            List<String> secties = zone.equals(ParkData.KRIEBELHUIS) ? ParkData.KRIEBEL_SECTIES : List.of("");
+            for (String sectie : secties) {
+                for (ParkData.Soort s : d.soorten.values()) {
+                    boolean hier = sectie.isEmpty() || sectie.equals(s.sectie())
+                            || sectie.equals(secties.get(secties.size() - 1)) && !ParkData.KRIEBEL_SECTIES.contains(s.sectie());
+                    if (zone.equals(s.zone()) && hier && SafariSpeler.telt(s.naam())) {
+                        uit.add(s.naam());
+                    }
                 }
             }
         }
@@ -273,7 +278,7 @@ public final class SafariDexTab {
         ParkData.Soort info = ParkData.get().soort(soort);
         String zone = info == null || info.zone() == null ? "" : info.zone();
         if (!zone.isEmpty()) {
-            y += GidsTekst.passend(g, Component.translatable("biome.guhs.safari_" + zone), px1, y, bw, 0.75f, LICHT, false) + 2;
+            y += GidsTekst.passend(g, hoofdstuk(info), px1, y, bw, 0.75f, LICHT, false) + 2;
         }
         Component ster = Component.literal("★".repeat(st) + "☆".repeat(3 - st)).withStyle(ChatFormatting.GOLD);
         y += GidsTekst.passend(g, ster, px1, y, bw, 1f, 0xFFD89A10, false) + 2;
@@ -287,6 +292,13 @@ public final class SafariDexTab {
         if (!zone.isEmpty() && !"entree".equals(zone) && y < onder - 8) {
             GidsTekst.alinea(g, badge(zone), px1, y, bw, 0.625f, ROZE);
         }
+    }
+
+    /** The chapter of a species: its zone, for the Kriebelhuis with its section ("Het Kriebelhuis · Nachtzaal"). */
+    static Component hoofdstuk(ParkData.Soort info) {
+        Component zone = Component.translatable("biome.guhs.safari_" + info.zone());
+        return info.sectie().isEmpty() ? zone
+                : Component.translatable("gui.guhs.safari.dex.sectie", zone, Component.translatable("gui.guhs.safari.dex.sectie." + info.sectie()));
     }
 
     /** The zone badge line: claimed, ready to claim, or how many species of the zone still need a photo. */
@@ -411,7 +423,7 @@ public final class SafariDexTab {
         uit.add(Component.translatable("entity.guhs.safari." + s).withStyle(ChatFormatting.BOLD));
         uit.add(Component.literal("★".repeat(st) + "☆".repeat(3 - st)).withStyle(ChatFormatting.GOLD));
         if (info != null && info.zone() != null && !info.zone().isEmpty()) {
-            uit.add(Component.translatable("biome.guhs.safari_" + info.zone()).withStyle(ChatFormatting.GRAY));
+            uit.add(hoofdstuk(info).copy().withStyle(ChatFormatting.GRAY));
         }
         return uit;
     }

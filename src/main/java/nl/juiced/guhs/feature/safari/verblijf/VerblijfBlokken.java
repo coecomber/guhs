@@ -34,6 +34,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import nl.juiced.guhs.feature.safari.SafariDier;
 
 /** Op Safari! step 2 (S5): the verblijfsbord, the Ooievaarsbus and the toys. */
 public final class VerblijfBlokken {
@@ -93,7 +94,8 @@ public final class VerblijfBlokken {
                 String soort = VerblijfsbordItem.soort(stack);
                 be.plaats(sl, placer instanceof ServerPlayer sp ? sp : null, soort);
                 if (placer instanceof ServerPlayer sp) {
-                    sp.sendSystemMessage(Component.translatable("gui.guhs.verblijf.welkom", VerblijfsbordItem.naam(soort)));
+                    sp.sendSystemMessage(Component.translatable(be.terrarium() ? "gui.guhs.verblijf.terrarium.welkom" : "gui.guhs.verblijf.welkom",
+                            VerblijfsbordItem.naam(soort)));
                 }
             }
         }
@@ -116,6 +118,65 @@ public final class VerblijfBlokken {
         @Override
         protected ItemStack getCloneItemStack(net.minecraft.world.level.LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
             return VerblijfsbordItem.bord(level.getBlockEntity(pos) instanceof VerblijfsbordBlockEntity b ? b.soortClient() : "");
+        }
+    }
+
+    // =====================================================================================================================
+    /**
+     * Round 4 (L4): the terrarium, what a terrariumbord (a small Kriebelhuis creature's board) becomes at home: a glass tank
+     * with a wooden frame (a plain block model), the creatures staying put inside ({@link SafariDier#zetVast}). It works
+     * like the board (the same block entity: right-click opens the menu; food in hand feeds a creature inside).
+     */
+    public static class Terrarium extends Bord {
+        public static final MapCodec<Terrarium> CODEC = simpleCodec(Terrarium::new);
+        private static final VoxelShape VORM = Block.box(0, 0, 0, 16, 16, 16);
+
+        public Terrarium(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return VORM;
+        }
+
+        @Override
+        protected RenderShape getRenderShape(BlockState state) {
+            return RenderShape.MODEL;
+        }
+
+        @Override
+        public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+            return new VerblijfsbordBlockEntity(VerblijfFeature.TERRARIUM_BE.get(), pos, state);
+        }
+
+        @Nullable
+        @Override
+        public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+            return level.isClientSide() ? null : createTickerHelper(type, VerblijfFeature.TERRARIUM_BE.get(), VerblijfsbordBlockEntity::tick);
+        }
+
+        /** Food (or anything) in hand goes to a creature inside (the glass is in the way of a click on it). */
+        @Override
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+                                              net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+            if (stack.isEmpty() || stack.getItem() instanceof VerblijfsbordItem) {
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
+            }
+            if (level instanceof ServerLevel sl && level.getBlockEntity(pos) instanceof VerblijfsbordBlockEntity be) {
+                for (ThuisDier d : be.dieren(sl)) {
+                    InteractionResult r = d.interact(player, hand, d.position());
+                    if (r.consumesAction()) {
+                        return r;
+                    }
+                }
+            }
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
     }
 

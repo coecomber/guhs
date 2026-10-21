@@ -57,6 +57,8 @@ public final class SafariFeature {
         SafariKoppelingen.register();   // step 2 integration: the hooks between the slices
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.feature.safari.gedrag.SafariDebug::register);    // round 4: /guhs safari debug
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.feature.safari.gedrag.SafariDebug::serverTick);
+        // round 4 (L4): the guhs critters living in park homes (the Kriebelhuis) stay there
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) -> Populatie.bewaakCritter(event.getEntity()));
         nl.juiced.guhs.feature.safari.gedrag.GuhdexBijBinnenkomst.register();   // round 4: a Guhdex for whoever enters without one
     }
 

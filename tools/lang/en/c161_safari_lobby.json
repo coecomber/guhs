@@ -193,5 +193,10 @@
   "item.guhs.safari_pinguinijsje.op": "Brrr! You swim like a penguin now, njeg.",
   "item.guhs.safari_zebrastreep": "Zebra Stripe",
   "item.guhs.safari_zebrastreep.lore": "Black, white, black, white... and hop!",
-  "item.guhs.safari_zebrastreep.op": "Zebra Stripe! You jump like a happy zebra."
+  "item.guhs.safari_zebrastreep.op": "Zebra Stripe! You jump like a happy zebra.",
+  "entity.guhs.guh_npc.safari_expert_kriebelhuis": "Professor Kriebelguh",
+  "item.guhs.safari_badge_kriebelhuis": "Zone Badge: The Creepy-Crawly House",
+  "gui.guhs.safari.expert.kriebelhuis.nog": "Ahem! Professor Kriebelguh, creepy-crawly connoisseur. *peers through magnifying glass* You've photographed %1$s of the %2$s Creepy-Crawly House species. %3$s to go! Look in the Night Hall too: they're awake by day in there, chonk.",
+  "gui.guhs.safari.expert.kriebelhuis.al": "*peers through magnifying glass* Ah, a true creepy-crawly expert! Already %1$s of the %2$s species. Even found the stick insect? Vahoeg!",
+  "gui.guhs.safari.expert.kriebelhuis.beloning": "*drops magnifying glass* All species of %s in your dex?! Fascinating! Here's your zone badge and 100 Safari Coins. I'm writing this in my notebook right away, chonk."
 }

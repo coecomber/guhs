@@ -50,6 +50,16 @@ NAMEN = {
     "ooievaar": "Ooievaar", "specht": "Specht",
     "koala": "Koala", "kangoeroe": "Kangoeroe", "wombat": "Wombat", "quokka": "Quokka", "prieelvogel": "Prieelvogel",
     "geitje": "Geitje", "alpaca": "Alpaca", "cavia": "Cavia", "ezeltje": "Ezeltje",
+    # round 4 (L4): the Kriebelhuis (35 animals + the anemone) and the pelican
+    "kameleon": "Kameleon", "reuzenschildpad": "Reuzenschildpad", "slang": "Opgerold slangetje", "hoornkikker": "Hoornkikker",
+    "kraaghagedis": "Kraaghagedis", "gifkikker": "Gifkikkertje", "baardagaam": "Baardagaam", "mier": "Mierenkolonie",
+    "springspin": "Springspinnetje", "wandelende_tak": "Wandelende tak", "mestkever": "Mestkevertje", "slak": "Slakje",
+    "vogelspin": "Vogelspinnetje", "hommel": "Hommel", "kiwi": "Kiwi", "schubdier": "Schubdier",
+    "spookdiertje": "Spookdiertje", "plompe_lori": "Plompe lori", "fruitvleermuis": "Fruitvleermuisje", "galago": "Galago",
+    "suikereekhoorn": "Suikereekhoorn", "fennek": "Fennek", "zeepaardje": "Zeepaardje", "pijlstaartrog": "Pijlstaartrog",
+    "zeeschildpad": "Zeeschildpad", "clownvis": "Clownvisje", "anemoon": "Anemoon", "kwal": "Kwalletjes",
+    "kogelvis": "Kogelvis", "zeester": "Zeesterren en zee-egeltjes", "zee_egel": "Zee-egeltje", "babyhaai": "Babyhaaitje",
+    "regenboogvis": "Regenboogschool", "lantaarnvisje": "Lantaarnvisje", "dumbo_octopus": "Dumbo-octopus", "pelikaan": "Pelikaan",
 }
 
 TEKSTEN = {
@@ -64,6 +74,13 @@ TEKSTEN = {
     "gui.guhs.safari.munten.erbij": "+%s Safarimunten! Vahoeg!",
     "commands.guhs.safari.munten": "Je hebt %s Safarimunten.",
     "commands.guhs.safari.wis": "Alles wat je in het safaripark deed is vergeten (dex, munten, geheimpjes...).",
+    # round 4 (L4): the Kriebelhuis chapter of the dex and its sections
+    "biome.guhs.safari_kriebelhuis": "Het Kriebelhuis",
+    "gui.guhs.safari.dex.sectie": "%s · %s",
+    "gui.guhs.safari.dex.sectie.terrarium": "Terrarium",
+    "gui.guhs.safari.dex.sectie.kriebelzaal": "Kriebelzaal",
+    "gui.guhs.safari.dex.sectie.nachtzaal": "Nachtzaal",
+    "gui.guhs.safari.dex.sectie.aquarium": "Aquarium",
 }
 
 

@@ -84,6 +84,35 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         super(VerblijfFeature.BORD_BE.get(), pos, state);
     }
 
+    /** (Round 4, L4: the terrarium shares everything with the board, with a block entity type of its own.) */
+    public VerblijfsbordBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    /** Round 4 (L4): is this a terrarium (a glass tank: the creatures stay put inside)? */
+    public boolean terrarium() {
+        return getType() == VerblijfFeature.TERRARIUM_BE.get();
+    }
+
+    /** Round 4 (L4): does family member i live here? A terrarium holds a female and a little one; a group (ants, jellyfish,
+     *  a school of fish: "kudde") all four. */
+    public boolean lidActief(int i) {
+        if (!terrarium()) {
+            return true;
+        }
+        nl.juiced.guhs.feature.safari.ParkData.Soort s = nl.juiced.guhs.feature.safari.ParkData.get().soort(soort);
+        return s != null && s.heeft("kudde") || i == 1 || i == 2;
+    }
+
+    /** Round 4 (L4): where member i stays in the tank: spread a little over the floor (a swimmer a bit higher, in the water). */
+    net.minecraft.world.phys.Vec3 tankPlek(int i) {
+        nl.juiced.guhs.feature.safari.ParkData.Soort s = nl.juiced.guhs.feature.safari.ParkData.get().soort(soort);
+        double[][] spreid = {{-0.2, -0.15}, {0.15, -0.1}, {-0.1, 0.2}, {0.2, 0.18}};
+        double y = s != null && s.zee() ? 0.4 : 2.6 / 16;
+        return new net.minecraft.world.phys.Vec3(worldPosition.getX() + 0.5 + spreid[i % 4][0], worldPosition.getY() + y,
+                worldPosition.getZ() + 0.5 + spreid[i % 4][1]);
+    }
+
     // --- set-up -----------------------------------------------------------------------------------------------------------
 
     /** Placed by {@code eigenaar}: a new board id and a new family. */
@@ -97,7 +126,9 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
             leden[i] = null;
         }
         for (int i = 0; i < FAMILIE.length; i++) {
-            spawnLid(level, i, true);
+            if (lidActief(i)) {
+                spawnLid(level, i, true);
+            }
         }
         herreken(level);
         setChanged();
@@ -111,6 +142,20 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         }
         dier.koppel(this, FAMILIE[i], variatie);
         leden[i] = dier.getUUID();
+        if (terrarium()) {
+            // round 4 (L4): in the tank, staying put
+            if (!namen[i].isEmpty()) {
+                dier.setCustomName(Component.literal(namen[i]));
+            }
+            dier.zetVast(tankPlek(i));
+            dier.snapTo(tankPlek(i).x, tankPlek(i).y, tankPlek(i).z, level.getRandom().nextFloat() * 360f, 0f);
+            level.addFreshEntity(dier);
+            if (welkom) {
+                dier.doeActie("blij", 60);
+            }
+            setChanged();
+            return;
+        }
         if (!namen[i].isEmpty()) {
             dier.setCustomName(Component.literal(namen[i]));
         }
@@ -386,7 +431,7 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
             }
         }
         for (int i = 0; i < leden.length; i++) {
-            if (leden[i] == null || !(level.getEntity(leden[i]) instanceof ThuisDier d) || d.isRemoved()) {
+            if (lidActief(i) && (leden[i] == null || !(level.getEntity(leden[i]) instanceof ThuisDier d) || d.isRemoved())) {
                 spawnLid(level, i, true);       // (the old id leaves the list: if that animal ever turns up, it goes)
             }
         }

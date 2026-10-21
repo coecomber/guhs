@@ -37,7 +37,8 @@ SOORTEN_JSON = os.path.join(RES, "data", "guhs", "safari", "soorten.json")
 BEWONERS_JSON = os.path.join(RES, "data", "guhs", "safari", "bewoners.json")
 
 # the studio module that makes each soort (batch 1 = dieren.py)
-MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "batch10", "batch11"]
+MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "batch10", "batch11", "batch12", "batch13", "batch14",
+           "batch15"]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # species data (design 1.6 soortenblad + ronde 38-39). gedrag flags:
@@ -72,6 +73,12 @@ GELUID = {
     "kameleon": "reptiel", "reuzenschildpad": "reptiel", "slang": "reptiel", "hoornkikker": "reptiel", "kiwi": "vogel",
     "schubdier": "klein", "spookdiertje": "aap", "plompe_lori": "aap", "zeepaardje": "zee", "pijlstaartrog": "zee",
     "zeeschildpad": "zee", "pelikaan": "groot_vogel",
+    # round 4 (L4): the Kriebelzaal, the aquarium, the terrarium and the Nachtzaal (batch 12-15)
+    "mier": "klein", "springspin": "klein", "wandelende_tak": "klein", "mestkever": "klein", "slak": "klein",
+    "vogelspin": "klein", "hommel": "klein", "clownvis": "zee", "anemoon": "zee", "kwal": "zee", "kogelvis": "zee",
+    "zeester": "zee", "zee_egel": "zee", "babyhaai": "zee", "regenboogvis": "zee", "kraaghagedis": "reptiel",
+    "gifkikker": "reptiel", "baardagaam": "reptiel", "fruitvleermuis": "vogel", "galago": "aap", "suikereekhoorn": "klein",
+    "fennek": "klein", "lantaarnvisje": "zee", "dumbo_octopus": "zee",
 }
 
 DATA = {
@@ -137,20 +144,65 @@ DATA = {
     "alpaca":         dict(zone="entree", gedrag=["aaihoek"], snelheid=0.18, bord=None),
     "cavia":          dict(zone="entree", gedrag=["aaihoek"], snelheid=0.16, bord=None),
     "ezeltje":        dict(zone="entree", gedrag=["aaihoek"], snelheid=0.18, bord=None),
-    # round 4 (test round 4, design ch. 6): the Kriebelhuis animals (batch 10/11). Data and animations only: they get no
-    # park homes yet (the Kriebelhuis comes later), and the dex only lists the park's own zones, so they stay out of it.
-    "kameleon":       dict(zone="kriebelhuis", gedrag=["boom", "verstopper"], snelheid=0.08, bord="middel"),
-    "reuzenschildpad": dict(zone="kriebelhuis", gedrag=[], snelheid=0.06, bord="gewoon"),
-    "slang":          dict(zone="kriebelhuis", gedrag=["verstopper"], snelheid=0.1, bord="middel"),
-    "hoornkikker":    dict(zone="kriebelhuis", gedrag=["verstopper", "water"], snelheid=0.12, bord="gewoon"),
-    "kiwi":           dict(zone="kriebelhuis", gedrag=["verstopper", "nacht"], snelheid=0.18, bord="zeldzaam"),
-    "schubdier":      dict(zone="kriebelhuis", gedrag=["verstopper", "nacht"], snelheid=0.14, bord="zeldzaam"),
-    "spookdiertje":   dict(zone="kriebelhuis", gedrag=["boom", "nacht"], snelheid=0.16, bord="middel"),
-    "plompe_lori":    dict(zone="kriebelhuis", gedrag=["boom", "nacht"], snelheid=0.06, bord="middel"),
-    "zeepaardje":     dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.06, bord="middel"),
-    "pijlstaartrog":  dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.14, bord="gewoon"),
-    "zeeschildpad":   dict(zone="kriebelhuis", gedrag=["water", "zwemmer"], snelheid=0.12, bord="middel"),
-    "pelikaan":       dict(zone="kriebelhuis", gedrag=["water", "vlieg"], snelheid=0.2, bord="gewoon"),
+    # round 4 (design ch. 6 rounds 50-56, L4): the Kriebelhuis, one chapter of the dex with four sections ("sectie"). Their
+    # homes are inside the building (zone_kriebelhuis.py writes them; indoors SafariDier stands on the floor of its home,
+    # not on the roof). Behaviours of their own:
+    #   zee         swims only (the aquarium; the sea creatures swim in their tank, never walk)
+    #   bodem       a sea creature that keeps to the bottom (starfish, sea urchin)
+    #   nachtzaal   the Nachtzaal turns day and night round: awake by day in the park (so you see them), at home nocturnal
+    #   kleurwissel changes its colour now and then (the chameleon); "kleuren" lists its textures (<soort>_<kleur>.png,
+    #               a missing file is the base texture)
+    #   decor       a still decoration (the anemone): no AI, no dex, no board
+    # "dexgroep": a group that counts as one dex species (the sea urchins count with the starfish). "terrarium": the board
+    # is a terrariumbord (a little glass tank at home instead of a fenced home).
+    # terrarium
+    "kameleon":       dict(zone="kriebelhuis", sectie="terrarium", gedrag=["boom", "verstopper", "kleurwissel"], snelheid=0.08,
+                           bord="middel", terrarium=True, kleuren=["groen", "roze", "blauw", "oranje"]),
+    "reuzenschildpad": dict(zone="kriebelhuis", sectie="terrarium", gedrag=[], snelheid=0.06, bord="gewoon"),
+    "slang":          dict(zone="kriebelhuis", sectie="terrarium", gedrag=["verstopper"], snelheid=0.1, bord="middel", terrarium=True,
+                           idle_mix={"kopje": 0.3}),
+    "hoornkikker":    dict(zone="kriebelhuis", sectie="terrarium", gedrag=["water"], snelheid=0.12, bord="gewoon", terrarium=True),
+    "kraaghagedis":   dict(zone="kriebelhuis", sectie="terrarium", gedrag=[], snelheid=0.2, bord="middel", terrarium=True),
+    "gifkikker":      dict(zone="kriebelhuis", sectie="terrarium", gedrag=["water"], snelheid=0.14, bord="gewoon", terrarium=True,
+                           kleuren=["blauw", "rood", "geel"]),
+    "baardagaam":     dict(zone="kriebelhuis", sectie="terrarium", gedrag=[], snelheid=0.1, bord="gewoon", terrarium=True,
+                           idle_mix={"zonnen": 0.5}),
+    # kriebelzaal
+    "mier":           dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=["kudde"], snelheid=0.12, bord="gewoon", terrarium=True),
+    "springspin":     dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=["verstopper"], snelheid=0.14, bord="gewoon", terrarium=True),
+    "wandelende_tak": dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=["boom"], snelheid=0.04, bord="middel", terrarium=True,
+                           idle_mix={"wieg": 0.4}),
+    "mestkever":      dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=[], snelheid=0.1, bord="gewoon", terrarium=True),
+    "slak":           dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=[], snelheid=0.03, bord="gewoon", terrarium=True),
+    "vogelspin":      dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=[], snelheid=0.08, bord="middel", terrarium=True),
+    "hommel":         dict(zone="kriebelhuis", sectie="kriebelzaal", gedrag=[], snelheid=0.12, bord="gewoon", terrarium=True),
+    # nachtzaal
+    "kiwi":           dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["verstopper", "nachtzaal"], snelheid=0.18, bord="zeldzaam"),
+    "schubdier":      dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["verstopper", "nachtzaal"], snelheid=0.14, bord="zeldzaam"),
+    "spookdiertje":   dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["boom", "nachtzaal"], snelheid=0.16, bord="middel", terrarium=True),
+    "plompe_lori":    dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["boom", "nachtzaal"], snelheid=0.06, bord="middel"),
+    "fruitvleermuis": dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["nachtzaal"], snelheid=0.14, bord="middel"),
+    "galago":         dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["boom", "nachtzaal"], snelheid=0.2, bord="middel"),
+    "suikereekhoorn": dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["boom", "nachtzaal"], snelheid=0.2, bord="middel"),
+    "fennek":         dict(zone="kriebelhuis", sectie="nachtzaal", gedrag=["verstopper", "nachtzaal"], snelheid=0.24, bord="middel",
+                           idle_mix={"oren": 0.25}),
+    # aquarium (rif-lagune, kelpbos, aai-lagune, diepzeezaal)
+    "zeepaardje":     dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.06, bord="middel", terrarium=True,
+                           idle_mix={"krul": 0.3}),
+    "pijlstaartrog":  dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.14, bord="middel"),
+    "zeeschildpad":   dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.12, bord="middel"),
+    "clownvis":       dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.12, bord="gewoon", terrarium=True),
+    "anemoon":        dict(zone="kriebelhuis", sectie="aquarium", gedrag=["decor"], snelheid=0.0, bord=None),
+    "kwal":           dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee", "kudde"], snelheid=0.05, bord="middel", terrarium=True),
+    "kogelvis":       dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.1, bord="middel", terrarium=True),
+    "zeester":        dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee", "bodem"], snelheid=0.02, bord="gewoon", terrarium=True),
+    "zee_egel":       dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee", "bodem"], snelheid=0.02, bord=None, dexgroep="zeester"),
+    "babyhaai":       dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.16, bord="zeldzaam"),
+    "regenboogvis":   dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee", "kudde"], snelheid=0.16, bord="gewoon", terrarium=True),
+    "lantaarnvisje":  dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.08, bord="middel", terrarium=True),
+    "dumbo_octopus":  dict(zone="kriebelhuis", sectie="aquarium", gedrag=["zee"], snelheid=0.06, bord="zeldzaam", terrarium=True),
+    # delta (outside, by the river)
+    "pelikaan":       dict(zone="delta", gedrag=["water", "vlieg"], snelheid=0.2, bord="gewoon"),
 }
 
 # round 4 (test round 4: giraffes and elephants ~1.5x bigger): model and hitbox scale (soorten.json "schaal", default 1)
@@ -178,7 +230,7 @@ ACTIES = {
     "bever": ["zwem", "draag", "burcht"], "das": ["tunnel"], "otter": ["zwem"],
     "nijlpaard": ["zwem"], "krokodil": ["zwem"], "capibara": ["zwem", "drink"], "flamingo": ["zwem"],
     "ijsbeer": ["zwem"], "zeehond": ["zwem"], "leeuw": ["drink"], "neushoorn": ["drink"], "jachtluipaard": ["drink"],
-    "hoornkikker": ["zwem"], "pelikaan": ["zwem"], "reuzenschildpad": ["drink"],
+    "hoornkikker": ["zwem"], "pelikaan": ["zwem"], "reuzenschildpad": ["drink"], "gifkikker": ["zwem"],
 }
 
 # round 4: the generated one-shot "show" animations (safari_atelier/gedrag_anims.py SHOWS) per call group, plus a few
@@ -396,6 +448,11 @@ def schrijf_soorten():
         }
         if s in SCHAAL:
             uit[s]["schaal"] = SCHAAL[s]
+        for k in ("sectie", "dexgroep", "kleuren"):           # round 4 (L4): the Kriebelhuis extras
+            if d.get(k):
+                uit[s][k] = d[k]
+        if d.get("terrarium"):
+            uit[s]["terrarium"] = True
         if d.get("idle_mix"):
             uit[s]["idle_mix"] = d["idle_mix"]
         acties = ["rust"] + [a for a in ACTIES.get(s, []) if a != "rust"]

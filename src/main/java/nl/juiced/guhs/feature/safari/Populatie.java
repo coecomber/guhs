@@ -61,6 +61,7 @@ public final class Populatie {
         }
         if (volgende >= plekken.size()) {
             volgende = -1;
+            LOGGER.info("Safari: {} Kriebelhuis critters", vulKriebelCritters(level, s.generatie));
             s.dierenVoor = Math.max(s.gebouwd, ParkData.get().versie);
             s.setDirty();
             LOGGER.info("Safari: {} homes filled (generation {})", plekken.size(), s.generatie);
@@ -69,12 +70,16 @@ public final class Populatie {
 
     /** Puts the family of one home in the world; returns how many animals. */
     public static int vul(ServerLevel level, ParkData.Plek p, int generatie) {
+        if (!p.entity().isEmpty()) {
+            return vulCritters(level, p, generatie);
+        }
         ParkData d = ParkData.get();
         ParkData.Soort soort = d.soort(p.soort());
         // the zone of the home is where its centre lies (outside the raster: no zone check rather than a stuck animal)
         int zone = d.zone(p.centrum().getX(), p.centrum().getZ());
         String gevraagd = p.zone().isEmpty() && soort != null ? soort.zone() : p.zone();
-        if (zone >= 0 && !gevraagd.isEmpty() && zone != d.zoneIndex(gevraagd) && !d.testPlateau) {
+        // (round 4: a Kriebelhuis home lies in the lobby's entree cells; its species' "zone" is no park zone)
+        if (zone >= 0 && !gevraagd.isEmpty() && d.zoneIndex(gevraagd) >= 0 && zone != d.zoneIndex(gevraagd) && !d.testPlateau) {
             LOGGER.warn("Safari: home {} of {} lies in zone {}, not in {}", p.id(), p.soort(), d.zoneNaam(zone), gevraagd);
         }
         RandomSource rnd = RandomSource.create(p.id() * 7919L + generatie);
@@ -107,7 +112,9 @@ public final class Populatie {
                 }
             }
             if (plek == null) {
-                plek = p.boom() ? boom(level, x, z) : dier.grond(level, x, z);
+                // (round 4: indoors, under the Kriebelhuis roof, a tree animal starts on the floor of its cage too)
+                boolean binnen = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) > p.centrum().getY() + SafariDier.BINNEN;
+                plek = p.boom() && !binnen ? boom(level, x, z) : dier.grond(level, x, z);
             }
             dier.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, rnd.nextFloat() * 360f, 0f);
             if (level.addFreshEntity(dier)) {
@@ -115,6 +122,157 @@ public final class Populatie {
             }
         }
         return n;
+    }
+
+    // --- round 4 (L4): the guhs critters in the Kriebelhuis (vlindertuin, kikkerhoek, axolotls, aquarium) ----------------------
+
+    /** The persistent-data key of a critter living in a park home: its home (x, y, z, straal) and generation. */
+    public static final String CRITTER = "guhs_safari_critter";
+
+    /**
+     * A home of another guhs entity type ({@code entity}, e.g. "guhs:koi" or just "koi"): that many of it, passive (never
+     * despawns, never hurt), on the floor or in the water of the home; {@link #bewaakCritter} keeps it there. Not in the dex.
+     */
+    static int vulCritters(ServerLevel level, ParkData.Plek p, int generatie) {
+        RandomSource rnd = RandomSource.create(p.id() * 7919L + generatie);
+        int n = 0;
+        for (int i = 0; i < Math.max(1, p.volwassenen() + p.jongen()); i++) {
+            double hoek = rnd.nextDouble() * Math.PI * 2, r = Math.sqrt(rnd.nextDouble()) * p.straal() * 0.6;
+            int x = p.centrum().getX() + (int) Math.round(Math.cos(hoek) * r), z = p.centrum().getZ() + (int) Math.round(Math.sin(hoek) * r);
+            level.getChunk(x >> 4, z >> 4);
+            BlockPos plek = critterPlek(level, x, z, p);
+            if (plek == null) {
+                plek = critterPlek(level, p.centrum().getX(), p.centrum().getZ(), p);
+            }
+            if (plek == null) {
+                plek = p.centrum();
+            }
+            if (spawnCritter(level, p.entity(), "", net.minecraft.world.phys.Vec3.atBottomCenterOf(plek), p.centrum().getX(), plek.getY(),
+                    p.centrum().getZ(), p.straal(), generatie, rnd.nextFloat() * 360f)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /**
+     * The critters of the Kriebelhuis ({@code data/guhs/safari/kriebelhuis.json} "critters", written by zone_kriebelhuis.py):
+     * per critter {@code entity} ("guhs:koi"...), {@code variant} (its texture name, e.g. "koi_goud": the colour after the
+     * entity's name goes in as "Kleur"/"Variant"), {@code pos} [x,y,z] and {@code straal}. Returns how many.
+     */
+    static int vulKriebelCritters(ServerLevel level, int generatie) {
+        com.google.gson.JsonArray lijst = kriebelCritters();
+        int n = 0;
+        for (int i = 0; i < lijst.size(); i++) {
+            if (!lijst.get(i).isJsonObject()) {
+                continue;
+            }
+            com.google.gson.JsonObject o = lijst.get(i).getAsJsonObject();
+            if (!o.has("entity") || !o.has("pos")) {
+                continue;
+            }
+            com.google.gson.JsonArray a = o.getAsJsonArray("pos");
+            net.minecraft.world.phys.Vec3 pos = new net.minecraft.world.phys.Vec3(a.get(0).getAsDouble(), a.get(1).getAsDouble(), a.get(2).getAsDouble());
+            level.getChunk(Mth.floor(pos.x) >> 4, Mth.floor(pos.z) >> 4);
+            String variant = o.has("variant") ? o.get("variant").getAsString() : "";
+            int straal = o.has("straal") ? o.get("straal").getAsInt() : 3;
+            if (spawnCritter(level, o.get("entity").getAsString(), variant, pos, Mth.floor(pos.x), Mth.floor(pos.y), Mth.floor(pos.z), straal,
+                    generatie, (i * 73) % 360)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** The "critters" list of kriebelhuis.json (empty without the file). */
+    static com.google.gson.JsonArray kriebelCritters() {
+        try (java.io.InputStream in = Populatie.class.getResourceAsStream("/data/guhs/safari/kriebelhuis.json")) {
+            if (in == null) {
+                return new com.google.gson.JsonArray();
+            }
+            com.google.gson.JsonElement e = com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            if (e.isJsonObject() && e.getAsJsonObject().has("critters")) {
+                return e.getAsJsonObject().getAsJsonArray("critters");
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Safari: could not read kriebelhuis.json", ex);
+        }
+        return new com.google.gson.JsonArray();
+    }
+
+    /**
+     * One guhs critter at {@code pos} living at home x,y,z (radius straal): passive (never despawns, never hurt), its colour
+     * from {@code variant}, and marked ({@link #CRITTER}) so {@link #bewaakCritter} keeps it there. False: unknown entity.
+     */
+    public static boolean spawnCritter(ServerLevel level, String entity, String variant, net.minecraft.world.phys.Vec3 pos, int x, int y, int z,
+                                       int straal, int generatie, float yaw) {
+        net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.tryParse(entity.contains(":") ? entity : "guhs:" + entity);
+        if (id == null || !net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.containsKey(id)) {
+            LOGGER.warn("Safari: unknown critter entity {}", entity);
+            return false;
+        }
+        net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
+        tag.putString("id", id.toString());
+        tag.putBoolean("PersistenceRequired", true);
+        tag.putBoolean("Invulnerable", true);
+        String kleur = variant.startsWith(id.getPath() + "_") ? variant.substring(id.getPath().length() + 1) : variant;
+        if (!kleur.isEmpty()) {
+            tag.putString("Kleur", kleur);              // (the koi, the kikkerguh...; unknown keys are ignored)
+            tag.putString("Variant", kleur);
+        }
+        net.minecraft.world.entity.Entity e = net.minecraft.world.entity.EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.STRUCTURE, en -> en);
+        if (e == null) {
+            return false;
+        }
+        net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+        t.putInt("X", x);
+        t.putInt("Y", y);
+        t.putInt("Z", z);
+        t.putInt("Straal", Math.max(2, straal));
+        t.putInt("Generatie", generatie);
+        e.getPersistentData().put(CRITTER, t);
+        e.setInvulnerable(true);
+        if (e instanceof net.minecraft.world.entity.Mob m) {
+            m.setPersistenceRequired();
+        }
+        e.snapTo(pos.x, pos.y, pos.z, yaw, 0f);
+        return level.addFreshEntity(e);
+    }
+
+    /** Where a critter goes in this column of its home: in the water (a water home) or on the floor, near the home's height. */
+    @javax.annotation.Nullable
+    static BlockPos critterPlek(ServerLevel level, int x, int z, ParkData.Plek p) {
+        BlockPos b = SafariDier.binnenGrond(level, x, z, p.centrum().getY(), p.water(), false);
+        return b == null && p.water() ? SafariDier.binnenGrond(level, x, z, p.centrum().getY(), false, false) : b;
+    }
+
+    /**
+     * Every 2 s for a critter of a park home: one of an older generation goes (the homes were refilled); one that strayed
+     * (more than its home + 4 away, or fallen) is put back on its home's centre, its speed gone; it never despawns.
+     */
+    public static void bewaakCritter(net.minecraft.world.entity.Entity e) {
+        if (!(e.level() instanceof ServerLevel level) || (e.tickCount + e.getId()) % 40 != 0 || e instanceof SafariDier) {
+            return;
+        }
+        net.minecraft.nbt.CompoundTag t = e.getPersistentData().getCompoundOrEmpty(CRITTER);
+        if (t.isEmpty()) {
+            return;
+        }
+        if (t.getIntOr("Generatie", 0) < SafariOpslag.get(level.getServer()).generatie()) {
+            e.discard();
+            return;
+        }
+        int x = t.getIntOr("X", e.getBlockX()), y = t.getIntOr("Y", e.getBlockY()), z = t.getIntOr("Z", e.getBlockZ());
+        if (weg(e.getX(), e.getY(), e.getZ(), x, y, z, t.getIntOr("Straal", 4))) {
+            e.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            e.teleportTo(x + 0.5, y, z + 0.5);
+            e.fallDistance = 0;
+        }
+    }
+
+    /** Has a critter at ex,ey,ez strayed from its home (centre x,y,z, radius straal)? */
+    public static boolean weg(double ex, double ey, double ez, int x, int y, int z, int straal) {
+        return Math.hypot(ex - (x + 0.5), ez - (z + 0.5)) > straal + 4 || ey < y - 8 || ey > y + 12;
     }
 
     /** A spot to hang under the lowest leaves near x,z (2..14 above the ground, with room below): its feet position. */

@@ -1795,7 +1795,8 @@
   "baby_model": true,
   "gedrag": [
    "boom",
-   "verstopper"
+   "verstopper",
+   "kleurwissel"
   ],
   "animaties": [
    "blij",
@@ -1812,6 +1813,14 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "kleuren": [
+   "groen",
+   "roze",
+   "blauw",
+   "oranje"
+  ],
+  "terrarium": true,
   "acties": [
    "rust",
    "anim:kijk",
@@ -1844,6 +1853,7 @@
   "glow": false,
   "bord": "gewoon",
   "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
   "acties": [
    "rust",
    "drink",
@@ -1879,6 +1889,11 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "terrarium": true,
+  "idle_mix": {
+   "kopje": 0.3
+  },
   "acties": [
    "rust",
    "anim:kopje",
@@ -1896,7 +1911,6 @@
   "man": false,
   "baby_model": true,
   "gedrag": [
-   "verstopper",
    "water"
   ],
   "animaties": [
@@ -1914,12 +1928,376 @@
   "glow": false,
   "bord": "gewoon",
   "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "terrarium": true,
   "acties": [
    "rust",
    "zwem",
    "anim:hop",
    "anim:rondkijk",
    "anim:snuffel"
+  ]
+ },
+ "kraaghagedis": {
+  "zone": "kriebelhuis",
+  "breedte": 0.99,
+  "hoogte": 0.38,
+  "baby_breedte": 0.61,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "kraag",
+   "ren",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:kraag",
+   "anim:rondkijk",
+   "anim:snuffel"
+  ]
+ },
+ "gifkikker": {
+  "zone": "kriebelhuis",
+  "breedte": 0.37,
+  "hoogte": 0.28,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "water"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hop",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "kleuren": [
+   "blauw",
+   "rood",
+   "geel"
+  ],
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "zwem",
+   "anim:hop",
+   "anim:rondkijk",
+   "anim:snuffel"
+  ]
+ },
+ "baardagaam": {
+  "zone": "kriebelhuis",
+  "breedte": 0.92,
+  "hoogte": 0.29,
+  "baby_breedte": 0.57,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk",
+   "zonnen"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.reptiel",
+  "sectie": "terrarium",
+  "terrarium": true,
+  "idle_mix": {
+   "zonnen": 0.5
+  },
+  "acties": [
+   "rust",
+   "anim:rondkijk",
+   "anim:snuffel",
+   "anim:zonnen"
+  ]
+ },
+ "mier": {
+  "zone": "kriebelhuis",
+  "breedte": 0.52,
+  "hoogte": 0.43,
+  "baby_breedte": 0.35,
+  "baby_hoogte": 0.34,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "draag",
+   "eet",
+   "huppel",
+   "idle",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:snuffel"
+  ]
+ },
+ "springspin": {
+  "zone": "kriebelhuis",
+  "breedte": 0.5,
+  "hoogte": 0.31,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.27,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hop",
+   "huppel",
+   "idle",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:hop",
+   "anim:huppel",
+   "anim:snuffel"
+  ]
+ },
+ "wandelende_tak": {
+  "zone": "kriebelhuis",
+  "breedte": 1.09,
+  "hoogte": 0.25,
+  "baby_breedte": 0.71,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk",
+   "wieg"
+  ],
+  "snelheid": 0.04,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "idle_mix": {
+   "wieg": 0.4
+  },
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:snuffel",
+   "anim:wieg"
+  ]
+ },
+ "mestkever": {
+  "zone": "kriebelhuis",
+  "breedte": 0.66,
+  "hoogte": 0.33,
+  "baby_breedte": 0.43,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "rol",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:rol",
+   "anim:snuffel"
+  ]
+ },
+ "slak": {
+  "zone": "kriebelhuis",
+  "breedte": 0.58,
+  "hoogte": 0.49,
+  "baby_breedte": 0.38,
+  "baby_hoogte": 0.34,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "kruip",
+   "rust",
+   "schuil",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.03,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:kruip",
+   "anim:schuil",
+   "anim:snuffel"
+  ]
+ },
+ "vogelspin": {
+  "zone": "kriebelhuis",
+  "breedte": 0.72,
+  "hoogte": 0.32,
+  "baby_breedte": 0.43,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk",
+   "zwaai"
+  ],
+  "snelheid": 0.08,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:snuffel",
+   "anim:zwaai"
+  ]
+ },
+ "hommel": {
+  "zone": "kriebelhuis",
+  "breedte": 0.54,
+  "hoogte": 0.53,
+  "baby_breedte": 0.34,
+  "baby_hoogte": 0.37,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "rust",
+   "slaap",
+   "snuffel",
+   "vlieg",
+   "walk"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.klein",
+  "sectie": "kriebelzaal",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:snuffel",
+   "anim:vlieg"
   ]
  },
  "kiwi": {
@@ -1933,7 +2311,7 @@
   "baby_model": true,
   "gedrag": [
    "verstopper",
-   "nacht"
+   "nachtzaal"
   ],
   "animaties": [
    "blij",
@@ -1950,6 +2328,7 @@
   "glow": false,
   "bord": "zeldzaam",
   "geluid": "safari.dier.vogel",
+  "sectie": "nachtzaal",
   "acties": [
    "rust",
    "anim:rondkijk",
@@ -1968,7 +2347,7 @@
   "baby_model": true,
   "gedrag": [
    "verstopper",
-   "nacht"
+   "nachtzaal"
   ],
   "animaties": [
    "blij",
@@ -1986,6 +2365,7 @@
   "glow": false,
   "bord": "zeldzaam",
   "geluid": "safari.dier.klein",
+  "sectie": "nachtzaal",
   "acties": [
    "rust",
    "anim:huppel",
@@ -2005,7 +2385,7 @@
   "baby_model": true,
   "gedrag": [
    "boom",
-   "nacht"
+   "nachtzaal"
   ],
   "animaties": [
    "blij",
@@ -2022,6 +2402,8 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.aap",
+  "sectie": "nachtzaal",
+  "terrarium": true,
   "acties": [
    "rust",
    "anim:draai",
@@ -2040,7 +2422,7 @@
   "baby_model": true,
   "gedrag": [
    "boom",
-   "nacht"
+   "nachtzaal"
   ],
   "animaties": [
    "blij",
@@ -2058,12 +2440,162 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.aap",
+  "sectie": "nachtzaal",
   "acties": [
    "rust",
    "anim:knuffel",
    "anim:krab",
    "anim:rek",
    "anim:rondkijk"
+  ]
+ },
+ "fruitvleermuis": {
+  "zone": "kriebelhuis",
+  "breedte": 0.64,
+  "hoogte": 0.65,
+  "baby_breedte": 0.38,
+  "baby_hoogte": 0.46,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "nachtzaal"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hang",
+   "idle",
+   "rondkijk",
+   "rust",
+   "schud",
+   "slaap",
+   "vlieg",
+   "walk"
+  ],
+  "snelheid": 0.14,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.vogel",
+  "sectie": "nachtzaal",
+  "acties": [
+   "rust",
+   "anim:rondkijk",
+   "anim:schud",
+   "anim:vlieg"
+  ]
+ },
+ "galago": {
+  "zone": "kriebelhuis",
+  "breedte": 0.72,
+  "hoogte": 0.86,
+  "baby_breedte": 0.46,
+  "baby_hoogte": 0.6,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "nachtzaal"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rondkijk",
+   "rust",
+   "slaap",
+   "spring",
+   "walk"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.aap",
+  "sectie": "nachtzaal",
+  "acties": [
+   "rust",
+   "anim:rondkijk",
+   "anim:spring"
+  ]
+ },
+ "suikereekhoorn": {
+  "zone": "kriebelhuis",
+  "breedte": 0.75,
+  "hoogte": 0.44,
+  "baby_breedte": 0.48,
+  "baby_hoogte": 0.31,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "boom",
+   "nachtzaal"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "krab",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk",
+   "zweef"
+  ],
+  "snelheid": 0.2,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.klein",
+  "sectie": "nachtzaal",
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:snuffel",
+   "anim:zweef"
+  ]
+ },
+ "fennek": {
+  "zone": "kriebelhuis",
+  "breedte": 0.87,
+  "hoogte": 0.95,
+  "baby_breedte": 0.54,
+  "baby_hoogte": 0.68,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "verstopper",
+   "nachtzaal"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "huppel",
+   "idle",
+   "krab",
+   "oren",
+   "rust",
+   "slaap",
+   "snuffel",
+   "walk"
+  ],
+  "snelheid": 0.24,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.klein",
+  "sectie": "nachtzaal",
+  "idle_mix": {
+   "oren": 0.25
+  },
+  "acties": [
+   "rust",
+   "anim:huppel",
+   "anim:krab",
+   "anim:oren",
+   "anim:snuffel"
   ]
  },
  "zeepaardje": {
@@ -2076,8 +2608,7 @@
   "man": false,
   "baby_model": true,
   "gedrag": [
-   "water",
-   "zwemmer"
+   "zee"
   ],
   "animaties": [
    "blij",
@@ -2094,6 +2625,11 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "idle_mix": {
+   "krul": 0.3
+  },
   "acties": [
    "rust",
    "anim:krul",
@@ -2111,8 +2647,7 @@
   "man": false,
   "baby_model": true,
   "gedrag": [
-   "water",
-   "zwemmer"
+   "zee"
   ],
   "animaties": [
    "blij",
@@ -2126,8 +2661,9 @@
   ],
   "snelheid": 0.14,
   "glow": false,
-  "bord": "gewoon",
+  "bord": "middel",
   "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
   "acties": [
    "rust",
    "anim:schud",
@@ -2144,8 +2680,7 @@
   "man": false,
   "baby_model": true,
   "gedrag": [
-   "water",
-   "zwemmer"
+   "zee"
   ],
   "animaties": [
    "blij",
@@ -2161,14 +2696,359 @@
   "glow": false,
   "bord": "middel",
   "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
   "acties": [
    "rust",
    "anim:schud",
    "anim:zwem"
   ]
  },
- "pelikaan": {
+ "clownvis": {
   "zone": "kriebelhuis",
+  "breedte": 0.44,
+  "hoogte": 0.32,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.12,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "anemoon": {
+  "zone": "kriebelhuis",
+  "breedte": 0.3,
+  "hoogte": 0.49,
+  "baby_breedte": 0.17,
+  "baby_hoogte": 0.27,
+  "baby_schaal": 0.55,
+  "man": false,
+  "baby_model": false,
+  "gedrag": [
+   "decor"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk"
+  ],
+  "snelheid": 0.0,
+  "glow": false,
+  "bord": null,
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "acties": [
+   "rust",
+   "anim:schud"
+  ]
+ },
+ "kwal": {
+  "zone": "kriebelhuis",
+  "breedte": 0.3,
+  "hoogte": 0.55,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.33,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee",
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.05,
+  "glow": true,
+  "bord": "middel",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "kogelvis": {
+  "zone": "kriebelhuis",
+  "breedte": 0.35,
+  "hoogte": 0.3,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "opblazen",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.1,
+  "glow": false,
+  "bord": "middel",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:opblazen",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "zeester": {
+  "zone": "kriebelhuis",
+  "breedte": 0.36,
+  "hoogte": 0.25,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee",
+   "bodem"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "kruip",
+   "rust",
+   "schud",
+   "slaap",
+   "walk"
+  ],
+  "snelheid": 0.02,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:kruip",
+   "anim:schud"
+  ]
+ },
+ "zee_egel": {
+  "zone": "kriebelhuis",
+  "breedte": 0.35,
+  "hoogte": 0.3,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee",
+   "bodem"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk"
+  ],
+  "snelheid": 0.02,
+  "glow": false,
+  "bord": null,
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "dexgroep": "zeester",
+  "acties": [
+   "rust",
+   "anim:schud"
+  ]
+ },
+ "babyhaai": {
+  "zone": "kriebelhuis",
+  "breedte": 0.63,
+  "hoogte": 0.44,
+  "baby_breedte": 0.38,
+  "baby_hoogte": 0.26,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "regenboogvis": {
+  "zone": "kriebelhuis",
+  "breedte": 0.3,
+  "hoogte": 0.25,
+  "baby_breedte": 0.3,
+  "baby_hoogte": 0.25,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee",
+   "kudde"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.16,
+  "glow": false,
+  "bord": "gewoon",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "lantaarnvisje": {
+  "zone": "kriebelhuis",
+  "breedte": 0.53,
+  "hoogte": 0.6,
+  "baby_breedte": 0.32,
+  "baby_hoogte": 0.36,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "hap",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.08,
+  "glow": true,
+  "bord": "middel",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:hap",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "dumbo_octopus": {
+  "zone": "kriebelhuis",
+  "breedte": 0.62,
+  "hoogte": 0.54,
+  "baby_breedte": 0.37,
+  "baby_hoogte": 0.32,
+  "baby_schaal": 1.0,
+  "man": false,
+  "baby_model": true,
+  "gedrag": [
+   "zee"
+  ],
+  "animaties": [
+   "blij",
+   "eet",
+   "fladder",
+   "idle",
+   "rust",
+   "schud",
+   "slaap",
+   "walk",
+   "zwem"
+  ],
+  "snelheid": 0.06,
+  "glow": false,
+  "bord": "zeldzaam",
+  "geluid": "safari.dier.zee",
+  "sectie": "aquarium",
+  "terrarium": true,
+  "acties": [
+   "rust",
+   "anim:fladder",
+   "anim:schud",
+   "anim:zwem"
+  ]
+ },
+ "pelikaan": {
+  "zone": "delta",
   "breedte": 1.41,
   "hoogte": 1.39,
   "baby_breedte": 0.94,
