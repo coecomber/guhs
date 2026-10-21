@@ -303,6 +303,7 @@ class Bouwer:
             if abs(x + 1 - MIDX) > 4:
                 S.fill(x, G + 4, HZ2, x + 2, G + 7, HZ2, "minecraft:glass")
         S.air(MIDX - 2, G + 1, HZ2, MIDX + 2, G + 6, HZ2)                                # the wide entrance
+        S.fill(HX1 + 1, G + 10, HZ1 + 1, HX2 - 1, G + 10, HZ2 - 1, "minecraft:birch_planks")     # ceiling (the lamps hang on it)
         self.thatch(HX1, HZ1, HX2, HZ2, G + 10, overhang=1)
         for x in range(HX1 + 3, HX2 - 2, 5):
             S.set(x, G + 9, 81, "guhs:guh_kristal_lamp")
@@ -953,10 +954,11 @@ class Bouwer:
         S.set(78, G + 1, 96, "guhs:guh_stoel[facing=east]")
         S.set(63, G + 1, 92, "guhs:guh_bloempot")
         S.set(83, G + 1, 92, "guhs:guh_bloempot")
-        S.set(76, G + 6, 98, "guhs:glimtegel[fel=true]")
-        S.set(64, G + 6, 100, "guhs:glimtegel[fel=true]")
-        S.set(80, G + 6, 104, "guhs:glimtegel[fel=true]")
+        S.set(76, G + 7, 98, "guhs:glimtegel[fel=true]")
+        S.set(64, G + 7, 100, "guhs:glimtegel[fel=true]")
+        S.set(80, G + 7, 104, "guhs:glimtegel[fel=true]")
         self.npc_winkel = (78.5, G + 1, 102.5, 0.0)
+        S.fill(UX1 + 1, G + 8, UZ1 + 1, UX2 - 1, G + 8, UZ2 - 1, "minecraft:birch_planks")     # ceiling
         self.thatch(UX1, UZ1, UX2, UZ2, G + 8, overhang=1)
         self.sectiebord(70, G + 3, UZ1 + 1, "south", ["", "Uitgang", "+ cadeautjes", ""])
 
