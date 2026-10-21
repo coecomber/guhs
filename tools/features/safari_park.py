@@ -55,6 +55,32 @@ def zone_modules():
     return sorted(mods, key=lambda m: bool(getattr(m, "NA_ZONES", False)))     # (stable: name order otherwise)
 
 
+def ai_punten(park, log=print):
+    """The point lists the animal AI reads (contract 'J1 leest': punten.glijbaan bottom -> top, dassentunnel top -> room,
+    beverdam, beverburcht), built from what the zones registered: the glijbaan favourites (Z3), the 'pad' of the
+    dassen-kijkkamer (Z4, chamber -> hill top, so reversed) and the bever-kijkhut favourites (Z4)."""
+    punten = {}
+    for k in park.kijkplekken:
+        fav = {f["naam"]: f["pos"] for f in k.get("favorieten", [])}
+        if k["naam"].startswith("glijbaan"):
+            trap = sorted((n for n in fav if n.startswith("glijbaan_trap_")), key=lambda n: int(n.rsplit("_", 1)[1]))
+            lijst = ([fav["glijbaan_bodem"]] if "glijbaan_bodem" in fav else []) + [fav[n] for n in trap]                 + ([fav["glijbaan_top"]] if "glijbaan_top" in fav else [])
+            if lijst:
+                punten["glijbaan"] = lijst
+        pad = k.get("pad")
+        if pad and pad.get("naam") == "dassentunnel":
+            punten["dassentunnel"] = list(reversed(pad["punten"]))
+        if k["naam"].startswith("bever"):
+            dam = [v for n, v in fav.items() if n.startswith("dam")]
+            burcht = [v for n, v in fav.items() if "burcht" in n]
+            if dam:
+                punten["beverdam"] = dam
+            if burcht:
+                punten["beverburcht"] = burcht
+    log("  ai-punten: " + ", ".join(f"{n} {len(v)}" for n, v in punten.items()))
+    return punten
+
+
 def kijkplekken_afmaken(park, plekken, log=print):
     """Round 3 (the river pipeline slice): every guh chair (kit.stoel) that is not part of a registered viewpoint
     becomes one (chairs within 6 blocks are one hut: the first chair is the kijk-guh's seat, the view is the chairs'
@@ -153,7 +179,7 @@ def maak(root=".", preview=False, log=print):
                               "waterhoogte": kit.WATER_Y, "ingang": [x, y, z], "ingang_yaw": yaw})
     _json(root, "zones.json", zones_json(park))
     _json(root, "plekken.json", plekken)
-    _json(root, "kijkplekken.json", {"kijkplekken": park.kijkplekken,
+    _json(root, "kijkplekken.json", {"kijkplekken": park.kijkplekken, "punten": ai_punten(park, log),
                                      "uitleg": "per kijkplek: oog, kijkrichting (null = rondom, een toren), stoel (de "
                                                "kijk-guh), favorieten = plekken in beeld waar de dieren af en toe heen "
                                                "gaan"})
