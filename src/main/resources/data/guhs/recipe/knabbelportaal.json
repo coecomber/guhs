@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BKB",
+    "KPK",
+    "BKB"
+  ],
+  "key": {
+    "B": "guhs:block_of_kaasknabbels",
+    "K": "guhs:kaas_knabbels",
+    "P": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:knabbelportaal"
+  }
+}

@@ -46,7 +46,9 @@ public enum PlekSoort {
     /** guhpixel: away on a trip of the Reisbureau, stored as data (detail: the destination). */
     OP_VAKANTIE,
     /** guhpixel: at work (asleep) on a Guhkantoor, stored as data. */
-    OP_KANTOOR;
+    OP_KANTOOR,
+    /** 1.6.0: retired to De Eeuwige Knabbelvelden, stored as data (feature/knabbelvelden; the Knabbelportaal brings it home). */
+    IN_DE_KNABBELVELDEN;
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);

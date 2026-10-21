@@ -140,6 +140,7 @@ public final class Features {
         nl.juiced.guhs.feature.snuffeldorp.SnuffeldorpFeature.register(modBus);   // verhalenpad: snuffel-dorp
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.register(modBus);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
         nl.juiced.guhs.feature.safari.SafariFeature.register(modBus);   // 1.6.0 Op Safari!: Safaripark Vadse Bergen
+        nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenFeature.register(modBus);   // 1.6.0: De Eeuwige Knabbelvelden (payloads + creative inside)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

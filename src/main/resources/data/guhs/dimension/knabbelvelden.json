@@ -1,0 +1,18 @@
+{
+  "type": "guhs:knabbelvelden",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:knabbelvelden",
+      "layers": [
+        {
+          "block": "guhs:block_of_kaasknabbels",
+          "height": 1
+        }
+      ],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}
