@@ -142,6 +142,7 @@ public final class Features {
         nl.juiced.guhs.feature.safari.SafariFeature.register(modBus);   // 1.6.0 Op Safari!: Safaripark Vadse Bergen
         nl.juiced.guhs.feature.bouwhulp.blokken.BouwBlokken.register(modBus);   // 1.6.0 deel 2 F11: the building blocks + the Bouwen tab
         nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenFeature.register(modBus);   // 1.6.0: De Eeuwige Knabbelvelden (payloads + creative inside)
+        nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.register(modBus);   // 1.6.0 Op Safari! deel 2: de Bouwhulp (F8 kern)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -256,6 +257,7 @@ public final class Features {
         nl.juiced.guhs.feature.snuffelsteiger.SnuffelsteigerFeature.payloads(registrar);   // verhalenpad: snuffel-steiger
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.payloads(registrar);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
         nl.juiced.guhs.feature.safari.SafariFeature.payloads(registrar);   // 1.6.0 Op Safari!
+        nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.payloads(registrar);   // 1.6.0 deel 2: de Bouwhulp
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -377,6 +379,7 @@ public final class Features {
         nl.juiced.guhs.feature.safari.kriebel.KriebelBlokken.creative(output);   // round 4 L3: Kriebelhuis + lobby blocks
         nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.creative(output);   // 1.6.0 Op Safari! S5: verblijfsborden, toys
         nl.juiced.guhs.feature.safari.quests.SafariQuests.creative(output);   // 1.6.0 Op Safari! S4
+        nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.creative(output);   // 1.6.0 deel 2: de Bouwhulp
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

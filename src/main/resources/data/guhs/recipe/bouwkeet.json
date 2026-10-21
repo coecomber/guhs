@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "YPY",
+    "PCP",
+    "LKL"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_wool",
+    "P": "minecraft:pink_wool",
+    "C": "minecraft:crafting_table",
+    "K": "guhs:kaas_knabbels",
+    "L": "#minecraft:logs"
+  },
+  "result": {
+    "id": "guhs:bouwkeet",
+    "count": 1
+  }
+}

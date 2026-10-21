@@ -1373,6 +1373,27 @@ UITLEG = {
            "volgende kleur: roze, geel, blauw, oranje en paars. Het geeft ook een klein beetje licht.",
         en="Coral that never dies, in or out of water. Right-click it with an empty hand to give it the next colour: "
            "pink, yellow, blue, orange and purple. It also gives off a little light."),
+    "bouwkeet": dict(
+        nl="Een geel-roze keetje van 3 bij 3 bij 3 met een kraantje op het dak: hier begint het bouwen. Rechtsklik "
+           "erop voor het menu met tabbladen (vormen, daken, blauwdrukken, bouwguhs, materiaal en niveau).\n"
+           "\n"
+           "- Kies iets om te bouwen en de keet zet er een spook van neer: een doorzichtig voorbeeld. Schuif, draai of "
+           "spiegel het tot het goed staat, en druk op Bouw!\n"
+           "- De blokjes komen uit je inventaris, daarna uit een gekoppelde Bank Guh (klik met een Banksleutel op de "
+           "keet). Mist er iets, dan zie je precies wat, en kun je toch bouwen: wat mist blijft spook.\n"
+           "- Met een upgrade wordt de keet beter (bouwguhs, draadloos materiaal, Pof!), maar dan trekt hij ook "
+           "vadskracht.\n"
+           "- Je laatste 5 bouwacties kun je terugdraaien.",
+        en="A yellow and pink shed of 3 by 3 by 3 with a little crane on the roof: this is where building starts. "
+           "Right-click it for the menu with tabs (shapes, roofs, blueprints, builder guhs, materials and level).\n"
+           "\n"
+           "- Pick something to build and the shed puts down a ghost of it: a see-through preview. Move, turn or "
+           "mirror it until it's right, and press Build!\n"
+           "- The blocks come from your inventory, then from a linked Bank Guh (click the shed with a Bank Key). If "
+           "something is missing you see exactly what, and you can build anyway: what's missing stays a ghost.\n"
+           "- An upgrade makes the shed better (builder guhs, wireless materials, Poof!), but then it also draws "
+           "chonk power.\n"
+           "- You can undo your last 5 building actions."),
 }
 
 LINK = {

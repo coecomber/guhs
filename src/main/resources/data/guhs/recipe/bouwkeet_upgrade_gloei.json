@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "GSG",
+    "PIP"
+  ],
+  "key": {
+    "P": "minecraft:pink_stained_glass",
+    "G": "minecraft:glowstone",
+    "S": "guhs:gloeister",
+    "I": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "guhs:bouwkeet_upgrade_gloei",
+    "count": 1
+  }
+}

@@ -279,6 +279,52 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
   - levels 0-4 with tier upgrades (the upgrade items' names/recipes are Claude's choice → doc chapter 9), VK consumption;
   - bouwguhs (max 4, via the existing guh hooks), sfeer (whistling guhs, the crane turning, a progress bar, a party), Pof! at level 4.
   - API for the others: `Spookbouw.start(ServerPlayer, Ontwerp, BlockPos, Rotation, Mirror)`, `Ontwerp` (a block map + size), `Materiaal.zoek/neem`, `BouwNiveau.van(keet)`.
+  - **F8 as built (branch op-safari-f8)**, package `nl.juiced.guhs.feature.bouwhulp`:
+    - `kern.Ontwerp`:
+      - `Ontwerp.van(Map<BlockPos,BlockState>)`: any positions; moved so the box starts at 0,0,0. An AIR state means "dig this spot out"; spots that are left out are left alone.
+      - `Ontwerp.doos(x,y,z,state)`.
+      - `grootte()`, `maat()` (the longest side, for the level limits), `aantal()`, `nodig()` (Map<Item,Integer>), `vervang(Function<BlockState,BlockState>)` (the kwasten), `geplaatst(oorsprong, rot, mirror)` (in building order).
+      - Turning happens around the middle of the footprint (`spil()`).
+      - `opslaan()` and `laad(tag)`.
+    - `kern.Spookbouw` (the one entry point):
+      - Creating: `start(player, ontwerp, oorsprong, rot, mirror)` returns a `Spook`, or null (empty / 10 open ghosts / protected; the player gets a message; `laatsteNee()` says why).
+      - Placing: `toonBediening(player, spook)` opens the control panel (arrows, turn, mirror, Bouw!, alsnog, undo, remove, friends). `draai`, `spiegel`, `schuif(level, s, Direction, n)`, `zet(level, s, pos, rot, mirror)` (all false while building or when protected).
+      - Building: `bouw(player, spook, alsnog)` returns `Spoken.Bouwen(begonnen, tekort, pof)`; `pauzeer`, `annuleer`, `ongedaan(player)`, `tekort(player, spook)`.
+      - Settings: `vervang(level, s, ontwerp)` (a slider changed the shape; not while building), `zetNaam`, `zetTempo` (blocks/s for a ghost without a keet; default 20), `zetBank(level, s, bankId)`, `koppel(level, s, bouwerPos)`.
+      - `beschermd(level, pos)`, `get(level, id)`.
+    - `kern.Spook`: read-only getters (`id, eigenaar, ontwerp, oorsprong, draai, spiegel, status SPOOK/BOUWT/WACHT, bouwerPos, gedaan, totaal, nogTeGaan, nogTeDoen(n), doos(), mag(player)`).
+    - `kern.Spoken` (SavedData per dimension `guhs:bouwhulp_spoken`): `van(level)`, `alle()`, `van(uuid)`, `nogNodig(level, s)`, `Spoken.magBouwen(level, pos, state)` (not protected, no block entity, breakable).
+    - `kern.Materiaal`:
+      - `kost(state)` returns `Kost(item, aantal)` or null for "can't be built". A double slab costs 2; the upper half of a door or bed, water and AIR cost 0.
+      - `bronnen(level, player|null, bankId|null, vadsnetPos|null)` returns `Bronnen` with `tel`, `neem`, `terug`, `tekort`, and `gratis()` (creative).
+      - `zoek` / `neem` shorthands; `terug(level, bronnen, stack, waar)` (whatever does not fit is dropped); `kisten(level, netPos)`.
+    - `kern.Bouwer` (implemented by `keet.BouwkeetBlockEntity`): `tempo`, `bronnen`, `pof`, `geplaatst`, `gestopt`. F10 can implement it on the verblijfsbord BE so a helper project builds at the helper's tempo; link it with `Spookbouw.koppel(level, s, bordPos)`.
+    - `keet.BouwNiveau` HANDWERK/GUHRAD/ZOUT/SAUS/GLOEI:
+      - Fields: `vk`, `maxVorm` (16/24/24/24/64), `maxBlauwdruk` (16/16/32/32/64).
+      - Flags: `bouwguhs()`, `draadloos()`, `natuurvormen()`, `egaliseerder()`, `bloktekst()`, `verfmachine()`, `tunnelboor()`, `publiceren()`, `pof()`.
+      - `BouwNiveau.van(keet)` gives the level the keet works at NOW (with vadskracht and switched on; otherwise HANDWERK).
+    - `keet.BouwkeetBlockEntity`:
+      - `niveau()`, `werkNiveau()`, `project()`, `zetProject(level, spook)` (1 active project per keet), `laatProjectLos(level)`.
+      - `voorDeDeur(n)` (a spot n blocks in front of the keet), `voorkant()`, `bank()`, `bronnen(level, spook, player)`.
+    - **Tabs**. Server side: `keet.BouwkeetTabs.registreer(Tab)`, with
+      ```
+      Tab { String id(); int volgorde(); BouwNiveau vanaf(); void schrijf(ServerPlayer, ServerLevel, BouwkeetBlockEntity, CompoundTag pagina); void doe(ServerPlayer, ServerLevel, BouwkeetBlockEntity, int actie, int waarde, String tekst); }
+      ```
+      - Ids are the constants `VORMEN` (10), `DAKEN` (20), `BLAUWDRUKKEN` (30), `BOUWGUHS` (40), `MATERIAAL` (50) and `NIVEAU` (60). Registering an id again replaces the tab: F8's VORMEN/DAKEN/BLAUWDRUKKEN are "binnenkort" stand-ins (Vormen has the "Proefhuisje" button) for F9 to replace.
+      - The tab name key is `gui.guhs.bouwkeet.tab.<id>`.
+      - `doe` only runs for who may change the keet, from `vanaf()`. The menu is re-sent after every action.
+
+      Client side: `client.BouwkeetScreen.tab(id, TabPagina)`, with
+      ```
+      TabPagina { knoppen(BouwkeetScreen s, CompoundTag pagina, x, y, w, h); teken(s, GuiGraphicsExtractor g, pagina, x, y, w, h); }
+      ```
+      Helpers on the screen: `s.knop(Component, x, y, w, Runnable, actief)`, `s.voegToe(widget)`, `s.doe(tabId, actie, waarde, tekst)`, `s.data()`, `s.magBewerken()`, `s.werkNiveau()`, `s.lettertype()`. The page area is `W - 20` × `PROJECT_Y - PAGINA_Y - 4` (320×134). The bottom strip (the project: Bouw!/Pof!, Spook..., Terug, Loslaten) belongs to F8.
+    - **Items, recipes and texts**:
+      - Blocks/items: `guhs:bouwkeet` (a 3×3×3 MachineBlock, GeckoLib, tag guhs:vadskracht) and `guhs:bouwkeet_upgrade_guhrad/_zout/_saus/_gloei`.
+      - `BouwhulpFeature.upgrade(BouwNiveau)` gives the upgrade item for a level.
+      - Generator: `tools/features/bouwhulp.py` (FEATURES 'bouwhulp'; on its own: `python tools/features/bouwhulp.py`). English is in `tools/lang/en/c180_bouwhulp.json`; F9/F10/F11 use c181..c183.
+    - Dev commands: `/guhs bouwhulp proef|terug|niveau <0-4>`.
+    - Own choices: `BOUWHULP_KEUZES.md` (doc ch. 9).
 - **F9 gereedschap** (owner: bouwhulp/vormen, bouwhulp/blauwdruk, bouwhulp/kwast):
   - the vormstaf (radial menu + screen), all shapes, roofs (dakmal), the kwasten (vervang/mix/verloop+patroon/verweren; animal patterns unlocked via the safari dex), capture (2 corners + auto);
   - own blueprints, the catalogue (~25 + placeholders, preview renders), the server library (SavedData, maker name, likes, max 10/player);

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XI ",
+    " I ",
+    "KCK"
+  ],
+  "key": {
+    "X": "guhs:techquest_recept_machines",
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:iron_chain",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:bouwkeet_upgrade_saus",
+    "count": 1
+  }
+}

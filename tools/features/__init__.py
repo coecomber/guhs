@@ -83,7 +83,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0 step 2 (append only)
             'safari_blokken', 'safari_camera', 'safari_lobby', 'safari_verblijf', 'safari_rit', 'safari_quests',
             # 1.6.0: De Eeuwige Knabbelvelden (append only)
-            'knabbelvelden']
+            'knabbelvelden',
+            # 1.6.0 deel 2: de Bouwhulp (F8 kern; append only)
+            'bouwhulp']
 
 
 def modules():
