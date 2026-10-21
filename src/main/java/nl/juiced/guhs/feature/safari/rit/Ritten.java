@@ -137,8 +137,18 @@ public final class Ritten {
             }
         }
         for (int i = 0; i < d.boten.size(); i++) {
-            Pad pad = d.boten.get(i).pad();
-            zorg(level, "boot" + i, pad.op(RitSchema.boot(t, pad.lengte()).afstand()), SafariRitten.BOOT.get(), i, 1);
+            RitData.Bootroute r = d.boten.get(i);
+            Pad pad = r.pad();
+            if (r.haltes().isEmpty()) {
+                zorg(level, "boot" + i, pad.op(RitSchema.boot(t, pad.lengte()).afstand()), SafariRitten.BOOT.get(), i, 1);
+                continue;
+            }
+            // round 4: the boat line, several boats hop-on hop-off (the boat's k encodes the route and its number)
+            int n = RitSchema.boten(pad.lengte(), r.haltes().size());
+            for (int k = 0; k < n; k++) {
+                RitSchema.Stand s = RitSchema.bootLijn(t, k, n, pad.lengte(), r.halteAfstanden());
+                zorg(level, "boot" + i + "_" + k, pad.op(s.afstand()), SafariRitten.BOOT.get(), i * BootEntity.PER_ROUTE + k, n);
+            }
         }
         if (d.kanoStart != null) {
             KanoEntity lig = zorg(level, "kano", d.kanoStart, SafariRitten.KANO.get(), 0, 1);

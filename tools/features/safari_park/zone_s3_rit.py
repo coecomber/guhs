@@ -5,7 +5,8 @@ server AND every client have the same paths):
 
   * the truck route: the route line (terrein.route) at standing height, a halte per zone (a sign, a bench, a lantern);
   * lantern posts along the paths (they light the park at night);
-  * the canoe: a jetty at the village pond and a path up the river, back before the first low spot (the beaver dam);
+  * the canoe: rented at the boat line's hoofdsteiger (free paddling; sneak = the guided trip up the river);
+  * the glass-bottom boat line (round 4): one line up the river from the hoofdsteiger with jetties per zone;
   * the kabelbaan IJskust -> Bamboebergen: two stations (deck, ladder, roof), pylons and an iron-bar cable;
   * the struisvogelrace track on the savanna (an oval, a start arch, the sign of the scoreboard);
   * the schemabord at the village square (block guhs:safari_schemabord);
@@ -759,9 +760,20 @@ def _vrij_stuk(park, a, b):
 def kano(park, log):
     meer = P(*MEREN[0][0])                         # the village pond (the river ends in it)
     plein = getattr(park, "plein", None) or (meer[0], 0, meer[1] + 20)
-    # start: the pond water closest to the square
+    # (round 4) the canoe is rented at the boat line's hoofdsteiger: it lies beside the jetty's waiting end
+    hs = getattr(park, "_hoofdsteiger", None)
     best = None
-    for dx in range(-30, 31):
+    if hs:
+        ex, _, ez = hs["pos"]
+        lx, lz = hs["land"]
+        dx_, dz_ = ex - (lx + 0.5), ez - (lz + 0.5)
+        dl = math.hypot(dx_, dz_) or 1
+        for kant in (1, -1):
+            kx, kz = ex - dz_ / dl * kant * 2.2, ez + dx_ / dl * kant * 2.2
+            if _water_ok(park, kx, kz) and _water_ok(park, kx + dx_ / dl, kz + dz_ / dl):
+                best = (0, int(math.floor(kx)), int(math.floor(kz)))
+                break
+    for dx in range(-30, 31) if best is None else ():
         for dz in range(-30, 31):
             x, z = meer[0] + dx, meer[1] + dz
             if _water_ok(park, x, z) and _water_ok(park, x + 1, z) and _water_ok(park, x, z + 1):
@@ -798,7 +810,8 @@ def kano(park, log):
     pad = _herbemonster(_midden(park, pad), 1.5)
     heen = [[round(x, 2), WATER_Y + 0.6, round(z, 2)] for x, z in pad]
     terug = list(reversed(heen))[1:]
-    _steiger(park, sx, sz, plein)
+    if not hs:
+        _steiger(park, sx, sz, plein)
     log(f"    s3: kano {len(heen)} punten heen ({len(heen) * 1.5:.0f} blokken), keert bij {geblokt}")
     return {"punten": heen + terug, "keer": len(heen) - 1, "start": heen[0], "stap": 1.5}
 
@@ -1034,138 +1047,262 @@ def _boot_water(park, x, z):
     return all(park.v[x, y, z] == 0 or park.pal[park.v[x, y, z]].startswith(_LUCHTIG) for y in (WATER_Y + 1, WATER_Y + 2))
 
 
-def boot(park, zone, log):
-    """A calm loop over the biggest open water of the zone, BOOT_R from every shore (the hull is 3 wide), and a jetty
-    from the nearest path to the loop's stop."""
-    from scipy.ndimage import label, distance_transform_edt as edt
-    zi_ = ZONES.index(zone)
-    mask = np.zeros((W, W), bool)
-    xs, zs = np.nonzero(park.zone == zi_)
-    for x, z in zip(xs, zs):
-        if _boot_water(park, x, z):
-            mask[x, z] = True
-    lab, n = label(mask)
-    if not n:
-        log(f"    s3: boot {zone}: geen open water")
-        return None
-    grootte = np.bincount(lab.ravel())
-    grootte[0] = 0
-    deel = lab == grootte.argmax()
-    d = edt(deel)
-    if d.max() < 6:
-        return boot_rivier(park, zone, log, f"het open water is te smal (max {d.max():.1f})")
-    cx, cz = np.unravel_index(int(d.argmax()), d.shape)
-    stralen = []
-    for k in range(48):
-        h = 2 * math.pi * k / 48
-        r = 0.0
-        while True:
-            px, pz = cx + 0.5 + math.cos(h) * (r + 0.5), cz + 0.5 + math.sin(h) * (r + 0.5)
-            ix, iz = int(px), int(pz)
-            if not (0 <= ix < W and 0 <= iz < W) or d[ix, iz] < 4.0:
-                break
-            r += 0.5
-        stralen.append(r)
-    stralen = np.array(stralen)
-    stralen = np.minimum(stralen, np.convolve(np.r_[stralen[-2:], stralen, stralen[:2]], np.ones(5) / 5, "valid"))
-    r_max = min(26.0, float(np.median(stralen)) * 1.3)
-    stralen = np.clip(stralen, 0, r_max)
-    if stralen.min() < 4:
-        stralen = np.maximum(stralen * 0.75, 0)
-    punten = [(cx + 0.5 + math.cos(2 * math.pi * k / 48) * stralen[k], cz + 0.5 + math.sin(2 * math.pi * k / 48) * stralen[k])
-              for k in range(48)]
-    lus = _herbemonster(punten + [punten[0]], 1.5)[:-1]
-    if len(lus) < 30:
-        return boot_rivier(park, zone, log, f"de lus over het open water is te kort ({len(lus)} punten)")
-    # every point (and the hull around it) on open water
-    for x, z in lus:
-        for ox in (-1.5, 0, 1.5):
-            for oz in (-1.5, 0, 1.5):
-                if not _boot_water(park, x + ox, z + oz):
-                    return boot_rivier(park, zone, log, f"de lus raakt de oever bij ({int(x)},{int(z)})")
-    # the stop: the loop point closest to a path; a jetty from the shore toward it
-    pd = pad_afstand(park)
+BOOT_HALTES = ("savanne", "delta", "regenwoud", "europa")   # the jetties up the river from the hoofdsteiger, in order
+BOOT_KANAAL = 1.5          # half width of the channel kept open for the 3-wide hull (natural bank blocks are dug away)
+_NATUUR = ("grass_block", "dirt", "coarse_dirt", "rooted_dirt", "podzol", "mud", "sand", "red_sand", "gravel", "clay",
+           "stone", "andesite", "diorite", "granite", "short_grass", "tall_grass", "fern", "large_fern", "dead_bush",
+           "sugar_cane", "lily_pad", "seagrass", "tall_seagrass", "kelp", "kelp_plant", "moss_carpet", "moss_block",
+           "dirt_path", "snow", "packed_mud", "muddy_mangrove_roots", "flowering_azalea", "azalea", "dandelion", "poppy",
+           "air", "water")
+
+
+def _natuur(s):
+    n = s.split("[")[0].split(":")[-1]
+    return n in _NATUUR or n.endswith(("_flower", "_tulip", "_sapling"))
+
+
+def boot_start(park):
+    """The hoofdsteiger's mooring (x, z) on the water: a lobby module sets park.boot_start (round 4: the lobby is being
+    redesigned and brings its own quay); until then the village pond water closest to the square."""
+    eigen = getattr(park, "boot_start", None)
+    if eigen:
+        return float(eigen[0]) + 0.5, float(eigen[1]) + 0.5
+    meer = P(*MEREN[0][0])
+    plein = getattr(park, "plein", None) or (meer[0], 0, meer[1] + 20)
     best = None
-    for k, (x, z) in enumerate(lus):
-        for h in range(0, 360, 15):
-            for r in range(3, 20):
-                sx, sz = int(x + math.cos(math.radians(h)) * r), int(z + math.sin(math.radians(h)) * r)
-                if not (0 <= sx < W and 0 <= sz < W) or park.water[sx, sz]:
-                    if 0 <= sx < W and 0 <= sz < W and not park.water[sx, sz]:
-                        break
+    for dx in range(-30, 31):
+        for dz in range(-30, 31):
+            x, z = meer[0] + dx, meer[1] + dz
+            if all(_water_ok(park, x + a, z + b) for a in (-1, 0, 1) for b in (-1, 0, 1)):
+                d = math.hypot(x - plein[0], z - plein[2])
+                if best is None or d < best[0]:
+                    best = (d, x, z)
+    return None if best is None else (best[1] + 0.5, best[2] + 0.5)
+
+
+def _kanaal(park, pad, dorp, log):
+    """Keep a channel 2 deep and BOOT_KANAAL wide open along the boat line: natural bank blocks (dirt, mud, a sand bar,
+    plants) are dug away to water; built things (and the village, the truck road, fences) are left and reported."""
+    gegraven, blijft = 0, set()
+    gedaan = set()
+    delta = ZONES.index("delta")
+    for i, (x, z) in enumerate(pad):
+        r = BOOT_KANAAL + (0.6 if i < 40 else 0.0)          # a wider mouth at the hoofdsteiger (outside the village)
+        for cx in range(int(math.floor(x - r)), int(math.floor(x + r)) + 1):
+            for cz in range(int(math.floor(z - r)), int(math.floor(z + r)) + 1):
+                # (the distance to the block's square, as controle.doorgang measures the hull's box)
+                if (cx, cz) in gedaan or math.hypot(max(cx - x, 0.0, x - cx - 1), max(cz - z, 0.0, z - cz - 1)) >= r:
                     continue
-                if park.binnen[sx, sz] and not park.hek[sx, sz] and park.hek_afstand[sx, sz] >= 3:
-                    kost = r * 2 + pd[sx, sz]
-                    if best is None or kost < best[0]:
-                        best = (kost, k, sx, sz, r, h)
-                break
-    if best is None:
-        log(f"    s3: boot {zone}: geen plek voor de steiger")
-        return None
-    _, k, sx, sz, r, h = best
-    lus = lus[k:] + lus[:k]             # the loop starts at the stop
-    x, z = lus[0]
-    _boot_steiger(park, sx, sz, x, z, lus)
-    log(f"    s3: boot {zone}: lus van {len(lus)} punten ({len(lus) * 1.5:.0f} blokken), steiger bij ({sx},{sz})")
-    return {"zone": zone, "punten": [[round(a, 2), WATER_Y + 0.55, round(b, 2)] for a, b in lus], "stap": 1.5,
-            "steiger": [sx + 0.5, int(park.hoogte[sx, sz]) + 1.0, sz + 0.5]}
+                gedaan.add((cx, cz))
+                if _boot_water(park, cx, cz):
+                    continue
+                if park.pad[cx, cz] or (dorp is not None and dorp[cx, cz]):
+                    blijft.add((cx, cz))
+                    continue
+                kolom = [park.pal[park.v[cx, y, cz]] for y in range(WATER_Y - 1, WATER_Y + 4)]
+                if not all(_natuur(b) for b in kolom):
+                    blijft.add((cx, cz))
+                    continue
+                for y in range(WATER_Y + 1, WATER_Y + 4):
+                    park.v[cx, y, cz] = 0
+                park.set(cx, WATER_Y, cz, "minecraft:water")
+                park.set(cx, WATER_Y - 1, cz, "minecraft:water")
+                onder = park.pal[park.v[cx, WATER_Y - 2, cz]]
+                if onder == "minecraft:air" or not onder.startswith("minecraft:water"):
+                    park.set(cx, WATER_Y - 2, cz, "minecraft:mud" if park.zone_vol[cx, cz] == delta else "minecraft:sand")
+                park.water[cx, cz] = True
+                park.hoogte[cx, cz] = min(int(park.hoogte[cx, cz]), WATER_Y - 2)
+                gegraven += 1
+    log(f"    s3: bootlijn: kanaal {gegraven} kolommen uitgegraven, {len(blijft)} gebouwde/pad-kolommen blijven staan"
+        + (f" ({sorted(blijft)[:6]})" if blijft else ""))
+    return blijft
 
 
-def boot_rivier(park, zone, log, waarom):
-    """No lake wide enough for a loop: a calm trip along the river through the zone and back the same way (like the
-    canoe), from a jetty near the path; it turns before the first spot where the hull would touch a bank or a bridge."""
-    pts = [P(x, z) for x, z in RIVIER]
-    ruw = _herbemonster(pts, 1.0)
-    zi_ = ZONES.index(zone)
-    run, beste = [], []
-    for x, z in ruw:
-        ix, iz = int(x), int(z)
-        ok = 0 <= ix < W and 0 <= iz < W and park.zone[ix, iz] == zi_
-        s = _snap(park, x, z, r=3) if ok else None
-        if s and all(_boot_water(park, s[0] + ox, s[1] + oz) for ox in (-1.2, 0, 1.2) for oz in (-1.2, 0, 1.2)):
-            if run and (math.hypot(s[0] - run[-1][0], s[1] - run[-1][1]) > 3 or not _vrij_stuk(park, run[-1], s)):
-                if len(run) > len(beste):
-                    beste = run
-                run = []
-            run.append(s)
-        else:
-            if len(run) > len(beste):
-                beste = run
-            run = []
-    if len(run) > len(beste):
-        beste = run
-    if len(beste) < 40:
-        log(f"    s3: boot {zone}: {waarom}, en geen rivierstuk van 40+ blokken vrij ({len(beste)})")
-        return None
-    pad = _herbemonster(beste, 1.5)
-    # the stop at the end closest to a path
-    pd = pad_afstand(park)
-    if pd[int(pad[-1][0]), int(pad[-1][1])] < pd[int(pad[0][0]), int(pad[0][1])]:
-        pad = list(reversed(pad))
-    x, z = pad[0]
+def _steiger_plek(park, pad, i0, i1, pd):
+    """The best jetty spot for the boat line between path indices i0..i1: a shore cell 3..10 blocks beside the line,
+    inside the park, away from fences, close to a footpath. Returns (cost, i, sx, sz) or None."""
     best = None
-    for h in range(0, 360, 10):
-        for r in range(2, 16):
-            sx, sz = int(x + math.cos(math.radians(h)) * r), int(z + math.sin(math.radians(h)) * r)
-            if not (0 <= sx < W and 0 <= sz < W):
+    for i in range(max(i0, 0), min(i1, len(pad)), 2):
+        x, z = pad[i]
+        a, b = pad[max(i - 2, 0)], pad[min(i + 2, len(pad) - 1)]
+        tx, tz = b[0] - a[0], b[1] - a[1]
+        tl = math.hypot(tx, tz) or 1
+        for kant in (1, -1):
+            nx_, nz_ = -tz / tl * kant, tx / tl * kant
+            for r in range(3, 11):
+                sx, sz = int(math.floor(x + nx_ * r)), int(math.floor(z + nz_ * r))
+                if not (2 <= sx < W - 2 and 2 <= sz < W - 2):
+                    break
+                if park.water[sx, sz]:
+                    continue
+                if (park.binnen[sx, sz] and not park.hek[sx, sz] and park.hek_afstand[sx, sz] >= 3
+                        and int(park.hoogte[sx, sz]) <= WATER_Y + 4):
+                    midden = abs(i - (i0 + i1) / 2) / max(i1 - i0, 1)
+                    kost = r * 2 + pd[sx, sz] + midden * 20 + max(0, int(park.hoogte[sx, sz]) - WATER_Y - 1) * 3
+                    if best is None or kost < best[0]:
+                        best = (kost, i, sx, sz)
                 break
-            if park.water[sx, sz]:
-                continue
-            if park.binnen[sx, sz] and not park.hek[sx, sz] and park.hek_afstand[sx, sz] >= 3:
-                kost = r * 2 + pd[sx, sz]
-                if best is None or kost < best[0]:
-                    best = (kost, sx, sz)
-            break
-    if best is None:
-        log(f"    s3: boot {zone}: geen plek voor de steiger aan de rivier")
+    return best
+
+
+def bootlijn(park, log):
+    """Round 4 (design 6.2, the user chose ONE line): one glass-bottom boat line up the river from the hoofdsteiger at
+    the village water past jetties in the savanne, the delta, the regenwoud and europa, and back the same way. The boats
+    stop at every jetty (hop on, hop off, like the truck). Data-driven start: park.boot_start (see boot_start)."""
+    start = boot_start(park)
+    if start is None:
+        log("    s3: bootlijn: geen startwater gevonden")
         return None
-    _, sx, sz = best
-    _boot_steiger(park, sx, sz, x, z, pad)
-    heen = [[round(a, 2), WATER_Y + 0.55, round(b, 2)] for a, b in pad]
-    terug = list(reversed(heen))[1:-1]
-    log(f"    s3: boot {zone}: {waarom}; rivierrit heen en terug ({len(heen) * 1.5:.0f} blokken), steiger bij ({sx},{sz})")
-    return {"zone": zone, "punten": heen + terug, "stap": 1.5, "heen_en_terug": True,
-            "steiger": [sx + 0.5, int(park.hoogte[sx, sz]) + 1.0, sz + 0.5]}
+    meer = P(*MEREN[0][0])
+    ruw = _herbemonster([start, meer] + [P(x, z) for x, z in reversed(RIVIER)], 1.0)
+    pad = [start]
+    laatste = ZONES.index(BOOT_HALTES[-1])
+    in_laatste = 0
+    for x, z in ruw[1:]:
+        s_ = _snap(park, x, z, r=5)
+        if s_ is None or math.hypot(s_[0] - pad[-1][0], s_[1] - pad[-1][1]) < 0.5:
+            continue
+        pad.append(s_)
+        if park.zone_vol[int(s_[0]), int(s_[1])] == laatste:
+            in_laatste += 1
+            if in_laatste > 70:                     # far enough into the last zone
+                break
+    pad = _herbemonster(pad, 1.0)
+    # smooth the line (the snapped river middle zigzags a little), then keep the hull off the banks
+    xs = np.convolve(np.r_[[pad[0][0]] * 3, [q[0] for q in pad], [pad[-1][0]] * 3], np.ones(7) / 7, "valid")
+    zs = np.convolve(np.r_[[pad[0][1]] * 3, [q[1] for q in pad], [pad[-1][1]] * 3], np.ones(7) / 7, "valid")
+    pad = _herbemonster(_midden(park, _herbemonster(list(zip(xs.tolist(), zs.tolist())), 1.0), r=1.5, schuif=2.5), 1.0)
+    blijft = _kanaal(park, pad, _dorp_masker(park), log)
+    # the jetties: the hoofdsteiger at the start, then one per stop zone along the line
+    pd = pad_afstand(park)
+    haltes = []
+    best = _steiger_plek(park, pad, 0, min(14, len(pad) - 1), pd)
+    if best:
+        _, i, sx0, sz0 = best
+        pad = pad[i:]                                            # the line starts at the hoofdsteiger's stop
+        haltes.append({"naam": "hoofdsteiger", "zone": "entree", "i": 0, "land": (sx0, sz0)})
+    for zone in BOOT_HALTES:
+        zi_ = ZONES.index(zone)
+        idx = [i for i, (x, z) in enumerate(pad) if park.zone_vol[int(x), int(z)] == zi_]
+        if len(idx) < 10:
+            log(f"    s3: bootlijn: de rivier komt niet door {zone}")
+            continue
+        vorige = haltes[-1]["i"] + 20 if haltes else 0
+        best = _steiger_plek(park, pad, max(idx[0] + 4, vorige), idx[-1] - 4, pd)
+        if best is None:
+            log(f"    s3: bootlijn: geen steigerplek in {zone}")
+            continue
+        _, i, sx, sz = best
+        haltes.append({"naam": zone, "zone": zone, "i": i, "land": (sx, sz)})
+    if haltes:
+        pad = pad[:haltes[-1]["i"] + 6]
+    park.steigers = list(getattr(park, "steigers", None) or [])
+    for h in haltes:
+        x, z = pad[h["i"]]
+        h["pos"] = _lijn_steiger(park, h, x, z, pad)
+        park.steigers.append({"naam": f"boot_{h['naam']}", "pos": h["pos"]})
+    park._hoofdsteiger = next((h for h in haltes if h["naam"] == "hoofdsteiger"), None)
+    log(f"    s3: bootlijn {len(pad)} punten ({len(pad)} blokken heen), steigers: "
+        + ", ".join(f"{h['naam']} {h['land']}" for h in haltes))
+    if not haltes:
+        return None
+    return {"zone": "lijn", "punten": [[round(a, 2), WATER_Y + 0.55, round(b, 2)] for a, b in pad], "stap": 1.0,
+            "heen_en_terug": True, "steiger": haltes[0]["pos"],
+            "haltes": [{"naam": h["naam"], "zone": h["zone"], "i": h["i"], "steiger": h["pos"]} for h in haltes]}
+
+
+def _lijn_steiger(park, h, x, z, punten):
+    """A jetty of the boat line: the plank deck from the shore to the boat (_boot_steiger), a shore landing that climbs
+    one block a step to the ground, a little roof with a lantern over the waiting end, a sign on the shore and a moored
+    rowing boat alongside. Returns the waiting spot (x, y, z) on the deck."""
+    sx, sz = h["land"]
+    _boot_steiger(park, sx, sz, x, z, punten)
+    dx, dz = x - (sx + 0.5), z - (sz + 0.5)
+    d = math.hypot(dx, dz) or 1
+    dx, dz = dx / d, dz / d
+    lang = max(1.0, d - 2.3)
+    # the shore landing: from the jetty root inland the ground at most one block up per step (the deck is a slab in the
+    # water surface: feet at WATER_Y + 0.5), 3 wide
+    for k in range(0, 8):
+        cx, cz = int(math.floor(sx + 0.5 - dx * k)), int(math.floor(sz + 0.5 - dz * k))
+        if not (0 <= cx < W and 0 <= cz < W) or park.water[cx, cz] or park.hek[cx, cz] or park.pad[cx, cz]:
+            break
+        doel = WATER_Y + k
+        if int(park.hoogte[cx, cz]) <= doel:
+            break
+        for a in (-1, 0, 1):
+            ax, az = int(math.floor(sx + 0.5 - dx * k - dz * a)), int(math.floor(sz + 0.5 - dz * k + dx * a))
+            if not park.water[ax, az] and not park.hek[ax, az] and not park.pad[ax, az] \
+                    and int(park.hoogte[ax, az]) > doel:
+                vlak(park, ax, az, doel, top="coarse_dirt", onder="dirt", vrij=4)
+    try:
+        from .zone_savanne import paadje
+        paadje(park, (int(math.floor(sx + 0.5 - dx * 2)), int(math.floor(sz + 0.5 - dz * 2))), max_r=24, blok="dirt_path")
+    except Exception:
+        pass
+    # the waiting end: a roof on 4 posts over 3 x 3 of the deck, a hanging lantern under it; the posts keep 2.2 from the
+    # boat's line (else the roof moves a step back toward the shore, or there is none: never a roof without posts)
+    ex, ez = sx + 0.5 + dx * lang, sz + 0.5 + dz * lang
+
+    def cel(t, a):
+        return int(math.floor(ex - dx * t - dz * a)), int(math.floor(ez - dz * t + dx * a))
+
+    def paal_voet(cx, cz):
+        if park.pad[cx, cz] or park.hek[cx, cz]:
+            return None
+        if any(math.hypot(cx + 0.5 - bx_, cz + 0.5 - bz_) <= 2.2 for bx_, bz_ in punten):
+            return None
+        voet = WATER_Y + 1 if park.water[cx, cz] else int(park.hoogte[cx, cz]) + 1
+        return voet if voet <= WATER_Y + 3 else None
+
+    for k in (0.0, 1.0, 2.0):
+        palen = [cel(t, a) for t in (k, k + 2) for a in (-1, 1)]
+        voeten = [paal_voet(cx, cz) for cx, cz in palen]
+        if any(v is None for v in voeten):
+            continue
+        for (cx, cz), v in zip(palen, voeten):
+            for y in range(v, WATER_Y + 4):
+                park.set(cx, y, cz, "minecraft:spruce_fence")
+        for t in (k, k + 1, k + 2):
+            for a in (-1, 0, 1):
+                cx, cz = cel(t, a)
+                if park.water[cx, cz]:
+                    _steiger_cel(park, cx, cz)
+                if park.v[cx, WATER_Y + 4, cz] == 0:
+                    park.set(cx, WATER_Y + 4, cz, "minecraft:spruce_slab", type="bottom", waterlogged="false")
+        mx, mz = cel(k + 1, 0)
+        park.set(mx, WATER_Y + 3, mz, "minecraft:lantern", hanging="true", waterlogged="false")
+        break
+    # the sign on the shore beside the jetty root, facing the land
+    zx, zz = int(math.floor(sx + 0.5 - dz * 2 - dx)), int(math.floor(sz + 0.5 + dx * 2 - dz))
+    if 0 <= zx < W and 0 <= zz < W and not park.water[zx, zz] and not park.pad[zx, zz] and not park.hek[zx, zz]:
+        g = int(park.hoogte[zx, zz])
+        if park.v[zx, g + 1, zz] == 0:
+            regels = (["Glasbodemboot", "Hoofdsteiger", "Kano huren:", "hier!"] if h["naam"] == "hoofdsteiger"
+                      else ["Glasbodemboot", "Steiger", ZONE_NAAM.get(h["zone"], h["zone"]), "Stap in!"])
+            bord(park, zx, g + 1, zz, regels, rotation=_rotatie_naar(-dx, -dz), blok="minecraft:spruce_sign")
+    # a moored rowing boat alongside the deck, near the shore (a hull of top slabs and a bench)
+    for kant in (2, -2):
+        cel = []
+        for t in (0.5, 1.5, 2.5):
+            cx, cz = int(math.floor(sx + 0.5 + dx * t - dz * kant)), int(math.floor(sz + 0.5 + dz * t + dx * kant))
+            cel.append((cx, cz))
+        if all(_boot_water(park, cx, cz) and all(math.hypot(cx + 0.5 - bx_, cz + 0.5 - bz_) > 2.6 for bx_, bz_ in punten)
+               for cx, cz in cel):
+            for n_, (cx, cz) in enumerate(cel):
+                _steiger_cel(park, cx, cz)
+                park.set(cx, WATER_Y, cz, "minecraft:spruce_slab", type="top", waterlogged="true")
+                if n_ == 1:
+                    park.set(cx, WATER_Y + 1, cz, "minecraft:white_carpet")
+            break
+    return [round(ex - dx * 1.0, 2), WATER_Y + 0.5, round(ez - dz * 1.0, 2)]
+
+
+def _steiger_cel(park, x, z):
+    """Remember a water cell taken by a jetty (controle.kano skips them: a jetty at the bank is meant to be there)."""
+    if getattr(park, "steiger_cellen", None) is None:
+        park.steiger_cellen = set()
+    park.steiger_cellen.add((int(x), int(z)))
 
 
 def _boot_steiger(park, sx, sz, x, z, punten=()):
@@ -1188,6 +1325,7 @@ def _boot_steiger(park, sx, sz, x, z, punten=()):
             cx, cz = int(math.floor(px - dz * a)), int(math.floor(pz + dx * a))
             if park.water[cx, cz] and park.v[cx, WATER_Y + 1, cz] == 0 and not bij_kano(cx, cz):
                 park.set(cx, WATER_Y, cz, "minecraft:spruce_slab", type="bottom", waterlogged="true")
+                _steiger_cel(park, cx, cz)
         t += 0.5
     ex, ez = int(math.floor(sx + 0.5 + dx * lang)), int(math.floor(sz + 0.5 + dz * lang))
     for a in (-1, 1):
@@ -1195,6 +1333,7 @@ def _boot_steiger(park, sx, sz, x, z, punten=()):
         if any(math.hypot(cx + 0.5 - bx_, cz + 0.5 - bz_) < 2.2 for bx_, bz_ in punten):
             continue                    # (final fix round 3: an end post never where the boat passes)
         if park.water[cx, cz] and not bij_kano(cx, cz):
+            _steiger_cel(park, cx, cz)
             park.set(cx, WATER_Y, cz, "minecraft:spruce_fence", waterlogged="true")
             park.set(cx, WATER_Y + 1, cz, "minecraft:spruce_fence")
             park.set(cx, WATER_Y + 2, cz, "minecraft:lantern", hanging="false", waterlogged="false")
@@ -1305,10 +1444,12 @@ def bouw(park, log=print):
         park.hek_afstand = distance_transform_edt(~(park.hek & ~park.water))
     s3 = {}
     s3["route"] = truckroute(park, log)
+    park._s3_kano = None
+    lijn = bootlijn(park, log)                  # round 4: one boat line; the canoe is rented at its hoofdsteiger
     s3["kano"] = kano(park, log)
     park._s3_kano = s3["kano"]
     s3["kabelbaan"] = kabelbaan(park, log)
-    s3["boot"] = {"routes": [r for r in (boot(park, "delta", log), boot(park, "ijskust", log)) if r]}
+    s3["boot"] = {"routes": [lijn] if lijn else []}
     s3["race"] = racebaan(park, log)
     s3["schemabord"] = schemabord(park, log)
     park._s3 = s3

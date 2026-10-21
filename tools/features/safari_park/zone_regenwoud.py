@@ -336,6 +336,16 @@ def schuilhut(park, x, z, kijk="north", hout="spruce", log=print):
                                   powered="false"))
     park.set(bx, g + 2, bz, state(f"{hout}_door", facing=tegen, half="upper", hinge="left", open="false",
                                   powered="false"))
+    # (round 4) a way out of the back door: on a slope the door opened onto the hill; cut a 1-wide trail that climbs
+    # one block per step until it meets the terrain (or a path / water)
+    ux, uz = (-kx // 2, -kz // 2)
+    for k in range(1, 10):
+        tx, tz = bx + ux * k, bz + uz * k
+        if not (0 <= tx < kit.W and 0 <= tz < kit.W) or park.water[tx, tz]:
+            break
+        if int(park.hoogte[tx, tz]) <= g + k - 1:
+            break
+        zet_hoogte(park, tx, tz, g + k - 1, top="coarse_dirt")
     kit.stoel(park, x, g + 1, z, kijk)                      # a guh chair looking out of the slit
     park.set(x, g + 3, z, state("lantern", hanging="true", waterlogged="false"))
     return g

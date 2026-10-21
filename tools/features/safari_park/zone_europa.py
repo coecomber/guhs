@@ -120,7 +120,11 @@ def toren(park, x, z, hout="spruce", dak="spruce", hoogte=8, dakblok=None):
                 if not (abs(dx) == 2 and abs(dz) == 2):
                     park.set(x + dx, p + 1, z + dz, f"{hout}_fence")
     park.set(x, p + 1, z + 2, "air")                                # gap for the ladder
-    for y in range(int(park.hoogte[x, z + 3]) + 1, p + 1):
+    # (round 4) the ladder hangs on a log post (a ladder needs a block behind it: without one the check removed it and
+    # the deck could not be reached); the post ends under the deck opening: from the top rung you step onto the post, then onto the deck
+    for y in range(int(park.hoogte[x, z + 2]) + 1, p):
+        park.set(x, y, z + 2, log)
+    for y in range(int(park.hoogte[x, z + 3]) + 1, p):              # every rung against the post
         park.set(x, y, z + 3, "ladder", facing="south", waterlogged="false")
     park.set(x, p, z + 2, "air")
     # roof

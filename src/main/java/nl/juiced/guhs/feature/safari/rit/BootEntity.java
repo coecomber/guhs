@@ -20,19 +20,22 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 
 /**
- * The glass-bottom boat (round 3, J2): a calm guided boat ride over the delta water and the ijskust bay, one boat per
- * route of {@link RitData#boten} (its route index is its timetable number k). It waits {@link RitSchema#BOOT_WACHT}
- * ticks at its jetty, then glides slowly round (or out and back) while the skipper tells three little things about what
- * swims below the glass floor (hippos and manatees, penguins and the narwhal). Get in and out only at the jetty.
- * Model: geckolib safari_rit/glasboot (tools/features/safari_rit.py).
+ * The glass-bottom boat (round 3, J2; round 4: the boat LINE). A route with jetties ({@link RitData.Bootroute#haltes}) is
+ * the one line up the river from the hoofdsteiger: {@link RitSchema#boten} boats run it and stop
+ * {@link RitSchema#BOOT_LIJN_WACHT} ticks at every jetty (hop on, hop off, like the truck); on the way to a jetty the
+ * skipper tells a little thing about what lives there. A route without jetties is the old calm loop with one stop at its
+ * jetty. Get in and out only while it stands at a jetty. Model: geckolib safari_rit/glasboot (tools/features/safari_rit.py).
  */
 public class BootEntity extends SchemaRit {
     public static final int PLAATSEN = 6, GUH_PLAATSEN = 2, VERHALEN = 3;
+    /** The timetable number k = route * PER_ROUTE + boat number on that route. */
+    public static final int PER_ROUTE = 100;
     private static final EntityDataAccessor<Boolean> DATA_STIL = SynchedEntityData.defineId(BootEntity.class, EntityDataSerializers.BOOLEAN);
     /** Seats (model pixels): the benches along both sides. */
     private static final double[][] ZIT = {{-17, 5, -24}, {17, 5, -24}, {-17, 5, -8}, {17, 5, -8}, {-17, 5, 8}, {17, 5, 8}, {-17, 5, 24}, {17, 5, 24}};
 
     private int vorigDeel = -1;
+    private int vorigeHalte = -2;
 
     public BootEntity(EntityType<? extends BootEntity> type, Level level) {
         super(type, level);
@@ -51,11 +54,16 @@ public class BootEntity extends SchemaRit {
     @Override
     protected void plaats(long t, boolean snap) {
         RitData d = RitData.get();
-        if (k() >= d.boten.size()) {
+        int route = k() / PER_ROUTE;
+        if (route >= d.boten.size()) {
             return;
         }
-        RitData.Bootroute r = d.boten.get(k());
+        RitData.Bootroute r = d.boten.get(route);
         double l = r.pad().lengte();
+        if (!r.haltes().isEmpty()) {
+            lijn(r, t, snap);
+            return;
+        }
         RitSchema.Stand s = RitSchema.boot(t, l);
         zet(r.pad().op(s.afstand()), r.pad().richting(s.afstand(), getYRot()), snap);
         if (level().isClientSide()) {
@@ -73,6 +81,34 @@ public class BootEntity extends SchemaRit {
             vertel(Component.translatable("gui.guhs.safari.boot." + r.zone() + "." + (deel - 1)));
         }
         vorigDeel = deel;
+    }
+
+    /** The boat line: stop at every jetty; arriving, the skipper names it; leaving, he tells about the next one. */
+    private void lijn(RitData.Bootroute r, long t, boolean snap) {
+        RitSchema.Stand s = RitSchema.bootLijn(t, k() % PER_ROUTE, n(), r.pad().lengte(), r.halteAfstanden());
+        zet(r.pad().op(s.afstand()), r.pad().richting(s.afstand(), getYRot()), snap);
+        if (level().isClientSide()) {
+            return;
+        }
+        if (s.staatStil() != staatStil()) {
+            entityData.set(DATA_STIL, s.staatStil());
+        }
+        if (snap) {
+            vorigeHalte = s.halte();
+            return;
+        }
+        if (s.halte() >= 0 && s.halte() != vorigeHalte) {
+            RitData.Halte h = r.haltes().get(s.halte());
+            vertel(s.halte() == 0 ? Component.translatable("gui.guhs.safari.boot.terug")
+                    : Component.translatable("gui.guhs.safari.boot.halte", Component.translatable("gui.guhs.safari.zone." + h.zone())));
+        } else if (s.halte() < 0 && vorigeHalte >= 0) {
+            RitData.Halte volgende = r.haltes().get((vorigeHalte + 1) % r.haltes().size());
+            if (!"entree".equals(volgende.zone())) {
+                int verhaal = Math.floorMod(vorigeHalte + k(), VERHALEN);
+                vertel(Component.translatable("gui.guhs.safari.boot." + volgende.zone() + "." + verhaal));
+            }
+        }
+        vorigeHalte = s.halte();
     }
 
     private void vertel(Component tekst) {

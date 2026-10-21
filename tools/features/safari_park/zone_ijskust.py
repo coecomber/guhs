@@ -124,7 +124,7 @@ def toren(park, cx, cz, hout="spruce", dak="minecraft:spruce_slab[type=bottom,wa
         park.set(cx, y + i, cz, log)
         park.set(cx, y + i, cz + 1, "minecraft:ladder[facing=south,waterlogged=false]")
     park.fill(cx - 2, y + hoog, cz - 2, cx + 2, y + hoog, cz + 2, planks)
-    park.set(cx, y + hoog, cz + 1, "minecraft:air")
+    park.set(cx, y + hoog, cz + 1, "minecraft:ladder[facing=south,waterlogged=false]")   # (round 4) up INTO the hatch
     park.set(cx, y + hoog, cz, log)
     for dx in range(-2, 3):
         for dz in range(-2, 3):
@@ -393,13 +393,21 @@ def kijkhut(park, cx, cz, kijk, hout="spruce", verhoog=1, B=3, D=2, glas="guhs:e
     naar = _richting((kx, kz))
     park.set(x, F + 1, z, f"minecraft:{hout}_door[facing={naar},half=lower,hinge=left,open=false,powered=false]")
     park.set(x, F + 2, z, f"minecraft:{hout}_door[facing={naar},half=upper,hinge=left,open=false,powered=false]")
-    for i in range(1, verhoog + 1):
+    # (round 4) the steps go down until they meet the real ground behind the hut (the floor stands on the HIGHEST ground
+    # of the footprint: on a slope the old fixed number of steps ended in the air, 2-3 blocks above the ground)
+    for i in range(1, 12):
         sx, sz = W(-D - i, 0)
         y = F + 1 - i
-        for yy in range(int(park.hoogte[sx, sz]), y):
+        grond_h = int(park.hoogte[sx, sz])
+        if grond_h >= y:
+            break                                           # the ground itself is the next step
+        for yy in range(grond_h, y):
             park.set(sx, yy, sz, planks)
         park.set(sx, y, sz, f"minecraft:{hout}_stairs[facing={naar},half=bottom,shape=straight,waterlogged=false]")
         ruim_kolom(park, sx, sz, y + 1, y + 4)
+        park.hoogte[sx, sz] = y
+        if y <= grond_h + 1:
+            break
     # benches (backrest away from the glass), a lantern, a sign-free sill
     terug = _richting((-kx, -kz))
     for w in (-2, -1, 1, 2):
@@ -713,6 +721,9 @@ def scheepswrak(park, rng, sx, sz):
             park.set(mx, y, wz - 1, "minecraft:ice")
 
 
+KOEPEL_GLAS = "minecraft:pink_stained_glass"    # (round 4) the dome and its tube: pink glass, not plain glass
+
+
 def onderwatertunnel(park, rng, sx, sz):
     """Round 3 (rebuilt): the underwater glass dome next to the wreck, reached from an entrance hall on the shore by a
     straight stair corridor (prismarine under the ground) and a level glass tube (only under water).
@@ -757,7 +768,7 @@ def onderwatertunnel(park, rng, sx, sz):
             for y in range(VLOER - 1, kit.WATER_Y):
                 d = math.sqrt((x - bx) ** 2 + ((y - cy) * 1.35) ** 2 + (z - bz) ** 2)
                 if d <= 5.6 and y >= VLOER:
-                    park.set(x, y, z, "minecraft:glass")
+                    park.set(x, y, z, KOEPEL_GLAS)
             if math.hypot(x - bx, z - bz) <= 5.6:
                 for y in range(int(park.hoogte[x, z]), VLOER):          # a solid base under the dome
                     park.set(x, y, z, "minecraft:prismarine_bricks")
@@ -809,6 +820,9 @@ def onderwatertunnel(park, rng, sx, sz):
     vlak_tot = trap_start - trap_lengte          # the level tube from the dome to the foot of the stairs
     naar_hal = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[(ux, uz)]
     wx_, wz_ = -uz, ux
+    # (round 4) level the hall plot FIRST: levelling it after the corridor filled the top steps (radius 4 > the hall's
+    # 3) with 2 layers of stone, so the way down to the dome was shut
+    egaliseer(park, hx, hz, 4, gH, top="minecraft:snow_block", rond=False)
     for s in range(4, trap_start + 1):
         vloer = VLOER if s <= vlak_tot else VLOER + (s - vlak_tot)
         cx_, cz_ = bx + ux * s, bz + uz * s
@@ -817,12 +831,12 @@ def onderwatertunnel(park, rng, sx, sz):
             x, z = cx_ + wx_ * w, cz_ + wz_ * w
             if abs(w) == 2:                       # side walls
                 for y in range(vloer, vloer + 5):
-                    park.set(x, y, z, "minecraft:glass" if onder_water and y > vloer else "minecraft:prismarine_bricks")
+                    park.set(x, y, z, KOEPEL_GLAS if onder_water and y > vloer else "minecraft:prismarine_bricks")
             else:
                 park.set(x, vloer, z, "minecraft:prismarine_bricks")
                 for y in range(vloer + 1, vloer + 4):
                     park.set(x, y, z, "minecraft:air")
-                park.set(x, vloer + 4, z, "minecraft:glass" if onder_water else "minecraft:prismarine_bricks")
+                park.set(x, vloer + 4, z, KOEPEL_GLAS if onder_water else "minecraft:prismarine_bricks")
                 if s > vlak_tot and w != 99:
                     park.set(x, vloer, z, f"minecraft:prismarine_brick_stairs[facing={naar_hal},half=bottom,shape=straight,waterlogged=false]")
                     park.set(x, vloer - 1, z, "minecraft:prismarine_bricks")
@@ -849,7 +863,6 @@ def onderwatertunnel(park, rng, sx, sz):
                 park.set(x, y, z, "minecraft:air")
             park.set(x, VLOER, z, "minecraft:prismarine_bricks")
     # 5. the entrance hall on the shore: 7 x 7, packed-ice walls with spruce corner posts, a door away from the sea
-    egaliseer(park, hx, hz, 4, gH, top="minecraft:snow_block", rond=False)
     for a in range(-3, 4):
         for b in range(-3, 4):
             x, z = hx + a, hz + b
@@ -872,11 +885,13 @@ def onderwatertunnel(park, rng, sx, sz):
             park.set(x, gH + 3, z, "minecraft:glass")
     # the stair well inside the hall: the last three steps come up through the hall floor (the hall code above laid
     # planks over them); railings on both sides and at the sea end, the walk-in side toward the door stays open
-    for s_ in range(trap_start - 2, trap_start + 1):
+    for s_ in range(trap_start - 3, trap_start + 1):
         trede = VLOER + (s_ - vlak_tot)
         for w in (-1, 0, 1):
             x, z = bx + ux * s_ + wx_ * w, bz + uz * s_ + wz_ * w
-            for y in range(trede + 1, gH + 4):
+            # (round 4) the step under the hall's wall row too, but only up to the floor: walking down, the head
+            # passes under the hall floor there (it blocked the way down by one block)
+            for y in range(trede + 1, (gH + 4) if s_ > trap_start - 3 else (gH + 1)):
                 park.set(x, y, z, "minecraft:air")
             park.set(x, trede, z, f"minecraft:prismarine_brick_stairs[facing={naar_hal},half=bottom,shape=straight,waterlogged=false]")
         for w in (-2, 2):
@@ -1441,6 +1456,18 @@ def plekken(park, plekken):
             if zee[x + ox, z + oz]:
                 zet_plek(plekken, "octopus", 0, x + ox, int(park.hoogte[x + ox, z + oz]) + 1, z + oz, 6)
                 break
+    # (round 4) more life round the pink dome: a diving pinguin group, seals and a second octopus in the water just
+    # outside the glass (homes in the water within 8..12 of the dome, on different sides), so the viewpoint is busy
+    if dome:
+        bx_, vy_, bz_ = dome
+        for soort, hoek, r, n_v, n_j in (("pinguin", 225, 9, 3, 2), ("zeehond", 90, 10, 2, 1), ("octopus", 330, 8, 1, 0),
+                                         ("pinguin", 30, 11, 2, 1)):
+            for dr in (0, 1, 2, -1, 3):
+                x = int(round(bx_ + math.cos(math.radians(hoek)) * (r + dr)))
+                z = int(round(bz_ + math.sin(math.radians(hoek)) * (r + dr)))
+                if zee[x, z] and park.hoogte[x, z] < kit.WATER_Y - 3:
+                    extra_plek(plekken, soort, ZONE, x, int(park.hoogte[x, z]) + 1, z, 4, n_v, n_j, water=True)
+                    break
     # pinguins at the slide: one group on the platform, one at the bottom on the shore
     if info["glijbaan"]:
         top, bodem = info["glijbaan"]

@@ -11,7 +11,8 @@ import java.util.List;
  *       {@link #trucks} of them run, spread evenly, so one comes by about every {@link #TRUCK_ELKE} ticks.</li>
  *   <li>{@link #GONDELS} gondolas go round the kabelbaan loop (two parallel lines, a turning loop in each station) and
  *       stand {@link #GONDEL_WACHT} ticks in every station.</li>
- *   <li>One glass-bottom boat per boat route goes round (or out and back) and waits {@link #BOOT_WACHT} at its jetty.</li>
+ *   <li>One glass-bottom boat per boat route goes round (or out and back) and waits {@link #BOOT_WACHT} at its jetty;
+ *       the boat line (round 4) runs {@link #boten} boats that stop {@link #BOOT_LIJN_WACHT} at every jetty.</li>
  * </ul>
  */
 public final class RitSchema {
@@ -27,6 +28,9 @@ public final class RitSchema {
     /** The glass-bottom boat: slow (so you can look down) and a long stop at the jetty. */
     public static final double BOOT_SNELHEID = 0.09;
     public static final int BOOT_WACHT = 240;
+    /** Round 4: the boat LINE up the river (hop on, hop off at every jetty): a little faster, about one boat every 2 minutes. */
+    public static final double BOOT_LIJN_SNELHEID = 0.15;
+    public static final int BOOT_LIJN_WACHT = 200, BOOT_ELKE = 2400;
 
     /** Where a ride is: how far along, and (when it stands still) which stop and how long it still waits. */
     public record Stand(double afstand, int halte, int wachtNog) {
@@ -87,6 +91,17 @@ public final class RitSchema {
     /** The glass-bottom boat (one per boat route, calm) with its jetty at distance 0. */
     public static Stand boot(long t, double lengte) {
         return lus(t, 0, 1, lengte, List.of(0.0), BOOT_SNELHEID, BOOT_WACHT);
+    }
+
+    /** How many boats run the boat line (spread evenly, so one comes by about every {@link #BOOT_ELKE} ticks). */
+    public static int boten(double lengte, int haltes) {
+        long ronde = ronde(lengte, haltes, BOOT_LIJN_SNELHEID, BOOT_LIJN_WACHT);
+        return (int) Math.max(1, Math.round((double) ronde / BOOT_ELKE));
+    }
+
+    /** Boat k (of n) on the boat line at game time t, its jetties at these distances (sorted, the first at 0). */
+    public static Stand bootLijn(long t, int k, int n, double lengte, List<Double> haltes) {
+        return lus(t, k, n, lengte, haltes, BOOT_LIJN_SNELHEID, BOOT_LIJN_WACHT);
     }
 
     private RitSchema() {

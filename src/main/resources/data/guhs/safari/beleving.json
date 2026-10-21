@@ -278,11 +278,11 @@
   },
   {
    "pos": [
-    439,
-    67,
-    616
+    419,
+    66,
+    600
    ],
-   "facing": "north",
+   "facing": "east",
    "zone": "savanne"
   },
   {

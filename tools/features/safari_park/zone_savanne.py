@@ -375,7 +375,9 @@ def uitkijktoren(park, x, z, g, kijk_naar, hout="acacia", dak="hay_block", hoogt
     for y in range(g + 1, deck):
         park.set(x, y, z + 2, log)
         park.set(x, y, z + 1, "minecraft:ladder", facing="north", waterlogged="false")
-    park.v[x, deck, z + 1] = 0                                   # the hatch: an opening in the deck above the ladder
+    # the hatch: an opening in the deck above the ladder; (round 4) the ladder goes on up INTO the hatch, so you can
+    # step from the top rung onto the deck (it stopped one rung short: the deck could not be reached)
+    park.set(x, deck, z + 1, "minecraft:ladder", facing="north", waterlogged="false")
     # railing round the deck (fences auto-connect; spruce = fence family)
     for dx in range(-2, 3):
         for dz in range(-2, 3):
@@ -669,7 +671,8 @@ def kijkhut(park, x, z, g, kijk_naar=None, richting=None, hout="spruce", dak="ha
         ruim(park, X, Z, F + 1, F + 4)
         for k in range(verhoogd):
             X, Z = w(a, diep + 1 + k)
-            y = F - 1 - k
+            y = F - k              # (round 4) the top stair level with the landing (its back is at F + 1, the landing's
+                                   # walking height): one lower left a 1.5 block step you could not climb
             for yy in range(g + 1, y):
                 park.set(X, yy, Z, basis)
             park.set(X, y, Z, trap(f"minecraft:{hout}_stairs", f))
@@ -913,7 +916,7 @@ def trotse_rots(park):
         if not (0 <= tx < W and 0 <= tz < W) or park.zone[tx, tz] != zi("savanne"):
             continue
         if any(park.water[int(cx + dx * t), int(cz + dz * t)] or park.water[int(cx + dx * t - dz * 3), int(cz + dz * t + dx * 3)]
-               or park.water[int(cx + dx * t + dz * 3), int(cz + dz * t - dx * 3)] for t in range(0, 26)):
+               or park.water[int(cx + dx * t + dz * 3), int(cz + dz * t - dx * 3)] for t in range(0, 34)):
             continue                                        # (no rock over the river: the canoe passes there)
         score = pd[tx, tz] + park.hek_afstand[tx, tz] * 0.5
         if best is None or score > best[0]:
@@ -923,7 +926,7 @@ def trotse_rots(park):
     # layer its own wobble), ledges, cracks with dry grass, boulders round the foot, a shrub on the shoulder
     ruimte = float(park.hek_afstand[cx, cz])
     S = max(1.0, min(1.35, (ruimte - 6.0) / 13.0))
-    R0, HH = 9.0 * S, int(round(10 * S))
+    R0, HH = 9.0 * S, int(round(12 * S))          # (round 4: taller and more tapered, a sharper silhouette)
     g = int(np.median(park.hoogte[cx - 8:cx + 9, cz - 8:cz + 9]))
     blokken = ("minecraft:granite", "minecraft:granite", "minecraft:granite", "minecraft:stone", "minecraft:andesite",
                "minecraft:polished_granite", "minecraft:terracotta", "minecraft:light_gray_terracotta")
@@ -933,7 +936,7 @@ def trotse_rots(park):
     lichaam = set()
     for dy in range(0, HH):
         y = g + dy
-        rr = R0 * (1.0 - dy / (HH * 2.1))
+        rr = R0 * (1.0 - dy / (HH * 1.55))
         if dy >= HH - 2:
             rr *= 0.9                                               # a slightly smaller crown: ledges round the top
         ox, oz = -ux * dy * 0.25 * S, -uz * dy * 0.25 * S
@@ -956,17 +959,34 @@ def trotse_rots(park):
                 park.set(x, g + dy, z, "minecraft:coarse_dirt")
                 if park.v[x, g + dy + 1, z] == 0 and RNG.random() < 0.5:
                     park.set(x, g + dy + 1, z, "minecraft:dead_bush" if RNG.random() < 0.3 else "minecraft:short_grass")
-    # the tongue: a slab 4 wide, 2 thick, from the top edge out over the plain, rising slightly, open underneath
-    for t in range(0, int(13 * S)):
-        bx, bz = cx + ux * (4 * S + t), cz + uz * (4 * S + t)
-        y = top - 1 + (1 if t > 7 * S else 0)
-        w = 2.4 if t < 10 * S else 1.5
-        for s in np.arange(-w, w + 0.01, 0.5):
-            x, z = int(round(bx - uz * s)), int(round(bz + ux * s))
-            for yy in (y - 1, y):
+    # (round 4, 'puntiger, meer zoals Pride Rock') the tongue: a long wedge out of the top edge over the plain, wide and
+    # thick at the root, tapering to a sharp point, rising toward the tip (a step of 1 every ~4 blocks: walkable), the
+    # underside cut away diagonally so it reads as one jutting blade against the sky
+    L = int(round(17 * S))
+    tong_top = []
+    for t in range(0, L):
+        f = t / max(L - 1, 1)
+        bx, bz = cx + ux * (3 * S + t), cz + uz * (3 * S + t)
+        y = top + int(t * 0.25)
+        w = 2.8 * (1 - f) + 0.4
+        dik = max(1, int(round(4.5 * (1 - f) + 0.6)))
+        for s_ in np.arange(-w, w + 0.01, 0.5):
+            x, z = int(round(bx - uz * s_)), int(round(bz + ux * s_))
+            for yy in range(y - dik + 1, y + 1):
                 park.set(x, yy, z, "minecraft:granite" if (x + z + yy) % 3 else "minecraft:polished_granite")
-            if RNG.random() < 0.25:
-                park.set(x, y - 2, z, "minecraft:granite")         # a ragged underside
+            ruim(park, x, z, y + 1, y + 3)
+            if RNG.random() < 0.2 and dik > 1:
+                park.set(x, y - dik, z, "minecraft:granite")       # a ragged underside
+        if w >= 1.2:
+            tong_top.append((int(round(bx)), y, int(round(bz))))
+    # the root: fill between the plateau and the rising tongue so it grows out of the crown (no step > 1)
+    for t in range(0, int(5 * S)):
+        bx, bz = cx + ux * t, cz + uz * t
+        for s_ in np.arange(-2.5, 2.51, 0.5):
+            x, z = int(round(bx - uz * s_)), int(round(bz + ux * s_))
+            for yy in range(top - 2, top + 1):
+                if park.v[x, yy, z] == 0:
+                    park.set(x, yy, z, "minecraft:granite")
     # top plateau: dry grass tufts, a little acacia shrub on the shoulder (shade for the lions)
     for x in range(cx - rmax, cx + rmax + 1):
         for z in range(cz - rmax, cz + rmax + 1):
@@ -1018,7 +1038,8 @@ def trotse_rots(park):
                     if park.v[x, yy, z] == 0:
                         park.set(x, yy, z, "minecraft:stone")
     SPOTS["trotse_rots_top"] = (cx, top + 1, cz)
-    SPOTS["trotse_rots_tong"] = (int(cx + ux * 12 * S), top + 1, int(cz + uz * 12 * S))
+    tx_, ty_, tz_ = tong_top[int(len(tong_top) * 0.75)] if tong_top else (int(cx + ux * 12 * S), top, int(cz + uz * 12 * S))
+    SPOTS["trotse_rots_tong"] = (tx_, ty_ + 1, tz_)
     SPOTS["trotse_rots_richting"] = (ux, uz)
 
 
@@ -1435,6 +1456,25 @@ def brug_halte(park):
             near = any(park.pad[x + dx, z + dz] for dx in (-2, -1, 0, 1, 2) for dz in (-2, -1, 0, 1, 2))
             if near and (x, z) not in ((x0, z0), (x0 + 5, z0), (x0, z0 + 5), (x0 + 5, z0 + 5)):
                 park.v[x, DECK + 1, z] = 0
+    # (round 4) a real gangway from the platform to the bridge deck: the middle of the platform's bridge side straight
+    # to the deck, 2 wide, planks at deck height and the way cleared (any railing: the bridge builder's fences are not
+    # spruce); before, the platform floated 2 blocks beside the bridge behind its railing and nobody could get on it
+    bx_, bz_ = -nx * zijde, -nz * zijde
+    stap = (int(round(bx_)), int(round(bz_)))
+    if abs(stap[0]) + abs(stap[1]) != 1:
+        stap = (int(math.copysign(1, bx_)), 0) if abs(bx_) >= abs(bz_) else (0, int(math.copysign(1, bz_)))
+    kant = [(x, z) for x, z in cells if (x - (x0 + 2.5)) * stap[0] + (z - (z0 + 2.5)) * stap[1] > 2]
+    kant.sort(key=lambda c: abs((c[0] - (x0 + 2.5)) * stap[1]) + abs((c[1] - (z0 + 2.5)) * stap[0]))
+    for (x, z) in kant[:2]:
+        park.v[x, DECK + 1, z] = 0
+        for k in range(1, 9):
+            gx, gz = x + stap[0] * k, z + stap[1] * k
+            s_ = park.get(gx, DECK, gz)
+            boven = park.get(gx, DECK + 1, gz)
+            ruim(park, gx, gz, DECK + 1, DECK + 4)
+            if s_ != "minecraft:air" and "water" not in s_ and "fence" not in boven and k > 1 and park.pad[gx, gz]:
+                break                                       # on the bridge deck (a path cell)
+            park.set(gx, DECK, gz, "minecraft:spruce_planks")
     # roof
     for lvl in range(4):
         y = DECK + 4 + lvl

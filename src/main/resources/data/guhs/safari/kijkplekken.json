@@ -979,18 +979,6 @@
    ],
    "favorieten": [
     {
-     "naam": "toren_oertijd_422_193_wolharige_neushoorn",
-     "pos": [
-      422,
-      81,
-      191
-     ],
-     "soorten": [
-      "wolharige_neushoorn"
-     ],
-     "straal": 3
-    },
-    {
      "naam": "toren_oertijd_422_193_mammoet",
      "pos": [
       414,
@@ -1191,6 +1179,19 @@
       "zebra"
      ],
      "straal": 3
+    },
+    {
+     "naam": "toren_savanne_469_579_2_giraffe",
+     "pos": [
+      465,
+      66,
+      611
+     ],
+     "soorten": [
+      "giraffe",
+      "kafferbuffel"
+     ],
+     "straal": 3
     }
    ]
   },
@@ -1198,26 +1199,26 @@
    "naam": "kijkhut_savanne_drinkpoel",
    "zone": "savanne",
    "oog": [
-    442.5,
-    68.62,
-    615.5
+    420.5,
+    67.62,
+    603.5
    ],
    "richting": [
-    0.0,
-    -1.0
+    1.0,
+    0.0
    ],
    "stoel": [
-    439,
-    67,
-    616
+    419,
+    66,
+    600
    ],
    "favorieten": [
     {
      "naam": "kijkhut_savanne_drinkpoel_1_olifant",
      "pos": [
-      442,
+      440,
       62,
-      593
+      603
      ],
      "soorten": [
       "olifant",
@@ -1228,9 +1229,9 @@
     {
      "naam": "kijkhut_savanne_drinkpoel_2_zebra",
      "pos": [
-      426,
+      444,
       62,
-      591
+      587
      ],
      "soorten": [
       "zebra",
@@ -1242,9 +1243,9 @@
     {
      "naam": "kijkhut_savanne_drinkpoel_3_giraffe",
      "pos": [
-      458,
-      63,
-      591
+      444,
+      64,
+      619
      ],
      "soorten": [
       "giraffe",
