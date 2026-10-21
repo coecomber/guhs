@@ -362,14 +362,13 @@ def dichtste_water(park, x, z, r=25):
 # ======================================================================================================================
 # europa
 R = kit.RESERVERINGEN
-BEVER = (196, 323)            # pond centre (behind the dam)
-DAM_X = 211                   # the dam runs north-south at this x
+BEVER = (187, 323)            # round 3: the middle pond of the beaver landscape (the lodge pond), see beverburcht()
 BEEK_EIND = (333, 318)        # pond of the watermill
 OTTER = (300, 336)            # otterglijbaan on the brook's south bank
 HOLLE_EIK = (284, 352)
 DAS = (160, 350)
 KRING = (204, 296)
-HERFST = (172, 300)
+HERFST = (172, 297)
 WEIDE = (318, 352)
 OOIEVAAR = (252, 322)
 TOREN = (300, 300)
@@ -379,135 +378,264 @@ RUINE = (394, 303)            # round 2: an overgrown little castle ruin on a lo
 OOST_HUT = (368, 333)         # front wall of the east kijkhut, looks north over the pond to the ruin
 
 
-def beverdam(park):
-    kap(park, 200, 323, 18)
-    # channel from the river's west bank into the hill
-    rx, rz = dichtste_water(park, 222, 323)
-    beek = [(x, 323) for x in range(DAM_X + 1, rx + 1)]
-    for x, z in beek:
-        for dz in (-1, 0, 1):
-            zet_grond(park, x, z + dz, WATER_Y - 3, "gravel", "dirt")
-            for y in range(WATER_Y - 2, WATER_Y + 1):
-                park.set(x, y, z + dz, "water", level=0)
-            park.water[x, z + dz] = True
-        for dz in (-2, 2):                                # banks at least 1 above the water
-            if park.hoogte[x, z + dz] < WATER_Y + 1:
-                zet_grond(park, x, z + dz, WATER_Y + 1)
-    oevers(park, [(x, z + dz) for x, z in beek for dz in (-1, 0, 1)], breed=3)
-    # the pond: two blocks higher than the river (the dam holds it), bigger in round 2, banks at least y 65
-    py = WATER_Y + 2
-    for x in range(BEVER[0] - 15, BEVER[0] + 16):
-        for z in range(BEVER[1] - 14, BEVER[1] + 15):
-            d = math.hypot((x - BEVER[0]) / 1.25, z - BEVER[1])
-            if x >= DAM_X - 1 or park.hek_afstand[x, z] < 4:
+def _hout(rng, axis=None):
+    """A random stick/log block for the beaver works (messy: mixed woods, axes, some stripped)."""
+    soorten = ("oak_log", "spruce_log", "dark_oak_log", "birch_log", "stripped_oak_log", "stripped_spruce_log",
+               "oak_wood", "dark_oak_wood")
+    s = soorten[int(rng.integers(0, len(soorten)))]
+    return kit.state(s, axis=axis or ("x", "y", "z")[int(rng.integers(0, 3))])
+
+
+def _modder(rng):
+    return ("mud", "packed_mud", "coarse_dirt", "mud", "rooted_dirt")[int(rng.integers(0, 5))]
+
+
+def _vijver_cellen(park, cx, cz, rx, rz, xmin, xmax, seed):
+    """Cells of a wobbly elliptic pond between xmin..xmax (exclusive of the dams), with their normalised distance."""
+    rng = np.random.default_rng(seed)
+    fase = rng.random(4) * 2 * math.pi
+    uit = {}
+    for x in range(int(cx - rx) - 2, int(cx + rx) + 3):
+        for z in range(int(cz - rz) - 2, int(cz + rz) + 3):
+            if x < xmin or x > xmax or park.hek_afstand[x, z] < 5 or park.pad[x, z]:
                 continue
-            if d <= 9.5:
-                zet_grond(park, x, z, py - 4 if d < 6 else py - 2, "mud" if d < 7 else "gravel", "dirt")
-                for y in range(int(park.hoogte[x, z]) + 1, py + 1):
-                    park.set(x, y, z, "water", level=0)
-                park.water[x, z] = True
-            elif d <= 12.5 and park.hoogte[x, z] < py + 1:
-                zet_grond(park, x, z, py + 1)
-    # the dam (round 2: bigger and more characteristic): three rows thick, a curved crest of crossed logs, branches
-    # (fences) and packed mud, from the bed up to py+2, wider than the channel and tied into both banks
-    for z in range(323 - 7, 323 + 8):
-        kern = abs(z - 323) <= 5
-        bed = WATER_Y - 3
-        top = py + 2 if kern else py + 1
-        for dxd in (-1, 0, 1):
-            x = DAM_X + dxd
-            for y in range(bed, top + 1):
-                r = (z * 3 + y * 5 + dxd * 7) % 6
-                if dxd == -1:
-                    blok = "mud" if y <= py else ("packed_mud" if r < 3 else kit.state("oak_log", axis="z"))
-                elif dxd == 0:
-                    blok = (kit.state("spruce_log", axis="z") if y % 2 else kit.state("oak_log", axis="z")) \
-                        if y < top else ("packed_mud" if r < 2 else kit.state("stripped_oak_log", axis="x"))
-                else:
-                    blok = kit.state("oak_log", axis="x") if r == 0 else ("packed_mud" if r < 3 else "mud")
-                park.set(x, y, z, blok)
-            park.water[x, z] = False
-            park.hoogte[x, z] = top
-        # branches sticking out of the crest, every other one leaning (fences + a log end)
-        if z % 2:
-            park.set(DAM_X, top + 1, z, "dark_oak_fence")
-            if z % 4 == 1:
-                park.set(DAM_X + 1, top + 1, z, "dark_oak_fence")
-    # the cascade on the downstream face: still pools stepping down (each source water in a closed basin, so nothing
-    # flows when the park is stamped), rims of slabs so the water seems to tumble over them
-    # pool 1 = a notch in the crest (x DAM_X-1..DAM_X, level py, open to the pond), rim slab at DAM_X+1;
-    # pool 2 one lower at DAM_X+2 (on a mud step in the channel), rim slab at DAM_X+3 over the channel water
-    for z in (322, 323, 324):
-        for x in (DAM_X - 1, DAM_X):
-            park.set(x, py, z, "water", level=0)
-            park.set(x, py - 1, z, "packed_mud")
-            park.set(x, py + 1, z, "air")
-            park.set(x, py + 2, z, "air")
-        park.set(DAM_X + 1, py, z, "mud_brick_slab", type="bottom", waterlogged="false")
-        park.set(DAM_X + 1, py - 1, z, "packed_mud")
-        park.set(DAM_X + 1, py + 1, z, "air")
-        park.set(DAM_X + 2, py - 1, z, "water", level=0)
-        park.set(DAM_X + 2, py - 2, z, "packed_mud")
-        park.set(DAM_X + 2, py, z, "air")
-        park.set(DAM_X + 3, py - 1, z, "mud_brick_slab", type="bottom", waterlogged="false")
-        park.water[DAM_X + 2, z] = False
-    for z in (321, 325):                                                # side walls of the notch and the pools
-        for x in (DAM_X - 1, DAM_X, DAM_X + 1, DAM_X + 2):
-            for y in range(py - 2, py + 1):
-                park.set(x, y, z, kit.state("spruce_log", axis="x"))
-    # the lodge (burcht), round 2: a big dome of logs, sticks and mud in the pond, a dry room inside, the entrance under
-    # water on the dam side, a smoke-hole of sticks on top
-    bx, bz = BEVER[0] - 2, BEVER[1]
-    R_, RY = 5.0, 4.2
-    for dx in range(-6, 7):
-        for dz in range(-6, 7):
-            for dy in range(-2, 6):
-                d = math.sqrt((dx / R_) ** 2 + (dz / R_) ** 2 + (dy / RY) ** 2)
-                if d > 1.0:
+            a = math.atan2(z - cz, x - cx)
+            wobbel = 1 + 0.13 * math.sin(3 * a + fase[0]) + 0.08 * math.sin(5 * a + fase[1])
+            d = math.hypot((x - cx) / rx, (z - cz) / rz) / wobbel
+            if d <= 1.0:
+                uit[(x, z)] = d
+    return uit
+
+
+def _vijver(park, cellen, level, diep, bodem="mud"):
+    """Carve a pond: bed level - diep in the middle (shallower toward the edge), water up to `level`, and SOFT BANKS:
+    the ring right next to the water at water level (an animal walks straight out), then +1 per block up to the old
+    ground (cut down when the ground was higher, raised when it was lower) - no trench, no plate."""
+    for (x, z), d in cellen.items():
+        bed = level - max(1, int(round(diep * (1 - d * d))))
+        zet_grond(park, x, z, bed, bodem if d < 0.75 else "gravel", "dirt")
+        for y in range(bed + 1, level + 1):
+            park.set(x, y, z, "water", level=0)
+        for y in range(level + 1, level + 12):
+            if park.v[x, y, z] and not _naam(park, x, y, z).endswith(("_log", "_wood")):
+                park.v[x, y, z] = 0
+        park.water[x, z] = True
+    rand = set()
+    for (x, z) in cellen:
+        for dx in range(-4, 5):
+            for dz in range(-4, 5):
+                c = (x + dx, z + dz)
+                if c in cellen or park.water[c] or park.pad[c] or park.hek[c] or park.hek_afstand[c] < 3:
                     continue
-                y = py + dy
-                if d <= 0.58 and dy >= 1:
-                    park.set(bx + dx, y, bz + dz, "air")
-                else:
-                    r = (dx * 7 + dz * 3 + dy * 11) % 7
-                    park.set(bx + dx, y, bz + dz,
-                             kit.state("spruce_log", axis="x") if r == 0 else
-                             kit.state("oak_log", axis="z") if r == 1 else
-                             kit.state("stripped_oak_log", axis="y") if r == 2 else
-                             "packed_mud" if r == 3 else "mud" if r == 4 else
-                             "dark_oak_wood" if r == 5 else "coarse_dirt")
-            park.water[bx + dx, bz + dz] = park.water[bx + dx, bz + dz] and math.hypot(dx, dz) > R_
-    park.set(bx, py + 1, bz, "hay_block", axis="y")                    # the beaver bed inside
-    park.set(bx + 1, py + 1, bz, "brown_carpet")
-    for dy in (5, 6):
-        park.set(bx, py + dy, bz, "dark_oak_fence")
-    park.set(bx - 1, py + 5, bz, "dark_oak_fence")
-    for y in (py - 1, py):                                              # underwater entrance toward the dam
-        for t in range(3, 6):
-            park.set(bx + t, y, bz, "water", level=0)
-    # gnawed trees on the banks: a stump with the typical waist (thin fence), a felled trunk with chips, a few stumps
-    knaag = [(181, 311), (188, 336), (205, 336), (206, 309), (180, 330), (193, 308), (199, 338)]
-    for i, (sx, sz) in enumerate(knaag):
-        if park.water[sx, sz] or park.hek_afstand[sx, sz] < 4 or park.pad[sx, sz]:
-            continue
-        g = int(park.hoogte[sx, sz])
-        park.set(sx, g + 1, sz, "stripped_oak_log", axis="y")
-        if i % 3 == 0:                                                   # half-gnawed: waist + the rest still standing
-            park.set(sx, g + 2, sz, "oak_fence")
-            park.set(sx, g + 3, sz, "oak_log", axis="y")
-            park.set(sx, g + 4, sz, "oak_log", axis="y")
-            park.set(sx, g + 5, sz, "oak_leaves", distance=1, persistent="true", waterlogged="false")
-        elif i % 3 == 1:                                                 # felled: the trunk lies next to the stump
-            for t in range(1, 5):
+                rand.add(c)
+    for (x, z) in rand:
+        r = min(math.hypot(x - a, z - b) for (a, b) in cellen if abs(x - a) <= 4 and abs(z - b) <= 4)
+        doel = level + max(0, int(round(r)) - 1)                          # ring 1: water level, then +1 per block
+        g = int(park.hoogte[x, z])
+        if doel == level and level != WATER_Y:
+            # an elevated pond (above the river): its beach is packed mud, which the generic oeverlijn pass (made for
+            # ponds at the water line) leaves alone - lowering it would let the pond run out
+            zet_grond(park, x, z, doel, "packed_mud", "dirt")
+        elif g > doel or g < level:
+            zet_grond(park, x, z, doel, "grass_block" if doel > level else "mud", "dirt")
+
+
+def _dam(park, xa, xb, z1, z2, top, rng, notch=None):
+    """A messy dam across the valley: cells x in xa..xb (west = upstream), z1..z2, from the bed up to `top` (+0/+1
+    jitter), stacked logs of mixed woods with mud packed between, branches (fences) sticking out of the crest and the
+    downstream face. notch = (zmid, [levels upstream -> downstream]): a 3-wide cascade of still pools in the crest."""
+    for x in range(xa, xb + 1):
+        for z in range(z1, z2 + 1):
+            if park.hek_afstand[x, z] < 4 or park.pad[x, z]:
+                continue
+            bed = min(int(park.hoogte[x, z]), WATER_Y - 2)
+            t = top + (1 if rng.random() < 0.35 else 0) - (1 if (z in (z1, z2) and rng.random() < 0.5) else 0)
+            for y in range(bed, t + 1):
+                park.set(x, y, z, _hout(rng, "z" if (y + x) % 2 else "x") if rng.random() < 0.62 else _modder(rng))
+            park.water[x, z] = False
+            park.hoogte[x, z] = t
+            if rng.random() < 0.3:
+                park.set(x, t + 1, z, ("dark_oak_fence", "spruce_fence", "oak_fence")[int(rng.integers(0, 3))])
+            elif rng.random() < 0.12:
+                park.set(x, t + 1, z, "dead_bush")
+    # logs sticking out of the downstream face, leaning (a horizontal log one block out, at random heights)
+    for z in range(z1 + 1, z2):
+        if rng.random() < 0.35:
+            y = top - int(rng.integers(1, 4))
+            if park.v[xb + 1, y, z] == 0:
+                park.set(xb + 1, y, z, kit.state("spruce_log", axis="x"))
+    if notch:
+        zmid, levels = notch
+        x = xa
+        cellen = []
+        # pool at the upstream level, then for every level drop: a rim (water one lower under a bottom slab), a pool
+        for i, lvl in enumerate(levels):
+            cellen.append(("pool", x, lvl))
+            x += 1
+            if i < len(levels) - 1:
+                cellen.append(("rim", x, levels[i + 1]))
+                x += 1
+        for kind, cx_, lvl in cellen:
+            if cx_ > xb:
+                break
+            for z in (zmid - 1, zmid, zmid + 1):
+                for y in range(lvl + 1, top + 5):
+                    park.set(cx_, y, z, "air")
+                park.set(cx_, lvl - 1, z, _modder(rng))
+                park.set(cx_, lvl, z, "water", level=0)
+                park.hoogte[cx_, z] = lvl - 1                                     # (later modules see the water)
+                park.water[cx_, z] = True
+                if kind == "rim":
+                    park.set(cx_, lvl + 1, z, "mud_brick_slab", type="bottom", waterlogged="false")
+            for z in (zmid - 2, zmid + 2):                                    # side walls of the cascade
+                for y in range(lvl - 1, lvl + 2):
+                    park.set(cx_, y, z, _hout(rng, "x"))
+
+
+def _dode_boom(park, x, z, level, rng):
+    """A drowned tree standing in the flooded forest: a bare trunk from the bed, a few stubby branches, sometimes
+    snapped off with the top lying across the water."""
+    bed = int(park.hoogte[x, z])
+    hoog = level + int(rng.integers(3, 8))
+    soort = ("stripped_oak_log", "spruce_log", "stripped_spruce_log", "dark_oak_log", "birch_log")[int(rng.integers(0, 5))]
+    for y in range(bed + 1, hoog + 1):
+        park.set(x, y, z, kit.state(soort, axis="y"))
+    for _ in range(int(rng.integers(1, 4))):
+        dx, dz = [(1, 0), (-1, 0), (0, 1), (0, -1)][int(rng.integers(0, 4))]
+        y = int(rng.integers(level + 2, hoog + 1))
+        park.set(x + dx, y, z + dz, "spruce_fence" if rng.random() < 0.6 else kit.state(soort, axis="x" if dx else "z"))
+    if rng.random() < 0.3:                                                    # snapped: the top lies on the water
+        dx, dz = [(1, 0), (-1, 0), (0, 1), (0, -1)][int(rng.integers(0, 4))]
+        for t in range(1, 4):
+            if park.water[x + dx * t, z + dz * t]:
+                park.set(x + dx * t, level + 1, z + dz * t, kit.state(soort, axis="x" if dx else "z"))
+
+
+def _stronk(park, sx, sz, i):
+    """A gnawed stump with wood chips (every third half-gnawed with the typical waist, every third felled)."""
+    if park.water[sx, sz] or park.hek_afstand[sx, sz] < 4 or park.pad[sx, sz]:
+        return
+    g = int(park.hoogte[sx, sz])
+    park.set(sx, g + 1, sz, "stripped_oak_log", axis="y")
+    if i % 3 == 0:
+        park.set(sx, g + 2, sz, "oak_fence")
+        park.set(sx, g + 3, sz, "oak_log", axis="y")
+        park.set(sx, g + 4, sz, "oak_log", axis="y")
+        park.set(sx, g + 5, sz, "oak_leaves", distance=1, persistent="true", waterlogged="false")
+    elif i % 3 == 1:
+        for t in range(1, 5):
+            if not park.water[sx + t, sz]:
                 park.set(sx + t, int(park.hoogte[sx + t, sz]) + 1, sz, "oak_log", axis="x")
-            park.set(sx, g + 2, sz, "oak_button", face="floor", facing="north", powered="false")
-        else:
-            park.set(sx, g + 2, sz, "oak_button", face="floor", facing="north", powered="false")
-        for ddx, ddz in ((1, 1), (-1, 0), (0, -1)):                      # wood chips
-            xx, zz = sx + ddx, sz + ddz
-            gg = int(park.hoogte[xx, zz])
-            if park.v[xx, gg + 1, zz] == 0 and not park.water[xx, zz]:
-                park.set(xx, gg + 1, zz, "birch_button", face="floor", facing="east", powered="false")
+    for ddx, ddz in ((1, 1), (-1, 0), (0, -1)):
+        xx, zz = sx + ddx, sz + ddz
+        gg = int(park.hoogte[xx, zz])
+        if park.v[xx, gg + 1, zz] == 0 and not park.water[xx, zz]:
+            park.set(xx, gg + 1, zz, "birch_button", face="floor", facing="east", powered="false")
+
+
+# the beaver landscape (round 3): three ponds stepping down east to the river, held by three messy dams
+P1 = (158, 322, 11.5, 10.0, 67)          # upper pond = the flooded forest (centre, radii, water level)
+P2 = (187, 323, 12.5, 9.5, 65)            # middle pond with the lodge
+P3 = (208, 323, 3.2, 4.2, 63)            # lower pool
+D1 = (170, 173, 68)                      # dams: x from..to, crest
+D2 = (201, 204, 66)
+D3 = (211, 212, 64)
+BURCHT = (186, 322)
+
+
+def beverburcht(park):
+    """Round 3 (the user: 'veel epischer, mooier, wilder, niet nep'): a whole beaver landscape west of the river.
+    A flooded forest (upper pond, drowned trees) behind a first dam, the big lodge in the middle pond behind a second
+    dam, a lower pool behind a third, and the outflow into the river. Every dam has a little cascade of still pools in
+    its crest (no flowing water when stamped). Gnawed stumps, felled trunks and two canals into the woods. Soft banks
+    at water level everywhere (the beavers - and anything else - walk straight out of the water)."""
+    rng = np.random.default_rng(kit.SEED + 201)
+    for (cx, cz, rx, rz, _) in (P1, P2, P3):
+        kap(park, cx, cz, max(rx, rz) + 3)
+    kap(park, BURCHT[0], BURCHT[1], 8)
+    # the outflow channel from the lower pool to the river (3 wide, at river level, soft banks)
+    rx_, rz_ = dichtste_water(park, 222, P3[1])
+    kanaal = {}
+    for x in range(D3[1] + 1, rx_ + 1):
+        for dz in (-1, 0, 1):
+            kanaal[(x, P3[1] + dz)] = 0.4
+    _vijver(park, kanaal, WATER_Y, 3, "gravel")
+    # the three ponds (each only between its dams)
+    c1 = _vijver_cellen(park, P1[0], P1[1], P1[2], P1[3], 146, D1[0] - 1, kit.SEED + 211)
+    c2 = _vijver_cellen(park, P2[0], P2[1], P2[2], P2[3], D1[1] + 1, D2[0] - 1, kit.SEED + 212)
+    c3 = _vijver_cellen(park, P3[0], P3[1], P3[2], P3[3], D2[1] + 1, D3[0] - 1, kit.SEED + 213)
+    _vijver(park, c3, P3[4], 2, "gravel")
+    _vijver(park, c2, P2[4], 4, "mud")
+    _vijver(park, c1, P1[4], 3, "mud")
+    # the dams across the valley, each with its cascade: upper level ... down to one above the next pond
+    zs1 = [z for (x, z) in c1 if x == D1[0] - 1] + [z for (x, z) in c2 if x == D1[1] + 1]
+    zs2 = [z for (x, z) in c2 if x == D2[0] - 1] + [z for (x, z) in c3 if x == D2[1] + 1]
+    for (xa, xb, top), zs, levels, zmid in ((D1, zs1, [67, 66, 65], P1[1]),
+                                          (D2, zs2, [65, 64, 63], P2[1]),
+                                          (D3, [P3[1] - 3, P3[1] + 3], [63, 62], P3[1])):
+        z1, z2 = (min(zs) - 3, max(zs) + 3) if zs else (zmid - 6, zmid + 6)
+        _dam(park, xa, xb, z1, z2, top, rng, notch=(zmid, levels))
+        # tie the dam into the banks: the ground just beyond its ends at least the crest
+        for z in (z1 - 1, z1 - 2, z2 + 1, z2 + 2):
+            for x in range(xa - 1, xb + 2):
+                if not park.water[x, z] and park.hoogte[x, z] < top and park.hek_afstand[x, z] >= 4:
+                    zet_grond(park, x, z, top)
+    # the flooded forest: drowned trees standing in the upper pond, lily pads, reeds on the banks
+    gezet = []
+    for (x, z), d in sorted(c1.items(), key=lambda t: rng.random()):
+        if len(gezet) >= 14:
+            break
+        if d < 0.9 and all(math.hypot(x - a, z - b) >= 3.2 for a, b in gezet):
+            _dode_boom(park, x, z, P1[4], rng)
+            gezet.append((x, z))
+    for cellen, lvl in ((c1, P1[4]), (c2, P2[4])):
+        for (x, z), d in cellen.items():
+            if 0.55 < d < 0.95 and park.v[x, lvl + 1, z] == 0 and rng.random() < 0.06:
+                park.set(x, lvl + 1, z, "lily_pad")
+    # gnawed stumps and felled trunks along the banks, and two little canals into the woods (the beavers' roads)
+    i = 0
+    for (cx, cz, rx, rz, lv) in (P1, P2):
+        for k in range(9):
+            a = rng.random() * 2 * math.pi
+            sx, sz = int(cx + math.cos(a) * (rx + 2.5)), int(cz + math.sin(a) * (rz + 2.5))
+            _stronk(park, sx, sz, i)
+            i += 1
+    for (sx, sz, ex, ez) in ((P2[0] - 6, P2[1] - P2[3] + 2, P2[0] - 11, P2[1] - P2[3] - 6),
+                             (P2[0] + 5, P2[1] + P2[3] - 2, P2[0] + 9, P2[1] + P2[3] + 6)):
+        kan = {}
+        for (fx, fz) in lijn((sx, sz), (ex, ez)):
+            kan[(int(round(fx)), int(round(fz)))] = 0.3
+        _vijver(park, kan, P2[4], 2, "mud")
+    # the lodge: a big rough mound of sticks and mud in the middle pond, a dry room inside, the entrance under water
+    bx, bz = BURCHT
+    lvl = P2[4]
+    for dx in range(-7, 8):
+        for dz in range(-7, 8):
+            a = math.atan2(dz, dx)
+            r = 5.0 + 0.7 * math.sin(3 * a + 1.3) + 0.4 * math.sin(7 * a)
+            d = math.hypot(dx, dz)
+            if d > r:
+                continue
+            x, z = bx + dx, bz + dz
+            bed = int(park.hoogte[x, z])
+            boven = lvl + int(round(5.5 * math.sqrt(max(0.0, 1 - (d / r) ** 2)))) + 1
+            for y in range(bed, boven + 1):
+                binnen = d <= 2.6 and lvl + 1 <= y <= lvl + 3
+                park.set(x, y, z, "air" if binnen else (_hout(rng) if rng.random() < 0.55 else _modder(rng)))
+            park.water[x, z] = False
+            park.hoogte[x, z] = boven
+            if d > r - 1.2 and rng.random() < 0.45:                       # sticks poking out of the surface
+                park.set(x, boven + 1, z, ("dark_oak_fence", "spruce_fence", "oak_fence")[int(rng.integers(0, 3))])
+    park.set(bx, lvl, bz - 1, "water", level=0)                            # the plunge hole in the floor ...
+    for t in range(0, 8):                                                   # ... and the tunnel out under water
+        for y in (lvl - 2, lvl - 1):
+            if park.v[bx + t, y, bz - 1] != 0 or t < 6:
+                park.set(bx + t, y, bz - 1, "water", level=0)
+    park.set(bx, lvl - 1, bz - 1, "water", level=0)
+    park.set(bx + 1, lvl + 1, bz + 1, "hay_block", axis="y")              # the beaver bed + some litter
+    park.set(bx - 1, lvl + 1, bz + 1, "brown_carpet")
+    park.set(bx - 1, lvl + 1, bz - 1, "brown_carpet")
+    park.beverplekken = [(bx + 6, bz + 5), ((D1[0] + D1[1]) // 2, P1[1] + 5), ((D2[0] + D2[1]) // 2, P2[1] - 6)]
 
 
 def beek(park):
@@ -810,6 +938,67 @@ def dassenheuvel(park):
         park.set(ex, top, ez, "coarse_dirt")
         park.set(ex, top + 1, ez, "brown_carpet")
     park.das_kamer = (x, g + 1, z - 1)
+    dassentunnel(park, x, z, g)
+
+
+def dassentunnel(park, x, z, g):
+    """Round 3: the badgers' own tunnel from the burrow chamber up to the hill: 2 wide (a das is 1.24 wide), rising half a
+    block per block (bottom slab, full block, slab...) so a das walks up without jumping, the roof low enough that a
+    player cannot follow (1 or 1.5 high). It leaves the chamber through its west wall and comes out on the hill's west
+    flank in a burrow mouth. The path points are kept for the AI (J1): kijkplekken.json, viewpoint 'dassen-kijkkamer',
+    field 'pad' = {naam: 'dassentunnel', soorten: ['das'], punten: [[x, y, z]...]} from the chamber to the hill top."""
+    rijen = (z - 1, z)
+    punten = [[x + 0.5, g + 1, z - 0.5], [x - 3.5, g + 1, z - 0.5]]
+    k, tx = 0, x - 5
+    while k < 24:
+        S = g + 1 + 0.5 * k                         # the walking surface in this cell
+        n = int(S)
+        half = S - n > 0.25
+        boven = min(int(park.hoogte[tx, r]) for r in rijen)
+        plafond = n + 2 if half else n + 1
+        if plafond > boven:                          # the roof would stick out of the hill: this is the mouth
+            break
+        for r in rijen:
+            for y in range(g - 1, n):
+                park.set(tx, y, r, "dirt")
+            # (the floor rises half a block per cell: slab, full block, slab... a das never has to jump)
+            if half:
+                park.set(tx, n, r, "mud_brick_slab", type="bottom", waterlogged="false")
+                park.set(tx, n + 1, r, "air")
+            else:
+                park.set(tx, n - 1, r, "rooted_dirt")
+                park.set(tx, n, r, "air")
+            park.set(tx, plafond, r, "dirt")
+        for r in (z - 2, z + 1):                     # the side walls stay solid
+            for y in range(g, plafond + 1):
+                if park.v[tx, y, r] == 0:
+                    park.set(tx, y, r, "dirt")
+        punten.append([tx + 0.5, S, z - 0.5])
+        tx -= 1
+        k += 1
+    # the mouth: an open trench out of the flank, a rim of coarse dirt and roots, leaf litter, a few stones
+    S = g + 1 + 0.5 * k
+    for t in range(0, 3):
+        mx = tx - t
+        for r in rijen:
+            top = int(park.hoogte[mx, r])
+            vloer = max(int(S) - 1, min(top, int(S) - 1))
+            for y in range(vloer + 1, top + 2):
+                park.set(mx, y, r, "air")
+            park.set(mx, vloer, r, "coarse_dirt")
+            park.hoogte[mx, r] = vloer
+        punten.append([mx + 0.5, vloer + 1, z - 0.5])
+    for (rx_, rz_) in ((tx + 1, z - 2), (tx + 1, z + 1), (tx, z - 2), (tx, z + 1)):
+        park.set(rx_, int(park.hoogte[rx_, rz_]), rz_, "coarse_dirt")
+    for (rx_, rz_) in ((tx - 1, z - 2), (tx - 2, z + 1)):
+        top = int(park.hoogte[rx_, rz_])
+        if park.v[rx_, top + 1, rz_] == 0:
+            park.set(rx_, top + 1, rz_, "brown_carpet")
+    # out on the hill: two more points toward the top (the badgers sun themselves there at dusk)
+    ux = tx - 5
+    punten.append([ux + 0.5, int(park.hoogte[ux, z - 1]) + 1, z - 0.5])
+    park.das_tunnel = [[round(float(a), 2) for a in p] for p in punten]
+    park.das_mond = (tx - 1, z - 1)
 
 
 def paddenstoelenkring(park):
@@ -1027,21 +1216,141 @@ def ooievaarsnest(park):
     park.set(x, top + 1, z, "brown_carpet")
 
 
+def hut_kijkplek(park, naam, x, z, kijk, F, zone="europa"):
+    """Register a kijkhut (built by kijkhut()) as a viewpoint: the eye behind the middle of the glass, the kijk-guh on
+    the chair right of the aisle."""
+    (fx, fz), (rx, rz) = _RICHTING[kijk]
+    ox, oz = x - fx, z - fz
+    return park.kijkplek(naam, zone, (ox + 0.5, F + 2.6, oz + 0.5), (fx, fz), (ox + rx, F + 1, oz + rz))
+
+
+def fav(park, k, naam, x, z, soorten, straal=3, y=None):
+    park.favoriet(naam, k, (x, y if y is not None else grond_y(park, x, z), z), soorten, straal)
+
+
+def knus(park, x, z, kijk, F, breed=7, diep=5, kleed="green_carpet"):
+    """Round 3: a cosy kijkhut inside (the user: no bare dark wood): a rug down the aisle, plants in the back corners, a
+    barrel with a map on it (a lectern-like reading spot), a guh lamp by the door."""
+    (fx, fz), (rx, rz) = _RICHTING[kijk]
+    h = breed // 2
+
+    def w2(u, w):
+        return x + u * rx + w * fx, z + u * rz + w * fz
+    for w in range(-diep + 2, 0):
+        cx, cz = w2(0, w)
+        if park.v[cx, F + 1, cz] == 0:
+            park.set(cx, F + 1, cz, kleed)
+    for u in (-h + 1, h - 1):
+        cx, cz = w2(u, -diep + 2)
+        if park.v[cx, F + 1, cz] == 0:
+            park.set(cx, F + 1, cz, "potted_fern" if u < 0 else "potted_azalea_bush")
+    cx, cz = w2(h - 1, -diep + 3)
+    if park.v[cx, F + 1, cz] == 0:
+        park.set(cx, F + 1, cz, "barrel", facing="up", open="false")
+        park.set(cx, F + 2, cz, "white_carpet")
+    lx, lz = w2(-h + 1, -diep + 3)                         # a happy guh lamp in the other back corner
+    if park.v[lx, F + 1, lz] == 0:
+        park.lamp(lx, F + 1, lz, "guhlamp")
+
+
+def vuurvliegjes(park, cx, cz, r, n, seed, op=("grass_block", "podzol", "moss_block", "dirt", "coarse_dirt")):
+    """Firefly bushes (a soft glow at dusk) on free ground in a circle, registered as lights."""
+    rng = np.random.default_rng(seed)
+    gezet = 0
+    for _ in range(n * 8):
+        if gezet >= n:
+            break
+        a, d = rng.random() * 2 * math.pi, math.sqrt(rng.random()) * r
+        x, z = int(cx + math.cos(a) * d), int(cz + math.sin(a) * d)
+        if park.water[x, z] or park.pad[x, z] or park.hek_afstand[x, z] < 3:
+            continue
+        g = int(park.hoogte[x, z])
+        if park.v[x, g + 1, z] == 0 and _naam(park, x, g, z).split(":")[1] in op:
+            park.lamp(x, g + 1, z, "minecraft:firefly_bush")
+            gezet += 1
+
+
+def lantaarnpaal(park, x, z, hout="spruce"):
+    """A little lantern post (log + fence + lantern) on free ground beside a path or a door."""
+    if park.water[x, z] or park.pad[x, z] or park.hek_afstand[x, z] < 3:
+        return
+    g = int(park.hoogte[x, z])
+    if park.v[x, g + 1, z] != 0 and not _naam(park, x, g + 1, z).endswith(("short_grass", "fern", "_carpet")):
+        return
+    park.set(x, g + 1, z, kit.state(f"{hout}_log", axis="y"))
+    park.set(x, g + 2, z, f"{hout}_fence")
+    park.lamp(x, g + 3, z, "lantaarn")
+
+
+def molen_binnen(park):
+    """The watermill's room: sacks of grain (hay), barrels, a rug, a hanging lantern, a little bench by the window."""
+    ex, ez = BEEK_EIND
+    x, z = ex + 8, ez
+    g = int(park.hoogte[x, z]) if park.v[x, int(park.hoogte[x, z]), z] else int(park.hoogte[x, z])
+    vloer = None
+    for y in range(WATER_Y, WATER_Y + 20):
+        if _naam(park, x, y, z) == "minecraft:cobblestone" and park.v[x, y + 1, z] == 0:
+            vloer = y
+            break
+    if vloer is None:
+        return
+    for dx in range(-2, 3):
+        for dz in range(-2, 3):
+            if park.v[x + dx, vloer + 1, z + dz] == 0 and abs(dx) <= 1 and abs(dz) <= 1:
+                park.set(x + dx, vloer + 1, z + dz, "brown_carpet")
+    park.set(x + 2, vloer + 1, z - 2, "hay_block", axis="y")
+    park.set(x + 2, vloer + 2, z - 2, "hay_block", axis="y")
+    park.set(x + 1, vloer + 1, z - 2, "barrel", facing="up", open="false")
+    park.set(x - 2, vloer + 1, z + 2, "barrel", facing="up", open="false")
+    park.set(x - 2, vloer + 1, z - 2, "composter", level=0)
+    park.lamp(x, vloer + 4, z, "lantaarn_hangend")
+
+
 def bouw(park, log=print):
-    for naam in ("beverdam", "beek", "otterglijbaan", "holle_eik", "dassenheuvel", "paddenstoelenkring",
+    for naam in ("beek", "otterglijbaan", "holle_eik", "dassenheuvel", "paddenstoelenkring",
                  "herfsthoekje", "hertenweide", "ooievaarsnest", "kikkervijver", "kasteelruine"):
         globals()[naam](park)
+    molen_binnen(park)
+    # the beaver landscape last of the landmarks: the tree clearing (kap) of the other spots must not eat its logs
+    kap(park, HUT[0], HUT[1] - 4, 7)
+    beverburcht(park)
     for (x, z) in (TOREN,):
         kap(park, x, z, 6)
         vlak(park, x, z, 3.5, int(park.hoogte[x, z]))
         toren(park, x, z, hout="spruce", hoogte=9)
     kap(park, HUT[0], HUT[1] - 4, 7)
-    kijkhut(park, HUT[0], HUT[1], kijk="south", hout="spruce", dak="dark_oak", naam="bever-kijkhut", zicht=20)
+    F = kijkhut(park, HUT[0], HUT[1], kijk="south", hout="spruce", dak="dark_oak", naam="bever-kijkhut", zicht=7)
+    knus(park, HUT[0], HUT[1], "south", F)
+    k = hut_kijkplek(park, "bever-kijkhut", HUT[0], HUT[1], "south", F)
+    bx, bz = BURCHT
+    fav(park, k, "burcht", bx + 1, bz - 6, ["bever", "otter"], 3)
+    fav(park, k, "dam_midden", (D2[0] + D2[1]) // 2, P2[1] - 6, ["bever"], 2)
+    fav(park, k, "dam_boven", (D1[0] + D1[1]) // 2, P1[1] - 6, ["bever"], 2)
     kap(park, OOST_HUT[0], OOST_HUT[1] + 4, 7)
-    kijkhut(park, OOST_HUT[0], OOST_HUT[1], kijk="north", hout="oak", dak="spruce", naam="vijver-kijkhut", zicht=15)
+    F = kijkhut(park, OOST_HUT[0], OOST_HUT[1], kijk="north", hout="oak", dak="spruce", naam="vijver-kijkhut", zicht=15)
+    knus(park, OOST_HUT[0], OOST_HUT[1], "north", F, kleed="lime_carpet")
+    k = hut_kijkplek(park, "vijver-kijkhut", OOST_HUT[0], OOST_HUT[1], "north", F)
+    fav(park, k, "vijver", VIJVER[0], VIJVER[1] - 2, ["ooievaar"], 3, y=WATER_Y)
+    fav(park, k, "ruinewei", RUINE[0] - 7, RUINE[1] + 11, ["edelhert", "egel"], 3)
+    # the dassen-kijkkamer: its favourite spot is INSIDE the burrow chamber, and the badgers' tunnel goes with it
+    kx, ky, kz = park.das_kamer
+    k = park.kijkplek("dassen-kijkkamer", "europa", (DAS[0] + 0.5, ky + 1.6, DAS[1] + 4.5), (0, -1),
+                      (DAS[0] - 3, ky, DAS[1] + 5))
+    park.favoriet("burchtkamer", k, (kx, ky, kz), ["das"], 2)
+    k["pad"] = {"naam": "dassentunnel", "soorten": ["das"], "punten": park.das_tunnel}
+    # lighting (round 3): fireflies in the damp places, lantern posts at the huts and the mill, the burrow mouth
+    vuurvliegjes(park, KRING[0], KRING[1], 7, 9, kit.SEED + 231)
+    vuurvliegjes(park, HERFST[0], HERFST[1], 9, 6, kit.SEED + 232)
+    vuurvliegjes(park, P1[0], P1[1], P1[2] + 5, 10, kit.SEED + 233)
+    vuurvliegjes(park, VIJVER[0], VIJVER[1], 11, 8, kit.SEED + 234)
+    vuurvliegjes(park, HOLLE_EIK[0], HOLLE_EIK[1], 8, 5, kit.SEED + 235)
+    for (lx, lz) in ((HUT[0] + 4, HUT[1] - 9), (OOST_HUT[0] - 4, OOST_HUT[1] + 9), (BEEK_EIND[0] + 4, BEEK_EIND[1] + 5),
+                     (park.das_mond[0] - 2, park.das_mond[1] + 4), (HOLLE_EIK[0] + 6, HOLLE_EIK[1] - 3),
+                     (RUINE[0] - 2, RUINE[1] + 7)):
+        lantaarnpaal(park, lx, lz)
     # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges: leaks are sealed generically by controle.lekken)
     for naam, (x, z, r) in {"toren": (TOREN[0], TOREN[1], 5), "das": (DAS[0], DAS[1], 11),
-                             "bever": (BEVER[0], BEVER[1], 11), "ruine": (RUINE[0], RUINE[1], 11),
+                             "bever": (BEVER[0], BEVER[1], 9), "ruine": (RUINE[0], RUINE[1], 11),
                              "vijver": (VIJVER[0], VIJVER[1], 10)}.items():
         if not ver_van_hek(park, x, z, r):
             log(f"  LET OP europa: {naam} ligt dicht bij een hek")
@@ -1054,13 +1363,18 @@ def bouw(park, log=print):
 
 
 def plekken(park, plekken_):
-    # round 2: the beavers on both flanks of the lodge, in full view of the bever-kijkhut (north bank)
-    zet_huizen(park, plekken_, "bever", [(BEVER[0] + 11, BEVER[1] - 5)], "europa")
-    extra_huis(park, plekken_, "bever", (BEVER[0] - 12, BEVER[1] - 7), "europa")
+    # round 3: the beavers live over the whole beaver landscape: the lodge, the middle dam, the upper dam (as many homes
+    # as there are beaver families; more beavers = a higher count in plekken.SOORTEN, the homes are ready)
+    pl = park.beverplekken
+    zet_huizen(park, plekken_, "bever", pl, "europa", straal=9)
+    for (x, z) in pl[len([p for p in plekken_ if p["soort"] == "bever"]):]:
+        extra_huis(park, plekken_, "bever", (x, z), "europa", straal=9)
     zet_huizen(park, plekken_, "otter", [(OTTER[0] - 6, OTTER[1] - 2), (OTTER[0] + 12, OTTER[1] - 8),
                                          (OTTER[0] - 22, OTTER[1] + 4)], "europa")
     kx, ky, kz = park.das_kamer
-    zet_huizen(park, plekken_, "das", [(kx, kz)], "europa", y=ky, straal=3)       # in the burrow chamber
+    # round 3: the badgers' home spans the chamber and the tunnel up to the hill (the AI walks them along the tunnel
+    # path, kijkplekken.json 'dassentunnel'), so one or two are always in the chamber in front of the glass
+    zet_huizen(park, plekken_, "das", [(kx - 3, kz)], "europa", y=ky, straal=8)
     zet_huizen(park, plekken_, "egel", [(HOLLE_EIK[0] + 5, HOLLE_EIK[1] + 3), (HERFST[0] + 2, HERFST[1] + 1),
                                         (HERFST[0] - 4, HERFST[1] + 5)], "europa")
     zet_huizen(park, plekken_, "vuursalamander", [(KRING[0] + 4, KRING[1] + 3)], "europa")
