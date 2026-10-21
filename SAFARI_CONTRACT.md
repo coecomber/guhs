@@ -228,3 +228,16 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - Register kijkplekken + favorieten.
   - Specials: dome higher + sea lanterns + entrance + iglo walls + east edge closed (ijskust); beverburcht landscape + dassentunnel (europa); soft banks (australie, everywhere).
   - Never their own water/bridge fixes.
+
+### J1 leest (kijkplekken.json + punten, read leniently by `gedrag/Kijkplekken.java`)
+- Root: `{"kijkplekken": [...], "punten": {...}}` (or just the list). Missing file or keys: the animals simply stroll at home.
+- Viewpoint: `naam`, `zone`, `oog` [x,y,z], `richting` (yaw degrees / "north".. / [dx,dz] / or `kijk_naar` [x,y,z]; default: toward its favourites), `stoel` [x,y,z], `favorieten` [{`naam`, `pos` [x,y,z] (ground level, where the animal stands), `soorten` [ids] (empty = any species), `straal`}]. A viewpoint may also carry its own `punten`.
+- Favourites are visited by animals of those species whose home lies within (home radius + 20) blocks and in the same zone. Hiders never hide inside a viewpoint's view cone (28 blocks, 50 degrees half-angle).
+- `punten` (name -> list of [x,y,z], or a nested object whose lists are flattened, e.g. `{"dassentunnel": {"a": [...], "b": [...]}}`):
+  - `dassentunnel`: ordered from the entrance at the top down to the viewing room (each point walkable, ≤ 6 blocks apart; a badger that is stuck hops to the next point);
+  - `glijbaan`: ordered from the BOTTOM of the slide (splash spot) up the side steps to the top;
+  - `beverdam`: spots on/at the dam where beavers bring branches;
+  - `beverburcht`: spots in/at the lodge (in and out of the water).
+  - A list is used by an animal only when all its points lie within (home radius + 40) and in the animal's zone.
+- Note for R3-A / Z3-Z4: more beavers around the dam please (plekken.py, bever is in the ZELDZAAM list; e.g. 2 homes of 3-4 near the dam + lodge).
+- `data/guhs/safari/bewoners.json` (J1, safari_dieren.py): the named residents; the first home (lowest id) of that species in that zone gets the name.

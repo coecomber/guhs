@@ -122,5 +122,9 @@
   "gui.guhs.safari.foto.naam.geitje": "little Goat",
   "gui.guhs.safari.foto.naam.alpaca": "alpaca",
   "gui.guhs.safari.foto.naam.cavia": "guinea Pig",
-  "gui.guhs.safari.foto.naam.ezeltje": "little Donkey"
+  "gui.guhs.safari.foto.naam.ezeltje": "little Donkey",
+  "gui.guhs.safari.dex.weergave.bewoners": "Residents",
+  "gui.guhs.safari.dex.bewoners.kop": "Famous residents %s/%s",
+  "gui.guhs.safari.dex.bewoners.uitleg": "Every zone has a few animals with a name. See a name tag? Take a photo of it!",
+  "gui.guhs.safari.bewoner.gefotografeerd": "You photographed %s! A famous resident of the park."
 }

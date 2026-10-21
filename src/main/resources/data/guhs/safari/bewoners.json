@@ -1,0 +1,98 @@
+[
+ {
+  "id": "olifant_savanne",
+  "soort": "olifant",
+  "zone": "savanne",
+  "naam": "Flappie"
+ },
+ {
+  "id": "leeuw_savanne",
+  "soort": "leeuw",
+  "zone": "savanne",
+  "naam": "Manenmans"
+ },
+ {
+  "id": "giraffe_savanne",
+  "soort": "giraffe",
+  "zone": "savanne",
+  "naam": "Langnek Lotte"
+ },
+ {
+  "id": "nijlpaard_delta",
+  "soort": "nijlpaard",
+  "zone": "delta",
+  "naam": "Gapende Gijs"
+ },
+ {
+  "id": "flamingo_delta",
+  "soort": "flamingo",
+  "zone": "delta",
+  "naam": "Roze Rosa"
+ },
+ {
+  "id": "luiaard_regenwoud",
+  "soort": "luiaard",
+  "zone": "regenwoud",
+  "naam": "Slome Sjaak"
+ },
+ {
+  "id": "toekan_regenwoud",
+  "soort": "toekan",
+  "zone": "regenwoud",
+  "naam": "Snavel Saar"
+ },
+ {
+  "id": "reuzenpanda_bamboe",
+  "soort": "reuzenpanda",
+  "zone": "bamboe",
+  "naam": "Bamboe Bas"
+ },
+ {
+  "id": "rode_panda_bamboe",
+  "soort": "rode_panda",
+  "zone": "bamboe",
+  "naam": "Pluimpje"
+ },
+ {
+  "id": "pinguin_ijskust",
+  "soort": "pinguin",
+  "zone": "ijskust",
+  "naam": "Flapje"
+ },
+ {
+  "id": "ijsbeer_ijskust",
+  "soort": "ijsbeer",
+  "zone": "ijskust",
+  "naam": "Sneeuwvlok"
+ },
+ {
+  "id": "mammoet_oertijd",
+  "soort": "mammoet",
+  "zone": "oertijd",
+  "naam": "Wolbol"
+ },
+ {
+  "id": "bever_europa",
+  "soort": "bever",
+  "zone": "europa",
+  "naam": "Knaagje"
+ },
+ {
+  "id": "otter_europa",
+  "soort": "otter",
+  "zone": "europa",
+  "naam": "Otto"
+ },
+ {
+  "id": "koala_australie",
+  "soort": "koala",
+  "zone": "australie",
+  "naam": "Slaapkop Kees"
+ },
+ {
+  "id": "kangoeroe_australie",
+  "soort": "kangoeroe",
+  "zone": "australie",
+  "naam": "Hupsje"
+ }
+]

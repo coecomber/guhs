@@ -44,7 +44,7 @@ public final class ParkData {
     public static final String DECOR = "decor";
 
     public record Soort(String naam, String zone, float breedte, float hoogte, float babySchaal, boolean man, Set<String> gedrag,
-                        List<String> animaties, double snelheid, boolean glow, Map<String, Float> idleMix) {
+                        List<String> animaties, double snelheid, boolean glow, Map<String, Float> idleMix, List<String> acties) {
         public boolean heeft(String g) {
             return gedrag.contains(g);
         }
@@ -226,7 +226,8 @@ public final class ParkData {
             }
         } else {
             for (String[] s : FALLBACK_SOORTEN) {
-                soorten.put(s[0], new Soort(s[0], s[1], 0.9f, 1.2f, 0.55f, false, Set.of(), List.of("idle", "walk", "blij", "eet"), 0.2, false, Map.of()));
+                soorten.put(s[0], new Soort(s[0], s[1], 0.9f, 1.2f, 0.55f, false, Set.of(), List.of("idle", "walk", "blij", "eet"), 0.2, false, Map.of(),
+                        List.of("rust")));
             }
         }
 
@@ -287,11 +288,17 @@ public final class ParkData {
                 }
             }
         }
+        List<String> acties = new ArrayList<>();
+        if (o.has("acties")) {
+            for (JsonElement a : o.getAsJsonArray("acties")) {
+                acties.add(a.getAsString());
+            }
+        }
         return new Soort(naam, str(o, "zone", "savanne"),
                 o.has("breedte") ? o.get("breedte").getAsFloat() : 0.9f, o.has("hoogte") ? o.get("hoogte").getAsFloat() : 1.2f,
                 o.has("baby_schaal") ? o.get("baby_schaal").getAsFloat() : 0.55f, o.has("man") && o.get("man").getAsBoolean(),
                 Set.copyOf(gedrag), List.copyOf(anim), o.has("snelheid") ? o.get("snelheid").getAsDouble() : 0.2,
-                o.has("glow") && o.get("glow").getAsBoolean(), Map.copyOf(mix));
+                o.has("glow") && o.get("glow").getAsBoolean(), Map.copyOf(mix), List.copyOf(acties));
     }
 
     @Nullable

@@ -76,7 +76,8 @@ public final class SafariClient {
                     String g = kies(soort, variant, SafariClient::geo);
                     state.addGeckolibData(MODEL, geo(g) ? g : "");
                     String t = kies(soort, variant, SafariClient::textuur);
-                    state.addGeckolibData(TEXTUUR, textuur(t) ? t : "");
+                    // round 3: asleep (at night or a nap) with its eyes shut, when the species has a _slaap texture
+                    state.addGeckolibData(TEXTUUR, !textuur(t) ? "" : dier.slaapt() && textuur(t + "_slaap") ? t + "_slaap" : t);
                     ParkData.Soort info = ParkData.get().soort(soort);
                     boolean kleineBaby = variant.equals("baby") && !g.endsWith("_baby");
                     state.addGeckolibData(SCHAAL, kleineBaby ? (info == null ? 0.55f : info.babySchaal()) : 1f);

@@ -71,9 +71,13 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<String> DATA_VARIANT = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_ACTIE = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_SLAAPT = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.BOOLEAN);
+    /** Round 3: the id of a "bekende bewoner" (bewoners.json), "" for an ordinary animal. */
+    private static final EntityDataAccessor<String> DATA_BEWONER = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.STRING);
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation SLAAP = RawAnimation.begin().thenLoop("slaap");
+    /** Round 3: activity animations that also play while it moves (the belly slide, carrying a branch, running). */
+    static final java.util.Set<String> BEWEGEND = java.util.Set.of("buikglij", "draag", "ren");
     /** How far outside its home an animal may stray before it is put back at once. */
     static final int TELEPORT_MARGE = 8, LOOP_MARGE = 2;
     /** (S3) True while this animal is calm and does not hide from players (the feeding time of its zone). */
@@ -86,10 +90,10 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private int plek = -1;
     private int generatie;
     private int actieTot;
-    private int volgendeActie = 200;
     @Nullable
     private ParkData.Soort info;
-    private boolean geregeld;
+    /** (BezigheidGoal: not before regel() set its navigation up.) */
+    boolean geregeld;
     /** Where a hanging animal (the sloth) hangs under a branch; null: it walks. Saved. */
     @Nullable
     private BlockPos hangPlek;
@@ -97,6 +101,19 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private int diepTel;
     /** Ticks until a species with an idle_mix picks its next standing animation. */
     private int mixPauze = 40;
+    /** Round 3: a nap by day (ticks left; it sleeps meanwhile, eyes shut). */
+    int dutTot;
+    /** Round 3: while it visits a spot outside its home (a favourite in view of a viewpoint, the slide, the tunnel, the dam),
+     *  its home reaches that far (bewaak); null: its own home only. */
+    @Nullable
+    BlockPos bezoek;
+    int bezoekStraal;
+    /** Round 3: how long a guh may still ride along (the capybara). */
+    private int rijdtTot;
+    /** (Tests) act even without a player nearby (and stay awake at night; favourites outside the park). */
+    public static boolean ALTIJD_ACTIEF = false;
+    @Nullable
+    BezigheidGoal bezigheid;
 
     public SafariDier(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -206,10 +223,12 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             @Override
             public boolean canUse() {
                 return info != null && info.heeft("verstopper") && hangPlek == null && !slaapt() && !KALM.test(SafariDier.this)
+                        && !(Safari.echt(level()) && nl.juiced.guhs.feature.safari.gedrag.Kijkplekken.get().inZicht(getX(), getY(), getZ()))
                         && super.canUse();
             }
         });
-        goalSelector.addGoal(5, new ThuisStroll());
+        bezigheid = new BezigheidGoal(this);
+        goalSelector.addGoal(5, bezigheid);
         goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8f) {
             @Override
             public boolean canUse() {
@@ -231,6 +250,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         builder.define(DATA_VARIANT, "vrouw");
         builder.define(DATA_ACTIE, "");
         builder.define(DATA_SLAAPT, false);
+        builder.define(DATA_BEWONER, "");
     }
 
     @Override
@@ -256,6 +276,62 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
 
     public boolean slaapt() {
         return entityData.get(DATA_SLAAPT);
+    }
+
+    /** Round 3: the "bekende bewoner" id ("" for an ordinary animal). */
+    public String bewoner() {
+        return entityData.get(DATA_BEWONER);
+    }
+
+    /** Round 3: makes this animal a named resident (a visible name tag). */
+    public void zetBewoner(String id, String naam) {
+        entityData.set(DATA_BEWONER, id);
+        setCustomName(Component.literal(naam));
+        setCustomNameVisible(true);
+    }
+
+    /** Round 3: the spot it is visiting now (null: at home). */
+    @Nullable
+    public BlockPos bezoek() {
+        return bezoek;
+    }
+
+    /** Round 3: what it is busy with now (null: nothing, e.g. no player near). */
+    @Nullable
+    public BezigheidGoal.Soort bezigheid() {
+        return bezigheid == null ? null : bezigheid.nu();
+    }
+
+    @Nullable
+    ParkData.Soort info() {
+        return info;
+    }
+
+    void zetActie(String a, int ticks) {
+        entityData.set(DATA_ACTIE, a);
+        actieTot = Math.max(1, ticks);
+    }
+
+    void stopActie() {
+        entityData.set(DATA_ACTIE, "");
+        actieTot = 0;
+    }
+
+    /** Round 3 (GuhReacties): lets a guh climb on for a little ride (the capybara). */
+    public boolean neemMee(Entity guh) {
+        if (!canAddPassenger(guh) || slaapt()) {
+            return false;
+        }
+        if (guh.startRiding(this, true, true)) {
+            rijdtTot = 160 + random.nextInt(120);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return "capibara".equals(soort()) && passenger instanceof nl.juiced.guhs.entity.GuhEntity && getPassengers().isEmpty();
     }
 
     public BlockPos thuis() {
@@ -295,6 +371,11 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     public void aiStep() {
         super.aiStep();
         if (!(level() instanceof ServerLevel level)) {
+            if (slaapt() && (tickCount + getId()) % 30 == 10) {
+                // round 3: zzz over its head, just like a sleeping guh
+                level().addParticle(nl.juiced.guhs.feature.emotes.EmotesFeature.GUH_ZZZ.get(), getX(), getY() + getBbHeight() + 0.1, getZ(),
+                        0.01 + random.nextDouble() * 0.01, 0.03, 0);
+            }
             return;
         }
         if (!geregeld) {
@@ -332,13 +413,14 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 }
             }
         }
-        if (--volgendeActie <= 0) {
-            volgendeActie = 200 + random.nextInt(600);
-            List<String> extra = info == null ? List.of() : info.extra();
-            if (!extra.isEmpty() && !slaapt() && getNavigation().isDone()) {
-                entityData.set(DATA_ACTIE, extra.get(random.nextInt(extra.size())));
-                actieTot = 60;
-            }
+        if (dutTot > 0) {
+            dutTot--;
+        }
+        if (isVehicle() && --rijdtTot <= 0) {
+            ejectPassengers();
+        }
+        if ((tickCount + getId()) % 40 == 0 && !slaapt() && level.hasNearbyAlivePlayer(getX(), getY(), getZ(), 24)) {
+            nl.juiced.guhs.feature.safari.gedrag.GuhReacties.kijk(level, this);
         }
     }
 
@@ -385,6 +467,11 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         }
         double dx = getX() - (thuis.getX() + 0.5), dz = getZ() - (thuis.getZ() + 0.5);
         double afstand = Math.sqrt(dx * dx + dz * dz);
+        int straal = this.straal;
+        if (bezoek != null) {
+            // visiting a spot: its home reaches up to there (the way there and back included)
+            straal = Math.max(straal, (int) Math.ceil(Math.hypot(bezoek.getX() - thuis.getX(), bezoek.getZ() - thuis.getZ())) + bezoekStraal);
+        }
         boolean uitZone = zone >= 0 && Safari.echt(level) && ParkData.get().zone(getBlockX(), getBlockZ()) != zone;
         boolean gevallen = getY() < thuis.getY() - 24 || getY() < level.getMinY() + 2;
         if (afstand > straal + TELEPORT_MARGE || uitZone || gevallen) {
@@ -420,7 +507,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         boolean nacht = info != null && info.heeft("nacht");
         boolean donker = level.isDarkOutside();
         // most animals sleep in the dark (nocturnal ones by day), but not all of them at once
-        boolean moet = (nacht != donker) && Math.floorMod(getUUID().hashCode(), 10) < 7;
+        boolean moet = !ALTIJD_ACTIEF && (nacht != donker) && Math.floorMod(getUUID().hashCode(), 10) < 7 && bezoek == null || dutTot > 0;
         if (moet != slaapt()) {
             entityData.set(DATA_SLAAPT, moet);
             if (moet) {
@@ -514,6 +601,9 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         tag.putInt("Zone", zone);
         tag.putInt("Plek", plek);
         tag.putInt("Generatie", generatie);
+        if (!bewoner().isEmpty()) {
+            tag.putString("Bewoner", bewoner());
+        }
         if (hangPlek != null) {
             tag.putInt("HangX", hangPlek.getX());
             tag.putInt("HangY", hangPlek.getY());
@@ -531,6 +621,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         zone = tag.getIntOr("Zone", -1);
         plek = tag.getIntOr("Plek", -1);
         generatie = tag.getIntOr("Generatie", 0);
+        entityData.set(DATA_BEWONER, tag.getStringOr("Bewoner", ""));
         int hy = tag.getIntOr("HangY", Integer.MIN_VALUE);
         hangPlek = hy == Integer.MIN_VALUE ? null : new BlockPos(tag.getIntOr("HangX", 0), hy, tag.getIntOr("HangZ", 0));
         geregeld = false;
@@ -548,7 +639,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             if (slaapt() && info != null && info.animaties().contains("slaap")) {
                 return state.setAndContinue(SLAAP);
             }
-            if (!a.isEmpty() && !state.isMoving()) {
+            if (!a.isEmpty() && (!state.isMoving() || BEWEGEND.contains(a))) {
                 return state.setAndContinue(RawAnimation.begin().thenLoop(a));
             }
             return state.setAndContinue(state.isMoving() ? WALK : IDLE);
@@ -560,82 +651,57 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         return cache;
     }
 
-    // --- strolling at home ----------------------------------------------------------------------------------------------------
+    // --- strolling at home: see BezigheidGoal (round 3: activities instead of only strolling) -------------------------------
 
-    /** Now and then a walk (or swim) to a random spot that lies in the home AND in the zone; never while asleep. */
-    final class ThuisStroll extends Goal {
-        private int pauze;
-
-        ThuisStroll() {
-            setFlags(EnumSet.of(Flag.MOVE));
+    /** A random spot in its home AND its zone to walk (or swim) to (null: none found this time). */
+    @Nullable
+    BlockPos kiesDoel(ServerLevel level) {
+        boolean boom = info.heeft("boom");
+        int r = boom ? Math.min(4, straal) : straal;
+        for (int poging = 0; poging < 8; poging++) {
+            double hoek = random.nextDouble() * Mth.TWO_PI, d = Math.sqrt(random.nextDouble()) * r;
+            int x = (boom ? getBlockX() : thuis.getX()) + (int) Math.round(Math.cos(hoek) * d);
+            int z = (boom ? getBlockZ() : thuis.getZ()) + (int) Math.round(Math.sin(hoek) * d);
+            if (!binnenThuis(x, z)) {
+                continue;
+            }
+            BlockPos p = magStaan(level, x, z);
+            if (p != null) {
+                return boom ? new BlockPos(x, getBlockY(), z) : p;
+            }
         }
+        return null;
+    }
 
-        @Override
-        public boolean canUse() {
-            if (slaapt() || info == null || hangPlek != null || !(level() instanceof ServerLevel level)) {
-                return false;
-            }
-            if (pauze > 0) {
-                pauze--;
-                return false;
-            }
-            int kans = info.heeft("boom") ? 600 : info.zee() ? 60 : 120;
-            if (random.nextInt(kans) != 0) {
-                return false;
-            }
-            if (!level.hasNearbyAlivePlayer(getX(), getY(), getZ(), 48)) {
-                return false;          // nobody to see it: no pathfinding (about 450 animals in the park)
-            }
-            BlockPos doel = kiesDoel(level);
-            if (doel == null) {
-                return false;
-            }
-            getNavigation().moveTo(doel.getX() + 0.5, doel.getY(), doel.getZ() + 0.5, 1.0);
-            return true;
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return !slaapt() && !getNavigation().isDone();
-        }
-
-        @Override
-        public void stop() {
-            pauze = 20 + random.nextInt(60);
-        }
-
-        @Nullable
-        private BlockPos kiesDoel(ServerLevel level) {
-            boolean boom = info.heeft("boom");
-            int r = boom ? Math.min(4, straal) : straal;
-            for (int poging = 0; poging < 8; poging++) {
-                double hoek = random.nextDouble() * Mth.TWO_PI, d = Math.sqrt(random.nextDouble()) * r;
-                int x = (boom ? getBlockX() : thuis.getX()) + (int) Math.round(Math.cos(hoek) * d);
-                int z = (boom ? getBlockZ() : thuis.getZ()) + (int) Math.round(Math.sin(hoek) * d);
-                if (!binnenThuis(x, z)) {
-                    continue;
-                }
-                if (zone >= 0 && Safari.echt(level) && ParkData.get().zone(x, z) != zone) {
-                    continue;
-                }
-                if (boom) {
-                    return new BlockPos(x, getBlockY(), z);
-                }
-                BlockPos p = grond(level, x, z);
-                FluidState f = level.getFluidState(p.below());
-                boolean nat = !f.isEmpty() || !level.getFluidState(p).isEmpty();
-                if (info.zee() && !nat) {
-                    continue;
-                }
-                if (!info.zee() && !info.water() && nat) {
-                    // a wading animal may stand in 1-deep water at the edge; nothing else goes into the water
-                    if (!info.wadend() || waterDiepte(level, p.below()) + waterDiepte(level, p) > 1) {
-                        continue;
-                    }
-                }
-                return p;
-            }
+    /** Where it may stand in this column (its zone, water rules of its species), null: not here. */
+    @Nullable
+    BlockPos magStaan(ServerLevel level, int x, int z) {
+        if (zone >= 0 && Safari.echt(level) && ParkData.get().zone(x, z) != zone) {
             return null;
         }
+        if (info.heeft("boom")) {
+            return new BlockPos(x, getBlockY(), z);
+        }
+        BlockPos p = grond(level, x, z);
+        FluidState f = level.getFluidState(p.below());
+        boolean nat = !f.isEmpty() || !level.getFluidState(p).isEmpty();
+        if (info.zee() && !nat) {
+            return null;
+        }
+        if (!info.zee() && !info.water() && nat) {
+            // a wading animal may stand in 1-deep water at the edge; nothing else goes into the water
+            if (!info.wadend() || waterDiepte(level, p.below()) + waterDiepte(level, p) > 1) {
+                return null;
+            }
+        }
+        return p;
+    }
+
+    int straalThuis() {
+        return straal;
+    }
+
+    int zoneIdx() {
+        return zone;
     }
 }

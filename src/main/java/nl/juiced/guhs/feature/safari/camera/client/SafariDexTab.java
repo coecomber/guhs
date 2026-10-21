@@ -47,7 +47,7 @@ import nl.juiced.guhs.feature.safari.kern.SafariSync;
  * Everything comes from the synced safari state ({@link SafariSync#stand}); the species list from {@link ParkData}.
  */
 public final class SafariDexTab {
-    private enum Weergave { DIEREN, MISSIES, GEHEIMPJES }
+    private enum Weergave { DIEREN, MISSIES, GEHEIMPJES, BEWONERS }
 
     private static final int TEKST = 0xFF5A3A4A, DONKER = 0xFF3A1C30, ROZE = 0xFF7A2848, LICHT = 0xFFB0708A;
     private static final int GEHEIMPJES = 8, CEL = 30;
@@ -207,6 +207,7 @@ public final class SafariDexTab {
         switch (weergave) {
             case MISSIES -> tekenMissies(g);
             case GEHEIMPJES -> tekenGeheimpjes(g);
+            case BEWONERS -> tekenBewoners(g);
             default -> tekenDieren(g, mouseX, mouseY);
         }
     }
@@ -324,6 +325,29 @@ public final class SafariDexTab {
         g.fill(x, y - 4, x + bw, y - 3, 0x60F7B6CB);
         y += GidsTekst.passend(g, Component.translatable("gui.guhs.safari.dex.sterren.kop").withStyle(ChatFormatting.BOLD), x, y, bw, 0.875f, ROZE, false) + 3;
         GidsTekst.alinea(g, Component.translatable("gui.guhs.safari.dex.sterren.uitleg"), x, y, bw, 0.75f, TEKST);
+    }
+
+    /** Round 3: the "bekende bewoners", named park animals; a name shows once you photographed it. */
+    private void tekenBewoners(GuiGraphicsExtractor g) {
+        List<nl.juiced.guhs.feature.safari.gedrag.Bewoners.Bewoner> alle = nl.juiced.guhs.feature.safari.gedrag.Bewoners.get();
+        CompoundTag vlaggen = stand().getCompoundOrEmpty("Vlaggen");
+        int gevonden = (int) alle.stream().filter(b -> vlaggen.getBooleanOr(nl.juiced.guhs.feature.safari.gedrag.Bewoners.VLAG + b.id(), false)).count();
+        int x = left + 12, y = gy + 2, bw = w - 24;
+        y += GidsTekst.passend(g, Component.translatable("gui.guhs.safari.dex.bewoners.kop", gevonden, alle.size()).withStyle(ChatFormatting.BOLD),
+                x, y, bw, 1f, DONKER, false) + 4;
+        int kol = 2, rijen = Math.max(1, (alle.size() + kol - 1) / kol);
+        int cw = (bw - 6) / kol, rij = Math.min(24, Math.max(14, (top + h - 30 - y) / rijen));
+        for (int i = 0; i < alle.size(); i++) {
+            var b = alle.get(i);
+            int cx = x + (i % kol) * (cw + 6), cy = y + (i / kol) * rij;
+            boolean heeft = vlaggen.getBooleanOr(nl.juiced.guhs.feature.safari.gedrag.Bewoners.VLAG + b.id(), false);
+            g.fill(cx, cy, cx + cw, cy + rij - 3, heeft ? 0x40F7B6CB : 0xFF2A1420);
+            Component soort = Component.translatable("entity.guhs.safari." + b.soort());
+            Component tekst = heeft ? Component.literal("✿ " + b.naam() + " ").append(Component.literal("(").append(soort).append(")").withStyle(ChatFormatting.GRAY))
+                    : Component.literal("??? ").append(Component.literal("(").append(Component.translatable("biome.guhs.safari_" + b.zone())).append(")"));
+            GidsTekst.passend(g, tekst, cx + 4, cy + (rij - 3) / 2 - 3, cw - 8, 0.75f, heeft ? DONKER : 0xFF8A6A7A, false);
+        }
+        GidsTekst.alinea(g, Component.translatable("gui.guhs.safari.dex.bewoners.uitleg"), x, top + h - 22, bw, 0.625f, LICHT);
     }
 
     private void tekenGeheimpjes(GuiGraphicsExtractor g) {
