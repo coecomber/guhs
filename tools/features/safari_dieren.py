@@ -366,7 +366,10 @@ def extra_animaties(soorten):
         if not (os.path.exists(pad) and os.path.exists(geo)):
             continue
         anims = json.load(open(pad, encoding="utf-8"))
-        if gedrag_anims.voeg_toe(s, json.load(open(geo, encoding="utf-8")), anims, shows(s)):
+        geo_data = json.load(open(geo, encoding="utf-8"))
+        nieuw = gedrag_anims.voeg_toe(s, geo_data, anims, shows(s))
+        nieuw += gedrag_anims.voeg_bouw_toe(s, geo_data, anims)       # 1.6.0 deel 2 (F10a): the helpers' work animations
+        if nieuw:
             with open(pad, "w", encoding="utf-8") as f:
                 json.dump(anims, f, indent=1)
 
@@ -456,10 +459,13 @@ def schrijf_soorten():
         if d.get("idle_mix"):
             uit[s]["idle_mix"] = d["idle_mix"]
         acties = ["rust"] + [a for a in ACTIES.get(s, []) if a != "rust"]
-        acties += [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM]
+        acties += [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM and not a.startswith("bouw_")]
         if "aaihoek" in d["gedrag"] or "geheim" in d["gedrag"]:
-            acties = ["rust"] + [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM]
+            acties = ["rust"] + [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM and not a.startswith("bouw_")]
         uit[s]["acties"] = acties
+        bouw = [a[len("bouw_"):] for a in namen if a.startswith("bouw_")]
+        if bouw:
+            uit[s]["bouw"] = bouw            # 1.6.0 deel 2 (F10a): the work animations a helper plays ("bouw_" + naam)
     os.makedirs(os.path.dirname(SOORTEN_JSON), exist_ok=True)
     with open(SOORTEN_JSON, "w", encoding="utf-8", newline="\n") as f:
         json.dump(uit, f, indent=1, ensure_ascii=False)

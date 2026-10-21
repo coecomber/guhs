@@ -283,6 +283,230 @@ def schelp(bt):
     return {"loop": True, "animation_length": 4.5, "bones": bones}
 
 
+# --- 1.6.0 deel 2 (F10a): work animations for the helper and build animals (design 2.8) ------------------------------
+# Played by the helpers (F10b) while they build; named bouw_<naam> and NOT park acties (safari_dieren skips "bouw_").
+# Each only when the model has the bones it moves; looping, so the helper can hold one as long as a job lasts.
+
+def _voorpoten(bt):
+    for paar in (("leg_front_left", "leg_front_right"), ("arm_left", "arm_right"), ("flipper_left", "flipper_right"),
+                 ("wing_left", "wing_right")):
+        if all(n in bt for n in paar):
+            return paar
+    return None
+
+
+def bouw_knaag(bt):
+    """Gnawing: head down at the trunk, quick little chews, ears twitching (the beaver felling a tree)."""
+    if "head" not in bt:
+        return None
+    bones = {"head": {"rotation": kf((0, [24, 0, 0]), *_trillen(0.1, 1.1, 0.1, [30, -6, 3], [26, 6, -3]), (1.2, [24, 0, 0]))}}
+    if "body" in bt:
+        bones["body"] = {"rotation": kf((0, [6, 0, 0]), (0.6, [8, 0, 0]), (1.2, [6, 0, 0]))}
+    for oor in ("ear_left", "ear_right"):
+        if oor in bt:
+            bones[oor] = {"rotation": kf(*_trillen(0, 1.2, 0.3, [0, 0, 0], [-15, 0, 0]))}
+    pp = _voorpoten(bt)
+    if pp:
+        for n in pp:
+            bones[n] = {"rotation": kf((0, [-35, 0, 0]))}
+    return {"loop": True, "animation_length": 1.2, "bones": bones}
+
+
+def bouw_graaf(bt):
+    """Digging: front down, the front paws scraping back one after the other (the earth flying: particles of the helper)."""
+    pp = _voorpoten(bt)
+    if not pp:
+        return None
+    w = _wortel(bt)
+    bones = {w: {"rotation": kf((0, [12, 0, 0])), "position": kf((0, [0, -0.6, 0]))},
+             pp[0]: {"rotation": kf((0, [-50, 0, 0]), (0.2, [40, 0, 0]), (0.4, [-50, 0, 0]))},
+             pp[1]: {"rotation": kf((0, [40, 0, 0]), (0.2, [-50, 0, 0]), (0.4, [40, 0, 0]))}}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [14, 0, 0]))}
+    if "tail" in bt:
+        bones["tail"] = {"rotation": kf((0, [-30, 0, 0]), (0.2, [-36, 0, 0]), (0.4, [-30, 0, 0]))}
+    return {"loop": True, "animation_length": 0.4, "bones": bones}
+
+
+def bouw_sjouw(bt, walk):
+    """Carrying a load while walking: the walk, head up; a trunk curled up, arms held in front."""
+    if not walk:
+        return None
+    bones = {k: dict(v) for k, v in walk["bones"].items()}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [-12, 0, 0]))}
+    if "trunk" in bt:
+        bones["trunk"] = {"rotation": kf((0, [-70, 0, 0]))}
+    if "trunk_tip" in bt:
+        bones["trunk_tip"] = {"rotation": kf((0, [-80, 0, 0]))}
+    for arm in ("arm_left", "arm_right"):
+        if arm in bt:
+            bones[arm] = {"rotation": kf((0, [-70, 0, 12 if arm == "arm_left" else -12]))}
+    return {"loop": True, "animation_length": walk["animation_length"], "bones": bones}
+
+
+def bouw_stamp(bt):
+    """Stamping the ground flat: up on the back legs a little, both front legs down with a thump, twice."""
+    pp = _voorpoten(bt)
+    if not pp or "leg_back_left" not in bt:
+        return None
+    w = _wortel(bt)
+    bones = {w: {"rotation": kf((0, [0, 0, 0]), (0.35, [-14, 0, 0]), (0.5, [2, 0, 0]), (0.6, [0, 0, 0]),
+                                (0.95, [-14, 0, 0]), (1.1, [2, 0, 0]), (1.2, [0, 0, 0]), (1.6, [0, 0, 0]))}}
+    for n in pp:
+        bones[n] = {"rotation": kf((0, [0, 0, 0]), (0.35, [-40, 0, 0]), (0.5, [6, 0, 0]), (0.6, [0, 0, 0]),
+                                   (0.95, [-40, 0, 0]), (1.1, [6, 0, 0]), (1.2, [0, 0, 0]), (1.6, [0, 0, 0]))}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [0, 0, 0]), (0.35, [-10, 0, 0]), (0.5, [8, 0, 0]), (0.95, [-10, 0, 0]),
+                                        (1.1, [8, 0, 0]), (1.6, [0, 0, 0]))}
+    return {"loop": True, "animation_length": 1.6, "bones": bones}
+
+
+def bouw_duw(bt):
+    """Pushing (demolishing, shoving snow): head down, the whole animal leaning in and shoving forward in pushes."""
+    if "head" not in bt:
+        return None
+    w = _wortel(bt)
+    bones = {"head": {"rotation": kf((0, [22, 0, 0]))},
+             w: {"position": kf((0, [0, 0, 0]), (0.5, [0, 0, -1.6]), (0.7, [0, 0, -1.4]), (1.2, [0, 0, 0]))}}
+    for n in _poten(bt):
+        if "back" in n:
+            bones[n] = {"rotation": kf((0, [0, 0, 0]), (0.5, [24, 0, 0]), (0.7, [22, 0, 0]), (1.2, [0, 0, 0]))}
+    if "trunk" in bt:
+        bones["trunk"] = {"rotation": kf((0, [20, 0, 0]))}
+    return {"loop": True, "animation_length": 1.2, "bones": bones}
+
+
+def bouw_pik(bt):
+    """Pecking / hacking: head (and a bird's body) in quick strokes forward (a woodpecker at a beam, a bill planting)."""
+    if "head" not in bt:
+        return None
+    bones = {"head": {"rotation": kf(*_trillen(0, 0.6, 0.075, [0, 0, 0], [38, 0, 0]))}}
+    for nek in ("hals", "neck"):
+        if nek in bt:
+            bones[nek] = {"rotation": kf(*_trillen(0, 0.6, 0.075, [0, 0, 0], [20, 0, 0]))}
+    if "body" in bt and ("wing_left" in bt or "leg_left" in bt):
+        bones["body"] = {"rotation": kf(*_trillen(0, 0.6, 0.075, [0, 0, 0], [8, 0, 0]))}
+    if "tail" in bt:
+        bones["tail"] = {"rotation": kf((0, [-15, 0, 0]))}
+    return {"loop": True, "animation_length": 0.6, "bones": bones}
+
+
+def bouw_klop(bt):
+    """Patting / hammering with both front paws (or flippers) down in turn (packing mud, snow, ice; nailing planks)."""
+    pp = _voorpoten(bt)
+    if not pp:
+        return None
+    a, b = pp
+    bones = {a: {"rotation": kf((0, [-90, 0, 0]), (0.25, [-30, 0, 0]), (0.5, [-90, 0, 0]))},
+             b: {"rotation": kf((0, [-30, 0, 0]), (0.25, [-90, 0, 0]), (0.5, [-30, 0, 0]))}}
+    if not a.startswith("leg"):
+        for n, z in ((a, 20), (b, -20)):
+            bones[n]["rotation"] = {t: [v[0], 0, z] for t, v in bones[n]["rotation"].items()}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [16, 0, 0]))}
+    return {"loop": True, "animation_length": 0.5, "bones": bones}
+
+
+def bouw_klim(bt):
+    """Climbing / reaching up: arms over the head in turn (hanging rope bridges, a tree house)."""
+    pp = _voorpoten(bt)
+    if not pp:
+        return None
+    a, b = pp
+    bones = {a: {"rotation": kf((0, [-160, 0, 10]), (0.5, [-110, 0, 10]), (1.0, [-160, 0, 10]))},
+             b: {"rotation": kf((0, [-110, 0, -10]), (0.5, [-160, 0, -10]), (1.0, [-110, 0, -10]))}}
+    w = _wortel(bt)
+    bones[w] = {"position": kf((0, [0, 0, 0]), (0.5, [0, 0.8, 0]), (1.0, [0, 0, 0]))}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [-20, 0, 0]))}
+    return {"loop": True, "animation_length": 1.0, "bones": bones}
+
+
+def bouw_plant(bt):
+    """Planting: head down to the ground, a little pat, back up with a happy wiggle (seedlings, flowers, reed)."""
+    if "head" not in bt:
+        return None
+    bones = {"head": {"rotation": kf((0, [0, 0, 0]), (0.5, [40, 0, 0]), (1.1, [40, 0, 0]), (1.4, [0, 0, 0]),
+                                     (1.6, [0, 0, 10]), (1.8, [0, 0, -10]), (2.0, [0, 0, 0]))}}
+    for nek in ("hals", "neck"):
+        if nek in bt:
+            bones[nek] = {"rotation": kf((0, [0, 0, 0]), (0.5, [45, 0, 0]), (1.1, [45, 0, 0]), (1.4, [0, 0, 0]))}
+    pp = _voorpoten(bt)
+    if pp and pp[0].startswith(("leg_front", "arm")):
+        bones[pp[0]] = {"rotation": kf((0, [0, 0, 0]), (0.6, [-30, 0, 0]), (0.75, [-10, 0, 0]), (0.9, [-30, 0, 0]),
+                                       (1.05, [-10, 0, 0]), (1.4, [0, 0, 0]))}
+    return {"loop": True, "animation_length": 2.0, "bones": bones}
+
+
+def bouw_staartklap(bt):
+    """The beaver's tail slapping down on the mud of the dam."""
+    if "tail" not in bt:
+        return None
+    w = _wortel(bt)
+    bones = {"tail": {"rotation": kf((0, [0, 0, 0]), (0.35, [-55, 0, 0]), (0.45, [12, 0, 0]), (0.55, [0, 0, 0]), (1.0, [0, 0, 0]))},
+             w: {"rotation": kf((0, [0, 0, 0]), (0.35, [4, 0, 0]), (0.45, [-2, 0, 0]), (0.55, [0, 0, 0]))}}
+    return {"loop": True, "animation_length": 1.0, "bones": bones}
+
+
+def bouw_tik(bt):
+    """Many arms busy at once (the octopus): every arm waving in turn, tips curling."""
+    armen = sorted(n for n in bt if n.startswith("arm_") and not n.endswith("_tip"))
+    if len(armen) < 4:
+        return bouw_klop(bt)
+    bones = {}
+    for i, n in enumerate(armen):
+        f = (i % 4) * 0.2
+        bones[n] = {"rotation": kf((0, [0, 0, 0]), (f + 0.2, [-35, 0, 0]), (f + 0.4, [0, 0, 0]), (1.6, [0, 0, 0]))}
+        if n + "_tip" in bt:
+            bones[n + "_tip"] = {"rotation": kf((0, [0, 0, 0]), (f + 0.3, [-40, 0, 0]), (f + 0.5, [0, 0, 0]), (1.6, [0, 0, 0]))}
+    return {"loop": True, "animation_length": 1.6, "bones": bones}
+
+
+def bouw_wiebel(bt):
+    """For a body without paws (the glimworm): a busy wiggle while it lays its threads of light."""
+    w = _wortel(bt)
+    if w not in bt:
+        return None
+    bones = {w: {"rotation": kf((0, [0, 0, 0]), (0.3, [0, 0, 12]), (0.6, [0, 0, 0]), (0.9, [0, 0, -12]), (1.2, [0, 0, 0]))}}
+    if "head" in bt:
+        bones["head"] = {"rotation": kf((0, [0, 0, 0]), (0.3, [10, 0, -8]), (0.9, [10, 0, 8]), (1.2, [0, 0, 0]))}
+    return {"loop": True, "animation_length": 1.2, "bones": bones}
+
+
+BOUW_ANIMS = {"knaag": bouw_knaag, "graaf": bouw_graaf, "sjouw": bouw_sjouw, "stamp": bouw_stamp, "duw": bouw_duw,
+              "pik": bouw_pik, "klop": bouw_klop, "klim": bouw_klim, "plant": bouw_plant, "staartklap": bouw_staartklap,
+              "tik": bouw_tik, "wiebel": bouw_wiebel}
+# soort -> its work animations (design 2.8 table + the build animals of round 29); saved as bouw_<naam>
+BOUW = {
+    "bever": ["knaag", "sjouw", "staartklap", "graaf"],
+    "stokstaartje": ["graaf", "sjouw"], "das": ["graaf", "sjouw"], "wombat": ["graaf", "sjouw"],
+    "olifant": ["sjouw", "stamp", "duw"], "mammoet": ["duw", "stamp", "sjouw"],
+    "orang_oetan": ["klim", "klop", "sjouw"], "gibbon": ["klim", "klop"],
+    "pinguin": ["klop", "sjouw"], "capibara": ["graaf", "sjouw"], "zebra": ["stamp", "sjouw"],
+    "koala": ["plant", "klim"], "toekan": ["plant", "pik"],
+    "neushoorn": ["duw", "stamp"], "kafferbuffel": ["duw", "stamp"],
+    "otter": ["graaf", "klop", "sjouw"], "flamingo": ["plant", "pik"], "kangoeroe": ["sjouw", "klop"],
+    "specht": ["pik", "klop"], "octopus": ["tik"], "gekko": ["klop", "klim"], "glimworm": ["wiebel"],
+    "prieelvogel": ["pik", "sjouw", "plant"],
+}
+
+
+def voeg_bouw_toe(soort, geo, anims):
+    """F10a: the soort's work animations into its animation file (in place); returns the names added."""
+    bt = _botten(geo)
+    a = anims["animations"]
+    walk = a.get("walk")
+    nieuw = []
+    for naam in BOUW.get(soort, []):
+        f = BOUW_ANIMS[naam]
+        anim = f(bt, walk) if naam == "sjouw" else f(bt)
+        if anim and f"bouw_{naam}" not in a:
+            a[f"bouw_{naam}"] = anim
+            nieuw.append(f"bouw_{naam}")
+    return nieuw
+
+
 SHOWS = {"brul": brul, "gaap": gaap, "rek": rek, "schud": schud, "snuffel": snuffel, "rondkijk": rondkijk,
          "huppel": huppel, "krab": krab, "pluk": pluk, "schelp": schelp}
 

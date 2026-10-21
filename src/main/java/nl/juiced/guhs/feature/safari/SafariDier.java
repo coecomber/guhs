@@ -79,7 +79,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation SLAAP = RawAnimation.begin().thenLoop("slaap");
     /** Round 3: activity animations that also play while it moves (the belly slide, carrying a branch, running). */
-    static final java.util.Set<String> BEWEGEND = java.util.Set.of("buikglij", "draag", "ren");
+    static final java.util.Set<String> BEWEGEND = java.util.Set.of("buikglij", "draag", "ren", "bouw_sjouw");   // (F10a: a helper carrying while it walks)
     /** How far outside its home an animal may stray before it is put back at once. */
     static final int TELEPORT_MARGE = 8, LOOP_MARGE = 2;
     /** (S3) True while this animal is calm and does not hide from players (the feeding time of its zone). */
