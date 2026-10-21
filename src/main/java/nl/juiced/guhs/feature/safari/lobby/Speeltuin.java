@@ -13,25 +13,28 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.huisje.Speelgoed;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.safari.ParkBouwer;
 import nl.juiced.guhs.feature.safari.Safari;
+import nl.juiced.guhs.feature.speelgoed.KnabbelbalEntity;
 import nl.juiced.guhs.feature.speelgoed.SpeelgoedFeature;
 import nl.juiced.guhs.feature.speelgoed.ToestelBlock;
 
 /**
- * The guh-speeltuin of the village (test round 3, design ronde 45): a fenced sand square with a guh-schommel, a
- * guh-glijbaantje and a guh-wip. The toys are multi-blocks with a block entity, so the game places them (not the tiles):
- * whenever one is missing it is built again. Three visitor guhs in safari clothes live there and play with them now and
- * then (the toys' own sessions, as in a guhhuisje); your own tamed guhs play there by themselves when you are near (the
- * speelgoed slice's SpeelGoal).
+ * The guh-speeltuin of the lobby (test round 3, design ronde 45; bigger in round 4): a fenced sand square with
+ * guh-schommels, a guh-glijbaantje and guh-wippen. The toys are multi-blocks with a block entity, so the game places them
+ * (not the tiles): whenever one is missing it is built again; the same for the knabbelbal (an entity). The plain-block
+ * toys (pluizige tunnel, bellenblaas, luchtscooter, hapluikje) are in the tiles. Visitor guhs in safari clothes live
+ * there and play with them now and then (the toys' own sessions, as in a guhhuisje); your own tamed guhs play there by
+ * themselves when you are near (the speelgoed slice's SpeelGoal).
  */
 public final class Speeltuin {
     public static final String TAG = "guhs_safari_speler";
-    static final int SPELERS = 3;
+    static final int SPELERS = 6;
     private static final int ELKE = 200;
     /** Server: the toy session each playing visitor guh is in. */
     private static final Map<UUID, KlusTaak> SPEELT = new HashMap<>();
@@ -76,11 +79,22 @@ public final class Speeltuin {
 
     /** The toy at this spot, built again when it is gone (its spot and parts free). */
     static void zorg(ServerLevel level, Beleving.Speelgoed t) {
+        if (t.soort().equals("knabbelbal")) {
+            if (level.getEntitiesOfClass(KnabbelbalEntity.class, new AABB(t.pos()).inflate(Beleving.get().speeltuinStraal + 2, 4,
+                    Beleving.get().speeltuinStraal + 2)).isEmpty()) {
+                KnabbelbalEntity.maak(level, Vec3.atBottomCenterOf(t.pos()), true);
+            }
+            return;
+        }
         Block blok = switch (t.soort()) {
             case "schommel" -> SpeelgoedFeature.SCHOMMEL.get();
             case "glijbaantje" -> SpeelgoedFeature.GLIJBAANTJE.get();
-            default -> SpeelgoedFeature.WIP.get();
+            case "wip" -> SpeelgoedFeature.WIP.get();
+            default -> null;
         };
+        if (blok == null) {
+            return;
+        }
         if (level.getBlockState(t.pos()).is(blok) || !(blok instanceof ToestelBlock toestel)) {
             return;
         }

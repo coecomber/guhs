@@ -49,10 +49,18 @@ public final class LobbyPlekken {
     public final AABB lodge;
     public final BlockPos plein;
     public final int pleinStraal;
+    /** (round 4) The Guh-safaribus on the busplein (null: no bus) and the bell at its stop: either takes you home. */
+    @Nullable
+    public final AABB bus;
+    @Nullable
+    public final BlockPos busBel;
 
     private static volatile LobbyPlekken data;
 
-    private LobbyPlekken(List<Npc> npcs, List<Pen> pennen, List<BlockPos> alpacaLus, AABB lodge, BlockPos plein, int pleinStraal) {
+    private LobbyPlekken(List<Npc> npcs, List<Pen> pennen, List<BlockPos> alpacaLus, AABB lodge, BlockPos plein, int pleinStraal,
+                         @Nullable AABB bus, @Nullable BlockPos busBel) {
+        this.bus = bus;
+        this.busBel = busBel;
         this.npcs = npcs;
         this.pennen = pennen;
         this.alpacaLus = alpacaLus;
@@ -106,10 +114,12 @@ public final class LobbyPlekken {
         AABB lodge = new AABB(0, 0, 0, 0, 0, 0);
         BlockPos plein = BlockPos.ZERO;
         int straal = 20;
+        AABB bus = null;
+        BlockPos bel = null;
         try (InputStream in = LobbyPlekken.class.getResourceAsStream("/data/guhs/safari/lobby.json")) {
             if (in == null) {
                 LOGGER.warn("Safari lobby: no lobby.json, the lobby has no characters");
-                return new LobbyPlekken(npcs, pennen, lus, lodge, plein, straal);
+                return new LobbyPlekken(npcs, pennen, lus, lodge, plein, straal, null, null);
             }
             JsonObject o = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
             for (JsonElement e : o.getAsJsonArray("npcs")) {
@@ -139,10 +149,16 @@ public final class LobbyPlekken {
             JsonObject pl = o.getAsJsonObject("plein");
             plein = pos(pl.get("centrum"));
             straal = pl.get("straal").getAsInt();
+            if (o.has("bus")) {
+                JsonObject bo = o.getAsJsonObject("bus");
+                BlockPos lo = pos(bo.get("min")), hi = pos(bo.get("max"));
+                bus = new AABB(lo.getX(), lo.getY(), lo.getZ(), hi.getX() + 1, hi.getY() + 1, hi.getZ() + 1);
+                bel = pos(bo.get("bel"));
+            }
         } catch (Exception e) {
             LOGGER.error("Safari lobby: could not read lobby.json", e);
         }
-        return new LobbyPlekken(npcs, pennen, lus, lodge, plein, straal);
+        return new LobbyPlekken(npcs, pennen, lus, lodge, plein, straal, bus, bel);
     }
 
     /** (Tests) forget the cached data. */

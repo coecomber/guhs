@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
@@ -20,6 +21,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.feature.safari.ParkBouwer;
 import nl.juiced.guhs.feature.safari.Safari;
+import nl.juiced.guhs.feature.safari.SafariToegang;
 import nl.juiced.guhs.feature.safari.kern.SafariSpeler;
 import nl.juiced.guhs.feature.verhaal.Praat;
 
@@ -52,6 +54,7 @@ public final class SafariLobby {
         NeoForge.EVENT_BUS.addListener(Bezoekers::opInteractieSpecifiek);
         NeoForge.EVENT_BUS.addListener(Kijkguhs::opInteractieSpecifiek);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opWakker);
+        NeoForge.EVENT_BUS.addListener(SafariLobby::opBus);
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -132,6 +135,27 @@ public final class SafariLobby {
                 }
             }
         }
+    }
+
+    /**
+     * (round 4) The Guh-safaribus on the busplein: ring the bell at its stop or click the bus, and it takes you back to
+     * where you came from (as {@code /guhs safari terug}).
+     */
+    private static void opBus(PlayerInteractEvent.RightClickBlock event) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || !Safari.in(p) || event.getHand() != InteractionHand.MAIN_HAND) {
+            return;
+        }
+        LobbyPlekken l = LobbyPlekken.get();
+        BlockPos pos = event.getPos();
+        boolean bel = pos.equals(l.busBel);
+        if (!bel && (l.bus == null || !l.bus.contains(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))) {
+            return;
+        }
+        if (!bel) {
+            event.setCanceled(true);
+        }
+        p.sendSystemMessage(Component.translatable("gui.guhs.safari.bus.terug").withStyle(ChatFormatting.GOLD));
+        SafariToegang.terug(p);
     }
 
     /** Waking up in a lodge hut: the vroege-vogel bonus for the first photo of the day (S1). */
