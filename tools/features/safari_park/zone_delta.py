@@ -198,8 +198,8 @@ def nijlpaardenpoel(park):
             onderbouw(park, x, z, vloer, "minecraft:mud")
     # the doorway in the side wall (k = 3*zij, dd = 2), then the stairwell up along the room
     dx_, dz_w = ex + sx * 3 * zij - ax * 2, ez + sz * 3 * zij - az * 2
-    for y in (vloer + 1, vloer + 2):
-        park.v[dx_, y, dz_w] = 0
+    for y in (vloer + 1, vloer + 2, vloer + 3):            # (round 4) 3 high: from the first stair (feet +0.5) your
+        park.v[dx_, y, dz_w] = 0                           # head hit the lintel, you could not get in
     op = kijk_richting(sx * zij, sz * zij)                 # walking up = away from the room, along it
     for t in range(1, 9):
         k = 3 + t

@@ -100,6 +100,8 @@ def pagode(park, log):
                 if not rand:
                     continue
                 pil = (abs(dx) == r and abs(dz) == r) or (abs(dx) == r and dz % 2 == 0) or (abs(dz) == r and dx % 2 == 0)
+                if r >= 4 and (dx == 0 or dz == 0) and not open_:
+                    pil = False                     # (round 4) the ground floor doorways: the middle post made them walls
                 for y in range(y0, y0 + hoog):
                     if pil:
                         park.set(px + dx, y, pz + dz, pilaar)
@@ -135,7 +137,7 @@ def pagode(park, log):
     park.set(px, g + 22, pz, "minecraft:gold_block")
     park.set(px, g + 14, pz + 1, state("lantern", hanging="true", waterlogged="false"))
     # ladder up the middle (a red post with the ladder on its north face), holes in the floors
-    for y in range(g + 1, g + 13):
+    for y in range(g + 1, g + 14):                  # (round 4) one rung higher: up INTO the top floor's hole
         park.set(px, y, pz, pilaar)
         park.set(px, y, pz - 1, state("ladder", facing="north", waterlogged="false"))
     for y in (g + 6, g + 11):

@@ -230,7 +230,7 @@ public class KanoEntity extends Entity implements GeoEntity {
         }
         if (!level().isClientSide() && player instanceof ServerPlayer p) {
             if (soort() == LIG) {
-                Ritten.huurKano(p, this, p.isShiftKeyDown());
+                Ritten.huurKano(p, this, !p.isShiftKeyDown());     // round 4: a click = paddle yourself, sneak = the guided trip
             } else if (getPassengers().stream().noneMatch(e -> e instanceof Player) && soort() == VRIJ) {
                 p.startRiding(this);
             }

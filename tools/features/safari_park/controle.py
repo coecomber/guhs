@@ -24,6 +24,9 @@ Categories:
   plaat        big unnatural flat regions (one height + one top block, >= 300 columns, outside the entreedorp); reported
   ingegraven   columns with a log / leaves right under terrain ground (a buried tree); reported per zone
   doorgang     clearance along the rides (truck route, kano, boot, kabelbaan): leaves/plants removed, rest reported
+  kuil         (round 4) a dry 1x1 pit >= 2 deep in walkable ground (you fall in); filled up
+  bereik       (round 4) doors, guh chairs, viewpoints, geheimpjes and jetties a player cannot WALK to from the entrance
+               square (step <= 1, drop <= 3, 2 high, doors/gates/ladders/swimming); reported with coordinates
   kano         river columns (water at the surface y 62, river or lakes) with a block 1-3 above the water: the canoe
                cannot pass under; reported (bridges are built with 3 free blocks by terrein.route)
 """
@@ -640,6 +643,8 @@ def kano(park):
         laag = park.v[:, y, :]
         vrij &= (laag == 0) | np.isin(laag, [park.idx.get("minecraft:lily_pad", -1)])
     blok = opp & ~vrij
+    for (x, z) in getattr(park, "steiger_cellen", None) or ():
+        blok[x, z] = False                 # (round 4) a jetty of the boat line at the bank: meant to be there
     lab, n = label(blok)
     plekken = []
     if n:
@@ -734,10 +739,17 @@ def ingegraven(park, herstel=False):
                 if y < top_grond[x, z]:
                     park.v[x, y, z] = dirt
         rond = _dil(hit, iterations=3)
+        # (round 4) only real tree columns lose their crown: a column with anything built in it (planks, fences, a
+        # ladder, a lantern: a lookout tower's leg, a hut's corner post) is a building, never a buried tree's crown
+        gebouwd = np.array([soort(s) not in ("lucht", "plant", "blad", "rank") and not _naam(s).endswith(_HOUT_BLAD)
+                            for s in park.pal], bool)[park.v]
         for x, z in zip(*np.nonzero(rond)):
             col_b = bm[x, :, z]
+            tg = top_grond[x, z]
+            if gebouwd[x, tg + 1:, z].any():
+                continue
             for y in np.nonzero(col_b)[0].tolist():
-                if y > top_grond[x, z]:
+                if y > tg:
                     park.v[x, y, z] = 0
         gm = _grond_lut(park)[park.v]
         bm = _boom_lut(park)[park.v]
@@ -938,6 +950,220 @@ def doorgang(park, herstel):
 
 
 # ======================================================================================================================
+# round 4: reachability (bereik) and narrow pits (kuil)
+_KLIM = ("ladder", "vine", "scaffolding", "twisting_vines", "weeping_vines", "cave_vines")
+_DOORLOOP = ("glow_lichen", "sculk_vein", "cobweb", "structure_void", "_trapdoor", "snow")
+_HALF = ("stoel", "_bed")
+
+
+@lru_cache(maxsize=None)
+def _loop_klasse(s):
+    """For walking: 'P' passable (air, plants, water, doors, gates, thin things), 'F' full floor, 'H' half floor (bottom
+    slab, stairs, a chair, a bed), 'C' climbable (ladder, vines; also passable), 'W' water (passable, swim), 'X' solid
+    but not standable (fences, walls, panes: you cannot step onto them)."""
+    n = _naam(s)
+    k = soort(s)
+    props = split_state(s)[1]
+    if n in ("water", "bubble_column") or k == "water":
+        return "W"
+    if any(n == w or n.endswith(w) for w in _KLIM):
+        return "C"
+    if n in ("light", "snow") or any(w in n for w in _DOORLOOP if w not in ("snow",)):
+        return "P"
+    if k in ("lucht", "deur", "poort", "grote_poort", "rank", "wand", "lelie", "hangend"):
+        return "P"
+    if k == "plant":
+        return "X" if n == "bamboo" else "P"
+    if k == "staand":
+        dun = ("carpet", "torch", "sign", "banner", "pressure_plate", "rail", "sea_pickle", "coral", "redstone_wire",
+               "candle")
+        return "P" if any(w in n for w in dun) else "H"
+    if k in ("hek", "muur", "ruit"):
+        return "X"
+    if n.endswith("_slab"):
+        return "H" if props.get("type", "bottom") == "bottom" else "F"
+    if n.endswith("_stairs") or any(w in n for w in _HALF):
+        return "H"
+    return "F"
+
+
+def _loop_volume(park, y0):
+    """uint8 bit volume over [x, y - y0, z]: 1 passable, 2 full floor, 4 half floor, 8 climb, 16 water."""
+    bits = {"P": 1, "F": 2, "H": 4, "C": 8 | 1, "W": 16 | 1, "X": 0}
+    lut = np.array([bits[_loop_klasse(s)] for s in park.pal], np.uint8)
+    return lut[park.v[:, y0:, :]]
+
+
+def _knopen(park, y0=20):
+    """Walk nodes: dict col -> sorted feet heights f (half blocks: f = 2*y feet in cell y, 2*y+1 standing on a half
+    block in cell y) and dict (col, f) -> 'l' land / 's' swim or climb."""
+    V = _loop_volume(park, y0)
+    P = (V & 1) > 0
+    F = (V & 2) > 0
+    Hf = (V & 4) > 0
+    C = (V & 8) > 0
+    Wt = (V & 16) > 0
+    n = V.shape[1]
+    knopen = {}
+    soorten = {}
+
+    def voeg(m, f_van, kind):
+        xs, ys, zs = np.nonzero(m)
+        cols = (xs.astype(np.int64) * W + zs).tolist()
+        fs = f_van(ys + y0).tolist()
+        for col, f in zip(cols, fs):
+            knopen.setdefault(col, set()).add(f)
+            if soorten.get((col, f)) != "l":
+                soorten[(col, f)] = kind
+
+    m = np.zeros_like(P)
+    m[:, 1:n - 1, :] = F[:, :n - 2, :] & P[:, 1:n - 1, :] & P[:, 2:, :]          # on a full block (also wading)
+    voeg(m, lambda y: 2 * y, "l")
+    m = np.zeros_like(P)
+    m[:, :n - 2, :] = Hf[:, :n - 2, :] & P[:, 1:n - 1, :] & P[:, 2:, :]           # on a half block in cell y
+    voeg(m, lambda y: 2 * y + 1, "l")
+    voeg(Wt | C, lambda y: 2 * y, "s")                                           # swimming / climbing
+    return {c: sorted(v) for c, v in knopen.items()}, soorten, P, Hf
+
+
+def _past(P, Hf, y0, x, z, h2):
+    """Does a player body (1.8 high) fit in column x,z with the feet at h2/2 (half blocks)? A half block in the cell
+    under the feet is fine (the feet stand on top of it)."""
+    h = h2 / 2.0
+    c = int(h)
+    while c < h + 1.8:
+        i = c - y0
+        if i < 0 or i >= P.shape[1]:
+            return False
+        if not P[x, i, z] and not (Hf[x, i, z] and h >= c + 0.5):
+            return False
+        c += 1
+    return True
+
+
+def _start(park, knopen, soorten):
+    ix, iy, iz = int(park.ingang[0]), int(park.ingang[1]), int(park.ingang[2])
+    for r in range(0, 8):
+        for dx in range(-r, r + 1):
+            for dz in range(-r, r + 1):
+                col = (ix + dx) * W + iz + dz
+                for f in knopen.get(col, []):
+                    if abs(f - 2 * iy) <= 4 and soorten[(col, f)] == "l":
+                        return (col, f)
+    return None
+
+
+def bereik(park, y0=20):
+    """Flood fill from the entrance square over everything a player can walk: step up <= 1 block, drop <= 3, a body 2
+    high, doors and gates open, ladders, swimming. Returns the reached set of (col, f)."""
+    from collections import deque
+    knopen, soorten, P, Hf = _knopen(park, y0)
+    start = _start(park, knopen, soorten)
+    gezien = set()
+    if start is None:
+        return gezien
+    q = deque([start])
+    gezien.add(start)
+    while q:
+        col, f = q.popleft()
+        x, z = divmod(col, W)
+        kind = soorten[(col, f)]
+        for g in knopen[col]:                       # inside the column: swim / climb up and down (and out of it)
+            if g != f and abs(g - f) <= 2 and (kind == "s" or soorten[(col, g)] == "s") and (col, g) not in gezien:
+                gezien.add((col, g))
+                q.append((col, g))
+        for ncol in (col + W, col - W, col + 1, col - 1):
+            if ncol < 0 or ncol >= W * W or (abs(ncol - col) == 1 and ncol // W != x):
+                continue
+            nx, nz = divmod(ncol, W)
+            for g in knopen.get(ncol, ()):
+                d = g - f
+                if not (-6 <= d <= 2) or (ncol, g) in gezien:
+                    continue
+                # the body at the higher of the two heights must fit in both columns (no head through a lintel when
+                # stepping down off a stair, no jumping up under a low ceiling)
+                hoog = max(f, g)
+                # (also swimming / climbing: no swimming up through a glass wall onto the floor behind it)
+                if not (_past(P, Hf, y0, nx, nz, hoog) and _past(P, Hf, y0, x, z, hoog)):
+                    continue
+                gezien.add((ncol, g))
+                q.append((ncol, g))
+    return gezien
+
+
+def _doelen(park):
+    """Targets a player must be able to walk to: (naam, x, y_feet, z, horizontal radius, tolerance in half blocks)."""
+    uit = []
+    deur_lut = np.array([("_door" in _naam(s) and "trapdoor" not in _naam(s)
+                          and split_state(s)[1].get("half") == "lower") for s in park.pal], bool)
+    xs, ys, zs = np.nonzero(deur_lut[park.v])
+    for x, y, z in zip(xs.tolist(), ys.tolist(), zs.tolist()):
+        uit.append(("deur", x, y, z, 1, 2))
+    for st in (getattr(park, "stoelen", None) or []):
+        uit.append(("stoel", int(st[0]), int(st[1]), int(st[2]), 1, 3))
+    for k in (getattr(park, "kijkplekken", None) or []):
+        if k.get("stoel") is None and k["naam"].startswith("glijbaan"):
+            continue                                # the penguins' slide points, not a place for people
+        ox, oy, oz = k["oog"]
+        uit.append((f"kijkplek {k['naam']}", int(ox), int(round(oy - 1.6)), int(oz), 2, 3))
+    for g in (getattr(park, "geheimpjes", None) or []):
+        uit.append(("geheimpje", int(g[0]), int(g[1]), int(g[2]), 2, 4))
+    for st in (getattr(park, "steigers", None) or []):
+        uit.append((f"steiger {st['naam']}", int(st["pos"][0]), int(st["pos"][1]), int(st["pos"][2]), 2, 3))
+    return uit
+
+
+def bereik_rapport(park):
+    """(count, list) of targets nobody can walk to: (naam, x, y, z, zone)."""
+    gezien = bereik(park)
+    if not gezien:
+        return 1, [("start niet gevonden",) + tuple(int(c) for c in park.ingang[:3]) + ("?",)]
+    bereikt = {}
+    for col, f in gezien:
+        bereikt.setdefault(col, []).append(f)
+    mis = []
+    for (naam, x, y, z, r, tol) in _doelen(park):
+        if not (0 <= x < W and 0 <= z < W):
+            continue
+        if getattr(park, "binnen", None) is not None and not park.binnen[x, z]:
+            continue
+        ok = any(abs(f - 2 * y) <= tol for dx in range(-r, r + 1) for dz in range(-r, r + 1)
+                 for f in bereikt.get((x + dx) * W + z + dz, ()))
+        if not ok:
+            mis.append((naam, x, y, z, _zone_naam(park, x, z)))
+    park._bereik = gezien
+    return len(mis), mis
+
+
+def kuilen(park, herstel=False):
+    """Narrow pits in walkable ground: a dry 1x1 column whose ground lies >= 2 blocks below all four neighbours, open
+    to the sky (you fall in, nothing to see: the 1-wide hole at the top of the glijbaan). Repaired by filling it up to
+    the lowest neighbour with that neighbour's blocks."""
+    if getattr(park, "hoogte", None) is None:
+        return 0
+    hoog = park.hoogte
+    binnen = park.binnen if getattr(park, "binnen", None) is not None else np.ones((W, W), bool)
+    hn = np.full((W, W), -1, int)
+    hn[1:-1, 1:-1] = np.minimum.reduce([hoog[2:, 1:-1], hoog[:-2, 1:-1], hoog[1:-1, 2:], hoog[1:-1, :-2]])
+    nat = park.water if getattr(park, "water", None) is not None else np.zeros((W, W), bool)
+    n = 0
+    for x, z in np.argwhere((hn - hoog >= 2) & binnen & ~nat).tolist():
+        top = int(hoog[x, z])
+        if any(park.v[x, y, z] and soort(park.pal[park.v[x, y, z]]) not in ("plant", "lucht")
+               for y in range(top + 1, min(int(hn[x, z]) + 3, H))):
+            continue
+        n += 1
+        if herstel:
+            buur = min(((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1)), key=lambda c: hoog[c])
+            blok = park.v[buur[0], int(hoog[buur]), buur[1]]
+            onder = park.v[buur[0], max(int(hoog[buur]) - 1, 0), buur[1]] or blok
+            for y in range(top + 1, int(hn[x, z]) + 1):
+                park.v[x, y, z] = blok if y == int(hn[x, z]) else onder
+            hoog[x, z] = hn[x, z]
+    return n
+
+
+# ======================================================================================================================
 def rapport(park):
     return _loop(park, herstel=False)
 
@@ -956,6 +1182,8 @@ def herstel(park, log=print):
         log(f"  zwevende stukken (niet weggehaald, x y z blokken): {na['_zweef'][:12]}")
     if na["_kano"]:
         log("  kano kan niet onder door (x, z, kolommen, zone): " + "; ".join(str(p) for p in na["_kano"]))
+    if na["_bereik"]:
+        log(f"  onbereikbaar ({len(na['_bereik'])}): " + "; ".join(str(p) for p in na["_bereik"][:80]))
     return voor, na
 
 
@@ -994,4 +1222,12 @@ def _loop(park, herstel, log=None):
     n, rap = doorgang(park, herstel)
     uit["doorgang"] = n
     uit["_doorgang"] = rap
+    uit["kuil"] = kuilen(park, herstel)
+    if not herstel:                          # (round 4) reachability: only counted on the final (report) pass
+        n, mis = bereik_rapport(park)
+        uit["bereik"] = n
+        uit["_bereik"] = mis
+    else:
+        uit["bereik"] = 0
+        uit["_bereik"] = []
     return uit

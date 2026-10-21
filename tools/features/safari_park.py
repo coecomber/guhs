@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 from safari_park import kit, terrein, plekken as plk          # noqa: E402
 
-VERSIE = 11      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
+VERSIE = 12      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
 
 
 def _json(root, rel, data):
@@ -172,6 +172,12 @@ def maak(root=".", preview=False, log=print):
     totaal = plk.controleer(plekken)
     log(f"  plekken: {len(plekken)} huizen, {totaal} dieren")
     stats = park.schrijf(root)
+    if os.environ.get("SAFARI_DUMP"):             # debugging: keep the finished park (blocks + the check's inputs)
+        import pickle
+        keep = {k: getattr(park, k, None) for k in ("v", "pal", "hoogte", "binnen", "water", "zone", "zone_vol", "pad",
+                                                     "ingang", "kijkplekken", "stoelen", "geheimpjes", "steigers")}
+        with open(os.environ["SAFARI_DUMP"], "wb") as fh:
+            pickle.dump(keep, fh, protocol=4)
     __import__("safari_park.route_data").route_data.schrijf(root, park, log)   # S3: ride data (assets/guhs/safari)
     log(f"  tegels geschreven {time.time() - t0:.0f}s: {sum(n for _, n in stats)} blokken")
     x, y, z, yaw = park.ingang

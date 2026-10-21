@@ -38,8 +38,14 @@ public final class RitData {
     public record Station(String zone, double afstand) {
     }
 
-    /** A glass-bottom boat route (a loop, or out and back made into one), its jetty at distance 0. */
-    public record Bootroute(String zone, Pad pad, Vec3 steiger) {
+    /**
+     * A glass-bottom boat route (a loop, or out and back made into one), its jetty at distance 0. Round 4: the boat LINE
+     * up the river has its jetties as stops (in loop order, the way back too): several boats run it hop-on hop-off.
+     */
+    public record Bootroute(String zone, Pad pad, Vec3 steiger, List<Halte> haltes) {
+        public List<Double> halteAfstanden() {
+            return haltes.stream().map(Halte::afstand).toList();
+        }
     }
 
     /** A safaripoort on the route: its corner block, its axis ("x"/"z"), the zones it joins. */
@@ -250,7 +256,9 @@ public final class RitData {
                 if (p.size() < 4 || steiger == null) {
                     continue;
                 }
-                if (o.has("heen_en_terug") && o.get("heen_en_terug").getAsBoolean()) {
+                int n = p.size();
+                boolean heenEnTerug = o.has("heen_en_terug") && o.get("heen_en_terug").getAsBoolean();
+                if (heenEnTerug) {
                     // out and back: the same water both ways, as one loop
                     for (int i = p.size() - 2; i >= 1; i--) {
                         p.add(p.get(i));
@@ -258,7 +266,22 @@ public final class RitData {
                 } else if (p.get(0).distanceTo(p.get(p.size() - 1)) < 1.0) {
                     p.remove(p.size() - 1);
                 }
-                boten.add(new Bootroute(o.get("zone").getAsString(), new Pad(p, true), steiger));
+                Pad pad = new Pad(p, true);
+                List<Halte> stops = new ArrayList<>();
+                if (o.has("haltes")) {
+                    for (JsonElement h : o.getAsJsonArray("haltes")) {
+                        JsonObject ho = h.getAsJsonObject();
+                        int i = Math.min(ho.get("i").getAsInt(), n - 1);
+                        String zone = ho.get("zone").getAsString(), naam = ho.get("naam").getAsString();
+                        stops.add(new Halte(zone, naam, pad.afstandVan(i)));
+                        // on the way back too (not at the start, nor at the far end where it turns)
+                        if (heenEnTerug && i > 0 && n - 1 - i >= 8) {
+                            stops.add(new Halte(zone, naam, pad.afstandVan(2 * (n - 1) - i)));
+                        }
+                    }
+                    stops.sort((a, b) -> Double.compare(a.afstand(), b.afstand()));
+                }
+                boten.add(new Bootroute(o.get("zone").getAsString(), pad, steiger, stops));
             }
         }
         Pad race = null;

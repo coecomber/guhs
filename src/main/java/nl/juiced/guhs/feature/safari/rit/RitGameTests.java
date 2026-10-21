@@ -228,7 +228,24 @@ public class RitGameTests {
         helper.assertTrue("entree".equals(d.haltes.get(0).zone()) || d.haltes.stream().anyMatch(h -> h.zone().equals("entree")), "the village has a stop");
         helper.assertTrue(d.kano != null && d.kanoStart != null && d.kano.lengte() > 100, "a canoe route");
         helper.assertTrue(d.kabel != null && d.kabel.lengte() > 200 && d.stations.size() == 2, "a kabelbaan loop with two stations");
-        helper.assertTrue(!d.boten.isEmpty(), "a glass-bottom boat");
+        helper.assertTrue(d.boten.size() == 1, "one glass-bottom boat line (" + d.boten.size() + ")");
+        RitData.Bootroute lijn = d.boten.get(0);
+        helper.assertTrue(lijn.haltes().stream().map(RitData.Halte::naam).distinct().count() >= 5,
+                "the boat line has the hoofdsteiger and 4 jetties (" + lijn.haltes() + ")");
+        helper.assertTrue(lijn.haltes().get(0).afstand() < 1e-6 && "hoofdsteiger".equals(lijn.haltes().get(0).naam()),
+                "the boat line starts at the hoofdsteiger");
+        helper.assertTrue(RitSchema.boten(lijn.pad().lengte(), lijn.haltes().size()) >= 2, "several boats run the line");
+        // hop on, hop off: in one round a boat stands still at every jetty of the line
+        int n = RitSchema.boten(lijn.pad().lengte(), lijn.haltes().size());
+        long ronde = RitSchema.ronde(lijn.pad().lengte(), lijn.haltes().size(), RitSchema.BOOT_LIJN_SNELHEID, RitSchema.BOOT_LIJN_WACHT);
+        java.util.Set<Integer> gezien = new java.util.HashSet<>();
+        for (long t = 0; t < ronde; t += 20) {
+            RitSchema.Stand st = RitSchema.bootLijn(t, 1, n, lijn.pad().lengte(), lijn.halteAfstanden());
+            if (st.staatStil()) {
+                gezien.add(st.halte());
+            }
+        }
+        helper.assertTrue(gezien.size() == lijn.haltes().size(), "the boat stops at every jetty (" + gezien.size() + "/" + lijn.haltes().size() + ")");
         helper.assertTrue(d.poorten.size() >= 5, "safaripoorten on the route (" + d.poorten.size() + ")");
         helper.assertTrue(d.race != null && d.raceWacht != null && d.raceBord != null, "a race track");
         helper.assertTrue(d.schemabord != null, "a schemabord");
