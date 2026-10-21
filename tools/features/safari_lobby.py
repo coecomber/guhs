@@ -128,6 +128,7 @@ TEKSTEN = {
     "gui.guhs.safari.welkom.3.camera": "Hier is je camera! Fotografeer de dieren voor je Safari-dex: hoe mooier de foto, hoe meer Safarimunten.",
     "gui.guhs.safari.welkom.4": "De experts in het paviljoen, de aaihoek, de giftshop en de lodge: kijk overal eens rond. Njeg, veel spotplezier!",
     "gui.guhs.safari.welkom.optie": "Op safari, vahoeg!",
+    "gui.guhs.safari.bus.terug": "Toet toet! De Guh-safaribus brengt je terug naar huis. Tot de volgende safari, vahoeg!",
     # --- experts ---
     **{f"gui.guhs.safari.expert.{z}.nog": f"Ik ben de expert van de {ZONE_NAAM[z]}. Je hebt %1$s van de %2$s soorten hier gefotografeerd. Nog %3$s te gaan, vads! Kom terug als ze er allemaal in zitten." for z in ZONES if z != "australie"},
     **{f"gui.guhs.safari.expert.{z}.al": f"Je bent een echte {ZONE_NAAM[z]}-kenner! Al %1$s van de %2$s soorten in je dex. Vahoeg!" for z in ZONES if z != "australie"},

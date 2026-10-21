@@ -372,7 +372,11 @@ def truckroute(park, log):
             grenzen = [j for j in range(n_) if _zone_op(park, *lijn[j]) != _zone_op(park, *lijn[j - 1])]
             kand_e = [j for j in kand_e if _zone_op(park, *lijn[j]) == "entree"
                       and all(min(abs(j - g), n_ - abs(j - g)) >= 10 for g in grenzen)] or kand_e
-            i = _perron(park, lijn, kand_e, pd, log)
+            # (round 4) the lobby says where its stop belongs (park.truckperron, x z): the candidates nearest it first
+            hint = getattr(park, "truckperron", None)
+            if hint:
+                kand_e = sorted(kand_e, key=lambda j: (lijn[j][0] - hint[0]) ** 2 + (lijn[j][1] - hint[1]) ** 2)
+            i = _perron(park, lijn, kand_e, pd, log, op_volgorde=bool(hint))
             if i is None:
                 i = min(kand, key=lambda j: j if j < len(lijn) // 2 else len(lijn))
                 _halte_bouw(park, lijn, i, k, pd)
@@ -460,14 +464,14 @@ def _poorten(park, lijn, niveaus, haltes, log):
 
 # ======================================================================================================================
 # round 3: the truck stop at the entree, an open platform along the road (no little house the truck drives through)
-def _perron(park, lijn, kandidaten, pd, log):
-    """The platform at the first candidate route point (from the middle of the candidates outward) where a 12 x 4
-    platform fits beside the road on free ground; returns that point's index (the stop) or None."""
+def _perron(park, lijn, kandidaten, pd, log, op_volgorde=False):
+    """The platform at the first candidate route point (from the middle of the candidates outward, or in the given
+    order) where a 12 x 4 platform fits beside the road on free ground; returns that point's index (the stop) or None."""
     if not kandidaten:
         return None
     n = len(lijn)
     mid = kandidaten[0] + 10
-    volgorde = sorted(kandidaten, key=lambda j: min(abs(j - mid), n - abs(j - mid)))
+    volgorde = kandidaten if op_volgorde else sorted(kandidaten, key=lambda j: min(abs(j - mid), n - abs(j - mid)))
     for i in volgorde:
         if _perron_op(park, lijn, i, pd, log):
             return i

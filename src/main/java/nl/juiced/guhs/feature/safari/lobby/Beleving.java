@@ -33,7 +33,7 @@ import net.minecraft.core.Direction;
 public final class Beleving {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    /** A toy of the speeltuin: "schommel", "glijbaantje" or "wip", its controller block and the way it faces. */
+    /** A toy of the speeltuin: "schommel", "glijbaantje", "wip" (its controller block and the way it faces) or "knabbelbal". */
     public record Speelgoed(String soort, BlockPos pos, Direction facing) {
     }
 

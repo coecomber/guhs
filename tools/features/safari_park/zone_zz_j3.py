@@ -2,11 +2,11 @@
 Op Safari! test round 3, slice J3 (lobby & beleving): writes data/guhs/safari/beleving.json for the game
 (feature/safari/lobby/Beleving), after every other zone module (name order: it reads what they built).
 
-  * "speeltuin": the guh-speeltuin of the village (zone_entree): its box, entrance and the three toys the game places
-    (they are multi-blocks with a block entity, so not in the tiles): {soort, pos [x, y, z], facing};
+  * "speeltuin": the guh-speeltuin of the lobby (zone_entree): its box, entrance and the toys the game places (the
+    multi-blocks with a block entity and the knabbelbal, so not in the tiles): {soort, pos [x, y, z], facing};
   * "kampvuur": the campfire by the lodge, the storyteller's spot and the way he looks;
-  * "parade_dorp": the penguin parade's walk through the village (from the park gate in the north, past the truck
-    station, round the fountain and back); the IJskust part of the parade follows the truck route (the game reads it
+  * "parade_dorp" (and parade.json "dorp"): the penguin parade's walk through the lobby (from the oostpoort along the
+    foot path, round the fountain and back); the IJskust part of the parade follows the truck route (the game reads it
     from route.json, so it stays right when the route changes);
   * "kijkstoelen": the guh chairs of the lookouts outside the village (one per lookout: chairs closer than 7 blocks
     to an earlier one belong to the same lookout), with the way the chair looks and its zone. The game uses these for
@@ -28,19 +28,9 @@ def _wereld(x, z, y=None):
 
 
 def _parade(info):
-    kruising = sorted(info.get("KRUISING") or [], key=lambda p: p[1])
-    if not kruising:
-        return []
-    kx, kz = kruising[0]
-    if kz < 20 and kx < 92:
-        heen = [(kx, kz + 1), (kx + 1, kz + 4), (85, 13), (88, 19), (90, 27), (91, 34), (93, 39)]
-    else:
-        heen = [(kx, kz + 1), ((kx + 98) / 2, kz + 3), (98, 39)]
-    heen += [(88, 47), (82, 49), (E.CX + 11, E.CZ - 10)]
-    start = math.atan2(heen[-1][1] - E.CZ, heen[-1][0] - E.CX)
-    rond = [(E.CX + math.cos(start + k * math.pi / 4) * 9.5, E.CZ + math.sin(start + k * math.pi / 4) * 9.5) for k in range(1, 9)]
-    route = heen + rond + list(reversed(heen))
-    return [_wereld(x, z) for (x, z) in route]
+    """(round 4) The walk of zone_entree's scene: from the oostpoort along the foot path to the square, once round the
+    fountain and back (local points, feet on the ground)."""
+    return [_wereld(x, z) for (x, z) in info.get("PARADE") or []]
 
 
 def _kijkstoelen(park):
@@ -79,6 +69,12 @@ def bouw(park, log=print):
         data["kampvuur"] = {"centrum": _wereld(*k["centrum"]), "verteller": v,
                             "yaw": round(math.degrees(math.atan2(-(c[0] - v[0]), c[2] - v[2])), 1)}
     data["parade_dorp"] = _parade(info)
+    # (round 4) the village walk of the pinguinparade, its own file (momenten/ParadeRoute reads it first)
+    ppad = os.path.join(kit.OUT_DATA, "parade.json")
+    os.makedirs(os.path.dirname(ppad), exist_ok=True)
+    with open(ppad, "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"dorp": data["parade_dorp"]}, f, indent=1, ensure_ascii=False)
+        f.write("\n")
     data["kijkstoelen"] = _kijkstoelen(park)
     pad = os.path.join(kit.OUT_DATA, "beleving.json")
     os.makedirs(os.path.dirname(pad), exist_ok=True)

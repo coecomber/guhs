@@ -1,14 +1,16 @@
 """
 Op Safari! step 2, slice S2 (the lobby): where the lobby's characters stand and the lodge beds, on top of zone_entree.
 
-Runs after zone_entree (name order). It only adds a few blocks (a bed in every lodge hut) and writes
-data/guhs/safari/lobby.json for the game (feature/safari/lobby/LobbyPlekken):
+Runs after zone_entree and zone_kriebelhuis (name order). It writes data/guhs/safari/lobby.json for the game
+(feature/safari/lobby/LobbyPlekken):
   * "npcs": every guh character of the lobby: {id, kind, pos [x, y, z] (the block it stands in), yaw}, the eight zone experts
     with their zone; every spot is a free standing spot found near the spot the village plan meant (air for feet and head,
     something solid below);
   * "pennen": the four aaihoek pens {soort, min [x, z], max [x, z]}, "alpaca_lus": the alpaca's walk (points on the path);
-  * "lodge": the box of the lodge huts (sleeping there = the vroege-vogel bonus), "plein": the square's middle + radius
-    (the visitor guhs stay around it).
+  * "lodge": the box of the lodge huts (sleeping there = the vroege-vogel bonus; the beds are in zone_entree's scene),
+    "plein": the square's middle + radius (the visitor guhs stay around it);
+  * (round 4) "bus": the Guh-safaribus box and its bell (clicking either takes you back to the Guhmension), and the
+    characters of park.lobby_npcs_extra (zone_kriebelhuis).
 """
 import json
 import math
@@ -60,64 +62,49 @@ def _yaw_naar(van, naar):
 
 
 def bouw(park, log=print):
+    info = E.INFO
     npcs = []
 
-    def npc(id_, kind, lx, lz, yaw=None, kijk=None, y=STA, **extra):
-        p = _plek(park, lx, lz, y)
-        if kijk is not None:
-            yaw = _yaw_naar((p[0], p[2]), _wereld(*kijk))
-        npcs.append(dict(id=id_, kind=kind, pos=p, yaw=yaw if yaw is not None else 0.0, **extra))
+    def npc(id_, kind, plek, kijk, y=STA, **extra):
+        p = _plek(park, *plek, y=y)
+        npcs.append(dict(id=id_, kind=kind, pos=p, yaw=_yaw_naar((p[0], p[2]), _wereld(*kijk)), **extra))
 
-    # the giftshop seller behind the door (giftshop GX 26..44, door in the east wall at z 58)
-    npc("verkoper", "safari_verkoper", 41, 58, kijk=(46, 58))
-    # the hoofdranger inside the rangerstation (26..44 x 33..46, door east at z 39), looking at the door
-    npc("hoofdranger", "safari_hoofdranger", 38, 42, kijk=(46, 39))
-    # the fotograaf on the square, facing the park gate (south)
-    npc("fotograaf", "safari_fotograaf", E.CX - 7, E.CZ + 7, yaw=0.0)
-    # the dierenverzorger at the barn door (barn 104..116 x 58..70, door west at z 65)
-    npc("verzorger", "safari_verzorger", 101, 64, kijk=(94, 60))
-    # the lodgebeheerder where the deck to the huts begins
-    npc("lodgebeheerder", "safari_lodgebeheerder", 50, 77, kijk=(44, 82))
-    # (round 3, J3) the ijsverkoper inside the ijskraam on the square, looking at the fountain
-    ijs = (E.INFO.get("J3") or {}).get("ijskraam")
+    # (round 4, the new lobby) the characters at the spots of zone_entree's scene: (where, looking at)
+    for id_, (plek, kijk) in info["NPC"].items():
+        npc(id_, "safari_" + id_, plek, kijk)
+    ijs = (info.get("J3") or {}).get("ijskraam")
     if ijs:
-        npc("ijsverkoper", "safari_ijsverkoper", *ijs["verkoper"], kijk=ijs["kijk"])
-    # the eight zone experts behind their counters in the expertenpaviljoen (same geometry as zone_entree)
-    zones = ["savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie"]
-    pvx, pvz, pvr = 54, 37, 5.5
-    for k, zone in enumerate(zones):
-        a = k / 8 * 2 * math.pi + math.pi / 8
-        b = a + math.pi / 8
-        lx, lz = pvx + math.cos(b) * (pvr - 1.9), pvz + math.sin(b) * (pvr - 1.9)
+        npc("ijsverkoper", "safari_ijsverkoper", ijs["verkoper"], ijs["kijk"])
+    # the nine experts in the expertenpaviljoen: each in front of its counter, looking into the pavilion
+    pv = info["PAVILJOEN"]
+    for zone, (bx, bz, b) in zip(E.EXPERT_ZONES, pv["balies"]):
+        lx, lz = pv["x"] + math.cos(b) * (pv["r"] - 2.3), pv["z"] + math.sin(b) * (pv["r"] - 2.3)
         p = _plek(park, int(round(lx)), int(round(lz)), r=1)
-        balie = _wereld(int(round(pvx + math.cos(b) * (pvr - 0.6))), int(round(pvz + math.sin(b) * (pvr - 0.6))))
         npcs.append(dict(id=f"expert_{zone}", kind=f"safari_expert_{zone}", pos=p,
-                         yaw=_yaw_naar((p[0], p[2]), _wereld(pvx, pvz)), zone=zone,
-                         balie=[balie[0], STA, balie[1]]))
+                         yaw=_yaw_naar((p[0], p[2]), _wereld(pv["x"], pv["z"])), zone=zone,
+                         balie=[E.OX + bx, STA, E.OZ + bz]))
+    # (round 4) characters other modules add (zone_kriebelhuis: its counter and shop): {id, kind, pos, yaw}
+    for extra in getattr(park, "lobby_npcs_extra", None) or []:
+        npcs.append(dict(extra))
 
-    # a bed in every lodge hut (along the west wall, head to the north), so sleeping there is possible
+    (l1x, l1z), (l2x, l2z) = info["LODGE"]
     fy = E.OY + E.G + 3
-    bedden = []
-    for (hx, hz, _) in [(20, 82, "x"), (30, 90, "z"), (20, 92, "x"), (42, 84, "z"), (40, 94, "x")]:
-        x, z = E.OX + hx + 1, E.OZ + hz + 1
-        if park.leeg(x, fy + 1, z) and park.leeg(x, fy + 1, z + 1):
-            park.set(x, fy + 1, z, "minecraft:yellow_bed[facing=north,occupied=false,part=head]")
-            park.set(x, fy + 1, z + 1, "minecraft:yellow_bed[facing=north,occupied=false,part=foot]")
-            bedden.append([x, fy + 1, z])
-    lodge_min = _wereld(18, 80)
-    lodge_max = _wereld(49, 101)
-
+    lodge_min, lodge_max = _wereld(l1x, l1z), _wereld(l2x, l2z)
+    bedden = [[E.OX + x, E.OY + y, E.OZ + z] for (x, y, z) in info["BEDDEN"]]
     pennen = []
     for (x0, z0, soort) in E.PENS:
-        a, b = _wereld(x0, z0), _wereld(x0 + 5, z0 + 6)
+        a, b = _wereld(x0 + 1, z0 + 1), _wereld(x0 + 6, z0 + 7)
         pennen.append(dict(soort=soort, min=list(a), max=list(b)))
-
+    bus = info["BUS"]
     data = {
         "npcs": npcs,
         "pennen": pennen,
-        "alpaca_lus": [list(_wereld(x, z)) for (x, z) in [(120, 60), (126, 59), (130, 64), (127, 72), (121, 74), (119, 67)]],
+        "alpaca_lus": [list(_wereld(x, z)) for (x, z) in info["ALPACA"]],
         "lodge": {"min": [lodge_min[0], fy - 4, lodge_min[1]], "max": [lodge_max[0], fy + 6, lodge_max[1]], "bedden": bedden},
         "plein": {"centrum": [E.OX + E.CX, STA, E.OZ + E.CZ], "straal": E.SQ_R + 6},
+        "bus": {"min": E.wereld(bus["min"][0], bus["min"][2], y=bus["min"][1]),
+                "max": E.wereld(bus["max"][0], bus["max"][2], y=bus["max"][1]),
+                "bel": E.wereld(bus["bel"][0], bus["bel"][2], y=bus["bel"][1])},
     }
     pad = os.path.join(kit.OUT_DATA, "lobby.json")
     os.makedirs(os.path.dirname(pad), exist_ok=True)

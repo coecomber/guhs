@@ -262,6 +262,24 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
 - **L1 lobby** (owns zone_entree.py, rewritten to the lobby2 layout; also lobby.json/beleving.json/parade.json writers). It writes **`data/guhs/safari/lobby_aansluiting.json`**:
   - `{"bus": [x,y,z], "hoofdsteiger": [x,y,z], "kano": [x,y,z], "truckperron": [x,y,z], "parkpoort_voet": [x,y,z], "boot_start": [[x,y,z],...]}`, plus the water connection from the pond to the river;
   - the truck route and the boat line must connect to these (R4-B2 boat line, J2 truck route).
+  - **Built (L1):**
+    - Placement: `park.lobby = {"oorsprong": [20, 64, 530], "g": 16, "draai": 0}`, so local (x, y, z) → world (20 + x, 64 + y − 16, 530 + z). Constants are in `zone_entree` (OX, OZ, OY, G).
+    - **The haven (NE):** the boat hoofdsteiger + kano are in the haven in the north-east (the old entree lake, joined to the river by a basin), not at the west pond.
+      - Reason: the truck comes in from the north, so a canal from the pond would cross the truck road.
+      - `park.boot_start` is set; zone_s3_rit builds the jetty.
+    - **The truck road** runs inside the lobby at local x 189 (from the north gate), then along z 98 to the east gate.
+      - `park.truckperron` (x, z) is a hint: zone_s3_rit's `_perron` tries the candidates nearest to it first.
+      - `zone_entree.INS` excludes the road, so `_dorpsweg` leaves it alone.
+      - `park.route_lijn` is spliced by zone_entree.
+    - **The Kriebelhuis plot** (local x 0..182, z 0..96, plus the aai-lagune and exit/shop plots) is flat grass. The exceptions are the pond (water at the ground, `park.water` False), the lodges, and the lodge paths.
+    - **`lobby.json`:**
+      - `"bus": {min, max, bel}`: clicking the bus or ringing its bell calls `SafariToegang.terug` (lobby/SafariLobby.opBus);
+      - npcs include `expert_kriebelhuis` (kind `safari_expert_kriebelhuis`; L4 adds the kind, until then it is skipped with a warning);
+      - npcs also include the dicts from `park.lobby_npcs_extra` (zone_kriebelhuis).
+    - **`beleving.json`:**
+      - speeltuin speelgoed: 2 schommels, a glijbaantje, 2 wippen, and a `knabbelbal` (Speeltuin keeps one ball);
+      - the tunnel, bellenblaas, luchtscooter and hapluikje are tile blocks;
+      - `parade.json` `"dorp"` is written by zone_zz_j3.
 - **L2 Kriebelhuis** (owns zone_kriebelhuis.py, a new module, building + the 4 aquarium parts + homes via the plekken hook).
   - New block ids it may use (L3 makes them): `guhs:terrariumglas`, `guhs:kasglas`, `guhs:mierenboerderij`, `guhs:infobord`, `guhs:warmtelamp`, `guhs:nepkoraal`, `guhs:glimpaddenstoel`, `guhs:sterrenplafond`, `guhs:schorsplaat`, `guhs:glasvloer`.
 - **L3 blocks** (owns those blocks: Java + tools generator) + the weerder test fix (radius steps 24/32/48/64/128).
