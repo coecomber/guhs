@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:bricks",
+    "D": "minecraft:light_gray_dye"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_wolkje",
+    "count": 8
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/template_glass_pane_post",
+  "textures": {
+    "pane": {
+      "sprite": "guhs:block/bouwhulp/glasinlood_bloem",
+      "force_translucent": true
+    },
+    "edge": {
+      "sprite": "guhs:block/bouwhulp/glasinlood_rand",
+      "force_translucent": true
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/pastelbaksteen_vanille_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/pastelbaksteen_vanille_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/pastelbaksteen_vanille"
+    }
+  }
+}

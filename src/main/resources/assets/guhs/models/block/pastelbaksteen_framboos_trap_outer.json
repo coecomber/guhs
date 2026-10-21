@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_framboos",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_framboos",
+    "side": "guhs:block/bouwhulp/pastelbaksteen_framboos"
+  }
+}

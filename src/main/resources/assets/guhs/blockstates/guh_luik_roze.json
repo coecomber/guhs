@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,kant=links,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht"
+    },
+    "facing=east,kant=links,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 90
+    },
+    "facing=south,kant=links,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 180
+    },
+    "facing=west,kant=links,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 270
+    },
+    "facing=north,kant=rechts,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht"
+    },
+    "facing=east,kant=rechts,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 90
+    },
+    "facing=south,kant=rechts,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 180
+    },
+    "facing=west,kant=rechts,open=false": {
+      "model": "guhs:block/guh_luik_roze_dicht",
+      "y": 270
+    },
+    "facing=north,kant=links,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_links"
+    },
+    "facing=east,kant=links,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_links",
+      "y": 90
+    },
+    "facing=south,kant=links,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_links",
+      "y": 180
+    },
+    "facing=west,kant=links,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_links",
+      "y": 270
+    },
+    "facing=north,kant=rechts,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_rechts"
+    },
+    "facing=east,kant=rechts,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_rechts",
+      "y": 90
+    },
+    "facing=south,kant=rechts,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_rechts",
+      "y": 180
+    },
+    "facing=west,kant=rechts,open=true": {
+      "model": "guhs:block/guh_luik_roze_open_rechts",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/dakpan_kersrood_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/dakpan_kersrood_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/dakpan_kersrood"
+    }
+  }
+}

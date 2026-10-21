@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:tegel_visgraat",
+  "result": {
+    "id": "guhs:tegel_visgraat_plaat",
+    "count": 2
+  }
+}

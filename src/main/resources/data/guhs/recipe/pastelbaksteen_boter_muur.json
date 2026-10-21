@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pastelbaksteen_boter"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_boter_muur",
+    "count": 6
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": "minecraft:light_blue_wool",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:knuffelblok_hemelsblauw",
+    "count": 4
+  }
+}

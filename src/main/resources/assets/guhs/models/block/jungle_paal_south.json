@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "particle": "minecraft:block/stripped_jungle_log",
+    "zij": "minecraft:block/stripped_jungle_log",
+    "eind": "minecraft:block/stripped_jungle_log_top"
+  },
+  "elements": [
+    {
+      "from": [
+        5.0,
+        5.0,
+        11.0
+      ],
+      "to": [
+        11.0,
+        11.0,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#eind",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "west": {
+          "texture": "#zij",
+          "rotation": 90
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "particle": "guhs:block/bouwhulp/luik_roze",
+    "luik": "guhs:block/bouwhulp/luik_roze",
+    "hout": "guhs:block/bouwhulp/verf_roze"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#luik"
+        },
+        "west": {
+          "texture": "#luik"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

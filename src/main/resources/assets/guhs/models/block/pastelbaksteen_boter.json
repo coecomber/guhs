@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "guhs:block/bouwhulp/pastelbaksteen_boter",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_boter",
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_boter"
+  }
+}

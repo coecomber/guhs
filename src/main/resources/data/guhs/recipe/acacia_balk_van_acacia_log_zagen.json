@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:acacia_log",
+  "result": {
+    "id": "guhs:acacia_balk",
+    "count": 2
+  }
+}

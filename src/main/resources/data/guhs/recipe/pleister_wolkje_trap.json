@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_wolkje"
+  },
+  "result": {
+    "id": "guhs:pleister_wolkje_trap",
+    "count": 4
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_salie",
+  "result": {
+    "id": "guhs:pleister_salie_plaat",
+    "count": 2
+  }
+}

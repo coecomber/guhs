@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "guhs:block/bouwhulp/pastelbaksteen_wolkje",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_wolkje",
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_wolkje"
+  }
+}

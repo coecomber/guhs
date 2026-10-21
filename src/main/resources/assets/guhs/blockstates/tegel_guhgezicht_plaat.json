@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/tegel_guhgezicht_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/tegel_guhgezicht_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/tegel_guhgezicht"
+    }
+  }
+}

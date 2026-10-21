@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_wolkje",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_wolkje",
+    "side": "guhs:block/bouwhulp/pastelbaksteen_wolkje"
+  }
+}

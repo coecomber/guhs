@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:mangrove_planks",
+  "result": {
+    "id": "guhs:mangrove_hoekje",
+    "count": 4
+  }
+}

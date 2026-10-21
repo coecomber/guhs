@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:bricks",
+    "D": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_boter",
+    "count": 8
+  }
+}

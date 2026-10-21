@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "guhs:knuffelblok_vanille",
+    "minecraft:bamboo"
+  ],
+  "result": {
+    "id": "guhs:knuffelblok_panda"
+  }
+}

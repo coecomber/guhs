@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_orchidee",
+  "result": {
+    "id": "guhs:pleister_orchidee_muur"
+  }
+}

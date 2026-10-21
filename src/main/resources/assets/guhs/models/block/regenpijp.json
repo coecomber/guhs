@@ -1,0 +1,108 @@
+{
+  "textures": {
+    "particle": "guhs:block/bouwhulp/zink",
+    "z": "guhs:block/bouwhulp/zink"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        11
+      ],
+      "to": [
+        10,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#z",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        14
+      ],
+      "to": [
+        11,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        2,
+        14
+      ],
+      "to": [
+        11,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    }
+  ]
+}

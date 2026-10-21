@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:bricks",
+    "D": "minecraft:magenta_dye"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_orchidee",
+    "count": 8
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_korenbloem",
+  "result": {
+    "id": "guhs:pleister_korenbloem_plaat",
+    "count": 2
+  }
+}

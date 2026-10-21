@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_hemelsblauw",
+  "result": {
+    "id": "guhs:dakpan_hemelsblauw_trap"
+  }
+}

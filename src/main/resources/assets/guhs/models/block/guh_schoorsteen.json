@@ -1,0 +1,320 @@
+{
+  "textures": {
+    "particle": "guhs:block/bouwhulp/pastelbaksteen_roze",
+    "b": "guhs:block/bouwhulp/pastelbaksteen_roze",
+    "oor": "guhs:block/bouwhulp/oor",
+    "roet": "guhs:block/bouwhulp/roet"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        13,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        },
+        "south": {
+          "texture": "#b"
+        },
+        "east": {
+          "texture": "#b"
+        },
+        "west": {
+          "texture": "#b"
+        },
+        "down": {
+          "texture": "#b",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        13,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        },
+        "south": {
+          "texture": "#b"
+        },
+        "east": {
+          "texture": "#b"
+        },
+        "west": {
+          "texture": "#b"
+        },
+        "down": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        16,
+        1
+      ],
+      "to": [
+        3,
+        16,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        16,
+        1
+      ],
+      "to": [
+        15,
+        16,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        16,
+        1
+      ],
+      "to": [
+        13,
+        16,
+        3
+      ],
+      "faces": {
+        "up": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        16,
+        13
+      ],
+      "to": [
+        13,
+        16,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        14,
+        3
+      ],
+      "to": [
+        13,
+        14,
+        13
+      ],
+      "faces": {
+        "up": {
+          "texture": "#roet"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        3
+      ],
+      "faces": {
+        "south": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        13
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        3,
+        16,
+        13
+      ],
+      "faces": {
+        "east": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "west": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        16,
+        7
+      ],
+      "to": [
+        5,
+        19.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        },
+        "south": {
+          "texture": "#b"
+        },
+        "east": {
+          "texture": "#b"
+        },
+        "west": {
+          "texture": "#b"
+        },
+        "up": {
+          "texture": "#b"
+        },
+        "down": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        16,
+        7
+      ],
+      "to": [
+        14,
+        19.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        },
+        "south": {
+          "texture": "#b"
+        },
+        "east": {
+          "texture": "#b"
+        },
+        "west": {
+          "texture": "#b"
+        },
+        "up": {
+          "texture": "#b"
+        },
+        "down": {
+          "texture": "#b"
+        }
+      }
+    },
+    {
+      "from": [
+        2.75,
+        16.5,
+        6.9
+      ],
+      "to": [
+        4.25,
+        18.75,
+        6.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        }
+      }
+    },
+    {
+      "from": [
+        11.75,
+        16.5,
+        6.9
+      ],
+      "to": [
+        13.25,
+        18.75,
+        6.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        }
+      }
+    }
+  ]
+}

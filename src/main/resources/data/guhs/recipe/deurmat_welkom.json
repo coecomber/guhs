@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CDC"
+  ],
+  "key": {
+    "C": "minecraft:brown_carpet",
+    "D": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:deurmat_welkom",
+    "count": 2
+  }
+}

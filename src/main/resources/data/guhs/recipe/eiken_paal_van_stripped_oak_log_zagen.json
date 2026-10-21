@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:stripped_oak_log",
+  "result": {
+    "id": "guhs:eiken_paal",
+    "count": 4
+  }
+}

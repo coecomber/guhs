@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/dakgoot"
+    },
+    "facing=east": {
+      "model": "guhs:block/dakgoot",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/dakgoot",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/dakgoot",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_framboos",
+  "result": {
+    "id": "guhs:pastelbaksteen_framboos_trap"
+  }
+}

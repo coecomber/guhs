@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:dark_oak_log",
+  "result": {
+    "id": "guhs:donkereiken_paal",
+    "count": 4
+  }
+}

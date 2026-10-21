@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_boter",
+  "result": {
+    "id": "guhs:pastelbaksteen_boter_vplaat",
+    "count": 2
+  }
+}

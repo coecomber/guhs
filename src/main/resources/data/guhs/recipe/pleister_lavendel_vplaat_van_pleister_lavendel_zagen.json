@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_lavendel",
+  "result": {
+    "id": "guhs:pleister_lavendel_vplaat",
+    "count": 2
+  }
+}

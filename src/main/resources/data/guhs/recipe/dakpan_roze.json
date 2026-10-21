@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": "minecraft:pink_terracotta"
+  },
+  "result": {
+    "id": "guhs:dakpan_roze",
+    "count": 4
+  }
+}

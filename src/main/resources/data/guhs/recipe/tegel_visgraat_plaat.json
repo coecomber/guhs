@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:tegel_visgraat"
+  },
+  "result": {
+    "id": "guhs:tegel_visgraat_plaat",
+    "count": 6
+  }
+}

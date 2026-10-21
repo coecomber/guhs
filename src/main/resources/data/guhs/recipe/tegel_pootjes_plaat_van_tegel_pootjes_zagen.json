@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:tegel_pootjes",
+  "result": {
+    "id": "guhs:tegel_pootjes_plaat",
+    "count": 2
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pleister_pistache",
+  "result": {
+    "id": "guhs:pleister_pistache_plaat",
+    "count": 2
+  }
+}

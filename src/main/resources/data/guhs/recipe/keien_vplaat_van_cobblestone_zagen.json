@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:cobblestone",
+  "result": {
+    "id": "guhs:keien_vplaat",
+    "count": 2
+  }
+}

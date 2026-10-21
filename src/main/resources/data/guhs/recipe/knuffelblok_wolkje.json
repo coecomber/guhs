@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": "minecraft:light_gray_wool",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:knuffelblok_wolkje",
+    "count": 4
+  }
+}

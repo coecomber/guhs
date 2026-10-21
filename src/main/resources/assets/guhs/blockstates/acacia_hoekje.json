@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/acacia_hoekje"
+    },
+    "facing=east": {
+      "model": "guhs:block/acacia_hoekje",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "guhs:block/acacia_hoekje",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "guhs:block/acacia_hoekje",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:tegel_guhgezicht",
+  "result": {
+    "id": "guhs:tegel_guhgezicht_plaat",
+    "count": 2
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_roze",
+  "result": {
+    "id": "guhs:pastelbaksteen_roze_plaat",
+    "count": 2
+  }
+}

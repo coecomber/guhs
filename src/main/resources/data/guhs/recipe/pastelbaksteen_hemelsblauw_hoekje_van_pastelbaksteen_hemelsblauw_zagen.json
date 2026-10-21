@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_hemelsblauw",
+  "result": {
+    "id": "guhs:pastelbaksteen_hemelsblauw_hoekje",
+    "count": 4
+  }
+}

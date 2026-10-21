@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pleister_hemelsblauw",
+    "top": "guhs:block/bouwhulp/pleister_hemelsblauw",
+    "side": "guhs:block/bouwhulp/pleister_hemelsblauw"
+  }
+}

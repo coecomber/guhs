@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "XXX"
+  ],
+  "key": {
+    "X": "minecraft:bricks",
+    "D": "minecraft:black_dye"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_drop",
+    "count": 8
+  }
+}

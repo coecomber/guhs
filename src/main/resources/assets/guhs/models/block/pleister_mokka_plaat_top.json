@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pleister_mokka",
+    "top": "guhs:block/bouwhulp/pleister_mokka",
+    "side": "guhs:block/bouwhulp/pleister_mokka"
+  }
+}

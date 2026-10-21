@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_wolkje",
+  "result": {
+    "id": "guhs:pastelbaksteen_wolkje_trap"
+  }
+}

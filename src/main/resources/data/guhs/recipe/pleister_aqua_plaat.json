@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_aqua"
+  },
+  "result": {
+    "id": "guhs:pleister_aqua_plaat",
+    "count": 6
+  }
+}

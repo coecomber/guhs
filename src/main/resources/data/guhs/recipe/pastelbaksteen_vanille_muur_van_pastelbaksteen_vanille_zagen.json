@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_vanille",
+  "result": {
+    "id": "guhs:pastelbaksteen_vanille_muur"
+  }
+}

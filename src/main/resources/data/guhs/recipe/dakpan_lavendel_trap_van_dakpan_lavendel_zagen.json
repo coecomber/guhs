@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_lavendel",
+  "result": {
+    "id": "guhs:dakpan_lavendel_trap"
+  }
+}

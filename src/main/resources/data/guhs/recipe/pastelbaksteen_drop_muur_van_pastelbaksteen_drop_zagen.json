@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_drop",
+  "result": {
+    "id": "guhs:pastelbaksteen_drop_muur"
+  }
+}

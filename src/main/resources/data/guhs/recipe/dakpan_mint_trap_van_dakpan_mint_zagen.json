@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:dakpan_mint",
+  "result": {
+    "id": "guhs:dakpan_mint_trap"
+  }
+}

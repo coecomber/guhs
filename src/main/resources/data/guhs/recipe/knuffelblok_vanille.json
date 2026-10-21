@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:knuffelblok_vanille",
+    "count": 4
+  }
+}

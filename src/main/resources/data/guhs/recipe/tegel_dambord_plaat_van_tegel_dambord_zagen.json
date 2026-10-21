@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:tegel_dambord",
+  "result": {
+    "id": "guhs:tegel_dambord_plaat",
+    "count": 2
+  }
+}

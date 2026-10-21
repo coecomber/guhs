@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:pastelbaksteen_mokka",
+  "result": {
+    "id": "guhs:pastelbaksteen_mokka_hoekje",
+    "count": 4
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "particle": "guhs:block/bouwhulp/luik_hemelsblauw",
+    "luik": "guhs:block/bouwhulp/luik_hemelsblauw",
+    "hout": "guhs:block/bouwhulp/verf_hemelsblauw"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        13
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#luik"
+        },
+        "south": {
+          "texture": "#luik"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

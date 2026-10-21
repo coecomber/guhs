@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_vanille"
+  },
+  "result": {
+    "id": "guhs:pleister_vanille_muur",
+    "count": 6
+  }
+}

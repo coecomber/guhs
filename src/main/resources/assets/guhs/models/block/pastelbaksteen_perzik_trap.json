@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/bouwhulp/pastelbaksteen_perzik",
+    "top": "guhs:block/bouwhulp/pastelbaksteen_perzik",
+    "side": "guhs:block/bouwhulp/pastelbaksteen_perzik"
+  }
+}

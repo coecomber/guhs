@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pleister_pistache"
+  },
+  "result": {
+    "id": "guhs:pleister_pistache_plaat",
+    "count": 6
+  }
+}

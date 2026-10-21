@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:pastelbaksteen_aqua"
+  },
+  "result": {
+    "id": "guhs:pastelbaksteen_aqua_plaat",
+    "count": 6
+  }
+}

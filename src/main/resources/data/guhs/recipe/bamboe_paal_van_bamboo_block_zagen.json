@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:bamboo_block",
+  "result": {
+    "id": "guhs:bamboe_paal",
+    "count": 4
+  }
+}

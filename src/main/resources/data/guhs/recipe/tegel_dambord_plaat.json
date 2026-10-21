@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "guhs:tegel_dambord"
+  },
+  "result": {
+    "id": "guhs:tegel_dambord_plaat",
+    "count": 6
+  }
+}

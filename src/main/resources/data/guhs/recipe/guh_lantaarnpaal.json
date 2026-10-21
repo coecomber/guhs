@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "DLD",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "D": "minecraft:pink_dye",
+    "L": "minecraft:lantern",
+    "I": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "guhs:guh_lantaarnpaal"
+  }
+}
