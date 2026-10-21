@@ -60,6 +60,7 @@ public final class Spookbouw {
             s.zet(oorsprong, draai, spiegel);
             spoken.veranderd(level, s);
         }
+        level.playSound(null, oorsprong, nl.juiced.guhs.feature.bouwhulp.BouwGeluid.SPOOK.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5f, 0.95f + level.getRandom().nextFloat() * 0.1f);   // F12
         return s;
     }
 

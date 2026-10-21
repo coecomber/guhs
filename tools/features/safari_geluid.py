@@ -9,6 +9,10 @@ Op Safari! (1.6.0), slice S6 - all safari sounds, synthesized (mono OGG, 44.1 kH
   sfeer/<zone>        an ambience loop per zone (about 12 s): savanne (32 s: breeze, far doves, a zebra, an elephant), delta (frogs + water), regenwoud
                       (jungle calls + drips), bamboe (wind chimes + leaves), ijskust (icy wind + waves), oertijd (deep wind),
                       europa (forest birds + brook), australie (dry wind + kookaburra-ish laugh), entree (cheerful murmur)
+  (F12) dier/ kriebel (a soft rustle + tiny clicks), hommel (a round buzz), vis (blub bubbles), kikker (a ribbit),
+        vleermuis (high little squeaks); sfeer/ kriebelhuis_kriebel (insect hum + drips), kriebelhuis_nacht (crickets + a soft
+        hoot), kriebelhuis_diepzee (deep hum + bubbles); beverbeek_sfeer (brook + birds), beverbeek_knaag1-3 (a beaver
+        gnawing), knabbelvelden_sfeer (a dreamy, slow pad with chimes)
   muziek_lobby        a cheerful safari lobby loop (marimba, shaker, soft bass), about 24 s
   camera              a camera shutter (click + whirr)
   munt                a coin "ting-ting" (Safarimunten)
@@ -30,8 +34,15 @@ OUT = os.path.join("src", "main", "resources", "assets", "guhs", "sounds", "safa
 rng = np.random.default_rng(20261020)
 
 DIER_GROEPEN = ["grote_kat", "olifant", "grazer", "klein", "vogel", "groot_vogel", "pinguin", "zee", "beer", "aap", "reptiel",
-                "nijlpaard", "geit", "ezel", "cavia"]
-ZONES = ["savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie", "entree"]
+                "nijlpaard", "geit", "ezel", "cavia",
+                # 1.6.0 F12: the Kriebelhuis' small folk got their own calls
+                "kriebel", "hommel", "vis", "kikker", "vleermuis"]
+ZONES = ["savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie", "entree",
+         # 1.6.0 F12: the Kriebelhuis' halls (client SafariSfeer picks them by kriebelhuis.json "secties")
+         "kriebelhuis_kriebel", "kriebelhuis_nacht", "kriebelhuis_diepzee"]
+# F12: the groups and zones above that came with F12 (python tools/features/safari_geluid.py --f12 writes only these)
+F12_GROEPEN = ["kriebel", "hommel", "vis", "kikker", "vleermuis"]
+F12_ZONES = ["kriebelhuis_kriebel", "kriebelhuis_nacht", "kriebelhuis_diepzee"]
 
 
 def _sig():
@@ -169,7 +180,57 @@ def dier(groep, v):
                    (0.85, toon(880 * j, 0.25, harm=(1, 0.7, 0.4)), 0.6))
     if groep == "cavia":
         return mix(0.7, (0, toon(1900 * j, 0.2, glij=0.5, harm=(1, 0.3)), 0.8), (0.25, toon(2200 * j, 0.25, glij=0.4, harm=(1, 0.3)), 0.8))
+    if groep == "kriebel":
+        ritsel = band(ruis(0.35), 2500, 7000) * env(int(0.35 * SR), 0.02, 0.2) * (0.6 + 0.4 * np.sin(2 * np.pi * 35 * t_(0.35)))
+        klik = np.zeros(int(0.02 * SR))
+        klik[:40] = rng.standard_normal(40) * np.linspace(1, 0, 40)
+        return mix(0.6, (0, ritsel, 0.5), (0.3 + 0.04 * v, klik, 0.7), (0.38 + 0.04 * v, klik, 0.5), (0.45, klik, 0.4))
+    if groep == "hommel":
+        t = t_(0.9)
+        f = 170 * j * (1 + 0.04 * np.sin(2 * np.pi * 5 * t))
+        fase = 2 * np.pi * np.cumsum(f) / SR
+        zoem = sum(np.sin(fase * k) / k for k in range(1, 9)) * (0.7 + 0.3 * np.sin(2 * np.pi * 3 * t))
+        return low(zoem, 1800) * env(len(t), 0.15, 0.3)
+    if groep == "vis":
+        return mix(0.7, *[(0.08 * i + 0.02 * v, toon(rng.uniform(380, 700) * j, 0.07, glij=1.2, harm=(1, 0.2), a=0.004, r=0.05), 0.6 - 0.08 * i)
+                          for i in range(3 + v)])
+    if groep == "kikker":
+        def kwak(f, d):
+            return toon(f, d, glij=-0.1, harm=(1, 0.8, 0.6, 0.4, 0.2)) * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 28 * t_(d))))
+        return mix(0.6, (0, kwak(330 * j, 0.14), 0.9), (0.2, kwak(400 * j, 0.18), 1.0))
+    if groep == "vleermuis":
+        return mix(0.45, *[(0.07 * i, toon(rng.uniform(3400, 4400) * j, 0.04, glij=-0.3, harm=(1, 0.1), a=0.002, r=0.02), 0.6)
+                           for i in range(3 + v % 2)])
     raise ValueError(groep)
+
+
+def knaag(v):
+    """A beaver gnawing: quick little bites on wood (F12: beverbeek_knaag and bouwhulp/knaag)."""
+    n = 7 + 2 * v
+    beet = []
+    for i in range(n):
+        b = band(ruis(0.035), 1500, 4500) * np.exp(-t_(0.035) * 90)
+        beet.append((i * (0.075 + 0.005 * v), b, rng.uniform(0.6, 1.0)))
+    return mix(n * 0.08 + 0.1, *beet) + 0.15 * band(ruis(n * 0.08 + 0.1), 300, 900) * env(int((n * 0.08 + 0.1) * SR), 0.05, 0.1)
+
+
+def beverbeek_sfeer(dur=16.0):
+    beek = band(ruis(dur), 500, 2600) * (0.8 + 0.2 * np.sin(2 * np.pi * 0.45 * t_(dur)))
+    kabbel = mix(dur, *[(rng.uniform(0, dur - 0.2), toon(rng.uniform(700, 1300), 0.07, glij=0.9, harm=(1,)), 0.08) for _ in range(30)])
+    return beek * 0.3 + kabbel + vogeltjes(dur, 7, 2400, 4600) * 0.6 + wind(dur, 300, 1200) * 0.12
+
+
+def knabbelvelden_sfeer(dur=24.0):
+    akkoorden = [(262, 330, 392), (349, 440, 523), (392, 494, 587), (262, 330, 392)]     # C F G C, slow and soft
+    stuk = dur / len(akkoorden)
+    delen = []
+    for i, ak in enumerate(akkoorden):
+        for f in ak:
+            delen.append((i * stuk, toon(f, stuk + 1.5, vib=0.004, vibf=4.0, harm=(1, 0.15), a=1.5, r=1.8), 0.18))
+            delen.append((i * stuk, toon(f / 2, stuk + 1.5, harm=(1,), a=1.5, r=1.8), 0.08))
+    belletjes = [(rng.uniform(0, dur - 2.0), toon([1047, 1175, 1319, 1568][int(rng.integers(4))], 1.8, harm=(1, 0.3), a=0.002, r=1.7), 0.07)
+                 for _ in range(9)]
+    return mix(dur + 0.4, *delen, *belletjes) + wind(dur + 0.4, 200, 700) * 0.04
 
 
 # --- ambience loops ------------------------------------------------------------------------------------------------------
@@ -272,6 +333,18 @@ def sfeer(zone, dur=12.0):
     if zone == "australie":
         lach = mix(dur, *[(s + 0.11 * k, toon(900 + 120 * (k % 3), 0.09, glij=0.4, harm=(1, 0.5)), 0.2) for s in (2.0, 8.0) for k in range(8)])
         return wind(dur, 200, 900) * 0.5 + krekels(dur, 3600, 10) * 0.4 + lach
+    if zone == "kriebelhuis_kriebel":
+        hum = low(toon(120, dur, vib=0.02, vibf=3.0, harm=(1, 0.5, 0.3, 0.2), a=0.5, r=0.5), 900) * 0.15
+        ritsel = band(ruis(dur), 3000, 7000) * (np.sin(2 * np.pi * 0.37 * t_(dur)) > 0.7) * 0.15
+        return hum + ritsel + druppels(dur, 14) * 0.8 + krekels(dur, 5600, 22) * 0.15
+    if zone == "kriebelhuis_nacht":
+        oehoe = mix(dur, *[(s, toon(380, 0.35, glij=-0.08, harm=(1, 0.2), a=0.08, r=0.2), 0.12) for s in (3.0, 3.5, 9.2)])
+        return krekels(dur, 4400, 16) * 0.8 + krekels(dur, 3800, 11) * 0.4 + oehoe + wind(dur, 150, 500) * 0.15
+    if zone == "kriebelhuis_diepzee":
+        diep = low(ruis(dur), 160) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.2 * t_(dur)))
+        bel = mix(dur, *[(rng.uniform(0, dur - 0.2), toon(rng.uniform(300, 800), 0.06, glij=1.4, harm=(1,), a=0.003, r=0.04), 0.15) for _ in range(28)])
+        zang = mix(dur, (4.0, toon(220, 2.0, glij=0.3, vib=0.02, harm=(1, 0.2), a=0.6, r=0.8), 0.06))
+        return diep * 0.8 + bel + zang
     if zone == "entree":
         gemompel = band(ruis(dur), 300, 1200) * (0.6 + 0.4 * np.sin(2 * np.pi * 0.7 * t_(dur)))
         return gemompel * 0.3 + vogeltjes(dur, 4) * 0.5 + krekels(dur, 4000, 8) * 0.2
@@ -337,6 +410,17 @@ def kano():
 
 def main():
     import sys
+    if "--f12" in sys.argv:              # 1.6.0 F12: only the new calls and loops (the older OGGs stay byte for byte)
+        for g in F12_GROEPEN:
+            for v in (1, 2, 3):
+                save(f"dier/{g}{v}", dier(g, v), 0.7)
+        for z in F12_ZONES:
+            save(f"sfeer/{z}", sfeer(z), 0.5, loop=True)
+        save("beverbeek_sfeer", beverbeek_sfeer(), 0.5, loop=True)
+        for v in (1, 2, 3):
+            save(f"beverbeek_knaag{v}", knaag(v), 0.6)
+        save("knabbelvelden_sfeer", knabbelvelden_sfeer(), 0.45, loop=True)
+        return
     if "--savanne" in sys.argv:            # round 4: only the new savanne ambience (the other OGGs stay as they are)
         save("sfeer/savanne", savanne(), 0.45, loop=True)
         return

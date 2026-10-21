@@ -70,15 +70,15 @@ GELUID = {
     "nijlpaard": "nijlpaard",
     "geitje": "geit", "alpaca": "geit", "ezeltje": "ezel", "cavia": "cavia",
     # round 4: the Kriebelhuis animals (batch 10/11)
-    "kameleon": "reptiel", "reuzenschildpad": "reptiel", "slang": "reptiel", "hoornkikker": "reptiel", "kiwi": "vogel",
-    "schubdier": "klein", "spookdiertje": "aap", "plompe_lori": "aap", "zeepaardje": "zee", "pijlstaartrog": "zee",
+    "kameleon": "reptiel", "reuzenschildpad": "reptiel", "slang": "reptiel", "hoornkikker": "kikker", "kiwi": "vogel",
+    "schubdier": "klein", "spookdiertje": "aap", "plompe_lori": "aap", "zeepaardje": "vis", "pijlstaartrog": "vis",
     "zeeschildpad": "zee", "pelikaan": "groot_vogel",
     # round 4 (L4): the Kriebelzaal, the aquarium, the terrarium and the Nachtzaal (batch 12-15)
-    "mier": "klein", "springspin": "klein", "wandelende_tak": "klein", "mestkever": "klein", "slak": "klein",
-    "vogelspin": "klein", "hommel": "klein", "clownvis": "zee", "anemoon": "zee", "kwal": "zee", "kogelvis": "zee",
-    "zeester": "zee", "zee_egel": "zee", "babyhaai": "zee", "regenboogvis": "zee", "kraaghagedis": "reptiel",
-    "gifkikker": "reptiel", "baardagaam": "reptiel", "fruitvleermuis": "vogel", "galago": "aap", "suikereekhoorn": "klein",
-    "fennek": "klein", "lantaarnvisje": "zee", "dumbo_octopus": "zee",
+    "mier": "kriebel", "springspin": "kriebel", "wandelende_tak": "kriebel", "mestkever": "kriebel", "slak": "kriebel",
+    "vogelspin": "kriebel", "hommel": "hommel", "clownvis": "vis", "anemoon": "vis", "kwal": "vis", "kogelvis": "vis",
+    "zeester": "vis", "zee_egel": "vis", "babyhaai": "vis", "regenboogvis": "vis", "kraaghagedis": "reptiel",
+    "gifkikker": "kikker", "baardagaam": "reptiel", "fruitvleermuis": "vleermuis", "galago": "aap", "suikereekhoorn": "klein",
+    "fennek": "klein", "lantaarnvisje": "vis", "dumbo_octopus": "vis",
 }
 
 DATA = {

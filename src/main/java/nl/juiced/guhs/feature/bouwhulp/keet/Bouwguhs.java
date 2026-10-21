@@ -175,7 +175,7 @@ public final class Bouwguhs {
         for (GuhEntity g : hier(level, keet)) {
             level.sendParticles(ParticleTypes.HEART, g.getX(), g.getY() + g.getBbHeight() + 0.3, g.getZ(), 4, 0.3, 0.2, 0.3, 0.05);
             g.getJumpControl().jump();
-            level.playSound(null, g.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.NEUTRAL, 0.6f, 1.4f + level.getRandom().nextFloat() * 0.4f);
+            level.playSound(null, g.blockPosition(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.FLUIT.get(), SoundSource.NEUTRAL, 0.6f, 0.9f + level.getRandom().nextFloat() * 0.4f);
         }
     }
 

@@ -1,5 +1,8 @@
 {
   "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:knabbelvelden.sfeer"
+    },
     "minecraft:audio/background_music": {
       "default": {
         "sound": "guhs:hemel.muziek",

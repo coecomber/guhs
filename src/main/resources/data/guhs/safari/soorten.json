@@ -2075,7 +2075,7 @@
   "snelheid": 0.12,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.reptiel",
+  "geluid": "safari.dier.kikker",
   "sectie": "terrarium",
   "terrarium": true,
   "acties": [
@@ -2147,7 +2147,7 @@
   "snelheid": 0.14,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.reptiel",
+  "geluid": "safari.dier.kikker",
   "sectie": "terrarium",
   "kleuren": [
    "blauw",
@@ -2226,7 +2226,7 @@
   "snelheid": 0.12,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2261,7 +2261,7 @@
   "snelheid": 0.14,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2297,7 +2297,7 @@
   "snelheid": 0.04,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "idle_mix": {
@@ -2334,7 +2334,7 @@
   "snelheid": 0.1,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2369,7 +2369,7 @@
   "snelheid": 0.03,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2404,7 +2404,7 @@
   "snelheid": 0.08,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.kriebel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2438,7 +2438,7 @@
   "snelheid": 0.12,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.klein",
+  "geluid": "safari.dier.hommel",
   "sectie": "kriebelzaal",
   "terrarium": true,
   "acties": [
@@ -2624,7 +2624,7 @@
   "snelheid": 0.14,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.vogel",
+  "geluid": "safari.dier.vleermuis",
   "sectie": "nachtzaal",
   "acties": [
    "rust",
@@ -2772,7 +2772,7 @@
   "snelheid": 0.06,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "idle_mix": {
@@ -2810,7 +2810,7 @@
   "snelheid": 0.14,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "acties": [
    "rust",
@@ -2876,7 +2876,7 @@
   "snelheid": 0.12,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -2909,7 +2909,7 @@
   "snelheid": 0.0,
   "glow": false,
   "bord": null,
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "acties": [
    "rust",
@@ -2942,7 +2942,7 @@
   "snelheid": 0.05,
   "glow": true,
   "bord": "middel",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -2977,7 +2977,7 @@
   "snelheid": 0.1,
   "glow": false,
   "bord": "middel",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -3013,7 +3013,7 @@
   "snelheid": 0.02,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -3047,7 +3047,7 @@
   "snelheid": 0.02,
   "glow": false,
   "bord": null,
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "dexgroep": "zeester",
   "acties": [
@@ -3080,7 +3080,7 @@
   "snelheid": 0.16,
   "glow": false,
   "bord": "zeldzaam",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "acties": [
    "rust",
@@ -3114,7 +3114,7 @@
   "snelheid": 0.16,
   "glow": false,
   "bord": "gewoon",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -3149,7 +3149,7 @@
   "snelheid": 0.08,
   "glow": true,
   "bord": "middel",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [
@@ -3185,7 +3185,7 @@
   "snelheid": 0.06,
   "glow": false,
   "bord": "zeldzaam",
-  "geluid": "safari.dier.zee",
+  "geluid": "safari.dier.vis",
   "sectie": "aquarium",
   "terrarium": true,
   "acties": [

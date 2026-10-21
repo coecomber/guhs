@@ -1,5 +1,12 @@
 {
   "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:beverbeek.sfeer",
+      "additions": {
+        "sound": "guhs:beverbeek.knaag",
+        "tick_chance": 0.0015
+      }
+    },
     "minecraft:audio/background_music": {
       "default": {
         "sound": "minecraft:music.game",

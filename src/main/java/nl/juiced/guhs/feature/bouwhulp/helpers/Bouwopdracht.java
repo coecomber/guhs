@@ -466,6 +466,10 @@ public final class Bouwopdracht {
         be.setChanged();
     }
 
+    /** F12: whose work sounds like gnawing (bouwhulp.knaag) and whose like digging (bouwhulp.graaf). */
+    private static final java.util.Set<String> KNAGERS = java.util.Set.of("bever", "specht"),
+            GRAVERS = java.util.Set.of("stokstaartje", "das", "wombat", "olifant", "neushoorn", "kafferbuffel", "mammoet", "otter");
+
     /** A block went in: now and then the nearest family member plays a work animation toward it, with a little sound. */
     public static void geplaatst(ServerLevel level, VerblijfsbordBlockEntity be, Spook s, BlockPos pos) {
         CompoundTag t = tag(be);
@@ -486,8 +490,11 @@ public final class Bouwopdracht {
         if (dichtst != null && d < 16 * 16) {
             dichtst.werk(pos);
         }
-        level.playSound(null, pos, n % 12 == 0 ? SoundEvents.WOOD_HIT : SoundEvents.GRAVEL_PLACE, SoundSource.NEUTRAL, 0.5f,
-                1.0f + level.getRandom().nextFloat() * 0.4f);
+        // F12: gnawers gnaw, diggers dig, the rest plonk their blocks in
+        String soort = be.soort();
+        net.minecraft.sounds.SoundEvent geluid = KNAGERS.contains(soort) ? nl.juiced.guhs.feature.bouwhulp.BouwGeluid.KNAAG.get()
+                : GRAVERS.contains(soort) ? nl.juiced.guhs.feature.bouwhulp.BouwGeluid.GRAAF.get() : nl.juiced.guhs.feature.bouwhulp.BouwGeluid.PLONK.get();
+        level.playSound(null, pos, geluid, SoundSource.NEUTRAL, 0.5f, 0.9f + level.getRandom().nextFloat() * 0.3f);
     }
 
     public static void gestopt(ServerLevel level, VerblijfsbordBlockEntity be, Spook s, boolean gelukt) {

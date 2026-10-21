@@ -26,9 +26,10 @@ public final class SafariGeluid {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
 
     public static final List<String> DIER_GROEPEN = List.of("grote_kat", "olifant", "grazer", "klein", "vogel", "groot_vogel", "pinguin",
-            "zee", "beer", "aap", "reptiel", "nijlpaard", "geit", "ezel", "cavia");
+            "zee", "beer", "aap", "reptiel", "nijlpaard", "geit", "ezel", "cavia",
+            "kriebel", "hommel", "vis", "kikker", "vleermuis");     // (1.6.0 F12: the Kriebelhuis' small folk)
     public static final List<String> ZONES = List.of("savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie",
-            "entree");
+            "entree", "kriebelhuis_kriebel", "kriebelhuis_nacht", "kriebelhuis_diepzee");   // (F12: the Kriebelhuis' halls)
 
     public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> DIER = new LinkedHashMap<>();
     public static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> SFEER = new LinkedHashMap<>();
@@ -51,6 +52,12 @@ public final class SafariGeluid {
     /** Test round 4: the tune of the pinguïnparade, four phrases of 4 seconds (flute and drum, tools/features/safari_parade_geluid.py). */
     public static final List<DeferredHolder<SoundEvent, SoundEvent>> PARADE = List.of(sound("safari.parade.1"), sound("safari.parade.2"),
             sound("safari.parade.3"), sound("safari.parade.4"));
+
+    /** F12: the Beverbeek's brook (the biome's ambient loop) and its beaver gnawing now and then (the biome's additions). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> BEVERBEEK_SFEER = sound("beverbeek.sfeer");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BEVERBEEK_KNAAG = sound("beverbeek.knaag");
+    /** F12: De Eeuwige Knabbelvelden's dreamy ambient loop (the biome's loop). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> KNABBELVELDEN_SFEER = sound("knabbelvelden.sfeer");
 
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Guhs.id(name)));

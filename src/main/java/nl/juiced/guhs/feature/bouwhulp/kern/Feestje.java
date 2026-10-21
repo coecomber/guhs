@@ -45,8 +45,7 @@ public final class Feestje {
         Vec3 m = Vec3.atBottomCenterOf(top);
         level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, m.x, m.y + 0.5, m.z, 60, 1.2, 0.8, 1.2, 0.35);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, m.x, m.y + 0.5, m.z, 30, 1.5, 0.6, 1.5, 0.1);
-        level.playSound(null, top, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.9f, 1.3f);
-        level.playSound(null, top, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.BLOCKS, 1f, 1.6f);
+        level.playSound(null, top, nl.juiced.guhs.feature.bouwhulp.BouwGeluid.FEEST.get(), SoundSource.BLOCKS, 1f, 1f);   // F12: the done-fanfare
         Display.ItemDisplay vlag = EntityType.ITEM_DISPLAY.create(level, EntitySpawnReason.TRIGGERED);
         if (vlag != null) {
             vlag.getSlot(0).set(new ItemStack(Items.PINK_BANNER));
@@ -68,8 +67,7 @@ public final class Feestje {
         int n = (int) Math.min(400, 40 + d.getXsize() * d.getZsize());
         level.sendParticles(ROZE, m.x, m.y, m.z, n, d.getXsize() / 2.5, d.getYsize() / 2.5, d.getZsize() / 2.5, 0.05);
         level.sendParticles(ParticleTypes.CLOUD, m.x, m.y, m.z, n / 2, d.getXsize() / 3, d.getYsize() / 3, d.getZsize() / 3, 0.08);
-        level.playSound(null, BlockPos.containing(m), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.BLOCKS, 1.5f, 0.6f);
-        level.playSound(null, BlockPos.containing(m), SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.BLOCKS, 1f, 1.4f);
+        level.playSound(null, BlockPos.containing(m), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.POF.get(), SoundSource.BLOCKS, 1.5f, 1f);   // F12
         for (ServerPlayer p : level.players()) {
             if (p.distanceToSqr(m) < 64 * 64) {
                 p.connection.send(new ClientboundSetTitlesAnimationPacket(2, 20, 8));

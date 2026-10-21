@@ -143,7 +143,9 @@ def worldgen(h):
     base = json.load(open(f"{wg}/biome/pink_puffs.json", encoding="utf-8"))
     ores = base["features"][6]
     w(f"{wg}/biome/{BIOME}.json", {
-        "attributes": {"minecraft:visual/fog_color": "#d4ece6", "minecraft:visual/sky_color": "#9fd3ea",
+        "attributes": {"minecraft:audio/ambient_sounds": {"loop": "guhs:beverbeek.sfeer",          # F12: the brook + a gnawing beaver
+                                                          "additions": {"sound": "guhs:beverbeek.knaag", "tick_chance": 0.0015}},
+                       "minecraft:visual/fog_color": "#d4ece6", "minecraft:visual/sky_color": "#9fd3ea",
                        "minecraft:visual/water_fog_color": "#2f6f7a",
                        "minecraft:visual/ambient_particles": [{"particle": {"type": "minecraft:falling_water"}, "probability": 0.0006}]},
         "has_precipitation": True, "temperature": 0.7, "downfall": 0.8,
