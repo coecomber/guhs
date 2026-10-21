@@ -26,11 +26,13 @@ HIER = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HIER, "..", ".."))
 ATELIER = os.path.join(HIER, "safari_atelier")
 STAGING = os.path.join(ROOT, "build", "safari_atelier")
+STAGING_SLAAP = os.path.join(ROOT, "build", "safari_atelier_slaap")   # round 3: the same models with closed eyes
 RES = os.path.join(ROOT, "src", "main", "resources")
 GEO_DIR = os.path.join(RES, "assets", "guhs", "geckolib", "models", "entity", "safari")
 ANIM_DIR = os.path.join(RES, "assets", "guhs", "geckolib", "animations", "entity", "safari")
 TEX_DIR = os.path.join(RES, "assets", "guhs", "textures", "entity", "safari")
 SOORTEN_JSON = os.path.join(RES, "data", "guhs", "safari", "soorten.json")
+BEWONERS_JSON = os.path.join(RES, "data", "guhs", "safari", "bewoners.json")
 
 # the studio module that makes each soort (batch 1 = dieren.py)
 MODULES = ["dieren", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9"]
@@ -132,6 +134,53 @@ DATA = {
 }
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# round 3 (lively animals, design ch. 5 / ronde 40): what an animal does in its "gedrag" activity (SafariDier):
+#   rust        lie down for a while (eyes open)        spuit      trunk up + a water shower
+#   kudde_ren   the herd runs together to another spot  spring     a few hops on the way (kangaroo)
+#   buikglij    slide on its belly over snow/ice         glijbaan   the slide loop (points "glijbaan" in kijkplekken.json)
+#   zwem        into the water and around               draag      carry a branch to the dam (points "beverdam")
+#   burcht      into the lodge for a while ("beverburcht")   tunnel   along the badger tunnel ("dassentunnel")
+#   drink       to the water's edge and drink
+#   anim:<a>    play its own animation <a> standing still
+# Every species gets "rust" + "anim:<a>" for its own extra animations (wacht, gaap, slinger, tik, ...); ACTIES adds the
+# special ones. Written to soorten.json as "acties".
+# ---------------------------------------------------------------------------------------------------------------------
+ACTIES = {
+    "olifant": ["spuit", "drink", "kudde_ren"], "mammoet": ["spuit", "kudde_ren"],
+    "zebra": ["kudde_ren", "drink"], "kafferbuffel": ["kudde_ren", "drink"], "giraffe": ["kudde_ren", "drink"],
+    "edelhert": ["kudde_ren", "drink"], "struisvogel": ["kudde_ren"], "wolharige_neushoorn": ["drink"],
+    "kangoeroe": ["spring", "drink"], "quokka": ["spring"], "wombat": [],
+    "pinguin": ["buikglij", "glijbaan", "zwem"],
+    "bever": ["zwem", "draag", "burcht"], "das": ["tunnel"], "otter": ["zwem"],
+    "nijlpaard": ["zwem"], "krokodil": ["zwem"], "capibara": ["zwem", "drink"], "flamingo": ["zwem"],
+    "ijsbeer": ["zwem"], "zeehond": ["zwem"], "leeuw": ["drink"], "neushoorn": ["drink"], "jachtluipaard": ["drink"],
+}
+# own animations that are no behaviour of their own (the base set, poses the AI sets itself, and the generated ones)
+GEEN_ACTIE_ANIM = {"idle", "walk", "blij", "eet", "hang", "slaap", "rust", "ren", "buikglij", "spuit", "draag", "zit"}
+
+# "bekende bewoners" (ronde 46): one named park animal per entry; the game names the first grown-up of the first home of
+# that species in that zone. id = soort + zone (stable).
+BEWONERS = [
+    ("olifant", "savanne", "Flappie"), ("leeuw", "savanne", "Manenmans"), ("giraffe", "savanne", "Langnek Lotte"),
+    ("nijlpaard", "delta", "Gapende Gijs"), ("flamingo", "delta", "Roze Rosa"),
+    ("luiaard", "regenwoud", "Slome Sjaak"), ("toekan", "regenwoud", "Snavel Saar"),
+    ("reuzenpanda", "bamboe", "Bamboe Bas"), ("rode_panda", "bamboe", "Pluimpje"),
+    ("pinguin", "ijskust", "Flapje"), ("ijsbeer", "ijskust", "Sneeuwvlok"),
+    ("mammoet", "oertijd", "Wolbol"),
+    ("bever", "europa", "Knaagje"), ("otter", "europa", "Otto"),
+    ("koala", "australie", "Slaapkop Kees"), ("kangoeroe", "australie", "Hupsje"),
+]
+
+
+def schrijf_bewoners():
+    uit = [{"id": f"{s}_{z}", "soort": s, "zone": z, "naam": n} for s, z, n in BEWONERS]
+    os.makedirs(os.path.dirname(BEWONERS_JSON), exist_ok=True)
+    with open(BEWONERS_JSON, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(uit, f, indent=1, ensure_ascii=False)
+        f.write("\n")
+
+
 def _modules():
     sys.path.insert(0, ATELIER)
     import importlib
@@ -165,7 +214,22 @@ def maak(soorten=None, vellen=False):
     for s in soorten:
         per[s].maak(s)
         os.chdir(cwd)                       # some studio code chdirs (blad -> repo root)
+    # round 3: the same studio run once more with closed eyes, into its own folder (only its textures are used)
+    import atelier
+    atelier.SLAAP = True
+    try:
+        for m in mods:
+            m.UIT = STAGING_SLAAP
+        os.makedirs(STAGING_SLAAP, exist_ok=True)
+        for s in soorten:
+            per[s].maak(s)
+            os.chdir(cwd)
+    finally:
+        atelier.SLAAP = False
+        for m in mods:
+            m.UIT = STAGING
     kopieer(soorten)
+    extra_animaties(soorten)
     if vellen:
         for m in mods:
             mine = [s for s in m.SOORTEN if s in soorten]
@@ -176,6 +240,21 @@ def maak(soorten=None, vellen=False):
                     m.vellen(mine)
             os.chdir(cwd)
     schrijf_soorten()
+    schrijf_bewoners()
+
+
+def extra_animaties(soorten):
+    """Round 3: slaap/rust and the behaviour animations (safari_atelier/gedrag_anims.py) into the copied animation files."""
+    import gedrag_anims
+    for s in soorten:
+        pad = os.path.join(ANIM_DIR, f"{s}.animation.json")
+        geo = os.path.join(GEO_DIR, f"{s}.geo.json")
+        if not (os.path.exists(pad) and os.path.exists(geo)):
+            continue
+        anims = json.load(open(pad, encoding="utf-8"))
+        if gedrag_anims.voeg_toe(s, json.load(open(geo, encoding="utf-8")), anims):
+            with open(pad, "w", encoding="utf-8") as f:
+                json.dump(anims, f, indent=1)
 
 
 def kopieer(soorten):
@@ -196,6 +275,15 @@ def kopieer(soorten):
                 oud = os.path.join(TEX_DIR, f)
                 if doel != f and os.path.exists(oud):
                     os.remove(oud)
+        # round 3: the closed-eye textures (<naam>_slaap.png) of every model of this soort
+        slaap = os.path.join(STAGING_SLAAP, s)
+        if os.path.isdir(slaap):
+            for f in os.listdir(slaap):
+                if f.endswith(".geo.json"):
+                    naam = f[:-len(".geo.json")]
+                    png = os.path.join(slaap, naam + ".png")
+                    if os.path.exists(png):
+                        shutil.copyfile(png, os.path.join(TEX_DIR, naam + "_slaap.png"))
 
 
 def _geo_maat(pad):
@@ -246,6 +334,11 @@ def schrijf_soorten():
         }
         if d.get("idle_mix"):
             uit[s]["idle_mix"] = d["idle_mix"]
+        acties = ["rust"] + [a for a in ACTIES.get(s, []) if a != "rust"]
+        acties += [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM]
+        if "aaihoek" in d["gedrag"] or "geheim" in d["gedrag"]:
+            acties = ["rust"] + [f"anim:{a}" for a in namen if a not in GEEN_ACTIE_ANIM]
+        uit[s]["acties"] = acties
     os.makedirs(os.path.dirname(SOORTEN_JSON), exist_ok=True)
     with open(SOORTEN_JSON, "w", encoding="utf-8", newline="\n") as f:
         json.dump(uit, f, indent=1, ensure_ascii=False)

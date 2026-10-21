@@ -207,8 +207,54 @@ def neusje(fur, neus, mond=True):
 
 
 def gezicht(fur, eye_y=0.42, eye_dx=0.26, eye_r=0.17, snoet=False, blush=True, spots=None):
-    """Het guh-gezicht (de grote glimoogjes) op een dierenkop."""
+    """Het guh-gezicht (de grote glimoogjes) op een dierenkop. Met SLAAP aan: dezelfde kop met dichte oogjes."""
+    if SLAAP:
+        return slaap_gezicht(fur, eye_y=eye_y, eye_dx=eye_dx, eye_r=eye_r, snoet=snoet, blush=blush, spots=spots)
     return guh_face(fur, eye_y=eye_y, eye_dx=eye_dx, eye_r=eye_r, snoet=snoet, blush=blush, spots=spots)
+
+
+# Ronde 3 (slapen zoals guhs): safari_dieren.py draait elke soort een tweede keer met SLAAP = True in een eigen map en
+# kopieert die textures als <naam>_slaap.png (de client toont ze terwijl het dier slaapt). Alles behalve de oogjes is
+# pixel voor pixel gelijk: de slaapschilder verbruikt de rng precies zoals de wakkere.
+SLAAP = False
+
+
+def slaap_gezicht(fur, eye_y=0.42, eye_dx=0.26, eye_r=0.17, snoet=False, blush=True, spots=None):
+    import copy
+    wakker = guh_face(fur, eye_y=eye_y, eye_dx=eye_dx, eye_r=eye_r, snoet=snoet, blush=blush, spots=spots)
+
+    def paint(W, H, rng):
+        r2 = copy.deepcopy(rng)
+        a = wakker(W, H, rng).astype(np.float32)            # (consumes the rng exactly like the awake face)
+        vacht = plain(fur, 8, spots)(W, H, r2).astype(np.float32)   # the same fur without eyes (guh_face starts with this)
+        r = eye_r * W
+        weg = np.zeros((H, W), bool)                         # the pixels of the open eyes, now fur again
+        for sx in (-1, 1):
+            cx, cy = W / 2 + sx * eye_dx * W, H * eye_y
+            for y in range(H):
+                for x in range(W):
+                    dx, dy = (x + 0.5 - cx) / r, (y + 0.5 - cy) / (r * 1.08)
+                    if math.hypot(dx, dy) <= 1.04:
+                        a[y, x] = vacht[y, x]
+                        weg[y, x] = True
+        if blush:                                            # the blush where it overlapped an open eye (once, not twice)
+            b = a.copy()
+            for sx in (-1, 1):
+                cx, cy = W / 2 + sx * eye_dx * W, H * eye_y
+                disc(b, cx + sx * 0.25 * r, cy + 1.45 * r, 0.62 * r, (255, 150, 186), 0.55, ry=0.32 * r)
+            a[weg] = b[weg]
+        for sx in (-1, 1):
+            # a happy closed eye: the lower arc of the eye, dark, a little thicker in the middle
+            cx, cy = W / 2 + sx * eye_dx * W, H * eye_y
+            for y in range(H):
+                for x in range(W):
+                    dx, dy = (x + 0.5 - cx) / r, (y + 0.5 - cy) / r
+                    d = math.hypot(dx, dy)
+                    dik = 0.17 + 0.08 * max(0.0, 1 - abs(dx))
+                    if dy > -0.05 and abs(d - 0.62) < dik and abs(dx) < 0.95:
+                        a[y, x, :3] = (40, 28, 52)
+        return np.clip(a, 0, 255).astype(np.uint8)
+    return paint
 
 
 # ---------------------------------------------------------------------------------------------------------------------

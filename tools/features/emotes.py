@@ -20,7 +20,9 @@ EMOTES = ["zwaaien", "dansen", "slapen", "vahoeg", "rollen", "smakken", "verlege
           # 3.0 (Guhverhalen): only the 626-guh; its animation comes from tools/features/guhwaii.py animations(), not from here
           "ukelele",
           # 1.2.0: being petted (a tap from the owner; not in the picker)
-          "aaien"]
+          "aaien",
+          # 1.6.0 Op Safari! (round 3): reactions to the park animals (GuhReacties; not in the picker)
+          "schrikken", "rechtop"]
 
 
 def _kf(pairs):
@@ -315,10 +317,42 @@ def _pet():
     }}
 
 
+def _startled():
+    """1.6.0: startled (the crocodile!): a hop back with paws up and ears straight up, a beat, then a relieved shake."""
+    return {"loop": True, "animation_length": 1.5, "bones": {
+        "root": {"position": _kf([(0, [0, 0, 0]), (0.12, [0, 2.2, 2.0]), (0.3, [0, 0, 2.5]), (1.1, [0, 0, 2.5]), (1.5, [0, 0, 0])]),
+                 "rotation": _kf([(0, [0, 0, 0]), (0.12, [-12, 0, 0]), (0.3, [-6, 0, 0]), (1.1, [-6, 0, 0]), (1.2, [0, 0, 5]),
+                                  (1.3, [0, 0, -5]), (1.4, [0, 0, 3]), (1.5, [0, 0, 0])])},
+        "body": {"scale": _kf([(0, [1, 1, 1]), (0.12, [0.92, 1.12, 0.94]), (0.3, [1, 1, 1]), (1.5, [1, 1, 1])])},
+        "leg_front_left": {"rotation": _kf([(0, [0, 0, 0]), (0.12, [-60, 0, -15]), (1.1, [-55, 0, -12]), (1.5, [0, 0, 0])])},
+        "leg_front_right": {"rotation": _kf([(0, [0, 0, 0]), (0.12, [-60, 0, 15]), (1.1, [-55, 0, 12]), (1.5, [0, 0, 0])])},
+        "ear_left": {"rotation": _kf([(0, [0, 0, 0]), (0.1, [-30, 0, -20]), (1.1, [-30, 0, -20]), (1.5, [0, 0, 0])])},
+        "ear_right": {"rotation": _kf([(0, [0, 0, 0]), (0.1, [-30, 0, 20]), (1.1, [-30, 0, 20]), (1.5, [0, 0, 0])])},
+        "tail": {"rotation": _kf([(0, [0, 0, 0]), (0.12, [60, 0, 0]), (1.1, [55, 0, 0]), (1.5, [0, 0, 0])])},
+    }}
+
+
+def _upright():
+    """1.6.0: up on its hind paws like a meerkat on guard, front paws tucked, looking left and right."""
+    return {"loop": True, "animation_length": 3.0, "bones": {
+        "root": {"rotation": _kf([(0, [-62, 0, 0])]), "position": _kf([(0, [0, 1.5, 2.5])])},
+        "leg_front_left": {"rotation": _kf([(0, [55, 0, 0])])},
+        "leg_front_right": {"rotation": _kf([(0, [55, 0, 0])])},
+        "leg_back_left": {"rotation": _kf([(0, [62, 0, 0])])},
+        "leg_back_right": {"rotation": _kf([(0, [62, 0, 0])])},
+        "head": {"rotation": _kf([(0, [55, 0, 0]), (0.8, [55, 0, 10]), (1.5, [55, 0, 0]), (2.2, [55, 0, -10]), (3.0, [55, 0, 0])])},
+        "ear_left": {"rotation": _kf([(0, [0, 0, 0]), (1.4, [0, 0, -10]), (1.6, [0, 0, 0])])},
+        "ear_right": {"rotation": _kf([(0, [0, 0, 0]), (2.4, [0, 0, 10]), (2.6, [0, 0, 0])])},
+        "tail": {"rotation": _kf([(0, [-40, 0, 0])])},
+    }}
+
+
 def animations():
     """animation name -> animation, merged into the guh animation file. (The ukelele's comes from tools/features/guhwaii.py.)"""
     makers = dict(zip(EMOTES[:14], [_wave, _dance, _sleep, _vahoeg, _roll, _munch, _shy, _yawn, _sing, _hug, _hearts, _twirl, _bff_hug, _sad]))
     makers["aaien"] = _pet
+    makers["schrikken"] = _startled
+    makers["rechtop"] = _upright
     return {f"animation.guh.emote_{name}": make() for name, make in makers.items()}
 
 
@@ -434,6 +468,12 @@ LANG = {
     "emote.guhs.aaien.description": ("Wordt even helemaal plat van geluk, ogen dicht, en duwt zijn kopje tegen je hand.",
                                      "Wordt even helemaal plat van geluk, ogen dicht, en duwt zijn kopje tegen je hand."),
     "gui.guhs.emotes.hint": ("Star = favourite", "Ster = lievelingsemote"),
+    # 1.6.0 Op Safari!: reactions to park animals (not in the picker)
+    "emote.guhs.schrikken": ("Startled", "Schrikken"),
+    "emote.guhs.schrikken.description": ("Jumps back with its paws up. Njeg, a crocodile!", "Springt achteruit met zijn pootjes omhoog. Njeg, een krokodil!"),
+    "emote.guhs.rechtop": ("Upright", "Rechtop"),
+    "emote.guhs.rechtop.description": ("Stands up on its hind paws and looks around, just like a meerkat.",
+                                       "Gaat op zijn achterpootjes staan en kijkt rond, net een stokstaartje."),
     "emote.guhs.zwaaien": ("Wave", "Zwaaien"),
     "emote.guhs.dansen": ("Dance", "Dansen"),
     "emote.guhs.slapen": ("Sleep", "Slapen"),

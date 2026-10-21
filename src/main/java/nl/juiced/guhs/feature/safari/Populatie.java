@@ -87,6 +87,10 @@ public final class Populatie {
                 continue;
             }
             dier.zet(p.soort(), variant, p.centrum(), p.straal(), zone, p.id(), generatie);
+            nl.juiced.guhs.feature.safari.gedrag.Bewoners.Bewoner bewoner = nl.juiced.guhs.feature.safari.gedrag.Bewoners.voor(p, i);
+            if (bewoner != null) {
+                dier.zetBewoner(bewoner.id(), bewoner.naam());      // round 3: a "bekende bewoner" (name tag, Safari dex list)
+            }
             double hoek = rnd.nextDouble() * Math.PI * 2, r = Math.sqrt(rnd.nextDouble()) * p.straal() * 0.7;
             int x = p.centrum().getX() + (int) Math.round(Math.cos(hoek) * r), z = p.centrum().getZ() + (int) Math.round(Math.sin(hoek) * r);
             if (zone >= 0 && d.zone(x, z) != zone) {

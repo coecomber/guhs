@@ -53,6 +53,9 @@ public final class Fotograaf {
 
     /** One click: look, score, keep, pay and tell the client. Returns the photo (null: no animal in the picture). */
     @Nullable
+    /** Round 3: the animals in the last picture {@link #kijk} took on this thread (for the "bekende bewoners"). */
+    private static final ThreadLocal<List<SafariDier>> IN_BEELD = ThreadLocal.withInitial(List::of);
+
     public static Foto klik(ServerPlayer p, boolean zoom) {
         ServerLevel level = p.level();
         level.playSound(p, p.blockPosition(), nl.juiced.guhs.feature.safari.spullen.SafariGeluid.CAMERA.get(), SoundSource.PLAYERS, 0.8f, 1.0f);   // (the photographer hears it via the client)
@@ -61,6 +64,10 @@ public final class Fotograaf {
             ModNetworking.sendTo(p, new CameraPayloads.Uitslag(new CompoundTag(), 0, 0, 0));
             return null;
         }
+        for (SafariDier d : IN_BEELD.get()) {
+            nl.juiced.guhs.feature.safari.gedrag.Bewoners.gefotografeerd(p, d);
+        }
+        IN_BEELD.set(List.of());
         long dag = Klok.dag();
         CompoundTag tag = f.tag(dag, p.getGameProfile().name());
         int was = SafariSpeler.registreerFoto(p, f.soort(), f.sterren(), tag);
@@ -131,6 +138,7 @@ public final class Fotograaf {
             return null;
         }
         final SafariDier onderwerp = beste;
+        IN_BEELD.set(List.copyOf(inBeeld));
         Vec3 m = onderwerp.getBoundingBox().getCenter();
         double afstand = m.distanceTo(oog);
         double grootte = Math.atan(Math.max(onderwerp.getBbWidth(), onderwerp.getBbHeight()) / afstand) / (2 * half);

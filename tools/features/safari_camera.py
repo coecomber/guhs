@@ -73,6 +73,11 @@ TEKSTEN = {
     "gui.guhs.safari.dex.weergave.dieren": "Dieren",
     "gui.guhs.safari.dex.weergave.missies": "Missies",
     "gui.guhs.safari.dex.weergave.geheimpjes": "Geheimpjes",
+    # 1.6.0 round 3: the "bekende bewoners"
+    "gui.guhs.safari.dex.weergave.bewoners": "Bewoners",
+    "gui.guhs.safari.dex.bewoners.kop": "Bekende bewoners %s/%s",
+    "gui.guhs.safari.dex.bewoners.uitleg": "In elke zone wonen een paar diertjes met een naam. Zie je een naambordje? Maak er een foto van!",
+    "gui.guhs.safari.bewoner.gefotografeerd": "Je hebt %s gefotografeerd! Een bekende bewoner van het park.",
     "gui.guhs.safari.dex.teller": "Dex %s/%s · %s Safarimunten",
     "gui.guhs.safari.dex.afdrukken": "Afdrukken",
     "gui.guhs.safari.dex.afdrukken.tip": "Maak een fotokaartje van je beste foto van dit dier (kost 1 vel papier).",

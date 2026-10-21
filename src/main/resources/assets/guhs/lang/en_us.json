@@ -26861,5 +26861,13 @@
   "gui.guhs.safari.olifant.bord": "Dikkie lives here",
   "commands.guhs.safari.quest": "Quest %s is now at: %s",
   "commands.guhs.safari.quests": "Disguised guh: %s · Too vah elephant: %s · Secrets: %s/%s · Beaver dams: %s",
-  "gui.guhs.safari.bordbon.ingewisseld": "Board voucher redeemed: the Golden dikdik's habitat sign! Sparkle sparkle, njeg."
+  "gui.guhs.safari.bordbon.ingewisseld": "Board voucher redeemed: the Golden dikdik's habitat sign! Sparkle sparkle, njeg.",
+  "emote.guhs.schrikken": "Startled",
+  "emote.guhs.schrikken.description": "Jumps back with its paws up. Njeg, a crocodile!",
+  "emote.guhs.rechtop": "Upright",
+  "emote.guhs.rechtop.description": "Stands up on its hind paws and looks around, just like a meerkat.",
+  "gui.guhs.safari.dex.weergave.bewoners": "Residents",
+  "gui.guhs.safari.dex.bewoners.kop": "Famous residents %s/%s",
+  "gui.guhs.safari.dex.bewoners.uitleg": "Every zone has a few animals with a name. See a name tag? Take a photo of it!",
+  "gui.guhs.safari.bewoner.gefotografeerd": "You photographed %s! A famous resident of the park."
 }

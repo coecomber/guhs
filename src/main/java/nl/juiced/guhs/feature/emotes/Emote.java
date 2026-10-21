@@ -52,7 +52,12 @@ public enum Emote {
      * and a paw up against your hand and a happy wiggle. Not in the picker, never a favourite or a random one, and it doesn't
      * count for "alle emotes" ({@link #kiesbaar}).
      */
-    AAIEN(32);
+    AAIEN(32),
+    // --- 1.6.0 Op Safari! (round 3): reactions to the park animals (GuhReacties), not in the picker ---
+    /** Startled (the crocodile!): a hop back, paws up, ears straight up, then a relieved little shake. */
+    SCHRIKKEN(30),
+    /** Stands up on its hind paws and looks around, like a meerkat on guard. */
+    RECHTOP(70);
 
     public final int onceTicks;
     public final RawAnimation animation;
@@ -68,7 +73,7 @@ public enum Emote {
 
     /** Can the owner pick it (the emote picker, a favourite)? Everything but the petting moment. */
     public boolean kiesbaar() {
-        return this != AAIEN;
+        return this != AAIEN && this != SCHRIKKEN && this != RECHTOP;
     }
 
     /** The emotes of the picker, in order. */
