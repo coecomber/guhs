@@ -203,6 +203,26 @@
     65,
     698
    ]
+  },
+  {
+   "id": "kriebelhuis_balie",
+   "kind": "safari_kriebelhuis_balie",
+   "pos": [
+    139.5,
+    65,
+    607.5
+   ],
+   "yaw": 180.0
+  },
+  {
+   "id": "kriebelhuis_winkel",
+   "kind": "safari_kriebelhuis_winkel",
+   "pos": [
+    98.5,
+    65,
+    632.5
+   ],
+   "yaw": 0.0
   }
  ],
  "pennen": [

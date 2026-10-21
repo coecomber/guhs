@@ -24,7 +24,7 @@ SOORTEN = {
     "struisvogel": ("savanne", 4, "open", 18),
     "zeekoe": ("delta", 2, "diep", 12), "nijlpaard": ("delta", 3, "plek:nijlpaardenpoel", 10),
     "flamingo": ("delta", 8, "plek:flamingomeer", 10), "capibara": ("delta", 4, "oever", 10),
-    "krokodil": ("delta", 2, "plek:krokodillenbank", 8),
+    "krokodil": ("delta", 2, "plek:krokodillenbank", 8), "pelikaan": ("delta", 3, "oever", 10),   # 1.6.0 L4: the delta bird (no home had been made)
     "rode_panda": ("bamboe", 3, "boom", 10), "reuzenpanda": ("bamboe", 2, "plek:bamboedoolhof", 10),
     "gibbon": ("bamboe", 3, "boom", 12),
     "luiaard": ("regenwoud", 2, "boom", 6), "okapi": ("regenwoud", 2, "verstop:okapi_dal", 7),
@@ -45,7 +45,7 @@ SOORTEN = {
     "cavia": ("entree", 2, "aaihoek", 3), "ezeltje": ("entree", 2, "aaihoek", 4),
 }
 WATERDIER = {"zeekoe", "narwal", "octopus"}
-HALFWATER = {"nijlpaard", "krokodil", "flamingo", "capibara", "zeehond", "otter", "bever", "pinguin", "ooievaar", "ijsbeer"}
+HALFWATER = {"pelikaan", "nijlpaard", "krokodil", "flamingo", "capibara", "zeehond", "otter", "bever", "pinguin", "ooievaar", "ijsbeer"}
 BOOMDIER = {"luipaard", "rode_panda", "gibbon", "luiaard", "toekan", "gekko", "koala", "specht", "prieelvogel"}
 
 

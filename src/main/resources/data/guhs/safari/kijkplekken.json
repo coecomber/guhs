@@ -28,14 +28,14 @@
      "straal": 3
     },
     {
-     "naam": "toren_australie_318_448_quokka",
+     "naam": "toren_australie_318_448_koala",
      "pos": [
-      338,
-      60,
-      432
+      323,
+      65,
+      429
      ],
      "soorten": [
-      "quokka"
+      "koala"
      ],
      "straal": 3
     }
@@ -323,12 +323,24 @@
     {
      "naam": "toren_europa_300_300_egel",
      "pos": [
-      320,
+      288,
       65,
-      296
+      284
      ],
      "soorten": [
       "egel"
+     ],
+     "straal": 3
+    },
+    {
+     "naam": "toren_europa_300_300_specht",
+     "pos": [
+      322,
+      65,
+      295
+     ],
+     "soorten": [
+      "specht"
      ],
      "straal": 3
     }
@@ -964,6 +976,62 @@
    ]
   },
   {
+   "naam": "kriebelhuis_kijkgrot",
+   "zone": "entree",
+   "oog": [
+    38.5,
+    60.6,
+    588.5
+   ],
+   "richting": [
+    -1.0,
+    0.0
+   ],
+   "stoel": [
+    38,
+    59,
+    588
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkgrot_zeepaardje",
+     "pos": [
+      33,
+      58,
+      584
+     ],
+     "soorten": [
+      "zeepaardje"
+     ],
+     "straal": 2
+    },
+    {
+     "naam": "kijkgrot_pijlstaartrog",
+     "pos": [
+      34,
+      58,
+      592
+     ],
+     "soorten": [
+      "pijlstaartrog"
+     ],
+     "straal": 2
+    },
+    {
+     "naam": "kijkgrot_zeester",
+     "pos": [
+      35,
+      58,
+      580
+     ],
+     "soorten": [
+      "zeester"
+     ],
+     "straal": 2
+    }
+   ]
+  },
+  {
    "naam": "toren_oertijd_422_193",
    "zone": "oertijd",
    "oog": [
@@ -978,6 +1046,18 @@
     193
    ],
    "favorieten": [
+    {
+     "naam": "toren_oertijd_422_193_wolharige_neushoorn",
+     "pos": [
+      422,
+      81,
+      191
+     ],
+     "soorten": [
+      "wolharige_neushoorn"
+     ],
+     "straal": 3
+    },
     {
      "naam": "toren_oertijd_422_193_mammoet",
      "pos": [
