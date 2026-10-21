@@ -20,9 +20,11 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 
 /**
- * A gondola of the kabelbaan IJskust - Bamboebergen (S3): two of them shuttle along the cable, one at each end, and
- * wait a while in every station. Get in from the station deck (a click); you only get out in a station (sneaking under
- * way does nothing: a long way down). Model: geckolib safari_rit/gondel (tools/features/safari_rit.py).
+ * A gondola of the kabelbaan IJskust - Bamboebergen (S3, a loop since round 3): {@link RitSchema#GONDELS} of them go
+ * round the loop (out along one line, back along the parallel one, hanging centred under the cable so they pass the
+ * T-masts on the outside) and turn in the open stations, where they stand still about five seconds along the
+ * platform. Get in from the platform (a click); you only get out in a station (sneaking under way does nothing: a long way
+ * down). Model: geckolib safari_rit/gondel (tools/features/safari_rit.py).
  */
 public class GondelEntity extends SchemaRit {
     public static final int PLAATSEN = 4, GUH_PLAATSEN = 2;
@@ -38,7 +40,7 @@ public class GondelEntity extends SchemaRit {
         builder.define(DATA_STATION, 0);
     }
 
-    /** The station it waits in (0 = IJskust, 1 = Bamboebergen), -1 under way. */
+    /** The station it waits in (index in {@link RitData#stations}), -1 under way. */
     public int station() {
         return entityData.get(DATA_STATION);
     }
@@ -46,25 +48,26 @@ public class GondelEntity extends SchemaRit {
     @Override
     protected void plaats(long t, boolean snap) {
         RitData d = RitData.get();
-        if (d.kabelA == null || d.kabelB == null) {
+        if (d.kabel == null) {
             return;
         }
-        double[] g = RitSchema.gondel(t, k(), d.kabelA.distanceTo(d.kabelB));
-        Vec3 p = d.kabelA.lerp(d.kabelB, g[0]);
-        Vec3 r = d.kabelB.subtract(d.kabelA);
-        float yaw = (float) Math.toDegrees(Math.atan2(-r.x, r.z));
-        zet(p, yaw, true);
-        if (!level().isClientSide() && (int) g[1] != station()) {
-            entityData.set(DATA_STATION, (int) g[1]);
-            if (g[1] >= 0) {
+        RitSchema.Stand s = RitSchema.gondel(t, k(), d.kabel.lengte(), stationAfstanden(d));
+        zet(d.kabel.op(s.afstand()), d.kabel.richting(s.afstand(), getYRot()), snap);
+        if (!level().isClientSide() && s.halte() != station()) {
+            entityData.set(DATA_STATION, s.halte());
+            if (s.halte() >= 0 && !snap) {
+                Component naam = Component.translatable("gui.guhs.safari.zone." + d.stations.get(s.halte()).zone());
                 for (Entity e : getPassengers()) {
                     if (e instanceof ServerPlayer sp) {
-                        sp.sendOverlayMessage(Component.translatable("gui.guhs.safari.kabel.aangekomen",
-                                Component.translatable(g[1] == 0 ? "gui.guhs.safari.zone.ijskust" : "gui.guhs.safari.zone.bamboe")));
+                        sp.sendOverlayMessage(Component.translatable("gui.guhs.safari.kabel.aangekomen", naam));
                     }
                 }
             }
         }
+    }
+
+    static java.util.List<Double> stationAfstanden(RitData d) {
+        return d.stations.stream().map(RitData.Station::afstand).toList();
     }
 
     @Override

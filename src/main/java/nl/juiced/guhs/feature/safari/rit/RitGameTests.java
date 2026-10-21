@@ -1,12 +1,29 @@
 package nl.juiced.guhs.feature.safari.rit;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import nl.juiced.guhs.feature.safari.SafariFeature;
 import nl.juiced.guhs.feature.safari.momenten.MomentSchema;
 import nl.juiced.guhs.gametest.GuhTest;
+import nl.juiced.guhs.registry.ModEntities;
 
-/** Op Safari! step 2 (S3): the truck and gondola timetables and the day plan of the moments (pure arithmetic). */
+/**
+ * Op Safari! step 2 (S3) and round 3 (J2): the truck and gondola timetables, the truck seats, the safaripoort (shuts by
+ * itself, opens for a truck, never lets an animal through), the ride data and the day plan of the moments.
+ */
 public class RitGameTests {
     private static final String BATCH = "safari";
 
@@ -44,21 +61,128 @@ public class RitGameTests {
         helper.succeed();
     }
 
-    /** The gondolas wait in a station, travel, wait at the other end; the two are always at opposite ends. */
+    /** The gondolas go round the loop, stand GONDEL_WACHT ticks in both stations, and are spread evenly along it. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void gondels(GameTestHelper helper) {
-        double lengte = 180;
-        long ronde = RitSchema.gondelRonde(lengte);
-        double[] g0 = RitSchema.gondel(0, 0, lengte);
-        helper.assertTrue(g0[0] == 0 && g0[1] == 0, "gondola 0 starts waiting at station A");
-        double[] g1 = RitSchema.gondel(0, 1, lengte);
-        helper.assertTrue(g1[0] == 1 && g1[1] == 1, "gondola 1 starts waiting at station B");
-        double[] onderweg = RitSchema.gondel(RitSchema.GONDEL_WACHT + 100, 0, lengte);
-        helper.assertTrue(onderweg[1] < 0 && onderweg[0] > 0 && onderweg[0] < 1, "under way in between");
-        for (long t = 0; t < ronde; t += 37) {
-            double a = RitSchema.gondel(t, 0, lengte)[0], b = RitSchema.gondel(t, 1, lengte)[0];
-            helper.assertTrue(Math.abs(a + b - 1) < 0.02, "always mirrored (t=" + t + ")");
+        double lengte = 400;
+        List<Double> stations = List.of(100.0, 300.0);
+        long ronde = RitSchema.ronde(lengte, 2, RitSchema.GONDEL_SNELHEID, RitSchema.GONDEL_WACHT);
+        int stil = 0;
+        boolean was = false;
+        double vorige = -1;
+        for (long t = 0; t < ronde; t++) {
+            RitSchema.Stand s = RitSchema.gondel(t, 0, lengte, stations);
+            helper.assertTrue(s.afstand() >= vorige - 1e-9, "never backwards within a loop (t=" + t + ")");
+            vorige = s.afstand();
+            if (s.staatStil()) {
+                helper.assertTrue(Math.abs(s.afstand() - stations.get(s.halte())) < 1e-9, "it stands in a station");
+                stil++;
+            }
+            if (s.staatStil() && !was) {
+                helper.assertTrue(s.wachtNog() == RitSchema.GONDEL_WACHT, "a full stop in the station");
+            }
+            was = s.staatStil();
         }
+        helper.assertTrue(stil == 2 * RitSchema.GONDEL_WACHT, "about 5 s in each of the two stations (" + stil + ")");
+        long t0 = 777;
+        helper.assertTrue(Math.abs(RitSchema.gondel(t0, 1, lengte, stations).afstand()
+                - RitSchema.gondel(t0 + ronde / RitSchema.GONDELS, 0, lengte, stations).afstand()) < 0.5, "gondola 1 = gondola 0 a sixth of a loop later");
+        helper.succeed();
+    }
+
+    /** The truck seats: players from the front, the visitors from the back, never the same seat, two always free for players. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void truckStoelen(GameTestHelper helper) {
+        helper.assertTrue(TruckEntity.ZIT.length == 1 + TruckEntity.STOELEN, "the guide + three rows of two");
+        for (int basis = 2; basis <= 4; basis++) {
+            for (int spelers = 0; spelers <= TruckEntity.STOELEN; spelers++) {
+                int bezoekers = TruckEntity.bezoekers(basis, spelers);
+                List<Integer> hun = TruckEntity.bezoekerStoelen(spelers, bezoekers);
+                Set<Integer> bezet = new HashSet<>();
+                for (int i = 0; i < spelers; i++) {
+                    int st = TruckEntity.spelerStoel(i);
+                    helper.assertTrue(st >= 1 && st <= TruckEntity.STOELEN && bezet.add(st), "player " + i + " has a seat of their own");
+                }
+                for (int st : hun) {
+                    helper.assertTrue(st >= 1 && st <= TruckEntity.STOELEN && bezet.add(st), "a visitor never sits in a player seat");
+                }
+                helper.assertTrue(hun.size() == bezoekers, "every visitor has a seat");
+                if (spelers <= TruckEntity.STOELEN - TruckEntity.VRIJ) {
+                    helper.assertTrue(TruckEntity.STOELEN - bezet.size() >= TruckEntity.VRIJ,
+                            "two seats stay free for players (" + basis + " visitors, " + spelers + " players)");
+                }
+            }
+        }
+        helper.assertTrue(TruckEntity.spelerStoel(0) == 1, "the first player sits in front, behind the guide");
+        helper.succeed();
+    }
+
+    // --- the safaripoort -----------------------------------------------------------------------------------------------------
+
+    private static final BlockPos POORT = new BlockPos(6, 1, 8);
+
+    private static SafariPoortBlockEntity poort(GameTestHelper helper) {
+        BlockPos hoek = helper.absolutePos(POORT);
+        SafariPoortBlock.zet(helper.getLevel(), hoek, Direction.Axis.X);
+        helper.assertTrue(helper.getLevel().getBlockState(SafariPoortBlock.deel(hoek, Direction.Axis.X, 3, 5)).is(SafariRitten.POORT.get()),
+                "all 4 x 6 parts are there");
+        SafariPoortBlockEntity be = (SafariPoortBlockEntity) helper.getLevel().getBlockEntity(hoek);
+        helper.assertTrue(be != null && !be.open(), "a shut gate with its block entity in the corner");
+        return be;
+    }
+
+    /** Opened by hand, the gate shuts itself after OPEN_MAX ticks. */
+    @GuhTest(template = "px_test_16", batch = BATCH, timeoutTicks = 300)
+    public static void poortSluitVanzelf(GameTestHelper helper) {
+        SafariPoortBlockEntity be = poort(helper);
+        be.openMetDeHand();
+        helper.assertTrue(be.open(), "a click opens it");
+        helper.runAfterDelay(SafariPoortBlockEntity.OPEN_MAX - 20, () -> {
+            helper.assertTrue(be.open(), "still open after " + (SafariPoortBlockEntity.OPEN_MAX - 20) + " ticks");
+            helper.succeedWhen(() -> helper.assertTrue(!be.open(), "shut again after about 10 s"));
+        });
+    }
+
+    /** A truck coming towards the gate opens it in time; when it has gone through and on, the gate shuts again. */
+    @GuhTest(template = "px_test_16", batch = BATCH, timeoutTicks = 200)
+    public static void poortTruck(GameTestHelper helper) {
+        SafariPoortBlockEntity be = poort(helper);
+        Vec3 m = be.midden();
+        TruckEntity truck = SafariRitten.TRUCK.get().create(helper.getLevel(), EntitySpawnReason.EVENT);
+        helper.assertTrue(truck != null, "a truck");
+        truck.zetVast();
+        truck.snapTo(m.x, m.y, m.z - 15, 0, 0);       // yaw 0: driving towards +z, the gate 15 blocks ahead
+        helper.getLevel().addFreshEntity(truck);
+        helper.assertTrue(SafariPoortBlockEntity.truckWilDoor(truck.position(), 0, m), "it wants through");
+        helper.assertFalse(SafariPoortBlockEntity.truckWilDoor(truck.position(), 180, m), "not when it drives away");
+        helper.runAfterDelay(2 * SafariPoortBlockEntity.ELKE + 1, () -> {
+            helper.assertTrue(be.open(), "open before the truck gets there");
+            truck.snapTo(m.x, m.y, m.z + 12, 0, 0);    // through and on: 12 blocks past it, driving away
+            helper.succeedWhen(() -> {
+                helper.assertTrue(!be.open(), "shut behind the truck");
+                truck.discard();
+            });
+        });
+    }
+
+    /** The hard rule: through an open gate players and guhs may pass, a park animal or a race ostrich never. */
+    @GuhTest(template = "px_test_16", batch = BATCH, timeoutTicks = 40)
+    public static void poortDierTegen(GameTestHelper helper) {
+        SafariPoortBlockEntity be = poort(helper);
+        be.openMetDeHand();
+        ServerLevel level = helper.getLevel();
+        BlockPos p = SafariPoortBlock.deel(be.getBlockPos(), be.as(), 1, 1);
+        BlockState st = level.getBlockState(p);
+        helper.assertTrue(st.getValue(SafariPoortBlock.OPEN), "the part is open");
+        Entity dier = SafariFeature.DIER.get().create(level, EntitySpawnReason.EVENT);
+        Entity struis = SafariRitten.STRUISVOGEL.get().create(level, EntitySpawnReason.EVENT);
+        Entity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.EVENT);
+        Player speler = helper.makeMockPlayer(GameType.SURVIVAL);
+        helper.assertFalse(st.getCollisionShape(level, p, CollisionContext.of(dier)).isEmpty(), "an animal bumps into it");
+        helper.assertFalse(st.getCollisionShape(level, p, CollisionContext.of(struis)).isEmpty(), "an ostrich too");
+        helper.assertTrue(st.getCollisionShape(level, p, CollisionContext.of(guh)).isEmpty(), "a guh walks through");
+        helper.assertTrue(st.getCollisionShape(level, p, CollisionContext.of(speler)).isEmpty(), "a player walks through");
+        helper.assertFalse(st.getCollisionShape(level, p, CollisionContext.empty()).isEmpty(), "anything else: a wall");
         helper.succeed();
     }
 
@@ -99,7 +223,9 @@ public class RitGameTests {
         helper.assertTrue(d.haltes.size() == 9, "a stop per zone (" + d.haltes.size() + ")");
         helper.assertTrue("entree".equals(d.haltes.get(0).zone()) || d.haltes.stream().anyMatch(h -> h.zone().equals("entree")), "the village has a stop");
         helper.assertTrue(d.kano != null && d.kanoStart != null && d.kano.lengte() > 100, "a canoe route");
-        helper.assertTrue(d.kabelA != null && d.kabelB != null && d.kabelA.distanceTo(d.kabelB) > 50, "a cable car");
+        helper.assertTrue(d.kabel != null && d.kabel.lengte() > 200 && d.stations.size() == 2, "a kabelbaan loop with two stations");
+        helper.assertTrue(!d.boten.isEmpty(), "a glass-bottom boat");
+        helper.assertTrue(d.poorten.size() >= 5, "safaripoorten on the route (" + d.poorten.size() + ")");
         helper.assertTrue(d.race != null && d.raceWacht != null && d.raceBord != null, "a race track");
         helper.assertTrue(d.schemabord != null, "a schemabord");
         helper.assertTrue(RitSchema.trucks(d.route.lengte(), d.haltes.size()) >= 3, "several trucks run");

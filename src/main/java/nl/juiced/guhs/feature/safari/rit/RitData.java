@@ -34,6 +34,18 @@ public final class RitData {
     public record Halte(String zone, String naam, double afstand) {
     }
 
+    /** A kabelbaan station: its zone and how far along the loop it lies. */
+    public record Station(String zone, double afstand) {
+    }
+
+    /** A glass-bottom boat route (a loop, or out and back made into one), its jetty at distance 0. */
+    public record Bootroute(String zone, Pad pad, Vec3 steiger) {
+    }
+
+    /** A safaripoort on the route: its corner block, its axis ("x"/"z"), the zones it joins. */
+    public record Poort(BlockPos hoek, String as, String van, String naar) {
+    }
+
     /** The truck route (a loop) and its stops, in route order (the first is the village). */
     @Nullable
     public final Pad route;
@@ -45,9 +57,15 @@ public final class RitData {
     public final Pad kano;
     @Nullable
     public final Vec3 kanoStart;
-    /** The kabelbaan: two station ends (the gondola floor height), the cable height. */
+    /**
+     * The kabelbaan: a loop (two parallel lines with a turning loop in both stations; the gondola floor height) and its
+     * stations, sorted along the loop.
+     */
     @Nullable
-    public final Vec3 kabelA, kabelB;
+    public final Pad kabel;
+    public final List<Station> stations;
+    public final List<Bootroute> boten;
+    public final List<Poort> poorten;
     /** The ostrich track (a loop, anticlockwise from the start line), where the ostriches wait, the scoreboard. */
     @Nullable
     public final Pad race;
@@ -60,15 +78,17 @@ public final class RitData {
     public final Vec3 fontein;
 
     private RitData(@Nullable Pad route, List<Halte> haltes, @Nullable BlockPos schemabord, @Nullable Pad kano, @Nullable Vec3 kanoStart,
-                    @Nullable Vec3 kabelA, @Nullable Vec3 kabelB, @Nullable Pad race, @Nullable Vec3 raceStart, @Nullable Vec3 raceWacht,
+                    @Nullable Pad kabel, List<Station> stations, List<Bootroute> boten, List<Poort> poorten, @Nullable Pad race, @Nullable Vec3 raceStart, @Nullable Vec3 raceWacht,
                     @Nullable Vec3 raceBord, int raceRondes, List<Vec3> bronnen, @Nullable Vec3 fontein) {
         this.route = route;
         this.haltes = List.copyOf(haltes);
         this.schemabord = schemabord;
         this.kano = kano;
         this.kanoStart = kanoStart;
-        this.kabelA = kabelA;
-        this.kabelB = kabelB;
+        this.kabel = kabel;
+        this.stations = List.copyOf(stations);
+        this.boten = List.copyOf(boten);
+        this.poorten = List.copyOf(poorten);
         this.race = race;
         this.raceStart = raceStart;
         this.raceWacht = raceWacht;
@@ -191,11 +211,55 @@ public final class RitData {
                 kanoStart = p.get(0);
             }
         }
-        Vec3 ka = null, kb = null;
+        List<Poort> poorten = new ArrayList<>();
+        if (r != null && r.has("poorten")) {
+            for (JsonElement e : r.getAsJsonArray("poorten")) {
+                JsonObject o = e.getAsJsonObject();
+                Vec3 v = vec(o.get("pos"));
+                if (v != null) {
+                    poorten.add(new Poort(BlockPos.containing(v), o.get("as").getAsString(), o.get("van").getAsString(), o.get("naar").getAsString()));
+                }
+            }
+        }
+        Pad kabel = null;
+        List<Station> stations = new ArrayList<>();
         JsonObject kb_ = lees("kabelbaan.json");
         if (kb_ != null) {
-            ka = vec(kb_.get("a"));
-            kb = vec(kb_.get("b"));
+            List<Vec3> p = punten(kb_.get("lus"));
+            if (p.size() > 8) {
+                if (p.get(0).distanceTo(p.get(p.size() - 1)) < 1.0) {
+                    p.remove(p.size() - 1);
+                }
+                kabel = new Pad(p, true);
+                if (kb_.has("stations")) {
+                    for (JsonElement e : kb_.getAsJsonArray("stations")) {
+                        JsonObject o = e.getAsJsonObject();
+                        stations.add(new Station(o.get("naam").getAsString(), kabel.afstandVan(Math.min(o.get("i").getAsInt(), p.size() - 1))));
+                    }
+                    stations.sort((a, b) -> Double.compare(a.afstand(), b.afstand()));
+                }
+            }
+        }
+        List<Bootroute> boten = new ArrayList<>();
+        JsonObject bo = lees("boot.json");
+        if (bo != null && bo.has("routes")) {
+            for (JsonElement e : bo.getAsJsonArray("routes")) {
+                JsonObject o = e.getAsJsonObject();
+                List<Vec3> p = punten(o.get("punten"));
+                Vec3 steiger = vec(o.get("steiger"));
+                if (p.size() < 4 || steiger == null) {
+                    continue;
+                }
+                if (o.has("heen_en_terug") && o.get("heen_en_terug").getAsBoolean()) {
+                    // out and back: the same water both ways, as one loop
+                    for (int i = p.size() - 2; i >= 1; i--) {
+                        p.add(p.get(i));
+                    }
+                } else if (p.get(0).distanceTo(p.get(p.size() - 1)) < 1.0) {
+                    p.remove(p.size() - 1);
+                }
+                boten.add(new Bootroute(o.get("zone").getAsString(), new Pad(p, true), steiger));
+            }
         }
         Pad race = null;
         Vec3 rs = null, rw = null, rb = null;
@@ -218,9 +282,9 @@ public final class RitData {
             bronnen.addAll(punten(sf.get("bronnen")));
             fontein = vec(sf.get("fontein"));
         }
-        LOGGER.info("Safari rides: route {} ({} stops), canoe {}, kabelbaan {}, race {}", route == null ? "-" : (int) route.lengte(),
-                haltes.size(), kano == null ? "-" : (int) kano.lengte(), ka == null ? "-" : (int) ka.distanceTo(kb == null ? ka : kb),
-                race == null ? "-" : (int) race.lengte());
-        return new RitData(route, haltes, bord, kano, kanoStart, ka, kb, race, rs, rw, rb, rondes, bronnen, fontein);
+        LOGGER.info("Safari rides: route {} ({} stops, {} gates), canoe {}, kabelbaan {} ({} stations), {} boats, race {}",
+                route == null ? "-" : (int) route.lengte(), haltes.size(), poorten.size(), kano == null ? "-" : (int) kano.lengte(),
+                kabel == null ? "-" : (int) kabel.lengte(), stations.size(), boten.size(), race == null ? "-" : (int) race.lengte());
+        return new RitData(route, haltes, bord, kano, kanoStart, kabel, stations, boten, poorten, race, rs, rw, rb, rondes, bronnen, fontein);
     }
 }

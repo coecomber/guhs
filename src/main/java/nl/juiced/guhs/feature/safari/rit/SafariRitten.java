@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.safari.rit;
 
+import java.util.List;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -7,12 +9,15 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -27,18 +32,21 @@ import nl.juiced.guhs.feature.safari.momenten.Momenten;
 import nl.juiced.guhs.feature.safari.momenten.SchemabordBlock;
 
 /**
- * Op Safari! step 2, slice S3 (vervoer &amp; momenten): the registry and wiring. Rides: {@link TruckEntity},
- * {@link KanoEntity}, {@link GondelEntity}, {@link RaceStruisvogelEntity} (kept running by {@link Ritten} along the paths of
- * {@link RitData}); the moments ({@link Momenten}) and the {@link SchemabordBlock}. Client: rit.client.RitClient and
+ * Op Safari! step 2, slice S3 (vervoer &amp; momenten) and round 3 (J2): the registry and wiring. Rides:
+ * {@link TruckEntity}, {@link KanoEntity}, {@link GondelEntity}, {@link BootEntity}, {@link RaceStruisvogelEntity} (kept
+ * running by {@link Ritten} along the paths of {@link RitData}); the {@link SafariPoortBlock}; the truck quiz
+ * ({@link SafariQuiz}) and Safari FM (client); the moments ({@link Momenten}) and the {@link SchemabordBlock}. Client: rit.client.RitClient and
  * momenten.client.SfeerClient. Resources: tools/features/safari_rit.py; park data: tools/features/safari_park/zone_s3_rit.py.
  */
 public final class SafariRitten {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<TruckEntity>> TRUCK = ENTITY_TYPES.register("safari_truck",
-            () -> EntityType.Builder.of(TruckEntity::new, MobCategory.MISC).sized(2.6f, 1.6f).clientTrackingRange(12).updateInterval(20)
+            () -> EntityType.Builder.of(TruckEntity::new, MobCategory.MISC).sized(3.4f, 2.0f).clientTrackingRange(12).updateInterval(20)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("safari_truck"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KanoEntity>> KANO = ENTITY_TYPES.register("safari_kano",
             () -> EntityType.Builder.of(KanoEntity::new, MobCategory.MISC).sized(1.2f, 0.6f).clientTrackingRange(10)
@@ -46,6 +54,9 @@ public final class SafariRitten {
     public static final DeferredHolder<EntityType<?>, EntityType<GondelEntity>> GONDEL = ENTITY_TYPES.register("safari_gondel",
             () -> EntityType.Builder.of(GondelEntity::new, MobCategory.MISC).sized(1.9f, 1.9f).clientTrackingRange(16).updateInterval(20)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("safari_gondel"))));
+    public static final DeferredHolder<EntityType<?>, EntityType<BootEntity>> BOOT = ENTITY_TYPES.register("safari_glasboot",
+            () -> EntityType.Builder.of(BootEntity::new, MobCategory.MISC).sized(2.8f, 1.2f).clientTrackingRange(12).updateInterval(20)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("safari_glasboot"))));
     public static final DeferredHolder<EntityType<?>, EntityType<RaceStruisvogelEntity>> STRUISVOGEL = ENTITY_TYPES.register("safari_race_struisvogel",
             () -> EntityType.Builder.of(RaceStruisvogelEntity::new, MobCategory.MISC).sized(0.9f, 1.8f).clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("safari_race_struisvogel"))));
@@ -54,17 +65,34 @@ public final class SafariRitten {
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).mapColor(MapColor.WOOD).strength(2f, 6f).noOcclusion()
                     .sound(SoundType.WOOD));
 
+    public static final DeferredBlock<SafariPoortBlock> POORT = BLOCKS.registerBlock("safaripoort", SafariPoortBlock::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(3f, 1200f).noOcclusion().sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.BLOCK));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SafariPoortBlockEntity>> POORT_BE = BLOCK_ENTITIES.register("safaripoort",
+            () -> new BlockEntityType<>(SafariPoortBlockEntity::new, POORT.get()));
+
+    /** Safari FM: the three tunes of the truck radio (tools/features/safari_fm_geluid.py). */
+    public static final List<DeferredHolder<SoundEvent, SoundEvent>> FM = List.of(fm(1), fm(2), fm(3));
+
+    private static DeferredHolder<SoundEvent, SoundEvent> fm(int i) {
+        return SOUNDS.register("safari.fm." + i, () -> SoundEvent.createVariableRangeEvent(Guhs.id("safari.fm." + i)));
+    }
+
     static {
         ITEMS.registerSimpleBlockItem(SCHEMABORD);
+        ITEMS.registerSimpleBlockItem(POORT);
     }
 
     public static void register(IEventBus modBus) {
         ENTITY_TYPES.register(modBus);
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
+        BLOCK_ENTITIES.register(modBus);
+        SOUNDS.register(modBus);
         NeoForge.EVENT_BUS.register(Ritten.class);
         NeoForge.EVENT_BUS.register(Momenten.class);
         NeoForge.EVENT_BUS.addListener(SafariRitten::commando);
+        NeoForge.EVENT_BUS.addListener(SafariQuiz::commando);
         // during feeding time the shy animals of that zone stop hiding (they come out for the food: a 3-star chance)
         SafariDier.KALM = d -> {
             int zone = ParkData.get().zone(d.getBlockX(), d.getBlockZ());
@@ -84,7 +112,7 @@ public final class SafariRitten {
             int trucks = d.route == null ? 0 : RitSchema.trucks(d.route.lengte(), d.haltes.size());
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.guhs.safari.ritten",
                     d.route == null ? 0 : (int) d.route.lengte(), d.haltes.size(), trucks,
-                    d.kano == null ? 0 : (int) d.kano.lengte(), d.kabelA == null || d.kabelB == null ? 0 : (int) d.kabelA.distanceTo(d.kabelB),
+                    d.kano == null ? 0 : (int) d.kano.lengte(), d.kabel == null ? 0 : (int) d.kabel.lengte(),
                     d.race == null ? 0 : (int) d.race.lengte(), Momenten.jarigeSoort(),
                     Momenten.nachtsafari(Safari.level(ctx.getSource().getServer()) == null ? ctx.getSource().getLevel()
                             : Safari.level(ctx.getSource().getServer())) ? "ja" : "nee"), false);

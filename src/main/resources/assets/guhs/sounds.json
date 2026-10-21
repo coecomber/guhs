@@ -5705,5 +5705,32 @@
       }
     ],
     "subtitle": "subtitles.guhs.safari.kano"
+  },
+  "safari.fm.1": {
+    "sounds": [
+      {
+        "name": "guhs:safari/fm_1",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.fm"
+  },
+  "safari.fm.2": {
+    "sounds": [
+      {
+        "name": "guhs:safari/fm_2",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.fm"
+  },
+  "safari.fm.3": {
+    "sounds": [
+      {
+        "name": "guhs:safari/fm_3",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.fm"
   }
 }

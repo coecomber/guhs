@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.safari.rit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
@@ -9,7 +10,9 @@ import com.geckolib.animation.RawAnimation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -17,29 +20,37 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 
 /**
- * The open safari truck (S3, design 1.7): it drives the route loop of the park and stands at every stop for a while
- * (hop on, hop off: a click gets you in, sneaking gets you out). A guide guh drives and tells a fact at every stop; a few
- * visitor guhs ride along looking out with their binoculars, but two seats always stay free for players; your own guhs
- * ride in the little trailer. Players can photograph from it (the camera just works). At a night safari it carries
- * lanterns. Model: geckolib safari_rit/safaritruck (phase-0 model + trailer, tools/features/safari_rit.py).
+ * The open safari truck (S3, design 1.7; made longer in round 3): it drives the route loop of the park and stands at every
+ * stop for a while (hop on, hop off: a click gets you in, sneaking gets you out). A guide guh drives and tells a fact (and
+ * asks a quiz question, {@link SafariQuiz}) at every stop; behind the guide are three roomy rows of two fixed seats. A few
+ * visitor guhs ride along looking out with their binoculars, but {@link #VRIJ} seats always stay free for players; your
+ * own guhs walk and run along beside the truck (they are put next to it again when they fall more than
+ * {@link #BIJ_MAX} blocks behind). Riders cannot get hurt (see {@link Ritten}). It opens the
+ * {@link SafariPoortBlock safaripoorten} on its way. Model: geckolib safari_rit/safaritruck (the phase-0 model stretched,
+ * tools/features/safari_rit.py).
  */
 public class TruckEntity extends SchemaRit {
-    public static final int STOELEN = 7, GUH_STOELEN = 4;
+    /** Seats for players and visitors (the guide's not counted); at least VRIJ of them stay free for players. */
+    public static final int STOELEN = 6, VRIJ = 2;
+    /** Own guhs that fall further behind than this are put next to the truck again. */
+    public static final double BIJ_MAX = 24;
     private static final EntityDataAccessor<Integer> DATA_BEZOEKERS = SynchedEntityData.defineId(TruckEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_NACHT = SynchedEntityData.defineId(TruckEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_STIL = SynchedEntityData.defineId(TruckEntity.class, EntityDataSerializers.BOOLEAN);
 
-    /** The seats (model pixels: x, seat surface y, z; front = -z): 0 is the driver (the guide). */
-    public static final double[][] ZIT = {{-10, 15, -20}, {10, 15, -20}, {-10, 15, -6}, {10, 15, -6}, {-10, 17, 8}, {10, 17, 8},
-            {-10, 19, 21}, {10, 19, 21}};
-    /** Which seats players take, in order (the visitors fill the others from the back). */
-    public static final int[] SPELER_ZIT = {1, 2, 3, 5, 4, 6, 7};
-    /** The trailer (guh seats). */
-    public static final double[][] AANHANGER = {{-6, 10, 52}, {6, 10, 52}, {-6, 10, 62}, {6, 10, 62}};
+    /**
+     * The seats (model pixels: x, seat surface y, z; front = -z): 0 is the driver (the guide), then three rows of two
+     * (tools/features/safari_rit.py TRUCK_STOELEN has the same numbers).
+     */
+    public static final double[][] ZIT = {{-11.5, 15, -17.5}, {-11.5, 16, 1.5}, {11.5, 16, 1.5}, {-11.5, 18, 21.5}, {11.5, 18, 21.5},
+            {-11.5, 20, 41.5}, {11.5, 20, 41.5}};
+    /** Which seats players take, in order: from the front (the visitors fill the others from the back). */
+    public static final int[] SPELER_ZIT = {1, 2, 3, 4, 5, 6};
 
     private int vorigeHalte = -1;
     /** Server: how many loops it has done (the guide picks another fact every loop). */
@@ -75,19 +86,33 @@ public class TruckEntity extends SchemaRit {
         }
     }
 
-    /** The visitor guhs it carries (2-4 by its number, fewer when players fill the seats; two always stay free). */
+    /** The visitor guhs it carries when nobody rides (2-4 by its number). */
     public int basisBezoekers() {
         return 2 + Math.floorMod(k() * 7 + 3, 3);
     }
 
-    /** The seats the visitors sit in now (not the players' seats). */
-    public List<Integer> bezoekerStoelen() {
-        int spelers = (int) spelers();
+    /** How many visitors ride along with this many players: never so many that fewer than {@link #VRIJ} seats stay free. */
+    public static int bezoekers(int basis, int spelers) {
+        return Math.max(0, Math.min(basis, STOELEN - VRIJ - spelers));
+    }
+
+    /** The seat (index in {@link #ZIT}) of the i-th player aboard. */
+    public static int spelerStoel(int i) {
+        return SPELER_ZIT[Mth.clamp(i, 0, SPELER_ZIT.length - 1)];
+    }
+
+    /** The seats the visitors sit in with this many players aboard: from the back, never a player's seat. */
+    public static List<Integer> bezoekerStoelen(int spelers, int bezoekers) {
         List<Integer> vrij = new ArrayList<>();
-        for (int i = SPELER_ZIT.length - 1; i >= spelers; i--) {
+        for (int i = SPELER_ZIT.length - 1; i >= spelers && vrij.size() < bezoekers; i--) {
             vrij.add(SPELER_ZIT[i]);
         }
-        return vrij.subList(0, Math.min(bezoekers(), vrij.size()));
+        return vrij;
+    }
+
+    /** The seats the visitors sit in now. */
+    public List<Integer> bezoekerStoelen() {
+        return bezoekerStoelen((int) spelers(), bezoekers());
     }
 
     @Override
@@ -110,7 +135,7 @@ public class TruckEntity extends SchemaRit {
                 level().playSound(null, this, nl.juiced.guhs.feature.safari.spullen.SafariGeluid.TRUCK_TOETER.get(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.9f, 1.0f);
             }
             vorigeHalte = s.halte();
-            int b = (int) Math.min(basisBezoekers(), STOELEN - spelers());
+            int b = bezoekers(basisBezoekers(), (int) spelers());
             if (b != bezoekers()) {
                 entityData.set(DATA_BEZOEKERS, b);
             }
@@ -126,7 +151,6 @@ public class TruckEntity extends SchemaRit {
             if (spelers() >= STOELEN) {
                 p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.safari.rit.vol"));
             } else if (p.startRiding(this)) {
-                neemGuhsMee(p, GUH_STOELEN);
                 p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.safari.rit.instappen"));
             }
         }
@@ -135,27 +159,46 @@ public class TruckEntity extends SchemaRit {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        if (passenger instanceof GuhEntity) {
-            return guhs() < GUH_STOELEN;
-        }
         return passenger instanceof Player && spelers() < STOELEN;
     }
 
     @Override
-    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
-        if (passenger instanceof GuhEntity) {
-            int i = 0;
-            for (Entity e : getPassengers()) {
-                if (e == passenger) {
-                    break;
-                }
-                if (e instanceof GuhEntity) {
-                    i++;
+    public void tick() {
+        super.tick();
+        if (level() instanceof ServerLevel sl && tickCount % 10 == 0) {
+            begeleid(sl);
+        }
+    }
+
+    /**
+     * The riders' own guhs walk (run, when it drives) along beside the truck, in pairs left and right; one that fell
+     * more than {@link #BIJ_MAX} behind (or got stuck) is put next to it again.
+     */
+    private void begeleid(ServerLevel level) {
+        int n = 0;
+        for (Entity e : getPassengers()) {
+            if (!(e instanceof ServerPlayer p)) {
+                continue;
+            }
+            UUID id = p.getUUID();
+            for (GuhEntity g : level.getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(64, 24, 64),
+                    g -> g.isTame() && id.equals(g.getOwnerUUID()) && !g.isOrderedToSit() && !g.isPassenger() && g.isAlive())) {
+                double kant = n % 2 == 0 ? -44 : 44;
+                Vec3 plek = position().add(stoel(kant, 0, -8 + (n / 2) * 18.0));
+                n++;
+                if (g.distanceToSqr(plek) > BIJ_MAX * BIJ_MAX) {
+                    int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(plek.x), Mth.floor(plek.z));
+                    g.getNavigation().stop();
+                    g.teleportTo(plek.x, Math.max(y, Mth.floor(plek.y)), plek.z);
+                } else {
+                    g.getNavigation().moveTo(plek.x, plek.y, plek.z, staatStil() ? 1.0 : 1.7);
                 }
             }
-            double[] z = AANHANGER[Math.min(i, AANHANGER.length - 1)];
-            return stoel(z[0], z[1] - 4, z[2]);
         }
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
         int i = 0;
         for (Entity e : getPassengers()) {
             if (e == passenger) {
@@ -165,7 +208,7 @@ public class TruckEntity extends SchemaRit {
                 i++;
             }
         }
-        double[] z = ZIT[SPELER_ZIT[Math.min(i, SPELER_ZIT.length - 1)]];
+        double[] z = ZIT[spelerStoel(i)];
         return stoel(z[0], z[1] - 8, z[2]);
     }
 

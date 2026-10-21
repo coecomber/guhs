@@ -3,13 +3,15 @@ package nl.juiced.guhs.feature.safari.rit;
 import java.util.List;
 
 /**
- * The timetable of the trucks and the gondolas (S3): pure arithmetic on the game time, so the server and every client
+ * The timetable of the trucks, the gondolas and the glass-bottom boats (S3, round 3): pure arithmetic on the game time, so the server and every client
  * put a ride in exactly the same spot without sending positions (the same path, the same clock). Tested in
  * {@code RitGameTests}.
  * <ul>
  *   <li>Trucks drive the route loop at {@link #TRUCK_SNELHEID} and stand {@link #HALTE_WACHT} ticks at every stop.
  *       {@link #trucks} of them run, spread evenly, so one comes by about every {@link #TRUCK_ELKE} ticks.</li>
- *   <li>Two gondolas shuttle between the stations (one at each end), {@link #GONDEL_WACHT} ticks in each station.</li>
+ *   <li>{@link #GONDELS} gondolas go round the kabelbaan loop (two parallel lines, a turning loop in each station) and
+ *       stand {@link #GONDEL_WACHT} ticks in every station.</li>
+ *   <li>One glass-bottom boat per boat route goes round (or out and back) and waits {@link #BOOT_WACHT} at its jetty.</li>
  * </ul>
  */
 public final class RitSchema {
@@ -20,7 +22,11 @@ public final class RitSchema {
     /** About one truck a minute at every stop. */
     public static final int TRUCK_ELKE = 1200;
     public static final double GONDEL_SNELHEID = 0.18;
-    public static final int GONDEL_WACHT = 200;
+    /** A gondola stands still about 5 seconds in a station (it turns round in the station's loop along the platform). */
+    public static final int GONDEL_WACHT = 100, GONDELS = 6;
+    /** The glass-bottom boat: slow (so you can look down) and a long stop at the jetty. */
+    public static final double BOOT_SNELHEID = 0.09;
+    public static final int BOOT_WACHT = 240;
 
     /** Where a ride is: how far along, and (when it stands still) which stop and how long it still waits. */
     public record Stand(double afstand, int halte, int wachtNog) {
@@ -29,9 +35,39 @@ public final class RitSchema {
         }
     }
 
+    /** One loop of a ride along a loop of this length with this many stops, in ticks. */
+    public static long ronde(double lengte, int haltes, double snelheid, int wacht) {
+        return Math.max(1L, Math.round(lengte / snelheid) + (long) haltes * wacht);
+    }
+
+    /**
+     * Ride k (of n, spread evenly) at game time t on a loop of this length with these stop distances (sorted): it drives
+     * at snelheid blocks a tick and stands wacht ticks at every stop.
+     */
+    public static Stand lus(long t, int k, int n, double lengte, List<Double> haltes, double snelheid, int wacht) {
+        long ronde = ronde(lengte, haltes.size(), snelheid, wacht);
+        long fase = Math.floorMod(t + (long) Math.floor((double) ronde * k / Math.max(1, n)), ronde);
+        double vorige = 0;
+        double klok = 0;
+        for (int i = 0; i < haltes.size(); i++) {
+            double d = haltes.get(i);
+            double rijden = (d - vorige) / snelheid;
+            if (fase < klok + rijden) {
+                return new Stand(vorige + (fase - klok) * snelheid, -1, 0);
+            }
+            klok += rijden;
+            if (fase < klok + wacht) {
+                return new Stand(d, i, (int) Math.ceil(klok + wacht - fase));
+            }
+            klok += wacht;
+            vorige = d;
+        }
+        return new Stand(Math.min(lengte, vorige + (fase - klok) * snelheid), -1, 0);
+    }
+
     /** One loop of a truck, in ticks. */
     public static long truckRonde(double lengte, int haltes) {
-        return Math.max(1L, Math.round(lengte / TRUCK_SNELHEID) + (long) haltes * HALTE_WACHT);
+        return ronde(lengte, haltes, TRUCK_SNELHEID, HALTE_WACHT);
     }
 
     public static int trucks(double lengte, int haltes) {
@@ -40,51 +76,17 @@ public final class RitSchema {
 
     /** Truck k (of n) at game time t on a loop of this length with these stop distances (sorted). */
     public static Stand truck(long t, int k, int n, double lengte, List<Double> haltes) {
-        long ronde = truckRonde(lengte, haltes.size());
-        long fase = Math.floorMod(t + (long) Math.floor((double) ronde * k / Math.max(1, n)), ronde);
-        double vorige = 0;
-        double klok = 0;
-        for (int i = 0; i < haltes.size(); i++) {
-            double d = haltes.get(i);
-            double rijden = (d - vorige) / TRUCK_SNELHEID;
-            if (fase < klok + rijden) {
-                return new Stand(vorige + (fase - klok) * TRUCK_SNELHEID, -1, 0);
-            }
-            klok += rijden;
-            if (fase < klok + HALTE_WACHT) {
-                return new Stand(d, i, (int) Math.ceil(klok + HALTE_WACHT - fase));
-            }
-            klok += HALTE_WACHT;
-            vorige = d;
-        }
-        return new Stand(Math.min(lengte, vorige + (fase - klok) * TRUCK_SNELHEID), -1, 0);
+        return lus(t, k, n, lengte, haltes, TRUCK_SNELHEID, HALTE_WACHT);
     }
 
-    public static long gondelRonde(double lengte) {
-        return 2L * (GONDEL_WACHT + Math.round(lengte / GONDEL_SNELHEID));
+    /** Gondola k (of {@link #GONDELS}) on the kabelbaan loop. */
+    public static Stand gondel(long t, int k, double lengte, List<Double> stations) {
+        return lus(t, k, GONDELS, lengte, stations, GONDEL_SNELHEID, GONDEL_WACHT);
     }
 
-    /**
-     * Gondola k (0 or 1) at game time t: the fraction from station A (0) to B (1), and the station it waits in (0 = A,
-     * 1 = B, -1 = under way).
-     */
-    public static double[] gondel(long t, int k, double lengte) {
-        long ronde = gondelRonde(lengte);
-        long reis = Math.round(lengte / GONDEL_SNELHEID);
-        long fase = Math.floorMod(t + (k == 0 ? 0 : ronde / 2), ronde);
-        if (fase < GONDEL_WACHT) {
-            return new double[]{0, 0, GONDEL_WACHT - fase};
-        }
-        fase -= GONDEL_WACHT;
-        if (fase < reis) {
-            return new double[]{(double) fase / reis, -1, 0};
-        }
-        fase -= reis;
-        if (fase < GONDEL_WACHT) {
-            return new double[]{1, 1, GONDEL_WACHT - fase};
-        }
-        fase -= GONDEL_WACHT;
-        return new double[]{1 - (double) fase / reis, -1, 0};
+    /** The glass-bottom boat (one per boat route, calm) with its jetty at distance 0. */
+    public static Stand boot(long t, double lengte) {
+        return lus(t, 0, 1, lengte, List.of(0.0), BOOT_SNELHEID, BOOT_WACHT);
     }
 
     private RitSchema() {

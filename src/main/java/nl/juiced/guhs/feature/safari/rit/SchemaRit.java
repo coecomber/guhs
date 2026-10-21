@@ -79,10 +79,19 @@ public abstract class SchemaRit extends Entity implements GeoEntity {
         }
     }
 
+    /** Gametests: a ride that stays where it is put (off its timetable). */
+    private boolean vast;
+
+    public void zetVast() {
+        vast = true;
+    }
+
     @Override
     public void tick() {
         super.tick();
-        plaats(level().getGameTime(), false);
+        if (!vast) {
+            plaats(level().getGameTime(), false);
+        }
     }
 
     // --- passengers ---------------------------------------------------------------------------------------------------------

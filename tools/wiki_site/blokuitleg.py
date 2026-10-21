@@ -1318,6 +1318,23 @@ UITLEG = {
            "Where an ordinary bed would explode (the Guhbarbecuether, the Guhbelly) the Cloud Bed only says you can't "
            "sleep here. Landing on it never hurts.",
         meer=["systemen/bouwblokken-biomen"]),
+    "safaripoort": dict(
+        nl="De grote houten poort van het safaripark: 4 blokken breed en 6 hoog, met een leeuwenschild met guh-oogjes "
+           "en roze oortjes. In het park staat er een op elke plek waar de truckroute van de ene zone naar de andere "
+           "gaat.\n"
+           "\n"
+           "- Rechtsklik: open of dicht. Een open poort gaat na 10 seconden vanzelf weer dicht.\n"
+           "- Komt er een safaritruck aan, dan zwaaien de deuren op tijd open. Ze gaan pas dicht als de truck en de "
+           "guhs die ernaast meerennen erdoor zijn.\n"
+           "- Spelers en guhs mogen door een open poort, de dieren nooit: zo blijft elk dier in zijn eigen zone.",
+        en="The big wooden gate of the safari park: 4 blocks wide and 6 high, with a lion shield with guh eyes and pink "
+           "ears. In the park there is one wherever the truck route goes from one zone into another.\n"
+           "\n"
+           "- Right-click: open or shut. An open gate shuts itself again after 10 seconds.\n"
+           "- When a safari truck comes, the doors swing open in time. They only shut once the truck and the guhs "
+           "running alongside it are through.\n"
+           "- Players and guhs may go through an open gate, the animals never: that way every animal stays in its own "
+           "zone."),
 }
 
 LINK = {
