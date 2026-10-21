@@ -422,12 +422,31 @@ def blokken():
         lang(f"block.guhs.{n}", nl, en)
 
 
+# R5: the aaihoek animals and the Kriebelhuis' sea decorations have no verblijfsbord (so no FEITEN), but an infobord can
+# still point at them
+EXTRA_FEITEN = {
+    "geitje": ("Geitjes klimmen overal op, zelfs op andere geitjes. Hoe hoger, hoe vadsiger.",
+               "Little goats climb on everything, even on other little goats. The higher, the chonkier."),
+    "alpaca": ("Een alpaca spuugt alleen als hij écht boos is. Meestal is hij gewoon heel pluizig.",
+               "An alpaca only spits when it's really cross. Mostly it's just very fluffy."),
+    "cavia": ("Blije cavia's maken luchtsprongetjes. Dat heet 'popcornen'!",
+              "Happy guinea pigs do little jumps in the air. That's called 'popcorning'!"),
+    "ezeltje": ("Ezeltjes onthouden plekken en vriendjes heel lang, soms wel 25 jaar.",
+                "Little donkeys remember places and friends for a very long time, sometimes 25 years."),
+    "anemoon": ("Een anemoon lijkt een bloem, maar het is een dier! De clownvis woont er veilig tussen.",
+                "An anemone looks like a flower, but it's an animal! The clownfish lives safely in between."),
+    "zee_egel": ("Een zee-egel loopt op honderden piepkleine pootjes, heel langzaam over de bodem.",
+                 "A sea urchin walks on hundreds of tiny feet, very slowly across the bottom."),
+}
+
+
 def infoteksten():
     """gui.guhs.safari.infobord.<soort> for every species (its Guhdex fact), plus the general and the empty board."""
     soorten = json.load(open(os.path.join(D, "safari", "soorten.json"), encoding="utf-8"))
     for soort in soorten:
-        if soort in FEITEN:
-            nl, en = FEITEN[soort]
+        feit = FEITEN.get(soort) or EXTRA_FEITEN.get(soort)
+        if feit:
+            nl, en = feit
             lang(f"gui.guhs.safari.infobord.{soort}", nl + " Kijk goed rond, misschien zie je er eentje!",
                  en + " Look around carefully, maybe you'll spot one!")
     lang("gui.guhs.safari.infobord.algemeen",

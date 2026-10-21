@@ -203,5 +203,6 @@
   "entity.guhs.guh_npc.safari_kriebelhuis_balie": "Ticket Guh Piepje",
   "entity.guhs.guh_npc.safari_kriebelhuis_winkel": "Shop Guh Spinneke",
   "gui.guhs.safari.kriebelhuis.balie.hallo": "Welcome to the Kriebelhuis! Tickets are free, tickles too. First the terrarium, then the Kriebelzaal, the Nachtzaal (shh, some critters are sleeping) and the Diepzeezaal. Don't miss the pink tunnel, njeg!",
-  "gui.guhs.safari.kriebelhuis.winkel.hallo": "A tickly welcome to the shop! Have a look around."
+  "gui.guhs.safari.kriebelhuis.winkel.hallo": "A tickly welcome to the shop! Have a look around.",
+  "gui.guhs.safari.critter.blijft": "This little critter lives here in the Kriebelhuis. Looking is fine, taking it home isn't, nyeg!"
 }

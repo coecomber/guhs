@@ -31,4 +31,29 @@ public class KriebelBlokkenGameTests {
         }
         helper.succeed();
     }
+
+    /** R5: every park species (the 87 of soorten.json, Kriebelhuis included) has its own info board text, in Dutch and English. */
+    @GuhTest(template = "empty")
+    public static void infobordTekstVoorElkeSoort(GameTestHelper helper) {
+        java.util.Set<String> nederlands = sleutels("nl_nl"), engels = sleutels("en_us");
+        java.util.List<String> mist = new java.util.ArrayList<>();
+        for (String soort : nl.juiced.guhs.feature.safari.ParkData.get().soorten.keySet()) {
+            String k = "gui.guhs.safari.infobord." + soort;
+            if (!nederlands.contains(k) || !engels.contains(k)) {
+                mist.add(soort);
+            }
+        }
+        helper.assertTrue(nl.juiced.guhs.feature.safari.ParkData.get().soorten.size() >= 87, "all species loaded");
+        helper.assertTrue(mist.isEmpty(), "info board text missing for " + mist);
+        helper.succeed();
+    }
+
+    private static java.util.Set<String> sleutels(String taal) {
+        try (java.io.InputStream in = KriebelBlokkenGameTests.class.getResourceAsStream("/assets/guhs/lang/" + taal + ".json")) {
+            return com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8))
+                    .getAsJsonObject().keySet();
+        } catch (java.io.IOException | RuntimeException e) {
+            return java.util.Set.of();
+        }
+    }
 }

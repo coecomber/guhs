@@ -101,6 +101,7 @@ public final class SafariQuests {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onEntity);
+        NeoForge.EVENT_BUS.addListener(SafariQuests::onEntitySpecifiek);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onBlock);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onTick);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onLogin);
@@ -159,11 +160,39 @@ public final class SafariQuests {
             }
             return;
         }
-        boolean raak = VermomdeGuh.klik(p, event.getTarget()) || VaheOlifant.klik(p, event.getTarget());
-        if (raak) {
+        if (klik(p, event.getTarget())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }
+    }
+
+    /** (R5: the disguised guhs are guhs; a click can arrive as the specific interaction only, like the kijk-guhs had in
+     *  round 4, so both paths handle it, once per click.) */
+    private static void onEntitySpecifiek(PlayerInteractEvent.EntityInteractSpecific event) {
+        boolean questDier = event.getTarget().entityTags().contains(VermomdeGuh.TAG) || event.getTarget().entityTags().contains(VaheOlifant.TAG);
+        if (!questDier) {
+            return;
+        }
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p) {
+            klik(p, event.getTarget());
+        }
+    }
+
+    private static final java.util.Map<java.util.UUID, Long> LAATST = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private static boolean klik(ServerPlayer p, net.minecraft.world.entity.Entity doel) {
+        long nu = p.level().getGameTime();
+        boolean questDier = doel.entityTags().contains(VermomdeGuh.TAG) || doel.entityTags().contains(VaheOlifant.TAG);
+        if (questDier && LAATST.getOrDefault(p.getUUID(), -100L) > nu - 5) {
+            return true;                        // (one click can fire both interactions)
+        }
+        boolean raak = VermomdeGuh.klik(p, doel) || VaheOlifant.klik(p, doel);
+        if (raak) {
+            LAATST.put(p.getUUID(), nu);
+        }
+        return raak;
     }
 
     private static void onBlock(PlayerInteractEvent.RightClickBlock event) {

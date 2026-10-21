@@ -880,7 +880,24 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
                 return null;
             }
         }
+        if (!info.zee() && !ruimte(level, p)) {
+            return null;                    // R5: a big animal (giraffe, olifant at 1.5x) only where its whole body fits
+        }
         return p;
+    }
+
+    /** Is this a big animal (its path and spots need room: under trees and roofs a giraffe gets stuck)? */
+    public boolean groot() {
+        return getBbWidth() > 1.2f || getBbHeight() > 2.6f;
+    }
+
+    /** R5: does its body fit standing at p (no blocks in its box)? Small animals: always (the old behaviour). */
+    public boolean ruimte(net.minecraft.world.level.LevelReader level, BlockPos p) {
+        if (!groot()) {
+            return true;
+        }
+        net.minecraft.world.phys.AABB box = getDimensions(getPose()).makeBoundingBox(p.getX() + 0.5, p.getY(), p.getZ() + 0.5).deflate(0.05);
+        return level instanceof net.minecraft.world.level.Level l ? l.noBlockCollision(this, box) : true;
     }
 
     int straalThuis() {

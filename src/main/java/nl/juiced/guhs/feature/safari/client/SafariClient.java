@@ -136,9 +136,11 @@ public final class SafariClient {
             for (com.geckolib.cache.model.GeoBone bone : info.model().boneLookup().get().values()) {
                 if (bone.name().equals("bundeltje")) {
                     bones.get(bone).skipRender(true).skipChildrenRender(true);
-                } else if (bone.name().startsWith("prop_") && !bone.name().substring(5).equals(actie)) {
+                } else if (bone.name().startsWith("prop_")) {
                     // round 4: a prop (the beaver's branch, the otter's shell, the giraffe's leaf) only during its own actie
-                    bones.get(bone).skipRender(true).skipChildrenRender(true);
+                    // (R5: set both ways every frame, so a snapshot never keeps an old state: at home and in the park alike)
+                    boolean weg = !bone.name().substring(5).equals(actie);
+                    bones.get(bone).skipRender(weg).skipChildrenRender(weg);
                 }
             }
         }

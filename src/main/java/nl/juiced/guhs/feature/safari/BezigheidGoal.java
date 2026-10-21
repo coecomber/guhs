@@ -288,7 +288,42 @@ public final class BezigheidGoal extends Goal {
         if (!anim.isEmpty() && heeft(dier.info(), anim)) {
             dier.zetActie(anim, max);
         }
-        return dier.getNavigation().moveTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, speed) || s == Soort.FAVORIET;
+        if (dier.groot() && !dier.ruimte(level, d)) {
+            BlockPos r = ruim(level, d);       // R5: a giraffe/olifant goes to a roomy spot next to it (it does not fit there)
+            if (r != null) {
+                doel = d = r;
+            }
+        }
+        if (dier.getNavigation().moveTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, speed) || s == Soort.FAVORIET) {
+            return true;
+        }
+        BlockPos r = dier.groot() ? ruim(level, d) : null;
+        if (r != null && !r.equals(d) && dier.getNavigation().moveTo(r.getX() + 0.5, r.getY(), r.getZ() + 0.5, speed)) {
+            doel = r;                          // R5: no path for its big body to the spot itself: as close as it fits
+            return true;
+        }
+        return false;
+    }
+
+    /** R5: the nearest spot within 4 blocks of d (on the ground) where the big animal's whole body fits, or null. */
+    @Nullable
+    private BlockPos ruim(ServerLevel level, BlockPos d) {
+        BlockPos beste = null;
+        double besteAfstand = Double.MAX_VALUE;
+        for (int dx = -4; dx <= 4; dx++) {
+            for (int dz = -4; dz <= 4; dz++) {
+                double a = dx * dx + dz * dz;
+                if (a >= besteAfstand || a > 16) {
+                    continue;
+                }
+                BlockPos g = SafariDier.binnenGrond(level, d.getX() + dx, d.getZ() + dz, d.getY(), false, false);
+                if (g != null && Math.abs(g.getY() - d.getY()) <= 3 && dier.ruimte(level, g)) {
+                    beste = g;
+                    besteAfstand = a;
+                }
+            }
+        }
+        return beste;
     }
 
     private boolean gedrag(ServerLevel level, ParkData.Soort info, String a) {
@@ -712,7 +747,8 @@ public final class BezigheidGoal extends Goal {
     }
 
     private boolean dichtbij(@Nullable BlockPos p, double r) {
-        return p != null && dier.distanceToSqr(p.getX() + 0.5, p.getY(), p.getZ() + 0.5) < r * r + 1;
+        double rr = r + Math.max(0, dier.getBbWidth() - 1) * 0.5;      // R5: a big body arrives sooner (its centre stays further off)
+        return p != null && dier.distanceToSqr(p.getX() + 0.5, p.getY(), p.getZ() + 0.5) < rr * rr + 1;
     }
 
     private String kuddeSleutel(ServerLevel level) {

@@ -113,16 +113,33 @@ public final class Bezoekers {
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
         if (event.getEntity() instanceof ServerPlayer p && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
-            int i = Math.floorMod(event.getTarget().getUUID().hashCode() + (int) (p.level().getGameTime() / 100), 5);
-            p.sendOverlayMessage(Component.translatable("gui.guhs.safari.bezoeker." + i).withStyle(ChatFormatting.YELLOW));
+            praat(p, event.getTarget());
         }
     }
 
+    /** (R5: like the kijk-guhs in round 4, the specific interaction swallowed the click, so the visitor never talked; now
+     *  both paths talk, once per click.) */
     static void opInteractieSpecifiek(PlayerInteractEvent.EntityInteractSpecific event) {
         if (isBezoeker(event.getTarget())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
+            if (event.getEntity() instanceof ServerPlayer p && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                praat(p, event.getTarget());
+            }
         }
+    }
+
+    private static final java.util.Map<java.util.UUID, Long> LAATST = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** What the visitor says (one line per click, even when both interactions fire). */
+    static void praat(ServerPlayer p, Entity guh) {
+        long nu = p.level().getGameTime();
+        if (LAATST.getOrDefault(p.getUUID(), -100L) > nu - 5) {
+            return;
+        }
+        LAATST.put(p.getUUID(), nu);
+        int i = Math.floorMod(guh.getUUID().hashCode() + (int) (nu / 100), 5);
+        p.sendSystemMessage(Component.translatable("gui.guhs.safari.bezoeker." + i).withStyle(ChatFormatting.YELLOW));
     }
 
     private Bezoekers() {

@@ -126,6 +126,7 @@ TEKSTEN = {
     "gui.guhs.safari.verkoper.hallo": "Welkom in de giftshop! Alles voor Safarimunten, en niks is te vads.",
     "gui.guhs.safari.kriebelhuis.balie.hallo": "Welkom in het Kriebelhuis! Kaartjes zijn gratis, kriebels ook. Eerst het terrarium, dan de Kriebelzaal, de Nachtzaal (stil hoor, sommige diertjes slapen) en de Diepzeezaal. Vergeet de roze tunnel niet, njeg!",
     "gui.guhs.safari.kriebelhuis.winkel.hallo": "Kriebelig welkom in het winkeltje! Kijk gerust rond.",
+    "gui.guhs.safari.critter.blijft": "Dit diertje woont hier in het Kriebelhuis. Kijken mag, meenemen niet, njeg!",
     "gui.guhs.safari.lodge.hallo": "Welkom in de lodge! Pak gerust een hutje: slaap je hier, dan word je ook hier wakker. En wie hier vroeg opstaat, krijgt voor zijn eerste foto van de dag dubbele munten. Snurk lekker, njeg!",
     "gui.guhs.safari.lodge.vroege_vogel": "Goedemorgen, vroege vogel! Je eerste foto van vandaag levert dubbele Safarimunten op.",
     # --- welcome (first visit) ---

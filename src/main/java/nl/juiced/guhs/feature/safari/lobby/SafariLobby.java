@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -53,6 +54,8 @@ public final class SafariLobby {
         NeoForge.EVENT_BUS.addListener(SafariLobby::opInteractie);
         NeoForge.EVENT_BUS.addListener(Bezoekers::opInteractieSpecifiek);
         NeoForge.EVENT_BUS.addListener(Kijkguhs::opInteractieSpecifiek);
+        NeoForge.EVENT_BUS.addListener(SafariLobby::opCritter);
+        NeoForge.EVENT_BUS.addListener(SafariLobby::opCritterSpecifiek);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opWakker);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opBus);
     }
@@ -75,6 +78,32 @@ public final class SafariLobby {
         }
         if (!event.isCanceled()) {
             Bezoekers.opInteractie(event);
+        }
+    }
+
+    /** R5: the Kriebelhuis critters (koi, kikkerguhs, vlindertjes...) live there: no bucket, net or picking up. */
+    private static void opCritter(PlayerInteractEvent.EntityInteract event) {
+        if (critter(event.getTarget())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            critterTip(event.getEntity(), event.getHand());
+        }
+    }
+
+    private static void opCritterSpecifiek(PlayerInteractEvent.EntityInteractSpecific event) {
+        if (critter(event.getTarget())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+        }
+    }
+
+    static boolean critter(net.minecraft.world.entity.Entity e) {
+        return e.getPersistentData().contains(nl.juiced.guhs.feature.safari.Populatie.CRITTER);
+    }
+
+    private static void critterTip(net.minecraft.world.entity.player.Player p, net.minecraft.world.InteractionHand hand) {
+        if (p instanceof ServerPlayer sp && hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.safari.critter.blijft").withStyle(ChatFormatting.YELLOW));
         }
     }
 
