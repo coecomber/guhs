@@ -3,6 +3,40 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.0 — Op Safari! — Minecraft 26.1.2 (not released yet)
+
+A huge safari park full of cute chibi animals, a Kriebelhuis with critters and an aquarium tunnel, a quiet place for retired guhs, and a whole new way of building: ghost building, a Bouwkeet, shape wands, brushes, blueprints, 400+ building blocks and animals that build for you.
+
+### Safaripark Vadse Bergen (Safari Park Fat Hills)
+
+- **A park dimension of its own**, reached by the safari bus from the bus station in the Guhmension. Nine zones (savanna, delta, rainforest, bamboo forest, ice coast, prehistory, Europe, Australia and the Kriebelhuis), fixed and the same for everyone.
+- **87 animal species** in a cute chibi guh style, from lions, elephants and penguins to beavers, red pandas, a narwhal and a sabre-tooth tiger, with males, females and little ones, day and night rhythms, sleeping, hiding, herds and special actions (belly sliding penguins, badgers in their tunnel, beavers with branches).
+- **The lobby:** the entrance building, giftshop, ranger station, lodge, ijskraam, speeltuin, campfire evenings, petting corner, nine zone experts with badges, the penguin parade and visitor guhs.
+- **Getting around:** the guide truck with stops and big safari gates, a canoe trail, a cable car loop and a boat line with jetties.
+- **Het Kriebelhuis (The Tickle House):** terrarium, Kriebelzaal, Nachtzaal, Diepzeezaal and a pink glass tunnel under the pond, with 35 small species and Professor Kriebelguh.
+- **Spotting:** the safari camera with stars, a Safari tab in the Guhdex, Safari coins, daily missions, side quests in dialogs with a tracker, secrets and the titles Speurneus and Beverbaas.
+- **Animals at home:** enclosure signs (Verblijfsborden) bring an animal family to your base, with happiness, toys, gifts, terrarium tanks for small critters and a 7-day cooldown.
+- **No danger in the park:** no fall damage, no hunger and no health loss.
+
+### De Eeuwige Knabbelvelden (The Eternal Nibble Fields)
+
+- **A Knabbelportaal** (2×2) opens a big screen where you can send tame guhs into retirement on a pink cheese plain, and bring them home again as a picked-up guh. Visit your own plot to pet them.
+
+### Bouwhulp (Building Help)
+
+- **Ghost building:** everything is first placed as a see-through ghost that you can move, turn and mirror. It shows a shortage list, takes material from your inventory, a linked Bank Guh or (from level 1) every chest on the vadsnet, can build anyway with what is there, and has undo for the last 5 actions.
+- **De Bouwkeet (The Building Shed):** a 3×3×3 hub with a crane, levels 0-4 on vadskracht, up to 4 building guhs in hard hats, a progress bar and a little party when a project is done.
+- **Tools:** the vormstaf (21 shapes, hollow or filled, plus 4 roofs), capture mode, four brushes (replace, mix, animal patterns unlocked through the safari dex, weathering), the egaliseerder, verfmachine and tunnelboor.
+- **Blueprints:** your own blueprints, a catalogue of 25 designs, the Ontwerpbureau (Design Desk) with a server library and likes, and the park buildings as blueprints in the giftshop.
+- **407 new building blocks** in their own creative tab "Guhs: Bouwen": vertical slabs and corners, posts and beams, sloped roof parts, 16 pastel bricks and plasters, roof tiles, guh tiles, wallpaper with skirting, plush blocks, stained glass and portholes, window frames and shutters, gutters, chimneys and dormers, and garden and street pieces.
+- **Helper animals:** from an enclosure sign's Bouwopdracht tab, your animal family builds things that fit the real terrain: beaver dams with a rising pool, burrows and ponds, tree houses, igloos, hot tubs, zebra paths, planting, demolishing, stepping stones, pouch transport between chests and more. "Bouw passend verblijf" sets down a ghost of a fitting, escape-proof enclosure.
+- **De Beverbeek (The Beaver Brook):** a rare new Guhmension brook forest with winding brooks, small waterfalls and wild beaver pools, and now and then a ranger post with Spaander, a beaver you can pet. Only in new chunks.
+
+### Other changes
+
+- **Wilde-guhweerder (Wild Guh Repeller) signs:** the radius steps are now 24, 32, 48, 64 and 128 (default 32).
+- **Knabbelkorf:** picked up with silk touch it keeps its bees and honey, like a vanilla beehive.
+
 ## 1.5.2 — fixes — Minecraft 26.1.2
 
 - **Much better FPS around guhs:** drawing a guh got a lot cheaper, especially guhs wearing clothes. Bases with a few dozen (dressed) guhs dropped to 10-15 fps; the guh model now works out once which of its ~415 bones to show for each look and reuses that, and every piece of clothing only walks its own bones. Guh wheels, office desks and every other place that draws a guh benefit too. The Guhkade cabinets draw their screen once per game tick instead of every frame. Nothing looks different.
