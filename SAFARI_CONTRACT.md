@@ -241,3 +241,10 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - A list is used by an animal only when all its points lie within (home radius + 40) and in the animal's zone.
 - Note for R3-A / Z3-Z4: more beavers around the dam please (plekken.py, bever is in the ZELDZAAM list; e.g. 2 homes of 3-4 near the dam + lodge).
 - `data/guhs/safari/bewoners.json` (J1, safari_dieren.py): the named residents; the first home (lowest id) of that species in that zone gets the name.
+- **Z3 note: the glijbaan points (for J1's pinguin slide loop)** are in `kijkplekken.json`.
+  - The viewpoint is `"glijbaan_ijskust"` (stoel null, so no kijk-guh), with favourites named:
+    - `glijbaan_top`: the platform, where they slide down from;
+    - `glijbaan_bodem`: the foot in the water;
+    - `glijbaan_trap_0` … `glijbaan_trap_n`: the side steps, in order from the bottom up (1 per 2 blocks, snow slabs as half steps).
+  - All of them are for `soorten ["pinguin"]`.
+  - Other ijskust/oertijd viewpoints: `onderwaterkoepel_ijskust` (all-round, chair in the middle), `kijkhut_ijskust_west`, `poolstation_ijskust`, `kijkhut_oertijd` and the towers.

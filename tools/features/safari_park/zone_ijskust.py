@@ -577,14 +577,14 @@ def _land_bij(park, doel, richting, zone=ZONE):
 # ======================================================================================================================
 def ijsbergkliffen(park, rng):
     cx, cz, r, _ = kit.RESERVERINGEN["ijsbergkliffen"]
-    for k in range(16):
+    for k in range(26):
         a = rng.random() * 2 * math.pi
         d = rng.random() * r
         x, z = int(cx + math.cos(a) * d), int(cz + math.sin(a) * d)
         if not mag_bouwen(park, x, z, 7):
             continue
         g = grond(park, x, z) if not park.water[x, z] else kit.WATER_Y - 2
-        top = int(70 + rng.random() * 18)
+        top = int(72 + rng.random() * 24)
         rr = 1.6 + rng.random() * 2.4
         for y in range(g - 2, top + 1):
             f = 1 - (y - g) / max(1, (top - g))
@@ -714,96 +714,209 @@ def scheepswrak(park, rng, sx, sz):
 
 
 def onderwatertunnel(park, rng, sx, sz):
-    """A walkable glass tube from the east shore under the sea to a glass dome next to the wreck.
-    Returns (dome centre, points along the tube in the water) for the water animals."""
+    """Round 3 (rebuilt): the underwater glass dome next to the wreck, reached from an entrance hall on the shore by a
+    straight stair corridor (prismarine under the ground) and a level glass tube (only under water).
+      - the dome floor sits at WATER_Y - 8 (one higher than before) and the sea bed round it is dug down to at least
+        2 below the floor, so through the glass you look into open water, never at stone;
+      - rings of sea lanterns on the sea bed (and seagrass), a lantern in the floor;
+      - the kijk-guh's chair in the middle (all-round viewpoint) plus 3 chairs facing out.
+    Returns (dome centre (x, floor y, z), points along the tube in the water)."""
     wx, wz, _, _ = kit.RESERVERINGEN["scheepswrak"]
-    bx, bz = wx + 11, wz + 12                                 # the dome, south-east of the wreck
-    ingang = _land_bij(park, (bx, bz), (1, 0.15))
-    if ingang is None:
-        return None, []
-    ax, az = ingang[0] + 4, ingang[1]
-    ytop = grond(park, ax, az)
-    VLOER = kit.WATER_Y - 9                                  # floor of the tube
-    pad = [(ax, az), (bx, bz)]
-    lengte = math.hypot(bx - ax, bz - az)
-    ux, uz = (bx - ax) / lengte, (bz - az) / lengte
-    x0, x1 = min(ax, bx) - 4, max(ax, bx) + 4
-    z0, z1 = min(az, bz) - 4, max(az, bz) + 4
-    vloer_van = {}
-    binnenkant, schil = [], []
-    for x in range(x0, x1 + 1):
-        for z in range(z0, z1 + 1):
-            s = (x - ax) * ux + (z - az) * uz
-            if s < -0.5 or s > lengte:
-                continue
-            d = abs(-(x - ax) * uz + (z - az) * ux)
-            vy = max(VLOER, ytop - int(s))
-            if d <= 1.4:
-                binnenkant.append((x, z, vy, s))
-            elif d <= 2.6:
-                schil.append((x, z, vy, s))
-            vloer_van[(x, z)] = vy
-    for x, z, vy, s in schil + binnenkant:
-        for y in range(vy, vy + 5):
-            park.set(x, y, z, "minecraft:glass")
-        park.set(x, vy, z, "minecraft:prismarine_bricks")
-    for x, z, vy, s in binnenkant:
-        for y in range(vy + 1, vy + 4):
-            park.set(x, y, z, "minecraft:air")
-        if vy > VLOER:                                       # the stairs down from the shore
-            park.set(x, vy, z, "minecraft:prismarine_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]")
-            park.set(x, vy - 1, z, "minecraft:prismarine_bricks")
-        elif int(s) % 6 == 0 and abs(-(x - ax) * uz + (z - az) * ux) < 0.6:
-            park.set(x, vy, z, "minecraft:sea_lantern")
-    # above ground at the entrance: no glass box, an ice arch instead
-    for x, z, vy, s in schil + binnenkant:
-        if vy >= ytop - 1:
-            for y in range(vy + 1, vy + 5):
-                park.set(x, y, z, "minecraft:air")
-    for t in (-1, 0, 1, 2):
-        for dd in (-2, 2):
-            x, z = int(round(ax - uz * dd + ux * t)), int(round(az + ux * dd + uz * t))
-            for y in range(ytop + 1, ytop + 5):
-                park.set(x, y, z, "minecraft:packed_ice")
-        for dd in range(-2, 3):
-            x, z = int(round(ax - uz * dd + ux * t)), int(round(az + ux * dd + uz * t))
-            park.set(x, ytop + 5, z, "minecraft:packed_ice")
-    # the dome
+    bx, bz = wx + 11, wz + 12
+    if not park.water[bx, bz]:
+        for r in range(1, 12):
+            hit = [(bx + dx, bz + dz) for dx in range(-r, r + 1) for dz in range(-r, r + 1)
+                   if park.water[bx + dx, bz + dz] and park.hoogte[bx + dx, bz + dz] < kit.WATER_Y - 6]
+            if hit:
+                bx, bz = hit[0]
+                break
+    VLOER = kit.WATER_Y - 8
     cy = VLOER + 3
-    for x in range(bx - 6, bx + 7):
-        for z in range(bz - 6, bz + 7):
-            for y in range(VLOER - 1, cy + 6):
-                d = math.sqrt((x - bx) ** 2 + ((y - cy) * 1.15) ** 2 + (z - bz) ** 2)
+    zi = ZONES.index(ZONE)
+    # 1. the sea bed round the dome: only ever dug down (a gentle bowl), sand and gravel, seagrass
+    for x in range(bx - 13, bx + 14):
+        for z in range(bz - 13, bz + 14):
+            if not park.water[x, z]:
+                continue
+            d = math.hypot(x - bx, z - bz)
+            if d > 13:
+                continue
+            doel = VLOER - 2 + max(0, int((d - 8) * 0.7))
+            h = int(park.hoogte[x, z])
+            if h > doel:
+                for y in range(doel + 1, h + 1):
+                    park.set(x, y, z, "minecraft:water")
+                park.set(x, doel, z, "minecraft:sand" if rng.random() < 0.7 else "minecraft:gravel")
+                park.set(x, doel - 1, z, "minecraft:stone")
+                park.hoogte[x, z] = doel
+            if d > 6.5 and rng.random() < 0.12:
+                park.set(x, int(park.hoogte[x, z]) + 1, z, "minecraft:seagrass")
+    # 2. the dome (a little flattened so its top stays under the water line), floor, lantern, chairs
+    for x in range(bx - 7, bx + 8):
+        for z in range(bz - 7, bz + 8):
+            for y in range(VLOER - 1, kit.WATER_Y):
+                d = math.sqrt((x - bx) ** 2 + ((y - cy) * 1.35) ** 2 + (z - bz) ** 2)
                 if d <= 5.6 and y >= VLOER:
                     park.set(x, y, z, "minecraft:glass")
+            if math.hypot(x - bx, z - bz) <= 5.6:
+                for y in range(int(park.hoogte[x, z]), VLOER):          # a solid base under the dome
+                    park.set(x, y, z, "minecraft:prismarine_bricks")
     for x in range(bx - 5, bx + 6):
         for z in range(bz - 5, bz + 6):
             for y in range(VLOER + 1, cy + 5):
-                d = math.sqrt((x - bx) ** 2 + ((y - cy) * 1.15) ** 2 + (z - bz) ** 2)
+                d = math.sqrt((x - bx) ** 2 + ((y - cy) * 1.35) ** 2 + (z - bz) ** 2)
                 if d <= 4.5:
                     park.set(x, y, z, "minecraft:air")
             if math.hypot(x - bx, z - bz) <= 4.6:
-                park.set(x, VLOER, z, "minecraft:prismarine_bricks")
-    for x, z, vy, s in binnenkant:                           # the dome's glass must not close the tube
-        for y in range(vy + 1, vy + 4):
-            park.set(x, y, z, "minecraft:air")
-    # test round 2: where the tube still pokes out above the ground or the water near the entrance, it is no glass
-    # box but packed ice (the same as the ice arch); glass stays only under the water line
-    for x, z, vy, s in schil + binnenkant:
-        boven = kit.WATER_Y if park.water[x, z] else int(park.hoogte[x, z])
-        for y in range(max(vy, boven + 1), vy + 5):
-            if park.get(x, y, z) == "minecraft:glass":
-                park.set(x, y, z, "minecraft:packed_ice")
+                park.set(x, VLOER, z, "minecraft:dark_prismarine" if (x + z) % 2 else "minecraft:prismarine_bricks")
     park.set(bx, VLOER, bz, "minecraft:sea_lantern")
-    kit.stoel(park, bx, VLOER + 1, bz, (round(ux), round(uz)) if (round(ux), round(uz)) in kit._KIJK else "north")
-    langs = [(int(round(ax + ux * s)), int(round(az + uz * s))) for s in range(8, int(lengte), 5)]
+    # 3. sea lanterns in rings on the bed (lights under 8 blocks of water: no ice melts up at the pack ice)
+    for (r, n) in ((8, 8), (11.5, 12)):
+        for k in range(n):
+            a = 2 * math.pi * k / n + (0.3 if r > 9 else 0)
+            x, z = int(round(bx + math.cos(a) * r)), int(round(bz + math.sin(a) * r))
+            if park.water[x, z]:
+                park.lamp(x, int(park.hoogte[x, z]), z, "ijslantaarn")
+    # 4. the entrance: the cardinal direction with the nearest land that has room for the hall
+    beste = None
+    for d4 in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        for t in range(6, 70):
+            x, z = bx + d4[0] * t, bz + d4[1] * t
+            if not (0 <= x < kit.W and 0 <= z < kit.W) or not park.binnen[x, z]:
+                break
+            if not park.water[x, z] and park.zone[x, z] == zi:
+                # the hall stands so far inland that the stairs end at the shore
+                for extra in range(0, 30):
+                    hx, hz = bx + d4[0] * (t + extra), bz + d4[1] * (t + extra)
+                    if not (4 <= hx < kit.W - 4 and 4 <= hz < kit.W - 4):
+                        break
+                    g = max(int(park.hoogte[hx + a, hz + b]) for a in range(-3, 4) for b in range(-3, 4))
+                    nodig = (g - VLOER) + 4
+                    if extra >= nodig and all(mag_bouwen(park, hx + a, hz + b, 3) and not park.water[hx + a, hz + b]
+                                              for a in range(-3, 4) for b in range(-3, 4)):
+                        kand = (t + extra, d4, (hx, hz), g, t)
+                        if beste is None or kand[0] < beste[0]:
+                            beste = kand
+                        break
+                break
+    langs = []
+    if beste is None:
+        kit.stoel(park, bx, VLOER + 1, bz, "north")
+        return (bx, VLOER, bz), langs
+    afstand, (ux, uz), (hx, hz), gH, t_land = beste
+    trap_start = afstand                         # the stairs end in the middle of the hall (hall is 7 x 7)
+    trap_lengte = gH - VLOER                    # one step up per block
+    vlak_tot = trap_start - trap_lengte          # the level tube from the dome to the foot of the stairs
+    naar_hal = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[(ux, uz)]
+    wx_, wz_ = -uz, ux
+    for s in range(4, trap_start + 1):
+        vloer = VLOER if s <= vlak_tot else VLOER + (s - vlak_tot)
+        cx_, cz_ = bx + ux * s, bz + uz * s
+        onder_water = park.water[cx_, cz_] and vloer + 4 < kit.WATER_Y
+        for w in range(-2, 3):
+            x, z = cx_ + wx_ * w, cz_ + wz_ * w
+            if abs(w) == 2:                       # side walls
+                for y in range(vloer, vloer + 5):
+                    park.set(x, y, z, "minecraft:glass" if onder_water and y > vloer else "minecraft:prismarine_bricks")
+            else:
+                park.set(x, vloer, z, "minecraft:prismarine_bricks")
+                for y in range(vloer + 1, vloer + 4):
+                    park.set(x, y, z, "minecraft:air")
+                park.set(x, vloer + 4, z, "minecraft:glass" if onder_water else "minecraft:prismarine_bricks")
+                if s > vlak_tot and w != 99:
+                    park.set(x, vloer, z, f"minecraft:prismarine_brick_stairs[facing={naar_hal},half=bottom,shape=straight,waterlogged=false]")
+                    park.set(x, vloer - 1, z, "minecraft:prismarine_bricks")
+            # under the corridor down to the old ground / sea bed: solid (no hanging tube under the land)
+            if not park.water[x, z]:
+                for y in range(min(int(park.hoogte[x, z]), vloer - 1), vloer):
+                    park.set(x, y, z, "minecraft:stone")
+            # a corridor that comes out above the land gets the land built over it again (snow mound)
+            if not park.water[x, z] and vloer + 5 > int(park.hoogte[x, z]):
+                for y in range(vloer + 5, vloer + 6):
+                    park.set(x, y, z, "minecraft:snow_block")
+        if s % 4 == 0:                            # lights in the ceiling / floor
+            if onder_water:
+                park.set(cx_, vloer, cz_, "minecraft:sea_lantern")
+            else:
+                park.set(cx_, vloer + 4, cz_, "minecraft:sea_lantern")
+        if onder_water:
+            langs.append((cx_ + wx_ * 4, cz_ + wz_ * 4))
+    # the dome's glass must not close the tube mouth
+    for s in range(3, 7):
+        for w in (-1, 0, 1):
+            x, z = bx + ux * s + wx_ * w, bz + uz * s + wz_ * w
+            for y in range(VLOER + 1, VLOER + 4):
+                park.set(x, y, z, "minecraft:air")
+            park.set(x, VLOER, z, "minecraft:prismarine_bricks")
+    # 5. the entrance hall on the shore: 7 x 7, packed-ice walls with spruce corner posts, a door away from the sea
+    egaliseer(park, hx, hz, 4, gH, top="minecraft:snow_block", rond=False)
+    for a in range(-3, 4):
+        for b in range(-3, 4):
+            x, z = hx + a, hz + b
+            rand = abs(a) == 3 or abs(b) == 3
+            hoek = abs(a) == 3 and abs(b) == 3
+            for y in range(gH + 1, gH + 6):
+                if hoek:
+                    park.set(x, y, z, "minecraft:spruce_log[axis=y]")
+                elif rand:
+                    park.set(x, y, z, "minecraft:packed_ice" if y != gH + 3 else "minecraft:blue_ice")
+                else:
+                    park.set(x, y, z, "minecraft:air")
+            park.set(x, gH, z, "minecraft:spruce_planks")
+            park.set(x, gH + 6, z, "minecraft:spruce_planks" if not rand else "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+            park.set(x, gH + 7, z, "minecraft:snow_block" if not rand else "minecraft:air")
+    # windows on both sides (glass, the view over the sea)
+    for w in (-1, 0, 1):
+        for zij in (-3, 3):
+            x, z = hx + wx_ * zij + ux * w, hz + wz_ * zij + uz * w
+            park.set(x, gH + 3, z, "minecraft:glass")
+    # the stair well inside the hall: the last three steps come up through the hall floor (the hall code above laid
+    # planks over them); railings on both sides and at the sea end, the walk-in side toward the door stays open
+    for s_ in range(trap_start - 2, trap_start + 1):
+        trede = VLOER + (s_ - vlak_tot)
+        for w in (-1, 0, 1):
+            x, z = bx + ux * s_ + wx_ * w, bz + uz * s_ + wz_ * w
+            for y in range(trede + 1, gH + 4):
+                park.set(x, y, z, "minecraft:air")
+            park.set(x, trede, z, f"minecraft:prismarine_brick_stairs[facing={naar_hal},half=bottom,shape=straight,waterlogged=false]")
+        for w in (-2, 2):
+            x, z = bx + ux * s_ + wx_ * w, bz + uz * s_ + wz_ * w
+            if abs(x - hx) <= 2 and abs(z - hz) <= 2:
+                park.set(x, gH + 1, z, "minecraft:spruce_fence")
+    dx_, dz_ = hx + ux * 3, hz + uz * 3          # the door, away from the sea
+    deur = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[(ux, uz)]
+    park.set(dx_, gH + 1, dz_, f"minecraft:spruce_door[facing={deur},half=lower,hinge=left,open=false,powered=false]")
+    park.set(dx_, gH + 2, dz_, f"minecraft:spruce_door[facing={deur},half=upper,hinge=left,open=false,powered=false]")
+    for y in (gH + 3,):
+        park.set(dx_, y, dz_, "minecraft:spruce_planks")
+    veilige_lamp(park, hx, gH + 5, hz, "lantaarn_hangend")
+    veilige_lamp(park, dx_ + ux, gH + 3, dz_ + uz, "lantaarn")
+    ex, ez = hx + wx_ * 2 + ux * 1, hz + wz_ * 2 + uz * 1
+    park.set(ex, gH + 1, ez, "guhs:bestaand_knuffelguh", facing=deur)
+    try:
+        from .zone_savanne import bord, paadje
+        rot = {"south": 0, "west": 4, "north": 8, "east": 12}[deur]
+        bord(park, hx - wx_ * 2 + ux, gH + 1, hz - wz_ * 2 + uz, ["Onderwater-", "kijkkoepel", "", "trap naar beneden"],
+             rotation=rot, blok="minecraft:spruce_sign")
+        paadje(park, (dx_ + ux * 2, dz_ + uz * 2), max_r=30, blok="dirt_path")
+    except Exception:
+        pass
+    _reset_caches(park)
+    # 6. chairs: the kijk-guh in the middle looking at the wreck, three more facing out
+    naar_wrak = _kardinaal(wx - bx, wz - bz)
+    kit.stoel(park, bx, VLOER + 1, bz, naar_wrak)
+    for d4 in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        if d4 == (ux, uz) or d4 == naar_wrak:
+            continue
+        kit.stoel(park, bx + d4[0] * 3, VLOER + 1, bz + d4[1] * 3, d4)
+    park._ijskust_dome = {"centrum": (bx, VLOER, bz), "hal": (hx, gH, hz), "richting": (ux, uz)}
     return (bx, VLOER, bz), langs
 
 
 def pinguinglijbaan(park, rng, zee):
+    """The ice slide (round 3: plus side steps the pinguins walk up, 1 per 2 blocks with snow slabs as half steps,
+    and lanterns at the top). Returns (top (x, y, z), bottom (x, z), points dict for the pinguin AI)."""
     cx, cz, _, _ = kit.RESERVERINGEN["pinguinglijbaan"]
-    # direction to the nearest water
-    wd = _water_afstand(park)
     best = None
     for a in range(0, 360, 10):
         dx, dz = math.cos(math.radians(a)), math.sin(math.radians(a))
@@ -816,7 +929,6 @@ def pinguinglijbaan(park, rng, zee):
     if best is None:
         return None
     t, dx, dz = best
-    # platform on the far side, slide toward the water dropping 1 per 2
     px, pz = int(round(cx - dx * 4)), int(round(cz - dz * 4))
     g = grond(park, px, pz)
     hoog = g + 9
@@ -825,9 +937,15 @@ def pinguinglijbaan(park, rng, zee):
             for y in range(grond(park, x, z) - 1, hoog + 1):
                 park.set(x, y, z, "minecraft:snow_block")
             park.hoogte[x, z] = hoog
-    # stairs up on the back side
+    # railing round the platform (not on the slide side)
+    for x in range(px - 2, px + 3):
+        for z in range(pz - 2, pz + 3):
+            if max(abs(x - px), abs(z - pz)) == 2:
+                if (x - px) * dx + (z - pz) * dz > 1.2:
+                    continue
+                park.set(x, hoog + 1, z, "minecraft:spruce_fence")
     sx, sz = -dx, -dz
-    for k in range(1, hoog - g + 1):
+    for k in range(1, hoog - g + 1):           # stairs up on the back side (for the visitors)
         x, z = int(round(px + sx * (2 + k))), int(round(pz + sz * (2 + k)))
         y = hoog - k
         if not mag_bouwen(park, x, z, 4):
@@ -837,8 +955,9 @@ def pinguinglijbaan(park, rng, zee):
             for yy in range(grond(park, xx, zz) - 1, y + 1):
                 park.set(xx, yy, zz, "minecraft:snow_block")
             ruim_kolom(park, xx, zz, y + 1, y + 4)
-    # the slide
     lengte = 2 * (hoog - kit.WATER_Y) + 4
+    trap = []
+    laatste = 0
     for k in range(0, lengte):
         y = hoog - k // 2
         x, z = int(round(px + dx * (3 + k))), int(round(pz + dz * (3 + k)))
@@ -854,13 +973,52 @@ def pinguinglijbaan(park, rng, zee):
                     park.set(xx, yy, zz, "minecraft:snow_block")
                 park.set(xx, y, zz, "minecraft:blue_ice" if not water_hier else "minecraft:packed_ice")
                 ruim_kolom(park, xx, zz, y + 1, y + 4)
+        # the side steps (w = +3, +4): the same fall, with a snow slab on the lower cell of every level change
+        if not water_hier:
+            for w in (3, 4):
+                xx, zz = int(round(x - dz * w)), int(round(z + dx * w))
+                if not mag_bouwen(park, xx, zz, 3):
+                    continue
+                for yy in range(min(grond(park, xx, zz), y) - 1, y + 1):
+                    park.set(xx, yy, zz, "minecraft:snow_block")
+                ruim_kolom(park, xx, zz, y + 1, y + 4)
+                if k % 2 == 0 and k > 0:
+                    park.set(xx, y + 1, zz, "minecraft:snow_block" if False else
+                             "minecraft:smooth_quartz_slab[type=bottom,waterlogged=false]")
+                park.hoogte[xx, zz] = y
+            trap.append((int(round(x - dz * 3)), y + 1, int(round(z + dx * 3))))
+            laatste = k
         if water_hier and y <= kit.WATER_Y:
             break
+    # the outer edge of the steps: a low snow wall so pinguins do not tumble off
+    for k in range(0, laatste + 1):
+        y = hoog - k // 2
+        x, z = int(round(px + dx * (3 + k))), int(round(pz + dz * (3 + k)))
+        xx, zz = int(round(x - dz * 5)), int(round(z + dx * 5))
+        if mag_bouwen(park, xx, zz, 3):
+            for yy in range(min(grond(park, xx, zz), y) - 1, y + 2):
+                park.set(xx, yy, zz, "minecraft:snow_block")
+    # the top of the steps joins the platform
+    for w in (3, 4):
+        for k in (0, -1, -2):
+            xx, zz = int(round(px + dx * (3 + k) - dz * w)), int(round(pz + dz * (3 + k) + dx * w))
+            if mag_bouwen(park, xx, zz, 3):
+                for yy in range(grond(park, xx, zz) - 1, hoog + 1):
+                    park.set(xx, yy, zz, "minecraft:snow_block")
+                ruim_kolom(park, xx, zz, hoog + 1, hoog + 4)
+                park.hoogte[xx, zz] = hoog
     bodem = (int(round(px + dx * (3 + lengte - 2))), int(round(pz + dz * (3 + lengte - 2))))
+    for (ox, oz) in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+        if (ox * dx + oz * dz) < 1.2:
+            veilige_lamp(park, px + ox, hoog + 2, pz + oz, "lantaarn")
+    punten = {"top": (px, hoog + 1, pz), "bodem": (bodem[0], kit.WATER_Y + 1, bodem[1]),
+              "trap": trap[::-1]}                 # from the bottom up
+    park._ijskust_glijbaan = punten
     return (px, hoog + 1, pz), bodem
 
 
 def iglo(park, cx, cz, deur):
+    """A snow igloo with a lit, cosy inside (fur rug, plush, lantern on packed ice so nothing melts)."""
     g = grond(park, cx, cz)
     egaliseer(park, cx, cz, 4, g, top="minecraft:snow_block")
     for x in range(cx - 4, cx + 5):
@@ -870,7 +1028,7 @@ def iglo(park, cx, cz, deur):
                 if d <= 3.6:
                     park.set(x, y, z, "minecraft:snow_block" if d > 2.6 else "minecraft:air")
     dx, dz = deur
-    for k in range(2, 5):                                   # the door tunnel
+    for k in range(2, 5):
         x, z = cx + dx * k, cz + dz * k
         for y in (g + 1, g + 2):
             park.set(x, y, z, "minecraft:air")
@@ -878,8 +1036,12 @@ def iglo(park, cx, cz, deur):
         for w in (-1, 1):
             for y in (g + 1, g + 2):
                 park.set(x - dz * w, y, z + dx * w, "minecraft:snow_block")
-    park.set(cx, g + 1, cz, "minecraft:white_carpet")
-    park.set(cx - dz, g + 1, cz + dx, "minecraft:lantern[hanging=false,waterlogged=false]")
+    for (a, b) in ((0, 0), (1, 0), (0, 1), (-1, 0), (0, -1)):
+        park.set(cx + a, g, cz + b, "minecraft:packed_ice")
+        park.set(cx + a, g + 1, cz + b, "minecraft:white_carpet" if (a, b) != (0, 0) else "minecraft:light_gray_carpet")
+    park.set(cx - dx, g + 1, cz - dz, "guhs:pink_kussen", facing=_richting((dx, dz)))
+    park.set(cx - dz, g + 1, cz + dx, "guhs:bestaand_knuffelguh", facing=_richting((dx, dz)))
+    veilige_lamp(park, cx + dz, g + 1, cz - dx, "lantaarn")
 
 
 def iglodorpje(park, rng):
@@ -907,64 +1069,113 @@ def iglodorpje(park, rng):
 
 
 def poolstation(park, rng):
+    """The research station (round 3: bigger, warm and cosy inside): 9 x 7, white walls with big windows, a red roof
+    edge, inside a desk with a map, guh chairs, a guh table with hot chocolate, a bunk, a bookcase, carpets, a plush,
+    guh lamps; the red-white vuurtoren next to it and the hot chocolate kiosk with a striped awning."""
     cx, cz, _, _ = kit.RESERVERINGEN["poolstation"]
-    c = zoek(park, ZONE, (cx, cz), r=6, max_helling=3)
+    c = zoek(park, ZONE, (cx, cz), r=7, max_helling=3)
+    if c is None:
+        c = zoek(park, ZONE, (cx, cz), r=6, max_helling=4)
     if c is None:
         return None
     cx, cz = c
-    g = max(grond(park, x, z) for x in range(cx - 6, cx + 7) for z in range(cz - 6, cz + 7))
-    egaliseer(park, cx, cz, 7, g, top="minecraft:snow_block", rond=False)
-    # the station: 7x5, white with a grey roof, windows, a door to the south
-    x0, z0 = cx - 6, cz - 5
-    for x in range(x0, x0 + 7):
-        for z in range(z0, z0 + 5):
-            rand = x in (x0, x0 + 6) or z in (z0, z0 + 4)
-            for y in range(g + 1, g + 4):
-                park.set(x, y, z, "minecraft:white_concrete" if rand else "minecraft:air")
-            park.set(x, g + 4, z, "minecraft:light_gray_concrete")
-    for x in (x0 + 2, x0 + 4):
-        park.set(x, g + 2, z0, "minecraft:glass")
-        park.set(x, g + 2, z0 + 4, "minecraft:glass")
-    for z in (z0 + 2,):
-        park.set(x0, g + 2, z, "minecraft:glass")
-    park.set(x0 + 3, g + 1, z0 + 4, "minecraft:air")
-    park.set(x0 + 3, g + 2, z0 + 4, "minecraft:air")
-    park.set(x0 + 1, g + 1, z0 + 1, "minecraft:crafting_table")
-    park.set(x0 + 5, g + 1, z0 + 1, "minecraft:barrel[facing=up,open=false]")
-    park.set(x0 + 3, g + 3, z0 + 2, "minecraft:lantern[hanging=true,waterlogged=false]")
+    g = max(grond(park, x, z) for x in range(cx - 7, cx + 8) for z in range(cz - 7, cz + 8))
+    egaliseer(park, cx, cz, 8, g, top="minecraft:snow_block", rond=False)
+    x0, z0 = cx - 7, cz - 6
+    B, D = 9, 7
+    for x in range(x0, x0 + B):
+        for z in range(z0, z0 + D):
+            rand = x in (x0, x0 + B - 1) or z in (z0, z0 + D - 1)
+            hoek = x in (x0, x0 + B - 1) and z in (z0, z0 + D - 1)
+            park.set(x, g, z, "minecraft:spruce_planks")
+            for y in range(g + 1, g + 5):
+                park.set(x, y, z, ("minecraft:stripped_spruce_log[axis=y]" if hoek else "minecraft:white_concrete")
+                         if rand else "minecraft:air")
+            park.set(x, g + 5, z, "minecraft:red_concrete" if rand else "minecraft:light_gray_concrete")
+            park.set(x, g + 6, z, "minecraft:snow[layers=2]" if not rand else "minecraft:air")
+    # big windows (2 high) on all sides, a door to the south
+    for x in range(x0 + 2, x0 + B - 2):
+        if x == x0 + B // 2:
+            continue
+        for y in (g + 2, g + 3):
+            park.set(x, y, z0, "minecraft:glass")
+            park.set(x, y, z0 + D - 1, "minecraft:glass")
+    for z in range(z0 + 2, z0 + D - 2):
+        for y in (g + 2, g + 3):
+            park.set(x0, y, z, "minecraft:glass")
+            park.set(x0 + B - 1, y, z, "minecraft:glass")
+    dxd = x0 + B // 2
+    park.set(dxd, g + 1, z0 + D - 1, "minecraft:spruce_door[facing=north,half=lower,hinge=left,open=false,powered=false]")
+    park.set(dxd, g + 2, z0 + D - 1, "minecraft:spruce_door[facing=north,half=upper,hinge=left,open=false,powered=false]")
+    park.set(dxd, g + 3, z0 + D - 1, "minecraft:white_concrete")
+    # inside: carpets, desk, chairs, table, bunk, bookcase, plush, lamps
+    for x in range(x0 + 1, x0 + B - 1):
+        for z in range(z0 + 1, z0 + D - 1):
+            park.set(x, g + 1, z, "minecraft:light_blue_carpet" if (x + z) % 3 else "minecraft:white_carpet")
+    park.set(x0 + 1, g + 1, z0 + 1, "minecraft:cartography_table")
+    park.set(x0 + 2, g + 1, z0 + 1, "minecraft:lectern[facing=south,has_book=false,powered=false]")
+    kit.stoel(park, x0 + 2, g + 1, z0 + 2, "north")
+    park.set(x0 + B - 2, g + 1, z0 + 1, "minecraft:bookshelf")
+    park.set(x0 + B - 2, g + 2, z0 + 1, "minecraft:bookshelf")
+    park.set(x0 + B - 3, g + 1, z0 + 1, "guhs:guh_kast", facing="south", open="false")
+    park.set(x0 + B - 2, g + 1, z0 + D - 2, "minecraft:white_bed[facing=north,occupied=false,part=foot]")
+    park.set(x0 + B - 2, g + 1, z0 + D - 3, "minecraft:white_bed[facing=north,occupied=false,part=head]")
+    tx, tz = x0 + 4, z0 + 3
+    park.set(tx, g + 1, tz, "guhs:guh_tafel", facing="north")
+    kit.stoel(park, tx - 1, g + 1, tz, "east")
+    kit.stoel(park, tx + 1, g + 1, tz, "west")
+    park.set(tx, g + 2, tz, "minecraft:decorated_pot[facing=north,cracked=false,waterlogged=false]")
+    park.set(x0 + 1, g + 1, z0 + D - 2, "guhs:bestaand_knuffelguh", facing="east")
+    park.set(x0 + 1, g + 1, z0 + D - 3, "minecraft:potted_azure_bluet")
+    park.set(x0 + 1, g + 1, z0 + 3, "minecraft:furnace[facing=east,lit=true]")
+    for (lx, lz) in ((x0 + 2, z0 + 3), (x0 + B - 3, z0 + 3)):
+        veilige_lamp(park, lx, g + 4, lz, "lantaarn_hangend")
+    veilige_lamp(park, x0 + B - 3, g + 1, z0 + D - 2, "guhlamp")
+    park._ijskust_station = {"stoel": (x0 + 2, g + 1, z0 + 2), "oog": (x0 + 2.5, g + 2.6, z0 + 2.5)}
     # antenna
-    for y in range(g + 5, g + 10):
+    for y in range(g + 6, g + 11):
         park.set(x0 + 1, y, z0 + 1, "minecraft:iron_bars")
-    park.set(x0 + 1, g + 10, z0 + 1, "minecraft:lightning_rod[facing=up,powered=false,waterlogged=false]")
-    # the vuurtoren: red and white rings, a lamp room
-    vx, vz = cx + 3, cz + 3
-    for y in range(g + 1, g + 16):
-        kleur = "minecraft:red_concrete" if ((y - g - 1) // 3) % 2 else "minecraft:white_concrete"
+    park.set(x0 + 1, g + 11, z0 + 1, "minecraft:lightning_rod[facing=up,powered=false,waterlogged=false]")
+    # the vuurtoren: red and white rings, a lamp room with a balcony
+    vx, vz = x0 + B + 2, z0 + 1
+    if mag_bouwen(park, vx, vz, 3):
+        egaliseer(park, vx, vz, 2, g, top="minecraft:snow_block", rond=False)
+        for y in range(g + 1, g + 17):
+            kleur = "minecraft:red_concrete" if ((y - g - 1) // 3) % 2 else "minecraft:white_concrete"
+            for x in range(vx - 1, vx + 2):
+                for z in range(vz - 1, vz + 2):
+                    park.set(x, y, z, kleur)
+        for x in range(vx - 2, vx + 3):
+            for z in range(vz - 2, vz + 3):
+                if max(abs(x - vx), abs(z - vz)) == 2:
+                    park.set(x, g + 17, z, "minecraft:iron_bars")
+                park.set(x, g + 16, z, "minecraft:white_concrete") if max(abs(x - vx), abs(z - vz)) == 2 else None
         for x in range(vx - 1, vx + 2):
             for z in range(vz - 1, vz + 2):
-                park.set(x, y, z, kleur)
-    for x in range(vx - 1, vx + 2):
-        for z in range(vz - 1, vz + 2):
-            park.set(x, g + 16, z, "minecraft:glass" if (x, z) != (vx, vz) else "minecraft:sea_lantern")
-            park.set(x, g + 17, z, "minecraft:glass")
-            park.set(x, g + 18, z, "minecraft:red_concrete")
-    park.set(vx, g + 17, vz, "minecraft:sea_lantern")
-    park.set(vx, g + 19, vz, "minecraft:red_concrete")
-    # the hot chocolate kiosk: a counter, striped awning, a pot
-    kx, kz = cx - 3, cz + 4
-    for x in range(kx - 1, kx + 2):
-        park.set(x, g + 1, kz, "minecraft:spruce_planks")
-        park.set(x, g + 2, kz, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
-    for x in (kx - 2, kx + 2):
-        for y in range(g + 1, g + 4):
-            park.set(x, y, kz, "minecraft:spruce_fence")
-            park.set(x, y, kz - 2, "minecraft:spruce_fence")
-    for x in range(kx - 2, kx + 3):
-        for z in range(kz - 2, kz + 1):
-            park.set(x, g + 4, z, "minecraft:orange_wool" if (x + z) % 2 else "minecraft:white_wool")
-    park.set(kx, g + 1, kz - 1, "minecraft:cauldron")
-    park.set(kx + 1, g + 1, kz - 1, "minecraft:brown_concrete")
-    park.set(kx - 1, g + 3, kz, "minecraft:candle[candles=1,lit=false,waterlogged=false]")
+                park.set(x, g + 17, z, "minecraft:glass" if (x, z) != (vx, vz) else "minecraft:sea_lantern")
+                park.set(x, g + 18, z, "minecraft:glass")
+                park.set(x, g + 19, z, "minecraft:red_concrete")
+        park.set(vx, g + 18, vz, "minecraft:sea_lantern")
+        park.set(vx, g + 20, vz, "minecraft:red_concrete")
+    # the hot chocolate kiosk in front of the door
+    kx, kz = cx - 3, z0 + D + 3
+    if mag_bouwen(park, kx, kz, 3):
+        egaliseer(park, kx, kz, 3, g, top="minecraft:snow_block", rond=False)
+        for x in range(kx - 1, kx + 2):
+            park.set(x, g + 1, kz, "minecraft:spruce_planks")
+            park.set(x, g + 2, kz, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+        for x in (kx - 2, kx + 2):
+            for y in range(g + 1, g + 4):
+                park.set(x, y, kz, "minecraft:spruce_fence")
+                park.set(x, y, kz - 2, "minecraft:spruce_fence")
+        for x in range(kx - 2, kx + 3):
+            for z in range(kz - 2, kz + 1):
+                park.set(x, g + 4, z, "minecraft:orange_wool" if (x + z) % 2 else "minecraft:white_wool")
+        park.set(kx, g + 1, kz - 1, "minecraft:cauldron")
+        park.set(kx + 1, g + 1, kz - 1, "minecraft:brown_concrete")
+        park.set(kx - 1, g + 3, kz - 1, "minecraft:lantern[hanging=true,waterlogged=false]")
+        for k in (-1, 1):                         # two log stools (not viewpoint chairs)
+            park.set(kx + k * 2, g + 1, kz + 2, "minecraft:stripped_spruce_log[axis=y]")
     return cx, g + 1, cz
 
 
@@ -994,6 +1205,164 @@ def kust_pad(park, log=print):
     return int(strook.sum())
 
 
+def veilige_lamp(park, x, y, z, soort="lantaarn"):
+    """Round 3: a light that never melts ice or snow layers: plain ice within 4 becomes packed ice, snow layers within
+    3 go (block light > 11 melts both in the game). Registered through park.lamp."""
+    for dx in range(-4, 5):
+        for dy in range(-4, 5):
+            for dz in range(-4, 5):
+                p = (x + dx, y + dy, z + dz)
+                if not park.inb(*p) or park.v[p] == 0:
+                    continue
+                s = park.get(*p)
+                if s == "minecraft:ice":
+                    park.set(*p, "minecraft:packed_ice")
+                elif s.startswith("minecraft:snow[") and max(abs(dx), abs(dy), abs(dz)) <= 3:
+                    park.v[p] = LUCHT
+    park.lamp(x, y, z, soort)
+
+
+def _kardinaal(dx, dz):
+    return (1 if dx > 0 else -1, 0) if abs(dx) >= abs(dz) else (0, 1 if dz > 0 else -1)
+
+
+def oostrand(park, zones=("ijskust", "oertijd"), log=print):
+    """Round 3: just outside the outer fence of these zones, every decor column that lies LOWER than the park ground
+    behind the fence (or has a hole under it) is built up to at least that ground (+ a ragged ice/snow cap rising a
+    little away from the fence): no looking down into the void and nothing to fall into from anywhere along the
+    ijskust and the oertijd. Decor that is already higher stays as it is."""
+    from scipy.ndimage import distance_transform_edt as edt
+    zis = [ZONES.index(z) for z in zones]
+    mijn = np.isin(park.zone, zis) & park.binnen
+    if not mijn.any():
+        return 0
+    d, (ix, iz) = edt(~mijn, return_indices=True)
+    band = (~park.binnen) & (d <= 12)
+    rng = np.random.default_rng(kit.SEED + 777)
+    n = 0
+    xs, zs = np.nonzero(band)
+    for x, z in zip(xs, zs):
+        bx, bz = int(ix[x, z]), int(iz[x, z])
+        binnen_h = int(park.hoogte[bx, bz])
+        nodig = binnen_h + 1 + int(d[x, z] * 0.35) + int(rng.integers(0, 2))
+        col = np.nonzero(park.v[x, :, z])[0]
+        top = int(col.max()) if len(col) else -1
+        laag = int(col.min()) if len(col) else 10 ** 6
+        if top >= binnen_h - 1 and laag <= binnen_h - 8:
+            continue
+        for y in range(max(0, binnen_h - 12), max(top, nodig) + 1):
+            if park.v[x, y, z] == 0 and y <= nodig:
+                park.set(x, y, z, "minecraft:stone" if y < nodig - 2 else (
+                    "minecraft:packed_ice" if rng.random() < 0.4 else "minecraft:snow_block"))
+        if top < nodig:
+            park.set(x, nodig, z, "minecraft:snow_block")
+        n += 1
+    log(f"    ijskust/oertijd: {n} decorkolommen achter het hek bijgewerkt (geen doorkijk, geen gaten)")
+    return n
+
+
+def pad_lampen(park, zone, stap=22, soort="lantaarn", log=print):
+    """Round 3 lighting: a lantern post (fence + lantern) beside the route path every ~stap blocks in the zone, on the
+    land next to the path, never near a fence (no ledge) and never near plain ice (veilige_lamp)."""
+    zi = ZONES.index(zone)
+    gekozen = []
+    xs, zs = np.nonzero(park.pad & (park.zone == zi))
+    volgorde = np.lexsort((zs, xs))
+    for i in volgorde:
+        x, z = int(xs[i]), int(zs[i])
+        if any(abs(x - a) + abs(z - b) < stap for a, b in gekozen):
+            continue
+        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1), (2, 0), (-2, 0), (0, 2), (0, -2)):
+            px, pz = x + dx, z + dz
+            if not (0 <= px < kit.W and 0 <= pz < kit.W) or park.pad[px, pz] or park.water[px, pz]:
+                continue
+            if not park.binnen[px, pz] or park.hek_afstand[px, pz] <= 3 or park.zone[px, pz] != zi:
+                continue
+            g = int(park.hoogte[px, pz])
+            if park.v[px, g + 1, pz] != 0 and not park.get(px, g + 1, pz).startswith(
+                    ("minecraft:snow[", "minecraft:short_grass", "minecraft:dead_bush")):
+                continue
+            ruim_kolom(park, px, pz, g + 1, g + 3)
+            park.set(px, g + 1, pz, "minecraft:spruce_fence")
+            veilige_lamp(park, px, g + 2, pz, soort)
+            gekozen.append((x, z))
+            break
+    log(f"    {zone}: {len(gekozen)} lantaarnpaaltjes langs het pad")
+    return gekozen
+
+
+def registreer_kijkplekken(park, log=print):
+    """Round 3: the viewpoints of the ijskust with their favourite spots (kijkplekken.json, read by the animal AI and
+    the kijk-guhs). The glijbaan is a viewpoint without a chair: its favourites are the slide points for the pinguins
+    (glijbaan_top, glijbaan_bodem, glijbaan_trap_0.. from the bottom up), see SAFARI_CONTRACT.md."""
+    info = park._ijskust
+    dome = getattr(park, "_ijskust_dome", None)
+    wx, wz, _, _ = kit.RESERVERINGEN["scheepswrak"]
+    if dome:
+        bx, vy, bz = dome["centrum"]
+        k = park.kijkplek("onderwaterkoepel_ijskust", ZONE, (bx + 0.5, vy + 2.6, bz + 0.5), None, (bx, vy + 1, bz))
+        # in the water round the dome: pinguins diving, the octopus on the bed, seals passing
+        for naam, (ox, oz), soorten in (("pinguins_duik", (-5, -5), ["pinguin"]), ("octopus_bodem", (7, 2), ["octopus"]),
+                                        ("zeehonden_zwem", (2, 8), ["zeehond"]), ("narwal_diep", (-9, 6), ["narwal"])):
+            x, z = bx + ox, bz + oz
+            if park.water[x, z]:
+                park.favoriet(f"koepel_{naam}", k, (x, int(park.hoogte[x, z]) + 2, z), soorten, straal=3)
+    hut = info.get("kijkhut")
+    if hut:
+        F, oog, punten = hut
+        stoelen = [s for s in park.stoelen if abs(s[0] - oog[0]) <= 4 and abs(s[2] - oog[1]) <= 4 and s[1] == F + 1]
+        kijk = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}[stoelen[0][3]] if stoelen else None
+        k = park.kijkplek("kijkhut_ijskust_west", ZONE, (oog[0] + 0.5, F + 2.6, oog[1] + 0.5), kijk,
+                          stoelen[0][:3] if stoelen else None)
+        for (x, y, z) in info.get("zeehonden", [])[:3]:
+            park.favoriet(f"kijkhut_ijskust_rots_{x}_{z}", k, (x, y, z), ["zeehond"], straal=2)
+        for (x, z) in sorted(info.get("ijsveld") or [], key=lambda p: abs(p[0] - oog[0]))[:2]:
+            park.favoriet(f"kijkhut_ijskust_pakijs_{x}_{z}", k, (x, kit.WATER_Y + 1, z), ["pinguin", "zeehond"], straal=3)
+    gl = getattr(park, "_ijskust_glijbaan", None)
+    if gl:
+        tx, ty, tz = gl["top"]
+        ox, oy, oz = gl["bodem"]
+        k = park.kijkplek("glijbaan_ijskust", ZONE, (ox + 0.5, oy + 1.6, oz + 0.5), (tx - ox, tz - oz), None)
+        park.favoriet("glijbaan_top", k, gl["top"], ["pinguin"], straal=2)
+        park.favoriet("glijbaan_bodem", k, gl["bodem"], ["pinguin"], straal=2)
+        for i, p in enumerate(gl["trap"]):
+            park.favoriet(f"glijbaan_trap_{i}", k, p, ["pinguin"], straal=1)
+    st = getattr(park, "_ijskust_station", None)
+    if st:
+        park.kijkplek("poolstation_ijskust", ZONE, st["oog"], (0, -1), st["stoel"])
+    # the tower and the station: a favourite on the nearest shore (a pinguin family is put there in plekken())
+    zi = ZONES.index(ZONE)
+    park._ijskust_oever = []
+    for k in park.kijkplekken:
+        if k["zone"] != ZONE or not (k["naam"].startswith("toren_") or k["naam"] == "poolstation_ijskust"):
+            continue
+        ox, oz = int(k["oog"][0]), int(k["oog"][2])
+        beste = None
+        for wil_water in (True, False):          # the shore if there is one in view, else open snow nearby
+            for r in range(8, 30):
+                for a in range(0, 360, 12):
+                    x = int(round(ox + math.cos(math.radians(a)) * r))
+                    z = int(round(oz + math.sin(math.radians(a)) * r))
+                    if not (2 <= x < kit.W - 2 and 2 <= z < kit.W - 2) or park.zone[x, z] != zi or park.water[x, z]:
+                        continue
+                    if not mag_bouwen(park, x, z, 5) or _pad_afstand(park)[x, z] < 3:
+                        continue
+                    if wil_water and not any(park.water[x + dx, z + dz] for dx in (-2, 0, 2) for dz in (-2, 0, 2)):
+                        continue
+                    beste = (x, z)
+                    break
+                if beste:
+                    break
+            if beste:
+                break
+        if beste:
+            x, z = beste
+            park.favoriet(f"{k['naam']}_oever", k, (x, kolom_top_vrij(park, x, z), z), ["pinguin", "zeehond"], straal=3)
+            park._ijskust_oever.append(beste)
+    log(f"    ijskust: kijkplekken koepel={bool(dome)} kijkhut={bool(hut)} glijbaan={bool(gl)}"
+        f" oever={len(park._ijskust_oever)}")
+
+
 # ======================================================================================================================
 def bouw(park, log=print):
     rng = np.random.default_rng(kit.SEED + 501)
@@ -1013,15 +1382,20 @@ def bouw(park, log=print):
     # east over the seal rocks to the wreck in its pack ice (test round 2: the old hide had one slit and saw nothing)
     t = zoek(park, ZONE, (sx + 70, sz - 22), r=3, max_helling=4)
     if t:
-        toren(park, *t, hout="birch", dak="minecraft:birch_slab[type=bottom,waterlogged=false]")
+        top = toren(park, *t, hout="birch", dak="minecraft:birch_slab[type=bottom,waterlogged=false]")
+        veilige_lamp(park, t[0] + 3, grond(park, t[0] + 3, t[1]) + 1, t[1], "guhlamp")
     h = zoek(park, ZONE, (sx - 46, sz - 10), r=5, max_helling=3, hek_marge=7)
     if h:
         kijk = (1, 0) if sx > h[0] else (-1, 0)
         park._ijskust["kijkhut"] = kijkhut(park, *h, kijk=kijk, hout="spruce", verhoog=2, kegel=30,
                                             bodem="minecraft:gravel", oever_blok="minecraft:snow_block",
                                             blad="spruce", diep_water=False, log=log)
+        lx, lz = h[0] - kijk[0] * 5, h[1] + 2
+        if mag_bouwen(park, lx, lz, 3) and not park.water[lx, lz]:
+            veilige_lamp(park, lx, grond(park, lx, lz) + 1, lz, "guhlamp")
     park._ijskust["ijsveld"] = _ijsveld(park, zee)
-    # the river crossing on the ijskust / europa border (its banks are partly ijskust): high enough for a canoe
+    pad_lampen(park, ZONE, stap=24, soort="lantaarn", log=log)
+    registreer_kijkplekken(park, log)
     log(f"    ijskust: zee {sx},{sz} tunnel {park._ijskust['tunnel'][0]} glijbaan {park._ijskust['glijbaan']}"
         f" toren {t} kijkhut {h}")
 
@@ -1105,6 +1479,9 @@ def plekken(park, plekken):
         extra_plek(plekken, "pinguin", ZONE, x, kit.WATER_Y + 1, z, 6, 2, 2, water=True)
         x, z = ijs[len(ijs) // 2]
         extra_plek(plekken, "zeehond", ZONE, x, kit.WATER_Y + 1, z, 7, 2, 1, water=True)
+    # round 3: a pinguin family on the shore in view of the tower and of the station
+    for (x, z) in getattr(park, "_ijskust_oever", []):
+        extra_plek(plekken, "pinguin", ZONE, x, kolom_top_vrij(park, x, z), z, 6, 2, 2, water=True)
     # two more pinguin families: one on the north shore, one on the south shore (next to the water)
     wd = _water_afstand(park)
     zi = ZONES.index(ZONE)
