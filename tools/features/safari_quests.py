@@ -71,38 +71,61 @@ TEKSTEN = {
     "gui.guhs.safari.beverdam": "Weer een beverdam af! (%s)",
     # de vermomde guh
     "gui.guhs.safari.vermomd.naam": "Streepje",
-    "gui.guhs.safari.vermomd.ranger": "Hoofdranger: Er is een guh het park binnengeglipt, verkleed als zebra! Hij denkt dat niemand het ziet. "
+    "gui.guhs.safari.vermomd.ranger": "Er is een guh het park binnengeglipt, verkleed als zebra! Hij denkt dat niemand het ziet. "
                                       "Kun jij hem vinden? Hij hangt vast rond bij de zebra's op de savanne.",
-    "gui.guhs.safari.vermomd.ranger_bezig": "Hoofdranger: Heb je die verklede guh al gevonden? Hij verstopt zich steeds bij andere dieren.",
-    "gui.guhs.safari.vermomd.ranger_klaar": "Hoofdranger: Streepje woont nu bij jou? Mooi zo. Zorg goed voor hem, njeg!",
-    "gui.guhs.safari.vermomd.1": "Verklede guh: Njeg! Ik ben echt een zebra, hoor. Kijk maar naar mijn streepjes! ...Oké, je hebt me. "
+    "gui.guhs.safari.vermomd.ranger_bezig": "Heb je die verklede guh al gevonden? Hij verstopt zich steeds bij andere dieren.",
+    "gui.guhs.safari.vermomd.ranger_klaar": "Streepje woont nu bij jou? Mooi zo. Zorg goed voor hem, njeg!",
+    "gui.guhs.safari.vermomd.1": "Njeg! Ik ben echt een zebra, hoor. Kijk maar naar mijn streepjes! ...Oké, je hebt me. "
                                  "Maar je vangt me nooit! *rent weg naar de bamboe*",
-    "gui.guhs.safari.vermomd.2": "Verklede guh: Ik ben een reuzenpanda. Ik eet bamboe. Nom nom. ...Hè, jij weer?! "
+    "gui.guhs.safari.vermomd.2": "Ik ben een reuzenpanda. Ik eet bamboe. Nom nom. ...Hè, jij weer?! "
                                  "*waggelt weg naar het ijs*",
-    "gui.guhs.safari.vermomd.3": "Verklede guh: Pinguïns hebben het hier echt koud, zeg. Brrr. ...Oké oké, je hebt gewonnen. "
+    "gui.guhs.safari.vermomd.3": "Pinguïns hebben het hier echt koud, zeg. Brrr. ...Oké oké, je hebt gewonnen. "
                                  "Mag ik met jou mee naar huis? Ik heb mijn zebrapakje nog!",
     "gui.guhs.safari.vermomd.klaar": "Streepje is nu jouw guh! Hij heeft zijn zelfgemaakte zebrapakje aan. +%s Safarimunten",
-    "gui.guhs.safari.vermomd.niet_nu": "Verklede guh: Psst! Ik ben gewoon een %s, hoor. Niks aan de hand. Njeg.",
+    "gui.guhs.safari.vermomd.niet_nu": "Psst! Ik ben gewoon een %s, hoor. Niks aan de hand. Njeg.",
     "gui.guhs.safari.vermomd.zebra": "zebra", "gui.guhs.safari.vermomd.panda": "panda", "gui.guhs.safari.vermomd.pinguin": "pinguïn",
     # de te vahe olifant
     "gui.guhs.safari.olifant.naam": "Dikkie",
-    "gui.guhs.safari.olifant.start": "Dikkie de olifant: Pfff... Bezoekers gaven me stiekem knabbeltjes, en nu pas ik niet meer door mijn "
+    "gui.guhs.safari.olifant.start": "Pfff... Bezoekers gaven me stiekem knabbeltjes, en nu pas ik niet meer door mijn "
                                      "poortje. Je kunt niet te vads zijn, hoor... maar ik ben wel een beetje te VAH. Help je me met een dieetje? "
                                      "Ik wil graag een appel, een wortel en een stukje meloen.",
     "gui.guhs.safari.olifant.dieet": "Dikkie wil nog: %s.",
-    "gui.guhs.safari.olifant.hap": "Dikkie: Mmm, gezond! *knabbel knabbel*",
-    "gui.guhs.safari.olifant.loopband": "Dikkie: Dat was lekker gezond! Nu nog even rennen op de olifantenloopband naast mijn stal. "
+    "gui.guhs.safari.olifant.hap": "Mmm, gezond! *knabbel knabbel*",
+    "gui.guhs.safari.olifant.loopband": "Dat was lekker gezond! Nu nog even rennen op de olifantenloopband naast mijn stal. "
                                         "Klik een paar keer op de loopband om me aan te moedigen!",
     "gui.guhs.safari.olifant.ren": "Rennen, Dikkie, rennen! (%s/%s)",
     "gui.guhs.safari.olifant.even": "Dikkie hijgt even uit. Nog heel even wachten...",
     "gui.guhs.safari.olifant.klaar": "Dikkie past weer door zijn poortje! Hij is zó blij. +%s Safarimunten",
-    "gui.guhs.safari.olifant.na": "Dikkie: Kijk mij eens slank zijn! Nou ja... een beetje. Dankjewel!",
+    "gui.guhs.safari.olifant.na": "Kijk mij eens slank zijn! Nou ja... een beetje. Dankjewel!",
     "gui.guhs.safari.olifant.appel": "een appel", "gui.guhs.safari.olifant.wortel": "een wortel",
     "gui.guhs.safari.olifant.meloen": "een stukje meloen",
     "gui.guhs.safari.olifant.bord": "Hier woont Dikkie",
     # commands
     "commands.guhs.safari.quest": "Quest %s staat nu op: %s",
     "commands.guhs.safari.quests": "Vermomde guh: %s · Te vahe olifant: %s · Geheimpjes: %s/%s · Beverdammen: %s",
+    "gui.guhs.safari.dialoog.park": "Safaripark Vadse Bergen",
+    "gui.guhs.safari.dialoog.hoofdranger": "Hoofdranger",
+    "gui.guhs.safari.dialoog.verkleed": "Verklede guh",
+    "gui.guhs.safari.dialoog.top": "Top!",
+    "gui.guhs.safari.vermomd.ranger_2": "Hij verstopt zich steeds bij andere dieren, dus hou je ogen open. Rechtsboven in je scherm zie je waar je moet zoeken. Succes, speurneus!",
+    "gui.guhs.safari.tracker.titel": "Safari-quests",
+    "gui.guhs.safari.tracker.vermomd": "Vermomde guh (%s/%s): zoek %s",
+    "gui.guhs.safari.tracker.waar.zebra": "bij de zebra's op de savanne",
+    "gui.guhs.safari.tracker.waar.reuzenpanda": "bij de reuzenpanda's in de bamboe",
+    "gui.guhs.safari.tracker.waar.pinguin": "bij de pinguïns op de IJskust",
+    "gui.guhs.safari.tracker.dieet": "Dikkie wil nog: %s",
+    "gui.guhs.safari.tracker.loopband": "Dikkie op de loopband: %s/%s rondjes",
+    "gui.guhs.safari.tracker.geheimpjes": "Geheimpjes: %s van de %s",
+    "gui.guhs.safari.tracker.klaar": "Klaar! Vahoeg!",
+    "gui.guhs.safari.tracker.naam.vermomd": "De vermomde guh",
+    "gui.guhs.safari.tracker.naam.olifant": "De te vahe olifant",
+    "gui.guhs.safari.tracker.naam.geheimpjes": "De geheimpjes",
+    "gui.guhs.safari.tracker.start.vermomd": "Nog niet begonnen. Praat met de hoofdranger in het entreedorp.",
+    "gui.guhs.safari.tracker.start.olifant": "Nog niet begonnen. Ga eens langs bij Dikkie in zijn stal op de savanne.",
+    "gui.guhs.safari.dex.weergave.quests": "Quests",
+    "gui.guhs.safari.dex.quests.kop": "Safari-quests",
+    "gui.guhs.safari.dex.quests.uitleg": "Wat je nu doet, zie je ook rechtsboven in je scherm als je in het park bent.",
+    "subtitles.guhs.safari.parade": "Pinguïnparade speelt",
 }
 
 # the FTB quests: (key, title, description, icon, advancement, x, shape)
@@ -293,11 +316,20 @@ def advancements(h):
         px.quest_adv(h, name)
 
 
+def sounds(h):
+    """Test round 4: the four phrases of the pinguinparade tune (OGGs by safari_parade_geluid.py)."""
+    def patch(d):
+        for i in range(1, 5):
+            d[f"safari.parade.{i}"] = {"sounds": [{"name": f"guhs:safari/parade/parade{i}"}], "subtitle": "subtitles.guhs.safari.parade"}
+    h.patch_json(f"{h.A}/sounds.json", patch)
+
+
 def build(h):
     textures(h)
     blocks(h)
     lang(h)
     advancements(h)
+    sounds(h)
 
 
 # =====================================================================================================================

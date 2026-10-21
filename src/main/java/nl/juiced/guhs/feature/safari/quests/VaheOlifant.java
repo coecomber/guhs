@@ -58,18 +58,27 @@ public final class VaheOlifant {
         if (!e.entityTags().contains(TAG)) {
             return false;
         }
-        praat(p, p.getMainHandItem());
+        praat(p, p.getMainHandItem(), e);
         return true;
     }
 
-    /** The player clicks Dikkie with this stack in the main hand (also the gametests). */
+    /** The player clicks Dikkie with this stack in the main hand (the gametests: no Dikkie entity). */
     static void praat(ServerPlayer p, ItemStack hand) {
+        praat(p, hand, null);
+    }
+
+    /** Dikkie (may be null) talks in the talking screen. */
+    private static void zeg(ServerPlayer p, @Nullable Entity dikkie, String sleutel, Object... args) {
+        SafariDialoog.zeg(p, dikkie, SafariDialoog.DIKKIE, sleutel, args);
+    }
+
+    static void praat(ServerPlayer p, ItemStack hand, @Nullable Entity dikkie) {
         MinecraftServer server = p.level().getServer();
         String stand = SafariSpeler.quest(server, p.getUUID(), QUEST);
         switch (stand) {
             case "" -> {
                 SafariSpeler.zetQuest(server, p.getUUID(), QUEST, "dieet");
-                SafariQuests.zeg(p, "gui.guhs.safari.olifant.start");
+                zeg(p, dikkie, "gui.guhs.safari.olifant.start");
             }
             case "dieet" -> {
                 List<String> gegeten = gegeten(server, p.getUUID());
@@ -80,7 +89,7 @@ public final class VaheOlifant {
                         }
                         gegeten.add(e.getKey());
                         SafariSpeler.zetQuest(server, p.getUUID(), GEGETEN, String.join(",", gegeten));
-                        p.sendSystemMessage(Component.translatable("gui.guhs.safari.olifant.hap").withStyle(ChatFormatting.GREEN));
+                        p.sendOverlayMessage(Component.translatable("gui.guhs.safari.olifant.hap").withStyle(ChatFormatting.GREEN));
                         p.level().playSound(null, p.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 1f, 0.6f);
                         break;
                     }
@@ -93,7 +102,7 @@ public final class VaheOlifant {
                 }
                 if (nog.isEmpty()) {
                     SafariSpeler.zetQuest(server, p.getUUID(), QUEST, "loopband");
-                    SafariQuests.zeg(p, "gui.guhs.safari.olifant.loopband");
+                    zeg(p, dikkie, "gui.guhs.safari.olifant.loopband");
                 } else {
                     net.minecraft.network.chat.MutableComponent lijst = Component.empty();
                     for (int i = 0; i < nog.size(); i++) {
@@ -102,11 +111,11 @@ public final class VaheOlifant {
                         }
                         lijst.append(Component.translatable("gui.guhs.safari.olifant." + nog.get(i)));
                     }
-                    SafariQuests.zeg(p, "gui.guhs.safari.olifant.dieet", lijst);
+                    zeg(p, dikkie, "gui.guhs.safari.olifant.dieet", lijst);
                 }
             }
-            case "loopband" -> SafariQuests.zeg(p, "gui.guhs.safari.olifant.loopband");
-            default -> SafariQuests.zeg(p, "gui.guhs.safari.olifant.na");
+            case "loopband" -> zeg(p, dikkie, "gui.guhs.safari.olifant.loopband");
+            default -> zeg(p, dikkie, "gui.guhs.safari.olifant.na");
         }
     }
 
@@ -126,7 +135,7 @@ public final class VaheOlifant {
         String stand = SafariSpeler.quest(server, p.getUUID(), QUEST);
         if (!stand.equals("loopband")) {
             if (stand.equals("klaar")) {
-                SafariQuests.zeg(p, "gui.guhs.safari.olifant.na");
+                zeg(p, null, "gui.guhs.safari.olifant.na");
             } else {
                 p.sendOverlayMessage(Component.translatable("block.guhs.olifantenloopband.lore").withStyle(ChatFormatting.GRAY));
             }
@@ -155,7 +164,7 @@ public final class VaheOlifant {
     static void klaar(ServerPlayer p) {
         MinecraftServer server = p.level().getServer();
         SafariSpeler.zetQuest(server, p.getUUID(), QUEST, "klaar");
-        SafariQuests.zeg(p, "gui.guhs.safari.olifant.klaar", MUNTEN);
+        zeg(p, null, "gui.guhs.safari.olifant.klaar", MUNTEN);
         SafariQuests.geef(p, new ItemStack(SafariQuests.OLIFANTENLOOPBAND_ITEM.get()));
         SafariQuests.geef(p, new ItemStack(SafariQuests.FOTOLIJSTJE_ITEM.get()));
         SafariMunten.verdienEens(p, "quest_" + QUEST, MUNTEN, "te vahe olifant");

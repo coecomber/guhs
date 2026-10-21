@@ -2,7 +2,6 @@ package nl.juiced.guhs.feature.safari.quests;
 
 import java.util.function.Consumer;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -107,6 +106,7 @@ public final class SafariQuests {
         NeoForge.EVENT_BUS.addListener(SafariQuests::onLogin);
         NeoForge.EVENT_BUS.addListener(SafariQuests::commands);
         Beloningen.register();
+        SafariDialoog.register();
         for (nl.juiced.guhs.entity.GuhClothes c : java.util.List.of(nl.juiced.guhs.entity.GuhClothes.ZEBRAPAKJE,
                 nl.juiced.guhs.entity.GuhClothes.PANDAPAKJE, nl.juiced.guhs.entity.GuhClothes.PINGUINPAKJE)) {
             nl.juiced.guhs.feature.kleding.KledingBronnen.bron(c, "safari_quests",
@@ -129,7 +129,12 @@ public final class SafariQuests {
 
     /** S2: the head ranger was clicked. True when he said something about a quest (then S2 shows nothing else). */
     public static boolean hoofdranger(ServerPlayer p) {
-        return VermomdeGuh.ranger(p);
+        return hoofdranger(p, null);
+    }
+
+    /** The same, with the ranger himself as the speaker of the talking screen. */
+    public static boolean hoofdranger(ServerPlayer p, @javax.annotation.Nullable net.minecraft.world.entity.Entity ranger) {
+        return VermomdeGuh.ranger(p, ranger);
     }
 
     /** S2: the player did an aaihoek chore (feeding, brushing, walking the alpaca): the FTB quest "Aaien maar!". */
@@ -224,13 +229,14 @@ public final class SafariQuests {
     // small helpers
     // =====================================================================================================================
 
+    /** (Test round 4) a page in the talking screen from "the park" (no speaker drawn); never the chat. */
     static void zeg(ServerPlayer p, String sleutel, Object... args) {
-        p.sendSystemMessage(Component.translatable(sleutel, args).withStyle(ChatFormatting.GOLD));
+        SafariDialoog.zeg(p, null, SafariDialoog.PARK, sleutel, args);
     }
 
+    /** A reward item: into the inventory, with a page "Je krijgt: ...!" in the same talking screen. */
     static void geef(ServerPlayer p, ItemStack stack) {
-        p.sendSystemMessage(Component.translatable("gui.guhs.safari.beloning.item", stack.getHoverName().copy().withStyle(ChatFormatting.GOLD))
-                .withStyle(ChatFormatting.LIGHT_PURPLE));
+        SafariDialoog.beloning(p, stack);
         Minigames.give(p, stack);
     }
 

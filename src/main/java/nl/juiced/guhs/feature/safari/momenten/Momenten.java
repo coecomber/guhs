@@ -127,6 +127,17 @@ public final class Momenten {
 
     // --- the ticker --------------------------------------------------------------------------------------------------------------
 
+    /** Test round 4: the guhs of the pinguïnparade can not be picked up (see {@link Parade#opInteractie}). */
+    @SubscribeEvent
+    public static void onParadeInteract(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        Parade.opInteractie(event, event.getTarget());
+    }
+
+    @SubscribeEvent
+    public static void onParadeInteractSpecific(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific event) {
+        Parade.opInteractie(event, event.getTarget());
+    }
+
     @SubscribeEvent
     public static void onTick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();

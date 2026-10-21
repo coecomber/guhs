@@ -5732,5 +5732,37 @@
       }
     ],
     "subtitle": "subtitles.guhs.safari.fm"
+  },
+  "safari.parade.1": {
+    "sounds": [
+      {
+        "name": "guhs:safari/parade/parade1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.parade"
+  },
+  "safari.parade.2": {
+    "sounds": [
+      {
+        "name": "guhs:safari/parade/parade2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.parade"
+  },
+  "safari.parade.3": {
+    "sounds": [
+      {
+        "name": "guhs:safari/parade/parade3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.parade"
+  },
+  "safari.parade.4": {
+    "sounds": [
+      {
+        "name": "guhs:safari/parade/parade4"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.parade"
   }
 }

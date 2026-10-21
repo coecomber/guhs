@@ -48,6 +48,9 @@ public final class SafariGeluid {
     public static final DeferredHolder<SoundEvent, SoundEvent> TRUCK_MOTOR = sound("safari.truck.motor");
     public static final DeferredHolder<SoundEvent, SoundEvent> TRUCK_TOETER = sound("safari.truck.toeter");
     public static final DeferredHolder<SoundEvent, SoundEvent> KANO = sound("safari.kano");
+    /** Test round 4: the tune of the pinguïnparade, four phrases of 4 seconds (flute and drum, tools/features/safari_parade_geluid.py). */
+    public static final List<DeferredHolder<SoundEvent, SoundEvent>> PARADE = List.of(sound("safari.parade.1"), sound("safari.parade.2"),
+            sound("safari.parade.3"), sound("safari.parade.4"));
 
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Guhs.id(name)));
