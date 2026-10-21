@@ -12,6 +12,12 @@ Op Safari! zone module: the Bamboebergen landmarks (design 1.4 zone table).
   schuilhut            a hide near the river
 
 (Mist is not a block: the bamboe biome's fog does that.) Helpers come from zone_regenwoud.
+
+Round 3 (Z2): a garden round the pagoda (stone lanterns, cherry trees, a red torii at the trail) with a cosy tea room on
+the ground floor and guh chairs on the viewing floor (the pagoda is a viewpoint); a wilder gorge (rock spires, vines and
+glow lichen on the walls, bamboo and firefly bushes on the rims, lanterns along the rope bridge); bigger tea terraces
+with a little tea pavilion; a bigger maze lit by guh-ear lanterns with a picnic table in the clearing; a cosy hide.
+Lights with park.lamp, favourite spots in the views, a natural relief on flat meadows.
 """
 import math
 
@@ -21,10 +27,12 @@ from scipy.ndimage import distance_transform_edt, gaussian_filter
 from . import kit
 from .kit import state
 from .terrein import ZONES
-from .zone_regenwoud import (RNG, ruim, zet_hoogte, steun, zoek, stairs, slab, schuilhut, hangbrug, hek_ok)
+from .zone_regenwoud import (RNG, ruim, zet_hoogte, steun, zoek, stairs, slab, schuilhut, hangbrug, hek_ok, lichen,
+                             vine, GUHLAMP, OORLANTAARN, kussen, bloempot, vuurvliegjes, ontplaat)
 
 WATER_Y = kit.WATER_Y
 PLAATS = {}
+KANT = {"west": "east", "east": "west", "north": "south", "south": "north"}   # wall side -> face property
 
 
 def _trail(park, van, naar, blok="minecraft:mossy_stone_bricks", lantaarn=8):
@@ -54,8 +62,10 @@ def _trail(park, van, naar, blok="minecraft:mossy_stone_bricks", lantaarn=8):
             zet_hoogte(park, xx, zz, h, top=blok, sub="dirt")
         if lantaarn and i % lantaarn == lantaarn // 2:
             lx, lz = x - 1, z
-            park.set(lx, h + 1, lz, "minecraft:spruce_fence")
-            park.set(lx, h + 2, lz, state("lantern", hanging="false", waterlogged="false"))
+            if park.pad[lx, lz] or park.water[lx, lz]:
+                continue
+            park.set(lx, h + 1, lz, "minecraft:bamboo_fence")
+            park.lamp(lx, h + 2, lz, OORLANTAARN)
 
 
 def pagode(park, log):
@@ -134,6 +144,39 @@ def pagode(park, log):
     park.set(px + 3, g + 1, pz - 6, state("decorated_pot", facing="south", cracked="true", waterlogged="false"))
     park.set(px + 2, g + 1, pz - 6, "minecraft:potted_bamboo")
     PLAATS["pagode"] = (px, g + 13, pz)
+    # round 3: a cosy tea room on the ground floor (guh table, cushions, guh lamps, flower pots)
+    park.set(px + 2, g + 1, pz + 2, "guhs:guh_tafel[facing=south]")
+    for (dx, dz, f) in ((1, 2, "east"), (3, 2, "west"), (2, 1, "south"), (2, 3, "north")):
+        kussen(park, px + dx, g + 1, pz + dz, facing=f)
+    park.set(px - 2, g + 1, pz + 2, "guhs:guh_tafel[facing=south]")
+    for (dx, dz, f) in ((-3, 2, "east"), (-1, 2, "west")):
+        kussen(park, px + dx, g + 1, pz + dz, facing=f)
+    park.lamp(px - 3, g + 1, pz - 3, GUHLAMP)
+    park.lamp(px + 3, g + 1, pz - 3, GUHLAMP)
+    bloempot(park, px - 3, g + 1, pz + 3)
+    bloempot(park, px + 3, g + 1, pz + 3)
+    park.set(px - 2, g + 1, pz - 2, "minecraft:potted_bamboo")
+    # the viewing floor (planks at g + 11, standing at g + 12, open railing): guh chairs looking out, the viewpoint
+    for (dx, dz, f) in ((2, 0, "east"), (-2, 0, "west"), (0, 2, "south")):
+        kit.stoel(park, px + dx, g + 12, pz + dz, f)
+    park.lamp(px - 2, g + 12, pz + 2, GUHLAMP)
+    PLAATS["pagode_kijkplek"] = park.kijkplek(f"pagode_bamboe_{px}_{pz}", "bamboe", (px + 0.5, g + 13.6, pz + 0.5), None,
+                                              (px + 2, g + 12, pz))
+    # a garden on the platform: stone lanterns at the corners, two cherry trees beside, moss and bamboo pots
+    for (sx, sz) in ((-6, -6), (6, -6), (-6, 6), (6, 6)):
+        x, z = px + sx, pz + sz
+        park.set(x, g + 1, z, "minecraft:stone_brick_wall")
+        park.set(x, g + 2, z, "minecraft:chiseled_stone_bricks")
+        park.lamp(x, g + 3, z, "lantaarn")
+    for (sx, sz) in ((-9, 2), (9, -2)):
+        x, z = px + sx, pz + sz
+        if not park.water[x, z] and not park.pad[x, z] and park.hek_afstand[x, z] >= 6:
+            t = park.boom("kers", x, int(park.hoogte[x, z]), z, grootte=0.9)
+            park.bomen.append((x, t, z, "kers"))
+    for _ in range(18):
+        dx, dz = int(RNG.integers(-6, 7)), int(RNG.integers(-6, 7))
+        if max(abs(dx), abs(dz)) == 6 and park.v[px + dx, g + 1, pz + dz] == 0:
+            park.set(px + dx, g + 1, pz + dz, "minecraft:moss_carpet")
     # a stone trail up from the nearest truck-route / path point
     xs, zs = np.nonzero(park.pad[px - 60:px + 61, pz - 60:pz + 61])
     if len(xs):
@@ -143,6 +186,20 @@ def pagode(park, log):
         a = math.atan2(tz - pz, tx - px)
         sx, sz = int(round(px + math.cos(a) * 7)), int(round(pz + math.sin(a) * 7))
         _trail(park, (sx, sz), (tx, tz))
+        # a red torii over the trail where it leaves the platform
+        gx, gz = int(round(px + math.cos(a) * 9)), int(round(pz + math.sin(a) * 9))
+        nx_, nz_ = -math.sin(a), math.cos(a)
+        gy = int(park.hoogte[gx, gz])
+        palen = [(int(round(gx + nx_ * 2)), int(round(gz + nz_ * 2))), (int(round(gx - nx_ * 2)), int(round(gz - nz_ * 2)))]
+        if all(not park.water[x, z] and not park.pad[x, z] and park.hek_afstand[x, z] >= 4 for x, z in palen):
+            for (x, z) in palen:
+                for y in range(int(park.hoogte[x, z]) + 1, gy + 6):
+                    park.set(x, y, z, state("stripped_crimson_hyphae", axis="y"))
+            for t in range(-3, 4):
+                x, z = int(round(gx + nx_ * t)), int(round(gz + nz_ * t))
+                park.set(x, gy + 6, z, "minecraft:crimson_planks")
+                if abs(t) <= 2:
+                    park.set(x, gy + 5, z, "minecraft:dark_oak_slab[type=top,waterlogged=false]", keep=True)
         log(f"    pagode bij ({px},{pz}) y{g}, pad vanaf ({tx},{tz})")
     else:
         log(f"    pagode bij ({px},{pz}) y{g}")
@@ -205,6 +262,40 @@ def kloof_hangbrug(park, log):
             park.set(ox, RAND + 4, oz, state("lantern", hanging="false", waterlogged="false"))
     (ax, az), (cx, cz) = eind
     hangbrug(park, (ax + 0.5, az + 0.5, 0.5), (cx + 0.5, cz + 0.5, 0.5), RAND + 1, plank="spruce")
+    # round 3: a wilder gorge: rock spires on the rims, vines and glow lichen on the walls facing the water
+    for k in range(6):
+        s_ = 1 if k % 2 == 0 else -1
+        off = -12 + k * 5
+        t = 10 + int(rng.integers(0, 3))
+        x, z = int(round(bx + nx * s_ * t + ux * off)), int(round(bz + nz * s_ * t + uz * off))
+        if park.water[x, z] or park.pad[x, z] or park.hek_afstand[x, z] < 6 or \
+                any(math.hypot(x - ex, z - ez) < 5 for ex, ez in eind):
+            continue
+        hh = int(park.hoogte[x, z])
+        hoog = 3 + int(rng.integers(0, 5))
+        for y in range(hh + 1, hh + hoog):
+            for (ddx, ddz) in ((0, 0), (1, 0), (0, 1)) if y < hh + hoog - 2 else ((0, 0),):
+                park.set(x + ddx, y, z + ddz, ("stone", "andesite", "tuff", "mossy_cobblestone")[int(rng.integers(0, 4))])
+        park.set(x, hh + hoog, z, "minecraft:moss_carpet")
+    for dx in range(-16, 17):
+        for dz in range(-16, 17):
+            x, z = int(bx) + dx, int(bz) + dz
+            if not park.water[x, z]:
+                continue
+            for (ddx, ddz, kant) in ((1, 0, "west"), (-1, 0, "east"), (0, 1, "north"), (0, -1, "south")):
+                wx2, wz2 = x + ddx, z + ddz
+                if park.water[wx2, wz2]:
+                    continue
+                wand = int(park.hoogte[wx2, wz2])
+                for y in range(WATER_Y + 2, wand):
+                    if park.v[x, y, z] == 0 and park.v[wx2, y, wz2] != 0:
+                        q = rng.random()
+                        if q < 0.22:
+                            park.set(x, y, z, vine(**{KANT[kant]: True}))
+                        elif q < 0.26:
+                            park.set(x, y, z, lichen(**{KANT[kant]: True}))
+                            park.lampen.append((x, y, z, "glow_lichen"))
+    vuurvliegjes(park, bx, bz, 14, 8, zone="bamboe", rng=rng)
     # cherry trees on both rims (red panda's on one side, gibbons on the other)
     bomen = {1: [], -1: []}
     for s in (1, -1):
@@ -217,7 +308,7 @@ def kloof_hangbrug(park, log):
                 if any(math.hypot(tx - ox, tz - oz) < 5 for ox, _, oz in bomen[s]) or                         any(math.hypot(tx - ex, tz - ez) < 4 for ex, ez in eind):
                     break
                 gy = int(park.hoogte[tx, tz])
-                top = park.boom("kers", tx, gy, tz, grootte=1.1)
+                top = park.boom("kers", tx, gy, tz, grootte=1.25)
                 park.bomen.append((tx, top, tz, "kers"))
                 bomen[s].append((tx, gy + 1, tz))
                 break
@@ -231,7 +322,7 @@ def kloof_hangbrug(park, log):
 
 def theeterrassen(park, log):
     tx, tz, r, _ = kit.RESERVERINGEN["theeterrassen"]
-    r = 15
+    r = 18
     zi = ZONES.index("bamboe")
     pd = distance_transform_edt(~park.pad)
     x0, z0 = tx - r - 2, tz - r - 2
@@ -260,8 +351,30 @@ def theeterrassen(park, log):
     # a small stone lantern at the top terrace
     if nieuw:
         (lx, lz), lh = max(nieuw.items(), key=lambda kv: kv[1])
-        park.set(lx, lh + 1, lz, "minecraft:stone_brick_wall")
-        park.set(lx, lh + 2, lz, state("lantern", hanging="false", waterlogged="false"))
+        # round 3: a little tea pavilion on the highest terrace (3x3, four posts, a dark-oak roof, a guh table with
+        # cushions, a guh lamp) where it fits, else the old stone lantern
+        def past(cx_, cz_):
+            return all(nieuw.get((cx_ + dx, cz_ + dz)) == lh for dx in (-1, 0, 1) for dz in (-1, 0, 1))
+        pav = next(((x, z) for (x, z), h in sorted(nieuw.items(), key=lambda kv: -kv[1]) if h == lh and past(x, z)), None)
+        if pav:
+            vx, vz = pav
+            for dx in (-1, 0, 1):
+                for dz in (-1, 0, 1):
+                    for y in range(lh + 1, lh + 5):
+                        park.set(vx + dx, y, vz + dz, "minecraft:air")
+            for dx, dz in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                for y in range(lh + 1, lh + 4):
+                    park.set(vx + dx, y, vz + dz, state("stripped_crimson_hyphae", axis="y"))
+            park.fill(vx - 2, lh + 4, vz - 2, vx + 2, lh + 4, vz + 2, "minecraft:dark_oak_slab[type=bottom,waterlogged=false]")
+            park.set(vx, lh + 4, vz, "minecraft:dark_oak_planks")
+            park.set(vx, lh + 1, vz, "guhs:guh_tafel[facing=south]")
+            kussen(park, vx - 1, lh + 1, vz, facing="east")
+            kussen(park, vx + 1, lh + 1, vz, facing="west")
+            park.lamp(vx, lh + 3, vz, "lantaarn_hangend")
+            PLAATS["theepaviljoen"] = (vx, lh + 1, vz)
+        else:
+            park.set(lx, lh + 1, lz, "minecraft:stone_brick_wall")
+            park.lamp(lx, lh + 2, lz, "lantaarn")
     PLAATS["theeterrassen"] = (tx, int(park.hoogte[tx, tz]) + 1, tz)
     log(f"    theeterrassen bij ({tx},{tz}), {len(nieuw)} kolommen")
 
@@ -272,12 +385,17 @@ def doolhof(park, log):
     if "hangbrug" in PLAATS:
         hx, _, hz = PLAATS["hangbrug"]
         vermijd.append((hx, hz, 22))
-    plek = zoek(park, "bamboe", (ox, oz), 50, hek=7, pad=(4, None), water=(3, None), zonder=vermijd, dicht=12)
+    plek = zoek(park, "bamboe", (ox, oz), 50, hek=7, pad=(4, None), water=(3, None), zonder=vermijd, dicht=14)
+    if plek is None:
+        plek = zoek(park, "bamboe", (ox, oz), 50, hek=7, pad=(4, None), water=(3, None), zonder=vermijd, dicht=12)
+        groot = False
+    else:
+        groot = True
     if plek is None:
         log("    bamboedoolhof: geen plek")
         return
     cx, cz = plek
-    N = 21
+    N = 25 if groot else 21
     x0, z0 = cx - N // 2, cz - N // 2
     g = int(np.median(park.hoogte[x0:x0 + N, z0:z0 + N]))
     ruim(park, cx, cz, 16, extra=2)
@@ -320,16 +438,32 @@ def doolhof(park, log):
             x, z = x0 + i, z0 + j
             if muur[i, j]:
                 hh = int(rng.integers(6, 10))
+                grond = int(park.hoogte[x, z])
+                if grond < g:                        # a column the levelling skipped (fence / water edge): fill it up
+                    for y in range(grond + 1, g):
+                        park.set(x, y, z, "minecraft:dirt")
+                    park.set(x, g, z, "minecraft:podzol[snowy=false]")
+                    park.hoogte[x, z] = grond = g
+                elif rng.random() < 0.45:            # a mixed floor under the bamboo (no flat podzol sheet)
+                    park.set(x, grond, z, "minecraft:moss_block" if rng.random() < 0.6 else "minecraft:rooted_dirt")
                 for k in range(hh):
                     blad = "large" if k >= hh - 2 else ("small" if k >= hh - 4 else "none")
-                    park.set(x, g + 1 + k, z, "minecraft:bamboo", age=1 if k < hh - 1 else 0, leaves=blad, stage=0)
+                    park.set(x, grond + 1 + k, z, "minecraft:bamboo", age=1 if k < hh - 1 else 0, leaves=blad, stage=0)
             else:
                 park.set(x, g, z, "minecraft:coarse_dirt" if rng.random() < 0.7 else "minecraft:rooted_dirt")
-    # a bench of stone slabs in the clearing
-    for k in (-1, 0, 1):
-        park.set(cx + k, g + 1, cz + 2, slab("smooth_stone_slab", "bottom"))
-    park.set(cx, g + 1, cz - 2, "minecraft:stone_brick_wall")
-    park.set(cx, g + 2, cz - 2, state("lantern", hanging="false", waterlogged="false"))
+    # round 3: a picnic spot in the clearing (a guh table with cushions, a flower pot, a guh lamp) and guh-ear lanterns
+    # here and there on the maze paths (a soft glow between the bamboo at night)
+    park.set(cx, g + 1, cz + 1, "guhs:guh_tafel[facing=south]")
+    for (dx, dz, f) in ((-1, 1, "east"), (1, 1, "west"), (0, 2, "north")):
+        kussen(park, cx + dx, g + 1, cz + dz, facing=f)
+    bloempot(park, cx - 2, g + 1, cz - 2)
+    park.lamp(cx, g + 1, cz - 2, GUHLAMP)
+    paden = [(i, j) for i in range(1, N - 1) for j in range(1, N - 1) if not muur[i, j]
+             and max(abs(i - N // 2), abs(j - N // 2)) > 3]
+    for k in range(0, len(paden), max(len(paden) // 9, 1)):
+        i, j = paden[k]
+        if park.v[x0 + i, g + 1, z0 + j] == 0:
+            park.lamp(x0 + i, g + 1, z0 + j, OORLANTAARN)
     PLAATS["doolhof"] = (cx, g + 1, cz)
     log(f"    bamboedoolhof bij ({cx},{cz}) (reservering {ox},{oz}), y{g}")
 
@@ -348,8 +482,33 @@ def hut(park, log):
         wd = park._water_d = distance_transform_edt(~park.water)
     best = min(((wd[h[0] + dx * 4, h[1] + dz * 4], k) for k, (dx, dz) in
                 {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}.items()))[1]
-    schuilhut(park, h[0], h[1], kijk=best, hout="dark_oak")
-    PLAATS["schuilhut"] = (h[0], int(park.hoogte[h[0], h[1]]) + 1, h[1])
+    g = schuilhut(park, h[0], h[1], kijk=best, hout="dark_oak")
+    PLAATS["schuilhut"] = (h[0], g + 1, h[1])
+    # round 3: cosy inside (a cushion and a flower pot in the back corners, a guh lamp instead of only the lantern)
+    stap = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}[best]
+    rx_, rz_ = -stap[1], stap[0]
+    bx_, bz_ = h[0] - stap[0], h[1] - stap[1]
+    kussen(park, bx_ + rx_, g + 1, bz_ + rz_)
+    bloempot(park, bx_ - rx_, g + 1, bz_ - rz_)
+    park.lamp(h[0] + rx_, g + 1, h[1] + rz_, GUHLAMP)
+    kp = park.kijkplek(f"schuilhut_bamboe_{h[0]}_{h[1]}", "bamboe", (h[0] + 0.5, g + 2.6, h[1] + 0.5), stap,
+                       (h[0], g + 1, h[1]))
+    # the favourite: the first land beyond the water in the view (else 8 ahead): red panda's and giant panda's
+    fav = None
+    for t in range(4, 22):
+        x, z = h[0] + stap[0] * t, h[1] + stap[1] * t
+        if not (0 <= x < kit.W and 0 <= z < kit.W) or park.zone[x, z] != ZONES.index("bamboe"):
+            break
+        if not park.water[x, z] and park.water[x - stap[0], z - stap[1]]:
+            fav = (x + stap[0] * 2, z + stap[1] * 2)
+            break
+    if fav is None:
+        fav = (h[0] + stap[0] * 8, h[1] + stap[1] * 8)
+    fx, fz = fav
+    if park.zone[fx, fz] == ZONES.index("bamboe") and not park.water[fx, fz]:
+        park.favoriet("bamboe_oever", kp, (fx, int(park.hoogte[fx, fz]) + 1, fz), soorten=("rode_panda", "reuzenpanda"),
+                      straal=4)
+        PLAATS["schuilhut_favoriet"] = (fx, int(park.hoogte[fx, fz]) + 1, fz)
     log(f"    schuilhut bamboe bij {h}, kijkt {best}")
 
 
@@ -360,6 +519,18 @@ def bouw(park, log=print):
     theeterrassen(park, log)
     doolhof(park, log)
     hut(park, log)
+    kp = PLAATS.get("pagode_kijkplek")
+    if kp is not None:
+        if "doolhof" in PLAATS:
+            park.favoriet("doolhof", kp, PLAATS["doolhof"], soorten=("reuzenpanda",), straal=4)
+        for i, b in enumerate((PLAATS.get("hangbrug_a") or [])[:1] + (PLAATS.get("hangbrug_b") or [])[:1]):
+            park.favoriet(f"kloofboom_{i}", kp, b, soorten=("rode_panda",) if i == 0 else ("gibbon",), straal=4)
+    vermijd = [(x, z, r + 6) for (x, z, r, zone) in kit.RESERVERINGEN.values()]
+    vermijd += [(v[0], v[2], 20 if k == "doolhof" else 14) for k, v in PLAATS.items()
+                if isinstance(v, tuple) and len(v) == 3]
+    ontplaat(park, "bamboe", vermijd, log)
+    if "theepaviljoen" in PLAATS:
+        vuurvliegjes(park, PLAATS["theepaviljoen"][0], PLAATS["theepaviljoen"][2], 16, 6, zone="bamboe")
 
 
 def _droog(park, x, y, z):
@@ -401,3 +572,7 @@ def plekken(park, plekken):
             x, y, z = PLAATS["doolhof"]
             p["centrum"] = [x + (1 if i == 0 else -1), y, z]
             p["straal"] = 10
+    if "schuilhut_favoriet" in PLAATS:          # round 3: red panda's in view of the hide
+        x, y, z = PLAATS["schuilhut_favoriet"]
+        plekken.append({"soort": "rode_panda", "zone": "bamboe", "centrum": [int(x), int(y), int(z)], "straal": 6,
+                        "volwassenen": 2, "jongen": 1, "water": False, "boom": False})

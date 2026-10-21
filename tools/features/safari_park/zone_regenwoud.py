@@ -12,6 +12,12 @@ Op Safari! zone module: the Regenwoud landmarks (design 1.4 zone table), plus th
 
 The terrain (park.hoogte) is updated wherever a landmark raises or lowers the ground, so plekken.py (run after the zone
 modules) puts animals ON things, not in them. plekken() moves the regenwoud homes onto their landmarks.
+
+Round 3 (Z2): every spot bigger and wilder (a higher massif with boulders, jungle trees and firefly bushes round the
+pond, glow-berry vines in the cave; a bigger canopy with hanging vines and glow berries under the ring and a third
+satellite tree; a bigger ruin with broken pillars and fallen columns), cosy tower deck and hut (guh chairs, guh lamps,
+cushions, a flower pot), lights registered with park.lamp, explicit viewpoints with favourite spots in their view, and
+flat meadows ('platen') in the zone get a natural relief. Water and bridges stay with the river pipeline.
 """
 import math
 
@@ -143,13 +149,117 @@ def lichen(**kant):
     return state("glow_lichen", waterlogged="false", **p)
 
 
+# round 3 (Z2): cosy furniture (guhs blocks) and lights
+GUHLAMP = "guhs:klusjes_guhlampje[facing=south,lit=true]"
+OORLANTAARN = "guhs:doolhof_lantaarn[lit=true]"
+KUSSENS = ("pink_kussen", "lime_kussen", "yellow_kussen", "light_blue_kussen", "white_kussen", "magenta_kussen")
+
+
+def kussen(park, x, y, z, kleur=None, facing="south"):
+    k = kleur or KUSSENS[int(RNG.integers(0, len(KUSSENS)))]
+    park.set(x, y, z, f"guhs:{k}[facing={facing}]")
+
+
+def bloempot(park, x, y, z, facing="south"):
+    park.set(x, y, z, f"guhs:guh_bloempot[facing={facing}]")
+
+
+def glowberry(park, x, y, z, lengte=2):
+    """Glow-berry vines (cave_vines with berries, they shine) hanging DOWN from the solid block above (x, y + 1, z)."""
+    lengte = max(1, int(lengte))
+    for i in range(lengte):
+        yy = y - i
+        if park.v[x, yy, z] != 0:
+            break
+        laatste = i == lengte - 1 or park.v[x, yy - 1, z] != 0
+        if laatste:
+            park.set(x, yy, z, state("cave_vines", age=25, berries="true"))
+            break
+        park.set(x, yy, z, state("cave_vines_plant", berries="true"))
+    park.lampen.append((int(x), int(y), int(z), "glowberry"))
+
+
+def vuurvliegjes(park, cx, cz, r, n, zone=None, rng=None):
+    """Firefly bushes (they glow and fireflies dance round them at night) on grass/moss/podzol within r of (cx, cz)."""
+    rng = rng if rng is not None else RNG
+    zi = ZONES.index(zone) if zone else None
+    gezet = 0
+    for _ in range(n * 8):
+        if gezet >= n:
+            break
+        a, d = rng.random() * 2 * math.pi, rng.random() * r
+        x, z = int(round(cx + math.cos(a) * d)), int(round(cz + math.sin(a) * d))
+        if not (2 <= x < kit.W - 2 and 2 <= z < kit.W - 2) or park.water[x, z] or park.pad[x, z]:
+            continue
+        if zi is not None and park.zone[x, z] != zi:
+            continue
+        h = int(park.hoogte[x, z])
+        if park.v[x, h + 1, z] != 0 or not any(g in park.get(x, h, z) for g in ("grass_block", "moss_block", "podzol",
+                                                                                 "rooted_dirt", "coarse_dirt")):
+            continue
+        park.lamp(x, h + 1, z, "minecraft:firefly_bush")
+        gezet += 1
+    return gezet
+
+
+def ontplaat(park, zone, vermijd=(), log=print):
+    """Round 3 (Z2): flat meadows in the zone (controle.platen: one height + one top block over >= 300 columns) get a
+    gentle natural relief (+0..2, never lower: banks stay above the water line) and a mixed top (grass, podzol, moss,
+    coarse dirt) with ferns and bushes, away from water, paths, fences and the landmarks (vermijd: (x, z, r))."""
+    from . import controle
+    _, lijst = controle.platen(park)
+    rng = np.random.default_rng(kit.SEED + 77 + ZONES.index(zone))
+    relief = kit.ruis(rng, 6.0) if hasattr(kit, "ruis") else None
+    klein = _lut(park, ("short_grass", "tall_grass", "fern", "dandelion", "poppy", "cornflower", "oxeye_daisy",
+                        "azure_bluet", "allium", "pink_tulip", "dead_bush", "moss_carpet"))
+    n_kol = 0
+    for (px, pz, opp, blok, y, zn) in lijst:
+        if zn != zone:
+            continue
+        r = int(math.sqrt(opp) * 0.9) + 6
+        for x in range(max(px - r, 2), min(px + r, kit.W - 2)):
+            for z in range(max(pz - r, 2), min(pz + r, kit.W - 2)):
+                if park.zone[x, z] != ZONES.index(zone) or park.water[x, z] or park.pad[x, z]:
+                    continue
+                if int(park.hoogte[x, z]) != y or park.hek_afstand[x, z] < 4:
+                    continue
+                if any(math.hypot(x - ax, z - az) <= ar for ax, az, ar in vermijd):
+                    continue
+                if park.water[x - 2:x + 3, z - 2:z + 3].any():
+                    continue                                       # banks: the river pipeline's
+                kol = park.v[x, y + 1:y + 12, z]
+                if kol.any() and not klein[kol[kol != 0]].all():
+                    continue                                       # something built / growing here: leave it
+                v = relief[x, z] if relief is not None else rng.normal()
+                dh = 0 if v < -0.3 else (1 if v < 0.7 else 2)
+                top = ("grass_block", "grass_block", "podzol", "moss_block", "coarse_dirt")[int(rng.integers(0, 5))]
+                if dh:
+                    zet_hoogte(park, x, z, y + dh, top=top, sub="dirt")
+                else:
+                    park.set(x, y, z, state(top, snowy="false") if top in ("grass_block", "podzol") else top)
+                hh = int(park.hoogte[x, z])
+                if park.v[x, hh + 1, z] == 0:
+                    q = rng.random()
+                    if q < 0.18:
+                        park.set(x, hh + 1, z, "minecraft:fern")
+                    elif q < 0.24:
+                        park.set(x, hh + 1, z, state("large_fern", half="lower"))
+                        park.set(x, hh + 2, z, state("large_fern", half="upper"))
+                    elif q < 0.27:
+                        park.set(x, hh + 1, z, park.leaves("jungle" if zone == "regenwoud" else "azalea"))
+                n_kol += 1
+    log(f"    {zone}: {n_kol} kolommen vlakte natuurlijker gemaakt")
+
+
 def hek_ok(park, x0, z0, x1, z1, minimum=4):
     sub = park.hek_afstand[max(x0, 0):x1 + 1, max(z0, 0):z1 + 1]
     return sub.size == 0 or float(sub.min()) >= minimum
 
 
-def toren(park, x, z, hout="spruce", hoogte=12, dak="spruce", log=print):
-    """A 5x5 wooden lookout tower (legs, a ladder up through a hatch, a railed deck with a roof) standing at (x, z)."""
+def toren(park, x, z, hout="spruce", hoogte=12, dak="spruce", log=print, gezellig=False):
+    """A 5x5 wooden lookout tower (legs, a ladder up through a hatch, a railed deck with a roof) standing at (x, z).
+    gezellig (round 3): two guh chairs looking out, a guh lamp and a cushion on the deck; the kijk-guh sits on a chair
+    (not in the ladder hole)."""
     g = int(np.median(park.hoogte[x - 2:x + 3, z - 2:z + 3]))
     ruim(park, x, z, 5, extra=1)
     for dx in range(-2, 3):
@@ -187,6 +297,12 @@ def toren(park, x, z, hout="spruce", hoogte=12, dak="spruce", log=print):
     park.set(x, dek + 7, z, state(f"{dak}_planks"))
     park.set(x, dek + 3, z, state("lantern", hanging="true", waterlogged="false"))
     kit.toren_kijkplek(park, x, z, dek)
+    if gezellig:
+        kit.stoel(park, x - 1, dek + 1, z - 1, "west")
+        kit.stoel(park, x + 1, dek + 1, z - 1, "east")
+        park.lamp(x - 1, dek + 1, z + 1, GUHLAMP)
+        kussen(park, x + 1, dek + 1, z + 1)
+        park.kijkplekken[-1]["stoel"] = [int(x - 1), int(dek + 1), int(z - 1)]
     return dek
 
 
@@ -242,8 +358,8 @@ def waterval_grot(park, log):
     # pond on the north side, massif to the south of it
     px, pz = wx, wz - 7
     mx, mz = wx, wz + 6
-    rx, rz, top = 12, 10, g + 21
-    ruim(park, wx, wz, 18, extra=3)
+    rx, rz, top = 14, 12, g + 24
+    ruim(park, wx, wz, 20, extra=3)
     rocks = ("stone", "mossy_cobblestone", "andesite", "cobblestone", "stone")
     for dx in range(-rx, rx + 1):
         for dz in range(-rz, rz + 1):
@@ -328,6 +444,8 @@ def waterval_grot(park, log):
                         park.set(x, y, z, lichen(up=True))
                     elif r < 0.13:
                         park.set(x, y, z, "minecraft:spore_blossom")
+                    elif r < 0.20:
+                        glowberry(park, x, y, z, lengte=1 + int(RNG.integers(0, 3)))
                     break
     park.set(ccx + 3, vloer, ccz + 2, state("decorated_pot", facing="north", cracked="true", waterlogged="false"))
     PLAATS["grot"] = (ccx, vloer, ccz)
@@ -351,6 +469,24 @@ def waterval_grot(park, log):
         hh = int(park.hoogte[x, z])
         if hh > g + 4:
             park.blob(x, hh + 1, z, 1.4, 1.0, 1.4, park.leaves("jungle"))
+    # round 3: a few small jungle trees on the massif (wilder skyline), mossy boulders and ferns round the pond, firefly
+    # bushes on the banks
+    for k in range(4):
+        a = k * math.pi / 2 + 0.7
+        x, z = int(round(mx + math.cos(a) * rx * 0.55)), int(round(mz + 2 + math.sin(a) * rz * 0.45))
+        hh = int(park.hoogte[x, z])
+        if hh > g + 6 and park.v[x, hh + 1, z] == 0 and not (abs(x - wx) <= 3 and z < face_z + 10):
+            t = park.boom("jungle", x, hh, z, grootte=0.5)
+            park.bomen.append((x, t, z, "jungle"))
+    for k in range(7):
+        a = k * 2 * math.pi / 7 + 0.3
+        x, z = int(round(px + math.cos(a) * 9.5)), int(round(pz + math.sin(a) * 8.5))
+        if park.water[x - 1:x + 2, z - 1:z + 2].any() or park.pad[x, z] or park.hek_afstand[x, z] < 5:
+            continue
+        hh = int(park.hoogte[x, z])
+        park.blob(x, hh + 1, z, 1.3 + RNG.random(), 1.0, 1.3 + RNG.random(), "minecraft:mossy_cobblestone")
+        park.set(x, hh + 3, z, "minecraft:moss_carpet", keep=True)
+    vuurvliegjes(park, px, pz, 12, 8, zone="regenwoud")
     log(f"    waterval + grot bij ({wx},{wz}), top y{top}, grot y{vloer}")
 
 
@@ -443,15 +579,31 @@ def reuzenboom(park, log):
             park.set(int(round(cxs + math.cos(a) * t)), PAD_Y - 1 - (6 - t), int(round(czs + math.sin(a) * t)),
                      "minecraft:jungle_wood")
     for a in (0.0, 1.6, 3.2, 4.8):
-        park.set(int(round(cxs + math.cos(a) * 6.8)), PAD_Y + 2, int(round(czs + math.sin(a) * 6.8)), state(
-            "lantern", hanging="false", waterlogged="false"))
+        park.lamp(int(round(cxs + math.cos(a) * 6.8)), PAD_Y + 2, int(round(czs + math.sin(a) * 6.8)), "lantaarn")
+    # round 3: glow berries and vines hanging under the ring deck (light at night, wilder), vines from the canopy
+    for k in range(12):
+        a = k * math.pi / 6 + 0.25
+        x, z = int(round(cxs + math.cos(a) * 5.2)), int(round(czs + math.sin(a) * 5.2))
+        if park.v[x, PAD_Y, z] != 0 and park.v[x, PAD_Y - 1, z] == 0:
+            if k % 3 == 0:
+                glowberry(park, x, PAD_Y - 1, z, lengte=2 + int(RNG.integers(0, 3)))
+            else:
+                park.set(x, PAD_Y - 1, z, vine(up=True))      # (an up-vine needs the block above: 1 long)
+    for _ in range(40):
+        a, d = RNG.random() * 2 * math.pi, 4 + RNG.random() * 8
+        x, z = int(round(cxs + math.cos(a) * d)), int(round(czs + math.sin(a) * d))
+        for y in range(cy - 6, cy + 2):
+            if park.v[x, y, z] == 0 and "leaves" in park.get(x, y + 1, z):
+                if y > PAD_Y + 3:
+                    park.set(x, y, z, vine(up=True))
+                break
     PLAATS["reuzenboom"] = (rx, PAD_Y + 1, rz)
     # two satellite trees with their own rings, hanging bridges to the main ring
     sats = []
-    for k in range(12):
-        if len(sats) >= 2:
+    for k in range(18):
+        if len(sats) >= 3:
             break
-        hoek = k * math.pi / 6 + 0.4
+        hoek = k * math.pi / 9 + 0.4
         sx, sz = int(round(rx + math.cos(hoek) * 17)), int(round(rz + math.sin(hoek) * 17))
         if park.water[sx - 2:sx + 4, sz - 2:sz + 4].any() or park.hek_afstand[sx, sz] < 10 or                 park.zone[sx, sz] != ZONES.index("regenwoud") or park.pad[sx - 3:sx + 5, sz - 3:sz + 5].any():
             continue
@@ -541,16 +693,16 @@ def hangbrug(park, a, b, y, half=1, plank="spruce", reling="minecraft:spruce_fen
 def ruine(park, log):
     rx, rz, _, _ = kit.RESERVERINGEN["ruine"]
     g = int(np.median(park.hoogte[rx - 7:rx + 8, rz - 7:rz + 8]))
-    ruim(park, rx, rz, 13, extra=3)
+    ruim(park, rx, rz, 16, extra=3)
     blokken = ("stone_bricks", "mossy_stone_bricks", "mossy_stone_bricks", "cracked_stone_bricks", "mossy_cobblestone")
 
     def steen():
         return "minecraft:" + blokken[int(RNG.integers(0, len(blokken)))]
 
-    for dx in range(-8, 9):
-        for dz in range(-8, 9):
+    for dx in range(-9, 10):
+        for dz in range(-9, 10):
             zet_hoogte(park, rx + dx, rz + dz, g, top="moss_block" if RNG.random() < 0.5 else "podzol")
-    tiers = [(7, 2), (5, 2), (3, 2), (2, 1)]
+    tiers = [(8, 2), (6, 2), (4, 2), (2, 1)]
     y = g + 1
     for (r, hgt) in tiers:
         for dy in range(hgt):
@@ -565,7 +717,7 @@ def ruine(park, log):
     for i, (r, hgt) in enumerate(tiers[:-1]):
         pass
     for step in range(top_y - g - 1):
-        z = rz - 8 + step
+        z = rz - 9 + step
         yy = g + 1 + step
         for dx in (-1, 0, 1):
             park.set(rx + dx, yy, z, stairs("stone_brick_stairs", "south"))
@@ -580,7 +732,7 @@ def ruine(park, log):
         for hh in range(top_y, top_y + 3):
             park.set(rx + dx, hh, rz + dz, "minecraft:chiseled_stone_bricks")
     park.fill(rx - 2, top_y + 3, rz - 2, rx + 2, top_y + 3, rz + 2, slab("stone_brick_slab", "bottom"))
-    park.set(rx, top_y, rz, state("lantern", hanging="false", waterlogged="false"))
+    park.lamp(rx, top_y, rz, "lantaarn")
     # chamber inside the bottom tier with an entrance on the south side; the geheimpje in the middle
     for dx in range(-3, 4):
         for dz in range(-3, 4):
@@ -595,8 +747,25 @@ def ruine(park, log):
     park.set(rx - 2, g + 1, rz - 2, "minecraft:moss_carpet")
     park.set(rx + 2, g + 3, rz + 2, lichen(up=True))
     # overgrowth: vines on the outer walls, moss carpet and bushes on the tiers
-    for dx in range(-8, 9):
-        for dz in range(-8, 9):
+    # round 3: broken pillars and fallen columns round the temple (wilder ruin)
+    for k in range(8):
+        a = k * math.pi / 4 + 0.2
+        x, z = int(round(rx + math.cos(a) * 12)), int(round(rz + math.sin(a) * 12))
+        if park.water[x, z] or park.pad[x, z] or park.hek_afstand[x, z] < 5 or park.zone[x, z] != ZONES.index("regenwoud"):
+            continue
+        hh = int(park.hoogte[x, z])
+        if k % 3 == 2:                                         # a fallen column lying in the moss
+            ax = "x" if abs(math.cos(a)) < abs(math.sin(a)) else "z"
+            for t in range(-2, 3):
+                fx, fz = (x + t, z) if ax == "x" else (x, z + t)
+                if park.v[fx, int(park.hoogte[fx, fz]) + 1, fz] == 0:
+                    park.set(fx, int(park.hoogte[fx, fz]) + 1, fz, state("stone_bricks"))
+        else:
+            for y in range(hh + 1, hh + 2 + int(RNG.integers(1, 5))):
+                park.set(x, y, z, "minecraft:mossy_stone_bricks" if RNG.random() < 0.5 else "minecraft:cracked_stone_bricks")
+            park.set(x, y + 1, z, "minecraft:moss_carpet")
+    for dx in range(-9, 10):
+        for dz in range(-9, 10):
             x, z = rx + dx, rz + dz
             col = [yy for yy in range(g + 1, top_y + 4) if park.v[x, yy, z] != 0]
             if not col:
@@ -606,8 +775,8 @@ def ruine(park, log):
                 park.set(x, tt + 1, z, "minecraft:moss_carpet")
             elif park.v[x, tt + 1, z] == 0 and RNG.random() < 0.06:
                 park.blob(x, tt + 1, z, 1.0, 0.8, 1.0, park.leaves("jungle"))
-    for x in range(rx - 8, rx + 9):
-        for z in range(rz - 8, rz + 9):
+    for x in range(rx - 9, rx + 10):
+        for z in range(rz - 9, rz + 10):
             for (ddx, ddz, kant) in ((1, 0, "east"), (-1, 0, "west"), (0, 1, "south"), (0, -1, "north")):
                 for hh in range(g + 1, top_y):
                     if park.v[x, hh, z] == 0 and "stone" in park.get(x + ddx, hh, z + ddz) and RNG.random() < 0.18:
@@ -718,8 +887,9 @@ def uitkijk_en_hut(park, log):
     vermijd = [(x, z, r + 8) for (x, z, r, zone) in kit.RESERVERINGEN.values()]
     t = zoek(park, "regenwoud", (520, 330), 140, hek=7, pad=(3, 7), zonder=vermijd, dicht=2)
     if t:
-        dek = toren(park, t[0], t[1], hout="jungle", hoogte=13, dak="jungle")
+        dek = toren(park, t[0], t[1], hout="jungle", hoogte=13, dak="jungle", gezellig=True)
         PLAATS["uitkijktoren"] = (t[0], dek + 1, t[1])
+        PLAATS["toren_kijkplek"] = park.kijkplekken[-1]
         log(f"    uitkijktoren bij {t}, dek y{dek}")
     # test round 2: a real viewing hut at the river (one-way glass, raised floor), looking over deeper clear water to
     # the far bank, where toekans and luiaards get trees of their own (the old hide looked at a mud bank)
@@ -738,6 +908,22 @@ def uitkijk_en_hut(park, log):
                                  bodem="minecraft:sand", oever_blok="minecraft:coarse_dirt", blad="jungle", log=log)
         PLAATS["schuilhut"] = (h[0], F + 1, h[1])
         PLAATS["kijkhut_kijk"] = (k, punten)
+        # round 3: cosy inside (the back row behind the chairs): a guh lamp, cushions, a flower pot; the viewpoint
+        kx, kz = k
+        wx_, wz_ = -kz, kx
+
+        def Wc(u, w):
+            return h[0] + u * kx + w * wx_, h[1] + u * kz + w * wz_
+        lx, lz = Wc(-1, -2)
+        park.lamp(lx, F + 1, lz, GUHLAMP)
+        for w in (-1, 1):
+            cx_, cz_ = Wc(-1, w)
+            kussen(park, cx_, F + 1, cz_)
+        bx_, bz_ = Wc(-1, 2)
+        bloempot(park, bx_, F + 1, bz_)
+        sx, sz = Wc(0, -1)
+        PLAATS["kijkhut_plek"] = park.kijkplek(f"kijkhut_regenwoud_{h[0]}_{h[1]}", "regenwoud",
+                                               (Wc(1, 0)[0] + 0.5, F + 2.6, Wc(1, 0)[1] + 0.5), (kx, kz), (sx, F + 1, sz))
         # trees on the far bank, in the view: the first land beyond the water along the view axis
         vx, vz = h
         oever = None
@@ -757,11 +943,18 @@ def uitkijk_en_hut(park, log):
                     park.bomen.append((x, top, z, "jungle"))
                     bomen.append((x, int(park.hoogte[x, z]) + 1, z))
         PLAATS["kijkhut_bomen"] = bomen
+        kp = PLAATS["kijkhut_plek"]
+        for i, (x, y, z) in enumerate(bomen):
+            park.favoriet(f"kijkboom_{i}", kp, (x, y, z), soorten=("luiaard",) if i == 1 else ("toekan", "luiaard"),
+                          straal=3)
+        if oever:
+            fx, fz = vx + k[0] * (oever + 1), vz + k[1] * (oever + 1)
+            park.favoriet("overkant", kp, (fx, int(park.hoogte[fx, fz]) + 1, fz), soorten=("orang_oetan", "toekan"),
+                          straal=4)
         log(f"    kijkhut bij {h}, kijkt {richtingen[k]}, overkant {oever}, {len(bomen)} kijkbomen")
 
 
 def bouw(park, log=print):
-    from .zone_ijskust import vul_laagtes, dicht_water, bruggen
     log("  regenwoud:")
     # (round 3: the river pipeline (terrein.py + kit.brug + controle.py) owns water and bridges)
     park._water_d = park._pad_d = None
@@ -770,7 +963,44 @@ def bouw(park, log=print):
     ruine(park, log)
     okapi_dal(park, log)
     uitkijk_en_hut(park, log)
-    pass
+    vermijd = [(x, z, r + 6) for (x, z, r, zone) in kit.RESERVERINGEN.values()]
+    vermijd += [(v[0], v[2], 12) for k, v in PLAATS.items() if isinstance(v, tuple) and len(v) == 3]
+    ontplaat(park, "regenwoud", vermijd, log)
+    # favourites round the tower: the ruin top (gekko's), the reuzenboom ring (orang-oetans), a jungle clearing
+    kp = PLAATS.get("toren_kijkplek")
+    if kp is not None:
+        tx, _, tz = PLAATS["uitkijktoren"]
+        for naam, sleutel, soorten in (("ruine", "ruine_top", ("gekko",)), ("reuzenboom", "reuzenboom", ("orang_oetan",
+                                                                                                          "toekan"))):
+            if sleutel in PLAATS and math.hypot(PLAATS[sleutel][0] - tx, PLAATS[sleutel][2] - tz) <= 60:
+                park.favoriet(naam, kp, PLAATS[sleutel], soorten=soorten, straal=5)
+        # a jungle clearing right below the tower (14..24 out, away from the path): toekans and orang-oetans
+        best = None
+        for k in range(16):
+            a = k * math.pi / 8
+            for d in (18, 14, 22):
+                x, z = int(round(tx + math.cos(a) * d)), int(round(tz + math.sin(a) * d))
+                if not (4 <= x < kit.W - 4 and 4 <= z < kit.W - 4) or park.zone[x, z] != ZONES.index("regenwoud"):
+                    continue
+                if park.water[x - 2:x + 3, z - 2:z + 3].any() or park.pad[x - 2:x + 3, z - 2:z + 3].any() or                         park.hek_afstand[x, z] < 6:
+                    continue
+                best = (x, z)
+                break
+            if best:
+                break
+        if best:
+            x, z = best
+            ruim(park, x, z, 3, extra=0)
+            for dx in range(-3, 4):
+                for dz in range(-3, 4):
+                    hh = int(park.hoogte[x + dx, z + dz])
+                    if math.hypot(dx, dz) <= 3 and park.v[x + dx, hh + 1, z + dz] == 0 and RNG.random() < 0.35:
+                        park.set(x + dx, hh + 1, z + dz, "minecraft:fern")
+            PLAATS["toren_favoriet"] = (x, int(park.hoogte[x, z]) + 1, z)
+            park.favoriet("open_plek", kp, PLAATS["toren_favoriet"], soorten=("toekan", "orang_oetan"), straal=4)
+    vuurvliegjes(park, 470, 378, 30, 10, zone="regenwoud")
+    if "reuzenboom" in PLAATS:
+        vuurvliegjes(park, PLAATS["reuzenboom"][0], PLAATS["reuzenboom"][2], 20, 8, zone="regenwoud")
 
 
 def _zet(p, xyz, straal=None):
@@ -799,6 +1029,10 @@ def plekken(park, plekken):
             _zet(p, (x + (2 if i == 0 else -2), y, z), 7)
         elif s == "okapi" and "okapi_dal" in PLAATS:
             _zet(p, PLAATS["okapi_dal"], 7)
+    if "toren_favoriet" in PLAATS:              # round 3: toekans in view of the tower
+        x, y, z = PLAATS["toren_favoriet"]
+        plekken.append({"soort": "toekan", "zone": "regenwoud", "centrum": [int(x), int(y), int(z)], "straal": 6,
+                        "volwassenen": 2, "jongen": 1, "water": False, "boom": True})
     # test round 2: animals in the view of the viewing hut (toekans and a luiaard in the trees on the far bank)
     bomen = PLAATS.get("kijkhut_bomen") or []
     for i, (x, y, z) in enumerate(bomen):
