@@ -1,0 +1,48 @@
+{
+  "textures": {
+    "particle": "guhs:block/safari/sterrenplafond",
+    "zij": "guhs:block/safari/sterrenplafond",
+    "boven": "guhs:block/safari/sterrenplafond",
+    "onder": "guhs:block/safari/sterrenplafond"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#zij",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#zij",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#zij",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#boven",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#onder",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

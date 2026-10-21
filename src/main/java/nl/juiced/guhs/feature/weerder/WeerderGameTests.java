@@ -61,14 +61,14 @@ public class WeerderGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_broco", timeoutTicks = 100)
     public static void weerderHoudtBrococoliefsWeg(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
-        zet(helper, p, 8);
+        zet(helper, p, 24);
         GuhEntity binnen = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
         binnen.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
         binnen.setSecretNote(true);
         GuhEntity buiten = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
         buiten.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
         buiten.setSecretNote(true);
-        buiten.snapTo(helper.absolutePos(BORD).getX() + 40.5, buiten.getY(), helper.absolutePos(BORD).getZ() + 0.5, 0, 0);
+        buiten.snapTo(helper.absolutePos(BORD).getX() + 60.5, buiten.getY(), helper.absolutePos(BORD).getZ() + 0.5, 0, 0);
         GuhEntity tam = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 3));
         tam.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
         tam.tame(p);
@@ -97,18 +97,18 @@ public class WeerderGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_spawn")
     public static void wildeGuhNietBinnenWelBuiten(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
-        zet(helper, p, 8);
+        zet(helper, p, 24);
         ServerLevel level = helper.getLevel();
         BlockPos bord = helper.absolutePos(BORD);
         var FAIL = MobSpawnEvent.PositionCheck.Result.FAIL;
         // inside the area (in the middle, at the edge, a bit lower and higher): natural and chunk-generation spawns are refused
-        for (BlockPos in : new BlockPos[] {bord.offset(3, 0, 2), bord.offset(8, 0, 0), bord.offset(-5, -4, 5), bord.offset(0, 8, -7)}) {
+        for (BlockPos in : new BlockPos[] {bord.offset(9, 0, 6), bord.offset(24, 0, 0), bord.offset(-15, -12, 15), bord.offset(0, 24, -21)}) {
             helper.assertTrue(check(level, in, EntitySpawnReason.NATURAL, false, p) == FAIL, "natural wild guh refused at " + in.subtract(bord));
             helper.assertTrue(check(level, in, EntitySpawnReason.CHUNK_GENERATION, false, p) == FAIL, "chunk-gen wild guh refused at " + in.subtract(bord));
             helper.assertFalse(WeerderFeature.wildeGuhMag(level, in), "Guhmension top-up refused at " + in.subtract(bord));
         }
         // outside: beside it, in a corner past the circle, far above, far below
-        for (BlockPos uit : new BlockPos[] {bord.offset(9, 0, 0), bord.offset(6, 0, 6), bord.offset(0, 9, 0), bord.offset(2, -9, 0), bord.offset(20, 0, 0)}) {
+        for (BlockPos uit : new BlockPos[] {bord.offset(25, 0, 0), bord.offset(18, 0, 18), bord.offset(0, 25, 0), bord.offset(6, -25, 0), bord.offset(60, 0, 0)}) {
             helper.assertTrue(check(level, uit, EntitySpawnReason.NATURAL, false, p) != FAIL, "natural wild guh allowed at " + uit.subtract(bord));
             helper.assertTrue(WeerderFeature.wildeGuhMag(level, uit), "Guhmension top-up allowed at " + uit.subtract(bord));
         }
@@ -127,11 +127,11 @@ public class WeerderGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_zee")
     public static void zeemeerguhNietInDeArea(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
-        zet(helper, p, 16);
+        zet(helper, p, 48);
         ServerLevel level = helper.getLevel();
         BlockPos bord = helper.absolutePos(BORD);
-        helper.assertTrue(Zeemeerguh.spawnAt(level, bord.offset(4, 1, 4), level.getRandom()) == null, "no wild Zeemeerguh in the area");
-        GuhEntity buiten = Zeemeerguh.spawnAt(level, bord.offset(20, 1, 0), level.getRandom());
+        helper.assertTrue(Zeemeerguh.spawnAt(level, bord.offset(12, 1, 12), level.getRandom()) == null, "no wild Zeemeerguh in the area");
+        GuhEntity buiten = Zeemeerguh.spawnAt(level, bord.offset(60, 1, 0), level.getRandom());
         helper.assertTrue(buiten != null, "a wild Zeemeerguh outside the area");
         buiten.discard();
         weg(helper, p);
@@ -162,8 +162,12 @@ public class WeerderGameTests {
         helper.assertTrue(geladen.binnen(bord.getX() + 31, bord.getY(), bord.getZ()), "loaded index: 31 away is inside");
         helper.assertFalse(geladen.binnen(bord.getX() + 33, bord.getY(), bord.getZ()), "loaded index: 33 away is outside");
         // smaller again
-        helper.assertTrue(be.zetStraal(8), "back to 8");
-        helper.assertTrue(WeerderFeature.wildeGuhMag(level, bord.offset(30, 0, 0)), "8: 30 blocks away is outside");
+        helper.assertFalse(be.zetStraal(8) || be.zetStraal(16), "8 and 16 are no steps any more");
+        helper.assertTrue(be.zetStraal(24), "back to 24");
+        helper.assertTrue(WeerderFeature.wildeGuhMag(level, bord.offset(30, 0, 0)), "24: 30 blocks away is outside");
+        helper.assertTrue(be.zetStraal(128), "up to 128");
+        helper.assertFalse(WeerderFeature.wildeGuhMag(level, bord.offset(120, 0, 30)), "128: 124 blocks away is inside");
+        helper.assertTrue(WeerderFeature.wildeGuhMag(level, bord.offset(130, 0, 0)), "128: 130 blocks away is outside");
         weg(helper, p);
         helper.succeed();
     }
@@ -171,14 +175,14 @@ public class WeerderGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_eigenaar")
     public static void alleenDeEigenaar(GameTestHelper helper) {
         ServerPlayer eigenaar = speler(helper), ander = speler(helper);
-        WeerderBlockEntity be = zet(helper, eigenaar, 16);
+        WeerderBlockEntity be = zet(helper, eigenaar, 24);
         BlockPos bord = helper.absolutePos(BORD);
         ander.snapTo(bord.getX() + 1.5, bord.getY(), bord.getZ() + 1.5);
         eigenaar.snapTo(bord.getX() - 0.5, bord.getY(), bord.getZ() + 1.5);
         helper.assertTrue(be.magBewerken(eigenaar), "the owner may");
         helper.assertFalse(be.magBewerken(ander), "someone else may not");
         helper.assertFalse(WeerderPayloads.zet(ander, bord, 48), "someone else can't change the radius");
-        helper.assertTrue(be.straal() == 16, "radius unchanged");
+        helper.assertTrue(be.straal() == 24, "radius unchanged");
         helper.assertFalse(WeerderPayloads.data(ander, be).getBooleanOr("MagBewerken", true), "read-only screen for someone else");
         helper.assertTrue(be.getBlockState().getDestroyProgress(ander, helper.getLevel(), bord) == 0f, "someone else can't break it");
         helper.assertTrue(WeerderPayloads.zet(eigenaar, bord, 48), "the owner changes the radius");

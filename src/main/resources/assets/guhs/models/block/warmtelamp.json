@@ -1,0 +1,133 @@
+{
+  "textures": {
+    "particle": "guhs:block/safari/warmtelamp_kap",
+    "kap": "guhs:block/safari/warmtelamp_kap",
+    "ketting": "guhs:block/safari/warmtelamp_ketting",
+    "gloed": "guhs:block/safari/warmtelamp_gloed"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        10,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ketting"
+        },
+        "south": {
+          "texture": "#ketting"
+        },
+        "east": {
+          "texture": "#ketting"
+        },
+        "west": {
+          "texture": "#ketting"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        7,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "down": {
+          "texture": "#kap"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        4,
+        5.5
+      ],
+      "to": [
+        10.5,
+        7,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gloed"
+        },
+        "south": {
+          "texture": "#gloed"
+        },
+        "east": {
+          "texture": "#gloed"
+        },
+        "west": {
+          "texture": "#gloed"
+        },
+        "up": {
+          "texture": "#gloed"
+        },
+        "down": {
+          "texture": "#gloed"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

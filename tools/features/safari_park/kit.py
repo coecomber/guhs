@@ -396,6 +396,12 @@ class Park:
             self.block_nbt = {}
         self.block_nbt[(int(x), int(y), int(z))] = payload
 
+    def infobord_nbt(self, x, y, z, soort):
+        """The species (a soorten.json id) of the guhs:infobord at x,y,z: clicking it shows that species' Guhdex text."""
+        if not hasattr(self, "block_nbt"):
+            self.block_nbt = {}
+        self.block_nbt[(int(x), int(y), int(z))] = _str_tag("Soort", soort)
+
     def schrijf(self, root, log=print):
         """Check + repair (controle.herstel: fences, leaves, support, water, holes...) and write all tiles."""
         from . import controle

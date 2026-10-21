@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "particle": "guhs:block/safari/schorsplaat",
+    "schors": "guhs:block/safari/schorsplaat"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#schors"
+        },
+        "south": {
+          "texture": "#schors"
+        },
+        "east": {
+          "texture": "#schors"
+        },
+        "west": {
+          "texture": "#schors"
+        },
+        "up": {
+          "texture": "#schors"
+        },
+        "down": {
+          "texture": "#schors",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

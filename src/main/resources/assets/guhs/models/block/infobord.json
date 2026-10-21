@@ -1,0 +1,105 @@
+{
+  "textures": {
+    "particle": "guhs:block/safari/infobord_hout",
+    "hout": "guhs:block/safari/infobord_hout",
+    "voor": "guhs:block/safari/infobord_voor"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        9,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8,
+        6.5
+      ],
+      "to": [
+        15,
+        16,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        15.5,
+        6
+      ],
+      "to": [
+        15.5,
+        16.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

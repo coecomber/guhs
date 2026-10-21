@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "GBG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "B": "minecraft:light_blue_dye"
+  },
+  "result": {
+    "id": "guhs:glasvloer",
+    "count": 8
+  }
+}
