@@ -184,3 +184,47 @@ Java: `nl.juiced.guhs.feature.safari.spullen` (`SafariSpullen`, `SafariGeluid`, 
 - Shared tool fixes: taal.py skips feature/safari (the safari generators write their own command texts, like guhpixel);
   kleding.py: markers starting with "safari" register their own clothes sources.
 - FTB: chapter `guhs_safari` (make_ftbquests.py CHAPTERS, last; CHAPTER_VERSION 42), quests in features/safari_quests.py.
+
+## Ronde 3 (test round 3 + ideas, design doc chapter 5) - contract
+Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-safari); then the zone forks Z1-Z4; then the final pass.
+- **R3-A rivier-pijplijn** (owner: terrein.py, kit.py, controle.py, plekken.py; ONLY the water/bridge parts of zone_*.py):
+  - the single river bed + banks (always above water), the single bridge builder `kit.brug(...)` (standard design, 2-3 free for boats, ramps without jumps);
+  - the zones lose their own water/bridge fixes;
+  - the check gets plates, buried trees, path jumps > 1, void view from walkable ground, and free passage along `route.json`/`kano.json`/`boot.json`/`kabelbaan.json`.
+  - Kit API for everyone:
+    - `park.kijkplek(naam, zone, oog=(x,y,z), richting, stoel=(x,y,z))` registers a viewpoint (the J3 kijk-guh sits on `stoel`);
+    - `park.favoriet(naam, kijkplek, pos, soorten=[...], straal)` registers a favourite spot in its view (used by J1's AI);
+    - `park.lamp(x,y,z, soort)` registers a light (or simply places it).
+  - Written to `data/guhs/safari/kijkplekken.json` (viewpoints with their favourite spots).
+- **J1 diergedrag** (owner: SafariDier + feature/safari AI classes, Populatie, client renderer, tools/features/safari_atelier + safari_dieren.py, soorten.json):
+  - lively AI with rest moments;
+  - favourite spots from kijkplekken.json;
+  - 2-3 behaviours per species (data `gedrag` + new animations);
+  - sleep like guhs (sleep-eye textures, pose, zzz);
+  - penguin belly slide + slide loop (uses `glijbaan` points from the ijskust zone data);
+  - beavers swim/carry;
+  - badgers use a tunnel path (points from the europa zone data `dassentunnel`);
+  - own guhs react to animals (emotes);
+  - "bekende bewoners" (named animals, data + Guhdex list in the Safari tab).
+- **J2 ritten** (owner: feature/safari/rit/*, zone_s3_rit.py, route_data.py, new block `safaripoort`):
+  - **safaripoort** 4x6x1 multiblock (lion-guh emblem, pink), right click, auto open/close for the truck, auto-close after 10 s, animals never pass;
+  - placed at every route ∩ zone border;
+  - **truck** longer with 3 rows, no trailer, own guhs walk along (teleport if > 24 behind), no clipping or damage;
+  - **truck stop entree** as an open platform along the route;
+  - **kabelbaan** as a loop with 2 parallel lines, T-masts, open stations with a turning loop;
+  - **glass-bottom boat** (delta + ijskust bay);
+  - **truck quiz** + **Safari FM**.
+  - J2 must not build bridges; it asks R3-A's kit.brug if it needs one.
+- **J3 lobby & beleving** (owner: zone_entree.py buildings/interiors, feature/safari/lobby/*, momenten scheduling/messages, safety):
+  - ALL lobby interiors (cosy, guhs furniture; museum rangerstation; stair to the side + hole fixed);
+  - ijskraam + guh-speeltuin, kampvuuravond at the lodge, pinguïnparade;
+  - kijk-guhs on every kijkplek (from kijkplekken.json);
+  - messages park-wide ~1 per 2-3 min with no catch-up spam;
+  - **no damage/hunger in the safari dimension**.
+- **Z1-Z4 zone forks** (after R3-A): savanne+delta / regenwoud+bamboe / ijskust+oertijd / europa+australie.
+  - Make the existing spots bigger, wilder and more beautiful.
+  - Interiors of their huts.
+  - Lighting (natural + guh lamps).
+  - Register kijkplekken + favorieten.
+  - Specials: dome higher + sea lanterns + entrance + iglo walls + east edge closed (ijskust); beverburcht landscape + dassentunnel (europa); soft banks (australie, everywhere).
+  - Never their own water/bridge fixes.
