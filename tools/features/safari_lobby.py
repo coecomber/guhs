@@ -38,6 +38,9 @@ NPCS = {
     # test round 3 (J3): the ijskraam and the kampvuur
     "safari_ijsverkoper": ("IJsverkoper Smeltje", 0.90, 0.35, 1.0),
     "safari_verteller": ("Verteller Opa Knor", 0.05, 0.5, 0.6),
+    # round 4 (L2): the Kriebelhuis' ticket guh and shop guh
+    "safari_kriebelhuis_balie": ("Kaartjesguh Piepje", 0.28, 0.40, 0.85),
+    "safari_kriebelhuis_winkel": ("Winkelguh Spinneke", 0.75, 0.35, 0.90),
 }
 for _z in ZONES:
     NPCS[f"safari_expert_{_z}"] = (f"Expert {ZONE_NAAM[_z]}",) + ZONE_KLEUR[_z][0]
@@ -121,6 +124,8 @@ TEKSTEN = {
     "gui.guhs.safari.verzorger.voer": "Alsjeblieft: een beetje van alles, plus een borstel en een touwtje als je die nog niet had. Raad maar wat ze vandaag lekker vinden, njeg!",
     "gui.guhs.safari.verzorger.voer.al": "Je hebt vandaag al een zakje gehad, vads. Morgen weer!",
     "gui.guhs.safari.verkoper.hallo": "Welkom in de giftshop! Alles voor Safarimunten, en niks is te vads.",
+    "gui.guhs.safari.kriebelhuis.balie.hallo": "Welkom in het Kriebelhuis! Kaartjes zijn gratis, kriebels ook. Eerst het terrarium, dan de Kriebelzaal, de Nachtzaal (stil hoor, sommige diertjes slapen) en de Diepzeezaal. Vergeet de roze tunnel niet, njeg!",
+    "gui.guhs.safari.kriebelhuis.winkel.hallo": "Kriebelig welkom in het winkeltje! Kijk gerust rond.",
     "gui.guhs.safari.lodge.hallo": "Welkom in de lodge! Pak gerust een hutje: slaap je hier, dan word je ook hier wakker. En wie hier vroeg opstaat, krijgt voor zijn eerste foto van de dag dubbele munten. Snurk lekker, njeg!",
     "gui.guhs.safari.lodge.vroege_vogel": "Goedemorgen, vroege vogel! Je eerste foto van vandaag levert dubbele Safarimunten op.",
     # --- welcome (first visit) ---
@@ -407,6 +412,7 @@ def _direct():
 
     class H:
         NL = {}
+        A = os.path.join(R, "assets", "guhs")
         TEX = os.path.join(A, "textures")
         D = os.path.join(R, "data", "guhs")
 

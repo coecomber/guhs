@@ -103,6 +103,8 @@ public final class Rollen {
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_LODGEBEHEERDER, LODGE);
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_IJSVERKOPER, IJSVERKOPER);
         NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_VERTELLER, Kampvuur.VERTELLER);
+        NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_KRIEBELHUIS_BALIE, KRIEBEL_BALIE);
+        NpcRollen.zet(GuhNpcEntity.Kind.SAFARI_KRIEBELHUIS_WINKEL, KRIEBEL_WINKEL);
         for (String zone : LobbyItems.BADGES.keySet()) {
             NpcRollen.zet(GuhNpcEntity.Kind.valueOf("SAFARI_EXPERT_" + zone.toUpperCase(java.util.Locale.ROOT)), new Expert(zone));
         }
@@ -261,6 +263,29 @@ public final class Rollen {
                 return;
             }
             p.sendSystemMessage(Component.translatable("gui.guhs.safari.verkoper.hallo").withStyle(ChatFormatting.LIGHT_PURPLE));
+            SafariWinkel.open(p);
+        }
+    };
+
+    // --- the Kriebelhuis' ticket guh and shop guh (round 4, L2) ----------------------------------------------------------
+
+    static final NpcRole KRIEBEL_BALIE = new NpcRole() {
+        @Override
+        public void talk(GuhNpcEntity npc, ServerPlayer p) {
+            if (haken("kriebelhuis_balie", npc, p)) {
+                return;
+            }
+            Praat.open(p, npc, null, "gui.guhs.safari.kriebelhuis.balie.hallo", new Object[0], new Praat.Optie(3, "gui.guhs.safari.optie.dank"));
+        }
+    };
+
+    static final NpcRole KRIEBEL_WINKEL = new NpcRole() {
+        @Override
+        public void talk(GuhNpcEntity npc, ServerPlayer p) {
+            if (haken("kriebelhuis_winkel", npc, p)) {
+                return;
+            }
+            p.sendSystemMessage(Component.translatable("gui.guhs.safari.kriebelhuis.winkel.hallo").withStyle(ChatFormatting.LIGHT_PURPLE));
             SafariWinkel.open(p);
         }
     };

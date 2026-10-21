@@ -76,8 +76,8 @@ public class SafariLobbyGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void lobbyPlekken(GameTestHelper helper) {
         LobbyPlekken l = LobbyPlekken.get();
-        helper.assertTrue(l.npcs.size() == 14, "14 characters (13 + the ijsverkoper of round 3), got " + l.npcs.size());
-        helper.assertTrue(l.npcs.stream().filter(n -> n.zone() != null && n.balie() != null).count() == 8, "8 experts with a zone and counter");
+        helper.assertTrue(l.npcs.size() == 17, "17 characters (13 + the ijsverkoper of round 3 + the Kriebelhuis expert, ticket guh and shop guh of round 4), got " + l.npcs.size());
+        helper.assertTrue(l.npcs.stream().filter(n -> n.zone() != null && n.balie() != null).count() == 9, "9 experts with a zone and counter");
         helper.assertTrue(l.pennen.size() == 4 && l.alpacaLus.size() >= 4, "4 pens and the alpaca's loop");
         helper.assertTrue(l.lodge.getXsize() > 4 && l.npc("hoofdranger") != null, "the lodge box and the hoofdranger");
         helper.succeed();

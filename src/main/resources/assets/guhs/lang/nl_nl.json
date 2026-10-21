@@ -27854,5 +27854,9 @@
   "gui.guhs.bouwhulp.spook.mist": "Klaar, maar %s blokjes misten: die blijven spook. Druk later nog eens op Bouw!",
   "gui.guhs.bouwhulp.spook.nee.leeg": "Er valt niets te bouwen.",
   "gui.guhs.bouwhulp.spook.nee.te_veel": "Je hebt al tien spoken open. Bouw of haal er eerst een weg.",
-  "gui.guhs.bouwhulp.spook.nee.beschermd": "Hier mag niet gebouwd worden: dit is een beschermd gebouw."
+  "gui.guhs.bouwhulp.spook.nee.beschermd": "Hier mag niet gebouwd worden: dit is een beschermd gebouw.",
+  "gui.guhs.safari.kriebelhuis.balie.hallo": "Welkom in het Kriebelhuis! Kaartjes zijn gratis, kriebels ook. Eerst het terrarium, dan de Kriebelzaal, de Nachtzaal (stil hoor, sommige diertjes slapen) en de Diepzeezaal. Vergeet de roze tunnel niet, njeg!",
+  "gui.guhs.safari.kriebelhuis.winkel.hallo": "Kriebelig welkom in het winkeltje! Kijk gerust rond.",
+  "entity.guhs.guh_npc.safari_kriebelhuis_balie": "Kaartjesguh Piepje",
+  "entity.guhs.guh_npc.safari_kriebelhuis_winkel": "Winkelguh Spinneke"
 }

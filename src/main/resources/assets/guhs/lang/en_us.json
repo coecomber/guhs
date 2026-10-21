@@ -27854,5 +27854,9 @@
   "gui.guhs.bouwhulp.spook.mist": "Done, but %s blocks were missing: they stay a ghost. Press Build! again later.",
   "gui.guhs.bouwhulp.spook.nee.leeg": "There's nothing to build.",
   "gui.guhs.bouwhulp.spook.nee.te_veel": "You already have ten ghosts open. Build or remove one first.",
-  "gui.guhs.bouwhulp.spook.nee.beschermd": "No building here: this is a protected building."
+  "gui.guhs.bouwhulp.spook.nee.beschermd": "No building here: this is a protected building.",
+  "gui.guhs.safari.kriebelhuis.balie.hallo": "Welcome to the Kriebelhuis! Tickets are free, tickles too. First the terrarium, then the Kriebelzaal, the Nachtzaal (shh, some critters are sleeping) and the Diepzeezaal. Don't miss the pink tunnel, njeg!",
+  "gui.guhs.safari.kriebelhuis.winkel.hallo": "A tickly welcome to the shop! Have a look around.",
+  "entity.guhs.guh_npc.safari_kriebelhuis_balie": "Ticket Guh Piepje",
+  "entity.guhs.guh_npc.safari_kriebelhuis_winkel": "Shop Guh Spinneke"
 }
