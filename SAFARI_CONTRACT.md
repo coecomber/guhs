@@ -379,6 +379,14 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
   - the "Bouw passend verblijf" button;
   - Beverbaas (SafariQuests.beverdamGebouwd);
   - the Beverbeek biome + a ranger post with a pettable beaver (Guhmension, new chunks only).
+  - **F10b as built (branch op-safari-f10b)**, package `nl.juiced.guhs.feature.bouwhulp.helpers` (`HelpersFeature`, texts `tools/features/bouwhulp_helpers.py`, EN `c183`):
+    - `Bouwopdracht` (the board's job; state in `VerblijfsbordBlockEntity.bouwopdracht()`): `taken(be)`, `start(p, level, be, taak, punten|null)`, `verblijf(p, level, be)`, `herbereken`, `stop`, `spook`, `bezig`, `staat` (the tab), `doe(p, level, be, Knop, waarde)`, `sjouwers(level, keet)` (BouwkeetBlockEntity.tempo adds them), `zetBank`.
+    - The board is the ghost's `Bouwer` (tempo, bronnen = owner + Bank Guh via Banksleutel, geplaatst → work animation, gestopt → home + Beverbaas for "dam").
+    - `Sjablonen` (task id → `Sjabloon` with `zoek`/`maak`/`punten`/`varianten`/`soort` SPOOK|TRANSPORT|SJOUWEN), the templates in `WaterWerk`, `GraafWerk`, `TerreinWerk`, `BouwWerk`, `SierWerk`; `PassendVerblijf.maak(klus, be)` + `regelKlopt` (the fence rule).
+    - `Aanwijzen`: after the tab's button, the next vormstaf click(s) are the spot(s) (RightClickBlock, HIGH, cancelled).
+    - `ThuisDier.werkuitje(plek, straal)` / `naarHuis(be, blij)` / `werk(pos)`: the family's walk to the site and its `bouw_*` animations.
+    - `VerblijfPayloads.Actie` got BOUW_KIES..BOUW_VERBLIJF (appended); the screen's Bouwopdracht tab and the Tevredenheid tab's "Bouw passend verblijf".
+    - Gametests: `BouwopdrachtGameTests` (prefix Bouwopdracht).
 ### L2 Kriebelhuis: what zone_kriebelhuis.py reads and writes
 - **Reads `park.lobby`** (set by zone_entree.bouw, L1): `{"oorsprong": [20, 64, 530], "g": 16, "draai": 0}`. A lobby2 local position (x, y, z) maps to world (ox + x, oy + (y - g), oz + z). Without it, it falls back to that same origin and logs it.
 - **Builds** in the local plot x 0..182, z 0..96, plus the aai-lagune (24..56 × 92..112), the exit + shop (60..86 × 88..108) and the strip between them.

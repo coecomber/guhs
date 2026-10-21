@@ -36,7 +36,9 @@ public final class VerblijfPayloads {
     };
 
     /** (Sent by ordinal: append only.) */
-    public enum Actie { VERVERS, NAAM, TERUG, VERSTOP, STRAAL, VORM, BREEDTE, DIEPTE, RAND, SLAAPPLEK, SLAAPPLEK_WEG, CADEAUS, BEZORG_KIES, BEZORG_STUUR }
+    public enum Actie { VERVERS, NAAM, TERUG, VERSTOP, STRAAL, VORM, BREEDTE, DIEPTE, RAND, SLAAPPLEK, SLAAPPLEK_WEG, CADEAUS, BEZORG_KIES, BEZORG_STUUR,
+        /** Deel 2 (F10b): the Bouwopdracht tab, in the order of Bouwopdracht.Knop. */
+        BOUW_KIES, BOUW_VARIANT, BOUW_ZOEK, BOUW_WIJS, BOUW_HERBEREKEN, BOUW_BEDIEN, BOUW_STOP, BOUW_VERBLIJF }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("verblijf_open"));
@@ -138,6 +140,7 @@ public final class VerblijfPayloads {
         }
         t.put("Cadeaus", cadeaus);
         t.putInt("Sterren", SafariSpeler.dex(p, soort).sterren());
+        t.put("Bouw", nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.staat(level, be));
         t.putLong("Cooldown", Math.max(0, SafariSpeler.bordVrijOp(level.getServer(), p.getUUID(), soort) - Klok.nu()));
         if (info != null && info.bezorger()) {
             ListTag vrienden = new ListTag();
@@ -205,6 +208,9 @@ public final class VerblijfPayloads {
                 }
                 be.setChanged();
             }
+            case BOUW_KIES, BOUW_VARIANT, BOUW_ZOEK, BOUW_WIJS, BOUW_HERBEREKEN, BOUW_BEDIEN, BOUW_STOP, BOUW_VERBLIJF ->
+                    nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.doe(p, level, be,
+                            nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.Knop.values()[a.ordinal() - Actie.BOUW_KIES.ordinal()], d.waarde());
             case BEZORG_STUUR -> {
                 Ooievaar.Fout f = Ooievaar.stuur(level, be);
                 if (f != null) {

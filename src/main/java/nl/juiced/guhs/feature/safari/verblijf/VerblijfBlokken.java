@@ -108,6 +108,25 @@ public final class VerblijfBlokken {
             return InteractionResult.SUCCESS;
         }
 
+        /** Deel 2 (F10b): a Banksleutel that remembers a bank links it, so the family's jobs take their blocks from that bank too. */
+        @Override
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+                                              net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+            if (!stack.is(nl.juiced.guhs.feature.bank.BankFeature.BANK_SLEUTEL.get()) || nl.juiced.guhs.feature.bank.BankSleutelItem.bank(stack) == null) {
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
+            }
+            if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof VerblijfsbordBlockEntity be) {
+                if (!be.magBewerken(sp)) {
+                    sp.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.niet_jouw", be.eigenaarNaam()));
+                } else {
+                    nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.zetBank(be, nl.juiced.guhs.feature.bank.BankSleutelItem.bank(stack));
+                    sp.sendOverlayMessage(Component.translatable("gui.guhs.bouwopdracht.bank_gekoppeld"));
+                    level.playSound(null, pos, net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.6f, 1.6f);
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+
         /** It drops itself with its species (the family goes back to the park: the block entity sees to that). */
         @Override
         protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {

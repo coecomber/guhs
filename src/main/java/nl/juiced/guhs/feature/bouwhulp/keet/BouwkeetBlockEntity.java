@@ -258,6 +258,7 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
     @Override
     public double tempo(ServerLevel level, Spook spook) {
         int guhs = werkNiveau().bouwguhs() ? Bouwguhs.aanwezig(level, this) : 0;
+        guhs += nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.sjouwers(level, this);   // (F10b: elephants carrying for it)
         double t = BASIS + PER_GUH * guhs;
         return Math.max(t, spook.totaal() / (double) MAX_SECONDEN);
     }

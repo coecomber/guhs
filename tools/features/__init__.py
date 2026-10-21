@@ -87,7 +87,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0 deel 2: de Bouwhulp (F8 kern; append only)
             'bouwhulp',
             # 1.6.0 deel 2 F9: vormstaf, kwasten, blauwdrukken (append only)
-            'bouwhulp_gereedschap']
+            'bouwhulp_gereedschap',
+            # 1.6.0 deel 2 F10: de Beverbeek (F10a: worldgen; it only adds its own region term and biome entry, idempotently, so
+            # its place after bio_wereld is the state F10a's standalone run left), then the helper texts (F10b)
+            'safari_beverbeek', 'bouwhulp_helpers']
 
 
 def modules():

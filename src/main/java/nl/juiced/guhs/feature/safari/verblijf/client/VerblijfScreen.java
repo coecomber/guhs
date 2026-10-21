@@ -28,9 +28,8 @@ import nl.juiced.guhs.feature.safari.verblijf.VerblijfsbordBlockEntity;
 
 /**
  * Op Safari! step 2 (S5): the verblijfsbord's menu (design 1.9): tabs Familie (names, mood, call back, hide), Verblijf (range
- * 8..32, circle or rectangle, show the edge, sleeping spot), Tevredenheid (the bar and the checklist; "Bouw passend verblijf"
- * comes with the Bouwkeet), Cadeautjes, Info (a fact, your best photo, the cooldown), Bouwopdracht (what this animal will
- * build later) and, for the stork, Bezorgen. Someone else's board: look only.
+ * 8..32, circle or rectangle, show the edge, sleeping spot), Tevredenheid (the bar and the checklist, "Bouw passend verblijf"), Cadeautjes, Info (a fact, your best photo, the cooldown), Bouwopdracht (the family's
+ * jobs, deel 2 F10b) and, for the stork, Bezorgen. Someone else's board: look only.
  */
 public class VerblijfScreen extends Screen {
     private static final int W = 320, H = 222;
@@ -166,11 +165,13 @@ public class VerblijfScreen extends Screen {
                 }
             }
             case TEVREDEN -> {
-                Button bouw = Button.builder(Component.translatable("gui.guhs.verblijf.tevreden.bouw"), b -> {
-                }).bounds(left + W - 156, top + H - 48, 146, 18).tooltip(Tooltip.create(Component.translatable("gui.guhs.verblijf.binnenkort"))).build();
-                bouw.active = false;
+                // deel 2 (F10b): the verblijf-assistent puts a fitting home down as a ghost, built by the family
+                Button bouw = Button.builder(Component.translatable("gui.guhs.verblijf.tevreden.bouw"), b -> doe(Actie.BOUW_VERBLIJF, 0, ""))
+                        .bounds(left + W - 156, top + H - 48, 146, 18).tooltip(Tooltip.create(Component.translatable("gui.guhs.bouwopdracht.verblijf.uitleg"))).build();
+                bouw.active = mag && !data.getCompoundOrEmpty("Bouw").contains("Project");
                 addRenderableWidget(bouw);
             }
+            case BOUW -> bouwKnoppen(mag);
             case CADEAUTJES -> {
                 Button pak = Button.builder(Component.translatable("gui.guhs.verblijf.cadeautjes.pak"), b -> doe(Actie.CADEAUS, 0, ""))
                         .bounds(left + 10, top + H - 48, 140, 18).build();
@@ -204,6 +205,64 @@ public class VerblijfScreen extends Screen {
             }
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.verblijf.sluit"), b -> onClose()).bounds(left + W - 56, top + H - 24, 48, 18).build());
+    }
+
+    /** Deel 2 (F10b): the Bouwopdracht tab: the tasks on the left, the chosen one's buttons and the running job on the right. */
+    private void bouwKnoppen(boolean mag) {
+        CompoundTag b = data.getCompoundOrEmpty("Bouw");
+        ListTag taken = b.getListOrEmpty("Taken");
+        if (taken.isEmpty()) {
+            return;
+        }
+        String keuze = b.getStringOr("Keuze", "");
+        int y = top + 44;
+        for (int i = 0; i < taken.size(); i++) {
+            String t = taken.getStringOr(i, "");
+            final int index = i;
+            Button k = Button.builder(Component.translatable("gui.guhs.verblijf.taak." + t), x -> doe(Actie.BOUW_KIES, index, ""))
+                    .bounds(left + 10, y + i * 18, 102, 16).build();
+            k.active = !t.equals(keuze);
+            addRenderableWidget(k);
+        }
+        int x = left + 118, w = W - 128;
+        CompoundTag project = b.getCompoundOrEmpty("Project");
+        boolean bezig = b.contains("Project");
+        if (b.getIntOr("Varianten", 1) > 1) {
+            Button v = Button.builder(Component.translatable("gui.guhs.bouwopdracht.variant",
+                            Component.translatable("gui.guhs.bouwopdracht.variant." + keuze + "." + b.getIntOr("Variant", 0))),
+                    x0 -> doe(Actie.BOUW_VARIANT, 0, "")).bounds(x, y + 44, w, 16).build();
+            v.active = mag;
+            addRenderableWidget(v);
+        }
+        Button zoek = Button.builder(Component.translatable("gui.guhs.bouwopdracht.zoek"), x0 -> doe(Actie.BOUW_ZOEK, 0, ""))
+                .bounds(x, y + 64, w / 2 - 1, 18).build();
+        Button wijs = Button.builder(Component.translatable(b.getIntOr("Punten", 1) == 2 ? "gui.guhs.bouwopdracht.wijs_twee" : "gui.guhs.bouwopdracht.wijs"),
+                x0 -> {
+                    doe(Actie.BOUW_WIJS, 0, "");
+                    onClose();
+                }).bounds(x + w / 2 + 1, y + 64, w / 2 - 1, 18).tooltip(Tooltip.create(Component.translatable("gui.guhs.bouwopdracht.wijs.uitleg"))).build();
+        zoek.active = mag && !bezig;
+        wijs.active = mag && !bezig;
+        addRenderableWidget(zoek);
+        addRenderableWidget(wijs);
+        if (bezig) {
+            boolean spook = project.contains("Status");
+            int bw = (w - 4) / 3;
+            Button bedien = Button.builder(Component.translatable("gui.guhs.bouwopdracht.bedien"), x0 -> {
+                doe(Actie.BOUW_BEDIEN, 0, "");
+                onClose();
+            }).bounds(x, y + 126, bw, 18).build();
+            Button her = Button.builder(Component.translatable("gui.guhs.bouwopdracht.herbereken"), x0 -> doe(Actie.BOUW_HERBEREKEN, 0, ""))
+                    .bounds(x + bw + 2, y + 126, bw, 18).tooltip(Tooltip.create(Component.translatable("gui.guhs.bouwopdracht.herbereken.uitleg"))).build();
+            Button stop = Button.builder(Component.translatable("gui.guhs.bouwopdracht.stop"), x0 -> doe(Actie.BOUW_STOP, 0, ""))
+                    .bounds(x + 2 * bw + 4, y + 126, bw, 18).build();
+            bedien.active = mag && spook;
+            her.active = mag && spook && !"BOUWT".equals(project.getStringOr("Status", ""));
+            stop.active = mag;
+            addRenderableWidget(bedien);
+            addRenderableWidget(her);
+            addRenderableWidget(stop);
+        }
     }
 
     /** A slider for one number (the range, a width, a depth), sent when it changes. */
@@ -378,17 +437,43 @@ public class VerblijfScreen extends Screen {
     }
 
     private void bouw(GuiGraphicsExtractor g, int x, int y) {
-        ListTag taken = data.getListOrEmpty("Taken");
+        CompoundTag b = data.getCompoundOrEmpty("Bouw");
+        ListTag taken = b.getListOrEmpty("Taken");
         if (taken.isEmpty()) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.verblijf.bouw.geen"), x, y, W - 20, 0.875f, TEKST);
             return;
         }
-        int h = GidsTekst.alinea(g, Component.translatable("gui.guhs.verblijf.bouw.uitleg"), x, y, W - 20, 0.875f, TEKST);
-        for (int i = 0; i < taken.size(); i++) {
-            GidsTekst.passend(g, Component.literal("• ").append(Component.translatable("gui.guhs.verblijf.taak." + taken.getStringOr(i, ""))),
-                    x + 6, y + h + 6 + i * 11, W - 30, 0.875f, DONKER, false);
+        int rx = left + 118, w = W - 128;
+        String keuze = b.getStringOr("Keuze", "");
+        GidsTekst.passend(g, Component.translatable("gui.guhs.verblijf.taak." + keuze).withStyle(ChatFormatting.BOLD), rx, y, w, 0.875f, DONKER, false);
+        GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwopdracht.uitleg." + keuze), rx, y + 12, w, 0.75f, TEKST);
+        int grootte = b.getIntOr("Grootte", 0);
+        GidsTekst.passend(g, Component.translatable("gui.guhs.bouwopdracht.grootte." + grootte), rx, y + 86, w, 0.75f, grootte == 2 ? GROEN : LICHT, false);
+        CompoundTag p = b.getCompoundOrEmpty("Project");
+        if (b.contains("Project")) {
+            String taak = p.getStringOr("Taak", "");
+            Component naam = Component.translatable(taak.equals("verblijf") ? "gui.guhs.verblijf.tevreden.bouw" : "gui.guhs.verblijf.taak." + taak);
+            Component status;
+            if (!p.contains("Status")) {
+                status = Component.translatable("gui.guhs.bouwopdracht.loopt." + p.getStringOr("Soort", "").toLowerCase(java.util.Locale.ROOT), naam);
+            } else if (p.getBooleanOr("Lopen", false)) {
+                status = Component.translatable("gui.guhs.bouwopdracht.onderweg", naam);
+            } else {
+                status = Component.translatable("gui.guhs.bouwopdracht.status." + p.getStringOr("Status", "SPOOK").toLowerCase(java.util.Locale.ROOT), naam);
+            }
+            GidsTekst.passend(g, status, rx, y + 98, w, 0.75f, DONKER, false);
+            if (p.contains("Totaal")) {
+                float f = p.getIntOr("Gedaan", 0) / (float) Math.max(1, p.getIntOr("Totaal", 1));
+                GidsTekst.balk(g, rx, y + 110, w, 7, f);
+                if ("BOUWT".equals(p.getStringOr("Status", ""))) {
+                    GidsTekst.passend(g, Component.translatable(net.minecraft.locale.Language.getInstance().has("gui.guhs.bouwopdracht.werk." + data.getStringOr("Soort", "")) ? "gui.guhs.bouwopdracht.werk." + data.getStringOr("Soort", "") : "gui.guhs.bouwopdracht.werk.anders").withStyle(ChatFormatting.ITALIC),
+                            rx, y + 119, w, 0.625f, LICHT, false);
+                }
+            }
         }
-        GidsTekst.passend(g, Component.translatable("gui.guhs.verblijf.binnenkort").withStyle(ChatFormatting.ITALIC), x, top + H - 44, W - 80, 0.75f, LICHT, false);
+        Component voet = Component.translatable(b.getBooleanOr("Bank", false) ? "gui.guhs.bouwopdracht.bank.ja" : "gui.guhs.bouwopdracht.bank.nee")
+                .copy().append(Component.literal("  ")).append(Component.translatable("gui.guhs.bouwopdracht.klaar_teller", b.getIntOr("Klaar", 0)));
+        GidsTekst.passend(g, voet, x, top + H - 20, W - 80, 0.625f, LICHT, false);
     }
 
     @Override

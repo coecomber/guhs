@@ -1494,3 +1494,24 @@ UITLEG["guh_schoorsteen"] = dict(
        "uit te doen, en nog een keer om het weer aan te steken.",
     en="A guh chimney with little ears. Put it on your roof and cosy smoke comes out. Right-click it to put the fire "
        "out, and once more to light it again.")
+
+# 1.6.0 deel 2 F10b: het verblijfsbord, met de Bouwopdracht van de helper- en bouwdieren
+UITLEG["safari_verblijfsbord"] = dict(
+    nl="Een verblijfsbordje uit de giftshop van het safaripark: zet het neer en er komt een familie van dat dier wonen "
+       "(papa, mama en twee kleintjes). Rechtsklik erop voor het menu.\n"
+       "\n"
+       "- Familie, Verblijf, Tevredenheid, Cadeautjes en Info: namen, de grootte van hun thuis, wat ze blij maakt.\n"
+       "- Bouw passend verblijf: een spook van een thuis met alles wat het dier fijn vindt, met een hek eromheen.\n"
+       "- Bouwopdracht: veel dieren helpen mee! Bevers bouwen een dam, stokstaartjes graven een kelder, pinguïns een "
+       "iglo, de gibbon hangt slingers. Kies Zoek plek of wijs zelf een plek aan met de vormstaf; de familie gaat op "
+       "werkuitje (tot 48 blokken ver) en bouwt het spook. Hoe blijer de familie, hoe groter en mooier.\n"
+       "- De blokjes komen uit je inventaris, of uit een Bank Guh: klik het bord met een Banksleutel.",
+    en="A home sign from the safari park's gift shop: put it down and a family of that animal moves in (dad, mum and "
+       "two little ones). Right-click it for the menu.\n"
+       "\n"
+       "- Family, Home, Happiness, Gifts and Info: names, the size of their home, what makes them happy.\n"
+       "- Build a fitting home: a ghost of a home with everything the animal loves, with a fence around it.\n"
+       "- Building job: many animals help! Beavers build a dam, meerkats dig a cellar, penguins an igloo, the gibbon "
+       "hangs garlands. Choose Find a spot or point one out with the Shape Wand; the family goes on a work outing (up "
+       "to 48 blocks away) and builds the ghost. The happier the family, the bigger and prettier.\n"
+       "- The blocks come from your inventory, or from a Bank Guh: click the sign with a Bank Key.")

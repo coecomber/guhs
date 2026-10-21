@@ -47,7 +47,7 @@ import nl.juiced.guhs.feature.safari.ParkData;
  * gifts drop. Now and then it counts how happy the family is ({@link Tevredenheid}), lets happy animals leave a gift
  * ({@link #cadeaus}), lets the ostrich lay a giant egg, and runs the stork's deliveries ({@link Ooievaar}).
  */
-public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEntity {
+public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEntity, nl.juiced.guhs.feature.bouwhulp.kern.Bouwer {
     public static final String[] FAMILIE = {"man", "vrouw", "baby", "baby"};
     public static final int MIN_STRAAL = 8, MAX_STRAAL = 32, START_STRAAL = 12;
     /** Every board that is loaded (for the friends check). */
@@ -79,6 +79,8 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
     UUID bestemming;
     final List<ItemStack> pakket = new ArrayList<>();
     long aankomst = -1;
+    /** Deel 2 (F10b): the Bouwopdracht's state (the chosen task, the running job; see bouwhulp.helpers.Bouwopdracht). */
+    private CompoundTag bouwopdracht = new CompoundTag();
 
     public VerblijfsbordBlockEntity(BlockPos pos, BlockState state) {
         super(VerblijfFeature.BORD_BE.get(), pos, state);
@@ -418,6 +420,36 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         if (aankomst >= 0 && level.getGameTime() >= aankomst) {
             Ooievaar.aangekomen(level, this);
         }
+        if (teller % 20 == 11) {
+            nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.tick(level, this);
+        }
+    }
+
+    // --- the Bouwopdracht (deel 2, F10b): this board builds its family's ghost --------------------------------------------
+
+    public CompoundTag bouwopdracht() {
+        return bouwopdracht;
+    }
+
+    @Override
+    public double tempo(ServerLevel level, nl.juiced.guhs.feature.bouwhulp.kern.Spook spook) {
+        return nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.tempo(level, this, spook);
+    }
+
+    @Override
+    public nl.juiced.guhs.feature.bouwhulp.kern.Materiaal.Bronnen bronnen(ServerLevel level, nl.juiced.guhs.feature.bouwhulp.kern.Spook spook,
+                                                                         @Nullable ServerPlayer bouwer) {
+        return nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.bronnen(level, this, bouwer);
+    }
+
+    @Override
+    public void geplaatst(ServerLevel level, nl.juiced.guhs.feature.bouwhulp.kern.Spook spook, BlockPos pos) {
+        nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.geplaatst(level, this, spook, pos);
+    }
+
+    @Override
+    public void gestopt(ServerLevel level, nl.juiced.guhs.feature.bouwhulp.kern.Spook spook, boolean klaar) {
+        nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.gestopt(level, this, spook, klaar);
     }
 
     /** Members that are really gone (all of the area's entities loaded, the member nowhere) come back. */
@@ -617,6 +649,7 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         ContainerHelper.loadAllItems(in.childOrEmpty("Pakket"), p);
         p.stream().filter(s -> !s.isEmpty()).forEach(pakket::add);
         uitslag = in.read("Uitslag", CompoundTag.CODEC).orElseGet(CompoundTag::new);
+        bouwopdracht = in.read("Bouwopdracht", CompoundTag.CODEC).orElseGet(CompoundTag::new);
     }
 
     @Override
@@ -656,6 +689,7 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         }
         ContainerHelper.saveAllItems(out.child("Pakket"), p);
         out.store("Uitslag", CompoundTag.CODEC, uitslag);
+        out.store("Bouwopdracht", CompoundTag.CODEC, bouwopdracht);
     }
 
     /** The client only needs the species (for the picture) and the owner's name. */

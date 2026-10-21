@@ -68,6 +68,11 @@ public class ThuisDier extends SafariDier {
     private int wegTot;
     /** Ticks until it looks for friends / its toy again. */
     private int rondkijken = 100;
+    /** Deel 2 (F10b, design 2.8): the family's job site ("werkuitje"), its radius, until when the board last asked. Not saved:
+     *  the board asks again every second. */
+    @Nullable
+    private BlockPos werkplek;
+    private int werkStraal, werkTot, thuisLopen, volgendWerk;
 
     public ThuisDier(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -118,7 +123,7 @@ public class ThuisDier extends SafariDier {
 
     @Override
     protected boolean binnenThuis(int x, int z) {
-        if (!rechthoek) {
+        if (!rechthoek || werkplek != null) {
             return super.binnenThuis(x, z);
         }
         return Math.abs(x - thuis().getX()) <= halfBreed && Math.abs(z - thuis().getZ()) <= halfDiep;
@@ -135,6 +140,31 @@ public class ThuisDier extends SafariDier {
     @Override
     protected void bewaak(ServerLevel level) {
         if (isVehicle() || wegTot > 0) {
+            return;
+        }
+        if (werkplek != null) {
+            // on a job: walks there by itself; far away or fallen: a puff and there
+            boolean gevallen = getY() < werkplek.getY() - 24 || getY() < level.getMinY() + 2;
+            if (gevallen || horizontaal(werkplek) > 96) {
+                poef(level);
+                BlockPos p = grond(level, werkplek.getX() + random.nextInt(3) - 1, werkplek.getZ() + random.nextInt(3) - 1);
+                teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+                poef(level);
+            }
+            return;
+        }
+        if (thuisLopen > 0) {
+            // back from a job: walking home (a puff only when it takes too long)
+            thuisLopen--;
+            if (binnenMarge(getX(), getZ(), 0)) {
+                thuisLopen = 0;
+            } else if (thuisLopen == 0) {
+                poef(level);
+                terugNaarHuis(level);
+                poef(level);
+            } else if (getNavigation().isDone()) {
+                getNavigation().moveTo(thuis().getX() + 0.5, thuis().getY(), thuis().getZ() + 0.5, 1.1);
+            }
             return;
         }
         if (!rechthoek) {
@@ -157,6 +187,9 @@ public class ThuisDier extends SafariDier {
         }
         if (wegTot > 0) {
             onderweg(level);
+        }
+        if (werkplek != null) {
+            opWerkuitje(level);
         }
         if ((tickCount + getId()) % 40 == 0 && !hoortBijBord(level)) {
             poef(level);
@@ -202,6 +235,89 @@ public class ThuisDier extends SafariDier {
             } else {
                 doeActie("blij", 80);
             }
+        }
+    }
+
+    // --- the Bouwopdracht (deel 2, F10b) ----------------------------------------------------------------------------------
+
+    /** The board sends the family to its job site (every second while the job runs): walk there and stay near it. */
+    public void werkuitje(BlockPos plek, int straal) {
+        werkTot = tickCount + 100;
+        if (plek.equals(werkplek)) {
+            return;
+        }
+        werkplek = plek.immutable();
+        werkStraal = Math.max(2, straal);
+        thuisLopen = 0;
+        zetThuis(werkplek, werkStraal);
+        getNavigation().stop();
+    }
+
+    @Nullable
+    public BlockPos werkplek() {
+        return werkplek;
+    }
+
+    /** The job is done (or stopped): home again, walking (happy when it went well). */
+    public void naarHuis(@Nullable VerblijfsbordBlockEntity be, boolean blij) {
+        if (werkplek == null) {
+            return;
+        }
+        werkplek = null;
+        if (be == null && level().getBlockEntity(bord) instanceof VerblijfsbordBlockEntity b) {
+            be = b;
+        }
+        if (be != null) {
+            neemVorm(be);
+        }
+        thuisLopen = 600;
+        if (blij) {
+            doeActie("blij", 60);
+            if (level() instanceof ServerLevel level) {
+                level.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), 3, 0.3, 0.2, 0.3, 0.0);
+            }
+        }
+    }
+
+    /** One of its work animations toward a spot (a block of the job just went in). */
+    public void werk(BlockPos pos) {
+        java.util.List<String> anims = nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.werkAnimaties(soort());
+        getLookControl().setLookAt(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        if (!anims.isEmpty()) {
+            java.util.List<String> staand = anims.stream().filter(a -> !a.equals("bouw_sjouw")).toList();
+            java.util.List<String> keuze = staand.isEmpty() ? anims : staand;
+            speelActie(keuze.get(random.nextInt(keuze.size())), 40);
+        } else {
+            doeActie("blij", 40);
+        }
+        volgendWerk = tickCount + 40 + random.nextInt(40);
+    }
+
+    private double horizontaal(BlockPos p) {
+        double dx = getX() - (p.getX() + 0.5), dz = getZ() - (p.getZ() + 0.5);
+        return Math.sqrt(dx * dx + dz * dz);
+    }
+
+    private void opWerkuitje(ServerLevel level) {
+        if (tickCount > werkTot) {
+            naarHuis(null, false);                  // the board stopped asking (unloaded, broken)
+            return;
+        }
+        if (slaapt() || isVehicle() || vast() != null) {
+            return;
+        }
+        double d = horizontaal(werkplek);
+        if (d > werkStraal + 1) {
+            if (getNavigation().isDone() && (tickCount + getId()) % 20 == 0) {
+                BlockPos g = grond(level, werkplek.getX(), werkplek.getZ());
+                getNavigation().moveTo(g.getX() + 0.5, g.getY(), g.getZ() + 0.5, 1.15);
+                if (nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.werkAnimaties(soort()).contains("bouw_sjouw") && random.nextInt(3) == 0) {
+                    speelActie("bouw_sjouw", 60);
+                }
+            }
+        } else if (tickCount > volgendWerk && random.nextInt(40) == 0) {
+            BlockPos naar = werkplek.offset(random.nextInt(5) - 2, 0, random.nextInt(5) - 2);
+            werk(naar);
         }
     }
 
