@@ -49,8 +49,8 @@ public final class WeerderFeature {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
 
     /** The radius steps of the area (blocks around the sign); a new weerder gets {@link #STANDAARD}. */
-    public static final List<Integer> STRALEN = List.of(8, 16, 24, 32, 48);
-    public static final int STANDAARD = 16;
+    public static final List<Integer> STRALEN = List.of(24, 32, 48, 64, 128);   // 1.6.0: 8 and 16 were far too small (user)
+    public static final int STANDAARD = 32;
 
     public static final DeferredBlock<WildeGuhweerderBlock> WEERDER = BLOCKS.registerBlock("wilde_guhweerder", WildeGuhweerderBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f, 6f).sound(SoundType.WOOD).noOcclusion()
