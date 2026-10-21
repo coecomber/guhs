@@ -1,0 +1,36 @@
+{
+  "type": "guhs:flat_jigsaw",
+  "biomes": "#guhs:has_structure/beverbeek_rangerpost",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_box",
+  "check_radius": 17,
+  "max_height_difference": 8,
+  "keep_clear": 9,
+  "jigsaw": {
+    "type": "minecraft:jigsaw",
+    "biomes": "#guhs:has_structure/beverbeek_rangerpost",
+    "step": "surface_structures",
+    "spawn_overrides": {
+      "monster": {
+        "bounding_box": "piece",
+        "spawns": []
+      }
+    },
+    "terrain_adaptation": "beard_box",
+    "start_pool": "guhs:beverbeek_rangerpost/start",
+    "size": 1,
+    "start_height": {
+      "absolute": -3
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 40,
+    "use_expansion_hack": false,
+    "start_jigsaw_name": "guhs:beverbeek_rangerpost_midden"
+  }
+}

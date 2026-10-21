@@ -142,6 +142,7 @@ public final class Features {
         nl.juiced.guhs.feature.safari.SafariFeature.register(modBus);   // 1.6.0 Op Safari!: Safaripark Vadse Bergen
         nl.juiced.guhs.feature.bouwhulp.blokken.BouwBlokken.register(modBus);   // 1.6.0 deel 2 F11: the building blocks + the Bouwen tab
         nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenFeature.register(modBus);   // 1.6.0: De Eeuwige Knabbelvelden (payloads + creative inside)
+        nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.register(modBus);   // 1.6.0 deel 2 F10a: de Beverbeek (biome, ranger post, aaibever)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
