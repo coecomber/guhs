@@ -46,7 +46,7 @@ public final class LobbyItems {
     public static final Map<String, DeferredItem<Item>> BADGES = new LinkedHashMap<>();
 
     static {
-        for (String zone : List.of("savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie")) {
+        for (String zone : List.of("savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie", "kriebelhuis")) {
             BADGES.put(zone, ITEMS.registerItem("safari_badge_" + zone, Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
         }
     }

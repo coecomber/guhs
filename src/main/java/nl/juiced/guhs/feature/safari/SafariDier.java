@@ -73,6 +73,8 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Boolean> DATA_SLAAPT = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.BOOLEAN);
     /** Round 3: the id of a "bekende bewoner" (bewoners.json), "" for an ordinary animal. */
     private static final EntityDataAccessor<String> DATA_BEWONER = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.STRING);
+    /** Round 4 (L4): its colour ("kleuren" in soorten.json: the chameleon, the poison dart frog), "" for the base texture. */
+    private static final EntityDataAccessor<String> DATA_KLEUR = SynchedEntityData.defineId(SafariDier.class, EntityDataSerializers.STRING);
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation SLAAP = RawAnimation.begin().thenLoop("slaap");
@@ -114,6 +116,13 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
     private boolean debugNaam, zichtbaarVoorDebug;
     @Nullable
     private Component naamVoorDebug;
+    /** Round 4 (L4): where it stays put (a little creature in its terrariumbord tank): no AI, no physics; null: it moves. Saved. */
+    @Nullable
+    private Vec3 vast;
+    /** Round 4 (L4): ticks until the chameleon changes colour again. */
+    private int kleurPauze = 600;
+    /** Round 4 (L4): how far above its home's centre the floor may lie before it counts as indoors (a roof over it). */
+    static final int BINNEN = 4;
     /** (Tests) act even without a player nearby (and stay awake at night; favourites outside the park). */
     public static boolean ALTIJD_ACTIEF = false;
     @Nullable
@@ -140,6 +149,26 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         this.plek = plek;
         this.generatie = generatie;
         regel();
+        if (info != null && !info.kleuren().isEmpty() && kleur().isEmpty()) {
+            entityData.set(DATA_KLEUR, info.kleuren().get(random.nextInt(info.kleuren().size())));
+        }
+    }
+
+    /** Round 4 (L4): stays put at {@code p} (its terrariumbord tank): no AI, no gravity, nothing pushes it. */
+    public void zetVast(Vec3 p) {
+        vast = p;
+        snapTo(p.x, p.y, p.z, getYRot(), 0f);
+        regel();
+    }
+
+    @Nullable
+    public Vec3 vast() {
+        return vast;
+    }
+
+    /** Round 4 (L4): its colour texture suffix ("" = the base texture). */
+    public String kleur() {
+        return entityData.get(DATA_KLEUR);
     }
 
     /** Navigation, controls and speed for the species (again after loading). */
@@ -168,6 +197,12 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             setPathfindingMalus(PathType.WATER, info.wadend() ? 8f : -1f);
         }
         setNoGravity(hangPlek != null);
+        // round 4 (L4): the anemone is a still decoration; a creature in its tank stays put
+        setNoAi(info.decor() || vast != null);
+        if (vast != null) {
+            setNoGravity(true);
+            noPhysics = true;
+        }
     }
 
     /** (Step 2, S5: a verblijfsbord animal at home) moves its home; the animal walks there by itself. */
@@ -255,6 +290,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         builder.define(DATA_ACTIE, "");
         builder.define(DATA_SLAAPT, false);
         builder.define(DATA_BEWONER, "");
+        builder.define(DATA_KLEUR, "");
     }
 
     @Override
@@ -403,10 +439,27 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         if (isPassenger()) {
             stopRiding();
         }
-        if (hangPlek != null) {
+        if (vast != null) {
+            if (distanceToSqr(vast) > 0.0025) {
+                setPos(vast);
+            }
+            setDeltaMovement(Vec3.ZERO);
+        } else if (hangPlek != null) {
             hangStil();
         } else if ((tickCount + getId()) % 10 == 0) {
             bewaak(level);
+        }
+        if (info != null && info.heeft("kleurwissel") && !slaapt() && --kleurPauze <= 0) {
+            // round 4 (L4): the chameleon slowly changes colour (now and then another one of its colours)
+            kleurPauze = 900 + random.nextInt(1500);
+            List<String> k = info.kleuren();
+            if (k.size() > 1) {
+                String nu = kleur(), nieuw = nu;
+                while (nieuw.equals(nu)) {
+                    nieuw = k.get(random.nextInt(k.size()));
+                }
+                entityData.set(DATA_KLEUR, nieuw);
+            }
         }
         if ((tickCount + getId()) % 10 == 0) {
             slaap(level);
@@ -569,15 +622,61 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         if (y <= level.getMinY()) {
             return thuis;
         }
+        if (!thuis.equals(BlockPos.ZERO) && y > thuis.getY() + BINNEN) {
+            // round 4 (L4): a roof over its home (the Kriebelhuis): the floor or the water near its home's height
+            BlockPos b = binnenGrond(level, x, z, thuis.getY(), info != null && info.zee(), info != null && info.heeft("bodem"));
+            return b != null ? b : thuis;
+        }
         if (info != null && info.zee()) {
             BlockPos w = new BlockPos(x, y - 2, z);
+            if (info.heeft("bodem") && !level.getFluidState(w).isEmpty()) {
+                while (w.getY() > level.getMinY() + 1 && !level.getFluidState(w.below()).isEmpty()) {
+                    w = w.below();
+                }
+            }
             return level.getFluidState(w).isEmpty() ? new BlockPos(x, y, z) : w;
         }
         return new BlockPos(x, y, z);
     }
 
+    /** Round 4 (L4): indoors, the spot in this column near height {@code rond} (from 3 above down to 8 below): a land animal
+     *  on the first floor with room for it, a swimmer 1 below the water's surface (a bottom dweller on the bottom); null:
+     *  none here. */
+    @Nullable
+    static BlockPos binnenGrond(net.minecraft.world.level.LevelReader level, int x, int z, int rond, boolean zee, boolean bodem) {
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int y = rond + 3; y >= rond - 8; y--) {
+            p.set(x, y, z);
+            if (zee) {
+                if (!level.getFluidState(p).isEmpty()) {
+                    int onder = y;
+                    while (onder > rond - 12 && !level.getFluidState(p.set(x, onder - 1, z)).isEmpty() && (bodem || onder > y - 1)) {
+                        onder--;
+                    }
+                    return new BlockPos(x, onder, z);
+                }
+                if (!level.getBlockState(p).getCollisionShape(level, p).isEmpty()) {
+                    return null;                                // a floor without water: not for a swimmer
+                }
+                continue;
+            }
+            BlockPos voet = p.immutable();
+            if (level.getBlockState(voet).getCollisionShape(level, voet).isEmpty() && level.getFluidState(voet).isEmpty()
+                    && !level.getBlockState(voet.below()).getCollisionShape(level, voet.below()).isEmpty()) {
+                return voet;
+            }
+        }
+        return null;
+    }
+
+    /** Round 4 (L4): is it awake at night? Nocturnal species; a Nachtzaal species only at home: in the park's Nachtzaal day
+     *  and night are turned round, so there it is awake by day (when the visitors come). */
+    public static boolean nachtdier(@Nullable ParkData.Soort info, boolean inPark) {
+        return info != null && (info.heeft("nacht") || info.heeft("nachtzaal") && !inPark);
+    }
+
     private void slaap(ServerLevel level) {
-        boolean nacht = info != null && info.heeft("nacht");
+        boolean nacht = nachtdier(info, Safari.echt(level));
         boolean donker = level.isDarkOutside();
         // most animals sleep in the dark (nocturnal ones by day), but not all of them at once
         // round 4: nocturnal species sleep by day only in part (4 in 10), so in the park you still see badgers, hedgehogs
@@ -680,6 +779,14 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         if (!bewoner().isEmpty()) {
             tag.putString("Bewoner", bewoner());
         }
+        if (!kleur().isEmpty()) {
+            tag.putString("Kleur", kleur());
+        }
+        if (vast != null) {
+            tag.putDouble("VastX", vast.x);
+            tag.putDouble("VastY", vast.y);
+            tag.putDouble("VastZ", vast.z);
+        }
         if (hangPlek != null) {
             tag.putInt("HangX", hangPlek.getX());
             tag.putInt("HangY", hangPlek.getY());
@@ -698,6 +805,9 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         plek = tag.getIntOr("Plek", -1);
         generatie = tag.getIntOr("Generatie", 0);
         entityData.set(DATA_BEWONER, tag.getStringOr("Bewoner", ""));
+        entityData.set(DATA_KLEUR, tag.getStringOr("Kleur", ""));
+        double vy = tag.getDoubleOr("VastY", Double.NaN);
+        vast = Double.isNaN(vy) ? null : new Vec3(tag.getDoubleOr("VastX", 0), vy, tag.getDoubleOr("VastZ", 0));
         int hy = tag.getIntOr("HangY", Integer.MIN_VALUE);
         hangPlek = hy == Integer.MIN_VALUE ? null : new BlockPos(tag.getIntOr("HangX", 0), hy, tag.getIntOr("HangZ", 0));
         geregeld = false;

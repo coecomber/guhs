@@ -150,6 +150,41 @@ DIER = {
     "quokka": (["struiken", "gras"], "blad", "outback", "glijbaan", ["kangoeroe"], []),
     "prieelvogel": (["bloemen", "bomen"], "fruit", "vogel", "schommel", [], ["decoreren"]),
     "gouden_dikdik": (["struiken", "gras"], "blad", "savanne", "glijbaan", [], []),
+    # round 4 (L4): the Kriebelhuis animals (a "terrarium" one lives in a glass tank at home: the terrariumbord) + the pelican
+    "kameleon": (["jungle", "bladeren"], "fruit", "jungle", "schommel", [], []),
+    "reuzenschildpad": (["gras", "zand"], "groente", "savanne", "bal", ["*"], []),
+    "slang": (["rots", "zand"], "vlees", "bos", "glijbaan", [], []),
+    "hoornkikker": (["mos", "waterbeetje"], "groente", "bos", "bal", [], []),
+    "kraaghagedis": (["zand", "rots"], "fruit", "outback", "glijbaan", [], []),
+    "gifkikker": (["mos", "varens", "waterbeetje"], "fruit", "jungle", "schommel", ["gifkikker"], []),
+    "baardagaam": (["zand", "rots"], "groente", "outback", "bal", [], []),
+    "mier": (["aarde", "bladeren"], "blad", "bos", "glijbaan", [], []),
+    "springspin": (["bladeren", "varens"], "fruit", "bos", "schommel", [], []),
+    "wandelende_tak": (["bladeren", "bomen"], "blad", "bos", "schommel", [], []),
+    "mestkever": (["aarde", "gras"], "gras", "savanne", "bal", [], []),
+    "slak": (["mos", "varens"], "groente", "bos", "glijbaan", [], []),
+    "vogelspin": (["aarde", "rots"], "fruit", "jungle", "krabboom", [], []),
+    "hommel": (["bloemen", "gras"], "fruit", "vogel", "schommel", [], ["planten"]),
+    "kiwi": (["varens", "aarde"], "groente", "vogel", "bal", [], []),
+    "schubdier": (["aarde", "holletje"], "groente", "bos", "bal", [], []),
+    "spookdiertje": (["jungle", "donker"], "fruit", "jungle", "schommel", [], []),
+    "plompe_lori": (["jungle", "donker"], "fruit", "jungle", "schommel", ["spookdiertje", "galago"], []),
+    "fruitvleermuis": (["bomen", "donker"], "fruit", "glim", "schommel", [], []),
+    "galago": (["bomen", "donker"], "fruit", "jungle", "schommel", ["plompe_lori"], []),
+    "suikereekhoorn": (["bomen", "bladeren"], "fruit", "bos", "schommel", [], []),
+    "fennek": (["zand", "holletje"], "groente", "outback", "bal", [], []),
+    "zeepaardje": (["zeegras"], "zeegras", "zee", "schommel", [], []),
+    "pijlstaartrog": (["waterveel", "zand"], "vis", "zee", "bal", ["zeeschildpad"], []),
+    "zeeschildpad": (["waterveel", "zeegras"], "zeegras", "zee", "bal", ["pijlstaartrog"], []),
+    "clownvis": (["zeegras"], "zeegras", "zee", "bal", [], []),
+    "kwal": (["donker"], "zeegras", "glim", "bal", [], []),
+    "kogelvis": (["zeegras", "rots"], "vis", "zee", "bal", [], []),
+    "zeester": (["zand", "rots"], "zeegras", "zee", "glijbaan", [], []),
+    "babyhaai": (["waterveel"], "vis", "zee", "bal", [], []),
+    "regenboogvis": (["zeegras"], "zeegras", "zee", "bal", [], []),
+    "lantaarnvisje": (["donker"], "vis", "glim", "bal", [], []),
+    "dumbo_octopus": (["donker", "rots"], "vis", "zee", "bal", [], []),
+    "pelikaan": (["water", "zand"], "vis", "vogel", "schommel", ["flamingo"], []),
 }
 TAKEN = {  # helper task id: (nl, en)
     "sjouwen": ("Materiaal sjouwen", "Carry materials"), "opruimen": ("Omgevallen bomen opruimen", "Clear fallen trees"),
@@ -174,7 +209,8 @@ TAKEN = {  # helper task id: (nl, en)
     "decoreren": ("Decoreren in een kleurthema", "Decorate in a colour theme"),
 }
 SPECIAAL = {"struisvogel": {"rijdier": True, "ei": True}, "ooievaar": {"bezorger": True},
-            "narwal": {"water_nodig": 60}, "zeekoe": {"water_nodig": 40}, "octopus": {"water_nodig": 40}}
+            "narwal": {"water_nodig": 60}, "zeekoe": {"water_nodig": 40}, "octopus": {"water_nodig": 40},
+            "pijlstaartrog": {"water_nodig": 40}, "zeeschildpad": {"water_nodig": 40}, "babyhaai": {"water_nodig": 40}}
 
 FEITEN = {  # species: (nl, en)
     "leeuw": ("Leeuwen slapen tot wel 20 uur per dag. Lekker vads.", "Lions sleep up to 20 hours a day. Nice and chonky."),
@@ -224,6 +260,41 @@ FEITEN = {  # species: (nl, en)
     "quokka": ("De quokka heet het gelukkigste dier ter wereld.", "The quokka is called the happiest animal in the world."),
     "prieelvogel": ("Een prieelvogelmannetje versiert zijn prieel met blauwe spulletjes.", "A male bowerbird decorates his bower with blue things."),
     "gouden_dikdik": ("Een gouden dikdik? Die bestaat niet. Behalve deze.", "A golden dik-dik? That doesn't exist. Except this one."),
+    # round 4 (L4)
+    "kameleon": ("Een kameleon kan met zijn oogjes twee kanten tegelijk op kijken.", "A chameleon can look two ways at once with its little eyes."),
+    "reuzenschildpad": ("Reuzenschildpadden kunnen ouder worden dan 150 jaar. Rustig aan, vads.", "Giant tortoises can live past 150. Slow and steady, chonk."),
+    "slang": ("Een slang ruikt met zijn tong. Daarom steekt hij hem steeds uit.", "A snake smells with its tongue. That's why it keeps sticking it out."),
+    "hoornkikker": ("Een hoornkikker is bijna helemaal mond. Hap!", "A horned frog is almost all mouth. Chomp!"),
+    "kraaghagedis": ("Schrikt een kraaghagedis, dan klapt hij zijn kraag open en rent hij op twee pootjes weg.", "When a frilled lizard gets a fright, it opens its frill and runs off on two legs."),
+    "gifkikker": ("Gifkikkertjes zijn zo fel van kleur om te zeggen: niet opeten!", "Poison dart frogs are so brightly coloured to say: don't eat me!"),
+    "baardagaam": ("Een baardagaam zwaait met zijn pootje om hallo te zeggen.", "A bearded dragon waves its little paw to say hello."),
+    "mier": ("Een mier kan wel 50 keer zijn eigen gewicht tillen. Sterk hoor!", "An ant can lift 50 times its own weight. So strong!"),
+    "springspin": ("Een springspin heeft acht oogjes en springt wel 50 keer zijn eigen lengte.", "A jumping spider has eight eyes and jumps 50 times its own length."),
+    "wandelende_tak": ("Een wandelende tak wiegt heen en weer, net als een takje in de wind.", "A stick insect sways to and fro, just like a twig in the wind."),
+    "mestkever": ("Een mestkever navigeert met de sterren. Ja, met de Melkweg!", "A dung beetle navigates by the stars. Yes, by the Milky Way!"),
+    "slak": ("Een slak heeft duizenden piepkleine tandjes.", "A snail has thousands of tiny teeth."),
+    "vogelspin": ("Een vogelspin is pluizig als een knuffel, maar knuffelen vindt hij niks.", "A tarantula is fluffy like a plushie, but it doesn't like cuddles."),
+    "hommel": ("Een hommel bromt zo hard omdat hij zijn vleugels warm trilt.", "A bumblebee buzzes so loud because it shivers its wings warm."),
+    "kiwi": ("Een kiwi is de enige vogel met neusgaatjes aan het puntje van zijn snavel.", "A kiwi is the only bird with nostrils at the tip of its beak."),
+    "schubdier": ("Een schubdier rolt zich op tot een bal als hij schrikt. Een levend dennenappeltje!", "A pangolin rolls into a ball when it's scared. A living pine cone!"),
+    "spookdiertje": ("Elk oog van een spookdiertje is groter dan zijn hersentjes.", "Each eye of a tarsier is bigger than its brain."),
+    "plompe_lori": ("De plompe lori doet alles heel, heel, heel langzaam. Vads tot op het bot.", "The slow loris does everything very, very, very slowly. Chonk to the bone."),
+    "fruitvleermuis": ("Fruitvleermuizen slapen ondersteboven, ingepakt in hun vleugels als een dekentje.", "Fruit bats sleep upside down, wrapped in their wings like a blanket."),
+    "galago": ("Een galago springt wel twee meter hoog. Boing!", "A bushbaby jumps up to two metres high. Boing!"),
+    "suikereekhoorn": ("Een suikereekhoorn zweeft van boom naar boom met een vliesje tussen zijn pootjes.", "A sugar glider glides from tree to tree with a skin flap between its legs."),
+    "fennek": ("Met zijn reuzenoren hoort een fennek zelfs een kevertje onder het zand lopen.", "With its giant ears a fennec fox can even hear a beetle walking under the sand."),
+    "zeepaardje": ("Bij zeepaardjes krijgt de papa de baby's. Fijn voor mama!", "With seahorses, the dad has the babies. Nice for mum!"),
+    "pijlstaartrog": ("Een pijlstaartrog 'vliegt' onder water met zijn grote vinnen.", "A stingray 'flies' under water with its big fins."),
+    "zeeschildpad": ("Zeeschildpadden zwemmen duizenden kilometers en vinden altijd terug naar hun strand.", "Sea turtles swim thousands of kilometres and always find their way back to their beach."),
+    "clownvis": ("Een clownvisje woont veilig tussen de prikarmpjes van een anemoon.", "A clownfish lives safely among the stinging arms of an anemone."),
+    "kwal": ("Kwallen hebben geen hersenen, geen hart en geen botten. Wel heel mooi.", "Jellyfish have no brain, no heart and no bones. Very pretty though."),
+    "kogelvis": ("Een kogelvis blaast zich op tot een stekelbal als hij schrikt.", "A pufferfish puffs up into a spiky ball when it's startled."),
+    "zeester": ("Een zeester kan een armpje terug laten groeien. En de zee-egeltjes zijn zijn beste vriendjes.", "A starfish can grow back an arm. And the sea urchins are its best friends."),
+    "babyhaai": ("Haaien hebben rijen tandjes: valt er een uit, dan schuift de volgende naar voren.", "Sharks have rows of teeth: when one falls out, the next one moves forward."),
+    "regenboogvis": ("Regenboogvisjes zwemmen in een school: samen draaien ze als één grote vis.", "Rainbowfish swim in a school: together they turn like one big fish."),
+    "lantaarnvisje": ("Een lantaarnvisje maakt zijn eigen licht, diep in de donkere zee.", "A lanternfish makes its own light, deep in the dark sea."),
+    "dumbo_octopus": ("De Dumbo-octopus fladdert met zijn oortjes, net als de olifant uit de film.", "The Dumbo octopus flaps its little ears, just like the elephant from the film."),
+    "pelikaan": ("In de keelzak van een pelikaan past meer dan in zijn maag. Slokop!", "A pelican's throat pouch holds more than its stomach. Gobble!"),
 }
 
 
@@ -249,6 +320,8 @@ def data():
             e.append(regel)
         uit[soort] = {"klasse": klasse, "prijs": PRIJS.get(klasse, 0), "voer": VOER[voer], "eisen": e, "cadeaus": CADEAU[cadeau],
                       "speeltje": speeltje, "vrienden": vrienden, "taken": taken, **SPECIAAL.get(soort, {})}
+        if s.get("terrarium"):
+            uit[soort]["terrarium"] = True        # round 4 (L4): a terrariumbord (a glass tank at home)
     return {"uitleg": "S5 verblijfsbord (tools/features/safari_verblijf.py): per species with a board its price, food (vanilla "
                       "items; the tag guhs:safarivoer counts double), what makes it happy (block counts in its home), gifts, "
                       "toy, friends ('*' = everyone), specials and helper tasks (the Bouwopdracht tab, coming later).",
@@ -430,6 +503,12 @@ LANG = {  # key: (en, nl)
                                             "Zet hem neer en er komt een familie wonen: een mannetje, een vrouwtje en twee kleintjes. Vahoeg!"),
     "item.guhs.safari_verblijfsbord.leeg": ("(no animal: get one in the Safaripark gift shop)", "(geen dier: haal er een in de safari-giftshop)"),
     "entity.guhs.safari_thuisdier": ("Animal at home", "Dier thuis"),
+    # round 4 (L4): the terrariumbord (small Kriebelhuis creatures live in a glass tank at home)
+    "item.guhs.safari_verblijfsbord.terrarium_met": ("Terrarium Sign: %s", "Terrariumbord: %s"),
+    "item.guhs.safari_verblijfsbord.terrarium_lore": ("Place it and a little glass tank appears, with the creatures living inside. Cosy indoors too!",
+                                                      "Zet hem neer en er verschijnt een glazen bakje waarin de beestjes wonen. Ook knus binnen!"),
+    "block.guhs.safari_terrarium": ("Terrarium", "Terrarium"),
+    "gui.guhs.verblijf.terrarium.welkom": ("%s moved into the terrarium! Vahoeg!", "%s woont nu in het terrarium! Vahoeg!"),
     "item.guhs.safari_reuzen_ei": ("Giant Egg", "Reuzen-ei"),
     "item.guhs.safari_reuzen_ei.lore": ("From your ostrich! Bake it in a furnace.", "Van je struisvogel! Bak hem in een oven."),
     "item.guhs.safari_reuzen_omelet": ("Giant Omelette", "Reuzen-omelet"),
@@ -601,6 +680,9 @@ def build(h):
         w(f"{D}/recipe/safari_reuzen_omelet_{soort_recept}.json", {"type": f"minecraft:{soort_recept}", "category": "food",
             "ingredient": "guhs:safari_reuzen_ei", "result": {"id": "guhs:safari_reuzen_omelet"}, "experience": 0.5,
             "cookingtime": {"smelting": 200, "smoking": 100, "campfire_cooking": 600}[soort_recept]})
+    # round 4 (L4): the terrarium (a terrariumbord placed at home): a glass tank with a wooden frame, a sandy-mossy floor,
+    # a little branch and a name plate; the little creature lives inside. One model for every species (cutout glass).
+    terrarium_blok(h)
     # the sign drops itself with its species (Java: getDrops); the loot table stays empty
     w(f"{D}/loot_table/blocks/safari_verblijfsbord.json", {"type": "minecraft:block", "pools": []})
     w(f"{D}/loot_table/entities/safari_thuisdier.json", {"type": "minecraft:entity", "pools": []})
@@ -614,6 +696,60 @@ def build(h):
         h.lang(f"gui.guhs.verblijf.speeltje.{sid}", en.lower(), nl.lower())
     for soort, (nl, en) in FEITEN.items():
         h.lang(f"gui.guhs.verblijf.feit.{soort}", en, nl)
+
+
+def tex_terrarium_glas():
+    """16x16: a clear pane with a few shine streaks inside a wooden frame (the frame only on the edges)."""
+    img = Image.new("RGBA", (16, 16), (210, 236, 246, 46))
+    d = ImageDraw.Draw(img)
+    for i in range(3):
+        d.line([(3 + i * 5, 12), (7 + i * 5, 4)], fill=(255, 255, 255, 110))
+    d.rectangle([0, 0, 15, 1], fill=(150, 104, 62, 255))
+    d.rectangle([0, 14, 15, 15], fill=(132, 90, 52, 255))
+    d.rectangle([0, 0, 1, 15], fill=(150, 104, 62, 255))
+    d.rectangle([14, 0, 15, 15], fill=(150, 104, 62, 255))
+    return img
+
+
+def tex_terrarium_bodem():
+    """16x16: sand with moss patches and a few pebbles."""
+    rng = np.random.default_rng(16)
+    a = np.zeros((16, 16, 4), np.uint8)
+    a[..., :3] = np.clip(np.array((214, 190, 140)) + rng.normal(0, 8, (16, 16, 1)), 0, 255)
+    a[..., 3] = 255
+    for (x, y, r) in ((4, 4, 3), (11, 10, 3), (3, 12, 2)):
+        for yy in range(16):
+            for xx in range(16):
+                if (xx - x) ** 2 + (yy - y) ** 2 <= r * r:
+                    a[yy, xx, :3] = np.clip(np.array((92, 140, 60)) + rng.normal(0, 10, 3), 0, 255)
+    for (x, y) in ((8, 3), (13, 5), (7, 13)):
+        a[y, x, :3] = (150, 150, 146)
+    return Image.fromarray(a, "RGBA")
+
+
+def terrarium_blok(h):
+    w = h.w
+    hout = "minecraft:block/stripped_oak_log"
+    w(f"{A}/models/block/safari_terrarium.json", {"parent": "minecraft:block/block", "render_type": "minecraft:cutout",
+        "textures": {"glas": "guhs:block/safari_terrarium_glas", "bodem": "guhs:block/safari_terrarium_bodem", "hout": hout,
+                     "particle": "guhs:block/safari_terrarium_glas"},
+        "elements": [
+            _el([0, 0, 0], [16, 2, 16], "#hout", ("north", "south", "east", "west", "down")),
+            _el([0.5, 2, 0.5], [15.5, 2.5, 15.5], "#bodem", ("up",)),
+            _el([0, 2, 0], [16, 15, 0.5], "#glas", ("north", "south")),
+            _el([0, 2, 15.5], [16, 15, 16], "#glas", ("north", "south")),
+            _el([0, 2, 0], [0.5, 15, 16], "#glas", ("east", "west")),
+            _el([15.5, 2, 0], [16, 15, 16], "#glas", ("east", "west")),
+            _el([0, 15, 0], [16, 16, 16], "#hout", ("north", "south", "east", "west", "up", "down")),
+            _el([3, 2.5, 9], [13, 3.5, 10], "#hout", ("north", "south", "east", "west", "up"), {"angle": 22.5, "axis": "y", "origin": [8, 3, 9.5]}),
+        ]})
+    w(f"{A}/blockstates/safari_terrarium.json", {"variants": {
+        f"facing={f}": {"model": "guhs:block/safari_terrarium", **({"y": r} if r else {})}
+        for f, r in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}})
+    h.save(tex_terrarium_glas(), "block", "safari_terrarium_glas.png")
+    h.save(tex_terrarium_bodem(), "block", "safari_terrarium_bodem.png")
+    # it drops its terrariumbord with the species (Java: getDrops)
+    w(f"{D}/loot_table/blocks/safari_terrarium.json", {"type": "minecraft:block", "pools": []})
 
 
 ITEMS = ["safari_verblijfsbord", "safari_speelbal", "safari_glijbaantje", "safari_krabboom", "safari_schommelband", "safari_ooievaarsbus",

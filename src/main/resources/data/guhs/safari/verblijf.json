@@ -1923,6 +1923,1335 @@
       "speeltje": "glijbaan",
       "vrienden": [],
       "taken": []
+    },
+    "kameleon": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "jungle",
+          "soort": "blok",
+          "min": 8,
+          "blokken": [
+            "minecraft:jungle_log",
+            "minecraft:jungle_leaves",
+            "minecraft:vine"
+          ]
+        },
+        {
+          "id": "bladeren",
+          "soort": "tag",
+          "min": 12,
+          "tag": "minecraft:leaves"
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "reuzenschildpad": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "gras",
+          "soort": "blok",
+          "min": 20,
+          "blokken": [
+            "minecraft:grass_block",
+            "minecraft:short_grass",
+            "minecraft:tall_grass"
+          ]
+        },
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:dead_bush",
+        "minecraft:acacia_sapling",
+        "minecraft:dandelion"
+      ],
+      "speeltje": "bal",
+      "vrienden": [
+        "*"
+      ],
+      "taken": []
+    },
+    "slang": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:beef",
+        "minecraft:porkchop",
+        "minecraft:mutton",
+        "minecraft:chicken"
+      ],
+      "eisen": [
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        },
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "glijbaan",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "hoornkikker": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "mos",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:moss_carpet"
+          ]
+        },
+        {
+          "id": "waterbeetje",
+          "soort": "water",
+          "min": 6
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "kraaghagedis": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:red_sand",
+        "minecraft:birch_sapling",
+        "minecraft:sweet_berries"
+      ],
+      "speeltje": "glijbaan",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "gifkikker": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "mos",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:moss_carpet"
+          ]
+        },
+        {
+          "id": "varens",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:fern",
+            "minecraft:large_fern"
+          ]
+        },
+        {
+          "id": "waterbeetje",
+          "soort": "water",
+          "min": 6
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [
+        "gifkikker"
+      ],
+      "taken": [],
+      "terrarium": true
+    },
+    "baardagaam": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:red_sand",
+        "minecraft:birch_sapling",
+        "minecraft:sweet_berries"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "mier": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:oak_leaves",
+        "minecraft:birch_leaves",
+        "minecraft:jungle_leaves",
+        "minecraft:apple"
+      ],
+      "eisen": [
+        {
+          "id": "aarde",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:rooted_dirt",
+            "minecraft:podzol"
+          ]
+        },
+        {
+          "id": "bladeren",
+          "soort": "tag",
+          "min": 12,
+          "tag": "minecraft:leaves"
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "glijbaan",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "springspin": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "bladeren",
+          "soort": "tag",
+          "min": 12,
+          "tag": "minecraft:leaves"
+        },
+        {
+          "id": "varens",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:fern",
+            "minecraft:large_fern"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "wandelende_tak": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:oak_leaves",
+        "minecraft:birch_leaves",
+        "minecraft:jungle_leaves",
+        "minecraft:apple"
+      ],
+      "eisen": [
+        {
+          "id": "bladeren",
+          "soort": "tag",
+          "min": 12,
+          "tag": "minecraft:leaves"
+        },
+        {
+          "id": "bomen",
+          "soort": "tag",
+          "min": 6,
+          "tag": "minecraft:logs"
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "mestkever": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:wheat",
+        "minecraft:hay_block",
+        "minecraft:apple"
+      ],
+      "eisen": [
+        {
+          "id": "aarde",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:rooted_dirt",
+            "minecraft:podzol"
+          ]
+        },
+        {
+          "id": "gras",
+          "soort": "blok",
+          "min": 20,
+          "blokken": [
+            "minecraft:grass_block",
+            "minecraft:short_grass",
+            "minecraft:tall_grass"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:dead_bush",
+        "minecraft:acacia_sapling",
+        "minecraft:dandelion"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "slak": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "mos",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:moss_carpet"
+          ]
+        },
+        {
+          "id": "varens",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:fern",
+            "minecraft:large_fern"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "glijbaan",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "vogelspin": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "aarde",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:rooted_dirt",
+            "minecraft:podzol"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "krabboom",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "hommel": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "bloemen",
+          "soort": "tag",
+          "min": 6,
+          "tag": "minecraft:small_flowers"
+        },
+        {
+          "id": "gras",
+          "soort": "blok",
+          "min": 20,
+          "blokken": [
+            "minecraft:grass_block",
+            "minecraft:short_grass",
+            "minecraft:tall_grass"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "guhs:pluisveertje",
+        "minecraft:feather",
+        "minecraft:dandelion"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [
+        "planten"
+      ],
+      "terrarium": true
+    },
+    "kiwi": {
+      "klasse": "zeldzaam",
+      "prijs": 300,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "varens",
+          "soort": "blok",
+          "min": 4,
+          "blokken": [
+            "minecraft:fern",
+            "minecraft:large_fern"
+          ]
+        },
+        {
+          "id": "aarde",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:rooted_dirt",
+            "minecraft:podzol"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "guhs:pluisveertje",
+        "minecraft:feather",
+        "minecraft:dandelion"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": []
+    },
+    "schubdier": {
+      "klasse": "zeldzaam",
+      "prijs": 300,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "aarde",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:rooted_dirt",
+            "minecraft:podzol"
+          ]
+        },
+        {
+          "id": "holletje",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:rooted_dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:mud"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": []
+    },
+    "spookdiertje": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "jungle",
+          "soort": "blok",
+          "min": 8,
+          "blokken": [
+            "minecraft:jungle_log",
+            "minecraft:jungle_leaves",
+            "minecraft:vine"
+          ]
+        },
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "plompe_lori": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "jungle",
+          "soort": "blok",
+          "min": 8,
+          "blokken": [
+            "minecraft:jungle_log",
+            "minecraft:jungle_leaves",
+            "minecraft:vine"
+          ]
+        },
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [
+        "spookdiertje",
+        "galago"
+      ],
+      "taken": []
+    },
+    "fruitvleermuis": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "bomen",
+          "soort": "tag",
+          "min": 6,
+          "tag": "minecraft:logs"
+        },
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:glow_berries",
+        "minecraft:glow_lichen",
+        "minecraft:glowstone_dust"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": []
+    },
+    "galago": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "bomen",
+          "soort": "tag",
+          "min": 6,
+          "tag": "minecraft:logs"
+        },
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:cocoa_beans",
+        "minecraft:vine",
+        "minecraft:glow_berries"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [
+        "plompe_lori"
+      ],
+      "taken": []
+    },
+    "suikereekhoorn": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "minecraft:glow_berries",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "bomen",
+          "soort": "tag",
+          "min": 6,
+          "tag": "minecraft:logs"
+        },
+        {
+          "id": "bladeren",
+          "soort": "tag",
+          "min": 12,
+          "tag": "minecraft:leaves"
+        }
+      ],
+      "cadeaus": [
+        "minecraft:stick",
+        "minecraft:sweet_berries",
+        "minecraft:brown_mushroom",
+        "minecraft:poppy"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": []
+    },
+    "fennek": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "minecraft:sweet_berries"
+      ],
+      "eisen": [
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        },
+        {
+          "id": "holletje",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:rooted_dirt",
+            "minecraft:coarse_dirt",
+            "minecraft:mud"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:red_sand",
+        "minecraft:birch_sapling",
+        "minecraft:sweet_berries"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": []
+    },
+    "zeepaardje": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "zeegras",
+          "soort": "blok",
+          "min": 6,
+          "blokken": [
+            "minecraft:seagrass",
+            "minecraft:tall_seagrass",
+            "minecraft:kelp",
+            "minecraft:kelp_plant"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "pijlstaartrog": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "waterveel",
+          "soort": "water",
+          "min": 60
+        },
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [
+        "zeeschildpad"
+      ],
+      "taken": [],
+      "water_nodig": 40
+    },
+    "zeeschildpad": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "waterveel",
+          "soort": "water",
+          "min": 60
+        },
+        {
+          "id": "zeegras",
+          "soort": "blok",
+          "min": 6,
+          "blokken": [
+            "minecraft:seagrass",
+            "minecraft:tall_seagrass",
+            "minecraft:kelp",
+            "minecraft:kelp_plant"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [
+        "pijlstaartrog"
+      ],
+      "taken": [],
+      "water_nodig": 40
+    },
+    "clownvis": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "zeegras",
+          "soort": "blok",
+          "min": 6,
+          "blokken": [
+            "minecraft:seagrass",
+            "minecraft:tall_seagrass",
+            "minecraft:kelp",
+            "minecraft:kelp_plant"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "kwal": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:glow_berries",
+        "minecraft:glow_lichen",
+        "minecraft:glowstone_dust"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "kogelvis": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "zeegras",
+          "soort": "blok",
+          "min": 6,
+          "blokken": [
+            "minecraft:seagrass",
+            "minecraft:tall_seagrass",
+            "minecraft:kelp",
+            "minecraft:kelp_plant"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "zeester": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "glijbaan",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "babyhaai": {
+      "klasse": "zeldzaam",
+      "prijs": 300,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "waterveel",
+          "soort": "water",
+          "min": 60
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "water_nodig": 40
+    },
+    "regenboogvis": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:seagrass",
+        "minecraft:kelp",
+        "minecraft:melon_slice"
+      ],
+      "eisen": [
+        {
+          "id": "zeegras",
+          "soort": "blok",
+          "min": 6,
+          "blokken": [
+            "minecraft:seagrass",
+            "minecraft:tall_seagrass",
+            "minecraft:kelp",
+            "minecraft:kelp_plant"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "lantaarnvisje": {
+      "klasse": "middel",
+      "prijs": 175,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:glow_berries",
+        "minecraft:glow_lichen",
+        "minecraft:glowstone_dust"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "dumbo_octopus": {
+      "klasse": "zeldzaam",
+      "prijs": 300,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "donker",
+          "soort": "blok",
+          "min": 3,
+          "blokken": [
+            "minecraft:moss_block",
+            "minecraft:glow_lichen",
+            "minecraft:cave_vines",
+            "minecraft:cave_vines_plant",
+            "minecraft:hanging_roots"
+          ]
+        },
+        {
+          "id": "rots",
+          "soort": "blok",
+          "min": 10,
+          "blokken": [
+            "minecraft:stone",
+            "minecraft:andesite",
+            "minecraft:granite",
+            "minecraft:diorite",
+            "minecraft:cobblestone",
+            "minecraft:mossy_cobblestone",
+            "minecraft:tuff",
+            "minecraft:calcite"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "minecraft:nautilus_shell",
+        "minecraft:kelp",
+        "minecraft:prismarine_shard"
+      ],
+      "speeltje": "bal",
+      "vrienden": [],
+      "taken": [],
+      "terrarium": true
+    },
+    "pelikaan": {
+      "klasse": "gewoon",
+      "prijs": 100,
+      "voer": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:tropical_fish"
+      ],
+      "eisen": [
+        {
+          "id": "water",
+          "soort": "water",
+          "min": 20
+        },
+        {
+          "id": "zand",
+          "soort": "blok",
+          "min": 12,
+          "blokken": [
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:suspicious_sand"
+          ]
+        }
+      ],
+      "cadeaus": [
+        "guhs:pluisveertje",
+        "minecraft:feather",
+        "minecraft:dandelion"
+      ],
+      "speeltje": "schommel",
+      "vrienden": [
+        "flamingo"
+      ],
+      "taken": []
     }
   }
 }

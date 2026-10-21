@@ -79,7 +79,10 @@ public final class SafariClient {
                     state.addGeckolibData(MODEL, geo(g) ? g : "");
                     String t = kies(soort, variant, SafariClient::textuur);
                     // round 3: asleep (at night or a nap) with its eyes shut, when the species has a _slaap texture
-                    String gekozen = !textuur(t) ? "" : dier.slaapt() && textuur(t + "_slaap") ? t + "_slaap" : t;
+                    // round 4 (L4): its own colour (the chameleon, the poison dart frog: s[_v]_<kleur>.png), awake or asleep
+                    String kleur = dier.kleur(), gekleurd = t + "_" + kleur;
+                    String gekozen = !textuur(t) ? "" : !kleur.isEmpty() && textuur(gekleurd) ? gekleurd
+                            : dier.slaapt() && textuur(t + "_slaap") ? t + "_slaap" : t;
                     state.addGeckolibData(TEXTUUR, gekozen);
                     ParkData.Soort info = ParkData.get().soort(soort);
                     boolean kleineBaby = variant.equals("baby") && !g.endsWith("_baby");

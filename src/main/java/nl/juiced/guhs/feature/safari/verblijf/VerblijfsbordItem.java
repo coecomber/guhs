@@ -2,6 +2,8 @@ package nl.juiced.guhs.feature.safari.verblijf;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -54,14 +56,22 @@ public class VerblijfsbordItem extends BlockItem {
     @Override
     public Component getName(ItemStack stack) {
         String s = soort(stack);
-        return s.isEmpty() ? super.getName(stack) : Component.translatable("item.guhs.safari_verblijfsbord.met", naam(s));
+        return s.isEmpty() ? super.getName(stack)
+                : Component.translatable(terrarium(s) ? "item.guhs.safari_verblijfsbord.terrarium_met" : "item.guhs.safari_verblijfsbord.met", naam(s));
+    }
+
+    /** Round 4 (L4): is this species' board a terrariumbord (a glass tank at home)? */
+    public static boolean terrarium(String soort) {
+        VerblijfData.Dier d = VerblijfData.dier(soort);
+        return d != null && d.terrarium();
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         String s = soort(stack);
-        tooltip.accept(Component.translatable(s.isEmpty() ? "item.guhs.safari_verblijfsbord.leeg" : "item.guhs.safari_verblijfsbord.lore")
+        tooltip.accept(Component.translatable(s.isEmpty() ? "item.guhs.safari_verblijfsbord.leeg"
+                        : terrarium(s) ? "item.guhs.safari_verblijfsbord.terrarium_lore" : "item.guhs.safari_verblijfsbord.lore")
                 .withStyle(ChatFormatting.GRAY));
     }
 
@@ -78,7 +88,7 @@ public class VerblijfsbordItem extends BlockItem {
                 p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.niet_in_park").withStyle(ChatFormatting.RED));
                 return InteractionResult.FAIL;
             }
-            if (d.waterNodig() > 0) {
+            if (d.waterNodig() > 0 && !d.terrarium()) {
                 int water = water(level, context.getClickedPos(), VerblijfsbordBlockEntity.START_STRAAL);
                 if (water < d.waterNodig()) {
                     p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.water_nodig", naam(soort), d.waterNodig()).withStyle(ChatFormatting.RED));
@@ -89,6 +99,18 @@ public class VerblijfsbordItem extends BlockItem {
             return InteractionResult.FAIL;
         }
         return super.place(context);
+    }
+
+    /** Round 4 (L4): a small Kriebelhuis creature's board places a terrarium (a glass tank) instead of the sign. */
+    @Nullable
+    @Override
+    protected net.minecraft.world.level.block.state.BlockState getPlacementState(BlockPlaceContext context) {
+        VerblijfData.Dier d = VerblijfData.dier(soort(context.getItemInHand()));
+        if (d != null && d.terrarium()) {
+            net.minecraft.world.level.block.state.BlockState s = VerblijfFeature.TERRARIUM.get().getStateForPlacement(context);
+            return s != null && canPlace(context, s) ? s : null;
+        }
+        return super.getPlacementState(context);
     }
 
     /** Water blocks in the (default) home around p. */

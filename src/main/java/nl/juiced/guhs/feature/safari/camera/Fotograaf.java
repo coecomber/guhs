@@ -70,7 +70,8 @@ public final class Fotograaf {
         IN_BEELD.set(List.of());
         long dag = Klok.dag();
         CompoundTag tag = f.tag(dag, p.getGameProfile().name());
-        int was = SafariSpeler.registreerFoto(p, f.soort(), f.sterren(), tag);
+        // round 4 (L4): a group counts as one dex species (a sea urchin goes in the dex as the starfish group)
+        int was = SafariSpeler.registreerFoto(p, ParkData.get().dexSoort(f.soort()), f.sterren(), tag);
         boolean vroeg = SafariSpeler.vlag(p, VROEGE_VOGEL);
         if (vroeg) {
             SafariSpeler.zetVlag(p, VROEGE_VOGEL, false);
@@ -102,6 +103,12 @@ public final class Fotograaf {
     }
 
     /** What a camera at {@code oog} looking along {@code richting} sees (null: no safari animal in the picture). */
+    /** Round 4 (L4): a decoration (the anemone) is never the subject of a photo. */
+    private static boolean decor(SafariDier d) {
+        ParkData.Soort s = ParkData.get().soort(d.soort());
+        return s != null && s.decor();
+    }
+
     @Nullable
     public static Foto kijk(ServerLevel level, Vec3 oog, Vec3 richting, boolean zoom) {
         double ver = zoom ? VER_ZOOM : VER_SNEL, half = zoom ? HALF_ZOOM : HALF_SNEL;
@@ -111,7 +118,7 @@ public final class Fotograaf {
         SafariDier beste = null;
         double besteHoek = Double.MAX_VALUE;
         int[] besteZicht = null;
-        for (SafariDier d : level.getEntitiesOfClass(SafariDier.class, doos, d -> !d.soort().isEmpty() && d.isAlive())) {
+        for (SafariDier d : level.getEntitiesOfClass(SafariDier.class, doos, d -> !d.soort().isEmpty() && d.isAlive() && !decor(d))) {
             Vec3 m = d.getBoundingBox().getCenter();
             double afstand = m.distanceTo(oog);
             if (afstand > ver || afstand < 0.5) {

@@ -41,6 +41,8 @@ NPCS = {
 }
 for _z in ZONES:
     NPCS[f"safari_expert_{_z}"] = (f"Expert {ZONE_NAAM[_z]}",) + ZONE_KLEUR[_z][0]
+# round 4 (L4): the Kriebelhuis badge colour (the ninth expert's look comes from kriebel_expert)
+KRIEBEL_BADGE = (120, 190, 70)
 
 # test round 3 (J3): the ijskraam, the kampvuuravond, the kijk-guhs, the penguin parade and the message budget
 J3_TEKSTEN = {
@@ -135,6 +137,12 @@ TEKSTEN = {
     "gui.guhs.safari.expert.australie.nog": "G'day, njeg mate! Je hebt %1$s van de %2$s outback-soorten gekiekt. Nog %3$s te gaan, no worries, vads!",
     "gui.guhs.safari.expert.australie.al": "Strewth, wat een vahoege outback-kenner! %1$s van de %2$s soorten. Good on ya, mate!",
     "gui.guhs.safari.expert.australie.beloning": "Crikey! Alle soorten van %s in de pocket! Hier, mate: je badge, een schilderij en 100 Safarimunten. No worries, njeg!",
+    # round 4 (L4): the ninth expert, Professor Kriebelguh of the Kriebelhuis (lab coat, magnifying glass)
+    "entity.guhs.guh_npc.safari_expert_kriebelhuis": "Professor Kriebelguh",
+    "item.guhs.safari_badge_kriebelhuis": "Zonebadge: Het Kriebelhuis",
+    "gui.guhs.safari.expert.kriebelhuis.nog": "Ahem! Professor Kriebelguh, kriebelkenner. *tuurt door vergrootglas* Je hebt %1$s van de %2$s Kriebelhuis-soorten gefotografeerd. Nog %3$s te gaan! Kijk ook in de Nachtzaal, daar zijn ze overdag wakker, njeg.",
+    "gui.guhs.safari.expert.kriebelhuis.al": "*tuurt door vergrootglas* Ah, een echte kriebelkenner! Al %1$s van de %2$s soorten. Zelfs de wandelende tak gevonden? Vahoeg!",
+    "gui.guhs.safari.expert.kriebelhuis.beloning": "*laat vergrootglas vallen* Alle soorten van %s in je dex?! Fascinerend! Hier is je zonebadge en 100 Safarimunten. Ik ga het meteen in mijn schriftje zetten, njeg.",
     # --- aaihoek ---
     "gui.guhs.safari.aaihoek.hint": "%1$s: %2$s",
     "gui.guhs.safari.aaihoek.voer.wortel": "iets oranjes en knapperigs",
@@ -334,6 +342,34 @@ IJSJES = {
 }
 
 
+def kriebel_expert(h):
+    """Round 4 (L4): Professor Kriebelguh, the Kriebelhuis expert: the sitting guh in a white lab coat with a ladybird pin,
+    round glasses on his nose and a big magnifying glass (a model of its own, SittingGuhRenderers.NPC_MODELEN), and his
+    zone badge."""
+    from features import beroepen_tex as bt
+    H, B = [0, 13, 0], [0, 12, -4]
+
+    def stippen(block):
+        for (x, y) in ((10, 10), (20, 9), (14, 19), (22, 20), (8, 21)):
+            block[y - 2:y + 2, x - 2:x + 2, :3] = (30, 24, 28)
+        block[:, 15:17, :3] = (30, 24, 28)
+
+    bt._npc(h, "safari_expert_kriebelhuis", 0.30, 0.12, 1.08, {
+        "kriebel_jas": (("body", B), [([-5.4, 1.8, -4.5], [10.8, 10.2, 1.0], "jas", 0), ([-5.4, 1.8, -4.5], [1.2, 10.2, 9.0], "jas", 0),
+                                      ([4.2, 1.8, -4.5], [1.2, 10.2, 9.0], "jas", 0), ([-1.0, 9.6, -4.8], [2.0, 2.0, 0.4], "kraag", 0)]),
+        "kriebel_speld": (("body", B), [([-3.6, 7.6, -4.9], [2.2, 1.8, 0.5], "lieveheer", 0)]),
+        "kriebel_bril": (("head", H), [([-4.6, 18.6, -8.2], [3.4, 3.0, 0.5], "brilrand", 0), ([1.2, 18.6, -8.2], [3.4, 3.0, 0.5], "brilrand", 0),
+                                       ([-1.2, 19.8, -8.2], [2.4, 0.6, 0.4], "brilrand", 0)]),
+        "kriebel_loep": (("arm_right", [-3.5, 10, -4]), [([-7.4, 9.0, -9.6], [5.6, 5.6, 0.8], "loeprand", 0),
+                                                          ([-6.8, 9.6, -9.8], [4.4, 4.4, 0.4], "glas", 0),
+                                                          ([-5.0, 5.2, -9.4], [0.9, 3.8, 0.9], "handvat", 0)]),
+    }, {"jas": ((246, 248, 246), 3, None), "kraag": ((236, 238, 240), 3, None), "lieveheer": ((214, 40, 44), 6, stippen),
+        "brilrand": ((50, 40, 46), 4, None), "loeprand": ((214, 170, 60), 6, None), "glas": ((186, 228, 250), 6, None),
+        "handvat": ((120, 70, 40), 6, None)}, 2916)
+    h.save(_badge(KRIEBEL_BADGE), "item", "safari_badge_kriebelhuis.png")
+    h.item_model("safari_badge_kriebelhuis")
+
+
 def build(h):
     for k, v in TEKSTEN.items():
         h.NL[k] = v
@@ -354,6 +390,7 @@ def build(h):
         h.save(_badge(ZONE_KLEUR[z][1]), "item", f"safari_badge_{z}.png")
         h.item_model(f"safari_badge_{z}")
     h.w(f"{h.D}/safari/winkel.json", WINKEL)
+    kriebel_expert(h)
 
 
 # --- direct mode -----------------------------------------------------------------------------------------------------

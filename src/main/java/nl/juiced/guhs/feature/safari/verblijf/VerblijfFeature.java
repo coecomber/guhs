@@ -61,6 +61,13 @@ public final class VerblijfFeature {
             p -> new VerblijfsbordItem(BORD.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix().stacksTo(16));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VerblijfsbordBlockEntity>> BORD_BE = BLOCK_ENTITIES.register("safari_verblijfsbord",
             () -> new BlockEntityType<>(VerblijfsbordBlockEntity::new, BORD.get()));
+    /** Round 4 (L4): the terrarium a terrariumbord becomes at home (a glass tank; the little creatures live inside). No item of
+     *  its own: the board item places it, and it drops the board again. */
+    public static final DeferredBlock<VerblijfBlokken.Terrarium> TERRARIUM = BLOCKS.registerBlock("safari_terrarium", VerblijfBlokken.Terrarium::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.0f).sound(SoundType.GLASS).noOcclusion().pushReaction(PushReaction.BLOCK)
+                    .isViewBlocking((s, l, p) -> false).isSuffocating((s, l, p) -> false));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VerblijfsbordBlockEntity>> TERRARIUM_BE = BLOCK_ENTITIES.register("safari_terrarium",
+            () -> new BlockEntityType<>((pos, state) -> new VerblijfsbordBlockEntity(VerblijfFeature.TERRARIUM_BE.get(), pos, state), TERRARIUM.get()));
 
     public static final DeferredBlock<VerblijfBlokken.Bus> BUS = BLOCKS.registerBlock("safari_ooievaarsbus", VerblijfBlokken.Bus::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(1.5f).sound(SoundType.WOOD).noOcclusion());

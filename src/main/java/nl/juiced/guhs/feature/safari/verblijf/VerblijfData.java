@@ -33,8 +33,10 @@ public final class VerblijfData {
     public record Eis(String id, String soort, List<String> blokken, String tag, int min) {
     }
 
+    /** {@code terrarium} (round 4, L4): a small Kriebelhuis creature: its board is a terrariumbord, a glass tank at home. */
     public record Dier(String soort, String klasse, int prijs, List<String> voer, List<Eis> eisen, List<String> cadeaus, String speeltje,
-                       List<String> vrienden, List<String> taken, boolean rijdier, boolean ei, boolean bezorger, int waterNodig) {
+                       List<String> vrienden, List<String> taken, boolean rijdier, boolean ei, boolean bezorger, int waterNodig,
+                       boolean terrarium) {
         /** Is {@code ander} a friend of this species? */
         public boolean vriend(String ander) {
             return !ander.equals(soort) && (vrienden.contains("*") || vrienden.contains(ander));
@@ -90,7 +92,7 @@ public final class VerblijfData {
                 uit.put(e.getKey(), new Dier(e.getKey(), o.get("klasse").getAsString(), o.get("prijs").getAsInt(), lijst(o.getAsJsonArray("voer")),
                         List.copyOf(eisen), lijst(o.getAsJsonArray("cadeaus")), o.get("speeltje").getAsString(), lijst(o.getAsJsonArray("vrienden")),
                         lijst(o.getAsJsonArray("taken")), bool(o, "rijdier"), bool(o, "ei"), bool(o, "bezorger"),
-                        o.has("water_nodig") ? o.get("water_nodig").getAsInt() : 0));
+                        o.has("water_nodig") ? o.get("water_nodig").getAsInt() : 0, bool(o, "terrarium")));
             }
         } catch (Exception ex) {
             LOGGER.error("Safari: can't read {}", BESTAND, ex);

@@ -263,6 +263,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         SAFARI_EXPERT_OERTIJD(1.0f),
         SAFARI_EXPERT_EUROPA(1.0f),
         SAFARI_EXPERT_AUSTRALIE(1.0f),
+        /** 1.6.0 round 4 (L4): the ninth expert, of the Kriebelhuis (lab coat, magnifying glass). */
+        SAFARI_EXPERT_KRIEBELHUIS(1.0f),
         /** 1.6.0 test round 3 (J3): the ijsverkoper of the ijskraam and the storyteller at the evening campfire. */
         SAFARI_IJSVERKOPER(1.0f),
         SAFARI_VERTELLER(1.0f),

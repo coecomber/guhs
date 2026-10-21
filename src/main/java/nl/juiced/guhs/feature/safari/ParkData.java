@@ -42,10 +42,14 @@ public final class ParkData {
     /** The zone names, in the order of the biomes ({@code guhs:safari_<zone>}). */
     public static final List<String> ZONE_NAMEN = List.of("entree", "savanne", "delta", "regenwoud", "bamboe", "ijskust", "oertijd", "europa", "australie");
     public static final String DECOR = "decor";
+    /** Round 4 (L4): the Kriebelhuis, a dex chapter of its own (its homes lie in the lobby's entree cells), and its sections
+     *  in route order. */
+    public static final String KRIEBELHUIS = "kriebelhuis";
+    public static final List<String> KRIEBEL_SECTIES = List.of("terrarium", "kriebelzaal", "nachtzaal", "aquarium");
 
     public record Soort(String naam, String zone, float breedte, float hoogte, float babySchaal, boolean man, Set<String> gedrag,
                         List<String> animaties, double snelheid, boolean glow, Map<String, Float> idleMix, List<String> acties,
-                        float schaal) {
+                        float schaal, String sectie, String dexgroep, List<String> kleuren) {
         public boolean heeft(String g) {
             return gedrag.contains(g);
         }
@@ -70,13 +74,26 @@ public final class ParkData {
             return heeft("boom") && animaties.contains("hang");
         }
 
+        /** Round 4 (L4): a still decoration (the anemone): no AI, not in the dex, no board. */
+        public boolean decor() {
+            return heeft("decor");
+        }
+
+        /** Round 4 (L4): the dex species it counts as (the sea urchins count with the starfish), its own name when alone. */
+        public String dexSoort() {
+            return dexgroep.isEmpty() ? naam : dexgroep;
+        }
+
         /** The extra animations it can play now and then (not idle/walk). */
         public List<String> extra() {
             return animaties.stream().filter(a -> !a.equals("idle") && !a.equals("walk")).toList();
         }
     }
 
-    public record Plek(int id, String soort, String zone, BlockPos centrum, int straal, int volwassenen, int jongen, boolean water, boolean boom) {
+    /** A home. {@code entity} (round 4, L4): not a safari animal but another guhs entity type (the koi, the kikkerguh...),
+     *  spawned passive and kept in place; "" for the park's own species. */
+    public record Plek(int id, String soort, String zone, BlockPos centrum, int straal, int volwassenen, int jongen, boolean water, boolean boom,
+                       String entity) {
     }
 
     private static volatile ParkData data;
@@ -160,6 +177,21 @@ public final class ParkData {
         return soorten.get(naam);
     }
 
+    /** Round 4 (L4): the dex species a photo of {@code soort} counts as (a group's leader), the species itself otherwise. */
+    public String dexSoort(String soort) {
+        Soort s = soorten.get(soort);
+        return s == null ? soort : s.dexSoort();
+    }
+
+    /** Round 4 (L4): the dex chapters in order: the park's zones, then the Kriebelhuis. */
+    public List<String> dexHoofdstukken() {
+        List<String> uit = new ArrayList<>(zones);
+        if (!uit.contains(KRIEBELHUIS)) {
+            uit.add(KRIEBELHUIS);
+        }
+        return uit;
+    }
+
     // --- loading -------------------------------------------------------------------------------------------------------------
 
     @Nullable
@@ -228,7 +260,7 @@ public final class ParkData {
         } else {
             for (String[] s : FALLBACK_SOORTEN) {
                 soorten.put(s[0], new Soort(s[0], s[1], 0.9f, 1.2f, 0.55f, false, Set.of(), List.of("idle", "walk", "blij", "eet"), 0.2, false, Map.of(),
-                        List.of("rust"), 1f));
+                        List.of("rust"), 1f, "", "", List.of()));
             }
         }
 
@@ -244,7 +276,7 @@ public final class ParkData {
                 }
                 plekken.add(new Plek(id++, o.get("soort").getAsString(), str(o, "zone", ""), c, o.has("straal") ? o.get("straal").getAsInt() : 12,
                         o.has("volwassenen") ? o.get("volwassenen").getAsInt() : 2, o.has("jongen") ? o.get("jongen").getAsInt() : 1,
-                        o.has("water") && o.get("water").getAsBoolean(), o.has("boom") && o.get("boom").getAsBoolean()));
+                        o.has("water") && o.get("water").getAsBoolean(), o.has("boom") && o.get("boom").getAsBoolean(), str(o, "entity", "")));
             }
         } else {
             String[] test = {"leeuw", "olifant", "giraffe", "zebra", "pinguin", "rode_panda"};
@@ -252,7 +284,7 @@ public final class ParkData {
                 double hoek = i * Math.PI * 2 / test.length;
                 BlockPos c = ingang.offset((int) (Math.cos(hoek) * 22), 0, (int) (Math.sin(hoek) * 22) - 30);
                 Soort s = soorten.get(test[i]);
-                plekken.add(new Plek(i, test[i], s == null ? "savanne" : s.zone(), c, 8, 2, 1, false, false));
+                plekken.add(new Plek(i, test[i], s == null ? "savanne" : s.zone(), c, 8, 2, 1, false, false, ""));
             }
         }
         ParkData d = new ParkData(versie, ingang, yaw, plateau, cel, breedte, raster, zones, plekken, soorten);
@@ -289,6 +321,12 @@ public final class ParkData {
                 }
             }
         }
+        List<String> kleuren = new ArrayList<>();
+        if (o.has("kleuren")) {
+            for (JsonElement k : o.getAsJsonArray("kleuren")) {
+                kleuren.add(k.getAsString());
+            }
+        }
         List<String> acties = new ArrayList<>();
         if (o.has("acties")) {
             for (JsonElement a : o.getAsJsonArray("acties")) {
@@ -300,7 +338,8 @@ public final class ParkData {
                 o.has("baby_schaal") ? o.get("baby_schaal").getAsFloat() : 0.55f, o.has("man") && o.get("man").getAsBoolean(),
                 Set.copyOf(gedrag), List.copyOf(anim), o.has("snelheid") ? o.get("snelheid").getAsDouble() : 0.2,
                 o.has("glow") && o.get("glow").getAsBoolean(), Map.copyOf(mix), List.copyOf(acties),
-                o.has("schaal") ? o.get("schaal").getAsFloat() : 1f);   // round 4: giraffe/olifant 1.5x (model + hitbox)
+                o.has("schaal") ? o.get("schaal").getAsFloat() : 1f,    // round 4: giraffe/olifant 1.5x (model + hitbox)
+                str(o, "sectie", ""), str(o, "dexgroep", ""), List.copyOf(kleuren));
     }
 
     @Nullable
