@@ -917,23 +917,19 @@ def _dorp(kruising_cellen):
                     S.set(x + a, G + 6, z + b, PARA[(a + b + i) % 3])
     claim(WX1 - 2, 14, WX2, WZ2 + 3)
 
-    # ---- truck station (NE): roof, platform, benches, sign (the trucks come later as entities) ----
+    # ---- (round 3) the old truck station (NE) is gone: the truck stops at J2's open platform along the route outside the
+    #      village. What stays is a small open plaza with guh chairs, flowers and a signpost to the truck stop. ----
     SX1, SZ1, SX2, SZ2 = 88, 38, 106, 49
     for x in range(SX1, SX2 + 1):
         for z in range(SZ1, SZ2 + 1):
-            S.set(x, G, z, "minecraft:smooth_sandstone" if z > SZ2 - 3 else "minecraft:dirt_path")
+            S.set(x, G, z, "minecraft:smooth_sandstone" if (x + z) % 5 else "minecraft:dirt_path")
             S.air(x, G + 1, z, x, G + 6, z)
             PATHS.add((x, z))
-    for x in range(SX1, SX2 + 1, 6):
-        for z in (SZ1, SZ2):
-            S.fill(x, G + 1, z, x, G + 6, z, LOG)
-    thatch(SX1, SZ1, SX2, SZ2, G + 7, overhang=1)
-    S.fill(SX1 + 1, G + 1, SZ2, SX2 - 1, G + 1, SZ2, slab("minecraft:smooth_sandstone_slab", "top"))
-    for x in range(SX1 + 2, SX2 - 1, 4):
-        S.set(x, G + 1, SZ2 - 1, "guhs:guh_stoel[facing=north]")             # guh chairs on the platform
-    S.fill(SX1 - 2, G + 1, SZ2 + 1, SX1 - 2, G + 3, SZ2 + 1, "minecraft:spruce_fence")
-    S.fill(SX1 - 3, G + 4, SZ2 + 1, SX1 - 1, G + 4, SZ2 + 1, "minecraft:yellow_concrete")
-    S.set(SX1 - 2, G + 5, SZ2 + 1, "minecraft:yellow_concrete")
+    for x in range(SX1 + 2, SX2 - 1, 5):
+        S.set(x, G + 1, SZ1 + 2, "guhs:guh_stoel[facing=south]")
+        S.set(x + 1, G + 1, SZ1 + 2, "minecraft:potted_azure_bluet")
+    S.fill(SX2 - 1, G + 1, SZ2 - 1, SX2 - 1, G + 3, SZ2 - 1, "minecraft:spruce_fence")           # signpost to the truck stop
+    S.set(SX2 - 1, G + 4, SZ2 - 1, "minecraft:yellow_concrete")
     claim(SX1, SZ1, SX2, SZ2)
 
     # ---- aaihoek (E): red barn + four pens (fences 2 high: nothing inside can be climbed over) ----

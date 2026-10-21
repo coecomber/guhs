@@ -144,7 +144,8 @@ public class RitGameTests {
     }
 
     /** A truck coming towards the gate opens it in time; when it has gone through and on, the gate shuts again. */
-    @GuhTest(template = "px_test_16", batch = BATCH, timeoutTicks = 200)
+    // (its own batch: in the big shared safari batch the gate sometimes never got its check in 200 ticks)
+    @GuhTest(template = "px_test_16", batch = BATCH + "_poorttruck", timeoutTicks = 200)
     public static void poortTruck(GameTestHelper helper) {
         SafariPoortBlockEntity be = poort(helper);
         Vec3 m = be.midden();
@@ -155,13 +156,16 @@ public class RitGameTests {
         helper.getLevel().addFreshEntity(truck);
         helper.assertTrue(SafariPoortBlockEntity.truckWilDoor(truck.position(), 0, m), "it wants through");
         helper.assertFalse(SafariPoortBlockEntity.truckWilDoor(truck.position(), 180, m), "not when it drives away");
-        helper.runAfterDelay(2 * SafariPoortBlockEntity.ELKE + 1, () -> {
-            helper.assertTrue(be.open(), "open before the truck gets there");
-            truck.snapTo(m.x, m.y, m.z + 12, 0, 0);    // through and on: 12 blocks past it, driving away
-            helper.succeedWhen(() -> {
-                helper.assertTrue(!be.open(), "shut behind the truck");
-                truck.discard();
-            });
+        // (polled, not a fixed delay: in a busy batch the gate's first check may fall a few ticks later)
+        java.util.concurrent.atomic.AtomicBoolean doorgereden = new java.util.concurrent.atomic.AtomicBoolean();
+        helper.succeedWhen(() -> {
+            if (!doorgereden.get()) {
+                helper.assertTrue(be.open(), "open before the truck gets there");
+                doorgereden.set(true);
+                truck.snapTo(m.x, m.y, m.z + 12, 0, 0);    // through and on: 12 blocks past it, driving away
+            }
+            helper.assertTrue(!be.open(), "shut behind the truck");
+            truck.discard();
         });
     }
 

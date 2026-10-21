@@ -270,6 +270,72 @@ def _dorpsweg(park, lijn, log):
     return nieuw, (0, len(weg) - 2)
 
 
+def ververs_route(park):
+    """(final fix round 3) After the check's repairs (path jumps raised road cells, holes filled) the truck's levels are
+    taken again from the road as it is now: per point the highest standing height of the road cells under the truck's
+    footprint (never a wheel inside the road), smoothed upward only. Bridges keep their deck height (staan finds it)."""
+    s3 = getattr(park, "_s3", None) or {}
+    r = s3.get("route")
+    if not r or not r.get("punten"):
+        return
+    # through every safaripoort exactly in its middle (its posts stand 2 blocks from the middle, the truck is 1.6 wide)
+    n_ = len(r["punten"])
+    for u in r.get("poorten") or []:
+        ox, _, oz = u["pos"]
+        midden = ox + 2.0 if u["as"] == "x" else oz + 2.0
+        for k in range(u["i"] - 7, u["i"] + 8):
+            w = 1.0 if abs(k - u["i"]) <= 3 else max(0.0, 1.0 - (abs(k - u["i"]) - 3) / 4.0)
+            p = r["punten"][k % n_]
+            if u["as"] == "x":
+                p[0] = round(p[0] + w * (midden - p[0]), 2)
+            else:
+                p[2] = round(p[2] + w * (midden - p[2]), 2)
+    # the snapped points may leave the corridor _rijbaan cleared by a few tenths: clear trees and plants (never
+    # structures) in the truck's footprint again, from the road up TRUCK_HOOG
+    for (x, y, z) in [tuple(p[:3]) for p in r["punten"]]:
+        for cx in range(int(math.floor(x - TRUCK_HALF)), int(math.floor(x + TRUCK_HALF)) + 1):
+            for cz in range(int(math.floor(z - TRUCK_HALF)), int(math.floor(z + TRUCK_HALF)) + 1):
+                if not (0 <= cx < W and 0 <= cz < W):
+                    continue
+                ddx = max(cx - x, 0.0, x - (cx + 1))
+                ddz = max(cz - z, 0.0, z - (cz + 1))
+                if ddx * ddx + ddz * ddz >= TRUCK_HALF * TRUCK_HALF:
+                    continue
+                bij_poort = park.hek[cx, cz] and any(
+                    math.hypot(cx + 0.5 - (u["pos"][0] + (2 if u["as"] == "x" else 0.5)),
+                               cz + 0.5 - (u["pos"][2] + (2 if u["as"] == "z" else 0.5))) < 8
+                    for u in r.get("poorten") or [])
+                for yy in range(int(math.ceil(y - 0.01)) - 1, min(H, int(math.ceil(y - 0.01)) + TRUCK_HOOG)):
+                    i = park.v[cx, yy, cz]
+                    if not i:
+                        continue
+                    st = park.pal[i]
+                    if bij_poort and ("fence_gate" in st or ("_log" in st and "axis=y" not in st)):
+                        # a footpath gate (+ its lintel) in the zone fence right beside a safaripoort, on the truck
+                        # road: the safaripoort lets walkers through too, so this little gate goes
+                        park.v[cx, yy, cz] = 0
+                    elif yy > int(math.ceil(y - 0.01)) and any(w in st for w in ("_log", "_leaves", "_wood"))                             and not st.startswith(("minecraft:stripped_", "guhs:")) and not park.hek[cx, cz]:
+                        park.v[cx, yy, cz] = 0
+    nieuw = []
+    for (x, y, z) in [tuple(p[:3]) for p in r["punten"]]:
+        best = None
+        for cx in range(int(math.floor(x - TRUCK_HALF)), int(math.floor(x + TRUCK_HALF)) + 1):
+            for cz in range(int(math.floor(z - TRUCK_HALF)), int(math.floor(z + TRUCK_HALF)) + 1):
+                if not (0 <= cx < W and 0 <= cz < W) or not park.pad[cx, cz]:
+                    continue
+                if math.hypot(cx + 0.5 - x, cz + 0.5 - z) > TRUCK_HALF + 0.3:
+                    continue
+                h = staan(park, cx, cz)
+                best = h if best is None else max(best, h)
+        nieuw.append(float(best if best is not None else y))
+    # smooth upward only (a max-filter then a gentle average that never goes below the max-filtered value)
+    hoog = [max(nieuw[max(0, k - 1):k + 2]) for k in range(len(nieuw))]
+    glad = _glad(hoog, r=1)
+    ys = [max(g, h - 0.25) for g, h in zip(glad, hoog)]
+    for p, y in zip(r["punten"], ys):
+        p[1] = round(y, 2)
+
+
 def truckroute(park, log):
     lijn = _herbemonster(park.route_lijn, 1.5)
     lijn, dorpsdeel = _dorpsweg(park, lijn, log)
@@ -435,6 +501,19 @@ def _perron_op(park, lijn, i, pd, log):
                 cellen.append((a, b, cx, cz))
         if not all(_perron_vrij(park, cx, cz, y) for _, _, cx, cz in cellen):
             continue
+        # (final fix round 3) the road may curve after the stop: no platform cell may come within the truck's reach of
+        # ANY route point near it (the posts stood right on the road a few points further)
+        buur = [lijn[j % len(lijn)] for j in range(i - 40, i + 41)]
+        def _raakt(cx, cz):
+            for qx, qz in buur:
+                ddx = max(cx - qx, 0.0, qx - (cx + 1))
+                ddz = max(cz - qz, 0.0, qz - (cz + 1))
+                if ddx * ddx + ddz * ddz < (TRUCK_HALF + 0.3) ** 2:
+                    return True
+            return False
+        # (only what stands up counts: the floor lies at road level; posts, lamps, chairs and signs stand on it)
+        if any(_raakt(cx, cz) for a_, b_, cx, cz in cellen if b_ in (0, 3) and a_ in (-6, -1, 5) or b_ in (1, 3)):
+            continue
         f_weg = _facing(nx, nz)              # from the road outward
         f_road = _tegen(f_weg)               # toward the road
         langs = _facing(rx, rz)
@@ -467,8 +546,14 @@ def _perron_op(park, lijn, i, pd, log):
         ka = [c for c in cellen if c[0] == 5 and c[1] == 1][0]
         bord(park, ka[2], y + 1, ka[3], ["", "Halte", "Entree", "~ safaritruck ~"], rotation=_rotatie_naar(-nx, -nz))
         # beside it: an old safari jeep (decor) and a little lookout
-        _oude_jeep(park, x + rx * 10 + nx * 4.5, z + rz * 10 + nz * 4.5, rx, rz)
-        _uitkijkje(park, x - rx * 10 + nx * 4.5, z - rz * 10 + nz * 4.5, f_road)
+        for (dx_, bouw_) in ((10, lambda px, pz: _oude_jeep(park, px, pz, rx, rz)),
+                             (-10, lambda px, pz: _uitkijkje(park, px, pz, f_road))):
+            # beside it (only where it stays clear of the road, also where the road curves)
+            for uit_ in (4.5, 6.0, 7.5):
+                px, pz = x + rx * dx_ + nx * uit_, z + rz * dx_ + nz * uit_
+                if all(math.hypot(px - qx, pz - qz) > TRUCK_HALF + 3.5 for qx, qz in buur):
+                    bouw_(px, pz)
+                    break
         log(f"    s3: perron entree bij route-punt {i} ({int(x)},{int(z)}), kant {f_weg}")
         return True
     return False
@@ -635,6 +720,36 @@ def _snap(park, x, z, r=4):
 MAX_KANO = 420     # blocks upstream before the guided trip turns (a trip of a few minutes)
 
 
+def _midden(park, pad, r=0.9, schuif=1.75):
+    """(final fix round 3) Keep the canoe off the banks: a point with a bank or wall block closer than r is moved to the
+    nearest spot (up to `schuif` away) whose whole surroundings within r are open water; points that cannot are kept."""
+    def vrij(x, z):
+        for cx in range(int(math.floor(x - r)), int(math.floor(x + r)) + 1):
+            for cz in range(int(math.floor(z - r)), int(math.floor(z + r)) + 1):
+                ddx = max(cx - x, 0.0, x - (cx + 1))
+                ddz = max(cz - z, 0.0, z - (cz + 1))
+                if ddx * ddx + ddz * ddz < r * r and not _water_ok(park, cx + 0.5, cz + 0.5):
+                    return False
+        return True
+    uit = []
+    for x, z in pad:
+        if vrij(x, z):
+            uit.append((x, z))
+            continue
+        best = None
+        for d in np.arange(0.25, schuif + 0.01, 0.25):
+            for k in range(16):
+                h = 2 * math.pi * k / 16
+                nx_, nz_ = x + math.cos(h) * d, z + math.sin(h) * d
+                if vrij(nx_, nz_):
+                    best = (nx_, nz_)
+                    break
+            if best:
+                break
+        uit.append(best or (x, z))
+    return uit
+
+
 def _vrij_stuk(park, a, b):
     """Every cell between two path points is open water with headroom (no crossing a dam or a bank)."""
     n = int(math.hypot(b[0] - a[0], b[1] - a[1]) * 4) + 1
@@ -680,7 +795,7 @@ def kano(park, log):
             break
     # turn a little before the blocked spot, then back the same way
     pad = pad[:max(10, len(pad) - 12)]
-    pad = _herbemonster(pad, 1.5)
+    pad = _herbemonster(_midden(park, pad), 1.5)
     heen = [[round(x, 2), WATER_Y + 0.6, round(z, 2)] for x, z in pad]
     terug = list(reversed(heen))[1:]
     _steiger(park, sx, sz, plein)
@@ -693,7 +808,7 @@ def _steiger(park, sx, sz, plein):
     dx, dz = plein[0] - sx, plein[2] - sz
     d = math.hypot(dx, dz) or 1
     dx, dz = dx / d, dz / d
-    x, z = sx, sz
+    x, z = sx + dx * 1.6, sz + dz * 1.6          # (final fix round 3: not on the mooring itself, the canoe lies beside it)
     for _ in range(12):
         xi, zi = int(x), int(z)
         if not park.water[xi, zi]:
@@ -779,8 +894,20 @@ def kabelbaan(park, log):
     n_mast = max(1, int(lengte // 36))
     masten = []
     for k in range(1, n_mast + 1):
-        t = k / (n_mast + 1)
-        mx, mz = ax + (bx - ax) * t, az + (bz - az) * t
+        t0 = k / (n_mast + 1)
+        # (final fix round 3: a mast never stands on a path, the truck road or water: a pole on the road blocked the truck
+        #  and made the path-jump repair build dirt ramps up to the mast top under the cable; slide along the line)
+        beste = None
+        for dt in sorted(np.linspace(-0.12, 0.12, 49), key=abs):
+            t = t0 + dt
+            mx, mz = ax + (bx - ax) * t, az + (bz - az) * t
+            if _mast_vrij(park, mx, mz):
+                beste = (mx, mz)
+                break
+        if beste is None:
+            log(f"    s3: kabelbaan: geen vrije mastplek rond t={t0:.2f}, mast overgeslagen")
+            continue
+        mx, mz = beste
         _mast(park, mx, mz, kabel, (nx, nz))
         masten.append([round(mx, 1), round(mz, 1)])
     gondel_y = dek + 1.0
@@ -791,7 +918,8 @@ def kabelbaan(park, log):
             "a": [ax + 0.5, gondel_y, az + 0.5], "b": [bx + 0.5, gondel_y, bz + 0.5]}
 
 
-KABEL_R = 3.5      # half the distance between the two lines (and the radius of the turning loops)
+KABEL_R = 4.5      # half the distance between the two lines (and the radius of the turning loops); 4.5 keeps the
+                   # gondolas (centred under their cable) well clear of the centred 2x2 mast pole
 
 
 def _station(park, x, z, g, dek, kabel, naar, naam):
@@ -799,7 +927,7 @@ def _station(park, x, z, g, dek, kabel, naar, naam):
     its half circle; a ladder up on the far side (away from the line), railings on the outer edge, a roof of slabs on
     posts at the edge, signs and a lantern on the outer edge."""
     ux, uz = naar
-    R = 7
+    R = 8      # (final fix round 3: 8 not 7, the turning loop (KABEL_R 4.5) + the gondola stay clear of the roof posts)
     for dx in range(-R - 1, R + 2):
         for dz in range(-R - 1, R + 2):
             d = math.hypot(dx, dz)
@@ -817,7 +945,7 @@ def _station(park, x, z, g, dek, kabel, naar, naam):
     for k in range(8):
         hoek = 2 * math.pi * k / 8 + math.pi / 8
         lx, lz = int(round(x + math.cos(hoek) * (R - 0.5))), int(round(z + math.sin(hoek) * (R - 0.5)))
-        on_line = (math.cos(hoek) * ux + math.sin(hoek) * uz) > 0.55
+        on_line = (math.cos(hoek) * ux + math.sin(hoek) * uz) > 0.3     # (final fix: well away from both lines)
         for yy in range(int(park.hoogte[lx, lz]) + 1, dek):
             park.set(lx, yy, lz, "minecraft:spruce_log", axis="y")
         onderbouw(park, lx, lz, int(park.hoogte[lx, lz]) + 1)
@@ -857,17 +985,35 @@ def _station(park, x, z, g, dek, kabel, naar, naam):
              rotation=_rotatie_naar(-ux, -uz))
 
 
+def _mast_cellen(mx, mz):
+    """The 2x2 pole of a mast, centred on (mx, mz) (so it stays as far as possible from both lines)."""
+    x0, z0 = int(round(mx)) - 1, int(round(mz)) - 1
+    return [(x0 + dx, z0 + dz) for dx in (0, 1) for dz in (0, 1)]
+
+
+def _mast_vrij(park, mx, mz, marge=2):
+    """No path, road, water, fence or building within `marge` of the pole."""
+    for (cx, cz) in _mast_cellen(mx, mz):
+        for dx in range(-marge, marge + 1):
+            for dz in range(-marge, marge + 1):
+                x, z = cx + dx, cz + dz
+                if not (0 <= x < W and 0 <= z < W):
+                    return False
+                if park.pad[x, z] or park.water[x, z] or park.hek[x, z]:
+                    return False
+    return True
+
+
 def _mast(park, mx, mz, kabel, n):
     """A T-mast between the two lines: a 2x2 log pole from the ground up to the cable, a crossbeam along n on top that
     reaches past both cables (they hang from its ends), a lamp on top."""
     nx, nz = n
-    x0, z0 = int(math.floor(mx)), int(math.floor(mz))
-    for dx in (0, 1):
-        for dz in (0, 1):
-            g = int(park.hoogte[x0 + dx, z0 + dz])
-            onderbouw(park, x0 + dx, z0 + dz, g + 1)
-            for y in range(g + 1, kabel + 2):
-                park.set(x0 + dx, y, z0 + dz, "minecraft:stripped_spruce_log", axis="y")
+    for (cx, cz) in _mast_cellen(mx, mz):
+        g = int(park.hoogte[cx, cz])
+        onderbouw(park, cx, cz, g + 1)
+        for y in range(g + 1, kabel + 2):
+            park.set(cx, y, cz, "minecraft:stripped_spruce_log", axis="y")
+    x0, z0 = _mast_cellen(mx, mz)[0]
     for k in np.linspace(-(KABEL_R + 1.5), KABEL_R + 1.5, 20):
         cx, cz = int(math.floor(mx + nx * k + 0.5)), int(math.floor(mz + nz * k + 0.5))
         park.set(cx, kabel + 1, cz, "minecraft:spruce_planks")
@@ -930,15 +1076,13 @@ def boot(park, zone, log):
               for k in range(48)]
     lus = _herbemonster(punten + [punten[0]], 1.5)[:-1]
     if len(lus) < 30:
-        log(f"    s3: boot {zone}: de lus is te kort ({len(lus)} punten)")
-        return None
+        return boot_rivier(park, zone, log, f"de lus over het open water is te kort ({len(lus)} punten)")
     # every point (and the hull around it) on open water
     for x, z in lus:
         for ox in (-1.5, 0, 1.5):
             for oz in (-1.5, 0, 1.5):
                 if not _boot_water(park, x + ox, z + oz):
-                    log(f"    s3: boot {zone}: de lus raakt de oever bij ({int(x)},{int(z)})")
-                    return None
+                    return boot_rivier(park, zone, log, f"de lus raakt de oever bij ({int(x)},{int(z)})")
     # the stop: the loop point closest to a path; a jetty from the shore toward it
     pd = pad_afstand(park)
     best = None
@@ -961,7 +1105,7 @@ def boot(park, zone, log):
     _, k, sx, sz, r, h = best
     lus = lus[k:] + lus[:k]             # the loop starts at the stop
     x, z = lus[0]
-    _boot_steiger(park, sx, sz, x, z)
+    _boot_steiger(park, sx, sz, x, z, lus)
     log(f"    s3: boot {zone}: lus van {len(lus)} punten ({len(lus) * 1.5:.0f} blokken), steiger bij ({sx},{sz})")
     return {"zone": zone, "punten": [[round(a, 2), WATER_Y + 0.55, round(b, 2)] for a, b in lus], "stap": 1.5,
             "steiger": [sx + 0.5, int(park.hoogte[sx, sz]) + 1.0, sz + 0.5]}
@@ -1016,7 +1160,7 @@ def boot_rivier(park, zone, log, waarom):
         log(f"    s3: boot {zone}: geen plek voor de steiger aan de rivier")
         return None
     _, sx, sz = best
-    _boot_steiger(park, sx, sz, x, z)
+    _boot_steiger(park, sx, sz, x, z, pad)
     heen = [[round(a, 2), WATER_Y + 0.55, round(b, 2)] for a, b in pad]
     terug = list(reversed(heen))[1:-1]
     log(f"    s3: boot {zone}: {waarom}; rivierrit heen en terug ({len(heen) * 1.5:.0f} blokken), steiger bij ({sx},{sz})")
@@ -1024,7 +1168,7 @@ def boot_rivier(park, zone, log, waarom):
             "steiger": [sx + 0.5, int(park.hoogte[sx, sz]) + 1.0, sz + 0.5]}
 
 
-def _boot_steiger(park, sx, sz, x, z):
+def _boot_steiger(park, sx, sz, x, z, punten=()):
     """A plank jetty (3 wide) from the shore cell (sx, sz) to 2.3 blocks before the boat's stop. Its deck lies in the water
     surface (waterlogged bottom slabs, level with the boat's floor), so the 2 blocks above the water stay free for the
     canoe; it keeps clear of the canoe's line itself, and only its end posts (a fence with a lantern) stand up."""
@@ -1048,6 +1192,8 @@ def _boot_steiger(park, sx, sz, x, z):
     ex, ez = int(math.floor(sx + 0.5 + dx * lang)), int(math.floor(sz + 0.5 + dz * lang))
     for a in (-1, 1):
         cx, cz = int(math.floor(ex - dz * a)), int(math.floor(ez + dx * a))
+        if any(math.hypot(cx + 0.5 - bx_, cz + 0.5 - bz_) < 2.2 for bx_, bz_ in punten):
+            continue                    # (final fix round 3: an end post never where the boat passes)
         if park.water[cx, cz] and not bij_kano(cx, cz):
             park.set(cx, WATER_Y, cz, "minecraft:spruce_fence", waterlogged="true")
             park.set(cx, WATER_Y + 1, cz, "minecraft:spruce_fence")
@@ -1166,6 +1312,7 @@ def bouw(park, log=print):
     s3["race"] = racebaan(park, log)
     s3["schemabord"] = schemabord(park, log)
     park._s3 = s3
+    park._s3_ververs = ververs_route
 
 
 def plekken(park, plekken):

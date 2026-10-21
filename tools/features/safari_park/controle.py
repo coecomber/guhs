@@ -69,6 +69,9 @@ def soort(s):
         return "water"
     if n == "lava":
         return "lava"
+    if n == "safaripoort":
+        return "grote_poort"      # the guhs safari gate (4x6 doors): it opens for the truck and for players, so a path
+                                  # and a ride pass it; never a fence gate (verbindingen must not touch its state)
     if n.endswith("_fence_gate"):
         return "poort"
     if n.endswith("_fence"):
@@ -266,7 +269,7 @@ def hekgaten(park, herstel):
     if getattr(park, "hek", None) is None:
         return 0
     kl = np.array([soort(s) for s in park.pal])
-    hekachtig = np.isin(kl, ["hek", "ruit", "muur", "poort"])
+    hekachtig = np.isin(kl, ["hek", "ruit", "muur", "poort", "grote_poort"])
     paal = np.array([s.startswith("minecraft:dark_oak_log") for s in park.pal])
     heeft = np.zeros((W, W), bool)
     for y in range(40, H):
@@ -777,6 +780,8 @@ def padsprongen(park, herstel, max_rondes=8):
     from .terrein import ZONES
     # (the entreedorp lays its own streets and plaza over the old route cells: its paths are its own design)
     m = park.pad & ~park.water
+    if getattr(park, "hek", None) is not None:
+        m &= ~park.hek          # fence/gate-post columns at the road's edge are not path (you walk past them)
     if getattr(park, "zone_vol", None) is not None:
         m &= park.zone_vol != ZONES.index("entree")
     xs, zs = np.nonzero(m)
@@ -811,6 +816,8 @@ def padsprongen(park, herstel, max_rondes=8):
                                  "sand", "red_sand", "mud", "stone_bricks", "cobblestone")
                     or top_hoog.endswith(("_planks", "_slab"))):
                 continue                      # the higher side is a structure, not a path: report only
+            if getattr(park, "hoogte", None) is not None and hh - (int(park.hoogte[hoog_c]) + 1) > 2.01:
+                continue                      # the high side stands on a structure (a mast, a gate): never ramp up to it
             x, z = laag
             doel = int(np.ceil(hh - 1.0))           # new walking height >= hh - 1
             top = int(np.floor(hl)) - 1
@@ -852,7 +859,11 @@ def void(park, herstel):
 
 
 # vehicle clearance boxes: (half width, blocks below the path point, blocks above it)
-_RIT_DOOS = {"route": (1, 0, 3), "kano": (0, 0, 2), "boot": (1, 0, 2), "kabelbaan": (1, 3, 0)}
+_RIT_DOOS = {"route": (1.6, 0, 3), "kano": (0.6, 0, 2), "boot": (1.2, 0, 2), "kabelbaan": (1.2, 0, 5)}
+# (half widths in blocks = the vehicle's real footprint around its path point: the truck TRUCK_HALF 1.6 (zone_s3_rit), the
+#  gondola and the boat ~1.2, the canoe 0.6; a block counts when its square comes closer to the point than that)
+# (kabelbaan: its points are the gondola FLOOR (zone_s3_rit: gondel_y = dek + 1, the cable at dek + 6), so the box is the
+#  gondola body from the floor up to just under the cable; the station deck it stands on is under the box)
 
 
 def _rit_punten(park, naam):
@@ -862,6 +873,13 @@ def _rit_punten(park, naam):
         return []
     if isinstance(d, dict) and d.get("punten"):
         return [tuple(p[:3]) for p in d["punten"]]
+    if isinstance(d, dict) and d.get("routes"):
+        uit = []
+        for r in d["routes"]:                         # the glass-bottom boats (one route per zone)
+            uit += [tuple(p[:3]) for p in r.get("punten", [])]
+        return uit
+    if isinstance(d, dict) and d.get("lus"):
+        return [tuple(p[:3]) for p in d["lus"]]       # the kabelbaan loop (2 lines + turning loops): where gondolas ride
     if isinstance(d, dict) and d.get("a") and d.get("b"):
         a, b = d["a"], d["b"]
         n = max(2, int(np.hypot(b[0] - a[0], b[2] - a[2])))
@@ -889,10 +907,14 @@ def doorgang(park, herstel):
             # the ride's own ground under the point is not in the box; a truck climbs a 1-block bump (smoothed points)
             y0 = int(np.ceil(py - 0.01)) - onder + (1 if naam == "route" else 0)
             y1 = int(np.ceil(py - 0.01)) + boven - 1
-            x0, z0 = int(np.floor(px)), int(np.floor(pz))
             hit = None
-            for x in range(x0 - hb, x0 + hb + 1):
-                for z in range(z0 - hb, z0 + hb + 1):
+            for x in range(int(np.floor(px - hb)), int(np.floor(px + hb)) + 1):
+                for z in range(int(np.floor(pz - hb)), int(np.floor(pz + hb)) + 1):
+                    # distance from the point to the block's square (0 when the point is inside it)
+                    ddx = max(x - px, 0.0, px - (x + 1))
+                    ddz = max(z - pz, 0.0, pz - (z + 1))
+                    if ddx * ddx + ddz * ddz >= hb * hb:
+                        continue
                     for y in range(max(y0, 0), min(y1, H - 1) + 1):
                         if not (0 <= x < W and 0 <= z < W):
                             continue
@@ -945,6 +967,9 @@ def _loop(park, herstel, log=None):
     uit["ingegraven"] = per.pop("_voor", n) if herstel else n
     uit["_ingegraven"] = per
     uit["padsprong"] = padsprongen(park, herstel)
+    if herstel and getattr(park, "_s3", None) and callable(getattr(park, "_s3_ververs", None)):
+        park._s3_ververs(park)          # the truck follows the road as repaired (through the gates' middle); it may
+                                        # clear tree parts in its footprint: the later checks (steun, zweef) tidy up
     uit["void"] = void(park, herstel)
     uit["hekgat"] = hekgaten(park, herstel)
     uit["steun"] = steun(park, herstel)

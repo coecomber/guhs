@@ -28,14 +28,14 @@
      "straal": 3
     },
     {
-     "naam": "toren_australie_318_448_quokka",
+     "naam": "toren_australie_318_448_wombat",
      "pos": [
-      338,
-      60,
-      432
+      302,
+      65,
+      444
      ],
      "soorten": [
-      "quokka"
+      "wombat"
      ],
      "straal": 3
     }
@@ -323,9 +323,9 @@
     {
      "naam": "toren_europa_300_300_egel",
      "pos": [
-      289,
+      310,
       66,
-      278
+      297
      ],
      "soorten": [
       "egel"
@@ -981,9 +981,9 @@
     {
      "naam": "toren_oertijd_422_193_wolharige_neushoorn",
      "pos": [
-      421,
-      73,
-      185
+      422,
+      81,
+      191
      ],
      "soorten": [
       "wolharige_neushoorn"
@@ -1293,6 +1293,70 @@
      "soorten": [
       "giraffe",
       "neushoorn"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_entree_219_584",
+   "zone": "entree",
+   "oog": [
+    219.5,
+    66.6,
+    584.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    219,
+    65,
+    584
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_entree_219_584_geitje",
+     "pos": [
+      230,
+      65,
+      597
+     ],
+     "soorten": [
+      "geitje"
+     ],
+     "straal": 3
+    }
+   ]
+  },
+  {
+   "naam": "kijkhut_entree_222_591",
+   "zone": "entree",
+   "oog": [
+    222.5,
+    66.6,
+    591.5
+   ],
+   "richting": [
+    1.0,
+    0.0
+   ],
+   "stoel": [
+    222,
+    65,
+    591
+   ],
+   "favorieten": [
+    {
+     "naam": "kijkhut_entree_222_591_geitje",
+     "pos": [
+      230,
+      65,
+      597
+     ],
+     "soorten": [
+      "geitje"
      ],
      "straal": 3
     }
