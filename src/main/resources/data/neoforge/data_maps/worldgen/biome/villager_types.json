@@ -62,6 +62,9 @@
     },
     "guhs:wolkenweide": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:beverbeek": {
+      "villager_type": "guhs:guh"
     }
   }
 }

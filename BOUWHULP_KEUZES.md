@@ -108,3 +108,14 @@ Kleine keuzes van de bouwslices, om met de gebruiker door te nemen (doc hoofdstu
   - tunnelboor: diamant, ijzer, redstone, zuiger;
   - ontwerpbureau: papier, blauwe kleurstof, planken, stokjes.
   - (alternatief: duurdere recepten in de tech-tiers)
+- [F10a] All build animals (specht, gibbon, gekko, prieelvogel, octopus, glimworm) already existed as safari species: no new models, only work animations (alternative: separate "bouw" models with tools such as a hammer or a helmet).
+- [F10a] Work animations as `bouw_<naam>` in the species' own animation file: knaag, graaf, sjouw, stamp, duw, pik, klop, klim, plant, staartklap (bever), tik (octopus), wiebel (glimworm). They are not random park actions; soorten.json gets a `bouw` list per species (alternative: also let them play in the park now and then).
+- [F10a] Beverbeek share ~1.2% of the Guhmension surface, like the Bleekwoud (alternative: rarer, ~0.5%).
+- [F10a] Trees: willow = cherry-shaped crown of drooping oak leaves with vines, alder = dark-oak trunk with a small round crown, plus vanilla birches and fallen trees (alternative: our own willow/alder wood sets with their own blocks).
+- [F10a] Brooks: water 1 block below the banks, 1-2 deep, gravel/sand/clay bed; little waterfalls only where the terrain steps (alternative: brooks with their own terrain carving and fixed waterfalls).
+- [F10a] Wild beaver pool in ~1 in 7 brook chunks: pool + dam (logs, mud, stripped logs) on the lower side + lodge with a dive entrance (alternative: as a structure template).
+- [F10a] Paw prints reuse the safari quests' `guhs:pootafdruk` (they light up through the verrekijker) (alternative: a separate Beverbeek block).
+- [F10a] Ranger post: a log cabin with a porch, a woodpile, a gnawed stump and a pond with a mini lodge; spacing 12/5 chunks, only in the Beverbeek. The ranger wears the hoofdranger's texture (alternative: his own outfit, e.g. a waders hat).
+- [F10a] The petting beaver is called "Spaander"; it is made by the ranger's role (1 per post, home = the ranger, radius 7) instead of being in the template; petting = hearts + sound + "blij" + an actionbar line (alternative: a dex bonus or an advancement for petting).
+- [F10a] The ranger "points to the busstation" in words only (Superkompas / reisguh), because there is no bus station structure yet (alternative: a compass target or a waymarker).
+- [F10a] Superkompas icon for the Beverbeek: stripped oak log (alternative: a beaver item/head).

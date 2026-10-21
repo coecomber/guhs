@@ -144,6 +144,7 @@ public final class Features {
         nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenFeature.register(modBus);   // 1.6.0: De Eeuwige Knabbelvelden (payloads + creative inside)
         nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.register(modBus);   // 1.6.0 Op Safari! deel 2: de Bouwhulp (F8 kern)
         nl.juiced.guhs.feature.bouwhulp.GereedschapFeature.register(modBus);   // 1.6.0 deel 2 F9: vormstaf, kwasten, blauwdrukken
+        nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.register(modBus);   // 1.6.0 deel 2 F10a: de Beverbeek (biome, ranger post, aaibever)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

@@ -272,6 +272,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         SAFARI_KRIEBELHUIS_BALIE(1.0f),
         SAFARI_KRIEBELHUIS_WINKEL(1.0f),
         // </safari-lobby>
+        // <beverbeek>
+        /** 1.6.0 deel 2 (F10a): the ranger-guh at the ranger post in the Beverbeek (feature/beverbeek). */
+        BEVERBEEK_RANGER(1.0f),
+        // </beverbeek>
         ;
 
         public final float scale;

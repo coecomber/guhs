@@ -82,6 +82,9 @@
   ],
   "animaties": [
    "blij",
+   "bouw_duw",
+   "bouw_sjouw",
+   "bouw_stamp",
    "eet",
    "idle",
    "rondkijk",
@@ -103,6 +106,11 @@
    "kudde_ren",
    "anim:rondkijk",
    "anim:schud"
+  ],
+  "bouw": [
+   "duw",
+   "sjouw",
+   "stamp"
   ]
  },
  "neushoorn": {
@@ -117,6 +125,8 @@
   "gedrag": [],
   "animaties": [
    "blij",
+   "bouw_duw",
+   "bouw_stamp",
    "eet",
    "idle",
    "rondkijk",
@@ -136,6 +146,10 @@
    "anim:rondkijk",
    "anim:schud",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "duw",
+   "stamp"
   ]
  },
  "kafferbuffel": {
@@ -152,6 +166,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_duw",
+   "bouw_stamp",
    "eet",
    "idle",
    "ren",
@@ -173,6 +189,10 @@
    "anim:rondkijk",
    "anim:schud",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "duw",
+   "stamp"
   ]
  },
  "dikdik": {
@@ -261,6 +281,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_sjouw",
+   "bouw_stamp",
    "eet",
    "idle",
    "ren",
@@ -282,6 +304,10 @@
    "anim:rondkijk",
    "anim:schud",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "sjouw",
+   "stamp"
   ]
  },
  "stokstaartje": {
@@ -299,6 +325,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_sjouw",
    "eet",
    "huppel",
    "idle",
@@ -322,6 +350,10 @@
    "anim:krab",
    "anim:rondkijk",
    "anim:wacht"
+  ],
+  "bouw": [
+   "graaf",
+   "sjouw"
   ]
  },
  "jachtluipaard": {
@@ -473,6 +505,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_pik",
+   "bouw_plant",
    "eet",
    "idle",
    "rondkijk",
@@ -490,6 +524,10 @@
    "zwem",
    "anim:rondkijk",
    "anim:schud"
+  ],
+  "bouw": [
+   "pik",
+   "plant"
   ]
  },
  "capibara": {
@@ -506,6 +544,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_sjouw",
    "eet",
    "huppel",
    "idle",
@@ -526,6 +566,10 @@
    "anim:huppel",
    "anim:krab",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "graaf",
+   "sjouw"
   ]
  },
  "krokodil": {
@@ -643,6 +687,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klim",
+   "bouw_klop",
    "eet",
    "idle",
    "rondkijk",
@@ -659,6 +705,10 @@
    "rust",
    "anim:rondkijk",
    "anim:slinger"
+  ],
+  "bouw": [
+   "klim",
+   "klop"
   ]
  },
  "luiaard": {
@@ -747,6 +797,9 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klim",
+   "bouw_klop",
+   "bouw_sjouw",
    "eet",
    "idle",
    "krab",
@@ -765,6 +818,11 @@
    "anim:krab",
    "anim:rek",
    "anim:rondkijk"
+  ],
+  "bouw": [
+   "klim",
+   "klop",
+   "sjouw"
   ]
  },
  "toekan": {
@@ -782,6 +840,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_pik",
+   "bouw_plant",
    "eet",
    "idle",
    "rondkijk",
@@ -800,6 +860,10 @@
    "anim:rondkijk",
    "anim:schud",
    "anim:vlieg"
+  ],
+  "bouw": [
+   "pik",
+   "plant"
   ]
  },
  "gekko": {
@@ -817,6 +881,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klim",
+   "bouw_klop",
    "eet",
    "idle",
    "klim",
@@ -835,6 +901,10 @@
    "anim:klim",
    "anim:rondkijk",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "klim",
+   "klop"
   ]
  },
  "glimworm": {
@@ -853,6 +923,7 @@
   ],
   "animaties": [
    "blij",
+   "bouw_wiebel",
    "eet",
    "hang",
    "idle",
@@ -870,6 +941,9 @@
    "rust",
    "anim:rondkijk",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "wiebel"
   ]
  },
  "pinguin": {
@@ -887,6 +961,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klop",
+   "bouw_sjouw",
    "buikglij",
    "eet",
    "idle",
@@ -907,6 +983,10 @@
    "zwem",
    "anim:rondkijk",
    "anim:schud"
+  ],
+  "bouw": [
+   "klop",
+   "sjouw"
   ]
  },
  "ijsbeer": {
@@ -1027,6 +1107,7 @@
   ],
   "animaties": [
    "blij",
+   "bouw_tik",
    "eet",
    "idle",
    "rust",
@@ -1043,6 +1124,9 @@
    "rust",
    "anim:schud",
    "anim:zwaai"
+  ],
+  "bouw": [
+   "tik"
   ]
  },
  "sabeltandtijger": {
@@ -1094,6 +1178,9 @@
   ],
   "animaties": [
    "blij",
+   "bouw_duw",
+   "bouw_sjouw",
+   "bouw_stamp",
    "eet",
    "idle",
    "rondkijk",
@@ -1113,6 +1200,11 @@
    "kudde_ren",
    "anim:rondkijk",
    "anim:schud"
+  ],
+  "bouw": [
+   "duw",
+   "sjouw",
+   "stamp"
   ]
  },
  "wolharige_neushoorn": {
@@ -1164,6 +1256,10 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_knaag",
+   "bouw_sjouw",
+   "bouw_staartklap",
    "draag",
    "eet",
    "idle",
@@ -1186,6 +1282,12 @@
    "anim:krab",
    "anim:schud",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "graaf",
+   "knaag",
+   "sjouw",
+   "staartklap"
   ]
  },
  "vuursalamander": {
@@ -1273,6 +1375,9 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_klop",
+   "bouw_sjouw",
    "drijf",
    "eet",
    "huppel",
@@ -1294,6 +1399,11 @@
    "anim:huppel",
    "anim:schelp",
    "anim:schud"
+  ],
+  "bouw": [
+   "graaf",
+   "klop",
+   "sjouw"
   ]
  },
  "das": {
@@ -1312,6 +1422,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_sjouw",
    "eet",
    "huppel",
    "idle",
@@ -1331,6 +1443,10 @@
    "anim:huppel",
    "anim:krab",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "graaf",
+   "sjouw"
   ]
  },
  "edelhert": {
@@ -1422,6 +1538,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klop",
+   "bouw_pik",
    "eet",
    "idle",
    "rondkijk",
@@ -1440,6 +1558,10 @@
    "anim:rondkijk",
    "anim:schud",
    "anim:tik"
+  ],
+  "bouw": [
+   "klop",
+   "pik"
   ]
  },
  "koala": {
@@ -1457,6 +1579,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klim",
+   "bouw_plant",
    "eet",
    "gaap",
    "idle",
@@ -1475,6 +1599,10 @@
    "anim:gaap",
    "anim:rek",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "klim",
+   "plant"
   ]
  },
  "kangoeroe": {
@@ -1491,6 +1619,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_klop",
+   "bouw_sjouw",
    "eet",
    "idle",
    "rondkijk",
@@ -1507,6 +1637,10 @@
    "spring",
    "drink",
    "anim:rondkijk"
+  ],
+  "bouw": [
+   "klop",
+   "sjouw"
   ]
  },
  "wombat": {
@@ -1523,6 +1657,8 @@
   ],
   "animaties": [
    "blij",
+   "bouw_graaf",
+   "bouw_sjouw",
    "eet",
    "huppel",
    "idle",
@@ -1541,6 +1677,10 @@
    "anim:huppel",
    "anim:krab",
    "anim:snuffel"
+  ],
+  "bouw": [
+   "graaf",
+   "sjouw"
   ]
  },
  "quokka": {
@@ -1594,6 +1734,9 @@
   ],
   "animaties": [
    "blij",
+   "bouw_pik",
+   "bouw_plant",
+   "bouw_sjouw",
    "dans",
    "eet",
    "idle",
@@ -1612,6 +1755,11 @@
    "anim:dans",
    "anim:rondkijk",
    "anim:schud"
+  ],
+  "bouw": [
+   "pik",
+   "plant",
+   "sjouw"
   ]
  },
  "gouden_dikdik": {

@@ -1,0 +1,85 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:falling_water"
+        },
+        "probability": 0.0006
+      }
+    ],
+    "minecraft:visual/fog_color": "#d4ece6",
+    "minecraft:visual/sky_color": "#9fd3ea",
+    "minecraft:visual/water_fog_color": "#2f6f7a"
+  },
+  "has_precipitation": true,
+  "temperature": 0.7,
+  "downfall": 0.8,
+  "effects": {
+    "water_color": "#4aa3bf",
+    "foliage_color": "#5fa64a",
+    "dry_foliage_color": "#8a7a4a",
+    "grass_color": "#79b85a"
+  },
+  "creature_spawn_probability": 0.12,
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 3
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": [],
+  "features": [
+    [],
+    [],
+    [
+      "guhs:beverbeek_beek",
+      "guhs:beverbeek_poel"
+    ],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:vahoege_vads_ore"
+    ],
+    [],
+    [],
+    [
+      "guhs:beverbeek_bomen",
+      "minecraft:patch_grass_forest",
+      "minecraft:flower_default",
+      "minecraft:patch_leaf_litter",
+      "minecraft:patch_bush",
+      "minecraft:patch_firefly_bush_near_water",
+      "minecraft:patch_waterlily",
+      "minecraft:patch_sugar_cane",
+      "guhs:beverbeek_sporen"
+    ],
+    []
+  ]
+}
