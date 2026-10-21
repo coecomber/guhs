@@ -228,3 +228,10 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - Register kijkplekken + favorieten.
   - Specials: dome higher + sea lanterns + entrance + iglo walls + east edge closed (ijskust); beverburcht landscape + dassentunnel (europa); soft banks (australie, everywhere).
   - Never their own water/bridge fixes.
+- **Z3 note: the glijbaan points (for J1's pinguin slide loop)** are in `kijkplekken.json`.
+  - The viewpoint is `"glijbaan_ijskust"` (stoel null, so no kijk-guh), with favourites named:
+    - `glijbaan_top`: the platform, where they slide down from;
+    - `glijbaan_bodem`: the foot in the water;
+    - `glijbaan_trap_0` … `glijbaan_trap_n`: the side steps, in order from the bottom up (1 per 2 blocks, snow slabs as half steps).
+  - All of them are for `soorten ["pinguin"]`.
+  - Other ijskust/oertijd viewpoints: `onderwaterkoepel_ijskust` (all-round, chair in the middle), `kijkhut_ijskust_west`, `poolstation_ijskust`, `kijkhut_oertijd` and the towers.
