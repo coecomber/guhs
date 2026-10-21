@@ -143,6 +143,7 @@ public final class Features {
         nl.juiced.guhs.feature.bouwhulp.blokken.BouwBlokken.register(modBus);   // 1.6.0 deel 2 F11: the building blocks + the Bouwen tab
         nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenFeature.register(modBus);   // 1.6.0: De Eeuwige Knabbelvelden (payloads + creative inside)
         nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.register(modBus);   // 1.6.0 Op Safari! deel 2: de Bouwhulp (F8 kern)
+        nl.juiced.guhs.feature.bouwhulp.GereedschapFeature.register(modBus);   // 1.6.0 deel 2 F9: vormstaf, kwasten, blauwdrukken
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -258,6 +259,7 @@ public final class Features {
         nl.juiced.guhs.feature.ringvlucht.RingVluchtFeature.payloads(registrar);   // 1.4.2: the Rookguh-vlucht of the Knabbelring
         nl.juiced.guhs.feature.safari.SafariFeature.payloads(registrar);   // 1.6.0 Op Safari!
         nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.payloads(registrar);   // 1.6.0 deel 2: de Bouwhulp
+        nl.juiced.guhs.feature.bouwhulp.GereedschapFeature.payloads(registrar);   // 1.6.0 deel 2 F9
     }
 
     public static void creative(Consumer<ItemStack> output) {

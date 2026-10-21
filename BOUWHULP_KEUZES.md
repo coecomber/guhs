@@ -57,3 +57,54 @@ Kleine keuzes van de bouwslices, om met de gebruiker door te nemen (doc hoofdstu
 - [F8] **Spookweergave**: het echte blokmodel, doorzichtig en lichtgevend, licht pulserend. Voor de eigenaar is het iets sterker (50%) dan voor anderen (26%). Er worden max 4000 spookblokjes tegelijk getekend (de dichtstbijzijnde). Alternatief: gekleurde doosjes.
 - [F8] **Proefhuisje**: tot F9 de vormen levert, heeft de Vormen-tab een knop "Proefhuisje als project" (een roze guh-huisje van 5×5). Er is ook een dev-commando `/guhs bouwhulp proef`, `... niveau <0-4>` en `... terug`. Het proefhuisje gaat weg zodra F9 de tab vervangt.
 - [F8] **Geluiden**: alleen bestaande vanilla-geluiden (hout plaatsen, levelup, klokje, puffervis voor Pof!). Eigen bouwgeluiden komen pas met F12.
+- [F9] **Handgereedschap koppelen aan een keet**: sluip-klik met een stuk gereedschap op een Bouwkeet. Daarna werkt het op het niveau van die keet: vormen tot 24/64, natuurvormen, bloktekst, en de egaliseerder, verfmachine en tunnelboor. Is de keet niet geladen, dan geldt het laatst geziene niveau. Zonder koppeling is het handwerk. (alternatief: gereedschap werkt alleen binnen x blokken van een keet)
+- [F9] **Eén set instellingen per speler en per gereedschap**. De Vormen- en Daken-tab van de keet gebruiken dezelfde instellingen als de vormstaf. (alternatief: aparte instellingen per keet)
+- [F9] **Vormstaf-bediening**:
+  - klik op een blok: de vorm of het dak staat er als spook, met de voorkant naar jou toe, en het spookpaneel opent;
+  - sluip-klik op een blok: dat blok wordt het wandmateriaal;
+  - sluip-klik in de lucht: het instelscherm;
+  - de modus (vorm, dak of vastleggen) staat in het ronde menu (klik op het midden) en in het scherm;
+  - als je de staf vasthoudt, zie je een spook-voorbeeld van je vorm waar je kijkt (alleen jij).
+  - (alternatief: aparte dakmal als los item)
+- [F9] **Toets voor het ronde menu**: standaard linker Alt, in te stellen bij Opties > Besturing > Guhs. Daarin:
+  - scroll: breedte en diepte;
+  - shift + scroll: hoogte;
+  - ctrl + scroll: wanddikte;
+  - H: hol of gevuld;
+  - toets loslaten: de aangewezen vorm kiezen.
+  - (alternatief: R of V, die bij Het Snuffeleiland al bezet zijn)
+- [F9] **Materiaal kiezen**: in het scherm uit je hotbar of linkerhand, of met de "pipet" (sluip-klik op een blok in de wereld). Een mix telt maximaal 4 blokken (70/20/10, bij 4 blokken 55/25/12/8). Zonder keuze krijgt elke vorm een eigen standaard: pastelbaksteen roze, voor natuurvormen een steen-/aarde-mix, enz. (alternatief: altijd het blok in je linkerhand)
+- [F9] **Holle vormen graven hun binnenkant uit (lucht)**, zodat een holle bol in een heuvel echt hol is. Plekken die naar boven of beneden aan de buitenkant grenzen (vloer en plafond) krijgen het rand-materiaal. (alternatief: binnenkant ongemoeid laten)
+- [F9] **Kwasten**: een klik verft een bolletje met een straal van 0-8 rond het geklikte blok en wordt meteen gebouwd, net als elk spook. Ontbreekt er materiaal, dan blijft het spook staan en opent het paneel. De standaard per kwast:
+  - vervangkwast: "alleen dit soort blok" aan;
+  - patroonkwast: "alleen de buitenkant" aan.
+  - (alternatief: eerst een spook, daarna pas bouwen)
+- [F9] **Dierpatronen**: de kleuren zijn zelf gekozen, en ze gaan open bij een foto van het dier in de safari-dex:
+  - zebra: zwart/wit strepen;
+  - giraffe: bruin/oranje vlakken met witte randen;
+  - luipaard: rozetten;
+  - jachtluipaard: stippen;
+  - pinguïn: zwarte rug, witte buik, oranje pootjes;
+  - panda: wit met zwarte vlekken;
+  - rode panda: oranje/bruine ringen;
+  - sabeltand: oranje met zwarte strepen.
+  - Een niet-kleurbaar blok wordt wol, of de kleursoort van het eerste mixblok.
+  - (alternatief: andere kleuren of patronen)
+- [F9] **Verweerkwast**: mos geeft mossy-varianten en soms een mostapijtje erbovenop, barsten geven cracked-varianten (steen wordt keien), klimop zijn ranken van 1-3 lang aan de zijkanten. De sterkte loopt van 10 tot 100%. (alternatief: alleen mossy/cracked, geen tapijtjes)
+- [F9] **Egaliseerder, verfmachine en tunnelboor zijn handgereedschap**, geen machineblokken. Ze werken pas als ze aan een Zoutkeet of Sauskeet gekoppeld zijn, en zetten eerst een spook neer met paneel. Details:
+  - egaliseerder: straal tot de helft van wat het niveau voor vormen toestaat; ruimt tot 24 blokken boven de grond op, ook bomen;
+  - tunnelboor: tot 64 lang, met lampjes om de 6 blokken; kijk je steil omhoog of omlaag, dan wordt het een schacht.
+  - Het puin gaat via de ongedaan-maken-lijst naar je inventaris, Bank Guh of de grond.
+  - (alternatief: losse machineblokken)
+- [F9] **Eigen blauwdrukken: max 30 per speler.** Vastleggen kan tot de maat van het niveau (16/32/64). Lege plekken binnen een gebouw gaan mee als "uitgraven" (alleen tussen een blok eronder en een blok erboven in dezelfde kolom). Automatisch vastleggen stopt bij natuurlijke grond, bladeren, gras en bloemen. (alternatief: alle lucht in het kader mee)
+- [F9] **Ontwerpbureau**: bladeren door eigen blauwdrukken, de catalogus en de bibliotheek. Print (1 vel papier, gratis in creative) geeft een blauwdruk-item. Dat raakt niet op en verwijst naar het ontwerp: verwijder je het ontwerp, dan doet het item niets meer. Publiceren kan alleen vanuit de Blauwdrukken-tab van een keet (vanaf Sauskeet). (alternatief: blauwdruk-item met het hele ontwerp erin, of publiceren bij het bureau)
+- [F9] **Catalogus**: 25 ontwerpen van Claude, met 3 "meer hier binnenkort"-plekken. De ontwerpen hebben geen maatlimiet: ze zijn uitgezocht en de grootste is ~20 breed. De preview-plaatjes zijn isometrische miniaturen in kaartkleuren, die in het spel zelf getekend worden. Dev-commando: `/guhs bouwgereedschap catalogus` zet ze allemaal neer om te bekijken. (alternatief: vooraf gerenderde png's)
+- [F9] **Giftshop**: de 6 safari-blauwdrukken kosten 80/100/120/90/150/70 munten (maximaal 1 per speler). Ze vervangen het "binnenkort"-aanbod. (alternatief: andere prijzen of onbeperkt)
+- [F9] **Recepten**:
+  - vormstaf: amethist + 2 stokjes;
+  - kwasten: stokje + witte wol (+ rood en blauw / zwart en wit / mosblok);
+  - egaliseerder: ijzer, zoutkristal, stokjes;
+  - verfmachine: drie kleurstoffen, ijzer, emmer;
+  - tunnelboor: diamant, ijzer, redstone, zuiger;
+  - ontwerpbureau: papier, blauwe kleurstof, planken, stokjes.
+  - (alternatief: duurdere recepten in de tech-tiers)

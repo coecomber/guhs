@@ -242,6 +242,9 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    // 1.6.0: a full compile of the whole tree (safari + bouwhulp) no longer fits the compiler daemon's default heap
+    options.fork = true
+    options.forkOptions.memoryMaximumSize = '3g'
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:white_wool"
+  ],
+  "result": {
+    "id": "guhs:vervangkwast",
+    "count": 1
+  }
+}

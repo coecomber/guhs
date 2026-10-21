@@ -348,6 +348,25 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
   - own blueprints, the catalogue (~25 + placeholders, preview renders), the server library (SavedData, maker name, likes, max 10/player);
   - egaliseerder (lvl 2), verfmachine + tunnelboor (lvl 3).
   - Name: "Ontwerpbureau" (not Tekentafel).
+  - **F9 as built (branch op-safari-f9)**: package `nl.juiced.guhs.feature.bouwhulp` (`GereedschapFeature`, generator `tools/features/bouwhulp_gereedschap.py`, EN `c181`).
+    - `vormen`:
+      - `Vormen.maak(VormInstelling, BouwNiveau)` (21 shapes) and `Daken.maak / Daken.blokken(Dak, b, d, overstek, gevels, mat, gevel, oor)` (zadel/schild/tent/oortjes; stair corners are worked out: `Daken.trapvormen(map)`);
+      - `Familie.van(block)` (vol/trap/plaat/muur by name), `Familie.inVorm(state, nieuwBlok)` (same shape in another material);
+      - `Mix` (1-4 blocks, `kies(pos)` deterministic), `BlokTekst`.
+      - F10 can use these for its templates.
+    - `gereedschap`:
+      - items `Vormstaf`, `Kwast` (4), `Terreinwerk` (egaliseerder/verfmachine/tunnelboor), with the keet link in CUSTOM_DATA (`GereedschapItem.niveau(level, stack)`);
+      - `Kwasten.*` / `Terrein.*` / `Vastleggen.*` return world-spot maps;
+      - `Plaatsen.spook/meteen/opWereld` turn them into ghosts;
+      - per-player settings in `BouwSpelers` (SavedData `guhs:bouwhulp_spelers`, also the own blueprints, max 30);
+      - `Opties` / `Optie` describe the settings for every screen.
+    - `blauwdruk`:
+      - `Blauwdruk` (an ontwerp + name + maker + 48x48 `Voorbeeld` picture), `Bibliotheek` (SavedData `guhs:bouwhulp_bibliotheek`, max 10 per player, thumbs), `Catalogus` (25 designs + 3 placeholders; `Catalogus.SAFARI` = the 6 giftshop ones);
+      - `Blauwdrukken` (the browser, keet tab + bureau; `alsProject(p, level, keet, ontwerp, naam)` puts any ontwerp as the keet's project);
+      - `BlauwdrukItem.van(b) / catalogus(id)`, `OntwerpbureauBlock`.
+    - The keet tabs Vormen / Daken / Blauwdrukken replace F8's stand-ins (`KeetGereedschapTabs`).
+    - Client: `GereedschapClient` (key `key.guhs.vormstaf_menu`, left Alt), `InstelScherm`, `RondMenu`, `VastlegScherm`, `BureauScherm`, `OptieLijst`, `BlauwdrukLijst`.
+    - build.gradle: javac forked with 3 GB (a full compile of the tree ran out of heap).
 - **F11 blokken** (owner: bouwhulp/blokken):
   - vertical slabs + corners, beams & posts (auto-connect), sloped roof parts (½, ¼);
   - guh window frames & shutters, pastel bricks/plaster (16), guh tiles, wallpaper + skirting, plush blocks, stained-glass guh windows + portholes, gutter/chimney/dormer;

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "DI ",
+    "IRI",
+    " IP"
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "guhs:tunnelboor",
+    "count": 1
+  }
+}
