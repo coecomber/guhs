@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:white_wool",
+    "minecraft:black_dye",
+    "minecraft:white_dye"
+  ],
+  "result": {
+    "id": "guhs:patroonkwast",
+    "count": 1
+  }
+}

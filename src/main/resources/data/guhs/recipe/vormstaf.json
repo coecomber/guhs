@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  A",
+    " S ",
+    "S  "
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:vormstaf",
+    "count": 1
+  }
+}

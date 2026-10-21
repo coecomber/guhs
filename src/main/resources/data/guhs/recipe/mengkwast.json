@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:white_wool",
+    "minecraft:red_dye",
+    "minecraft:blue_dye"
+  ],
+  "result": {
+    "id": "guhs:mengkwast",
+    "count": 1
+  }
+}

@@ -85,7 +85,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0: De Eeuwige Knabbelvelden (append only)
             'knabbelvelden',
             # 1.6.0 deel 2: de Bouwhulp (F8 kern; append only)
-            'bouwhulp']
+            'bouwhulp',
+            # 1.6.0 deel 2 F9: vormstaf, kwasten, blauwdrukken (append only)
+            'bouwhulp_gereedschap']
 
 
 def modules():

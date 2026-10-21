@@ -129,6 +129,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.safari.quests.client.SafariQuestsClient.init(modBus);   // 1.6.0 Op Safari! S4: glowing footprints
         nl.juiced.guhs.feature.knabbelvelden.client.KnabbelveldenClient.init(modBus);   // 1.6.0: De Eeuwige Knabbelvelden
         nl.juiced.guhs.feature.bouwhulp.client.BouwhulpClient.init(modBus);   // 1.6.0 deel 2: ghosts, the Bouwkeet
+        nl.juiced.guhs.feature.bouwhulp.client.GereedschapClient.init(modBus);   // 1.6.0 deel 2 F9: tool screens, radial menu, previews
     }
 
     private FeaturesClient() {

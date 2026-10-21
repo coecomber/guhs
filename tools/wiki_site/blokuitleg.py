@@ -1373,6 +1373,23 @@ UITLEG = {
            "volgende kleur: roze, geel, blauw, oranje en paars. Het geeft ook een klein beetje licht.",
         en="Coral that never dies, in or out of water. Right-click it with an empty hand to give it the next colour: "
            "pink, yellow, blue, orange and purple. It also gives off a little light."),
+    "ontwerpbureau": dict(
+        nl="Een tekentafel met een blauw vel erop: de plek voor blauwdrukken. Rechtsklik erop en blader door je eigen "
+           "blauwdrukken, de catalogus (25 kant-en-klare ontwerpen, van guh-huisje tot vuurtoren) en de bibliotheek "
+           "van de server.\n"
+           "\n"
+           "- Print: je krijgt een blauwdruk mee (kost een vel papier). Klik ermee op een blok en het ontwerp staat er "
+           "als spook, waar je ook bent.\n"
+           "- In de bibliotheek geef je duimpjes aan de mooiste ontwerpen.\n"
+           "- Eigen blauwdrukken maak je met de vormstaf (op Vastleggen). Publiceren doe je in een Bouwkeet, vanaf een Sauskeet.",
+        en="A drawing desk with a blue sheet on it: the place for blueprints. Right-click it and browse your own "
+           "blueprints, the catalogue (25 ready designs, from guh cottage to lighthouse) and the server's library.\n"
+           "\n"
+           "- Print: you get a blueprint to take along (costs a sheet of paper). Click a block with it and the design "
+           "stands there as a ghost, wherever you are.\n"
+           "- In the library you give thumbs up to the nicest designs.\n"
+           "- You make your own blueprints with the Shape Wand (set to Capture). Publishing happens in a Building "
+           "Shed, from a Sauce Shed on."),
     "bouwkeet": dict(
         nl="Een geel-roze keetje van 3 bij 3 bij 3 met een kraantje op het dak: hier begint het bouwen. Rechtsklik "
            "erop voor het menu met tabbladen (vormen, daken, blauwdrukken, bouwguhs, materiaal en niveau).\n"

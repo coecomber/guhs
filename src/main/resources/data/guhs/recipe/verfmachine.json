@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RYB",
+    "IKI",
+    " I "
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "Y": "minecraft:yellow_dye",
+    "B": "minecraft:blue_dye",
+    "I": "minecraft:iron_ingot",
+    "K": "minecraft:bucket"
+  },
+  "result": {
+    "id": "guhs:verfmachine",
+    "count": 1
+  }
+}

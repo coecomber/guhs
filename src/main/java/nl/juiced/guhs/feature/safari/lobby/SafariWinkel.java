@@ -158,10 +158,7 @@ public final class SafariWinkel {
 
     /** The fixed offers of the lobby itself. */
     static void registreerVast() {
-        aanbod("blauwdrukken_binnenkort").groep("blauwdrukken").icoon(() -> new ItemStack(Items.MAP))
-                .naam(Component.translatable("gui.guhs.safari.winkel.blauwdrukken"))
-                .uitleg(Component.translatable("gui.guhs.safari.winkel.blauwdrukken.uitleg"))
-                .eis((s, u) -> Component.translatable("gui.guhs.safari.winkel.binnenkort")).registreer();
+        // (the park blueprints: deel 2 F9, GereedschapFeature)
         aanbod("voer_komkommer").groep("voer").icoon(() -> new ItemStack(LobbyItems.KOMKOMMER.get()))
                 .naam(Component.translatable("item.guhs.safari_komkommer")).uitleg(Component.translatable("gui.guhs.safari.winkel.aaihoekvoer"))
                 .prijs(2).lever((p, a) -> geef(p, new ItemStack(LobbyItems.KOMKOMMER.get(), 4))).registreer();

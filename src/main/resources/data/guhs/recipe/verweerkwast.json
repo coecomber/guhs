@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:white_wool",
+    "minecraft:moss_block"
+  ],
+  "result": {
+    "id": "guhs:verweerkwast",
+    "count": 1
+  }
+}
