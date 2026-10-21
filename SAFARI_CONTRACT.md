@@ -257,3 +257,12 @@ Merge order: R3-A first; then J1, J2, J3 (each rebased/merged on the latest op-s
   - Format: `{"dorp": [[x, y, z], ...]}`: block positions in walking order, y = the walking surface (a point may also be `{"x":..,"y":..,"z":..}`). At least ~30 blocks long (the stoet is 20 blocks: tamboer, flag, 6 penguins, 3 dancers, 2 blocks apart), at least 3 wide, no stairs steeper than 1 block per step.
   - The lobby generator writes it. Without the file the old loop `beleving.json` `parade_dorp` is used. The IJskust walk stays fixed (the truck route in the IJskust).
   - Reader: `momenten/ParadeRoute`; walker: `momenten/Parade` (members scripted 2 blocks apart along the walk; guhs tagged `guhs_safari_parade_guh`, penguins `guhs_safari_parade`).
+
+## Ronde 4: lobby + Kriebelhuis build (design: chapter 6 rounds 47-56 + safari-ontwerp/lobby2/ontwerp.md + renders _v2 + lobby2_overzicht_legenda.png)
+- **L1 lobby** (owns zone_entree.py, rewritten to the lobby2 layout; also lobby.json/beleving.json/parade.json writers). It writes **`data/guhs/safari/lobby_aansluiting.json`**:
+  - `{"bus": [x,y,z], "hoofdsteiger": [x,y,z], "kano": [x,y,z], "truckperron": [x,y,z], "parkpoort_voet": [x,y,z], "boot_start": [[x,y,z],...]}`, plus the water connection from the pond to the river;
+  - the truck route and the boat line must connect to these (R4-B2 boat line, J2 truck route).
+- **L2 Kriebelhuis** (owns zone_kriebelhuis.py, a new module, building + the 4 aquarium parts + homes via the plekken hook).
+  - New block ids it may use (L3 makes them): `guhs:terrariumglas`, `guhs:kasglas`, `guhs:mierenboerderij`, `guhs:infobord`, `guhs:warmtelamp`, `guhs:nepkoraal`, `guhs:glimpaddenstoel`, `guhs:sterrenplafond`, `guhs:schorsplaat`, `guhs:glasvloer`.
+- **L3 blocks** (owns those blocks: Java + tools generator) + the weerder test fix (radius steps 24/32/48/64/128).
+- **L4 Kriebelhuis animals** (owns soorten.json entries for the 36 new species, their behaviour, the dex chapter "Kriebelhuis" with subsections + the 9th expert, terrarium boards; plus the guhs critters spawning in the aquarium/vlindertuin/kikkerhoek).
