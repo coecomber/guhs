@@ -58,6 +58,10 @@ TUBE = [(76, 59), (66, 57), (54, 50), (40, 44), (26, 46), (16, 56), (20, 68), (3
 PCX, PCZ, PRX, PRZ = 42, 54, 37, 29          # the pond (L1 digs it; we deepen it around the tube if needed)
 
 _DRAAI_F = ["north", "east", "south", "west"]
+# round 5 (test round 5): adults, young per water species; at least 3 of each, the small fish at least 8
+AANTAL_VIS = {"kwal": (4, 0), "lantaarnvisje": (8, 0), "dumbo_octopus": (2, 1), "kogelvis": (2, 1), "babyhaai": (3, 0),
+              "clownvis": (3, 1), "anemoon": (3, 0), "regenboogvis": (8, 0), "zeeschildpad": (2, 1), "zeepaardje": (3, 1),
+              "pijlstaartrog": (2, 1), "zeester": (3, 0), "zee_egel": (3, 0)}
 
 
 def L_K0(S):
@@ -333,6 +337,7 @@ class Bouwer:
             S.set(HX2 - 6 + i + (1 if i else 0) - (1 if i == 3 else 0), G + 3 + (i % 2), HZ1 + 1, k)
         self.pad(MIDX - 3, HZ2 + 1, MIDX + 3, 96)                                       # gate (L1: on to the square)
         self.doel("kriebelhuis_entreehal", MIDX, G + 1, 84)
+        self.hal_licht(HX1, HZ1, HX2, HZ2)
         # the gate: two pillars, an arch, the sign, a guh with a big magnifying glass on top
         for x in (MIDX - 6, MIDX + 6):
             S.fill(x, G + 1, 95, x + 1, G + 9, 96, "minecraft:spruce_planks")
@@ -360,6 +365,35 @@ class Bouwer:
         for k in range(4):
             S.set(MIDX + 1 - k, G + 10 - k + 1, 96, "minecraft:stripped_dark_oak_wood[axis=y]")
 
+    def lampions(self, x1, z1, x2, z2, y, stap=4, vrij=()):
+        """Hanging lampions (yellow, pink, mint) in a grid under a ceiling at y + 1."""
+        kleuren = ("geel", "roze", "mint")
+        for x in range(x1, x2 + 1, stap):
+            for z in range(z1, z2 + 1, stap):
+                if (x, z) in vrij or not self.S.leeg(x, y, z) or self.S.leeg(x, y + 1, z):
+                    continue
+                self.S.set(x, y, z, f"guhs:lampion_{kleuren[(x // stap + z // stap) % 3]}[hanging=true]")
+
+    def hal_licht(self, HX1, HZ1, HX2, HZ2):
+        """Test round 5: the entreehal was too empty and dark: lampions under the ceiling, glow tiles in a paw trail
+        to the terrarium door, stone guh lanterns, and a cheerful corner with plushies and cushions."""
+        S = self.S
+        self.lampions(HX1 + 2, HZ1 + 2, HX2 - 2, HZ2 - 2, G + 9)
+        for z in range(HZ1 + 3, HZ2 - 1, 4):                                          # glow tiles along the walk
+            for x in (MIDX - 4, MIDX + 4):
+                if S.get(x, G, z).startswith("minecraft:birch_planks"):
+                    S.set(x, G, z, "guhs:glimtegel[fel=true]")
+        for x in range(MIDX + 2, HX2, 3):                                             # a paw trail to the terrarium door
+            S.set(x, G, 81, "guhs:tegel_pootjes")
+        for (x, z) in ((HX1 + 1, HZ1 + 1), (HX2 - 1, HZ1 + 1), (HX1 + 1, HZ2 - 1), (HX2 - 1, HZ2 - 1)):
+            S.set(x, G + 1, z, "guhs:toro[lit=true]")
+        for (x, z, f) in ((HX1 + 2, 90, "east"), (HX1 + 3, 90, "east"), (HX2 - 3, 90, "west"), (HX2 - 2, 90, "west")):
+            S.set(x, G + 1, z, f"guhs:pink_kussen[facing={f}]")
+        for (x, k) in ((116, "knuffel_normal"), (119, "knuffel_mint"), (122, "knuffel_wolk")):
+            S.set(x, G + 3, 75, f"guhs:{k}[facing=south]")
+        S.set(HX1 + 4, G + 1, 88, "guhs:wolkenlamp")
+        S.set(HX2 - 4, G + 1, 88, "guhs:wolkenlamp")
+
     # ==================================================================================================================
     def terrarium_zaal(self):
         S = self.S
@@ -368,16 +402,19 @@ class Bouwer:
         S.fill(TX1, G - 2, TZ1, TX2, G - 1, TZ2, "minecraft:dirt")
         self.box(TX1, G + 1, TZ1, TX2, G + 8, TZ2, "minecraft:terracotta", floor="minecraft:smooth_sandstone")
         S.air(HX2, G + 1, 80, HX2, G + 3, 82)
-        S.fill(HX2, G + 3, 80, HX2, G + 3, 82, "minecraft:white_terracotta")
-        S.air(HX2, G + 1, 80, HX2, G + 2, 82)
+        S.fill(HX2, G + 1, 80, HX2, G + 3, 82, "minecraft:white_terracotta")             # (round 5: no open blocks
+        S.air(HX2, G + 1, 81, HX2, G + 2, 81)                                            # beside the door)
         self.door2(HX2, G + 1, 81, "east", "guhs:guhwaii_palm_deur")
+        S.set(HX2 + 1, G + 1, 79, "guhs:toro[lit=true]")
+        S.set(HX2 + 1, G + 1, 83, "guhs:toro[lit=true]")
         self.sectiebord(HX2 - 1, G + 3, 79, "west", ["", "1", "Terrarium", ""])
         for x in range(TX1 + 1, TX2):
             for z in range(64, 79):
                 S.set(x, G, z, "minecraft:smooth_sandstone" if (x + z) % 4 else "minecraft:sandstone")
                 self.paden.add((x, z))
-        T_N = [(137, "kameleon", "jungle", 1, 1), (146, "reuzenschildpad", "woestijn", 1, 1),
-               (155, "slang", "jungle", 2, 0), (164, "hoornkikker", "jungle", 2, 0)]
+        # (round 5: the north row leaves a 3 wide aisle at x 153..155 to the Kriebelzaal door, visible from the middle)
+        T_N = [(136, "kameleon", "jungle", 1, 1), (145, "reuzenschildpad", "woestijn", 1, 1),
+               (156, "slang", "jungle", 2, 0), (165, "hoornkikker", "jungle", 2, 0)]
         T_S = [(137, "kraaghagedis", "woestijn", 2, 0), (146, "gifkikker", "jungle", 3, 0),
                (155, "baardagaam", "woestijn", 1, 1), (164, None, "water", 0, 0)]
         for (x1, soort, stijl, v, j) in T_N:
@@ -422,11 +459,32 @@ class Bouwer:
             S.set(x + 2, G + 1, 78, "minecraft:potted_fern")
         S.set(TX2 - 2, G + 1, 66, "guhs:park_bankje[facing=west]")
         S.set(TX1 + 2, G + 1, 76, "guhs:park_bankje[facing=east]")
+        self.looproute()
         # the glass kas dome
         self.koepel(155, 71, 21.5, 21.5, G + 8, 13, TX1, TZ1, TX2, TZ2, KASGLAS, rib="minecraft:white_concrete")
         for x in range(TX1 + 8, TX2 - 2, 8):
             self.lantaarnpaal(x, 64)
             self.lantaarnpaal(x, 78)
+
+    def looproute(self):
+        """Round 5: the door to the Kriebelzaal was hidden behind the cases. A paw-tile route from the hall door round the
+        kikkerhoek to the aisle between the north cases (x 153..155) and the door, with little lamps and a sign."""
+        S = self.S
+        TZ1 = TERRARIUM[1]
+        route = [(x, 80) for x in range(135, 146)] + [(145, z) for z in range(79, 61, -1)] +                 [(x, 62) for x in range(146, 155)] + [(154, z) for z in range(61, TZ1, -1)]
+        for (x, z) in route:
+            S.set(x, G, z, "guhs:tegel_pootjes")
+            self.paden.add((x, z))
+        for z in range(TZ1 + 1, 62):                                                   # the aisle stays free and walkable
+            for x in (153, 155):
+                S.set(x, G, z, "minecraft:smooth_sandstone")
+                S.air(x, G + 1, z, x, G + 4, z)
+                self.paden.add((x, z))
+            S.air(154, G + 1, z, 154, G + 4, z)
+        for (x, z) in ((153, 52), (155, 52)):
+            S.set(x, G + 1, z, "guhs:toro[lit=true]")
+        S.set(144, G + 1, 63, "minecraft:birch_sign[rotation=0,waterlogged=false]")
+        self.park.bord_nbt(*S.w(144, G + 1, 63), ["", "Kriebelzaal", "volg de", "pootjes ->"])
 
     def sectiebord(self, x, y, z, facing, regels):
         self.S.set(x, y, z, f"minecraft:oak_wall_sign[facing={facing},waterlogged=false]")
@@ -463,13 +521,13 @@ class Bouwer:
         TZ1 = TERRARIUM[1]
         S.fill(KX1, G - 2, KZ1, KX2, G - 1, KZ2, "minecraft:dirt")
         self.box(KX1, G + 1, KZ1, KX2, G + 8, KZ2, "minecraft:light_gray_terracotta", floor=MOS)
-        S.air(152, G + 1, TZ1, 154, G + 3, TZ1)
-        S.fill(152, G + 3, TZ1, 154, G + 3, TZ1, "minecraft:terracotta")
-        S.set(152, G + 1, TZ1, "minecraft:terracotta"); S.set(152, G + 2, TZ1, "minecraft:terracotta")
-        S.set(154, G + 1, TZ1, "minecraft:terracotta"); S.set(154, G + 2, TZ1, "minecraft:terracotta")
-        self.door2(153, G + 1, TZ1, "north", "guhs:guhwaii_palm_deur")
-        self.sectiebord(151, G + 3, TZ1 + 1, "south", ["", "2", "Kriebelzaal", ""])
-        KRONKEL = [(153, 49), (153, 42), (166, 38), (173, 28), (170, 16), (156, 10), (142, 14), (136, 24), (129, 27)]
+        S.air(153, G + 1, TZ1, 155, G + 3, TZ1)
+        S.fill(153, G + 3, TZ1, 155, G + 3, TZ1, "minecraft:terracotta")
+        S.set(153, G + 1, TZ1, "minecraft:terracotta"); S.set(153, G + 2, TZ1, "minecraft:terracotta")
+        S.set(155, G + 1, TZ1, "minecraft:terracotta"); S.set(155, G + 2, TZ1, "minecraft:terracotta")
+        self.door2(154, G + 1, TZ1, "north", "guhs:guhwaii_palm_deur")
+        self.sectiebord(154, G + 4, TZ1 + 1, "south", ["", "2", "Kriebelzaal", ""])
+        KRONKEL = [(154, 49), (153, 42), (166, 38), (173, 28), (170, 16), (156, 10), (142, 14), (136, 24), (129, 27)]
         kpad = set()
         for (ax, az), (bx, bz) in zip(KRONKEL, KRONKEL[1:]):
             n = int(max(abs(bx - ax), abs(bz - az)))
@@ -505,7 +563,7 @@ class Bouwer:
             self.decor_binnen(ix1, iy, iz1, ix2, iz2, stijl)
             self.huis(soort, "kriebelzaal", cx, iy, cz, v, j, straal=1)
 
-        kooitje(153, 44, 1, 0, "springspin")
+        kooitje(154, 44, 1, 0, "springspin")
         kooitje(162, 39, 0, 1, "wandelende_tak", stijl="jungle")
         kooitje(170, 32, -1, 0, "mestkever", bodem="minecraft:coarse_dirt", stijl="woestijn")
         kooitje(170, 20, -1, 0, "slak", stijl="jungle")
@@ -567,6 +625,22 @@ class Bouwer:
         for x in range(KX1 + 4, KX2 - 2, 7):
             S.set(x, G + 8, 27, "minecraft:verdant_froglight[axis=y]")
             S.set(x, G + 8, 14, "minecraft:pearlescent_froglight[axis=y]")
+        # round 5: more light, the vlindertuin most of all (lampions over the garden, guh lamps along its path, glow
+        # mushrooms in the beds) and lampions over the whole winding path
+        self.lampions(VX1 + 1, VZ1 + 1, VX2 - 1, VZ2 - 1, G + 8, stap=3)
+        for i, (x, z) in enumerate(sorted(kpad)):
+            if i % 9 == 0 and (x, z) not in kooi_cellen:
+                self.lampions(x, z, x, z, G + 8)
+        for (x, z) in ((133, 34), (144, 34), (133, 47), (144, 47), (138, 41)):
+            if S.leeg(x, G + 1, z) and (x, z) not in kpad:
+                S.set(x, G + 1, z, "guhs:glimpaddenstoel")
+        for (x, z) in ((137, 44), (143, 38), (147, 45)):
+            if S.leeg(x, G + 1, z) and (x, z) not in kpad:
+                S.set(x, G + 1, z, "guhs:doolhof_lantaarn[lit=true]")
+        for (x, z, f) in ((131, 33, "east"), (145, 47, "west")):
+            if S.leeg(x, G + 1, z) and S.leeg(x, G + 2, z):
+                S.set(x, G + 1, z, "minecraft:spruce_fence")
+                S.set(x, G + 2, z, f"guhs:vogelhuisje[facing={f}]")
         # roof: flat green + leaf-shaped roofs + a big ladybird
         S.fill(KX1, G + 9, KZ1, KX2, G + 9, KZ2, "minecraft:green_terracotta")
         for (cx, cz, Ln, Wd, ang) in ((142, 15, 15, 8, 25), (168, 14, 16, 8, -30), (142, 38, 14, 8, -20),
@@ -665,6 +739,12 @@ class Bouwer:
             S.set(x, G + 1, 21, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
             S.set(x + 4, G + 1, 31, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
         S.set(NX1 + 2, G + 1, 26, "guhs:park_bankje[facing=east]")
+        for z in range(34, NZ2, 3):                                                    # round 5: a little light in the
+            S.set(100, G, z, "minecraft:sea_lantern")                                 # corridor to the Diepzeezaal door
+            self.paden.add((100, z))
+        for (x, z) in ((98, 36), (102, 40), (98, 44)):
+            if S.leeg(x, G + 1, z):
+                S.set(x, G + 1, z, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
 
     # ==================================================================================================================
     def diepzeezaal(self):
@@ -723,9 +803,9 @@ class Bouwer:
             self.doel("diepzeebak " + kant, stand_x, G + 1, 53)
             cx = (ax1 + ax2) / 2
             for soort, hz in dieren:
-                self.huis(soort, "diepzeezaal", int(cx), G + 3, int(hz), 3 if soort == "kwal" else 1,
-                          0 if soort in ("kwal", "lantaarnvisje") else 1 if soort != "babyhaai" else 0,
-                          straal=3, water=True)
+                # round 5: at least 3 of every fish (small ones 8), their home in the middle of the water (G+1..G+7)
+                volw, jong = AANTAL_VIS.get(soort, (3, 0))
+                self.huis(soort, "diepzeezaal", int(cx), G + 4, int(hz), volw, jong, straal=3, water=True)
                 self.infobord(gx + (1 if ax1 < 96 else -1), G + 1, int(hz), "east" if ax1 < 96 else "west", soort)
             if ax1 < 96:
                 self.critter("guhs:kruimelkwal", "kruimelkwal", "diepzeezaal", cx, G + 5, 64.5, straal=3, water=True)
@@ -862,6 +942,7 @@ class Bouwer:
         for (x, y, z), d in cellen.items():                                           # re-hollow where they overlap
             if d < 3.0 and y > TY:
                 S.set(x, y, z, "minecraft:air")
+        self.buis_mantel(tubec, cellen, wy_opp, TY)
         # the viewing cave in the kelp forest: a stone shell on the east side, the glass stays toward the kelp (west)
         for (cx, cz) in tubec:
             if not (14 <= cx <= 28 and 46 <= cz <= 70):
@@ -883,17 +964,22 @@ class Bouwer:
         self.TY = TY
         # the animals around the tube: rif-lagune (east) and kelpbos (west)
         W = wy_opp
-        self.huis("clownvis", "rif-lagune", 54, W - 6, 42, 2, 1, straal=4, water=True)
-        self.huis("anemoon", "rif-lagune", 52, W - 9, 41, 2, 0, straal=1, water=True)
-        self.huis("regenboogvis", "rif-lagune", 46, W - 4, 66, 4, 0, straal=6, water=True)
-        self.huis("zeeschildpad", "rif-lagune", 60, W - 4, 70, 1, 1, straal=8, water=True)
-        for (x, y, z) in ((48, W - 5, 58), (58, W - 3, 66), (38, W - 4, 52)):
+        # round 5: more animals round the tube: at least 3 of every species, the small fish at least 8
+        A = AANTAL_VIS
+        self.huis("clownvis", "rif-lagune", 54, W - 6, 42, *A["clownvis"], straal=4, water=True)
+        self.huis("anemoon", "rif-lagune", 52, W - 9, 41, *A["anemoon"], straal=1, water=True)
+        self.huis("regenboogvis", "rif-lagune", 46, W - 5, 66, *A["regenboogvis"], straal=6, water=True)
+        self.huis("zeeschildpad", "rif-lagune", 60, W - 5, 70, *A["zeeschildpad"], straal=8, water=True)
+        for (x, y, z) in ((48, W - 5, 58), (58, W - 4, 66), (38, W - 5, 52), (44, W - 6, 72), (62, W - 5, 56),
+                          (34, W - 6, 64), (54, W - 5, 76), (40, W - 4, 40)):
             self.critter("guhs:guh_vis", "guh_vis", "rif-lagune", x + 0.5, y, z + 0.5, straal=6, water=True)
-        self.huis("zeepaardje", "kelpbos", 12, W - 5, 56, 2, 1, straal=4, water=True)
-        self.huis("pijlstaartrog", "kelpbos", 28, W - 8, 64, 1, 1, straal=6, water=True)
-        self.huis("zeester", "kelpbos", 22, W - 9, 70, 3, 0, straal=3, water=True)
-        self.huis("zee_egel", "kelpbos", 30, W - 9, 40, 3, 0, straal=3, water=True)
-        for (x, y, z, v) in ((16, W - 4, 40, "koi_roodwit"), (30, W - 3, 34, "koi_goud"), (8, W - 4, 64, "koi_driekleur")):
+        self.huis("zeepaardje", "kelpbos", 12, W - 5, 56, *A["zeepaardje"], straal=4, water=True)
+        self.huis("pijlstaartrog", "kelpbos", 28, W - 7, 64, *A["pijlstaartrog"], straal=6, water=True)
+        self.huis("zeester", "kelpbos", 22, W - 9, 70, *A["zeester"], straal=3, water=True)
+        self.huis("zee_egel", "kelpbos", 30, W - 9, 40, *A["zee_egel"], straal=3, water=True)
+        self.huis("regenboogvis", "kelpbos", 20, W - 5, 46, *A["regenboogvis"], straal=6, water=True)
+        for (x, y, z, v) in ((16, W - 4, 40, "koi_roodwit"), (30, W - 3, 34, "koi_goud"), (8, W - 4, 64, "koi_driekleur"),
+                             (24, W - 4, 60, "koi_roodwit"), (10, W - 3, 48, "koi_goud"), (34, W - 4, 58, "koi_driekleur")):
             self.critter("guhs:koi", v, "kelpbos", x + 0.5, y, z + 0.5, straal=6, water=True)
         for soort, x, z in (("zeepaardje", 13, 54), ("pijlstaartrog", 14, 62), ("zeester", 15, 50)):
             self.park.favoriet(f"kijkgrot_{soort}", kp, S.w(x, W - 6, z), [soort], straal=2)
@@ -903,6 +989,39 @@ class Bouwer:
                                  (19, 64, "east", "pijlstaartrog")):
             if S.leeg(x, TY + 1, z) and S.get(x, TY, z) != "minecraft:air":
                 self.infobord(x, TY + 1, z, f, soort)
+
+    def buis_mantel(self, tubec, cellen, wy_opp, TY):
+        """Round 5: past halfway the tube runs where the pond is shallow, so dirt and stone lay against the glass. Inside
+        the pond the water now reaches down round the tube (a sand floor below it); where the tube runs under land, the
+        ground against the glass is rock, like the viewing cave."""
+        S = self.S
+        bij = {}
+        for (cx, cz) in tubec:
+            for x in range(int(cx) - 6, int(cx) + 7):
+                for z in range(int(cz) - 6, int(cz) + 7):
+                    d = math.hypot(x - cx, z - cz)
+                    if d < 5.6:
+                        bij[(x, z)] = min(bij.get((x, z), 9), d)
+        grond = ("minecraft:dirt", "minecraft:grass_block", "minecraft:stone", "minecraft:coarse_dirt",
+                 "minecraft:rooted_dirt", "minecraft:gravel", "minecraft:clay", "minecraft:sand")
+        n_water = n_rots = 0
+        for (x, z), dh in bij.items():
+            in_vijver = math.hypot((x - PCX) / PRX, (z - PCZ) / PRZ) < 0.97
+            for y in range(TY - 4, wy_opp):                                       # (the shore at the surface stays)
+                if (x, y, z) in cellen:
+                    continue
+                b = S.get(x, y, z)
+                if not b.startswith(grond):
+                    continue
+                if in_vijver and y >= TY - 3:
+                    S.set(x, y, z, WATER)
+                    n_water += 1
+                elif in_vijver:
+                    S.set(x, y, z, BED)
+                elif dh < 5.2:
+                    S.set(x, y, z, self.rnd.choice(["minecraft:tuff", "minecraft:mossy_cobblestone", "minecraft:andesite"]))
+                    n_rots += 1
+        self.log(f"    kriebelhuis: water round the tube {n_water}, rock against the glass {n_rots}")
 
     # ==================================================================================================================
     def uitgang(self):
@@ -961,8 +1080,47 @@ class Bouwer:
         S.fill(UX1 + 1, G + 8, UZ1 + 1, UX2 - 1, G + 8, UZ2 - 1, "minecraft:birch_planks")     # ceiling
         self.thatch(UX1, UZ1, UX2, UZ2, G + 8, overhang=1)
         self.sectiebord(70, G + 3, UZ1 + 1, "south", ["", "Uitgang", "+ cadeautjes", ""])
+        self.winkel_lief()
 
         self.doel("cadeauwinkeltje", 76, G + 1, 100)
+
+    def winkel_lief(self):
+        """Round 5: the gift shop was dull and dark. Heart tiles on the floor, lampions under the ceiling, plush shelves
+        and plush blocks, a cushion corner, cloud lamps and a welcome mat at both doors."""
+        S = self.S
+        UX1, UZ1, UX2, UZ2 = UITGANG
+        for x in range(UX1 + 1, UX2):
+            for z in range(UZ1 + 1, UZ2):
+                if S.get(x, G, z).startswith("minecraft:birch_planks") and S.leeg(x, G + 1, z):
+                    S.set(x, G, z, "guhs:tegel_hartjes" if (x + z) % 2 else "guhs:pleister_wolkje")
+        self.lampions(UX1 + 2, UZ1 + 2, UX2 - 2, UZ2 - 2, G + 7, stap=3)
+        for (x, z) in ((UX1 + 1, UZ1 + 1), (UX2 - 1, UZ1 + 1), (UX1 + 1, UZ2 - 1), (UX2 - 1, UZ2 - 1)):
+            if S.leeg(x, G + 1, z):
+                S.set(x, G + 1, z, "guhs:wolkenlamp")
+        knuffels = ["knuffel_normal", "knuffel_mint", "knuffel_snow", "knuffel_pinguh", "knuffel_wolk", "knuffel_choco"]
+        for i, z in enumerate(range(UZ1 + 3, UZ2 - 2, 2)):                            # plush shelves along the west wall
+            x = UX1 + 1
+            if not (S.leeg(x, G + 1, z) and S.leeg(x, G + 2, z)) or 99 <= z <= 102:
+                continue
+            S.set(x, G + 1, z, "minecraft:birch_planks")
+            S.set(x, G + 2, z, f"guhs:{knuffels[i % len(knuffels)]}[facing=east]")
+        for (x, z, k) in ((74, 94, "knuffelblok_roze"), (75, 94, "knuffelblok_hemelsblauw"), (74, 95, "knuffelblok_boter"),
+                          (82, 94, "knuffelblok_lavendel"), (82, 95, "knuffelblok_aqua")):
+            if S.leeg(x, G + 1, z):
+                S.set(x, G + 1, z, f"guhs:{k}")
+        S.set(74, G + 2, 94, "guhs:knuffel_pinguh[facing=north]")
+        for (x, z, f) in ((64, 96, "east"), (64, 97, "east"), (65, 95, "south")):
+            if S.leeg(x, G + 1, z):
+                S.set(x, G + 1, z, f"guhs:pink_kussen[facing={f}]")
+        for x in range(76, 81):                                                        # the counter + lamps
+            if S.leeg(x, G + 1, 101):
+                S.set(x, G + 1, 101, "minecraft:spruce_planks")
+        S.set(76, G + 2, 101, "guhs:doolhof_lantaarn[lit=true]")
+        S.set(80, G + 2, 101, "guhs:knuffel_starry[facing=south]")
+        if S.leeg(UX2 - 1, G + 1, 98):
+            S.set(UX2 - 1, G + 1, 98, "guhs:deurmat_welkom[facing=east]")
+        if S.leeg(UX1 + 1, G + 1, 100):
+            S.set(UX1 + 1, G + 1, 100, "guhs:deurmat_welkom[facing=west]")
 
     def aai_lagune(self):
         S = self.S

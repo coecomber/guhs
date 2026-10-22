@@ -1185,9 +1185,15 @@ def bootlijn(park, log):
         _, i, sx0, sz0 = best
         pad = pad[i:]                                            # the line starts at the hoofdsteiger's stop
         haltes.append({"naam": "hoofdsteiger", "zone": "entree", "i": 0, "land": (sx0, sz0)})
+    lob = (getattr(park, "lobby", None) or {}).get("oorsprong")
+
+    def bij_lobby(x, z):
+        """(Round 5) right outside the lobby fence (the channel to the river): no stop of another zone there."""
+        return lob is not None and lob[0] - 10 <= x <= lob[0] + 250 and z >= lob[2] - 25
+
     for zone in BOOT_HALTES:
         zi_ = ZONES.index(zone)
-        idx = [i for i, (x, z) in enumerate(pad) if park.zone_vol[int(x), int(z)] == zi_]
+        idx = [i for i, (x, z) in enumerate(pad) if park.zone_vol[int(x), int(z)] == zi_ and not bij_lobby(x, z)]
         if len(idx) < 10:
             log(f"    s3: bootlijn: de rivier komt niet door {zone}")
             continue

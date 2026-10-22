@@ -28934,5 +28934,6 @@
   "gui.guhs.bouwhulp.raster.knop": "Click: choose from all options. Shift-click: one back.",
   "gui.guhs.bouwkeet.bouw.uitleg": "Let the shed build the ghost. If something is missing, it first asks whether to build anyway (what's missing stays a ghost).",
   "gui.guhs.bouwkeet.pauze.uitleg": "Pauses the building. Build! goes on.",
-  "gui.guhs.bouwkeet.niet_jouw.uitleg": "This is not your shed: only the owner may build."
+  "gui.guhs.bouwkeet.niet_jouw.uitleg": "This is not your shed: only the owner may build.",
+  "commands.guhs.safari.kaartwand": "Map wall: the %s maps go back on the wall as soon as the entrance hall is loaded"
 }

@@ -112,5 +112,6 @@
   "gui.guhs.safari.dex.sectie.terrarium": "Terrarium",
   "gui.guhs.safari.dex.sectie.kriebelzaal": "Creepy-Crawly Hall",
   "gui.guhs.safari.dex.sectie.nachtzaal": "Night Hall",
-  "gui.guhs.safari.dex.sectie.aquarium": "Aquarium"
+  "gui.guhs.safari.dex.sectie.aquarium": "Aquarium",
+  "commands.guhs.safari.kaartwand": "Map wall: the %s maps go back on the wall as soon as the entrance hall is loaded"
 }

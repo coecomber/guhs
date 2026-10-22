@@ -111,8 +111,31 @@ def ijsgrot(park, rng):
                 park.set(x, vloer, z, "minecraft:snow_block")
                 for y in range(min(g, vloer) - 2, vloer):
                     park.set(x, y, z, "minecraft:stone")
-    # a ramp from the tunnel mouth down/up to the ground in front
-    mx, mz = cx + ux * (int(R) + 3), cz + uz * (int(R) + 3)
+    # round 5: a snow staircase from the tunnel mouth down to the ground in front (the cave floor lay ~4 above it:
+    # unreachable in survival); 3 wide, a low snow wall on both sides, its foot where it meets the ground
+    naar = {(1, 0): "west", (-1, 0): "east", (0, 1): "north", (0, -1): "south"}[(ux, uz)]     # up = toward the cave
+    t = int(R) + 3
+    y = vloer
+    while t < int(R) + 16:
+        xs = [(cx + ux * t - uz * w_, cz + uz * t + ux * w_) for w_ in range(-2, 3)]
+        g = max(int(park.hoogte[x, z]) for (x, z) in xs[1:4])
+        if y <= g:
+            break
+        for k, (x, z) in enumerate(xs):
+            g_ = int(park.hoogte[x, z])
+            for yy in range(min(g_, y) - 1, y):
+                park.set(x, yy, z, "minecraft:snow_block")
+            if k in (0, 4):
+                park.set(x, y, z, "minecraft:snow_block")
+                ruim_kolom(park, x, z, y + 1, y + 6)
+            else:
+                park.set(x, y, z, f"minecraft:spruce_stairs[facing={naar},half=bottom,shape=straight,waterlogged=false]")
+                ruim_kolom(park, x, z, y + 1, y + 6)
+                park.hoogte[x, z] = max(int(park.hoogte[x, z]), y)
+        t += 1
+        y -= 1
+    # a ramp from the stairs' foot to the nearest path
+    mx, mz = cx + ux * t, cz + uz * t
     try:
         from .zone_savanne import paadje
         paadje(park, (mx + ux, mz + uz), max_r=40, blok="dirt_path")

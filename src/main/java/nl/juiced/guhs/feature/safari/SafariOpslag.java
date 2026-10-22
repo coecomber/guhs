@@ -25,6 +25,10 @@ public final class SafariOpslag extends SavedData {
     int generatie;
     /** The park version the populations were spawned for (0: never). */
     int dierenVoor;
+    /** (Round 5) The map ids of the kaartwand in the entreegebouw, in kaartwand.json's order (a restamp reuses them). */
+    final java.util.List<Integer> kaarten = new java.util.ArrayList<>();
+    /** (Round 5) The park version whose kaartwand hangs (the frames go up once the wall's chunks are loaded). */
+    int kaartwand;
 
     public static SafariOpslag get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(TYPE);
@@ -32,6 +36,15 @@ public final class SafariOpslag extends SavedData {
 
     public int generatie() {
         return generatie;
+    }
+
+    /** The map id of the k-th map of the kaartwand (a fresh one the first time). */
+    net.minecraft.world.level.saveddata.maps.MapId kaart(int k, net.minecraft.server.level.ServerLevel level) {
+        while (kaarten.size() <= k) {
+            kaarten.add(level.getFreeMapId().id());
+            setDirty();
+        }
+        return new net.minecraft.world.level.saveddata.maps.MapId(kaarten.get(k));
     }
 
     private CompoundTag save() {
@@ -42,6 +55,8 @@ public final class SafariOpslag extends SavedData {
         t.putBoolean("Herbouw", herbouw);
         t.putInt("Generatie", generatie);
         t.putInt("DierenVoor", dierenVoor);
+        t.putIntArray("Kaarten", kaarten.stream().mapToInt(Integer::intValue).toArray());
+        t.putInt("Kaartwand", kaartwand);
         return t;
     }
 
@@ -53,6 +68,12 @@ public final class SafariOpslag extends SavedData {
         s.herbouw = t.getBooleanOr("Herbouw", false);
         s.generatie = t.getIntOr("Generatie", 0);
         s.dierenVoor = t.getIntOr("DierenVoor", 0);
+        s.kaartwand = t.getIntOr("Kaartwand", 0);
+        t.getIntArray("Kaarten").ifPresent(a -> {
+            for (int id : a) {
+                s.kaarten.add(id);
+            }
+        });
         return s;
     }
 }

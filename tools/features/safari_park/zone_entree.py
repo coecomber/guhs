@@ -184,7 +184,7 @@ class Lokaal:
         """Glass panes, iron bars and fences connect to their family and to solid blocks (like the game)."""
         def fam(n):
             n = n.split("[")[0]
-            if n.endswith("_fence"):
+            if n.endswith("_fence") or n.split(":")[-1].startswith("guh_hekje"):     # (the bouwhulp's guh fences)
                 return "fence"
             if n.endswith(("glass_pane", "iron_bars")):
                 return "pane"
@@ -272,13 +272,17 @@ WEGCEL = _weg_cellen()
 INS = FP - WEGCEL
 
 
+KANAAL_X = (220, 230)         # test round 5: the haven reaches the north edge only here (the boats' channel); elsewhere
+                             # a strip of land with the fence keeps the lobby closed (the fence was missing over the water)
+
+
 def _haven_cellen():
     cel = set()
     for x in range(HAVEN_X1, 234):
         for z in range(0, 60):
             rand = 54 + 4 * vnoise(x / 7.0, 3.3, 31)                      # an organic south shore
             hoek = math.hypot(max(HAVEN_X1 + 6 - x, 0), max(z - (rand - 6), 0))
-            if z <= rand and hoek <= 6.5:
+            if z <= rand and hoek <= 6.5 and (z >= 5 or KANAAL_X[0] <= x <= KANAAL_X[1]):
                 cel.add((x, z))
     return cel
 
@@ -591,7 +595,8 @@ def _lobby():
     pad(CX - 3, CZ + SQ_RZ - 1, CX + 3, 152)                                 # square -> entreegebouw
     pad(91, 124, CX - SQ_RX + 2, 129)                                        # square -> giftshop door (x 90)
     pad(CX + SQ_RX - 2, 123, 155, 128)                                       # square -> rangerstation door (x 156)
-    pad_lijn([(89, 99), (95, 104), (103, 112), (108, 116)], lampen=9)        # Kriebelhuis exit + shop -> square
+    pad_lijn([(87, 99), (89, 99), (95, 104), (103, 112), (108, 116)], lampen=9)   # Kriebelhuis exit + shop -> square
+                                                                             # (round 5: right from the door, no grass row)
     pad_lijn([(141, 113), (150, 106), (170, 105), (236, 105)], lampen=12)    # square -> oostpoort (on foot)
     pad(207, 92, 212, 103, pal=["minecraft:smooth_stone", "minecraft:polished_andesite"])   # to the zebra crossing
     pad_lijn([(189, 106), (189, 172), (203, 172)], lampen=11)                # -> aaihoek, expertenpaviljoen
@@ -599,9 +604,11 @@ def _lobby():
     pad_lijn([(143, 140), (165, 158), (189, 168)], lampen=10)                # square -> paviljoen
     pad_lijn([(98, 134), (80, 146), (62, 151), (53, 151)], lampen=9)         # square -> ijskraam, speeltuin
     pad_lijn([(97, 119), (72, 115), (53, 117)], lampen=10)                   # square -> kampvuur
-    pad_lijn([(40, 116), (6, 116), (6, 22)], lampen=11)                      # kampvuur -> lodges (west path)
+    pad_lijn([(53, 117), (40, 116), (6, 116), (6, 22)], lampen=11)           # kampvuur -> lodges (west path); round 5:
+                                                                             # one path on from the square past the campfire
+    pad_lijn([(6, 102), (23, 102)], lampen=3)                                # round 5: west path -> the aai-lagune boardwalk
     pad_lijn([(6, 24), (74, 24)], lampen=12)                                 # north shore, in front of the lodges
-    pad_lijn([(31, 126), (36, 121)], w=3)                                    # speeltuin north gate -> kampvuur
+    pad_lijn([(31, 126), (36, 121), (40, 117)], w=3)                         # speeltuin north gate -> the west path
 
     # ================================================================ HUB at the haven: Botenhuis, quay, zebra crossing
     # the quay strip between the road and the water (x 192..201) and the south quay: planks (not a path: zone_s3_rit's
@@ -1028,7 +1035,13 @@ def _lobby():
                  dict(soort="schommel", pos=(41, G + 1, 136), facing="south"),
                  dict(soort="wip", pos=(16, G + 1, 166), facing="east"),
                  dict(soort="wip", pos=(30, G + 1, 168), facing="east"),
-                 dict(soort="knabbelbal", pos=(30, G + 1, 152), facing="north")]
+                 dict(soort="knabbelbal", pos=(30, G + 1, 152), facing="north"),
+                 # round 5: more to play with (the guhs play there more often: SAFARI_CONTRACT "Testronde 5")
+                 dict(soort="glijbaantje", pos=(37, G + 1, 162), facing="south"),
+                 dict(soort="schommel", pos=(28, G + 1, 160), facing="south"),
+                 dict(soort="wip", pos=(42, G + 1, 151), facing="east"),
+                 dict(soort="knabbelbal", pos=(20, G + 1, 166), facing="north"),
+                 dict(soort="knabbelbal", pos=(38, G + 1, 146), facing="north")]
     # the pluizige tunnel (in the tiles: plain blocks that join by their sides): an L through the middle
     TUN = [(x, 146) for x in range(14, 25)] + [(24, z) for z in range(147, 157)]
     tun = set(TUN)
@@ -1049,6 +1062,9 @@ def _lobby():
     for (x, z) in ((44, 158), (38, 172)):
         S.set(x, G + 1, z, "luchtscooter")
     S.set(48, G + 1, 166, "hapluikje[facing=west,snoet=slaapt]")
+    S.set(20, G + 1, 140, "hapluikje[facing=south,snoet=slaapt]")                  # round 5: a few more plain toys
+    S.set(22, G + 1, 172, "bellenblaas[facing=north]")
+    S.set(33, G + 1, 148, "luchtscooter")
     for x in range(10, 16):
         for z in range(152, 158):
             S.set(x, G, z, "minecraft:sand")
@@ -1066,6 +1082,50 @@ def _lobby():
     claim(SX1, SZ1, SX2, SZ2, m=1)
     speeltuin = dict(centrum=((SX1 + SX2) // 2, (SZ1 + SZ2) // 2), min=(SX1, SZ1), max=(SX2, SZ2), ingang=(SX2, 150),
                      speelgoed=speelgoed)
+
+    def entree_binnen(EX1, EZ1, EX2, EZ2, MIDX):
+        """Round 5: the hall was dark and bare. Lampions under the ceiling, glow tiles along the walls, stone guh
+        lanterns, a cafe corner with guh chairs and tables, guh fences as a queue at the counter, cushions, plants."""
+        for x in range(EX1 + 3, EX2 - 2, 5):
+            for z in range(EZ1 + 3, EZ2 - 2, 5):
+                if abs(x - MIDX) > 4 and S.is_air(x, G + 10, z) and not S.is_air(x, G + 11, z):
+                    S.set(x, G + 10, z, LAMPION[(x // 5 + z // 5) % 3])
+        for x in range(EX1 + 2, EX2 - 1, 4):                               # glow tiles in the floor along both walls
+            for z in (EZ1 + 1, EZ2 - 1):
+                if S.get(x, G, z) != AIR and S.is_air(x, G + 1, z):
+                    S.set(x, G, z, "glimtegel[fel=true]")
+        for z in range(EZ1 + 2, EZ2 - 1, 4):
+            for x in (EX1 + 1, EX2 - 1):
+                if S.get(x, G, z) != AIR and S.is_air(x, G + 1, z):
+                    S.set(x, G, z, "glimtegel[fel=true]")
+        for (x, z) in ((MIDX - 5, EZ1 + 2), (MIDX + 5, EZ1 + 2), (MIDX - 5, EZ2 - 2), (MIDX + 5, EZ2 - 2)):
+            S.set(x, G + 1, z, "toro[lit=true]")
+        # the cafe corner (south-west): guh tables with chairs round them, a cushion bench and plants
+        for (tx, tz) in ((90, 163), (96, 163), (102, 163), (90, 168), (96, 168), (102, 168)):
+            if not (S.is_air(tx, G + 1, tz) and S.is_air(tx, G + 1, tz - 1) and S.is_air(tx, G + 1, tz + 1)):
+                continue
+            S.set(tx, G + 1, tz, "guh_tafel[facing=north]")
+            S.set(tx - 1, G + 1, tz, "guh_stoel[facing=east]")
+            S.set(tx + 1, G + 1, tz, "guh_stoel[facing=west]")
+            S.set(tx, G + 2, tz, "doolhof_lantaarn[lit=true]" if (tx + tz) % 2 else "guh_bloempot")
+        for x in range(87, 106, 3):
+            if S.is_air(x, G + 1, EZ2 - 1):
+                S.set(x, G + 1, EZ2 - 1, "pink_kussen[facing=north]")
+        # a queue of guh fences in front of the counter (x 92..110, z 156..157), open at both ends
+        for x in range(93, 110):
+            if S.is_air(x, G + 1, 160):
+                S.set(x, G + 1, 160, "guh_hekje_mint")
+        # plushies and plants on the counter, cloud lamps, more flower pots along the walls
+        for (x, k) in ((93, "knuffel_normal"), (98, "knuffel_pinguh"), (104, "knuffel_wolk"), (109, "knuffel_mint")):
+            if S.is_air(x, G + 3, 156):
+                S.set(x, G + 3, 156, f"{k}[facing=south]")
+        for (x, z) in ((EX1 + 2, EZ1 + 2), (EX2 - 2, EZ1 + 2), (EX1 + 2, EZ2 - 3), (EX2 - 2, EZ2 - 3)):
+            if S.is_air(x, G + 1, z):
+                S.set(x, G + 1, z, "wolkenlamp")
+        for x in range(EX1 + 4, EX2 - 3, 6):
+            for z in (EZ1 + 1, EZ2 - 1):
+                if S.is_air(x, G + 1, z) and abs(x - MIDX) > 4:
+                    S.set(x, G + 1, z, "guh_bloempot")
 
     # ================================================================ ENTREEGEBOUW (thatched lodge, welkomsthal)
     EX1, EZ1, EX2, EZ2 = 84, 152, 160, 178
@@ -1092,15 +1152,28 @@ def _lobby():
     S.fill(92, G + 3, 156, 110, G + 3, 156, slab("minecraft:birch_slab"))
     for x in (95, 101, 107):
         S.set(x, G + 3, 157, "klusjes_guhlampje[facing=south,lit=true]")
-    MAQ = {(0, 0): "minecraft:white_concrete", (1, 0): "minecraft:light_gray_concrete", (2, 0): "minecraft:lime_concrete",
-           (3, 0): "minecraft:green_terracotta", (0, 1): "minecraft:green_concrete", (1, 1): "minecraft:light_blue_concrete",
-           (2, 1): "minecraft:green_terracotta", (3, 1): "minecraft:cyan_terracotta", (0, 2): "minecraft:orange_terracotta",
-           (1, 2): "minecraft:yellow_concrete", (2, 2): "minecraft:yellow_concrete", (3, 2): "minecraft:yellow_concrete"}
-    S.fill(132, G + 1, 158, 150, G + 1, 172, "minecraft:spruce_planks")                    # the 3D park model
-    for (a, b), c in MAQ.items():
-        S.fill(134 + a * 4, G + 2, 160 + b * 4, 137 + a * 4, G + 2, 163 + b * 4, c)
-    S.set(141, G + 3, 166, "minecraft:light_blue_stained_glass")
-    bordje(131, G + 1, 165, 12, ["Het park", "van boven:", "8 zones +", "Het Kriebelhuis"])
+    # round 5: the "park van boven" model is gone; a kaartwand with real maps of the park (item frames, filled by the
+    # game from data/guhs/safari/kaartwand.json, written by safari_park/kaartwand.py from the finished park)
+    KW = dict(x0=138, y0=G + 8, z=158, n=6)                                  # frames x 138..143, rows G+8 (north) .. G+3
+    S.fill(135, G + 1, KW["z"], 146, G + 9, KW["z"], "minecraft:dark_oak_planks")
+    S.fill(135, G + 1, KW["z"], 135, G + 9, KW["z"], "minecraft:stripped_dark_oak_log[axis=y]")
+    S.fill(146, G + 1, KW["z"], 146, G + 9, KW["z"], "minecraft:stripped_dark_oak_log[axis=y]")
+    S.fill(135, G + 10, KW["z"], 146, G + 10, KW["z"], "minecraft:stripped_dark_oak_log[axis=x]")
+    S.fill(136, G + 2, KW["z"], 145, G + 9, KW["z"], "minecraft:pink_terracotta")           # the passe-partout
+    S.fill(137, G + 3, KW["z"], 144, G + 8, KW["z"], "minecraft:spruce_planks")
+    S.set(140, G + 9, KW["z"] + 1, "minecraft:oak_wall_sign[facing=south,waterlogged=false]")
+    S.set(141, G + 9, KW["z"] + 1, "minecraft:oak_wall_sign[facing=south,waterlogged=false]")
+    BORDJES.append(((140, G + 9, KW["z"] + 1), ["", "Safaripark", "Vadse Bergen", ""]))
+    BORDJES.append(((141, G + 9, KW["z"] + 1), ["", "zo ziet het", "park eruit!", ""]))
+    for x in range(KW["x0"], KW["x0"] + KW["n"]):                           # the column signs (filled in below)
+        S.set(x, G + 2, KW["z"] + 1, "minecraft:birch_wall_sign[facing=south,waterlogged=false]")
+    for (x, z) in ((134, 160), (147, 160)):
+        S.set(x, G + 1, z, "toro[lit=true]")
+    for x in range(134, 148):                                                # a little rail to look from
+        if x not in (140, 141):
+            S.set(x, G + 1, 163, "guh_hekje_roze")
+    KAARTWAND.clear()
+    KAARTWAND.update(KW)
     S.fill(88, G + 3, 177, 98, G + 6, 177, "minecraft:yellow_concrete")                    # the timetable board
     S.fill(89, G + 4, 177, 97, G + 5, 177, "minecraft:green_concrete")
     for x in range(146, 158, 3):                                                             # souvenir corner
@@ -1114,6 +1187,7 @@ def _lobby():
         S.set(x, G + 10, 165, "guh_kristal_lamp")
     for (hx, hz) in ((96, 162), (110, 168), (134, 156), (150, 168)):
         hang(hx, hz, G + 1)
+    entree_binnen(EX1, EZ1, EX2, EZ2, MIDX)
     claim(EX1, EZ1, EX2, EZ2, m=1)
     # the olifantenpoort in front of it (two elephants, their trunks meet over the path)
     GZ = 181
@@ -1349,6 +1423,7 @@ def _naam(s):
     return s if ":" in s.split("[")[0] else "guhs:" + s
 
 
+KAARTWAND = {}      # (round 5) the kaartwand in the entreegebouw (local): x0, y0 (top row), z (the wall), n
 INFO = {}           # the last build's lobby info (local coordinates): zone_s2_lobby / zone_zz_j3 / plekken read it
 
 # the park route through the lobby (world): Australie -> the north gate -> the truck road -> the east gate -> savanne
@@ -1471,11 +1546,22 @@ def _buiten(park, fp, oud_zone, weg_oud, aansluit, log):
     rnd = random.Random(23)
     zand = park.id("minecraft:sand")
     water = park.id("minecraft:water", level="0")
-    # the basin north of the haven (to the river)
-    for x in range(OX + HAVEN_X1 + 4, OX + 238):
-        for z in range(516, OZ):
+    # the channel north of the haven to the river (test round 5: a winding channel from the boats' gap in the fence,
+    # no longer a rectangular basin that left a dead square of water west of the gap)
+    # (along the river line the canoe follows: terrein.RIVIER's last stretch runs diagonally to the village pond)
+    lijn = _dicht([(OX + sum(KANAAL_X) / 2 + 0.5, OZ + 1.5), (OX + 230.0, OZ - 4.0), (OX + 236.0, OZ - 10.0),
+                   (OX + 242.0, OZ - 13.5), (OX + 248.0, OZ - 14.0)])
+    from scipy.spatial import cKDTree
+    kanaal = cKDTree(np.array(lijn))
+    in_kanaal = np.zeros((W, W), bool)
+    for x in range(OX + HAVEN_X1, OX + 242):
+        for z in range(508, OZ + 2):
             if fp[x, z]:
                 continue
+            d, _ = kanaal.query((x + 0.5, z + 0.5))
+            if d > 3.6 + 0.8 * vnoise(x / 4.0, z / 4.0, 41):
+                continue
+            in_kanaal[x, z] = True
             for y in range(wy - 6, wy - 3):
                 park.v[x, y, z] = zand
             for y in range(wy - 3, wy + 1):
@@ -1485,11 +1571,11 @@ def _buiten(park, fp, oud_zone, weg_oud, aansluit, log):
             park.water[x, z] = True
             park.hoogte[x, z] = wy - 4
             park.pad[x, z] = False
-    # the old entree lake west of the basin (outside the footprint): land
+    # the old entree lake west of and around the channel (outside the footprint): land
     ezi = terrein.ZONES.index("entree")
-    for x in range(OX + 150, OX + HAVEN_X1 + 4):
+    for x in range(OX + 150, OX + 238):
         for z in range(500, OZ):
-            if park.water[x, z] and oud_zone[x, z] == ezi:
+            if park.water[x, z] and oud_zone[x, z] == ezi and not in_kanaal[x, z]:
                 _grond(park, x, z, 64, rnd)
                 park.water[x, z] = False
     # the old route: its path cells that no new route point is near go back to the zone's ground
@@ -1605,9 +1691,10 @@ def _hekken_bij(park, oud_hek, fp, log):
 HOUT = ("_leaves", "_log", "_wood", "vine", "palm", "mangrove_roots", "propagule")
 
 
-def _bomen_weg(park, schrijf):
+def _bomen_weg(park, schrijf, beschermd=None):
     """Trees whose trunk is in the lobby area go, crown and all. A leaf or branch belongs to the NEAREST trunk, so
-    the crowns of the trees that stay outside are left whole."""
+    the crowns of the trees that stay outside are left whole. Columns in `beschermd` (the lobby itself) are never
+    touched: its buildings are wood too (test round 5: the two west lodges lost their walls to a decor tree's crown)."""
     W = kit.W
     weg = [b for b in park.bomen if schrijf[b[0], b[2]]]
     if not weg:
@@ -1621,7 +1708,7 @@ def _bomen_weg(park, schrijf):
         z0, z1 = max(tz - 9, 0), min(tz + 10, W)
         for x in range(x0, x1):
             for z in range(z0, z1):
-                if schrijf[x, z]:
+                if schrijf[x, z] or (beschermd is not None and beschermd[x, z]):
                     continue
                 d = np.hypot(stammen[:, 0] - x, stammen[:, 1] - z)
                 if int(np.argmin(d)) not in weg_idx:
@@ -1659,7 +1746,7 @@ def _overgang(park, schrijf, log):
             continue
         plan.append((x, z, oud, nieuw))
         verandert[x, z] = True
-    _bomen_weg(park, verandert)
+    _bomen_weg(park, verandert, beschermd=schrijf)
     padblok = park.id("minecraft:dirt_path")
     dirt = park.id("minecraft:dirt")
     for x, z, oud, nieuw in plan:

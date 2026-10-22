@@ -448,3 +448,24 @@ FX-B (op-safari-fxb), for FX-A and the merge:
   - `ThuisDier.kom(level)` ends a hiding;
   - `SlaapplekAanwijzen` (next right-click inside the home);
   - the client draws the edge itself (`client.VerblijfRand`).
+### Testronde 5: FX-A (park generator + kaartwand), for FX-B / FX-C
+- **Park VERSIE 16.** Check counts are all 0 (kano 4 and plaat 73 are the known ones). The reachability check now:
+  - sees all 8 geheimpjes (`park.geheimpjes` is set by zone_zz_s4);
+  - needs a clear line in the column between the stand height and the target, so standing on a roof above a target no longer counts.
+- **Speeltuin toys** (`beleving.json`, `speeltuin.speelgoed`, lobby local coordinates; world = local + (20, 48, 530)):
+  - the old ones stay;
+  - new multi-block toys: glijbaantje (37, 17, 162) south, schommel (28, 17, 160) south, wip (42, 17, 151) east, knabbelbal (20, 17, 166) and (38, 17, 146);
+  - new plain toys in the tiles: hapluikje (20, 17, 140) south, bellenblaas (22, 17, 172) north, luchtscooter (33, 17, 148).
+  - FX-B makes the visitor guhs play there more often.
+  - The safari animal toys (speelbal, schommelband, krabboom, glijbaantje) are **not** placed: guhs have no play session for them (feature/speelgoed only knows the guh toys).
+- **Fish** (FX-A owns the counts):
+  - `zone_kriebelhuis.AANTAL_VIS` gives the `plekken.json` adults/young: at least 3 per water species, regenboogvis and lantaarnvisje 8.
+  - The Diepzeezaal homes are at local y G+4 (the middle of the tanks, water G+1..G+7).
+  - `kriebelhuis.json` critters: 8 guh_vis in the rif-lagune, 6 koi in the kelpbos.
+  - "Swim in the middle, not against the ceiling" is FX-B's behaviour.
+- **Boat guide guhs**: there is no generator data for them. FX-B puts them on the boats (boot.json routes stay as they were).
+- **Kaartwand** (entreegebouw):
+  - `data/guhs/safari/kaartwand.json` holds 36 maps, written by `tools/features/safari_park/kaartwand.py`.
+  - `feature/safari/Kaartwand` makes the locked map data under ids kept in `SafariOpslag.kaarten`, and hangs fixed, invulnerable item frames (tag `guhs_kaartwand`). That happens once every chunk of the wall has its entities loaded (`ParkBouwer.tick` → `Kaartwand.tick`, flag `SafariOpslag.kaartwand`).
+  - Dev: `/guhs safari kaartwand` hangs them again.
+  - AT: `ItemFrame fixed`.

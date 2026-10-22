@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 from safari_park import kit, terrein, plekken as plk          # noqa: E402
 
-VERSIE = 15      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
+VERSIE = 16      # raise on every change of the park (the game re-stamps when the jar's versie > the stored one)
 
 
 def _json(root, rel, data):
@@ -171,7 +171,10 @@ def maak(root=".", preview=False, log=print):
     kijkplekken_afmaken(park, plekken, log)     # round 3: seats -> viewpoints, first-guess favourite spots
     totaal = plk.controleer(plekken)
     log(f"  plekken: {len(plekken)} huizen, {totaal} dieren")
+    from safari_park import kaartwand
+    kaartwand.borden(park)                        # round 5: the signs under the kaartwand's maps (before the tiles)
     stats = park.schrijf(root)
+    kaartwand.schrijf(root, park, log)            # the maps themselves, from the finished park
     if os.environ.get("SAFARI_DUMP"):             # debugging: keep the finished park (blocks + the check's inputs)
         import pickle
         keep = {k: getattr(park, k, None) for k in ("v", "pal", "hoogte", "binnen", "water", "zone", "zone_vol", "pad",

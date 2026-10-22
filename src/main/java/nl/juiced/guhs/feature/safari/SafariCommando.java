@@ -30,6 +30,11 @@ final class SafariCommando {
             ctx.getSource().sendSuccess(() -> Component.translatable("commands.guhs.safari.dieren", ParkData.get().plekken.size()), true);
             return 1;
         }));
+        safari.then(Commands.literal("kaartwand").executes(ctx -> {             // round 5: hang the maps again
+            int n = Kaartwand.opnieuw(ctx.getSource().getServer());
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.guhs.safari.kaartwand", n), true);
+            return n;
+        }));
         safari.then(Commands.literal("status").executes(ctx -> {
             SafariOpslag s = SafariOpslag.get(ctx.getSource().getServer());
             ParkData d = ParkData.get();

@@ -28934,5 +28934,6 @@
   "gui.guhs.bouwhulp.raster.knop": "Klik: kies uit alle mogelijkheden. Shift-klik: één terug.",
   "gui.guhs.bouwkeet.bouw.uitleg": "Laat de keet het spook bouwen. Ontbreekt er iets, dan vraagt hij eerst of hij toch moet bouwen (wat mist blijft spook).",
   "gui.guhs.bouwkeet.pauze.uitleg": "Zet het bouwen even stil. Met Bouw! gaat hij verder.",
-  "gui.guhs.bouwkeet.niet_jouw.uitleg": "Dit is niet jouw keet: alleen de eigenaar mag bouwen."
+  "gui.guhs.bouwkeet.niet_jouw.uitleg": "Dit is niet jouw keet: alleen de eigenaar mag bouwen.",
+  "commands.guhs.safari.kaartwand": "Kaartwand: de %s kaarten gaan opnieuw aan de muur zodra het entreegebouw geladen is"
 }
