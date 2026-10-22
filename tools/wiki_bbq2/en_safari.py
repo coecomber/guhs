@@ -456,9 +456,17 @@ TEKST = {
         "everything the animal needs, its toy and a guh fence with a gate. The fence is always high enough: no animal jumps over it."),
     ("biomen/beverbeek", "Het beekjesbos"): (
         "The brook forest",
-        "A rare forest of willows, alders and birches in the Guhmension, with winding brooks and little waterfalls. Behind wild dams "
-        "lie beaver pools with a lodge, and everywhere you see gnawed stumps, leaf piles and little paw prints. No wild beavers walk "
-        "around. Beaver Brook only grows in new parts of the world."),
+        "A rare forest of willows, alders and birches (with here and there a guh blossom, a maple or a fluff tree) on gently rolling "
+        "hills in the Guhmension. Brooks and little rivers, 2 to 5 blocks wide, wind through it, with small waterfalls. Behind wild "
+        "dams lie beaver pools with a lodge, and everywhere you see gnawed stumps, leaf piles and little paw prints. Beaver Brook only "
+        "grows in new parts of the world."),
+    ("biomen/beverbeek", "Bevers en beverguhs"): (
+        "Beavers and beaver guhs",
+        "Wild beaver families live along the water: a pair, often with one or two little ones. They swim, gnaw at tree trunks and "
+        "carry twigs around. You may pet them (right-click), but not tame or take them. Fewer guhs live here than elsewhere, and the "
+        "ones born here are often a Beaver Guh (chestnut brown, orange buck teeth, a flat scaly tail) or wear a rodent hood. You can "
+        "make the Rodent Hood and the Beaver Tail yourself too: 3 brown wool and an orange dye for the hood, 2 brown wool and a piece "
+        "of leather for the tail."),
     ("biomen/beverbeek", "De rangerpost"): (
         "The ranger post",
         "Very rarely there is a log cabin with a porch: the ranger post. The Beaver Brook Ranger tells you about beavers and points "

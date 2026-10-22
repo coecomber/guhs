@@ -23,8 +23,13 @@ public final class Aaibever {
         return e instanceof SafariDier d && d.entityTags().contains(TAG);
     }
 
+    /** 1.6.2: Spaander, or one of the wild Beverbeek beavers ({@link WildeBevers}): you can pet them all. */
+    public static boolean aaibaar(Entity e) {
+        return is(e) || WildeBevers.is(e);
+    }
+
     static void opInteractie(PlayerInteractEvent.EntityInteract event) {
-        if (!is(event.getTarget())) {
+        if (!aaibaar(event.getTarget())) {
             return;
         }
         event.setCanceled(true);
@@ -34,14 +39,16 @@ public final class Aaibever {
         }
         aai(level, (SafariDier) event.getTarget());
         if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
-            nl.juiced.guhs.quest.GuhAdvancements.grant(sp, "beverbeek_spaander");   // F13: the FTB quest "Spaander"
+            if (is(event.getTarget())) {
+                nl.juiced.guhs.quest.GuhAdvancements.grant(sp, "beverbeek_spaander");   // F13: the FTB quest "Spaander"
+            }
         }
         event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.beverbeek.aai." + level.getRandom().nextInt(REGELS))
                 .withStyle(ChatFormatting.GOLD));
     }
 
     static void opInteractieSpecifiek(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (is(event.getTarget())) {
+        if (aaibaar(event.getTarget())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }

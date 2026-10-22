@@ -9,6 +9,13 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **De Eeuwige Knabbelvelden (The Eternal Nibble Fields) take picked-up guhs too:** a guh in a chest, your pockets, a Bank Guh or a backpack is taken out first (the portal screen shows where it is and asks first).
 - **...and all your other vadsjes:** every tame critter of the Guhdex tab "Mijn andere vadsjes" (pieppiepmuisjes, Schilly, Poepschilly, fluff squirrels, guh bunnies, guhxolotls and the rest) can retire as well, also when picked up. On your plot they walk about see-through with a little halo, you can pet them, and "Mee naar huis" brings them back as their own item, exactly as they were. The portal screen has a new Kind button to show one kind at a time.
 - **Retired guhs and vadsjes leave the Guhdex lists:** they are no longer listed in "Mijn guhs" or "Mijn andere vadsjes", so those stay tidy. A guh keeps its number (never handed out again) and is listed again with it when it comes home through the portal.
+- **De Beverbeek (Beaver Brook):**
+  - **Rolling hills instead of mountains:** the brook forest now has its own gently rolling terrain (it used to lie on whatever the Guhmension made there, often steep mountains). Only new chunks get the new terrain: the world is not reset.
+  - **Wider brooks:** the brooks swell and narrow between 2 and 5 blocks wide, small rivers in the wide stretches, still with the beaver pools and dams.
+  - **More trees of our own:** about a quarter of the trees are now guh blossoms, red and orange maples and fluff trees, among the willows, alders and birches.
+  - **Wild beavers:** beaver families (a pair, often with one or two little ones) live along the water. They swim, gnaw at tree trunks and carry twigs around. Pet them with a right-click; they can't be tamed or taken. Like the other wild animals they come and go, so they never pile up.
+  - **Fewer guhs, and beaver-ish ones:** fewer guhs live in the Beverbeek. The ones born there are often a **Beverguh** (Beaver Guh: chestnut brown, orange buck teeth, a flat scaly tail; a bonus page in the Guhdex) or wear the new **knaagdier outfit**.
+  - **Knaagdiermuts and Beverstaart (Rodent Hood and Beaver Tail):** a beaver hood with round ears and buck teeth, and a flat beaver tail. Craftable: 3 brown wool and an orange dye for the hood, 2 brown wool and a leather for the tail.
 
 ## 1.6.1 — fix — Minecraft 26.1.2
 

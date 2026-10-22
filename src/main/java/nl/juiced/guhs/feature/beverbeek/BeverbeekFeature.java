@@ -16,9 +16,10 @@ import nl.juiced.guhs.feature.verhaal.NpcRollen;
 /**
  * 1.6.0 deel 2 (F10a, design 2.10): de Beverbeek, a rare brook forest in the Guhmension (willow, alder, birch), with
  * winding brooks and little waterfalls ({@link BeekFeature}), wild beaver pools behind dams with a lodge
- * ({@link BeverpoelFeature}), gnawed stumps, leaf heaps and paw prints ({@link SporenFeature}). No wild beavers: the
- * only beaver lives at the occasional ranger post (structure {@code guhs:beverbeek_rangerpost}), where the
- * {@link BeverbeekRanger} tells about beavers and his {@link Aaibever} may be petted.
+ * ({@link BeverpoelFeature}), gnawed stumps, leaf heaps and paw prints ({@link SporenFeature}). 1.6.2: wild beaver
+ * families along the water ({@link WildeBevers}), fewer guhs, and those often Beverguhs or in a knaagdier outfit
+ * ({@link BeverGuhs}). The occasional ranger post (structure {@code guhs:beverbeek_rangerpost}): the {@link BeverbeekRanger}
+ * tells about beavers and his {@link Aaibever} Spaander may be petted.
  * tools/features/safari_beverbeek.py makes the resources (the biome and its region, the trees, the post).
  * New chunks only: the server world is never reset.
  */
@@ -34,6 +35,8 @@ public final class BeverbeekFeature {
         NpcRollen.zet(GuhNpcEntity.Kind.BEVERBEEK_RANGER, BeverbeekRanger.ROL);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, Aaibever::opInteractie);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, Aaibever::opInteractieSpecifiek);
+        WildeBevers.registreer();   // 1.6.2: wild beaver families along the brooks
+        BeverGuhs.registreer();     // 1.6.2: the Beverguh and the knaagdier outfit of the Beverbeek's guhs
         // the Superkompas tab "Biomes" (section Guhmension), with a gnawed stump as its icon
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "beverbeek");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("beverbeek", "minecraft:stripped_oak_log");

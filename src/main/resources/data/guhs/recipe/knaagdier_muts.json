@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:brown_wool",
+    "minecraft:brown_wool",
+    "minecraft:brown_wool",
+    "minecraft:orange_dye"
+  ],
+  "result": {
+    "id": "guhs:knaagdier_muts"
+  }
+}

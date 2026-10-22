@@ -28969,5 +28969,10 @@
   "gui.guhs.knabbelvelden.bezig.opgepakt": "Zit opgepakt ergens (zie hieronder). Hij wordt er eerst uit gehaald.",
   "gui.guhs.knabbelvelden.scherm.soort": "Soort: %s",
   "gui.guhs.knabbelvelden.scherm.soort.alles": "alles",
-  "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs"
+  "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs",
+  "entity.guhs.guh.beverguh": "Beverguh",
+  "gui.guhs.guhdex.rarity.beverguh": "Zeldzaamheid: Alleen in de Beverbeek",
+  "gui.guhs.guhdex.info.beverguh": "Een kastanjebruine guh met twee oranje knaagtandjes en een platte geschubde staart. Knabbelt aan alles wat van hout is (ook aan je deur, sorry vads). Woont in de Beverbeek tussen de bevers. Tem hem met kaasknabbels, njeg!",
+  "item.guhs.knaagdier_muts": "Knaagdiermuts",
+  "item.guhs.knaagdier_staart": "Beverstaart"
 }

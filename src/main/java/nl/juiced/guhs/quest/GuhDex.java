@@ -32,6 +32,7 @@ public final class GuhDex {
             GuhVariant.BOSWACHTERGUH, GuhVariant.KNABBELPLUKKER,
             GuhVariant.GRILLGUH, GuhVariant.ASGUH, GuhVariant.ROOKGUH,   // (2.10.1: the Rookguh, with your saved-Rookguh count)
             GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH,   // biomes3
+            GuhVariant.BEVERGUH,   // 1.6.2 (Beverbeek)
             GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
             // 2.8 (Knuffeldal)
             GuhVariant.PLUISGUH, GuhVariant.PINGUH, GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
@@ -66,6 +67,7 @@ public final class GuhDex {
             GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,   // (1.2.8: the Bleekwoud is rare and they only come at night)
             GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3: the new biomes only exist in new chunks, far out
             GuhVariant.HERTGUHTJE,   // 1.4.2: only in Het Knabbelpark (new chunks too)
+            GuhVariant.BEVERGUH,   // 1.6.2: only in the Beverbeek (rare, new chunks only)
             GuhVariant.KNABBELKOI,   // <park-a> 1.4.2: only in the japanse tuin of a Knabbelpark
             GuhVariant.DUIFGUHTJE,   // 1.4.2 park-plekjes b: only at Oma-guh's plekje of Het Knabbelpark
             // (einde2: every creature page of the outer islands is a bonus page: only the six tameable biome guhs count for

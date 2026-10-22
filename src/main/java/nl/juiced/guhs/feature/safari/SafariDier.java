@@ -767,14 +767,24 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         return false;
     }
 
+    /**
+     * 1.6.2: a wild one (entity tag {@link #WILD}, the Beverbeek's beavers): comes and goes like the mod's other wild
+     * animals (WildeDieren: not saved, despawns far from every player). Every other safari animal stays for good.
+     */
+    public static final String WILD = "guhs_wild_safaridier";
+
+    public boolean isWild() {
+        return entityTags().contains(WILD);
+    }
+
     @Override
     public boolean removeWhenFarAway(double distance) {
-        return false;
+        return isWild();
     }
 
     @Override
     public boolean isPersistenceRequired() {
-        return true;
+        return !isWild();
     }
 
     // --- saving ---------------------------------------------------------------------------------------------------------------

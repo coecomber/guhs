@@ -200,9 +200,16 @@ WIKI = {
          "(ook een voorstel van Bouw passend verblijf telt): stop of annuleer die eerst."),
         # --- the Beverbeek ---
         ("biomen/beverbeek", "Het beekjesbos",
-         "Een zeldzaam bos van wilgen, elzen en berken in de Guhmensie, met slingerende beekjes en kleine watervalletjes. Achter "
-         "wilde dammen liggen beverpoelen met een burcht, en overal zie je knaagstronkjes, bladhoopjes en pootafdrukjes. Er lopen geen "
-         "wilde bevers rond. De Beverbeek groeit alleen in nieuwe stukken wereld."),
+         "Een zeldzaam bos van wilgen, elzen en berken (met hier en daar een guhbloesem, esdoorn of pluizenboom) op zacht glooiende "
+         "heuvels in de Guhmensie. Er slingeren beekjes en riviertjes doorheen, 2 tot 5 blokken breed, met kleine watervalletjes. Achter "
+         "wilde dammen liggen beverpoelen met een burcht, en overal zie je knaagstronkjes, bladhoopjes en pootafdrukjes. "
+         "De Beverbeek groeit alleen in nieuwe stukken wereld."),
+        ("biomen/beverbeek", "Bevers en beverguhs",
+         "Langs het water wonen wilde beverfamilies: een paartje, vaak met een of twee kleintjes. Ze zwemmen, knagen aan boomstammen en "
+         "sjouwen takjes rond. Je mag ze aaien (rechtsklik), maar niet temmen of meenemen. Er wonen hier minder guhs dan elders, en "
+         "wie er geboren wordt is vaak een Beverguh (kastanjebruin, oranje knaagtandjes, een platte geschubde staart) of draagt een "
+         "knaagdiermuts. De Knaagdiermuts en de Beverstaart kun je ook zelf maken: 3 bruine wol en een oranje kleurstof voor de muts, "
+         "2 bruine wol en een stuk leer voor de staart."),
         ("biomen/beverbeek", "De rangerpost",
          "Heel soms staat er een blokhut met een veranda: de rangerpost. De Beverbeek-ranger vertelt over bevers en wijst je de weg "
          "naar de safaribus. Bij de post woont Spaander, een bever die je niet kunt temmen of meenemen, maar wel lief kunt aaien."),

@@ -28,6 +28,14 @@ SHIFT = 12.0
 KELDER_Y = (40, 48)
 GUHWAII_OFF = (0.34, 0.40)
 BLEEKWOUD_OFF = (0.60, 0.64)        # never next to a Bleekwoud (its term starts at 0.650)
+# 1.6.2: the Beverbeek's own terrain (it used to lie on whatever the Guhmension made there: often mountains). From
+# HEUVEL_TERM on the terrain blends (knuffeldal-style, inside the interpolated final_density) into rolling hills around
+# HEUVEL_Y, +-HEUVEL_AMP blocks of the low noise beverbeek_heuvels; the blend starts well before the biome (TERM), so the
+# edge is a slope, not a cliff.
+HEUVELS = "beverbeek_heuvels"
+HEUVEL_TERM = (0.615, 0.648)
+HEUVEL_Y = 70
+HEUVEL_AMP = 11
 
 POST = "beverbeek_rangerpost"
 POST_W, POST_H, G = 17, 12, 3
@@ -120,11 +128,26 @@ def worldgen(h):
         "decorators": [_strooisel(True)], "ignore_vines": True}})
     survive = {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive",
                                                                            "state": {"Name": "minecraft:oak_sapling", "Properties": {"stage": "0"}}}}
-    for naam in ("beverbeek_wilg", "beverbeek_els"):
+    # 1.6.2: a minority (~25%) of the mod's own trees that suit a cosy brook forest: guhbloesem, red and orange maple,
+    # pluizenboom (the guhbloesem and pluizenboom copied onto plain dirt: theirs stand on pink wool / knuffelgras)
+    for eigen, bron in (("beverbeek_guhbloesem", "guhbloesem"), ("beverbeek_pluizenboom", "pluizenboom")):
+        cf = json.load(open(f"{wg}/configured_feature/{bron}.json", encoding="utf-8"))
+        for k in ("below_trunk_provider", "dirt_provider"):
+            if k in cf["config"]:
+                cf["config"][k] = _onder()
+        w(f"{wg}/configured_feature/{eigen}.json", cf)
+    for naam in ("beverbeek_wilg", "beverbeek_els", "beverbeek_guhbloesem", "beverbeek_pluizenboom"):
         w(f"{wg}/placed_feature/{naam}_checked.json", {"feature": f"guhs:{naam}", "placement": [survive]})
+    for naam in ("esdoorn_boom_rood", "esdoorn_boom_oranje"):
+        w(f"{wg}/placed_feature/beverbeek_{naam}_checked.json", {"feature": f"guhs:{naam}", "placement": [survive]})
+    # (random_selector tries them in order: the first four make ~25% of the trees)
     w(f"{wg}/configured_feature/beverbeek_bomen.json", {"type": "minecraft:random_selector", "config": {
         "default": "guhs:beverbeek_els_checked",
-        "features": [{"chance": 0.38, "feature": "guhs:beverbeek_wilg_checked"},
+        "features": [{"chance": 0.08, "feature": "guhs:beverbeek_guhbloesem_checked"},
+                     {"chance": 0.07, "feature": "guhs:beverbeek_esdoorn_boom_rood_checked"},
+                     {"chance": 0.06, "feature": "guhs:beverbeek_esdoorn_boom_oranje_checked"},
+                     {"chance": 0.06, "feature": "guhs:beverbeek_pluizenboom_checked"},
+                     {"chance": 0.38, "feature": "guhs:beverbeek_wilg_checked"},
                      {"chance": 0.3, "feature": "minecraft:birch_bees_0002_leaf_litter"},
                      {"chance": 0.04, "feature": "minecraft:fallen_birch_tree"},
                      {"chance": 0.04, "feature": "minecraft:fallen_oak_tree"}]}})
@@ -150,8 +173,8 @@ def worldgen(h):
                        "minecraft:visual/ambient_particles": [{"particle": {"type": "minecraft:falling_water"}, "probability": 0.0006}]},
         "has_precipitation": True, "temperature": 0.7, "downfall": 0.8,
         "effects": {"water_color": "#4aa3bf", "foliage_color": "#5fa64a", "dry_foliage_color": "#8a7a4a", "grass_color": "#79b85a"},
-        "creature_spawn_probability": 0.12,
-        "spawners": {**{k: [] for k in base["spawners"]}, "creature": [{"type": "guhs:guh", "weight": 100, "minCount": 2, "maxCount": 3}]},
+        "creature_spawn_probability": 0.06,      # (1.6.2: fewer guhs: the Beverbeek is the beavers'; they come via WildeBevers)
+        "spawners": {**{k: [] for k in base["spawners"]}, "creature": [{"type": "guhs:guh", "weight": 100, "minCount": 1, "maxCount": 2}]},
         "spawn_costs": {}, "carvers": [],
         "features": [[], [], ["guhs:beverbeek_beek", "guhs:beverbeek_poel"], [], [], [], ores, [], [],
                      ["guhs:beverbeek_bomen", "minecraft:patch_grass_forest", "minecraft:flower_default", "minecraft:patch_leaf_litter",
@@ -163,6 +186,16 @@ def worldgen(h):
     from features import knuffeldal_wereld as kw
     from features import verhaal_wereld as vw
     w(f"{wg}/noise/{NOISE}.json", {"firstOctave": NOISE_OCTAVE, "amplitudes": [1.0]})
+    w(f"{wg}/noise/{HEUVELS}.json", {"firstOctave": -6, "amplitudes": [1.0, 0.5, 0.25]})
+
+    def buiten_term():
+        """1 away from everything the Beverbeek must never touch (the same exclusions as the biome term)."""
+        buiten = kw.mul(kw.mul(kw.geen_zee(), vw.geen_knuffel()), kw.mul(vw.geen_polder(), kw.mul(
+            vw.geen_toendra(), kw.spline(vw.GUHWAII_NOISE, [(GUHWAII_OFF[0], 1.0), (GUHWAII_OFF[1], 0.0)]))))
+        buiten = kw.mul(buiten, kw.spline("bleekwoud", [(BLEEKWOUD_OFF[0], 1.0), (BLEEKWOUD_OFF[1], 0.0)]))
+        for soort in bw.ENTRIES:
+            buiten = kw.mul(buiten, kw.add(1.0, kw.mul(bw._regio(soort), -1.0)))
+        return buiten
 
     def term():
         buiten = kw.mul(kw.mul(kw.geen_zee(), vw.geen_knuffel()), kw.mul(vw.geen_polder(), kw.mul(
@@ -178,6 +211,17 @@ def worldgen(h):
         if f"guhs:{NOISE}\"" not in json.dumps(r["erosion"]):      # (idempotent)
             for slot in ("temperature", "vegetation", "erosion"):
                 r[slot] = kw.add(r[slot], kw.mul(term(), -SHIFT))
+        # 1.6.2: the rolling hills (the erosion shift above only picks the biome; it never shaped the terrain)
+        final = r["final_density"]
+        binnen = final["input"] if final.get("type") == "guhs:bio_terrein" else final
+        assert binnen["type"] == "minecraft:max" and binnen["argument1"]["type"] == "minecraft:interpolated", "unexpected final_density"
+        if f"guhs:{HEUVELS}\"" not in json.dumps(binnen["argument1"]):
+            terrein = binnen["argument1"]["argument"]
+            bed = kw.add(kw.gradient(0, 256, 0.025 * (HEUVEL_Y + 0.5), 0.025 * (HEUVEL_Y + 0.5 - 256)),
+                         kw.mul(kw.noise_ref(HEUVELS), 0.025 * HEUVEL_AMP))
+            b = {"type": "minecraft:cache_2d", "argument": kw.mul(kw.spline(NOISE, [(HEUVEL_TERM[0], 0.0), (HEUVEL_TERM[1], 1.0)]), buiten_term())}
+            binnen["argument1"] = {"type": "minecraft:interpolated",
+                                   "argument": kw.add(kw.mul(terrein, kw.add(kw.mul(b, -1.0), 1.0)), kw.mul(bed, b))}
     h.patch_json(f"{wg}/noise_settings/guhmension.json", router)
 
     def biome_source(d):

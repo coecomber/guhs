@@ -101,6 +101,14 @@ public final class GuhmensionSpawner {
             return;
         }
         int groupSize = 2 + random.nextInt(3);
+        if (level.getBiome(new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z))
+                .is(nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.BIOME)) {
+            // 1.6.2: the Beverbeek belongs to the beavers: half the groups don't come, the others are 1-2 guhs (about a quarter)
+            if (random.nextBoolean()) {
+                return;
+            }
+            groupSize = 1 + random.nextInt(2);
+        }
         for (int i = 0; i < groupSize; i++) {
             int gx = x + random.nextInt(5) - 2;
             int gz = z + random.nextInt(5) - 2;
