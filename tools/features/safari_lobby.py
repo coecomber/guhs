@@ -248,6 +248,18 @@ WINKEL = [
     {"id": "blok_bamboe_omheining", "groep": "blokken", "item": "guhs:bamboe_omheining", "prijs": 5, "aantal": 16},
     {"id": "blok_safari_acaciaplanken", "groep": "blokken", "item": "guhs:safari_acaciaplanken", "prijs": 5, "aantal": 16},
     {"id": "blok_dierentuinbordje", "groep": "blokken", "item": "guhs:dierentuinbordje", "prijs": 8, "aantal": 4},
+    # G1 (design 1.8 / 2.9): the park's safarihek and rotswanden; these unlock through the dex ("eis")
+    {"id": "blok_safarihek", "groep": "blokken", "item": "guhs:safarihek", "prijs": 10, "aantal": 16, "eis": {"dex": 10}},
+    {"id": "blok_rotswand", "groep": "blokken", "item": "guhs:rotswand", "prijs": 10, "aantal": 16, "eis": {"dex": 20}},
+    {"id": "blok_rotswand_trap", "groep": "blokken", "item": "guhs:rotswand_trap", "prijs": 10, "aantal": 16, "eis": {"dex": 20}},
+    {"id": "blok_rotswand_muur", "groep": "blokken", "item": "guhs:rotswand_muur", "prijs": 10, "aantal": 16, "eis": {"dex": 20}},
+    {"id": "blok_rieten_dak_savanne", "groep": "blokken", "item": "guhs:rieten_dak", "prijs": 15, "aantal": 64, "eis": {"zone": "savanne"},
+     "naam": "gui.guhs.safari.winkel.rieten_dak_bulk"},
+    # G1: the animal toys of the verblijfsborden (they were only on display)
+    {"id": "speelgoed_speelbal", "groep": "speelgoed", "item": "guhs:safari_speelbal", "prijs": 20, "uitleg": "gui.guhs.safari.winkel.speelgoed"},
+    {"id": "speelgoed_krabboom", "groep": "speelgoed", "item": "guhs:safari_krabboom", "prijs": 30, "uitleg": "gui.guhs.safari.winkel.speelgoed"},
+    {"id": "speelgoed_schommelband", "groep": "speelgoed", "item": "guhs:safari_schommelband", "prijs": 25, "uitleg": "gui.guhs.safari.winkel.speelgoed"},
+    {"id": "speelgoed_glijbaantje", "groep": "speelgoed", "item": "guhs:safari_glijbaantje", "prijs": 30, "uitleg": "gui.guhs.safari.winkel.speelgoed"},
 ]
 
 

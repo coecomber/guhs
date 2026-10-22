@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "R  ",
+    "RR ",
+    "RRR"
+  ],
+  "key": {
+    "R": "guhs:rotswand"
+  },
+  "result": {
+    "id": "guhs:rotswand_trap",
+    "count": 4
+  }
+}

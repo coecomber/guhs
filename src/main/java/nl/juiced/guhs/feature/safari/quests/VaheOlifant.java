@@ -208,6 +208,11 @@ public final class VaheOlifant {
         }
         if (er.isEmpty()) {
             zet(level, stal);
+        } else if (er.get(0) instanceof SafariDier d && d.bewoner().isEmpty()) {
+            // G1: a Dikkie from before 1.6.0's bekende-bewoner list becomes one too (keeping his translated name)
+            Component naam = d.getCustomName();
+            d.zetBewoner(nl.juiced.guhs.feature.safari.gedrag.Bewoners.DIKKIE, "Dikkie");
+            d.setCustomName(naam);
         }
     }
 
@@ -220,6 +225,7 @@ public final class VaheOlifant {
         int zone = ParkData.get().zone(stal.getX(), stal.getZ());
         dier.zet("olifant", "man", stal, 2, zone, -1, SafariOpslag.get(level.getServer()).generatie());
         dier.snapTo(stal.getX() + 0.5, stal.getY(), stal.getZ() + 0.5, 180f, 0f);
+        dier.zetBewoner(nl.juiced.guhs.feature.safari.gedrag.Bewoners.DIKKIE, "Dikkie");   // G1: a bekende bewoner too
         dier.setCustomName(Component.translatable("gui.guhs.safari.olifant.naam"));
         dier.setCustomNameVisible(true);
         dier.addTag(TAG);

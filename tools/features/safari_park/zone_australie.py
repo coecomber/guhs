@@ -295,6 +295,14 @@ def outback(park):
         park.set(hx, top - 2, hz, "coarse_dirt")
 
 
+def _npc(park, id_, kind, pos, yaw):
+    """G1 (design 1.4): an Aussie guh standing here (feet at pos, Minecraft yaw: 0 south, 90 west, 270 east); the game
+    places it like the lobby characters (lobby.json, written by zone_s2_lobby from park.lobby_npcs_extra)."""
+    npcs = getattr(park, "lobby_npcs_extra", [])
+    npcs.append(dict(id=id_, kind=kind, pos=[int(pos[0]), int(pos[1]), int(pos[2])], yaw=float(yaw)))
+    park.lobby_npcs_extra = npcs
+
+
 def postkantoortje(park):
     x, z = POST
     kap(park, x, z, 7)
@@ -339,6 +347,7 @@ def postkantoortje(park):
     park.set(x, g + 2, z - 1, "potted_dead_bush")
     park.set(x, g + 2, z + 1, "flower_pot")
     park.set(x + 2, g + 1, z, "chiseled_bookshelf", facing="west")
+    _npc(park, "aussie_post", "safari_aussie_post", (x + 1, g + 1, z), 90)        # G1: Shazza behind the counter
     park.lamp(x + 1, g + 3, z, "lantaarn_hangend")
     for dz in (-2, 2):
         park.lamp(x - 5, g + 3, z + dz, "lantaarn_hangend")
@@ -368,6 +377,7 @@ def kamp(park):
     for (bx, bz, ax) in ((x - 3, z, "z"), (x + 3, z, "z"), (x, z + 3, "x")):
         park.set(bx, g + 1, bz, kit.state("stripped_acacia_log", axis=ax))
     park.set(x + 2, g + 1, z - 3, "chest", facing="south", type="single", waterlogged="false")
+    _npc(park, "aussie_kamp", "safari_aussie_kamp", (x - 3, g + 2, z), 270)       # G1: Davo on the log bench, facing the fire
     park.lamp(x + 2, g + 2, z - 3, "lantaarn")
 
 
@@ -386,6 +396,7 @@ def schaduwboom(park):
         park.set(xx, g + (2 if mid else 3), z, "white_wool")
     for (tx, tz) in (a, b):
         park.set(tx, g + 3, tz, kit.state("acacia_log", axis="y"))
+    _npc(park, "aussie_hangmat", "safari_aussie_hangmat", (x, g + 3, z), 0)       # G1: Bazza asleep in the hammock
 
 
 def prieel(park):

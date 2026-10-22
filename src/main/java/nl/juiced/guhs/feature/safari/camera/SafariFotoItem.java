@@ -60,12 +60,54 @@ public class SafariFotoItem extends Item {
                 .withStyle(ChatFormatting.GOLD));
     }
 
+    /** G1 (design 1.7): the photo as a painting to hang up: the species' own photo painting (painting variant
+     *  guhs:safari_foto_<soort>, a 1x1 portrait; tools/features/safari_g1.py), for two sheets of paper. */
+    public static final int SCHILDERIJ_PAPIER = 2;
+
+    static void schilderij(ServerPlayer p, String soort) {
+        SafariSpeler.DexRegel r = SafariSpeler.dex(p, soort);
+        if (r.sterren() <= 0) {
+            return;
+        }
+        ItemStack doek = nl.juiced.guhs.feature.safari.SafariKoppelingen.schilderij(p.level().getServer(), "safari_foto_" + soort);
+        if (doek.isEmpty()) {
+            return;
+        }
+        if (!p.getAbilities().instabuild) {
+            if (p.getInventory().countItem(Items.PAPER) < SCHILDERIJ_PAPIER) {
+                p.sendOverlayMessage(Component.translatable("gui.guhs.safari.schilderij.papier", SCHILDERIJ_PAPIER).withStyle(ChatFormatting.RED));
+                return;
+            }
+            int over = SCHILDERIJ_PAPIER;
+            for (int i = 0; i < p.getInventory().getContainerSize() && over > 0; i++) {
+                ItemStack s = p.getInventory().getItem(i);
+                if (s.is(Items.PAPER)) {
+                    int n = Math.min(over, s.getCount());
+                    s.shrink(n);
+                    over -= n;
+                }
+            }
+        }
+        p.getInventory().placeItemBackInInventory(doek);
+        p.level().playSound(null, p.blockPosition(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.PLAYERS, 0.8f, 0.9f);
+        p.sendOverlayMessage(Component.translatable("gui.guhs.safari.schilderij.klaar", Component.translatable("entity.guhs.safari." + soort))
+                .withStyle(ChatFormatting.GOLD));
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return foto(stack).getBooleanOr("Goud", false) || super.isFoil(stack);
+    }
+
     @Override
     public Component getName(ItemStack stack) {
         CompoundTag f = foto(stack);
         String soort = f.getStringOr("Soort", "");
-        return soort.isEmpty() ? super.getName(stack)
-                : Component.translatable("item.guhs.safari_foto.van", Component.translatable("entity.guhs.safari." + soort));
+        if (soort.isEmpty()) {
+            return super.getName(stack);
+        }
+        Component naam = Component.translatable("item.guhs.safari_foto.van", Component.translatable("entity.guhs.safari." + soort));
+        return f.getBooleanOr("Goud", false) ? naam.copy().withStyle(ChatFormatting.GOLD) : naam;   // G1: the golden camera's photo
     }
 
     @Override
@@ -78,6 +120,9 @@ public class SafariFotoItem extends Item {
         int sterren = f.getIntOr("Sterren", 1);
         tooltip.accept(Component.literal("★".repeat(sterren) + "☆".repeat(Math.max(0, 3 - sterren))).withStyle(ChatFormatting.GOLD));
         tooltip.accept(Foto.onderschrift(f).copy().withStyle(ChatFormatting.WHITE, ChatFormatting.ITALIC));
+        if (f.getBooleanOr("Goud", false)) {
+            tooltip.accept(Component.translatable("item.guhs.safari_foto.goud").withStyle(ChatFormatting.GOLD));
+        }
         String wie = f.getStringOr("Fotograaf", "");
         if (!wie.isEmpty()) {
             tooltip.accept(Component.translatable("item.guhs.safari_foto.door", wie).withStyle(ChatFormatting.GRAY));

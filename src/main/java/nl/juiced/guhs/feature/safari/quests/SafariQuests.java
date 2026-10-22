@@ -81,8 +81,9 @@ public final class SafariQuests {
 
     // --- items ------------------------------------------------------------------------------------------------------------
     /** The golden safari camera: the cosmetic reward of the full dex (S1's camera can check the flag {@link Beloningen#GOUDEN_CAMERA}). */
-    public static final DeferredItem<GuhpixelFeature.LoreItem> GOUDEN_SAFARICAMERA = ITEMS.registerItem("gouden_safaricamera",
-            GuhpixelFeature.LoreItem::new, () -> new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC));
+    /** G1: a real camera now (golden photo frames, {@link nl.juiced.guhs.feature.safari.camera.SafariCameraItem.Goud}). */
+    public static final DeferredItem<nl.juiced.guhs.feature.safari.camera.SafariCameraItem.Goud> GOUDEN_SAFARICAMERA = ITEMS.registerItem("gouden_safaricamera",
+            nl.juiced.guhs.feature.safari.camera.SafariCameraItem.Goud::new, () -> new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC));
     /** The voucher for the Gouden dikdik's board (S5's giftshop / board redeems it). */
     public static final DeferredItem<GuhpixelFeature.LoreItem> BORDBON_GOUDEN_DIKDIK = ITEMS.registerItem("bordbon_gouden_dikdik",
             GuhpixelFeature.LoreItem::new, () -> new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE));

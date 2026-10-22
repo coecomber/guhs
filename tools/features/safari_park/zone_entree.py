@@ -1269,6 +1269,39 @@ def _lobby():
         S.fill(x, y + 1, z, x, y + h, z, "minecraft:oak_log[axis=y]")
         S.ellipsoid(x, y + h, z, 2.6, 2.0, 2.6, OL, keep=True)
 
+    # ================================================================ (G1, design 1.5) a picknickplek beside a path
+    def picknick():
+        beste, bd = None, 1e9
+        for (x, z) in sorted(FP):
+            d = (x - CX) ** 2 + (z - CZ) ** 2
+            if d < 24 * 24 or d >= bd or not vrij_grond(x, z, 4) or S.get(x, G, z) != GRASS:
+                continue
+            blok = [(x + a, z + b) for a in range(-4, 5) for b in range(-4, 5)]
+            if any(c in PATHS for c in blok):
+                continue
+            if not any((x + a, z + b) in PATHS for a in range(-6, 7) for b in range(-6, 7)):
+                continue
+            beste, bd = (x, z), d
+        if beste is None:
+            return None
+        x, z = beste
+        for a in range(-1, 2):                                  # the checked blanket
+            for b in range(-2, 3):
+                S.set(x + a, G + 1, z + b, "minecraft:red_carpet" if (a + b) % 2 else "minecraft:white_carpet")
+        S.set(x + 3, G + 1, z, "guh_tafel[facing=north]")
+        S.set(x + 3, G + 1, z - 1, "guh_stoel[facing=south]")
+        S.set(x + 3, G + 1, z + 1, "guh_stoel[facing=north]")
+        S.set(x - 3, G + 1, z, "minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]")
+        S.set(x - 3, G + 1, z - 2, "guh_bloempot")
+        bordje(x - 3, G + 1, z + 2, 4, ["Picknickplek", "Eet smakelijk,", "vads!", ""])
+        for a in range(-4, 5):
+            for b in range(-4, 5):
+                OCC.add((x + a, z + b))
+        return beste
+
+    PICKNICK = picknick()
+    print(f"    lobby: picknickplek {PICKNICK}")
+
     cells = sorted(FP)
     rnd.shuffle(cells)
     for (x, z) in cells:

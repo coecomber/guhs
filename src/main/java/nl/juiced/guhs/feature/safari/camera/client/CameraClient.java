@@ -39,7 +39,7 @@ public final class CameraClient {
             public Identifier getScopeOverlayTexture(ItemStack stack) {
                 return ZOEKER;
             }
-        }, CameraFeature.CAMERA.get()));
+        }, CameraFeature.CAMERA.get(), nl.juiced.guhs.feature.safari.quests.SafariQuests.GOUDEN_SAFARICAMERA.get()));   // (G1: the golden one too)
         modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("safari_camera"), CameraClient::teken));
         CameraPayloads.ontvanger = CameraClient::uitslag;
         Lokaal.bron = () -> Minecraft.getInstance().player == null ? null : Minecraft.getInstance().player.getUUID();
@@ -81,7 +81,7 @@ public final class CameraClient {
         CompoundTag f = laatste.foto();
         int w = 220, h = f.isEmpty() ? 22 : 46 + (laatste.munten() > 0 ? 10 : 0) + (laatste.missies() > 0 ? 10 : 0);
         int x = (g.guiWidth() - w) / 2, y = 8;
-        g.fill(x - 2, y - 2, x + w + 2, y + h + 2, 0xFFF7B6CB);
+        g.fill(x - 2, y - 2, x + w + 2, y + h + 2, f.getBooleanOr("Goud", false) ? 0xFFE8B830 : 0xFFF7B6CB);   // G1: golden frame
         g.fill(x, y, x + w, y + h, 0xF0FFF8FB);
         if (f.isEmpty()) {
             g.centeredText(font, Component.translatable("gui.guhs.safari.foto.niks"), x + w / 2, y + 7, 0xFF7A2848);

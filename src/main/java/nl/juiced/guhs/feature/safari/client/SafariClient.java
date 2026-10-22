@@ -40,6 +40,8 @@ public final class SafariClient {
     static final DataTicket<Boolean> GLOED = DataTicket.create("guhs_safari_dier_gloed", Boolean.class);
     /** Round 4: the animation it plays now (prop bones "prop_<actie>" only show during that actie). */
     static final DataTicket<String> ACTIE = DataTicket.create("guhs_safari_dier_actie", String.class);
+    /** G1 (design 1.7, nachtsafari): the glowing-eyes texture to draw now ("" none: by day, asleep, or no such file). */
+    static final DataTicket<String> NACHTOGEN = DataTicket.create("guhs_safari_dier_nachtogen", String.class);
     private static final Map<String, Boolean> BESTAAT = new ConcurrentHashMap<>();
 
     public static void init(IEventBus modBus) {
@@ -92,6 +94,9 @@ public final class SafariClient {
                     // <naam>_slaap_glowmask (round 4: the sleeping glimworm drew the missing texture when only <naam>_glowmask existed)
                     state.addGeckolibData(GLOED, !gekozen.isEmpty() && textuur(gekozen + "_glowmask"));
                     state.addGeckolibData(ACTIE, dier.actie());
+                    // G1: awake in the dark, its eyes catch the light (the eye pixels of <t>_nachtogen, drawn like spider eyes)
+                    boolean nacht = !dier.slaapt() && dier.level().isDarkOutside() && textuur(t + "_nachtogen");
+                    state.addGeckolibData(NACHTOGEN, nacht ? t + "_nachtogen" : "");
                 }
 
                 @Override
@@ -118,6 +123,19 @@ public final class SafariClient {
                 @Override
                 protected RenderType getRenderType(LivingEntityRenderState state) {
                     return Boolean.TRUE.equals(state.getOrDefaultGeckolibData(GLOED, false)) ? super.getRenderType(state) : null;
+                }
+            });
+            withRenderLayer(new AutoGlowingGeoLayer<SafariDier, Void, LivingEntityRenderState>(this) {
+                @Override
+                protected Identifier getTextureResource(LivingEntityRenderState state) {
+                    return Guhs.id("textures/entity/safari/" + state.getOrDefaultGeckolibData(NACHTOGEN, "") + ".png");
+                }
+
+                @Nullable
+                @Override
+                protected RenderType getRenderType(LivingEntityRenderState state) {
+                    return state.getOrDefaultGeckolibData(NACHTOGEN, "").isEmpty() ? null
+                            : net.minecraft.client.renderer.rendertype.RenderTypes.eyes(getTextureResource(state));
                 }
             });
         }

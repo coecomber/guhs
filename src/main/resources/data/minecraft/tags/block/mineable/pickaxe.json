@@ -590,6 +590,9 @@
     "guhs:dakgoot",
     "guhs:regenpijp",
     "guhs:guh_schoorsteen",
-    "guhs:guh_lantaarnpaal"
+    "guhs:guh_lantaarnpaal",
+    "guhs:rotswand",
+    "guhs:rotswand_trap",
+    "guhs:rotswand_muur"
   ]
 }

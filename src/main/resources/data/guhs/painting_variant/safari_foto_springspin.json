@@ -1,0 +1,18 @@
+{
+  "asset_id": "guhs:safari_foto_springspin",
+  "width": 1,
+  "height": 1,
+  "title": {
+    "translate": "painting.guhs.safari_foto.title",
+    "with": [
+      {
+        "translate": "entity.guhs.safari.springspin"
+      }
+    ],
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari_foto.author",
+    "color": "gray"
+  }
+}

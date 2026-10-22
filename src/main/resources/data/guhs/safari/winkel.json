@@ -92,5 +92,84 @@
     "item": "guhs:dierentuinbordje",
     "prijs": 8,
     "aantal": 4
+  },
+  {
+    "id": "blok_safarihek",
+    "groep": "blokken",
+    "item": "guhs:safarihek",
+    "prijs": 10,
+    "aantal": 16,
+    "eis": {
+      "dex": 10
+    }
+  },
+  {
+    "id": "blok_rotswand",
+    "groep": "blokken",
+    "item": "guhs:rotswand",
+    "prijs": 10,
+    "aantal": 16,
+    "eis": {
+      "dex": 20
+    }
+  },
+  {
+    "id": "blok_rotswand_trap",
+    "groep": "blokken",
+    "item": "guhs:rotswand_trap",
+    "prijs": 10,
+    "aantal": 16,
+    "eis": {
+      "dex": 20
+    }
+  },
+  {
+    "id": "blok_rotswand_muur",
+    "groep": "blokken",
+    "item": "guhs:rotswand_muur",
+    "prijs": 10,
+    "aantal": 16,
+    "eis": {
+      "dex": 20
+    }
+  },
+  {
+    "id": "blok_rieten_dak_savanne",
+    "groep": "blokken",
+    "item": "guhs:rieten_dak",
+    "prijs": 15,
+    "aantal": 64,
+    "eis": {
+      "zone": "savanne"
+    },
+    "naam": "gui.guhs.safari.winkel.rieten_dak_bulk"
+  },
+  {
+    "id": "speelgoed_speelbal",
+    "groep": "speelgoed",
+    "item": "guhs:safari_speelbal",
+    "prijs": 20,
+    "uitleg": "gui.guhs.safari.winkel.speelgoed"
+  },
+  {
+    "id": "speelgoed_krabboom",
+    "groep": "speelgoed",
+    "item": "guhs:safari_krabboom",
+    "prijs": 30,
+    "uitleg": "gui.guhs.safari.winkel.speelgoed"
+  },
+  {
+    "id": "speelgoed_schommelband",
+    "groep": "speelgoed",
+    "item": "guhs:safari_schommelband",
+    "prijs": 25,
+    "uitleg": "gui.guhs.safari.winkel.speelgoed"
+  },
+  {
+    "id": "speelgoed_glijbaantje",
+    "groep": "speelgoed",
+    "item": "guhs:safari_glijbaantje",
+    "prijs": 30,
+    "uitleg": "gui.guhs.safari.winkel.speelgoed"
   }
 ]

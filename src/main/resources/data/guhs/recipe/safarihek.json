@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LNL",
+    "LNL"
+  ],
+  "key": {
+    "L": "minecraft:dark_oak_log",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "guhs:safarihek",
+    "count": 6
+  }
+}

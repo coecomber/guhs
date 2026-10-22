@@ -108,11 +108,19 @@ public final class SafariDexTab {
             rijScroll = Math.max(0, Math.min(rijScroll, maxScroll()));
             if (gekozen != null) {
                 String soort = gekozen;
+                int half = (px2 - px1 - 2) / 2;
                 Button print = Button.builder(Component.translatable("gui.guhs.safari.dex.afdrukken"),
-                        b -> ClientPacketDistributor.sendToServer(new CameraPayloads.Afdrukken(soort))).bounds(px1, top + h - 22, px2 - px1, 14).build();
+                        b -> ClientPacketDistributor.sendToServer(new CameraPayloads.Afdrukken(soort))).bounds(px1, top + h - 22, half, 14).build();
                 print.active = sterren(soort) > 0;
                 print.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.guhs.safari.dex.afdrukken.tip")));
                 knop.accept(print);
+                // G1 (design 1.7): or as a painting to hang up (the species' photo painting, two sheets of paper)
+                Button doek = Button.builder(Component.translatable("gui.guhs.safari.dex.schilderij"),
+                        b -> ClientPacketDistributor.sendToServer(new CameraPayloads.Afdrukken(CameraPayloads.SCHILDERIJ + soort)))
+                        .bounds(px1 + half + 2, top + h - 22, px2 - px1 - half - 2, 14).build();
+                doek.active = sterren(soort) > 0;
+                doek.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.guhs.safari.dex.schilderij.tip")));
+                knop.accept(doek);
             }
         }
     }
@@ -125,7 +133,7 @@ public final class SafariDexTab {
         return SafariSync.stand;
     }
 
-    static CompoundTag dexRegel(String soort) {
+    public static CompoundTag dexRegel(String soort) {
         return stand().getCompoundOrEmpty("Dex").getCompoundOrEmpty(soort);
     }
 
@@ -263,6 +271,10 @@ public final class SafariDexTab {
         int y = gy;
         int bw = px2 - px1;
         int beeldH = Math.max(50, (int) ((h - 46) * 0.42f));
+        if (st > 0 && dexRegel(soort).getCompoundOrEmpty("Foto").getBooleanOr("Goud", false)) {
+            g.fill(px1 - 2, y - 2, px2 + 2, y + beeldH + 2, 0xFFE8B830);          // G1: a golden frame (golden camera)
+            g.fill(px1, y, px2, y + beeldH, 0xFFFFF4D8);
+        }
         g.fill(px1, y, px2, y + beeldH, st > 0 ? 0x30F7B6CB : 0xFF2A1420);
         if (st > 0) {
             SafariDier pop = pop(soort);

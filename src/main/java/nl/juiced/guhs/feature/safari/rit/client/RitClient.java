@@ -148,6 +148,10 @@ public final class RitClient {
                 // they look out to their side of the truck, now and then at the view ahead
                 double[] z = TruckEntity.ZIT[s];
                 float kijk = yaw + (z[0] < 0 ? 70f : -70f) + Mth.sin((truck.tickCount + s * 40) * 0.03f) * 25f;
+                // G1 (design 1.5): looking through their binoculars, the head tipped up a little and slowly searching
+                float op = -7f + Mth.sin((truck.tickCount + s * 23) * 0.05f) * 4f;
+                g.setXRot(op);
+                g.xRotO = op;
                 uit[1 + j] = gast(g, truck, truckState, stoel(z, yaw), kijk, partialTick);
             }
             return uit;
@@ -155,7 +159,7 @@ public final class RitClient {
 
         private static void draag(GuhEntity g, int i) {
             g.wear(kleding("SAFARIHOEDJE", "SAFARI_HOEDJE", i % 2 == 0 ? "STRAW_HAT" : "RAIN_HAT"));
-            g.wear(kleding("VERREKIJKER", "SAFARI_VERREKIJKER", i % 3 == 0 ? "SUNGLASSES" : "DETECTIVE_VERGROOTGLAS"));
+            g.wear(kleding("SAFARI_VERREKIJKER", "VERREKIJKER", "DETECTIVE_VERGROOTGLAS"));   // (G1: everyone has binoculars)
         }
 
         /** The first clothes that exist (the safari clothes of slice S6 when they are there, else a fitting stand-in). */

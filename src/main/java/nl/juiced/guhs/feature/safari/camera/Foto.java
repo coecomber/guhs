@@ -65,7 +65,8 @@ public record Foto(String soort, String variant, String zone, String actie, bool
                 : Component.translatable(actieKey).append(" ");
         Component dier = Component.translatable(t.getBooleanOr("Baby", false) ? "gui.guhs.safari.foto.baby" : "gui.guhs.safari.foto.dier",
                 bijwoord, Component.translatable("gui.guhs.safari.foto.naam." + soort));   // (the name inside a sentence: "rode panda")
-        Component waar = t.getBooleanOr("Familie", false) ? Component.translatable("gui.guhs.safari.foto.familie")
+        Component waar = t.getBooleanOr("Nacht", false) ? Component.translatable("gui.guhs.safari.foto.nacht")
+                : t.getBooleanOr("Familie", false) ? Component.translatable("gui.guhs.safari.foto.familie")
                 : t.getBooleanOr("Samen", false) ? Component.translatable("gui.guhs.safari.foto.samen")
                 : t.getBooleanOr("Dichtbij", false) ? Component.translatable("gui.guhs.safari.foto.dichtbij") : Component.empty();
         return Component.translatable("gui.guhs.safari.foto.zin." + sterren, dier, waar);
