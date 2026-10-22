@@ -1103,7 +1103,11 @@ def _lobby():
         for x in range(EX1 + 3, EX2 - 2, 5):
             for z in range(EZ1 + 3, EZ2 - 2, 5):
                 if abs(x - MIDX) > 4 and S.is_air(x, G + 10, z) and not S.is_air(x, G + 11, z):
-                    S.set(x, G + 10, z, LAMPION[(x // 5 + z // 5) % 3])
+                    # round 6 (user): 3 lower, so the floor gets the light, on a chain from the ceiling
+                    laag = G + 7 if all(S.is_air(x, y, z) for y in range(G + 6, G + 10)) else G + 10
+                    for y in range(laag + 1, G + 11):
+                        S.set(x, y, z, "minecraft:chain[axis=y,waterlogged=false]")
+                    S.set(x, laag, z, LAMPION[(x // 5 + z // 5) % 3])
         for x in range(EX1 + 2, EX2 - 1, 4):                               # glow tiles in the floor along both walls
             for z in (EZ1 + 1, EZ2 - 1):
                 if S.get(x, G, z) != AIR and S.is_air(x, G + 1, z):
