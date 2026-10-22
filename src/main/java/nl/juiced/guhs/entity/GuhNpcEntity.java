@@ -271,6 +271,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         /** 1.6.0 round 4 (L2): the Kriebelhuis' ticket guh and its shop guh. */
         SAFARI_KRIEBELHUIS_BALIE(1.0f),
         SAFARI_KRIEBELHUIS_WINKEL(1.0f),
+        /** 1.6.0 F1b: Chauffeur Toeter of the Guh-safaribus at the busstations in the Guhmension. */
+        SAFARI_CHAUFFEUR(1.0f),
         // </safari-lobby>
         // <beverbeek>
         /** 1.6.0 deel 2 (F10a): the ranger-guh at the ranger post in the Beverbeek (feature/beverbeek). */

@@ -22,7 +22,6 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.feature.safari.ParkBouwer;
 import nl.juiced.guhs.feature.safari.Safari;
-import nl.juiced.guhs.feature.safari.SafariToegang;
 import nl.juiced.guhs.feature.safari.kern.SafariSpeler;
 import nl.juiced.guhs.feature.verhaal.Praat;
 
@@ -168,7 +167,7 @@ public final class SafariLobby {
 
     /**
      * (round 4) The Guh-safaribus on the busplein: ring the bell at its stop or click the bus, and it takes you back to
-     * where you came from (as {@code /guhs safari terug}).
+     * where you came from (F1b: the busstation you got on at, with the ride back; see bus.Busrit).
      */
     private static void opBus(PlayerInteractEvent.RightClickBlock event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || !Safari.in(p) || event.getHand() != InteractionHand.MAIN_HAND) {
@@ -184,7 +183,7 @@ public final class SafariLobby {
             event.setCanceled(true);
         }
         p.sendSystemMessage(Component.translatable("gui.guhs.safari.bus.terug").withStyle(ChatFormatting.GOLD));
-        SafariToegang.terug(p);
+        nl.juiced.guhs.feature.safari.bus.Busrit.uitstappen(p);   // F1b: back to the station you got on at, your guhs along, the way back
     }
 
     /** Waking up in a lodge hut: the vroege-vogel bonus for the first photo of the day (S1). */

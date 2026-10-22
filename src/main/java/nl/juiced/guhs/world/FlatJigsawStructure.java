@@ -46,6 +46,11 @@ public class FlatJigsawStructure extends Structure implements BouwRuimte.Ruimte 
         this.voorrang = voorrang;
     }
 
+    /** F1b: the jigsaw inside (a structure placed by hand by an op skips the flatness and room checks). */
+    public Structure jigsaw() {
+        return jigsaw;
+    }
+
     @Override
     public int keepClear() {
         return keepClear;

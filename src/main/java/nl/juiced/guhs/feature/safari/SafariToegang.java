@@ -44,15 +44,35 @@ public final class SafariToegang {
         for (Leashable dier : Leashable.leashableLeashedTo(p)) {
             dier.dropLeash();
         }
-        ParkData d = ParkData.get();
-        BlockPos in = d.ingang;
-        level.getChunk(in.getX() >> 4, in.getZ() >> 4);
-        int y = Math.max(in.getY(), level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, in.getX(), in.getZ()));
+        Vec3 aankomst = aankomst(level);
         p.stopRiding();
-        p.teleport(new TeleportTransition(level, new Vec3(in.getX() + 0.5, y, in.getZ() + 0.5), Vec3.ZERO, d.ingangYaw, 0f,
-                TeleportTransition.DO_NOTHING));
+        p.teleport(new TeleportTransition(level, aankomst, Vec3.ZERO, aankomstYaw(), 0f, TeleportTransition.DO_NOTHING));
         p.sendSystemMessage(Component.translatable("gui.guhs.safari.welkom").withStyle(ChatFormatting.GOLD));
         return true;
+    }
+
+    /**
+     * F1b: where you step out of the bus: on the busplein beside the lobby's Guh-safaribus (its west side, the middle of
+     * its length), on the ground. (The park's ingang is the middle of the bus itself: you used to land on its roof.)
+     * Without a bus in lobby.json: the ingang.
+     */
+    public static Vec3 aankomst(ServerLevel level) {
+        net.minecraft.world.phys.AABB bus = nl.juiced.guhs.feature.safari.lobby.LobbyPlekken.get().bus;
+        BlockPos in = ParkData.get().ingang;
+        int x = in.getX(), z = in.getZ(), y0 = in.getY();
+        if (bus != null) {
+            x = (int) Math.floor(bus.minX) - 6;
+            z = (int) Math.floor(bus.minZ) + 8;
+            y0 = (int) Math.floor(bus.minY);
+        }
+        level.getChunk(x >> 4, z >> 4);
+        int y = Math.max(y0, level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z));
+        return new Vec3(x + 0.5, y, z + 0.5);
+    }
+
+    /** Looking north, at the lobby (F1b). */
+    public static float aankomstYaw() {
+        return nl.juiced.guhs.feature.safari.lobby.LobbyPlekken.get().bus != null ? 180f : ParkData.get().ingangYaw;
     }
 
     /** Back to where the player came from. False when they are not in the park. */
