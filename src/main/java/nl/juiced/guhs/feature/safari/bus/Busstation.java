@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -116,6 +115,7 @@ public final class Busstation {
         }
         StructureStart start = gemaakt;
         BoundingBox box = start.getBoundingBox();
+        BekendeStations.onthoud(level, box.getCenter());
         ChunkPos min = new ChunkPos(SectionPos.blockToSectionCoord(box.minX()), SectionPos.blockToSectionCoord(box.minZ()));
         ChunkPos max = new ChunkPos(SectionPos.blockToSectionCoord(box.maxX()), SectionPos.blockToSectionCoord(box.maxZ()));
         level.getChunk(chunk.x(), chunk.z()).setStartForStructure(structure, start);
@@ -128,14 +128,12 @@ public final class Busstation {
         return true;
     }
 
-    /** The nearest busstation (like /locate, 100 chunks), or null. */
+    /**
+     * The nearest busstation the world knows ({@link BekendeStations}), or null. 1.6.1: no structure search any more: on the
+     * server thread it loaded chunks and hung the live server until the watchdog stopped it.
+     */
     @Nullable
     public static BlockPos dichtstbij(ServerLevel level, BlockPos bij) {
-        Holder.Reference<Structure> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(KEY).orElse(null);
-        if (holder == null) {
-            return null;
-        }
-        var pair = level.getChunkSource().getGenerator().findNearestMapStructure(level, HolderSet.direct(holder), bij, 100, false);
-        return pair == null ? null : pair.getFirst();
+        return BekendeStations.dichtstbij(level, bij);
     }
 }

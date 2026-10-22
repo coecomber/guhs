@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.1 — fix — Minecraft 26.1.2
+
+- **Server freeze fixed:** asking the Beverbeek ranger the way to the safari bus (and the op command `/guhs safari busstation waar`) searched the world for the nearest busstation on the server thread, which could hang a server until it was stopped. The ranger, the Superkompas and the command now only use the stations the world already knows (every station is remembered as soon as its area is loaded, or when an op places one), so nothing is searched any more. The Superkompas also finds a busstation that an op placed by hand.
+
 ## 1.6.0 — Op Safari! — Minecraft 26.1.2
 
 A huge safari park full of cute chibi animals, a Kriebelhuis with critters and an aquarium tunnel, a quiet place for retired guhs, and a whole new way of building: ghost building, a Bouwkeet, shape wands, brushes, blueprints, 400+ building blocks and animals that build for you.

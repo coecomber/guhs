@@ -134,6 +134,10 @@ public class GuhCompassItem extends Item {
      * by distance and the first one that really has the structure wins.)
      */
     public static BlockPos findCenter(ServerLevel level, ResourceKey<Structure> key, BlockPos from) {
+        if (key.equals(nl.juiced.guhs.feature.safari.bus.Busstation.KEY)) {
+            // 1.6.1: stations are guaranteed (custom placement) or placed by hand: only the known ones count
+            return nl.juiced.guhs.feature.safari.bus.Busstation.dichtstbij(level, from);
+        }
         Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(key);
         if (holder.isEmpty()) {
             return null;

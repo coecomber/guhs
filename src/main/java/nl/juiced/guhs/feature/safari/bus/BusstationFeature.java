@@ -49,6 +49,7 @@ public final class BusstationFeature {
 
     public static void register() {
         BusScenes.registreer();
+        BekendeStations.registreer();   // 1.6.1: the known stations (no structure search on the server thread)
         // test round 5: the Superkompas finds the nearest busstation (tab Knus, next to the Reisbureau)
         nl.juiced.guhs.item.SuperkompasItem.voegToe("knus", "safari_busstation");
         Bescherming.registreer(Busstation.STRUCTUUR, 2);

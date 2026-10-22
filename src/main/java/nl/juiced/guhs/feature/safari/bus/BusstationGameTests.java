@@ -236,4 +236,19 @@ public class BusstationGameTests {
         }
         helper.succeed();
     }
+
+    /** 1.6.1: the ranger, the Superkompas and "waar" only read the known stations: no structure search on the server thread. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void busstationBekendeStationsZonderZoeken(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos hier = helper.absolutePos(new BlockPos(1, 1, 1));
+        BlockPos ver = hier.offset(5000, 0, 5000), dichtbij = hier.offset(300, 0, -200);
+        BekendeStations.onthoud(level, ver);
+        BekendeStations.onthoud(level, dichtbij);
+        BekendeStations.onthoud(level, dichtbij.offset(5, 0, 5));            // the same station again
+        helper.assertTrue(dichtbij.equals(Busstation.dichtstbij(level, hier)), "the nearest known station");
+        helper.assertTrue(dichtbij.equals(nl.juiced.guhs.item.GuhCompassItem.findCenter(level, Busstation.KEY, hier)),
+                "the Superkompas points at it too");
+        helper.succeed();
+    }
 }
