@@ -613,7 +613,8 @@ def build(h):
     # the board: GeckoLib draws it all (the blockstate only gives the particles)
     g, atlas, plek = bord_model()
     w(f"{A}/geckolib/models/block/safari/verblijfsbord.geo.json", g)
-    w(f"{A}/geckolib/animations/block/safari/verblijfsbord.animation.json", {"format_version": "1.8.0", "animations": {}})
+    w(f"{A}/geckolib/animations/block/safari/verblijfsbord.animation.json", {"format_version": "1.8.0", "animations": {
+        "idle": {"loop": True, "animation_length": 1.0, "bones": {}}}})   # (GeckoLib refuses a file without animations)
     w(f"{A}/blockstates/safari_verblijfsbord.json", {"variants": {
         f"facing={f}": {"model": "guhs:block/safari_verblijfsbord"} for f in ("north", "south", "east", "west")}})
     w(f"{A}/models/block/safari_verblijfsbord.json", {"textures": {"particle": "minecraft:block/stripped_oak_log"}})
