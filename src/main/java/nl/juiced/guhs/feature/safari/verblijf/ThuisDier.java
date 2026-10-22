@@ -185,7 +185,7 @@ public class ThuisDier extends SafariDier {
         if (!(level() instanceof ServerLevel level) || isRemoved()) {
             return;
         }
-        if (wegTot > 0) {
+        if (wegTot != 0) {                      // (test round 5: hiding counts up from a negative number; it was never ticked)
             onderweg(level);
         }
         if (werkplek != null) {
@@ -382,7 +382,8 @@ public class ThuisDier extends SafariDier {
         snacks = Math.min(4, snacks + waarde);
         stack.consume(1, player);
         doeActie(info() != null && info().animaties().contains("eet") ? "eet" : "blij", 60);
-        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + getBbHeight() * 0.6, getZ(), 5 * waarde, 0.3, 0.2, 0.3, 0.0);
+        // test round 5: feeding no longer counts for happiness (they feed themselves), it is a treat: hearts
+        level.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() * 0.8, getZ(), 2 + waarde, 0.3, 0.2, 0.3, 0.0);
         level.playSound(null, blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 0.7f, 1.2f);
         if (player instanceof ServerPlayer sp) {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.gevoerd", getDisplayName()));
@@ -416,6 +417,14 @@ public class ThuisDier extends SafariDier {
         poef(level);
         setInvisible(true);
         wegTot = -Math.max(1, ticks);          // (negative: hiding at home, not flying)
+    }
+
+    /** Test round 5: "Terugroepen" ends a hiding at once (visible again, at home). A stork on its way stays away. */
+    public void kom(ServerLevel level) {
+        if (wegTot < 0) {
+            wegTot = 0;
+            setInvisible(false);
+        }
     }
 
     // --- the stork's delivery -------------------------------------------------------------------------------------------

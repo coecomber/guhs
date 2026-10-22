@@ -42,6 +42,9 @@ public final class ClientSpoken {
         int gedaan, rest, mist;
         @Nullable
         final BlockPos bouwer;
+        /** Test round 5: the builder's reach (square, in x and z around {@link #bouwer}); MAX_VALUE: no limit. */
+        final int bereik;
+        final int buiten;
         final Long2ObjectOpenHashMap<BlockState> blokken = new Long2ObjectOpenHashMap<>();
         final BlockPos midden;
 
@@ -54,6 +57,8 @@ public final class ClientSpoken {
             gedaan = t.getIntOr("Gedaan", 0);
             rest = t.getIntOr("Rest", 0);
             bouwer = t.contains("Bouwer") ? BlockPos.of(t.getLongOr("Bouwer", 0L)) : null;
+            bereik = t.getIntOr("Bereik", Integer.MAX_VALUE);
+            buiten = t.getIntOr("Buiten", 0);
             var h = t.getListOrEmpty("Helpers");
             for (int i = 0; i < h.size(); i++) {
                 try {
@@ -121,6 +126,16 @@ public final class ClientSpoken {
             return status;
         }
 
+        public int bereik() {
+            return bereik;
+        }
+
+        /** Is this spot out of the builder's reach (the ghost block is drawn red)? */
+        boolean buiten(BlockPos p) {
+            return bouwer != null && bereik != Integer.MAX_VALUE
+                    && (Math.abs(p.getX() - bouwer.getX()) > bereik || Math.abs(p.getZ() - bouwer.getZ()) > bereik);
+        }
+
         /** Does the player own it or help with it (it is drawn a little stronger)? */
         boolean vanMij(UUID speler) {
             return eigenaar.equals(speler) || helpers.contains(speler);
@@ -128,7 +143,7 @@ public final class ClientSpoken {
     }
 
     /** One block to draw: where, what, which faces (bit per {@link Direction#ordinal}), how strong. */
-    record Teken(BlockPos pos, BlockState staat, int vlakken, boolean eigen, boolean overlapt) {
+    record Teken(BlockPos pos, BlockState staat, int vlakken, boolean eigen, boolean overlapt, boolean buiten) {
     }
 
     private static final Map<UUID, Spook> SPOKEN = new ConcurrentHashMap<>();
@@ -210,7 +225,7 @@ public final class ClientSpoken {
                 if (vlakken == 0) {
                     continue;
                 }
-                lijst.add(new Teken(p, doel, vlakken, eigen, !nu.isAir()));
+                lijst.add(new Teken(p, doel, vlakken, eigen, !nu.isAir(), s.buiten(p)));
                 afstand.add(d);
             }
         }
@@ -227,6 +242,38 @@ public final class ClientSpoken {
             lijst = kort;
         }
         teken = List.copyOf(lijst);
+    }
+
+    private static final net.minecraft.core.particles.DustParticleOptions RAND =
+            new net.minecraft.core.particles.DustParticleOptions(0xFF4060, 1.5f);
+
+    /**
+     * Test round 5: the keet's reach as a red-pink line on the ground near the ghost (within 40 blocks of it), while you move
+     * it (its control panel or the keet menu is open) or while part of it lies outside.
+     */
+    static void bereikRand() {
+        Minecraft mc = Minecraft.getInstance();
+        ClientLevel level = mc.level;
+        if (level == null || mc.player == null || level.getGameTime() % 5 != 0) {
+            return;
+        }
+        boolean bezig = mc.screen instanceof SpookScherm || mc.screen instanceof BouwkeetScreen;
+        for (Spook s : SPOKEN.values()) {
+            if (s.bouwer == null || s.bereik == Integer.MAX_VALUE || !s.vanMij(mc.player.getUUID()) || !(bezig || s.buiten > 0)
+                    || !s.midden.closerToCenterThan(mc.player.position(), 96)) {
+                continue;
+            }
+            int x0 = s.bouwer.getX() - s.bereik, x1 = s.bouwer.getX() + s.bereik, z0 = s.bouwer.getZ() - s.bereik, z1 = s.bouwer.getZ() + s.bereik;
+            for (int i = -40; i <= 40; i += 2) {
+                for (int[] p : new int[][] {{s.midden.getX() + i, z0}, {s.midden.getX() + i, z1}, {x0, s.midden.getZ() + i}, {x1, s.midden.getZ() + i}}) {
+                    if (p[0] < x0 || p[0] > x1 || p[1] < z0 || p[1] > z1 || !level.isLoaded(new BlockPos(p[0], s.midden.getY(), p[1]))) {
+                        continue;
+                    }
+                    int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, p[0], p[1]);
+                    level.addParticle(RAND, p[0] + 0.5, y + 0.3, p[1] + 0.5, 0, 0.02, 0);
+                }
+            }
+        }
     }
 
     private ClientSpoken() {

@@ -23,6 +23,14 @@ public interface Bouwer {
         return false;
     }
 
+    /**
+     * Test round 5: how far (horizontally, in x and in z) from the builder's block it builds; spots further away stay a ghost
+     * (drawn red). Unlimited by default.
+     */
+    default int bereik(ServerLevel level) {
+        return Integer.MAX_VALUE;
+    }
+
     /** A block was placed (for sounds, the crane, the bouwguhs). */
     default void geplaatst(ServerLevel level, Spook spook, BlockPos pos) {
     }

@@ -43,11 +43,13 @@ public final class VerblijfClient {
             event.registerEntityRenderer(VerblijfFeature.THUISDIER.get(), ThuisRenderer::new);
         });
         VerblijfPayloads.opener = VerblijfClient::open;
+        VerblijfRand.register();   // test round 5: the home's edge, drawn here
     }
 
     private static void open(CompoundTag data) {
         Minecraft mc = Minecraft.getInstance();
         mc.execute(() -> {
+            VerblijfRand.vernieuw(data);
             if (mc.screen instanceof VerblijfScreen s && s.pos().asLong() == data.getLongOr("Pos", 0L)) {
                 s.update(data);
             } else {

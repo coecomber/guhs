@@ -452,3 +452,35 @@ TEKST = {
         "Very rarely there is a log cabin with a porch: the ranger post. The Beaver Brook Ranger tells you about beavers and points "
         "you the way to the safari bus. Spaander lives at the post, a beaver you can't tame or take along, but can pet lovingly."),
 }
+
+# test round 5 (FX-C): the verblijfsbord and the Bouwkeet explained
+TEKST.update({
+    ('systemen/verblijfsborden', 'Thuis met je dieren'): ('At home with your animals',
+        'Pet them (right-click with an empty hand) and give them a toy: a play ball, scratching post, swing tyre or little slide. They find their own food, so feeding is not needed: a treat that suits them (safari feed counts double) does give hearts. Happy animals now and then leave a gift. Friends may pet and feed your animals too.'),
+    ('systemen/verblijfsborden', 'Het menu'): ('The menu',
+        'Click the sign for the menu, with the tabs Family (give names, call back, hide for a bit), Enclosure (size, shape, show the edge, the sleeping spot), Happiness (what the animal still misses, and Build a fitting enclosure), Gifts, Info (a fact, your best photo, when you may buy a sign again) and, for helper animals, Build Job. Every button explains itself when you hover over it; a grey button says why it is grey.'),
+    ('systemen/verblijfsborden', 'Verstoppen en terugroepen'): ('Hiding and calling back',
+        'Hide for a bit makes the animals invisible for twenty seconds, handy when you want to build in their enclosure. Then they come back by themselves with a puff. Call back brings them straight to the sign, also when they are hiding.'),
+    ('systemen/verblijfsborden', 'Rand en slaapplek'): ('Edge and sleeping spot',
+        "Show edge shows the enclosure's edge with pink dust on the ground, for two minutes or until you click Hide edge. When you change the size, you see the new edge straight away. For the sleeping spot, click Point at sleeping spot: the menu closes, and your next right-click on a block inside the enclosure becomes the spot where the family sleeps at night."),
+    ('systemen/verblijfsborden', 'Tevredenheid'): ('Happiness',
+        'The bar shows how happy the family is. What the animal needs (water, sand or grass, for example) counts most, then enough room, petted today, its toy nearby and a friend living within 24 blocks. Hover over a line: it says exactly what to do, with example blocks. Everything inside the edge counts, from six blocks below to ten above the sign.'),
+    ('systemen/verblijfsborden', 'Bouw passend verblijf'): ('Build a fitting enclosure',
+        'This button first only puts down a proposal: a ghost of an enclosure with everything the animal loves, with a fence around it. Nothing is built yet. Like it? Choose Approved, let them build: the family goes on a work outing and builds it themselves, with your blocks from your inventory and the linked Bank Guh. If something is missing, they build what is there and the rest stays a ghost. Cancel removes the proposal. A sign does one job at a time.'),
+    ('systemen/spookbouw', 'Materiaal'): ('Material',
+        "The blocks come from your inventory first, then from a linked Bank Guh (click the shed with a Bank Key) and, from a Guh Wheel Shed on, from every chest connected to the shed's vadsnet. If something is missing you see exactly what: hover over a block for its name. Build anyway builds what is there, and the rest stays a ghost until you have it. In creative you build for free."),
+    ('systemen/spookbouw', 'Boodschappenlijstje'): ('Shopping list',
+        'Something missing? Click List (in the shed or the ghost panel): you get a plain book with every block that is still missing, with its exact name and count (and how many stacks that is). Handy next to the crafting table.'),
+    ('systemen/bouwkeet-niveaus', 'De niveaus'): ('The levels',
+        'Handwork (no vadskracht): shape wand and brushes, shapes up to 16 blocks, roofs, own blueprints and the library. Builds up to 64 blocks from the shed.\n\nGuh Wheel Shed (10 VK): builder guhs, shapes up to 24, and material from every chest on the vadsnet. Builds up to 96 blocks away.\n\nSalt Shed (30 VK): nature shapes, block text, the leveller and blueprints up to 32. Builds up to 128 blocks away.\n\nSauce Shed (80 VK): the paint machine, the tunnel drill and publishing in the library. Builds up to 160 blocks away.\n\nGlow Shed (200 VK): shapes and blueprints up to 64, and Poof! Builds up to 192 blocks away.'),
+    ('systemen/bouwkeet-niveaus', 'Bereik'): ('Reach',
+        'A shed builds its project up to a certain distance: 64 blocks at Handwork, and 32 more per level, up to 192 at the Glow Shed. If you move the ghost (with the arrows in the shed or the ghost panel) so far that part of it is out of reach, that part turns red and you see a warning. That part is not built until you move it closer or raise the shed a level. While moving, you see the edge of the reach as red dust on the ground.'),
+    ('systemen/bouwkeet-niveaus', 'Hoe lang duurt het?'): ('How long does it take?',
+        'The shed builds five blocks a second, and every builder guh nearby adds five. A house of seven hundred blocks takes a few minutes. The shed shows how long it still takes, and a little bar floats above it. A ghost stays when you close the menu: you can walk around, come back and move it further until you say Build!'),
+    ('systemen/vormstaf', 'Bediening'): ('Using it',
+        'Click a block: your shape stands there as a ghost. Sneak-click a block: that becomes your material (up to four blocks mixed). Hold the shape wand key (left Alt by default) for the round menu, with the shapes, roofs, the settings screen and capture. Click the shape in the settings screen or in the shed and you get a grid of every shape, each with a picture and its name; grey ones are still locked. You always see a preview where you look, only for you. Sneak-click a Site Shed with a tool to link it to that shed: it then works at its level.'),
+    ('systemen/helperdieren', 'Bouw passend verblijf'): ('Build a fitting enclosure',
+        'In the Happiness tab of every Enclosure Sign, the button Build a fitting enclosure first puts down a proposal as a ghost: an enclosure with everything the animal needs, its toy and a guh fence with a gate. Choose Approved, let them build and the animals build it themselves with your blocks, or Cancel. The fence is always high enough: no animal jumps over it.'),
+    ('systemen/helperdieren', 'Grijze knoppen'): ('Grey buttons',
+        'Is a button grey? Hover over it: it always says why. Usually the sign already has a job (a proposal of Build a fitting enclosure counts too): stop or cancel that first.'),
+})

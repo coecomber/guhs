@@ -381,7 +381,8 @@ def portret(soort, naam):
 
 
 def paneel(dier, naam, W, H):
-    """The board's panel W x H texels: sky, grass, the animal, its name in a strip; painted mirrored (GeckoLib mirrors x)."""
+    """The board's panel W x H texels: sky, grass, the animal, its name in a strip (test round 5: not mirrored any more;
+    the north face shows the texture the right way round)."""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     strip = max(10, H // 4)
@@ -405,7 +406,7 @@ def paneel(dier, naam, W, H):
     bb = d.textbbox((0, 0), naam, font=f)
     d.text(((W - tw) / 2, H - strip + (strip - (bb[3] - bb[1])) / 2 - bb[1]), naam, font=f, fill=(255, 248, 226, 255))
     d.rectangle([0, 0, W - 1, H - 1], outline=(70, 110, 52, 255), width=2)
-    return img.transpose(Image.FLIP_LEFT_RIGHT)
+    return img
 
 
 # --- the toys, the stork's mailbox, the giant egg ------------------------------------------------------------------------

@@ -325,6 +325,7 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
 
     public void terugroepen(ServerLevel level) {
         for (ThuisDier d : dieren(level)) {
+            d.kom(level);
             d.poef(level);
             d.getNavigation().stop();
             BlockPos p = d.grond(level, worldPosition.getX(), worldPosition.getZ());

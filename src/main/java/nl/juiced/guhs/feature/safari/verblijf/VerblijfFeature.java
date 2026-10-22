@@ -126,6 +126,11 @@ public final class VerblijfFeature {
         ENTITY_TYPES.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(THUISDIER.get(), SafariDier.createAttributes().build()));
         NeoForge.EVENT_BUS.addListener(VerblijfFeature::breken);
+        // test round 5: "Slaapplek aanwijzen" (the next click on a block inside the home)
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH,
+                (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) -> SlaapplekAanwijzen.klik(event));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) ->
+                SlaapplekAanwijzen.weg(event.getEntity().getUUID()));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

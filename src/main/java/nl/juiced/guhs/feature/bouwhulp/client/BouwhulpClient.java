@@ -34,6 +34,7 @@ public final class BouwhulpClient {
             if (mc.level != null && mc.level.getGameTime() % 10 == 0) {
                 ClientSpoken.herbereken();
             }
+            ClientSpoken.bereikRand();
         });
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
             ClientSpoken.wegAlles();

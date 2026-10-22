@@ -38,7 +38,9 @@ public final class VerblijfPayloads {
     /** (Sent by ordinal: append only.) */
     public enum Actie { VERVERS, NAAM, TERUG, VERSTOP, STRAAL, VORM, BREEDTE, DIEPTE, RAND, SLAAPPLEK, SLAAPPLEK_WEG, CADEAUS, BEZORG_KIES, BEZORG_STUUR,
         /** Deel 2 (F10b): the Bouwopdracht tab, in the order of Bouwopdracht.Knop. */
-        BOUW_KIES, BOUW_VARIANT, BOUW_ZOEK, BOUW_WIJS, BOUW_HERBEREKEN, BOUW_BEDIEN, BOUW_STOP, BOUW_VERBLIJF }
+        BOUW_KIES, BOUW_VARIANT, BOUW_ZOEK, BOUW_WIJS, BOUW_HERBEREKEN, BOUW_BEDIEN, BOUW_STOP, BOUW_VERBLIJF,
+        /** Test round 5: point at the sleeping spot; the proposal of "Bouw passend verblijf" approved / cancelled. */
+        SLAAPPLEK_WIJS, VERBLIJF_GOED, VERBLIJF_WEG }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("verblijf_open"));
@@ -117,9 +119,35 @@ public final class VerblijfPayloads {
             dieren.add(d);
         }
         t.put("Dieren", dieren);
-        t.put("Tevreden", be.uitslag().copy());
+        CompoundTag tevreden = be.uitslag().copy();
         VerblijfData.Dier info = VerblijfData.dier(soort);
         if (info != null) {
+            // test round 5: what each requirement wants, for the checklist's tooltips (a few example blocks per line)
+            ListTag eisen = tevreden.getListOrEmpty("Eisen");
+            for (int i = 0; i < eisen.size(); i++) {
+                CompoundTag e = eisen.getCompoundOrEmpty(i);
+                String id = e.getStringOr("Id", "");
+                info.eisen().stream().filter(x -> x.id().equals(id)).findFirst().ifPresent(x -> {
+                    ListTag bl = new ListTag();
+                    e.putString("Soort", x.soort());
+                    if (x.soort().equals("tag")) {
+                        BuiltInRegistries.BLOCK.getTagOrEmpty(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                                net.minecraft.resources.Identifier.parse(x.tag()))).forEach(h -> {
+                            if (bl.size() < 4 && h.value().asItem() != net.minecraft.world.item.Items.AIR) {
+                                bl.add(StringTag.valueOf(BuiltInRegistries.ITEM.getKey(h.value().asItem()).toString()));
+                            }
+                        });
+                    } else {
+                        x.blokken().stream().limit(4).forEach(b -> BuiltInRegistries.BLOCK.getOptional(net.minecraft.resources.Identifier.parse(b))
+                                .filter(bk -> bk.asItem() != net.minecraft.world.item.Items.AIR)
+                                .ifPresent(bk -> bl.add(StringTag.valueOf(BuiltInRegistries.ITEM.getKey(bk.asItem()).toString()))));
+                    }
+                    e.put("Bl", bl);
+                });
+            }
+            ListTag vrienden = new ListTag();
+            info.vrienden().forEach(v -> vrienden.add(StringTag.valueOf(v)));
+            tevreden.put("VriendSoorten", vrienden);
             ListTag voer = new ListTag();
             info.voer().forEach(v -> voer.add(StringTag.valueOf(v)));
             t.put("Voer", voer);
@@ -130,6 +158,7 @@ public final class VerblijfPayloads {
             t.putBoolean("Bezorger", info.bezorger());
             t.putBoolean("Rijdier", info.rijdier());
         }
+        t.put("Tevreden", tevreden);
         ListTag cadeaus = new ListTag();
         for (int i = 0; i < be.cadeaus().getContainerSize(); i++) {
             ItemStack s = be.cadeaus().getItem(i);
@@ -188,6 +217,9 @@ public final class VerblijfPayloads {
                 }
             }
             case SLAAPPLEK_WEG -> be.zetSlaapplek(null);
+            case SLAAPPLEK_WIJS -> SlaapplekAanwijzen.begin(p, be);
+            case VERBLIJF_GOED -> nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.verblijfGoedgekeurd(p, level, be);
+            case VERBLIJF_WEG -> nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.verblijfAnnuleren(p, level, be);
             case CADEAUS -> {
                 for (int i = 0; i < be.cadeaus().getContainerSize(); i++) {
                     ItemStack s = be.cadeaus().getItem(i);

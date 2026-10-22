@@ -230,6 +230,7 @@ public final class Spookbouw {
                     Spoken.van(level).veranderd(level, s);
                 }
             }
+            case LIJSTJE -> Lijstje.geef(p, s.naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam, tekort(p, s));
             case WEGHALEN -> {
                 s.helpers.removeIf(u -> {
                     ServerPlayer hp = level.getServer().getPlayerList().getPlayer(u);

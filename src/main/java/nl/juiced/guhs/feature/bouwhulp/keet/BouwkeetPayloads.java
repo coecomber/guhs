@@ -38,7 +38,9 @@ public final class BouwkeetPayloads {
     };
 
     /** The menu's own buttons (tab ""; sent by ordinal: append only). */
-    public enum Actie { KIES, AAN, BEDIENING, BOUW, ALSNOG, PAUZE, TERUG, LOSLATEN, ANNULEER }
+    public enum Actie { KIES, AAN, BEDIENING, BOUW, ALSNOG, PAUZE, TERUG, LOSLATEN, ANNULEER,
+        /** Test round 5: the missing blocks as a written book. */
+        LIJSTJE }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("bouwkeet_open"));
@@ -104,6 +106,8 @@ public final class BouwkeetPayloads {
             pr.put("Tekort", items(Spookbouw.tekort(p, s)));
             pr.putInt("Ongedaan", Spoken.van(level).ongedaanTeMaken(p.getUUID()));
             pr.putBoolean("Pof", keet.werkNiveau().pof());
+            nl.juiced.guhs.feature.bouwhulp.kern.SpookPayloads.bereik(level, s, pr);                         // test round 5: the reach, blocks outside it
+            pr.putDouble("Tempo", keet.tempo(level, s));               // (for "nog ~2 min")
             t.put("Project", pr);
         }
         // the tabs and the open one's page
@@ -179,6 +183,12 @@ public final class BouwkeetPayloads {
                 case ANNULEER -> {
                     if (mag && s != null && s.mag(p)) {
                         Spookbouw.annuleer(level, s);
+                    }
+                }
+                case LIJSTJE -> {
+                    if (s != null) {
+                        nl.juiced.guhs.feature.bouwhulp.kern.Lijstje.geef(p, s.naam().isEmpty()
+                                ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam(), Spookbouw.tekort(p, s));
                     }
                 }
             }

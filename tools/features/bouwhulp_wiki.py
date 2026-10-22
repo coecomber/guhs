@@ -67,20 +67,25 @@ WIKI = {
          "de pijltjes in het paneel schuif je het vooruit, opzij, omhoog of omlaag (vanuit waar je kijkt), en je kunt het draaien en "
          "spiegelen. Via een naamvak mag een vriend meehelpen."),
         ("spookbouw", "Materiaal",
-         "De blokken komen eerst uit je inventaris, dan uit een gekoppelde Bank Guh (klik met een Banksleutel op de keet) en, vanaf "
-         "een Guhrad-keet, uit alle kisten die aan het vadsnet van de keet zitten. Ontbreekt er iets, dan zie je precies wat. Met "
-         "Alsnog bouwen wordt gebouwd wat er is, en de rest blijft spook tot je het hebt. In creatief bouw je gratis."),
+         "De blokken komen eerst uit je inventaris, dan uit een gekoppelde Bank Guh (klik met een Banksleutel op de "
+         "keet) en, vanaf een Guhrad-keet, uit alle kisten die aan het vadsnet van de keet zitten. Ontbreekt er iets, "
+         "dan zie je precies wat: ga met je muis op een blokje staan voor de naam. Met Alsnog bouwen wordt gebouwd wat "
+         "er is, en de rest blijft spook tot je het hebt. In creatief bouw je gratis."),
         ("spookbouw", "Bouwen en terugdraaien",
          "Er wordt van onder naar boven gebouwd, een paar blokjes per tik. Blokken die al kloppen worden overgeslagen, en kisten, "
          "machines en beschermde gebouwen worden nooit aangeraakt. De laatste vijf bouwacties kun je terugdraaien; wat in de weg "
          "stond komt dan precies terug. Je kunt tot tien spoken tegelijk open hebben staan."),
+        ("spookbouw", "Boodschappenlijstje",
+         "Mist er iets? Klik op Lijstje (in de keet of in het spookpaneel): je krijgt een gewoon boek met alle blokken "
+         "die nog ontbreken, met de precieze naam en het aantal (en hoeveel stapels dat is). Handig naast de werkbank."),
         # --- the keet ---
         ("bouwkeet-niveaus", "De niveaus",
-         "Handwerk (zonder vadskracht): vormstaf en kwasten, vormen tot 16 blokken, daken, eigen blauwdrukken en de bibliotheek.\n\n"
-         "Guhrad-keet (10 VK): bouwguhs, vormen tot 24, en materiaal uit alle kisten op het vadsnet.\n\n"
-         "Zoutkeet (30 VK): natuurvormen, bloktekst, de egaliseerder en blauwdrukken tot 32.\n\n"
-         "Sauskeet (80 VK): de verfmachine, de tunnelboor en publiceren in de bibliotheek.\n\n"
-         "Gloeikeet (200 VK): vormen en blauwdrukken tot 64, en Pof!"),
+         "Handwerk (zonder vadskracht): vormstaf en kwasten, vormen tot 16 blokken, daken, eigen blauwdrukken en de "
+         "bibliotheek. Bouwt tot 64 blokken van de keet.\n\nGuhrad-keet (10 VK): bouwguhs, vormen tot 24, en materiaal "
+         "uit alle kisten op het vadsnet. Bouwt tot 96 blokken ver.\n\nZoutkeet (30 VK): natuurvormen, bloktekst, de "
+         "egaliseerder en blauwdrukken tot 32. Bouwt tot 128 blokken ver.\n\nSauskeet (80 VK): de verfmachine, de "
+         "tunnelboor en publiceren in de bibliotheek. Bouwt tot 160 blokken ver.\n\nGloeikeet (200 VK): vormen en "
+         "blauwdrukken tot 64, en Pof! Bouwt tot 192 blokken ver."),
         ("bouwkeet-niveaus", "Upgraden",
          "Klik met een upgrade op de keet, steeds één niveau tegelijk: het Guhrad-tandwieltje, de Zoutkristal-waterpas, het "
          "Saus-kraanhaakje en de Gloei-bouwlamp. Vanaf de Guhrad-keet trekt de keet vadskracht zolang hij aan staat. Zonder "
@@ -91,6 +96,17 @@ WIKI = {
          "mee, en een balkje boven de keet laat zien hoe ver het is. Als het af is, is er een klein feestje."),
         ("bouwkeet-niveaus", "Pof!",
          "Een Gloeikeet met al het materiaal bij de hand bouwt het hele project in één keer: een roze wolk, POF!, en het staat er."),
+        ("bouwkeet-niveaus", "Bereik",
+         "Een keet bouwt zijn project tot een bepaalde afstand: 64 blokken op Handwerk, en 32 meer per niveau, tot 192 "
+         "op de Gloeikeet. Schuif je het spook (met de pijltjes in de keet of het spookpaneel) zo ver dat een stuk "
+         "buiten het bereik valt, dan wordt dat stuk rood en zie je een waarschuwing. Dat deel wordt niet gebouwd tot "
+         "je het dichterbij schuift of de keet een niveau hoger maakt. Tijdens het verschuiven zie je de grens van het "
+         "bereik als rode stofjes op de grond."),
+        ("bouwkeet-niveaus", "Hoe lang duurt het?",
+         "De keet bouwt vijf blokken per seconde, en elke bouwguh in de buurt doet er vijf bij. Een huis van "
+         "zevenhonderd blokken duurt dus een paar minuten. In de keet zie je hoe lang het nog duurt, en boven de keet "
+         "zweeft een balkje. Een spook blijft staan als je het menu sluit: je kunt rondlopen, terugkomen en verder "
+         "schuiven tot je Bouw! zegt."),
         # --- vormstaf ---
         ("vormstaf", "Vormen",
          "Bol, koepel, cilinder, halve cilinder, boog, tunnel, brug, piramide, kegel, ring, wenteltrap, helix, hart, guh, ei en "
@@ -99,10 +115,12 @@ WIKI = {
         ("vormstaf", "Daken",
          "Een zadeldak, schilddak, tentdak of oortjesdak, met de trapjes in de hoeken goed uitgerekend."),
         ("vormstaf", "Bediening",
-         "Klik op een blok: je vorm staat er als spook. Sluip-klik op een blok: dat wordt je materiaal (tot vier blokken gemengd). "
-         "Houd de vormstaf-toets in (standaard linker Alt) voor het ronde menu, met de vormen, daken, het instellingenscherm en "
-         "vastleggen. Je ziet steeds een voorbeeld waar je kijkt, alleen voor jou. Sluip-klik met gereedschap op een Bouwkeet om het "
-         "aan die keet te koppelen: dan werkt het op zijn niveau."),
+         "Klik op een blok: je vorm staat er als spook. Sluip-klik op een blok: dat wordt je materiaal (tot vier "
+         "blokken gemengd). Houd de vormstaf-toets in (standaard linker Alt) voor het ronde menu, met de vormen, daken, "
+         "het instellingenscherm en vastleggen. Klik je in het instellingenscherm of in de keet op de vorm, dan krijg "
+         "je een raster met alle vormen, elk met een plaatje en de naam; grijs is nog op slot. Je ziet steeds een "
+         "voorbeeld waar je kijkt, alleen voor jou. Sluip-klik met gereedschap op een Bouwkeet om het aan die keet te "
+         "koppelen: dan werkt het op zijn niveau."),
         # --- kwasten ---
         ("kwasten", "Vier kwasten",
          "De vervangkwast verft blokken om naar jouw blok, in dezelfde vorm (een trap blijft een trap). De mengkwast verft een mix van "
@@ -173,9 +191,13 @@ WIKI = {
          "water erachter stijgt een tot drie blokken en wordt een beverpoel. Stroomt er niks, dan zeggen ze \"Hier stroomt niks, "
          "njeg\": laat dan eerst de graafploeg een beekje graven. Na vijf dammen krijg je de titel Beverbaas."),
         ("helperdieren", "Bouw passend verblijf",
-         "In de tab Tevredenheid van elk verblijfsbord zet de knop Bouw passend verblijf een spook neer van een verblijf met alles "
-         "wat het dier nodig heeft, zijn speeltje en een guh-hek met poortje. Het hek staat altijd hoog genoeg: geen dier springt "
-         "eroverheen."),
+         "In de tab Tevredenheid van elk verblijfsbord zet de knop Bouw passend verblijf eerst een voorstel neer als "
+         "spook: een verblijf met alles wat het dier nodig heeft, zijn speeltje en een guh-hek met poortje. Kies "
+         "Goedgekeurd, laat bouwen en de dieren bouwen het zelf met jouw blokken, of Annuleren. Het hek staat altijd "
+         "hoog genoeg: geen dier springt eroverheen."),
+        ("helperdieren", "Grijze knoppen",
+         "Is een knop grijs, ga er dan met je muis op staan: er staat altijd waarom. Meestal heeft het bord al een klus "
+         "(ook een voorstel van Bouw passend verblijf telt): stop of annuleer die eerst."),
         # --- the Beverbeek ---
         ("biomen/beverbeek", "Het beekjesbos",
          "Een zeldzaam bos van wilgen, elzen en berken in de Guhmensie, met slingerende beekjes en kleine watervalletjes. Achter "

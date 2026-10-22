@@ -433,3 +433,18 @@ FX-B (op-safari-fxb), for FX-A and the merge:
   - safari animal toys (any `VerblijfBlokken.Speeltje` block) within speeltuinStraal + 2 of `beleving.json` "speeltuin" are found automatically. FX-A only has to place them (ground level, 1 block of free space in front).
 - **Camera**: every block with "glas"/"glass" in its id, every TransparentBlock and IronBarsBlock, portholes and nepkoraal are see-through for photos (`Fotograaf.doorzichtig`).
 - **Superkompas**: tab Knus gets `safari_busstation` (`structure.guhs.safari_busstation` + tooltip, in `tools/features/safari_fxb.py`).
+### FX-C (test round 5): what changed in the API
+- `Bouwer.bereik(level)` (default unlimited); `BouwkeetBlockEntity` returns `werkNiveau().bereik` (64/96/128/160/192).
+  - `Spoken` does not build spots outside it: they stay in `mist`, the ghost goes WACHT with a warning plus tip.
+  - `Spoken.buiten(level, spook, bouwer)` counts those spots.
+  - `SpookPayloads.bereik(level, s, tag)` writes Bereik/Buiten/BereikVolgend (into the ghost packet, the panel and the keet's project).
+- `kern.Lijstje.geef(player, naam, tekort)`: the missing blocks as a written book. It is new action `LIJSTJE` in both `SpookPayloads.Actie` and `BouwkeetPayloads.Actie`.
+- `BouwkeetScreen.TabPagina.tip(...)` (default null): a page's own tooltips. `BouwkeetScreen.itemTip(row)`.
+- `client.KeuzeRaster`: `OptieLijst` choices with 6 or more options open a tile grid.
+- Verblijfsbord:
+  - `VerblijfPayloads.Actie` appends `SLAAPPLEK_WIJS`, `VERBLIJF_GOED` and `VERBLIJF_WEG`;
+  - `Bouwopdracht.verblijf` is a proposal (no panel), with `voorstel` / `verblijfGoedgekeurd` / `verblijfAnnuleren`;
+  - `Tevredenheid.Uitslag` has no `gevoerd` any more;
+  - `ThuisDier.kom(level)` ends a hiding;
+  - `SlaapplekAanwijzen` (next right-click inside the home);
+  - the client draws the edge itself (`client.VerblijfRand`).

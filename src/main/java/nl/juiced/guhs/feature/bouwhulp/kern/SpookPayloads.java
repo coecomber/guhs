@@ -52,7 +52,9 @@ public final class SpookPayloads {
     };
 
     /** The buttons of the control panel (sent by ordinal: append only). */
-    public enum Actie { VERVERS, DRAAI, SPIEGEL, SCHUIF, BOUW, ALSNOG, PAUZE, ANNULEER, TERUG, TOEVOEGEN, WEGHALEN }
+    public enum Actie { VERVERS, DRAAI, SPIEGEL, SCHUIF, BOUW, ALSNOG, PAUZE, ANNULEER, TERUG, TOEVOEGEN, WEGHALEN,
+        /** Test round 5: the missing blocks as a written book. */
+        LIJSTJE }
 
     public record Data(String soort, CompoundTag data) implements CustomPacketPayload {
         public static final Type<Data> TYPE = new Type<>(Guhs.id("spook"));
@@ -110,7 +112,7 @@ public final class SpookPayloads {
 
     /** A ghost (new or changed) to everybody in its dimension. */
     static void stuur(ServerLevel level, Spook s) {
-        CompoundTag t = pak(s);
+        CompoundTag t = pak(level, s);
         for (ServerPlayer p : level.players()) {
             PacketDistributor.sendToPlayer(p, new Data("spook", t));
         }
@@ -122,7 +124,7 @@ public final class SpookPayloads {
         leeg.putBoolean("Alles", true);
         PacketDistributor.sendToPlayer(p, new Data("weg", leeg));
         for (Spook s : Spoken.van(p.level()).alle()) {
-            PacketDistributor.sendToPlayer(p, new Data("spook", pak(s)));
+            PacketDistributor.sendToPlayer(p, new Data("spook", pak(p.level(), s)));
         }
     }
 
@@ -167,6 +169,7 @@ public final class SpookPayloads {
         t.putInt("Draai", s.draai.ordinal());
         t.putInt("Spiegel", s.spiegel.ordinal());
         t.putBoolean("Keet", s.bouwerPos != null);
+        bereik(level, s, t);
         t.putBoolean("VraagAlsnog", vraagAlsnog);
         t.putInt("Ongedaan", Spoken.van(level).ongedaanTeMaken(p.getUUID()));
         t.put("Tekort", items(tekort));
@@ -193,8 +196,24 @@ public final class SpookPayloads {
         return l;
     }
 
+    /**
+     * Test round 5: the builder's reach (Bereik, around Bouwer), how many of the ghost's blocks lie outside it (Buiten), and a
+     * keet's reach at its next level (BereikVolgend), for the red ghost blocks and the warning.
+     */
+    public static void bereik(ServerLevel level, Spook s, CompoundTag t) {
+        Bouwer b = Spoken.van(level).bouwerVan(level, s);
+        if (b == null || s.bouwerPos == null || b.bereik(level) == Integer.MAX_VALUE) {
+            return;
+        }
+        t.putInt("Bereik", b.bereik(level));
+        t.putInt("Buiten", Spoken.buiten(level, s, b));
+        if (b instanceof nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity keet && keet.werkNiveau().volgende() != null) {
+            t.putInt("BereikVolgend", keet.werkNiveau().volgende().bereik);
+        }
+    }
+
     /** One ghost as the client gets it. */
-    static CompoundTag pak(Spook s) {
+    static CompoundTag pak(ServerLevel level, Spook s) {
         CompoundTag t = new CompoundTag();
         t.store("Id", UUIDUtil.CODEC, s.id);
         t.store("EigenaarId", UUIDUtil.CODEC, s.eigenaar);
@@ -208,6 +227,7 @@ public final class SpookPayloads {
         t.putInt("Rest", s.nogTeGaan());
         if (s.bouwerPos != null) {
             t.putLong("Bouwer", s.bouwerPos.asLong());
+            bereik(level, s, t);
         }
         ListTag helpers = new ListTag();
         s.helpers.forEach(u -> helpers.add(net.minecraft.nbt.StringTag.valueOf(u.toString())));

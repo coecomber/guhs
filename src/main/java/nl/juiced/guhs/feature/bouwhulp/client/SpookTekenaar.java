@@ -86,6 +86,9 @@ public final class SpookTekenaar {
                 }
                 Matrix4f m = pose.last().pose();
                 int alfa = (int) (255 * (k.eigen() ? EIGEN : ANDER) * puls);
+                if (k.buiten()) {
+                    alfa = Math.min(255, alfa + 40);   // (test round 5: out of the keet's reach: red and a bit stronger)
+                }
                 List<BakedQuad>[] q = quads(k.staat());
                 for (int i = 0; i < 7; i++) {
                     if (i < 6 && (k.vlakken() & 1 << i) == 0) {
@@ -98,6 +101,9 @@ public final class SpookTekenaar {
                             if (bron != null) {
                                 kleur = bron.colorInWorld(k.staat(), mc.level, p) & 0xFFFFFF;
                             }
+                        }
+                        if (k.buiten()) {
+                            kleur = rood(kleur);
                         }
                         int argb = alfa << 24 | kleur;
                         Direction d = quad.direction();
@@ -114,6 +120,12 @@ public final class SpookTekenaar {
             buffers.endBatch(type);
         }
         balken(pose, buffers, cam);
+    }
+
+    /** Test round 5: a block out of reach: tinted red (its own colours still faintly there). */
+    private static int rood(int kleur) {
+        int r = kleur >> 16 & 0xFF, g = kleur >> 8 & 0xFF, b = kleur & 0xFF;
+        return Math.min(255, 140 + r / 2) << 16 | g * 3 / 10 << 8 | b * 3 / 10;
     }
 
     /** A little bar over every working keet: pink = done, cream = to go. */
