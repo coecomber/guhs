@@ -104,8 +104,9 @@ public final class MijnGuhsTab {
             }).bounds(left + 8, top + 28, kolom, 14).build());
             // 1.2.5: call this guh over, wherever it is (grey when it is picked up, in a Guh Wheel or in the wolkjes)
             Roepen.Uitkomst niet = Roepen.nietRoepbaar(PlekSoort.byId(guh.plekSoort()), guh.dood());
-            roepKnop = Button.builder(Component.translatable("gui.guhs.mijnguhs.roep"),
-                    b -> ClientPacketDistributor.sendToServer(new BandPayloads.Roep(guh.id()))).bounds(left + 8, top + h - 22, kolom, ROEP_H).build();
+            // 1.6.2: first "weet je het zeker?" with what will happen where it is now
+            roepKnop = Button.builder(Component.translatable("gui.guhs.mijnguhs.roep"), b -> vraagRoep(guh))
+                    .bounds(left + 8, top + h - 22, kolom, ROEP_H).build();
             roepKnop.active = niet == null;
             Component uitleg = Component.translatable(niet == null ? "gui.guhs.mijnguhs.roep.tip" : switch (niet) {
                 case DOOD -> "gui.guhs.mijnguhs.roep.dood";
@@ -119,6 +120,25 @@ public final class MijnGuhsTab {
             lijst.zet(pagina(guh));
             lijst.scrollNaar(paginaScroll);
         }
+    }
+
+    /**
+     * 1.6.2: "Roep naar mij" asks first, saying what happens at the place the guh is now (out of the chest, off the Guh Wheel
+     * so no more vadskracht, out of its huisje...). Yes: the call goes to the server; either way back to the Guhdex.
+     */
+    private static void vraagRoep(MijnGuhsCache.Guh guh) {
+        Minecraft mc = Minecraft.getInstance();
+        net.minecraft.client.gui.screens.Screen terug = mc.screen;
+        Component titel = Component.translatable("gui.guhs.mijnguhs.roep.vraag.titel", guh.naam());
+        Component tekst = Component.translatable("gui.guhs.mijnguhs.roep.vraag." + PlekSoort.byId(guh.plekSoort()).id(), guh.naam())
+                .append("\n\n").append(guh.plek().copy().withStyle(ChatFormatting.GRAY))
+                .append("\n\n").append(Component.translatable("gui.guhs.mijnguhs.roep.vraag.zeker"));
+        mc.setScreen(new net.minecraft.client.gui.screens.ConfirmScreen(ja -> {
+            if (ja) {
+                ClientPacketDistributor.sendToServer(new BandPayloads.Roep(guh.id()));
+            }
+            mc.setScreen(terug);
+        }, titel, tekst, Component.translatable("gui.guhs.mijnguhs.roep.vraag.ja"), Component.translatable("gui.guhs.mijnguhs.roep.vraag.nee")));
     }
 
     /** Asks the server for fresh data. */

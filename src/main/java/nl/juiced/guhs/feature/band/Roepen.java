@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -53,8 +54,13 @@ import nl.juiced.guhs.registry.ModSounds;
  * entity to load, at most {@value #WACHT} ticks). It arrives ~2 blocks from the player on safe ground, as the very same
  * guh (vanilla teleport: hearts, clothes, name, favourites, dagboekje all stay). Where it came from is cleaned up: out of
  * its Guhhuisje ({@link Huisjes#trekUit}), checked out of the Guhkamer ({@link Guhkamer#roep}), no longer sitting or
- * wandering, off any vehicle / lead (the lead goes into your pockets). Not for a guh that is picked up (an item in a
- * chest, backpack, pockets, a Bank Guh or on the ground), running in a Guh Wheel or in the wolkjes, and only by its owner.
+ * wandering, off any vehicle / lead (the lead goes into your pockets). Only by its owner.
+ * <p>
+ * 1.6.2: it ALWAYS works now (only a guh in the wolkjes can't come: the Knuffelhart brings it back), and the Guhdex first
+ * asks "weet je het zeker?" with what will happen ({@code gui.guhs.mijnguhs.roep.vraag.<plek>}). A picked-up guh comes out
+ * of the pockets, chest (shulker boxes in it too), Bank Guh, backpack or the ground it lies on ({@link UitItem}); a guh in
+ * a Guh Wheel stops running; a guh on holiday comes back early, a guh at the office clocks out. (A retired guh is not in
+ * Mijn guhs: only the Knabbelportaal brings it home.) In the pockets of a player who is offline it comes as soon as that player logs in ({@link RoepPost}).
  */
 public final class Roepen {
     /** How long we wait for an unloaded guh's entity to load. */
@@ -66,9 +72,12 @@ public final class Roepen {
     private static final DeferredHolder<TicketType, TicketType> TICKET = TICKET_TYPES.register("roep",
             () -> new TicketType(TicketType.NO_TIMEOUT, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION | TicketType.FLAG_KEEP_DIMENSION_ACTIVE));
 
-    public enum Uitkomst { OK, BEZIG, NIET_JOUW, OPGEPAKT, GUHWIEL, DOOD, KWIJT, NIET_THUIS }
+    public enum Uitkomst { OK, BEZIG, NIET_JOUW, OPGEPAKT, GUHWIEL, DOOD, KWIJT, NIET_THUIS, LATER }
 
-    /** A guh being fetched from an unloaded chunk (or a Guhkamer guest that is still asleep in its room). */
+    /**
+     * A guh being fetched from an unloaded chunk (or a Guhkamer guest that is still asleep in its room, or (1.6.2) a
+     * picked-up guh / a guh in a Guh Wheel whose chunk is loading: {@code item} is the place it was last seen).
+     */
     private static final class Klus {
         final ServerPlayer speler;
         final UUID id;
@@ -77,14 +86,21 @@ public final class Roepen {
         @Nullable
         final ChunkPos chunk;
         final boolean kamer;
+        @Nullable
+        final Plek item;
         int ticks;
 
         Klus(ServerPlayer speler, UUID id, @Nullable ServerLevel level, @Nullable ChunkPos chunk, boolean kamer) {
+            this(speler, id, level, chunk, kamer, null);
+        }
+
+        Klus(ServerPlayer speler, UUID id, @Nullable ServerLevel level, @Nullable ChunkPos chunk, boolean kamer, @Nullable Plek item) {
             this.speler = speler;
             this.id = id;
             this.level = level;
             this.chunk = chunk;
             this.kamer = kamer;
+            this.item = item;
         }
     }
 
@@ -98,20 +114,25 @@ public final class Roepen {
         TICKET_TYPES.register(modBus);
         NeoForge.EVENT_BUS.addListener(Roepen::tick);
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> stopAlles());
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent e) -> {
+            if (e.getEntity() instanceof ServerPlayer p) {
+                RoepPost.login(p);   // 1.6.2: guhs called from an offline player's pockets, and post for this owner
+            }
+        });
     }
 
-    /** Why the button is grey for a guh at this kind of place (the client greys it out too), or null when it may be called. */
+    /**
+     * Why the button is grey for a guh at this kind of place (the client greys it out too), or null when it may be called.
+     * 1.6.2: only a guh in the wolkjes (the Knuffelhart brings it back) or in the Knabbelvelden; everywhere else it comes,
+     * after "weet je het zeker?".
+     */
     @Nullable
     public static Uitkomst nietRoepbaar(PlekSoort soort, boolean dood) {
         if (dood || soort == PlekSoort.IN_DE_WOLKJES) {
             return Uitkomst.DOOD;
         }
-        return switch (soort) {
-            case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND -> Uitkomst.OPGEPAKT;
-            case GUHWIEL -> Uitkomst.GUHWIEL;
-            case OP_VAKANTIE, OP_KANTOOR, IN_DE_KNABBELVELDEN -> Uitkomst.NIET_THUIS;   // (guhpixel: stored as data; its own balie / Prikklok brings it back)
-            default -> null;
-        };
+        // (a retired guh isn't in Mijn guhs at all: only the Knabbelportaal brings it home; this is a safety net)
+        return soort == PlekSoort.IN_DE_KNABBELVELDEN ? Uitkomst.NIET_THUIS : null;
     }
 
     /** Is this guh being fetched right now (tests)? */
@@ -136,6 +157,8 @@ public final class Roepen {
             case KWIJT -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.kwijt", naam).withStyle(ChatFormatting.GOLD));
             case NIET_THUIS -> speler.sendOverlayMessage(Component.translatable(inGuhpixel ? "gui.guhs.guhpixel.roep.niet_hier"
                     : "gui.guhs.guhpixel.roep.niet_thuis", naam).withStyle(ChatFormatting.GOLD));
+            case LATER -> speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.later", naam,
+                    houder(speler, id)).withStyle(ChatFormatting.LIGHT_PURPLE));
             case OK -> {
             }
         }
@@ -175,12 +198,43 @@ public final class Roepen {
             return Uitkomst.BEZIG;
         }
         if (geladen instanceof GuhEntity guh) {
+            vakantieAf(speler, id);   // (1.6.2: still walking off with its suitcase: the trip is off)
             haal(speler, guh);
             return Uitkomst.OK;
         }
         Uitkomst niet = nietRoepbaar(r.plek.soort(), r.dood);
         if (niet != null) {
             return niet;
+        }
+        // 1.6.2: kept as data somewhere: back at once
+        Vec3 plek = veiligePlek(speler.level(), speler, nl.juiced.guhs.registry.ModEntities.GUH.get().getDimensions());
+        switch (r.plek.soort()) {
+            case OP_VAKANTIE -> {
+                var u = nl.juiced.guhs.feature.guhpixel.reisbureau.Reizen.haalOp(speler, plek, true);
+                Entity e = Band.zoekGeladen(s, id);
+                if (e instanceof GuhEntity guh) {
+                    aankomst(speler, guh, plek);
+                    return Uitkomst.OK;
+                }
+                return u == nl.juiced.guhs.feature.guhpixel.reisbureau.Reizen.Uitkomst.NIEMAND ? Uitkomst.KWIJT : Uitkomst.NIET_THUIS;
+            }
+            case OP_KANTOOR -> {
+                return aangekomen(speler, nl.juiced.guhs.feature.guhpixel.kantoor.Kantoor.roep(speler, id, plek), plek);
+            }
+            default -> {
+            }
+        }
+        if (isItem(r.plek.soort())) {
+            // a picked-up guh (or one in a Guh Wheel): the pockets of whoever is online first, then where it was last seen
+            CompoundTag data = UitItem.uitSpelers(s, speler.getUUID(), id);
+            if (data != null) {
+                return verschijn(speler, data) != null ? Uitkomst.OK : Uitkomst.KWIJT;
+            }
+            String houder = r.plek.detail().getString();
+            if (r.plek.soort() == PlekSoort.ITEM_SPELER && !houder.isEmpty() && s.getPlayerList().getPlayerByName(houder) == null) {
+                RoepPost.wacht(s, houder, speler.getUUID(), id);   // (offline: as soon as they log in)
+                return Uitkomst.LATER;
+            }
         }
         if (r.plek.soort() == PlekSoort.ONBEKEND) {
             return Uitkomst.KWIJT;
@@ -191,8 +245,61 @@ public final class Roepen {
         }
         ChunkPos chunk = ChunkPos.containing(r.plek.pos());
         level.getChunkSource().addTicketWithRadius(TICKET.get(), chunk, TICKET_STRAAL);
-        KLUSSEN.put(id, new Klus(speler, id, level, chunk, false));
+        KLUSSEN.put(id, new Klus(speler, id, level, chunk, false, isItem(r.plek.soort()) ? r.plek : null));
         return Uitkomst.BEZIG;
+    }
+
+    /** 1.6.2: a place where the guh is an item (or held by a Guh Wheel), not an entity. */
+    static boolean isItem(PlekSoort soort) {
+        return switch (soort) {
+            case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND, GUHWIEL -> true;
+            default -> false;
+        };
+    }
+
+    /** 1.6.2: the name of the (offline) player in whose pockets the guh is. */
+    private static Component houder(ServerPlayer speler, UUID id) {
+        BandData.Rec r = BandData.get(speler.level().getServer()).vind(speler.getUUID(), id);
+        return r == null ? Component.literal("?") : r.plek.detail();
+    }
+
+    /** 1.6.2: a trip of this guh that is still being walked off to is called off (the Reisbureau's own early call-back). */
+    private static void vakantieAf(ServerPlayer speler, UUID id) {
+        CompoundTag reis = nl.juiced.guhs.feature.guhpixel.reisbureau.Reizen.reis(speler.level().getServer(), speler.getUUID());
+        if (reis != null && id.equals(nl.juiced.guhs.feature.guhpixel.reisbureau.Reizen.guhId(reis))) {
+            nl.juiced.guhs.feature.guhpixel.reisbureau.Reizen.haalOp(speler, speler.position(), true);
+        }
+    }
+
+    private static Uitkomst aangekomen(ServerPlayer speler, @Nullable Entity e, Vec3 plek) {
+        if (e instanceof GuhEntity guh) {
+            aankomst(speler, guh, plek);
+            return Uitkomst.OK;
+        }
+        return Uitkomst.KWIJT;
+    }
+
+    /**
+     * 1.6.2: a picked-up guh's data (already out of its item) appears next to the player as the very same guh. If a guh with
+     * its UUID is in the world already (the item was a stray copy), that one comes and the data is not used: never two.
+     */
+    @Nullable
+    static GuhEntity verschijn(ServerPlayer speler, CompoundTag data) {
+        UUID id = data.read("UUID", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+        Entity al = id == null ? null : Band.zoekGeladen(speler.level().getServer(), id);
+        if (al instanceof GuhEntity guh) {
+            return haal(speler, guh);
+        }
+        Vec3 plek = veiligePlek(speler.level(), speler, nl.juiced.guhs.registry.ModEntities.GUH.get().getDimensions());
+        float yaw = (float) (Mth.atan2(speler.getZ() - plek.z, speler.getX() - plek.x) * Mth.RAD_TO_DEG) - 90f;
+        CompoundTag t = data.copy();
+        t.putBoolean("Sitting", false);
+        Entity e = nl.juiced.guhs.item.PickedUpGuhItem.release(speler.level(), t, plek.x, plek.y, plek.z, yaw);
+        if (e instanceof GuhEntity guh) {
+            aankomst(speler, guh, plek);
+            return guh;
+        }
+        return null;
     }
 
     /** Every tick: is a guh we are fetching loaded yet? */
@@ -232,6 +339,20 @@ public final class Roepen {
                     losLaten(k);
                     MijnGuhs.stuur(k.speler, null);
                     continue;
+                }
+                if (k.item != null && k.ticks % 10 == 0 && k.level.isLoaded(k.item.pos())) {
+                    // 1.6.2: the chunk of the chest / Bank Guh / wheel / backpack / spot on the ground is there: take it out
+                    CompoundTag data = UitItem.uitWereld(k.level, k.item.pos(), k.item.soort(), k.id);
+                    if (data == null) {
+                        data = UitItem.uitSpelers(s, k.speler.getUUID(), k.id);
+                    }
+                    if (data != null) {
+                        it.remove();
+                        losLaten(k);
+                        verschijn(k.speler, data);
+                        MijnGuhs.stuur(k.speler, null);
+                        continue;
+                    }
                 }
             }
             if (k.ticks >= WACHT) {

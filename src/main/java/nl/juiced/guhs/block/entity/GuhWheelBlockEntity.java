@@ -69,6 +69,12 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         VadsKracht.veranderd(level, worldPosition);
     }
 
+    /** (1.6.2, "Roep naar mij") the running guh's data, read only (null: empty). */
+    @Nullable
+    public CompoundTag guhData() {
+        return guhData;
+    }
+
     /** Takes the guh out again, as picked-up guh data (or null if the wheel was empty). */
     @Nullable
     public CompoundTag takeOut() {

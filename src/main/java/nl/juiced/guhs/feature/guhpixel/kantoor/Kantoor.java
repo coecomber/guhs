@@ -374,6 +374,28 @@ public final class Kantoor {
         return true;
     }
 
+    /**
+     * 1.6.2: "Roep naar mij" in the Guhdex: the guh clocks out wherever its desk is and stands at plek (finished shifts are
+     * still paid). Null when it isn't at work; the desk empties itself when its chunk loads (it checks the record).
+     */
+    @Nullable
+    public static Entity roep(ServerPlayer p, UUID id, Vec3 plek) {
+        MinecraftServer server = p.level().getServer();
+        Werk w = KantoorData.get(server).van(id);
+        if (w == null || !p.getUUID().equals(w.eigenaar)) {
+            return null;
+        }
+        float yaw = (float) (Math.toDegrees(Math.atan2(p.getZ() - plek.z, p.getX() - plek.x)) - 90.0);
+        if (!vrij(p.level(), w, plek, yaw)) {
+            return null;
+        }
+        ServerLevel bl = server.getLevel(w.dim);
+        if (bl != null && bl.isLoaded(w.pos) && bl.getBlockEntity(w.pos) instanceof BureautjeBlockEntity be) {
+            be.leeg();
+        }
+        return Band.zoekGeladen(server, id);
+    }
+
     /** Releases a stored guh at a spot, pays its finished shifts, deletes the record. False: it could not appear (the record stays). */
     private static boolean vrij(ServerLevel level, Werk w, Vec3 plek, float yaw) {
         MinecraftServer server = level.getServer();

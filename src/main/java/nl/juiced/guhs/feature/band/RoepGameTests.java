@@ -21,13 +21,13 @@ import nl.juiced.guhs.feature.huisje.HuisjeBlock;
 import nl.juiced.guhs.feature.huisje.HuisjeMaat;
 import nl.juiced.guhs.feature.huisje.Huisjes;
 import nl.juiced.guhs.gametest.GuhTest;
-import nl.juiced.guhs.item.PickedUpGuhItem;
 import nl.juiced.guhs.registry.ModEntities;
 
 /**
  * Game tests of "Roep naar mij" (1.2.5, {@link Roepen}): from far away in the same level (loaded, and from a chunk that
  * unloaded: a ticket loads it and we wait for the entity), out of its Guhhuisje (no longer a resident), from the Nether
- * (the same guh: name and hearts kept), and refused for someone else's guh, a picked-up one and one in the wolkjes.
+ * (the same guh: name and hearts kept), and refused for someone else's guh and one in the wolkjes (1.6.2: picked-up guhs
+ * and the rest: RoepOveralGameTests).
  * Every guh lands ~2 blocks from the player on safe ground, not sitting. (Template huisje_test_tuin: 24 x 24 grass at y 0.)
  */
 public class RoepGameTests {
@@ -185,17 +185,14 @@ public class RoepGameTests {
         BlockPos was = vreemd.blockPosition();
         helper.assertTrue(Roepen.roep(p, vreemd.getUUID()) == Roepen.Uitkomst.NIET_JOUW, "not your guh");
         helper.assertTrue(vreemd.blockPosition().equals(was) && !vreemd.isRemoved(), "it stays where it is");
-        // a picked-up guh (in the pockets / a chest)
-        GuhEntity opgepakt = guh(helper, p, new BlockPos(8, 1, 5));
-        UUID id = opgepakt.getUUID();
-        PickedUpGuhItem.pickUp(opgepakt);
-        helper.assertTrue(GuhVolger.plek(s, p.getUUID(), id).soort() == PlekSoort.ITEM_SPELER, "picked up");
-        helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.OPGEPAKT, "a picked-up guh can't be called");
-        helper.assertTrue(Roepen.nietRoepbaar(PlekSoort.ITEM_KIST, false) == Roepen.Uitkomst.OPGEPAKT
-                && Roepen.nietRoepbaar(PlekSoort.ITEM_RUGZAK, false) == Roepen.Uitkomst.OPGEPAKT
-                && Roepen.nietRoepbaar(PlekSoort.GUHWIEL, false) == Roepen.Uitkomst.GUHWIEL
-                && Roepen.nietRoepbaar(PlekSoort.HUISJE, false) == null && Roepen.nietRoepbaar(PlekSoort.WERELD, true) == Roepen.Uitkomst.DOOD,
-                "grey for items, the wheel and the wolkjes");
+        // 1.6.2: only the wolkjes (and the Knabbelvelden, not in Mijn guhs) are grey; picked-up guhs, the wheel, holiday, office can be called
+        helper.assertTrue(Roepen.nietRoepbaar(PlekSoort.ITEM_KIST, false) == null && Roepen.nietRoepbaar(PlekSoort.ITEM_RUGZAK, false) == null
+                && Roepen.nietRoepbaar(PlekSoort.GUHWIEL, false) == null && Roepen.nietRoepbaar(PlekSoort.OP_VAKANTIE, false) == null
+                && Roepen.nietRoepbaar(PlekSoort.IN_DE_KNABBELVELDEN, false) == Roepen.Uitkomst.NIET_THUIS
+                && Roepen.nietRoepbaar(PlekSoort.HUISJE, false) == null
+                && Roepen.nietRoepbaar(PlekSoort.WERELD, true) == Roepen.Uitkomst.DOOD
+                && Roepen.nietRoepbaar(PlekSoort.IN_DE_WOLKJES, false) == Roepen.Uitkomst.DOOD,
+                "grey only for the wolkjes and the Knabbelvelden");
         // a guh in the wolkjes
         GuhEntity dood = guh(helper, p, new BlockPos(11, 1, 5));
         UUID doodId = dood.getUUID();
