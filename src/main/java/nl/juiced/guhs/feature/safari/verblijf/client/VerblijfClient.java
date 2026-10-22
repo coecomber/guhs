@@ -52,7 +52,7 @@ public final class VerblijfClient {
             VerblijfRand.vernieuw(data);
             if (mc.screen instanceof VerblijfScreen s && s.pos().asLong() == data.getLongOr("Pos", 0L)) {
                 s.update(data);
-            } else {
+            } else if (!data.getBooleanOr("AlleenVerversen", false)) {
                 mc.setScreen(new VerblijfScreen(data));
             }
         });

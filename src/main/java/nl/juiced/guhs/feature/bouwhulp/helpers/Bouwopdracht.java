@@ -228,6 +228,14 @@ public final class Bouwopdracht {
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
+    /** Round 6: the proposal's shortage as a book, before you approve it. */
+    public static void verblijfLijstje(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
+        if (voorstel(level, be)) {
+            nl.juiced.guhs.feature.bouwhulp.kern.Lijstje.geef(p, Component.translatable("gui.guhs.verblijf.voorstel.lijstje_naam",
+                    Component.translatable("entity.guhs.safari." + be.soort())).getString(), Spookbouw.tekort(p, spook(level, be)));
+        }
+    }
+
     /** "Annuleren": the proposal goes, nothing was built. */
     public static void verblijfAnnuleren(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
         if (voorstel(level, be)) {
@@ -683,6 +691,11 @@ public final class Bouwopdracht {
 
     /** What the screen shows: the tasks, the chosen one and its variants, the running job and its progress. */
     public static CompoundTag staat(ServerLevel level, VerblijfsbordBlockEntity be) {
+        return staat(null, level, be);
+    }
+
+    /** The same, for this player: a waiting proposal also lists what this player is still missing for it (round 6). */
+    public static CompoundTag staat(@Nullable ServerPlayer speler, ServerLevel level, VerblijfsbordBlockEntity be) {
         CompoundTag uit = new CompoundTag();
         ListTag taken = new ListTag();
         taken(be).forEach(x -> taken.add(StringTag.valueOf(x)));
@@ -698,6 +711,9 @@ public final class Bouwopdracht {
         uit.putBoolean("Bank", bank(be) != null);
         uit.putInt("Klaar", tag(be).getIntOr(KLAAR, 0));
         uit.putBoolean("Voorstel", voorstel(level, be));   // test round 5: "Bouw passend verblijf" waits for the owner's OK
+        if (speler != null && voorstel(level, be)) {
+            uit.put("Tekort", nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetPayloads.items(Spookbouw.tekort(speler, spook(level, be))));
+        }
         CompoundTag t = tag(be);
         String soort = t.getStringOr(SOORT, "");
         if (!soort.isEmpty() && bezig(level, be)) {

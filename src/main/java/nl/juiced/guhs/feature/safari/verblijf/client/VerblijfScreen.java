@@ -58,10 +58,14 @@ public class VerblijfScreen extends Screen {
     private final List<Tip> tips = new ArrayList<>();
     private int vriend;
 
+    /** Round 6: the tab each board was last on, so coming back (after the ghost panel, or reopening) lands there again. */
+    private static final java.util.Map<Long, Tab> LAATSTE_TAB = new java.util.HashMap<>();
+
     public VerblijfScreen(CompoundTag data) {
         super(Component.translatable("gui.guhs.verblijf.titel", Component.translatable("entity.guhs.safari." + data.getStringOr("Soort", ""))));
         this.data = data;
         this.pos = BlockPos.of(data.getLongOr("Pos", 0L));
+        this.tab = LAATSTE_TAB.getOrDefault(pos.asLong(), Tab.FAMILIE);
     }
 
     public BlockPos pos() {
@@ -155,11 +159,15 @@ public class VerblijfScreen extends Screen {
         top = (height - H) / 2;
         namen.clear();
         List<Tab> tabs = tabs();
+        if (!tabs.contains(tab)) {
+            tab = Tab.FAMILIE;                       // (a remembered tab this board doesn't have now)
+        }
         int tw = (W - 12) / tabs.size();
         for (int i = 0; i < tabs.size(); i++) {
             Tab t = tabs.get(i);
             Button b = Button.builder(Component.translatable("gui.guhs.verblijf.tab." + sleutel(t)), x -> {
                 tab = t;
+                LAATSTE_TAB.put(pos.asLong(), t);
                 rebuildWidgets();
             }).bounds(left + 6 + i * tw, top + 22, tw - 2, 20).build();
             b.active = t != tab;
@@ -227,6 +235,10 @@ public class VerblijfScreen extends Screen {
                 if (bouw.getBooleanOr("Voorstel", false)) {
                     knop(Component.translatable("gui.guhs.verblijf.voorstel.annuleren"), left + 14, top + H - 62, 160,
                             () -> doe(Actie.VERBLIJF_WEG, 0, ""), "gui.guhs.verblijf.voorstel.annuleren.uitleg", nietJouw);
+                    knop(Component.translatable("gui.guhs.bouwhulp.lijstje.knop"), left + 178, top + H - 62, 44,
+                            () -> doe(Actie.VERBLIJF_LIJSTJE, 0, ""), "gui.guhs.verblijf.voorstel.lijstje.uitleg",
+                            eerste(nietJouw, data.getCompoundOrEmpty("Bouw").getListOrEmpty("Tekort").isEmpty()
+                                    ? Component.translatable("gui.guhs.verblijf.reden.niets_nodig") : null));
                     knop(Component.translatable("gui.guhs.verblijf.voorstel.goed").withStyle(ChatFormatting.BOLD), left + W - 254, top + H - 62, 240,
                             () -> doe(Actie.VERBLIJF_GOED, 0, ""), "gui.guhs.verblijf.voorstel.goed.uitleg", nietJouw);
                 } else {
@@ -477,6 +489,32 @@ public class VerblijfScreen extends Screen {
         int h = GidsTekst.alinea(g, Component.translatable("gui.guhs.verblijf.voer.traktatie", lijst), x, ry, W - 28, 0.875f, TEKST);
         if (data.getCompoundOrEmpty("Bouw").getBooleanOr("Voorstel", false)) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.verblijf.voorstel.uitleg"), x, ry + h + 8, W - 28, 0.875f, GROEN);
+            voorstelTekort(g, x, top + H - 88);
+        }
+    }
+
+    /** Round 6: what the proposal still needs from you (your inventory and the linked Bank Guh), before you approve it. */
+    private void voorstelTekort(GuiGraphicsExtractor g, int x, int y) {
+        ListTag tekort = data.getCompoundOrEmpty("Bouw").getListOrEmpty("Tekort");
+        if (tekort.isEmpty()) {
+            GidsTekst.passend(g, Component.translatable("gui.guhs.verblijf.voorstel.alles_er"), x, y + 4, W - 28, 0.875f, GROEN, false);
+            return;
+        }
+        Component kop = Component.translatable("gui.guhs.verblijf.voorstel.nodig");
+        GidsTekst.passend(g, kop, x, y + 4, 70, 0.875f, ROOD, false);
+        int n = Math.min(15, tekort.size());
+        for (int i = 0; i < n; i++) {
+            CompoundTag c = tekort.getCompoundOrEmpty(i);
+            var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
+            int ix = x + 72 + i * 24;
+            if (item.isPresent()) {
+                g.item(new ItemStack(item.get()), ix, y);
+                GidsTekst.schaal(g, Component.literal(String.valueOf(c.getIntOr("N", 0))), ix + 17, y + 11, 0.6f, ROOD, true);
+                tips.add(new Tip(ix, y, 18, 18, nl.juiced.guhs.feature.bouwhulp.client.BouwkeetScreen.itemTip(c)));
+            }
+        }
+        if (tekort.size() > n) {
+            GidsTekst.schaal(g, Component.literal("+" + (tekort.size() - n)), x + 72 + n * 24, y + 5, 0.75f, LICHT, false);
         }
     }
 

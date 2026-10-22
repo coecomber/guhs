@@ -40,7 +40,9 @@ public final class VerblijfPayloads {
         /** Deel 2 (F10b): the Bouwopdracht tab, in the order of Bouwopdracht.Knop. */
         BOUW_KIES, BOUW_VARIANT, BOUW_ZOEK, BOUW_WIJS, BOUW_HERBEREKEN, BOUW_BEDIEN, BOUW_STOP, BOUW_VERBLIJF,
         /** Test round 5: point at the sleeping spot; the proposal of "Bouw passend verblijf" approved / cancelled. */
-        SLAAPPLEK_WIJS, VERBLIJF_GOED, VERBLIJF_WEG }
+        SLAAPPLEK_WIJS, VERBLIJF_GOED, VERBLIJF_WEG,
+        /** Round 6: the proposal's shortage as a written book (like the Bouwkeet's "Lijstje"). */
+        VERBLIJF_LIJSTJE }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("verblijf_open"));
@@ -79,13 +81,27 @@ public final class VerblijfPayloads {
         registrar.playToServer(Doe.TYPE, Doe.STREAM_CODEC, Doe::handle);
     }
 
-    /** Sends the board's state to this player (opening or refreshing the menu). */
+    /** Sends the board's state to this player, opening the menu. */
     public static void open(ServerPlayer p, VerblijfsbordBlockEntity be) {
+        stuur(p, be, false);
+    }
+
+    /**
+     * After a button: the new state only refreshes a menu that is still open. Round 6: it used to reopen the menu (on the
+     * Familie tab) after "Slaapplek aanwijzen" closed it, and over the ghost panel of "Spook...".
+     */
+    static void ververs(ServerPlayer p, VerblijfsbordBlockEntity be) {
+        stuur(p, be, true);
+    }
+
+    private static void stuur(ServerPlayer p, VerblijfsbordBlockEntity be, boolean alleenVerversen) {
         if (!(p.level() instanceof ServerLevel level)) {
             return;
         }
         be.herreken(level);
-        PacketDistributor.sendToPlayer(p, new Open(staat(p, level, be)));
+        CompoundTag t = staat(p, level, be);
+        t.putBoolean("AlleenVerversen", alleenVerversen);
+        PacketDistributor.sendToPlayer(p, new Open(t));
     }
 
     static CompoundTag staat(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
@@ -169,7 +185,7 @@ public final class VerblijfPayloads {
         }
         t.put("Cadeaus", cadeaus);
         t.putInt("Sterren", SafariSpeler.dex(p, soort).sterren());
-        t.put("Bouw", nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.staat(level, be));
+        t.put("Bouw", nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.staat(p, level, be));
         t.putLong("Cooldown", Math.max(0, SafariSpeler.bordVrijOp(level.getServer(), p.getUUID(), soort) - Klok.nu()));
         if (info != null && info.bezorger()) {
             ListTag vrienden = new ListTag();
@@ -194,7 +210,7 @@ public final class VerblijfPayloads {
         Actie a = d.actie() >= 0 && d.actie() < Actie.values().length ? Actie.values()[d.actie()] : Actie.VERVERS;
         if (a != Actie.VERVERS && !be.magBewerken(p)) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.niet_jouw", be.eigenaarNaam()).withStyle(ChatFormatting.RED));
-            open(p, be);
+            ververs(p, be);
             return;
         }
         switch (a) {
@@ -220,6 +236,7 @@ public final class VerblijfPayloads {
             case SLAAPPLEK_WIJS -> SlaapplekAanwijzen.begin(p, be);
             case VERBLIJF_GOED -> nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.verblijfGoedgekeurd(p, level, be);
             case VERBLIJF_WEG -> nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.verblijfAnnuleren(p, level, be);
+            case VERBLIJF_LIJSTJE -> nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.verblijfLijstje(p, level, be);
             case CADEAUS -> {
                 for (int i = 0; i < be.cadeaus().getContainerSize(); i++) {
                     ItemStack s = be.cadeaus().getItem(i);
@@ -254,7 +271,7 @@ public final class VerblijfPayloads {
                 }
             }
         }
-        open(p, be);
+        ververs(p, be);
     }
 
     private VerblijfPayloads() {

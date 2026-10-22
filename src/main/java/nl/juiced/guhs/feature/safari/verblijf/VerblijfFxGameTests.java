@@ -123,4 +123,27 @@ public class VerblijfFxGameTests {
         }
         helper.succeed();
     }
+
+    /** Round 6: the proposal shows what you still miss (names + counts) before you approve it, and gives it as a book. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 60)
+    public static void verblijfVoorstelToontTekort(GameTestHelper helper) {
+        VerblijfsbordBlockEntity be = bord(helper, "leeuw");
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        Bouwopdracht.testZoekStraal = 8;
+        try {
+            helper.assertTrue(Bouwopdracht.verblijf(p, helper.getLevel(), be), "a proposal: " + Bouwopdracht.laatsteNee);
+            net.minecraft.nbt.ListTag tekort = Bouwopdracht.staat(p, helper.getLevel(), be).getListOrEmpty("Tekort");
+            helper.assertTrue(!tekort.isEmpty() && tekort.getCompoundOrEmpty(0).getIntOr("N", 0) > 0
+                    && !tekort.getCompoundOrEmpty(0).getStringOr("Id", "").isEmpty(), "the shortage is in the menu: " + tekort);
+            Bouwopdracht.verblijfLijstje(p, helper.getLevel(), be);
+            helper.assertTrue(p.getInventory().contains(s -> s.is(net.minecraft.world.item.Items.WRITTEN_BOOK)), "and as a booklet");
+            Bouwopdracht.verblijfAnnuleren(p, helper.getLevel(), be);
+            helper.assertTrue(!Bouwopdracht.staat(p, helper.getLevel(), be).contains("Tekort"), "no proposal, no list");
+        } finally {
+            Bouwopdracht.testZoekStraal = -1;
+        }
+        helper.succeed();
+    }
 }

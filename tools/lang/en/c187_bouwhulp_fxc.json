@@ -93,5 +93,10 @@
   "gui.guhs.bouwhulp.raster.knop": "Click: choose from all options. Shift-click: one back.",
   "gui.guhs.bouwkeet.bouw.uitleg": "Let the shed build the ghost. If something is missing, it first asks whether to build anyway (what's missing stays a ghost).",
   "gui.guhs.bouwkeet.pauze.uitleg": "Pauses the building. Build! goes on.",
-  "gui.guhs.bouwkeet.niet_jouw.uitleg": "This is not your shed: only the owner may build."
+  "gui.guhs.bouwkeet.niet_jouw.uitleg": "This is not your shed: only the owner may build.",
+  "gui.guhs.verblijf.voorstel.nodig": "Still needed:",
+  "gui.guhs.verblijf.voorstel.alles_er": "All blocks are there! (from your inventory and the linked Bank Guh)",
+  "gui.guhs.verblijf.voorstel.lijstje.uitleg": "Gives you a booklet with every block still missing for this proposal: the exact name and how many. Handy next to the crafting table.",
+  "gui.guhs.verblijf.voorstel.lijstje_naam": "Home: %s",
+  "gui.guhs.verblijf.reden.niets_nodig": "Nothing is missing: all blocks are there."
 }

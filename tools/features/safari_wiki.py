@@ -246,8 +246,9 @@ WIKI = {
          "Deze knop zet eerst alleen een voorstel neer: een spook van een verblijf met alles wat het dier blij maakt, "
          "met een hek eromheen. Er wordt nog niets gebouwd. Bevalt het, kies dan Goedgekeurd, laat bouwen: de familie "
          "gaat op werkuitje en bouwt het zelf, met jouw blokken uit je inventaris en de gekoppelde Bank Guh. Mist er "
-         "iets, dan bouwen ze wat er is en blijft de rest spook. Annuleren haalt het voorstel weg. Een bord doet één "
-         "klus tegelijk."),
+         "iets, dan bouwen ze wat er is en blijft de rest spook. Onder het voorstel staat al wat je nog mist (plaatje, "
+         "naam en aantal), en de knop Lijstje geeft je daar een boekje van. Annuleren haalt het voorstel weg. Een bord "
+         "doet één klus tegelijk."),
         # --- the Kriebelhuis ---
         ("kriebelhuis", "Het gebouw",
          "Bij de balie zit Kaartjesguh Piepje (de kaartjes zijn gratis). Daarna loop je door het Terrarium onder een glazen koepel, "
