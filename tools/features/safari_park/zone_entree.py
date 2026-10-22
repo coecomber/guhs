@@ -1065,6 +1065,20 @@ def _lobby():
     S.set(20, G + 1, 140, "hapluikje[facing=south,snoet=slaapt]")                  # round 5: a few more plain toys
     S.set(22, G + 1, 172, "bellenblaas[facing=north]")
     S.set(33, G + 1, 148, "luchtscooter")
+    # round 5 (user): the safari animal toys too, now that the guhs play with them (FX-B Speeltuin): each on a free
+    # 3x3 spot near its wish spot, so it never lands on another toy, a path or the tunnel
+    bezet = {(x, z) for d in speelgoed for x in range(d["pos"][0] - 2, d["pos"][0] + 3) for z in range(d["pos"][2] - 2, d["pos"][2] + 3)}
+    for naam, (wx, wz) in (("safari_speelbal", (46, 140)), ("safari_schommelband", (14, 132)),
+                           ("safari_krabboom", (46, 170)), ("safari_glijbaantje", (20, 160))):
+        for r in range(0, 7):
+            plek = next(((x, z) for x in range(wx - r, wx + r + 1) for z in range(wz - r, wz + r + 1)
+                         if SX1 + 2 <= x <= SX2 - 2 and SZ1 + 2 <= z <= SZ2 - 2
+                         and all(S.is_air(x + dx, G + 1, z + dz) and (x + dx, z + dz) not in bezet
+                                 for dx in (-1, 0, 1) for dz in (-1, 0, 1))), None)
+            if plek:
+                S.set(plek[0], G + 1, plek[1], naam)
+                bezet |= {(plek[0] + dx, plek[1] + dz) for dx in range(-1, 2) for dz in range(-1, 2)}
+                break
     for x in range(10, 16):
         for z in range(152, 158):
             S.set(x, G, z, "minecraft:sand")
