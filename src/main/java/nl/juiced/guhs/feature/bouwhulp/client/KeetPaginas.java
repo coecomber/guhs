@@ -96,6 +96,11 @@ final class KeetPaginas {
             if (tab.getBooleanOr("Bank", false)) {
                 s.knop(Component.translatable("gui.guhs.bouwkeet.bank.los"), x + w - 90, y, 90, () -> s.doe(BouwkeetTabs.MATERIAAL, 3, 0, ""), s.magBewerken());
             }
+            // test round 5: what is still missing as a written book
+            boolean mist = !s.data().getCompoundOrEmpty("Project").getListOrEmpty("Tekort").isEmpty();
+            s.knop(Component.translatable("gui.guhs.bouwhulp.lijstje.knop"), x + w - 90, y + 22, 90,
+                    () -> s.doe("", nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetPayloads.Actie.LIJSTJE.ordinal(), 0, ""), mist)
+                    .setTooltip(Tooltip.create(Component.translatable(mist ? "gui.guhs.bouwhulp.lijstje.uitleg" : "gui.guhs.bouwhulp.lijstje.niets.uitleg")));
             ListTag spoken = tab.getListOrEmpty("Spoken");
             int sy = y + h - Math.min(2, spoken.size()) * 20;
             for (int i = 0; i < Math.min(2, spoken.size()); i++) {
@@ -105,6 +110,11 @@ final class KeetPaginas {
                 s.knop(Component.translatable("gui.guhs.bouwkeet.spoken.hier"), x + w - 62, sy + i * 20, 62, () -> s.doe(BouwkeetTabs.MATERIAAL, 2, 0, id),
                         s.magBewerken() && !c.getBooleanOr("Project", false) && !c.getBooleanOr("Elders", false));
             }
+        }
+
+        @Override
+        public java.util.List<Component> tip(BouwkeetScreen s, CompoundTag tab, int x, int y, int w, int h, int mx, int my) {
+            return materiaalTip(tab, x, y, mx, my);
         }
 
         @Override
@@ -136,6 +146,10 @@ final class KeetPaginas {
             }
             ListTag spoken = tab.getListOrEmpty("Spoken");
             int sy = y + h - Math.min(2, spoken.size()) * 20;
+            if (!nodig.isEmpty() && !tab.getBooleanOr("Gratis", false)) {
+                GidsTekst.passend(g, Component.translatable("gui.guhs.bouwkeet.nodig.hover").withStyle(ChatFormatting.ITALIC), x, ny + 10 + 2 * 20 + 2, w,
+                        0.7f, LICHT, false);
+            }
             if (!spoken.isEmpty()) {
                 GidsTekst.passend(g, Component.translatable("gui.guhs.bouwkeet.spoken").withStyle(ChatFormatting.BOLD), x, sy - 10, w, 0.75f, DONKER, false);
             }
@@ -151,6 +165,24 @@ final class KeetPaginas {
     };
 
     // =====================================================================================================================
+
+    /** (Materiaal) the needed item under the mouse: its name and "12 / 30". */
+    static java.util.List<Component> materiaalTip(CompoundTag tab, int x, int y, int mx, int my) {
+        ListTag nodig = tab.getListOrEmpty("Nodig");
+        int ny = y + 28;
+        for (int i = 0; i < Math.min(12, nodig.size()); i++) {
+            int ix = x + (i % 6) * 52, iy = ny + 10 + (i / 6) * 20;
+            if (mx >= ix && mx < ix + 50 && my >= iy && my < iy + 18) {
+                CompoundTag c = nodig.getCompoundOrEmpty(i);
+                var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
+                if (item.isPresent()) {
+                    return java.util.List.of(new ItemStack(item.get()).getHoverName(), Component.translatable("gui.guhs.bouwhulp.tip.heb",
+                            Math.min(c.getLongOr("Heb", 0L), c.getIntOr("N", 0)), c.getIntOr("N", 0)).withStyle(ChatFormatting.GRAY));
+                }
+            }
+        }
+        return null;
+    }
 
     static final BouwkeetScreen.TabPagina NIVEAU = new BouwkeetScreen.TabPagina() {
         @Override

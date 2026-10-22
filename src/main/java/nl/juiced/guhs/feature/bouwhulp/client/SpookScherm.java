@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.gids.client.GidsTekst;
  * only.
  */
 public class SpookScherm extends Screen {
-    private static final int W = 300, H = 216;
+    private static final int W = 340, H = 270;
     private static final int PANEEL = 0xF0FFF6FA, RAND = 0xFFE58CB8, KOP = 0xFFFBE0EE, DONKER = 0xFF5A2C44, TEKST = 0xFF6A4058,
             LICHT = 0xFFA07A90, GROEN = 0xFF4E8A3A, ROOD = 0xFFB0484A;
 
@@ -89,7 +89,7 @@ public class SpookScherm extends Screen {
         boolean mag = mag();
         boolean bouwt = status() == 1;
         boolean vrij = mag && !bouwt;
-        int y = top + 64;
+        int y = top + 92;
         // arrows: a little cross, plus up / down
         int ax = left + 10;
         knop(ax + 22, y, 20, "↑", b -> schuif(0), vrij, "gui.guhs.bouwhulp.spook.vooruit");
@@ -105,6 +105,12 @@ public class SpookScherm extends Screen {
         draai.active = spiegel.active = vrij;
         addRenderableWidget(draai);
         addRenderableWidget(spiegel);
+        // test round 5: the missing blocks as a written book
+        Button lijstje = Button.builder(Component.translatable("gui.guhs.bouwhulp.lijstje.knop"), b -> doe(Actie.LIJSTJE, 0, ""))
+                .bounds(left + 196, top + 200, W - 206, 18).tooltip(Tooltip.create(Component.translatable(data.getListOrEmpty("Tekort").isEmpty()
+                        ? "gui.guhs.bouwhulp.lijstje.niets.uitleg" : "gui.guhs.bouwhulp.lijstje.uitleg"))).build();
+        lijstje.active = !data.getListOrEmpty("Tekort").isEmpty();
+        addRenderableWidget(lijstje);
         // building
         int by = top + H - 46;
         if (data.getBooleanOr("VraagAlsnog", false) && mag) {
@@ -187,28 +193,37 @@ public class SpookScherm extends Screen {
         if (status() == 1 && tot > 0) {
             GidsTekst.balk(g, x, y + 26, W - 20, 5, data.getIntOr("Gedaan", 0) / (float) tot);
         }
-        // the shortage (or "alles is er")
-        int lx = left + 196, ly = top + 64;
+        // test round 5: part of it out of the keet's reach (drawn red in the world)
+        int buiten = data.getIntOr("Buiten", 0);
+        if (buiten > 0) {
+            Component tip = data.contains("BereikVolgend") ? Component.translatable("gui.guhs.bouwhulp.bereik.tip.volgend", data.getIntOr("BereikVolgend", 0))
+                    : Component.translatable("gui.guhs.bouwhulp.bereik.tip.max");
+            GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.bereik.buiten", buiten, data.getIntOr("Bereik", 0)).append(" ").append(tip),
+                    x, y + 34, W - 20, 0.7f, ROOD);
+        }
+        // the shortage (or "alles is er"): the item, how many, its name
+        int lx = left + 196, ly = top + 92;
         ListTag tekort = data.getListOrEmpty("Tekort");
         if (data.getBooleanOr("VraagAlsnog", false)) {
-            GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.spook.alsnog.vraag"), left + 10, top + H - 74, W - 20, 0.75f, ROOD);
+            GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.spook.alsnog.vraag"), left + 10, top + 156, 180, 0.75f, ROOD);
         }
         if (tekort.isEmpty()) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.spook.alles_er"), lx, ly, W - 206, 0.75f, GROEN);
         } else {
             GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.tekort").withStyle(ChatFormatting.BOLD), lx, ly, W - 206, 0.75f, ROOD, false);
-            for (int i = 0; i < Math.min(8, tekort.size()); i++) {
+            for (int i = 0; i < Math.min(5, tekort.size()); i++) {
                 CompoundTag c = tekort.getCompoundOrEmpty(i);
-                int ix = lx + (i % 4) * 22, iy = ly + 10 + (i / 4) * 22;
+                int iy = ly + 10 + i * 17;
                 var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
                 if (item.isPresent()) {
                     ItemStack s = new ItemStack(item.get());
-                    g.item(s, ix, iy);
-                    GidsTekst.schaal(g, Component.literal(String.valueOf(c.getIntOr("N", 0))), ix + 17, iy + 11, 0.6f, ROOD, true);
+                    g.item(s, lx, iy);
+                    GidsTekst.passend(g, Component.literal(c.getIntOr("N", 0) + "× ").withStyle(ChatFormatting.BOLD).append(s.getHoverName().copy()
+                            .withStyle(ChatFormatting.RESET)), lx + 18, iy + 5, W - 226, 0.7f, ROOD, false);
                 }
             }
-            if (tekort.size() > 8) {
-                GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.meer", tekort.size() - 8), lx, ly + 56, W - 206, 0.7f, LICHT, false);
+            if (tekort.size() > 5) {
+                GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.meer", tekort.size() - 5), lx, ly + 10 + 5 * 17, W - 206, 0.7f, LICHT, false);
             }
         }
         ListTag helpers = data.getListOrEmpty("Helpers");

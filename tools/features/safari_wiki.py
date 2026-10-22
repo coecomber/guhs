@@ -218,12 +218,36 @@ WIKI = {
          "rond of rechthoekig), ook zonder hek. Sla je het bord kapot, dan gaan ze met een puf terug naar het park en krijg je het "
          "bord terug: zo kun je ze verhuizen."),
         ("verblijfsborden", "Thuis met je dieren",
-         "Aai ze, voer ze met eten dat bij ze past (safarivoer telt dubbel) en geef ze een speeltje: een speelbal, krabboom, "
-         "schommelband of glijbaantje. Blije dieren geven af en toe een cadeautje. Vrienden mogen je dieren ook aaien en voeren."),
+         "Aai ze (rechtsklik met een lege hand) en geef ze een speeltje: een speelbal, krabboom, schommelband of "
+         "glijbaantje. Eten zoeken ze zelf, dus voeren hoeft niet: een traktatie die bij ze past (safarivoer telt "
+         "dubbel) geeft wel hartjes. Blije dieren geven af en toe een cadeautje. Vrienden mogen je dieren ook aaien en "
+         "voeren."),
         ("verblijfsborden", "Het menu",
-         "Klik op het bord voor het menu: Familie (namen geven, terugroepen), Verblijf (grootte, vorm, slaapplek), Tevredenheid (wat "
-         "het dier nog mist, en de knop Bouw passend verblijf), Cadeautjes, Info (een weetje, je beste foto, wanneer je weer een bord "
-         "mag kopen) en bij helperdieren de tab Bouwopdracht."),
+         "Klik op het bord voor het menu, met de tabs Familie (namen geven, terugroepen, even verstoppen), Verblijf "
+         "(grootte, vorm, de rand laten zien, de slaapplek), Tevredenheid (wat het dier nog mist, en Bouw passend "
+         "verblijf), Cadeautjes, Info (een weetje, je beste foto, wanneer je weer een bord mag kopen) en bij "
+         "helperdieren Bouwopdracht. Elke knop legt zichzelf uit als je er met je muis op gaat staan; een grijze knop "
+         "zegt waarom hij grijs is."),
+        ("verblijfsborden", "Verstoppen en terugroepen",
+         "Even verstoppen laat de dieren twintig seconden onzichtbaar worden, handig als je in hun verblijf wilt "
+         "bouwen. Daarna komen ze vanzelf terug met een puf. Terugroepen haalt ze meteen naar het bord, ook als ze zich "
+         "verstopt hebben."),
+        ("verblijfsborden", "Rand en slaapplek",
+         "Rand tonen laat de rand van het verblijf zien met roze stofjes op de grond, twee minuten lang of tot je op "
+         "Rand verstoppen klikt. Schuif je de grootte, dan zie je de nieuwe rand meteen. Voor de slaapplek klik je "
+         "Slaapplek aanwijzen: het menu gaat dicht, en de volgende rechtsklik op een blok binnen het verblijf wordt de "
+         "plek waar de familie 's nachts slaapt."),
+        ("verblijfsborden", "Tevredenheid",
+         "De balk laat zien hoe blij de familie is. Wat het dier nodig heeft (bijvoorbeeld water, zand of gras) telt "
+         "het zwaarst, daarna genoeg ruimte, vandaag geaaid, zijn speeltje in de buurt en een vriendje dat binnen 24 "
+         "blokken woont. Ga met je muis op een regel staan: dan staat er precies wat je moet doen, met "
+         "voorbeeldblokken. Alles binnen de rand telt, van zes blokken onder tot tien boven het bord."),
+        ("verblijfsborden", "Bouw passend verblijf",
+         "Deze knop zet eerst alleen een voorstel neer: een spook van een verblijf met alles wat het dier blij maakt, "
+         "met een hek eromheen. Er wordt nog niets gebouwd. Bevalt het, kies dan Goedgekeurd, laat bouwen: de familie "
+         "gaat op werkuitje en bouwt het zelf, met jouw blokken uit je inventaris en de gekoppelde Bank Guh. Mist er "
+         "iets, dan bouwen ze wat er is en blijft de rest spook. Annuleren haalt het voorstel weg. Een bord doet één "
+         "klus tegelijk."),
         # --- the Kriebelhuis ---
         ("kriebelhuis", "Het gebouw",
          "Bij de balie zit Kaartjesguh Piepje (de kaartjes zijn gratis). Daarna loop je door het Terrarium onder een glazen koepel, "

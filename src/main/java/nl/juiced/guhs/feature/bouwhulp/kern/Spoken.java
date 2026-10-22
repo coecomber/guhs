@@ -270,6 +270,10 @@ public final class Spoken extends SavedData {
             if (nu == doel || !magBouwen(level, pos, nu)) {
                 continue;
             }
+            if (bouwer != null && buiten(s.bouwerPos, bouwer.bereik(level), pos)) {
+                s.mist.add(pos.asLong());   // test round 5: out of the keet's reach, stays a ghost (drawn red)
+                continue;
+            }
             Materiaal.Kost kost = Materiaal.kost(doel);
             if (kost == null) {
                 continue;
@@ -305,6 +309,32 @@ public final class Spoken extends SavedData {
         }
     }
 
+    /** Test round 5: is this spot further than {@code bereik} from the builder's block (in x or in z)? */
+    public static boolean buiten(@Nullable BlockPos bouwerPos, int bereik, BlockPos pos) {
+        return bouwerPos != null && bereik < Integer.MAX_VALUE
+                && (Math.abs(pos.getX() - bouwerPos.getX()) > bereik || Math.abs(pos.getZ() - bouwerPos.getZ()) > bereik);
+    }
+
+    /** How many blocks of this ghost lie out of its builder's reach. */
+    public static int buiten(ServerLevel level, Spook s, @Nullable Bouwer bouwer) {
+        if (bouwer == null || s.bouwerPos == null) {
+            return 0;
+        }
+        int bereik = bouwer.bereik(level), n = 0;
+        for (Map.Entry<BlockPos, BlockState> e : s.volgorde()) {
+            if (!e.getValue().isAir() && buiten(s.bouwerPos, bereik, e.getKey())) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** (The builder of a ghost: for the menus.) */
+    @Nullable
+    public Bouwer bouwerVan(ServerLevel level, Spook s) {
+        return bouwer(level, s);
+    }
+
     /** May a builder change this spot (not protected, not a block entity, not unbreakable, inside the world)? */
     public static boolean magBouwen(ServerLevel level, BlockPos pos, BlockState nu) {
         if (level.isOutsideBuildHeight(pos) || !level.getWorldBorder().isWithinBounds(pos)) {
@@ -328,8 +358,14 @@ public final class Spoken extends SavedData {
             weg(level, s);
         } else {
             s.status = Spook.Status.WACHT;
-            if (p != null) {
-                p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.spook.mist", s.mist.size()));
+            int ver = bouwer == null ? 0 : buiten(level, s, bouwer);
+            if (p != null && ver > 0) {
+                p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.bereik.buiten.klaar", ver, bouwer.bereik(level))
+                        .withStyle(net.minecraft.ChatFormatting.GOLD));
+                p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.bereik.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+            if (p != null && s.mist.size() > ver) {
+                p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.spook.mist", s.mist.size() - ver));
             }
             if (bouwer != null) {
                 bouwer.gestopt(level, s, false);

@@ -141,6 +141,7 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         niveau = naar.nummer();
         meld();
         sync();
+        bereikVeranderd();
         return true;
     }
 
@@ -149,6 +150,15 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         niveau = Math.max(0, Math.min(4, n));
         meld();
         sync();
+        bereikVeranderd();
+    }
+
+    /** Test round 5: a new level reaches further: the project's ghost goes out again (fewer red blocks). */
+    private void bereikVeranderd() {
+        Spook s = project();
+        if (s != null && level instanceof ServerLevel sl) {
+            nl.juiced.guhs.feature.bouwhulp.kern.Spoken.van(sl).veranderd(sl, s);
+        }
     }
 
     @Nullable
@@ -254,6 +264,11 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
     // =====================================================================================================================
     // Bouwer: what the project asks
     // =====================================================================================================================
+
+    @Override
+    public int bereik(ServerLevel level) {
+        return werkNiveau().bereik;
+    }
 
     @Override
     public double tempo(ServerLevel level, Spook spook) {

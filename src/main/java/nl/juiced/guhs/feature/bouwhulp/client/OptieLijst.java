@@ -42,6 +42,8 @@ final class OptieLijst {
     }
 
     static final int RIJ = 20;
+    /** From this many options a choice opens the {@link KeuzeRaster} (shift-click still steps back through them). */
+    static final int RASTER_VANAF = 6;
     /** The block/mix setting whose hotbar picker is open (null: none). */
     @Nullable
     static String kiezer;
@@ -65,6 +67,12 @@ final class OptieLijst {
                     ListTag k = o.getListOrEmpty("Keuzes");
                     CompoundTag nu = k.getCompoundOrEmpty(Math.min(waarde, k.size() - 1));
                     Button b = h.knop(keuze(key, nu), bx, cy, bw, () -> {
+                        // test round 5: many options (shapes, roofs, patterns): a grid to pick from instead of clicking through
+                        if (k.size() >= RASTER_VANAF && !Minecraft.getInstance().hasShiftDown()) {
+                            Minecraft mc = Minecraft.getInstance();
+                            mc.setScreen(new KeuzeRaster(mc.screen, key, k, waarde, j -> s.zet(key, j, "")));
+                            return;
+                        }
                         int stap = Minecraft.getInstance().hasShiftDown() ? -1 : 1;
                         for (int n = 1; n <= k.size(); n++) {
                             int j = Math.floorMod(waarde + stap * n, k.size());
@@ -76,6 +84,8 @@ final class OptieLijst {
                     }, mag);
                     if (nu.contains("Dicht")) {
                         b.setTooltip(Tooltip.create(Component.translatable(nu.getStringOr("Dicht", ""))));
+                    } else if (k.size() >= RASTER_VANAF) {
+                        b.setTooltip(Tooltip.create(Component.translatable("gui.guhs.bouwhulp.raster.knop")));
                     }
                 }
                 case GETAL -> {

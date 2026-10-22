@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.bouwhulp.client;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,9 +36,9 @@ import nl.juiced.guhs.feature.gids.client.GidsTekst;
  * </pre>
  */
 public class BouwkeetScreen extends Screen {
-    public static final int W = 340, H = 244;
+    public static final int W = 400, H = 268;
     /** The page area: x + 10 .. x + W - 10, from {@link #PAGINA_Y} to {@link #PROJECT_Y} - 4 (relative to the panel). */
-    public static final int PAGINA_Y = 42, PROJECT_Y = H - 64;
+    public static final int PAGINA_Y = 42, PROJECT_Y = H - 76;
     public static final int PANEEL = 0xF0FFF9EC, RAND = 0xFFE7B04A, KOP = 0xFFFFE9B8, DONKER = 0xFF5A3A1E, TEKST = 0xFF6A4A2A,
             LICHT = 0xFFA0845E, GROEN = 0xFF4E8A3A, ROOD = 0xFFB0484A, ROZE = 0xFFE07AAE;
 
@@ -49,6 +50,11 @@ public class BouwkeetScreen extends Screen {
 
         /** Draws the page (behind the buttons). */
         default void teken(BouwkeetScreen s, GuiGraphicsExtractor g, CompoundTag tab, int x, int y, int w, int h) {
+        }
+
+        /** Test round 5: the tooltip of what the mouse is over on the page (an item: its name), or null. */
+        default List<Component> tip(BouwkeetScreen s, CompoundTag tab, int x, int y, int w, int h, int mx, int my) {
+            return null;
         }
     }
 
@@ -168,12 +174,14 @@ public class BouwkeetScreen extends Screen {
         }
         boolean bouwt = pr.getIntOr("Status", 0) == 1;
         if (bouwt) {
-            knop(Component.translatable("gui.guhs.bouwhulp.spook.pauze"), left + 10, y, 64, () -> doe("", Actie.PAUZE.ordinal(), 0, ""), mag);
+            knop(Component.translatable("gui.guhs.bouwhulp.spook.pauze"), left + 10, y, 64, () -> doe("", Actie.PAUZE.ordinal(), 0, ""), mag)
+                    .setTooltip(Tooltip.create(Component.translatable("gui.guhs.bouwkeet.pauze.uitleg")));
         } else {
             Component bouw = pr.getBooleanOr("Pof", false) && pr.getListOrEmpty("Tekort").isEmpty()
                     ? Component.translatable("gui.guhs.bouwkeet.pof").withStyle(ChatFormatting.BOLD)
                     : Component.translatable("gui.guhs.bouwhulp.spook.bouw").withStyle(ChatFormatting.BOLD);
-            knop(bouw, left + 10, y, 64, () -> doe("", Actie.BOUW.ordinal(), 0, ""), mag);
+            knop(bouw, left + 10, y, 64, () -> doe("", Actie.BOUW.ordinal(), 0, ""), mag)
+                    .setTooltip(Tooltip.create(Component.translatable(mag ? "gui.guhs.bouwkeet.bouw.uitleg" : "gui.guhs.bouwkeet.niet_jouw.uitleg")));
         }
         knop(Component.translatable("gui.guhs.bouwkeet.bediening"), left + 78, y, 70, () -> doe("", Actie.BEDIENING.ordinal(), 0, ""), true)
                 .setTooltip(Tooltip.create(Component.translatable("gui.guhs.bouwkeet.bediening.uitleg")));
@@ -182,6 +190,42 @@ public class BouwkeetScreen extends Screen {
         terug.setTooltip(Tooltip.create(Component.translatable("gui.guhs.bouwhulp.spook.terug.uitleg")));
         knop(Component.translatable("gui.guhs.bouwkeet.loslaten"), left + 216, y, 64, () -> doe("", Actie.LOSLATEN.ordinal(), 0, ""), mag && !bouwt)
                 .setTooltip(Tooltip.create(Component.translatable("gui.guhs.bouwkeet.loslaten.uitleg")));
+        // test round 5: the missing blocks as a written book
+        knop(Component.translatable("gui.guhs.bouwhulp.lijstje.knop"), left + 284, y, 54, () -> doe("", Actie.LIJSTJE.ordinal(), 0, ""),
+                !pr.getListOrEmpty("Tekort").isEmpty()).setTooltip(Tooltip.create(Component.translatable(pr.getListOrEmpty("Tekort").isEmpty()
+                ? "gui.guhs.bouwhulp.lijstje.niets.uitleg" : "gui.guhs.bouwhulp.lijstje.uitleg")));
+    }
+
+    /** Test round 5: the item names (the shortage under the project, the page's own items) as tooltips. */
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
+        List<Component> tip = null;
+        TabPagina pagina = PAGINAS.get(openTab());
+        if (pagina != null) {
+            tip = pagina.tip(this, data.getCompoundOrEmpty("Tab"), left + 10, top + PAGINA_Y, W - 20, PROJECT_Y - PAGINA_Y - 4, mouseX, mouseY);
+        }
+        ListTag tekort = data.getCompoundOrEmpty("Project").getListOrEmpty("Tekort");
+        int x = left + 10, y = top + PROJECT_Y + 2;
+        for (int i = 0; tip == null && i < Math.min(12, tekort.size()); i++) {
+            int ix = x + 62 + i * 24;
+            if (mouseX >= ix && mouseX < ix + 18 && mouseY >= y + 13 && mouseY < y + 31) {
+                tip = itemTip(tekort.getCompoundOrEmpty(i));
+            }
+        }
+        if (tip != null) {
+            g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
+        }
+    }
+
+    /** "Eikenhouten planken" / "Nog 12 nodig" for an item row {Id, N}. */
+    public static List<Component> itemTip(CompoundTag c) {
+        var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
+        if (item.isEmpty()) {
+            return null;
+        }
+        return List.of(new ItemStack(item.get()).getHoverName(), Component.translatable("gui.guhs.bouwhulp.tip.aantal", c.getIntOr("N", 0))
+                .withStyle(ChatFormatting.GRAY));
     }
 
     // =====================================================================================================================
@@ -221,8 +265,22 @@ public class BouwkeetScreen extends Screen {
         int[] gr = pr.getIntArray("Grootte").orElse(new int[] {0, 0, 0});
         Component kop = Component.translatable("gui.guhs.bouwkeet.project", naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project")
                 : Component.literal(naam), gr[0], gr[1], gr[2], pr.getIntOr("Totaal", 0));
-        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), x, y, W - 20, 0.75f, DONKER, false);
+        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), x, y, W - 120, 0.75f, DONKER, false);
         int gedaan = pr.getIntOr("Gedaan", 0), rest = pr.getIntOr("Rest", 0);
+        // test round 5: how long it still takes (a project of 700 blocks takes a few minutes at 5 a second)
+        double tempo = pr.getDoubleOr("Tempo", 0);
+        if (pr.getIntOr("Status", 0) == 1 && tempo > 0 && rest > 0) {
+            int sec = (int) Math.ceil(rest / tempo);
+            Component tijd = sec >= 90 ? Component.translatable("gui.guhs.bouwkeet.nog.min", (sec + 30) / 60) : Component.translatable("gui.guhs.bouwkeet.nog.sec", sec);
+            GidsTekst.passend(g, tijd, x + W - 20, y, 110, 0.75f, GROEN, true);
+        }
+        int buiten = pr.getIntOr("Buiten", 0);
+        if (buiten > 0) {
+            Component tip = pr.contains("BereikVolgend") ? Component.translatable("gui.guhs.bouwhulp.bereik.tip.volgend", pr.getIntOr("BereikVolgend", 0))
+                    : Component.translatable("gui.guhs.bouwhulp.bereik.tip.max");
+            GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.bereik.buiten", buiten, pr.getIntOr("Bereik", 0)).append(" ").append(tip),
+                    x, y + 34, W - 20, 0.7f, ROOD, false);
+        }
         if (gedaan + rest > 0) {
             GidsTekst.balk(g, x, y + 10, W - 20, 4, gedaan / (float) (gedaan + rest));
         }
@@ -231,7 +289,7 @@ public class BouwkeetScreen extends Screen {
             GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.alles_er"), x, y + 17, W - 20, 0.75f, GROEN, false);
         } else {
             GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.tekort"), x, y + 17, 60, 0.75f, ROOD, false);
-            for (int i = 0; i < Math.min(10, tekort.size()); i++) {
+            for (int i = 0; i < Math.min(12, tekort.size()); i++) {
                 CompoundTag c = tekort.getCompoundOrEmpty(i);
                 var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
                 int ix = x + 62 + i * 24;

@@ -23,8 +23,9 @@ import net.minecraft.world.level.material.Fluids;
  * "nijlpaard: ✔ water ≥ 20, ✘ modder, ✔ gras"):
  * <ul>
  *   <li>its {@link VerblijfData.Eis requirements} (blocks in the home, counted in a box around the board: from 6 below to 10
- *       above it): 60 points shared;</li>
- *   <li>room to roam (an area of at least 12): 10; fed today: 10; petted today: 10;</li>
+ *       above it): 65 points shared;</li>
+ *   <li>room to roam (an area of at least 12): 15; petted today: 10 (test round 5: the family feeds itself, so food no
+ *       longer counts; feeding by hand gives hearts);</li>
  *   <li>its toy in the home: 5; a friend's board within 24 blocks: 5.</li>
  * </ul>
  * Counting is a few thousand block reads, so the board does it now and then ({@link VerblijfsbordBlockEntity}), not per tick.
@@ -39,7 +40,7 @@ public final class Tevredenheid {
         }
     }
 
-    public record Uitslag(int score, List<Regel> eisen, boolean ruimte, boolean gevoerd, boolean geaaid, boolean speeltje, boolean vrienden) {
+    public record Uitslag(int score, List<Regel> eisen, boolean ruimte, boolean geaaid, boolean speeltje, boolean vrienden) {
         public CompoundTag tag() {
             CompoundTag t = new CompoundTag();
             t.putInt("Score", score);
@@ -53,7 +54,6 @@ public final class Tevredenheid {
             }
             t.put("Eisen", l);
             t.putBoolean("Ruimte", ruimte);
-            t.putBoolean("Gevoerd", gevoerd);
             t.putBoolean("Geaaid", geaaid);
             t.putBoolean("Speeltje", speeltje);
             t.putBoolean("Vrienden", vrienden);
@@ -111,11 +111,11 @@ public final class Tevredenheid {
             }
         }
         boolean ruimte = be.rechthoek() ? Math.min(be.breedte(), be.diepte()) >= 8 : be.straal() >= 12;
-        boolean gevoerd = be.vandaagGevoerd(), geaaid = be.vandaagGeaaid();
+        boolean geaaid = be.vandaagGeaaid();
         boolean vrienden = d != null && vriendIn(level, be, d);
-        int score = (eisen.isEmpty() ? 60 : 60 * met / eisen.size()) + (ruimte ? 10 : 0) + (gevoerd ? 10 : 0) + (geaaid ? 10 : 0)
+        int score = (eisen.isEmpty() ? 65 : 65 * met / eisen.size()) + (ruimte ? 15 : 0) + (geaaid ? 10 : 0)
                 + (speeltje ? 5 : 0) + (vrienden ? 5 : 0);
-        return new Uitslag(Math.min(100, score), List.copyOf(eisen), ruimte, gevoerd, geaaid, speeltje, vrienden);
+        return new Uitslag(Math.min(100, score), List.copyOf(eisen), ruimte, geaaid, speeltje, vrienden);
     }
 
     private static int tel(Map<Block, Integer> blokken, List<String> ids) {

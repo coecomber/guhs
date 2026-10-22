@@ -184,7 +184,11 @@ public final class Bouwopdracht {
         }
     }
 
-    /** "Bouw passend verblijf": the fitting home as this board's project. */
+    /**
+     * "Bouw passend verblijf": the fitting home as this board's project. Test round 5: first only a proposal (the ghost,
+     * no control panel); the family starts after "Goedgekeurd, laat bouwen" in the board's menu ({@link #verblijfGoedgekeurd}),
+     * "Annuleren" takes the ghost away ({@link #verblijfAnnuleren}).
+     */
     public static boolean verblijf(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
         if (bezig(level, be)) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.bouwopdracht.nee.al_bezig").withStyle(ChatFormatting.RED));
@@ -192,12 +196,59 @@ public final class Bouwopdracht {
         }
         try {
             Map<BlockPos, BlockState> m = PassendVerblijf.maak(klus(level, be, "verblijf"), be);
-            return spookStart(p, level, be, "verblijf", m, List.of(be.getBlockPos()));
+            boolean ok = spookStart(p, level, be, "verblijf", m, List.of(be.getBlockPos()), false);
+            if (ok) {
+                p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.voorstel.klaar").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            return ok;
         } catch (Klus.Nee nee) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.bouwopdracht.nee." + nee.sleutel).withStyle(ChatFormatting.RED));
             laatsteNee = nee.sleutel;
             return false;
         }
+    }
+
+    /** Is the board's job the fitting-home proposal that still waits for the owner's OK? */
+    public static boolean voorstel(ServerLevel level, VerblijfsbordBlockEntity be) {
+        Spook s = spook(level, be);
+        return s != null && s.status() == Spook.Status.SPOOK && "verblijf".equals(tag(be).getStringOr(TAAK, ""));
+    }
+
+    /** "Goedgekeurd, laat bouwen": the family builds the proposal (what is there; missing blocks stay a ghost and are named). */
+    public static void verblijfGoedgekeurd(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
+        if (!voorstel(level, be)) {
+            return;
+        }
+        Spook s = spook(level, be);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, true);
+        if (!b.tekort().isEmpty()) {
+            p.sendSystemMessage(Component.translatable("gui.guhs.verblijf.voorstel.tekort", tekortTekst(b.tekort())).withStyle(ChatFormatting.GOLD));
+        }
+        p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.voorstel.gaan", Component.translatable("entity.guhs.safari." + be.soort()))
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
+    /** "Annuleren": the proposal goes, nothing was built. */
+    public static void verblijfAnnuleren(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be) {
+        if (voorstel(level, be)) {
+            stop(level, be);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.voorstel.weg"));
+        }
+    }
+
+    /** "12× Eikenhouten planken, 4× Glas" (at most 8 kinds, then "..."). */
+    public static Component tekortTekst(Map<net.minecraft.world.item.Item, Integer> tekort) {
+        net.minecraft.network.chat.MutableComponent uit = Component.empty();
+        int i = 0;
+        for (Map.Entry<net.minecraft.world.item.Item, Integer> e : tekort.entrySet()) {
+            if (i == 8) {
+                uit.append(", ...");
+                break;
+            }
+            uit.append(i == 0 ? "" : ", ").append(e.getValue() + "× ").append(e.getKey().getDefaultInstance().getHoverName());
+            i++;
+        }
+        return uit;
     }
 
     /** Why the last start said no (tests). */
@@ -228,6 +279,11 @@ public final class Bouwopdracht {
 
     private static boolean spookStart(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be, String taak, Map<BlockPos, BlockState> ruw,
                                       List<BlockPos> plek) {
+        return spookStart(p, level, be, taak, ruw, plek, true);
+    }
+
+    private static boolean spookStart(ServerPlayer p, ServerLevel level, VerblijfsbordBlockEntity be, String taak, Map<BlockPos, BlockState> ruw,
+                                      List<BlockPos> plek, boolean paneel) {
         Map<BlockPos, BlockState> m = filter(level, ruw);
         if (m.isEmpty()) {
             throw Klus.nee("niets_te_doen");
@@ -266,7 +322,9 @@ public final class Bouwopdracht {
             t.putInt(GEPLAATST, 0);
             be.setChanged();
         }
-        Spookbouw.toonBediening(p, s);
+        if (paneel) {
+            Spookbouw.toonBediening(p, s);
+        }
         return true;
     }
 
@@ -639,6 +697,7 @@ public final class Bouwopdracht {
         uit.putInt("Grootte", grootte(be));
         uit.putBoolean("Bank", bank(be) != null);
         uit.putInt("Klaar", tag(be).getIntOr(KLAAR, 0));
+        uit.putBoolean("Voorstel", voorstel(level, be));   // test round 5: "Bouw passend verblijf" waits for the owner's OK
         CompoundTag t = tag(be);
         String soort = t.getStringOr(SOORT, "");
         if (!soort.isEmpty() && bezig(level, be)) {

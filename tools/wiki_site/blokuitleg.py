@@ -1400,6 +1400,10 @@ UITLEG = {
            "keet). Mist er iets, dan zie je precies wat, en kun je toch bouwen: wat mist blijft spook.\n"
            "- Met een upgrade wordt de keet beter (bouwguhs, draadloos materiaal, Pof!), maar dan trekt hij ook "
            "vadskracht.\n"
+           "- De keet bouwt tot 64 blokken ver, en 32 verder per niveau (tot 192). Wat verder ligt wordt rood en "
+           "blijft spook; schuif het dichterbij of maak de keet een niveau hoger.\n"
+           "- Lijstje geeft je een boek met alle blokken die nog ontbreken, met naam en aantal.\n"
+           "- Je ziet hoe lang het nog duurt. Het spook blijft staan als je het menu sluit.\n"
            "- Je laatste 5 bouwacties kun je terugdraaien.",
         en="A yellow and pink shed of 3 by 3 by 3 with a little crane on the roof: this is where building starts. "
            "Right-click it for the menu with tabs (shapes, roofs, blueprints, builder guhs, materials and level).\n"
@@ -1410,6 +1414,10 @@ UITLEG = {
            "something is missing you see exactly what, and you can build anyway: what's missing stays a ghost.\n"
            "- An upgrade makes the shed better (builder guhs, wireless materials, Poof!), but then it also draws "
            "chonk power.\n"
+           "- The shed builds up to 64 blocks away, and 32 further per level (up to 192). What lies further turns red "
+           "and stays a ghost; move it closer or raise the shed a level.\n"
+           "- List gives you a book with every block that is still missing, with its name and count.\n"
+           "- You see how long it still takes. The ghost stays when you close the menu.\n"
            "- You can undo your last 5 building actions."),
 }
 
@@ -1516,13 +1524,18 @@ UITLEG["safari_terrarium"] = dict(
        "bak. Mieren, kwalletjes en regenboogvisjes wonen er met z'n vieren in.",
     en="A glass tank where a small Kriebelhuis critter lives: a terrarium sign turns into this when you put it down. "
        "Right-click it for the menu, like a home sign. Hold food to feed the critters in the tank. Ants, jellyfish and "
-       "rainbow fish live in it as a group of four.")
+       "rainbow fish live in it as a group of four.",
+    meer=["systemen/verblijfsborden", "systemen/kriebelhuis"])
 UITLEG["safari_verblijfsbord"] = dict(
     nl="Een verblijfsbordje uit de giftshop van het safaripark: zet het neer en er komt een familie van dat dier wonen "
        "(papa, mama en twee kleintjes). Rechtsklik erop voor het menu.\n"
        "\n"
        "- Familie, Verblijf, Tevredenheid, Cadeautjes en Info: namen, de grootte van hun thuis, wat ze blij maakt.\n"
-       "- Bouw passend verblijf: een spook van een thuis met alles wat het dier fijn vindt, met een hek eromheen.\n"
+       "- Ga met je muis op een knop of een regel staan: er staat altijd wat hij doet, of waarom hij grijs is.\n"
+       "- Rand tonen laat de rand van hun thuis zien; Slaapplek aanwijzen: klik daarna op een blok binnen de rand.\n"
+       "- Eten zoeken ze zelf. Aaien en hun speeltje maken ze extra blij; voeren is een traktatie (hartjes).\n"
+       "- Bouw passend verblijf: eerst een voorstel als spook (met een hek eromheen). Goedgekeurd? Dan bouwen de "
+       "dieren het zelf met jouw blokken. Of Annuleren.\n"
        "- Bouwopdracht: veel dieren helpen mee! Bevers bouwen een dam, stokstaartjes graven een kelder, pinguïns een "
        "iglo, de gibbon hangt slingers. Kies Zoek plek of wijs zelf een plek aan met de vormstaf; de familie gaat op "
        "werkuitje (tot 48 blokken ver) en bouwt het spook. Hoe blijer de familie, hoe groter en mooier.\n"
@@ -1531,7 +1544,11 @@ UITLEG["safari_verblijfsbord"] = dict(
        "two little ones). Right-click it for the menu.\n"
        "\n"
        "- Family, Home, Happiness, Gifts and Info: names, the size of their home, what makes them happy.\n"
-       "- Build a fitting home: a ghost of a home with everything the animal loves, with a fence around it.\n"
+       "- Hover over a button or a line: it always says what it does, or why it is grey.\n"
+       "- Show edge shows the edge of their home; Point at sleeping spot: then click a block inside the edge.\n"
+       "- They find their own food. Petting and their toy make them extra happy; feeding is a treat (hearts).\n"
+       "- Build a fitting home: first a proposal as a ghost (with a fence around it). Approved? Then the animals "
+       "build it themselves with your blocks. Or Cancel.\n"
        "- Building job: many animals help! Beavers build a dam, meerkats dig a cellar, penguins an igloo, the gibbon "
        "hangs garlands. Choose Find a spot or point one out with the Shape Wand; the family goes on a work outing (up "
        "to 48 blocks away) and builds the ghost. The happier the family, the bigger and prettier.\n"

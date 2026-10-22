@@ -15,13 +15,14 @@ import javax.annotation.Nullable;
  * <tr><td>3 Sauskeet</td><td>80</td><td>24</td><td>32</td><td>verfmachine, tunnelboor, publishing in the library</td></tr>
  * <tr><td>4 Gloeikeet</td><td>200</td><td>64</td><td>64</td><td>Pof!</td></tr>
  * </table>
+ * Test round 5: how far from the keet it builds ({@link #bereik}, square, horizontally): 64, 96, 128, 160, 192.
  */
 public enum BouwNiveau {
-    HANDWERK(0, 16, 16),
-    GUHRAD(10, 24, 16),
-    ZOUT(30, 24, 32),
-    SAUS(80, 24, 32),
-    GLOEI(200, 64, 64);
+    HANDWERK(0, 16, 16, 64),
+    GUHRAD(10, 24, 16, 96),
+    ZOUT(30, 24, 32, 128),
+    SAUS(80, 24, 32, 160),
+    GLOEI(200, 64, 64, 192);
 
     /** VK per second while the keet is switched on. */
     public final int vk;
@@ -29,11 +30,14 @@ public enum BouwNiveau {
     public final int maxVorm;
     /** The longest side of a blueprint (≤ n³). */
     public final int maxBlauwdruk;
+    /** How far from the keet (horizontally, in each of x and z) its project may stand; the rest stays a ghost. */
+    public final int bereik;
 
-    BouwNiveau(int vk, int maxVorm, int maxBlauwdruk) {
+    BouwNiveau(int vk, int maxVorm, int maxBlauwdruk, int bereik) {
         this.vk = vk;
         this.maxVorm = maxVorm;
         this.maxBlauwdruk = maxBlauwdruk;
+        this.bereik = bereik;
     }
 
     public int nummer() {
