@@ -45,7 +45,7 @@ public class CameraGameTests {
         helper.succeed();
     }
 
-    /** The camera sees a lion 6 blocks away; a stone wall hides it, a glass wall does not. */
+    /** The camera sees a lion 6 blocks away; a stone wall hides it, a glass wall (also terrarium glass, kasglas, water) does not. */
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 40)
     public static void zicht(GameTestHelper helper) {
         BlockPos plek = new BlockPos(10, 1, 8);
@@ -70,6 +70,17 @@ public class CameraGameTests {
                 }
             }
             helper.assertTrue(Fotograaf.kijk(helper.getLevel(), oog, naar, false) != null, "through glass it can be seen");
+            // test round 5: the Kriebelhuis tanks (terrariumglas, kasglas) and a water tank behind glass don't block a photo
+            for (var glas : java.util.List.of(nl.juiced.guhs.feature.safari.kriebel.KriebelBlokken.TERRARIUMGLAS.get(),
+                    nl.juiced.guhs.feature.safari.kriebel.KriebelBlokken.KASGLAS.get(), Blocks.PINK_STAINED_GLASS)) {
+                for (int y = 1; y <= 4; y++) {
+                    for (int z = 5; z <= 11; z++) {
+                        helper.setBlock(new BlockPos(6, y, z), glas.defaultBlockState());
+                        helper.setBlock(new BlockPos(7, y, z), Blocks.WATER.defaultBlockState());
+                    }
+                }
+                helper.assertTrue(Fotograaf.kijk(helper.getLevel(), oog, naar, false) != null, "through " + glas + " and water it can be seen");
+            }
             helper.assertTrue(Fotograaf.kijk(helper.getLevel(), oog, naar.yRot(1.2f), false) == null, "looking far away: not in the picture");
             helper.succeed();
         });

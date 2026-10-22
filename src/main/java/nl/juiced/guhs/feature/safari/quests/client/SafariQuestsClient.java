@@ -23,7 +23,7 @@ public final class SafariQuestsClient {
 
     public static void init(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tick());
-        // test round 4: the quest tracker in the top right corner (QuestTrackerHud)
+        // test round 4: the quest tracker (QuestTrackerHud; top left since test round 5)
         modBus.addListener((net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) ->
                 event.registerAboveAll(nl.juiced.guhs.Guhs.id("safari_quest_tracker"), QuestTrackerHud::extractRenderState));
     }

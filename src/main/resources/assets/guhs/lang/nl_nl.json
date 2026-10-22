@@ -28838,5 +28838,16 @@
   "scene.guhs.safari_bus_terug.titel": "Met de Guh-safaribus naar huis",
   "scene.guhs.safari_bus_terug.naam.chauffeur": "Toeter",
   "scene.guhs.safari_bus_terug.zon": "De zon zakt al achter de rieten lodge. Wat een dag, hè?",
-  "scene.guhs.safari_bus_terug.doei": "Tot de volgende keer, vads!"
+  "scene.guhs.safari_bus_terug.doei": "Tot de volgende keer, vads!",
+  "structure.guhs.safari_busstation": "Safari-busstation",
+  "structure.guhs.safari_busstation.tooltip": "Hier vertrekt de gratis safaribus naar Safaripark Vadse Bergen (Guhmension)",
+  "gui.guhs.beverbeek.ranger.bus.richting": "Safaripark Vadse Bergen? Daar rijdt de safaribus heen! Het dichtstbijzijnde busstation ligt ongeveer %1$s blokken naar het %2$s. Je Superkompas wijst het ook aan, onder Knus. Daar wonen nog veel meer bevers, bij een échte beverburcht!",
+  "gui.guhs.beverbeek.ranger.richting.noord": "noorden",
+  "gui.guhs.beverbeek.ranger.richting.noordoost": "noordoosten",
+  "gui.guhs.beverbeek.ranger.richting.oost": "oosten",
+  "gui.guhs.beverbeek.ranger.richting.zuidoost": "zuidoosten",
+  "gui.guhs.beverbeek.ranger.richting.zuid": "zuiden",
+  "gui.guhs.beverbeek.ranger.richting.zuidwest": "zuidwesten",
+  "gui.guhs.beverbeek.ranger.richting.west": "westen",
+  "gui.guhs.beverbeek.ranger.richting.noordwest": "noordwesten"
 }

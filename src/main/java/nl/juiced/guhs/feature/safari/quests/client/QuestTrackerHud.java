@@ -12,7 +12,8 @@ import nl.juiced.guhs.feature.safari.kern.SafariSync;
 import nl.juiced.guhs.feature.safari.quests.QuestTracker;
 
 /**
- * Test round 4 (design ronde 49): the small quest tracker in the top right corner while you are in the safari park:
+ * Test round 4 (design ronde 49): the small quest tracker in the top left corner (test round 5: was top right, under the
+ * effect icons) while you are in the safari park:
  * a pink title and one line per quest that is busy ({@link QuestTracker#regels}, from the synced safari state). It hides
  * while a screen is open, with F1, and when no quest is busy.
  */
@@ -34,7 +35,7 @@ final class QuestTrackerHud {
         for (Component r : regels) {
             breed = Math.max(breed, Math.min(MAX_BREED, font.width(r)));
         }
-        int x = g.guiWidth() - breed - 8, y = 6;
+        int x = 8, y = 6;
         int hoog = 12;
         for (Component r : regels) {
             hoog += font.split(r, MAX_BREED).size() * 10;

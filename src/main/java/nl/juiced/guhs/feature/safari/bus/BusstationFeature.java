@@ -49,6 +49,8 @@ public final class BusstationFeature {
 
     public static void register() {
         BusScenes.registreer();
+        // test round 5: the Superkompas finds the nearest busstation (tab Knus, next to the Reisbureau)
+        nl.juiced.guhs.item.SuperkompasItem.voegToe("knus", "safari_busstation");
         Bescherming.registreer(Busstation.STRUCTUUR, 2);
         Bezetting.npc("safari_bus_chauffeur", Busstation.STRUCTUUR, null, Busstation.CHAUFFEUR, GuhNpcEntity.Kind.SAFARI_CHAUFFEUR, null, 90f);
         Bezetting.npc("safari_bus_verkoper", Busstation.STRUCTUUR, null, Busstation.VERKOPER, GuhNpcEntity.Kind.SAFARI_VERKOPER, null, 0f);

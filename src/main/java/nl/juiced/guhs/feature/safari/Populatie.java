@@ -85,8 +85,10 @@ public final class Populatie {
         RandomSource rnd = RandomSource.create(p.id() * 7919L + generatie);
         int n = 0;
         int mannen = (p.volwassenen() + 1) / 2;
-        for (int i = 0; i < p.volwassenen() + p.jongen(); i++) {
-            String variant = i < mannen ? "man" : i < p.volwassenen() ? "vrouw" : "baby";
+        int totaal = Math.max(p.volwassenen() + p.jongen(), minimum(soort));
+        for (int i = 0; i < totaal; i++) {
+            String variant = i >= p.volwassenen() + p.jongen() ? (i % 2 == 0 ? "man" : "vrouw")
+                    : i < mannen ? "man" : i < p.volwassenen() ? "vrouw" : "baby";
             SafariDier dier = SafariFeature.DIER.get().create(level, EntitySpawnReason.STRUCTURE);
             if (dier == null) {
                 continue;
@@ -122,6 +124,19 @@ public final class Populatie {
             }
         }
         return n;
+    }
+
+    /** Test round 5: the small fish that swim in schools in the Kriebelhuis tanks (at least {@link #SCHOOL} of them). */
+    static final java.util.Set<String> KLEINE_VISJES = java.util.Set.of("regenboogvis", "lantaarnvisje", "clownvis");
+    /** Test round 5: at least this many of every species in a Kriebelhuis tank (and of every water critter), small fish a school. */
+    static final int MIN_AQUARIUM = 3, SCHOOL = 8;
+
+    /** Test round 5: how many of this species a home holds at least (Kriebelhuis water animals: 3, small fish 8; else 0). */
+    static int minimum(@javax.annotation.Nullable ParkData.Soort soort) {
+        if (soort == null || !ParkData.KRIEBELHUIS.equals(soort.zone()) || !soort.zee() || soort.decor()) {
+            return 0;
+        }
+        return KLEINE_VISJES.contains(soort.naam()) ? SCHOOL : MIN_AQUARIUM;
     }
 
     // --- round 4 (L4): the guhs critters in the Kriebelhuis (vlindertuin, kikkerhoek, axolotls, aquarium) ----------------------
@@ -163,6 +178,7 @@ public final class Populatie {
     static int vulKriebelCritters(ServerLevel level, int generatie) {
         com.google.gson.JsonArray lijst = kriebelCritters();
         int n = 0;
+        java.util.Map<String, java.util.List<com.google.gson.JsonObject>> waterGroepen = new java.util.LinkedHashMap<>();
         for (int i = 0; i < lijst.size(); i++) {
             if (!lijst.get(i).isJsonObject()) {
                 continue;
@@ -179,6 +195,26 @@ public final class Populatie {
             if (spawnCritter(level, o.get("entity").getAsString(), variant, pos, Mth.floor(pos.x), Mth.floor(pos.y), Mth.floor(pos.z), straal,
                     generatie, (i * 73) % 360)) {
                 n++;
+            }
+            if (o.has("water") && o.get("water").getAsBoolean()) {
+                String sleutel = (o.has("afdeling") ? o.get("afdeling").getAsString() : "") + "|" + o.get("entity").getAsString();
+                waterGroepen.computeIfAbsent(sleutel, k -> new java.util.ArrayList<>()).add(o);
+            }
+        }
+        // test round 5: every water critter at least three times in its tank (a lonely jellyfish looked lost)
+        for (java.util.List<com.google.gson.JsonObject> groep : waterGroepen.values()) {
+            com.google.gson.JsonObject o = groep.get(0);
+            com.google.gson.JsonArray a = o.getAsJsonArray("pos");
+            int straal = o.has("straal") ? o.get("straal").getAsInt() : 3;
+            String variant = o.has("variant") ? o.get("variant").getAsString() : "";
+            for (int k = groep.size(); k < MIN_AQUARIUM; k++) {
+                double hoek = k * 2.1, r = Math.min(1.5, straal * 0.5);
+                net.minecraft.world.phys.Vec3 pos = new net.minecraft.world.phys.Vec3(a.get(0).getAsDouble() + Math.cos(hoek) * r, a.get(1).getAsDouble(),
+                        a.get(2).getAsDouble() + Math.sin(hoek) * r);
+                if (spawnCritter(level, o.get("entity").getAsString(), variant, pos, Mth.floor(a.get(0).getAsDouble()), Mth.floor(a.get(1).getAsDouble()),
+                        Mth.floor(a.get(2).getAsDouble()), straal, generatie, (k * 97) % 360)) {
+                    n++;
+                }
             }
         }
         return n;

@@ -57,7 +57,7 @@ public final class RitClient {
             event.registerEntityRenderer(SafariRitten.KANO.get(), c -> new SimpelRenderer<KanoEntity>(c, "safari_rit/kano", 0.6f));
             event.registerEntityRenderer(SafariRitten.GONDEL.get(), c -> new SimpelRenderer<GondelEntity>(c, "safari_rit/gondel", 0f));
             event.registerEntityRenderer(SafariRitten.STRUISVOGEL.get(), c -> new SimpelRenderer<RaceStruisvogelEntity>(c, "safari/struisvogel", 0.5f));
-            event.registerEntityRenderer(SafariRitten.BOOT.get(), c -> new SimpelRenderer<BootEntity>(c, "safari_rit/glasboot", 0f));
+            event.registerEntityRenderer(SafariRitten.BOOT.get(), BootRenderer::new);
             event.registerBlockEntityRenderer(SafariRitten.POORT_BE.get(), PoortRenderer::new);
         });
         NeoForge.EVENT_BUS.addListener(SafariFm::tick);
@@ -157,7 +157,7 @@ public final class RitClient {
             return uit;
         }
 
-        private static void draag(GuhEntity g, int i) {
+        static void draag(GuhEntity g, int i) {
             g.wear(kleding("SAFARIHOEDJE", "SAFARI_HOEDJE", i % 2 == 0 ? "STRAW_HAT" : "RAIN_HAT"));
             g.wear(kleding("SAFARI_VERREKIJKER", "VERREKIJKER", "DETECTIVE_VERGROOTGLAS"));   // (G1: everyone has binoculars)
         }
@@ -186,6 +186,92 @@ public final class RitClient {
             s.lightCoords = truckState.lightCoords;
             s.shadowPieces.clear();
             return new Gast(s, plek);
+        }
+    }
+
+    /**
+     * Test round 5: the glass-bottom boat always has two safari guides on board, standing on the decks at both ends: a
+     * ranger at the bow and a guide with binoculars at the stern, both slowly looking round (drawn like the truck's guests,
+     * never real entities).
+     */
+    public static class BootRenderer extends GeoEntityRenderer<BootEntity, EntityRenderState> {
+        private static final DataTicket<EntityRenderState[]> GIDSEN = DataTicket.create("guhs_safari_boot_gidsen", EntityRenderState[].class);
+        private static final DataTicket<Vec3[]> PLEKKEN = DataTicket.create("guhs_safari_boot_plekken", Vec3[].class);
+        /** Where they stand (model pixels): the middle of the bow deck and of the stern deck. */
+        private static final double[][] STA = {{0, -2, -36}, {0, -2, 36}};
+
+        private final EntityRenderDispatcher dispatcher;
+        @Nullable
+        private GuhNpcEntity ranger;
+        @Nullable
+        private GuhEntity gids;
+
+        public BootRenderer(EntityRendererProvider.Context context) {
+            super(context, new DefaultedEntityGeoModel<BootEntity>(Guhs.id("safari_rit/glasboot")));
+            this.shadowRadius = 0f;
+            this.dispatcher = context.getEntityRenderDispatcher();
+        }
+
+        @Override
+        public void addRenderData(BootEntity boot, @Nullable Void related, EntityRenderState state, float partialTick) {
+            float yaw = Mth.rotLerp(partialTick, boot.yRotO, boot.getYRot());
+            state.addGeckolibData(DataTickets.ENTITY_BODY_YAW, yaw);
+            if (ranger == null || ranger.level() != boot.level()) {
+                ranger = ModEntities.GUH_NPC.get().create(boot.level(), EntitySpawnReason.TRIGGERED);
+                if (ranger != null) {
+                    ranger.setKind(GuhNpcEntity.Kind.BOSWACHTERGUH);
+                    ranger.setCustomNameVisible(false);
+                }
+            }
+            if (gids == null || gids.level() != boot.level()) {
+                gids = ModEntities.GUH.get().create(boot.level(), EntitySpawnReason.TRIGGERED);
+                if (gids != null) {
+                    gids.setVariant(GuhVariant.MINT);
+                    TruckRenderer.draag(gids, 0);
+                }
+            }
+            EntityRenderState[] wie = new EntityRenderState[2];
+            Vec3[] waar = new Vec3[2];
+            Entity[] guhs = {ranger, gids};
+            for (int i = 0; i < 2; i++) {
+                Entity e = guhs[i];
+                if (e == null) {
+                    continue;
+                }
+                // looking out over the water, now to one side, now to the other (each at its own pace)
+                float kijk = yaw + (i == 0 ? 0f : 180f) + Mth.sin((boot.tickCount + i * 57) * (i == 0 ? 0.02f : 0.027f)) * 80f;
+                e.setYRot(kijk);
+                e.yRotO = kijk;
+                if (e instanceof net.minecraft.world.entity.LivingEntity l) {
+                    l.yBodyRot = l.yBodyRotO = kijk;
+                    l.yHeadRot = l.yHeadRotO = kijk;
+                    float op = i == 1 ? -6f + Mth.sin((boot.tickCount + 31) * 0.05f) * 4f : 0f;
+                    l.setXRot(op);
+                    l.xRotO = op;
+                }
+                e.tickCount = boot.tickCount;
+                EntityRenderState s = dispatcher.extractEntity(e, partialTick);
+                s.lightCoords = state.lightCoords;
+                s.shadowPieces.clear();
+                wie[i] = s;
+                waar[i] = new Vec3(-STA[i][0] / 16.0, STA[i][1] / 16.0, -STA[i][2] / 16.0).yRot(-yaw * Mth.DEG_TO_RAD);
+            }
+            state.addGeckolibData(GIDSEN, wie);
+            state.addGeckolibData(PLEKKEN, waar);
+        }
+
+        @Override
+        public void submit(EntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+            super.submit(state, poseStack, collector, camera);
+            EntityRenderState[] wie = state.getGeckolibData(GIDSEN);
+            Vec3[] waar = state.getGeckolibData(PLEKKEN);
+            if (wie != null && waar != null) {
+                for (int i = 0; i < wie.length; i++) {
+                    if (wie[i] != null) {
+                        dispatcher.submit(wie[i], camera, waar[i].x, waar[i].y, waar[i].z, poseStack, collector);
+                    }
+                }
+            }
         }
     }
 

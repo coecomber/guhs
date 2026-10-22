@@ -94,7 +94,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0 G1: the gaps of the design audit (append only)
             'safari_g1',
             # 1.6.0 F1b: het safari-busstation in de Guhmension (append only)
-            'safari_busstation']
+            'safari_busstation',
+            # 1.6.0 test round 5, fix slice FX-B: its texts (append only)
+            'safari_fxb']
 
 
 def modules():

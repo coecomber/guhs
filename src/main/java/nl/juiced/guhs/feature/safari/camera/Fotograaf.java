@@ -264,7 +264,7 @@ public final class Fotograaf {
         return false;
     }
 
-    /** Blocks you can look through for a photo: glass (also the one-way glass of the hides), panes, bars, fluids, plants. */
+    /** Blocks you can look through for a photo: glass (also the one-way glass of the hides and the Kriebelhuis tanks), panes, bars, fluids, plants. */
     static boolean doorzichtig(BlockState s) {
         if (!s.getFluidState().isEmpty() && s.getCollisionShape(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, BlockPos.ZERO).isEmpty()) {
             return true;
@@ -273,8 +273,13 @@ public final class Fotograaf {
                 || s.is(net.minecraft.world.level.block.Blocks.IRON_BARS)) {
             return true;
         }
+        if (s.getBlock() instanceof net.minecraft.world.level.block.TransparentBlock || s.getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock) {
+            return true;      // (every glass-like block, also those of other mods)
+        }
         String id = BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath();
-        if (id.contains("glass") || id.equals("eenrichtingsglas")) {
+        // test round 5: also the Dutch "glas" (terrariumglas, kasglas, glasvloer, glasinlood...: the Kriebelhuis tanks blocked
+        // every photo), the portholes and the fake coral in the aquariums
+        if (id.contains("glass") || id.contains("glas") || id.startsWith("patrijspoort") || id.startsWith("nepkoraal")) {
             return true;
         }
         // plants, flowers, carpets of moss, snow layers, torches: no occlusion and nothing to bump into

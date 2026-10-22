@@ -56,6 +56,8 @@ public final class Parade {
     /** Blocks between two members of the stoet, measured along the walk. */
     public static final double AFSTAND = 2.0;
     static final int PINGUINS = 6, DANSERS = 3;
+    /** Test round 5: two of the six penguins are little ones (the third and the fifth). */
+    public static final java.util.Set<Integer> BABYS = java.util.Set.of(2, 4);
     /** Walking speed (blocks per tick): normally {@link #SNEL}, a little faster for a long walk, never faster than {@link #MAX_SNEL}. */
     static final double SNEL = 0.075, MAX_SNEL = 0.11;
     /** Ticks of one phrase of the parade tune (the OGGs are exactly this long). */
@@ -309,7 +311,7 @@ public final class Parade {
     private static SafariDier pinguin(ServerLevel level, BlockPos plek, int i) {
         SafariDier p = SafariFeature.DIER.get().create(level, EntitySpawnReason.EVENT);
         if (p != null) {
-            p.zet("pinguin", i % 2 == 0 ? "man" : "vrouw", plek, 3, -1, -1, 0);
+            p.zet("pinguin", BABYS.contains(i) ? "baby" : i % 2 == 0 ? "man" : "vrouw", plek, 3, -1, -1, 0);
             p.addTag(TAG);
             p.setNoAi(true);
             p.setNoGravity(true);

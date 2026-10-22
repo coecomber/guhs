@@ -628,20 +628,18 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             return b != null ? b : thuis;
         }
         if (info != null && info.zee()) {
-            BlockPos w = new BlockPos(x, y - 2, z);
-            if (info.heeft("bodem") && !level.getFluidState(w).isEmpty()) {
-                while (w.getY() > level.getMinY() + 1 && !level.getFluidState(w.below()).isEmpty()) {
-                    w = w.below();
-                }
+            if (level.getFluidState(new BlockPos(x, y - 1, z)).isEmpty()) {
+                return new BlockPos(x, y, z);
             }
-            return level.getFluidState(w).isEmpty() ? new BlockPos(x, y, z) : w;
+            // test round 5: a swimmer in the middle of the water (it hugged the surface), a bottom dweller on the bottom
+            return waterPlek(level, x, y - 1, z, level.getMinY() + 1, info.heeft("bodem"));
         }
         return new BlockPos(x, y, z);
     }
 
     /** Round 4 (L4): indoors, the spot in this column near height {@code rond} (from 3 above down to 8 below): a land animal
-     *  on the first floor with room for it, a swimmer 1 below the water's surface (a bottom dweller on the bottom); null:
-     *  none here. */
+     *  on the first floor with room for it, a swimmer in the middle of the water (test round 5; it was 1 below the surface,
+     *  so the Diepzeezaal's fish swam against the ceiling) and a bottom dweller on the bottom; null: none here. */
     @Nullable
     static BlockPos binnenGrond(net.minecraft.world.level.LevelReader level, int x, int z, int rond, boolean zee, boolean bodem) {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
@@ -649,11 +647,7 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             p.set(x, y, z);
             if (zee) {
                 if (!level.getFluidState(p).isEmpty()) {
-                    int onder = y;
-                    while (onder > rond - 12 && !level.getFluidState(p.set(x, onder - 1, z)).isEmpty() && (bodem || onder > y - 1)) {
-                        onder--;
-                    }
-                    return new BlockPos(x, onder, z);
+                    return waterPlek(level, x, y, z, rond - 12, bodem);
                 }
                 if (!level.getBlockState(p).getCollisionShape(level, p).isEmpty()) {
                     return null;                                // a floor without water: not for a swimmer
@@ -667,6 +661,27 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
             }
         }
         return null;
+    }
+
+    /**
+     * Test round 5: where a swimmer goes in the water column whose top water block is {@code boven}: a bottom dweller on
+     * the bottom, a swimmer in the middle (never in the top block, nor the top two of water 4 or more deep).
+     */
+    static BlockPos waterPlek(net.minecraft.world.level.LevelReader level, int x, int boven, int z, int ondergrens, boolean bodem) {
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        int onder = boven;
+        while (onder > ondergrens && !level.getFluidState(p.set(x, onder - 1, z)).isEmpty()) {
+            onder--;
+        }
+        if (bodem) {
+            return new BlockPos(x, onder, z);
+        }
+        int diep = boven - onder + 1;
+        int y = (boven + onder) / 2;
+        if (diep >= 2) {
+            y = Math.min(y, boven - (diep >= 4 ? 2 : 1));
+        }
+        return new BlockPos(x, Math.max(onder, y), z);
     }
 
     /** Round 4 (L4): is it awake at night? Nocturnal species; a Nachtzaal species only at home: in the park's Nachtzaal day

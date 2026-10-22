@@ -15,6 +15,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
+import nl.juiced.guhs.feature.emotes.Emote;
+import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.huisje.Speelgoed;
 import nl.juiced.guhs.feature.knus.GuhHooks;
@@ -31,11 +33,20 @@ import nl.juiced.guhs.feature.speelgoed.ToestelBlock;
  * toys (pluizige tunnel, bellenblaas, luchtscooter, hapluikje) are in the tiles. Visitor guhs in safari clothes live
  * there and play with them now and then (the toys' own sessions, as in a guhhuisje); your own tamed guhs play there by
  * themselves when you are near (the speelgoed slice's SpeelGoal).
+ * <p>
+ * Test round 5: more visitors ({@link #SPELERS}), and they play far more than guhs elsewhere: an idle visitor looks for a
+ * toy every {@link #KIJK} ticks, so you always see the toys in use. The safari animal toys of the giftshop (speelbal,
+ * schommelband, krabboom, glijbaantje) stand there too: a guh runs to one and plays its own little game there (rolling,
+ * dancing, a vahoeg) for a while.
  */
 public final class Speeltuin {
     public static final String TAG = "guhs_safari_speler";
-    static final int SPELERS = 6;
+    static final int SPELERS = 10;
     private static final int ELKE = 200;
+    /** Test round 5: how often an idle visitor guh looks for a toy (each time: 3 in 4 it starts to play). */
+    private static final int KIJK = 40;
+    /** The safari animal toys found in the playground at the last upkeep. */
+    private static final List<BlockPos> DIERSPEELGOED = new java.util.ArrayList<>();
     /** Server: the toy session each playing visitor guh is in. */
     private static final Map<UUID, KlusTaak> SPEELT = new HashMap<>();
     private static final Map<UUID, Integer> DUUR = new HashMap<>();
@@ -47,15 +58,19 @@ public final class Speeltuin {
             return;
         }
         speel(level);
-        if (server.getTickCount() % ELKE != 29 || level.players().isEmpty() || !ParkBouwer.klaar(server)) {
+        boolean onderhoud = server.getTickCount() % ELKE == 29, kijk = server.getTickCount() % KIJK == 13;
+        if (!onderhoud && !kijk || level.players().isEmpty() || !ParkBouwer.klaar(server)) {
             return;
         }
         BlockPos c = b.speeltuin;
         if (!level.hasChunk(c.getX() >> 4, c.getZ() >> 4) || !level.areEntitiesLoaded(ChunkPos.pack(c))) {
             return;
         }
-        for (Beleving.Speelgoed t : b.speelgoed) {
-            zorg(level, t);
+        if (onderhoud) {
+            for (Beleving.Speelgoed t : b.speelgoed) {
+                zorg(level, t);
+            }
+            zoekDierspeelgoed(level, c, b.speeltuinStraal + 2);
         }
         List<GuhEntity> er = level.getEntitiesOfClass(GuhEntity.class, new AABB(c).inflate(b.speeltuinStraal + 20, 12, b.speeltuinStraal + 20),
                 g -> g.entityTags().contains(TAG));
@@ -64,16 +79,85 @@ public final class Speeltuin {
                 stop(g);
                 BlockPos p = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c);
                 g.teleportTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
-            } else if (!SPEELT.containsKey(g.getUUID()) && !g.isPassenger() && g.getRandom().nextInt(2) == 0) {
-                KlusTaak taak = Speelgoed.willekeurig(level, g, c, b.speeltuinStraal + 2);
+            } else if (kijk && !SPEELT.containsKey(g.getUUID()) && !g.isPassenger() && g.getRandom().nextInt(4) != 0) {
+                KlusTaak taak = !DIERSPEELGOED.isEmpty() && g.getRandom().nextInt(3) == 0 ? null
+                        : Speelgoed.willekeurig(level, g, c, b.speeltuinStraal + 2);
+                if (taak == null && !DIERSPEELGOED.isEmpty()) {
+                    taak = new DierSpeeltje(g, DIERSPEELGOED.get(g.getRandom().nextInt(DIERSPEELGOED.size())), level);
+                }
                 if (taak != null) {
                     SPEELT.put(g.getUUID(), taak);
                     GuhHooks.bezig(g, 40);
                 }
             }
         }
+        if (!onderhoud) {
+            return;
+        }
         for (int i = er.size(); i < SPELERS; i++) {
             Bezoekers.maak(level, level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c), TAG);
+        }
+    }
+
+    /** Test round 5: the safari animal toys (verblijf Speeltje blocks) standing in the playground. */
+    private static void zoekDierspeelgoed(ServerLevel level, BlockPos c, int straal) {
+        DIERSPEELGOED.clear();
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int dx = -straal; dx <= straal; dx++) {
+            for (int dz = -straal; dz <= straal; dz++) {
+                for (int dy = -2; dy <= 4; dy++) {
+                    p.set(c.getX() + dx, c.getY() + dy, c.getZ() + dz);
+                    if (level.getBlockState(p).getBlock() instanceof nl.juiced.guhs.feature.safari.verblijf.VerblijfBlokken.Speeltje) {
+                        DIERSPEELGOED.add(p.immutable());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Test round 5: a visitor guh plays at a safari animal toy: it runs there and does a little game for a few seconds (a
+     * ball or slide: rolling; the tyre swing: dancing; the scratching post: a vahoeg), then goes off again.
+     */
+    static final class DierSpeeltje implements KlusTaak {
+        private final GuhEntity g;
+        private final BlockPos toy;
+        private final Emote emote;
+        private int gespeeld = -1;
+
+        DierSpeeltje(GuhEntity g, BlockPos toy, ServerLevel level) {
+            this.g = g;
+            this.toy = toy;
+            String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(level.getBlockState(toy).getBlock()).getPath();
+            this.emote = id.contains("schommel") ? Emote.DANSEN : id.contains("krab") ? Emote.VAHOEG : Emote.ROLLEN;
+        }
+
+        @Override
+        public boolean tick() {
+            if (gespeeld >= 0) {
+                return ++gespeeld < 120;
+            }
+            if (g.distanceToSqr(toy.getX() + 0.5, g.getY(), toy.getZ() + 0.5) < 3.2) {
+                g.getNavigation().stop();
+                g.getLookControl().setLookAt(toy.getX() + 0.5, toy.getY() + 0.5, toy.getZ() + 0.5);
+                g.emotes.start(emote, true, GuhEmotes.Source.SELF);
+                gespeeld = 0;
+                return true;
+            }
+            if (g.getNavigation().isDone()) {
+                g.getNavigation().moveTo(toy.getX() + 0.5, toy.getY(), toy.getZ() + 1.5, 1.0);
+            }
+            return true;
+        }
+
+        @Override
+        public void stop() {
+            g.emotes.stop();
+        }
+
+        @Override
+        public int maxTicks() {
+            return 400;
         }
     }
 

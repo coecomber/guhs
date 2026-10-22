@@ -420,3 +420,16 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
 - `Busrit.instappen(p, oord)` / `Busrit.uitstappen(p)`: SafariToegang + own guhs along (safari hat) + scenes `safari_bus_heen_0..2` (park, anchored at the lobby bus box min corner) and `safari_bus_terug` (station, anchored at CHAUFFEUR). The lobby's bus/bell (SafariLobby.opBus) now calls `Busrit.uitstappen`.
 - `SafariToegang.aankomst(level)`: the busplein west of the lobby bus (x = bus.minX − 6, z = bus.minZ + 8); used by naarPark.
 - Ops: `/guhs safari busstation plaats|waar`. NPC kind `SAFARI_CHAUFFEUR`.
+
+## Testronde 5 (fix slices FX-A park/buildings, FX-B behaviour/UI, FX-C verblijfsbord + bouwkeet)
+FX-B (op-safari-fxb), for FX-A and the merge:
+- **Aquarium counts are enforced in Java** (`Populatie.minimum`):
+  - every Kriebelhuis water species (zone kriebelhuis, zee, not decor) spawns at least 3; regenboogvis, lantaarnvisje and clownvis at least 8;
+  - every water critter of `kriebelhuis.json` ("water": true) spawns at least 3 per (afdeling, entity).
+  - FX-A may raise the counts in its data too; the Java minimum stays. Existing worlds only refill with a park VERSIE bump (FX-A's regen).
+- **Swimmers go to the middle of their water** (`SafariDier.waterPlek`): never the top block, nor the top two of water 4+ deep. Tanks need at least 3 water blocks of depth to look good.
+- **Speeltuin** (`Speeltuin`):
+  - 10 visitor guhs, which look for a toy every 2 s;
+  - safari animal toys (any `VerblijfBlokken.Speeltje` block) within speeltuinStraal + 2 of `beleving.json` "speeltuin" are found automatically. FX-A only has to place them (ground level, 1 block of free space in front).
+- **Camera**: every block with "glas"/"glass" in its id, every TransparentBlock and IronBarsBlock, portholes and nepkoraal are see-through for photos (`Fotograaf.doorzichtig`).
+- **Superkompas**: tab Knus gets `safari_busstation` (`structure.guhs.safari_busstation` + tooltip, in `tools/features/safari_fxb.py`).

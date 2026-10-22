@@ -26,10 +26,10 @@ public final class RitSchema {
     /** A gondola stands still about 5 seconds in a station (it turns round in the station's loop along the platform). */
     public static final int GONDEL_WACHT = 100, GONDELS = 6;
     /** The glass-bottom boat: slow (so you can look down) and a long stop at the jetty. */
-    public static final double BOOT_SNELHEID = 0.09;
+    public static final double BOOT_SNELHEID = 0.135;   // test round 5: ~50% faster (was 0.09)
     public static final int BOOT_WACHT = 240;
     /** Round 4: the boat LINE up the river (hop on, hop off at every jetty): a little faster, about one boat every 2 minutes. */
-    public static final double BOOT_LIJN_SNELHEID = 0.15;
+    public static final double BOOT_LIJN_SNELHEID = 0.225;   // test round 5: ~50% faster (was 0.15)
     public static final int BOOT_LIJN_WACHT = 200, BOOT_ELKE = 2400;
 
     /** Where a ride is: how far along, and (when it stands still) which stop and how long it still waits. */

@@ -27,6 +27,9 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * lines and cut the rest off without a sign: half of what Steele explains, the last sentence of many characters of the
  * Guhbarbecuether. And a speaker whose head stands on the ground (the Mika-shaped characters) only looks a little down:
  * following the mouse to the answer buttons tipped the whole character over on its face.
+ * <p>
+ * 1.6.0 (test round 5): the answers always start under the balloon and the screen grows for them. They were stacked up
+ * from the bottom, so four or more (IJsverkoper Smeltje's ice creams) covered the text.
  */
 public class PraatScherm extends Screen {
     private static final int W = 300, H = 186, PIC = 70;
@@ -38,6 +41,8 @@ public class PraatScherm extends Screen {
     private int left, top;
     /** 1.4.0: how much taller than {@link #H} the screen is now, for a text of more than {@link #REGELS} lines. */
     private int extra;
+    /** 1.6.0 test round 5: the height without the extra text lines: taller when the answers need room under the balloon. */
+    private int basis = H;
     /** 3.0 (verhaal.Praat): the page of a scene ("Paginas"), and whether the -1 "read/closed" answer was sent. */
     private int pagina;
     private boolean klaarGemeld;
@@ -93,7 +98,7 @@ public class PraatScherm extends Screen {
 
     /** The height of the screen: taller for a long text (every page of a scene alike, so nothing jumps while reading). */
     private int hoogte() {
-        return H + extra;
+        return basis + extra;
     }
 
     private int meerRegels(CompoundTag pg) {
@@ -106,24 +111,27 @@ public class PraatScherm extends Screen {
         for (Tag t : data.getListOrEmpty("Paginas")) {
             meer = Math.max(meer, meerRegels((CompoundTag) t));
         }
-        // (as far as the window allows: on a very low window the last lines are cut off, as before)
-        extra = Math.max(0, Math.min(meer * REGEL_HOOG, (height - 4 - H) / REGEL_HOOG * REGEL_HOOG));
-        left = (width - W) / 2;
-        top = (height - hoogte()) / 2;
         List<CompoundTag> opties = new ArrayList<>();
         if (laatstePagina()) {
             for (Tag t : data.getListOrEmpty("Opties")) {
                 opties.add((CompoundTag) t);
             }
-        } else {
+        }
+        boolean burgemeester = data.getStringOr("Scherm", "").equals("burgemeester");
+        // the balloon, then a row per answer, then the "Doei!" row
+        basis = Math.max(H, 22 + PIC + 6 + (burgemeester ? 0 : opties.size() * 22) + 30);
+        // (as far as the window allows: on a very low window the last lines are cut off, as before)
+        extra = Math.max(0, Math.min(meer * REGEL_HOOG, (height - 4 - basis) / REGEL_HOOG * REGEL_HOOG));
+        left = (width - W) / 2;
+        top = (height - hoogte()) / 2;
+        if (!laatstePagina()) {
             // 3.0: a scene: "Verder »" to the next page (the answers come on the last one)
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.verhaal.verder"), b -> {
                 pagina++;
                 rebuildWidgets();
             }).bounds(left + W - 10 - 96 - 4 - 96, top + hoogte() - 26, 96, 20).build());
         }
-        boolean burgemeester = data.getStringOr("Scherm", "").equals("burgemeester");
-        int y = top + hoogte() - 26 - (burgemeester ? 0 : opties.size() * 22);
+        int y = top + 22 + PIC + extra + 6;
         int x = left + 10, w = W - 20;
         if (burgemeester) {
             // the list's "Geven" next to "Doei!"

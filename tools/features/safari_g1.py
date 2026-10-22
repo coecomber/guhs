@@ -3,7 +3,7 @@ Op Safari! (1.6.0), slice G1 - the gaps of the design audit (Java: feature/safar
 
   build(h)      the texts (NL here, English in tools/lang/en/c186_safari_g1.json); the safarihek and rotswanden (textures,
                 models, blockstates, loot, recipes, tags); the Aussie guhs' skins; the night-eyes textures of the safari
-                animals (<texture>_nachtogen.png: only the eye pixels, glowing; the client draws them in the dark); the
+                animals (<texture>_nachtogen.png: a soft glint per eye (test round 5: no glowing pupils); the client draws it in the dark); the
                 painting variants of the Kriebelhuis painting and of every species' photo painting (safari_foto_<soort>).
   python tools/features/safari_g1.py --direct
                 writes only this slice's files (no full make_resources), from the project root. Add --fotos to (re)render
@@ -254,19 +254,54 @@ AUSSIES = {"safari_aussie_hangmat": (0.09, 0.45, 0.80), "safari_aussie_post": (0
 
 
 def aussies(recolour, pinkish):
+    """The three Aussie guhs: the sitting guh recoloured, with (test round 5) a cork hat of their own: a wide brown brim,
+    a low crown with a band and little corks dangling on strings all round (a model of its own per kind, registered in
+    SafariExtraClient). Bazza sleeps in his hammock (eyes shut)."""
     from features import bio_bouw_meer
-    src = Image.open(os.path.join(A, "textures", "entity", "guh_sitting.png"))
+    from features import beroepen_tex as bt
+
+    class H:
+        TEX = os.path.join(A, "textures")
+
+        @staticmethod
+        def w(path, obj):
+            _w(path, obj)
+
+        @staticmethod
+        def save(img, *path):
+            img.save(os.path.join(H.TEX, *path))
+
+    H.A = A
+    H.recolour = staticmethod(recolour)
+    H.pinkish = staticmethod(pinkish)
+    HOOFD = ("head", [0, 13, 0])
+    kurken = []
+    for x in (-7.5, -4, -0.5, 3, 6.5):                          # in front, and a few at the back and the sides
+        kurken.append(([x, 24.2, -8.6], [0.25, 2.0, 0.25], "touwtje", 0))
+        kurken.append(([x - 0.4, 23.0, -8.8], [1.0, 1.4, 0.8], "kurk", 0))
+    for z in (-4.5, 0, 4.5):
+        for x in (-9.4, 8.6):
+            kurken.append(([x + 0.4, 24.2, z], [0.25, 2.0, 0.25], "touwtje", 0))
+            kurken.append(([x, 23.0, z - 0.4], [0.8, 1.4, 1.0], "kurk", 0))
     for kind, (hue, sat, val) in AUSSIES.items():
-        img = recolour(src, hue=hue, sat=sat, val=val, only=pinkish)
+        bt._npc(H, kind, hue, sat, val, {
+            "kurkenhoed": (HOOFD, [([-9.5, 26.0, -9.0], [19.0, 0.8, 17.0], "rand", 0), ([-5.5, 26.8, -5.5], [11.0, 3.6, 10.0], "bol", 0),
+                                   ([-5.6, 26.8, -5.6], [11.2, 1.0, 10.2], "band", 0)]),
+            "kurken": (HOOFD, kurken),
+        }, {"rand": ((150, 104, 62), 5, None), "bol": ((160, 112, 68), 5, None), "band": ((96, 60, 36), 3, None),
+            "touwtje": ((70, 52, 40), 2, None), "kurk": ((214, 176, 124), 7, None)}, 1606 + len(kind))
         if kind.endswith("hangmat"):                             # Bazza is asleep in his hammock (eyes shut)
-            img = Image.fromarray(bio_bouw_meer._ogen_dicht(np.array(img.convert("RGBA"))), "RGBA")
-        img.save(os.path.join(A, "textures", "entity", f"npc_{kind}.png"))
+            pad = os.path.join(A, "textures", "entity", f"npc_{kind}.png")
+            img = Image.open(pad).convert("RGBA")
+            Image.fromarray(bio_bouw_meer._ogen_dicht(np.array(img)), "RGBA").save(pad)
 
 
 # --- night eyes ---------------------------------------------------------------------------------------------------------
 def nachtogen():
-    """For every safari texture with a _slaap twin: the pixels where the two differ are the eyes. The dark ones (the pupils)
-    glow green-yellow like eyeshine, the light ones (the highlights) a soft white; everything else is see-through."""
+    """For every safari texture with a _slaap twin: the pixels where the two differ are the eyes. Test round 5: no glowing
+    green pupils any more (they took the cuteness away); each eye only gets a soft white glint, its own highlight pixels
+    (or, without one, its top-left pixel), as if a lantern shines in it. Everything else is see-through. The client draws
+    the texture additively in the dark, so a soft grey-white is a gentle twinkle."""
     n = 0
     for f in sorted(os.listdir(SAFARI_TEX)):
         if not f.endswith(".png") or f.endswith(("_slaap.png", "_glowmask.png", "_nachtogen.png")):
@@ -284,10 +319,25 @@ def nachtogen():
             continue
         lum = wakker[..., :3].mean(axis=2)
         uit = np.zeros(wakker.shape, np.uint8)
-        donker = verschil & (lum < 120)
-        licht = verschil & (lum >= 170)
-        uit[donker] = (196, 255, 120, 255)
-        uit[licht] = (255, 255, 230, 255)
+        h, w = verschil.shape
+        gezien = np.zeros_like(verschil)
+        for y0 in range(h):
+            for x0 in range(w):
+                if not verschil[y0, x0] or gezien[y0, x0]:
+                    continue
+                oog, stapel = [], [(y0, x0)]          # one eye: the touching changed pixels
+                gezien[y0, x0] = True
+                while stapel:
+                    y, x = stapel.pop()
+                    oog.append((y, x))
+                    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        ny, nx = y + dy, x + dx
+                        if 0 <= ny < h and 0 <= nx < w and verschil[ny, nx] and not gezien[ny, nx]:
+                            gezien[ny, nx] = True
+                            stapel.append((ny, nx))
+                licht = [(y, x) for y, x in oog if lum[y, x] >= 170]
+                for y, x in (licht or [min(oog)]):
+                    uit[y, x] = (150, 150, 140, 255)
         Image.fromarray(uit, "RGBA").save(os.path.join(SAFARI_TEX, stam + "_nachtogen.png"))
         n += 1
     return n

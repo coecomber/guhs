@@ -94,7 +94,7 @@ public final class SafariClient {
                     // <naam>_slaap_glowmask (round 4: the sleeping glimworm drew the missing texture when only <naam>_glowmask existed)
                     state.addGeckolibData(GLOED, !gekozen.isEmpty() && textuur(gekozen + "_glowmask"));
                     state.addGeckolibData(ACTIE, dier.actie());
-                    // G1: awake in the dark, its eyes catch the light (the eye pixels of <t>_nachtogen, drawn like spider eyes)
+                    // G1: awake in the dark, its eyes catch the light (<t>_nachtogen; test round 5: a soft glint, no glowing pupils)
                     boolean nacht = !dier.slaapt() && dier.level().isDarkOutside() && textuur(t + "_nachtogen");
                     state.addGeckolibData(NACHTOGEN, nacht ? t + "_nachtogen" : "");
                 }

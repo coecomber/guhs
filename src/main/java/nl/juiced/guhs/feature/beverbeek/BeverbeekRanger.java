@@ -44,12 +44,37 @@ public final class BeverbeekRanger implements NpcRole {
             case 1 -> Praat.open(p, npc, null, T + "feit." + npc.getRandom().nextInt(FEITJES), new Object[0],
                     new Praat.Optie(1, T + "optie.nog"), new Praat.Optie(4, T + "optie.terug"), new Praat.Optie(9, T + "optie.doei"));
             case 2 -> Praat.open(p, npc, null, T + "aaien", new Object[0], new Praat.Optie(4, T + "optie.terug"), new Praat.Optie(9, T + "optie.doei"));
-            case 3 -> Praat.open(p, npc, null, T + "bus", new Object[0], new Praat.Optie(4, T + "optie.terug"), new Praat.Optie(9, T + "optie.doei"));
+            case 3 -> bus(npc, p);
             case 4 -> talk(npc, p);
             case 9 -> Praat.sluit(p);
             default -> {
             }
         }
+    }
+
+    /**
+     * Test round 5: "Waar is het safaripark?": the ranger points the way to the nearest busstation (direction in words and
+     * about how far), and tells about the Superkompas; without one in reach his old answer.
+     */
+    private static void bus(GuhNpcEntity npc, ServerPlayer p) {
+        net.minecraft.core.BlockPos station = npc.level() instanceof ServerLevel level
+                ? nl.juiced.guhs.feature.safari.bus.Busstation.dichtstbij(level, npc.blockPosition()) : null;
+        Praat.Optie terug = new Praat.Optie(4, T + "optie.terug"), doei = new Praat.Optie(9, T + "optie.doei");
+        if (station == null) {
+            Praat.open(p, npc, null, T + "bus", new Object[0], terug, doei);
+            return;
+        }
+        double dx = station.getX() - npc.getX(), dz = station.getZ() - npc.getZ();
+        long ver = Math.max(100, Math.round(Math.hypot(dx, dz) / 100.0) * 100);
+        Praat.open(p, npc, null, T + "bus.richting", new Object[]{ver, net.minecraft.network.chat.Component.translatable(T + "richting." + richting(dx, dz))},
+                terug, doei);
+    }
+
+    /** The compass direction of (dx, dz) in eight steps: noord, noordoost, oost... (north is -z). */
+    public static String richting(double dx, double dz) {
+        String[] acht = {"zuid", "zuidwest", "west", "noordwest", "noord", "noordoost", "oost", "zuidoost"};
+        double hoek = Math.toDegrees(Math.atan2(-dx, dz));          // like a mob's yaw: 0 = south (+z), 90 = west (-x)
+        return acht[Math.floorMod((int) Math.round(hoek / 45.0), 8)];
     }
 
     @Override

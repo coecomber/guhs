@@ -190,7 +190,9 @@ public class BusstationGameTests {
         ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         BlockPos start = helper.absolutePos(new BlockPos(2, 2, 2));
-        BlockPos park = helper.absolutePos(new BlockPos(2, 2, 40));
+        // (test round 5: within the loaded test area: at 38 blocks a guh put down just over a chunk border into an unloaded
+        // chunk was invisible to the "who follows me" search, so now and then it stayed behind)
+        BlockPos park = helper.absolutePos(new BlockPos(2, 2, 12));
         p.snapTo(start.getX() + 0.5, start.getY(), start.getZ() + 0.5);
         GuhEntity kaal = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         GuhEntity gehoed = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
@@ -222,7 +224,7 @@ public class BusstationGameTests {
                     "the station is remembered");
             helper.assertTrue(Busrit.uitstappen(p), "and back");
             helper.assertTrue(p.blockPosition().distSqr(start) < 4, "the player is back where they got on");
-            helper.assertTrue(kaal.blockPosition().distSqr(start) < 16 && gehoed.blockPosition().distSqr(start) < 16, "with both guhs");
+            helper.assertTrue(kaal.blockPosition().distSqr(start) < 16 && gehoed.blockPosition().distSqr(start) < 16, "with both guhs " + kaal.blockPosition() + " " + gehoed.blockPosition() + " start " + start + " p " + p.blockPosition() + " lvl " + kaal.level().dimension() + kaal.isRemoved() + gehoed.isRemoved());
             helper.assertTrue(kaal.getClothes(GuhClothes.Slot.HEAD) == null, "the safari hat came off");
             helper.assertTrue(gehoed.getClothes(GuhClothes.Slot.HEAD) == GuhClothes.STRAW_HAT, "the straw hat is back");
             helper.assertTrue(Busrit.station(p) == null, "the station is forgotten");
