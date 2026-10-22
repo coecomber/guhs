@@ -28838,5 +28838,6 @@
   "scene.guhs.safari_bus_terug.titel": "Met de Guh-safaribus naar huis",
   "scene.guhs.safari_bus_terug.naam.chauffeur": "Toeter",
   "scene.guhs.safari_bus_terug.zon": "De zon zakt al achter de rieten lodge. Wat een dag, hè?",
-  "scene.guhs.safari_bus_terug.doei": "Tot de volgende keer, vads!"
+  "scene.guhs.safari_bus_terug.doei": "Tot de volgende keer, vads!",
+  "commands.guhs.safari.kaartwand": "Kaartwand: de %s kaarten gaan opnieuw aan de muur zodra het entreegebouw geladen is"
 }

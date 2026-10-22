@@ -113,6 +113,7 @@ public final class ParkBouwer {
         }
         if (s.bezig == 0) {
             Populatie.tick(server);
+            Kaartwand.tick(server);                   // round 5: the maps in the entreegebouw, once its chunks are in
             return;
         }
         if (wacht-- > 0) {

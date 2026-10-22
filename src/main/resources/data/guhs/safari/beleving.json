@@ -72,6 +72,51 @@
      682
     ],
     "facing": "north"
+   },
+   {
+    "soort": "glijbaantje",
+    "pos": [
+     57,
+     65,
+     692
+    ],
+    "facing": "south"
+   },
+   {
+    "soort": "schommel",
+    "pos": [
+     48,
+     65,
+     690
+    ],
+    "facing": "south"
+   },
+   {
+    "soort": "wip",
+    "pos": [
+     62,
+     65,
+     681
+    ],
+    "facing": "east"
+   },
+   {
+    "soort": "knabbelbal",
+    "pos": [
+     40,
+     65,
+     696
+    ],
+    "facing": "north"
+   },
+   {
+    "soort": "knabbelbal",
+    "pos": [
+     58,
+     65,
+     676
+    ],
+    "facing": "north"
    }
   ]
  },

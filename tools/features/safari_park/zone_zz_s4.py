@@ -235,6 +235,7 @@ def _sporen(park, plekken, log):
 def plekken(park, plekken_):
     log = print
     geheim = _geheimpjes(park, log)
+    park.geheimpjes = [list(g["pos"]) for g in geheim]     # round 5: the reachability check walks to all eight
     _schrijf("geheimpjes.json", {"geheimpjes": geheim,
                                  "uitleg": "per zone het geheimpje (S4): rechtsklik op dit blok in het safaripark"})
     log("    s4: geheimpjes " + ", ".join(f"{g['zone']} {tuple(g['pos'])}" for g in geheim))

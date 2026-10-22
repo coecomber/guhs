@@ -75,9 +75,9 @@ def soort(s):
     if n == "safaripoort":
         return "grote_poort"      # the guhs safari gate (4x6 doors): it opens for the truck and for players, so a path
                                   # and a ride pass it; never a fence gate (verbindingen must not touch its state)
-    if n.endswith("_fence_gate"):
+    if n.endswith("_fence_gate") or n.startswith("guh_poortje"):
         return "poort"
-    if n.endswith("_fence"):
+    if n.endswith("_fence") or n.startswith("guh_hekje"):          # (the bouwhulp's guh fences are fences too)
         return "hek"
     if n.endswith("_pane") or n == "iron_bars":
         return "ruit"
@@ -1058,6 +1058,7 @@ def bereik(park, y0=20):
     high, doors and gates open, ladders, swimming. Returns the reached set of (col, f)."""
     from collections import deque
     knopen, soorten, P, Hf = _knopen(park, y0)
+    park._bereik_P = (P, y0)
     start = _start(park, knopen, soorten)
     gezien = set()
     if start is None:
@@ -1107,7 +1108,7 @@ def _doelen(park):
         ox, oy, oz = k["oog"]
         uit.append((f"kijkplek {k['naam']}", int(ox), int(round(oy - 1.6)), int(oz), 2, 3))
     for g in (getattr(park, "geheimpjes", None) or []):
-        uit.append(("geheimpje", int(g[0]), int(g[1]), int(g[2]), 2, 4))
+        uit.append(("geheimpje", int(g[0]), int(g[1]), int(g[2]), 2, 6))   # (a secret may sit up to 3 above the feet)
     for st in (getattr(park, "steigers", None) or []):
         uit.append((f"steiger {st['naam']}", int(st["pos"][0]), int(st["pos"][1]), int(st["pos"][2]), 2, 3))
     return uit
@@ -1122,12 +1123,22 @@ def bereik_rapport(park):
     for col, f in gezien:
         bereikt.setdefault(col, []).append(f)
     mis = []
+    P, y0 = park._bereik_P
+
+    def open_lijn(cx, cz, f, y):
+        """(Round 5) Nothing solid between the stand height and the target in that column: standing on the roof right
+        above a target (the snow dome over the ice cave's skull) is not reaching it."""
+        yf = f // 2
+        lo, hi = (y + 1, yf - 1) if yf > y else (yf + 2, y - 1)
+        return all(P[cx, c - y0, cz] for c in range(lo, hi + 1) if 0 <= c - y0 < P.shape[1])
+
     for (naam, x, y, z, r, tol) in _doelen(park):
         if not (0 <= x < W and 0 <= z < W):
             continue
         if getattr(park, "binnen", None) is not None and not park.binnen[x, z]:
             continue
-        ok = any(abs(f - 2 * y) <= tol for dx in range(-r, r + 1) for dz in range(-r, r + 1)
+        ok = any(abs(f - 2 * y) <= tol and open_lijn(x + dx, z + dz, f, y)
+                 for dx in range(-r, r + 1) for dz in range(-r, r + 1)
                  for f in bereikt.get((x + dx) * W + z + dz, ()))
         if not ok:
             mis.append((naam, x, y, z, _zone_naam(park, x, z)))

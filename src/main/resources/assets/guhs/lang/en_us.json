@@ -28838,5 +28838,6 @@
   "scene.guhs.safari_bus_terug.titel": "By Guh Safari Bus back home",
   "scene.guhs.safari_bus_terug.naam.chauffeur": "Toeter",
   "scene.guhs.safari_bus_terug.zon": "The sun is already setting behind the thatched lodge. What a day, huh?",
-  "scene.guhs.safari_bus_terug.doei": "See you next time, vads!"
+  "scene.guhs.safari_bus_terug.doei": "See you next time, vads!",
+  "commands.guhs.safari.kaartwand": "Map wall: the %s maps go back on the wall as soon as the entrance hall is loaded"
 }
