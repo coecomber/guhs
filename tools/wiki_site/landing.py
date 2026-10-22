@@ -24,7 +24,6 @@ GUHS_VERSION = MOD_VERSION
 MC_VERSION = "26.1.2"
 LINKS = [
     ("CurseForge", "https://www.curseforge.com/minecraft/mc-mods/guhs"),
-    ("Modrinth", "https://modrinth.com/mod/guhs"),
     ("GitHub", "https://github.com/coecomber/guhs"),
     ("Guhs-pack", "https://github.com/coecomber/guhs-pack"),
 ]

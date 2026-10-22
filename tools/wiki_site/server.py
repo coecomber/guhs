@@ -310,9 +310,9 @@ class ServerPage(Guide):
             (f"De pack-repo, met de modlijst: {_ext(PACK_REPO)}", f"The pack repo, with the mod list: {_ext(PACK_REPO)}"),
             (f"Prism Launcher: {_ext(PRISM_SITE)}", f"Prism Launcher: {_ext(PRISM_SITE)}"),
             (f"NeoForge: {_ext(NEOFORGE_SITE)}", f"NeoForge: {_ext(NEOFORGE_SITE)}"),
-            (f"Guhs zelf: {_ext('https://github.com/coecomber/guhs', 'GitHub')} &middot; {_ext('https://modrinth.com/mod/guhs', 'Modrinth')} &middot; "
+            (f"Guhs zelf: {_ext('https://github.com/coecomber/guhs', 'GitHub')} &middot; "
              f"{_ext('https://www.curseforge.com/minecraft/mc-mods/guhs', 'CurseForge')}",
-             f"Guhs itself: {_ext('https://github.com/coecomber/guhs', 'GitHub')} &middot; {_ext('https://modrinth.com/mod/guhs', 'Modrinth')} &middot; "
+             f"Guhs itself: {_ext('https://github.com/coecomber/guhs', 'GitHub')} &middot; "
              f"{_ext('https://www.curseforge.com/minecraft/mc-mods/guhs', 'CurseForge')}"),
         ])
         return self.step("links", 10, "Links", "Links", body)

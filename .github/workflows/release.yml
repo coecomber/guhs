@@ -1,11 +1,9 @@
 # Publishes a Guhs release when you push a tag like v1.0.0:
-#   builds the jar, creates the GitHub Release (with the jar), and uploads it to CurseForge and Modrinth.
+#   builds the jar, creates the GitHub Release (with the jar), and uploads it to CurseForge (Modrinth dropped at 1.6.0, user choice).
 #
 # One-time setup (repository Settings -> Secrets and variables -> Actions):
 #   Secrets:   CURSEFORGE_TOKEN   (CurseForge -> account -> API tokens)
-#              MODRINTH_TOKEN     (Modrinth -> Settings -> PATs, scopes: Create versions + Read projects + Write projects)
 #   Variables: CURSEFORGE_PROJECT_ID   (the number shown as "Project ID" on the CurseForge project page)
-#              MODRINTH_PROJECT_ID     (the project ID from the Modrinth project page, e.g. "AbCd1234")
 #
 # The tag must match mod_version in gradle.properties (tag v1.0.0 <-> mod_version=1.0.0), otherwise the job stops.
 # The release notes are the section "## <version>" of CHANGELOG.md.
@@ -92,7 +90,7 @@ jobs:
           ls -la build/libs
           test -f "build/libs/guhs-${{ steps.version.outputs.version }}.jar"
 
-      - name: Publish to GitHub, CurseForge and Modrinth
+      - name: Publish to GitHub and CurseForge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           # GitHub Release (created for the tag)
@@ -102,11 +100,6 @@ jobs:
           # CurseForge
           curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          # Modrinth
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-featured: true
 
           files: build/libs/guhs-${{ steps.version.outputs.version }}.jar
           name: Guhs ${{ steps.version.outputs.version }} (Minecraft ${{ steps.version.outputs.mc }})
@@ -118,9 +111,9 @@ jobs:
           game-versions: ${{ steps.version.outputs.mc }}
           java: ${{ steps.version.outputs.java }}
           # the same GeckoLib project for both lines (its 26.1.2 files are GeckoLib 5.x, its 1.21.1 files 4.x);
-          # CurseForge/Modrinth pick the file that matches the game version
+          # CurseForge picks the file that matches the game version
           dependencies: |
-            geckolib(required){modrinth:8BmcQJ2H}{curseforge:388172}
+            geckolib(required){curseforge:388172}
 
           retry-attempts: 3
           retry-delay: 10000

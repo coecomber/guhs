@@ -7,7 +7,6 @@
 <p align="center">
 Minecraft 26.1.2 (Guhs 1.1.x and 1.2.x) and 1.21.1 (Guhs 1.0.x) · NeoForge · requires GeckoLib<br>
 <a href="https://www.curseforge.com/minecraft/mc-mods/guhs">CurseForge</a> ·
-<a href="https://modrinth.com/mod/guhs">Modrinth</a> ·
 <a href="https://guhs.nl/">guhs.nl</a> ·
 <a href="https://guhs.nl/wiki/">Wiki</a> ·
 <a href="CHANGELOG.md">Changelog</a>

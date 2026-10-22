@@ -545,7 +545,6 @@ class Renderer:
         fact_html = "".join(f'<li class="fact">{esc(f)}</li>' for f in facts[:: max(1, len(facts) // 5)][:5])
         dl = ('<div class="dl">'
               '<a class="btn" href="https://www.curseforge.com/minecraft/mc-mods/guhs" rel="noopener">CurseForge</a>'
-              '<a class="btn" href="https://modrinth.com/mod/guhs" rel="noopener">Modrinth</a>'
               f'<a class="btn" href="https://github.com/coecomber/guhs/releases" rel="noopener">GitHub &middot; {t("releases", "downloads")}</a></div>')
         hero_img = self.b.img("guh", "Een guh") if self.im.has("guh") else ""
         stats = (f'<ul class="pills"><li>{t("Version", "Versie")} <b>{SITE_VERSION}</b></li><li>Minecraft <b>{SITE_MC}</b></li><li>NeoForge</li>'
