@@ -46,6 +46,17 @@ TEKSTEN = {
                                                "geen ansichtkaart en geen souvenir.",
     "gui.guhs.mijnguhs.roep.vraag.op_kantoor": "Let op: %s werkt nu op kantoor. Hij klokt meteen uit; het loon van de diensten die "
                                               "al af zijn krijg je nog wel.",
+    # 1.6.2: the Knabbelportaal takes picked-up guhs and every kind of "Mijn andere vadsjes" too
+    "gui.guhs.knabbelvelden.bezig.opgepakt": "Zit opgepakt ergens (zie hieronder). Hij wordt er eerst uit gehaald.",
+    "gui.guhs.knabbelvelden.niet.niet_jouw": "Dit is niet van jou.",
+    "gui.guhs.knabbelvelden.scherm.sub": "Njeg, niet dood hoor, gewoon met pensioen! Kies guhs en andere vadsjes en stuur ze heen of haal ze terug.",
+    "gui.guhs.knabbelvelden.scherm.thuis": "Bij jou (%s)",
+    "gui.guhs.knabbelvelden.scherm.soort": "Soort: %s",
+    "gui.guhs.knabbelvelden.scherm.soort.alles": "alles",
+    "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs",
+    "gui.guhs.knabbelvelden.scherm.vraag.tekst": "Deze vadsjes zijn ergens mee bezig: %s",
+    "gui.guhs.knabbelvelden.scherm.vraag.uitleg": "Ze stoppen ermee en gaan met pensioen (uit hun huisje, uit het Guhrad, uit de kist waar ze opgepakt in zitten...).",
+
 }
 
 

@@ -64,7 +64,8 @@ public final class RoepPost extends SavedData {
             }
             it.remove();
             p.setDirty();
-            CompoundTag data = UitItem.uitSpeler(speler, w.id());
+            net.minecraft.world.item.ItemStack item = UitItem.uitSpeler(speler, w.id());
+            CompoundTag data = item == null ? null : nl.juiced.guhs.item.PickedUpGuhItem.guhData(item);
             if (data == null) {
                 continue;                                     // (not in their pockets any more: nothing to do)
             }

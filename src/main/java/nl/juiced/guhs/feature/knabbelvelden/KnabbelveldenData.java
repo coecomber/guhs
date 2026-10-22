@@ -34,6 +34,16 @@ public final class KnabbelveldenData extends SavedData {
         public UUID id() {
             return GuhOpslag.id(opslag);
         }
+
+        /** 1.6.2: a maatje (pieppiepmuisje, Schilly, landdiertje...) is kept as its own pick-up item ({@link Vadsjes}). */
+        public boolean isMaatje() {
+            return opslag.contains(Vadsjes.ITEM);
+        }
+
+        /** "guh", or the maatje's kind (its entity id, like the Guhdex tab "Mijn andere vadsjes"). */
+        public String soort() {
+            return isMaatje() ? opslag.getStringOr(Vadsjes.SOORT, "") : "guh";
+        }
     }
 
     private final Map<UUID, Map<UUID, Rust>> guhs = new HashMap<>();

@@ -55,6 +55,9 @@ public final class MijnGuhs {
         ListTag guhs = new ListTag();
         var registries = player.registryAccess();
         for (BandData.Rec r : data.guhsVan(player.getUUID())) {
+            if (metPensioen(s, player.getUUID(), r)) {
+                continue;   // 1.6.2: retired guhs leave the list (their number stays theirs); the Knabbelportaal shows them
+            }
             CompoundTag t = new CompoundTag();
             t.putString("Id", r.id.toString());
             t.putInt("Nr", nl.juiced.guhs.quest.GuhNummers.nummer(s, player.getUUID(), r.id));   // 1.6.0 (F3b): its Guhdex number
@@ -139,7 +142,8 @@ public final class MijnGuhs {
      */
     private static ListTag vadsjes(BandData data, ServerPlayer player, net.minecraft.core.HolderLookup.Provider registries) {
         List<BandData.Rec> recs = new java.util.ArrayList<>(data.van(player.getUUID()));
-        recs.removeIf(r -> r.guh || r.plek == null || r.plek.soort() == PlekSoort.ONBEKEND);
+        recs.removeIf(r -> r.guh || r.plek == null || r.plek.soort() == PlekSoort.ONBEKEND
+                || metPensioen(player.level().getServer(), player.getUUID(), r));   // 1.6.2: retired ones too
         recs.sort(java.util.Comparator.comparing(r -> r.soort));
         ListTag out = new ListTag();
         for (BandData.Rec r : recs) {
@@ -152,6 +156,12 @@ public final class MijnGuhs {
             out.add(t);
         }
         return out;
+    }
+
+    /** 1.6.2: is this guh or maatje retired in De Eeuwige Knabbelvelden (then it isn't listed here)? */
+    static boolean metPensioen(MinecraftServer s, UUID eigenaar, BandData.Rec r) {
+        return (r.plek != null && r.plek.soort() == PlekSoort.IN_DE_KNABBELVELDEN)
+                || nl.juiced.guhs.feature.knabbelvelden.KnabbelveldenData.get(s).vind(eigenaar, r.id) != null;
     }
 
     private static String json(Component c, net.minecraft.core.HolderLookup.Provider registries) {

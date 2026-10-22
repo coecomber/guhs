@@ -24,5 +24,14 @@
   "gui.guhs.mijnguhs.roep.vraag.in_de_wolkjes": "%s is in the little clouds. Calling won't help, but the Cuddle Heart will.",
   "gui.guhs.mijnguhs.roep.vraag.bij_jou": "%s was already with you. It comes a little closer.",
   "gui.guhs.mijnguhs.roep.vraag.op_vakantie": "Note: %s is on holiday (Travel Agency). If you call it now, it cuts its trip short: no postcard and no souvenir.",
-  "gui.guhs.mijnguhs.roep.vraag.op_kantoor": "Note: %s is at work in the office. It clocks out right away; you still get the pay for the shifts it already finished."
+  "gui.guhs.mijnguhs.roep.vraag.op_kantoor": "Note: %s is at work in the office. It clocks out right away; you still get the pay for the shifts it already finished.",
+  "gui.guhs.knabbelvelden.bezig.opgepakt": "Picked up and kept somewhere (see below). It is taken out first.",
+  "gui.guhs.knabbelvelden.niet.niet_jouw": "This one isn't yours.",
+  "gui.guhs.knabbelvelden.scherm.sub": "Njeg, not gone for good, just retired! Pick guhs and other vadsjes and send them off or bring them back.",
+  "gui.guhs.knabbelvelden.scherm.thuis": "With you (%s)",
+  "gui.guhs.knabbelvelden.scherm.soort": "Kind: %s",
+  "gui.guhs.knabbelvelden.scherm.soort.alles": "all",
+  "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs",
+  "gui.guhs.knabbelvelden.scherm.vraag.tekst": "These vadsjes are busy with something: %s",
+  "gui.guhs.knabbelvelden.scherm.vraag.uitleg": "They stop and retire (out of their house, off the Guh Wheel, out of the chest they are kept in...)."
 }

@@ -107,6 +107,13 @@ public final class Roepen {
     /** Per band id. */
     private static final Map<UUID, Klus> KLUSSEN = new ConcurrentHashMap<>();
 
+    /** (1.6.2) the ticket that loads a far chunk for a fetch (the Knabbelportaal uses it for maatjes too). */
+    public static TicketType ticket() {
+        return TICKET.get();
+    }
+
+    public static final int TICKET_RADIUS = TICKET_STRAAL;
+
     private Roepen() {
     }
 
@@ -226,9 +233,9 @@ public final class Roepen {
         }
         if (isItem(r.plek.soort())) {
             // a picked-up guh (or one in a Guh Wheel): the pockets of whoever is online first, then where it was last seen
-            CompoundTag data = UitItem.uitSpelers(s, speler.getUUID(), id);
-            if (data != null) {
-                return verschijn(speler, data) != null ? Uitkomst.OK : Uitkomst.KWIJT;
+            ItemStack item = UitItem.uitSpelers(s, speler.getUUID(), id);
+            if (item != null) {
+                return verschijn(speler, nl.juiced.guhs.item.PickedUpGuhItem.guhData(item)) != null ? Uitkomst.OK : Uitkomst.KWIJT;
             }
             String houder = r.plek.detail().getString();
             if (r.plek.soort() == PlekSoort.ITEM_SPELER && !houder.isEmpty() && s.getPlayerList().getPlayerByName(houder) == null) {
@@ -250,7 +257,7 @@ public final class Roepen {
     }
 
     /** 1.6.2: a place where the guh is an item (or held by a Guh Wheel), not an entity. */
-    static boolean isItem(PlekSoort soort) {
+    public static boolean isItem(PlekSoort soort) {
         return switch (soort) {
             case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND, GUHWIEL -> true;
             default -> false;
@@ -342,14 +349,14 @@ public final class Roepen {
                 }
                 if (k.item != null && k.ticks % 10 == 0 && k.level.isLoaded(k.item.pos())) {
                     // 1.6.2: the chunk of the chest / Bank Guh / wheel / backpack / spot on the ground is there: take it out
-                    CompoundTag data = UitItem.uitWereld(k.level, k.item.pos(), k.item.soort(), k.id);
-                    if (data == null) {
-                        data = UitItem.uitSpelers(s, k.speler.getUUID(), k.id);
+                    ItemStack item = UitItem.uitWereld(k.level, k.item.pos(), k.item.soort(), k.id);
+                    if (item == null) {
+                        item = UitItem.uitSpelers(s, k.speler.getUUID(), k.id);
                     }
-                    if (data != null) {
+                    if (item != null) {
                         it.remove();
                         losLaten(k);
-                        verschijn(k.speler, data);
+                        verschijn(k.speler, nl.juiced.guhs.item.PickedUpGuhItem.guhData(item));
                         MijnGuhs.stuur(k.speler, null);
                         continue;
                     }

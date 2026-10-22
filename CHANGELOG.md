@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.2 — Minecraft 26.1.2 (in the making)
+
+- **"Roep naar mij" (Call to me) always works:** wherever your guh is, it comes. A picked-up guh comes out of your pockets, a chest (also from a shulker box in it), a Bank Guh, another guh's backpack or off the ground; a guh in a Guh Wheel stops running; a guh on holiday comes back early (no postcard or souvenir); a guh at the office clocks out (finished shifts are still paid). If it is in the pockets of a player who is offline, it comes as soon as they log in. The Guhdex first tells you what will happen where it is now and asks "Weet je het zeker?". Only a guh in the clouds can't come (the Cuddle Heart can help there).
+- **De Eeuwige Knabbelvelden (The Eternal Nibble Fields) take picked-up guhs too:** a guh in a chest, your pockets, a Bank Guh or a backpack is taken out first (the portal screen shows where it is and asks first).
+- **...and all your other vadsjes:** every tame critter of the Guhdex tab "Mijn andere vadsjes" (pieppiepmuisjes, Schilly, Poepschilly, fluff squirrels, guh bunnies, guhxolotls and the rest) can retire as well, also when picked up. On your plot they walk about see-through with a little halo, you can pet them, and "Mee naar huis" brings them back as their own item, exactly as they were. The portal screen has a new Kind button to show one kind at a time.
+- **Retired guhs and vadsjes leave the Guhdex lists:** they are no longer listed in "Mijn guhs" or "Mijn andere vadsjes", so those stay tidy. A guh keeps its number (never handed out again) and is listed again with it when it comes home through the portal.
+
 ## 1.6.1 — fix — Minecraft 26.1.2
 
 - **Server freeze fixed:** asking the Beverbeek ranger the way to the safari bus (and the op command `/guhs safari busstation waar`) searched the world for the nearest busstation on the server thread, which could hang a server until it was stopped. The ranger, the Superkompas and the command now only use the stations the world already knows (every station is remembered as soon as its area is loaded, or when an op places one), so nothing is searched any more. The Superkompas also finds a busstation that an op placed by hand.

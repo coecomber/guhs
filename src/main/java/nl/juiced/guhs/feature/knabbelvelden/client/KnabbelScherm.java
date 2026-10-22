@@ -55,9 +55,17 @@ public class KnabbelScherm extends Screen {
     enum Sorteer { NUMMER, NAAM, VACHT, DATUM }
 
     /** One card. */
-    record Kaart(UUID id, int nr, Component naam, CompoundTag looks, long sinds, String bezig, String niet, boolean onderweg, boolean velden) {
+    record Kaart(UUID id, int nr, Component naam, CompoundTag looks, long sinds, String bezig, String niet, boolean onderweg, boolean velden,
+                 String soort, Component plek) {
+        /** 1.6.2: a maatje of "Mijn andere vadsjes" (soort = its kind), not a guh. */
+        boolean maatje() {
+            return !"guh".equals(soort);
+        }
+
+        /** A guh's fur, a maatje's kind. */
         String vacht() {
-            return GuhVariant.byId(looks.getStringOr("Variant", "")).displayName().getString();
+            return maatje() ? nl.juiced.guhs.feature.band.client.AndereVadsjesTab.soortNaam(soort).getString()
+                    : GuhVariant.byId(looks.getStringOr("Variant", "")).displayName().getString();
         }
     }
 
@@ -88,6 +96,9 @@ public class KnabbelScherm extends Screen {
             String z = zoek == null ? "" : zoek.getValue().trim().toLowerCase(Locale.ROOT);
             zichtbaar.clear();
             for (Kaart k : alle) {
+                if (!soortFilter.isEmpty() && !soortFilter.equals(k.soort())) {
+                    continue;   // 1.6.2: only one kind (guhs, pieppiepmuisjes...)
+                }
                 if (z.isEmpty() || k.naam().getString().toLowerCase(Locale.ROOT).contains(z) || k.vacht().toLowerCase(Locale.ROOT).contains(z)
                         || ("#" + k.nr()).equals(z) || String.valueOf(k.nr()).equals(z)) {
                     zichtbaar.add(k);
@@ -122,6 +133,9 @@ public class KnabbelScherm extends Screen {
     private CompoundTag data;
     private final Kolom thuis = new Kolom(false), velden = new Kolom(true);
     private Sorteer sorteer = Sorteer.NUMMER;
+    /** 1.6.2: "" = every kind, else "guh" or a maatje's kind. */
+    private String soortFilter = "";
+    private Button soortKnop;
     private EditBox zoek;
     private Button stuurKnop, haalKnop, reisKnop, sorteerKnop, jaKnop, neeKnop;
     private int left, top, w, h, detailX, detailW, kolomY;
@@ -168,7 +182,8 @@ public class KnabbelScherm extends Screen {
             UUID id = t.read("Id", UUIDUtil.CODEC).orElse(null);
             if (id != null) {
                 kolom.alle.add(new Kaart(id, t.getIntOr("Nr", 0), Tekst.get(t, "Naam"), t.getCompoundOrEmpty("Looks"), t.getLongOr("Sinds", -1L),
-                        t.getStringOr("Bezig", ""), t.getStringOr("Niet", ""), t.getBooleanOr("Onderweg", false), inVelden));
+                        t.getStringOr("Bezig", ""), t.getStringOr("Niet", ""), t.getBooleanOr("Onderweg", false), inVelden,
+                        t.getStringOr("Soort", "guh"), t.contains("Plek") ? Tekst.get(t, "Plek") : Component.empty()));
             }
         }
     }
@@ -213,6 +228,14 @@ public class KnabbelScherm extends Screen {
             b.setMessage(sorteerTekst());
             filter();
         }).bounds(zoek.getX() + zoek.getWidth() + 6, top + 32, 110, 16).build());
+        // 1.6.2: which kind: all, guhs, or one kind of "Mijn andere vadsjes" (only kinds you have)
+        soortKnop = addRenderableWidget(Button.builder(soortTekst(), b -> {
+            List<String> soorten = soorten();
+            int i = soorten.indexOf(soortFilter);
+            soortFilter = soorten.get((i + 1) % soorten.size());
+            b.setMessage(soortTekst());
+            filter();
+        }).bounds(sorteerKnop.getX() + sorteerKnop.getWidth() + 4, top + 32, 120, 16).build());
 
         int mx = thuis.x + kolomW + (mid - 22) / 2, my = thuis.y + thuis.h / 2;
         stuurKnop = addRenderableWidget(Button.builder(Component.literal("→"), b -> stuur())
@@ -244,6 +267,33 @@ public class KnabbelScherm extends Screen {
         filter();
     }
 
+    /** "" (all) first, then guhs, then every maatje kind you have here or at home. */
+    private List<String> soorten() {
+        List<String> uit = new ArrayList<>(List.of(""));
+        java.util.TreeSet<String> rest = new java.util.TreeSet<>();
+        for (Kolom k : List.of(thuis, velden)) {
+            for (Kaart c : k.alle) {
+                if (c.maatje()) {
+                    rest.add(c.soort());
+                } else if (!uit.contains("guh")) {
+                    uit.add("guh");
+                }
+            }
+        }
+        uit.addAll(rest);
+        if (!uit.contains(soortFilter)) {
+            soortFilter = "";
+        }
+        return uit;
+    }
+
+    private Component soortTekst() {
+        Component wat = soortFilter.isEmpty() ? Component.translatable("gui.guhs.knabbelvelden.scherm.soort.alles")
+                : "guh".equals(soortFilter) ? Component.translatable("gui.guhs.knabbelvelden.scherm.soort.guh")
+                : nl.juiced.guhs.feature.band.client.AndereVadsjesTab.soortNaam(soortFilter);
+        return Component.translatable("gui.guhs.knabbelvelden.scherm.soort", wat);
+    }
+
     private Component sorteerTekst() {
         return Component.translatable("gui.guhs.knabbelvelden.scherm.sorteer", Component.translatable("gui.guhs.knabbelvelden.sorteer."
                 + sorteer.name().toLowerCase(Locale.ROOT)));
@@ -259,6 +309,9 @@ public class KnabbelScherm extends Screen {
         jaKnop.visible = neeKnop.visible = v;
         reisKnop.active = !v;
         sorteerKnop.active = !v;
+        if (soortKnop != null) {
+            soortKnop.active = !v;
+        }
     }
 
     @Nullable
@@ -423,6 +476,9 @@ public class KnabbelScherm extends Screen {
                 tip.add(Component.translatable("gui.guhs.knabbelvelden.niet." + over.niet()).withStyle(ChatFormatting.GOLD));
             } else if (!over.bezig().isEmpty()) {
                 tip.add(Component.translatable("gui.guhs.knabbelvelden.bezig." + over.bezig()).withStyle(ChatFormatting.GOLD));
+                if ("opgepakt".equals(over.bezig()) && !over.plek().getString().isEmpty()) {
+                    tip.add(over.plek().copy().withStyle(ChatFormatting.GRAY));
+                }
             }
             if (over.onderweg()) {
                 tip.add(Component.translatable("gui.guhs.knabbelvelden.scherm.onderweg").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -467,12 +523,16 @@ public class KnabbelScherm extends Screen {
         int x2 = x + CW - 3, y2 = y + CH - 3;
         g.fill(x, y, x2, y2, gekozen ? ROZE : over ? 0xFFF4B8D4 : VAK_RAND);
         g.fill(x + 1, y + 1, x2 - 1, y2 - 1, gekozen ? GEKOZEN : over ? 0xFFFFF0F7 : 0xFFFFFFFF);
-        GuhEntity pop = pop(kaart);
-        if (pop != null) {
-            pop.tickCount = tijd;
-            GuhPop.teken(g, x + 2, y + 2, x2 - 2, y + 44, pop, 30, -5);
+        if (kaart.maatje()) {
+            icoon(g, kaart, x + (CW - 3) / 2, y + 23, 2f);
+        } else {
+            GuhEntity pop = pop(kaart);
+            if (pop != null) {
+                pop.tickCount = tijd;
+                GuhPop.teken(g, x + 2, y + 2, x2 - 2, y + 44, pop, 30, -5);
+            }
+            GidsTekst.passend(g, Component.literal("#" + kaart.nr()), x + 3, y + 3, 30, 0.7f, ROZE, false);
         }
-        GidsTekst.passend(g, Component.literal("#" + kaart.nr()), x + 3, y + 3, 30, 0.7f, ROZE, false);
         GidsTekst.passend(g, kaart.naam(), x + 3, y + 46, CW - 9, 0.75f, kanNiet ? GRIJS : DONKER, false);
         GidsTekst.passend(g, Component.literal(kaart.vacht()), x + 3, y + 55, CW - 9, 0.6f, GRIJS, false);
         if (!kaart.bezig().isEmpty() && !kanNiet) {
@@ -489,7 +549,16 @@ public class KnabbelScherm extends Screen {
 
     @Nullable
     private GuhEntity pop(Kaart k) {
-        return poppen.computeIfAbsent(k.id(), id -> GuhPop.van(k.looks()));
+        return k.maatje() ? null : poppen.computeIfAbsent(k.id(), id -> GuhPop.van(k.looks()));
+    }
+
+    /** 1.6.2: a maatje's picture (its pick-up item), centred on cx, cy at this scale. */
+    private static void icoon(GuiGraphicsExtractor g, Kaart k, int cx, int cy, float schaal) {
+        g.pose().pushMatrix();
+        g.pose().translate(cx - 8 * schaal, cy - 8 * schaal);
+        g.pose().scale(schaal, schaal);
+        g.item(nl.juiced.guhs.feature.band.client.AndereVadsjesTab.icoon(k.soort()), 0, 0);
+        g.pose().popMatrix();
     }
 
     private void detail(GuiGraphicsExtractor g) {
@@ -500,32 +569,44 @@ public class KnabbelScherm extends Screen {
         }
         Kaart k = focus;
         g.fill(x + 14, y + 84, x + dw - 14, y + 92, 0x70FFFFFF);
-        GuhEntity pop = pop(k);
-        if (pop != null) {
-            pop.tickCount = tijd;
-            GuhPop.teken(g, x + 2, y + 4, x + dw - 2, y + 92, pop, draai, 8);
+        if (k.maatje()) {
+            icoon(g, k, x + dw / 2, y + 50, 3f);
+        } else {
+            GuhEntity pop = pop(k);
+            if (pop != null) {
+                pop.tickCount = tijd;
+                GuhPop.teken(g, x + 2, y + 4, x + dw - 2, y + 92, pop, draai, 8);
+            }
         }
         int ty = y + 96;
         GidsTekst.passend(g, k.naam().copy().withStyle(ChatFormatting.BOLD), x + 6, ty, dw - 12, 1f, DONKER, false);
         ty += 11;
-        GidsTekst.passend(g, Component.literal("#" + k.nr() + " · " + k.vacht()), x + 6, ty, dw - 12, 0.8f, ROZE, false);
+        GidsTekst.passend(g, Component.literal(k.maatje() ? k.vacht() : "#" + k.nr() + " · " + k.vacht()), x + 6, ty, dw - 12, 0.8f, ROZE, false);
         ty += 10;
-        GuhPersonality aard = GuhPersonality.byId(k.looks().getStringOr("Personality", ""));
+        if (!k.velden() && !k.plek().getString().isEmpty()) {
+            // 1.6.2: where it is now (a picked-up one: in which chest...)
+            GidsTekst.passend(g, k.plek(), x + 6, ty, dw - 12, 0.7f, GRIJS, false);
+            ty += 9;
+        }
+        GuhPersonality aard = k.maatje() ? null : GuhPersonality.byId(k.looks().getStringOr("Personality", ""));
         if (aard != null) {
             GidsTekst.passend(g, Component.translatable("gui.guhs.knabbelvelden.scherm.aard", aard.displayName()), x + 6, ty, dw - 12, 0.75f, DONKER, false);
             ty += 9;
         }
         CompoundTag kleren = k.looks().getCompoundOrEmpty("Clothes");
         List<Component> stukken = new ArrayList<>();
+        boolean kleding = !k.maatje();
         for (GuhClothes.Slot slot : GuhClothes.Slot.values()) {
             GuhClothes c = GuhClothes.byId(kleren.getStringOr(slot.name(), ""));
             if (c != null) {
                 stukken.add(new ItemStack(ModItems.clothingItem(c)).getHoverName());
             }
         }
-        GidsTekst.passend(g, Component.translatable("gui.guhs.knabbelvelden.scherm.kleding"), x + 6, ty, dw - 12, 0.75f, DONKER, false);
-        ty += 9;
-        if (stukken.isEmpty()) {
+        if (kleding) {
+            GidsTekst.passend(g, Component.translatable("gui.guhs.knabbelvelden.scherm.kleding"), x + 6, ty, dw - 12, 0.75f, DONKER, false);
+            ty += 9;
+        }
+        if (kleding && stukken.isEmpty()) {
             GidsTekst.passend(g, Component.translatable("gui.guhs.knabbelvelden.scherm.geen_kleding"), x + 10, ty, dw - 16, 0.7f, GRIJS, false);
             ty += 8;
         }

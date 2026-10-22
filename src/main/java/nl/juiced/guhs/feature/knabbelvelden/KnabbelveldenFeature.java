@@ -66,6 +66,21 @@ public final class KnabbelveldenFeature {
         GuhHooks.tick(Geesten::leef);
         GuhHooks.klik(Geesten::klik);
         NeoForge.EVENT_BUS.addListener(Geesten::opJoin);
+        // 1.6.2: a click on a maatje stand-in: a pet / "Mee naar huis?" (before its own menu or picking it up)
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH,
+                (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract e) -> {
+                    if (Geesten.klikMaatje(e.getTarget(), e.getEntity(), e.getHand())) {
+                        e.setCanceled(true);
+                        e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                    }
+                });
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH,
+                (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific e) -> {
+                    if (!(e.getTarget() instanceof nl.juiced.guhs.entity.GuhEntity) && Geesten.isGeest(e.getTarget())) {
+                        e.setCanceled(true);
+                        e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                    }
+                });
         NeoForge.EVENT_BUS.addListener(Geesten::tick);
         NeoForge.EVENT_BUS.addListener(Pensioen::tick);
         NeoForge.EVENT_BUS.addListener(KnabbelveldenFeature::opSchade);
@@ -76,7 +91,7 @@ public final class KnabbelveldenFeature {
             Pensioen.vergeet(e.getEntity().getUUID());
             ETEN.remove(e.getEntity().getUUID());
             if (e.getEntity().level() instanceof ServerLevel level && Knabbelvelden.level(level.getServer()) instanceof ServerLevel velden) {
-                for (Entity g : com.google.common.collect.Lists.newArrayList(velden.getAllEntities())) {   // (a copy: discard while iterating crashes)
+                for (Entity g : com.google.common.collect.Lists.newArrayList(velden.getAllEntities())) {   // (guhs and maatjes)   // (a copy: discard while iterating crashes)
                     Geesten.Geest geest = Geesten.isGeest(g) ? Geesten.geest(g) : null;
                     if (geest != null && geest.eigenaar().equals(e.getEntity().getUUID())) {
                         g.discard();

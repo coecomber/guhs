@@ -30,6 +30,7 @@ import nl.juiced.guhs.block.entity.GuhWheelBlockEntity;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.Band;
 import nl.juiced.guhs.feature.band.BandData;
+import nl.juiced.guhs.feature.band.UitItem;
 import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.band.GuhVolger;
 import nl.juiced.guhs.feature.band.Plek;
@@ -52,8 +53,10 @@ import nl.juiced.guhs.taal.Tekst;
  *   <li>{@link #stuur}: any tamed guh of the player, wherever it is: a loaded one goes at once ({@link GuhOpslag#bewaar}),
  *       one in a Guhrad is taken out of the wheel, an unloaded one is fetched first (its chunk loads, like "Roep naar mij":
  *       {@link Roepen}) and goes the moment it arrives. A busy guh (living in a huisje, running in a Guhrad, riding, a
- *       guest of the Guhkamer) only goes when the player confirmed it ({@link Uitkomst#BEVESTIGEN}). Not: a picked-up guh
- *       (an item somewhere), one on holiday / at the office, one in the wolkjes.</li>
+ *       guest of the Guhkamer) only goes when the player confirmed it ({@link Uitkomst#BEVESTIGEN}). Not: one on holiday /
+ *       at the office, one in the wolkjes. 1.6.2: a picked-up guh (an item in a chest, pockets, Bank Guh, backpack, on the
+ *       ground) goes too, after a question: it is taken out first ({@link UitItem}, the "Roep naar mij" way). And every
+ *       maatje of "Mijn andere vadsjes" can retire as well ({@link Vadsjes}): it is kept as its own pick-up item.</li>
  *   <li>{@link #terug}: the guh comes home as a picked-up guh item (everything kept: number, name, clothes, personality,
  *       fur...), into your pockets, or on the ground at the portal when they are full. Never doubled: no item while a guh
  *       with its UUID is in the world, and the record goes only after the item is made.</li>
@@ -114,14 +117,22 @@ public final class Pensioen {
             Tekst.put(root, "Melding", melding);
         }
         ListTag thuis = new ListTag();
-        for (BandData.Rec r : BandData.get(s).guhsVan(p.getUUID())) {
+        for (BandData.Rec r : BandData.get(s).van(p.getUUID())) {
             if (r.dood || velden.vind(p.getUUID(), r.id) != null) {
                 continue;
             }
+            if (!r.guh && (r.plek == null || r.plek.soort() == PlekSoort.ONBEKEND)) {
+                continue;   // (a maatje that died: like "Mijn andere vadsjes")
+            }
             CompoundTag t = new CompoundTag();
             t.store("Id", UUIDUtil.CODEC, r.id);
-            t.putInt("Nr", GuhNummers.nummer(s, p.getUUID(), r.id));
-            Tekst.put(t, "Naam", r.weergave());
+            t.putInt("Nr", r.guh ? GuhNummers.nummer(s, p.getUUID(), r.id) : 0);
+            t.putString("Soort", r.guh ? "guh" : r.soort);
+            Tekst.put(t, "Naam", r.guh ? r.weergave() : !nl.juiced.guhs.taal.Tekst.empty(r.naam) ? r.naam
+                    : Component.translatable("entity.guhs." + r.soort));
+            if (r.plek != null) {
+                Tekst.put(t, "Plek", GuhVolger.tekst(r.plek));
+            }
             t.put("Looks", r.looks.copy());
             t.putLong("Sinds", r.sindsDag);
             String bezig = bezig(s, p.getUUID(), r.id), niet = nietNu(s, p.getUUID(), r.id);
@@ -136,6 +147,7 @@ public final class Pensioen {
             CompoundTag t = new CompoundTag();
             t.store("Id", UUIDUtil.CODEC, r.id());
             t.putInt("Nr", r.nr());
+            t.putString("Soort", r.soort());
             Tekst.put(t, "Naam", GuhOpslag.naam(r.opslag()));
             t.put("Looks", r.opslag().getCompoundOrEmpty("Looks").copy());
             t.putLong("Sinds", r.sindsDag());
@@ -199,17 +211,16 @@ public final class Pensioen {
             return "al";
         }
         BandData.Rec r = BandData.get(s).vind(eigenaar, id);
-        if (r == null || !r.guh) {
+        if (r == null) {
             return "niet_jouw";
         }
         if (r.dood) {
             return "dood";
         }
-        if (Band.zoekGeladen(s, id) != null) {
+        if (r.guh ? Band.zoekGeladen(s, id) != null : Vadsjes.zoekGeladen(s, id) != null) {
             return null;
         }
         return switch (r.plek.soort()) {
-            case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND -> "opgepakt";
             case OP_VAKANTIE, OP_KANTOOR -> "weg";
             case IN_DE_WOLKJES -> "dood";
             case ONBEKEND -> "kwijt";
@@ -237,7 +248,11 @@ public final class Pensioen {
         if (r == null) {
             return null;
         }
+        if (!r.guh) {
+            return Roepen.isItem(r.plek.soort()) ? "opgepakt" : null;
+        }
         return switch (r.plek.soort()) {
+            case ITEM_SPELER, ITEM_KIST, ITEM_RUGZAK, ITEM_BANK, ITEM_GROND -> "opgepakt";   // 1.6.2: taken out first
             case HUISJE, SLAAPT_IN_HUISJE -> "huisje";
             case GUHWIEL -> "guhwiel";
             case GUHKAMER -> "guhkamer";
@@ -253,6 +268,10 @@ public final class Pensioen {
     /** Sends one guh (see the class doc). The player gets no message here; the screen tells (the action's line). */
     public static Uitkomst stuur(ServerPlayer p, UUID id, boolean bevestigd) {
         MinecraftServer s = p.level().getServer();
+        BandData.Rec rec = BandData.get(s).vind(p.getUUID(), id);
+        if (rec != null && !rec.guh) {
+            return stuurMaatje(p, rec, bevestigd);
+        }
         Entity e = Band.zoekGeladen(s, id);
         if (e != null && !(e instanceof GuhEntity g && Band.isBandGuh(g) && p.getUUID().equals(g.getOwnerUUID()))) {
             return Uitkomst.NIET_JOUW;
@@ -289,6 +308,87 @@ public final class Pensioen {
             return Uitkomst.ONDERWEG;
         }
         return u == Roepen.Uitkomst.NIET_JOUW ? Uitkomst.NIET_JOUW : u == Roepen.Uitkomst.KWIJT ? Uitkomst.KWIJT : Uitkomst.NIET_NU;
+    }
+
+    /** A maatje waiting to be fetched: its place (loaded with the "Roep naar mij" ticket) and how long we wait. */
+    private record MaatjeWacht(UUID speler, ServerLevel level, BlockPos pos, PlekSoort soort, int[] ticks) {
+    }
+
+    private static final Map<UUID, MaatjeWacht> MAATJES = new ConcurrentHashMap<>();
+
+    /**
+     * 1.6.2: one of "Mijn andere vadsjes" retires: a loaded one at once, a picked-up one out of the pockets / chest / Bank
+     * Guh / backpack / ground, an unloaded one when its chunk is there (we wait a while, like "Roep naar mij").
+     */
+    static Uitkomst stuurMaatje(ServerPlayer p, BandData.Rec r, boolean bevestigd) {
+        MinecraftServer s = p.level().getServer();
+        String niet = nietNu(s, p.getUUID(), r.id);
+        if (niet != null) {
+            return niet.equals("kwijt") ? Uitkomst.KWIJT : niet.equals("niet_jouw") ? Uitkomst.NIET_JOUW : Uitkomst.NIET_NU;
+        }
+        if (!bevestigd && bezig(s, p.getUUID(), r.id) != null) {
+            return Uitkomst.BEVESTIGEN;
+        }
+        if (MAATJES.containsKey(r.id)) {
+            return Uitkomst.ONDERWEG;
+        }
+        net.minecraft.world.entity.TamableAnimal dier = Vadsjes.zoekGeladen(s, r.id);
+        if (dier != null) {
+            if (!p.getUUID().equals(Band.eigenaar(dier))) {
+                return Uitkomst.NIET_JOUW;
+            }
+            Vadsjes.bewaar(p.getUUID(), dier);
+            return Uitkomst.OK;
+        }
+        if (Roepen.isItem(r.plek.soort())) {
+            ItemStack item = UitItem.uitSpelers(s, p.getUUID(), r.id);
+            if (item != null) {
+                Vadsjes.bewaarItem(s, p.getUUID(), r.id, item, p.level().dimension(), p.blockPosition());
+                return Uitkomst.OK;
+            }
+        }
+        ServerLevel level = s.getLevel(r.plek.dim());
+        if (level == null || r.plek.soort() == PlekSoort.ONBEKEND) {
+            return Uitkomst.KWIJT;
+        }
+        level.getChunkSource().addTicketWithRadius(Roepen.ticket(), net.minecraft.world.level.ChunkPos.containing(r.plek.pos()), Roepen.TICKET_RADIUS);
+        MAATJES.put(r.id, new MaatjeWacht(p.getUUID(), level, r.plek.pos(), r.plek.soort(), new int[1]));
+        return Uitkomst.ONDERWEG;
+    }
+
+    /** Every tick: a maatje we are fetching: is its chunk (and it, or its item) there yet? */
+    private static void tickMaatjes(MinecraftServer s) {
+        for (Iterator<Map.Entry<UUID, MaatjeWacht>> it = MAATJES.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<UUID, MaatjeWacht> e = it.next();
+            UUID id = e.getKey();
+            MaatjeWacht w = e.getValue();
+            w.ticks()[0]++;
+            ServerPlayer p = s.getPlayerList().getPlayer(w.speler());
+            boolean klaar = false;
+            if (w.ticks()[0] % 10 == 0 && w.level().isLoaded(w.pos())) {
+                net.minecraft.world.entity.TamableAnimal dier = Vadsjes.zoekGeladen(s, id);
+                if (dier != null && w.speler().equals(Band.eigenaar(dier))) {
+                    Vadsjes.bewaar(w.speler(), dier);
+                    klaar = true;
+                } else if (Roepen.isItem(w.soort())) {
+                    ItemStack item = UitItem.uitWereld(w.level(), w.pos(), w.soort(), id);
+                    if (item == null) {
+                        item = UitItem.uitSpelers(s, w.speler(), id);
+                    }
+                    if (item != null) {
+                        Vadsjes.bewaarItem(s, w.speler(), id, item, w.level().dimension(), w.pos());
+                        klaar = true;
+                    }
+                }
+            }
+            if (klaar || p == null || w.ticks()[0] > WACHT_MAX) {
+                it.remove();
+                w.level().getChunkSource().removeTicketWithRadius(Roepen.ticket(), net.minecraft.world.level.ChunkPos.containing(w.pos()), Roepen.TICKET_RADIUS);
+                if (p != null) {
+                    ververs(p, klaar ? null : Component.translatable("gui.guhs.knabbelvelden.melding.kwijt"));
+                }
+            }
+        }
     }
 
     /** A loaded guh of this owner goes: out of the Guhkamer and its huisje, stored, a poof of pink cheese dust. */
@@ -355,6 +455,9 @@ public final class Pensioen {
 
     /** Every tick: is a guh we are fetching here yet? Then it goes. */
     static void tick(ServerTickEvent.Post event) {
+        if (!MAATJES.isEmpty()) {
+            tickMaatjes(event.getServer());
+        }
         if (ONDERWEG.isEmpty()) {
             return;
         }
@@ -385,7 +488,7 @@ public final class Pensioen {
 
     /** (tests) is this guh being fetched? */
     public static boolean onderweg(UUID id) {
-        return ONDERWEG.containsKey(id);
+        return ONDERWEG.containsKey(id) || MAATJES.containsKey(id);
     }
 
     // =====================================================================================================================
@@ -400,10 +503,13 @@ public final class Pensioen {
         MinecraftServer s = p.level().getServer();
         KnabbelveldenData velden = KnabbelveldenData.get(s);
         KnabbelveldenData.Rust r = velden.vind(p.getUUID(), id);
-        if (r == null || Band.zoekGeladen(s, id) != null) {
+        if (r == null || (r.isMaatje() ? Vadsjes.zoekGeladen(s, id) != null : Band.zoekGeladen(s, id) != null)) {
             return ItemStack.EMPTY;
         }
-        ItemStack stack = PickedUpGuhItem.of(itemData(p, r));
+        ItemStack stack = r.isMaatje() ? Vadsjes.item(s, r.opslag()) : PickedUpGuhItem.of(itemData(p, r));
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY;   // (can't be read: keep the record, nothing is lost)
+        }
         velden.haalWeg(p.getUUID(), id);
         Geesten.weg(s, id);
         ItemStack kopie = stack.copy();
@@ -458,6 +564,10 @@ public final class Pensioen {
 
     static void stopAlles() {
         ONDERWEG.clear();
+        for (MaatjeWacht w : MAATJES.values()) {
+            w.level().getChunkSource().removeTicketWithRadius(Roepen.ticket(), net.minecraft.world.level.ChunkPos.containing(w.pos()), Roepen.TICKET_RADIUS);
+        }
+        MAATJES.clear();
         OPEN.clear();
     }
 

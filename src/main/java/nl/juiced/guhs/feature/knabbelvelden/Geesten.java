@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +62,12 @@ public final class Geesten {
     }
 
     public static boolean isGeest(Entity e) {
-        return e instanceof GuhEntity g && GuhHooks.heeft(g, GEEST);
+        if (e instanceof GuhEntity g) {
+            return GuhHooks.heeft(g, GEEST);
+        }
+        // 1.6.2: a maatje's stand-in (Vadsjes.geest): marked in its persistent data (server) / invisible in the Knabbelvelden (client)
+        return e instanceof nl.juiced.guhs.feature.piep.PiepMaatje && (e.getPersistentData().contains(BAND)
+                || (e.level().isClientSide() && e.isInvisible() && Knabbelvelden.echt(e.level())));
     }
 
     /** (server) the ghost behind this entity, or null. */
@@ -78,6 +85,7 @@ public final class Geesten {
         if (level == null) {
             return;
         }
+        halo(level);
         Set<UUID> eigenaars = new HashSet<>(KnabbelveldenData.get(s).eigenaars());
         for (Geest g : LEVEND.values()) {
             eigenaars.add(g.eigenaar());
@@ -131,7 +139,11 @@ public final class Geesten {
         BlockPos spawn = Knabbelvelden.spawn(KnabbelveldenData.get(s).plot(eigenaar));
         for (KnabbelveldenData.Rust r : rust) {
             if (!er.contains(r.id())) {
-                maak(level, eigenaar, r, spawn);
+                if (r.isMaatje()) {
+                    maakMaatje(level, eigenaar, r, spawn);
+                } else {
+                    maak(level, eigenaar, r, spawn);
+                }
             }
         }
     }
@@ -184,6 +196,48 @@ public final class Geesten {
         return g;
     }
 
+    /** 1.6.2: a stand-in of a retired maatje (see {@link Vadsjes#geest}), somewhere around the plot spawn. */
+    @Nullable
+    static Entity maakMaatje(ServerLevel level, UUID eigenaar, KnabbelveldenData.Rust r, BlockPos spawn) {
+        RandomSource rng = level.getRandom();
+        double hoek = rng.nextDouble() * Math.PI * 2, afstand = 5 + rng.nextDouble() * 14;
+        double x = spawn.getX() + 0.5 + Math.cos(hoek) * afstand, z = spawn.getZ() + 0.5 + Math.sin(hoek) * afstand;
+        net.minecraft.world.entity.TamableAnimal dier = Vadsjes.geest(level, r, x, z);
+        if (dier == null) {
+            return null;
+        }
+        dier.setHomeTo(spawn, Knabbelvelden.STRAAL);
+        dier.getPersistentData().putString(EIGENAAR, eigenaar.toString());
+        dier.getPersistentData().putString(BAND, r.id().toString());
+        LEVEND.put(dier.getUUID(), new Geest(eigenaar, r.id()));   // (before it joins: the join check knows it)
+        if (!level.addFreshEntity(dier)) {
+            LEVEND.remove(dier.getUUID());
+            return null;
+        }
+        level.sendParticles(ParticleTypes.END_ROD, x, Knabbelvelden.VLOER + 0.6, z, 8, 0.3, 0.4, 0.3, 0.03);
+        return dier;
+    }
+
+    /** 1.6.2: every second, the maatje stand-ins' little halo of light (the guh ghosts wear a real one), and back on the plot after a fall. */
+    static void halo(ServerLevel level) {
+        for (Map.Entry<UUID, Geest> e : LEVEND.entrySet()) {
+            Entity ent = level.getEntity(e.getKey());
+            if (ent == null || ent instanceof GuhEntity) {
+                continue;
+            }
+            double y = ent.getY() + ent.getBbHeight() + 0.25;
+            for (int i = 0; i < 6; i++) {
+                double a = i * Math.PI / 3;
+                level.sendParticles(ParticleTypes.END_ROD, ent.getX() + Math.cos(a) * 0.25, y, ent.getZ() + Math.sin(a) * 0.25, 1, 0, 0, 0, 0);
+            }
+            if (ent.getY() < Knabbelvelden.VLOER - 3) {
+                BlockPos sp = Knabbelvelden.spawn(KnabbelveldenData.get(level.getServer()).plot(e.getValue().eigenaar()));
+                ent.teleportTo(sp.getX() + 0.5, Knabbelvelden.VLOER, sp.getZ() + 0.5);
+                ent.fallDistance = 0;
+            }
+        }
+    }
+
     /** A retired guh came home: its ghost goes. */
     static void weg(MinecraftServer s, UUID band) {
         ServerLevel level = Knabbelvelden.level(s);
@@ -220,7 +274,24 @@ public final class Geesten {
      * is in the Knabbelvelden (never two of the same guh).
      */
     static void opJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof GuhEntity g)) {
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
+        if (event.getEntity() instanceof nl.juiced.guhs.feature.piep.PiepMaatje && !(event.getEntity() instanceof GuhEntity)) {
+            // 1.6.2: a maatje stand-in that isn't ours never comes in, nor a real maatje that is retired (never two)
+            Entity m = event.getEntity();
+            if (m.getPersistentData().contains(BAND)) {
+                if (!LEVEND.containsKey(m.getUUID())) {
+                    event.setCanceled(true);
+                }
+            } else if (m.getPersistentData().contains(nl.juiced.guhs.feature.band.Band.BAND_ID)
+                    && KnabbelveldenData.get(((ServerLevel) event.getLevel()).getServer()).bevat(Vadsjes.bandId(m))) {
+                com.mojang.logging.LogUtils.getLogger().warn("Knabbelvelden: maatje {} is retired; a copy tried to join, removed", Vadsjes.bandId(m));
+                event.setCanceled(true);
+            }
+            return;
+        }
+        if (!(event.getEntity() instanceof GuhEntity g)) {
             return;
         }
         if (g.getPersistentData().contains(BAND)) {
@@ -301,6 +372,43 @@ public final class Geesten {
         }
         sp.sendOverlayMessage(regel.copy().withStyle(ChatFormatting.LIGHT_PURPLE));
         return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * 1.6.2: a click on a maatje stand-in (an entity interaction, before its own menu): a pet with hearts, or (the owner,
+     * sneaking) "Mee naar huis?". True when it was one of ours (the click is used up).
+     */
+    static boolean klikMaatje(Entity e, Player player, InteractionHand hand) {
+        if (e instanceof GuhEntity || !isGeest(e)) {
+            return false;
+        }
+        if (e.level().isClientSide() || hand != InteractionHand.MAIN_HAND || !(player instanceof ServerPlayer sp)) {
+            return true;
+        }
+        Geest geest = LEVEND.get(e.getUUID());
+        if (geest == null) {
+            return true;
+        }
+        boolean eigen = geest.eigenaar().equals(sp.getUUID());
+        if (eigen && sp.isShiftKeyDown()) {
+            CompoundTag t = new CompoundTag();
+            t.putInt("Entity", e.getId());
+            Tekst.put(t, "Naam", e.getName().copy());
+            ModNetworking.sendTo(sp, new KnabbelPayloads.Vraag(t));
+            return true;
+        }
+        ServerLevel level = (ServerLevel) e.level();
+        level.sendParticles(ParticleTypes.HEART, e.getX(), e.getY() + e.getBbHeight() + 0.2, e.getZ(), 3, 0.3, 0.2, 0.3, 0.02);
+        if (e instanceof nl.juiced.guhs.feature.piep.PiepMaatje m) {
+            level.playSound(null, e.blockPosition(), m.oppakGeluid(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.7f, 1.3f);
+        }
+        int n = 1 + level.getRandom().nextInt(5);
+        Component regel = Component.translatable("gui.guhs.knabbelvelden.aai." + n, e.getName());
+        if (eigen && level.getRandom().nextInt(3) == 0) {
+            regel = regel.copy().append(" ").append(Component.translatable("gui.guhs.knabbelvelden.aai.tip").withStyle(ChatFormatting.GRAY));
+        }
+        sp.sendOverlayMessage(regel.copy().withStyle(ChatFormatting.LIGHT_PURPLE));
+        return true;
     }
 
     /** (KnabbelPayloads.MeeNaarHuis) the owner said yes: the retired guh comes home as an item (dropped at the plot portal when full). */

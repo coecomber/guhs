@@ -142,7 +142,10 @@ public class KnabbelveldenGameTests {
         helper.assertTrue(level.getEntity(id) == null, "the stale copy did not join");
         helper.assertTrue(!Pensioen.terug(p, id, null).isEmpty(), "it comes home once");
         helper.assertTrue(Pensioen.terug(p, id, null).isEmpty() && telItems(p) == 1, "not a second time");
-        helper.assertTrue(Pensioen.stuur(p, id, true) == Pensioen.Uitkomst.NIET_NU, "an item in your pockets can't be sent");
+        // 1.6.2: an item in your pockets goes too (it is taken out of them), and comes home once more
+        helper.assertTrue(Pensioen.stuur(p, id, true) == Pensioen.Uitkomst.OK && telItems(p) == 0 && Pensioen.inVelden(p).size() == 1,
+                "an item in your pockets goes too, out of them");
+        helper.assertTrue(!Pensioen.terug(p, id, null).isEmpty() && telItems(p) == 1, "and comes home as one item again");
         // put down again, sent again, and the item from before can't bring a second one
         ItemStack stack = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(ModItems.PICKED_UP_GUH.get())).findFirst().orElseThrow();
         Entity weer = PickedUpGuhItem.release(level, PickedUpGuhItem.guhData(stack), plek.x, plek.y, plek.z, 0f);

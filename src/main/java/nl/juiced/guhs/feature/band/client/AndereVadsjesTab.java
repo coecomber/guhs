@@ -99,12 +99,12 @@ public final class AndereVadsjesTab {
     }
 
     /** "Pieppiepmuisje", "Schilly"...: the creature's own name (its entity id is its kind). */
-    static Component soortNaam(String soort) {
+    public static Component soortNaam(String soort) {
         return Component.translatable("entity.guhs." + soort);
     }
 
     /** The item this kind becomes when you pick it up (its picture); a name tag when there is none. */
-    static ItemStack icoon(String soort) {
+    public static ItemStack icoon(String soort) {
         for (String id : new String[]{soort + "_item", soort + "_emmertje", soort}) {
             Item item = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(Guhs.MODID, id));
             if (item != Items.AIR) {

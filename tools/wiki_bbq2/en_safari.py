@@ -287,22 +287,34 @@ TEKST = {
         "with a little cloud of pink cheese. You don't walk through it: right-click opens the screen."),
     ("systemen/knabbelvelden", "Het scherm"): (
         "The screen",
-        "On the left are your guhs from the Guhdex, on the right the guhs that have retired. Search by name, sort by number, name, "
-        "fur or date, and pick one or more. With the arrows you send them to the Nibble Fields or bring them back. Click a guh to see "
-        "everything about it: its personality, its clothes and how long it has been yours."),
+        "On the left are your guhs and other vadsjes that are with you, on the right the ones that have retired. Search by name, sort "
+        "by number, name, fur or date, use the Kind button to choose what you see (all, guhs, pieppiepmuisjes, schillies...), and pick "
+        "one or more. With the arrows you send them to the Nibble Fields or bring them back. Click a guh to see everything about it: "
+        "its personality, its clothes, where it is now and how long it has been yours."),
     ("systemen/knabbelvelden", "Wie mag er met pensioen?"): (
         "Who may retire?",
-        "Every tame guh of yours, even one that is far away: it is fetched first and then goes with a poof. If a guh is busy (it lives "
-        "in a Guh House, runs in a Guh Wheel, stays in the Guh Room or is riding something), the screen asks first whether it really "
-        "may. A picked-up guh, a guh on holiday or at the office, and a guh in the clouds can't go."),
+        "Every tame guh of yours, even one that is far away: it is fetched first and then goes with a poof. A picked-up guh too, in "
+        "your pockets, a chest, a Bank Guh or a backpack: it is taken out first. If a guh is busy (it lives in a Guh House, runs in a "
+        "Guh Wheel, stays in the Guh Room, is riding something or is kept somewhere picked up), the screen asks first whether it really "
+        "may. A guh on holiday or at the office, and a guh in the clouds can't go."),
+    ("systemen/knabbelvelden", "Ook je andere vadsjes"): (
+        "Your other vadsjes too",
+        "All your other tame vadsjes from the Guhdex tab My other vadsjes may retire too: pieppiepmuisjes, Schilly, Poepschilly, "
+        "fluff squirrels, guh bunnies, guhxolotls and the rest. They go the same way, also when they are kept somewhere picked up, and "
+        "come home as their own item, exactly as they were."),
+    ("systemen/knabbelvelden", "Weg uit je Guhdex-lijstje"): (
+        "Off your Guhdex list",
+        "A retired vadsje is no longer listed in My guhs or My other vadsjes: that keeps those lists tidy. A guh does keep its number, "
+        "no other guh ever gets it. Bring it back with the portal and it is listed again, with its old number. So Call to me doesn't "
+        "work for a retired vadsje: only the Nibble Portal brings it home."),
     ("systemen/knabbelvelden", "Weer naar huis"): (
         "Back home",
         "A guh you bring back comes into your pockets as a picked-up guh, with everything on it. If your pockets are full, it waits "
         "for you at the portal."),
     ("systemen/knabbelvelden", "Op bezoek"): (
         "Visiting",
-        "Every player has their own bit of Nibble Field. Go there through the screen: your retired guhs nibble, nap and play around "
-        "you, see-through and with a little halo. Click a guh to pet it; sneak + click asks whether it wants to come home. It is always "
+        "Every player has their own bit of Nibble Field. Go there through the screen: your retired guhs and vadsjes nibble, nap and play "
+        "around you, see-through and with a little halo. Click a guh to pet it; sneak + click asks whether it wants to come home. It is always "
         "day, nobody gets hurt, and you can't build or break there."),
     # --- Building Help ---
     ("systemen/bouwhulp", "Zo begin je"): (
