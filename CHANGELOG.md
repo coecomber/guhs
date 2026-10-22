@@ -3,7 +3,7 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.6.2 — Minecraft 26.1.2 (in the making)
+## 1.6.2 — Minecraft 26.1.2
 
 - **"Roep naar mij" (Call to me) always works:** wherever your guh is, it comes. A picked-up guh comes out of your pockets, a chest (also from a shulker box in it), a Bank Guh, another guh's backpack or off the ground; a guh in a Guh Wheel stops running; a guh on holiday comes back early (no postcard or souvenir); a guh at the office clocks out (finished shifts are still paid). If it is in the pockets of a player who is offline, it comes as soon as they log in. The Guhdex first tells you what will happen where it is now and asks "Weet je het zeker?". Only a guh in the clouds can't come (the Cuddle Heart can help there).
 - **De Eeuwige Knabbelvelden (The Eternal Nibble Fields) take picked-up guhs too:** a guh in a chest, your pockets, a Bank Guh or a backpack is taken out first (the portal screen shows where it is and asks first).
