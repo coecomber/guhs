@@ -170,4 +170,79 @@ public class BeverbeekGameTests {
         helper.assertTrue(entities.contains("beverbeek_ranger"), "with the ranger in it");
         helper.succeed();
     }
+
+    // --- 1.6.2 ------------------------------------------------------------------------------------------------------------
+
+    /** The brooks swell and narrow: 2-5 blocks wide (small rivers in the wide stretches). */
+    @GuhTest(template = EMPTY)
+    public static void beverbeekBekenBreedte(GameTestHelper helper) {
+        double min = 99, max = 0;
+        for (int x = 0; x < 2048; x += 7) {
+            for (int z = 0; z < 2048; z += 7) {
+                double b = Beek.breed(12345L, x, z) * 2;
+                min = Math.min(min, b);
+                max = Math.max(max, b);
+            }
+        }
+        helper.assertTrue(min >= 2.0 && min < 2.8 && max > 4.4 && max <= 5.3, "brooks 2-5 wide: " + min + " .. " + max);
+        helper.succeed();
+    }
+
+    /** A wild beaver family: comes and goes (never saved, not persistent), pettable, never the ranger's Spaander. */
+    @GuhTest(template = EMPTY, timeoutTicks = 60)
+    public static void beverbeekWildeBevers(GameTestHelper helper) {
+        BlockPos plek = helper.absolutePos(new BlockPos(2, 1, 2));
+        int n = WildeBevers.gezin(helper.getLevel(), plek, helper.getLevel().getRandom());
+        List<SafariDier> bevers = WildeBevers.in(helper.getLevel(), new AABB(plek).inflate(6));
+        helper.assertTrue(n >= 2 && n <= 4 && bevers.size() == n, "a pair with 0-2 little ones: " + n + " / " + bevers.size());
+        for (SafariDier b : bevers) {
+            helper.assertTrue("bever".equals(b.soort()) && b.isWild() && !b.isPersistenceRequired(), "a wild bever, not kept: " + b);
+            helper.assertTrue(nl.juiced.guhs.world.WildeDieren.isKomEnGa(b) && !b.shouldBeSaved(), "never written to disk");
+            helper.assertTrue(Aaibever.aaibaar(b) && !Aaibever.is(b), "pettable, but not Spaander");
+            b.discard();
+        }
+        helper.succeed();
+    }
+
+    /** The Beverbeek's guhs: some become a Beverguh, some wear the knaagdier hood; a tame guh is left alone. */
+    @GuhTest(template = EMPTY, timeoutTicks = 60)
+    public static void beverbeekGuhs(GameTestHelper helper) {
+        int bever = 0, muts = 0;
+        for (int i = 0; i < 120; i++) {
+            nl.juiced.guhs.entity.GuhEntity g = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.NATURAL);
+            String wat = BeverGuhs.kies(g);
+            bever += "beverguh".equals(wat) && g.getVariant() == nl.juiced.guhs.entity.GuhVariant.BEVERGUH ? 1 : 0;
+            muts += "knaagdier".equals(wat) && g.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.HEAD) == nl.juiced.guhs.entity.GuhClothes.KNAAGDIER_MUTS ? 1 : 0;
+            helper.assertTrue(BeverGuhs.kies(g).isEmpty(), "once per guh");
+        }
+        helper.assertTrue(bever > 15 && bever < 60 && muts > 10, "Beverguhs " + bever + ", hoods " + muts + " of 120");
+        nl.juiced.guhs.entity.GuhEntity tam = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.NATURAL);
+        tam.setTame(true, false);
+        helper.assertTrue(BeverGuhs.kies(tam).isEmpty() && tam.getVariant() == nl.juiced.guhs.entity.GuhVariant.NORMAL, "a tame guh stays itself");
+        helper.assertTrue(nl.juiced.guhs.quest.GuhDex.ENTRIES.contains(nl.juiced.guhs.entity.GuhVariant.BEVERGUH)
+                && nl.juiced.guhs.quest.GuhDex.EXTRA.contains(nl.juiced.guhs.entity.GuhVariant.BEVERGUH), "a (bonus) Guhdex page");
+        helper.assertTrue(nl.juiced.guhs.feature.kleding.KledingBronnen.bron(nl.juiced.guhs.entity.GuhClothes.KNAAGDIER_MUTS) != null
+                && nl.juiced.guhs.feature.kleding.KledingBronnen.bron(nl.juiced.guhs.entity.GuhClothes.KNAAGDIER_STAART) != null, "the outfit has a source");
+        for (String r : List.of("/assets/guhs/textures/entity/guh_beverguh.png", "/assets/guhs/textures/entity/guh_slaap/guh_beverguh.png",
+                "/assets/guhs/textures/entity/guh_clothes/knaagdier_muts.png", "/assets/guhs/textures/entity/guh_clothes/knaagdier_staart.png",
+                "/assets/guhs/textures/item/knaagdier_muts.png", "/assets/guhs/textures/item/knaagdier_staart.png")) {
+            helper.assertTrue(BeverbeekGameTests.class.getResource(r) != null, "missing " + r);
+        }
+        helper.succeed();
+    }
+
+    /** Fewer guhs: the biome's own spawner brings 1-2 at a time, at half the old chance. */
+    @GuhTest(template = EMPTY)
+    public static void beverbeekMinderGuhs(GameTestHelper helper) {
+        var biome = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).getValue(BeverbeekFeature.BIOME);
+        helper.assertTrue(biome != null, "the biome");
+        var spawns = biome.getMobSettings();
+        helper.assertTrue(spawns.getCreatureProbability() <= 0.07f, "creature chance " + spawns.getCreatureProbability());
+        for (var e : spawns.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap()) {
+            if (e.value().type() == ModEntities.GUH.get()) {
+                helper.assertTrue(e.value().maxCount() <= 2, "1-2 guhs at a time: " + e.value());
+            }
+        }
+        helper.succeed();
+    }
 }

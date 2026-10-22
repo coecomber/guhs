@@ -98,7 +98,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.0 test round 5, fix slice FX-B: its texts (append only)
             'safari_fxb',
             # 1.6.0 test round 5 FX-C: the verblijfsbord and the Bouwkeet explained (texts; after the slices whose keys it rewrites)
-            'bouwhulp_fxc']
+            'bouwhulp_fxc',
+            # 1.6.2: the Beverguh + the knaagdier outfit (append only)
+            'beverbeek_guhs']
 
 
 def modules():

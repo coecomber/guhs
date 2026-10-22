@@ -11,21 +11,25 @@ import net.minecraft.world.level.levelgen.synth.SimplexNoise;
  * forest; where the land steps down, the water tumbles down a little waterfall by itself (it is real, flowing water).
  */
 public final class Beek {
-    /** Half the width of a brook in blocks (the distance to the zero line): below this is water, below {@link #DIEP} two deep. */
-    public static final double BREED = 1.7, DIEP = 0.8;
-    private static final double SCHAAL = 120, KRONKEL = 34, KRONKEL_DEEL = 0.32;
+    /**
+     * Half the width of a brook in blocks (the distance to the zero line): 1.6.2 it swells and narrows along the brook
+     * between {@link #BREED_MIN} and {@link #BREED_MAX} (2-5 blocks wide, a small river in the wide stretches); the middle
+     * {@link #DIEP_DEEL} of it is two deep.
+     */
+    public static final double BREED_MIN = 1.1, BREED_MAX = 2.6, DIEP_DEEL = 0.45;
+    private static final double SCHAAL = 120, KRONKEL = 34, KRONKEL_DEEL = 0.32, BREED_SCHAAL = 90;
     private static final long ZOUT = 20261021L;
 
     private static volatile Ruis ruis;
 
-    private record Ruis(long seed, SimplexNoise traag, SimplexNoise snel) {
+    private record Ruis(long seed, SimplexNoise traag, SimplexNoise snel, SimplexNoise breed) {
     }
 
     private static Ruis ruis(long seed) {
         Ruis r = ruis;
         if (r == null || r.seed() != seed) {
             RandomSource rnd = new LegacyRandomSource(seed ^ ZOUT);
-            r = new Ruis(seed, new SimplexNoise(rnd), new SimplexNoise(rnd));
+            r = new Ruis(seed, new SimplexNoise(rnd), new SimplexNoise(rnd), new SimplexNoise(rnd));
             ruis = r;
         }
         return r;
@@ -50,10 +54,20 @@ public final class Beek {
         return Math.abs(v) / Math.max(Math.sqrt(gx * gx + gz * gz), 1e-4);
     }
 
+    /** Half the brook's width at x, z (1.6.2: it varies slowly along the brook). */
+    public static double breed(long seed, int x, int z) {
+        double t = 0.5 + 0.5 * ruis(seed).breed().getValue(x / BREED_SCHAAL, z / BREED_SCHAAL);
+        return BREED_MIN + (BREED_MAX - BREED_MIN) * Math.max(0, Math.min(1, t));
+    }
+
     /** 0 = dry land, 1 = a shallow brook, 2 = the deep middle of a brook. */
     public static int diepte(long seed, int x, int z) {
         double d = afstand(seed, x, z);
-        return d < DIEP ? 2 : d < BREED ? 1 : 0;
+        if (d > BREED_MAX) {
+            return 0;
+        }
+        double b = breed(seed, x, z);
+        return d < b * DIEP_DEEL ? 2 : d < b ? 1 : 0;
     }
 
     private Beek() {

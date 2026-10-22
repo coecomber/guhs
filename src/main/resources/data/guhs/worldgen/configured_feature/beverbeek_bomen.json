@@ -4,6 +4,22 @@
     "default": "guhs:beverbeek_els_checked",
     "features": [
       {
+        "chance": 0.08,
+        "feature": "guhs:beverbeek_guhbloesem_checked"
+      },
+      {
+        "chance": 0.07,
+        "feature": "guhs:beverbeek_esdoorn_boom_rood_checked"
+      },
+      {
+        "chance": 0.06,
+        "feature": "guhs:beverbeek_esdoorn_boom_oranje_checked"
+      },
+      {
+        "chance": 0.06,
+        "feature": "guhs:beverbeek_pluizenboom_checked"
+      },
+      {
         "chance": 0.38,
         "feature": "guhs:beverbeek_wilg_checked"
       },

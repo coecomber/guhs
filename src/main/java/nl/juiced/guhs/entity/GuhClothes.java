@@ -531,6 +531,13 @@ public enum GuhClothes {
     JAPAN_KATTENOORTJES(Slot.OREN, "outfit_oren_balto"),
     JAPAN_STRIKJE(Slot.NECK, "outfit_bowtie"),
     // </bio_bouw_dal>
+    // 1.6.2: the knaagdier outfit of the Beverbeek's guhs (tools/features/beverbeek_guhs.py; also craftable)
+    // <beverbeek>
+    /** A brown beaver hood with round ears and two orange buck teeth. */
+    KNAAGDIER_MUTS(Slot.HEAD, "outfit_knaagdier_muts", "outfit_knaagdier_oren", "outfit_knaagdier_tandjes"),
+    /** A flat, scaly beaver tail. */
+    KNAAGDIER_STAART(Slot.BACK, "outfit_knaagdier_staart"),
+    // </beverbeek>
     // Op Safari! (1.6.0, slice S6): the safari outfits (giftshop, the visitor guhs; tools/features/safari_blokken.py)
     // <safari>
     /** A khaki safari hat with a brown band. */

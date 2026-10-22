@@ -308,7 +308,7 @@ VARIANT_HOME = {
     "mager": "bouwwerken/knabbelkelder", "vahoege_ender": "dimensies/guheinde", "kaasmoerasguh": "biomen/kaasmoeras",
     "asguh": "biomen/asdal", "pluisguh": "biomen/knuffeldal", "pinguh": "biomen/guhpolder", "golden": "bouwwerken/guhramid",
     "ender": "dimensies/guheinde", "snow": "biomen/guh_peaks", "brococolief": "bouwwerken/guh_village",
-    "bloesemguh": "biomen/bloesemmeertje", "tanukiguh": "biomen/klaterdal",
+    "bloesemguh": "biomen/bloesemmeertje", "tanukiguh": "biomen/klaterdal", "beverguh": "biomen/beverbeek",
     "baltoguh": "verhalen/nomguh", "mewtwo": "verhalen/kloon-eiland", "stitch626": "verhalen/ohana",
 }
 # NPC kind (or villager profession) -> where it lives

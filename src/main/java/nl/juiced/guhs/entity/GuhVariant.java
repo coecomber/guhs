@@ -56,6 +56,11 @@ public enum GuhVariant {
     /** 1.4.2: het Hertguhtje: little antlers and white spots; only in the hertenkooi of Het Knabbelpark, and one of your own as its reward (feature/park). */
     HERTGUHTJE(0, "hert"),
     // </park>
+    // <beverbeek>
+    /** 1.6.2: de Beverguh: chestnut-brown, orange buck teeth, a flat scaly paddle tail. Only born in the Beverbeek (feature/beverbeek/BeverGuhs); here, before the Pluisguh: the
+     * Knus and einde2 tests want PLUISGUH, PINGUH and KORSTGUH .. KOORGUH right before REISGUH. */
+    BEVERGUH(0, "bever"),
+    // </beverbeek>
     /** De Pluisguh (2.8): extra fluffy and pink, with a fluffy tuft and cheek fluff. Only born in the Knuffeldal (knuffeldal feature). */
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
@@ -189,7 +194,7 @@ public enum GuhVariant {
 
     /** No plush in the knuffelkast (biomes3: the biome guhs; 1.4.2: the park's Hertguhtje; einde2: the outer-island guhs), so a complete knuffelkast stays what it was. */
     public boolean geenKnuffel() {
-        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh();
+        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh() || this == BEVERGUH;
     }
 
     /** einde2: one of the six guhs of the Guheinde's outer islands (KORSTGUH .. KOORGUH): real tameable variants, each bound to its biome. */
@@ -229,7 +234,8 @@ public enum GuhVariant {
             "balto", "mewtwo", "stitch", "samguh", "guhshi",
             "bloesem", "tanuki",   // biomes3
             "hert",   // 1.4.2 (park)
-            "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh");   // einde2
+            "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh",   // einde2
+            "bever");   // 1.6.2 (Beverbeek)
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

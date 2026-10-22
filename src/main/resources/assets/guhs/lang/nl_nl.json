@@ -28940,5 +28940,10 @@
   "gui.guhs.verblijf.voorstel.alles_er": "Alle blokken zijn er! (uit je inventaris en de gekoppelde Bank Guh)",
   "gui.guhs.verblijf.voorstel.lijstje.uitleg": "Geeft je een boekje met alle blokken die nog ontbreken voor dit voorstel: de precieze naam en hoeveel. Handig naast de werkbank.",
   "gui.guhs.verblijf.voorstel.lijstje_naam": "Verblijf: %s",
-  "gui.guhs.verblijf.reden.niets_nodig": "Er ontbreekt niets: alle blokken zijn er."
+  "gui.guhs.verblijf.reden.niets_nodig": "Er ontbreekt niets: alle blokken zijn er.",
+  "entity.guhs.guh.beverguh": "Beverguh",
+  "gui.guhs.guhdex.rarity.beverguh": "Zeldzaamheid: Alleen in de Beverbeek",
+  "gui.guhs.guhdex.info.beverguh": "Een kastanjebruine guh met twee oranje knaagtandjes en een platte geschubde staart. Knabbelt aan alles wat van hout is (ook aan je deur, sorry vads). Woont in de Beverbeek tussen de bevers. Tem hem met kaasknabbels, njeg!",
+  "item.guhs.knaagdier_muts": "Knaagdiermuts",
+  "item.guhs.knaagdier_staart": "Beverstaart"
 }

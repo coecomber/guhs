@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.2 — Minecraft 26.1.2
+
+- **De Beverbeek (Beaver Brook):**
+  - **Rolling hills instead of mountains:** the brook forest now has its own gently rolling terrain (it used to lie on whatever the Guhmension made there, often steep mountains). Only new chunks get the new terrain: the world is not reset.
+  - **Wider brooks:** the brooks swell and narrow between 2 and 5 blocks wide, small rivers in the wide stretches, still with the beaver pools and dams.
+  - **More trees of our own:** about a quarter of the trees are now guh blossoms, red and orange maples and fluff trees, among the willows, alders and birches.
+  - **Wild beavers:** beaver families (a pair, often with one or two little ones) live along the water. They swim, gnaw at tree trunks and carry twigs around. Pet them with a right-click; they can't be tamed or taken. Like the other wild animals they come and go, so they never pile up.
+  - **Fewer guhs, and beaver-ish ones:** fewer guhs live in the Beverbeek. The ones born there are often a **Beverguh** (Beaver Guh: chestnut brown, orange buck teeth, a flat scaly tail; a bonus page in the Guhdex) or wear the new **knaagdier outfit**.
+  - **Knaagdiermuts and Beverstaart (Rodent Hood and Beaver Tail):** a beaver hood with round ears and buck teeth, and a flat beaver tail. Craftable: 3 brown wool and an orange dye for the hood, 2 brown wool and a leather for the tail.
+
 ## 1.6.1 — fix — Minecraft 26.1.2
 
 - **Server freeze fixed:** asking the Beverbeek ranger the way to the safari bus (and the op command `/guhs safari busstation waar`) searched the world for the nearest busstation on the server thread, which could hang a server until it was stopped. The ranger, the Superkompas and the command now only use the stations the world already knows (every station is remembered as soon as its area is loaded, or when an op places one), so nothing is searched any more. The Superkompas also finds a busstation that an op placed by hand.
