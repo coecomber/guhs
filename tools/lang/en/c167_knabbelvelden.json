@@ -69,5 +69,8 @@
   "gui.guhs.knabbelvelden.sorteer.nummer": "number",
   "gui.guhs.knabbelvelden.sorteer.naam": "name",
   "gui.guhs.knabbelvelden.sorteer.vacht": "fur",
-  "gui.guhs.knabbelvelden.sorteer.datum": "date"
+  "gui.guhs.knabbelvelden.sorteer.datum": "date",
+  "ftb.guhs_minigames.section.extra_knabbelvelden": "Nibble Fields",
+  "ftb.guhs_minigames.q.knabbelvelden_portaal.title": "Nyeg, just retired!",
+  "ftb.guhs_minigames.q.knabbelvelden_portaal.desc": "Too many guhs to take along? Build a &dNibble Portal&r (4 blocks of kaasknabbels, 4 kaasknabbels and a pink dye). Right-click it: your guhs at home on the left, &dthe Eternal Nibble Fields&r on the right. Send them into retirement or bring them back. Not dead, mind you: in the Nibble Fields they nibble, nap and float around as sweet little ghost guhs with a halo. Go and visit them with the button &dTo the Nibble Fields&r!"
 }

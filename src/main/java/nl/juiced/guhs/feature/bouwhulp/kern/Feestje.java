@@ -55,6 +55,7 @@ public final class Feestje {
             level.addFreshEntity(vlag);
         }
         if (bouwer != null) {
+            nl.juiced.guhs.quest.GuhAdvancements.grant(bouwer, "bouwhulp_eerste_bouw");   // F13: the FTB quest "Spookje wordt echt"
             bouwer.sendOverlayMessage(Component.translatable("gui.guhs.bouwhulp.klaar", s.naam().isEmpty()
                     ? Component.translatable("gui.guhs.bouwhulp.project") : Component.literal(s.naam())));
         }

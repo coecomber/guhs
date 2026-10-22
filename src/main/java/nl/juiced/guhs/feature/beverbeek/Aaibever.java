@@ -33,6 +33,9 @@ public final class Aaibever {
             return;
         }
         aai(level, (SafariDier) event.getTarget());
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
+            nl.juiced.guhs.quest.GuhAdvancements.grant(sp, "beverbeek_spaander");   // F13: the FTB quest "Spaander"
+        }
         event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.beverbeek.aai." + level.getRandom().nextInt(REGELS))
                 .withStyle(ChatFormatting.GOLD));
     }

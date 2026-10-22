@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_safari",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 42,
+  guhs_chapter_version: 44,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_safari.png",
@@ -472,6 +472,75 @@
       ],
       x: 3.0,
       y: 8.0625,
+    },
+    {
+      id: "475548BC7EBD016C",
+      icon: {
+        id: "guhs:safari_verblijfsbord",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:safari_verblijfsbord",
+          },
+          id: "4755483059D2E97D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486BCF413FF2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554805A9740055",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 8.0625,
+    },
+    {
+      id: "4755488C65F21DF6",
+      icon: {
+        id: "guhs:safari_badge_kriebelhuis",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:safari_badge_kriebelhuis",
+          },
+          id: "4755484A0A96FE73",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554846EA59CCF8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548EBD00578A7",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 0.0,
+      y: 8.0625,
+      shape: "gear",
     },
   ],
 }

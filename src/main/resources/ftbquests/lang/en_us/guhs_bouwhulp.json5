@@ -1,0 +1,78 @@
+{
+  "chapter.475548DCF11AE724.title": "&dBuilding Help",
+  "chapter.475548DCF11AE724.chapter_subtitle": [
+    "15. The Site Shed, the Shape Wand, brushes, blueprints and animals that build",
+  ],
+  "quest.475548CAEC5BABFB.title": "How do you get here?",
+  "quest.475548CAEC5BABFB.quest_desc": [
+    "This chapter can start right away: you make a Site Shed with wool, a crafting table, logs and kaasknabbels.",
+    "",
+    "Everything you build first stands as a &dghost&r. The &dSite Shed&r builds it for you, with material from your pockets, your Bank Guh or your chests. With &echonk power&r it grows from Handiwork to Glow Shed.",
+    "",
+    "After that: the Shape Wand, brushes, blueprints, and animals from the safari park that build for you. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
+  ],
+  "quest.475548B7CA93DF77.title": "A Site Shed of your own",
+  "quest.475548B7CA93DF77.quest_desc": [
+    "Make a &dSite Shed&r (yellow and pink wool, a crafting table, logs and kaasknabbels) and put it down: a little shed of 3 by 3 by 3 with a crane on the roof. Click it for the menu with tabs. This is where building starts!",
+  ],
+  "quest.47554803F0210A48.title": "The Shape Wand",
+  "quest.47554803F0210A48.quest_desc": [
+    "Make a &dShape Wand&r (two sticks and an amethyst shard). Click a block with it and your shape stands there as a &dghost&r: see-through, not real yet. Hold left &eAlt&r for the round menu with all the shapes and roofs.",
+  ],
+  "quest.47554887FA9719A0.title": "The ghost comes true",
+  "quest.47554887FA9719A0.quest_desc": [
+    "Put down a ghost (with the Shape Wand or in the Site Shed), slide it into place and press &eBuild!&r. The blocks come from your pockets, your Bank Guh or your chests. When it is done, there is a little party!",
+  ],
+  "quest.4755485A78C6D2FB.title": "Guh Wheel Shed",
+  "quest.4755485A78C6D2FB.quest_desc": [
+    "Make a &dGuh Wheel Cog&r and click your Site Shed with it. With &echonk power&r (10 VK) your own guhs help as &dbuilder guhs&r, and the shed takes material from every chest on its chonk net.",
+  ],
+  "quest.475548795A6913F0.title": "Salt Shed",
+  "quest.475548795A6913F0.quest_desc": [
+    "The &dSalt Crystal Spirit Level&r makes a Salt Shed (30 VK): nature shapes, block text and the &dLeveller&r.",
+  ],
+  "quest.47554823FA08751A.title": "Sauce Shed",
+  "quest.47554823FA08751A.quest_desc": [
+    "The &dSauce Crane Hook&r makes a Sauce Shed (80 VK): the &dPaint Machine&r, the &dTunnel Drill&r and publishing in the server's library.",
+  ],
+  "quest.4755488D81A05C01.title": "Glow Shed... POOF!",
+  "quest.4755488D81A05C01.quest_desc": [
+    "The &dGlow Work Lamp&r makes a Glow Shed (200 VK): shapes and blueprints up to 64 big. And is all the material there? Then it builds everything at once: &dPOOF!&r",
+  ],
+  "quest.4755481AB4C606FF.title": "Paint away",
+  "quest.4755481AB4C606FF.quest_desc": [
+    "Make a &dSwap Brush&r: sneak-click a block to pick it, and every click paints a little ball of blocks over, in the same shape. There is also a mix, a pattern and a weathering brush. Animal patterns open up with your Safari Dex.",
+  ],
+  "quest.47554844EA7B71A6.title": "On paper",
+  "quest.47554844EA7B71A6.quest_desc": [
+    "Choose &ecapture&r in the Shape Wand menu and click two corners of something pretty (or sneak-click a building once). That makes it a &dblueprint&r of your own.",
+  ],
+  "quest.4755486530927C16.title": "The Design Desk",
+  "quest.4755486530927C16.quest_desc": [
+    "Make a &dDesign Desk&r. There you browse your own blueprints, the catalogue with 25 designs and the server's library.",
+  ],
+  "quest.4755481D845812DE.title": "A blueprint in your hand",
+  "quest.4755481D845812DE.quest_desc": [
+    "Print a blueprint at the Design Desk (a sheet of paper). Click a block with it and the design stands there as a ghost. It never runs out!",
+  ],
+  "quest.475548E77DB35A62.title": "Pastel bricks",
+  "quest.475548E77DB35A62.quest_desc": [
+    "The creative tab &dGuhs: Building&r has more than 400 new building blocks. Make a few &dpink pastel bricks&r: eight bricks around a pink dye.",
+  ],
+  "quest.475548700A6997D3.title": "On a work outing",
+  "quest.475548700A6997D3.quest_desc": [
+    "Click the &denclosure sign&r of a helper animal (a beaver, penguin or orangutan, for example) and open the &eBuilding job&r tab. Pick a job, find a spot and confirm: the family goes on a work outing and builds it for you.",
+  ],
+  "quest.47554863AF850026.title": "Beaver Boss",
+  "quest.47554863AF850026.quest_desc": [
+    "Let your beavers build &efive beaver dams&r. Behind every dam the water rises and a beaver pool appears. You get the title &6Beaver Boss&r.",
+  ],
+  "quest.475548C98F32D883.title": "Beaver Brook",
+  "quest.475548C98F32D883.quest_desc": [
+    "Somewhere in the Guhmension lies a rare brook forest of willows, alders and birches, with wild beaver dams. Find &dBeaver Brook&r!",
+  ],
+  "quest.475548D6A9C71935.title": "Spaander",
+  "quest.475548D6A9C71935.quest_desc": [
+    "Very rarely there is a &dranger post&r in Beaver Brook. Spaander lives there, a beaver you can't take along, but can pet lovingly. Pet him!",
+  ],
+}

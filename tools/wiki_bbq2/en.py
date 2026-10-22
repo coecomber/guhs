@@ -1324,3 +1324,9 @@ PAGINA["verhalen/knabbelpark"] = (
     "In the little house of every Nibble Park the Park Ranger Guh sits behind his counter. Help him for a day: read the three "
     "plaques in the statue garden, give every Fawnguh in the deer pen a cheese nibble and bring the Pen Keeper Guh six wheat for "
     "the hay rack. Then you get a Fawnguh of your own and a statuette of your guh.")
+
+# 1.6.0 Op Safari! (F13): Safari Park Vadse Bergen, the Eternal Nibble Fields and Building Help: tools/wiki_bbq2/en_safari.py
+from . import en_safari as _safari  # noqa: E402
+
+PAGINA.update(_safari.PAGINA)
+TEKST.update(_safari.TEKST)

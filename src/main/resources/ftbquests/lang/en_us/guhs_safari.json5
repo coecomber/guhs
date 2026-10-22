@@ -7,7 +7,7 @@
   "quest.475548780A582533.quest_desc": [
     "This chapter comes after &dWelcome to the Guhmension!&r in &dThe Guhmension&r.",
     "",
-    "Somewhere in the Guhmension stands a safari bus station. Hop on the &6Guh safari bus&r and it takes you to &6Safaripark Vadse Bergen&r: a big park with 46 sweet animals in eight zones.",
+    "Somewhere in the Guhmension stands a safari bus station. Hop on the &6Guh safari bus&r and it takes you to &6Safaripark Vadse Bergen&r: a big park full of sweet animals in eight zones, plus the Creepy-Crawly House.",
     "",
     "Spot them, photograph them for your &dSafari Dex&r, find the secrets and help the rangers. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
@@ -37,7 +37,7 @@
   ],
   "quest.475548B969EAD2F7.title": "Safari King",
   "quest.475548B969EAD2F7.quest_desc": [
-    "Photograph every animal in the park: all 46! You get the golden safari camera, the golden animal statue and the voucher for the Golden Dik-dik's enclosure sign.",
+    "Photograph every animal in the park, the Creepy-Crawly House ones too! You get the golden safari camera, the golden animal statue and the voucher for the Golden Dik-dik's enclosure sign.",
   ],
   "quest.4755481736717BEB.title": "Psst, a secret",
   "quest.4755481736717BEB.quest_desc": [
@@ -58,5 +58,13 @@
   "quest.475548692580E122.title": "Petting time!",
   "quest.475548692580E122.quest_desc": [
     "Do a chore in the petting corner of the entrance village: feeding, brushing or walking the alpaca.",
+  ],
+  "quest.475548BC7EBD016C.title": "Animals at home",
+  "quest.475548BC7EBD016C.quest_desc": [
+    "Is an animal in your Safari Dex? Then you can buy an &denclosure sign&r in the gift shop. Put it down and a family comes to live with you: a male, a female and two little ones. Petting, feeding and a toy make them happy!",
+  ],
+  "quest.4755488C65F21DF6.title": "Professor Kriebelguh",
+  "quest.4755488C65F21DF6.quest_desc": [
+    "In the entrance village stands &dthe Creepy-Crawly House&r, full of little critters: a terrarium, the Creepy-Crawly Hall, the Night Hall and a pink tunnel under the pond. Photograph them all and collect your badge from Professor Kriebelguh in the experts' pavilion.",
   ],
 }
