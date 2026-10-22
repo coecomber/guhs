@@ -132,7 +132,6 @@ public final class PxKantoorGameTests {
         helper.assertTrue(guh.isRemoved() && level.getEntity(id) == null && w != null && w.pos.equals(bureau), "the guh is stored, not in the world");
         Plek plek = GuhVolger.plek(level.getServer(), p.getUUID(), id);
         helper.assertTrue(plek != null && plek.soort() == PlekSoort.OP_KANTOOR && plek.pos().equals(bureau), "'Waar is mijn guh?' says at the office: " + plek);
-        helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.NIET_THUIS, "it cannot be called away from work");
         BureautjeBlockEntity be = (BureautjeBlockEntity) level.getBlockEntity(bureau);
         helper.assertTrue(be.bezet() && id.equals(be.guh()) && level.getBlockState(bureau).getValue(BureautjeBlock.BEZET)
                 && be.naam().getString().equals("Vadsje") && !be.looks().isEmpty(), "the desk shows the sleeping copy");
@@ -187,6 +186,26 @@ public final class PxKantoorGameTests {
                 && inWereld(helper, id) == 1, "the very same guh is back, once");
         helper.assertTrue(data.van(id) == null && !be.bezet() && !level.getBlockState(bureau).getValue(BureautjeBlock.BEZET), "the desk is free");
         helper.assertTrue(!Kantoor.klokUit(level, bureau, level.getBlockState(bureau), p, false) && inWereld(helper, id) == 1, "never doubled");
+        ruimOp(helper, p);
+        helper.succeed();
+    }
+
+    /** 1.6.2: "Roep naar mij" clocks a working guh out: the very same guh comes, once, and the desk is free. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void roepHaaltVanKantoor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = PxTest.speler(helper);
+        BlockPos bureau = bureau(helper, 6, 10);
+        klok(helper);
+        GuhEntity guh = guh(helper, p, "Vadsje", 4);
+        UUID id = guh.getUUID();
+        helper.assertTrue(Kantoor.klokIn(p, level, bureau, id) == null, "the guh clocks in");
+        Roepen.Uitkomst u = Roepen.roep(p, id);
+        helper.assertTrue(u == Roepen.Uitkomst.OK, "called away from work: " + u);
+        Entity terug = level.getEntity(id);
+        helper.assertTrue(terug instanceof GuhEntity g && p.getUUID().equals(g.getOwnerUUID()) && inWereld(helper, id) <= 1, "the very same guh, once");
+        BureautjeBlockEntity be = (BureautjeBlockEntity) level.getBlockEntity(bureau);
+        helper.assertTrue(KantoorData.get(level.getServer()).van(id) == null && !be.bezet(), "clocked out, the desk is free");
         ruimOp(helper, p);
         helper.succeed();
     }

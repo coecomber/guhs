@@ -255,7 +255,7 @@ public final class PxReisbureauGameTests {
         helper.assertTrue(!Reizen.opslaan(tweede) && tweede.isAlive(), "a guh without a trip stays");
         Plek plek = GuhVolger.plek(server, p.getUUID(), id);
         helper.assertTrue(plek != null && plek.soort() == PlekSoort.OP_VAKANTIE, "'Mijn guhs' says on holiday: " + plek);
-        helper.assertTrue(GuhVolger.tekst(plek).getString().length() > 0 && Roepen.roep(p, id) == Roepen.Uitkomst.NIET_THUIS, "it cannot be called while away");
+        helper.assertTrue(GuhVolger.tekst(plek).getString().length() > 0, "the place has a text");
         CompoundTag stand = Reizen.stand(p, balie, null);
         helper.assertTrue(stand.contains("Reis") && !stand.contains("Guhs") && stand.getCompoundOrEmpty("Reis").getBooleanOr("Weg", false)
                 && stand.getCompoundOrEmpty("Reis").getLongOr("Rest", 0L) > 7 * Klok.UUR, "the screen shows who is away and for how long");
@@ -321,6 +321,27 @@ public final class PxReisbureauGameTests {
         helper.assertTrue(tel(p, ReisbureauSlice.blok("gouden_koffertje").asItem()) == 1 && d.getIntOr("Stempels", 0) == 0 && d.getIntOr("Koffertjes", 0) == 1,
                 "ten stamps: the Gouden koffertje");
         d.remove("Souvenirs");
+        klaar(helper, p);
+    }
+
+    /** 1.6.2: "Roep naar mij" cuts a holiday short: the very same guh comes, once, without postcard or souvenir. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void roepBreektVakantieAf(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        ServerPlayer p = speler(helper, Reizen.KLAAR);
+        BlockPos balie = balie(helper, 6, 8);
+        GuhEntity guh = guh(helper, p, "Vadsje", 6, 6);
+        UUID id = guh.getUUID();
+        Bestemming b = vandaag(helper, 2);
+        helper.assertTrue(Reizen.boek(p, id, b, balie) == Reizen.Uitkomst.OK && Reizen.opslaan(guh), "off on holiday");
+        int kaarten = tel(p, b.kaart()), souvenirs = tel(p, b.souvenir().asItem());
+        Roepen.Uitkomst u = Roepen.roep(p, id);
+        helper.assertTrue(u == Roepen.Uitkomst.OK, "called back from holiday: " + u);
+        helper.assertTrue(level.getEntitiesOfClass(GuhEntity.class, helper.getBounds().inflate(16), x -> x.getUUID().equals(id)).size() <= 1
+                && level.getEntity(id) instanceof GuhEntity, "the very same guh, once");
+        helper.assertTrue(Reizen.reis(server, p.getUUID()) == null, "the trip is off");
+        helper.assertTrue(tel(p, b.kaart()) == kaarten && tel(p, b.souvenir().asItem()) == souvenirs, "no postcard or souvenir");
         klaar(helper, p);
     }
 
