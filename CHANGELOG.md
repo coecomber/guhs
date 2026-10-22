@@ -3,7 +3,7 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.6.0 — Op Safari! — Minecraft 26.1.2 (not released yet)
+## 1.6.0 — Op Safari! — Minecraft 26.1.2
 
 A huge safari park full of cute chibi animals, a Kriebelhuis with critters and an aquarium tunnel, a quiet place for retired guhs, and a whole new way of building: ghost building, a Bouwkeet, shape wands, brushes, blueprints, 400+ building blocks and animals that build for you.
 
@@ -36,6 +36,9 @@ A huge safari park full of cute chibi animals, a Kriebelhuis with critters and a
 
 - **Wilde-guhweerder (Wild Guh Repeller) signs:** the radius steps are now 24, 32, 48, 64 and 128 (default 32).
 - **Knabbelkorf:** picked up with silk touch it keeps its bees and honey, like a vanilla beehive.
+- **Guhdex:** bigger, with a Safari tab. Every tamed guh has a fixed number (in taming order); a picked-up guh shows its number in your Guhdex, or whose guh it is.
+- **Superkompas:** can point to the nearest safari busstation.
+- **Wiki:** pages for the safari park, the Kriebelhuis, the Knabbelvelden and all of the Bouwhulp; every block you can use has a "Zo werkt het". New FTB chapter Bouwhulp.
 
 ## 1.5.2 — fixes — Minecraft 26.1.2
 
