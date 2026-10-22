@@ -159,6 +159,9 @@ public final class Beloningen {
         int n = beverdammen(p) + 1;
         SafariSpeler.zetQuest(p.level().getServer(), p.getUUID(), BEVERDAMMEN, String.valueOf(n));
         SafariQuests.zeg(p, "gui.guhs.safari.beverdam", n);
+        if (n >= BEVERBAAS) {
+            adv(p, "bouwhulp_beverbaas");                // F13: the FTB quest "Beverbaas"
+        }
         return n;
     }
 

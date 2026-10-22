@@ -1,0 +1,647 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_bouwhulp",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 44,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_bouwhulp.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "475548DCF11AE724",
+  images: [
+    {
+      height: 3.0,
+      id: "47554864CFB6914B",
+      image: "guhs:textures/ftbquests/guhs_bouwhulp/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "4755485D827B7C3C",
+      image: "guhs:textures/ftbquests/guhs_bouwhulp/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "47554856D0B06627",
+      image: "guhs:textures/ftbquests/guhs_bouwhulp/kop_bouwhulp_keet.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755484A1DE08BDF",
+      image: "guhs:textures/ftbquests/guhs_bouwhulp/kop_bouwhulp_gereedschap.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755481DAA78B65D",
+      image: "guhs:textures/ftbquests/guhs_bouwhulp/kop_bouwhulp_helpers.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 8.74375,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+  ],
+  order_index: 14,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548E2C6DD6A33",
+      linked_quest: "4755486E9E523698",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548CAEC5BABFB",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_bouwhulp.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548B8152E1F9F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482AEA794D0F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548B7CA93DF77",
+      icon: {
+        id: "guhs:bouwkeet",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bouwkeet",
+          },
+          id: "475548601A5DBDBC",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482C0A43E74A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FB5961AB5D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "47554803F0210A48",
+      icon: {
+        id: "guhs:vormstaf",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vormstaf",
+          },
+          id: "47554817423197A0",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816BFAEF5AD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554813561E7542",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554887FA9719A0",
+      icon: {
+        id: "guhs:vormstaf",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bouwhulp_eerste_bouw",
+          id: "475548611971CDFA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554853FFBCB451",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755486934820C81",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755485A78C6D2FB",
+      icon: {
+        id: "guhs:bouwkeet_upgrade_guhrad",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bouwkeet_upgrade_guhrad",
+          },
+          id: "475548E7BA4ABA39",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F269D0D7BF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554842ECA97767",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548795A6913F0",
+      icon: {
+        id: "guhs:bouwkeet_upgrade_zout",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bouwkeet_upgrade_zout",
+          },
+          id: "47554885DDCE24D8",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CF4147D85F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554849B655ECEA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554823FA08751A",
+      icon: {
+        id: "guhs:bouwkeet_upgrade_saus",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bouwkeet_upgrade_saus",
+          },
+          id: "475548FAD172057E",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484ECF64E599",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548412BE5A133",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755488D81A05C01",
+      icon: {
+        id: "guhs:bouwkeet_upgrade_gloei",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bouwkeet_upgrade_gloei",
+          },
+          id: "4755480DB2B443B5",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C5804F8072",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A13BFE5D7C",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "4755481AB4C606FF",
+      icon: {
+        id: "guhs:vervangkwast",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vervangkwast",
+          },
+          id: "4755482EE35DE481",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554895BB40A1E8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548311AC551BF",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554844EA7B71A6",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bouwhulp_vastgelegd",
+          id: "475548FFF9C5CD46",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C2AD7FC1E5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486A183319C5",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755486530927C16",
+      icon: {
+        id: "guhs:ontwerpbureau",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:ontwerpbureau",
+          },
+          id: "4755488348F30273",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548041B6051DC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486F80A7FEEE",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755481D845812DE",
+      icon: {
+        id: "guhs:blauwdruk",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:blauwdruk",
+          },
+          id: "475548C4FE0CFCD9",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554853107B6DA9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548977EE23889",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548E77DB35A62",
+      icon: {
+        id: "guhs:pastelbaksteen_roze",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:pastelbaksteen_roze",
+          },
+          id: "4755483AC6668B84",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E28F3F608B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548135AA9C881",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548700A6997D3",
+      icon: {
+        id: "guhs:safari_verblijfsbord",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bouwhulp_helperklus",
+          id: "47554867DFDA0BEB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481B5060223C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548A2DDA84059",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 0.0,
+      y: 10.525,
+    },
+    {
+      id: "47554863AF850026",
+      icon: {
+        id: "minecraft:oak_log",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bouwhulp_beverbaas",
+          id: "4755482304C9EF84",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EE9CD2A9B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483F72F2DA78",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 1.5,
+      y: 10.525,
+      shape: "gear",
+    },
+    {
+      id: "475548C98F32D883",
+      icon: {
+        id: "minecraft:birch_sapling",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:beverbeek",
+          id: "475548F9A1AF9424",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554899F8A14BAC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482EAC86C8E4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 10.525,
+    },
+    {
+      id: "475548D6A9C71935",
+      icon: {
+        id: "minecraft:stick",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/beverbeek_spaander",
+          id: "4755483A7A77E864",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CFF4107966",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A7028B23E0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 10.525,
+    },
+  ],
+}

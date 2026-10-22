@@ -504,6 +504,7 @@ public final class Bouwopdracht {
         String taak = tag(be).getStringOr(TAAK, "");
         ServerPlayer eigenaar = be.eigenaar() == null ? null : level.getServer().getPlayerList().getPlayer(be.eigenaar());
         if (eigenaar != null) {
+            nl.juiced.guhs.quest.GuhAdvancements.grant(eigenaar, "bouwhulp_helperklus");   // F13: the FTB quest "Op werkuitje"
             eigenaar.sendSystemMessage(Component.translatable("gui.guhs.bouwopdracht.klaar", Component.translatable("entity.guhs.safari." + be.soort()),
                     Component.translatable(taak.equals("verblijf") ? "gui.guhs.verblijf.tevreden.bouw" : "gui.guhs.verblijf.taak." + taak))
                     .withStyle(ChatFormatting.LIGHT_PURPLE));

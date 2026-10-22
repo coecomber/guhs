@@ -141,7 +141,7 @@ FTB = [
      "expertenpaviljoen.", "minecraft:map", "safari_zone_vol", 0.0, None),
     ("safari_spoorzoeker", "Spoorzoeker", "Sommige dieren verstoppen zich heel goed. Volg de pootafdrukjes (door een verrekijker lichten ze op) "
      "en fotografeer een verstopper, zoals de okapi, de das of de bever.", "guhs:gouden_safaricamera", "safari_spoorzoeker", 1.5, None),
-    ("safari_dex_vol", "Safarikoning", "Zet elk dier in het park op de foto: alle 46! Je krijgt de gouden safaricamera, het gouden "
+    ("safari_dex_vol", "Safarikoning", "Zet elk dier in het park op de foto, ook die van het Kriebelhuis! Je krijgt de gouden safaricamera, het gouden "
      "dierenbeeld en de bon voor het verblijfsbord van de Gouden dikdik.", "guhs:gouden_safaricamera", "safari_dex_vol", 3.0, "gear"),
     ("safari_geheimpje", "Psst, een geheimpje", "In elke zone van het park ligt een geheimpje verstopt. Vind er eentje!",
      "minecraft:chest", "safari_geheimpje", -6.0, "circle"),
@@ -340,3 +340,12 @@ def ftb(fq):
         y = FTB_Y if i < 7 else FTB_Y + 2.0
         fq.q(key, titel, tekst, icoon, [fq.adv(adv)], rewards=(("guhs:kaas_knabbels", 8),), x=x, y=y, shape=vorm,
              xp=250 if vorm == "gear" else 100)
+    # F13: the enclosure sign and the Kriebelhuis
+    fq.q("safari_verblijfsbord", "Dieren thuis", "Staat een dier in je Safari-dex? Dan koop je in de giftshop een &dverblijfsbord&r. Zet hem "
+         "neer en er komt een familie bij je wonen: een mannetje, een vrouwtje en twee kleintjes. Aaien, voeren en een speeltje maken ze blij!",
+         "guhs:safari_verblijfsbord", [fq.item("guhs:safari_verblijfsbord")], rewards=(("guhs:kaas_knabbels", 8),), x=1.5, y=FTB_Y + 2.0,
+         xp=100)
+    fq.q("safari_kriebelhuis", "Professor Kriebelguh", "In het entreedorp staat &dHet Kriebelhuis&r, vol kleine diertjes: een terrarium, de "
+         "Kriebelzaal, de Nachtzaal en een roze tunnel onder de vijver. Fotografeer ze allemaal en haal je badge op bij Professor Kriebelguh "
+         "in het expertenpaviljoen.", "guhs:safari_badge_kriebelhuis", [fq.item("guhs:safari_badge_kriebelhuis")],
+         rewards=(("guhs:kaas_knabbels", 16),), x=3.0, y=FTB_Y + 2.0, shape="gear", xp=250)

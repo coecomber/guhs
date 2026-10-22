@@ -57,6 +57,9 @@ GROEPEN = [("bbq2_tech", "Guh Technology", "Guh-technologie",
            ("bbq2_guhrio", "Super Guhrio", "Super Guhrio", ["guhrio", "guhrio_w1", "guhrio_w2", "guhrio_w3", "guhrio_beloning"]),
            ("bbq2_guhpad", "The Guh Path", "Het Guhpad", ["guhpad", "oude_scenes"]),
            ("bbq2_snuffel", "Sniff Island", "Het Snuffeleiland", ["snuffel_steiger", "snuffel", "snuffel_dorp"]),
+           # 1.6.0 Op Safari! (F13)
+           ("bbq2_safari", "Safari Park Vadse Bergen", "Safaripark Vadse Bergen", ["safari", "knabbelvelden"]),
+           ("bbq2_bouwhulp", "Building Help", "Bouwhulp", ["bouwhulp"]),
            ("bbq2_meer", "More new things", "Nog meer nieuws", [])]
 
 # --- the docs step's own corrections to the notes ----------------------------------------------------------------------------
@@ -209,6 +212,9 @@ DIMENSIE_VERWANT = {"barbecuether": ["verhalen/knabbelring", "verhalen/super-guh
                                      "systemen/zoutkristal", "systemen/pepers", "systemen/rustpunten", "verhalen/grillguh",
                                      "systemen/het-guhpad"],
                     "guheinde": ["systemen/het-guhpad"],
+                    "safaripark": ["systemen/safaripark", "systemen/safari-lobby", "systemen/safari-dieren", "systemen/safari-vervoer",
+                                   "systemen/safaricamera", "systemen/safari-quests", "systemen/kriebelhuis"],
+                    "knabbelvelden": ["systemen/knabbelvelden"],
                     "snuffeleiland": ["verhalen/snuffeleiland", "verhalen/snuffeldorp", "systemen/snuffelen", "systemen/snuffeldorp-bewoners",
                                       "systemen/guhstation", "bouwwerken/steigerhuisje"]}
 
@@ -376,6 +382,7 @@ ANDERE_PAGINA = {
     "dimensies/guheinde": ("The Guh End: the lock on the portal", "Het Guheinde: het slot op het portaal"),
     "dimensies/snuffeleiland": ("Sniff Island: the dimension", "Het Snuffeleiland: de dimensie"),
     "bouwwerken/steigerhuisje": ("The Dock Cottage", "Het Steigerhuisje"),
+    "biomen/beverbeek": ("Beaver Brook", "De Beverbeek"),
     "verhalen/nomguh": ("Baltoguh and Nomguh: the scene", "Baltoguh en Nomguh: het filmpje"),
     "verhalen/kloon-eiland": ("Guhtwo and Clone Island: the scene", "Guhtwo en het kloon-eiland: het filmpje"),
     "verhalen/ohana": ("Ohana on Guhwai'i: the scene", "Ohana op Guhwai'i: het filmpje"),

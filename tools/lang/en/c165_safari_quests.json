@@ -77,7 +77,7 @@
   "ftb.guhs_safari.q.safari_spoorzoeker.title": "Tracker",
   "ftb.guhs_safari.q.safari_spoorzoeker.desc": "Some animals hide really well. Follow the paw prints (they light up through a spyglass) and photograph a hider, like the okapi, the badger or the beaver.",
   "ftb.guhs_safari.q.safari_dex_vol.title": "Safari King",
-  "ftb.guhs_safari.q.safari_dex_vol.desc": "Photograph every animal in the park: all 46! You get the golden safari camera, the golden animal statue and the voucher for the Golden Dik-dik's enclosure sign.",
+  "ftb.guhs_safari.q.safari_dex_vol.desc": "Photograph every animal in the park, the Creepy-Crawly House ones too! You get the golden safari camera, the golden animal statue and the voucher for the Golden Dik-dik's enclosure sign.",
   "ftb.guhs_safari.q.safari_geheimpje.title": "Psst, a secret",
   "ftb.guhs_safari.q.safari_geheimpje.desc": "A secret is hidden in every zone of the park. Find one!",
   "ftb.guhs_safari.q.safari_geheimpjes_alle.title": "Sniffer",
@@ -92,7 +92,7 @@
   "ftb.guhs_safari.sub": "Safaripark Vadse Bergen: spotting, photographing and sniffing out secrets",
   "ftb.guhs_safari.section.extra_safari_quests": "On safari",
   "ftb.guhs_safari.q.intro_guhs_safari.title": "How do you get here?",
-  "ftb.guhs_safari.q.intro_guhs_safari.desc": "This chapter comes after &dWelcome to the Guhmension!&r in &dThe Guhmension&r.\n\nSomewhere in the Guhmension stands a safari bus station. Hop on the &6Guh safari bus&r and it takes you to &6Safaripark Vadse Bergen&r: a big park with 46 sweet animals in eight zones.\n\nSpot them, photograph them for your &dSafari Dex&r, find the secrets and help the rangers. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
+  "ftb.guhs_safari.q.intro_guhs_safari.desc": "This chapter comes after &dWelcome to the Guhmension!&r in &dThe Guhmension&r.\n\nSomewhere in the Guhmension stands a safari bus station. Hop on the &6Guh safari bus&r and it takes you to &6Safaripark Vadse Bergen&r: a big park full of sweet animals in eight zones, plus the Creepy-Crawly House.\n\nSpot them, photograph them for your &dSafari Dex&r, find the secrets and help the rangers. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   "gui.guhs.safari.bordbon.ingewisseld": "Board voucher redeemed: the Golden dikdik's habitat sign! Sparkle sparkle, njeg.",
   "gui.guhs.safari.dialoog.park": "Safaripark Vadse Bergen",
   "gui.guhs.safari.dialoog.hoofdranger": "Head ranger",
@@ -116,5 +116,9 @@
   "gui.guhs.safari.dex.weergave.quests": "Quests",
   "gui.guhs.safari.dex.quests.kop": "Safari quests",
   "gui.guhs.safari.dex.quests.uitleg": "What you are doing now also shows in the top right of your screen while you are in the park.",
-  "subtitles.guhs.safari.parade": "Penguin parade plays"
+  "subtitles.guhs.safari.parade": "Penguin parade plays",
+  "ftb.guhs_safari.q.safari_verblijfsbord.title": "Animals at home",
+  "ftb.guhs_safari.q.safari_verblijfsbord.desc": "Is an animal in your Safari Dex? Then you can buy an &denclosure sign&r in the gift shop. Put it down and a family comes to live with you: a male, a female and two little ones. Petting, feeding and a toy make them happy!",
+  "ftb.guhs_safari.q.safari_kriebelhuis.title": "Professor Kriebelguh",
+  "ftb.guhs_safari.q.safari_kriebelhuis.desc": "In the entrance village stands &dthe Creepy-Crawly House&r, full of little critters: a terrarium, the Creepy-Crawly Hall, the Night Hall and a pink tunnel under the pond. Photograph them all and collect your badge from Professor Kriebelguh in the experts' pavilion."
 }

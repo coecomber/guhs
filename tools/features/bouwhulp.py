@@ -453,6 +453,8 @@ def bestanden():
         uit[f"{A}/textures/item/{naam}.png"] = icoon(ICONEN[naam])
         uit[f"{A}/items/{naam}.json"] = {"model": {"type": "minecraft:model", "model": f"guhs:item/{naam}"}}
         uit[f"{A}/models/item/{naam}.json"] = {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/{naam}"}}
+    for naam in QUEST_ADV:                        # F13: hidden advancements for the FTB tasks
+        uit[f"data/guhs/advancement/quest/{naam}.json"] = {"criteria": {"done": {"trigger": "minecraft:impossible"}}}
     return uit
 
 
@@ -475,6 +477,71 @@ def _tag(root, pad, waarden):
     with open(vol, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         f.write("\n")
+
+
+# F13: the FTB chapter guhs_bouwhulp (make_ftbquests.py CHAPTERS), no locks; the hidden quest advancements the Java grants
+# (Feestje.klaar, VastlegDienst, Bouwopdracht.gestopt, Beloningen.beverdam, Aaibever)
+FTB_CHAPTER = "guhs_bouwhulp"
+FTB_SECTIES = [("bouwhulp_keet", "De Bouwkeet", "item:guhs:bouwkeet",
+                ["bouwhulp_keet", "bouwhulp_vormstaf", "bouwhulp_eerste_bouw", "bouwhulp_guhrad", "bouwhulp_zout", "bouwhulp_saus",
+                 "bouwhulp_gloei"]),
+               ("bouwhulp_gereedschap", "Kwasten en blauwdrukken", "item:guhs:patroonkwast",
+                ["bouwhulp_kwast", "bouwhulp_vastgelegd", "bouwhulp_ontwerpbureau", "bouwhulp_blauwdruk", "bouwhulp_blokken"]),
+               ("bouwhulp_helpers", "Helperdieren en de Beverbeek", "item:guhs:safari_verblijfsbord",
+                ["bouwhulp_helperklus", "bouwhulp_beverbaas", "beverbeek_biome", "beverbeek_spaander"])]
+QUEST_ADV = ["bouwhulp_eerste_bouw", "bouwhulp_vastgelegd", "bouwhulp_helperklus", "bouwhulp_beverbaas", "beverbeek_spaander"]
+
+
+def ftb(fq):
+    q, item, adv = fq.q, fq.item, fq.adv
+    q("bouwhulp_keet", "Een eigen Bouwkeet", "Maak een &dBouwkeet&r (gele en roze wol, een werkbank, stammen en kaasknabbels) en zet hem "
+      "neer: een keetje van 3 bij 3 bij 3 met een kraantje op het dak. Klik erop voor het menu met tabbladen. Hier begint het bouwen!",
+      "guhs:bouwkeet", [item("guhs:bouwkeet")], rewards=(("guhs:kaas_knabbels", 8),), shape="gear", xp=100)
+    q("bouwhulp_vormstaf", "De vormstaf", "Maak een &dvormstaf&r (twee stokjes en een amethistscherf). Klik ermee op een blok en je vorm "
+      "staat er als &dspook&r: doorzichtig, nog niet echt. Houd linker &eAlt&r in voor het ronde menu met alle vormen en daken.",
+      "guhs:vormstaf", [item("guhs:vormstaf")], deps=["bouwhulp_keet"], xp=50)
+    q("bouwhulp_eerste_bouw", "Spookje wordt echt", "Zet een spook neer (met de vormstaf of in de Bouwkeet), schuif hem op zijn plek en "
+      "druk op &eBouw!&r. De blokken komen uit je zakken, je Bank Guh of je kisten. Als het af is, is er een feestje!",
+      "guhs:vormstaf", [adv("bouwhulp_eerste_bouw")], rewards=(("guhs:kaas_knabbels", 16),), deps=["bouwhulp_vormstaf"], xp=100)
+    q("bouwhulp_guhrad", "Guhrad-keet", "Maak een &dGuhrad-tandwieltje&r en klik ermee op je Bouwkeet. Met &evadskracht&r (10 VK) helpen "
+      "je eigen guhs als &dbouwguhs&r, en pakt de keet materiaal uit alle kisten op zijn vadsnet.",
+      "guhs:bouwkeet_upgrade_guhrad", [item("guhs:bouwkeet_upgrade_guhrad")], deps=["bouwhulp_eerste_bouw"], xp=100)
+    q("bouwhulp_zout", "Zoutkeet", "De &dZoutkristal-waterpas&r maakt een Zoutkeet (30 VK): natuurvormen, bloktekst en de &degaliseerder&r.",
+      "guhs:bouwkeet_upgrade_zout", [item("guhs:bouwkeet_upgrade_zout")], deps=["bouwhulp_guhrad"], xp=100)
+    q("bouwhulp_saus", "Sauskeet", "Het &dSaus-kraanhaakje&r maakt een Sauskeet (80 VK): de &dverfmachine&r, de &dtunnelboor&r en "
+      "publiceren in de bibliotheek van de server.",
+      "guhs:bouwkeet_upgrade_saus", [item("guhs:bouwkeet_upgrade_saus")], deps=["bouwhulp_zout"], xp=150)
+    q("bouwhulp_gloei", "Gloeikeet... POF!", "De &dGloei-bouwlamp&r maakt een Gloeikeet (200 VK): vormen en blauwdrukken tot 64 groot. En "
+      "is al het materiaal er? Dan bouwt hij alles in één keer: &dPOF!&r",
+      "guhs:bouwkeet_upgrade_gloei", [item("guhs:bouwkeet_upgrade_gloei")], deps=["bouwhulp_saus"], shape="gear", xp=250)
+    q("bouwhulp_kwast", "Verven maar", "Maak een &dvervangkwast&r: sluip-klik op een blok om het te kiezen, en elke klik verft een bolletje "
+      "blokken om, in dezelfde vorm. Er zijn ook een meng-, een patroon- en een verweerkwast. Dierpatronen gaan open met je Safari-dex.",
+      "guhs:vervangkwast", [item("guhs:vervangkwast")], deps=["bouwhulp_vormstaf"], xp=50)
+    q("bouwhulp_vastgelegd", "Op papier", "Kies &evastleggen&r in het menu van de vormstaf en klik twee hoeken van iets moois aan (of "
+      "sluip-klik één keer op een gebouw). Zo wordt het een eigen &dblauwdruk&r.",
+      "minecraft:paper", [adv("bouwhulp_vastgelegd")], deps=["bouwhulp_eerste_bouw"], xp=100)
+    q("bouwhulp_ontwerpbureau", "Het Ontwerpbureau", "Maak een &dOntwerpbureau&r. Daar blader je door je eigen blauwdrukken, de catalogus "
+      "met 25 ontwerpen en de bibliotheek van de server.",
+      "guhs:ontwerpbureau", [item("guhs:ontwerpbureau")], deps=["bouwhulp_vastgelegd"], xp=50)
+    q("bouwhulp_blauwdruk", "Een blauwdruk in je hand", "Druk aan het Ontwerpbureau een blauwdruk af (een vel papier). Klik ermee op een "
+      "blok en het ontwerp staat er als spook. Hij raakt nooit op!",
+      "guhs:blauwdruk", [item("guhs:blauwdruk")], deps=["bouwhulp_ontwerpbureau"], xp=50)
+    q("bouwhulp_blokken", "Pastelbakstenen", "In het creatieve tabblad &dGuhs: Bouwen&r staan meer dan 400 nieuwe bouwblokken. Maak een "
+      "paar &droze pastelbakstenen&r: acht bakstenen rond een roze kleurstof.",
+      "guhs:pastelbaksteen_roze", [item("guhs:pastelbaksteen_roze")], deps=["bouwhulp_keet"], xp=50)
+    q("bouwhulp_helperklus", "Op werkuitje", "Klik op het &dverblijfsbord&r van een helperdier (bijvoorbeeld een bever, pinguïn of "
+      "orang-oetan) en open de tab &eBouwopdracht&r. Kies een klus, zoek een plek en bevestig: de familie gaat op werkuitje en bouwt het "
+      "voor je.",
+      "guhs:safari_verblijfsbord", [adv("bouwhulp_helperklus")], rewards=(("guhs:kaas_knabbels", 16),), xp=150)
+    q("bouwhulp_beverbaas", "Beverbaas", "Laat je bevers &evijf beverdammen&r bouwen. Achter elke dam stijgt het water en ontstaat een "
+      "beverpoel. Je krijgt de titel &6Beverbaas&r.",
+      "minecraft:oak_log", [adv("bouwhulp_beverbaas")], deps=["bouwhulp_helperklus"], shape="gear", xp=250)
+    q("beverbeek_biome", "De Beverbeek", "Ergens in de Guhmensie ligt een zeldzaam beekjesbos van wilgen, elzen en berken, met wilde "
+      "beverdammen. Vind de &dBeverbeek&r!",
+      "minecraft:birch_sapling", [fq.biome("beverbeek")], xp=100)
+    q("beverbeek_spaander", "Spaander", "Heel soms staat er in de Beverbeek een &drangerpost&r. Daar woont Spaander, een bever die je niet "
+      "kunt meenemen, maar wel lief kunt aaien. Aai hem!",
+      "minecraft:stick", [adv("beverbeek_spaander")], deps=["beverbeek_biome"], xp=100)
 
 
 TAGS = [("data/minecraft/tags/block/mineable/axe.json", ["guhs:bouwkeet"]),

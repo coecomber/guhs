@@ -78,6 +78,7 @@ public final class VastlegDienst {
                 DOOS.remove(u);
                 p.level().playSound(null, p.blockPosition(), nl.juiced.guhs.feature.bouwhulp.BouwGeluid.PAPIER.get(), SoundSource.PLAYERS, 0.8f, 1f);   // F12
                 p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.vastleg.bewaard", naam, o.aantal()));
+                nl.juiced.guhs.quest.GuhAdvancements.grant(p, "bouwhulp_vastgelegd");   // F13: the FTB quest "Op papier"
                 GereedschapPayloads.sluitVastleg(p);
             }
             default -> {

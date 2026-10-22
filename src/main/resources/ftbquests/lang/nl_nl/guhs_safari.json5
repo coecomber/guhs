@@ -7,7 +7,7 @@
   "quest.475548780A582533.quest_desc": [
     "Dit hoofdstuk komt na &dWelkom in de Guhmensie!&r in &dDe Guhmensie&r.",
     "",
-    "Ergens in de Guhmensie staat een safari-busstation. Stap in de &6Guh-safaribus&r en hij brengt je naar &6Safaripark Vadse Bergen&r: een groot park met 46 lieve dieren in acht zones.",
+    "Ergens in de Guhmensie staat een safari-busstation. Stap in de &6Guh-safaribus&r en hij brengt je naar &6Safaripark Vadse Bergen&r: een groot park vol lieve dieren in acht zones, plus Het Kriebelhuis.",
     "",
     "Spot ze, zet ze op de foto voor je &dSafari-dex&r, zoek de geheimpjes en help de rangers. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
@@ -37,7 +37,7 @@
   ],
   "quest.475548B969EAD2F7.title": "Safarikoning",
   "quest.475548B969EAD2F7.quest_desc": [
-    "Zet elk dier in het park op de foto: alle 46! Je krijgt de gouden safaricamera, het gouden dierenbeeld en de bon voor het verblijfsbord van de Gouden dikdik.",
+    "Zet elk dier in het park op de foto, ook die van het Kriebelhuis! Je krijgt de gouden safaricamera, het gouden dierenbeeld en de bon voor het verblijfsbord van de Gouden dikdik.",
   ],
   "quest.4755481736717BEB.title": "Psst, een geheimpje",
   "quest.4755481736717BEB.quest_desc": [
@@ -58,5 +58,13 @@
   "quest.475548692580E122.title": "Aaien maar!",
   "quest.475548692580E122.quest_desc": [
     "Doe een klusje in de aaihoek van het entreedorp: voeren, borstelen of de alpaca uitlaten.",
+  ],
+  "quest.475548BC7EBD016C.title": "Dieren thuis",
+  "quest.475548BC7EBD016C.quest_desc": [
+    "Staat een dier in je Safari-dex? Dan koop je in de giftshop een &dverblijfsbord&r. Zet hem neer en er komt een familie bij je wonen: een mannetje, een vrouwtje en twee kleintjes. Aaien, voeren en een speeltje maken ze blij!",
+  ],
+  "quest.4755488C65F21DF6.title": "Professor Kriebelguh",
+  "quest.4755488C65F21DF6.quest_desc": [
+    "In het entreedorp staat &dHet Kriebelhuis&r, vol kleine diertjes: een terrarium, de Kriebelzaal, de Nachtzaal en een roze tunnel onder de vijver. Fotografeer ze allemaal en haal je badge op bij Professor Kriebelguh in het expertenpaviljoen.",
   ],
 }

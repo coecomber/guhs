@@ -460,6 +460,8 @@ class Game:
                 out[did] = [gen.get("settings", {}).get("biome")]
             elif src.get("type") == "minecraft:fixed":
                 out[did] = [src["biome"]]
+            elif "zones" in src:            # (1.6.0: the safari park's own biome source, one biome per zone plus the decor)
+                out[did] = list(src["zones"].values()) + ([src["decor"]] if src.get("decor") else [])
             else:
                 out[did] = [b["biome"] for b in src.get("biomes", [])]
         return out
