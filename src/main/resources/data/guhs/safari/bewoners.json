@@ -94,5 +94,11 @@
   "soort": "kangoeroe",
   "zone": "australie",
   "naam": "Hupsje"
+ },
+ {
+  "id": "quest_dikkie",
+  "soort": "olifant",
+  "zone": "savanne",
+  "naam": "Dikkie"
  }
 ]

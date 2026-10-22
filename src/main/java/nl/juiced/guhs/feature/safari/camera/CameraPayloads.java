@@ -36,6 +36,9 @@ public final class CameraPayloads {
         }
     }
 
+    /** G1: "schilderij:" before the species = print it as a painting ({@link SafariFotoItem#schilderij}). */
+    public static final String SCHILDERIJ = "schilderij:";
+
     /** Print the dex photo of this species as a photo card (costs a sheet of paper). */
     public record Afdrukken(String soort) implements CustomPacketPayload {
         public static final Type<Afdrukken> TYPE = new Type<>(Guhs.id("safari_afdrukken"));
@@ -48,7 +51,11 @@ public final class CameraPayloads {
 
         static void handle(Afdrukken p, IPayloadContext context) {
             if (context.player() instanceof ServerPlayer sp) {
-                SafariFotoItem.afdrukken(sp, p.soort());
+                if (p.soort().startsWith(SCHILDERIJ)) {
+                    SafariFotoItem.schilderij(sp, p.soort().substring(SCHILDERIJ.length()));
+                } else {
+                    SafariFotoItem.afdrukken(sp, p.soort());
+                }
             }
         }
     }

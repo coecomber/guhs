@@ -1496,6 +1496,27 @@ UITLEG["guh_schoorsteen"] = dict(
        "out, and once more to light it again.")
 
 # 1.6.0 deel 2 F10b: het verblijfsbord, met de Bouwopdracht van de helper- en bouwdieren
+# G1 (1.6.0): the safari blocks that still had no "Zo werkt het"
+UITLEG["safari_schemabord"] = dict(
+    nl="Het schemabord van het safaripark, op het dorpsplein. Rechtsklik erop en je ziet het plan van vandaag: wanneer "
+       "de dieren gevoerd worden, wanneer de ranger een praatje houdt, of er een nachtsafari is en welk dier jarig is "
+       "(dat dier levert vandaag dubbele munten op voor een foto).",
+    en="The schedule board of the safari park, on the village square. Right-click it to see today's plan: when the "
+       "animals are fed, when the ranger gives a talk, whether there is a night safari and which animal has its "
+       "birthday (that animal pays double coins for a photo today).")
+UITLEG["safari_ooievaarsbus"] = dict(
+    nl="Een brievenbus voor ooievaarspost. Zet hem bij je huis: de ooievaars van je vrienden (een ooievaar van een "
+       "verblijfsbord) brengen er af en toe een pakketje in. Rechtsklik erop om de bus te openen en de cadeautjes eruit "
+       "te halen. Alleen jij kunt je eigen bus openen.",
+    en="A mailbox for stork mail. Put it by your house: your friends' storks (a stork from a home sign) now and then "
+       "drop a parcel in it. Right-click it to open the box and take the presents out. Only you can open your own box.")
+UITLEG["safari_terrarium"] = dict(
+    nl="Een glazen bak waar een klein Kriebelhuis-diertje in woont: dit wordt een terrariumbordje als je het neerzet. "
+       "Rechtsklik erop voor het menu, net als bij een verblijfsbord. Houd je eten vast, dan voer je de diertjes in de "
+       "bak. Mieren, kwalletjes en regenboogvisjes wonen er met z'n vieren in.",
+    en="A glass tank where a small Kriebelhuis critter lives: a terrarium sign turns into this when you put it down. "
+       "Right-click it for the menu, like a home sign. Hold food to feed the critters in the tank. Ants, jellyfish and "
+       "rainbow fish live in it as a group of four.")
 UITLEG["safari_verblijfsbord"] = dict(
     nl="Een verblijfsbordje uit de giftshop van het safaripark: zet het neer en er komt een familie van dat dier wonen "
        "(papa, mama en twee kleintjes). Rechtsklik erop voor het menu.\n"

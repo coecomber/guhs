@@ -205,6 +205,36 @@
    ]
   },
   {
+   "id": "aussie_post",
+   "kind": "safari_aussie_post",
+   "pos": [
+    297,
+    66,
+    428
+   ],
+   "yaw": 90.0
+  },
+  {
+   "id": "aussie_hangmat",
+   "kind": "safari_aussie_hangmat",
+   "pos": [
+    240,
+    68,
+    445
+   ],
+   "yaw": 0.0
+  },
+  {
+   "id": "aussie_kamp",
+   "kind": "safari_aussie_kamp",
+   "pos": [
+    237,
+    67,
+    452
+   ],
+   "yaw": 270.0
+  },
+  {
    "id": "kriebelhuis_balie",
    "kind": "safari_kriebelhuis_balie",
    "pos": [

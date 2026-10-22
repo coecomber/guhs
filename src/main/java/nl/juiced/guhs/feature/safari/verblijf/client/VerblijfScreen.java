@@ -430,6 +430,16 @@ public class VerblijfScreen extends Screen {
         Component foto = sterren <= 0 ? Component.translatable("gui.guhs.verblijf.info.geen_foto")
                 : Component.translatable("gui.guhs.verblijf.info.sterren", "★".repeat(sterren) + "☆".repeat(Math.max(0, 3 - sterren)));
         GidsTekst.passend(g, foto, x, ry, W - 20, 0.875f, sterren > 0 ? GROEN : LICHT, false);
+        // G1 (design 1.9, "je beste foto"): the caption of your best dex photo of this species, in a little photo frame
+        // (under the cooldown line)
+        CompoundTag beste = nl.juiced.guhs.feature.safari.camera.client.SafariDexTab.dexRegel(soort).getCompoundOrEmpty("Foto");
+        if (sterren > 0 && !beste.isEmpty()) {
+            int fy = ry + 30;
+            boolean goud = beste.getBooleanOr("Goud", false);
+            g.fill(x - 2, fy - 2, x + W - 18, fy + 22, goud ? 0xFFE8B830 : 0xFFC9A46A);
+            g.fill(x, fy, x + W - 20, fy + 20, 0xFFF8EBD2);
+            GidsTekst.alinea(g, nl.juiced.guhs.feature.safari.camera.Foto.onderschrift(beste), x + 3, fy + 2, W - 26, 0.75f, TEKST);
+        }
         long cd = data.getLongOr("Cooldown", 0L);
         Component cooldown = cd <= 0 ? Component.translatable("gui.guhs.verblijf.info.cooldown.nu")
                 : Component.translatable("gui.guhs.verblijf.info.cooldown", VerblijfWinkel.tijd(cd));

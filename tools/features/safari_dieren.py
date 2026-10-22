@@ -267,8 +267,14 @@ BEWONERS = [
 ]
 
 
+# G1 (ronde 46: "Dikkie van de te vahe olifant hoort er al bij"): residents that are no park home's animal; the game gives
+# the id itself (VaheOlifant) and never hands it to a home animal (ids starting with "quest_")
+QUEST_BEWONERS = [("quest_dikkie", "olifant", "savanne", "Dikkie")]
+
+
 def schrijf_bewoners():
     uit = [{"id": f"{s}_{z}", "soort": s, "zone": z, "naam": n} for s, z, n in BEWONERS]
+    uit += [{"id": i, "soort": s, "zone": z, "naam": n} for i, s, z, n in QUEST_BEWONERS]
     os.makedirs(os.path.dirname(BEWONERS_JSON), exist_ok=True)
     with open(BEWONERS_JSON, "w", encoding="utf-8", newline="\n") as f:
         json.dump(uit, f, indent=1, ensure_ascii=False)

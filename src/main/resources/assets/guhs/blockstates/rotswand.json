@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/rotswand"
+      },
+      {
+        "model": "guhs:block/rotswand",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/rotswand",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/rotswand",
+        "y": 270
+      }
+    ]
+  }
+}

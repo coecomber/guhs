@@ -1,0 +1,18 @@
+{
+  "asset_id": "guhs:safari_foto_rode_panda",
+  "width": 1,
+  "height": 1,
+  "title": {
+    "translate": "painting.guhs.safari_foto.title",
+    "with": [
+      {
+        "translate": "entity.guhs.safari.rode_panda"
+      }
+    ],
+    "color": "yellow"
+  },
+  "author": {
+    "translate": "painting.guhs.safari_foto.author",
+    "color": "gray"
+  }
+}

@@ -34,6 +34,8 @@ import org.slf4j.Logger;
 public final class Bewoners {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String VLAG = "bewoner:";
+    /** G1: a resident that lives no park home (Dikkie of the side quest): its own code names it ({@code quest_dikkie}). */
+    public static final String QUEST = "quest_", DIKKIE = "quest_dikkie";
 
     public record Bewoner(String id, String soort, String zone, String naam) {
     }
@@ -80,7 +82,7 @@ public final class Bewoners {
         ParkData d = ParkData.get();
         Set<String> gehad = new HashSet<>();
         for (Bewoner b : get()) {
-            if (!b.soort().equals(plek.soort()) || gehad.contains(b.id())) {
+            if (b.id().startsWith(QUEST) || !b.soort().equals(plek.soort()) || gehad.contains(b.id())) {
                 continue;
             }
             // the first home (lowest id) of this species whose centre lies in this zone

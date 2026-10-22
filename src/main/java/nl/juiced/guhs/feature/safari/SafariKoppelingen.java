@@ -43,7 +43,7 @@ public final class SafariKoppelingen {
     static final Map<String, String> ZONE_SCHILDERIJ = Map.of(
             "savanne", "safari_savanne", "delta", "safari_flamingo", "regenwoud", "safari_regenwoud",
             "bamboe", "safari_rode_panda", "ijskust", "safari_pinguinfamilie", "oertijd", "safari_grote_trek",
-            "europa", "safari_otters", "australie", "safari_koala");
+            "europa", "safari_otters", "australie", "safari_koala", "kriebelhuis", "safari_kriebelhuis");   // (G1: the 9th badge's painting)
     /** The paintings in the giftshop: variant → price (by size: 1x1 10, 1x2/2x1 15, 2x2 20, 3x2 25, 3x3/4x2 30). */
     static final Map<String, Integer> SCHILDERIJEN = new LinkedHashMap<>();
 
@@ -51,7 +51,7 @@ public final class SafariKoppelingen {
         for (String v : new String[] {"rode_panda", "pinguin", "koala", "stokstaartje"}) {
             SCHILDERIJEN.put("safari_" + v, 10);
         }
-        for (String v : new String[] {"giraffe", "flamingo", "pinguinfamilie", "otters"}) {
+        for (String v : new String[] {"giraffe", "flamingo", "pinguinfamilie", "otters", "kriebelhuis"}) {
             SCHILDERIJEN.put("safari_" + v, 15);
         }
         SCHILDERIJEN.put("safari_leeuwenfamilie", 20);

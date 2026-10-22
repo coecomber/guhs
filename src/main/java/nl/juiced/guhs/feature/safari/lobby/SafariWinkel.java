@@ -61,7 +61,7 @@ import nl.juiced.guhs.taal.Tekst;
 public final class SafariWinkel {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final List<String> GROEPEN = List.of("kleding", "borden", "blokken", "kunst", "voer", "blauwdrukken");
+    public static final List<String> GROEPEN = List.of("kleding", "borden", "blokken", "kunst", "voer", "speelgoed", "blauwdrukken");
     public static final Map<String, Integer> BORD_PRIJS = Map.of("gewoon", 100, "middel", 175, "zeldzaam", 300);
 
     public enum Uitkomst { OK, ONBEKEND, NIET_HIER, MAX, EIS, TE_DUUR, MISLUKT }
@@ -197,7 +197,7 @@ public final class SafariWinkel {
                                 Component.translatable(o.has("naam") ? o.get("naam").getAsString() : "item." + itemId.replace(':', '.')),
                                 o.has("uitleg") ? Component.translatable(o.get("uitleg").getAsString()) : Component.empty(),
                                 o.get("prijs").getAsInt(), o.has("max") ? o.get("max").getAsInt() : 0,
-                                (s, u) -> null,
+                                eis(o.has("eis") ? o.getAsJsonObject("eis") : null),
                                 (p, a) -> {
                                     Item it = item(itemId);
                                     return it != null && geef(p, new ItemStack(it, aantal));
@@ -210,6 +210,32 @@ public final class SafariWinkel {
             json = j;
         }
         return j;
+    }
+
+    /**
+     * G1 (design 1.8 / 2.9: "een deel ervan ontgrendelt via de dex"): an offer's requirement from winkel.json:
+     * {@code {"dex": n}} (at least n species photographed) and/or {@code {"zone": "savanne"}} (that zone complete).
+     * Null when met (or no requirement), else what is still needed.
+     */
+    public static BiFunction<MinecraftServer, UUID, Component> eis(@Nullable JsonObject e) {
+        if (e == null) {
+            return (s, u) -> null;
+        }
+        int dex = e.has("dex") ? e.get("dex").getAsInt() : 0;
+        String zone = e.has("zone") ? e.get("zone").getAsString() : null;
+        return (server, speler) -> {
+            if (dex > 0) {
+                int heeft = (int) nl.juiced.guhs.feature.safari.kern.SafariSpeler.gefotografeerd(server, speler).stream()
+                        .filter(nl.juiced.guhs.feature.safari.kern.SafariSpeler::telt).count();
+                if (heeft < dex) {
+                    return Component.translatable("gui.guhs.safari.winkel.eis.dex", dex, heeft);
+                }
+            }
+            if (zone != null && !nl.juiced.guhs.feature.safari.kern.SafariSpeler.zoneCompleet(server, speler, zone)) {
+                return Component.translatable("gui.guhs.safari.winkel.eis.zone", Component.translatable("biome.guhs.safari_" + zone));
+            }
+            return null;
+        };
     }
 
     private static Map<String, String> bordKlassen;

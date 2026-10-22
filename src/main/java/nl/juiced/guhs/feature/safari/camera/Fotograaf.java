@@ -57,6 +57,11 @@ public final class Fotograaf {
     private static final ThreadLocal<List<SafariDier>> IN_BEELD = ThreadLocal.withInitial(List::of);
 
     public static Foto klik(ServerPlayer p, boolean zoom) {
+        return klik(p, zoom, false);
+    }
+
+    /** G1: {@code goud} = taken with the golden safari camera (the photo gets a golden frame, tag "Goud"). */
+    public static Foto klik(ServerPlayer p, boolean zoom, boolean goud) {
         ServerLevel level = p.level();
         level.playSound(p, p.blockPosition(), nl.juiced.guhs.feature.safari.spullen.SafariGeluid.CAMERA.get(), SoundSource.PLAYERS, 0.8f, 1.0f);   // (the photographer hears it via the client)
         Foto f = kijk(level, p.getEyePosition(), p.getLookAngle(), zoom);
@@ -70,6 +75,12 @@ public final class Fotograaf {
         IN_BEELD.set(List.of());
         long dag = Klok.dag();
         CompoundTag tag = f.tag(dag, p.getGameProfile().name());
+        if (goud) {
+            tag.putBoolean("Goud", true);
+        }
+        if (nachtfoto(level, f)) {
+            tag.putBoolean("Nacht", true);                  // G1: a night photo, with glowing eyes
+        }
         // round 4 (L4): a group counts as one dex species (a sea urchin goes in the dex as the starfish group)
         int was = SafariSpeler.registreerFoto(p, ParkData.get().dexSoort(f.soort()), f.sterren(), tag);
         boolean vroeg = SafariSpeler.vlag(p, VROEGE_VOGEL);
@@ -100,6 +111,11 @@ public final class Fotograaf {
         }
         ModNetworking.sendTo(p, new CameraPayloads.Uitslag(tag, was, munten, missies));
         return f;
+    }
+
+    /** G1: a photo of an awake animal in the dark (its eyes glow): the caption says so. */
+    static boolean nachtfoto(ServerLevel level, Foto f) {
+        return level.isDarkOutside() && !f.slaapt();
     }
 
     /** What a camera at {@code oog} looking along {@code richting} sees (null: no safari animal in the picture). */
@@ -163,7 +179,9 @@ public final class Fotograaf {
         int zelfde = (int) inBeeld.stream().filter(d -> d.soort().equals(onderwerp.soort())).count();
         int soorten = (int) inBeeld.stream().map(SafariDier::soort).distinct().count();
         boolean extra = onderwerp.isBaby() || zelfde >= 2 || soorten >= 2;
-        if (nl.juiced.guhs.feature.safari.momenten.Momenten.noorderlicht(level, onderwerp.blockPosition())) {
+        // G1 (design 1.7, nachtsafari): an awake animal at night, its eyes glowing, counts like the northern lights
+        if (nl.juiced.guhs.feature.safari.momenten.Momenten.noorderlicht(level, onderwerp.blockPosition())
+                || (level.isDarkOutside() && !onderwerp.slaapt())) {
             // under the northern lights (IJskust at night): one bonus point (the extra point, or the action point when
             // the extra one is there already)
             if (extra) {

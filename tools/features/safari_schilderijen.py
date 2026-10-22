@@ -42,6 +42,9 @@ SCHILDERIJEN = {
     "grote_trek":        (4, 2, "De grote trek", "The great migration", "zonsondergang",
                           [("kafferbuffel", "", -2.4, 0), ("zebra", "", -0.9, 0.3), ("zebra", "", 0.5, -0.2), ("kafferbuffel", "man", 1.9, 0.2),
                            ("zebra", "baby", 3.0, 0.6)], 20),
+    # G1: the painting of the ninth expert's badge (Het Kriebelhuis)
+    "kriebelhuis":       (2, 1, "Kriebelvriendjes", "Creepy-crawly friends", "kriebel",
+                          [("kameleon", "", -0.8, 0), ("gifkikker", "", 0.1, 0.3), ("vogelspin", "", 0.9, 0)], 25),
 }
 
 ACHTERGROND = {           # top colour, bottom colour, ground colour
@@ -53,7 +56,13 @@ ACHTERGROND = {           # top colour, bottom colour, ground colour
     "europa": ((214, 236, 214), (242, 248, 238), (110, 164, 90)),
     "regenwoud": ((186, 222, 178), (226, 242, 214), (70, 130, 70)),
     "zonsondergang": ((246, 168, 132), (252, 220, 160), (196, 150, 80)),
+    "kriebel": ((210, 236, 200), (246, 238, 214), (120, 150, 86)),
+    "oertijd": ((222, 214, 196), (246, 238, 222), (150, 128, 96)),
+    "zee": ((170, 214, 236), (220, 240, 248), (230, 214, 170)),
 }
+# G1: the background of a species' photo painting (safari_foto_<soort>), by its zone (the Kriebelhuis' water animals: zee)
+ZONE_THEMA = {"savanne": "savanne", "delta": "delta", "regenwoud": "regenwoud", "bamboe": "bamboe", "ijskust": "ijs",
+              "oertijd": "oertijd", "europa": "europa", "australie": "australie", "kriebelhuis": "kriebel", "entree": "europa"}
 
 
 def achtergrond(w, h, thema):
@@ -90,15 +99,13 @@ def lijst(img):
     return img
 
 
-def main():
+def teken(bw, bh, thema, dieren, yaw):
+    """One painting (bw x bh blocks): the animals on the theme's background in a wooden frame."""
     sys.path.insert(0, os.path.join("tools"))
     import wiki_renders as wr
     sys.path.insert(0, os.path.join("tools", "features", "safari_atelier"))
     import blad
-
-    os.makedirs(TEX_OUT, exist_ok=True)
-    for naam, (bw, bh, *_rest) in SCHILDERIJEN.items():
-        _nl, _en, thema, dieren, yaw = _rest
+    if True:
         W, H = bw * PPB, bh * PPB
         quads = []
         for soort, variant, dx, dz in dieren:
@@ -119,10 +126,32 @@ def main():
         schaduw.putalpha(sh)
         bg.alpha_composite(schaduw, (6, 10))
         bg.alpha_composite(dieren_img, (0, int(H * 4 * 0.06)))
-        out = lijst(bg.resize((W, H), Image.LANCZOS))
+        return lijst(bg.resize((W, H), Image.LANCZOS))
+
+
+def main(namen=None):
+    os.makedirs(TEX_OUT, exist_ok=True)
+    for naam, (bw, bh, *_rest) in SCHILDERIJEN.items():
+        if namen and naam not in namen:
+            continue
+        _nl, _en, thema, dieren, yaw = _rest
+        out = teken(bw, bh, thema, dieren, yaw)
         out.save(os.path.join(TEX_OUT, f"safari_{naam}.png"))
         print("wrote", naam, out.size)
 
 
+def fotos(soorten):
+    """G1 (design 1.7, a photo printed as a painting): a 1x1 portrait per species, safari_foto_<soort>.png.
+    {@code soorten}: soort -> zone (soorten.json)."""
+    os.makedirs(TEX_OUT, exist_ok=True)
+    for soort, zone in soorten.items():
+        if not os.path.exists(os.path.join(GEO, soort + ".geo.json")):
+            continue
+        thema = ZONE_THEMA.get(zone or "", "europa")
+        out = teken(1, 1, thema, [(soort, "", 0, 0)], 30)
+        out.save(os.path.join(TEX_OUT, f"safari_foto_{soort}.png"))
+    print("safari_schilderijen: photo paintings for", len(soorten), "species")
+
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:] or None)

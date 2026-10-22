@@ -54,7 +54,7 @@ public class SafariCameraItem extends Item {
     @Override
     public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remaining) {
         if (entity instanceof ServerPlayer p) {
-            Fotograaf.klik(p, DUUR - remaining >= ZOOM_NA);
+            Fotograaf.klik(p, DUUR - remaining >= ZOOM_NA, this instanceof Goud);
         }
         return true;
     }
@@ -73,5 +73,23 @@ public class SafariCameraItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable("item.guhs.safaricamera.uitleg").withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatable("item.guhs.safaricamera.uitleg2").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+    }
+
+    /** G1 (design 1.8): the golden safari camera of the full dex. Works like the camera; its photos get golden frames. */
+    public static class Goud extends SafariCameraItem {
+        public Goud(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        public boolean isFoil(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.gouden_safaricamera.lore").withStyle(ChatFormatting.GOLD));
+            super.appendHoverText(stack, context, display, tooltip, flag);
+        }
     }
 }

@@ -12,9 +12,11 @@ import net.minecraft.world.item.SpyglassItem;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
@@ -63,9 +65,21 @@ public final class SafariSpullen {
     public static final DeferredBlock<DunBlok> DIERENTUINBORDJE = BLOCKS.registerBlock("dierentuinbordje", p -> new DunBlok(p, 6, 10),
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(1f).noOcclusion());
 
+    /** G1 (design 1.8): the park's own safarihek (dark posts with mesh, connects like a fence) and the rotswanden. */
+    public static final DeferredBlock<FenceBlock> SAFARIHEK = BLOCKS.registerBlock("safarihek", FenceBlock::new,
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_FENCE));
+    public static final DeferredBlock<Block> ROTSWAND = BLOCKS.registerSimpleBlock("rotswand",
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.TERRACOTTA_ORANGE));
+    public static final DeferredBlock<StairBlock> ROTSWAND_TRAP = BLOCKS.registerBlock("rotswand_trap",
+            p -> new StairBlock(ROTSWAND.get().defaultBlockState(), p),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.TERRACOTTA_ORANGE));
+    public static final DeferredBlock<WallBlock> ROTSWAND_MUUR = BLOCKS.registerBlock("rotswand_muur", WallBlock::new,
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.TERRACOTTA_ORANGE).forceSolidOn());
+    static final List<DeferredBlock<?>> BLOKKEN = List.of(RIETEN_DAK, RIETEN_DAK_TRAP, RIETEN_DAK_PLAAT, BAMBOEWAND, BAMBOE_OMHEINING,
+            SAFARI_ACACIAPLANKEN, DIERENTUINBORDJE, SAFARIHEK, ROTSWAND, ROTSWAND_TRAP, ROTSWAND_MUUR);
+
     static {
-        for (DeferredBlock<?> b : List.of(RIETEN_DAK, RIETEN_DAK_TRAP, RIETEN_DAK_PLAAT, BAMBOEWAND, BAMBOE_OMHEINING, SAFARI_ACACIAPLANKEN,
-                DIERENTUINBORDJE)) {
+        for (DeferredBlock<?> b : BLOKKEN) {
             ITEMS.registerSimpleBlockItem(b);
         }
     }
@@ -91,8 +105,7 @@ public final class SafariSpullen {
     }
 
     public static void creative(Consumer<ItemStack> output) {
-        for (DeferredBlock<?> b : List.of(RIETEN_DAK, RIETEN_DAK_TRAP, RIETEN_DAK_PLAAT, BAMBOEWAND, BAMBOE_OMHEINING, SAFARI_ACACIAPLANKEN,
-                DIERENTUINBORDJE)) {
+        for (DeferredBlock<?> b : BLOKKEN) {
             output.accept(new ItemStack(b.get()));
         }
         output.accept(new ItemStack(SAFARIVOER.get()));

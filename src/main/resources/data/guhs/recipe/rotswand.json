@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TC",
+    "CT"
+  ],
+  "key": {
+    "T": "minecraft:orange_terracotta",
+    "C": "minecraft:cobblestone"
+  },
+  "result": {
+    "id": "guhs:rotswand",
+    "count": 4
+  }
+}
