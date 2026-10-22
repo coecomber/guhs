@@ -149,6 +149,20 @@ public final class Wolkjes {
         }
         guh.setOwnerUUID(eigenaar);
         guh.setTame(true, true);
+        // 1.6.3: a guh whose item was lost has no snapshot: its last looks (personality, hair, clothes) come back too
+        if (r.looks.contains("Personality")) {
+            guh.setPersonality(nl.juiced.guhs.entity.GuhPersonality.byId(r.looks.getStringOr("Personality", "")));
+        }
+        if (r.looks.contains("Haar")) {
+            guh.setHaarkleur(r.looks.getIntOr("Haar", 0));
+        }
+        CompoundTag kleren = r.looks.getCompoundOrEmpty("Clothes");
+        for (String slot : kleren.keySet()) {
+            nl.juiced.guhs.entity.GuhClothes c = nl.juiced.guhs.entity.GuhClothes.byId(kleren.getStringOr(slot, ""));
+            if (c != null) {
+                guh.wear(c);
+            }
+        }
         // 1.2.0: only its own name comes back (before, an unnamed guh got its variant name as a fixed custom name)
         if (!nl.juiced.guhs.taal.Tekst.empty(r.naam) && !(nl.juiced.guhs.taal.Tekst.literal(r.naam) && r.naam.getString().equals("Guh"))) {
             guh.setCustomName(r.naam.copy());
@@ -220,6 +234,43 @@ public final class Wolkjes {
                 com.mojang.logging.LogUtils.getLogger().warn("Wolkjes listener failed", e);
             }
         }
+    }
+
+    /**
+     * 1.6.3: a picked-up guh whose item is destroyed (fell out of the world, a cactus, an explosion) goes to the wolkjes
+     * with its whole data, exactly like a guh that died: the Knuffelhart can bring it back.
+     */
+    public static void uitItem(ServerLevel level, CompoundTag data, Vec3 pos) {
+        if (data.isEmpty()) {
+            return;
+        }
+        Entity e = EntityType.loadEntityRecursive(data.copy(), level, EntitySpawnReason.LOAD, ent -> {
+            ent.snapTo(pos.x, Math.max(pos.y, level.getMinY() + 1), pos.z, ent.getYRot(), 0f);
+            return ent;
+        });
+        if (e instanceof GuhEntity guh && Band.isBandGuh(guh) && Band.eigenaar(guh) != null
+                && !isDood(level.getServer(), Band.eigenaar(guh), Band.id(guh))) {
+            naarDeWolkjes(guh);
+        }
+    }
+
+    /**
+     * 1.6.3: "Roep naar mij" found the spot on the ground where a picked-up guh lay, but no item (it burned away before
+     * 1.6.3, or is gone otherwise): it goes to the wolkjes with its last looks, so the Knuffelhart can bring it back.
+     * False when it isn't a living band guh of this owner.
+     */
+    static boolean kwijtNaarDeWolkjes(MinecraftServer s, UUID eigenaar, UUID bandId, Plek waar) {
+        BandData data = BandData.get(s);
+        BandData.Rec r = data.vind(eigenaar, bandId);
+        if (r == null || r.dood || !r.guh) {
+            return false;
+        }
+        r.dood = true;
+        r.doodDag = Band.dag(s);
+        r.lichaam = new CompoundTag();   // (no snapshot: rebuilt from its looks, see maak)
+        data.setDirty();
+        GuhVolger.zet(eigenaar, bandId, new Plek(PlekSoort.IN_DE_WOLKJES, waar.dim(), waar.pos(), "", s.overworld().getGameTime()));
+        return true;
     }
 
     private Wolkjes() {

@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.3 — fix — Minecraft 26.1.2
+
+- **Picked-up guhs are never lost any more:** a picked-up guh lying on the ground no longer burns away in fire or lava and no longer despawns. If its parcel is destroyed anyway (a cactus, an explosion, falling out of the world), the guh goes to the clouds, and the Cuddle Heart (Knuffelhart) can bring it back.
+- **Guhs that burned away before this fix come back too:** call it with "Roep naar mij" in the Guhdex. When its parcel is no longer where it lay, it goes to the clouds, and the Cuddle Heart brings it back with its hearts, name, looks and clothes.
+
 ## 1.6.2 — Minecraft 26.1.2
 
 - **"Roep naar mij" (Call to me) always works:** wherever your guh is, it comes. A picked-up guh comes out of your pockets, a chest (also from a shulker box in it), a Bank Guh, another guh's backpack or off the ground; a guh in a Guh Wheel stops running; a guh on holiday comes back early (no postcard or souvenir); a guh at the office clocks out (finished shifts are still paid). If it is in the pockets of a player who is offline, it comes as soon as they log in. The Guhdex first tells you what will happen where it is now and asks "Weet je het zeker?". Only a guh in the clouds can't come (the Cuddle Heart can help there).

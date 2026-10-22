@@ -28974,5 +28974,6 @@
   "gui.guhs.guhdex.rarity.beverguh": "Zeldzaamheid: Alleen in de Beverbeek",
   "gui.guhs.guhdex.info.beverguh": "Een kastanjebruine guh met twee oranje knaagtandjes en een platte geschubde staart. Knabbelt aan alles wat van hout is (ook aan je deur, sorry vads). Woont in de Beverbeek tussen de bevers. Tem hem met kaasknabbels, njeg!",
   "item.guhs.knaagdier_muts": "Knaagdiermuts",
-  "item.guhs.knaagdier_staart": "Beverstaart"
+  "item.guhs.knaagdier_staart": "Beverstaart",
+  "gui.guhs.mijnguhs.roep.verloren": "%s lag als pakketje op de grond, maar het pakketje is er niet meer (verbrand of kwijt). Njeg... Hij is nu in de wolkjes: met het Knuffelhart haal je hem terug!"
 }

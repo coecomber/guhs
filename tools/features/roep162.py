@@ -55,6 +55,9 @@ TEKSTEN = {
     "gui.guhs.knabbelvelden.scherm.soort.alles": "alles",
     "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs",
     "gui.guhs.knabbelvelden.scherm.vraag.tekst": "Deze vadsjes zijn ergens mee bezig: %s",
+    # 1.6.3: a picked-up guh whose item burned away (before 1.6.3) goes to the wolkjes when it is called
+    "gui.guhs.mijnguhs.roep.verloren": "%s lag als pakketje op de grond, maar het pakketje is er niet meer (verbrand of kwijt). "
+                                       "Njeg... Hij is nu in de wolkjes: met het Knuffelhart haal je hem terug!",
     "gui.guhs.knabbelvelden.scherm.vraag.uitleg": "Ze stoppen ermee en gaan met pensioen (uit hun huisje, uit het Guhrad, uit de kist waar ze opgepakt in zitten...).",
 
 }

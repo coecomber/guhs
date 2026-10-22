@@ -365,6 +365,14 @@ public final class Roepen {
             if (k.ticks >= WACHT) {
                 it.remove();
                 losLaten(k);
+                if (k.item != null && k.item.soort() == PlekSoort.ITEM_GROND && k.level.isLoaded(k.item.pos())
+                        && Wolkjes.kwijtNaarDeWolkjes(s, k.speler.getUUID(), k.id, k.item)) {
+                    // 1.6.3: its spot on the ground is loaded but the item is gone (burned in lava before 1.6.3): to the wolkjes
+                    k.speler.sendSystemMessage(Component.translatable("gui.guhs.mijnguhs.roep.verloren", naam(s, k.speler.getUUID(), k.id))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
+                    MijnGuhs.stuur(k.speler, null);
+                    continue;
+                }
                 k.speler.sendOverlayMessage(Component.translatable("gui.guhs.mijnguhs.roep.kwijt", naam(s, k.speler.getUUID(), k.id))
                         .withStyle(ChatFormatting.GOLD));
                 MijnGuhs.stuur(k.speler, null);

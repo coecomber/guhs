@@ -65,7 +65,8 @@ public class RoepOveralGameTests {
         helper.assertTrue(e instanceof GuhEntity && !e.isRemoved(), wat + ": the guh is there");
         double d = e.distanceTo(p);
         helper.assertTrue(d <= 3.6, wat + ": next to the player (" + d + ")");
-        helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.BIJ_JOU, wat + ": bij jou");
+        Plek nu = GuhVolger.plek(p.level().getServer(), p.getUUID(), id);
+        helper.assertTrue(nu.soort() == PlekSoort.BIJ_JOU, wat + ": bij jou (" + nu + ")");
     }
 
     @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 400)
@@ -177,6 +178,47 @@ public class RoepOveralGameTests {
             // and releasing the copy's data on purpose gives the real one, not a second
             GuhEntity weer = Roepen.verschijn(p, PickedUpGuhItem.guhData(kopie));
             helper.assertTrue(weer != null && weer.getUUID().equals(id) && weer == helper.getLevel().getEntity(id), "verschijn never makes a twin");
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
+
+    /** 1.6.3: a picked-up guh on the ground never burns or despawns; when its item is destroyed it goes to the wolkjes. */
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 200)
+    public static void kapotItemNaarDeWolkjes(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(20, 1, 20));
+        ItemStack stack = opgepakt(helper, p, new BlockPos(4, 1, 4));
+        UUID id = id(stack);
+        helper.assertTrue(stack.has(net.minecraft.core.component.DataComponents.DAMAGE_RESISTANT), "it does not burn");
+        BlockPos abs = helper.absolutePos(new BlockPos(4, 1, 6));
+        net.minecraft.world.entity.item.ItemEntity item = new net.minecraft.world.entity.item.ItemEntity(helper.getLevel(),
+                abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5, stack.copy());
+        helper.getLevel().addFreshEntity(item);
+        item.getItem().getItem().onDestroyed(item);
+        item.discard();
+        helper.assertTrue(Wolkjes.isDood(helper.getLevel().getServer(), p.getUUID(), id), "in the wolkjes");
+        helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.IN_DE_WOLKJES, "'waar is hij' says so");
+        GuhEntity terug = Wolkjes.terug(helper.getLevel(), p, id, p.position());
+        helper.assertTrue(terug != null && terug.getUUID().equals(id) && hoeveel(helper.getLevel(), id) == 1, "the Knuffelhart brings the same guh back");
+        terug.discard();
+        weg(helper, p);
+        helper.succeed();
+    }
+
+    /** 1.6.3: called, its spot on the ground is loaded but the item is gone (burned before 1.6.3): to the wolkjes. */
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = Roepen.WACHT + 200)
+    public static void verlorenItemNaarDeWolkjes(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(20, 1, 20));
+        ItemStack stack = opgepakt(helper, p, new BlockPos(4, 1, 4));
+        UUID id = id(stack);
+        GuhVolger.item(stack, PlekSoort.ITEM_GROND, helper.getLevel().dimension(), helper.absolutePos(new BlockPos(4, 1, 6)), "", helper.getLevel().getGameTime());
+        Roepen.Uitkomst u = Roepen.roep(p, id);
+        helper.assertTrue(u == Roepen.Uitkomst.BEZIG, "it is looked for: " + u);
+        helper.runAfterDelay(Roepen.WACHT + 20, () -> {
+            helper.assertTrue(Wolkjes.isDood(helper.getLevel().getServer(), p.getUUID(), id), "in the wolkjes");
+            GuhEntity terug = Wolkjes.terug(helper.getLevel(), p, id, p.position());
+            helper.assertTrue(terug != null && terug.getUUID().equals(id) && terug.isTame(), "the Knuffelhart brings it back");
+            terug.discard();
             weg(helper, p);
             helper.succeed();
         });

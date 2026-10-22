@@ -84,13 +84,32 @@ public class PickedUpGuhItem extends Item {
         }
     }
 
-    /** 2.10: "waar is mijn guh": dropped on the ground. */
+    /**
+     * 2.10: "waar is mijn guh": dropped on the ground. 1.6.3: it never despawns, and falling out of the world sends the
+     * guh to the wolkjes (the Knuffelhart can bring it back) instead of losing it.
+     */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, net.minecraft.world.entity.item.ItemEntity entity) {
-        if (!entity.level().isClientSide() && entity.tickCount % 100 == 1) {
-            nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, entity.level().dimension(), entity.blockPosition(), "", entity.level().getGameTime());
+        if (entity.level() instanceof net.minecraft.server.level.ServerLevel level) {
+            entity.setUnlimitedLifetime();
+            if (entity.getY() < level.getMinY() - 32) {
+                nl.juiced.guhs.feature.band.Wolkjes.uitItem(level, guhData(stack), entity.position());
+                entity.discard();
+                return true;
+            }
+            if (entity.tickCount % 100 == 1) {
+                nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, level.dimension(), entity.blockPosition(), "", level.getGameTime());
+            }
         }
         return false;
+    }
+
+    /** 1.6.3: the item was destroyed on the ground (a cactus, an explosion...): the guh goes to the wolkjes, never lost. */
+    @Override
+    public void onDestroyed(net.minecraft.world.entity.item.ItemEntity entity) {
+        if (entity.level() instanceof net.minecraft.server.level.ServerLevel level) {
+            nl.juiced.guhs.feature.band.Wolkjes.uitItem(level, guhData(entity.getItem()), entity.position());
+        }
     }
 
     public static ItemStack of(CompoundTag guhData) {

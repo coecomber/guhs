@@ -33,5 +33,6 @@
   "gui.guhs.knabbelvelden.scherm.soort.alles": "all",
   "gui.guhs.knabbelvelden.scherm.soort.guh": "guhs",
   "gui.guhs.knabbelvelden.scherm.vraag.tekst": "These vadsjes are busy with something: %s",
-  "gui.guhs.knabbelvelden.scherm.vraag.uitleg": "They stop and retire (out of their house, off the Guh Wheel, out of the chest they are kept in...)."
+  "gui.guhs.knabbelvelden.scherm.vraag.uitleg": "They stop and retire (out of their house, off the Guh Wheel, out of the chest they are kept in...).",
+  "gui.guhs.mijnguhs.roep.verloren": "%s lay on the ground as a parcel, but the parcel is gone (burned or lost). Njeg... It is in the clouds now: bring it back with the Cuddle Heart!"
 }

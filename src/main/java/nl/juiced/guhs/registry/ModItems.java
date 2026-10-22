@@ -85,7 +85,7 @@ public final class ModItems {
 
     /** A tamed guh you picked up (sneak + right-click). */
     public static final DeferredItem<PickedUpGuhItem> PICKED_UP_GUH = ITEMS.registerItem("picked_up_guh",
-            PickedUpGuhItem::new, () -> new Item.Properties().stacksTo(1));
+            PickedUpGuhItem::new, () -> new Item.Properties().stacksTo(1).fireResistant());   // (1.6.3: never burns away in lava)
 
     public static final DeferredItem<BankGuhItem> BANK_GUH = ITEMS.registerItem("bank_guh",
             props -> new BankGuhItem(ModBlocks.BANK_GUH.get(), props), () -> new Item.Properties().stacksTo(1));
