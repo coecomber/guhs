@@ -76,7 +76,7 @@ public final class KnabbelveldenFeature {
             Pensioen.vergeet(e.getEntity().getUUID());
             ETEN.remove(e.getEntity().getUUID());
             if (e.getEntity().level() instanceof ServerLevel level && Knabbelvelden.level(level.getServer()) instanceof ServerLevel velden) {
-                for (Entity g : velden.getAllEntities()) {
+                for (Entity g : com.google.common.collect.Lists.newArrayList(velden.getAllEntities())) {   // (a copy: discard while iterating crashes)
                     Geesten.Geest geest = Geesten.isGeest(g) ? Geesten.geest(g) : null;
                     if (geest != null && geest.eigenaar().equals(e.getEntity().getUUID())) {
                         g.discard();

@@ -330,7 +330,7 @@ public final class Momenten {
     /** Rangers of moments that are over (a restart in the middle of one) go home. */
     private static void opruimen(ServerLevel level) {
         Set<UUID> nu = new HashSet<>(RANGERS.values());
-        for (Entity e : level.getAllEntities()) {
+        for (Entity e : com.google.common.collect.Lists.newArrayList(level.getAllEntities())) {   // (a copy: discard while iterating crashes)
             if (e instanceof GuhNpcEntity && e.entityTags().contains(RANGER_TAG) && !nu.contains(e.getUUID())) {
                 e.discard();
             }

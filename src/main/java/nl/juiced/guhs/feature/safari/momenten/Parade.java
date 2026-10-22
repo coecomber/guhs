@@ -382,11 +382,15 @@ public final class Parade {
     private static void stop(ServerLevel level) {
         STOETEN.clear();
         dagGestart = Long.MIN_VALUE;
+        List<Entity> weg = new java.util.ArrayList<>();          // (collect first: discarding while iterating crashed the server)
         for (Entity e : level.getAllEntities()) {
             if (isParadeDier(e) || isParadeGuh(e)) {
-                level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.4, e.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
-                e.discard();
+                weg.add(e);
             }
+        }
+        for (Entity e : weg) {
+            level.sendParticles(ParticleTypes.POOF, e.getX(), e.getY() + 0.4, e.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
+            e.discard();
         }
     }
 

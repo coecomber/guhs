@@ -1,0 +1,108 @@
+# 1.6.0 Discord pictures (dev only, Dutch client): the safari park, the Kriebelhuis, the busstation and the bouwhulp.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/discord160.txt
+
+section setup
+/gamemode spectator
+/weather clear
+/gamerule doDaylightCycle false
+/time set 6000
+mist off
+renderdistance 16
+
+section busstation (Guhmension)
+tplocate guhs:guhmension safari_busstation
+wait 100
+looktpl 40 18 -16 16 2 16
+waitrender 400
+shot discord_bus_a
+looktpl -14 14 40 16 2 16
+waitrender 400
+shot discord_bus_b
+
+section into the park (stamps it the first time)
+/gamemode creative
+/guhs safari
+wait 400
+/gamemode spectator
+/effect give @s minecraft:night_vision infinite 0 true
+
+section lobby square + parade
+camera 142 80 610 0 25
+waitrender 400
+shot discord_lobby_plein
+/time set 8750
+wait 200
+camera 205 72 615 0 18
+waitrender 300
+shot discord_parade_a
+wait 160
+camera 175 72 620 40 15
+waitrender 300
+shot discord_parade_b
+wait 160
+camera 150 71 630 30 15
+waitrender 300
+shot discord_parade_c
+/time set 6000
+
+section kaartwand
+camera 161 70 699 180 0
+waitrender 300
+shot discord_kaartwand
+
+section savanne
+camera 420 74 635 215 17
+waitrender 400
+shot discord_savanne_a
+camera 455 76 630 145 15
+waitrender 400
+shot discord_savanne_b
+camera 300 80 575 200 20
+waitrender 400
+shot discord_savanne_c
+
+section ijskust penguins
+camera 230 72 240 200 20
+waitrender 400
+shot discord_ijskust
+
+section kriebelhuis
+camera 38 61 588 90 0
+waitrender 400
+shot discord_kijkgrot_west
+camera 38 61 588 270 0
+waitrender 400
+shot discord_kijkgrot_oost
+camera 134 68 611 -90 10
+waitrender 400
+shot discord_kriebel_hal
+camera 175 70 619 180 15
+waitrender 400
+shot discord_terrarium
+
+section bouwhulp (overworld, a grass platform in the sky)
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3000 210 3000
+wait 60
+/execute in minecraft:overworld run fill 2990 199 2990 3130 199 3080 minecraft:grass_block
+/execute in minecraft:overworld run tp @s 3000 200 3000 -90 0
+wait 40
+/guhs bouwgereedschap catalogus
+wait 60
+/execute in minecraft:overworld run tp @s 2995 200 3075 -90 0
+wait 20
+/guhs bouwhulp proef
+wait 40
+gui close
+/gamemode spectator
+/time set 6000
+camera 3040 225 2975 0 35
+waitrender 400
+shot discord_catalogus_a
+camera 3010 212 3000 -45 25
+waitrender 400
+shot discord_catalogus_b
+camera 2990 206 3067 -54 25
+waitrender 300
+shot discord_spook
+quit
