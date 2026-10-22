@@ -172,8 +172,9 @@ public class PlaatsingGameTests {
         }
         LOGGER.info("Plaatsing: {} guaranteed ({}), {} story starts within 900 blocks, problems: {}", found, report, stories, fouten);
         // (guhpixel: + the Guh-internetcafe and the Reisbureau; bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie
-        // that is no minigame, landmark or guhpixel building; verhalenpad snuffel-steiger: + the steigerhuisje; 1.4.2: + Het Knabbelpark)
-        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + GUHPIXEL.size() + 3, "every guaranteed set is in the Guhmension: " + found);
+        // that is no minigame, landmark or guhpixel building; verhalenpad snuffel-steiger: + the steigerhuisje; 1.4.2: + Het Knabbelpark;
+        // 1.6.0 F1b: + the safari busstation)
+        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + GUHPIXEL.size() + 4, "every guaranteed set is in the Guhmension: " + found);
         helper.assertTrue(fouten.isEmpty(), "guaranteed copies in their ring, no story near spawn: " + fouten);
         helper.succeed();
     }
