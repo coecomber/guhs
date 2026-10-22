@@ -96,6 +96,7 @@ public final class VerblijfBlokken {
                 if (placer instanceof ServerPlayer sp) {
                     sp.sendSystemMessage(Component.translatable(be.terrarium() ? "gui.guhs.verblijf.terrarium.welkom" : "gui.guhs.verblijf.welkom",
                             VerblijfsbordItem.naam(soort)));
+                    VerblijfPayloads.openSamenstellen(sp, be);   // (1.6.4: first the family dialog)
                 }
             }
         }

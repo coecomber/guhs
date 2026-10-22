@@ -42,7 +42,9 @@ public final class VerblijfPayloads {
         /** Test round 5: point at the sleeping spot; the proposal of "Bouw passend verblijf" approved / cancelled. */
         SLAAPPLEK_WIJS, VERBLIJF_GOED, VERBLIJF_WEG,
         /** Round 6: the proposal's shortage as a written book (like the Bouwkeet's "Lijstje"). */
-        VERBLIJF_LIJSTJE }
+        VERBLIJF_LIJSTJE,
+        /** 1.6.4: the family dialog: tekst = the four roles, comma separated (man/vrouw/ouder/baby). */
+        FAMILIE }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("verblijf_open"));
@@ -86,6 +88,17 @@ public final class VerblijfPayloads {
         stuur(p, be, false);
     }
 
+    /** 1.6.4: the menu opens on the family dialog (a board placed for the first time). */
+    public static void openSamenstellen(ServerPlayer p, VerblijfsbordBlockEntity be) {
+        if (!(p.level() instanceof ServerLevel level)) {
+            return;
+        }
+        be.herreken(level);
+        CompoundTag t = staat(p, level, be);
+        t.putBoolean("Samenstellen", true);
+        PacketDistributor.sendToPlayer(p, new Open(t));
+    }
+
     /**
      * After a button: the new state only refreshes a menu that is still open. Round 6: it used to reopen the menu (on the
      * Familie tab) after "Slaapplek aanwijzen" closed it, and over the ghost panel of "Spook...".
@@ -119,9 +132,12 @@ public final class VerblijfPayloads {
             t.putLong("Slaapplek", be.slaapplek().asLong());
         }
         ListTag dieren = new ListTag();
+        t.putBoolean("Geslacht", VerblijfsbordBlockEntity.heeftGeslacht(soort));
+        t.putBoolean("FamilieGekozen", be.familieGekozen());
         for (int i = 0; i < VerblijfsbordBlockEntity.FAMILIE.length; i++) {
             CompoundTag d = new CompoundTag();
-            d.putString("Rol", VerblijfsbordBlockEntity.FAMILIE[i]);
+            d.putString("Rol", be.rol(i));
+            d.putBoolean("Actief", be.lidActief(i));
             d.putString("Naam", be.naam(i));
             UUID id = be.lid(i);
             if (id != null && level.getEntity(id) instanceof ThuisDier dier) {
@@ -218,6 +234,11 @@ public final class VerblijfPayloads {
             }
             case NAAM -> be.hernoem(level, d.waarde(), d.tekst().length() > 24 ? d.tekst().substring(0, 24) : d.tekst());
             case TERUG -> be.terugroepen(level);
+            case FAMILIE -> {
+                if (!be.zetFamilie(level, d.tekst().split(",", -1))) {
+                    p.sendOverlayMessage(Component.translatable("gui.guhs.verblijf.samenstellen.ongeldig").withStyle(ChatFormatting.RED));
+                }
+            }
             case VERSTOP -> be.verstoppen(level);
             case STRAAL -> be.zetStraal(level, d.waarde());
             case VORM -> be.zetVorm(level, d.waarde() != 0);

@@ -40,8 +40,8 @@ import nl.juiced.guhs.feature.safari.ParkData;
 
 /**
  * Op Safari! step 2 (S5): the verblijfsbord's block entity: which species, whose board, the home (a circle of 8..32 or a
- * rectangle), the optional sleeping spot, and the family that lives here - always exactly 1 male, 1 female and 2 little
- * ones ({@link #FAMILIE}). It looks after them: a member that is really gone (its whole area loaded and no sign of it) comes
+ * rectangle), the optional sleeping spot, and the family that lives here: four members, 1 male, 1 female and 2 little ones
+ * ({@link #FAMILIE}) unless the owner chose otherwise in the family dialog (1.6.4: {@link #zetFamilie}). It looks after them: a member that is really gone (its whole area loaded and no sign of it) comes
  * back; the board remembers who belongs to it, so a member that wandered off in an unloaded chunk and turns up later sees it
  * is not family any more and goes back to the park (no duplicates, ever). Broken: the family goes back to the park, the
  * gifts drop. Now and then it counts how happy the family is ({@link Tevredenheid}), lets happy animals leave a gift
@@ -65,6 +65,12 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
     private int variatie;
     /** The family: per member its entity id (null: not there yet) and name. */
     private final UUID[] leden = new UUID[FAMILIE.length];
+    /** 1.6.4: who each member is (man / vrouw / baby): chosen in the family dialog, {@link #FAMILIE} until then. */
+    private final String[] rollen = FAMILIE.clone();
+    /** 1.6.4: the owner went through the family dialog (the first time it opens by itself). */
+    private boolean familieGekozen;
+    /** 1.6.4: per species: do its male and female look different (an own _man model)? Read from the mod's own files. */
+    private static final java.util.Map<String, Boolean> GESLACHT = new java.util.concurrent.ConcurrentHashMap<>();
     private final String[] namen = {"", "", "", ""};
     private final SimpleContainer cadeaus = new SimpleContainer(9);
     private long gevoerdDag = -1, verzorgdDag = -1;
@@ -126,7 +132,9 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         this.variatie = level.getRandom().nextInt(6);
         for (int i = 0; i < leden.length; i++) {
             leden[i] = null;
+            rollen[i] = FAMILIE[i];
         }
+        familieGekozen = false;
         for (int i = 0; i < FAMILIE.length; i++) {
             if (lidActief(i)) {
                 spawnLid(level, i, true);
@@ -142,7 +150,7 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         if (dier == null) {
             return;
         }
-        dier.koppel(this, FAMILIE[i], variatie);
+        dier.koppel(this, rollen[i], variatie);
         leden[i] = dier.getUUID();
         if (terrarium()) {
             // round 4 (L4): in the tank, staying put
@@ -246,6 +254,84 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
 
     public String naam(int i) {
         return namen[i];
+    }
+
+    /** 1.6.4: who member i is: man, vrouw or baby. */
+    public String rol(int i) {
+        return rollen[i];
+    }
+
+    public boolean familieGekozen() {
+        return familieGekozen;
+    }
+
+    /** 1.6.4: do this species' male and female look different (it has its own _man model or texture)? */
+    public static boolean heeftGeslacht(String soort) {
+        return !soort.isEmpty() && GESLACHT.computeIfAbsent(soort, s ->
+                VerblijfsbordBlockEntity.class.getResource("/assets/guhs/geckolib/models/entity/safari/" + s + "_man.geo.json") != null
+                        || VerblijfsbordBlockEntity.class.getResource("/assets/guhs/textures/entity/safari/" + s + "_man.png") != null);
+    }
+
+    /**
+     * 1.6.4: the family dialog: per member "man", "vrouw", "ouder" (a parent of a species whose male and female look the
+     * same) or "baby". At least one parent. A member whose role changes is swapped (poof): the old one goes, the new one
+     * comes, never one more than four; names stay. False: not a valid family (nothing changes).
+     */
+    public boolean zetFamilie(ServerLevel level, String[] keuze) {
+        if (keuze.length != FAMILIE.length) {
+            return false;
+        }
+        boolean geslacht = heeftGeslacht(soort);
+        String[] nieuw = rollen.clone();
+        int ouders = 0;
+        for (int i = 0; i < keuze.length; i++) {
+            String k = keuze[i] == null ? "" : keuze[i].strip();
+            if (!lidActief(i)) {
+                continue;                       // (a terrarium's empty places stay as they are)
+            }
+            switch (k) {
+                case "baby" -> nieuw[i] = "baby";
+                case "man", "vrouw", "ouder" -> {
+                    ouders++;
+                    // a same-looking species: a parent keeps its old role, a new parent is a female first (the ostrich lays the egg)
+                    nieuw[i] = geslacht && !k.equals("ouder") ? k : !rollen[i].equals("baby") ? rollen[i] : null;
+                }
+                default -> {
+                    return false;
+                }
+            }
+        }
+        if (ouders == 0) {
+            return false;
+        }
+        for (int i = 0; i < nieuw.length; i++) {
+            if (nieuw[i] == null) {
+                boolean heeftVrouw = false;
+                for (int j = 0; j < nieuw.length; j++) {
+                    heeftVrouw |= lidActief(j) && "vrouw".equals(nieuw[j]);
+                }
+                nieuw[i] = heeftVrouw ? "man" : "vrouw";
+            }
+        }
+        familieGekozen = true;
+        for (int i = 0; i < nieuw.length; i++) {
+            if (nieuw[i].equals(rollen[i])) {
+                continue;
+            }
+            rollen[i] = nieuw[i];
+            if (!lidActief(i)) {
+                continue;
+            }
+            if (leden[i] != null && level.getEntity(leden[i]) instanceof ThuisDier oud) {
+                oud.poef(level);
+                oud.discard();
+            }
+            leden[i] = null;                    // (one still in an unloaded chunk is no family any more: it goes when it turns up)
+            spawnLid(level, i, true);
+        }
+        herreken(level);
+        setChanged();
+        return true;
     }
 
     @Nullable
@@ -633,7 +719,9 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         for (int i = 0; i < leden.length; i++) {
             leden[i] = in.read("Lid" + i, UUIDUtil.CODEC).orElse(null);
             namen[i] = in.getStringOr("Naam" + i, "");
+            rollen[i] = in.getStringOr("Rol" + i, FAMILIE[i]);   // (1.6.4: a board from before keeps the old family)
         }
+        familieGekozen = in.getBooleanOr("FamilieGekozen", !soort.isEmpty());
         cadeaus.clearContent();
         net.minecraft.core.NonNullList<ItemStack> lijst = net.minecraft.core.NonNullList.withSize(cadeaus.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(in.childOrEmpty("Cadeaus"), lijst);
@@ -673,7 +761,9 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         for (int i = 0; i < leden.length; i++) {
             out.storeNullable("Lid" + i, UUIDUtil.CODEC, leden[i]);
             out.putString("Naam" + i, namen[i]);
+            out.putString("Rol" + i, rollen[i]);
         }
+        out.putBoolean("FamilieGekozen", familieGekozen);
         net.minecraft.core.NonNullList<ItemStack> lijst = net.minecraft.core.NonNullList.withSize(cadeaus.getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < lijst.size(); i++) {
             lijst.set(i, cadeaus.getItem(i));

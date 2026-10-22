@@ -256,7 +256,11 @@ TEKST = {
         "sign: a little glass tank appears for them to live in."),
     ("systemen/verblijfsborden", "De familie"): (
         "The family",
-        "Exactly one male, one female and two little ones come to live on every sign. They stay inside their area (8 to 32 blocks, "
+        "Four animals come to live on every sign. When you put the sign down, you first put the family together: a parent or a "
+        "little one for each animal, and for species where you can see the difference (like the lion with its mane) also a male "
+        "or a female. There has to be at least one parent. Chose nothing? Then it is a male, a female and two little ones. You "
+        "can always change it later with Put the family together on the Family tab: who changes is swapped with a puff and keeps "
+        "its name. They stay inside their area (8 to 32 blocks, "
         "round or rectangular), even without a fence. Break the sign and they go back to the park with a puff and you get the sign "
         "back: that way you can move them."),
     ("systemen/verblijfsborden", "Thuis met je dieren"): (

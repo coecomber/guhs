@@ -35,6 +35,9 @@ import nl.juiced.guhs.feature.safari.verblijf.VerblijfsbordBlockEntity;
  * Test round 5: half as big again; every button explains itself in a tooltip, a greyed-out one says why; every checklist line
  * says how to tick it; "Rand tonen" toggles the client's own edge ({@link VerblijfRand}); the sleeping spot is pointed at
  * with a click; "Bouw passend verblijf" is a proposal with "Annuleren" / "Goedgekeurd, laat bouwen".
+ * <p>
+ * 1.6.4: the family dialog ({@link #samenstellen}): per member a parent or a little one, and for a species whose male and
+ * female look different also a male or a female. It opens by itself when a board is placed, and later from the Familie tab.
  */
 public class VerblijfScreen extends Screen {
     private static final int W = 480, H = 330;
@@ -57,6 +60,9 @@ public class VerblijfScreen extends Screen {
     private final List<EditBox> namen = new ArrayList<>();
     private final List<Tip> tips = new ArrayList<>();
     private int vriend;
+    /** 1.6.4: the family dialog is open, with what is chosen so far per member (man / vrouw / ouder / baby). */
+    private boolean samenstellen;
+    private final String[] keuze = new String[VerblijfsbordBlockEntity.FAMILIE.length];
 
     /** Round 6: the tab each board was last on, so coming back (after the ghost panel, or reopening) lands there again. */
     private static final java.util.Map<Long, Tab> LAATSTE_TAB = new java.util.HashMap<>();
@@ -66,6 +72,19 @@ public class VerblijfScreen extends Screen {
         this.data = data;
         this.pos = BlockPos.of(data.getLongOr("Pos", 0L));
         this.tab = LAATSTE_TAB.getOrDefault(pos.asLong(), Tab.FAMILIE);
+        this.samenstellen = data.getBooleanOr("Samenstellen", false);
+        startKeuze();
+    }
+
+    /** The dialog starts from the family as it is (a parent of a same-looking species is just "ouder"). */
+    private void startKeuze() {
+        ListTag dieren = data.getListOrEmpty("Dieren");
+        boolean geslacht = data.getBooleanOr("Geslacht", false);
+        for (int i = 0; i < keuze.length; i++) {
+            String rol = i < dieren.size() ? dieren.getCompoundOrEmpty(i).getStringOr("Rol", VerblijfsbordBlockEntity.FAMILIE[i])
+                    : VerblijfsbordBlockEntity.FAMILIE[i];
+            keuze[i] = rol.equals("baby") ? "baby" : geslacht ? rol : "ouder";
+        }
     }
 
     public BlockPos pos() {
@@ -75,6 +94,12 @@ public class VerblijfScreen extends Screen {
     /** New state from the server: rebuild, unless a slider or a name box is in use (their values stay). */
     public void update(CompoundTag nieuw) {
         this.data = nieuw;
+        if (nieuw.getBooleanOr("Samenstellen", false)) {
+            samenstellen = true;
+            startKeuze();
+        } else if (!samenstellen) {
+            startKeuze();
+        }
         for (var w : children()) {
             if (w instanceof AbstractSliderButton s && s.isFocused() || w instanceof EditBox e && e.isFocused()) {
                 return;
@@ -158,6 +183,10 @@ public class VerblijfScreen extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         namen.clear();
+        if (samenstellen) {
+            samenstelKnoppen();
+            return;
+        }
         List<Tab> tabs = tabs();
         if (!tabs.contains(tab)) {
             tab = Tab.FAMILIE;                       // (a remembered tab this board doesn't have now)
@@ -197,6 +226,11 @@ public class VerblijfScreen extends Screen {
                         "gui.guhs.verblijf.terugroepen.uitleg", nietJouw);
                 knop(Component.translatable("gui.guhs.verblijf.verstoppen"), left + 246, top + H - 62, 220, () -> doe(Actie.VERSTOP, 0, ""),
                         "gui.guhs.verblijf.verstoppen.uitleg", nietJouw);
+                knop(Component.translatable("gui.guhs.verblijf.samenstellen.knop"), left + 14, top + H - 30, 220, () -> {
+                    startKeuze();
+                    samenstellen = true;
+                    rebuildWidgets();
+                }, "gui.guhs.verblijf.samenstellen.knop.uitleg", nietJouw);
             }
             case VERBLIJF -> {
                 boolean rechthoek = data.getBooleanOr("Rechthoek", false);
@@ -282,6 +316,101 @@ public class VerblijfScreen extends Screen {
         }
         Button sluit = Button.builder(Component.translatable("gui.guhs.verblijf.sluit"), b -> onClose()).bounds(left + W - 76, top + H - 30, 66, 20).build();
         addRenderableWidget(sluit);
+    }
+
+    // --- 1.6.4: the family dialog ---------------------------------------------------------------------------------------
+
+    private static final int RIJ = 36;
+
+    /** The members the dialog shows (a terrarium only has room for some of them). */
+    private boolean actief(int i) {
+        ListTag dieren = data.getListOrEmpty("Dieren");
+        return i < dieren.size() && dieren.getCompoundOrEmpty(i).getBooleanOr("Actief", true);
+    }
+
+    private boolean heeftOuder() {
+        for (int i = 0; i < keuze.length; i++) {
+            if (actief(i) && !keuze[i].equals("baby")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A member that becomes a parent: a female when there is none yet, else a male. */
+    private String nieuweOuder() {
+        if (!data.getBooleanOr("Geslacht", false)) {
+            return "ouder";
+        }
+        for (int i = 0; i < keuze.length; i++) {
+            if (actief(i) && keuze[i].equals("vrouw")) {
+                return "man";
+            }
+        }
+        return "vrouw";
+    }
+
+    private void samenstelKnoppen() {
+        Component nietJouw = nietJouw();
+        boolean geslacht = data.getBooleanOr("Geslacht", false);
+        int rij = 0;
+        for (int i = 0; i < keuze.length; i++) {
+            if (!actief(i)) {
+                continue;
+            }
+            final int lid = i;
+            int ry = top + 78 + rij++ * RIJ;
+            boolean kind = keuze[i].equals("baby");
+            knop(Component.translatable(kind ? "gui.guhs.verblijf.samenstellen.kind" : "gui.guhs.verblijf.samenstellen.ouder"), left + 170, ry, 140, () -> {
+                keuze[lid] = keuze[lid].equals("baby") ? nieuweOuder() : "baby";
+                rebuildWidgets();
+            }, "gui.guhs.verblijf.samenstellen.ouder_kind.uitleg", nietJouw);
+            if (geslacht && !kind) {
+                boolean man = keuze[i].equals("man");
+                knop(Component.translatable(man ? "gui.guhs.verblijf.samenstellen.man" : "gui.guhs.verblijf.samenstellen.vrouw"), left + 318, ry, 140, () -> {
+                    keuze[lid] = keuze[lid].equals("man") ? "vrouw" : "man";
+                    rebuildWidgets();
+                }, "gui.guhs.verblijf.samenstellen.geslacht.uitleg", nietJouw);
+            }
+        }
+        knop(Component.translatable(data.getBooleanOr("FamilieGekozen", true) ? "gui.guhs.verblijf.samenstellen.annuleren"
+                : "gui.guhs.verblijf.samenstellen.zo_laten"), left + 14, top + H - 30, 160, () -> {
+            samenstellen = false;
+            startKeuze();
+            rebuildWidgets();
+        }, "gui.guhs.verblijf.samenstellen.annuleren.uitleg", null);
+        knop(Component.translatable("gui.guhs.verblijf.samenstellen.klaar").withStyle(ChatFormatting.BOLD), left + W - 254, top + H - 30, 240, () -> {
+            doe(Actie.FAMILIE, 0, String.join(",", keuze));
+            samenstellen = false;
+            tab = Tab.FAMILIE;
+            LAATSTE_TAB.put(pos.asLong(), tab);
+            rebuildWidgets();
+        }, "gui.guhs.verblijf.samenstellen.klaar.uitleg",
+                eerste(nietJouw, heeftOuder() ? null : Component.translatable("gui.guhs.verblijf.samenstellen.reden.geen_ouder")));
+    }
+
+    private void samenstellenTekenen(GuiGraphicsExtractor g) {
+        int x = left + 14;
+        g.text(font, Component.translatable("gui.guhs.verblijf.samenstellen.titel").withStyle(ChatFormatting.BOLD), x, top + 30, DONKER, false);
+        Component soort = Component.translatable("entity.guhs.safari." + data.getStringOr("Soort", ""));
+        GidsTekst.alinea(g, Component.translatable(data.getBooleanOr("Geslacht", false) ? "gui.guhs.verblijf.samenstellen.uitleg.geslacht"
+                : "gui.guhs.verblijf.samenstellen.uitleg", soort), x, top + 44, W - 28, 0.875f, LICHT);
+        ListTag dieren = data.getListOrEmpty("Dieren");
+        int rij = 0;
+        for (int i = 0; i < keuze.length; i++) {
+            if (!actief(i)) {
+                continue;
+            }
+            int ry = top + 78 + rij * RIJ;
+            g.fill(x - 2, ry - 4, left + W - 14, ry + 26, rij % 2 == 0 ? 0x18C9A46A : 0x0CC9A46A);
+            rij++;
+            String naam = dieren.getCompoundOrEmpty(i).getStringOr("Naam", "");
+            g.text(font, Component.translatable("gui.guhs.verblijf.samenstellen.dier", rij).withStyle(ChatFormatting.BOLD), x + 2, ry + 1, DONKER, false);
+            Component wie = naam.isEmpty() ? Component.translatable("gui.guhs.verblijf.samenstellen.wie." + keuze[i]) : Component.literal(naam);
+            GidsTekst.passend(g, wie, x + 2, ry + 13, 150, 0.875f, LICHT, false);
+        }
+        GidsTekst.passend(g, Component.translatable("gui.guhs.verblijf.samenstellen.wissel").withStyle(ChatFormatting.ITALIC), x,
+                top + 78 + rij * RIJ + 4, W - 28, 0.875f, LICHT, false);
     }
 
     /** Deel 2 (F10b): the Bouwopdracht tab: the tasks on the left, the chosen one's buttons and the running job on the right. */
@@ -388,6 +517,10 @@ public class VerblijfScreen extends Screen {
             van = van.copy().append(" ").append(Component.translatable("gui.guhs.verblijf.alleen_kijken").withStyle(ChatFormatting.ITALIC));
         }
         GidsTekst.passend(g, van, left + W - 8, top + 6, 220, 0.875f, LICHT, true);
+        if (samenstellen) {
+            samenstellenTekenen(g);
+            return;
+        }
         int x = left + 14, y = top + 54;
         switch (tab) {
             case FAMILIE -> familie(g, x, y);

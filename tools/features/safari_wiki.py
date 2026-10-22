@@ -214,7 +214,11 @@ WIKI = {
          "dier. Van elke soort kun je eens per zeven dagen een bord kopen. Kleine diertjes uit het Kriebelhuis krijgen een "
          "terrariumbord: dan verschijnt er een glazen bakje waar ze in wonen."),
         ("verblijfsborden", "De familie",
-         "Op elk bord komt precies één mannetje, één vrouwtje en twee kleintjes wonen. Ze blijven binnen hun gebied (8 tot 32 blokken, "
+         "Op elk bord komen vier dieren wonen. Zet je het bord neer, dan stel je eerst de familie samen: kies per dier een ouder "
+         "of een kind, en bij soorten waar je het verschil ziet (zoals de leeuw met zijn manen) ook een mannetje of een vrouwtje. "
+         "Er moet minstens één ouder bij zijn. Niets gekozen? Dan zijn het een mannetje, een vrouwtje en twee kleintjes. Later "
+         "wijzigen kan altijd met Familie samenstellen op de tab Familie: wie verandert, wordt met een puf omgewisseld en zijn "
+         "naam blijft. Ze blijven binnen hun gebied (8 tot 32 blokken, "
          "rond of rechthoekig), ook zonder hek. Sla je het bord kapot, dan gaan ze met een puf terug naar het park en krijg je het "
          "bord terug: zo kun je ze verhuizen."),
         ("verblijfsborden", "Thuis met je dieren",
