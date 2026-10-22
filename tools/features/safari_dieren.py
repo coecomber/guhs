@@ -241,6 +241,9 @@ SHOWS_GROEP = {
     "groot_vogel": ["schud", "rondkijk"], "pinguin": ["schud", "rondkijk"], "zee": ["schud"],
     "aap": ["krab", "rondkijk", "rek"], "reptiel": ["rondkijk", "snuffel"], "nijlpaard": ["gaap", "schud"],
     "geit": ["huppel", "schud"], "ezel": ["schud", "rondkijk"], "cavia": ["huppel", "snuffel"],
+    # F12's own sound groups for the Kriebelhuis keep the shows they had as klein / zee / reptiel / vogel
+    "kriebel": ["huppel", "krab", "snuffel"], "hommel": ["huppel", "krab", "snuffel"], "vis": ["schud"],
+    "kikker": ["rondkijk", "snuffel"], "vleermuis": ["schud", "rondkijk"],
 }
 SHOWS_SOORT = {
     "giraffe": ["pluk", "schud", "rondkijk"], "otter": ["schelp", "schud", "huppel"], "bever": ["schud", "snuffel", "krab"],
