@@ -413,3 +413,10 @@ Package `nl.juiced.guhs.feature.bouwhulp` (+ client). Generators `tools/features
 - Shapes/templates for F9/F10 can use these ids directly.
 - The creative tab "Guhs: Bouwen" (`BouwBlokken.TAB`): add tools via `BouwBlokken.TAB_EXTRA.add(out -> out.accept(stack))` in a static init / register().
 - Small self-made choices go in `BOUWHULP_KEUZES.md` (one line per choice, prefixed with the slice); at the merge they move to design doc chapter 9.
+
+## F1b busstation + Guh-safaribus (feature/safari/bus, tools/features/safari_busstation.py)
+- Structure `guhs:safari_busstation` (64×34×64, anchor `guhs:safari_busstation_midden`, G = 6); guaranteed set `safari_busstation_gegarandeerd` (500-2000, sector 15/16, alleen_nieuw) + a rare random set (160/126).
+- Template coordinates are shared by `Busstation.java` and the generator: BUS (50..55 × 26..41), CHAUFFEUR (57, G+1, 38), BEL (56, G+1, 44), VERKOPER (41, G+1, 54), DIEREN, BEZOEKERS.
+- `Busrit.instappen(p, oord)` / `Busrit.uitstappen(p)`: SafariToegang + own guhs along (safari hat) + scenes `safari_bus_heen_0..2` (park, anchored at the lobby bus box min corner) and `safari_bus_terug` (station, anchored at CHAUFFEUR). The lobby's bus/bell (SafariLobby.opBus) now calls `Busrit.uitstappen`.
+- `SafariToegang.aankomst(level)`: the busplein west of the lobby bus (x = bus.minX − 6, z = bus.minZ + 8); used by naarPark.
+- Ops: `/guhs safari busstation plaats|waar`. NPC kind `SAFARI_CHAUFFEUR`.

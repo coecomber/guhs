@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:safari_busstation",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20261032,
+    "min_afstand": 500,
+    "max_afstand": 2000,
+    "alleen_nieuw": true,
+    "sector": 15,
+    "sectoren": 16
+  }
+}

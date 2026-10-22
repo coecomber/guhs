@@ -92,7 +92,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # its place after bio_wereld is the state F10a's standalone run left), then the helper texts (F10b)
             'safari_beverbeek', 'bouwhulp_helpers',
             # 1.6.0 G1: the gaps of the design audit (append only)
-            'safari_g1']
+            'safari_g1',
+            # 1.6.0 F1b: het safari-busstation in de Guhmension (append only)
+            'safari_busstation']
 
 
 def modules():

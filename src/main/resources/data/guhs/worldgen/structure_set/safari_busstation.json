@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:safari_busstation",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 160,
+    "separation": 126,
+    "salt": 20261031
+  }
+}

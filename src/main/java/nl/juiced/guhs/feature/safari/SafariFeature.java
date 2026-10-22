@@ -62,6 +62,7 @@ public final class SafariFeature {
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) -> Populatie.bewaakCritter(event.getEntity()));
         nl.juiced.guhs.feature.safari.gedrag.GuhdexBijBinnenkomst.register();   // round 4: a Guhdex for whoever enters without one
         nl.juiced.guhs.feature.safari.extra.SafariExtra.register();   // G1: safari hats on own guhs, the Aussie guhs
+        nl.juiced.guhs.feature.safari.bus.BusstationFeature.register();   // F1b: the busstations in the Guhmension + the Guh-safaribus
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {
