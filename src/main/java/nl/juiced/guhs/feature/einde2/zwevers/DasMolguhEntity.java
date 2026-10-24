@@ -47,6 +47,9 @@ import com.geckolib.animation.state.AnimationTest;
 public class DasMolguhEntity extends Elementdier {
     private static final EntityDataAccessor<Boolean> DATA_ONDER = SynchedEntityData.defineId(DasMolguhEntity.class, EntityDataSerializers.BOOLEAN);
     private static final RawAnimation GRAAF = RawAnimation.begin().thenPlay("graaf_in").thenLoop("onder");
+    /** 1.7.0 (Onder de Wol): the stone of the Guhmension's viltsteen and knuffelsteen layers, which a cave molguh digs through like earth. */
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> ONDERWOL_GROND =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, nl.juiced.guhs.Guhs.id("onderwol/molguh_grond"));
     private static final EntityDimensions MAAT_ONDER = EntityDimensions.scalable(0.95f, 0.3f).withEyeHeight(0.2f);
 
     private int graafTijd, volgendeGraaf = 200;
@@ -93,9 +96,10 @@ public class DasMolguhEntity extends Elementdier {
         return isOnder();
     }
 
-    /** Ground it can dig in: the ground of the outer islands, and whatever a shovel digs (earth, sand, gravel, snow). */
+    /** Ground it can dig in: the ground of the outer islands, whatever a shovel digs (earth, sand, gravel, snow), and (1.7.0) the
+     * viltsteen and knuffelsteen of the Guhmension's caves. */
     public static boolean zacht(BlockState state) {
-        return state.is(Einde2Ids.EILANDGROND) || state.is(BlockTags.MINEABLE_WITH_SHOVEL);
+        return state.is(Einde2Ids.EILANDGROND) || state.is(BlockTags.MINEABLE_WITH_SHOVEL) || state.is(ONDERWOL_GROND);
     }
 
     /** Does it stand on ground it can dig in? */

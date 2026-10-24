@@ -104,7 +104,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.2: the Beverguh + the knaagdier outfit (append only)
             'beverbeek_guhs',
             # 1.6.4: the verblijfsbord's family dialog (append only)
-            'familie164']
+            'familie164',
+            # 1.7.0 Onder de Wol: the kern, then its creatures (append only)
+            'onderwol', 'onderwol_wezens']
 
 
 def modules():
