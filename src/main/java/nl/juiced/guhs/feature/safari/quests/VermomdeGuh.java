@@ -149,7 +149,12 @@ public final class VermomdeGuh {
         for (ParkData.Plek p : ParkData.get().plekken) {
             if (p.soort().equals(soort)) {
                 int x = p.centrum().getX() + 3, z = p.centrum().getZ() + 2;
-                return new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+                // (1.7.0 fix: on the real ground, not on top of a bamboo stalk or a bush: the players must reach him)
+                BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+                while (pos.getY() > level.getMinY() && !level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP)) {
+                    pos = pos.below();
+                }
+                return pos;
             }
         }
         return null;
@@ -179,13 +184,13 @@ public final class VermomdeGuh {
     }
 
     /**
-     * 1.7.0 fix: tall grass (or a flower) on his spot catches the click before it reaches him, and in the park nothing may be
-     * broken: plants on his spot and just above it go.
+     * 1.7.0 fix: tall grass (or a flower, or bamboo) on his spot catches the click before it reaches him, and in the park
+     * nothing may be broken: plants on his spot and just above it go.
      */
     static void ruimOp(ServerLevel level, BlockPos pos) {
         for (BlockPos p : new BlockPos[]{pos, pos.above()}) {
             net.minecraft.world.level.block.state.BlockState s = level.getBlockState(p);
-            if (!s.isAir() && s.canBeReplaced() && s.getFluidState().isEmpty()) {
+            if (!s.isAir() && (s.canBeReplaced() || s.is(net.minecraft.world.level.block.Blocks.BAMBOO)) && s.getFluidState().isEmpty()) {
                 level.removeBlock(p, false);
             }
         }
