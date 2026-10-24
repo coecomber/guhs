@@ -576,3 +576,79 @@ def build(h):
     texts(h)
     worldgen(h)
     selfcheck(h)
+
+
+# =====================================================================================================================
+# on its own (the way the slices since 1.5 run): python tools/features/onderwol.py from the project root. It writes
+# only its own files, patches the shared Guhmension files in place (all patches are idempotent), writes the 26.1 item
+# definitions, and merges its texts into nl_nl.json / en_us.json. A full make_resources run is NOT safe on this tree
+# (later hand fixes, e.g. render types, are not in every generator).
+# =====================================================================================================================
+def _direct():
+    import types
+    R = os.path.join("src", "main", "resources")
+    A, D = os.path.join(R, "assets", "guhs"), os.path.join(R, "data", "guhs")
+    NL, EN = {}, {}
+
+    def w(path, obj):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(obj, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+
+    def patch_json(path, fn):
+        data = json.load(open(path, encoding="utf-8"))
+        fn(data)
+        w(path, data)
+
+    def add_tag(path, values):
+        full = f"{R}/data/{path}.json"
+        data = json.load(open(full, encoding="utf-8")) if os.path.exists(full) else {"replace": False, "values": []}
+        for v in values:
+            if v not in data["values"]:
+                data["values"].append(v)
+        w(full, data)
+
+    def simple_block(name, tex_=None, render_type=None):
+        model = {"parent": "minecraft:block/cube_all", "textures": {"all": tex_ or f"guhs:block/{name}"}}
+        if render_type:
+            model["render_type"] = render_type
+        w(f"{A}/models/block/{name}.json", model)
+        w(f"{A}/blockstates/{name}.json", {"variants": {"": {"model": f"guhs:block/{name}"}}})
+        w(f"{A}/models/item/{name}.json", {"parent": f"guhs:block/{name}"})
+
+    def item_model(name, tex_=None, parent="minecraft:item/generated"):
+        w(f"{A}/models/item/{name}.json", {"parent": parent, "textures": {"layer0": tex_ or f"guhs:item/{name}"}})
+
+    def self_drop(name, item=None):
+        w(f"{D}/loot_table/blocks/{name}.json", {"type": "minecraft:block", "pools": [{
+            "rolls": 1, "bonus_rolls": 0, "entries": [{"type": "minecraft:item", "name": f"guhs:{item or name}"}],
+            "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
+
+    def shaped(name, pattern, key, result, count=1):
+        w(f"{D}/recipe/{name}.json", {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": pattern, "key": dict(key),
+                                      "result": {"id": result, "count": count}})
+
+    def lang(key, en, nl):
+        EN[key] = en
+        NL[key] = nl
+    h = types.SimpleNamespace(R=R, A=A, D=D, w=w, patch_json=patch_json, add_tag=add_tag, simple_block=simple_block,
+                              item_model=item_model, self_drop=self_drop, shaped=shaped, lang=lang)
+    build(h)
+    # the 26.1 item definitions (mc26.py makes these in a full run)
+    items = VILT + [f"{n}_trap" for n in TRAPPEN] + [f"{n}_plaat" for n in TRAPPEN] + [f"{n}_muur" for n in MUREN] + \
+        ["knuffelnaad", "guhklei", *ERTSEN, "vahoegiet_erts", "lichtmosblok", "lichtmos", *PLANTEN, "pluiskussen", "vahoegiet", "glitterbes"]
+    for i in items:
+        w(f"{A}/items/{i}.json", {"model": {"type": "minecraft:model", "model": f"guhs:item/{i}"}})
+    for taal, teksten in (("nl_nl", NL), ("en_us", EN)):
+        p = os.path.join(A, "lang", taal + ".json")
+        data = json.load(open(p, encoding="utf-8"))
+        data.update(teksten)
+        w(p, data)
+    print(f"onderwol: {len(items)} items, {len(NL)} texts")
+
+
+if __name__ == "__main__":
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    _direct()
