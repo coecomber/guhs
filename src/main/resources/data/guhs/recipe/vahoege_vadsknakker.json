@@ -1,0 +1,12 @@
+{
+  "type": "guhs:vadsknakker",
+  "category": "equipment",
+  "ingredients": [
+    "guhs:vahoege_vads_paxel",
+    "guhs:vahoege_vads_shears",
+    "guhs:vahoege_vads_hoe"
+  ],
+  "result": {
+    "id": "guhs:vahoege_vadsknakker"
+  }
+}

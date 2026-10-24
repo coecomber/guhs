@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " L ",
+    "WWW",
+    "W W"
+  ],
+  "key": {
+    "L": "minecraft:lantern",
+    "W": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:mijnlampje",
+    "count": 1
+  }
+}

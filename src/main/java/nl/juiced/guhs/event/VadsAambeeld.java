@@ -30,9 +30,13 @@ import nl.juiced.guhs.registry.ModItems;
  */
 public final class VadsAambeeld {
     /** The unbreakable Vads gear. */
-    private static final List<Supplier<? extends Item>> VADS = List.of(ModItems.VADS_HELMET, ModItems.VADS_CHESTPLATE, ModItems.VADS_LEGGINGS,
-            ModItems.VADS_BOOTS, ModItems.VADS_SWORD, ModItems.VADS_PICKAXE, ModItems.VADS_AXE, ModItems.VADS_SHOVEL, ModItems.VADS_HOE,
-            ModItems.VADS_PAXEL, ModItems.VADS_SHEARS);
+    private static final List<Supplier<? extends Item>> VADS = new java.util.ArrayList<>(List.of(ModItems.VADS_HELMET, ModItems.VADS_CHESTPLATE,
+            ModItems.VADS_LEGGINGS, ModItems.VADS_BOOTS, ModItems.VADS_SWORD, ModItems.VADS_PICKAXE, ModItems.VADS_AXE, ModItems.VADS_SHOVEL,
+            ModItems.VADS_HOE, ModItems.VADS_PAXEL, ModItems.VADS_SHEARS));
+
+    static {
+        VADS.addAll(nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.nieuweVads());   // 1.7.0: the Vadsknakker and super vahoege vads
+    }
 
     private VadsAambeeld() {
     }

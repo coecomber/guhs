@@ -3,6 +3,10 @@
   "values": [
     "guhs:vahoege_vads_pickaxe",
     "guhs:vahoege_vads_paxel",
-    "guhs:fossielmijn_zoutkristalhouweel"
+    "guhs:fossielmijn_zoutkristalhouweel",
+    "guhs:super_vahoege_vads_pickaxe",
+    "guhs:super_vahoege_vads_paxel",
+    "guhs:vahoege_vadsknakker",
+    "guhs:super_vahoege_vadsknakker"
   ]
 }

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VSV",
+    "VKV",
+    "VVV"
+  ],
+  "key": {
+    "V": "guhs:vahoegiet",
+    "S": "guhs:super_vads_sjabloon",
+    "K": "guhs:guh_kristalsteen"
+  },
+  "result": {
+    "id": "guhs:super_vads_sjabloon",
+    "count": 2
+  }
+}

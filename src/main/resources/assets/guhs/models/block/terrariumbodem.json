@@ -1,0 +1,97 @@
+{
+  "textures": {
+    "particle": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    },
+    "glas": {
+      "sprite": "guhs:block/safari/terrariumglas",
+      "force_translucent": true
+    },
+    "hout": "minecraft:block/stripped_oak_log",
+    "bodem": "guhs:block/safari_terrarium_bodem"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        2,
+        0.5
+      ],
+      "to": [
+        15.5,
+        2.5,
+        15.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#bodem"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glas",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#glas",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#glas",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#glas",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#glas",
+          "cullface": "up"
+        }
+      }
+    }
+  ]
+}

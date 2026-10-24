@@ -510,6 +510,9 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
         if (teller % 20 == 11) {
             nl.juiced.guhs.feature.bouwhulp.helpers.Bouwopdracht.tick(level, this);
         }
+        if (terrarium()) {
+            nl.juiced.guhs.feature.mijnhulp.TerrariumRuimte.tick(level, this);   // 1.7.0: terraria of any shape
+        }
     }
 
     // --- the Bouwopdracht (deel 2, F10b): this board builds its family's ghost --------------------------------------------

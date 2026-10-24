@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:vahoegiet",
+    "guhs:vahoegiet",
+    "guhs:vahoegiet",
+    "guhs:vahoegiet",
+    "guhs:vahoege_vads_ingot",
+    "guhs:vahoege_vads_ingot",
+    "guhs:vahoege_vads_ingot",
+    "guhs:vahoege_vads_ingot"
+  ],
+  "result": {
+    "id": "guhs:vahoegietstaaf"
+  }
+}

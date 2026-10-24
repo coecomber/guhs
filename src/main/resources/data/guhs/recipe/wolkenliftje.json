@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WFW",
+    "FVF",
+    "WFW"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "F": "minecraft:feather",
+    "V": "guhs:vahoege_vads"
+  },
+  "result": {
+    "id": "guhs:wolkenliftje",
+    "count": 2
+  }
+}
