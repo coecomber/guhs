@@ -131,6 +131,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.bouwhulp.client.BouwhulpClient.init(modBus);   // 1.6.0 deel 2: ghosts, the Bouwkeet
         nl.juiced.guhs.feature.bouwhulp.client.GereedschapClient.init(modBus);   // 1.6.0 deel 2 F9: tool screens, radial menu, previews
         nl.juiced.guhs.feature.onderwol.wezens.client.OnderWolWezensClient.init(modBus);   // 1.7.0 Onder de Wol: the cave glimworm, the Grotguh's glow
+        nl.juiced.guhs.feature.guhvillagers.client.GuhVillagersClient.init(modBus);   // 1.7.0: the new guh villager look, the IJzerguhlem
     }
 
     private FeaturesClient() {

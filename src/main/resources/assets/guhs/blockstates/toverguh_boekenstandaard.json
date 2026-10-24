@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/toverguh_boekenstandaard"
+    },
+    "facing=east": {
+      "model": "guhs:block/toverguh_boekenstandaard",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/toverguh_boekenstandaard",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/toverguh_boekenstandaard",
+      "y": 270
+    }
+  }
+}

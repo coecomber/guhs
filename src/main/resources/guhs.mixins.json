@@ -8,6 +8,8 @@
     "EntitySaveMixin",
     "FlowingFluidMixin",
     "GameTestInfoMixin",
+    "GuhGolemMixin",
+    "GuhGolemSensorMixin",
     "GuhrioDuwMixin",
     "KnabbelGeestZichtMixin",
     "MockConnectionMixin",

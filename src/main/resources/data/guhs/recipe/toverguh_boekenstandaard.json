@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WBW",
+    " P ",
+    " P "
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "B": "minecraft:book",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:toverguh_boekenstandaard",
+    "count": 1
+  }
+}

@@ -12,12 +12,10 @@ import com.geckolib.renderer.base.RenderPassInfo;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
-import net.minecraft.client.renderer.entity.VillagerRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.state.SlimeRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.bus.api.IEventBus;
@@ -47,8 +45,7 @@ public final class GuhsClient {
         GuhsTaal.init(modBus);
         nl.juiced.guhs.feature.FeaturesClient.init(modBus);
         modBus.addListener(GuhsClient::registerRenderers);
-        modBus.addListener(GuhsClient::registerLayerDefinitions);
-        modBus.addListener(GuhsClient::addVillagerLayers);
+        // (1.7.0: guh villagers have their own model now: feature/guhvillagers/client, no more ears+tail layer on the vanilla one)
         modBus.addListener(GuhWheelRenderer::registerModels);
         modBus.addListener(GuhsClient::registerScreens);
         modBus.addListener(GuhsClient::registerBlockColors);
@@ -62,17 +59,6 @@ public final class GuhsClient {
         // DEV ONLY: the automatic screenshot round (gradlew runAutocheckClient); the class isn't in the guhs jar
         if (System.getProperty("guhs.autocheck") != null) {
             nl.juiced.guhs.dev.AutoCheck.init(modBus);
-        }
-    }
-
-    private static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(GuhVillagerFeaturesLayer.LAYER, GuhVillagerFeaturesLayer::createLayer);
-    }
-
-    /** Guh villagers are vanilla villagers: add their ears and tail to the vanilla villager renderer. */
-    private static void addVillagerLayers(EntityRenderersEvent.AddLayers event) {
-        if (event.getRenderer(EntityType.VILLAGER) instanceof VillagerRenderer villagers) {
-            villagers.addLayer(new GuhVillagerFeaturesLayer(villagers, event.getEntityModels().bakeLayer(GuhVillagerFeaturesLayer.LAYER)));
         }
     }
 
