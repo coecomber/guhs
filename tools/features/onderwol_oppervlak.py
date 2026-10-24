@@ -574,7 +574,24 @@ def selfcheck():
         raise SystemExit("onderwol_oppervlak self-check failed:\n  " + "\n  ".join(problemen))
 
 
+def vallei_tags():
+    """1.7.0: the Bloemenvallei takes ground from the fields and meadows, so it may hold what they hold (also the saved spot of
+    a guaranteed building found there before the valley existed): it joins every biome tag that lists guh_fields or guh_meadows."""
+    import glob
+    for pad in glob.glob(os.path.join("src", "main", "resources", "data", "guhs", "tags", "worldgen", "biome", "**", "*.json"), recursive=True):
+        with open(pad, encoding="utf-8") as f:
+            d = json.load(f)
+        waarden = d.get("values", [])
+        namen = [v if isinstance(v, str) else v.get("id") for v in waarden]
+        if ("guhs:guh_fields" in namen or "guhs:guh_meadows" in namen) and "guhs:bloemenvallei" not in namen:
+            waarden.append("guhs:bloemenvallei")
+            with open(pad, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(d, f, indent=2, ensure_ascii=False)
+                f.write("\n")
+
+
 def build():
+    vallei_tags()
     textures()
     blokken()
     teksten()

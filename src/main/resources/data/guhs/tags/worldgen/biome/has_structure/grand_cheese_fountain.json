@@ -24,6 +24,7 @@
     "minecraft:sparse_jungle",
     "minecraft:badlands",
     "minecraft:mushroom_fields",
-    "minecraft:snowy_taiga"
+    "minecraft:snowy_taiga",
+    "guhs:bloemenvallei"
   ]
 }

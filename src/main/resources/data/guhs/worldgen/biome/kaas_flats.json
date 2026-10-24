@@ -70,8 +70,8 @@
   "features": [
     [],
     [
-      "guhs:onderwol_vijvertje",
-      "guhs:onderwol_kronkelbeekje"
+      "guhs:onderwol_kronkelbeekje",
+      "guhs:onderwol_vijvertje"
     ],
     [
       "guhs:onderwol_geode",
@@ -107,10 +107,10 @@
     ],
     [
       "guhs:onderwol_sausval",
-      "guhs:onderwol_wolwaterval_zacht",
-      "guhs:onderwol_kaasval",
       "guhs:onderwol_grotwaterval",
-      "guhs:onderwol_grotwaterval_diep"
+      "guhs:onderwol_grotwaterval_diep",
+      "guhs:onderwol_wolwaterval_zacht",
+      "guhs:onderwol_kaasval"
     ],
     [
       "guhs:guhbloesem_rare",

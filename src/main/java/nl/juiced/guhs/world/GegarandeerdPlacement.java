@@ -298,9 +298,34 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         }
         if (heeft) {
             OPSLAG.put(level, data);
+            // 1.7.0 guard: a world that already has chunks but never ran 1.6.5 (no AllesBewaard) would save spots computed on
+            // the new terrain, which may lie elsewhere than the buildings that stand there: those are then not saved
+            if (!data.allesBewaard() && heeftChunks(level)) {
+                ONBEWAARD.add(level.dimension());
+                LOGGER.error("Guhs: {} has generated chunks but its guaranteed spots were never all saved (start Guhs 1.6.5 on this world first): "
+                        + "the plain guaranteed sets are searched but NOT saved now, so they may move with the terrain of this version", level.dimension().identifier());
+            }
         }
         if (open) {
             NieuwTerrein.volg(level);
+        }
+    }
+
+    /** 1.7.0: the dimensions whose plain spots must not be saved (see laad). */
+    private static final Set<net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>> ONBEWAARD = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    /**
+     * 1.7.0: the flatness factor of a saved spot: always flat enough. A spot found (and saved) on older terrain whose chunk is
+     * not generated yet must not be refused by this version's terrain (ZoekHoogte, other heights).
+     */
+    static final int BEWAARD_VLAK = 1000;
+
+    private static boolean heeftChunks(ServerLevel level) {
+        java.nio.file.Path regio = net.minecraft.world.level.dimension.DimensionType.getStorageFolder(level.dimension(),
+                level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT)).resolve("region");
+        try (var files = java.nio.file.Files.list(regio)) {
+            return files.anyMatch(f -> f.getFileName().toString().endsWith(".mca"));
+        } catch (java.io.IOException e) {
+            return false;
         }
     }
 
@@ -801,7 +826,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         if (opslag != null) {
             Plek bewaard = opslag.plek(naam(set));
             if (bewaard != null) {
-                return Optional.of(bewaard);
+                return Optional.of(new Plek(bewaard.chunk(), BEWAARD_VLAK));   // (1.7.0: always flat enough, see BEWAARD_VLAK)
             }
         }
         // bbq2: the middle of the ring: 0,0, or the guaranteed copy of the set this one lies around
@@ -876,7 +901,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
                         LOGGER.debug("Guhs: guaranteed {} at chunk {} ({} blocks, flatness x{}, {} tries, {} ms)", naam(set), c, (int) d, ronde[3], tries,
                                 (System.nanoTime() - start) / 1_000_000);
                         Plek plek = new Plek(c, ronde[3]);
-                        if (opslag != null) {
+                        if (opslag != null && (alleenNieuw() || !ONBEWAARD.contains(level.dimension()))) {
                             plek = opslag.zet(naam(set), plek);
                             String van = hand ? mx + ", " + mz + " (chosen by an operator)" : rond().map(Identifier::toString).orElse("0,0");
                             if (terrein != null) {
