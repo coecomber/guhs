@@ -146,6 +146,7 @@ public final class Features {
         nl.juiced.guhs.feature.bouwhulp.GereedschapFeature.register(modBus);   // 1.6.0 deel 2 F9: vormstaf, kwasten, blauwdrukken
         nl.juiced.guhs.feature.bouwhulp.helpers.HelpersFeature.register(modBus);   // 1.6.0 deel 2 F10b: helper + build animals (verblijfsbord Bouwopdracht)
         nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.register(modBus);   // 1.6.0 deel 2 F10a: de Beverbeek (biome, ranger post, aaibever)
+        nl.juiced.guhs.feature.onderwol.OnderWolFeature.register(modBus);   // 1.7.0 Onder de Wol: the underground of the Guhmension
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -384,6 +385,7 @@ public final class Features {
         nl.juiced.guhs.feature.safari.verblijf.VerblijfFeature.creative(output);   // 1.6.0 Op Safari! S5: verblijfsborden, toys
         nl.juiced.guhs.feature.safari.quests.SafariQuests.creative(output);   // 1.6.0 Op Safari! S4
         nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature.creative(output);   // 1.6.0 deel 2: de Bouwhulp
+        nl.juiced.guhs.feature.onderwol.OnderWolFeature.creative(output);   // 1.7.0 Onder de Wol: layers, ores, cave plants
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
