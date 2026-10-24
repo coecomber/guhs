@@ -1,0 +1,14 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/sausmeer_vissershutje/start",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    }
+  ]
+}

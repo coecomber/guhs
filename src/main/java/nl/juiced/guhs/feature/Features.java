@@ -148,6 +148,7 @@ public final class Features {
         nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.register(modBus);   // 1.6.0 deel 2 F10a: de Beverbeek (biome, ranger post, aaibever)
         nl.juiced.guhs.feature.onderwol.OnderWolFeature.register(modBus);   // 1.7.0 Onder de Wol: the underground of the Guhmension
         nl.juiced.guhs.feature.onderwol.wezens.OnderWolWezens.register(modBus);   // 1.7.0 Onder de Wol: Grotguh, cave molguh, glimwormpjes
+        nl.juiced.guhs.feature.onderwol.bouw.OnderWolBouw.register(modBus);   // 1.7.0 Onder de Wol: underground buildings (guhs:grot_bouw)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

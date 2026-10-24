@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:mijningang_hutje",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 10,
+    "salt": 17010001
+  }
+}
