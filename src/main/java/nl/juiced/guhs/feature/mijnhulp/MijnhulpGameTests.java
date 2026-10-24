@@ -68,8 +68,9 @@ public class MijnhulpGameTests {
     public static void vadsknakkerReceptVoegtEnchantmentsSamen(GameTestHelper helper) {
         Holder<Enchantment> eff = ench(helper, Enchantments.EFFICIENCY), fortuin = ench(helper, Enchantments.FORTUNE),
                 zijde = ench(helper, Enchantments.SILK_TOUCH);
-        ItemStack paxel = met(ModItems.VADS_PAXEL, eff, 3), schaar = met(ModItems.VADS_SHEARS, eff, 3), schoffel = met(ModItems.VADS_HOE, fortuin, 2);
-        schoffel.enchant(zijde, 1);     // (clashes with fortune: left out)
+        // the paxel counts first (the anvil's left item), whatever the grid order
+        ItemStack paxel = met(ModItems.VADS_PAXEL, eff, 3), schaar = met(ModItems.VADS_SHEARS, eff, 3), schoffel = met(ModItems.VADS_HOE, zijde, 1);
+        paxel.enchant(fortuin, 2);      // (the hoe's silk touch clashes with it: left out)
         CraftingInput in = CraftingInput.of(3, 1, List.of(schoffel, paxel, schaar));
         var recept = helper.getLevel().recipeAccess().getRecipeFor(RecipeType.CRAFTING, in, helper.getLevel());
         helper.assertTrue(recept.isPresent(), "paxel + shears + hoe make something");
@@ -192,16 +193,18 @@ public class MijnhulpGameTests {
         BlockPos top = new BlockPos(5, 8, 4);
         helper.setBlock(top, MijnhulpFeature.PLUISLADDER.get().defaultBlockState().setValue(PluisladderBlock.FACING, Direction.NORTH));
         helper.runAfterDelay(40, () -> {
-            for (int y = 1; y <= 8; y++) {
+            for (int y = 2; y <= 8; y++) {      // (relative y 1 is the template's floor)
                 helper.assertBlockPresent(MijnhulpFeature.PLUISLADDER.get(), top.atY(y));
             }
-            helper.assertTrue(helper.getBlockState(top.atY(1)).is(BlockTags.CLIMBABLE), "climbable");
+            helper.assertBlockPresent(Blocks.WHITE_CONCRETE, top.atY(1));
+            helper.assertTrue(helper.getBlockState(top.atY(2)).is(BlockTags.CLIMBABLE), "climbable");
             helper.assertTrue(!helper.getBlockState(top.atY(3)).getValue(PluisladderBlock.TOP), "the lower pieces aren't the top");
             ServerPlayer p = GuhMockPlayer.of(helper);
+            p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);     // (the mock player starts in creative: no roll back)
             BlockPos abs = helper.absolutePos(top.atY(3));
             helper.getBlockState(top.atY(3)).getBlock().playerWillDestroy(helper.getLevel(), abs, helper.getBlockState(top.atY(3)), p);
             helper.getLevel().removeBlock(abs, false);
-            for (int y = 1; y <= 8; y++) {
+            for (int y = 2; y <= 8; y++) {
                 helper.assertBlockNotPresent(MijnhulpFeature.PLUISLADDER.get(), top.atY(y));
             }
             helper.assertItemEntityCountIs(MijnhulpFeature.PLUISLADDER_ITEM.get().asItem(), top.atY(3), 2.0, 1);
@@ -212,14 +215,18 @@ public class MijnhulpGameTests {
     /** A tamed guh with a Mijnlampje lights up a dark spot, takes the light along, and takes it away when it goes. */
     @GuhTest(template = VLOER, timeoutTicks = 120)
     public static void mijnlampjeLoptMee(GameTestHelper helper) {
-        // a dark box: a roof over the floor
-        for (int x = 0; x < 9; x++) {
-            for (int z = 0; z < 9; z++) {
-                helper.setBlock(new BlockPos(x, 4, z), Blocks.STONE);
+        // a closed dark box on the template's floor (relative y 1): walls and a roof, so no sky light gets in
+        for (int x = 0; x <= 8; x++) {
+            for (int z = 0; z <= 8; z++) {
+                for (int y = 2; y <= 5; y++) {
+                    if (y == 5 || x == 0 || x == 8 || z == 0 || z == 8) {
+                        helper.setBlock(new BlockPos(x, y, z), Blocks.STONE);
+                    }
+                }
             }
         }
         ServerPlayer p = GuhMockPlayer.of(helper);
-        GuhEntity g = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
+        GuhEntity g = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 2, 3));
         g.tame(p);
         g.setNoAi(true);
         g.wear(GuhClothes.MIJNLAMPJE);
@@ -235,7 +242,7 @@ public class MijnhulpGameTests {
                 helper.runAfterDelay(30, () -> {
                     helper.assertTrue(!helper.getLevel().getBlockState(l2).is(MijnhulpFeature.MIJNLAMP_LICHT.get()), "the guh is gone: so is its light");
                     // a stray light block (e.g. from a saved chunk) disappears by itself
-                    BlockPos los = helper.absolutePos(new BlockPos(7, 1, 7));
+                    BlockPos los = helper.absolutePos(new BlockPos(2, 2, 6));
                     helper.getLevel().setBlockAndUpdate(los, MijnhulpFeature.MIJNLAMP_LICHT.get().defaultBlockState());
                     helper.runAfterDelay(25, () -> {
                         helper.assertTrue(helper.getLevel().getBlockState(los).isAir(), "a light without a lamp guh vanishes");

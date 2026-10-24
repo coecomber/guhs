@@ -64,6 +64,8 @@ public class VadsknakkerRecept extends ShapelessRecipe {
                 stukken.add(s);
             }
         }
+        // the paxel first (like the anvil's left item), then the rest in grid order: the outcome doesn't hang on the grid
+        stukken.sort(java.util.Comparator.comparingInt(st -> st.getItem() instanceof nl.juiced.guhs.item.PaxelItem ? 0 : 1));
         voegSamen(uit, stukken);
         return uit;
     }
