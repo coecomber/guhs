@@ -46,6 +46,8 @@ NOISES = {
 # the cave biomes: noise threshold (above it the biome), and how far depth/continentalness are pushed there
 GLITTER_VANAF, PLUIS_VANAF = 0.28, 0.30
 SHIFT = 10.0
+# the caves are only worked out where the terrain (without caves) is above this: inside the land and just above it
+LUCHT = -0.2
 MC_JAR = os.path.join(os.environ.get("APPDATA", ""), "PrismLauncher", "libraries", "com", "mojang", "minecraft", "26.1.2",
                       "minecraft-26.1.2-client.jar")
 
@@ -179,6 +181,8 @@ def tags(h):
         h.add_tag(f"c/tags/{kind}/ores", g(*ERTSEN, "vahoegiet_erts"))
     # the rock of the layers (what ores, springs, geodes and the cave plants grow into)
     h.add_tag("guhs/tags/block/onderwol/laagsteen", ["minecraft:pink_wool", "guhs:viltsteen", "guhs:knuffelsteen", "guhs:guh_kristalsteen"])
+    # (1.7.0 extra: a golfballetje also pays for a go in the grijpmachine, like the other minigame coins)
+    h.add_tag("guhs/tags/item/knus/grijptickets", ["guhs:golfballetje"])
 
 
 def recipes(h):
@@ -312,22 +316,39 @@ def _noise(name, xz=1.0, y=1.0):
     return {"type": "minecraft:noise", "noise": name, "xz_scale": xz, "y_scale": y}
 
 
-def grotten():
-    """The caves (density: below 0 is air). Cheese caves more and bigger the deeper (none above ~y 47), spaghetti and
-    noodles a bit rarer in the wool, vanilla's entrances (the cave mouths) a bit rarer than vanilla."""
+def _interp(f):
+    return {"type": "minecraft:interpolated", "argument": f}
+
+
+def _max(a, b):
+    return {"type": "minecraft:max", "argument1": a, "argument2": b}
+
+
+def _min(a, b):
+    return {"type": "minecraft:min", "argument1": a, "argument2": b}
+
+
+def grotten(vast):
+    """The caves (density: below 0 is air). Cheese caves more and bigger the deeper (none above ~y 47), closing up towards
+    the knuffelnaad each along its own noise (no flat floors), spaghetti and noodles a bit rarer in the wool, vanilla's
+    entrances (the cave mouths). Everything but the noodles (interpolated inside already) sits in an interpolated, as in
+    vanilla: the final density is filled per cell without moving the cache_once counter, so a cache_once or a noise
+    outside interpolation is either frozen per 8x4x8 cell or paid per block. vast: the terrain without caves (a cache_once
+    the terrain's own interpolated shares); where it is clearly air (a few blocks above the land) no cave noise is worked
+    out at all, which also spares the structure searches (getBaseHeight) most of the caves' cost."""
     kaas = kw.add({"type": "minecraft:clamp", "min": -1.0, "max": 1.0, "input": _noise("minecraft:cave_cheese", 1.0, 0.6666666666666666)},
                   kw.add(kw.gradient(18, 30, 0.24, 0.46), kw.gradient(42, 48, 0.0, 1.6)))
-    mond = kw.mul(5.0, kw.add("minecraft:overworld/caves/entrances", 0.06))
+    mond = kw.mul(5.0, "minecraft:overworld/caves/entrances")
     spaghetti = kw.add(kw.add("minecraft:overworld/caves/spaghetti_2d", "minecraft:overworld/caves/spaghetti_roughness_function"),
                        kw.gradient(60, 74, 0.0, 0.25))
-    binnen = {"type": "minecraft:interpolated", "argument": {"type": "minecraft:min", "argument1": {"type": "minecraft:min", "argument1": kaas, "argument2": mond},
-                                                            "argument2": spaghetti}}
+    dicht = kw.gradient(5, 14, 0.7, 0.0)
+    # never in the bottom blocks, never under the seas (the sea noise of the Knuffeldal module: 1 away from the seas)
+    wacht = _max(kw.gradient(4, 6, 2.0, -10.0), kw.add(-10.0, kw.mul(kw.add(1.0, kw.mul(kw.geen_zee(), -1.0)), 12.0)))
+    holtes = _max(kw.add(_min(_min(kaas, mond), spaghetti), dicht), wacht)
+    binnen = _interp({"type": "minecraft:range_choice", "input": vast, "min_inclusive": -1000000.0, "max_exclusive": LUCHT,
+                      "when_in_range": 1.0, "when_out_of_range": holtes})
     noedel = kw.add("minecraft:overworld/caves/noodle", kw.gradient(58, 70, 0.0, 0.4))
-    ruw = {"type": "minecraft:min", "argument1": binnen, "argument2": noedel}
-    # never in the bottom five blocks, never under the seas (the sea noise of the Knuffeldal module: 1 away from the seas)
-    bodem = kw.gradient(5, 8, 2.0, -10.0)
-    zee = kw.add(-10.0, kw.mul(kw.add(1.0, kw.mul(kw.geen_zee(), -1.0)), 12.0))
-    return {"type": "minecraft:max", "argument1": {"type": "minecraft:max", "argument1": ruw, "argument2": bodem}, "argument2": zee}
+    return _max(_min(binnen, noedel), _interp(wacht))
 
 
 def router(d):
@@ -335,16 +356,24 @@ def router(d):
     final = r["final_density"]
     assert final.get("type") == "guhs:bio_terrein", "onderwol must come after bio_wereld"
     binnen = final["input"]
-    if "minecraft:overworld/caves/noodle" not in json.dumps(binnen):   # (idempotent)
-        assert binnen["type"] == "minecraft:max" and binnen["argument1"]["type"] == "minecraft:interpolated", "unexpected final_density"
-        terrein = json.loads(json.dumps(binnen["argument1"]))
-        # the preliminary surface is the real terrain now (was a constant): the layer rule only works below it
-        r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface", "density": terrein["argument"],
-                                          "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
-        # (the caves are only worked out where the terrain is solid: above the land the old value goes through untouched)
-        oud = {"type": "minecraft:cache_once", "argument": binnen}
-        final["input"] = {"type": "minecraft:range_choice", "input": oud, "min_inclusive": -1000000.0, "max_exclusive": 0.0,
-                          "when_in_range": oud, "when_out_of_range": {"type": "minecraft:min", "argument1": oud, "argument2": grotten()}}
+    if binnen["type"] == "minecraft:range_choice" and binnen["input"]["type"] == "minecraft:cache_once":   # (the first test build's shape)
+        binnen = final["input"] = binnen["input"]["argument"]
+    if binnen["type"] == "minecraft:min" and "minecraft:overworld/caves/noodle" in json.dumps(binnen["argument2"]):   # (idempotent)
+        binnen = binnen["argument1"]
+    assert binnen["type"] == "minecraft:max" and binnen["argument1"]["type"] == "minecraft:interpolated", "unexpected final_density"
+    if binnen["argument1"]["argument"]["type"] == "minecraft:cache_once":   # (idempotent)
+        binnen["argument1"]["argument"] = binnen["argument1"]["argument"]["argument"]
+    terrein = json.loads(json.dumps(binnen["argument1"]))
+    # the terrain value is shared (inside interpolation) with the caves' check "is this solid?"; below y 30 the bottom of
+    # the Guhmension (binnen's second half) is solid whatever the terrain says
+    gedeeld = {"type": "minecraft:cache_once", "argument": binnen["argument1"]["argument"]}
+    binnen["argument1"]["argument"] = gedeeld
+    vast = _max(gedeeld, {"type": "minecraft:y_clamped_gradient", "from_y": 29, "to_y": 31, "from_value": 1.0, "to_value": -1.0})
+    final["input"] = _min(binnen, grotten(vast))
+    # the preliminary surface is the real terrain now (was a constant): the layer rule only works below it
+    r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface", "density": terrein["argument"],
+                                      "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
+    if "guhs:onderwol_glitter" not in json.dumps(r["depth"]):   # (idempotent)
         # the cave biomes: deep inside the rock (as the Gatenkaasgrotten' "deep"), in their own band of height, where their noise
         # is high, depth goes up by SHIFT and continentalness up (Glitterspelonk) or down (Pluisgrot) by SHIFT
         rots = {"type": "minecraft:clamp", "min": 0.0, "max": 1.0, "input": kw.mul(kw.add(terrein, -0.28), 6.0)}
@@ -369,11 +398,13 @@ def surface(d):
 
 
 def biome_source(d):
+    """The cave biomes' climate points lie beyond what the noises reach by themselves (only the shift of router() gets
+    there); the offset keeps them from winning by default where depth is naturally high, at the bottom of the world."""
     alles = [-2.0, 2.0]
     entries = [e for e in d["generator"]["biome_source"]["biomes"] if e["biome"] not in g(*BIOMES)]
     for biome, c in (("glitterspelonk", 2.0), ("pluisgrot", -2.0)):
         entries.append({"biome": f"guhs:{biome}", "parameters": {"temperature": alles, "humidity": alles, "continentalness": c,
-                                                                 "erosion": alles, "weirdness": alles, "depth": 2.0, "offset": 0.0}})
+                                                                 "erosion": alles, "weirdness": alles, "depth": 2.0, "offset": 1.0}})
     d["generator"]["biome_source"]["biomes"] = entries
 
 
@@ -442,13 +473,23 @@ def features(h):
     w(f"{wg}/placed_feature/onderwol_sausval.json", {"feature": "guhs:onderwol_sausval", "placement": [
         {"type": "minecraft:count", "count": 6}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(12, 44)},
         {"type": "minecraft:biome"}]})
-    # --- the Java features: the saus sea (once per chunk) and the sinkholes (rare) ---
-    for naam in ("onderwol_sauszee", "onderwol_zinkgat"):
-        w(f"{wg}/configured_feature/{naam}.json", {"type": f"guhs:{naam}", "config": {}})
+    # --- the Java feature: the saus sea (once per chunk) ---
+    w(f"{wg}/configured_feature/onderwol_sauszee.json", {"type": "guhs:onderwol_sauszee", "config": {}})
     w(f"{wg}/placed_feature/onderwol_sauszee.json", {"feature": "guhs:onderwol_sauszee", "placement": [{"type": "minecraft:biome"}]})
-    w(f"{wg}/placed_feature/onderwol_zinkgat.json", {"feature": "guhs:onderwol_zinkgat", "placement": [
-        {"type": "minecraft:rarity_filter", "chance": 70}, {"type": "minecraft:in_square"},
-        {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"}, {"type": "minecraft:biome"}]})
+    for naam in ("configured_feature", "placed_feature"):   # (the round shafts of the first test build: replaced by the carvers)
+        if os.path.exists(f"{wg}/{naam}/onderwol_zinkgat.json"):
+            os.remove(f"{wg}/{naam}/onderwol_zinkgat.json")
+    # --- the carvers: vanilla's winding caves and (rare) ravines, through the wool and the layers, so the underground now and
+    # then opens up to the surface the way it does in the overworld (no lava: its level is under the world) ---
+    h.add_tag("guhs/tags/block/onderwol/grot_vervangbaar", ["#minecraft:wool", "#guhs:onderwol/laagsteen", "#c:ores", *GROT_OPPERVLAK])
+    for naam, bron, kans, hoogte in (("onderwol_grot", "cave", 0.14, {"type": "minecraft:uniform", "min_inclusive": {"absolute": 10},
+                                                                           "max_inclusive": {"absolute": 180}}),
+                                     ("onderwol_kloof", "canyon", 0.012, {"type": "minecraft:uniform", "min_inclusive": {"absolute": 24},
+                                                                           "max_inclusive": {"absolute": 80}})):
+        carver = _mc(f"data/minecraft/worldgen/configured_carver/{bron}.json")
+        carver["config"].pop("debug_settings", None)
+        carver["config"].update({"probability": kans, "replaceable": "#guhs:onderwol/grot_vervangbaar", "lava_level": {"absolute": -8}, "y": hoogte})
+        w(f"{wg}/configured_carver/{naam}.json", carver)
     # --- the plants of the cave biomes ---
     scan = lambda richting: [  # noqa: E731
         {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 66)},
@@ -490,8 +531,15 @@ def features(h):
 
 ERTS_IDS = [f"guhs:onderwol_{s}" for s in ERTS_PLAATSING if s != "smaragderts"] + ["guhs:onderwol_guhklei", "guhs:onderwol_vahoegiet"]
 WEG = {"guhs:vahoege_vads_ore", "guhs:vahoege_vads_ore_rich"}   # the old vads lumps in the wool: vads lives in the stone now
-STAP2 = ["guhs:onderwol_geode", "guhs:onderwol_sauszee", "guhs:onderwol_zinkgat"]
+STAP2 = ["guhs:onderwol_geode", "guhs:onderwol_sauszee"]
 STAP8 = ["guhs:onderwol_sausval"]
+CARVERS = ["guhs:onderwol_grot", "guhs:onderwol_kloof"]
+ZEE_BIOMES = g("guh_sea", "diepe_guhzee")   # (no carvers: they would cut holes under the water)
+# the surface blocks of the Guhmension's biomes the carvers may cut through (besides wool and the layers)
+GROT_OPPERVLAK = ["minecraft:grass_block", "minecraft:dirt", "minecraft:sand", "minecraft:sandstone", "minecraft:clay", "minecraft:snow_block",
+                  "minecraft:pink_terracotta", "minecraft:magenta_terracotta", "minecraft:pink_concrete_powder", "guhs:rijpgras", "guhs:knuffelgras",
+                  "guhs:vadsmos", "guhs:bleekmos", "guhs:kaasmodder", "guhs:modderig_kaasgras", "guhs:gladde_knuffelsteen", "guhs:guhklei",
+                  "guhs:block_of_kaasknabbels"]
 
 
 def biomes(h):
@@ -504,6 +552,7 @@ def biomes(h):
         while len(f) < 11:
             f.append([])
         f[6] = [x for x in f[6] if x not in WEG]
+        f[2] = [x for x in f[2] if x != "guhs:onderwol_zinkgat"]
         for stap, lijst in ((2, STAP2), (6, ERTS_IDS + (["guhs:onderwol_smaragderts"] if biome_id in SMARAGD_BIOMES else [])), (8, STAP8)):
             for x in lijst:
                 if x not in f[stap]:
@@ -513,6 +562,8 @@ def biomes(h):
         if not os.path.exists(pad):
             continue
         h.patch_json(pad, lambda d, b=b: voeg_toe(d["features"], b))
+        if b not in ZEE_BIOMES:
+            h.patch_json(pad, lambda d: d.update(carvers=d.get("carvers", []) + [c for c in CARVERS if c not in d.get("carvers", [])]))
     # the two cave biomes (written in the 26.1 shape)
     kristal = json.load(open(f"{wg}/biome/guh_kristalmijn.json", encoding="utf-8"))
     leeg = {k: [] for k in kristal["spawners"]}

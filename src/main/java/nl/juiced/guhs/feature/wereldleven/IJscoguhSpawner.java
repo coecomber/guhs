@@ -25,12 +25,14 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.knus.PleinSlot;
+import nl.juiced.guhs.feature.weerder.WeerderFeature;
 import nl.juiced.guhs.world.ModDimensions;
 
 /**
  * Brings IJscoguh Tingeling around, like the wandering trader: every few minutes, per player in the Guhmensie, a chance
  * that he rides up (when there isn't one close already). In a Knuffeldal town he comes to the plein. Guhs run after his
- * cart (IJscoguhEntity.Volgen). Ops: /guhs ijscoguh (he comes to you now).
+ * cart (IJscoguhEntity.Volgen). Never in the area of a Wilde-guhweerder (1.7.0): not to a player standing in one, and not
+ * to a spot in one. Ops: /guhs ijscoguh (he comes to you now).
  */
 public final class IJscoguhSpawner {
     /**
@@ -73,7 +75,7 @@ public final class IJscoguhSpawner {
                 continue;
             }
             VOLGENDE.put(player.getUUID(), now + POGING + level.getRandom().nextInt(POGING / 2));
-            if (nearest(level, player.blockPosition(), AL_EEN) != null) {
+            if (nearest(level, player.blockPosition(), AL_EEN) != null || !WeerderFeature.wildeGuhMag(level, player.blockPosition())) {
                 continue;    // (he's around already: the next chance comes later)
             }
             if (level.getRandom().nextFloat() < KANS && spawnBij(level, player, level.getRandom()) != null) {
@@ -101,14 +103,14 @@ public final class IJscoguhSpawner {
         BlockPos doel = player.blockPosition();
         BlockPos spot = null;
         StructureStart stadje = PleinSlot.stadje(level, player.blockPosition());
-        if (stadje != null && !stadje.getPieces().isEmpty()) {
+        if (stadje != null && !stadje.getPieces().isEmpty() && WeerderFeature.wildeGuhMag(level, stadje.getPieces().get(0).getBoundingBox().getCenter())) {
             doel = stadje.getPieces().get(0).getBoundingBox().getCenter();
-            spot = surface(level, doel.offset(random.nextInt(9) - 4, 0, random.nextInt(9) - 4));
+            spot = vrij(level, surface(level, doel.offset(random.nextInt(9) - 4, 0, random.nextInt(9) - 4)));
         }
         for (int tries = 0; spot == null && tries < 12; tries++) {
             double a = random.nextDouble() * Math.PI * 2;
             int r = 20 + random.nextInt(17);
-            spot = surface(level, player.blockPosition().offset((int) (Math.cos(a) * r), 0, (int) (Math.sin(a) * r)));
+            spot = vrij(level, surface(level, player.blockPosition().offset((int) (Math.cos(a) * r), 0, (int) (Math.sin(a) * r))));
         }
         if (spot == null) {
             return null;
@@ -124,6 +126,12 @@ public final class IJscoguhSpawner {
         ijsco.bel();
         player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.ijscoguh_komt").withStyle(ChatFormatting.LIGHT_PURPLE));
         return ijsco;
+    }
+
+    /** The spot, unless it lies in the area of a Wilde-guhweerder (then null). */
+    @Nullable
+    private static BlockPos vrij(ServerLevel level, @Nullable BlockPos spot) {
+        return spot != null && WeerderFeature.wildeGuhMag(level, spot) ? spot : null;
     }
 
     private static BlockPos surfaceOr(ServerLevel level, BlockPos pos) {

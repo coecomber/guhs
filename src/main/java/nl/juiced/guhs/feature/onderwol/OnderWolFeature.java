@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,28 +30,33 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.world.ModDimensions;
 
 /**
  * 1.7.0 "Onder de Wol" (design: ontwerp-guhs170-mijnen.md): the Guhmension gets an underground worth digging in. Under
  * the pink wool lie layers of stone (viltsteen y 45-64, the existing knuffelsteen y 25-45 and guhkristalsteen y 5-25,
  * the unbreakable knuffelnaad below), caves that get bigger the deeper you go, a saus sea in the deep caves of some
- * regions, geodes, sinkholes, two cave biomes (the Glitterspelonk and the Pluisgrot), and ores: every vanilla ore and
- * the mod's own (vads, kaasknabbels, kaaskorrels) in a version per layer, guhklei, pigment and the rare vahoegiet.
+ * regions, geodes, vanilla-style winding caves and ravines up to the surface, two cave biomes (the Glitterspelonk and
+ * the Pluisgrot), and ores: every vanilla ore and the mod's own (vads, kaasknabbels, kaaskorrels) in a version per layer,
+ * guhklei, pigment and the rare vahoegiet.
  * <p>
  * The terrain is data (tools/features/onderwol.py: the layers are surface rules, the caves a term in the final density,
- * the cave biomes a shift of depth and continentalness); this class registers the blocks and items and the two Java
- * features: the saus sea ({@link OnderWolWorldgen.Sauszee}) and the sinkholes ({@link OnderWolWorldgen.Zinkgat}).
- * New chunks only: the server world is never reset.
+ * the cave biomes a shift of depth and continentalness, the winding caves vanilla's carvers); this class registers the
+ * blocks and items and the Java feature of the saus sea ({@link OnderWolWorldgen.Sauszee}), and keeps monsters out of the
+ * caves ({@link #onSpawnCheck}). New chunks only: the server world is never reset.
  */
 public final class OnderWolFeature {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
@@ -184,7 +193,6 @@ public final class OnderWolFeature {
 
     // --- worldgen ------------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SAUSZEE = FEATURES.register("onderwol_sauszee", OnderWolWorldgen.Sauszee::new);
-    public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> ZINKGAT = FEATURES.register("onderwol_zinkgat", OnderWolWorldgen.Zinkgat::new);
 
     private static DeferredBlock<StairBlock> trap(String id, DeferredBlock<Block> van) {
         return BLOCKS.registerBlock(id, p -> new StairBlock(van.get().defaultBlockState(), p), () -> BlockBehaviour.Properties.ofFullCopy(van.get()));
@@ -202,11 +210,39 @@ public final class OnderWolFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         FEATURES.register(modBus);
+        NeoForge.EVENT_BUS.addListener(OnderWolFeature::onSpawnCheck);
         // the Superkompas tab "Biomes" (section Guhmension)
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "glitterspelonk");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("glitterspelonk", "guhs:glitterrank_bes");
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "pluisgrot");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("pluisgrot", "guhs:pluiskussen");
+    }
+
+    /**
+     * No monsters wander up from the caves: in the Guhmension a monster does not spawn by itself under the surface, except
+     * in the structures made for them (a Mika camp, the Moerasheks' hut: the ones with a monster spawn override).
+     */
+    static void onSpawnCheck(MobSpawnEvent.PositionCheck event) {
+        if (event.getSpawnType() != EntitySpawnReason.NATURAL && event.getSpawnType() != EntitySpawnReason.CHUNK_GENERATION
+                || event.getEntity().getType().getCategory() != MobCategory.MONSTER
+                || !(event.getLevel().getLevel() instanceof ServerLevel level) || level.dimension() != ModDimensions.GUHMENSION) {
+            return;
+        }
+        BlockPos pos = event.getEntity().blockPosition();
+        if (onderDeGrond(level, pos) && !inMonsterStructuur(level, pos)) {
+            event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
+        }
+    }
+
+    /** Under the surface: more than {@value #ONDER_OPPERVLAK} blocks below the top of the ground (leaves don't count). */
+    public static boolean onderDeGrond(ServerLevel level, BlockPos pos) {
+        return pos.getY() < level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) - ONDER_OPPERVLAK;
+    }
+
+    static final int ONDER_OPPERVLAK = 3;
+
+    static boolean inMonsterStructuur(ServerLevel level, BlockPos pos) {
+        return level.structureManager().getStructureWithPieceAt(pos, s -> s.value().spawnOverrides().containsKey(MobCategory.MONSTER)).isValid();
     }
 
     public static void creative(Consumer<ItemStack> output) {

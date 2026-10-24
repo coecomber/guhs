@@ -59,7 +59,10 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": [],
+  "carvers": [
+    "guhs:onderwol_grot",
+    "guhs:onderwol_kloof"
+  ],
   "features": [
     [],
     [],
@@ -67,8 +70,7 @@
       "guhs:beverbeek_beek",
       "guhs:beverbeek_poel",
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee",
-      "guhs:onderwol_zinkgat"
+      "guhs:onderwol_sauszee"
     ],
     [],
     [],

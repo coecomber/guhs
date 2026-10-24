@@ -62,11 +62,13 @@ import net.minecraft.world.level.storage.ValueInput;
  * IJscoguh Tingeling (2.8, wereldleven): a guh on his ice-cream bike (a box full of kaasijsjes, a parasol, a bell). Like
  * a wandering trader he turns up near players in the Guhmensie (IJscoguhSpawner), also on the Knuffeldal plein, rings
  * his bell ("Tingeling!"), sells kaasijsjes for kaasknabbels (the seasonal flavour only in its own season) and rides
- * away after a day. Guhs close by run after his cart ({@link Volgen}). Always friendly: nothing can hurt him.
+ * away after an hour (1.7.0: an hour of real time, also while his chunk was not loaded: {@link #WEG_NA_MS}). Guhs close by run after his cart ({@link Volgen}). Always friendly: nothing can hurt him.
  */
 public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant {
-    /** He rides away after this long (one in-game day). */
-    public static final int BLIJFT = 24000;
+    /** He rides away after this many ticks near a player (1.7.0: an hour; was one in-game day)... */
+    public static final int BLIJFT = 20 * 60 * 60;
+    /** ...and in any case an hour of real time after he came, counted on the clock (so also while nobody was near). */
+    public static final long WEG_NA_MS = 60L * 60 * 1000;
     /** Guhs run after the cart from this far. */
     public static final double VOLG_AFSTAND = 14;
     /** Prices in kaasknabbels. */
@@ -79,6 +81,8 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private int blijft = BLIJFT;
+    /** When he came (System.currentTimeMillis); 0: not yet known (set on his first tick, also for one saved before 1.7.0). */
+    private long sinds;
     @Nullable
     private BlockPos doel;
     private int belOver = 60;
@@ -160,6 +164,11 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         this.blijft = ticks;
     }
 
+    /** When he came (real time, ms), see {@link #WEG_NA_MS}. */
+    public void setSinds(long ms) {
+        this.sinds = ms;
+    }
+
     /** Rides to his goal when it is far away. */
     private class NaarDoelGoal extends Goal {
         NaarDoelGoal() {
@@ -204,7 +213,10 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
             belOver = 160 + random.nextInt(200);
             bel();
         }
-        if (--blijft <= 0) {
+        if (sinds == 0) {
+            sinds = System.currentTimeMillis();
+        }
+        if (--blijft <= 0 || System.currentTimeMillis() - sinds > WEG_NA_MS) {
             wegrijden();
         }
     }
@@ -398,6 +410,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Blijft", blijft);
+        tag.putLong("Sinds", sinds);
         if (doel != null) {
             tag.store("Doel", BlockPos.CODEC, doel);
         }
@@ -409,6 +422,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         if (tag.keySet().contains("Blijft")) {
             blijft = tag.getIntOr("Blijft", 0);
         }
+        sinds = tag.getLongOr("Sinds", 0L);
         doel = (tag).read("Doel", BlockPos.CODEC).orElse(null);
     }
 

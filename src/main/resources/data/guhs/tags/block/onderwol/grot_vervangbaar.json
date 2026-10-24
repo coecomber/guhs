@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:wool",
+    "#guhs:onderwol/laagsteen",
+    "#c:ores",
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:sand",
+    "minecraft:sandstone",
+    "minecraft:clay",
+    "minecraft:snow_block",
+    "minecraft:pink_terracotta",
+    "minecraft:magenta_terracotta",
+    "minecraft:pink_concrete_powder",
+    "guhs:rijpgras",
+    "guhs:knuffelgras",
+    "guhs:vadsmos",
+    "guhs:bleekmos",
+    "guhs:kaasmodder",
+    "guhs:modderig_kaasgras",
+    "guhs:gladde_knuffelsteen",
+    "guhs:guhklei",
+    "guhs:block_of_kaasknabbels"
+  ]
+}

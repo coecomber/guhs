@@ -43,8 +43,9 @@ import nl.juiced.guhs.world.ModDimensions;
 /**
  * 1.7.0 "Onder de Wol": who lives in the new caves of the Guhmension (design rounds 10, 11, 23). Nothing hostile.
  * <ul>
- *   <li>the <b>Grotguh</b> ({@link GuhVariant#GROTGUH}): a wild guh with sparkly deep-pink fur, in every cave, more of them
- *       in the Glitterspelonk. Tamed with kaasknabbels like any guh; a (bonus) Guhdex page.</li>
+ *   <li>wild guhs in the caves: mostly the usual ones (rolled as on the surface), now and then (as rare as a chocolate
+ *       guh, {@link #GROTGUH_KANS}) a <b>Grotguh</b> ({@link GuhVariant#GROTGUH}) with sparkly deep-pink fur. Tamed with
+ *       kaasknabbels like any guh; a (bonus) Guhdex page.</li>
  *   <li>the <b>Molguh</b>: the das-molguh of the Guheinde ({@link DasMolguhEntity}), in the caves of the viltsteen and
  *       knuffelsteen layers. It digs into that stone like into earth (the block tag {@link #MOLGUH_GROND}) and pops up
  *       again a bit further; where it pops up it sometimes leaves something behind ({@link #achterlaten}).</li>
@@ -71,7 +72,9 @@ public final class OnderWolWezens {
     /** The top-up looks every this many ticks per player; 1 in {@link #KANS} looks brings something. */
     public static final int TIJD = 200, KANS = 2;
     /** At most this many within 48 blocks of a player: cave guhs (in the Glitterspelonk: {@link #GUHS_GLITTER}), molguhs, glimworms. */
-    public static final int GUHS = 3, GUHS_GLITTER = 5, MOLGUHS = 2, GLIMWORMEN = 10;
+    public static final int GUHS = 2, GUHS_GLITTER = 3, MOLGUHS = 2, GLIMWORMEN = 10;
+    /** Out of {@link GuhVariant#ROLL_OUT_OF} cave guhs, this many are a Grotguh: as rare as a chocolate guh on the surface. */
+    public static final int GROTGUH_KANS = GuhVariant.CHOCO.weight;
     /** The layers (y) of the molguh: viltsteen and knuffelsteen. */
     public static final int MOL_ONDER = 25, MOL_BOVEN = 64;
     /** Chance that a cave molguh leaves something behind when it pops up. */
@@ -113,7 +116,8 @@ public final class OnderWolWezens {
             if (!glitter && molLaag && random.nextFloat() < 0.4f) {
                 return molguh(level, vloer, random) != null ? "molguh" : "";
             }
-            return grotguh(level, vloer, glitter, random) != null ? "grotguh" : "";
+            GuhEntity guh = grotguh(level, vloer, glitter, random);
+            return guh == null ? "" : guh.getVariant() == GuhVariant.GROTGUH ? "grotguh" : "guh";
         }
         return "";
     }
@@ -150,7 +154,7 @@ public final class OnderWolWezens {
                 && !level.canSeeSky(p);
     }
 
-    /** A wild Grotguh on this cave floor (null: too many around, or no room). */
+    /** A wild cave guh on this cave floor, now and then a Grotguh (null: too many around, or no room). */
     @Nullable
     public static GuhEntity grotguh(ServerLevel level, BlockPos vloer, boolean glitter, RandomSource random) {
         if (aantal(level, GuhEntity.class, vloer, 48, g -> g.entityTags().contains(GROT) && !g.isTame()) >= (glitter ? GUHS_GLITTER : GUHS)) {
@@ -162,7 +166,7 @@ public final class OnderWolWezens {
         }
         guh.snapTo(vloer.getX() + 0.5, vloer.getY(), vloer.getZ() + 0.5, random.nextFloat() * 360f, 0);
         guh.finalizeSpawn(level, level.getCurrentDifficultyAt(vloer), EntitySpawnReason.NATURAL, null);
-        guh.setVariant(GuhVariant.GROTGUH);
+        guh.setVariant(random.nextInt(GuhVariant.ROLL_OUT_OF) < GROTGUH_KANS ? GuhVariant.GROTGUH : GuhEntity.wildeVariant(random, true));   // (no ghosts: they belong to the night sky)
         guh.addTag(GROT);
         if (!level.noCollision(guh)) {
             guh.discard();
