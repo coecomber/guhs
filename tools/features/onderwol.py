@@ -43,15 +43,15 @@ PLANTEN = ["glitterrank", "glitterrank_bes", "glinsterpaddenstoel", "pluisbollet
 BIOMES = ["glitterspelonk", "pluisgrot", "slaapgrot", "knuffelwortelgrot", "belletjesgrot", "kristalpegelgrot"]
 # (ronde 28) every cave biome: its noise, threshold, band of height (bottom, top), and the climate axis it is pushed along
 # (the others are pushed along continentalness/erosion/weirdness too, so they never win each other's spot)
-GROTTEN = {
-    "glitterspelonk": ("onderwol_glitter", 0.28, (26, 44), "continents", 1),
-    "pluisgrot": ("onderwol_pluis", 0.30, (46, 62), "continents", -1),
-    "slaapgrot": ("onderwol_slaap", 0.30, (46, 62), "erosion", 1),
-    "knuffelwortelgrot": ("onderwol_wortel", 0.22, (48, 62), "erosion", -1),   # (only under the forests, see router)
-    "belletjesgrot": ("onderwol_belletjes", 0.26, (26, 44), "ridges", 1),
-    "kristalpegelgrot": ("onderwol_pegel", 0.36, (10, 40), "ridges", -1),
+GROTTEN = {   # (speeltest 3: two axes each, see the note above biome_source; one axis lost against the Gatenkaasgrotten)
+    "glitterspelonk": ("onderwol_glitter", 0.20, (26, 44), (("continents", 1), ("temperature", 1))),
+    "pluisgrot": ("onderwol_pluis", 0.22, (46, 62), (("continents", -1), ("temperature", -1))),
+    "slaapgrot": ("onderwol_slaap", 0.22, (46, 62), (("erosion", 1), ("vegetation", -1))),
+    "knuffelwortelgrot": ("onderwol_wortel", 0.16, (48, 62), (("erosion", -1), ("vegetation", 1))),   # (only under the forests, see router)
+    "belletjesgrot": ("onderwol_belletjes", 0.18, (26, 44), (("ridges", 1), ("temperature", -1))),
+    "kristalpegelgrot": ("onderwol_pegel", 0.28, (10, 40), (("ridges", -1), ("temperature", 1))),
 }
-KLIMAAT = {"continents": "continentalness", "erosion": "erosion", "ridges": "weirdness"}
+KLIMAAT = {"continents": "continentalness", "erosion": "erosion", "ridges": "weirdness", "temperature": "temperature", "vegetation": "humidity"}
 NOISES = {
     "onderwol_golf": {"firstOctave": -6, "amplitudes": [1.0, 0.5]},       # the waves of the layer borders (2D)
     "onderwol_glitter": {"firstOctave": -6, "amplitudes": [1.0, 0.5]},    # where the Glitterspelonk is
@@ -67,8 +67,7 @@ NOISES = {
     "onderwol_kaal": {"firstOctave": -4, "amplitudes": [1.0, 0.5, 0.25]},
     "onderwol_streep": {"firstOctave": -7, "amplitudes": [1.0]},
 }
-# the cave biomes: noise threshold (above it the biome), and how far depth/continentalness are pushed there
-GLITTER_VANAF, PLUIS_VANAF = 0.28, 0.30
+# how far depth and the climate axes are pushed in a cave biome (see GROTTEN)
 SHIFT = 10.0
 # the caves are only worked out where the terrain (without caves) is above this: inside the land and just above it
 LUCHT = -0.2
@@ -389,7 +388,7 @@ def router(d):
                                       "density": {"type": "guhs:bio_terrein", "input": terrein["argument"], "ruis": final["ruis"]},
                                       "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
     # (idempotent: take a shift from an earlier run off first; it is the second half of an add)
-    for k in ("depth", "continents", "erosion", "ridges"):
+    for k in ("depth", "continents", "erosion", "ridges", "temperature", "vegetation"):
         if "guhs:onderwol_" in json.dumps(r[k]):
             r[k] = r[k]["argument1"]
     # the cave biomes: deep inside the rock (as the Gatenkaasgrotten' "deep"), in their own band of height, where their noise
@@ -404,13 +403,14 @@ def router(d):
     def sel(noise, vanaf):
         return {"type": "minecraft:clamp", "min": 0.0, "max": 1.0, "input": kw.mul(kw.add(_noise(f"guhs:{noise}", 1.0, 1.0), -vanaf), 8.0)}
     alle, assen = None, {}
-    for biome, (noise, vanaf, (onder, boven), as_, teken) in GROTTEN.items():
+    for biome, (noise, vanaf, (onder, boven), assen_) in GROTTEN.items():
         f = kw.mul(band(onder, boven), sel(noise, vanaf))
         if biome == "knuffelwortelgrot":
             f = kw.mul(f, bos)
         alle = f if alle is None else kw.add(alle, f)
-        term = f if teken > 0 else kw.mul(f, -1.0)
-        assen[as_] = term if as_ not in assen else kw.add(assen[as_], term)
+        for as_, teken in assen_:
+            term = f if teken > 0 else kw.mul(f, -1.0)
+            assen[as_] = term if as_ not in assen else kw.add(assen[as_], term)
     # (the terrain check "inside the rock" once per axis: it is the dearest part)
     r["depth"] = kw.add(r["depth"], kw.mul(kw.mul(alle, rots), SHIFT))
     for as_, term in assen.items():
@@ -428,12 +428,15 @@ def surface(d):
 
 def biome_source(d):
     """The cave biomes' climate points lie beyond what the noises reach by themselves (only the shift of router() gets
-    there); the offset keeps them from winning by default where depth is naturally high, at the bottom of the world."""
+    there); the offset keeps them from winning by default where depth is naturally high, at the bottom of the world. Each is
+    pushed along two axes (GROTTEN): with one, the Belletjesgrot tied with the Gatenkaasgrotten (weirdness up to 2, no
+    offset) and never won (speeltest 3; checked with a simulation of the fitness over all Guhmension biomes)."""
     alles = [-2.0, 2.0]
     entries = [e for e in d["generator"]["biome_source"]["biomes"] if e["biome"] not in g(*BIOMES)]
-    for biome, (_, _, _, as_, teken) in GROTTEN.items():
-        p = {"temperature": alles, "humidity": alles, "continentalness": alles, "erosion": alles, "weirdness": alles, "depth": 2.0, "offset": 1.0}
-        p[KLIMAAT[as_]] = 2.0 * teken
+    for biome, (_, _, _, assen_) in GROTTEN.items():
+        p = {"temperature": alles, "humidity": alles, "continentalness": alles, "erosion": alles, "weirdness": alles, "depth": 2.0, "offset": 0.3}
+        for as_, teken in assen_:
+            p[KLIMAAT[as_]] = 2.0 * teken
         entries.append({"biome": f"guhs:{biome}", "parameters": p})
     d["generator"]["biome_source"]["biomes"] = entries
 
@@ -548,6 +551,10 @@ def features(h):
     patch("onderwol_glitter_plafond", "guhs:lichtmosblok", "ceiling", 0.35, "guhs:onderwol_glitterrank")
     patch("onderwol_pluis_vloer", "guhs:pluiswolblok", "floor", 0.35, "guhs:onderwol_pluis_vloerplantjes", diepte=2)
     patch("onderwol_pluis_plafond", "guhs:pluiswolblok", "ceiling", 0.0, "guhs:onderwol_pluis_vloerplantjes", diepte=2)
+    # (speeltest 3: light) the Kristalpegelgrot's floor: glowing crystal clusters; the Slaapgrot's night lights: sparkle mushrooms
+    w(f"{wg}/configured_feature/onderwol_pegel_lichtjes.json", {"type": "minecraft:simple_block", "config": {"to_place": gewogen(
+        ("guhs:guh_kristal_cluster", 2), ("guhs:glinsterpaddenstoel", 1))}})
+    w(f"{wg}/configured_feature/onderwol_nachtlampjes.json", {"type": "minecraft:simple_block", "config": {"to_place": st("guhs:glinsterpaddenstoel")}})
     # the crystal drip ponds: a little water on guhkristalsteen
     w(f"{wg}/configured_feature/onderwol_druppelvijver.json", {"type": "minecraft:waterlogged_vegetation_patch", "config": {
         "depth": 1, "extra_bottom_block_chance": 0.0, "extra_edge_column_chance": 0.5, "ground_state": st("guhs:guh_kristalsteen"),
@@ -555,7 +562,8 @@ def features(h):
         "vegetation_feature": {"feature": "guhs:onderwol_glitter_vloerplantjes", "placement": []}, "vertical_range": 5,
         "xz_radius": {"type": "minecraft:uniform", "min_inclusive": 2, "max_inclusive": 3}}})
     for naam, n, richting in (("onderwol_glitter_vloer", 90, "down"), ("onderwol_glitter_plafond", 90, "up"), ("onderwol_pluis_vloer", 90, "down"),
-                              ("onderwol_pluis_plafond", 70, "up"), ("onderwol_druppelvijver", 10, "down")):
+                              ("onderwol_pluis_plafond", 70, "up"), ("onderwol_druppelvijver", 10, "down"), ("onderwol_pegel_lichtjes", 40, "down"),
+                              ("onderwol_nachtlampjes", 30, "down")):
         w(f"{wg}/placed_feature/{naam}.json", {"feature": f"guhs:{naam}", "placement": [{"type": "minecraft:count", "count": n}, *scan(richting)]})
 
 
@@ -572,10 +580,10 @@ GROT_SFEER = {   # fog, sky, ambient particle, its chance
     "kristalpegelgrot": ("#f0b0cc", "#ffc0dc", {"type": "minecraft:dripping_dripstone_water"}, 0.002),
 }
 GROT_DECO = {   # per biome: generation step -> features (the new caves' own: onderwol_grot.py)
-    "slaapgrot": {9: ["guhs:onderwol_pluis_vloer"]},
+    "slaapgrot": {9: ["guhs:onderwol_pluis_vloer", "guhs:onderwol_nachtlampjes"]},
     "knuffelwortelgrot": {9: ["guhs:onderwol_knuffelwortel_plafond", "guhs:onderwol_knuffelwortel_vloer"]},
     "belletjesgrot": {7: ["guhs:onderwol_belletjes"]},
-    "kristalpegelgrot": {7: ["guhs:onderwol_kristalpegel_cluster", "guhs:onderwol_kristalpegel"]},
+    "kristalpegelgrot": {7: ["guhs:onderwol_kristalpegel_cluster", "guhs:onderwol_kristalpegel"], 9: ["guhs:onderwol_pegel_lichtjes"]},
 }
 ZEE_BIOMES = g("guh_sea", "diepe_guhzee")   # (no carvers: they would cut holes under the water)
 # the surface blocks of the Guhmension's biomes the carvers may cut through (besides wool and the layers)

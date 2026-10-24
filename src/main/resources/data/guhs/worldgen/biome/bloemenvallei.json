@@ -1,0 +1,144 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "guhs:onderwol.plink",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/fog_color": "#fde4f0",
+    "minecraft:visual/sky_color": "#efbfe6",
+    "minecraft:visual/water_fog_color": "#e0709a",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "guhs:pluisje"
+        },
+        "probability": 0.004
+      },
+      {
+        "particle": {
+          "type": "guhs:bloesemblaadje"
+        },
+        "probability": 0.0025
+      }
+    ]
+  },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#f7a8c8",
+    "foliage_color": "#f9bcd6",
+    "grass_color": "#f9bcd6"
+  },
+  "creature_spawn_probability": 0.45,
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 8
+      },
+      {
+        "type": "guhs:guh_bee",
+        "weight": 45,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "guhs:guh_slime",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": [
+    "guhs:onderwol_grot",
+    "guhs:onderwol_kloof"
+  ],
+  "features": [
+    [],
+    [
+      "guhs:onderwol_vijvertje",
+      "guhs:onderwol_hartjesmeertje_vallei"
+    ],
+    [
+      "guhs:onderwol_geode",
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_eilandje",
+      "guhs:onderwol_bloemenvallei_grond",
+      "guhs:onderwol_viltkiezel",
+      "guhs:onderwol_wolkei"
+    ],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:onderwol_kolenerts",
+      "guhs:onderwol_kopererts",
+      "guhs:onderwol_ijzererts",
+      "guhs:onderwol_lapiserts",
+      "guhs:onderwol_gouderts",
+      "guhs:onderwol_redstoneerts",
+      "guhs:onderwol_diamanterts",
+      "guhs:onderwol_vadserts",
+      "guhs:onderwol_kaasknabbelerts",
+      "guhs:onderwol_kaaskorrelerts",
+      "guhs:onderwol_pigmenterts",
+      "guhs:onderwol_guhklei",
+      "guhs:onderwol_vahoegiet"
+    ],
+    [
+      "guhs:onderwol_grotmeertje"
+    ],
+    [
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_wolwaterval_zacht",
+      "guhs:onderwol_grotwaterval",
+      "guhs:onderwol_grotwaterval_diep"
+    ],
+    [
+      "guhs:guhbloesem_rare",
+      "guhs:guh_flowers",
+      "guhs:roze_gras",
+      "guhs:onderwol_druppels",
+      "guhs:onderwol_stammetje_bloesem",
+      "guhs:onderwol_paddenstoelenkring",
+      "guhs:onderwol_bloemenweitje",
+      "guhs:onderwol_weitjesgras",
+      "guhs:onderwol_struikje",
+      "guhs:onderwol_heg",
+      "guhs:onderwol_vallei_boompje",
+      "guhs:onderwol_vallei_hoge_bloemen",
+      "guhs:onderwol_vallei_bloemen",
+      "guhs:onderwol_vallei_blaadjes"
+    ],
+    []
+  ]
+}

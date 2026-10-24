@@ -20,8 +20,8 @@
         "max_delay": 24000
       }
     },
-    "minecraft:visual/fog_color": "#e8b8da",
-    "minecraft:visual/sky_color": "#d08abf",
+    "minecraft:visual/fog_color": "#eac0de",
+    "minecraft:visual/sky_color": "#d392c5",
     "minecraft:visual/water_fog_color": "#e0709a"
   },
   "has_precipitation": false,
@@ -69,11 +69,15 @@
   ],
   "features": [
     [],
-    [],
+    [
+      "guhs:onderwol_bronbeekje"
+    ],
     [
       "guhs:onderwol_geode",
       "guhs:onderwol_sauszee",
+      "guhs:onderwol_eilandje",
       "guhs:onderwol_pastelwol",
+      "guhs:onderwol_regenboogheuvels",
       "guhs:onderwol_viltkiezel",
       "guhs:onderwol_wolkei"
     ],
@@ -97,11 +101,15 @@
       "guhs:onderwol_vahoegiet",
       "guhs:onderwol_smaragderts"
     ],
-    [],
+    [
+      "guhs:onderwol_grotmeertje"
+    ],
     [
       "guhs:onderwol_sausval",
       "guhs:onderwol_wolwaterval",
-      "guhs:onderwol_kaasval"
+      "guhs:onderwol_kaasval",
+      "guhs:onderwol_grotwaterval",
+      "guhs:onderwol_grotwaterval_diep"
     ],
     [
       "guhs:guhbloesem_rare",

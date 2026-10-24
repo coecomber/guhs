@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "guhs:block/bronnetje"
+    },
+    "waterlogged=true": {
+      "model": "guhs:block/bronnetje"
+    }
+  }
+}

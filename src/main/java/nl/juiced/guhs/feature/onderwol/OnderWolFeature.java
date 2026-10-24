@@ -191,7 +191,7 @@ public final class OnderWolFeature {
     public static final DeferredBlock<Block> GLINSTERPADDENSTOEL = BLOCKS.registerBlock("glinsterpaddenstoel",
             p -> new OnderWolBlokken.Grotplantje(10, 8, false, p), () -> plantje(MapColor.COLOR_PURPLE).sound(SoundType.FUNGUS).lightLevel(s -> 7));
     public static final DeferredBlock<Block> PLUISBOLLETJE = BLOCKS.registerBlock("pluisbolletje",
-            p -> new OnderWolBlokken.Grotplantje(10, 10, true, p), () -> plantje(MapColor.SNOW).sound(SoundType.WOOL));
+            p -> new OnderWolBlokken.Grotplantje(10, 10, true, p), () -> plantje(MapColor.SNOW).sound(SoundType.WOOL).lightLevel(s -> 5));   // (speeltest 3: the Pluisgrot was pitch dark)
     public static final DeferredBlock<Block> PLUISKUSSEN = BLOCKS.registerBlock("pluiskussen", OnderWolBlokken.Pluiskussen::new,
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).mapColor(MapColor.SNOW).strength(0.6f));
 
@@ -250,7 +250,9 @@ public final class OnderWolFeature {
         SOUNDS.register(modBus);
         OnderWolGrot.register(modBus);
         OnderWolOppervlak.register(modBus);   // (ronde 27-28: the cheerful surface: quilt, kiezel, weitjes, keien, vijvertjes, kringen...)   // (ronde 28: the blocks and decoration of the four new cave biomes)
+        OnderWolWater.register(modBus);   // (ronde 29: beekjes, grotmeertjes, grotwatervalletjes; bronnetje + glinsterriet)
         NeoForge.EVENT_BUS.addListener(OnderWolFeature::onSpawnCheck);
+        NeoForge.EVENT_BUS.addListener(GrotZoeken::register);   // (/guhs grot <naam>)
         // the Superkompas tab "Biomes" (section Guhmension)
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "glitterspelonk");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("glitterspelonk", "guhs:glitterrank_bes");
@@ -298,6 +300,11 @@ public final class OnderWolFeature {
         for (DeferredBlock<? extends Block> block : OnderWolGrot.BLOCK_ITEMS) {
             output.accept(new ItemStack(block.get()));
         }
+        OnderWolWater.creative(output);
+        for (DeferredBlock<? extends Block> block : OnderWolOppervlak.BLOCK_ITEMS) {
+            output.accept(new ItemStack(block.get()));
+        }
+        output.accept(new ItemStack(OnderWolOppervlak.HARTJESLELIE_ITEM.get()));
         output.accept(new ItemStack(VAHOEGIET.get()));
         output.accept(new ItemStack(GLITTERBES.get()));
     }

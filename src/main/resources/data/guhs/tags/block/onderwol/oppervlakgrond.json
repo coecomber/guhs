@@ -16,6 +16,11 @@
     "guhs:knuffelgras",
     "guhs:vadsmos",
     "guhs:viltkiezel",
-    "guhs:viltsteen"
+    "guhs:viltsteen",
+    "minecraft:white_terracotta",
+    "minecraft:light_blue_wool",
+    "guhs:roze_zand",
+    "guhs:gatenkaas",
+    "guhs:kaasmos"
   ]
 }

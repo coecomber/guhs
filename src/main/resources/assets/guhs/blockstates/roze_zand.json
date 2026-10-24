@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/roze_zand"
+      },
+      {
+        "model": "guhs:block/roze_zand",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/roze_zand",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/roze_zand",
+        "y": 270
+      }
+    ]
+  }
+}

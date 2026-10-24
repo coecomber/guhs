@@ -155,14 +155,14 @@ def features(h):
         "density": {"type": "minecraft:uniform", "min_inclusive": 0.3, "max_exclusive": 0.7}, "wetness": 0.0,
         "chance_of_dripstone_column_at_max_distance_from_center": 0.1, "max_distance_from_edge_affecting_chance_of_dripstone_column": 3,
         "max_distance_from_center_affecting_height_bias": 8}},
-        [{"type": "minecraft:count", "count": _uniform(8, 16)}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 62)}])
+        [{"type": "minecraft:count", "count": _uniform(40, 64)}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 62)}])
     lucht_of_water = {"type": "minecraft:any_of", "predicates": [{"type": "minecraft:matching_block_tag", "tag": "minecraft:air"},
                                                                  {"type": "minecraft:matching_blocks", "blocks": "minecraft:water"}]}
     punt = {"type": "guhs:onderwol_kristalpegel", "config": {"chance_of_directional_spread": 0.7, "chance_of_spread_radius2": 0.5,
                                                              "chance_of_spread_radius3": 0.5, "chance_of_taller_dripstone": 0.2}}
     zet("onderwol_kristalpegel", {"type": "minecraft:simple_random_selector", "config": {"features": [
         {"feature": punt, "placement": _scan("down", lucht_of_water)}, {"feature": punt, "placement": _scan("up", lucht_of_water)}]}},
-        [{"type": "minecraft:count", "count": _uniform(30, 44)}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 62)},
+        [{"type": "minecraft:count", "count": _uniform(120, 160)}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 62)},
          {"type": "minecraft:count", "count": _uniform(1, 5)},
          {"type": "minecraft:random_offset",
           "xz_spread": {"type": "minecraft:clamped_normal", "mean": 0.0, "deviation": 3.0, "min_inclusive": -10, "max_inclusive": 10},
@@ -193,7 +193,7 @@ def features(h):
 
     # --- c. the belletjes caves: belletjeskristal on the walls, floor and ceiling around a spot of cave air, trosjes on it ---
     zet("onderwol_belletjes", {"type": "guhs:onderwol_belletjes", "config": {}},
-        [{"type": "minecraft:count", "count": 8}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 60)}])
+        [{"type": "minecraft:count", "count": 24}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(6, 60)}])
 
     # --- d. the rozenkwarts druppels: in every Guhmension cave in the knuffelsteen, on ceilings and now and then a wall ---
     zet("onderwol_druppels", {"type": "guhs:onderwol_druppels", "config": {}},

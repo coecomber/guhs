@@ -1,0 +1,76 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "guhs:roze_guhbloem"
+          },
+          "weight": 4
+        },
+        {
+          "data": {
+            "Name": "guhs:knabbelroos"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "guhs:guhoortjes"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "guhs:kaasbloem"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:pink_tulip"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:white_tulip"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:allium"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:azure_bluet"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:cornflower"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:oxeye_daisy"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:lily_of_the_valley"
+          },
+          "weight": 2
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "feature": "guhs:onderwol_kaaslappendeken",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    }
+  ]
+}

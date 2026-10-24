@@ -90,7 +90,8 @@ public class Kristalpegel extends Block implements SimpleWaterloggedBlock, Falla
     /** The light of a state: the tips glow a little. */
     public static int licht(BlockState state) {
         DripstoneThickness d = state.getValue(THICKNESS);
-        return d == DripstoneThickness.TIP || d == DripstoneThickness.TIP_MERGE ? 4 : 0;
+        // (speeltest 3: the cave was too dark) the tips glow, the thick part just above them a little
+        return d == DripstoneThickness.TIP || d == DripstoneThickness.TIP_MERGE ? 10 : d == DripstoneThickness.FRUSTUM ? 5 : 0;
     }
 
     @Override

@@ -1,0 +1,38 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:bloemenvallei"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:knabbelvlindertje",
+      "weight": 24,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "guhs:lieveheersbeestje",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "guhs:glimguhtje",
+      "weight": 12,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "guhs:pluisvinkje",
+      "weight": 10,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "guhs:guh_konijntje",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

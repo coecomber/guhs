@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/schelpje"
+      },
+      {
+        "model": "guhs:block/schelpje",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/schelpje",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/schelpje",
+        "y": 270
+      }
+    ]
+  }
+}

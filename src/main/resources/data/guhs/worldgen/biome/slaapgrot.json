@@ -83,13 +83,18 @@
       "guhs:onderwol_guhklei",
       "guhs:onderwol_vahoegiet"
     ],
-    [],
     [
-      "guhs:onderwol_sausval"
+      "guhs:onderwol_grotmeertje"
+    ],
+    [
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_grotwaterval",
+      "guhs:onderwol_grotwaterval_diep"
     ],
     [
       "guhs:onderwol_druppels",
-      "guhs:onderwol_pluis_vloer"
+      "guhs:onderwol_pluis_vloer",
+      "guhs:onderwol_nachtlampjes"
     ],
     []
   ]

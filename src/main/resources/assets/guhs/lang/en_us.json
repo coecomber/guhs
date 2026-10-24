@@ -29097,5 +29097,13 @@
   "block.guhs.kristalpegel.lore": "Hangs and stands like dripstone. The tips drip a little cheese sauce. Watch your head!",
   "block.guhs.knuffelwortelaarde.lore": "Bone meal grows plush roots underneath.",
   "block.guhs.belletjeskristal.lore": "Rings a note when you step on it or hit it. Every spot has its own note: play a tune!",
-  "block.guhs.belletjestrosje.lore": "Click it and it chimes. Every spot has its own note."
+  "block.guhs.belletjestrosje.lore": "Click it and it chimes. Every spot has its own note.",
+  "block.guhs.bronnetje": "Little Spring",
+  "block.guhs.glinsterriet": "Glitter Reed",
+  "block.guhs.bronnetje.lore": "A bubbling little spring stone. Under water it bubbles, and pink glitter sparkles above the brook.",
+  "block.guhs.glinsterriet.lore": "Grows along the brooks and softly glitters pink, especially at night.",
+  "biome.guhs.bloemenvallei": "Flower Valley",
+  "block.guhs.roze_zand": "Pink Sand",
+  "block.guhs.schelpje": "Little Shell",
+  "block.guhs.hartjeslelie": "Heart Lily Pad"
 }

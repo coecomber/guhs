@@ -84,10 +84,13 @@
       "guhs:onderwol_vahoegiet"
     ],
     [
-      "guhs:onderwol_belletjes"
+      "guhs:onderwol_belletjes",
+      "guhs:onderwol_grotmeertje"
     ],
     [
-      "guhs:onderwol_sausval"
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_grotwaterval",
+      "guhs:onderwol_grotwaterval_diep"
     ],
     [
       "guhs:onderwol_druppels"

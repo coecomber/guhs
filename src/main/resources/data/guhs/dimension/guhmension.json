@@ -139,6 +139,27 @@
           }
         },
         {
+          "biome": "guhs:bloemenvallei",
+          "parameters": {
+            "temperature": -0.17,
+            "humidity": 0.0,
+            "continentalness": [
+              -1.0,
+              1.0
+            ],
+            "erosion": [
+              -0.7,
+              0.15
+            ],
+            "weirdness": 0.0,
+            "depth": [
+              -1.0,
+              1.0
+            ],
+            "offset": 0.18
+          }
+        },
+        {
           "biome": "guhs:guh_peaks",
           "parameters": {
             "temperature": -0.3,
@@ -558,10 +579,7 @@
         {
           "biome": "guhs:glitterspelonk",
           "parameters": {
-            "temperature": [
-              -2.0,
-              2.0
-            ],
+            "temperature": 2.0,
             "humidity": [
               -2.0,
               2.0
@@ -576,16 +594,13 @@
               2.0
             ],
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         },
         {
           "biome": "guhs:pluisgrot",
           "parameters": {
-            "temperature": [
-              -2.0,
-              2.0
-            ],
+            "temperature": -2.0,
             "humidity": [
               -2.0,
               2.0
@@ -600,7 +615,7 @@
               2.0
             ],
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         },
         {
@@ -610,10 +625,7 @@
               -2.0,
               2.0
             ],
-            "humidity": [
-              -2.0,
-              2.0
-            ],
+            "humidity": -2.0,
             "continentalness": [
               -2.0,
               2.0
@@ -624,7 +636,7 @@
               2.0
             ],
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         },
         {
@@ -634,10 +646,7 @@
               -2.0,
               2.0
             ],
-            "humidity": [
-              -2.0,
-              2.0
-            ],
+            "humidity": 2.0,
             "continentalness": [
               -2.0,
               2.0
@@ -648,16 +657,13 @@
               2.0
             ],
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         },
         {
           "biome": "guhs:belletjesgrot",
           "parameters": {
-            "temperature": [
-              -2.0,
-              2.0
-            ],
+            "temperature": -2.0,
             "humidity": [
               -2.0,
               2.0
@@ -672,16 +678,13 @@
             ],
             "weirdness": 2.0,
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         },
         {
           "biome": "guhs:kristalpegelgrot",
           "parameters": {
-            "temperature": [
-              -2.0,
-              2.0
-            ],
+            "temperature": 2.0,
             "humidity": [
               -2.0,
               2.0
@@ -696,7 +699,7 @@
             ],
             "weirdness": -2.0,
             "depth": 2.0,
-            "offset": 1.0
+            "offset": 0.3
           }
         }
       ]

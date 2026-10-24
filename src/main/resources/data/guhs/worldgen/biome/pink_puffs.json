@@ -20,8 +20,8 @@
         "max_delay": 24000
       }
     },
-    "minecraft:visual/fog_color": "#ffe8f4",
-    "minecraft:visual/sky_color": "#f7c6e6",
+    "minecraft:visual/fog_color": "#fee8f3",
+    "minecraft:visual/sky_color": "#f4c6e8",
     "minecraft:visual/water_fog_color": "#e0709a",
     "minecraft:visual/ambient_particles": [
       {
@@ -78,12 +78,17 @@
   "features": [
     [],
     [
-      "guhs:onderwol_vijvertje"
+      "guhs:onderwol_vijvertje",
+      "guhs:onderwol_hartjesmeertje",
+      "guhs:onderwol_kronkelbeekje",
+      "guhs:onderwol_bronbeekje"
     ],
     [
       "guhs:onderwol_geode",
       "guhs:onderwol_sauszee",
+      "guhs:onderwol_eilandje",
       "guhs:onderwol_pastelwol",
+      "guhs:onderwol_regenboogheuvels",
       "guhs:onderwol_viltkiezel",
       "guhs:onderwol_wolkei"
     ],
@@ -106,10 +111,14 @@
       "guhs:onderwol_guhklei",
       "guhs:onderwol_vahoegiet"
     ],
-    [],
+    [
+      "guhs:onderwol_grotmeertje"
+    ],
     [
       "guhs:onderwol_sausval",
-      "guhs:onderwol_wolwaterval_zacht"
+      "guhs:onderwol_wolwaterval_zacht",
+      "guhs:onderwol_grotwaterval",
+      "guhs:onderwol_grotwaterval_diep"
     ],
     [
       "guhs:guhbloesem_rare",
@@ -119,7 +128,11 @@
       "guhs:onderwol_stammetje_bloesem",
       "guhs:onderwol_paddenstoelenkring",
       "guhs:onderwol_bloemenweitje",
-      "guhs:onderwol_weitjesgras"
+      "guhs:onderwol_weitjesgras",
+      "guhs:onderwol_boomgroepje_bloesem",
+      "guhs:onderwol_boomgroepje_pluis",
+      "guhs:onderwol_struikje",
+      "guhs:onderwol_heg"
     ],
     []
   ]
