@@ -1,0 +1,23 @@
+{
+  "gui.guhs.kleding.prijs.hint.kisten_in_de_kaasmijnschacht": "rare in the chests of the Old Cheese Mineshaft",
+  "gui.guhs.kleding.prijs.hint.kisten_van_de_barbecuether_mikas": "rare in the chests of the Mika Grill Palace and the Skewer Keep",
+  "gui.guhs.kleding.prijs.hint.lavalopers_opwaarderen": "upgrade at the tailor: cheese sauce striders + 4 magma cream + 1 wahoog chonk (right-click him with magma cream)",
+  "gui.guhs.kledingbron.loot_barbecuether": "Chests of the Mikas in the Barbecuether",
+  "gui.guhs.kledingbron.loot_mijnschacht": "Old Cheese Mineshaft",
+  "gui.guhs.menu.clothes.feet": "Feet",
+  "gui.guhs.voetjes.al": "You already have the lava striders, vads! Use them in your guh's wardrobe.",
+  "gui.guhs.voetjes.en": "%s and %s",
+  "gui.guhs.voetjes.mist": "The tailor can upgrade your cheese sauce striders to lava striders, but he still needs: %s.",
+  "gui.guhs.voetjes.mist.lopers": "cheese sauce striders (in your bag, or unlocked)",
+  "gui.guhs.voetjes.mist.magma": "%s magma cream",
+  "gui.guhs.voetjes.mist.vads": "%s wahoog chonk",
+  "gui.guhs.voetjes.opgewaardeerd": "The tailor melts the wahoog chonk and the magma cream into your cheese sauce striders... Lava striders! Now your guh even walks on real lava, njeg!",
+  "item.guhs.golfschoentjes": "Golf Shoes",
+  "item.guhs.kaassauslopers": "Cheese Sauce Striders",
+  "item.guhs.kaassauslopers.uitleg": "Your guh walks on top of every cheese sauce with these, the hot frying sauce too. Not on real lava, vads!",
+  "item.guhs.lavalopers": "Lava Striders",
+  "item.guhs.lavalopers.uitleg": "Your guh walks on top of real lava and every cheese sauce with these. Wahoog!",
+  "item.guhs.mijnwerkerslaarsjes": "Miner's Boots",
+  "item.guhs.pluisslofjes": "Fluffy Slippers",
+  "item.guhs.regenlaarsjes": "Guh Rain Boots"
+}

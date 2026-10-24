@@ -119,7 +119,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
             SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT),
             SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT),
             SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT),    // (2.8: the sixth, HAAR)
-            SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT));   // (2.9: the seventh, OREN)
+            SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT),    // (2.9: the seventh, OREN)
+            SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT));   // (1.7.0: the eighth, FEET; saved as "ClothesFeet")
     /** 2.8: the visual flags of the Knus features (feature.knus.GuhHooks: GLANZEND, PYJAMA, ...), saved as "KnusVlaggen". */
     private static final EntityDataAccessor<Integer> DATA_KNUS_VLAGGEN = SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT);
     /** 2.8: the hair colour (RGB) of its HAAR piece, -1 = natural (the kapper's dyes), saved as "Haarkleur". */
@@ -652,6 +653,23 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     @Override
     public boolean canDrownInFluidType(net.neoforged.neoforge.fluids.FluidType type) {
         return !(isZeemeer() && type == net.neoforged.neoforge.common.NeoForgeMod.WATER_TYPE.value()) && super.canDrownInFluidType(type);
+    }
+
+    /** 1.7.0: with kaassauslopers (every kaassaus) or lavalopers (lava too) it walks on top, like a strider (feature.voetjes). */
+    @Override
+    public boolean canStandOnFluid(net.minecraft.world.level.material.FluidState fluid) {
+        return nl.juiced.guhs.feature.voetjes.Voetjes.kanStaanOp(this, fluid) || super.canStandOnFluid(fluid);
+    }
+
+    @Override
+    public net.minecraft.world.phys.shapes.VoxelShape getLiquidCollisionShape() {
+        return nl.juiced.guhs.feature.voetjes.Voetjes.heeftLopers(this) ? nl.juiced.guhs.feature.voetjes.Voetjes.VLOEISTOFVLOER : super.getLiquidCollisionShape();
+    }
+
+    /** 1.7.0: on (or in) the sauce its lopers walk on it doesn't burn (feature.voetjes). */
+    @Override
+    public boolean fireImmune() {
+        return super.fireImmune() || nl.juiced.guhs.feature.voetjes.Voetjes.vuurvast(this);
     }
 
     @Nullable

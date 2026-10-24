@@ -16,7 +16,7 @@ SITE_MC = "26.1.2"
 SITE_GECKOLIB = "5.5.2+"
 
 SLOTS = {"head": ("Head", "Hoofd"), "eyes": ("Eyes", "Ogen"), "body": ("Body", "Lijf"), "neck": ("Neck", "Nek"), "back": ("Back", "Rug"),
-         "haar": ("Hair", "Haar"), "oren": ("Ears", "Oren")}
+         "haar": ("Hair", "Haar"), "oren": ("Ears", "Oren"), "feet": ("Feet", "Voetjes")}
 BONES = {"neck": ("a very long neck", "een heel lange nek"), "teckel": ("six legs and an extra long body", "zes pootjes en een extra lang lijf"),
          "ender": ("dragon wings: it flies", "drakenvleugels: hij vliegt"), "koning": ("crown, mane and moustache", "kroon, manen en snorretje"),
          "wolk": ("a little cloud on its head", "een wolkje op zijn hoofd"), "zeemeer": ("a fish tail: it swims", "een vissenstaart: hij zwemt"),

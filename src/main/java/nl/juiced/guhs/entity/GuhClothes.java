@@ -556,6 +556,21 @@ public enum GuhClothes {
     PANDAPAKJE(Slot.BODY, "outfit_suit"),
     PINGUINPAKJE(Slot.BODY, "outfit_suit"),
     // </safari_quests>
+    // 1.7.0 Onder de Wol (ronde 26): the FEET slot's pieces (feature.voetjes, tools/features/voetjes.py); ONLY between these two markers
+    // <voetjes>
+    /** Pink fluffy slippers with a pompom (the kleermaker). */
+    PLUISSLOFJES(Slot.FEET, "outfit_voet_laag", "outfit_voet_pompon"),
+    /** Yellow rain boots, to go with the regenjas and the regenhoed (the kleermaker). */
+    REGENLAARSJES(Slot.FEET, "outfit_voet_hoog", "outfit_voet_zool"),
+    /** White golf shoes with a fringed flap (the Golfguh, for golfballetjes). */
+    GOLFSCHOENTJES(Slot.FEET, "outfit_voet_laag", "outfit_voet_zool", "outfit_voet_flap"),
+    /** Sturdy brown miner's boots with a steel toe cap (chests in mine shafts). */
+    MIJNWERKERSLAARSJES(Slot.FEET, "outfit_voet_hoog", "outfit_voet_zool", "outfit_voet_neus"),
+    /** Cheese-yellow platform shoes: a tamed guh walks on top of every kaassaus (Barbecuether Mika chests). */
+    KAASSAUSLOPERS(Slot.FEET, "outfit_voet_laag", "outfit_voet_plateau"),
+    /** The kleermaker's upgrade of the kaassauslopers: on real lava too. */
+    LAVALOPERS(Slot.FEET, "outfit_voet_hoog", "outfit_voet_plateau"),
+    // </voetjes>
     ;
 
     /**
@@ -566,11 +581,13 @@ public enum GuhClothes {
     public enum Slot {
         HEAD, EYES, BODY, NECK, BACK, HAAR,
         /** 2.9: on the guh ears (earrings, ear warmers, ear bows, headphones; bones {@code outfit_oren_*} on the head). */
-        OREN;
+        OREN,
+        /** 1.7.0: on the four paws (slippers, boots, the kaassaus- and lavalopers; bones {@code outfit_voet_*} on the legs). */
+        FEET;
 
-        private static final List<Slot> KLEDING = List.of(HEAD, EYES, BODY, NECK, BACK, OREN);
+        private static final List<Slot> KLEDING = List.of(HEAD, EYES, BODY, NECK, BACK, OREN, FEET);
 
-        /** The six wardrobe slots (everything but HAAR), in order. */
+        /** The seven wardrobe slots (everything but HAAR), in order (1.7.0: FEET last, so older favourites still fit). */
         public static List<Slot> kleding() {
             return KLEDING;
         }

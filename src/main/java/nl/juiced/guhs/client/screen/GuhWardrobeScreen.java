@@ -58,7 +58,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     // the clothes tab
     private static final int PREVIEW_X = 8, PREVIEW_Y = 32, PREVIEW_W = 114, PREVIEW_H = 164;
     private static final int LIST_X = 130, LIST_Y = 78, LIST_W = 188, ROW_H = 18, ROWS = 7;
-    private static final int TAB_Y = 24, TAB_W = 30, TAB_H = 22;
+    private static final int TAB_Y = 24, TAB_W = 26, TAB_H = 22;   // (1.7.0: 26 wide, so the seven slot tabs fit)
     /** The favourites row and the message lines (right side, under the list). */
     private static final int FAV_Y = LIST_Y + ROWS * ROW_H + 4, MELDING_Y = FAV_Y + 22;
     private static final List<GuhClothes.Slot> SLOTS = GuhClothes.Slot.kleding();
@@ -510,6 +510,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             case NECK -> "❀";
             case BACK -> "⌂";
             case OREN -> "♪";
+            case FEET -> "◣";
             default -> "?";
         };
     }

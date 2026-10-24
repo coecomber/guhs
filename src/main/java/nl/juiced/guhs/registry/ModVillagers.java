@@ -97,6 +97,8 @@ public final class ModVillagers {
                 sell(clothes(GuhClothes.OORSTRIKJE_ROZE), 1, nl.juiced.guhs.feature.kleding.KledingBronLijst.PRIJS_OORSTRIKJE, 12, 5),
                 sell(clothes(GuhClothes.OORSTRIKJE_MINT), 1, nl.juiced.guhs.feature.kleding.KledingBronLijst.PRIJS_OORSTRIKJE, 12, 5),
                 sell(clothes(GuhClothes.OORSTRIKJE_GEEL), 1, nl.juiced.guhs.feature.kleding.KledingBronLijst.PRIJS_OORSTRIKJE, 12, 5),
+                sell(clothes(GuhClothes.PLUISSLOFJES), 1, nl.juiced.guhs.feature.voetjes.VoetjesFeature.PRIJS_SLOFJES, 12, 5),        // 1.7.0: the FEET slot
+                sell(clothes(GuhClothes.REGENLAARSJES), 1, nl.juiced.guhs.feature.voetjes.VoetjesFeature.PRIJS_REGENLAARSJES, 12, 10),
                 sell(ModItems.ROZE_LINT.get(), 1, 3, 12, 5), // for the Slee-guh's broken sled
                 buy(Items.PINK_WOOL, 12, 1, 16, 2),
                 buy(Items.STRING, 14, 1, 16, 2));
