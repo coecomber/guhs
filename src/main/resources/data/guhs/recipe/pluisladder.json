@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "WWW",
+    "S S"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "W": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:pluisladder",
+    "count": 1
+  }
+}

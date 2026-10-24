@@ -556,6 +556,11 @@ public enum GuhClothes {
     PANDAPAKJE(Slot.BODY, "outfit_suit"),
     PINGUINPAKJE(Slot.BODY, "outfit_suit"),
     // </safari_quests>
+    // 1.7.0 Onder de Wol (feature/mijnhulp): a pink miner's helmet with a lamp that really lights up the dark (Mijnlampje).
+    // Saved by number: at the merge of the 1.7.0 branches each new piece goes after the ones already merged.
+    // <mijnhulp>
+    MIJNLAMPJE(Slot.HEAD, "outfit_helmet", "outfit_kaasmijn_lamp"),
+    // </mijnhulp>
     ;
 
     /**

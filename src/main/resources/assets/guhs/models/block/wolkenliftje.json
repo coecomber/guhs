@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/wolkenliftje_boven",
+    "side": "guhs:block/wolkenliftje_zij",
+    "bottom": "guhs:block/wolkenliftje_onder"
+  }
+}

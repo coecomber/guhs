@@ -166,6 +166,15 @@ public class SafariDier extends PathfinderMob implements GeoEntity {
         return vast;
     }
 
+    /** 1.7.0 (feature/mijnhulp/TerrariumRuimte): one step of walking through its terrarium: its fixed spot moves to {@code p}. */
+    public void schuifVast(Vec3 p, float yaw) {
+        vast = p;
+        setPos(p);
+        setYRot(yaw);
+        setYBodyRot(yaw);
+        setYHeadRot(yaw);
+    }
+
     /** Round 4 (L4): its colour texture suffix ("" = the base texture). */
     public String kleur() {
         return entityData.get(DATA_KLEUR);

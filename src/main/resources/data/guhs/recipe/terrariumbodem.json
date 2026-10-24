@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "G",
+    "S",
+    "P"
+  ],
+  "key": {
+    "G": "guhs:terrariumglas",
+    "S": "minecraft:sand",
+    "P": "minecraft:stripped_oak_log"
+  },
+  "result": {
+    "id": "guhs:terrariumbodem",
+    "count": 2
+  }
+}

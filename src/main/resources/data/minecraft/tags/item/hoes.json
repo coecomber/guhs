@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "guhs:vahoege_vads_hoe"
+    "guhs:vahoege_vads_hoe",
+    "guhs:super_vahoege_vads_hoe",
+    "guhs:vahoege_vadsknakker",
+    "guhs:super_vahoege_vadsknakker"
   ]
 }

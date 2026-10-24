@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "guhs:super_vads_sjabloon",
+  "base": "guhs:vahoege_vads_pickaxe",
+  "addition": "guhs:vahoegietstaaf",
+  "result": {
+    "id": "guhs:super_vahoege_vads_pickaxe"
+  }
+}
