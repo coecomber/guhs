@@ -1,0 +1,23 @@
+{
+  "fallback": "guhs:onderwol/mijnguhdorp/zij_slaapzaal_eind",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/knuffelslaapzaal/start",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/mijnguhdorp/voorraadgrotje",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    }
+  ]
+}

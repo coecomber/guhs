@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/verlaten_guhmijn",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/verlaten_guhmijn/start",
+  "start_jigsaw_name": "guhs:verlaten_guhmijn_midden",
+  "size": 7,
+  "max_distance": 72,
+  "min_y": 24,
+  "max_y": 38,
+  "dekking": 6,
+  "ruimte": "zaal",
+  "keep_clear": 106,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.7
+  }
+}

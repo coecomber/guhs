@@ -1,0 +1,25 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/paddenstoelendorpje",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/paddenstoelendorpje/start",
+  "start_jigsaw_name": "guhs:paddenstoelendorpje_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 26,
+  "max_y": 36,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 55,
+  "zaal": {
+    "rand": 5,
+    "boven": 4,
+    "ruw": 1.2
+  },
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.5
+  }
+}

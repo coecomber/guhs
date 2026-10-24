@@ -1,0 +1,104 @@
+{
+  "fallback": "guhs:onderwol/verlaten_guhmijn/gang_eind",
+  "elements": [
+    {
+      "weight": 6,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/gang_lang",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/gang_kort",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/gang_slee",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/kruising",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/splitsing",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/trap",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/ingestort",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/voorraad",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/depot",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/kantine",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/verlaten_guhmijn/schuur",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    }
+  ]
+}

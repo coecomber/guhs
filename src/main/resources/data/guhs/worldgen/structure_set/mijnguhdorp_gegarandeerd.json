@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:mijnguhdorp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 17010028,
+    "min_afstand": 300,
+    "max_afstand": 1000,
+    "sector": 0,
+    "sectoren": 1,
+    "alleen_nieuw": true
+  }
+}

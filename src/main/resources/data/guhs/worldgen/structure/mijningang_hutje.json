@@ -1,0 +1,26 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/mijningang_hutje",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/mijningang_hutje/start",
+  "start_jigsaw_name": "guhs:mijningang_hutje_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 36,
+  "max_y": 50,
+  "dekking": 6,
+  "ruimte": "zaal",
+  "keep_clear": 26,
+  "zaal": {
+    "rand": 4,
+    "boven": 4,
+    "ruw": 1.0
+  },
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 1.0,
+    "verplicht": true
+  }
+}

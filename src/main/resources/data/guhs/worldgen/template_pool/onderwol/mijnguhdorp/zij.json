@@ -1,0 +1,23 @@
+{
+  "fallback": "guhs:onderwol/mijnguhdorp/zij_eind",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/mijnguhdorp/voorraadgrotje",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/mijnguhdorp/uitkijkje",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    }
+  ]
+}
