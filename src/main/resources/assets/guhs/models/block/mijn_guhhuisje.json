@@ -1,0 +1,237 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/mijn_guhhuisje_zij",
+    "voor": "guhs:block/mijn_guhhuisje_voor",
+    "zij": "guhs:block/mijn_guhhuisje_zij",
+    "onder": "guhs:block/mijn_guhhuisje_onder",
+    "helm": "guhs:block/mijn_guhhuisje_helm",
+    "lamp": "guhs:block/mijn_guhhuisje_lamp"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#onder"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        10,
+        2.5
+      ],
+      "to": [
+        13.5,
+        13,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#helm"
+        },
+        "south": {
+          "texture": "#helm"
+        },
+        "east": {
+          "texture": "#helm"
+        },
+        "west": {
+          "texture": "#helm"
+        },
+        "up": {
+          "texture": "#helm"
+        },
+        "down": {
+          "texture": "#helm"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        13,
+        4
+      ],
+      "to": [
+        12,
+        14,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#helm"
+        },
+        "south": {
+          "texture": "#helm"
+        },
+        "east": {
+          "texture": "#helm"
+        },
+        "west": {
+          "texture": "#helm"
+        },
+        "up": {
+          "texture": "#helm"
+        },
+        "down": {
+          "texture": "#helm"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        9.6,
+        1
+      ],
+      "to": [
+        14,
+        10.4,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#helm"
+        },
+        "south": {
+          "texture": "#helm"
+        },
+        "east": {
+          "texture": "#helm"
+        },
+        "west": {
+          "texture": "#helm"
+        },
+        "up": {
+          "texture": "#helm"
+        },
+        "down": {
+          "texture": "#helm"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        10.6,
+        1.8
+      ],
+      "to": [
+        9.5,
+        12.8,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp"
+        },
+        "south": {
+          "texture": "#lamp"
+        },
+        "east": {
+          "texture": "#lamp"
+        },
+        "west": {
+          "texture": "#lamp"
+        },
+        "up": {
+          "texture": "#lamp"
+        },
+        "down": {
+          "texture": "#lamp"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        10,
+        6
+      ],
+      "to": [
+        4.5,
+        12.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        11.5,
+        10,
+        6
+      ],
+      "to": [
+        13,
+        12.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}

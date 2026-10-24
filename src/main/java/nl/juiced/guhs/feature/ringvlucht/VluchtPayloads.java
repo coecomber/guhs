@@ -20,7 +20,10 @@ public final class VluchtPayloads {
         registrar.playToServer(Kies.TYPE, Kies.STREAM_CODEC, Kies::handle);
     }
 
-    /** data: "Haltes" = a list of {Id, Naam (lang key), Wereld (lang key), Volgende}, in the order to show. */
+    /**
+     * data: "Haltes" = a list of {Id, Naam (lang key), Wereld (lang key), Volgende, (1.7.0) Grijs + Waarom (lang key): shown
+     * but not to pick}, in the order to show. rookguh -1: the screen of the player's own Rookguh-platform.
+     */
     public record Open(int rookguh, CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("ringvlucht_open"));
         public static final StreamCodec<FriendlyByteBuf, Open> STREAM_CODEC = StreamCodec.composite(
@@ -47,7 +50,9 @@ public final class VluchtPayloads {
         }
 
         public static void handle(Kies payload, IPayloadContext context) {
-            if (context.player() instanceof ServerPlayer p && p.level().getEntity(payload.rookguh()) instanceof VluchtRookguhEntity rookguh) {
+            if (payload.rookguh() < 0 && context.player() instanceof ServerPlayer p) {
+                RookPlatform.kiesVanafPlatform(p, payload.halte());   // (1.7.0: the screen of the own Rookguh-platform)
+            } else if (context.player() instanceof ServerPlayer p && p.level().getEntity(payload.rookguh()) instanceof VluchtRookguhEntity rookguh) {
                 Vlucht.kies(p, rookguh, payload.halte());
             }
         }

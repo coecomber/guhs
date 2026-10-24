@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pink_wool",
+    "minecraft:magenta_wool",
+    "minecraft:white_wool",
+    "guhs:viltsteen",
+    "guhs:knuffelsteen",
+    "guhs:roze_knuffelsteen",
+    "guhs:guh_kristalsteen",
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:stone",
+    "minecraft:cobblestone",
+    "minecraft:deepslate",
+    "minecraft:cobbled_deepslate",
+    "minecraft:granite",
+    "minecraft:diorite",
+    "minecraft:andesite",
+    "minecraft:tuff",
+    "minecraft:sand",
+    "minecraft:red_sand",
+    "minecraft:gravel",
+    "minecraft:sandstone",
+    "minecraft:clay_ball",
+    "minecraft:snowball",
+    "guhs:guhklei",
+    "guhs:viltkiezel",
+    "guhs:gatenkaas"
+  ]
+}

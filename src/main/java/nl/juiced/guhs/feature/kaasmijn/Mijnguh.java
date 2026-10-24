@@ -59,6 +59,9 @@ public final class Mijnguh implements NpcRole {
             npc.openShop(player);
             return;
         }
+        if (nl.juiced.guhs.feature.mijnhuisje.MijnHulpje.praat(npc, player)) {
+            return;                                                    // (1.7.0: the quest Mijnguh-hulpje)
+        }
         GuhQuests.say(player, npc, "quest.guhs.kaasmijn.tip" + npc.getRandom().nextInt(TIPS));
         npc.openShop(player);
     }

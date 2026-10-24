@@ -241,3 +241,8 @@ def build(h):
 def ftb(fq):
     for key, titel, tekst, icon, adv in FTB:
         fq.q(key, titel, tekst, icon, [fq.adv(adv)], rewards=(("guhs:kaas_knabbels", 4),))
+    # 1.7.0 (feature/ringvlucht/RookPlatform, tools/features/mijnrook.py): the own Rookguh-platform after the whole story
+    fq.q("ringvlucht_platform", "Je eigen landingsplek", "Speel de hele reis van de Knabbelring uit: de Rookguh geeft je een eigen "
+         "&6Rookguh-platform&r. Zet het neer waar je wilt, in elke wereld, en hij vliegt je er altijd heen. Klik erop en hij vliegt je "
+         "terug naar elke plek van je reis, of naar het &6Super Guhrio-kasteel&r (als je wereld 1-1 hebt uitgespeeld).",
+         "guhs:rookguh_platform", [fq.item("guhs:rookguh_platform")], rewards=(("guhs:kaas_knabbels", 8),))

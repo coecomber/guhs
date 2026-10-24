@@ -36,6 +36,17 @@ import nl.juiced.guhs.world.ModDimensions;
 public final class RingVluchtFeature {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<TicketType> TICKETS = DeferredRegister.create(Registries.TICKET_TYPE, Guhs.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
+
+    /** 1.7.0: the Rookguh-platform, your own landing place for the Rookguh ({@link RookPlatform}). */
+    public static final net.neoforged.neoforge.registries.DeferredBlock<RookPlatformBlok> PLATFORM = BLOCKS.registerBlock("rookguh_platform",
+            RookPlatformBlok::new, () -> net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PINK).strength(1.5f, 6f)
+                    .sound(net.minecraft.world.level.block.SoundType.STONE).lightLevel(s -> 4));
+    public static final net.neoforged.neoforge.registries.DeferredItem<net.minecraft.world.item.BlockItem> PLATFORM_ITEM = ITEMS.registerItem(
+            "rookguh_platform", p -> new nl.juiced.guhs.feature.balto.BaltoBlocks.LoreBlock(PLATFORM.get(), p),
+            () -> new net.minecraft.world.item.Item.Properties().useBlockDescriptionPrefix().rarity(net.minecraft.world.item.Rarity.RARE));
 
     public static final DeferredHolder<EntityType<?>, EntityType<VluchtRookguhEntity>> ROOKGUH = ENTITY_TYPES.register("ringvlucht_rookguh",
             () -> EntityType.Builder.of(VluchtRookguhEntity::new, MobCategory.MISC).sized(1.6f, 1.8f).eyeHeight(1.3f).fireImmune()
@@ -50,6 +61,9 @@ public final class RingVluchtFeature {
     public static void register(IEventBus modBus) {
         ENTITY_TYPES.register(modBus);
         TICKETS.register(modBus);
+        BLOCKS.register(modBus);
+        ITEMS.register(modBus);
+        RookPlatform.registreer();
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(ROOKGUH.get(), RookguhEntity.createAttributes().build()));
         NeoForge.EVENT_BUS.register(RingVluchtEvents.class);
         NeoForge.EVENT_BUS.addListener(RingVluchtCommands::register);
@@ -108,6 +122,7 @@ public final class RingVluchtFeature {
     }
 
     public static void creative(Consumer<ItemStack> output) {
+        output.accept(new ItemStack(PLATFORM_ITEM.get()));
     }
 
     private RingVluchtFeature() {

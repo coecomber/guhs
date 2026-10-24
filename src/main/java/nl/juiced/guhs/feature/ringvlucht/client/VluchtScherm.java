@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.ringvlucht.VluchtPayloads;
  * ({@link VluchtPayloads.Kies}); the server checks it again and plays the flight.
  */
 public class VluchtScherm extends Screen {
-    private static final int W = 260, RIJ = 22, KOP = 46;
+    private static final int W = 300, RIJ = 22, KOP = 46;
     private static final int PANEL = 0xF0301A26, BORDER = 0xFFF7B6CB, TEXT = 0xFFFFE6EE;
     private final int rookguh;
     private final List<CompoundTag> haltes = new ArrayList<>();
@@ -49,6 +49,15 @@ public class VluchtScherm extends Screen {
         for (CompoundTag h : haltes) {
             String id = h.getStringOr("Id", "");
             boolean volgende = h.getBooleanOr("Volgende", false);
+            if (h.getBooleanOr("Grijs", false)) {             // (1.7.0: shown, not to pick yet: the reason instead of the world)
+                MutableComponent grijs = Component.translatable(h.getStringOr("Naam", "")).withStyle(ChatFormatting.GRAY).append(Component.literal("  "))
+                        .append(Component.translatable(h.getStringOr("Waarom", "")).withStyle(ChatFormatting.DARK_GRAY));
+                Button knop = Button.builder(grijs, b -> { }).bounds(left + 10, y, W - 20, 20).build();
+                knop.active = false;
+                addRenderableWidget(knop);
+                y += RIJ;
+                continue;
+            }
             MutableComponent tekst = Component.empty();
             if (volgende) {
                 tekst.append(Component.literal("★ ").withStyle(ChatFormatting.GOLD));
