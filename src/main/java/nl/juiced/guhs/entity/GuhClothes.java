@@ -576,6 +576,10 @@ public enum GuhClothes {
     /** The kleermaker's upgrade of the kaassauslopers: on real lava too. */
     LAVALOPERS(Slot.FEET, "outfit_voet_hoog", "outfit_voet_plateau"),
     // </voetjes>
+    // 1.7.0 Onder de Wol (feature/mijnhuisje): the Rugzakzadel, a saddle bag in which a guh keeps endless plain ground blocks
+    // <mijnrook>
+    RUGZAKZADEL(Slot.BACK, "outfit_backpack"),
+    // </mijnrook>
     ;
 
     /**

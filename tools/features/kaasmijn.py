@@ -1434,3 +1434,8 @@ def ftb(fq):
     q("kaasmijn_pakje", "Een echte mijnguh", "Koop de mijnguhhelm (met lampje!), de kaasmijnoverall en de stoffige zakdoek bij de Mijnguh (alleen hij verkoopt ze) en trek ze je guh aan. VAHOEG, wat een vakguh!",
       "guhs:kaasmijn_helm", [fq.item("guhs:kaasmijn_helm"), fq.item("guhs:kaasmijn_overall"), fq.item("guhs:kaasmijn_zakdoek")],
       rewards=(("guhs:kaashouweel", 1),), x=4, y=42, shape="rsquare", xp=150)
+    # 1.7.0 Onder de Wol (feature/mijnhuisje, tools/features/mijnrook.py): the Mijnguh's little quest
+    q("mijnhuisje_hulpje", "Mijnguh-hulpje", "Help de &dMijnguh&r: breng hem 16 viltsteen, een guhklei en een &5Vahoegiet&r. Dan krijg je het "
+      "&6mijn-guhhuisje&r (en een mijnlampje voor je guh): tot 4 guhs wonen erin en minen langzaam de grond eronder leeg. Met kaasknabbels "
+      "gaat het vier keer zo snel!", "guhs:mijn_guhhuisje", [fq.item("guhs:mijn_guhhuisje")], rewards=(("guhs:kaas_knabbels", 16),),
+      x=6, y=42, shape="hexagon", xp=150)

@@ -113,7 +113,8 @@ public final class Vlucht {
         }
     }
 
-    private record Reis(Haltes.Halte halte, Doelplek doel) {
+    /** 1.7.0: a flight goes to a stop of the story or to one of the extra places of {@link RookPlatform} (its name on landing). */
+    private record Reis(Component naam, Doelplek doel) {
     }
 
     /** (not saved) the flight this player is on: chosen, the scene plays. */
@@ -194,11 +195,22 @@ public final class Vlucht {
             p.sendOverlayMessage(Component.translatable(nee).withStyle(ChatFormatting.GRAY));
             return;
         }
-        List<Haltes.Halte> lijst = bestemmingen(p, hier);
-        if (lijst.isEmpty()) {
+        CompoundTag data = menu(p, hier, false);
+        if (!RookPlatform.heeftKeuze(data)) {
             GuhQuests.say(p, rookguh, "quest.guhs.ringvlucht.niks");
             return;
         }
+        rookguh.playSound(nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), 0.8f, rookguh.getVoicePitch());
+        ModNetworking.sendTo(p, new VluchtPayloads.Open(rookguh.getId(), data));
+    }
+
+    /**
+     * The rows of the Rookguh's screen for this player: the stops their story reached (from the Rookguh of stop {@code hier};
+     * null: from anywhere), then (1.7.0) the extra places of {@link RookPlatform} (the Super Guhrio castle, greyed until
+     * world 1-1 is done; their own Rookguh-platform, unless they stand at it).
+     */
+    static CompoundTag menu(ServerPlayer p, @Nullable Haltes.Halte hier, boolean vanafPlatform) {
+        List<Haltes.Halte> lijst = bestemmingen(p, hier);
         Haltes.Halte volgende = volgende(p);
         CompoundTag data = new CompoundTag();
         ListTag haltes = new ListTag();
@@ -210,9 +222,9 @@ public final class Vlucht {
             t.putBoolean("Volgende", h == volgende);
             haltes.add(t);
         }
+        RookPlatform.extra(p, haltes, vanafPlatform);
         data.put("Haltes", haltes);
-        rookguh.playSound(nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), 0.8f, rookguh.getVoicePitch());
-        ModNetworking.sendTo(p, new VluchtPayloads.Open(rookguh.getId(), data));
+        return data;
     }
 
     /** Why this player can't fly right now (a lang key), or null. */
@@ -233,9 +245,15 @@ public final class Vlucht {
      */
     public static boolean kies(ServerPlayer p, VluchtRookguhEntity rookguh, String halteId) {
         Haltes.Halte hier = rookguh.halte();
+        if (!rookguh.isAlive() || rookguh.level() != p.level() || rookguh.distanceTo(p) > REIK || hier == null
+                || !(Haltes.klaar(p, hier) || Sluiers.passeert(p))) {
+            return false;
+        }
+        if (RookPlatform.isExtra(halteId)) {
+            return RookPlatform.vlieg(p, halteId, rookguh, false);   // (1.7.0: the Super Guhrio castle, the own platform)
+        }
         Haltes.Halte naar = Haltes.van(halteId);
-        if (!rookguh.isAlive() || rookguh.level() != p.level() || rookguh.distanceTo(p) > REIK || hier == null || naar == null
-                || !(Haltes.klaar(p, hier) || Sluiers.passeert(p)) || !bestemmingen(p, hier).contains(naar)) {
+        if (naar == null || !bestemmingen(p, hier).contains(naar)) {
             return false;
         }
         return vlieg(p, naar, rookguh);
@@ -252,7 +270,16 @@ public final class Vlucht {
             p.sendOverlayMessage(Component.translatable(nee).withStyle(ChatFormatting.GRAY));
             return false;
         }
-        Doelplek doel = doelplek(p, naar);
+        return vliegNaar(p, Component.translatable(naar.naamKey()), doelplek(p, naar), spreker);
+    }
+
+    /** 1.7.0: {@link #vlieg} to any place (a stop, or an extra place of {@link RookPlatform}); {@code naam} is said on landing. */
+    static boolean vliegNaar(ServerPlayer p, Component naam, @Nullable Doelplek doel, @Nullable Entity spreker) {
+        String nee = waaromNiet(p);
+        if (nee != null) {
+            p.sendOverlayMessage(Component.translatable(nee).withStyle(ChatFormatting.GRAY));
+            return false;
+        }
         if (doel == null) {
             zeg(p, spreker, "quest.guhs.ringvlucht.weg_kwijt");
             return false;
@@ -264,7 +291,7 @@ public final class Vlucht {
         warm(doel);
         Cutscene scene = samMee(p) ? VluchtScenes.MET_SAM : VluchtScenes.ZONDER_SAM;
         BlockPos anker = p.blockPosition();
-        REIZEN.put(p.getUUID(), new Reis(naar, doel));
+        REIZEN.put(p.getUUID(), new Reis(naam, doel));
         if (!Cutscenes.speel(p, scene, anker, VluchtScenes.openste(p.level(), anker), Vlucht::land)) {
             REIZEN.remove(p.getUUID());
             return false;
@@ -348,7 +375,7 @@ public final class Vlucht {
         if (van != level.dimension()) {
             GuhAdvancements.grant(p, "ringvlucht_grens");
         }
-        p.sendSystemMessage(Component.translatable("quest.guhs.ringvlucht.geland", Component.translatable(reis.halte().naamKey())).withStyle(ChatFormatting.GOLD));
+        p.sendSystemMessage(Component.translatable("quest.guhs.ringvlucht.geland", reis.naam()).withStyle(ChatFormatting.GOLD));
     }
 
     /** May the Rookguh put this player down in this cell of that level: never behind a sluier that is still closed for them. */

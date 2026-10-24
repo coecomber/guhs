@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " V ",
+    "WSW",
+    " C "
+  ],
+  "key": {
+    "V": "guhs:vahoegiet",
+    "W": "minecraft:pink_wool",
+    "S": "minecraft:saddle",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "guhs:rugzakzadel",
+    "count": 1
+  }
+}

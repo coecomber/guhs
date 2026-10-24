@@ -1591,3 +1591,49 @@ UITLEG["safari_verblijfsbord"] = dict(
        "hangs garlands. Choose Find a spot or point one out with the Shape Wand; the family goes on a work outing (up "
        "to 48 blocks away) and builds the ghost. The happier the family, the bigger and prettier.\n"
        "- The blocks come from your inventory, or from a Bank Guh: click the sign with a Bank Key.")
+# 1.7.0 Onder de Wol (feature/mijnhuisje, feature/ringvlucht/RookPlatform; tools/features/mijnrook.py)
+UITLEG["mijn_guhhuisje"] = dict(
+    nl="Een klein guhhuisje met een mijnhelmpje. Je krijgt het van de Mijnguh als je hem 16 viltsteen, een guhklei en een "
+       "Vahoegiet brengt. Klik erop met een opgepakte guh en die trekt erin: hooguit 4 van je eigen tamme guhs.\n"
+       "\n"
+       "De guhs minen langzaam het gebied onder het huisje leeg, laag voor laag van boven naar beneden. Rechtsklik erop "
+       "voor het menu:\n"
+       "- Schuifjes: tot 20 blokken naar elke kant (oost-west en noord-zuid) en tot hoe diep (nooit onder y 10).\n"
+       "- Laat zien: roze glinsters tonen even de rand van het gebied.\n"
+       "- Gratis werkt elke guh een blok per 20 seconden; met kaasknabbels in het vakje vier keer zo snel (een knabbel per 20 blokken).\n"
+       "- Wat ze minen gaat in een kist naast het huisje, of in de Bank Guh van een Banksleutel in het andere vakje. Een guh "
+       "met een rugzakzadel neemt alle gewone grondblokken mee in zijn rugzak (eindeloos) en brengt ze naar de Bank Guh.\n"
+       "- Is alles vol, dan wachten de guhs tot er weer plek is.\n"
+       "\n"
+       "Ze minen alleen gewone grond (wol, de steenlagen, ertsen, aarde, zand...), nooit gebouwen, nooit naast water of "
+       "lava. Onder het huisje blijft een pilaar staan met een ladder naar beneden, en er komen roze lampjes in.",
+    en="A little guh house with a miner's helmet. The Miner Guh gives it to you when you bring him 16 felt stone, a guh "
+       "clay and a Vahoegite. Click it with a picked-up guh and it moves in: at most 4 of your own tamed guhs.\n"
+       "\n"
+       "The guhs slowly mine out the area under the house, layer by layer from the top down. Right-click it for the "
+       "menu:\n"
+       "- Sliders: up to 20 blocks to each side (east-west and north-south) and how deep (never below y 10).\n"
+       "- Show: pink sparkles show the edge of the area for a while.\n"
+       "- For free each guh mines a block every 20 seconds; with cheese nibbles in the slot four times as fast (one nibble per 20 blocks).\n"
+       "- What they mine goes into a chest next to the house, or into the Bank Guh of a Bank Key in the other slot. A guh "
+       "wearing a Saddle Bag takes all plain ground blocks along in its bag (endlessly) and brings them to the Bank Guh.\n"
+       "- When everything is full, the guhs wait until there is room again.\n"
+       "\n"
+       "They only mine plain ground (wool, the stone layers, ores, dirt, sand...), never buildings, never next to water "
+       "or lava. A pillar stays under the house with a ladder down, and pink lamps go in it.",
+    meer=["systemen/guhhuisje"])
+UITLEG["rookguh_platform"] = dict(
+    nl="Je eigen landingsplek voor de Rookguh. Je krijgt hem als je de hele reis van de Knabbelring hebt uitgespeeld "
+       "(wie dat al gedaan had, kreeg hem bij de eerste keer inloggen na de update).\n"
+       "\n"
+       "Zet hem neer waar je wilt, in elke wereld: dat wordt jouw Rookguh-platform. Je hebt er één; zet je hem ergens anders "
+       "neer, dan verhuist je landingsplek mee. Bij elke Reis-Rookguh staat je platform nu in de lijst. Rechtsklik zelf op "
+       "je platform en de Rookguh vliegt je naar elke plek van je reis, of naar het Super Guhrio-kasteel (als je wereld 1-1 "
+       "hebt uitgespeeld).",
+    en="Your own landing place for the Smoke Guh. You get it when you have finished the whole journey of the Nibble Ring "
+       "(whoever had done that already got it at their first login after the update).\n"
+       "\n"
+       "Put it down wherever you like, in any world: that becomes your Smoke Guh Platform. You have one; put it down "
+       "somewhere else and your landing place moves along. Every Travel Smoke Guh now lists your platform. Right-click "
+       "your platform yourself and the Smoke Guh flies you to any place of your journey, or to the Super Guhrio castle "
+       "(once you have finished world 1-1).")

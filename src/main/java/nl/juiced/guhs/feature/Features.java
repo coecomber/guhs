@@ -152,6 +152,7 @@ public final class Features {
         nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.register(modBus);   // 1.7.0 Onder de Wol: Vadsknakker, super vads, Wolkenliftje, Pluisladder, Mijnlampje, terraria
         nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature.register(modBus);   // 1.7.0: guh villager looks, 4 professions, IJzerguhlem, villagers oppakken
         nl.juiced.guhs.feature.voetjes.VoetjesFeature.register(modBus);   // 1.7.0 (ronde 26): the FEET slot, slofjes, laarsjes, kaassaus- and lavalopers
+        nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.register(modBus);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel, Mijnguh-hulpje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -395,6 +396,7 @@ public final class Features {
         nl.juiced.guhs.feature.toveren.ToverenFeature.creative(output);   // 1.7.0: Glinsteraltaar + Knuffelboekenkast
         nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.creative(output);   // 1.7.0 Onder de Wol: the mining helpers
         nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature.creative(output);   // 1.7.0: the four workstations
+        nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.creative(output);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
