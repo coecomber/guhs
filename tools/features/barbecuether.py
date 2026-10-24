@@ -543,8 +543,9 @@ def dimension(h):
             "vein_toggle": zero, "vein_ridged": zero, "vein_gap": zero},
         "spawn_target": [],
         "surface_rule": surface_rule()})
-    # caves: the Nether's cave carver, in our rock, without lava pools
-    h.w(f"{D}/worldgen/configured_carver/barbecuegrot.json", {"type": "minecraft:nether_cave", "config": {
+    # caves: the Nether's cave carver, in our rock. (1.7.0: vanilla's nether_cave ignores lava_level and fills every cave
+    # below y 31 with real lava; guhs:sausgrot (BbqZonderLava.SausGrot) is the same carver with kaasfrituursaus)
+    h.w(f"{D}/worldgen/configured_carver/barbecuegrot.json", {"type": "guhs:sausgrot", "config": {
         "probability": 0.2, "y": {"type": "minecraft:uniform", "min_inclusive": {"absolute": 0}, "max_inclusive": {"below_top": 1}},
         "yScale": 0.5, "lava_level": {"absolute": -10}, "replaceable": "#guhs:barbecuegrot_vervangbaar",
         "horizontal_radius_multiplier": 1.0, "vertical_radius_multiplier": 1.0, "floor_level": -0.7}})

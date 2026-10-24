@@ -1,0 +1,136 @@
+{
+  "textures": {
+    "particle": "guhs:block/golfbaan_bankhoek",
+    "bank": "guhs:block/golfbaan_bankhoek"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        4,
+        16,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bank"
+        },
+        "south": {
+          "texture": "#bank"
+        },
+        "east": {
+          "texture": "#bank"
+        },
+        "west": {
+          "texture": "#bank"
+        },
+        "up": {
+          "texture": "#bank"
+        },
+        "down": {
+          "texture": "#bank"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        0
+      ],
+      "to": [
+        8,
+        16,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bank"
+        },
+        "south": {
+          "texture": "#bank"
+        },
+        "east": {
+          "texture": "#bank"
+        },
+        "west": {
+          "texture": "#bank"
+        },
+        "up": {
+          "texture": "#bank"
+        },
+        "down": {
+          "texture": "#bank"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bank"
+        },
+        "south": {
+          "texture": "#bank"
+        },
+        "east": {
+          "texture": "#bank"
+        },
+        "west": {
+          "texture": "#bank"
+        },
+        "up": {
+          "texture": "#bank"
+        },
+        "down": {
+          "texture": "#bank"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bank"
+        },
+        "south": {
+          "texture": "#bank"
+        },
+        "east": {
+          "texture": "#bank"
+        },
+        "west": {
+          "texture": "#bank"
+        },
+        "up": {
+          "texture": "#bank"
+        },
+        "down": {
+          "texture": "#bank"
+        }
+      }
+    }
+  ]
+}

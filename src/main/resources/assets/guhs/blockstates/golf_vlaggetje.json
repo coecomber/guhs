@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "vlag=true": {
+      "model": "guhs:block/golf_vlaggetje"
+    },
+    "vlag=false": {
+      "model": "guhs:block/golf_vlaggetje_leeg"
+    }
+  }
+}

@@ -154,7 +154,8 @@ public class KledingGameTests {
         List<GuhClothes> sold = villager.getOffers().stream().map(MerchantOffer::getResult)
                 .filter(s -> s.getItem() instanceof GuhClothingItem).map(s -> ((GuhClothingItem) s.getItem()).getClothes()).toList();
         List<GuhClothes> expected = List.of(GuhClothes.RED_BOWTIE, GuhClothes.BLACK_BOWTIE, GuhClothes.SUNGLASSES, GuhClothes.RAIN_HAT,
-                GuhClothes.STRIPED_SWEATER, GuhClothes.RAINCOAT, GuhClothes.OORSTRIKJE_ROZE, GuhClothes.OORSTRIKJE_MINT, GuhClothes.OORSTRIKJE_GEEL);
+                GuhClothes.STRIPED_SWEATER, GuhClothes.RAINCOAT, GuhClothes.OORSTRIKJE_ROZE, GuhClothes.OORSTRIKJE_MINT, GuhClothes.OORSTRIKJE_GEEL,
+                GuhClothes.PLUISSLOFJES, GuhClothes.REGENLAARSJES);   // (1.7.0: the FEET slot)
         helper.assertTrue(sold.equals(expected), "exactly his own set, all of it: " + sold);
         helper.assertTrue(villager.getOffers().stream().anyMatch(o -> o.getResult().is(ModItems.ROZE_LINT.get())), "still the pink ribbon (the sled)");
         helper.assertFalse(KledingKleermaker.zorgVoorAanbod(villager), "only once");

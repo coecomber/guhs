@@ -50,6 +50,11 @@ public class GolfBallEntity extends Entity {
     public static final double CAPTURE_RADIUS = 0.36, CAPTURE_SPEED = 0.42, LIP_SPEED = 0.62;
     /** A ball that's still rolling after this long just stops (stuck against something on a slope). */
     public static final int MAX_ROLL_TICKS = 20 * 25;
+    /** 1.7.0: the friction of ijsvilt (it rolls on and on) and of kaasmodder (it sticks). */
+    public static final double FRICTION_IJS = 0.985, FRICTION_MODDER = 0.80;
+    /** 1.7.0: the vahoeg looping: at least this fast along its FACING and the ball goes round (in LOOP_TICKS, radius LOOP_R). */
+    public static final double LOOP_SPEED = 0.45, LOOP_R = 2.1;
+    public static final int LOOP_TICKS = 24;
 
     public enum BallEvent { STOPPED, HOLED, SAUS, OUT, LIP }
 
@@ -62,6 +67,10 @@ public class GolfBallEntity extends Entity {
     private UUID npc;
     private boolean moving, sunk, frozen;
     private int movingTicks, lipCooldown;
+    /** 1.7.0: going round a looping (ticks left, 0 = not), where it started, its way and speed; no second go right after. */
+    private int loopTicks, loopCooldown;
+    private Vec3 loopStart = Vec3.ZERO, loopDir = Vec3.ZERO;
+    private double loopSpeed;
     private double startY;
     @Nullable
     private BallEvent lastEvent;
@@ -116,6 +125,7 @@ public class GolfBallEntity extends Entity {
     /** A swing of the club. */
     public void hit(Vec3 velocity) {
         sunk = frozen = false;
+        loopTicks = 0;
         noPhysics = false;
         moving = true;
         movingTicks = 0;
@@ -126,6 +136,7 @@ public class GolfBallEntity extends Entity {
     /** Back on this spot, lying still (a new hole, or after the kaassaus / out of bounds). */
     public void resetTo(Vec3 pos) {
         sunk = frozen = moving = false;
+        loopTicks = 0;
         noPhysics = false;
         setDeltaMovement(Vec3.ZERO);
         startY = pos.y;
@@ -189,6 +200,13 @@ public class GolfBallEntity extends Entity {
         if (lipCooldown > 0) {
             lipCooldown--;
         }
+        if (loopCooldown > 0) {
+            loopCooldown--;
+        }
+        if (loopTicks > 0) {
+            looping();
+            return;
+        }
         Vec3 from = position();
         Vec3 v = getDeltaMovement();
         BlockState under = level().getBlockState(below());
@@ -211,11 +229,17 @@ public class GolfBallEntity extends Entity {
         }
         Vec3 moved = position().subtract(from);
         double vx = v.x, vy = v.y, vz = v.z;
+        // 1.7.0: a 45 degree bank wall sends it off at an angle
+        Vec3 banked = horizontalCollision ? bank(v) : null;
+        if (banked != null) {
+            vx = banked.x;
+            vz = banked.z;
+        }
         // walls: bounce back (the pink slime bumpers give it an extra kick)
-        if (horizontalCollision && Math.abs(moved.x - v.x) > 1e-5) {
+        if (banked == null && horizontalCollision && Math.abs(moved.x - v.x) > 1e-5) {
             vx = -v.x * bounce(BlockPos.containing(getX() + Math.signum(v.x) * (SIZE / 2 + 0.1), getY() + 0.1, getZ()), Math.abs(v.x));
         }
-        if (horizontalCollision && Math.abs(moved.z - v.z) > 1e-5) {
+        if (banked == null && horizontalCollision && Math.abs(moved.z - v.z) > 1e-5) {
             vz = -v.z * bounce(BlockPos.containing(getX(), getY() + 0.1, getZ() + Math.signum(v.z) * (SIZE / 2 + 0.1)), Math.abs(v.z));
         }
         if (verticalCollisionBelow) {
@@ -238,9 +262,13 @@ public class GolfBallEntity extends Entity {
             setOnGround(false);
             level().playSound(null, blockPosition(), SoundEvents.SLIME_JUMP, SoundSource.PLAYERS, 1f, 1.3f);
         }
+        if (grounded && ground.getBlock() instanceof Golf18Blocks.Looping && loopCooldown == 0 && startLoop(ground, vx, vz)) {
+            return;
+        }
         if (grounded) {
-            vx *= FRICTION;
-            vz *= FRICTION;
+            double f = friction(ground);
+            vx *= f;
+            vz *= f;
         } else {
             vx *= AIR;
             vz *= AIR;
@@ -284,6 +312,89 @@ public class GolfBallEntity extends Entity {
             moving = false;
             event(BallEvent.STOPPED);
         }
+    }
+
+    /** 1.7.0: how much of its speed the ball keeps per tick rolling on this floor. */
+    public static double friction(BlockState ground) {
+        if (ground.is(Golf18.IJSVILT.get())) {
+            return FRICTION_IJS;
+        }
+        if (ground.is(nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.KAASMODDER.get())) {
+            return FRICTION_MODDER;
+        }
+        return FRICTION;
+    }
+
+    /**
+     * 1.7.0: hit a bank wall? Then the ball goes off along the mirror of its way in the slanted face (a little slower), or
+     * null when it hit something else (or the straight back of a bank wall).
+     */
+    @Nullable
+    private Vec3 bank(Vec3 v) {
+        double sx = Math.signum(v.x) * (SIZE / 2 + 0.1), sz = Math.signum(v.z) * (SIZE / 2 + 0.1);
+        for (BlockPos pos : new BlockPos[]{blockPosition(), BlockPos.containing(getX() + sx, getY() + 0.1, getZ()),
+                BlockPos.containing(getX(), getY() + 0.1, getZ() + sz), BlockPos.containing(getX() + sx, getY() + 0.1, getZ() + sz)}) {
+            BlockState state = level().getBlockState(pos);
+            if (state.getBlock() instanceof Golf18Blocks.Bankhoek) {
+                Vec3 n = Golf18Blocks.Bankhoek.normal(state.getValue(Golf18Blocks.Bankhoek.FACING));
+                double dot = v.x * n.x + v.z * n.z;
+                if (dot >= 0) {
+                    return null;
+                }
+                double speed = Math.hypot(v.x, v.z);
+                if (speed > 0.04) {
+                    level().playSound(null, pos, SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.PLAYERS, (float) Math.min(1, speed * 2), 1.4f);
+                }
+                return new Vec3((v.x - 2 * dot * n.x) * WALL_BOUNCE, 0, (v.z - 2 * dot * n.z) * WALL_BOUNCE);
+            }
+        }
+        return null;
+    }
+
+    /** 1.7.0: rolling onto a looping: fast enough along its way and the ball goes round (true); too slow and it rolls back. */
+    private boolean startLoop(BlockState ground, double vx, double vz) {
+        Direction way = ground.getValue(Golf18Blocks.Looping.FACING);
+        double along = vx * way.getStepX() + vz * way.getStepZ();
+        if (along >= LOOP_SPEED) {
+            loopTicks = LOOP_TICKS;
+            loopStart = position();
+            loopDir = new Vec3(way.getStepX(), 0, way.getStepZ());
+            loopSpeed = Math.min(MAX_SPEED, Math.hypot(vx, vz)) * 0.85;
+            noPhysics = true;
+            setDeltaMovement(Vec3.ZERO);
+            level().playSound(null, blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 0.8f, 1.6f);
+            return true;
+        }
+        if (along > 0.03) {                                          // up the ring a bit, and back down again
+            loopCooldown = 15;
+            setDeltaMovement(vx - 2 * along * way.getStepX() * 0.8, getDeltaMovement().y, vz - 2 * along * way.getStepZ() * 0.8);
+            level().playSound(null, blockPosition(), SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 0.8f, 0.7f);
+            return true;
+        }
+        return false;
+    }
+
+    /** One tick round the looping: up, over the top and down, then on its way. */
+    private void looping() {
+        loopTicks--;
+        double t = 2 * Math.PI * (LOOP_TICKS - loopTicks) / LOOP_TICKS;
+        Vec3 p = loopStart.add(loopDir.scale(LOOP_R * Math.sin(t))).add(0, LOOP_R * (1 - Math.cos(t)), 0);
+        setPos(p.x, p.y, p.z);
+        if (level() instanceof ServerLevel server && loopTicks % 3 == 0) {
+            server.sendParticles(ParticleTypes.END_ROD, p.x, p.y + 0.15, p.z, 1, 0, 0, 0, 0);
+        }
+        if (loopTicks == 0) {
+            noPhysics = false;
+            loopCooldown = 15;
+            setPos(loopStart.x + loopDir.x * 0.3, loopStart.y, loopStart.z + loopDir.z * 0.3);
+            setDeltaMovement(loopDir.scale(loopSpeed));
+            level().playSound(null, blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5f, 1.8f);
+        }
+    }
+
+    /** (Tests) is it going round a looping right now? */
+    public boolean isLooping() {
+        return loopTicks > 0;
     }
 
     private BlockPos below() {
@@ -343,10 +454,15 @@ public class GolfBallEntity extends Entity {
         return Math.hypot(a.x + dx * t - px, a.z + dz * t - pz);
     }
 
-    /** What the ball may roll on: golf felt, tees and cups, ramps (stairs and slabs), launch pads and the guh's tongue. */
+    /**
+     * What the ball may roll on: golf felt, tees and cups, ramps (stairs and slabs), launch pads and the guh's tongue; 1.7.0
+     * also ijsvilt, kaasmodder, the rails of the sliding guh blocks and the looping.
+     */
     public static boolean isCourse(BlockState state) {
         return state.is(GolfFeature.VILT.get()) || state.is(GolfFeature.AFSLAG.get()) || state.is(GolfFeature.HOLE.get())
                 || state.is(ModBlocks.ROZE_SLIJMBLOK.get()) || state.is(ModBlocks.TONG.get())
+                || state.is(Golf18.IJSVILT.get()) || state.is(Golf18.SCHUIFRAIL.get()) || state.is(Golf18.LOOPING.get())
+                || state.is(nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.KAASMODDER.get())
                 || state.getBlock() instanceof StairBlock || state.getBlock() instanceof SlabBlock;
     }
 

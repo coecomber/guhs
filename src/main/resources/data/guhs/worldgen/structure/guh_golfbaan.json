@@ -17,9 +17,9 @@
     }
   },
   "terrain_adaptation": "beard_box",
-  "check_radius": 96,
+  "check_radius": 100,
   "max_height_difference": 30,
-  "keep_clear": 104,
+  "keep_clear": 112,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/guh_golfbaan",
@@ -45,7 +45,8 @@
       "absolute": 0
     },
     "project_start_to_heightmap": "WORLD_SURFACE_WG",
-    "max_distance_from_center": 80,
-    "use_expansion_hack": false
+    "max_distance_from_center": 116,
+    "use_expansion_hack": false,
+    "start_jigsaw_name": "guhs:guh_golfbaan_midden"
   }
 }

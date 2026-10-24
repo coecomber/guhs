@@ -64,8 +64,10 @@ public class GolfGameTests {
         for (GuhClothes piece : List.of(GuhClothes.GOLF_PET, GuhClothes.GOLF_ZONNEKLEP, GuhClothes.GOLF_TRUI)) {
             helper.assertTrue(results.contains(ModItems.clothingItem(piece)), "sells " + piece);
         }
-        helper.assertTrue(offers.size() == 3 && offers.stream().allMatch(o -> o.getCostA().is(GolfFeature.GOLFBALLETJE.get())), "for golfballetjes");
-        helper.assertTrue(offers.stream().mapToInt(o -> o.getCostA().getCount()).sum() == 34, "the whole outfit costs 34 golfballetjes");
+        var outfit = offers.stream().filter(o -> List.of(GuhClothes.GOLF_PET, GuhClothes.GOLF_ZONNEKLEP, GuhClothes.GOLF_TRUI).stream()
+                .anyMatch(c -> o.getResult().is(ModItems.clothingItem(c)))).toList();   // (1.7.0: the golf shop sells more, see Golf18GameTests)
+        helper.assertTrue(outfit.size() == 3 && offers.stream().allMatch(o -> o.getCostA().is(GolfFeature.GOLFBALLETJE.get())), "for golfballetjes");
+        helper.assertTrue(outfit.stream().mapToInt(o -> o.getCostA().getCount()).sum() == 34, "the whole outfit costs 34 golfballetjes");
         helper.succeed();
     }
 

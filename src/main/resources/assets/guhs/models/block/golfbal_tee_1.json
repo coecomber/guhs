@@ -1,0 +1,73 @@
+{
+  "textures": {
+    "particle": "minecraft:block/white_wool",
+    "bal": "minecraft:block/white_wool",
+    "tee": "minecraft:block/pink_concrete"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        2,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tee"
+        },
+        "south": {
+          "texture": "#tee"
+        },
+        "east": {
+          "texture": "#tee"
+        },
+        "west": {
+          "texture": "#tee"
+        },
+        "up": {
+          "texture": "#tee"
+        },
+        "down": {
+          "texture": "#tee"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        2,
+        6.5
+      ],
+      "to": [
+        9.5,
+        5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bal"
+        },
+        "south": {
+          "texture": "#bal"
+        },
+        "east": {
+          "texture": "#bal"
+        },
+        "west": {
+          "texture": "#bal"
+        },
+        "up": {
+          "texture": "#bal"
+        },
+        "down": {
+          "texture": "#bal"
+        }
+      }
+    }
+  ]
+}

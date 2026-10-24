@@ -229,6 +229,7 @@ public final class BarbecuetherFeature {
         POI_TYPES.register(modBus);
         FEATURES.register(modBus);
         STRUCTURE_TYPES.register(modBus);
+        BbqZonderLava.register(modBus);   // (1.7.0: no real lava in the Barbecuether, new chunks and old ones)
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> event.enqueueWork(Kaasfrituursaus::registerInteractions));
         NeoForge.EVENT_BUS.addListener(BarbecuetherEvents::onUseBlock);
         NeoForge.EVENT_BUS.addListener(BarbecuetherEvents::onDrops);

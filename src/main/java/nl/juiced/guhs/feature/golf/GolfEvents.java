@@ -125,6 +125,9 @@ public final class GolfEvents {
     /** A golfer whose Golfguh isn't there any more (her chunk unloaded, she's gone): the round is over. */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer player && GolfGame.isGolfing(player)) {
+            GolfGame.golferTick(player);                               // (1.7.0: 18 holes reach far from the Golfguh)
+        }
         if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 40 == 0 && GolfGame.isGolfing(player)
                 && !GolfGame.hasGolfguhNearby(player)) {
             GolfGame.leave(player);

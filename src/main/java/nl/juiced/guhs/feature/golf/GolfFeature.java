@@ -71,6 +71,7 @@ public final class GolfFeature {
         NeoForge.EVENT_BUS.register(GolfProtection.class);
         nl.juiced.guhs.feature.Protected.add(GolfProtection::protectedAt);
         NeoForge.EVENT_BUS.register(GolfEvents.class);
+        Golf18.register(modBus);                                      // 1.7.0: the back 9 and the golf shop
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -80,6 +81,7 @@ public final class GolfFeature {
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(GOLFBALLETJE.get()));
         output.accept(new ItemStack(VILT_ITEM.get()));
+        Golf18.creative(output);
     }
 
     @Nullable

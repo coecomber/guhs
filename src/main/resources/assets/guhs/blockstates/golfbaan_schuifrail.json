@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "stand=geen": {
+      "model": "guhs:block/golfbaan_schuifrail"
+    },
+    "stand=a": {
+      "model": "guhs:block/golfbaan_schuifrail"
+    },
+    "stand=b": {
+      "model": "guhs:block/golfbaan_schuifrail"
+    }
+  }
+}

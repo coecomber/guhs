@@ -1419,6 +1419,40 @@ UITLEG = {
            "- List gives you a book with every block that is still missing, with its name and count.\n"
            "- You see how long it still takes. The ghost stays when you close the menu.\n"
            "- You can undo your last 5 building actions."),
+    # 1.7.0 "Rondje Guhmension": the golf shop's deco and the golf trophy (tools/features/golf18.py)
+    "golf_vlaggetje": dict(
+        nl="Deco uit het golfwinkeltje van de Golfguh, voor 6 golfballetjes: een hole met een roze guh-vlaggetje, voor "
+           "je eigen kleine green. Rechtsklik erop: vlag eruit, en nog een keer: vlag erin.",
+        en="Decoration from the Golfguh's golf shop, for 6 golfballetjes: a hole with a pink guh flag, for your own little "
+           "green. Right-click it: flag out, and again: flag back in.",
+        meer=["minigames/golf"]),
+    "golfbal_tee": dict(
+        nl="Deco uit het golfwinkeltje van de Golfguh: twee golfballetjes op een tee voor 3 golfballetjes. Zet er tot 4 "
+           "op één blok, net als kaarsjes: klik met nog een balletje op een blok dat er al staat. Echte golfballetjes om "
+           "mee te betalen zijn het niet.",
+        en="Decoration from the Golfguh's golf shop: two golf balls on tees for 3 golfballetjes. Put up to 4 on one block, "
+           "like candles: click a block that already has some with another ball. They are not golfballetjes you can pay with.",
+        meer=["minigames/golf"]),
+    "golfkarretje": dict(
+        nl="Het golfkarretje uit het golfwinkeltje van de Golfguh, voor 64 golfballetjes. Rechtsklik met een lege hand "
+           "om erin te gaan zitten (sluipen: uitstappen). Rijden doet hij niet: het is deco.",
+        en="The golf cart from the Golfguh's golf shop, for 64 golfballetjes. Right-click it with an empty hand to sit in "
+           "it (sneak to get out). It doesn't drive: it is decoration.",
+        meer=["minigames/golf"]),
+    "golfrek": dict(
+        nl="Deco uit het golfwinkeltje van de Golfguh, voor 10 golfballetjes: een roze golftas met guhgolfclubs en twee "
+           "balletjes, om tegen de muur te zetten. Verder doet hij niks: echt golfen doe je met de club van de Golfguh.",
+        en="Decoration from the Golfguh's golf shop, for 10 golfballetjes: a pink golf bag with guh golf clubs and two balls, "
+           "to put against a wall. It does nothing else: real golfing is done with the Golfguh's club.",
+        meer=["minigames/golf"]),
+    "golftrofee": dict(
+        nl="Niet te koop: de Golfguh geeft hem één keer, als je op een golfbaan met 18 holes alle 18 holes op of onder "
+           "par speelt. Op de trofee staan je naam en je record. Zet hem neer en rechtsklik erop: dan lees je wie hem "
+           "won en met hoeveel slagen. Breek je hem af, dan houdt hij zijn naam en record.",
+        en="Not for sale: the Golfguh gives it once, when you play all 18 holes of an 18-hole golf course at or under par. "
+           "Your name and your record are on it. Put it down and right-click it to read who won it and in how many strokes. "
+           "Break it and it keeps its name and record.",
+        meer=["minigames/golf"]),
 }
 
 LINK = {

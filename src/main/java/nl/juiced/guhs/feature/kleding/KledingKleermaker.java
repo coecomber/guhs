@@ -11,7 +11,7 @@ import nl.juiced.guhs.registry.ModVillagers;
  */
 public final class KledingKleermaker {
     /** Bump when the offer changes: every kleermaker then gets the new list. */
-    public static final int VERSIE = 1;
+    public static final int VERSIE = 2;   // (1.7.0: + the pluisslofjes and regenlaarsjes)
     private static final String TAG = "guhs_kleermaker_aanbod";
 
     /** True for a guh-village kleermaker. */

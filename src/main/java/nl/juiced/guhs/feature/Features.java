@@ -151,6 +151,7 @@ public final class Features {
         nl.juiced.guhs.feature.toveren.ToverenFeature.register(modBus);   // 1.7.0 Onder de Wol: Glinsteraltaar, guh enchantments
         nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.register(modBus);   // 1.7.0 Onder de Wol: Vadsknakker, super vads, Wolkenliftje, Pluisladder, Mijnlampje, terraria
         nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature.register(modBus);   // 1.7.0: guh villager looks, 4 professions, IJzerguhlem, villagers oppakken
+        nl.juiced.guhs.feature.voetjes.VoetjesFeature.register(modBus);   // 1.7.0 (ronde 26): the FEET slot, slofjes, laarsjes, kaassaus- and lavalopers
     }
 
     public static void payloads(PayloadRegistrar registrar) {
