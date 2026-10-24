@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/lichtjes_lamp_aan",
+    "hoed": "guhs:block/lichtjes_lamp_aan",
+    "steel": "guhs:block/steeltjessteen"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        6,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      }
+    }
+  ]
+}

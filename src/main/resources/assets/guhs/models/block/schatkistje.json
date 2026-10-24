@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hout": "guhs:block/schatkistje",
+    "goud": "minecraft:block/gold_block",
+    "particle": "guhs:block/schatkistje"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        3
+      ],
+      "to": [
+        15,
+        9,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        9,
+        3
+      ],
+      "to": [
+        15,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        6,
+        2
+      ],
+      "to": [
+        9,
+        9,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "down": {
+          "texture": "#goud"
+        }
+      }
+    }
+  ]
+}

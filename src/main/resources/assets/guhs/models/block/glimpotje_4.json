@@ -1,0 +1,75 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/glimpotje_4",
+    "glas": "guhs:block/glimpotje_4",
+    "deksel": "guhs:block/glimpotje_deksel"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        10,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glas"
+        },
+        "south": {
+          "texture": "#glas"
+        },
+        "east": {
+          "texture": "#glas"
+        },
+        "west": {
+          "texture": "#glas"
+        },
+        "up": {
+          "texture": "#glas"
+        },
+        "down": {
+          "texture": "#glas"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "down": {
+          "texture": "#deksel"
+        }
+      }
+    }
+  ]
+}

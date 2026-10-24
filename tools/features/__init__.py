@@ -110,7 +110,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.7.0 ronde 26: the FEET slot (slofjes, laarsjes, kaassaus- and lavalopers; append only: its rng is 1000+index)
             'voetjes', 'golf18',
             # 1.7.0 Onder de Wol: the underground buildings, part 1 (framework onderwol_bouw.py; append only)
-            'onderwol_structuren1']
+            'onderwol_structuren1',
+            # 1.7.0 rondes 41-43: the cave minigames Schatgraven, Glimwormvangen, Lichtjespuzzel (append only)
+            'grotspellen']
 
 
 def modules():

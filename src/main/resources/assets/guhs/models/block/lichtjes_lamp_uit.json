@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/lichtjes_lamp_uit",
+    "side": "guhs:block/lichtjes_lamp_rand",
+    "bottom": "guhs:block/lichtjes_lamp_rand"
+  }
+}

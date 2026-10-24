@@ -1,0 +1,105 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kaas": "guhs:block/gouden_kaasje",
+    "particle": "guhs:block/gouden_kaasje"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kaas"
+        },
+        "south": {
+          "texture": "#kaas"
+        },
+        "east": {
+          "texture": "#kaas"
+        },
+        "west": {
+          "texture": "#kaas"
+        },
+        "up": {
+          "texture": "#kaas"
+        },
+        "down": {
+          "texture": "#kaas"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        13,
+        5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kaas"
+        },
+        "south": {
+          "texture": "#kaas"
+        },
+        "east": {
+          "texture": "#kaas"
+        },
+        "west": {
+          "texture": "#kaas"
+        },
+        "up": {
+          "texture": "#kaas"
+        },
+        "down": {
+          "texture": "#kaas"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        5,
+        3
+      ],
+      "to": [
+        13,
+        7,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kaas"
+        },
+        "south": {
+          "texture": "#kaas"
+        },
+        "east": {
+          "texture": "#kaas"
+        },
+        "west": {
+          "texture": "#kaas"
+        },
+        "up": {
+          "texture": "#kaas"
+        },
+        "down": {
+          "texture": "#kaas"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "licht=0": {
+      "model": "guhs:block/glimpotje_0"
+    },
+    "licht=1": {
+      "model": "guhs:block/glimpotje_1"
+    },
+    "licht=2": {
+      "model": "guhs:block/glimpotje_2"
+    },
+    "licht=3": {
+      "model": "guhs:block/glimpotje_3"
+    },
+    "licht=4": {
+      "model": "guhs:block/glimpotje_4"
+    }
+  }
+}

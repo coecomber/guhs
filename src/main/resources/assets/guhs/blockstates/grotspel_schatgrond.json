@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "kiezel=false,staat=dicht": {
+      "model": "guhs:block/grotspel_schatgrond_dicht_wol"
+    },
+    "kiezel=false,staat=rust": {
+      "model": "guhs:block/grotspel_schatgrond_rust_wol"
+    },
+    "kiezel=false,staat=leeg": {
+      "model": "guhs:block/grotspel_schatgrond_leeg_wol"
+    },
+    "kiezel=false,staat=schat": {
+      "model": "guhs:block/grotspel_schatgrond_schat_wol"
+    },
+    "kiezel=false,staat=goud": {
+      "model": "guhs:block/grotspel_schatgrond_goud_wol"
+    },
+    "kiezel=false,staat=piep": {
+      "model": "guhs:block/grotspel_schatgrond_piep_wol"
+    },
+    "kiezel=true,staat=dicht": {
+      "model": "guhs:block/grotspel_schatgrond_dicht_kiezel"
+    },
+    "kiezel=true,staat=rust": {
+      "model": "guhs:block/grotspel_schatgrond_rust_kiezel"
+    },
+    "kiezel=true,staat=leeg": {
+      "model": "guhs:block/grotspel_schatgrond_leeg_kiezel"
+    },
+    "kiezel=true,staat=schat": {
+      "model": "guhs:block/grotspel_schatgrond_schat_kiezel"
+    },
+    "kiezel=true,staat=goud": {
+      "model": "guhs:block/grotspel_schatgrond_goud_kiezel"
+    },
+    "kiezel=true,staat=piep": {
+      "model": "guhs:block/grotspel_schatgrond_piep_kiezel"
+    }
+  }
+}

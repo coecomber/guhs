@@ -1,0 +1,74 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hoed": "guhs:block/paddenstoelsteen",
+    "steel": "guhs:block/steeltjessteen",
+    "particle": "guhs:block/paddenstoelsteen"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        6,
+        2
+      ],
+      "to": [
+        14,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      }
+    }
+  ]
+}
