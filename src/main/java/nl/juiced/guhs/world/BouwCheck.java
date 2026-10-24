@@ -77,7 +77,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  *   <li>gegarandeerd (bbq2): lists every guaranteed copy of a dimension (the dimension you are in when none is given): its
  *       chunk, its distance to the middle of its ring, and whether it stands in new terrain ("nieuw terrein: ja" = its start
  *       chunk did not exist yet when the spot was chosen, or the building is there; "nee" = the chunk existed before the set
- *       did, so the building never appeared there).</li>
+ *       did, so the building never appeared there). 1.6.5: also whether its spot is saved ("plek bewaard"), and a first line
+ *       with the AllesBewaard marker of the dimension.</li>
  * </ul>
  * The report goes to the chat (short) and to &lt;world&gt;/bouwcheck/&lt;dimension&gt;.txt (long).
  */
@@ -170,15 +171,32 @@ public final class BouwCheck {
      * bbq2: /guhs bouwcheck gegarandeerd [dimensie]: every guaranteed copy of the dimension. "nieuw terrein": an alleen_nieuw
      * set with a saved spot stands in terrain that was new when it was chosen; for the others the start chunk is looked at:
      * not generated yet (the building will come), or generated with the start in it. "nee" = the chunk was generated before
-     * the set existed: the building is not there.
+     * the set existed: the building is not there. 1.6.5: "plek bewaard" / "plek NIET bewaard" per set, and the
+     * AllesBewaard line ({@link #bewaardRegel}) first.
      */
     private static int gegarandeerd(CommandSourceStack source, ServerLevel level) {
         List<String> lines = gegarandeerdRegels(level);
         String dim = level.dimension().identifier().toString();
+        String bewaard = bewaardRegel(level);
         source.sendSuccess(() -> Component.literal("Bouwcheck gegarandeerd " + dim + ": " + lines.size() + " sets"), false);
+        source.sendSuccess(() -> Component.literal("  " + bewaard), false);
         lines.forEach(line -> source.sendSuccess(() -> Component.literal("  " + line), false));
-        write(source.getServer(), level, "gegarandeerd", String.join(System.lineSeparator(), lines) + System.lineSeparator());
+        write(source.getServer(), level, "gegarandeerd", bewaard + System.lineSeparator() + String.join(System.lineSeparator(), lines) + System.lineSeparator());
         return lines.size();
+    }
+
+    /**
+     * 1.6.5: one line about the saved spots of this level: AllesBewaard (every guaranteed set searched once, every found spot
+     * saved, see {@link GegarandeerdData}), how many spots are saved, and the sets that had no spot when it was marked.
+     */
+    public static String bewaardRegel(ServerLevel level) {
+        GegarandeerdData opslag = GegarandeerdPlacement.opslag(level);
+        if (opslag == null) {
+            return "AllesBewaard: - (geen opslag: deze dimensie heeft geen gegarandeerde sets)";
+        }
+        java.util.Set<String> geen = opslag.geenPlek();
+        return "AllesBewaard: " + (opslag.allesBewaard() ? "ja" : "NEE (nog niet: wacht tot de zoektocht klaar is, zie het log)") + ", "
+                + opslag.alles().size() + " plekken bewaard" + (geen.isEmpty() ? "" : ", zonder plek: " + String.join(", ", geen));
     }
 
     /** One line per guaranteed set of this level (server thread: it looks at the start chunks that exist). */
@@ -190,7 +208,7 @@ public final class BouwCheck {
         for (GegarandeerdPlacement.Kopie k : GegarandeerdPlacement.kopieen(state, level.getSeed())) {
             String naam = k.set() + (k.placement().alleenNieuw() ? " (alleen nieuw)" : "");
             if (k.plek().isEmpty()) {
-                lines.add(naam + ": GEEN PLEK");
+                lines.add(naam + ": GEEN PLEK" + (opslag != null && opslag.geenPlek().contains(k.set()) ? " (zo bewaard bij AllesBewaard)" : ""));
                 continue;
             }
             ChunkPos c = k.plek().get();
@@ -217,7 +235,7 @@ public final class BouwCheck {
             }
             lines.add(String.format("%s: chunk %s (blok %d, %d), %d blokken van %s, nieuw terrein: %s (%s%s)", naam, c, c.getMiddleBlockX(),
                     c.getMiddleBlockZ(), d, k.placement().rond().map(Identifier::toString).orElse("0,0"), nieuw ? "ja" : "nee", staat,
-                    bewaard ? ", plek bewaard" : ""));
+                    bewaard ? ", plek bewaard" : ", plek NIET bewaard"));
         }
         return lines;
     }

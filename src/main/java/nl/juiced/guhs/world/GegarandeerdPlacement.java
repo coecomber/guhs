@@ -80,6 +80,12 @@ import nl.juiced.guhs.registry.ModStructureTypes;
  * {@link Ring#join}); a set without a spot is named loudly in the log at world load, and an operator can give it a spot
  * near a point of their choice ({@link #zoekRond}: /guhs bouwcheck plek); {@link #doos} tells where a guaranteed copy
  * stands (its box) before a single chunk of it is loaded.
+ * <p>
+ * 1.6.5: EVERY guaranteed set saves its spot ({@link GegarandeerdData}) the first time it is found in the level's own world,
+ * and a saved spot is the answer for ever after, for the plain sets too (they used to be worked out again at every start:
+ * a version that changes the terrain would have moved them). The search of a plain set is unchanged (no new-terrain
+ * filter, no wider rings): in a world that runs 1.6.5 the saved spot is exactly the one 1.6.4 used. When the search
+ * thread has looked for every set of a dimension, the store is marked AllesBewaard ({@link GegarandeerdData#allesBewaard}).
  */
 public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -233,9 +239,9 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         final long seed;
         final Map<GegarandeerdPlacement, Optional<Plek>> plekken = new ConcurrentHashMap<>();
         /**
-         * bbq2: the saved spots of the alleen_nieuw sets, when this is the level's own world (its own generator state): only
-         * there chunks exist and spots are kept. Null for the other seeds of /guhs bouwcheck and the gametests' generators:
-         * those are brand-new worlds, searched like before.
+         * bbq2: the saved spots of the guaranteed sets (1.6.5: all of them, before only the alleen_nieuw ones), when this is
+         * the level's own world (its own generator state): only there chunks exist and spots are kept. Null for the other
+         * seeds of /guhs bouwcheck and the gametests' generators: those are brand-new worlds, searched like before.
          */
         @Nullable
         final GegarandeerdData opslag;
@@ -274,19 +280,20 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
     private static final Map<ServerLevel, GegarandeerdData> OPSLAG = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
 
     /**
-     * bbq2: loads the saved spots of this level's alleen_nieuw sets (server thread, at level load, before {@link #onthoud}),
-     * and starts remembering the chunks it saves while one of them still has to be found.
+     * bbq2: loads the saved spots of this level's guaranteed sets (server thread, at level load, before {@link #onthoud}),
+     * and starts remembering the chunks it saves while one of its alleen_nieuw sets still has to be found. (1.6.5: for
+     * every dimension with a guaranteed set, not only the ones with an alleen_nieuw set: every set saves its spot.)
      */
     public static void laad(ServerLevel level) {
         boolean heeft = false, open = false;
         GegarandeerdData data = null;
         for (Holder<StructureSet> set : level.getChunkSource().getGeneratorState().possibleStructureSets()) {
-            if (set.value().placement() instanceof GegarandeerdPlacement g && g.alleenNieuw()) {
+            if (set.value().placement() instanceof GegarandeerdPlacement g) {
                 if (data == null) {
                     data = GegarandeerdData.get(level);
                 }
                 heeft = true;
-                open |= data.plek(naam(set)) == null;
+                open |= g.alleenNieuw() && data.plek(naam(set)) == null;
             }
         }
         if (heeft) {
@@ -297,7 +304,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         }
     }
 
-    /** bbq2: the saved spots of this level (null: it has no alleen_nieuw set). */
+    /** bbq2: the saved spots of this level (null: it has no guaranteed set; before 1.6.5: no alleen_nieuw set). */
     @Nullable
     public static GegarandeerdData opslag(ServerLevel level) {
         return OPSLAG.get(level);
@@ -566,6 +573,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         Thread thread = new Thread(() -> {
             long t = System.nanoTime();
             int found = 0;
+            boolean fout = false;
             List<String> geen = new ArrayList<>();
             try {
                 for (Object[] o : todo) {
@@ -575,6 +583,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
                         er = g.info(state, seed).isPresent();
                     } catch (RuntimeException ex) {
                         LOGGER.warn("Guhs: guaranteed {} failed", o[2], ex);
+                        fout = true;
                         // (not searched again in this session: a question from the server thread must never start it)
                         Wereld w = g.wereld(state, seed);
                         if (w != null) {
@@ -594,6 +603,9 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
             if (!geen.isEmpty()) {
                 meldGeenPlek(dim, geen);
             }
+            if (!fout) {
+                markeerAllesBewaard(level, state, seed, todo, geen, dim);
+            }
             NieuwTerrein.klaar(level);   // (bbq2: the searches of this load are done: the saved chunks need not be remembered any more)
             for (java.util.function.Consumer<ServerLevel> l : NA_VOORUIT) {
                 try {
@@ -606,6 +618,38 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         thread.setDaemon(true);
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
+    }
+
+    /**
+     * 1.6.5: after a search of every guaranteed set of the level's own world without a failure: when every set that has a
+     * spot has it saved, the store is marked AllesBewaard (once), with the sets that found none (see
+     * {@link GegarandeerdData}). Not for the other seeds of /guhs bouwcheck or a test world (no store of the level).
+     */
+    private static void markeerAllesBewaard(ServerLevel level, ChunkGeneratorStructureState state, long seed, List<Object[]> todo, List<String> geen,
+                                            String dim) {
+        GegarandeerdData opslag = OPSLAG.get(level);
+        if (opslag == null || todo.isEmpty()) {
+            return;
+        }
+        Wereld w = ((GegarandeerdPlacement) todo.get(0)[0]).wereld(state, seed);
+        if (w == null || !w.echt || w.opslag != opslag) {
+            return;
+        }
+        List<String> nietBewaard = new ArrayList<>();
+        for (Object[] o : todo) {
+            String naam = (String) o[2];
+            if (!geen.contains(naam) && opslag.plek(naam) == null) {
+                nietBewaard.add(naam);
+            }
+        }
+        if (!nietBewaard.isEmpty()) {
+            LOGGER.warn("Guhs: {} guaranteed spot(s) in {} are not saved (not marked AllesBewaard): {}", nietBewaard.size(), dim, nietBewaard);
+            return;
+        }
+        if (opslag.markeerAllesBewaard(geen)) {
+            LOGGER.info("Guhs: every guaranteed spot of {} is saved ({} sets, {} without a spot): marked AllesBewaard", dim, todo.size(), geen.size());
+            bewaar(level);
+        }
     }
 
     /**
@@ -752,8 +796,8 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         if (set == null) {
             return Optional.empty();
         }
-        // bbq2: an alleen_nieuw set in the level's own world: the saved spot is the answer for ever
-        GegarandeerdData opslag = alleenNieuw() ? w.opslag : null;
+        // bbq2: in the level's own world the saved spot is the answer for ever (1.6.5: for every set, not only alleen_nieuw)
+        GegarandeerdData opslag = w.opslag;
         if (opslag != null) {
             Plek bewaard = opslag.plek(naam(set));
             if (bewaard != null) {
@@ -784,13 +828,14 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         if (level == null || state == null) {
             return Optional.empty();
         }
-        GegarandeerdData opslag = alleenNieuw() ? w.opslag : null;
+        GegarandeerdData opslag = w.opslag;   // (1.6.5: every set saves its spot, not only alleen_nieuw)
         long start = System.nanoTime();
         ChunkGenerator generator = w.generator != null ? w.generator : level.getChunkSource().getGenerator();
         LevelHeightAccessor height = w.height != null ? w.height : level;
         RandomState random = state.randomState();
-        // bbq2: only where nothing exists yet (the level's own world; elsewhere the world is brand new)
-        NieuwTerrein terrein = opslag != null && w.terrein != null ? w.terrein.get() : null;
+        // bbq2: an alleen_nieuw set only where nothing exists yet (the level's own world; elsewhere the world is brand new).
+        // 1.6.5: a plain set searches as it always did (its own ring, no terrain filter), it only saves what it finds.
+        NieuwTerrein terrein = alleenNieuw() && opslag != null && w.terrein != null ? w.terrein.get() : null;
         int vrij = terrein == null ? 0 : vrij(set, level, generator);
         double midden = draai(w.seed) + Math.PI * 2 * sector / sectoren, half = Math.PI / sectoren;
         SplittableRandom rng = new SplittableRandom(mix(w.seed * 31 + salt()));
@@ -833,10 +878,14 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
                         Plek plek = new Plek(c, ronde[3]);
                         if (opslag != null) {
                             plek = opslag.zet(naam(set), plek);
-                            LOGGER.info("Guhs: the guaranteed {} stands at chunk {} ({} blocks from {}, new terrain within {} blocks{})", naam(set),
-                                    plek.chunk(), (int) d, hand ? mx + ", " + mz + " (chosen by an operator)" : rond().map(Identifier::toString).orElse("0,0"), vrij,
-                                    ruimer > 1 ? ", ring x" + ruimer : "");
-                            if (ruimer > RUIMER_GEWOON) {
+                            String van = hand ? mx + ", " + mz + " (chosen by an operator)" : rond().map(Identifier::toString).orElse("0,0");
+                            if (terrein != null) {
+                                LOGGER.info("Guhs: the guaranteed {} stands at chunk {} ({} blocks from {}, new terrain within {} blocks{})", naam(set),
+                                        plek.chunk(), (int) d, van, vrij, ruimer > 1 ? ", ring x" + ruimer : "");
+                            } else {
+                                LOGGER.info("Guhs: the guaranteed {} stands at chunk {} ({} blocks from {}); spot saved", naam(set), plek.chunk(), (int) d, van);
+                            }
+                            if (terrein != null && ruimer > RUIMER_GEWOON) {
                                 LOGGER.warn("Guhs: LAST RESORT: the guaranteed {} found no spot in new terrain within {} blocks of {}; it stands {} blocks "
                                         + "away (ring x{}). A longer walk than meant, but it exists.", naam(set), (int) Math.round(maxAfstand * RUIMER_GEWOON),
                                         rond().map(Identifier::toString).orElse("0,0"), (int) d, ruimer);

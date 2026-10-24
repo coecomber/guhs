@@ -61,6 +61,25 @@ public class NieuwTerreinGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.6.5: the AllesBewaard marker of the saved spots: set once, with the sets that had no spot; that list only shrinks
+     * (a set of it that gets a spot leaves it), and a saved set never lands on it.
+     */
+    @GuhTest(template = EMPTY, batch = "nieuwterrein")
+    public static void gegarandeerdAllesBewaard(GameTestHelper helper) {
+        GegarandeerdData data = new GegarandeerdData();
+        helper.assertTrue(!data.allesBewaard() && data.geenPlek().isEmpty(), "a new store: not marked");
+        data.zet("guhs:a", new GegarandeerdPlacement.Plek(new ChunkPos(10, -20), 1));
+        helper.assertTrue(data.markeerAllesBewaard(List.of("guhs:b", "guhs:a")), "marked the first time");
+        helper.assertTrue(data.allesBewaard() && data.geenPlek().equals(Set.of("guhs:b")), "a saved set is never on the no-spot list: " + data.geenPlek());
+        helper.assertTrue(!data.markeerAllesBewaard(List.of("guhs:c")) && data.geenPlek().equals(Set.of("guhs:b")), "only once: " + data.geenPlek());
+        data.zet("guhs:b", new GegarandeerdPlacement.Plek(new ChunkPos(1, 2), 2));
+        helper.assertTrue(data.allesBewaard() && data.geenPlek().isEmpty() && data.plek("guhs:b") != null, "a set that gets a spot leaves the list");
+        helper.assertTrue(data.zet("guhs:a", new GegarandeerdPlacement.Plek(new ChunkPos(0, 0), 1)).chunk().equals(new ChunkPos(10, -20)),
+                "a saved spot never moves");
+        helper.succeed();
+    }
+
     /** Which chunks exist: read from the header of a region file, from the chunks in memory, per axis around a chunk. */
     @GuhTest(template = EMPTY, batch = "nieuwterrein")
     public static void nieuwTerreinRegiobestand(GameTestHelper helper) {
@@ -155,6 +174,20 @@ public class NieuwTerreinGameTests {
         helper.assertTrue(s1.equals(nieuwNiets), "a brand-new world: the same spot as before (" + s1 + " / " + nieuwNiets + ")");
         // (verhalenpad snuffel-steiger: the steigerhuisje's own alleen_nieuw set goes before this one and is searched, and saved, on the way)
         helper.assertTrue(opslag.plek("?") != null && opslag.plek("?").chunk().equals(s1), "and it is saved: " + opslag.alles());
+        // 1b. (1.6.5) a plain set (not alleen_nieuw) saves its spot too: exactly the spot it has without a store
+        for (Holder<StructureSet> h : alle) {
+            if (h.unwrapKey().isPresent() && h.value().placement() instanceof GegarandeerdPlacement g && !g.alleenNieuw() && g.rond().isEmpty()) {
+                ChunkPos zonder = g.plek(stateA, seed).orElse(null);
+                if (zonder == null) {
+                    continue;
+                }
+                String naam = h.unwrapKey().get().identifier().toString();
+                ChunkPos met = g.plek(stateB, seed).orElse(null);
+                helper.assertTrue(zonder.equals(met) && opslag.plek(naam) != null && opslag.plek(naam).chunk().equals(zonder),
+                        "a plain set (" + naam + ") is saved at its own spot: " + zonder + " / " + met + " / " + opslag.plek(naam));
+                break;
+            }
+        }
 
         // 2. the old spot and 20 chunks around it exist already: another spot, in new terrain
         java.util.function.LongPredicate rondS1 = k -> Math.abs(ChunkPos.getX(k) - s1.x()) <= 20 && Math.abs(ChunkPos.getZ(k) - s1.z()) <= 20;
@@ -175,7 +208,8 @@ public class NieuwTerreinGameTests {
         // 4. nothing is new anywhere: no spot, nothing saved (it is searched again another time)
         GegarandeerdData opslag4 = new GegarandeerdData();
         GegarandeerdPlacement.onthoudBestaand(level, stateB, seed, generator, height, opslag4, () -> NieuwTerrein.van(k -> true));
-        helper.assertTrue(nieuw.plek(stateB, seed).isEmpty() && opslag4.alles().isEmpty(), "no new terrain: not placed, not saved");
+        // (1.6.5: a plain set that is asked for the first time on the way saves its spot here, so only this set is checked)
+        helper.assertTrue(nieuw.plek(stateB, seed).isEmpty() && opslag4.plek("?") == null, "no new terrain: not placed, not saved: " + opslag4.alles());
         LOGGER.info("NieuwTerrein: old spot {}, in an existing world {} ({} blocks from 0,0)", s1, s2, d);
 
         // 5. (PHASE3 R04) the LAST RESORT: everything within twice its ring exists already (a world that was lived in around
