@@ -9,6 +9,7 @@
     "W": "minecraft:wheat"
   },
   "result": {
-    "id": "guhs:kippennestje"
+    "id": "guhs:kippennestje",
+    "count": 1
   }
 }

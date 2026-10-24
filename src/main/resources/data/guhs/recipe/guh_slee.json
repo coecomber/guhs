@@ -12,6 +12,7 @@
     "B": "guhs:sleebouwersboek"
   },
   "result": {
-    "id": "guhs:guh_slee"
+    "id": "guhs:guh_slee",
+    "count": 1
   }
 }

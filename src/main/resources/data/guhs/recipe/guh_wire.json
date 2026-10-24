@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "redstone",
   "ingredients": [
-    "minecraft:redstone",
-    "minecraft:pink_dye",
-    "guhs:kaas_knabbels"
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:pink_dye"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    }
   ],
   "result": {
     "id": "guhs:guh_wire",

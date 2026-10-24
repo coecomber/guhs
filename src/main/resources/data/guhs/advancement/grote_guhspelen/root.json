@@ -12,7 +12,7 @@
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,
-    "background": "minecraft:block/pink_wool"
+    "background": "minecraft:textures/block/pink_wool.png"
   },
   "criteria": {
     "done": {

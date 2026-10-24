@@ -2,11 +2,18 @@
   "type": "minecraft:crafting_shapeless",
   "category": "equipment",
   "ingredients": [
-    "guhs:vahoege_vads_pickaxe",
-    "guhs:vahoege_vads_axe",
-    "guhs:vahoege_vads_shovel"
+    {
+      "item": "guhs:vahoege_vads_pickaxe"
+    },
+    {
+      "item": "guhs:vahoege_vads_axe"
+    },
+    {
+      "item": "guhs:vahoege_vads_shovel"
+    }
   ],
   "result": {
-    "id": "guhs:vahoege_vads_paxel"
+    "id": "guhs:vahoege_vads_paxel",
+    "count": 1
   }
 }

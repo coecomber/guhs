@@ -7,12 +7,21 @@
     "WWW"
   ],
   "key": {
-    "S": "minecraft:string",
-    "L": "minecraft:leather",
-    "W": "minecraft:pink_wool",
-    "C": "minecraft:chest"
+    "S": {
+      "item": "minecraft:string"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    }
   },
   "result": {
-    "id": "guhs:guh_backpack"
+    "id": "guhs:guh_backpack",
+    "count": 1
   }
 }

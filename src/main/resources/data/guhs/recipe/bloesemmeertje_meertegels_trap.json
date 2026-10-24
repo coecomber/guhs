@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "guhs:bloesemmeertje_meertegels"
+    "#": {
+      "item": "guhs:bloesemmeertje_meertegels"
+    }
   },
   "pattern": [
     "#  ",

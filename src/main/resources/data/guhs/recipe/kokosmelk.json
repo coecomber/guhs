@@ -6,6 +6,7 @@
     "minecraft:glass_bottle"
   ],
   "result": {
-    "id": "guhs:kokosmelk"
+    "id": "guhs:kokosmelk",
+    "count": 1
   }
 }

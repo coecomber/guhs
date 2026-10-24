@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/mossy_carpet_side",
+  "render_type": "minecraft:cutout",
   "textures": {
     "side": "guhs:block/bleekmos_tapijt_hoog"
   }

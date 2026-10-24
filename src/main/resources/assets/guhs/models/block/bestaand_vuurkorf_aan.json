@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/bestaand_vuurkorf_ijzer",
     "ijzer": "guhs:block/bestaand_vuurkorf_ijzer",

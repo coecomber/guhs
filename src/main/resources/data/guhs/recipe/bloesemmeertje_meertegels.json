@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": "#guhs:bloesemmeertje_meerslib",
+  "ingredient": {
+    "tag": "guhs:bloesemmeertje_meerslib"
+  },
   "result": {
     "id": "guhs:bloesemmeertje_meertegels"
   },

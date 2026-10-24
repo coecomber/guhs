@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "guhs:guh_dakpan_wit"
+    "#": {
+      "item": "guhs:guh_dakpan_wit"
+    }
   },
   "pattern": [
     "#  ",

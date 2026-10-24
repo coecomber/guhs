@@ -11,6 +11,7 @@
     "F": "#minecraft:wooden_fences"
   },
   "result": {
-    "id": "guhs:guh_wip"
+    "id": "guhs:guh_wip",
+    "count": 1
   }
 }

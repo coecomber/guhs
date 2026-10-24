@@ -1,9 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": {
-      "sprite": "guhs:block/knabbelpoort",
-      "force_translucent": true
-    }
-  }
+    "all": "guhs:block/knabbelpoort"
+  },
+  "render_type": "minecraft:translucent"
 }

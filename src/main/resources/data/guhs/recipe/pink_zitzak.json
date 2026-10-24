@@ -9,6 +9,7 @@
     "W": "minecraft:pink_wool"
   },
   "result": {
-    "id": "guhs:pink_zitzak"
+    "id": "guhs:pink_zitzak",
+    "count": 1
   }
 }

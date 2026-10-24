@@ -12,6 +12,7 @@
     "S": "minecraft:string"
   },
   "result": {
-    "id": "guhs:mini_luchtballon"
+    "id": "guhs:mini_luchtballon",
+    "count": 1
   }
 }

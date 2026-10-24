@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/theetafel_kleed",
     "kleed": "guhs:block/theetafel_kleed",
@@ -195,40 +196,16 @@
           "texture": "#kopje"
         },
         "north": {
-          "texture": "#kopje",
-          "uv": [
-            11,
-            0,
-            14,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "south": {
-          "texture": "#kopje",
-          "uv": [
-            2,
-            0,
-            5,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "west": {
-          "texture": "#kopje",
-          "uv": [
-            2,
-            0,
-            5,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "east": {
-          "texture": "#kopje",
-          "uv": [
-            11,
-            0,
-            14,
-            0.5
-          ]
+          "texture": "#kopje"
         }
       }
     },
@@ -251,40 +228,16 @@
           "texture": "#kopje"
         },
         "north": {
-          "texture": "#kopje",
-          "uv": [
-            11.5,
-            0,
-            13.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "south": {
-          "texture": "#kopje",
-          "uv": [
-            2.5,
-            0,
-            4.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "west": {
-          "texture": "#kopje",
-          "uv": [
-            2.5,
-            0,
-            4.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "east": {
-          "texture": "#kopje",
-          "uv": [
-            11.5,
-            0,
-            13.5,
-            2.0
-          ]
+          "texture": "#kopje"
         }
       }
     },
@@ -307,40 +260,16 @@
           "texture": "#kopje"
         },
         "north": {
-          "texture": "#kopje",
-          "uv": [
-            2,
-            0,
-            5,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "south": {
-          "texture": "#kopje",
-          "uv": [
-            11,
-            0,
-            14,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "west": {
-          "texture": "#kopje",
-          "uv": [
-            11,
-            0,
-            14,
-            0.5
-          ]
+          "texture": "#kopje"
         },
         "east": {
-          "texture": "#kopje",
-          "uv": [
-            2,
-            0,
-            5,
-            0.5
-          ]
+          "texture": "#kopje"
         }
       }
     },
@@ -363,40 +292,16 @@
           "texture": "#kopje"
         },
         "north": {
-          "texture": "#kopje",
-          "uv": [
-            2.5,
-            0,
-            4.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "south": {
-          "texture": "#kopje",
-          "uv": [
-            11.5,
-            0,
-            13.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "west": {
-          "texture": "#kopje",
-          "uv": [
-            11.5,
-            0,
-            13.5,
-            2.0
-          ]
+          "texture": "#kopje"
         },
         "east": {
-          "texture": "#kopje",
-          "uv": [
-            2.5,
-            0,
-            4.5,
-            2.0
-          ]
+          "texture": "#kopje"
         }
       }
     },
@@ -419,40 +324,16 @@
           "texture": "#pot"
         },
         "north": {
-          "texture": "#pot",
-          "uv": [
-            3,
-            0,
-            7,
-            4
-          ]
+          "texture": "#pot"
         },
         "south": {
-          "texture": "#pot",
-          "uv": [
-            9,
-            0,
-            13,
-            4
-          ]
+          "texture": "#pot"
         },
         "west": {
-          "texture": "#pot",
-          "uv": [
-            3,
-            0,
-            7,
-            4
-          ]
+          "texture": "#pot"
         },
         "east": {
-          "texture": "#pot",
-          "uv": [
-            9,
-            0,
-            13,
-            4
-          ]
+          "texture": "#pot"
         }
       }
     },
@@ -475,40 +356,16 @@
           "texture": "#goud"
         },
         "north": {
-          "texture": "#goud",
-          "uv": [
-            4,
-            0,
-            6,
-            1
-          ]
+          "texture": "#goud"
         },
         "south": {
-          "texture": "#goud",
-          "uv": [
-            10,
-            0,
-            12,
-            1
-          ]
+          "texture": "#goud"
         },
         "west": {
-          "texture": "#goud",
-          "uv": [
-            4,
-            0,
-            6,
-            1
-          ]
+          "texture": "#goud"
         },
         "east": {
-          "texture": "#goud",
-          "uv": [
-            10,
-            0,
-            12,
-            1
-          ]
+          "texture": "#goud"
         }
       }
     },
@@ -531,40 +388,16 @@
           "texture": "#pot"
         },
         "north": {
-          "texture": "#pot",
-          "uv": [
-            1.5,
-            0,
-            3,
-            2
-          ]
+          "texture": "#pot"
         },
         "south": {
-          "texture": "#pot",
-          "uv": [
-            13,
-            0,
-            14.5,
-            2
-          ]
+          "texture": "#pot"
         },
         "west": {
-          "texture": "#pot",
-          "uv": [
-            4.5,
-            0,
-            5.5,
-            2
-          ]
+          "texture": "#pot"
         },
         "east": {
-          "texture": "#pot",
-          "uv": [
-            10.5,
-            0,
-            11.5,
-            2
-          ]
+          "texture": "#pot"
         }
       }
     },
@@ -581,40 +414,16 @@
       ],
       "faces": {
         "north": {
-          "texture": "#taart",
-          "uv": [
-            9,
-            0,
-            13,
-            2.5
-          ]
+          "texture": "#taart"
         },
         "south": {
-          "texture": "#taart",
-          "uv": [
-            3,
-            0,
-            7,
-            2.5
-          ]
+          "texture": "#taart"
         },
         "west": {
-          "texture": "#taart",
-          "uv": [
-            10,
-            0,
-            14,
-            2.5
-          ]
+          "texture": "#taart"
         },
         "east": {
-          "texture": "#taart",
-          "uv": [
-            2,
-            0,
-            6,
-            2.5
-          ]
+          "texture": "#taart"
         }
       }
     },

@@ -15,6 +15,7 @@
     "X": "guhs:techquest_recept_saus"
   },
   "result": {
-    "id": "guhs:frituurautomaat"
+    "id": "guhs:frituurautomaat",
+    "count": 1
   }
 }

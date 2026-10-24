@@ -513,7 +513,7 @@ def biomes(h):
     # the two cave biomes (written in the 26.1 shape)
     kristal = json.load(open(f"{wg}/biome/guh_kristalmijn.json", encoding="utf-8"))
     leeg = {k: [] for k in kristal["spawners"]}
-    muziek = kristal["attributes"].get("minecraft:audio/background_music")
+    muziek = kristal.get("attributes", {}).get("minecraft:audio/background_music")   # (older modules write the old shape; mc26 converts it later)
 
     def biome(fog, sky, deeltje, kans, planten):
         f = [[] for _ in range(11)]

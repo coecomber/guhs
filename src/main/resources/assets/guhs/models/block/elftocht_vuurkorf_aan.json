@@ -324,22 +324,10 @@
       ],
       "faces": {
         "north": {
-          "texture": "#vuur",
-          "uv": [
-            3,
-            0,
-            13,
-            8
-          ]
+          "texture": "#vuur"
         },
         "south": {
-          "texture": "#vuur",
-          "uv": [
-            3,
-            0,
-            13,
-            8
-          ]
+          "texture": "#vuur"
         }
       }
     },
@@ -356,24 +344,13 @@
       ],
       "faces": {
         "east": {
-          "texture": "#vuur",
-          "uv": [
-            3,
-            0,
-            13,
-            8
-          ]
+          "texture": "#vuur"
         },
         "west": {
-          "texture": "#vuur",
-          "uv": [
-            3,
-            0,
-            13,
-            8
-          ]
+          "texture": "#vuur"
         }
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:cutout"
 }

@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "vadshout_fence",
   "key": {
-    "#": "minecraft:stick",
-    "W": "guhs:vadshout_planken"
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "guhs:vadshout_planken"
+    }
   },
   "pattern": [
     "W#W",

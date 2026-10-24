@@ -12,6 +12,7 @@
     "P": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:guh_fluitje"
+    "id": "guhs:guh_fluitje",
+    "count": 1
   }
 }

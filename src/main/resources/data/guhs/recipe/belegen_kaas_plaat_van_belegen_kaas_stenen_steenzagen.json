@@ -1,6 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:belegen_kaas_stenen",
+  "ingredient": {
+    "item": "guhs:belegen_kaas_stenen"
+  },
   "result": {
     "id": "guhs:belegen_kaas_plaat",
     "count": 2

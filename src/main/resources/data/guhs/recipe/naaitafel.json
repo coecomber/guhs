@@ -6,10 +6,15 @@
     "PP"
   ],
   "key": {
-    "S": "minecraft:string",
-    "P": "minecraft:pink_wool"
+    "S": {
+      "item": "minecraft:string"
+    },
+    "P": {
+      "item": "minecraft:pink_wool"
+    }
   },
   "result": {
-    "id": "guhs:naaitafel"
+    "id": "guhs:naaitafel",
+    "count": 1
   }
 }

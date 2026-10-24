@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/mika_grillpaleis",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -28,6 +28,5 @@
   "placement": "paleis",
   "min_y": 33,
   "max_y": 33,
-  "reach": 26,
-  "keep_clear": 60
+  "reach": 26
 }

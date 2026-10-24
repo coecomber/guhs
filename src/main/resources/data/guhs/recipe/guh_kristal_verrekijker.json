@@ -10,6 +10,7 @@
     "S": "minecraft:spyglass"
   },
   "result": {
-    "id": "guhs:guh_kristal_verrekijker"
+    "id": "guhs:guh_kristal_verrekijker",
+    "count": 1
   }
 }

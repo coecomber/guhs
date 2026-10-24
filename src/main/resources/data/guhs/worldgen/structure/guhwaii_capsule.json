@@ -1,7 +1,7 @@
 {
   "type": "guhs:regio_jigsaw",
   "biomes": "#guhs:has_structure/guhwaii_capsule",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -46,8 +46,7 @@
     "hoek": 0.0,
     "afstand": 0
   },
-  "keep_clear": 37,
+  "keep_clear": 39,
   "grond_y": 4,
-  "reach": 30,
-  "voorrang": 810
+  "reach": 30
 }

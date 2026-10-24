@@ -9,6 +9,7 @@
     "L": "#minecraft:leaves"
   },
   "result": {
-    "id": "guhs:bladerhoopje"
+    "id": "guhs:bladerhoopje",
+    "count": 1
   }
 }

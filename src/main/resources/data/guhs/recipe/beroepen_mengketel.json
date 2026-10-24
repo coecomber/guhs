@@ -11,6 +11,7 @@
     "C": "minecraft:cauldron"
   },
   "result": {
-    "id": "guhs:beroepen_mengketel"
+    "id": "guhs:beroepen_mengketel",
+    "count": 1
   }
 }

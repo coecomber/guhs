@@ -13,6 +13,7 @@
     "S": "minecraft:stone"
   },
   "result": {
-    "id": "guhs:snuffelsensor"
+    "id": "guhs:snuffelsensor",
+    "count": 1
   }
 }

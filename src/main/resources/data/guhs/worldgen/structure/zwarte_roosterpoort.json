@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/zwarte_roosterpoort",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -29,7 +29,5 @@
   "placement": "brug",
   "min_y": 40,
   "max_y": 58,
-  "reach": 44,
-  "keep_clear": 49,
-  "voorrang": 270
+  "reach": 44
 }

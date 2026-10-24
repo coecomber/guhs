@@ -1,42 +1,15 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/knabbelbuis_filter_kop",
-      "force_translucent": true
-    },
-    "boven": {
-      "sprite": "guhs:block/knabbelbuis_boven",
-      "force_translucent": true
-    },
-    "zij": {
-      "sprite": "guhs:block/knabbelbuis_zij",
-      "force_translucent": true
-    },
-    "ruit": {
-      "sprite": "guhs:block/knabbelbuis_ruit",
-      "force_translucent": true
-    },
-    "ring": {
-      "sprite": "guhs:block/knabbelbuis_ring",
-      "force_translucent": true
-    },
-    "kast": {
-      "sprite": "guhs:block/knabbelbuis_filter_zij_vol",
-      "force_translucent": true
-    },
-    "kastboven": {
-      "sprite": "guhs:block/knabbelbuis_filter_boven",
-      "force_translucent": true
-    },
-    "kop": {
-      "sprite": "guhs:block/knabbelbuis_filter_kop",
-      "force_translucent": true
-    },
-    "oor": {
-      "sprite": "guhs:block/knabbelbuis_filter_oor",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/knabbelbuis_filter_kop",
+    "boven": "guhs:block/knabbelbuis_boven",
+    "zij": "guhs:block/knabbelbuis_zij",
+    "ruit": "guhs:block/knabbelbuis_ruit",
+    "ring": "guhs:block/knabbelbuis_ring",
+    "kast": "guhs:block/knabbelbuis_filter_zij_vol",
+    "kastboven": "guhs:block/knabbelbuis_filter_boven",
+    "kop": "guhs:block/knabbelbuis_filter_kop",
+    "oor": "guhs:block/knabbelbuis_filter_oor"
   },
   "elements": [
     {
@@ -709,5 +682,6 @@
         }
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:translucent"
 }

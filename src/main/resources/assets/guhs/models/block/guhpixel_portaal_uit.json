@@ -1,9 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
+  "render_type": "minecraft:translucent",
   "textures": {
-    "all": {
-      "sprite": "guhs:block/guhpixel_portaal_uit",
-      "force_translucent": true
-    }
+    "all": "guhs:block/guhpixel_portaal_uit"
   }
 }

@@ -6,9 +6,12 @@
     "V "
   ],
   "key": {
-    "V": "guhs:vahoege_vads"
+    "V": {
+      "item": "guhs:vahoege_vads"
+    }
   },
   "result": {
-    "id": "guhs:vahoege_vads_shears"
+    "id": "guhs:vahoege_vads_shears",
+    "count": 1
   }
 }

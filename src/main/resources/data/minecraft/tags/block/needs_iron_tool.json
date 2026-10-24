@@ -3,6 +3,22 @@
     "guhs:compressed_super_vahoege_vads",
     "guhs:block_of_vahoege_vads",
     "guhs:kristalkaas_erts",
-    "guhs:kristalkaas_blok"
+    "guhs:kristalkaas_blok",
+    "guhs:gouderts_vilt",
+    "guhs:gouderts_knuffel",
+    "guhs:gouderts_kristal",
+    "guhs:redstoneerts_vilt",
+    "guhs:redstoneerts_knuffel",
+    "guhs:redstoneerts_kristal",
+    "guhs:diamanterts_vilt",
+    "guhs:diamanterts_knuffel",
+    "guhs:diamanterts_kristal",
+    "guhs:smaragderts_vilt",
+    "guhs:smaragderts_knuffel",
+    "guhs:smaragderts_kristal",
+    "guhs:vadserts_vilt",
+    "guhs:vadserts_knuffel",
+    "guhs:vadserts_kristal",
+    "guhs:vahoegiet_erts"
   ]
 }

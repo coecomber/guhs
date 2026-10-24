@@ -6,6 +6,7 @@
     "minecraft:purple_dye"
   ],
   "result": {
-    "id": "guhs:katapult_mikaplank"
+    "id": "guhs:katapult_mikaplank",
+    "count": 1
   }
 }

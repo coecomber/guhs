@@ -1,3 +1,14 @@
 {
-  "parent": "guhs:block/guh_glijbaantje"
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "guhs:block/guh_glijbaantje"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "guhs:item/guh_glijbaantje"
+      }
+    }
+  }
 }

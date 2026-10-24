@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": "guhs:fossielmijn_zoutkristalerts",
+  "ingredient": {
+    "item": "guhs:fossielmijn_zoutkristalerts"
+  },
   "result": {
     "id": "guhs:zoutkristal"
   },

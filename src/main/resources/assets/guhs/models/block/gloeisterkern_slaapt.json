@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/gloeisterkern_slaapt",
     "kern": "guhs:block/gloeisterkern_slaapt"

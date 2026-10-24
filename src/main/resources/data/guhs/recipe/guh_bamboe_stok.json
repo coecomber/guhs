@@ -9,6 +9,7 @@
     "B": "guhs:guh_bamboe"
   },
   "result": {
-    "id": "minecraft:stick"
+    "id": "minecraft:stick",
+    "count": 1
   }
 }

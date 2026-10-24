@@ -10,6 +10,7 @@
     "P": "minecraft:paper"
   },
   "result": {
-    "id": "guhs:sterrenwacht_ruine_sterrenkaart"
+    "id": "guhs:sterrenwacht_ruine_sterrenkaart",
+    "count": 1
   }
 }

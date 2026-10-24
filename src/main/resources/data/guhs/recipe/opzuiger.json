@@ -14,6 +14,7 @@
     "D": "guhs:guh_wire"
   },
   "result": {
-    "id": "guhs:opzuiger"
+    "id": "guhs:opzuiger",
+    "count": 1
   }
 }

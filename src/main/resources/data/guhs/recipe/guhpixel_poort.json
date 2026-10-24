@@ -13,6 +13,7 @@
     "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:guhpixel_poort"
+    "id": "guhs:guhpixel_poort",
+    "count": 1
   }
 }

@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:klipkaas",
+  "ingredient": {
+    "item": "guhs:klipkaas"
+  },
   "result": {
-    "id": "guhs:klipkaas_stenen"
+    "id": "guhs:klipkaas_stenen",
+    "count": 1
   }
 }

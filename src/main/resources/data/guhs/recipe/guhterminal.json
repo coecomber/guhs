@@ -14,6 +14,7 @@
     "G": "minecraft:glass_pane"
   },
   "result": {
-    "id": "guhs:guhterminal"
+    "id": "guhs:guhterminal",
+    "count": 1
   }
 }

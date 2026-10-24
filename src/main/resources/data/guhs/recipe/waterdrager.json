@@ -13,6 +13,7 @@
     "B": "minecraft:bucket"
   },
   "result": {
-    "id": "guhs:waterdrager"
+    "id": "guhs:waterdrager",
+    "count": 1
   }
 }

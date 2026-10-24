@@ -13,6 +13,7 @@
     "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:besteltafel"
+    "id": "guhs:besteltafel",
+    "count": 1
   }
 }

@@ -7,9 +7,12 @@
     "VVV"
   ],
   "key": {
-    "V": "guhs:vahoege_vads_ingot"
+    "V": {
+      "item": "guhs:vahoege_vads_ingot"
+    }
   },
   "result": {
-    "id": "guhs:vahoege_vads_chestplate"
+    "id": "guhs:vahoege_vads_chestplate",
+    "count": 1
   }
 }

@@ -1,9 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": {
-      "sprite": "guhs:block/kruimelwolk",
-      "force_translucent": true
-    }
-  }
+    "all": "guhs:block/kruimelwolk"
+  },
+  "render_type": "minecraft:translucent"
 }

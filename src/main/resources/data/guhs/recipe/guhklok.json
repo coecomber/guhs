@@ -13,6 +13,7 @@
     "S": "minecraft:stone"
   },
   "result": {
-    "id": "guhs:guhklok"
+    "id": "guhs:guhklok",
+    "count": 1
   }
 }

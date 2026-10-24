@@ -10,6 +10,7 @@
     "D": "minecraft:dirt"
   },
   "result": {
-    "id": "guhs:guh_moestuinbak"
+    "id": "guhs:guh_moestuinbak",
+    "count": 1
   }
 }

@@ -1,4 +1,5 @@
 {
+  "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
     "blad": "guhs:block/drijvende_bloesemblaadjes_1_5",

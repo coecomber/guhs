@@ -1,7 +1,7 @@
 {
   "type": "guhs:kust_steiger",
   "biomes": "#guhs:has_structure/steigerhuisje",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {},
   "terrain_adaptation": "none",
   "start_pool": "guhs:steigerhuisje/start",
@@ -130,6 +130,5 @@
     54,
     62
   ],
-  "eigen_afstand": 96,
-  "keep_clear": 76
+  "eigen_afstand": 96
 }

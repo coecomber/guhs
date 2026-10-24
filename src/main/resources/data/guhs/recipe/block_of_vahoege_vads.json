@@ -7,9 +7,12 @@
     "###"
   ],
   "key": {
-    "#": "guhs:vahoege_vads_ingot"
+    "#": {
+      "item": "guhs:vahoege_vads_ingot"
+    }
   },
   "result": {
-    "id": "guhs:block_of_vahoege_vads"
+    "id": "guhs:block_of_vahoege_vads",
+    "count": 1
   }
 }

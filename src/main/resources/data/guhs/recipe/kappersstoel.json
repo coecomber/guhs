@@ -11,6 +11,7 @@
     "I": "minecraft:iron_ingot"
   },
   "result": {
-    "id": "guhs:kappersstoel"
+    "id": "guhs:kappersstoel",
+    "count": 1
   }
 }

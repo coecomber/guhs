@@ -12,6 +12,7 @@
     "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:guh_fohn"
+    "id": "guhs:guh_fohn",
+    "count": 1
   }
 }

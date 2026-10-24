@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "a": "guhs:block/safari_ooievaarsbus",
     "b": "minecraft:block/stripped_spruce_log",

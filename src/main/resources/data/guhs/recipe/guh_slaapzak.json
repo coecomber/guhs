@@ -10,6 +10,7 @@
     "P": "#minecraft:wool"
   },
   "result": {
-    "id": "guhs:guh_slaapzak"
+    "id": "guhs:guh_slaapzak",
+    "count": 1
   }
 }

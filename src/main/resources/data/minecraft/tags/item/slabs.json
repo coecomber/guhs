@@ -74,6 +74,10 @@
     "guhs:tegel_hartjes_plaat",
     "guhs:tegel_pootjes_plaat",
     "guhs:tegel_dambord_plaat",
-    "guhs:tegel_visgraat_plaat"
+    "guhs:tegel_visgraat_plaat",
+    "guhs:viltsteen_plaat",
+    "guhs:gepolijste_viltsteen_plaat",
+    "guhs:viltsteen_bakstenen_plaat",
+    "guhs:viltsteen_tegels_plaat"
   ]
 }

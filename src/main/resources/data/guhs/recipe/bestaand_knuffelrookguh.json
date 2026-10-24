@@ -12,6 +12,7 @@
     "R": "guhs:bestaand_recept_knuffel"
   },
   "result": {
-    "id": "guhs:bestaand_knuffelrookguh"
+    "id": "guhs:bestaand_knuffelrookguh",
+    "count": 1
   }
 }

@@ -9,6 +9,7 @@
     "W": "minecraft:black_wool"
   },
   "result": {
-    "id": "guhs:black_zitzak"
+    "id": "guhs:black_zitzak",
+    "count": 1
   }
 }

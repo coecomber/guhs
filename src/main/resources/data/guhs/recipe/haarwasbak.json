@@ -12,6 +12,7 @@
     "I": "minecraft:gold_ingot"
   },
   "result": {
-    "id": "guhs:haarwasbak"
+    "id": "guhs:haarwasbak",
+    "count": 1
   }
 }

@@ -1,17 +1,9 @@
 {
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/eenrichtingsglas",
-      "force_translucent": true
-    },
-    "glass": {
-      "sprite": "guhs:block/eenrichtingsglas",
-      "force_translucent": true
-    },
-    "ceiling": {
-      "sprite": "guhs:block/eenrichtingsglas_onder",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/eenrichtingsglas",
+    "glass": "guhs:block/eenrichtingsglas",
+    "ceiling": "guhs:block/eenrichtingsglas_onder"
   },
   "elements": [
     {

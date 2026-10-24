@@ -65,6 +65,9 @@
     "guhs:rieten_dak",
     "guhs:rieten_dak_trap",
     "guhs:rieten_dak_plaat",
-    "guhs:knabbelportaal"
+    "guhs:knabbelportaal",
+    "guhs:lichtmosblok",
+    "guhs:lichtmos",
+    "guhs:pluiskussen"
   ]
 }

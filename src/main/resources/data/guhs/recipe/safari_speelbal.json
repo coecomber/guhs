@@ -11,6 +11,7 @@
     "S": "minecraft:slime_ball"
   },
   "result": {
-    "id": "guhs:safari_speelbal"
+    "id": "guhs:safari_speelbal",
+    "count": 1
   }
 }

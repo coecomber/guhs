@@ -1,46 +1,34 @@
 {
-  "attributes": {
-    "minecraft:audio/ambient_sounds": {
-      "mood": {
-        "sound": "minecraft:ambient.cave",
-        "tick_delay": 6000,
-        "block_search_extent": 8,
-        "offset": 2.0
-      }
-    },
-    "minecraft:audio/background_music": {
-      "default": {
-        "sound": "minecraft:music.overworld.cherry_grove",
-        "min_delay": 12000,
-        "max_delay": 24000
-      },
-      "creative": {
-        "sound": "minecraft:music.creative",
-        "min_delay": 12000,
-        "max_delay": 24000
-      }
-    },
-    "minecraft:visual/ambient_particles": [
-      {
-        "particle": {
-          "type": "guhs:pluisje"
-        },
-        "probability": 0.006
-      }
-    ],
-    "minecraft:visual/fog_color": "#ffe4f1",
-    "minecraft:visual/sky_color": "#f7b6d8",
-    "minecraft:visual/water_fog_color": "#d76aa6"
-  },
   "has_precipitation": false,
   "temperature": 0.7,
   "downfall": 0.4,
-  "effects": {
-    "water_color": "#f79acb",
-    "foliage_color": "#f9b8d6",
-    "grass_color": "#f7a8cc"
-  },
   "creature_spawn_probability": 0.35,
+  "effects": {
+    "sky_color": 16234200,
+    "fog_color": 16770289,
+    "water_color": 16227019,
+    "water_fog_color": 14117542,
+    "grass_color": 16230604,
+    "foliage_color": 16365782,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "music": {
+      "sound": "minecraft:music.overworld.cherry_grove",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": false
+    },
+    "particle": {
+      "options": {
+        "type": "guhs:pluisje"
+      },
+      "probability": 0.006
+    }
+  },
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -65,20 +53,40 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": [],
+  "carvers": {
+    "air": []
+  },
   "features": [
     [],
     [],
-    [],
+    [
+      "guhs:onderwol_geode",
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_zinkgat"
+    ],
     [],
     [],
     [],
     [
       "guhs:guhmension_kaasknabbel_veins",
-      "guhs:vahoege_vads_ore"
+      "guhs:onderwol_kolenerts",
+      "guhs:onderwol_kopererts",
+      "guhs:onderwol_ijzererts",
+      "guhs:onderwol_lapiserts",
+      "guhs:onderwol_gouderts",
+      "guhs:onderwol_redstoneerts",
+      "guhs:onderwol_diamanterts",
+      "guhs:onderwol_vadserts",
+      "guhs:onderwol_kaasknabbelerts",
+      "guhs:onderwol_kaaskorrelerts",
+      "guhs:onderwol_pigmenterts",
+      "guhs:onderwol_guhklei",
+      "guhs:onderwol_vahoegiet"
     ],
     [],
-    [],
+    [
+      "guhs:onderwol_sausval"
+    ],
     [
       "guhs:pluizenboom",
       "guhs:reuze_guhpaddenstoel",

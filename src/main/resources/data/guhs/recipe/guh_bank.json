@@ -11,6 +11,7 @@
     "W": "minecraft:pink_wool"
   },
   "result": {
-    "id": "guhs:guh_bank"
+    "id": "guhs:guh_bank",
+    "count": 1
   }
 }

@@ -1,7 +1,7 @@
 {
   "type": "guhs:leegte_bouw",
   "biomes": "#guhs:has_structure/guhvleugel_ringenrace",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -29,7 +29,5 @@
   ],
   "y": 150,
   "min_distance": 1100,
-  "rand": 0,
-  "keep_clear": 136,
-  "voorrang": 294
+  "rand": 0
 }

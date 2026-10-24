@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "textures": {
     "beeld": "guhs:block/guhriow3_hendel_om",
     "particle": "guhs:block/guhriow3_hendel_om"

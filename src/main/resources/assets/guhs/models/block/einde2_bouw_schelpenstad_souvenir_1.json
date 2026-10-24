@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/einde2_bouw_schelpenstad_souvenir_voet",
     "voet": "guhs:block/einde2_bouw_schelpenstad_souvenir_voet",

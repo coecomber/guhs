@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:vruchthuis_wand",
+  "ingredient": {
+    "item": "guhs:vruchthuis_wand"
+  },
   "result": {
-    "id": "guhs:vruchthuis_dak"
+    "id": "guhs:vruchthuis_dak",
+    "count": 1
   }
 }

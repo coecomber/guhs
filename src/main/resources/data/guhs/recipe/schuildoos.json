@@ -11,6 +11,7 @@
     "K": "minecraft:chest"
   },
   "result": {
-    "id": "guhs:schuildoos"
+    "id": "guhs:schuildoos",
+    "count": 1
   }
 }

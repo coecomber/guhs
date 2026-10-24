@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "t": "guhs:block/weeb_figuurtjes_0",
     "particle": "guhs:block/weeb_figuurtjes_0"

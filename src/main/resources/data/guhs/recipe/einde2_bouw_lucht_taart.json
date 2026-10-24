@@ -11,6 +11,7 @@
     "W": "minecraft:wheat"
   },
   "result": {
-    "id": "guhs:einde2_bouw_lucht_taart"
+    "id": "guhs:einde2_bouw_lucht_taart",
+    "count": 1
   }
 }

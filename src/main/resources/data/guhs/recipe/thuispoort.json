@@ -14,6 +14,7 @@
     "E": "minecraft:ender_pearl"
   },
   "result": {
-    "id": "guhs:thuispoort"
+    "id": "guhs:thuispoort",
+    "count": 1
   }
 }

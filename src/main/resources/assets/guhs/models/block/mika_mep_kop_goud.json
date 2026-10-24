@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "face": "guhs:block/mika_mep_goud_face",
     "bonk": "guhs:block/mika_mep_goud_bonk",

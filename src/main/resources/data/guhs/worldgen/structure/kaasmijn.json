@@ -1,7 +1,7 @@
 {
   "type": "guhs:flat_jigsaw",
   "biomes": "#guhs:has_structure/kaasmijn",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {
     "creature": {
       "bounding_box": "full",
@@ -23,11 +23,11 @@
   "terrain_adaptation": "none",
   "check_radius": 48,
   "max_height_difference": 12,
-  "keep_clear": 57,
+  "keep_clear": 24,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/kaasmijn",
-    "step": "fluid_springs",
+    "step": "surface_structures",
     "spawn_overrides": {
       "creature": {
         "bounding_box": "full",

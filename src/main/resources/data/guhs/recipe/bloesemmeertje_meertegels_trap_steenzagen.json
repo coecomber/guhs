@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:bloesemmeertje_meertegels",
+  "ingredient": {
+    "item": "guhs:bloesemmeertje_meertegels"
+  },
   "result": {
-    "id": "guhs:bloesemmeertje_meertegels_trap"
+    "id": "guhs:bloesemmeertje_meertegels_trap",
+    "count": 1
   }
 }

@@ -13,6 +13,7 @@
     "P": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:knabbeloven"
+    "id": "guhs:knabbeloven",
+    "count": 1
   }
 }

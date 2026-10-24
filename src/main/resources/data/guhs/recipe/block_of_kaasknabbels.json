@@ -7,9 +7,12 @@
     "###"
   ],
   "key": {
-    "#": "guhs:kaas_knabbels"
+    "#": {
+      "item": "guhs:kaas_knabbels"
+    }
   },
   "result": {
-    "id": "guhs:block_of_kaasknabbels"
+    "id": "guhs:block_of_kaasknabbels",
+    "count": 1
   }
 }

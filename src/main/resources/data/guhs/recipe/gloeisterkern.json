@@ -12,6 +12,7 @@
     "G": "guhs:gloeister"
   },
   "result": {
-    "id": "guhs:gloeisterkern"
+    "id": "guhs:gloeisterkern",
+    "count": 1
   }
 }

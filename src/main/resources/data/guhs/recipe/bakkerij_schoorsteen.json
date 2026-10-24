@@ -10,6 +10,7 @@
     "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:bakkerij_schoorsteen"
+    "id": "guhs:bakkerij_schoorsteen",
+    "count": 1
   }
 }

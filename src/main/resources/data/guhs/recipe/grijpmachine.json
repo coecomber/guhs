@@ -8,11 +8,12 @@
   ],
   "key": {
     "G": "minecraft:glass",
-    "K": "minecraft:iron_chain",
+    "K": "minecraft:chain",
     "P": "minecraft:pink_concrete",
     "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:grijpmachine"
+    "id": "guhs:grijpmachine",
+    "count": 1
   }
 }

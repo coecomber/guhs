@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "t": "guhs:block/einde2_deco_windgong",
     "particle": "guhs:block/einde2_deco_windgong"

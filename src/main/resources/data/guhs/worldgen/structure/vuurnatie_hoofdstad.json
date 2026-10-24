@@ -1,7 +1,7 @@
 {
   "type": "guhs:leegte_bouw",
   "biomes": "#guhs:has_structure/vuurnatie_hoofdstad",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -29,7 +29,5 @@
   ],
   "y": 134,
   "min_distance": 1100,
-  "rand": 48,
-  "keep_clear": 184,
-  "voorrang": 397
+  "rand": 48
 }

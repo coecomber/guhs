@@ -1,6 +1,14 @@
 {
-  "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "guhs:item/guh_schaatsen"
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "guhs:item/guh_schaatsen"
+    }
+  },
+  "perspectives": {
+    "head": {
+      "parent": "guhs:item/guh_schaatsen_3d"
+    }
   }
 }

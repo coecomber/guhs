@@ -11,6 +11,7 @@
     "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:knabbelbal"
+    "id": "guhs:knabbelbal",
+    "count": 1
   }
 }

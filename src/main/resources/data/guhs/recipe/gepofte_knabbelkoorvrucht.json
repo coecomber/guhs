@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": "guhs:knabbelkoorvrucht",
+  "ingredient": {
+    "item": "guhs:knabbelkoorvrucht"
+  },
   "result": {
     "id": "guhs:gepofte_knabbelkoorvrucht"
   },

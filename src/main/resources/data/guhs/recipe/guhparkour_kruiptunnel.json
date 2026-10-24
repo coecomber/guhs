@@ -10,6 +10,7 @@
     "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:guhparkour_kruiptunnel"
+    "id": "guhs:guhparkour_kruiptunnel",
+    "count": 1
   }
 }

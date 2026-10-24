@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "guhs:gladde_knuffelsteen"
+    "#": {
+      "item": "guhs:gladde_knuffelsteen"
+    }
   },
   "pattern": [
     "###"

@@ -10,6 +10,7 @@
     "D": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:guh_voerbak"
+    "id": "guhs:guh_voerbak",
+    "count": 1
   }
 }

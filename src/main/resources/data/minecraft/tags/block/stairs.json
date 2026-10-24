@@ -70,6 +70,10 @@
     "guhs:dakpan_mint_trap",
     "guhs:dakpan_lavendel_trap",
     "guhs:dakpan_perzik_trap",
-    "guhs:rotswand_trap"
+    "guhs:rotswand_trap",
+    "guhs:viltsteen_trap",
+    "guhs:gepolijste_viltsteen_trap",
+    "guhs:viltsteen_bakstenen_trap",
+    "guhs:viltsteen_tegels_trap"
   ]
 }

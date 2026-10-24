@@ -9,6 +9,7 @@
     "G": "guhs:gloeikoolgruis"
   },
   "result": {
-    "id": "guhs:gloeikool"
+    "id": "guhs:gloeikool",
+    "count": 1
   }
 }

@@ -16,6 +16,7 @@
     "X": "guhs:techquest_recept_saus"
   },
   "result": {
-    "id": "guhs:grillkoolpers"
+    "id": "guhs:grillkoolpers",
+    "count": 1
   }
 }

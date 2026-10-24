@@ -14,6 +14,7 @@
     "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:bestelbalie"
+    "id": "guhs:bestelbalie",
+    "count": 1
   }
 }

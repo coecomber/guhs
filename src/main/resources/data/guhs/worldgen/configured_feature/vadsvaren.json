@@ -1,25 +1,61 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "minecraft:random_patch",
   "config": {
-    "to_place": {
-      "type": "minecraft:weighted_state_provider",
-      "entries": [
-        {
-          "weight": 5,
-          "data": {
-            "Name": "guhs:roze_gras"
+    "tries": 48,
+    "xz_spread": 7,
+    "y_spread": 2,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:weighted_state_provider",
+            "entries": [
+              {
+                "weight": 5,
+                "data": {
+                  "Name": "guhs:roze_gras"
+                }
+              },
+              {
+                "weight": 1,
+                "data": {
+                  "Name": "guhs:guhoortjes"
+                }
+              },
+              {
+                "weight": 1,
+                "data": {
+                  "Name": "guhs:kaasbloem"
+                }
+              }
+            ]
           }
-        },
+        }
+      },
+      "placement": [
         {
-          "weight": 1,
-          "data": {
-            "Name": "guhs:guhoortjes"
-          }
-        },
-        {
-          "weight": 1,
-          "data": {
-            "Name": "guhs:kaasbloem"
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  -1,
+                  0
+                ],
+                "blocks": [
+                  "guhs:vadsmos",
+                  "minecraft:pink_wool"
+                ]
+              }
+            ]
           }
         }
       ]

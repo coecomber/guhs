@@ -2,5 +2,6 @@
   "parent": "minecraft:block/template_trapdoor_open",
   "textures": {
     "texture": "guhs:block/guhwaii_palm_luik"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

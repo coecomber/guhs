@@ -3,7 +3,9 @@
   "category": "redstone",
   "group": "bleekhout_trapdoor",
   "key": {
-    "#": "guhs:bleekhout_planken"
+    "#": {
+      "item": "guhs:bleekhout_planken"
+    }
   },
   "pattern": [
     "###",

@@ -1,13 +1,8 @@
 {
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/guh_portal",
-      "force_translucent": true
-    },
-    "top": {
-      "sprite": "guhs:block/guh_portal",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/guh_portal",
+    "top": "guhs:block/guh_portal"
   },
   "elements": [
     {

@@ -9,6 +9,7 @@
     "P": "guhs:knabbelkoorblok_plaat"
   },
   "result": {
-    "id": "guhs:knabbelkoorpilaar"
+    "id": "guhs:knabbelkoorpilaar",
+    "count": 1
   }
 }

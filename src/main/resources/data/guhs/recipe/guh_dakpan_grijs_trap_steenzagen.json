@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:guh_dakpan_grijs",
+  "ingredient": {
+    "item": "guhs:guh_dakpan_grijs"
+  },
   "result": {
-    "id": "guhs:guh_dakpan_grijs_trap"
+    "id": "guhs:guh_dakpan_grijs_trap",
+    "count": 1
   }
 }

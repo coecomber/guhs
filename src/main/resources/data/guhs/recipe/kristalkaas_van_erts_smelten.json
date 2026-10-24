@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": "guhs:kristalkaas_erts",
+  "ingredient": {
+    "item": "guhs:kristalkaas_erts"
+  },
   "result": {
     "id": "guhs:kristalkaas"
   },

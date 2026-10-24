@@ -5,6 +5,7 @@
     "guhs:kaasbloem"
   ],
   "result": {
-    "id": "minecraft:yellow_dye"
+    "id": "minecraft:yellow_dye",
+    "count": 1
   }
 }

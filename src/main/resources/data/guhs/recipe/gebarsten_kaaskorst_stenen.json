@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": "guhs:kaaskorst_stenen",
+  "ingredient": {
+    "item": "guhs:kaaskorst_stenen"
+  },
   "result": {
     "id": "guhs:gebarsten_kaaskorst_stenen"
   },

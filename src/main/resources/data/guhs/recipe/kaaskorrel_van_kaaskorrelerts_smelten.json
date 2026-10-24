@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": "guhs:kaaskorrelerts",
+  "ingredient": {
+    "item": "guhs:kaaskorrelerts"
+  },
   "result": {
     "id": "guhs:kaaskorrel"
   },

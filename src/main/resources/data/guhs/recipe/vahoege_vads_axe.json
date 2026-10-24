@@ -7,10 +7,15 @@
     " S"
   ],
   "key": {
-    "V": "guhs:vahoege_vads_ingot",
-    "S": "minecraft:stick"
+    "V": {
+      "item": "guhs:vahoege_vads_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
   },
   "result": {
-    "id": "guhs:vahoege_vads_axe"
+    "id": "guhs:vahoege_vads_axe",
+    "count": 1
   }
 }

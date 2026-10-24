@@ -13,6 +13,7 @@
     "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:bzg_brievenbus"
+    "id": "guhs:bzg_brievenbus",
+    "count": 1
   }
 }

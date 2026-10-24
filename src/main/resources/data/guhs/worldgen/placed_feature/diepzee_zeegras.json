@@ -18,9 +18,6 @@
     {
       "type": "guhs:outside_structure",
       "structure": "guhs:onderwater"
-    },
-    {
-      "type": "guhs:buiten_gebouwen"
     }
   ]
 }

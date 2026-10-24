@@ -13,6 +13,7 @@
     "T": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:vogels_voerhuisje"
+    "id": "guhs:vogels_voerhuisje",
+    "count": 1
   }
 }

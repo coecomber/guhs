@@ -9,6 +9,7 @@
     "minecraft:milk_bucket"
   ],
   "result": {
-    "id": "guhs:kaasfondue"
+    "id": "guhs:kaasfondue",
+    "count": 1
   }
 }

@@ -15,6 +15,7 @@
     "X": "guhs:techquest_recept_bezorg"
   },
   "result": {
-    "id": "guhs:stepstation"
+    "id": "guhs:stepstation",
+    "count": 1
   }
 }

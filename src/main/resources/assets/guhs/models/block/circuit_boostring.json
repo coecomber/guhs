@@ -1,14 +1,9 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "translucent",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/circuit_boostring",
-      "force_translucent": true
-    },
-    "skin": {
-      "sprite": "guhs:block/circuit_boostring",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/circuit_boostring",
+    "skin": "guhs:block/circuit_boostring"
   },
   "elements": [
     {

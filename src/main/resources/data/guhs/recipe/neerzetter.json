@@ -16,6 +16,7 @@
     "X": "guhs:techquest_recept_machines"
   },
   "result": {
-    "id": "guhs:neerzetter"
+    "id": "guhs:neerzetter",
+    "count": 1
   }
 }

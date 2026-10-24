@@ -13,6 +13,7 @@
     "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:sleerail_kurkentrekker"
+    "id": "guhs:sleerail_kurkentrekker",
+    "count": 1
   }
 }

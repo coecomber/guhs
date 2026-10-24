@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/spiesburcht",
-  "step": "fluid_springs",
+  "step": "underground_decoration",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -40,6 +40,5 @@
   "placement": "brug",
   "min_y": 42,
   "max_y": 64,
-  "reach": 40,
-  "keep_clear": 68
+  "reach": 40
 }

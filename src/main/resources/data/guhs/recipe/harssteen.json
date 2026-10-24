@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": "guhs:kaashars",
+  "ingredient": {
+    "item": "guhs:kaashars"
+  },
   "result": {
     "id": "guhs:harssteen"
   },

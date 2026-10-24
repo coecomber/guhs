@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "t": "guhs:block/japan_windgong",
     "particle": "guhs:block/japan_windgong"

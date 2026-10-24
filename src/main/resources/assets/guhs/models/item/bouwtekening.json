@@ -2,5 +2,13 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "guhs:item/bouwtekening"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "guhs:item/bouwtekening_getekend"
+    }
+  ]
 }

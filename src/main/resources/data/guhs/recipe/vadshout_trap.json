@@ -3,7 +3,9 @@
   "category": "building",
   "group": "vadshout_stairs",
   "key": {
-    "#": "guhs:vadshout_planken"
+    "#": {
+      "item": "guhs:vadshout_planken"
+    }
   },
   "pattern": [
     "#  ",

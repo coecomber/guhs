@@ -13,6 +13,7 @@
     "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:guh_molentje"
+    "id": "guhs:guh_molentje",
+    "count": 1
   }
 }

@@ -1,14 +1,9 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/guheinde_portaal",
-      "force_translucent": true
-    },
-    "portal": {
-      "sprite": "guhs:block/guheinde_portaal",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/guheinde_portaal",
+    "portal": "guhs:block/guheinde_portaal"
   },
   "elements": [
     {

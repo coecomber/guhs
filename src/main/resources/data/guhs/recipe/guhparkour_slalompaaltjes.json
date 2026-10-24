@@ -12,6 +12,7 @@
     "S": "#minecraft:wooden_slabs"
   },
   "result": {
-    "id": "guhs:guhparkour_slalompaaltjes"
+    "id": "guhs:guhparkour_slalompaaltjes",
+    "count": 1
   }
 }

@@ -13,6 +13,7 @@
     "F": "minecraft:leather"
   },
   "result": {
-    "id": "guhs:einde2_reizen_appa_platform"
+    "id": "guhs:einde2_reizen_appa_platform",
+    "count": 1
   }
 }

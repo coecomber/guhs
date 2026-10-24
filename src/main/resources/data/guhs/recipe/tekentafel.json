@@ -13,6 +13,7 @@
     "X": "guhs:techquest_recept_machines"
   },
   "result": {
-    "id": "guhs:tekentafel"
+    "id": "guhs:tekentafel",
+    "count": 1
   }
 }

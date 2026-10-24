@@ -1,14 +1,8 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/knuffel_ghost",
-      "force_translucent": true
-    },
-    "t": {
-      "sprite": "guhs:block/knuffel_ghost",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/knuffel_ghost",
+    "t": "guhs:block/knuffel_ghost"
   },
   "elements": [
     {
@@ -627,5 +621,6 @@
         0.5
       ]
     }
-  }
+  },
+  "render_type": "minecraft:translucent"
 }

@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "saus": "guhs:block/ringsausuman_pannantir",
     "ijzer": "guhs:block/ringsausuman_pannantir_ijzer",

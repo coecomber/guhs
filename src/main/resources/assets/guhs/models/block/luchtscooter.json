@@ -1,18 +1,10 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": {
-      "sprite": "guhs:block/luchtscooter_voet",
-      "force_translucent": true
-    },
-    "voet": {
-      "sprite": "guhs:block/luchtscooter_voet",
-      "force_translucent": true
-    },
-    "wind": {
-      "sprite": "guhs:block/luchtscooter",
-      "force_translucent": true
-    }
+    "particle": "guhs:block/luchtscooter_voet",
+    "voet": "guhs:block/luchtscooter_voet",
+    "wind": "guhs:block/luchtscooter"
   },
   "elements": [
     {

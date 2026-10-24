@@ -13,6 +13,7 @@
     "P": "minecraft:piston"
   },
   "result": {
-    "id": "guhs:korstduwer"
+    "id": "guhs:korstduwer",
+    "count": 1
   }
 }

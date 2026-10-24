@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:houtskoolsteen_stenen",
+  "ingredient": {
+    "item": "guhs:houtskoolsteen_stenen"
+  },
   "result": {
-    "id": "guhs:gebeitelde_houtskoolsteen_stenen"
+    "id": "guhs:gebeitelde_houtskoolsteen_stenen",
+    "count": 1
   }
 }

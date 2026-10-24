@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "guhs:guh_dakpan_roze"
+    "#": {
+      "item": "guhs:guh_dakpan_roze"
+    }
   },
   "pattern": [
     "#  ",

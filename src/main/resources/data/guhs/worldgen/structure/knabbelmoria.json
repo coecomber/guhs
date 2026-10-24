@@ -1,7 +1,7 @@
 {
   "type": "guhs:ringh3_mijn",
   "biomes": "#guhs:has_structure/knabbelmoria",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "piece",
@@ -21,7 +21,5 @@
   "start_jigsaw_name": "guhs:knabbelmoria_midden",
   "check_radius": 28,
   "max_height_difference": 8,
-  "headroom": 12,
-  "keep_clear": 62,
-  "voorrang": 290
+  "headroom": 12
 }

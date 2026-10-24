@@ -10,6 +10,7 @@
     "I": "minecraft:iron_ingot"
   },
   "result": {
-    "id": "guhs:sleeglijder"
+    "id": "guhs:sleeglijder",
+    "count": 1
   }
 }

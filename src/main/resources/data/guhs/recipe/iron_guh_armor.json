@@ -7,10 +7,15 @@
     "III"
   ],
   "key": {
-    "I": "minecraft:iron_ingot",
-    "K": "guhs:kaas_knabbels"
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    }
   },
   "result": {
-    "id": "guhs:iron_guh_armor"
+    "id": "guhs:iron_guh_armor",
+    "count": 1
   }
 }

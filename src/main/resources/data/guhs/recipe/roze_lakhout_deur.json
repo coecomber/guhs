@@ -3,7 +3,9 @@
   "category": "redstone",
   "group": "roze_lakhout_door",
   "key": {
-    "#": "guhs:roze_lakhout_planken"
+    "#": {
+      "item": "guhs:roze_lakhout_planken"
+    }
   },
   "pattern": [
     "##",

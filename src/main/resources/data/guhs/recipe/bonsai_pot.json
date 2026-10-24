@@ -10,6 +10,7 @@
     "P": "minecraft:flower_pot"
   },
   "result": {
-    "id": "guhs:bonsai_pot"
+    "id": "guhs:bonsai_pot",
+    "count": 1
   }
 }

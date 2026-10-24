@@ -15,6 +15,7 @@
     "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:oogster"
+    "id": "guhs:oogster",
+    "count": 1
   }
 }

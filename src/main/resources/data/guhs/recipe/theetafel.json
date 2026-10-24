@@ -11,6 +11,7 @@
     "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:theetafel"
+    "id": "guhs:theetafel",
+    "count": 1
   }
 }

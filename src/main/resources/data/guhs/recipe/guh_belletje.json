@@ -12,6 +12,7 @@
     "G": "minecraft:gold_ingot"
   },
   "result": {
-    "id": "guhs:guh_belletje"
+    "id": "guhs:guh_belletje",
+    "count": 1
   }
 }

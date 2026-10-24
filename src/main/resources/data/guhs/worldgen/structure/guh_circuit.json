@@ -1,7 +1,7 @@
 {
   "type": "guhs:flat_jigsaw",
   "biomes": "#guhs:has_structure/guh_circuit",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {
     "creature": {
       "bounding_box": "piece",
@@ -19,11 +19,11 @@
   "terrain_adaptation": "beard_box",
   "check_radius": 192,
   "max_height_difference": 48,
-  "keep_clear": 105,
+  "keep_clear": 96,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/guh_circuit",
-    "step": "fluid_springs",
+    "step": "surface_structures",
     "spawn_overrides": {
       "creature": {
         "bounding_box": "piece",
@@ -42,7 +42,7 @@
     "start_pool": "guhs:guh_circuit/start",
     "size": 1,
     "start_height": {
-      "absolute": 0
+      "absolute": -3
     },
     "project_start_to_heightmap": "WORLD_SURFACE_WG",
     "max_distance_from_center": 100,

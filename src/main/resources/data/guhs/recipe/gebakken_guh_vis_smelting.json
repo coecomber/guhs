@@ -1,7 +1,9 @@
 {
   "type": "minecraft:smelting",
   "category": "food",
-  "ingredient": "guhs:guh_vis",
+  "ingredient": {
+    "item": "guhs:guh_vis"
+  },
   "result": {
     "id": "guhs:gebakken_guh_vis"
   },

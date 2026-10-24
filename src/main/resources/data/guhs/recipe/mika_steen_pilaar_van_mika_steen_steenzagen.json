@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:mika_steen",
+  "ingredient": {
+    "item": "guhs:mika_steen"
+  },
   "result": {
-    "id": "guhs:mika_steen_pilaar"
+    "id": "guhs:mika_steen_pilaar",
+    "count": 1
   }
 }

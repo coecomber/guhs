@@ -1,7 +1,10 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": "guhs:roosterijzer",
+  "ingredient": {
+    "item": "guhs:roosterijzer"
+  },
   "result": {
-    "id": "guhs:gepolijst_roosterijzer"
+    "id": "guhs:gepolijst_roosterijzer",
+    "count": 1
   }
 }

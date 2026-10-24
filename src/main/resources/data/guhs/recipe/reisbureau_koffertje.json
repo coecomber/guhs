@@ -11,6 +11,7 @@
     "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:reisbureau_koffertje"
+    "id": "guhs:reisbureau_koffertje",
+    "count": 1
   }
 }

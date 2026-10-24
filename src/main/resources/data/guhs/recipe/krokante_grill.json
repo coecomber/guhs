@@ -12,6 +12,7 @@
     "S": "minecraft:smooth_stone"
   },
   "result": {
-    "id": "guhs:krokante_grill"
+    "id": "guhs:krokante_grill",
+    "count": 1
   }
 }

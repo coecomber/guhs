@@ -10,6 +10,7 @@
     "D": "minecraft:dirt"
   },
   "result": {
-    "id": "guhs:seizoensbloembak"
+    "id": "guhs:seizoensbloembak",
+    "count": 1
   }
 }

@@ -12,6 +12,7 @@
     "H": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:reisbureau_balie"
+    "id": "guhs:reisbureau_balie",
+    "count": 1
   }
 }

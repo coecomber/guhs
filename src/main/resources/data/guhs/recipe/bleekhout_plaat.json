@@ -3,7 +3,9 @@
   "category": "building",
   "group": "bleekhout_slab",
   "key": {
-    "#": "guhs:bleekhout_planken"
+    "#": {
+      "item": "guhs:bleekhout_planken"
+    }
   },
   "pattern": [
     "###"

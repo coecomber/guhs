@@ -31,16 +31,34 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "guhs:onderwol_geode",
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_zinkgat"
+    ],
     [],
     [],
     [],
     [
       "guhs:guhmension_kaasknabbel_veins",
-      "guhs:vahoege_vads_ore"
+      "guhs:onderwol_kolenerts",
+      "guhs:onderwol_kopererts",
+      "guhs:onderwol_ijzererts",
+      "guhs:onderwol_lapiserts",
+      "guhs:onderwol_gouderts",
+      "guhs:onderwol_redstoneerts",
+      "guhs:onderwol_diamanterts",
+      "guhs:onderwol_vadserts",
+      "guhs:onderwol_kaasknabbelerts",
+      "guhs:onderwol_kaaskorrelerts",
+      "guhs:onderwol_pigmenterts",
+      "guhs:onderwol_guhklei",
+      "guhs:onderwol_vahoegiet"
     ],
     [],
-    [],
+    [
+      "guhs:onderwol_sausval"
+    ],
     [
       "guhs:bleekhout_boom_hart",
       "guhs:bleekhout_boom",

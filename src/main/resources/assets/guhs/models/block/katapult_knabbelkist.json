@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/katapult_knabbelkist",
     "kist": "guhs:block/katapult_knabbelkist",

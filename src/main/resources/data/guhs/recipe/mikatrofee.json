@@ -6,10 +6,15 @@
     "B"
   ],
   "key": {
-    "M": "guhs:mika_vet",
-    "B": "minecraft:polished_blackstone"
+    "M": {
+      "item": "guhs:mika_vet"
+    },
+    "B": {
+      "item": "minecraft:polished_blackstone"
+    }
   },
   "result": {
-    "id": "guhs:mikatrofee"
+    "id": "guhs:mikatrofee",
+    "count": 1
   }
 }

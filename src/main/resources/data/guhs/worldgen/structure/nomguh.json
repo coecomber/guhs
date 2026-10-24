@@ -1,7 +1,7 @@
 {
   "type": "guhs:regio_jigsaw",
   "biomes": "#guhs:has_structure/nomguh",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -41,8 +41,7 @@
     "hoek": 0.0,
     "afstand": 0
   },
-  "keep_clear": 121,
+  "keep_clear": 127,
   "grond_y": 20,
-  "reach": 118,
-  "voorrang": 850
+  "reach": 118
 }

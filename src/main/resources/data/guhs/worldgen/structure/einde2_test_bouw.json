@@ -1,7 +1,7 @@
 {
   "type": "guhs:leegte_bouw",
   "biomes": "#guhs:has_structure/einde2_test_bouw",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -29,6 +29,5 @@
   ],
   "y": 160,
   "min_distance": 1100,
-  "rand": 48,
-  "keep_clear": 89
+  "rand": 48
 }

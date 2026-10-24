@@ -12,6 +12,7 @@
     "C": "minecraft:stripped_cherry_log"
   },
   "result": {
-    "id": "guhs:koningstroon"
+    "id": "guhs:koningstroon",
+    "count": 1
   }
 }

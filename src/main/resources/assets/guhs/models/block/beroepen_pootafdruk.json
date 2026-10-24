@@ -3,6 +3,7 @@
     "poot": "guhs:block/beroepen_pootafdruk",
     "particle": "guhs:block/beroepen_pootafdruk"
   },
+  "render_type": "minecraft:cutout",
   "elements": [
     {
       "from": [

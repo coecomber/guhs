@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "glas": "guhs:block/safari_terrarium_glas",
     "bodem": "guhs:block/safari_terrarium_bodem",

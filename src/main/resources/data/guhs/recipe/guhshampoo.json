@@ -7,6 +7,7 @@
     "minecraft:slime_ball"
   ],
   "result": {
-    "id": "guhs:guhshampoo"
+    "id": "guhs:guhshampoo",
+    "count": 1
   }
 }

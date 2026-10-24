@@ -11,6 +11,7 @@
     "S": "minecraft:smooth_stone_slab"
   },
   "result": {
-    "id": "guhs:safari_glijbaantje"
+    "id": "guhs:safari_glijbaantje",
+    "count": 1
   }
 }

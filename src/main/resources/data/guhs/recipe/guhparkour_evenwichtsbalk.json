@@ -10,6 +10,7 @@
     "W": "minecraft:pink_wool"
   },
   "result": {
-    "id": "guhs:guhparkour_evenwichtsbalk"
+    "id": "guhs:guhparkour_evenwichtsbalk",
+    "count": 1
   }
 }

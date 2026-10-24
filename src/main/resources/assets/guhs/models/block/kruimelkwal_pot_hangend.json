@@ -1,23 +1,12 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
   "ambientocclusion": false,
   "textures": {
-    "glas": {
-      "sprite": "guhs:block/kruimelkwal_pot_glas",
-      "force_translucent": true
-    },
-    "deksel": {
-      "sprite": "guhs:block/kruimelkwal_pot_deksel",
-      "force_translucent": true
-    },
-    "kwal": {
-      "sprite": "guhs:block/kruimelkwal_pot_kwal",
-      "force_translucent": true
-    },
-    "particle": {
-      "sprite": "guhs:block/kruimelkwal_pot_glas",
-      "force_translucent": true
-    }
+    "glas": "guhs:block/kruimelkwal_pot_glas",
+    "deksel": "guhs:block/kruimelkwal_pot_deksel",
+    "kwal": "guhs:block/kruimelkwal_pot_kwal",
+    "particle": "guhs:block/kruimelkwal_pot_glas"
   },
   "elements": [
     {

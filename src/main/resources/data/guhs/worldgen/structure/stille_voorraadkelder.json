@@ -1,7 +1,7 @@
 {
-  "type": "guhs:flat_jigsaw",
+  "type": "minecraft:jigsaw",
   "biomes": "#guhs:has_structure/stille_voorraadkelder",
-  "step": "fluid_springs",
+  "step": "underground_structures",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -25,43 +25,12 @@
     }
   },
   "terrain_adaptation": "none",
-  "check_radius": 0,
-  "max_height_difference": 0,
-  "jigsaw": {
-    "type": "minecraft:jigsaw",
-    "biomes": "#guhs:has_structure/stille_voorraadkelder",
-    "step": "fluid_springs",
-    "spawn_overrides": {
-      "monster": {
-        "bounding_box": "full",
-        "spawns": []
-      },
-      "creature": {
-        "bounding_box": "full",
-        "spawns": []
-      },
-      "ambient": {
-        "bounding_box": "full",
-        "spawns": []
-      },
-      "underground_water_creature": {
-        "bounding_box": "full",
-        "spawns": []
-      },
-      "axolotls": {
-        "bounding_box": "full",
-        "spawns": []
-      }
-    },
-    "terrain_adaptation": "none",
-    "start_pool": "guhs:stille_voorraadkelder/start",
-    "size": 1,
-    "start_height": {
-      "absolute": 8
-    },
-    "start_jigsaw_name": "guhs:voorraadkelder_midden",
-    "max_distance_from_center": 80,
-    "use_expansion_hack": false
+  "start_pool": "guhs:stille_voorraadkelder/start",
+  "size": 1,
+  "start_height": {
+    "absolute": 8
   },
-  "keep_clear": 59
+  "start_jigsaw_name": "guhs:voorraadkelder_midden",
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false
 }

@@ -11,6 +11,7 @@
     "C": "minecraft:composter"
   },
   "result": {
-    "id": "guhs:zaadbak"
+    "id": "guhs:zaadbak",
+    "count": 1
   }
 }

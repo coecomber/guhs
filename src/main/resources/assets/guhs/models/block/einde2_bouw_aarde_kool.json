@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "side": "guhs:block/einde2_bouw_aarde_kool",
     "top": "guhs:block/einde2_bouw_aarde_kool_top",

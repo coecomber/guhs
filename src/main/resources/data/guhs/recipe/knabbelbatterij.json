@@ -13,6 +13,7 @@
     "R": "minecraft:redstone_block"
   },
   "result": {
-    "id": "guhs:knabbelbatterij"
+    "id": "guhs:knabbelbatterij",
+    "count": 1
   }
 }

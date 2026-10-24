@@ -11,6 +11,7 @@
     "B": "minecraft:slime_ball"
   },
   "result": {
-    "id": "guhs:guhparkour_springplank"
+    "id": "guhs:guhparkour_springplank",
+    "count": 1
   }
 }

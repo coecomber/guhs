@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "t": "guhs:block/japan_mini_torii",
     "particle": "guhs:block/japan_mini_torii"

@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "zij": "guhs:block/torenpeper_kweekbak_zij",
     "onder": "guhs:block/torenpeper_kweekbak_onder",

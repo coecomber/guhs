@@ -13,6 +13,7 @@
     "P": "minecraft:feather"
   },
   "result": {
-    "id": "guhs:luchtblazer"
+    "id": "guhs:luchtblazer",
+    "count": 1
   }
 }

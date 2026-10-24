@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/sate_stam",
     "steen": "guhs:block/houtskoolsteen_stenen",

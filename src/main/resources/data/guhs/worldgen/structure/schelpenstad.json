@@ -1,7 +1,7 @@
 {
   "type": "guhs:leegte_bouw",
   "biomes": "#guhs:has_structure/schelpenstad",
-  "step": "fluid_springs",
+  "step": "surface_structures",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -35,7 +35,5 @@
     "structuur": "guhs:bikinibodem",
     "dx": 224,
     "dz": 64
-  },
-  "keep_clear": 136,
-  "voorrang": 293
+  }
 }

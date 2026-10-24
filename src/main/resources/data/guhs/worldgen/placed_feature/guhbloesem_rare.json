@@ -26,9 +26,6 @@
     },
     {
       "type": "minecraft:biome"
-    },
-    {
-      "type": "guhs:buiten_gebouwen"
     }
   ]
 }

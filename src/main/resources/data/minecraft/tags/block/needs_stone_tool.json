@@ -2,6 +2,15 @@
   "replace": false,
   "values": [
     "guhs:fossielmijn_zoutkristalerts",
-    "guhs:fossielmijn_zoutader"
+    "guhs:fossielmijn_zoutader",
+    "guhs:ijzererts_vilt",
+    "guhs:ijzererts_knuffel",
+    "guhs:ijzererts_kristal",
+    "guhs:kopererts_vilt",
+    "guhs:kopererts_knuffel",
+    "guhs:kopererts_kristal",
+    "guhs:lapiserts_vilt",
+    "guhs:lapiserts_knuffel",
+    "guhs:lapiserts_kristal"
   ]
 }

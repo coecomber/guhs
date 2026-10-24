@@ -12,6 +12,7 @@
     "P": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:knabbelportaal"
+    "id": "guhs:knabbelportaal",
+    "count": 1
   }
 }

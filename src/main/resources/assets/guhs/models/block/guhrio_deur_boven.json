@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "textures": {
     "deur": "guhs:block/guhrio_deur_boven",
     "particle": "guhs:block/guhrio_deur_boven"
