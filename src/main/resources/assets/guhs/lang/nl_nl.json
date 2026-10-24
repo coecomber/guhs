@@ -28999,5 +28999,9 @@
   "gui.guhs.verblijf.samenstellen.zo_laten": "Zo laten",
   "gui.guhs.verblijf.samenstellen.annuleren.uitleg": "Terug naar het bord; de familie blijft zoals hij is. Je kunt het later altijd nog wijzigen met Familie samenstellen op de tab Familie.",
   "gui.guhs.verblijf.samenstellen.reden.geen_ouder": "Er moet minstens één ouder in de familie zijn.",
-  "gui.guhs.verblijf.samenstellen.ongeldig": "Dat kan niet: een familie heeft minstens één ouder."
+  "gui.guhs.verblijf.samenstellen.ongeldig": "Dat kan niet: een familie heeft minstens één ouder.",
+  "entity.guhs.guh.grotguh": "Grotguh",
+  "gui.guhs.guhdex.rarity.grotguh": "Zeldzaamheid: Alleen diep in de grotten van de Guhmension",
+  "gui.guhs.guhdex.info.grotguh": "Een donkerroze guh met kleine kristalspikkeltjes in zijn vacht, die in het donker zachtjes glinsteren. Woont onder de wol, het liefst in de Glitterspelonk. Zie je iets twinkelen in een grot? Grote kans dat het een Grotguh is, njeg! Tem hem met kaasknabbels.",
+  "entity.guhs.grotglimworm": "Glimwormpje"
 }

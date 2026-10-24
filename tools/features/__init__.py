@@ -105,8 +105,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'beverbeek_guhs',
             # 1.6.4: the verblijfsbord's family dialog (append only)
             'familie164',
+            'familie164',
             # 1.7.0 Onder de Wol: the kern (the underground of the Guhmension; LAST of the modules that touch its terrain), then its creatures (append only)
-            'onderwol']
+            'onderwol', 'onderwol_wezens']
 
 
 def modules():

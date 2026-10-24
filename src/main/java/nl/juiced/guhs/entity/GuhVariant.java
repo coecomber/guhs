@@ -61,6 +61,11 @@ public enum GuhVariant {
      * Knus and einde2 tests want PLUISGUH, PINGUH and KORSTGUH .. KOORGUH right before REISGUH. */
     BEVERGUH(0, "bever"),
     // </beverbeek>
+    // <onderwol>
+    /** 1.7.0 (Onder de Wol): de Grotguh: deep pink/magenta fur with little crystal specks that glow softly in the dark. Only born in
+     * the caves of the Guhmension (feature/onderwol/wezens/OnderWolWezens); a fur colour only, no bones of its own. */
+    GROTGUH(0),
+    // </onderwol>
     /** De Pluisguh (2.8): extra fluffy and pink, with a fluffy tuft and cheek fluff. Only born in the Knuffeldal (knuffeldal feature). */
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
@@ -194,7 +199,7 @@ public enum GuhVariant {
 
     /** No plush in the knuffelkast (biomes3: the biome guhs; 1.4.2: the park's Hertguhtje; einde2: the outer-island guhs), so a complete knuffelkast stays what it was. */
     public boolean geenKnuffel() {
-        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh() || this == BEVERGUH;
+        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh() || this == BEVERGUH || this == GROTGUH;
     }
 
     /** einde2: one of the six guhs of the Guheinde's outer islands (KORSTGUH .. KOORGUH): real tameable variants, each bound to its biome. */
