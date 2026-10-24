@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "G",
+    "C"
+  ],
+  "key": {
+    "G": "guhs:guh_wheel",
+    "C": "minecraft:crafting_table"
+  },
+  "result": {
+    "id": "guhs:guhrad_werkbank",
+    "count": 1
+  }
+}

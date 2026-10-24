@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "guhs:block/guhrad_werkbank_top",
+    "front": "guhs:block/guhrad_werkbank_front",
+    "side": "guhs:block/guhrad_werkbank_side"
+  }
+}

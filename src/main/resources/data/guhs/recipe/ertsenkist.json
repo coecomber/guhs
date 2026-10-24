@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VVV",
+    "VCV"
+  ],
+  "key": {
+    "V": "guhs:viltsteen",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "guhs:ertsenkist",
+    "count": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "K",
+    "G"
+  ],
+  "key": {
+    "K": "guhs:guh_kristal",
+    "G": "minecraft:grindstone"
+  },
+  "result": {
+    "id": "guhs:kristalslijpsteen",
+    "count": 1
+  }
+}

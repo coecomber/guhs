@@ -170,6 +170,9 @@ public final class ModVillagers {
      * its current level (1.21.1: Villager#addOffersFromItemListings(offers, listings, 2)).
      */
     public static void addTrades(Villager villager) {
+        if (nl.juiced.guhs.feature.guhvillagers.GuhVillagerHandel.addTrades(villager)) {
+            return;   // 1.7.0: the Toverguh, Vadsmonteur, Mijnwerker and Kristalslijper
+        }
         VillagerData data = villager.getVillagerData();
         List<Trade> listings = trades(data.profession()).get(data.level());
         if (listings == null || listings.isEmpty()) {
