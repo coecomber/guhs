@@ -108,7 +108,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.7.0 Onder de Wol: the kern (the underground of the Guhmension; LAST of the modules that touch its terrain), then its creatures (append only)
             'onderwol', 'onderwol_wezens',
             # 1.7.0 ronde 26: the FEET slot (slofjes, laarsjes, kaassaus- and lavalopers; append only: its rng is 1000+index)
-            'voetjes', 'golf18']
+            'voetjes', 'golf18',
+            # 1.7.0 Onder de Wol, minigames2: Karretjes-wissels + de Kegelgrot (append only)
+            'mijnspellen']
 
 
 def modules():

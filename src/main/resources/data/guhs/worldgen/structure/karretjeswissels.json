@@ -1,0 +1,44 @@
+{
+  "type": "guhs:flat_jigsaw",
+  "biomes": "#guhs:has_structure/karretjeswissels",
+  "step": "underground_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "none",
+  "check_radius": 10,
+  "max_height_difference": 8,
+  "keep_clear": 40,
+  "jigsaw": {
+    "type": "minecraft:jigsaw",
+    "biomes": "#guhs:has_structure/karretjeswissels",
+    "step": "underground_structures",
+    "spawn_overrides": {
+      "monster": {
+        "bounding_box": "piece",
+        "spawns": []
+      },
+      "ambient": {
+        "bounding_box": "piece",
+        "spawns": []
+      }
+    },
+    "terrain_adaptation": "none",
+    "start_pool": "guhs:karretjeswissels/start",
+    "size": 3,
+    "start_height": {
+      "absolute": -22
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 80,
+    "use_expansion_hack": false,
+    "start_jigsaw_name": "guhs:karretjes_lift"
+  }
+}

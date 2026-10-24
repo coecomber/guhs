@@ -1,0 +1,42 @@
+{
+  "textures": {
+    "particle": "guhs:block/neon_kegelbord",
+    "n": "guhs:block/neon_kegelbord",
+    "rand": "minecraft:block/black_concrete"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        14
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#n"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "down": {
+          "texture": "#rand"
+        }
+      },
+      "shade": false
+    }
+  ]
+}

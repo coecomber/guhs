@@ -134,6 +134,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.toveren.client.ToverenClient.init(modBus);   // 1.7.0: the Glinsteraltaar's book, hearts, fluff
         nl.juiced.guhs.feature.mijnhulp.client.MijnhulpClient.init(modBus);   // 1.7.0 Onder de Wol: the Wolkenliftje's keys, tooltips
         nl.juiced.guhs.feature.guhvillagers.client.GuhVillagersClient.init(modBus);   // 1.7.0: the new guh villager look, the IJzerguhlem
+        nl.juiced.guhs.feature.mijnspellen.client.MijnspellenClient.init(modBus);   // 1.7.0 Onder de Wol: ore carts, pins + ball (minigames2)
     }
 
     private FeaturesClient() {

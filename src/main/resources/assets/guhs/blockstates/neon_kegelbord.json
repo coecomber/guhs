@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/neon_kegelbord"
+    },
+    "facing=east": {
+      "model": "guhs:block/neon_kegelbord",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/neon_kegelbord",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/neon_kegelbord",
+      "y": 270
+    }
+  }
+}

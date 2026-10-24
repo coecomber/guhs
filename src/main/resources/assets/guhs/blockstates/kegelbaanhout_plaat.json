@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/kegelbaanhout_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/kegelbaanhout_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/kegelbaanhout"
+    }
+  }
+}

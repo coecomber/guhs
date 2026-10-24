@@ -290,6 +290,13 @@
     "guhs:knuffelboekenkast",
     "guhs:toverguh_boekenstandaard",
     "guhs:guhrad_werkbank",
-    "guhs:ertsenkist"
+    "guhs:ertsenkist",
+    "guhs:bielzenhout",
+    "guhs:kegelbaanhout",
+    "guhs:bielzenhout_trap",
+    "guhs:kegelbaanhout_trap",
+    "guhs:bielzenhout_plaat",
+    "guhs:kegelbaanhout_plaat",
+    "guhs:wolbalrek"
   ]
 }

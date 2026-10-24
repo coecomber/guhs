@@ -282,6 +282,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         /** 1.6.0 deel 2 (F10a): the ranger-guh at the ranger post in the Beverbeek (feature/beverbeek). */
         BEVERBEEK_RANGER(1.0f),
         // </beverbeek>
+        // <minigames2>
+        /** 1.7.0 Onder de Wol (feature/mijnspellen): Conducteur Piepwiel of the Wisselgrot and De Guhde of the Kegelgrot. */
+        WISSELGUH(1.0f),
+        KEGELGUH(1.05f),
+        // </minigames2>
         ;
 
         public final float scale;

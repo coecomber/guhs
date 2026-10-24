@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "baan=0,facing=north": {
+      "model": "guhs:block/kegelgrot_baanbegin"
+    },
+    "baan=0,facing=east": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 90
+    },
+    "baan=0,facing=south": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 180
+    },
+    "baan=0,facing=west": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 270
+    },
+    "baan=1,facing=north": {
+      "model": "guhs:block/kegelgrot_baanbegin"
+    },
+    "baan=1,facing=east": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 90
+    },
+    "baan=1,facing=south": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 180
+    },
+    "baan=1,facing=west": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 270
+    },
+    "baan=2,facing=north": {
+      "model": "guhs:block/kegelgrot_baanbegin"
+    },
+    "baan=2,facing=east": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 90
+    },
+    "baan=2,facing=south": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 180
+    },
+    "baan=2,facing=west": {
+      "model": "guhs:block/kegelgrot_baanbegin",
+      "y": 270
+    }
+  }
+}
