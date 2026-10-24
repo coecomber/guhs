@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import nl.juiced.guhs.registry.ModStructureTypes;
@@ -71,7 +70,10 @@ public class FlatJigsawStructure extends Structure implements BouwRuimte.Ruimte 
         return BouwRuimte.claim(context, this, jigsaw.findValidGenerationPoint(context));
     }
 
-    /** Is the ground around this chunk flat enough (the surface on a 5x5 grid differs at most max_height_difference x factor)? */
+    /**
+     * Is the ground around this chunk flat enough (the surface on a 5x5 grid differs at most max_height_difference x factor)?
+     * (1.7.0: the quick {@link ZoekHoogte}, without the caves.)
+     */
     public boolean vlakGenoeg(net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.world.level.levelgen.RandomState random,
                               net.minecraft.world.level.LevelHeightAccessor height, ChunkPos chunk, int factor) {
         if (checkRadius <= 0) {
@@ -81,7 +83,7 @@ public class FlatJigsawStructure extends Structure implements BouwRuimte.Ruimte 
         int low = Integer.MAX_VALUE, high = Integer.MIN_VALUE;
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
-                int h = generator.getBaseHeight(x0 + i * checkRadius / 2, z0 + j * checkRadius / 2, Heightmap.Types.WORLD_SURFACE_WG, height, random);
+                int h = ZoekHoogte.hoogte(generator, random, height, x0 + i * checkRadius / 2, z0 + j * checkRadius / 2);
                 low = Math.min(low, h);
                 high = Math.max(high, h);
                 if (high - low > max) {

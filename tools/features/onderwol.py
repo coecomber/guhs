@@ -8,8 +8,8 @@ Guhmension. This module makes the resources of the kern and the whole terrain:
     y 0-4, guhkristalsteen up to y ~25, knuffelsteen up to ~45, viltsteen up to ~64, then the pink wool as before. The
     borders wave a few blocks (a 2D noise) and are speckled (vertical gradients);
   - the caves: a term in the final density (inside guhs:bio_terrein, after every older module): vanilla's cheese caves
-    (more and bigger the deeper), spaghetti, noodles and entrances (the cave mouths), never in the bottom 5 blocks and
-    never under the seas;
+    (more and bigger the deeper), spaghetti and entrances (the cave mouths), closing up towards the bottom and never
+    under the seas; plus vanilla's carvers (winding caves, ravines) for caves that open up to the surface;
   - the cave biomes guhs:glitterspelonk (knuffelsteen) and guhs:pluisgrot (viltsteen): a shift of depth and
     continentalness where their noise says so, deep inside the rock (the same "deep" trick as the Gatenkaasgrotten);
   - the ores, the geodes, the saus springs, the saus sea and the sinkholes in every Guhmension biome.
@@ -330,9 +330,8 @@ def _min(a, b):
 
 def grotten(vast):
     """The caves (density: below 0 is air). Cheese caves more and bigger the deeper (none above ~y 47), closing up towards
-    the knuffelnaad each along its own noise (no flat floors), spaghetti and noodles a bit rarer in the wool, vanilla's
-    entrances (the cave mouths). Everything but the noodles (interpolated inside already) sits in an interpolated, as in
-    vanilla: the final density is filled per cell without moving the cache_once counter, so a cache_once or a noise
+    the knuffelnaad each along its own noise (no flat floors), spaghetti a bit rarer in the wool, vanilla's entrances (the
+    cave mouths). Everything sits in one interpolated, as in vanilla: the final density is filled per cell without moving the cache_once counter, so a cache_once or a noise
     outside interpolation is either frozen per 8x4x8 cell or paid per block. vast: the terrain without caves (a cache_once
     the terrain's own interpolated shares); where it is clearly air (a few blocks above the land) no cave noise is worked
     out at all, which also spares the structure searches (getBaseHeight) most of the caves' cost."""
@@ -345,10 +344,10 @@ def grotten(vast):
     # never in the bottom blocks, never under the seas (the sea noise of the Knuffeldal module: 1 away from the seas)
     wacht = _max(kw.gradient(4, 6, 2.0, -10.0), kw.add(-10.0, kw.mul(kw.add(1.0, kw.mul(kw.geen_zee(), -1.0)), 12.0)))
     holtes = _max(kw.add(_min(_min(kaas, mond), spaghetti), dicht), wacht)
-    binnen = _interp({"type": "minecraft:range_choice", "input": vast, "min_inclusive": -1000000.0, "max_exclusive": LUCHT,
-                      "when_in_range": 1.0, "when_out_of_range": holtes})
-    noedel = kw.add("minecraft:overworld/caves/noodle", kw.gradient(58, 70, 0.0, 0.4))
-    return _max(_min(binnen, noedel), _interp(wacht))
+    # (no noodle caves: vanilla's noodle has interpolators of its own, so its four noises would be worked out at every cell
+    # corner, in the air too: measured, the structure searches took 3x as long as in 1.6.4)
+    return _interp({"type": "minecraft:range_choice", "input": vast, "min_inclusive": -1000000.0, "max_exclusive": LUCHT,
+                    "when_in_range": 1.0, "when_out_of_range": holtes})
 
 
 def router(d):
@@ -358,7 +357,7 @@ def router(d):
     binnen = final["input"]
     if binnen["type"] == "minecraft:range_choice" and binnen["input"]["type"] == "minecraft:cache_once":   # (the first test build's shape)
         binnen = final["input"] = binnen["input"]["argument"]
-    if binnen["type"] == "minecraft:min" and "minecraft:overworld/caves/noodle" in json.dumps(binnen["argument2"]):   # (idempotent)
+    if binnen["type"] == "minecraft:min" and "minecraft:overworld/caves/entrances" in json.dumps(binnen["argument2"]):   # (idempotent)
         binnen = binnen["argument1"]
     assert binnen["type"] == "minecraft:max" and binnen["argument1"]["type"] == "minecraft:interpolated", "unexpected final_density"
     if binnen["argument1"]["argument"]["type"] == "minecraft:cache_once":   # (idempotent)
@@ -369,7 +368,8 @@ def router(d):
     gedeeld = {"type": "minecraft:cache_once", "argument": binnen["argument1"]["argument"]}
     binnen["argument1"]["argument"] = gedeeld
     vast = _max(gedeeld, {"type": "minecraft:y_clamped_gradient", "from_y": 29, "to_y": 31, "from_value": 1.0, "to_value": -1.0})
-    final["input"] = _min(binnen, grotten(vast))
+    # (guhs:grotten only marks the term: the quick height probe of the searches, ZoekHoogte, leaves it out)
+    final["input"] = _min(binnen, {"type": "guhs:grotten", "argument": grotten(vast)})
     # the preliminary surface is the real terrain now (was a constant): the layer rule only works below it
     r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface", "density": terrein["argument"],
                                       "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
@@ -615,7 +615,7 @@ def selfcheck(h):
         if b != "knuffelnaad" and not os.path.exists(f"{D}/loot_table/blocks/{b}.json"):   # (unbreakable: no loot)
             problemen.append(f"loot table missing: {b}")
     d = json.load(open(f"{D}/worldgen/noise_settings/guhmension.json", encoding="utf-8"))
-    if json.dumps(d["noise_router"]["final_density"]).count("minecraft:overworld/caves/noodle") != 1:
+    if json.dumps(d["noise_router"]["final_density"]).count("minecraft:overworld/caves/entrances") != 1:
         problemen.append("the caves are missing from (or twice in) the final density")
     if problemen:
         raise SystemExit("onderwol self-check failed:\n  " + "\n  ".join(problemen))

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -62,6 +64,9 @@ public final class OnderWolFeature {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Guhs.MODID);
+    private static final DeferredRegister<MapCodec<? extends DensityFunction>> DICHTHEDEN = DeferredRegister.create(Registries.DENSITY_FUNCTION_TYPE, Guhs.MODID);
+    public static final DeferredHolder<MapCodec<? extends DensityFunction>, MapCodec<GrottenFunctie>> GROTTEN =
+            DICHTHEDEN.register("grotten", () -> GrottenFunctie.DATA_CODEC);
 
     public static final ResourceKey<Biome> GLITTERSPELONK = ResourceKey.create(Registries.BIOME, Guhs.id("glitterspelonk"));
     public static final ResourceKey<Biome> PLUISGROT = ResourceKey.create(Registries.BIOME, Guhs.id("pluisgrot"));
@@ -210,6 +215,7 @@ public final class OnderWolFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         FEATURES.register(modBus);
+        DICHTHEDEN.register(modBus);
         NeoForge.EVENT_BUS.addListener(OnderWolFeature::onSpawnCheck);
         // the Superkompas tab "Biomes" (section Guhmension)
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "glitterspelonk");

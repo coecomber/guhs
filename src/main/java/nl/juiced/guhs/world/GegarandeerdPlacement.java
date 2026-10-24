@@ -29,7 +29,6 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -966,7 +965,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
     /** Quick filter: the biome at the surface of the chunk's middle suits one of the set's structures. */
     private static boolean biomePast(Holder<StructureSet> set, ChunkGenerator generator, RandomState random, LevelHeightAccessor height, ChunkPos c) {
         int x = c.getMiddleBlockX(), z = c.getMiddleBlockZ();
-        int y = generator.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, height, random);
+        int y = ZoekHoogte.hoogte(generator, random, height, x, z);
         Holder<Biome> biome = generator.getBiomeSource().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), random.sampler());
         for (StructureSet.StructureSelectionEntry e : set.value().structures()) {
             if (e.structure().value().biomes().contains(biome)) {
