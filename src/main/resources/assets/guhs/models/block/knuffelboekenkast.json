@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "guhs:block/knuffelboekenkast",
+    "end": "guhs:block/guhbloesem_planks"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "VKV",
+    "SSS"
+  ],
+  "key": {
+    "B": "minecraft:book",
+    "V": "guhs:vahoegiet",
+    "K": "guhs:guh_kristal",
+    "S": "guhs:guh_kristalsteen"
+  },
+  "result": {
+    "id": "guhs:glinsteraltaar",
+    "count": 1
+  }
+}

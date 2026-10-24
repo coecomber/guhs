@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sharpness",
+    "minecraft:protection",
+    "minecraft:efficiency",
+    "minecraft:unbreaking",
+    "minecraft:power",
+    "minecraft:fortune",
+    "minecraft:looting",
+    "minecraft:silk_touch",
+    "minecraft:feather_falling",
+    "minecraft:respiration",
+    "minecraft:depth_strider",
+    "minecraft:swift_sneak",
+    "minecraft:mending",
+    "guhs:mika_mepper",
+    "guhs:pluisval",
+    "guhs:glitterzicht",
+    "guhs:vadsvlijt",
+    "guhs:bakvads"
+  ]
+}
