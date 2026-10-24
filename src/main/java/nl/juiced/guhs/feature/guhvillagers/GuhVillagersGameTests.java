@@ -139,7 +139,7 @@ public class GuhVillagersGameTests {
     @GuhTest(template = EMPTY, batch = BATCH, timeoutTicks = 200)
     public static void golemGuhVillagersMakenIJzerguhlem(GameTestHelper helper) {
         for (boolean guh : new boolean[]{true, false}) {
-            BlockPos midden = helper.absolutePos(new BlockPos(guh ? 40 : 80, 20, 40));
+            BlockPos midden = helper.absolutePos(new BlockPos(10, 3, 10));   // (both rounds on the same spot: far away the chunks take no entities)
             vloer(helper, midden);
             long nu = helper.getLevel().getGameTime();
             Villager eerste = null;
@@ -157,10 +157,22 @@ public class GuhVillagersGameTests {
             }
             eerste.spawnGolemIfNeeded(helper.getLevel(), nu, 5);
             List<IronGolem> g = golems(helper, midden);
-            helper.assertTrue(g.size() == 1, (guh ? "guh" : "vanilla") + " villagers: one golem, got " + g.size());
+            if (g.size() != 1) {
+                final long t = nu;
+                List<Villager> buren = helper.getLevel().getEntitiesOfClass(Villager.class, eerste.getBoundingBox().inflate(10));
+                helper.fail((guh ? "guh" : "vanilla") + " villagers: one golem, got " + g.size() + "; villagers near " + buren.size()
+                        + ", wanting " + buren.stream().filter(b -> b.wantsToSpawnGolem(t)).count() + ", detected "
+                        + buren.stream().filter(b -> b.getBrain().hasMemoryValue(MemoryModuleType.GOLEM_DETECTED_RECENTLY)).count()
+                        + ", floor " + helper.getLevel().getBlockState(midden.below()) + ", golem test spawn "
+                        + net.minecraft.util.SpawnUtil.trySpawnMob(EntityType.IRON_GOLEM, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED,
+                        helper.getLevel(), midden, 10, 8, 6, net.minecraft.util.SpawnUtil.Strategy.LEGACY_IRON_GOLEM, false).isPresent());
+            }
             helper.assertTrue(guh == (g.get(0) instanceof IJzerguhlem), guh ? "an IJzerguhlem" : "a vanilla iron golem");
             for (IronGolem golem : g) {
                 golem.discard();
+            }
+            for (Villager v : helper.getLevel().getEntitiesOfClass(Villager.class, new AABB(midden).inflate(16))) {
+                v.discard();
             }
         }
         helper.succeed();
