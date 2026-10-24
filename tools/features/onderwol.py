@@ -341,7 +341,10 @@ def router(d):
         # the preliminary surface is the real terrain now (was a constant): the layer rule only works below it
         r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface", "density": terrein["argument"],
                                           "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
-        final["input"] = {"type": "minecraft:min", "argument1": binnen, "argument2": grotten()}
+        # (the caves are only worked out where the terrain is solid: above the land the old value goes through untouched)
+        oud = {"type": "minecraft:cache_once", "argument": binnen}
+        final["input"] = {"type": "minecraft:range_choice", "input": oud, "min_inclusive": -1000000.0, "max_exclusive": 0.0,
+                          "when_in_range": oud, "when_out_of_range": {"type": "minecraft:min", "argument1": oud, "argument2": grotten()}}
         # the cave biomes: deep inside the rock (as the Gatenkaasgrotten' "deep"), in their own band of height, where their noise
         # is high, depth goes up by SHIFT and continentalness up (Glitterspelonk) or down (Pluisgrot) by SHIFT
         rots = {"type": "minecraft:clamp", "min": 0.0, "max": 1.0, "input": kw.mul(kw.add(terrein, -0.28), 6.0)}
