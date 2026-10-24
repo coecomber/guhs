@@ -131,7 +131,12 @@ public final class Highscores {
             // --- bbq2 (Super Guhrio): the whole castle in one go and the six levels (feature/guhrio/GuhrioKasteel submits them) ---
             time("guhrio_kasteel", "guhrio_vadsmunt"),
             time("guhrio_1_1", "guhrio_munt"), time("guhrio_1_2", "guhrio_munt"), time("guhrio_2_1", "guhrio_munt"),
-            time("guhrio_2_2", "guhrio_munt"), time("guhrio_3_1", "guhrio_munt"), time("guhrio_3_2", "guhrio_munt"));
+            time("guhrio_2_2", "guhrio_munt"), time("guhrio_3_1", "guhrio_munt"), time("guhrio_3_2", "guhrio_munt"),
+            // <minigames1> 1.7.0 Onder de Wol: the cave games (feature/grotspellen; board = id, points)
+            points("schatgraven_makkelijk", "schatmuntje"), points("schatgraven_medium", "schatmuntje"), points("schatgraven_lastig", "schatmuntje"),
+            points("glimwormvangen_makkelijk", "glimmertje"), points("glimwormvangen_medium", "glimmertje"), points("glimwormvangen_lastig", "glimmertje"),
+            points("lichtjespuzzel_makkelijk", "lampjesmunt"), points("lichtjespuzzel_medium", "lampjesmunt"), points("lichtjespuzzel_lastig", "lampjesmunt"));
+            // </minigames1>
 
     /** A 2.9 row with points ("N pt", higher is better; board = id, icon = the game's coin). */
     private static Game points(String id, String coin) {

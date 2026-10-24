@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "aan=true": {
+      "model": "guhs:block/lichtjes_lamp_aan"
+    },
+    "aan=false": {
+      "model": "guhs:block/lichtjes_lamp_uit"
+    }
+  }
+}

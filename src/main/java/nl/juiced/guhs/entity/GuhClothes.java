@@ -576,6 +576,20 @@ public enum GuhClothes {
     /** The kleermaker's upgrade of the kaassauslopers: on real lava too. */
     LAVALOPERS(Slot.FEET, "outfit_voet_hoog", "outfit_voet_plateau"),
     // </voetjes>
+    // 1.7.0 Onder de Wol (feature/grotspellen): the clothes of the cave minigames, on existing bones. Saved by number:
+    // at the merge they go after the pieces already merged.
+    // <minigames1>
+    /** Schatgraven: a black pirate hat with a pink band. */
+    SCHAT_PIRATENHOEDJE(Slot.HEAD, "outfit_tricorn"),
+    /** Schatgraven: a black eye patch with a little pink heart. */
+    SCHAT_OOGKLEPJE(Slot.EYES, "outfit_eyepatch"),
+    /** Glimwormvangen: glowing glimworm feelers on the ears (they glow in the dark). */
+    GLIM_ANTENNETJES(Slot.OREN, "outfit_oren_sponsguh"),
+    /** Glimwormvangen: a butterfly net in a little bag on the back. */
+    GLIM_VLINDERNETJE(Slot.BACK, "outfit_doolhof_rugzakje", "outfit_circuit_vlagcape_stok"),
+    /** Lichtjespuzzel: a glowing red mushroom hat with white dots. */
+    LICHTJES_PADDENSTOELHOEDJE(Slot.HEAD, "outfit_theemutsje"),
+    // </minigames1>
     ;
 
     /**
