@@ -103,7 +103,7 @@ public class Golf18GameTests {
     /** A ball rolling east into a bank corner (corner south-east) goes off north. */
     @GuhTest(template = LANES, timeoutTicks = 100, batch = BATCH)
     public static void golf18BankCornerSendsTheBallOffAtAnAngle(GameTestHelper helper) {
-        helper.setBlock(new BlockPos(12, 2, 2), Golf18.BANKHOEK.get().defaultBlockState().setValue(Golf18Blocks.Bankhoek.FACING, Direction.EAST));
+        helper.setBlock(new BlockPos(12, 3, 2), Golf18.BANKHOEK.get().defaultBlockState().setValue(Golf18Blocks.Bankhoek.FACING, Direction.EAST));
         GolfBallEntity b = ball(helper, 4.5, 2.5);
         double[] minZ = {99};
         for (int t = 3; t < 60; t++) {
@@ -122,7 +122,7 @@ public class Golf18GameTests {
     @GuhTest(template = LANES, timeoutTicks = 160, batch = BATCH)
     public static void golf18LoopingFastRoundSlowBack(GameTestHelper helper) {
         var loop = Golf18.LOOPING.get().defaultBlockState().setValue(Golf18Blocks.Looping.FACING, Direction.EAST);
-        helper.setBlock(new BlockPos(8, 1, 2), loop);
+        helper.setBlock(new BlockPos(8, 2, 2), loop);                   // (in the felt: the template sits 1 up)
         GolfBallEntity fast = ball(helper, 3.5, 2.5);
         boolean[] looped = {false};
         for (int t = 3; t < 50; t++) {
@@ -234,7 +234,12 @@ public class Golf18GameTests {
             helper.assertTrue(GolfGame.best(player, GolfGame.BEST18, Niveau.MEDIUM) == 65, "an 18-hole record of 65");
             helper.assertTrue(GolfGame.best(player) == -1, "not a 9-hole record");
             helper.assertTrue(count(player, Golf18.GOLFTROFEE_ITEM.get()) == 1, "the golf trophy");
-            var trofee = player.getInventory().getItem(player.getInventory().findSlotMatchingItem(new net.minecraft.world.item.ItemStack(Golf18.GOLFTROFEE_ITEM.get())));
+            var trofee = net.minecraft.world.item.ItemStack.EMPTY;
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                if (player.getInventory().getItem(i).is(Golf18.GOLFTROFEE_ITEM.get())) {
+                    trofee = player.getInventory().getItem(i);
+                }
+            }
             helper.assertTrue(trofee.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME) != null
                     && trofee.getOrDefault(net.minecraft.core.component.DataComponents.LORE, net.minecraft.world.item.component.ItemLore.EMPTY).lines().size() == 2,
                     "with your name and the record on it");

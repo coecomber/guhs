@@ -865,9 +865,6 @@ public final class GolfGame {
     /** Every tick of the Golfguh: the windmill, the countdown, the timers, and golfers who wandered off. */
     public void tick(GuhNpcEntity npc) {
         ServerLevel world = (ServerLevel) npc.level();
-        if (world.getGameTime() == lastTick) {
-            return;                                                    // (1.7.0: ticked already, by her or by the golfer)
-        }
         lastTick = world.getGameTime();
         npcPos = npc.blockPosition();
         long clock = lastTick;                                         // (the game clock: the golfer may tick her from afar)
