@@ -44,12 +44,13 @@ import nl.juiced.guhs.registry.ModItems;
  * 1.7.0 toveren: the Glinsteraltaar (power only from Knuffelboekenkasten in the ring, its pool, lapis + levels, the
  * Spreukjesboekje), the guh enchantments' rules (no durability on unbreakable gear, Mika-mepper not on the Mika-mepper,
  * the book-only spells never in a table) and their effects (Pluisval, Vadsvlijt, Bakvads, Spaarguhtje, Aaizacht,
- * Kaasknabbelgeur). The room: bank_test_kamer (7 x 5 x 7, stone floor); the altar stands in its middle.
+ * Kaasknabbelgeur). The room: bank_test_kamer (7 x 5 x 7; its stone floor is relative y 1); the altar stands in its middle.
  */
 public class ToverenGameTests {
     private static final String KAMER = "bank_test_kamer";
     private static final String BATCH = "toveren";
-    private static final BlockPos ALTAAR = new BlockPos(3, 1, 3);
+    /** (relative y 1 is the room's stone floor: everything stands on it, at y 2) */
+    private static final BlockPos ALTAAR = new BlockPos(3, 2, 3);
 
     private static Holder<Enchantment> h(ServerLevel level, ResourceKey<Enchantment> key) {
         return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key);
@@ -78,7 +79,8 @@ public class ToverenGameTests {
         ring(helper, Blocks.BOOKSHELF.defaultBlockState(), 16);
         helper.assertTrue(GlinsteraltaarBlock.kracht(level, abs) == 0, "vanilla bookshelves give the altar no power");
         ring(helper, ToverenFeature.KNUFFELBOEKENKAST.get().defaultBlockState(), 6);
-        helper.assertTrue(GlinsteraltaarBlock.kracht(level, abs) == 6, "six Knuffelboekenkasten: power 6, got " + GlinsteraltaarBlock.kracht(level, abs));
+        helper.assertTrue(GlinsteraltaarBlock.kracht(level, abs) == 6, "six Knuffelboekenkasten: power 6, got " + GlinsteraltaarBlock.kracht(level, abs)
+               );
         // a block between a shelf and the altar takes that shelf away
         BlockPos eerste = GlinsteraltaarBlock.KAST_PLEKKEN.stream().filter(o -> o.getY() == 0).findFirst().orElseThrow();
         helper.setBlock(ALTAAR.offset(eerste.getX() / 2, 0, eerste.getZ() / 2), Blocks.STONE);
@@ -203,9 +205,9 @@ public class ToverenGameTests {
     @GuhTest(template = KAMER, batch = BATCH)
     public static void pluisvalLandtZacht(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        helper.setBlock(new BlockPos(2, 0, 2), Blocks.PINK_WOOL);
+        helper.setBlock(new BlockPos(2, 1, 2), Blocks.PINK_WOOL);
         ServerPlayer player = GuhMockPlayer.of(helper);
-        BlockPos op = helper.absolutePos(new BlockPos(2, 1, 2));
+        BlockPos op = helper.absolutePos(new BlockPos(2, 2, 2));
         player.snapTo(op.getX() + 0.5, op.getY(), op.getZ() + 0.5);
         ItemStack laarzen = new ItemStack(Items.IRON_BOOTS);
         player.setItemSlot(EquipmentSlot.FEET, laarzen);
@@ -214,7 +216,7 @@ public class ToverenGameTests {
         laarzen.enchant(h(level, Spreuken.PLUISVAL), 1);
         LivingFallEvent wol = NeoForge.EVENT_BUS.post(new LivingFallEvent(player, 8, 1f));
         helper.assertTrue(wol.getDamageMultiplier() == 0f, "with Pluisval on wool: no fall damage");
-        helper.setBlock(new BlockPos(2, 0, 2), Blocks.STONE);
+        helper.setBlock(new BlockPos(2, 1, 2), Blocks.STONE);
         LivingFallEvent steen = NeoForge.EVENT_BUS.post(new LivingFallEvent(player, 8, 1f));
         helper.assertTrue(steen.getDamageMultiplier() == 1f, "on stone Pluisval does nothing");
         helper.succeed();
@@ -252,14 +254,14 @@ public class ToverenGameTests {
     @GuhTest(template = KAMER, batch = BATCH)
     public static void spaarguhtjeNaarDeBank(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        helper.setBlock(new BlockPos(1, 1, 1), ModBlocks.BANK_GUH.get());
-        BankGuhBlockEntity bank = (BankGuhBlockEntity) level.getBlockEntity(helper.absolutePos(new BlockPos(1, 1, 1)));
+        helper.setBlock(new BlockPos(1, 2, 1), ModBlocks.BANK_GUH.get());
+        BankGuhBlockEntity bank = (BankGuhBlockEntity) level.getBlockEntity(helper.absolutePos(new BlockPos(1, 2, 1)));
         ServerPlayer player = GuhMockPlayer.of(helper);
         ItemStack pikhouweel = new ItemStack(Items.IRON_PICKAXE);
         pikhouweel.enchant(h(level, Spreuken.SPAARGUHTJE), 1);
         pikhouweel.enchant(h(level, Spreuken.BAKVADS), 1);
         player.setItemInHand(InteractionHand.MAIN_HAND, pikhouweel);
-        BlockPos erts = helper.absolutePos(new BlockPos(4, 1, 4));
+        BlockPos erts = helper.absolutePos(new BlockPos(4, 2, 4));
         // no key: the drops stay drops (but baked)
         List<ItemEntity> drops = new ArrayList<>(List.of(new ItemEntity(level, erts.getX(), erts.getY(), erts.getZ(), new ItemStack(Items.RAW_GOLD, 2))));
         NeoForge.EVENT_BUS.post(new BlockDropsEvent(level, erts, Blocks.GOLD_ORE.defaultBlockState(), null, drops, player, pikhouweel));
@@ -284,9 +286,9 @@ public class ToverenGameTests {
         ItemStack zwaard = new ItemStack(Items.IRON_SWORD);
         zwaard.enchant(h(level, Spreuken.AAIZACHT), 1);
         player.setItemInHand(InteractionHand.MAIN_HAND, zwaard);
-        Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(2, 1, 2));
-        Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(4, 1, 4));
-        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 4));
+        Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(2, 2, 2));
+        Zombie zombie = helper.spawn(EntityType.ZOMBIE, new BlockPos(4, 2, 4));
+        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 4));
         guh.tame(player);
         float v = villager.getHealth(), z = zombie.getHealth(), g = guh.getHealth();
         villager.hurtServer(level, level.damageSources().playerAttack(player), 4f);
@@ -303,7 +305,7 @@ public class ToverenGameTests {
         ServerLevel level = helper.getLevel();
         ServerPlayer player = GuhMockPlayer.of(helper);
         player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
-        GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 1, 5));
+        GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 5));
         KaasknabbelGeurGoal goal = new KaasknabbelGeurGoal(wild);
         helper.assertFalse(goal.canUse(), "no scent, no interest");
         ItemStack kist = new ItemStack(Items.LEATHER_CHESTPLATE);
