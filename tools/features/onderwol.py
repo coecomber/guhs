@@ -558,7 +558,7 @@ def selfcheck(h):
     for b in VILT + ["knuffelnaad", "guhklei", "vahoegiet_erts", "lichtmosblok", "lichtmos", "pluiskussen"] + ERTSEN + PLANTEN:
         if not os.path.exists(f"{A}/textures/block/{b}.png"):
             problemen.append(f"texture missing: {b}")
-        if not os.path.exists(f"{D}/loot_table/blocks/{b}.json"):
+        if b != "knuffelnaad" and not os.path.exists(f"{D}/loot_table/blocks/{b}.json"):   # (unbreakable: no loot)
             problemen.append(f"loot table missing: {b}")
     d = json.load(open(f"{D}/worldgen/noise_settings/guhmension.json", encoding="utf-8"))
     if json.dumps(d["noise_router"]["final_density"]).count("minecraft:overworld/caves/noodle") != 1:
