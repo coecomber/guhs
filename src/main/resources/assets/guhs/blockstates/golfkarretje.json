@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/golfkarretje"
+    },
+    "facing=east": {
+      "model": "guhs:block/golfkarretje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/golfkarretje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/golfkarretje",
+      "y": 270
+    }
+  }
+}

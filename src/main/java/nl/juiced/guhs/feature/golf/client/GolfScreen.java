@@ -46,12 +46,29 @@ public class GolfScreen extends Screen {
         if (!mine && !data.getBooleanOr("Running", false)) {
             NiveauKeuze.knoppen(this::addRenderableWidget, "golf", left + 20, top + 60, W - 40);
         }
-        Button play = Button.builder(Component.translatable(mine ? "gui.guhs.golf.stop" : "gui.guhs.golf.play"),
-                        b -> send(mine ? GolfGame.STOP : NiveauKeuze.actie("golf", GolfGame.START)))
-                .bounds(left + 20, top + 82, W - 40, 20)
-                .tooltip(Tooltip.create(Component.translatable(mine ? "gui.guhs.golf.stop.tooltip" : "gui.guhs.golf.play.tooltip"))).build();
-        play.active = mine || !data.getBooleanOr("Running", false);
-        addRenderableWidget(play);
+        if (!mine && data.getBooleanOr("Achttien", false)) {
+            // 1.7.0: an 18-hole course: front 9, back 9 or all 18 (the last two once the front 9 went at or under par)
+            boolean open = data.getBooleanOr("AchterOpen", false), free = !data.getBooleanOr("Running", false);
+            int w = (W - 48) / 3;
+            int[] actions = {GolfGame.START, GolfGame.START_ACHTER, GolfGame.START_ALLE};
+            String[] keys = {"gui.guhs.golf.play_voor", "gui.guhs.golf.play_achter", "gui.guhs.golf.play_alle"};
+            for (int i = 0; i < 3; i++) {
+                int action = actions[i];
+                boolean locked = i > 0 && !open;
+                Button b = Button.builder(Component.translatable(keys[i]), x -> send(NiveauKeuze.actie("golf", action)))
+                        .bounds(left + 20 + i * (w + 4), top + 82, w, 20)
+                        .tooltip(Tooltip.create(Component.translatable(locked ? "gui.guhs.golf.achter_dicht" : keys[i] + ".tooltip"))).build();
+                b.active = free && !locked;
+                addRenderableWidget(b);
+            }
+        } else {
+            Button play = Button.builder(Component.translatable(mine ? "gui.guhs.golf.stop" : "gui.guhs.golf.play"),
+                            b -> send(mine ? GolfGame.STOP : NiveauKeuze.actie("golf", GolfGame.START)))
+                    .bounds(left + 20, top + 82, W - 40, 20)
+                    .tooltip(Tooltip.create(Component.translatable(mine ? "gui.guhs.golf.stop.tooltip" : "gui.guhs.golf.play.tooltip"))).build();
+            play.active = mine || !data.getBooleanOr("Running", false);
+            addRenderableWidget(play);
+        }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.golf.shop"), b -> send(GolfGame.SHOP))
                 .bounds(left + 20, top + H - 30, (W - 44) / 2, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.golf.shop.tooltip"))).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
@@ -82,7 +99,19 @@ public class GolfScreen extends Screen {
             total += pars[i];
         }
         g.centeredText(font, Component.translatable("gui.guhs.golf.par_line_niveau", Klassiekers.naam(gekozen), par.toString(), total),
-                width / 2, top + 110, 0xFFFFE6EE);
+                width / 2, top + 106, 0xFFFFE6EE);
+        if (data.getBooleanOr("Achttien", false)) {                   // (1.7.0: the back 9, and your best 18)
+            int[] all = data.getIntArray("Par_" + gekozen.id()).orElse(new int[0]);
+            StringBuilder back = new StringBuilder();
+            int backTotal = 0;
+            for (int i = GolfGame.HOLES; i < Math.min(all.length, GolfGame.MAX_HOLES); i++) {
+                back.append(i == GolfGame.HOLES ? "" : " ").append(all[i]);
+                backTotal += all[i];
+            }
+            int best18 = data.getIntOr("Best18_" + gekozen.id(), -1);
+            g.centeredText(font, Component.translatable(data.getBooleanOr("AchterOpen", false) ? "gui.guhs.golf.par_line_achter" : "gui.guhs.golf.par_line_dicht",
+                    back.toString(), backTotal, best18 < 0 ? "-" : String.valueOf(best18)), width / 2, top + 116, 0xFFFFD27A);
+        }
         // your records (per level, against that level's par) and the club record
         MutableComponent line = Component.translatable("gui.guhs.klassiekers.records").withStyle(ChatFormatting.GOLD);
         for (Niveau n : Niveau.values()) {
@@ -102,7 +131,7 @@ public class GolfScreen extends Screen {
     /** The par per hole of a level on this course (sent by the Golfguh; the plan's pars when she didn't). */
     private int[] pars(Niveau n) {
         int[] p = data.getIntArray("Par_" + n.id()).orElse(new int[0]);
-        return p.length == GolfGame.HOLES ? p : GolfBanen.PARS[n.ordinal()];
+        return p.length >= GolfGame.HOLES ? java.util.Arrays.copyOf(p, GolfGame.HOLES) : GolfBanen.PARS[n.ordinal()];   // (1.7.0: 18 on an 18-hole course)
     }
 
     @Override

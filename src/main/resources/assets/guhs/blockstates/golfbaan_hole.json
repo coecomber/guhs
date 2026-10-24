@@ -26,6 +26,33 @@
     },
     "hole=9": {
       "model": "guhs:block/golfbaan_hole_9"
+    },
+    "hole=10": {
+      "model": "guhs:block/golfbaan_hole_10"
+    },
+    "hole=11": {
+      "model": "guhs:block/golfbaan_hole_11"
+    },
+    "hole=12": {
+      "model": "guhs:block/golfbaan_hole_12"
+    },
+    "hole=13": {
+      "model": "guhs:block/golfbaan_hole_13"
+    },
+    "hole=14": {
+      "model": "guhs:block/golfbaan_hole_14"
+    },
+    "hole=15": {
+      "model": "guhs:block/golfbaan_hole_15"
+    },
+    "hole=16": {
+      "model": "guhs:block/golfbaan_hole_16"
+    },
+    "hole=17": {
+      "model": "guhs:block/golfbaan_hole_17"
+    },
+    "hole=18": {
+      "model": "guhs:block/golfbaan_hole_18"
     }
   }
 }

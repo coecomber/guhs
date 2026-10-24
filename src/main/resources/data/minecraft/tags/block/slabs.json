@@ -80,6 +80,9 @@
     "guhs:viltsteen_plaat",
     "guhs:gepolijste_viltsteen_plaat",
     "guhs:viltsteen_bakstenen_plaat",
-    "guhs:viltsteen_tegels_plaat"
+    "guhs:viltsteen_tegels_plaat",
+    "guhs:ruitjesvilt_plaat",
+    "guhs:ruitjesvilt_mint_plaat",
+    "guhs:ruitjesvilt_geel_plaat"
   ]
 }

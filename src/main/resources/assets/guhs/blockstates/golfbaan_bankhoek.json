@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/golfbaan_bankhoek"
+    },
+    "facing=east": {
+      "model": "guhs:block/golfbaan_bankhoek",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/golfbaan_bankhoek",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/golfbaan_bankhoek",
+      "y": 270
+    }
+  }
+}

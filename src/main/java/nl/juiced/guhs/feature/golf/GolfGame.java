@@ -59,6 +59,13 @@ import nl.juiced.guhs.registry.ModSounds;
  * the windmill twice as fast and gets extra pink slime bumpers ({@link GolfBanen#lastigBumpers}, placed at the start and
  * taken away after the round). The wind of 2.9 is gone. A course built before 2.10 only has medium tees: then every level
  * plays from those (with the medium par).
+ * <p>
+ * 1.7.0 "Rondje Guhmension": a course generated since 1.7.0 has 18 holes (the guh_golfbaan18 template: the old 9 plus the
+ * back 9, holes 10-18, each a mini Guhmension). The back 9 open per player once you play the front 9 at or under par
+ * ({@link #OPEN}); then the Golfguh asks: front 9, back 9 or all 18 ({@link Ronde}). The back 9 give more golfballetjes
+ * ({@link GolfBanen#balletjesAchter}), a round of 18 its own bonus, record and scoreboard, and the first round of 18 at or
+ * under par the golf trophy. Its moving obstacles (sliding guh blocks, turning arms, snapping teeth) are turned by the
+ * Golfguh like her windmill. Older courses stay 9 holes.
  */
 public final class GolfGame {
     /** MAX_STROKES is medium's; see {@link #maxSlagen(Niveau)}. */
@@ -70,9 +77,33 @@ public final class GolfGame {
     public static final int TOTAL_PAR = Arrays.stream(PAR).sum();
     /** Lang keys of the holes: gui.guhs.golf.hole.&lt;name&gt; (also on the signs of the course). */
     public static final String[] HOLE_NAMES = {"guhpaadje", "vadsbocht", "guhmolen", "kaassausmoeras", "vahoegschans", "guhmond",
-            "bumperbal", "kaasknabbelheuvel", "grote_vads"};
-    /** Actions from the Golfguh's screen. */
-    public static final int START = 0, SHOP = 1, STOP = 2;
+            "bumperbal", "kaasknabbelheuvel", "grote_vads",
+            "blubberslalom", "kristalschacht", "schuifvadsjes", "guhpiek", "gatenkaasgokje", "kruimeldraaimolen", "kokosflipper",
+            "wolkenhop", "grote_guhmond"};
+    /** 1.7.0: the most holes a course can have (an 18-hole course). */
+    public static final int MAX_HOLES = 18;
+    /** Actions from the Golfguh's screen (START plays the front 9; 1.7.0: START_ACHTER the back 9, START_ALLE all 18). */
+    public static final int START = 0, SHOP = 1, STOP = 2, START_ACHTER = 3, START_ALLE = 4;
+
+    /** 1.7.0: which holes a round has. */
+    public enum Ronde {
+        VOOR(0, 9), ACHTER(9, 18), ALLE(0, 18);
+
+        public final int first, end;
+
+        Ronde(int first, int end) {
+            this.first = first;
+            this.end = end;
+        }
+
+        public int holes() {
+            return end - first;
+        }
+
+        public static Ronde of(int action) {
+            return action == START_ACHTER ? ACHTER : action == START_ALLE ? ALLE : VOOR;
+        }
+    }
     public static final int COUNTDOWN = 61, NEXT_HOLE_DELAY = 50, HAZARD_DELAY = 30, IDLE_LIMIT = 20 * 180, SAIL_TICKS = 20;
     /**
      * 1.2.7 (one golfer per course): while somebody else is waiting for the course (they asked the Golfguh in the last
@@ -84,7 +115,7 @@ public final class GolfGame {
     /** 2.10: on a lastig round the windmill turns twice as fast. */
     public static final int SAIL_TICKS_LASTIG = 10;
     /** The version of the saved course (2: with the tees of all three levels); an older one is scanned again. */
-    private static final int COURSE_VERSION = 2;
+    private static final int COURSE_VERSION = 3;
     /**
      * How far the course reaches around the Golfguh (she sits in the middle of it), and when you've walked away (a square
      * just a bit bigger than the course: golfers can't get hurt, so they don't get to take that out for a walk).
@@ -109,18 +140,25 @@ public final class GolfGame {
     public static final int SCORES_TICKS = 100;
 
     private static final String BEST = "guhs_golf_best", ROUNDS = "guhs_golf_rounds", ACES = "guhs_golf_aces", FIRST = "guhs_golf_first";
+    /** 1.7.0: the back 9 are open for you; you got the golf trophy; your best back 9 and your best 18 (per level). */
+    public static final String OPEN = "guhs_golf_achter_open", TROFEE = "guhs_golf_trofee", BEST_ACHTER = "guhs_golf_best_achter",
+            BEST18 = "guhs_golf_best18";
+    /** 1.7.0: the world's top 3 of the back 9 and of a whole round of 18. */
+    public static final String BOARD_ACHTER = "golf_achter", BOARD_18 = "golf_18";
 
     private final UUID npcId;
     /** The level of the round (2.9): makkelijk 10 strokes and no penalty strokes, medium 8, lastig 6 (2.10: far tees). */
     private Niveau niveau = Niveau.MEDIUM;
+    /** 1.7.0: the holes of this round. */
+    private Ronde ronde = Ronde.VOOR;
     /** 2.10: the par of every hole of this round (the level's, or medium's where that level has no tee on this course). */
-    private final int[] pars = PAR.clone();
+    private final int[] pars = new int[MAX_HOLES];
     @Nullable
     private UUID player;
     private String playerName = "";
     private Phase phase = Phase.IDLE;
     private int timer, hole, strokes;
-    private final int[] scores = new int[HOLES];
+    private final int[] scores = new int[MAX_HOLES];
     @Nullable
     private UUID ball;
     private Vec3 lastShot = Vec3.ZERO;
@@ -134,9 +172,19 @@ public final class GolfGame {
     // the course, found once
     private boolean scanned;
     /** The tees per level (makkelijk, medium, lastig) and hole; only medium ones on a course from before 2.10. */
-    private final BlockPos[][] tees = new BlockPos[3][HOLES];
-    private final BlockPos[] cups = new BlockPos[HOLES];
+    private final BlockPos[][] tees = new BlockPos[3][MAX_HOLES];
+    private final BlockPos[] cups = new BlockPos[MAX_HOLES];
     private final List<BlockPos> hubs = new ArrayList<>();
+    /**
+     * 1.7.0, the back 9: 0 = not looked yet, 1 = none (a 9-hole course), 2 = there (scanned). Its moving obstacles: where the
+     * sliding guh blocks stand in position A and B, the hubs of the turning arms, the jaws of the snapping teeth; and the
+     * whole course (for walking away), null on a 9-hole course.
+     */
+    private int achter;
+    private final List<BlockPos> schuifA = new ArrayList<>(), schuifB = new ArrayList<>(), assen = new ArrayList<>(), tanden = new ArrayList<>();
+    @Nullable
+    private BlockPos baanMin, baanMax, npcPos;
+    private boolean obstakelStand;
     /** 2.10: the extra slime bumpers of a lastig round that are on the course right now (saved: they go after a restart too). */
     private final List<BlockPos> bumpers = new ArrayList<>();
     @Nullable
@@ -183,6 +231,28 @@ public final class GolfGame {
         return niveau;
     }
 
+    public Ronde ronde() {
+        return ronde;
+    }
+
+    /** 1.7.0: does this course have a whole back 9 (holes 10-18 with all their medium tees and cups)? */
+    public boolean heeftAchter() {
+        if (achter != 2) {
+            return false;
+        }
+        for (int i = HOLES; i < MAX_HOLES; i++) {
+            if (tees[Niveau.MEDIUM.ordinal()][i] == null || cups[i] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 1.7.0: are the back 9 open for this player (front 9 at or under par once)? */
+    public static boolean achterOpen(Player p) {
+        return GuhQuests.saved(p).getBooleanOr(OPEN, false);
+    }
+
     /** The most strokes a hole may take on this level: makkelijk 10, medium 8, lastig 6. */
     public static int maxSlagen(Niveau niveau) {
         return switch (niveau) {
@@ -225,7 +295,7 @@ public final class GolfGame {
 
     /** The par of the whole round. */
     public int totalPar() {
-        return Arrays.stream(pars).sum();
+        return Arrays.stream(pars, ronde.first, ronde.end).sum();
     }
 
     /** The extra lastig bumpers on the course right now. */
@@ -235,8 +305,9 @@ public final class GolfGame {
 
     /** The par per hole on a level on this course: the level's where it has its own tee, medium's elsewhere. */
     private int[] parsFor(ServerLevel world, Niveau level) {
-        int[] p = new int[HOLES];
-        for (int i = 0; i < HOLES; i++) {
+        int n = heeftAchter() ? MAX_HOLES : HOLES;
+        int[] p = new int[n];
+        for (int i = 0; i < n; i++) {
             BlockPos own = tees[level.ordinal()][i];
             boolean eigen = level == Niveau.MEDIUM || (own != null && world.getBlockState(own).is(GolfFeature.AFSLAG.get()));
             p[i] = GolfBanen.par(eigen ? level : Niveau.MEDIUM, i);
@@ -277,6 +348,13 @@ public final class GolfGame {
             data.putIntArray("Par_" + n.id(), game.scanned ? game.parsFor((ServerLevel) npc.level(), n) : GolfBanen.PARS[n.ordinal()]);
         }
         data.putInt("Rounds", GuhQuests.saved(player).getIntOr(ROUNDS, 0));
+        data.putBoolean("Achttien", game.heeftAchter());                // (1.7.0: the back 9, and whether they're open for you)
+        data.putBoolean("AchterOpen", achterOpen(player));
+        data.putString("Ronde", game.ronde.name());
+        for (Niveau n : Niveau.values()) {
+            data.putInt("BestAchter_" + n.id(), best(player, BEST_ACHTER, n));
+            data.putInt("Best18_" + n.id(), best(player, BEST18, n));
+        }
         data.putInt("Aces", GuhQuests.saved(player).getIntOr(ACES, 0));
         List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), BOARD);
         data.putString("RecordName", top.isEmpty() ? "" : top.get(0).name());
@@ -294,14 +372,14 @@ public final class GolfGame {
             npc.openShop(player);
         } else if (a == STOP && game.isPlayedBy(player)) {
             game.end(npc, player, "quest.guhs.golf.stopped", false);
-        } else if (a == START) {
-            game.start(npc, player, Klassiekers.niveau(action));
+        } else if (a == START || a == START_ACHTER || a == START_ALLE) {
+            game.start(npc, player, Klassiekers.niveau(action), Ronde.of(a));
         }
     }
 
     // --- a round ----------------------------------------------------------------------------------------------------------
 
-    private void start(GuhNpcEntity npc, ServerPlayer p, Niveau level) {
+    private void start(GuhNpcEntity npc, ServerPlayer p, Niveau level, Ronde route) {
         ServerLevel world = (ServerLevel) npc.level();
         if (isPlayedBy(p)) {
             return;
@@ -329,6 +407,20 @@ public final class GolfGame {
             GuhQuests.say(p, npc, "quest.guhs.golf.broken");
             return;
         }
+        if (route != Ronde.VOOR) {                                      // (1.7.0: the back 9)
+            if (achter == 0) {
+                scanAchter(world, true);
+                save(npc.roleData);
+            }
+            if (!heeftAchter()) {
+                GuhQuests.say(p, npc, "quest.guhs.golf.geen_achter");
+                return;
+            }
+            if (!achterOpen(p)) {
+                GuhQuests.say(p, npc, "quest.guhs.golf.achter_dicht");
+                return;
+            }
+        }
         if (p.getInventory().getFreeSlot() < 0) {
             GuhQuests.say(p, npc, "quest.guhs.golf.full");
             return;
@@ -336,10 +428,13 @@ public final class GolfGame {
         player = p.getUUID();
         playerName = p.getGameProfile().name();
         niveau = level;
-        System.arraycopy(parsFor(world, level), 0, pars, 0, HOLES);
+        ronde = route;
+        int[] levelPars = parsFor(world, level);
+        Arrays.fill(pars, 0);
+        System.arraycopy(levelPars, 0, pars, 0, levelPars.length);
         GOLFERS.put(player, npcId);
         Arrays.fill(scores, 0);
-        hole = 0;
+        hole = route.first;
         strokes = 0;
         lastSwing = world.getGameTime();
         lastTick = world.getGameTime();
@@ -355,7 +450,8 @@ public final class GolfGame {
         toTee(npc, p);
         phase = Phase.COUNTDOWN;
         timer = COUNTDOWN;
-        GuhQuests.say(p, npc, "quest.guhs.golf.start");
+        GuhQuests.say(p, npc, route == Ronde.VOOR ? "quest.guhs.golf.start" : route == Ronde.ACHTER ? "quest.guhs.golf.start_achter"
+                : "quest.guhs.golf.start_alle");
         if (level != Niveau.MEDIUM) {
             GuhQuests.say(p, npc, "quest.guhs.klassiekers.golf." + level.id(), maxSlagen());
         }
@@ -370,7 +466,12 @@ public final class GolfGame {
             tee = tees[Niveau.MEDIUM.ordinal()][hole];                  // (that level's tee is gone: the medium one)
         }
         Direction facing = world.getBlockState(tee).getOptionalValue(GolfBlocks.Afslag.FACING).orElse(Direction.NORTH);
-        p.teleportTo(world, tee.getX() + 0.5 - facing.getStepX() * 2, tee.getY() + 1, tee.getZ() + 0.5 - facing.getStepZ() * 2, java.util.Set.of(), facing.toYRot(), 35f, true);
+        int back = 2;                                                  // (1.7.0: one step when there's a wall two behind the tee)
+        BlockPos stand = tee.relative(facing, -2).above();
+        if (!world.isEmptyBlock(stand) || !world.isEmptyBlock(stand.above())) {
+            back = 1;
+        }
+        p.teleportTo(world, tee.getX() + 0.5 - facing.getStepX() * back, tee.getY() + 1, tee.getZ() + 0.5 - facing.getStepZ() * back, java.util.Set.of(), facing.toYRot(), 35f, true);
         GolfBallEntity old = ball(world);
         if (old != null) {
             old.discard();
@@ -558,7 +659,7 @@ public final class GolfGame {
         int diff = score - pars[hole];
         String result = !holed ? "max" : score == 1 ? "ace" : diff <= -3 ? "albatros" : diff == -2 ? "eagle" : diff == -1 ? "birdie"
                 : diff == 0 ? "par" : diff == 1 ? "bogey" : diff == 2 ? "double_bogey" : "more";
-        int balls = balletjesPar(score, pars[hole], holed);
+        int balls = hole < HOLES ? balletjesPar(score, pars[hole], holed) : GolfBanen.balletjesAchter(score, pars[hole], holed);
         balls = balls > 0 ? niveau.munten(balls) : 0;
         if (balls > 0) {
             give(p, new ItemStack(GolfFeature.GOLFBALLETJE.get(), balls));
@@ -606,27 +707,30 @@ public final class GolfGame {
 
     private void nextHole(GuhNpcEntity npc, ServerPlayer p) {
         hole++;
-        if (hole >= HOLES) {
+        if (hole >= ronde.end) {
             finish(npc, p);
         } else {
             startHole(npc, p);
         }
     }
 
-    /** All 9 holes played: the scorecard, the bonus, records. */
+    /** All holes of the round played: the scorecard, the bonus, records (1.7.0: per route; the back 9 opening, the trophy). */
     private void finish(GuhNpcEntity npc, ServerPlayer p) {
         int total = Arrays.stream(scores).sum(), diff = total - totalPar();
         CompoundTag saved = GuhQuests.saved(p);
-        int best = best(p, niveau);
+        String bestKey = ronde == Ronde.VOOR ? BEST : ronde == Ronde.ACHTER ? BEST_ACHTER : BEST18;
+        int best = best(p, bestKey, niveau);
         boolean record = best < 0 || total < best;
-        int bonus = niveau.munten(roundBonus(diff, record && best >= 0));
+        int bonus = niveau.munten(ronde == Ronde.ALLE ? GolfBanen.bonus18(diff, record && best >= 0) : roundBonus(diff, record && best >= 0));
         if (record) {
-            saved.putInt(Klassiekers.sleutel(BEST, niveau), total);
+            saved.putInt(Klassiekers.sleutel(bestKey, niveau), total);
         }
         saved.putInt(ROUNDS, saved.getIntOr(ROUNDS, 0) + 1);
         p.sendSystemMessage(Component.translatable("quest.guhs.golf.card").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        p.sendSystemMessage(cardLine("gui.guhs.golf.card_par", pars, null));
-        p.sendSystemMessage(cardLine("gui.guhs.golf.card_you", scores, pars));
+        for (int from = ronde.first; from < ronde.end; from += HOLES) {        // (18 holes: two lines of 9)
+            p.sendSystemMessage(cardLine("gui.guhs.golf.card_par", pars, null, from, from + HOLES));
+            p.sendSystemMessage(cardLine("gui.guhs.golf.card_you", scores, pars, from, from + HOLES));
+        }
         p.sendSystemMessage(Component.translatable("quest.guhs.golf.total", total, rel(diff), bonus).withStyle(ChatFormatting.LIGHT_PURPLE));
         if (record) {
             p.sendSystemMessage(Component.translatable(best < 0 ? "quest.guhs.golf.first_record" : "quest.guhs.golf.record", total, best)
@@ -643,13 +747,34 @@ public final class GolfGame {
             p.sendSystemMessage(Component.translatable("quest.guhs.golf.first").withStyle(ChatFormatting.GOLD));
         }
         GuhAdvancements.grant(p, "golf_ronde");
-        if (diff <= 0 && niveau != Niveau.MAKKELIJK) {
+        if (ronde == Ronde.VOOR && diff <= 0 && niveau != Niveau.MAKKELIJK) {
             GuhAdvancements.grant(p, "golf_par");
         }
-        if (diff <= 0 && niveau == Niveau.LASTIG) {
+        if (ronde == Ronde.VOOR && diff <= 0 && niveau == Niveau.LASTIG) {
             GuhAdvancements.grant(p, "golf_lastig_par");                // (from the far tees, past all the bumpers)
         }
-        if (Scorebord.submit(p, niveau.board(BOARD), total, true) == 1) {
+        int frontTotal = 0, frontPar = 0;                                // (1.7.0: the front 9 at or under par opens the back 9)
+        for (int i = 0; i < HOLES; i++) {
+            frontTotal += scores[i];
+            frontPar += pars[i];
+        }
+        if (ronde != Ronde.ACHTER && frontTotal <= frontPar && !saved.getBooleanOr(OPEN, false)) {
+            saved.putBoolean(OPEN, true);
+            p.sendSystemMessage(Component.translatable(heeftAchter() ? "quest.guhs.golf.achter_open" : "quest.guhs.golf.achter_open_elders")
+                    .withStyle(ChatFormatting.GOLD));
+            GuhAdvancements.grant(p, "golf_achter_open");
+        }
+        if (ronde == Ronde.ALLE) {
+            GuhAdvancements.grant(p, "golf_18");
+            if (diff <= 0 && !saved.getBooleanOr(TROFEE, false)) {
+                saved.putBoolean(TROFEE, true);
+                give(p, trofee(p.getGameProfile().name(), total, totalPar(), niveau));
+                p.sendSystemMessage(Component.translatable("quest.guhs.golf.trofee").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+                GuhAdvancements.grant(p, "golf_trofee");
+            }
+        }
+        String board = ronde == Ronde.VOOR ? BOARD : ronde == Ronde.ACHTER ? BOARD_ACHTER : BOARD_18;
+        if (Scorebord.submit(p, niveau.board(board), total, true) == 1) {
             p.sendSystemMessage(Component.translatable("quest.guhs.golf.club_record").withStyle(ChatFormatting.GOLD));
         }
         Klassiekers.gespeeld(p, "golf", niveau);
@@ -660,14 +785,25 @@ public final class GolfGame {
         end(npc, p, null, true);
     }
 
-    private MutableComponent cardLine(String label, int[] values, @Nullable int[] par) {
+    /** 1.7.0: the golf trophy, with the winner's name and the record on it. */
+    public static ItemStack trofee(String name, int total, int par, Niveau level) {
+        ItemStack stack = new ItemStack(Golf18.GOLFTROFEE_ITEM.get());
+        stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.translatable("item.guhs.golftrofee.van", name).withStyle(ChatFormatting.GOLD));
+        stack.set(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(List.of(
+                Component.translatable("item.guhs.golftrofee.record", total, par, rel(total - par)),
+                Component.translatable("item.guhs.golftrofee.niveau", Klassiekers.naam(level)))));
+        return stack;
+    }
+
+    private MutableComponent cardLine(String label, int[] values, @Nullable int[] par, int from, int to) {
         MutableComponent line = Component.translatable(label).withStyle(ChatFormatting.GRAY);
         int total = 0;
-        for (int i = 0; i < HOLES; i++) {
+        for (int i = from; i < to; i++) {
             total += values[i];
             ChatFormatting colour = par == null ? ChatFormatting.WHITE : values[i] == 1 ? ChatFormatting.GOLD
                     : values[i] < par[i] ? ChatFormatting.GREEN : values[i] == par[i] ? ChatFormatting.WHITE : ChatFormatting.RED;
-            line.append(Component.literal(i == 0 ? " " : " | ").withStyle(ChatFormatting.DARK_GRAY));
+            line.append(Component.literal(i == from ? " " : " | ").withStyle(ChatFormatting.DARK_GRAY));
             line.append(Component.literal(String.valueOf(values[i])).withStyle(colour));
         }
         return line.append(Component.literal("  = " + total).withStyle(ChatFormatting.YELLOW));
@@ -729,26 +865,40 @@ public final class GolfGame {
     /** Every tick of the Golfguh: the windmill, the countdown, the timers, and golfers who wandered off. */
     public void tick(GuhNpcEntity npc) {
         ServerLevel world = (ServerLevel) npc.level();
+        if (world.getGameTime() == lastTick) {
+            return;                                                    // (1.7.0: ticked already, by her or by the golfer)
+        }
         lastTick = world.getGameTime();
-        if (npc.tickCount % SCORES_TICKS == 1) {
+        npcPos = npc.blockPosition();
+        long clock = lastTick;                                         // (the game clock: the golfer may tick her from afar)
+        if (clock % SCORES_TICKS == 1) {
             showScores(npc);
         }
-        if (npc.tickCount % (isRunning() && niveau == Niveau.LASTIG ? SAIL_TICKS_LASTIG : SAIL_TICKS) == 0) {
+        if (clock % (isRunning() && niveau == Niveau.LASTIG ? SAIL_TICKS_LASTIG : SAIL_TICKS) == 0) {
             if (!scanned && world.getNearestPlayer(npc, 40) != null) {
                 scan(npc);
+            }
+            if (scanned && achter == 0 && world.getNearestPlayer(npc, 40) != null) {
+                scanAchter(world, false);                              // (1.7.0: a back 9? once its chunks are there)
+                if (achter != 0) {
+                    save(npc.roleData);
+                }
             }
             if (scanned && !hubs.isEmpty() && world.getNearestPlayer(npc, 72) != null) {
                 turnSails(world);
             }
+            if (achter == 2 && (isRunning() || world.getNearestPlayer(npc, 170) != null)) {
+                moveObstacles(world);
+            }
         }
         if (player == null) {
-            if (!bumpers.isEmpty() && npc.tickCount % 20 == 0) {
+            if (!bumpers.isEmpty() && clock % 20 == 0) {
                 removeBumpers(npc, world);                             // (the round ended while she wasn't looking)
             }
             return;
         }
         ServerPlayer p = world.getServer().getPlayerList().getPlayer(player);
-        if (p == null || !p.isAlive() || p.level() != world || horizontalDistance(p, npc) > LEAVE_RADIUS) {
+        if (p == null || !p.isAlive() || p.level() != world || walkedAway(p, npc)) {
             if (p != null && p.isAlive() && p.level() == world) {
                 end(npc, p, "quest.guhs.golf.walked_away", false);
             } else {
@@ -773,7 +923,7 @@ public final class GolfGame {
             end(npc, p, "quest.guhs.golf.te_lang", false);
             return;
         }
-        if (npc.tickCount % 20 == 0) {
+        if (clock % 20 == 0) {
             refresh(p);
             if (!p.getInventory().hasAnyMatching(s -> s.is(GolfFeature.GOLFCLUB.get())) && p.getInventory().getFreeSlot() >= 0) {
                 giveClub(p);                                            // (lost it somehow? here's another one)
@@ -784,7 +934,7 @@ public final class GolfGame {
                 timer--;
                 if (timer == 60 || timer == 40 || timer == 20) {
                     title(p, Component.literal(String.valueOf(timer / 20)).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
-                            Component.translatable("gui.guhs.golf.hole_sub", holeName(0), pars[0]), 0, 22, 0);
+                            Component.translatable("gui.guhs.golf.hole_sub", holeName(ronde.first), pars[ronde.first]), 0, 22, 0);
                     notifySound(p, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 if (timer <= 0) {
@@ -821,15 +971,15 @@ public final class GolfGame {
             newBall(world, lastShot);                                  // (the ball got lost: a new one where you hit it)
             phase = Phase.AIM;
         }
-        if (isRunning() && npc.tickCount % 10 == 0 && phase != Phase.COUNTDOWN && world.getGameTime() >= quietUntil) {
+        if (isRunning() && clock % 10 == 0 && phase != Phase.COUNTDOWN && world.getGameTime() >= quietUntil) {
             int done = 0, par = 0;
-            for (int i = 0; i < hole; i++) {
+            for (int i = ronde.first; i < hole; i++) {
                 done += scores[i];
                 par += pars[i];
             }
             GolfBallEntity b = ball(world);
             int left = b == null || cups[hole] == null ? 0 : (int) Math.round(Math.hypot(b.getX() - cups[hole].getX() - 0.5, b.getZ() - cups[hole].getZ() - 0.5));
-            Component bar = Component.translatable("gui.guhs.golf.bar", hole + 1, holeName(hole), pars[hole], strokes, maxSlagen(),
+            Component bar = Component.translatable("gui.guhs.golf.bar_n", hole + 1, ronde.end, holeName(hole), pars[hole], strokes, maxSlagen(),
                     left, rel(done - par)).withStyle(ChatFormatting.LIGHT_PURPLE);
             p.sendOverlayMessage(bar);
         }
@@ -859,6 +1009,76 @@ public final class GolfGame {
                 }
             }
         }
+    }
+
+    // --- 1.7.0: the moving obstacles of the back 9 ---------------------------------------------------------------------------
+
+    /**
+     * One step of every moving obstacle of the back 9: the sliding guh blocks go to their other position, the arms of the
+     * Kruimeldraaimolen turn an eighth (a "+" and an "x" in turn), the teeth of the Grote Guhmond snap shut or open. A block
+     * never appears on the ball or on somebody (that spot waits for the next step).
+     */
+    void moveObstacles(ServerLevel world) {
+        obstakelStand = !obstakelStand;
+        BlockState guh = Golf18.SCHUIFGUH.get().defaultBlockState();
+        swap(world, obstakelStand ? schuifB : schuifA, obstakelStand ? schuifA : schuifB, guh);
+        BlockState wiek = GolfFeature.WIEK.get().defaultBlockState();
+        for (BlockPos as : assen) {
+            if (world.isLoaded(as) && world.getBlockState(as).is(Golf18.DRAAIAS.get())) {
+                swap(world, arms(as, !obstakelStand), arms(as, obstakelStand), wiek);
+            }
+        }
+        BlockState tand = nl.juiced.guhs.registry.ModBlocks.TAND.get().defaultBlockState();
+        List<BlockPos> dicht = new ArrayList<>();
+        for (BlockPos kaak : tanden) {
+            if (world.isLoaded(kaak) && world.getBlockState(kaak).is(Golf18.HAPTAND.get())) {
+                dicht.add(kaak.below(2));
+                dicht.add(kaak.below(3));
+            }
+        }
+        if (obstakelStand) {
+            swap(world, dicht, List.of(), tand);                       // hap!
+            if (!dicht.isEmpty()) {
+                world.playSound(null, dicht.get(0), SoundEvents.EVOKER_FANGS_ATTACK, SoundSource.BLOCKS, 0.5f, 1.6f);
+            }
+        } else {
+            swap(world, List.of(), dicht, tand);                       // and open wide
+        }
+    }
+
+    /** Takes {@code block} away from {@code off} (only where it is that block) and puts it on {@code on} (only on free spots). */
+    private static void swap(ServerLevel world, List<BlockPos> off, List<BlockPos> on, BlockState block) {
+        for (BlockPos pos : off) {
+            if (world.isLoaded(pos) && world.getBlockState(pos).is(block.getBlock())) {
+                world.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+            }
+        }
+        for (BlockPos pos : on) {
+            if (world.isLoaded(pos) && world.isEmptyBlock(pos) && world.getEntities((net.minecraft.world.entity.Entity) null, new AABB(pos),
+                    e -> e instanceof GolfBallEntity || e instanceof net.minecraft.world.entity.LivingEntity).isEmpty()) {
+                world.setBlock(pos, block, 2);
+            }
+        }
+    }
+
+    /** The arms of a turning hub (one block below it): a "+" of 4 x 6 blocks, or an "x" of 4 x 4. */
+    public static List<BlockPos> arms(BlockPos hub, boolean plus) {
+        List<BlockPos> list = new ArrayList<>();
+        BlockPos c = hub.below();
+        for (int k = 1; k <= (plus ? 6 : 4); k++) {
+            if (plus) {
+                list.add(c.offset(k, 0, 0));
+                list.add(c.offset(-k, 0, 0));
+                list.add(c.offset(0, 0, k));
+                list.add(c.offset(0, 0, -k));
+            } else {
+                list.add(c.offset(k, 0, k));
+                list.add(c.offset(-k, 0, k));
+                list.add(c.offset(k, 0, -k));
+                list.add(c.offset(-k, 0, -k));
+            }
+        }
+        return list;
     }
 
     public static List<BlockPos> sails(BlockPos hub, Direction face, boolean plus) {
@@ -903,11 +1123,12 @@ public final class GolfGame {
         }
         Arrays.fill(cups, null);
         hubs.clear();
+        achter = 0;
         for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
             BlockState state = world.getBlockState(pos);
-            if (state.is(GolfFeature.AFSLAG.get())) {
+            if (state.is(GolfFeature.AFSLAG.get()) && state.getValue(GolfBlocks.HOLE) <= HOLES) {
                 tees[state.getValue(GolfBlocks.NIVEAU).ordinal()][state.getValue(GolfBlocks.HOLE) - 1] = pos.immutable();
-            } else if (state.is(GolfFeature.HOLE.get())) {
+            } else if (state.is(GolfFeature.HOLE.get()) && state.getValue(GolfBlocks.HOLE) <= HOLES) {
                 cups[state.getValue(GolfBlocks.HOLE) - 1] = pos.immutable();
             } else if (state.is(GolfFeature.MOLENAS.get())) {
                 hubs.add(pos.immutable());
@@ -927,14 +1148,101 @@ public final class GolfGame {
             home = c;
         }
         scanned = true;
+        if (complete()) {
+            scanAchter(world, force);
+        }
         save(npc.roleData);
         return true;
     }
 
+    /**
+     * 1.7.0: is there a back 9, and where are its tees, cups and moving obstacles? An 18-hole course is the guh_golfbaan18
+     * template, so the medium tee of hole 10 is at a known spot from the cup and tee of hole 1 ({@link GolfBanen#inWereld18}):
+     * no tee there, a 9-hole course. Without force it waits until those chunks are loaded.
+     */
+    void scanAchter(ServerLevel world, boolean force) {
+        BlockPos cup1 = cups[0], tee1 = tees[Niveau.MEDIUM.ordinal()][0];
+        if (cup1 == null || tee1 == null || !world.getBlockState(tee1).is(GolfFeature.AFSLAG.get())) {
+            return;
+        }
+        Direction facing = world.getBlockState(tee1).getValue(GolfBlocks.Afslag.FACING);
+        BlockPos tee10 = GolfBanen.inWereld18(GolfBanen.TEE10_18, cup1, facing);
+        if (!force && !world.isLoaded(tee10)) {
+            return;
+        }
+        for (int i = HOLES; i < MAX_HOLES; i++) {
+            for (BlockPos[] t : tees) {
+                t[i] = null;
+            }
+            cups[i] = null;
+        }
+        schuifA.clear();
+        schuifB.clear();
+        assen.clear();
+        tanden.clear();
+        baanMin = baanMax = null;
+        BlockState t10 = world.getBlockState(tee10);
+        if (!t10.is(GolfFeature.AFSLAG.get()) || t10.getValue(GolfBlocks.HOLE) != 10) {
+            achter = 1;                                                // (a 9-hole course)
+            return;
+        }
+        BlockPos[] box = GolfBanen.doos18(GolfBanen.ACHTER_18, cup1, facing);
+        if (!force && !world.hasChunksAt(box[0], box[1])) {
+            return;
+        }
+        for (BlockPos pos : BlockPos.betweenClosed(box[0], box[1])) {
+            BlockState state = world.getBlockState(pos);
+            if (state.is(GolfFeature.AFSLAG.get()) && state.getValue(GolfBlocks.HOLE) > HOLES) {
+                tees[state.getValue(GolfBlocks.NIVEAU).ordinal()][state.getValue(GolfBlocks.HOLE) - 1] = pos.immutable();
+            } else if (state.is(GolfFeature.HOLE.get()) && state.getValue(GolfBlocks.HOLE) > HOLES) {
+                cups[state.getValue(GolfBlocks.HOLE) - 1] = pos.immutable();
+            } else if (state.is(Golf18.SCHUIFRAIL.get()) && state.getValue(Golf18Blocks.STAND) != Golf18Blocks.Stand.GEEN) {
+                (state.getValue(Golf18Blocks.STAND) == Golf18Blocks.Stand.A ? schuifA : schuifB).add(pos.above());
+            } else if (state.is(Golf18.DRAAIAS.get())) {
+                assen.add(pos.immutable());
+            } else if (state.is(Golf18.HAPTAND.get())) {
+                tanden.add(pos.immutable());
+            }
+        }
+        BlockPos[] all = GolfBanen.doos18(GolfBanen.BAAN_18, cup1, facing);
+        baanMin = all[0];
+        baanMax = all[1];
+        achter = 2;
+    }
+
+    /** Has the golfer left the course? (A 9-hole course: a square round the Golfguh; 1.7.0, 18 holes: the whole course.) */
+    private boolean walkedAway(ServerPlayer p, GuhNpcEntity npc) {
+        if (achter == 2 && baanMin != null && baanMax != null) {
+            int m = LEAVE_RADIUS - COURSE_RADIUS;
+            return p.getX() < baanMin.getX() - m || p.getX() > baanMax.getX() + 1 + m || p.getZ() < baanMin.getZ() - m
+                    || p.getZ() > baanMax.getZ() + 1 + m;
+        }
+        return horizontalDistance(p, npc) > LEAVE_RADIUS;
+    }
+
+    /**
+     * 1.7.0, every tick of a golfer: keeps the Golfguh's chunk going while they play an 18-hole course (the back 9 are far
+     * from her), and if she isn't ticking by herself (her chunk asleep) the golfer ticks her game.
+     */
+    public static void golferTick(ServerPlayer p) {
+        UUID npc = GOLFERS.get(p.getUUID());
+        GolfGame game = npc == null ? null : GAMES.get(npc);
+        if (game == null || game.npcPos == null || !game.isPlayedBy(p)) {
+            return;
+        }
+        ServerLevel world = p.level();
+        if (game.achter == 2 && p.tickCount % 20 == 0) {
+            world.getChunkSource().addTicketWithRadius(Golf18.TICKET.get(), new net.minecraft.world.level.ChunkPos(game.npcPos.getX() >> 4, game.npcPos.getZ() >> 4), 2);
+        }
+        if (world.getGameTime() - game.lastTick >= 3 && world.getEntity(npc) instanceof GuhNpcEntity g) {
+            game.tick(g);
+        }
+    }
+
     /** All 9 medium tees and cups are there (the makkelijk and lastig tees are a bonus: without them, medium's are used). */
     public boolean complete() {
-        return Arrays.stream(tees[Niveau.MEDIUM.ordinal()]).allMatch(java.util.Objects::nonNull)
-                && Arrays.stream(cups).allMatch(java.util.Objects::nonNull);
+        return Arrays.stream(tees[Niveau.MEDIUM.ordinal()], 0, HOLES).allMatch(java.util.Objects::nonNull)
+                && Arrays.stream(cups, 0, HOLES).allMatch(java.util.Objects::nonNull);
     }
 
     /** Are the tees and cups found earlier still there? (Someone in creative mode may have rebuilt the course.) */
@@ -955,16 +1263,70 @@ public final class GolfGame {
         }
         CompoundTag tag = new CompoundTag();
         tag.putInt("Versie", COURSE_VERSION);
-        tag.put("Tees", new LongArrayTag(Arrays.stream(tees[Niveau.MEDIUM.ordinal()]).mapToLong(BlockPos::asLong).toArray()));
+        tag.put("Tees", new LongArrayTag(Arrays.stream(tees[Niveau.MEDIUM.ordinal()], 0, HOLES).mapToLong(BlockPos::asLong).toArray()));
         for (Niveau n : new Niveau[]{Niveau.MAKKELIJK, Niveau.LASTIG}) {
-            tag.put("Tees_" + n.id(), new LongArrayTag(Arrays.stream(tees[n.ordinal()]).mapToLong(t -> t == null ? Long.MIN_VALUE : t.asLong()).toArray()));
+            tag.put("Tees_" + n.id(), new LongArrayTag(Arrays.stream(tees[n.ordinal()], 0, HOLES).mapToLong(t -> t == null ? Long.MIN_VALUE : t.asLong()).toArray()));
         }
-        tag.put("Cups", new LongArrayTag(Arrays.stream(cups).mapToLong(BlockPos::asLong).toArray()));
+        tag.put("Cups", new LongArrayTag(Arrays.stream(cups, 0, HOLES).mapToLong(BlockPos::asLong).toArray()));
         tag.put("Hubs", new LongArrayTag(hubs.stream().mapToLong(BlockPos::asLong).toArray()));
         if (home != null) {
             tag.putLong("Home", home.asLong());
         }
+        if (achter != 0) {                                             // (1.7.0: the back 9, or "none")
+            CompoundTag a = new CompoundTag();
+            a.putInt("Status", achter);
+            if (achter == 2) {
+                for (Niveau n : Niveau.values()) {
+                    a.put("Tees_" + n.id(), new LongArrayTag(Arrays.stream(tees[n.ordinal()], HOLES, MAX_HOLES)
+                            .mapToLong(t -> t == null ? Long.MIN_VALUE : t.asLong()).toArray()));
+                }
+                a.put("Cups", new LongArrayTag(Arrays.stream(cups, HOLES, MAX_HOLES).mapToLong(t -> t == null ? Long.MIN_VALUE : t.asLong()).toArray()));
+                a.put("SchuifA", longs(schuifA));
+                a.put("SchuifB", longs(schuifB));
+                a.put("Assen", longs(assen));
+                a.put("Tanden", longs(tanden));
+                if (baanMin != null && baanMax != null) {
+                    a.putLong("Min", baanMin.asLong());
+                    a.putLong("Max", baanMax.asLong());
+                }
+            }
+            tag.put("Achter", a);
+        }
         data.put("Course", tag);
+    }
+
+    private static LongArrayTag longs(List<BlockPos> list) {
+        return new LongArrayTag(list.stream().mapToLong(BlockPos::asLong).toArray());
+    }
+
+    private static void unlongs(CompoundTag tag, String key, List<BlockPos> into) {
+        into.clear();
+        for (long l : tag.getLongArray(key).orElse(new long[0])) {
+            into.add(BlockPos.of(l));
+        }
+    }
+
+    private void loadAchter(CompoundTag a) {
+        achter = a.getIntOr("Status", 0);
+        if (achter != 2) {
+            return;
+        }
+        for (Niveau n : Niveau.values()) {
+            long[] l = a.getLongArray("Tees_" + n.id()).orElse(new long[0]);
+            for (int i = 0; i < HOLES; i++) {
+                tees[n.ordinal()][HOLES + i] = i < l.length && l[i] != Long.MIN_VALUE ? BlockPos.of(l[i]) : null;
+            }
+        }
+        long[] c = a.getLongArray("Cups").orElse(new long[0]);
+        for (int i = 0; i < HOLES; i++) {
+            cups[HOLES + i] = i < c.length && c[i] != Long.MIN_VALUE ? BlockPos.of(c[i]) : null;
+        }
+        unlongs(a, "SchuifA", schuifA);
+        unlongs(a, "SchuifB", schuifB);
+        unlongs(a, "Assen", assen);
+        unlongs(a, "Tanden", tanden);
+        baanMin = a.contains("Min") ? BlockPos.of(a.getLongOr("Min", 0L)) : null;
+        baanMax = a.contains("Max") ? BlockPos.of(a.getLongOr("Max", 0L)) : null;
     }
 
     private void load(CompoundTag data) {
@@ -992,6 +1354,7 @@ public final class GolfGame {
             hubs.add(BlockPos.of(l));
         }
         home = tag.contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
+        loadAchter(tag.getCompoundOrEmpty("Achter"));
         scanned = true;
     }
 
@@ -1002,6 +1365,22 @@ public final class GolfGame {
                 Component.translatable("gui.guhs.scorebord.golf"), BOARD,
                 n -> Component.translatable("gui.guhs.golf.bord_par", maxSlagen(Niveau.of(n)), GolfBanen.totalPar(Niveau.of(n))),
                 total -> String.valueOf(total)));
+        GolfGame game = GAMES.get(npc.getUUID());
+        if (game != null && game.heeftAchter()) {                     // (1.7.0: and the top 3 of 18 holes, a bit to the side)
+            Scorebord.show(world, npc.position().add(2.5, 2.4, 0), "golf18", Klassiekers.bord(world.getServer(),
+                    Component.translatable("gui.guhs.scorebord.golf18"), BOARD_18,
+                    n -> Component.translatable("gui.guhs.golf.bord_par", maxSlagen(Niveau.of(n)), totalPar18(Niveau.of(n))),
+                    total -> String.valueOf(total)));
+        }
+    }
+
+    /** 1.7.0: the par of all 18 holes on a level (43 / 65 / 83). */
+    public static int totalPar18(Niveau niveau) {
+        int total = 0;
+        for (int i = 0; i < MAX_HOLES; i++) {
+            total += GolfBanen.par(niveau, i);
+        }
+        return total;
     }
 
     // --- helpers -----------------------------------------------------------------------------------------------------------
@@ -1014,8 +1393,13 @@ public final class GolfGame {
 
     /** Your best round on this level, -1 when none yet. */
     public static int best(Player p, Niveau niveau) {
+        return best(p, BEST, niveau);
+    }
+
+    /** 1.7.0: your best round of a route (BEST, BEST_ACHTER, BEST18) on this level, -1 when none yet. */
+    public static int best(Player p, String base, Niveau niveau) {
         CompoundTag saved = GuhQuests.saved(p);
-        String key = Klassiekers.sleutel(BEST, niveau);
+        String key = Klassiekers.sleutel(base, niveau);
         return saved.contains(key) ? saved.getIntOr(key, 0) : -1;
     }
 
@@ -1103,6 +1487,16 @@ public final class GolfGame {
     }
 
     // --- for the GameTests --------------------------------------------------------------------------------------------------
+
+    /** (Tests) starts a round of a route, as the Golfguh's screen would. */
+    public void testStart(GuhNpcEntity npc, ServerPlayer p, Niveau level, Ronde route) {
+        start(npc, p, level, route);
+    }
+
+    /** (Tests) the moving obstacles that were found: sliding blocks A and B, turning hubs, snapping jaws. */
+    public List<List<BlockPos>> testObstakels() {
+        return List.of(schuifA, schuifB, assen, tanden);
+    }
 
     /** Skips the countdown. */
     public void testSkipCountdown() {

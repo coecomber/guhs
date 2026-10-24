@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "balletjes=1": {
+      "model": "guhs:block/golfbal_tee_1"
+    },
+    "balletjes=2": {
+      "model": "guhs:block/golfbal_tee_2"
+    },
+    "balletjes=3": {
+      "model": "guhs:block/golfbal_tee_3"
+    },
+    "balletjes=4": {
+      "model": "guhs:block/golfbal_tee_4"
+    }
+  }
+}

@@ -106,7 +106,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.6.4: the verblijfsbord's family dialog (append only)
             'familie164',
             # 1.7.0 Onder de Wol: the kern (the underground of the Guhmension; LAST of the modules that touch its terrain), then its creatures (append only)
-            'onderwol', 'onderwol_wezens']
+            'onderwol', 'onderwol_wezens',
+            # 1.7.0 ronde 26: the FEET slot (slofjes, laarsjes, kaassaus- and lavalopers; append only: its rng is 1000+index)
+            'voetjes', 'golf18']
 
 
 def modules():

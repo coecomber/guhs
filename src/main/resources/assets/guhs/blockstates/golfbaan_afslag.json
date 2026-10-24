@@ -81,6 +81,87 @@
     "facing=north,hole=9,niveau=lastig": {
       "model": "guhs:block/golfbaan_afslag_lastig"
     },
+    "facing=north,hole=10,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=10,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=10,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=11,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=11,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=11,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=12,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=12,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=12,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=13,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=13,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=13,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=14,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=14,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=14,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=15,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=15,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=15,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=16,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=16,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=16,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=17,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=17,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=17,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
+    "facing=north,hole=18,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk"
+    },
+    "facing=north,hole=18,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag"
+    },
+    "facing=north,hole=18,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig"
+    },
     "facing=east,hole=1,niveau=makkelijk": {
       "model": "guhs:block/golfbaan_afslag_makkelijk",
       "y": 90
@@ -186,6 +267,114 @@
       "y": 90
     },
     "facing=east,hole=9,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=10,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=10,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=10,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=11,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=11,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=11,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=12,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=12,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=12,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=13,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=13,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=13,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=14,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=14,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=14,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=15,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=15,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=15,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=16,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=16,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=16,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=17,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=17,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=17,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 90
+    },
+    "facing=east,hole=18,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 90
+    },
+    "facing=east,hole=18,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 90
+    },
+    "facing=east,hole=18,niveau=lastig": {
       "model": "guhs:block/golfbaan_afslag_lastig",
       "y": 90
     },
@@ -297,6 +486,114 @@
       "model": "guhs:block/golfbaan_afslag_lastig",
       "y": 180
     },
+    "facing=south,hole=10,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=10,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=10,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=11,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=11,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=11,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=12,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=12,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=12,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=13,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=13,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=13,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=14,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=14,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=14,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=15,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=15,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=15,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=16,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=16,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=16,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=17,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=17,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=17,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
+    "facing=south,hole=18,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 180
+    },
+    "facing=south,hole=18,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 180
+    },
+    "facing=south,hole=18,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 180
+    },
     "facing=west,hole=1,niveau=makkelijk": {
       "model": "guhs:block/golfbaan_afslag_makkelijk",
       "y": 270
@@ -402,6 +699,114 @@
       "y": 270
     },
     "facing=west,hole=9,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=10,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=10,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=10,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=11,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=11,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=11,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=12,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=12,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=12,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=13,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=13,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=13,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=14,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=14,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=14,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=15,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=15,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=15,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=16,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=16,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=16,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=17,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=17,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=17,niveau=lastig": {
+      "model": "guhs:block/golfbaan_afslag_lastig",
+      "y": 270
+    },
+    "facing=west,hole=18,niveau=makkelijk": {
+      "model": "guhs:block/golfbaan_afslag_makkelijk",
+      "y": 270
+    },
+    "facing=west,hole=18,niveau=medium": {
+      "model": "guhs:block/golfbaan_afslag",
+      "y": 270
+    },
+    "facing=west,hole=18,niveau=lastig": {
       "model": "guhs:block/golfbaan_afslag_lastig",
       "y": 270
     }

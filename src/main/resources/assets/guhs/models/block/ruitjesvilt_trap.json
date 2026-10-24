@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/ruitjesvilt",
+    "top": "guhs:block/ruitjesvilt",
+    "side": "guhs:block/ruitjesvilt"
+  }
+}

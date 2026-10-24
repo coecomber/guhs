@@ -74,6 +74,9 @@
     "guhs:viltsteen_trap",
     "guhs:gepolijste_viltsteen_trap",
     "guhs:viltsteen_bakstenen_trap",
-    "guhs:viltsteen_tegels_trap"
+    "guhs:viltsteen_tegels_trap",
+    "guhs:ruitjesvilt_trap",
+    "guhs:ruitjesvilt_mint_trap",
+    "guhs:ruitjesvilt_geel_trap"
   ]
 }

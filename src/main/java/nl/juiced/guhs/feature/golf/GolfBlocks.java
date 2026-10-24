@@ -16,8 +16,8 @@ import nl.juiced.guhs.feature.spelen.Niveau;
  * drop nothing): the Golfguh finds the holes by scanning for them.
  */
 public final class GolfBlocks {
-    /** Which of the 9 holes a tee or a cup belongs to. */
-    public static final IntegerProperty HOLE = IntegerProperty.create("hole", 1, 9);
+    /** Which hole a tee or a cup belongs to (1.7.0: 10-18 are the back 9 of an 18-hole course). */
+    public static final IntegerProperty HOLE = IntegerProperty.create("hole", 1, 18);
 
     /**
      * 2.10: which level's tee it is (every hole has three: makkelijk close to the cup, medium where it always was, lastig
