@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PWP",
+    "BBB",
+    "PPP"
+  ],
+  "key": {
+    "P": "guhs:guhbloesem_planks",
+    "W": "minecraft:pink_wool",
+    "B": "minecraft:book"
+  },
+  "result": {
+    "id": "guhs:knuffelboekenkast",
+    "count": 1
+  }
+}

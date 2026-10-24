@@ -1,0 +1,131 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:wool",
+    "#minecraft:wool_carpets",
+    {
+      "id": "guhs:viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels",
+      "required": false
+    },
+    {
+      "id": "guhs:gebeitelde_viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_muur",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_muur",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltkiezel",
+      "required": false
+    },
+    {
+      "id": "guhs:pluiskussen",
+      "required": false
+    },
+    {
+      "id": "guhs:pluiswolblok",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:golfbaan_vilt",
+      "required": false
+    },
+    {
+      "id": "guhs:block_of_kaasknabbels",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbel_stone",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbel_cobblestone",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbel_deepslate",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbel_dirt",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbelerts_vilt",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbelerts_knuffel",
+      "required": false
+    },
+    {
+      "id": "guhs:kaasknabbelerts_kristal",
+      "required": false
+    },
+    {
+      "id": "guhs:houtskoolsteen_kaasknabbelerts",
+      "required": false
+    }
+  ]
+}

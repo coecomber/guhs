@@ -1,0 +1,95 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:wool",
+    "#minecraft:wool_carpets",
+    {
+      "id": "guhs:viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels",
+      "required": false
+    },
+    {
+      "id": "guhs:gebeitelde_viltsteen",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_muur",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:gepolijste_viltsteen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_bakstenen_muur",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:viltsteen_tegels_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:viltkiezel",
+      "required": false
+    },
+    {
+      "id": "guhs:pluiskussen",
+      "required": false
+    },
+    {
+      "id": "guhs:pluiswolblok",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak_plaat",
+      "required": false
+    },
+    {
+      "id": "guhs:pluisdak_trap",
+      "required": false
+    },
+    {
+      "id": "guhs:golfbaan_vilt",
+      "required": false
+    }
+  ]
+}
