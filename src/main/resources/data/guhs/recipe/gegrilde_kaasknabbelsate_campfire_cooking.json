@@ -1,9 +1,7 @@
 {
   "type": "minecraft:campfire_cooking",
   "category": "food",
-  "ingredient": {
-    "item": "guhs:kaasknabbelsate"
-  },
+  "ingredient": "guhs:kaasknabbelsate",
   "result": {
     "id": "guhs:gegrilde_kaasknabbelsate"
   },

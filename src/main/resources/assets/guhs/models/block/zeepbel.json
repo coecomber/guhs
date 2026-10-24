@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "guhs:block/zeepbel"
-  },
-  "render_type": "minecraft:translucent"
+    "all": {
+      "sprite": "guhs:block/zeepbel",
+      "force_translucent": true
+    }
+  }
 }

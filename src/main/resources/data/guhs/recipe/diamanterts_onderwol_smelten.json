@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:diamanterts_vilt",
+    "guhs:diamanterts_knuffel",
+    "guhs:diamanterts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:diamond"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

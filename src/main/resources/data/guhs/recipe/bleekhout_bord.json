@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "bleekhout_sign",
   "key": {
-    "#": {
-      "item": "guhs:bleekhout_planken"
-    },
-    "X": {
-      "item": "minecraft:stick"
-    }
+    "#": "guhs:bleekhout_planken",
+    "X": "minecraft:stick"
   },
   "pattern": [
     "###",

@@ -3,9 +3,7 @@
   "category": "redstone",
   "group": "bleekhout_door",
   "key": {
-    "#": {
-      "item": "guhs:bleekhout_planken"
-    }
+    "#": "guhs:bleekhout_planken"
   },
   "pattern": [
     "##",

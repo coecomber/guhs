@@ -1,9 +1,7 @@
 {
   "type": "minecraft:blasting",
   "category": "misc",
-  "ingredient": {
-    "item": "guhs:vahoege_vads"
-  },
+  "ingredient": "guhs:vahoege_vads",
   "result": {
     "id": "guhs:vahoege_vads_ingot"
   },

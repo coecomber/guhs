@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cross",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "cross": "guhs:block/bubbelstroom_omhoog"
+    "cross": {
+      "sprite": "guhs:block/bubbelstroom_omhoog",
+      "force_translucent": true
+    }
   }
 }

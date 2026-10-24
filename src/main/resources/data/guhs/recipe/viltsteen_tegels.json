@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VV",
+    "VV"
+  ],
+  "key": {
+    "V": "guhs:viltsteen_bakstenen"
+  },
+  "result": {
+    "id": "guhs:viltsteen_tegels",
+    "count": 4
+  }
+}

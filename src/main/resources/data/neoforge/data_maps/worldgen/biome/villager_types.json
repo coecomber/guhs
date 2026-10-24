@@ -65,6 +65,12 @@
     },
     "guhs:beverbeek": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:glitterspelonk": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:pluisgrot": {
+      "villager_type": "guhs:guh"
     }
   }
 }

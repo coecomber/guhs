@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/redstoneerts_vilt"
+    },
+    "lit=true": {
+      "model": "guhs:block/redstoneerts_vilt"
+    }
+  }
+}

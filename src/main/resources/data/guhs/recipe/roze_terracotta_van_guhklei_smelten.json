@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "guhs:guhklei",
+  "result": {
+    "id": "minecraft:pink_terracotta"
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

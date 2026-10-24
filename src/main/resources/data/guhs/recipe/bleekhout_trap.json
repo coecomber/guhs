@@ -3,9 +3,7 @@
   "category": "building",
   "group": "bleekhout_stairs",
   "key": {
-    "#": {
-      "item": "guhs:bleekhout_planken"
-    }
+    "#": "guhs:bleekhout_planken"
   },
   "pattern": [
     "#  ",

@@ -1,7 +1,7 @@
 {
   "type": "guhs:guhbubbel",
   "biomes": "#guhs:has_structure/onderwater",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {
     "creature": {
       "bounding_box": "full",
@@ -35,5 +35,7 @@
   "water_level": 63,
   "centre_depth": 25,
   "min_depth": 12,
-  "check_radius": 62
+  "check_radius": 62,
+  "keep_clear": 129,
+  "voorrang": 900
 }

@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/mika_mep_mika_side",
     "face": "guhs:block/mika_mep_mika_face",

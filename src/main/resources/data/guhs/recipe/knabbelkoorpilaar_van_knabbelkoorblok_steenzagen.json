@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:knabbelkoorblok"
-  },
+  "ingredient": "guhs:knabbelkoorblok",
   "result": {
-    "id": "guhs:knabbelkoorpilaar",
-    "count": 1
+    "id": "guhs:knabbelkoorpilaar"
   }
 }

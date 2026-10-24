@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:viltsteen_bakstenen"
+  },
+  "result": {
+    "id": "guhs:viltsteen_bakstenen_muur",
+    "count": 6
+  }
+}

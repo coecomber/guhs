@@ -1,12 +1,26 @@
 {
-  "render_type": "minecraft:translucent",
   "ambientocclusion": false,
   "textures": {
-    "particle": "guhs:block/knuffelhart_goud",
-    "voet": "guhs:block/knuffelhart_voet",
-    "goud": "guhs:block/knuffelhart_goud",
-    "kussen": "guhs:block/knuffelhart_kussen",
-    "glas": "guhs:block/knuffelhart_glas"
+    "particle": {
+      "sprite": "guhs:block/knuffelhart_goud",
+      "force_translucent": true
+    },
+    "voet": {
+      "sprite": "guhs:block/knuffelhart_voet",
+      "force_translucent": true
+    },
+    "goud": {
+      "sprite": "guhs:block/knuffelhart_goud",
+      "force_translucent": true
+    },
+    "kussen": {
+      "sprite": "guhs:block/knuffelhart_kussen",
+      "force_translucent": true
+    },
+    "glas": {
+      "sprite": "guhs:block/knuffelhart_glas",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

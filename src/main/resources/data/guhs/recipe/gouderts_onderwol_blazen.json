@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:gouderts_vilt",
+    "guhs:gouderts_knuffel",
+    "guhs:gouderts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:gold_ingot"
+  },
+  "experience": 1.0,
+  "cookingtime": 100
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:vadserts_vilt",
+    "guhs:vadserts_knuffel",
+    "guhs:vadserts_kristal"
+  ],
+  "result": {
+    "id": "guhs:vahoege_vads_ingot"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

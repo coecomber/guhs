@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:viltsteen_tegels"
+  },
+  "result": {
+    "id": "guhs:viltsteen_tegels_plaat",
+    "count": 6
+  }
+}

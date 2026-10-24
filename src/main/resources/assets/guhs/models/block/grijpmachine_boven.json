@@ -1,16 +1,42 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/grijpmachine_kast",
-    "kast": "guhs:block/grijpmachine_kast",
-    "voor": "guhs:block/grijpmachine_voorkant",
-    "paneel": "guhs:block/grijpmachine_paneel",
-    "glas": "guhs:block/grijpmachine_glas",
-    "frame": "guhs:block/grijpmachine_frame",
-    "bord": "guhs:block/grijpmachine_bord",
-    "rood": "guhs:block/grijpmachine_rood",
-    "klauw": "guhs:block/grijpmachine_klauw"
+    "particle": {
+      "sprite": "guhs:block/grijpmachine_kast",
+      "force_translucent": true
+    },
+    "kast": {
+      "sprite": "guhs:block/grijpmachine_kast",
+      "force_translucent": true
+    },
+    "voor": {
+      "sprite": "guhs:block/grijpmachine_voorkant",
+      "force_translucent": true
+    },
+    "paneel": {
+      "sprite": "guhs:block/grijpmachine_paneel",
+      "force_translucent": true
+    },
+    "glas": {
+      "sprite": "guhs:block/grijpmachine_glas",
+      "force_translucent": true
+    },
+    "frame": {
+      "sprite": "guhs:block/grijpmachine_frame",
+      "force_translucent": true
+    },
+    "bord": {
+      "sprite": "guhs:block/grijpmachine_bord",
+      "force_translucent": true
+    },
+    "rood": {
+      "sprite": "guhs:block/grijpmachine_rood",
+      "force_translucent": true
+    },
+    "klauw": {
+      "sprite": "guhs:block/grijpmachine_klauw",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

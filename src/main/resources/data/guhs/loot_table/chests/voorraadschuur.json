@@ -18,11 +18,21 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.voorraadkelder.0\"}",
-                "{\"translate\": \"book.guhs.bieb.voorraadkelder.1\"}",
-                "{\"translate\": \"book.guhs.bieb.voorraadkelder.2\"}",
-                "{\"translate\": \"book.guhs.bieb.voorraadkelder.3\"}",
-                "{\"translate\": \"book.guhs.bieb.voorraadkelder.4\"}"
+                {
+                  "translate": "book.guhs.bieb.voorraadkelder.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.voorraadkelder.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.voorraadkelder.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.voorraadkelder.3"
+                },
+                {
+                  "translate": "book.guhs.bieb.voorraadkelder.4"
+                }
               ]
             },
             {

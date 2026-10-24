@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "guhs:vahoegiet_erts",
+  "result": {
+    "id": "guhs:vahoegiet"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:smaragderts_vilt",
+    "guhs:smaragderts_knuffel",
+    "guhs:smaragderts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:emerald"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

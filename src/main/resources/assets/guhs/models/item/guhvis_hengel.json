@@ -2,13 +2,5 @@
   "parent": "minecraft:item/handheld_rod",
   "textures": {
     "layer0": "guhs:item/guhvis_hengel"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "cast": 1
-      },
-      "model": "guhs:item/guhvis_hengel_cast"
-    }
-  ]
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:spring_feature",
+  "config": {
+    "state": {
+      "Name": "guhs:kaas_saus",
+      "Properties": {
+        "falling": "true"
+      }
+    },
+    "requires_block_below": true,
+    "rock_count": 4,
+    "hole_count": 1,
+    "valid_blocks": [
+      "guhs:knuffelsteen",
+      "guhs:guh_kristalsteen",
+      "guhs:viltsteen"
+    ]
+  }
+}

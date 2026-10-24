@@ -1,8 +1,13 @@
 {
   "parent": "minecraft:block/slime_block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/roze_slijmblok",
-    "texture": "guhs:block/roze_slijmblok"
+    "particle": {
+      "sprite": "guhs:block/roze_slijmblok",
+      "force_translucent": true
+    },
+    "texture": {
+      "sprite": "guhs:block/roze_slijmblok",
+      "force_translucent": true
+    }
   }
 }

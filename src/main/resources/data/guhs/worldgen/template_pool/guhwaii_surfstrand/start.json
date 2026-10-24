@@ -4,10 +4,11 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
+        "element_type": "guhs:grond_single_pool_element",
         "location": "guhs:guhwaii_surfstrand",
         "projection": "rigid",
-        "processors": "guhs:guhwaiispellen_fundering"
+        "processors": "guhs:guhwaiispellen_fundering",
+        "ground_level_delta": 5
       }
     }
   ]

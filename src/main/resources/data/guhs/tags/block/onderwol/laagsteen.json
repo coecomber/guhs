@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pink_wool",
+    "guhs:viltsteen",
+    "guhs:knuffelsteen",
+    "guhs:guh_kristalsteen"
+  ]
+}

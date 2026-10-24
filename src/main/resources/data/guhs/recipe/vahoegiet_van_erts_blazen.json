@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "guhs:vahoegiet_erts",
+  "result": {
+    "id": "guhs:vahoegiet"
+  },
+  "experience": 1.0,
+  "cookingtime": 100
+}

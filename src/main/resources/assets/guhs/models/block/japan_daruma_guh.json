@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "t": "guhs:block/japan_daruma_guh",
     "particle": "guhs:block/japan_daruma_guh"

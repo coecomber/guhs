@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:gladde_knuffelsteen"
-  },
+  "ingredient": "guhs:gladde_knuffelsteen",
   "result": {
-    "id": "guhs:gladde_knuffelsteen_trap",
-    "count": 1
+    "id": "guhs:gladde_knuffelsteen_trap"
   }
 }

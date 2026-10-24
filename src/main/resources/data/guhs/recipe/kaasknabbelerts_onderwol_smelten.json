@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:kaasknabbelerts_vilt",
+    "guhs:kaasknabbelerts_knuffel",
+    "guhs:kaasknabbelerts_kristal"
+  ],
+  "result": {
+    "id": "guhs:kaas_knabbels"
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

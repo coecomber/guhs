@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
     "doek": "guhs:block/guhparkour_doek",

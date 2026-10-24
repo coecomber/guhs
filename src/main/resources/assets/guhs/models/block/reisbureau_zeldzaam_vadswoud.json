@@ -775,9 +775,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "up": {
@@ -789,9 +788,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "north": {
@@ -803,9 +801,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "south": {
@@ -817,9 +814,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "west": {
@@ -831,9 +827,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "east": {
@@ -845,9 +840,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         }
       },
@@ -874,9 +868,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "up": {
@@ -888,9 +881,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "north": {
@@ -902,9 +894,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "south": {
@@ -916,9 +907,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "west": {
@@ -930,9 +920,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "east": {
@@ -944,9 +933,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         }
       },
@@ -973,9 +961,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "up": {
@@ -987,9 +974,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "north": {
@@ -1001,9 +987,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "south": {
@@ -1015,9 +1000,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "west": {
@@ -1029,9 +1013,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "east": {
@@ -1043,9 +1026,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         }
       },
@@ -1072,9 +1054,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "up": {
@@ -1086,9 +1067,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "north": {
@@ -1100,9 +1080,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "south": {
@@ -1114,9 +1093,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "west": {
@@ -1128,9 +1106,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         },
         "east": {
@@ -1142,9 +1119,8 @@
             3.75
           ],
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15,
-            "ambient_occlusion": false
+            "ambient_occlusion": false,
+            "light_emission": 15
           }
         }
       },

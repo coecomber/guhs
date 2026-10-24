@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancements.guhs.guhmension.root.description"
     },
-    "background": "minecraft:textures/block/pink_wool.png",
+    "background": "minecraft:block/pink_wool",
     "show_toast": false,
     "announce_to_chat": false
   },

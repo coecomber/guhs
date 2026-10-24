@@ -13,7 +13,7 @@
     "show_toast": false,
     "announce_to_chat": false,
     "hidden": false,
-    "background": "minecraft:textures/block/pink_glazed_terracotta.png"
+    "background": "minecraft:block/pink_glazed_terracotta"
   },
   "criteria": {
     "guh_wheel": {

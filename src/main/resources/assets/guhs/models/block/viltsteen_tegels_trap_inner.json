@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "guhs:block/viltsteen_tegels",
+    "top": "guhs:block/viltsteen_tegels",
+    "side": "guhs:block/viltsteen_tegels"
+  }
+}

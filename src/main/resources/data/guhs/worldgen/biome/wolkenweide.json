@@ -1,24 +1,20 @@
 {
-  "has_precipitation": false,
-  "temperature": 0.8,
-  "downfall": 0.3,
-  "creature_spawn_probability": 0.3,
-  "effects": {
-    "sky_color": 12176639,
-    "fog_color": 15852278,
-    "water_color": 10478578,
-    "water_fog_color": 7321818,
-    "grass_color": 15981030,
-    "foliage_color": 16175072,
-    "ambient_sound": "guhs:wolkenweide.sfeer",
-    "music": {
-      "sound": "guhs:wolkenweide.muziek",
-      "min_delay": 6000,
-      "max_delay": 14000,
-      "replace_current_music": false
-    }
-  },
   "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:wolkenweide.sfeer"
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "guhs:wolkenweide.muziek",
+        "min_delay": 6000,
+        "max_delay": 14000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
     "minecraft:visual/ambient_particles": [
       {
         "particle": {
@@ -33,8 +29,20 @@
         "probability": 0.0016
       }
     ],
+    "minecraft:visual/fog_color": "#f1e2f6",
+    "minecraft:visual/sky_color": "#b9ccff",
+    "minecraft:visual/water_fog_color": "#6fb8da",
     "neoforge:custom_skybox": "guhs:wolkenweide"
   },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.3,
+  "effects": {
+    "water_color": "#9fe3f2",
+    "foliage_color": "#f6cfe0",
+    "grass_color": "#f3d9e6"
+  },
+  "creature_spawn_probability": 0.3,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -53,9 +61,7 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [

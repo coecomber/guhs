@@ -1,4 +1,8 @@
 {
   "feature": "guhs:bloesemmeertje_leven",
-  "placement": []
+  "placement": [
+    {
+      "type": "guhs:buiten_gebouwen"
+    }
+  ]
 }

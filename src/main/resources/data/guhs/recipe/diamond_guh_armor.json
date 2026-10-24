@@ -7,15 +7,10 @@
     "III"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:diamond"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "I": "minecraft:diamond",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:diamond_guh_armor",
-    "count": 1
+    "id": "guhs:diamond_guh_armor"
   }
 }

@@ -1,9 +1,7 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": {
-    "item": "guhs:houtskoolsteen"
-  },
+  "ingredient": "guhs:houtskoolsteen",
   "result": {
     "id": "minecraft:charcoal"
   },

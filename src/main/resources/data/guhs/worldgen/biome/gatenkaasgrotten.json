@@ -1,35 +1,53 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.cave",
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 3000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            1.0,
+            0.82,
+            0.3
+          ],
+          "scale": 0.7
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#e8c060",
+    "minecraft:visual/sky_color": "#f6d98a",
+    "minecraft:visual/water_fog_color": "#c89a30"
+  },
   "has_precipitation": false,
   "temperature": 0.8,
   "downfall": 0.0,
-  "creature_spawn_probability": 0.45,
   "effects": {
-    "sky_color": 16177546,
-    "fog_color": 15253600,
-    "water_color": 15911244,
-    "water_fog_color": 13146672,
-    "grass_color": 16234187,
-    "foliage_color": 16234187,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 3000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "ambient_sound": "minecraft:ambient.cave",
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          1.0,
-          0.82,
-          0.3
-        ],
-        "scale": 0.7
-      },
-      "probability": 0.004
-    }
+    "water_color": "#f2c94c",
+    "foliage_color": "#f7b6cb",
+    "grass_color": "#f7b6cb"
   },
+  "creature_spawn_probability": 0.45,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -41,9 +59,7 @@
     "creature": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [
       "guhs:gatenkaas_holte"

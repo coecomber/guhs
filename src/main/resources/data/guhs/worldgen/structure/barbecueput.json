@@ -1,7 +1,7 @@
 {
   "type": "guhs:barbecueput",
   "biomes": "#guhs:has_structure/barbecueput",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {},
   "terrain_adaptation": "beard_thin",
   "start_pool": "guhs:barbecueput/start",
@@ -9,5 +9,6 @@
   "check_radius": 20,
   "max_height_difference": 12,
   "headroom": 10,
-  "surface_pool": "guhs:barbecueput/klein"
+  "surface_pool": "guhs:barbecueput/klein",
+  "keep_clear": 19
 }

@@ -1,9 +1,7 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": {
-    "item": "guhs:knuffelsteen"
-  },
+  "ingredient": "guhs:knuffelsteen",
   "result": {
     "id": "guhs:gladde_knuffelsteen"
   },

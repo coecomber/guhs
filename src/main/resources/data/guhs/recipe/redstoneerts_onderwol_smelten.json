@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:redstoneerts_vilt",
+    "guhs:redstoneerts_knuffel",
+    "guhs:redstoneerts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:redstone"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

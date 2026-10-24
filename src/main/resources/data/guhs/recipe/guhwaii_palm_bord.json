@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "guhwaii_palm_sign",
   "key": {
-    "#": {
-      "item": "guhs:guhwaii_palm_planken"
-    },
-    "X": {
-      "item": "minecraft:stick"
-    }
+    "#": "guhs:guhwaii_palm_planken",
+    "X": "minecraft:stick"
   },
   "pattern": [
     "###",

@@ -16,19 +16,41 @@
                   "author": "De Bibliothecaris",
                   "resolved": true,
                   "pages": [
-                    "{\"translate\": \"book.guhs.bieb.guheinde.0\"}",
-                    "{\"translate\": \"book.guhs.bieb.guheinde.1\"}",
-                    "{\"translate\": \"book.guhs.bieb.guheinde.2\"}",
-                    "{\"translate\": \"book.guhs.bieb.guheinde.3\"}",
-                    "{\"translate\": \"book.guhs.bieb.guheinde.4\"}"
+                    {
+                      "translate": "book.guhs.bieb.guheinde.0"
+                    },
+                    {
+                      "translate": "book.guhs.bieb.guheinde.1"
+                    },
+                    {
+                      "translate": "book.guhs.bieb.guheinde.2"
+                    },
+                    {
+                      "translate": "book.guhs.bieb.guheinde.3"
+                    },
+                    {
+                      "translate": "book.guhs.bieb.guheinde.4"
+                    }
                   ]
                 },
                 "minecraft:custom_data": {
                   "GuhsBoek": "guheinde"
                 },
-                "minecraft:custom_name": "{\"translate\": \"book.guhs.bieb.guheinde.title\", \"italic\": false, \"color\": \"#F7B6CB\"}",
+                "minecraft:custom_name": {
+                  "translate": "book.guhs.bieb.guheinde.title",
+                  "italic": false,
+                  "color": "#F7B6CB"
+                },
                 "minecraft:lore": [
-                  "{\"translate\": \"item.guhs.bieb_boek.lore\", \"with\": [\"13\", \"13\"], \"italic\": false, \"color\": \"gray\"}"
+                  {
+                    "translate": "item.guhs.bieb_boek.lore",
+                    "with": [
+                      "13",
+                      "13"
+                    ],
+                    "italic": false,
+                    "color": "gray"
+                  }
                 ],
                 "minecraft:enchantment_glint_override": false
               }

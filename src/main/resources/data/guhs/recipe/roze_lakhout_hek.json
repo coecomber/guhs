@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "roze_lakhout_fence",
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "guhs:roze_lakhout_planken"
-    }
+    "#": "minecraft:stick",
+    "W": "guhs:roze_lakhout_planken"
   },
   "pattern": [
     "W#W",

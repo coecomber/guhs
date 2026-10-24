@@ -1,7 +1,7 @@
 {
   "type": "guhs:einde2_deco_bouwsel",
   "biomes": "#guhs:has_structure/deco_luchtbizonstal",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {},
   "terrain_adaptation": "none",
   "min_distance": 1100,
@@ -9,7 +9,7 @@
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/deco_luchtbizonstal",
-    "step": "surface_structures",
+    "step": "fluid_springs",
     "spawn_overrides": {},
     "terrain_adaptation": "none",
     "start_pool": "guhs:einde2_deco/deco_luchtbizonstal",
@@ -22,5 +22,7 @@
     "max_distance_from_center": 24,
     "use_expansion_hack": false
   },
-  "max_verschil": 4
+  "max_verschil": 4,
+  "keep_clear": 19,
+  "voorrang": 5
 }

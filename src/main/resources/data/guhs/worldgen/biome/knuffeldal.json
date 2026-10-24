@@ -1,34 +1,46 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.overworld.cherry_grove",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "guhs:pluisje"
+        },
+        "probability": 0.006
+      }
+    ],
+    "minecraft:visual/fog_color": "#ffe4f1",
+    "minecraft:visual/sky_color": "#f7b6d8",
+    "minecraft:visual/water_fog_color": "#d76aa6"
+  },
   "has_precipitation": false,
   "temperature": 0.7,
   "downfall": 0.4,
-  "creature_spawn_probability": 0.35,
   "effects": {
-    "sky_color": 16234200,
-    "fog_color": 16770289,
-    "water_color": 16227019,
-    "water_fog_color": 14117542,
-    "grass_color": 16230604,
-    "foliage_color": 16365782,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.overworld.cherry_grove",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    },
-    "particle": {
-      "options": {
-        "type": "guhs:pluisje"
-      },
-      "probability": 0.006
-    }
+    "water_color": "#f79acb",
+    "foliage_color": "#f9b8d6",
+    "grass_color": "#f7a8cc"
   },
+  "creature_spawn_probability": 0.35,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -53,9 +65,7 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [],

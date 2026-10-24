@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/cross",
-  "render_type": "cutout",
   "textures": {
     "cross": "guhs:block/guhriow1_bloem_1"
   }

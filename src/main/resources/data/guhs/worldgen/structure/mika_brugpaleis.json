@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/mika_brugpaleis",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -21,5 +21,6 @@
   "placement": "brug",
   "min_y": 40,
   "max_y": 62,
-  "reach": 40
+  "reach": 40,
+  "keep_clear": 56
 }

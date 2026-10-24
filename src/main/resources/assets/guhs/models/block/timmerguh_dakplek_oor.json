@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cube_all",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "all": "guhs:block/timmerguh_dakplek_oor"
+    "all": {
+      "sprite": "guhs:block/timmerguh_dakplek_oor",
+      "force_translucent": true
+    }
   }
 }

@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "guhwaii_palm_fence",
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "guhs:guhwaii_palm_planken"
-    }
+    "#": "minecraft:stick",
+    "W": "guhs:guhwaii_palm_planken"
   },
   "pattern": [
     "W#W",

@@ -3,9 +3,7 @@
   "category": "building",
   "group": "guhwaii_palm_stairs",
   "key": {
-    "#": {
-      "item": "guhs:guhwaii_palm_planken"
-    }
+    "#": "guhs:guhwaii_palm_planken"
   },
   "pattern": [
     "#  ",

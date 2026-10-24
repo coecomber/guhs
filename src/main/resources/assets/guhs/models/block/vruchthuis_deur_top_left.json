@@ -3,6 +3,5 @@
   "textures": {
     "bottom": "guhs:block/vruchthuis_deur_bottom",
     "top": "guhs:block/vruchthuis_deur_top"
-  },
-  "render_type": "minecraft:cutout"
+  }
 }

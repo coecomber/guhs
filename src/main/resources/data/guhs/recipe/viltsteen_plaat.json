@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:viltsteen"
+  },
+  "result": {
+    "id": "guhs:viltsteen_plaat",
+    "count": 6
+  }
+}

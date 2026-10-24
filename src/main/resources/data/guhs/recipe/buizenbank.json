@@ -6,15 +6,10 @@
     "PP"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:yellow_stained_glass"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "G": "minecraft:yellow_stained_glass",
+    "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:buizenbank",
-    "count": 1
+    "id": "guhs:buizenbank"
   }
 }

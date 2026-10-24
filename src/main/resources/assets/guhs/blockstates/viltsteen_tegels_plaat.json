@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/viltsteen_tegels_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/viltsteen_tegels_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/viltsteen_tegels"
+    }
+  }
+}

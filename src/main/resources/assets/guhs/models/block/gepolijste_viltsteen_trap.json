@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/gepolijste_viltsteen",
+    "top": "guhs:block/gepolijste_viltsteen",
+    "side": "guhs:block/gepolijste_viltsteen"
+  }
+}

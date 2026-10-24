@@ -2,6 +2,5 @@
   "parent": "minecraft:block/template_trapdoor_top",
   "textures": {
     "texture": "guhs:block/roze_lakhout_luik"
-  },
-  "render_type": "minecraft:cutout"
+  }
 }

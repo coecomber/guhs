@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 17,
+    "discard_chance_on_air_exposure": 0.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "guhs:viltsteen"
+        },
+        "state": {
+          "Name": "guhs:kolenerts_vilt"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "guhs:knuffelsteen"
+        },
+        "state": {
+          "Name": "guhs:kolenerts_knuffel"
+        }
+      }
+    ]
+  }
+}

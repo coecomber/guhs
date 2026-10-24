@@ -3,19 +3,14 @@
   "category": "redstone",
   "group": "vadshout_fence_gate",
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "guhs:vadshout_planken"
-    }
+    "#": "minecraft:stick",
+    "W": "guhs:vadshout_planken"
   },
   "pattern": [
     "#W#",
     "#W#"
   ],
   "result": {
-    "count": 1,
     "id": "guhs:vadshout_poort"
   }
 }

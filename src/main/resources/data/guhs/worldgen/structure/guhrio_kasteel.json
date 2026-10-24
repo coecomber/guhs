@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/guhrio_kasteel",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -25,5 +25,7 @@
   "placement": "paleis",
   "min_y": 33,
   "max_y": 33,
-  "reach": 48
+  "reach": 48,
+  "keep_clear": 70,
+  "voorrang": 290
 }

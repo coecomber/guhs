@@ -7,21 +7,12 @@
     "IRI"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_concrete"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "P": "minecraft:pink_concrete",
+    "K": "guhs:kaas_knabbels",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:guh_wheel",
-    "count": 1
+    "id": "guhs:guh_wheel"
   }
 }

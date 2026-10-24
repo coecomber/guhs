@@ -1,0 +1,8 @@
+{
+  "feature": "guhs:onderwol_sauszee",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

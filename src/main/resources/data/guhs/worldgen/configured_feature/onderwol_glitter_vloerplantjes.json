@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "guhs:lichtmos"
+          },
+          "weight": 30
+        },
+        {
+          "data": {
+            "Name": "guhs:glinsterpaddenstoel"
+          },
+          "weight": 10
+        }
+      ]
+    }
+  }
+}

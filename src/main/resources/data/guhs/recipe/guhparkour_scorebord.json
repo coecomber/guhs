@@ -12,7 +12,6 @@
     "F": "#minecraft:wooden_fences"
   },
   "result": {
-    "id": "guhs:guhparkour_scorebord",
-    "count": 1
+    "id": "guhs:guhparkour_scorebord"
   }
 }

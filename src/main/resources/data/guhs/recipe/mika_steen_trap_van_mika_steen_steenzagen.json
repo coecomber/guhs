@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:mika_steen"
-  },
+  "ingredient": "guhs:mika_steen",
   "result": {
-    "id": "guhs:mika_steen_trap",
-    "count": 1
+    "id": "guhs:mika_steen_trap"
   }
 }

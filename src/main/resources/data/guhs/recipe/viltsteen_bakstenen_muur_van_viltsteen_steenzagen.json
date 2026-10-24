@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:viltsteen",
+  "result": {
+    "id": "guhs:viltsteen_bakstenen_muur",
+    "count": 1
+  }
+}

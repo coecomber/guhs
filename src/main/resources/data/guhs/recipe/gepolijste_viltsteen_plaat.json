@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:gepolijste_viltsteen"
+  },
+  "result": {
+    "id": "guhs:gepolijste_viltsteen_plaat",
+    "count": 6
+  }
+}

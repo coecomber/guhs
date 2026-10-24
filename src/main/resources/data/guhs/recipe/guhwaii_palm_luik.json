@@ -3,9 +3,7 @@
   "category": "redstone",
   "group": "guhwaii_palm_trapdoor",
   "key": {
-    "#": {
-      "item": "guhs:guhwaii_palm_planken"
-    }
+    "#": "guhs:guhwaii_palm_planken"
   },
   "pattern": [
     "###",

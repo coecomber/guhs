@@ -1,10 +1,18 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "boven": "guhs:block/regenboogblok_boven_heel_x",
-    "zij": "guhs:block/regenboogblok_zij",
-    "particle": "guhs:block/regenboogblok_zij"
+    "boven": {
+      "sprite": "guhs:block/regenboogblok_boven_heel_x",
+      "force_translucent": true
+    },
+    "zij": {
+      "sprite": "guhs:block/regenboogblok_zij",
+      "force_translucent": true
+    },
+    "particle": {
+      "sprite": "guhs:block/regenboogblok_zij",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

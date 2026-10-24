@@ -1,7 +1,7 @@
 {
   "type": "guhs:knuffeldal_stadje",
   "biomes": "#guhs:has_structure/knuffeldal_stadje",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",

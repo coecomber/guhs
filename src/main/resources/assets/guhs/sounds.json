@@ -5576,76 +5576,6 @@
     ],
     "subtitle": "subtitles.guhs.safari.dier.cavia"
   },
-  "safari.dier.kriebel": {
-    "sounds": [
-      {
-        "name": "guhs:safari/dier/kriebel1"
-      },
-      {
-        "name": "guhs:safari/dier/kriebel2"
-      },
-      {
-        "name": "guhs:safari/dier/kriebel3"
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.dier.kriebel"
-  },
-  "safari.dier.hommel": {
-    "sounds": [
-      {
-        "name": "guhs:safari/dier/hommel1"
-      },
-      {
-        "name": "guhs:safari/dier/hommel2"
-      },
-      {
-        "name": "guhs:safari/dier/hommel3"
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.dier.hommel"
-  },
-  "safari.dier.vis": {
-    "sounds": [
-      {
-        "name": "guhs:safari/dier/vis1"
-      },
-      {
-        "name": "guhs:safari/dier/vis2"
-      },
-      {
-        "name": "guhs:safari/dier/vis3"
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.dier.vis"
-  },
-  "safari.dier.kikker": {
-    "sounds": [
-      {
-        "name": "guhs:safari/dier/kikker1"
-      },
-      {
-        "name": "guhs:safari/dier/kikker2"
-      },
-      {
-        "name": "guhs:safari/dier/kikker3"
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.dier.kikker"
-  },
-  "safari.dier.vleermuis": {
-    "sounds": [
-      {
-        "name": "guhs:safari/dier/vleermuis1"
-      },
-      {
-        "name": "guhs:safari/dier/vleermuis2"
-      },
-      {
-        "name": "guhs:safari/dier/vleermuis3"
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.dier.vleermuis"
-  },
   "safari.sfeer.savanne": {
     "sounds": [
       {
@@ -5722,33 +5652,6 @@
     "sounds": [
       {
         "name": "guhs:safari/sfeer/entree",
-        "stream": true
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.sfeer"
-  },
-  "safari.sfeer.kriebelhuis_kriebel": {
-    "sounds": [
-      {
-        "name": "guhs:safari/sfeer/kriebelhuis_kriebel",
-        "stream": true
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.sfeer"
-  },
-  "safari.sfeer.kriebelhuis_nacht": {
-    "sounds": [
-      {
-        "name": "guhs:safari/sfeer/kriebelhuis_nacht",
-        "stream": true
-      }
-    ],
-    "subtitle": "subtitles.guhs.safari.sfeer"
-  },
-  "safari.sfeer.kriebelhuis_diepzee": {
-    "sounds": [
-      {
-        "name": "guhs:safari/sfeer/kriebelhuis_diepzee",
         "stream": true
       }
     ],
@@ -5861,5 +5764,241 @@
       }
     ],
     "subtitle": "subtitles.guhs.safari.parade"
+  },
+  "bouwhulp.spook": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/spook"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.spook"
+  },
+  "bouwhulp.plonk": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/plonk1"
+      },
+      {
+        "name": "guhs:bouwhulp/plonk2"
+      },
+      {
+        "name": "guhs:bouwhulp/plonk3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.plonk"
+  },
+  "bouwhulp.kraan": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/kraan"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.kraan"
+  },
+  "bouwhulp.pof": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/pof"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.pof"
+  },
+  "bouwhulp.feest": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/feest"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.feest"
+  },
+  "bouwhulp.zwiep": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/zwiep1"
+      },
+      {
+        "name": "guhs:bouwhulp/zwiep2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.zwiep"
+  },
+  "bouwhulp.papier": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/papier"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.papier"
+  },
+  "bouwhulp.knaag": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/knaag1"
+      },
+      {
+        "name": "guhs:bouwhulp/knaag2"
+      },
+      {
+        "name": "guhs:bouwhulp/knaag3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.knaag"
+  },
+  "bouwhulp.graaf": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/graaf1"
+      },
+      {
+        "name": "guhs:bouwhulp/graaf2"
+      },
+      {
+        "name": "guhs:bouwhulp/graaf3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.graaf"
+  },
+  "bouwhulp.fluit": {
+    "sounds": [
+      {
+        "name": "guhs:bouwhulp/fluit1"
+      },
+      {
+        "name": "guhs:bouwhulp/fluit2"
+      },
+      {
+        "name": "guhs:bouwhulp/fluit3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bouwhulp.fluit"
+  },
+  "safari.dier.kriebel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/kriebel1"
+      },
+      {
+        "name": "guhs:safari/dier/kriebel2"
+      },
+      {
+        "name": "guhs:safari/dier/kriebel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.kriebel"
+  },
+  "safari.dier.hommel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/hommel1"
+      },
+      {
+        "name": "guhs:safari/dier/hommel2"
+      },
+      {
+        "name": "guhs:safari/dier/hommel3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.hommel"
+  },
+  "safari.dier.vis": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/vis1"
+      },
+      {
+        "name": "guhs:safari/dier/vis2"
+      },
+      {
+        "name": "guhs:safari/dier/vis3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.vis"
+  },
+  "safari.dier.kikker": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/kikker1"
+      },
+      {
+        "name": "guhs:safari/dier/kikker2"
+      },
+      {
+        "name": "guhs:safari/dier/kikker3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.kikker"
+  },
+  "safari.dier.vleermuis": {
+    "sounds": [
+      {
+        "name": "guhs:safari/dier/vleermuis1"
+      },
+      {
+        "name": "guhs:safari/dier/vleermuis2"
+      },
+      {
+        "name": "guhs:safari/dier/vleermuis3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.dier.vleermuis"
+  },
+  "safari.sfeer.kriebelhuis_kriebel": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/kriebelhuis_kriebel",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.kriebelhuis_nacht": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/kriebelhuis_nacht",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "safari.sfeer.kriebelhuis_diepzee": {
+    "sounds": [
+      {
+        "name": "guhs:safari/sfeer/kriebelhuis_diepzee",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.safari.sfeer"
+  },
+  "beverbeek.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:safari/beverbeek_sfeer",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.beverbeek.sfeer"
+  },
+  "beverbeek.knaag": {
+    "sounds": [
+      {
+        "name": "guhs:safari/beverbeek_knaag1"
+      },
+      {
+        "name": "guhs:safari/beverbeek_knaag2"
+      },
+      {
+        "name": "guhs:safari/beverbeek_knaag3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.beverbeek.knaag"
+  },
+  "knabbelvelden.sfeer": {
+    "sounds": [
+      {
+        "name": "guhs:safari/knabbelvelden_sfeer",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelvelden.sfeer"
   }
 }

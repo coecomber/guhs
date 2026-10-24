@@ -1,9 +1,7 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": {
-    "item": "guhs:gatenkaas_stenen"
-  },
+  "ingredient": "guhs:gatenkaas_stenen",
   "result": {
     "id": "guhs:belegen_kaas_stenen"
   },

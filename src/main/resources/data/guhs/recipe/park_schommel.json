@@ -7,11 +7,10 @@
     "SSS"
   ],
   "key": {
-    "C": "minecraft:chain",
+    "C": "minecraft:iron_chain",
     "S": "minecraft:cherry_slab"
   },
   "result": {
-    "id": "guhs:park_schommel",
-    "count": 1
+    "id": "guhs:park_schommel"
   }
 }

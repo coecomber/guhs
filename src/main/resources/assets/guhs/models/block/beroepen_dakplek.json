@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cube_all",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "all": "guhs:block/beroepen_dakplek"
+    "all": {
+      "sprite": "guhs:block/beroepen_dakplek",
+      "force_translucent": true
+    }
   }
 }

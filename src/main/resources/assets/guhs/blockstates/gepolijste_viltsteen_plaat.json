@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/gepolijste_viltsteen_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/gepolijste_viltsteen_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/gepolijste_viltsteen"
+    }
+  }
+}

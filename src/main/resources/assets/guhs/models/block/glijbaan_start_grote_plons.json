@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/glijbaan_start_paal",
     "paal": "guhs:block/glijbaan_start_paal",

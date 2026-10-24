@@ -1,7 +1,7 @@
 {
   "type": "guhs:flat_jigsaw",
   "biomes": "#guhs:has_structure/zwevende_eilanden",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {
     "creature": {
       "bounding_box": "piece",
@@ -23,11 +23,11 @@
   "terrain_adaptation": "beard_box",
   "check_radius": 64,
   "max_height_difference": 28,
-  "keep_clear": 32,
+  "keep_clear": 109,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/zwevende_eilanden",
-    "step": "surface_structures",
+    "step": "fluid_springs",
     "spawn_overrides": {
       "creature": {
         "bounding_box": "piece",

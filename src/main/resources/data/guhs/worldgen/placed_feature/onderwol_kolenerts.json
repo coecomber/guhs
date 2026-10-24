@@ -1,0 +1,27 @@
+{
+  "feature": "guhs:onderwol_kolenerts",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 18
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:trapezoid",
+        "min_inclusive": {
+          "absolute": 44
+        },
+        "max_inclusive": {
+          "absolute": 72
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

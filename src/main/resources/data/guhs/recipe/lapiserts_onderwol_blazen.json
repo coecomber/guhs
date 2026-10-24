@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:lapiserts_vilt",
+    "guhs:lapiserts_knuffel",
+    "guhs:lapiserts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:lapis_lazuli"
+  },
+  "experience": 0.2,
+  "cookingtime": 100
+}

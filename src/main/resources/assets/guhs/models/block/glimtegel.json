@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/glimtegel",
     "tegel": "guhs:block/glimtegel",
@@ -83,9 +82,8 @@
         }
       },
       "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15,
-        "ambient_occlusion": false
+        "ambient_occlusion": false,
+        "light_emission": 15
       }
     }
   ]

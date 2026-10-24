@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:gepolijste_viltsteen"
+  },
+  "result": {
+    "id": "guhs:gepolijste_viltsteen_trap",
+    "count": 4
+  }
+}

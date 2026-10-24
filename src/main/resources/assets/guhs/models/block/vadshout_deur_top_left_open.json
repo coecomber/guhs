@@ -3,6 +3,5 @@
   "textures": {
     "bottom": "guhs:block/vadshout_deur_bottom",
     "top": "guhs:block/vadshout_deur_top"
-  },
-  "render_type": "minecraft:cutout"
+  }
 }

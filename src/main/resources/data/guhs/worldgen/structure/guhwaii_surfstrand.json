@@ -1,7 +1,7 @@
 {
   "type": "guhs:regio_jigsaw",
   "biomes": "#guhs:has_structure/guhwaii_surfstrand",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -47,7 +47,8 @@
     "afstand": 0,
     "kust_value": 0.5650000000000001
   },
-  "keep_clear": 49,
+  "keep_clear": 35,
   "grond_y": 4,
-  "reach": 40
+  "reach": 40,
+  "voorrang": 800
 }

@@ -1,5 +1,4 @@
 {
-  "render_type": "cutout",
   "textures": {
     "deur": "guhs:block/guhrio_deur_onder",
     "particle": "guhs:block/guhrio_deur_onder"

@@ -1,11 +1,26 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "guhs:block/knabbelbuis_ring",
-    "boven": "guhs:block/knabbelbuis_boven",
-    "zij": "guhs:block/knabbelbuis_zij",
-    "ruit": "guhs:block/knabbelbuis_ruit",
-    "ring": "guhs:block/knabbelbuis_ring"
+    "particle": {
+      "sprite": "guhs:block/knabbelbuis_ring",
+      "force_translucent": true
+    },
+    "boven": {
+      "sprite": "guhs:block/knabbelbuis_boven",
+      "force_translucent": true
+    },
+    "zij": {
+      "sprite": "guhs:block/knabbelbuis_zij",
+      "force_translucent": true
+    },
+    "ruit": {
+      "sprite": "guhs:block/knabbelbuis_ruit",
+      "force_translucent": true
+    },
+    "ring": {
+      "sprite": "guhs:block/knabbelbuis_ring",
+      "force_translucent": true
+    }
   },
   "elements": [
     {
@@ -31,6 +46,5 @@
         }
       }
     }
-  ],
-  "render_type": "minecraft:translucent"
+  ]
 }

@@ -12,7 +12,6 @@
     "V": "minecraft:feather"
   },
   "result": {
-    "id": "guhs:knuffelgenerator",
-    "count": 1
+    "id": "guhs:knuffelgenerator"
   }
 }

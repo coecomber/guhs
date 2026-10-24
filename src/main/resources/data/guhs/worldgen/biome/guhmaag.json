@@ -1,36 +1,52 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.basalt_deltas.loop",
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            1.0,
+            0.55,
+            0.7
+          ],
+          "scale": 1.0
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#6a1a30",
+    "minecraft:visual/sky_color": "#8c2a4a",
+    "minecraft:visual/water_fog_color": "#9ac020"
+  },
   "has_precipitation": false,
   "temperature": 0.9,
   "downfall": 0.0,
   "effects": {
-    "sky_color": 9185866,
-    "fog_color": 6953520,
-    "water_color": 12116026,
-    "water_fog_color": 10141728,
-    "ambient_sound": "minecraft:ambient.basalt_deltas.loop",
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          1.0,
-          0.55,
-          0.7
-        ],
-        "scale": 1.0
-      },
-      "probability": 0.004
-    },
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    }
+    "water_color": "#b8e03a"
   },
   "spawners": {},
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": []
 }

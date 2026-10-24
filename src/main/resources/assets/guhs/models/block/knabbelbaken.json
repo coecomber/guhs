@@ -1,10 +1,21 @@
 {
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/knabbelbaken_glas",
-    "glas": "guhs:block/knabbelbaken_glas",
-    "kern": "guhs:block/knabbelbaken_kern",
-    "voet": "guhs:block/grillkool"
+    "particle": {
+      "sprite": "guhs:block/knabbelbaken_glas",
+      "force_translucent": true
+    },
+    "glas": {
+      "sprite": "guhs:block/knabbelbaken_glas",
+      "force_translucent": true
+    },
+    "kern": {
+      "sprite": "guhs:block/knabbelbaken_kern",
+      "force_translucent": true
+    },
+    "voet": {
+      "sprite": "guhs:block/grillkool",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

@@ -1,7 +1,7 @@
 {
   "type": "guhs:leegte_bouw",
   "biomes": "#guhs:has_structure/bikinibodem",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -34,5 +34,7 @@
   "leeg": [
     480,
     224
-  ]
+  ],
+  "keep_clear": 120,
+  "voorrang": 302
 }

@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:schimmelkaas"
-  },
+  "ingredient": "guhs:schimmelkaas",
   "result": {
-    "id": "guhs:schimmelkaas_stenen",
-    "count": 1
+    "id": "guhs:schimmelkaas_stenen"
   }
 }

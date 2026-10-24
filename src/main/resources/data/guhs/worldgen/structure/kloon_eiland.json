@@ -1,7 +1,7 @@
 {
   "type": "guhs:regio_jigsaw",
   "biomes": "#guhs:has_structure/kloon_eiland",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -58,5 +58,6 @@
   "keep_clear": 49,
   "grond_y": 30,
   "reach": 40,
-  "vaste_y": 64
+  "vaste_y": 64,
+  "voorrang": 850
 }

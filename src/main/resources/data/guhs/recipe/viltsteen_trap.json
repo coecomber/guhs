@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:viltsteen"
+  },
+  "result": {
+    "id": "guhs:viltsteen_trap",
+    "count": 4
+  }
+}

@@ -1,8 +1,6 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:guh_dakpan_grijs"
-  },
+  "ingredient": "guhs:guh_dakpan_grijs",
   "result": {
     "id": "guhs:guh_dakpan_grijs_plaat",
     "count": 2

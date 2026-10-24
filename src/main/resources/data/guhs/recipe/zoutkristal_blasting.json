@@ -1,9 +1,7 @@
 {
   "type": "minecraft:blasting",
   "category": "misc",
-  "ingredient": {
-    "item": "guhs:fossielmijn_zoutkristalerts"
-  },
+  "ingredient": "guhs:fossielmijn_zoutkristalerts",
   "result": {
     "id": "guhs:zoutkristal"
   },

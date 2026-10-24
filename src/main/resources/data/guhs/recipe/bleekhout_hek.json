@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "bleekhout_fence",
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "guhs:bleekhout_planken"
-    }
+    "#": "minecraft:stick",
+    "W": "guhs:bleekhout_planken"
   },
   "pattern": [
     "W#W",

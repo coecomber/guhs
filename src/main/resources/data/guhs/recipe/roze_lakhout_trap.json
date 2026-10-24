@@ -3,9 +3,7 @@
   "category": "building",
   "group": "roze_lakhout_stairs",
   "key": {
-    "#": {
-      "item": "guhs:roze_lakhout_planken"
-    }
+    "#": "guhs:roze_lakhout_planken"
   },
   "pattern": [
     "#  ",

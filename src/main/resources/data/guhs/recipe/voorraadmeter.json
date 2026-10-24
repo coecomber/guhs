@@ -13,7 +13,6 @@
     "S": "minecraft:stone"
   },
   "result": {
-    "id": "guhs:voorraadmeter",
-    "count": 1
+    "id": "guhs:voorraadmeter"
   }
 }

@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/einde2_bouw_schelpenstad_drooglamp",
     "kap": "guhs:block/einde2_bouw_schelpenstad_drooglamp",

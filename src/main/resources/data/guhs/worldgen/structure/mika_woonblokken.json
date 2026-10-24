@@ -1,7 +1,7 @@
 {
   "type": "guhs:burcht",
   "biomes": "#guhs:has_structure/mika_woonblokken",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "terrain_adaptation": "none",
   "spawn_overrides": {
     "monster": {
@@ -21,5 +21,6 @@
   "placement": "paleis",
   "min_y": 33,
   "max_y": 33,
-  "reach": 24
+  "reach": 24,
+  "keep_clear": 41
 }

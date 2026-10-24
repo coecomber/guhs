@@ -6,12 +6,11 @@
     "ILI"
   ],
   "key": {
-    "K": "minecraft:chain",
+    "K": "minecraft:iron_chain",
     "I": "minecraft:iron_ingot",
     "L": "guhs:lichtstaafje"
   },
   "result": {
-    "id": "guhs:einde2_bouw_schelpenstad_drooglamp",
-    "count": 1
+    "id": "guhs:einde2_bouw_schelpenstad_drooglamp"
   }
 }

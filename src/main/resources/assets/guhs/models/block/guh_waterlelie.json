@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/lily_pad",
-  "render_type": "minecraft:cutout",
   "textures": {
     "texture": "guhs:block/guh_waterlelie",
     "particle": "guhs:block/guh_waterlelie"

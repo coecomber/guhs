@@ -1,8 +1,6 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:kruimelrots"
-  },
+  "ingredient": "guhs:kruimelrots",
   "result": {
     "id": "guhs:kruimelrots_stenen_plaat",
     "count": 2

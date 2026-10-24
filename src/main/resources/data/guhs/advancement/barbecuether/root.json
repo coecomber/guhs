@@ -13,7 +13,7 @@
     "show_toast": false,
     "announce_to_chat": false,
     "hidden": false,
-    "background": "guhs:textures/block/houtskoolsteen_stenen.png"
+    "background": "guhs:block/houtskoolsteen_stenen"
   },
   "criteria": {
     "grillkool": {

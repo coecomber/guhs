@@ -2,6 +2,5 @@
   "parent": "minecraft:block/template_trapdoor_bottom",
   "textures": {
     "texture": "guhs:block/vadshout_luik"
-  },
-  "render_type": "minecraft:cutout"
+  }
 }

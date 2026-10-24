@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": [
+    "guhs:ijzererts_vilt",
+    "guhs:ijzererts_knuffel",
+    "guhs:ijzererts_kristal"
+  ],
+  "result": {
+    "id": "minecraft:iron_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

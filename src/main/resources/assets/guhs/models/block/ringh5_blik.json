@@ -1,9 +1,14 @@
 {
   "ambientocclusion": false,
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/ringh5_blik",
-    "blik": "guhs:block/ringh5_blik"
+    "particle": {
+      "sprite": "guhs:block/ringh5_blik",
+      "force_translucent": true
+    },
+    "blik": {
+      "sprite": "guhs:block/ringh5_blik",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

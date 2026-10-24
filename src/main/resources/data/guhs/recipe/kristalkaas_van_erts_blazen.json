@@ -1,9 +1,7 @@
 {
   "type": "minecraft:blasting",
   "category": "misc",
-  "ingredient": {
-    "item": "guhs:kristalkaas_erts"
-  },
+  "ingredient": "guhs:kristalkaas_erts",
   "result": {
     "id": "guhs:kristalkaas"
   },

@@ -14,7 +14,6 @@
     "X": "guhs:techquest_recept_saus"
   },
   "result": {
-    "id": "guhs:sausvat",
-    "count": 1
+    "id": "guhs:sausvat"
   }
 }

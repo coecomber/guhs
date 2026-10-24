@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "guhs:block/vruchthuis_raam"
-  },
-  "render_type": "minecraft:translucent"
+    "all": {
+      "sprite": "guhs:block/vruchthuis_raam",
+      "force_translucent": true
+    }
+  }
 }

@@ -1,7 +1,7 @@
 {
   "type": "guhs:knabbelpark",
   "biomes": "#guhs:has_structure/knabbelpark",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "spawn_overrides": {},
   "terrain_adaptation": "beard_thin",
   "start_pool": "guhs:knabbelpark/start",
@@ -18,5 +18,6 @@
     "guhs:knabbelpark/hertenkooi",
     "guhs:knabbelpark/parkwachter"
   ],
-  "pogingen": 8
+  "pogingen": 8,
+  "keep_clear": 84
 }

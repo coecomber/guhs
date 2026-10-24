@@ -1,35 +1,53 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.cave",
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            1.0,
+            0.6,
+            0.85
+          ],
+          "scale": 0.8
+        },
+        "probability": 0.006
+      }
+    ],
+    "minecraft:visual/fog_color": "#e890c8",
+    "minecraft:visual/sky_color": "#ffa6cc",
+    "minecraft:visual/water_fog_color": "#e0709a"
+  },
   "has_precipitation": false,
   "temperature": 0.8,
   "downfall": 0.0,
-  "creature_spawn_probability": 0.45,
   "effects": {
-    "sky_color": 16754380,
-    "fog_color": 15241416,
-    "water_color": 16230600,
-    "water_fog_color": 14708890,
-    "grass_color": 16234187,
-    "foliage_color": 16234187,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "ambient_sound": "minecraft:ambient.cave",
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          1.0,
-          0.6,
-          0.85
-        ],
-        "scale": 0.8
-      },
-      "probability": 0.006
-    }
+    "water_color": "#f7a8c8",
+    "foliage_color": "#f7b6cb",
+    "grass_color": "#f7b6cb"
   },
+  "creature_spawn_probability": 0.45,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -41,9 +59,7 @@
     "creature": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [],

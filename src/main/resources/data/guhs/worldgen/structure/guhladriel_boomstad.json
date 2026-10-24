@@ -1,7 +1,7 @@
 {
   "type": "guhs:ringh4_boomstad",
   "biomes": "#guhs:has_structure/guhladriel_boomstad",
-  "step": "surface_structures",
+  "step": "fluid_springs",
   "terrain_adaptation": "beard_thin",
   "spawn_overrides": {
     "monster": {
@@ -30,5 +30,7 @@
   ],
   "hoogte": 52,
   "voorkeur": "guhs:ringh4_voorkeur",
-  "anders": 8
+  "anders": 8,
+  "keep_clear": 97,
+  "voorrang": 280
 }

@@ -1,12 +1,26 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/mewtwo_rekje",
-    "r": "guhs:block/mewtwo_rekje",
-    "a": "guhs:block/mewtwo_buisje_roze",
-    "b": "guhs:block/mewtwo_buisje_paars",
-    "c": "guhs:block/mewtwo_buisje_lila"
+    "particle": {
+      "sprite": "guhs:block/mewtwo_rekje",
+      "force_translucent": true
+    },
+    "r": {
+      "sprite": "guhs:block/mewtwo_rekje",
+      "force_translucent": true
+    },
+    "a": {
+      "sprite": "guhs:block/mewtwo_buisje_roze",
+      "force_translucent": true
+    },
+    "b": {
+      "sprite": "guhs:block/mewtwo_buisje_paars",
+      "force_translucent": true
+    },
+    "c": {
+      "sprite": "guhs:block/mewtwo_buisje_lila",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

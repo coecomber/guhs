@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
     "vacht": "guhs:block/speelgoed_vacht",

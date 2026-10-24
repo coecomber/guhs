@@ -3,9 +3,7 @@
   "category": "redstone",
   "group": "vadshout_trapdoor",
   "key": {
-    "#": {
-      "item": "guhs:vadshout_planken"
-    }
+    "#": "guhs:vadshout_planken"
   },
   "pattern": [
     "###",

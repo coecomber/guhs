@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "guhs:pluisbolletje"
+          },
+          "weight": 6
+        },
+        {
+          "data": {
+            "Name": "guhs:pluiskussen"
+          },
+          "weight": 1
+        }
+      ]
+    }
+  }
+}
