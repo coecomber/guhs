@@ -1,12 +1,16 @@
 {
   "attributes": {
     "minecraft:audio/ambient_sounds": {
-      "loop": "minecraft:ambient.cave",
+      "loop": "guhs:onderwol.sfeer.belletjes",
       "mood": {
-        "sound": "minecraft:ambient.cave",
+        "sound": "guhs:onderwol.plink",
         "tick_delay": 6000,
         "block_search_extent": 8,
         "offset": 2.0
+      },
+      "additions": {
+        "sound": "guhs:onderwol.tingel",
+        "tick_chance": 0.001
       }
     },
     "minecraft:visual/fog_color": "#f2a0d8",
@@ -22,9 +26,9 @@
     ],
     "minecraft:audio/background_music": {
       "default": {
-        "sound": "minecraft:music.game",
-        "min_delay": 12000,
-        "max_delay": 24000
+        "sound": "guhs:onderwol.muziek.glitterspelonk",
+        "min_delay": 1200,
+        "max_delay": 4800
       },
       "creative": {
         "sound": "minecraft:music.creative",

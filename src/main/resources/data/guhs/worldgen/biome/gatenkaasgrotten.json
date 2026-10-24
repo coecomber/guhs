@@ -1,19 +1,23 @@
 {
   "attributes": {
     "minecraft:audio/ambient_sounds": {
-      "loop": "minecraft:ambient.cave",
+      "loop": "guhs:onderwol.sfeer.druppels",
       "mood": {
-        "sound": "minecraft:ambient.cave",
-        "tick_delay": 3000,
+        "sound": "guhs:onderwol.plink",
+        "tick_delay": 6000,
         "block_search_extent": 8,
         "offset": 2.0
+      },
+      "additions": {
+        "sound": "guhs:onderwol.giechel",
+        "tick_chance": 0.0009
       }
     },
     "minecraft:audio/background_music": {
       "default": {
-        "sound": "minecraft:music.game",
-        "min_delay": 12000,
-        "max_delay": 24000
+        "sound": "guhs:onderwol.muziek.gatenkaasgrotten",
+        "min_delay": 1200,
+        "max_delay": 4800
       },
       "creative": {
         "sound": "minecraft:music.creative",

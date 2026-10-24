@@ -29072,5 +29072,15 @@
   "block.guhs.knuffelnaad.lore": "The seam at the very bottom of the Guhmension. Nothing gets through, njeg.",
   "block.guhs.guhklei.lore": "Gives clay balls (they bake into bricks). Bake the block itself for pink terracotta.",
   "block.guhs.glitterrank_bes.lore": "Right-click to pick the glitter berries. They grow back on their own.",
-  "block.guhs.pluiskussen.lore": "Land on it softly: no fall damage and a little bounce."
+  "block.guhs.pluiskussen.lore": "Land on it softly: no fall damage and a little bounce.",
+  "block.guhs.roze_knuffelsteen": "Pink Plush Stone",
+  "block.guhs.viltkiezel": "Felt Gravel",
+  "subtitles.guhs.onderwol.plink": "Droplet plinks",
+  "subtitles.guhs.onderwol.tingel": "Crystal bell tinkles",
+  "subtitles.guhs.onderwol.giechel": "Distant guh giggles",
+  "subtitles.guhs.onderwol.snurkje": "Guh snores softly",
+  "subtitles.guhs.onderwol.sfeer.druppels": "Drops drip",
+  "subtitles.guhs.onderwol.sfeer.zacht": "Soft cave breeze",
+  "subtitles.guhs.onderwol.sfeer.slaap": "Guhs breathe softly",
+  "subtitles.guhs.onderwol.sfeer.belletjes": "Little bells echo"
 }

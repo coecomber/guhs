@@ -3,7 +3,7 @@
     "minecraft:audio/ambient_sounds": {
       "loop": "guhs:bloesemmeertje.ambient",
       "mood": {
-        "sound": "minecraft:ambient.cave",
+        "sound": "guhs:onderwol.plink",
         "tick_delay": 6000,
         "block_search_extent": 8,
         "offset": 2.0

@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarpetBlock;
+import net.minecraft.world.level.block.ColoredFallingBlock;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.SlabBlock;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.MapColor;
@@ -67,6 +70,9 @@ public final class OnderWolFeature {
     private static final DeferredRegister<MapCodec<? extends DensityFunction>> DICHTHEDEN = DeferredRegister.create(Registries.DENSITY_FUNCTION_TYPE, Guhs.MODID);
     public static final DeferredHolder<MapCodec<? extends DensityFunction>, MapCodec<GrottenFunctie>> GROTTEN =
             DICHTHEDEN.register("grotten", () -> GrottenFunctie.DATA_CODEC);
+    private static final DeferredRegister<MapCodec<? extends SurfaceRules.RuleSource>> REGELS = DeferredRegister.create(Registries.MATERIAL_RULE, Guhs.MODID);
+    public static final DeferredHolder<MapCodec<? extends SurfaceRules.RuleSource>, MapCodec<OnderWolLagen>> LAGEN_REGEL =
+            REGELS.register("onderwol_lagen", () -> OnderWolLagen.DATA_CODEC);
 
     public static final ResourceKey<Biome> GLITTERSPELONK = ResourceKey.create(Registries.BIOME, Guhs.id("glitterspelonk"));
     public static final ResourceKey<Biome> PLUISGROT = ResourceKey.create(Registries.BIOME, Guhs.id("pluisgrot"));
@@ -106,6 +112,13 @@ public final class OnderWolFeature {
     public static final DeferredBlock<WallBlock> VILTSTEEN_BAKSTENEN_MUUR = muur("viltsteen_bakstenen_muur", VILTSTEEN_BAKSTENEN);
     public static final DeferredBlock<StairBlock> VILTSTEEN_TEGELS_TRAP = trap("viltsteen_tegels_trap", VILTSTEEN_TEGELS);
     public static final DeferredBlock<SlabBlock> VILTSTEEN_TEGELS_PLAAT = plaat("viltsteen_tegels_plaat", VILTSTEEN_TEGELS);
+
+    /** Ronde 27: the pink veins and bands in the knuffelsteen layer. */
+    public static final DeferredBlock<Block> ROZE_KNUFFELSTEEN = BLOCKS.registerSimpleBlock("roze_knuffelsteen", () -> laag("knuffel"));
+    /** Ronde 27: soft gravel of little felt balls, along brooks and shores; falls like gravel. */
+    public static final DeferredBlock<ColoredFallingBlock> VILTKIEZEL = BLOCKS.registerBlock("viltkiezel",
+            p -> new ColoredFallingBlock(new ColorRGBA(0xFFD49AB0), p),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_PINK).sound(SoundType.WOOL));
 
     /** The bottom of the Guhmension (y 0-4): the seam of the world, unbreakable like bedrock. */
     public static final DeferredBlock<Block> KNUFFELNAAD = BLOCKS.registerSimpleBlock("knuffelnaad",
@@ -187,7 +200,7 @@ public final class OnderWolFeature {
         List<DeferredBlock<? extends Block>> l = new ArrayList<>(List.of(VILTSTEEN, GEPOLIJSTE_VILTSTEEN, VILTSTEEN_BAKSTENEN, VILTSTEEN_TEGELS,
                 GEBEITELDE_VILTSTEEN, VILTSTEEN_TRAP, VILTSTEEN_PLAAT, VILTSTEEN_MUUR, GEPOLIJSTE_VILTSTEEN_TRAP, GEPOLIJSTE_VILTSTEEN_PLAAT,
                 VILTSTEEN_BAKSTENEN_TRAP, VILTSTEEN_BAKSTENEN_PLAAT, VILTSTEEN_BAKSTENEN_MUUR, VILTSTEEN_TEGELS_TRAP, VILTSTEEN_TEGELS_PLAAT,
-                KNUFFELNAAD, GUHKLEI));
+                ROZE_KNUFFELSTEEN, VILTKIEZEL, KNUFFELNAAD, GUHKLEI));
         l.addAll(ERTSEN.values());
         l.addAll(List.of(VAHOEGIET_ERTS, LICHTMOSBLOK, LICHTMOS, GLITTERRANK, GLITTERRANK_BES, GLINSTERPADDENSTOEL, PLUISBOLLETJE, PLUISKUSSEN));
         BLOCK_ITEMS = List.copyOf(l);
@@ -216,6 +229,7 @@ public final class OnderWolFeature {
         ITEMS.register(modBus);
         FEATURES.register(modBus);
         DICHTHEDEN.register(modBus);
+        REGELS.register(modBus);
         NeoForge.EVENT_BUS.addListener(OnderWolFeature::onSpawnCheck);
         // the Superkompas tab "Biomes" (section Guhmension)
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "glitterspelonk");

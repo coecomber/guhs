@@ -24,6 +24,8 @@ import zipfile
 
 from features import knuffeldal_wereld as kw
 from features import onderwol_tex as tex
+from features import onderwol_tex2 as tex2
+from features import onderwol_geluid as geluid
 from features.barbecuether import stair_states, wall_multipart
 
 LAGEN = ["vilt", "knuffel", "kristal"]
@@ -34,6 +36,7 @@ VANILLA = {"kolenerts": "coal", "kopererts": "copper", "ijzererts": "iron", "gou
            "redstoneerts": "redstone", "diamanterts": "diamond", "smaragderts": "emerald"}
 ERTSEN = [f"{s}_{l}" for s in SOORTEN for l in LAGEN]
 VILT = ["viltsteen", "gepolijste_viltsteen", "viltsteen_bakstenen", "viltsteen_tegels", "gebeitelde_viltsteen"]
+NIEUW27 = ["roze_knuffelsteen", "viltkiezel"]   # (ronde 27: the pink veins of the knuffelsteen; soft gravel along brooks and shores)
 TRAPPEN = ["viltsteen", "gepolijste_viltsteen", "viltsteen_bakstenen", "viltsteen_tegels"]
 MUREN = ["viltsteen", "viltsteen_bakstenen"]
 PLANTEN = ["glitterrank", "glitterrank_bes", "glinsterpaddenstoel", "pluisbolletje"]
@@ -42,6 +45,12 @@ NOISES = {
     "onderwol_golf": {"firstOctave": -6, "amplitudes": [1.0, 0.5]},       # the waves of the layer borders (2D)
     "onderwol_glitter": {"firstOctave": -6, "amplitudes": [1.0, 0.5]},    # where the Glitterspelonk is
     "onderwol_pluis": {"firstOctave": -6, "amplitudes": [1.0, 0.5]},      # where the Pluisgrot is
+    # (ronde 27, OnderWolLagen) the knuffelsteen's pink veins (3D), its bubbles of wool (3D), the bare patches of viltsteen on low
+    # ground and where the pastel stripes run (2D)
+    "onderwol_roze": {"firstOctave": -5, "amplitudes": [1.0, 0.5]},
+    "onderwol_wolbel": {"firstOctave": -3, "amplitudes": [1.0]},
+    "onderwol_kaal": {"firstOctave": -4, "amplitudes": [1.0, 0.5, 0.25]},
+    "onderwol_streep": {"firstOctave": -7, "amplitudes": [1.0]},
 }
 # the cave biomes: noise threshold (above it the biome), and how far depth/continentalness are pushed there
 GLITTER_VANAF, PLUIS_VANAF = 0.28, 0.30
@@ -66,7 +75,7 @@ def g(*names):
 # =====================================================================================================================
 def blocks_and_items(h):
     A, w = h.A, h.w
-    for b in VILT + ["knuffelnaad", "guhklei", "lichtmosblok", "pluiskussen", "vahoegiet_erts"] + [e for e in ERTSEN if not e.startswith("redstoneerts")]:
+    for b in VILT + NIEUW27 + ["knuffelnaad", "guhklei", "lichtmosblok", "pluiskussen", "vahoegiet_erts"] + [e for e in ERTSEN if not e.startswith("redstoneerts")]:
         h.simple_block(b)
     for e in [e for e in ERTSEN if e.startswith("redstoneerts")]:
         w(f"{A}/models/block/{e}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": f"guhs:block/{e}"}})
@@ -123,7 +132,7 @@ def loot(h):
 
     def item(name, fns):
         return {"type": "minecraft:item", "name": name, "functions": fns}
-    for b in VILT + ["lichtmosblok", "lichtmos", "glinsterpaddenstoel", "pluiskussen"] + [f"{n}_trap" for n in TRAPPEN] + [f"{n}_muur" for n in MUREN]:
+    for b in VILT + NIEUW27 + ["lichtmosblok", "lichtmos", "glinsterpaddenstoel", "pluiskussen"] + [f"{n}_trap" for n in TRAPPEN] + [f"{n}_muur" for n in MUREN]:
         h.self_drop(b)
     for n in TRAPPEN:
         w(f"{D}/loot_table/blocks/{n}_plaat.json", {"type": "minecraft:block", "pools": [{"rolls": 1, "entries": [
@@ -165,7 +174,8 @@ def loot(h):
 def tags(h):
     stenen = VILT + [f"{n}_trap" for n in TRAPPEN] + [f"{n}_plaat" for n in TRAPPEN] + [f"{n}_muur" for n in MUREN]
     h.add_tag("minecraft/tags/block/mineable/pickaxe", g(*stenen, *ERTSEN, "vahoegiet_erts"))
-    h.add_tag("minecraft/tags/block/mineable/shovel", g("guhklei"))
+    h.add_tag("minecraft/tags/block/mineable/shovel", g("guhklei", "viltkiezel"))
+    h.add_tag("minecraft/tags/block/mineable/pickaxe", g("roze_knuffelsteen"))
     h.add_tag("minecraft/tags/block/mineable/hoe", g("lichtmosblok", "lichtmos", "pluiskussen"))
     h.add_tag("minecraft/tags/block/needs_stone_tool", g(*[f"{s}_{l}" for s in ("ijzererts", "kopererts", "lapiserts") for l in LAGEN]))
     h.add_tag("minecraft/tags/block/needs_iron_tool", g(*[f"{s}_{l}" for s in ("gouderts", "redstoneerts", "diamanterts", "smaragderts", "vadserts")
@@ -180,7 +190,8 @@ def tags(h):
             h.add_tag(f"c/tags/{kind}/ores/{mc}", g(*[f"{soort}_{l}" for l in LAGEN]))
         h.add_tag(f"c/tags/{kind}/ores", g(*ERTSEN, "vahoegiet_erts"))
     # the rock of the layers (what ores, springs, geodes and the cave plants grow into)
-    h.add_tag("guhs/tags/block/onderwol/laagsteen", ["minecraft:pink_wool", "guhs:viltsteen", "guhs:knuffelsteen", "guhs:guh_kristalsteen"])
+    h.add_tag("guhs/tags/block/onderwol/laagsteen", ["minecraft:pink_wool", "guhs:viltsteen", "guhs:knuffelsteen", "guhs:roze_knuffelsteen",
+                                                    "guhs:guh_kristalsteen"])
     # (1.7.0 extra: a golfballetje also pays for a go in the grijpmachine, like the other minigame coins)
     h.add_tag("guhs/tags/item/knus/grijptickets", ["guhs:golfballetje"])
 
@@ -237,6 +248,7 @@ NAMEN = {  # id: (Dutch, English)
     "glitterrank": ("Glitterrank", "Glitter Vine"), "glitterrank_bes": ("Glitterrank met bessen", "Glitter Vine with Berries"),
     "glinsterpaddenstoel": ("Glinsterpaddenstoeltje", "Sparkle Mushroom"), "pluisbolletje": ("Pluisbolletje", "Fluff Puff"),
     "pluiskussen": ("Pluiskussen", "Fluff Cushion"),
+    "roze_knuffelsteen": ("Roze knuffelsteen", "Pink Plush Stone"), "viltkiezel": ("Viltkiezel", "Felt Gravel"),
 }
 ERTSNAAM = {"kolenerts": ("Kolenerts", "Coal Ore"), "kopererts": ("Kopererts", "Copper Ore"), "ijzererts": ("IJzererts", "Iron Ore"),
             "gouderts": ("Gouderts", "Gold Ore"), "lapiserts": ("Lapis-lazulierts", "Lapis Lazuli Ore"), "redstoneerts": ("Redstone-erts", "Redstone Ore"),
@@ -286,30 +298,12 @@ def _als(cond, rule):
     return {"type": "minecraft:condition", "if_true": cond, "then_run": rule}
 
 
-GOLVEN = [(0.42, 99.0, 4), (0.16, 0.42, 2), (-0.16, 0.16, 0), (-0.42, -0.16, -2), (-99.0, -0.42, -4)]
-
-
-def _grens(y, blok):
-    """Everything below the (waving, speckled) border at y becomes blok."""
-    regels = []
-    for lo, hi, d in GOLVEN:
-        regels.append(_als({"type": "minecraft:noise_threshold", "noise": "guhs:onderwol_golf", "min_threshold": lo, "max_threshold": hi},
-                           _als(_vg(f"onderwol_laag_{y}", y + d - 2, y + d + 1), _blok(blok))))
-    return {"type": "minecraft:sequence", "sequence": regels}
-
-
 def lagen_regel():
-    """The layers: only below the preliminary surface (cave floors stay stone, the surface keeps its biome rules) and not in
-    the Gatenkaasgrotten (their rock is gatenkaas)."""
-    lagen = {"type": "minecraft:sequence", "sequence": [
-        _als(_vg("onderwol_naad", 3, 5), _blok("guhs:knuffelnaad")),
-        _grens(25, "guhs:guh_kristalsteen"),
-        _grens(45, "guhs:knuffelsteen"),
-        _grens(64, "guhs:viltsteen"),
-    ]}
-    onder = {"type": "minecraft:not", "invert": {"type": "minecraft:above_preliminary_surface"}}
+    """The layers (ronde 27): Java's guhs:onderwol_lagen (feature/onderwol/OnderWolLagen) measures from each column's real top,
+    lets the borders follow the land, keeps the top blocks for the biome and adds the knuffelsteen's pink; not in the
+    Gatenkaasgrotten (their rock is gatenkaas). The knuffelnaad at the very bottom always."""
     geen_gatenkaas = {"type": "minecraft:not", "invert": {"type": "minecraft:biome", "biome_is": ["guhs:gatenkaasgrotten"]}}
-    return _als(onder, _als(geen_gatenkaas, lagen)), _als(_vg("onderwol_naad_altijd", 0, 1), _blok("guhs:knuffelnaad"))
+    return _als(geen_gatenkaas, {"type": "guhs:onderwol_lagen"}), _als(_vg("onderwol_naad_altijd", 0, 1), _blok("guhs:knuffelnaad"))
 
 
 def _noise(name, xz=1.0, y=1.0):
@@ -370,8 +364,10 @@ def router(d):
     vast = _max(gedeeld, {"type": "minecraft:y_clamped_gradient", "from_y": 29, "to_y": 31, "from_value": 1.0, "to_value": -1.0})
     # (guhs:grotten only marks the term: the quick height probe of the searches, ZoekHoogte, leaves it out)
     final["input"] = _min(binnen, {"type": "guhs:grotten", "argument": grotten(vast)})
-    # the preliminary surface is the real terrain now (was a constant): the layer rule only works below it
-    r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface", "density": terrein["argument"],
+    # the preliminary surface is the real terrain now (was a constant), with the biomes3 regions' own terrain model laid over
+    # it (ronde 27: the Klaterdal's floors lie far below the plain terrain); OnderWolLagen lets the layer borders follow it
+    r["preliminary_surface_level"] = {"type": "minecraft:find_top_surface",
+                                      "density": {"type": "guhs:bio_terrein", "input": terrein["argument"], "ruis": final["ruis"]},
                                       "upper_bound": 256, "lower_bound": 0, "cell_height": 4}
     if "guhs:onderwol_glitter" not in json.dumps(r["depth"]):   # (idempotent)
         # the cave biomes: deep inside the rock (as the Gatenkaasgrotten' "deep"), in their own band of height, where their noise
@@ -392,9 +388,10 @@ def router(d):
 def surface(d):
     rules = d["surface_rule"]["sequence"]
     lagen, naad = lagen_regel()
-    if lagen not in rules:
-        rules.insert(0, lagen)
-        rules.insert(0, naad)
+    # (idempotent; also takes out the first test builds' rule, the y borders under the preliminary surface)
+    rules[:] = [r for r in rules if not any(m in json.dumps(r) for m in ("onderwol_laag_", "guhs:onderwol_lagen", "guhs:onderwol_naad"))]
+    rules.insert(0, lagen)
+    rules.insert(0, naad)
 
 
 def biome_source(d):
@@ -623,12 +620,14 @@ def selfcheck(h):
 
 def build(h):
     tex.textures(h)
+    tex2.textures(h)   # (ronde 27-28: the new terrain and cave blocks)
     blocks_and_items(h)
     loot(h)
     tags(h)
     recipes(h)
     texts(h)
     worldgen(h)
+    geluid.build(h)   # (ronde 28: no scary cave sounds in the Guhmension; every cave biome its own cheerful music)
     selfcheck(h)
 
 
@@ -691,7 +690,7 @@ def _direct():
     build(h)
     # the 26.1 item definitions (mc26.py makes these in a full run)
     items = VILT + [f"{n}_trap" for n in TRAPPEN] + [f"{n}_plaat" for n in TRAPPEN] + [f"{n}_muur" for n in MUREN] + \
-        ["knuffelnaad", "guhklei", *ERTSEN, "vahoegiet_erts", "lichtmosblok", "lichtmos", *PLANTEN, "pluiskussen", "vahoegiet", "glitterbes"]
+        [*NIEUW27, "knuffelnaad", "guhklei", *ERTSEN, "vahoegiet_erts", "lichtmosblok", "lichtmos", *PLANTEN, "pluiskussen", "vahoegiet", "glitterbes"]
     for i in items:
         w(f"{A}/items/{i}.json", {"model": {"type": "minecraft:model", "model": f"guhs:item/{i}"}})
     for taal, teksten in (("nl_nl", NL), ("en_us", EN)):

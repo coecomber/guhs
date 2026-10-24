@@ -6000,5 +6000,189 @@
       }
     ],
     "subtitle": "subtitles.guhs.knabbelvelden.sfeer"
+  },
+  "onderwol.muziek.gatenkaasgrotten": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_gatenkaasgrotten",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.guh_kristalmijn": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_guh_kristalmijn",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.glitterspelonk": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_glitterspelonk",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.pluisgrot": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_pluisgrot",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.kristalpegelgrot": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_kristalpegelgrot",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.knuffelwortelgrot": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_knuffelwortelgrot",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.slaapgrot": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_slaapgrot",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.muziek.belletjesgrot": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/muziek_belletjesgrot",
+        "stream": true,
+        "volume": 0.6
+      }
+    ]
+  },
+  "onderwol.sfeer.druppels": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/sfeer_druppels",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.sfeer.druppels"
+  },
+  "onderwol.sfeer.zacht": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/sfeer_zacht",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.sfeer.zacht"
+  },
+  "onderwol.sfeer.slaap": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/sfeer_slaap",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.sfeer.slaap"
+  },
+  "onderwol.sfeer.belletjes": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/sfeer_belletjes",
+        "stream": true,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.sfeer.belletjes"
+  },
+  "onderwol.plink": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/plink1",
+        "volume": 0.55
+      },
+      {
+        "name": "guhs:onderwol/plink2",
+        "volume": 0.55
+      },
+      {
+        "name": "guhs:onderwol/plink3",
+        "volume": 0.55
+      },
+      {
+        "name": "guhs:onderwol/plink4",
+        "volume": 0.55
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.plink"
+  },
+  "onderwol.tingel": {
+    "sounds": [
+      {
+        "name": "guhs:onderwol/tingel1",
+        "volume": 0.5
+      },
+      {
+        "name": "guhs:onderwol/tingel2",
+        "volume": 0.5
+      },
+      {
+        "name": "guhs:onderwol/tingel3",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.tingel"
+  },
+  "onderwol.giechel": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.3
+      },
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.25
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.giechel"
+  },
+  "onderwol.snurkje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sleep",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.3
+      },
+      {
+        "name": "minecraft:entity.cat.purr",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.25
+      }
+    ],
+    "subtitle": "subtitles.guhs.onderwol.snurkje"
   }
 }
