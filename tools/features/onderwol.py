@@ -385,16 +385,16 @@ def _hoogte(lo, hi, piek=None):
 
 # ore: (layers, size, count, lowest y, highest y, triangular?, discard chance on air)
 ERTS_PLAATSING = {
-    "kolenerts": (["vilt", "knuffel"], 17, 18, 44, 72, True, 0.0),
-    "kopererts": (["vilt", "knuffel"], 12, 12, 38, 62, True, 0.0),
-    "ijzererts": (["vilt", "knuffel", "kristal"], 9, 16, 20, 60, True, 0.0),
+    "kolenerts": (["vilt", "knuffel"], 14, 7, 44, 72, True, 0.0),
+    "kopererts": (["vilt", "knuffel"], 10, 6, 38, 62, True, 0.0),
+    "ijzererts": (["vilt", "knuffel", "kristal"], 9, 9, 20, 60, True, 0.0),
     "lapiserts": (["knuffel", "kristal"], 7, 4, 16, 44, True, 0.0),
     "gouderts": (["knuffel", "kristal"], 9, 6, 5, 36, True, 0.0),
     "redstoneerts": (["kristal"], 8, 6, 5, 20, False, 0.0),
     "diamanterts": (["kristal"], 6, 5, 5, 16, False, 0.5),
     "smaragderts": (["vilt", "knuffel"], 3, 5, 30, 64, False, 0.0),
     "vadserts": (["knuffel", "kristal"], 6, 8, 8, 34, True, 0.0),
-    "kaasknabbelerts": (["vilt", "knuffel"], 12, 10, 40, 66, True, 0.0),
+    "kaasknabbelerts": (["vilt", "knuffel"], 10, 6, 40, 66, True, 0.0),
     "kaaskorrelerts": (["knuffel", "kristal"], 8, 6, 5, 24, True, 0.0),
     "pigmenterts": (["knuffel", "kristal"], 8, 7, 18, 48, True, 0.0),
 }
@@ -416,7 +416,7 @@ def features(h):
     w(f"{wg}/configured_feature/onderwol_guhklei.json", {"type": "minecraft:ore", "config": {"size": 33, "discard_chance_on_air_exposure": 0.0, "targets": [
         {"target": {"predicate_type": "minecraft:block_match", "block": LAAGSTEEN[l]}, "state": {"Name": "guhs:guhklei"}} for l in ("vilt", "knuffel")]}})
     w(f"{wg}/placed_feature/onderwol_guhklei.json", {"feature": "guhs:onderwol_guhklei", "placement": [
-        {"type": "minecraft:count", "count": 3}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(26, 62)},
+        {"type": "minecraft:count", "count": 2}, {"type": "minecraft:in_square"}, {"type": "minecraft:height_range", "height": _hoogte(26, 62)},
         {"type": "minecraft:biome"}]})
     w(f"{wg}/configured_feature/onderwol_vahoegiet.json", {"type": "minecraft:ore", "config": {"size": 3, "discard_chance_on_air_exposure": 0.3, "targets": [
         {"target": {"predicate_type": "minecraft:block_match", "block": LAAGSTEEN["kristal"]}, "state": {"Name": "guhs:vahoegiet_erts"}}]}})
