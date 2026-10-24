@@ -819,7 +819,7 @@ LANG = {
     "quest.guhs.grillguh.klaar2": "Hier: mijn geheime grillrecept (daarmee maak je zelf Aanmaakblokjes) en een koksmuts voor je guh. En kom maar eens langs in mijn winkeltje!",
     "quest.guhs.grillguh.recept_weer": "Njeg, ben je mijn recept kwijt? Hier, ik had nog een kopietje. Niet aan de Mika's laten zien!",
     "quest.guhs.grillguh.mika_drop": "De Mika laat een gestolen Aanmaakblokje vallen!",
-    "quest.guhs.grillguh.tip0": "Door het portaal is het heet, heel heet. Kaasfrituursaus brandt, dus niet in springen, vads!",
+    "quest.guhs.grillguh.tip0": "Door het portaal is het heet, heel heet. Kaasfrituursaus is dik en kleverig: je zwemt er heel langzaam doorheen, dus kijk uit waar je springt, vads!",
     "quest.guhs.grillguh.tip1": "In het Satébos groeien reuzensatéspiezen, in het Worstenwoud staan braadworsten zo groot als bomen. VAHOEG!",
     "quest.guhs.grillguh.tip2": "Een bed in de Barbecuether? Njeg! Veel te warm om te slapen.",
     "quest.guhs.grillguh.tip3": "Eén stap daar is acht stappen hier. Handig om snel te reizen, als je tegen de hitte kunt!",

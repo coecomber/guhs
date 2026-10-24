@@ -10,11 +10,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -31,8 +29,8 @@ import nl.juiced.guhs.registry.ModFluids;
 
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
- * Kaasfrituursaus: boiling cheese frying sauce, the lava of the Barbecuether. It glows, burns you like lava, sets things
- * on fire, flows faster in the heat of the Barbecuether (like lava in the Nether) and fills the big "lava seas".
+ * Kaasfrituursaus: cheese frying sauce, the lava of the Barbecuether. It glows, flows faster in the heat of the Barbecuether
+ * (like lava in the Nether) and fills the big "lava seas". 1.7.0: harmless (no burning, no fires), see {@link #burn}.
  * <ul>
  *   <li>with water or kaassaus next to it: a source becomes grillkool, flowing sauce becomes houtskoolsteen
  *       (like lava + water = obsidian / cobblestone)</li>
@@ -104,52 +102,6 @@ public final class Kaasfrituursaus {
                 .tickRate(30).slopeFindDistance(2).levelDecreasePerBlock(2).explosionResistance(100f);
     }
 
-    /** What lava does, for our sauce: faster in the heat, sets things on fire, pops and bubbles. */
-    private static void lavaRandomTick(ServerLevel level, BlockPos pos) {
-        if (!(level.getGameRules().get(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER) != 0)) {
-            return;
-        }
-        RandomSource random = level.getRandom();
-        int i = random.nextInt(3);
-        if (i > 0) {
-            BlockPos p = pos;
-            for (int j = 0; j < i; j++) {
-                p = p.offset(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                if (!level.isLoaded(p)) {
-                    return;
-                }
-                BlockState state = level.getBlockState(p);
-                if (state.isAir()) {
-                    for (Direction d : Direction.values()) {
-                        if (flammable(level, p.relative(d), d.getOpposite())) {
-                            level.setBlockAndUpdate(p, BaseFireBlock.getState(level, p));
-                            return;
-                        }
-                    }
-                } else if (state.blocksMotion()) {
-                    return;
-                }
-            }
-        } else {
-            for (int k = 0; k < 3; k++) {
-                BlockPos p = pos.offset(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
-                if (!level.isLoaded(p)) {
-                    return;
-                }
-                if (level.isEmptyBlock(p.above()) && flammable(level, p, Direction.UP)) {
-                    level.setBlockAndUpdate(p.above(), BaseFireBlock.getState(level, p.above()));
-                }
-            }
-        }
-    }
-
-    private static boolean flammable(LevelReader level, BlockPos pos, Direction face) {
-        if (pos.getY() >= level.getMinY() && pos.getY() < level.getMaxY() + 1 && !level.hasChunkAt(pos)) {
-            return false;
-        }
-        return level.getBlockState(pos).ignitedByLava(level, pos, face);
-    }
-
     private static void lavaAnimateTick(Level level, BlockPos pos, RandomSource random) {
         BlockPos above = pos.above();
         if (level.getBlockState(above).isAir() && !level.getBlockState(above).isSolidRender()) {
@@ -200,7 +152,6 @@ public final class Kaasfrituursaus {
 
         @Override
         protected void randomTick(ServerLevel level, BlockPos pos, FluidState state, RandomSource random) {
-            lavaRandomTick(level, pos);
         }
 
         @Override
@@ -249,7 +200,6 @@ public final class Kaasfrituursaus {
 
         @Override
         protected void randomTick(ServerLevel level, BlockPos pos, FluidState state, RandomSource random) {
-            lavaRandomTick(level, pos);
         }
 
         @Override
@@ -298,17 +248,14 @@ public final class Kaasfrituursaus {
         }
     }
 
-    /** What the sauce does to you: like lava (on fire for 15 s, 4 damage), unless you're fire resistant. */
+    /**
+     * What the sauce does to you. 1.7.0 (the user: harmless): nothing burns any more, you just wade through it thick and slow
+     * (the fluid type's lava-like movement) and it breaks a fall like lava does. Until 1.6: on fire for 15 s, 4 damage.
+     */
     public static void burn(Entity entity) {
-        if (entity instanceof ItemEntity item) {
-            if (!item.fireImmune() && item.tickCount % 10 == 0) {
-                item.hurtOrSimulate(item.damageSources().lava(), 4f);
-            }
-            return;
+        if (!(entity instanceof ItemEntity)) {
+            entity.fallDistance *= 0.5F;
         }
-        entity.lavaIgnite();   // (26.1: lavaHurt no longer sets you on fire; 1.21.1 lavaHurt did both)
-        entity.lavaHurt();
-        entity.fallDistance *= 0.5F;
     }
 
     // --- mixing with water / kaassaus / coal --------------------------------------------------------------------------
