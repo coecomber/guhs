@@ -29,6 +29,32 @@ public final class CameraFeature {
 
     public static void register(IEventBus modBus) {
         ITEMS.register(modBus);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(CameraFeature::onDimensie);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(CameraFeature::onLogin);
+    }
+
+    /** 1.7.0: whoever comes into the safari park without a camera gets a new one (lost, sold, left in a chest...). */
+    private static void onDimensie(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getTo().equals(nl.juiced.guhs.feature.safari.Safari.DIM) && event.getEntity() instanceof net.minecraft.server.level.ServerPlayer p) {
+            geefCamera(p);
+        }
+    }
+
+    private static void onLogin(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer p && p.level().dimension().equals(nl.juiced.guhs.feature.safari.Safari.DIM)) {
+            geefCamera(p);
+        }
+    }
+
+    static void geefCamera(net.minecraft.server.level.ServerPlayer p) {
+        if (p.isSpectator() || p.getInventory().hasAnyMatching(s -> s.getItem() instanceof SafariCameraItem)) {
+            return;
+        }
+        ItemStack camera = new ItemStack(CAMERA.get());
+        if (!p.getInventory().add(camera)) {
+            p.drop(camera, false);
+        }
+        p.sendSystemMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.safari.camera.nieuw"));
     }
 
     public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {

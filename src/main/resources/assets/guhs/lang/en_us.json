@@ -29173,5 +29173,6 @@
   "item.guhs.opgepakte_villager.ruilen": "%s trades",
   "item.guhs.opgepakte_villager.hint": "Right-click a block to put them down",
   "gui.guhs.villager_oppakken.kan_niet": "You can't pick up this villager, njeg.",
-  "gui.guhs.villager_oppakken.handelt": "Just a moment: this villager is busy trading!"
+  "gui.guhs.villager_oppakken.handelt": "Just a moment: this villager is busy trading!",
+  "gui.guhs.safari.camera.nieuw": "You had no safari camera with you, so the rangers give you a new one. Click click, vahoeg!"
 }

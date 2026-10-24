@@ -29173,5 +29173,6 @@
   "item.guhs.opgepakte_villager.ruilen": "%s ruilaanbiedingen",
   "item.guhs.opgepakte_villager.hint": "Rechtsklik op een blok om hem neer te zetten",
   "gui.guhs.villager_oppakken.kan_niet": "Deze villager kun je niet oppakken, njeg.",
-  "gui.guhs.villager_oppakken.handelt": "Even geduld: deze villager is aan het handelen!"
+  "gui.guhs.villager_oppakken.handelt": "Even geduld: deze villager is aan het handelen!",
+  "gui.guhs.safari.camera.nieuw": "Je had geen safaricamera bij je, dus de rangers geven je een nieuwe. Klik klik, vahoeg!"
 }
