@@ -100,7 +100,7 @@ public class NieuwTerreinGameTests {
     }
 
     /**
-     * The search itself, in a real Guhmension generator (seed 20261001) with an "alleen_nieuw" copy of the guaranteed Guhdisco
+     * The search itself, in a real Guhmension generator (seed 20261001) with an "alleen_nieuw" copy of the guaranteed Guhbibliotheek
      * set: in a new world it finds exactly the spot of the old set; when that spot exists already it takes another one in
      * new terrain; the saved spot stays the answer whatever happens to the terrain; and when nothing is new anywhere, nothing
      * is placed (and nothing saved).
@@ -123,7 +123,7 @@ public class NieuwTerreinGameTests {
         NoiseBasedChunkGenerator generator = new NoiseBasedChunkGenerator(biomes, settings);
         LevelHeightAccessor height = LevelHeightAccessor.create(settings.value().noiseSettings().minY(), settings.value().noiseSettings().height());
         var sets = access.lookupOrThrow(Registries.STRUCTURE_SET);
-        Identifier oudId = Guhs.id("guh_disco_gegarandeerd");
+        Identifier oudId = Guhs.id("guhbibliotheek_gegarandeerd");   // (1.7.0: was the Guhdisco, which has no guaranteed copy any more)
         StructureSet oudSet = sets.getValue(oudId);
         GegarandeerdPlacement oud = (GegarandeerdPlacement) oudSet.placement();
 
@@ -134,7 +134,7 @@ public class NieuwTerreinGameTests {
         BouwRuimte.remember(randomA, stateA);
         GegarandeerdPlacement.onthoud(level, stateA, seed, generator, height);
         ChunkPos s1 = oud.plek(stateA, seed).orElse(null);
-        helper.assertTrue(s1 != null, "the old Guhdisco set has its spot");
+        helper.assertTrue(s1 != null, "the old Guhbibliotheek set has its spot");
 
         // the same set, "alleen_nieuw", in a state of its own (every other set as it is)
         GegarandeerdPlacement nieuw = new GegarandeerdPlacement(Vec3i.ZERO, StructurePlacement.FrequencyReductionMethod.DEFAULT, 1f, oud.zout(), Optional.empty(),

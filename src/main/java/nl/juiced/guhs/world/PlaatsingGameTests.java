@@ -40,7 +40,8 @@ public class PlaatsingGameTests {
     static final List<String> MINIGAMES = List.of("guh_circuit", "guhdoolhof", "guh_golfbaan", "guh_racebaan", "knabbelspelen", "mika_mep_hal",
             "vadsig_eetfestijn", "guh_beauty_theater", "guh_disco", "guh_kermis", "verstopguh_huis", "guhvis_vijver", "sjoelhuisje",
             "knabbelkatapult", "guh_sterrenwacht", "ballonfestival", "knuffelbad");
-    static final List<String> LANDMARKS = List.of("guh_kasteel", "guh_village", "guhbibliotheek", "kaasmijn", "hemelkapelletje", "zwevende_eilanden");
+    /** (1.7.0: the minigames and the guh_village have no guaranteed copy any more; the rare landmarks keep theirs.) */
+    static final List<String> LANDMARKS = List.of("guh_kasteel", "guhbibliotheek", "kaasmijn", "hemelkapelletje", "zwevende_eilanden");
     /** guhpixel: the Guh-internetcafe and the Reisbureau, in a ring outside the old ones (tools/features/guhpixel_lib.py gegarandeerd). */
     static final List<String> GUHPIXEL = List.of("internetcafe", "reisbureau");
 
@@ -57,11 +58,13 @@ public class PlaatsingGameTests {
     /** The sets and the story tag load with the 1.1.2 numbers. */
     @GuhTest(template = EMPTY, batch = "plaatsing")
     public static void plaatsingSets(GameTestHelper helper) {
+        var sets = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET);
         for (String name : MINIGAMES) {
-            helper.assertTrue(set(helper, name + "_gegarandeerd").placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 700
-                    && g.maxAfstand() == 1500, name + ": a guaranteed copy 700-1500 blocks from spawn");
+            // (1.7.0: no guaranteed copy any more, the normal set is common enough)
+            helper.assertTrue(!sets.containsKey(Guhs.id(name + "_gegarandeerd")), name + ": no guaranteed copy");
             helper.assertTrue(spacing(helper, name) <= 32, name + ": its normal set at most 32 chunks apart");
         }
+        helper.assertTrue(!sets.containsKey(Guhs.id("guh_village_gegarandeerd")) && spacing(helper, "guh_village") <= 34, "guh_village: no guaranteed copy");
         for (String name : LANDMARKS) {
             helper.assertTrue(set(helper, name + "_gegarandeerd").placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 1500
                     && g.maxAfstand() == 2500, name + ": a guaranteed copy 1500-2500 blocks from spawn");
@@ -173,8 +176,8 @@ public class PlaatsingGameTests {
         LOGGER.info("Plaatsing: {} guaranteed ({}), {} story starts within 900 blocks, problems: {}", found, report, stories, fouten);
         // (guhpixel: + the Guh-internetcafe and the Reisbureau; bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie
         // that is no minigame, landmark or guhpixel building; verhalenpad snuffel-steiger: + the steigerhuisje; 1.4.2: + Het Knabbelpark;
-        // 1.6.0 F1b: + the safari busstation)
-        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + GUHPIXEL.size() + 4, "every guaranteed set is in the Guhmension: " + found);
+        // 1.6.0 F1b: + the safari busstation; 1.7.0: the minigames and the guh_village have none any more)
+        helper.assertTrue(found == LANDMARKS.size() + GUHPIXEL.size() + 4, "every guaranteed set is in the Guhmension: " + found);
         helper.assertTrue(fouten.isEmpty(), "guaranteed copies in their ring, no story near spawn: " + fouten);
         helper.succeed();
     }
