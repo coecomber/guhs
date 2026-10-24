@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.6.5 — fix — Minecraft 26.1.2
+
+- **Guaranteed buildings stay where they are, for good:** every world now remembers the spot of every guaranteed building (the one copy per world that compasses and /locate point to), not only the newest ones. Nothing moves in this version; it makes sure that a later update that changes the land cannot move them or build a second copy. Server operators: `/guhs bouwcheck gegarandeerd` shows "plek bewaard" for every building and "AllesBewaard: ja" once all spots are saved.
+
 ## 1.6.4 — Minecraft 26.1.2
 
 - **Put the family together on a home sign (verblijfsbord):** when you put a sign down, a dialog lets you choose the family: a parent or a little one for each of the four animals, and for species where males and females look different (like the lion's mane, the elephant's tusks or the giraffe's horns) also a male or a female. At least one parent. Change it later with "Familie samenstellen..." on the Family tab: only the animals that change are swapped (with a puff) and their names stay; there are always four.
