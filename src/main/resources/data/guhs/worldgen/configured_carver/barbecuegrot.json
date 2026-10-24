@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:nether_cave",
+  "type": "guhs:sausgrot",
   "config": {
     "probability": 0.2,
     "y": {
