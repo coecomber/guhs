@@ -174,6 +174,20 @@ public final class VermomdeGuh {
             if (er.isEmpty()) {
                 zet(level, i, pos);
             }
+            ruimOp(level, pos);
+        }
+    }
+
+    /**
+     * 1.7.0 fix: tall grass (or a flower) on his spot catches the click before it reaches him, and in the park nothing may be
+     * broken: plants on his spot and just above it go.
+     */
+    static void ruimOp(ServerLevel level, BlockPos pos) {
+        for (BlockPos p : new BlockPos[]{pos, pos.above()}) {
+            net.minecraft.world.level.block.state.BlockState s = level.getBlockState(p);
+            if (!s.isAir() && s.canBeReplaced() && s.getFluidState().isEmpty()) {
+                level.removeBlock(p, false);
+            }
         }
     }
 
@@ -183,6 +197,7 @@ public final class VermomdeGuh {
             return null;
         }
         guh.setVariant(GuhVariant.NORMAL);
+        ruimOp(level, pos);
         guh.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0f);
         guh.wear(PLEKKEN.get(i).pak());
         guh.setNoAi(true);

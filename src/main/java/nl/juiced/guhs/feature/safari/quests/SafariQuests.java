@@ -204,6 +204,18 @@ public final class SafariQuests {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }
+        // (1.7.0 fix: a click on a plant right in front of a quest animal is meant for the animal)
+        else if (p.level().getBlockState(event.getPos()).canBeReplaced()) {
+            net.minecraft.world.phys.AABB rond = new net.minecraft.world.phys.AABB(event.getPos()).inflate(0.75);
+            for (net.minecraft.world.entity.Entity e : p.level().getEntities((net.minecraft.world.entity.Entity) null, rond,
+                    e -> e.entityTags().contains(VermomdeGuh.TAG) || e.entityTags().contains(VaheOlifant.TAG))) {
+                if (klik(p, e)) {
+                    event.setCanceled(true);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    return;
+                }
+            }
+        }
     }
 
     private static void onTick(ServerTickEvent.Post event) {
