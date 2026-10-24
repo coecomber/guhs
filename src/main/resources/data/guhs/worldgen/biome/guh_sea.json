@@ -78,7 +78,9 @@
     ],
     [
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee"
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_pastelwol",
+      "guhs:onderwol_viltkiezel"
     ],
     [],
     [],
@@ -106,7 +108,8 @@
     [
       "guhs:guhbloesem_rare",
       "guhs:guh_flowers",
-      "guhs:roze_gras"
+      "guhs:roze_gras",
+      "guhs:onderwol_druppels"
     ],
     []
   ]

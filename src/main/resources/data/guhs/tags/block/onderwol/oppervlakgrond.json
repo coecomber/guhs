@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pink_wool",
+    "minecraft:magenta_wool",
+    "minecraft:white_wool",
+    "guhs:knuffelblok_perzik",
+    "guhs:block_of_kaasknabbels",
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:sand",
+    "minecraft:clay",
+    "minecraft:pink_concrete_powder",
+    "minecraft:pink_terracotta",
+    "minecraft:magenta_terracotta",
+    "guhs:knuffelgras",
+    "guhs:vadsmos",
+    "guhs:viltkiezel",
+    "guhs:viltsteen"
+  ]
+}

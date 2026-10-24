@@ -1,0 +1,22 @@
+{
+  "feature": "guhs:onderwol_paddenstoelenkring",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 40
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "guhs:buiten_gebouwen"
+    }
+  ]
+}

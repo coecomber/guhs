@@ -71,6 +71,18 @@
     },
     "guhs:pluisgrot": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:slaapgrot": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:knuffelwortelgrot": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:belletjesgrot": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:kristalpegelgrot": {
+      "villager_type": "guhs:guh"
     }
   }
 }

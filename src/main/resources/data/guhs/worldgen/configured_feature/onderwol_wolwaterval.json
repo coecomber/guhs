@@ -1,0 +1,11 @@
+{
+  "type": "guhs:onderwol_waterval",
+  "config": {
+    "state": {
+      "Name": "minecraft:water",
+      "Properties": {
+        "level": "0"
+      }
+    }
+  }
+}

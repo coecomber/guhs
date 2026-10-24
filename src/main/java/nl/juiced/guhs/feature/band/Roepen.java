@@ -502,7 +502,8 @@ public final class Roepen {
 
     private static boolean gevaarlijkOnder(BlockState s) {
         return s.is(Blocks.MAGMA_BLOCK) || s.is(BlockTags.CAMPFIRES) || s.is(BlockTags.LEAVES) || s.is(Blocks.CACTUS)
-                || s.is(Blocks.POINTED_DRIPSTONE) || s.is(Blocks.LAVA) || gevaarlijk(s);
+                || s.is(Blocks.POINTED_DRIPSTONE) || s.getBlock() instanceof nl.juiced.guhs.feature.onderwol.Kristalpegel || s.is(Blocks.LAVA)
+                || gevaarlijk(s);
     }
 
     private static boolean gevaarlijk(BlockState s) {

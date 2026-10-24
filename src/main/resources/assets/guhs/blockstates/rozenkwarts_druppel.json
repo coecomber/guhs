@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "guhs:block/rozenkwarts_druppel"
+    },
+    "facing=down": {
+      "model": "guhs:block/rozenkwarts_druppel",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/rozenkwarts_druppel",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "guhs:block/rozenkwarts_druppel",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/rozenkwarts_druppel",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/rozenkwarts_druppel",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

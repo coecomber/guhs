@@ -71,10 +71,14 @@
   ],
   "features": [
     [],
-    [],
+    [
+      "guhs:onderwol_vijvertje"
+    ],
     [
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee"
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_viltkiezel",
+      "guhs:onderwol_wolkei"
     ],
     [],
     [],
@@ -97,7 +101,8 @@
     ],
     [],
     [
-      "guhs:onderwol_sausval"
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_wolwaterval_zacht"
     ],
     [
       "guhs:pluizenboom",
@@ -105,7 +110,10 @@
       "guhs:pluisgras",
       "guhs:guhpaddenstoeltjes",
       "guhs:knuffeldal_bloemen",
-      "guhs:knuffeldal_bladerhoopjes"
+      "guhs:knuffeldal_bladerhoopjes",
+      "guhs:onderwol_druppels",
+      "guhs:onderwol_stammetje_pluis",
+      "guhs:onderwol_paddenstoelenkring"
     ],
     []
   ]

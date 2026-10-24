@@ -29082,5 +29082,20 @@
   "subtitles.guhs.onderwol.sfeer.druppels": "Drops drip",
   "subtitles.guhs.onderwol.sfeer.zacht": "Soft cave breeze",
   "subtitles.guhs.onderwol.sfeer.slaap": "Guhs breathe softly",
-  "subtitles.guhs.onderwol.sfeer.belletjes": "Little bells echo"
+  "subtitles.guhs.onderwol.sfeer.belletjes": "Little bells echo",
+  "biome.guhs.slaapgrot": "Sleepy Cave",
+  "biome.guhs.knuffelwortelgrot": "Plush Root Cave",
+  "biome.guhs.belletjesgrot": "Little Bells Cave",
+  "biome.guhs.kristalpegelgrot": "Crystal Icicle Cave",
+  "block.guhs.kristalpegelblok": "Crystal Icicle Block",
+  "block.guhs.kristalpegel": "Crystal Icicle",
+  "block.guhs.knuffelwortelaarde": "Plush Root Soil",
+  "block.guhs.knuffelwortels": "Plush Roots",
+  "block.guhs.belletjeskristal": "Bell Crystal",
+  "block.guhs.belletjestrosje": "Little Bell Cluster",
+  "block.guhs.rozenkwarts_druppel": "Rose Quartz Drop",
+  "block.guhs.kristalpegel.lore": "Hangs and stands like dripstone. The tips drip a little cheese sauce. Watch your head!",
+  "block.guhs.knuffelwortelaarde.lore": "Bone meal grows plush roots underneath.",
+  "block.guhs.belletjeskristal.lore": "Rings a note when you step on it or hit it. Every spot has its own note: play a tune!",
+  "block.guhs.belletjestrosje.lore": "Click it and it chimes. Every spot has its own note."
 }

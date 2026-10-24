@@ -1518,6 +1518,9 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
+        if (!this.level().isClientSide() && nl.juiced.guhs.feature.onderwol.wezens.SlaapGuhs.slaapt(this)) {
+            return null;   // 1.7.0: a Slaapgrot sleeper doesn't chatter (it snores: SLAPEN emote + SlaapGuhs.tick)
+        }
         return ModSounds.GUH_AMBIENT.get();
     }
 

@@ -29082,5 +29082,20 @@
   "subtitles.guhs.onderwol.sfeer.druppels": "Druppels tikken",
   "subtitles.guhs.onderwol.sfeer.zacht": "Zacht grotbriesje",
   "subtitles.guhs.onderwol.sfeer.slaap": "Guhs ademen zachtjes",
-  "subtitles.guhs.onderwol.sfeer.belletjes": "Belletjes galmen"
+  "subtitles.guhs.onderwol.sfeer.belletjes": "Belletjes galmen",
+  "biome.guhs.slaapgrot": "Slaapgrot",
+  "biome.guhs.knuffelwortelgrot": "Knuffelwortelgrot",
+  "biome.guhs.belletjesgrot": "Belletjesgrot",
+  "biome.guhs.kristalpegelgrot": "Kristalpegelgrot",
+  "block.guhs.kristalpegelblok": "Kristalpegelblok",
+  "block.guhs.kristalpegel": "Kristalpegel",
+  "block.guhs.knuffelwortelaarde": "Knuffelwortelaarde",
+  "block.guhs.knuffelwortels": "Knuffelwortels",
+  "block.guhs.belletjeskristal": "Belletjeskristal",
+  "block.guhs.belletjestrosje": "Belletjestrosje",
+  "block.guhs.rozenkwarts_druppel": "Rozenkwarts druppel",
+  "block.guhs.kristalpegel.lore": "Hangt en staat net als druipsteen. De puntjes druppen een beetje kaassaus. Pas op je hoofd!",
+  "block.guhs.knuffelwortelaarde.lore": "Met beendermeel groeien er knuffelwortels onder.",
+  "block.guhs.belletjeskristal.lore": "Klinkt een toontje als je erop stapt of ertegen slaat. Elke plek heeft zijn eigen toon: speel een liedje!",
+  "block.guhs.belletjestrosje.lore": "Klik erop en het tingelt. Elke plek heeft zijn eigen toon."
 }

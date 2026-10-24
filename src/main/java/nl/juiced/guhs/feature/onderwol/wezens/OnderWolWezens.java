@@ -73,6 +73,10 @@ public final class OnderWolWezens {
     public static final int TIJD = 200, KANS = 2;
     /** At most this many within 48 blocks of a player: cave guhs (in the Glitterspelonk: {@link #GUHS_GLITTER}), molguhs, glimworms. */
     public static final int GUHS = 2, GUHS_GLITTER = 3, MOLGUHS = 2, GLIMWORMEN = 10;
+    /** In the Slaapgrot: at most this many cave guhs within 48 blocks (mostly asleep, {@link SlaapGuhs#SLAAP_KANS}). */
+    public static final int GUHS_SLAAPGROT = 4;
+    /** In the Slaapgrot the top-up brings a molguh less often (it is the guhs' bedroom). */
+    public static final float MOLGUH_KANS = 0.4f, MOLGUH_KANS_SLAAPGROT = 0.15f;
     /** Out of {@link GuhVariant#ROLL_OUT_OF} cave guhs, this many are a Grotguh: as rare as a chocolate guh on the surface. */
     public static final int GROTGUH_KANS = GuhVariant.CHOCO.weight;
     /** The layers (y) of the molguh: viltsteen and knuffelsteen. */
@@ -85,6 +89,7 @@ public final class OnderWolWezens {
         modBus.addListener((EntityAttributeCreationEvent e) -> e.put(GROTGLIMWORM.get(), GrotGlimwormEntity.createAttributes().build()));
         NeoForge.EVENT_BUS.addListener(OnderWolWezens::onLevelTick);
         NeoForge.EVENT_BUS.addListener(OnderWolWezens::onEntityTick);
+        SlaapGuhs.register();   // (round 28: the sleepers of the Slaapgrot)
     }
 
     // --- the top-up ------------------------------------------------------------------------------------------------------------
@@ -113,11 +118,12 @@ public final class OnderWolWezens {
                 return glimwormen(level, vloer, random) > 0 ? "glimworm" : "";
             }
             boolean molLaag = vloer.getY() >= MOL_ONDER && vloer.getY() <= MOL_BOVEN && level.getBlockState(vloer.below()).is(MOLGUH_GROND);
-            if (!glitter && molLaag && random.nextFloat() < 0.4f) {
+            boolean slaapgrot = !glitter && level.getBiome(vloer).is(SlaapGuhs.SLAAPGROT);
+            if (!glitter && molLaag && random.nextFloat() < (slaapgrot ? MOLGUH_KANS_SLAAPGROT : MOLGUH_KANS)) {
                 return molguh(level, vloer, random) != null ? "molguh" : "";
             }
-            GuhEntity guh = grotguh(level, vloer, glitter, random);
-            return guh == null ? "" : guh.getVariant() == GuhVariant.GROTGUH ? "grotguh" : "guh";
+            GuhEntity guh = grotguh(level, vloer, glitter, slaapgrot, random);
+            return guh == null ? "" : (guh.getVariant() == GuhVariant.GROTGUH ? "grotguh" : "guh") + (SlaapGuhs.slaapt(guh) ? " (slaapt)" : "");
         }
         return "";
     }
@@ -157,7 +163,17 @@ public final class OnderWolWezens {
     /** A wild cave guh on this cave floor, now and then a Grotguh (null: too many around, or no room). */
     @Nullable
     public static GuhEntity grotguh(ServerLevel level, BlockPos vloer, boolean glitter, RandomSource random) {
-        if (aantal(level, GuhEntity.class, vloer, 48, g -> g.entityTags().contains(GROT) && !g.isTame()) >= (glitter ? GUHS_GLITTER : GUHS)) {
+        return grotguh(level, vloer, glitter, false, random);
+    }
+
+    /**
+     * A wild cave guh on this cave floor, now and then a Grotguh; in the Slaapgrot ({@code slaapgrot}) mostly fast asleep
+     * ({@link SlaapGuhs}). Null: too many around, or no room.
+     */
+    @Nullable
+    public static GuhEntity grotguh(ServerLevel level, BlockPos vloer, boolean glitter, boolean slaapgrot, RandomSource random) {
+        int max = glitter ? GUHS_GLITTER : slaapgrot ? GUHS_SLAAPGROT : GUHS;
+        if (aantal(level, GuhEntity.class, vloer, 48, g -> g.entityTags().contains(GROT) && !g.isTame()) >= max) {
             return null;
         }
         GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.NATURAL);
@@ -171,6 +187,9 @@ public final class OnderWolWezens {
         if (!level.noCollision(guh)) {
             guh.discard();
             return null;
+        }
+        if (slaapgrot && random.nextFloat() < SlaapGuhs.SLAAP_KANS) {
+            SlaapGuhs.inslapen(guh);   // (curls up as soon as it stands: SlaapGuhs.tick)
         }
         level.addFreshEntity(guh);
         return guh;

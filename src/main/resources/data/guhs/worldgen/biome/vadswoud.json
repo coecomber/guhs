@@ -71,10 +71,13 @@
   ],
   "features": [
     [],
-    [],
+    [
+      "guhs:onderwol_vijvertje"
+    ],
     [
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee"
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_viltkiezel"
     ],
     [],
     [],
@@ -97,14 +100,18 @@
     ],
     [],
     [
-      "guhs:onderwol_sausval"
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_wolwaterval_zacht"
     ],
     [
       "guhs:reuzenguhboom",
       "guhs:vadshout_boom",
       "guhs:knabbelbessenstruiken",
       "guhs:guhnestje",
-      "guhs:vadsvaren"
+      "guhs:vadsvaren",
+      "guhs:onderwol_druppels",
+      "guhs:onderwol_stammetje_vads",
+      "guhs:onderwol_paddenstoelenkring"
     ],
     []
   ]

@@ -1,0 +1,96 @@
+{
+  "attributes": {
+    "minecraft:visual/fog_color": "#efd8f0",
+    "minecraft:visual/sky_color": "#f6e8ff",
+    "minecraft:visual/water_fog_color": "#e0709a",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.006
+      }
+    ],
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "guhs:onderwol.muziek.slaapgrot",
+        "min_delay": 1200,
+        "max_delay": 4800
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:onderwol.sfeer.slaap",
+      "mood": {
+        "sound": "guhs:onderwol.plink",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "guhs:onderwol.snurkje",
+        "tick_chance": 0.0014
+      }
+    }
+  },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#f7a8c8",
+    "foliage_color": "#f7b6cb",
+    "grass_color": "#f7b6cb"
+  },
+  "creature_spawn_probability": 0.1,
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": []
+  },
+  "spawn_costs": {},
+  "carvers": [],
+  "features": [
+    [],
+    [],
+    [
+      "guhs:onderwol_geode",
+      "guhs:onderwol_sauszee"
+    ],
+    [],
+    [],
+    [],
+    [
+      "guhs:onderwol_kolenerts",
+      "guhs:onderwol_kopererts",
+      "guhs:onderwol_ijzererts",
+      "guhs:onderwol_lapiserts",
+      "guhs:onderwol_gouderts",
+      "guhs:onderwol_redstoneerts",
+      "guhs:onderwol_diamanterts",
+      "guhs:onderwol_vadserts",
+      "guhs:onderwol_kaasknabbelerts",
+      "guhs:onderwol_kaaskorrelerts",
+      "guhs:onderwol_pigmenterts",
+      "guhs:onderwol_guhklei",
+      "guhs:onderwol_vahoegiet"
+    ],
+    [],
+    [
+      "guhs:onderwol_sausval"
+    ],
+    [
+      "guhs:onderwol_druppels",
+      "guhs:onderwol_pluis_vloer"
+    ],
+    []
+  ]
+}

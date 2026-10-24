@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:noise_threshold_provider",
+      "seed": 6402,
+      "noise": {
+        "firstOctave": 0,
+        "amplitudes": [
+          1.0
+        ]
+      },
+      "scale": 0.012,
+      "threshold": -0.4,
+      "high_chance": 0.4,
+      "default_state": {
+        "Name": "guhs:roze_guhbloem"
+      },
+      "low_states": [
+        {
+          "Name": "guhs:roze_guhbloem"
+        },
+        {
+          "Name": "guhs:guhoortjes"
+        },
+        {
+          "Name": "guhs:roze_guhbloem"
+        }
+      ],
+      "high_states": [
+        {
+          "Name": "guhs:knabbelroos"
+        },
+        {
+          "Name": "guhs:kaasbloem"
+        },
+        {
+          "Name": "guhs:guhoortjes"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "feature": "guhs:onderwol_viltkiezel",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

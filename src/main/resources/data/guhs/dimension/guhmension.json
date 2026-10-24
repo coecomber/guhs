@@ -602,6 +602,102 @@
             "depth": 2.0,
             "offset": 1.0
           }
+        },
+        {
+          "biome": "guhs:slaapgrot",
+          "parameters": {
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "continentalness": [
+              -2.0,
+              2.0
+            ],
+            "erosion": 2.0,
+            "weirdness": [
+              -2.0,
+              2.0
+            ],
+            "depth": 2.0,
+            "offset": 1.0
+          }
+        },
+        {
+          "biome": "guhs:knuffelwortelgrot",
+          "parameters": {
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "continentalness": [
+              -2.0,
+              2.0
+            ],
+            "erosion": -2.0,
+            "weirdness": [
+              -2.0,
+              2.0
+            ],
+            "depth": 2.0,
+            "offset": 1.0
+          }
+        },
+        {
+          "biome": "guhs:belletjesgrot",
+          "parameters": {
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "continentalness": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -2.0,
+              2.0
+            ],
+            "weirdness": 2.0,
+            "depth": 2.0,
+            "offset": 1.0
+          }
+        },
+        {
+          "biome": "guhs:kristalpegelgrot",
+          "parameters": {
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "continentalness": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -2.0,
+              2.0
+            ],
+            "weirdness": -2.0,
+            "depth": 2.0,
+            "offset": 1.0
+          }
         }
       ]
     }

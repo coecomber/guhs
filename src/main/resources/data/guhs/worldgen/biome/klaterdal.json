@@ -99,7 +99,9 @@
     [
       "guhs:onderwol_sausval"
     ],
-    [],
+    [
+      "guhs:onderwol_druppels"
+    ],
     []
   ]
 }

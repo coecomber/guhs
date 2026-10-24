@@ -70,7 +70,8 @@
       "guhs:beverbeek_beek",
       "guhs:beverbeek_poel",
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee"
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_viltkiezel"
     ],
     [],
     [],
@@ -104,7 +105,8 @@
       "minecraft:patch_firefly_bush_near_water",
       "minecraft:patch_waterlily",
       "minecraft:patch_sugar_cane",
-      "guhs:beverbeek_sporen"
+      "guhs:beverbeek_sporen",
+      "guhs:onderwol_druppels"
     ],
     []
   ]

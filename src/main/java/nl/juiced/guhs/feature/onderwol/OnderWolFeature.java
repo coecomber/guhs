@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -70,6 +71,22 @@ public final class OnderWolFeature {
     private static final DeferredRegister<MapCodec<? extends DensityFunction>> DICHTHEDEN = DeferredRegister.create(Registries.DENSITY_FUNCTION_TYPE, Guhs.MODID);
     public static final DeferredHolder<MapCodec<? extends DensityFunction>, MapCodec<GrottenFunctie>> GROTTEN =
             DICHTHEDEN.register("grotten", () -> GrottenFunctie.DATA_CODEC);
+    /**
+     * Ronde 28: the caves' own music and ambience (tools/features/onderwol_geluid.py writes the files, sounds.json and the
+     * biomes' audio). A biome may only name a registered sound event, so every one of them is registered here.
+     */
+    private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
+    static {
+        List<String> geluiden = new ArrayList<>(List.of("sfeer.druppels", "sfeer.zacht", "sfeer.slaap", "sfeer.belletjes", "plink", "tingel",
+                "giechel", "snurkje"));
+        for (String grot : List.of("gatenkaasgrotten", "guh_kristalmijn", "glitterspelonk", "pluisgrot", "kristalpegelgrot", "knuffelwortelgrot",
+                "slaapgrot", "belletjesgrot")) {
+            geluiden.add("muziek." + grot);
+        }
+        for (String g : geluiden) {
+            SOUNDS.register("onderwol." + g, () -> SoundEvent.createVariableRangeEvent(Guhs.id("onderwol." + g)));
+        }
+    }
     private static final DeferredRegister<MapCodec<? extends SurfaceRules.RuleSource>> REGELS = DeferredRegister.create(Registries.MATERIAL_RULE, Guhs.MODID);
     public static final DeferredHolder<MapCodec<? extends SurfaceRules.RuleSource>, MapCodec<OnderWolLagen>> LAGEN_REGEL =
             REGELS.register("onderwol_lagen", () -> OnderWolLagen.DATA_CODEC);
@@ -230,12 +247,21 @@ public final class OnderWolFeature {
         FEATURES.register(modBus);
         DICHTHEDEN.register(modBus);
         REGELS.register(modBus);
+        SOUNDS.register(modBus);
+        OnderWolGrot.register(modBus);
+        OnderWolOppervlak.register(modBus);   // (ronde 27-28: the cheerful surface: quilt, kiezel, weitjes, keien, vijvertjes, kringen...)   // (ronde 28: the blocks and decoration of the four new cave biomes)
         NeoForge.EVENT_BUS.addListener(OnderWolFeature::onSpawnCheck);
         // the Superkompas tab "Biomes" (section Guhmension)
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "glitterspelonk");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("glitterspelonk", "guhs:glitterrank_bes");
         nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", "pluisgrot");
         nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet("pluisgrot", "guhs:pluiskussen");
+        // (ronde 28: the four new cave biomes)
+        for (String[] grot : new String[][]{{"slaapgrot", "guhs:pluiskussen"}, {"knuffelwortelgrot", "guhs:knuffelwortels"},
+                {"belletjesgrot", "guhs:belletjestrosje"}, {"kristalpegelgrot", "guhs:kristalpegel"}}) {
+            nl.juiced.guhs.feature.bio.BiomeLijst.biome("guhmension", grot[0]);
+            nl.juiced.guhs.feature.bio.kompas.BiomeIconen.zet(grot[0], grot[1]);
+        }
     }
 
     /**
@@ -267,6 +293,9 @@ public final class OnderWolFeature {
 
     public static void creative(Consumer<ItemStack> output) {
         for (DeferredBlock<? extends Block> block : BLOCK_ITEMS) {
+            output.accept(new ItemStack(block.get()));
+        }
+        for (DeferredBlock<? extends Block> block : OnderWolGrot.BLOCK_ITEMS) {
             output.accept(new ItemStack(block.get()));
         }
         output.accept(new ItemStack(VAHOEGIET.get()));

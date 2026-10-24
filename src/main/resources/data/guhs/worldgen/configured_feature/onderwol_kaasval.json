@@ -1,0 +1,11 @@
+{
+  "type": "guhs:onderwol_waterval",
+  "config": {
+    "state": {
+      "Name": "guhs:kaas_saus",
+      "Properties": {
+        "level": "0"
+      }
+    }
+  }
+}

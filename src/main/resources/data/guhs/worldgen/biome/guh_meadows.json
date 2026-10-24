@@ -22,7 +22,15 @@
     },
     "minecraft:visual/fog_color": "#ffd9ea",
     "minecraft:visual/sky_color": "#ffa6cc",
-    "minecraft:visual/water_fog_color": "#e0709a"
+    "minecraft:visual/water_fog_color": "#e0709a",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "guhs:pluisje"
+        },
+        "probability": 0.003
+      }
+    ]
   },
   "has_precipitation": false,
   "temperature": 0.8,
@@ -69,10 +77,15 @@
   ],
   "features": [
     [],
-    [],
+    [
+      "guhs:onderwol_vijvertje"
+    ],
     [
       "guhs:onderwol_geode",
-      "guhs:onderwol_sauszee"
+      "guhs:onderwol_sauszee",
+      "guhs:onderwol_pastelwol",
+      "guhs:onderwol_viltkiezel",
+      "guhs:onderwol_wolkei"
     ],
     [],
     [],
@@ -95,12 +108,18 @@
     ],
     [],
     [
-      "guhs:onderwol_sausval"
+      "guhs:onderwol_sausval",
+      "guhs:onderwol_wolwaterval_zacht"
     ],
     [
       "guhs:guhbloesem_rare",
       "guhs:guh_flowers",
-      "guhs:roze_gras"
+      "guhs:roze_gras",
+      "guhs:onderwol_druppels",
+      "guhs:onderwol_stammetje_bloesem",
+      "guhs:onderwol_paddenstoelenkring",
+      "guhs:onderwol_bloemenweitje",
+      "guhs:onderwol_weitjesgras"
     ],
     []
   ]

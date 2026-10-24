@@ -1,18 +1,5 @@
 {
   "attributes": {
-    "minecraft:audio/ambient_sounds": {
-      "loop": "guhs:onderwol.sfeer.zacht",
-      "mood": {
-        "sound": "guhs:onderwol.plink",
-        "tick_delay": 6000,
-        "block_search_extent": 8,
-        "offset": 2.0
-      },
-      "additions": {
-        "sound": "guhs:onderwol.giechel",
-        "tick_chance": 0.0009
-      }
-    },
     "minecraft:visual/fog_color": "#f8e6ee",
     "minecraft:visual/sky_color": "#fff0f6",
     "minecraft:visual/water_fog_color": "#e0709a",
@@ -34,6 +21,19 @@
         "sound": "minecraft:music.creative",
         "min_delay": 12000,
         "max_delay": 24000
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "loop": "guhs:onderwol.sfeer.zacht",
+      "mood": {
+        "sound": "guhs:onderwol.plink",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "guhs:onderwol.giechel",
+        "tick_chance": 0.0009
       }
     }
   },
@@ -88,6 +88,7 @@
       "guhs:onderwol_sausval"
     ],
     [
+      "guhs:onderwol_druppels",
       "guhs:onderwol_pluis_vloer",
       "guhs:onderwol_pluis_plafond"
     ],
