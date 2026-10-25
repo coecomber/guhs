@@ -246,6 +246,7 @@ def ingang_hutje(h):
     Y = lambda y: y - y0
     Z = lambda z: z - z0
     hut = "pastelbaksteen_roze"
+    dak(b, m, X, Y, Z)
     # the floor opening: 3 x 1 across x at z = SZ (the lift lets you off to the south), lined with bricks below the floor
     for x in range(SX - 2, SX + 3):
         for z in range(SZ - 1, SZ + 2):
@@ -267,13 +268,44 @@ def ingang_hutje(h):
     # the lift guh inside, a wild guh outside
     b.npc(X(16), Y(HV), Z(12), "onderwol_ingang", yaw=200)
     b.guh(X(7.5), Y(HV), Z(10.5), yaw=270)
-    # loot: the chest and the closed barrel
+    # loot: the chest and the closed barrel (in the south-west corner: the render's spot, right inside the door, blocked it)
     b.kist(X(17), Y(HV), Z(11), "west", LOOT["ingang_hutje"])
-    b.ton(X(11), Y(HV), Z(12), LOOT["ingang_hutje"])
+    b.set(X(11), Y(HV), Z(12), "minecraft:air")
+    b.ton(X(11), Y(HV), Z(17), LOOT["ingang_hutje"])
     b.save("onderwol/ingang_hutje/start")
     ob.processor_list(h)
     ob.pool(h, "onderwol/ingang_hutje/start", [(b, 1)])
     return b
+
+
+def dak(b, m, X, Y, Z):
+    """The hut's roof, made here instead of taken from the render: the render scene ends at its y 45, so its roof lost the
+    top row of stairs and the ridge slab, and its stairs started one block above the wall top (a gap over the frame).
+    Now: the walls (y HV..HV+3) carry the second row of stairs straight on their top, the first row is the eave; five rows a
+    side up to the ridge (a full block under a slab cap), the gables filled with planks."""
+    HV = m["HV"]
+    H0X, H1X, H0Z, H1Z = m["H0X"], m["H1X"], m["H0Z"], m["H1Z"]
+    zm = (H0Z + H1Z) // 2
+    sx, sy, sz = b.size
+    b.size = (sx, Y(HV + 8) + 1, sz)
+    # (away with the render's roof and gables: everything above the wall top)
+    for (x, y, z), blok in list(b.blocks.items()):
+        if y > Y(HV + 3) or (y == Y(HV + 3) and "dakpan" in blok[0]):
+            b.set(x, y, z, "minecraft:air")
+    for x in range(X(H0X - 1), X(H1X + 1) + 1):
+        for z in range(sz):
+            b.set(x, Y(HV + 8), z, "minecraft:air")
+    for i in range(5):
+        for x in range(H0X - 1, H1X + 2):
+            b.zet(X(x), Y(HV + 3 + i), Z(H0Z - 1 + i), "dakpan_mint_trap[facing=south,half=bottom,shape=straight,waterlogged=false]")
+            b.zet(X(x), Y(HV + 3 + i), Z(H1Z + 1 - i), "dakpan_mint_trap[facing=north,half=bottom,shape=straight,waterlogged=false]")
+    for x in range(H0X - 1, H1X + 2):
+        b.zet(X(x), Y(HV + 7), Z(zm), "dakpan_mint_plaat[type=double,waterlogged=false]")
+        b.zet(X(x), Y(HV + 8), Z(zm), "dakpan_mint_plaat[type=bottom,waterlogged=false]")
+    for j in range(1, 5):
+        for x in (H0X, H1X):
+            for z in range(H0Z + j, H1Z - j + 1):
+                b.zet(X(x), Y(HV + 3 + j), Z(z), "minecraft:oak_planks")
 
 
 def mijnkamertje(h):
@@ -344,6 +376,13 @@ def mijnguhdorp(h):
         for y in range(VL, VL + 5):
             if b.get(X(px), Y(y), Z(pz)) and b.get(X(px), Y(y), Z(pz)) != ob.SCHIL:
                 b.schil(X(px), Y(y), Z(pz))
+    # (the kraam's north-west post stood right in front of the door of the house south of it: one block west, still under
+    # the kraam's roof)
+    for y in range(VL, VL + 5):
+        paal = b.blocks.get((X(WX), Y(y), Z(WZ - 3)))
+        if paal and paal[0] == "guhs:eiken_paal":
+            b.set(X(WX), Y(y), Z(WZ - 3), "minecraft:air")
+            b.set(X(WX - 1), Y(y), Z(WZ - 3), *paal)
     # the signs of the render (legend), now real signs
     b.set(X(WX - 1), Y(VL + 4), Z(WZ), "minecraft:air")
     hangbord(b, X(WX - 1), Y(VL + 4), Z(WZ), "west", ["Bouwstoffen", "in bulk!", "Ruilen voor", "knabbels"])

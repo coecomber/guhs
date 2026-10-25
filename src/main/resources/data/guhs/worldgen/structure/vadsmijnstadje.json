@@ -12,10 +12,11 @@
   "max_y": 28,
   "dekking": 6,
   "ruimte": "zaal",
-  "keep_clear": 47,
+  "keep_clear": 59,
   "ingang": {
     "pool": "guhs:onderwol/ingang_hutje/start",
-    "kans": 1.0
+    "kans": 1.0,
+    "pogingen": 9
   },
   "voorrang": 70
 }
