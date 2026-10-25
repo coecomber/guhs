@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhtechniek_beurs",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21705008,
+    "min_afstand": 800,
+    "max_afstand": 1500,
+    "alleen_nieuw": true,
+    "sector": 7,
+    "sectoren": 16
+  }
+}

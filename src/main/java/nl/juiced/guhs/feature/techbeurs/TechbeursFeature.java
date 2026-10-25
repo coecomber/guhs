@@ -53,6 +53,12 @@ public final class TechbeursFeature {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VadsschakelaarBlock.Kern>> VADSSCHAKELAAR_BE = BLOCK_ENTITIES.register(
             "vadsschakelaar", () -> new BlockEntityType<>(VadsschakelaarBlock.Kern::new, VADSSCHAKELAAR.get()));
+    /** {@code guhs:beurs_beheer}: the hidden caretaker under the floor of the Guhtechniek-beurs (no item, unbreakable). */
+    public static final DeferredBlock<BeursBeheer> BEURS_BEHEER = BLOCKS.registerBlock("beurs_beheer", BeursBeheer::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable()
+                    .pushReaction(PushReaction.BLOCK));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BeursBeheer.Kern>> BEURS_BEHEER_BE = BLOCK_ENTITIES.register(
+            "beurs_beheer", () -> new BlockEntityType<>(BeursBeheer.Kern::new, BEURS_BEHEER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VadslampBlockEntity>> VADSLAMP_BE = BLOCK_ENTITIES.register(
             "vadslamp", () -> new BlockEntityType<>(VadslampBlockEntity::new, VADSLAMP.get()));
 
@@ -71,6 +77,7 @@ public final class TechbeursFeature {
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
         modBus.addListener(TechbeursFeature::capabilities);
+        Beurs.register();
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {

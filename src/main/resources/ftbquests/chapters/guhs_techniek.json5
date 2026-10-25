@@ -303,6 +303,33 @@
       y: 6.5625,
     },
     {
+      id: "475548718031ABA9",
+      icon: {
+        id: "guhs:vadsschakelaar",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:guhtechniek_beurs",
+          id: "4755481890BA0506",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548017C542D20",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      shape: "hexagon",
+    },
+    {
       id: "475548DCDA7ED81E",
       icon: {
         id: "minecraft:spyglass",
@@ -324,7 +351,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 7.5,
       y: 6.5625,
       shape: "circle",
     },
@@ -360,7 +387,7 @@
           xp: 100,
         },
       ],
-      x: 7.5,
+      x: 9.0,
       y: 6.5625,
       shape: "gear",
     },
@@ -389,7 +416,7 @@
         },
       ],
       x: 9.0,
-      y: 6.5625,
+      y: 8.0625,
     },
     {
       id: "475548FAE94982EA",
@@ -415,7 +442,7 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 8.0625,
     },
     {
@@ -442,7 +469,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 8.0625,
     },
     {
@@ -469,7 +496,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 8.0625,
     },
     {
@@ -496,7 +523,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 3.0,
       y: 8.0625,
     },
     {
@@ -521,7 +548,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 1.5,
       y: 8.0625,
       shape: "circle",
     },

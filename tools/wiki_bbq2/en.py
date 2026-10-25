@@ -1336,3 +1336,9 @@ from . import en_onderwol as _onderwol  # noqa: E402
 
 PAGINA.update(_onderwol.PAGINA)
 TEKST.update(_onderwol.TEKST)
+
+# 1.7.0 (ronde 45-47) Guhtechniek-beurs: tools/wiki_bbq2/en_techbeurs.py (the Dutch: tools/features/techbeurs_wiki.py)
+from . import en_techbeurs as _techbeurs  # noqa: E402
+
+PAGINA.update(_techbeurs.PAGINA)
+TEKST.update(_techbeurs.TEKST)
