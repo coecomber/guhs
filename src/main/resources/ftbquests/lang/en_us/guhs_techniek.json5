@@ -23,6 +23,14 @@
   "quest.47554804C1C54D5D.quest_desc": [
     "Hook a &dGuh Oven&r up to the wire. It bakes everything a regular furnace bakes, without coal, on 5 chonk power. Every machine has a &dsnoot&r: it sleeps without power, looks happy when it's working and surprised when it's full.",
   ],
+  "quest.4755487ECE3B82D6.title": "Light with a Little Snoot",
+  "quest.4755487ECE3B82D6.quest_desc": [
+    "The &dChonk Lamp&r (a lantern, two Guh Wire and two glowstone dust) burns on 1 chonk power: it wakes up, looks happy and gives the brightest light there is. And it shines much further than a normal lamp: up to about 6 blocks around it, it puts down invisible extra light. One lamp lights up a whole cave. Without chonk power it goes back to sleep.",
+  ],
+  "quest.475548718031ABA9.title": "At the Guh Technology Fair",
+  "quest.475548718031ABA9.quest_desc": [
+    "Somewhere in the Guhmension stands a glass hall where &devery guh machine really works&r: the &dGuh Technology Fair&r (your Super Compass finds it under Cozy). Every stand has a sign, a &dChonk Switch&r to turn it off and on and a fair guh who tells you which quest teaches it. The Dream Factory runs in the middle. Looking is fine, taking is not!",
+  ],
   "quest.475548DCDA7ED81E.title": "Seeing Is Knowing",
   "quest.475548DCDA7ED81E.quest_desc": [
     "Look at a wheel, a wire or a machine: under your crosshair it says &bThis setup uses 5/10 chonk power&r. If your setup asks for MORE than all your guhs run together, it doesn't go slower: then &ceverything stops&r, and you can read how much you're short. You don't need a meter. Seen it? Tick it off.",

@@ -64,6 +64,8 @@ import nl.juiced.guhs.feature.huisje.Huisjes;
 public final class Bescherming {
     /** The widest rim a structure can ask for (blocks). */
     public static final int MAX_RAND = 64;
+    /** The structures whose own (owner-less) machines may change blocks inside them ({@link #machinesMogen}). */
+    private static final java.util.Set<String> MACHINES_MOGEN = ConcurrentHashMap.newKeySet();
 
     /**
      * heel: one box around all pieces (a story structure behind a sluier) instead of a box per piece. welke / stuk (einde2):
@@ -166,6 +168,15 @@ public final class Bescherming {
         DOZEN.clear();
     }
 
+    /**
+     * 1.7.0: inside every copy of {@code guhs:<structuur>} the building's own machines (no owner: placed by the template) may
+     * change blocks after all ({@link #magWijzigen} with nobody): the Oogster, Knabbelaar, Neerzetter, Plantagebak, Opzuiger
+     * and the Haltepaaltjes of a showcase building (the Guhtechniek-beurs). Players still may not.
+     */
+    public static void machinesMogen(String structuur) {
+        MACHINES_MOGEN.add(structuur);
+    }
+
     /** The quest blocks of {@code guhs:<structuur>} this player may break or place after all (asked for protected spots only). */
     public static void uitzondering(String structuur, BiPredicate<ServerPlayer, BlockPos> mag) {
         UITZONDERINGEN.computeIfAbsent(structuur, s -> new CopyOnWriteArrayList<>()).add(mag);
@@ -191,6 +202,12 @@ public final class Bescherming {
      * For machines: Knabbelaar, Neerzetter, Oogster.
      */
     public static boolean magWijzigen(ServerLevel level, BlockPos pos, @Nullable UUID namens) {
+        if (namens == null && !MACHINES_MOGEN.isEmpty() && !level.isOutsideBuildHeight(pos) && level.isLoaded(pos)) {
+            String s = structuurBij(level, pos);
+            if (s != null && MACHINES_MOGEN.contains(s)) {
+                return true;
+            }
+        }
         if (level.isOutsideBuildHeight(pos) || !level.isLoaded(pos) || beschermd(level, pos) || Protected.at(level, pos)) {
             return false;
         }

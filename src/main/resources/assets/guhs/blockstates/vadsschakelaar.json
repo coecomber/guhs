@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,powered=false": {
+      "model": "guhs:block/vadsschakelaar_uit"
+    },
+    "facing=north,powered=true": {
+      "model": "guhs:block/vadsschakelaar_aan"
+    },
+    "facing=east,powered=false": {
+      "model": "guhs:block/vadsschakelaar_uit",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "guhs:block/vadsschakelaar_aan",
+      "y": 90
+    },
+    "facing=south,powered=false": {
+      "model": "guhs:block/vadsschakelaar_uit",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "guhs:block/vadsschakelaar_aan",
+      "y": 180
+    },
+    "facing=west,powered=false": {
+      "model": "guhs:block/vadsschakelaar_uit",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "guhs:block/vadsschakelaar_aan",
+      "y": 270
+    }
+  }
+}

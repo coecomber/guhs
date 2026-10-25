@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " G ",
+    "DLD",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "D": "guhs:guh_wire",
+    "L": "minecraft:lantern"
+  },
+  "result": {
+    "id": "guhs:vadslamp",
+    "count": 1
+  }
+}

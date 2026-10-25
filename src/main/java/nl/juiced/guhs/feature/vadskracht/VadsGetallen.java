@@ -10,7 +10,7 @@ public final class VadsGetallen {
             DISCO_MAX_GUHS = 4, BLUBKACHELTJE = 6, GLOEISTERKERN = 200;
     /** What one Knabbelbatterij holds, in VK (= VK-seconds): about half an hour of one Guhrad. */
     public static final long BATTERIJ = 18_000;
-    public static final int SENSOR = 1, HAPLUIKJE = 2, BUISFILTER = 2, OPZUIGER = 3, STEPSTATION = 4, GUH_OVEN = 5, MOLEN = 5,
+    public static final int SENSOR = 1, VADSLAMP = 1, HAPLUIKJE = 2, BUISFILTER = 2, OPZUIGER = 3, STEPSTATION = 4, GUH_OVEN = 5, MOLEN = 5,
             NEERZETTER = 5, POMP = 6, PLANTAGEBAK = 6, OOGSTER = 8, BROUWKETEL = 8, FRITUUR = 8, KNABBELAAR = 10, KNUTSELMACHINE = 10;
 
     /** The most blocks (Guhdraad + machine blocks) in one net; a bigger net stands still ({@link VadsNet.Status#TE_GROOT}). */

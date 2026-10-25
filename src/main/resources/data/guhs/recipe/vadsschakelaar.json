@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "L",
+    "D"
+  ],
+  "key": {
+    "L": "minecraft:lever",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:vadsschakelaar",
+    "count": 1
+  }
+}

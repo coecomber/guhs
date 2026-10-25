@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,snoet=slaapt": {
+      "model": "guhs:block/vadslamp_uit"
+    },
+    "facing=north,snoet=werkt": {
+      "model": "guhs:block/vadslamp_aan"
+    },
+    "facing=north,snoet=vol": {
+      "model": "guhs:block/vadslamp_aan"
+    },
+    "facing=east,snoet=slaapt": {
+      "model": "guhs:block/vadslamp_uit",
+      "y": 90
+    },
+    "facing=east,snoet=werkt": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 90
+    },
+    "facing=east,snoet=vol": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 90
+    },
+    "facing=south,snoet=slaapt": {
+      "model": "guhs:block/vadslamp_uit",
+      "y": 180
+    },
+    "facing=south,snoet=werkt": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 180
+    },
+    "facing=south,snoet=vol": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 180
+    },
+    "facing=west,snoet=slaapt": {
+      "model": "guhs:block/vadslamp_uit",
+      "y": 270
+    },
+    "facing=west,snoet=werkt": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 270
+    },
+    "facing=west,snoet=vol": {
+      "model": "guhs:block/vadslamp_aan",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhtechniek_beurs",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 150,
+    "separation": 110,
+    "salt": 21705001
+  }
+}

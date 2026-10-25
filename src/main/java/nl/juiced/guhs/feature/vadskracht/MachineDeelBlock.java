@@ -53,28 +53,29 @@ public class MachineDeelBlock extends Block {
         builder.add(DX, DY, DZ);
     }
 
-    /** The state of a part at this offset from its kern. */
-    public static BlockState staat(Block deel, Vec3i vanKern) {
-        return deel.defaultBlockState().setValue(DX, vanKern.getX() + 2).setValue(DY, vanKern.getY()).setValue(DZ, vanKern.getZ() + 2);
-    }
-
     /**
-     * (1.7.0) A structure placed turned (every jigsaw building, guhs:burcht tiles) turns the machine too: the part keeps
-     * pointing at its kern (the kern's FACING turns with {@link MachineBlock#rotate}).
+     * 1.7.0: a part placed turned or mirrored (a structure template, a jigsaw piece) turns its offset to the kern with it,
+     * like the kern's facing turns (Meerblok's shape follows the facing), so it keeps pointing at its own kern.
      */
     @Override
     protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
-        BlockPos r = new BlockPos(state.getValue(DX) - 2, 0, state.getValue(DZ) - 2).rotate(rotation);
-        return state.setValue(DX, r.getX() + 2).setValue(DZ, r.getZ() + 2);
+        BlockPos d = new BlockPos(state.getValue(DX) - 2, 0, state.getValue(DZ) - 2).rotate(rotation);
+        return state.setValue(DX, d.getX() + 2).setValue(DZ, d.getZ() + 2);
     }
 
     @Override
     protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        int dx = state.getValue(DX) - 2, dz = state.getValue(DZ) - 2;
         return switch (mirror) {
-            case LEFT_RIGHT -> state.setValue(DZ, 4 - state.getValue(DZ));
-            case FRONT_BACK -> state.setValue(DX, 4 - state.getValue(DX));
+            case LEFT_RIGHT -> state.setValue(DZ, 2 - dz);
+            case FRONT_BACK -> state.setValue(DX, 2 - dx);
             default -> state;
         };
+    }
+
+    /** The state of a part at this offset from its kern. */
+    public static BlockState staat(Block deel, Vec3i vanKern) {
+        return deel.defaultBlockState().setValue(DX, vanKern.getX() + 2).setValue(DY, vanKern.getY()).setValue(DZ, vanKern.getZ() + 2);
     }
 
     public static BlockPos kern(BlockState state, BlockPos pos) {

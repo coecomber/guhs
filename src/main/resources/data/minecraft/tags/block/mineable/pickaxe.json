@@ -664,6 +664,8 @@
     "guhs:ertskarretje",
     "guhs:stationsklokje",
     "guhs:seinlampje",
-    "guhs:neon_kegelbord"
+    "guhs:neon_kegelbord",
+    "guhs:vadslamp",
+    "guhs:vadsschakelaar"
   ]
 }
