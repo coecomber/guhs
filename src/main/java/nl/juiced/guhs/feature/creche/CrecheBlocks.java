@@ -49,6 +49,13 @@ public final class CrecheBlocks {
             return defaultBlockState().setValue(AXIS, context.getHorizontalDirection().getClockWise().getAxis());
         }
 
+        /** A structure placed turned a quarter: the axis turns along (Block.rotate keeps the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return rotation == net.minecraft.world.level.block.Rotation.CLOCKWISE_90 || rotation == net.minecraft.world.level.block.Rotation.COUNTERCLOCKWISE_90
+                    ? state.setValue(AXIS, state.getValue(AXIS) == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X) : state;
+        }
+
         @Override
         protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
             return state.getValue(AXIS) == Direction.Axis.X ? X : Z;
