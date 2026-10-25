@@ -380,6 +380,14 @@ class Park:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "wb") as f:
             f.write(gzip.compress(data, 6, mtime=0))   # mtime 0: identical park = identical files (no git churn)
+        # fences, bars, panes, walls: their connections from the tile's own neighbours (tools/verbindingen.py; a side on
+        # the tile's edge keeps what was written)
+        import sys
+        tools = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        if tools not in sys.path:
+            sys.path.insert(0, tools)
+        import hekjes
+        hekjes.herstel_bestand(path)
         return path, n
 
     def bord_nbt(self, x, y, z, regels):
