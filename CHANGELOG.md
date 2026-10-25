@@ -3,6 +3,61 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.7.0 — Onder de Wol — Minecraft 26.1.2
+
+Mining in the Guhmension used to mean digging through an endless sea of pink wool. Not any more: under the wool there is now a whole plush underground, with stone layers, ores, caves, cave biomes, buildings, a villager town and five cave minigames, plus a prettier surface, an enchanting altar of our own and a lot of mining helpers. Everything new in the land only grows in new chunks: worlds are not reset, so go exploring a little further out.
+
+### Under the wool
+
+- **Stone layers (Knuffel-lagen):** pink wool on top, then **viltsteen** (Felt Stone, with polished, bricks, tiles, chiseled, stairs, slabs and walls), **knuffelsteen** (Snugglestone, finally in bulk, with pink veins and pastel stripes), **guhkristalsteen** deep down and the unbreakable **knuffelnaad** (Plush Seam) at the bottom. The borders wave and follow the land, under every Guhmension biome.
+- **Ores per layer:** every vanilla ore and the guh ores (vads, kaasknabbel, kaaskorrel and the new **pigmenterts** for pastel dyes) have a version in each stone layer; deeper is richer. New: **guhklei** (clay balls for bricks, the block bakes into pink terracotta for the Bouwhulp roofs and plaster) and the rare **Vahoegiet**, only deep in the guhkristalsteen and in geodes.
+- **Caves:** winding tunnels, big cheese-hole halls and now and then a gigantic one, plush heart geodes, sauce lakes and sauce falls, cave ponds with a glowing rim, little waterfalls and, in a quarter of the underground, a deep **sauszee** of warm cheese sauce.
+- **Six cave biomes:** the Glitterspelonk (glitter vines, glow moss, glitter berries, glimwormpjes), the Pluisgrot (fluff cushions you bounce on), the Slaapgrot (wild guhs asleep: pet them awake), the Knuffelwortelgrot (under forests), the Belletjesgrot (crystals that each play their own note: tap a tune) and the Kristalpegelgrot (pink crystal icicles; mind your head). Each has its own **cheerful cave music**, and the scary vanilla cave sounds are gone from the Guhmension.
+- **Nothing hostile under the ground:** monsters no longer spawn by themselves in the Guhmension's caves. Instead: wild guhs, the rare sparkly **Grotguh**, the **Molguh** that pops up out of the stone and sometimes leaves something behind, and glimwormpjes.
+- **Op command:** `/guhs grot <naam>` finds the nearest cave biome of a kind (vanilla `/locate biome` misses the thin cave layers).
+
+### Buildings under the ground
+
+- **About twenty new buildings** in caves of their own, common, now and then or rare: from an abandoned guh mine with a random tunnel network to a cuddle dormitory, a mushroom village with houses in the caps, a bathhouse full of warm sauce, a secret cave disco, a giant guh fossil, a surprise party and a huge, very rare old guh temple. With signs, residents, loot, unique deco and here and there guh clothes.
+- **Het Mijnguhdorp:** the Mijnguh's village around a warm sauce lake, always one between about 300 and 1000 blocks from the middle of a new world, with a cloud lift up to a little hut above ground.
+- **Het Vadsmijnstadje:** an underground town of real guh villagers in a big cave hall, with a Guhrad-centrale on the square.
+- The old underground buildings (guh caves, the kaasmijn and the others) now stand in the stone of their depth.
+
+### Guh villagers
+
+- **A new, cuter guh villager model** for grown-ups and children, in both kinds of villages (their trades stay).
+- **Four new professions:** the Toverguh (Spreukjesboekjes), the Vadsmonteur (vadskracht machines), the Mijnwerker (layer stones, guhklei, dye; buys ores) and the Kristalslijper (crystal blocks), each with a workstation of its own.
+- **De IJzerguhlem:** guh villagers summon a fluffy pink Iron Guhlem instead of an iron golem, by the same rules (iron farms keep working). It drops iron and pluisgras.
+- **Pick up villagers:** sneak + right-click with an empty hand picks up any villager, vanilla or guh, with its profession, trades and name.
+
+### Enchanting the guh way
+
+- **Het Glinsteraltaar (Glitter Altar):** the guh enchanting table, powered by **knuffelboekenkasten** (Cuddle Bookshelves). The useful vanilla enchantments plus guh spells, for lapis and levels.
+- **Eight guh spells:** Mika-mepper, Pluisval, Glitterzicht, Vadsvlijt, Bakvads, and (only as a book, from the Toverguh or chests) Spaarguhtje, Aaizacht and Kaasknabbelgeur. They come as **Spreukjesboekjes**, the guh enchanted book.
+- Unbreaking and mending are never offered for unbreakable gear such as vahoege vads.
+
+### Mining helpers
+
+- **De Vahoege Vadsknakker:** pickaxe, axe, shovel, hoe and shears in one, with a smart right-click.
+- **Super vahoege vads:** the netherite step of vads gear, with a Vahoegietstaaf and a rare template from the deepest buildings. All in the Guhmension: no Barbecuether trip needed.
+- **Wolkenliftje (Cloud Lift):** jump to float up to the next one, sneak to go down. **Pluisladder:** a rope ladder that unrolls down to the floor by itself. **Mijnlampje:** a helmet lamp that lights up the dark around your guh.
+- **Mijn-guhhuisje:** help the Mijnguh (quest Mijnguh-hulpje) and get a little house where up to four of your guhs slowly mine out an area you set with sliders, into a chest or a Bank Guh. With a **Rugzakzadel** a guh carries endless plain ground blocks.
+
+### Five cave minigames
+
+- **Schatgraven, Glimwormvangen, De Lichtjespuzzel, Karretjes-wissels and De Kegelgrot** (real guh bowling), each in a hall deep under a little hut with a Wolkenliftje down. Every game has its own coin (they all work in the claw machine too), a shop with guh clothes, building blocks and deco, highscores in the Guhdex and a top 3 board. The Superkompas finds them in its Minigames tab.
+
+### More new things
+
+- **Guh golf: 18 holes.** New golf courses get a back 9, "Rondje Guhmension", with moving obstacles, ramps, loopings and the Big Guh Mouth; it opens once you play the front 9 at par. More golf balls per hole, a golf shop with building blocks and deco, and a golf trophy for all 18 at par. Existing courses keep their 9 holes.
+- **Voetjes (Feet):** a seventh wardrobe slot, with pluisslofjes, regenlaarsjes, golfschoentjes, mijnwerkerslaarsjes, **kaassauslopers** (tame guhs walk over every cheese sauce) and **lavalopers** (also over lava).
+- **A more cheerful surface:** a quilt of pastel wool, felt gravel, flower meadows, wool boulders, ponds, little waterfalls, fairy rings, fallen logs, brooks from spring to spring, pink beaches, little islands, a cheese patchwork, heart lakes, rainbow hills and the rare new **Bloemenvallei** (Flower Valley) biome. Softer pastel evening skies, too.
+- **The Barbecuether has no lava any more:** everything is kaasfrituursaus, and that is harmless now. Lava in chunks that already exist turns into sauce when they load (no reset).
+- **Bigger terraria:** build terrariumglas or the new terrariumbodem onto a terrarium in any shape and the critters roam all of it.
+- **Rookguh-platform:** finish the Knabbelring journey for a landing place of your own, in any world. From it the Rookguh flies you to every place of your journey, or to the Super Guhrio castle once you finished world 1-1. Players who already finished get it at their next login.
+- **Safari:** entering the park (or logging in there) without a safari camera gives you a new one; the disguised guh stands on the real ground and can be clicked through tall grass.
+- **FTB Quests:** a new chapter Onder de Wol. **Wiki:** pages for everything above, and every new block you can use has a "Zo werkt het".
+
 ## 1.6.5 — fix — Minecraft 26.1.2
 
 - **Guaranteed buildings stay where they are, for good:** every world now remembers the spot of every guaranteed building (the one copy per world that compasses and /locate point to), not only the newest ones. Nothing moves in this version; it makes sure that a later update that changes the land cannot move them or build a second copy. Server operators: `/guhs bouwcheck gegarandeerd` shows "plek bewaard" for every building and "AllesBewaard: ja" once all spots are saved.
