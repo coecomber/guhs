@@ -158,7 +158,7 @@ public final class Features {
         nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.register(modBus);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel, Mijnguh-hulpje
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Schatgraven, Glimwormvangen, Lichtjespuzzel
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
-        nl.juiced.guhs.feature.onderwol.stadje.Vadsmijnstadje.register();   // 1.7.0 Onder de Wol: the Vadsmijnstadje (Superkompas entry)
+        nl.juiced.guhs.feature.onderwol.stadje.Vadsmijnstadje.register(modBus);   // 1.7.0 Onder de Wol: the Vadsmijnstadje (Superkompas entry, its Bijvuller)
         nl.juiced.guhs.feature.techbeurs.TechbeursFeature.register(modBus);   // 1.7.0 (ronde 45-47): the Vadslamp + the Guhtechniek-beurs
     }
 
