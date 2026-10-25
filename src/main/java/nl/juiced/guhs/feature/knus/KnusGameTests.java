@@ -236,11 +236,13 @@ public class KnusGameTests {
         GuhHooks.maakBewoner(guh, new BlockPos(1, 2, 3));
         helper.assertTrue(GuhHooks.isBewoner(guh) && new BlockPos(1, 2, 3).equals(GuhHooks.thuis(guh)), "a resident with a home");
         // the hair slot: saved, synced, not a wardrobe slot, not taken off with the clothes
-        // (2.9: OREN is the seventh slot and a wardrobe slot: the wardrobe has six)
+        // (2.9: OREN is the seventh slot and a wardrobe slot; 1.7.0: FEET the eighth: the wardrobe has seven)
         helper.assertTrue(GuhClothes.Slot.HAAR.ordinal() == 5 && !GuhClothes.Slot.kleding().contains(GuhClothes.Slot.HAAR)
                 && GuhClothes.Slot.OREN.ordinal() == 6 && GuhClothes.Slot.kleding().contains(GuhClothes.Slot.OREN)
-                && GuhClothes.Slot.kleding().size() == 6, "HAAR is the sixth slot, OREN the seventh, the wardrobe keeps six");
-        helper.assertTrue(nl.juiced.guhs.menu.GuhWardrobeMenu.index(GuhClothes.Slot.OREN) == 5, "the wardrobe has six clothing slots");
+                && GuhClothes.Slot.FEET.ordinal() == 7 && GuhClothes.Slot.kleding().contains(GuhClothes.Slot.FEET)
+                && GuhClothes.Slot.kleding().size() == 7, "HAAR is the sixth slot, OREN the seventh, FEET the eighth, the wardrobe keeps seven");
+        helper.assertTrue(nl.juiced.guhs.menu.GuhWardrobeMenu.index(GuhClothes.Slot.OREN) == 5
+                && nl.juiced.guhs.menu.GuhWardrobeMenu.index(GuhClothes.Slot.FEET) == 6, "the wardrobe has seven clothing slots");
         guh.setHaarkleur(0xFF88CC);
         guh.wear(GuhClothes.WINTER_SCARF);
         CompoundTag tag = new CompoundTag();

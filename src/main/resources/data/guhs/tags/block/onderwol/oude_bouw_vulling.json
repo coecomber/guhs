@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pink_wool",
+    "minecraft:magenta_wool",
+    "minecraft:pink_concrete",
+    "minecraft:white_concrete",
+    "minecraft:blackstone",
+    "minecraft:black_concrete"
+  ]
+}

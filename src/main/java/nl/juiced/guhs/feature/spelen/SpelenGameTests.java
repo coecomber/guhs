@@ -187,13 +187,16 @@ public class SpelenGameTests {
         helper.succeed();
     }
 
-    /** OREN: the seventh slot, a wardrobe slot (six in the wardrobe), saved like the others; the wardrobe menu's indices. */
+    /** OREN: the seventh slot, a wardrobe slot (1.7.0: seven in the wardrobe with FEET), saved like the others; the wardrobe menu's indices. */
     @GuhTest(template = EMPTY)
     public static void spelenOrenSlot(GameTestHelper helper) {
-        helper.assertTrue(GuhClothes.Slot.OREN.ordinal() == 6 && GuhClothes.Slot.values().length == 7, "OREN is the seventh slot");
+        // (1.7.0: FEET is the eighth slot, after OREN: the wardrobe has seven)
+        helper.assertTrue(GuhClothes.Slot.OREN.ordinal() == 6 && GuhClothes.Slot.FEET.ordinal() == 7 && GuhClothes.Slot.values().length == 8,
+                "OREN is the seventh slot, FEET the eighth");
         helper.assertTrue(GuhClothes.Slot.kleding().equals(List.of(GuhClothes.Slot.HEAD, GuhClothes.Slot.EYES, GuhClothes.Slot.BODY, GuhClothes.Slot.NECK,
-                GuhClothes.Slot.BACK, GuhClothes.Slot.OREN)), "the wardrobe slots");
-        helper.assertTrue(GuhWardrobeMenu.index(GuhClothes.Slot.OREN) == 5 && GuhWardrobeMenu.index(GuhClothes.Slot.HAAR) == -1
+                GuhClothes.Slot.BACK, GuhClothes.Slot.OREN, GuhClothes.Slot.FEET)), "the wardrobe slots");
+        helper.assertTrue(GuhWardrobeMenu.index(GuhClothes.Slot.OREN) == 5 && GuhWardrobeMenu.index(GuhClothes.Slot.FEET) == 6
+                && GuhWardrobeMenu.index(GuhClothes.Slot.HAAR) == -1
                 && GuhWardrobeMenu.ARMOR_SLOT == 0 && GuhWardrobeMenu.PACK_START == 1 && GuhWardrobeMenu.INV_START == 19 && GuhWardrobeMenu.INV_END == 55,
                 "menu indices (2.9: clothes are unlocks, not slots any more)");
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 2));

@@ -111,9 +111,9 @@ public final class Golf18 {
     public static final DeferredItem<BlockItem> GOLFBAL_TEE_ITEM = ITEMS.registerSimpleBlockItem(GOLFBAL_TEE);
     public static final DeferredItem<BlockItem> GOLF_VLAGGETJE_ITEM = ITEMS.registerSimpleBlockItem(GOLF_VLAGGETJE);
     public static final DeferredItem<BlockItem> GOLFKARRETJE_ITEM = ITEMS.registerItem("golfkarretje", p -> new BlockItem(GOLFKARRETJE.get(), p),
-            () -> new Item.Properties().rarity(Rarity.RARE));
+            () -> new Item.Properties().rarity(Rarity.RARE).useBlockDescriptionPrefix());
     public static final DeferredItem<BlockItem> GOLFTROFEE_ITEM = ITEMS.registerItem("golftrofee", p -> new BlockItem(GOLFTROFEE.get(), p),
-            () -> new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
+            () -> new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).useBlockDescriptionPrefix());
 
     private static DeferredBlock<Block> ruitjes(String id, MapColor colour) {
         return BLOCKS.registerSimpleBlock(id, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).mapColor(colour));

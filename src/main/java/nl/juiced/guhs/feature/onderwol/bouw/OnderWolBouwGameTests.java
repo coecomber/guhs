@@ -166,6 +166,77 @@ public class OnderWolBouwGameTests {
         helper.succeed();
     }
 
+    /**
+     * The old underground structures (OudeBouwLaagProcessor): imitation rock always and hidden wall fill become layer stone,
+     * walls seen from inside and decorative blocks stay, a mantle closes them off from open world, outside the box nothing
+     * changes; their pools use the processor list and the ones at cave depth come less often.
+     */
+    @GuhTest(template = VELD, batch = BATCH)
+    public static void onderwolBouwOudeBouwLagen(GameTestHelper helper) {
+        var level = helper.getLevel();
+        java.util.List<StructureTemplate.StructureBlockInfo> mal = new java.util.ArrayList<>();
+        // a 3 x 3 x 3 room of pink wool around one block of air (local 5..7, 2..4, 5..7); its floor block in the middle is dirt
+        for (int x = 5; x <= 7; x++) {
+            for (int y = 2; y <= 4; y++) {
+                for (int z = 5; z <= 7; z++) {
+                    BlockState st = x == 6 && y == 3 && z == 6 ? Blocks.AIR.defaultBlockState()
+                            : x == 6 && y == 2 && z == 6 ? Blocks.DIRT.defaultBlockState()
+                            : x == 7 && y == 3 && z == 6 ? Blocks.YELLOW_STAINED_GLASS.defaultBlockState() : Blocks.PINK_WOOL.defaultBlockState();
+                    mal.add(new StructureTemplate.StructureBlockInfo(helper.absolutePos(new BlockPos(x, y, z)), st, null));
+                }
+            }
+        }
+        BlockPos ver = helper.absolutePos(new BlockPos(14, 3, 6));
+        mal.add(new StructureTemplate.StructureBlockInfo(ver, Blocks.PINK_WOOL.defaultBlockState(), null));
+        BlockPos hoek = helper.absolutePos(new BlockPos(5, 2, 5));
+        level.setBlock(hoek, net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(Guhs.id("viltsteen")).defaultBlockState(), 2);
+        level.setBlock(helper.absolutePos(new BlockPos(6, 14, 5)), Blocks.STONE.defaultBlockState(), 2);   // (deep under "the surface")
+        BlockPos a = helper.absolutePos(new BlockPos(4, 1, 4)), b = helper.absolutePos(new BlockPos(8, 5, 8));
+        BoundingBox box = BoundingBox.fromCorners(a, b);
+        var uit = OudeBouwLaagProcessor.verwerk(level, box, mal);
+        java.util.Map<BlockPos, BlockState> m = new java.util.HashMap<>();
+        for (var i : uit) {
+            m.put(i.pos(), i.state());
+        }
+        BlockState muur = m.get(helper.absolutePos(new BlockPos(5, 3, 6)));
+        helper.assertTrue(muur != null && muur.is(Blocks.PINK_WOOL), "a wall seen from inside stays pink: " + muur);
+        BlockState h = m.get(hoek);
+        helper.assertTrue(h != null && h.getBlock() == net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(Guhs.id("viltsteen")),
+                "a hidden corner takes the world's own layer stone: " + h);
+        BlockState vloer = m.get(helper.absolutePos(new BlockPos(6, 2, 6)));
+        helper.assertTrue(vloer != null && vloer.is(GrotSchilProcessor.LAAGSTEEN) && !vloer.is(Blocks.DIRT), "imitation rock always: " + vloer);
+        helper.assertTrue(m.get(helper.absolutePos(new BlockPos(7, 3, 6))).is(Blocks.YELLOW_STAINED_GLASS), "decorative blocks stay");
+        helper.assertTrue(m.get(helper.absolutePos(new BlockPos(6, 3, 6))).isAir(), "the room stays air");
+        helper.assertTrue(m.get(ver).is(Blocks.PINK_WOOL), "outside the box: untouched (placed by another chunk)");
+        BlockState mantel = m.get(helper.absolutePos(new BlockPos(6, 3, 4)));
+        helper.assertTrue(mantel != null && mantel.is(GrotSchilProcessor.LAAGSTEEN), "a mantle against the open world: " + mantel);
+        helper.assertTrue(!m.containsKey(helper.absolutePos(new BlockPos(6, 3, 9))), "no mantle outside the box");
+        // the data
+        var lijst = level.registryAccess().lookupOrThrow(Registries.PROCESSOR_LIST)
+                .get(ResourceKey.create(Registries.PROCESSOR_LIST, Guhs.id("onderwol_oude_bouw")));
+        helper.assertTrue(lijst.isPresent() && lijst.get().value().list().size() == 1
+                && lijst.get().value().list().get(0) instanceof OudeBouwLaagProcessor, "the processor list");
+        var sets = level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET);
+        for (var e : java.util.Map.of("guh_caves", 13, "challenging_guh_caves", 30, "gatenkaas_mijnschacht", 18, "stille_voorraadkelder", 40).entrySet()) {
+            var set = sets.getOptional(ResourceKey.create(Registries.STRUCTURE_SET, Guhs.id(e.getKey())));
+            helper.assertTrue(set.isPresent() && set.get().placement() instanceof net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement r
+                    && r.spacing() == e.getValue(), e.getKey() + ": spacing " + e.getValue());
+        }
+        for (String pool : java.util.List.of("guh_caves/start", "guh_caves/tubes", "challenging_guh_caves/start", "kaasmijn/start",
+                "gatenkaas_mijnschacht/start", "stille_voorraadkelder/start")) {
+            try (InputStream in = OnderWolBouwGameTests.class.getResourceAsStream("/data/guhs/worldgen/template_pool/" + pool + ".json")) {
+                JsonObject js = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
+                for (var el : js.getAsJsonArray("elements")) {
+                    helper.assertTrue("guhs:onderwol_oude_bouw".equals(el.getAsJsonObject().getAsJsonObject("element").get("processors").getAsString()),
+                            pool + ": the layer processor");
+                }
+            } catch (java.io.IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        helper.succeed();
+    }
+
     /** The shaft: pads at the bottom, a column of wolkenstroom up and down, a ladder, a lining in the rock. */
     @GuhTest(template = VELD, batch = BATCH, timeoutTicks = 200)
     public static void onderwolBouwSchacht(GameTestHelper helper) {

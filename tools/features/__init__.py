@@ -118,7 +118,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.7.0 Onder de Wol, rounds 32-43: het Vadsmijnstadje (guh villagers under the ground; append only)
             'onderwol_stadje',
             # 1.7.0 Onder de Wol: the underground buildings, part 3 (r17-r24; after part 1, whose dorp side pool it extends; append only)
-            'onderwol_structuren3']
+            'onderwol_structuren3',
+            # 1.7.0 ontwerpronde 22: the old underground structures in the layer stone of their depth (patches only; append only)
+            'onderwol_oud']
 
 
 def modules():

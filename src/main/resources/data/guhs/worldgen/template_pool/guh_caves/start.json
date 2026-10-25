@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/central_room",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     }
   ]

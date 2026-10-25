@@ -7,8 +7,8 @@
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 32,
-    "separation": 12,
+    "spacing": 40,
+    "separation": 15,
     "salt": 20270303,
     "exclusion_zone": {
       "other_set": "guhs:knabbelkelder",

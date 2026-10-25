@@ -236,9 +236,13 @@ public class BarbecuetherGameTests {
                 helper.setBlock(new BlockPos(x, 1, z), BarbecuetherFeature.KAASFRITUURSAUS_BLOCK.get());
             }
         }
+        // (1.7.0, the user's choice: the sauce is harmless now: a pig wades through it without catching fire or getting hurt)
         var pig = helper.spawn(EntityType.PIG, new BlockPos(2, 1, 2));
         float health = pig.getHealth();
-        helper.succeedWhen(() -> helper.assertTrue(pig.isOnFire() && (pig.getHealth() < health || !pig.isAlive()), "a pig in it catches fire and gets hurt"));
+        helper.runAfterDelay(60, () -> {
+            helper.assertTrue(pig.isAlive() && !pig.isOnFire() && pig.getHealth() >= health, "a pig in it does not burn and is not hurt");
+            helper.succeed();
+        });
     }
 
     @GuhTest(template = ROOM, timeoutTicks = 100)

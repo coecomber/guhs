@@ -97,7 +97,7 @@ public final class OnderWolOppervlak {
     /** The blocks with a plain block item, in creative-tab order (the hartjeslelie has its own item: placed on water). */
     public static final List<DeferredBlock<? extends Block>> BLOCK_ITEMS = List.of(ROZE_ZAND, SCHELPJE);
     public static final DeferredItem<PlaceOnWaterBlockItem> HARTJESLELIE_ITEM = ITEMS.registerItem("hartjeslelie",
-            p -> new PlaceOnWaterBlockItem(HARTJESLELIE.get(), p), () -> new Item.Properties());
+            p -> new PlaceOnWaterBlockItem(HARTJESLELIE.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
     static {
         for (DeferredBlock<? extends Block> block : BLOCK_ITEMS) {
             ITEMS.registerSimpleBlockItem(block);
