@@ -413,7 +413,7 @@ public class MijnspellenGameTests {
      * Puts a whole building together the way worldgen does (the start pool, aligned on the hall's lift jigsaw): the hut
      * lands straight above the hall, so its Wolkenliftje really reaches the one in the hall; the NPC came along. Cleans up.
      */
-    private static void gebouw(GameTestHelper helper, String sid, String spel, GuhNpcEntity.Kind kind) {
+    public static void gebouw(GameTestHelper helper, String sid, String spel, GuhNpcEntity.Kind kind) {
         net.minecraft.server.level.ServerLevel level = helper.getLevel();
         BlockPos start = helper.absolutePos(new BlockPos(2, 16, 2));
         var pool = level.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL)
@@ -422,7 +422,8 @@ public class MijnspellenGameTests {
         helper.assertTrue(ok, sid + ": the jigsaws fit together");
         BlockPos min = start.offset(-64, -16, -64), max = start.offset(64, 40, 64);
         List<BlockPos> liftjes = new ArrayList<>();
-        for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
+        // (the lift column is the start jigsaw's column: other tests' halls may stand nearby)
+        for (BlockPos pos : BlockPos.betweenClosed(start.offset(0, -16, 0), start.offset(0, 40, 0))) {
             if (level.getBlockState(pos).is(nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.WOLKENLIFTJE.get())) {
                 liftjes.add(pos.immutable());
             }
@@ -435,8 +436,9 @@ public class MijnspellenGameTests {
                     sid + ": the hut's lift is straight above the hall's: " + onder + " " + boven);
             helper.assertTrue(boven.equals(nl.juiced.guhs.feature.mijnhulp.Wolkenliftje.doel(level, onder, true))
                     && onder.equals(nl.juiced.guhs.feature.mijnhulp.Wolkenliftje.doel(level, boven, false)), sid + ": up and down");
-            var npcs = level.getEntitiesOfClass(GuhNpcEntity.class, new net.minecraft.world.phys.AABB(min.getCenter(), max.getCenter()), n -> n.getKind() == kind);
-            helper.assertTrue(npcs.size() == 1, sid + ": its guh came along");
+            var npcs = level.getEntitiesOfClass(GuhNpcEntity.class, new net.minecraft.world.phys.AABB(start.getCenter(), start.getCenter()).inflate(48, 20, 48),
+                    n -> n.getKind() == kind);
+            helper.assertTrue(npcs.size() >= 1, sid + ": its guh came along");
         } finally {
             level.getEntitiesOfClass(GuhNpcEntity.class, new net.minecraft.world.phys.AABB(min.getCenter(), max.getCenter()), n -> n.getKind() == kind)
                     .forEach(n -> n.discard());
@@ -473,6 +475,8 @@ public class MijnspellenGameTests {
         helper.assertTrue(game.start(npc, p, Niveau.MAKKELIJK), "the shift starts");
         helper.assertTrue(KarretjesGame.isPlaying(p) && game.begin(Niveau.MAKKELIJK) != null && game.begin(Niveau.LASTIG) != null,
                 "all three networks found");
+        helper.assertTrue(game.volgende() != null && KarretjesNet.baan(Niveau.MAKKELIJK).ertsen().contains(game.volgende()),
+                "the first cart's ore is announced in the countdown: " + game.volgende());
         Baan baan = KarretjesNet.baan(Niveau.MAKKELIJK);
         Wissel w0 = baan.wissels().stream().filter(w -> w.p().v() == 0).findFirst().orElseThrow();
         BlockPos wissel = game.cel(Niveau.MAKKELIJK, w0.p().u(), w0.p().v(), 1);
@@ -543,5 +547,166 @@ public class MijnspellenGameTests {
             leave(helper, p);
             helper.succeed();
         });
+    }
+
+    // --- 1.7.0 playtest: only the hall is protected, the extra entrances, connected fences, the calm start ----------------
+
+    /** The template's box at the test's origin (the template as worldgen's start piece would have it, not turned). */
+    private static BoundingBox templateBox(GameTestHelper helper, String template) {
+        var t = helper.getLevel().getStructureManager().get(Guhs.id(template)).orElseThrow();
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        return BoundingBox.fromCorners(o, o.offset(t.getSize().getX() - 1, t.getSize().getY() - 1, t.getSize().getZ() - 1));
+    }
+
+    private static boolean doorloopbaar(GameTestHelper helper, BlockPos p, boolean deuren) {
+        BlockState s = helper.getLevel().getBlockState(p);
+        return s.getCollisionShape(helper.getLevel(), p).isEmpty() || deuren && s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock;
+    }
+
+    /** Every spot you can walk to from `van` inside the box (through doors when `deuren`). */
+    private static Set<BlockPos> bereikbaar(GameTestHelper helper, BlockPos van, BoundingBox box, boolean deuren) {
+        Set<BlockPos> gezien = new java.util.HashSet<>();
+        java.util.ArrayDeque<BlockPos> rij = new java.util.ArrayDeque<>();
+        gezien.add(van);
+        rij.add(van);
+        while (!rij.isEmpty() && gezien.size() < 200000) {
+            BlockPos p = rij.poll();
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+                BlockPos q = p.relative(d).immutable();
+                if (box.isInside(q) && !gezien.contains(q) && doorloopbaar(helper, q, deuren)) {
+                    gezien.add(q);
+                    rij.add(q);
+                }
+            }
+        }
+        return gezien;
+    }
+
+    /**
+     * A hall template (as worldgen places its start piece): only the hall with its walls is protected (the box minus
+     * Spelhal.RAND sideways: the host, the walls), not the rock room around it; the extra entrances (signs "Ingang") lie
+     * outside it and you walk to every one from the host, only through their doors.
+     */
+    public static void spelhalIngangen(GameTestHelper helper, String template, GuhNpcEntity.Kind kind) {
+        BoundingBox stuk = templateBox(helper, template);
+        BoundingBox hal = nl.juiced.guhs.feature.spelen.Spelhal.hal(stuk);
+        List<BoundingBox> dozen = List.of(hal);
+        GuhNpcEntity npc = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds().inflate(2), n -> n.getKind() == kind).get(0);
+        BlockPos host = npc.blockPosition();
+        helper.assertTrue(nl.juiced.guhs.feature.spelen.Spelhal.binnen(dozen, host), template + ": the host's spot is protected");
+        helper.assertTrue(nl.juiced.guhs.feature.spelen.Spelhal.binnen(dozen, new BlockPos(hal.minX(), host.getY(), host.getZ()))
+                && !helper.getLevel().getBlockState(new BlockPos(hal.minX(), host.getY() + 1, hal.minZ() + 1)).isAir(), template + ": the wall is protected");
+        helper.assertTrue(!nl.juiced.guhs.feature.spelen.Spelhal.binnen(dozen, new BlockPos(hal.minX() - 1, host.getY(), host.getZ()))
+                && !nl.juiced.guhs.feature.spelen.Spelhal.binnen(dozen, new BlockPos(hal.maxX() + 1, host.getY(), hal.maxZ() + 1)),
+                template + ": the rock right outside the wall is not");
+        List<BlockPos> ingangen = new ArrayList<>();
+        for (BlockPos pos : BlockPos.betweenClosed(stuk.minX(), stuk.minY(), stuk.minZ(), stuk.maxX(), stuk.maxY(), stuk.maxZ())) {
+            if (helper.getLevel().getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign
+                    && sign.getFrontText().getMessage(0, false).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                    && t.getKey().endsWith("_ingang_0")) {
+                ingangen.add(pos.immutable());
+            }
+        }
+        helper.assertTrue(ingangen.size() >= 2 && ingangen.size() <= 3, template + ": 2-3 extra entrances: " + ingangen);
+        Set<BlockPos> metDeuren = bereikbaar(helper, host, stuk, true), zonder = bereikbaar(helper, host, stuk, false);
+        for (BlockPos bord : ingangen) {
+            helper.assertTrue(!nl.juiced.guhs.feature.spelen.Spelhal.binnen(dozen, bord), template + ": the entrance " + bord + " is not protected");
+            helper.assertTrue(metDeuren.contains(bord), template + ": from the host through a door to the entrance " + bord);
+            helper.assertTrue(!zonder.contains(bord), template + ": the hall is closed but for its doors (" + bord + ")");
+        }
+    }
+
+    /** Every fence, pane, wall and iron bars in the test's template has the state the game would give it from its neighbours. */
+    public static void hekjesVerbonden(GameTestHelper helper, String template) {
+        BoundingBox box = templateBox(helper, template);
+        int n = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ())) {
+            BlockState s = helper.getLevel().getBlockState(pos);
+            if (s.getBlock() instanceof net.minecraft.world.level.block.FenceBlock || s.getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock
+                    || s.getBlock() instanceof net.minecraft.world.level.block.WallBlock) {
+                BlockState goed = net.minecraft.world.level.block.Block.updateFromNeighbourShapes(s, helper.getLevel(), pos);
+                helper.assertTrue(goed == s, template + ": the fence at " + pos + " is " + s + ", connected it would be " + goed);
+                n++;
+            }
+        }
+        helper.assertTrue(n > 0, template + ": no fences to check");
+    }
+
+    @GuhTest(template = "karretjeswissels_zaal", batch = BATCH, timeoutTicks = 100)
+    public static void spelhalWisselgrotIngangen(GameTestHelper helper) {
+        spelhalIngangen(helper, "karretjeswissels_zaal", GuhNpcEntity.Kind.WISSELGUH);
+        helper.succeed();
+    }
+
+    @GuhTest(template = "kegelgrot_zaal", batch = BATCH, timeoutTicks = 100)
+    public static void spelhalKegelgrotIngangen(GameTestHelper helper) {
+        spelhalIngangen(helper, "kegelgrot_zaal", GuhNpcEntity.Kind.KEGELGUH);
+        helper.succeed();
+    }
+
+    @GuhTest(template = "karretjeswissels_hut", batch = BATCH)
+    public static void spelhalWisselgrotHekjes(GameTestHelper helper) {
+        hekjesVerbonden(helper, "karretjeswissels_hut");
+        helper.succeed();
+    }
+
+    @GuhTest(template = "kegelgrot_hut", batch = BATCH)
+    public static void spelhalKegelgrotHekjes(GameTestHelper helper) {
+        hekjesVerbonden(helper, "kegelgrot_hut");
+        helper.succeed();
+    }
+
+    /** The protected boxes of a building: the hall (minus RAND), not the 1 x 1 shaft, the hut whole. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void spelhalDozen(GameTestHelper helper) {
+        BoundingBox stuk = new BoundingBox(0, 0, 0, 72, 11, 36);
+        BoundingBox hal = nl.juiced.guhs.feature.spelen.Spelhal.hal(stuk);
+        helper.assertTrue(hal.minX() == 8 && hal.maxX() == 64 && hal.minZ() == 8 && hal.maxZ() == 28 && hal.minY() == 0 && hal.maxY() == 11,
+                "the hall is the piece minus 8 sideways: " + hal);
+        helper.assertTrue(!nl.juiced.guhs.feature.spelen.Spelhal.binnen(List.of(hal), new BlockPos(3, 6, 11)), "an entrance chamber isn't protected");
+        helper.succeed();
+    }
+
+    /**
+     * The calm start of the Wisselgrot: a five-second countdown (that says the first ore), the first cart needs at least six
+     * seconds from the tunnel to the first switch on makkelijk (five on medium, four and a half on lastig), and the first
+     * carts never bunch up on the stem (at least two blocks apart).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void karretjesRustigeStart(GameTestHelper helper) {
+        helper.assertTrue(KarretjesGame.AFTELLEN >= 100, "a five-second countdown");
+        int[] minimum = {120, 100, 90};
+        for (Niveau n : Niveau.values()) {
+            int t = KarretjesGame.tickenTotEersteWissel(n);
+            helper.assertTrue(t >= minimum[n.ordinal()] && t > KarretjesGame.WACHT, n + ": the first cart reaches the first switch after " + t + " ticks");
+            double gat = KarretjesGame.kleinsteAfstandOpDeStam(n, 8);
+            helper.assertTrue(gat >= 2.0, n + ": the first carts stay apart on the stem: " + gat);
+        }
+        helper.succeed();
+    }
+
+    /** hut_op_grond: the hut piece (a grond element) goes to the ground at its own spot, the hall and the shaft stay. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void spelhalHutOpGrond(GameTestHelper helper) {
+        var manager = helper.getLevel().getStructureManager();
+        var geen = net.minecraft.core.Holder.direct(new net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList(List.of()));
+        var vast = net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool.Projection.RIGID;
+        var liquid = net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings.IGNORE_WATERLOGGING;
+        List<net.minecraft.world.level.levelgen.structure.StructurePiece> stukken = new ArrayList<>();
+        Object[][] delen = {{"karretjeswissels_zaal", 0, false}, {"karretjeswissels_schacht", 12, false}, {"karretjeswissels_hut", 32, true}};
+        for (Object[] d : delen) {
+            var el = (Boolean) d[2]
+                    ? new nl.juiced.guhs.world.grond.GrondPoolElement(com.mojang.datafixers.util.Either.left(Guhs.id((String) d[0])), geen, vast,
+                    java.util.Optional.empty(), 4)
+                    : net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement.single("guhs:" + d[0]).apply(vast);
+            BlockPos pos = new BlockPos(100, (Integer) d[1], 200);
+            stukken.add(new net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece(manager, el, pos, 1,
+                    net.minecraft.world.level.block.Rotation.CLOCKWISE_90, el.getBoundingBox(manager, pos, net.minecraft.world.level.block.Rotation.CLOCKWISE_90), liquid));
+        }
+        int[] dy = nl.juiced.guhs.world.FlatJigsawStructure.opGrond(stukken, (x, z) -> 75);
+        BoundingBox hut = stukken.get(2).getBoundingBox();
+        helper.assertTrue(dy[0] == 0 && dy[1] == 0 && hut.minY() + 4 == 75, "the hut's floor lands on the ground (its floor at y 74): " + hut
+                + " moved " + java.util.Arrays.toString(dy));
+        helper.succeed();
     }
 }
