@@ -155,6 +155,17 @@ public final class FossielmijnBlocks {
             builder.add(DELEN);
         }
 
+        /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.facing(state, FACING, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.facing(state, FACING, mirror);
+        }
+
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());

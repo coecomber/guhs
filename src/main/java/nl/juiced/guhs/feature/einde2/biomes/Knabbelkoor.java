@@ -184,6 +184,17 @@ public final class Knabbelkoor {
             builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
         }
 
+        /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.kanten(state, PROPERTY_BY_DIRECTION, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.kanten(state, PROPERTY_BY_DIRECTION, mirror);
+        }
+
         @Override
         protected boolean isPathfindable(BlockState state, PathComputationType type) {
             return false;

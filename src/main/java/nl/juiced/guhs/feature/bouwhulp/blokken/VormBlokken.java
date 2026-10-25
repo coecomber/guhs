@@ -167,6 +167,17 @@ public final class VormBlokken {
             ARM.values().forEach(builder::add);
         }
 
+        /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.kanten(state, ARM, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.kanten(state, ARM, mirror);
+        }
+
         private VoxelShape vorm(BlockState s) {
             double t = dik ? 10 : 6, lo = 8 - t / 2, hi = 8 + t / 2;
             VoxelShape v = Block.box(lo, lo, lo, hi, hi, hi);
