@@ -505,8 +505,9 @@ public class PxKernGameTests {
         p.hurtServer(level, level.damageSources().magic(), 5f);
         helper.assertTrue(p.getHealth() == voor, "no damage");
         helper.assertTrue(Roepen.roep(p, UUID.randomUUID()) == Roepen.Uitkomst.NIET_THUIS, "no guhs are called into guhpixel");
-        helper.assertTrue(Roepen.nietRoepbaar(PlekSoort.OP_VAKANTIE, false) == Roepen.Uitkomst.NIET_THUIS
-                && Roepen.nietRoepbaar(PlekSoort.OP_KANTOOR, false) == Roepen.Uitkomst.NIET_THUIS, "a stored guh cannot be called");
+        // (1.6.2 "Roep naar mij always works": a guh on holiday or at the office is fetched back, so outside Guhpixel it is callable)
+        helper.assertTrue(Roepen.nietRoepbaar(PlekSoort.OP_VAKANTIE, false) == null
+                && Roepen.nietRoepbaar(PlekSoort.OP_KANTOOR, false) == null, "a stored guh can be called back (1.6.2)");
         // a creative player passes
         p.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
         helper.assertTrue(p.gameMode.destroyBlock(vloer) && level.getBlockState(vloer).isAir(), "creative players may build");
@@ -644,7 +645,8 @@ public class PxKernGameTests {
                 "the stored record: id, owner, name");
         Plek plek = GuhVolger.plek(level.getServer(), p.getUUID(), id);
         helper.assertTrue(plek != null && plek.soort() == PlekSoort.OP_VAKANTIE, "'Waar is mijn guh?' says on holiday: " + plek);
-        helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.NIET_THUIS, "it cannot be called while it is stored");
+        // (1.6.2 "Roep naar mij always works": a guh on holiday comes back early; asked without calling, so the record stays for laatVrij below)
+        helper.assertTrue(Roepen.nietRoepbaar(plek.soort(), false) == null, "it can be called back while it is stored (1.6.2)");
         Vec3 terug = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(8, 2, 8)));
         Entity e = GuhOpslag.laatVrij(level, opslag, terug, 90f);
         helper.assertTrue(e instanceof GuhEntity g && g.getUUID().equals(id) && g.isTame() && p.getUUID().equals(g.getOwnerUUID())

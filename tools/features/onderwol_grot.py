@@ -31,8 +31,9 @@ BELLETJES_GROT = ["guhs:onderwol_belletjes"]                                    
 DRUPPELS = ["guhs:onderwol_druppels"]                                                             # step 9: vegetal_decoration
 
 CUTOUT = "minecraft:cutout"
+# (shears = anything that can shears_dig, like the mod's other plants: the vadsschaar cuts these off too)
 SHEARS = [{"condition": "minecraft:any_of", "terms": [
-    {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}},
+    {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"},
     {"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
         {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]}]
 # (vanilla's amethyst cluster rotations per facing)

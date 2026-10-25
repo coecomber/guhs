@@ -92,9 +92,13 @@ public class BioWereldGameTests {
         MultiNoiseBiomeSource nieuw = (MultiNoiseBiomeSource) BiomeSource.CODEC.parse(ops, source).getOrThrow();
         JsonObject zonder = source.deepCopy();
         JsonArray oudeLijst = new JsonArray();
+        // 1.7.0 "Onder de Wol" added the Bloemenvallei surface biome and six cave biomes on purpose: they are left out of
+        // the old source too, and a sample that lands in one of them is that update's intended change, not a shift here.
+        java.util.Set<String> nieuw170 = java.util.Set.of("guhs:bloemenvallei", "guhs:glitterspelonk", "guhs:pluisgrot", "guhs:slaapgrot",
+                "guhs:knuffelwortelgrot", "guhs:belletjesgrot", "guhs:kristalpegelgrot");
         for (JsonElement e : source.getAsJsonArray("biomes")) {
             String b = e.getAsJsonObject().get("biome").getAsString();
-            if (!b.equals("guhs:klaterdal") && !b.equals("guhs:bloesemmeertje") && !b.equals("guhs:wolkenweide")) {
+            if (!b.equals("guhs:klaterdal") && !b.equals("guhs:bloesemmeertje") && !b.equals("guhs:wolkenweide") && !nieuw170.contains(b)) {
                 oudeLijst.add(e);
             }
         }
@@ -120,7 +124,8 @@ public class BioWereldGameTests {
                     if (welke != soort) {
                         anders++;
                     }
-                    if (soort == Kaart.BUITEN && !oud.getNoiseBiome(punt).equals(biome)) {
+                    boolean van170 = biome.unwrapKey().map(k -> nieuw170.contains(k.identifier().toString())).orElse(false);
+                    if (soort == Kaart.BUITEN && !van170 && !oud.getNoiseBiome(punt).equals(biome)) {
                         verschoven++;
                     }
                     if (soort != Kaart.BUITEN && w.model.meng(qx, qz) < 1f) {

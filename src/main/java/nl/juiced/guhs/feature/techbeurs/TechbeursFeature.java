@@ -69,7 +69,7 @@ public final class TechbeursFeature {
             public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
                 tooltip.accept(Component.translatable("block.guhs." + id + ".lore").withStyle(ChatFormatting.GRAY));
             }
-        }, () -> new Item.Properties());
+        }, () -> new Item.Properties().useBlockDescriptionPrefix());   // (the name is the block's: block.guhs.<id>)
     }
 
     public static void register(IEventBus modBus) {
