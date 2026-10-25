@@ -20,6 +20,28 @@ public final class ToverenClient {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(ToverenFeature.GLINSTERALTAAR_BE.get(), GlinsteraltaarRenderer::new));
         modBus.addListener(ToverenClient::particles);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(ToverenClient::uitleg);
+    }
+
+    /**
+     * Playtest: hovering over a book or an item with a guh enchantment says what it does (the .desc text of each guh
+     * enchantment, under the item's other lines). Vanilla enchantments keep their vanilla tooltip.
+     */
+    private static void uitleg(net.neoforged.neoforge.event.entity.player.ItemTooltipEvent event) {
+        net.minecraft.world.item.ItemStack stack = event.getItemStack();
+        for (var component : java.util.List.of(net.minecraft.core.component.DataComponents.STORED_ENCHANTMENTS,
+                net.minecraft.core.component.DataComponents.ENCHANTMENTS)) {
+            net.minecraft.world.item.enchantment.ItemEnchantments spreuken = stack.get(component);
+            if (spreuken == null) {
+                continue;
+            }
+            for (var holder : spreuken.keySet()) {
+                holder.unwrapKey().filter(k -> k.identifier().getNamespace().equals(nl.juiced.guhs.Guhs.MODID)).ifPresent(k -> event.getToolTip().add(
+                        net.minecraft.network.chat.Component.literal("  ").append(holder.value().description()).append(": ")
+                                .append(net.minecraft.network.chat.Component.translatable("enchantment.guhs." + k.identifier().getPath() + ".desc"))
+                                .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC)));
+            }
+        }
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
