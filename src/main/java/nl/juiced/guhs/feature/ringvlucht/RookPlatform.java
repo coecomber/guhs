@@ -53,6 +53,10 @@ public final class RookPlatform {
     public static final String GUHRIO = "#guhrio", PLATFORM = "#platform";
     /** The castle's gate (template coordinates of the whole castle, tools/features/guhrio_kasteel.py: x C, y G + 1, the arch at z 111), out to the south. */
     public static final BlockPos GUHRIO_POORT = new BlockPos(63, 27, 111);
+    /** 1.7.1: where the castle's Reis-Rookguh hovers: on the forecourt, a few blocks east of where it puts you down (whole-build coordinates). */
+    public static final BlockPos GUHRIO_ROOKGUH = new BlockPos(68, 28, 116);
+    /** 1.7.1: how high above the platform block its Rookguh hovers (so whoever lands on the platform stands under it). */
+    static final double HOOGTE = 2.0;
     static final Haltes.Halte GUHRIO_HALTE = new Haltes.Halte("guhrio", "guhrio", GuhrioKasteel.STRUCTUUR, null,
             List.of(new Haltes.Ingang(GUHRIO_POORT, 0, 1)), 6);
     /** (tests) where the castle is, instead of a real copy. */
@@ -77,6 +81,68 @@ public final class RookPlatform {
                 geschenk(p, true);
             }
         });
+        // 1.7.1: the own platform has its Rookguh hovering above it (also a platform put down before 1.7.1)
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) -> {
+            if (event.getEntity() instanceof ServerPlayer p && p.tickCount % 100 == 37) {
+                Plek plek = van(p);
+                if (plek != null && plek.dim() == p.level().dimension() && plek.pos().closerThan(p.blockPosition(), 64)
+                        && p.level().isLoaded(plek.pos())) {
+                    zorgRookguh(p.level(), plek.pos());
+                }
+            }
+        });
+    }
+
+    /** 1.7.1: a Rookguh hovers above this platform (made when there is none). */
+    static void zorgRookguh(ServerLevel level, BlockPos pos) {
+        if (!level.getBlockState(pos).is(RingVluchtFeature.PLATFORM.get())) {
+            return;
+        }
+        net.minecraft.world.phys.AABB zoek = new net.minecraft.world.phys.AABB(pos).inflate(1, 4, 1);
+        for (VluchtRookguhEntity r : level.getEntitiesOfClass(VluchtRookguhEntity.class, zoek, e -> e.isAlive() && PLATFORM.equals(e.halteId()))) {
+            if (pos.equals(r.blok())) {
+                return;
+            }
+        }
+        VluchtRookguhEntity r = VluchtRookguhEntity.maakExtra(level, new net.minecraft.world.phys.Vec3(pos.getX() + 0.5, pos.getY() + 1 + HOOGTE, pos.getZ() + 0.5), PLATFORM, pos);
+        if (r != null) {
+            level.addFreshEntity(r);
+        }
+    }
+
+    /**
+     * 1.7.1: a click on the Rookguh of an extra place. Above a platform: as a click on the platform itself (yours: the flight
+     * screen; another one: it becomes yours). On the castle's forecourt: the flight screen to every stop reached (and your
+     * own platform), not to the castle itself.
+     */
+    static void klikRookguh(ServerPlayer p, VluchtRookguhEntity r) {
+        if (PLATFORM.equals(r.halteId())) {
+            BlockPos blok = r.blok();
+            if (blok == null || !(p.level() instanceof ServerLevel level) || !level.getBlockState(blok).is(RingVluchtFeature.PLATFORM.get())) {
+                return;
+            }
+            if (!isVan(p, level, blok)) {
+                RookPlatformBlok.neem(p, level, blok);
+            } else if (mag(p)) {
+                open(p);
+            } else {
+                p.sendSystemMessage(Component.translatable("quest.guhs.ringvlucht.platform.te_vroeg").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            return;
+        }
+        String nee = Vlucht.waaromNiet(p);
+        if (nee != null) {
+            p.sendOverlayMessage(Component.translatable(nee).withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        CompoundTag data = Vlucht.menu(p, null, false);
+        data.getListOrEmpty("Haltes").removeIf(t -> t instanceof CompoundTag c && GUHRIO.equals(c.getStringOr("Id", "")));
+        if (!heeftKeuze(data)) {
+            GuhQuests.say(p, r, "quest.guhs.ringvlucht.niks");
+            return;
+        }
+        r.playSound(nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), 0.8f, r.getVoicePitch());
+        ModNetworking.sendTo(p, new VluchtPayloads.Open(r.getId(), data));
     }
 
     /** The platform for this player, once (true: given now). */

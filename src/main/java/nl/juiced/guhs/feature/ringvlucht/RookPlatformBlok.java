@@ -60,6 +60,7 @@ public class RookPlatformBlok extends Block {
         p.sendSystemMessage(Component.translatable(verhuisd ? "quest.guhs.ringvlucht.platform.verhuisd" : "quest.guhs.ringvlucht.platform.neergezet")
                 .withStyle(ChatFormatting.AQUA));
         level.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 12, 0.6, 0.2, 0.6, 0.01);
+        RookPlatform.zorgRookguh(level, pos);                // (1.7.1: its Rookguh comes and hovers above it)
     }
 
     @Override

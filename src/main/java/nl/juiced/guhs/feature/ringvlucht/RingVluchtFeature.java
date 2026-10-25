@@ -56,7 +56,7 @@ public final class RingVluchtFeature {
             () -> new TicketType(400L, TicketType.FLAG_LOADING | TicketType.FLAG_CAN_EXPIRE_IF_UNLOADED));
 
     /** The Bezetting ids of the Rookguhs: ringvlucht_&lt;stop&gt;, and the two of the Gouw. */
-    public static final String GOUW_ID = "ringvlucht_gouw", KAMP_ID = "ringvlucht_gouw_kamp";
+    public static final String GOUW_ID = "ringvlucht_gouw", KAMP_ID = "ringvlucht_gouw_kamp", GUHRIO_ID = "ringvlucht_guhrio";
 
     public static void register(IEventBus modBus) {
         ENTITY_TYPES.register(modBus);
@@ -115,6 +115,10 @@ public final class RingVluchtFeature {
         }, Gouw.KAMP_ZOEK);
         Bezetting.alleenIn(GOUW_ID, ModDimensions.GUHMENSION);
         Bezetting.alleenIn(KAMP_ID, ModDimensions.GUHMENSION);
+        // 1.7.1: the Super Guhrio castle has its own Reis-Rookguh on the forecourt (there for everyone)
+        Bezetting.wezen(GUHRIO_ID, nl.juiced.guhs.feature.guhrio.GuhrioKasteel.STRUCTUUR, null, RookPlatform.GUHRIO_ROOKGUH,
+                (level, plek, draai) -> VluchtRookguhEntity.maakExtra(level, plek, RookPlatform.GUHRIO, null));
+        Bezetting.alleenIn(GUHRIO_ID, BarbecuetherFeature.BARBECUETHER);
     }
 
     public static void payloads(PayloadRegistrar registrar) {

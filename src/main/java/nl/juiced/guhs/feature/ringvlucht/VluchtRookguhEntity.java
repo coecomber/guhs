@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.ringvlucht;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -52,10 +53,42 @@ public class VluchtRookguhEntity extends RookguhEntity {
         return guh;
     }
 
-    /** The stop of this Rookguh (null: none, a stray one). */
+    /**
+     * 1.7.1: the Rookguh of an extra place ({@link RookPlatform#GUHRIO}: the forecourt of the Super Guhrio castle,
+     * {@link RookPlatform#PLATFORM}: hovering above a Rookguh-platform at {@code blok}): no stop of the story, there for everyone.
+     */
+    @Nullable
+    public static VluchtRookguhEntity maakExtra(ServerLevel level, Vec3 plek, String id, @Nullable BlockPos blok) {
+        VluchtRookguhEntity guh = RingVluchtFeature.ROOKGUH.get().create(level, EntitySpawnReason.STRUCTURE);
+        if (guh == null) {
+            return null;
+        }
+        guh.halte = id;
+        guh.blok = blok;
+        guh.snapTo(plek.x, plek.y, plek.z, 0f, 0f);
+        guh.setInvulnerable(true);
+        guh.setNoGravity(true);
+        return guh;
+    }
+
+    /** The platform block of a platform's Rookguh (null for every other one). */
+    @Nullable
+    private BlockPos blok;
+
+    /** The stop of this Rookguh (null: none, a stray one, or the Rookguh of an extra place). */
     @Nullable
     public Haltes.Halte halte() {
         return Haltes.van(halte);
+    }
+
+    /** Its stop id, or {@link RookPlatform#GUHRIO} / {@link RookPlatform#PLATFORM} (1.7.1). */
+    public String halteId() {
+        return halte;
+    }
+
+    @Nullable
+    public BlockPos blok() {
+        return blok;
     }
 
     @Override
@@ -70,6 +103,11 @@ public class VluchtRookguhEntity extends RookguhEntity {
             return;
         }
         setDeltaMovement(Vec3.ZERO);
+        if (RookPlatform.PLATFORM.equals(halte) && tickCount % 40 == 0
+                && (blok == null || !level().getBlockState(blok).is(RingVluchtFeature.PLATFORM.get()))) {
+            discard();                                        // (1.7.1: its platform is gone)
+            return;
+        }
         if (tickCount % 10 == 0) {
             Player p = level().getNearestPlayer(this, 10);
             if (p != null) {
@@ -85,7 +123,11 @@ public class VluchtRookguhEntity extends RookguhEntity {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!level().isClientSide() && hand == InteractionHand.MAIN_HAND && player instanceof ServerPlayer p) {
-            Vlucht.klik(p, this);
+            if (RookPlatform.isExtra(halte)) {
+                RookPlatform.klikRookguh(p, this);           // (1.7.1: the castle's, a platform's)
+            } else {
+                Vlucht.klik(p, this);
+            }
         }
         return InteractionResult.SUCCESS;
     }
@@ -119,11 +161,16 @@ public class VluchtRookguhEntity extends RookguhEntity {
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Halte", halte);
+        if (blok != null) {
+            tag.putLong("Blok", blok.asLong());
+        }
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         halte = tag.getStringOr("Halte", "");
+        long b = tag.getLongOr("Blok", Long.MIN_VALUE);
+        blok = b == Long.MIN_VALUE ? null : BlockPos.of(b);
     }
 }

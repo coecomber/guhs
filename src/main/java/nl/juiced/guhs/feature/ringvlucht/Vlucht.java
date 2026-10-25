@@ -245,15 +245,19 @@ public final class Vlucht {
      */
     public static boolean kies(ServerPlayer p, VluchtRookguhEntity rookguh, String halteId) {
         Haltes.Halte hier = rookguh.halte();
-        if (!rookguh.isAlive() || rookguh.level() != p.level() || rookguh.distanceTo(p) > REIK || hier == null
-                || !(Haltes.klaar(p, hier) || Sluiers.passeert(p))) {
+        boolean kasteel = RookPlatform.GUHRIO.equals(rookguh.halteId());   // (1.7.1: the castle's Rookguh, there for everyone)
+        if (!rookguh.isAlive() || rookguh.level() != p.level() || rookguh.distanceTo(p) > REIK
+                || (!kasteel && (hier == null || !(Haltes.klaar(p, hier) || Sluiers.passeert(p))))) {
             return false;
         }
         if (RookPlatform.isExtra(halteId)) {
+            if (kasteel && RookPlatform.GUHRIO.equals(halteId)) {
+                return false;                                 // (it is there already)
+            }
             return RookPlatform.vlieg(p, halteId, rookguh, false);   // (1.7.0: the Super Guhrio castle, the own platform)
         }
         Haltes.Halte naar = Haltes.van(halteId);
-        if (naar == null || !bestemmingen(p, hier).contains(naar)) {
+        if (naar == null || !bestemmingen(p, kasteel ? null : hier).contains(naar)) {
             return false;
         }
         return vlieg(p, naar, rookguh);

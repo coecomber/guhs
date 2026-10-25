@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.7.1 — Minecraft 26.1.2
+
+- **Rookguh-platform:** a Reis-Rookguh now hovers above your platform. Click it (or the platform) to fly; clicking someone else's makes that platform yours. Platforms put down in 1.7.0 get their Rookguh when their owner comes by.
+- **Super Guhrio castle:** a Reis-Rookguh now hovers on the forecourt, next to where the Rookguh puts you down, and flies you to every stop you reached.
+- **Fix:** the Superkompas and the guh compasses could freeze a server for a minute in freshly generated, unexplored land. They no longer work out buildings in land that does not exist yet: a fixed spot (such as a guaranteed building) is pointed at straight away, the rest is found once the land is there.
+
 ## 1.7.0 — Onder de Wol — Minecraft 26.1.2
 
 Mining in the Guhmension used to mean digging through an endless sea of pink wool. Not any more: under the wool there is now a whole plush underground, with stone layers, ores, caves, cave biomes, buildings, a villager town and five cave minigames, plus a prettier surface, an enchanting altar of our own and a lot of mining helpers. Everything new in the land only grows in new chunks: worlds are not reset, so go exploring a little further out.

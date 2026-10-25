@@ -175,8 +175,18 @@ public class GuhCompassItem extends Item {
             }
         }
         candidates.sort(java.util.Comparator.comparingLong(o -> (Long) o[0]));
+        nl.juiced.guhs.world.NieuwTerrein terrein = nl.juiced.guhs.world.NieuwTerrein.van(level);
         for (Object[] cand : candidates) {
             net.minecraft.world.level.ChunkPos c = (net.minecraft.world.level.ChunkPos) cand[1];
+            if (!terrein.bestaat(c.x(), c.z())) {
+                // 1.7.1: not generated yet. Working out the building there (on the server thread, every 16 blocks walked)
+                // took over a minute in fresh 1.7.0 terrain: a fixed spot (rings, guaranteed) is pointed at as it is, a
+                // random spot is skipped until the land is there
+                if (cand[2] instanceof net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement) {
+                    return new BlockPos(c.getMiddleBlockX(), from.getY(), c.getMiddleBlockZ());
+                }
+                continue;
+            }
             var result = level.structureManager().checkStructurePresence(c, holder.get().value(),
                     (net.minecraft.world.level.levelgen.structure.placement.StructurePlacement) cand[2], false);
             if (result == net.minecraft.world.level.levelgen.structure.StructureCheckResult.START_NOT_PRESENT) {
