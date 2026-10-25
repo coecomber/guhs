@@ -139,4 +139,27 @@ public class VadslampGameTests {
                 .getOrThrow(VadsKracht.TOON).stream().anyMatch(h -> h.value() == TechbeursFeature.VADSLAMP.get()), "the hover readout works on it");
         helper.succeed();
     }
+
+    /** The Vadsschakelaar in the line: on, the lamp behind it burns; off, it sleeps; on again, it burns again. */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
+    public static void vadsschakelaarKnipt(GameTestHelper helper) {
+        BlockPos schakelaar = new BlockPos(5, 2, 2), lampPos = new BlockPos(7, 2, 2);
+        helper.setBlock(new BlockPos(3, 2, 2), VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 1));
+        helper.setBlock(new BlockPos(4, 2, 2), ModBlocks.GUH_WIRE.get());
+        helper.setBlock(schakelaar, TechbeursFeature.VADSSCHAKELAAR.get());
+        helper.setBlock(new BlockPos(6, 2, 2), ModBlocks.GUH_WIRE.get());
+        helper.setBlock(lampPos, TechbeursFeature.VADSLAMP.get());
+        VadslampBlockEntity lamp = (VadslampBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(lampPos));
+        helper.runAfterDelay(30, () -> {
+            helper.assertTrue(lamp.heeftKracht(), "on: the lamp behind the switch has vadskracht");
+            VadsschakelaarBlock.zet(helper.getLevel(), helper.absolutePos(schakelaar), false);
+            helper.runAfterDelay(30, () -> {
+                helper.assertTrue(!lamp.heeftKracht() && lamp.snoet() == Snoet.SLAAPT, "off: the lamp sleeps");
+                helper.assertTrue(VadsKracht.net(helper.getLevel(), helper.absolutePos(new BlockPos(4, 2, 2))).draait(),
+                        "the source side still runs on its own");
+                VadsschakelaarBlock.zet(helper.getLevel(), helper.absolutePos(schakelaar), true);
+                helper.succeedWhen(() -> helper.assertTrue(lamp.heeftKracht() && lamp.snoet() == Snoet.WERKT, "on again: it burns"));
+            });
+        });
+    }
 }

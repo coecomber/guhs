@@ -30707,5 +30707,9 @@
   "sign.guhs.kegelen.north_ingang2_3": "around here.",
   "block.guhs.vadslamp": "Chonk Lamp",
   "block.guhs.vadslamp.lore": "On 1 chonk power: light level 15, and it lights up a much bigger area than a normal lamp",
-  "block.guhs.vadslamp_licht": "Chonk Lamp Light"
+  "block.guhs.vadslamp_licht": "Chonk Lamp Light",
+  "block.guhs.vadsschakelaar": "Chonk Switch",
+  "block.guhs.vadsschakelaar.lore": "Put it in a line of Guh Wire: on, the chonk power goes through; off, everything behind it sleeps",
+  "block.guhs.vadsschakelaar.aan": "Switch on: the chonk power goes through",
+  "block.guhs.vadsschakelaar.uit": "Switch off: everything behind it sleeps"
 }

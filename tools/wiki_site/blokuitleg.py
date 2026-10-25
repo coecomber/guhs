@@ -1848,3 +1848,19 @@ UITLEG["vadslamp"] = dict(
        "- The extra light doesn't go through walls and is never in the way: you can just put blocks in it.\n"
        "- Recipe: a lantern, two Guh Wire and two glowstone dust.",
     meer=["systemen/guh-technologie"])
+UITLEG["vadsschakelaar"] = dict(
+    nl="Een hendeltje voor in je Guhdraad. Zet hem tussen twee stukken draad en rechtsklik erop om hem om te zetten:\n"
+       "\n"
+       "- Aan (groen knopje, blij snoetje): de vadskracht gaat erdoorheen, net als door een stuk Guhdraad.\n"
+       "- Uit (rood knopje, slapend snoetje): hij knipt de lijn door. Alles achter de schakelaar krijgt geen vadskracht meer en "
+       "valt in slaap; de kant van je Guhrad draait gewoon door.\n"
+       "\n"
+       "Handig om een machine even stil te zetten zonder draad weg te halen. Recept: een hendel boven een Guhdraad.",
+    en="A little lever for your Guh Wire. Put it between two pieces of wire and right-click it to flip it:\n"
+       "\n"
+       "- On (green knob, happy snoot): the chonk power goes through, just like through a piece of Guh Wire.\n"
+       "- Off (red knob, sleeping snoot): it cuts the line. Everything behind the switch gets no chonk power and falls asleep; "
+       "the side of your Guh Wheel keeps running.\n"
+       "\n"
+       "Handy for stopping a machine for a while without taking wire away. Recipe: a lever above a Guh Wire.",
+    meer=["systemen/guh-technologie"])

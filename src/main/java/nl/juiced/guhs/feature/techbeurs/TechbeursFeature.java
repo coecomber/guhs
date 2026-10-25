@@ -45,6 +45,14 @@ public final class TechbeursFeature {
             () -> BlockBehaviour.Properties.of().replaceable().noCollision().noOcclusion().noLootTable().instabreak()
                     .lightLevel(s -> VadslampLicht.LICHT).randomTicks().pushReaction(PushReaction.DESTROY));
 
+    /** {@code guhs:vadsschakelaar}: a lever in a line of Guhdraad (on: the vadskracht goes through, off: it cuts the line). */
+    public static final DeferredBlock<VadsschakelaarBlock> VADSSCHAKELAAR = BLOCKS.registerBlock("vadsschakelaar", VadsschakelaarBlock::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f, 6f).sound(SoundType.METAL).noOcclusion()
+                    .pushReaction(PushReaction.DESTROY));
+    public static final DeferredItem<BlockItem> VADSSCHAKELAAR_ITEM = item("vadsschakelaar", VADSSCHAKELAAR);
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VadsschakelaarBlock.Kern>> VADSSCHAKELAAR_BE = BLOCK_ENTITIES.register(
+            "vadsschakelaar", () -> new BlockEntityType<>(VadsschakelaarBlock.Kern::new, VADSSCHAKELAAR.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VadslampBlockEntity>> VADSLAMP_BE = BLOCK_ENTITIES.register(
             "vadslamp", () -> new BlockEntityType<>(VadslampBlockEntity::new, VADSLAMP.get()));
 
@@ -67,10 +75,12 @@ public final class TechbeursFeature {
 
     private static void capabilities(RegisterCapabilitiesEvent event) {
         VadskrachtFeature.knoopCapability(event, VADSLAMP_BE.get());
+        VadskrachtFeature.knoopCapability(event, VADSSCHAKELAAR_BE.get());
     }
 
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(VADSLAMP_ITEM.get()));
+        output.accept(new ItemStack(VADSSCHAKELAAR_ITEM.get()));
     }
 
     private TechbeursFeature() {
