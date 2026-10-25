@@ -15,6 +15,10 @@ minigames, each in its own hall deep under a little entrance hut with a Wolkenli
               <struct>_schacht (DIEPTE blocks of nothing) and the hut <struct>_hut on the ground (on foundations, a porch
               of pink guh fences); a Wolkenliftje in both floors, straight above each other (sneak = down, jump = up).
               Only the hall with its walls and the hut are protected (Java Spelhal).
+              (ronde 45-47) Each hall runs its lights and scoreboard lamps on a Guhrad (spelhal_kracht.py, _kracht_*):
+              a guh in a wheel in the north wall, a Vadsschakelaar, Vadslampen over Guhdraad, a lever, signs. The games
+              never depend on it. The Glimwormvangen hall stays dark (its glimpotjes are the game's light): only the
+              scoreboard lamps there.
   check       the halls fit the Java (SchatVeld.GROOTTE, Lichtjespuzzel.CEL, the scan range around the host), both
               Wolkenliftjes have room above them, the entrances can be walked to, fences are connected, every guhs: block
               exists (spelhal_bouw.check_gebouw).
@@ -37,6 +41,7 @@ if os.path.join(HERE, "..") not in sys.path:
     sys.path.insert(0, os.path.join(HERE, ".."))
 
 from features import spelhal_bouw as sh  # noqa: E402
+from features import spelhal_kracht as sk  # noqa: E402
 
 DIEPTE = 16          # the shaft: the world's own rock between the hall's ceiling and the hut
 LIFT = (None, 4)     # the hut and both Wolkenliftjes stand at z = 4 of every template (x per game)
@@ -691,8 +696,9 @@ def zaal_schatgraven(h, texts):
     S = ms.Structure((X, H + 2, Z))
     rng = random.Random(1770)
     # (the ceiling is not plain viltsteen: the cave decoration hangs glitterrank from viltsteen ceilings)
-    _zaal(S, mc, X, Z, H, "guhs:viltsteen", lambda x, z: "guhs:viltsteen_tegels",
-          lambda x, z: "guhs:guh_kristal_lamp" if x % 6 == 3 and z % 6 == 3 else "guhs:gepolijste_viltsteen", rng, muur2="guhs:pluiswolblok")
+    # (ronde 45-47: no crystal lamps in the ceiling and walls any more: the hall's light is its Vadslampen)
+    _zaal(S, mc, X, Z, H, "guhs:viltsteen", lambda x, z: "guhs:viltsteen_tegels", lambda x, z: "guhs:gepolijste_viltsteen", rng,
+          muur2="guhs:pluiswolblok")
     vx, vz, n = VELD
     # the field: pluiswol with clusters of viltkiezel
     kiezels = [(rng.randrange(n), rng.randrange(n)) for _ in range(6)]
@@ -711,10 +717,8 @@ def zaal_schatgraven(h, texts):
     for (x, z) in ((2, Z - 2), (X - 3, Z - 2)):
         S.set(x, 1, z, mc("barrel"), {"facing": "up", "open": "false"})
         S.set(x, 2, z, "guhs:gouden_kaasje", {"facing": "south"})
-    for z in range(3, Z - 1, 5):
-        for x in (0, X - 1):
-            S.set(x, 3, z, "guhs:guh_kristal_lamp")
     _host(S, ms, spel, texts, mc)
+    _kracht_schatgraven(ms, S, texts)
     return _af(h, ms, S, spel, texts, "guhs:viltsteen_bakstenen")
 
 
@@ -744,6 +748,7 @@ def zaal_glimwormen(h, texts):
             S.set(x, 1, z, "guhs:glimplant")
             geplant += 1
     _host(S, ms, spel, texts, mc)
+    _kracht_glimwormen(ms, S, texts)
     return _af(h, ms, S, spel, texts, "guhs:gladde_knuffelsteen")
 
 
@@ -760,14 +765,53 @@ def zaal_lichtjes(h, texts):
     for x in range(n * cel):
         for z in range(n * cel):
             S.set(rx + x, 0, rz + z, "guhs:grotspel_puzzellamp", {"aan": "true"})
-    # mushroom lamps and stools along the walls
-    for z in range(3, Z - 1, 4):
-        for x in (1, X - 2):
-            S.set(x, 1, z, "guhs:paddenstoellampje")
+    # stools along the walls (ronde 45-47: the mushroom lamps along the walls are Vadslampen now, _kracht_lichtjes)
     for (x, z) in ((3, Z - 2), (X - 4, Z - 2), (3, 2), (X - 4, 2)):
         S.set(x, 1, z, "guhs:paddenstoelkrukje", {"facing": "south"})
     _host(S, ms, spel, texts, mc)
+    _kracht_lichtjes(ms, S, texts)
     return _af(h, ms, S, spel, texts, "guhs:steeltjessteen")
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# (ronde 45-47) vadskracht in the halls (spelhal_kracht.py): each a Guhrad in the north wall, right of the host
+# ---------------------------------------------------------------------------------------------------------------------
+def _kracht_schatgraven(ms, S, texts):
+    """Eight Vadslampen round the field (it is never wired over) and two scoreboard lamps by Kapitein Schepsnuit: 10 VK."""
+    _s, X, Z, H, lx, (nx, nz), _k, _salt = SPELEN["schatgraven"]
+    vx, vz, n = VELD
+    veld = {(x, z) for x in range(vx - 1, vx + n + 1) for z in range(vz - 1, vz + n + 1)} | {(nx, nz)}   # (and the host's spot)
+    return sk.hal(ms, S, "schatgraven", texts, "grotspel.schatgraven_kracht", rad=(19, 1, 1, "south"), hendel=(19, 1, 2, "floor", "south"),
+                  schakelaar=(17, 1, 1, "west", (16, 1)),
+                  lampen=[(2, 1, 9, "east"), (2, 1, 15, "east"), (2, 1, 21, "east"), (X - 3, 1, 9, "west"), (X - 3, 1, 15, "west"),
+                          (X - 3, 1, 21, "west"), (6, 1, 6, "south"), (16, 1, 6, "south")],
+                  score=[(nx - 1, 1, nz - 1, "south"), (nx + 1, 1, nz - 1, "south")], binnen=(1, 1, X - 2, Z - 2), y=1, verboden=veld,
+                  borden=[(21, 1, 2, "south", sk.BORD_RAD, "rad", False), (18, 1, 3, "south", sk.BORD_LAMPEN, "lampen", False),
+                          (12, 1, 2, "south", sk.BORD_SCORE, "score", False)])
+
+
+def _kracht_glimwormen(ms, S, texts):
+    """Only the two scoreboard lamps by Juf Glimmie (the hall stays dark: its glimpotjes are the game's light): 2 VK."""
+    _s, X, Z, H, lx, (nx, nz), _k, _salt = SPELEN["glimwormvangen"]
+    # (the wheel a step off the north wall: the fence posts with the glimpotjes stand against it)
+    return sk.hal(ms, S, "glimwormvangen", texts, "grotspel.glimwormvangen_kracht", rad=(21, 1, 2, "south"),
+                  hendel=(21, 1, 3, "floor", "south"), schakelaar=(20, 1, 3, "south", (19, 3)),
+                  score=[(nx - 1, 1, nz - 1, "south"), (nx + 1, 1, nz - 1, "south")], binnen=(1, 1, X - 2, 7), y=1, verboden={(nx, nz)},
+                  borden=[(23, 1, 3, "south", sk.BORD_RAD, "rad", False), (14, 1, 2, "south", sk.BORD_SCORE, "score", False)])
+
+
+def _kracht_lichtjes(ms, S, texts):
+    """The twelve mushroom lamps along the walls are Vadslampen, and two scoreboard lamps by Meester Knipperlicht: 14 VK.
+    The wire keeps off the raster."""
+    _s, X, Z, H, lx, (nx, nz), _k, _salt = SPELEN["lichtjespuzzel"]
+    rx, rz, n, cel = RASTER
+    raster = {(x, z) for x in range(rx, rx + n * cel) for z in range(rz, rz + n * cel)} | {(nx, nz)}   # (and the host's spot)
+    lampen = [(x, 1, z, "east" if x == 1 else "west") for z in range(3, Z - 1, 4) for x in (1, X - 2)]
+    return sk.hal(ms, S, "lichtjespuzzel", texts, "grotspel.lichtjespuzzel_kracht", rad=(18, 1, 1, "south"),
+                  hendel=(18, 1, 2, "floor", "south"), schakelaar=(16, 1, 1, "west", (15, 1)), lampen=lampen,
+                  score=[(nx - 1, 1, nz - 1, "south"), (nx + 1, 1, nz - 1, "south")], binnen=(1, 1, X - 2, Z - 2), y=1, verboden=raster,
+                  borden=[(20, 1, 3, "south", sk.BORD_RAD, "rad", False), (17, 1, 2, "south", sk.BORD_LAMPEN, "lampen", False),
+                          (12, 1, 2, "south", sk.BORD_SCORE, "score", False)])
 
 
 def structure_files(h, spel, hal):
@@ -1074,6 +1118,7 @@ def build(h):
         struct = SPELEN[spel][0]
         S, info = maak(h, extra)
         hut = hut_template(ms, spel, extra)
+        sk.verbind(S)
         for t, naam in ((S, struct), (hut, f"{struct}_hut")):
             sh.verbind(t, h.A)
             problems += sh.check_verbonden(t, h.A, naam)

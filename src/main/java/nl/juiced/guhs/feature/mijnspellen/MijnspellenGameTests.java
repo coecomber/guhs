@@ -709,4 +709,103 @@ public class MijnspellenGameTests {
                 + " moved " + java.util.Arrays.toString(dy));
         helper.succeed();
     }
+
+    // --- 1.7.0 (ronde 45-47): the halls run on vadskracht, the Kegelzetter -----------------------------------------------------
+
+    @GuhTest(template = "karretjeswissels_zaal", batch = BATCH + "_kracht", timeoutTicks = 300)
+    public static void karretjesKracht(GameTestHelper helper) {
+        hal(helper, 1, 10);
+    }
+
+    @GuhTest(template = "karretjeswissels_zaal", batch = BATCH + "_kracht", timeoutTicks = 300, rotationSteps = 1)
+    public static void karretjesKrachtGedraaid(GameTestHelper helper) {
+        hal(helper, 1, 10);
+    }
+
+    @GuhTest(template = "kegelgrot_zaal", batch = BATCH + "_kracht", timeoutTicks = 300)
+    public static void kegelgrotKracht(GameTestHelper helper) {
+        hal(helper, 2, 9);
+    }
+
+    @GuhTest(template = "kegelgrot_zaal", batch = BATCH + "_kracht", timeoutTicks = 300, rotationSteps = 3)
+    public static void kegelgrotKrachtGedraaid(GameTestHelper helper) {
+        hal(helper, 2, 9);
+    }
+
+    /** The hall's wheels run, every lamp burns; the Kegelgrot's three setters have vadskracht and show it on their signs. */
+    private static void hal(GameTestHelper helper, int wielen, int lampen) {
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, wielen, lampen, 0,
+                g -> nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.lampenBranden(helper, g, lampen));
+    }
+
+    /**
+     * The Kegelzetter (Kegelzetter.java): with the setter's wheel running every lane's setter has vadskracht and its sign
+     * says so; its lever on (the guh's break) and the signs turn to "pauze" (De Guhde's tick), and a game still starts
+     * with ten pins standing: the pins never wait for vadskracht. Lever off: the signs turn back.
+     */
+    @GuhTest(template = "kegelgrot_zaal", batch = BATCH + "_kracht", timeoutTicks = 600, rotationSteps = 1)
+    public static void kegelzetterPauze(GameTestHelper helper) {
+        net.minecraft.server.level.ServerLevel level = helper.getLevel();
+        GuhNpcEntity npc = npc(helper, GuhNpcEntity.Kind.KEGELGUH);
+        KegelGame game = KegelGame.of(npc);
+        helper.assertTrue(game.scan(npc, true), "the lanes are found");
+        var g = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.zoek(helper);
+        BlockPos rad = g.wielen().stream().max(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();   // (on the bridge)
+        BlockPos hendel = null;
+        for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+            if (level.getBlockState(rad.below().relative(d)).is(Blocks.LEVER)) {
+                hendel = rad.below().relative(d).immutable();
+            }
+        }
+        helper.assertTrue(hendel != null, "the setter's lever on the bridge under its wheel");
+        BlockPos h = hendel;
+        int[] fase = {0};
+        ServerPlayer[] speler = {null};
+        helper.succeedWhen(() -> {
+            switch (fase[0]) {
+                case 0 -> {
+                    for (Niveau n : Niveau.values()) {
+                        helper.assertTrue(nl.juiced.guhs.feature.mijnspellen.kegelgrot.Kegelzetter.kracht(level, game.begin(n), richting(level, game.begin(n)))
+                                == Boolean.TRUE, "the setter of lane " + n + " has vadskracht");
+                        helper.assertTrue(bordSleutel(level, game.begin(n)).startsWith("sign.guhs.kegelen.zetter_aan_"), "its sign: it works");
+                    }
+                    nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.trek(level, h);
+                    fase[0] = 1;
+                    helper.fail("lever pulled");
+                }
+                case 1 -> {
+                    for (Niveau n : Niveau.values()) {
+                        helper.assertTrue(nl.juiced.guhs.feature.mijnspellen.kegelgrot.Kegelzetter.kracht(level, game.begin(n), richting(level, game.begin(n)))
+                                == Boolean.FALSE, "the setter of lane " + n + " has no vadskracht");
+                        helper.assertTrue(bordSleutel(level, game.begin(n)).startsWith("sign.guhs.kegelen.zetter_uit_"), "its sign: pauze");
+                    }
+                    ServerPlayer p = player(helper);
+                    p.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
+                    speler[0] = p;
+                    helper.assertTrue(game.start(npc, p, Niveau.MEDIUM), "a game starts without vadskracht");
+                    helper.assertTrue(game.testKegels(level).size() == 10, "ten pins stand all the same");
+                    leave(helper, p);
+                    nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.trek(level, h);
+                    fase[0] = 2;
+                    helper.fail("lever back");
+                }
+                default -> {
+                    for (Niveau n : Niveau.values()) {
+                        helper.assertTrue(bordSleutel(level, game.begin(n)).startsWith("sign.guhs.kegelen.zetter_aan_"), "the sign of lane " + n + " works again");
+                    }
+                }
+            }
+        });
+    }
+
+    private static net.minecraft.core.Direction richting(net.minecraft.server.level.ServerLevel level, BlockPos begin) {
+        return level.getBlockState(begin).getValue(nl.juiced.guhs.feature.mijnspellen.MijnspelBlokken.Begin.FACING);
+    }
+
+    private static String bordSleutel(net.minecraft.server.level.ServerLevel level, BlockPos begin) {
+        BlockPos b = nl.juiced.guhs.feature.mijnspellen.kegelgrot.Kegelzetter.bord(begin, richting(level, begin));
+        String k = level.getBlockEntity(b) instanceof net.minecraft.world.level.block.entity.SignBlockEntity s
+                ? nl.juiced.guhs.feature.mijnspellen.kegelgrot.Kegelzetter.sleutel(s) : null;
+        return k == null ? "(no Kegelzetter sign at " + b + ")" : k;
+    }
 }

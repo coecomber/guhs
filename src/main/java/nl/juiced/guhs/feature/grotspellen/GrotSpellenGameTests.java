@@ -491,4 +491,58 @@ public class GrotSpellenGameTests {
         }
         helper.succeed();
     }
+
+    // --- 1.7.0 (ronde 45-47): every hall's lights and scoreboard lamps run on its own Guhrad (tools/features/spelhal_kracht.py) ---
+
+    @GuhTest(template = "grotspel_schatgraven", batch = "grotspellen_kracht", timeoutTicks = 300)
+    public static void grotSchatgravenKracht(GameTestHelper helper) {
+        halKracht(helper, 1, 10);
+    }
+
+    @GuhTest(template = "grotspel_schatgraven", batch = "grotspellen_kracht", timeoutTicks = 300, rotationSteps = 1)
+    public static void grotSchatgravenKrachtGedraaid(GameTestHelper helper) {
+        halKracht(helper, 1, 10);
+    }
+
+    @GuhTest(template = "grotspel_glimwormen", batch = "grotspellen_kracht", timeoutTicks = 300)
+    public static void grotGlimwormenKracht(GameTestHelper helper) {
+        halKracht(helper, 1, 2);
+    }
+
+    @GuhTest(template = "grotspel_glimwormen", batch = "grotspellen_kracht", timeoutTicks = 300, rotationSteps = 2)
+    public static void grotGlimwormenKrachtGedraaid(GameTestHelper helper) {
+        halKracht(helper, 1, 2);
+    }
+
+    @GuhTest(template = "grotspel_lichtjes", batch = "grotspellen_kracht", timeoutTicks = 300)
+    public static void grotLichtjesKracht(GameTestHelper helper) {
+        halKracht(helper, 1, 14);
+    }
+
+    @GuhTest(template = "grotspel_lichtjes", batch = "grotspellen_kracht", timeoutTicks = 300, rotationSteps = 3)
+    public static void grotLichtjesKrachtGedraaid(GameTestHelper helper) {
+        halKracht(helper, 1, 14);
+    }
+
+    /**
+     * A hall placed by itself (also turned): its Guhrad(en) whole and running, every Vadslamp burning and lighting around it
+     * (KrachtProef), a lever by each wheel and a Vadsschakelaar (what a lever does: VadsmijnstadjeGameTests, the same blocks).
+     */
+    public static void halKracht(GameTestHelper helper, int wielen, int lampen) {
+        ServerLevel level = helper.getLevel();
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.Gevonden g = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.zoek(helper);
+        helper.assertTrue(g.wielen().size() == wielen, wielen + " Guhrad(en), found " + g.wielen().size());
+        helper.assertTrue(nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.schakelaars(helper).size() == wielen, "a Vadsschakelaar per wheel");
+        List<BlockPos> hendels = new java.util.ArrayList<>(nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.hendels(helper, g.wielen()));
+        for (BlockPos w : g.wielen()) {                          // (a lever on the block under the wheel: the Kegelzetter's)
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                if (level.getBlockState(w.below().relative(d)).is(net.minecraft.world.level.block.Blocks.LEVER)) {
+                    hendels.add(w.below().relative(d).immutable());
+                }
+            }
+        }
+        helper.assertTrue(hendels.size() == wielen, "a lever by each wheel: " + hendels);
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, wielen, lampen, 0,
+                gv -> nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.lampenBranden(helper, gv, lampen));
+    }
 }

@@ -18,6 +18,15 @@ The rail networks, bins and levers of the Wisselgrot are NOT in the template: Co
 KarretjesNet.java when a shift starts (one source of truth); this module only keeps the floor and the balcony free for
 them (KAR_BANEN, checked against the Java file). The bowling lanes ARE built here (lane, gutters, bumpers, posts), with
 the same numbers as KegelBaan.java (checked too).
+
+(ronde 45-47, spelhal_kracht.py) Both halls run on vadskracht, early tier, the games never depending on it:
+  the Wisselgrot   a Guhrad at the balcony's east end: the balcony's lights (Vadslampen instead of the hanging lanterns)
+                   and two scoreboard lamps by Piepwiel (10 VK); the lanterns over the rail network stay
+  the Kegelgrot    two Guhraden: one in the lounge behind De Guhde (the lounge's lights and two scoreboard lamps on his
+                   counter, 6 VK) and the KEGELZETTER: a bridge over the end of the lanes (u ZETTER_U, a block above the
+                   pins) with a Guhrad on it and a Vadslamp per lane (3 VK), and a sign per lane (u ZETTER_BORD_U) that
+                   Java (mijnspellen/kegelgrot/Kegelzetter.java, the same numbers, checked) turns to "pauze" while the
+                   setter has no vadskracht; the pins are set all the same.
 """
 import json
 import math
@@ -25,6 +34,7 @@ import os
 import re
 
 from features import spelhal_bouw as sh
+from features import spelhal_kracht as sk
 
 SCHACHT = 20                 # the empty column between the hall's ceiling and the hut's floor
 PLAFOND = "guhs:gepolijste_viltsteen"   # the Wisselgrot's ceiling
@@ -70,11 +80,18 @@ def kegel_getallen():
 
 
 def check_java():
-    """KAR_BANEN = KarretjesNet.java (switches and bins per network, in the order the Java builds them)."""
+    """KAR_BANEN = KarretjesNet.java (switches and bins per network, in the order the Java builds them); the Kegelzetter's
+    numbers = Kegelzetter.java."""
+    problems = []
+    zet = _java(os.path.join("kegelgrot", "Kegelzetter.java"))
+    if zet is not None:
+        for naam, waarde in (("U", ZETTER_U), ("BORD_U", ZETTER_BORD_U), ("DY", ZETTER_DY)):
+            m = re.search(rf"\b{naam} = (-?\d+)", zet)
+            if not m or int(m.group(1)) != waarde:
+                problems.append(f"Kegelzetter.{naam} != {waarde}")
     src = _java(os.path.join("karretjes", "KarretjesNet.java"))
     if src is None:
-        return []
-    problems = []
+        return problems
     delen = src.split("banen.add(baan(Niveau.")[1:]
     if len(delen) != 3:
         return [f"KarretjesNet.java: expected 3 networks, found {len(delen)}"]
@@ -257,8 +274,7 @@ def karretjes_zaal(ms, texts, rng):
     bord(ms, S, mid - 1, KAR_Y + 6, 1, "south", [("Wisselgrot", "Switch Cave"), ("Zet de wissels", "Set the switches"),
                                                 ("met de hendels!", "with the levers!"), ("Aan = rechtsaf", "On = turn right")],
          texts, "karretjes.uitleg")
-    for x in range(2, X - 2, 6):                                           # lamps along the balcony
-        S.set(x, KAR_HOOG - 1, 3, "minecraft:lantern", {"hanging": "true", "waterlogged": "false"})
+    # (ronde 45-47) the lamps along the balcony are Vadslampen on the balcony floor (karretjes_kracht)
     # (1.7.0 playtest) how it works, on the balcony wall: the levers, the bins, the calm start
     uitleg = [(mid + 2, [("~ De hendels ~", "~ The levers ~"), ("UIT: <- links", "OFF: <- left"), ("AAN: rechts ->", "ON: right ->"),
                          ("De rails wijzen!", "Rails show it!")]),
@@ -271,6 +287,7 @@ def karretjes_zaal(ms, texts, rng):
     for i, (x, regels) in enumerate(uitleg):
         assert S.get(x, KAR_Y + 6, 1) in (None, "minecraft:air"), f"Wisselgrot: the sign spot {x} is taken"
         bord(ms, S, x, KAR_Y + 6, 1, "south", regels, texts, f"karretjes.uitleg{i + 2}")
+    karretjes_kracht(ms, S, texts, X, mid)
     # (1.7.0 playtest) RAND blocks of room on every side (the world's rock: only the hall is protected) and three extra
     # entrances from the balcony: west, east and north
     R = sh.RAND
@@ -286,6 +303,20 @@ def karretjes_zaal(ms, texts, rng):
                           plafond=PLAFOND)
         info["ingangen"].append(kamer)
     return T, info
+
+
+def karretjes_kracht(ms, S, texts, X, mid):
+    """The Wisselgrot's vadskracht: a Guhrad at the balcony's east end (wheel block (X - 4, z 1), facing the balcony), a
+    lever in front, a Vadsschakelaar; eight Vadslampen on the balcony (where the hanging lanterns were, not by the lift or
+    Piepwiel) and two scoreboard lamps flanking Piepwiel; the wire stays in the back half of the balcony (z 1..4: the
+    front row is for the players at the levers on the railing): 10 VK."""
+    y = KAR_Y + 5
+    lampen = [(x, y, 2, "south") for x in range(2, X - 2, 6) if abs(x - mid) > 3]
+    return sk.hal(ms, S, "karretjes", texts, "karretjes.kracht", rad=(X - 4, y, 1, "south"), hendel=(X - 4, y, 2, "floor", "south"),
+                  schakelaar=(X - 6, y, 1, "west", (X - 7, 1)), lampen=lampen, score=[(mid - 1, y, 1, "south"), (mid + 1, y, 1, "south")],
+                  binnen=(1, 1, X - 2, 4), y=y,
+                  borden=[(X - 4, y, 3, "south", sk.BORD_RAD, "rad", False), (X - 7, y, 3, "south", sk.BORD_LAMPEN, "lampen", False),
+                          (mid - 2, y, 1, "south", sk.BORD_SCORE, "score", False)])
 
 
 def karretjes_hut(ms, texts):
@@ -403,7 +434,7 @@ def kegelgrot_zaal(ms, texts, rng):
             S.set(mx - v, KEG_Y, KEG_Z0, "guhs:kegelbaanhout")
         # a neon sign above the pins, lamps above the lane
         S.set(mx, KEG_Y + 4, Z - 2, "guhs:neon_kegelbord", {"facing": "north"})
-        for u in (2, 7, 12):
+        for u in (2, 7):                                              # (u 12: the Kegelzetter's lamps light the pins now)
             S.set(mx, KEG_HOOG - 1, KEG_Z0 + u, "minecraft:lantern", {"hanging": "true", "waterlogged": "false"})
         naam = {"recht": [("~ Baan 1 ~", "~ Lane 1 ~"), ("Recht", "Straight"), ("Makkelijk", "Easy"), ("Pas op: goten!", "Mind the gutters!")],
                 "bochtig": [("~ Baan 2 ~", "~ Lane 2 ~"), ("Bochtig", "Bendy"), ("Medium", "Medium"), ("Kronkel, guhtje!", "Wiggle, guhtje!")],
@@ -433,8 +464,8 @@ def kegelgrot_zaal(ms, texts, rng):
     bord(ms, S, mid - 1, KEG_Y + 3, 1, "south", [("De Kegelgrot", "The Bowling Cave"), ("Kijk, hou vast,", "Look, hold on,"),
                                                  ("laat los: rol!", "let go: roll!"), ("Strike = VAHOEG", "Strike = WAHOOG")],
          texts, "kegelen.uitleg")
-    for x in range(2, X - 2, 5):
-        S.set(x, KEG_HOOG - 1, 2, "minecraft:lantern", {"hanging": "true", "waterlogged": "false"})
+    # (ronde 45-47) the lounge's lamps are Vadslampen on a Guhrad behind De Guhde, and the Kegelzetter over the pins
+    info["zetter"] = kegelgrot_kracht(ms, S, texts, X, mid, banen)
     # (1.7.0 playtest) RAND blocks of room on every side and three extra entrances from the lounge: west, east and north
     R = sh.RAND
     T = sh.verschuif(ms, S, R, 0, R, (X + 2 * R, Y, Z + 2 * R))
@@ -449,6 +480,49 @@ def kegelgrot_zaal(ms, texts, rng):
                           plafond="guhs:gepolijste_viltsteen", deur="minecraft:cherry_door", hout="cherry")
         info["ingangen"].append(kamer)
     return T, info
+
+
+# the Kegelzetter (Java mijnspellen/kegelgrot/Kegelzetter.java, in a lane's frame from its foul line: u along the lane, v to
+# its right, dy above the foul line block): the bridge at u ZETTER_U (dy 3), the lane's Vadslamp on it (dy 4, v -1: the
+# neon sign behind stays in sight), the lane's sign on the bridge's front (u ZETTER_BORD_U, dy 3, v 0)
+ZETTER_U, ZETTER_BORD_U, ZETTER_DY = 15, 14, 3
+ZETTER_AAN = [("Kegelzetter", "Pin setter"), ("op vadskracht!", "on vads power!"), ("Zet je kegels", "Sets your pins"), ("klaar. Strike!", "up. Strike!")]
+ZETTER_UIT = [("Kegelzetter", "Pin setter"), ("heeft PAUZE!", "takes a BREAK!"), ("De Guhde zet ze", "The Guhde sets"), ("met de hand.", "them by hand.")]
+
+
+def kegelgrot_kracht(ms, S, texts, X, mid, banen):
+    """The Kegelgrot's vadskracht, two Guhraden:
+      - the lounge: a Guhrad right behind De Guhde (wheel block (mid + 2, z 1)), its lever beside him, a Vadsschakelaar; two
+        scoreboard lamps on his counter (wired over the counter top), four Vadslampen along the front of the lounge: 6 VK;
+      - the Kegelzetter: a bridge of kegelbaanhout over the end of the lanes, a Guhrad on its west end (its lever on the
+        bridge's front: it powers the bridge block under the wheel), a Vadsschakelaar and a Vadslamp per lane on the
+        bridge, wired along its top: 3 VK; and per lane the Kegelzetter sign (Java swaps it to "pauze" without power).
+    Returns the setter's spots (for the check against the Java)."""
+    y = KEG_Y + 1
+    lounge = sk.hal(ms, S, "kegelgrot", texts, "kegelen.kracht", rad=(mid + 2, y, 1, "south"), hendel=(mid + 2, y, 2, "floor", "south"),
+                    schakelaar=(mid, y, 1, "west", (mid, 2)), lampen=[(6, y, 4, "south"), (9, y, 4, "south"), (X - 7, y, 4, "south"), (X - 2, y, 4, "south")],
+                    score=[(mid - 1, y + 1, 3, "south"), (mid + 1, y + 1, 3, "south")], binnen=(1, 1, X - 2, 5), y=y,
+                    borden=[(mid + 5, y, 2, "south", sk.BORD_RAD, "rad", False), (mid + 4, y, 2, "south", sk.BORD_LAMPEN, "lampen", False),
+                            (mid - 2, y, 2, "south", sk.BORD_SCORE, "score", False)])
+    S.set(mid, y + 1, 3, "guhs:guh_wire")      # (on the counter between the two scoreboard lamps, a step up from the wire at (mid, 2))
+    # the bridge (u ZETTER_U, a block above the pins' heads) over the whole width
+    zb = KEG_Z0 + ZETTER_U
+    by = KEG_Y + ZETTER_DY
+    for x in range(1, X - 1):
+        S.set(x, by, zb, "guhs:kegelbaanhout")
+    lampen = [(mx + 1, by + 1, zb, "north") for (_s, _x0, _w, mx, _vmin, _vmax) in banen]
+    assert lampen[0][0] == 5, lampen
+    zetter = sk.hal(ms, S, "kegelzetter", texts, "kegelen.kracht_zetter", rad=(2, by + 1, zb, "north"), hendel=(2, by, zb - 1, "wall", "north"),
+                    schakelaar=(4, by + 1, zb, "north", None), lampen=lampen, binnen=(0, 0, 0, 0), y=by + 1, draad=False,
+                    borden=[(1, by, zb - 1, "north", sk.BORD_RAD, "rad", True)])
+    for x in range(lampen[0][0] + 1, lampen[-1][0]):                      # the wire along the bridge, lamp to lamp
+        if S.get(x, by + 1, zb) in (None, "minecraft:air"):
+            S.set(x, by + 1, zb, "guhs:guh_wire")
+    for b, (_s, _x0, _w, mx, _vmin, _vmax) in enumerate(banen):
+        bord(ms, S, mx, by, KEG_Z0 + ZETTER_BORD_U, "north", ZETTER_AAN, texts, "kegelen.zetter_aan")
+    for i, (nl, en) in enumerate(ZETTER_UIT):
+        texts[f"sign.guhs.kegelen.zetter_uit_{i}"] = (en, nl)
+    return {"lounge": lounge, "zetter": zetter}
 
 
 def kegelgrot_hut(ms, texts):
@@ -524,6 +598,7 @@ def build(h, ms, texts):
     for spel, z, info, hut in (("karretjes", zaal, kinfo, karretjes_hut(ms, texts)), ("kegelgrot", kzaal, ginfo, kegelgrot_hut(ms, texts))):
         sid = STRUCTUREN[spel]
         sch = sh.schacht(ms, spel, sid, SCHACHT)
+        sk.verbind(z)
         for naam, t in ((f"{sid}_zaal", z), (f"{sid}_hut", hut)):
             sh.verbind(t, h.A)
             problems += sh.check_verbonden(t, h.A, naam)

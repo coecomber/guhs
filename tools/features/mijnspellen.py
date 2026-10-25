@@ -769,6 +769,8 @@ TEXTS = {  # key: (English, Dutch)
     "gui.guhs.kegelen.sta": ("Stand on the approach of your lane!", "Ga op de aanloop van je baan staan!"),
     "gui.guhs.kegelen.kijk": ("Look down the lane, at the pins!", "Kijk de baan af, naar de kegeltjes!"),
     "gui.guhs.kegelen.goot": ("Into the gutter...", "De goot in..."),
+    "gui.guhs.kegelen.zetter_pauze": ("The pin setter takes a break: The Guhde sets your pins by hand.",
+                                      "De kegelzetter heeft pauze: De Guhde zet je kegels met de hand."),
     "gui.guhs.kegelen.goot_titel": ("Gutter ball!", "Gootbal!"),
     "gui.guhs.kegelen.mis": ("Missed!", "Mis!"),
     "gui.guhs.kegelen.mis_sub": ("Not a single piep", "Geen enkele piep"),
