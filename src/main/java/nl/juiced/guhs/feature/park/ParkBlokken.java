@@ -198,6 +198,17 @@ public final class ParkBlokken {
             builder.add(HorizontalDirectionalBlock.FACING, BEELD);
         }
 
+        /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.facing(state, HorizontalDirectionalBlock.FACING, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.facing(state, HorizontalDirectionalBlock.FACING, mirror);
+        }
+
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, context.getHorizontalDirection().getOpposite());
@@ -247,6 +258,17 @@ public final class ParkBlokken {
         @Override
         protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
             builder.add(HorizontalDirectionalBlock.FACING);
+        }
+
+        /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.facing(state, HorizontalDirectionalBlock.FACING, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.facing(state, HorizontalDirectionalBlock.FACING, mirror);
         }
 
         @Override

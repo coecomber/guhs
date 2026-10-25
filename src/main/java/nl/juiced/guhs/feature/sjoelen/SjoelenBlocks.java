@@ -40,6 +40,13 @@ public final class SjoelenBlocks {
             builder.add(FACING, DEEL);
         }
 
+        /** 1.7.0: in a mirrored structure the left block is now on the right: the numbers across the bak turn round. */
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            BlockState s = super.mirror(state, mirror);
+            return mirror == net.minecraft.world.level.block.Mirror.NONE ? s : s.setValue(DEEL, 4 - s.getValue(DEEL));
+        }
+
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection());

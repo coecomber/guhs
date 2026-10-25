@@ -206,6 +206,13 @@ public final class DetailBlokken {
             builder.add(FACING, OPEN, KANT);
         }
 
+        /** 1.7.0: in a mirrored structure the hinge goes to the other side too (like a vanilla door). */
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            BlockState s = super.mirror(state, mirror);
+            return mirror == net.minecraft.world.level.block.Mirror.NONE ? s : s.setValue(KANT, s.getValue(KANT) == Kant.LINKS ? Kant.RECHTS : Kant.LINKS);
+        }
+
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             Direction f = Vorm.tegenMuur(context);

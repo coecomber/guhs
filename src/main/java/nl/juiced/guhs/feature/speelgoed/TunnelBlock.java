@@ -65,6 +65,8 @@ public class TunnelBlock extends Block {
     public static final EnumProperty<Kant> ZUID = EnumProperty.create("south", Kant.class);
     public static final EnumProperty<Kant> WEST = EnumProperty.create("west", Kant.class);
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+    private static final Map<Direction, EnumProperty<Kant>> KANTEN = Map.of(Direction.NORTH, NOORD, Direction.EAST, OOST, Direction.SOUTH, ZUID,
+            Direction.WEST, WEST);
 
     private static final Map<BlockState, VoxelShape> VORMEN = new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -82,6 +84,17 @@ public class TunnelBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NOORD, OOST, ZUID, WEST, AXIS);
+    }
+
+    /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return nl.juiced.guhs.block.Draaien.as(nl.juiced.guhs.block.Draaien.kanten(state, KANTEN, rotation), AXIS, rotation);
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return nl.juiced.guhs.block.Draaien.kanten(state, KANTEN, mirror);
     }
 
     public static EnumProperty<Kant> kant(Direction d) {

@@ -65,6 +65,13 @@ public final class KnabbelspelenBlocks {
             builder.add(FACING, SCHUIF);
         }
 
+        /** 1.7.0: in a mirrored structure the half-block shift goes to the other side too. */
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            BlockState s = super.mirror(state, mirror);
+            return mirror == net.minecraft.world.level.block.Mirror.NONE ? s : s.setValue(SCHUIF, switch (s.getValue(SCHUIF)) { case LINKS -> Schuif.RECHTS; case RECHTS -> Schuif.LINKS; default -> Schuif.GEEN; });
+        }
+
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());

@@ -47,6 +47,17 @@ public class HuisjeDeelBlock extends Block {
         builder.add(DX, DY, DZ);
     }
 
+    /** 1.7.0: a structure placed turned or mirrored turns this block along (Block.rotate/mirror keep the state as it is). */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return nl.juiced.guhs.block.Draaien.offset(state, DX, DZ, 3, rotation);
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return nl.juiced.guhs.block.Draaien.offset(state, DX, DZ, 3, mirror);
+    }
+
     /** The part state for a block at part, belonging to the controller at controller. */
     static BlockState voor(BlockState base, BlockPos controller, BlockPos part) {
         return base.setValue(DX, part.getX() - controller.getX() + 3).setValue(DY, part.getY() - controller.getY())

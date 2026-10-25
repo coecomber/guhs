@@ -56,6 +56,26 @@ public class KnabbelportaalBlock extends Block {
         builder.add(AS, DEEL);
     }
 
+    /**
+     * 1.7.0: a structure placed turned or mirrored turns the portal along: the axis turns, and where "to the right" now
+     * points the negative way the left and right parts swap numbers (so the four still find each other: {@link #heel}).
+     */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return langs(state, rotation.rotate(langs(state.getValue(AS))));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return langs(state, mirror.mirror(langs(state.getValue(AS))));
+    }
+
+    private static BlockState langs(BlockState state, Direction nieuw) {
+        int deel = state.getValue(DEEL);
+        boolean om = nieuw.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+        return state.setValue(AS, nieuw.getAxis()).setValue(DEEL, om ? deel ^ 1 : deel);
+    }
+
     /** The direction "to the right" along the portal. */
     static Direction langs(Direction.Axis as) {
         return as == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;

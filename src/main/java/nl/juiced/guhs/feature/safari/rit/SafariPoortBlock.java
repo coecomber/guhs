@@ -75,6 +75,20 @@ public class SafariPoortBlock extends BaseEntityBlock {
         builder.add(AS, DEEL_X, DEEL_Y, OPEN);
     }
 
+    /**
+     * 1.7.0: a structure placed turned or mirrored turns the gate along: the axis turns, and where the row of parts now
+     * runs the negative way deel_x counts from the other end (so {@link #hoek} still finds the corner).
+     */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return nl.juiced.guhs.block.Draaien.rij(state, AS, DEEL_X, BREED, rotation.rotate(nl.juiced.guhs.block.Draaien.langs(state.getValue(AS))));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return nl.juiced.guhs.block.Draaien.rij(state, AS, DEEL_X, BREED, mirror.mirror(nl.juiced.guhs.block.Draaien.langs(state.getValue(AS))));
+    }
+
     // --- the parts ------------------------------------------------------------------------------------------------------------
 
     /** The corner part (deel 0, 0) of the gate this part belongs to. */
