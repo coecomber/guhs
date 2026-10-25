@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:grotguh_holen",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 36,
+    "separation": 12,
+    "salt": 17020061
+  }
+}

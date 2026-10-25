@@ -606,6 +606,10 @@ public enum GuhClothes {
     FEESTHOEDJE(Slot.HEAD, "outfit_party_hat", "outfit_party_pom"),
     SLINGER_SJAALTJE(Slot.NECK, "outfit_scarf"),
     // </structuren3>
+    // <structuren2>
+    /** 1.7.0 Onder de Wol (Badhuis De Warme Knabbel, loot): a towel wrapped into a turban (the theemutsje bones). */
+    HANDDOEK_TULBAND(Slot.HEAD, "outfit_theemutsje"),
+    // </structuren2>
     ;
 
     /**

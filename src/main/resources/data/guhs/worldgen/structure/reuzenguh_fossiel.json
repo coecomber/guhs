@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/reuzenguh_fossiel",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/reuzenguh_fossiel/start",
+  "start_jigsaw_name": "guhs:reuzenguh_fossiel_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 13,
+  "max_y": 20,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 39,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.3
+  }
+}

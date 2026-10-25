@@ -28,7 +28,10 @@ HIER = os.path.dirname(os.path.abspath(__file__))
 BRON = os.path.join(HIER, "onderwol_bouw_bron")
 RENDERS = os.path.abspath(os.path.join(HIER, "..", "..", "..", "..", "mijnen-ontwerp", "_bron"))
 SCRIPTS = ["r2_mijnguhdorp", "r3_knuffelslaapzaal", "r4_paddenstoelendorpje", "r05_verlaten_guhmijn", "r06_grotschilderingen",
-           "r07_sausmeer_vissershutje", "r08_mijningang_hutje"]
+           "r07_sausmeer_vissershutje", "r08_mijningang_hutje",
+           # (onderwol_structuren2)
+           "r09_verlaten_sledestation", "r10_oude_kaasmakerij", "r11_verzonken_guhhuisje", "r12_reuzenguh_fossiel", "r13_kristalkwekerij",
+           "r14_verdwaalde_bouwploeg", "r15_grotguh_holen", "r16_saus_kuuroord"]
 # the module constants worth keeping per script (when the script has them)
 META = ["X", "Y", "Z", "DY", "Y0", "VL", "TOP", "ZS", "CUT", "MX", "MZ", "MRX", "MRZ", "WX", "WZ", "LX", "LZ", "CX", "CZ", "RX", "RZ", "RY",
         "SP", "H0X", "H1X", "H0Z", "H1Z", "HV", "SX", "SZ", "VA", "VB", "BX", "BZ", "WN", "WW", "PB", "PT", "HB", "HT", "MID", "ZW",
