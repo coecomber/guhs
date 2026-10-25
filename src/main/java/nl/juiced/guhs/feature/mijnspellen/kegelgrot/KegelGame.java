@@ -317,6 +317,9 @@ public final class KegelGame {
             }
             showScores(npc);
         }
+        if (npc.tickCount % 20 == 7 && scanned) {
+            zetters(world);
+        }
         if (player == null) {
             return;
         }
@@ -438,7 +441,22 @@ public final class KegelGame {
         timer = VEGEN;
     }
 
-    /** Puts the pins up: a fresh rack of ten, or only sweeps away the fallen ones. */
+    /** (1.7.0, ronde 45-47) Every lane's Kegelzetter sign shows whether its setter has vadskracht ({@link Kegelzetter}). */
+    private void zetters(ServerLevel world) {
+        for (int i = 0; i < 3; i++) {
+            if (begin[i] != null) {
+                Boolean kracht = Kegelzetter.kracht(world, begin[i], richting[i]);
+                if (kracht != null) {
+                    Kegelzetter.toon(world, begin[i], richting[i], kracht);
+                }
+            }
+        }
+    }
+
+    /**
+     * Puts the pins up: a fresh rack of ten, or only sweeps away the fallen ones. Always, whatever the lane's Kegelzetter
+     * does (1.7.0): with vadskracht a fresh rack comes with its little show, without it De Guhde sets them by hand.
+     */
     private void opzetten(ServerLevel world, boolean nieuw) {
         if (nieuw) {
             boolean[] alle = new boolean[10];
@@ -465,6 +483,17 @@ public final class KegelGame {
         if (nieuw) {
             Vec3 at = punt(niveau, KegelBaan.KOP + 0.6, 0, 0.5);
             world.playSound(null, BlockPos.containing(at), SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 1f, 1.2f);
+            BlockPos b = begin[niveau.ordinal()];
+            BlockPos lamp = b == null ? null : Kegelzetter.lamp(world, b, richting[niveau.ordinal()]);
+            if (lamp != null) {
+                boolean kracht = Kegelzetter.kracht(world, b, richting[niveau.ordinal()]) == Boolean.TRUE;
+                Kegelzetter.toon(world, b, richting[niveau.ordinal()], kracht);
+                if (kracht) {
+                    Kegelzetter.show(world, lamp, at);
+                } else if (player != null && world.getServer().getPlayerList().getPlayer(player) instanceof ServerPlayer p) {
+                    p.sendOverlayMessage(Component.translatable("gui.guhs.kegelen.zetter_pauze").withStyle(ChatFormatting.GRAY));
+                }
+            }
         } else {
             Vec3 at = punt(niveau, KegelBaan.KOP + 0.6, 0, 0.5);
             world.playSound(null, BlockPos.containing(at), SoundEvents.BRUSH_GENERIC, SoundSource.BLOCKS, 1f, 1f);

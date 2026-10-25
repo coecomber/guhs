@@ -6,11 +6,22 @@ features/onderwol_bouw.py; Java: feature/onderwol/stadje): the Vadsmijnstadje, a
     the hall      ~59 x 59 blocks, a dome up to ~19 high, carved by the template itself (its air is air in the world,
                   its rock is the SCHIL marker: the layer stone of each spot where the world is open); glitterranken
                   hanging from the ceiling, lichtmos, pluisbolletjes and crystals along the wall
-    the plaza     in the middle (radius 8): the Guhrad-centrale, a pavilion with a running Guhrad (feature/vadskracht
-                  GuhWheelBlock, a guh inside it, no owner: nobody can take it out). The vadskracht system has no lamps,
-                  so the village lamps are decorative; the wheel IS a redstone source while its guh runs, so the two
-                  redstone lamps right against it (under and behind it) burn on the guh's power. The bell (the meeting
-                  point), benches, lantern posts and the welcome board.
+    the plaza     in the middle (radius 8): the Guhrad-centrale, a pavilion with two running Guhraden back to back
+                  (feature/vadskracht GuhWheelBlock, a guh inside each, no owner: nobody can take them out), 30 VK. The
+                  bell (the meeting point), benches and the welcome board.
+    vadskracht    (ronde 45-47, "Vadskracht in de structuren") the town is NOT protected (players may break its blocks),
+                  so only the early tier: Guhrad, Guhdraad, Guhoven, Vadsmolen, Vadslamp, Vadsschakelaar (no pipes, no
+                  bezorgstation, no crystal press: those belong in protected buildings). Three setups, each with a sign
+                  "Dit is een ... op N vadskracht" and a Vadsschakelaar:
+                    - de lantaarns: every lantern of the town is a Vadslamp (1 VK) on the centrale, over pink Guhdraad
+                      along the streets (laid by leg_pad: never next to a door or the bell, it gives redstone power);
+                    - de Glasslijperij of the Kristalslijper (Huize Glinster): a Vadsmolen grinding grind to zand and a
+                      Guhoven baking zand to glas, on the centrale too (its own switch);
+                    - de Ertslijn at the ore depot: a chest cart full of raw ore stands on a raised track over a hopper;
+                      the hopper feeds a Guhoven (ore -> bars), a Vadsmolen grinds mijngruis to zand, hoppers under both
+                      bring it all into the Mijnwerkerskist by Huize Houweel; its own Guhrad (11 of 15 VK) and lever.
+                  The centrale's net asks more than one guh gives (28 of 30 VK): a lever in front of either wheel gives
+                  that guh a break and then the whole net stands still (all lamps out), the lesson of the sign.
     10 houses     on a ring around the plaza (one every 30 degrees, north and south left open), walls of viltsteen
                   bricks or pastel bricks (there is no guhklei brick: guhklei smelts to pink terracotta, so the
                   "guhklei-baksteen" houses are pastelbaksteen with pink terracotta corners), pastel dakpan roofs, a
@@ -28,6 +39,7 @@ features/onderwol_bouw.py; Java: feature/onderwol/stadje): the Vadsmijnstadje, a
 Rarity: random_spread spacing 94 chunks (~1500 blocks), separation 40.
 
     PYTHONPATH=tools python tools/features/onderwol_stadje.py      (from the project root; standalone, idempotent)
+    (Java checks: feature/onderwol/stadje/VadsmijnstadjeGameTests, the template placed, also turned, with KrachtProef)
     PYTHONPATH=tools python tools/features/onderwol_stadje.py --render   (+ the preview mijnen-ontwerp/r30_vadsmijnstadje.png)
 """
 import json
@@ -43,6 +55,7 @@ if os.path.join(HERE, "..") not in sys.path:
 import make_structures as ms  # noqa: E402
 import sign_text  # noqa: E402
 from features import onderwol_bouw as ob  # noqa: E402
+from features import onderwol_vadskracht as ov  # noqa: E402
 
 NAAM = "vadsmijnstadje"
 PREFIX = "sign.guhs.onderwol_bouw.stadje"
@@ -79,10 +92,20 @@ HUIZEN = [
 
 BORDEN = {
     "welkom": ["Welkom in het", "Vadsmijnstadje!", "Diep onder de", "wol. Njeg!"],
-    "inwoners": ["Inwoners: 12", "Guhraderen: 1", "Kaas: genoeg", "Zon: nooit"],
+    "inwoners": ["Inwoners: 12", "Guhraderen: 3", "Kaas: genoeg", "Zon: nooit"],
     "rennen": ["Niet rennen.", "Behalve in het", "Guhrad. Daar", "MOET je rennen."],
     "lift": ["Wolkenlift", "Op = naar boven", "Neer = hier ben", "je al. Njeg!"],
-    "centrale": ["Guhrad-centrale", "Vadskracht: AAN", "Niet storen,", "hij rent!"],
+    "centrale": ["Guhrad-centrale", "2 guhs: 30 VK", "Niet storen,", "ze rennen!"],
+    "centrale2": ["Hendel = pauze", "voor die guh.", "Dan te weinig", "vads: alles uit!"],
+    "lantaarns": ["Dit zijn", "Vadslampen op", "1 vadskracht", "Knopje = aan/uit"],
+    "glas": ["Glasslijperij", "Knopje = aan/uit", "Molen + oven:", "10 vadskracht"],
+    "glasmolen": ["Dit is een", "Vadsmolen op", "5 vadskracht", "maalt grind"],
+    "glasoven": ["Dit is een", "Guhoven op", "5 vadskracht", "bakt glas"],
+    "erts": ["Ertslijn!", "Kar > trechter", "> oven > kist", "Njeg!"],
+    "ertsoven": ["Dit is een", "Guhoven op", "5 vadskracht", "smelt het erts"],
+    "ertsmolen": ["Dit is een", "Vadsmolen op", "5 vadskracht", "maalt mijngruis"],
+    "ertsrad": ["Guhrad: 15 VK", "Hendel bij het", "rad = aan/uit", "Knopje = lijn"],
+    "ertskist": ["Mijnwerkerskist", "Baren en zand", "voor Huize", "Houweel!"],
     "bel": ["Dorpsbel", "Eén keer: eten.", "Twee keer: ook", "eten."],
     "depot": ["Ertsdepot", "Karretjes niet", "voeren. Njeg!", ""],
     "gang": ["Oude mijngang", "Ingestort.", "Andere kant op!", ""],
@@ -100,10 +123,19 @@ EN = {
     "Huize Buis": "House Tube", "Hamsterbouwer": "Hamster Builder", "Buizen in alle": "Tubes in every", "kleuren roze.": "shade of pink.",
     "Huize Knabbelbak": "House Snack Tray", "Vadstemmer": "Vads Tamer", "Aaien mag.": "Petting: yes.", "Voeren ook.": "Feeding too.",
     "Welkom in het": "Welcome to", "Vadsmijnstadje!": "Vads Mine Town!", "Diep onder de": "Deep under the", "wol. Njeg!": "wool. Njeg!",
-    "Inwoners: 12": "Residents: 12", "Guhraderen: 1": "Guh wheels: 1", "Kaas: genoeg": "Cheese: plenty", "Zon: nooit": "Sun: never",
+    "Inwoners: 12": "Residents: 12", "Guhraderen: 3": "Guh wheels: 3", "Kaas: genoeg": "Cheese: plenty", "Zon: nooit": "Sun: never",
     "Niet rennen.": "No running.", "Behalve in het": "Except in the", "Guhrad. Daar": "guh wheel. There", "MOET je rennen.": "you MUST run.",
     "Wolkenlift": "Cloud lift", "Op = naar boven": "Up = upstairs", "Neer = hier ben": "Down = you are", "je al. Njeg!": "here. Njeg!",
-    "Guhrad-centrale": "Guh wheel plant", "Vadskracht: AAN": "Vads power: ON", "Niet storen,": "Do not disturb,", "hij rent!": "he's running!",
+    "Guhrad-centrale": "Guh wheel plant", "2 guhs: 30 VK": "2 guhs: 30 VP", "Niet storen,": "Do not disturb,",
+    "ze rennen!": "they're running!", "Hendel = pauze": "Lever = a break", "voor die guh.": "for that guh.",
+    "Dan te weinig": "Then too little", "vads: alles uit!": "vads: all off!", "Dit zijn": "These are",
+    "Vadslampen op": "Vads lamps on", "1 vadskracht": "1 vads power", "Knopje = aan/uit": "Switch = on/off",
+    "Glasslijperij": "Glass works", "Molen + oven:": "Mill + oven:", "10 vadskracht": "10 vads power", "Dit is een": "This is a",
+    "Vadsmolen op": "Vads mill on", "5 vadskracht": "5 vads power", "maalt grind": "grinds gravel", "Guhoven op": "Guh oven on",
+    "bakt glas": "bakes glass", "Ertslijn!": "Ore line!", "Kar > trechter": "Cart > hopper", "> oven > kist": "> oven > chest",
+    "smelt het erts": "smelts the ore", "maalt mijngruis": "grinds mine grit", "Guhrad: 15 VK": "Guh wheel: 15 VP",
+    "Hendel bij het": "The lever by the", "rad = aan/uit": "wheel = on/off", "Knopje = lijn": "Switch: the line",
+    "Mijnwerkerskist": "Miner's chest", "Baren en zand": "Bars and sand", "voor Huize": "for House", "Houweel!": "Pickaxe!",
     "Dorpsbel": "Village bell", "Eén keer: eten.": "Once: dinner.", "Twee keer: ook": "Twice: also", "eten.": "dinner.",
     "Ertsdepot": "Ore depot", "Karretjes niet": "Don't feed the", "voeren. Njeg!": "carts. Njeg!",
     "Oude mijngang": "Old mine tunnel", "Ingestort.": "Caved in.", "Andere kant op!": "Other way!",
@@ -313,13 +345,17 @@ def pad_naar_plein(b, start, binnen, bezet, rng):
 
 
 def lantaarnpaal(b, x, z):
-    b.zet(x, STA, z, "guh_lantaarnpaal[half=lower]")
-    b.zet(x, STA + 1, z, "guh_lantaarnpaal[half=upper]")
+    """(ronde 45-47) a lantern of the town: a Vadslamp on the street, its face towards the plaza (bouw_lampnet wires it)."""
+    dx, dz = C - 0.5 - x, C - 0.5 - z
+    facing = (("east" if dx > 0 else "west") if abs(dx) >= abs(dz) else ("south" if dz > 0 else "north"))
+    ov.lamp(b, x, STA, z, facing)
+    b.lampen.append((x, z))
 
 
 def bouw_stadje(h=None):
     rng = random.Random(170432)
     b = ob.Bouw((SX, SY, SZ), NAAM, prefix=PREFIX)
+    b.lampen = []        # (x, z) of the Vadslampen of the centrale's net
     zaal = Zaal()
     binnen = bouw_zaal(b, zaal, rng)
     bezet = set()        # floor columns already used (paths, plaza, houses)
@@ -361,21 +397,18 @@ def bouw_stadje(h=None):
     b.zet(C, STA + 10, C, "guh_kristal_lamp")
     for (px, pz) in ((C - 2, C - 2), (C + 2, C - 2), (C - 2, C + 2), (C + 2, C + 2)):
         b.zet(px, STA + 4, pz, "lampion_roze[hanging=true]")
-    # the wheel: the block at (C, STA, C), facing south (along = west), its 8 parts; a guh running inside, no owner
-    guh = ms.guh_nbt(1.0)
-    b.zet(C, STA, C, "guh_wheel[facing=south,running=true]", {"id": "guhs:guh_wheel", "HasGuh": ms.Byte(1), "Blij": ms.Byte(1),
-                                                          "Vast": ms.Byte(1), "Guh": guh})   # (1.7.0: a building's guh)
-    for s in range(3):
-        for hgt in range(3):
-            if s == 1 and hgt == 0:
-                continue
-            b.zet(C - (s - 1), STA + hgt, C, f"guh_wheel_part[facing=south,side={s},height={hgt}]")
-    # the guh's power: two redstone lamps right against the wheel (under it and behind it), lit while it runs
-    b.zet(C, VL, C, "minecraft:redstone_lamp[lit=true]")
-    b.zet(C, STA, C - 1, "minecraft:redstone_lamp[lit=true]")
-    b.zet(C - 1, STA, C - 1, "viltsteen_tegels_plaat[type=bottom]")
-    b.zet(C + 1, STA, C - 1, "viltsteen_tegels_plaat[type=bottom]")
+    # the wheels (ronde 45-47): two back to back, a guh running in each, no owner ("Vast"): (C, STA, C) facing south and
+    # (C, STA, C - 1) facing north, each with a lever in front of it (on = that guh's break); a Vadsschakelaar against the
+    # south wheel's west part starts the line of the lamps
+    for (wz, f, hz) in ((C, "south", C + 1), (C - 1, "north", C - 2)):
+        b.zet(C, VL, wz, "gepolijste_viltsteen")
+        ov.guhrad(b, C, STA, wz, f)
+        ov.hendel(b, C, STA, hz, f)
+    ov.schakelaar(b, C - 2, STA, C, "west")
+    b.centrale_start = (C - 3, C)     # (the first spot of the lamps' wire: west of the switch)
     b.sign(C + 2, STA, C + 3, "south", BORDEN["centrale"], wall=False)
+    b.sign(C - 2, STA, C + 3, "south", BORDEN["centrale2"], wall=False)
+    b.sign(C - 2, STA, C - 3, "north", BORDEN["lantaarns"], wall=False)
     # the bell (the meeting point) and benches, lantern posts
     b.zet(C, STA, C - 6, "minecraft:bell[attachment=floor,facing=north,powered=false]")
     b.sign(C + 1, STA, C - 6, "north", BORDEN["bel"], wall=False)
@@ -473,22 +506,23 @@ def bouw_stadje(h=None):
         b.zet(C, STA, z, "minecraft:rail[shape=north_south,waterlogged=false]")
         bezet.add((C, z))
     b.zet(C, STA, rz, "minecraft:rail[shape=south_east,waterlogged=false]")
-    for x in range(C + 1, C + 6):
-        b.zet(x, STA, rz, "minecraft:rail[shape=east_west,waterlogged=false]")
     b.zet(C + 6, STA, rz, "viltsteen_bakstenen")
-    b.zet(C + 6, STA + 1, rz, "lampion_geel[hanging=false]")
     for x in range(C - 1, C + 7):
         for z in range(rz - 1, rz + 2):
             if (x, z) in binnen and (x, z) not in bezet:
                 b.zet(x, VL, z, "gladde_knuffelsteen")
                 bezet.add((x, z))
-    b.ton(C + 5, STA, rz - 1, LOOT["vadsmijnstadje_depot"])
-    b.zet(C + 4, STA, rz - 1, "block_of_kaasknabbels")
-    b.zet(C + 3, STA, rz - 1, "guhklei")
+    b.ton(C - 2, STA, rz - 1, LOOT["vadsmijnstadje_depot"])
+    b.zet(C - 3, STA, rz - 1, "block_of_kaasknabbels")
+    b.zet(C - 2, STA, rz + 1, "guhklei")
     b.sign(C + 2, STA, rz - 1, "south", BORDEN["depot"], wall=False)
-    b.entity(C + 3.5, STA + 0.0625, rz + 0.5, {"id": "minecraft:chest_minecart", "LootTable": LOOT["vadsmijnstadje_depot"],
-                                               "Rotation": ms.floats(90.0, 0.0)})
-    b.entity(C + 0.5, STA + 0.0625, rz + 9.5, {"id": "minecraft:minecart", "Rotation": ms.floats(0.0, 0.0)})
+    b.entity(C + 0.5, STA + 0.0625, rz + 9.5, {"id": "minecraft:chest_minecart", "LootTable": LOOT["vadsmijnstadje_depot"],
+                                               "Rotation": ms.floats(0.0, 0.0)})
+
+    # --- (ronde 45-47) the working vadskracht: the ore line, the glass works, the lamps' wire
+    bouw_ertslijn(b, rz, bezet)
+    bouw_glasslijperij(b, bezet)
+    bouw_lampnet(b, binnen, bezet)
 
     # --- the cave itself: glitterranken from the ceiling, plants and crystals along the wall
     kolommen = sorted(binnen)
@@ -527,12 +561,112 @@ def bouw_stadje(h=None):
 
 
 # =====================================================================================================================
+# (ronde 45-47) the working vadskracht (early tier only: the town is not protected)
+# =====================================================================================================================
+ERTS_KAR = [("minecraft:raw_iron", 24), ("minecraft:raw_copper", 24), ("minecraft:raw_gold", 8)]
+
+
+def _zet_bezet(bezet, *punten):
+    for p in punten:
+        bezet.add((p[0], p[2]) if len(p) == 3 else p)
+
+
+def bouw_ertslijn(b, rz, bezet):
+    """The ore line at the depot (z rz: the spur east of the main track's corner). The spur climbs two blocks to a dock over
+    a hopper; a chest cart full of raw ore stands there. Hopper (under the cart) -> Guhoven (ore -> bars); a Vadsmolen
+    (mijngruis -> zand) beside it; a hopper under each (the oven's into the molen's) -> the Mijnwerkerskist in front of Huize
+    Houweel. Power: a Guhrad of its own (wheel block (C + 8, rz), facing north, the lever in front of it), a Vadsschakelaar
+    between its west part and the molen (the molen touches the oven), and Houweel's Vadslamp against its east part:
+    5 + 5 + 1 = 11 of 15 VK. No Guhdraad here (a wire's redstone power would lock the hoppers)."""
+    y = STA
+    # Houweel's old lantern stood where the wheel stands now: its lamp is the one on this net
+    b.set(C + 7, y, rz, "minecraft:air")
+    b.lampen[:] = [p for p in b.lampen if p != (C + 7, rz)]
+    # the climbing spur: the flat corner (C, rz), ascending at C+1 (to y+1) and C+2 (to y+2), the dock rail at C+3 on the hopper
+    b.zet(C + 1, y, rz, "minecraft:rail[shape=ascending_east,waterlogged=false]")
+    b.zet(C + 2, y, rz, "viltsteen_bakstenen")
+    b.zet(C + 2, y + 1, rz, "minecraft:rail[shape=ascending_east,waterlogged=false]")
+    b.zet(C + 3, y, rz, "viltsteen_bakstenen")
+    b.set(C + 3, y + 1, rz, "minecraft:hopper", {"facing": "east", "enabled": "true"}, {"id": "minecraft:hopper"})
+    b.zet(C + 3, y + 2, rz, "minecraft:rail[shape=east_west,waterlogged=false]")
+    b.entity(C + 3.5, y + 2.0625, rz + 0.5, {"id": "minecraft:chest_minecart", "Rotation": ms.floats(90.0, 0.0), "Items": ms.compounds(
+        [{"Slot": ms.Byte(i), "id": item, "count": n} for i, (item, n) in enumerate(ERTS_KAR)])})
+    # the oven (fed from the west by the dock's hopper) and the molen, both a block up; under them the hoppers to the chest
+    ov.oven(b, C + 4, y + 1, rz, "north")
+    ov.machine(b, C + 5, y + 1, rz, "vadsmolen", "north", slots=2, stapels=[(0, "minecraft:gravel", 64)])
+    b.set(C + 4, y, rz, "minecraft:hopper", {"facing": "east", "enabled": "true"}, {"id": "minecraft:hopper"})
+    b.set(C + 5, y, rz, "minecraft:hopper", {"facing": "south", "enabled": "true"}, {"id": "minecraft:hopper"})
+    b.set(C + 5, y, rz + 1, "minecraft:chest", {"facing": "east", "type": "single", "waterlogged": "false"}, {"id": "minecraft:chest"})
+    # the switch on the end brick (C + 6, rz), the wheel east of it, its lever in front, Houweel's lamp behind its east part
+    ov.schakelaar(b, C + 6, y + 1, rz, "north")
+    ov.guhrad(b, C + 8, y, rz, "north")
+    ov.hendel(b, C + 8, y, rz - 1, "north")
+    ov.lamp(b, C + 9, y, rz + 1, "north")
+    b.sign(C + 3, y, rz - 1, "north", BORDEN["erts"], wall=False)
+    b.sign(C + 4, y, rz - 1, "north", BORDEN["ertsoven"], wall=False)
+    b.sign(C + 5, y, rz - 1, "north", BORDEN["ertsmolen"], wall=False)
+    b.sign(C + 7, y, rz - 1, "north", BORDEN["ertsrad"], wall=False)
+    b.sign(C + 6, y, rz + 1, "east", BORDEN["ertskist"], wall=False)
+    _zet_bezet(bezet, *[(x, rz) for x in range(C, C + 10)], *[(x, rz - 1) for x in range(C + 2, C + 10)],
+               *[(x, rz + 1) for x in range(C + 4, C + 10)])
+
+
+GLAS = (26, 13)     # the Glasslijperij: the molen's spot (x, z), east of Huize Glinster (the Kristalslijper)
+
+
+def bouw_glasslijperij(b, bezet):
+    """The Kristalslijper's Glasslijperij: a Vadsmolen grinding grind to zand and, against it, a Guhoven baking zand to glas
+    (5 + 5 VK, on the centrale's net), behind a Vadsschakelaar of its own (the lamps' wire comes to its east side)."""
+    x, z = GLAS
+    for p in ((x, z), (x, z + 1), (x + 1, z), (x + 1, z + 1), (x + 2, z), (x, z - 1), (x + 1, z - 1)):
+        assert b.get(p[0], STA, p[1]) == "minecraft:air", f"the Glasslijperij needs {p} free, not {b.get(p[0], STA, p[1])}"
+    ov.machine(b, x, STA, z, "vadsmolen", "east", slots=2, stapels=[(0, "minecraft:gravel", 64)])
+    ov.oven(b, x, STA, z + 1, "east", "minecraft:sand", 48)
+    ov.schakelaar(b, x + 1, STA, z, "east")
+    b.glas_start = (x + 2, z)
+    b.sign(x + 1, STA, z - 1, "east", BORDEN["glas"], wall=False)
+    b.sign(x + 1, STA, z + 1, "east", BORDEN["glasoven"], wall=False)
+    b.sign(x, STA, z - 1, "east", BORDEN["glasmolen"], wall=False)
+    _zet_bezet(bezet, (x, z), (x, z + 1), (x + 1, z), (x + 1, z + 1), (x + 1, z - 1), (x, z - 1))
+
+
+def bouw_lampnet(b, binnen, bezet):
+    """The Guhdraad of the centrale's net along the streets: from the spot west of the plaza switch to every Vadslamp of the
+    town and to the Glasslijperij's switch, each the shortest free way (ov.leg_pad: a line of air on a full floor, never
+    next to a door, the bell or a knoop of another net). The town's lamps and the glass works ask 28 VK: more than one guh."""
+    eigen = {(C - 2, STA, C), (GLAS[0] + 1, STA, GLAS[1])}
+
+    def vrij(x, z):
+        return (x, z) in binnen and ov.draad_vrij(b, x, STA, z, eigen=eigen)
+    net = set()
+    start = b.centrale_start
+    assert vrij(*start), f"the lamps' wire can't start at {start}"
+    b.zet(start[0], STA, start[1], ov.DRAAD)
+    net.add(start)
+    doelen = [("lamp", p) for p in b.lampen] + [("glas", b.glas_start)]
+    doelen.sort(key=lambda d: math.hypot(d[1][0] - start[0], d[1][1] - start[1]))
+    for soort, (x, z) in doelen:
+        if soort == "lamp":
+            van = [(x + dx, z + dz) for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+            if any(p in net for p in van):
+                continue
+        else:
+            van = [(x, z)]
+        net.update(ov.leg_pad(b, van, net, STA, vrij))
+    _zet_bezet(bezet, *net)
+    vraag = len(b.lampen) + 10
+    assert 15 < vraag <= 30, f"the centrale's net asks {vraag} VK: it must need both guhs (more than 15) and fit 30"
+    b.lampnet = net
+
+
+# =====================================================================================================================
 # the resources
 # =====================================================================================================================
 def build(h):
     for naam, pools in LOOT_DEF.items():
         ob.loot(h, naam, pools)
     b = bouw_stadje(h)
+    ov.verbind(b)
     b.save(f"onderwol/{NAAM}/start")
     ob.grot_bouw(h, NAAM, templates=[(b, 1)], titel="Vadsmijnstadje",
                  tooltip="Een ondergronds stadje vol guh-villagers in een grote grotzaal, met een Guhrad-centrale op het plein.",

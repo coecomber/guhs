@@ -15,6 +15,17 @@ onderwol_stadje.py: the Guhrad-centrale), on a Bouw (features/onderwol_bouw.py):
                                     around it (a structure placed in a new chunk gets no block updates: the hose nets
                                     read the hose's arms, so they must be right in the template)
 
+(ronde 45-47) and for the showcase setups (onderwol_stadje.py, the five cave game halls):
+
+    lamp(b, x, y, z, facing)        a Vadslamp (asleep: the net wakes it; it lights a big area on 1 VK)
+    schakelaar(b, x, y, z, facing)  a Vadsschakelaar, on (a little lever IN the line: every face but the top joins)
+    hendel(b, x, y, z, facing)      a lever (off) on the floor right next to a building's wheel block: on = the guh's break
+    draad_vrij(b, x, y, z, ...)     may a piece of Guhdraad lie here without touching what it should not (a door, a bell,
+                                    a hopper... it gives redstone power to all its neighbours; another net's knoop)
+    leg_pad(b, van, naar, y, ...)   the shortest line of free floor (draad_vrij) from the spots `van` to one of `naar`,
+                                    laid as Guhdraad; returns its spots
+    Plat(S)                         an ms.Structure (the game halls) with the Bouw methods these helpers use (zet, naam)
+
 The Java side checks it in game tests (feature/onderwol/bouw/KrachtProef: the template placed, also turned).
 """
 import json
@@ -137,3 +148,133 @@ def verbind(b):
                 arms["east"] = arms["east"] if arms["east"] != "none" else "side"
                 arms["west"] = arms["west"] if arms["west"] != "none" else "side"
             b.blocks[p] = (naam, arms, nbt)   # (powered: false, the default; the net lights it)
+
+
+# =====================================================================================================================
+# (ronde 45-47) lamps, switches, levers and laying a line
+# =====================================================================================================================
+LAMPJE, SCHAKELAAR, HENDEL = "guhs:vadslamp", "guhs:vadsschakelaar", "minecraft:lever"
+# what a powered Guhdraad must never stand next to (it gives redstone power to all six neighbours and strongly to the block
+# under it, like redstone dust): it would open a door, ring a bell, lock a hopper...
+GEVOELIG = ("_door", "deur", "trapdoor", "luikje", "fence_gate", "poort", "minecraft:bell", "minecraft:hopper", "note_block",
+            "piston", "dispenser", "dropper", "minecraft:tnt", "powered_rail", "activator_rail", "copper_bulb", "minecraft:lever",
+            "jigsaw", "wolkenlift")
+
+
+def lamp(b, x, y, z, facing="south"):
+    """A Vadslamp (1 VK: light 15 and invisible lights around it while it has vadskracht), asleep in the template."""
+    b.zet(x, y, z, f"{LAMPJE}[facing={facing},snoet=slaapt]", {"id": LAMPJE})
+
+
+def schakelaar(b, x, y, z, facing="south"):
+    """A Vadsschakelaar, on: in a line it passes the vadskracht (every face but its top), off it cuts the line."""
+    b.zet(x, y, z, f"{SCHAKELAAR}[facing={facing},powered=true]", {"id": SCHAKELAAR})
+
+
+def hendel(b, x, y, z, facing):
+    """A lever (off) on the floor; next to a building's wheel block (GuhWheelBlockEntity.kijkHendel) on = the guh's break."""
+    assert b.get(x, y, z) in (None, "minecraft:air"), f"{b.naam}: the lever at {(x, y, z)} needs room, not {b.get(x, y, z)}"
+    b.zet(x, y, z, f"{HENDEL}[face=floor,facing={facing},powered=false]")
+
+
+def _gevoelig(naam):
+    return naam is not None and any(k in naam for k in GEVOELIG)
+
+
+def _vol_onder(naam):
+    """Could Guhdraad lie on this block (a full block; not a slab, stairs, fence, wall, bed, sign, chest...)?"""
+    if naam.endswith(("_trap", "_plaat", "_slab", "_stairs", "_bed", "_sign", "_carpet", "_tapijt")):
+        return False
+    if any(k in naam for k in ("fence", "hekje", "_muur", "_wall", "lantaarn", "lampion", "kristal_cluster", "rail")):
+        return False
+    return naam not in ("minecraft:chest", "minecraft:barrel", "minecraft:trapped_chest", LAMPJE)
+
+
+def draad_vrij(b, x, y, z, eigen=(), verboden=()):
+    """May Guhdraad lie at (x, y, z)? The spot is air, a full block under it (not a rail, a jigsaw...), no block that reacts
+    to redstone next to it, above it or next to the block under it, and no knoop next to it but the ones in `eigen` (the
+    lamps and switches of its own net) or a Vadslamp (every lamp is fine in any net). `verboden`: spots it may not use."""
+    if (x, y, z) in verboden or b.get(x, y, z) != "minecraft:air":
+        return False
+    onder = b.get(x, y - 1, z)
+    if onder in (None, "minecraft:air") or _gevoelig(onder) or onder in (DRAAD, SLANG) or onder in VADS or not _vol_onder(onder):
+        return False
+    for (dx, dy, dz) in RICHTING.values():
+        n = b.get(x + dx, y + dy, z + dz)
+        if _gevoelig(n):
+            return False
+        if n in VADS and n not in (DRAAD, LAMPJE) and (x + dx, y + dy, z + dz) not in eigen:
+            return False
+        if dy == 0 and _gevoelig(b.get(x + dx, y - 1, z + dz)):
+            return False
+    return True
+
+
+def leg_pad(b, van, naar, y, vrij, max_stappen=4000):
+    """Lays the shortest line of Guhdraad at height y from one of the spots `van` (x, z) to one of the spots `naar` (x, z: a
+    wire already laid, or the spot next to a switch), only over spots where vrij(x, z) holds (`naar` itself is not laid).
+    Returns the new wire spots [(x, z)] (empty when a `van` spot is already in `naar`); AssertionError when there is no way."""
+    from collections import deque
+    naar = set(naar)
+    vorige = {}
+    rij = deque()
+    for p in van:
+        if p in naar:
+            return []
+        if vrij(*p):
+            vorige[p] = None
+            rij.append(p)
+    eind = None
+    while rij and len(vorige) < max_stappen * 10:
+        p = rij.popleft()
+        for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            q = (p[0] + dx, p[1] + dz)
+            if q in vorige:
+                continue
+            if q in naar:
+                vorige[q] = p
+                eind = q
+                break
+            if vrij(*q):
+                vorige[q] = p
+                rij.append(q)
+        if eind:
+            break
+    assert eind, f"{b.naam}: no way for Guhdraad from {list(van)[:3]} at y {y}"
+    pad = []
+    p = vorige[eind]
+    while p is not None:
+        pad.append(p)
+        p = vorige[p]
+    for (x, z) in pad:
+        b.zet(x, y, z, DRAAD)
+    return pad
+
+
+class Plat:
+    """An ms.Structure (the game halls of grotspellen.py / mijnspellen_bouw.py) with what the helpers here use of a Bouw."""
+
+    def __init__(self, S, naam):
+        self.S, self.naam, self.blocks = S, naam, S.blocks
+
+    def get(self, x, y, z):
+        return self.S.get(x, y, z)
+
+    def set(self, x, y, z, name, props=None, nbt=None):
+        self.S.set(x, y, z, name, props, nbt)
+
+    def zet(self, x, y, z, s, nbt=None):
+        naam, props = _blok(s)
+        self.S.set(x, y, z, naam, props, nbt)
+
+
+def _blok(s):
+    """'guhs:x[a=b]' -> ('guhs:x', {'a': 'b'}) (no namespace = guhs; the same as onderwol_bouw._blok)."""
+    if "[" in s:
+        naam, rest = s.split("[", 1)
+        props = dict(kv.split("=") for kv in rest.rstrip("]").split(",") if kv)
+    else:
+        naam, props = s, {}
+    if ":" not in naam:
+        naam = "guhs:" + naam
+    return naam, props
