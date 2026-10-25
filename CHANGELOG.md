@@ -47,6 +47,17 @@ Mining in the Guhmension used to mean digging through an endless sea of pink woo
 
 - **Schatgraven, Glimwormvangen, De Lichtjespuzzel, Karretjes-wissels and De Kegelgrot** (real guh bowling), each in a hall deep under a little hut with a Wolkenliftje down. Every game has its own coin (they all work in the claw machine too), a shop with guh clothes, building blocks and deco, highscores in the Guhdex and a top 3 board. The Superkompas finds them in its Minigames tab.
 
+### Chonk power you can see
+
+- **De Vadslamp (Chonk Lamp):** a guh lantern that burns on 1 chonk power: light level 15, and invisible extra light up to about 6 blocks around it, so one lamp lights up a whole cave (never through walls; the light goes when the power goes or the lamp breaks). Recipe: a lantern with two Guhdraad and two glowstone dust; quest "Light with a Little Snoot" in Project 1.
+- **De Vadsschakelaar (Chonk Switch):** a switch you put in a line of Guhdraad (a lever on Guhdraad): on, the chonk power goes through; off, everything behind it sleeps.
+- **De Guhtechniek-beurs (Guh Technology Fair):** a protected glass exhibition hall on the land of the Guhmension where every part of Guh Technology has a working stand: the sources (the Glowstar Core too), Knabbelbuizen with a Filter Piece and sensors, every machine, every fluid machine and a Scooter Station. Every stand has a sign with its chonk power, a Chonk Switch and a standhouder guh with a joke and the quest that teaches you to build it; in the middle the **Droomfabriek (Dream Factory)** turns cheese nibble plants into fried nibbles and vahoege potions. Looking is fine, taking is not. There is always one 800 to 1500 blocks from the middle of the world, in new terrain, and now and then a rare copy; the Superkompas finds it (tab Knus). New quest "At the Guh Technology Fair".
+- **Chonk power in the buildings:** setups that really run, each with a sign "Dit is een ... op N vadskracht" and a lever that gives the building's guh a break (the setup stops):
+  - **Het Vadsmijnstadje:** the Guhrad-centrale has two Guhraden back to back (30 chonk power) for 18 Vadslampen along the streets (one guh on a break is too little: every lamp goes out), the Kristalslijper's glasslijperij (a Vadsmolen grinds gravel to sand, a Guhoven bakes it into glass) and an ertslijn at the ore depot (a cart of raw ore over a hopper into a Guhoven, into the miners' chest). The town is not protected, so it only shows the early machines.
+  - **The five cave minigame halls:** a Guhrad per hall for the lights and two scoreboard lamps by the host; the games never need the power. In De Kegelgrot the **Kegelzetter (Pin Setter)**, a bridge over the end of the lanes, sets a fresh rack with sparks and a clack; without power its sign says "pauze" and De Guhde sets the pins by hand, so the game keeps working.
+  - **Kaasmakerij De Gouden Saus and the Oude wolspinnerij:** the dairy's pump house (two Guhraden, Sauspompen filling eight Sausvaten, a Guhoven grilling saté) and the spinnery's power station (three Guhraden, four mills in the spinning circles, a Guhoven at the tea table).
+  - **New copies of older buildings:** the Guhbakkerij on the guh village square (a Guhoven baking potatoes, a Vadsmolen grinding knabbelgraan), the kaasmijn's pump hall (two Sauspompen filling five Sausvaten, a Knabbelaar gnawing a kaasader that grows back, the kaasbrokken through a Knabbelbuis into a chest), in the Barbecuether the Spieskeuken of the spiesburcht (two Guhovens grilling saté and a Vadsmolen), the kitchen of the grillpaleis (a Guhoven and a Sauspomp on frituursaus) and the Grillkoolfabriek in the courtyard of the woonblokken (two Guhraden, pumps on frituursaus and water, the Grillkoolpers and the Frituurautomaat), and the farm's harvest corner (an Oogster over a wheat field and a Plantagebak whose tree the farm's klusjes-guhs chop). Buildings already in your world stay as they are.
+
 ### More new things
 
 - **Guh golf: 18 holes.** New golf courses get a back 9, "Rondje Guhmension", with moving obstacles, ramps, loopings and the Big Guh Mouth; it opens once you play the front 9 at par. More golf balls per hole, a golf shop with building blocks and deco, and a golf trophy for all 18 at par. Existing courses keep their 9 holes.
@@ -57,6 +68,14 @@ Mining in the Guhmension used to mean digging through an endless sea of pink woo
 - **Rookguh-platform:** finish the Knabbelring journey for a landing place of your own, in any world. From it the Rookguh flies you to every place of your journey, or to the Super Guhrio castle once you finished world 1-1. Players who already finished get it at their next login.
 - **Safari:** entering the park (or logging in there) without a safari camera gives you a new one; the disguised guh stands on the real ground and can be clicked through tall grass.
 - **FTB Quests:** a new chapter Onder de Wol. **Wiki:** pages for everything above, and every new block you can use has a "Zo werkt het".
+
+### Bug fixes
+
+- **Enchantment tooltips:** a book or item with a guh enchantment now explains what the enchantment does.
+- **Fences, panes, walls and garlands connect properly** in every building: fences, walls, glass panes, bars and gates join their neighbours, and the vlaggetjes, feestslingers and seizoensslinger hang along their row, now also in buildings that are placed turned.
+- **Kaasmakerij:** the stairs go up to the platform.
+- **Cave minigame halls are reachable in survival:** only the hall itself (and its hut) is protected, not the rock around it, and every hall has extra entrances with a door, so digging over from a cave works too. The huts above stand on the ground (some floated).
+- **Mine entrance huts:** the roof is whole (stairs on the wall top, a ridge), the doors are free (no barrel in the doorway) and the building tries more spots, so its hut is surely there.
 
 ## 1.6.5 — fix — Minecraft 26.1.2
 
