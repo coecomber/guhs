@@ -363,7 +363,8 @@ def bouw_stadje(h=None):
         b.zet(px, STA + 4, pz, "lampion_roze[hanging=true]")
     # the wheel: the block at (C, STA, C), facing south (along = west), its 8 parts; a guh running inside, no owner
     guh = ms.guh_nbt(1.0)
-    b.zet(C, STA, C, "guh_wheel[facing=south,running=true]", {"id": "guhs:guh_wheel", "HasGuh": ms.Byte(1), "Blij": ms.Byte(1), "Guh": guh})
+    b.zet(C, STA, C, "guh_wheel[facing=south,running=true]", {"id": "guhs:guh_wheel", "HasGuh": ms.Byte(1), "Blij": ms.Byte(1),
+                                                          "Vast": ms.Byte(1), "Guh": guh})   # (1.7.0: a building's guh)
     for s in range(3):
         for hgt in range(3):
             if s == 1 and hgt == 0:

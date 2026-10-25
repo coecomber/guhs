@@ -249,4 +249,42 @@ public class VadsmijnstadjeGameTests {
         helper.getLevel().removePlayerImmediately(player, Entity.RemovalReason.DISCARDED);
         helper.succeed();
     }
+
+    /**
+     * 1.7.0 playtest: the Guhrad-centrale really runs in the placed template: the wheel stands whole, its guh runs, its
+     * net gives vadskracht (feature/onderwol/bouw/KrachtProef).
+     */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 200)
+    public static void vadsmijnstadjeCentraleDraait(GameTestHelper helper) {
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 1, 0, 0, g -> { });
+    }
+
+    /** The same, with the town placed turned (as the jigsaw placement does 3 times in 4): the wheel turns with it. */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 200, rotationSteps = 1)
+    public static void vadsmijnstadjeCentraleDraaitGedraaid(GameTestHelper helper) {
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 1, 0, 0, g -> { });
+    }
+
+    /**
+     * The centrale's guh belongs to the town ("Vast", no owner): right-clicking does not give it to you, and breaking the
+     * wheel lets it hop out as a wild guh instead of dropping it as a picked-up guh item.
+     */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 60)
+    public static void vadsmijnstadjeCentraleGuhBlijft(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var g = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.zoek(helper);
+        helper.assertTrue(g.wielen().size() == 1, "one Guhrad");
+        BlockPos wiel = g.wielen().get(0);
+        var be = (nl.juiced.guhs.block.entity.GuhWheelBlockEntity) level.getBlockEntity(wiel);
+        helper.assertTrue(be != null && be.isVast() && be.hasGuh() && be.getGuhOwner() == null, "the town's guh runs in it, without an owner");
+        net.minecraft.world.phys.AABB rond = new net.minecraft.world.phys.AABB(wiel).inflate(3);
+        int voor = level.getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, rond).size();
+        level.destroyBlock(wiel, true);
+        helper.runAfterDelay(2, () -> {
+            helper.assertTrue(level.getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, rond).size() == voor + 1, "the guh hopped out");
+            helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, rond.inflate(2)).stream()
+                    .noneMatch(i -> i.getItem().is(nl.juiced.guhs.registry.ModItems.PICKED_UP_GUH.get())), "no picked-up guh item");
+            helper.succeed();
+        });
+    }
 }
