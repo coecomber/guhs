@@ -277,6 +277,142 @@ public class OnderWolBouwGameTests {
         helper.succeed();
     }
 
+    // --- the templates as placed (a jigsaw piece: "known shape", no neighbour updates) ----------------------------------
+
+    /** Fills the field with sponge (= "not in the template"), places the template at the field's corner, returns its size. */
+    private static net.minecraft.core.Vec3i plaats(GameTestHelper helper, String id) {
+        var level = helper.getLevel();
+        StructureTemplate t = level.getStructureManager().get(Guhs.id(id)).orElseThrow(() -> new IllegalStateException("no template " + id));
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        for (int x = 0; x < 24; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 24; z++) {
+                    level.setBlock(o.offset(x, y, z), Blocks.SPONGE.defaultBlockState(), 2);
+                }
+            }
+        }
+        helper.assertTrue(t.getSize().getX() <= 24 && t.getSize().getY() <= 16 && t.getSize().getZ() <= 24, id + " fits the field: " + t.getSize());
+        t.placeInWorld(level, o, o, new StructurePlaceSettings().setKnownShape(true).setIgnoreEntities(true), RandomSource.create(1), 2);
+        return t.getSize();
+    }
+
+    private static boolean verbindt(BlockState s) {
+        return s.getBlock() instanceof net.minecraft.world.level.block.FenceBlock || s.getBlock() instanceof net.minecraft.world.level.block.WallBlock
+                || s.getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock || s.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
+    }
+
+    /**
+     * The connection pass of onderwol_bouw.verbind(): every fence, wall, pane, bar and gate in the templates is stored the
+     * way Minecraft itself would shape it next to its neighbours (where all of them are in the template).
+     */
+    @GuhTest(template = VELD, batch = BATCH, timeoutTicks = 200)
+    public static void onderwolBouwHekjesVerbonden(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        int getoetst = 0, verbonden = 0;
+        for (String id : java.util.List.of("onderwol/ingang_hutje/start", "onderwol/verlaten_guhmijn/start", "onderwol/verlaten_guhmijn/gang_lang",
+                "onderwol/verlaten_guhmijn/gang_slee", "onderwol/verlaten_guhmijn/kruising", "onderwol/verlaten_guhmijn/kantine")) {
+            var maat = plaats(helper, id);
+            for (int x = 0; x < maat.getX(); x++) {
+                for (int y = 0; y < maat.getY(); y++) {
+                    for (int z = 0; z < maat.getZ(); z++) {
+                        BlockPos p = o.offset(x, y, z);
+                        BlockState s = level.getBlockState(p);
+                        if (!verbindt(s)) {
+                            continue;
+                        }
+                        // (only where every neighbour that shapes it is in the template: the four sides, and above for a wall)
+                        boolean binnen = true;
+                        for (Direction d : new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP}) {
+                            if (d == Direction.UP && !(s.getBlock() instanceof net.minecraft.world.level.block.WallBlock)) {
+                                continue;
+                            }
+                            BlockPos q = p.relative(d);
+                            if (q.getX() - o.getX() >= maat.getX() || q.getX() < o.getX() || q.getZ() - o.getZ() >= maat.getZ() || q.getZ() < o.getZ()
+                                    || q.getY() - o.getY() >= maat.getY() || level.getBlockState(q).is(Blocks.SPONGE)) {
+                                binnen = false;
+                            }
+                        }
+                        if (!binnen) {
+                            continue;
+                        }
+                        getoetst++;
+                        BlockState vorm = net.minecraft.world.level.block.Block.updateFromNeighbourShapes(s, level, p);
+                        helper.assertTrue(vorm.equals(s), id + " " + new BlockPos(x, y, z) + ": stored " + s + ", but Minecraft shapes it " + vorm);
+                        if (s.getBlock() instanceof net.minecraft.world.level.block.FenceBlock && (s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.NORTH)
+                                || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.EAST) || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.SOUTH)
+                                || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.WEST))) {
+                            verbonden++;
+                        }
+                    }
+                }
+            }
+        }
+        helper.assertTrue(getoetst >= 40 && verbonden >= 30, "enough fences checked (" + getoetst + ") and connected (" + verbonden + ")");
+        helper.succeed();
+    }
+
+    /** onderwol_bouw.deuren_vrij(): the entrance hut's door has a free way in and out (no barrel right inside it). */
+    @GuhTest(template = VELD, batch = BATCH, timeoutTicks = 200)
+    public static void onderwolBouwHutDeurVrij(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        var maat = plaats(helper, "onderwol/ingang_hutje/start");
+        int deuren = 0;
+        for (int x = 0; x < maat.getX(); x++) {
+            for (int y = 0; y < maat.getY(); y++) {
+                for (int z = 0; z < maat.getZ(); z++) {
+                    BlockPos p = o.offset(x, y, z);
+                    BlockState s = level.getBlockState(p);
+                    if (!(s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock)
+                            || s.getValue(net.minecraft.world.level.block.DoorBlock.HALF) != net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
+                        continue;
+                    }
+                    deuren++;
+                    Direction f = s.getValue(net.minecraft.world.level.block.DoorBlock.FACING);
+                    for (Direction d : new Direction[]{f, f.getOpposite()}) {
+                        for (int dy = 0; dy < 2; dy++) {
+                            BlockPos q = p.relative(d).above(dy);
+                            helper.assertTrue(level.getBlockState(q).getCollisionShape(level, q).isEmpty(),
+                                    "the door at " + new BlockPos(x, y, z) + ": free at " + d + " (" + level.getBlockState(q) + ")");
+                        }
+                    }
+                }
+            }
+        }
+        helper.assertTrue(deuren == 1, "the hut has its door: " + deuren);
+        helper.succeed();
+    }
+
+    /**
+     * The entrance hut's roof (onderwol_structuren1.dak): the long sides' stairs sit straight on the wall top (template y 6,
+     * z 2 and 10, x 4..12), five rows a side, and the ridge is whole: a slab cap over its full length (y 11, z 6, x 3..13).
+     */
+    @GuhTest(template = VELD, batch = BATCH, timeoutTicks = 200)
+    public static void onderwolBouwHutDakHeel(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        plaats(helper, "onderwol/ingang_hutje/start");
+        for (int x = 4; x <= 12; x++) {
+            for (int z : new int[]{2, 10}) {
+                BlockState muur = level.getBlockState(o.offset(x, 6, z)), trap = level.getBlockState(o.offset(x, 7, z));
+                helper.assertTrue(muur.isCollisionShapeFullBlock(level, o.offset(x, 6, z)), "the wall top at x " + x + " z " + z + ": " + muur);
+                helper.assertTrue(trap.getBlock() instanceof net.minecraft.world.level.block.StairBlock, "a stair right on the wall at x " + x + " z " + z + ": " + trap);
+            }
+        }
+        for (int x = 3; x <= 13; x++) {
+            for (int i = 0; i < 5; i++) {
+                helper.assertTrue(level.getBlockState(o.offset(x, 6 + i, 1 + i)).getBlock() instanceof net.minecraft.world.level.block.StairBlock
+                        && level.getBlockState(o.offset(x, 6 + i, 11 - i)).getBlock() instanceof net.minecraft.world.level.block.StairBlock,
+                        "roof row " + i + " at x " + x);
+            }
+            BlockState nok = level.getBlockState(o.offset(x, 11, 6));
+            helper.assertTrue(nok.getBlock() instanceof net.minecraft.world.level.block.SlabBlock, "the ridge cap at x " + x + ": " + nok);
+            helper.assertTrue(!level.getBlockState(o.offset(x, 10, 6)).isAir(), "under the ridge cap at x " + x);
+        }
+        helper.succeed();
+    }
+
     /** The talking guhs have their lines (nl_nl), and every structure its Superkompas name. */
     @GuhTest(template = VELD, batch = BATCH)
     public static void onderwolBouwTeksten(GameTestHelper helper) {
