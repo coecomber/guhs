@@ -27,7 +27,7 @@ public final class ElftochtProtection {
     /** Is this spot part of an Elf-Guhjestocht? */
     public static boolean inTocht(ServerLevel world, BlockPos pos) {
         var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(ElftochtFeature.STRUCTURE);
-        return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && world.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     public static boolean protectedAt(Level level, BlockPos pos) {

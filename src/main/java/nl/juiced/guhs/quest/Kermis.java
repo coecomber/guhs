@@ -131,7 +131,7 @@ public final class Kermis {
             }
         }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(GuhCompassItem.GUH_KERMIS);
-        return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     /** The station piece (the finish line) of a kermis as its template has it: where its anchor is and how it lies. */

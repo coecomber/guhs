@@ -49,7 +49,7 @@ public final class SjoelenProtection {
             return false;
         }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(SjoelenFeature.SJOELHUISJE);
-        return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     private static boolean denied(Player player, BlockPos pos, boolean quiet) {

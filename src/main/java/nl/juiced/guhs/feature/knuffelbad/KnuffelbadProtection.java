@@ -66,7 +66,7 @@ public final class KnuffelbadProtection {
             }
         }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(STRUCTUUR);
-        return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     /** Can this player change this block? (If not, they are told why.) */

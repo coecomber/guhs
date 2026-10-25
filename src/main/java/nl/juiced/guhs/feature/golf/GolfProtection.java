@@ -32,7 +32,7 @@ public final class GolfProtection {
     /** Is this spot part of a guh golf course? */
     public static boolean inCourse(ServerLevel world, BlockPos pos) {
         Structure structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(COURSE);
-        return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && world.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     static boolean protectedAt(Level level, BlockPos pos) {

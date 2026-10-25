@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.7.2 — Minecraft 26.1.2
+
+- **Build right next to guh buildings:** the protection of the golf course, the eetfestijn, the Nomguh, the kermis and the other protected guh buildings used to reach up to 12 blocks around them (the box Minecraft keeps for smoothing the land). Now only the building itself is protected, and the other protected buildings keep at most one block around them. Story buildings behind Guhdalf's sluier stay as they are.
+
 ## 1.7.1 — Minecraft 26.1.2
 
 - **Rookguh-platform:** a Reis-Rookguh now hovers above your platform. Click it (or the platform) to fly; clicking someone else's makes that platform yours. Platforms put down in 1.7.0 get their Rookguh when their owner comes by.

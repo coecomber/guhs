@@ -46,7 +46,7 @@ public final class BeautyProtection {
             return false;
         }
         var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(THEATRE);
-        return structure != null && level.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && level.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     static boolean protectedAt(Level level, BlockPos pos) {

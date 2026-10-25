@@ -68,10 +68,10 @@ public final class Nomguh {
         return new BlockPos(box.minX() + t.getX(), box.minY() + t.getY(), box.minZ() + t.getZ());
     }
 
-    /** Is this spot inside a Nomguh (its whole square)? */
+    /** Is this spot on one of the pieces of a Nomguh (1.7.2: the pieces themselves, not the whole square around them)? */
     public static boolean in(ServerLevel level, BlockPos pos) {
         Structure s = structure(level);
-        return s != null && level.structureManager().getStructureAt(pos, s).isValid();
+        return s != null && level.structureManager().getStructureWithPieceAt(pos, s).isValid();
     }
 
     @Nullable

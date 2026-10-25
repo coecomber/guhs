@@ -50,7 +50,7 @@ public final class MewtwoProtection {
             return false;
         }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(MewtwoFeature.KLOON_EILAND);
-        return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     private static boolean denied(Player player, BlockPos pos, boolean quiet) {

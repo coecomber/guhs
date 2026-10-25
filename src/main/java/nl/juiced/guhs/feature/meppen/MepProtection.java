@@ -31,7 +31,7 @@ public final class MepProtection {
     /** Is this spot in (or on) a Mika-mephal? */
     public static boolean inHall(ServerLevel world, BlockPos pos) {
         var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(HALL);
-        return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && world.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     static boolean protectedAt(Level level, BlockPos pos) {

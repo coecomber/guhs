@@ -60,7 +60,7 @@ public final class BibliotheekProtection {
             return false;                                      // (it only generates in the Guhmension)
         }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(LIBRARY);
-        return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     private static boolean denied(Player player, BlockPos pos) {

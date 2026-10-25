@@ -136,7 +136,9 @@ public final class Bescherming {
     private static void registreer(String structuur, int rand, boolean heel, @Nullable Predicate<StructureStart> welke,
                                    @Nullable Predicate<StructurePiece> stuk) {
         Regel oud = REGELS.get(structuur);
-        int r = Math.max(0, Math.min(MAX_RAND, rand));
+        // 1.7.2: a building's rim is at most one block (players build right next to it); only a story structure's sluier box
+        // keeps its own rim, as hidden and protected are the same blocks there
+        int r = Math.max(0, Math.min(heel ? MAX_RAND : 1, rand));
         Predicate<StructureStart> w = welke != null ? welke : oud != null ? oud.welke() : ALLE_KOPIEEN;
         Predicate<StructurePiece> st = stuk != null ? stuk : oud != null ? oud.stuk() : ALLE_STUKKEN;
         REGELS.put(structuur, new Regel(structuur, oud != null && oud.heel() && !heel ? Math.max(r, oud.rand()) : r, heel || oud != null && oud.heel(), w, st));

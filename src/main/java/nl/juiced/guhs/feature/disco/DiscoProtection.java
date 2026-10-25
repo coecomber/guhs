@@ -30,7 +30,7 @@ public final class DiscoProtection {
     /** Is this spot part of a Guhdisco? */
     public static boolean inDisco(ServerLevel world, BlockPos pos) {
         var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(DISCO);
-        return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
+        return structure != null && world.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     static boolean protectedAt(Level level, BlockPos pos) {
