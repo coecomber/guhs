@@ -135,8 +135,32 @@ MINIGAMES = {
                   lead_nl="Het enige echte spel van Guhpixel: doe je taakjes op De Vadsvaarder en zoek de Mika, of wees de Mika en duw iedereen stiekem in slaap. Niemand doet elkaar pijn.",
                   lead_en="The one real game of Guhpixel: do your tasks on The Chonkfarer and find the Mika, or be the Mika and secretly push everyone asleep. Nobody gets hurt."),
 }
+# 1.7.0 Onder de Wol: the five cave minigames (feature/grotspellen, feature/mijnspellen; texts in tools/features/onderwol_wiki.py)
+MINIGAMES.update({
+    "schatgraven": dict(nl="Schatgraven", en="Treasure Dig", structure="grotspel_schatgraven", npc="schatgraafguh", bron="schatgraven",
+                        munt="schatmuntje", gids="schatgraven", img="schatmuntje", group="onder_de_wol",
+                        lead_nl="Graaf in 90 seconden de schatten onder het pluisveld op, met Kapitein Schepsnuit en zijn snuffelhulpje Snuffie.",
+                        lead_en="Dig up the treasure under the fluff field in 90 seconds, with Captain Shovelsnout and his sniffing helper Sniffy."),
+    "glimwormvangen": dict(nl="Glimwormvangen", en="Glowworm Catching", structure="grotspel_glimwormen", npc="glimwormguh", bron="glimwormvangen",
+                           munt="glimmertje", gids="glimwormvangen", img="glimmertje", group="onder_de_wol",
+                           lead_nl="Vang in 60 seconden zo veel mogelijk glimwormpjes in de donkere zaal van Juf Glimmie.",
+                           lead_en="Catch as many glowworms as you can in 60 seconds in Miss Glimmy's dark hall."),
+    "lichtjespuzzel": dict(nl="De Lichtjespuzzel", en="The Little Lights Puzzle", structure="grotspel_lichtjes", npc="lampjesguh", bron="lichtjespuzzel",
+                           munt="lampjesmunt", gids="lichtjespuzzel", img="lampjesmunt", group="onder_de_wol",
+                           lead_nl="Zet alle 49 paddenstoellampjes van Meester Knipperlicht aan, met zo weinig mogelijk sprongetjes.",
+                           lead_en="Switch on all 49 of Master Blinky's toadstool lamps, in as few jumps as you can."),
+    "karretjes": dict(nl="Karretjes-wissels", en="Cart switches", structure="karretjeswissels", npc="wisselguh", bron="karretjes",
+                      munt="ertsbonnetje", gids="karretjes", img="ertsbonnetje", group="onder_de_wol",
+                      lead_nl="Zet in de Wisselgrot de wissels voor de ertskarretjes van Conducteur Piepwiel: elk karretje in de bak van zijn erts.",
+                      lead_en="Set the switches for Conducteur Piepwiel's ore carts in the Switch Cave: every cart into the bin of its ore."),
+    "kegelen": dict(nl="De Kegelgrot", en="The Bowling Cave", structure="kegelgrot", npc="kegelguh", bron="kegelen",
+                    munt="kegelknoop", gids="kegelen", img="kegelknoop", group="onder_de_wol",
+                    lead_nl="Echt guh-bowlen bij De Guhde: tien frames met een wolbal op tien pluchen guh-kegeltjes.",
+                    lead_en="Real guh bowling with De Guhde: ten frames with a wool ball at ten plush guh pins."),
+})
 MINIGAME_GROUPS = {"klassiekers": ("Klassiekers", "Classics"), "grote_guhspelen": ("De Grote Guhspelen", "The Grote Guhspelen"),
-                   "knuffeldal": ("Knuffeldal", "Knuffeldal"), "verhalen": ("Guhverhalen", "Guh stories"), "guhpixel": ("Guhpixel", "Guhpixel")}
+                   "knuffeldal": ("Knuffeldal", "Knuffeldal"), "verhalen": ("Guhverhalen", "Guh stories"), "guhpixel": ("Guhpixel", "Guhpixel"),
+                   "onder_de_wol": ("Onder de Wol", "Under the Wool")}
 
 # --- stories and questlines --------------------------------------------------------------------------------------------------
 # id -> dict(nl, en, img, lead_nl, lead_en, ftb=[(chapter, section id or None = whole chapter)], structure, npcs, reward (clothing bron / variant))
@@ -455,6 +479,9 @@ BRON_PAGE = {
     "beroep_bouw": "verhalen/beroepen", "band": "systemen/hartjes", "timmerguh": "verhalen/timmerguh", "nomguh": "verhalen/nomguh",
     "mewtwo": "verhalen/kloon-eiland", "hemel": "verhalen/hemelkapelletje", "guhwaii": "verhalen/ohana", "crafting": "systemen/kleding",
     "grijpmachine": "blokken/grijpmachine",
+    # 1.7.0 Onder de Wol
+    "schatgraven": "minigames/schatgraven", "glimwormvangen": "minigames/glimwormvangen", "lichtjespuzzel": "minigames/lichtjespuzzel",
+    "karretjes": "minigames/karretjes", "kegelen": "minigames/kegelen", "loot_mijnschacht": "bouwwerken/gatenkaas_mijnschacht",
 }
 # chest loot table -> structure
 LOOT_STRUCTURE = {"barbecueput_groot": "barbecueput", "barbecueput_klein": "barbecueput", "boomhutdorp_uitkijk": "boomhutdorp",

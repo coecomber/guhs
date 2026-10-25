@@ -2090,8 +2090,8 @@ def grote_guhspelen_section():
                  "Het superkompas heeft ook een rij <b>icoontjestabbladen</b> (Avontuur, Quests, Minigames, Wonderen, Wonen, Einde, Ondergrond, Barbecue, Knus) met "
                  "een lijst van plekken in twee kolommen. <b>Minigames</b> heeft nu alle spellen, onder de kopjes <i>Klassiekers</i>, <i>Knuffeldal</i> en <i>De Grote "
                  "Guhspelen</i>, met het icoontje van het spel en een groen vinkje als je er al was. De plek waar je heen gaat is goud.") +
-               p("Visit all six new buildings for <i>Guhspelen-ontdekker</i>, and every minigame building for <i>Vahoege wereldreiziger</i>.",
-                 "Bezoek alle zes nieuwe gebouwen voor <i>Guhspelen-ontdekker</i>, en elk minigamegebouw voor <i>Vahoege wereldreiziger</i>."))
+               p("Visit all new buildings (since 1.7.0 also the five cave games) for <i>Guhspelen-ontdekker</i>, and every minigame building for <i>Vahoege wereldreiziger</i>.",
+                 "Bezoek alle nieuwe gebouwen (sinds 1.7.0 ook de vijf grot-minigames) voor <i>Guhspelen-ontdekker</i>, en elk minigamegebouw voor <i>Vahoege wereldreiziger</i>."))
 
     # ---------------------------------------------------------------- J: beroepen
     BEROEPEN = [("brandweerguh", "Brandweercommandant Blusguh", ("Brandweerkazerne", "Brandweerkazerne"),

@@ -60,6 +60,8 @@ GROEPEN = [("bbq2_tech", "Guh Technology", "Guh-technologie",
            # 1.6.0 Op Safari! (F13)
            ("bbq2_safari", "Safari Park Vadse Bergen", "Safaripark Vadse Bergen", ["safari", "knabbelvelden"]),
            ("bbq2_bouwhulp", "Building Help", "Bouwhulp", ["bouwhulp"]),
+           # 1.7.0 Onder de Wol
+           ("bbq2_onderwol", "Under the Wool", "Onder de Wol", ["onderwol"]),
            ("bbq2_meer", "More new things", "Nog meer nieuws", [])]
 
 # --- the docs step's own corrections to the notes ----------------------------------------------------------------------------
@@ -383,6 +385,25 @@ ANDERE_PAGINA = {
     "dimensies/snuffeleiland": ("Sniff Island: the dimension", "Het Snuffeleiland: de dimensie"),
     "bouwwerken/steigerhuisje": ("The Dock Cottage", "Het Steigerhuisje"),
     "biomen/beverbeek": ("Beaver Brook", "De Beverbeek"),
+    # 1.7.0 Onder de Wol (tools/features/onderwol_wiki.py)
+    "minigames/golf": ("Guh golf: the back 9", "Guhgolf: de achterste 9"),
+    "minigames/schatgraven": ("Treasure Dig", "Schatgraven"),
+    "minigames/glimwormvangen": ("Glowworm Catching", "Glimwormvangen"),
+    "minigames/lichtjespuzzel": ("The Little Lights Puzzle", "De Lichtjespuzzel"),
+    "minigames/karretjes": ("Cart switches", "Karretjes-wissels"),
+    "minigames/kegelen": ("The Bowling Cave", "De Kegelgrot"),
+    "biomen/glitterspelonk": ("The Glitter Cavern", "De Glitterspelonk"),
+    "biomen/pluisgrot": ("The Fluff Cave", "De Pluisgrot"),
+    "biomen/slaapgrot": ("The Sleepy Cave", "De Slaapgrot"),
+    "biomen/knuffelwortelgrot": ("The Plush Root Cave", "De Knuffelwortelgrot"),
+    "biomen/belletjesgrot": ("The Little Bells Cave", "De Belletjesgrot"),
+    "biomen/kristalpegelgrot": ("The Crystal Icicle Cave", "De Kristalpegelgrot"),
+    "biomen/bloemenvallei": ("The Flower Valley", "De Bloemenvallei"),
+    "bouwwerken/mijnguhdorp": ("The Mijnguh Village", "Het Mijnguhdorp"),
+    "bouwwerken/vadsmijnstadje": ("The Vads Mine Town", "Het Vadsmijnstadje"),
+    "systemen/kleding": ("Guh clothes: the feet", "Guhkleding: de voetjes"),
+    "systemen/commandos": ("Commands: finding caves", "Commando's: grotten zoeken"),
+    "dimensies/guhmension": ("The Guhmension: under the wool", "De Guhmensie: onder de wol"),
     "verhalen/nomguh": ("Baltoguh and Nomguh: the scene", "Baltoguh en Nomguh: het filmpje"),
     "verhalen/kloon-eiland": ("Guhtwo and Clone Island: the scene", "Guhtwo en het kloon-eiland: het filmpje"),
     "verhalen/ohana": ("Ohana on Guhwai'i: the scene", "Ohana op Guhwai'i: het filmpje"),

@@ -361,6 +361,22 @@ class Game:
                 for p in pieces:
                     if bron_id and p not in bron:
                         bron[p] = bron_id
+        # 1.7.0 the cave minigames: GrotSpellenFeature's own bron(GuhClothes.X, GrotSpel.Soort.Y, GrotSpelRol.PRIJS_Z), where the
+        # bron is the Soort's id and the price the lang text gui.guhs.kleding.prijs.munt.<its coins> with that number
+        gs = os.path.join(self.java, "feature", "grotspellen")
+        if os.path.exists(os.path.join(gs, "GrotSpellenFeature.java")):
+            feat = strip_java_comments(read(os.path.join(gs, "GrotSpellenFeature.java")))
+            ids = dict(re.findall(r'\b([A-Z]+)\(\s*"(\w+)"\s*,', strip_java_comments(read(os.path.join(gs, "GrotSpel.java")))))
+            munt = dict(re.findall(r"case\s+([A-Z]+)\s*->\s*\"(\w+)\"", feat))
+            rol = strip_java_comments(read(os.path.join(gs, "GrotSpelRol.java")))
+            for m in re.finditer(r"\bbron\(\s*GuhClothes\.([A-Z0-9_]+)\s*,\s*GrotSpel\.Soort\.([A-Z]+)\s*,\s*(?:GrotSpelRol\.)?([A-Z_]+)\s*\)", feat):
+                c, soort, pc = m.groups()
+                if c in const_set and soort in ids and c not in bron:
+                    bron[c] = ids[soort]
+                    n = re.search(r"\b" + pc + r"\s*=\s*(\d+)", rol)
+                    fmt = self.lang_nl.get(f"gui.guhs.kleding.prijs.munt.{munt.get(soort, '')}")
+                    if n and fmt and fmt.count("%s") == 1:
+                        prijs[c] = fmt % n.group(1)
         return bron, prijs, loose
 
     @cached_property

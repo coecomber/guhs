@@ -878,8 +878,9 @@ class Builder:
     def minigames(self):
         g = self.g
         for mid, m in T.MINIGAMES.items():
-            pg = Page("minigames", f"minigames/{mid}", m["nl"], m["en"], "Minigame", "Minigame", self.im.first(m.get("img") or ""))
-            pg.images = [n for n in [m.get("img")] if n and self.im.has(n)]
+            pic = self.pic(m.get("img"))     # (1.7.0: a render, else the icon of the item it names)
+            pg = Page("minigames", f"minigames/{mid}", m["nl"], m["en"], "Minigame", "Minigame", pic)
+            pg.images = [pic] if pic else []
             pg.lead_nl, pg.lead_en = m["lead_nl"], m["lead_en"]
             grp = T.MINIGAME_GROUPS.get(m.get("group"), ("", ""))
             pg.info("Group", "Groep", t(grp[1], grp[0]))

@@ -1330,3 +1330,9 @@ from . import en_safari as _safari  # noqa: E402
 
 PAGINA.update(_safari.PAGINA)
 TEKST.update(_safari.TEKST)
+
+# 1.7.0 Onder de Wol: tools/wiki_bbq2/en_onderwol.py (the Dutch: tools/features/onderwol_wiki.py)
+from . import en_onderwol as _onderwol  # noqa: E402
+
+PAGINA.update(_onderwol.PAGINA)
+TEKST.update(_onderwol.TEKST)

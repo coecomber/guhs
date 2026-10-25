@@ -1584,14 +1584,6 @@ UITLEG["safari_ooievaarsbus"] = dict(
        "te halen. Alleen jij kunt je eigen bus openen.",
     en="A mailbox for stork mail. Put it by your house: your friends' storks (a stork from a home sign) now and then "
        "drop a parcel in it. Right-click it to open the box and take the presents out. Only you can open your own box.")
-UITLEG["safari_terrarium"] = dict(
-    nl="Een glazen bak waar een klein Kriebelhuis-diertje in woont: dit wordt een terrariumbordje als je het neerzet. "
-       "Rechtsklik erop voor het menu, net als bij een verblijfsbord. Houd je eten vast, dan voer je de diertjes in de "
-       "bak. Mieren, kwalletjes en regenboogvisjes wonen er met z'n vieren in.",
-    en="A glass tank where a small Kriebelhuis critter lives: a terrarium sign turns into this when you put it down. "
-       "Right-click it for the menu, like a home sign. Hold food to feed the critters in the tank. Ants, jellyfish and "
-       "rainbow fish live in it as a group of four.",
-    meer=["systemen/verblijfsborden", "systemen/kriebelhuis"])
 UITLEG["safari_verblijfsbord"] = dict(
     nl="Een verblijfsbordje uit de giftshop van het safaripark: zet het neer en er komt een familie van dat dier wonen "
        "(papa, mama en twee kleintjes). Je stelt de familie eerst zelf samen: per dier een ouder of een kind, en bij "
@@ -1669,3 +1661,172 @@ UITLEG["rookguh_platform"] = dict(
        "somewhere else and your landing place moves along. Every Travel Smoke Guh now lists your platform. Right-click "
        "your platform yourself and the Smoke Guh flies you to any place of your journey, or to the Super Guhrio castle "
        "(once you have finished world 1-1).")
+# 1.7.0 Onder de Wol: the blocks that do something (tools/features/onderwol*.py, toveren.py, mijnhulp.py, guhvillagers.py,
+# grotspellen.py, golf18.py). The safari terrarium's own text moved into terrariumglas (the tank has no item, so no page).
+UITLEG["glinsteraltaar"] = dict(
+    nl="De guh-betoveringstafel. Rechtsklik erop: leg er gereedschap, een wapen, een harnasstuk of een boek op, met lapis, en "
+       "kies een van de drie spreukjes. Het kost lapis en levels, zoals bij een betoveringstafel.\n"
+       "\n"
+       "- Hoe sterk de spreukjes zijn, hangt af van de knuffelboekenkasten om het altaar heen (tot 15, net als boekenkasten); "
+       "gewone boekenkasten tellen niet mee.\n"
+       "- Er zitten nuttige vanilla-betoveringen in en vijf guh-spreukjes: Mika-mepper, Pluisval, Glitterzicht, Vadsvlijt en Bakvads.\n"
+       "- Een boek met een guh-spreukje wordt een Spreukjesboekje.\n"
+       "- Onbreekbaarheid en herstel komen nooit op spullen die toch al niet kapot gaan.",
+    en="The guh enchanting table. Right-click it: put a tool, a weapon, a piece of armour or a book on it, with lapis, and "
+       "choose one of the three spells. It costs lapis and levels, like an enchanting table.\n"
+       "\n"
+       "- How strong the spells are depends on the Cuddle Bookshelves around the altar (up to 15, like bookshelves); ordinary "
+       "bookshelves don't count.\n"
+       "- It holds useful vanilla enchantments and five guh spells: Mika Whacker, Fluff Fall, Glitter Sight, Vads Diligence and "
+       "Baking Vads.\n"
+       "- A book with a guh spell becomes a Little Spell Book.\n"
+       "- Unbreaking and mending never go on things that don't break anyway.",
+    meer=["systemen/glinsteraltaar"])
+UITLEG["knuffelboekenkast"] = dict(
+    nl="Een boekenkast van roze bloesemhout met pastelboeken en pluche guhtjes ertussen. Zet hem om een Glinsteraltaar (zoals "
+       "boekenkasten om een betoveringstafel, met een blok lucht ertussen): elke kast maakt de spreukjes sterker, tot 15. Er vliegen "
+       "hartjes van de kast naar het altaar.",
+    en="A bookshelf of pink blossom wood with pastel books and little plush guhs in between. Put it around a Glitter Altar (like "
+       "bookshelves around an enchanting table, with a block of air in between): every shelf makes the spells stronger, up to 15. "
+       "Hearts fly from the shelf to the altar.",
+    meer=["systemen/glinsteraltaar"])
+UITLEG["wolkenliftje"] = dict(
+    nl="Een lift voor je mijn. Zet er een onderin en een boven op de grond, recht boven elkaar (met twee vrije blokken erboven).\n"
+       "\n"
+       "- Ga erop staan en spring: je zweeft in een roze wolkje naar het volgende Wolkenliftje erboven (tot 256 blokken).\n"
+       "- Sluip erop: naar het volgende eronder.\n"
+       "- Het werkt dwars door de steen heen.",
+    en="An elevator for your mine. Put one at the bottom and one up on the ground, straight above each other (with two free "
+       "blocks above them).\n"
+       "\n"
+       "- Stand on it and jump: you float up in a pink cloud to the next Cloud Lift above (up to 256 blocks).\n"
+       "- Sneak on it: down to the next one below.\n"
+       "- It works right through the stone.",
+    meer=["systemen/mijnhulpjes"])
+UITLEG["pluisladder"] = dict(
+    nl="Een zachte roze touwladder op een rol. Zet hem tegen een wand aan de rand van een gat: hij rolt vanzelf uit tot de bodem, "
+       "en je klimt erin zoals op een ladder. Graaf je de bodem verder weg, dan rolt hij verder uit. Breek je een stukje, dan rolt "
+       "de hele ladder op en krijg je je rol terug.",
+    en="A soft pink rope ladder on a roll. Put it against a wall at the edge of a hole: it unrolls down to the floor by itself, "
+       "and you climb it like a ladder. Dig the floor away further and it unrolls further. Break a piece and the whole ladder rolls "
+       "up and you get your roll back.",
+    meer=["systemen/mijnhulpjes"])
+UITLEG["terrariumglas"] = dict(
+    nl="Glas voor terraria. Zet je een terrariumbordje neer, dan verschijnt er een glazen bakje waarin de diertjes wonen; klik "
+       "erop voor het menu, net als bij een verblijfsbord, en voer ze met eten in je hand.\n"
+       "\n"
+       "Sinds 1.7.0 mag een terrarium elke vorm hebben: bouw terrariumglas of terrariumbodem tegen het bakje aan, en alles wat zo "
+       "aan elkaar vastzit (een grote glazen bak, gangetjes, omhoog en omlaag) is één leefruimte. De diertjes lopen er overal "
+       "doorheen, maar nooit eruit.",
+    en="Glass for terraria. When you put down a terrarium sign, a glass tank appears where the critters live; click it for the "
+       "menu, like a home sign, and feed them with food in your hand.\n"
+       "\n"
+       "Since 1.7.0 a terrarium may have any shape: build terrarium glass or terrarium floor onto the tank, and everything joined "
+       "to it like that (a big glass tank, tunnels, up and down) is one living space. The critters walk around in all of it, but "
+       "never out of it.",
+    meer=["systemen/verblijfsborden", "systemen/kriebelhuis"])
+UITLEG["terrariumbodem"] = dict(
+    nl="Een bodem van zand en hout onder glas, om een terrarium groter te maken. Bouw hem aan een terrarium (samen met "
+       "terrariumglas): alles wat aan elkaar vastzit is één leefruimte, en de diertjes lopen er overal doorheen.",
+    en="A floor of sand and wood under glass, to make a terrarium bigger. Build it onto a terrarium (together with terrarium "
+       "glass): everything joined together is one living space, and the critters walk around in all of it.",
+    meer=["systemen/verblijfsborden"])
+UITLEG["belletjeskristal"] = dict(
+    nl="Een kristal uit de Belletjesgrot dat een toontje speelt als je erop stapt (niet als je sluipt), erop valt, ertegen slaat "
+       "of er iets op schiet, met een zachte echo. Elke plek heeft zijn eigen toon: een rijtje kristallen is een toonladder, dus je "
+       "kunt er liedjes op lopen en tikken.",
+    en="A crystal from the Little Bells Cave that plays a note when you step on it (not when sneaking), land on it, hit it or "
+       "shoot it, with a soft echo. Every spot has its own note: a row of crystals is a scale, so you can walk and tap tunes on them.",
+    meer=["biomen/belletjesgrot"])
+UITLEG["belletjestrosje"] = dict(
+    nl="Een klein trosje kristallen belletjes uit de Belletjesgrot, op elke kant van een blok. Klik erop, sla ertegen of schiet "
+       "erop en het klingelt zijn toontje, met een echo. De toon hangt af van de plek, zoals bij het belletjeskristal.",
+    en="A little bunch of crystal bells from the Little Bells Cave, on any side of a block. Click it, hit it or shoot it and it "
+       "chimes its note, with an echo. The note depends on the spot, like the bell crystal.",
+    meer=["biomen/belletjesgrot"])
+UITLEG["glitterrank_bes"] = dict(
+    nl="Het eind van een glitterrank uit de Glitterspelonk, met bessen. Rechtsklik met een lege hand om de glitterbessen te "
+       "plukken (een of twee, om te eten); de rank blijft hangen, zonder bessen.",
+    en="The end of a glitter vine from the Glitter Cavern, with berries. Right-click with an empty hand to pick the glitter "
+       "berries (one or two, to eat); the vine stays, without berries.",
+    meer=["biomen/glitterspelonk"])
+UITLEG["knuffelwortelaarde"] = dict(
+    nl="Zachte aarde uit de Knuffelwortelgrot, zoals wortelaarde. Strooi er beendermeel op en er groeit een knuffelwortel onder.",
+    en="Soft soil from the Plush Root Cave, like rooted dirt. Use bone meal on it and a plush root grows under it.",
+    meer=["biomen/knuffelwortelgrot"])
+UITLEG["pluiskussen"] = dict(
+    nl="Een groot zacht kussen van pluis uit de Pluisgrot. Je landt erop zonder je pijn te doen en stuitert een klein beetje "
+       "omhoog (zachter dan slijm). Sluip je, dan stuiter je niet.",
+    en="A big soft cushion of fluff from the Fluff Cave. You land on it without hurting yourself and bounce up a little (softer "
+       "than slime). Sneak and you don't bounce.",
+    meer=["biomen/pluisgrot"])
+UITLEG["kristalpegel"] = dict(
+    nl="Een roze kristalpegel, zoals druipsteen: hij hangt aan een plafond of staat op een vloer, en een rij pegels wordt vanzelf "
+       "een dikkere zuil. Het puntje gloeit zacht en druppelt af en toe kaassaus. Pas op: een hangende pegel die zijn houvast "
+       "verliest valt naar beneden en doet pijn, en wie op een staande punt valt ook. Op een kristalpegelblok met water of kaassaus "
+       "erop groeit een pegel langzaam aan.",
+    en="A pink crystal icicle, like dripstone: it hangs from a ceiling or stands on a floor, and a row of them becomes a thicker "
+       "column by itself. The tip glows softly and now and then drips cheese sauce. Watch out: a hanging icicle that loses its hold "
+       "falls down and hurts, and so does falling onto a standing tip. On a crystal icicle block with water or cheese sauce on top an "
+       "icicle slowly grows.",
+    meer=["biomen/kristalpegelgrot"])
+UITLEG["toverguh_boekenstandaard"] = dict(
+    nl="De werkplek van de Toverguh, een nieuw guh-villagerberoep. Zet hem bij een guh-villager zonder beroep en hij wordt "
+       "Toverguh: hij verkoopt Spreukjesboekjes, ook met de spreukjes die je niet uit het Glinsteraltaar krijgt.",
+    en="The workstation of the Wizard Guh, a new guh villager profession. Put it near a guh villager without a profession and it "
+       "becomes a Wizard Guh: it sells Little Spell Books, also with the spells you don't get from the Glitter Altar.",
+    meer=["systemen/guh-villagers", "systemen/glinsteraltaar"])
+UITLEG["guhrad_werkbank"] = dict(
+    nl="De werkplek van de Vadsmonteur, een nieuw guh-villagerberoep. Zet hem bij een guh-villager zonder beroep en hij wordt "
+       "Vadsmonteur: hij verkoopt Guhraderen, Guhdraad, Guh Ovens en andere machines voor vadskracht, en koopt vahoege vads.",
+    en="The workstation of the Chonk Mechanic, a new guh villager profession. Put it near a guh villager without a profession and "
+       "it becomes a Chonk Mechanic: it sells Guh Wheels, Guh Wire, Guh Ovens and other vadskracht machines, and buys vahoege vads.",
+    meer=["systemen/guh-villagers"])
+UITLEG["ertsenkist"] = dict(
+    nl="De werkplek van de Mijnwerker, een nieuw guh-villagerberoep. Zet hem bij een guh-villager zonder beroep en hij wordt "
+       "Mijnwerker: hij verkoopt laagstenen, guhklei, kleurstof en lampjes, en koopt je ertsen en Vahoegiet.",
+    en="The workstation of the Miner, a new guh villager profession. Put it near a guh villager without a profession and it "
+       "becomes a Miner: it sells layer stones, guh clay, dye and lamps, and buys your ores and Vahoegite.",
+    meer=["systemen/guh-villagers"])
+UITLEG["kristalslijpsteen"] = dict(
+    nl="De werkplek van de Kristalslijper, een nieuw guh-villagerberoep. Zet hem bij een guh-villager zonder beroep en hij wordt "
+       "Kristalslijper: hij slijpt guhkristal en Vahoegiet tot kristallampen, kristalpegels, belletjeskristallen en meer.",
+    en="The workstation of the Crystal Cutter, a new guh villager profession. Put it near a guh villager without a profession and "
+       "it becomes a Crystal Cutter: it cuts guh crystal and Vahoegite into crystal lamps, crystal icicles, bell crystals and more.",
+    meer=["systemen/guh-villagers"])
+UITLEG["lampjestegel"] = dict(
+    nl="Deco uit het winkeltje van Meester Knipperlicht (de Lichtjespuzzel), voor 40 lampjesmunten: een vloertegel met een "
+       "paddenstoellampje. Rechtsklik erop om hem aan of uit te zetten.",
+    en="Decoration from Master Blinky's shop (the Little Lights Puzzle), for 40 lamp coins: a floor tile with a toadstool lamp. "
+       "Right-click it to switch it on or off.",
+    meer=["minigames/lichtjespuzzel"])
+UITLEG["paddenstoelkrukje"] = dict(
+    nl="Deco uit het winkeltje van Meester Knipperlicht, voor 32 lampjesmunten: een krukje van een paddenstoel. Rechtsklik met "
+       "een lege hand om erop te gaan zitten.",
+    en="Decoration from Master Blinky's shop, for 32 lamp coins: a toadstool stool. Right-click it with an empty hand to sit on it.",
+    meer=["minigames/lichtjespuzzel"])
+UITLEG["gouden_kaasje"] = dict(
+    nl="Deco uit het winkeltje van Kapitein Schepsnuit (Schatgraven), voor 24 schatmuntjes: het gouden kaasje, net als de bonusschat "
+       "in het veld. Het gloeit een beetje; verder doet het niks.",
+    en="Decoration from Captain Shovelsnout's shop (Treasure Dig), for 24 treasure coins: the golden cheese, just like the bonus "
+       "treasure in the field. It glows a little; it does nothing else.",
+    meer=["minigames/schatgraven"])
+UITLEG["schatkistje"] = dict(
+    nl="Deco uit het winkeltje van Kapitein Schepsnuit, voor 40 schatmuntjes: een klein schatkistje. Het is versiering: er kan "
+       "niets in.",
+    en="Decoration from Captain Shovelsnout's shop, for 40 treasure coins: a little treasure chest. It is decoration: nothing "
+       "goes in it.",
+    meer=["minigames/schatgraven"])
+UITLEG["glimpotje"] = dict(
+    nl="Deco uit het winkeltje van Juf Glimmie (Glimwormvangen), voor 24 glimmertjes: een potje vol glimwormpjes dat licht geeft. "
+       "In de spelletjeszaal zijn dit de lampen: daar worden ze lichter naarmate je meer vangt.",
+    en="Decoration from Miss Glimmy's shop (Glowworm Catching), for 24 glimmer coins: a jar full of glowworms that gives light. In "
+       "the game hall these are the lamps: there they get brighter the more you catch.",
+    meer=["minigames/glimwormvangen"])
+UITLEG["glimplant"] = dict(
+    nl="Deco uit het winkeltje van Juf Glimmie, voor 20 glimmertjes: een gloeiend struikje waar je doorheen kunt lopen. In de "
+       "spelletjeszaal verstoppen de glimwormpjes zich erin.",
+    en="Decoration from Miss Glimmy's shop, for 20 glimmer coins: a glowing bush you can walk through. In the game hall the "
+       "glowworms hide in it.",
+    meer=["minigames/glimwormvangen"])
+LINK["golfbaan_ijsvilt"] = ["minigames/golf"]
