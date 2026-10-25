@@ -88,6 +88,15 @@ public class GuhOvenBlockEntity extends AbstractFurnaceBlockEntity implements Va
         return this.dataAccess.get(DATA_LIT_TIME) > 0;
     }
 
+    /** (1.7.0) However the oven got here (a structure, a chunk that loads), its net is built around it at the next tick. */
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level instanceof ServerLevel server) {
+            nl.juiced.guhs.feature.vadskracht.VadsKracht.herbouw(server, worldPosition);
+        }
+    }
+
     public static void serverTick(ServerLevel level, BlockPos pos, BlockState state, GuhOvenBlockEntity oven) {
         ItemStack fuel = oven.items.get(SLOT_FUEL);
         if (!fuel.isEmpty()) {
