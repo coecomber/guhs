@@ -55,8 +55,8 @@ PAGINA = {
     "systemen/nieuw-in-1-7": (
         "New in 1.7.0: Under the Wool",
         "What's new in Guhs 1.7.0 \"Onder de Wol\" (Under the Wool): a whole underground below the Guhmension, buildings, villagers, "
-        "enchanting, mining helpers, five cave minigames, 18 holes of golf, feet clothes and a more cheerful surface. The full list is "
-        "in the mod's CHANGELOG."),
+        "enchanting, mining helpers, five cave minigames, chonk power in the buildings, the Guh Technology Fair, 18 holes of golf, "
+        "feet clothes and a more cheerful surface. The full list is in the mod's CHANGELOG."),
     "systemen/grot-minigames": (
         "The five cave minigames",
         "Under pink huts in the Guhmension lie five game halls: Treasure Dig, Glowworm Catching, the Little Lights Puzzle, the cart "
@@ -221,7 +221,7 @@ TEKST = {
     ("bouwwerken/vadsmijnstadje", "Een stadje van echte villagers"): (
         "A town of real villagers",
         "A big cave hall in the Snugglestone, about 60 by 60 blocks, with ten houses of Felt Stone and pastel bricks around a square. "
-        "On the square the Guh Wheel plant turns: a guh in a Guh Wheel that powers the town with vadskracht. Ten guh villagers live "
+        "On the square the Guh Wheel plant turns: two guhs in Guh Wheels that power the town with chonk power. Ten guh villagers live "
         "there (with the four new professions and a few of the old guh jobs), two children and two Iron Guhlems. A Mine Entrance Hut "
         "above ground takes you down with the cloud lift. There is one about every 1500 blocks."),
     # --- villagers ---
@@ -468,4 +468,77 @@ TEKST = {
         "Under the Wool (1.7.0)",
         "Under the wool of the Guhmension there are now stone layers, ores, caves with six cave biomes and more than twenty "
         "buildings under the ground. See Under the Wool: the underground."),
+    # --- 1.7.0 ronde 45-47: vadskracht in the buildings ---
+    ("systemen/nieuw-in-1-7", "Vadskracht"): (
+        "Chonk power",
+        "The Chonk Lamp, a guh lantern on 1 chonk power with light level 15 and extra light around it, and the Chonk "
+        "Switch, the on/off button in a line of Guh Wire. The Guh Technology Fair: a protected glass hall on the land "
+        "of the Guhmension with a working stand for every part of Guh Technology, fair guhs and the Dream Factory in "
+        "the middle. And real chonk power in buildings: the Vads Mine Town, the five cave minigame halls (with the pin "
+        "setter in the Bowling Cave), the Golden Sauce Dairy, the Old Wool Spinnery and new copies of old buildings: "
+        "the Guh Bakery in the guh village, the Cheese Mine, the kitchens and the Grill Coal Factory of the "
+        "Barbecuether and the harvest corner of the Guh Farm."),
+    ("bouwwerken/vadsmijnstadje", "Vadskracht in het stadje"): (
+        "Chonk power in the town",
+        "The Guh Wheel plant on the square has two Guh Wheels back to back, 30 chonk power together. All 18 lanterns of "
+        "the town are Chonk Lamps, connected by Guh Wire along the streets, with a Chonk Switch for the whole line. The "
+        "net asks 28 chonk power: flip the lever in front of one of the Guh Wheels and that guh takes a break, and "
+        "every lamp goes out. By House Glinster stands the Crystal Cutter's glass works (a Chonk Mill grinds gravel "
+        "into sand, a Guh Oven bakes it into glass) and at the ore depot the ore line: a chest cart full of raw ore "
+        "over a hopper, a Guh Oven that smelts the ore and a Chonk Mill that grinds mine grit, all into the miner's "
+        "chest by House Pickaxe, on a Guh Wheel of its own. Every setup has a sign with how much chonk power it uses. "
+        "The town is not protected, so it only has simple machines."),
+    ("systemen/grot-minigames", "Vadskracht in de zalen"): (
+        "Chonk power in the halls",
+        "Every hall has a Guh Wheel of its own with a guh, behind a Chonk Switch and with a lever in front (on = the "
+        "guh takes a break). It gives chonk power to Chonk Lamps in the hall and to two scoreboard lamps next to the "
+        "host. At Treasure Dig eight lamps stand around the field, at the Little Lights Puzzle the twelve mushroom "
+        "lamps on the wall are Chonk Lamps and in the Switch Cave the lanterns on the balcony. Glowworm Catching stays "
+        "dark on purpose (the glow jars are its light), so only the scoreboard lamps burn there. The games themselves "
+        "also work without chonk power."),
+    ("minigames/kegelen", "De Kegelzetter"): (
+        "The pin setter",
+        "Over the end of the lanes hangs the pin setter (Kegelzetter): a bridge with a Guh Wheel of its own and a Chonk "
+        "Lamp per lane. With chonk power a fresh rack of pins comes with sparks and a clack. Without chonk power the "
+        "lane's sign says \"pauze\" (a break) and De Guhde sets the pins by hand: so you can always play on. Behind De "
+        "Guhde another Guh Wheel runs for the hall's lamps."),
+    ("bouwwerken/guh_village", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "In new guh villages the Guh Bakery stands on the edge of the square, under a striped canopy: a Guh Wheel with "
+        "a guh, a Guh Oven baking potatoes and the square's Chonk Mill, which grinds nibble grain. Signs tell how much "
+        "chonk power everything uses, and a lever next to the Guh Wheel gives the guh a break. Guh villages that "
+        "already existed stay as they are."),
+    ("bouwwerken/kaasmijn", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "In new Cheese Mines two Sauce Pumps in the Nibble Cave pump cheese sauce from the pool into five Sauce Vats, "
+        "and a Nibbler gnaws at a cheese vein (it grows back); a Direction Piece sends the cheese chunks through a "
+        "Nibble Tube into a chest. Everything runs on a Guh Wheel, with signs and a lever that gives the guh a break."),
+    ("bouwwerken/spiesburcht", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "In new Skewer Keeps the skewer kitchen stands in the great hall: two Guh Ovens grilling satay and a Chonk "
+        "Mill, on a Guh Wheel with signs and a lever that gives the guh a break."),
+    ("bouwwerken/mika_grillpaleis", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "In new Mika Grill Palaces the grill kitchen runs on chonk power: a Guh Oven and a Sauce Pump on frying sauce "
+        "that fills five Sauce Vats, on a Guh Wheel with signs and a lever that gives the guh a break."),
+    ("bouwwerken/mika_woonblokken", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "In the courtyard of new Mika Apartments stands the Grill Coal Factory: two Guh Wheels with one lever between "
+        "them, Sauce Pumps on frying sauce and water, the Grill Coal Press and the Auto Fryer, with tubes into a chest. "
+        "Signs tell how much chonk power everything uses."),
+    ("bouwwerken/guhboerderij", "Vadskracht (1.7.0)"): (
+        "Chonk power (1.7.0)",
+        "New Guh Farms have a harvest corner on chonk power: a Harvester over a fenced little wheat field (the harvest "
+        "goes through a tube into a chest) and a Plantation Box whose tree the farm's chore guhs chop down. With signs "
+        "and a lever that gives the Guh Wheel's guh a break."),
+    ("bouwwerken/kaasmakerij", "Het pomphuis"): (
+        "The pump house",
+        "At the jetty stands the pump house: two Guh Wheels with happy guhs, each with a Sauce Pump right against it on "
+        "the sauce lake. Hoses bring the sauce to eight Sauce Vats, which fill up while you watch, and Guh Wire over "
+        "redstone lamps runs to a Guh Oven grilling satay."),
+    ("bouwwerken/oude_wolspinnerij", "De krachtcentrale"): (
+        "The power station",
+        "On the north walk in front of the water wheel three Guh Wheels turn. A glowing Guh Wire runs over lamps along "
+        "the hall to four spinning mills grinding nibble grain in the spinning circles, and to a Guh Oven at the tea "
+        "table."),
 }

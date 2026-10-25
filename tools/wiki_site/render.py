@@ -567,6 +567,15 @@ class Renderer:
                f'<span class="cta-txt"><small>Samen spelen, dag en nacht</small><b>Speel op de officiële server</b>'
                f'<span>Join guhs.nl in een paar minuten met Prism Launcher: stap voor stap, de regels en hulp bij problemen.</span></span>'
                f'<span class="go">Naar de server &rarr;</span></a>')
+        # what's new in this version: the "Nieuw in x" page of the update (systemen/nieuw-in-1-7 since 1.7.0)
+        new_pg = self.site.pages.get("systemen/nieuw-in-1-7")
+        new = ""
+        if new_pg:
+            new_thumb = self.thumb_of(new_pg)
+            new = (f'<a class="start-cta new-cta" href="@@{new_pg.id}@@"><span class="cta-art">{self.b.img(new_thumb, "") if new_thumb else ""}</span>'
+                   f'<span class="cta-txt"><small>{t("What&#39;s new", "Wat is er nieuw")}</small><b>{t(esc(new_pg.title_en), esc(new_pg.title))}</b>'
+                   f'<span>{t("Everything new in this version at a glance, with links to every page.", "Alles wat nieuw is in deze versie op een rij, met links naar elke pagina.")}</span></span>'
+                   f'<span class="go">{t("See what&#39;s new", "Bekijk het nieuws")} &rarr;</span></a>')
         first = ("<ol>"
                  f'<li>{t("Find a guh and feed it kaasknabbels until it is tame.", "Zoek een guh en voer hem kaasknabbels tot hij tam is.")} '
                  f'<a href="@@systemen/temmen@@">{t("Taming", "Temmen")}</a></li>'
@@ -579,7 +588,7 @@ class Renderer:
         return (f'<section class="hero"><div><h1>{t("Welcome to the <em>Guhs</em> wiki", "Welkom op de <em>Guhs</em>-wiki")}</h1>'
                 f'<p class="tagline">{t("Everything about the lieve vadsige guhs, for Minecraft " + SITE_MC + " (and 1.21.1).", "Alles over de lieve vadsige guhs, voor Minecraft " + SITE_MC + " (en 1.21.1).")}</p>'
                 f'{stats}</div><div class="hero-art">{hero_img}</div></section>'
-                f'{cta}{srv}'
+                f'{cta}{srv}{new}'
                 f'<div class="box" id="wat"><h2>{t("What is Guhs?", "Wat is Guhs?")}</h2>{what}{intro}</div>'
                 f'<h2>{t("Browse the wiki", "Blader door de wiki")}</h2><div class="tiles">{"".join(tiles)}</div>'
                 f'<div class="box" id="start"><h2>{t("In short", "In het kort")}</h2>{first}'
