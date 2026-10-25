@@ -60,7 +60,8 @@ import nl.juiced.guhs.world.ZoekHoogte;
  *       surface straight above it (its own jigsaw {@link #INGANG_BOVEN} in the middle of its 3 x 1 floor opening, in the
  *       hut's floor layer, its top side pointing where the lift lets you off), and a shaft ({@link GrotSchachtPiece})
  *       connects the two. Only where the ground there is dry and flat enough ({@link #HUT_VLAK}); {@code verplicht}: no
- *       hut, no building;</li>
+ *       hut, no building; {@code pogingen}: the whole build tries up to that many spots ({@link #SCHUIVEN}) for a fit
+ *       hut before it settles for the first one without;</li>
  *   <li>then it claims its room like every guhs structure ({@link BouwRuimte#claim}: keep_clear, voorrang).</li>
  * </ol>
  * The template pool elements use the processor list {@code guhs:onderwol_grot_schil} ({@link GrotSchilProcessor}). Python:
@@ -91,13 +92,25 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
         ).apply(i, Zaal::new));
     }
 
-    public record Ingang(Holder<StructureTemplatePool> pool, float kans, boolean verplicht) {
+    /**
+     * The entrance hut: {@code kans} the chance of one, {@code verplicht} no hut no building, {@code pogingen} how many
+     * spots the whole build may try (the middle of the chunk first, then {@link #SCHUIF} blocks to the sides and corners)
+     * until the ground above its shaft marker is fit for the hut; when none is, the build stands at the first spot without it.
+     */
+    public record Ingang(Holder<StructureTemplatePool> pool, float kans, boolean verplicht, int pogingen) {
         public static final Codec<Ingang> CODEC = RecordCodecBuilder.create(i -> i.group(
                 StructureTemplatePool.CODEC.fieldOf("pool").forGetter(Ingang::pool),
                 Codec.floatRange(0.0f, 1.0f).optionalFieldOf("kans", 1.0f).forGetter(Ingang::kans),
-                Codec.BOOL.optionalFieldOf("verplicht", false).forGetter(Ingang::verplicht)
+                Codec.BOOL.optionalFieldOf("verplicht", false).forGetter(Ingang::verplicht),
+                Codec.intRange(1, 9).optionalFieldOf("pogingen", 1).forGetter(Ingang::pogingen)
         ).apply(i, Ingang::new));
     }
+
+    /** How far (blocks) a build moves for another try at its entrance hut ({@link Ingang#pogingen}). */
+    public static final int SCHUIF = 8;
+    /** The spots a build tries for its entrance hut, in order: the middle, the four sides, the four corners. */
+    static final int[][] SCHUIVEN = {{0, 0}, {SCHUIF, 0}, {-SCHUIF, 0}, {0, SCHUIF}, {0, -SCHUIF}, {SCHUIF, SCHUIF}, {-SCHUIF, -SCHUIF},
+            {SCHUIF, -SCHUIF}, {-SCHUIF, SCHUIF}};
 
     public static final MapCodec<GrotBouwStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
@@ -235,44 +248,65 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
             y = laag + random.nextInt(hoog - laag + 1);
         }
         final int vloerY = y;
-        Optional<GenerationStub> stub = JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), size, new BlockPos(x, y, z), false,
+        boolean hutGewenst = ingang.isPresent() && random.nextFloat() < ingang.get().kans();
+        int pogingen = hutGewenst ? ingang.get().pogingen() : 1;
+        Optional<GenerationStub> zonderHut = Optional.empty();
+        for (int k = 0; k < pogingen; k++) {
+            int px = x + SCHUIVEN[k][0], pz = z + SCHUIVEN[k][1];
+            List<StructurePiece> bouw = stukken(context, px, vloerY, pz);
+            if (bouw == null) {
+                continue;
+            }
+            StructurePiecesBuilder builder = new StructurePiecesBuilder();
+            // 1. the hall (before the build: the template's blocks win)
+            zaal(context, bouw, builder, vloerY, chunk);
+            // 2. the build itself
+            bouw.forEach(builder::addPiece);
+            // 3. the entrance hut and its shaft
+            if (hutGewenst && ingang(context, bouw, builder)) {
+                return BouwRuimte.claim(context, this, Optional.of(new GenerationStub(new BlockPos(px, vloerY, pz), Either.right(builder))));
+            }
+            if (zonderHut.isEmpty()) {
+                // (a failed hut adds nothing: this is the build on its own, for when no spot gets its hut)
+                zonderHut = Optional.of(new GenerationStub(new BlockPos(px, vloerY, pz), Either.right(builder)));
+            }
+        }
+        if (ingang.isPresent() && ingang.get().verplicht()) {
+            return Optional.empty();   // (no hut, no building)
+        }
+        return BouwRuimte.claim(context, this, zonderHut);
+    }
+
+    /** The jigsaw pieces of the build with its start in the floor layer under (x, vloerY, z), or null when they don't fit. */
+    private List<StructurePiece> stukken(GenerationContext context, int x, int vloerY, int z) {
+        Optional<GenerationStub> stub = JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), size, new BlockPos(x, vloerY, z), false,
                 Optional.empty(), new JigsawStructure.MaxDistance(maxDistance, VERTICAAL), PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
                 LiquidSettings.IGNORE_WATERLOGGING);
         if (stub.isEmpty()) {
-            return stub;
+            return null;
         }
         StructurePiecesBuilder jigsaw = stub.get().getPiecesBuilder();
-        if (jigsaw.isEmpty()) {
-            return Optional.empty();
+        if (jigsaw.isEmpty() || !genoegDekking(context, jigsaw.getBoundingBox())) {
+            return null;
         }
-        List<StructurePiece> bouw = new ArrayList<>(jigsaw.build().pieces());
-        if (!genoegDekking(context, jigsaw.getBoundingBox())) {
-            return Optional.empty();
+        return new ArrayList<>(jigsaw.build().pieces());
+    }
+
+    /** The natural hall around the start piece (or every piece), when the structure has one. */
+    private void zaal(GenerationContext context, List<StructurePiece> bouw, StructurePiecesBuilder builder, int vloerY, ChunkPos chunk) {
+        if (zaal.isEmpty()) {
+            return;
         }
-        StructurePiecesBuilder builder = new StructurePiecesBuilder();
-        // 1. the hall (before the build: the template's blocks win)
-        if (zaal.isPresent()) {
-            Zaal z0 = zaal.get();
-            BoundingBox start = bouw.get(0).getBoundingBox();
-            List<StructurePiece> om = z0.alle() ? bouw : bouw.subList(0, 1);
-            for (int k = 0; k < om.size(); k++) {
-                BoundingBox b = om.get(k).getBoundingBox();
-                int vloer = b.minY() + (vloerY - start.minY());
-                builder.addPiece(new GrotZaalPiece((b.minX() + b.maxX()) / 2, (b.minZ() + b.maxZ()) / 2, vloer,
-                        b.getXSpan() / 2 + z0.rand(), b.getZSpan() / 2 + z0.rand(), b.maxY() - vloer + 1 + z0.boven(), z0.ruw(), dekking,
-                        context.seed() ^ chunk.pack() * 31L ^ k));
-            }
+        Zaal z0 = zaal.get();
+        BoundingBox start = bouw.get(0).getBoundingBox();
+        List<StructurePiece> om = z0.alle() ? bouw : bouw.subList(0, 1);
+        for (int k = 0; k < om.size(); k++) {
+            BoundingBox b = om.get(k).getBoundingBox();
+            int vloer = b.minY() + (vloerY - start.minY());
+            builder.addPiece(new GrotZaalPiece((b.minX() + b.maxX()) / 2, (b.minZ() + b.maxZ()) / 2, vloer,
+                    b.getXSpan() / 2 + z0.rand(), b.getZSpan() / 2 + z0.rand(), b.maxY() - vloer + 1 + z0.boven(), z0.ruw(), dekking,
+                    context.seed() ^ chunk.pack() * 31L ^ k));
         }
-        // 2. the build itself
-        bouw.forEach(builder::addPiece);
-        // 3. the entrance hut and its shaft
-        if (ingang.isPresent()) {
-            boolean gelukt = random.nextFloat() < ingang.get().kans() && ingang(context, bouw, builder);
-            if (!gelukt && ingang.get().verplicht()) {
-                return Optional.empty();
-            }
-        }
-        return BouwRuimte.claim(context, this, Optional.of(new GenerationStub(new BlockPos(x, vloerY, z), Either.right(builder))));
     }
 
     /** Is every part of this box at least dekking blocks under the surface (at its corners and middle), and above the bottom? */
