@@ -31,6 +31,8 @@ import nl.juiced.guhs.registry.ModSounds;
 public final class Mijnguh implements NpcRole {
     public static final String MET_KEY = "guhs_kaasmijn_met";
     public static final int TIPS = 5;
+    /** The plek (RoleData guhs_plek) of the Mijnguh in the underground Mijnguhdorp (tools/features/onderwol_bouw.py mijnguh). */
+    public static final String DORP = "mijnguhdorp";
     /** The whole mine around him (he sits in the middle of the head; the mine is 96 wide and 34 deep). */
     private static final int CLEANUP_EVERY = 200;
     /** How far around you he looks for a pickaxe you left lying about, before lending another. */
@@ -39,6 +41,11 @@ public final class Mijnguh implements NpcRole {
     @Override
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.8f);
+        // 1.7.0: the Mijnguh of the underground Mijnguhdorp starts (and takes in) the quest Mijnguh-hulpje before anything else
+        if (DORP.equals(npc.roleData.getStringOr(nl.juiced.guhs.feature.verhaal.NpcRollen.PLEK, ""))
+                && nl.juiced.guhs.feature.mijnhuisje.MijnHulpje.praat(npc, player)) {
+            return;
+        }
         var saved = GuhQuests.saved(player);
         if (!saved.getBooleanOr(MET_KEY, false)) {
             saved.putBoolean(MET_KEY, true);

@@ -114,7 +114,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.7.0 rondes 41-43: the cave minigames Schatgraven, Glimwormvangen, Lichtjespuzzel (append only)
             'grotspellen',
             # 1.7.0 Onder de Wol, minigames2: Karretjes-wissels + de Kegelgrot (append only)
-            'mijnspellen']
+            'mijnspellen',
+            # 1.7.0 Onder de Wol, rounds 32-43: het Vadsmijnstadje (guh villagers under the ground; append only)
+            'onderwol_stadje']
 
 
 def modules():
