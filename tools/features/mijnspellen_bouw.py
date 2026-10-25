@@ -6,10 +6,13 @@ start_jigsaw_name, projected to the surface minus the shaft, so the hut lands on
 
   <game>_zaal     the cave hall: walls, floor and ceiling all round (it carves its own room, caves can't run into it),
                   the game's marker blocks, the NPC, the Wolkenliftje (bottom) and a jigsaw in the ceiling above it;
+                  (1.7.0 playtest) with spelhal_bouw.RAND blocks of the world's rock round it and three extra entrances
+                  (a door, a short tunnel, a chamber with "Ingang" signs): only the hall itself is protected (Java Spelhal);
   <game>_schacht  a 1x1 column of nothing (structure void) as tall as SCHACHT: only two jigsaws, so the rock between the
                   hall and the hut stays rock (and isn't protected);
   <game>_hut      the little entrance hut on the surface with a sign and the Wolkenliftje (top), straight above the bottom
-                  one (the Wolkenliftje only goes straight up/down).
+                  one (the Wolkenliftje only goes straight up/down), on spelhal_bouw foundations; worldgen puts it on the
+                  ground at its own spot ("hut_op_grond").
 
 The rail networks, bins and levers of the Wisselgrot are NOT in the template: Conducteur Piepwiel lays them from
 KarretjesNet.java when a shift starts (one source of truth); this module only keeps the floor and the balcony free for
@@ -21,7 +24,10 @@ import math
 import os
 import re
 
+from features import spelhal_bouw as sh
+
 SCHACHT = 20                 # the empty column between the hall's ceiling and the hut's floor
+PLAFOND = "guhs:gepolijste_viltsteen"   # the Wisselgrot's ceiling
 # --- Karretjes-wissels: the three networks (KarretjesNet.BANEN): switches (u, v), bins (u, v, ore) ---------------------
 KAR_BANEN = [
     {"niveau": "makkelijk", "wissels": [(2, 0), (5, -3)], "bakken": [(8, -5, "kolen"), (8, -1, "ijzer"), (8, 3, "vads")]},
@@ -158,7 +164,8 @@ def karretjes_zaal(ms, texts, rng):
     X, Z, Y = xs + 0, KAR_Z0 + 14, KAR_HOOG + 1
     S = ms.Structure((X, Y, Z))
     rots = "guhs:viltsteen"
-    doos(S, 0, 0, 0, X - 1, KAR_HOOG, Z - 1, rots, "guhs:ertsgruissteen", rots)
+    # (the ceiling is NOT plain viltsteen: the cave decoration hangs glitterrank from viltsteen ceilings, right over the levers)
+    doos(S, 0, 0, 0, X - 1, KAR_HOOG, Z - 1, rots, "guhs:ertsgruissteen", PLAFOND)
     for x in range(X):                                    # the foundation and the floor
         for z in range(Z):
             S.set(x, 0, z, rots)
@@ -239,7 +246,7 @@ def karretjes_zaal(ms, texts, rng):
     lift = (mid - 3, KAR_Y + 4, 2)
     S.set(*lift, "guhs:wolkenliftje")
     jigsaw(S, lift[0], KAR_HOOG, lift[2], "up", "guhs:karretjes_lift", "guhs:karretjes_schacht_onder", "guhs:karretjeswissels/schacht",
-           "guhs:viltsteen")
+           PLAFOND)
     info["lift"] = lift
     npc(ms, S, mid, KAR_Y + 5, 2, "wisselguh", "south")
     info["npc"] = (mid, KAR_Y + 5, 2)
@@ -252,7 +259,33 @@ def karretjes_zaal(ms, texts, rng):
          texts, "karretjes.uitleg")
     for x in range(2, X - 2, 6):                                           # lamps along the balcony
         S.set(x, KAR_HOOG - 1, 3, "minecraft:lantern", {"hanging": "true", "waterlogged": "false"})
-    return S, info
+    # (1.7.0 playtest) how it works, on the balcony wall: the levers, the bins, the calm start
+    uitleg = [(mid + 2, [("~ De hendels ~", "~ The levers ~"), ("UIT: <- links", "OFF: <- left"), ("AAN: rechts ->", "ON: right ->"),
+                         ("De rails wijzen!", "Rails show it!")]),
+              (mid + 3, [("~ De bakken ~", "~ The bins ~"), ("Het erts in de", "The ore in the"), ("muur achter een", "wall behind a"),
+                         ("bak = zijn erts!", "bin = its ore!")]),
+              (mid + 4, [("~ Rustig aan ~", "~ Easy now ~"), ("De eerste", "The first carts"), ("karretjes gaan", "go slowly. Look"),
+                         ("langzaam. Kijk!", "at the bar!")]),
+              (mid - 4, [("Onderin zie je", "The bar shows"), ("welk erts er nu", "which ore comes"), ("aankomt. Zet de", "next. Set the"),
+                         ("wissel vast!", "switch early!")])]
+    for i, (x, regels) in enumerate(uitleg):
+        assert S.get(x, KAR_Y + 6, 1) in (None, "minecraft:air"), f"Wisselgrot: the sign spot {x} is taken"
+        bord(ms, S, x, KAR_Y + 6, 1, "south", regels, texts, f"karretjes.uitleg{i + 2}")
+    # (1.7.0 playtest) RAND blocks of room on every side (the world's rock: only the hall is protected) and three extra
+    # entrances from the balcony: west, east and north
+    R = sh.RAND
+    T = sh.verschuif(ms, S, R, 0, R, (X + 2 * R, Y, Z + 2 * R))
+    info["lift"] = (lift[0] + R, lift[1], lift[2] + R)
+    info["npc"] = (mid + R, KAR_Y + 5, 2 + R)
+    info["hal"] = (R, 0, R, R + X - 1, Y - 1, R + Z - 1)
+    info["ingangen"] = []
+    for (x, z, richting) in ((0, 3, "west"), (X - 1, 3, "east"), (mid + 8, 0, "north")):
+        assert S.get(x + (1 if richting == "west" else -1 if richting == "east" else 0), KAR_Y + 5, z + (1 if richting == "north" else 0)) == "minecraft:air"
+        kamer = sh.ingang(ms, T, x + R, KAR_Y + 5, z + R, richting, naam=("Wisselgrot", "Switch Cave"), wie=("bij Piepwiel", "Piepwiel's"),
+                          texts=texts, prefix=f"karretjes.{richting}", vloer="guhs:bielzenhout", wand="guhs:ertsgruis_bakstenen",
+                          plafond=PLAFOND)
+        info["ingangen"].append(kamer)
+    return T, info
 
 
 def karretjes_hut(ms, texts):
@@ -295,7 +328,9 @@ def karretjes_hut(ms, texts):
                                       ("sluipen = omlaag", "sneak = down")], texts, "karretjes.hut")
     bord(ms, S, c, 3, 2, "south", [("Op het", "Stand on the"), ("wolkenliftje", "cloud lift"), ("sluipen:", "and sneak:"),
                                   ("naar beneden!", "down you go!")], texts, "karretjes.lift")
-    return S
+    for x in (1, 2, 3, 5, 6, 7):                                           # a little fence in front (connected: sh.verbind)
+        S.set(x, 2, 8, "minecraft:spruce_fence")
+    return sh.hut(ms, S, vloer_y=1, fundering="guhs:ertsgruissteen")
 
 
 # =====================================================================================================================
@@ -400,7 +435,20 @@ def kegelgrot_zaal(ms, texts, rng):
          texts, "kegelen.uitleg")
     for x in range(2, X - 2, 5):
         S.set(x, KEG_HOOG - 1, 2, "minecraft:lantern", {"hanging": "true", "waterlogged": "false"})
-    return S, info
+    # (1.7.0 playtest) RAND blocks of room on every side and three extra entrances from the lounge: west, east and north
+    R = sh.RAND
+    T = sh.verschuif(ms, S, R, 0, R, (X + 2 * R, Y, Z + 2 * R))
+    info["lift"] = (lift[0] + R, lift[1], lift[2] + R)
+    info["npc"] = (mid + R, KEG_Y + 1, 2 + R)
+    info["hal"] = (R, 0, R, R + X - 1, Y - 1, R + Z - 1)
+    info["ingangen"] = []
+    for (x, z, richting) in ((0, 2, "west"), (X - 1, 2, "east"), (6, 0, "north")):
+        assert S.get(x + (1 if richting == "west" else -1 if richting == "east" else 0), KEG_Y + 1, z + (1 if richting == "north" else 0)) in (None, "minecraft:air")
+        kamer = sh.ingang(ms, T, x + R, KEG_Y + 1, z + R, richting, naam=("Kegelgrot", "Bowling Cave"), wie=("bij De Guhde", "The Guhde's"),
+                          texts=texts, prefix=f"kegelen.{richting}", vloer="guhs:kegelbaanhout", wand="guhs:viltsteen_bakstenen",
+                          plafond="guhs:gepolijste_viltsteen", deur="minecraft:cherry_door", hout="cherry")
+        info["ingangen"].append(kamer)
+    return T, info
 
 
 def kegelgrot_hut(ms, texts):
@@ -439,19 +487,14 @@ def kegelgrot_hut(ms, texts):
     S.set(6, 2, 2, "guhs:wolbalrek", {"facing": "south"})
     bord(ms, S, c + 1, 3, 8, "south", [("De Kegelgrot", "The Bowling Cave"), ("Guh-bowlen", "Guh bowling"), ("bij De Guhde", "with The Guhde"),
                                       ("Sluip op 't liftje", "Sneak on the lift")], texts, "kegelen.hut")
-    return S
+    for x in (2, 3, 5, 6):                                                 # pink guh fences in front (connected: sh.verbind)
+        S.set(x, 2, 8, "guhs:guh_hekje_roze")
+    return sh.hut(ms, S, vloer_y=1, fundering="guhs:viltsteen")
 
 
 # =====================================================================================================================
 # the shafts, the test floor, the worldgen files
 # =====================================================================================================================
-def schacht(ms, spel):
-    S = ms.Structure((1, SCHACHT, 1))
-    jigsaw(S, 0, 0, 0, "down", f"guhs:{spel}_schacht_onder", "", "minecraft:empty", "guhs:viltsteen")
-    jigsaw(S, 0, SCHACHT - 1, 0, "up", f"guhs:{spel}_schacht_boven", f"guhs:{spel}_hut_onder", f"guhs:{STRUCTUREN[spel]}/hut", "guhs:viltsteen")
-    return S
-
-
 def test_vloer(ms):
     """GameTests: a stone floor (y 0) of 28 x 22 with room above."""
     S = ms.Structure((28, 10, 22))
@@ -469,29 +512,6 @@ BIOMES = ["guhs:belletjesgrot", "guhs:beverbeek", "guhs:bleekwoud", "guhs:bloeme
 SALT = {"karretjes": 17072201, "kegelgrot": 17072202}
 
 
-def worldgen(h):
-    D = h.D
-    for spel, sid in STRUCTUREN.items():
-        h.w(f"{D}/tags/worldgen/biome/has_structure/{sid}.json", {"values": BIOMES})
-        h.w(f"{D}/worldgen/structure_set/{sid}.json", {"structures": [{"structure": f"guhs:{sid}", "weight": 1}],
-                                                       "placement": {"type": "minecraft:random_spread", "spacing": 32, "separation": 11,
-                                                                     "salt": SALT[spel]}})
-        for pool, loc in (("start", f"{sid}_zaal"), ("schacht", f"{sid}_schacht"), ("hut", f"{sid}_hut")):
-            h.w(f"{D}/worldgen/template_pool/{sid}/{pool}.json", {"fallback": "minecraft:empty", "elements": [
-                {"weight": 1, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{loc}",
-                                          "projection": "rigid", "processors": "minecraft:empty"}}]})
-        geen = {"bounding_box": "piece", "spawns": []}
-        jig = {"type": "minecraft:jigsaw", "biomes": f"#guhs:has_structure/{sid}", "step": "underground_structures",
-               "spawn_overrides": {"monster": geen, "ambient": geen}, "terrain_adaptation": "none",
-               "start_pool": f"guhs:{sid}/start", "size": 3, "start_height": {"absolute": -(SCHACHT + 2)},
-               "project_start_to_heightmap": "WORLD_SURFACE_WG", "max_distance_from_center": 80, "use_expansion_hack": False,
-               "start_jigsaw_name": f"guhs:{spel}_lift"}
-        h.w(f"{D}/worldgen/structure/{sid}.json", {
-            "type": "guhs:flat_jigsaw", "biomes": f"#guhs:has_structure/{sid}", "step": "underground_structures",
-            "spawn_overrides": {"monster": geen, "ambient": geen}, "terrain_adaptation": "none",
-            "check_radius": 10, "max_height_difference": 8, "keep_clear": 40, "jigsaw": jig})
-
-
 def build(h, ms, texts):
     import random
     problems = check_java()
@@ -499,13 +519,21 @@ def build(h, ms, texts):
         raise AssertionError("mijnspellen: the networks differ from KarretjesNet.java:\n  " + "\n  ".join(problems))
     rng = random.Random(1707)
     zaal, kinfo = karretjes_zaal(ms, texts, rng)
-    zaal.save("karretjeswissels_zaal")
-    karretjes_hut(ms, texts).save("karretjeswissels_hut")
-    schacht(ms, "karretjes").save("karretjeswissels_schacht")
     kzaal, ginfo = kegelgrot_zaal(ms, texts, rng)
-    kzaal.save("kegelgrot_zaal")
-    kegelgrot_hut(ms, texts).save("kegelgrot_hut")
-    schacht(ms, "kegelgrot").save("kegelgrot_schacht")
+    problems = []
+    for spel, z, info, hut in (("karretjes", zaal, kinfo, karretjes_hut(ms, texts)), ("kegelgrot", kzaal, ginfo, kegelgrot_hut(ms, texts))):
+        sid = STRUCTUREN[spel]
+        sch = sh.schacht(ms, spel, sid, SCHACHT)
+        for naam, t in ((f"{sid}_zaal", z), (f"{sid}_hut", hut)):
+            sh.verbind(t, h.A)
+            problems += sh.check_verbonden(t, h.A, naam)
+        problems += sh.check_gebouw(spel, z, info, hut, h.A)
+        z.save(f"{sid}_zaal")
+        hut.save(f"{sid}_hut")
+        sch.save(f"{sid}_schacht")
+        sh.worldgen(h, sid, spel, templates={"start": f"{sid}_zaal", "schacht": f"{sid}_schacht", "hut": f"{sid}_hut"},
+                    hal_hoogte=z.size[1], schacht_hoogte=SCHACHT, biomes=BIOMES, salt=SALT[spel])
     test_vloer(ms).save("mijnspellen_test")
-    worldgen(h)
+    if problems:
+        raise AssertionError("mijnspellen self-check:\n  " + "\n  ".join(problems))
     return kinfo, ginfo

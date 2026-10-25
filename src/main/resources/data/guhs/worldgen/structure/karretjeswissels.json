@@ -16,6 +16,7 @@
   "check_radius": 10,
   "max_height_difference": 8,
   "keep_clear": 40,
+  "hut_op_grond": true,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/karretjeswissels",
@@ -34,7 +35,7 @@
     "start_pool": "guhs:karretjeswissels/start",
     "size": 3,
     "start_height": {
-      "absolute": -22
+      "absolute": -35
     },
     "project_start_to_heightmap": "WORLD_SURFACE_WG",
     "max_distance_from_center": 80,
