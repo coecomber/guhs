@@ -337,7 +337,9 @@ public class BioSystemenGameTests {
         Set<GuhVariant> oudeBonus = Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,
                 GuhVariant.HERTGUHTJE,   // (1.4.2: the park's Hertguhtje is a bonus page too)
                 GuhVariant.KNABBELKOI,   // <park-a> (1.4.2: and the Knabbelkoi of its japanse tuin)
-                GuhVariant.DUIFGUHTJE);   // (1.4.2 park-plekjes b: the Duifguhtje too)
+                GuhVariant.DUIFGUHTJE,   // (1.4.2 park-plekjes b: the Duifguhtje too)
+                GuhVariant.BEVERGUH,   // (1.6.2: the Beverbeek's Beverguh is a bonus page too)
+                GuhVariant.GROTGUH);   // (1.7.0 Onder de Wol: and the Grotguh of the Guhmension caves)
         // einde2 (1.5.0) adds bonus pages of its own (GuhDex.NIEUW_EINDE2 minus its six counting biome guhs): not biomes3's
         Set<GuhVariant> einde2Bonus = new java.util.HashSet<>();
         for (GuhVariant v : GuhDex.EXTRA) {

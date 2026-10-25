@@ -127,8 +127,9 @@ def blocks_and_items(h):
 
 SILK = [{"condition": "minecraft:match_tool", "predicate": {"predicates": {"minecraft:enchantments": [
     {"enchantments": "minecraft:silk_touch", "levels": {"min": 1}}]}}}]
+# (shears = anything that can shears_dig, like the mod's other plants: the vadsschaar cuts these off too)
 SHEARS = [{"condition": "minecraft:any_of", "terms": [
-    {"condition": "minecraft:match_tool", "predicate": {"items": "minecraft:shears"}}, *SILK]}]
+    {"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}, *SILK]}]
 FORTUIN = {"function": "minecraft:apply_bonus", "enchantment": "minecraft:fortune", "formula": "minecraft:ore_drops"}
 DECAY = {"function": "minecraft:explosion_decay"}
 # pigment: the common pastel dyes in the upper layers, the rarer colours deeper
