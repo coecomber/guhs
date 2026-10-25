@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/oude_wolspinnerij",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/oude_wolspinnerij/start",
+  "start_jigsaw_name": "guhs:oude_wolspinnerij_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 44,
+  "max_y": 54,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 35,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.5
+  }
+}

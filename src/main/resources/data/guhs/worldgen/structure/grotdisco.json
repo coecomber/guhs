@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/grotdisco",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/grotdisco/start",
+  "start_jigsaw_name": "guhs:grotdisco_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 14,
+  "max_y": 20,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 30,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.5
+  }
+}
