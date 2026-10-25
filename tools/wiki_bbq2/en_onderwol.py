@@ -52,6 +52,11 @@ PAGINA = {
         "A more cheerful Guhmension",
         "Above ground the Guhmension got prettier too: a patchwork of pastel wool, flower meadows, brooks from spring to spring, "
         "pink beaches, little islands, heart lakes, rainbow hills and the rare Flower Valley."),
+    "systemen/nieuw-in-1-7": (
+        "New in 1.7.0: Under the Wool",
+        "What's new in Guhs 1.7.0 \"Onder de Wol\" (Under the Wool): a whole underground below the Guhmension, buildings, villagers, "
+        "enchanting, mining helpers, five cave minigames, 18 holes of golf, feet clothes and a more cheerful surface. The full list is "
+        "in the mod's CHANGELOG."),
     "systemen/grot-minigames": (
         "The five cave minigames",
         "Under pink huts in the Guhmension lie five game halls: Treasure Dig, Glowworm Catching, the Little Lights Puzzle, the cart "
@@ -59,6 +64,27 @@ PAGINA = {
 }
 
 TEKST = {
+    # --- what's new ---
+    ("systemen/nieuw-in-1-7", "Onder de grond"): (
+        "Under the ground",
+        "Stone layers (Felt Stone, Snugglestone, Guh Crystal Stone and the Plush Seam), ores per layer, guh clay, pigment and "
+        "Vahoegite, caves with six cave biomes and cheerful cave music, a sauce sea, more than twenty buildings under the ground, the "
+        "Mijnguh Village and the Vads Mine Town. Nothing hostile under the ground: but the Cave Guh, the Badger-Mole Guh and little "
+        "glow worms. Only in new chunks."),
+    ("systemen/nieuw-in-1-7", "Spullen en systemen"): (
+        "Things and systems",
+        "The Glitter Altar with Cuddle Bookshelves, eight guh spells and Little Spell Books; guh villagers with a new model, four new "
+        "professions, the Iron Guhlem and picking up villagers; the Vahoege Vadscracker, super vahoege vads, the Cloud Lift, the Fluff "
+        "Ladder and the Little Mine Lamp; the Mine Guh House with the Miner Guh's helper quest and the Saddle Bag; the feet clothing "
+        "slot with Cheese Sauce Striders and Lava Striders; bigger terraria; a Smoke Guh Platform of your own."),
+    ("systemen/nieuw-in-1-7", "Spelletjes"): (
+        "Games",
+        "Five cave minigames (Treasure Dig, Glowworm Catching, the Little Lights Puzzle, cart switches and the Bowling Cave) with their "
+        "own coins and shops, and new golf courses with 18 holes, a golf shop and the golf trophy."),
+    ("systemen/nieuw-in-1-7", "Bovengronds"): (
+        "Above ground",
+        "A more cheerful Guhmension (patchwork, flower meadows, brooks, pink beaches, little islands, heart lakes, rainbow hills and "
+        "the Flower Valley) and a Barbecuether without lava: everything is harmless Cheese Frying Sauce."),
     # --- overview ---
     ("systemen/onder-de-wol", "Waarom naar beneden?"): (
         "Why go down?",

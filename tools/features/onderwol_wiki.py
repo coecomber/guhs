@@ -71,6 +71,13 @@ WIKI = {
             "naar bronnetje, roze strandjes, eilandjes, hartjesmeertjes, regenboogheuvels en de zeldzame Bloemenvallei.",
             ["biomen/bloemenvallei", "dimensies/guhmension", "onder-de-wol", "bronnetje", "glinsterriet", "roze_zand", "hartjeslelie",
              "viltkiezel"]),
+        "nieuw-in-1-7": (
+            "Nieuw in 1.7.0: Onder de Wol", "block:guhs:glinsteraltaar",
+            "Wat er nieuw is in Guhs 1.7.0 \"Onder de Wol\": een hele ondergrond onder de Guhmensie, gebouwen, villagers, toveren, "
+            "mijnhulpjes, vijf grot-minigames, 18 holes golf, voetjes en een vrolijker oppervlak. De volledige lijst staat in het "
+            "CHANGELOG van de mod.",
+            ["onder-de-wol", "steenlagen-en-ertsen", "grotten", "ondergrondse-bouwwerken", "guh-villagers", "glinsteraltaar",
+             "mijnhulpjes", "mijn-guhhuisje", "grot-minigames", "voetjes", "vrolijk-oppervlak", "minigames/golf"]),
         "grot-minigames": (
             "De vijf grot-minigames", "schatmuntje",
             "Onder roze hutjes in de Guhmensie liggen vijf spelletjeszalen: Schatgraven, Glimwormvangen, de Lichtjespuzzel, de "
@@ -82,6 +89,22 @@ WIKI = {
                  "lampjesguh": "minigames/lichtjespuzzel", "wisselguh": "minigames/karretjes", "kegelguh": "minigames/kegelen"},
     "entity_home": {"grotglimworm": "biomen/glitterspelonk", "ijzerguhlem": "systemen/guh-villagers", "vangglimworm": "minigames/glimwormvangen"},
     "tekst": [
+        # --- what's new (the changelog on the wiki) ---
+        ("systemen/nieuw-in-1-7", "Onder de grond",
+         "Steenlagen (viltsteen, knuffelsteen, guhkristalsteen en de knuffelnaad), ertsen per laag, guhklei, pigment en Vahoegiet, "
+         "grotten met zes grotbiomen en vrolijke grotmuziek, een sauszee, ruim twintig gebouwen onder de grond, het Mijnguhdorp en "
+         "het Vadsmijnstadje. Niets vijandigs onder de grond: wel de Grotguh, de Molguh en glimwormpjes. Alleen in nieuwe chunks."),
+        ("systemen/nieuw-in-1-7", "Spullen en systemen",
+         "Het Glinsteraltaar met knuffelboekenkasten, acht guh-spreukjes en Spreukjesboekjes; guh-villagers met een nieuw model, vier "
+         "nieuwe beroepen, de IJzerguhlem en villagers oppakken; de Vahoege Vadsknakker, super vahoege vads, het Wolkenliftje, de "
+         "Pluisladder en het Mijnlampje; het Mijn-guhhuisje met de quest Mijnguh-hulpje en het Rugzakzadel; het kledingslot voetjes "
+         "met kaassauslopers en lavalopers; grotere terraria; een eigen Rookguh-platform."),
+        ("systemen/nieuw-in-1-7", "Spelletjes",
+         "Vijf grot-minigames (Schatgraven, Glimwormvangen, de Lichtjespuzzel, Karretjes-wissels en de Kegelgrot) met eigen munten en "
+         "winkeltjes, en nieuwe golfbanen met 18 holes, een golfwinkeltje en de golftrofee."),
+        ("systemen/nieuw-in-1-7", "Bovengronds",
+         "Een vrolijker Guhmensie (lappendeken, bloemenweitjes, beekjes, roze strandjes, eilandjes, hartjesmeertjes, regenboogheuvels "
+         "en de Bloemenvallei) en een Barbecuether zonder lava: alles is ongevaarlijke kaasfrituursaus."),
         # --- overview ---
         ("systemen/onder-de-wol", "Waarom naar beneden?",
          "Vroeger was alles onder de Guhmensie roze wol, en minen was dus niet zo heel spannend. Nu vind je onder de wol steen om mee "
