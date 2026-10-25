@@ -610,6 +610,7 @@ public enum GuhClothes {
     /** 1.7.0 Onder de Wol (Badhuis De Warme Knabbel, loot): a towel wrapped into a turban (the theemutsje bones). */
     HANDDOEK_TULBAND(Slot.HEAD, "outfit_theemutsje"),
     // </structuren2>
+    // 1.7.0 released: the order above is frozen (saved by number). New pieces only go below this line.
     ;
 
     /**
