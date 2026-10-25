@@ -133,7 +133,9 @@ public class KnabbelaarBlockEntity extends TechBlockEntity {
         }
         server.destroyBlockProgress(breekId(), doel, -1);
         server.levelEvent(2001, doel, Block.getId(state));   // the sound and the bits of a broken block
-        server.setBlock(doel, state.getFluidState().createLegacyBlock(), Block.UPDATE_ALL);
+        // (1.7.0) a kaasader is left mined out, like after a pickaxe: it grows back (the kaasmijn never runs dry)
+        server.setBlock(doel, state.getBlock() instanceof nl.juiced.guhs.feature.kaasmijn.KaasaderBlock ader ? ader.uitgemijnd()
+                : state.getFluidState().createLegacyBlock(), Block.UPDATE_ALL);
         server.gameEvent(GameEvent.BLOCK_DESTROY, doel, GameEvent.Context.of(state));
         stopAlles(buit, 0, 8);
         hap = null;
@@ -186,7 +188,7 @@ public class KnabbelaarBlockEntity extends TechBlockEntity {
             if (!state.isAir() && !(state.getBlock() instanceof LiquidBlock)) {
                 if (!magKnabbelen(server, doel, state)) {
                     regels.accept(Component.translatable("gui.guhs.techmachine.knabbelaar.lust_niet", state.getBlock().getName()).withStyle(ChatFormatting.GOLD));
-                } else if (!Bescherming.magWijzigen(server, doel, eigenaar())) {
+                } else if (!magWijzigen(server, doel)) {
                     regels.accept(Component.translatable("gui.guhs.techmachine.mag_niet").withStyle(ChatFormatting.GOLD));
                 }
             }

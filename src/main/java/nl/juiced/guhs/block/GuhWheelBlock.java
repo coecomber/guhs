@@ -207,6 +207,16 @@ public class GuhWheelBlock extends BaseEntityBlock {
         nl.juiced.guhs.feature.vadskracht.VadsKracht.veranderd(level, pos);
     }
 
+    /** (1.7.0) A building's wheel: its lever next to it switches the guh's break on and off (see GuhWheelBlockEntity#kijkHendel). */
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
+                                   @Nullable net.minecraft.world.level.redstone.Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel) {
+            wheel.kijkHendel();
+        }
+    }
+
     // --- redstone: full power in every direction while a guh is running ---
 
     @Override

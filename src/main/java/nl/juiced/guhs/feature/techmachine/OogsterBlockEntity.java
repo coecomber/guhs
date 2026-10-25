@@ -94,7 +94,7 @@ public class OogsterBlockEntity extends TechBlockEntity {
         }
         voortgang = 0;
         Oogst.Pluk pluk = Oogst.bekijk(server, doel);
-        if (pluk == null || (!pluk.pos().equals(doel) && !Bescherming.magWijzigen(server, pluk.pos(), eigenaar()))) {
+        if (pluk == null || (!pluk.pos().equals(doel) && !magWijzigen(server, pluk.pos()))) {
             doel = null;   // (nothing ripe after all, or the top of the stalk stands where it may not cut)
             return;
         }

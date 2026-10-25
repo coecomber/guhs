@@ -43,6 +43,7 @@ public final class TechklusFeature {
         Klusjes.registreer(PLANTAGE_KLUS);
         KlusGebied.registreer(MACHINE, (level, pos, state) -> state.is(MACHINES));
         KlusGebied.registreer(BAK, (level, pos, state) -> state.getBlock() instanceof PlantagebakBlock);
+        GebouwKlus.register();   // (1.7.0: the klusjes-guhs of a building chop the trees of its own Plantagebakken)
         // once a second: look what lies in the machines around the huisjes (what they are shown is what they get)
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> {
             if (event.getServer().getTickCount() % 20 == 7) {

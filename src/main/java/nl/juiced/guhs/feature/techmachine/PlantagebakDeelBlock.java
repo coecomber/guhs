@@ -68,6 +68,26 @@ public class PlantagebakDeelBlock extends MachineDeelBlock {
         return RenderShape.MODEL;
     }
 
+    /** (1.7.0) Turned with a structure: the piece of the bed turns along (a structure placed in a new chunk calls no onPlace). */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        Stuk stuk = state.getValue(STUK);
+        int i = stuk.ordinal();
+        BlockPos r = new BlockPos(i % 3 - 1, 0, i / 3 - 1).rotate(rotation);
+        return super.rotate(state, rotation).setValue(STUK, Stuk.van(r.getX(), r.getZ()));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        int i = state.getValue(STUK).ordinal(), dx = i % 3 - 1, dz = i / 3 - 1;
+        if (mirror == net.minecraft.world.level.block.Mirror.LEFT_RIGHT) {
+            dz = -dz;
+        } else if (mirror == net.minecraft.world.level.block.Mirror.FRONT_BACK) {
+            dx = -dx;
+        }
+        return super.mirror(state, mirror).setValue(STUK, Stuk.van(dx, dz));
+    }
+
     /** Placed (by its kern): it finds out which piece of the bed it is. */
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {

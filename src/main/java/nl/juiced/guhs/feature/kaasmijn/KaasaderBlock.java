@@ -31,6 +31,11 @@ public class KaasaderBlock extends DropExperienceBlock {
         this.minedOut = minedOut;
     }
 
+    /** (1.7.0) What a mined vein becomes (it grows back): also when a Knabbelaar gnaws it. */
+    public BlockState uitgemijnd() {
+        return minedOut.get().defaultBlockState();
+    }
+
     /** Mined by a player: the mined-out vein takes its place (the drops still come from the full vein). */
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.item.ItemStack toolStack, boolean willHarvest, FluidState fluid) {

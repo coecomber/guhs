@@ -44,6 +44,13 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
      * owner, so nobody takes it out, and when the wheel is broken it does not drop as an item but hops out as a wild guh.
      */
     private boolean vast;
+    /**
+     * (1.7.0, ronde 45-47) A building's wheel whose lever is on: its guh takes a break (gives nothing, the wheel stands still)
+     * while a redstone signal reaches the wheel block from a lever, button... next to it (Guhdraad and the Guhrad's own
+     * parts do not count: {@link nl.juiced.guhs.feature.techbuis.Buizen#redstone}). Only {@link #vast} wheels: a player's own
+     * wheel ignores redstone as it always did.
+     */
+    private boolean rust;
     /** Does this wheel count in its net (false: one Guhrad too many)? Not saved: the net tells it at every evaluation. */
     private boolean teltMee = true;
 
@@ -88,9 +95,36 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         guhData = null;
         blij = false;
         vast = false;
+        rust = false;
         sync();
         VadsKracht.veranderd(level, worldPosition);
         return tag;
+    }
+
+    /** (1.7.0) Does the building's guh take a break (its lever is on, see {@link #rust})? */
+    public boolean rust() {
+        return rust;
+    }
+
+    /**
+     * (1.7.0) A neighbour of the wheel block changed: a building's wheel looks whether its lever is on (then the guh takes a
+     * break) or off again (then it runs on).
+     */
+    public void kijkHendel() {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel) || (!vast && !rust)) {
+            return;
+        }
+        boolean nu = vast && nl.juiced.guhs.feature.techbuis.Buizen.redstone(level, worldPosition);
+        if (nu == rust) {
+            return;
+        }
+        rust = nu;
+        BlockState state = getBlockState();
+        if (state.hasProperty(nl.juiced.guhs.block.GuhWheelBlock.RUNNING)) {
+            level.setBlock(worldPosition, state.setValue(nl.juiced.guhs.block.GuhWheelBlock.RUNNING, guhData != null && !rust), 3);
+        }
+        sync();
+        VadsKracht.veranderd(level, worldPosition);
     }
 
     /** (1.7.0) Is this a building's wheel (see {@link #vast})? */
@@ -124,7 +158,7 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
 
     @Override
     public int vadsAanbod() {
-        return guhData == null ? 0 : GuhradKracht.van(guhData, blij);
+        return guhData == null || rust ? 0 : GuhradKracht.van(guhData, blij);
     }
 
     @Override
@@ -158,6 +192,9 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
             regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.leeg").withStyle(net.minecraft.ChatFormatting.GRAY));
             return;
         }
+        if (rust) {
+            regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.rust").withStyle(net.minecraft.ChatFormatting.GOLD));
+        }
         // tech-bronnen: what is special about this guh (per variant), then its mood
         net.minecraft.network.chat.Component stijl = stijl().regel();
         if (stijl != null) {
@@ -184,6 +221,9 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         if (be.guhData == null) {
             be.displayGuh = null;
             return;
+        }
+        if (be.rust) {
+            return;   // (1.7.0: the building's guh takes a break, its lever is on: the wheel stands still)
         }
         // tech-bronnen: the wheel turns as hard as its guh runs (per variant; a happy guh a bit faster still)
         nl.juiced.guhs.feature.techbron.GuhradStijl stijl = be.stijl();
@@ -225,6 +265,7 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         guhData = newData;
         blij = tag.getBooleanOr("Blij", false);
         vast = tag.getBooleanOr("Vast", false);
+        rust = tag.getBooleanOr("Rust", false);
     }
 
     @Override
@@ -236,6 +277,9 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         tag.putBoolean("Blij", blij);
         if (vast) {
             tag.putBoolean("Vast", true);
+        }
+        if (rust) {
+            tag.putBoolean("Rust", true);
         }
         if (guhData != null) {
             tag.store("Guh", CompoundTag.CODEC, guhData);

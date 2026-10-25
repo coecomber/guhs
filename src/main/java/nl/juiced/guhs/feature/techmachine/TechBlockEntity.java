@@ -197,9 +197,32 @@ public abstract class TechBlockEntity extends MachineBlockEntity implements Menu
         if (sleutel != magPlek || nu >= magTot || nu < magTot - MAG_ONTHOUDEN) {
             magPlek = sleutel;
             magTot = nu + MAG_ONTHOUDEN;
-            magAntwoord = Bescherming.magWijzigen(server, plek, eigenaar());
+            magAntwoord = Bescherming.magWijzigen(server, plek, eigenaar()) || gebouwMachine(server, plek);
         }
         return magAntwoord;
+    }
+
+    /** (1.7.0) How far a building's own machine reaches in its building ({@link #gebouwMachine}). */
+    public static final int GEBOUW_BEREIK = 12;
+
+    /**
+     * (1.7.0, ronde 45-47) A building's own machine works in its own protected building: a machine the structure placed (no
+     * owner: a player's machine always has one) that stands in a protected building may change the blocks of that
+     * building close by ({@link #GEBOUW_BEREIK}): the Oogster and the Plantagebak of the Guhboerderij, the Knabbelaar on the
+     * kaasader of the kaasmijn. Players still may not change anything there.
+     */
+    protected boolean gebouwMachine(ServerLevel server, BlockPos plek) {
+        return eigenaar() == null && worldPosition.distManhattan(plek) <= GEBOUW_BEREIK && server.isLoaded(plek)
+                && !server.isOutsideBuildHeight(plek) && beschermd(server, worldPosition) && beschermd(server, plek);
+    }
+
+    /** {@link Bescherming#magWijzigen} for this machine's owner, or a building's own machine in its building (not kept). */
+    protected boolean magWijzigen(ServerLevel server, BlockPos plek) {
+        return Bescherming.magWijzigen(server, plek, eigenaar()) || gebouwMachine(server, plek);
+    }
+
+    private static boolean beschermd(ServerLevel server, BlockPos pos) {
+        return Bescherming.beschermd(server, pos) || nl.juiced.guhs.feature.Protected.at(server, pos);
     }
 
     @Override

@@ -310,6 +310,9 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
             return false;
         }
         kijk(server);
+        if (stand == Stand.BOOM && eigenaar() == null) {
+            nl.juiced.guhs.feature.techklus.GebouwKlus.roep(server, this);   // (1.7.0: a building's bak: its own guhs chop the tree)
+        }
         return stand == Stand.GROEIT;
     }
 
@@ -410,7 +413,7 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
     /** Lets the sapling at the plant spot grow into its tree now; remembers the blocks of the tree. False: it would not. */
     private boolean groei(ServerLevel server, BlockPos plek) {
         BlockState zaailing = server.getBlockState(plek);
-        if (!isZaailingBlok(zaailing) || !Bescherming.magWijzigen(server, plek, eigenaar())) {
+        if (!isZaailingBlok(zaailing) || !magWijzigen(server, plek)) {
             return false;
         }
         BlockState[] eerst = foto(server, plek);
@@ -485,7 +488,7 @@ public class PlantagebakBlockEntity extends TechBlockEntity {
         }
         List<BlockPos> erbij = vierkant(plek);
         for (BlockPos p : erbij) {
-            if (!server.getBlockState(p).canBeReplaced() || !zaailing.canSurvive(server, p) || !Bescherming.magWijzigen(server, p, eigenaar())) {
+            if (!server.getBlockState(p).canBeReplaced() || !zaailing.canSurvive(server, p) || !magWijzigen(server, p)) {
                 return false;
             }
         }
