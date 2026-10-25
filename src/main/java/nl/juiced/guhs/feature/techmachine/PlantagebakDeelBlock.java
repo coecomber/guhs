@@ -68,6 +68,26 @@ public class PlantagebakDeelBlock extends MachineDeelBlock {
         return RenderShape.MODEL;
     }
 
+    /** 1.7.0: turned or mirrored with a template, its piece of the bed turns along (the offset to the kern: MachineDeelBlock). */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        Stuk s = state.getValue(STUK);
+        int i = s.ordinal();
+        BlockPos d = new BlockPos(i % 3 - 1, 0, i / 3 - 1).rotate(rotation);
+        return super.rotate(state, rotation).setValue(STUK, Stuk.van(d.getX(), d.getZ()));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        int i = state.getValue(STUK).ordinal(), dx = i % 3 - 1, dz = i / 3 - 1;
+        Stuk s = switch (mirror) {
+            case LEFT_RIGHT -> Stuk.van(dx, -dz);
+            case FRONT_BACK -> Stuk.van(-dx, dz);
+            default -> state.getValue(STUK);
+        };
+        return super.mirror(state, mirror).setValue(STUK, s);
+    }
+
     /** Placed (by its kern): it finds out which piece of the bed it is. */
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
