@@ -102,6 +102,15 @@ public class GidsGameTests {
                 && SuperkompasItem.categoryOf(null) == -1, "the tab of a place");
         helper.assertTrue(GidsData.groepVanStructuur("guhdoolhof") == SpelGroepen.van("doolhof") && GidsData.groepVanStructuur("guh_kasteel") == null,
                 "a place's game");
+        // 1.7.0 Onder de Wol: the five cave games stand in the Minigames tab after the subheadings (one heading-less group, in
+        // registration order), and the compass may look for each of them
+        List<String> grot = List.of("grotspel_schatgraven", "grotspel_glimwormen", "grotspel_lichtjes", "karretjeswissels", "kegelgrot");
+        SuperkompasItem.Kopje los = mg.kopjes().get(mg.kopjes().size() - 1);
+        helper.assertTrue(los.id() == null && los.structures().equals(grot), "the cave games: " + los.structures());
+        for (String s : grot) {
+            helper.assertTrue(SuperkompasItem.allowed(s) && SuperkompasItem.categoryOf(s) == cats.indexOf(mg), "the compass may look for " + s);
+        }
+        helper.assertTrue(GidsData.groepVanStructuur("grotspel_lichtjes") == SpelGroepen.van("lichtjespuzzel"), "a cave hall's game");
         helper.succeed();
     }
 
@@ -200,7 +209,7 @@ public class GidsGameTests {
         GidsFeature.kijk(player);
         helper.assertTrue(!GidsFeature.heeft(player, GidsFeature.ONTDEKKER), "nothing visited yet");
         List<SpelGroepen.Groep> groot = GidsFeature.nodig(true);
-        helper.assertTrue(groot.size() == 8, "six new buildings (1.7.0 minigames2: + the Wisselgrot and the Kegelgrot): " + groot.size());
+        helper.assertTrue(groot.size() == 11, "six new buildings (1.7.0: + the five cave games: Schatgraven, Glimwormvangen, Lichtjespuzzel, the Wisselgrot, the Kegelgrot): " + groot.size());
         for (int i = 0; i < groot.size() - 1; i++) {
             SpelGroepen.bezoek(player, groot.get(i).id());
         }

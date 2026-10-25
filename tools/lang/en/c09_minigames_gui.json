@@ -227,7 +227,6 @@
   "gui.guhs.golf.stop": "Stop",
   "gui.guhs.golf.stop.tooltip": "Your round stops; you keep the golf balls you already have",
   "gui.guhs.golf.shop": "Little Shop",
-  "gui.guhs.golf.shop.tooltip": "The golf outfit for your guh, for golf balls",
   "gui.guhs.golf.par_line": "Par per hole: %s (total %s)",
   "gui.guhs.golf.par_line_niveau": "Par on %s: %s (total %s)",
   "gui.guhs.golf.bord_par": "(max %s strokes, par %s)",

@@ -20,7 +20,7 @@ import nl.juiced.guhs.feature.spelen.SpelGroepen;
  * ({@link GidsData} puts it in order). The server side only hands out the two explorer advancements of the tab
  * "De Grote Guhspelen":
  * <ul>
- *   <li>{@link #ONTDEKKER}: you've been in all six buildings of De Grote Guhspelen;</li>
+ *   <li>{@link #ONTDEKKER}: you've been in all buildings of De Grote Guhspelen (1.7.0: the five cave games too);</li>
  *   <li>{@link #WERELDREIZIGER}: you've been in every minigame building of the Guhmensie (a challenge).</li>
  * </ul>
  * Resources: tools/features/gids.py.

@@ -155,7 +155,11 @@ public final class GrotSpellenFeature {
         bron(GuhClothes.GLIM_ANTENNETJES, GrotSpel.Soort.GLIMWORMVANGEN, GrotSpelRol.PRIJS_ANTENNETJES);
         bron(GuhClothes.GLIM_VLINDERNETJE, GrotSpel.Soort.GLIMWORMVANGEN, GrotSpelRol.PRIJS_VLINDERNETJE);
         bron(GuhClothes.LICHTJES_PADDENSTOELHOEDJE, GrotSpel.Soort.LICHTJESPUZZEL, GrotSpelRol.PRIJS_PADDENSTOELHOEDJE);
-        // the Minigames tab of the Guhdex (no compass place yet: structuur null, visited when you talk to the host)
+        // the Minigames tab of the Guhdex and the Superkompas (Minigames tab, after the subheadings like the Wisselgrot and the
+        // Kegelgrot; the compass finds the nearest hall): visited when you stand in the hall or talk to the host
+        for (GrotSpel.Soort soort : GrotSpel.Soort.values()) {
+            nl.juiced.guhs.item.SuperkompasItem.voegToe("minigames", soort.structuur);
+        }
         groep(GrotSpel.Soort.SCHATGRAVEN, "schatmuntje", Items.GOLD_NUGGET);
         groep(GrotSpel.Soort.GLIMWORMVANGEN, "glimmertje", Items.GLOW_BERRIES);
         groep(GrotSpel.Soort.LICHTJESPUZZEL, "lampjesmunt", Items.SHROOMLIGHT);
@@ -175,7 +179,7 @@ public final class GrotSpellenFeature {
     }
 
     private static void groep(GrotSpel.Soort soort, String munt, Item standIn) {
-        SpelGroepen.groep(new SpelGroepen.Groep(soort.id, SpelGroepen.Tijdperk.GROTE_GUHSPELEN, SpelGroepen.icoon(munt, standIn), null, soort.npc(),
+        SpelGroepen.groep(new SpelGroepen.Groep(soort.id, SpelGroepen.Tijdperk.GROTE_GUHSPELEN, SpelGroepen.icoon(munt, standIn), soort.structuur, soort.npc(),
                 soort.borden()));
     }
 

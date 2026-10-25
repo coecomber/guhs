@@ -6,7 +6,7 @@ this module only writes:
   lang (Dutch in both files)   the Guhdex tabs (Guhs, Knus, Minigames, Kleding), everything the Minigames and Kleding tabs
                                say (headings, columns, tooltips), a short label per Highscores row inside its building
                                (gui.guhs.gids.rij.<row>), the Superkompas subheadings and tab texts
-  advancements                 grote_guhspelen/gids_ontdekker (all six buildings of De Grote Guhspelen visited) and
+  advancements                 grote_guhspelen/gids_ontdekker (all buildings of De Grote Guhspelen visited; 1.7.0: the cave minigames too) and
                                grote_guhspelen/gids_wereldreiziger (every minigame building visited; a challenge), both
                                granted by GidsFeature (trigger minecraft:impossible)
   ftb(fq)                      two explorer quests in "Minigames & bijzondere plekken"
@@ -148,7 +148,7 @@ SUPERKOMPAS = {
 ADVANCEMENTS = [
     # (name, parent, icon, frame, title, description)
     ("gids_ontdekker", "guhs:grote_guhspelen/root", "guhs:guhmensie_superkompas", "goal", "Guhspelen-ontdekker",
-     "Bezoek alle zes gebouwen van De Grote Guhspelen. Je superkompas wijst de weg!"),
+     "Bezoek alle gebouwen van De Grote Guhspelen, ook de grot-minigames onder de wol. Je superkompas wijst de weg!"),
     ("gids_wereldreiziger", "guhs:grote_guhspelen/gids_ontdekker", "guhs:guhdex", "challenge", "Vahoege wereldreiziger",
      "Bezoek ELK minigame-gebouw van de Guhmensie en Knuffeldal. Kijk in de Guhdex (Minigames) welke je nog mist!"),
 ]
