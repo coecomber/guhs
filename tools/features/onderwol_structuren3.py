@@ -32,6 +32,7 @@ import sign_text
 from features import onderwol_bouw as ob
 from features import onderwol_bouw_scene as sc
 from features import onderwol_structuren1 as s1
+from features import onderwol_vadskracht as ov
 
 PREFIX = "sign.guhs.onderwol3"
 SALT = 17030001   # (this slice: 17030001, 17030011, ...)
@@ -48,7 +49,7 @@ PRAAT = {
     "onderwol_spinnerij": ("knuffelmakerguh", [
         "Welkom bij De Wolclub! Lang geleden was alles grijs. Toen pakten wij onze spinnewielen... en nu? Roze! Vahoeg!",
         "Hier hoeft niemand te werken. We spinnen omdat het gezellig is. En om de vijf minuten is er pauze.",
-        "Het waterrad geeft vadskracht. Die draait de spinnewielen, dan hoeven onze pootjes het niet te doen.",
+        "Drie guhs rennen in de Guhraden. Dat geeft vadskracht voor de spinmolens, dan hoeven onze pootjes het niet te doen.",
         "Neem gerust een wolbaal mee. Wol is er genoeg, de hele Guhmension ligt er vol mee!",
         "In de weefhoek maken we tapijtjes, dekentjes en stofjes voor guhkleding."]),
     "onderwol_sterren": ("sterrenwacht_ruine_sterrenkijker", [
@@ -89,7 +90,7 @@ PRAAT_EN = {
                        "Danced out? Sit on a cushion for a bit. Five minutes. Then back to vadsing!"],
     "onderwol_spinnerij": ["Welcome to De Wolclub! Long ago everything was grey. Then we picked up our spinning wheels... and now? Pink! Vahoeg!",
                            "Nobody has to work here. We spin because it's cosy. And every five minutes there's a break.",
-                           "The water wheel makes vads power. It turns the spinning wheels, so our paws don't have to.",
+                           "Three guhs run in the guh wheels. That makes vads power for the spinning mills, so our paws don't have to.",
                            "Take a bale of wool, go on. There's plenty of wool, the whole Guhmension is full of it!",
                            "In the weaving corner we make little rugs, blankets and fabrics for guh clothes."],
     "onderwol_sterren": ["Look, there! That constellation is called the Great Cheese Nibble.",
@@ -131,6 +132,11 @@ EN_REGELS = {
     "De Wolclub,": "De Wolclub,", "sinds altijd.": "since forever.", "Iedereen": "Everyone", "welkom!": "welcome!",
     "Hier werd de": "Here the whole", "hele Guhmension": "Guhmension was", "roze gesponnen!": "spun pink!",
     "Waterrad =": "Water wheel =", "vadskracht.": "vads power.", "Niet aaien,": "Don't pet it,", "hij draait!": "it spins!",
+    "Guhrad =": "Guh wheel =", "hij rent!": "it runs!", "Krachtcentrale:": "Power plant:", "3 guhs rennen": "3 guhs run",
+    "voor de hele": "for the whole", "Wolclub!": "Wolclub!", "Spinmolen:": "Spinning mill:", "maalt graan voor": "grinds grain for",
+    "de koekjes.": "the cookies.", "Op vadskracht!": "On vads power!", "Roze draad =": "Pink wire =", "vadskracht!": "vads power!",
+    "Lampjes aan?": "Lamps on?", "Dan rennen ze!": "Then they run!", "Guhoven:": "Guh oven:", "grilt saté op": "grills satay on",
+    "Geen kolen!": "No coal!",
     "Pauze is om": "Break every", "de 5 minuten.": "5 minutes.", "Werken is om": "Work every", "de 6 minuten.": "6 minutes.",
     "Thee en koekjes:": "Tea and cookies:", "pak maar, njeg!": "help yourself!",
     "Weefhoek:": "Weaving corner:", "tapijtjes en": "little rugs,", "dekentjes en": "blankets and", "guhkleding-stof": "guh fabrics",
@@ -409,6 +415,47 @@ def grotdisco(h):
 # =====================================================================================================================
 # r18 the Oude wolspinnerij (De Wolclub)
 # =====================================================================================================================
+def krachtcentrale(b):
+    """(1.7.0 playtest) The Wolclub runs on REAL vadskracht (features/onderwol_vadskracht.py). The render had a still water
+    wheel, Vadstouw (a rope) as "cables", einde2 Vadsontvangers (receivers of a Zender that is not there) over the spinning
+    circles and a Vadsmolen as the water wheel's hub: none of it gave or got anything. Now: the krachtcentrale, three
+    Guhraden on the north walk in front of the water wheel, each with a happy guh (3 x 15 VK); Guhdraad over redstone lamps
+    (they burn on the guhs' power) as a main line along the hall, branches to four Spinmolens (Vadsmolens grinding
+    knabbelgraan, in the two spinning circles where the receivers were) and to a Guhoven at the tea table. One net:
+    4 mills (20) + the oven (5) = 25 of 45 VK. Template coordinates: floor y 2, the hall z 10-34, the walk z 8-9."""
+    # what only looked like vadskracht: the ropes, the receivers on their posts, the hub of the water wheel
+    for p, blok in list(b.blocks.items()):
+        if blok[0] in ("guhs:vadstouw", "guhs:vadsontvanger"):
+            b.set(*p, LUCHT)
+    assert b.get(18, 6, 5) == "guhs:vadsmolen"
+    b.zet(18, 6, 5, "minecraft:stripped_spruce_log[axis=z]")
+    # the krachtcentrale: three wheels facing the hall, a piece of Guhdraad under each into the main line (z 11)
+    for x in (12, 20, 28):
+        ov.guhrad(b, x, 3, 9, "south")
+        ov.draad(b, x, 3, 10)
+    for x in range(10, 33):
+        ov.draad(b, x, 3, 11)
+    # the spinmolens: in the two spinning circles, on the posts' spots (z 16 and 24), on a branch each (x 25 and 32)
+    for x in (25, 32):
+        for z in (16, 24):
+            assert b.get(x, 3, z) == "minecraft:spruce_fence" and b.get(x, 4, z) == "minecraft:spruce_slab", (x, z)
+            b.set(x, 4, z, LUCHT)
+            ov.machine(b, x, 3, z, "vadsmolen", "south", slots=2, stapels=[(0, "guhs:knabbelgraan", 64)])
+        for z in list(range(12, 16)) + list(range(17, 24)):
+            assert vrij(b, x, 3, z), (x, z, b.get(x, 3, z))
+            ov.draad(b, x, 3, z)
+    # the tea table: a Guhoven grilling saté, on a branch along x 10
+    for z in range(12, 20):
+        assert vrij(b, 10, 3, z), (10, z, b.get(10, 3, z))
+        ov.draad(b, 10, 3, z)
+    plaats(b, 10, 3, 20, "the Guhoven")
+    ov.oven(b, 10, 3, 20, "north", "guhs:kaasknabbelsate", 8)
+    bord(b, (14, 3, 10), "south", ["Krachtcentrale:", "3 guhs rennen", "voor de hele", "Wolclub!"])
+    bord(b, (26, 3, 15), "south", ["Spinmolen:", "maalt graan voor", "de koekjes.", "Op vadskracht!"])
+    bord(b, (11, 3, 12), "south", ["Roze draad =", "vadskracht!", "Lampjes aan?", "Dan rennen ze!"])
+    bord(b, (11, 3, 20), "north", ["Guhoven:", "grilt saté op", "vadskracht.", "Geen kolen!"])
+
+
 def wolspinnerij(h):
     scene = "r18_oude_wolspinnerij"
     v, _, pal, _, m = sc.laad(scene)
@@ -428,7 +475,7 @@ def wolspinnerij(h):
     b.verbinding(*P(0, VL + 1, 19), "west", "guhs:mijnguhdorp_zij_in")
     bord(b, P(4, VL + 1, 23), "west", ["De Wolclub,", "sinds altijd.", "Iedereen", "welkom!"])
     bord(b, P(15, VL + 1, 15), "south", ["Hier werd de", "hele Guhmension", "roze gesponnen!", ""])
-    bord(b, P(22, VL + 1, 12), "south", ["Waterrad =", "vadskracht.", "Niet aaien,", "hij draait!"])
+    bord(b, P(22, VL + 1, 12), "south", ["Guhrad =", "vadskracht.", "Niet aaien,", "hij rent!"])
     bord(b, P(29, VL + 1, 22), "south", ["Pauze is om", "de 5 minuten.", "Werken is om", "de 6 minuten."])
     bord(b, P(13, VL + 1, 22), "north", ["Thee en koekjes:", "pak maar, njeg!", "", ""])
     bord(b, P(42, VL + 1, 23), "north", ["Weefhoek:", "tapijtjes en", "dekentjes en", "guhkleding-stof"])
@@ -442,6 +489,8 @@ def wolspinnerij(h):
             b.guh(gx, round(gy) + (0.5 if zit else 0), gz, yaw=yaw)
     kist(b, P(31, VL + 1, 34), "north", LOOT["oude_wolspinnerij"])
     b.ton(*P(46, VL + 1, 16), LOOT["oude_wolspinnerij"]) if vrij(b, *P(46, VL + 1, 16)) else None
+    krachtcentrale(b)
+    ov.verbind(b)
     b.save("onderwol/oude_wolspinnerij/start")
     return b
 

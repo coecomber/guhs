@@ -106,6 +106,17 @@ public class GuhWheelBlock extends BaseEntityBlock {
         }
     }
 
+    /** 1.7.0: a structure placed turned or mirrored turns the wheel with it (its parts follow: GuhWheelPartBlock). */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    }
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;

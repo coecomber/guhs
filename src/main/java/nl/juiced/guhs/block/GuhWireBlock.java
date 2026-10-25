@@ -111,6 +111,30 @@ public class GuhWireBlock extends Block {
         }
     }
 
+    // --- a structure placed turned or mirrored (1.7.0): the dust's arms turn with it, like redstone dust ---
+
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return switch (rotation) {
+            case CLOCKWISE_180 -> state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST))
+                    .setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
+            case COUNTERCLOCKWISE_90 -> state.setValue(NORTH, state.getValue(EAST)).setValue(EAST, state.getValue(SOUTH))
+                    .setValue(SOUTH, state.getValue(WEST)).setValue(WEST, state.getValue(NORTH));
+            case CLOCKWISE_90 -> state.setValue(NORTH, state.getValue(WEST)).setValue(EAST, state.getValue(NORTH))
+                    .setValue(SOUTH, state.getValue(EAST)).setValue(WEST, state.getValue(SOUTH));
+            default -> state;
+        };
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return switch (mirror) {
+            case LEFT_RIGHT -> state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
+            case FRONT_BACK -> state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
+            default -> state;
+        };
+    }
+
     // --- looks: connect like redstone dust ---
 
     /** Works out which sides connect (keeping POWERED), exactly like redstone dust does. */

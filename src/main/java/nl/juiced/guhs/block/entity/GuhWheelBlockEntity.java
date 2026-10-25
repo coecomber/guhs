@@ -39,6 +39,11 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
     private CompoundTag guhData;
     /** Was the guh "blij" when it was put in (then it runs extra hard for as long as it is in the wheel)? */
     private boolean blij;
+    /**
+     * (1.7.0) A wheel of a building (the Vadsmijnstadje's centrale, the Kaasmakerij's pomphuis, the Wolclub): its guh has no
+     * owner, so nobody takes it out, and when the wheel is broken it does not drop as an item but hops out as a wild guh.
+     */
+    private boolean vast;
     /** Does this wheel count in its net (false: one Guhrad too many)? Not saved: the net tells it at every evaluation. */
     private boolean teltMee = true;
 
@@ -64,6 +69,7 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
     /** Puts a (picked-up) guh into the wheel. */
     public void insert(CompoundTag guh) {
         guhData = guh.copy();
+        vast = false;   // (1.7.0: someone's own guh, not the building's)
         blij = level != null && GuhradKracht.isBlij(guhData, level.getGameTime());
         sync();
         VadsKracht.veranderd(level, worldPosition);
@@ -81,12 +87,30 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         CompoundTag tag = guhData;
         guhData = null;
         blij = false;
+        vast = false;
         sync();
         VadsKracht.veranderd(level, worldPosition);
         return tag;
     }
 
+    /** (1.7.0) Is this a building's wheel (see {@link #vast})? */
+    public boolean isVast() {
+        return vast;
+    }
+
     // --- vadskracht ---
+
+    /**
+     * (1.7.0) However the wheel got here (a structure placed in a chunk that was generated, a chunk that loads, a template),
+     * its net is built around it at the next tick: a wheel never waits for a block update to give vadskracht.
+     */
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level instanceof net.minecraft.server.level.ServerLevel server) {
+            VadsKracht.herbouw(server, worldPosition);
+        }
+    }
 
     @Override
     public BlockPos vadsPlek() {
@@ -200,6 +224,7 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         }
         guhData = newData;
         blij = tag.getBooleanOr("Blij", false);
+        vast = tag.getBooleanOr("Vast", false);
     }
 
     @Override
@@ -209,6 +234,9 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         // showing a guh that was already taken out
         tag.putBoolean("HasGuh", guhData != null);
         tag.putBoolean("Blij", blij);
+        if (vast) {
+            tag.putBoolean("Vast", true);
+        }
         if (guhData != null) {
             tag.store("Guh", CompoundTag.CODEC, guhData);
         }
@@ -223,7 +251,17 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         if (level == null || level.isClientSide()) {
             return;
         }
+        boolean vanGebouw = vast;
         CompoundTag guh = takeOut();
+        if (guh != null && vanGebouw && level instanceof net.minecraft.server.level.ServerLevel server) {
+            // (1.7.0) a building's guh: it hops out of the broken wheel as a wild guh (nobody pockets it)
+            EntityType.create(nl.juiced.guhs.storage.Nbt.input(server.registryAccess(), guh), server, net.minecraft.world.entity.EntitySpawnReason.LOAD)
+                    .ifPresent(e -> {
+                        e.snapTo(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, e.getYRot(), 0f);
+                        server.addFreshEntity(e);
+                    });
+            guh = null;
+        }
         if (guh != null) {
             net.minecraft.world.item.ItemStack item = nl.juiced.guhs.item.PickedUpGuhItem.of(guh);
             nl.juiced.guhs.feature.band.GuhVolger.item(item, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, level.dimension(), pos, "",

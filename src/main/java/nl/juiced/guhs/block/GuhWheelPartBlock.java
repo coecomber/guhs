@@ -61,6 +61,21 @@ public class GuhWheelPartBlock extends Block {
         return facing.getClockWise();
     }
 
+    /**
+     * 1.7.0: a structure placed turned or mirrored (every jigsaw building is) turns its wheel too: the part keeps pointing
+     * at its wheel. Turning keeps the side (the wheel's "along" turns with it); a mirror swaps the two outer sides.
+     */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return mirror == net.minecraft.world.level.block.Mirror.NONE ? state
+                : state.setValue(FACING, mirror.mirror(state.getValue(FACING))).setValue(SIDE, 2 - state.getValue(SIDE));
+    }
+
     public static BlockPos wheelPos(BlockState state, BlockPos pos) {
         return pos.relative(along(state.getValue(FACING)), 1 - state.getValue(SIDE)).below(state.getValue(HEIGHT));
     }
