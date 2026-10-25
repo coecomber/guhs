@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_minigames",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 44,
+  guhs_chapter_version: 45,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_minigames.png",
@@ -1715,6 +1715,173 @@
       shape: "gear",
     },
     {
+      id: "4755484E0194E349",
+      icon: {
+        id: "guhs:golf_vlaggetje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/golf_achter_open",
+          id: "475548641817F37D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548842F12C8F4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548EB01C2BD83",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+    },
+    {
+      id: "475548D4AC31E831",
+      icon: {
+        id: "guhs:golfbal_tee",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/golf_18",
+          id: "475548BC5F00CD2F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484318BDBDB5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:golfballetje",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D9EB24E4D4",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 6.0,
+      y: 18.9875,
+    },
+    {
+      id: "475548636D78ED94",
+      icon: {
+        id: "guhs:golftrofee",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/golf_trofee",
+          id: "475548AB1A0E7FE1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D5E024BCD7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:golfballetje",
+          },
+          count: 16,
+        },
+        {
+          id: "4755483C6922F1FB",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 4.5,
+      y: 18.9875,
+      shape: "hexagon",
+    },
+    {
+      id: "4755484C1FF4789D",
+      icon: {
+        id: "guhs:ruitjesvilt",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:ruitjesvilt",
+          },
+          count: 4,
+          id: "47554814A7977A59",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483FCB6583E8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D9A3763700",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 18.9875,
+    },
+    {
+      id: "475548454B0C54A8",
+      icon: {
+        id: "guhs:golfkarretje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:golfkarretje",
+          },
+          id: "4755489BE794D85D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482F0E23C776",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E79760DA3A",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 1.5,
+      y: 18.9875,
+      shape: "gear",
+    },
+    {
       id: "4755483F8C9960F8",
       icon: {
         id: "guhs:guhmensie_superkompas",
@@ -2898,6 +3065,41 @@
       x: 9.0,
       y: 32.375,
       shape: "rsquare",
+    },
+    {
+      id: "4755487D7EC7EF8A",
+      icon: {
+        id: "guhs:mijn_guhhuisje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mijn_guhhuisje",
+          },
+          id: "4755488340B51C34",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DBA232D145",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755487C074EA26F",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 9.0,
+      y: 33.875,
+      shape: "hexagon",
     },
     {
       id: "475548F2C3072206",

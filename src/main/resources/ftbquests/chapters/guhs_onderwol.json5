@@ -1,0 +1,2976 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_onderwol",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 45,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_onderwol.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755488927D41F42",
+  images: [
+    {
+      height: 3.0,
+      id: "475548DFD785CB99",
+      image: "guhs:textures/ftbquests/guhs_onderwol/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "47554859C32F444B",
+      image: "guhs:textures/ftbquests/guhs_onderwol/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "47554805B103F3D3",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_lagen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554823B52948DC",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_ertsen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548EE38B44E83",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_grotten.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 8.74375,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548FE8A53FD53",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_gebouwen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 8.74375,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548AC19C38E04",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_dorpen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548962430D71B",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_toveren.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755483058761DDF",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_gereedschap.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 19.66875,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548372E6EEFB4",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_boven.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 19.66875,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554825E14772E6",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_schatgraven.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 23.631249999999998,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548B4C5E5D72B",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_glimwormvangen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 23.631249999999998,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548FF892EEAF8",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_lichtjespuzzel.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 27.593749999999996,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548D21EB70C16",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_karretjes.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 27.593749999999996,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755489812A9BDD9",
+      image: "guhs:textures/ftbquests/guhs_onderwol/kop_ow_kegelgrot.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 31.556249999999995,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+  ],
+  order_index: 15,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548F39D53C407",
+      linked_quest: "4755486E9E523698",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548E2E5895B46",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_onderwol.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "47554848162254A2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E4BFF909F9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548C06561D026",
+      icon: {
+        id: "guhs:viltsteen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:viltsteen",
+          },
+          count: 16,
+          id: "47554879FE7F7939",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482272263E0C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D291D059FD",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755485207448E5F",
+      icon: {
+        id: "guhs:viltsteen_bakstenen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:viltsteen_bakstenen",
+          },
+          count: 4,
+          id: "4755487078EFC550",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487F05BFA1EF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486392259C70",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755488508CB5B71",
+      icon: {
+        id: "guhs:knuffelsteen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knuffelsteen",
+          },
+          count: 16,
+          id: "475548EE0709073F",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F992B3F1E3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F420B528D2",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548BE98526A69",
+      icon: {
+        id: "guhs:roze_knuffelsteen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:roze_knuffelsteen",
+          },
+          count: 8,
+          id: "475548075B50D6D3",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488D735A71F8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D73A3C29AB",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548744358EB41",
+      icon: {
+        id: "guhs:guh_kristalsteen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristalsteen",
+          },
+          count: 16,
+          id: "47554814311DABC8",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482B0E77AB81",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483AFED93974",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548460D12F18C",
+      icon: {
+        id: "guhs:guhklei",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhklei",
+          },
+          id: "475548B19C5AE535",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554876A59D1B20",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548771CD8A12D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548E6FFA6D000",
+      icon: {
+        id: "guhs:viltkiezel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:viltkiezel",
+          },
+          count: 8,
+          id: "475548A4BEA9484B",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548617F83EFE6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C8BEA5B2BB",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755483AC2433ECA",
+      icon: {
+        id: "guhs:ijzererts_vilt",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:raw_iron",
+          },
+          count: 8,
+          id: "47554824EB5BEACA",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B7847296C4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CB5F276B61",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548BBB33321A2",
+      icon: {
+        id: "guhs:vadserts_knuffel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads",
+          },
+          count: 4,
+          id: "475548C4D51B2090",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548442962D428",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FF05A46051",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755480C6A8F5ABA",
+      icon: {
+        id: "guhs:kaaskorrelerts_knuffel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaaskorrel",
+          },
+          count: 4,
+          id: "475548765649B9CC",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548421C157000",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554891102AB3E9",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554814C85ED327",
+      icon: {
+        id: "guhs:pigmenterts_knuffel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:pink_dye",
+          },
+          count: 4,
+          id: "475548D214973DDF",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A154A910C9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755489324486048",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548B0FC9E29E4",
+      icon: {
+        id: "guhs:diamanterts_kristal",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:diamond",
+          },
+          id: "475548D60118E470",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D9E6B3705D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FBC4D94927",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755489643C5D067",
+      icon: {
+        id: "guhs:vahoegiet",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoegiet",
+          },
+          id: "475548F699BDFEF8",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554862E2941DED",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755483F5627CD53",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+      shape: "hexagon",
+    },
+    {
+      id: "475548DD3F28574D",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:pluisgrot",
+          id: "475548B24EBD12F3",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AFC213F3C3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548659F3CB6A9",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "47554840854191D9",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:slaapgrot",
+          id: "4755483E462E5FB6",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481C3DF3875B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483D994E6CA6",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548BA15916DE8",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:knuffelwortelgrot",
+          id: "4755481593876C11",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F604E273E0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755485D945F535B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548BAFFF723D3",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:glitterspelonk",
+          id: "4755481E2959E9C5",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554862F4958B82",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548815714187A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "47554869EDD3B162",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:belletjesgrot",
+          id: "475548AC5E08409C",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554825CE711502",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488D7C4CB352",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "4755487F50CAC044",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:kristalpegelgrot",
+          id: "475548E97C174824",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480C7DAE353B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A282A8505F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548D099F17C9A",
+      icon: {
+        id: "guhs:glitterbes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:glitterbes",
+          },
+          count: 4,
+          id: "47554858A2FC1675",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B0A6D6B358",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488E07AB2706",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 10.525,
+    },
+    {
+      id: "4755484F490023B0",
+      icon: {
+        id: "guhs:belletjeskristal",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:belletjeskristal",
+          },
+          count: 4,
+          id: "47554801FC1E0F81",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554805A54B5B26",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E9D517D5F1",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+    },
+    {
+      id: "4755482971DBC4D2",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_grotguh",
+          id: "47554886E626ADC0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482BC812A898",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554820547866BB",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      shape: "rsquare",
+    },
+    {
+      id: "4755486EE34554A2",
+      icon: {
+        id: "guhs:das_molguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_das_molguh",
+          id: "4755488F800DD6D1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554867C27557B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554832A05FFB31",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 12.025,
+      shape: "rsquare",
+    },
+    {
+      id: "475548E834B2AC9A",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:verlaten_guhmijn",
+          id: "47554862DC5F3D21",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488294C302D3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755487879A45D88",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "47554884F7F36C5E",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotschilderingen",
+          id: "475548D828E8884C",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C8B0318EEA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554846821B2ABD",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "4755487E4EFDA62A",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:sausmeer_vissershutje",
+          id: "4755481A2F4C80DF",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554849B626CBF9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F97A4DB8CA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548F8A6E01E87",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:verlaten_sledestation",
+          id: "4755487C108E5A87",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483FF50BD876",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755487F51DED319",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548A31EB03FE3",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:kaasmakerij",
+          id: "475548B2B2A43926",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BEF4570307",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B297D48C67",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548E43C921496",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:verzonken_guhhuisje",
+          id: "475548E3F3221691",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554857F6DD1453",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483EE13F284F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "475548BEEA704CE6",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:reuzenguh_fossiel",
+          id: "475548226EC124B6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A4EC9DC29D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B95DB31FBD",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 10.525,
+      shape: "circle",
+    },
+    {
+      id: "4755485D4FD81C35",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:kristalkwekerij",
+          id: "47554878F307B69C",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554819D73042AB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C14A32C825",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "47554814EE68D972",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:verdwaalde_bouwploeg",
+          id: "47554849E80030DC",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554894133892E1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483EE123D940",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "4755487C3776AE7E",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotguh_holen",
+          id: "475548913A413DFD",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482D394F4104",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D4DF1BC0B4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "4755485369CA2E0B",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:badhuis",
+          id: "47554888274681F3",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485904EB1A34",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481BB105BE3E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "47554840B53ECE83",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotdisco",
+          id: "475548F333D1DA4D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482FD55B915D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548AE1378B0BA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "475548A308D151F2",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:oude_wolspinnerij",
+          id: "475548ED6649CFE0",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486877473285",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548638A68FD12",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "475548E9A8ECC5D4",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:sterrengrot",
+          id: "475548DC73C3ACAA",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F6D2EFB403",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554873381AF69C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 12.025,
+      shape: "circle",
+    },
+    {
+      id: "475548BB2A548A7E",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:knuffelslaapzaal",
+          id: "4755484E01821E85",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554887E5E0E6FC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486424AADC17",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 13.525,
+      shape: "circle",
+    },
+    {
+      id: "4755481A6712783B",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:paddenstoelendorpje",
+          id: "47554805BA2F1083",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548712ABC5BD7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548EA0BB34706",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 13.525,
+      shape: "circle",
+    },
+    {
+      id: "475548CC9AE67554",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:knuffelkuil",
+          id: "475548E6D12546C9",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E2A9880786",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482B11FE435C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 13.525,
+      shape: "circle",
+    },
+    {
+      id: "47554879E81F60D6",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:verrassingsfeestje",
+          id: "475548B6B9008067",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BEDF26A141",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554808D1AA711C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 13.525,
+      shape: "circle",
+    },
+    {
+      id: "47554816ECE7CB9E",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:oude_guhtempel",
+          id: "475548E70D105FEF",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AF6A9E3B06",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A9838F877F",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 17.5,
+      y: 13.525,
+      shape: "hexagon",
+    },
+    {
+      id: "4755487C966424D3",
+      icon: {
+        id: "guhs:guhmensie_superkompas",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:oude_bankkluis",
+          id: "475548A8324A6DC1",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486D050A67C4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C38C8020B3",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 19.0,
+      y: 13.525,
+      shape: "hexagon",
+    },
+    {
+      id: "47554807ED2DDCEC",
+      icon: {
+        id: "guhs:super_vads_sjabloon",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:super_vads_sjabloon",
+          },
+          id: "4755485757D3D70B",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FCF26346C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D8723B6656",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 20.5,
+      y: 13.525,
+      shape: "hexagon",
+    },
+    {
+      id: "47554877F6655F21",
+      icon: {
+        id: "guhs:wolkenliftje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mijningang_hutje",
+          id: "47554892813A98BA",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484ECF23A446",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548113F810174",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548AC74050099",
+      icon: {
+        id: "guhs:kaasmijn_helm",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mijnguhdorp",
+          id: "4755487C98EAAC60",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554834FBF2A7FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483546E2EC0E",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+      shape: "octagon",
+    },
+    {
+      id: "47554836F9048A00",
+      icon: {
+        id: "guhs:rugzakzadel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:rugzakzadel",
+          },
+          id: "475548134006B9D9",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484E6FA8C03D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548BB9D2E0334",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554834F6C3EDE9",
+      icon: {
+        id: "guhs:guhrad_werkbank",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:vadsmijnstadje",
+          id: "475548970AB25574",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B689A7F33B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486D4D9B9909",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+      shape: "octagon",
+    },
+    {
+      id: "47554808207E5C87",
+      icon: {
+        id: "guhs:opgepakte_villager",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:opgepakte_villager",
+          },
+          id: "4755482F000A864F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480C2F04BCF9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554829D671EBFC",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548B819CCDAC3",
+      icon: {
+        id: "guhs:guhrad_werkbank",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhrad_werkbank",
+          },
+          id: "475548DDAC7B161E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FAC46B2551",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FE7F22C743",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755487C6CC95ACA",
+      icon: {
+        id: "guhs:glinsteraltaar",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:glinsteraltaar",
+          },
+          id: "475548E0AC0FB42C",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554814365C12EC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554813ACD40949",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548A12E2F162C",
+      icon: {
+        id: "guhs:knuffelboekenkast",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knuffelboekenkast",
+          },
+          count: 6,
+          id: "475548BBF4857102",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554805436389C7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554831E88E5ECD",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554851D66A5CDF",
+      icon: {
+        id: "guhs:vahoege_vadsknakker",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vadsknakker",
+          },
+          id: "4755482C49024E38",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A5D5BBCF6D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D8307E8DDB",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 0.0,
+      y: 21.45,
+      shape: "hexagon",
+    },
+    {
+      id: "4755484747A594CD",
+      icon: {
+        id: "guhs:vahoegietstaaf",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoegietstaaf",
+          },
+          id: "475548A6184AA3FF",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482838E44378",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C05C129DA6",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 21.45,
+    },
+    {
+      id: "475548973E8AE280",
+      icon: {
+        id: "guhs:super_vahoege_vads_pickaxe",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:super_vahoege_vads_pickaxe",
+          },
+          id: "4755480490C51A12",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E66518EA4F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "4755488E2987E256",
+          type: "xp",
+          xp: 400,
+        },
+      ],
+      x: 3.0,
+      y: 21.45,
+      shape: "gear",
+    },
+    {
+      id: "47554898D0F31280",
+      icon: {
+        id: "guhs:wolkenliftje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:wolkenliftje",
+          },
+          count: 2,
+          id: "475548310E14BDA9",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554844A5BEC412",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E4C1CCF08B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 21.45,
+    },
+    {
+      id: "475548A8239B7775",
+      icon: {
+        id: "guhs:pluisladder",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:pluisladder",
+          },
+          count: 4,
+          id: "475548284F01E6CD",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481090905C3C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554899E6F599F9",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 21.45,
+    },
+    {
+      id: "475548FDFFFCF0C0",
+      icon: {
+        id: "guhs:mijnlampje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mijnlampje",
+          },
+          id: "475548D5C50415F4",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B830A99ACB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488718791B05",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 21.45,
+    },
+    {
+      id: "475548130C0384F6",
+      icon: {
+        id: "guhs:terrariumbodem",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:terrariumbodem",
+          },
+          count: 4,
+          id: "4755485F92F06BA3",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B141882A6E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E71B920C06",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 21.45,
+    },
+    {
+      id: "475548BE092F7DCE",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:bloemenvallei",
+          id: "4755487C99755418",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480A2F02A9BB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481CC6A4FDA6",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 21.45,
+      shape: "circle",
+    },
+    {
+      id: "4755486F44BFD227",
+      icon: {
+        id: "guhs:bronnetje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bronnetje",
+          },
+          id: "4755486362886772",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554802B6B47588",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B6886C40CA",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 13.0,
+      y: 21.45,
+    },
+    {
+      id: "475548F97C102D7B",
+      icon: {
+        id: "guhs:roze_zand",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:roze_zand",
+          },
+          count: 8,
+          id: "4755482507491B58",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554857C1EC3BE3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554812A802BA2A",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 21.45,
+    },
+    {
+      id: "475548419B888EB9",
+      icon: {
+        id: "guhs:hartjeslelie",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:hartjeslelie",
+          },
+          id: "475548C751A46DA2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B57727F83B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548230075AE96",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 16.0,
+      y: 21.45,
+    },
+    {
+      id: "47554832468B854A",
+      icon: {
+        id: "guhs:schatmuntje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotspel_schatgraven",
+          id: "475548E00FE05EA5",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480FFD6A6CA0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FAD7902155",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548728B5CFC06",
+      icon: {
+        id: "guhs:schatschepje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/schatgraven_gespeeld",
+          id: "475548FD328BF427",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548598D99DA31",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:schatmuntje",
+          },
+          count: 4,
+        },
+        {
+          id: "47554851818744F4",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548FF86794E52",
+      icon: {
+        id: "guhs:schat_piratenhoedje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/schatgraven_kleding",
+          id: "475548B6E73ADDAC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FD9658EE5B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FC24541992",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 3.0,
+      y: 25.412499999999998,
+      shape: "gear",
+    },
+    {
+      id: "475548250C3E6B6B",
+      icon: {
+        id: "guhs:glimmertje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotspel_glimwormen",
+          id: "47554841C9088EFF",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554897CED60BD9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B7DEA5A030",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "47554881F9BCE516",
+      icon: {
+        id: "guhs:glimnetje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/glimwormvangen_gespeeld",
+          id: "475548AE4C0AF9F7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B277051F4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:glimmertje",
+          },
+          count: 4,
+        },
+        {
+          id: "4755481D85F02BD7",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 13.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548A437653A6F",
+      icon: {
+        id: "guhs:glim_antennetjes",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/glimwormvangen_kleding",
+          id: "475548E93AD20977",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554861ECF0B674",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554894E2816470",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 14.5,
+      y: 25.412499999999998,
+      shape: "gear",
+    },
+    {
+      id: "47554832CEE0E7B8",
+      icon: {
+        id: "guhs:lampjesmunt",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grotspel_lichtjes",
+          id: "475548F72CDD531F",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554881D0D92C62",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554840F4AC59AC",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 29.374999999999996,
+    },
+    {
+      id: "4755481F558E3C0F",
+      icon: {
+        id: "guhs:paddenstoellampje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/lichtjespuzzel_gespeeld",
+          id: "47554895F68B2EC3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EAF08C82A5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:lampjesmunt",
+          },
+          count: 4,
+        },
+        {
+          id: "47554838A2ECA8F6",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 29.374999999999996,
+    },
+    {
+      id: "475548A59772AB66",
+      icon: {
+        id: "guhs:lichtjes_paddenstoelhoedje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/lichtjespuzzel_kleding",
+          id: "4755480B4AA7BD1B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A8DF0F7F26",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548212073F268",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 3.0,
+      y: 29.374999999999996,
+      shape: "gear",
+    },
+    {
+      id: "475548D1185FF884",
+      icon: {
+        id: "guhs:ertsbonnetje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:karretjeswissels",
+          id: "475548FC92C3B345",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488D7FA2B8AE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E53F0BF1BE",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 29.374999999999996,
+    },
+    {
+      id: "4755487F34EB4DEE",
+      icon: {
+        id: "minecraft:lever",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/karretjes_gespeeld",
+          id: "475548DF3ABBF4C9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485F8127E101",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:ertsbonnetje",
+          },
+          count: 4,
+        },
+        {
+          id: "475548CFF02E72B3",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 13.0,
+      y: 29.374999999999996,
+    },
+    {
+      id: "4755489ADDC2EC9F",
+      icon: {
+        id: "guhs:ertskarretje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/karretjes_25",
+          id: "475548B28AE7B5DD",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554838D9002210",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:ertsbonnetje",
+          },
+          count: 6,
+        },
+        {
+          id: "4755484E85A87A5E",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 14.5,
+      y: 29.374999999999996,
+    },
+    {
+      id: "475548B5198CD2CE",
+      icon: {
+        id: "guhs:seinlampje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/karretjes_lastig_40",
+          id: "47554811FEEB9B84",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483F239B4333",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:ertsbonnetje",
+          },
+          count: 10,
+        },
+        {
+          id: "475548F882FCBB15",
+          type: "xp",
+          xp: 400,
+        },
+      ],
+      x: 16.0,
+      y: 29.374999999999996,
+      shape: "hexagon",
+    },
+    {
+      id: "475548E53122893B",
+      icon: {
+        id: "guhs:karretjes_conducteurspetje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/karretjes_kleding",
+          id: "475548F83DD5CA1C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F5F7E3E333",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755489278B5C5C7",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 17.5,
+      y: 29.374999999999996,
+      shape: "gear",
+    },
+    {
+      id: "475548AD62B7D655",
+      icon: {
+        id: "guhs:kegelknoop",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:kegelgrot",
+          id: "47554846F2AEFA32",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488D5D56840F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554879E47FFC26",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 33.33749999999999,
+    },
+    {
+      id: "475548DD1B815C39",
+      icon: {
+        id: "guhs:kegeltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kegelen_gespeeld",
+          id: "475548F436E0A1BD",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489F193236DE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kegelknoop",
+          },
+          count: 4,
+        },
+        {
+          id: "4755484A01CFABB9",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 33.33749999999999,
+    },
+    {
+      id: "475548E32E032C41",
+      icon: {
+        id: "guhs:kegeltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kegelen_strike",
+          id: "475548E8EEBE91B1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554864B5DD200B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B9858D9ACF",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 3.0,
+      y: 33.33749999999999,
+    },
+    {
+      id: "475548882DF00EC3",
+      icon: {
+        id: "guhs:wolbalrek",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kegelen_150",
+          id: "475548507605CF15",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A34B4DC13C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kegelknoop",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C7C427B736",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 4.5,
+      y: 33.33749999999999,
+    },
+    {
+      id: "475548F75AE7E0B9",
+      icon: {
+        id: "guhs:neon_kegelbord",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kegelen_perfect",
+          id: "47554843748A1419",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554874D1C89047",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kegelknoop",
+          },
+          count: 32,
+        },
+        {
+          id: "475548429C5B5B51",
+          type: "xp",
+          xp: 750,
+        },
+      ],
+      x: 6.0,
+      y: 33.33749999999999,
+      shape: "hexagon",
+    },
+    {
+      id: "475548CF4C312BA9",
+      icon: {
+        id: "guhs:kegelgrot_bowlingshirtje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kegelen_kleding",
+          id: "4755489BA085F6F0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487A9C1A644E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755489183842CB3",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 7.5,
+      y: 33.33749999999999,
+      shape: "gear",
+    },
+  ],
+}

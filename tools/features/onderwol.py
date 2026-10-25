@@ -758,6 +758,11 @@ def _direct():
     print(f"onderwol: {len(items)} items, {len(NL)} texts")
 
 
+# 1.7.0: the FTB chapter "Onder de Wol" (its quests, sections and texts: tools/features/onderwol_ftb.py; tools/make_ftbquests.py
+# reads these three names of this module)
+from features.onderwol_ftb import FTB_CHAPTER, FTB_SECTIES, ftb  # noqa: E402,F401
+
+
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))

@@ -45,7 +45,8 @@ PALETTE = {
     "peach": ((255, 222, 214), (255, 160, 170), (120, 50, 60)),
     "green": ((200, 244, 196), (104, 200, 110), (26, 84, 36)),   # 3.0: Diertjes van de Guhmensie
     "cyan": ((196, 246, 250), (84, 204, 224), (16, 84, 104)),    # bbq2: Guh-technologie
-    "nacht": ((126, 104, 170), (52, 40, 80), (14, 10, 24)),      # guhpad: Het echte Guheinde (a mystery: no hearts, question marks)
+    "nacht": ((126, 104, 170), (52, 40, 80), (14, 10, 24)),
+    "vilt": ((240, 204, 226), (200, 118, 172), (84, 34, 72)),    # 1.7.0: Onder de Wol (felt stone pink)      # guhpad: Het echte Guheinde (a mystery: no hearts, question marks)
 }
 
 

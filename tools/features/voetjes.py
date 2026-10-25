@@ -315,6 +315,30 @@ def _direct():
           + ", ".join(f"{s}={swatches[s]}" for s in ("voet_schoen", "voet_zool", "voet_extra")), file=sys.stdout)
 
 
+# --- FTB Quests (tools/make_ftbquests.py): a section of its own in Guhs & basis, by the wardrobe -------------------------------
+FTB_CHAPTER = "guhs_basis"
+FTB_SECTIES = [("voetjes", "Voetjes: slofjes, laarsjes en lopers", "item:guhs:pluisslofjes", None)]
+
+
+def ftb(fq):
+    q, item = fq.q, fq.item
+    q("voetjes_slofjes", "Warme voetjes", "De kledingkast heeft een nieuw vakje: &dvoetjes&r! Koop pluisslofjes bij de kleermaker en doe ze je "
+      "guh aan.", "guhs:pluisslofjes", [item("guhs:pluisslofjes")], xp=50)
+    q("voetjes_regenlaarsjes", "Plassen springen", "Gele regenlaarsjes bij de kleermaker: precies goed bij de regenjas en de regenhoed.",
+      "guhs:regenlaarsjes", [item("guhs:regenlaarsjes")], xp=50)
+    q("voetjes_golfschoentjes", "Golfschoentjes", "De Golfguh verkoopt golfschoentjes, voor golfballetjes.", "guhs:golfschoentjes",
+      [item("guhs:golfschoentjes")], xp=50)
+    q("voetjes_mijnwerkerslaarsjes", "Stevige laarsjes", "Mijnwerkerslaarsjes zijn niet te koop: ze liggen heel soms in de kisten van "
+      "de verlaten kaasmijnschacht (in de Gatenkaasgrotten).", "guhs:mijnwerkerslaarsjes", [item("guhs:mijnwerkerslaarsjes")], xp=100)
+    q("voetjes_kaassauslopers", "Over de kaassaus", "Kaassauslopers liggen heel soms in de kisten van het Mika-grillpaleis en de Spiesburcht in de "
+      "Guhbarbecuether. "
+      "Een tamme guh die ze draagt loopt bovenop alle kaassaus alsof het vloer is, en volgt je gewoon naar de overkant.",
+      "guhs:kaassauslopers", [item("guhs:kaassauslopers")], shape="hexagon", xp=200)
+    q("voetjes_lavalopers", "Over de lava", "Breng de kleermaker kaassauslopers, 4 magmacrème en een vahoege vads (klik hem aan met de "
+      "magmacrème): hij maakt er &6lavalopers&r van. Daarmee loopt je guh ook over echte lava.", "guhs:lavalopers",
+      [item("guhs:lavalopers")], shape="hexagon", xp=300)
+
+
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))

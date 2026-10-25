@@ -1101,5 +1101,39 @@ def _direct():
     print(f"grotspellen: {len(NL)} texts")
 
 
+# --- FTB Quests (tools/make_ftbquests.py): one section per game in the chapter "Onder de Wol" -------------------------------
+FTB_CHAPTER = "guhs_onderwol"
+FTB_SECTIES = [("ow_schatgraven", "Schatgraven", "npc:schatgraafguh", ["schatgraven_hal", "schatgraven_gespeeld", "schatgraven_pakje"]),
+               ("ow_glimwormvangen", "Glimwormvangen", "npc:glimwormguh", ["glimwormvangen_hal", "glimwormvangen_gespeeld", "glimwormvangen_pakje"]),
+               ("ow_lichtjespuzzel", "De Lichtjespuzzel", "npc:lampjesguh", ["lichtjespuzzel_hal", "lichtjespuzzel_gespeeld", "lichtjespuzzel_pakje"])]
+
+
+def ftb(fq):
+    q, adv = fq.q, fq.adv
+    q("schatgraven_hal", "Schatgraven", "Boven de grond staat een hutje met een wolkenliftje naar beneden. In de grot daaronder wacht "
+      "&6Kapitein Schepsnuit&r met &6Snuffie&r (Superkompas: Minigames).", "guhs:schatmuntje", [fq.structure("grotspel_schatgraven")],
+      xp=100)
+    q("schatgraven_gespeeld", "Koud, warm, HEET!", "Graaf schatten op met het zachte schepje. Snuffie piept koud, warm of HEET en springt "
+      "als je er bijna bent. Een gouden kaasje is een bonus, een piepkaas kost tijd. Je verdient &6schatmuntjes&r.", "guhs:schatschepje",
+      [adv("schatgraven_gespeeld")], rewards=(("guhs:schatmuntje", 4),), xp=150)
+    q("schatgraven_pakje", "Ahoi, piraatje!", "Koop het piratenhoedje en het oogklepje bij Kapitein Schepsnuit, voor schatmuntjes.",
+      "guhs:schat_piratenhoedje", [adv("schatgraven_kleding")], shape="gear", xp=200)
+    q("glimwormvangen_hal", "Glimwormvangen", "Onder een hutje met een wolkenliftje ligt een donkere zaal vol glimwormpjes. Daar woont "
+      "&6Juf Glimmie&r (Superkompas: Minigames).", "guhs:glimmertje", [fq.structure("grotspel_glimwormen")], xp=100)
+    q("glimwormvangen_gespeeld", "Vang ze met je netje", "Vang zoveel glimwormpjes als je kunt. Het potje op je rug gaat gloeien en de zaal "
+      "wordt steeds lichter. Een gouden glimworm telt extra! Je verdient &6glimmertjes&r.", "guhs:glimnetje",
+      [adv("glimwormvangen_gespeeld")], rewards=(("guhs:glimmertje", 4),), xp=150)
+    q("glimwormvangen_pakje", "Zelf een glimwormpje", "Koop de glimworm-antennetjes en het vlindernetje bij Juf Glimmie, voor glimmertjes.",
+      "guhs:glim_antennetjes", [adv("glimwormvangen_kleding")], shape="gear", xp=200)
+    q("lichtjespuzzel_hal", "De Lichtjespuzzel", "Onder een hutje met een wolkenliftje ligt een grot met een groot raster van "
+      "paddenstoellampjes. &6Meester Knipperlicht&r legt het uit (Superkompas: Minigames).", "guhs:lampjesmunt",
+      [fq.structure("grotspel_lichtjes")], xp=100)
+    q("lichtjespuzzel_gespeeld", "Alle lampjes aan!", "Een lampje springt om, samen met zijn vier buren. Krijg ze allemaal aan voor de tijd "
+      "om is. Elk potje een nieuwe puzzel! Je verdient &6lampjesmunten&r.", "guhs:paddenstoellampje",
+      [adv("lichtjespuzzel_gespeeld")], rewards=(("guhs:lampjesmunt", 4),), xp=150)
+    q("lichtjespuzzel_pakje", "Een gloeiend hoedje", "Koop het gloeiende paddenstoelhoedje bij Meester Knipperlicht, voor lampjesmunten.",
+      "guhs:lichtjes_paddenstoelhoedje", [adv("lichtjespuzzel_kleding")], shape="gear", xp=200)
+
+
 if __name__ == "__main__":
     _direct()

@@ -747,5 +747,22 @@ def _direct():
     print(f"golf18: {len(NL)} texts")
 
 
+# --- FTB Quests (tools/make_ftbquests.py): in the section of the golf course (SECTIONS: module ("golf", "golf18")) ---------------
+def ftb(fq):
+    q, item, adv = fq.q, fq.item, fq.adv
+    q("golf18_achter_open", "De achterste negen", "Nieuwe golfbanen hebben 18 holes: een rondje langs de hele Guhmensie, van het "
+      "Kaasmoeras tot de Grote Guhmond. Speel eerst de voorste 9 een keer op of onder par, dan gaan de nieuwe holes open. Ze zijn een "
+      "stuk lastiger: molens, schansen, bumpers en gladde vloeren!", "guhs:golf_vlaggetje", [adv("golf_achter_open")], xp=200)
+    q("golf18_18", "Rondje Guhmensie", "Speel alle 18 holes in een ronde.", "guhs:golfbal_tee", [adv("golf_18")],
+      rewards=(("guhs:golfballetje", 8),), xp=250)
+    q("golf18_trofee", "De Golftrofee", "Speel alle 18 holes op of onder par. De Golfguh geeft je een keer de &6Golftrofee&r, met je naam en "
+      "je record erop. Niet te koop!", "guhs:golftrofee", [adv("golf_trofee")], rewards=(("guhs:golfballetje", 16),), shape="hexagon",
+      xp=500)
+    q("golf18_ruitjesvilt", "Ruitjesvilt", "In het winkeltje van de Golfguh: ruitjesvilt (roze, mint of geel, met trapjes en plaatjes), "
+      "4 blokken voor een golfballetje.", "guhs:ruitjesvilt", [item("guhs:ruitjesvilt", 4)], xp=50)
+    q("golf18_karretje", "Een eigen golfkarretje", "Het duurste uit het golfwinkeltje: een golfkarretje om in te zitten, voor 64 "
+      "golfballetjes. Rijden doet hij niet, maar vads zit hij wel.", "guhs:golfkarretje", [item("guhs:golfkarretje")], shape="gear", xp=200)
+
+
 if __name__ == "__main__":
     _direct()

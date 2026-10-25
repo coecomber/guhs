@@ -1897,9 +1897,9 @@ public class GuhGameTests {
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
                     "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_diertjes",
-                    "guhs_guhpixel", "guhs_techniek", "guhs_safari", "guhs_bouwhulp", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
+                    "guhs_guhpixel", "guhs_techniek", "guhs_safari", "guhs_bouwhulp", "guhs_onderwol", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
                     "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt")),
-                    "the chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie; 1.6.0: Op Safari! and Bouwhulp), in reading order, and "
+                    "the chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie; 1.6.0: Op Safari! and Bouwhulp; 1.7.0: Onder de Wol), in reading order, and "
                             + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "
                             + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde (einde2 ftb: Guheinde: algemeen, with its three sub-chapters "
                             + "Guheinde: Guhvatar, Guheinde: Guhvatar extra and Guheinde: Sponsguh right under it), and Het echte Guheinde: " + names);

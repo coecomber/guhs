@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_pad_barbecuether",
   group: "4755489B04766E01",
-  guhs_chapter_version: 44,
+  guhs_chapter_version: 45,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_pad_barbecuether.png",
@@ -199,7 +199,7 @@
       ],
     },
   ],
-  order_index: 16,
+  order_index: 17,
   progression_mode: "flexible",
   quest_links: [
     {
@@ -3689,6 +3689,35 @@
         },
       ],
       x: 13.0,
+      y: 36.3375,
+    },
+    {
+      id: "4755488C27F38468",
+      icon: {
+        id: "guhs:rookguh_platform",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:rookguh_platform",
+          },
+          id: "4755483FE688CAC2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CE7D73418F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
       y: 36.3375,
     },
   ],

@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_basis",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 44,
+  guhs_chapter_version: 45,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_basis.png",
@@ -89,12 +89,24 @@
     },
     {
       height: 1.5625,
-      id: "475548DAE266A178",
-      image: "guhs:textures/ftbquests/guhs_basis/kop_extra_kleding.png",
+      id: "475548663110C950",
+      image: "guhs:textures/ftbquests/guhs_basis/kop_voetjes.png",
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
       y: 15.70625,
+      hover: [
+        "Komt na: Hoe kom je hier?",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548DAE266A178",
+      image: "guhs:textures/ftbquests/guhs_basis/kop_extra_kleding.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 19.66875,
       hover: [
         "Komt na: Hoe kom je hier?",
       ],
@@ -1256,6 +1268,212 @@
       y: 17.4875,
     },
     {
+      id: "475548E9955CDA22",
+      icon: {
+        id: "guhs:pluisslofjes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:pluisslofjes",
+          },
+          id: "47554819D2866F11",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554836FB73448F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483A933EDD86",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548507AC0EC13",
+      icon: {
+        id: "guhs:regenlaarsjes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:regenlaarsjes",
+          },
+          id: "475548DC9ED1DBDC",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D3888ED47F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CA64413C76",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548FA32708B6A",
+      icon: {
+        id: "guhs:golfschoentjes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:golfschoentjes",
+          },
+          id: "4755487547B18AD4",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A7F082ED8F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548AE2C2DE540",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548FE06FA2E4B",
+      icon: {
+        id: "guhs:mijnwerkerslaarsjes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mijnwerkerslaarsjes",
+          },
+          id: "475548B0D94D818A",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B4C43F189",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481E837D11D9",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755484B9D71AAF0",
+      icon: {
+        id: "guhs:kaassauslopers",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaassauslopers",
+          },
+          id: "475548592AD21858",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554893DD615F5E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F8B0DD0AAF",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548EA40F17787",
+      icon: {
+        id: "guhs:lavalopers",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:lavalopers",
+          },
+          id: "4755482631D24EE7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A461C490A3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482A20A40E8E",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
       id: "475548F8EC553ED3",
       icon: {
         id: "guhs:oorstrikje_roze",
@@ -1284,8 +1502,8 @@
           xp: 100,
         },
       ],
-      x: 11.5,
-      y: 17.4875,
+      x: 0.0,
+      y: 21.45,
     },
     {
       id: "475548A791E693C6",
@@ -1316,8 +1534,8 @@
           xp: 100,
         },
       ],
-      x: 13.0,
-      y: 17.4875,
+      x: 1.5,
+      y: 21.45,
     },
     {
       id: "47554820558D9EA6",
@@ -1348,8 +1566,8 @@
           xp: 100,
         },
       ],
-      x: 14.5,
-      y: 17.4875,
+      x: 3.0,
+      y: 21.45,
     },
     {
       id: "475548C45FC7C462",
@@ -1380,8 +1598,8 @@
           xp: 200,
         },
       ],
-      x: 16.0,
-      y: 17.4875,
+      x: 4.5,
+      y: 21.45,
       shape: "hexagon",
     },
     {
@@ -1413,8 +1631,8 @@
           xp: 300,
         },
       ],
-      x: 17.5,
-      y: 17.4875,
+      x: 6.0,
+      y: 21.45,
       shape: "hexagon",
     },
     {
@@ -1446,8 +1664,8 @@
           xp: 800,
         },
       ],
-      x: 19.0,
-      y: 17.4875,
+      x: 7.5,
+      y: 21.45,
       shape: "gear",
     },
   ],

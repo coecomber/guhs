@@ -842,5 +842,41 @@ def _direct():
     print(f"mijnspellen: {len(NL)} texts merged")
 
 
+# --- FTB Quests (tools/make_ftbquests.py): a section per game in the chapter "Onder de Wol", after the three of grotspellen.py --------
+FTB_CHAPTER = "guhs_onderwol"
+FTB_SECTIES = [("ow_karretjes", "Karretjes-wissels", "npc:wisselguh", ["karretjes_grot", "karretjes_gespeeld", "karretjes_25", "karretjes_lastig",
+                                                                        "karretjes_pakje"]),
+               ("ow_kegelgrot", "De Kegelgrot", "npc:kegelguh", ["kegelgrot_grot", "kegelgrot_gespeeld", "kegelgrot_strike", "kegelgrot_150",
+                                                                  "kegelgrot_perfect", "kegelgrot_pakje"])]
+
+
+def ftb(fq):
+    q, adv = fq.q, fq.adv
+    q("karretjes_grot", "De Wisselgrot", "Onder een hutje met een wolkenliftje ligt een grot vol mijnsporen. &6Conducteur Piepwiel&r "
+      "zoekt een wisselwachter (Superkompas: Minigames).", "guhs:ertsbonnetje", [fq.structure("karretjeswissels")], xp=100)
+    q("karretjes_gespeeld", "Wissels om!", "Sta op het balkon en zet de wissels met de hendels, zodat elk ertskarretje in de bak van zijn "
+      "eigen kleur rolt. Drie karretjes kwijt en het is klaar. Je verdient &6ertsbonnetjes&r.", "minecraft:lever",
+      [adv("karretjes_gespeeld")], rewards=(("guhs:ertsbonnetje", 4),), xp=150)
+    q("karretjes_25", "Op tijd, op het spoor", "Breng 25 karretjes goed aan in een dienst.", "guhs:ertskarretje", [adv("karretjes_25")],
+      rewards=(("guhs:ertsbonnetje", 6),), xp=200)
+    q("karretjes_lastig", "Hoofdwisselwachter", "Breng 40 karretjes goed aan op het lastige net.", "guhs:seinlampje",
+      [adv("karretjes_lastig_40")], rewards=(("guhs:ertsbonnetje", 10),), shape="hexagon", xp=400)
+    q("karretjes_pakje", "Conducteur!", "Koop het conducteurspetje bij Conducteur Piepwiel, voor ertsbonnetjes.",
+      "guhs:karretjes_conducteurspetje", [adv("karretjes_kleding")], shape="gear", xp=200)
+    q("kegelgrot_grot", "De Kegelgrot", "Onder een hutje met een grote kegel op het dak ligt een bowlingbaan in de grot. &6De Guhde&r "
+      "leent je een wolbal (Superkompas: Minigames).", "guhs:kegelknoop", [fq.structure("kegelgrot")], xp=100)
+    q("kegelgrot_gespeeld", "Tien frames", "Speel een hele partij: kijk waar de bal heen moet, houd rechtsklik vast voor kracht en laat "
+      "los. Sta wat opzij voor een beetje effect. Je verdient &6kegelknopen&r.", "guhs:kegeltje", [adv("kegelen_gespeeld")],
+      rewards=(("guhs:kegelknoop", 4),), xp=150)
+    q("kegelgrot_strike", "STRIKE!", "Gooi alle tien de pluchen guh-kegeltjes in een keer om. Piep piep piep!", "guhs:kegeltje",
+      [adv("kegelen_strike")], xp=150)
+    q("kegelgrot_150", "Honderdvijftig", "Gooi 150 punten of meer in een partij.", "guhs:wolbalrek", [adv("kegelen_150")],
+      rewards=(("guhs:kegelknoop", 8),), xp=250)
+    q("kegelgrot_perfect", "De perfecte partij", "300 punten: twaalf strikes op rij. The Guhde abides.", "guhs:neon_kegelbord",
+      [adv("kegelen_perfect")], rewards=(("guhs:kegelknoop", 32),), shape="hexagon", xp=750)
+    q("kegelgrot_pakje", "Bowlingkampioen", "Koop het bowlingshirtje en het kegelzweetbandje bij De Guhde, voor kegelknopen.",
+      "guhs:kegelgrot_bowlingshirtje", [adv("kegelen_kleding")], shape="gear", xp=200)
+
+
 if __name__ == "__main__":
     _direct()
