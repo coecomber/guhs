@@ -135,8 +135,12 @@ public final class Highscores {
             // <minigames1> 1.7.0 Onder de Wol: the cave games (feature/grotspellen; board = id, points)
             points("schatgraven_makkelijk", "schatmuntje"), points("schatgraven_medium", "schatmuntje"), points("schatgraven_lastig", "schatmuntje"),
             points("glimwormvangen_makkelijk", "glimmertje"), points("glimwormvangen_medium", "glimmertje"), points("glimwormvangen_lastig", "glimmertje"),
-            points("lichtjespuzzel_makkelijk", "lampjesmunt"), points("lichtjespuzzel_medium", "lampjesmunt"), points("lichtjespuzzel_lastig", "lampjesmunt"));
+            points("lichtjespuzzel_makkelijk", "lampjesmunt"), points("lichtjespuzzel_medium", "lampjesmunt"), points("lichtjespuzzel_lastig", "lampjesmunt"),
             // </minigames1>
+            // <minigames2> 1.7.0 Onder de Wol: Karretjes-wissels (carts sorted) and the Kegelgrot (bowling score), per level
+            points("karretjes_makkelijk", "ertsbonnetje"), points("karretjes_medium", "ertsbonnetje"), points("karretjes_lastig", "ertsbonnetje"),
+            points("kegelen_makkelijk", "kegelknoop"), points("kegelen_medium", "kegelknoop"), points("kegelen_lastig", "kegelknoop"));
+            // </minigames2>
 
     /** A 2.9 row with points ("N pt", higher is better; board = id, icon = the game's coin). */
     private static Game points(String id, String coin) {

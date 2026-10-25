@@ -1453,6 +1453,38 @@ UITLEG = {
            "Your name and your record are on it. Put it down and right-click it to read who won it and in how many strokes. "
            "Break it and it keeps its name and record.",
         meer=["minigames/golf"]),
+    # <minigames2> 1.7.0 Onder de Wol: the deco of the Wisselgrot and the Kegelgrot (tools/features/mijnspellen.py)
+    "ertskarretje": dict(
+        nl="Deco uit het winkeltje van Conducteur Piepwiel in de Wisselgrot, voor 64 ertsbonnetjes: een mijnkarretje vol "
+           "glinsterende ertsen. Rechtsklik met een lege hand om erin te gaan zitten (sluipen: uitstappen). Rijden doet hij niet.",
+        en="Decoration from Conducteur Piepwiel's shop in the Switch Cave, for 64 ore tickets: a mine cart full of glittering "
+           "ore. Right-click it with an empty hand to sit in it (sneak to get out). It doesn't ride."),
+    "stationsklokje": dict(
+        nl="Deco uit het winkeltje van Conducteur Piepwiel, voor 24 ertsbonnetjes: een stationsklok op een paaltje. Het "
+           "is altijd vijf over guh. Verder doet hij niks.",
+        en="Decoration from Conducteur Piepwiel's shop, for 24 ore tickets: a station clock on a little pole. It is always "
+           "five past guh. It does nothing else."),
+    "seinlampje": dict(
+        nl="Deco uit het winkeltje van Conducteur Piepwiel, voor 20 ertsbonnetjes: een seinlamp, rood boven groen. Hij "
+           "geeft licht; verder doet hij niks.",
+        en="Decoration from Conducteur Piepwiel's shop, for 20 ore tickets: a signal lamp, red over green. It gives light; "
+           "it does nothing else."),
+    "kegeltje": dict(
+        nl="Deco uit het winkeltje van De Guhde in de Kegelgrot, voor 20 kegelknopen: een pluchen guh-kegeltje, net zo "
+           "een als op de banen. Hier valt hij niet om.",
+        en="Decoration from The Guhde's shop in the Bowling Cave, for 20 pin buttons: a plush guh pin, just like the ones on "
+           "the lanes. It doesn't fall over here."),
+    "wolbalrek": dict(
+        nl="Deco uit het winkeltje van De Guhde, voor 40 kegelknopen: een rekje met drie wolballen. Gooien kun je er niet "
+           "mee: bowlen doe je met de geleende bal van De Guhde.",
+        en="Decoration from The Guhde's shop, for 40 pin buttons: a rack with three wool balls. You can't throw them: you "
+           "bowl with The Guhde's loaned ball."),
+    "neon_kegelbord": dict(
+        nl="Deco uit het winkeltje van De Guhde, voor 32 kegelknopen: een neonbord met een kegel en een bal. Het geeft "
+           "licht; verder doet het niks.",
+        en="Decoration from The Guhde's shop, for 32 pin buttons: a neon sign with a pin and a ball. It gives light; it "
+           "does nothing else."),
+    # </minigames2>
 }
 
 LINK = {

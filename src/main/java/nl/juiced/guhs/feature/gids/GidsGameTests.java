@@ -70,7 +70,8 @@ public class GidsGameTests {
                 .contains("kaasknabbel_nest"), "barbecue stays, the nest stays in avontuur");
         // one Minigames tab with the subheadings, and every minigame building of the Guhdex in it
         SuperkompasItem.Category mg = cats.stream().filter(c -> c.id().equals("minigames")).findFirst().orElseThrow();
-        helper.assertTrue(mg.kopjes().stream().map(SuperkompasItem.Kopje::id).toList().equals(List.of("klassiekers", "knuffeldal", "grote_guhspelen",
+        // (1.7.0 minigames2: the cave games come after them, without a subheading, by SuperkompasItem.voegToe)
+        helper.assertTrue(mg.kopjes().stream().map(SuperkompasItem.Kopje::id).filter(java.util.Objects::nonNull).toList().equals(List.of("klassiekers", "knuffeldal", "grote_guhspelen",
                 "verhalen", "guhpixel")), "the subheadings (3.0: + verhalen; guhpixel: + guhpixel): " + mg.kopjes());
         SuperkompasItem.Category verhalen = cats.stream().filter(c -> c.id().equals("verhalen")).findFirst().orElseThrow();
         // (verhalenpad snuffel-steiger: + the steigerhuisje, where Het Snuffeleiland begins)
@@ -199,7 +200,7 @@ public class GidsGameTests {
         GidsFeature.kijk(player);
         helper.assertTrue(!GidsFeature.heeft(player, GidsFeature.ONTDEKKER), "nothing visited yet");
         List<SpelGroepen.Groep> groot = GidsFeature.nodig(true);
-        helper.assertTrue(groot.size() == 6, "six new buildings: " + groot.size());
+        helper.assertTrue(groot.size() == 8, "six new buildings (1.7.0 minigames2: + the Wisselgrot and the Kegelgrot): " + groot.size());
         for (int i = 0; i < groot.size() - 1; i++) {
             SpelGroepen.bezoek(player, groot.get(i).id());
         }

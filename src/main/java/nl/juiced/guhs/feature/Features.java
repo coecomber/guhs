@@ -155,6 +155,7 @@ public final class Features {
         nl.juiced.guhs.feature.onderwol.bouw.OnderWolBouw.register(modBus);   // 1.7.0 Onder de Wol: underground buildings (guhs:grot_bouw)
         nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.register(modBus);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel, Mijnguh-hulpje
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Schatgraven, Glimwormvangen, Lichtjespuzzel
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -401,6 +402,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature.creative(output);   // 1.7.0: the four workstations
         nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.creative(output);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.creative(output);   // 1.7.0 Onder de Wol: the cave games' coins, blocks and deco
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.creative(output);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

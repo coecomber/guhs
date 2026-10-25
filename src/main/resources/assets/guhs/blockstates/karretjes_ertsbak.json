@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=north,soort=0": {
+      "model": "guhs:block/karretjes_ertsbak_kolen"
+    },
+    "facing=north,soort=1": {
+      "model": "guhs:block/karretjes_ertsbak_ijzer"
+    },
+    "facing=north,soort=2": {
+      "model": "guhs:block/karretjes_ertsbak_goud"
+    },
+    "facing=north,soort=3": {
+      "model": "guhs:block/karretjes_ertsbak_vads"
+    },
+    "facing=north,soort=4": {
+      "model": "guhs:block/karretjes_ertsbak_kaasknabbel"
+    },
+    "facing=north,soort=5": {
+      "model": "guhs:block/karretjes_ertsbak_diamant"
+    },
+    "facing=east,soort=0": {
+      "model": "guhs:block/karretjes_ertsbak_kolen",
+      "y": 90
+    },
+    "facing=east,soort=1": {
+      "model": "guhs:block/karretjes_ertsbak_ijzer",
+      "y": 90
+    },
+    "facing=east,soort=2": {
+      "model": "guhs:block/karretjes_ertsbak_goud",
+      "y": 90
+    },
+    "facing=east,soort=3": {
+      "model": "guhs:block/karretjes_ertsbak_vads",
+      "y": 90
+    },
+    "facing=east,soort=4": {
+      "model": "guhs:block/karretjes_ertsbak_kaasknabbel",
+      "y": 90
+    },
+    "facing=east,soort=5": {
+      "model": "guhs:block/karretjes_ertsbak_diamant",
+      "y": 90
+    },
+    "facing=south,soort=0": {
+      "model": "guhs:block/karretjes_ertsbak_kolen",
+      "y": 180
+    },
+    "facing=south,soort=1": {
+      "model": "guhs:block/karretjes_ertsbak_ijzer",
+      "y": 180
+    },
+    "facing=south,soort=2": {
+      "model": "guhs:block/karretjes_ertsbak_goud",
+      "y": 180
+    },
+    "facing=south,soort=3": {
+      "model": "guhs:block/karretjes_ertsbak_vads",
+      "y": 180
+    },
+    "facing=south,soort=4": {
+      "model": "guhs:block/karretjes_ertsbak_kaasknabbel",
+      "y": 180
+    },
+    "facing=south,soort=5": {
+      "model": "guhs:block/karretjes_ertsbak_diamant",
+      "y": 180
+    },
+    "facing=west,soort=0": {
+      "model": "guhs:block/karretjes_ertsbak_kolen",
+      "y": 270
+    },
+    "facing=west,soort=1": {
+      "model": "guhs:block/karretjes_ertsbak_ijzer",
+      "y": 270
+    },
+    "facing=west,soort=2": {
+      "model": "guhs:block/karretjes_ertsbak_goud",
+      "y": 270
+    },
+    "facing=west,soort=3": {
+      "model": "guhs:block/karretjes_ertsbak_vads",
+      "y": 270
+    },
+    "facing=west,soort=4": {
+      "model": "guhs:block/karretjes_ertsbak_kaasknabbel",
+      "y": 270
+    },
+    "facing=west,soort=5": {
+      "model": "guhs:block/karretjes_ertsbak_diamant",
+      "y": 270
+    }
+  }
+}

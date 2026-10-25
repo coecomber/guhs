@@ -136,6 +136,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.guhvillagers.client.GuhVillagersClient.init(modBus);   // 1.7.0: the new guh villager look, the IJzerguhlem
         nl.juiced.guhs.feature.mijnhuisje.client.MijnhuisjeClient.init(modBus);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje's screen
         nl.juiced.guhs.feature.grotspellen.client.GrotSpellenClient.init(modBus);   // 1.7.0 Onder de Wol: glimworms, the jar on your back, glowing clothes
+        nl.juiced.guhs.feature.mijnspellen.client.MijnspellenClient.init(modBus);   // 1.7.0 Onder de Wol: ore carts, pins + ball (minigames2)
     }
 
     private FeaturesClient() {

@@ -1,0 +1,136 @@
+{
+  "textures": {
+    "particle": "guhs:block/kegelgrot_wolbal",
+    "t": "guhs:block/kegelgrot_wolbal"
+  },
+  "elements": [
+    {
+      "from": [
+        5.2,
+        0.4,
+        5.2
+      ],
+      "to": [
+        10.8,
+        6,
+        10.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#t"
+        },
+        "south": {
+          "texture": "#t"
+        },
+        "east": {
+          "texture": "#t"
+        },
+        "west": {
+          "texture": "#t"
+        },
+        "up": {
+          "texture": "#t"
+        },
+        "down": {
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        4.8,
+        1.2,
+        5.6
+      ],
+      "to": [
+        11.2,
+        5.2,
+        10.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#t"
+        },
+        "south": {
+          "texture": "#t"
+        },
+        "east": {
+          "texture": "#t"
+        },
+        "west": {
+          "texture": "#t"
+        },
+        "up": {
+          "texture": "#t"
+        },
+        "down": {
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        5.6,
+        1.2,
+        4.8
+      ],
+      "to": [
+        10.4,
+        5.2,
+        11.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#t"
+        },
+        "south": {
+          "texture": "#t"
+        },
+        "east": {
+          "texture": "#t"
+        },
+        "west": {
+          "texture": "#t"
+        },
+        "up": {
+          "texture": "#t"
+        },
+        "down": {
+          "texture": "#t"
+        }
+      }
+    },
+    {
+      "from": [
+        5.6,
+        0,
+        5.6
+      ],
+      "to": [
+        10.4,
+        6.4,
+        10.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#t"
+        },
+        "south": {
+          "texture": "#t"
+        },
+        "east": {
+          "texture": "#t"
+        },
+        "west": {
+          "texture": "#t"
+        },
+        "up": {
+          "texture": "#t"
+        },
+        "down": {
+          "texture": "#t"
+        }
+      }
+    }
+  ]
+}

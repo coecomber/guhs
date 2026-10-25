@@ -69,9 +69,9 @@ public class SpelenGameTests {
     @GuhTest(template = EMPTY)
     public static void spelenGroepenKloppen(GameTestHelper helper) {
         List<SpelGroepen.Groep> alle = SpelGroepen.alle();
-        helper.assertTrue(alle.size() == 26, "26 groups (1.7.0: the three cave games of feature/grotspellen): " + alle.size());
+        helper.assertTrue(alle.size() == 28, "28 groups (1.7.0: the five cave games of feature/grotspellen and feature/mijnspellen): " + alle.size());
         helper.assertTrue(SpelGroepen.van(SpelGroepen.Tijdperk.KLASSIEKERS).size() == 9 && SpelGroepen.van(SpelGroepen.Tijdperk.KNUFFELDAL).size() == 5
-                && SpelGroepen.van(SpelGroepen.Tijdperk.GROTE_GUHSPELEN).size() == 9 && SpelGroepen.van(SpelGroepen.Tijdperk.VERHALEN).size() == 3,
+                && SpelGroepen.van(SpelGroepen.Tijdperk.GROTE_GUHSPELEN).size() == 11 && SpelGroepen.van(SpelGroepen.Tijdperk.VERHALEN).size() == 3,
                 "per era (3.0: two story groups; bbq2: the castle of Super Guhrio)");
         var structures = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
         Set<String> rows = new HashSet<>();

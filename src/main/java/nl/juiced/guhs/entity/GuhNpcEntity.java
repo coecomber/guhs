@@ -289,6 +289,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         LAMPJESGUH(1.0f),
         SNUFFELHULPJE(0.55f),
         // </minigames1>
+        // <minigames2>
+        /** 1.7.0 Onder de Wol (feature/mijnspellen): Conducteur Piepwiel of the Wisselgrot and De Guhde of the Kegelgrot. */
+        WISSELGUH(1.0f),
+        KEGELGUH(1.05f),
+        // </minigames2>
         ;
 
         public final float scale;

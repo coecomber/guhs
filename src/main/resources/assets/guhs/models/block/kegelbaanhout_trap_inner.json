@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "guhs:block/kegelbaanhout",
+    "top": "guhs:block/kegelbaanhout",
+    "side": "guhs:block/kegelbaanhout"
+  }
+}

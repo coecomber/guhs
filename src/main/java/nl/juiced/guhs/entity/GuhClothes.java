@@ -594,6 +594,13 @@ public enum GuhClothes {
     /** Lichtjespuzzel: a glowing red mushroom hat with white dots. */
     LICHTJES_PADDENSTOELHOEDJE(Slot.HEAD, "outfit_theemutsje"),
     // </minigames1>
+    // <minigames2>
+    /** 1.7.0 Onder de Wol (feature/mijnspellen): Conducteur Piepwiel's cap (Wisselgrot, ertsbonnetjes). */
+    KARRETJES_CONDUCTEURSPETJE(Slot.HEAD, "outfit_cap"),
+    /** De Guhde's bowling shirt and sweatband (Kegelgrot, kegelknopen). */
+    KEGELGROT_BOWLINGSHIRTJE(Slot.BODY, "outfit_suit"),
+    KEGELGROT_ZWEETBANDJE(Slot.HEAD, "outfit_spelen_zweetband"),
+    // </minigames2>
     ;
 
     /**

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/wolbalrek"
+    },
+    "facing=east": {
+      "model": "guhs:block/wolbalrek",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/wolbalrek",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/wolbalrek",
+      "y": 270
+    }
+  }
+}

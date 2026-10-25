@@ -296,6 +296,13 @@
     "guhs:paddenstoelsteen",
     "guhs:steeltjessteen",
     "guhs:paddenstoelkrukje",
-    "guhs:paddenstoellampje"
+    "guhs:paddenstoellampje",
+    "guhs:bielzenhout",
+    "guhs:kegelbaanhout",
+    "guhs:bielzenhout_trap",
+    "guhs:kegelbaanhout_trap",
+    "guhs:bielzenhout_plaat",
+    "guhs:kegelbaanhout_plaat",
+    "guhs:wolbalrek"
   ]
 }

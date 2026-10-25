@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/karretjes_spoorbegin_top",
+    "side": "guhs:block/bielzenhout",
+    "bottom": "guhs:block/bielzenhout"
+  }
+}
