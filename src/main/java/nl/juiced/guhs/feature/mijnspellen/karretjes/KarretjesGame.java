@@ -57,6 +57,10 @@ import nl.juiced.guhs.registry.ModSounds;
  * switch shows where it sends the next cart. A cart in its own bin: +1 ("klopt!"); in the wrong bin it is gone; three
  * gone and the shift is over. Every cart comes a little sooner and all of them roll a little faster.
  * <p>
+ * (1.7.0 playtest) A calm start: a five-second countdown that already says the first cart's ore, the action bar always
+ * shows the next cart's ore, the first {@link #RUSTIG} carts roll slower (and come no sooner), and the very first one
+ * waits {@link #WACHT} ticks in the tunnel mouth before it rolls on to the first switch ({@link #tickenTotEersteWissel}).
+ * <p>
  * Ertsbonnetjes: the carts you sorted times 0.6 / 1.0 / 1.4 (makkelijk / medium / lastig), at most {@link #MAX_MUNTEN},
  * +5 for beating your own record on that network ({@link #munten}). The world's top 3 per network float above Piepwiel.
  * While you play you can't get hurt or hungry. Games live in memory (a restart ends them; the carts then disappear by
@@ -66,13 +70,16 @@ import nl.juiced.guhs.registry.ModSounds;
 public final class KarretjesGame {
     /** Options of Piepwiel's talking screen. */
     public static final int OPTIE_MAKKELIJK = 1, OPTIE_MEDIUM = 2, OPTIE_LASTIG = 3, OPTIE_WINKEL = 4, OPTIE_UITLEG = 5, OPTIE_STOP = 6;
-    public static final int LEVENS = 3, AFTELLEN = 61, IDLE_LIMIT = 20 * 60 * 15, NA_TIJD = 60, MAX_KARREN = 120, MAX_MUNTEN = 90;
+    public static final int LEVENS = 3, AFTELLEN = 101, IDLE_LIMIT = 20 * 60 * 15, NA_TIJD = 60, MAX_KARREN = 120, MAX_MUNTEN = 90;
     /** How fast the carts roll at the start (blocks per tick), how much faster per cart, at most how much faster. */
     static final double[] SNELHEID = {0.09, 0.11, 0.13};
     static final double SNELLER = 0.0015, MAX_SNELLER = 0.07;
     /** Ticks between two carts at the start, the factor after every cart, the shortest. */
     static final int[] INTERVAL = {150, 125, 110}, MIN_INTERVAL = {56, 46, 38};
     static final double KORTER = 0.95;
+    /** The calm start: the speed of the first carts (factor), and how long the very first one waits in the tunnel mouth. */
+    static final double[] RUSTIG = {0.6, 0.75, 0.9};
+    public static final int WACHT = 40;
     static final double[] MUNTEN = {0.6, 1.0, 1.4};
     public static final int SCAN = 40, WEG = 48, SCORES_TICKS = 100;
     public static final String BORD = "karretjes";
@@ -90,10 +97,24 @@ public final class KarretjesGame {
     static final class Kar {
         final Rit rit;
         final UUID entity;
+        /** Its own speed (times the shift's), and how long it still waits in the tunnel mouth (u 0). */
+        final double factor;
+        int wacht;
 
-        Kar(Rit rit, UUID entity) {
+        Kar(Rit rit, UUID entity, double factor, int wacht) {
             this.rit = rit;
             this.entity = entity;
+            this.factor = factor;
+            this.wacht = wacht;
+        }
+
+        /** Waiting in the tunnel mouth now? (then it doesn't roll this tick) */
+        boolean wachtNu() {
+            if (wacht > 0 && rit.totaal() >= -KarretjesNet.START.u()) {
+                wacht--;
+                return true;
+            }
+            return false;
         }
     }
 
@@ -108,6 +129,9 @@ public final class KarretjesGame {
     private long lastTick, gestart;
     private final List<Kar> karren = new ArrayList<>();
     private boolean[] standen = new boolean[0];
+    /** The ore of the next cart (said in the countdown and in the action bar). */
+    @Nullable
+    private Erts volgende;
 
     // the networks, found once
     private boolean scanned;
@@ -237,6 +261,18 @@ public final class KarretjesGame {
                 BlockPos boven = pos.above();
                 if (!world.getBlockState(boven).isAir()) {
                     world.setBlock(boven, Blocks.AIR.defaultBlockState(), STIL);
+                }
+            }
+        }
+        // (1.7.0 playtest) glitterrank the cave decoration hung from the ceiling, over the network and the balcony: gone
+        for (int u = KarretjesNet.BALKON_U - 3; u <= baan.uMax() + 1; u++) {
+            for (int v = baan.vMin() - 1; v <= baan.vMax() + 1; v++) {
+                for (int dy = 1; dy <= 11; dy++) {
+                    BlockPos pos = cel(n, u, v, dy);
+                    if (world.getBlockState(pos).is(nl.juiced.guhs.feature.onderwol.OnderWolFeature.GLITTERRANK.get())
+                            || world.getBlockState(pos).is(nl.juiced.guhs.feature.onderwol.OnderWolFeature.GLITTERRANK_BES.get())) {
+                        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
                 }
             }
         }
@@ -373,8 +409,10 @@ public final class KarretjesGame {
         p.teleportTo(world, balkon.x, balkon.y, balkon.z, java.util.Set.of(), richting[n.ordinal()].toYRot(), 35f, true);
         phase = Phase.AFTELLEN;
         timer = AFTELLEN;
+        volgende = kies(world);
         GuhQuests.say(p, npc, "quest.guhs.karretjes.start_" + n.id());
         p.sendSystemMessage(Component.translatable("quest.guhs.karretjes.hoe").withStyle(ChatFormatting.GRAY));
+        p.sendSystemMessage(Component.translatable("quest.guhs.karretjes.rustig").withStyle(ChatFormatting.GRAY));
         return true;
     }
 
@@ -404,10 +442,14 @@ public final class KarretjesGame {
         switch (phase) {
             case AFTELLEN -> {
                 timer--;
-                if (timer == 60 || timer == 40 || timer == 20) {
+                if (timer > 0 && timer % 20 == 0) {
                     Mijnspel.titel(p, Component.literal(String.valueOf(timer / 20)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
-                            Component.translatable("gui.guhs.karretjes.aftellen"), 0, 22, 0);
+                            timer > 40 || volgende == null ? Component.translatable("gui.guhs.karretjes.aftellen")
+                                    : Component.translatable("gui.guhs.karretjes.eerste", ertsNaam(volgende)), 0, 22, 0);
                     Mijnspel.geluid(p, SoundEvents.NOTE_BLOCK_PLING.value(), 0.9f, 1.0f);
+                }
+                if (timer % 10 == 5 && volgende != null) {
+                    p.sendOverlayMessage(Component.translatable("gui.guhs.karretjes.eerste", ertsNaam(volgende)).withStyle(ChatFormatting.YELLOW));
                 }
                 if (timer <= 0) {
                     phase = Phase.SPELEN;
@@ -420,9 +462,10 @@ public final class KarretjesGame {
             }
             case SPELEN -> {
                 if (--timer <= 0 && gestuurd < MAX_KARREN) {
+                    int nr = gestuurd;
                     stuur(world);
-                    timer = (int) Math.round(interval);
-                    interval = Math.max(MIN_INTERVAL[niveau.ordinal()], interval * KORTER);
+                    timer = volgendeTimer(nr, interval);
+                    interval = krimp(niveau, nr, interval);
                 }
                 rijden(world, npc, p);
                 if (phase == Phase.SPELEN && (kwijt >= LEVENS || gestuurd >= MAX_KARREN && karren.isEmpty())) {
@@ -442,8 +485,8 @@ public final class KarretjesGame {
             }
         }
         if (isRunning() && phase == Phase.SPELEN && npc.tickCount % 10 == 0) {
-            p.sendOverlayMessage(Component.translatable("gui.guhs.karretjes.balk", goed, kwijt, LEVENS, karren.size(), niveau.naam())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+            p.sendOverlayMessage(Component.translatable("gui.guhs.karretjes.balk", goed, kwijt, LEVENS,
+                    volgende == null ? Component.literal("-") : ertsNaam(volgende), niveau.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -452,21 +495,49 @@ public final class KarretjesGame {
         return SNELHEID[niveau.ordinal()] + Math.min(MAX_SNELLER, SNELLER * gestuurd);
     }
 
-    /** A new cart out of the tunnel (its ore at random among this network's bins). */
+    /** A new cart out of the tunnel: the announced ore (the next one at random among this network's bins), calm at the start. */
     private void stuur(ServerLevel world) {
-        Baan baan = KarretjesNet.baan(niveau);
-        List<Erts> ertsen = baan.ertsen();
-        Erts erts = ertsen.get(world.getRandom().nextInt(ertsen.size()));
-        stuur(world, erts);
+        Erts erts = volgende != null ? volgende : kies(world);
+        int nr = gestuurd;
+        stuur(world, erts, factor(nr), nr == 0 ? WACHT : 0);
+        volgende = kies(world);
     }
 
-    /** (also tests) a cart with this ore. */
+    private Erts kies(ServerLevel world) {
+        List<Erts> ertsen = KarretjesNet.baan(niveau).ertsen();
+        return ertsen.get(world.getRandom().nextInt(ertsen.size()));
+    }
+
+    static Component ertsNaam(Erts erts) {
+        return Component.translatable("gui.guhs.karretjes.erts." + erts.id());
+    }
+
+    /** The speed factor of the cart with this number (0 = the first of the shift). */
+    static double factor(int nr) {
+        return nr < RUSTIG.length ? RUSTIG[nr] : 1.0;
+    }
+
+    /** Ticks until the next cart after cart nr was sent (the first one also waits in the tunnel mouth). */
+    static int volgendeTimer(int nr, double interval) {
+        return (int) Math.round(interval) + (nr == 0 ? WACHT : 0);
+    }
+
+    /** The interval after cart nr: the calm carts keep it, then every cart a little sooner. */
+    static double krimp(Niveau n, int nr, double interval) {
+        return nr < RUSTIG.length ? interval : Math.max(MIN_INTERVAL[n.ordinal()], interval * KORTER);
+    }
+
+    /** (also tests) a cart with this ore, at full speed. */
     public Kar stuur(ServerLevel world, Erts erts) {
+        return stuur(world, erts, 1.0, 0);
+    }
+
+    private Kar stuur(ServerLevel world, Erts erts, double factor, int wacht) {
         Rit rit = new Rit(KarretjesNet.baan(niveau), erts);
         double[] at = rit.positie();
         Vec3 pos = punt(niveau, at[0], at[1], 0);
         ErtsKarretjeEntity e = ErtsKarretjeEntity.create(world, this, pos, yaw(rit), lading(erts));
-        Kar kar = new Kar(rit, e.getUUID());
+        Kar kar = new Kar(rit, e.getUUID(), factor, wacht);
         karren.add(kar);
         gestuurd++;
         world.playSound(null, BlockPos.containing(pos), SoundEvents.MINECART_RIDING, SoundSource.BLOCKS, 0.25f, 1.3f);
@@ -492,7 +563,10 @@ public final class KarretjesGame {
         double v = snelheid();
         for (int i = karren.size() - 1; i >= 0; i--) {
             Kar k = karren.get(i);
-            Bak bak = k.rit.stap(v, standen);
+            if (k.wachtNu()) {
+                continue;
+            }
+            Bak bak = k.rit.stap(v * k.factor, standen);
             double[] at = k.rit.positie();
             Vec3 pos = punt(niveau, at[0], at[1], 0);
             if (world.getEntity(k.entity) instanceof ErtsKarretjeEntity e) {
@@ -696,6 +770,64 @@ public final class KarretjesGame {
         begin[n.ordinal()] = pos;
         richting[n.ordinal()] = f;
         scanned = true;
+    }
+
+    /** The next cart's ore (null: none announced). */
+    @Nullable
+    public Erts volgende() {
+        return volgende;
+    }
+
+    /**
+     * How many ticks the first cart of a shift takes from leaving the tunnel to reaching the first switch: rolling at its
+     * calm speed to the tunnel mouth, waiting there, rolling on (the levers stay as they are).
+     */
+    public static int tickenTotEersteWissel(Niveau n) {
+        Baan baan = KarretjesNet.baan(n);
+        Kar k = new Kar(new Rit(baan, baan.ertsen().get(0)), new UUID(0, 0), factor(0), WACHT);
+        double tot = baan.wortel().p().u() - KarretjesNet.START.u();
+        int ticks = 0;
+        while (k.rit.totaal() < tot && ticks < 10000) {
+            if (!k.wachtNu()) {
+                k.rit.stap(SNELHEID[n.ordinal()] * k.factor, new boolean[baan.wissels().size()]);
+            }
+            ticks++;
+        }
+        return ticks;
+    }
+
+    /**
+     * (tests) The first carts of a shift as the tick loop sends them (all levers off): the smallest distance (blocks) between
+     * two carts that are both still rolling on the shared stem of the network (up to the first switch).
+     */
+    public static double kleinsteAfstandOpDeStam(Niveau n, int aantal) {
+        Baan baan = KarretjesNet.baan(n);
+        double stam = baan.wortel().p().u() - KarretjesNet.START.u();
+        boolean[] uit = new boolean[baan.wissels().size()];
+        List<Kar> rij = new ArrayList<>();
+        double interval = INTERVAL[n.ordinal()], kleinste = Double.MAX_VALUE;
+        int timer = 0, gestuurd = 0;
+        for (int t = 0; t < 20 * 120; t++) {
+            if (--timer <= 0 && gestuurd < aantal) {
+                rij.add(new Kar(new Rit(baan, baan.ertsen().get(0)), new UUID(0, gestuurd), factor(gestuurd), gestuurd == 0 ? WACHT : 0));
+                timer = volgendeTimer(gestuurd, interval);
+                interval = krimp(n, gestuurd, interval);
+                gestuurd++;
+            }
+            double v = SNELHEID[n.ordinal()] + Math.min(MAX_SNELLER, SNELLER * gestuurd);
+            for (Kar k : rij) {
+                if (k.rit.aangekomen() == null && !k.wachtNu()) {
+                    k.rit.stap(v * k.factor, uit);
+                }
+            }
+            for (int i = 1; i < rij.size(); i++) {
+                Kar voor = rij.get(i - 1), achter = rij.get(i);
+                if (voor.rit.aangekomen() == null && voor.rit.totaal() < stam) {
+                    kleinste = Math.min(kleinste, voor.rit.totaal() - achter.rit.totaal());
+                }
+            }
+        }
+        return kleinste;
     }
 
     /** (tests) start with the countdown skipped. */

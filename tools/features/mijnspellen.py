@@ -645,11 +645,16 @@ TEXTS = {  # key: (English, Dutch)
     "quest.guhs.karretjes.uitleg": ("The carts roll out of the tunnel, each full of one ore: the colour of its load says which bin it belongs in "
                                     "(the ore is also in the wall behind its bin). On the railing there is a lever above every switch: "
                                     "on = right, off = left; the rail shows where the switch sends the next cart. A cart in the wrong bin is gone; "
-                                    "%s gone and your shift is over. They come ever faster, guhtje!",
+                                    "%s gone and your shift is over. They come ever faster, guhtje! But calmly at first: the first carts roll "
+                                    "slowly, the very first one waits in the tunnel mouth, and the bar at the bottom always says which ore comes "
+                                    "next, so you can set the switch early. On track 1 the right bin sparkles. The signs on the balcony wall show it too.",
                                     "De karretjes rollen uit de tunnel, elk vol met één erts: de kleur van de lading zegt in welke bak hij moet "
                                     "(het erts zit ook in de muur achter zijn bak). Op de reling staat boven elke wissel een hendel: aan = "
                                     "rechtsaf, uit = linksaf; de rail laat zien waar de wissel het volgende karretje heen stuurt. Een karretje "
-                                    "in de verkeerde bak is weg; %s weg en je dienst zit erop. Ze komen steeds sneller, guhtje!"),
+                                    "in de verkeerde bak is weg; %s weg en je dienst zit erop. Ze komen steeds sneller, guhtje! Maar eerst rustig: "
+                                    "de eerste karretjes rollen langzaam, de allereerste wacht even in de tunnelmond, en onderin staat steeds welk "
+                                    "erts er hierna komt, dan zet je de wissel alvast goed. Op baan 1 glinstert de goeie bak. De bordjes op de "
+                                    "balkonmuur laten het ook zien."),
     "quest.guhs.karretjes.bezig": ("%s is on shift right now. Watch from the balcony, it's quite exciting!",
                                    "%s heeft nu dienst. Kijk maar mee vanaf het balkon, het is best spannend!"),
     "quest.guhs.karretjes.bezig_jij": ("You're on shift! %s right, %s gone. Keep your paws on the levers!",
@@ -662,8 +667,12 @@ TEXTS = {  # key: (English, Dutch)
                                           "Baan 2! Drie wissels, vier bakken. Pas op het goud, dat is verlegen."),
     "quest.guhs.karretjes.start_lastig": ("Track 3! Five switches, six bins. Even I get dizzy. WAHOOG!",
                                           "Baan 3! Vijf wissels, zes bakken. Daar word zelfs ik duizelig van. VAHOEG!"),
-    "quest.guhs.karretjes.hoe": ("Levers on the railing: on = right, off = left. Every cart in the bin of its ore!",
-                                 "Hendels op de reling: aan = rechtsaf, uit = linksaf. Elk karretje in de bak van zijn erts!"),
+    "quest.guhs.karretjes.hoe": ("Levers on the railing: on = right, off = left (as you look at the tracks). Every cart in the bin of its ore!",
+                                 "Hendels op de reling: aan = rechtsaf, uit = linksaf (zoals jij naar de sporen kijkt). Elk karretje in de bak van zijn erts!"),
+    "quest.guhs.karretjes.rustig": ("Calm start: the first carts roll slowly and the very first one waits in the tunnel mouth. The bar at the bottom "
+                                    "always says which ore comes next: set the switch early!",
+                                    "Rustig begin: de eerste karretjes rollen langzaam en de allereerste wacht even in de tunnelmond. Onderin staat "
+                                    "steeds welk erts er hierna komt: zet de wissel alvast goed!"),
     "quest.guhs.karretjes.gestopt": ("Shift over! The carts go back to the depot.", "Dienst voorbij! De karretjes gaan terug naar de remise."),
     "quest.guhs.karretjes.weggelopen": ("You left your post... the carts stopped by themselves.", "Je liep weg van je post... de karretjes stopten vanzelf."),
     "quest.guhs.karretjes.te_lang": ("That was a very long shift! Time for a nap, guhtje.", "Dat was een heel lange dienst! Tijd voor een dutje, guhtje."),
@@ -687,7 +696,8 @@ TEXTS = {  # key: (English, Dutch)
     "gui.guhs.karretjes.aftellen": ("Paws on the levers!", "Pootjes op de hendels!"),
     "gui.guhs.karretjes.tuut": ("TUUT TUUT!", "TUUT TUUT!"),
     "gui.guhs.karretjes.tuut_sub": ("Here come the carts!", "Daar komen de karretjes!"),
-    "gui.guhs.karretjes.balk": ("Right: %s | Gone: %s/%s | Rolling: %s | %s", "Goed: %s | Weg: %s/%s | Onderweg: %s | %s"),
+    "gui.guhs.karretjes.balk": ("Right: %s | Gone: %s/%s | Next: %s | %s", "Goed: %s | Weg: %s/%s | Volgende: %s | %s"),
+    "gui.guhs.karretjes.eerste": ("First cart: %s!", "Eerste karretje: %s!"),
     "gui.guhs.karretjes.klopt": ("%s in the right bin! (%s)", "%s in de goeie bak! (%s)"),
     "gui.guhs.karretjes.fout": ("Oops! %s in the %s bin... %s left", "Oei! %s in de %s-bak... nog %s"),
     "gui.guhs.karretjes.klaar": ("%s carts!", "%s karretjes!"),
