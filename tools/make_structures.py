@@ -18,6 +18,8 @@ import math
 import os
 import struct
 
+import verbindingen
+
 # Minecraft 1.21.1, on purpose also for Guhs 1.1.0 (26.1.2): the templates are written in 1.21.1's formats (block names such
 # as minecraft:chain, sign texts and item components in block entities as 1.21.1 had them), and 26.1.2's DataFixer upgrades
 # every template with an older DataVersion when it loads it. Raise this only together with writing the 26.1 formats.
@@ -184,6 +186,9 @@ class Structure:
                     self.set(x, y, z, name)
 
     def save(self, name):
+        # fences, walls, panes, bars, fence gates and garlands: their connections from the template's own neighbours (a
+        # jigsaw piece keeps the stored state; see tools/verbindingen.py)
+        verbindingen.verbind(self)
         palette, palette_index, blocks = [], {}, []
         for (x, y, z), (block, props, nbt) in sorted(self.blocks.items()):
             key = (block, tuple(sorted(props.items())))
