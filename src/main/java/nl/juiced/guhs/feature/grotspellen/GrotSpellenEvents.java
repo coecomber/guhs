@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
@@ -34,10 +32,12 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import nl.juiced.guhs.feature.spelen.Spelhal;
 import nl.juiced.guhs.world.ModDimensions;
 
 /**
- * Keeps the cave games fair and tidy: the halls and their huts can't be broken or built in (creative players may), players
+ * Keeps the cave games fair and tidy: the halls and their huts can't be broken or built in (creative players may; the rock
+ * around a hall and its extra entrance tunnels can: {@link Spelhal}), players
  * in a game can't get hurt, the borrowed tools never leave the game (no dropping; gone when you log out, die or change
  * dimension), a tap on a glimworm catches it, and a left-click with the shovel digs.
  */
@@ -45,7 +45,8 @@ public final class GrotSpellenEvents {
     /** Extra protected boxes, only for the GameTests (the test world has no generated halls). */
     public static final List<BoundingBox> TEST_AREAS = new CopyOnWriteArrayList<>();
 
-    /** Is this spot part of a cave-game hall (or its hut) (server side)? */
+    /** Is this spot part of a cave-game hall with its own walls, or its hut (server side)? Not the rock around it or the
+     * extra entrance tunnels ({@link Spelhal}). */
     public static boolean inZaal(Level level, BlockPos pos) {
         if (!(level instanceof ServerLevel server)) {
             return false;
@@ -55,17 +56,7 @@ public final class GrotSpellenEvents {
                 return true;
             }
         }
-        if (server.dimension() != ModDimensions.GUHMENSION) {
-            return false;
-        }
-        var registry = server.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        for (var key : GrotSpellenFeature.STRUCTUREN) {
-            Structure structure = registry.getValue(key);
-            if (structure != null && server.structureManager().getStructureAt(pos, structure).isValid()) {
-                return true;
-            }
-        }
-        return false;
+        return server.dimension() == ModDimensions.GUHMENSION && Spelhal.beschermd(server, pos, GrotSpellenFeature.STRUCTUREN);
     }
 
     private static boolean denied(Player player, BlockPos pos, boolean quiet) {
