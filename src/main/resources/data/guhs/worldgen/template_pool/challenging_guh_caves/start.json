@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:challenging_guh_caves/dungeon_hall",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     }
   ]

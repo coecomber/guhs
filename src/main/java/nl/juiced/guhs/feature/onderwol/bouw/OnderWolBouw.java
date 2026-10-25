@@ -51,6 +51,9 @@ public final class OnderWolBouw {
             PIECES.register("grot_schacht", () -> (StructurePieceType.ContextlessType) GrotSchachtPiece::new);
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<GrotSchilProcessor>> SCHIL =
             PROCESSORS.register("onderwol_grot_schil", () -> () -> GrotSchilProcessor.CODEC);
+    /** The layer stone for the old underground structures (guh caves, kaasmijn, gatenkaas mine and larder): OudeBouwLaagProcessor. */
+    public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<OudeBouwLaagProcessor>> OUDE_BOUW =
+            PROCESSORS.register("onderwol_oude_bouw", () -> () -> OudeBouwLaagProcessor.CODEC);
 
     /** The structures of this slice (tools/features/onderwol_structuren1.py), all in the Superkompas tab "ondergrond". */
     public static final List<String> STRUCTUREN = List.of("mijnguhdorp", "knuffelslaapzaal", "paddenstoelendorpje", "verlaten_guhmijn",

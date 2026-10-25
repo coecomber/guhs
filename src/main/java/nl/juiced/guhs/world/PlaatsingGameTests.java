@@ -73,7 +73,8 @@ public class PlaatsingGameTests {
             helper.assertTrue(set(helper, name + "_gegarandeerd").placement() instanceof GegarandeerdPlacement g && g.minAfstand() == 4300
                     && g.maxAfstand() == 5600, name + ": a guaranteed copy 4300-5600 blocks from spawn (new chunks on a pregenerated server)");
         }
-        Map<String, Integer> halved = Map.of("guh_caves", 10, "gatenkaas_mijnschacht", 14, "challenging_guh_caves", 24, "mini_picnic", 22, "quartz_statue", 24);
+        // (1.7.0 ontwerpronde 22: the old underground structures at the depth of the new caves come 25% less often: 10, 14, 24 -> 13, 18, 30)
+        Map<String, Integer> halved = Map.of("guh_caves", 13, "gatenkaas_mijnschacht", 18, "challenging_guh_caves", 30, "mini_picnic", 22, "quartz_statue", 24);
         halved.forEach((name, s) -> helper.assertTrue(spacing(helper, name) == s, name + ": spacing " + s + ", was " + spacing(helper, name)));
         helper.assertTrue(set(helper, "nomguh").placement() instanceof RegioPiekPlacement p && p.plek().cell() == 24, "nomguh: cells of 24 chunks");
         var structures = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
@@ -176,8 +177,8 @@ public class PlaatsingGameTests {
         LOGGER.info("Plaatsing: {} guaranteed ({}), {} story starts within 900 blocks, problems: {}", found, report, stories, fouten);
         // (guhpixel: + the Guh-internetcafe and the Reisbureau; bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie
         // that is no minigame, landmark or guhpixel building; verhalenpad snuffel-steiger: + the steigerhuisje; 1.4.2: + Het Knabbelpark;
-        // 1.6.0 F1b: + the safari busstation; 1.7.0: the minigames and the guh_village have none any more)
-        helper.assertTrue(found == LANDMARKS.size() + GUHPIXEL.size() + 4, "every guaranteed set is in the Guhmension: " + found);
+        // 1.6.0 F1b: + the safari busstation; 1.7.0: the minigames and the guh_village have none any more, + the Mijnguhdorp under the ground)
+        helper.assertTrue(found == LANDMARKS.size() + GUHPIXEL.size() + 5, "every guaranteed set is in the Guhmension: " + found);
         helper.assertTrue(fouten.isEmpty(), "guaranteed copies in their ring, no story near spawn: " + fouten);
         helper.succeed();
     }

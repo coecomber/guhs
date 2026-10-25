@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:stille_voorraadkelder",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     }
   ]

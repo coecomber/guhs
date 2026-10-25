@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/tube_straight",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     },
     {
@@ -16,7 +16,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/tube_junction",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     },
     {
@@ -25,7 +25,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/nest_room",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     },
     {
@@ -34,7 +34,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/pantry_room",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     },
     {
@@ -43,7 +43,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "guhs:guh_caves/portrait_room",
         "projection": "rigid",
-        "processors": "minecraft:empty"
+        "processors": "guhs:onderwol_oude_bouw"
       }
     }
   ]

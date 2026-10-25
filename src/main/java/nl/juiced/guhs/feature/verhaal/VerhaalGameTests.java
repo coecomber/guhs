@@ -502,6 +502,7 @@ public class VerhaalGameTests {
                         GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE,   // biomes3
                         GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
                         GuhVariant.BEVERGUH,   // 1.6.2 (Beverbeek)
+                        GuhVariant.GROTGUH,   // 1.7.0 (Onder de Wol: the caves)
                         GuhVariant.KNABBELKOI,   // <park-a> 1.4.2 (park plekjes)
                         GuhVariant.DUIFGUHTJE,   // 1.4.2 (park-plekjes b)
                         GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,   // einde2
@@ -509,7 +510,7 @@ public class VerhaalGameTests {
                         GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT,
                         GuhVariant.KOH, GuhVariant.HEI_BAI_GUH, GuhVariant.FANG, GuhVariant.GEEST_KOI, GuhVariant.LIBELKONIJNGUH,   // einde2 phase B
                         GuhVariant.LANTAARNGEEST, GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH)),
-                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud, (biomes3) the four of the new biomes, (1.4.2) the park's three, (einde2) every creature page of the outer islands and (1.6.2) the Beverguh");
+                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud, (biomes3) the four of the new biomes, (1.4.2) the park's three, (einde2) every creature page of the outer islands, (1.6.2) the Beverguh and (1.7.0) the Grotguh");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {
             ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
