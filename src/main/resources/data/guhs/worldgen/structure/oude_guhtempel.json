@@ -1,0 +1,21 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/oude_guhtempel",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/oude_guhtempel/start",
+  "start_jigsaw_name": "guhs:oude_guhtempel_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 15,
+  "max_y": 18,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 90,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 1.0
+  },
+  "voorrang": 80
+}

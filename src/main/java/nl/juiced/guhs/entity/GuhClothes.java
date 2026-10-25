@@ -601,6 +601,11 @@ public enum GuhClothes {
     KEGELGROT_BOWLINGSHIRTJE(Slot.BODY, "outfit_suit"),
     KEGELGROT_ZWEETBANDJE(Slot.HEAD, "outfit_spelen_zweetband"),
     // </minigames2>
+    // <structuren3>
+    /** 1.7.0 Onder de Wol (feature/onderwol/structuren3): the party hat and the bunting scarf from the Verrassingsfeestje's chest. */
+    FEESTHOEDJE(Slot.HEAD, "outfit_party_hat", "outfit_party_pom"),
+    SLINGER_SJAALTJE(Slot.NECK, "outfit_scarf"),
+    // </structuren3>
     ;
 
     /**
