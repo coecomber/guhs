@@ -601,6 +601,10 @@ public enum GuhClothes {
     KEGELGROT_BOWLINGSHIRTJE(Slot.BODY, "outfit_suit"),
     KEGELGROT_ZWEETBANDJE(Slot.HEAD, "outfit_spelen_zweetband"),
     // </minigames2>
+    // <structuren2>
+    /** 1.7.0 Onder de Wol (Badhuis De Warme Knabbel, loot): a towel wrapped into a turban (the theemutsje bones). */
+    HANDDOEK_TULBAND(Slot.HEAD, "outfit_theemutsje"),
+    // </structuren2>
     ;
 
     /**

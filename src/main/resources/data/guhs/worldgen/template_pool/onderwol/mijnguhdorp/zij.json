@@ -18,6 +18,24 @@
         "projection": "rigid",
         "processors": "guhs:onderwol_grot_schil"
       }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/kaasmakerij/start",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:onderwol/kristalkwekerij/start",
+        "projection": "rigid",
+        "processors": "guhs:onderwol_grot_schil"
+      }
     }
   ]
 }

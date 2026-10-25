@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/grotguh_holen",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/grotguh_holen/start",
+  "start_jigsaw_name": "guhs:grotguh_holen_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 28,
+  "max_y": 40,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 33,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.3
+  }
+}

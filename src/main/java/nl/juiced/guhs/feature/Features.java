@@ -153,6 +153,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature.register(modBus);   // 1.7.0: guh villager looks, 4 professions, IJzerguhlem, villagers oppakken
         nl.juiced.guhs.feature.voetjes.VoetjesFeature.register(modBus);   // 1.7.0 (ronde 26): the FEET slot, slofjes, laarsjes, kaassaus- and lavalopers
         nl.juiced.guhs.feature.onderwol.bouw.OnderWolBouw.register(modBus);   // 1.7.0 Onder de Wol: underground buildings (guhs:grot_bouw)
+        nl.juiced.guhs.feature.onderwol.bouw.OnderWolStructuren2.register();   // 1.7.0 Onder de Wol: underground buildings, part 2
         nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.register(modBus);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel, Mijnguh-hulpje
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Schatgraven, Glimwormvangen, Lichtjespuzzel
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)

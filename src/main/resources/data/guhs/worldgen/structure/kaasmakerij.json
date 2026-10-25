@@ -1,0 +1,20 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/kaasmakerij",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/kaasmakerij/start",
+  "start_jigsaw_name": "guhs:kaasmakerij_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 24,
+  "max_y": 36,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 38,
+  "ingang": {
+    "pool": "guhs:onderwol/ingang_hutje/start",
+    "kans": 0.3
+  }
+}

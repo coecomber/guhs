@@ -1,0 +1,16 @@
+{
+  "type": "guhs:grot_bouw",
+  "biomes": "#guhs:has_structure/verzonken_guhhuisje",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwol/verzonken_guhhuisje/start",
+  "start_jigsaw_name": "guhs:verzonken_guhhuisje_midden",
+  "size": 1,
+  "max_distance": 64,
+  "min_y": 40,
+  "max_y": 50,
+  "dekking": 6,
+  "ruimte": "beide",
+  "keep_clear": 33
+}
