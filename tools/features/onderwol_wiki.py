@@ -335,8 +335,11 @@ WIKI = {
          "pluisjes in de lucht. Soms ligt er een hartjesmeertje in."),
         # --- the cave minigames ---
         ("systemen/grot-minigames", "Hoe kom je er?",
-         "Elke spelletjeszaal ligt diep onder een roze hutje ergens in de Guhmensie, ongeveer om de 500 blokken. Spring in het hutje op "
-         "het Wolkenliftje en je zweeft naar beneden; terug naar boven gaat net zo. Het Superkompas wijst de dichtstbijzijnde aan."),
+         "Elke spelletjeszaal ligt diep onder een roze hutje ergens in de Guhmensie, ongeveer om de 500 blokken. Ga in het hutje op "
+         "het Wolkenliftje staan en sluip: je zweeft naar beneden; springen op het liftje in de zaal brengt je weer naar boven. Elke "
+         "zaal heeft ook twee of drie extra ingangen: een tunneltje met een deur en een bordje \"Ingang\", dus graaf je vanuit een "
+         "grot naar een zaal, dan kom je er ook in. Alleen de zaal zelf is beschermd, de steen eromheen niet. Het Superkompas "
+         "wijst de dichtstbijzijnde aan."),
         ("systemen/grot-minigames", "Munten en winkeltjes",
          "Elk spel heeft zijn eigen munt: schatmuntjes, glimmertjes, lampjesmunten, ertsbonnetjes en kegelknopen. Hoe beter je speelt, "
          "hoe meer munten, en een nieuw persoonlijk record geeft er nog wat bij. In het winkeltje van de spelleider koop je er "

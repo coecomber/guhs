@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -27,7 +26,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
@@ -35,12 +33,13 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+import nl.juiced.guhs.feature.spelen.Spelhal;
 
 /**
  * What the two cave minigames of 1.7.0 share (Karretjes-wissels and the Kegelgrot): titles and sounds for one player,
- * and the protection of their buildings (the cave hall, the shaft of the Wolkenliftje and the entrance hut: no breaking,
- * no building, no buckets, no explosions; levers, doors and chairs still work; creative players may change them).
- * Only the pieces are protected, not the rock between them (see {@link #inGebouw}).
+ * and the protection of their buildings (the cave hall with its own walls and the entrance hut: no breaking, no building,
+ * no buckets, no explosions; levers, doors and chairs still work; creative players may change them). Not the rock around
+ * the hall, the extra entrance tunnels or the rock between the hall and the hut ({@link Spelhal}).
  */
 public final class Mijnspel {
     /** The structures (their pieces are protected). */
@@ -58,21 +57,7 @@ public final class Mijnspel {
                 return true;
             }
         }
-        if (server.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION || !server.structureManager().hasAnyStructureAt(pos)) {
-            return false;
-        }
-        var reg = server.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        for (ResourceKey<Structure> key : STRUCTUREN) {
-            Structure structure = reg.getValue(key);
-            if (structure == null) {
-                continue;
-            }
-            StructureStart start = server.structureManager().getStructureWithPieceAt(pos, structure);
-            if (start.isValid()) {
-                return true;
-            }
-        }
-        return false;
+        return server.dimension() == nl.juiced.guhs.world.ModDimensions.GUHMENSION && Spelhal.beschermd(server, pos, STRUCTUREN);
     }
 
     private static boolean geweigerd(Player player, BlockPos pos, boolean stil) {

@@ -6,14 +6,18 @@ minigames, each in its own hall deep under a little entrance hut with a Wolkenli
               the coins, the borrowed tools, the five clothes (on existing bones: their textures and icons), the hosts'
               looks, the golden glimworm, models, blockstates, the 26.1 item definitions, loot, tags (the coins in
               guhs:knus/grijptickets, the tools in guhs:loaned, mineable), hidden advancements, texts, and the three
-              structures (template + start pool + structure + structure set + biome tag):
+              structures (three templates each + pools + structure + structure set + biome tag):
                 grotspel_schatgraven  the treasure hall (a 15x15 field)       Kapitein Schepsnuit
                 grotspel_glimwormen   the dark glimworm hall (glimpotjes)     Juf Glimmie
                 grotspel_lichtjes     the mushroom-lamp hall (7x7 lamps of 2) Meester Knipperlicht
-              Each template: the hall at the bottom (y 0 = its floor), DIEPTE blocks of the world's own rock, and the hut
-              on top (its floor at G = the ground); a Wolkenliftje in both floors, straight above each other.
+              (1.7.0 playtest) Each game is three templates (spelhal_bouw.py): the hall <struct> (the start piece: the hall
+              with RAND blocks of the world's rock round it and three extra entrances with a door), the shaft
+              <struct>_schacht (DIEPTE blocks of nothing) and the hut <struct>_hut on the ground (on foundations, a porch
+              of pink guh fences); a Wolkenliftje in both floors, straight above each other (sneak = down, jump = up).
+              Only the hall with its walls and the hut are protected (Java Spelhal).
   check       the halls fit the Java (SchatVeld.GROOTTE, Lichtjespuzzel.CEL, the scan range around the host), both
-              Wolkenliftjes have room above them, every guhs: block exists.
+              Wolkenliftjes have room above them, the entrances can be walked to, fences are connected, every guhs: block
+              exists (spelhal_bouw.check_gebouw).
 
 On its own (like the slices since 1.5): python tools/features/grotspellen.py from the project root. It writes only its own
 files (and adds to the tags), and merges its texts into nl_nl.json / en_us.json. English: tools/lang/en/c194_grotspellen.json.
@@ -32,7 +36,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if os.path.join(HERE, "..") not in sys.path:
     sys.path.insert(0, os.path.join(HERE, ".."))
 
-DIEPTE = 16          # the world's own rock between the hall's ceiling and the hut
+from features import spelhal_bouw as sh  # noqa: E402
+
+DIEPTE = 16          # the shaft: the world's own rock between the hall's ceiling and the hut
 LIFT = (None, 4)     # the hut and both Wolkenliftjes stand at z = 4 of every template (x per game)
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -535,11 +541,6 @@ RASTER = (5, 8, 7, 2)        # Lichtjespuzzel: the raster's low corner (x, z), l
 BIOMES = ["guhs:guh_fields", "guhs:knabbel_crumbs", "guhs:pink_puffs", "guhs:kaas_flats", "guhs:guh_meadows", "guhs:bloemenvallei"]
 
 
-def _g(H):
-    """The template y of the ground (the hut's floor) for a hall of height H."""
-    return H + 2 + DIEPTE
-
-
 def sign_nbt(lines):
     from make_structures import NbtList, Byte
     msgs = [json.dumps(l) if l else json.dumps("") for l in (list(lines) + [""] * 4)[:4]]
@@ -551,13 +552,14 @@ def sign_nbt(lines):
 
 
 SIGNS = {   # (game, where): [(Dutch, English)] (short lines)
-    ("schatgraven", "hut"): [("Schatgraven!", "Treasure Dig!"), ("Spring op het", "Jump on the"), ("wolkje: naar", "cloud: down to"), ("de schatzaal", "the hall")],
+    ("schatgraven", "hut"): [("Schatgraven!", "Treasure Dig!"), ("Sluip op het", "Sneak on the"), ("wolkje: naar", "cloud: down to"), ("de schatzaal", "the hall")],
     ("schatgraven", "zaal"): [("Kapitein", "Captain"), ("Schepsnuit", "Shovelsnout"), ("Graaf mee,", "Dig along,"), ("guhtje!", "guhtje!")],
-    ("glimwormvangen", "hut"): [("Glimworm-", "Glowworm"), ("vangen!", "Catching!"), ("Wolkje springen", "Jump the cloud,"), ("= naar beneden", "= go down")],
+    ("glimwormvangen", "hut"): [("Glimworm-", "Glowworm"), ("vangen!", "Catching!"), ("Sluip op het", "Sneak on the"), ("wolkje: omlaag", "cloud: go down")],
     ("glimwormvangen", "zaal"): [("Ssst!", "Shhh!"), ("De glimwormpjes", "The glowworms"), ("slapen bijna.", "are nearly"), ("Bijna.", "asleep. Nearly.")],
-    ("lichtjespuzzel", "hut"): [("Lichtjes-", "Little Lights"), ("puzzel!", "Puzzle!"), ("Spring op het", "Jump on the"), ("wolkje", "cloud")],
+    ("lichtjespuzzel", "hut"): [("Lichtjes-", "Little Lights"), ("puzzel!", "Puzzle!"), ("Sluip op het", "Sneak on the"), ("wolkje: omlaag", "cloud: go down")],
     ("lichtjespuzzel", "zaal"): [("Alle lampjes", "All lamps on"), ("aan = Meester", "= Master Blinky"), ("Knipperlicht", "can read his"), ("leest weer!", "paper again!")],
     ("alle", "terug"): [("Terug naar", "Back up?"), ("boven?", ""), ("Spring op het", "Jump on the"), ("wolkje!", "cloud!")],
+    ("alle", "lift"): [("Wolkenliftje:", "Cloud lift:"), ("sluipen = omlaag", "sneak = go down"), ("springen =", "jump ="), ("omhoog", "go up")],
 }
 
 
@@ -571,10 +573,16 @@ def _sign_lines(spel, waar, texts):
 
 
 def _hutje(S, mc, lx, lz, G, spel, texts):
-    """The entrance hut: 7x7 of cherry wood with a pink striped roof, a door on the north, the Wolkenliftje in the middle."""
+    """The entrance hut: 7x7 of cherry wood with a pink striped roof, a door on the north, the Wolkenliftje in the middle,
+    a porch of pink guh fences (their connections: spelhal_bouw.verbind)."""
+    for x in range(lx - 4, lx + 5):                      # room around it: the ground's bumps don't stick into the porch
+        for z in range(lz - 4, lz + 5):
+            for y in range(G + 1, G + 5):
+                S.set(x, y, z, mc("air"))
     for x in range(lx - 3, lx + 4):
         for z in range(lz - 3, lz + 4):
             S.set(x, G, z, mc("cherry_planks"))
+            S.set(x, G - 1, z, mc("stone_bricks"))
             for y in range(G + 1, G + 4):
                 rand = x in (lx - 3, lx + 3) or z in (lz - 3, lz + 3)
                 hoek = x in (lx - 3, lx + 3) and z in (lz - 3, lz + 3)
@@ -589,28 +597,28 @@ def _hutje(S, mc, lx, lz, G, spel, texts):
         for z in range(lz - 3, lz + 4):
             S.set(x, G + 4, z, mc("birch_planks") if x not in (lx - 3, lx + 3) and z not in (lz - 3, lz + 3) else mc("stripped_cherry_log"),
                   None if x not in (lx - 3, lx + 3) and z not in (lz - 3, lz + 3) else {"axis": "y"})
-    for k, y in enumerate(range(G + 5, G + 9)):          # the roof: a pyramid in pink and white stripes, a lantern on top
+    # the roof: a stepped pyramid in pink and white stripes that starts level with the ceiling (one block of eaves round
+    # it) and closes on top, a lantern on the very top
+    for k, y in enumerate(range(G + 4, G + 8)):
         r = 4 - k
         for x in range(lx - r, lx + r + 1):
             for z in range(lz - r, lz + r + 1):
                 if max(abs(x - lx), abs(z - lz)) == r or k == 3:
                     S.set(x, y, z, mc("pink_wool") if (x + z) % 2 == 0 else mc("white_wool"))
-    S.set(lx, G + 9, lz, mc("lantern"), {"hanging": "false", "waterlogged": "false"})
-    # the door (north) and a step
+    S.set(lx, G + 8, lz, mc("lantern"), {"hanging": "false", "waterlogged": "false"})
+    # the door (north), a porch with pink guh fences, a lantern post and the sign
     S.set(lx, G + 1, lz - 3, mc("cherry_door"), {"facing": "south", "half": "lower", "hinge": "left", "open": "false", "powered": "false"})
     S.set(lx, G + 2, lz - 3, mc("cherry_door"), {"facing": "south", "half": "upper", "hinge": "left", "open": "false", "powered": "false"})
-    S.set(lx - 2, G + 1, lz - 4, mc("cherry_fence"), {"east": "false", "north": "false", "south": "false", "west": "false", "waterlogged": "false"})
+    for x in (lx - 3, lx - 2, lx - 1, lx + 1, lx + 3):
+        S.set(x, G + 1, lz - 4, "guhs:guh_hekje_roze")
     S.set(lx - 2, G + 2, lz - 4, mc("lantern"), {"hanging": "false", "waterlogged": "false"})
-    # inside: the Wolkenliftje, a hanging lamp, the sign by the door (outside)
+    S.set(lx + 2, G + 1, lz - 4, mc("cherry_sign"), {"rotation": "8", "waterlogged": "false"}, sign_nbt(_sign_lines(spel, "hut", texts)))
+    # inside: the Wolkenliftje, a hanging lamp, a sign how it works
     S.set(lx, G, lz, "guhs:wolkenliftje")
     S.set(lx, G + 3, lz + 2, mc("lantern"), {"hanging": "true", "waterlogged": "false"})
-    S.set(lx + 2, G + 1, lz - 4, mc("cherry_sign"), {"rotation": "8", "waterlogged": "false"}, sign_nbt(_sign_lines(spel, "hut", texts)))
     S.set(lx + 2, G + 1, lz + 2, "guhs:gouden_kaasje" if spel == "schatgraven" else "guhs:glimpotje" if spel == "glimwormvangen"
           else "guhs:paddenstoellampje", {"facing": "south"} if spel == "schatgraven" else {"licht": "4"} if spel == "glimwormvangen" else None)
-    # the jigsaw the structure is centred on (in the hut's floor)
-    S.set(lx - 2, G, lz - 2, mc("jigsaw"), {"orientation": "up_north"},
-          {"id": "minecraft:jigsaw", "name": f"guhs:{SPELEN[spel][0]}_midden", "target": "minecraft:empty", "pool": "minecraft:empty",
-           "joint": "rollable", "final_state": "minecraft:cherry_planks", "selection_priority": 0, "placement_priority": 0})
+    S.set(lx - 1, G + 2, lz + 2, mc("cherry_wall_sign"), {"facing": "north", "waterlogged": "false"}, sign_nbt(_sign_lines("alle", "lift", texts)))
 
 
 def _zaal(S, mc, X, Z, H, muur, vloer, plafond, rng, muur2=None):
@@ -628,11 +636,51 @@ def _zaal(S, mc, X, Z, H, muur, vloer, plafond, rng, muur2=None):
 
 
 def _host(S, ms, spel, texts, mc):
-    _s, X, Z, H, lx, (nx, nz), kind, _salt = SPELEN[spel]
+    struct, X, Z, H, lx, (nx, nz), kind, _salt = SPELEN[spel]
     S.entity(nx + 0.5, 1.0, nz + 0.5, {"id": "guhs:guh_npc", "Kind": kind, "PersistenceRequired": ms.Byte(1), "Rotation": ms.floats(0.0, 0.0)})
     S.set(nx + 2, 1, nz - 2, mc("cherry_sign"), {"rotation": "0", "waterlogged": "false"}, sign_nbt(_sign_lines(spel, "zaal", texts)))
     S.set(lx, 0, LIFT[1], "guhs:wolkenliftje")
     S.set(lx - 1, 1, LIFT[1] - 2, mc("cherry_sign"), {"rotation": "0", "waterlogged": "false"}, sign_nbt(_sign_lines("alle", "terug", texts)))
+    # the lift jigsaw in the ceiling, straight above the Wolkenliftje (the shaft and the hut hang on it)
+    sh.jigsaw(S, lx, H + 1, LIFT[1], "up", f"guhs:{struct}_lift", f"guhs:{struct}_schacht_onder", f"guhs:{struct}/schacht", S.get(lx, H + 1, LIFT[1]))
+
+
+# the extra entrances of every hall: (x, z, the way out) of the door in the wall (standing at y 1)
+INGANGEN = {"schatgraven": [(0, 4, "west"), ("X", 4, "east"), (11, "Z", "south")],
+            "glimwormvangen": [(0, 4, "west"), ("X", 4, "east"), (13, "Z", "south")],
+            "lichtjespuzzel": [(0, 5, "west"), ("X", 5, "east"), (11, "Z", "south")]}
+NAMEN = {"schatgraven": (("Schatgraven", "Treasure Dig"), ("bij Schepsnuit", "Shovelsnout's")),
+         "glimwormvangen": (("Glimwormvangen", "Glowworms"), ("bij Juf Glimmie", "Miss Glimmy's")),
+         "lichtjespuzzel": (("Lichtjespuzzel", "Lights Puzzle"), ("bij Knipperlicht", "Master Blinky's"))}
+
+
+def _af(h, ms, S, spel, texts, wand):
+    """The finished hall template: RAND blocks of room on every side (the world's rock) and the extra entrances. Returns
+    (template, info)."""
+    struct, X, Z, H, lx, (nx, nz), _k, _salt = SPELEN[spel]
+    R = sh.RAND
+    T = sh.verschuif(ms, S, R, 0, R, (X + 2 * R, H + 2, Z + 2 * R))
+    info = {"hal": (R, 0, R, R + X - 1, H + 1, R + Z - 1), "npc": (nx + R, 1, nz + R), "lift": (lx + R, 0, LIFT[1] + R), "ingangen": []}
+    naam, wie = NAMEN[spel]
+    for (x, z, richting) in INGANGEN[spel]:
+        x = X - 1 if x == "X" else x
+        z = Z - 1 if z == "Z" else z
+        dx, dz = sh.D[richting]
+        assert S.get(x - dx, 1, z - dz) == "minecraft:air" and S.get(x - dx, 2, z - dz) == "minecraft:air", f"{spel}: the door {x, z} is blocked"
+        info["ingangen"].append(sh.ingang(ms, T, x + R, 1, z + R, richting, naam=naam, wie=wie, texts=texts, prefix=f"grotspel.{spel}_{richting}",
+                                          vloer="guhs:viltsteen_tegels", wand=wand, plafond="guhs:gepolijste_viltsteen",
+                                          deur="minecraft:cherry_door", hout="cherry"))
+    return T, info
+
+
+def hut_template(ms, spel, texts):
+    """The hut on the surface: 9 x 9, the Wolkenliftje over the down jigsaw in the middle, on spelhal_bouw foundations."""
+    mc = ms.mc
+    struct = SPELEN[spel][0]
+    S = ms.Structure((9, 10, 9))
+    _hutje(S, mc, 4, 4, 1, spel, texts)
+    sh.jigsaw(S, 4, 0, 4, "down", f"guhs:{struct}_hut_onder", "", "minecraft:empty", "minecraft:stone_bricks")
+    return sh.hut(ms, S, vloer_y=1, fundering="minecraft:stone_bricks")
 
 
 def zaal_schatgraven(h, texts):
@@ -640,11 +688,11 @@ def zaal_schatgraven(h, texts):
     mc = ms.mc
     spel = "schatgraven"
     _s, X, Z, H, lx, _n, _k, _salt = SPELEN[spel]
-    G = _g(H)
-    S = ms.Structure((X, G + 10, Z))
+    S = ms.Structure((X, H + 2, Z))
     rng = random.Random(1770)
+    # (the ceiling is not plain viltsteen: the cave decoration hangs glitterrank from viltsteen ceilings)
     _zaal(S, mc, X, Z, H, "guhs:viltsteen", lambda x, z: "guhs:viltsteen_tegels",
-          lambda x, z: "guhs:guh_kristal_lamp" if x % 6 == 3 and z % 6 == 3 else "guhs:viltsteen", rng, muur2="guhs:pluiswolblok")
+          lambda x, z: "guhs:guh_kristal_lamp" if x % 6 == 3 and z % 6 == 3 else "guhs:gepolijste_viltsteen", rng, muur2="guhs:pluiswolblok")
     vx, vz, n = VELD
     # the field: pluiswol with clusters of viltkiezel
     kiezels = [(rng.randrange(n), rng.randrange(n)) for _ in range(6)]
@@ -667,8 +715,7 @@ def zaal_schatgraven(h, texts):
         for x in (0, X - 1):
             S.set(x, 3, z, "guhs:guh_kristal_lamp")
     _host(S, ms, spel, texts, mc)
-    _hutje(S, mc, lx, LIFT[1], G, spel, texts)
-    return S, G
+    return _af(h, ms, S, spel, texts, "guhs:viltsteen_bakstenen")
 
 
 def zaal_glimwormen(h, texts):
@@ -676,11 +723,10 @@ def zaal_glimwormen(h, texts):
     mc = ms.mc
     spel = "glimwormvangen"
     _s, X, Z, H, lx, _n, _k, _salt = SPELEN[spel]
-    G = _g(H)
-    S = ms.Structure((X, G + 10, Z))
+    S = ms.Structure((X, H + 2, Z))
     rng = random.Random(1771)
     sterren = {(rng.randrange(2, X - 2), rng.randrange(2, Z - 2)) for _ in range(14)}
-    _zaal(S, mc, X, Z, H, "guhs:knuffelsteen", lambda x, z: "guhs:nachtvilt" if (x * 7 + z * 3) % 11 else "guhs:viltsteen",
+    _zaal(S, mc, X, Z, H, "guhs:knuffelsteen", lambda x, z: "guhs:nachtvilt" if (x * 7 + z * 3) % 11 else "guhs:viltsteen_tegels",
           lambda x, z: "guhs:glimmos" if (x, z) in sterren else "guhs:nachtvilt", rng, muur2="guhs:nachtvilt")
     # glimpotjes on little posts along the walls (they also mark the hall for the game)
     for x in range(1, X - 1):
@@ -688,7 +734,7 @@ def zaal_glimwormen(h, texts):
             rand = x in (1, X - 2) or z in (1, Z - 2)
             if rand and ((x + z) % 4 == 0) and not (abs(x - lx) <= 1 and z <= 6):
                 for y in (1, 2):
-                    S.set(x, y, z, mc("cherry_fence"), {"east": "false", "north": "false", "south": "false", "west": "false", "waterlogged": "false"})
+                    S.set(x, y, z, mc("cherry_fence"))
                 S.set(x, 3, z, "guhs:glimpotje", {"licht": "1"})
     # glimplanten all over the floor (the hiders' spots)
     geplant = 0
@@ -698,8 +744,7 @@ def zaal_glimwormen(h, texts):
             S.set(x, 1, z, "guhs:glimplant")
             geplant += 1
     _host(S, ms, spel, texts, mc)
-    _hutje(S, mc, lx, LIFT[1], G, spel, texts)
-    return S, G
+    return _af(h, ms, S, spel, texts, "guhs:gladde_knuffelsteen")
 
 
 def zaal_lichtjes(h, texts):
@@ -707,8 +752,7 @@ def zaal_lichtjes(h, texts):
     mc = ms.mc
     spel = "lichtjespuzzel"
     _s, X, Z, H, lx, _n, _k, _salt = SPELEN[spel]
-    G = _g(H)
-    S = ms.Structure((X, G + 10, Z))
+    S = ms.Structure((X, H + 2, Z))
     rng = random.Random(1772)
     _zaal(S, mc, X, Z, H, "guhs:steeltjessteen", lambda x, z: "guhs:viltsteen_tegels",
           lambda x, z: "guhs:paddenstoelsteen" if (x // 3 + z // 3) % 3 == 0 else "guhs:steeltjessteen", rng, muur2="guhs:paddenstoelsteen")
@@ -723,28 +767,15 @@ def zaal_lichtjes(h, texts):
     for (x, z) in ((3, Z - 2), (X - 4, Z - 2), (3, 2), (X - 4, 2)):
         S.set(x, 1, z, "guhs:paddenstoelkrukje", {"facing": "south"})
     _host(S, ms, spel, texts, mc)
-    _hutje(S, mc, lx, LIFT[1], G, spel, texts)
-    return S, G
+    return _af(h, ms, S, spel, texts, "guhs:steeltjessteen")
 
 
-def structure_files(h, spel, G):
+def structure_files(h, spel, hal):
+    """Hall + shaft + hut (spelhal_bouw.worldgen): the hut stands on the ground straight above the hall's lift."""
     struct, X, Z, H, lx, _n, _k, salt = SPELEN[spel]
-    D = h.D
-    tag = f"#guhs:has_structure/{struct}"
-    spawn = {"monster": {"bounding_box": "piece", "spawns": []}, "ambient": {"bounding_box": "piece", "spawns": []}}
-    h.w(f"{D}/worldgen/structure/{struct}.json", {
-        "type": "guhs:flat_jigsaw", "biomes": tag, "step": "fluid_springs", "spawn_overrides": spawn, "terrain_adaptation": "beard_box",
-        "check_radius": 16, "max_height_difference": 10, "keep_clear": 24,
-        "jigsaw": {"type": "minecraft:jigsaw", "biomes": tag, "step": "fluid_springs", "spawn_overrides": spawn, "terrain_adaptation": "beard_box",
-                   "start_pool": f"guhs:{struct}/start", "size": 1, "start_height": {"absolute": 0},
-                   "project_start_to_heightmap": "WORLD_SURFACE_WG", "max_distance_from_center": 64, "use_expansion_hack": False,
-                   "start_jigsaw_name": f"guhs:{struct}_midden"}})
-    h.w(f"{D}/worldgen/template_pool/{struct}/start.json", {"fallback": "minecraft:empty", "elements": [{"weight": 1, "element": {
-        "element_type": "guhs:grond_single_pool_element", "location": f"guhs:{struct}", "projection": "rigid", "processors": "minecraft:empty",
-        "ground_level_delta": G + 1}}]})
-    h.w(f"{D}/worldgen/structure_set/{struct}.json", {"structures": [{"structure": f"guhs:{struct}", "weight": 1}],
-        "placement": {"type": "minecraft:random_spread", "spacing": 32, "separation": 12, "salt": salt}})
-    h.w(f"{D}/tags/worldgen/biome/has_structure/{struct}.json", {"values": BIOMES})
+    sh.worldgen(h, struct, struct, templates={"start": struct, "schacht": f"{struct}_schacht", "hut": f"{struct}_hut"},
+                hal_hoogte=hal.size[1], schacht_hoogte=DIEPTE, biomes=BIOMES, salt=salt, spacing=32, separation=12, keep_clear=32,
+                check_radius=10, max_height_difference=8, step="fluid_springs")
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -759,16 +790,12 @@ def _const(text, name):
     return m.group(1).strip()
 
 
-def check(spel, S, G, A):
-    problems = []
+def check(spel, S, info, hut, A):
+    """The game's own checks (the field, the raster, the jars against the Java) and spelhal_bouw.check_gebouw (the lifts,
+    the protected box, the extra entrances, fences, blockstates)."""
     struct, X, Z, H, lx, (nx, nz), kind, _salt = SPELEN[spel]
-    lz = LIFT[1]
-    for y, waar in ((0, "hall"), (G, "hut")):
-        if S.get(lx, y, lz) != "guhs:wolkenliftje":
-            problems.append(f"{spel}: no Wolkenliftje in the {waar} floor")
-        for dy in (1, 2):
-            if S.get(lx, y + dy, lz) not in (None, "minecraft:air"):
-                problems.append(f"{spel}: no room above the {waar} Wolkenliftje ({S.get(lx, y + dy, lz)})")
+    problems = sh.check_gebouw(spel, S, info, hut, A)
+    nx, ny, nz = info["npc"]
     if S.get(nx, 0, nz) in (None, "minecraft:air") or S.get(nx, 1, nz) != "minecraft:air" or S.get(nx, 2, nz) != "minecraft:air":
         problems.append(f"{spel}: the host has no floor or no room")
     gs = _java("GrotSpel.java")
@@ -804,10 +831,6 @@ def check(spel, S, G, A):
             problems.append(f"glimwormvangen: only {n} glimpotjes")
         if bereik("guhs:glimpotje") or bereik("guhs:glimplant"):
             problems.append("glimwormvangen: jars or plants out of the host's scan range")
-    have = {f[:-5] for f in os.listdir(os.path.join(A, "blockstates"))}
-    missing = sorted({name for (name, _p, _n) in S.blocks.values() if name.startswith("guhs:") and name[5:] not in have})
-    if missing:
-        problems.append(f"{spel}: blocks without a blockstate: {missing}")
     return problems
 
 
@@ -862,8 +885,8 @@ TEKSTEN = {  # key: (Dutch, English)
     "gui.guhs.kleding.prijs.munt.lampjesmunten": ("%s lampjesmunten", "%s lamp coins"),
     # the Minigames tab, highscores, the boards, the structures
     "gui.guhs.spelgroep.schatgraven": ("Schatgraven", "Treasure Dig"),
-    "gui.guhs.spelgroep.schatgraven.waar": ("Diep onder een roze hutje in de Guhmension: spring op het wolkenliftje, naar Kapitein Schepsnuit.",
-                                            "Deep under a pink hut in the Guhmension: jump on the cloud lift, down to Captain Shovelsnout."),
+    "gui.guhs.spelgroep.schatgraven.waar": ("Diep onder een roze hutje in de Guhmension: sluip op het wolkenliftje, naar Kapitein Schepsnuit.",
+                                            "Deep under a pink hut in the Guhmension: sneak on the cloud lift, down to Captain Shovelsnout."),
     "gui.guhs.spelgroep.glimwormvangen": ("Glimwormvangen", "Glowworm Catching"),
     "gui.guhs.spelgroep.glimwormvangen.waar": ("Diep onder een roze hutje in de Guhmension: de donkere zaal van Juf Glimmie.",
                                                "Deep under a pink hut in the Guhmension: Miss Glimmy's dark hall."),
@@ -1046,11 +1069,19 @@ def build(h):
     models(h)
     extra = {}
     problems = []
+    import make_structures as ms
     for spel, maak in (("schatgraven", zaal_schatgraven), ("glimwormvangen", zaal_glimwormen), ("lichtjespuzzel", zaal_lichtjes)):
-        S, G = maak(h, extra)
-        structure_files(h, spel, G)
-        problems += check(spel, S, G, h.A)
-        S.save(SPELEN[spel][0])
+        struct = SPELEN[spel][0]
+        S, info = maak(h, extra)
+        hut = hut_template(ms, spel, extra)
+        for t, naam in ((S, struct), (hut, f"{struct}_hut")):
+            sh.verbind(t, h.A)
+            problems += sh.check_verbonden(t, h.A, naam)
+        structure_files(h, spel, S)
+        problems += check(spel, S, info, hut, h.A)
+        S.save(struct)
+        hut.save(f"{struct}_hut")
+        sh.schacht(ms, struct, struct, DIEPTE).save(f"{struct}_schacht")
     texts(h, extra)
     if problems:
         raise AssertionError("grotspellen self-check:\n  " + "\n  ".join(problems))

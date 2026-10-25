@@ -364,8 +364,10 @@ TEKST = {
     # --- the cave minigames ---
     ("systemen/grot-minigames", "Hoe kom je er?"): (
         "How do you get there?",
-        "Every game hall lies deep under a pink hut somewhere in the Guhmension, about every 500 blocks. Jump on the Cloud Lift in the "
-        "hut and you float down; going back up works the same way. The Super Compass points to the nearest one."),
+        "Every game hall lies deep under a pink hut somewhere in the Guhmension, about every 500 blocks. Stand on the Cloud Lift in the "
+        "hut and sneak: you float down; jumping on the lift in the hall takes you back up. Every hall also has two or three extra "
+        "entrances: a little tunnel with a door and an \"Entrance\" sign, so if you dig towards a hall from a cave you get in too. "
+        "Only the hall itself is protected, not the rock around it. The Super Compass points to the nearest one."),
     ("systemen/grot-minigames", "Munten en winkeltjes"): (
         "Coins and shops",
         "Every game has its own coin: treasure coins, glimmer coins, lamp coins, ore tickets and pin buttons. The better you play, "

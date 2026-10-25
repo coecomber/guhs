@@ -454,4 +454,41 @@ public class GrotSpellenGameTests {
             helper.succeed();
         });
     }
+
+    // --- 1.7.0 playtest: only the hall is protected, the extra entrances, the hut on top, connected fences ----------------
+    @GuhTest(template = "grotspel_schatgraven", timeoutTicks = 100)
+    public static void grotSchatgravenIngangen(GameTestHelper helper) {
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.spelhalIngangen(helper, "grotspel_schatgraven", GuhNpcEntity.Kind.SCHATGRAAFGUH);
+        helper.succeed();
+    }
+
+    @GuhTest(template = "grotspel_glimwormen", timeoutTicks = 100)
+    public static void grotGlimwormenIngangen(GameTestHelper helper) {
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.spelhalIngangen(helper, "grotspel_glimwormen", GuhNpcEntity.Kind.GLIMWORMGUH);
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.hekjesVerbonden(helper, "grotspel_glimwormen");
+        helper.succeed();
+    }
+
+    @GuhTest(template = "grotspel_lichtjes", timeoutTicks = 100)
+    public static void grotLichtjesIngangen(GameTestHelper helper) {
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.spelhalIngangen(helper, "grotspel_lichtjes", GuhNpcEntity.Kind.LAMPJESGUH);
+        helper.succeed();
+    }
+
+    @GuhTest(template = "grotspel_schatgraven_hut")
+    public static void grotHutHekjes(GameTestHelper helper) {
+        nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.hekjesVerbonden(helper, "grotspel_schatgraven_hut");
+        helper.succeed();
+    }
+
+    /** Hall + shaft + hut put together by their jigsaws: the hut's Wolkenliftje straight above the hall's, both ways. */
+    @GuhTest(template = EMPTY, batch = "grotspellen_gebouw", timeoutTicks = 200)
+    public static void grotGebouwen(GameTestHelper helper) {
+        for (GrotSpel.Soort soort : GrotSpel.Soort.values()) {
+            GuhNpcEntity.Kind kind = soort == GrotSpel.Soort.SCHATGRAVEN ? GuhNpcEntity.Kind.SCHATGRAAFGUH
+                    : soort == GrotSpel.Soort.GLIMWORMVANGEN ? GuhNpcEntity.Kind.GLIMWORMGUH : GuhNpcEntity.Kind.LAMPJESGUH;
+            nl.juiced.guhs.feature.mijnspellen.MijnspellenGameTests.gebouw(helper, soort.structuur, soort.structuur, kind);
+        }
+        helper.succeed();
+    }
 }
