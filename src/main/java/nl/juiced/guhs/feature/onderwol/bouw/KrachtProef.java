@@ -110,6 +110,84 @@ public final class KrachtProef {
         });
     }
 
+    // =================================================================================================================
+    // (ronde 45-47) the showcase setups: lamps, levers, switches, chests
+    // =================================================================================================================
+
+    /** The Vadslampen among the machines found. */
+    public static List<BlockPos> lampen(GameTestHelper helper, Gevonden g) {
+        List<BlockPos> uit = new ArrayList<>();
+        for (BlockPos m : g.machines()) {
+            if (helper.getLevel().getBlockEntity(m) instanceof nl.juiced.guhs.feature.techbeurs.VadslampBlockEntity) {
+                uit.add(m);
+            }
+        }
+        return uit;
+    }
+
+    /** Every Vadslamp burns: it has vadskracht and keeps its invisible lights around it. */
+    public static void lampenBranden(GameTestHelper helper, Gevonden g, int minstens) {
+        List<BlockPos> lampen = lampen(helper, g);
+        helper.assertTrue(lampen.size() >= minstens, "at least " + minstens + " Vadslampen, found " + lampen.size());
+        for (BlockPos l : lampen) {
+            var be = (nl.juiced.guhs.feature.techbeurs.VadslampBlockEntity) helper.getLevel().getBlockEntity(l);
+            helper.assertTrue(be != null && be.heeftKracht() && !be.lichten().isEmpty(), "the Vadslamp at " + l + " burns and lights around it");
+        }
+    }
+
+    /** The levers right next to these wheel blocks (a building's guh takes a break while its lever is on). */
+    public static List<BlockPos> hendels(GameTestHelper helper, List<BlockPos> wielen) {
+        ServerLevel level = helper.getLevel();
+        List<BlockPos> uit = new ArrayList<>();
+        for (BlockPos w : wielen) {
+            for (Direction d : Direction.Plane.HORIZONTAL) {
+                BlockPos h = w.relative(d).immutable();
+                if (level.getBlockState(h).is(Blocks.LEVER) && !uit.contains(h)) {
+                    uit.add(h);
+                }
+            }
+        }
+        return uit;
+    }
+
+    /** Flips the lever at this (absolute) spot, as a player's click does. */
+    public static void trek(ServerLevel level, BlockPos h) {
+        BlockState state = level.getBlockState(h);
+        ((net.minecraft.world.level.block.LeverBlock) state.getBlock()).pull(state, level, h, null);
+    }
+
+    /** The Vadsschakelaars in the test's bounds (absolute). */
+    public static List<BlockPos> schakelaars(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AABB box = helper.getBounds();
+        List<BlockPos> uit = new ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed((int) Math.floor(box.minX), (int) Math.floor(box.minY), (int) Math.floor(box.minZ),
+                (int) Math.ceil(box.maxX) - 1, (int) Math.ceil(box.maxY) - 1, (int) Math.ceil(box.maxZ) - 1)) {
+            if (level.getBlockState(p).getBlock() instanceof nl.juiced.guhs.feature.techbeurs.VadsschakelaarBlock) {
+                uit.add(p.immutable());
+            }
+        }
+        return uit;
+    }
+
+    /** How many of this item lie in the chests in the test's bounds. */
+    public static int inKisten(GameTestHelper helper, net.minecraft.world.item.Item item) {
+        ServerLevel level = helper.getLevel();
+        AABB box = helper.getBounds();
+        int n = 0;
+        for (BlockPos p : BlockPos.betweenClosed((int) Math.floor(box.minX), (int) Math.floor(box.minY), (int) Math.floor(box.minZ),
+                (int) Math.ceil(box.maxX) - 1, (int) Math.ceil(box.maxY) - 1, (int) Math.ceil(box.maxZ) - 1)) {
+            if (level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity kist && kist.getLootTable() == null) {
+                for (int i = 0; i < kist.getContainerSize(); i++) {
+                    if (kist.getItem(i).is(item)) {
+                        n += kist.getItem(i).getCount();
+                    }
+                }
+            }
+        }
+        return n;
+    }
+
     /** The wheel and its 8 parts: each part says this wheel is its wheel (also after the building was turned). */
     public static void heel(GameTestHelper helper, BlockPos wiel) {
         ServerLevel level = helper.getLevel();

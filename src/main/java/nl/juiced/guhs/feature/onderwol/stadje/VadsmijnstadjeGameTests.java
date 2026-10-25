@@ -251,18 +251,117 @@ public class VadsmijnstadjeGameTests {
     }
 
     /**
-     * 1.7.0 playtest: the Guhrad-centrale really runs in the placed template: the wheel stands whole, its guh runs, its
-     * net gives vadskracht (feature/onderwol/bouw/KrachtProef).
+     * 1.7.0 (ronde 45-47): the town's vadskracht really runs in the placed template (feature/onderwol/bouw/KrachtProef):
+     * three Guhraden whole and running (two in the centrale, one at the ore line), every machine awake: the 19 Vadslampen
+     * burn and light around them, the Glasslijperij grinds and bakes, and the Ertslijn brings bars (the chest cart's raw ore,
+     * through the hopper and the Guhoven) and zand (the Vadsmolen) into the Mijnwerkerskist.
      */
-    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 700)
     public static void vadsmijnstadjeCentraleDraait(GameTestHelper helper) {
-        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 1, 0, 0, g -> { });
+        fabriek(helper);
     }
 
-    /** The same, with the town placed turned (as the jigsaw placement does 3 times in 4): the wheel turns with it. */
-    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 200, rotationSteps = 1)
+    /** The same, with the town placed turned (as the jigsaw placement does 3 times in 4): it all turns with it. */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 700, rotationSteps = 1)
     public static void vadsmijnstadjeCentraleDraaitGedraaid(GameTestHelper helper) {
-        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 1, 0, 0, g -> { });
+        fabriek(helper);
+    }
+
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 700, rotationSteps = 2)
+    public static void vadsmijnstadjeFabriekGedraaid2(GameTestHelper helper) {
+        fabriek(helper);
+    }
+
+    private static void fabriek(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 3, 23, 0, g -> {
+            nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.lampenBranden(helper, g, 19);
+            long molens = g.machines().stream().filter(m -> level.getBlockEntity(m) instanceof nl.juiced.guhs.feature.techmachine.VadsmolenBlockEntity).count();
+            helper.assertTrue(molens == 2 && g.ovens().size() == 2, "two Vadsmolens and two Guhovens: " + molens + ", " + g.ovens().size());
+            for (BlockPos o : g.ovens()) {
+                var oven = (nl.juiced.guhs.feature.guhoven.GuhOvenBlockEntity) level.getBlockEntity(o);
+                helper.assertTrue(level.getBlockState(o).getValue(net.minecraft.world.level.block.AbstractFurnaceBlock.LIT)
+                        || !oven.getItem(2).isEmpty(), "the Guhoven at " + o + " bakes");
+            }
+            int baren = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.inKisten(helper, net.minecraft.world.item.Items.IRON_INGOT)
+                    + nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.inKisten(helper, net.minecraft.world.item.Items.COPPER_INGOT)
+                    + nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.inKisten(helper, net.minecraft.world.item.Items.GOLD_INGOT);
+            helper.assertTrue(baren > 0, "bars from the cart's ore in the Mijnwerkerskist (cart -> hopper -> Guhoven -> hopper -> chest)");
+            helper.assertTrue(nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.inKisten(helper, net.minecraft.world.item.Items.SAND) > 0,
+                    "zand from the Vadsmolen in the Mijnwerkerskist");
+        });
+    }
+
+    /** The two wheels of the centrale (the ones nearest the middle of the town), nearest first. */
+    private static List<BlockPos> centrale(GameTestHelper helper, nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.Gevonden g) {
+        net.minecraft.world.phys.Vec3 midden = helper.getBounds().getCenter();
+        List<BlockPos> wielen = new ArrayList<>(g.wielen());
+        wielen.sort(java.util.Comparator.comparingDouble(w -> w.getCenter().distanceToSqr(midden.x, w.getY() + 0.5, midden.z)));
+        return wielen.subList(0, 2);
+    }
+
+    /**
+     * The levers and the switch of the centrale: a lever in front of either wheel gives that guh a break, and then the net
+     * (28 VK of lamps and glass works) has too little vadskracht and stands still: every lamp of the town goes out, the ore
+     * line (its own wheel) runs on. Lever back: all burns again. The Vadsschakelaar by the centrale cuts the lamps' line:
+     * the lamps go out, the wheels run on.
+     */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 900)
+    public static void vadsmijnstadjeHendelsEnSchakelaar(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var g = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.zoek(helper);
+        List<BlockPos> centrale = centrale(helper, g);
+        BlockPos ertsrad = g.wielen().stream().filter(w -> !centrale.contains(w)).findFirst().orElseThrow();
+        List<BlockPos> hendels = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.hendels(helper, centrale);
+        helper.assertTrue(hendels.size() == 2, "a lever in front of each centrale wheel: " + hendels);
+        helper.assertTrue(nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.hendels(helper, List.of(ertsrad)).size() == 1, "and one at the ore line");
+        List<BlockPos> lampen = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.lampen(helper, g);
+        List<BlockPos> dorpslampen = lampen.stream().filter(l -> l.distManhattan(ertsrad) > 3).toList();
+        helper.assertTrue(dorpslampen.size() == 18, "18 lamps on the centrale: " + dorpslampen.size());
+        BlockPos midden = BlockPos.containing(helper.getBounds().getCenter());
+        BlockPos schakelaar = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.schakelaars(helper).stream()
+                .min(java.util.Comparator.comparingInt(p -> p.distManhattan(midden.atY(p.getY())))).orElseThrow();
+        int[] fase = {0};
+        long[] sinds = {0};
+        helper.succeedWhen(() -> {
+            long nu = helper.getTick();
+            boolean lampenAan = dorpslampen.stream().allMatch(l -> ((nl.juiced.guhs.feature.vadskracht.MachineBlockEntity) level.getBlockEntity(l)).heeftKracht());
+            boolean lampenUit = dorpslampen.stream().noneMatch(l -> ((nl.juiced.guhs.feature.vadskracht.MachineBlockEntity) level.getBlockEntity(l)).heeftKracht());
+            switch (fase[0]) {
+                case 0 -> {   // everything burns: one guh takes a break
+                    helper.assertTrue(lampenAan, "all town lamps burn first");
+                    nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.trek(level, hendels.get(0));
+                    fase[0] = 1;
+                    sinds[0] = nu;
+                    helper.fail("lever pulled");
+                }
+                case 1 -> {   // too little for the net: every lamp out; the ore line runs on
+                    helper.assertTrue(lampenUit, "one guh's break: too little vadskracht, every town lamp out");
+                    helper.assertTrue(!nl.juiced.guhs.feature.vadskracht.VadsKracht.net(level, centrale.get(1)).draait()
+                            && !nl.juiced.guhs.feature.vadskracht.VadsKracht.net(level, centrale.get(0)).draait(), "the centrale's net stands still");
+                    helper.assertTrue(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(level, ertsrad).draait(), "the ore line runs on");
+                    nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.trek(level, hendels.get(0));
+                    fase[0] = 2;
+                    helper.fail("lever back");
+                }
+                case 2 -> {   // all burns again: now the switch
+                    helper.assertTrue(lampenAan, "the lamps burn again");
+                    nl.juiced.guhs.feature.techbeurs.VadsschakelaarBlock.zet(level, schakelaar, false);
+                    fase[0] = 3;
+                    helper.fail("switch off");
+                }
+                case 3 -> {   // the line cut: lamps out, the wheels run
+                    helper.assertTrue(lampenUit, "the switch cuts the lamps' line: every town lamp out");
+                    for (BlockPos w : centrale) {
+                        helper.assertTrue(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(level, w).draait(), "the wheel at " + w + " runs on");
+                    }
+                    nl.juiced.guhs.feature.techbeurs.VadsschakelaarBlock.zet(level, schakelaar, true);
+                    fase[0] = 4;
+                    helper.fail("switch on");
+                }
+                default -> helper.assertTrue(lampenAan, "and on again");
+            }
+        });
     }
 
     /**
@@ -273,8 +372,8 @@ public class VadsmijnstadjeGameTests {
     public static void vadsmijnstadjeCentraleGuhBlijft(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var g = nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.zoek(helper);
-        helper.assertTrue(g.wielen().size() == 1, "one Guhrad");
-        BlockPos wiel = g.wielen().get(0);
+        helper.assertTrue(g.wielen().size() == 3, "three Guhraden (two in the centrale, one at the ore line)");
+        BlockPos wiel = centrale(helper, g).get(0);
         var be = (nl.juiced.guhs.block.entity.GuhWheelBlockEntity) level.getBlockEntity(wiel);
         helper.assertTrue(be != null && be.isVast() && be.hasGuh() && be.getGuhOwner() == null, "the town's guh runs in it, without an owner");
         net.minecraft.world.phys.AABB rond = new net.minecraft.world.phys.AABB(wiel).inflate(3);
