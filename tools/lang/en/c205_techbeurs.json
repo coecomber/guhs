@@ -1,0 +1,7 @@
+{
+  "block.guhs.vadslamp": "Chonk Lamp",
+  "block.guhs.vadslamp.lore": "On 1 chonk power: light level 15, and it lights up a much bigger area than a normal lamp",
+  "block.guhs.vadslamp_licht": "Chonk Lamp Light",
+  "ftb.guhs_techniek.q.tech_quests_vadslamp.desc": "The &dChonk Lamp&r (a lantern, two Guh Wire and two glowstone dust) burns on 1 chonk power: it wakes up, looks happy and gives the brightest light there is. And it shines much further than a normal lamp: up to about 6 blocks around it, it puts down invisible extra light. One lamp lights up a whole cave. Without chonk power it goes back to sleep.",
+  "ftb.guhs_techniek.q.tech_quests_vadslamp.title": "Light with a Little Snoot"
+}

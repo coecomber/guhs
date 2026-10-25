@@ -30704,5 +30704,8 @@
   "sign.guhs.kegelen.north_ingang2_0": "Through the door",
   "sign.guhs.kegelen.north_ingang2_1": "and straight on!",
   "sign.guhs.kegelen.north_ingang2_2": "You may dig",
-  "sign.guhs.kegelen.north_ingang2_3": "around here."
+  "sign.guhs.kegelen.north_ingang2_3": "around here.",
+  "block.guhs.vadslamp": "Chonk Lamp",
+  "block.guhs.vadslamp.lore": "On 1 chonk power: light level 15, and it lights up a much bigger area than a normal lamp",
+  "block.guhs.vadslamp_licht": "Chonk Lamp Light"
 }

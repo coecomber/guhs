@@ -1830,3 +1830,21 @@ UITLEG["glimplant"] = dict(
        "glowworms hide in it.",
     meer=["minigames/glimwormvangen"])
 LINK["golfbaan_ijsvilt"] = ["minigames/golf"]
+UITLEG["vadslamp"] = dict(
+    nl="Een lantaarntje met een guh-gezicht dat op 1 vadskracht brandt. Hang hem aan je Guhdraad (of zet hem pal naast een Guhrad of "
+       "een machine): krijgt hij vadskracht, dan wordt hij wakker, kijkt blij en geeft lichtniveau 15. En hij schijnt veel verder "
+       "dan een gewone lamp: tot zo'n 6 blokken om hem heen zet hij onzichtbaar extra licht in de lucht, dus één Vadslamp verlicht "
+       "een hele kamer of grot.\n"
+       "\n"
+       "- Zonder vadskracht slaapt hij en is hij donker; het extra licht verdwijnt dan vanzelf.\n"
+       "- Het extra licht gaat niet door muren heen en zit nooit in de weg: je kunt er gewoon blokken in zetten.\n"
+       "- Recept: een lantaarn, twee Guhdraad en twee gloeisteenstof.",
+    en="A little lantern with a guh face that burns on 1 chonk power. Hook it up to your Guh Wire (or put it right next to a Guh "
+       "Wheel or a machine): when it gets chonk power it wakes up, looks happy and gives light level 15. And it shines much further "
+       "than a normal lamp: up to about 6 blocks around it, it puts invisible extra light in the air, so one Chonk Lamp lights up a "
+       "whole room or cave.\n"
+       "\n"
+       "- Without chonk power it sleeps and stays dark; the extra light then goes away by itself.\n"
+       "- The extra light doesn't go through walls and is never in the way: you can just put blocks in it.\n"
+       "- Recipe: a lantern, two Guh Wire and two glowstone dust.",
+    meer=["systemen/guh-technologie"])

@@ -30704,5 +30704,8 @@
   "sign.guhs.kegelen.north_ingang2_0": "Door de deur,",
   "sign.guhs.kegelen.north_ingang2_1": "dan rechtdoor!",
   "sign.guhs.kegelen.north_ingang2_2": "Graven mag hier",
-  "sign.guhs.kegelen.north_ingang2_3": "gewoon, hoor."
+  "sign.guhs.kegelen.north_ingang2_3": "gewoon, hoor.",
+  "block.guhs.vadslamp": "Vadslamp",
+  "block.guhs.vadslamp.lore": "Op 1 vadskracht: lichtniveau 15, en hij verlicht een veel groter stuk dan een gewone lamp",
+  "block.guhs.vadslamp_licht": "Licht van een Vadslamp"
 }

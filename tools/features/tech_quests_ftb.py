@@ -32,7 +32,7 @@ from features import tech_bezorg, tech_bronnen, tech_vloeistof, vadskracht, were
 
 SECTIES = [
     ("tech_quests_bakken", "Project 1: Nooit meer zelf bakken", "item:guhs:block/guh_oven_front_on",
-     ["tech_quests_rad", "tech_quests_draad", "tech_quests_oven", "tech_quests_aflezen", "tech_quests_trechters", "tech_quests_klus_machines",
+     ["tech_quests_rad", "tech_quests_draad", "tech_quests_oven", "tech_quests_vadslamp", "tech_quests_aflezen", "tech_quests_trechters", "tech_quests_klus_machines",
       "tech_quests_klus_oogst", "tech_quests_molen", "tech_quests_knuffel", "tech_quests_disco", "tech_quests_hoeveel"]),
     ("tech_quests_centrale", "De Oude Guhrad-centrale", "npc:uitvinderguh",
      ["tech_quests_centrale_vind"] + [f"tech_quests_techniek_{i}" for i in range(1, 9)] + ["tech_quests_maagje", "tech_quests_kaarten"]),
@@ -93,6 +93,11 @@ def ftb(fq):
       f"Hang een &dGuhoven&r aan de draad. Hij bakt alles wat een gewone oven bakt, zonder kolen, op {g('GUH_OVEN')} vadskracht. Elke machine "
       "heeft een &dsnoet&r: hij slaapt zonder kracht, kijkt blij als hij werkt en verbaasd als hij vol zit.",
       "guhs:guh_oven", [item("guhs:guh_oven")], deps=["tech_quests_draad"])
+    q("tech_quests_vadslamp", "Licht met een snoetje",
+      f"De &dVadslamp&r (een lantaarn, twee Guhdraad en twee gloeisteenstof) brandt op {g('VADSLAMP')} vadskracht: hij wordt wakker, "
+      "kijkt blij en geeft het felste licht dat er is. En hij schijnt veel verder dan een gewone lamp: tot zo'n 6 blokken om hem heen zet "
+      "hij onzichtbaar extra licht neer. Eén lamp verlicht een hele grot. Zonder vadskracht slaapt hij weer.",
+      "guhs:vadslamp", [item("guhs:vadslamp")], deps=["tech_quests_draad"])
     q("tech_quests_aflezen", "Kijken is weten",
       f"Kijk naar een rad, een draad of een machine: onder je vizier staat &bDeze opstelling gebruikt {g('GUH_OVEN')}/{rad} vadskracht&r. "
       "Vraagt je opstelling méér dan je guhs bij elkaar rennen, dan gaat het niet langzamer: dan staat &calles stil&r, en je leest hoeveel je "

@@ -159,6 +159,7 @@ public final class Features {
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Schatgraven, Glimwormvangen, Lichtjespuzzel
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
         nl.juiced.guhs.feature.onderwol.stadje.Vadsmijnstadje.register();   // 1.7.0 Onder de Wol: the Vadsmijnstadje (Superkompas entry)
+        nl.juiced.guhs.feature.techbeurs.TechbeursFeature.register(modBus);   // 1.7.0 (ronde 45-47): the Vadslamp + the Guhtechniek-beurs
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -406,6 +407,7 @@ public final class Features {
         nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeFeature.creative(output);   // 1.7.0 Onder de Wol: the Mijn-guhhuisje, the Rugzakzadel
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.creative(output);   // 1.7.0 Onder de Wol: the cave games' coins, blocks and deco
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.creative(output);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
+        nl.juiced.guhs.feature.techbeurs.TechbeursFeature.creative(output);   // 1.7.0 (ronde 45-47): the Vadslamp
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
