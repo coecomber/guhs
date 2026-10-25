@@ -74,10 +74,11 @@ WIKI = {
         "nieuw-in-1-7": (
             "Nieuw in 1.7.0: Onder de Wol", "block:guhs:glinsteraltaar",
             "Wat er nieuw is in Guhs 1.7.0 \"Onder de Wol\": een hele ondergrond onder de Guhmensie, gebouwen, villagers, toveren, "
-            "mijnhulpjes, vijf grot-minigames, 18 holes golf, voetjes en een vrolijker oppervlak. De volledige lijst staat in het "
-            "CHANGELOG van de mod.",
+            "mijnhulpjes, vijf grot-minigames, vadskracht in de gebouwen, de Guhtechniek-beurs, 18 holes golf, voetjes en een vrolijker "
+            "oppervlak. De volledige lijst staat in het CHANGELOG van de mod.",
             ["onder-de-wol", "steenlagen-en-ertsen", "grotten", "ondergrondse-bouwwerken", "guh-villagers", "glinsteraltaar",
-             "mijnhulpjes", "mijn-guhhuisje", "grot-minigames", "voetjes", "vrolijk-oppervlak", "minigames/golf"]),
+             "mijnhulpjes", "mijn-guhhuisje", "grot-minigames", "voetjes", "vrolijk-oppervlak", "minigames/golf",
+             "bouwwerken/guhtechniek_beurs", "vadslamp", "vadsschakelaar", "bouwwerken/vadsmijnstadje"]),
         "grot-minigames": (
             "De vijf grot-minigames", "schatmuntje",
             "Onder roze hutjes in de Guhmensie liggen vijf spelletjeszalen: Schatgraven, Glimwormvangen, de Lichtjespuzzel, de "
@@ -219,7 +220,7 @@ WIKI = {
          "Mijn-guhhuisje."),
         ("bouwwerken/vadsmijnstadje", "Een stadje van echte villagers",
          "Een grote grotzaal in de knuffelsteen, ongeveer 60 bij 60 blokken, met tien huisjes van viltsteen en pastelbaksteen rond "
-         "een plein. Op het plein draait de Guhrad-centrale: een guh in een Guhrad die het stadje van vadskracht voorziet. Er wonen "
+         "een plein. Op het plein draait de Guhrad-centrale: twee guhs in Guhraden die het stadje van vadskracht voorzien. Er wonen "
          "tien guh-villagers (met de vier nieuwe beroepen en een paar oude guh-beroepen), twee kindjes en twee IJzerguhlems. Een "
          "Mijningang-hutje bovengronds brengt je met de wolkenlift naar beneden. Je vindt er een om de ongeveer 1500 blokken."),
         # --- villagers ---
@@ -420,5 +421,66 @@ WIKI = {
         ("dimensies/guhmension", "Onder de Wol (1.7.0)",
          "Onder de wol van de Guhmensie zitten nu steenlagen, ertsen, grotten met zes grotbiomen en ruim twintig gebouwen onder de grond. "
          "Zie Onder de Wol: de ondergrond."),
+        # --- 1.7.0 ronde 45-47: vadskracht in the buildings ---
+        ("systemen/nieuw-in-1-7", "Vadskracht",
+         "De Vadslamp, een guhlantaarn op 1 vadskracht met licht 15 en extra licht eromheen, en de Vadsschakelaar, het "
+         "aan/uit-knopje in een lijn Guhdraad. De Guhtechniek-beurs: een beschermde glazen hal op het land van de "
+         "Guhmensie met een werkende stand voor elk onderdeel van de Guh-technologie, beursguhs en in het midden de "
+         "Droomfabriek. En echte vadskracht in gebouwen: het Vadsmijnstadje, de vijf grot-minigamezalen (met de "
+         "Kegelzetter in de Kegelgrot), de Kaasmakerij, de Oude wolspinnerij en nieuwe exemplaren van oude gebouwen: de "
+         "Guhbakkerij in het guhdorp, de kaasmijn, de keukens en de Grillkoolfabriek van de Barbecuether en de "
+         "oogsthoek van de guhboerderij."),
+        ("bouwwerken/vadsmijnstadje", "Vadskracht in het stadje",
+         "De Guhrad-centrale op het plein heeft twee Guhraden rug aan rug, samen 30 vadskracht. Alle 18 lantaarns van "
+         "het stadje zijn Vadslampen, verbonden met Guhdraad langs de straten, met een Vadsschakelaar voor de hele "
+         "lijn. Het net vraagt 28 vadskracht: zet je de hendel voor een van de Guhraden om, dan krijgt die guh pauze en "
+         "gaan alle lampen uit. Bij Huize Glinster staat de Glasslijperij van de Kristalslijper (een Vadsmolen maalt "
+         "grind tot zand, een Guhoven bakt er glas van) en bij het ertsdepot de Ertslijn: een kistkarretje vol ruw erts "
+         "boven een trechter, een Guhoven die het erts smelt en een Vadsmolen die mijngruis maalt, alles in de "
+         "Mijnwerkerskist bij Huize Houweel, op een eigen Guhrad. Bij elke opstelling staat een bordje met hoeveel "
+         "vadskracht het gebruikt. Het stadje is niet beschermd, dus er staan alleen eenvoudige machines."),
+        ("systemen/grot-minigames", "Vadskracht in de zalen",
+         "Elke zaal heeft een eigen Guhrad met een guh, achter een Vadsschakelaar en met een hendel ervoor (aan = de "
+         "guh heeft pauze). Het geeft vadskracht aan Vadslampen in de zaal en aan twee scorebordlampjes naast de "
+         "spelleider. Bij Schatgraven staan acht lampen rond het veld, bij de Lichtjespuzzel zijn de twaalf "
+         "paddenstoellampen aan de muur Vadslampen en in de Wisselgrot de lantaarns op het balkon. Glimwormvangen "
+         "blijft expres donker (de glimpotjes zijn het licht), daar branden alleen de scorebordlampjes. De spelletjes "
+         "zelf werken ook zonder vadskracht."),
+        ("minigames/kegelen", "De Kegelzetter",
+         "Boven het einde van de banen hangt de Kegelzetter: een brug met een eigen Guhrad en een Vadslamp per baan. "
+         "Met vadskracht komt er een vers rek kegels met vonkjes en een klak. Zonder vadskracht staat er op het bordje "
+         "van de baan \"pauze\" en zet De Guhde de kegels met de hand: je kunt dus altijd verder spelen. Achter De Guhde "
+         "draait nog een Guhrad voor de lampen van de zaal."),
+        ("bouwwerken/guh_village", "Vadskracht (1.7.0)",
+         "In nieuwe guhdorpen staat aan de rand van het plein de Guhbakkerij, onder een gestreepte luifel: een Guhrad "
+         "met een guh, een Guhoven die aardappels bakt en de Vadsmolen van het plein, die knabbelgraan maalt. Bordjes "
+         "vertellen hoeveel vadskracht alles gebruikt, en een hendel naast het Guhrad geeft de guh pauze. Guhdorpen die "
+         "al bestonden blijven zoals ze zijn."),
+        ("bouwwerken/kaasmijn", "Vadskracht (1.7.0)",
+         "In nieuwe kaasmijnen pompen twee Sauspompen in de Knabbelgrot kaassaus uit de poel in vijf Sausvaten, en een "
+         "Knabbelaar knabbelt aan een kaasader (die groeit weer aan); een Richtingstuk stuurt de kaasbrokken door een "
+         "Knabbelbuis naar een kist. Alles draait op een Guhrad, met bordjes en een hendel die de guh pauze geeft."),
+        ("bouwwerken/spiesburcht", "Vadskracht (1.7.0)",
+         "In nieuwe spiesburchten staat in de grote hal de Spieskeuken: twee Guhovens die saté grillen en een "
+         "Vadsmolen, op een Guhrad met bordjes en een hendel die de guh pauze geeft."),
+        ("bouwwerken/mika_grillpaleis", "Vadskracht (1.7.0)",
+         "In nieuwe grillpaleizen draait de grillkeuken op vadskracht: een Guhoven en een Sauspomp op frituursaus die "
+         "vijf Sausvaten vult, op een Guhrad met bordjes en een hendel die de guh pauze geeft."),
+        ("bouwwerken/mika_woonblokken", "Vadskracht (1.7.0)",
+         "Op de binnenplaats van nieuwe woonblokken staat de Grillkoolfabriek: twee Guhraden met één hendel ertussen, "
+         "Sauspompen op frituursaus en water, de Grillkoolpers en de Frituurautomaat, met buizen naar een kist. Bordjes "
+         "vertellen hoeveel vadskracht alles gebruikt."),
+        ("bouwwerken/guhboerderij", "Vadskracht (1.7.0)",
+         "Nieuwe boerderijen hebben een oogsthoek op vadskracht: een Oogster boven een omheind graanveldje (de oogst "
+         "gaat door een buis naar een kist) en een Plantagebak, waarvan de klusjes-guhs van de boerderij de boom "
+         "omhakken. Met bordjes en een hendel die de guh van het Guhrad pauze geeft."),
+        ("bouwwerken/kaasmakerij", "Het pomphuis",
+         "Aan de steiger staat het pomphuis: twee Guhraden met blije guhs, met tegen elk een Sauspomp op het sausmeer. "
+         "Slangen brengen de saus naar acht Sausvaten, die vollopen terwijl je kijkt, en Guhdraad over redstonelampen "
+         "loopt naar een Guhoven die saté grilt."),
+        ("bouwwerken/oude_wolspinnerij", "De krachtcentrale",
+         "Op de noordelijke loopbrug voor het waterrad draaien drie Guhraden. Een gloeiende Guhdraad loopt over lampen "
+         "langs de hal naar vier spinmolens die knabbelgraan malen in de spinkringen, en naar een Guhoven bij de "
+         "theetafel."),
     ],
 }
