@@ -33,6 +33,7 @@ import sign_text
 from features import onderwol_bouw as ob
 from features import onderwol_bouw_scene as sc
 from features import onderwol_structuren1 as s1
+from features import onderwol_vadskracht as ov
 
 PREFIX = "sign.guhs.onderwol_bouw"
 SALT = 17020001   # (this slice: 17020001, 17020011, ...)
@@ -135,6 +136,11 @@ EN_REGELS = {
     "Niet in het vat": "No diving into", "duiken.": "the vat.", "Njeg.": "Njeg.",
     "Vissen verboden,": "No fishing,", "saus is geen": "sauce is not", "water.": "water.",
     "Dit is Kaasje,": "This is Kaasje,", "onze mascotte.": "our mascot.", "Niet likken!": "No licking!",
+    # r10, the pomphuis (1.7.0 playtest)
+    "Pomphuis!": "Pump house!", "Guhs rennen,": "Guhs run,", "pompen pompen,": "pumps pump,", "vaten vullen.": "vats fill up.",
+    "Kaassaus-vaten:": "Cheese sauce vats:", "zie ze vollopen!": "watch them fill!", "Guhoven:": "Guh oven:",
+    "grilt saté op": "grills satay on", "vadskracht.": "vads power.", "Geen kolen!": "No coal!", "Roze draad =": "Pink wire =",
+    "vadskracht!": "vads power!", "Lampjes aan?": "Lamps on?", "Dan rennen ze!": "Then they run!",
     # r11
     "Hier stond ooit": "Here once stood", "huize Pluis": "house Pluis", "(voor het": "(before it", "zakte)": "sank)",
     "Bovengronds:": "Upstairs:", "1 verdieping": "1 floor", "hoger.": "higher.",
@@ -368,6 +374,51 @@ def sledestation(h):
 # =====================================================================================================================
 # r10 Kaasmakerij De Gouden Saus
 # =====================================================================================================================
+def pomphuis(b):
+    """(1.7.0 playtest) The pomphuis on the jetty, with WORKING vadskracht (features/onderwol_vadskracht.py): two Guhraden
+    stand in the jetty's inner edge, each with a happy guh (2 x 15 VK); right against each wheel a Sauspomp in the jetty,
+    standing on the saus lake (a pump lifts from the source block under it). Their hoses climb over the wheels and run down
+    to the row of eight Sausvaten, which fill up while you watch. Guhdraad joins both wheels (over redstone lamps that burn
+    on the guhs' power) and leads to a Guhoven grilling kaasknabbelsate. One net: 2 pumps (12) + the oven (5) = 17 of 30 VK.
+    Template coordinates (floor y 3, the jetty's planks y 4)."""
+    # the render's pumps stood on the planks (no source under them) and its hoses ran into the air: gone
+    for p, blok in list(b.blocks.items()):
+        if blok[0] in ("guhs:sausslang", "guhs:sauspomp"):
+            b.set(*p, "minecraft:air")
+    for x in range(24, 32):
+        assert b.get(x, 4, 27) == "guhs:sausvat", (x, b.get(x, 4, 27))
+        b.zet(x, 4, 27, "sausvat[facing=north,niveau=0,saus=leeg]", {"id": "guhs:sausvat"})
+    # the wheels: in the jetty's inner edge (x 20), facing the hall; the pumps right against them, on the lake
+    for zw in (22, 26):
+        for z in (zw - 1, zw, zw + 1):
+            assert b.get(20, 4, z) == "minecraft:spruce_planks"
+            b.set(20, 4, z, "minecraft:air")
+        ov.guhrad(b, 20, 4, zw, "east")
+        assert b.get(19, 4, zw) == "minecraft:spruce_planks" and b.get(19, 3, zw) == "guhs:kaas_saus"
+        ov.machine(b, 19, 4, zw, "sauspomp", "west")
+        # the hose: up out of the pump, over the wheel, along x 23 to the vats
+        for y in (5, 6, 7):
+            ov.slang(b, 19, y, zw)
+        for x in range(20, 24):
+            ov.slang(b, x, 7, zw)
+    for z in range(23, 28):
+        ov.slang(b, 23, 7, z)
+    for y in (6, 5):
+        ov.slang(b, 23, y, 27)
+    for x in range(24, 32):
+        ov.slang(b, x, 5, 27)
+    # Guhdraad over lamps: along both wheels (x 21), and to the Guhoven
+    for z in range(21, 28):
+        ov.draad(b, 21, 4, z)
+    for x in (22, 23):
+        ov.draad(b, x, 4, 24)
+    ov.oven(b, 24, 4, 24, "east", "guhs:kaasknabbelsate", 16)
+    b.sign(22, 4, 20, "north", ["Pomphuis!", "Guhs rennen,", "pompen pompen,", "vaten vullen."], wall=False)
+    b.sign(26, 4, 26, "east", ["Kaassaus-vaten:", "zie ze vollopen!", "", ""], wall=False)
+    b.sign(24, 4, 23, "east", ["Guhoven:", "grilt saté op", "vadskracht.", "Geen kolen!"], wall=False)
+    b.sign(22, 4, 26, "east", ["Roze draad =", "vadskracht!", "Lampjes aan?", "Dan rennen ze!"], wall=False)
+
+
 def kaasmakerij(h):
     naam = "r10_oude_kaasmakerij"
     crop = (2, 55, 4, 25, 2, 38)
@@ -392,6 +443,7 @@ def kaasmakerij(h):
     b, gs, _ = s1.omzet(naam, "kaasmakerij", crop, aanpas=aanpas)
     b.prefix = f"{PREFIX}.kaas"
     bord = bordjes(naam)
+    pomphuis(b)
     b.anker(*P(30, 7, 20))
     b.ingang(*P(40, 7, 34))
     # the east entrance tunnel ends at the template's edge: the connector for the Mijnguhdorp's side tunnels
@@ -418,6 +470,7 @@ def kaasmakerij(h):
             praat(b, 49 - x0, gy, gz, "onderwol_kaas", 270)     # (the render had Goudje inside the cheese table)
         else:
             b.guh(gx, gy, gz, yaw=yaw)
+    ov.verbind(b)
     return bewaar(b, "onderwol/kaasmakerij/start")
 
 

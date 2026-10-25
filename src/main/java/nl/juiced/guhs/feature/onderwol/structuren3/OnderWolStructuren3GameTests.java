@@ -212,4 +212,31 @@ public class OnderWolStructuren3GameTests {
         }
         helper.succeed();
     }
+
+    /**
+     * 1.7.0 playtest: the Wolclub's krachtcentrale really works in the placed template: three Guhraden run, the four
+     * Spinmolens and the Guhoven have vadskracht, the Guhdraad glows and its lamps burn, the mills grind and the oven grills.
+     */
+    @GuhTest(template = "onderwol/oude_wolspinnerij/start", batch = BATCH, timeoutTicks = 300)
+    public static void wolspinnerijKrachtcentraleWerkt(GameTestHelper helper) {
+        krachtcentrale(helper);
+    }
+
+    /** The same, placed turned (the jigsaw placement turns buildings). */
+    @GuhTest(template = "onderwol/oude_wolspinnerij/start", batch = BATCH, timeoutTicks = 300, rotationSteps = 3)
+    public static void wolspinnerijKrachtcentraleWerktGedraaid(GameTestHelper helper) {
+        krachtcentrale(helper);
+    }
+
+    private static void krachtcentrale(GameTestHelper helper) {
+        var level = helper.getLevel();
+        nl.juiced.guhs.feature.onderwol.bouw.KrachtProef.draait(helper, 3, 5, 40, g -> {
+            helper.assertTrue(g.machines().stream().filter(m -> level.getBlockEntity(m) instanceof nl.juiced.guhs.feature.techmachine.VadsmolenBlockEntity)
+                    .count() == 4, "four Spinmolens");
+            helper.assertTrue(g.machines().stream().allMatch(m -> level.getBlockEntity(m) instanceof nl.juiced.guhs.feature.techmachine.VadsmolenBlockEntity molen
+                    && molen.vakken().getAmountAsInt(nl.juiced.guhs.feature.techmachine.VadsmolenBlockEntity.UIT) > 0), "every Spinmolen grinds");
+            helper.assertTrue(g.ovens().stream().allMatch(o -> level.getBlockState(o).getValue(net.minecraft.world.level.block.AbstractFurnaceBlock.LIT)),
+                    "the Guhoven grills");
+        });
+    }
 }

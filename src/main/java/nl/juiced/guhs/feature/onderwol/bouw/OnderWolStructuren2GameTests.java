@@ -104,4 +104,30 @@ public class OnderWolStructuren2GameTests {
         helper.assertTrue(OnderWolStructuren2.KLEDINGBRON.equals(KledingBronnen.bron(GuhClothes.HANDDOEK_TULBAND)), "the turban comes from the bathhouse");
         helper.succeed();
     }
+
+    /**
+     * 1.7.0 playtest: the Kaasmakerij's pomphuis really works in the placed template: both Guhraden run, the pumps (on the
+     * saus lake) and the Guhoven have vadskracht, the Guhdraad glows and its lamps burn, the vats fill and the oven grills.
+     */
+    @GuhTest(template = "onderwol/kaasmakerij/start", batch = BATCH, timeoutTicks = 300)
+    public static void kaasmakerijPomphuisWerkt(GameTestHelper helper) {
+        pomphuis(helper);
+    }
+
+    /** The same, placed turned half around (the jigsaw placement turns buildings). */
+    @GuhTest(template = "onderwol/kaasmakerij/start", batch = BATCH, timeoutTicks = 300, rotationSteps = 2)
+    public static void kaasmakerijPomphuisWerktGedraaid(GameTestHelper helper) {
+        pomphuis(helper);
+    }
+
+    private static void pomphuis(GameTestHelper helper) {
+        var level = helper.getLevel();
+        KrachtProef.draait(helper, 2, 3, 9, g -> {
+            helper.assertTrue(g.vaten().size() == 8, "eight Sausvaten");
+            helper.assertTrue(g.vaten().stream().anyMatch(v -> level.getBlockEntity(v) instanceof nl.juiced.guhs.feature.techsaus.SausvatBlockEntity vat
+                    && vat.tank().inhoud() > 0), "the pumps fill the Sausvaten");
+            helper.assertTrue(g.ovens().stream().allMatch(o -> level.getBlockState(o).getValue(net.minecraft.world.level.block.AbstractFurnaceBlock.LIT)),
+                    "the Guhoven grills");
+        });
+    }
 }
