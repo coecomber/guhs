@@ -122,7 +122,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.7.0 ontwerpronde 22: the old underground structures in the layer stone of their depth (patches only; append only)
             'onderwol_oud',
             # 1.7.0 Onder de Wol: the underground buildings, part 2 (onderwol_structuren2; after onderwol_structuren1, whose dorp pool it extends; append only)
-            'onderwol_structuren2']
+            'onderwol_structuren2',
+            # 1.7.0 ronde 45-47: working vadskracht in new copies of old structures (patches their templates; after every module
+            # that writes them: guh_village (make_structures + beroepen), kaasmijn, boerderij, spiesburcht, bestaand, paleizen; append only)
+            'vadskracht_oud']
 
 
 def modules():
