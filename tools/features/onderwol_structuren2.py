@@ -443,6 +443,15 @@ def kaasmakerij(h):
     b, gs, _ = s1.omzet(naam, "kaasmakerij", crop, aanpas=aanpas)
     b.prefix = f"{PREFIX}.kaas"
     bord = bordjes(naam)
+    # the stairs up to the platform (spruce slabs at y 10, x 25-32, z 16-18): the render had the flight mirrored (from
+    # the platform's edge up AWAY from it, facing back). One flight from the floor (y 3) at x 19 up east, its top step
+    # (y 9) right against the platform.
+    trap = [p for p, (n, _, _) in b.blocks.items() if n == "guhs:belegen_kaas_trap" and p[2] == 18]
+    assert sorted(trap) == [(20 + i, 9 - i, 18) for i in range(6)], f"kaasmakerij: the stairs moved: {sorted(trap)}"
+    for p in trap:
+        b.set(*p, "minecraft:air")
+    for i in range(6):
+        b.set(19 + i, 4 + i, 18, "guhs:belegen_kaas_trap", {"facing": "east", "half": "bottom", "shape": "straight", "waterlogged": "false"})
     pomphuis(b)
     b.anker(*P(30, 7, 20))
     b.ingang(*P(40, 7, 34))
