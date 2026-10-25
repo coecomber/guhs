@@ -22,6 +22,11 @@ features/onderwol_bouw.py; Java: feature/onderwol/stadje): the Vadsmijnstadje, a
                       bring it all into the Mijnwerkerskist by Huize Houweel; its own Guhrad (11 of 15 VK) and lever.
                   The centrale's net asks more than one guh gives (28 of 30 VK): a lever in front of either wheel gives
                   that guh a break and then the whole net stands still (all lamps out), the lesson of the sign.
+    de bijvuller  (guhs:stadje_bijvuller, Java feature/onderwol/stadje/Bijvuller) hidden in the rock under the plaza:
+                  every 3 minutes it tops up the two Vadsmolens with gravel, trims the Mijnwerkerskist (4 of each bar,
+                  16 zand) and the Glasslijperij's Guhoven (8 glas), and gives the cart back the ore of the bars it
+                  trimmed (never new ore: the town's 56 ore stay a loop). It finds them by NeoForgeData.guhs_stadje (set
+                  here with _merk), so a broken machine is simply left alone.
     10 houses     on a ring around the plaza (one every 30 degrees, north and south left open), walls of viltsteen
                   bricks or pastel bricks (there is no guhklei brick: guhklei smelts to pink terracotta, so the
                   "guhklei-baksteen" houses are pastelbaksteen with pink terracotta corners), pastel dakpan roofs, a
@@ -523,6 +528,9 @@ def bouw_stadje(h=None):
     bouw_ertslijn(b, rz, bezet)
     bouw_glasslijperij(b, bezet)
     bouw_lampnet(b, binnen, bezet)
+    # the hidden Bijvuller that keeps the ore line and the glass works going (in the rock under the plaza)
+    assert b.get(*BIJVULLER) == ob.SCHIL, f"the Bijvuller's spot is {b.get(*BIJVULLER)}"
+    b.set(*BIJVULLER, "guhs:stadje_bijvuller", {}, {"id": "guhs:stadje_bijvuller"})
 
     # --- the cave itself: glitterranken from the ceiling, plants and crystals along the wall
     kolommen = sorted(binnen)
@@ -564,6 +572,33 @@ def bouw_stadje(h=None):
 # (ronde 45-47) the working vadskracht (early tier only: the town is not protected)
 # =====================================================================================================================
 ERTS_KAR = [("minecraft:raw_iron", 24), ("minecraft:raw_copper", 24), ("minecraft:raw_gold", 8)]
+BAR = {"minecraft:raw_iron": "minecraft:iron_ingot", "minecraft:raw_copper": "minecraft:copper_ingot", "minecraft:raw_gold": "minecraft:gold_ingot"}
+MOLEN_GRIND = 64        # the gravel in each Vadsmolen (the Bijvuller keeps it there)
+TOON_BAR, TOON_ZAND, TOON_GLAS = 4, 16, 8   # what the Bijvuller leaves in the Mijnwerkerskist / the glass oven
+BIJVULLER = (C, 0, C + 3)                   # the hidden Bijvuller, in the rock under the plaza
+MERK = "guhs_stadje"
+
+
+def _merk_regels(**regels):
+    """The Bijvuller's mark (Java Bijvuller): Soort, Vul / Toon [(id, count)], Kar [(id, count, bar)]."""
+    out = {}
+    for k, v in regels.items():
+        if k in ("Vul", "Toon"):
+            out[k] = ms.compounds([{"id": i, "count": n} for (i, n) in v])
+        elif k == "Kar":
+            out[k] = ms.compounds([{"id": i, "count": n, "bar": bar} for (i, n, bar) in v])
+        else:
+            out[k] = v
+    return out
+
+
+def _merk(b, x, y, z, **regels):
+    """Marks the block entity at (x, y, z) for the Bijvuller (NeoForgeData.guhs_stadje)."""
+    naam, props, nbt = b.blocks[(x, y, z)]
+    nbt = dict(nbt or {})
+    assert "id" in nbt, f"{naam} at {(x, y, z)} has no block entity to mark"
+    nbt["NeoForgeData"] = {MERK: _merk_regels(**regels)}
+    b.blocks[(x, y, z)] = (naam, props, nbt)
 
 
 def _zet_bezet(bezet, *punten):
@@ -590,13 +625,16 @@ def bouw_ertslijn(b, rz, bezet):
     b.set(C + 3, y + 1, rz, "minecraft:hopper", {"facing": "east", "enabled": "true"}, {"id": "minecraft:hopper"})
     b.zet(C + 3, y + 2, rz, "minecraft:rail[shape=east_west,waterlogged=false]")
     b.entity(C + 3.5, y + 2.0625, rz + 0.5, {"id": "minecraft:chest_minecart", "Rotation": ms.floats(90.0, 0.0), "Items": ms.compounds(
-        [{"Slot": ms.Byte(i), "id": item, "count": n} for i, (item, n) in enumerate(ERTS_KAR)])})
+        [{"Slot": ms.Byte(i), "id": item, "count": n} for i, (item, n) in enumerate(ERTS_KAR)]),
+        "NeoForgeData": {MERK: _merk_regels(Soort="kar", Kar=[(i, n, BAR[i]) for (i, n) in ERTS_KAR])}})
     # the oven (fed from the west by the dock's hopper) and the molen, both a block up; under them the hoppers to the chest
     ov.oven(b, C + 4, y + 1, rz, "north")
-    ov.machine(b, C + 5, y + 1, rz, "vadsmolen", "north", slots=2, stapels=[(0, "minecraft:gravel", 64)])
+    ov.machine(b, C + 5, y + 1, rz, "vadsmolen", "north", slots=2, stapels=[(0, "minecraft:gravel", MOLEN_GRIND)])
+    _merk(b, C + 5, y + 1, rz, Soort="molen", Vul=[("minecraft:gravel", MOLEN_GRIND)])
     b.set(C + 4, y, rz, "minecraft:hopper", {"facing": "east", "enabled": "true"}, {"id": "minecraft:hopper"})
     b.set(C + 5, y, rz, "minecraft:hopper", {"facing": "south", "enabled": "true"}, {"id": "minecraft:hopper"})
     b.set(C + 5, y, rz + 1, "minecraft:chest", {"facing": "east", "type": "single", "waterlogged": "false"}, {"id": "minecraft:chest"})
+    _merk(b, C + 5, y, rz + 1, Soort="kist", Toon=[(BAR[i], TOON_BAR) for (i, _n) in ERTS_KAR] + [("minecraft:sand", TOON_ZAND)])
     # the switch on the end brick (C + 6, rz), the wheel east of it, its lever in front, Houweel's lamp behind its east part
     ov.schakelaar(b, C + 6, y + 1, rz, "north")
     ov.guhrad(b, C + 8, y, rz, "north")
@@ -620,8 +658,10 @@ def bouw_glasslijperij(b, bezet):
     x, z = GLAS
     for p in ((x, z), (x, z + 1), (x + 1, z), (x + 1, z + 1), (x + 2, z), (x, z - 1), (x + 1, z - 1)):
         assert b.get(p[0], STA, p[1]) == "minecraft:air", f"the Glasslijperij needs {p} free, not {b.get(p[0], STA, p[1])}"
-    ov.machine(b, x, STA, z, "vadsmolen", "east", slots=2, stapels=[(0, "minecraft:gravel", 64)])
+    ov.machine(b, x, STA, z, "vadsmolen", "east", slots=2, stapels=[(0, "minecraft:gravel", MOLEN_GRIND)])
+    _merk(b, x, STA, z, Soort="molen", Vul=[("minecraft:gravel", MOLEN_GRIND)])
     ov.oven(b, x, STA, z + 1, "east", "minecraft:sand", 48)
+    _merk(b, x, STA, z + 1, Soort="oven", Toon=[("minecraft:glass", TOON_GLAS)])
     ov.schakelaar(b, x + 1, STA, z, "east")
     b.glas_start = (x + 2, z)
     b.sign(x + 1, STA, z - 1, "east", BORDEN["glas"], wall=False)
@@ -662,7 +702,16 @@ def bouw_lampnet(b, binnen, bezet):
 # =====================================================================================================================
 # the resources
 # =====================================================================================================================
+def bijvuller_blok(h):
+    """guhs:stadje_bijvuller: the hidden refiller (looks like the layer's knuffelsteen; no item, no loot)."""
+    h.w(os.path.join(h.A, "models", "block", "stadje_bijvuller.json"),
+        {"parent": "minecraft:block/cube_all", "textures": {"all": "guhs:block/knuffelsteen"}})
+    h.w(os.path.join(h.A, "blockstates", "stadje_bijvuller.json"), {"variants": {"": {"model": "guhs:block/stadje_bijvuller"}}})
+    h.lang("block.guhs.stadje_bijvuller", "Town Refiller", "Stadjesbijvuller")
+
+
 def build(h):
+    bijvuller_blok(h)
     for naam, pools in LOOT_DEF.items():
         ob.loot(h, naam, pools)
     b = bouw_stadje(h)

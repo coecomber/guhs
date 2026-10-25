@@ -34,7 +34,12 @@ import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.entity.vehicle.minecart.MinecartChest;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -42,13 +47,16 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Features;
 import nl.juiced.guhs.feature.guhvillagers.GuhVillagersFeature;
 import nl.juiced.guhs.feature.kaasmijn.Mijnguh;
 import nl.juiced.guhs.feature.mijnhuisje.MijnHulpje;
+import nl.juiced.guhs.feature.guhoven.GuhOvenBlockEntity;
 import nl.juiced.guhs.feature.onderwol.bouw.GrotBouwStructure;
+import nl.juiced.guhs.feature.techmachine.VadsmolenBlockEntity;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
@@ -383,6 +391,142 @@ public class VadsmijnstadjeGameTests {
             helper.assertTrue(level.getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, rond).size() == voor + 1, "the guh hopped out");
             helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, rond.inflate(2)).stream()
                     .noneMatch(i -> i.getItem().is(nl.juiced.guhs.registry.ModItems.PICKED_UP_GUH.get())), "no picked-up guh item");
+            helper.succeed();
+        });
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------
+    // the Bijvuller (the hidden refiller of the showcase)
+    // ---------------------------------------------------------------------------------------------------------------------
+
+    /** Every block entity of this kind in the test's bounds. */
+    @SuppressWarnings("unchecked")
+    private static <T> List<T> alle(GameTestHelper helper, Class<T> soort) {
+        ServerLevel level = helper.getLevel();
+        net.minecraft.world.phys.AABB box = helper.getBounds();
+        List<T> out = new ArrayList<>();
+        for (BlockPos p : BlockPos.betweenClosed((int) Math.floor(box.minX), (int) Math.floor(box.minY), (int) Math.floor(box.minZ),
+                (int) Math.ceil(box.maxX) - 1, (int) Math.ceil(box.maxY) - 1, (int) Math.ceil(box.maxZ) - 1)) {
+            if (level.getBlockState(p).hasBlockEntity() && soort.isInstance(level.getBlockEntity(p))) {
+                out.add((T) level.getBlockEntity(p));
+            }
+        }
+        return out;
+    }
+
+    private static <T extends BlockEntity> List<T> gemerkt(GameTestHelper helper, Class<T> soort) {
+        return alle(helper, soort).stream().filter(be -> be.getPersistentData().contains(Bijvuller.MERK)).toList();
+    }
+
+    private static List<MinecartChest> karren(GameTestHelper helper) {
+        return helper.getLevel().getEntitiesOfClass(MinecartChest.class, helper.getBounds(),
+                k -> k.isAlive() && k.getPersistentData().contains(Bijvuller.MERK));
+    }
+
+    /** The gravel in a Vadsmolen's in slot. */
+    private static int gruis(VadsmolenBlockEntity m) {
+        var r = m.vakken().getResource(VadsmolenBlockEntity.IN);
+        return !r.isEmpty() && r.toStack().is(Items.GRAVEL) ? m.vakken().getAmountAsInt(VadsmolenBlockEntity.IN) : 0;
+    }
+
+    private static void leeg(VadsmolenBlockEntity m) {
+        m.vakken().set(VadsmolenBlockEntity.IN, ItemResource.EMPTY, 0);
+    }
+
+    /**
+     * The Bijvuller after a long day: the molens empty, the cart's iron gone (as 20 bars in the Mijnwerkerskist), the chest
+     * full of zand, the glass oven full of glas. Nothing happens before its round; then the molens have their gravel again,
+     * the chest keeps 4 bars (16 went back into the cart as ore: never more ore than there were bars) and 16 zand, the glass
+     * oven 8 glas, and the cart got no ore it did not have.
+     */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 100)
+    public static void vadsmijnstadjeBijvullerVult(GameTestHelper helper) {
+        bijvuller(helper);
+    }
+
+    /** The same in a turned town. */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 100, rotationSteps = 1)
+    public static void vadsmijnstadjeBijvullerVultGedraaid(GameTestHelper helper) {
+        bijvuller(helper);
+    }
+
+    private static void bijvuller(GameTestHelper helper) {
+        List<Bijvuller.Kern> beheer = alle(helper, Bijvuller.Kern.class);
+        helper.assertTrue(beheer.size() == 1, "one Bijvuller under the town: " + beheer.size());
+        var molens = gemerkt(helper, VadsmolenBlockEntity.class);
+        var kisten = gemerkt(helper, ChestBlockEntity.class);
+        var ovens = gemerkt(helper, GuhOvenBlockEntity.class);
+        var karren = karren(helper);
+        helper.assertTrue(molens.size() == 2 && kisten.size() == 1 && ovens.size() == 1 && karren.size() == 1,
+                "its marks: 2 molens, the Mijnwerkerskist, the glass oven, the ore cart: " + molens.size() + " " + kisten.size() + " "
+                        + ovens.size() + " " + karren.size());
+        var kist = kisten.get(0);
+        var oven = ovens.get(0);
+        var kar = karren.get(0);
+        int koper = Bijvuller.tel(kar, Items.RAW_COPPER), goud = Bijvuller.tel(kar, Items.RAW_GOLD);
+        // a long day
+        molens.forEach(VadsmijnstadjeGameTests::leeg);
+        Bijvuller.neem(kar, Items.RAW_IRON, 64);
+        Bijvuller.stop(kist, Items.IRON_INGOT, 20);
+        Bijvuller.stop(kist, Items.SAND, 64);
+        oven.setItem(2, new ItemStack(Items.GLASS, 64));
+        helper.runAfterDelay(20, () -> {
+            for (var m : molens) {
+                helper.assertTrue(gruis(m) == 0, "nothing before its round");
+            }
+            helper.assertTrue(Bijvuller.tel(kar, Items.RAW_IRON) == 0, "no ore before its round");
+            beheer.get(0).versnel();
+            helper.runAfterDelay(3, () -> {
+                for (var m : molens) {
+                    helper.assertTrue(gruis(m) >= 60, "the molen at " + m.getBlockPos() + " has its gravel again: " + gruis(m));
+                }
+                int karIjzer = Bijvuller.tel(kar, Items.RAW_IRON);
+                int kistIjzer = Bijvuller.tel(kist, Items.IRON_INGOT);
+                helper.assertTrue(kistIjzer >= 4 && kistIjzer <= 5, "the chest keeps 4 bars to show: " + kistIjzer);
+                helper.assertTrue(karIjzer >= 14 && karIjzer <= 16, "the other 16 went back into the cart as ore: " + karIjzer);
+                helper.assertTrue(Bijvuller.tel(kar, Items.RAW_COPPER) <= koper && Bijvuller.tel(kar, Items.RAW_GOLD) <= goud,
+                        "no ore out of nothing");
+                int zand = Bijvuller.tel(kist, Items.SAND);
+                helper.assertTrue(zand >= 16 && zand <= 18, "the chest keeps about 16 zand: " + zand);
+                int glas = oven.getItem(2).is(Items.GLASS) ? oven.getItem(2).getCount() : 0;
+                helper.assertTrue(glas >= 8 && glas <= 9, "the glass oven keeps 8 glas: " + glas);
+                helper.succeed();
+            });
+        });
+    }
+
+    /**
+     * What a player broke stays broken: no molen put back, a chest put in the Mijnwerkerskist's place is not touched, a
+     * cart that was broken does not come back; what still stands (the Glasslijperij's molen) is looked after as before.
+     */
+    @GuhTest(template = "onderwol/vadsmijnstadje/start", batch = BATCH, timeoutTicks = 60)
+    public static void vadsmijnstadjeBijvullerLaatSloopMetRust(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        List<Bijvuller.Kern> beheer = alle(helper, Bijvuller.Kern.class);
+        var kist = gemerkt(helper, ChestBlockEntity.class).get(0);
+        BlockPos kistPlek = kist.getBlockPos();
+        var molens = new ArrayList<>(gemerkt(helper, VadsmolenBlockEntity.class));
+        molens.sort(java.util.Comparator.comparingInt(m -> m.getBlockPos().distManhattan(kistPlek)));
+        BlockPos weg = molens.get(0).getBlockPos();
+        var blijft = molens.get(1);
+        helper.assertTrue(weg.distManhattan(kistPlek) <= 3, "the ore line's molen stands by the chest");
+        level.destroyBlock(weg, false);
+        level.destroyBlock(kistPlek, false);
+        level.setBlockAndUpdate(kistPlek, Blocks.CHEST.defaultBlockState());
+        var nieuw = (ChestBlockEntity) level.getBlockEntity(kistPlek);
+        Bijvuller.stop(nieuw, Items.SAND, 40);
+        for (var k : karren(helper)) {
+            k.discard();
+        }
+        leeg(blijft);
+        beheer.get(0).versnel();
+        helper.runAfterDelay(3, () -> {
+            helper.assertTrue(level.getBlockState(weg).isAir(), "the broken molen is not put back");
+            helper.assertTrue(level.getBlockEntity(kistPlek) instanceof ChestBlockEntity c && Bijvuller.tel(c, Items.SAND) >= 40,
+                    "a chest a player put in its place is left alone");
+            helper.assertTrue(karren(helper).isEmpty() && level.getEntitiesOfClass(MinecartChest.class, helper.getBounds()).size() == 1,
+                    "no new ore cart (only the depot's)");
+            helper.assertTrue(gruis(blijft) >= 60, "the Glasslijperij's molen still gets its gravel: " + gruis(blijft));
             helper.succeed();
         });
     }

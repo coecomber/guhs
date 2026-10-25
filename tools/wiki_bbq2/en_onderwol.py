@@ -487,7 +487,9 @@ TEKST = {
         "into sand, a Guh Oven bakes it into glass) and at the ore depot the ore line: a chest cart full of raw ore "
         "over a hopper, a Guh Oven that smelts the ore and a Chonk Mill that grinds mine grit, all into the miner's "
         "chest by House Pickaxe, on a Guh Wheel of its own. Every setup has a sign with how much chonk power it uses. "
-        "The town is not protected, so it only has simple machines."),
+        "The town is not protected, so it only has simple machines. A hidden refiller tops the Chonk Mills up with gravel "
+        "every three minutes and tidies the miner's chest and the glass oven (there is always something left to take). The "
+        "chest cart gets back the ore of the bars it tidied away, but never new ore. A machine you break stays gone."),
     ("systemen/grot-minigames", "Vadskracht in de zalen"): (
         "Chonk power in the halls",
         "Every hall has a Guh Wheel of its own with a guh, behind a Chonk Switch and with a lever in front (on = the "

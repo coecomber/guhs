@@ -438,7 +438,10 @@ WIKI = {
          "grind tot zand, een Guhoven bakt er glas van) en bij het ertsdepot de Ertslijn: een kistkarretje vol ruw erts "
          "boven een trechter, een Guhoven die het erts smelt en een Vadsmolen die mijngruis maalt, alles in de "
          "Mijnwerkerskist bij Huize Houweel, op een eigen Guhrad. Bij elke opstelling staat een bordje met hoeveel "
-         "vadskracht het gebruikt. Het stadje is niet beschermd, dus er staan alleen eenvoudige machines."),
+         "vadskracht het gebruikt. Het stadje is niet beschermd, dus er staan alleen eenvoudige machines. Een verstopte "
+         "bijvuller vult elke drie minuten de Vadsmolens bij met grind en ruimt de Mijnwerkerskist en de glasoven op (er "
+         "blijft altijd wat liggen om te pakken). Het kistkarretje krijgt het erts van de opgeruimde baren terug, maar nooit "
+         "nieuw erts. Een machine die je sloopt blijft weg."),
         ("systemen/grot-minigames", "Vadskracht in de zalen",
          "Elke zaal heeft een eigen Guhrad met een guh, achter een Vadsschakelaar en met een hendel ervoor (aan = de "
          "guh heeft pauze). Het geeft vadskracht aan Vadslampen in de zaal en aan twee scorebordlampjes naast de "

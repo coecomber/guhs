@@ -1,5 +1,16 @@
 package nl.juiced.guhs.feature.onderwol.stadje;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.item.SuperkompasItem;
 
 /**
@@ -16,11 +27,24 @@ import nl.juiced.guhs.item.SuperkompasItem;
  * Guhraden power every lantern (Vadslampen over Guhdraad) and the Kristalslijper's Glasslijperij (Vadsmolen + Guhoven); the
  * Ertslijn at the depot has its own Guhrad (a chest cart of raw ore over a hopper, a Guhoven, a Vadsmolen, hoppers into the
  * Mijnwerkerskist). Checked by VadsmijnstadjeGameTests with KrachtProef.
+ * <p>
+ * 1.7.0: the hidden {@link Bijvuller} under the plaza keeps that showcase running (molens topped up with gravel, the cart's
+ * ore recycled from the bars in the Mijnwerkerskist, the outputs trimmed), without ever making ore.
  */
 public final class Vadsmijnstadje {
     public static final String NAAM = "vadsmijnstadje";
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
+    /** {@code guhs:stadje_bijvuller}: the hidden refiller in the rock under the plaza (no item, drops nothing). */
+    public static final DeferredBlock<Bijvuller> BIJVULLER = BLOCKS.registerBlock("stadje_bijvuller", Bijvuller::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).sound(SoundType.STONE).noLootTable()
+                    .pushReaction(PushReaction.BLOCK));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<Bijvuller.Kern>> BIJVULLER_BE = BLOCK_ENTITIES.register(
+            "stadje_bijvuller", () -> new BlockEntityType<>(Bijvuller.Kern::new, BIJVULLER.get()));
 
-    public static void register() {
+    public static void register(IEventBus modBus) {
+        BLOCKS.register(modBus);
+        BLOCK_ENTITIES.register(modBus);
         SuperkompasItem.voegToe("ondergrond", NAAM);
     }
 
