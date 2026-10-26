@@ -76,14 +76,13 @@ public class VerblijfScreen extends Screen {
         startKeuze();
     }
 
-    /** The dialog starts from the family as it is (a parent of a same-looking species is just "ouder"). */
+    /** The dialog starts from the family as it is (1.7.4: every parent is a male or a female, also of a same-looking species). */
     private void startKeuze() {
         ListTag dieren = data.getListOrEmpty("Dieren");
-        boolean geslacht = data.getBooleanOr("Geslacht", false);
         for (int i = 0; i < keuze.length; i++) {
             String rol = i < dieren.size() ? dieren.getCompoundOrEmpty(i).getStringOr("Rol", VerblijfsbordBlockEntity.FAMILIE[i])
                     : VerblijfsbordBlockEntity.FAMILIE[i];
-            keuze[i] = rol.equals("baby") ? "baby" : geslacht ? rol : "ouder";
+            keuze[i] = rol.equals("man") || rol.equals("vrouw") ? rol : "baby";
         }
     }
 
@@ -339,9 +338,6 @@ public class VerblijfScreen extends Screen {
 
     /** A member that becomes a parent: a female when there is none yet, else a male. */
     private String nieuweOuder() {
-        if (!data.getBooleanOr("Geslacht", false)) {
-            return "ouder";
-        }
         for (int i = 0; i < keuze.length; i++) {
             if (actief(i) && keuze[i].equals("vrouw")) {
                 return "man";
@@ -352,7 +348,6 @@ public class VerblijfScreen extends Screen {
 
     private void samenstelKnoppen() {
         Component nietJouw = nietJouw();
-        boolean geslacht = data.getBooleanOr("Geslacht", false);
         int rij = 0;
         for (int i = 0; i < keuze.length; i++) {
             if (!actief(i)) {
@@ -365,7 +360,7 @@ public class VerblijfScreen extends Screen {
                 keuze[lid] = keuze[lid].equals("baby") ? nieuweOuder() : "baby";
                 rebuildWidgets();
             }, "gui.guhs.verblijf.samenstellen.ouder_kind.uitleg", nietJouw);
-            if (geslacht && !kind) {
+            if (!kind) {   // (1.7.4: for every species; two males or two females is fine too)
                 boolean man = keuze[i].equals("man");
                 knop(Component.translatable(man ? "gui.guhs.verblijf.samenstellen.man" : "gui.guhs.verblijf.samenstellen.vrouw"), left + 318, ry, 140, () -> {
                     keuze[lid] = keuze[lid].equals("man") ? "vrouw" : "man";

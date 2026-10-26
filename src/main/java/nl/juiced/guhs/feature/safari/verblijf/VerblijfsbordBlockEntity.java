@@ -273,15 +273,14 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
     }
 
     /**
-     * 1.6.4: the family dialog: per member "man", "vrouw", "ouder" (a parent of a species whose male and female look the
-     * same) or "baby". At least one parent. A member whose role changes is swapped (poof): the old one goes, the new one
+     * 1.6.4: the family dialog: per member "man", "vrouw", "ouder" (a parent that keeps its sex; older clients) or "baby";
+     * 1.7.4: the sex is chosen for every species, two of the same is fine. At least one parent. A member whose role changes is swapped (poof): the old one goes, the new one
      * comes, never one more than four; names stay. False: not a valid family (nothing changes).
      */
     public boolean zetFamilie(ServerLevel level, String[] keuze) {
         if (keuze.length != FAMILIE.length) {
             return false;
         }
-        boolean geslacht = heeftGeslacht(soort);
         String[] nieuw = rollen.clone();
         int ouders = 0;
         for (int i = 0; i < keuze.length; i++) {
@@ -293,8 +292,8 @@ public class VerblijfsbordBlockEntity extends BlockEntity implements GeoBlockEnt
                 case "baby" -> nieuw[i] = "baby";
                 case "man", "vrouw", "ouder" -> {
                     ouders++;
-                    // a same-looking species: a parent keeps its old role, a new parent is a female first (the ostrich lays the egg)
-                    nieuw[i] = geslacht && !k.equals("ouder") ? k : !rollen[i].equals("baby") ? rollen[i] : null;
+                    // "ouder": a parent keeps its old role, a new parent is a female first (the ostrich lays the egg)
+                    nieuw[i] = !k.equals("ouder") ? k : !rollen[i].equals("baby") ? rollen[i] : null;
                 }
                 default -> {
                     return false;
