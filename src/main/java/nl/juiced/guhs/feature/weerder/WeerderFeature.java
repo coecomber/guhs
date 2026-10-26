@@ -34,7 +34,8 @@ import nl.juiced.guhs.entity.GuhEntity;
 /**
  * De Wilde-guhweerder (1.2.0): a little guh sign ("hier woont al een vadsje") you put in your house or base. No WILD guhs
  * spawn in the area around it: not the natural/biome spawns (overworld, Guhmension, any dimension), not the Guhmension's
- * top-ups ({@link nl.juiced.guhs.world.GuhmensionSpawner}), not the wild Zeemeerguhs. Still lief: the wild guhs see the sign
+ * top-ups ({@link nl.juiced.guhs.world.GuhmensionSpawner}), not the wild Zeemeerguhs, not the cave guhs and molguhs (1.7.3,
+ * {@link nl.juiced.guhs.feature.onderwol.wezens.OnderWolWezens}). Still lief: the wild guhs see the sign
  * and know a vadsje already lives here, so they go cuddle somewhere else. Your own (tamed) guhs, babies, story/NPC guhs and
  * guhs from a spawn egg are welcome, and guhs that are already there stay.
  * <p>

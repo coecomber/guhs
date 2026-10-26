@@ -37,6 +37,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.einde2.zwevers.DasMolguhEntity;
 import nl.juiced.guhs.feature.einde2.zwevers.E2ZweversFeature;
 import nl.juiced.guhs.feature.onderwol.OnderWolFeature;
+import nl.juiced.guhs.feature.weerder.WeerderFeature;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.world.ModDimensions;
 
@@ -173,6 +174,9 @@ public final class OnderWolWezens {
     @Nullable
     public static GuhEntity grotguh(ServerLevel level, BlockPos vloer, boolean glitter, boolean slaapgrot, RandomSource random) {
         int max = glitter ? GUHS_GLITTER : slaapgrot ? GUHS_SLAAPGROT : GUHS;
+        if (!WeerderFeature.wildeGuhMag(level, vloer)) {
+            return null;   // (1.7.3: a Wilde-guhweerder's area, e.g. a base's basement)
+        }
         if (aantal(level, GuhEntity.class, vloer, 48, g -> g.entityTags().contains(GROT) && !g.isTame()) >= max) {
             return null;
         }
@@ -198,6 +202,9 @@ public final class OnderWolWezens {
     /** A wild cave molguh on this floor (null: too many around, or no room). */
     @Nullable
     public static DasMolguhEntity molguh(ServerLevel level, BlockPos vloer, RandomSource random) {
+        if (!WeerderFeature.wildeGuhMag(level, vloer)) {
+            return null;
+        }
         if (aantal(level, DasMolguhEntity.class, vloer, 48, m -> m.entityTags().contains(MOL)) >= MOLGUHS) {
             return null;
         }

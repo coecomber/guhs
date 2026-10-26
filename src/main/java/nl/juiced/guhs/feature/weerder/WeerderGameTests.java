@@ -16,6 +16,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.onderwater.Zeemeerguh;
+import nl.juiced.guhs.feature.onderwol.wezens.OnderWolWezens;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.registry.ModEntities;
@@ -23,7 +24,7 @@ import nl.juiced.guhs.registry.ModEntities;
 /**
  * Game tests of the Wilde-guhweerder (1.2.0, batch "guhweerder"): a wild guh's natural / chunk-generation spawn is refused
  * inside its area and allowed outside it (also above it); tamed guhs, spawn eggs and breeding are unaffected; the
- * Guhmension top-up check and the wild Zeemeerguh spawn respect it; the radius is saved and loaded (block entity and the
+ * Guhmension top-up check, the wild Zeemeerguh spawn and the cave guhs/molguhs (1.7.3) respect it; the radius is saved and loaded (block entity and the
  * level index) and only the steps are allowed; only its owner changes it. Every test removes its weerder again, so the
  * level's index is empty for the other tests. Each test has a batch of its own (guhweerder_*: batches run one after the other), so
  * one test's big area never covers another test's "outside" spots.
@@ -121,6 +122,24 @@ public class WeerderGameTests {
         }
         weg(helper, p);
         helper.assertTrue(WeerderFeature.wildeGuhMag(level, in), "no weerder, no area");
+        helper.succeed();
+    }
+
+    @GuhTest(template = "empty", batch = BATCH + "_grot")
+    public static void grotguhNietInDeArea(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        zet(helper, p, 24);
+        ServerLevel level = helper.getLevel();
+        BlockPos vloer = helper.absolutePos(new BlockPos(2, 1, 3));   // (the middle: a big guh is almost 2 wide)
+        helper.assertTrue(OnderWolWezens.grotguh(level, vloer, false, level.getRandom()) == null, "no wild cave guh in the area");
+        helper.assertTrue(OnderWolWezens.molguh(level, vloer, level.getRandom()) == null, "no wild cave molguh in the area");
+        weg(helper);
+        if (WeerderFeature.wildeGuhMag(level, vloer)) {   // (the other guhweerder tests run at the same time: their areas may reach here)
+            GuhEntity guh = OnderWolWezens.grotguh(level, vloer, false, level.getRandom());
+            helper.assertTrue(guh != null, "without the weerder the cave guh comes");
+            guh.discard();
+        }
+        helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         helper.succeed();
     }
 

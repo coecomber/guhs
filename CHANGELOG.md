@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.7.3 — Minecraft 26.1.2
+
+- **The Wild Guh Shoo-Sign works again in the Guhmension:** the new cave guhs and molguhs of Onder de Wol (1.7.0) ignored the sign, so wild guhs could pop up in basements and under high roofs inside its area. They now stay out, just like the other wild guhs.
+
 ## 1.7.2 — Minecraft 26.1.2
 
 - **Build right next to guh buildings:** the protection of the golf course, the eetfestijn, the Nomguh, the kermis and the other protected guh buildings used to reach up to 12 blocks around them (the box Minecraft keeps for smoothing the land). Now only the building itself is protected, and the other protected buildings keep at most one block around them. Story buildings behind Guhdalf's sluier stay as they are.
