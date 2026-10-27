@@ -9,7 +9,7 @@ Dungeons II): one 10 x 10 x 7.5 body block, two flat 3 x 4 x 1 ears, four 3 x 2 
 The Blub-Guh-Meter: one model with every part as a bone; BlubClient switches bones on and off (sharp or soft body, Blub
 ears, small guh ears, big guh ears, each soort's decoration) and picks the texture
   textures/entity/blubguh/<soort>_<tint>_<stap>.png   stap = p (0), b (1-19), or the meter rounded down to 5 (20..100)
-(the colour slides to guh pink in steps of 5, the face changes at 20 / 40, the ears at 60 / 80 / 100; the round ear tips
+(the colour slides to guh pink in steps of 5, the face changes at 20 / 50 (guh eyes, then the whole face with the :3 mouth), the ears at 60 / 80 / 100; the round ear tips
 at 80+ are see-through texture). The strikje is drawn white and tinted in its own pass; the blue Blub glows a little
 (blubguh/blauw_gloed.png).
 
@@ -301,7 +301,7 @@ def model_vox(meter, soort, tint=0):
         if meter >= 1:
             pix(0.5, oy + 1.5, 1, .5, BLOS)
             pix(8.5, oy + 1.5, 1, .5, BLOS)
-    elif meter < 40:
+    elif meter < 50:                                # (ronde 2: the :3 mouth from 50, not 40)
         guhoog(0.5, oy - 1.5)
         guhoog(6.5, oy - 1.5)
         pix(4, oy + 1, 2, 1, st)

@@ -18,9 +18,10 @@ import nl.juiced.guhs.feature.piep.PiepMenu;
 import nl.juiced.guhs.network.ModNetworking;
 
 /**
- * The Blub-guh's own right-click menu (server side; the screen is client.BlubMenuScreen). Bigger than a piep-maatje's: its
- * Blub-Guh-Meter on top, then name, strikje, volgen / blijven, op je schouder, oppakken, slaapliedje piepen, verstoppertje,
- * four trucjes and hupsen. Every button is a guhs:blub_actie; the owner, close by (the same rules as {@link PiepMenu#mag}).
+ * The Blub-guh's own right-click menu (server side; the screens are client.BlubMenuScreen, BlubTrucScreen and
+ * BlubKledingkastScreen): its Blub-Guh-Meter on top, then name, volgen / blijven, Kledingkast, Trucjes (every trick and
+ * emote: {@link BlubTruc}), op je schouder, oppakken. Every button is a guhs:blub_actie; the owner, close by (the same
+ * rules as {@link PiepMenu#mag}).
  */
 public final class BlubMenu {
     public enum Actie {
@@ -28,15 +29,12 @@ public final class BlubMenu {
         WISSEL,
         /** Rename (tekst; empty = no name). */
         NAAM,
-        /** Strikje (waarde: -1 off, 0-15 a DyeColor). */
-        STRIK,
         SCHOUDER,
         OPPAKKEN,
-        SLAAPLIEDJE,
-        VERSTOPPERTJE,
-        /** A trick (waarde 0 zitten, 1 rondje, 2 dood spelen, 3 hoge sprong). */
+        /** A trick or emote of its Trucjes screen (waarde = BlubTruc ordinal). */
         TRUC,
-        HUPSEN;
+        /** Its Kledingkast (waarde = BlubKleding.Plek ordinal, tekst = the piece id; empty = take it off). */
+        KLEED;
 
         public static Actie byIndex(int i) {
             Actie[] all = values();
@@ -63,7 +61,7 @@ public final class BlubMenu {
         if (!PiepMenu.mag(player, blub)) {
             return false;
         }
-        if (blub.isBezig() && actie != Actie.NAAM && actie != Actie.STRIK) {
+        if (blub.isBezig() && actie != Actie.NAAM && actie != Actie.KLEED) {
             player.sendOverlayMessage(Component.translatable("gui.guhs.piep.even_bezig", blub.getDisplayName()).withStyle(ChatFormatting.GRAY));
             return false;
         }
@@ -83,11 +81,6 @@ public final class BlubMenu {
                 PiepMenu.hernoem(blub, tekst);
                 return true;
             }
-            case STRIK -> {
-                blub.setStrik(waarde);
-                blub.emotie(BlubGuhEntity.RECHTOP, 60);
-                return true;
-            }
             case SCHOUDER -> {
                 blub.speciaal(player);
                 return true;
@@ -95,19 +88,18 @@ public final class BlubMenu {
             case OPPAKKEN -> {
                 return PiepDierItem.pakOp(blub, player);
             }
-            case SLAAPLIEDJE -> {
-                blub.slaapliedje(player);
-                return true;
-            }
-            case VERSTOPPERTJE -> {
-                return blub.verstoppertje(player);
-            }
             case TRUC -> {
-                blub.truc(player, Math.floorMod(waarde, 4));
+                BlubTruc.byIndex(waarde).doe(blub, player);
                 return true;
             }
-            case HUPSEN -> {
-                blub.hupsen(player);
+            case KLEED -> {
+                BlubKleding.Plek plek = BlubKleding.Plek.values()[Math.floorMod(waarde, BlubKleding.Plek.values().length)];
+                boolean uit = tekst == null || tekst.isEmpty();
+                BlubKleding.Stuk stuk = uit ? null : BlubKleding.stuk(tekst);
+                if (!uit && (stuk == null || stuk.plek() != plek || !BlubKleding.mag(blub, stuk))) {
+                    return false;
+                }
+                blub.kleed(plek, stuk);
                 return true;
             }
         }
@@ -154,5 +146,6 @@ public final class BlubMenu {
     static void register(PayloadRegistrar registrar) {
         registrar.playToClient(MenuOpen.TYPE, MenuOpen.STREAM_CODEC, MenuOpen::handle);
         registrar.playToServer(MenuActie.TYPE, MenuActie.STREAM_CODEC, MenuActie::handle);
+        BlubSnoes.register(registrar);
     }
 }

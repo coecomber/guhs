@@ -27,7 +27,8 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
  *   <li>{@code /guhs blub raster}: the m06 grid in front of you (5 soorten x meter 0/25/50/75/100);</li>
  *   <li>{@code /guhs blub groepje [aantal]}: random Blubs with the real spawn dice (default 12);</li>
  *   <li>{@code /guhs blub tam}: every Blub-guh within 16 blocks becomes yours;</li>
- *   <li>{@code /guhs blub info}: the dice of the Blub you look at (or the nearest one).</li>
+ *   <li>{@code /guhs blub info}: the dice of the Blub you look at (or the nearest one);</li>
+ *   <li>{@code /guhs blub snoes aan|uit}: your "snoes_geholpen" flag (wild Blubs only show with it: {@link BlubSnoes}).</li>
  * </ul>
  */
 public final class BlubCommando {
@@ -60,7 +61,10 @@ public final class BlubCommando {
                         .then(Commands.argument("aantal", IntegerArgumentType.integer(1, 64))
                                 .executes(c -> groepje(c.getSource(), IntegerArgumentType.getInteger(c, "aantal")))))
                 .then(Commands.literal("tam").executes(c -> tam(c.getSource())))
-                .then(Commands.literal("info").executes(c -> info(c.getSource())))));
+                .then(Commands.literal("info").executes(c -> info(c.getSource())))
+                .then(Commands.literal("snoes")
+                        .then(Commands.literal("aan").executes(c -> snoes(c.getSource(), true)))
+                        .then(Commands.literal("uit").executes(c -> snoes(c.getSource(), false))))));
     }
 
     /** A Blub with these dice at this spot (not wild-rolled: finalizeSpawn keeps them), looking at the player. */
@@ -137,6 +141,13 @@ public final class BlubCommando {
         return blubs.size();
     }
 
+    private static int snoes(CommandSourceStack source, boolean aan) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        BlubSnoes.zet(p, aan);
+        source.sendSuccess(() -> Component.translatable(aan ? "commands.guhs.blub.snoes.aan" : "commands.guhs.blub.snoes.uit"), false);
+        return 1;
+    }
+
     private static int info(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
         Vec3 oog = p.getEyePosition(), kijk = p.getViewVector(1f);
@@ -152,7 +163,7 @@ public final class BlubCommando {
         }
         source.sendSuccess(() -> Component.translatable("commands.guhs.blub.info", b.getDisplayName(), BlubTrekking.metertje(b.meter()), b.meter(),
                 b.blubSoort().id(), b.tint(), String.format(java.util.Locale.ROOT, "%.2f", b.grootte()), b.isBaby() ? "baby" : "groot",
-                b.isTame() ? "tam" : "wild", b.strik()), false);
+                b.isTame() ? "tam" : "wild", b.draagt(BlubKleding.Plek.STRIK) == null ? "-" : b.draagt(BlubKleding.Plek.STRIK).id()), false);
         return b.meter();
     }
 }

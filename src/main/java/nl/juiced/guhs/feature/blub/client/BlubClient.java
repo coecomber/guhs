@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.DyeColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
@@ -28,6 +27,7 @@ import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.feature.blub.BlubFeature;
 import nl.juiced.guhs.feature.blub.BlubGuhEntity;
 import nl.juiced.guhs.feature.blub.BlubMenu;
+import nl.juiced.guhs.feature.blub.BlubSnoes;
 import nl.juiced.guhs.feature.blub.BlubTrekking;
 
 /**
@@ -62,7 +62,12 @@ public final class BlubClient {
     public static void init(IEventBus modBus) {
         modBus.addListener(BlubClient::renderers);
         BlubMenu.menuOpener = BlubClient::openMenu;
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(
+                (net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut e) -> BlubSnoes.Client.geholpen = false);
     }
+
+    /** The adult Blub-guh is drawn at 80% of the model (its size dice and baby size come on top). */
+    public static final float MODEL_SCHAAL = 0.8f;
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(BlubFeature.BLUBGUH.get(), BlubRenderer::new);
@@ -154,11 +159,20 @@ public final class BlubClient {
                     soort == BlubTrekking.Soort.BLAUW));
         }
 
-        /** Babyblubjes are small (the size dice are the entity's scale attribute, drawn by GeckoLib itself). */
+        /** 80% of the model; babyblubjes are small (the size dice are the entity's scale attribute, drawn by GeckoLib itself). */
         @Override
         public void scaleModelForRender(RenderPassInfo<LivingEntityRenderState> info, float widthScale, float heightScale) {
-            float age = info.renderState().ageScale;
-            super.scaleModelForRender(info, widthScale * age, heightScale * age);
+            float s = info.renderState().ageScale * MODEL_SCHAAL;
+            super.scaleModelForRender(info, widthScale * s, heightScale * s);
+        }
+
+        /** A wild Blub only shows once you helped Snoes (tamed ones always; TODO(Guhdromenland): always in the dream). */
+        @Override
+        public boolean shouldRender(BlubGuhEntity blub, net.minecraft.client.renderer.culling.Frustum frustum, double x, double y, double z) {
+            if (!blub.isTame() && !BlubSnoes.inDroom(blub.level()) && !BlubSnoes.Client.geholpen) {
+                return false;
+            }
+            return super.shouldRender(blub, frustum, x, y, z);
         }
 
         @Override
@@ -183,7 +197,7 @@ public final class BlubClient {
         }
     }
 
-    /** The strikje: only its bone, in its dye colour (the texture's strikje is white). */
+    /** The strikje: only its bone, in its colour (the texture's strikje is white). */
     static class StrikLaag extends GeoRenderLayer<BlubGuhEntity, Void, LivingEntityRenderState> {
         StrikLaag(GeoRenderer<BlubGuhEntity, Void, LivingEntityRenderState> renderer) {
             super(renderer);
@@ -195,7 +209,7 @@ public final class BlubClient {
             if (look == null || look.strik() < 0 || !info.willRender()) {
                 return;
             }
-            int kleur = 0xFF000000 | (DyeColor.byId(look.strik()).getTextureDiffuseColor() & 0xFFFFFF);
+            int kleur = 0xFF000000 | look.strik();
             GuhRenderer.submitPass(info, collector.order(1), RenderTypes.entityCutout(look.textuur()), info.packedLight(), kleur,
                     name -> name.equals("strik"));
         }

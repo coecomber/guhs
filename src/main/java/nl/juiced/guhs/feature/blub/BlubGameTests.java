@@ -32,6 +32,7 @@ public class BlubGameTests {
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
         p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        BlubSnoes.zet(p, true);                                   // (wild Blubs only know you once you helped Snoes)
         return p;
     }
 
@@ -76,7 +77,7 @@ public class BlubGameTests {
             helper.assertTrue(Math.abs(kans - s.kans) < 2.5, s.id() + ": about " + s.kans + "%, got " + kans);
         }
         helper.assertTrue(Math.abs(normaal * 100.0 / n - 60) < 3, "the normal tint about 60%");
-        helper.assertTrue(BlubTrekking.stap(0) == 0 && BlubTrekking.stap(1) == 1 && BlubTrekking.stap(20) == 2 && BlubTrekking.stap(59) == 3
+        helper.assertTrue(BlubTrekking.stap(0) == 0 && BlubTrekking.stap(1) == 1 && BlubTrekking.stap(20) == 2 && BlubTrekking.stap(49) == 2 && BlubTrekking.stap(50) == 3 && BlubTrekking.stap(59) == 3
                 && BlubTrekking.stap(60) == 4 && BlubTrekking.stap(99) == 5 && BlubTrekking.stap(100) == 6, "the stages of the meter");
         helper.succeed();
     }
@@ -120,7 +121,7 @@ public class BlubGameTests {
         BlubGuhEntity b = blub(helper, new BlockPos(6, 2, 6), new BlubTrekking.Waarden(100, BlubTrekking.Soort.RAVIJN, 2, 1.12f));
         helper.assertTrue("vol".equals(b.titel()), "exactly 100 is a Volle Guh");
         tem(helper, b, p);
-        b.setStrik(6);
+        b.kleedAan(BlubKleding.Plek.STRIK, BlubKleding.stuk("strik_pink"));
         b.setCustomName(Component.literal("Bubbels"));
         p.setShiftKeyDown(true);
         b.mobInteract(p, InteractionHand.MAIN_HAND);
@@ -137,7 +138,8 @@ public class BlubGameTests {
         helper.assertTrue(terug != null && terug.isTame() && terug.isOwnedBy(p), "put down, still yours");
         helper.assertTrue(terug.meter() == 100 && terug.blubSoort() == BlubTrekking.Soort.RAVIJN && terug.tint() == 2
                 && Math.abs(terug.grootte() - 1.12f) < 0.001f, "meter, soort, tint and size are kept");
-        helper.assertTrue(terug.strik() == 6 && "Bubbels".equals(terug.getCustomName().getString()), "strikje and name are kept");
+        helper.assertTrue(terug.draagt(BlubKleding.Plek.STRIK) == BlubKleding.stuk("strik_pink") && "Bubbels".equals(terug.getCustomName().getString()),
+                "strikje and name are kept");
         // like the real Blub: no damage (a fright), but /kill works
         float hp = terug.getHealth();
         helper.assertFalse(terug.hurtServer(level, level.damageSources().playerAttack(p), 5f), "a hit does nothing");
@@ -149,27 +151,59 @@ public class BlubGameTests {
         helper.succeed();
     }
 
+    @GuhTest(template = TUIN, batch = "blub")
+    public static void blubPasNaSnoes(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        BlubSnoes.zet(p, false);
+        BlubGuhEntity b = blub(helper, new BlockPos(6, 2, 6), new BlubTrekking.Waarden(40, BlubTrekking.Soort.BLAUW, 0, 1f));
+        helper.assertFalse(BlubSnoes.zichtbaar(b, p), "without Snoes: a wild Blub is not there for you");
+        for (int i = 0; i < 20; i++) {
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 5));
+            b.mobInteract(p, InteractionHand.MAIN_HAND);
+        }
+        helper.assertTrue(!b.isTame() && p.getMainHandItem().getCount() == 5, "without Snoes: no taming, the knabbel stays in your hand");
+        BlubSnoes.zet(p, true);
+        helper.assertTrue(BlubSnoes.heeft(p) && BlubSnoes.zichtbaar(b, p), "Snoes helped: you see the Blub");
+        tem(helper, b, p);
+        BlubSnoes.zet(p, false);
+        helper.assertTrue(BlubSnoes.zichtbaar(b, p), "a tame Blub is always there");
+        b.setCustomName(Component.literal("Bubbels"));
+        BlubGuhEntity vol = blub(helper, new BlockPos(8, 2, 6), new BlubTrekking.Waarden(100, BlubTrekking.Soort.ZWAM, 0, 1f));
+        helper.assertTrue("vol".equals(vol.titel()), "a Volle Guh");
+        vol.setCustomName(Component.literal("Wolkje"));
+        helper.assertTrue(vol.getDisplayName().getString().startsWith("Wolkje") && vol.getDisplayName().getString().length() > "Wolkje".length(),
+                "a named Volle Guh keeps its title next to its name");
+        helper.assertTrue(b.shouldShowName() && vol.shouldShowName(), "a name tag above its head");
+        helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        helper.succeed();
+    }
+
     @GuhTest(template = TUIN, batch = "blub", timeoutTicks = 320)
     public static void blubMenuKnoppen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(11, 2, 11));
         BlubGuhEntity b = blub(helper, new BlockPos(12, 2, 12), new BlubTrekking.Waarden(35, BlubTrekking.Soort.BLAUW, 0, 1f));
         tem(helper, b, p);
-        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.STRIK, 9, "") && b.strik() == 9, "strikje colour");
-        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.STRIK, -1, "") && b.strik() == -1, "no strikje");
+        int plek = BlubKleding.Plek.STRIK.ordinal();
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, plek, "strik_cyan")
+                && b.strik() == BlubKleding.stuk("strik_cyan").kleur(), "Kledingkast: a cyan strikje");
+        helper.assertFalse(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, plek, "bestaat_niet"), "an unknown piece: nothing");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, plek, "") && b.strik() == -1, "Kledingkast: off again");
         boolean volgt = b.aan(PiepInstelling.VOLGEN);
         BlubMenu.doe(p, b, BlubMenu.Actie.WISSEL, PiepInstelling.VOLGEN.ordinal(), "");
         helper.assertTrue(b.aan(PiepInstelling.VOLGEN) != volgt, "volgen switches");
-        BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, 0, "");
+        BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.ZITTEN.ordinal(), "");
         helper.assertTrue(b.isOrderedToSit(), "trick 'zit': it sits");
-        BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, 0, "");
+        BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.ZITTEN.ordinal(), "");
         helper.assertFalse(b.isOrderedToSit(), "trick 'zit' again: up");
-        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.SLAAPLIEDJE, 0, ""), "the lullaby");
-        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.HUPSEN, 0, "") && b.isBezig(), "hupsen: busy hopping");
+        BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.OOR_KRUL.ordinal(), "");
+        helper.assertTrue(b.emotie() == BlubGuhEntity.KRUL, "ears curled by hand");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.SLAAPLIEDJE.ordinal(), ""), "the lullaby");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.HUPSEN.ordinal(), "") && b.isBezig(), "hupsen: busy hopping");
         helper.assertFalse(BlubMenu.doe(p, b, BlubMenu.Actie.SCHOUDER, 0, ""), "busy: no other buttons");
         helper.runAfterDelay(240, () -> {
             helper.assertFalse(b.isBezig(), "done hopping");
             helper.assertTrue(b.hupsRecord() >= 6, "a hop record");
-            helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.VERSTOPPERTJE, 0, "") && b.verstopt(), "verstoppertje: hidden");
+            helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.VERSTOPPERTJE.ordinal(), "") && b.verstopt(), "verstoppertje: hidden");
             b.mobInteract(p, InteractionHand.MAIN_HAND);
             helper.assertFalse(b.verstopt(), "found by clicking it");
             helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.SCHOUDER, 0, "") && Schouder.heeft(p) && b.isRemoved(), "onto the shoulder");

@@ -29,8 +29,8 @@ CLOTHES = []
 # only this entry moves to the dream dimension's biomes.
 SPAWNS = {"blubguh_tijdelijk": (["guhs:wolkenweide", "guhs:bloemenvallei"], [("guhs:blubguh", 6, 2, 4)])}
 
-SOUNDS = {"blubguh.piep": [{"name": "guhs:entity.pieppiepmuisje.ambient", "type": "event", "pitch": 1.45, "volume": 0.7},
-                           {"name": "minecraft:entity.slime.squish_small", "type": "event", "pitch": 1.6, "volume": 0.5}]}
+# (the sounds: one event per action, tools/blub_audio_import.py fills them from inspiration/Blub audio/; its ACTIES give the
+# subtitles below)
 
 SOORT_NL = {"blauw": "Blauw", "weide": "Weide", "schild": "Schildje", "ravijn": "Ravijn", "zwam": "Zwam"}
 SOORT_EN = {"blauw": "Blue", "weide": "Meadow", "schild": "Shell", "ravijn": "Ravine", "zwam": "Fungus"}
@@ -42,16 +42,32 @@ TRUC_NL = ["Zitten! %s gaat netjes zitten (of staat weer op).", "Rondje! %s draa
            "Dood spelen! %s valt om... en staat weer op. Njeg, hij leeft!", "Hoge sprong! %s springt een salto!"]
 TRUC_EN = ["Sit! %s sits down nicely (or gets up again).", "Spin! %s spins around, wheee!",
            "Play dead! %s flops over... and gets up again. Njeg, alive!", "High jump! %s does a somersault!"]
+# its Trucjes screen (feature/blub/BlubTruc, in that order): id -> (name NL, EN, what it does NL, EN)
+TRUCJES = {
+    "zitten": ("Zitten", "Sit", "Zitten of weer opstaan (zoals Rondvadsen).", "Sit or get up again (like Rondvadsen)."),
+    "rondje": ("Rondje draaien", "Spin", "Een rondje draaien. De guhs in de buurt juichen!", "A little spin. The guhs nearby cheer!"),
+    "dood": ("Dood spelen", "Play dead", "Hij valt om... en staat weer op. De guhs juichen.", "It flops over... and gets up again. The guhs cheer."),
+    "sprong": ("Hoge sprong", "High jump", "Een hoge sprong met een salto.", "A high jump with a somersault."),
+    "hupsen": ("Hupsen!", "Hop hop!", "Hij hupst rondjes om je heen, steeds sneller. Record: %s sprongetjes.",
+               "It hops in circles around you, faster and faster. Record: %s hops."),
+    "slaapliedje": ("Slaapliedje piepen", "Squeak a lullaby", "Hij piept een liedje en de guhs in de buurt worden heel slaperig.",
+                    "It squeaks a little tune and the guhs nearby get very sleepy."),
+    "verstoppertje": ("Verstoppertje", "Hide and seek", "Hij verstopt zich ergens in de buurt. Vind hem binnen een minuut (rechtsklik)!",
+                      "It hides somewhere nearby. Find it within a minute (right-click)!"),
+    "squish": ("Squish!", "Squish!", "Een squish-knuffel: plat als een pudding, en weer omhoog.", "A squish hug: flat as a pudding, and up again."),
+    "oor_blij": ("Oortjes: blij", "Ears: happy", "Oortjes rechtop, blij!", "Ears up, happy!"),
+    "oor_plat": ("Oortjes: verlegen", "Ears: shy", "Oortjes plat, een beetje verlegen.", "Ears flat, a bit shy."),
+    "oor_krul": ("Oortjes: nieuwsgierig", "Ears: curious", "Oortjes in een krul: wat is dat?", "Curled ears: what is that?"),
+}
 
 # key -> (Dutch, English)
 TEKSTEN = {
-    "entity.guhs.blubguh": ("Blub-guh", "Blub-guh"),
+    "entity.guhs.blubguh": ("Blub", "Blub"),
     "entity.guhs.blubguh.puur": ("Pure Blub", "Pure Blub"),
     "entity.guhs.blubguh.vol": ("Volle Guh", "Full Guh"),
     "item.guhs.blubguh_item": ("Blub-guh", "Blub-guh"),
     "item.guhs.blubguh_item.tooltip": ("Zet hem neer met rechtsklik op de grond. Squish!", "Right-click the ground to put it down. Squish!"),
     "item.guhs.blubguh_spawn_egg": ("Blub-guh-spawnei", "Blub-guh Spawn Egg"),
-    "subtitles.guhs.blubguh.piep": ("Blub-guh piept", "Blub-guh squeaks"),
     "gui.guhs.landdiertjes.getemd.blubguh": ("%s is nu jouw Blub-guh! Squish!", "%s is your Blub-guh now! Squish!"),
     "gui.guhs.piep.menu.sub.blubguh": ("Een zachte Blub-guh", "A soft Blub-guh"),
     "gui.guhs.piep.menu.speciaal.blubguh": ("Op je schouder!", "On your shoulder!"),
@@ -67,30 +83,24 @@ TEKSTEN = {
     "gui.guhs.blubguh.menu.baby": ("Babyblubje!", "Baby blub!"),
     "gui.guhs.blubguh.menu.titel.puur": ("Een Pure Blub! Helemaal zonder guh. Zeldzaam!", "A Pure Blub! No guh at all. Rare!"),
     "gui.guhs.blubguh.menu.titel.vol": ("Een Volle Guh! Bijna een echte guh. Zeldzaam!", "A Full Guh! Almost a real guh. Rare!"),
-    "gui.guhs.blubguh.menu.strik": ("Strikje: %s", "Bow: %s"),
-    "gui.guhs.blubguh.menu.strik.geen": ("geen", "none"),
-    "gui.guhs.blubguh.menu.strik.tooltip": ("Klik: de volgende kleur (na de laatste: weer geen strikje).", "Click: the next colour (after the last one: no bow again)."),
+    "gui.guhs.blubguh.menu.kast": ("Kledingkast", "Wardrobe"),
+    "gui.guhs.blubguh.menu.kast.tooltip": ("Strikjes en (later) meer: kies wat hij draagt.", "Bows and (later) more: pick what it wears."),
+    "gui.guhs.blubguh.menu.trucjes": ("Trucjes", "Tricks"),
+    "gui.guhs.blubguh.menu.trucjes.tooltip": ("Alle trucjes en oortjes-emoties van je Blub.", "All your Blub's tricks and ear moods."),
+    "gui.guhs.blubguh.trucjes.titel": ("Trucjes van %s", "Tricks of %s"),
+    "gui.guhs.blubguh.truc.doe": ("Doe!", "Go!"),
+    "gui.guhs.blubguh.kast.titel": ("Kledingkast van %s", "Wardrobe of %s"),
+    "gui.guhs.blubguh.kast.uitleg": ("Klik om aan te trekken. Alle strikjes zijn gratis!", "Click to put it on. Every bow is free!"),
+    "gui.guhs.blubguh.kast.aan": ("Draagt nu: %s", "Wearing: %s"),
+    "gui.guhs.blubguh.kast.plek.strik": ("Strikje", "Bow"),
+    "gui.guhs.blubguh.kast.strik": ("%s strikje", "%s bow"),
+    "gui.guhs.blubguh.snoes_eerst": ("Deze Blub kent je nog niet... help eerst Snoes in slaap, njeg!",
+                                     "This Blub doesn't know you yet... help Snoes fall asleep first, njeg!"),
+    "commands.guhs.blub.snoes.aan": ("Snoes is geholpen: je ziet nu wilde Blubs (en kunt ze temmen).", "Snoes was helped: you see wild Blubs now (and can tame them)."),
+    "commands.guhs.blub.snoes.uit": ("Snoes is nog niet geholpen: wilde Blubs zijn weer onzichtbaar voor je.", "Snoes not helped yet: wild Blubs are invisible to you again."),
     "gui.guhs.blubguh.menu.schouder": ("Op je schouder", "On your shoulder"),
     "gui.guhs.blubguh.menu.schouder.tooltip": ("Hij hupt op je schouder. Sluip + rechtsklik op een blok: eraf.",
                                                "It hops onto your shoulder. Sneak + right-click a block: off it hops."),
-    "gui.guhs.blubguh.menu.liedje": ("Slaapliedje piepen", "Squeak a lullaby"),
-    "gui.guhs.blubguh.menu.liedje.tooltip": ("Hij piept een liedje en de guhs in de buurt worden heel slaperig.",
-                                             "It squeaks a little tune and the guhs nearby get very sleepy."),
-    "gui.guhs.blubguh.menu.verstop": ("Verstoppertje", "Hide and seek"),
-    "gui.guhs.blubguh.menu.verstop.tooltip": ("Hij verstopt zich ergens in de buurt. Vind hem binnen een minuut (rechtsklik)!",
-                                              "It hides somewhere nearby. Find it within a minute (right-click)!"),
-    "gui.guhs.blubguh.menu.hupsen": ("Hupsen!", "Hop hop!"),
-    "gui.guhs.blubguh.menu.hupsen.tooltip": ("Hij hupst rondjes om je heen, steeds sneller. Record: %s sprongetjes.",
-                                             "It hops in circles around you, faster and faster. Record: %s hops."),
-    "gui.guhs.blubguh.menu.trucjes": ("Trucjes:", "Tricks:"),
-    "gui.guhs.blubguh.menu.truc.0": ("Zit", "Sit"),
-    "gui.guhs.blubguh.menu.truc.1": ("Rondje", "Spin"),
-    "gui.guhs.blubguh.menu.truc.2": ("Dood", "Dead"),
-    "gui.guhs.blubguh.menu.truc.3": ("Sprong", "Jump"),
-    "gui.guhs.blubguh.menu.truc.0.tooltip": ("Zitten of weer opstaan (zoals Rondvadsen).", "Sit or get up again (like Rondvadsen)."),
-    "gui.guhs.blubguh.menu.truc.1.tooltip": ("Een rondje draaien. De guhs in de buurt juichen!", "A little spin. The guhs nearby cheer!"),
-    "gui.guhs.blubguh.menu.truc.2.tooltip": ("Dood spelen... en weer opstaan.", "Play dead... and get up again."),
-    "gui.guhs.blubguh.menu.truc.3.tooltip": ("Een hoge sprong met een salto.", "A high jump with a somersault."),
     # messages
     "gui.guhs.blubguh.op_schouder": ("%s zit op je schouder. Squish!", "%s sits on your shoulder. Squish!"),
     "gui.guhs.blubguh.liedje": ("%s piept een slaapliedje... piep, piep, pieeep...", "%s squeaks a lullaby... squeak, squeak, squeeeak..."),
@@ -118,12 +128,22 @@ for _s in SOORT_NL:
     for _t in range(3):
         TEKSTEN[f"gui.guhs.blubguh.tint.{_s}.{_t}"] = (TINT_NL[_s][_t], TINT_EN[_s][_t])
 for _i in range(4):
-    TEKSTEN[f"gui.guhs.blubguh.truc.{_i}"] = (TRUC_NL[_i], TRUC_EN[_i])
+    TEKSTEN[f"gui.guhs.blubguh.truc_melding.{_i}"] = (TRUC_NL[_i], TRUC_EN[_i])
+for _id, (_nl, _en, _unl, _uen) in TRUCJES.items():
+    TEKSTEN[f"gui.guhs.blubguh.truc.{_id}"] = (_nl, _en)
+    TEKSTEN[f"gui.guhs.blubguh.truc.{_id}.tooltip"] = (_unl, _uen)
+try:                                                   # the subtitles of its sound events (one per action)
+    import blub_audio_import as _audio
+except ImportError:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    import blub_audio_import as _audio
+for _a in _audio.ACTIES:
+    TEKSTEN[f"subtitles.guhs.blubguh.{_a.id}"] = (_a.ondertitel_nl, _a.ondertitel_en)
 
 
 def zichtbaar(soort, meter):
     """Which switchable bones show (the same rules as client/BlubClient.zichtbaar)."""
-    stap = 0 if meter <= 0 else 6 if meter >= 100 else 1 if meter < 20 else 2 if meter < 40 else 3 if meter < 60 else 4 if meter < 80 else 5
+    stap = 0 if meter <= 0 else 6 if meter >= 100 else 1 if meter < 20 else 2 if meter < 50 else 3 if meter < 60 else 4 if meter < 80 else 5
     z = {"lijf": stap < 4, "lijf_zacht": stap >= 4,
          "oor_l": soort == "blauw" and stap < 6, "oor_r": soort == "blauw" and stap < 6,
          "guhoortje_l": stap == 5 and soort in ("weide", "schild", "zwam"), "guhoortje_r": stap == 5 and soort in ("weide", "schild", "zwam"),
@@ -180,8 +200,7 @@ def build(h):
             "spawners": [{"type": t, "weight": wt, "minCount": lo, "maxCount": hi} for t, wt, lo, hi in spawners]})
 
     def patch(d):
-        for event, entries in SOUNDS.items():
-            d[event] = {"sounds": entries, "subtitle": f"subtitles.guhs.{event}"}
+        _audio.sound_events(d)                          # (keeps the imported files, adds missing events, drops old ones)
     h.patch_json(f"{A}/sounds.json", patch)
     for k, (nl, en) in TEKSTEN.items():
         h.lang(k, en, nl)

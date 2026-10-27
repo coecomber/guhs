@@ -97,7 +97,7 @@ public final class BlubTrekking {
         return new Waarden(meter, soort, tint, grootte);
     }
 
-    /** The stage of the meter (what the model shows): 0 puur, 1 blosjes, 2 guh-oogjes, 3 heel gezicht, 4 roze oortjes, 5 ronde puntjes, 6 guh-oren. */
+    /** The stage of the meter (what the model shows): 0 puur, 1 blosjes, 2 guh-oogjes + streepjesmondje (20-49), 3 heel gezicht met :3 (50-59), 4 roze oortjes, 5 ronde puntjes, 6 guh-oren. */
     public static int stap(int meter) {
         if (meter <= 0) {
             return 0;
@@ -105,7 +105,7 @@ public final class BlubTrekking {
         if (meter >= 100) {
             return 6;
         }
-        return meter < 20 ? 1 : meter < 40 ? 2 : meter < 60 ? 3 : meter < 80 ? 4 : 5;
+        return meter < 20 ? 1 : meter < 50 ? 2 : meter < 60 ? 3 : meter < 80 ? 4 : 5;
     }
 
     /** "Blub ■■■······· Guh 30%". */

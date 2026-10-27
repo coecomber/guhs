@@ -29,6 +29,8 @@ import nl.juiced.guhs.feature.piep.PiepDierItem;
  * 1.8.0 (Guhdromenland), TEST BUILD: the Blub-guh ({@link BlubGuhEntity}) with its Blub-Guh-Meter ({@link BlubTrekking}),
  * its menu ({@link BlubMenu}) and test commands ({@link BlubCommando}: /guhs blub ...).
  * <p>
+ * Wild Blubs only show (and can be tamed) once you helped Snoes ({@link BlubSnoes}); tamed ones always.
+ * <p>
  * Spawns: TIJDELIJK in the Wolkenweide and the Bloemenvallei of the Guhmension (biome modifier
  * data/guhs/neoforge/biome_modifier/blubguh_tijdelijk.json, from tools/features/blub.py: {@code SPAWNS}), until
  * Guhdromenland exists; then that one file moves to the dream dimension. Resources: tools/features/blub.py.
@@ -39,7 +41,7 @@ public final class BlubFeature {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<BlubGuhEntity>> BLUBGUH = ENTITY_TYPES.register("blubguh",
-            () -> EntityType.Builder.of(BlubGuhEntity::new, MobCategory.CREATURE).sized(0.62f, 0.62f).eyeHeight(0.45f)
+            () -> EntityType.Builder.of(BlubGuhEntity::new, MobCategory.CREATURE).sized(0.5f, 0.5f).eyeHeight(0.36f)
                     .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("blubguh"))));
 
     /** Picked up (the whole Blub in the item, meter and all). */
@@ -47,11 +49,10 @@ public final class BlubFeature {
             p -> new PiepDierItem(() -> BLUBGUH.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<SpawnEggItem> BLUBGUH_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "blubguh_spawn_egg", BLUBGUH);
 
-    /** TIJDELIJK: the muisje's peeps, higher (sounds.json). */
-    public static final DeferredHolder<SoundEvent, SoundEvent> PIEP = SOUNDS.register("blubguh.piep",
-            () -> SoundEvent.createVariableRangeEvent(Guhs.id("blubguh.piep")));
 
     public static void register(IEventBus modBus) {
+        BlubGeluid.values();                                  // (its sound events register themselves in SOUNDS)
+        BlubSnoes.events();
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
         SOUNDS.register(modBus);

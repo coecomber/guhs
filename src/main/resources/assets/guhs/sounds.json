@@ -6185,21 +6185,364 @@
     ],
     "subtitle": "subtitles.guhs.onderwol.snurkje"
   },
-  "blubguh.piep": {
+  "blubguh.idle": {
     "sounds": [
       {
-        "name": "guhs:entity.pieppiepmuisje.ambient",
-        "type": "event",
-        "pitch": 1.45,
-        "volume": 0.7
+        "name": "guhs:blubguh/idle/1"
       },
       {
-        "name": "minecraft:entity.slime.squish_small",
-        "type": "event",
-        "pitch": 1.6,
-        "volume": 0.5
+        "name": "guhs:blubguh/idle/2"
+      },
+      {
+        "name": "guhs:blubguh/idle/3"
+      },
+      {
+        "name": "guhs:blubguh/idle/4"
+      },
+      {
+        "name": "guhs:blubguh/idle/5"
       }
     ],
-    "subtitle": "subtitles.guhs.blubguh.piep"
+    "subtitle": "subtitles.guhs.blubguh.idle"
+  },
+  "blubguh.huppelen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/huppelen/1"
+      },
+      {
+        "name": "guhs:blubguh/huppelen/2"
+      },
+      {
+        "name": "guhs:blubguh/huppelen/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.huppelen"
+  },
+  "blubguh.landen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/landen/1"
+      },
+      {
+        "name": "guhs:blubguh/landen/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.landen"
+  },
+  "blubguh.squish": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/squish/1"
+      },
+      {
+        "name": "guhs:blubguh/squish/2"
+      },
+      {
+        "name": "guhs:blubguh/squish/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.squish"
+  },
+  "blubguh.blij": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/blij/1"
+      },
+      {
+        "name": "guhs:blubguh/blij/2"
+      },
+      {
+        "name": "guhs:blubguh/blij/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.blij"
+  },
+  "blubguh.schrik": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/schrik/1"
+      },
+      {
+        "name": "guhs:blubguh/schrik/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.schrik"
+  },
+  "blubguh.nieuwsgierig": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/nieuwsgierig/1"
+      },
+      {
+        "name": "guhs:blubguh/nieuwsgierig/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.nieuwsgierig"
+  },
+  "blubguh.eten": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/eten/1"
+      },
+      {
+        "name": "guhs:blubguh/eten/2"
+      },
+      {
+        "name": "guhs:blubguh/eten/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.eten"
+  },
+  "blubguh.getemd": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/getemd/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.getemd"
+  },
+  "blubguh.baby": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/baby/1"
+      },
+      {
+        "name": "guhs:blubguh/baby/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.baby"
+  },
+  "blubguh.slapen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/slapen/1"
+      },
+      {
+        "name": "guhs:blubguh/slapen/2"
+      },
+      {
+        "name": "guhs:blubguh/slapen/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.slapen"
+  },
+  "blubguh.wakker": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/wakker/1"
+      },
+      {
+        "name": "guhs:blubguh/wakker/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.wakker"
+  },
+  "blubguh.bellen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/bellen/1"
+      },
+      {
+        "name": "guhs:blubguh/bellen/2"
+      },
+      {
+        "name": "guhs:blubguh/bellen/3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.bellen"
+  },
+  "blubguh.plas": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/plas/1"
+      },
+      {
+        "name": "guhs:blubguh/plas/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.plas"
+  },
+  "blubguh.uitschudden": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/uitschudden/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.uitschudden"
+  },
+  "blubguh.liedje": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/liedje/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.liedje"
+  },
+  "blubguh.verstoppen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/verstoppen/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.verstoppen"
+  },
+  "blubguh.verstopt_piep": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/verstopt_piep/1"
+      },
+      {
+        "name": "guhs:blubguh/verstopt_piep/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.verstopt_piep"
+  },
+  "blubguh.gevonden": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/gevonden/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.gevonden"
+  },
+  "blubguh.truc_zit": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/truc_zit/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.truc_zit"
+  },
+  "blubguh.truc_rondje": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/truc_rondje/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.truc_rondje"
+  },
+  "blubguh.truc_dood": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/truc_dood/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.truc_dood"
+  },
+  "blubguh.truc_op": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/truc_op/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.truc_op"
+  },
+  "blubguh.truc_sprong": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/truc_sprong/1"
+      },
+      {
+        "name": "guhs:blubguh/truc_sprong/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.truc_sprong"
+  },
+  "blubguh.hupsen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/hupsen/1"
+      },
+      {
+        "name": "guhs:blubguh/hupsen/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.hupsen"
+  },
+  "blubguh.tikkertje": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/tikkertje/1"
+      },
+      {
+        "name": "guhs:blubguh/tikkertje/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.tikkertje"
+  },
+  "blubguh.delen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/delen/1"
+      },
+      {
+        "name": "guhs:blubguh/delen/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.delen"
+  },
+  "blubguh.schouder_op": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/schouder_op/1",
+        "pitch": 0.6667
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.schouder_op"
+  },
+  "blubguh.schouder_af": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/schouder_af/1",
+        "pitch": 0.7692
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.schouder_af"
+  },
+  "blubguh.oppakken": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/oppakken/1",
+        "pitch": 0.6667
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.oppakken"
+  },
+  "blubguh.neerzetten": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/neerzetten/1",
+        "pitch": 0.7692
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.neerzetten"
+  },
+  "blubguh.strikje": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/strikje/1"
+      },
+      {
+        "name": "guhs:blubguh/strikje/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.strikje"
+  },
+  "blubguh.glinster": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/glinster/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.glinster"
+  },
+  "blubguh.weg": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/weg/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.weg"
   }
 }

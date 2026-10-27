@@ -1,30 +1,36 @@
-# Blub-guh testen (1.8.0 testbuild)
+# Blub-guh testen (1.8.0 testbuild, ronde 2)
 
 Start de client: dubbelklik `C:\Users\Juiced\Documents\MineScapeStory\guhs_work\w-blub\run-client.bat`
 (eigen `run/`-map met een nieuwe testwereld; maak een creatieve wereld met cheats aan).
 
+**Eerst:** `/guhs blub snoes aan`. Wilde Blubs zie je pas als je Snoes geholpen hebt (dat verhaal bestaat nog niet, dus zet je
+het zo aan). Zonder die vlag zijn wilde Blubs onzichtbaar en niet aan te klikken; tamme Blubs zie je altijd.
+
 ## Testcommando's (op, cheats aan)
 | Commando | Wat |
 |---|---|
+| `/guhs blub snoes aan` / `uit` | Jouw vlag "Snoes geholpen" (wilde Blubs zien en temmen) |
 | `/guhs blub spawn <meter> [soort] [tint] [grootte] [baby]` | Eén Blub-guh voor je neus. soort = blauw / weide / schild / ravijn / zwam, tint 0-2, grootte 0.85-1.15, baby true/false. Bijv. `/guhs blub spawn 100 zwam 1 1.1 false` |
-| `/guhs blub raster` | Het m06-raster: 5 soorten × meter 0 / 25 / 50 / 75 / 100 (tam, zittend) |
-| `/guhs blub groepje [aantal]` | Random Blubs met de echte spawn-trekking (standaard 12) |
+| `/guhs blub raster` | Het m06-raster: 5 soorten × meter 0 / 25 / 50 / 75 / 100 (tam, zittend: altijd zichtbaar) |
+| `/guhs blub groepje [aantal]` | Random wilde Blubs met de echte spawn-trekking (standaard 12) |
 | `/guhs blub tam` | Alle Blub-guhs binnen 16 blokken worden van jou |
-| `/guhs blub info` | Meter, soort, tint, grootte enz. van de Blub waar je naar kijkt |
+| `/guhs blub info` | Meter, soort, tint, grootte, strikje enz. van de Blub waar je naar kijkt |
 
+`spawn`, `raster` en `groepje` werken altijd, maar wilde Blubs zie je alleen met `snoes aan`.
 Ook: het **Blub-guh-spawnei** (creatief tabblad Guhs) en de echte spawn (TIJDELIJK) in de **Wolkenweide** en de **Bloemenvallei**
 van de Guhmension (groepjes van 2-4; `/locate biome guhs:wolkenweide`).
 
 ## Wat je kunt proberen
-- **Temmen**: TIJDELIJK met een **kaasknabbel** (1 op 3), tot droomzand bestaat.
-- **Klikken met lege hand**: squish-knuffel (pudding + piep + hartjes); eigenaar: het menu.
-- **Sluipen + klikken**: oppakken (alles blijft bewaard: meter, soort, tint, grootte, strikje, naam).
-- **Menu**: naam, Volgen, Rondvadsen, Strikje (klik = volgende kleur, na de laatste weer geen), Op je schouder (eraf: sluip +
-  rechtsklik op een blok), Slaapliedje piepen (guhs in de buurt worden slaperig), Verstoppertje (zoek hem binnen een minuut),
-  4 trucjes (zit, rondje, dood spelen, sprong; guhs in de buurt juichen), Hupsen (rondjes om je heen, record), Oppakken.
-- **Babyblubjes**: geef twee tamme Blubs een kaasknabbel → babyblubje met waarden tussen de ouders.
-- **Uit zichzelf**: oortjes-emoties (plat als je hem slaat: hij is onkwetsbaar, alleen `/kill` werkt; krul als er iets nieuws
-  is), plassen springen bij regen (`/weather rain`), tikkertje met guhs, knabbel delen met een guh, 's nachts slapen bij een
-  guh of in een guhnestje (zzz + droomwolkje), bellen blazen (in water: jij krijgt waterademen als hij erbij is), Pure Blub (0)
-  en Volle Guh (100) glinsteren en hebben een titel. De blauwe gloeit zachtjes.
-- **Guhhuisje**, **Mijn andere vadsjes** en de **Knabbelvelden**: werken via de bestaande maatje-code.
+- **Naamkaartje**: wilde Blubs heten "Blub" ("Pure Blub" op meter 0, "Volle Guh" op 100). Geef je hem een naam, dan zie je die naam,
+  en een Pure Blub / Volle Guh houdt zijn titel erachter ("Bubbels ✦ Volle Guh").
+- **Temmen** met een **kaasknabbel** (1 op 3), alleen met de Snoes-vlag. Zonder vlag krijg je een grapje over Snoes.
+- **Klikken met lege hand**: squish-knuffel; eigenaar: het menu. **Sluipen + klikken**: oppakken (alles blijft bewaard).
+- **Menu**: naam, Volgen, Rondvadsen, **Kledingkast** (strikjes in 16 kleuren of niets; ook te zien op de Blub),
+  **Trucjes** (zitten, rondje, dood spelen, hoge sprong, hupsen, slaapliedje, verstoppertje, squish, oortjes blij/verlegen/nieuwsgierig),
+  Op je schouder (eraf: sluip + rechtsklik op een blok), Oppakken.
+- **Grootte**: een volwassen Blub is nu 80% van het vorige model (de 85-115%-grootte en baby's komen daarbovenop).
+- **Babyblubjes**: geef twee tamme Blubs een kaasknabbel.
+- **Geluiden**: elke actie heeft nu een eigen geluid (placeholders). Zie `C:\Users\Juiced\Documents\MineScapeStory\inspiration\Blub audio\LEESMIJ.md`.
+- **Uit zichzelf**: oortjes-emoties, tikkertje en knabbel delen met guhs, 's nachts slapen bij een guh of in een guhnestje,
+  bellen blazen, glinsteren (Pure Blub / Volle Guh), de blauwe gloeit zachtjes.
+- **Regen/plassen**: werkt nu niet in de Guhmension (daar regent het niet; er komt een apart "Weer vadser"-blok).
