@@ -666,6 +666,7 @@
     "guhs:seinlampje",
     "guhs:neon_kegelbord",
     "guhs:vadslamp",
-    "guhs:vadsschakelaar"
+    "guhs:vadsschakelaar",
+    "guhs:weer_vadser"
   ]
 }

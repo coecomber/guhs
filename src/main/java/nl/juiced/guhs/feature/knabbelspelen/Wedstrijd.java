@@ -559,6 +559,7 @@ public final class Wedstrijd {
                 if (winnaar) {
                     lintjes++;
                     Adv.grant(p, "knabbelspelen_winnaar");
+                    nl.juiced.guhs.feature.weer.WeerUnlocks.potjeEenmalig(p, nl.juiced.guhs.feature.weer.Weertje.KNABBEL);   // 1.8.0: knabbelbuitje
                 }
                 Scorebord.submit(p, Onderdeel.ZESKAMP_BOARD, totaal, false);
                 int best = bestZeskamp(p);

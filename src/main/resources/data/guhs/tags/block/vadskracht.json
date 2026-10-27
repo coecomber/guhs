@@ -51,6 +51,7 @@
     "guhs:enderguhrad",
     "guhs:bouwkeet",
     "guhs:vadslamp",
-    "guhs:vadsschakelaar"
+    "guhs:vadsschakelaar",
+    "guhs:weer_vadser"
   ]
 }
