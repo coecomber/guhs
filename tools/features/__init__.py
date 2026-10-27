@@ -125,7 +125,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'onderwol_structuren2',
             # 1.7.0 ronde 45-47: working vadskracht in new copies of old structures (patches their templates; after every module
             # that writes them: guh_village (make_structures + beroepen), kaasmijn, boerderij, spiesburcht, bestaand, paleizen; append only)
-            'vadskracht_oud']
+            'vadskracht_oud',
+            # 1.8.0 Guhdromenland (test build): the Blub-guh (append only)
+            'blub']
 
 
 def modules():

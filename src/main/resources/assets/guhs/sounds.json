@@ -6184,5 +6184,22 @@
       }
     ],
     "subtitle": "subtitles.guhs.onderwol.snurkje"
+  },
+  "blubguh.piep": {
+    "sounds": [
+      {
+        "name": "guhs:entity.pieppiepmuisje.ambient",
+        "type": "event",
+        "pitch": 1.45,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:entity.slime.squish_small",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.piep"
   }
 }

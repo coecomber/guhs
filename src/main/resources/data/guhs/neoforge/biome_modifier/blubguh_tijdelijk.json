@@ -1,0 +1,15 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:wolkenweide",
+    "guhs:bloemenvallei"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:blubguh",
+      "weight": 6,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

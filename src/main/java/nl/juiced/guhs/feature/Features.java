@@ -160,6 +160,7 @@ public final class Features {
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.register(modBus);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
         nl.juiced.guhs.feature.onderwol.stadje.Vadsmijnstadje.register(modBus);   // 1.7.0 Onder de Wol: the Vadsmijnstadje (Superkompas entry, its Bijvuller)
         nl.juiced.guhs.feature.techbeurs.TechbeursFeature.register(modBus);   // 1.7.0 (ronde 45-47): the Vadslamp + the Guhtechniek-beurs
+        nl.juiced.guhs.feature.blub.BlubFeature.register(modBus);   // 1.8.0 (Guhdromenland): the Blub-guh (test build)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -278,6 +279,7 @@ public final class Features {
         nl.juiced.guhs.feature.bouwhulp.GereedschapFeature.payloads(registrar);   // 1.6.0 deel 2 F9
         nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.payloads(registrar);   // 1.7.0 Onder de Wol: the Wolkenliftje's ride
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.payloads(registrar);   // 1.7.0 Onder de Wol: the glimworm jar on your back
+        nl.juiced.guhs.feature.blub.BlubFeature.payloads(registrar);   // 1.8.0: the Blub-guh's menu
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -408,6 +410,7 @@ public final class Features {
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.creative(output);   // 1.7.0 Onder de Wol: the cave games' coins, blocks and deco
         nl.juiced.guhs.feature.mijnspellen.MijnspellenFeature.creative(output);   // 1.7.0 Onder de Wol: Karretjes-wissels + Kegelgrot (minigames2)
         nl.juiced.guhs.feature.techbeurs.TechbeursFeature.creative(output);   // 1.7.0 (ronde 45-47): the Vadslamp
+        nl.juiced.guhs.feature.blub.BlubFeature.creative(output);   // 1.8.0: the Blub-guh spawn egg
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
