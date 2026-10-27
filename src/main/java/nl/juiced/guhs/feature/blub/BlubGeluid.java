@@ -23,7 +23,9 @@ public enum BlubGeluid {
     VERSTOPT_PIEP(0.25f, 0.1f), GEVONDEN(1.0f, 0.05f), TRUC_ZIT(0.6f, 0.05f), TRUC_RONDJE(0.7f, 0.05f), TRUC_DOOD(0.7f, 0.05f),
     TRUC_OP(0.7f, 0.05f), TRUC_SPRONG(0.8f, 0.05f), HUPSEN(0.5f, 0f), TIKKERTJE(0.7f, 0.1f), DELEN(0.6f, 0.08f),
     SCHOUDER_OP(0.8f, 0f), SCHOUDER_AF(0.8f, 0f), OPPAKKEN(0.8f, 0f), NEERZETTEN(0.8f, 0f), STRIKJE(0.7f, 0.05f),
-    GLINSTER(0.2f, 0.2f), WEG(0.8f, 0f);
+    GLINSTER(0.2f, 0.2f), WEG(0.8f, 0f), KNUFFEL_GUH(0.8f, 0.08f),
+    // 1.8.0 ronde 3b: the Blub's own chores in a Guhhuisje
+    KLUS_BESPROEIEN(0.5f, 0.12f), KLUS_BEZORGEN(0.7f, 0.08f), KLUS_ZINGEN(0.9f, 0f), KLUS_BADDEREN(0.6f, 0.1f);
 
     /** Babyblubjes squeak this much higher. */
     public static final float BABY_TOON = 1.3f;

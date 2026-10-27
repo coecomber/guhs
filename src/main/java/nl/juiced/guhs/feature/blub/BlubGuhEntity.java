@@ -406,6 +406,7 @@ public class BlubGuhEntity extends Landdiertje {
         goalSelector.addGoal(3, new VerstopGoal());
         goalSelector.addGoal(5, new TikkertjeGoal());
         goalSelector.addGoal(5, new DeelGoal());
+        goalSelector.addGoal(3, new KnuffelGoal());
     }
 
     @Override
@@ -486,9 +487,13 @@ public class BlubGuhEntity extends Landdiertje {
     }
 
     /** A squish-knuffel: flat as a pudding, a squeak, hearts, ears up (and it wakes up). */
-    public void squish(ServerPlayer player) {
+    public void squish(@Nullable ServerPlayer player) {
         setSlaapt(false);
-        aaien(player);
+        if (player != null) {
+            aaien(player);
+        } else if (level() instanceof ServerLevel sl) {
+            sl.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
+        }
         triggerAnim("actie", "squish");
         BlubGeluid.SQUISH.speel(this);
         emotie(RECHTOP, 80);
@@ -497,7 +502,7 @@ public class BlubGuhEntity extends Landdiertje {
     // --- the menu's things ---------------------------------------------------------------------------------------------------------
 
     /** A trick: 0 zitten (switches Rondvadsen), 1 een rondje, 2 dood spelen (and up again), 3 een hoge sprong. Guhs nearby cheer. */
-    public void truc(ServerPlayer player, int welke) {
+    public void truc(@Nullable ServerPlayer player, int welke) {
         setSlaapt(false);
         switch (welke) {
             case 0 -> zet(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN, !aan(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN));
@@ -513,7 +518,9 @@ public class BlubGuhEntity extends Landdiertje {
         if (welke == 2) {
             weerOp = level().getGameTime() + 46;                       // (the "dood" animation gets up at 2.3 s)
         }
-        player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.truc_melding." + welke, getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        if (player != null) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.truc_melding." + welke, getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
         if (welke != 0) {
             juichen(welke == 2 ? 70 : 20);
         }
@@ -525,6 +532,184 @@ public class BlubGuhEntity extends Landdiertje {
     }
 
     private long juichOp, weerOp;
+
+    // --- by itself: now and then a trick (about once a minute) -------------------------------------------------------------------
+
+    /** Game time of its next try at a trick of its own. */
+    private long volgendeTruc = -1;
+
+    /** May it do a trick of its own right now? Not asleep, hiding, busy, riding, on a shoulder or walking somewhere. */
+    public boolean magZelfTruc() {
+        return !isRemoved() && !slaapt() && !verstopt() && !isBezig() && !isPassenger() && !opSchouder && liedje == 0 && weerOp == 0
+                && knuffelGuh == null && !getNavigation().isInProgress();
+    }
+
+    /** Is there room around it for hupsen (a ring of about 2 blocks)? */
+    private boolean vrijOmHeen() {
+        BlockPos hier = blockPosition();
+        for (int i = 0; i < 8; i++) {
+            double a = i * Math.PI / 4;
+            if (!kanStaan(hier.offset((int) Math.round(Math.cos(a) * 2), 0, (int) Math.round(Math.sin(a) * 2)))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Does one random trick of its own (BlubTruc#zelf; hupsen only with room). Returns it, or null when it can't now. */
+    @Nullable
+    public BlubTruc zelfTruc() {
+        if (!magZelfTruc()) {
+            return null;
+        }
+        java.util.List<BlubTruc> kan = new java.util.ArrayList<>();
+        for (BlubTruc t : BlubTruc.values()) {
+            if (t.zelf && (t != BlubTruc.HUPSEN || vrijOmHeen())) {
+                kan.add(t);
+            }
+        }
+        BlubTruc t = kan.get(random.nextInt(kan.size()));
+        t.doe(this, null);
+        return t;
+    }
+
+    // --- a hug with a guh --------------------------------------------------------------------------------------------------------
+
+    /** The guh it is on its way to hug (null: none). */
+    @Nullable
+    private GuhEntity knuffelGuh;
+    private long volgendeKnuffel = -1;
+    /** How far it looks for a guh to hug. */
+    public static final int KNUFFEL_BEREIK = 8;
+
+    /** The trick "Knuffelen met een guh": the nearest tame guh within 8 blocks (its own owner's first), or a little joke. */
+    public boolean knuffelGuh(@Nullable ServerPlayer player) {
+        GuhEntity g = knuffelPartner();
+        if (g == null) {
+            if (player != null) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.knuffel.geen", getDisplayName()).withStyle(ChatFormatting.GRAY));
+            }
+            return false;
+        }
+        setSlaapt(false);
+        knuffelGuh = g;
+        return true;
+    }
+
+    /** A tame guh nearby that is free for a hug: its own owner's guhs first, then the nearest. */
+    @Nullable
+    public GuhEntity knuffelPartner() {
+        java.util.UUID eigen = nl.juiced.guhs.entity.Owners.uuid(this);
+        return level().getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(KNUFFEL_BEREIK), g -> g.isAlive() && g.isTame()
+                        && g.emotes.current() == null && !nl.juiced.guhs.feature.knus.GuhHooks.isBezig(g) && !nl.juiced.guhs.feature.huisje.Huisjes.isBinnen(g))
+                .stream().min(java.util.Comparator.<GuhEntity>comparingInt(g -> eigen != null && eigen.equals(nl.juiced.guhs.entity.Owners.uuid(g)) ? 0 : 1)
+                        .thenComparingDouble(this::distanceToSqr)).orElse(null);
+    }
+
+    /** Do it and this guh live in the same Guhhuisje? (Then they hug more often.) */
+    private boolean zelfdeHuisje(GuhEntity g) {
+        if (!(level() instanceof ServerLevel sl) || nl.juiced.guhs.entity.Owners.uuid(this) == null || nl.juiced.guhs.entity.Owners.uuid(g) == null) {
+            return false;
+        }
+        try {
+            var a = nl.juiced.guhs.feature.huisje.Huisjes.vanBewoner(sl.getServer(), nl.juiced.guhs.entity.Owners.uuid(this), nl.juiced.guhs.feature.band.Band.id(this));
+            var b = nl.juiced.guhs.feature.huisje.Huisjes.vanBewoner(sl.getServer(), nl.juiced.guhs.entity.Owners.uuid(g), nl.juiced.guhs.feature.band.Band.id(g));
+            return a != null && b != null && a.pos().equals(b.pos());
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    /** The hug itself: the guh hugs (KNUFFELEN), the Blub squishes, hearts and a peep. */
+    public void knuffelMoment(GuhEntity g) {
+        getNavigation().stop();
+        g.getNavigation().stop();
+        g.getLookControl().setLookAt(this, 90f, 90f);
+        getLookControl().setLookAt(g, 90f, 90f);
+        g.emotes.start(Emote.KNUFFELEN, false, GuhEmotes.Source.SELF);
+        triggerAnim("actie", "squish");
+        emotie(RECHTOP, 80);
+        BlubGeluid.KNUFFEL_GUH.speel(this);
+        if (level() instanceof ServerLevel sl) {
+            double mx = (getX() + g.getX()) / 2, mz = (getZ() + g.getZ()) / 2;
+            sl.sendParticles(ParticleTypes.HEART, mx, getY() + Math.max(getBbHeight(), g.getBbHeight()) + 0.2, mz, 6, 0.4, 0.2, 0.4, 0);
+        }
+    }
+
+    /** Walks to the guh (the guh comes a little closer too) and hugs it. */
+    class KnuffelGoal extends Goal {
+        private int ticks;
+        private boolean klaar;
+
+        KnuffelGoal() {
+            setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (knuffelGuh != null) {
+                return true;
+            }
+            long nu = level().getGameTime();
+            if (volgendeKnuffel < 0) {
+                volgendeKnuffel = nu + 600 + random.nextInt(2400);
+            }
+            if (nu < volgendeKnuffel || !isTame() || isBezig() || slaapt() || isPassenger() || liedje > 0) {
+                return false;
+            }
+            GuhEntity g = knuffelPartner();
+            if (g == null) {
+                volgendeKnuffel = nu + 200;                          // (nobody around: look again in 10 seconds)
+                return false;
+            }
+            // about once every few minutes per pair; housemates of one Guhhuisje a bit more often
+            volgendeKnuffel = nu + (zelfdeHuisje(g) ? 1200 + random.nextInt(1800) : 2400 + random.nextInt(3600));
+            knuffelGuh = g;
+            return true;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !klaar && knuffelGuh != null && knuffelGuh.isAlive() && ticks < 300 && !isBezig();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void start() {
+            ticks = 0;
+            klaar = false;
+        }
+
+        @Override
+        public void tick() {
+            GuhEntity g = knuffelGuh;
+            if (g == null) {
+                return;
+            }
+            ticks++;
+            getLookControl().setLookAt(g);
+            double reik = 1.3 + (getBbWidth() + g.getBbWidth()) * 0.5;
+            if (distanceToSqr(g) <= reik * reik) {
+                knuffelMoment(g);
+                klaar = true;
+            } else if (ticks % 10 == 1) {
+                getNavigation().moveTo(g, 1.2);
+                if (!g.isOrderedToSit() && ticks > 20) {
+                    g.getNavigation().moveTo(BlubGuhEntity.this, 0.9);   // (the guh comes to meet it halfway)
+                }
+            }
+        }
+
+        @Override
+        public void stop() {
+            knuffelGuh = null;
+            getNavigation().stop();
+        }
+    }
 
     /** Slaapliedje piepen: a little tune, then the guhs around yawn and go to sleep. */
     public void slaapliedje(ServerPlayer player) {
@@ -602,13 +787,17 @@ public class BlubGuhEntity extends Landdiertje {
     }
 
     /** Hupsen: a few hops in a ring around its owner, faster and faster (its record is kept). */
-    public void hupsen(ServerPlayer player) {
+    public void hupsen(@Nullable ServerPlayer player) {
         setSlaapt(false);
-        zet(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN, true);
+        if (isTame()) {
+            zet(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN, true);
+        }
         hupsenOver = 6 + random.nextInt(5);
         hupsenGedaan = 0;
         hupsWacht = 0;
-        player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.hupsen.start", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        if (player != null) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.hupsen.start", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
     }
 
     // --- every tick -----------------------------------------------------------------------------------------------------------------
@@ -716,6 +905,13 @@ public class BlubGuhEntity extends Landdiertje {
                 emotie(KRUL, 60);
                 BlubGeluid.NIEUWSGIERIG.speel(this);
             }
+        }
+        // now and then a trick of its own (about once a minute; wild and tame)
+        if (volgendeTruc < 0) {
+            volgendeTruc = nu + 600 + random.nextInt(1200);
+        } else if (nu >= volgendeTruc) {
+            volgendeTruc = nu + 600 + random.nextInt(1200);
+            zelfTruc();
         }
         // a Pure Blub and a Volle Guh glitter a little
         if (titel() != null && nu >= volgendeGlinster) {

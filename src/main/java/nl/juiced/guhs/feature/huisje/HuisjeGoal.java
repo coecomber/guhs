@@ -126,7 +126,7 @@ public class HuisjeGoal extends Goal {
     }
 
     /** The day part for this huisje: the overworld clock (a fixed-time dimension like the guhmaag has none of its own). */
-    static Dagdeel dagdeel(ServerLevel level, Huisje h) {
+    public static Dagdeel dagdeel(ServerLevel level, Huisje h) {
         Dagdeel test = TEST_DAGDEEL.get(h.pos());
         if (test != null) {
             return test;

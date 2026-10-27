@@ -13,21 +13,25 @@ import net.minecraft.server.level.ServerPlayer;
  * screen's order).
  */
 public enum BlubTruc {
-    ZITTEN((b, p) -> b.truc(p, 0)),
-    RONDJE((b, p) -> b.truc(p, 1)),
-    DOOD((b, p) -> b.truc(p, 2)),
-    SPRONG((b, p) -> b.truc(p, 3)),
-    HUPSEN((b, p) -> b.hupsen(p)),
-    SLAAPLIEDJE((b, p) -> b.slaapliedje(p)),
-    VERSTOPPERTJE((b, p) -> b.verstoppertje(p)),
-    SQUISH((b, p) -> b.squish(p)),
-    OOR_BLIJ((b, p) -> b.oortjes(BlubGuhEntity.RECHTOP)),
-    OOR_PLAT((b, p) -> b.oortjes(BlubGuhEntity.PLAT)),
-    OOR_KRUL((b, p) -> b.oortjes(BlubGuhEntity.KRUL));
+    ZITTEN(false, (b, p) -> b.truc(p, 0)),
+    RONDJE(true, (b, p) -> b.truc(p, 1)),
+    DOOD(true, (b, p) -> b.truc(p, 2)),
+    SPRONG(true, (b, p) -> b.truc(p, 3)),
+    HUPSEN(true, (b, p) -> b.hupsen(p)),
+    SLAAPLIEDJE(false, (b, p) -> b.slaapliedje(p)),
+    VERSTOPPERTJE(false, (b, p) -> b.verstoppertje(p)),
+    SQUISH(true, (b, p) -> b.squish(p)),
+    OOR_BLIJ(true, (b, p) -> b.oortjes(BlubGuhEntity.RECHTOP)),
+    OOR_PLAT(true, (b, p) -> b.oortjes(BlubGuhEntity.PLAT)),
+    OOR_KRUL(true, (b, p) -> b.oortjes(BlubGuhEntity.KRUL)),
+    KNUFFEL_GUH(false, (b, p) -> b.knuffelGuh(p));
 
+    /** Does it do this one by itself now and then (BlubGuhEntity#zelfTruc)? Only tricks it can do alone. */
+    public final boolean zelf;
     private final BiConsumer<BlubGuhEntity, ServerPlayer> doe;
 
-    BlubTruc(BiConsumer<BlubGuhEntity, ServerPlayer> doe) {
+    BlubTruc(boolean zelf, BiConsumer<BlubGuhEntity, ServerPlayer> doe) {
+        this.zelf = zelf;
         this.doe = doe;
     }
 
@@ -43,7 +47,8 @@ public enum BlubTruc {
         return Component.translatable("gui.guhs.blubguh.truc." + id() + ".tooltip");
     }
 
-    public void doe(BlubGuhEntity blub, ServerPlayer player) {
+    /** Does the trick (player: who asked; null when it does one by itself). */
+    public void doe(BlubGuhEntity blub, @javax.annotation.Nullable ServerPlayer player) {
         doe.accept(blub, player);
     }
 

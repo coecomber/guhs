@@ -18,9 +18,11 @@ from PIL import Image, ImageDraw
 
 try:
     from features import blub_modellen as modellen
+    from features import blub_klusjes as klusjes
 except ImportError:                                   # (run as a script from the project root)
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     from features import blub_modellen as modellen
+    from features import blub_klusjes as klusjes
 
 BONES = {}
 CLOTHES = []
@@ -58,6 +60,8 @@ TRUCJES = {
     "oor_blij": ("Oortjes: blij", "Ears: happy", "Oortjes rechtop, blij!", "Ears up, happy!"),
     "oor_plat": ("Oortjes: verlegen", "Ears: shy", "Oortjes plat, een beetje verlegen.", "Ears flat, a bit shy."),
     "oor_krul": ("Oortjes: nieuwsgierig", "Ears: curious", "Oortjes in een krul: wat is dat?", "Curled ears: what is that?"),
+    "knuffel_guh": ("Knuffelen met een guh", "Hug a guh", "Hij zoekt de dichtstbijzijnde tamme guh (binnen 8 blokken) voor een dikke knuffel.",
+                    "It looks for the nearest tame guh (within 8 blocks) for a big hug."),
 }
 
 # key -> (Dutch, English)
@@ -139,6 +143,7 @@ except ImportError:
     import blub_audio_import as _audio
 for _a in _audio.ACTIES:
     TEKSTEN[f"subtitles.guhs.blubguh.{_a.id}"] = (_a.ondertitel_nl, _a.ondertitel_en)
+TEKSTEN.update(klusjes.TEKSTEN)
 
 
 def zichtbaar(soort, meter):
@@ -190,6 +195,7 @@ def icoon():
 def build(h):
     A, D, w = h.A, h.D, h.w
     modellen.build(h)
+    klusjes.build(h)
     h.save(icoon(), "item", "blubguh_item.png")
     h.item_model("blubguh_item")
     w(f"{A}/models/item/blubguh_spawn_egg.json", {"parent": "minecraft:item/template_spawn_egg"})
@@ -287,7 +293,7 @@ def _mc26():
             break
     mc26.SPAWN_EGGS = {"blubguh_spawn_egg": mc26.SPAWN_EGGS["blubguh_spawn_egg"]}
     mc26.spawn_eggs()
-    for n in ("blubguh_item", "blubguh_spawn_egg"):
+    for n in ["blubguh_item", "blubguh_spawn_egg"] + klusjes.ITEMS:
         with open(os.path.join(mc26.A, "items", n + ".json"), "w", encoding="utf-8", newline="\n") as f:
             json.dump({"model": {"type": "minecraft:model", "model": f"guhs:item/{n}"}}, f, indent=2)
             f.write("\n")

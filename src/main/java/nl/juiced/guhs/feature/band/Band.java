@@ -468,6 +468,8 @@ public final class Band {
 
     /** Chore speed: 1.5 when blij, else 1.0. */
     public static float klusSnelheid(Mob guh) {
-        return isBlij(guh) ? 1.5f : 1.0f;
+        float f = isBlij(guh) ? 1.5f : 1.0f;
+        // 1.8.0: a guh a Blub sang to sleep (Slaapliedjeszanger) is uitgerust: its chores go a bit quicker
+        return guh.hasEffect(nl.juiced.guhs.feature.kamperen.KamperenFeature.UITGERUST) ? f * 1.15f : f;
     }
 }

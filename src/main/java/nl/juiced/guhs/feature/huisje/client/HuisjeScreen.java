@@ -491,7 +491,8 @@ public class HuisjeScreen extends Screen {
             out.add(new Tekst(Component.translatable("gui.guhs.huisje.kies_bewoner"), LICHT, 0.75f));
             for (int i = 0; i < alle.size(); i++) {
                 String id = alle.getCompoundOrEmpty(i).getStringOr("Id", "");
-                out.add(new KlusRij(null, id, icoon(alle.getCompoundOrEmpty(i).getStringOr("Icoon", "")), false, false));
+                out.add(new KlusRij(null, id, icoon(alle.getCompoundOrEmpty(i).getStringOr("Icoon", "")), false, false,
+                        alle.getCompoundOrEmpty(i).getStringOr("Wie", "")));
             }
             return out;
         }
@@ -501,13 +502,14 @@ public class HuisjeScreen extends Screen {
         ListTag k = b.getListOrEmpty("Klussen");
         for (int i = 0; i < k.size(); i++) {
             CompoundTag c = k.getCompoundOrEmpty(i);
-            String icoon = "";
+            String icoon = "", wie = "";
             for (int j = 0; j < alle.size(); j++) {
                 if (alle.getCompoundOrEmpty(j).getStringOr("Id", "").equals(c.getStringOr("Id", ""))) {
                     icoon = alle.getCompoundOrEmpty(j).getStringOr("Icoon", "");
+                    wie = alle.getCompoundOrEmpty(j).getStringOr("Wie", "");
                 }
             }
-            out.add(new KlusRij(b.getStringOr("Id", ""), c.getStringOr("Id", ""), icoon(icoon), c.getBooleanOr("Aan", false), c.getBooleanOr("Kan", false)));
+            out.add(new KlusRij(b.getStringOr("Id", ""), c.getStringOr("Id", ""), icoon(icoon), c.getBooleanOr("Aan", false), c.getBooleanOr("Kan", false), wie));
         }
         return out;
     }
@@ -524,8 +526,11 @@ public class HuisjeScreen extends Screen {
         private final String klus;
         private final ItemStack icoon;
         private final boolean aan, kan;
+        /** 1.8.0: who can do it (Klus.doeners); a chore of one kind of resident says so instead of "kan niet" (Sjokkel, Blubs). */
+        private final String wie;
 
-        KlusRij(@Nullable String bewoner, String klus, ItemStack icoon, boolean aan, boolean kan) {
+        KlusRij(@Nullable String bewoner, String klus, ItemStack icoon, boolean aan, boolean kan, String wie) {
+            this.wie = wie;
             this.bewoner = bewoner;
             this.klus = klus;
             this.icoon = icoon;
@@ -552,7 +557,7 @@ public class HuisjeScreen extends Screen {
             GidsTekst.passend(g, Component.translatable("gui.guhs.klus." + klus).withStyle(ChatFormatting.BOLD), x + 22, y + 6, w - 70, 0.875f,
                     kan || bewoner == null ? DONKER : LICHT, false);
             if (bewoner != null) {
-                Component staat = !kan ? Component.translatable("gui.guhs.huisje.kan_niet") : Component.translatable(aan ? "gui.guhs.huisje.aan" : "gui.guhs.huisje.uit");
+                Component staat = !kan ? kanNiet() : Component.translatable(aan ? "gui.guhs.huisje.aan" : "gui.guhs.huisje.uit");
                 int kleur = !kan ? LICHT : !mag ? 0xFF9A8A92 : aan ? 0xFF3A9A5A : 0xFFB04060;
                 if (kan) {
                     g.fill(x + w - 44, y + 3, x + w - 4, y + 15, !mag ? 0x40A0A0A0 : aan ? 0x6068D88A : 0x60F77AB0);   // (grey: only looking)
@@ -563,6 +568,13 @@ public class HuisjeScreen extends Screen {
                         0.75f, kleur, false);
             }
             GidsTekst.alinea(g, tip(), x + 22, y + 18, w - 24, 0.625f, TEKST);
+        }
+
+        /** "kan niet", or for a chore of one kind of resident "alleen Sjokkel" / "alleen Blubs" (gui.guhs.huisje.alleen.&lt;wie&gt;). */
+        private Component kanNiet() {
+            String alleen = "gui.guhs.huisje.alleen." + wie;
+            return !wie.isEmpty() && net.minecraft.client.resources.language.I18n.exists(alleen) ? Component.translatable(alleen)
+                    : Component.translatable("gui.guhs.huisje.kan_niet");
         }
 
         @Override
@@ -576,6 +588,10 @@ public class HuisjeScreen extends Screen {
 
         @Override
         public List<Component> tip(double mx, double my, int x, int y, int w) {
+            String hint = "gui.guhs.huisje.alleen." + wie + ".hint";
+            if (bewoner != null && !kan && !wie.isEmpty() && net.minecraft.client.resources.language.I18n.exists(hint)) {
+                return List.of(Component.translatable(hint));       // (a lovely hint: who could do this one)
+            }
             return bewoner == null ? null : !mag() ? List.of(Component.translatable("gui.guhs.timmerguh.alleen_kijken"))
                     : List.of(Component.translatable(aan ? "gui.guhs.huisje.klus_uit" : "gui.guhs.huisje.klus_aan"));
         }

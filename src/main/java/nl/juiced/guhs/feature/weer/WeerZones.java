@@ -28,7 +28,7 @@ import nl.juiced.guhs.network.ModNetworking;
  */
 public final class WeerZones {
     /** The radius of a zone (blocks, horizontally), and the soft edge inside it where the weather eases out. */
-    public static final int STRAAL = 100, RAND = 12;
+    public static final int STRAAL = 60, RAND = 8;
     /** A zone that is not renewed this many ticks is gone. */
     public static final int VERVAL = 40;
 

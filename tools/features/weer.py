@@ -25,7 +25,7 @@ except ImportError:                                   # (run as a script from th
     from features import vadskracht
 
 BLOK = "weer_vadser"
-KRACHT = 2            # (Java: WeerFeature.KRACHT)
+KRACHT = 20           # (Java: WeerFeature.KRACHT)
 KANS = 0.125          # a weerpotje in about 1 in 8 of the chests of BRONNEN
 
 # the guh-weertjes: id -> (Dutch, English)
@@ -76,8 +76,8 @@ DEELTJES = {"weer_pluisje": [f"guhs:pluisje_{i}" for i in range(4)], "weer_zeepb
 # key -> (Dutch, English)
 TEKSTEN = {
     f"block.guhs.{BLOK}": ("Weer vadser", "Weather Vadser"),
-    f"block.guhs.{BLOK}.lore": ("Maakt zijn eigen weertje, tot 100 blokken in de rondte. Rechtsklik: kies een weertje!",
-                                "Makes its own weather, up to 100 blocks around. Right-click: pick a weather!"),
+    f"block.guhs.{BLOK}.lore": ("Maakt zijn eigen weertje, tot 60 blokken in de rondte. Rechtsklik: kies een weertje!",
+                                "Makes its own weather, up to 60 blocks around. Right-click: pick a weather!"),
     f"block.guhs.{BLOK}.lore.kracht": ("Heeft %s vadskracht nodig zolang er een ander weertje dan normaal aanstaat",
                                        "Needs %s vadskracht while it makes any weather but normal"),
     "item.guhs.weerpotje.gebruik": ("Rechtsklik: het weertje is voor altijd van jou, in elke Weer vadser",
@@ -87,7 +87,7 @@ TEKSTEN = {
     "gui.guhs.weer.potje_gekregen": ("Je kreeg een weerpotje: %s!", "You got a weather jar: %s!"),
     "gui.guhs.weer.op_slot": ("%s zit nog op slot. Zoek eerst zijn weerpotje!", "%s is still locked. Find its weather jar first!"),
     "gui.guhs.weer.uitgezet": ("De Weer vadser doet weer normaal. Gewoon weer, vads.", "The Weather Vadser is back to normal. Just weather, vads."),
-    "gui.guhs.weer.gekozen": ("Weertje: %s! Tot 100 blokken in de rondte.", "Weather: %s! Up to 100 blocks around."),
+    "gui.guhs.weer.gekozen": ("Weertje: %s! Tot 60 blokken in de rondte.", "Weather: %s! Up to 60 blocks around."),
     "gui.guhs.weer.gekozen_slaapt": ("Weertje: %s, maar de Weer vadser doet een dutje: hij heeft %s vadskracht nodig.",
                                      "Weather: %s, but the Weather Vadser is napping: it needs %s vadskracht."),
     "gui.guhs.weer.uitlezing": ("Weertje: %s", "Weather: %s"),

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    "TST"
+  ],
+  "key": {
+    "T": "minecraft:white_terracotta",
+    "S": "minecraft:slime_ball"
+  },
+  "result": {
+    "id": "guhs:blub_badje",
+    "count": 1
+  }
+}

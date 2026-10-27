@@ -6201,6 +6201,18 @@
       },
       {
         "name": "guhs:blubguh/idle/5"
+      },
+      {
+        "name": "guhs:blubguh/idle/6"
+      },
+      {
+        "name": "guhs:blubguh/idle/7"
+      },
+      {
+        "name": "guhs:blubguh/idle/8"
+      },
+      {
+        "name": "guhs:blubguh/idle/9"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.idle"
@@ -6254,6 +6266,9 @@
       },
       {
         "name": "guhs:blubguh/blij/3"
+      },
+      {
+        "name": "guhs:blubguh/blij/4"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.blij"
@@ -6544,5 +6559,57 @@
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.weg"
+  },
+  "blubguh.knuffel_guh": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/knuffel_guh/1"
+      },
+      {
+        "name": "guhs:blubguh/knuffel_guh/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.knuffel_guh"
+  },
+  "blubguh.klus_besproeien": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/klus_besproeien/1"
+      },
+      {
+        "name": "guhs:blubguh/klus_besproeien/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.klus_besproeien"
+  },
+  "blubguh.klus_bezorgen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/klus_bezorgen/1"
+      },
+      {
+        "name": "guhs:blubguh/klus_bezorgen/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.klus_bezorgen"
+  },
+  "blubguh.klus_zingen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/klus_zingen/1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.klus_zingen"
+  },
+  "blubguh.klus_badderen": {
+    "sounds": [
+      {
+        "name": "guhs:blubguh/klus_badderen/1"
+      },
+      {
+        "name": "guhs:blubguh/klus_badderen/2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.blubguh.klus_badderen"
   }
 }

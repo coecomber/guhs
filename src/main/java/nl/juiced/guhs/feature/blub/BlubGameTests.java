@@ -151,6 +151,46 @@ public class BlubGameTests {
         helper.succeed();
     }
 
+    /** Ronde 3: the trick "Knuffelen met een guh" (no guh around: a joke; a tame guh: they hug: KNUFFELEN). */
+    @GuhTest(template = TUIN, batch = "blub", timeoutTicks = 300)
+    public static void blubKnuffeltGuh(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        BlubGuhEntity b = blub(helper, new BlockPos(6, 2, 6), new BlubTrekking.Waarden(40, BlubTrekking.Soort.WEIDE, 0, 1f));
+        tem(helper, b, p);
+        helper.assertFalse(b.knuffelGuh(p), "no tame guh nearby: nobody to hug (a joke instead)");
+        nl.juiced.guhs.entity.GuhEntity guh = helper.spawn(nl.juiced.guhs.registry.ModEntities.GUH.get(), new BlockPos(11, 2, 6));
+        guh.tame(p);
+        helper.assertTrue(b.knuffelPartner() == guh, "the tame guh is its hug partner");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.KNUFFEL_GUH.ordinal(), ""), "the trick Knuffelen met een guh");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.KNUFFELEN, "the guh hugs the Blub");
+            helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        });
+    }
+
+    /** Ronde 3: a trick of its own now and then, but never while asleep or on a shoulder. */
+    @GuhTest(template = TUIN, batch = "blub")
+    public static void blubZelfTrucNietSlapendOfOpSchouder(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        BlubGuhEntity b = blub(helper, new BlockPos(12, 2, 12), new BlubTrekking.Waarden(40, BlubTrekking.Soort.BLAUW, 0, 1f));
+        tem(helper, b, p);
+        b.setSlaapt(true);
+        helper.assertTrue(b.zelfTruc() == null, "asleep: no trick");
+        b.setSlaapt(false);
+        BlubTruc t = b.zelfTruc();
+        helper.assertTrue(t != null && t.zelf, "awake and free: a trick it can do alone: " + t);
+        for (BlubTruc x : BlubTruc.values()) {
+            helper.assertTrue(!x.zelf || (x != BlubTruc.VERSTOPPERTJE && x != BlubTruc.SLAAPLIEDJE && x != BlubTruc.KNUFFEL_GUH && x != BlubTruc.ZITTEN),
+                    "never by itself: " + x);
+        }
+        BlubGuhEntity c = blub(helper, new BlockPos(6, 2, 6), new BlubTrekking.Waarden(40, BlubTrekking.Soort.BLAUW, 0, 1f));
+        tem(helper, c, p);
+        c.speciaal(p);
+        helper.assertTrue(Schouder.heeft(p) && c.zelfTruc() == null, "on the shoulder: no trick");
+        helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        helper.succeed();
+    }
+
     @GuhTest(template = TUIN, batch = "blub")
     public static void blubPasNaSnoes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -203,7 +243,9 @@ public class BlubGameTests {
         helper.runAfterDelay(240, () -> {
             helper.assertFalse(b.isBezig(), "done hopping");
             helper.assertTrue(b.hupsRecord() >= 6, "a hop record");
-            helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.VERSTOPPERTJE.ordinal(), "") && b.verstopt(), "verstoppertje: hidden");
+            helper.assertFalse(b.isBezig(), "free again before verstoppertje");
+            boolean gedaan = BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.VERSTOPPERTJE.ordinal(), "");
+            helper.assertTrue(gedaan && b.verstopt(), "verstoppertje: hidden (" + gedaan + ", " + b.verstopt() + ")");
             b.mobInteract(p, InteractionHand.MAIN_HAND);
             helper.assertFalse(b.verstopt(), "found by clicking it");
             helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.SCHOUDER, 0, "") && Schouder.heeft(p) && b.isRemoved(), "onto the shoulder");

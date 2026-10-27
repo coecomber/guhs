@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "schuim=false": {
+      "model": "guhs:block/blub_badje"
+    },
+    "schuim=true": {
+      "model": "guhs:block/blub_badje_schuim"
+    }
+  }
+}

@@ -112,6 +112,23 @@ ACTIES = [
           "1 op 3 glinsteringen: ongeveer elke 4,5 seconde, heel zacht.", "+-0,20", 1.0, [("v:block/amethyst/shimmer", 1.5, 1)]),
     Actie("weg", "Blub is weg", "Blub is gone", "Alleen als hij met /kill of in de leegte verdwijnt (hij kan verder niet doodgaan).",
           "Bijna nooit.", "geen", 1.0, [("piep", 0.8, 1)]),
+    Actie("knuffel_guh", "Blub knuffelt een guh", "Blub hugs a guh",
+          "Als een tamme Blub en een tamme guh elkaar knuffelen (vanzelf, of het trucje Knuffelen met een guh).",
+          "Ongeveer eens per paar minuten per paar dat bij elkaar in de buurt is (huisgenootjes wat vaker).", "+-0,08", 1.0,
+          [("v:mob/slime/small3", 1.5, 1), ("piep", 1.7, 1)]),
+    Actie("klus_besproeien", "Blub besproeit de plantjes", "Blub sprinkles the plants",
+          "Klusje Bellenbesproeier: als hij bellen over een gewas blaast.", "1x per gewas (3 per keer).", "+-0,12", 1.0,
+          [("v:block/bubble_column/bubble2", 1.2, 1), ("v:block/bubble_column/bubble3", 1.2, 1)]),
+    Actie("klus_bezorgen", "Blub bezorgt een knabbel", "Blub delivers a knabbel",
+          "Klusje Knabbelbezorger: als hij een knabbel afgeeft aan een guh of diertje.", "1x per knabbel.", "+-0,08", 1.0,
+          [("piep", 1.6, 2)]),
+    Actie("klus_zingen", "Blub zingt het slaapliedje", "Blub sings the lullaby",
+          "Klusje Slaapliedjeszanger: 's avonds bij het huisje, 8 noten (het spel maakt de melodie zelf, net als bij 'liedje'). Lever een noot in.",
+          "Eens per dag, 's avonds.", "geen (de melodie zelf)", 1.0, [("piep", 1.6, 1)]),
+    Actie("klus_badderen", "Blub baddert", "Blub splashes in the bath",
+          "Klusje Bubbelbadmeester (bad klaarmaken) en als een Blub zelf in het Blub-bubbelbadje baddert.",
+          "Elke 1,5 seconde tijdens het klaarmaken; elke 5 seconden in bad.", "+-0,10", 1.0,
+          [("v:liquid/splash", 1.4, 1), ("v:block/bubble_column/bubble1", 1.3, 1)]),
 ]
 
 # (the lullaby's tune, BlubGuhEntity: tonen; for the example file)

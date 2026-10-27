@@ -37,6 +37,8 @@ import nl.juiced.guhs.feature.piep.PiepDierItem;
  */
 public final class BlubFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
+    public static final DeferredRegister<net.minecraft.world.effect.MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
 
@@ -50,11 +52,33 @@ public final class BlubFeature {
     public static final DeferredItem<SpawnEggItem> BLUBGUH_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "blubguh_spawn_egg", BLUBGUH);
 
 
+    // --- ronde 3b: the Blub's own chores (feature/blub/klus) -------------------------------------------------------------------
+    /** The Blub-bubbelbadje: a little tub; a Blub splashes in it, foam (Bubbelbadmeester) makes guhs fris en blij. */
+    public static final net.neoforged.neoforge.registries.DeferredBlock<nl.juiced.guhs.feature.blub.klus.BlubBadjeBlock> BADJE = BLOCKS.registerBlock(
+            "blub_badje", nl.juiced.guhs.feature.blub.klus.BlubBadjeBlock::new, () -> net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PINK).strength(1.0f)
+                    .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion());
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BADJE_ITEM = ITEMS.registerSimpleBlockItem(BADJE);
+    /** Only the chore icons in the huisje screen (no creative tab): bellen, knabbels, liedje. */
+    public static final java.util.Map<String, DeferredItem<Item>> KLUS_ICONEN = new java.util.LinkedHashMap<>();
+
+    static {
+        for (String k : java.util.List.of("bellen", "knabbels", "liedje")) {
+            KLUS_ICONEN.put(k, ITEMS.registerSimpleItem("blubguh_klus_" + k));
+        }
+    }
+
+    public static final DeferredHolder<net.minecraft.world.effect.MobEffect, nl.juiced.guhs.feature.blub.klus.FrisEnBlijEffect> FRIS_EN_BLIJ =
+            EFFECTS.register("fris_en_blij", nl.juiced.guhs.feature.blub.klus.FrisEnBlijEffect::new);
+
     public static void register(IEventBus modBus) {
         BlubGeluid.values();                                  // (its sound events register themselves in SOUNDS)
         BlubSnoes.events();
         ITEMS.register(modBus);
+        BLOCKS.register(modBus);
+        EFFECTS.register(modBus);
         ENTITY_TYPES.register(modBus);
+        nl.juiced.guhs.feature.blub.klus.BlubKlusjes.registreer();
         SOUNDS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(BLUBGUH.get(), BlubGuhEntity.createAttributes().build()));
         modBus.addListener((RegisterSpawnPlacementsEvent event) -> event.register(BLUBGUH.get(), SpawnPlacementTypes.ON_GROUND,
@@ -69,6 +93,7 @@ public final class BlubFeature {
 
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(BLUBGUH_SPAWN_EGG.get()));
+        output.accept(new ItemStack(BADJE_ITEM.get()));
     }
 
     private BlubFeature() {

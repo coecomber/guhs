@@ -63,9 +63,13 @@ public class WeerGameTests {
         BlockPos midden = helper.absolutePos(new BlockPos(4, 2, 5));
         WeerZones.testZone(level, midden, Weertje.REGEN);
         try {
-            helper.assertTrue(WeerZones.weerOp(level, midden.offset(60, 0, 40)) == Weertje.REGEN, "60/40 blocks away: still the zone");
+            helper.assertTrue(WeerZones.weerOp(level, midden.offset(35, 0, 25)) == Weertje.REGEN, "35/25 blocks away: still the zone");
+            helper.assertTrue(WeerZones.STRAAL == 60 && WeerZones.weerOp(level, midden.offset(62, 0, 0)) == Weertje.NORMAAL, "62 blocks away: outside the 60");
+            WeerZones.Zone zone = WeerZones.zones(level).get(0);
+            helper.assertTrue(zone.gewicht(midden.getX() + 56.5, midden.getZ() + 0.5) < 1f && zone.gewicht(midden.getX() + 50.5, midden.getZ() + 0.5) == 1f,
+                    "a soft edge of about 8 blocks");
             helper.assertTrue(WeerZones.weerOp(level, midden.offset(150, 0, 0)) == Weertje.NORMAAL, "150 blocks away: the world's own");
-            BlockPos lucht = new BlockPos(midden.getX() + 70, level.getMaxY() - 2, midden.getZ());
+            BlockPos lucht = new BlockPos(midden.getX() + 45, level.getMaxY() - 2, midden.getZ());
             helper.assertTrue(WeerZones.regentOp(level, lucht), "it rains under the open sky in the zone");
             WeerZones.wisTest(level);
             WeerZones.testZone(level, midden, Weertje.ZON);
@@ -84,13 +88,17 @@ public class WeerGameTests {
     public static void weerVadserVolgtVadskracht(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos bron = new BlockPos(1, 2, 1), blok = new BlockPos(2, 2, 1);
-        helper.setBlock(bron, VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 2));
+        helper.setBlock(bron, VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 1));   // 10 VK: too little
         helper.setBlock(blok, WeerFeature.WEER_VADSER.get());
         WeerVadserBlockEntity be = (WeerVadserBlockEntity) level.getBlockEntity(helper.absolutePos(blok));
         be.zet(Weertje.HARTJES);
         BlockPos abs = helper.absolutePos(blok);
+        helper.assertTrue(WeerFeature.KRACHT == 20, "the Weer vadser asks 20 vadskracht");
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(WeerZones.weerOp(level, abs) == Weertje.HARTJES, "the zone is there while it has vadskracht"))
+                .thenIdle(40)
+                .thenExecute(() -> helper.assertTrue(WeerZones.weerOp(level, abs) == Weertje.NORMAAL, "10 vadskracht is not enough"))
+                .thenExecute(() -> helper.setBlock(bron, VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 2)))
+                .thenWaitUntil(() -> helper.assertTrue(WeerZones.weerOp(level, abs) == Weertje.HARTJES, "the zone is there with 20 vadskracht"))
                 .thenExecute(() -> helper.setBlock(bron, Blocks.AIR))
                 .thenWaitUntil(() -> helper.assertTrue(WeerZones.weerOp(level, abs) == Weertje.NORMAAL, "no vadskracht: normal weather again"))
                 .thenExecute(() -> {

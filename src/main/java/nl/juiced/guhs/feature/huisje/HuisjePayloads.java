@@ -225,6 +225,7 @@ public final class HuisjePayloads {
             CompoundTag c = new CompoundTag();
             c.putString("Id", k.id());
             c.putString("Icoon", BuiltInRegistries.ITEM.getKey(k.icoon().getItem()).toString());
+            c.putString("Wie", k.doeners());          // (1.8.0: a chore of one kind of resident shows "alleen ..." in the list)
             klusjes.add(c);
         }
         t.put("Klusjes", klusjes);

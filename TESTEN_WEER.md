@@ -1,7 +1,7 @@
 # Testen: de Weer vadser (1.8.0 testbuild)
 
-Craften: `WWW / IGI / IKI` (W = witte wol, I = ijzer, G = glas, K = kaasknabbels). Zet hem neer, geef hem 2 vadskracht
-(Guhrad + Guhdraad) en rechtsklik: kies een weertje. Het geldt tot 100 blokken in de rondte.
+Craften: `WWW / IGI / IKI` (W = witte wol, I = ijzer, G = glas, K = kaasknabbels). Zet hem neer, geef hem 20 vadskracht
+(Guhrad + Guhdraad) en rechtsklik: kies een weertje. Het geldt tot 60 blokken in de rondte.
 
 Commando's (op, permissieniveau 2):
 

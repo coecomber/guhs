@@ -34,3 +34,14 @@ van de Guhmension (groepjes van 2-4; `/locate biome guhs:wolkenweide`).
 - **Uit zichzelf**: oortjes-emoties, tikkertje en knabbel delen met guhs, 's nachts slapen bij een guh of in een guhnestje,
   bellen blazen, glinsteren (Pure Blub / Volle Guh), de blauwe gloeit zachtjes.
 - **Regen/plassen**: werkt nu niet in de Guhmension (daar regent het niet; er komt een apart "Weer vadser"-blok).
+
+## Ronde 3
+- **Zelf trucjes**: elke Blub (wild of tam) doet ongeveer eens per minuut zelf een trucje of oortjes-emote (niet als hij slaapt,
+  verstopt zit, op je schouder zit of onderweg is; hupsen alleen met ruimte; nooit verstoppertje of slaapliedje).
+- **Knuffelen met een guh**: tamme Blubs en tamme guhs knuffelen elkaar zo eens per paar minuten (huisgenootjes vaker);
+  ook als trucje in het Trucjes-scherm (geen tamme guh binnen 8 blokken: een grapje).
+- **Blub-klusjes in het guhhuisje** (alleen Blubs; bij andere bewoners staat er "alleen Blubs", net als "alleen Sjokkel"):
+  Bellenbesproeier (gewassen groeien een tikje sneller), Knabbelbezorger (kaasknabbels uit de kist naar tamme guhs/diertjes),
+  Slaapliedjeszanger ('s avonds; de guhs van het huisje zijn de volgende dag uitgerust), Bubbelbadmeester
+  (zet het **Blub-bubbelbadje** klaar met schuim: guhs worden "fris en blij"). Het badje: craften `T T / TST`
+  (T = witte terracotta, S = slijmbal); een Blub in de buurt gaat er ook zelf in badderen.

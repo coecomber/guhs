@@ -791,8 +791,27 @@ UITLEG = {
            " to 9 kinds; empty means everything). With \"Other Station\" you move it to another Scooter Station. It only "
            "works where you may build yourself.",
         meer=["systemen/bezorgguhtje"]),
+    "blub_badje": dict(
+        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!
+"
+           "
+"
+           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.
+"
+           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.
+"
+           "- Het schuim is na een paar minuten weg; dan schuimt de Blub het weer op.",
+        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!
+"
+           "
+"
+           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.
+"
+           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.
+"
+           "- The foam is gone after a few minutes; then the Blub foams it up again."),
     "weer_vadser": dict(
-        nl="Maakt zijn eigen weertje, tot 100 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 2 vadskracht "
+        nl="Maakt zijn eigen weertje, tot 60 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
            "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.\n"
            "\n"
            "- Rechtsklik: kies een weertje. Zon, regen (in koude streken sneeuw) en onweer kan altijd.\n"
@@ -800,7 +819,7 @@ UITLEG = {
            "en bloesemwind) maak je eerst los met een weerpotje. Het menu zegt waar je dat potje vindt.\n"
            "- Rechtsklik met een weerpotje: meteen ontgrendeld. Met het souvenir 'Regenboogje in een potje': het "
            "regenboogweer, en het souvenir houd je.",
-        en="Makes its own weather, up to 100 blocks around. Outside that the normal weather stays. It needs 2 vadskracht "
+        en="Makes its own weather, up to 60 blocks around. Outside that the normal weather stays. It needs 20 vadskracht "
            "while it makes any weather but normal; without vadskracht the weather goes back to normal by itself.\n"
            "\n"
            "- Right-click: pick a weather. Sun, rain (snow in cold places) and thunderstorm are always there.\n"

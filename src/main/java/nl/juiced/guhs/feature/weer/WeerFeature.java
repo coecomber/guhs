@@ -35,7 +35,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vadskracht.VadskrachtFeature;
 
 /**
- * 1.8.0 (Guhdromenland), TEST BUILD: the Weer vadser ({@link WeerVadserBlock}): its own weather in a circle of 100 blocks
+ * 1.8.0 (Guhdromenland), TEST BUILD: the Weer vadser ({@link WeerVadserBlock}): its own weather in a circle of 60 blocks
  * ({@link WeerZones}), zon / regen / onweer always and eight guh-weertjes ({@link Weertje}) unlocked with weerpotjes
  * ({@link WeerPotjeItem}, {@link WeerUnlocks}). What the guh-weertjes do on the server: {@link WeerEffecten}; what you see:
  * client/WeerClient. Test commands: {@link WeerCommando} (/guhs weer ...).
@@ -53,7 +53,7 @@ public final class WeerFeature {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, Guhs.MODID);
 
     /** What a Weer vadser asks while it makes a weather (tools/features/weer.py: KRACHT). */
-    public static final int KRACHT = 2;
+    public static final int KRACHT = 20;
 
     /**
      * TODO 1.8.0 (Guhdromenland): the dream sources of the weerpotjes, still to be hooked in once the dream islands exist
