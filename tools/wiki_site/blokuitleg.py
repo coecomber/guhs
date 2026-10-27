@@ -793,27 +793,19 @@ UITLEG = {
         meer=["systemen/bezorgguhtje"]),
     "weer_vadser": dict(
         nl="Maakt zijn eigen weertje, tot 100 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 2 vadskracht "
-           "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.
-"
-           "
-"
-           "- Rechtsklik: kies een weertje. Zon, regen (in koude streken sneeuw) en onweer kan altijd.
-"
+           "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.\n"
+           "\n"
+           "- Rechtsklik: kies een weertje. Zon, regen (in koude streken sneeuw) en onweer kan altijd.\n"
            "- De guh-weertjes (pluisjessneeuw, bellenbui, knabbelbuitje, regenboogweer, hartjesregen, sterrenregen, knusmist "
-           "en bloesemwind) maak je eerst los met een weerpotje. Het menu zegt waar je dat potje vindt.
-"
+           "en bloesemwind) maak je eerst los met een weerpotje. Het menu zegt waar je dat potje vindt.\n"
            "- Rechtsklik met een weerpotje: meteen ontgrendeld. Met het souvenir 'Regenboogje in een potje': het "
            "regenboogweer, en het souvenir houd je.",
         en="Makes its own weather, up to 100 blocks around. Outside that the normal weather stays. It needs 2 vadskracht "
-           "while it makes any weather but normal; without vadskracht the weather goes back to normal by itself.
-"
-           "
-"
-           "- Right-click: pick a weather. Sun, rain (snow in cold places) and thunderstorm are always there.
-"
+           "while it makes any weather but normal; without vadskracht the weather goes back to normal by itself.\n"
+           "\n"
+           "- Right-click: pick a weather. Sun, rain (snow in cold places) and thunderstorm are always there.\n"
            "- The guh weathers (fluff snow, bubble shower, nibble drizzle, rainbow weather, heart rain, star shower, cosy fog "
-           "and blossom breeze) need a weather jar first. The menu tells you where to find it.
-"
+           "and blossom breeze) need a weather jar first. The menu tells you where to find it.\n"
            "- Right-click with a weather jar: unlocked at once. With the souvenir 'Rainbow in a Jar': the rainbow weather, "
            "and you keep the souvenir."),
     "hapluikje": dict(
