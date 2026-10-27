@@ -6188,31 +6188,31 @@
   "blubguh.idle": {
     "sounds": [
       {
-        "name": "guhs:blubguh/idle/1"
+        "name": "guhs:blubguh/idle/blub"
       },
       {
-        "name": "guhs:blubguh/idle/2"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_34"
       },
       {
-        "name": "guhs:blubguh/idle/3"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_38"
       },
       {
-        "name": "guhs:blubguh/idle/4"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_47"
       },
       {
-        "name": "guhs:blubguh/idle/5"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_13"
       },
       {
-        "name": "guhs:blubguh/idle/6"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_20"
       },
       {
-        "name": "guhs:blubguh/idle/7"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_26"
       },
       {
-        "name": "guhs:blubguh/idle/8"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_31"
       },
       {
-        "name": "guhs:blubguh/idle/9"
+        "name": "guhs:blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_58"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.idle"
@@ -6220,13 +6220,13 @@
   "blubguh.huppelen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/huppelen/1"
+        "name": "guhs:blubguh/huppelen/placeholder_1_small1"
       },
       {
-        "name": "guhs:blubguh/huppelen/2"
+        "name": "guhs:blubguh/huppelen/placeholder_2_small2"
       },
       {
-        "name": "guhs:blubguh/huppelen/3"
+        "name": "guhs:blubguh/huppelen/placeholder_3_small3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.huppelen"
@@ -6234,10 +6234,10 @@
   "blubguh.landen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/landen/1"
+        "name": "guhs:blubguh/landen/placeholder_1_small4"
       },
       {
-        "name": "guhs:blubguh/landen/2"
+        "name": "guhs:blubguh/landen/placeholder_2_small5"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.landen"
@@ -6245,13 +6245,13 @@
   "blubguh.squish": {
     "sounds": [
       {
-        "name": "guhs:blubguh/squish/1"
+        "name": "guhs:blubguh/squish/placeholder_1_small1"
       },
       {
-        "name": "guhs:blubguh/squish/2"
+        "name": "guhs:blubguh/squish/placeholder_2_small3"
       },
       {
-        "name": "guhs:blubguh/squish/3"
+        "name": "guhs:blubguh/squish/placeholder_3_small5"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.squish"
@@ -6259,16 +6259,16 @@
   "blubguh.blij": {
     "sounds": [
       {
-        "name": "guhs:blubguh/blij/1"
+        "name": "guhs:blubguh/blij/blub_blij"
       },
       {
-        "name": "guhs:blubguh/blij/2"
+        "name": "guhs:blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_20"
       },
       {
-        "name": "guhs:blubguh/blij/3"
+        "name": "guhs:blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_31"
       },
       {
-        "name": "guhs:blubguh/blij/4"
+        "name": "guhs:blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_58"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.blij"
@@ -6276,10 +6276,7 @@
   "blubguh.schrik": {
     "sounds": [
       {
-        "name": "guhs:blubguh/schrik/1"
-      },
-      {
-        "name": "guhs:blubguh/schrik/2"
+        "name": "guhs:blubguh/schrik/blub_schrik"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.schrik"
@@ -6287,10 +6284,13 @@
   "blubguh.nieuwsgierig": {
     "sounds": [
       {
-        "name": "guhs:blubguh/nieuwsgierig/1"
+        "name": "guhs:blubguh/nieuwsgierig/blub_vraagtoon"
       },
       {
-        "name": "guhs:blubguh/nieuwsgierig/2"
+        "name": "guhs:blubguh/nieuwsgierig/whatsapp_ptt_2026_10_27_at_12_11_26_vraagtoon"
+      },
+      {
+        "name": "guhs:blubguh/nieuwsgierig/whatsapp_ptt_2026_10_27_at_12_11_58_vraagtoon"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.nieuwsgierig"
@@ -6298,13 +6298,13 @@
   "blubguh.eten": {
     "sounds": [
       {
-        "name": "guhs:blubguh/eten/1"
+        "name": "guhs:blubguh/eten/placeholder_1_eat1"
       },
       {
-        "name": "guhs:blubguh/eten/2"
+        "name": "guhs:blubguh/eten/placeholder_2_eat2"
       },
       {
-        "name": "guhs:blubguh/eten/3"
+        "name": "guhs:blubguh/eten/placeholder_3_eat3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.eten"
@@ -6312,7 +6312,7 @@
   "blubguh.getemd": {
     "sounds": [
       {
-        "name": "guhs:blubguh/getemd/1"
+        "name": "guhs:blubguh/getemd/placeholder_1_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.getemd"
@@ -6320,10 +6320,10 @@
   "blubguh.baby": {
     "sounds": [
       {
-        "name": "guhs:blubguh/baby/1"
+        "name": "guhs:blubguh/baby/placeholder_1_small2"
       },
       {
-        "name": "guhs:blubguh/baby/2"
+        "name": "guhs:blubguh/baby/placeholder_2_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.baby"
@@ -6331,13 +6331,15 @@
   "blubguh.slapen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/slapen/1"
+        "name": "guhs:blubguh/slapen/snurkje",
+        "weight": 5
       },
       {
-        "name": "guhs:blubguh/slapen/2"
+        "name": "guhs:blubguh/slapen/droom_blubje"
       },
       {
-        "name": "guhs:blubguh/slapen/3"
+        "name": "guhs:blubguh/slapen/slaapzuchtje",
+        "weight": 2
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.slapen"
@@ -6345,10 +6347,10 @@
   "blubguh.wakker": {
     "sounds": [
       {
-        "name": "guhs:blubguh/wakker/1"
+        "name": "guhs:blubguh/wakker/blub_wakker"
       },
       {
-        "name": "guhs:blubguh/wakker/2"
+        "name": "guhs:blubguh/wakker/placeholder_2_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.wakker"
@@ -6356,13 +6358,13 @@
   "blubguh.bellen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/bellen/1"
+        "name": "guhs:blubguh/bellen/placeholder_1_bubble1"
       },
       {
-        "name": "guhs:blubguh/bellen/2"
+        "name": "guhs:blubguh/bellen/placeholder_2_bubble2"
       },
       {
-        "name": "guhs:blubguh/bellen/3"
+        "name": "guhs:blubguh/bellen/placeholder_3_bubble3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.bellen"
@@ -6370,10 +6372,10 @@
   "blubguh.plas": {
     "sounds": [
       {
-        "name": "guhs:blubguh/plas/1"
+        "name": "guhs:blubguh/plas/placeholder_1_splash"
       },
       {
-        "name": "guhs:blubguh/plas/2"
+        "name": "guhs:blubguh/plas/placeholder_2_splash2"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.plas"
@@ -6381,7 +6383,7 @@
   "blubguh.uitschudden": {
     "sounds": [
       {
-        "name": "guhs:blubguh/uitschudden/1"
+        "name": "guhs:blubguh/uitschudden/placeholder_1_shake"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.uitschudden"
@@ -6389,7 +6391,9 @@
   "blubguh.liedje": {
     "sounds": [
       {
-        "name": "guhs:blubguh/liedje/1"
+        "name": "guhs:blubguh/liedje/slaapliedje",
+        "stream": true,
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.liedje"
@@ -6397,7 +6401,7 @@
   "blubguh.verstoppen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/verstoppen/1"
+        "name": "guhs:blubguh/verstoppen/blub_wegrennen"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.verstoppen"
@@ -6405,10 +6409,10 @@
   "blubguh.verstopt_piep": {
     "sounds": [
       {
-        "name": "guhs:blubguh/verstopt_piep/1"
+        "name": "guhs:blubguh/verstopt_piep/blub_hint"
       },
       {
-        "name": "guhs:blubguh/verstopt_piep/2"
+        "name": "guhs:blubguh/verstopt_piep/whatsapp_ptt_2026_10_27_at_12_11_13"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.verstopt_piep"
@@ -6416,7 +6420,7 @@
   "blubguh.gevonden": {
     "sounds": [
       {
-        "name": "guhs:blubguh/gevonden/1"
+        "name": "guhs:blubguh/gevonden/placeholder_1_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.gevonden"
@@ -6424,7 +6428,7 @@
   "blubguh.truc_zit": {
     "sounds": [
       {
-        "name": "guhs:blubguh/truc_zit/1"
+        "name": "guhs:blubguh/truc_zit/placeholder_1_small2"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.truc_zit"
@@ -6432,7 +6436,7 @@
   "blubguh.truc_rondje": {
     "sounds": [
       {
-        "name": "guhs:blubguh/truc_rondje/1"
+        "name": "guhs:blubguh/truc_rondje/blub_rondje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.truc_rondje"
@@ -6440,7 +6444,7 @@
   "blubguh.truc_dood": {
     "sounds": [
       {
-        "name": "guhs:blubguh/truc_dood/1"
+        "name": "guhs:blubguh/truc_dood/placeholder_1_big1"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.truc_dood"
@@ -6448,7 +6452,7 @@
   "blubguh.truc_op": {
     "sounds": [
       {
-        "name": "guhs:blubguh/truc_op/1"
+        "name": "guhs:blubguh/truc_op/blub_tada"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.truc_op"
@@ -6456,10 +6460,10 @@
   "blubguh.truc_sprong": {
     "sounds": [
       {
-        "name": "guhs:blubguh/truc_sprong/1"
+        "name": "guhs:blubguh/truc_sprong/placeholder_1_hop1"
       },
       {
-        "name": "guhs:blubguh/truc_sprong/2"
+        "name": "guhs:blubguh/truc_sprong/placeholder_2_hop2"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.truc_sprong"
@@ -6467,10 +6471,10 @@
   "blubguh.hupsen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/hupsen/1"
+        "name": "guhs:blubguh/hupsen/placeholder_1_hop3"
       },
       {
-        "name": "guhs:blubguh/hupsen/2"
+        "name": "guhs:blubguh/hupsen/placeholder_2_hop4"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.hupsen"
@@ -6478,10 +6482,10 @@
   "blubguh.tikkertje": {
     "sounds": [
       {
-        "name": "guhs:blubguh/tikkertje/1"
+        "name": "guhs:blubguh/tikkertje/blub_tikkertje"
       },
       {
-        "name": "guhs:blubguh/tikkertje/2"
+        "name": "guhs:blubguh/tikkertje/placeholder_2_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.tikkertje"
@@ -6489,10 +6493,10 @@
   "blubguh.delen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/delen/1"
+        "name": "guhs:blubguh/delen/placeholder_1_eat2"
       },
       {
-        "name": "guhs:blubguh/delen/2"
+        "name": "guhs:blubguh/delen/placeholder_2_eat3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.delen"
@@ -6500,7 +6504,7 @@
   "blubguh.schouder_op": {
     "sounds": [
       {
-        "name": "guhs:blubguh/schouder_op/1",
+        "name": "guhs:blubguh/schouder_op/blub_hup_op",
         "pitch": 0.6667
       }
     ],
@@ -6509,7 +6513,7 @@
   "blubguh.schouder_af": {
     "sounds": [
       {
-        "name": "guhs:blubguh/schouder_af/1",
+        "name": "guhs:blubguh/schouder_af/blub_hup_af",
         "pitch": 0.7692
       }
     ],
@@ -6518,7 +6522,7 @@
   "blubguh.oppakken": {
     "sounds": [
       {
-        "name": "guhs:blubguh/oppakken/1",
+        "name": "guhs:blubguh/oppakken/placeholder_1_small4",
         "pitch": 0.6667
       }
     ],
@@ -6527,7 +6531,7 @@
   "blubguh.neerzetten": {
     "sounds": [
       {
-        "name": "guhs:blubguh/neerzetten/1",
+        "name": "guhs:blubguh/neerzetten/placeholder_1_small2",
         "pitch": 0.7692
       }
     ],
@@ -6536,10 +6540,10 @@
   "blubguh.strikje": {
     "sounds": [
       {
-        "name": "guhs:blubguh/strikje/1"
+        "name": "guhs:blubguh/strikje/placeholder_1_equip_leather1"
       },
       {
-        "name": "guhs:blubguh/strikje/2"
+        "name": "guhs:blubguh/strikje/placeholder_2_equip_leather2"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.strikje"
@@ -6547,7 +6551,7 @@
   "blubguh.glinster": {
     "sounds": [
       {
-        "name": "guhs:blubguh/glinster/1"
+        "name": "guhs:blubguh/glinster/placeholder_1_shimmer"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.glinster"
@@ -6555,7 +6559,7 @@
   "blubguh.weg": {
     "sounds": [
       {
-        "name": "guhs:blubguh/weg/1"
+        "name": "guhs:blubguh/weg/blub_weg"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.weg"
@@ -6563,10 +6567,10 @@
   "blubguh.knuffel_guh": {
     "sounds": [
       {
-        "name": "guhs:blubguh/knuffel_guh/1"
+        "name": "guhs:blubguh/knuffel_guh/placeholder_1_small3"
       },
       {
-        "name": "guhs:blubguh/knuffel_guh/2"
+        "name": "guhs:blubguh/knuffel_guh/placeholder_2_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.knuffel_guh"
@@ -6574,10 +6578,10 @@
   "blubguh.klus_besproeien": {
     "sounds": [
       {
-        "name": "guhs:blubguh/klus_besproeien/1"
+        "name": "guhs:blubguh/klus_besproeien/placeholder_1_bubble2"
       },
       {
-        "name": "guhs:blubguh/klus_besproeien/2"
+        "name": "guhs:blubguh/klus_besproeien/placeholder_2_bubble3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_besproeien"
@@ -6585,10 +6589,10 @@
   "blubguh.klus_bezorgen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/klus_bezorgen/1"
+        "name": "guhs:blubguh/klus_bezorgen/placeholder_1_piepje"
       },
       {
-        "name": "guhs:blubguh/klus_bezorgen/2"
+        "name": "guhs:blubguh/klus_bezorgen/placeholder_2_piepje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_bezorgen"
@@ -6596,7 +6600,9 @@
   "blubguh.klus_zingen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/klus_zingen/1"
+        "name": "guhs:blubguh/klus_zingen/slaapliedje",
+        "stream": true,
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_zingen"
@@ -6604,10 +6610,10 @@
   "blubguh.klus_badderen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/klus_badderen/1"
+        "name": "guhs:blubguh/klus_badderen/placeholder_1_splash"
       },
       {
-        "name": "guhs:blubguh/klus_badderen/2"
+        "name": "guhs:blubguh/klus_badderen/placeholder_2_bubble1"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_badderen"

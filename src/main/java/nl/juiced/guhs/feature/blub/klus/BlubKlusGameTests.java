@@ -90,7 +90,7 @@ public class BlubKlusGameTests {
         });
     }
 
-    @GuhTest(template = TUIN, batch = "blub_klus_zingen", timeoutTicks = 1000)
+    @GuhTest(template = TUIN, batch = "blub_klus_zingen", timeoutTicks = 1600)
     public static void blubKlusZingen(GameTestHelper helper) {
         ServerPlayer p = KlusjesGameTests.speler(helper, new BlockPos(21, 2, 21));
         Huisje h = KlusjesGameTests.huisje(helper, p);

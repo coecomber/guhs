@@ -103,6 +103,10 @@ public class BlubGuhEntity extends Landdiertje {
     private int hupsenOver, hupsenGedaan, hupsRecord, hupsWacht;
     /** The slaapliedje: ticks it still sings (0: not). */
     private int liedje;
+    /** How long the lullaby (one sound file, blubguh.liedje / blubguh.klus_zingen) lasts: 23.5 s after the import's trim. */
+    public static final int LIEDJE_TICKS = 20 * 24;
+    /** Asleep: the next little sleep sound (every 3.5-5 seconds). */
+    private long volgendSlaapGeluid;
     /** Ticks in the air (for the landing sound). */
     private int inDeLucht;
     @Nullable
@@ -711,9 +715,16 @@ public class BlubGuhEntity extends Landdiertje {
         }
     }
 
-    /** Slaapliedje piepen: a little tune, then the guhs around yawn and go to sleep. */
-    public void slaapliedje(ServerPlayer player) {
-        liedje = 60;
+    /** Slaapliedje piepen: the whole lullaby once (not twice when asked again while it sings); the guhs around yawn and fall asleep. */
+    public void slaapliedje(@Nullable ServerPlayer player) {
+        if (liedje > 0) {
+            return;                                                    // (it is still singing)
+        }
+        liedje = LIEDJE_TICKS;
+        BlubGeluid.LIEDJE.speel(this);
+        if (player == null) {
+            return;
+        }
         liedjeVoor = player;
         player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.liedje", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
@@ -813,7 +824,8 @@ public class BlubGuhEntity extends Landdiertje {
             entityData.set(DATA_EMOTIE, RECHTOP);
         }
         if (slaapt()) {
-            if (tickCount % 50 == 0) {
+            if (sl.getGameTime() >= volgendSlaapGeluid) {
+                volgendSlaapGeluid = sl.getGameTime() + 70 + random.nextInt(31);   // (every 3.5-5 s one of its sleep sounds)
                 BlubGeluid.SLAPEN.speel(this);
                 sl.sendParticles(nl.juiced.guhs.feature.bio.bouwwolk2.BouwWolk2Slice.ZZZ.get(), getX(), getY() + getBbHeight() + 0.2, getZ(),
                         0, random.nextInt(3), 0.02, 0, 1);
@@ -825,10 +837,15 @@ public class BlubGuhEntity extends Landdiertje {
         // the slaapliedje
         if (liedje > 0) {
             liedje--;
-            if (liedje % 8 == 0) {
-                float[] tonen = {1.0f, 1.19f, 1.33f, 1.19f, 1.0f, 0.89f, 1.0f, 0.75f};
-                BlubGeluid.LIEDJE.speel(this, tonen[(liedje / 8) % tonen.length]);
+            if (liedje % 15 == 0) {                                    // (notes over the whole song)
                 sl.sendParticles(ParticleTypes.NOTE, getX(), getY() + getBbHeight() + 0.3, getZ(), 0, random.nextFloat(), 0, 0, 1);
+            }
+            if (liedje % 100 == 50) {                                  // (the guhs around get sleepier while it sings)
+                for (GuhEntity guh : sl.getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(10))) {
+                    if (random.nextInt(3) == 0) {
+                        guh.emotes.start(Emote.GAPEN, false, GuhEmotes.Source.SELF);
+                    }
+                }
             }
             if (liedje == 0) {
                 int slapers = 0;

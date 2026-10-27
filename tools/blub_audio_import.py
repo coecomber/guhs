@@ -62,8 +62,9 @@ ACTIES = [
     Actie("getemd", "Blub is getemd", "Blub is tamed", "Op het moment dat hij van jou wordt.", "1x.", "geen", 1.0, [("piep", 1.75, 1)]),
     Actie("baby", "Babyblubje!", "A baby blub!", "Als er een babyblubje geboren wordt.", "1x per baby.", "+-0,05", 1.0,
           [("v:mob/slime/small2", 2.0, 1), ("piep", 2.1, 1)]),
-    Actie("slapen", "Blub snurkt", "Blub snores", "Zolang hij slaapt ('s nachts bij een guh of in een guhnestje).",
-          "Elke 2,5 seconde, met een zzz.", "+-0,05", 1.0, [("v:mob/fox/sleep1", 1.6, 1), ("v:mob/fox/sleep2", 1.6, 1), ("v:mob/fox/sleep3", 1.6, 1)]),
+    Actie("slapen", "Blub snurkt", "Blub snores", "Zolang hij slaapt ('s nachts bij een guh of in een guhnestje). Zacht.",
+          "Elke 3,5-5 seconden een willekeurig geluidje, met een zzz. Het snurkje komt het vaakst, het droom_blubje zelden "
+          "(gewichten in GEWICHT bovenin tools/blub_audio_import.py; een nieuw bestand telt 1).", "+-0,05", 1.0, [("v:mob/fox/sleep1", 1.6, 1), ("v:mob/fox/sleep2", 1.6, 1), ("v:mob/fox/sleep3", 1.6, 1)]),
     Actie("wakker", "Blub wordt wakker", "Blub wakes up", "Als hij wakker wordt (ochtend, of jij maakt hem wakker).", "1x.",
           "+-0,08", 1.0, [("piep", 1.2, 2)]),
     Actie("bellen", "Blub blaast bellen", "Blub blows bubbles", "Als hij bellen blaast (op het land af en toe; in het water elke 3 seconden).",
@@ -74,10 +75,10 @@ ACTIES = [
     Actie("uitschudden", "Blub schudt zich uit", "Blub shakes itself dry", "Na een plas-sprong schudt hij zich soms uit.",
           "1 op 3 plas-sprongen.", "+-0,08", 1.0, [("v:mob/wolf/shake", 1.6, 1)]),
     Actie("liedje", "Blub piept een slaapliedje", "Blub squeaks a lullaby",
-          "Het trucje Slaapliedje: 8 noten na elkaar. Het spel maakt de melodie zelf door deze noot hoger en lager af te spelen "
-          "(toonhoogtes 1,0 - 1,19 - 1,33 - 1,19 - 1,0 - 0,89 - 1,0 - 0,75). Lever dus EEN noot in (of een paar varianten). "
-          "_melodie_zoals_in_spel.ogg is alleen een voorbeeld en wordt niet geimporteerd.",
-          "8 noten, elke 0,4 seconde.", "geen (de melodie zelf)", 1.0, [("piep", 1.74, 1)]),
+          "Het trucje Slaapliedje: een heel liedje, wordt in een keer afgespeeld (op gewone toonhoogte, ongeveer 25 seconden; "
+          "tot zo'n 16 blokken ver te horen). Tijdens het liedje gapen de guhs in de buurt, aan het eind vallen ze in slaap. "
+          "_melodie_zoals_in_spel.ogg is alleen een oud voorbeeld en wordt niet geimporteerd.",
+          "1x per keer dat je het trucje kiest (niet dubbel als hij nog zingt).", "geen", 1.0, [("piep", 1.74, 1)]),
     Actie("verstoppen", "Blub verstopt zich", "Blub hides", "Het trucje Verstoppertje: als hij wegrent om zich te verstoppen.", "1x.",
           "+-0,05", 1.0, [("piep", 1.3, 1)]),
     Actie("verstopt_piep", "Blub giechelt", "Blub giggles", "Terwijl hij verstopt zit: een heel zacht piepje als hint.",
@@ -123,15 +124,22 @@ ACTIES = [
           "Klusje Knabbelbezorger: als hij een knabbel afgeeft aan een guh of diertje.", "1x per knabbel.", "+-0,08", 1.0,
           [("piep", 1.6, 2)]),
     Actie("klus_zingen", "Blub zingt het slaapliedje", "Blub sings the lullaby",
-          "Klusje Slaapliedjeszanger: 's avonds bij het huisje, 8 noten (het spel maakt de melodie zelf, net als bij 'liedje'). Lever een noot in.",
-          "Eens per dag, 's avonds.", "geen (de melodie zelf)", 1.0, [("piep", 1.6, 1)]),
+          "Klusje Slaapliedjeszanger: 's avonds bij het huisje een heel liedje, wordt in een keer afgespeeld (op gewone toonhoogte, "
+          "ongeveer 25 seconden; tot zo'n 16 blokken ver te horen).",
+          "Eens per dag, 's avonds.", "geen", 1.0, [("piep", 1.6, 1)]),
     Actie("klus_badderen", "Blub baddert", "Blub splashes in the bath",
           "Klusje Bubbelbadmeester (bad klaarmaken) en als een Blub zelf in het Blub-bubbelbadje baddert.",
           "Elke 1,5 seconde tijdens het klaarmaken; elke 5 seconden in bad.", "+-0,10", 1.0,
           [("v:liquid/splash", 1.4, 1), ("v:block/bubble_column/bubble1", 1.3, 1)]),
 ]
 
-# (the lullaby's tune, BlubGuhEntity: tonen; for the example file)
+# Long files (a whole song): streamed, heard up to about 16 blocks away (BlubGuhEntity.LIEDJE_TICKS: about 25 s).
+LANG = {"liedje", "klus_zingen"}
+BEREIK_LANG = 16
+# How often a file is picked (sounds.json "weight"), per folder and file name (without extension); not listed: 1.
+GEWICHT = {"slapen": {"snurkje": 5, "slaapzuchtje": 2, "droom_blubje": 1}}
+
+# (the old 8-note tune; only for the old example file)
 LIEDJE = [1.0, 1.19, 1.33, 1.19, 1.0, 0.89, 1.0, 0.75]
 
 
@@ -173,7 +181,10 @@ def _schrijf(pad, x, rate):
     import soundfile as sf
     x = x / (np.max(np.abs(x)) + 1e-9) * 0.9
     os.makedirs(os.path.dirname(pad), exist_ok=True)
-    sf.write(pad, x, rate, format="OGG", subtype="VORBIS")
+    # (in blocks: libsndfile's Vorbis writer overflows its stack on a long file written in one go, like the 25 s lullaby)
+    with sf.SoundFile(pad, "w", samplerate=rate, channels=1, format="OGG", subtype="VORBIS") as f:
+        for i in range(0, len(x), 8192):
+            f.write(x[i:i + 8192])
 
 
 def placeholders():
@@ -218,6 +229,7 @@ def importeer():
         doel = os.path.join(SOUND_DIR, a.id)
         if os.path.isdir(doel):
             shutil.rmtree(doel)
+        gebruikt = set()
         for n, f in enumerate(_bestanden(os.path.join(BASE, a.id)), 1):
             x, rate = _lees(os.path.join(BASE, a.id, f))
             x = trim_silence(x, rate)
@@ -225,7 +237,8 @@ def importeer():
             if fade > 0:
                 x[:fade] *= np.linspace(0, 1, fade)
                 x[-fade:] *= np.linspace(1, 0, fade)
-            _schrijf(os.path.join(doel, f"{n}.ogg"), x, rate)
+            naam = _naam(f, n, gebruikt)
+            _schrijf(os.path.join(doel, f"{naam}.ogg"), x, rate)
             totaal += 1
     with open(SOUNDS_JSON, encoding="utf-8") as f:
         d = json.load(f)
@@ -234,6 +247,16 @@ def importeer():
         json.dump(d, f, indent=2, ensure_ascii=False)
         f.write("\n")
     print(f"blub audio: {totaal} files in {len(ACTIES)} sound events")
+
+
+def _naam(bestand, n, gebruikt):
+    """A resource-safe name from the file name (lower case, a-z 0-9 _), unique in its folder."""
+    stam = re.sub(r"[^a-z0-9_]+", "_", os.path.splitext(bestand)[0].lower()).strip("_") or str(n)
+    naam, k = stam, 2
+    while naam in gebruikt:
+        naam, k = f"{stam}_{k}", k + 1
+    gebruikt.add(naam)
+    return naam
 
 
 def sound_events(d):
@@ -247,6 +270,12 @@ def sound_events(d):
         sounds = []
         for n in namen:
             e = {"name": f"guhs:blubguh/{a.id}/{n}"}
+            if a.id in LANG:
+                e["stream"] = True                                  # (a whole song)
+                e["attenuation_distance"] = BEREIK_LANG
+            gewicht = GEWICHT.get(a.id, {}).get(n, 1)
+            if gewicht != 1:
+                e["weight"] = gewicht
             if a.codepitch != 1.0:
                 e["pitch"] = round(1.0 / a.codepitch, 4)        # (shared code plays it at a fixed pitch: undo it)
             sounds.append(e)

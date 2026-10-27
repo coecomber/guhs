@@ -18,7 +18,7 @@ import nl.juiced.guhs.Guhs;
  */
 public enum BlubGeluid {
     IDLE(0.6f, 0.1f), HUPPELEN(0.25f, 0.15f), LANDEN(0.4f, 0.1f), SQUISH(0.8f, 0.12f), BLIJ(0.7f, 0.12f), SCHRIK(0.8f, 0.08f),
-    NIEUWSGIERIG(0.5f, 0.1f), ETEN(0.6f, 0.1f), GETEMD(0.9f, 0f), BABY(0.9f, 0.05f), SLAPEN(0.35f, 0.05f), WAKKER(0.6f, 0.08f),
+    NIEUWSGIERIG(0.5f, 0.1f), ETEN(0.6f, 0.1f), GETEMD(0.9f, 0f), BABY(0.9f, 0.05f), SLAPEN(0.28f, 0.05f), WAKKER(0.6f, 0.08f),
     BELLEN(0.4f, 0.15f), PLAS(0.5f, 0.15f), UITSCHUDDEN(0.6f, 0.08f), LIEDJE(0.9f, 0f), VERSTOPPEN(0.7f, 0.05f),
     VERSTOPT_PIEP(0.25f, 0.1f), GEVONDEN(1.0f, 0.05f), TRUC_ZIT(0.6f, 0.05f), TRUC_RONDJE(0.7f, 0.05f), TRUC_DOOD(0.7f, 0.05f),
     TRUC_OP(0.7f, 0.05f), TRUC_SPRONG(0.8f, 0.05f), HUPSEN(0.5f, 0f), TIKKERTJE(0.7f, 0.1f), DELEN(0.6f, 0.08f),

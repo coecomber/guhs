@@ -25,7 +25,7 @@ import nl.juiced.guhs.feature.klusjes.StappenTaak;
 
 /**
  * Slaapliedjeszanger (a Blub's chore, id {@value #ID}): in the evening (once a day) the Blub sits down by the huisje's door
- * and squeaks the lullaby. The guhs that live in this huisje sleep extra well: they are {@code uitgerust} (the guh_slaapzak's
+ * and squeaks the whole lullaby (about 25 seconds). The guhs that live in this huisje sleep extra well: they are {@code uitgerust} (the guh_slaapzak's
  * effect, reused: a little faster, and their chores go {@code Band.klusSnelheid} a bit quicker) until the next evening.
  */
 public class ZingKlus extends BlubKlusjes.BlubKlus {
@@ -33,7 +33,6 @@ public class ZingKlus extends BlubKlusjes.BlubKlus {
     /** A day: uitgerust from this evening until the next one. */
     public static final int UITGERUST = 24000;
     static final String GEZONGEN_DAG = "guhs_blub_gezongen_dag";
-    private static final float[] TONEN = {1.0f, 1.19f, 1.33f, 1.19f, 1.0f, 0.89f, 1.0f, 0.75f};
 
     ZingKlus() {
         super(ID, () -> new ItemStack(BlubFeature.KLUS_ICONEN.get("liedje").get()), 200);
@@ -80,9 +79,11 @@ public class ZingKlus extends BlubKlusjes.BlubKlus {
         @Override
         protected void begin() {
             erbij(loop(huisje.pos(), 3.0));
-            erbij(werk(TONEN.length * 8 + 4, Vec3.atCenterOf(huisje.pos()), t -> {
-                if (t % 8 == 1 && mob instanceof BlubGuhEntity b) {
-                    BlubGeluid.KLUS_ZINGEN.speel(b, TONEN[(t / 8) % TONEN.length]);
+            erbij(werk(BlubGuhEntity.LIEDJE_TICKS, Vec3.atCenterOf(huisje.pos()), t -> {
+                if (t == 1 && mob instanceof BlubGuhEntity b) {
+                    BlubGeluid.KLUS_ZINGEN.speel(b);                    // (the whole lullaby, once)
+                }
+                if (t % 15 == 0) {
                     level.sendParticles(ParticleTypes.NOTE, mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 0, level.getRandom().nextFloat(), 0, 0, 1);
                 }
             }));
