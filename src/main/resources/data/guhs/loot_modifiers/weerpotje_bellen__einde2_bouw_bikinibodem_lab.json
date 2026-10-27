@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "table": "guhs:weer/potje_bellen",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "guhs:chests/einde2_bouw_bikinibodem_lab"
+    }
+  ]
+}

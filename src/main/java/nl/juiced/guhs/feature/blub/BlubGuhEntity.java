@@ -686,7 +686,7 @@ public class BlubGuhEntity extends Landdiertje {
             }
         }
         // puddles: in the rain it jumps about and shakes itself dry
-        if (nu >= volgendePlas && onGround() && !slaapt() && sl.isRainingAt(blockPosition().above())) {
+        if (nu >= volgendePlas && onGround() && !slaapt() && nl.juiced.guhs.feature.weer.WeerZones.regentOp(sl, blockPosition().above())) {
             volgendePlas = nu + 40 + random.nextInt(60);
             setDeltaMovement(getDeltaMovement().add(0, 0.42, 0));
             needsSync = true;

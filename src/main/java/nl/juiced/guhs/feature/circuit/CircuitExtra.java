@@ -236,6 +236,9 @@ public final class CircuitExtra implements RaceBaan.Extra {
         // ghost, nor did the first racer on an empty board, and a sharp record locked everyone else out for good): a
         // gold-medal time on any circuit track is the legend's time. Beating the golden ghost itself still counts too.
         boolean geest = game.goudTicks() >= 0 && total < game.goudTicks();
+        if (medal == RaceGame.Medal.GOUD) {
+            nl.juiced.guhs.feature.weer.WeerUnlocks.potjeEenmalig(racer, nl.juiced.guhs.feature.weer.Weertje.REGENBOOG);   // 1.8.0: regenboogweer
+        }
         if (geest || medal == RaceGame.Medal.GOUD) {
             boolean nieuw = !RaceGame.has(racer, "grote_guhspelen/circuit_gouden_geest");
             RaceGame.grant(racer, "grote_guhspelen/circuit_gouden_geest");

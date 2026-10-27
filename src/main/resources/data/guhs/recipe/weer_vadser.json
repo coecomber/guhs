@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "IGI",
+    "IKI"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:weer_vadser",
+    "count": 1
+  }
+}

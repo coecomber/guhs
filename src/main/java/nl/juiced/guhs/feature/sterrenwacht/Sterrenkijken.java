@@ -279,6 +279,7 @@ public final class Sterrenkijken {
             Buiten.toon(player, "sterrenwacht_zeldzaam");
         }
         GuhAdvancements.grant(player, "sterrenwacht_sterrenbeeld");
+        nl.juiced.guhs.feature.weer.WeerUnlocks.potjeEenmalig(player, nl.juiced.guhs.feature.weer.Weertje.STERREN);   // 1.8.0: sterrenregen
         Buiten.toon(player, "sterrenwacht_sterrenbeeld");
         if (atlas >= 6) {
             GuhAdvancements.grant(player, "sterrenwacht_zes");
