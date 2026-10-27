@@ -6312,7 +6312,7 @@
   "blubguh.getemd": {
     "sounds": [
       {
-        "name": "guhs:blubguh/getemd/placeholder_1_piepje"
+        "name": "guhs:blubguh/getemd/blub_getemd"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.getemd"
@@ -6320,10 +6320,10 @@
   "blubguh.baby": {
     "sounds": [
       {
-        "name": "guhs:blubguh/baby/placeholder_1_small2"
+        "name": "guhs:blubguh/baby/blub_babyblubje"
       },
       {
-        "name": "guhs:blubguh/baby/placeholder_2_piepje"
+        "name": "guhs:blubguh/baby/placeholder_1_small2"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.baby"
@@ -6350,7 +6350,7 @@
         "name": "guhs:blubguh/wakker/blub_wakker"
       },
       {
-        "name": "guhs:blubguh/wakker/placeholder_2_piepje"
+        "name": "guhs:blubguh/wakker/blub_goedemorgen"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.wakker"
@@ -6420,7 +6420,7 @@
   "blubguh.gevonden": {
     "sounds": [
       {
-        "name": "guhs:blubguh/gevonden/placeholder_1_piepje"
+        "name": "guhs:blubguh/gevonden/blub_gevonden"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.gevonden"
@@ -6482,10 +6482,10 @@
   "blubguh.tikkertje": {
     "sounds": [
       {
-        "name": "guhs:blubguh/tikkertje/blub_tikkertje"
+        "name": "guhs:blubguh/tikkertje/blub_tik"
       },
       {
-        "name": "guhs:blubguh/tikkertje/placeholder_2_piepje"
+        "name": "guhs:blubguh/tikkertje/blub_tikkertje"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.tikkertje"
@@ -6567,10 +6567,10 @@
   "blubguh.knuffel_guh": {
     "sounds": [
       {
-        "name": "guhs:blubguh/knuffel_guh/placeholder_1_small3"
+        "name": "guhs:blubguh/knuffel_guh/blub_knuffel"
       },
       {
-        "name": "guhs:blubguh/knuffel_guh/placeholder_2_piepje"
+        "name": "guhs:blubguh/knuffel_guh/placeholder_1_small3"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.knuffel_guh"
@@ -6589,10 +6589,10 @@
   "blubguh.klus_bezorgen": {
     "sounds": [
       {
-        "name": "guhs:blubguh/klus_bezorgen/placeholder_1_piepje"
+        "name": "guhs:blubguh/klus_bezorgen/blub_hier"
       },
       {
-        "name": "guhs:blubguh/klus_bezorgen/placeholder_2_piepje"
+        "name": "guhs:blubguh/klus_bezorgen/blub_alsjeblieft"
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_bezorgen"
