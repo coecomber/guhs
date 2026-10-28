@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "fles": "guhs:block/droom_badspulletje_fles",
+    "dop": "guhs:block/droom_badspulletje_roze",
+    "schuim": "guhs:block/droom_badspulletje_schuim",
+    "particle": "guhs:block/droom_badspulletje_fles"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fles"
+        },
+        "south": {
+          "texture": "#fles"
+        },
+        "east": {
+          "texture": "#fles"
+        },
+        "west": {
+          "texture": "#fles"
+        },
+        "up": {
+          "texture": "#fles"
+        },
+        "down": {
+          "texture": "#fles"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        9,
+        6
+      ],
+      "to": [
+        10,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fles"
+        },
+        "south": {
+          "texture": "#fles"
+        },
+        "east": {
+          "texture": "#fles"
+        },
+        "west": {
+          "texture": "#fles"
+        },
+        "up": {
+          "texture": "#fles"
+        },
+        "down": {
+          "texture": "#fles"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        11,
+        6
+      ],
+      "to": [
+        10,
+        13,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dop"
+        },
+        "south": {
+          "texture": "#dop"
+        },
+        "east": {
+          "texture": "#dop"
+        },
+        "west": {
+          "texture": "#dop"
+        },
+        "up": {
+          "texture": "#dop"
+        },
+        "down": {
+          "texture": "#dop"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "down": {
+          "texture": "#schuim"
+        }
+      }
+    }
+  ]
+}

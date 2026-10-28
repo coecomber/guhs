@@ -887,6 +887,17 @@ UITLEG = {
            "eilanden Droompost je al kan bezorgen. Klik daarna op het brievenbusje van zo'n eiland om erheen te zweven.",
         en="The Dream Square's own little mailbox, by the Dream Post Office. Click it in a dream: it tells which islands "
            "Dream Post can already deliver you to. Then click the little mailbox of such an island to float there.",
+    "droom_badspulletje": dict(
+        nl="Een badspulletje op een wolkje van het Wolkenbadje in Guhdromenland: een badeend, een zeepje of een schuimfles.\n"
+           "\n"
+           "- Stap op de zeepbel bij het bordje 'Zeepbelroute': een zeepbel neemt je mee langs de wolkjes (sluipen = eruit).\n"
+           "- Bij elk wolkje wacht de zeepbel even: klik op het badspulletje om het mee te nemen voor Snoes.\n"
+           "- Met alle drie: praat met Snoes bij zijn kleine badje. Hij durft eindelijk in bad!",
+        en="A bath thing on a little cloud of the Cloud Bath in Guh Dreamland: a rubber duck, a soap or a bottle of bubble bath.\n"
+           "\n"
+           "- Step on the bubble by the 'Bubble route' sign: a soap bubble takes you along the clouds (sneak = hop out).\n"
+           "- At each cloud the bubble waits a moment: click the bath thing to take it along for Snoes.\n"
+           "- With all three: talk to Snoes by his little bath. He finally dares to take a bath!",
         meer=[]),
     "kattenhuisje_roze": dict(
         nl="Een kattenhuisje met een rond deurtje en guh-oortjes op het dak. Je kunt er je guh in instoppen, net als in de "

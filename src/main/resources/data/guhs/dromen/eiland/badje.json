@@ -1,0 +1,22 @@
+{
+  "versie": 1,
+  "template": "guhs:dromen/eiland_badje",
+  "midden": [
+    52,
+    24,
+    52
+  ],
+  "aankomst": {
+    "plek": [
+      -14.69,
+      1,
+      -20.23
+    ],
+    "yaw": -36.0
+  },
+  "steiger": [
+    -21.45,
+    1,
+    -29.53
+  ]
+}
