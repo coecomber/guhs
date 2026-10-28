@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:pluis",
+    "guhs:pluis",
+    "guhs:pluis",
+    "guhs:pluis"
+  ],
+  "result": {
+    "id": "minecraft:white_wool",
+    "count": 1
+  }
+}

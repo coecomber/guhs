@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:wheat_seeds",
+    "#minecraft:wool"
+  ],
+  "result": {
+    "id": "guhs:pluisbolletje_zaad",
+    "count": 2
+  }
+}

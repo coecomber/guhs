@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "guhs:block/pluisbolletje_plant_stage1"
+  }
+}

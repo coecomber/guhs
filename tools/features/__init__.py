@@ -156,6 +156,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'hamsterbuis']
             # 1.8.0 vadskracht: de Mega-knuffelcentrale + export bij guh-villagers (append only)
             'centrale']
+            # 1.8.0 vadskracht: de Kaaskas + de Guh-sorteerband (append only)
+            'kaaskas']
 
 
 def modules():

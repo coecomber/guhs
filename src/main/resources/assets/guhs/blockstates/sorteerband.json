@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/sorteerband"
+    },
+    "facing=east": {
+      "model": "guhs:block/sorteerband",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/sorteerband",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/sorteerband",
+      "y": 270
+    }
+  }
+}
