@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/droomwekker"
+    },
+    "facing=east": {
+      "model": "guhs:block/droomwekker",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/droomwekker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/droomwekker",
+      "y": 270
+    }
+  }
+}

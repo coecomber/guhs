@@ -822,6 +822,72 @@ UITLEG = {
            "- Then go to sleep in a bed close by yourself: you wake up in Guh Dreamland.\n"
            "- Sneak + right-click: untuck your guh.",
         meer=[]),
+    "droombrievenbus_sterren": dict(
+        nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
+           "Droompost bezorgt je met een grote zeepbel op het Sterrenkussenveld.\n"
+           "\n"
+           "- Alleen naar eilanden waar je al eens bent geweest (Droompost bezorgt alleen op bekende adressen).\n"
+           "- Thuis doet het niks: dan komt er alleen reclame in.",
+        en="A little mailbox by the Dream Post Office on the Dream Square, in Guh Dreamland. Click it in a dream and "
+           "Dream Post delivers you to the Star Cushion Field in a big bubble.\n"
+           "\n"
+           "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
+           "- At home it does nothing: it only gets junk mail.",
+        meer=[]),
+    "droombrievenbus_molentje": dict(
+        nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
+           "Droompost bezorgt je met een grote zeepbel op het Maanmolentje.\n"
+           "\n"
+           "- Alleen naar eilanden waar je al eens bent geweest (Droompost bezorgt alleen op bekende adressen).\n"
+           "- Thuis doet het niks: dan komt er alleen reclame in.",
+        en="A little mailbox by the Dream Post Office on the Dream Square, in Guh Dreamland. Click it in a dream and "
+           "Dream Post delivers you to the Moon Mill in a big bubble.\n"
+           "\n"
+           "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
+           "- At home it does nothing: it only gets junk mail.",
+        meer=[]),
+    "droombrievenbus_badje": dict(
+        nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
+           "Droompost bezorgt je met een grote zeepbel op het Wolkenbadje.\n"
+           "\n"
+           "- Alleen naar eilanden waar je al eens bent geweest (Droompost bezorgt alleen op bekende adressen).\n"
+           "- Thuis doet het niks: dan komt er alleen reclame in.",
+        en="A little mailbox by the Dream Post Office on the Dream Square, in Guh Dreamland. Click it in a dream and "
+           "Dream Post delivers you to the Cloud Bath in a big bubble.\n"
+           "\n"
+           "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
+           "- At home it does nothing: it only gets junk mail.",
+        meer=[]),
+    "droombrievenbus_herinnering": dict(
+        nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
+           "Droompost bezorgt je met een grote zeepbel op het Herinneringseiland.\n"
+           "\n"
+           "- Alleen naar eilanden waar je al eens bent geweest (Droompost bezorgt alleen op bekende adressen).\n"
+           "- Thuis doet het niks: dan komt er alleen reclame in.",
+        en="A little mailbox by the Dream Post Office on the Dream Square, in Guh Dreamland. Click it in a dream and "
+           "Dream Post delivers you to Memory Island in a big bubble.\n"
+           "\n"
+           "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
+           "- At home it does nothing: it only gets junk mail.",
+        meer=[]),
+    "droombrievenbus_liedjes": dict(
+        nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
+           "Droompost bezorgt je met een grote zeepbel op de Slaapliedjesheuvels.\n"
+           "\n"
+           "- Alleen naar eilanden waar je al eens bent geweest (Droompost bezorgt alleen op bekende adressen).\n"
+           "- Thuis doet het niks: dan komt er alleen reclame in.",
+        en="A little mailbox by the Dream Post Office on the Dream Square, in Guh Dreamland. Click it in a dream and "
+           "Dream Post delivers you to the Lullaby Hills in a big bubble.\n"
+           "\n"
+           "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
+           "- At home it does nothing: it only gets junk mail.",
+        meer=[]),
+    "droombrievenbus_plein": dict(
+        nl="Het brievenbusje van het Droomplein zelf, bij het Droomposthuisje. Klik erop in een droom: het vertelt naar welke "
+           "eilanden Droompost je al kan bezorgen. Klik daarna op het brievenbusje van zo'n eiland om erheen te zweven.",
+        en="The Dream Square's own little mailbox, by the Dream Post Office. Click it in a dream: it tells which islands "
+           "Dream Post can already deliver you to. Then click the little mailbox of such an island to float there.",
+        meer=[]),
     "kattenhuisje_roze": dict(
         nl="Een kattenhuisje met een rond deurtje en guh-oortjes op het dak. Je kunt er je guh in instoppen, net als in de "
            "doos met knabbels: 's avonds rechtsklikken met een tamme guh in de buurt, en dan zelf gaan slapen in een bed "

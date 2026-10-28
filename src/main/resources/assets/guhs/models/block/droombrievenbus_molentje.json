@@ -1,0 +1,118 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bus": "guhs:block/droombrievenbus_molentje",
+    "paal": "guhs:block/droombrievenbus_paal",
+    "vlag": "guhs:block/droombrievenbus_vlag",
+    "particle": "guhs:block/droombrievenbus_molentje"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        8,
+        3
+      ],
+      "to": [
+        12,
+        15,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bus"
+        },
+        "south": {
+          "texture": "#bus"
+        },
+        "east": {
+          "texture": "#bus"
+        },
+        "west": {
+          "texture": "#bus"
+        },
+        "up": {
+          "texture": "#bus"
+        },
+        "down": {
+          "texture": "#bus"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        11,
+        8
+      ],
+      "to": [
+        13,
+        17,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vlag"
+        },
+        "south": {
+          "texture": "#vlag"
+        },
+        "east": {
+          "texture": "#vlag"
+        },
+        "west": {
+          "texture": "#vlag"
+        },
+        "up": {
+          "texture": "#vlag"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        15,
+        8.5
+      ],
+      "to": [
+        12.1,
+        17,
+        12
+      ],
+      "faces": {
+        "east": {
+          "texture": "#vlag"
+        },
+        "west": {
+          "texture": "#vlag"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/droombrievenbus_sterren"
+    },
+    "facing=east": {
+      "model": "guhs:block/droombrievenbus_sterren",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/droombrievenbus_sterren",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/droombrievenbus_sterren",
+      "y": 270
+    }
+  }
+}

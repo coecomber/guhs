@@ -1,0 +1,141 @@
+{
+  "textures": {
+    "voor": "guhs:block/droomwekker",
+    "kast": "guhs:block/droomwekker_kast",
+    "bel": "guhs:block/droomwekker_bel",
+    "particle": "guhs:block/droomwekker"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        1,
+        6
+      ],
+      "to": [
+        14,
+        13,
+        10
+      ],
+      "faces": {
+        "south": {
+          "texture": "#kast"
+        },
+        "east": {
+          "texture": "#kast"
+        },
+        "west": {
+          "texture": "#kast"
+        },
+        "up": {
+          "texture": "#kast"
+        },
+        "down": {
+          "texture": "#kast"
+        },
+        "north": {
+          "texture": "#voor"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        13,
+        7
+      ],
+      "to": [
+        6,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bel"
+        },
+        "south": {
+          "texture": "#bel"
+        },
+        "east": {
+          "texture": "#bel"
+        },
+        "west": {
+          "texture": "#bel"
+        },
+        "up": {
+          "texture": "#bel"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        13,
+        7
+      ],
+      "to": [
+        14,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bel"
+        },
+        "south": {
+          "texture": "#bel"
+        },
+        "east": {
+          "texture": "#bel"
+        },
+        "west": {
+          "texture": "#bel"
+        },
+        "up": {
+          "texture": "#bel"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        7
+      ],
+      "to": [
+        5,
+        1,
+        9
+      ],
+      "faces": {
+        "up": {
+          "texture": "#bel"
+        },
+        "north": {
+          "texture": "#bel"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        0,
+        7
+      ],
+      "to": [
+        13,
+        1,
+        9
+      ],
+      "faces": {
+        "up": {
+          "texture": "#bel"
+        },
+        "north": {
+          "texture": "#bel"
+        }
+      }
+    }
+  ],
+  "parent": "minecraft:block/block"
+}
