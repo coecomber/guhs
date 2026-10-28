@@ -18,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import org.slf4j.Logger;
 
@@ -29,14 +30,34 @@ import org.slf4j.Logger;
  */
 public record BinnenKamer(Vec3i maat, BlockPos mat, float yaw, List<BlockPos> deur, BlockPos prikbord, BlockPos logeerHoofd,
                           BlockPos logeerVoet, List<Bed> bedden) {
-    /** One guh bed: the bed block, which way the sleeper looks (away from the wall), its name sign, bedside table and hook. */
-    public record Bed(BlockPos bed, Direction kijk, BlockPos bord, BlockPos kastje, BlockPos haak) {
+    /**
+     * One guh bed: the bed block, which way the sleeper looks (away from the wall), its name sign, bedside table and hook.
+     * 1.8.0 (the Guhvilla): a bed can also be one vakje of a new bed (Knuffelnest, family beds, stapelbedje...): then
+     * {@code punt} is where the sleeper lies (template coordinates, exact), {@code yaw} which way it looks, {@code soort} who
+     * sleeps there ("guh", "blub", "muis", "schilly"; "" for the old guhbedjes), and the sign, table and hook may be missing.
+     */
+    public record Bed(BlockPos bed, Direction kijk, @Nullable BlockPos bord, @Nullable BlockPos kastje, @Nullable BlockPos haak,
+                      @Nullable Vec3 punt, float yaw, String soort) {
+        /** The yaw of the sleeper. */
+        public float kijkYaw() {
+            return Float.isNaN(yaw) ? kijk.toYRot() : yaw;
+        }
+    }
+
+    /** 1.8.0: does this room have vakjes per kind (the villa), so residents go to a bed of their own kind? */
+    public boolean getypt() {
+        for (Bed b : bedden) {
+            if (!b.soort().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Identifier BESTAND = Guhs.id("huisje_binnen/kamers.json");
     /** No room is larger than this (the box that is cleared before a room is stamped). */
-    public static final Vec3i MAX = new Vec3i(16, 6, 16);
+    public static final Vec3i MAX = new Vec3i(24, 7, 24);   // (1.8.0: room for the Guhvilla's hall)
 
     private static final Map<HuisjeMaat, BinnenKamer> KAMERS = new EnumMap<>(HuisjeMaat.class);
     private static int versie = -1;
@@ -89,8 +110,14 @@ public record BinnenKamer(Vec3i maat, BlockPos mat, float yaw, List<BlockPos> de
                     for (var e : k.getAsJsonArray("bedden")) {
                         JsonObject b = e.getAsJsonObject();
                         Direction kijk = Direction.byName(b.get("kijk").getAsString());
-                        bedden.add(new Bed(pos(b.getAsJsonArray("bed")), kijk == null ? Direction.SOUTH : kijk, pos(b.getAsJsonArray("bord")),
-                                pos(b.getAsJsonArray("kastje")), pos(b.getAsJsonArray("haak"))));
+                        Vec3 punt = null;
+                        if (b.has("punt") && b.get("punt").isJsonArray()) {
+                            JsonArray a = b.getAsJsonArray("punt");
+                            punt = new Vec3(a.get(0).getAsDouble(), a.get(1).getAsDouble(), a.get(2).getAsDouble());
+                        }
+                        bedden.add(new Bed(pos(b.getAsJsonArray("bed")), kijk == null ? Direction.SOUTH : kijk, mag(b, "bord"),
+                                mag(b, "kastje"), mag(b, "haak"), punt, b.has("yaw") ? b.get("yaw").getAsFloat() : Float.NaN,
+                                b.has("soort") ? b.get("soort").getAsString() : ""));
                     }
                     List<BlockPos> deur = new ArrayList<>();
                     for (var e : k.getAsJsonArray("deur")) {
@@ -106,6 +133,12 @@ public record BinnenKamer(Vec3i maat, BlockPos mat, float yaw, List<BlockPos> de
         } catch (Exception e) {
             LOGGER.error("Guhs: could not read {}", BESTAND, e);
         }
+    }
+
+    /** An optional position (missing or null: null). */
+    @Nullable
+    private static BlockPos mag(JsonObject o, String key) {
+        return o.has(key) && o.get(key).isJsonArray() ? pos(o.getAsJsonArray(key)) : null;
     }
 
     private static BlockPos pos(JsonArray a) {

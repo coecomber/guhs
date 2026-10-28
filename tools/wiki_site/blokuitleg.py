@@ -2157,3 +2157,23 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+# 1.8.0: the Guhvilla (and the range slider of every huisje)
+UITLEG["guhhuisje_villa"] = dict(
+    nl="Het allergrootste Guhhuisje: twee verdiepingen, een balkonnetje, een kroontje op het dak en plek voor twintig bewoners "
+       "(guhs, Blubs, muisjes, Schilly en Poepschilly).\n"
+       "\n"
+       "- Rechtsklik: het huisje-scherm, net als bij de andere huisjes (bewoners, klusjes, Nieuwe bewoner, Naar binnen).\n"
+       "- Met de schuifregelaar 'Klus-area' maak je het gebied waar de bewoners rondlopen en klusjes doen groter of kleiner: "
+       "bij de villa tot 32 blokken (de andere huisjes iets minder ver). De blauwe koepel laat zien hoe groot het wordt.\n"
+       "- Binnen slapen de bewoners in de nieuwe bedden: twee Knuffelnesten, de Guh-hoofd-bank, stapelbedjes, het mandje, "
+       "luciferdoosjes en een schelpbedje. Elk diertje krijgt een vakje van zijn eigen soort.",
+    en="The very biggest Guh House: two floors, a little balcony, a crown on the roof and room for twenty residents "
+       "(guhs, Blubs, mice, Schilly and Poepschilly).\n"
+       "\n"
+       "- Right-click: the huisje screen, just like the other huisjes (residents, chores, New resident, Go inside).\n"
+       "- With the slider 'Chore area' you make the area where the residents wander and do chores bigger or smaller: "
+       "up to 32 blocks for the villa (a bit less for the other huisjes). The blue dome shows how big it gets.\n"
+       "- Inside, the residents sleep in the new beds: two Cuddle Nests, the Guh-head bench, bunk beds, the basket, matchboxes "
+       "and a shell bed. Every critter gets a vakje of its own kind.",
+    meer=["systemen/guhhuisje"])

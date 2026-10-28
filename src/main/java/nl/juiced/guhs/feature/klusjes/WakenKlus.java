@@ -89,7 +89,7 @@ public class WakenKlus extends BasisKlus {
     @Nullable
     static LivingEntity dreiging(ServerLevel level, Huisje huisje, @Nullable Mob wie) {
         Vec3 m = huisje.midden();
-        double r = Huisjes.BEREIK + EXTRA;
+        double r = huisje.bereik() + EXTRA;
         List<Mob> lijst = level.getEntitiesOfClass(Mob.class, huisje.gebied().inflate(EXTRA), e -> e.isAlive() && e != wie
                 && (e instanceof Enemy || isMika(e)) && !isSpelMika(e) && !(e instanceof OwnableEntity o && nl.juiced.guhs.entity.Owners.uuid(o) != null)
                 && !e.isPassenger() && e.position().distanceToSqr(m.x, e.getY(), m.z) <= r * r);

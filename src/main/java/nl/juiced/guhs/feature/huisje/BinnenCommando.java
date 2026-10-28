@@ -170,7 +170,8 @@ public final class BinnenCommando {
             int cel = Binnen.PER_RIJ * Binnen.PER_RIJ - 1;   // (a far corner no huisje will ever get)
             for (HuisjeMaat maat : HuisjeMaat.values()) {
                 BinnenKamer k = BinnenKamer.van(server, maat);
-                check.accept(k != null && k.bedden().size() == maat.plekken(), maat.id() + ": kamers.json has " + maat.plekken() + " beds");
+                check.accept(k != null && (k.getypt() ? k.bedden().stream().filter(b -> b.soort().equals("guh")).count() >= maat.plekken()
+                        : k.bedden().size() == maat.plekken()), maat.id() + ": kamers.json has " + maat.plekken() + " beds");
                 if (k == null) {
                     continue;
                 }
@@ -181,10 +182,13 @@ public final class BinnenCommando {
                 if (gestempeld) {
                     int bedden = 0, borden = 0;
                     for (BinnenKamer.Bed b : k.bedden()) {
-                        bedden += level.getBlockState(o.offset(b.bed())).is(HuisjeFeature.BEDJE.get()) ? 1 : 0;
-                        borden += level.getBlockEntity(o.offset(b.bord())) instanceof SignBlockEntity ? 1 : 0;
+                        // (1.8.0: a vakje of the villa's new beds: a bed block of any kind stands there)
+                        bedden += k.getypt() ? (level.getBlockState(o.offset(b.bed())).isAir() ? 0 : 1)
+                                : level.getBlockState(o.offset(b.bed())).is(HuisjeFeature.BEDJE.get()) ? 1 : 0;
+                        borden += b.bord() == null || level.getBlockEntity(o.offset(b.bord())) instanceof SignBlockEntity ? 1 : 0;
                     }
-                    check.accept(bedden == maat.plekken() && borden == maat.plekken(), maat.id() + ": " + bedden + " beds and " + borden + " name signs stand");
+                    int moet = k.getypt() ? k.bedden().size() : maat.plekken();
+                    check.accept(bedden == moet && borden == moet, maat.id() + ": " + bedden + " beds and " + borden + " name signs stand");
                     boolean deur = k.deur().stream().allMatch(d -> level.getBlockState(o.offset(d)).getBlock() instanceof DoorBlock);
                     BlockState hoofd = level.getBlockState(o.offset(k.logeerHoofd())), voet = level.getBlockState(o.offset(k.logeerVoet()));
                     check.accept(deur && hoofd.getBlock() instanceof BedBlock && voet.getBlock() instanceof BedBlock

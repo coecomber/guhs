@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KTK",
+    "WHW",
+    "BNB"
+  ],
+  "key": {
+    "K": "guhs:guh_kristal",
+    "T": "guhs:timmerguh_bouwboekje",
+    "W": "minecraft:pink_wool",
+    "H": "guhs:guhhuisje_groot",
+    "B": "guhs:block_of_kaasknabbels",
+    "N": "guhs:knuffelnest"
+  },
+  "result": {
+    "id": "guhs:guhhuisje_villa",
+    "count": 1
+  }
+}

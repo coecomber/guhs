@@ -51,6 +51,8 @@ public final class Huisje {
      *  counter the first time somebody goes inside) and the version of the room template stamped there (0: not built). */
     int cel = -1;
     int celVersie;
+    /** 1.8.0: the range of the home base the owner chose with the slider (0: the size's default). */
+    int bereik;
 
     Huisje(ResourceKey<Level> dim, BlockPos pos, Direction facing, HuisjeMaat maat, UUID eigenaar, String naam) {
         this.dim = dim;
@@ -155,16 +157,30 @@ public final class Huisje {
         return midden(pos, facing, maat);
     }
 
-    /** Within the home base: {@link Huisjes#BEREIK} horizontally from the middle, 8 up or down. */
+    /** 1.8.0: the range of the home base (blocks around the middle): the owner's choice within the size's limits. */
+    public int bereik() {
+        return bereik <= 0 ? maat.standaardBereik() : Math.max(maat.minBereik(), Math.min(maat.maxBereik(), bereik));
+    }
+
+    /** 1.8.0: sets the range (clamped to the size's limits); returns the range it got. */
+    public int zetBereik(int blokken) {
+        this.bereik = Math.max(maat.minBereik(), Math.min(maat.maxBereik(), blokken));
+        Huisjes.dirty();
+        return bereik;
+    }
+
+    /** Within the home base: {@link #bereik()} horizontally from the middle, 8 up or down. */
     public boolean inGebied(BlockPos p) {
         Vec3 m = midden();
+        int r = bereik();
         double dx = p.getX() + 0.5 - m.x, dz = p.getZ() + 0.5 - m.z;
-        return dx * dx + dz * dz <= (double) Huisjes.BEREIK * Huisjes.BEREIK && Math.abs(p.getY() - pos.getY()) <= 8;
+        return dx * dx + dz * dz <= (double) r * r && Math.abs(p.getY() - pos.getY()) <= 8;
     }
 
     public AABB gebied() {
         Vec3 m = midden();
-        return new AABB(m.x - Huisjes.BEREIK, pos.getY() - 8, m.z - Huisjes.BEREIK, m.x + Huisjes.BEREIK, pos.getY() + 9, m.z + Huisjes.BEREIK);
+        int r = bereik();
+        return new AABB(m.x - r, pos.getY() - 8, m.z - r, m.x + r, pos.getY() + 9, m.z + r);
     }
 
     /** Does this resident do this chore? (what the owner set, else the chore's default for a loaded resident, else on) */
@@ -257,6 +273,9 @@ public final class Huisje {
         t.putString("EigenaarNaam", eigenaarNaam);
         t.putString("Naam", naam);
         t.putBoolean("Meldingen", meldingen);
+        if (bereik > 0) {
+            t.putInt("Bereik", bereik);
+        }
         if (cel >= 0) {
             t.putInt("Cel", cel);
             t.putInt("CelVersie", celVersie);
@@ -290,6 +309,7 @@ public final class Huisje {
         h.meldingen = t.getBooleanOr("Meldingen", true);
         h.cel = t.getIntOr("Cel", -1);
         h.celVersie = t.getIntOr("CelVersie", 0);
+        h.bereik = t.getIntOr("Bereik", 0);
         ListTag list = t.getListOrEmpty("Bewoners");
         for (int i = 0; i < list.size(); i++) {
             CompoundTag c = list.getCompoundOrEmpty(i);

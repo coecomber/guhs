@@ -136,7 +136,7 @@ public final class HuisjeOverzicht {
         }
         t.put("Klusjes", klusjes);
         ListTag dingen = new ListTag();
-        for (Speeltje.Telling s : Speelgoed.tel(level, h.pos(), Huisjes.BEREIK,
+        for (Speeltje.Telling s : Speelgoed.tel(level, h.pos(), h.bereik(),
                 p -> h.inGebied(p) && KlusGebied.inTest(h, Vec3.atCenterOf(p)))) {
             dingen.add(ding(s.id(), s.icoon(), s.icoon().getItem().getDescriptionId(), s.aantal()));
         }

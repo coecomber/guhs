@@ -53,6 +53,8 @@ public final class Huisjes extends SavedData {
     public static final String NAAM = "guhs_huisjes";
     /** The home base (and the dome): this many blocks around the huisje, horizontally. */
     public static final int BEREIK = 16;
+    /** 1.8.0: the largest range any huisje can have (the villa turned all the way up): for "which huisjes reach here". */
+    public static final int MAX_BEREIK = 32;
     public static final long NAAM_SALT = 20210202L;
     /** Persistent data keys on a resident. */
     public static final String THUIS = "guhs_huisje_thuis", DIM = "guhs_huisje_dim", BINNEN = "guhs_huisje_binnen";
@@ -339,7 +341,7 @@ public final class Huisjes extends SavedData {
         p.remove(BINNEN);
         if (bewoner instanceof PathfinderMob mob) {
             Vec3 m = h.midden();
-            mob.setHomeTo(BlockPos.containing(m), BEREIK);
+            mob.setHomeTo(BlockPos.containing(m), h.bereik());
             HuisjeGoal.zorgVoor(mob);
         }
         GuhVolger.zet(bewoner, PlekSoort.HUISJE, h.naamTekst());
@@ -360,6 +362,16 @@ public final class Huisjes extends SavedData {
     }
 
     /** Moves out of its huisje (and out of the door when it was asleep inside). */
+    /** 1.8.0: after the range changed, every loaded resident gets the new home radius. */
+    public static void nieuwThuis(ServerLevel level, Huisje h) {
+        BlockPos m = BlockPos.containing(h.midden());
+        for (UUID id : List.copyOf(h.bewoners)) {
+            if (zoekBewoner(level, h, id) instanceof PathfinderMob mob && !isBinnen(mob)) {
+                mob.setHomeTo(m, h.bereik());
+            }
+        }
+    }
+
     public static void trekUit(Entity bewoner) {
         Huisje h = thuisVan(bewoner);
         if (h != null) {

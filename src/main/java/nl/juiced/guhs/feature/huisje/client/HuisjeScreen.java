@@ -47,7 +47,12 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * while it is open this screen is dimmed and only the dialog takes the mouse and the keys (Esc closes the dialog only).
  */
 public class HuisjeScreen extends Screen {
-    private static final int W = 320, H = 230, RIJ = 28;
+    /** 1.8.0: the screen grows with the window (up to 440 x 320) so a Guhvilla's twenty residents and their chores fit. */
+    private int W = 320, H = 230;
+    private static final int RIJ = 28;
+    /** 1.8.0: the width of the residents' column (the chores take the rest), and how far the lists moved down for the range row. */
+    private int split = 132;
+    private static final int OMLAAG = 14;
     /** Width of the "Alles aan" / "Alles uit" buttons. */
     private static final int ALLES_B = 50;
     private static final int PANEEL = 0xF0FFF4F8, RAND = 0xFFF7B6CB, DONKER = 0xFF3A1C30, TEKST = 0xFF5A3A4A, LICHT = 0xFFB0708A, ROZE = 0xFF7A2848;
@@ -156,8 +161,19 @@ public class HuisjeScreen extends Screen {
 
     @Override
     protected void init() {
+        W = Math.max(320, Math.min(440, width - 16));
+        H = Math.max(230, Math.min(320, height - 16));
+        split = Math.max(132, (W - 24) * 2 / 5);
         left = (width - W) / 2;
         top = (height - H) / 2;
+        HuisjeKoepel.bereik(pos, data.getIntOr("Bereik", Huisjes.BEREIK));
+        // 1.8.0: the range of the home base (the blue dome): a slider, the dome shows while it moves
+        int bmin = data.getIntOr("BereikMin", 8), bmax = Math.max(bmin + 1, data.getIntOr("BereikMax", 16));
+        BereikSlider slider = new BereikSlider(left + W / 2 + 2, top + 39, W / 2 - 10, 16, bmin, bmax, data.getIntOr("Bereik", 16));
+        slider.active = mag();
+        slider.setTooltip(mag() ? net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.guhs.huisje.bereik.tooltip",
+                data.getIntOr("BereikStandaard", 16), bmin, bmax)) : alleenKijken());
+        addRenderableWidget(slider);
         naam = new EditBox(font, left + 10, top + 22, 114, 16, Component.translatable("gui.guhs.huisje.naam"));
         naam.setMaxLength(Huisjes.MAX_NAAM);
         naam.setValue(nl.juiced.guhs.taal.Tekst.get(data, "Naam").getString());
@@ -202,7 +218,7 @@ public class HuisjeScreen extends Screen {
             gekozen = lijst.isEmpty() ? null : lijst.getCompoundOrEmpty(0).getStringOr("Id", "");
         }
         // the residents on the left, the chores (or who could move in) on the right
-        bewoners.plaats(left + 8, top + 64, 132, H - 64 - 30);
+        bewoners.plaats(left + 8, top + 64 + OMLAAG, split, H - 64 - OMLAAG - 30);
         List<GidsLijst.Regel> rijen = new ArrayList<>();
         for (int i = 0; i < lijst.size(); i++) {
             rijen.add(new BewonerRij(lijst.getCompoundOrEmpty(i)));
@@ -214,7 +230,7 @@ public class HuisjeScreen extends Screen {
             for (boolean aan : new boolean[]{true, false}) {
                 Button alles = Button.builder(Component.translatable(aan ? "gui.guhs.huisje.alles_aan" : "gui.guhs.huisje.alles_uit"),
                         b -> stuur(HuisjePayloads.Actie.ALLE_KLUSSEN, "", "", aan, 0))
-                        .bounds(left + W - 8 - (aan ? 2 * ALLES_B + 2 : ALLES_B), top + 49, ALLES_B, 14)
+                        .bounds(left + W - 8 - (aan ? 2 * ALLES_B + 2 : ALLES_B), top + 49 + OMLAAG, ALLES_B, 14)
                         .tooltip(mag ? net.minecraft.client.gui.components.Tooltip.create(
                                 Component.translatable(aan ? "gui.guhs.huisje.alles_aan.tooltip" : "gui.guhs.huisje.alles_uit.tooltip")) : alleenKijken())
                         .build();
@@ -222,7 +238,7 @@ public class HuisjeScreen extends Screen {
                 addRenderableWidget(alles);
             }
         }
-        rechts.plaats(left + 146, top + 64, W - 146 - 8, H - 64 - 30);
+        rechts.plaats(left + split + 14, top + 64 + OMLAAG, W - split - 14 - 8, H - 64 - OMLAAG - 30);
         rechts.zet(nieuw ? kandidaten() : klussen());
         int by = top + H - 25;
         Button nieuwKnop = Button.builder(Component.translatable(nieuw ? "gui.guhs.huisje.terug_klusjes" : "gui.guhs.huisje.nieuwe_bewoner"), b -> {
@@ -266,6 +282,58 @@ public class HuisjeScreen extends Screen {
         }
     }
 
+    /**
+     * 1.8.0: the range slider: "Klus-area: 18 blokken". Moving it shows the dome (a few seconds, or as long as "laat klus-area
+     * zien" is on) at the new size; letting go tells the server, which keeps the value inside the size's limits.
+     */
+    private final class BereikSlider extends net.minecraft.client.gui.components.AbstractSliderButton {
+        private final int min, max;
+
+        BereikSlider(int x, int y, int w, int h, int min, int max, int nu) {
+            super(x, y, w, h, Component.empty(), (Math.max(min, Math.min(max, nu)) - min) / (double) (max - min));
+            this.min = min;
+            this.max = max;
+            updateMessage();
+        }
+
+        int blokken() {
+            return min + (int) Math.round(value * (max - min));
+        }
+
+        @Override
+        protected void updateMessage() {
+            setMessage(Component.translatable("gui.guhs.huisje.bereik", blokken()));
+        }
+
+        @Override
+        protected void applyValue() {
+            HuisjeKoepel.bereik(pos, blokken());
+            HuisjeKoepel.voorproef(pos);
+        }
+
+        @Override
+        public void onRelease(MouseButtonEvent event) {
+            super.onRelease(event);
+            bewaar();
+        }
+
+        @Override
+        public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {   // (the arrow keys move it too)
+            boolean ja = super.keyPressed(event);
+            if (ja) {
+                bewaar();
+            }
+            return ja;
+        }
+
+        private void bewaar() {
+            if (blokken() != data.getIntOr("Bereik", -1)) {
+                data.putInt("Bereik", blokken());
+                stuur(HuisjePayloads.Actie.BEREIK, "", "", false, blokken());
+            }
+        }
+    }
+
     /** "Meldingen van zeldzame vondsten: aan" + what it does. */
     private static net.minecraft.client.gui.components.Tooltip meldTip(boolean aan) {
         return net.minecraft.client.gui.components.Tooltip.create(Component.empty()
@@ -305,23 +373,23 @@ public class HuisjeScreen extends Screen {
             String eigenaar = data.getStringOr("EigenaarNaam", "");
             Component van = Component.translatable("gui.guhs.huisje.van_wie", eigenaar.isEmpty() ? "?" : eigenaar, nl.juiced.guhs.taal.Tekst.get(data, "Naam"))
                     .withStyle(ChatFormatting.BOLD);
-            g.fill(left + 6, top + 40, left + W - 6, top + 51, 0x40D27A9C);
+            g.fill(left + 6, top + 40, left + W / 2 - 2, top + 51, 0x40D27A9C);
             GidsTekst.passend(g, van.copy().append(Component.literal("  ")).append(Component.translatable("gui.guhs.timmerguh.alleen_kijken_kort")
-                    .withStyle(ChatFormatting.ITALIC)), left + 9, top + 42, W - 18, 0.75f, ROZE, false);
+                    .withStyle(ChatFormatting.ITALIC)), left + 9, top + 42, W / 2 - 14, 0.75f, ROZE, false);
         } else {
             // where the chores' spoils go
             Component opslag = Component.translatable(data.getBooleanOr("Bank", false) ? "gui.guhs.huisje.opslag.bank"
                     : data.getBooleanOr("Luikje", false) ? "gui.guhs.huisje.opslag.luikje"   // (bbq2: a Hapluikje in the home base)
                     : data.getBooleanOr("Kist", false) ? "gui.guhs.huisje.opslag.kist" : "gui.guhs.huisje.opslag.deur");
-            GidsTekst.passend(g, opslag, left + 8, top + 42, W - 16, 0.75f, LICHT, false);
+            GidsTekst.passend(g, opslag, left + 8, top + 43, W / 2 - 12, 0.75f, LICHT, false);
         }
-        GidsTekst.schaal(g, Component.translatable("gui.guhs.huisje.kop.bewoners").withStyle(ChatFormatting.BOLD), left + 8, top + 53, 0.875f, ROZE, false);
+        GidsTekst.schaal(g, Component.translatable("gui.guhs.huisje.kop.bewoners").withStyle(ChatFormatting.BOLD), left + 8, top + 53 + OMLAAG, 0.875f, ROZE, false);
         Component kop = nieuw ? Component.translatable("gui.guhs.huisje.kop.nieuw")
                 : gekozen != null && bewoner(gekozen) != null ? Component.translatable("gui.guhs.huisje.kop.klusjes_van", nl.juiced.guhs.taal.Tekst.get(bewoner(gekozen), "Naam"))
                 : Component.translatable("gui.guhs.huisje.kop.klusjes");
-        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), left + 146, top + 53, W - 146 - 8 - (nieuw || !mag() ? 0 : 2 * ALLES_B + 4), 0.875f, ROZE, false);
+        GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), left + split + 14, top + 53 + OMLAAG, W - split - 14 - 8 - (nieuw || !mag() ? 0 : 2 * ALLES_B + 4), 0.875f, ROZE, false);
         if (lijst("Bewoners").isEmpty()) {
-            GidsTekst.alinea(g, Component.translatable("gui.guhs.huisje.leeg"), left + 12, top + 68, 124, 0.75f, LICHT);
+            GidsTekst.alinea(g, Component.translatable("gui.guhs.huisje.leeg"), left + 12, top + 68 + OMLAAG, split - 8, 0.75f, LICHT);
         }
         int mx = overzicht != null ? -1 : mouseX, my = overzicht != null ? -1 : mouseY;   // (no hover under the dialog)
         bewoners.teken(g, mx, my, 0xFFD27A9C, 0x30D27A9C);

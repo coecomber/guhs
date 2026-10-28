@@ -216,7 +216,7 @@ public final class Bescherming {
         if (spawnBescherming(level, pos, namens)) {
             return false;
         }
-        for (Huisje h : Huisjes.rond(level, pos, Huisjes.BEREIK + 8)) {
+        for (Huisje h : Huisjes.rond(level, pos, Huisjes.MAX_BEREIK + 8)) {
             if (h.inGebied(pos) && (namens == null || !namens.equals(h.eigenaar()))) {
                 return false;
             }

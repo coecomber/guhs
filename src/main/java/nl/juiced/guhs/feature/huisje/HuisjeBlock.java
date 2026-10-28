@@ -114,6 +114,9 @@ public class HuisjeBlock extends BaseEntityBlock {
             if (maat == HuisjeMaat.GROOT) {
                 GidsFeature.grant(player, "lieve_vadsjes/huisje_groot");
             }
+            if (maat == HuisjeMaat.VILLA) {   // 1.8.0
+                GidsFeature.grant(player, "lieve_vadsjes/huisje_villa");
+            }
         }
     }
 

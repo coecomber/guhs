@@ -152,7 +152,61 @@ public final class BinnenInrichting {
             boolean baby = e instanceof Mob m ? m.isBaby() : looks.getBooleanOr("Baby", false);
             uit.add(new Slot(id, guh, naam, waar, detail, looks, baby, data.ingestopt.getOrDefault(id, -1L) == dag, lievelings(r)));
         }
+        BinnenKamer k = BinnenKamer.van(s, h.maat);
+        return k != null && k.getypt() ? verdeel(uit, k, h) : uit;
+    }
+
+    /**
+     * 1.8.0 (the Guhvilla): the residents over the vakjes of the new beds, by kind: a guh in a guh vakje, a Blub, muisje or
+     * Schilly in one of its own (when those are full: any free one). The list has one entry per bed (null: an empty bed), so
+     * bed i shows entry i everywhere ({@link #bouw}, {@link #tick}, {@link #bedKlik}).
+     */
+    static List<Slot> verdeel(List<Slot> slots, BinnenKamer k, Huisje h) {
+        List<Slot> uit = new ArrayList<>(java.util.Collections.nCopies(k.bedden().size(), (Slot) null));
+        List<Slot> over = new ArrayList<>();
+        for (Slot s : slots) {
+            String soort = soortVan(s.guh() ? "guh" : h.soort(s.id()));
+            int plek = -1;
+            for (int i = 0; i < k.bedden().size() && plek < 0; i++) {
+                if (uit.get(i) == null && k.bedden().get(i).soort().equals(soort)) {
+                    plek = i;
+                }
+            }
+            if (plek >= 0) {
+                uit.set(plek, s);
+            } else {
+                over.add(s);
+            }
+        }
+        for (Slot s : over) {   // (no vakje of its own kind left: the first free one)
+            int plek = uit.indexOf(null);
+            if (plek < 0) {
+                break;
+            }
+            uit.set(plek, s);
+        }
         return uit;
+    }
+
+    /** The vakje kind of a resident kind ("guh" or the maatje's entity id). */
+    static String soortVan(String bewonerSoort) {
+        String s = bewonerSoort == null ? "" : bewonerSoort.toLowerCase(java.util.Locale.ROOT);
+        if (s.contains("blub")) {
+            return "blub";
+        }
+        if (s.contains("muis")) {
+            return "muis";
+        }
+        if (s.contains("schilly")) {
+            return "schilly";
+        }
+        return "guh";
+    }
+
+    /** Where the sleeper of this bed lies: the exact vakje (villa) or on top of the guhbedje. */
+    static Vec3 slaapPlek(BlockPos o, BinnenKamer.Bed b) {
+        return b.punt() != null ? new Vec3(o.getX() + b.punt().x, o.getY() + b.punt().y, o.getZ() + b.punt().z)
+                : Vec3.atBottomCenterOf(o.offset(b.bed())).add(0, BED_HOOGTE, 0);
     }
 
     /** What lies on the bedside table: a discovered favourite (the knuffel, else the snack), else a kaasknabbel. */
@@ -176,6 +230,10 @@ public final class BinnenInrichting {
     private static String teken(List<Slot> slots) {
         StringBuilder b = new StringBuilder();
         for (Slot s : slots) {
+            if (s == null) {
+                b.append("-;");
+                continue;
+            }
             b.append(s.id()).append('|').append(s.waar()).append('|').append(s.detail().getString()).append('|').append(s.naam().getString())
                     .append('|').append(s.looks().hashCode()).append('|').append(s.ingestopt()).append('|')
                     .append(BuiltInRegistries.ITEM.getKey(s.lievelings().getItem())).append(';');
@@ -221,7 +279,7 @@ public final class BinnenInrichting {
         for (int i = 0; i < k.bedden().size(); i++) {
             BinnenKamer.Bed b = k.bedden().get(i);
             Slot s = i < slots.size() ? slots.get(i) : null;
-            if (level.getBlockEntity(o.offset(b.bord())) instanceof SignBlockEntity bord) {
+            if (b.bord() != null && level.getBlockEntity(o.offset(b.bord())) instanceof SignBlockEntity bord) {
                 SignText tekst = new SignText();
                 tekst = s == null ? tekst.setMessage(1, Component.translatable("gui.guhs.huisje.binnen.bordje.vrij").withStyle(ChatFormatting.GRAY))
                         : tekst.setMessage(1, kort(s.naam()));
@@ -231,18 +289,26 @@ public final class BinnenInrichting {
             if (s == null) {
                 continue;
             }
-            float yaw = b.kijk().toYRot();
-            Vec3 bed = Vec3.atBottomCenterOf(o.offset(b.bed())).add(0, BED_HOOGTE, 0);
-            Vec3 kastje = Vec3.atBottomCenterOf(o.offset(b.kastje())).add(0, 0.5, 0);
-            item(level, s.lievelings(), kastje, yaw, "ground", 0.8f);
+            float yaw = b.kijkYaw();
+            Vec3 bed = slaapPlek(o, b);
+            if (b.kastje() != null) {
+                Vec3 kastje = Vec3.atBottomCenterOf(o.offset(b.kastje())).add(0, 0.5, 0);
+                item(level, s.lievelings(), kastje, yaw, "ground", 0.8f);
+            }
             if (s.waar() == Waar.SLAAPT) {
                 if (s.guh()) {
                     slaper(level, s, bed, yaw);
-                    kleren(level, s, o.offset(b.haak()), b.kijk());
+                    if (b.haak() != null) {
+                        kleren(level, s, o.offset(b.haak()), b.kijk());
+                    }
                 }
-                dek(level, bed, yaw, i, s.ingestopt() || !s.guh());
+                if (b.punt() == null) {   // (the new beds of the villa have their own blankets)
+                    dek(level, bed, yaw, i, s.ingestopt() || !s.guh());
+                }
             } else {
-                dek(level, bed, yaw, i, false);
+                if (b.punt() == null) {
+                    dek(level, bed, yaw, i, false);
+                }
                 briefje(level, bed.add(0, 0.42, 0), Component.translatable("gui.guhs.huisje.binnen.briefje." + s.waar().name().toLowerCase(java.util.Locale.ROOT),
                         s.detail()));
             }
@@ -429,10 +495,10 @@ public final class BinnenInrichting {
         List<Vec3> slapers = new ArrayList<>();
         for (int i = 0; i < Math.min(st.slots().size(), k.bedden().size()); i++) {
             Slot s = st.slots().get(i);
-            if (s.waar() != Waar.SLAAPT) {
+            if (s == null || s.waar() != Waar.SLAAPT) {
                 continue;
             }
-            Vec3 bed = Vec3.atBottomCenterOf(o.offset(k.bedden().get(i).bed())).add(0, BED_HOOGTE, 0);
+            Vec3 bed = slaapPlek(o, k.bedden().get(i));
             slapers.add(bed);
             if (!s.guh()) {
                 level.sendParticles(EmotesFeature.GUH_ZZZ.get(), bed.x, bed.y + 0.55, bed.z, 1, 0.1, 0.05, 0.1, 0.0);
@@ -464,7 +530,7 @@ public final class BinnenInrichting {
             return;
         }
         List<Slot> slots = slots(p.level().getServer(), h);
-        if (bed >= slots.size()) {
+        if (bed >= slots.size() || slots.get(bed) == null) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.huisje.binnen.leeg_bed").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }

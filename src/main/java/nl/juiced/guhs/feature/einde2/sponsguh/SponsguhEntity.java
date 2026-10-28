@@ -144,7 +144,7 @@ public class SponsguhEntity extends EigenWezen {
         if (Einde2Bescherming.beschermd(level, pos)) {
             return false;
         }
-        for (Huisje huisje : Huisjes.rond(level, pos, Huisjes.BEREIK)) {
+        for (Huisje huisje : Huisjes.rond(level, pos, Huisjes.MAX_BEREIK)) {
             if (baas == null || !Huisjes.magBewerken(baas, huisje)) {
                 return false;
             }
