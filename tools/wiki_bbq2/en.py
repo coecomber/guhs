@@ -1344,3 +1344,9 @@ from . import en_techbeurs as _techbeurs  # noqa: E402
 
 PAGINA.update(_techbeurs.PAGINA)
 TEKST.update(_techbeurs.TEKST)
+
+# 1.8.0 Dromen & Vadskracht: tools/wiki_bbq2/en_dromen180.py (the Dutch: tools/features/dromen180_wiki.py)
+from . import en_dromen180 as _dromen180  # noqa: E402
+
+PAGINA.update(_dromen180.PAGINA)
+TEKST.update(_dromen180.TEKST)

@@ -3,6 +3,69 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.8.0 — Dromen & Vadskracht — Minecraft 26.1.2
+
+The sleep update. Guhs get tired, yawn and crawl into a box of nibbles at night, and when you sleep next to them you wake up somewhere else entirely. Plus a second big theme: vadskracht, with a whole new floor of machines and a roof full of endgame projects. New land only grows in new chunks; nothing is reset.
+
+### Guhdromenland (the dream dimension)
+
+- **Tuck in and dream:** in the evening, right-click a sleeping spot (box of nibbles, cat house, guh bed, guh nest) to tuck in your tame guh, then sleep in a bed close by. You may choose: sleep normally, or dream together. What you give the guh to hold decides on which island you start.
+- **A floating dream world** under an eternal purple-pink dusk with stars, falling stars and a sleepy guh moon, a soft fade when you fall asleep and wake up, and music per island. No building or breaking in the dream (except on your own little cloud), you float gently between the islands, and a Blub bubble catches you if you fall.
+- **The Droomplein and six islands:** the Slaapliedjesheuvels (a Blub choir), the Sterrenkussenveld (bouncing cushions and catchable falling stars), the Herinneringseiland (three memory bubbles with little films), the Wolkenbadje (a soap-bubble ride and a giant bath), the Maanmolentje (a gear puzzle and the Zandguh's mill) and the Vliegdroom high above the square (fly on a Rookguh through cloud rings, Vlieg-diploma).
+- **A story:** a little guh who can't sleep needs your help. Snoes follows you to whichever bed you sleep in. Progress shows in the top left.
+- **On the square:** Droompost mailboxes for fast travel to islands you visited, the Droomfontein, the Wekkerguh (asks before waking you), the Zandguh's **droomwinkeltje** (pay with droomzand) and a daily **droomkistje** at the top of the cushion field.
+- **Your own droomwolkje:** after the story every player gets a little cloud island to build on, with friends who may build along. **Droomgasten:** tame guhs of other players who are asleep sometimes visit the square; give them a hug or a nibble and their owner gets a message.
+- **New dream creatures:** the Zandguh, the Wekkerguh, Rommelguh, a knitting Oma-guh, pillow-fighting guhs, Badmeester Bubbels and glowing sterrenvisjes. New blocks: droomzand, zeepbelglas, droomzandblok, slaapliedjesgras, maanbloemetjes.
+
+### The Blub-guh
+
+- **A new critter** based on the Blub of Minecraft Dungeons II, squishy, hopping and squeaking. Every Blub has a **Blub-Guh-Meter** from 0 (pure Blub) to 100 (completely guh) that sets its face and ears, five kinds (blue, meadow, carapace, ravine, fungal), pastel tints and a size of 75-125%. Exactly 0 and 100 are rare titles.
+- **Tame, breed and dress up:** babies get values between their parents. A wardrobe with bows and eight sleepy clothes, a tricks screen (sit, spin, play dead, big jump, hupsen, hide and seek, lullaby, ear emotes), on your head, pick up, a Blub plushie of your own Blub, hugs with tame guhs, and they do a random trick now and then.
+- **Four Blub-only chores** in guh houses: Bellenbesproeier, Knabbelbezorger, Slaapliedjeszanger and Bubbelbadmeester (with the new Blub bubble bath).
+- **Guhdex:** pages for the Blub-guh and all new creatures, plus the **meterkaart** (10 boxes per kind, gold boxes for Pure Blub and Volle Guh).
+- Wild Blubs only show up for you after a certain story.
+
+### De Zingende Weide
+
+- **A new rare Guhmension biome** in five parts, with pink striped cliffs, sea-green stone, giant **wolkjesbomen** (a full new wood set), pastel crystals, the guh-faced **Guhwand**, pillars with guh ears, **bubbelsap** to bathe in (it makes you bubbly), roaming sparkles by day and rainbow light pillars at night. It can rain here.
+- **De Koorkom:** at dusk the Blubs gather and sing. Take a **dirigeerstokje** and conduct them in a rhythm game.
+- **Bubbelsap pools** with a little bath house.
+- **Roze graan:** shear the pink grass, plant pink seeds, bake pink bread and nibble cookies; guhs and Blubs love the bread.
+
+### Sleeping well
+
+- **Guhs get sleepy** in the evening, look for a sleeping spot by themselves, and can be sung to sleep with a music box or mobile; wake them with breakfast in bed.
+- **New beds:** four player beds (Droombed, Guh-hoofdbed, Blub-bed, Wolkenhemelbed), four critter beds (guh & Blub basket, bunk bed, matchbox for muisjes, shell bed for Schilly) and seven multi-block **family beds** plus the **Knuffelnest** for eight guhs, where every critter sleeps in its own spot.
+- **Deco:** moon night lights, nightstand, dream catcher, mobile, mask rack, boxes (moving, shoe, pizza), cat houses, scratching posts.
+- **Sleepy clothes:** sleep mask, nightgown, moon cap, ear clouds, Blub slippers and a little plushie for guhs, and a **droompyjama** set for you with a small set bonus.
+
+### Guh houses
+
+- **De Guhvilla:** a huge 4x4 guh house for 20 residents with a roomy inside full of the new beds.
+- **Bigger, clearer menus** for all guh houses and a **slider** for the chore area (small +10%, medium +20%, large +40%, villa up to 32).
+
+### Weather
+
+- **De Weer vadser:** make your own weather in a zone: sun, rain/snow, thunder and nine guh weathers (fluff snow, bubble shower, nibble drizzle, rainbow weather, heart rain, star rain, cosy mist, blossom wind, dream weather), unlocked with weather jars found all over the mods' places. Radius 10, larger with **Wolkenantennes** (20/35/60) or the **Knabbel-weerstation** (150). Costs vadskracht.
+
+### Vadskracht, part two
+
+- **Generators:** the **Knabbelketel** (burns nibbles, 80 VK), the **Mega-knuffelcentrale** (16 guhs, up to 352 VK, needs care). Guh wheels now give diminishing returns after the first four in one net.
+- **Factory hall:** **Knuffelsteen-generator** (cheese sauce + water), **Bouwblokken-fabriek** (pick a block, it makes it in bulk; links to a Bank Guh or chest), **Wolfabriek** (spinning machine and dye bath, with pluis from shearable **Wolkenschaapjes**, the Scheerstal, the Knuffelrecycler, the Wolkenvanger and the new **pluisbolletje** crop), **Kleurmolen** and **Regenboogpers** for every dye, the **Kaaskas** (crops grow much faster), the **Sorteerband**, cheese-sauce pipes and tanks. New guh chores: Kassier, Sorteerder, Scheren and Bloemetjes plukken.
+- **Endgame:** the **Mega-oven**, the **Sterrenkoepel** monument, the **Draaimolen**, the **Fossiel-broedmachine** with four prehistoric guhs (Mammoet-guh, T-Guh, Pteroguh, Oer-stokstaartje) that help in guh houses, the **Hamsterbuis** travel net through every dimension, and the **Kaasraket** that builds itself in four steps and flies you to the **Kaasmaan**.
+- **Export:** guh villagers buy your bulk products every day for rare things.
+- **De Guhtechniek-beurs** grows an annex, the Fabriekshal and the Koepel, showing everything running, also on existing worlds.
+- **FTB:** a completely new, much clearer Guh-technologie chapter in four tiers.
+
+### Guhpixel
+
+- **De Gezelschapshoek:** Kussengevecht (pillow fight on a giant bed), Wie is het (guess the guh) and Guh op een rij (four in a row against a bot or a friend).
+
+### Other
+
+- **Effect tooltips:** hover an effect in your inventory to read what it does.
+- **Fixes:** big wild guhs no longer suffocate when they spawn in a wall; the Onder de Wol entrance huts no longer appear in lakes and rivers and show up half as often; no more double Rookguhs; and many small things.
+
 ## 1.7.4 — Minecraft 26.1.2
 
 - **Family on the enclosure sign:** when you put together the family, you now choose for every species whether a parent is a male or a female, also when they look the same. Two males or two females is fine too.

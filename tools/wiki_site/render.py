@@ -567,8 +567,8 @@ class Renderer:
                f'<span class="cta-txt"><small>Samen spelen, dag en nacht</small><b>Speel op de officiële server</b>'
                f'<span>Join guhs.nl in een paar minuten met Prism Launcher: stap voor stap, de regels en hulp bij problemen.</span></span>'
                f'<span class="go">Naar de server &rarr;</span></a>')
-        # what's new in this version: the "Nieuw in x" page of the update (systemen/nieuw-in-1-7 since 1.7.0)
-        new_pg = self.site.pages.get("systemen/nieuw-in-1-7")
+        # what's new in this version: the "Nieuw in x" page of the update (systemen/nieuw-in-1-8 since 1.8.0, 1-7 before)
+        new_pg = self.site.pages.get("systemen/nieuw-in-1-8") or self.site.pages.get("systemen/nieuw-in-1-7")
         new = ""
         if new_pg:
             new_thumb = self.thumb_of(new_pg)
