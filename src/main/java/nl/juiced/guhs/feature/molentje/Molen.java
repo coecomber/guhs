@@ -451,7 +451,7 @@ public final class Molen {
 
     // =========================================================================================================== the Zandguh
     /** DroomNpc's story talk of the Zandguh: at the mill a bag of droomzand (once a run) and Snoes' piece, else hints. */
-    static boolean praatZandguh(ServerPlayer sp, GuhNpcEntity npc) {
+    public static boolean praatZandguh(ServerPlayer sp, GuhNpcEntity npc) {
         ServerLevel level = (ServerLevel) npc.level();
         Plekken p = bij(level, npc.position());
         if (p == null) {

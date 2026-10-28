@@ -36,7 +36,8 @@ public final class SnoesVerhaalFeature {
         // the story's talk on top of the dream NPCs' jokes (DroomNpc.zet)
         DroomNpc.zet(Kind.SNOES, SnoesVerhaal::praatSnoes);
         DroomNpc.zet(Kind.SNOES_BLIJ, SnoesVerhaal::praatSnoesBlij);
-        DroomNpc.zet(Kind.ZANDGUH, (p, n) -> SnoesVerhaal.hint(p, n, Stukje.DROOMZAND));
+        // (integration) the molen island talks first (outside it praatZandguh returns false), then the story hint
+        DroomNpc.zet(Kind.ZANDGUH, (p, n) -> nl.juiced.guhs.feature.molentje.Molen.praatZandguh(p, n) || SnoesVerhaal.hint(p, n, Stukje.DROOMZAND));
         DroomNpc.zet(Kind.DROOM_OMAGUH, (p, n) -> SnoesVerhaal.hint(p, n, Stukje.HERINNERING));
         DroomNpc.zet(Kind.ROMMELGUH, (p, n) -> SnoesVerhaal.hint(p, n, Stukje.HERINNERING));
         DroomNpc.zet(Kind.KUSSENGEVECHT_GUH, (p, n) -> SnoesVerhaal.hint(p, n, Stukje.STER));

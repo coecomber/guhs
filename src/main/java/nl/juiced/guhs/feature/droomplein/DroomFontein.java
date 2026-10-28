@@ -69,6 +69,9 @@ public final class DroomFontein {
         level.sendParticles(ParticleTypes.END_ROD, item.getX(), item.getY() + 1, item.getZ(), 8, 0.4, 0.8, 0.4, 0.02);
         level.playSound(null, item.blockPosition(), SoundEvents.BUBBLE_POP, SoundSource.BLOCKS, 1f, 1.2f);
         Entity gooier = item.getOwner();
+        if (gooier instanceof ServerPlayer sp) {
+            nl.juiced.guhs.feature.snoesverhaal.DroomBronnen.fontein(sp);   // (integration) the knabbel weerpotje, once
+        }
         Component droom = droom(level.getServer(), gooier instanceof ServerPlayer p ? p : null, level.getRandom());
         for (ServerPlayer p : level.players()) {
             if (p == gooier || bak().inflate(12).contains(p.position())) {

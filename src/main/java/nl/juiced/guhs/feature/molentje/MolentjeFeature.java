@@ -69,7 +69,7 @@ public final class MolentjeFeature {
         BLOCK_ENTITIES.register(modBus);
         NeoForge.EVENT_BUS.addListener(Molen::tick);
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> MolentjeCommando.register(event));
-        DroomNpc.zet(GuhNpcEntity.Kind.ZANDGUH, Molen::praatZandguh);
+        // (integration) the Zandguh talk is chained in SnoesVerhaalFeature (molen first, then the story hint)
     }
 
     public static void creative(Consumer<ItemStack> output) {

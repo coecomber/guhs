@@ -901,6 +901,7 @@ UITLEG = {
            "eilanden Droompost je al kan bezorgen. Klik daarna op het brievenbusje van zo'n eiland om erheen te zweven.",
         en="The Dream Square's own little mailbox, by the Dream Post Office. Click it in a dream: it tells which islands "
            "Dream Post can already deliver you to. Then click the little mailbox of such an island to float there.",
+        meer=[]),
     "droom_badspulletje": dict(
         nl="Een badspulletje op een wolkje van het Wolkenbadje in Guhdromenland: een badeend, een zeepje of een schuimfles.\n"
            "\n"
