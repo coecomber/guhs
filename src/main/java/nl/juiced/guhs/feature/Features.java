@@ -172,6 +172,7 @@ public final class Features {
         nl.juiced.guhs.feature.dromen.liedjes.BlubKoortje.register();   // 1.8.0 Guhdromenland: the Slaapliedjesheuvels' Blub-koortje
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.register(modBus);   // 1.8.0: het Sterrenkussenveld (stuiterkussens, vallende sterren)
         nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
+        nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.register(modBus);   // 1.8.0 (Guhdromenland F): the story of Snoes, its finale, the dream weerpotjes
     }
 
     public static void payloads(PayloadRegistrar registrar) {
