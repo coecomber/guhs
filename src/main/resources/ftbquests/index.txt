@@ -1,4 +1,4 @@
-version 45
+version 46
 group 475548DB0F6F37EB
 group 4755489B04766E01
 chapter guhs_basis
@@ -17,6 +17,7 @@ chapter guhs_techniek
 chapter guhs_safari
 chapter guhs_bouwhulp
 chapter guhs_onderwol
+chapter guhs_dromen
 chapter guhs_verhalen
 chapter guhs_pad_barbecuether
 chapter guhs_guheinde

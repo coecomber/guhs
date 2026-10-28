@@ -129,7 +129,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 Guhdromenland (test build): the Blub-guh (append only)
             'blub',
             # 1.8.0 Guhdromenland: the dream NPCs, the Sterrenvisje and the glas met een restje (append only)
-            'droomwezens']
+            'droomwezens',
+            # 1.8.0 Guhdromenland F: the story of Snoes (texts, hidden advancements, the FTB chapter guhs_dromen; append only)
+            'snoesverhaal']
 
 
 def modules():
