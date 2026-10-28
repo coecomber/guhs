@@ -88,8 +88,8 @@ public class KoorkomPodium extends BaseEntityBlock {
                 }
                 return;
             }
-            if (level.getGameTime() % 20 != 0) {
-                return;
+            if (level.getGameTime() % 20 != 0 || nl.juiced.guhs.feature.dirigent.Concert.bezig(level, pos)) {
+                return;     // (a concert with a dirigeerstokje runs here: the dusk song waits)
             }
             long dag = Math.floorDiv(level.getDefaultClockTime(), 24000L);
             if (!schemer(level) || dag == gezongen) {

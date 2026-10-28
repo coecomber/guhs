@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "guhs:droomzand",
+    "minecraft:note_block"
+  ],
+  "result": {
+    "id": "guhs:dirigeerstokje",
+    "count": 1
+  }
+}

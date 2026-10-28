@@ -185,7 +185,8 @@ FTB_SECTIES = [
     ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras"]),
     ("dr_snoes", "De droom van Snoes", "item:guhs:roze_guh_koek",
      ["dr_snoes_proloog"] + [f"dr_snoes_{s}" for s in STUKJES] + ["dr_snoes_finale"]),
-    ("dr_weide", "De Zingende Weide", "item:guhs:blubguh_item", ["dr_weide", "dr_weide_brood"]),
+    ("dr_weide", "De Zingende Weide", "item:guhs:blubguh_item", ["dr_weide", "dr_weide_brood", "dr_weide_dirigent",
+                                                                  "dr_weide_maestro"]),
 ]
 
 SNOES_QUESTS = {  # piece -> (title, description, icon)
@@ -270,6 +271,12 @@ def ftb(fq):
     q("dr_weide_brood", "Roze boterham", "Breek het &droze gras&r van de Zingende Weide met je hand: soms vallen er &droze zaadjes&r uit. "
       "Plant ze op akkerland, oogst het roze graan en bak er een &droze broodje&r van (3 graan). Guhs en Blubs zijn er dol op!",
       "guhs:roze_broodje", [item("guhs:roze_broodje")], xp=100)
+    # (1.8.0 uitbreiding: de Dirigent in de Koorkom)
+    q("dr_weide_dirigent", "Tik tik, Blubjes!", "Maak een &ddirigeerstokje&r (stokje, droomzand, nootblok) en klik bij het podium "
+      "van een &dKoorkom&r. Kijk op de tel naar de Blub die zijn oortjes opsteekt, en klik. Haal minstens één ster!",
+      "guhs:dirigeerstokje", [adv("dirigent_concert")], xp=100)
+    q("dr_weide_maestro", "Maestro Blub", "Dirigeer een heel concert met &6drie sterren&r. De Blubs zingen dan zo mooi dat er "
+      "hartjes van afvliegen.", "guhs:dirigeerstokje", [adv("dirigent_drie_sterren")], shape="hexagon", xp=250)
 
 
 def _direct():
