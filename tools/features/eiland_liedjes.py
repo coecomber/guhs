@@ -29,7 +29,7 @@ import sign_text  # noqa: E402
 X, Y, Z = 100, 56, 100
 C = 50                          # centre (x and z)
 T = 24                          # base top of the island
-VERSIE = 1
+VERSIE = 2   # 2 = playtest fixes: walkable podium hills, no fence on the way to the steiger
 PREFIX = "sign.guhs.dromen.liedjes"
 NOTEN = ["do", "re", "mi", "fa", "sol"]
 
@@ -181,7 +181,21 @@ def bouw():
     for (hx, hz, hr, hh, noot) in HEUVELS:
         if not noot:
             continue
-        top = vloer(hx, hz)
+        top = vloer(hx, hz) - 1                              # (playtest fix: one lower than the hilltop)
+        # (playtest fix) a walkable cone round the podium: going outwards the ground drops at most one block per block,
+        # so a survival player and a Blub can walk up (the bare hill was a jump of 2-3 blocks onto the podium)
+        for x in range(hx - hr - 2, hx + hr + 3):
+            for z in range(hz - hr - 2, hz + hr + 3):
+                r = math.hypot(x - hx, z - hz)
+                if r <= 3.2 or not binnen(x, z):
+                    continue
+                nodig = top - math.ceil(r - 3.2)
+                oud = vloer(x, z)
+                if (x, z) in H and nodig > oud:
+                    for y in range(oud, nodig):
+                        S.set(x, y, z, "pluiswolblok")
+                    S.set(x, nodig, z, "c_slaapliedjesgras")
+                    H[(x, z)] = nodig
         for x in range(hx - 3, hx + 4):
             for z in range(hz - 3, hz + 4):
                 r = math.hypot(x - hx, z - hz)
@@ -332,10 +346,14 @@ def bouw():
     for (x, z), y in sorted(H.items()):
         if S.is_air(x, y + 1, z) and rng.random() < 0.10:
             S.set(x, y + 1, z, rng.choice(["c_maanbloemetje[open=true]", "c_maanbloemetje[open=true]", "pluisgras", "minecraft:allium"]))
+    pad = set()                                          # (playtest fix) the walk from the welcome spot to the steiger
+    for k10 in range(240, 450, 5):
+        for w in (-2, -1, 0, 1, 2):
+            pad.add((int(round(C + PDX * k10 / 10 - PDZ * w)), int(round(C + PDZ * k10 / 10 + PDX * w))))
     for x in range(X):
         for z in range(Z):
             if binnen(x, z) and not all(binnen(x + a, z + b) for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
-                if rng.random() < 0.5 and S.is_air(x, vloer(x, z) + 1, z):
+                if (x, z) not in pad and rng.random() < 0.5 and S.is_air(x, vloer(x, z) + 1, z):
                     S.set(x, vloer(x, z) + 1, z, "guh_hekje_roze")
     for (x, y, z) in ((12, 38, 22), (86, 40, 78), (16, 34, 82), (82, 42, 18)):
         S.ellipsoid(x, y, z, 3, 1.2, 2, "wolkenblok_wit")

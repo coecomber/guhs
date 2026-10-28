@@ -27,7 +27,8 @@ X, Y, Z = 84, 60, 84
 C = 42                    # island centre (x and z)
 T = 30                    # the island's top layer (y)
 MIDDEN = (C, T, C)
-VERSIE = 1
+VERSIE = 2   # 2 = playtest fix: no fence across the path to the steiger
+PAD = set()   # (x, z) of the path from the steiger to the mill: the rim fence leaves it open
 SIGN = "sign.guhs.molentje"
 
 NAMEN = {  # id -> (Dutch, English, Dutch lore, English lore)
@@ -234,6 +235,7 @@ def bouw_eiland(ms):
     for k in np.arange(0, 34, 0.5):
         for w in (-1.5, -0.5, 0.5, 1.5):
             x, z = int(round(MX + pdx * k + qx * w)), int(round(MZ + pdz * k + qz * w))
+            PAD.add((x, z))
             if binnen(x, z):
                 S.set(x, T, z, "pleister_muisgrijs" if abs(w) < 1 else "maansteen_tegels")
                 S.air(x, T + 1, z, x, T + 4, z)
@@ -401,8 +403,8 @@ def bouw_eiland(ms):
     for x in range(X):
         for z in range(Z):
             if binnen(x, z) and not all(binnen(x + a, z + b) for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
-                if S.is_air(x, T + 1, z) and not S.is_air(x, T, z) and (x, z) not in MEER:
-                    S.set(x, T + 1, z, "guh_hekje_wit")
+                if S.is_air(x, T + 1, z) and not S.is_air(x, T, z) and (x, z) not in MEER and (x, z) not in PAD:
+                    S.set(x, T + 1, z, "guh_hekje_wit")   # (playtest fix: never across the path to the steiger)
     for (x, z) in ((24, 34), (33, 58)):
         S.set(x, T + 1, z, "guhnestje")
         S.set(x + 1, T + 1, z + 1, "c_maanlampje")

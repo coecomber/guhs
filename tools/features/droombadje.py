@@ -25,7 +25,8 @@ from PIL import Image
 X, Y, Z = 100, 68, 96
 C, CZ, T = 52, 52, 24                     # the island's centre column and its top (the "midden" block is (C, T, CZ))
 BX, BZ, RX, RZ = C + 2, CZ + 4, 15, 9      # the giant tub
-VLOER = T + 3
+VLOER = T                                  # (playtest fix) the tub stands on the island (it floated 2 blocks)
+WAND = 3                                   # the tub's wall height above its floor (water 2 deep, rim slab on top)
 SX, SZ = C - 8, CZ + 22                    # Snoes' own little bath
 STAP = (math.cos(math.radians(144)), math.sin(math.radians(144)))     # (unused helper of the render)
 NAAR_PLEIN = (-math.sin(math.radians(144)), math.cos(math.radians(144)))  # from the island towards the plein (north-west)
@@ -171,15 +172,15 @@ def _bouw():
                 continue
             zet(x, VLOER, z, "minecraft:smooth_quartz")
             kuip = ((x - BX) / (RX - 1.2)) ** 2 + ((z - BZ) / (RZ - 1.2)) ** 2 <= 1
-            for y in range(VLOER + 1, VLOER + 6):
-                zet(x, y, z, ("minecraft:water" if y < VLOER + 5 else "minecraft:air") if kuip else "minecraft:smooth_quartz")
+            for y in range(VLOER + 1, VLOER + WAND + 1):
+                zet(x, y, z, ("minecraft:water" if y < VLOER + WAND else "minecraft:air") if kuip else "minecraft:smooth_quartz")
             if not kuip:
-                b.set(x, VLOER + 6, z, "minecraft:smooth_quartz_slab", {"type": "bottom", "waterlogged": "false"})
-            elif rng.random() < 0.38:
-                zet(x, VLOER + 5, z, "knuffelbad_schuim")
+                b.set(x, VLOER + WAND + 1, z, "minecraft:smooth_quartz_slab", {"type": "bottom", "waterlogged": "false"})
+            elif rng.random() < 0.2:
+                zet(x, VLOER + WAND, z, "knuffelbad_schuim")
     for dx in (-9, -3, 3, 9):
-        zet(BX + dx, VLOER + 3, BZ + RZ, "tegel_guhgezicht")
-        zet(BX + dx, VLOER + 3, BZ - RZ, "tegel_guhgezicht")
+        zet(BX + dx, VLOER + 2, BZ + RZ, "tegel_guhgezicht")
+        zet(BX + dx, VLOER + 2, BZ - RZ, "tegel_guhgezicht")
     for (dx, dy, dz, r) in ((-6, 9, -2, 1), (2, 11, 3, 2), (8, 8, -3, 1), (-9, 12, 4, 1)):
         bel(BX + dx, VLOER + dy, BZ + dz, r)
     # the tap: a silver pipe with a warm and a cold knob, a stream of bubble water into the tub
@@ -191,13 +192,22 @@ def _bouw():
     zet(KX - 3, VLOER + 9, KZ, "minecraft:light_gray_concrete")
     zet(KX + 1, VLOER + 11, KZ - 1, "pink_kussen[facing=north]")
     zet(KX + 1, VLOER + 11, KZ + 1, "light_blue_kussen[facing=north]")
-    for y in range(VLOER + 5, VLOER + 9):
+    for y in range(VLOER + WAND, VLOER + 9):
         zet(KX - 3, y, KZ, "minecraft:light_blue_stained_glass")
     b.sign(KX + 2, VLOER + 2, KZ, "east", ["Kraan:", "roze = warm", "blauw = koud", ""])
-    # cloud stairs up to the tub's rim (the plein side)
-    for k in range(4):
+    # cloud stairs up to the tub's rim (the plein side): steps of one block, ending right against the rim
+    for k in range(WAND):
         for x in range(BX - 4 + k, BX + 5 - k):
-            zet(x, T + 1 + k, BZ - RZ - 4 + k, "wolkenblok_wit_trap[facing=south,half=bottom,shape=straight,waterlogged=false]")
+            zet(x, VLOER + 1 + k, BZ - RZ - WAND + k, "wolkenblok_wit_trap[facing=south,half=bottom,shape=straight,waterlogged=false]")
+    # (playtest fix) and steps inside the tub up to the rim, so you can climb out again in survival
+    kz = BZ - int((RZ - 1.2))                         # the first water row behind the north rim
+    for k in range(WAND):
+        for x in range(BX - 1, BX + 2):
+            z = kz + (WAND - 1 - k)
+            for y in range(VLOER + 1, VLOER + 1 + k):
+                zet(x, y, z, "minecraft:smooth_quartz")
+            zet(x, VLOER + 1 + k, z, "minecraft:smooth_quartz_stairs[facing=north,half=bottom,shape=straight,waterlogged="
+                + ("true" if VLOER + 1 + k < VLOER + WAND else "false") + "]")
 
     # ---- the towel rack ------------------------------------------------------------------------------------------------
     HX, HZ = C - 20, CZ + 10
@@ -226,9 +236,11 @@ def _bouw():
     zet(SX - 4, T + 1, SZ + 2, "white_kussen[facing=north]")
     zet(SX + 4, T + 1, SZ - 2, "sterrenlantaarn")
     b.sign(SX - 4, T + 1, SZ - 2, "north", ["Snoes' badje", "Sst, hij durft", "nog niet goed", ""], wall=False)
-    snoes = (SX + 0.5, T + 1, SZ + 3.5)            # Snoes stands by his bath, looking at it (north)
+    snoes = (SX + 0.5, T + 1, SZ - 2.5)            # (playtest fix) Snoes stands on the island side of his bath, looking at it
+    for y in (T + 1, T + 2):                       # (south); his old spot was inside the rim cloud
+        zet(SX, y, SZ - 3, "minecraft:air")
     b.entity(snoes[0], snoes[1], snoes[2], {"id": "guhs:guh_npc", "Kind": "snoes", "PersistenceRequired": ms.Byte(1),
-                                             "Invulnerable": ms.Byte(1), "Rotation": ms.floats(180.0, 0.0),
+                                             "Invulnerable": ms.Byte(1), "Rotation": ms.floats(0.0, 0.0),
                                              "RoleData": {"guhs_droombadje": ms.Byte(1)}})
 
     # ---- the bubble pad and the three clouds with the bath things --------------------------------------------------------
@@ -297,7 +309,7 @@ def _bouw():
             nbt["Kleding"] = {"strik": strik}
         b.entity(x + 0.5, T + 1, z + 0.5, nbt)
     for (dx, dz, soort) in ((-7, 2, 3), (0, -3, 0), (6, 3, 9), (-3, 5, 1)):   # GUHEENDJE, NORMAAL, MAANEENDJE, VADSEENDJE
-        b.entity(BX + dx + 0.5, VLOER + 4.6, BZ + dz + 0.5, {"id": "guhs:badeendje", "Soort": ms.Byte(soort), "Deco": ms.Byte(1),
+        b.entity(BX + dx + 0.5, VLOER + WAND - 0.4, BZ + dz + 0.5, {"id": "guhs:badeendje", "Soort": ms.Byte(soort), "Deco": ms.Byte(1),
                                                               "Rotation": ms.floats(float(rng.randint(0, 359)), 0.0)})
     b.guh(C - 18.5, T + 1, CZ + 2.5, yaw=90)
     b.guh(C + 14.5, T + 1, CZ - 12.5, yaw=230)
@@ -383,7 +395,7 @@ def build(h):
     plan = _bouw()
     blok(h)
     h.w(f"{h.D}/dromen/eiland/badje.json", {
-        "versie": 1, "template": "guhs:dromen/eiland_badje", "midden": [C, T, CZ],
+        "versie": 2, "template": "guhs:dromen/eiland_badje", "midden": [C, T, CZ],
         "aankomst": {"plek": plan["aankomst"], "yaw": round(-math.degrees(math.atan2(-NAAR_PLEIN[0], -NAAR_PLEIN[1])), 1)},
         "steiger": plan["steiger"]})
     h.w(f"{h.D}/dromen/badje_route.json", {"start": plan["start"], "route": plan["route"],
