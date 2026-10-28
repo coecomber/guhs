@@ -28,6 +28,8 @@ TEKSTEN = {  # key -> (Dutch, English)
                        "Praat eens met hem.",
                        "Somebody is sitting next to your bed... a ruffled guh with a bent ear. He yawns, but he doesn't sleep. "
                        "Talk to him."),
+    S + "verhuisd": ("Snoes dribbelt met je mee en ploft naast je nieuwe bed neer. Njeg, hier is het ook knus.",
+                     "Snoes toddles along with you and plops down beside your new bed. Njeg, it's cosy here too."),
     S + "proloog.0": ("Njeg... hoi. Ik ben Snoes. Sorry, ik zit gewoon even bij je bed. Het is hier zo knus.",
                       "Njeg... hi. I'm Snoes. Sorry, I'm just sitting by your bed for a bit. It's so cosy here."),
     S + "proloog.1": ("Iedereen heeft een plekje om te slapen. Een mandje, een nestje, een doos... Ik niet. Ik heb nog nooit ergens "

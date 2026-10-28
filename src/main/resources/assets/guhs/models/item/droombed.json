@@ -1,3 +1,6 @@
 {
-  "parent": "guhs:block/droombed_head"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/bedden/droombed"
+  }
 }

@@ -31,6 +31,7 @@ public final class SnoesVerhaalFeature {
     public static void register(IEventBus modBus) {
         SnoesScenes.init();
         NeoForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> SnoesVerhaal.onKlik(e));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.EntityJoinLevelEvent e) -> SnoesVerhaal.opladen(e));   // (1.8.0) an old Snoes after a move
         // playtest: the bed asks "gewoon slapen / dromen" (DroomSlapen); Snoes is a dream buddy there
         nl.juiced.guhs.feature.dromen.DroomSlapen.SNOES_BIJ_BED = SnoesVerhaal::snoesBijBed;
         nl.juiced.guhs.feature.dromen.DroomSlapen.DROOM_MET_SNOES = SnoesVerhaal::droomMetSnoes;

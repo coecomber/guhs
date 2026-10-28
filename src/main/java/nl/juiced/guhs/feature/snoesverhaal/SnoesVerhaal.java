@@ -273,8 +273,14 @@ public final class SnoesVerhaal {
             return;
         }
         ServerLevel level = (ServerLevel) event.getLevel();
-        if (!level.getBlockState(event.getPos()).is(DroomSlapen.DROOMBEDDEN) || fase(p) != Fase.NIETS
-                || !DroomSlapen.bedtijd(level) || !heeftTammeGuh(p)) {
+        if (!level.getBlockState(event.getPos()).is(DroomSlapen.DROOMBEDDEN)) {
+            return;
+        }
+        if (fase(p) == Fase.BIJ_BED) {
+            verhuis(p, event.getPos());   // (another bed while the prologue runs: he trots along, no sleeping yet either way)
+            return;
+        }
+        if (fase(p) != Fase.NIETS || !DroomSlapen.bedtijd(level) || !heeftTammeGuh(p)) {
             return;
         }
         if (verschijn(p, event.getPos()) != null) {
@@ -402,7 +408,75 @@ public final class SnoesVerhaal {
             return null;
         }
         GuhNpcEntity snoes = snoesThuis(p);
-        return snoes != null && snoes.level() == p.level() && snoes.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK ? snoes : null;
+        if (snoes != null && snoes.level() == p.level() && snoes.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK) {
+            return snoes;
+        }
+        return verhuis(p, bed);   // (1.8.0) a different bed: Snoes trots along to this one
+    }
+
+    /**
+     * (1.8.0) Snoes moves to this bed: the player sleeps somewhere else while the story runs. The old Snoes goes (also one that
+     * is not loaded now: it is cleared when its chunk loads, see {@link #opladen}); the new one stands beside this bed in the same
+     * part of the story. Null when there is no room beside the bed, or when Snoes is already right here.
+     */
+    @Nullable
+    static GuhNpcEntity verhuis(ServerPlayer p, BlockPos bed) {
+        Fase f = fase(p);
+        if (f != Fase.BIJ_BED && f != Fase.INGESTOPT && f != Fase.DROOMT) {
+            return null;
+        }
+        GuhNpcEntity oud = snoesThuis(p);
+        if (oud != null && oud.level() == p.level() && oud.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK) {
+            return null;
+        }
+        ServerLevel level = (ServerLevel) p.level();
+        BlockPos plek = vrijePlek(level, bed);
+        if (plek == null) {
+            return null;
+        }
+        int stap = oud != null ? oud.roleData.getIntOr(STAP, 0) : 0;
+        if (oud != null) {
+            ((ServerLevel) oud.level()).sendParticles(ParticleTypes.CLOUD, oud.getX(), oud.getY() + 0.5, oud.getZ(), 6, 0.3, 0.3, 0.3, 0.01);
+            oud.discard();
+        }
+        Vec3 at = Vec3.atBottomCenterOf(plek);
+        float yaw = (float) Math.toDegrees(Math.atan2(-(bed.getX() + 0.5 - at.x), bed.getZ() + 0.5 - at.z));
+        GuhNpcEntity snoes = DroomNpc.spawn(level, at, yaw, Kind.SNOES);
+        snoes.addTag(TAG_THUIS);
+        snoes.roleData.putString(VAN, p.getUUID().toString());
+        snoes.roleData.putInt(STAP, stap);
+        snoes.setInvulnerable(true);
+        snoes.setPersistenceRequired();
+        data(p).putString("Snoes", snoes.getUUID().toString());
+        data(p).putLong("Bed", bed.asLong());
+        if (f == Fase.INGESTOPT) {
+            instoppen(p, snoes);   // (tucked in again at the new bed: a box or kattenhuisje close by, else the floor)
+        } else {
+            p.sendSystemMessage(Component.translatable("gui.guhs.snoes.verhuisd").withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        level.sendParticles(ParticleTypes.CLOUD, at.x, at.y + 0.5, at.z, 6, 0.3, 0.3, 0.3, 0.01);
+        level.playSound(null, snoes, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 0.85f);
+        return snoes;
+    }
+
+    /** (1.8.0) An old Snoes that loads again after he moved (his chunk was not loaded then): he is gone, the new one counts. */
+    static void opladen(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof GuhNpcEntity n) || !n.entityTags().contains(TAG_THUIS)) {
+            return;
+        }
+        String van = n.roleData.getStringOr(VAN, "");
+        if (van.isEmpty() || event.getLevel().getServer() == null) {
+            return;
+        }
+        ServerPlayer baas;
+        try {
+            baas = event.getLevel().getServer().getPlayerList().getPlayer(UUID.fromString(van));
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        if (baas != null && !n.getUUID().equals(uuid(baas, "Snoes"))) {
+            event.setCanceled(true);
+        }
     }
 
     /** (DroomSlapen.DROOM_MET_SNOES) "Dromen" with Snoes: off to the Droomplein (the story goes on where it was). */

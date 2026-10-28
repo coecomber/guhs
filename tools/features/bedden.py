@@ -357,7 +357,7 @@ def build(h):
     model(h, "wolkenhemelbed_foot", foot, tx)
     for n in SPELERBEDDEN:
         h.w(f"{A}/blockstates/{n}.json", bedstaat(n))
-        h.w(f"{A}/models/item/{n}.json", {"parent": f"guhs:block/{n}_head"})
+        h.w(f"{A}/models/item/{n}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/bedden/{n}"}})   # (icon: render of the whole bed, see icoon())
         h.w(f"{h.D}/loot_table/blocks/{n}.json", deel_loot(n, "part", "head"))
 
     # 5. Guh-en-Blub-mandje: a wicker basket with a pink cushion and a heart blanket at the foot
@@ -406,9 +406,9 @@ def build(h):
     ], {"ribbel": "schelp_ribbel", "parel": "schelp_parel", "zeewier": "schelp_zeewier"})
     h.w(f"{A}/blockstates/schelpbedje.json", facing_staat("schelpbedje"))
     for n in ("guh_blub_mandje", "luciferdoosje", "schelpbedje"):
-        h.w(f"{A}/models/item/{n}.json", {"parent": f"guhs:block/{n}"})
+        h.w(f"{A}/models/item/{n}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/bedden/{n}"}})
         h.self_drop(n)
-    h.w(f"{A}/models/item/stapelbedje.json", {"parent": "guhs:block/stapelbedje_lower"})
+    h.w(f"{A}/models/item/stapelbedje.json", {"parent": "minecraft:item/generated", "textures": {"layer0": "guhs:item/bedden/stapelbedje"}})
     h.w(f"{h.D}/loot_table/blocks/stapelbedje.json", deel_loot("stapelbedje", "half", "lower"))
 
     # recipes: sweet ingredients that fit each bed
@@ -577,30 +577,12 @@ def fam_build(h):
 
 
 def icoon(naam):
-    """The family bed's item icon: a square crop of its render (dromen-ontwerp/bedden/f0X_*.png), or a little round nest."""
-    import glob
-    renders = os.path.join("..", "..", "dromen-ontwerp", "bedden")
-    nr = {n: i + 1 for i, n in enumerate(FAMILIE)}.get(naam)
+    """(1.8.0 fix) The item icon of a bed: textures/item/bedden/<naam>.png, a 64x64 render of the WHOLE bed from its own block
+    models (isometric, transparent; made with the renderkit, see the session tool bed_iconen.py). Committed; never cropped from the
+    concept renders any more (those gave odd icons with room walls in them)."""
     pad = os.path.join("src", "main", "resources", "assets", "guhs", "textures", "item", "bedden", f"{naam}.png")
-    os.makedirs(os.path.dirname(pad), exist_ok=True)
-    kandidaten = sorted(glob.glob(os.path.join(renders, f"f{nr:02d}_*.png"))) if nr else []
-    if kandidaten and naam != "knuffelnest":
-        img = Image.open(kandidaten[0]).convert("RGBA")
-        w, hgt = img.size
-        s = int(min(w, hgt) * 0.6)
-        top = int(hgt * 0.25)
-        img = img.crop(((w - s) // 2, top, (w - s) // 2 + s, top + s)).resize((32, 32), Image.LANCZOS)
-        img.save(pad)
-        return
-    if os.path.exists(pad) and not kandidaten and naam != "knuffelnest":
-        return   # (no renders around: keep the committed icon)
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.ellipse([1, 4, 14, 15], fill=(255, 186, 210, 255))
-    d.ellipse([3, 6, 12, 13], fill=(255, 232, 240, 255))
-    d.ellipse([3, 1, 6, 5], fill=(255, 186, 210, 255))
-    d.ellipse([9, 1, 12, 5], fill=(255, 186, 210, 255))
-    img.save(pad)
+    if not os.path.exists(pad):
+        print(f"  bedden: no icon {pad} (render it with the renderkit)")
 
 
 JAVA = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "bedden", "FamilieVormen.java")

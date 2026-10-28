@@ -98,11 +98,22 @@ public final class RookPlatform {
         if (!level.getBlockState(pos).is(RingVluchtFeature.PLATFORM.get())) {
             return;
         }
+        // (1.8.0 fix) only with the chunk's entities loaded (else the one that is there is missed and a second one made)
+        if (!level.areEntitiesLoaded(net.minecraft.world.level.ChunkPos.pack(pos))) {
+            return;
+        }
         net.minecraft.world.phys.AABB zoek = new net.minecraft.world.phys.AABB(pos).inflate(1, 4, 1);
-        for (VluchtRookguhEntity r : level.getEntitiesOfClass(VluchtRookguhEntity.class, zoek, e -> e.isAlive() && PLATFORM.equals(e.halteId()))) {
-            if (pos.equals(r.blok())) {
-                return;
+        java.util.List<VluchtRookguhEntity> er = new java.util.ArrayList<>(level.getEntitiesOfClass(VluchtRookguhEntity.class, zoek,
+                e -> e.isAlive() && PLATFORM.equals(e.halteId()) && pos.equals(e.blok())));
+        if (!er.isEmpty()) {
+            // exactly one per platform: of doubles (also from older worlds) the oldest stays
+            er.sort(java.util.Comparator.comparingInt((VluchtRookguhEntity r) -> r.tickCount).reversed());
+            for (int i = 1; i < er.size(); i++) {
+                if (er.get(i).getPassengers().isEmpty()) {
+                    er.get(i).discard();
+                }
             }
+            return;
         }
         VluchtRookguhEntity r = VluchtRookguhEntity.maakExtra(level, new net.minecraft.world.phys.Vec3(pos.getX() + 0.5, pos.getY() + 1 + HOOGTE, pos.getZ() + 0.5), PLATFORM, pos);
         if (r != null) {

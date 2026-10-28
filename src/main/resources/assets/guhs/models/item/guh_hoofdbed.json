@@ -1,3 +1,6 @@
 {
-  "parent": "guhs:block/guh_hoofdbed_head"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/bedden/guh_hoofdbed"
+  }
 }

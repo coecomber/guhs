@@ -80,4 +80,20 @@ public class VliegdroomGameTests {
         helper.assertTrue(tel(p.getInventory(), VliegdroomFeature.DIPLOMA.get()) == 1, "one diploma only");
         helper.succeed();
     }
+
+    /** (1.8.0 fix) Two Rookguhs on one spot (an older world, or a refill before the entities loaded): one stays. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void rookguhNooitDubbel(GameTestHelper helper) {
+        Vec3 plek = Vec3.atBottomCenterOf(helper.absolutePos(new net.minecraft.core.BlockPos(2, 1, 2)));
+        DroomRookguhEntity a = DroomRookguhEntity.maak(helper.getLevel(), DroomRookguhEntity.Rol.STEIGER, plek, 0f);
+        DroomRookguhEntity b = DroomRookguhEntity.maak(helper.getLevel(), DroomRookguhEntity.Rol.STEIGER, plek, 0f);
+        helper.assertTrue(a != null && b != null, "two Rookguhs made");
+        helper.getLevel().addFreshEntity(a);
+        helper.getLevel().addFreshEntity(b);
+        List<DroomRookguhEntity> er = new java.util.ArrayList<>(List.of(a, b));
+        helper.assertTrue(VliegdroomFeature.ruimDubbelOp(er) == 1, "one double cleared");
+        helper.assertTrue(a.isAlive() != b.isAlive(), "exactly one Rookguh stays");
+        (a.isAlive() ? a : b).discard();
+        helper.succeed();
+    }
 }

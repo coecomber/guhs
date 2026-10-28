@@ -163,12 +163,17 @@ public final class VliegdroomFeature {
         boolean plein = DroomEilanden.gebouwd(level, DroomEilanden.PLEIN) >= 1;
         for (Plek pl : plekken()) {
             boolean opPlein = pl.rol() == DroomRookguhEntity.Rol.STEIGER;
-            if ((opPlein && !plein) || (!opPlein && !vlieg) || !level.isLoaded(BlockPos.containing(pl.plek()))) {
+            BlockPos thuis = BlockPos.containing(pl.plek());
+            // (1.8.0 fix) only when the entities of that chunk are loaded too: a chunk is "loaded" a little before its
+            // entities, and then the Rookguh that IS there was not found yet, so a second one was made on top of it
+            if ((opPlein && !plein) || (!opPlein && !vlieg) || !level.isLoaded(thuis)
+                    || !level.areEntitiesLoaded(net.minecraft.world.level.ChunkPos.pack(thuis))) {
                 continue;
             }
-            List<DroomRookguhEntity> er = level.getEntitiesOfClass(DroomRookguhEntity.class, new AABB(BlockPos.containing(pl.plek())).inflate(200),
-                    g -> g.rol() == pl.rol() && g.thuis().distanceToSqr(pl.plek()) < 0.25);
+            List<DroomRookguhEntity> er = level.getEntitiesOfClass(DroomRookguhEntity.class, new AABB(thuis).inflate(200),
+                    g -> g.isAlive() && g.rol() == pl.rol() && g.thuis().distanceToSqr(pl.plek()) < 0.25);
             if (!er.isEmpty()) {
+                ruimDubbelOp(er);
                 continue;
             }
             DroomRookguhEntity g = DroomRookguhEntity.maak(level, pl.rol(), pl.plek(), pl.yaw());
@@ -177,6 +182,22 @@ public final class VliegdroomFeature {
             }
         }
         return nieuw;
+    }
+
+    /** (1.8.0 fix) Exactly one Rookguh per spot: of doubles (also from older worlds) the oldest stays, the rest goes. */
+    static int ruimDubbelOp(List<DroomRookguhEntity> er) {
+        if (er.size() < 2) {
+            return 0;
+        }
+        er.sort(java.util.Comparator.comparingInt((DroomRookguhEntity g) -> g.tickCount).reversed());
+        int weg = 0;
+        for (int i = 1; i < er.size(); i++) {
+            if (er.get(i).getPassengers().isEmpty()) {   // never pull a rookguh from under a rider
+                er.get(i).discard();
+                weg++;
+            }
+        }
+        return weg;
     }
 
     // --- test commands ------------------------------------------------------------------------------------------------------

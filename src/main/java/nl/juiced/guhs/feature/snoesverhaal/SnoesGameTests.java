@@ -58,6 +58,25 @@ public class SnoesGameTests {
         helper.succeed();
     }
 
+    /** (1.8.0) The player sleeps at another bed while the story runs: Snoes moves there (one Snoes, same step). */
+    @GuhTest(template = TUIN, batch = BATCH)
+    public static void snoesVerhuistMee(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        BlockPos bed1 = helper.absolutePos(new BlockPos(2, 1, 2));
+        BlockPos bed2 = helper.absolutePos(new BlockPos(9, 1, 9));
+        GuhNpcEntity eerste = SnoesVerhaal.verschijn(p, bed1);
+        helper.assertTrue(eerste != null, "Snoes appears at the first bed");
+        SnoesVerhaal.praatSnoes(p, eerste);
+        GuhNpcEntity tweede = SnoesVerhaal.verhuis(p, bed2);
+        helper.assertTrue(tweede != null && !eerste.isAlive(), "a far bed: the old Snoes goes, a new one comes");
+        helper.assertTrue(SnoesVerhaal.snoesThuis(p) == tweede && tweede.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(bed2)) < 9,
+                "the new Snoes is the player's, beside the new bed");
+        helper.assertTrue(SnoesVerhaal.stap(tweede) == 1 && SnoesVerhaal.fase(p) == SnoesVerhaal.Fase.BIJ_BED, "same step of the story");
+        helper.assertTrue(SnoesVerhaal.verhuis(p, bed2) == null, "the same bed again: he stays");
+        SnoesVerhaal.vergeet(p);
+        helper.succeed();
+    }
+
     /** Each piece gives its island's weerpotje once (and the story is on). */
     @GuhTest(template = TUIN, batch = BATCH)
     public static void stukjeGeeftWeerpotje(GameTestHelper helper) {
