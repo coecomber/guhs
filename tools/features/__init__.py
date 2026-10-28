@@ -133,7 +133,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 Guhdromenland F: the story of Snoes (texts, hidden advancements, the FTB chapter guhs_dromen; append only)
             'snoesverhaal',
             # 1.8.0: the Guhdex pages of Guhdromenland and the Blub-meterkaart (append only)
-            'dexdromen']
+            'dexdromen',
+            # 1.8.0: the dream's feel (sky, fade, island music, NPC voices; append only)
+            'droomsfeer']
 
 
 def modules():

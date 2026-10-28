@@ -14,6 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity.Kind;
 import nl.juiced.guhs.feature.NpcRole;
+import nl.juiced.guhs.feature.droomsfeer.DroomGeluid;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
@@ -106,12 +107,19 @@ public final class DroomNpc {
             case WEKKERGUH -> {
                 npc.speel("rinkel");
                 level.playSound(null, npc, DroomwezensFeature.RINKEL.get(), SoundSource.NEUTRAL, 0.9f, 1f);
+                DroomGeluid.WEKKERGUH.speel(npc);
             }
             case KUSSENGEVECHT_GUH -> {
                 npc.speel("gooi");
                 level.sendParticles(ParticleTypes.CLOUD, npc.getX(), npc.getY() + 0.9, npc.getZ(), 6, 0.3, 0.2, 0.3, 0.01);
+                DroomGeluid.KUSSENGEVECHT.speel(npc);
             }
-            case SNOES -> level.playSound(null, npc, nl.juiced.guhs.registry.ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 0.8f);
+            // (droomsfeer: every dream NPC talks with its own sound event, the user's recordings in inspiration/Dromen audio)
+            case SNOES -> (npc.getRandom().nextInt(3) == 0 ? DroomGeluid.SNOES_GEEUW : DroomGeluid.SNOES_PRAAT).speel(npc);
+            case SNOES_BLIJ -> DroomGeluid.SNOES_BLIJ.speel(npc);
+            case ZANDGUH -> DroomGeluid.ZANDGUH.speel(npc);
+            case ROMMELGUH -> DroomGeluid.ROMMELGUH.speel(npc);
+            case DROOM_OMAGUH -> DroomGeluid.OMA.speel(npc);
             default -> level.playSound(null, npc, nl.juiced.guhs.registry.ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.9f, 1.1f);
         }
     }

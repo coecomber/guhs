@@ -144,6 +144,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.sterrenveld.client.SterrenveldClient.init(modBus);   // 1.8.0: the falling stars
         nl.juiced.guhs.feature.molentje.client.MolentjeClient.init(modBus);   // 1.8.0: the Maanmolentje's turning sails
         nl.juiced.guhs.feature.zingendeweide.client.WeideClient.init(modBus);   // 1.8.0: De Zingende Weide's sky, trillertjes, bubbelsap
+        nl.juiced.guhs.feature.droomsfeer.client.DroomsfeerClient.init(modBus);   // 1.8.0: the dream sky (moon, stars), the fade, the island music
     }
 
     private FeaturesClient() {

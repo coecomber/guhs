@@ -6653,5 +6653,169 @@
       }
     ],
     "subtitle": "subtitles.guhs.droomwezens.slokje"
+  },
+  "dromen.muziek.plein": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_plein/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.plein"
+  },
+  "dromen.muziek.liedjes": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_liedjes/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.liedjes"
+  },
+  "dromen.muziek.sterren": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_sterren/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.sterren"
+  },
+  "dromen.muziek.herinnering": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_herinnering/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.herinnering"
+  },
+  "dromen.muziek.badje": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_badje/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.badje"
+  },
+  "dromen.muziek.molentje": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_molentje/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.molentje"
+  },
+  "dromen.snoes_praat": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/snoes_praat/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/snoes_praat/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.snoes_praat"
+  },
+  "dromen.snoes_geeuw": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/snoes_geeuw/placeholder_1_guh_ambient1"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.snoes_geeuw"
+  },
+  "dromen.snoes_blij": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/snoes_blij/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/snoes_blij/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.snoes_blij"
+  },
+  "dromen.zandguh": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/zandguh/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/zandguh/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.zandguh"
+  },
+  "dromen.wekkerguh": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/wekkerguh/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/wekkerguh/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.wekkerguh"
+  },
+  "dromen.rommelguh": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/rommelguh/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/rommelguh/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.rommelguh"
+  },
+  "dromen.oma": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/oma/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/oma/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.oma"
+  },
+  "dromen.kussengevecht": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/kussengevecht/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/kussengevecht/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.kussengevecht"
+  },
+  "dromen.badmeester": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/badmeester/placeholder_1_guh_ambient1"
+      },
+      {
+        "name": "guhs:dromen/badmeester/placeholder_2_guh_ambient5"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.badmeester"
+  },
+  "dromen.sterrenvisje": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/sterrenvisje/placeholder_1_shimmer"
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.sterrenvisje"
   }
 }

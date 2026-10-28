@@ -17,6 +17,7 @@ public final class BadGuh implements NpcRole {
 
     @Override
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
+        nl.juiced.guhs.feature.droomsfeer.DroomGeluid.BADMEESTER.speel(npc);   // (droomsfeer: his own voice, inspiration/Dromen audio)
         ServerLevel level = (ServerLevel) npc.level();
         long dag = Math.floorDiv(level.getDefaultClockTime(), 24000L);
         String sleutel = DAG + "_" + player.getUUID();
