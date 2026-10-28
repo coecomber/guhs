@@ -62,3 +62,22 @@ Niets hiervan is al in de client bekeken: het gaat vooral om uiterlijk, gevoel e
 ## Nog niet in deze build
 - De beurs zelf (begane grond-aanbouw, Fabriekshal en Koepel als echte structuur) volgt hierna.
 - Het FTB-hoofdstuk Guh-technologie wordt daarna vereenvoudigd en compleet gemaakt.
+
+## De vernieuwde Guhtechniek-beurs
+- **Vinden**:
+  - Superkompas, tab Knus;
+  - of in de Guhmension `/locate structure guhs:guhtechniek_beurs`, dan `/tp`.
+- **Snel een eigen beurs neerzetten** (creative, op een vlakke plek): `/place template guhs:techbeurs/guhtechniek_beurs ~ ~ ~`. Binnen een seconde zet de Beursbeheer de aanbouw (oostkant) en de Fabriekshal + Koepel (op het dak) erbij.
+- **Bestaande werelden**: een beurs die er al stond, krijgt de aanbouw, Fabriekshal en Koepel vanzelf zodra hij geladen wordt. Staat er al iets van een speler (kist, bordje, guhs-blok) waar de aanbouw komt, dan doet hij het niet en staat er een waarschuwing in de log.
+- **De route** (van simpel naar ingewikkeld):
+  1. ingang west, door de hal;
+  2. de deur in de oostmuur naar de aanbouw: Hapluikje, Snuffelsensor + Guhteller, Knuffelsteen-generator, Mika-rad, 4 Weer vadsers (straal 10, 20, 35, 60), Guhrad + Knabbelketel;
+  3. trap of wolkenliftje naar het dakterras, dan de Fabriekshal in;
+  4. Fabriekshal: noord de fabriek (Bouwblokken-fabriek, Wolfabriek, Knuffelrecycler, Scheerstal met Wolkenschaapjes, Kleurmolen, Regenboogpers, ketelstand), zuid de tier 5-logistiek (Vadszender/-ontvanger, Guhterminal + Bestelbalie, Knabbelpoort-buis + Thuispoort, Bouwkeet, Luchtblazer + Waterdrager, Korstduwer + Vuurkorf, Hamsterbuis-stations), midden de Kaaskas (met Kassier), Sorteerband (met Sorteerder), Saustank → Sausbuis → Saustank en de raderen-hoek (6 raderen op 1 net: afnemende opbrengst);
+  5. trap of wolkenliftje (west) naar de Koepel: Mega-oven, Knabbel-weerstation, Draaimolen, Wolkenvanger, Fossiel-broedmachine, Hamsterknooppunt, Mega-knuffelcentrale met 16 guhs, de halve Kaasraket, Enderguhrad, Komeetkern, fossielvitrines en onder de glazen koepel de Sterrenkoepel.
+- **Let op**:
+  - alles draait echt (schakelaartjes uit/aan);
+  - in survival kun je niets in de stands aanklikken behalve schakelaars en bordjes;
+  - de Weer vadsers staan op normaal (ze doen dus niets aan het weer);
+  - de Sterrenkoepel staat op niveau 6 en eet niets: anders zou de beurs iedereen bonussen geven;
+  - de broedmachine broedt niet: anders komen er elke dag oerguhs bij.

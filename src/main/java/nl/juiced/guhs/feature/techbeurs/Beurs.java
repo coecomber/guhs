@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -54,6 +53,13 @@ public final class Beurs {
         zet("sauzen", kraam, 2);
         zet("bezorg", loket, 2);
         zet("droom", uitvinder, 3);
+        // 1.8.0: the annex, the Fabriekshal and the Koepel (BeursUitbouw)
+        zet("aanbouw", loket, 2);
+        zet("fabriek", uitvinder, 2);
+        zet("kaaskas", kraam, 2);
+        zet("sorteer", werktuig, 2);
+        zet("koepel", loket, 2);
+        zet("raket", uitvinder, 2);
     }
 
     private static void zet(String stand, GuhNpcEntity.Kind kind, int regels) {
@@ -75,7 +81,9 @@ public final class Beurs {
 
     /**
      * In the beurs a visitor may look but not take: a click on a block that holds items (a chest, a machine, a station, a
-     * hopper) does nothing for players who are not in creative. Switches, doors and signs work as always.
+     * hopper) does nothing for players who are not in creative. Switches, doors and signs work as always. 1.8.0: no click
+     * on any block entity but a switch or a sign (the Sterrenkoepel, the Lanceerplatform, the Hamsterbuis-stations, the
+     * Weer vadsers... are showpieces).
      */
     private static void opKlik(PlayerInteractEvent.RightClickBlock event) {
         if (!(event.getEntity() instanceof ServerPlayer player) || !(player.level() instanceof ServerLevel level)) {
@@ -93,12 +101,10 @@ public final class Beurs {
             return true;
         }
         BlockEntity be = level.getBlockEntity(pos);
-        if (be == null || be instanceof VadsschakelaarBlock.Kern) {
-            return true;
+        if (level.getBlockState(pos).getBlock() instanceof nl.juiced.guhs.feature.vadskracht.MachineDeelBlock) {
+            return false;   // (a part passes the click on to its kern)
         }
-        return level.getCapability(Capabilities.Item.BLOCK, pos, null) == null
-                && level.getCapability(Capabilities.Fluid.BLOCK, pos, null) == null
-                && !(be instanceof net.minecraft.world.MenuProvider);
+        return be == null || be instanceof VadsschakelaarBlock.Kern || be instanceof net.minecraft.world.level.block.entity.SignBlockEntity;
     }
 
     private Beurs() {

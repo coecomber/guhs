@@ -44,6 +44,8 @@ import nl.juiced.guhs.feature.vadskracht.Kisten;
  *   <li>{@code Vul: [{id, count}]}: keeps at least half of each in it (put in from above: a Guhoven's top is its input);</li>
  *   <li>{@code Leeg: n}: as soon as n or more items can be taken out (from below: the out slots), takes them all ("sold");</li>
  *   <li>{@code LeegSaus: mB}: the same for sauce (a Sausvat that is nearly full is emptied);</li>
+ *   <li>{@code VulSaus: mB} (1.8.0): keeps at least half of that much kaassaus in it (a Saustank, the Kaaskas, the
+ *       Knuffelsteen-generator);</li>
  *   <li>{@code Station: 1b}: a Stepstation adopts the Haltepaaltjes of its stand (a template cannot link them: they hold
  *       absolute positions);</li>
  *   <li>{@code Hak: ticks}: a Plantagebak whose tree has stood this long is chopped, so it plants a new one;</li>
@@ -53,10 +55,13 @@ import nl.juiced.guhs.feature.vadskracht.Kisten;
  * </ul>
  * It finds them through the block entities of the loaded chunks within {@link #BEREIK} (again every {@link #OPNIEUW}
  * ticks), never through a block scan.
+ * <p>
+ * 1.8.0: the first time it ticks it also stamps the annex, the Fabriekshal and the Koepel ({@link BeursUitbouw}; it keeps
+ * the version it stamped, so an old beurs gets them too) and protects them.
  */
 public class BeursBeheer extends BaseEntityBlock {
     public static final MapCodec<BeursBeheer> CODEC = simpleCodec(BeursBeheer::new);
-    /** How far around it (horizontally) it looks; up and down {@link #HOOG}. */
+    /** How far around it (horizontally) it looks; up and down {@link #HOOG} (1.8.0: plus the boxes of the annex and the floors). */
     public static final int BEREIK = 48, HOOG = 24;
     static final int ELKE = 20, OPNIEUW = 600;
     public static final String MERK = "guhs_beurs";
@@ -91,13 +96,19 @@ public class BeursBeheer extends BaseEntityBlock {
         };
     }
 
-    /** The caretaker's block entity (nothing saved: it finds everything again after a load). */
+    /** The caretaker's block entity (it saves only the version of the stamped annex + floors: it finds everything again). */
     public static class Kern extends BlockEntity {
         private final List<BlockPos> gemerkt = new ArrayList<>();
         private final Set<BlockPos> geadopteerd = new HashSet<>();
         private final Map<BlockPos, Integer> boomTijd = new HashMap<>();
         private int teller;
         private int zoekTeller;
+        /** The {@link BeursUitbouw#VERSIE} stamped here (saved). */
+        private int uitbouw;
+        private boolean uitbouwBekeken;
+        /** The hall it stands in, once {@link #uitbouw} found it (then it also looks after the annex and the floors). */
+        @javax.annotation.Nullable
+        private BeursUitbouw.Hal hal;
 
         public Kern(BlockPos pos, BlockState state) {
             super(TechbeursFeature.BEURS_BEHEER_BE.get(), pos, state);
@@ -108,6 +119,10 @@ public class BeursBeheer extends BaseEntityBlock {
                 return;
             }
             teller = 0;
+            if (!uitbouwBekeken && !(level.getServer() instanceof net.minecraft.gametest.framework.GameTestServer)) {
+                uitbouwBekeken = true;
+                uitbouw(level);
+            }
             if (zoekTeller <= 0 || gemerkt.isEmpty()) {
                 zoek(level);
                 zoekTeller = OPNIEUW;
@@ -122,6 +137,48 @@ public class BeursBeheer extends BaseEntityBlock {
                     }
                 }
             }
+        }
+
+        /**
+         * The annex and the upper floors ({@link BeursUitbouw}): stamped when this caretaker's version is older, protected
+         * after every load. (Game tests call it themselves: the game test server leaves it alone.) True when it stamped.
+         */
+        public boolean uitbouw(ServerLevel level) {
+            hal = BeursUitbouw.vind(level, worldPosition);
+            if (hal == null) {
+                return false;
+            }
+            boolean gestempeld = false;
+            if (uitbouw < BeursUitbouw.VERSIE && BeursUitbouw.bouw(level, hal, uitbouw == 0)) {
+                uitbouw = BeursUitbouw.VERSIE;
+                setChanged();
+                gestempeld = true;
+                zoekTeller = 0;
+                gemerkt.clear();
+            }
+            if (uitbouw > 0) {
+                BeursUitbouw.bescherm(level, hal);
+            } else {
+                hal = null;
+            }
+            return gestempeld;
+        }
+
+        /** (Tests) the version of the annex + floors stamped here. */
+        public int uitbouwVersie() {
+            return uitbouw;
+        }
+
+        @Override
+        protected void loadAdditional(net.minecraft.world.level.storage.ValueInput in) {
+            super.loadAdditional(in);
+            uitbouw = in.getIntOr("Uitbouw", 0);
+        }
+
+        @Override
+        protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput uit) {
+            super.saveAdditional(uit);
+            uit.putInt("Uitbouw", uitbouw);
         }
 
         /** Every marked block entity in the loaded chunks around it. */
@@ -140,6 +197,25 @@ public class BeursBeheer extends BaseEntityBlock {
                         if (Math.abs(p.getX() - worldPosition.getX()) <= BEREIK && Math.abs(p.getZ() - worldPosition.getZ()) <= BEREIK
                                 && Math.abs(p.getY() - worldPosition.getY()) <= HOOG && be.getPersistentData().contains(MERK)) {
                             gemerkt.add(p.immutable());
+                        }
+                    }
+                }
+            }
+            if (hal != null) {
+                for (BeursUitbouw.Stuk s : BeursUitbouw.STUKKEN) {
+                    net.minecraft.world.level.levelgen.structure.BoundingBox doos = hal.doos(s);
+                    for (int cx = doos.minX() >> 4; cx <= doos.maxX() >> 4; cx++) {
+                        for (int cz = doos.minZ() >> 4; cz <= doos.maxZ() >> 4; cz++) {
+                            LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+                            if (chunk == null) {
+                                continue;
+                            }
+                            for (BlockEntity be : chunk.getBlockEntities().values()) {
+                                BlockPos p = be.getBlockPos();
+                                if (doos.isInside(p) && be.getPersistentData().contains(MERK) && !gemerkt.contains(p)) {
+                                    gemerkt.add(p.immutable());
+                                }
+                            }
                         }
                     }
                 }
@@ -176,6 +252,23 @@ public class BeursBeheer extends BaseEntityBlock {
                 if (uit != null && Kisten.tel(uit, s -> true) >= leeg) {
                     for (int i = 0; i < 64 && !Kisten.neem(uit, s -> true, 64).isEmpty(); i++) {
                         // ("sold to the visitors")
+                    }
+                }
+            }
+            int vulSaus = r.getIntOr("VulSaus", 0);
+            if (vulSaus > 0) {
+                ResourceHandler<FluidResource> tank = be instanceof nl.juiced.guhs.feature.techsaus.SausMachineBlockEntity m ? m.alleTanks()
+                        : level.getCapability(Capabilities.Fluid.BLOCK, p, null);
+                if (tank != null) {
+                    FluidResource kaassaus = nl.juiced.guhs.feature.vadskracht.Sauzen.kaassaus();
+                    long heeft = 0;
+                    for (int i = 0; i < tank.size(); i++) {
+                        if (tank.getResource(i).equals(kaassaus)) {
+                            heeft += tank.getAmountAsLong(i);
+                        }
+                    }
+                    if (heeft * 2 < vulSaus) {
+                        nl.juiced.guhs.feature.vadskracht.Sauzen.stop(tank, kaassaus, (int) (vulSaus - heeft), false);
                     }
                 }
             }
