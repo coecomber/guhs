@@ -25,7 +25,11 @@ public enum LobbyPlek {
     BORD_STATS(-10, 100, 14, 180),
     BORD_ONLINE(10, 100, 14, 180),
     PARKOUR_START(28, 100, 6, -90),
-    UITGANG(0, 100, 28, 0);
+    UITGANG(0, 100, 28, 0),
+    // 1.8.0 the Gezelschapshoek in the south-east (feature/guhpixel/gezel): Kussengevecht, Wie is het, Guh op een rij
+    SPEL_KUSSEN(14, 100, 22, 135),
+    SPEL_WIEISHET(20, 100, 16, 135),
+    SPEL_OPEENRIJ(26, 100, 24, 135);
 
     private final int x, y, z;
     private final float yaw;
