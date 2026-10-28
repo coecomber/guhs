@@ -167,6 +167,8 @@
     {"id": "c119_e2_sp_zij", "title": "einde2 Sponsguh sp_zij: the side lines of Bikinibodem (Sandy-guh, De Vliegende Guhlander, Zeemeerman and Mosselguh), Octo's house, Gerrit",
      "prefixes": ["gui.guhs.einde2_sp_zij.", "quest.guhs.einde2_sp_zij.", "sign.guhs.einde2_sp_zij.", "subtitles.guhs.einde2_sp_zij.", "advancements.guhs.guheinde.einde2_sp_zij_", "ftb.guhs_guheinde.q.einde2_sp_zij_", "ftb.guhs_guheinde.section.extra_einde2_sp_zij", "block.guhs.einde2_sp_zij_", "item.guhs.einde2_sp_zij_", "entity.guhs.einde2_sp_zij_", "scene.guhs.einde2_sp_zij_", "gui.guhs.verhalen.sandy_boomkoepel.", "gui.guhs.verhalen.vliegende_guhlander.", "gui.guhs.verhalen.zeemeerman.", "ftb.guhs_guheinde.section.einde2_sp_zij", "gui.guhs.kledingbron.einde2_sp_zij"]},
     {"id": "c198_onderwol_ftb", "title": "1.7.0 Onder de Wol FTB Quests book: the chapter Onder de Wol, the back nine (golf18) and the feet slot (voetjes) quests",
-     "prefixes": ["ftb.guhs_onderwol.", "ftb.guhs_minigames.q.golf18_", "ftb.guhs_basis.q.voetjes_", "ftb.guhs_basis.section.voetjes"]}
+     "prefixes": ["ftb.guhs_onderwol.", "ftb.guhs_minigames.q.golf18_", "ftb.guhs_basis.q.voetjes_", "ftb.guhs_basis.section.voetjes"]},
+    {"id": "c218_ftb_techniek", "title": "1.8.0 FTB Quests book: the tier sections and the new quests of the Guh-technologie (tools/ftb_techniek.py)",
+     "prefixes": ["ftb.guhs_techniek.section.t1_", "ftb.guhs_techniek.section.t2_", "ftb.guhs_techniek.section.t3_", "ftb.guhs_techniek.section.t4_", "ftb.guhs_techniek.q.tk_"]}
   ]
 }

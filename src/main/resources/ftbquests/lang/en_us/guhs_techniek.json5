@@ -5,255 +5,327 @@
   ],
   "quest.475548606F626425.title": "How Do You Get Here?",
   "quest.475548606F626425.quest_desc": [
-    "This chapter comes after &dGuh Wheel&r in &dGuhs \\& Basics&r: a guh running in a wheel makes &bchonk power&r.",
+    "This chapter comes after &dThe Guh Wheel&r in &dGuhs \\& Basics&r: a guh running in a wheel makes &bchonk power&r. With &dGuh Wire&r you bring it to machines with a little snoot.",
     "",
-    "With &bGuh Wire&r you bring that power to machines with a little snoot: ovens, tubes, nibblers... Every row below is a &6project&r, and after every project something works all by itself in your own world.",
+    "It goes in &6tiers&r: &aTier 1&r you build right away at home, &6Tier 2&r needs stuff from the &6Guhbarbecuether&r, &bTier 3&r are the big projects and &5Tier 4&r lies in the &5Guh End&r. Look at a wheel, wire or machine and you see how much chonk power your setup uses.",
     "",
-    "Look at a wheel, a wire or a machine and you see right away how much chonk power your setup uses. &6Tier 5&r waits in the &5Guh End&r, in the Mechanist Guh's workshop, and after that you build the &6Peace Balloon&r there. And tier 6? That one is still coming! Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it earlier. The headings show what logically comes after what. Tick this off and get chonky to work!",
+    "Nothing is locked: every quest ticks itself off as soon as you've done it, even if that was earlier. Tick this off and get chonkily to work!",
   ],
   "quest.475548750B9F2376.title": "A Guh at Work",
   "quest.475548750B9F2376.quest_desc": [
-    "It all starts with a &dGuh Wheel&r (see &dGuhs \\& Basics&r). Put it down and click it with a picked-up guh: it runs, and that gives &b10 chonk power&r. Forever: a guh never gets tired and doesn't need to eat. Click with an empty hand to take your guh back.",
+    "Put down a &dGuh Wheel&r and click it with a picked-up guh: it runs for &b10 chonk power&r, forever. It never gets tired and never needs to eat. Click with an empty hand to take it back.",
   ],
   "quest.47554813F0135DAA.title": "Laying Guh Wire",
   "quest.47554813F0135DAA.quest_desc": [
-    "Redstone + pink dye + a cheese nibble = 3 &dGuh Wire&r. Lay it from your wheel to your machines; a machine right next to the wheel needs no wire. Everything that's joined together is one &bsetup&r.",
+    "Redstone, pink dye and a cheese nibble give 3 &dGuh Wire&r. Lay it from your wheel to your machines: everything joined together is one &esetup&r. A machine right next to the wheel needs no wire.",
+  ],
+  "quest.4755483EAEAB3E93.title": "On, Off, On, Off",
+  "quest.4755483EAEAB3E93.quest_desc": [
+    "Put a &dChonk Switch&r in your wire: click it and everything behind it turns off or on. Your guh gets a little breather too (not that it wants one).",
   ],
   "quest.47554804C1C54D5D.title": "The Oven with a Little Snoot",
   "quest.47554804C1C54D5D.quest_desc": [
-    "Hook a &dGuh Oven&r up to the wire. It bakes everything a regular furnace bakes, without coal, on 5 chonk power. Every machine has a &dsnoot&r: it sleeps without power, looks happy when it's working and surprised when it's full.",
+    "The &dGuh Oven&r bakes everything a regular furnace bakes, without coal, on &b5 chonk power&r. Its snoot shows how it's doing: asleep without power, happy when working, surprised when full.",
   ],
   "quest.4755487ECE3B82D6.title": "Light with a Little Snoot",
   "quest.4755487ECE3B82D6.quest_desc": [
-    "The &dChonk Lamp&r (a lantern, two Guh Wire and two glowstone dust) burns on 1 chonk power: it wakes up, looks happy and gives the brightest light there is. And it shines much further than a normal lamp: up to about 6 blocks around it, it puts down invisible extra light. One lamp lights up a whole cave. Without chonk power it goes back to sleep.",
+    "The &dChonk Lamp&r burns on &b1 chonk power&r and lights up to 6 blocks around it. One lamp and your whole cave is bright. Monsters hate it.",
   ],
-  "quest.475548718031ABA9.title": "At the Guh Technology Fair",
-  "quest.475548718031ABA9.quest_desc": [
-    "Somewhere in the Guhmension stands a glass hall where &devery guh machine really works&r: the &dGuh Technology Fair&r (your Super Compass finds it under Cozy). Every stand has a sign, a &dChonk Switch&r to turn it off and on and a fair guh who tells you which quest teaches it. The Dream Factory runs in the middle. Looking is fine, taking is not!",
-  ],
-  "quest.475548DCDA7ED81E.title": "Seeing Is Knowing",
+  "quest.475548DCDA7ED81E.title": "Looking Is Knowing",
   "quest.475548DCDA7ED81E.quest_desc": [
-    "Look at a wheel, a wire or a machine: under your crosshair it says &bThis setup uses 5/10 chonk power&r. If your setup asks for MORE than all your guhs run together, it doesn't go slower: then &ceverything stops&r, and you can read how much you're short. You don't need a meter. Seen it? Tick it off.",
-  ],
-  "quest.4755484B3CA7170A.title": "Never Bake Yourself Again",
-  "quest.4755484B3CA7170A.quest_desc": [
-    "The first project: put a chest with a &ehopper&r above your Guh Oven and a hopper underneath leading to a second chest. Everything you toss into the top chest lies baked in the bottom one a little later, and your guh just keeps running while you do something else. Later you'll swap the hoppers for Nibble Tubes.",
-  ],
-  "quest.475548857F9855C8.title": "Colleagues with a Snoot",
-  "quest.475548857F9855C8.quest_desc": [
-    "Does a guh live in your &dGuh House&r? Then it'll look after your machines: the chore &eRefill \\& Empty Machines&r. It's &coff&r until you switch it on for your resident. Show it once: put a little stack in the machine yourself, then it remembers what goes in there and refills from the chest next to the house or from your Bank Guh. Whatever is ready, it picks up. Only at machines of yours inside its chore area. Nyeg, who needs hoppers now?",
-  ],
-  "quest.475548FAE94982EA.title": "Pumpkin Picker",
-  "quest.475548FAE94982EA.quest_desc": [
-    "A resident with the chore &eFarming&r harvests more than grain: also &epumpkins&r and &emelons&r on their stem, &esugar cane&r, &ecocoa&r, &enether wart&r and the &esprouts&r from the Guhbarbecuether. It leaves the plant standing, so everything grows back all by itself. Let it harvest one. Nyeg, pumpkin pie!",
-  ],
-  "quest.4755484ABA7ABFD0.title": "Milling Without Wind",
-  "quest.4755484ABA7ABFD0.quest_desc": [
-    "The &dChonk Mill&r (a Guh Windmill, iron, Guh Wire, stone and a nibble) grinds on 5 chonk power: nibble grain into nibble flour, bones into bone meal, grill skewers into powder, cobblestone into gravel and gravel into sand. And it gives more than grinding by hand. Grind something with it!",
-  ],
-  "quest.475548740C56ABC5.title": "Happy Guhs Run Faster",
-  "quest.475548740C56ABC5.quest_desc": [
-    "The &dCuddle Generator&r is a big pink cushion: tame guhs nearby come and lie on it all by themselves and give 3 chonk power per guh (8 guhs at most). And whoever just lay on the cushion is &dhappy&r: pop a guh like that in your wheel and it gives 15 instead of 10.",
-  ],
-  "quest.47554862789E1FC3.title": "Dancing for the Factory",
-  "quest.47554862789E1FC3.quest_desc": [
-    "The &dDisco Dynamo&r is a 3 by 3 dance floor with a turntable. Click it with a music disc: it plays it over and over, up to 4 guhs come to dance and each one gives 5 chonk power. Every disc has its own light show.",
+    "Look at a wheel, wire or machine: under your crosshair it says, for example, &bThis setup uses 5/10 chonk power&r. Ask too much and everything stops, and you can read how much you're short. Seen it? Tick it off.",
   ],
   "quest.47554848DC20455B.title": "How Much Can You Hook Up?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per setup, the first &e4&r Guh Wheels count in full (every wheel after that &e75%&r of the one before, up to &e16&r), at most &e2&r Cuddle Generators and &e2&r Disco Dynamos count (later also 4 Blub Stoves and 1 Glowstar Core). Whatever you hook up beyond that sleeps, and you can read that off. Story guhs are stronger: Baltoguh runs faster, Guhtwo makes the wheel float. Need more? Build a second setup.",
+    "Per setup, &e4&r Guh Wheels count in full (then less and less, up to &e16&r), plus &e2&r Cuddle Generators, &e2&r Disco Dynamos, &e4&r Blub Stoves and &e1&r Glowstar Core. Need more? Build a second setup.",
+  ],
+  "quest.475548718031ABA9.title": "At the Guh Technology Fair",
+  "quest.475548718031ABA9.quest_desc": [
+    "In the Guhmension stands a glass hall where &devery machine really works&r (Super Compass, under Cozy). Every stand has a sign and a fair guh who tells you which quest teaches it. Look, don't touch!",
+  ],
+  "quest.4755484B3CA7170A.title": "Never Bake Yourself Again",
+  "quest.4755484B3CA7170A.quest_desc": [
+    "A chest with a &ehopper&r above your Guh Oven, a hopper underneath into a second chest. Toss it in, walk away, and a bit later it's all baked.",
+  ],
+  "quest.4755484ABA7ABFD0.title": "Milling Without Wind",
+  "quest.4755484ABA7ABFD0.quest_desc": [
+    "The &dChonk Mill&r (&b5 chonk power&r) grinds nibble grain into flour, bones into bone meal and cobblestone into gravel and sand. It gives more than grinding by hand. Grind something!",
+  ],
+  "quest.475548740C56ABC5.title": "Happy Guhs Run Faster",
+  "quest.475548740C56ABC5.quest_desc": [
+    "Tame guhs come and lie on the &dCuddle Generator&r by themselves: &b3 chonk power&r per guh, up to 8 guhs. A freshly cuddled guh then runs for &b15&r instead of 10 in its wheel.",
+  ],
+  "quest.47554862789E1FC3.title": "Dancing for the Factory",
+  "quest.47554862789E1FC3.quest_desc": [
+    "Click the &dDisco Dynamo&r with a music disc: up to 4 guhs come to dance, each for &b5 chonk power&r. Every disc has its own light show. Nyeg, what moves.",
+  ],
+  "quest.47554857D4132B52.title": "Cheese in the Boiler",
+  "quest.47554857D4132B52.quest_desc": [
+    "The &dNibble Boiler&r burns cheese nibbles for &b80 chonk power&r. A block of nibbles burns nine times as long. A real glutton, though: time for a nibble farm!",
+  ],
+  "quest.475548338C23DDC9.title": "Weather All Around",
+  "quest.475548338C23DDC9.quest_desc": [
+    "A &dWeather Vadser&r reaches 10 blocks. Put a &dCloud Antenna&r on it: I, II and III make that 20, 35 and 60 blocks. Every step costs more chonk power.",
+  ],
+  "quest.475548857F9855C8.title": "Colleagues with a Snoot",
+  "quest.475548857F9855C8.quest_desc": [
+    "Switch on the chore &eRefill \\& Empty Machines&r for a resident of your &dGuh House&r. Put something in a machine once yourself: it remembers and refills from the chest or your Bank Guh. Who still needs hoppers?",
+  ],
+  "quest.475548FAE94982EA.title": "Pumpkin Picker",
+  "quest.475548FAE94982EA.quest_desc": [
+    "A resident with the chore &eFarming&r also harvests &epumpkins&r, &emelons&r, &esugar cane&r, &ecocoa&r and &enether wart&r, and leaves the plant standing. Let it harvest one. Nyeg, pumpkin pie!",
+  ],
+  "quest.4755485D1220067B.title": "Everything in Its Place",
+  "quest.4755485D1220067B.quest_desc": [
+    "Lay a &dGuh Sorting Belt&r and give a resident of a house next to it the chore &eSorter&r. It puts everything into the right chest. Tidier than your room!",
+  ],
+  "quest.4755482DC987EC03.title": "The Greenhouse Picks Itself",
+  "quest.4755482DC987EC03.quest_desc": [
+    "Give a resident of your &dGuh House&r the chore &eGreenhouse keeper: picking the greenhouse&r. It walks into your Cheese Greenhouse, picks everything ripe and replants it right away. Seen it? Tick it off.",
+  ],
+  "quest.4755481C4E6961E9.title": "A Greenhouse Full of Cheese",
+  "quest.4755481C4E6961E9.quest_desc": [
+    "Put a &dCheese Greenhouse&r among your crops and give it &bchonk power&r and a bucket of &6cheese sauce&r. Watch them grow!",
+  ],
+  "quest.4755480F265D161B.title": "Fluffy!",
+  "quest.4755480F265D161B.quest_desc": [
+    "Plant &ffluffballs&r (seeds: wheat seeds + wool) and harvest your first &ffluff&r. Soft, right?",
+  ],
+  "quest.475548070DEA1A7F.title": "Shearing Stable",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Keep tame &dCloud Lambs&r around a &dShearing Stable&r: it shears them by itself. Tame and breed them with cloud candy floss. Bleh!",
+  ],
+  "quest.475548F127CB5DD5.title": "Nothing Is Wasted",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Put old plushies, guh clothes, wool or cushions into the &dPlushie Recycler&r: fluff comes out again.",
+  ],
+  "quest.475548A8AACBBEF7.title": "Whirring Spinner",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "The &dSpinning Machine&r spins &ffluff&r into wool: 2 fluff is 1 white wool.",
+  ],
+  "quest.4755487539D5A8EA.title": "Splash in the Dye Bath",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Wool and dye into the &dDye Bath&r: it dyes everything the game can dye, glass, clay and cuddle blocks too.",
+  ],
+  "quest.47554809CF8DAD01.title": "All the Colours of the Rainbow",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "The &dColour Mill&r grinds a flower into 2 or 3 dye. A guh with the chore &ePicking Flowers&r keeps it going forever.",
+  ],
+  "quest.4755483CF22A99C0.title": "Rainbow Press",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "The &dRainbow Press&r presses fluff with &6cheese sauce&r into any colour. Pick the colour with sneak + click, or put down an example dye.",
+  ],
+  "quest.4755488802E43B45.title": "Building Blocks in Bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Put an example in the &dBuilding Block Factory&r: it makes stairs, slabs, walls and coloured blocks. Link a Bank Guh or a chest (sneak and click) and it fetches its own stuff.",
   ],
   "quest.475548420F21E4DE.title": "The Old Guh Wheel Power Plant",
   "quest.475548420F21E4DE.quest_desc": [
-    "In the &6Guhbarbecuether&r stands an old power plant with a copper roof and two chimneys. Five old guhs are still running their laps in there. The Super Compass (Barbecue > Old Guh Wheel Power Plant) shows the way. &7You can only get there &eby going through the grill portal first&7. Won't it let you through yet? Then the portal itself tells you what has to happen first.&r",
+    "In the &6Guhbarbecuether&r stands an old power plant with two chimneys, where five old guhs still run their laps. Your Super Compass (Barbecue) shows the way.",
   ],
   "quest.47554831DB6F1928.title": "The Inventor Guh",
   "quest.47554831DB6F1928.quest_desc": [
-    "Talk to the &dInventor Guh&r in his workshop. His practice hall is a mess: five setups, all broken. You get two pieces of Guh Wire to take along.",
+    "Talk to the &dInventor Guh&r in his workshop. His practice hall is in ruins: five setups, all broken.",
   ],
   "quest.47554840FCE93158.title": "The Loose Wire",
   "quest.47554840FCE93158.quest_desc": [
-    "&eSetup 1.&r The wheel runs, the oven sleeps: a piece of wire is missing. Lay &dGuh Wire&r on the yellow tile. (Every setup breaks again by itself when you walk away: the next player wants to practice too.)",
+    "&eSetup 1:&r the wheel runs, the oven sleeps. Lay &dGuh Wire&r on the yellow tile.",
   ],
   "quest.4755483DB67F112D.title": "Too Heavy!",
   "quest.4755483DB67F112D.quest_desc": [
-    "&eSetup 2.&r Two ovens and a mill on one wheel: too heavy, so everything stands still. Look at a wire and read it off. Then snip a wire at the red wool.",
+    "&eSetup 2:&r two ovens and a mill on one wheel. Read the wire and cut one at the red wool.",
   ],
   "quest.4755483FA3802986.title": "Salt for the Tubes",
   "quest.4755483FA3802986.quest_desc": [
-    "Bring the Inventor Guh 4 &dsalt crystals&r. You chip them out of the crystal vein of the &6Salt Crystal Mine&r, or out of salt crystal ore in the rocks of the Guhbarbecuether.",
+    "Bring the Inventor Guh 4 &dsalt crystals&r. You chip them in the &6Salt Crystal Mine&r or out of salt crystal ore in the Guhbarbecuether.",
   ],
   "quest.475548AAF387B15B.title": "Back to Front",
   "quest.475548AAF387B15B.quest_desc": [
-    "&eSetup 3.&r The nibbles need to go to the empty barrel, but the &dDirection Piece&r points the wrong way. Sneak and click it with an empty hand.",
+    "&eSetup 3:&r the &dDirection Piece&r points the wrong way. Sneak and click it with an empty hand.",
   ],
-  "quest.475548BBF8F93D33.title": "The Filter Is Set Wrong",
+  "quest.475548BBF8F93D33.title": "The Filter Is Wrong",
   "quest.475548BBF8F93D33.quest_desc": [
-    "&eSetup 4.&r The &dFilter Piece&r lets everything through except nibbles: only paper rolls into the nibble barrel. Click it and switch it from &eall except&r to &eonly these&r.",
+    "&eSetup 4:&r the &dFilter Piece&r lets everything through except nibbles. Set it to &eonly these&r.",
   ],
-  "quest.47554806F65039F7.title": "The Hose Has Gone Missing",
+  "quest.47554806F65039F7.title": "The Hose Is Missing",
   "quest.47554806F65039F7.quest_desc": [
-    "&eSetup 5.&r The pump slurps cheese sauce, but a piece of &dSauce Hose&r to the vat is missing. The Inventor Guh gives you one: lay it on the yellow tile and wait for the sauce.",
+    "&eSetup 5:&r a piece of &dSauce Hose&r is missing between pump and vat. Lay the Inventor Guh's hose on the yellow tile.",
   ],
-  "quest.4755489C917DB8D2.title": "The Practice Hall Is Running Again",
+  "quest.4755489C917DB8D2.title": "The Practice Hall Runs Again",
   "quest.4755489C917DB8D2.quest_desc": [
-    "Tell the Inventor Guh. You get the &dBottomless Nibble Belly&r for your Bank Guh and his three &drecipe cards&r: with those you make the machines of projects 3 and 4.",
+    "Tell the Inventor Guh. You get the &dBottomless Nibble Belly&r and three &drecipe cards&r. He's so proud his whiskers tremble.",
   ],
   "quest.475548CB872211C2.title": "A Belly Without a Bottom",
   "quest.475548CB872211C2.quest_desc": [
-    "Click your placed Bank Guh with the &dBottomless Nibble Belly&r: the limit of 256 per kind is gone, forever (even when you pick it up). And only then may a &dFilter Piece&r nom stuff &eout&r of it too: you set on it what it may take and how much has to stay behind. A hopper under your bank, a plain Direction Piece or a pick-up Stop Post never gets anything out of your bank.",
+    "Click your Bank Guh with the &dBottomless Nibble Belly&r: the limit of 256 per kind is gone, forever. And now a Filter Piece may take stuff out of your bank too.",
   ],
   "quest.475548F60C0C821A.title": "Three Recipe Cards",
   "quest.475548F60C0C821A.quest_desc": [
-    "You put a recipe card in the top left of the crafting grid along with the recipe: it &estays put&r, so one card is enough forever. Lost it? Sneak and click the Inventor Guh, then he'll sell them to you again.",
+    "Put a &drecipe card&r in the top left of the crafting grid: it &estays put&r, so one is enough. Lost it? The Inventor Guh sells them again.",
   ],
   "quest.4755482BE2D9F769.title": "A Sack of Salt",
   "quest.4755482BE2D9F769.quest_desc": [
-    "The clever machines ask for &dsalt crystal&r from the &6Guhbarbecuether&r. Go fetch a little supply: the crystal vein of the Salt Crystal Mine grows back by itself for every player. &7You can only get there &eby going through the grill portal first&7. Won't it let you through yet? Then the portal itself tells you what has to happen first.&r",
+    "Almost all clever machines ask for &dsalt crystal&r. The crystal vein in the &6Salt Crystal Mine&r grows back by itself: chip a little supply.",
   ],
   "quest.4755487386E05705.title": "Nibble Tubes",
   "quest.4755487386E05705.quest_desc": [
-    "Glass, cheese nibbles and salt crystal give 8 &dNibble Tubes&r. They're see-through: you can watch your stuff roll through them. A tube sticks by itself to chests, machines, a Bank Guh and other tubes, and it needs no chonk power.",
+    "Glass, cheese nibbles and salt crystal give 8 see-through &dNibble Tubes&r. They stick by themselves to chests, machines and your Bank Guh, without chonk power.",
   ],
   "quest.47554874A4D9A550.title": "From Chest to Chest",
   "quest.47554874A4D9A550.quest_desc": [
-    "A tube does nothing until there's a &dDirection Piece&r on it. Put it against a chest (the arrow points away from it): it keeps taking one thing out and sends it through the tubes to the nearest chest or machine where it fits. Sneak and click to turn it around. A redstone signal locks it.",
+    "A &dDirection Piece&r against a chest keeps taking one thing out and sends it through the tubes. Sneak and click to turn it around; redstone locks it.",
   ],
   "quest.475548663D30283F.title": "The Filter Piece",
   "quest.475548663D30283F.quest_desc": [
-    "A &dFilter Piece&r is a Direction Piece with a little list (and a snoot: 2 chonk power). Pick &eonly these&r or &eall except&r, and with &eleave behind&r a number of them always stays in the chest.",
+    "A &dFilter Piece&r is a Direction Piece with a little list: &eonly these&r or &eall except&r. With &eleave behind&r a little stack stays put.",
   ],
   "quest.4755480977191AF0.title": "Storage That Sorts Itself",
   "quest.4755480977191AF0.quest_desc": [
-    "Project: one drop-off chest with a Direction Piece, a long tube running past your chests, and in front of each chest a Filter Piece set to &eonly these&r. Whatever is on a list goes to that chest; the rest rolls on to the leftovers chest at the end. Dump your whole backpack into the drop-off chest and walk away. Does it work? Tick it off.",
+    "One drop-off chest, a long tube past your chests and a Filter Piece set to &eonly these&r in front of each chest. Toss in your whole backpack and walk away. Works? Tick it off.",
   ],
   "quest.475548D8B9ED36C0.title": "The Bank Key",
   "quest.475548D8B9ED36C0.quest_desc": [
-    "Click your Bank Guh with a &dBank Key&r (salt crystal, gold, a nibble): the key remembers which bank it is. You don't lose it, and you can link as many Nom Hatches with it as you like.",
+    "Click your Bank Guh with a &dBank Key&r: the key remembers which bank it is. Link as many Nom Hatches with it as you like.",
   ],
   "quest.47554882DC1A04E7.title": "Everything into the Bank by Itself",
   "quest.47554882DC1A04E7.quest_desc": [
-    "The &dNom Hatch&r (2 chonk power) is a little mouth of your Bank Guh: click it with the Bank Key and everything that goes in (from your hand, a hopper, a tube, chore guhs, a Delivery Guhling) ends up in your bank. No matter how far away, even in another dimension. Put one by your mine, your field and your oven. Full is full: what doesn't fit stays where it was.",
+    "The &dNom Hatch&r is a little mouth of your Bank Guh: everything that goes in ends up in your bank, even in another dimension. Put one by your mine, your field and your oven. Nom!",
   ],
   "quest.4755488D31012FE1.title": "Nom, All Tidy!",
   "quest.4755488D31012FE1.quest_desc": [
-    "Is there a working &dNom Hatch&r in the chore area of your &dGuh House&r? Then your residents pop the haul from their chores in there when there's no Bank Guh nearby (or when it's full): the harvest, the wood, whatever they tidy up. That way everything lands in your bank, however far away it is. Let a resident nom something through the hatch.",
+    "Is there a working Nom Hatch in the chore area of your &dGuh House&r? Then your residents pop their haul in there. Let a resident nom something through the hatch.",
   ],
   "quest.475548BDFB85CAA9.title": "The Slurper",
   "quest.475548BDFB85CAA9.quest_desc": [
-    "The &dSlurper&r (3 chonk power) slurps up everything lying loose on the ground within four blocks. Put it under your orchard or next to your guhs, with a tube to a Nom Hatch.",
+    "The &dSlurper&r (&b3 chonk power&r) slurps up everything lying on the ground within four blocks. Tube behind it, Nom Hatch on it, done.",
   ],
   "quest.47554898D099DC48.title": "The Field That Harvests Itself",
   "quest.47554898D099DC48.quest_desc": [
-    "The &dHarvester&r (8 chonk power) snips everything that's ripe in the 5 by 5 field in front of its snoot, and leaves it planted: grain, nibble grain, carrots, berries, pumpkins, sugar cane, peppers... Tube behind it, Nom Hatch on the end: your harvest is in the bank before you're home.",
+    "The &dHarvester&r (&b8 chonk power&r) snips everything ripe in the 5 by 5 in front of its snoot and leaves it planted. Your harvest is in the bank before you're home.",
   ],
   "quest.475548E6A2E8156C.title": "Enough Is Enough",
   "quest.475548E6A2E8156C.quest_desc": [
-    "Four sensors (1 chonk power each) give a redstone signal: the &dStock Meter&r (is there enough of something in a chest or bank?), the &dSniff Sensor&r (guhs, Mikas or players nearby), the &dGuh Clock&r and the &dGuh Counter&r. A signal locks a Direction Piece: that way your line stops by itself when the chest is full enough.",
+    "The &dStock Meter&r, &dSniff Sensor&r, &dGuh Clock&r and &dGuh Counter&r give a redstone signal. Lock a Direction Piece with it and your line stops by itself when the chest is full enough.",
   ],
   "quest.4755489EE127F43A.title": "The Nibble Battery",
   "quest.4755489EE127F43A.quest_desc": [
-    "Whatever your guhs run too much, the &dNibble Battery&r saves up (good for half an hour of one Guh Wheel). If your setup comes up short for a moment, it jumps in. It keeps its charge when you pick it up.",
+    "The &dNibble Battery&r saves whatever your guhs run too much and jumps in when you're short for a moment. Half an hour of Guh Wheel in your pocket.",
   ],
   "quest.475548CAB39407AC.title": "The Bank as a Warehouse",
   "quest.475548CAB39407AC.quest_desc": [
-    "With the Bottomless Nibble Belly (from the Inventor Guh), a Filter Piece may nom from your Bank Guh too. Put a Filter Piece against it, pick what may come out and set &eleave behind 64&r: the bank feeds your ovens and mills, but always keeps a stack back for you. A hopper or a plain Direction Piece gets nothing out of your bank: only the Filter Piece can do that.",
+    "Put a Filter Piece against your Bank Guh, choose what may come out and set &eleave behind 64&r. Your bank feeds your ovens, but always keeps a stack back for you.",
   ],
   "quest.475548EE50E67F23.title": "Sauce and Hoses",
   "quest.475548EE50E67F23.quest_desc": [
-    "For this project you need the &dRecipe Card: Sauce and Hoses&r (from the Inventor Guh, after his practice hall), and &dgrill skewers&r or &dblub cream&r from the Guhbarbecuether. &dSauce Hoses&r you make without a card: dried kelp, copper and a grill skewer give 8. &7You can only get there &eby going through the grill portal first&7. Won't it let you through yet? Then the portal itself tells you what has to happen first.&r",
+    "For this row you need the &dRecipe Card: Sauce and Hoses&r, plus grill skewers or blub cream from the Guhbarbecuether.",
+  ],
+  "quest.475548D239DF01F5.title": "A Hose Full of Sauce",
+  "quest.475548D239DF01F5.quest_desc": [
+    "Dried kelp, copper and a grill skewer give 8 &dSauce Hoses&r (no recipe card needed). They carry sauce from pump to vat and machine. Slurp!",
   ],
   "quest.475548E3DE1ED0DD.title": "The Sauce Pump",
   "quest.475548E3DE1ED0DD.quest_desc": [
-    "Put the &dSauce Pump&r (6 chonk power) ON TOP of a source block of cheese sauce, cheese frying sauce or water. It pumps a bucket every two seconds and the source never runs dry. With &dSauce Hoses&r it pushes the sauce to everything that's hooked up.",
+    "Put the &dSauce Pump&r (&b6 chonk power&r) on a source of cheese sauce, frying sauce or water. It pumps a bucket every two seconds and the source never runs dry.",
   ],
   "quest.475548926B76ACE8.title": "Sauce on Tap",
   "quest.475548926B76ACE8.quest_desc": [
-    "A &dSauce Vat&r stores 16 of one sauce (milk too, from a bucket). Tap it with an empty bucket, at home, without ever walking to the sauce sea again. The vat keeps its sauce when you pick it up.",
+    "A &dSauce Vat&r stores 16 buckets of one sauce (milk too). Tap it with an empty bucket, at home.",
+  ],
+  "quest.475548FE7360CF21.title": "A Pool of Sauce",
+  "quest.475548FE7360CF21.quest_desc": [
+    "The &dBig Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is. No swimming!",
+  ],
+  "quest.4755484DD06F433F.title": "Pipes All the Way",
+  "quest.4755484DD06F433F.quest_desc": [
+    "A &dSauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
   ],
   "quest.47554850B3FE62C9.title": "Fry-Up on the Assembly Line",
   "quest.47554850B3FE62C9.quest_desc": [
-    "The &dAuto Fryer&r (8 chonk power) slurps cheese frying sauce from the hose and fries everything you pop in: cheese nibbles and guhfish. Tube in, tube out, and there's always something yummy ready.",
+    "The &dAuto Fryer&r (&b8 chonk power&r) fries cheese nibbles and guhfish with frying sauce from the hose. Tube in, tube out, always something yummy.",
   ],
   "quest.47554811EB698416.title": "Potions That Brew Themselves",
   "quest.47554811EB698416.quest_desc": [
-    "The &dAuto Brewer&r (8 chonk power) turns a bucket of cheese sauce, three bottles and one ingredient into three &dGuh Potions&r. Feed it bottles and ingredients with tubes, and take the potions out on the other side.",
+    "The &dAuto Brewer&r (&b8 chonk power&r) turns cheese sauce, three bottles and one ingredient into three &dGuh Potions&r.",
   ],
   "quest.475548F7532D6CDF.title": "The Grill Coal Line",
   "quest.475548F7532D6CDF.quest_desc": [
-    "The &dGrill Coal Press&r (8 chonk power, two blocks tall) presses a bucket of cheese frying sauce and a bucket of water into one &dgrill coal&r. Two pumps, one hose (two sauces may go through the same hose) and a tube to your bank: fuel and building block without any chopping.",
+    "The &dGrill Coal Press&r presses a bucket of frying sauce and a bucket of water into &dgrill coal&r. Two pumps and one hose are enough.",
+  ],
+  "quest.47554897538BBDF6.title": "Soft Stone",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Cheese sauce + water = &dcuddlestone&r. Put the &dCuddlestone Generator&r next to water, give it sauce through a hose and chonk power, and put a chest next to it.",
   ],
   "quest.4755482AAA464E6F.title": "The Blub Stove",
   "quest.4755482AAA464E6F.quest_desc": [
-    "A &dSauce Blubby&r in a jar on a &dBlub Stove&r gives 6 chonk power as long as it's warm: feed it a cheese nibble now and then (one nibble is 10 minutes; a tube may feed it too). Sneak and click with an empty hand to get your blubby back. No blubby to be found? The Caretaker Guh of the &6Sauce Strider Stable&r gives you one every day after his questline.",
+    "A &dSauce Blubby&r in a jar on a &dBlub Stove&r gives &b6 chonk power&r as long as it's warm. Feed it a cheese nibble now and then; blub blub.",
   ],
   "quest.475548D2FB73B680.title": "Nibbling Machines",
   "quest.475548D2FB73B680.quest_desc": [
-    "The &dRecipe Card: Nibbling Machines&r (from the Inventor Guh) is for the Nibbler, the Placer, the Tinker Machine and the Drawing Table. Machines that change the world never do so in protected buildings or in the chore area of someone else's Guh House.",
+    "The &dRecipe Card: Nibbling Machines&r is for the Nibbler, the Placer, the Tinker Machine and the Drawing Table.",
   ],
   "quest.475548EDCA6C5C41.title": "Stone Without a Pickaxe",
   "quest.475548EDCA6C5C41.quest_desc": [
-    "The &dNibbler&r (10 chonk power) gnaws away the block in front of its snoot, one every two seconds, with the haul of an iron pickaxe. Put it in front of a cobblestone generator (water and lava) and you've got a stone line; a Chonk Mill behind it turns that into gravel and sand. It never eats chests or machines.",
+    "The &dNibbler&r (&b10 chonk power&r) gnaws away the block in front of its snoot every two seconds. Put it in front of a cobblestone generator for an endless stone line. It never eats chests.",
   ],
   "quest.475548385506BB09.title": "The Placer",
   "quest.475548385506BB09.quest_desc": [
-    "The &dPlacer&r (5 chonk power) puts the blocks from its tummy down in front of it, one per second, just like you would (seeds only on farmland). Together with a Nibbler: place, nibble, place...",
+    "The &dPlacer&r (&b5 chonk power&r) puts the blocks from its tummy down in front of it, one per second. Together with a Nibbler: place, nibble, place...",
   ],
   "quest.47554801C8BC02C1.title": "A Forest in a Box",
   "quest.47554801C8BC02C1.quest_desc": [
-    "The &dPlantation Box&r (6 chonk power, 3 by 3) makes any sapling grow within a minute: regular trees, mod trees, little satay and sausage fungi. Click with an axe and the whole tree is in your pockets; it replants the saplings itself. (You get its recipe card at the &6Grill Campground&r.)",
+    "The &dPlantation Box&r (&b6 chonk power&r) makes any sapling grow within a minute. Click with an axe and the whole tree is in your pockets. (Recipe card: the Grill Camping.)",
   ],
   "quest.47554824C71FDE23.title": "Little Lumberjack Guh",
   "quest.47554824C71FDE23.quest_desc": [
-    "Don't feel like chopping yourself? A resident of your &dGuh House&r with the chore &ePlantation: Plant \\& Chop&r chops down the tree on your Plantation Box in one go and brings the wood to the chest or your Bank Guh. If the box is empty, it fetches saplings from the chest. Other trees it happily leaves standing. If there's a working Nom Hatch in the chore area, it noms the haul of all its chores through to your bank. Crack, nyeg, done!",
+    "A resident with the chore &ePlantation: Plant \\& Chop&r chops down the tree on your Plantation Box and carries the wood away. Crack, nyeg, done!",
   ],
   "quest.4755481FE3A70B9B.title": "The Drawing Table",
   "quest.4755481FE3A70B9B.quest_desc": [
-    "Lay a recipe in the grid of the &dDrawing Table&r and add an empty &dBlueprint&r (paper + blue dye): the recipe gets drawn on it. It only costs the sheet, nothing from the grid.",
+    "Lay a recipe in the &dDrawing Table&r with an empty &dBlueprint&r: the recipe gets drawn on it. It only costs the sheet.",
   ],
   "quest.475548572A1B862E.title": "Tinkering Without Hands",
   "quest.475548572A1B862E.quest_desc": [
-    "Pop the Blueprint into a &dTinker Machine&r (10 chonk power) and feed it the ingredients with tubes: it keeps tinkering as long as there's stuff. Guh Wire from redstone, blocks from nibbles, bottles from glass: whatever you draw.",
+    "Pop the Blueprint into a &dTinker Machine&r (&b10 chonk power&r) and feed it with tubes: it keeps tinkering as long as there's stuff.",
   ],
   "quest.475548AB62468038.title": "The Delivery Guhling",
   "quest.475548AB62468038.quest_desc": [
-    "The &dRecipe Card: The Delivery Guhling&r is for the Scooter Station and the Stop Posts. Tubes are for close by; a Delivery Guhling carries stuff up to 96 blocks away, around corners and over hills.",
+    "The &dRecipe Card: The Delivery Guhling&r is for the Scooter Station and the Stop Posts. A Delivery Guhling carries stuff up to 96 blocks away, around corners and over hills.",
   ],
   "quest.475548DEA5251682.title": "The Scooter Station",
   "quest.475548DEA5251682.quest_desc": [
-    "In a &dScooter Station&r (4 chonk power) lives one Delivery Guhling: a mini guh on a scooter with a backpack that's far too big. Put it down and he's there right away.",
+    "In a &dScooter Station&r (&b4 chonk power&r) lives one Delivery Guhling: a mini guh on a scooter with a backpack that's far too big.",
   ],
   "quest.4755484269E3BBBB.title": "Stop Posts",
   "quest.4755484269E3BBBB.quest_desc": [
-    "Put a &dStop Post&r next to or on top of a chest or machine. Green = he picks up here, orange = he drops off here; in the post you pick what (empty = everything). Up to 8 stops per station.",
+    "Put a &dStop Post&r by a chest or machine: &agreen&r = pick up, &6orange&r = drop off. Up to 8 stops per station.",
   ],
   "quest.47554878BA1CB0B3.title": "The Delivery Round",
   "quest.47554878BA1CB0B3.quest_desc": [
-    "Let your Delivery Guhling deliver something: from your field to your oven, from your stone line to a Nom Hatch. He only takes along what he can also drop off somewhere, and what's in his backpack never goes missing.",
+    "Let your Delivery Guhling drop something off, say from your field to your oven. Whatever is in its backpack never gets lost.",
   ],
-  "quest.475548948ABBD5A9.title": "Guhdex: The Delivery Guhling",
+  "quest.475548948ABBD5A9.title": "Guhdex: the Delivery Guhling",
   "quest.475548948ABBD5A9.quest_desc": [
-    "Get close to a Delivery Guhling and he's in your &dGuhdex&r. Give him a cheese nibble and he scoots extra fast for a minute.",
+    "Get close to a Delivery Guhling and it's in your &dGuhdex&r. Give it a cheese nibble and it scoots extra hard for a minute.",
   ],
-  "quest.47554885894ECF79.title": "Whistle for Your Package",
+  "quest.47554885894ECF79.title": "Whistling for Your Parcel",
   "quest.47554885894ECF79.quest_desc": [
-    "With the &dDelivery Guhling Whistle&r (from the Lighthouse Keeper Guh in the &6Smoke Guh Lighthouse&r) your nearest Delivery Guhling comes to you and his backpack opens. Sneak and whistle: everybody home.",
+    "With the &dDelivery Guhling Whistle&r (from the Tower Keeper Guh in the Smoke Guh Lighthouse) your Delivery Guhling comes to you. Sneak and whistle: everyone home.",
   ],
   "quest.475548E6B2C7EA62.title": "A Glowstar",
   "quest.475548E6B2C7EA62.quest_desc": [
-    "The last layer starts with a &dglowstar&r: only &cBurnt Mika&r drops that, the boss of the Mika Grill Palace in the &6Guhbarbecuether&r. &7You can only get there &eby going through the grill portal first&7. Won't it let you through yet? Then the portal itself tells you what has to happen first.&r",
+    "Only &cBurnt Mika&r drops a &dglowstar&r, the boss of the Mika Grill Palace in the Guhbarbecuether. Hot!",
   ],
   "quest.475548C6100523DE.title": "The Glowstar Core",
   "quest.475548C6100523DE.quest_desc": [
-    "One glowstar, grill coal and salt crystal make a &dGlowstar Core&r: &b200 chonk power&r, forever, without a guh. 1 per setup counts. A whole factory runs on that.",
+    "Glowstar, grill coal and salt crystal make a &dGlowstar Core&r: &b200 chonk power&r, forever, without a guh. One per setup counts.",
   ],
   "quest.475548DEAFCC1743.title": "The Big Plan",
   "quest.475548DEAFCC1743.quest_desc": [
-    "Finished the practice hall AND beaten Burnt Mika? Then talk to the &dInventor Guh&r: he wants to build &6The Great Nibble Machine&r on the landing. Every player builds their own: only you see yours grow.",
+    "Practice hall done and Burnt Mika beaten? Then the Inventor Guh wants to build &6The Great Nibble Machine&r. Only you see yours grow.",
   ],
   "quest.4755482A83C19F43.title": "The Foundation",
   "quest.4755482A83C19F43.quest_desc": [
-    "Bring 256 stones (cobblestone, blackstone or cobbled deepslate) and 128 logs. Bringing it in portions is fine, he counts everything. Tip: the stone line and a forest in a box.",
+    "Bring 256 stone and 128 logs (in portions is fine). Tip: a stone line and a forest in a box.",
   ],
   "quest.475548F9410F7144.title": "The Boiler",
   "quest.475548F9410F7144.quest_desc": [
@@ -261,11 +333,11 @@
   ],
   "quest.4755488527E543A2.title": "The Belly",
   "quest.4755488527E543A2.quest_desc": [
-    "Bring 128 nibble flour and 64 Guh Wire. Tip: a Harvester by your nibble grain, a Chonk Mill, and a Tinker Machine with a Blueprint of Guh Wire.",
+    "Bring 128 nibble flour and 64 Guh Wire. Tip: Harvester, Chonk Mill and a Tinker Machine.",
   ],
   "quest.475548AAAB47105E.title": "The Snoot",
   "quest.475548AAAB47105E.quest_desc": [
-    "Bring 12 Guh Potions (any you like) and 128 glass. Tip: the Auto Brewer, and sand in a Guh Oven that feeds itself.",
+    "Bring 12 Guh Potions and 128 glass. Tip: the Auto Brewer, and sand in a Guh Oven that feeds itself.",
   ],
   "quest.47554899F92839CC.title": "The Glowstar Heart",
   "quest.47554899F92839CC.quest_desc": [
@@ -273,139 +345,23 @@
   ],
   "quest.4755486E2791471E.title": "The Perfect Nibble",
   "quest.4755486E2791471E.quest_desc": [
-    "Your Great Nibble Machine makes one &dperfect nibble&r every day. Click the little tray under its mouth. You're now a &6Nibble Machinist&r too: pick the title in your Guhdex.",
+    "Your Great Nibble Machine makes one &dperfect nibble&r every day: click the little tray under its mouth. You're now a &6Nibble Machinist&r (title in your Guhdex).",
   ],
   "quest.4755481356D8732B.title": "The Machine on the Shelf",
   "quest.4755481356D8732B.quest_desc": [
-    "Put the &dNibble Machine Statuette&r down where everyone can see it. Click it: it nibbles.",
-  ],
-  "quest.4755486C9C3A3914.title": "The Workshop Opens",
-  "quest.4755486C9C3A3914.quest_desc": [
-    "After the finale of the Guhvatar story the door of the workshop in the &dSouthern Air Temple&r opens. Talk to the &6Mechanist Guh&r: he gives you his &6Blueprint&r, for all the machines of tier 5.",
-  ],
-  "quest.475548B31FFA7754.title": "Power Through the Air",
-  "quest.475548B31FFA7754.quest_desc": [
-    "A &6Chonk Transmitter&r sends the chonk power of its net to &6Chonk Receivers&r within 32 blocks. Together they are one net: short anywhere = everything still.",
-  ],
-  "quest.4755484919B04299.title": "Your Bank, Everywhere",
-  "quest.4755484919B04299.quest_desc": [
-    "A &6Guh Terminal&r is a little window into your Bank Guh. Link it with the &6Bank Key&r. Search, sort, take, put in: with the rules of your bank.",
-  ],
-  "quest.4755485469FDB005.title": "The Order Guh",
-  "quest.4755485469FDB005.quest_desc": [
-    "The &6Order Guh&r works at an &6Order Counter&r next to your Tinker Machines. Order, and he takes everything out of the bank, runs the machines and brings the receipt.",
-  ],
-  "quest.475548ED2949994A.title": "Mail Through the Gate",
-  "quest.475548ED2949994A.quest_desc": [
-    "A &6Nibble Gate Tube&r sends what goes in to its buddy, even in another dimension.",
-  ],
-  "quest.475548FF921ACE73.title": "Home in One Step",
-  "quest.475548FF921ACE73.quest_desc": [
-    "Your own network of &6Home Gates&r. Choose where you jump to; your guhs on a lead and your mount come along.",
-  ],
-  "quest.475548650E14A004.title": "The Four Elements",
-  "quest.475548650E14A004.quest_desc": [
-    "&6Air Blower&r, &6Water Bearer&r, &6Crust Pusher&r and &6Fire Basket&r: let each of them do its thing.",
-  ],
-  "quest.4755489AF6F07054.title": "The Enderguh Wheel",
-  "quest.4755489AF6F07054.quest_desc": [
-    "A &5Wahoog Enderguh&r flies rounds in a giant wheel: 50 chonk power. One per setup counts.",
-  ],
-  "quest.47554838F636EE19.title": "A Little Tail of the Comet",
-  "quest.47554838F636EE19.quest_desc": [
-    "The shard of the nibble comet lies by the duel square of the Fire Nation Capital, only for you. The &6Comet Core&r: 500 chonk power, the strongest source so far.",
-  ],
-  "quest.475548534CAE17DB.title": "New Sources",
-  "quest.475548534CAE17DB.quest_desc": [
-    "A turning Enderguh Wheel and a glowing Comet Core, both in your own net.",
-  ],
-  "quest.4755480F23D80288.title": "All Done",
-  "quest.4755480F23D80288.quest_desc": [
-    "Tell the Mechanist Guh. For the first time in a hundred years he finishes something: a diploma, for you. And he has one more big plan...",
-  ],
-  "quest.475548E71D7409D9.title": "A Plan with Little Ears",
-  "quest.475548E71D7409D9.quest_desc": [
-    "The &dMechanist Guh&r has one more big plan. On the &6building site&r behind his workshop in the Southern Air Temple hangs a board: click it. Everyone builds their own balloon, and only you see yours grow.",
-  ],
-  "quest.475548A570C5F8D9.title": "The Cloth",
-  "quest.475548A570C5F8D9.quest_desc": [
-    "Bring 128 &dtent canvas&r (any color) and 64 &dGuh Wire&r. Tip: a Tinker Machine with a Blueprint of tent canvas.",
-  ],
-  "quest.4755485FD93F0316.title": "The Basket",
-  "quest.4755485FD93F0316.quest_desc": [
-    "Bring 256 &dlogs&r and 16 &dbox shells&r. Tip: a forest in a tub, and a &dHidey Guh&r pushes you a box shell every day for a cheese nibble.",
-  ],
-  "quest.47554879788DCD2C.title": "The Burner",
-  "quest.47554879788DCD2C.quest_desc": [
-    "Bring 2 &dFire Baskets&r, 1 &dChonk Receiver&r, 96 &dgrill coal&r and 16 &dcrystal cheese&r. The burner runs on &bchonk power&r from your own factory: no coal, no smoke.",
-  ],
-  "quest.4755488B9692F09D.title": "The Nibble Supply",
-  "quest.4755488B9692F09D.quest_desc": [
-    "Bring 512 &dcheese nibbles&r and 128 &dfried cheese nibbles&r. Tip: the frying line and a field that harvests itself.",
-  ],
-  "quest.4755486E1D362EDF.title": "The Decorations",
-  "quest.4755486E1D362EDF.quest_desc": [
-    "Bring 64 &dlight rods&r and 32 &dflash crumbs&r. Then the Mechanist Guh puts ears on it.",
-  ],
-  "quest.4755486223397A6F.title": "Takeoff!",
-  "quest.4755486223397A6F.quest_desc": [
-    "Click the board and let the &dPeace Balloon&r take off. You get the &dPeace Balloon Statuette&r, your own &dhot air balloon&r and the title &6Peacebringer&r.",
-  ],
-  "quest.475548E931E5CAA0.title": "A Balloon on the Shelf",
-  "quest.475548E931E5CAA0.quest_desc": [
-    "Put the &dPeace Balloon Statuette&r where everyone can see it. Click it: a tiny crumb floats out of the little basket.",
-  ],
-  "quest.47554884FF4B91D1.title": "Floating Yourself",
-  "quest.47554884FF4B91D1.quest_desc": [
-    "Put your own &dhot air balloon&r on the ground and step in. Hold jump: the burner roars and you rise. The wind does the rest. Lost it? Sneak and click the board on the building site.",
-  ],
-  "quest.4755481EB48408C2.title": "Nibble Rain Every Day",
-  "quest.4755481EB48408C2.quest_desc": [
-    "The Peace Balloon makes a round over the Guh End every day. Drop by the board on the building site afterwards: there's still a little bag of nibbles in the basket, just for you.",
-  ],
-  "quest.475548A95CB45E8A.title": "Peacebringer",
-  "quest.475548A95CB45E8A.quest_desc": [
-    "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
-  ],
-  "quest.47554885F57F3160.title": "The Hamster Junction",
-  "quest.47554885F57F3160.quest_desc": [
-    "Build a &dHamster Junction&r and run a guh wire to it. It fills a buffer with vadskracht: that keeps all your hamster tubes rolling. One per guh owner!",
-  ],
-  "quest.4755484F38966CF2.title": "Whoosh!",
-  "quest.4755484F38966CF2.quest_desc": [
-    "Place two &dhamster tube stations&r, far apart (another dimension is fine!). Step into the tube, pick where to go, and whoosh!",
-  ],
-  "quest.475548B6445198F6.title": "Sixteen cuddles",
-  "quest.475548B6445198F6.quest_desc": [
-    "The &dMega Cuddle Plant&r is a giant 5 by 3 cushion. Up to &d16 tamed guhs&r come and cuddle on it by themselves, and every guh gives &b22 vadskracht&r: 352 together! Do look after them: &6food&r (kaasknabbels, pink buns or blocks of kaasknabbels) and &6one wool&r a day for fresh blankets. One per net.",
-  ],
-  "quest.4755485077753D1B.title": "Export vads",
-  "quest.4755485077753D1B.quest_desc": [
-    "The &dguh villagers&r (Vadsmonteur, Miner, Crystal Cutter and Magic Guh) buy &6bulk&r from your factories every day: blocks of kaasknabbels, knuffelsteen, coloured wool and baked goods. They pay with rare things: clothes, plushies, weather jars, dream sand and even fossils. New orders every day!",
-  ],
-  "quest.4755481C4E6961E9.title": "A greenhouse full of cheese",
-  "quest.4755481C4E6961E9.quest_desc": [
-    "Make a &aCheese Greenhouse&r, put it among your crops and give it &bvadskracht&r and a bucket of &6kaassaus&r. Watch them grow!",
-  ],
-  "quest.4755480F265D161B.title": "Fluffy!",
-  "quest.4755480F265D161B.quest_desc": [
-    "Grow &ffluffballs&r (seeds: wheat seeds + wool) and harvest your first &ffluff&r.",
-  ],
-  "quest.4755485D1220067B.title": "Everything in its place",
-  "quest.4755485D1220067B.quest_desc": [
-    "Lay a &dGuh Sorting Belt&r and put a guh with the chore &dSorter&r in a huisje next to it. It puts everything into the right chest!",
+    "Put the &dNibble Machine Statuette&r where everyone can see it. Click it: it nibbles.",
   ],
   "quest.475548A1F7B4CAB5.title": "Baking in Bulk",
   "quest.475548A1F7B4CAB5.quest_desc": [
-    "Build a &6Mega Oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+    "The &dMega Oven&r is a whole guh bakery on chonk power. Click with an empty hand to choose what it bakes.",
   ],
   "quest.475548344C093E6F.title": "Weather for the Whole Base",
   "quest.475548344C093E6F.quest_desc": [
-    "Put a &bNibble Weather Station&r next to your Weather Vadser and feed it nibbles: then the weather covers your whole base.",
+    "Put a &dNibble Weather Station&r next to your Weather Vadser and feed it nibbles: then the weather covers your whole base.",
   ],
   "quest.4755481D33D17AEA.title": "A Sky Full of Guhs",
   "quest.4755481D33D17AEA.quest_desc": [
-    "Build the &dStar Dome&r and feed it nibbles until the first guh constellation lights up.",
+    "Build the &dStar Dome&r and feed it nibbles until the first guh constellation lights up. Ooooh.",
   ],
   "quest.4755482DD09880EA.title": "A Fair for Guhs",
   "quest.4755482DD09880EA.quest_desc": [
@@ -413,110 +369,166 @@
   ],
   "quest.475548C601C9DF81.title": "Catching Clouds",
   "quest.475548C601C9DF81.quest_desc": [
-    "Put a &bCloud Catcher&r on the roof: the higher, the more fluff.",
+    "Put a &dCloud Catcher&r on the roof: the higher, the more fluff.",
   ],
-  "quest.47554857D4132B52.title": "Cheese in the boiler",
-  "quest.47554857D4132B52.quest_desc": [
-    "The &6Nibble Boiler&r burns cheese nibbles for &d80 chonk power&r. A block of cheese nibbles burns nine times as long. Hungry, though: hundreds of nibbles an hour. Time for a nibble farm!",
+  "quest.475548B6445198F6.title": "Sixteen Cuddles",
+  "quest.475548B6445198F6.quest_desc": [
+    "Up to 16 tame guhs cuddle on the &dMega Cuddle Plant&r, each for &b22 chonk power&r. Feed them and give one wool every day for fresh blankets. One per net.",
   ],
-  "quest.47554897538BBDF6.title": "Soft stone",
-  "quest.47554897538BBDF6.quest_desc": [
-    "Cheese sauce + water = &dcuddlestone&r. Put the &6Cuddlestone Generator&r next to a water source, give it cheese sauce through a hose and chonk power, and put a chest next to it.",
+  "quest.4755485077753D1B.title": "Export Chonk",
+  "quest.4755485077753D1B.quest_desc": [
+    "The &dguh villagers&r buy &6bulk&r from your factories every day: nibble blocks, cuddlestone, wool and bakes. They pay with rare things, even fossils.",
   ],
-  "quest.475548FE7360CF21.title": "A pool of sauce",
-  "quest.475548FE7360CF21.quest_desc": [
-    "The &6Big Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is.",
+  "quest.47554885F57F3160.title": "The Hamster Junction",
+  "quest.47554885F57F3160.quest_desc": [
+    "Build a &dHamster Junction&r and run Guh Wire to it: that keeps all your hamster tubes rolling. One per guh owner!",
   ],
-  "quest.4755484DD06F433F.title": "Pipes all the way",
-  "quest.4755484DD06F433F.quest_desc": [
-    "A &6Sauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
+  "quest.4755484F38966CF2.title": "Whoosh!",
+  "quest.4755484F38966CF2.quest_desc": [
+    "Place two &dhamster tube stations&r far apart (another dimension is fine). Step in, pick where to go, and whoosh!",
   ],
-  "quest.475548338C23DDC9.title": "Weather all around",
-  "quest.475548338C23DDC9.quest_desc": [
-    "A Weather Vadser only reaches 10 blocks. Put a &bCloud Antenna&r on it: I, II and III make the radius 20, 35 and 60. Every step costs more chonk power.",
-  ],
-  "quest.4755482B7D2B8727.title": "A fossil!",
-  "quest.4755482B7D2B8727.quest_desc": [
-    "Deep in old fossil places there are sometimes &6fossils&r: in the chests of the &dFossil Dig&r and the &dfossil mine&r of the Barbecuether, at the &dgiant guh fossil&r, in the &dabandoned guh mine&r and at the &dcave paintings&r under the wool. The dig's daily find is sometimes a fossil too. Find one!",
-  ],
-  "quest.47554824583EC9A0.title": "The Fossil Hatchery",
-  "quest.47554824583EC9A0.quest_desc": [
-    "Make a &6Fossil Hatchery&r. Put a fossil and &616 cheese nibbles&r in and give it &d20 vadskracht&r: under the glass bell the egg turns round.",
-  ],
-  "quest.4755486826FB3AE3.title": "Crack!",
-  "quest.4755486826FB3AE3.quest_desc": [
-    "After a whole Minecraft day of hatching a baby ancient guh crawls out of the egg. It is yours right away!",
-  ],
-  "quest.47554819DD50745F.title": "Mammoth Guh",
-  "quest.47554819DD50745F.quest_desc": [
-    "Hatch a &6Mammoth Guh&r. In a guh house it does its chores twice as fast, and cuddling gives wool.",
-  ],
-  "quest.4755487AF029E682.title": "T-Guh",
-  "quest.4755487AF029E682.quest_desc": [
-    "Hatch a &6T-Guh&r. Give it the &dWatch&r chore: it spots monsters coming from very far away.",
-  ],
-  "quest.475548D5A97A13A7.title": "Pteroguh",
-  "quest.475548D5A97A13A7.quest_desc": [
-    "Hatch a &6Pteroguh&r. When it lives in a guh house it flies the goods to chests far around the house.",
-  ],
-  "quest.475548787889088A.title": "Ancient Meerkat Guh",
-  "quest.475548787889088A.quest_desc": [
-    "Hatch an &6Ancient Meerkat Guh&r. Take it along: it stands up and points out rare guhs nearby.",
-  ],
-  "quest.47554818B2023D00.title": "A place to launch",
+  "quest.47554818B2023D00.title": "A Place to Launch",
   "quest.47554818B2023D00.quest_desc": [
-    "Make a &dLaunch Pad&r (iron blocks, knuffelsteen and a nibble battery) and put it somewhere open: the rocket gets big!",
+    "Make a &dLaunch Pad&r and put it somewhere open: the rocket gets big!",
   ],
-  "quest.475548044BCA1179.title": "The hull",
+  "quest.475548044BCA1179.title": "The Hull",
   "quest.475548044BCA1179.quest_desc": [
-    "Click the pad with &d64 knuffelsteen&r, &d24 iron&r and &d16 glass&r (in portions is fine).",
+    "Click the pad with 64 cuddlestone, 24 iron and 16 glass (in portions is fine).",
   ],
-  "quest.4755488593D48293.title": "The engine",
+  "quest.4755488593D48293.title": "The Engine",
   "quest.4755488593D48293.quest_desc": [
-    "Two &dnibble batteries&r, a &dGuh Oven&r, &d4 iron blocks&r and &d16 redstone&r. Vroom!",
+    "Two nibble batteries, a Guh Oven, 4 iron blocks and 16 redstone. Vroom!",
   ],
-  "quest.47554853840EB6A3.title": "The fuel",
+  "quest.47554853840EB6A3.title": "The Fuel",
   "quest.47554853840EB6A3.quest_desc": [
-    "&d24 blocks of cheese nibbles&r and &d4 buckets of cheese sauce&r. Rockets run on cheese, everybody knows that.",
+    "24 blocks of cheese nibbles and 4 buckets of cheese sauce. Rockets run on cheese, everybody knows that.",
   ],
-  "quest.475548C49AC8277E.title": "The crew",
+  "quest.475548C49AC8277E.title": "The Crew",
   "quest.475548C49AC8277E.quest_desc": [
-    "Dress three of your guhs in an &dastronaut suit&r (wool and glass), take them to the pad and click it.",
+    "Dress three guhs in an &dastronaut suit&r, take them to the pad and click it.",
   ],
   "quest.47554832A7DE93A7.title": "Liftoff!",
   "quest.47554832A7DE93A7.quest_desc": [
     "Click the pad: countdown, engines on, and off goes the rocket!",
   ],
-  "quest.4755487EF180F842.title": "One small step",
+  "quest.4755487EF180F842.title": "One Small Step",
   "quest.4755487EF180F842.quest_desc": [
-    "Plant a &dlittle moon flag&r on the Cheese Moon. Chip &dcheese moon crystals&r in the craters and swap them with &dAstronaut Kaasje&r for souvenirs.",
+    "Plant a &dlittle moon flag&r on the Cheese Moon. Swap cheese moon crystals with &dAstronaut Kaasje&r for souvenirs.",
   ],
-  "quest.475548A8AACBBEF7.title": "Whirring Spinner",
-  "quest.475548A8AACBBEF7.quest_desc": [
-    "Build a &dSpinning Machine&r and spin &ffluff&r into wool: 2 fluff is 1 white wool. Fluff comes from Cloud Lambs (shearing) or the Plushie Recycler.",
+  "quest.4755482B7D2B8727.title": "A Fossil!",
+  "quest.4755482B7D2B8727.quest_desc": [
+    "&6Fossils&r lie in old digs, the fossil mine of the Barbecuether, the abandoned guh mine and by the cave paintings under the wool. Find one!",
   ],
-  "quest.4755487539D5A8EA.title": "Splash in the Dye Bath",
-  "quest.4755487539D5A8EA.quest_desc": [
-    "Put wool and dye in the &dDye Bath&r: it dyes everything the game can dye, glass, clay and cuddle blocks too.",
+  "quest.47554824583EC9A0.title": "The Fossil Hatchery",
+  "quest.47554824583EC9A0.quest_desc": [
+    "Put a fossil and 16 cheese nibbles in the &dFossil Hatchery&r and give it &b20 chonk power&r.",
   ],
-  "quest.475548070DEA1A7F.title": "Shearing Stable",
-  "quest.475548070DEA1A7F.quest_desc": [
-    "Keep tame &dCloud Lambs&r around a &dShearing Stable&r: it shears them by itself. Tame them with fluffgrass or cloud candy floss and breed them with cloud candy floss!",
+  "quest.4755486826FB3AE3.title": "Crack!",
+  "quest.4755486826FB3AE3.quest_desc": [
+    "After a whole day of hatching, a baby ancient guh crawls out of the egg. It's yours right away!",
   ],
-  "quest.475548F127CB5DD5.title": "Nothing Is Wasted",
-  "quest.475548F127CB5DD5.quest_desc": [
-    "Put old plushies, guh clothes, wool or cushions into the &dPlushie Recycler&r: fluff comes out.",
+  "quest.47554819DD50745F.title": "Mammoth Guh",
+  "quest.47554819DD50745F.quest_desc": [
+    "A &dMammoth Guh&r does its chores twice as fast, and cuddling gives wool.",
   ],
-  "quest.4755488802E43B45.title": "Building Blocks in Bulk",
-  "quest.4755488802E43B45.quest_desc": [
-    "Put an &dexample&r in the &dBuilding Block Factory&r: it makes stairs, slabs, walls, smooth and coloured blocks. Link a Bank Guh (Bank Key) or a chest (sneak + click, then the chest).",
+  "quest.4755487AF029E682.title": "T-Guh",
+  "quest.4755487AF029E682.quest_desc": [
+    "Give a &dT-Guh&r the chore &eWatch&r: it spots monsters coming from very far away. Rawr, nyeg.",
   ],
-  "quest.47554809CF8DAD01.title": "All the Colours of the Rainbow",
-  "quest.47554809CF8DAD01.quest_desc": [
-    "Grind flowers in the &dColour Mill&r: 2 to 3 dye per flower. Let a guh do the chore &dPicking Flowers&r for an endless supply!",
+  "quest.475548D5A97A13A7.title": "Pteroguh",
+  "quest.475548D5A97A13A7.quest_desc": [
+    "A &dPteroguh&r in a guh house flies goods to chests far around the house.",
   ],
-  "quest.4755483CF22A99C0.title": "Rainbow Press",
-  "quest.4755483CF22A99C0.quest_desc": [
-    "Press fluff and &6cheese sauce&r into any colour in the &dRainbow Press&r. Pick the colour with sneak + click, or put down an example dye.",
+  "quest.475548787889088A.title": "Ancient Meerkat Guh",
+  "quest.475548787889088A.quest_desc": [
+    "Take an &dAncient Meerkat Guh&r along: it stands up and points out rare guhs nearby.",
+  ],
+  "quest.4755486C9C3A3914.title": "The Workshop Opens",
+  "quest.4755486C9C3A3914.quest_desc": [
+    "After the finale of the Guhvatar story the workshop in the &dSouthern Air Temple&r opens. The &6Mechanist Guh&r gives you his Blueprint for all the machines below.",
+  ],
+  "quest.475548B31FFA7754.title": "Power Through the Air",
+  "quest.475548B31FFA7754.quest_desc": [
+    "A &dChonk Transmitter&r sends chonk power to &dChonk Receivers&r up to 32 blocks away. Together they're one net.",
+  ],
+  "quest.4755484919B04299.title": "Your Bank, Everywhere",
+  "quest.4755484919B04299.quest_desc": [
+    "A &dGuh Terminal&r is a little window into your Bank Guh: link it with your Bank Key and search, take and put in.",
+  ],
+  "quest.4755485469FDB005.title": "The Order Guh",
+  "quest.4755485469FDB005.quest_desc": [
+    "The &dOrder Guh&r at an &dOrder Counter&r takes everything out of the bank, runs your Tinker Machines and brings the receipt.",
+  ],
+  "quest.475548ED2949994A.title": "Mail Through the Gate",
+  "quest.475548ED2949994A.quest_desc": [
+    "A &dNibble Gate Tube&r sends what goes in to its buddy, even in another dimension.",
+  ],
+  "quest.475548FF921ACE73.title": "Home in One Step",
+  "quest.475548FF921ACE73.quest_desc": [
+    "Build your own network of &dHome Gates&r. Your guhs on a lead and your mount jump along.",
+  ],
+  "quest.475548650E14A004.title": "The Four Elements",
+  "quest.475548650E14A004.quest_desc": [
+    "&dAir Blower&r, &dWater Bearer&r, &dCrust Pusher&r and &dFire Basket&r: let each of them do its thing.",
+  ],
+  "quest.4755489AF6F07054.title": "The Enderguh Wheel",
+  "quest.4755489AF6F07054.quest_desc": [
+    "A &5Wahoog Enderguh&r flies rounds in a giant wheel: &b50 chonk power&r. One per setup.",
+  ],
+  "quest.47554838F636EE19.title": "A Little Tail of the Comet",
+  "quest.47554838F636EE19.quest_desc": [
+    "By the duel square of the Fire Nation Capital lies a shard of the nibble comet. The &dComet Core&r gives &b500 chonk power&r!",
+  ],
+  "quest.475548534CAE17DB.title": "New Sources",
+  "quest.475548534CAE17DB.quest_desc": [
+    "A turning Enderguh Wheel and a glowing Comet Core, both in your own net.",
+  ],
+  "quest.4755480F23D80288.title": "All Done",
+  "quest.4755480F23D80288.quest_desc": [
+    "Tell the Mechanist Guh. For the first time in a hundred years he finishes something: a diploma, for you.",
+  ],
+  "quest.475548E71D7409D9.title": "A Plan with Little Ears",
+  "quest.475548E71D7409D9.quest_desc": [
+    "The Mechanist Guh has one more big plan. Click the board on the &6building site&r behind his workshop.",
+  ],
+  "quest.475548A570C5F8D9.title": "The Cloth",
+  "quest.475548A570C5F8D9.quest_desc": [
+    "Bring 128 tent canvas and 64 Guh Wire. Tip: a Tinker Machine with a Blueprint of tent canvas.",
+  ],
+  "quest.4755485FD93F0316.title": "The Basket",
+  "quest.4755485FD93F0316.quest_desc": [
+    "Bring 256 logs and 16 box shells. Tip: a forest in a box, and a Hidey Guh.",
+  ],
+  "quest.47554879788DCD2C.title": "The Burner",
+  "quest.47554879788DCD2C.quest_desc": [
+    "Bring 2 Fire Baskets, 1 Chonk Receiver, 96 grill coal and 16 crystal cheese. The burner runs on chonk power from your own factory.",
+  ],
+  "quest.4755488B9692F09D.title": "The Nibble Supply",
+  "quest.4755488B9692F09D.quest_desc": [
+    "Bring 512 cheese nibbles and 128 fried cheese nibbles. Tip: the frying line and the Harvester.",
+  ],
+  "quest.4755486E1D362EDF.title": "The Decorations",
+  "quest.4755486E1D362EDF.quest_desc": [
+    "Bring 64 light rods and 32 flash crumbs. Then the Mechanist Guh puts ears on it.",
+  ],
+  "quest.4755486223397A6F.title": "Takeoff!",
+  "quest.4755486223397A6F.quest_desc": [
+    "Click the board and let the &dPeace Balloon&r take off. You get a statuette, your own hot air balloon and the title &6Peacebringer&r.",
+  ],
+  "quest.475548E931E5CAA0.title": "A Balloon on the Shelf",
+  "quest.475548E931E5CAA0.quest_desc": [
+    "Put down the &dPeace Balloon Statuette&r. Click it: a tiny crumb floats out of the little basket.",
+  ],
+  "quest.47554884FF4B91D1.title": "Floating Yourself",
+  "quest.47554884FF4B91D1.quest_desc": [
+    "Put down your &dhot air balloon&r, step in and hold jump: the burner roars and you rise. The wind does the rest.",
+  ],
+  "quest.4755481EB48408C2.title": "Nibble Rain Every Day",
+  "quest.4755481EB48408C2.quest_desc": [
+    "The Peace Balloon flies a round every day. Drop by the board afterwards: there's a little bag of nibbles in the basket, just for you.",
+  ],
+  "quest.475548A95CB45E8A.title": "Peacebringer",
+  "quest.475548A95CB45E8A.quest_desc": [
+    "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
 }

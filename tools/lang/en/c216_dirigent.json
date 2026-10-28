@@ -21,5 +21,9 @@
   "gui.guhs.dirigent.einde.3": "★★★ VAHOEG! A true maestro! %s/%s points, %s perfect, best combo %s.",
   "gui.guhs.dirigent.record": "New record: %s points! (Was %s.)",
   "gui.guhs.dirigent.prijs": "The Blubs give you a thank-you: %s!",
-  "gui.guhs.dirigent.goud": "What's sparkling there? A GOLDEN conductor's baton, for the very best maestro!"
+  "gui.guhs.dirigent.goud": "What's sparkling there? A GOLDEN conductor's baton, for the very best maestro!",
+  "ftb.guhs_dromen.q.dr_weide_dirigent.title": "Tap Tap, Blubbies!",
+  "ftb.guhs_dromen.q.dr_weide_dirigent.desc": "Make a &dConductor's Baton&r (stick, dream sand, note block) and click by the stage of a &dChoir Bowl&r. On the beat, look at the Blub that lifts its ears, and click. Get at least one star!",
+  "ftb.guhs_dromen.q.dr_weide_maestro.title": "Maestro Blub",
+  "ftb.guhs_dromen.q.dr_weide_maestro.desc": "Conduct a whole concert with &6three stars&r. The Blubs then sing so beautifully that little hearts fly off them."
 }

@@ -5,255 +5,327 @@
   ],
   "quest.475548606F626425.title": "Hoe kom je hier?",
   "quest.475548606F626425.quest_desc": [
-    "Dit hoofdstuk komt na &dHet Guhrad&r in &dGuhs \\& basis&r: een guh die in een rad rent, maakt &bvadskracht&r.",
+    "Dit hoofdstuk komt na &dHet Guhrad&r in &dGuhs \\& basis&r: een guh die in een rad rent, maakt &bvadskracht&r. Met &dGuhdraad&r breng je die naar machines met een snoetje.",
     "",
-    "Met &bGuhdraad&r breng je die kracht naar machines met een snoetje: ovens, buizen, knabbelaars... Elk rijtje hieronder is een &6project&r, en na elk project werkt er iets vanzelf in je eigen wereld.",
+    "Het gaat in &6tiers&r: &aTier 1&r bouw je meteen thuis, &6Tier 2&r vraagt spullen uit de &6Guhbarbecuether&r, &bTier 3&r zijn de grote projecten en &5Tier 4&r ligt in het &5Guheinde&r. Kijk naar een rad, draad of machine en je ziet hoeveel vadskracht je opstelling gebruikt.",
     "",
-    "Kijk naar een rad, een draad of een machine en je ziet meteen hoeveel vadskracht je opstelling gebruikt. &6Trap 5&r vind je in het &5Guheinde&r, in de werkplaats van de Werktuigguh, en daarna bouw je er de &6Vredesballon&r. En trap 6? Die komt nog! Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
+    "Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als dat al eerder was. Vink dit af en ga lekker vadsig aan de slag!",
   ],
   "quest.475548750B9F2376.title": "Een guh aan het werk",
   "quest.475548750B9F2376.quest_desc": [
-    "Alles begint met een &dGuhrad&r (zie &dGuhs \\& basis&r). Zet het neer en klik erop met een opgepakte guh: hij rent, en dat geeft &b10 vadskracht&r. Voor altijd: een guh wordt nooit moe en hoeft niet te eten. Klik met een lege hand om je guh terug te pakken.",
+    "Zet een &dGuhrad&r neer en klik erop met een opgepakte guh: hij rent voor &b10 vadskracht&r, voor altijd. Moe wordt hij nooit, eten hoeft niet. Klik met een lege hand om hem terug te pakken.",
   ],
   "quest.47554813F0135DAA.title": "Guhdraad trekken",
   "quest.47554813F0135DAA.quest_desc": [
-    "Redstone + roze kleurstof + een kaasknabbel = 3 &dGuhdraad&r. Leg het van je rad naar je machines; een machine pal naast het rad heeft geen draad nodig. Alles wat aan elkaar vastzit is één &bopstelling&r.",
+    "Redstone, roze kleurstof en een kaasknabbel geven 3 &dGuhdraad&r. Leg het van je rad naar je machines: alles wat aan elkaar vastzit is één &eopstelling&r. Een machine pal naast het rad heeft geen draad nodig.",
+  ],
+  "quest.4755483EAEAB3E93.title": "Aan, uit, aan, uit",
+  "quest.4755483EAEAB3E93.quest_desc": [
+    "Leg een &dVadsschakelaar&r in je draad: klik erop en alles erachter gaat uit of aan. Ook je guh mag dan even uitpuffen (al wil hij eigenlijk niet).",
   ],
   "quest.47554804C1C54D5D.title": "De oven met een snoetje",
   "quest.47554804C1C54D5D.quest_desc": [
-    "Hang een &dGuhoven&r aan de draad. Hij bakt alles wat een gewone oven bakt, zonder kolen, op 5 vadskracht. Elke machine heeft een &dsnoet&r: hij slaapt zonder kracht, kijkt blij als hij werkt en verbaasd als hij vol zit.",
+    "De &dGuhoven&r bakt alles wat een gewone oven bakt, zonder kolen, op &b5 vadskracht&r. Zijn snoet laat zien hoe het gaat: slapen zonder kracht, blij als hij werkt, verbaasd als hij vol zit.",
   ],
   "quest.4755487ECE3B82D6.title": "Licht met een snoetje",
   "quest.4755487ECE3B82D6.quest_desc": [
-    "De &dVadslamp&r (een lantaarn, twee Guhdraad en twee gloeisteenstof) brandt op 1 vadskracht: hij wordt wakker, kijkt blij en geeft het felste licht dat er is. En hij schijnt veel verder dan een gewone lamp: tot zo'n 6 blokken om hem heen zet hij onzichtbaar extra licht neer. Eén lamp verlicht een hele grot. Zonder vadskracht slaapt hij weer.",
-  ],
-  "quest.475548718031ABA9.title": "Op de Guhtechniek-beurs",
-  "quest.475548718031ABA9.quest_desc": [
-    "Ergens in de Guhmensie staat een glazen hal waar &delke guhmachine echt werkt&r: de &dGuhtechniek-beurs&r (je Superkompas vindt hem onder Knus). Elke stand heeft een bordje, een &dVadsschakelaar&r om hem uit en aan te zetten en een beursguh die vertelt welk quest hem leert. In het midden draait de Droomfabriek. Kijken mag, pakken niet!",
+    "De &dVadslamp&r brandt op &b1 vadskracht&r en verlicht tot 6 blokken om zich heen. Eén lamp en je hele grot is licht. Monsters balen.",
   ],
   "quest.475548DCDA7ED81E.title": "Kijken is weten",
   "quest.475548DCDA7ED81E.quest_desc": [
-    "Kijk naar een rad, een draad of een machine: onder je vizier staat &bDeze opstelling gebruikt 5/10 vadskracht&r. Vraagt je opstelling méér dan je guhs bij elkaar rennen, dan gaat het niet langzamer: dan staat &calles stil&r, en je leest hoeveel je tekortkomt. Een meter heb je niet nodig. Gezien? Vink hem af.",
-  ],
-  "quest.4755484B3CA7170A.title": "Nooit meer zelf bakken",
-  "quest.4755484B3CA7170A.quest_desc": [
-    "Het eerste project: zet een kist met een &etrechter&r boven je Guhoven en een trechter eronder naar een tweede kist. Alles wat je in de bovenste kist gooit, ligt even later gebakken in de onderste, en je guh rent gewoon door terwijl jij iets anders doet. Later vervang je de trechters door Knabbelbuizen.",
-  ],
-  "quest.475548857F9855C8.title": "Collega's met een snoet",
-  "quest.475548857F9855C8.quest_desc": [
-    "Woont er een guh in je &dGuhhuisje&r? Dan doet hij je machines: het klusje &eMachines bijvullen \\& leeghalen&r. Het staat &cuit&r tot jij het bij je bewoner aanzet. Doe het één keer voor: leg zelf een stapeltje in de machine, dan onthoudt hij wat erin hoort en vult hij bij uit de kist naast het huisje of uit je Bank Guh. Wat klaarligt, haalt hij op. Alleen bij machines van jou in zijn klus-area. Njeg, wie heeft er dan nog trechters nodig?",
-  ],
-  "quest.475548FAE94982EA.title": "Pompoenenplukker",
-  "quest.475548FAE94982EA.quest_desc": [
-    "Een bewoner met het klusje &eFarmen&r oogst meer dan graan: ook &epompoenen&r en &emeloenen&r aan hun stengel, &esuikerriet&r, &ecacao&r, &enetherwrat&r en de &escheutjes&r uit de Guhbarbecuether. Hij laat de plant staan, dus alles groeit vanzelf weer aan. Laat hem er één oogsten. Njeg, pompoentaart!",
-  ],
-  "quest.4755484ABA7ABFD0.title": "Malen zonder wind",
-  "quest.4755484ABA7ABFD0.quest_desc": [
-    "De &dVadsmolen&r (een guh-molentje, ijzer, Guhdraad, steen en een knabbel) maalt op 5 vadskracht: knabbelgraan tot knabbelmeel, botten tot beendermeel, grillspiesen tot poeder, keisteen tot grind en grind tot zand. En hij geeft meer dan malen met de hand. Maal er iets mee!",
-  ],
-  "quest.475548740C56ABC5.title": "Blije guhs rennen harder",
-  "quest.475548740C56ABC5.quest_desc": [
-    "De &dKnuffelgenerator&r is een groot roze kussen: tamme guhs in de buurt komen er vanzelf op liggen en geven 3 vadskracht per guh (hooguit 8 guhs). En wie net op het kussen lag is &dblij&r: stop zo'n guh in je rad en hij geeft 15 in plaats van 10.",
-  ],
-  "quest.47554862789E1FC3.title": "Dansen voor de fabriek",
-  "quest.47554862789E1FC3.quest_desc": [
-    "De &dDisco-dynamo&r is een dansvloer van 3 bij 3 met een draaitafel. Klik erop met een muziekplaat: hij draait hem steeds opnieuw, tot 4 guhs komen dansen en elk geeft 5 vadskracht. Elke plaat heeft een eigen lichtshow.",
+    "Kijk naar een rad, draad of machine: onder je vizier staat bijvoorbeeld &bDeze opstelling gebruikt 5/10 vadskracht&r. Vraag je te veel, dan staat alles stil en lees je af hoeveel je tekortkomt. Gezien? Vink hem af.",
   ],
   "quest.47554848DC20455B.title": "Hoeveel mag eraan?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per opstelling tellen de eerste &e4&r Guhraden helemaal mee (elk rad daarna &e75%&r van het vorige, tot &e16&r), &e2&r Knuffelgeneratoren en &e2&r Disco-dynamo's mee (later ook 4 Blubkacheltjes en 1 Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat het rad zweven. Meer nodig? Bouw een tweede opstelling.",
+    "Per opstelling tellen &e4&r Guhraden helemaal mee (daarna steeds minder, tot &e16&r), &e2&r Knuffelgeneratoren, &e2&r Disco-dynamo's, &e4&r Blubkacheltjes en &e1&r Gloeisterkern. Meer nodig? Bouw een tweede opstelling.",
+  ],
+  "quest.475548718031ABA9.title": "Op de Guhtechniek-beurs",
+  "quest.475548718031ABA9.quest_desc": [
+    "In de Guhmensie staat een glazen hal waar &delke machine echt werkt&r (Superkompas, onder Knus). Elke stand heeft een bordje en een beursguh die vertelt welke quest hem leert. Kijken mag, pakken niet!",
+  ],
+  "quest.4755484B3CA7170A.title": "Nooit meer zelf bakken",
+  "quest.4755484B3CA7170A.quest_desc": [
+    "Een kist met een &etrechter&r boven je Guhoven, een trechter eronder naar een tweede kist. Gooi erin, loop weg, en even later ligt alles gebakken klaar.",
+  ],
+  "quest.4755484ABA7ABFD0.title": "Malen zonder wind",
+  "quest.4755484ABA7ABFD0.quest_desc": [
+    "De &dVadsmolen&r (&b5 vadskracht&r) maalt knabbelgraan tot meel, botten tot beendermeel en keisteen tot grind en zand. Hij geeft meer dan malen met de hand. Maal er iets mee!",
+  ],
+  "quest.475548740C56ABC5.title": "Blije guhs rennen harder",
+  "quest.475548740C56ABC5.quest_desc": [
+    "Op de &dKnuffelgenerator&r komen tamme guhs vanzelf liggen: &b3 vadskracht&r per guh, tot 8 guhs. Een guh die net geknuffeld is, rent daarna &b15&r in plaats van 10 in zijn rad.",
+  ],
+  "quest.47554862789E1FC3.title": "Dansen voor de fabriek",
+  "quest.47554862789E1FC3.quest_desc": [
+    "Klik op de &dDisco-dynamo&r met een muziekplaat: tot 4 guhs komen dansen, elk voor &b5 vadskracht&r. Elke plaat heeft zijn eigen lichtshow. Njeg, wat een moves.",
+  ],
+  "quest.47554857D4132B52.title": "Kaas in de ketel",
+  "quest.47554857D4132B52.quest_desc": [
+    "De &dKnabbelketel&r stookt kaasknabbels voor &b80 vadskracht&r. Een blok knabbels brandt negen keer zo lang. Wel een veelvraat: tijd voor een knabbelboerderij!",
+  ],
+  "quest.475548338C23DDC9.title": "Weer in de wijde omtrek",
+  "quest.475548338C23DDC9.quest_desc": [
+    "Een &dWeer vadser&r reikt 10 blokken. Zet er een &dWolkenantenne&r op: I, II en III maken dat 20, 35 en 60 blokken. Elke stap kost meer vadskracht.",
+  ],
+  "quest.475548857F9855C8.title": "Collega's met een snoet",
+  "quest.475548857F9855C8.quest_desc": [
+    "Zet bij een bewoner van je &dGuhhuisje&r het klusje &eMachines bijvullen \\& leeghalen&r aan. Leg zelf één keer iets in een machine: hij onthoudt het en vult bij uit de kist of je Bank Guh. Wie heeft er nog trechters nodig?",
+  ],
+  "quest.475548FAE94982EA.title": "Pompoenenplukker",
+  "quest.475548FAE94982EA.quest_desc": [
+    "Een bewoner met het klusje &eFarmen&r oogst ook &epompoenen&r, &emeloenen&r, &esuikerriet&r, &ecacao&r en &enetherwrat&r, en laat de plant staan. Laat hem er één oogsten. Njeg, pompoentaart!",
+  ],
+  "quest.4755485D1220067B.title": "Alles op z'n plek",
+  "quest.4755485D1220067B.quest_desc": [
+    "Leg een &dGuh-sorteerband&r en geef een bewoner van een huisje ernaast het klusje &eSorteerder&r. Hij stopt alles in de goede kist. Netter dan jouw kamer!",
+  ],
+  "quest.4755482DC987EC03.title": "De kas plukt zichzelf",
+  "quest.4755482DC987EC03.quest_desc": [
+    "Geef een bewoner van je &dGuhhuisje&r het klusje &eKassier: de kas plukken&r. Hij loopt je Kaaskas in, plukt alles wat rijp is en plant het meteen opnieuw. Gezien? Vink hem af.",
+  ],
+  "quest.4755481C4E6961E9.title": "Een kas vol kaas",
+  "quest.4755481C4E6961E9.quest_desc": [
+    "Zet een &dKaaskas&r tussen je gewassen en geef hem &bvadskracht&r en een emmer &6kaassaus&r. Kijk ze groeien!",
+  ],
+  "quest.4755480F265D161B.title": "Pluizig!",
+  "quest.4755480F265D161B.quest_desc": [
+    "Plant &fpluisbolletjes&r (zaadjes: tarwezaad + wol) en oogst je eerste &fpluis&r. Zacht, hè?",
+  ],
+  "quest.475548070DEA1A7F.title": "Scheerstal",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Zet tamme &dWolkenschaapjes&r rond een &dScheerstal&r: hij scheert ze vanzelf. Tem en kweek ze met wolkensuikerspin. Bleh!",
+  ],
+  "quest.475548F127CB5DD5.title": "Niks gaat verloren",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Stop oude knuffels, guhkleding, wol of kussens in de &dKnuffelrecycler&r: er komt weer pluis uit.",
+  ],
+  "quest.475548A8AACBBEF7.title": "Snorrende spinmachine",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "De &dSpinmachine&r spint &fpluis&r tot wol: 2 pluis is 1 witte wol.",
+  ],
+  "quest.4755487539D5A8EA.title": "Plons in het verfbad",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Wol en kleurstof in het &dVerfbad&r: het verft alles wat het spel kan verven, ook glas, klei en knuffelblokken.",
+  ],
+  "quest.47554809CF8DAD01.title": "Alle kleuren van de regenboog",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "De &dKleurmolen&r maalt een bloem tot 2 à 3 kleurstof. Een guh met het klusje &eBloemetjes plukken&r houdt hem eindeloos vol.",
+  ],
+  "quest.4755483CF22A99C0.title": "Regenboogpers",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "De &dRegenboogpers&r perst pluis met &6kaassaus&r tot elke kleur. Kies de kleur met sluipen + klikken, of leg een voorbeeld-kleurstof neer.",
+  ],
+  "quest.4755488802E43B45.title": "Bouwblokken in bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Leg een voorbeeld in de &dBouwblokken-fabriek&r: hij maakt trappen, platen, muurtjes en gekleurde blokken. Koppel een Bank Guh of een kist (sluip en klik) en hij pakt zelf zijn spullen.",
   ],
   "quest.475548420F21E4DE.title": "De Oude Guhrad-centrale",
   "quest.475548420F21E4DE.quest_desc": [
-    "In de &6Guhbarbecuether&r staat een oude krachtcentrale met een koperen dak en twee schoorstenen. Vijf oude guhs rennen er nog altijd hun rondjes. Het superkompas (Barbecue > Oude Guhrad-centrale) wijst de weg. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
+    "In de &6Guhbarbecuether&r staat een oude centrale met twee schoorstenen, waar vijf oude guhs nog altijd rondjes rennen. Je Superkompas (Barbecue) wijst de weg.",
   ],
   "quest.47554831DB6F1928.title": "De Uitvinder-guh",
   "quest.47554831DB6F1928.quest_desc": [
-    "Praat met de &dUitvinder-guh&r in zijn werkplaats. Zijn oefenhal ligt in puin: vijf opstellingen, allemaal kapot. Je krijgt twee stukjes Guhdraad mee.",
+    "Praat met de &dUitvinder-guh&r in zijn werkplaats. Zijn oefenhal ligt in puin: vijf opstellingen, allemaal kapot.",
   ],
   "quest.47554840FCE93158.title": "De losse draad",
   "quest.47554840FCE93158.quest_desc": [
-    "&eOpstelling 1.&r Het rad rent, de oven slaapt: er mist een stukje draad. Leg &dGuhdraad&r op de gele tegel. (Elke opstelling gaat vanzelf weer stuk als je wegloopt: de volgende speler wil ook oefenen.)",
+    "&eOpstelling 1:&r het rad rent, de oven slaapt. Leg &dGuhdraad&r op de gele tegel.",
   ],
   "quest.4755483DB67F112D.title": "Te zwaar!",
   "quest.4755483DB67F112D.quest_desc": [
-    "&eOpstelling 2.&r Twee ovens en een molen aan één rad: te zwaar, dus alles staat stil. Kijk naar een draad en lees het af. Knip dan een draad door bij de rode wol.",
+    "&eOpstelling 2:&r twee ovens en een molen aan één rad. Lees de draad af en knip er één door bij de rode wol.",
   ],
   "quest.4755483FA3802986.title": "Zout voor de buizen",
   "quest.4755483FA3802986.quest_desc": [
-    "Breng de Uitvinder-guh 4 &dzoutkristallen&r. Die hak je uit de kristalader van de &6Zoutkristalmijn&r, of uit zoutkristalerts in de rotsen van de Guhbarbecuether.",
+    "Breng de Uitvinder-guh 4 &dzoutkristallen&r. Je hakt ze in de &6Zoutkristalmijn&r of uit zoutkristalerts in de Guhbarbecuether.",
   ],
   "quest.475548AAF387B15B.title": "Achterstevoren",
   "quest.475548AAF387B15B.quest_desc": [
-    "&eOpstelling 3.&r De knabbels moeten naar de lege ton, maar het &dRichtingstuk&r wijst de verkeerde kant op. Sluip en klik erop met een lege hand.",
+    "&eOpstelling 3:&r het &dRichtingstuk&r wijst de verkeerde kant op. Sluip en klik erop met een lege hand.",
   ],
   "quest.475548BBF8F93D33.title": "Het filter staat verkeerd",
   "quest.475548BBF8F93D33.quest_desc": [
-    "&eOpstelling 4.&r Het &dFilterstuk&r laat alles door behalve knabbels: er rolt alleen papier de knabbelton in. Klik erop en zet het van &ealles behalve&r op &ealleen deze&r.",
+    "&eOpstelling 4:&r het &dFilterstuk&r laat alles door behalve knabbels. Zet het op &ealleen deze&r.",
   ],
   "quest.47554806F65039F7.title": "De slang is zoek",
   "quest.47554806F65039F7.quest_desc": [
-    "&eOpstelling 5.&r De pomp slurpt kaassaus, maar er mist een stuk &dSausslang&r naar het vat. De Uitvinder-guh geeft er een: leg hem op de gele tegel en wacht op de saus.",
+    "&eOpstelling 5:&r er mist een stuk &dSausslang&r tussen pomp en vat. Leg de slang van de Uitvinder-guh op de gele tegel.",
   ],
   "quest.4755489C917DB8D2.title": "De oefenhal draait weer",
   "quest.4755489C917DB8D2.quest_desc": [
-    "Vertel het de Uitvinder-guh. Je krijgt het &dBodemloos Knabbelmaagje&r voor je Bank Guh en zijn drie &dreceptkaarten&r: daarmee maak je de machines van projecten 3 en 4.",
+    "Vertel het de Uitvinder-guh. Je krijgt het &dBodemloos Knabbelmaagje&r en drie &dreceptkaarten&r. Hij is zo trots dat zijn snorharen trillen.",
   ],
   "quest.475548CB872211C2.title": "Een maag zonder bodem",
   "quest.475548CB872211C2.quest_desc": [
-    "Klik met het &dBodemloos Knabbelmaagje&r op je neergezette Bank Guh: de grens van 256 per soort is weg, voor altijd (ook als je hem oppakt). En pas dan mag een &dFilterstuk&r er ook spullen &euit&r happen: jij zet erop wat het mag pakken en hoeveel er moet blijven liggen. Een trechter onder je bank, een gewoon Richtingstuk of een ophaal-Haltepaaltje krijgt nooit iets uit je bank.",
+    "Klik met het &dBodemloos Knabbelmaagje&r op je Bank Guh: de grens van 256 per soort is weg, voor altijd. En nu mag een Filterstuk ook spullen uit je bank halen.",
   ],
   "quest.475548F60C0C821A.title": "Drie receptkaarten",
   "quest.475548F60C0C821A.quest_desc": [
-    "Een receptkaart leg je linksboven in het werkbankrooster bij het recept: hij &eblijft liggen&r, dus één kaart is genoeg voor altijd. Kwijt? Sluip en klik op de Uitvinder-guh, dan verkoopt hij ze opnieuw.",
+    "Leg een &dreceptkaart&r linksboven in het werkbankrooster: hij &eblijft liggen&r, dus één is genoeg. Kwijt? De Uitvinder-guh verkoopt ze opnieuw.",
   ],
   "quest.4755482BE2D9F769.title": "Een zak zout",
   "quest.4755482BE2D9F769.quest_desc": [
-    "De slimme machines vragen &dzoutkristal&r uit de &6Guhbarbecuether&r. Haal een voorraadje: de kristalader van de Zoutkristalmijn groeit voor iedere speler vanzelf weer aan. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
+    "Bijna alle slimme machines vragen &dzoutkristal&r. De kristalader in de &6Zoutkristalmijn&r groeit vanzelf weer aan: hak een voorraadje.",
   ],
   "quest.4755487386E05705.title": "Knabbelbuizen",
   "quest.4755487386E05705.quest_desc": [
-    "Glas, kaasknabbels en zoutkristal geven 8 &dKnabbelbuizen&r. Ze zijn doorzichtig: je ziet je spullen erdoor rollen. Een buis plakt vanzelf vast aan kisten, machines, een Bank Guh en andere buizen, en hij heeft geen vadskracht nodig.",
+    "Glas, kaasknabbels en zoutkristal geven 8 doorzichtige &dKnabbelbuizen&r. Ze plakken vanzelf aan kisten, machines en je Bank Guh, zonder vadskracht.",
   ],
   "quest.47554874A4D9A550.title": "Van kist naar kist",
   "quest.47554874A4D9A550.quest_desc": [
-    "Een buis doet niks tot er een &dRichtingstuk&r aan zit. Zet het tegen een kist (de pijl wijst ervan af): het haalt er steeds één ding uit en stuurt het door de buizen naar de dichtstbijzijnde kist of machine waar het past. Sluip en klik om het om te draaien. Een redstonesignaal zet het op slot.",
+    "Een &dRichtingstuk&r tegen een kist haalt er steeds één ding uit en stuurt het door de buizen. Sluip en klik om het om te draaien; redstone zet het op slot.",
   ],
   "quest.475548663D30283F.title": "Het Filterstuk",
   "quest.475548663D30283F.quest_desc": [
-    "Een &dFilterstuk&r is een Richtingstuk met een lijstje (en een snoet: 2 vadskracht). Kies &ealleen deze&r of &ealles behalve&r, en met &elaat liggen&r blijft er altijd een aantal achter in de kist.",
+    "Een &dFilterstuk&r is een Richtingstuk met een lijstje: &ealleen deze&r of &ealles behalve&r. Met &elaat liggen&r blijft er een stapeltje achter.",
   ],
   "quest.4755480977191AF0.title": "Een opslag die zichzelf sorteert",
   "quest.4755480977191AF0.quest_desc": [
-    "Project: één inleverkist met een Richtingstuk, een lange buis langs je kisten, en vóór elke kist een Filterstuk met &ealleen deze&r. Wat op een lijstje staat gaat naar die kist; de rest rolt door naar de restkist aan het eind. Gooi je hele rugzak in de inleverkist en loop weg. Werkt hij? Vink hem af.",
+    "Eén inleverkist, een lange buis langs je kisten en voor elke kist een Filterstuk op &ealleen deze&r. Gooi je hele rugzak erin en loop weg. Werkt hij? Vink hem af.",
   ],
   "quest.475548D8B9ED36C0.title": "De Banksleutel",
   "quest.475548D8B9ED36C0.quest_desc": [
-    "Klik met een &dBanksleutel&r (zoutkristal, goud, een knabbel) op je Bank Guh: de sleutel onthoudt welke bank het is. Je raakt hem niet kwijt en je kunt er zoveel Hapluikjes mee koppelen als je wilt.",
+    "Klik met een &dBanksleutel&r op je Bank Guh: de sleutel onthoudt welke bank het is. Koppel er zoveel Hapluikjes mee als je wilt.",
   ],
   "quest.47554882DC1A04E7.title": "Alles vanzelf in de bank",
   "quest.47554882DC1A04E7.quest_desc": [
-    "Het &dHapluikje&r (2 vadskracht) is een mondje van je Bank Guh: klik er met de Banksleutel op en alles wat erin gaat (uit je hand, een trechter, een buis, klusguhs, een Bezorgguhtje) belandt in je bank. Hoe ver weg ook, zelfs in een andere dimensie. Zet er een bij je mijn, je akker en je oven. Vol is vol: wat niet past, blijft waar het was.",
+    "Het &dHapluikje&r is een mondje van je Bank Guh: alles wat erin gaat, belandt in je bank, zelfs in een andere dimensie. Zet er een bij je mijn, je akker en je oven. Hap!",
   ],
   "quest.4755488D31012FE1.title": "Hap, opgeruimd!",
   "quest.4755488D31012FE1.quest_desc": [
-    "Staat er een werkend &dHapluikje&r in het klusgebied van je &dGuhhuisje&r? Dan stoppen je bewoners de buit van hun klusjes daarin als er geen Bank Guh in de buurt staat (of als die vol zit): de oogst, het hout, wat ze opruimen. Zo ligt alles in je bank, hoe ver die ook weg staat. Laat een bewoner iets door het luikje happen.",
+    "Staat er een werkend Hapluikje in het klusgebied van je &dGuhhuisje&r, dan stoppen je bewoners hun buit daarin. Laat een bewoner iets door het luikje happen.",
   ],
   "quest.475548BDFB85CAA9.title": "De Opzuiger",
   "quest.475548BDFB85CAA9.quest_desc": [
-    "De &dOpzuiger&r (3 vadskracht) slurpt alles op wat binnen vier blokken los op de grond ligt. Zet hem onder je boomgaard of naast je guhs, met een buis naar een Hapluikje.",
+    "De &dOpzuiger&r (&b3 vadskracht&r) slurpt alles op wat binnen vier blokken op de grond ligt. Buis erachter, Hapluikje eraan, klaar.",
   ],
   "quest.47554898D099DC48.title": "De akker die zichzelf oogst",
   "quest.47554898D099DC48.quest_desc": [
-    "De &dOogster&r (8 vadskracht) knipt alles wat rijp is in het veld van 5 bij 5 vóór zijn snoet, en laat het geplant staan: graan, knabbelgraan, wortels, bessen, pompoenen, suikerriet, pepers... Buis erachter, Hapluikje eraan: je oogst ligt in de bank voor je thuis bent.",
+    "De &dOogster&r (&b8 vadskracht&r) knipt alles wat rijp is in 5 bij 5 voor zijn snoet en laat het geplant staan. Je oogst ligt in de bank voor je thuis bent.",
   ],
   "quest.475548E6A2E8156C.title": "Genoeg is genoeg",
   "quest.475548E6A2E8156C.quest_desc": [
-    "Vier sensoren (1 vadskracht per stuk) geven een redstonesignaal: de &dVoorraadmeter&r (zit er genoeg van iets in een kist of bank?), de &dSnuffelsensor&r (guhs, Mika's of spelers dichtbij), de &dGuhklok&r en de &dGuhteller&r. Een signaal zet een Richtingstuk op slot: zo stopt je lijn vanzelf als de kist vol genoeg is.",
+    "De &dVoorraadmeter&r, &dSnuffelsensor&r, &dGuhklok&r en &dGuhteller&r geven een redstonesignaal. Zet er een Richtingstuk mee op slot en je lijn stopt vanzelf als de kist vol genoeg is.",
   ],
   "quest.4755489EE127F43A.title": "De Knabbelbatterij",
   "quest.4755489EE127F43A.quest_desc": [
-    "Wat je guhs te veel rennen, spaart de &dKnabbelbatterij&r op (goed voor een half uur van één Guhrad). Komt je opstelling even tekort, dan springt hij bij. Hij houdt zijn lading als je hem oppakt.",
+    "De &dKnabbelbatterij&r spaart op wat je guhs te veel rennen en springt bij als je even tekortkomt. Een half uur Guhrad in je broekzak.",
   ],
   "quest.475548CAB39407AC.title": "De bank als magazijn",
   "quest.475548CAB39407AC.quest_desc": [
-    "Met het Bodemloos Knabbelmaagje (van de Uitvinder-guh) mag een Filterstuk ook uit je Bank Guh happen. Zet er een Filterstuk tegen, kies wat eruit mag en zet &elaat liggen 64&r: de bank voert je ovens en molens, maar houdt altijd een stapel voor jou achter. Een trechter of een gewoon Richtingstuk krijgt niks uit je bank: dat kan alleen het Filterstuk.",
+    "Zet een Filterstuk tegen je Bank Guh, kies wat eruit mag en zet &elaat liggen 64&r. Je bank voert je ovens, maar houdt altijd een stapel voor jou achter.",
   ],
   "quest.475548EE50E67F23.title": "Saus en slangen",
   "quest.475548EE50E67F23.quest_desc": [
-    "Voor dit project heb je de &dreceptkaart: saus en slangen&r nodig (van de Uitvinder-guh, na zijn oefenhal), en &dgrillspiesen&r of &dblubroom&r uit de Guhbarbecuether. &dSausslangen&r maak je zonder kaart: gedroogde kelp, koper en een grillspies geven er 8. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
+    "Voor dit rijtje heb je de &dreceptkaart: saus en slangen&r nodig, en grillspiesen of blubroom uit de Guhbarbecuether.",
+  ],
+  "quest.475548D239DF01F5.title": "Een slang vol saus",
+  "quest.475548D239DF01F5.quest_desc": [
+    "Gedroogde kelp, koper en een grillspies geven 8 &dSausslangen&r (zonder receptkaart). Ze brengen saus van pomp naar vat en machine. Slurp!",
   ],
   "quest.475548E3DE1ED0DD.title": "De Sauspomp",
   "quest.475548E3DE1ED0DD.quest_desc": [
-    "Zet de &dSauspomp&r (6 vadskracht) óp een bronblok kaassaus, kaasfrituursaus of water. Hij pompt een emmer per twee seconden en de bron raakt nooit op. Met &dSausslangen&r duwt hij de saus naar alles wat eraan vastzit.",
+    "Zet de &dSauspomp&r (&b6 vadskracht&r) op een bron van kaassaus, frituursaus of water. Hij pompt een emmer per twee seconden en de bron raakt nooit op.",
   ],
   "quest.475548926B76ACE8.title": "Saus uit de kraan",
   "quest.475548926B76ACE8.quest_desc": [
-    "Een &dSausvat&r bewaart 16 van één saus (ook melk, uit een emmer). Tap er met een lege emmer uit, thuis, zonder ooit nog naar de sauszee te lopen. Het vat houdt zijn saus als je het oppakt.",
+    "Een &dSausvat&r bewaart 16 emmers van één saus (ook melk). Tap er met een lege emmer uit, thuis.",
+  ],
+  "quest.475548FE7360CF21.title": "Een zwembad saus",
+  "quest.475548FE7360CF21.quest_desc": [
+    "De &dGrote saustank&r bewaart 64 emmers. De meter op zijn buik laat zien hoe vol hij zit. Niet in zwemmen!",
+  ],
+  "quest.4755484DD06F433F.title": "Buizen tot de horizon",
+  "quest.4755484DD06F433F.quest_desc": [
+    "Een &dSausbuis&r brengt saus ver weg: hij telt maar als een zestiende slang.",
   ],
   "quest.47554850B3FE62C9.title": "Frituur aan de lopende band",
   "quest.47554850B3FE62C9.quest_desc": [
-    "De &dFrituurautomaat&r (8 vadskracht) slurpt kaasfrituursaus uit de slang en frituurt alles wat je erin stopt: kaasknabbels en guh-vis. Buis erin, buis eruit, en er ligt altijd iets lekkers klaar.",
+    "De &dFrituurautomaat&r (&b8 vadskracht&r) frituurt kaasknabbels en guh-vis met frituursaus uit de slang. Buis erin, buis eruit, altijd iets lekkers.",
   ],
   "quest.47554811EB698416.title": "Drankjes die zichzelf brouwen",
   "quest.47554811EB698416.quest_desc": [
-    "De &dBrouwautomaat&r (8 vadskracht) maakt van een emmer kaassaus, drie flesjes en één ingrediënt drie &dGuhdrankjes&r. Voer hem met buizen flesjes en ingrediënten, en haal de drankjes er aan de andere kant uit.",
+    "De &dBrouwautomaat&r (&b8 vadskracht&r) maakt van kaassaus, drie flesjes en één ingrediënt drie &dGuhdrankjes&r.",
   ],
   "quest.475548F7532D6CDF.title": "De grillkoollijn",
   "quest.475548F7532D6CDF.quest_desc": [
-    "De &dGrillkoolpers&r (8 vadskracht, twee blokken hoog) perst een emmer kaasfrituursaus en een emmer water tot één &dgrillkool&r. Twee pompen, één slang (er mogen twee sauzen door dezelfde slang) en een buis naar je bank: brandstof en bouwsteen zonder te hakken.",
+    "De &dGrillkoolpers&r perst een emmer frituursaus en een emmer water tot &dgrillkool&r. Twee pompen en één slang zijn genoeg.",
+  ],
+  "quest.47554897538BBDF6.title": "Zachte steen",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Kaassaus + water = &dknuffelsteen&r. Zet de &dKnuffelsteen-generator&r naast water, geef hem saus via een slang en vadskracht, en zet er een kist naast.",
   ],
   "quest.4755482AAA464E6F.title": "Het Blubkacheltje",
   "quest.4755482AAA464E6F.quest_desc": [
-    "Een &dSausblubje&r in een potje op een &dBlubkacheltje&r geeft 6 vadskracht zolang hij warm is: voer hem af en toe een kaasknabbel (één knabbel is 10 minuten; een buis mag hem ook voeren). Sluip en klik met een lege hand om je blubje terug te krijgen. Geen blubje te vinden? De Verzorger-guh van de &6Sausloper-stal&r geeft er na zijn questlijn elke dag één.",
+    "Een &dSausblubje&r in een potje op een &dBlubkacheltje&r geeft &b6 vadskracht&r zolang hij warm is. Voer hem af en toe een kaasknabbel; blub blub.",
   ],
   "quest.475548D2FB73B680.title": "Knabbelende machines",
   "quest.475548D2FB73B680.quest_desc": [
-    "De &dreceptkaart: knabbelende machines&r (van de Uitvinder-guh) is voor de Knabbelaar, de Neerzetter, de Knutselmachine en de Tekentafel. Machines die de wereld veranderen doen dat nooit in beschermde gebouwen of in het klusgebied van andermans Guhhuisje.",
+    "De &dreceptkaart: knabbelende machines&r is voor de Knabbelaar, de Neerzetter, de Knutselmachine en de Tekentafel.",
   ],
   "quest.475548EDCA6C5C41.title": "Steen zonder houweel",
   "quest.475548EDCA6C5C41.quest_desc": [
-    "De &dKnabbelaar&r (10 vadskracht) knaagt het blok vóór zijn snoet weg, elke twee seconden één, met de buit van een ijzeren houweel. Zet hem voor een keisteenmaker (water en lava) en je hebt een steenlijn; een Vadsmolen erachter maakt er grind en zand van. Kisten en machines eet hij nooit op.",
+    "De &dKnabbelaar&r (&b10 vadskracht&r) knaagt elke twee seconden het blok voor zijn snoet weg. Voor een keisteenmaker heb je een eindeloze steenlijn. Kisten eet hij nooit op.",
   ],
   "quest.475548385506BB09.title": "De Neerzetter",
   "quest.475548385506BB09.quest_desc": [
-    "De &dNeerzetter&r (5 vadskracht) zet de blokken uit zijn buikje vóór zich neer, één per seconde, zoals jij dat zou doen (zaadjes alleen op akkergrond). Samen met een Knabbelaar: neerzetten, knabbelen, neerzetten...",
+    "De &dNeerzetter&r (&b5 vadskracht&r) zet de blokken uit zijn buikje voor zich neer, één per seconde. Samen met een Knabbelaar: zetten, knabbelen, zetten...",
   ],
   "quest.47554801C8BC02C1.title": "Een bos in een bak",
   "quest.47554801C8BC02C1.quest_desc": [
-    "De &dPlantagebak&r (6 vadskracht, 3 bij 3) laat elk boompje binnen een minuut groeien: gewone bomen, modbomen, saté- en worstzwammetjes. Klik met een bijl en de hele boom ligt in je zakken; de zaailingen plant hij zelf opnieuw. (Zijn receptkaart krijg je op de &6Grillcamping&r.)",
+    "De &dPlantagebak&r (&b6 vadskracht&r) laat elk boompje binnen een minuut groeien. Klik met een bijl en de hele boom ligt in je zakken. (Receptkaart: de Grillcamping.)",
   ],
   "quest.47554824C71FDE23.title": "Houthakkertje guh",
   "quest.47554824C71FDE23.quest_desc": [
-    "Geen zin om zelf te hakken? Een bewoner van je &dGuhhuisje&r met het klusje &ePlantage: planten \\& hakken&r hakt de boom op je Plantagebak in één keer om en brengt het hout naar de kist of je Bank Guh. Is de bak leeg, dan haalt hij zaailingen uit de kist. Andere bomen laat hij lekker staan. Staat er een werkend Hapluikje in de klus-area, dan hapt dat de buit van al zijn klusjes door naar je bank. Krak, njeg, klaar!",
+    "Een bewoner met het klusje &ePlantage: planten \\& hakken&r hakt de boom op je Plantagebak om en brengt het hout weg. Krak, njeg, klaar!",
   ],
   "quest.4755481FE3A70B9B.title": "De Tekentafel",
   "quest.4755481FE3A70B9B.quest_desc": [
-    "Leg een recept in het rooster van de &dTekentafel&r en een lege &dBouwtekening&r (papier + blauwe kleurstof) erbij: het recept staat erop getekend. Het kost alleen het vel, niks uit het rooster.",
+    "Leg een recept in de &dTekentafel&r met een lege &dBouwtekening&r erbij: het recept staat erop getekend. Het kost alleen het vel.",
   ],
   "quest.475548572A1B862E.title": "Knutselen zonder handen",
   "quest.475548572A1B862E.quest_desc": [
-    "Stop de Bouwtekening in een &dKnutselmachine&r (10 vadskracht) en voer hem de ingrediënten met buizen: hij knutselt door zolang er spullen zijn. Guhdraad uit redstone, blokken uit knabbels, flesjes uit glas: wat je maar tekent.",
+    "Stop de Bouwtekening in een &dKnutselmachine&r (&b10 vadskracht&r) en voer hem met buizen: hij knutselt door zolang er spullen zijn.",
   ],
   "quest.475548AB62468038.title": "Het Bezorgguhtje",
   "quest.475548AB62468038.quest_desc": [
-    "De &dreceptkaart: het Bezorgguhtje&r is voor het Stepstation en de Haltepaaltjes. Buizen zijn voor dichtbij; een Bezorgguhtje brengt spullen tot 96 blokken ver, om hoekjes en over heuvels.",
+    "De &dreceptkaart: het Bezorgguhtje&r is voor het Stepstation en de Haltepaaltjes. Een Bezorgguhtje brengt spullen tot 96 blokken ver, om hoekjes en over heuvels.",
   ],
   "quest.475548DEA5251682.title": "Het Stepstation",
   "quest.475548DEA5251682.quest_desc": [
-    "In een &dStepstation&r (4 vadskracht) woont één Bezorgguhtje: een mini-guh op een step met een veel te grote rugzak. Zet het neer en hij is er meteen.",
+    "In een &dStepstation&r (&b4 vadskracht&r) woont één Bezorgguhtje: een mini-guh op een step met een veel te grote rugzak.",
   ],
   "quest.4755484269E3BBBB.title": "Haltepaaltjes",
   "quest.4755484269E3BBBB.quest_desc": [
-    "Zet een &dHaltepaaltje&r naast of op een kist of machine. Groen = hier haalt hij op, oranje = hier levert hij af; in het paaltje kies je wat (leeg = alles). Tot 8 haltes per station.",
+    "Zet een &dHaltepaaltje&r bij een kist of machine: &agroen&r = ophalen, &6oranje&r = afleveren. Tot 8 haltes per station.",
   ],
   "quest.47554878BA1CB0B3.title": "De bezorgronde",
   "quest.47554878BA1CB0B3.quest_desc": [
-    "Laat je Bezorgguhtje iets afleveren: van je akker naar je oven, van je steenlijn naar een Hapluikje. Hij pakt alleen mee wat hij ook ergens kwijt kan, en wat in zijn rugzak zit raakt nooit zoek.",
+    "Laat je Bezorgguhtje iets afleveren, bijvoorbeeld van je akker naar je oven. Wat in zijn rugzak zit, raakt nooit zoek.",
   ],
   "quest.475548948ABBD5A9.title": "Guhdex: het Bezorgguhtje",
   "quest.475548948ABBD5A9.quest_desc": [
-    "Kom dicht bij een Bezorgguhtje en hij staat in je &dGuhdex&r. Geef hem een kaasknabbel en hij stept een minuut lang extra hard.",
+    "Kom dicht bij een Bezorgguhtje en hij staat in je &dGuhdex&r. Een kaasknabbel en hij stept een minuut lang extra hard.",
   ],
   "quest.47554885894ECF79.title": "Fluiten naar je pakketje",
   "quest.47554885894ECF79.quest_desc": [
-    "Met het &dBezorgguhtje-fluitje&r (van de Torenwachter-guh in de &6Rookguh-vuurtoren&r) komt je dichtstbijzijnde Bezorgguhtje naar je toe en gaat zijn rugzak open. Sluip en fluit: allemaal naar huis.",
+    "Met het &dBezorgguhtje-fluitje&r (van de Torenwachter-guh in de Rookguh-vuurtoren) komt je Bezorgguhtje naar je toe. Sluip en fluit: allemaal naar huis.",
   ],
   "quest.475548E6B2C7EA62.title": "Een gloeister",
   "quest.475548E6B2C7EA62.quest_desc": [
-    "De laatste laag begint met een &dgloeister&r: die laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis in de &6Guhbarbecuether&r. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
+    "Een &dgloeister&r laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis in de Guhbarbecuether. Heet!",
   ],
   "quest.475548C6100523DE.title": "De Gloeisterkern",
   "quest.475548C6100523DE.quest_desc": [
-    "Eén gloeister, grillkool en zoutkristal maken een &dGloeisterkern&r: &b200 vadskracht&r, voor altijd, zonder guh. Er telt er 1 per opstelling mee. Daar draait een hele fabriek op.",
+    "Gloeister, grillkool en zoutkristal maken een &dGloeisterkern&r: &b200 vadskracht&r, voor altijd, zonder guh. Er telt er één per opstelling.",
   ],
   "quest.475548DEAFCC1743.title": "Het grote plan",
   "quest.475548DEAFCC1743.quest_desc": [
-    "Heb je de oefenhal af én de Aangebrande Mika verslagen? Praat dan met de &dUitvinder-guh&r: hij wil op het bordes &6De Grote Knabbelmachine&r bouwen. Iedere speler bouwt zijn eigen: alleen jij ziet de jouwe groeien.",
+    "Oefenhal af en de Aangebrande Mika verslagen? Dan wil de Uitvinder-guh &6De Grote Knabbelmachine&r bouwen. Alleen jij ziet de jouwe groeien.",
   ],
   "quest.4755482A83C19F43.title": "De fundering",
   "quest.4755482A83C19F43.quest_desc": [
-    "Breng 256 stenen (keisteen, zwartsteen of diepleisteen) en 128 boomstammen. In porties mag, hij telt alles. Tip: de steenlijn en een bos in een bak.",
+    "Breng 256 stenen en 128 boomstammen (in porties mag). Tip: een steenlijn en een bos in een bak.",
   ],
   "quest.475548F9410F7144.title": "De ketel",
   "quest.475548F9410F7144.quest_desc": [
@@ -261,11 +333,11 @@
   ],
   "quest.4755488527E543A2.title": "De maag",
   "quest.4755488527E543A2.quest_desc": [
-    "Breng 128 knabbelmeel en 64 Guhdraad. Tip: een Oogster bij je knabbelgraan, een Vadsmolen, en een Knutselmachine met een Bouwtekening van Guhdraad.",
+    "Breng 128 knabbelmeel en 64 Guhdraad. Tip: Oogster, Vadsmolen en een Knutselmachine.",
   ],
   "quest.475548AAAB47105E.title": "De snoet",
   "quest.475548AAAB47105E.quest_desc": [
-    "Breng 12 Guhdrankjes (welke je wilt) en 128 glas. Tip: de Brouwautomaat, en zand in een Guhoven die zichzelf voert.",
+    "Breng 12 Guhdrankjes en 128 glas. Tip: de Brouwautomaat, en zand in een Guhoven die zichzelf voert.",
   ],
   "quest.47554899F92839CC.title": "Het gloeisterhart",
   "quest.47554899F92839CC.quest_desc": [
@@ -273,139 +345,23 @@
   ],
   "quest.4755486E2791471E.title": "De perfecte knabbel",
   "quest.4755486E2791471E.quest_desc": [
-    "Jouw Grote Knabbelmachine maakt elke dag één &dperfecte knabbel&r. Klik op het bakje onder zijn bek. Je bent nu ook &6Knabbelmachinist&r: kies de titel in je Guhdex.",
+    "Je Grote Knabbelmachine maakt elke dag één &dperfecte knabbel&r: klik op het bakje onder zijn bek. Je bent nu &6Knabbelmachinist&r (titel in je Guhdex).",
   ],
   "quest.4755481356D8732B.title": "De machine op de kast",
   "quest.4755481356D8732B.quest_desc": [
     "Zet het &dKnabbelmachine-beeldje&r neer waar iedereen het ziet. Klik erop: hij knabbelt.",
   ],
-  "quest.4755486C9C3A3914.title": "De werkplaats gaat open",
-  "quest.4755486C9C3A3914.quest_desc": [
-    "Na de finale van het Guhvatar-verhaal gaat de deur van de werkplaats in de &dZuidelijke Luchttempel&r open. Praat met de &6Werktuigguh&r: hij geeft je zijn &6Bouwplan&r, voor alle machines van trap 5.",
-  ],
-  "quest.475548B31FFA7754.title": "Kracht door de lucht",
-  "quest.475548B31FFA7754.quest_desc": [
-    "Een &6Vadszender&r zendt de vadskracht van zijn net naar &6Vadsontvangers&r binnen 32 blokken. Samen zijn ze één net: tekort ergens = alles stil.",
-  ],
-  "quest.4755484919B04299.title": "Je bank, overal",
-  "quest.4755484919B04299.quest_desc": [
-    "Een &6Guhterminal&r is een raampje in je Bank Guh. Koppel hem met de &6Banksleutel&r. Zoeken, sorteren, pakken, storten: met de regels van je bank.",
-  ],
-  "quest.4755485469FDB005.title": "De Bestelguh",
-  "quest.4755485469FDB005.quest_desc": [
-    "De &6Bestelguh&r werkt aan een &6Bestelbalie&r naast je Knutselmachines. Bestel, en hij haalt alles uit de bank, laat de machines draaien en brengt het bonnetje.",
-  ],
-  "quest.475548ED2949994A.title": "Post door de poort",
-  "quest.475548ED2949994A.quest_desc": [
-    "Een &6Knabbelpoort-buis&r stuurt wat erin gaat naar zijn maatje, ook in een andere dimensie.",
-  ],
-  "quest.475548FF921ACE73.title": "Thuis in één stap",
-  "quest.475548FF921ACE73.quest_desc": [
-    "Je eigen netwerk van &6Thuispoorten&r. Kies waar je heen springt; je guhs aan de lijn en je rijdier gaan mee.",
-  ],
-  "quest.475548650E14A004.title": "De vier elementen",
-  "quest.475548650E14A004.quest_desc": [
-    "&6Luchtblazer&r, &6Waterdrager&r, &6Korstduwer&r en &6Vuurkorf&r: laat ze elk hun ding doen.",
-  ],
-  "quest.4755489AF6F07054.title": "Het Enderguhrad",
-  "quest.4755489AF6F07054.quest_desc": [
-    "Een &5Vahoege Enderguh&r vliegt rondjes in een reuzenrad: 50 vadskracht. Eén per opstelling telt.",
-  ],
-  "quest.47554838F636EE19.title": "Een staartje van de komeet",
-  "quest.47554838F636EE19.quest_desc": [
-    "De scherf van de knabbelkomeet ligt bij het duelplein van de Vuurnatie-hoofdstad, alleen voor jou. De &6Komeetkern&r: 500 vadskracht, de sterkste bron tot nu toe.",
-  ],
-  "quest.475548534CAE17DB.title": "Nieuwe bronnen",
-  "quest.475548534CAE17DB.quest_desc": [
-    "Een draaiend Enderguhrad en een gloeiende Komeetkern, allebei in je eigen net.",
-  ],
-  "quest.4755480F23D80288.title": "Helemaal af",
-  "quest.4755480F23D80288.quest_desc": [
-    "Vertel het de Werktuigguh. Voor het eerst in honderd jaar maakt hij iets af: een diploma, voor jou. En hij heeft nog één groot plan...",
-  ],
-  "quest.475548E71D7409D9.title": "Een plan met oortjes",
-  "quest.475548E71D7409D9.quest_desc": [
-    "De &dWerktuigguh&r heeft nog één groot plan. Op de &6bouwplaats&r achter zijn werkplaats in de Zuidelijke Luchttempel hangt een bord: klik erop. Iedereen bouwt zijn eigen ballon, en alleen jij ziet de jouwe groeien.",
-  ],
-  "quest.475548A570C5F8D9.title": "Het doek",
-  "quest.475548A570C5F8D9.quest_desc": [
-    "Breng 128 &dtentdoek&r (elke kleur) en 64 &dGuhdraad&r. Tip: een Knutselmachine met een Bouwtekening van tentdoek.",
-  ],
-  "quest.4755485FD93F0316.title": "De mand",
-  "quest.4755485FD93F0316.quest_desc": [
-    "Breng 256 &dboomstammen&r en 16 &ddoosschillen&r. Tip: een bos in een bak, en een &dSchuilguh&r schuift je elke dag een doosschil toe voor een kaasknabbel.",
-  ],
-  "quest.47554879788DCD2C.title": "De brander",
-  "quest.47554879788DCD2C.quest_desc": [
-    "Breng 2 &dVuurkorven&r, 1 &dVadsontvanger&r, 96 &dgrillkool&r en 16 &dkristalkaas&r. De brander draait op &bvadskracht&r uit je eigen fabriek: geen kolen, geen rook.",
-  ],
-  "quest.4755488B9692F09D.title": "De knabbelvoorraad",
-  "quest.4755488B9692F09D.quest_desc": [
-    "Breng 512 &dkaasknabbels&r en 128 &dgefrituurde kaasknabbels&r. Tip: de frituurlijn en een akker die zichzelf oogst.",
-  ],
-  "quest.4755486E1D362EDF.title": "De versiering",
-  "quest.4755486E1D362EDF.quest_desc": [
-    "Breng 64 &dlichtstaafjes&r en 32 &dflitskruimels&r. Dan zet de Werktuigguh er oortjes op.",
-  ],
-  "quest.4755486223397A6F.title": "Opstijgen!",
-  "quest.4755486223397A6F.quest_desc": [
-    "Klik op het bord en laat de &dVredesballon&r opstijgen. Je krijgt het &dVredesballon-beeldje&r, je eigen &dheteluchtballon&r en de titel &6Vredesbrenger&r.",
-  ],
-  "quest.475548E931E5CAA0.title": "Een ballon op de kast",
-  "quest.475548E931E5CAA0.quest_desc": [
-    "Zet het &dVredesballon-beeldje&r neer waar iedereen het ziet. Klik erop: er dwarrelt een kruimeltje uit het mandje.",
-  ],
-  "quest.47554884FF4B91D1.title": "Zelf zweven",
-  "quest.47554884FF4B91D1.quest_desc": [
-    "Zet je eigen &dheteluchtballon&r op de grond en stap in. Houd springen ingedrukt: de brander loeit en je stijgt. De wind doet de rest. Kwijt? Sluip en klik op het bord van de bouwplaats.",
-  ],
-  "quest.4755481EB48408C2.title": "Elke dag knabbelregen",
-  "quest.4755481EB48408C2.quest_desc": [
-    "De Vredesballon maakt elke dag een rondje boven het Guheinde. Kom daarna langs bij het bord op de bouwplaats: er zit nog een zakje knabbels in de mand, speciaal voor jou.",
-  ],
-  "quest.475548A95CB45E8A.title": "Vredesbrenger",
-  "quest.475548A95CB45E8A.quest_desc": [
-    "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
-  ],
-  "quest.47554885F57F3160.title": "Het Hamsterknooppunt",
-  "quest.47554885F57F3160.quest_desc": [
-    "Bouw een &dHamsterknooppunt&r en leg er een guhdraad naartoe. Het vult een buffer met vadskracht: daarmee rollen al je hamsterbuizen. Eentje per guhbaas!",
-  ],
-  "quest.4755484F38966CF2.title": "Woesj!",
-  "quest.4755484F38966CF2.quest_desc": [
-    "Zet twee &dhamsterbuis-stations&r neer, ver uit elkaar (mag in een andere dimensie!). Stap in de buis, kies waarheen, en woesj!",
-  ],
-  "quest.475548B6445198F6.title": "Zestien knuffels",
-  "quest.475548B6445198F6.quest_desc": [
-    "De &dMega-knuffelcentrale&r is een reuzenkussen van 5 bij 3. Tot &d16 tamme guhs&r komen er vanzelf op knuffelen, en elke guh geeft &b22 vadskracht&r: samen 352! Verzorg ze wel: &6voer&r (kaasknabbels, roze broodjes of kaasknabbelblokken) en elke dag &6één wol&r voor verse dekentjes. Eén per net.",
-  ],
-  "quest.4755485077753D1B.title": "Export-vads",
-  "quest.4755485077753D1B.quest_desc": [
-    "De &dguh-villagers&r (Vadsmonteur, Mijnwerker, Kristalslijper en Toverguh) kopen elke dag &6bulk&r van je fabrieken: kaasknabbelblokken, knuffelsteen, gekleurde wol en baksels. Ze betalen met zeldzame dingen: kleertjes, knuffels, weerpotjes, droomzand en zelfs fossielen. Elke dag nieuwe bestellingen!",
-  ],
-  "quest.4755481C4E6961E9.title": "Een kas vol kaas",
-  "quest.4755481C4E6961E9.quest_desc": [
-    "Maak een &aKaaskas&r, zet hem tussen je gewassen en geef hem &bvadskracht&r en een emmer &6kaassaus&r. Kijk ze groeien!",
-  ],
-  "quest.4755480F265D161B.title": "Pluizig!",
-  "quest.4755480F265D161B.quest_desc": [
-    "Kweek &fpluisbolletjes&r (zaadjes: tarwezaad + wol) en oogst je eerste &fpluis&r.",
-  ],
-  "quest.4755485D1220067B.title": "Alles op z'n plek",
-  "quest.4755485D1220067B.quest_desc": [
-    "Leg een &dGuh-sorteerband&r en zet een guh met het klusje &dSorteerder&r in een huisje ernaast. Hij stopt alles in de goede kist!",
-  ],
   "quest.475548A1F7B4CAB5.title": "Bakken in bulk",
   "quest.475548A1F7B4CAB5.quest_desc": [
-    "Bake a &6Mega-oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+    "De &dMega-oven&r is een hele guh-bakkerij op vadskracht. Klik met een lege hand om te kiezen wat hij bakt.",
   ],
   "quest.475548344C093E6F.title": "Weer voor de hele basis",
   "quest.475548344C093E6F.quest_desc": [
-    "Zet een &bKnabbel-weerstation&r naast je Weer vadser en voer hem knabbels: het weertje geldt dan voor je hele basis.",
+    "Zet een &dKnabbel-weerstation&r naast je Weer vadser en voer hem knabbels: het weertje geldt dan voor je hele basis.",
   ],
   "quest.4755481D33D17AEA.title": "Een sterrenhemel van guhs",
   "quest.4755481D33D17AEA.quest_desc": [
-    "Bouw de &dSterrenkoepel&r en voer hem knabbels tot het eerste guh-sterrenbeeld oplicht.",
+    "Bouw de &dSterrenkoepel&r en voer hem knabbels tot het eerste guh-sterrenbeeld oplicht. Oooh.",
   ],
   "quest.4755482DD09880EA.title": "Kermis voor guhs",
   "quest.4755482DD09880EA.quest_desc": [
@@ -413,75 +369,43 @@
   ],
   "quest.475548C601C9DF81.title": "Wolken vangen",
   "quest.475548C601C9DF81.quest_desc": [
-    "Zet een &bWolkenvanger&r op het dak: hoe hoger, hoe meer pluis.",
+    "Zet een &dWolkenvanger&r op het dak: hoe hoger, hoe meer pluis.",
   ],
-  "quest.47554857D4132B52.title": "Kaas in de ketel",
-  "quest.47554857D4132B52.quest_desc": [
-    "De &6Knabbelketel&r stookt kaasknabbels voor &d80 vadskracht&r. Een blok kaasknabbels brandt negen keer zo lang. Wel een veelvraat: honderden knabbels per uur. Tijd voor een knabbelboerderij!",
+  "quest.475548B6445198F6.title": "Zestien knuffels",
+  "quest.475548B6445198F6.quest_desc": [
+    "Op de &dMega-knuffelcentrale&r knuffelen tot 16 tamme guhs, elk voor &b22 vadskracht&r. Voer ze en geef elke dag één wol voor verse dekentjes. Eén per net.",
   ],
-  "quest.47554897538BBDF6.title": "Zachte steen",
-  "quest.47554897538BBDF6.quest_desc": [
-    "Kaassaus + water = &dknuffelsteen&r. Zet de &6Knuffelsteen-generator&r naast een waterbron, geef hem kaassaus via een slang en vadskracht, en zet er een kist naast.",
+  "quest.4755485077753D1B.title": "Export-vads",
+  "quest.4755485077753D1B.quest_desc": [
+    "De &dguh-villagers&r kopen elke dag &6bulk&r van je fabrieken: knabbelblokken, knuffelsteen, wol en baksels. Ze betalen met zeldzame dingen, zelfs fossielen.",
   ],
-  "quest.475548FE7360CF21.title": "Een zwembad saus",
-  "quest.475548FE7360CF21.quest_desc": [
-    "De &6Grote saustank&r bewaart 64 emmers. De meter op zijn buik laat zien hoe vol hij zit.",
+  "quest.47554885F57F3160.title": "Het Hamsterknooppunt",
+  "quest.47554885F57F3160.quest_desc": [
+    "Bouw een &dHamsterknooppunt&r en leg er Guhdraad naartoe: daarmee rollen al je hamsterbuizen. Eentje per guhbaas!",
   ],
-  "quest.4755484DD06F433F.title": "Buizen tot de horizon",
-  "quest.4755484DD06F433F.quest_desc": [
-    "Een &6Sausbuis&r brengt saus ver weg: hij telt maar voor een zestiende slang.",
-  ],
-  "quest.475548338C23DDC9.title": "Weer in de wijde omtrek",
-  "quest.475548338C23DDC9.quest_desc": [
-    "Een Weer vadser reikt maar 10 blokken. Zet er een &bWolkenantenne&r op: I, II en III maken de straal 20, 35 en 60. Elke stap kost meer vadskracht.",
-  ],
-  "quest.4755482B7D2B8727.title": "Een fossiel!",
-  "quest.4755482B7D2B8727.quest_desc": [
-    "Diep in oude fossielplekken liggen soms &6fossielen&r: in de kisten van de &dFossiel-opgraving&r en de &dfossielmijn&r van de Barbecuether, bij het &dreuzenguh-fossiel&r, in de &dverlaten guhmijn&r en bij de &dgrotschilderingen&r onder de wol. Ook de dagvondst van de opgraving is soms een fossiel. Vind er een!",
-  ],
-  "quest.47554824583EC9A0.title": "De Fossiel-broedmachine",
-  "quest.47554824583EC9A0.quest_desc": [
-    "Maak een &6Fossiel-broedmachine&r. Stop er een fossiel en &616 kaasknabbels&r in en geef hem &d20 vadskracht&r: onder de glazen stolp draait het ei rond.",
-  ],
-  "quest.4755486826FB3AE3.title": "Krak!",
-  "quest.4755486826FB3AE3.quest_desc": [
-    "Na een hele Minecraft-dag broeden kruipt er een baby-oerguh uit het ei. Hij is meteen van jou!",
-  ],
-  "quest.47554819DD50745F.title": "Mammoet-guh",
-  "quest.47554819DD50745F.quest_desc": [
-    "Broed een &6Mammoet-guh&r uit. In een guhhuisje doet hij zijn klusjes twee keer zo snel, en knuffelen geeft wol.",
-  ],
-  "quest.4755487AF029E682.title": "T-Guh",
-  "quest.4755487AF029E682.quest_desc": [
-    "Broed een &6T-Guh&r uit. Geef hem de klus &dWaken&r: hij ziet monsters van heel ver aankomen.",
-  ],
-  "quest.475548D5A97A13A7.title": "Pteroguh",
-  "quest.475548D5A97A13A7.quest_desc": [
-    "Broed een &6Pteroguh&r uit. Woont hij in een guhhuisje, dan vliegt hij de spullen naar kisten tot ver om het huisje heen.",
-  ],
-  "quest.475548787889088A.title": "Oer-stokstaartje-guh",
-  "quest.475548787889088A.quest_desc": [
-    "Broed een &6Oer-stokstaartje-guh&r uit. Neem hem mee: hij gaat rechtop staan en wijst je zeldzame guhs in de buurt aan.",
+  "quest.4755484F38966CF2.title": "Woesj!",
+  "quest.4755484F38966CF2.quest_desc": [
+    "Zet twee &dhamsterbuis-stations&r ver uit elkaar (mag in een andere dimensie). Stap in, kies waarheen, en woesj!",
   ],
   "quest.47554818B2023D00.title": "Een plek om te lanceren",
   "quest.47554818B2023D00.quest_desc": [
-    "Maak een &dLanceerplatform&r (ijzerblokken, knuffelsteen en een knabbelbatterij) en zet het op een open plek: de raket wordt groot!",
+    "Maak een &dLanceerplatform&r en zet het op een open plek: de raket wordt groot!",
   ],
   "quest.475548044BCA1179.title": "De romp",
   "quest.475548044BCA1179.quest_desc": [
-    "Klik op het platform met &d64 knuffelsteen&r, &d24 ijzer&r en &d16 glas&r (mag in porties).",
+    "Klik op het platform met 64 knuffelsteen, 24 ijzer en 16 glas (in porties mag).",
   ],
   "quest.4755488593D48293.title": "De motor",
   "quest.4755488593D48293.quest_desc": [
-    "Twee &dknabbelbatterijen&r, een &dGuhoven&r, &d4 ijzerblokken&r en &d16 redstone&r. Brommm!",
+    "Twee knabbelbatterijen, een Guhoven, 4 ijzerblokken en 16 redstone. Brommm!",
   ],
   "quest.47554853840EB6A3.title": "De brandstof",
   "quest.47554853840EB6A3.quest_desc": [
-    "&d24 blokken kaasknabbels&r en &d4 emmers kaassaus&r. Raketten rijden op kaas, dat weet iedereen.",
+    "24 blokken kaasknabbels en 4 emmers kaassaus. Raketten rijden op kaas, dat weet iedereen.",
   ],
   "quest.475548C49AC8277E.title": "De bemanning",
   "quest.475548C49AC8277E.quest_desc": [
-    "Trek drie van je guhs een &dastronautenpakje&r aan (wol en glas), neem ze mee naar het platform en klik erop.",
+    "Trek drie guhs een &dastronautenpakje&r aan, neem ze mee naar het platform en klik erop.",
   ],
   "quest.47554832A7DE93A7.title": "Lancering!",
   "quest.47554832A7DE93A7.quest_desc": [
@@ -489,34 +413,122 @@
   ],
   "quest.4755487EF180F842.title": "Eén kleine stap",
   "quest.4755487EF180F842.quest_desc": [
-    "Plant een &dmaanvlaggetje&r op de Kaasmaan. Hak in de kraters &dkaasmaankristallen&r en ruil ze bij &dAstronaut Kaasje&r voor souvenirs.",
+    "Plant een &dmaanvlaggetje&r op de Kaasmaan. Ruil kaasmaankristallen bij &dAstronaut Kaasje&r voor souvenirs.",
   ],
-  "quest.475548A8AACBBEF7.title": "Snorrende spinmachine",
-  "quest.475548A8AACBBEF7.quest_desc": [
-    "Bouw een &dSpinmachine&r en spin &fpluis&r tot wol: 2 pluis is 1 witte wol. Pluis krijg je van Wolkenschaapjes (scheren) of uit de Knuffelrecycler.",
+  "quest.4755482B7D2B8727.title": "Een fossiel!",
+  "quest.4755482B7D2B8727.quest_desc": [
+    "&6Fossielen&r liggen in oude opgravingen, de fossielmijn van de Barbecuether, de verlaten guhmijn en bij de grotschilderingen onder de wol. Vind er een!",
   ],
-  "quest.4755487539D5A8EA.title": "Plons in het verfbad",
-  "quest.4755487539D5A8EA.quest_desc": [
-    "Leg wol en kleurstof in het &dVerfbad&r: het verft alles wat het spel kan verven, ook glas, klei en knuffelblokken.",
+  "quest.47554824583EC9A0.title": "De Fossiel-broedmachine",
+  "quest.47554824583EC9A0.quest_desc": [
+    "Stop een fossiel en 16 kaasknabbels in de &dFossiel-broedmachine&r en geef hem &b20 vadskracht&r.",
   ],
-  "quest.475548070DEA1A7F.title": "Scheerstal",
-  "quest.475548070DEA1A7F.quest_desc": [
-    "Zet tamme &dWolkenschaapjes&r rond een &dScheerstal&r: hij scheert ze vanzelf. Tem ze met pluisgras of wolkensuikerspin en kweek ze met wolkensuikerspin!",
+  "quest.4755486826FB3AE3.title": "Krak!",
+  "quest.4755486826FB3AE3.quest_desc": [
+    "Na een hele dag broeden kruipt er een baby-oerguh uit het ei. Hij is meteen van jou!",
   ],
-  "quest.475548F127CB5DD5.title": "Niks gaat verloren",
-  "quest.475548F127CB5DD5.quest_desc": [
-    "Stop oude knuffels, guhkleding, wol of kussens in de &dKnuffelrecycler&r: er komt pluis uit.",
+  "quest.47554819DD50745F.title": "Mammoet-guh",
+  "quest.47554819DD50745F.quest_desc": [
+    "Een &dMammoet-guh&r doet zijn klusjes twee keer zo snel, en knuffelen geeft wol.",
   ],
-  "quest.4755488802E43B45.title": "Bouwblokken in bulk",
-  "quest.4755488802E43B45.quest_desc": [
-    "Leg een &dvoorbeeld&r in de &dBouwblokken-fabriek&r: hij maakt trappen, platen, muurtjes, gladde en gekleurde blokken. Koppel een Bank Guh (Banksleutel) of een kist (sneak + klik, dan de kist).",
+  "quest.4755487AF029E682.title": "T-Guh",
+  "quest.4755487AF029E682.quest_desc": [
+    "Geef een &dT-Guh&r de klus &eWaken&r: hij ziet monsters van heel ver aankomen. Rawr, njeg.",
   ],
-  "quest.47554809CF8DAD01.title": "Alle kleuren van de regenboog",
-  "quest.47554809CF8DAD01.quest_desc": [
-    "Maal bloemetjes in de &dKleurmolen&r: 2 tot 3 kleurstof per bloem. Laat een guh het klusje &dBloemetjes plukken&r doen voor een eindeloze voorraad!",
+  "quest.475548D5A97A13A7.title": "Pteroguh",
+  "quest.475548D5A97A13A7.quest_desc": [
+    "Een &dPteroguh&r in een guhhuisje vliegt spullen naar kisten tot ver om het huisje heen.",
   ],
-  "quest.4755483CF22A99C0.title": "Regenboogpers",
-  "quest.4755483CF22A99C0.quest_desc": [
-    "Pers pluis met &6kaassaus&r tot elke kleur in de &dRegenboogpers&r. Kies de kleur met sneak + klik, of leg een voorbeeld-kleurstof neer.",
+  "quest.475548787889088A.title": "Oer-stokstaartje-guh",
+  "quest.475548787889088A.quest_desc": [
+    "Neem een &dOer-stokstaartje-guh&r mee: hij gaat rechtop staan en wijst zeldzame guhs in de buurt aan.",
+  ],
+  "quest.4755486C9C3A3914.title": "De werkplaats gaat open",
+  "quest.4755486C9C3A3914.quest_desc": [
+    "Na de finale van het Guhvatar-verhaal gaat de werkplaats in de &dZuidelijke Luchttempel&r open. De &6Werktuigguh&r geeft je zijn Bouwplan voor alle machines hieronder.",
+  ],
+  "quest.475548B31FFA7754.title": "Kracht door de lucht",
+  "quest.475548B31FFA7754.quest_desc": [
+    "Een &dVadszender&r stuurt vadskracht naar &dVadsontvangers&r tot 32 blokken ver. Samen zijn ze één net.",
+  ],
+  "quest.4755484919B04299.title": "Je bank, overal",
+  "quest.4755484919B04299.quest_desc": [
+    "Een &dGuhterminal&r is een raampje in je Bank Guh: koppel hem met je Banksleutel en zoek, pak en stort.",
+  ],
+  "quest.4755485469FDB005.title": "De Bestelguh",
+  "quest.4755485469FDB005.quest_desc": [
+    "De &dBestelguh&r aan een &dBestelbalie&r haalt alles uit de bank, laat je Knutselmachines draaien en brengt het bonnetje.",
+  ],
+  "quest.475548ED2949994A.title": "Post door de poort",
+  "quest.475548ED2949994A.quest_desc": [
+    "Een &dKnabbelpoort-buis&r stuurt wat erin gaat naar zijn maatje, ook in een andere dimensie.",
+  ],
+  "quest.475548FF921ACE73.title": "Thuis in één stap",
+  "quest.475548FF921ACE73.quest_desc": [
+    "Bouw je eigen netwerk van &dThuispoorten&r. Je guhs aan de lijn en je rijdier springen mee.",
+  ],
+  "quest.475548650E14A004.title": "De vier elementen",
+  "quest.475548650E14A004.quest_desc": [
+    "&dLuchtblazer&r, &dWaterdrager&r, &dKorstduwer&r en &dVuurkorf&r: laat ze elk hun ding doen.",
+  ],
+  "quest.4755489AF6F07054.title": "Het Enderguhrad",
+  "quest.4755489AF6F07054.quest_desc": [
+    "Een &5Vahoege Enderguh&r vliegt rondjes in een reuzenrad: &b50 vadskracht&r. Eén per opstelling.",
+  ],
+  "quest.47554838F636EE19.title": "Een staartje van de komeet",
+  "quest.47554838F636EE19.quest_desc": [
+    "Bij het duelplein van de Vuurnatie-hoofdstad ligt een scherf van de knabbelkomeet. De &dKomeetkern&r geeft &b500 vadskracht&r!",
+  ],
+  "quest.475548534CAE17DB.title": "Nieuwe bronnen",
+  "quest.475548534CAE17DB.quest_desc": [
+    "Een draaiend Enderguhrad en een gloeiende Komeetkern, allebei in je eigen net.",
+  ],
+  "quest.4755480F23D80288.title": "Helemaal af",
+  "quest.4755480F23D80288.quest_desc": [
+    "Vertel het de Werktuigguh. Voor het eerst in honderd jaar maakt hij iets af: een diploma, voor jou.",
+  ],
+  "quest.475548E71D7409D9.title": "Een plan met oortjes",
+  "quest.475548E71D7409D9.quest_desc": [
+    "De Werktuigguh heeft nog één groot plan. Klik op het bord op de &6bouwplaats&r achter zijn werkplaats.",
+  ],
+  "quest.475548A570C5F8D9.title": "Het doek",
+  "quest.475548A570C5F8D9.quest_desc": [
+    "Breng 128 tentdoek en 64 Guhdraad. Tip: een Knutselmachine met een Bouwtekening van tentdoek.",
+  ],
+  "quest.4755485FD93F0316.title": "De mand",
+  "quest.4755485FD93F0316.quest_desc": [
+    "Breng 256 boomstammen en 16 doosschillen. Tip: een bos in een bak, en een Schuilguh.",
+  ],
+  "quest.47554879788DCD2C.title": "De brander",
+  "quest.47554879788DCD2C.quest_desc": [
+    "Breng 2 Vuurkorven, 1 Vadsontvanger, 96 grillkool en 16 kristalkaas. De brander draait op vadskracht uit je eigen fabriek.",
+  ],
+  "quest.4755488B9692F09D.title": "De knabbelvoorraad",
+  "quest.4755488B9692F09D.quest_desc": [
+    "Breng 512 kaasknabbels en 128 gefrituurde kaasknabbels. Tip: de frituurlijn en de Oogster.",
+  ],
+  "quest.4755486E1D362EDF.title": "De versiering",
+  "quest.4755486E1D362EDF.quest_desc": [
+    "Breng 64 lichtstaafjes en 32 flitskruimels. Dan zet de Werktuigguh er oortjes op.",
+  ],
+  "quest.4755486223397A6F.title": "Opstijgen!",
+  "quest.4755486223397A6F.quest_desc": [
+    "Klik op het bord en laat de &dVredesballon&r opstijgen. Je krijgt een beeldje, je eigen heteluchtballon en de titel &6Vredesbrenger&r.",
+  ],
+  "quest.475548E931E5CAA0.title": "Een ballon op de kast",
+  "quest.475548E931E5CAA0.quest_desc": [
+    "Zet het &dVredesballon-beeldje&r neer. Klik erop: er dwarrelt een kruimeltje uit het mandje.",
+  ],
+  "quest.47554884FF4B91D1.title": "Zelf zweven",
+  "quest.47554884FF4B91D1.quest_desc": [
+    "Zet je &dheteluchtballon&r neer, stap in en houd springen ingedrukt: de brander loeit en je stijgt. De wind doet de rest.",
+  ],
+  "quest.4755481EB48408C2.title": "Elke dag knabbelregen",
+  "quest.4755481EB48408C2.quest_desc": [
+    "De Vredesballon vliegt elke dag een rondje. Kom daarna langs bij het bord: er zit een zakje knabbels in de mand, speciaal voor jou.",
+  ],
+  "quest.475548A95CB45E8A.title": "Vredesbrenger",
+  "quest.475548A95CB45E8A.quest_desc": [
+    "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
   ],
 }
