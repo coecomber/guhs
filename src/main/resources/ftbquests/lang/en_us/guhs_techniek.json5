@@ -367,4 +367,12 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
+  "quest.47554885F57F3160.title": "The Hamster Junction",
+  "quest.47554885F57F3160.quest_desc": [
+    "Build a &dHamster Junction&r and run a guh wire to it. It fills a buffer with vadskracht: that keeps all your hamster tubes rolling. One per guh owner!",
+  ],
+  "quest.4755484F38966CF2.title": "Whoosh!",
+  "quest.4755484F38966CF2.quest_desc": [
+    "Place two &dhamster tube stations&r, far apart (another dimension is fine!). Step into the tube, pick where to go, and whoosh!",
+  ],
 }

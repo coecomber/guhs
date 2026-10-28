@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P P",
+    "G G",
+    "PKP"
+  ],
+  "key": {
+    "P": "minecraft:pink_wool",
+    "G": "minecraft:glass_pane",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:hamsterbuis_station",
+    "count": 2
+  }
+}

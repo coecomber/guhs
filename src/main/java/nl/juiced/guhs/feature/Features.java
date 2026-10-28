@@ -185,6 +185,7 @@ public final class Features {
         nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.register(modBus);   // 1.8.0 uitbreiding: de Vliegdroom (Rookguhs, wolkjesringen-parcours)
         nl.juiced.guhs.feature.droomwolkje.DroomwolkjeFeature.register(modBus);   // 1.8.0 (uitbreiding): the own droomwolkje and the droomgasten
+        nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.register(modBus);   // 1.8.0 (vadskracht): the hamsterbuis network
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -309,6 +310,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.payloads(registrar);   // 1.8.0: the soft dream fade
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.payloads(registrar);   // 1.8.0: the droomwinkeltje's screen and buys
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.payloads(registrar);   // 1.8.0 playtest: Snoes' story HUD
+        nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.payloads(registrar);   // 1.8.0: the hamsterbuis station's screen
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -458,6 +460,7 @@ public final class Features {
         nl.juiced.guhs.feature.dirigent.DirigentFeature.creative(output);   // 1.8.0: the dirigeerstokjes
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.creative(output);   // 1.8.0 uitbreiding: the Vlieg-diploma
         nl.juiced.guhs.feature.droomwolkje.DroomwolkjeFeature.creative(output);   // 1.8.0: the "Mijn droomwolkje" brievenbusje
+        nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.creative(output);   // 1.8.0: Hamsterknooppunt + hamsterbuis station
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

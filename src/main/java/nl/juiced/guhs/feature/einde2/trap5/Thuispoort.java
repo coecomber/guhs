@@ -369,7 +369,7 @@ public final class Thuispoort {
         }
 
         /** Teleports the player, then their mount and their guhs on a lead, and seats / leashes them again next tick. */
-        static void verplaats(ServerPlayer speler, ServerLevel doelLevel, Vec3 aankomst) {
+        public static void verplaats(ServerPlayer speler, ServerLevel doelLevel, Vec3 aankomst) {
             ServerLevel van = speler.level();
             van.sendParticles(ParticleTypes.PORTAL, speler.getX(), speler.getY() + 1, speler.getZ(), 40, 0.4, 0.8, 0.4, 0.4);
             van.playSound(null, speler.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 0.8f, 1.2f);
