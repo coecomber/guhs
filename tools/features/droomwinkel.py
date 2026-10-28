@@ -25,17 +25,17 @@ T = "gui.guhs.droomwinkel."
 # the droomkistje 2-4 a day)
 AANBOD = [
     # guh sleep clothes (agent "slaapkleding")
-    ("slaapmasker", "kleding", "guhs:slaapmasker", 10),
-    ("nachtjaponnetje", "kleding", "guhs:nachtjaponnetje", 12),
-    ("maanmutsje", "kleding", "guhs:maanmutsje", 10),
-    ("oorwolkjes", "kleding", "guhs:oorwolkjes", 10),
-    ("blub_sloffen", "kleding", "guhs:blub_sloffen", 12),
-    ("knuffeltje", "kleding", "guhs:knuffeltje", 12),
-    # the player's dream pyjamas
-    ("droompyjama_muts", "pyjama", "guhs:droompyjama_muts", 10),
-    ("droompyjama_jasje", "pyjama", "guhs:droompyjama_jasje", 14),
-    ("droompyjama_broek", "pyjama", "guhs:droompyjama_broek", 12),
-    ("droompyjama_sloffen", "pyjama", "guhs:droompyjama_sloffen", 10),
+    ("slaapmasker", "kleding", "guhs:slaapmasker", 12),
+    ("nachtjaponnetje", "kleding", "guhs:nachtjaponnetje", 20),
+    ("maanmutsje", "kleding", "guhs:maanmutsje", 18),
+    ("oorwolkjes", "kleding", "guhs:oorwolkjes", 14),
+    ("blub_sloffen", "kleding", "guhs:blub_sloffen", 16),
+    # (the knuffeltje is no shop item: it is Snoes' thank-you after the finale)
+    # the player's dream pyjamas (craftable too: here only as an extra, a bit dearer)
+    ("droompyjama_muts", "pyjama", "guhs:droompyjama_muts", 18),
+    ("droompyjama_jasje", "pyjama", "guhs:droompyjama_jasje", 26),
+    ("droompyjama_broek", "pyjama", "guhs:droompyjama_broek", 22),
+    ("droompyjama_sloffen", "pyjama", "guhs:droompyjama_sloffen", 16),
     # Blub clothes (unlock items, agent "blubkleding")
 ] + [(f"blubkleding_{k}", "blubkleding", f"guhs:blubkleding_{k}", 8)
      for k in ("slaapmutsje", "sjaaltje", "sterrenkroontje", "bubbelhelm", "pyjamaatje", "slaapmaskertje", "bloemenkransje", "brilletje")] + [

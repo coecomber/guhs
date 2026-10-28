@@ -3,61 +3,55 @@
     "id": "slaapmasker",
     "groep": "kleding",
     "item": "guhs:slaapmasker",
-    "prijs": 10
+    "prijs": 12
   },
   {
     "id": "nachtjaponnetje",
     "groep": "kleding",
     "item": "guhs:nachtjaponnetje",
-    "prijs": 12
+    "prijs": 20
   },
   {
     "id": "maanmutsje",
     "groep": "kleding",
     "item": "guhs:maanmutsje",
-    "prijs": 10
+    "prijs": 18
   },
   {
     "id": "oorwolkjes",
     "groep": "kleding",
     "item": "guhs:oorwolkjes",
-    "prijs": 10
+    "prijs": 14
   },
   {
     "id": "blub_sloffen",
     "groep": "kleding",
     "item": "guhs:blub_sloffen",
-    "prijs": 12
-  },
-  {
-    "id": "knuffeltje",
-    "groep": "kleding",
-    "item": "guhs:knuffeltje",
-    "prijs": 12
+    "prijs": 16
   },
   {
     "id": "droompyjama_muts",
     "groep": "pyjama",
     "item": "guhs:droompyjama_muts",
-    "prijs": 10
+    "prijs": 18
   },
   {
     "id": "droompyjama_jasje",
     "groep": "pyjama",
     "item": "guhs:droompyjama_jasje",
-    "prijs": 14
+    "prijs": 26
   },
   {
     "id": "droompyjama_broek",
     "groep": "pyjama",
     "item": "guhs:droompyjama_broek",
-    "prijs": 12
+    "prijs": 22
   },
   {
     "id": "droompyjama_sloffen",
     "groep": "pyjama",
     "item": "guhs:droompyjama_sloffen",
-    "prijs": 10
+    "prijs": 16
   },
   {
     "id": "blubkleding_slaapmutsje",
