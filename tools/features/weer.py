@@ -43,18 +43,18 @@ ALTIJD = {"normaal": ("Normaal", "Normal"), "zon": ("Zon", "Sun"), "regen": ("Re
 
 # the chests (oude content) where the weerpotjes hide. TODO 1.8.0: the dream sources (WeerFeature.DROOMBRONNEN).
 # Not a chest, so in Java: knabbel (Knabbelspelen zeskamp won), regenboog (Guh-Circuit gold; the Regenboogje souvenir on a
-# Weer vadser), sterren (a constellation at the telescope). No chest table exists (yet) in the Wolkenhoeder-hut, the
-# Regenboogbrug, the Knuffelbad and Klaterdal: the Wolkenweide's wolkenkist stands in for the hut.
+# Weer vadser), sterren (a constellation at the telescope). The Wolkenhoeder-hut, the Regenboogbrug, the Knuffelbad and the
+# Klaterdal tea house got a little chest of their own (tools/features/weerrest.py, chests/weer/*).
 BRONNEN = {
-    "pluisjes": ["guhs:chests/onderwol/oude_wolspinnerij", "guhs:chests/zwevende_eilanden_wolkenkist"],
+    "pluisjes": ["guhs:chests/onderwol/oude_wolspinnerij", "guhs:chests/zwevende_eilanden_wolkenkist", "guhs:chests/weer/wolkenhoeder_hut"],
     "bellen": ["guhs:chests/onderwater_wrak", "guhs:chests/einde2_bouw_bikinibodem_huis", "guhs:chests/einde2_bouw_bikinibodem_keuken",
                "guhs:chests/einde2_bouw_bikinibodem_lab"],
     "sterren": ["guhs:chests/guh_sterrenwacht", "guhs:chests/onderwol/sterrengrot"],
-    "knusmist": ["guhs:chests/onderwol/knuffelslaapzaal"],
+    "knusmist": ["guhs:chests/onderwol/knuffelslaapzaal", "guhs:chests/weer/knuffelbad"],
     "hartjes": ["guhs:chests/guh_picnic", "guhs:chests/onderwol/verrassingsfeestje"],
-    "regenboog": [],
+    "regenboog": ["guhs:chests/weer/regenboogbrug"],
     "knabbel": ["guhs:chests/kaasknabbel_nest_schat"],
-    "bloesem": ["guhs:chests/picknickeilandje"],
+    "bloesem": ["guhs:chests/picknickeilandje", "guhs:chests/weer/dal_theehuisje"],
 }
 
 # what each weertje's potje holds (the colours of its jar's contents)
@@ -114,16 +114,18 @@ UITLEG = {
     "bloesem": ("Bloesemblaadjes waaien voorbij. Ruikt naar het Bloesemmeertje.", "Blossom petals blow by. Smells like the Bloesemmeertje."),
 }
 BRON_TEKST = {
-    "pluisjes": ("kisten in de Oude wolspinnerij en de wolkenkisten van de Wolkenweide", "chests in the Old Wool Mill and the Cloud Meadow's cloud chests"),
+    "pluisjes": ("kisten in de Oude wolspinnerij, de wolkenkisten van de Wolkenweide en het kistje in de Wolkenhoeder-hut",
+                 "chests in the Old Wool Mill, the Cloud Meadow's cloud chests and the little chest in the Cloud Herder's hut"),
     "bellen": ("kisten in de Guhbubbel en in Bikinibodem", "chests in the Guh Bubble and in Bikini Bottom"),
     "knabbel": ("de schatkist van een Kaasknabbel-nest, of win de Knabbelspelen", "the treasure chest of a Cheese Nibble Nest, or win the Nibble Games"),
-    "regenboog": ("het souvenir 'Regenboogje in een potje' van het Reisbureau, of een gouden medaille op het Guh-Circuit",
-                  "the Travel Agency's souvenir 'Rainbow in a Jar', or a gold medal on the Guh Circuit"),
+    "regenboog": ("het kistje aan het eind van de Regenboogbrug, het souvenir 'Regenboogje in een potje' van het Reisbureau, of een gouden medaille op het Guh-Circuit",
+                  "the little chest at the end of the Rainbow Bridge, the Travel Agency's souvenir 'Rainbow in a Jar', or a gold medal on the Guh Circuit"),
     "hartjes": ("kisten bij een Guh-picknick en een Verrassingsfeestje", "chests at a Guh Picnic and a Surprise Party"),
     "sterren": ("de Guh-Sterrenwacht, de Sterrengrot, of maak een sterrenbeeld met de telescoop",
                 "the Guh Observatory, the Star Cave, or connect a constellation with the telescope"),
-    "knusmist": ("kisten in de Knuffelslaapzaal", "chests in the Cuddle Dormitory"),
-    "bloesem": ("de kist op het picknickeilandje van het Bloesemmeertje", "the chest on the Bloesemmeertje's picnic island"),
+    "knusmist": ("kisten in de Knuffelslaapzaal en het kistje in het Knuffelbad", "chests in the Cuddle Dormitory and the little chest in the Cuddle Bath"),
+    "bloesem": ("de kist op het picknickeilandje van het Bloesemmeertje en het kistje in het theehuisje van het Klaterdal",
+                "the chest on the Bloesemmeertje's picnic island and the little chest in the Klaterdal tea house"),
 }
 LORE = {
     "pluisjes": ("Er dwarrelen roze pluisjes in. Zacht!", "Pink fluff swirls inside. Soft!"),

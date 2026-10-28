@@ -25,6 +25,9 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import nl.juiced.guhs.client.GuhRenderFrame;
+import nl.juiced.guhs.client.GuhRenderer;
+import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.weer.WeerFeature;
 import nl.juiced.guhs.feature.weer.WeerPayloads;
 import nl.juiced.guhs.feature.weer.WeerZones;
@@ -72,12 +75,34 @@ public final class WeerClient {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tick());
         NeoForge.EVENT_BUS.addListener(WeerClient::onFog);
         NeoForge.EVENT_BUS.addListener(WeerClient::onFogKleur);
+        GuhRenderer.hook(WeerClient::oortjesWapperen);
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
             WeerZones.Client.wis();
             houdVast = false;
             weertje = null;
             sterkte = mist = oudMist = 0;
             STERREN.clear();
+        });
+    }
+
+    /** Is there a bloesemwind zone anywhere (refreshed once per client tick, so most frames skip the ears at once)? */
+    private static boolean bloesemErgens;
+
+    /** Bloesemwind: the guhs' ears flutter softly in the breeze, only inside a bloesemwind zone (a small extra rotation). */
+    private static void oortjesWapperen(GuhEntity guh, float partialTick, GuhRenderFrame frame) {
+        if (!bloesemErgens) {
+            return;
+        }
+        WeerZones.Zone zone = WeerZones.zoneOp(guh.level(), guh.getX(), guh.getZ());
+        if (zone == null || zone.weertje() != Weertje.BLOESEM) {
+            return;
+        }
+        float t = (guh.tickCount + partialTick) * 0.35f + (guh.getId() % 17) * 0.6f;   // each guh its own little rhythm
+        float links = (float) (Math.sin(t) * 0.12 + Math.sin(t * 2.3) * 0.05);
+        float rechts = (float) (Math.sin(t + 1.1) * 0.12 + Math.sin(t * 2.1 + 0.4) * 0.05);
+        frame.bones(bones -> {
+            bones.ifPresent("ear_left", b -> b.setRotZ(b.getRotZ() + links));
+            bones.ifPresent("ear_right", b -> b.setRotZ(b.getRotZ() - rechts));
         });
     }
 
@@ -134,6 +159,7 @@ public final class WeerClient {
         if (mc.isPaused()) {
             return;
         }
+        bloesemErgens = WeerZones.Client.zones().stream().anyMatch(z -> z.weertje() == Weertje.BLOESEM);
         Camera cam = mc.gameRenderer.getMainCamera();
         Vec3 c = cam.isInitialized() ? cam.position() : mc.player.position();
         WeerZones.Zone zone = WeerZones.zoneOp(level, c.x, c.z);

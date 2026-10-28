@@ -128,4 +128,31 @@ public class WeerGameTests {
         helper.assertTrue(keer > rollen / 8 / 3 && keer < rollen / 8 * 3, "a hartjesregen potje in about 1 in 8 picnic chests: " + keer + "/" + rollen);
         helper.succeed();
     }
+
+    /** 1.8.0 weerrest: the four places without a chest got one (tools/features/weerrest.py), and it can hold their potje. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void weerpotjeKistjesOpNieuwePlekken(GameTestHelper helper) {
+        var level = helper.getLevel();
+        var params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, helper.absoluteVec(new Vec3(1, 1, 1)))
+                .create(LootContextParamSets.CHEST);
+        String[][] plekken = {{"wolkenhoeder_hut", "pluisjes"}, {"regenboogbrug", "regenboog"}, {"knuffelbad", "knusmist"},
+                {"dal_theehuisje", "bloesem"}};
+        for (String[] plek : plekken) {
+            var template = level.getStructureManager().get(Guhs.id(plek[0]));
+            helper.assertTrue(template.isPresent(), plek[0] + ": the template loads");
+            var kisten = template.get().filterBlocks(BlockPos.ZERO,
+                    new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(), Blocks.CHEST);
+            helper.assertTrue(!kisten.isEmpty(), plek[0] + ": has its little chest");
+            var table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/weer/" + plek[0])));
+            Weertje w = java.util.Arrays.stream(Weertje.values()).filter(x -> x.id().equals(plek[1])).findFirst().orElseThrow();
+            boolean gevonden = false;
+            for (int i = 0; i < 400 && !gevonden; i++) {
+                for (ItemStack s : table.getRandomItems(params)) {
+                    gevonden |= s.is(WeerFeature.potje(w));
+                }
+            }
+            helper.assertTrue(gevonden, plek[0] + ": its chest can hold the " + plek[1] + " potje");
+        }
+        helper.succeed();
+    }
 }
