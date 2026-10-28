@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "soort=badeend": {
+      "model": "guhs:block/droom_badspulletje_badeend"
+    },
+    "soort=zeepje": {
+      "model": "guhs:block/droom_badspulletje_zeepje"
+    },
+    "soort=schuim": {
+      "model": "guhs:block/droom_badspulletje_schuim"
+    }
+  }
+}
