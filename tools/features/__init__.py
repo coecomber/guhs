@@ -141,7 +141,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0: roze graan of the Zingende Weide (seeds from the pink grass, crop, broodje, koekje, hooibaal; append only)
             'rozegraan',
             # 1.8.0 playtest 2: the droomkistje of the droomweer (append only)
-            'droomweer']
+            'droomweer',
+            # 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein (append only)
+            'droomwinkel']
 
 
 def modules():

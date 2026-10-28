@@ -1,0 +1,69 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "guhs:droombed",
+      "required": false
+    },
+    {
+      "id": "guhs:guh_hoofdbed",
+      "required": false
+    },
+    {
+      "id": "guhs:blub_bed",
+      "required": false
+    },
+    {
+      "id": "guhs:wolkenhemelbed",
+      "required": false
+    },
+    {
+      "id": "guhs:guh_blub_mandje",
+      "required": false
+    },
+    {
+      "id": "guhs:stapelbedje",
+      "required": false
+    },
+    {
+      "id": "guhs:luciferdoosje",
+      "required": false
+    },
+    {
+      "id": "guhs:schelpbedje",
+      "required": false
+    },
+    {
+      "id": "guhs:guh_hoofd_bank",
+      "required": false
+    },
+    {
+      "id": "guhs:slaaptreintje",
+      "required": false
+    },
+    {
+      "id": "guhs:kussenfort",
+      "required": false
+    },
+    {
+      "id": "guhs:droomschuitje",
+      "required": false
+    },
+    {
+      "id": "guhs:boomhut_stapelbed",
+      "required": false
+    },
+    {
+      "id": "guhs:quiltbed",
+      "required": false
+    },
+    {
+      "id": "guhs:badkuip_bed",
+      "required": false
+    },
+    {
+      "id": "guhs:massa_guhbed",
+      "required": false
+    }
+  ]
+}

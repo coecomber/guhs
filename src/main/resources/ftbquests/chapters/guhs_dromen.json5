@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 49,
+  guhs_chapter_version: 50,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -786,6 +786,38 @@
         },
       ],
       x: 16.0,
+      y: 10.525,
+    },
+    {
+      id: "475548B9AA4C5665",
+      icon: {
+        id: "guhs:droomzand",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/droomwinkel_gekocht",
+          id: "4755489D57C17D6D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D8D1A49643",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C18CE3FB26",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
       y: 10.525,
     },
     {
