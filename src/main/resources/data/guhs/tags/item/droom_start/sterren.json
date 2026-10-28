@@ -4,9 +4,7 @@
     "guhs:sterrenlantaarn",
     "guhs:sterrenkoekje",
     "guhs:knuffel_starry",
-    {
-      "id": "guhs:sterlampje",
-      "required": false
-    }
+    "guhs:sterlampje",
+    "guhs:maanlampje_ster"
   ]
 }

@@ -173,9 +173,7 @@ public final class SterrenveldFeature {
             double a = level.getRandom().nextDouble() * Math.PI * 2, r = Math.sqrt(level.getRandom().nextDouble()) * STRAAL;
             VallendeSter.nieuw(level, midden.add(Math.cos(a) * r, 26 + level.getRandom().nextInt(10), Math.sin(a) * r));
         }
-        if (event.getServer().getTickCount() % 40 == 3) {
-            terugOpHetEiland(level, eiland);
-        }
+        // (creatures that tumble off: DroomRegels puts them back, for every island)
     }
 
     /** Close to the big star: the story piece "ster" (once), with a title and a shower of sparkles. */
@@ -217,16 +215,4 @@ public final class SterrenveldFeature {
         p.connection.send(new ClientboundSetTitleTextPacket(titel));
     }
 
-    /** A Blub or a kussengevecht-guh that tumbled off the island floats back onto the path (the sea is no place for them). */
-    static void terugOpHetEiland(ServerLevel level, AABB eiland) {
-        DroomEilanden.Opzet o = DroomEilanden.opzet(DroomEilanden.STERREN);
-        Vec3 terug = DroomEilanden.wereld(DroomEilanden.STERREN, o.aankomst().plek());
-        AABB onder = new AABB(eiland.minX, level.getMinY(), eiland.minZ, eiland.maxX, DroomEilanden.Y - 30, eiland.maxZ);
-        for (Entity e : level.getEntities((Entity) null, onder, e -> e instanceof LivingEntity && !(e instanceof ServerPlayer))) {
-            e.teleportTo(terug.x, terug.y, terug.z);
-            e.setDeltaMovement(Vec3.ZERO);
-            e.fallDistance = 0;
-            level.sendParticles(ParticleTypes.BUBBLE_POP, terug.x, terug.y + 0.5, terug.z, 8, 0.3, 0.3, 0.3, 0.02);
-        }
-    }
 }

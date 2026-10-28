@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WZW",
+    " S "
+  ],
+  "key": {
+    "W": "minecraft:yellow_wool",
+    "Z": "guhs:droomzand",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:droombrievenbus_sterren",
+    "count": 1
+  }
+}

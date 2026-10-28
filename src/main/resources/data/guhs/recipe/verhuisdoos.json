@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:doos_knabbels",
+    "minecraft:string"
+  ],
+  "result": {
+    "id": "guhs:verhuisdoos",
+    "count": 1
+  }
+}

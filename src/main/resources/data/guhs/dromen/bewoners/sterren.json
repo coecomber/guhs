@@ -1,0 +1,32 @@
+{
+  "versie": 1,
+  "bewoners": [
+    {
+      "soort": "guh_slaapt",
+      "plek": [
+        -18.5,
+        1.25,
+        -17.5
+      ],
+      "yaw": 150
+    },
+    {
+      "soort": "guh_slaapt",
+      "plek": [
+        -15.5,
+        1.25,
+        -19.5
+      ],
+      "yaw": 300
+    },
+    {
+      "soort": "guh_slaapt",
+      "plek": [
+        -12.5,
+        1.25,
+        -17.5
+      ],
+      "yaw": 105
+    }
+  ]
+}

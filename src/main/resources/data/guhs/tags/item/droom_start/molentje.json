@@ -1,16 +1,12 @@
 {
   "replace": false,
   "values": [
-    {
-      "id": "guhs:droomzand",
-      "required": false
-    },
+    "guhs:droomzand",
     "guhs:lampion_roze",
     "guhs:lampion_geel",
     "guhs:lampion_mint",
-    {
-      "id": "guhs:maanlampje",
-      "required": false
-    }
+    "guhs:maanlampje_maan",
+    "guhs:maanlampje_wolkje",
+    "guhs:maanlampje_guh"
   ]
 }

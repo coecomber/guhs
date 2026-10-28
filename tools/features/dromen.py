@@ -26,15 +26,16 @@ KATTENHUISJES = {  # colour -> (body, dark, recipe wool)
     "mint": ((180, 236, 206), (120, 196, 160), "minecraft:lime_wool"),
 }
 ZEE = "droomzee_tijdelijk"
+DOZEN = ["verhuisdoos", "schoenendoos", "pizzadoos"]   # the other boxes (tools/features/droomspul.py)
 
 # what you give your guh -> the island the dream starts on (DroomStart; "required": false for ids of other parts)
 START = {
-    "badje": ["guhs:knuffelbad_badeendje", {"id": "guhs:zeepje", "required": False}],
-    "sterren": ["guhs:sterrenlantaarn", "guhs:sterrenkoekje", "guhs:knuffel_starry", {"id": "guhs:sterlampje", "required": False}],
-    "herinnering": ["guhs:roze_guh_koek", "guhs:knabbelkoekje", "guhs:reisbureau_kaart_lingsesdijk", "guhs:reisbureau_kaart_kaasmarkt",
+    "badje": ["guhs:knuffelbad_badeendje", "guhs:zeepje"],                     # zeepje: tools/features/droomspul.py
+    "sterren": ["guhs:sterrenlantaarn", "guhs:sterrenkoekje", "guhs:knuffel_starry", "guhs:sterlampje", "guhs:maanlampje_ster"],
+    "herinnering": ["guhs:fotootje", "guhs:roze_guh_koek", "guhs:knabbelkoekje", "guhs:reisbureau_kaart_lingsesdijk", "guhs:reisbureau_kaart_kaasmarkt",
                     "guhs:reisbureau_kaart_vadswoud", "guhs:reisbureau_kaart_knuffeldal", "guhs:reisbureau_kaart_bloesemmeertje"],
-    "molentje": [{"id": "guhs:droomzand", "required": False}, "guhs:lampion_roze", "guhs:lampion_geel", "guhs:lampion_mint",
-                 {"id": "guhs:maanlampje", "required": False}],
+    "molentje": ["guhs:droomzand", "guhs:lampion_roze", "guhs:lampion_geel", "guhs:lampion_mint",
+                 "guhs:maanlampje_maan", "guhs:maanlampje_wolkje", "guhs:maanlampje_guh"],   # maanlampjes: slaapzorg.py
     "liedjes": ["guhs:knuffel_normal", "guhs:knuffel_mint", "guhs:knuffel_choco", "guhs:knuffel_snow", "guhs:knuffel_rainbow",
                 "guhs:knuffel_wolk", "guhs:knuffel_ghost", "guhs:knuffel_golden", "guhs:knuffel_mager", "guhs:pluiswolblok"]
                + [f"guhs:{k}_kussen" for k in ("white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray",
@@ -241,7 +242,7 @@ def blokken(h):
     h.item_model("droomkussen")
     h.shapeless("droomkussen", ["guhs:pink_kussen", "minecraft:amethyst_shard"], "guhs:droomkussen")
     # tags
-    w(f"{D}/tags/block/guh_slaapplekken.json", {"replace": False, "values": ["guhs:doos_knabbels"]
+    w(f"{D}/tags/block/guh_slaapplekken.json", {"replace": False, "values": ["guhs:doos_knabbels"] + [f"guhs:{d}" for d in DOZEN]
                                                  + [f"guhs:kattenhuisje_{k}" for k in KATTENHUISJES] + ["guhs:huisje_bedje", "guhs:guhnestje"]})
     for eiland, items in START.items():
         w(f"{D}/tags/item/droom_start/{eiland}.json", {"replace": False, "values": items})

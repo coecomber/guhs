@@ -135,7 +135,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0: the Guhdex pages of Guhdromenland and the Blub-meterkaart (append only)
             'dexdromen',
             # 1.8.0: the dream's feel (sky, fade, island music, NPC voices; append only)
-            'droomsfeer']
+            'droomsfeer',
+            # 1.8.0 Guhdromenland: more boxes, the tuck-in items, the islanders' lists (reads the island templates; append only)
+            'droomspul']
 
 
 def modules():

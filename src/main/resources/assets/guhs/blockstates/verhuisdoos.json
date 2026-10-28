@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/verhuisdoos"
+    },
+    "facing=east": {
+      "model": "guhs:block/verhuisdoos",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/verhuisdoos",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/verhuisdoos",
+      "y": 270
+    }
+  }
+}

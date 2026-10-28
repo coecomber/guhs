@@ -3,15 +3,20 @@ package nl.juiced.guhs.feature.dromen;
 import java.util.Map;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
@@ -21,6 +26,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 /**
  * The rules of the dream (ontwerp ronde 9):
@@ -46,6 +52,7 @@ public final class DroomRegels {
         NeoForge.EVENT_BUS.addListener(DroomRegels::onItem);
         NeoForge.EVENT_BUS.addListener(DroomRegels::onDood);
         NeoForge.EVENT_BUS.addListener(DroomRegels::onTick);
+        NeoForge.EVENT_BUS.addListener(DroomRegels::onServerTick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer sp && !DroomReis.inDroom(sp)) {
                 weg(sp);
@@ -165,5 +172,46 @@ public final class DroomRegels {
                 p.removeEffect(MobEffects.JUMP_BOOST);
             }
         }
+    }
+
+    // =====================================================================================================================
+    // the creatures of the islands stay on their island
+    // =====================================================================================================================
+
+    /** Below this height a creature that tumbled off an island floats back onto it (the islands span about Y-40 .. Y+40). */
+    public static final int VAL_Y = DroomEilanden.Y - 30;
+
+    /** Every two seconds while somebody dreams: Blubs, guhs and other creatures that tumbled off an island come back. */
+    private static void onServerTick(ServerTickEvent.Post event) {
+        MinecraftServer server = event.getServer();
+        if (server.getTickCount() % 40 != 3) {
+            return;
+        }
+        ServerLevel level = server.getLevel(DromenFeature.DIM);
+        if (level == null || level.players().isEmpty()) {
+            return;
+        }
+        for (String eiland : DroomEilanden.IDS) {
+            if (DroomEilanden.gebouwd(level, eiland) >= 0) {
+                terugOpHetEiland(level, eiland);
+            }
+        }
+    }
+
+    /** A creature (no player) under this island, between the sea and {@link #VAL_Y}, floats back to the island's arrival spot. */
+    public static int terugOpHetEiland(ServerLevel level, String eiland) {
+        BlockPos m = DroomEilanden.midden(eiland);
+        double r = DroomEilanden.MAX_MAAT.getX() / 2.0 + 8;
+        AABB onder = new AABB(m.getX() - r, level.getMinY(), m.getZ() - r, m.getX() + r, VAL_Y, m.getZ() + r);
+        Vec3 terug = DroomEilanden.wereld(eiland, DroomEilanden.opzet(eiland).aankomst().plek());
+        int n = 0;
+        for (Entity e : level.getEntities((Entity) null, onder, e -> e instanceof LivingEntity && !(e instanceof Player))) {
+            e.teleportTo(terug.x, terug.y, terug.z);
+            e.setDeltaMovement(Vec3.ZERO);
+            e.fallDistance = 0;
+            level.sendParticles(ParticleTypes.BUBBLE_POP, terug.x, terug.y + 0.5, terug.z, 8, 0.3, 0.3, 0.3, 0.02);
+            n++;
+        }
+        return n;
     }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:slime_ball",
+    "minecraft:pink_dye",
+    "minecraft:sugar"
+  ],
+  "result": {
+    "id": "guhs:zeepje",
+    "count": 2
+  }
+}
