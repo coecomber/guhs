@@ -53,6 +53,20 @@ public class TaalsleutelsGameTests {
         }
     }
 
+    /** 1.8.0: every guhs effect explains itself when you hover it in the inventory (EffectTips: {@code <id>.uitleg}). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void effectUitleg(GameTestHelper helper) {
+        List<String> missing = new ArrayList<>();
+        need(missing, nl.juiced.guhs.feature.effecttips.client.EffectTips.ONBEKEND);
+        BuiltInRegistries.MOB_EFFECT.forEach(effect -> {
+            if (BuiltInRegistries.MOB_EFFECT.getKey(effect).getNamespace().equals(Guhs.MODID)) {
+                need(missing, effect.getDescriptionId() + nl.juiced.guhs.feature.effecttips.client.EffectTips.UITLEG);
+            }
+        });
+        check(helper, missing, "effect explanations");
+        helper.succeed();
+    }
+
     /** The name of everything we register: items, blocks, entities, effects, biomes. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void registryNamen(GameTestHelper helper) {
