@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/lanceerplatform_top",
+    "bottom": "guhs:block/lanceerplatform_zij",
+    "side": "guhs:block/lanceerplatform_zij"
+  }
+}

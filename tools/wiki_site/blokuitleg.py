@@ -2209,3 +2209,24 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+# <raket> 1.8.0 Vadskracht: the Kaasraket (tools/features/raket.py)
+UITLEG["lanceerplatform"] = dict(
+    nl="Het platform van de Kaasraket. Bouw de raket in vier stappen: de romp, de motor, de brandstof en de bemanning.\n"
+       "\n"
+       "- Klik erop met de spullen bij je: alles van de huidige stap gaat erin, ook in porties. Sluip-klik: wat er nog nodig is.\n"
+       "- Bij elke klare stap bouwt de raket zichzelf een stukje verder boven het platform. De volgende stap twinkelt als spook.\n"
+       "- De bemanning: drie van je eigen guhs in een astronautenpakje, dichtbij. Ze stappen in de cockpit.\n"
+       "- Alles klaar: klik voor de lancering. Daarna brengt een klik je naar de Kaasmaan.",
+    en="The pad of the Cheese Rocket. Build the rocket in four steps: the hull, the engine, the fuel and the crew.\n"
+       "\n"
+       "- Click it with the things on you: everything of the current step goes in, in portions too. Sneak-click: what's still needed.\n"
+       "- With every finished step the rocket builds itself a bit further above the pad. The next step twinkles as a ghost.\n"
+       "- The crew: three of your own guhs in an astronaut suit, close by. They climb into the cockpit.\n"
+       "- All done: click for the launch. After that a click takes you to the Cheese Moon.",
+    meer=[])
+UITLEG["terugkeercapsule"] = dict(
+    nl="Staat in de maanbasis op de Kaasmaan. Klik erop en je gaat terug naar waar je vandaan kwam (naast je Lanceerplatform).",
+    en="Stands in the moon base on the Cheese Moon. Click it and you go back to where you came from (next to your Launch Pad).",
+    meer=[])
+# </raket>

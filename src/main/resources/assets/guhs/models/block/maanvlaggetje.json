@@ -1,0 +1,101 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "paal": "minecraft:block/iron_block",
+    "doek": "guhs:block/maanvlaggetje_doek",
+    "particle": "guhs:block/maanvlaggetje_doek"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "down": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        9,
+        7.75
+      ],
+      "to": [
+        16,
+        15,
+        8.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ],
+          "texture": "#doek"
+        },
+        "south": {
+          "uv": [
+            16,
+            2,
+            0,
+            14
+          ],
+          "texture": "#doek"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#doek"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1,
+            12
+          ],
+          "texture": "#doek"
+        }
+      }
+    }
+  ]
+}

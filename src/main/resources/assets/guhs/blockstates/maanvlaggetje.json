@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/maanvlaggetje"
+    },
+    "facing=east": {
+      "model": "guhs:block/maanvlaggetje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/maanvlaggetje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/maanvlaggetje",
+      "y": 270
+    }
+  }
+}

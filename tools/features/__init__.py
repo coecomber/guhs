@@ -151,7 +151,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 U3: the Dirigent in the Koorkom (append only)
             'dirigent',
             # 1.8.0 U2: the Gezelschapshoek of Guhpixel (append only)
-            'guhpixel_gezel']
+            'guhpixel_gezel',
+            # 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan (append only)
+            'raket']
 
 
 def modules():

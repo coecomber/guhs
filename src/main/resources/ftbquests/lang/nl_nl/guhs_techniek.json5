@@ -367,4 +367,32 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
   ],
+  "quest.47554818B2023D00.title": "Een plek om te lanceren",
+  "quest.47554818B2023D00.quest_desc": [
+    "Maak een &dLanceerplatform&r (ijzerblokken, knuffelsteen en een knabbelbatterij) en zet het op een open plek: de raket wordt groot!",
+  ],
+  "quest.475548044BCA1179.title": "De romp",
+  "quest.475548044BCA1179.quest_desc": [
+    "Klik op het platform met &d64 knuffelsteen&r, &d24 ijzer&r en &d16 glas&r (mag in porties).",
+  ],
+  "quest.4755488593D48293.title": "De motor",
+  "quest.4755488593D48293.quest_desc": [
+    "Twee &dknabbelbatterijen&r, een &dGuhoven&r, &d4 ijzerblokken&r en &d16 redstone&r. Brommm!",
+  ],
+  "quest.47554853840EB6A3.title": "De brandstof",
+  "quest.47554853840EB6A3.quest_desc": [
+    "&d24 blokken kaasknabbels&r en &d4 emmers kaassaus&r. Raketten rijden op kaas, dat weet iedereen.",
+  ],
+  "quest.475548C49AC8277E.title": "De bemanning",
+  "quest.475548C49AC8277E.quest_desc": [
+    "Trek drie van je guhs een &dastronautenpakje&r aan (wol en glas), neem ze mee naar het platform en klik erop.",
+  ],
+  "quest.47554832A7DE93A7.title": "Lancering!",
+  "quest.47554832A7DE93A7.quest_desc": [
+    "Klik op het platform: aftellen, motoren aan, en weg is de raket!",
+  ],
+  "quest.4755487EF180F842.title": "Eén kleine stap",
+  "quest.4755487EF180F842.quest_desc": [
+    "Plant een &dmaanvlaggetje&r op de Kaasmaan. Hak in de kraters &dkaasmaankristallen&r en ruil ze bij &dAstronaut Kaasje&r voor souvenirs.",
+  ],
 }
