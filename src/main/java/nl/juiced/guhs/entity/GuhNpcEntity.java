@@ -294,6 +294,17 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         WISSELGUH(1.0f),
         KEGELGUH(1.05f),
         // </minigames2>
+        // <droomwezens>
+        /** 1.8.0 Guhdromenland (feature/droomwezens): Snoes the zwerfguh (and after his story: blij), the Zandguh, the Wekkerguh,
+         * the Rommelguh, Oma-guh with her knitting and a kussengevecht-guh. Their talk: DroomNpc.praat. */
+        SNOES(0.95f),
+        SNOES_BLIJ(0.95f),
+        ZANDGUH(1.0f),
+        WEKKERGUH(1.0f),
+        ROMMELGUH(1.05f),
+        DROOM_OMAGUH(1.0f),
+        KUSSENGEVECHT_GUH(0.95f),
+        // </droomwezens>
         ;
 
         public final float scale;

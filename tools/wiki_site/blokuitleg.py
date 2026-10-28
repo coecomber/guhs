@@ -874,6 +874,17 @@ UITLEG = {
     "krabpaal_blauw": dict(
         nl="Een pluchen krabpaal met guh-oortjes.\n" "\n" "- Tamme guhs in de buurt hupsen er overdag af en toe bovenop, kijken rond als een poesje en zwaaien naar je.\n" "- Zet ze op 'zitten' als je liever hebt dat ze beneden blijven.",
         en="A plush scratching post with guh ears.\n" "\n" "- Tame guhs nearby now and then hop on top by day, look around like a kitty and wave at you.\n" "- Tell them to sit if you'd rather they stay down."),
+    "glas_restje": dict(
+        nl="Een glas met een restje sap, cola, limonade, melk of thee: het handelsmerk van de Rommelguh. Welk drankje erin zit "
+           "is een verrassing.\n"
+           "\n"
+           "- Rechtsklik met nog een glas: er komt een glas bij (tot 3).\n"
+           "- Rechtsklik met een lege hand: een slokje. Er blijft natuurlijk altijd een restje over.",
+        en="A glass with a little bit of juice, cola, lemonade, milk or tea left: the Rommelguh's trademark. Which drink is in "
+           "it is a surprise.\n"
+           "\n"
+           "- Right-click with another glass: one more glass (up to 3).\n"
+           "- Right-click with an empty hand: a sip. Of course there's always a little bit left."),
     "hapluikje": dict(
         nl="Een luikje met een bekje dat alles wat je erin stopt meteen in je Bankguh legt, hoe ver die ook weg staat.\n"
            "\n"

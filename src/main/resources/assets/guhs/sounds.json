@@ -6617,5 +6617,41 @@
       }
     ],
     "subtitle": "subtitles.guhs.blubguh.klus_badderen"
+  },
+  "droomwezens.kussen": {
+    "sounds": [
+      {
+        "name": "minecraft:dig/cloth1",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:dig/cloth3",
+        "pitch": 1.1
+      }
+    ],
+    "subtitle": "subtitles.guhs.droomwezens.kussen"
+  },
+  "droomwezens.rinkel": {
+    "sounds": [
+      {
+        "name": "minecraft:note/bell",
+        "pitch": 1.5
+      },
+      {
+        "name": "minecraft:note/bell",
+        "pitch": 1.34
+      }
+    ],
+    "subtitle": "subtitles.guhs.droomwezens.rinkel"
+  },
+  "droomwezens.slokje": {
+    "sounds": [
+      {
+        "name": "minecraft:random/drink",
+        "pitch": 1.2,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.droomwezens.slokje"
   }
 }

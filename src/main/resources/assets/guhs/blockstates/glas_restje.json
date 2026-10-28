@@ -1,0 +1,229 @@
+{
+  "variants": {
+    "drankje=sap,facing=north,glazen=1": {
+      "model": "guhs:block/glas_restje_1_sap"
+    },
+    "drankje=sap,facing=east,glazen=1": {
+      "model": "guhs:block/glas_restje_1_sap",
+      "y": 90
+    },
+    "drankje=sap,facing=south,glazen=1": {
+      "model": "guhs:block/glas_restje_1_sap",
+      "y": 180
+    },
+    "drankje=sap,facing=west,glazen=1": {
+      "model": "guhs:block/glas_restje_1_sap",
+      "y": 270
+    },
+    "drankje=cola,facing=north,glazen=1": {
+      "model": "guhs:block/glas_restje_1_cola"
+    },
+    "drankje=cola,facing=east,glazen=1": {
+      "model": "guhs:block/glas_restje_1_cola",
+      "y": 90
+    },
+    "drankje=cola,facing=south,glazen=1": {
+      "model": "guhs:block/glas_restje_1_cola",
+      "y": 180
+    },
+    "drankje=cola,facing=west,glazen=1": {
+      "model": "guhs:block/glas_restje_1_cola",
+      "y": 270
+    },
+    "drankje=limo,facing=north,glazen=1": {
+      "model": "guhs:block/glas_restje_1_limo"
+    },
+    "drankje=limo,facing=east,glazen=1": {
+      "model": "guhs:block/glas_restje_1_limo",
+      "y": 90
+    },
+    "drankje=limo,facing=south,glazen=1": {
+      "model": "guhs:block/glas_restje_1_limo",
+      "y": 180
+    },
+    "drankje=limo,facing=west,glazen=1": {
+      "model": "guhs:block/glas_restje_1_limo",
+      "y": 270
+    },
+    "drankje=melk,facing=north,glazen=1": {
+      "model": "guhs:block/glas_restje_1_melk"
+    },
+    "drankje=melk,facing=east,glazen=1": {
+      "model": "guhs:block/glas_restje_1_melk",
+      "y": 90
+    },
+    "drankje=melk,facing=south,glazen=1": {
+      "model": "guhs:block/glas_restje_1_melk",
+      "y": 180
+    },
+    "drankje=melk,facing=west,glazen=1": {
+      "model": "guhs:block/glas_restje_1_melk",
+      "y": 270
+    },
+    "drankje=thee,facing=north,glazen=1": {
+      "model": "guhs:block/glas_restje_1_thee"
+    },
+    "drankje=thee,facing=east,glazen=1": {
+      "model": "guhs:block/glas_restje_1_thee",
+      "y": 90
+    },
+    "drankje=thee,facing=south,glazen=1": {
+      "model": "guhs:block/glas_restje_1_thee",
+      "y": 180
+    },
+    "drankje=thee,facing=west,glazen=1": {
+      "model": "guhs:block/glas_restje_1_thee",
+      "y": 270
+    },
+    "drankje=sap,facing=north,glazen=2": {
+      "model": "guhs:block/glas_restje_2_sap"
+    },
+    "drankje=sap,facing=east,glazen=2": {
+      "model": "guhs:block/glas_restje_2_sap",
+      "y": 90
+    },
+    "drankje=sap,facing=south,glazen=2": {
+      "model": "guhs:block/glas_restje_2_sap",
+      "y": 180
+    },
+    "drankje=sap,facing=west,glazen=2": {
+      "model": "guhs:block/glas_restje_2_sap",
+      "y": 270
+    },
+    "drankje=cola,facing=north,glazen=2": {
+      "model": "guhs:block/glas_restje_2_cola"
+    },
+    "drankje=cola,facing=east,glazen=2": {
+      "model": "guhs:block/glas_restje_2_cola",
+      "y": 90
+    },
+    "drankje=cola,facing=south,glazen=2": {
+      "model": "guhs:block/glas_restje_2_cola",
+      "y": 180
+    },
+    "drankje=cola,facing=west,glazen=2": {
+      "model": "guhs:block/glas_restje_2_cola",
+      "y": 270
+    },
+    "drankje=limo,facing=north,glazen=2": {
+      "model": "guhs:block/glas_restje_2_limo"
+    },
+    "drankje=limo,facing=east,glazen=2": {
+      "model": "guhs:block/glas_restje_2_limo",
+      "y": 90
+    },
+    "drankje=limo,facing=south,glazen=2": {
+      "model": "guhs:block/glas_restje_2_limo",
+      "y": 180
+    },
+    "drankje=limo,facing=west,glazen=2": {
+      "model": "guhs:block/glas_restje_2_limo",
+      "y": 270
+    },
+    "drankje=melk,facing=north,glazen=2": {
+      "model": "guhs:block/glas_restje_2_melk"
+    },
+    "drankje=melk,facing=east,glazen=2": {
+      "model": "guhs:block/glas_restje_2_melk",
+      "y": 90
+    },
+    "drankje=melk,facing=south,glazen=2": {
+      "model": "guhs:block/glas_restje_2_melk",
+      "y": 180
+    },
+    "drankje=melk,facing=west,glazen=2": {
+      "model": "guhs:block/glas_restje_2_melk",
+      "y": 270
+    },
+    "drankje=thee,facing=north,glazen=2": {
+      "model": "guhs:block/glas_restje_2_thee"
+    },
+    "drankje=thee,facing=east,glazen=2": {
+      "model": "guhs:block/glas_restje_2_thee",
+      "y": 90
+    },
+    "drankje=thee,facing=south,glazen=2": {
+      "model": "guhs:block/glas_restje_2_thee",
+      "y": 180
+    },
+    "drankje=thee,facing=west,glazen=2": {
+      "model": "guhs:block/glas_restje_2_thee",
+      "y": 270
+    },
+    "drankje=sap,facing=north,glazen=3": {
+      "model": "guhs:block/glas_restje_3_sap"
+    },
+    "drankje=sap,facing=east,glazen=3": {
+      "model": "guhs:block/glas_restje_3_sap",
+      "y": 90
+    },
+    "drankje=sap,facing=south,glazen=3": {
+      "model": "guhs:block/glas_restje_3_sap",
+      "y": 180
+    },
+    "drankje=sap,facing=west,glazen=3": {
+      "model": "guhs:block/glas_restje_3_sap",
+      "y": 270
+    },
+    "drankje=cola,facing=north,glazen=3": {
+      "model": "guhs:block/glas_restje_3_cola"
+    },
+    "drankje=cola,facing=east,glazen=3": {
+      "model": "guhs:block/glas_restje_3_cola",
+      "y": 90
+    },
+    "drankje=cola,facing=south,glazen=3": {
+      "model": "guhs:block/glas_restje_3_cola",
+      "y": 180
+    },
+    "drankje=cola,facing=west,glazen=3": {
+      "model": "guhs:block/glas_restje_3_cola",
+      "y": 270
+    },
+    "drankje=limo,facing=north,glazen=3": {
+      "model": "guhs:block/glas_restje_3_limo"
+    },
+    "drankje=limo,facing=east,glazen=3": {
+      "model": "guhs:block/glas_restje_3_limo",
+      "y": 90
+    },
+    "drankje=limo,facing=south,glazen=3": {
+      "model": "guhs:block/glas_restje_3_limo",
+      "y": 180
+    },
+    "drankje=limo,facing=west,glazen=3": {
+      "model": "guhs:block/glas_restje_3_limo",
+      "y": 270
+    },
+    "drankje=melk,facing=north,glazen=3": {
+      "model": "guhs:block/glas_restje_3_melk"
+    },
+    "drankje=melk,facing=east,glazen=3": {
+      "model": "guhs:block/glas_restje_3_melk",
+      "y": 90
+    },
+    "drankje=melk,facing=south,glazen=3": {
+      "model": "guhs:block/glas_restje_3_melk",
+      "y": 180
+    },
+    "drankje=melk,facing=west,glazen=3": {
+      "model": "guhs:block/glas_restje_3_melk",
+      "y": 270
+    },
+    "drankje=thee,facing=north,glazen=3": {
+      "model": "guhs:block/glas_restje_3_thee"
+    },
+    "drankje=thee,facing=east,glazen=3": {
+      "model": "guhs:block/glas_restje_3_thee",
+      "y": 90
+    },
+    "drankje=thee,facing=south,glazen=3": {
+      "model": "guhs:block/glas_restje_3_thee",
+      "y": 180
+    },
+    "drankje=thee,facing=west,glazen=3": {
+      "model": "guhs:block/glas_restje_3_thee",
+      "y": 270
+    }
+  }
+}

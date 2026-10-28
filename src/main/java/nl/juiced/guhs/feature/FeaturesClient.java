@@ -140,6 +140,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.blub.client.BlubClient.init(modBus);   // 1.8.0 (Guhdromenland): the Blub-guh's look and menu
         nl.juiced.guhs.feature.weer.client.WeerClient.init(modBus);   // 1.8.0: the Weer vadser's weather, the guh-weertjes, its menu
         nl.juiced.guhs.feature.slaapzorg.client.SlaapzorgClient.init(modBus);   // 1.8.0: the Mobiel's turning moon and stars
+        nl.juiced.guhs.feature.droomwezens.client.DroomwezensClient.init(modBus);   // 1.8.0: the dream NPCs' models, the sterrenvisje
     }
 
     private FeaturesClient() {
