@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wolkjeshout_button",
+  "ingredients": [
+    "guhs:wolkjeshout_planken"
+  ],
+  "result": {
+    "id": "guhs:wolkjeshout_knop"
+  }
+}

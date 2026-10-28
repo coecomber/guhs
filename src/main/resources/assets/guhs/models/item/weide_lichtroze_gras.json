@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:block/weide_lichtroze_gras"
+  }
+}

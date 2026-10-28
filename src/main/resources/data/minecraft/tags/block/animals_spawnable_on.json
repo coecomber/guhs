@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "guhs:wolkenweide_gras"
+    "guhs:wolkenweide_gras",
+    "guhs:zalmklei_gras",
+    "guhs:zeegroen_gras",
+    "guhs:schildjeszand"
   ]
 }

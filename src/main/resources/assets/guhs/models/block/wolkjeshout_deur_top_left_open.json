@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/door_top_left_open",
+  "textures": {
+    "bottom": "guhs:block/wolkjeshout_deur_bottom",
+    "top": "guhs:block/wolkjeshout_deur_top"
+  },
+  "render_type": "minecraft:cutout"
+}

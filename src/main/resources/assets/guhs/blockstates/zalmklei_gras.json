@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/zalmklei_gras"
+      },
+      {
+        "model": "guhs:block/zalmklei_gras",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/zalmklei_gras",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/zalmklei_gras",
+        "y": 270
+      }
+    ]
+  }
+}

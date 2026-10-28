@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/gepolijste_zeegroen_steen_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/gepolijste_zeegroen_steen"
+    },
+    "type=top": {
+      "model": "guhs:block/gepolijste_zeegroen_steen_plaat_top"
+    }
+  }
+}

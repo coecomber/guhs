@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#guhs:wolkjeshout_stammen"
+  ],
+  "result": {
+    "id": "guhs:wolkjeshout_planken",
+    "count": 4
+  }
+}

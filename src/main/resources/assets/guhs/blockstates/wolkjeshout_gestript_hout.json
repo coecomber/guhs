@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/wolkjeshout_gestript_hout"
+    },
+    "axis=z": {
+      "model": "guhs:block/wolkjeshout_gestript_hout_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/wolkjeshout_gestript_hout_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

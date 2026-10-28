@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wolkjeshout_pressure_plate",
+  "key": {
+    "#": "guhs:wolkjeshout_planken"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "guhs:wolkjeshout_drukplaat"
+  }
+}

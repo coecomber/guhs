@@ -79,6 +79,9 @@
     "guhs:ruitjesvilt_mint_trap",
     "guhs:ruitjesvilt_geel_trap",
     "guhs:bielzenhout_trap",
-    "guhs:kegelbaanhout_trap"
+    "guhs:kegelbaanhout_trap",
+    "guhs:zeegroen_steen_trap",
+    "guhs:zeegroen_bakstenen_trap",
+    "guhs:gepolijste_zeegroen_steen_trap"
   ]
 }

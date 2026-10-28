@@ -289,7 +289,8 @@ public class BlubGuhEntity extends Landdiertje {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         if (!getrokken) {
-            zetWaarden(BlubTrekking.trek(random));
+            // (1.8.0: in De Zingende Weide the kind follows the part of the meadow)
+            zetWaarden(BlubTrekking.trek(random, nl.juiced.guhs.feature.zingendeweide.WeideDeel.blubSoort(level, blockPosition())));
         }
         return super.finalizeSpawn(level, difficulty, spawnType, data);
     }

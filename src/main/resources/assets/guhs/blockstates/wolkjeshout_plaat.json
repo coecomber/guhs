@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/wolkjeshout_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/wolkjeshout_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/wolkjeshout_plaat_top"
+    }
+  }
+}

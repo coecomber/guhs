@@ -139,6 +139,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.mijnspellen.client.MijnspellenClient.init(modBus);   // 1.7.0 Onder de Wol: ore carts, pins + ball (minigames2)
         nl.juiced.guhs.feature.blub.client.BlubClient.init(modBus);   // 1.8.0 (Guhdromenland): the Blub-guh's look and menu
         nl.juiced.guhs.feature.weer.client.WeerClient.init(modBus);   // 1.8.0: the Weer vadser's weather, the guh-weertjes, its menu
+        nl.juiced.guhs.feature.zingendeweide.client.WeideClient.init(modBus);   // 1.8.0: De Zingende Weide's sky, trillertjes, bubbelsap
     }
 
     private FeaturesClient() {

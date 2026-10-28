@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wolkjeshout_door",
+  "key": {
+    "#": "guhs:wolkjeshout_planken"
+  },
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "guhs:wolkjeshout_deur"
+  }
+}

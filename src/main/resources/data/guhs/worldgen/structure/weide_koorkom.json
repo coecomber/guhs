@@ -1,0 +1,8 @@
+{
+  "type": "guhs:weide_bouw",
+  "biomes": "#guhs:has_structure/zingende_weide",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "soort": "koorkom"
+}

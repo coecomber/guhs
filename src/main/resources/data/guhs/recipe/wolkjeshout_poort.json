@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wolkjeshout_fence_gate",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "guhs:wolkjeshout_planken"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "guhs:wolkjeshout_poort"
+  }
+}

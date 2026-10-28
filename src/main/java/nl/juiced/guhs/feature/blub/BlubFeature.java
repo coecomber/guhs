@@ -31,9 +31,9 @@ import nl.juiced.guhs.feature.piep.PiepDierItem;
  * <p>
  * Wild Blubs only show (and can be tamed) once you helped Snoes ({@link BlubSnoes}); tamed ones always.
  * <p>
- * Spawns: TIJDELIJK in the Wolkenweide and the Bloemenvallei of the Guhmension (biome modifier
- * data/guhs/neoforge/biome_modifier/blubguh_tijdelijk.json, from tools/features/blub.py: {@code SPAWNS}), until
- * Guhdromenland exists; then that one file moves to the dream dimension. Resources: tools/features/blub.py.
+ * Spawns: only in De Zingende Weide (the biome's own spawner, tools/features/zingendeweide.py; the kind follows the part of
+ * the meadow: {@link nl.juiced.guhs.feature.zingendeweide.WeideDeel#blubSoort}), and later in Guhdromenland.
+ * Resources: tools/features/blub.py.
  */
 public final class BlubFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);

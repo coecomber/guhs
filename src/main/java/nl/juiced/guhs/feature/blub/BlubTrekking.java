@@ -2,6 +2,8 @@ package nl.juiced.guhs.feature.blub;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
@@ -84,6 +86,18 @@ public final class BlubTrekking {
 
     public static Waarden trek(RandomSource random) {
         return new Waarden(meter(random), soort(random), tint(random), grootte(random));
+    }
+
+    /**
+     * 1.8.0: a Blub of a part of De Zingende Weide. A blue one anywhere (about half of them); else the kind of its part
+     * ({@code deel}: weide, schildje, ravijn or zwam), and in a part without a kind of its own (null) the usual draw.
+     */
+    public static Waarden trek(RandomSource random, @Nullable Soort deel) {
+        if (deel == null) {
+            return trek(random);
+        }
+        Soort soort = random.nextInt(100) < 50 ? Soort.BLAUW : deel;
+        return new Waarden(meter(random), soort, tint(random), grootte(random));
     }
 
     /** A babyblubje: meter and grootte somewhere between the parents' (both ends included), soort and tint of one of them. */

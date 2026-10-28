@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "guhs:block/weide_hoog_roze_gras_onder"
+    },
+    "half=upper": {
+      "model": "guhs:block/weide_hoog_roze_gras_boven"
+    }
+  }
+}

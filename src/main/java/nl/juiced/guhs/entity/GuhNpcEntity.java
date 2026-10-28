@@ -294,6 +294,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         WISSELGUH(1.0f),
         KEGELGUH(1.05f),
         // </minigames2>
+        // <zingendeweide>
+        /** 1.8.0 De Zingende Weide (feature/zingendeweide): Badmeester Bubbels of the bath hut at the Bubbelsap-poeltjes. */
+        BUBBELBADGUH(1.0f),
+        // </zingendeweide>
         ;
 
         public final float scale;

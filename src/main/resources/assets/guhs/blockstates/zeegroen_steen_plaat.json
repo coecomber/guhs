@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/zeegroen_steen_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/zeegroen_steen"
+    },
+    "type=top": {
+      "model": "guhs:block/zeegroen_steen_plaat_top"
+    }
+  }
+}

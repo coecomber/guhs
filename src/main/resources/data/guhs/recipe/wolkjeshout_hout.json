@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "guhs:wolkjeshout_stam"
+  },
+  "result": {
+    "id": "guhs:wolkjeshout_hout",
+    "count": 3
+  }
+}
