@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GWG",
+    "BRB",
+    "GKG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "W": "guhs:guh_wheel",
+    "B": "guhs:knabbelbatterij",
+    "R": "guhs:guh_wire",
+    "K": "guhs:block_of_kaasknabbels"
+  },
+  "result": {
+    "id": "guhs:hamsterknooppunt",
+    "count": 1
+  }
+}

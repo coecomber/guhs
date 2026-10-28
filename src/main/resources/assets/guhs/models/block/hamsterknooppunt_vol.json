@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "guhs:block/hamsterknooppunt_voor_vol",
+    "side": "guhs:block/hamsterknooppunt_zij",
+    "top": "guhs:block/hamsterknooppunt_boven",
+    "particle": "guhs:block/hamsterknooppunt_zij"
+  }
+}

@@ -52,6 +52,7 @@
     "guhs:bouwkeet",
     "guhs:vadslamp",
     "guhs:vadsschakelaar",
-    "guhs:weer_vadser"
+    "guhs:weer_vadser",
+    "guhs:hamsterknooppunt"
   ]
 }

@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 51,
+  guhs_chapter_version: 52,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -127,13 +127,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "4755483DC0A9EE7D",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_tech_hamsterbuis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 27.568749999999998,
+      y: 31.531249999999996,
       hover: [
         "De Werktuigguh krabt achter zijn oortjes.",
         "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
@@ -2802,6 +2814,75 @@
       x: 16.0,
       y: 24.45,
       shape: "rsquare",
+    },
+    {
+      id: "47554885F57F3160",
+      icon: {
+        id: "guhs:hamsterknooppunt",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:hamsterknooppunt",
+          },
+          id: "475548CE5C262945",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482C197F1A55",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548C41D6E055C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755484F38966CF2",
+      icon: {
+        id: "guhs:hamsterbuis_station",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:hamsterbuis_station",
+          },
+          count: 2,
+          id: "4755483AA6788C49",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E571222693",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548272C095FE7",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 28.412499999999998,
     },
   ],
 }
