@@ -61,7 +61,7 @@
   ],
   "quest.47554848DC20455B.title": "How Much Can You Hook Up?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per setup, at most &e4&r Guh Wheels, &e2&r Cuddle Generators and &e2&r Disco Dynamos count (later also 4 Blub Stoves and 1 Glowstar Core). Whatever you hook up beyond that sleeps, and you can read that off. Story guhs are stronger: Baltoguh runs faster, Guhtwo makes the wheel float. Need more? Build a second setup.",
+    "Per setup, the first &e4&r Guh Wheels count in full (every wheel after that &e75%&r of the one before, up to &e16&r), at most &e2&r Cuddle Generators and &e2&r Disco Dynamos count (later also 4 Blub Stoves and 1 Glowstar Core). Whatever you hook up beyond that sleeps, and you can read that off. Story guhs are stronger: Baltoguh runs faster, Guhtwo makes the wheel float. Need more? Build a second setup.",
   ],
   "quest.475548420F21E4DE.title": "The Old Guh Wheel Power Plant",
   "quest.475548420F21E4DE.quest_desc": [
@@ -374,5 +374,149 @@
   "quest.4755484F38966CF2.title": "Whoosh!",
   "quest.4755484F38966CF2.quest_desc": [
     "Place two &dhamster tube stations&r, far apart (another dimension is fine!). Step into the tube, pick where to go, and whoosh!",
+  ],
+  "quest.475548B6445198F6.title": "Sixteen cuddles",
+  "quest.475548B6445198F6.quest_desc": [
+    "The &dMega Cuddle Plant&r is a giant 5 by 3 cushion. Up to &d16 tamed guhs&r come and cuddle on it by themselves, and every guh gives &b22 vadskracht&r: 352 together! Do look after them: &6food&r (kaasknabbels, pink buns or blocks of kaasknabbels) and &6one wool&r a day for fresh blankets. One per net.",
+  ],
+  "quest.4755485077753D1B.title": "Export vads",
+  "quest.4755485077753D1B.quest_desc": [
+    "The &dguh villagers&r (Vadsmonteur, Miner, Crystal Cutter and Magic Guh) buy &6bulk&r from your factories every day: blocks of kaasknabbels, knuffelsteen, coloured wool and baked goods. They pay with rare things: clothes, plushies, weather jars, dream sand and even fossils. New orders every day!",
+  ],
+  "quest.4755481C4E6961E9.title": "A greenhouse full of cheese",
+  "quest.4755481C4E6961E9.quest_desc": [
+    "Make a &aCheese Greenhouse&r, put it among your crops and give it &bvadskracht&r and a bucket of &6kaassaus&r. Watch them grow!",
+  ],
+  "quest.4755480F265D161B.title": "Fluffy!",
+  "quest.4755480F265D161B.quest_desc": [
+    "Grow &ffluffballs&r (seeds: wheat seeds + wool) and harvest your first &ffluff&r.",
+  ],
+  "quest.4755485D1220067B.title": "Everything in its place",
+  "quest.4755485D1220067B.quest_desc": [
+    "Lay a &dGuh Sorting Belt&r and put a guh with the chore &dSorter&r in a huisje next to it. It puts everything into the right chest!",
+  ],
+  "quest.475548A1F7B4CAB5.title": "Baking in Bulk",
+  "quest.475548A1F7B4CAB5.quest_desc": [
+    "Build a &6Mega Oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+  ],
+  "quest.475548344C093E6F.title": "Weather for the Whole Base",
+  "quest.475548344C093E6F.quest_desc": [
+    "Put a &bNibble Weather Station&r next to your Weather Vadser and feed it nibbles: then the weather covers your whole base.",
+  ],
+  "quest.4755481D33D17AEA.title": "A Sky Full of Guhs",
+  "quest.4755481D33D17AEA.quest_desc": [
+    "Build the &dStar Dome&r and feed it nibbles until the first guh constellation lights up.",
+  ],
+  "quest.4755482DD09880EA.title": "A Fair for Guhs",
+  "quest.4755482DD09880EA.quest_desc": [
+    "Build a &dMerry-Go-Round&r and buy a ticket (a cheese nibble): your guhs ride along and get happy.",
+  ],
+  "quest.475548C601C9DF81.title": "Catching Clouds",
+  "quest.475548C601C9DF81.quest_desc": [
+    "Put a &bCloud Catcher&r on the roof: the higher, the more fluff.",
+  ],
+  "quest.47554857D4132B52.title": "Cheese in the boiler",
+  "quest.47554857D4132B52.quest_desc": [
+    "The &6Nibble Boiler&r burns cheese nibbles for &d80 chonk power&r. A block of cheese nibbles burns nine times as long. Hungry, though: hundreds of nibbles an hour. Time for a nibble farm!",
+  ],
+  "quest.47554897538BBDF6.title": "Soft stone",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Cheese sauce + water = &dcuddlestone&r. Put the &6Cuddlestone Generator&r next to a water source, give it cheese sauce through a hose and chonk power, and put a chest next to it.",
+  ],
+  "quest.475548FE7360CF21.title": "A pool of sauce",
+  "quest.475548FE7360CF21.quest_desc": [
+    "The &6Big Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is.",
+  ],
+  "quest.4755484DD06F433F.title": "Pipes all the way",
+  "quest.4755484DD06F433F.quest_desc": [
+    "A &6Sauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
+  ],
+  "quest.475548338C23DDC9.title": "Weather all around",
+  "quest.475548338C23DDC9.quest_desc": [
+    "A Weather Vadser only reaches 10 blocks. Put a &bCloud Antenna&r on it: I, II and III make the radius 20, 35 and 60. Every step costs more chonk power.",
+  ],
+  "quest.4755482B7D2B8727.title": "A fossil!",
+  "quest.4755482B7D2B8727.quest_desc": [
+    "Deep in old fossil places there are sometimes &6fossils&r: in the chests of the &dFossil Dig&r and the &dfossil mine&r of the Barbecuether, at the &dgiant guh fossil&r, in the &dabandoned guh mine&r and at the &dcave paintings&r under the wool. The dig's daily find is sometimes a fossil too. Find one!",
+  ],
+  "quest.47554824583EC9A0.title": "The Fossil Hatchery",
+  "quest.47554824583EC9A0.quest_desc": [
+    "Make a &6Fossil Hatchery&r. Put a fossil and &616 cheese nibbles&r in and give it &d20 vadskracht&r: under the glass bell the egg turns round.",
+  ],
+  "quest.4755486826FB3AE3.title": "Crack!",
+  "quest.4755486826FB3AE3.quest_desc": [
+    "After a whole Minecraft day of hatching a baby ancient guh crawls out of the egg. It is yours right away!",
+  ],
+  "quest.47554819DD50745F.title": "Mammoth Guh",
+  "quest.47554819DD50745F.quest_desc": [
+    "Hatch a &6Mammoth Guh&r. In a guh house it does its chores twice as fast, and cuddling gives wool.",
+  ],
+  "quest.4755487AF029E682.title": "T-Guh",
+  "quest.4755487AF029E682.quest_desc": [
+    "Hatch a &6T-Guh&r. Give it the &dWatch&r chore: it spots monsters coming from very far away.",
+  ],
+  "quest.475548D5A97A13A7.title": "Pteroguh",
+  "quest.475548D5A97A13A7.quest_desc": [
+    "Hatch a &6Pteroguh&r. When it lives in a guh house it flies the goods to chests far around the house.",
+  ],
+  "quest.475548787889088A.title": "Ancient Meerkat Guh",
+  "quest.475548787889088A.quest_desc": [
+    "Hatch an &6Ancient Meerkat Guh&r. Take it along: it stands up and points out rare guhs nearby.",
+  ],
+  "quest.47554818B2023D00.title": "A place to launch",
+  "quest.47554818B2023D00.quest_desc": [
+    "Make a &dLaunch Pad&r (iron blocks, knuffelsteen and a nibble battery) and put it somewhere open: the rocket gets big!",
+  ],
+  "quest.475548044BCA1179.title": "The hull",
+  "quest.475548044BCA1179.quest_desc": [
+    "Click the pad with &d64 knuffelsteen&r, &d24 iron&r and &d16 glass&r (in portions is fine).",
+  ],
+  "quest.4755488593D48293.title": "The engine",
+  "quest.4755488593D48293.quest_desc": [
+    "Two &dnibble batteries&r, a &dGuh Oven&r, &d4 iron blocks&r and &d16 redstone&r. Vroom!",
+  ],
+  "quest.47554853840EB6A3.title": "The fuel",
+  "quest.47554853840EB6A3.quest_desc": [
+    "&d24 blocks of cheese nibbles&r and &d4 buckets of cheese sauce&r. Rockets run on cheese, everybody knows that.",
+  ],
+  "quest.475548C49AC8277E.title": "The crew",
+  "quest.475548C49AC8277E.quest_desc": [
+    "Dress three of your guhs in an &dastronaut suit&r (wool and glass), take them to the pad and click it.",
+  ],
+  "quest.47554832A7DE93A7.title": "Liftoff!",
+  "quest.47554832A7DE93A7.quest_desc": [
+    "Click the pad: countdown, engines on, and off goes the rocket!",
+  ],
+  "quest.4755487EF180F842.title": "One small step",
+  "quest.4755487EF180F842.quest_desc": [
+    "Plant a &dlittle moon flag&r on the Cheese Moon. Chip &dcheese moon crystals&r in the craters and swap them with &dAstronaut Kaasje&r for souvenirs.",
+  ],
+  "quest.475548A8AACBBEF7.title": "Whirring Spinner",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "Build a &dSpinning Machine&r and spin &ffluff&r into wool: 2 fluff is 1 white wool. Fluff comes from Cloud Lambs (shearing) or the Plushie Recycler.",
+  ],
+  "quest.4755487539D5A8EA.title": "Splash in the Dye Bath",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Put wool and dye in the &dDye Bath&r: it dyes everything the game can dye, glass, clay and cuddle blocks too.",
+  ],
+  "quest.475548070DEA1A7F.title": "Shearing Stable",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Keep tame &dCloud Lambs&r around a &dShearing Stable&r: it shears them by itself. Tame them with fluffgrass or cloud candy floss and breed them with cloud candy floss!",
+  ],
+  "quest.475548F127CB5DD5.title": "Nothing Is Wasted",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Put old plushies, guh clothes, wool or cushions into the &dPlushie Recycler&r: fluff comes out.",
+  ],
+  "quest.4755488802E43B45.title": "Building Blocks in Bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Put an &dexample&r in the &dBuilding Block Factory&r: it makes stairs, slabs, walls, smooth and coloured blocks. Link a Bank Guh (Bank Key) or a chest (sneak + click, then the chest).",
+  ],
+  "quest.47554809CF8DAD01.title": "All the Colours of the Rainbow",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "Grind flowers in the &dColour Mill&r: 2 to 3 dye per flower. Let a guh do the chore &dPicking Flowers&r for an endless supply!",
+  ],
+  "quest.4755483CF22A99C0.title": "Rainbow Press",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "Press fluff and &6cheese sauce&r into any colour in the &dRainbow Press&r. Pick the colour with sneak + click, or put down an example dye.",
   ],
 }

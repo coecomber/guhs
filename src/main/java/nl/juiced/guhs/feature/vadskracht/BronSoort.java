@@ -13,7 +13,7 @@ public enum BronSoort {
     GUHRAD(16), KNUFFELGENERATOR(2), DISCO_DYNAMO(2), BLUBKACHELTJE(4), GLOEISTERKERN(1),
     // einde2 tier 5 (CONTRACT_E2_B 1.2 and 9 item 7, owner trap5_machines, texts in tools/features/einde2_trap5_machines.py)
     ENDERGUHRAD(1), KOMEETKERN(1),
-    // 1.8.0 (vadskracht, feature/centrale): the Mega-knuffelcentrale, the end of the progression; one per net
+    // 1.8.0 (vadskracht, feature/centrale): the Mega-knuffelcentrale, the end of the progression, one per net
     MEGA_KNUFFELCENTRALE(1),
     // 1.8.0 (vadskracht, feature/vadsbasis): the Knabbelketel (not part of the Guhraden's afnemende opbrengst)
     KNABBELKETEL(4);

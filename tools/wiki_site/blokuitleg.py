@@ -2199,62 +2199,14 @@ UITLEG["guhhuisje_villa"] = dict(
        "- Inside, the residents sleep in the new beds: two Cuddle Nests, the Guh-head bench, bunk beds, the basket, matchboxes "
        "and a shell bed. Every critter gets a vakje of its own kind.",
     meer=["systemen/guhhuisje"])
-# <bedden> (1.8.0, tools/features/bedden.py: rewritten on every run)
-UITLEG['droombed'] = dict(nl='Een echt bed: slapen, je spawnpunt zetten en de nacht overslaan, net als een gewoon bed. Ligt er een ingestopte guh of Snoes vlakbij, dan kun je ook samen gaan dromen.', en='A real bed: sleep, set your spawn point and skip the night, just like a normal bed. With a tucked-in guh or Snoes close by you can go dreaming together too.')
-UITLEG['guh_blub_mandje'] = dict(nl="Een slaapplekje voor een guh én een Blub. 's Nachts zoekt een guh het mandje vanzelf op; een Blub in de buurt kruipt er dan knuffelend bij. Je kunt er ook een guh in instoppen om te gaan dromen.", en='A sleeping spot for a guh and a Blub. At night a guh finds the basket by itself; a Blub nearby then cuddles up with it. You can also tuck a guh in here to go dreaming.')
-UITLEG['stapelbedje'] = dict(nl="Twee slaapplekjes boven elkaar: 's nachts slaapt er onder en boven een guh. De bovenste klautert via het laddertje naar boven.", en='Two sleeping spots on top of each other: at night a guh sleeps below and one on top. The top one climbs up the little ladder.')
-UITLEG['luciferdoosje'] = dict(nl="'s Nachts kruipt een pieppiepmuisje in de buurt erin om te slapen (zzz). Overdag is het weer gewoon een doosje.", en="At night a squeaky mouse nearby crawls in to sleep (zzz). By day it's just a little box again.")
-UITLEG['schelpbedje'] = dict(nl="'s Nachts komen Schilly en Poepschilly erin slapen (zzz). Leg het in de buurt van hun strandje.", en='At night Schilly and Poepschilly come to sleep in it (zzz). Put it near their beach.')
-UITLEG['guh_hoofdbank'] = dict(nl="Een familiebed van meerdere blokken: je zet het in een keer neer (het ligt van je af, het hoofdeinde aan de verre kant) en wie een stukje breekt, breekt het hele bed. Elk vakje is voor een eigen diertje: guh, Blub, pieppiepmuisje of Schilly (in een schelpje of een nat hoekje). 's Nachts gaan tamme diertjes in de buurt vanzelf naar hun vakje en slapen ze samen. Het is geen bed voor jezelf.", en='A family bed of several blocks: you place it in one go (it lies away from you, the head end on the far side) and breaking one piece breaks the whole bed. Every nook is for its own critter: guh, Blub, squeaky mouse or Schilly (in a shell or a wet corner). At night tame critters nearby go to their nook by themselves and sleep together. It is not a bed for you.')
-UITLEG['knuffelnest'] = dict(nl="Het grote ronde nest voor acht guhs (4 bij 4 blokken). 's Nachts komen tot acht tamme guhs uit de buurt erin slapen, in een kringetje met hun kopjes naar het knabbelschaaltje. Je zet het in een keer neer; wie een stukje breekt, breekt het hele nest.", en='The big round nest for eight guhs (4 by 4 blocks). At night up to eight tame guhs from around sleep in it, in a circle with their heads towards the nibble bowl. You place it in one go; breaking one piece breaks the whole nest.')
-UITLEG['guh_hoofdbed'] = UITLEG['droombed']
-UITLEG['blub_bed'] = UITLEG['droombed']
-UITLEG['wolkenhemelbed'] = UITLEG['droombed']
-UITLEG['slaaptreintje'] = UITLEG['guh_hoofdbank']
-UITLEG['kussenfort'] = UITLEG['guh_hoofdbank']
-UITLEG['droomschuitje'] = UITLEG['guh_hoofdbank']
-UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
-UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
-UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
-# </bedden>
 
 # <hamsterbuis> 1.8.0 (vadskracht): the hamsterbuis network (tools/features/hamsterbuis.py BLOKUITLEG)
 UITLEG['hamsterknooppunt'] = dict(nl='Het hoofdstation van je hamsterbuis-net. Leg een guhdraad naar het knooppunt: wat je net overhoudt, vult zijn buffer (tot 4000 VK). Elke reis met een hamsterbuis-station kost 100 VK uit die buffer. Je hebt er één: zet je een nieuwe neer, dan verhuist het knooppunt mee.\n\n- Rechtsklik: hoe vol de buffer is en hoeveel stations je net heeft.', en='The main station of your hamster tube network. Run a guh wire to the junction: what your net has left over fills its buffer (up to 4000 VK). Every trip with a hamster tube station costs 100 VK from that buffer. You have one: place a new one and the junction moves along.\n\n- Right-click: how full the buffer is and how many stations your network has.', meer=[])
 UITLEG['hamsterbuis_station'] = dict(nl='Een doorzichtige hamsterbuis-ingang, voor overal: in de Guhmension, de gewone wereld, de Barbecuether, het Guheinde... Stap in de buis (of klik erop) en kies een ander station: woesj, daar sta je. Heeft zelf geen vadskracht nodig.\n\n- Jij hernoemt je stations en zet ze op Openbaar of Privé.\n- Je droomwolkje-vriendjes mogen altijd mee.\n- Sluipend in de buis stappen: dan gebeurt er niks.', en='A see-through hamster tube entrance, for anywhere: the Guhmension, the normal world, the Barbecuether, the Guheinde... Step into the tube (or click it) and pick another station: whoosh, there you are. Needs no vadskracht itself.\n\n- You rename your stations and set them Public or Private.\n- Your dream cloud friends may always come along.\n- Sneaking into the tube: nothing happens.', meer=[])
-# </hamsterbuis>
-# <centrale>
-UITLEG['mega_knuffelcentrale'] = dict(
-    nl="Het reuzenkussen van de Mega-knuffelcentrale (5 bij 3). Tamme guhs binnen 8 blokken komen vanzelf liggen, tot 16. Elke guh geeft 22 vadskracht.\n\n- Klik met kaasknabbels, roze broodjes of kaasknabbelblokken: voer. Elke knuffelende guh eet om de 120 seconden een portie. Zonder voer knuffelen ze maar voor 25 procent.\n- Klik met wol: verse dekentjes. Eén wol per dag; oude dekentjes geven 75 procent.\n- Buizen en trechters mogen voer en wol erin doen.\n- Eén per vadskracht-net. Lege hand: hoe gaat het met de guhs?",
-    en="The giant cushion of the Mega Cuddle Plant (5 by 3). Tamed guhs within 8 blocks come and lie down by themselves, up to 16. Every guh gives 22 vadskracht.\n\n- Click with kaasknabbels, pink buns or blocks of kaasknabbels: food. Every cuddling guh eats a portion every 120 seconds. Without food they only cuddle at 25 percent.\n- Click with wool: fresh blankets. One wool a day; old blankets give 75 percent.\n- Pipes and hoppers may put food and wool in.\n- One per vadskracht net. Empty hand: how are the guhs doing?",
-    meer=[])
-# </centrale>
-# <kaaskas> 1.8.0 vadskracht: de Kaaskas en de Guh-sorteerband (tools/features/kaaskas.py)
+# </hamsterbuis># <kaaskas> 1.8.0 vadskracht: de Kaaskas en de Guh-sorteerband (tools/features/kaaskas.py)
 UITLEG['kaaskas'] = dict(nl='De kern van een glazen kas. Zet hem tussen je gewassen en geef hem vadskracht (12) en kaassaus (emmer of Sausslang).\n\n- Elke ruim een seconde krijgt een groeiend gewas in de kas een duwtje, voor een beetje saus.\n- Kaasknabbelplantjes, pluisbolletjes, roze graan, tarwe: elk gewas telt.\n- Plukken doe je zelf, met een Oogster of met een guh met het klusje Kassier.', en='The heart of a glass greenhouse. Put it among your crops and give it vadskracht (12) and kaassaus (bucket or Sauce Hose).\n\n- Every second or so a growing crop in the greenhouse gets a push, for a bit of sauce.\n- Nibble plants, fluffballs, pink grain, wheat: every crop counts.\n- Picking is up to you, an Oogster or a guh with the chore Greenhouse keeper.', meer=[])
 UITLEG['sorteerband'] = dict(nl='Een lage band die je achter elkaar legt. Wat erop ligt rijdt mee in de richting van de pijltjes.\n\n- Aan het eind (geen band meer ervoor) blijft het liggen.\n- Een guh met het klusje Sorteerder pakt het op en stopt het in de kist waar al zoiets in ligt.', en='A low belt you lay in a row. What lies on it rides along in the direction of the arrows.\n\n- At the end (no belt in front) it stays.\n- A guh with the chore Sorter picks it up and puts it in the chest that already holds that kind.', meer=[])
 # </kaaskas>
-
-# <koepel>
-UITLEG['mega_oven'] = dict(
-    nl='Een grote bakkerij van 3 bij 2 bij 2 op vadskracht.\n\n- Klik met een lege hand: het volgende bakprogramma (roze broodjes, knabbelkoekjes, guh-taarten, cupcakes, broden).\n- Ingrediënten gaan erin met de hand of met een buis; de baksels gaan er met een buis uit, of sluip + lege hand.\n- Hij bakt meer per ingrediënt dan een werkbank en heeft geen melk nodig.',
-    en='A big bakery of 3 by 2 by 2 on vadskracht.\n\n- Click with an empty hand: the next programme (pink buns, nibble cookies, guh cakes, cupcakes, breads).\n- Ingredients go in by hand or by pipe; the baking comes out by pipe, or sneak + empty hand.\n- It bakes more per ingredient than a crafting table and needs no milk.',
-    meer=[])
-UITLEG['knabbel_weerstation'] = dict(
-    nl='Een weertoren die de Weer vadsers in de buurt groter maakt.\n\n- Voer hem kaasknabbels of knabbelblokken; hij eet één knabbel per 30 seconden.\n- Zolang hij vadskracht en knabbels heeft, maakt elke Weer vadser tot 16 blokken bij hem vandaan zijn weertje over 150 blokken.',
-    en='A weather tower that makes the Weather Vadsers nearby bigger.\n\n- Feed it cheese nibbles or nibble blocks; it eats one nibble per 30 seconds.\n- As long as it has vadskracht and nibbles, every Weather Vadser up to 16 blocks from it makes its weather over 150 blocks.',
-    meer=[])
-UITLEG['sterrenkoepel'] = dict(
-    nl='Het Vadsigheids-monument: hij groeit nooit, hij gaat stralen.\n\n- Klik met kaasknabbels of knabbelblokken: alles uit je hand gaat erin.\n- Bij elk niveau licht een nieuw guh-sterrenbeeld op (12 in totaal) en is iedereen online even uitgerust.\n- Lege hand: de stand en de grootste gevers.\n- De sterren stralen alleen op vadskracht.',
-    en='The Vadsiness Monument: it never grows, it shines.\n\n- Click with cheese nibbles or nibble blocks: everything in your hand goes in.\n- Every level lights up a new guh constellation (12 in all) and everybody online feels rested for a while.\n- Empty hand: the standing and the biggest givers.\n- The stars only shine on vadskracht.',
-    meer=[])
-UITLEG['draaimolen'] = dict(
-    nl='Een draaimolen voor je guhs.\n\n- Klik met een kaasknabbel: dat is een kaartje voor een rit van 30 seconden.\n- Tamme guhs tot 8 blokken ver rijden mee en worden blij: dan doen ze hun klusjes beter en lopen ze harder in een Guhrad.\n- Jij wordt er gezellig van.',
-    en='A merry-go-round for your guhs.\n\n- Click with a cheese nibble: that is a ticket for a ride of 30 seconds.\n- Tame guhs up to 8 blocks away ride along and get happy: then they do their chores better and run faster in a Guh Wheel.\n- It makes you feel cosy.',
-    meer=[])
-UITLEG['wolkenvanger'] = dict(
-    nl='Een schotel die wolkjes tot pluis condenseert.\n\n- Werkt alleen onder de open lucht.\n- Hoe hoger, hoe sneller: op zeeniveau elke 30 seconden een pluisje, vanaf hoogte 192 elke 6 seconden.\n- Een kist of buis eronder krijgt het pluis meteen; anders: klik met een lege hand.',
-    en='A dish that condenses little clouds into fluff.\n\n- Only works under the open sky.\n- The higher, the faster: at sea level a bit of fluff every 30 seconds, from height 192 every 6 seconds.\n- A chest or pipe under it gets the fluff at once; otherwise: click with an empty hand.',
-    meer=[])
-# </koepel>
 # <vadsbasis> 1.8.0 vadskracht (tools/features/vadsbasis.py)
 UITLEG['knabbelketel'] = dict(
     nl="Een ketel met een guh-snoet die kaasknabbels stookt en daarmee 80 vadskracht geeft. Rechtsklik met kaasknabbels of een "
@@ -2384,3 +2336,52 @@ UITLEG["regenboogpers"] = dict(
        "bucket in the bucket slot or from a Sauce Vat, sauce pump or sauce pipe next to it. Pick the colour with sneak + empty "
        "hand (the next colour), or put a dye in the example slot. Needs a lot of vadskracht.")
 # </fabriek>
+# <bedden> (1.8.0, tools/features/bedden.py: rewritten on every run)
+UITLEG['droombed'] = dict(nl='Een echt bed: slapen, je spawnpunt zetten en de nacht overslaan, net als een gewoon bed. Ligt er een ingestopte guh of Snoes vlakbij, dan kun je ook samen gaan dromen.', en='A real bed: sleep, set your spawn point and skip the night, just like a normal bed. With a tucked-in guh or Snoes close by you can go dreaming together too.')
+UITLEG['guh_blub_mandje'] = dict(nl="Een slaapplekje voor een guh én een Blub. 's Nachts zoekt een guh het mandje vanzelf op; een Blub in de buurt kruipt er dan knuffelend bij. Je kunt er ook een guh in instoppen om te gaan dromen.", en='A sleeping spot for a guh and a Blub. At night a guh finds the basket by itself; a Blub nearby then cuddles up with it. You can also tuck a guh in here to go dreaming.')
+UITLEG['stapelbedje'] = dict(nl="Twee slaapplekjes boven elkaar: 's nachts slaapt er onder en boven een guh. De bovenste klautert via het laddertje naar boven.", en='Two sleeping spots on top of each other: at night a guh sleeps below and one on top. The top one climbs up the little ladder.')
+UITLEG['luciferdoosje'] = dict(nl="'s Nachts kruipt een pieppiepmuisje in de buurt erin om te slapen (zzz). Overdag is het weer gewoon een doosje.", en="At night a squeaky mouse nearby crawls in to sleep (zzz). By day it's just a little box again.")
+UITLEG['schelpbedje'] = dict(nl="'s Nachts komen Schilly en Poepschilly erin slapen (zzz). Leg het in de buurt van hun strandje.", en='At night Schilly and Poepschilly come to sleep in it (zzz). Put it near their beach.')
+UITLEG['guh_hoofdbank'] = dict(nl="Een familiebed van meerdere blokken: je zet het in een keer neer (het ligt van je af, het hoofdeinde aan de verre kant) en wie een stukje breekt, breekt het hele bed. Elk vakje is voor een eigen diertje: guh, Blub, pieppiepmuisje of Schilly (in een schelpje of een nat hoekje). 's Nachts gaan tamme diertjes in de buurt vanzelf naar hun vakje en slapen ze samen. Het is geen bed voor jezelf.", en='A family bed of several blocks: you place it in one go (it lies away from you, the head end on the far side) and breaking one piece breaks the whole bed. Every nook is for its own critter: guh, Blub, squeaky mouse or Schilly (in a shell or a wet corner). At night tame critters nearby go to their nook by themselves and sleep together. It is not a bed for you.')
+UITLEG['knuffelnest'] = dict(nl="Het grote ronde nest voor acht guhs (4 bij 4 blokken). 's Nachts komen tot acht tamme guhs uit de buurt erin slapen, in een kringetje met hun kopjes naar het knabbelschaaltje. Je zet het in een keer neer; wie een stukje breekt, breekt het hele nest.", en='The big round nest for eight guhs (4 by 4 blocks). At night up to eight tame guhs from around sleep in it, in a circle with their heads towards the nibble bowl. You place it in one go; breaking one piece breaks the whole nest.')
+UITLEG['guh_hoofdbed'] = UITLEG['droombed']
+UITLEG['blub_bed'] = UITLEG['droombed']
+UITLEG['wolkenhemelbed'] = UITLEG['droombed']
+UITLEG['slaaptreintje'] = UITLEG['guh_hoofdbank']
+UITLEG['kussenfort'] = UITLEG['guh_hoofdbank']
+UITLEG['droomschuitje'] = UITLEG['guh_hoofdbank']
+UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
+UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
+UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
+# </bedden>
+
+# <centrale>
+UITLEG['mega_knuffelcentrale'] = dict(
+    nl="Het reuzenkussen van de Mega-knuffelcentrale (5 bij 3). Tamme guhs binnen 8 blokken komen vanzelf liggen, tot 16. Elke guh geeft 22 vadskracht.\n\n- Klik met kaasknabbels, roze broodjes of kaasknabbelblokken: voer. Elke knuffelende guh eet om de 120 seconden een portie. Zonder voer knuffelen ze maar voor 25 procent.\n- Klik met wol: verse dekentjes. Eén wol per dag; oude dekentjes geven 75 procent.\n- Buizen en trechters mogen voer en wol erin doen.\n- Eén per vadskracht-net. Lege hand: hoe gaat het met de guhs?",
+    en="The giant cushion of the Mega Cuddle Plant (5 by 3). Tamed guhs within 8 blocks come and lie down by themselves, up to 16. Every guh gives 22 vadskracht.\n\n- Click with kaasknabbels, pink buns or blocks of kaasknabbels: food. Every cuddling guh eats a portion every 120 seconds. Without food they only cuddle at 25 percent.\n- Click with wool: fresh blankets. One wool a day; old blankets give 75 percent.\n- Pipes and hoppers may put food and wool in.\n- One per vadskracht net. Empty hand: how are the guhs doing?",
+    meer=[])
+# </centrale>
+
+
+# <koepel>
+UITLEG['mega_oven'] = dict(
+    nl='Een grote bakkerij van 3 bij 2 bij 2 op vadskracht.\n\n- Klik met een lege hand: het volgende bakprogramma (roze broodjes, knabbelkoekjes, guh-taarten, cupcakes, broden).\n- Ingrediënten gaan erin met de hand of met een buis; de baksels gaan er met een buis uit, of sluip + lege hand.\n- Hij bakt meer per ingrediënt dan een werkbank en heeft geen melk nodig.',
+    en='A big bakery of 3 by 2 by 2 on vadskracht.\n\n- Click with an empty hand: the next programme (pink buns, nibble cookies, guh cakes, cupcakes, breads).\n- Ingredients go in by hand or by pipe; the baking comes out by pipe, or sneak + empty hand.\n- It bakes more per ingredient than a crafting table and needs no milk.',
+    meer=[])
+UITLEG['knabbel_weerstation'] = dict(
+    nl='Een weertoren die de Weer vadsers in de buurt groter maakt.\n\n- Voer hem kaasknabbels of knabbelblokken; hij eet één knabbel per 30 seconden.\n- Zolang hij vadskracht en knabbels heeft, maakt elke Weer vadser tot 16 blokken bij hem vandaan zijn weertje over 150 blokken.',
+    en='A weather tower that makes the Weather Vadsers nearby bigger.\n\n- Feed it cheese nibbles or nibble blocks; it eats one nibble per 30 seconds.\n- As long as it has vadskracht and nibbles, every Weather Vadser up to 16 blocks from it makes its weather over 150 blocks.',
+    meer=[])
+UITLEG['sterrenkoepel'] = dict(
+    nl='Het Vadsigheids-monument: hij groeit nooit, hij gaat stralen.\n\n- Klik met kaasknabbels of knabbelblokken: alles uit je hand gaat erin.\n- Bij elk niveau licht een nieuw guh-sterrenbeeld op (12 in totaal) en is iedereen online even uitgerust.\n- Lege hand: de stand en de grootste gevers.\n- De sterren stralen alleen op vadskracht.',
+    en='The Vadsiness Monument: it never grows, it shines.\n\n- Click with cheese nibbles or nibble blocks: everything in your hand goes in.\n- Every level lights up a new guh constellation (12 in all) and everybody online feels rested for a while.\n- Empty hand: the standing and the biggest givers.\n- The stars only shine on vadskracht.',
+    meer=[])
+UITLEG['draaimolen'] = dict(
+    nl='Een draaimolen voor je guhs.\n\n- Klik met een kaasknabbel: dat is een kaartje voor een rit van 30 seconden.\n- Tamme guhs tot 8 blokken ver rijden mee en worden blij: dan doen ze hun klusjes beter en lopen ze harder in een Guhrad.\n- Jij wordt er gezellig van.',
+    en='A merry-go-round for your guhs.\n\n- Click with a cheese nibble: that is a ticket for a ride of 30 seconds.\n- Tame guhs up to 8 blocks away ride along and get happy: then they do their chores better and run faster in a Guh Wheel.\n- It makes you feel cosy.',
+    meer=[])
+UITLEG['wolkenvanger'] = dict(
+    nl='Een schotel die wolkjes tot pluis condenseert.\n\n- Werkt alleen onder de open lucht.\n- Hoe hoger, hoe sneller: op zeeniveau elke 30 seconden een pluisje, vanaf hoogte 192 elke 6 seconden.\n- Een kist of buis eronder krijgt het pluis meteen; anders: klik met een lege hand.',
+    en='A dish that condenses little clouds into fluff.\n\n- Only works under the open sky.\n- The higher, the faster: at sea level a bit of fluff every 30 seconds, from height 192 every 6 seconds.\n- A chest or pipe under it gets the fluff at once; otherwise: click with an empty hand.',
+    meer=[])
+# </koepel>

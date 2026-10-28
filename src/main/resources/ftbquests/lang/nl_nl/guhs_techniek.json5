@@ -61,7 +61,7 @@
   ],
   "quest.47554848DC20455B.title": "Hoeveel mag eraan?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per opstelling tellen hooguit &e4&r Guhraden, &e2&r Knuffelgeneratoren en &e2&r Disco-dynamo's mee (later ook 4 Blubkacheltjes en 1 Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat het rad zweven. Meer nodig? Bouw een tweede opstelling.",
+    "Per opstelling tellen de eerste &e4&r Guhraden helemaal mee (elk rad daarna &e75%&r van het vorige, tot &e16&r), &e2&r Knuffelgeneratoren en &e2&r Disco-dynamo's mee (later ook 4 Blubkacheltjes en 1 Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat het rad zweven. Meer nodig? Bouw een tweede opstelling.",
   ],
   "quest.475548420F21E4DE.title": "De Oude Guhrad-centrale",
   "quest.475548420F21E4DE.quest_desc": [
@@ -374,5 +374,149 @@
   "quest.4755484F38966CF2.title": "Woesj!",
   "quest.4755484F38966CF2.quest_desc": [
     "Zet twee &dhamsterbuis-stations&r neer, ver uit elkaar (mag in een andere dimensie!). Stap in de buis, kies waarheen, en woesj!",
+  ],
+  "quest.475548B6445198F6.title": "Zestien knuffels",
+  "quest.475548B6445198F6.quest_desc": [
+    "De &dMega-knuffelcentrale&r is een reuzenkussen van 5 bij 3. Tot &d16 tamme guhs&r komen er vanzelf op knuffelen, en elke guh geeft &b22 vadskracht&r: samen 352! Verzorg ze wel: &6voer&r (kaasknabbels, roze broodjes of kaasknabbelblokken) en elke dag &6één wol&r voor verse dekentjes. Eén per net.",
+  ],
+  "quest.4755485077753D1B.title": "Export-vads",
+  "quest.4755485077753D1B.quest_desc": [
+    "De &dguh-villagers&r (Vadsmonteur, Mijnwerker, Kristalslijper en Toverguh) kopen elke dag &6bulk&r van je fabrieken: kaasknabbelblokken, knuffelsteen, gekleurde wol en baksels. Ze betalen met zeldzame dingen: kleertjes, knuffels, weerpotjes, droomzand en zelfs fossielen. Elke dag nieuwe bestellingen!",
+  ],
+  "quest.4755481C4E6961E9.title": "Een kas vol kaas",
+  "quest.4755481C4E6961E9.quest_desc": [
+    "Maak een &aKaaskas&r, zet hem tussen je gewassen en geef hem &bvadskracht&r en een emmer &6kaassaus&r. Kijk ze groeien!",
+  ],
+  "quest.4755480F265D161B.title": "Pluizig!",
+  "quest.4755480F265D161B.quest_desc": [
+    "Kweek &fpluisbolletjes&r (zaadjes: tarwezaad + wol) en oogst je eerste &fpluis&r.",
+  ],
+  "quest.4755485D1220067B.title": "Alles op z'n plek",
+  "quest.4755485D1220067B.quest_desc": [
+    "Leg een &dGuh-sorteerband&r en zet een guh met het klusje &dSorteerder&r in een huisje ernaast. Hij stopt alles in de goede kist!",
+  ],
+  "quest.475548A1F7B4CAB5.title": "Bakken in bulk",
+  "quest.475548A1F7B4CAB5.quest_desc": [
+    "Bake a &6Mega-oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+  ],
+  "quest.475548344C093E6F.title": "Weer voor de hele basis",
+  "quest.475548344C093E6F.quest_desc": [
+    "Zet een &bKnabbel-weerstation&r naast je Weer vadser en voer hem knabbels: het weertje geldt dan voor je hele basis.",
+  ],
+  "quest.4755481D33D17AEA.title": "Een sterrenhemel van guhs",
+  "quest.4755481D33D17AEA.quest_desc": [
+    "Bouw de &dSterrenkoepel&r en voer hem knabbels tot het eerste guh-sterrenbeeld oplicht.",
+  ],
+  "quest.4755482DD09880EA.title": "Kermis voor guhs",
+  "quest.4755482DD09880EA.quest_desc": [
+    "Bouw een &dDraaimolen&r en koop een kaartje (een kaasknabbel): je guhs rijden mee en worden blij.",
+  ],
+  "quest.475548C601C9DF81.title": "Wolken vangen",
+  "quest.475548C601C9DF81.quest_desc": [
+    "Zet een &bWolkenvanger&r op het dak: hoe hoger, hoe meer pluis.",
+  ],
+  "quest.47554857D4132B52.title": "Kaas in de ketel",
+  "quest.47554857D4132B52.quest_desc": [
+    "De &6Knabbelketel&r stookt kaasknabbels voor &d80 vadskracht&r. Een blok kaasknabbels brandt negen keer zo lang. Wel een veelvraat: honderden knabbels per uur. Tijd voor een knabbelboerderij!",
+  ],
+  "quest.47554897538BBDF6.title": "Zachte steen",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Kaassaus + water = &dknuffelsteen&r. Zet de &6Knuffelsteen-generator&r naast een waterbron, geef hem kaassaus via een slang en vadskracht, en zet er een kist naast.",
+  ],
+  "quest.475548FE7360CF21.title": "Een zwembad saus",
+  "quest.475548FE7360CF21.quest_desc": [
+    "De &6Grote saustank&r bewaart 64 emmers. De meter op zijn buik laat zien hoe vol hij zit.",
+  ],
+  "quest.4755484DD06F433F.title": "Buizen tot de horizon",
+  "quest.4755484DD06F433F.quest_desc": [
+    "Een &6Sausbuis&r brengt saus ver weg: hij telt maar voor een zestiende slang.",
+  ],
+  "quest.475548338C23DDC9.title": "Weer in de wijde omtrek",
+  "quest.475548338C23DDC9.quest_desc": [
+    "Een Weer vadser reikt maar 10 blokken. Zet er een &bWolkenantenne&r op: I, II en III maken de straal 20, 35 en 60. Elke stap kost meer vadskracht.",
+  ],
+  "quest.4755482B7D2B8727.title": "Een fossiel!",
+  "quest.4755482B7D2B8727.quest_desc": [
+    "Diep in oude fossielplekken liggen soms &6fossielen&r: in de kisten van de &dFossiel-opgraving&r en de &dfossielmijn&r van de Barbecuether, bij het &dreuzenguh-fossiel&r, in de &dverlaten guhmijn&r en bij de &dgrotschilderingen&r onder de wol. Ook de dagvondst van de opgraving is soms een fossiel. Vind er een!",
+  ],
+  "quest.47554824583EC9A0.title": "De Fossiel-broedmachine",
+  "quest.47554824583EC9A0.quest_desc": [
+    "Maak een &6Fossiel-broedmachine&r. Stop er een fossiel en &616 kaasknabbels&r in en geef hem &d20 vadskracht&r: onder de glazen stolp draait het ei rond.",
+  ],
+  "quest.4755486826FB3AE3.title": "Krak!",
+  "quest.4755486826FB3AE3.quest_desc": [
+    "Na een hele Minecraft-dag broeden kruipt er een baby-oerguh uit het ei. Hij is meteen van jou!",
+  ],
+  "quest.47554819DD50745F.title": "Mammoet-guh",
+  "quest.47554819DD50745F.quest_desc": [
+    "Broed een &6Mammoet-guh&r uit. In een guhhuisje doet hij zijn klusjes twee keer zo snel, en knuffelen geeft wol.",
+  ],
+  "quest.4755487AF029E682.title": "T-Guh",
+  "quest.4755487AF029E682.quest_desc": [
+    "Broed een &6T-Guh&r uit. Geef hem de klus &dWaken&r: hij ziet monsters van heel ver aankomen.",
+  ],
+  "quest.475548D5A97A13A7.title": "Pteroguh",
+  "quest.475548D5A97A13A7.quest_desc": [
+    "Broed een &6Pteroguh&r uit. Woont hij in een guhhuisje, dan vliegt hij de spullen naar kisten tot ver om het huisje heen.",
+  ],
+  "quest.475548787889088A.title": "Oer-stokstaartje-guh",
+  "quest.475548787889088A.quest_desc": [
+    "Broed een &6Oer-stokstaartje-guh&r uit. Neem hem mee: hij gaat rechtop staan en wijst je zeldzame guhs in de buurt aan.",
+  ],
+  "quest.47554818B2023D00.title": "Een plek om te lanceren",
+  "quest.47554818B2023D00.quest_desc": [
+    "Maak een &dLanceerplatform&r (ijzerblokken, knuffelsteen en een knabbelbatterij) en zet het op een open plek: de raket wordt groot!",
+  ],
+  "quest.475548044BCA1179.title": "De romp",
+  "quest.475548044BCA1179.quest_desc": [
+    "Klik op het platform met &d64 knuffelsteen&r, &d24 ijzer&r en &d16 glas&r (mag in porties).",
+  ],
+  "quest.4755488593D48293.title": "De motor",
+  "quest.4755488593D48293.quest_desc": [
+    "Twee &dknabbelbatterijen&r, een &dGuhoven&r, &d4 ijzerblokken&r en &d16 redstone&r. Brommm!",
+  ],
+  "quest.47554853840EB6A3.title": "De brandstof",
+  "quest.47554853840EB6A3.quest_desc": [
+    "&d24 blokken kaasknabbels&r en &d4 emmers kaassaus&r. Raketten rijden op kaas, dat weet iedereen.",
+  ],
+  "quest.475548C49AC8277E.title": "De bemanning",
+  "quest.475548C49AC8277E.quest_desc": [
+    "Trek drie van je guhs een &dastronautenpakje&r aan (wol en glas), neem ze mee naar het platform en klik erop.",
+  ],
+  "quest.47554832A7DE93A7.title": "Lancering!",
+  "quest.47554832A7DE93A7.quest_desc": [
+    "Klik op het platform: aftellen, motoren aan, en weg is de raket!",
+  ],
+  "quest.4755487EF180F842.title": "Eén kleine stap",
+  "quest.4755487EF180F842.quest_desc": [
+    "Plant een &dmaanvlaggetje&r op de Kaasmaan. Hak in de kraters &dkaasmaankristallen&r en ruil ze bij &dAstronaut Kaasje&r voor souvenirs.",
+  ],
+  "quest.475548A8AACBBEF7.title": "Snorrende spinmachine",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "Bouw een &dSpinmachine&r en spin &fpluis&r tot wol: 2 pluis is 1 witte wol. Pluis krijg je van Wolkenschaapjes (scheren) of uit de Knuffelrecycler.",
+  ],
+  "quest.4755487539D5A8EA.title": "Plons in het verfbad",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Leg wol en kleurstof in het &dVerfbad&r: het verft alles wat het spel kan verven, ook glas, klei en knuffelblokken.",
+  ],
+  "quest.475548070DEA1A7F.title": "Scheerstal",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Zet tamme &dWolkenschaapjes&r rond een &dScheerstal&r: hij scheert ze vanzelf. Tem ze met pluisgras of wolkensuikerspin en kweek ze met wolkensuikerspin!",
+  ],
+  "quest.475548F127CB5DD5.title": "Niks gaat verloren",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Stop oude knuffels, guhkleding, wol of kussens in de &dKnuffelrecycler&r: er komt pluis uit.",
+  ],
+  "quest.4755488802E43B45.title": "Bouwblokken in bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Leg een &dvoorbeeld&r in de &dBouwblokken-fabriek&r: hij maakt trappen, platen, muurtjes, gladde en gekleurde blokken. Koppel een Bank Guh (Banksleutel) of een kist (sneak + klik, dan de kist).",
+  ],
+  "quest.47554809CF8DAD01.title": "Alle kleuren van de regenboog",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "Maal bloemetjes in de &dKleurmolen&r: 2 tot 3 kleurstof per bloem. Laat een guh het klusje &dBloemetjes plukken&r doen voor een eindeloze voorraad!",
+  ],
+  "quest.4755483CF22A99C0.title": "Regenboogpers",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "Pers pluis met &6kaassaus&r tot elke kleur in de &dRegenboogpers&r. Kies de kleur met sneak + klik, of leg een voorbeeld-kleurstof neer.",
   ],
 }
