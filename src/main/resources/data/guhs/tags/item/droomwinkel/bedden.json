@@ -34,7 +34,7 @@
       "required": false
     },
     {
-      "id": "guhs:guh_hoofd_bank",
+      "id": "guhs:guh_hoofdbank",
       "required": false
     },
     {
@@ -58,11 +58,11 @@
       "required": false
     },
     {
-      "id": "guhs:badkuip_bed",
+      "id": "guhs:badkuipbed",
       "required": false
     },
     {
-      "id": "guhs:massa_guhbed",
+      "id": "guhs:knuffelnest",
       "required": false
     }
   ]

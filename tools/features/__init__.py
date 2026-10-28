@@ -141,20 +141,16 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0: roze graan of the Zingende Weide (seeds from the pink grass, crop, broodje, koekje, hooibaal; append only)
             'rozegraan',
             # 1.8.0 playtest 2: the droomkistje of the droomweer (append only)
-            'droomweer']
-            # 1.8.0: the Guhvilla (20 residents, its model and roof, the hall inside with the new beds; after huisje; append only)
-            'guhvilla']
             'droomweer',
-            # 1.8.0 U2: sleepy guh clothes and the player's droompyjama (append only)
-            'slaapkleding']
-            'droomweer',
-            # 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein (append only)
-            'droomwinkel']
-            'droomweer',
-            # 1.8.0 uitbreiding: de Dirigent in de Koorkom (append only)
-            'dirigent']
-            'droomweer',
-            # 1.8.0: the Gezelschapshoek of Guhpixel (Kussengevecht, Wie is het, Guh op een rij; append only)
+            # 1.8.0: the Guhvilla (append only)
+            'guhvilla',
+            # 1.8.0 U2: guh slaapkleding + the droompyjama (append only)
+            'slaapkleding',
+            # 1.8.0 U1: the droomwinkeltje of the Zandguh (append only)
+            'droomwinkel',
+            # 1.8.0 U3: the Dirigent in the Koorkom (append only)
+            'dirigent',
+            # 1.8.0 U2: the Gezelschapshoek of Guhpixel (append only)
             'guhpixel_gezel']
 
 

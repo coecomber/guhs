@@ -70,8 +70,8 @@ AANBOD = [
 
 # the beds of the bedden branch (optional tag entries: a bed that does not exist yet is just not in it)
 BEDDEN = ["droombed", "guh_hoofdbed", "blub_bed", "wolkenhemelbed", "guh_blub_mandje", "stapelbedje", "luciferdoosje",
-          "schelpbedje", "guh_hoofd_bank", "slaaptreintje", "kussenfort", "droomschuitje", "boomhut_stapelbed", "quiltbed",
-          "badkuip_bed", "massa_guhbed"]
+          "schelpbedje", "guh_hoofdbank", "slaaptreintje", "kussenfort", "droomschuitje", "boomhut_stapelbed", "quiltbed",
+          "badkuipbed", "knuffelnest"]
 
 # key -> (Dutch, English)
 TEKSTEN = {
