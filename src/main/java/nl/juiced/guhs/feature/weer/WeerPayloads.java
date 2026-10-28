@@ -46,11 +46,12 @@ public final class WeerPayloads {
     }
 
     /** Server to client: open the menu of the Weer vadser at pos (its weather, does it have vadskracht, the unlocked ones). */
-    public record Open(BlockPos pos, int weertje, boolean kracht, List<String> ontgrendeld) implements CustomPacketPayload {
+    public record Open(BlockPos pos, int weertje, boolean kracht, List<String> ontgrendeld, int straal, int kosten) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("weer_open"));
         public static final StreamCodec<FriendlyByteBuf, Open> STREAM_CODEC = StreamCodec.composite(
                 BlockPos.STREAM_CODEC, Open::pos, ByteBufCodecs.VAR_INT, Open::weertje, ByteBufCodecs.BOOL, Open::kracht,
-                ByteBufCodecs.stringUtf8(32).apply(ByteBufCodecs.list(32)), Open::ontgrendeld, Open::new);
+                ByteBufCodecs.stringUtf8(32).apply(ByteBufCodecs.list(32)), Open::ontgrendeld, ByteBufCodecs.VAR_INT, Open::straal,
+                ByteBufCodecs.VAR_INT, Open::kosten, Open::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

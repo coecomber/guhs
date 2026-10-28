@@ -92,7 +92,7 @@ public final class WeerCommando {
         }
         WeerZones.wisTest(p.level());
         WeerZones.testZone(p.level(), p.blockPosition(), w);
-        source.sendSuccess(() -> Component.literal("Testzone " + w.id() + " hier (straal " + WeerZones.STRAAL + "); /guhs weer uit = weg"), false);
+        source.sendSuccess(() -> Component.literal("Testzone " + w.id() + " hier (straal " + WeerZones.STRAAL + ", zoals met Wolkenantenne III); /guhs weer uit = weg"), false);
         return 1;
     }
 

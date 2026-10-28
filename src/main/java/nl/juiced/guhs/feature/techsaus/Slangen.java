@@ -135,7 +135,7 @@ public final class Slangen {
                 }
             }
         }
-        int slangen = gezien.size();
+        int slangen = gezien.size() * 16;   // (1.8.0: counted in sixteenths of a hose)
         boolean teLang = false;
         while (!rij.isEmpty()) {
             BlockPos slang = rij.poll();
@@ -153,12 +153,14 @@ public final class Slangen {
                     if (gezien.contains(buur)) {
                         continue;
                     }
-                    if (slangen >= SausGetallen.SLANG_MAX) {
+                    // 1.8.0 (vadskracht): a dikke Sausbuis counts for 1/16 hose: long trunk lines (at most SLANG_MAX * 16 of them)
+                    int kost = state.getBlock() instanceof SausbuisBlock ? 1 : 16;
+                    if (slangen + kost > SausGetallen.SLANG_MAX * 16) {
                         teLang = true;   // (a hose that is left out: beyond it nothing is joined)
                         continue;
                     }
                     gezien.add(buur);
-                    slangen++;
+                    slangen += kost;
                     rij.add(buur);
                 } else {
                     uit.add(new Aansluiting(buur, kant.getOpposite()));

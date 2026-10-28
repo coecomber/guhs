@@ -32,6 +32,10 @@ public final class SausGetallen {
 
     // --- the Sausvat ---
     public static final int VAT = 16_000;
+    /** 1.8.0 (vadskracht): the Grote saustank holds 64 buckets. */
+    public static final int TANK = 64_000;
+    /** 1.8.0: the Knuffelsteen-generator: kaassaus + water per knuffelsteen, ticks per knuffelsteen, its tanks. */
+    public static final int GEN_SAUS = 50, GEN_WATER = 50, GEN_TIKKEN = 20, GEN_TANK = 4000;
 
     // --- the Brouwautomaat (one pan: a bucket of kaassaus + one ingredient + three bottles = three Guhdrankjes) ---
     public static final int BROUW_TANK = 4000, BROUW_SAUS = 1000, BROUW_FLESJES = 3, BROUW_TIKKEN = 200;

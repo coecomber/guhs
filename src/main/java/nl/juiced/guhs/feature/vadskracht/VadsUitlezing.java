@@ -39,6 +39,10 @@ public final class VadsUitlezing {
             default -> {
             }
         }
+        // 1.8.0: a net with more Guhraden than count in full says how effective they still are
+        if (net.aantal(BronSoort.GUHRAD) > BronSoort.GUHRAD.vol()) {
+            uit.add(Component.translatable(K + "afnemend", net.aantal(BronSoort.GUHRAD), net.effectief(BronSoort.GUHRAD)).withStyle(ChatFormatting.GOLD));
+        }
         if (net.bufferMax() > 0) {
             if (net.draait() && net.tekort() > 0) {
                 long seconden = net.buffer() / net.tekort();
@@ -52,6 +56,10 @@ public final class VadsUitlezing {
             uit.add(Component.translatable(K + "geeft", bron.vadsAanbod()).withStyle(ChatFormatting.GREEN));
             if (!net.teltMee(bron) && bron.vadsSoort() != null) {
                 uit.add(Component.translatable(K + "telt_niet_mee", bron.vadsSoort().max, bron.vadsSoort().naam(bron.vadsSoort().max)).withStyle(ChatFormatting.GOLD));
+            } else if (net.deel(bron) < 1000 && bron.vadsSoort() != null) {
+                // 1.8.0: afnemende opbrengst
+                BronSoort s = bron.vadsSoort();
+                uit.add(Component.translatable(K + "telt_deels", Math.round(net.deel(bron) / 10.0), s.vol(), s.naam(s.vol())).withStyle(ChatFormatting.GOLD));
             }
         }
         if (knoop instanceof VadsVerbruiker verbruiker) {

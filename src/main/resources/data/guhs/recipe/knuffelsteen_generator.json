@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IKI",
+    "SGS",
+    "IDI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:knuffelsteen",
+    "S": "guhs:sausslang",
+    "G": "guhs:grillspies",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:knuffelsteen_generator",
+    "count": 1
+  }
+}

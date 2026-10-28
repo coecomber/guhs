@@ -27,7 +27,9 @@ WIKI = {
         ("systemen/vadskracht", "Niet te veel van hetzelfde",
          "Per opstelling tellen hooguit "
          + ", ".join(f"{n} {v.TEXTS[v.K + 'soort.' + soort + ('.enkel' if n == 1 else '')]}" for soort, n in v.bron_max().items() if soort not in v.ELDERS)
-         + ". Zet je er meer neer, dan doen de extra's niks ('telt niet mee'). De sterkste tellen het eerst."),
+         + ". Zet je er meer neer, dan doen de extra's niks ('telt niet mee'). De sterkste tellen het eerst. Guhraden worden na "
+         f"{v.getal('GUHRAD_VOL')} stuks lui: elk rad daarna levert {v.getal('GUHRAD_AFNAME_PROCENT')}% van het vorige. Kijk naar een "
+         "rad en je leest hoe vads de opstelling nog is."),
         ("systemen/vadskracht", "De snoet van een machine",
          "Elke guhmachine heeft een snoet. Slaapt hij, dan heeft hij geen vadskracht. Kijkt hij blij, dan heeft hij vadskracht. Kijkt "
          "hij verbaasd met een rond mondje, dan zit hij vol: haal eruit wat hij gemaakt heeft."),

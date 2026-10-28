@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/white_wool",
+    "paal": "minecraft:block/iron_block",
+    "wolk": "minecraft:block/white_wool",
+    "punt": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        14,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "down": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        14,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#punt"
+        },
+        "south": {
+          "texture": "#punt"
+        },
+        "east": {
+          "texture": "#punt"
+        },
+        "west": {
+          "texture": "#punt"
+        },
+        "up": {
+          "texture": "#punt"
+        },
+        "down": {
+          "texture": "#punt"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        9,
+        4
+      ],
+      "to": [
+        12,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wolk"
+        },
+        "south": {
+          "texture": "#wolk"
+        },
+        "east": {
+          "texture": "#wolk"
+        },
+        "west": {
+          "texture": "#wolk"
+        },
+        "up": {
+          "texture": "#wolk"
+        },
+        "down": {
+          "texture": "#wolk"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        5,
+        6
+      ],
+      "to": [
+        6,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wolk"
+        },
+        "south": {
+          "texture": "#wolk"
+        },
+        "east": {
+          "texture": "#wolk"
+        },
+        "west": {
+          "texture": "#wolk"
+        },
+        "up": {
+          "texture": "#wolk"
+        },
+        "down": {
+          "texture": "#wolk"
+        }
+      }
+    }
+  ]
+}

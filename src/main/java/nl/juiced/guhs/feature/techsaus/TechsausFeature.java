@@ -78,6 +78,20 @@ public final class TechsausFeature {
     public static final DeferredBlock<GrillkoolpersBlock> GRILLKOOLPERS = BLOCKS.registerBlock("grillkoolpers", GrillkoolpersBlock::new,
             TechsausFeature::machine);
     public static final DeferredItem<BlockItem> GRILLKOOLPERS_ITEM = blokItem(GRILLKOOLPERS);
+    // 1.8.0 (vadskracht): the Knuffelsteen-generator, the Grote saustank and the dikke Sausbuis
+    public static final DeferredBlock<KnuffelsteenGeneratorBlock> KNUFFELSTEEN_GENERATOR = BLOCKS.registerBlock("knuffelsteen_generator",
+            KnuffelsteenGeneratorBlock::new, TechsausFeature::machine);
+    public static final DeferredItem<BlockItem> KNUFFELSTEEN_GENERATOR_ITEM = blokItem(KNUFFELSTEEN_GENERATOR);
+    public static final DeferredBlock<SaustankBlock> SAUSTANK = BLOCKS.registerBlock("saustank", SaustankBlock::new,
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.TERRACOTTA_ORANGE).strength(3f, 6f).noOcclusion()
+                    .isRedstoneConductor((state, level, pos) -> false).isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false).pushReaction(PushReaction.BLOCK));
+    public static final DeferredItem<BlockItem> SAUSTANK_ITEM = blokItem(SAUSTANK);
+    public static final DeferredBlock<SausbuisBlock> SAUSBUIS = BLOCKS.registerBlock("sausbuis", SausbuisBlock::new,
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.0f, 4f).sound(SoundType.COPPER).noOcclusion()
+                    .isRedstoneConductor((state, level, pos) -> false).isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false));
+    public static final DeferredItem<BlockItem> SAUSBUIS_ITEM = blokItem(SAUSBUIS);
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SauspompBlockEntity>> SAUSPOMP_BE = BLOCK_ENTITIES.register("sauspomp",
             () -> new BlockEntityType<>(SauspompBlockEntity::new, SAUSPOMP.get()));
@@ -89,6 +103,10 @@ public final class TechsausFeature {
             "frituurautomaat", () -> new BlockEntityType<>(FrituurautomaatBlockEntity::new, FRITUURAUTOMAAT.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GrillkoolpersBlockEntity>> GRILLKOOLPERS_BE = BLOCK_ENTITIES.register(
             "grillkoolpers", () -> new BlockEntityType<>(GrillkoolpersBlockEntity::new, GRILLKOOLPERS.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnuffelsteenGeneratorBlockEntity>> KNUFFELSTEEN_GENERATOR_BE =
+            BLOCK_ENTITIES.register("knuffelsteen_generator", () -> new BlockEntityType<>(KnuffelsteenGeneratorBlockEntity::new, KNUFFELSTEEN_GENERATOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SaustankBlockEntity>> SAUSTANK_BE = BLOCK_ENTITIES.register("saustank",
+            () -> new BlockEntityType<>(SaustankBlockEntity::new, SAUSTANK.get()));
 
     /** The item of a sauce block: its name is the block's, and it carries a grey line of what it is for. */
     private static DeferredItem<BlockItem> blokItem(DeferredBlock<? extends Block> block) {
@@ -125,6 +143,9 @@ public final class TechsausFeature {
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, FRITUURAUTOMAAT_BE.get(), SausMachineBlockEntity::sausHandler);
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, GRILLKOOLPERS_BE.get(), SausMachineBlockEntity::sausHandler);
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, SAUSVAT_BE.get(), (vat, kant) -> vat.tank());
+        VadskrachtFeature.machineCapabilities(event, KNUFFELSTEEN_GENERATOR_BE.get());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, KNUFFELSTEEN_GENERATOR_BE.get(), SausMachineBlockEntity::sausHandler);
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, SAUSTANK_BE.get(), (tank, kant) -> tank.tank());
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -137,6 +158,9 @@ public final class TechsausFeature {
         output.accept(new ItemStack(BROUWAUTOMAAT_ITEM.get()));
         output.accept(new ItemStack(FRITUURAUTOMAAT_ITEM.get()));
         output.accept(new ItemStack(GRILLKOOLPERS_ITEM.get()));
+        output.accept(new ItemStack(KNUFFELSTEEN_GENERATOR_ITEM.get()));
+        output.accept(new ItemStack(SAUSTANK_ITEM.get()));
+        output.accept(new ItemStack(SAUSBUIS_ITEM.get()));
     }
 
     private TechsausFeature() {

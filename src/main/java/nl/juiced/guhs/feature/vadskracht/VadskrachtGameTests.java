@@ -241,9 +241,12 @@ public class VadskrachtGameTests {
         return tag;
     }
 
-    /** Five Guhraden in one net: only four count; the strongest count first; an empty wheel gives nothing. */
+    /**
+     * Five Guhraden in one net (1.8.0 afnemende opbrengst): four count in full, the fifth for 75%; the strongest count first;
+     * an empty wheel gives nothing.
+     */
     @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 100)
-    public static void vadskrachtHooguitVierGuhraden(GameTestHelper helper) {
+    public static void vadskrachtAfnemendeGuhraden(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         GuhWheelBlockEntity[] raden = new GuhWheelBlockEntity[5];
         for (int i = 0; i < 5; i++) {
@@ -257,17 +260,29 @@ public class VadskrachtGameTests {
         VadsNet net = net(helper, p(3, 1));
         gelijk(helper, 5, net.knopen().size(), "five wheels in one net");
         gelijk(helper, 5, net.aantal(BronSoort.GUHRAD), "aantal");
-        gelijk(helper, BronSoort.GUHRAD.max, net.telt(BronSoort.GUHRAD), "telt");
-        gelijk(helper, 4 * VadsGetallen.GUHRAD, net.aanbod(), "aanbod of five ordinary guhs");
+        gelijk(helper, 5, net.telt(BronSoort.GUHRAD), "telt (all five, the fifth for less)");
+        int vijfde = Math.round(VadsGetallen.GUHRAD * VadsGetallen.GUHRAD_AFNAME_PROCENT / 100f);
+        gelijk(helper, 4 * VadsGetallen.GUHRAD + vijfde, net.aanbod(), "aanbod of five ordinary guhs");
+        gelijk(helper, 1000 * VadsGetallen.GUHRAD_AFNAME_PROCENT / 100, net.deel(raden[4]), "the fifth counts for 75%");
+        gelijk(helper, Math.round((4 * VadsGetallen.GUHRAD + vijfde) * 100f / (5 * VadsGetallen.GUHRAD)), net.effectief(BronSoort.GUHRAD), "effectief");
         gelijk(helper, 5 * 9 + 9, net.grootte(), "every block of every wheel is in the net");
         // equal output: the lowest positions count, so the last wheel is the one too many
-        helper.assertTrue(raden[0].teltMee() && raden[3].teltMee() && !raden[4].teltMee(), "the fifth wheel does not count");
-        helper.assertFalse(net.teltMee(raden[4]), "VadsNet.teltMee");
+        helper.assertTrue(raden[0].teltMee() && raden[3].teltMee() && raden[4].teltMee(), "the fifth wheel counts (for less)");
+        gelijk(helper, 1000, net.deel(raden[0]), "the first counts in full");
         List<String> regels = lees(helper, p(2, 9).above(2));   // a part block of the fifth wheel
-        helper.assertTrue(regels.contains("Deze opstelling gebruikt 0/40 vadskracht"), "readout of the net: " + regels);
+        helper.assertTrue(regels.contains("Deze opstelling gebruikt 0/48 vadskracht"), "readout of the net: " + regels);
         helper.assertTrue(regels.contains("Dit geeft 10 vadskracht"), "readout of the wheel: " + regels);
-        helper.assertTrue(regels.contains("Telt niet mee: hooguit 4 Guhraden per opstelling"), "readout says it does not count: " + regels);
-        helper.assertFalse(lees(helper, p(1, 1)).stream().anyMatch(r -> r.startsWith("Telt niet mee")), "a wheel that counts does not say so");
+        helper.assertTrue(regels.contains("Telt voor 75% mee: na 4 Guhraden wordt een guh een beetje lui, njeg"), "readout says it counts for less: " + regels);
+        helper.assertTrue(regels.stream().anyMatch(r -> r.startsWith("5 Guhraden in deze opstelling: samen nog 96%")), "how effective the net is: " + regels);
+        helper.assertFalse(lees(helper, p(1, 1)).stream().anyMatch(r -> r.startsWith("Telt voor")), "a wheel that counts in full does not say so");
+
+        // the 17th wheel and further count for nothing at all; the curve never gives much more than seven wheels
+        int som = 0;
+        for (int i = 0; i < BronSoort.GUHRAD.max + 4; i++) {
+            som += BronSoort.GUHRAD.deel(i);
+        }
+        gelijk(helper, 0, BronSoort.GUHRAD.deel(BronSoort.GUHRAD.max), "beyond the max");
+        helper.assertTrue(som < 8000, "twenty wheels are worth fewer than eight: " + som);
 
         // a story guh runs harder: now the fifth wheel is the strongest, and another one does not count
         raden[4].takeOut();
@@ -275,8 +290,8 @@ public class VadskrachtGameTests {
         int balto = GuhradKracht.van(GuhVariant.BALTOGUH).kracht();
         helper.assertTrue(balto > VadsGetallen.GUHRAD, "the Baltoguh gives more than an ordinary guh: " + balto);
         net = net(helper, p(3, 1));
-        gelijk(helper, balto + 3 * VadsGetallen.GUHRAD, net.aanbod(), "aanbod with a Baltoguh");
-        helper.assertTrue(raden[4].teltMee() && !raden[3].teltMee(), "the strongest count first");
+        gelijk(helper, balto + 3 * VadsGetallen.GUHRAD + vijfde, net.aanbod(), "aanbod with a Baltoguh");
+        helper.assertTrue(net.deel(raden[4]) == 1000 && net.deel(raden[3]) < 1000, "the strongest count first");
 
         // a happy guh (blij when it goes in) gives more for as long as it runs
         raden[0].takeOut();
@@ -286,13 +301,13 @@ public class VadskrachtGameTests {
         blij.put("NeoForgeData", data);
         raden[0].insert(blij);
         helper.assertTrue(raden[0].isBlij() && raden[0].vadsAanbod() == VadsGetallen.GUHRAD_BLIJ, "a happy guh gives " + VadsGetallen.GUHRAD_BLIJ);
-        gelijk(helper, balto + VadsGetallen.GUHRAD_BLIJ + 2 * VadsGetallen.GUHRAD, net(helper, p(3, 1)).aanbod(), "aanbod with a happy guh");
+        gelijk(helper, balto + VadsGetallen.GUHRAD_BLIJ + 2 * VadsGetallen.GUHRAD + vijfde, net(helper, p(3, 1)).aanbod(), "aanbod with a happy guh");
         helper.assertTrue(lees(helper, p(1, 1)).contains("Een blij guhtje: het rent extra hard, njeg!"), "the wheel's own line");
 
         // an empty wheel gives nothing and says so
         raden[1].takeOut();
         gelijk(helper, 0, raden[1].vadsAanbod(), "an empty wheel");
-        gelijk(helper, balto + VadsGetallen.GUHRAD_BLIJ + 2 * VadsGetallen.GUHRAD, net(helper, p(3, 1)).aanbod(), "the empty wheel is the one that does not count");
+        gelijk(helper, balto + VadsGetallen.GUHRAD_BLIJ + 2 * VadsGetallen.GUHRAD, net(helper, p(3, 1)).aanbod(), "the empty wheel is the one that counts for less");
         helper.assertTrue(lees(helper, p(1, 3)).contains("Er rent geen guh in dit rad"), "readout of an empty wheel: " + lees(helper, p(1, 3)));
         helper.succeed();
     }

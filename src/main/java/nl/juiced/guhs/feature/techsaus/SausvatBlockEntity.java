@@ -32,10 +32,16 @@ import nl.juiced.guhs.feature.vadskracht.Sauzen;
  * ({@link TechsausFeature#INHOUD}, loot table function copy_components).
  */
 public class SausvatBlockEntity extends BlockEntity {
-    private final SausTank tank = new SausTank(SausGetallen.VAT, Sauzen::isTechniek, this::veranderd);
+    private final SausTank tank;
 
     public SausvatBlockEntity(BlockPos pos, BlockState state) {
-        super(TechsausFeature.SAUSVAT_BE.get(), pos, state);
+        this(TechsausFeature.SAUSVAT_BE.get(), pos, state, SausGetallen.VAT);
+    }
+
+    /** 1.8.0 (vadskracht): a vat of another size (the Grote saustank, {@link SaustankBlockEntity}). */
+    protected SausvatBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state, int mb) {
+        super(type, pos, state);
+        tank = new SausTank(mb, Sauzen::isTechniek, this::veranderd);
     }
 
     public SausTank tank() {

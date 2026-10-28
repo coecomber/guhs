@@ -160,6 +160,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'kaaskas']
             # 1.8.0 vadskracht: de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger; append only)
             'koepel']
+            # 1.8.0 vadskracht: Knabbelketel, Knuffelsteen-generator, Saustank, Sausbuis, Wolkenantennes (append only)
+            'vadsbasis']
 
 
 def modules():

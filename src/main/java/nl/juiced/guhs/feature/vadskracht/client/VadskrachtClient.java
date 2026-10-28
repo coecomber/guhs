@@ -44,6 +44,11 @@ public final class VadskrachtClient {
         if (Guhs.MODID.equals(id.getNamespace()) && LORE.contains(id.getPath())) {
             event.getToolTip().add(Math.min(1, event.getToolTip().size()),
                     Component.translatable("block.guhs." + id.getPath() + ".lore").withStyle(ChatFormatting.GRAY));
+            if (id.getPath().equals("guh_wheel")) {
+                // 1.8.0: afnemende opbrengst (BronSoort.GUHRAD.vol(), VadsGetallen.GUHRAD_AFNAME_PROCENT)
+                event.getToolTip().add(Math.min(2, event.getToolTip().size()),
+                        Component.translatable("block.guhs.guh_wheel.lore.afname").withStyle(ChatFormatting.GOLD));
+            }
         }
     }
 

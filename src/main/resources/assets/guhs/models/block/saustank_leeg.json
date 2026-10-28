@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/sausvat_leeg",
+  "textures": {
+    "hoepel": "guhs:block/techsaus_staal",
+    "boven": "guhs:block/techsaus_staal"
+  }
+}

@@ -70,6 +70,10 @@ public final class VadsNet {
     private long buffer, bufferMax;
     private final int[] aantal = new int[BronSoort.values().length], telt = new int[BronSoort.values().length];
     private final Map<VadsBron, Boolean> teltNiet = new IdentityHashMap<>();
+    /** 1.8.0: the sources that count for less than all they give (afnemende opbrengst), and for how many per mille. */
+    private final Map<VadsBron, Integer> deel = new IdentityHashMap<>();
+    /** 1.8.0: per kind what its sources give together / what of that counts. */
+    private final int[] vol = new int[BronSoort.values().length], echt = new int[BronSoort.values().length];
     /** Does the Guhdraad show power (null: not set yet, every piece is checked)? */
     private Boolean draadAan;
 
@@ -125,6 +129,20 @@ public final class VadsNet {
     /** Does this source count (false: one too many of its kind)? */
     public boolean teltMee(VadsBron bron) {
         return !teltNiet.containsKey(bron);
+    }
+
+    /** 1.8.0: the part (per mille) this source counts for: 1000 in full, less with afnemende opbrengst, 0 when it does not count. */
+    public int deel(VadsBron bron) {
+        if (teltNiet.containsKey(bron)) {
+            return 0;
+        }
+        return deel.getOrDefault(bron, 1000);
+    }
+
+    /** 1.8.0: how effective the sources of this kind are together, in percent (100: every one counts in full). */
+    public int effectief(BronSoort s) {
+        int v = vol[s.ordinal()];
+        return v <= 0 ? 100 : (int) Math.round(echt[s.ordinal()] * 100.0 / v);
     }
 
     /** The controller positions of the knopen. */
@@ -209,17 +227,32 @@ public final class VadsNet {
             gemeten.add(new Gemeten(b, Math.max(0, b.vadsAanbod()), b.vadsPlek()));
         }
         gemeten.sort(STERKSTE_EERST);
+        deel.clear();
+        Arrays.fill(vol, 0);
+        Arrays.fill(echt, 0);
         for (Gemeten g : gemeten) {
             BronSoort soort = g.bron().vadsSoort();
             boolean mee = true;
+            int bijdrage = g.geeft();
             if (soort != null) {
-                mee = aantal[soort.ordinal()]++ < soort.max;
+                int plaats = aantal[soort.ordinal()]++;
+                int promille = soort.deel(plaats);
+                mee = promille > 0;
                 if (mee) {
                     telt[soort.ordinal()]++;
+                    // 1.8.0: afnemende opbrengst (the Guhraden): from the strongest down, each next one counts for less
+                    bijdrage = (int) Math.round(g.geeft() * promille / 1000.0);
+                    if (promille < 1000) {
+                        deel.put(g.bron(), promille);
+                    }
+                }
+                vol[soort.ordinal()] += g.geeft();
+                if (mee) {
+                    echt[soort.ordinal()] += bijdrage;
                 }
             }
             if (mee) {
-                geeft += g.geeft();
+                geeft += bijdrage;
             } else {
                 teltNiet.put(g.bron(), Boolean.TRUE);
             }

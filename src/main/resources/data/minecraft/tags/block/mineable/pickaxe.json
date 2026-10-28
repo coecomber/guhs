@@ -694,6 +694,13 @@
     "guhs:knabbel_weerstation",
     "guhs:sterrenkoepel",
     "guhs:draaimolen",
-    "guhs:wolkenvanger"
+    "guhs:wolkenvanger",
+    "guhs:knabbelketel",
+    "guhs:knuffelsteen_generator",
+    "guhs:saustank",
+    "guhs:sausbuis",
+    "guhs:wolkenantenne_1",
+    "guhs:wolkenantenne_2",
+    "guhs:wolkenantenne_3"
   ]
 }

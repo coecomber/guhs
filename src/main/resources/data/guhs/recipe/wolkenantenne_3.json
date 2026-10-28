@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DWD",
+    "WAW",
+    "DBD"
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "W": "minecraft:white_wool",
+    "A": "guhs:wolkenantenne_2",
+    "B": "minecraft:iron_block"
+  },
+  "result": {
+    "id": "guhs:wolkenantenne_3",
+    "count": 1
+  }
+}

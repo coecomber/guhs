@@ -1,6 +1,6 @@
 {
   "block.guhs.weer_vadser": "Weather Vadser",
-  "block.guhs.weer_vadser.lore": "Makes its own weather, up to 60 blocks around. Right-click: pick a weather!",
+  "block.guhs.weer_vadser.lore": "Makes its own weather all around. Right-click: pick a weather!",
   "block.guhs.weer_vadser.lore.kracht": "Needs %s vadskracht while it makes any weather but normal",
   "item.guhs.weerpotje.gebruik": "Right-click: the weather is yours for good, in every Weather Vadser",
   "gui.guhs.weer.ontgrendeld": "Unlocked: %s! Pick it in your Weather Vadser. VAHOEG!",
@@ -8,7 +8,7 @@
   "gui.guhs.weer.potje_gekregen": "You got a weather jar: %s!",
   "gui.guhs.weer.op_slot": "%s is still locked. Find its weather jar first!",
   "gui.guhs.weer.uitgezet": "The Weather Vadser is back to normal. Just weather, vads.",
-  "gui.guhs.weer.gekozen": "Weather: %s! Up to 60 blocks around.",
+  "gui.guhs.weer.gekozen": "Weather: %s! Up to %s blocks around.",
   "gui.guhs.weer.gekozen_slaapt": "Weather: %s, but the Weather Vadser is napping: it needs %s vadskracht.",
   "gui.guhs.weer.uitlezing": "Weather: %s",
   "gui.guhs.weer.scherm.uit": "Now: just the world's weather. Pick one!",
