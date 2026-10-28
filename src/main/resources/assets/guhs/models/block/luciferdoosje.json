@@ -1,0 +1,192 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hoesje": "guhs:block/bedden/lucifer_hoesje",
+    "etiket": "guhs:block/bedden/lucifer_etiket",
+    "laatje": "guhs:block/bedden/lucifer_laatje",
+    "bedje": "guhs:block/bedden/lucifer_bedje",
+    "ruit": "guhs:block/bedden/lucifer_ruit",
+    "stokje": "guhs:block/bedden/lucifer_stokje",
+    "kopje": "guhs:block/bedden/lucifer_kopje",
+    "particle": "guhs:block/bedden/lucifer_hoesje"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        1
+      ],
+      "to": [
+        13,
+        4,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#etiket"
+        },
+        "south": {
+          "texture": "#hoesje"
+        },
+        "up": {
+          "texture": "#hoesje"
+        },
+        "down": {
+          "texture": "#hoesje"
+        },
+        "west": {
+          "texture": "#hoesje"
+        },
+        "east": {
+          "texture": "#hoesje"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        4
+      ],
+      "to": [
+        13,
+        3,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#laatje"
+        },
+        "up": {
+          "texture": "#laatje"
+        },
+        "north": {
+          "texture": "#laatje"
+        },
+        "south": {
+          "texture": "#laatje"
+        },
+        "west": {
+          "texture": "#laatje"
+        },
+        "east": {
+          "texture": "#laatje"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        1,
+        4.5
+      ],
+      "to": [
+        12.5,
+        3.01,
+        14.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#bedje"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        3,
+        9
+      ],
+      "to": [
+        12.5,
+        3.5,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ruit"
+        },
+        "up": {
+          "texture": "#ruit"
+        },
+        "north": {
+          "texture": "#ruit"
+        },
+        "south": {
+          "texture": "#ruit"
+        },
+        "west": {
+          "texture": "#ruit"
+        },
+        "east": {
+          "texture": "#ruit"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        4.5
+      ],
+      "to": [
+        12,
+        3.8,
+        5.3
+      ],
+      "faces": {
+        "down": {
+          "texture": "#stokje"
+        },
+        "up": {
+          "texture": "#stokje"
+        },
+        "north": {
+          "texture": "#stokje"
+        },
+        "south": {
+          "texture": "#stokje"
+        },
+        "west": {
+          "texture": "#stokje"
+        },
+        "east": {
+          "texture": "#stokje"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        2.8,
+        4.2
+      ],
+      "to": [
+        13.5,
+        4.2,
+        5.6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kopje"
+        },
+        "up": {
+          "texture": "#kopje"
+        },
+        "north": {
+          "texture": "#kopje"
+        },
+        "south": {
+          "texture": "#kopje"
+        },
+        "west": {
+          "texture": "#kopje"
+        },
+        "east": {
+          "texture": "#kopje"
+        }
+      }
+    }
+  ]
+}

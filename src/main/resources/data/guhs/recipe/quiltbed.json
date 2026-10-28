@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ABC",
+    "WWW",
+    "PPP"
+  ],
+  "key": {
+    "A": "minecraft:pink_wool",
+    "B": "minecraft:light_blue_wool",
+    "C": "minecraft:yellow_wool",
+    "W": "minecraft:white_wool",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:quiltbed",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "SKS",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:sugar_cane",
+    "K": "guhs:pink_kussen"
+  },
+  "result": {
+    "id": "guhs:guh_blub_mandje",
+    "count": 1
+  }
+}

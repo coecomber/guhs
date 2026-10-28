@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WDW",
+    "PPP"
+  ],
+  "key": {
+    "W": "minecraft:purple_wool",
+    "D": "guhs:droomzand",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:droombed",
+    "count": 1
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kfffaf0": "guhs:block/bedden/fam/kfffaf0",
+    "ke6dcd2": "guhs:block/bedden/fam/ke6dcd2",
+    "k78b4ff": "guhs:block/bedden/fam/k78b4ff",
+    "particle": "guhs:block/bedden/fam/kfffaf0"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0.0
+      ],
+      "to": [
+        6.366,
+        3.269,
+        6.194
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfffaf0"
+        },
+        "up": {
+          "texture": "#kfffaf0"
+        },
+        "north": {
+          "texture": "#kfffaf0"
+        },
+        "south": {
+          "texture": "#kfffaf0"
+        },
+        "west": {
+          "texture": "#kfffaf0"
+        },
+        "east": {
+          "texture": "#kfffaf0"
+        }
+      }
+    },
+    {
+      "from": [
+        9.118,
+        0,
+        2.065
+      ],
+      "to": [
+        9.944,
+        14.28,
+        2.89
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ke6dcd2"
+        },
+        "up": {
+          "texture": "#ke6dcd2"
+        },
+        "north": {
+          "texture": "#ke6dcd2"
+        },
+        "south": {
+          "texture": "#ke6dcd2"
+        },
+        "west": {
+          "texture": "#ke6dcd2"
+        },
+        "east": {
+          "texture": "#ke6dcd2"
+        }
+      }
+    },
+    {
+      "from": [
+        9.944,
+        8.774,
+        2.065
+      ],
+      "to": [
+        16.0,
+        13.591,
+        2.753
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k78b4ff"
+        },
+        "up": {
+          "texture": "#k78b4ff"
+        },
+        "north": {
+          "texture": "#k78b4ff"
+        },
+        "south": {
+          "texture": "#k78b4ff"
+        },
+        "west": {
+          "texture": "#k78b4ff"
+        },
+        "east": {
+          "texture": "#k78b4ff"
+        }
+      }
+    }
+  ]
+}

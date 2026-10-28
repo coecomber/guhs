@@ -1,0 +1,74 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kffa0be": "guhs:block/bedden/fam/kffa0be",
+    "k785a6e": "guhs:block/bedden/fam/k785a6e",
+    "particle": "guhs:block/bedden/fam/kffa0be"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0.8
+      ],
+      "to": [
+        12.8,
+        0.8,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffa0be"
+        },
+        "up": {
+          "texture": "#kffa0be"
+        },
+        "north": {
+          "texture": "#kffa0be"
+        },
+        "south": {
+          "texture": "#kffa0be"
+        },
+        "west": {
+          "texture": "#kffa0be"
+        },
+        "east": {
+          "texture": "#kffa0be"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0.8,
+        11.2
+      ],
+      "to": [
+        8.8,
+        8.8,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k785a6e"
+        },
+        "up": {
+          "texture": "#k785a6e"
+        },
+        "north": {
+          "texture": "#k785a6e"
+        },
+        "south": {
+          "texture": "#k785a6e"
+        },
+        "west": {
+          "texture": "#k785a6e"
+        },
+        "east": {
+          "texture": "#k785a6e"
+        }
+      }
+    }
+  ]
+}

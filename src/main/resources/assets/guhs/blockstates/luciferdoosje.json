@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/luciferdoosje"
+    },
+    "facing=east": {
+      "model": "guhs:block/luciferdoosje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/luciferdoosje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/luciferdoosje",
+      "y": 270
+    }
+  }
+}

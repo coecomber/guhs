@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "WDW",
+    " B "
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "W": "minecraft:purple_wool",
+    "D": "guhs:droomzand",
+    "B": "minecraft:oak_boat"
+  },
+  "result": {
+    "id": "guhs:droomschuitje",
+    "count": 1
+  }
+}

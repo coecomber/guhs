@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "k786ec8": "guhs:block/bedden/fam/k786ec8",
+    "particle": "guhs:block/bedden/fam/k786ec8"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1.08,
+        14.705
+      ],
+      "to": [
+        16,
+        1.985,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k786ec8"
+        },
+        "up": {
+          "texture": "#k786ec8"
+        },
+        "north": {
+          "texture": "#k786ec8"
+        },
+        "south": {
+          "texture": "#k786ec8"
+        },
+        "west": {
+          "texture": "#k786ec8"
+        },
+        "east": {
+          "texture": "#k786ec8"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WSW",
+    "BBB"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "S": "minecraft:slime_ball",
+    "B": "minecraft:light_blue_wool"
+  },
+  "result": {
+    "id": "guhs:blub_bed",
+    "count": 1
+  }
+}

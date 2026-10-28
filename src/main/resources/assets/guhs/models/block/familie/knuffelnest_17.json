@@ -1,0 +1,114 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kffbad2": "guhs:block/bedden/fam/kffbad2",
+    "kff96be": "guhs:block/bedden/fam/kff96be",
+    "gezicht": "guhs:block/bedden/fam/gezicht",
+    "kffb6cc": "guhs:block/bedden/fam/kffb6cc",
+    "particle": "guhs:block/bedden/fam/kffbad2"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0.0
+      ],
+      "to": [
+        7.111,
+        5.01,
+        2.909
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffbad2"
+        },
+        "up": {
+          "texture": "#kffbad2"
+        },
+        "north": {
+          "texture": "#kffbad2"
+        },
+        "south": {
+          "texture": "#kffbad2"
+        },
+        "west": {
+          "texture": "#kffbad2"
+        },
+        "east": {
+          "texture": "#kffbad2"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        2.909
+      ],
+      "to": [
+        5.495,
+        3.394,
+        3.232
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kff96be"
+        },
+        "up": {
+          "texture": "#kff96be"
+        },
+        "north": {
+          "texture": "#kff96be"
+        },
+        "south": {
+          "texture": "#kff96be"
+        },
+        "west": {
+          "texture": "#kff96be"
+        },
+        "east": {
+          "texture": "#kff96be"
+        }
+      }
+    },
+    {
+      "from": [
+        7.111,
+        0,
+        0.485
+      ],
+      "to": [
+        16,
+        0.97,
+        2.909
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffb6cc"
+        },
+        "up": {
+          "texture": "#kffb6cc"
+        },
+        "north": {
+          "texture": "#kffb6cc"
+        },
+        "west": {
+          "texture": "#kffb6cc"
+        },
+        "east": {
+          "texture": "#kffb6cc"
+        },
+        "south": {
+          "texture": "#gezicht",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.477
+          ]
+        }
+      }
+    }
+  ]
+}

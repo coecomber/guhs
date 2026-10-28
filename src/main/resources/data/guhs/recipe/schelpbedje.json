@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "N",
+    "S"
+  ],
+  "key": {
+    "N": "minecraft:nautilus_shell",
+    "S": "minecraft:seagrass"
+  },
+  "result": {
+    "id": "guhs:schelpbedje",
+    "count": 1
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kffeca0": "guhs:block/bedden/fam/kffeca0",
+    "schelp": "guhs:block/bedden/fam/schelp",
+    "k786ec8": "guhs:block/bedden/fam/k786ec8",
+    "particle": "guhs:block/bedden/fam/kffeca0"
+  },
+  "elements": [
+    {
+      "from": [
+        12.154,
+        0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        0.36,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffeca0"
+        },
+        "up": {
+          "texture": "#kffeca0"
+        },
+        "north": {
+          "texture": "#kffeca0"
+        },
+        "south": {
+          "texture": "#kffeca0"
+        },
+        "west": {
+          "texture": "#kffeca0"
+        },
+        "east": {
+          "texture": "#kffeca0"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        6.108
+      ],
+      "to": [
+        3.23,
+        0.854,
+        14.705
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0.854,
+        5.656
+      ],
+      "to": [
+        2.325,
+        5.944,
+        6.561
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.08,
+        14.705
+      ],
+      "to": [
+        3.23,
+        1.985,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k786ec8"
+        },
+        "up": {
+          "texture": "#k786ec8"
+        },
+        "north": {
+          "texture": "#k786ec8"
+        },
+        "south": {
+          "texture": "#k786ec8"
+        },
+        "west": {
+          "texture": "#k786ec8"
+        },
+        "east": {
+          "texture": "#k786ec8"
+        }
+      }
+    }
+  ]
+}

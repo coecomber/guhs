@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -137,6 +138,10 @@ public class SlaapplekGoal extends Goal {
                 return;
             }
             lopen++;
+            if (flat < 1.0 && cy - guh.getY() > 0.6) {
+                inslapen(cx, cy, cz);   // (the upper bunk of a Stapelbedje: it climbs the little ladder)
+                return;
+            }
             if (flat < 1.8) {
                 guh.getMoveControl().setWantedPosition(cx, cy, cz, 0.7);
                 if (guh.onGround() && cy > guh.getY() + 0.2) {
@@ -184,7 +189,9 @@ public class SlaapplekGoal extends Goal {
         double bestD = Double.MAX_VALUE;
         for (BlockPos p : BlockPos.betweenClosed(hier.offset(-ZOEK, -ZOEK_DY, -ZOEK), hier.offset(ZOEK, ZOEK_DY, ZOEK))) {
             double d = p.distSqr(hier);
-            if (d < bestD && Slapen.isSlaapplek(level.getBlockState(p)) && level.getBlockState(p.above()).getCollisionShape(level, p.above()).isEmpty()
+            BlockState s = level.getBlockState(p);
+            if (d < bestD && Slapen.isSlaapplek(s) && (level.getBlockState(p.above()).getCollisionShape(level, p.above()).isEmpty()
+                    || nl.juiced.guhs.feature.bedden.StapelbedBlock.isOnder(s))   // (the lower bunk has the upper one right above it)
                     && !bezet(level, p)) {
                 best = p.immutable();
                 bestD = d;

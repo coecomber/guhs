@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    "WTW",
+    "WTW"
+  ],
+  "key": {
+    "T": "minecraft:stick",
+    "W": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:stapelbedje",
+    "count": 1
+  }
+}

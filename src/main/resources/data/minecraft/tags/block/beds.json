@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "guhs:wolkenbed"
+    "guhs:wolkenbed",
+    "guhs:droombed",
+    "guhs:guh_hoofdbed",
+    "guhs:blub_bed",
+    "guhs:wolkenhemelbed"
   ]
 }

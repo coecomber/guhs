@@ -1,0 +1,237 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "k966e50": "guhs:block/bedden/fam/k966e50",
+    "k96d282": "guhs:block/bedden/fam/k96d282",
+    "kaae196": "guhs:block/bedden/fam/kaae196",
+    "kffecc8": "guhs:block/bedden/fam/kffecc8",
+    "kdc5a6e": "guhs:block/bedden/fam/kdc5a6e",
+    "particle": "guhs:block/bedden/fam/k966e50"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        12.0
+      ],
+      "to": [
+        4.0,
+        8.145,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k966e50"
+        },
+        "up": {
+          "texture": "#k966e50"
+        },
+        "north": {
+          "texture": "#k966e50"
+        },
+        "south": {
+          "texture": "#k966e50"
+        },
+        "west": {
+          "texture": "#k966e50"
+        },
+        "east": {
+          "texture": "#k966e50"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6.4,
+        0.0
+      ],
+      "to": [
+        16.0,
+        11.636,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k96d282"
+        },
+        "up": {
+          "texture": "#k96d282"
+        },
+        "north": {
+          "texture": "#k96d282"
+        },
+        "south": {
+          "texture": "#k96d282"
+        },
+        "west": {
+          "texture": "#k96d282"
+        },
+        "east": {
+          "texture": "#k96d282"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10.764,
+        4.571
+      ],
+      "to": [
+        11.429,
+        16.0,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kaae196"
+        },
+        "up": {
+          "texture": "#kaae196"
+        },
+        "north": {
+          "texture": "#kaae196"
+        },
+        "south": {
+          "texture": "#kaae196"
+        },
+        "west": {
+          "texture": "#kaae196"
+        },
+        "east": {
+          "texture": "#kaae196"
+        }
+      }
+    },
+    {
+      "from": [
+        4.0,
+        0,
+        12.0
+      ],
+      "to": [
+        12.0,
+        4.218,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffecc8"
+        },
+        "up": {
+          "texture": "#kffecc8"
+        },
+        "north": {
+          "texture": "#kffecc8"
+        },
+        "south": {
+          "texture": "#kffecc8"
+        },
+        "west": {
+          "texture": "#kffecc8"
+        },
+        "east": {
+          "texture": "#kffecc8"
+        }
+      }
+    },
+    {
+      "from": [
+        3.429,
+        4.218,
+        11.429
+      ],
+      "to": [
+        12.571,
+        5.091,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kdc5a6e"
+        },
+        "up": {
+          "texture": "#kdc5a6e"
+        },
+        "north": {
+          "texture": "#kdc5a6e"
+        },
+        "south": {
+          "texture": "#kdc5a6e"
+        },
+        "west": {
+          "texture": "#kdc5a6e"
+        },
+        "east": {
+          "texture": "#kdc5a6e"
+        }
+      }
+    },
+    {
+      "from": [
+        14.857,
+        1.164,
+        12.571
+      ],
+      "to": [
+        15.543,
+        1.687,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k966e50"
+        },
+        "up": {
+          "texture": "#k966e50"
+        },
+        "north": {
+          "texture": "#k966e50"
+        },
+        "south": {
+          "texture": "#k966e50"
+        },
+        "west": {
+          "texture": "#k966e50"
+        },
+        "east": {
+          "texture": "#k966e50"
+        }
+      }
+    },
+    {
+      "from": [
+        14.857,
+        0,
+        12.343
+      ],
+      "to": [
+        15.543,
+        4.655,
+        13.029
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k966e50"
+        },
+        "up": {
+          "texture": "#k966e50"
+        },
+        "north": {
+          "texture": "#k966e50"
+        },
+        "south": {
+          "texture": "#k966e50"
+        },
+        "west": {
+          "texture": "#k966e50"
+        },
+        "east": {
+          "texture": "#k966e50"
+        }
+      }
+    }
+  ]
+}

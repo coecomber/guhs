@@ -165,6 +165,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomblokken.DroomblokkenFeature.register(modBus);   // 1.8.0 (Guhdromenland): droomzand and the dream blocks
         nl.juiced.guhs.feature.dromen.DromenFeature.register(modBus);   // 1.8.0: Guhdromenland (the dream dimension, tucking in, the islands)
         nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.register(modBus);   // 1.8.0 (Guhdromenland B): slaapzorg, sleepy guhs, sleeping spots, lullaby, breakfast in bed
+        nl.juiced.guhs.feature.bedden.BeddenFeature.register(modBus);   // 1.8.0: the player beds, critter beds and family beds
         nl.juiced.guhs.feature.droombadje.DroombadjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): het Wolkenbadje (bubble ride, bath things, Snoes' bath)
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.register(modBus);   // 1.8.0: the dream NPCs, the sterrenvisje, the glas met een restje
         nl.juiced.guhs.feature.droomplein.DroompleinFeature.register(modBus);   // 1.8.0 (Guhdromenland E): the Droomplein (post, fountain, Wekkerguh look)
@@ -437,6 +438,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomblokken.DroomblokkenFeature.creative(output);   // 1.8.0: droomzand and the dream blocks
         nl.juiced.guhs.feature.dromen.DromenFeature.creative(output);   // 1.8.0: doos met knabbels, kattenhuisjes, droomkussen
         nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.creative(output);   // 1.8.0: the slaapkamer-set, maannachtlampjes, krabpalen
+        nl.juiced.guhs.feature.bedden.BeddenFeature.creative(output);   // 1.8.0: the beds
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.creative(output);   // 1.8.0: sterrenvisje, its bucket, glas met een restje
         nl.juiced.guhs.feature.droomplein.DroompleinFeature.creative(output);   // 1.8.0: the Droomplein's brievenbusjes and droomwekker
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.creative(output);   // 1.8.0: the stuiterkussens

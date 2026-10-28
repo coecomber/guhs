@@ -1,0 +1,1600 @@
+{
+  "variants": {
+    "deel=0,facing=north": {
+      "model": "guhs:block/familie/kussenfort_0"
+    },
+    "deel=1,facing=north": {
+      "model": "guhs:block/familie/kussenfort_1"
+    },
+    "deel=2,facing=north": {
+      "model": "guhs:block/familie/kussenfort_2"
+    },
+    "deel=3,facing=north": {
+      "model": "guhs:block/familie/kussenfort_3"
+    },
+    "deel=4,facing=north": {
+      "model": "guhs:block/familie/kussenfort_4"
+    },
+    "deel=5,facing=north": {
+      "model": "guhs:block/familie/kussenfort_5"
+    },
+    "deel=6,facing=north": {
+      "model": "guhs:block/familie/kussenfort_6"
+    },
+    "deel=7,facing=north": {
+      "model": "guhs:block/familie/kussenfort_7"
+    },
+    "deel=8,facing=north": {
+      "model": "guhs:block/familie/kussenfort_8"
+    },
+    "deel=9,facing=north": {
+      "model": "guhs:block/familie/kussenfort_9"
+    },
+    "deel=10,facing=north": {
+      "model": "guhs:block/familie/kussenfort_10"
+    },
+    "deel=11,facing=north": {
+      "model": "guhs:block/familie/kussenfort_11"
+    },
+    "deel=12,facing=north": {
+      "model": "guhs:block/familie/kussenfort_12"
+    },
+    "deel=13,facing=north": {
+      "model": "guhs:block/familie/kussenfort_13"
+    },
+    "deel=14,facing=north": {
+      "model": "guhs:block/familie/kussenfort_14"
+    },
+    "deel=15,facing=north": {
+      "model": "guhs:block/familie/kussenfort_15"
+    },
+    "deel=16,facing=north": {
+      "model": "guhs:block/familie/kussenfort_16"
+    },
+    "deel=17,facing=north": {
+      "model": "guhs:block/familie/kussenfort_17"
+    },
+    "deel=18,facing=north": {
+      "model": "guhs:block/familie/kussenfort_18"
+    },
+    "deel=19,facing=north": {
+      "model": "guhs:block/familie/kussenfort_19"
+    },
+    "deel=20,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=21,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=22,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=23,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=24,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=25,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=26,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=27,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=28,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=29,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=30,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=31,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=32,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=33,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=34,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=35,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=36,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=37,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=38,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=39,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=40,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=41,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=42,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=43,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=44,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=45,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=46,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=47,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=48,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=49,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=50,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=51,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=52,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=53,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=54,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=55,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=56,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=57,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=58,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=59,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=60,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=61,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=62,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=63,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=64,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=65,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=66,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=67,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=68,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=69,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=70,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=71,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=72,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=73,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=74,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=75,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=76,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=77,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=78,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=79,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=80,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=81,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=82,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=83,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=84,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=85,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=86,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=87,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=88,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=89,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=90,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=91,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=92,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=93,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=94,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=95,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=96,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=97,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=98,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=99,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=100,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=101,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=102,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=103,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=104,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=105,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=106,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=107,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=108,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=109,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=110,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=111,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=112,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=113,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=114,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=115,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=116,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=117,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=118,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=119,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=120,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=121,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=122,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=123,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=124,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=125,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=126,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=127,facing=north": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=0,facing=east": {
+      "model": "guhs:block/familie/kussenfort_0",
+      "y": 90
+    },
+    "deel=1,facing=east": {
+      "model": "guhs:block/familie/kussenfort_1",
+      "y": 90
+    },
+    "deel=2,facing=east": {
+      "model": "guhs:block/familie/kussenfort_2",
+      "y": 90
+    },
+    "deel=3,facing=east": {
+      "model": "guhs:block/familie/kussenfort_3",
+      "y": 90
+    },
+    "deel=4,facing=east": {
+      "model": "guhs:block/familie/kussenfort_4",
+      "y": 90
+    },
+    "deel=5,facing=east": {
+      "model": "guhs:block/familie/kussenfort_5",
+      "y": 90
+    },
+    "deel=6,facing=east": {
+      "model": "guhs:block/familie/kussenfort_6",
+      "y": 90
+    },
+    "deel=7,facing=east": {
+      "model": "guhs:block/familie/kussenfort_7",
+      "y": 90
+    },
+    "deel=8,facing=east": {
+      "model": "guhs:block/familie/kussenfort_8",
+      "y": 90
+    },
+    "deel=9,facing=east": {
+      "model": "guhs:block/familie/kussenfort_9",
+      "y": 90
+    },
+    "deel=10,facing=east": {
+      "model": "guhs:block/familie/kussenfort_10",
+      "y": 90
+    },
+    "deel=11,facing=east": {
+      "model": "guhs:block/familie/kussenfort_11",
+      "y": 90
+    },
+    "deel=12,facing=east": {
+      "model": "guhs:block/familie/kussenfort_12",
+      "y": 90
+    },
+    "deel=13,facing=east": {
+      "model": "guhs:block/familie/kussenfort_13",
+      "y": 90
+    },
+    "deel=14,facing=east": {
+      "model": "guhs:block/familie/kussenfort_14",
+      "y": 90
+    },
+    "deel=15,facing=east": {
+      "model": "guhs:block/familie/kussenfort_15",
+      "y": 90
+    },
+    "deel=16,facing=east": {
+      "model": "guhs:block/familie/kussenfort_16",
+      "y": 90
+    },
+    "deel=17,facing=east": {
+      "model": "guhs:block/familie/kussenfort_17",
+      "y": 90
+    },
+    "deel=18,facing=east": {
+      "model": "guhs:block/familie/kussenfort_18",
+      "y": 90
+    },
+    "deel=19,facing=east": {
+      "model": "guhs:block/familie/kussenfort_19",
+      "y": 90
+    },
+    "deel=20,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=21,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=22,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=23,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=24,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=25,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=26,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=27,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=28,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=29,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=30,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=31,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=32,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=33,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=34,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=35,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=36,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=37,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=38,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=39,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=40,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=41,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=42,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=43,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=44,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=45,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=46,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=47,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=48,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=49,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=50,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=51,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=52,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=53,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=54,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=55,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=56,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=57,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=58,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=59,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=60,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=61,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=62,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=63,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=64,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=65,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=66,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=67,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=68,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=69,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=70,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=71,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=72,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=73,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=74,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=75,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=76,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=77,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=78,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=79,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=80,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=81,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=82,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=83,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=84,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=85,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=86,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=87,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=88,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=89,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=90,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=91,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=92,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=93,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=94,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=95,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=96,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=97,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=98,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=99,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=100,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=101,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=102,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=103,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=104,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=105,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=106,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=107,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=108,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=109,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=110,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=111,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=112,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=113,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=114,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=115,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=116,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=117,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=118,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=119,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=120,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=121,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=122,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=123,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=124,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=125,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=126,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=127,facing=east": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=0,facing=south": {
+      "model": "guhs:block/familie/kussenfort_0",
+      "y": 180
+    },
+    "deel=1,facing=south": {
+      "model": "guhs:block/familie/kussenfort_1",
+      "y": 180
+    },
+    "deel=2,facing=south": {
+      "model": "guhs:block/familie/kussenfort_2",
+      "y": 180
+    },
+    "deel=3,facing=south": {
+      "model": "guhs:block/familie/kussenfort_3",
+      "y": 180
+    },
+    "deel=4,facing=south": {
+      "model": "guhs:block/familie/kussenfort_4",
+      "y": 180
+    },
+    "deel=5,facing=south": {
+      "model": "guhs:block/familie/kussenfort_5",
+      "y": 180
+    },
+    "deel=6,facing=south": {
+      "model": "guhs:block/familie/kussenfort_6",
+      "y": 180
+    },
+    "deel=7,facing=south": {
+      "model": "guhs:block/familie/kussenfort_7",
+      "y": 180
+    },
+    "deel=8,facing=south": {
+      "model": "guhs:block/familie/kussenfort_8",
+      "y": 180
+    },
+    "deel=9,facing=south": {
+      "model": "guhs:block/familie/kussenfort_9",
+      "y": 180
+    },
+    "deel=10,facing=south": {
+      "model": "guhs:block/familie/kussenfort_10",
+      "y": 180
+    },
+    "deel=11,facing=south": {
+      "model": "guhs:block/familie/kussenfort_11",
+      "y": 180
+    },
+    "deel=12,facing=south": {
+      "model": "guhs:block/familie/kussenfort_12",
+      "y": 180
+    },
+    "deel=13,facing=south": {
+      "model": "guhs:block/familie/kussenfort_13",
+      "y": 180
+    },
+    "deel=14,facing=south": {
+      "model": "guhs:block/familie/kussenfort_14",
+      "y": 180
+    },
+    "deel=15,facing=south": {
+      "model": "guhs:block/familie/kussenfort_15",
+      "y": 180
+    },
+    "deel=16,facing=south": {
+      "model": "guhs:block/familie/kussenfort_16",
+      "y": 180
+    },
+    "deel=17,facing=south": {
+      "model": "guhs:block/familie/kussenfort_17",
+      "y": 180
+    },
+    "deel=18,facing=south": {
+      "model": "guhs:block/familie/kussenfort_18",
+      "y": 180
+    },
+    "deel=19,facing=south": {
+      "model": "guhs:block/familie/kussenfort_19",
+      "y": 180
+    },
+    "deel=20,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=21,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=22,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=23,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=24,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=25,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=26,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=27,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=28,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=29,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=30,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=31,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=32,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=33,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=34,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=35,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=36,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=37,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=38,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=39,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=40,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=41,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=42,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=43,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=44,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=45,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=46,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=47,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=48,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=49,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=50,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=51,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=52,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=53,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=54,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=55,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=56,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=57,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=58,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=59,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=60,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=61,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=62,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=63,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=64,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=65,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=66,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=67,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=68,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=69,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=70,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=71,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=72,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=73,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=74,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=75,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=76,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=77,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=78,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=79,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=80,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=81,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=82,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=83,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=84,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=85,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=86,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=87,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=88,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=89,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=90,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=91,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=92,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=93,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=94,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=95,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=96,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=97,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=98,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=99,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=100,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=101,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=102,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=103,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=104,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=105,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=106,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=107,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=108,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=109,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=110,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=111,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=112,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=113,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=114,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=115,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=116,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=117,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=118,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=119,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=120,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=121,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=122,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=123,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=124,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=125,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=126,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=127,facing=south": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=0,facing=west": {
+      "model": "guhs:block/familie/kussenfort_0",
+      "y": 270
+    },
+    "deel=1,facing=west": {
+      "model": "guhs:block/familie/kussenfort_1",
+      "y": 270
+    },
+    "deel=2,facing=west": {
+      "model": "guhs:block/familie/kussenfort_2",
+      "y": 270
+    },
+    "deel=3,facing=west": {
+      "model": "guhs:block/familie/kussenfort_3",
+      "y": 270
+    },
+    "deel=4,facing=west": {
+      "model": "guhs:block/familie/kussenfort_4",
+      "y": 270
+    },
+    "deel=5,facing=west": {
+      "model": "guhs:block/familie/kussenfort_5",
+      "y": 270
+    },
+    "deel=6,facing=west": {
+      "model": "guhs:block/familie/kussenfort_6",
+      "y": 270
+    },
+    "deel=7,facing=west": {
+      "model": "guhs:block/familie/kussenfort_7",
+      "y": 270
+    },
+    "deel=8,facing=west": {
+      "model": "guhs:block/familie/kussenfort_8",
+      "y": 270
+    },
+    "deel=9,facing=west": {
+      "model": "guhs:block/familie/kussenfort_9",
+      "y": 270
+    },
+    "deel=10,facing=west": {
+      "model": "guhs:block/familie/kussenfort_10",
+      "y": 270
+    },
+    "deel=11,facing=west": {
+      "model": "guhs:block/familie/kussenfort_11",
+      "y": 270
+    },
+    "deel=12,facing=west": {
+      "model": "guhs:block/familie/kussenfort_12",
+      "y": 270
+    },
+    "deel=13,facing=west": {
+      "model": "guhs:block/familie/kussenfort_13",
+      "y": 270
+    },
+    "deel=14,facing=west": {
+      "model": "guhs:block/familie/kussenfort_14",
+      "y": 270
+    },
+    "deel=15,facing=west": {
+      "model": "guhs:block/familie/kussenfort_15",
+      "y": 270
+    },
+    "deel=16,facing=west": {
+      "model": "guhs:block/familie/kussenfort_16",
+      "y": 270
+    },
+    "deel=17,facing=west": {
+      "model": "guhs:block/familie/kussenfort_17",
+      "y": 270
+    },
+    "deel=18,facing=west": {
+      "model": "guhs:block/familie/kussenfort_18",
+      "y": 270
+    },
+    "deel=19,facing=west": {
+      "model": "guhs:block/familie/kussenfort_19",
+      "y": 270
+    },
+    "deel=20,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=21,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=22,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=23,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=24,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=25,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=26,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=27,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=28,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=29,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=30,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=31,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=32,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=33,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=34,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=35,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=36,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=37,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=38,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=39,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=40,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=41,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=42,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=43,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=44,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=45,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=46,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=47,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=48,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=49,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=50,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=51,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=52,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=53,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=54,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=55,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=56,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=57,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=58,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=59,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=60,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=61,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=62,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=63,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=64,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=65,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=66,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=67,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=68,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=69,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=70,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=71,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=72,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=73,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=74,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=75,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=76,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=77,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=78,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=79,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=80,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=81,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=82,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=83,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=84,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=85,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=86,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=87,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=88,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=89,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=90,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=91,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=92,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=93,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=94,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=95,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=96,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=97,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=98,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=99,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=100,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=101,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=102,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=103,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=104,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=105,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=106,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=107,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=108,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=109,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=110,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=111,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=112,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=113,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=114,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=115,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=116,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=117,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=118,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=119,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=120,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=121,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=122,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=123,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=124,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=125,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=126,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    },
+    "deel=127,facing=west": {
+      "model": "guhs:block/familie/leeg"
+    }
+  }
+}

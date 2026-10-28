@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "L": "#minecraft:leaves",
+    "P": "#minecraft:planks",
+    "S": "minecraft:ladder"
+  },
+  "result": {
+    "id": "guhs:boomhut_stapelbed",
+    "count": 1
+  }
+}

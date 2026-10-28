@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kd6b082": "guhs:block/bedden/fam/kd6b082",
+    "kfffaf4": "guhs:block/bedden/fam/kfffaf4",
+    "ruit_beecdc_dcf8ee": "guhs:block/bedden/fam/ruit_beecdc_dcf8ee",
+    "particle": "guhs:block/bedden/fam/kd6b082"
+  },
+  "elements": [
+    {
+      "from": [
+        9.446,
+        0.0,
+        12.916
+      ],
+      "to": [
+        12.53,
+        3.855,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kd6b082"
+        },
+        "up": {
+          "texture": "#kd6b082"
+        },
+        "north": {
+          "texture": "#kd6b082"
+        },
+        "south": {
+          "texture": "#kd6b082"
+        },
+        "west": {
+          "texture": "#kd6b082"
+        },
+        "east": {
+          "texture": "#kd6b082"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3.855,
+        0
+      ],
+      "to": [
+        12.53,
+        8.482,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfffaf4"
+        },
+        "up": {
+          "texture": "#kfffaf4"
+        },
+        "north": {
+          "texture": "#kfffaf4"
+        },
+        "south": {
+          "texture": "#kfffaf4"
+        },
+        "west": {
+          "texture": "#kfffaf4"
+        },
+        "east": {
+          "texture": "#kfffaf4"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8.636,
+        0
+      ],
+      "to": [
+        10.988,
+        9.253,
+        14.458
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        },
+        "up": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        },
+        "north": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        },
+        "south": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        },
+        "west": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        },
+        "east": {
+          "texture": "#ruit_beecdc_dcf8ee"
+        }
+      }
+    }
+  ]
+}

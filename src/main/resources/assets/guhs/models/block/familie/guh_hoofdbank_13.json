@@ -1,0 +1,81 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "gezicht": "guhs:block/bedden/fam/gezicht",
+    "kffb6cc": "guhs:block/bedden/fam/kffb6cc",
+    "schelp": "guhs:block/bedden/fam/schelp",
+    "particle": "guhs:block/bedden/fam/gezicht"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0.0
+      ],
+      "to": [
+        16,
+        16,
+        2.206
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffb6cc"
+        },
+        "up": {
+          "texture": "#kffb6cc"
+        },
+        "north": {
+          "texture": "#kffb6cc"
+        },
+        "west": {
+          "texture": "#kffb6cc"
+        },
+        "east": {
+          "texture": "#kffb6cc"
+        },
+        "south": {
+          "texture": "#gezicht",
+          "uv": [
+            9.674,
+            1.072,
+            13.022,
+            10.482
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.794,
+        0,
+        11.029
+      ],
+      "to": [
+        16,
+        1.206,
+        12.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    }
+  ]
+}
