@@ -477,6 +477,9 @@ public class BlubGuhEntity extends Landdiertje {
         BlubGeluid.BABY.speel(this);
         if (getOwner() instanceof Player owner) {
             baby.tame(owner);
+            if (owner instanceof ServerPlayer sp) {
+                nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.vul(sp, baby);   // (1.8.0: a box on the meterkaart)
+            }
         }
         return baby;
     }
@@ -1410,6 +1413,7 @@ public class BlubGuhEntity extends Landdiertje {
     public void temmen(ServerPlayer player) {
         super.temmen(player);
         BlubGeluid.GETEMD.speel(this);
+        nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.vul(player, this);   // (1.8.0: a box on the meterkaart)
     }
 
     /** Puts on a piece from its Kledingkast (with a little sound; null takes it off). */

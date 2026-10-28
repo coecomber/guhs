@@ -509,7 +509,9 @@ public class VerhaalGameTests {
                         GuhVariant.VLEERMUIS_LEMURGUH, GuhVariant.OTTER_PINGUINGUH, GuhVariant.DAS_MOLGUH, GuhVariant.SCHILDPAD_EENDGUH,
                         GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT,
                         GuhVariant.KOH, GuhVariant.HEI_BAI_GUH, GuhVariant.FANG, GuhVariant.GEEST_KOI, GuhVariant.LIBELKONIJNGUH,   // einde2 phase B
-                        GuhVariant.LANTAARNGEEST, GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH)),
+                        GuhVariant.LANTAARNGEEST, GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH,
+                        GuhVariant.BLUBGUH, GuhVariant.STERRENVISJE, GuhVariant.SNOES, GuhVariant.ZANDGUH, GuhVariant.WEKKERGUH,   // 1.8.0 (Guhdromenland)
+                        GuhVariant.ROMMELGUH, GuhVariant.DROOM_OMAGUH, GuhVariant.KUSSENGEVECHT_GUH, GuhVariant.BUBBELBADGUH)),
                 "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud, (biomes3) the four of the new biomes, (1.4.2) the park's three, (einde2) every creature page of the outer islands, (1.6.2) the Beverguh and (1.7.0) the Grotguh");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {

@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 46,
+  guhs_chapter_version: 47,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -245,6 +245,70 @@
         },
       ],
       x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554856E53B814D",
+      icon: {
+        id: "guhs:blubguh_item",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/blub_meterkaart_rij",
+          id: "4755488679406ECC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554854204B9357",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755483E5A3E11B3",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548C58A6F0B16",
+      icon: {
+        id: "guhs:blubguh_item",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/blub_meterkaart_goud",
+          id: "475548CA7F36DDC0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485FC96B29F2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554812AC0788A3",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 6.0,
       y: 6.5625,
     },
     {

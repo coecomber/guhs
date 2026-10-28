@@ -177,6 +177,13 @@ public enum GuhVariant {
     // (the buddy and the pet of the Sponsguh story: both bonus pages)
     SPONSGUH(0), GERRIT(0),
     // </einde2>
+    // <dromen18>
+    // 1.8.0 Guhdromenland: the Blub-guh and the sterrenvisje (creature pages: their id is their entity id) and the dream
+    // characters (character pages: their name is their GuhNpcEntity.Kind; Snoes' happy kind SNOES_BLIJ fills Snoes' page).
+    // All bonus pages (GuhDex.EXTRA): a full Guhdex stays what it was. Appended after GERRIT, nothing before them moves.
+    BLUBGUH(0), STERRENVISJE(0),
+    SNOES(0), ZANDGUH(0), WEKKERGUH(0), ROMMELGUH(0), DROOM_OMAGUH(0), KUSSENGEVECHT_GUH(0), BUBBELBADGUH(0),
+    // </dromen18>
     ;
 
     /** The Guhdex page is a guh character (GuhNpcEntity), not a variant: it can't be tamed. */
@@ -224,6 +231,9 @@ public enum GuhVariant {
     /** The Guhdex page of a guh character (null when that kind has none). */
     @javax.annotation.Nullable
     public static GuhVariant ofCharacter(GuhNpcEntity.Kind kind) {
+        if (kind == GuhNpcEntity.Kind.SNOES_BLIJ) {
+            return SNOES;   // 1.8.0: Snoes after his story is still Snoes (one page)
+        }
         for (GuhVariant v : values()) {
             if (v.isCharacter() && v.name().equals(kind.name())) {
                 return v;

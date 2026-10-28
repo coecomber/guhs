@@ -130,6 +130,9 @@ public class GuhDexScreen extends Screen {
         }
     }
 
+    /** 1.8.0: where the Blub-meterkaart link is on the Blub-guh page (x1, y1, x2, y2), or null. */
+    private int[] meterkaartKnop;
+
     /** Which tab (remembered while the game runs). */
     private static Tab tab = Tab.GUHS;
     /** The scroll position per list tab (remembered while the game runs). */
@@ -507,6 +510,16 @@ public class GuhDexScreen extends Screen {
             y += fitText(g, Component.literal("♥ ").append(Component.translatable("gui.guhs.guhdex.rookguhs",
                     nl.juiced.guhs.feature.spiesburcht.SpiesburchtStats.clientRookguhs)), tx, y, TEXT_W, 10, 0xFFC0407A) + 2;
         }
+        meterkaartKnop = null;
+        if (seen && v == GuhVariant.BLUBGUH) {   // 1.8.0: the Blub-meterkaart (feature.dexdromen), a click away
+            int[] kaart = nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.Client.kaart;
+            Component link = Component.translatable("gui.guhs.meterkaart.link", nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.gevuld(kaart),
+                    nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.VAKJES);
+            int lw = Math.min(TEXT_W, font.width(link));
+            boolean hover = mouseX >= tx && mouseX < tx + lw && mouseY >= y && mouseY < y + 10;
+            y += fitText(g, link.copy().withStyle(hover ? ChatFormatting.UNDERLINE : ChatFormatting.RESET), tx, y, TEXT_W, 10, hover ? 0xFFC0407A : 0xFF3A6FB0) + 2;
+            meterkaartKnop = new int[] {tx, y - 12, tx + lw, y};
+        }
         y += 3;
         if (seen) {
             // the rarity: at most two lines, then the description gets all the room that's left
@@ -755,6 +768,12 @@ public class GuhDexScreen extends Screen {
             return true;
         }
         if (super.mouseClicked(event, doubleClick)) {
+            return true;
+        }
+        if (tab == Tab.GUHS && button == 0 && meterkaartKnop != null && mouseX >= meterkaartKnop[0] && mouseX < meterkaartKnop[2]
+                && mouseY >= meterkaartKnop[1] && mouseY < meterkaartKnop[3]) {
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.minecraft.sounds.SoundEvents.BOOK_PAGE_TURN, 1.0f));
+            minecraft.setScreen(new nl.juiced.guhs.feature.dexdromen.client.BlubMeterkaartScreen(this));
             return true;
         }
         if ((tab == Tab.MINIGAMES || tab == Tab.KLEDING) && lijst.klik(mouseX, mouseY, button)) {

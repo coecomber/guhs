@@ -174,6 +174,7 @@ public final class Features {
         nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.register(modBus);   // 1.8.0 (Guhdromenland F): the story of Snoes, its finale, the dream weerpotjes
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.register(modBus);   // 1.8.0: De Zingende Weide (the Blub biome)
+        nl.juiced.guhs.feature.dexdromen.DexDromenFeature.register(modBus);   // 1.8.0: the Guhdex pages of Guhdromenland + the Blub-meterkaart
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -293,6 +294,7 @@ public final class Features {
         nl.juiced.guhs.feature.mijnhulp.MijnhulpFeature.payloads(registrar);   // 1.7.0 Onder de Wol: the Wolkenliftje's ride
         nl.juiced.guhs.feature.grotspellen.GrotSpellenFeature.payloads(registrar);   // 1.7.0 Onder de Wol: the glimworm jar on your back
         nl.juiced.guhs.feature.blub.BlubFeature.payloads(registrar);   // 1.8.0: the Blub-guh's menu
+        nl.juiced.guhs.feature.dexdromen.DexDromenFeature.payloads(registrar);   // 1.8.0: the Blub-meterkaart (Guhdex)
         nl.juiced.guhs.feature.weer.WeerFeature.payloads(registrar);   // 1.8.0: the Weer vadser's zones and menu
     }
 

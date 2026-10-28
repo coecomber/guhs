@@ -167,7 +167,8 @@ def selfcheck():
 FTB_CHAPTER = "guhs_dromen"
 FTB_PORTRAIT = "item:guhs:droomkussen"
 FTB_SECTIES = [
-    ("dr_blub", "De Blub-guh", "item:guhs:blubguh_item", ["dr_blub_vriend", "dr_blub_badje", "dr_blub_glas"]),
+    ("dr_blub", "De Blub-guh", "item:guhs:blubguh_item", ["dr_blub_vriend", "dr_blub_badje", "dr_blub_glas",
+                                                          "dr_blub_meterkaart_rij", "dr_blub_meterkaart_goud"]),
     ("dr_weer", "De Weer vadser", "item:guhs:weer_vadser", ["dr_weer_vadser", "dr_weer_bellen", "dr_weer_regenboog"]),
     ("dr_slaap", "Slaap lekker, guh", "item:guhs:muziekdoosje",
      ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
@@ -201,6 +202,12 @@ def ftb(fq):
       "Bubbelbadmeester worden je guhs fris en blij.", "guhs:blub_badje", [item("guhs:blub_badje")], xp=50)
     q("dr_blub_glas", "Nog niet leeg!", "Rommelguh laat overal glazen met een restje staan. Maak er zelf ook een paar: drie "
       "glasruiten in een V.", "guhs:glas_restje", [item("guhs:glas_restje")], xp=50)
+    # (1.8.0 dexdromen: the Blub-meterkaart in the Guhdex, on the Blub-guh page)
+    q("dr_blub_meterkaart_rij", "Van Blub tot Guh", "Vul op je &dBlub-meterkaart&r (Guhdex, pagina Blub-guh) een hele rij van één "
+      "soort: een Blub met meter 0-9, 10-19... tot en met 90-100. Temmen en kweken telt allebei.", "guhs:blubguh_item",
+      [adv("blub_meterkaart_rij")], xp=200)
+    q("dr_blub_meterkaart_goud", "Goud!", "Een &6gouden vakje&r op je meterkaart: tem of kweek een &dPure Blub&r (meter precies 0) of "
+      "een &dVolle Guh&r (meter precies 100). Heel zeldzaam!", "guhs:blubguh_item", [adv("blub_meterkaart_goud")], xp=300)
     # --- the Weer vadser --------------------------------------------------------------------------------------------------
     q("dr_weer_vadser", "Weer vadsen", "Maak een &dWeer vadser&r en zet het weer in een straal van 60 blokken: zon, regen, sneeuw "
       "of onweer. Hij wil 20 vadskracht zolang er een ander weertje aan staat. Ook in de Guhmensie regent het dan!",
