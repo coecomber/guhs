@@ -183,6 +183,7 @@ public final class Features {
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.register(modBus);   // 1.8.0 (U2): sleepy guh clothes + the droompyjama   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.register(modBus);   // 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein
+        nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -454,6 +455,7 @@ public final class Features {
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.creative(output);   // 1.8.0: sleepy clothes + droompyjama   // 1.8.0: the droomkistje
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);   // 1.8.0: the droomkistje
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.creative(output);   // 1.8.0: the droomkraampje
+        nl.juiced.guhs.feature.dirigent.DirigentFeature.creative(output);   // 1.8.0: the dirigeerstokjes
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

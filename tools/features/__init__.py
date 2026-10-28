@@ -150,6 +150,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'droomweer',
             # 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein (append only)
             'droomwinkel']
+            'droomweer',
+            # 1.8.0 uitbreiding: de Dirigent in de Koorkom (append only)
+            'dirigent']
 
 
 def modules():
