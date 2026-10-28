@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "guhs:zeegroen_bakstenen"
+  },
+  "result": {
+    "id": "guhs:gepolijste_zeegroen_steen",
+    "count": 4
+  }
+}

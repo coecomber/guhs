@@ -94,8 +94,9 @@ public class BioWereldGameTests {
         JsonArray oudeLijst = new JsonArray();
         // 1.7.0 "Onder de Wol" added the Bloemenvallei surface biome and six cave biomes on purpose: they are left out of
         // the old source too, and a sample that lands in one of them is that update's intended change, not a shift here.
+        // (1.8.0 adds De Zingende Weide the same way: a region of its own, never inside ours)
         java.util.Set<String> nieuw170 = java.util.Set.of("guhs:bloemenvallei", "guhs:glitterspelonk", "guhs:pluisgrot", "guhs:slaapgrot",
-                "guhs:knuffelwortelgrot", "guhs:belletjesgrot", "guhs:kristalpegelgrot");
+                "guhs:knuffelwortelgrot", "guhs:belletjesgrot", "guhs:kristalpegelgrot", "guhs:zingende_weide");
         for (JsonElement e : source.getAsJsonArray("biomes")) {
             String b = e.getAsJsonObject().get("biome").getAsString();
             if (!b.equals("guhs:klaterdal") && !b.equals("guhs:bloesemmeertje") && !b.equals("guhs:wolkenweide") && !nieuw170.contains(b)) {

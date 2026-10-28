@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NNN",
+    "GBG"
+  ],
+  "key": {
+    "N": "minecraft:note_block",
+    "G": "guhs:gepolijste_zeegroen_steen",
+    "B": "guhs:zingbloemetje_roze"
+  },
+  "result": {
+    "id": "guhs:koorkom_podium",
+    "count": 1
+  }
+}

@@ -83,6 +83,9 @@
     },
     "guhs:kristalpegelgrot": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:zingende_weide": {
+      "villager_type": "guhs:guh"
     }
   }
 }

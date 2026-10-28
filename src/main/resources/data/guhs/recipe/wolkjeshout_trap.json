@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wolkjeshout_stairs",
+  "key": {
+    "#": "guhs:wolkjeshout_planken"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "guhs:wolkjeshout_trap"
+  }
+}

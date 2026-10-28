@@ -85,6 +85,9 @@
     "guhs:ruitjesvilt_mint_plaat",
     "guhs:ruitjesvilt_geel_plaat",
     "guhs:bielzenhout_plaat",
-    "guhs:kegelbaanhout_plaat"
+    "guhs:kegelbaanhout_plaat",
+    "guhs:zeegroen_steen_plaat",
+    "guhs:zeegroen_bakstenen_plaat",
+    "guhs:gepolijste_zeegroen_steen_plaat"
   ]
 }

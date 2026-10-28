@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/koorkom_podium_top",
+    "side": "guhs:block/koorkom_podium_zij",
+    "bottom": "guhs:block/zeegroen_bakstenen"
+  }
+}

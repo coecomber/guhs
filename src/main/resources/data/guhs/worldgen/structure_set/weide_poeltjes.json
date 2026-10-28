@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:weide_poeltjes",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 12,
+    "separation": 5,
+    "salt": 20180802
+  }
+}

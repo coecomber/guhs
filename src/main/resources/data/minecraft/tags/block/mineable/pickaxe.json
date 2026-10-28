@@ -668,6 +668,24 @@
     "guhs:vadslamp",
     "guhs:vadsschakelaar",
     "guhs:weer_vadser",
-    "guhs:molen_tandwiel"
+    "guhs:molen_tandwiel",
+    "guhs:zeegroen_steen",
+    "guhs:zeegroen_bakstenen",
+    "guhs:gepolijste_zeegroen_steen",
+    "guhs:zeegroen_steen_trap",
+    "guhs:zeegroen_steen_plaat",
+    "guhs:zeegroen_steen_muur",
+    "guhs:zeegroen_bakstenen_trap",
+    "guhs:zeegroen_bakstenen_plaat",
+    "guhs:zeegroen_bakstenen_muur",
+    "guhs:gepolijste_zeegroen_steen_trap",
+    "guhs:gepolijste_zeegroen_steen_plaat",
+    "guhs:weidekristal_cyaan",
+    "guhs:weidekristal_lila",
+    "guhs:weidekristal_roze",
+    "guhs:weidekristalletjes_cyaan",
+    "guhs:weidekristalletjes_lila",
+    "guhs:weidekristalletjes_roze",
+    "guhs:koorkom_podium"
   ]
 }

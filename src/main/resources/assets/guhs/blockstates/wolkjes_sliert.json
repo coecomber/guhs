@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "tip=false": {
+      "model": "guhs:block/wolkjes_sliert"
+    },
+    "tip=true": {
+      "model": "guhs:block/wolkjes_sliert_punt"
+    }
+  }
+}

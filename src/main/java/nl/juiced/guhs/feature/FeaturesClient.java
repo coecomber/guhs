@@ -143,6 +143,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.droomwezens.client.DroomwezensClient.init(modBus);   // 1.8.0: the dream NPCs' models, the sterrenvisje
         nl.juiced.guhs.feature.sterrenveld.client.SterrenveldClient.init(modBus);   // 1.8.0: the falling stars
         nl.juiced.guhs.feature.molentje.client.MolentjeClient.init(modBus);   // 1.8.0: the Maanmolentje's turning sails
+        nl.juiced.guhs.feature.zingendeweide.client.WeideClient.init(modBus);   // 1.8.0: De Zingende Weide's sky, trillertjes, bubbelsap
     }
 
     private FeaturesClient() {

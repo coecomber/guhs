@@ -311,6 +311,24 @@
     "guhs:slaapmasker_kapstok",
     "guhs:krabpaal",
     "guhs:krabpaal_blauw",
-    "guhs:molenwieken"
+    "guhs:molenwieken",
+    "guhs:wolkjeshout_stam",
+    "guhs:wolkjeshout_gestript",
+    "guhs:wolkjeshout_hout",
+    "guhs:wolkjeshout_gestript_hout",
+    "guhs:wolkjeshout_gezicht",
+    "guhs:wolkjeshout_planken",
+    "guhs:wolkjeshout_trap",
+    "guhs:wolkjeshout_plaat",
+    "guhs:wolkjeshout_hek",
+    "guhs:wolkjeshout_poort",
+    "guhs:wolkjeshout_deur",
+    "guhs:wolkjeshout_luik",
+    "guhs:wolkjeshout_knop",
+    "guhs:wolkjeshout_drukplaat",
+    "guhs:wolkjeshout_bord",
+    "guhs:wolkjeshout_wandbord",
+    "guhs:wolkjeshout_hangbord",
+    "guhs:wolkjeshout_wandhangbord"
   ]
 }

@@ -2056,3 +2056,31 @@ UITLEG["vadsschakelaar"] = dict(
        "\n"
        "Handy for stopping a machine for a while without taking wire away. Recipe: a lever above a Guh Wire.",
     meer=["systemen/guh-technologie"])
+
+# 1.8.0: De Zingende Weide (feature/zingendeweide)
+UITLEG["koorkom_podium"] = dict(
+    nl="Het podiumpje in het midden van de Koorkom. Bij schemer komen de wilde Blubs uit de buurt (40 blokken) hierheen "
+       "gehupt, en zodra er drie omheen staan (of na een halve minuut) piepen ze samen hun slaapliedje. Eén keer per avond, "
+       "daarna is het stil tot de volgende schemer.\n"
+       "\n"
+       "Zelf maken: drie nootblokken op gepolijste zeegroene steen met een roze zingbloemetje.",
+    en="The little stage in the middle of the Choir Bowl. At dusk the wild Blubs around (40 blocks) hop over, and once three "
+       "stand around it (or after half a minute) they squeak their lullaby together. Once per evening, then it is quiet until "
+       "the next dusk.\n"
+       "\n"
+       "Make your own: three note blocks on polished seagreen stone with a pink singing flower.")
+UITLEG["wolkjeshout_gezicht"] = dict(
+    nl="Een slaperig guhgezichtje in de stam van een wolkjesboom. Rechtsklik: hij snurkt zachtjes. Met een bijl strip je hem "
+       "tot een gewone gestripte stam.",
+    en="A sleepy guh face in the trunk of a cloudlet tree. Right-click: a soft snore. An axe strips it to a plain stripped log.")
+UITLEG["bubbelsap"] = dict(
+    nl="Glanzend regenboogsap uit De Zingende Weide. Het stroomt als water, maar je kunt er niet in verdrinken en het doet "
+       "nooit pijn. Wie erin staat of zwemt wordt bubbelig: belletjes om je heen en een beetje hoger springen, nog even nadat "
+       "je eruit bent. Blubs badderen er dolgraag in. Schep het op met een emmer.",
+    en="Shiny rainbow sap from the Singing Meadow. It flows like water, but you can't drown in it and it never hurts. Whoever "
+       "stands or swims in it gets bubbly: little bubbles around you and a bit higher jumps, for a while after you get out. "
+       "Blubs love bathing in it. Scoop it up with a bucket.")
+UITLEG["weidekristal_cyaan"] = UITLEG["weidekristal_lila"] = UITLEG["weidekristal_roze"] = dict(
+    nl="Een pastel weidekristal uit De Zingende Weide: doorschijnend, het geeft een beetje licht en tingelt zachtjes als je "
+       "eroverheen loopt.",
+    en="A pastel meadow crystal from the Singing Meadow: see-through, it gives a little light and chimes softly when you walk on it.")

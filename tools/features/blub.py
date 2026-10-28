@@ -27,9 +27,9 @@ except ImportError:                                   # (run as a script from th
 BONES = {}
 CLOTHES = []
 
-# TIJDELIJK (1.8.0 test build): the Blub-guh lives in the Wolkenweide and the Bloemenvallei until Guhdromenland exists; then
-# only this entry moves to the dream dimension's biomes.
-SPAWNS = {"blubguh_tijdelijk": (["guhs:wolkenweide", "guhs:bloemenvallei"], [("guhs:blubguh", 6, 2, 4)])}
+# 1.8.0: wild Blubs spawn only in De Zingende Weide (its biome file has the spawner: tools/features/zingendeweide.py; later
+# Guhdromenland too). The temporary Wolkenweide/Bloemenvallei modifier of the test build is gone.
+SPAWNS = {}
 
 # (the sounds: one event per action, tools/blub_audio_import.py fills them from inspiration/Blub audio/; its ACTIES give the
 # subtitles below)

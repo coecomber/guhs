@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wolkjeshout_slab",
+  "key": {
+    "#": "guhs:wolkjeshout_planken"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "guhs:wolkjeshout_plaat"
+  }
+}

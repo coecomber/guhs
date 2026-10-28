@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "guhs:block/wolkjeshout_drukplaat"
+    },
+    "powered=true": {
+      "model": "guhs:block/wolkjeshout_drukplaat_down"
+    }
+  }
+}

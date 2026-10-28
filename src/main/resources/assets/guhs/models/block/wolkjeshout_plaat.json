@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "guhs:block/wolkjeshout_planken",
+    "side": "guhs:block/wolkjeshout_planken",
+    "top": "guhs:block/wolkjeshout_planken"
+  }
+}

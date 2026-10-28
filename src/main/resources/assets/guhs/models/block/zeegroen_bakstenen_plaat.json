@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "guhs:block/zeegroen_bakstenen",
+    "side": "guhs:block/zeegroen_bakstenen",
+    "top": "guhs:block/zeegroen_bakstenen"
+  }
+}
