@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voor": "guhs:block/molentje/molen_tandwiel",
+    "zij": "guhs:block/molentje/molen_tandwiel_zij",
+    "particle": "guhs:block/molentje/molen_tandwiel"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        1,
+        14
+      ],
+      "to": [
+        15,
+        15,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#voor",
+          "rotation": 90
+        },
+        "north": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GCG",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "guhs:molen_tandwiel",
+    "count": 1
+  }
+}

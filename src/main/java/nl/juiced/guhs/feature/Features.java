@@ -171,6 +171,7 @@ public final class Features {
         nl.juiced.guhs.feature.herinnering.HerinneringFeature.register();   // 1.8.0: the Herinneringseiland (its herinneringsbelletjes and retro films)
         nl.juiced.guhs.feature.dromen.liedjes.BlubKoortje.register();   // 1.8.0 Guhdromenland: the Slaapliedjesheuvels' Blub-koortje
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.register(modBus);   // 1.8.0: het Sterrenkussenveld (stuiterkussens, vallende sterren)
+        nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -429,6 +430,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.creative(output);   // 1.8.0: sterrenvisje, its bucket, glas met een restje
         nl.juiced.guhs.feature.droomplein.DroompleinFeature.creative(output);   // 1.8.0: the Droomplein's brievenbusjes and droomwekker
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.creative(output);   // 1.8.0: the stuiterkussens
+        nl.juiced.guhs.feature.molentje.MolentjeFeature.creative(output);   // 1.8.0: molentandwieltje, blaaskussentje, molenwieken
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

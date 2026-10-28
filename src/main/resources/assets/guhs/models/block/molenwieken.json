@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "naaf": "guhs:block/molentje/wiek_naaf",
+    "hout": "guhs:block/molentje/wiek_hout",
+    "particle": "guhs:block/molentje/wiek_naaf"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        4,
+        0
+      ],
+      "to": [
+        12,
+        12,
+        8
+      ],
+      "faces": {
+        "south": {
+          "texture": "#naaf"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "down": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

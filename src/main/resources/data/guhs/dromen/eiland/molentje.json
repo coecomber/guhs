@@ -1,0 +1,22 @@
+{
+  "versie": 1,
+  "template": "guhs:dromen/eiland_molentje",
+  "midden": [
+    42,
+    30,
+    42
+  ],
+  "aankomst": {
+    "plek": [
+      -15.02,
+      1.0,
+      2.18
+    ],
+    "yaw": 252.0
+  },
+  "steiger": [
+    -27.5,
+    1.0,
+    7.5
+  ]
+}

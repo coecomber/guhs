@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    " S ",
+    "W W"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:molenwieken",
+    "count": 1
+  }
+}

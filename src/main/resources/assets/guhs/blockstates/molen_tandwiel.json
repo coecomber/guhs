@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,stand=0": {
+      "model": "guhs:block/molen_tandwiel_0",
+      "y": 180
+    },
+    "facing=north,stand=1": {
+      "model": "guhs:block/molen_tandwiel_1",
+      "y": 180
+    },
+    "facing=north,stand=2": {
+      "model": "guhs:block/molen_tandwiel_2",
+      "y": 180
+    },
+    "facing=north,stand=3": {
+      "model": "guhs:block/molen_tandwiel_3",
+      "y": 180
+    },
+    "facing=east,stand=0": {
+      "model": "guhs:block/molen_tandwiel_0",
+      "y": 270
+    },
+    "facing=east,stand=1": {
+      "model": "guhs:block/molen_tandwiel_1",
+      "y": 270
+    },
+    "facing=east,stand=2": {
+      "model": "guhs:block/molen_tandwiel_2",
+      "y": 270
+    },
+    "facing=east,stand=3": {
+      "model": "guhs:block/molen_tandwiel_3",
+      "y": 270
+    },
+    "facing=south,stand=0": {
+      "model": "guhs:block/molen_tandwiel_0"
+    },
+    "facing=south,stand=1": {
+      "model": "guhs:block/molen_tandwiel_1"
+    },
+    "facing=south,stand=2": {
+      "model": "guhs:block/molen_tandwiel_2"
+    },
+    "facing=south,stand=3": {
+      "model": "guhs:block/molen_tandwiel_3"
+    },
+    "facing=west,stand=0": {
+      "model": "guhs:block/molen_tandwiel_0",
+      "y": 90
+    },
+    "facing=west,stand=1": {
+      "model": "guhs:block/molen_tandwiel_1",
+      "y": 90
+    },
+    "facing=west,stand=2": {
+      "model": "guhs:block/molen_tandwiel_2",
+      "y": 90
+    },
+    "facing=west,stand=3": {
+      "model": "guhs:block/molen_tandwiel_3",
+      "y": 90
+    }
+  }
+}
