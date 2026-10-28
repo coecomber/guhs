@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "guhs:block/roze_graan_stage2"
+  }
+}

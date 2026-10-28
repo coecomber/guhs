@@ -336,7 +336,7 @@ public class BlubGuhEntity extends Landdiertje {
     /** Kaasknabbels: taming, snacks, falling in love. */
     @Override
     public boolean isVoer(ItemStack stack) {
-        return stack.is(ModItems.KAAS_KNABBELS.get());
+        return stack.is(ModItems.KAAS_KNABBELS.get()) || nl.juiced.guhs.feature.rozegraan.RozegraanFeature.isBroodje(stack);   // 1.8.0: roze broodje
     }
 
     @Override
