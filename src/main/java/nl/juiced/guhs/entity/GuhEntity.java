@@ -170,6 +170,9 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     /** The 18 slots of the backpack (only usable while it wears one; 2.9: the contents belong to this guh). */
     private final net.minecraft.world.SimpleContainer backpack = new net.minecraft.world.SimpleContainer(BACKPACK_SIZE);
     private int launchTicks;
+    /** 1.7.4: seconds in a row this tamed guh has floated without a reason ({@link #zweefHerstel}); not saved. */
+    private int zweefSec;
+    public static final int ZWEEF_HERSTEL_SEC = 120;
     private int launchCooldown;
     private Vec3 launchDirection = Vec3.ZERO;
 
@@ -1447,6 +1450,31 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                 && super.canMate(other);
     }
 
+    /**
+     * 1.7.4 self-heal: a tamed guh that floats (NoGravity) without a reason for {@link #ZWEEF_HERSTEL_SEC} seconds in a row gets
+     * its gravity back. Something left NoGravity on and it was saved that way (LazyLikeLieke's Cocoön, 1.7.3): never on
+     * the ground, so it hardly walked and every emote said "bezig". Reasons to float: asleep inside its Guhhuisje, an Ender
+     * guh, a Zeemeerguh, a story variant's own behaviour, riding, no AI. The short floats (a tunnel, a launch, Stitch on
+     * a wall, the parkour) are over long before the time is up.
+     */
+    private void zweefHerstel() {
+        boolean zweeftZonderReden = this.isNoGravity() && this.isTame() && !this.isNoAi() && !this.isPassenger() && !isEnder() && !isZeemeer()
+                && !this.getPersistentData().contains(nl.juiced.guhs.feature.huisje.Huisjes.BINNEN)
+                && nl.juiced.guhs.feature.verhaal.VariantGedragen.van(this) == null;
+        zweefSec = zweeftZonderReden ? zweefSec + 1 : 0;
+        if (zweefSec >= ZWEEF_HERSTEL_SEC) {
+            zweefSec = 0;
+            this.noPhysics = false;
+            this.setNoGravity(false);
+            com.mojang.logging.LogUtils.getLogger().info("Guh {} ({}) floated without a reason: gravity back", this.getName().getString(), this.getStringUUID());
+        }
+    }
+
+    /** (tests) as if it has floated this many seconds in a row already. */
+    public void zetZweefSec(int sec) {
+        zweefSec = sec;
+    }
+
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
@@ -1500,6 +1528,9 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         emotes.tick();
         if (!this.level().isClientSide()) {
             nl.juiced.guhs.feature.knus.GuhHooks.runTick(this);   // 2.8: the Knus features
+            if (this.tickCount % 20 == 0) {
+                zweefHerstel();
+            }
         }
         if (isZeemeer()) {
             nl.juiced.guhs.feature.onderwater.Zeemeerguh.tick(this);

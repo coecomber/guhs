@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.7.4 — Minecraft 26.1.2
+
+- **Family on the enclosure sign:** when you put together the family, you now choose for every species whether a parent is a male or a female, also when they look the same. Two males or two females is fine too.
+- **Floating guhs come down:** a tame guh that got stuck floating (it hardly walked and every emote said it was busy) gets its gravity back by itself after two minutes.
+
 ## 1.7.3 — Minecraft 26.1.2
 
 - **The Wild Guh Shoo-Sign works again in the Guhmension:** the new cave guhs and molguhs of Onder de Wol (1.7.0) ignored the sign, so wild guhs could pop up in basements and under high roofs inside its area. They now stay out, just like the other wild guhs.

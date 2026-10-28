@@ -184,6 +184,26 @@ public class GuhGameTests {
         helper.succeed();
     }
 
+    /** 1.7.4: a tamed guh stuck without gravity (no reason to float) gets it back; one that floats on purpose (here: no AI, like a statue) keeps floating. */
+    @GuhTest(template = EMPTY, batch = "zweefherstel", timeoutTicks = 100)
+    public static void zwevendeGuhKrijgtZwaartekrachtTerug(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        GuhEntity vast = helper.spawn(ModEntities.GUH.get(), POS.above(2));
+        vast.tame(player);
+        vast.setNoGravity(true);
+        vast.zetZweefSec(GuhEntity.ZWEEF_HERSTEL_SEC - 2);
+        GuhEntity beeld = helper.spawn(ModEntities.GUH.get(), POS.above(2).east(2));
+        beeld.tame(player);
+        beeld.setNoGravity(true);
+        beeld.setNoAi(true);
+        beeld.zetZweefSec(GuhEntity.ZWEEF_HERSTEL_SEC - 2);
+        helper.runAfterDelay(80, () -> {
+            helper.assertTrue(!vast.isNoGravity() && vast.onGround(), "the stuck guh has its gravity back and stands on the ground");
+            helper.assertTrue(beeld.isNoGravity(), "a guh without AI keeps floating");
+            helper.succeed();
+        });
+    }
+
     @GuhTest(template = EMPTY)
     public static void friedKnabbelsHealToFull(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

@@ -14,12 +14,12 @@ EN_BESTAND = os.path.join("tools", "lang", "en", "c189_familie164.json")
 
 TEKSTEN = {
     "gui.guhs.verblijf.samenstellen.knop": "Familie samenstellen...",
-    "gui.guhs.verblijf.samenstellen.knop.uitleg": "Kies wie er in deze familie wonen: per dier een ouder of een kind (en bij sommige "
-                                                  "soorten een mannetje of een vrouwtje). Wie verandert, wordt met een poef "
+    "gui.guhs.verblijf.samenstellen.knop.uitleg": "Kies wie er in deze familie wonen: per dier een ouder of een kind (en of een ouder "
+                                                  "een mannetje of een vrouwtje is). Wie verandert, wordt met een poef "
                                                   "omgewisseld; het blijven er altijd vier.",
     "gui.guhs.verblijf.samenstellen.titel": "Stel de familie samen",
-    "gui.guhs.verblijf.samenstellen.uitleg": "Kies voor elk dier of het een ouder of een kind is. Bij de %s zien mannetjes en "
-                                             "vrouwtjes er hetzelfde uit.",
+    "gui.guhs.verblijf.samenstellen.uitleg": "Kies voor elk dier of het een ouder of een kind is, en of een ouder een "
+                                             "mannetje of een vrouwtje is. Bij de %s zien mannetjes en vrouwtjes er hetzelfde uit.",
     "gui.guhs.verblijf.samenstellen.uitleg.geslacht": "Kies voor elk dier of het een ouder of een kind is, en of een ouder een "
                                                       "mannetje of een vrouwtje is: bij de %s zie je het verschil.",
     "gui.guhs.verblijf.samenstellen.dier": "Dier %s",
@@ -32,8 +32,8 @@ TEKSTEN = {
     "gui.guhs.verblijf.samenstellen.man": "Mannetje",
     "gui.guhs.verblijf.samenstellen.vrouw": "Vrouwtje",
     "gui.guhs.verblijf.samenstellen.ouder_kind.uitleg": "Klik om te wisselen tussen een ouder (volwassen) en een kind (een kleintje).",
-    "gui.guhs.verblijf.samenstellen.geslacht.uitleg": "Klik om te wisselen tussen een mannetje en een vrouwtje. Bij deze soort zie "
-                                                      "je het verschil.",
+    "gui.guhs.verblijf.samenstellen.geslacht.uitleg": "Klik om te wisselen tussen een mannetje en een vrouwtje. Twee mannetjes of "
+                                                      "twee vrouwtjes mag ook.",
     "gui.guhs.verblijf.samenstellen.wissel": "Wie je verandert, wordt met een poef omgewisseld. Zijn naam blijft.",
     "gui.guhs.verblijf.samenstellen.klaar": "Zo is het goed!",
     "gui.guhs.verblijf.samenstellen.klaar.uitleg": "De familie wordt zo samengesteld. Wie verandert, wordt omgewisseld; het "

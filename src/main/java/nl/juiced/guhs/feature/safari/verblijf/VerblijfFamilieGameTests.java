@@ -11,7 +11,7 @@ import nl.juiced.guhs.gametest.GuhTest;
 /**
  * 1.6.4: the verblijfsbord's family dialog: the standard family until something is chosen, a chosen family is what comes,
  * changing it swaps exactly the members that change (never more than four, names stay), at least one parent, and the
- * male/female choice only for a species whose male and female look different.
+ * male/female choice only for a species whose male and female look different (1.7.4: for every species, two of the same too).
  */
 public class VerblijfFamilieGameTests {
     private static final String BATCH = "safari_verblijf_familie";
@@ -107,6 +107,23 @@ public class VerblijfFamilieGameTests {
             helper.runAfterDelay(5, () -> {
                 List<ThuisDier> f = familie(helper);
                 helper.assertTrue(f.size() == 4 && tel(f, "baby") == 2, "four, two chicks (" + f.size() + ")");
+                helper.succeed();
+            });
+        });
+    }
+
+    /** 1.7.4: the male/female choice for every species, also two females or two males. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 60)
+    public static void geslachtKiezenTweeHetzelfde(GameTestHelper helper) {
+        VerblijfsbordBlockEntity be = bord(helper, "zebra");   // (male and female look the same)
+        helper.runAfterDelay(5, () -> {
+            helper.assertTrue(be.zetFamilie(helper.getLevel(), new String[] {"vrouw", "vrouw", "baby", "baby"}), "two females");
+            helper.assertTrue(be.rol(0).equals("vrouw") && be.rol(1).equals("vrouw"), "two females: " + be.rol(0) + "/" + be.rol(1));
+            helper.assertTrue(be.zetFamilie(helper.getLevel(), new String[] {"man", "man", "baby", "baby"}), "two males");
+            helper.assertTrue(be.rol(0).equals("man") && be.rol(1).equals("man"), "two males: " + be.rol(0) + "/" + be.rol(1));
+            helper.runAfterDelay(5, () -> {
+                List<ThuisDier> f = familie(helper);
+                helper.assertTrue(f.size() == 4 && tel(f, "man") == 2 && tel(f, "baby") == 2, "two males, two foals (" + f.size() + ")");
                 helper.succeed();
             });
         });

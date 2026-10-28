@@ -1874,7 +1874,7 @@ UITLEG["safari_ooievaarsbus"] = dict(
 UITLEG["safari_verblijfsbord"] = dict(
     nl="Een verblijfsbordje uit de giftshop van het safaripark: zet het neer en er komt een familie van dat dier wonen "
        "(papa, mama en twee kleintjes). Je stelt de familie eerst zelf samen: per dier een ouder of een kind, en bij "
-       "soorten waar je het ziet ook een mannetje of een vrouwtje. Rechtsklik erop voor het menu.\n"
+       "een ouder ook een mannetje of een vrouwtje. Rechtsklik erop voor het menu.\n"
        "\n"
        "- Familie, Verblijf, Tevredenheid, Cadeautjes en Info: namen, de grootte van hun thuis, wat ze blij maakt.\n"
        "- Familie samenstellen (tab Familie): wissel later nog wie er wonen; wie verandert, wordt met een poef omgewisseld.\n"
@@ -1889,7 +1889,7 @@ UITLEG["safari_verblijfsbord"] = dict(
        "- De blokjes komen uit je inventaris, of uit een Bank Guh: klik het bord met een Banksleutel.",
     en="A home sign from the safari park's gift shop: put it down and a family of that animal moves in (dad, mum and "
        "two little ones). You first put the family together yourself: a parent or a little one for each animal, and for "
-       "species where you can see it also a male or a female. Right-click it for the menu.\n"
+       "a parent also a male or a female. Right-click it for the menu.\n"
        "\n"
        "- Family, Home, Happiness, Gifts and Info: names, the size of their home, what makes them happy.\n"
        "- Put the family together (Family tab): change later who lives there; who changes is swapped with a puff.\n"

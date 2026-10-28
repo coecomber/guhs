@@ -215,7 +215,7 @@ WIKI = {
          "terrariumbord: dan verschijnt er een glazen bakje waar ze in wonen."),
         ("verblijfsborden", "De familie",
          "Op elk bord komen vier dieren wonen. Zet je het bord neer, dan stel je eerst de familie samen: kies per dier een ouder "
-         "of een kind, en bij soorten waar je het verschil ziet (zoals de leeuw met zijn manen) ook een mannetje of een vrouwtje. "
+         "of een kind, en bij een ouder ook een mannetje of een vrouwtje (twee mannetjes of twee vrouwtjes mag ook). "
          "Er moet minstens één ouder bij zijn. Niets gekozen? Dan zijn het een mannetje, een vrouwtje en twee kleintjes. Later "
          "wijzigen kan altijd met Familie samenstellen op de tab Familie: wie verandert, wordt met een puf omgewisseld en zijn "
          "naam blijft. Ze blijven binnen hun gebied (8 tot 32 blokken, "
