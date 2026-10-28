@@ -144,6 +144,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'droomweer']
             # 1.8.0: the Guhvilla (20 residents, its model and roof, the hall inside with the new beds; after huisje; append only)
             'guhvilla']
+            'droomweer',
+            # 1.8.0 U2: sleepy guh clothes and the player's droompyjama (append only)
+            'slaapkleding']
 
 
 def modules():

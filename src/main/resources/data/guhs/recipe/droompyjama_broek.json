@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WMW",
+    "WDW",
+    "W W"
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "D": "guhs:droomzand",
+    "M": "guhs:maanbloemetje"
+  },
+  "result": {
+    "id": "guhs:droompyjama_broek",
+    "count": 1
+  }
+}

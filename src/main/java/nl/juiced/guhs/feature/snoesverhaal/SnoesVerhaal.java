@@ -591,10 +591,26 @@ public final class SnoesVerhaal {
         return Cutscenes.speel(p, SnoesScenes.FINALE, anker, Rotation.NONE, SnoesVerhaal::naFinale);
     }
 
+    /** 1.8.0 (U2): Snoes' thank-you, the knuffeltje for your guh's back (once; the source of GuhClothes.KNUFFELTJE). */
+    static void knuffeltje(ServerPlayer p) {
+        CompoundTag d = data(p);
+        if (d.getBooleanOr("KnuffeltjeGekregen", false)) {
+            return;
+        }
+        d.putBoolean("KnuffeltjeGekregen", true);
+        net.minecraft.world.item.ItemStack k = new net.minecraft.world.item.ItemStack(
+                nl.juiced.guhs.registry.ModItems.clothingItem(nl.juiced.guhs.entity.GuhClothes.KNUFFELTJE));
+        if (!p.getInventory().add(k)) {
+            p.drop(k, false);
+        }
+        p.sendSystemMessage(Component.translatable("gui.guhs.snoes.knuffeltje").withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
     /** After the finale (also the test command): Snoes is helped, the rewards, and Snoes moves to the plein. */
     public static void naFinale(ServerPlayer p) {
         DroomVoortgang.zetFinale(p);                       // (also "Snoes geholpen": the wild Blubs show themselves now)
         DroomBronnen.geef(p, Weertje.REGENBOOG);
+        knuffeltje(p);
         GuhAdvancements.grant(p, "snoes_finale");
         zetFase(p, Fase.KLAAR);
         GuhNpcEntity thuis = snoesThuis(p);
