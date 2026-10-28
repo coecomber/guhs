@@ -803,27 +803,17 @@ UITLEG = {
            "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
     "stuiterkussen_boter": dict(
-        nl="Een reuzenkussen waar je hoog vanaf stuitert, zoals de kussenspiraal op het Sterrenkussenveld (er zijn 8 kleuren).
-"
-           "
-"
-           "- Spring of loop erop: boing, ongeveer vijf blokken de lucht in. Ook als je zweeft in de droom.
-"
-           "- Sluip om er gewoon op te blijven staan.
-"
-           "- Vallen erop doet nooit pijn.
-"
+        nl="Een reuzenkussen waar je hoog vanaf stuitert, zoals de kussenspiraal op het Sterrenkussenveld (er zijn 8 kleuren).\n"
+           "\n"
+           "- Spring of loop erop: boing, ongeveer vijf blokken de lucht in. Ook als je zweeft in de droom.\n"
+           "- Sluip om er gewoon op te blijven staan.\n"
+           "- Vallen erop doet nooit pijn.\n"
            "- Craften: een knuffelblok in die kleur + een slijmbal.",
-        en="A giant pillow you bounce high off, like the pillow spiral on the Star Pillow Field (there are 8 colours).
-"
-           "
-"
-           "- Jump or walk onto it: boing, about five blocks into the air. Even while floating in the dream.
-"
-           "- Sneak to just stand on it.
-"
-           "- Falling onto it never hurts.
-"
+        en="A giant pillow you bounce high off, like the pillow spiral on the Star Pillow Field (there are 8 colours).\n"
+           "\n"
+           "- Jump or walk onto it: boing, about five blocks into the air. Even while floating in the dream.\n"
+           "- Sneak to just stand on it.\n"
+           "- Falling onto it never hurts.\n"
            "- Crafting: a knuffelblok of that colour + a slime ball.",
         meer=[]),
     "doos_knabbels": dict(
