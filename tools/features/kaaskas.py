@@ -54,7 +54,6 @@ def teksten():
         "gui.guhs.kaaskas.wacht_saus": ("Wacht op kaassaus (emmer of Sausslang)", "Waiting for kaassaus (bucket or Sauce Hose)"),
         "block.guhs.pluisbolletje_plant": ("Pluisbolletjesplant", "Fluffball Plant"),
         "item.guhs.pluisbolletje_zaad": ("Pluisbolletjeszaad", "Fluffball Seeds"),
-        "item.guhs.pluis": ("Pluis", "Fluff"),
         "block.guhs.sorteerband": ("Guh-sorteerband", "Guh Sorting Belt"),
         "block.guhs.sorteerband.lore": ("Wat erop ligt rijdt mee naar het eind. Daar sorteert een guh met het klusje Sorteerder het "
                                         "in de goede kist. Njeg, opgeruimd staat netjes!",
@@ -155,8 +154,7 @@ def build(h):
     w(f"{A}/blockstates/pluisbolletje_plant.json", {"variants": {f"age={a}": {"model": f"guhs:block/pluisbolletje_plant_stage{a}"} for a in range(4)}})
     h.save(zw.tint(zw.vanilla_png("item/wheat_seeds"), (240, 200, 220), 0.2), "item", "pluisbolletje_zaad.png")
     h.item_model("pluisbolletje_zaad")
-    h.save(_pluis_item(), "item", "pluis.png")
-    h.item_model("pluis")
+    # guhs:pluis itself (texture, model, text) belongs to tools/features/fabriek.py
     rijp = {"condition": "minecraft:block_state_property", "block": "guhs:pluisbolletje_plant", "properties": {"age": "3"}}
     w(f"{D}/loot_table/blocks/pluisbolletje_plant.json", {"type": "minecraft:block", "pools": [
         {"rolls": 1, "bonus_rolls": 0, "entries": [{"type": "minecraft:alternatives", "children": [

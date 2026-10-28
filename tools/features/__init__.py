@@ -153,19 +153,19 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 U2: the Gezelschapshoek of Guhpixel (append only)
             'guhpixel_gezel',
             # 1.8.0 (vadskracht): the hamsterbuis network (append only)
-            'hamsterbuis']
+            'hamsterbuis',
             # 1.8.0 vadskracht: de Mega-knuffelcentrale + export bij guh-villagers (append only)
-            'centrale']
+            'centrale',
             # 1.8.0 vadskracht: de Kaaskas + de Guh-sorteerband (append only)
-            'kaaskas']
+            'kaaskas',
             # 1.8.0 vadskracht: de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger; append only)
-            'koepel']
+            'koepel',
             # 1.8.0 vadskracht: Knabbelketel, Knuffelsteen-generator, Saustank, Sausbuis, Wolkenantennes (append only)
-            'vadsbasis']
+            'vadsbasis',
             # 1.8.0 V3-V5: the Fossiel-broedmachine and the oerguhs (append only)
-            'fossiel']
+            'fossiel',
             # 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan (append only)
-            'raket']
+            'raket',
             # 1.8.0 vadskracht: de Fabriekshal (wol, bouwblokken, kleurstof; append only)
             'fabriek']
 

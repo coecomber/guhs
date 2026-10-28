@@ -52,8 +52,8 @@ public final class KaaskasFeature {
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).mapColor(MapColor.SNOW));
     public static final DeferredItem<BlockItem> PLUIS_ZAAD = ITEMS.registerItem("pluisbolletje_zaad",
             p -> new BlockItem(PLUISBOLLETJE.get(), p), () -> new Item.Properties().useItemDescriptionPrefix());
-    /** TEMPORARY (see the class comment): pluis, until the fabriek branch's pluis is merged. */
-    public static final DeferredItem<Item> PLUIS = ITEMS.registerSimpleItem("pluis");
+    /** Pluis is the fabriek's item (guhs:pluis, registered by FabriekFeature); kept here as a name for the kaaskas code. */
+    public static final DeferredItem<Item> PLUIS = nl.juiced.guhs.feature.fabriek.FabriekFeature.PLUIS;
 
     public static final DeferredBlock<SorteerbandBlock> SORTEERBAND = BLOCKS.registerBlock("sorteerband", SorteerbandBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f, 3f).sound(SoundType.WOOL).noOcclusion());
@@ -82,7 +82,6 @@ public final class KaaskasFeature {
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(KAASKAS_ITEM.get()));
         output.accept(new ItemStack(PLUIS_ZAAD.get()));
-        output.accept(new ItemStack(PLUIS.get()));
         output.accept(new ItemStack(SORTEERBAND_ITEM.get()));
     }
 
