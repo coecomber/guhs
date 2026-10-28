@@ -154,6 +154,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhpixel_gezel',
             # 1.8.0 (vadskracht): the hamsterbuis network (append only)
             'hamsterbuis']
+            # 1.8.0 vadskracht: de Mega-knuffelcentrale + export bij guh-villagers (append only)
+            'centrale']
 
 
 def modules():
