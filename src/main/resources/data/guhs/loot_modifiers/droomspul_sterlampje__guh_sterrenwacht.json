@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "table": "guhs:droomspul/sterlampje",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "guhs:chests/guh_sterrenwacht"
+    }
+  ]
+}

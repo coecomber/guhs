@@ -174,6 +174,7 @@ public final class Features {
         nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.register(modBus);   // 1.8.0 (Guhdromenland F): the story of Snoes, its finale, the dream weerpotjes
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.register(modBus);   // 1.8.0: De Zingende Weide (the Blub biome)
+        nl.juiced.guhs.feature.droomspul.DroomspulFeature.register(modBus);   // 1.8.0 (Guhdromenland): more boxes, the tuck-in items, the islanders
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -434,6 +435,7 @@ public final class Features {
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.creative(output);   // 1.8.0: the stuiterkussens
         nl.juiced.guhs.feature.molentje.MolentjeFeature.creative(output);   // 1.8.0: molentandwieltje, blaaskussentje, molenwieken
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.creative(output);   // 1.8.0: De Zingende Weide's blocks
+        nl.juiced.guhs.feature.droomspul.DroomspulFeature.creative(output);   // 1.8.0: verhuis-/schoenen-/pizzadoos, zeepje, sterlampje, fotootje
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/pizzadoos"
+    },
+    "facing=east": {
+      "model": "guhs:block/pizzadoos",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/pizzadoos",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/pizzadoos",
+      "y": 270
+    }
+  }
+}

@@ -31819,5 +31819,22 @@
   "block.guhs.weidekristal_lila": "Lila weidekristal",
   "block.guhs.weidekristalletjes_lila": "Lilae weidekristalletjes",
   "block.guhs.weidekristal_roze": "Roze weidekristal",
-  "block.guhs.weidekristalletjes_roze": "Rozee weidekristalletjes"
+  "block.guhs.weidekristalletjes_roze": "Rozee weidekristalletjes",
+  "block.guhs.verhuisdoos": "Verhuisdoos",
+  "block.guhs.verhuisdoos.lore": "'Breekbaar: guh'. Rechtsklik 's avonds: stop je guh erin in.",
+  "block.guhs.schoenendoos": "Schoenendoos",
+  "block.guhs.schoenendoos.lore": "De schoenen zijn weg, de guh is erin. Rechtsklik 's avonds: stop je guh erin in.",
+  "block.guhs.pizzadoos": "Pizzadoos",
+  "block.guhs.pizzadoos.lore": "Nog warm en het ruikt naar kaas. Welke guh kan daar nou nee tegen zeggen?",
+  "item.guhs.zeepje": "Zeepje",
+  "item.guhs.zeepje.lore": "Geef het mee bij het instoppen: je droomt van het Wolkenbadje.",
+  "item.guhs.sterlampje": "Sterlampje",
+  "item.guhs.sterlampje.lore": "Geef het mee bij het instoppen: je droomt van het Sterrenkussenveld.",
+  "item.guhs.fotootje": "Fotootje",
+  "item.guhs.fotootje.lore": "Een oud fotootje van een familiedag. Geef het mee bij het instoppen: je droomt van het Herinneringseiland.",
+  "entity.guhs.droompostguh": "Droompostguh",
+  "gui.guhs.droomspul.postguh.0": "Post voor jou? Njeg... alleen een droom. Die bezorg ik wel gratis.",
+  "gui.guhs.droomspul.postguh.1": "Een busje per eiland. Maar alleen naar eilanden waar je al was, anders weet ik je adres niet!",
+  "gui.guhs.droomspul.postguh.2": "Postzegels? Hier betaal je met gaapjes. Ik heb er al drie gehad vandaag.",
+  "gui.guhs.droomspul.postguh.3": "Gisteren bezorgde ik een knuffel. Hij was een beetje platgedrukt, maar nog heel lief."
 }

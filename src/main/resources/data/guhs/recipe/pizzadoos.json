@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:doos_knabbels",
+    "minecraft:bread"
+  ],
+  "result": {
+    "id": "guhs:pizzadoos",
+    "count": 1
+  }
+}

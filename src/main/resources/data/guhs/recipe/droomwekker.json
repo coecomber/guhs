@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:clock",
+    "minecraft:pink_dye",
+    "guhs:droomzand"
+  ],
+  "result": {
+    "id": "guhs:droomwekker",
+    "count": 1
+  }
+}

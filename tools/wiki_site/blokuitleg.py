@@ -836,6 +836,26 @@ UITLEG = {
            "- Then go to sleep in a bed close by yourself: you wake up in Guh Dreamland.\n"
            "- Sneak + right-click: untuck your guh.",
         meer=[]),
+    "verhuisdoos": dict(
+        nl="Een verhuisdoos met 'Breekbaar: guh' erop. Hij werkt precies als de doos met knabbels: 's avonds rechtsklikken "
+           "met een tamme guh van jou in de buurt stopt hem erin in, en wat je in je hand hebt bepaalt waar jullie van dromen. "
+           "Er is ook een schoenendoos en een pizzadoos.",
+        en="A moving box that says 'Fragile: guh'. It works just like the box of nibbles: right-click in the evening with a "
+           "tame guh of yours nearby to tuck it in, and what you hold decides what you dream of. There's a shoe box and a "
+           "pizza box too.",
+        meer=[]),
+    "schoenendoos": dict(
+        nl="Een schoenendoos, de schoenen zijn al weg. Stop er 's avonds je guh in, net als in de doos met knabbels "
+           "(rechtsklik; sluip + rechtsklik om hem weer uit te stoppen).",
+        en="A shoe box, the shoes are long gone. Tuck your guh in it in the evening, just like in the box of nibbles "
+           "(right-click; sneak + right-click to untuck it).",
+        meer=[]),
+    "pizzadoos": dict(
+        nl="Een pizzadoos die nog naar kaas ruikt. Geen guh kan er nee tegen zeggen: stop je guh er 's avonds in, net als in "
+           "de doos met knabbels (rechtsklik; sluip + rechtsklik om hem weer uit te stoppen).",
+        en="A pizza box that still smells of cheese. No guh can say no to it: tuck your guh in it in the evening, just like "
+           "in the box of nibbles (right-click; sneak + right-click to untuck it).",
+        meer=[]),
     "droombrievenbus_sterren": dict(
         nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
            "Droompost bezorgt je met een grote zeepbel op het Sterrenkussenveld.\n"

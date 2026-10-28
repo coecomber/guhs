@@ -1,0 +1,19 @@
+{
+  "block.guhs.verhuisdoos": "Moving Box",
+  "block.guhs.verhuisdoos.lore": "'Fragile: guh'. Right-click in the evening: tuck your guh in.",
+  "block.guhs.schoenendoos": "Shoe Box",
+  "block.guhs.schoenendoos.lore": "The shoes are gone, the guh is in. Right-click in the evening: tuck your guh in.",
+  "block.guhs.pizzadoos": "Pizza Box",
+  "block.guhs.pizzadoos.lore": "Still warm and it smells of cheese. Which guh could ever say no to that?",
+  "item.guhs.zeepje": "Little Soap",
+  "item.guhs.zeepje.lore": "Give it along when you tuck your guh in: you dream of the Cloud Bath.",
+  "item.guhs.sterlampje": "Star Lamp",
+  "item.guhs.sterlampje.lore": "Give it along when you tuck your guh in: you dream of the Star Cushion Field.",
+  "item.guhs.fotootje": "Little Photo",
+  "item.guhs.fotootje.lore": "An old little photo of a family day. Give it along when you tuck your guh in: you dream of Memory Island.",
+  "entity.guhs.droompostguh": "Dream Post Guh",
+  "gui.guhs.droomspul.postguh.0": "Mail for you? Njeg... only a dream. I deliver those for free.",
+  "gui.guhs.droomspul.postguh.1": "One mailbox per island. But only to islands you've been to, otherwise I don't know your address!",
+  "gui.guhs.droomspul.postguh.2": "Stamps? Here you pay with yawns. I've had three already today.",
+  "gui.guhs.droomspul.postguh.3": "Yesterday I delivered a hug. It was a bit squashed, but still very sweet."
+}

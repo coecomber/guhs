@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:doos_knabbels",
+    "minecraft:pink_dye"
+  ],
+  "result": {
+    "id": "guhs:schoenendoos",
+    "count": 1
+  }
+}
