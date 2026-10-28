@@ -166,6 +166,7 @@ public final class Features {
         nl.juiced.guhs.feature.dromen.DromenFeature.register(modBus);   // 1.8.0: Guhdromenland (the dream dimension, tucking in, the islands)
         nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.register(modBus);   // 1.8.0 (Guhdromenland B): slaapzorg, sleepy guhs, sleeping spots, lullaby, breakfast in bed
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.register(modBus);   // 1.8.0: the dream NPCs, the sterrenvisje, the glas met een restje
+        nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -422,6 +423,7 @@ public final class Features {
         nl.juiced.guhs.feature.dromen.DromenFeature.creative(output);   // 1.8.0: doos met knabbels, kattenhuisjes, droomkussen
         nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.creative(output);   // 1.8.0: the slaapkamer-set, maannachtlampjes, krabpalen
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.creative(output);   // 1.8.0: sterrenvisje, its bucket, glas met een restje
+        nl.juiced.guhs.feature.molentje.MolentjeFeature.creative(output);   // 1.8.0: molentandwieltje, blaaskussentje, molenwieken
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

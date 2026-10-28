@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "draait=true,facing=north": {
+      "model": "guhs:block/molenwieken",
+      "y": 180
+    },
+    "draait=false,facing=north": {
+      "model": "guhs:block/molenwieken",
+      "y": 180
+    },
+    "draait=true,facing=east": {
+      "model": "guhs:block/molenwieken",
+      "y": 270
+    },
+    "draait=false,facing=east": {
+      "model": "guhs:block/molenwieken",
+      "y": 270
+    },
+    "draait=true,facing=south": {
+      "model": "guhs:block/molenwieken"
+    },
+    "draait=false,facing=south": {
+      "model": "guhs:block/molenwieken"
+    },
+    "draait=true,facing=west": {
+      "model": "guhs:block/molenwieken",
+      "y": 90
+    },
+    "draait=false,facing=west": {
+      "model": "guhs:block/molenwieken",
+      "y": 90
+    }
+  }
+}

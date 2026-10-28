@@ -874,6 +874,12 @@ UITLEG = {
     "krabpaal_blauw": dict(
         nl="Een pluchen krabpaal met guh-oortjes.\n" "\n" "- Tamme guhs in de buurt hupsen er overdag af en toe bovenop, kijken rond als een poesje en zwaaien naar je.\n" "- Zet ze op 'zitten' als je liever hebt dat ze beneden blijven.",
         en="A plush scratching post with guh ears.\n" "\n" "- Tame guhs nearby now and then hop on top by day, look around like a kitty and wave at you.\n" "- Tell them to sit if you'd rather they stay down."),
+    "molen_tandwiel": dict(
+        nl="Een tandwieltje met een pijltje, van de puzzelmuur van het Maanmolentje in Guhdromenland.\n" "\n" "- Klik erop: het draait een kwartslag.\n" "- Bij het Maanmolentje draait het tandwieltje rechts ervan altijd een stukje mee. Wijzen alle pijltjes omhoog? Dan kan de molen malen.\n" "- Werkt het niet? Begin links en werk naar rechts.",
+        en="A little cog with an arrow, from the puzzle wall of the Maanmolentje in Guhdromenland.\n" "\n" "- Click it: it turns a quarter.\n" "- At the Maanmolentje the cog to its right always turns along a little. All arrows up? Then the mill can grind.\n" "- Stuck? Start on the left and work to the right."),
+    "blaaskussentje": dict(
+        nl="Een lavendel kussentje vol belletjes, bij het Maanmolentje.\n" "\n" "- Klik erop: de dichtstbijzijnde Blub-guh hupst erheen, gaat erop zitten en blaast bellen naar de wieken.\n" "- Drie blazende Blubs en alle tandwieltjes omhoog: de wieken draaien! Praat daarna met de Zandguh voor een zakje droomzand.\n" "- Na een tijdje stoppen de wieken en hupsen de Blubs er weer af.",
+        en="A lavender cushion full of bubbles, at the Maanmolentje.\n" "\n" "- Click it: the nearest Blub-guh hops over, sits on it and blows bubbles at the sails.\n" "- Three blowing Blubs and all cogs up: the sails turn! Then talk to the Zandguh for a little bag of droomzand.\n" "- After a while the sails stop and the Blubs hop off again."),
     "glas_restje": dict(
         nl="Een glas met een restje sap, cola, limonade, melk of thee: het handelsmerk van de Rommelguh. Welk drankje erin zit "
            "is een verrassing.\n"
