@@ -1,0 +1,235 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hout": "guhs:block/slaapzorg/kapstok_hout",
+    "roze": "guhs:block/slaapzorg/kapstok_masker_roze",
+    "blauw": "guhs:block/slaapzorg/kapstok_masker_blauw",
+    "particle": "guhs:block/slaapzorg/kapstok_hout"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "to": [
+        9,
+        15,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        12,
+        7.5
+      ],
+      "to": [
+        13,
+        13,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        8.5,
+        7.6
+      ],
+      "to": [
+        6.5,
+        11,
+        8.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#roze"
+        },
+        "up": {
+          "texture": "#roze"
+        },
+        "north": {
+          "texture": "#roze"
+        },
+        "south": {
+          "texture": "#roze"
+        },
+        "west": {
+          "texture": "#roze"
+        },
+        "east": {
+          "texture": "#roze"
+        }
+      }
+    },
+    {
+      "from": [
+        9.5,
+        8.5,
+        7.6
+      ],
+      "to": [
+        14,
+        11,
+        8.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#blauw"
+        },
+        "up": {
+          "texture": "#blauw"
+        },
+        "north": {
+          "texture": "#blauw"
+        },
+        "south": {
+          "texture": "#blauw"
+        },
+        "west": {
+          "texture": "#blauw"
+        },
+        "east": {
+          "texture": "#blauw"
+        }
+      }
+    },
+    {
+      "from": [
+        9.8,
+        11,
+        7.6
+      ],
+      "to": [
+        10.8,
+        12,
+        8.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#blauw"
+        },
+        "up": {
+          "texture": "#blauw"
+        },
+        "north": {
+          "texture": "#blauw"
+        },
+        "south": {
+          "texture": "#blauw"
+        },
+        "west": {
+          "texture": "#blauw"
+        },
+        "east": {
+          "texture": "#blauw"
+        }
+      }
+    },
+    {
+      "from": [
+        12.7,
+        11,
+        7.6
+      ],
+      "to": [
+        13.7,
+        12,
+        8.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#blauw"
+        },
+        "up": {
+          "texture": "#blauw"
+        },
+        "north": {
+          "texture": "#blauw"
+        },
+        "south": {
+          "texture": "#blauw"
+        },
+        "west": {
+          "texture": "#blauw"
+        },
+        "east": {
+          "texture": "#blauw"
+        }
+      }
+    }
+  ]
+}

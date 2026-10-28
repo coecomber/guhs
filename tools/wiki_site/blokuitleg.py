@@ -792,23 +792,15 @@ UITLEG = {
            "works where you may build yourself.",
         meer=["systemen/bezorgguhtje"]),
     "blub_badje": dict(
-        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!
-"
-           "
-"
-           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.
-"
-           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.
-"
+        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!\n"
+           "\n"
+           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.\n"
+           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.\n"
            "- Het schuim is na een paar minuten weg; dan schuimt de Blub het weer op.",
-        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!
-"
-           "
-"
-           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.
-"
-           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.
-"
+        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!\n"
+           "\n"
+           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.\n"
+           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
     "weer_vadser": dict(
         nl="Maakt zijn eigen weertje, tot 60 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
@@ -827,6 +819,33 @@ UITLEG = {
            "and blossom breeze) need a weather jar first. The menu tells you where to find it.\n"
            "- Right-click with a weather jar: unlocked at once. With the souvenir 'Rainbow in a Jar': the rainbow weather, "
            "and you keep the souvenir."),
+    "muziekdoosje": dict(
+        nl="Een speeldoosje met een guhtje erop dat rondjes danst. Het speelt het slaapliedje van de Blub-guhs.\n" "\n" "- Rechtsklik: het liedje speelt (ongeveer 24 seconden). Alle guhs tot 8 blokken in de rondte gapen en vallen een voor een in slaap.\n" "- 's Avonds en 's nachts slapen ze tot de ochtend, overdag doen ze een dutje van een minuut.\n" "- Een tamme guh blijft niet liggen als jij ver wegloopt: dan loopt hij je achterna.\n" "- Zolang het liedje speelt, begint het niet nog een keer.",
+        en="A little music box with a guh on top that twirls round. It plays the Blub-guhs' lullaby.\n" "\n" "- Right-click: the song plays (about 24 seconds). Every guh up to 8 blocks around yawns and falls asleep, one by one.\n" "- In the evening and at night they sleep until the morning, by day they take a nap of a minute.\n" "- A tame guh doesn't stay asleep when you walk far away: it follows you.\n" "- While the song plays, it doesn't start again."),
+    "mobiel": dict(
+        nl="Een mobiel met een maantje, een sterretje, een wolkje en een slapend guhtje. Hij draait rustig rond.\n" "\n" "- Hang hem boven een guhbedje.\n" "- Rechtsklik: hij draait sneller en speelt het slaapliedje. Guhs tot 6 blokken in de rondte vallen in slaap, net als bij het Muziekdoosje.",
+        en="A mobile with a little moon, a star, a cloud and a sleeping guh. It turns slowly.\n" "\n" "- Hang it above a guh bed.\n" "- Right-click: it turns faster and plays the lullaby. Guhs up to 6 blocks around fall asleep, just like with the Music Box."),
+    "nachtkastje": dict(
+        nl="Een kastje voor naast het bed, met een lampje erop.\n" "\n" "- Rechtsklik: het lampje aan of uit.\n",
+        en="A little table for beside the bed, with a lamp on top.\n" "\n" "- Right-click: the lamp on or off.\n"),
+    "maanlampje_maan": dict(
+        nl="Een zacht nachtlampje, zodat niemand bang is in het donker.\n" "\n" "- Rechtsklik: aan of uit.\n",
+        en="A soft night light, so nobody is scared of the dark.\n" "\n" "- Right-click: on or off.\n"),
+    "maanlampje_ster": dict(
+        nl="Een zacht nachtlampje, zodat niemand bang is in het donker.\n" "\n" "- Rechtsklik: aan of uit.\n",
+        en="A soft night light, so nobody is scared of the dark.\n" "\n" "- Right-click: on or off.\n"),
+    "maanlampje_wolkje": dict(
+        nl="Een zacht nachtlampje, zodat niemand bang is in het donker.\n" "\n" "- Rechtsklik: aan of uit.\n",
+        en="A soft night light, so nobody is scared of the dark.\n" "\n" "- Right-click: on or off.\n"),
+    "maanlampje_guh": dict(
+        nl="Een zacht nachtlampje, zodat niemand bang is in het donker.\n" "\n" "- Rechtsklik: aan of uit.\n",
+        en="A soft night light, so nobody is scared of the dark.\n" "\n" "- Right-click: on or off.\n"),
+    "krabpaal": dict(
+        nl="Een pluchen krabpaal met guh-oortjes.\n" "\n" "- Tamme guhs in de buurt hupsen er overdag af en toe bovenop, kijken rond als een poesje en zwaaien naar je.\n" "- Zet ze op 'zitten' als je liever hebt dat ze beneden blijven.",
+        en="A plush scratching post with guh ears.\n" "\n" "- Tame guhs nearby now and then hop on top by day, look around like a kitty and wave at you.\n" "- Tell them to sit if you'd rather they stay down."),
+    "krabpaal_blauw": dict(
+        nl="Een pluchen krabpaal met guh-oortjes.\n" "\n" "- Tamme guhs in de buurt hupsen er overdag af en toe bovenop, kijken rond als een poesje en zwaaien naar je.\n" "- Zet ze op 'zitten' als je liever hebt dat ze beneden blijven.",
+        en="A plush scratching post with guh ears.\n" "\n" "- Tame guhs nearby now and then hop on top by day, look around like a kitty and wave at you.\n" "- Tell them to sit if you'd rather they stay down."),
     "hapluikje": dict(
         nl="Een luikje met een bekje dat alles wat je erin stopt meteen in je Bankguh legt, hoe ver die ook weg staat.\n"
            "\n"

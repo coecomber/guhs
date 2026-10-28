@@ -162,6 +162,7 @@ public final class Features {
         nl.juiced.guhs.feature.techbeurs.TechbeursFeature.register(modBus);   // 1.7.0 (ronde 45-47): the Vadslamp + the Guhtechniek-beurs
         nl.juiced.guhs.feature.blub.BlubFeature.register(modBus);   // 1.8.0 (Guhdromenland): the Blub-guh (test build)
         nl.juiced.guhs.feature.weer.WeerFeature.register(modBus);   // 1.8.0: the Weer vadser (weather zones, guh-weertjes)
+        nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.register(modBus);   // 1.8.0 (Guhdromenland B): slaapzorg, sleepy guhs, sleeping spots, lullaby, breakfast in bed
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -414,6 +415,7 @@ public final class Features {
         nl.juiced.guhs.feature.techbeurs.TechbeursFeature.creative(output);   // 1.7.0 (ronde 45-47): the Vadslamp
         nl.juiced.guhs.feature.blub.BlubFeature.creative(output);   // 1.8.0: the Blub-guh spawn egg
         nl.juiced.guhs.feature.weer.WeerFeature.creative(output);   // 1.8.0: the Weer vadser and the weerpotjes
+        nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.creative(output);   // 1.8.0: the slaapkamer-set, maannachtlampjes, krabpalen
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

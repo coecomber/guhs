@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "TST",
+    "F F"
+  ],
+  "key": {
+    "T": "minecraft:stick",
+    "S": "minecraft:string",
+    "F": "minecraft:feather"
+  },
+  "result": {
+    "id": "guhs:droomvanger",
+    "count": 1
+  }
+}

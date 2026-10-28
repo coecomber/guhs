@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "PPP",
+    "P P"
+  ],
+  "key": {
+    "T": "minecraft:torch",
+    "P": "minecraft:cherry_planks"
+  },
+  "result": {
+    "id": "guhs:nachtkastje",
+    "count": 1
+  }
+}

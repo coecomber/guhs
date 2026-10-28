@@ -1,0 +1,73 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hout": "guhs:block/slaapzorg/mobiel_hout",
+    "particle": "guhs:block/slaapzorg/mobiel_hout"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        13,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        12,
+        6.5
+      ],
+      "to": [
+        9.5,
+        13,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

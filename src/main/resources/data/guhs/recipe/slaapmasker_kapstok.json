@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WTW",
+    " T ",
+    " T "
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:slaapmasker_kapstok",
+    "count": 1
+  }
+}

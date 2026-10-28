@@ -1,0 +1,204 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "zij": "guhs:block/slaapzorg/muziekdoosje_zij",
+    "top": "guhs:block/slaapzorg/muziekdoosje_top",
+    "goud": "guhs:block/slaapzorg/muziekdoosje_goud",
+    "guhtje": "guhs:block/slaapzorg/muziekdoosje_guhtje",
+    "particle": "guhs:block/slaapzorg/muziekdoosje_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        6,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        2.5,
+        7.5
+      ],
+      "to": [
+        14,
+        3.5,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        13.5,
+        3.5,
+        7.5
+      ],
+      "to": [
+        14.5,
+        5.5,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        6,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#guhtje"
+        },
+        "up": {
+          "texture": "#guhtje"
+        },
+        "north": {
+          "texture": "#guhtje"
+        },
+        "south": {
+          "texture": "#guhtje"
+        },
+        "west": {
+          "texture": "#guhtje"
+        },
+        "east": {
+          "texture": "#guhtje"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        8,
+        7.5
+      ],
+      "to": [
+        7.5,
+        8.5,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#guhtje"
+        },
+        "up": {
+          "texture": "#guhtje"
+        },
+        "north": {
+          "texture": "#guhtje"
+        },
+        "south": {
+          "texture": "#guhtje"
+        },
+        "west": {
+          "texture": "#guhtje"
+        },
+        "east": {
+          "texture": "#guhtje"
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        8,
+        7.5
+      ],
+      "to": [
+        9,
+        8.5,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#guhtje"
+        },
+        "up": {
+          "texture": "#guhtje"
+        },
+        "north": {
+          "texture": "#guhtje"
+        },
+        "south": {
+          "texture": "#guhtje"
+        },
+        "west": {
+          "texture": "#guhtje"
+        },
+        "east": {
+          "texture": "#guhtje"
+        }
+      }
+    }
+  ]
+}

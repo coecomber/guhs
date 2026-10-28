@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SSS",
+    "YGW"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "Y": "minecraft:yellow_dye",
+    "G": "minecraft:glowstone_dust",
+    "W": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:mobiel",
+    "count": 1
+  }
+}
