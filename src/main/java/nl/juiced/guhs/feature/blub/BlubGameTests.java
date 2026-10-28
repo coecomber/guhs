@@ -272,4 +272,33 @@ public class BlubGameTests {
             helper.succeed();
         });
     }
+
+    /** 1.8.0 extension: Blub-kleding is locked until its item is used; then it goes on (and shows in the vadsjes tab look). */
+    @GuhTest(template = TUIN, batch = "blub")
+    public static void blubKledingOntgrendelEnAantrekken(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(11, 2, 11));
+        BlubKledingUnlocks.wis(p);
+        BlubGuhEntity b = blub(helper, new BlockPos(12, 2, 12), new BlubTrekking.Waarden(35, BlubTrekking.Soort.WEIDE, 0, 1f));
+        tem(helper, b, p);
+        int hoofd = BlubKleding.Plek.HOOFD.ordinal();
+        helper.assertFalse(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, hoofd, "slaapmutsje"), "locked: the slaapmutsje won't go on");
+        helper.assertFalse(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, BlubKleding.Plek.OGEN.ordinal(), "slaapmutsje"), "wrong place: nothing");
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(BlubFeature.KLEDING_ITEMS.get("slaapmutsje").get(), 2));
+        p.getItemInHand(InteractionHand.MAIN_HAND).getItem().use(helper.getLevel(), p, InteractionHand.MAIN_HAND);
+        helper.assertTrue(BlubKledingUnlocks.heeft(p, "slaapmutsje") && p.getItemInHand(InteractionHand.MAIN_HAND).getCount() == 1,
+                "the item unlocks it and is used up");
+        p.getItemInHand(InteractionHand.MAIN_HAND).getItem().use(helper.getLevel(), p, InteractionHand.MAIN_HAND);
+        helper.assertTrue(p.getItemInHand(InteractionHand.MAIN_HAND).getCount() == 1, "already unlocked: nothing used up");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, hoofd, "slaapmutsje")
+                && b.draagt(BlubKleding.Plek.HOOFD) == BlubKleding.stuk("slaapmutsje"), "unlocked: it goes on");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.KLEED, BlubKleding.Plek.STRIK.ordinal(), "strik_pink")
+                && b.strik() >= 0 && b.draagt(BlubKleding.Plek.HOOFD) != null, "a strikje and a mutsje together");
+        helper.assertTrue(b.rijLook().contains("Kleding0"), "the vadsjes tab gets its kleding");
+        helper.assertTrue(b.knuffelData().getStringOr("Kleding", "").contains("slaapmutsje"), "a knuffel keeps the kleding");
+        for (String k : BlubKleding.KLEDING) {
+            helper.assertTrue(BlubKleding.stuk(k) != null && BlubFeature.KLEDING_ITEMS.containsKey(k), "piece and item: " + k);
+        }
+        helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
+        helper.succeed();
+    }
 }

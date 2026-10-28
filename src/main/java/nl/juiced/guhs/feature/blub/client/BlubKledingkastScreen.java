@@ -16,11 +16,11 @@ import nl.juiced.guhs.feature.blub.BlubMenu;
 
 /**
  * The Blub-guh's Kledingkast (like the guh's wardrobe, small): a big preview of the Blub on the left, per place
- * ({@link BlubKleding.Plek}: for now only the strikje) a tab, and the place's pieces as a grid of colour swatches plus
- * "niets". A click dresses the Blub at once (guhs:blub_actie KLEED) and the preview shows it. Back to the menu.
+ * ({@link BlubKleding.Plek}) a tab, and the place's pieces as a grid (strikjes: colour swatches; Blub-kleding: their
+ * item, with a lock until unlocked) plus "niets". A click dresses the Blub at once (guhs:blub_actie KLEED) and the preview shows it. Back to the menu.
  */
 public class BlubKledingkastScreen extends Screen {
-    private static final int W = 300, H = 196, PREVIEW_W = 110, VAK = 22, KOLOMMEN = 6, TAB_W = 70, TAB_H = 18;
+    private static final int W = 400, H = 196, PREVIEW_W = 110, VAK = 22, KOLOMMEN = 9, TAB_W = 52, TAB_H = 18;
     private static final int GOUD = 0xFFF2C14E;
 
     private final BlubGuhEntity blub;
@@ -78,6 +78,11 @@ public class BlubKledingkastScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         Object o = onder(event.x(), event.y());
+        if (o instanceof BlubKleding.Stuk s && !BlubKleding.Client.heeft(s) && !minecraft.player.isCreative()) {
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                    net.minecraft.sounds.SoundEvents.VILLAGER_NO, 1.4f));
+            return true;
+        }
         if (o != null && event.button() == 0) {
             BlubMenuScreen.stuur(blub, BlubMenu.Actie.KLEED, plek.ordinal(), o instanceof BlubKleding.Stuk s ? s.id() : "");
             minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
@@ -116,13 +121,34 @@ public class BlubKledingkastScreen extends Screen {
             if (s == null) {
                 g.fill(x, y, x + VAK, y + VAK, 0xFFFFFFFF);
                 g.centeredText(font, Component.literal("✕"), x + VAK / 2, y + 7, 0xFFB04060);
-            } else {
+            } else if (s.getint()) {
                 g.fill(x, y, x + VAK, y + VAK, 0xFF000000 | s.kleur());
+            } else {
+                boolean heeft = BlubKleding.Client.heeft(s) || minecraft.player.isCreative();
+                g.fill(x, y, x + VAK, y + VAK, heeft ? 0xFFF7EEFA : 0xFFB0A8B8);
+                var item = nl.juiced.guhs.feature.blub.BlubFeature.KLEDING_ITEMS.get(s.id());
+                if (item != null) {
+                    g.item(new net.minecraft.world.item.ItemStack(item.get()), x + 3, y + 3);
+                }
+                if (!heeft) {
+                    g.fill(x, y, x + VAK, y + VAK, 0x88303040);
+                    int lx = x + VAK - 9, ly = y + VAK - 9;                  // a little padlock in the corner
+                    g.fill(lx + 1, ly, lx + 6, ly + 1, 0xFFF2C14E);
+                    g.fill(lx + 1, ly, lx + 2, ly + 3, 0xFFF2C14E);
+                    g.fill(lx + 5, ly, lx + 6, ly + 3, 0xFFF2C14E);
+                    g.fill(lx, ly + 3, lx + 7, ly + 8, 0xFFF2C14E);
+                    g.fill(lx + 3, ly + 4, lx + 4, ly + 6, 0xFF6A4A10);
+                }
             }
         }
         if (over != null) {
-            Component naam = over instanceof BlubKleding.Stuk s ? s.naam() : Component.translatable("gui.guhs.kleding.niets");
-            g.setTooltipForNextFrame(font.split(naam, 200), mouseX, mouseY);
+            java.util.List<net.minecraft.util.FormattedCharSequence> tip = new java.util.ArrayList<>(
+                    font.split(over instanceof BlubKleding.Stuk s ? s.naam() : Component.translatable("gui.guhs.kleding.niets"), 200));
+            if (over instanceof BlubKleding.Stuk s && !BlubKleding.Client.heeft(s) && !minecraft.player.isCreative()) {
+                tip.addAll(font.split(Component.translatable("gui.guhs.blubguh.kast.op_slot")
+                        .withStyle(net.minecraft.ChatFormatting.GRAY), 200));
+            }
+            g.setTooltipForNextFrame(tip, mouseX, mouseY);
         }
         g.text(font, Component.translatable("gui.guhs.blubguh.kast.aan", aan == null ? Component.translatable("gui.guhs.kleding.niets") : aan.naam()),
                 lijstX(), top + H - 40, BlubMenuScreen.KLEUR_SUB, false);

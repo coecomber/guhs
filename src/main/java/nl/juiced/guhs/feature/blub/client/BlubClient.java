@@ -27,6 +27,7 @@ import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.feature.blub.BlubFeature;
 import nl.juiced.guhs.feature.blub.BlubGuhEntity;
 import nl.juiced.guhs.feature.blub.BlubMenu;
+import nl.juiced.guhs.feature.blub.BlubKleding;
 import nl.juiced.guhs.feature.blub.BlubSnoes;
 import nl.juiced.guhs.feature.blub.BlubTrekking;
 
@@ -39,7 +40,7 @@ import nl.juiced.guhs.feature.blub.BlubTrekking;
  */
 public final class BlubClient {
     /** This frame's look of a Blub (extract time, values only). */
-    record Look(Identifier textuur, String[] verborgen, int emotie, int strik, boolean gloeit) {
+    record Look(Identifier textuur, String[] verborgen, int emotie, int strik, boolean gloeit, java.util.Set<String> kleding, boolean helm) {
     }
 
     static final DataTicket<Look> LOOK = DataTicket.create("guhs_blub_look", Look.class);
@@ -48,7 +49,9 @@ public final class BlubClient {
     /** The switchable bones (the same list as blub_modellen.SCHAKEL). */
     static final String[] SCHAKEL = {"lijf", "lijf_zacht", "oor_l", "oor_r", "guhoortje_l", "guhoortje_r", "guhoor_l", "guhoor_r",
             "weide_sprieten", "weide_hengel", "schild_vleugel_l", "schild_vleugel_r", "schild_sprieten", "ravijn_spriet_l",
-            "ravijn_spriet_r", "ravijn_vin_l", "ravijn_vin_r", "zwam_gewei", "strik"};
+            "ravijn_spriet_r", "ravijn_vin_l", "ravijn_vin_r", "zwam_gewei", "strik",
+            "kl_slaapmutsje", "kl_sjaaltje", "kl_sterrenkroontje", "kl_bubbelhelm", "kl_pyjamaatje", "kl_slaapmaskertje",
+            "kl_bloemenkransje", "kl_brilletje"};
     /** The bones that move with its mood (whichever of them show). */
     private static final String[] OREN = {"oor_l", "oor_r", "guhoortje_l", "guhoortje_r", "guhoor_l", "guhoor_r", "ravijn_spriet_l", "ravijn_spriet_r"};
     /** soort x stage (0..6) -> the bones that are hidden (worked out once). */
@@ -98,7 +101,7 @@ public final class BlubClient {
             case "ravijn_vin_l", "ravijn_vin_r" -> ravijn;
             case "zwam_gewei" -> zwam;
             case "strik" -> false;                          // (its own pass)
-            default -> true;
+            default -> !bone.startsWith("kl_");             // (the Blub-kleding: their own pass, KledingLaag)
         };
     }
 
@@ -149,6 +152,7 @@ public final class BlubClient {
             });
             this.shadowRadius = 0.32f;
             withRenderLayer(new StrikLaag(this));
+            withRenderLayer(new KledingLaag(this));
             withRenderLayer(new GloedLaag(this));
         }
 
@@ -156,8 +160,20 @@ public final class BlubClient {
         public void addRenderData(BlubGuhEntity blub, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
             BlubTrekking.Soort soort = blub.blubSoort();
             int meter = blub.meter();
+            java.util.Set<String> kleding = new java.util.HashSet<>(4);
+            boolean helm = false;
+            for (BlubKleding.Plek plek : BlubKleding.Plek.values()) {
+                BlubKleding.Stuk stuk = plek == BlubKleding.Plek.STRIK ? null : blub.draagt(plek);
+                if (stuk != null && !stuk.getint()) {
+                    if (BlubKleding.DOORZICHTIG.contains(stuk.id())) {
+                        helm = true;
+                    } else {
+                        kleding.add(stuk.bone());
+                    }
+                }
+            }
             state.addGeckolibData(LOOK, new Look(textuur(soort, blub.tint(), meter), verborgen(soort, meter), blub.emotie(), blub.strik(),
-                    soort == BlubTrekking.Soort.BLAUW));
+                    soort == BlubTrekking.Soort.BLAUW, kleding, helm));
         }
 
         /** 80% of the model; babyblubjes are small (the size dice are the entity's scale attribute, drawn by GeckoLib itself). */
@@ -213,6 +229,32 @@ public final class BlubClient {
             int kleur = 0xFF000000 | look.strik();
             GuhRenderer.submitPass(info, collector.order(1), RenderTypes.entityCutout(look.textuur()), info.packedLight(), kleur,
                     name -> name.equals("strik"));
+        }
+    }
+
+    /**
+     * The Blub-kleding (1.8.0 extension): the bones of the pieces it wears, in their own colours (painted in every texture),
+     * and the see-through bubbelhelm in a translucent pass.
+     */
+    static class KledingLaag extends GeoRenderLayer<BlubGuhEntity, Void, LivingEntityRenderState> {
+        KledingLaag(GeoRenderer<BlubGuhEntity, Void, LivingEntityRenderState> renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void submitRenderTask(RenderPassInfo<LivingEntityRenderState> info, SubmitNodeCollector collector) {
+            Look look = info.getGeckolibData(LOOK);
+            if (look == null || !info.willRender()) {
+                return;
+            }
+            if (!look.kleding().isEmpty()) {
+                GuhRenderer.submitPass(info, collector.order(1), RenderTypes.entityCutout(look.textuur()), info.packedLight(), 0xFFFFFFFF,
+                        look.kleding()::contains);
+            }
+            if (look.helm()) {
+                GuhRenderer.submitPass(info, collector.order(2), RenderTypes.entityTranslucent(look.textuur()), info.packedLight(), 0xFFFFFFFF,
+                        name -> name.equals("kl_bubbelhelm"));
+            }
         }
     }
 

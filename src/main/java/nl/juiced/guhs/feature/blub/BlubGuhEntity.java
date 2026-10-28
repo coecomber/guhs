@@ -374,7 +374,7 @@ public class BlubGuhEntity extends Landdiertje {
         return 0.8f;
     }
 
-    /** Its strikje for the Guhdex tab "Mijn andere vadsjes": the colour and the name of the piece. */
+    /** Its strikje for the Guhdex tab "Mijn andere vadsjes": the colour and the name of the piece (and its other Blub-kleding). */
     @Override
     public net.minecraft.nbt.CompoundTag rijLook() {
         net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
@@ -382,6 +382,13 @@ public class BlubGuhEntity extends Landdiertje {
         if (s != null) {
             t.putInt("Strik", s.kleur());
             nl.juiced.guhs.taal.Tekst.put(t, "StrikNaam", s.naam());
+        }
+        int n = 0;                                                    // (1.8.0 extension: the Blub-kleding it wears)
+        for (BlubKleding.Plek plek : BlubKleding.Plek.values()) {
+            BlubKleding.Stuk k = plek == BlubKleding.Plek.STRIK ? null : draagt(plek);
+            if (k != null) {
+                nl.juiced.guhs.taal.Tekst.put(t, "Kleding" + n++, k.naam());
+            }
         }
         return t;
     }

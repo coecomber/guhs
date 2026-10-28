@@ -74,6 +74,15 @@ public final class BlubFeature {
                     nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlockEntity::new, KNUFFEL.get()));
 
     /** Only the chore icons in the huisje screen (no creative tab): bellen, knabbels, liedje. */
+    /** 1.8.0 extension: the Blub-kleding unlock items guhs:blubkleding_<id> (BlubKleding.KLEDING). */
+    public static final java.util.Map<String, DeferredItem<BlubKledingItem>> KLEDING_ITEMS = new java.util.LinkedHashMap<>();
+
+    static {
+        for (String k : BlubKleding.KLEDING) {
+            KLEDING_ITEMS.put(k, ITEMS.registerItem("blubkleding_" + k, p -> new BlubKledingItem(k, p), () -> new Item.Properties().stacksTo(16)));
+        }
+    }
+
     public static final java.util.Map<String, DeferredItem<Item>> KLUS_ICONEN = new java.util.LinkedHashMap<>();
 
     static {
@@ -110,6 +119,7 @@ public final class BlubFeature {
         output.accept(new ItemStack(BLUBGUH_SPAWN_EGG.get()));
         output.accept(new ItemStack(BADJE_ITEM.get()));
         output.accept(new ItemStack(KNUFFEL_ITEM.get()));
+        KLEDING_ITEMS.values().forEach(i -> output.accept(new ItemStack(i.get())));
     }
 
     private BlubFeature() {

@@ -324,7 +324,7 @@ def model_vox(meter, soort, tint=0):
 # the GeckoLib model: cubes whose faces are sampled from the voxels
 # =====================================================================================================================
 S = 2                       # texels per model pixel (= voxels per pixel: one texel per voxel)
-ATLAS = 80                  # atlas size in model pixels (the texture is ATLAS * S = 160 square)
+ATLAS = 144                 # atlas size in model pixels (the texture is ATLAS * S = 288 square; 144 since the Blub-kleding)
 STAPPEN = ["p", "b"] + [str(m) for m in range(20, 101, 5)]
 STAP_METER = {"p": 0, "b": 10, **{str(m): m for m in range(20, 101, 5)}}
 FACES = ("north", "south", "east", "west", "up", "down")
@@ -424,7 +424,7 @@ def _paint_patch(img, patch, vox, P, meter):
             if kleur is None:
                 continue
             img[v * S + row, u * S + col, :3] = kleur[:3]
-            img[v * S + row, u * S + col, 3] = 255
+            img[v * S + row, u * S + col, 3] = kleur[3] if len(kleur) > 3 else 255     # (the bubbelhelm is see-through)
 
 
 # --- painters for the cubes that stand at an angle (no voxels to sample) ---------------------------------------------------
@@ -446,6 +446,144 @@ def strik(P, meter, col, row, W, H, face):
     """White with a soft shade (the colour comes from the render pass)."""
     return (226, 226, 226) if (row == 0 or col == 0) else WIT
 
+
+
+# --- the Blub-kleding (1.8.0 extension): every piece is a bone kl_<id>, painted in every texture, drawn in its own pass ---
+MUTS, MUTS2, POMPON = (150, 186, 238), (120, 156, 218), (252, 252, 252)
+SJAAL, SJAAL2 = (238, 112, 140), (252, 196, 210)
+GOUD, GOUD2, STERGEEL = (240, 196, 80), (210, 160, 56), (255, 236, 120)
+HELM, HELMGLANS = (196, 230, 252, 70), (255, 255, 255, 170)
+PYJ, PYJ2 = (176, 206, 246), (250, 250, 255)
+MASKER, MASKER2 = (188, 160, 226), (120, 88, 168)
+BLAD, BLOEM, BLOEMHART = (110, 170, 120), (250, 246, 222), (214, 184, 240)
+BRIL = (156, 112, 70)
+
+
+def kl_muts(P, meter, col, row, W, H, face):
+    return MUTS2 if row == H - 1 else MUTS
+
+
+def kl_muts_rand(P, meter, col, row, W, H, face):
+    return POMPON if (col + row) % 3 else (232, 236, 244)
+
+
+def kl_pompon(P, meter, col, row, W, H, face):
+    return POMPON if (col + row) % 2 else (238, 240, 248)
+
+
+def kl_sjaal(P, meter, col, row, W, H, face):
+    if face in ("up", "down"):
+        return None                                  # (a band: only its sides)
+    return SJAAL if (col // 2 + row) % 2 else SJAAL2
+
+
+def kl_sjaal_slip(P, meter, col, row, W, H, face):
+    return SJAAL if (row // 2) % 2 else SJAAL2
+
+
+def kl_kroon(P, meter, col, row, W, H, face):
+    return GOUD2 if row == H - 1 else GOUD
+
+
+def kl_ster(P, meter, col, row, W, H, face):
+    return STERGEEL
+
+
+def kl_helm(P, meter, col, row, W, H, face):
+    if face in ("north", "east") and 2 <= col <= 4 and 2 <= row <= 5:
+        return HELMGLANS                             # (a little shine)
+    if face == "up" and 3 <= col <= 6 and 3 <= row <= 5:
+        return HELMGLANS
+    return HELM
+
+
+def kl_pyjama(P, meter, col, row, W, H, face):
+    if face in ("north", "down"):
+        return None                                  # (the face stays free)
+    stripe = col if face == "up" else row
+    if face == "up":
+        stripe = row
+    return PYJ if (stripe // 2) % 2 else PYJ2
+
+
+def kl_masker(P, meter, col, row, W, H, face):
+    if face != "north":
+        return MASKER
+    # two closed eyes, embroidered (little smiles turned down) at both thirds
+    for cx in (W // 4, 3 * W // 4):
+        if row == H // 2 and abs(col - cx) <= 2:
+            return MASKER2
+        if row == H // 2 - 1 and abs(col - cx) == 3:
+            return MASKER2
+    return MASKER
+
+
+def kl_blad(P, meter, col, row, W, H, face):
+    return BLAD
+
+
+def kl_bloem(P, meter, col, row, W, H, face):
+    if 0 < col < W - 1 and 0 < row < H - 1:
+        return BLOEMHART
+    return BLOEM
+
+
+def kl_bril(P, meter, col, row, W, H, face):
+    if face != "north":
+        return BRIL
+    if 0 < col < W - 1 and 0 < row < H - 1:
+        return None                                  # (round-ish frames: the middle is open)
+    if (col in (0, W - 1)) and (row in (0, H - 1)):
+        return None                                  # (round corners)
+    return BRIL
+
+
+def kleding_bones(lay, B1):
+    """The eight pieces (ids as in BlubKleding / BOUWPLAN_180_UITBREIDING): front = north (-z), the body is x -5..5,
+    z -5..5, y 2..9.5 (B1); the face is on the north side, the eyes around y 4.5..7.5 at x about +-3."""
+    out = []
+    # slaapmutsje (hoofd): a floppy cone on top, its tip and pompon hang over one ear
+    out.append(bone("kl_slaapmutsje", "root", [0, B1, 0], [
+        cube(lay, [-4.5, B1, -2.5], [9, 1, 7.5], kl_muts_rand),
+        cube(lay, [-3.5, B1 + 1, -1.5], [7, 2, 5.5], kl_muts),
+        cube(lay, [-2, B1 + 3, -0.5], [5, 1.5, 3.5], kl_muts),
+        cube(lay, [1.5, B1 + 2.5, 0], [3, 1.5, 2.5], kl_muts),
+        cube(lay, [4.2, B1 + 0.5, 0.2], [2, 2, 2], kl_pompon)]))
+    # sjaaltje (nek): a band round the top of the body, one end hangs down at the front
+    out.append(bone("kl_sjaaltje", "root", [0, 8, 0], [
+        cube(lay, [-5.4, 7.6, -5.4], [10.8, 1.6, 10.8], kl_sjaal),
+        cube(lay, [2.0, 4.0, -5.8], [1.8, 3.6, 0.6], kl_sjaal_slip)]))
+    # sterrenkroontje (hoofd): a small golden band with three star points
+    out.append(bone("kl_sterrenkroontje", "root", [0, B1, 1], [
+        cube(lay, [-2.5, B1, -1.5], [5, 1, 5], kl_kroon),
+        cube(lay, [-2.4, B1 + 1, -1.7], [1, 1.5, 0.6], kl_ster),
+        cube(lay, [-0.5, B1 + 1, -1.7], [1, 2, 0.6], kl_ster),
+        cube(lay, [1.4, B1 + 1, -1.7], [1, 1.5, 0.6], kl_ster)]))
+    # bubbelhelm (hoofd): a see-through bubble over the whole Blub (ears and all)
+    out.append(bone("kl_bubbelhelm", "root", [0, 2, 0], [cube(lay, [-6.5, 1.5, -6.5], [13, 13.5, 13], kl_helm)]))
+    # pyjamaatje (lijf): a striped little blanket over back, sides and top (the face stays free)
+    out.append(bone("kl_pyjamaatje", "root", [0, 2, 0], [cube(lay, [-5.3, 3.0, -4.8], [10.6, 6.8, 10.1], kl_pyjama)]))
+    # slaapmaskertje (ogen): over the eyes, with a band round the head
+    out.append(bone("kl_slaapmaskertje", "root", [0, 6, -5], [
+        cube(lay, [-4.8, 4.6, -5.4], [9.6, 2.8, 0.5], kl_masker),
+        cube(lay, [-5.3, 5.6, -5.2], [10.6, 0.8, 10.6], lambda *a: MASKER2 if a[6] not in ("up", "down") else None)]))
+    # bloemenkransje (hoofd): maanbloemetjes all round the top edge, on a green twig
+    krans = [cube(lay, [-4.2, B1, -4.2], [8.4, 0.5, 8.4], lambda *a: BLAD if a[6] not in ("up", "down") or
+                  (a[2] < 2 or a[3] < 2 or a[2] >= a[4] - 2 or a[3] >= a[5] - 2) else None)]
+    for bx, bz in ((-4, -4), (-1, -4.6), (2.3, -4), (4, -1), (3.5, 2.5), (0.5, 3.8), (-3, 3.5), (-4.6, 0.3)):
+        krans.append(cube(lay, [bx - 0.6, B1 + 0.3, bz - 0.6], [1.2, 1, 1.2], kl_bloem))
+    out.append(bone("kl_bloemenkransje", "root", [0, B1, 0], krans))
+    # brilletje (ogen): two round frames and a little bridge, oma style
+    out.append(bone("kl_brilletje", "root", [0, 6, -5], [
+        cube(lay, [-4.7, 4.3, -5.4], [3.6, 3.6, 0.3], kl_bril),
+        cube(lay, [1.1, 4.3, -5.4], [3.6, 3.6, 0.3], kl_bril),
+        cube(lay, [-1.1, 6.3, -5.4], [2.2, 0.5, 0.3], kl_bril),
+        cube(lay, [-5.2, 6.3, -5.4], [0.5, 0.5, 3], kl_bril),
+        cube(lay, [4.7, 6.3, -5.4], [0.5, 0.5, 3], kl_bril)]))
+    return out
+
+
+KLEDING = ["slaapmutsje", "sjaaltje", "sterrenkroontje", "bubbelhelm", "pyjamaatje", "slaapmaskertje", "bloemenkransje", "brilletje"]
 
 BENEN = ("leg_front_left", "leg_front_right", "leg_back_left", "leg_back_right")
 
@@ -505,6 +643,7 @@ def model():
     bones.append(bone("strik", "root", [0, B1, -4.3], [
         cube(lay, [-2.1, B1, -4.6], [1.6, 1.3, 0.6], strik), cube(lay, [0.5, B1, -4.6], [1.6, 1.3, 0.6], strik),
         cube(lay, [-0.55, B1 + 0.1, -4.7], [1.1, 1.1, 0.8], strik)]))
+    bones.extend(kleding_bones(lay, B1))
     geo = {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": "geometry.blubguh", "texture_width": ATLAS, "texture_height": ATLAS,
                         "visible_bounds_width": 1.6, "visible_bounds_height": 1.8, "visible_bounds_offset": [0, 0.9, 0]},
@@ -583,7 +722,7 @@ def animaties():
 # the bones BlubClient switches (keep in sync with feature/blub/client/BlubClient.java)
 SCHAKEL = ["lijf", "lijf_zacht", "oor_l", "oor_r", "guhoortje_l", "guhoortje_r", "guhoor_l", "guhoor_r", "weide_sprieten", "weide_hengel",
            "schild_vleugel_l", "schild_vleugel_r", "schild_sprieten", "ravijn_spriet_l", "ravijn_spriet_r", "ravijn_vin_l", "ravijn_vin_r",
-           "zwam_gewei", "strik"]
+           "zwam_gewei", "strik"] + ["kl_" + k for k in KLEDING]
 ANIMS = ("idle", "walk", "zit", "slaap", "blij", "eet", "squish", "rondje", "dood", "sprong", "uitschudden")
 
 
