@@ -6,7 +6,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity.Kind;
@@ -25,12 +24,33 @@ public final class SnoesVerhaalFeature {
     private SnoesVerhaalFeature() {
     }
 
+    public static void payloads(net.neoforged.neoforge.network.registration.PayloadRegistrar registrar) {
+        SnoesHud.register(registrar);
+    }
+
     public static void register(IEventBus modBus) {
         SnoesScenes.init();
         NeoForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> SnoesVerhaal.onKlik(e));
-        NeoForge.EVENT_BUS.addListener((PlayerTickEvent.Post e) -> SnoesVerhaal.onSpelerTick(e));
+        // playtest: the bed asks "gewoon slapen / dromen" (DroomSlapen); Snoes is a dream buddy there
+        nl.juiced.guhs.feature.dromen.DroomSlapen.SNOES_BIJ_BED = SnoesVerhaal::snoesBijBed;
+        nl.juiced.guhs.feature.dromen.DroomSlapen.DROOM_MET_SNOES = SnoesVerhaal::droomMetSnoes;
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> SnoesVerhaal.onDimensie(e));
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> SnoesVerhaal.tick(e));
+        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+            if (e.getServer().getTickCount() % 20 == 9) {
+                SnoesHud.tick(e.getServer());                 // (playtest) the story HUD, when it changed
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
+            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                SnoesHud.sync(sp, true);
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
+            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                SnoesHud.uitgelogd(sp);
+            }
+        });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> SnoesCommando.register(e));
         DroomVoortgang.luister(SnoesVerhaal::opVoortgang);
         // the story's talk on top of the dream NPCs' jokes (DroomNpc.zet)

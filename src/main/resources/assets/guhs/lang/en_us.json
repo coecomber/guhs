@@ -31906,5 +31906,22 @@
   "gui.guhs.droomspul.postguh.0": "Mail for you? Njeg... only a dream. I deliver those for free.",
   "gui.guhs.droomspul.postguh.1": "One mailbox per island. But only to islands you've been to, otherwise I don't know your address!",
   "gui.guhs.droomspul.postguh.2": "Stamps? Here you pay with yawns. I've had three already today.",
-  "gui.guhs.droomspul.postguh.3": "Yesterday I delivered a hug. It was a bit squashed, but still very sweet."
+  "gui.guhs.droomspul.postguh.3": "Yesterday I delivered a hug. It was a bit squashed, but still very sweet.",
+  "gui.guhs.dromen.wekkerguh.vraag": "Ring? Do you really want to wake up already, vadsje? It's still so cosy here...",
+  "gui.guhs.dromen.wekkerguh.ja": "Yes, wake me up",
+  "gui.guhs.dromen.wekkerguh.nee": "No, a little more dreaming",
+  "gui.guhs.dromen.wekkerguh.nog_even": "Alarm Guh hits his own snooze button. Zzz...",
+  "gui.guhs.dromen.bed.vraag": "%s yawns and looks at you sleepily. Will you dream together, or do you just want a good sleep?",
+  "gui.guhs.dromen.bed.dromen": "Dream together",
+  "gui.guhs.dromen.bed.slapen": "Just sleep",
+  "gui.guhs.dromen.bed.weg": "Your dream buddy is just too far away... njeg.",
+  "gui.guhs.snoes.gids.thuis_mee": "Bubbels was still with you (on your head or in your pockets) and simply comes home with you. Blub!",
+  "gui.guhs.blubguh.snoes_eerst_droom": "This Blub squeaks friendly, but won't come along yet... let Snoes sleep first!",
+  "gui.guhs.snoes.hud.titel": "Snoes' dream",
+  "gui.guhs.snoes.hud.bij_bed": "Talk to Snoes by your bed.",
+  "gui.guhs.snoes.hud.ingestopt": "Lie down in your bed next to Snoes and choose 'Dream together'.",
+  "gui.guhs.snoes.hud.stukjes": "Pieces %s/%s:",
+  "gui.guhs.snoes.hud.zoek": "Find the pieces on the islands (Dream Post takes you back quickly).",
+  "gui.guhs.snoes.hud.terug": "Sleep next to Snoes to dream on.",
+  "gui.guhs.snoes.hud.finale": "All found! Go to the Dream Square."
 }

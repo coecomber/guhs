@@ -29,6 +29,8 @@ import nl.juiced.guhs.registry.ModEntities;
  */
 public final class Wekkerguh {
     static final String TAG = "guhs_wekkerguh";
+    /** The talking screen's sleutel of the Wekkerguh's question. */
+    static final String SLEUTEL = "dromen_wekker";
     private static final int GRAPJES = 5;
 
     /** Makes a new Wekkerguh (part C: its own NPC model). It gets the tag, the spot and the keeping from here. */
@@ -46,6 +48,7 @@ public final class Wekkerguh {
 
     static void register() {
         NeoForge.EVENT_BUS.addListener(Wekkerguh::onKlik);
+        nl.juiced.guhs.feature.verhaal.Praat.luister(SLEUTEL, Wekkerguh::antwoord);
         NeoForge.EVENT_BUS.addListener(Wekkerguh::tick);
     }
 
@@ -59,10 +62,22 @@ public final class Wekkerguh {
         }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        if (event.getEntity() instanceof ServerPlayer p) {
+        if (event.getEntity() instanceof ServerPlayer p && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
+            // playtest: first ask, only "ja" wakes you up
+            nl.juiced.guhs.feature.verhaal.Praat.open(p, event.getTarget(), SLEUTEL, "gui.guhs.dromen.wekkerguh.vraag", new Object[0],
+                    new nl.juiced.guhs.feature.verhaal.Praat.Optie(0, "gui.guhs.dromen.wekkerguh.ja"),
+                    new nl.juiced.guhs.feature.verhaal.Praat.Optie(1, "gui.guhs.dromen.wekkerguh.nee"));
+        }
+    }
+
+    /** The Wekkerguh's question was answered: 0 = wake up (with a joke), 1 = keep dreaming. */
+    static void antwoord(ServerPlayer p, @Nullable Entity spreker, int optie) {
+        if (optie == 0 && DroomReis.inDroom(p)) {
             p.sendSystemMessage(Component.translatable("gui.guhs.dromen.wekkerguh.grap" + p.getRandom().nextInt(GRAPJES))
                     .withStyle(ChatFormatting.GOLD));
             DroomReis.wakker(p);
+        } else if (optie == 1) {
+            p.sendOverlayMessage(Component.translatable("gui.guhs.dromen.wekkerguh.nog_even").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 

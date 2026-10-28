@@ -123,6 +123,8 @@ TEKSTEN = {
     "gui.guhs.blubguh.kast.strik": ("%s strikje", "%s bow"),
     "gui.guhs.blubguh.snoes_eerst": ("Deze Blub kent je nog niet... help eerst Snoes in slaap, njeg!",
                                      "This Blub doesn't know you yet... help Snoes fall asleep first, njeg!"),
+    "gui.guhs.blubguh.snoes_eerst_droom": ("Deze Blub piept vriendelijk, maar wil nog niet mee... eerst Snoes laten slapen!",
+                                           "This Blub squeaks friendly, but won't come along yet... let Snoes sleep first!"),
     "commands.guhs.blub.snoes.aan": ("Snoes is geholpen: je ziet nu wilde Blubs (en kunt ze temmen).", "Snoes was helped: you see wild Blubs now (and can tame them)."),
     "commands.guhs.blub.snoes.uit": ("Snoes is nog niet geholpen: wilde Blubs zijn weer onzichtbaar voor je.", "Snoes not helped yet: wild Blubs are invisible to you again."),
     "gui.guhs.blubguh.menu.schouder": ("Op je hoofd", "On your head"),

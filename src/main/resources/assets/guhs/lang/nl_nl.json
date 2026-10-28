@@ -31906,5 +31906,22 @@
   "gui.guhs.droomspul.postguh.0": "Post voor jou? Njeg... alleen een droom. Die bezorg ik wel gratis.",
   "gui.guhs.droomspul.postguh.1": "Een busje per eiland. Maar alleen naar eilanden waar je al was, anders weet ik je adres niet!",
   "gui.guhs.droomspul.postguh.2": "Postzegels? Hier betaal je met gaapjes. Ik heb er al drie gehad vandaag.",
-  "gui.guhs.droomspul.postguh.3": "Gisteren bezorgde ik een knuffel. Hij was een beetje platgedrukt, maar nog heel lief."
+  "gui.guhs.droomspul.postguh.3": "Gisteren bezorgde ik een knuffel. Hij was een beetje platgedrukt, maar nog heel lief.",
+  "gui.guhs.dromen.wekkerguh.vraag": "Tring? Wil je echt al wakker worden, vadsje? Het is hier nog zo knus...",
+  "gui.guhs.dromen.wekkerguh.ja": "Ja, maak me maar wakker",
+  "gui.guhs.dromen.wekkerguh.nee": "Nee, nog even dromen",
+  "gui.guhs.dromen.wekkerguh.nog_even": "Wekkerguh zet zichzelf op snooze. Zzz...",
+  "gui.guhs.dromen.bed.vraag": "%s gaapt en kijkt je slaperig aan. Gaan jullie samen dromen, of wil je gewoon lekker slapen?",
+  "gui.guhs.dromen.bed.dromen": "Samen dromen",
+  "gui.guhs.dromen.bed.slapen": "Gewoon slapen",
+  "gui.guhs.dromen.bed.weg": "Je droommaatje is net te ver weg... njeg.",
+  "gui.guhs.snoes.gids.thuis_mee": "Bubbels zat nog bij je (op je hoofd of in je zakken) en gaat gewoon mee naar huis. Blub!",
+  "gui.guhs.blubguh.snoes_eerst_droom": "Deze Blub piept vriendelijk, maar wil nog niet mee... eerst Snoes laten slapen!",
+  "gui.guhs.snoes.hud.titel": "Snoes' droom",
+  "gui.guhs.snoes.hud.bij_bed": "Praat met Snoes bij je bed.",
+  "gui.guhs.snoes.hud.ingestopt": "Ga in je bed liggen naast Snoes en kies 'Samen dromen'.",
+  "gui.guhs.snoes.hud.stukjes": "Stukjes %s/%s:",
+  "gui.guhs.snoes.hud.zoek": "Zoek de stukjes op de eilanden (Droompost brengt je snel terug).",
+  "gui.guhs.snoes.hud.terug": "Ga slapen naast Snoes om verder te dromen.",
+  "gui.guhs.snoes.hud.finale": "Alles gevonden! Ga naar het Droomplein."
 }

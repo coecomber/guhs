@@ -299,6 +299,7 @@ public final class Features {
         nl.juiced.guhs.feature.dexdromen.DexDromenFeature.payloads(registrar);   // 1.8.0: the Blub-meterkaart (Guhdex)
         nl.juiced.guhs.feature.weer.WeerFeature.payloads(registrar);   // 1.8.0: the Weer vadser's zones and menu
         nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.payloads(registrar);   // 1.8.0: the soft dream fade
+        nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.payloads(registrar);   // 1.8.0 playtest: Snoes' story HUD
     }
 
     public static void creative(Consumer<ItemStack> output) {

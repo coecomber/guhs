@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:beds",
+    "guhs:wolkenbed",
+    "guhs:guh_slaapzak"
+  ]
+}

@@ -60,6 +60,7 @@ public final class DroomSlapen {
         NeoForge.EVENT_BUS.addListener(DroomSlapen::onKlik);
         NeoForge.EVENT_BUS.addListener(DroomSlapen::onSpelerTick);
         NeoForge.EVENT_BUS.addListener(DroomSlapen::tick);
+        nl.juiced.guhs.feature.verhaal.Praat.luister(SLEUTEL, DroomSlapen::antwoord);
     }
 
     // =====================================================================================================================
@@ -241,16 +242,55 @@ public final class DroomSlapen {
     // falling asleep beside it
     // =====================================================================================================================
 
-    private static void onSpelerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof ServerPlayer p) || !p.isSleeping() || p.getSleepTimer() < INSLAAP_TICKS || DroomReis.inDroom(p)) {
-            return;
-        }
+    /** The talking screen's sleutel of the bed question ("gewoon slapen" or "dromen"). */
+    static final String SLEUTEL = "dromen_bed";
+    /** After how many sleeping ticks the bed question comes (before the night is over: the night skips at 100). */
+    static final int VRAAG_TICKS = 12;
+    /** Blocks a player sleeps in that count as a bed for dreaming (and for Snoes): beds, the wolkenbed, the guh-slaapzak. */
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> DROOMBEDDEN =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, nl.juiced.guhs.Guhs.id("droombedden"));
+    /** The story's dream buddy at this bed (Snoes, set by snoesverhaal; null: none). */
+    public static java.util.function.BiFunction<ServerPlayer, BlockPos, Entity> SNOES_BIJ_BED = (p, bed) -> null;
+    /** The story's way into the dream with Snoes (set by snoesverhaal; false: it did not go). */
+    public static java.util.function.Predicate<ServerPlayer> DROOM_MET_SNOES = p -> false;
+
+    /** This player's dream buddy at their bed: their tucked-in guh close by, else the story's Snoes (null: dream alone? no: sleep). */
+    @Nullable
+    static Entity maatjeBijBed(ServerPlayer p, BlockPos bed) {
         GuhEntity guh = ingestopt(p);
-        BlockPos bed = p.getSleepingPos().orElse(p.blockPosition());
-        if (guh == null || guh.level() != p.level() || guh.distanceToSqr(Vec3.atCenterOf(bed)) > BED_BEREIK * BED_BEREIK) {
+        if (guh != null && guh.level() == p.level() && guh.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK) {
+            return guh;
+        }
+        return SNOES_BIJ_BED.apply(p, bed);
+    }
+
+    /** Lying in bed with a dream buddy close by: a question, gewoon slapen or dromen (playtest: never straight into the dream). */
+    private static void onSpelerTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || !p.isSleeping() || p.getSleepTimer() != VRAAG_TICKS || DroomReis.inDroom(p)) {
             return;
         }
-        DroomReis.naarDroom(p, DroomStart.eilandVoor(DroomReis.mee(p)));
+        BlockPos bed = p.getSleepingPos().orElse(p.blockPosition());
+        Entity maatje = maatjeBijBed(p, bed);
+        if (maatje == null) {
+            return;
+        }
+        nl.juiced.guhs.feature.verhaal.Praat.open(p, maatje, SLEUTEL, "gui.guhs.dromen.bed.vraag", new Object[]{maatje.getDisplayName()},
+                new nl.juiced.guhs.feature.verhaal.Praat.Optie(1, "gui.guhs.dromen.bed.dromen"),
+                new nl.juiced.guhs.feature.verhaal.Praat.Optie(0, "gui.guhs.dromen.bed.slapen"));
+    }
+
+    /** The bed question was answered: 1 = off to the dream (with the guh, else with Snoes); 0 = sleep as usual. */
+    static void antwoord(ServerPlayer p, @Nullable Entity spreker, int optie) {
+        if (optie != 1 || DroomReis.inDroom(p)) {
+            return;
+        }
+        BlockPos bed = p.getSleepingPos().orElse(p.blockPosition());
+        GuhEntity guh = ingestopt(p);
+        if (guh != null && guh.level() == p.level() && guh.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK) {
+            DroomReis.naarDroom(p, DroomStart.eilandVoor(DroomReis.mee(p)));
+        } else if (!DROOM_MET_SNOES.test(p)) {
+            p.sendOverlayMessage(Component.translatable("gui.guhs.dromen.bed.weg").withStyle(ChatFormatting.GRAY));
+        }
     }
 
     /** Once a second: tucked-in guhs keep sleeping on their place; in the morning (owner not dreaming) they wake up. */

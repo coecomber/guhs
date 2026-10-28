@@ -97,4 +97,30 @@ public class SnoesGameTests {
         helper.assertTrue(s.zinnen().size() >= 12 && s.duur() >= 600, "lines and length");
         helper.succeed();
     }
+
+    /** Playtest: Bubbels on your head (and down again) or picked up never makes a second Bubbels. */
+    @GuhTest(template = TUIN, batch = BATCH)
+    public static void bubbelsNooitDubbel(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        p.snapTo(helper.absoluteVec(new net.minecraft.world.phys.Vec3(3.5, 1, 3.5)));
+        DroomVoortgang.geef(p, Stukje.LIEDJE);                       // (the story is on: DROOMT)
+        nl.juiced.guhs.feature.blub.BlubGuhEntity gids = SnoesVerhaal.roepGids(p);
+        helper.assertTrue(gids != null && aantalGidsen(helper) == 1, "one Bubbels");
+        nl.juiced.guhs.feature.piep.Schouder.zet(p, gids);
+        helper.assertTrue(SnoesVerhaal.draagtGids(p) && SnoesVerhaal.gids(p) == null, "Bubbels on the head");
+        helper.assertTrue(SnoesVerhaal.roepGids(p) == null && aantalGidsen(helper) == 0, "on the head: no second Bubbels");
+        nl.juiced.guhs.feature.piep.Schouder.eraf(p, p.position());
+        helper.assertTrue(SnoesVerhaal.roepGids(p) != null && aantalGidsen(helper) == 1, "down again: still one Bubbels");
+        nl.juiced.guhs.feature.blub.BlubGuhEntity weer = SnoesVerhaal.gids(p);
+        nl.juiced.guhs.feature.piep.PiepDierItem.pakOp(weer, p);
+        helper.assertTrue(SnoesVerhaal.draagtGids(p) && SnoesVerhaal.roepGids(p) == null && aantalGidsen(helper) == 0,
+                "picked up: no second Bubbels");
+        SnoesVerhaal.vergeet(p);
+        helper.succeed();
+    }
+
+    private static int aantalGidsen(GameTestHelper helper) {
+        return helper.getLevel().getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(nl.juiced.guhs.feature.blub.BlubGuhEntity.class),
+                b -> b.isAlive() && b.entityTags().contains(SnoesVerhaal.TAG_GIDS)).size();
+    }
 }
