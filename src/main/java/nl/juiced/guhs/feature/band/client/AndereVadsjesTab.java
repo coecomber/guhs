@@ -114,6 +114,16 @@ public final class AndereVadsjesTab {
         return new ItemStack(Items.NAME_TAG);
     }
 
+    /** 1.8.0: a little bow in its colour on the picture's top-right corner (the Blub-guh's strikje). */
+    static void strikje(GuiGraphicsExtractor g, int x, int y, int kleur) {
+        int rand = 0xFF5A3A4A;
+        g.fill(x - 1, y - 1, x + 10, y + 6, rand);
+        g.fill(x, y, x + 4, y + 5, kleur);              // left loop
+        g.fill(x + 5, y, x + 9, y + 5, kleur);          // right loop
+        g.fill(x + 4, y + 1, x + 5, y + 4, rand);       // the knot
+        g.fill(x + 1, y + 1, x + 2, y + 2, 0x60FFFFFF); // a little shine
+    }
+
     /** A kind's heading: "Pieppiepmuisje (3)". */
     private final class Kop implements GidsLijst.Regel {
         private final Component tekst;
@@ -157,6 +167,9 @@ public final class AndereVadsjesTab {
         public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x, y, x + w, y + RIJ - 2, hover ? 0x40F77AB0 : 0x20F7B6CB);
             g.item(icoon, x + 3, y + 3);
+            if (v.looks().contains("Strik")) {
+                strikje(g, x + 12, y + 2, 0xFF000000 | v.looks().getIntOr("Strik", 0xF7A0C8));
+            }
             int tx = x + 24, breed = x + w - 4 - tx;
             GidsTekst.passend(g, naam().copy().withStyle(ChatFormatting.BOLD), tx, y + 2, breed, 1f, DONKER, false);
             GidsTekst.passend(g, MijnGuhsTab.kortePlek(v.plek()), tx, y + 13, breed, 0.75f, TEKST, false);
@@ -167,6 +180,9 @@ public final class AndereVadsjesTab {
             List<Component> out = new ArrayList<>();
             out.add(naam().copy().withStyle(ChatFormatting.BOLD));
             out.add(soortNaam(v.soort()).copy().withStyle(ChatFormatting.LIGHT_PURPLE));
+            if (v.looks().contains("StrikNaam")) {
+                out.add(nl.juiced.guhs.taal.Tekst.get(v.looks(), "StrikNaam").copy().withStyle(ChatFormatting.DARK_PURPLE));
+            }
             for (net.minecraft.network.chat.FormattedText r : font.getSplitter().splitLines(v.plek(), 200, net.minecraft.network.chat.Style.EMPTY)) {
                 out.add(Component.literal(r.getString()).withStyle(ChatFormatting.GRAY));
             }

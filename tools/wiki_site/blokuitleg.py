@@ -802,6 +802,17 @@ UITLEG = {
            "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.\n"
            "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
+    "blub_knuffel": dict(
+        nl="Een zachte knuffel van jouw eigen Blub-guh, net als de echte Blub-knuffel: dezelfde soort, tint, meter en strikje.\n"
+           "\n"
+           "- Laat er een maken in het menu van je Blub (rechtsklik met lege hand): de knop 'Knuffel laten maken'. Kost 1 wol.\n"
+           "- Zet hem neer: hij kijkt naar je toe. Rechtsklik: squish, met een hartje.\n"
+           "- Hak je hem weer op, dan blijft het dezelfde knuffel (de tooltip zegt van welke Blub hij is).",
+        en="A soft plush of your own Blub-guh, just like the real Blub plush: the same kind, tint, meter and bow.\n"
+           "\n"
+           "- Have one made in your Blub's menu (right-click with an empty hand): the button 'Have a plush made'. Costs 1 wool.\n"
+           "- Put it down: it looks at you. Right-click: squish, with a little heart.\n"
+           "- Break it again and it stays the same plush (the tooltip says which Blub it is of)."),
     "stuiterkussen_boter": dict(
         nl="Een reuzenkussen waar je hoog vanaf stuitert, zoals de kussenspiraal op het Sterrenkussenveld (er zijn 8 kleuren).\n"
            "\n"

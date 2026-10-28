@@ -34,7 +34,9 @@ public final class BlubMenu {
         /** A trick or emote of its Trucjes screen (waarde = BlubTruc ordinal). */
         TRUC,
         /** Its Kledingkast (waarde = BlubKleding.Plek ordinal, tekst = the piece id; empty = take it off). */
-        KLEED;
+        KLEED,
+        /** 1.8.0: "Knuffel laten maken": a Blub-knuffel of this Blub, for one wool. */
+        KNUFFEL;
 
         public static Actie byIndex(int i) {
             Actie[] all = values();
@@ -92,6 +94,9 @@ public final class BlubMenu {
                 BlubTruc.byIndex(waarde).doe(blub, player);
                 return true;
             }
+            case KNUFFEL -> {
+                return knuffel(player, blub);
+            }
             case KLEED -> {
                 BlubKleding.Plek plek = BlubKleding.Plek.values()[Math.floorMod(waarde, BlubKleding.Plek.values().length)];
                 boolean uit = tekst == null || tekst.isEmpty();
@@ -104,6 +109,35 @@ public final class BlubMenu {
             }
         }
         return false;
+    }
+
+    /** The price of a Blub-knuffel: one wool, any colour (free in creative). */
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.item.Item> KNUFFEL_PRIJS = net.minecraft.tags.ItemTags.WOOL;
+
+    /** "Knuffel laten maken": takes one wool and gives a Blub-knuffel of this Blub (its soort, meter, tint, strikje, name). */
+    static boolean knuffel(ServerPlayer player, BlubGuhEntity blub) {
+        if (!player.getAbilities().instabuild) {
+            net.minecraft.world.item.ItemStack wol = net.minecraft.world.item.ItemStack.EMPTY;
+            for (net.minecraft.world.item.ItemStack st : player.getInventory().getNonEquipmentItems()) {
+                if (st.is(KNUFFEL_PRIJS)) {
+                    wol = st;
+                    break;
+                }
+            }
+            if (wol.isEmpty()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.knuffel.geen_wol").withStyle(ChatFormatting.GRAY));
+                return false;
+            }
+            wol.shrink(1);
+        }
+        net.minecraft.world.item.ItemStack knuffel = new net.minecraft.world.item.ItemStack(BlubFeature.KNUFFEL_ITEM.get());
+        nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlockEntity.schrijf(knuffel, blub.knuffelData());
+        if (!player.getInventory().add(knuffel)) {
+            player.drop(knuffel, false);
+        }
+        BlubGeluid.SQUISH.speel(blub);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.knuffel.gemaakt", blub.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        return true;
     }
 
     // --- payloads ----------------------------------------------------------------------------------------------------------------

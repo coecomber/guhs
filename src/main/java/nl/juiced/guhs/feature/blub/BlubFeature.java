@@ -41,6 +41,8 @@ public final class BlubFeature {
     public static final DeferredRegister<net.minecraft.world.effect.MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
+    public static final DeferredRegister<net.minecraft.world.level.block.entity.BlockEntityType<?>> BLOCK_ENTITIES =
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<BlubGuhEntity>> BLUBGUH = ENTITY_TYPES.register("blubguh",
             () -> EntityType.Builder.of(BlubGuhEntity::new, MobCategory.CREATURE).sized(0.5f, 0.5f).eyeHeight(0.36f)
@@ -59,6 +61,18 @@ public final class BlubFeature {
                     .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PINK).strength(1.0f)
                     .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion());
     public static final DeferredItem<net.minecraft.world.item.BlockItem> BADJE_ITEM = ITEMS.registerSimpleBlockItem(BADJE);
+    // --- 1.8.0 afronding: the Blub-knuffel (a plush of your own Blub; made in its menu) ---------------------------------------
+    public static final net.neoforged.neoforge.registries.DeferredBlock<nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlock> KNUFFEL = BLOCKS.registerBlock(
+            "blub_knuffel", nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlock::new, () -> net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_LIGHT_BLUE).strength(0.5f)
+                    .sound(net.minecraft.world.level.block.SoundType.WOOL).noOcclusion());
+    public static final DeferredItem<nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelItem> KNUFFEL_ITEM = ITEMS.registerItem("blub_knuffel",
+            p -> new nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelItem(KNUFFEL.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+    public static final DeferredHolder<net.minecraft.world.level.block.entity.BlockEntityType<?>,
+            net.minecraft.world.level.block.entity.BlockEntityType<nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlockEntity>> KNUFFEL_BE =
+            BLOCK_ENTITIES.register("blub_knuffel", () -> new net.minecraft.world.level.block.entity.BlockEntityType<>(
+                    nl.juiced.guhs.feature.blub.knuffel.BlubKnuffelBlockEntity::new, KNUFFEL.get()));
+
     /** Only the chore icons in the huisje screen (no creative tab): bellen, knabbels, liedje. */
     public static final java.util.Map<String, DeferredItem<Item>> KLUS_ICONEN = new java.util.LinkedHashMap<>();
 
@@ -78,6 +92,7 @@ public final class BlubFeature {
         BLOCKS.register(modBus);
         EFFECTS.register(modBus);
         ENTITY_TYPES.register(modBus);
+        BLOCK_ENTITIES.register(modBus);
         nl.juiced.guhs.feature.blub.klus.BlubKlusjes.registreer();
         SOUNDS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(BLUBGUH.get(), BlubGuhEntity.createAttributes().build()));
@@ -94,6 +109,7 @@ public final class BlubFeature {
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(BLUBGUH_SPAWN_EGG.get()));
         output.accept(new ItemStack(BADJE_ITEM.get()));
+        output.accept(new ItemStack(KNUFFEL_ITEM.get()));
     }
 
     private BlubFeature() {

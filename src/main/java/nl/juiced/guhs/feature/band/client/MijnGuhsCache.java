@@ -45,7 +45,12 @@ public final class MijnGuhsCache {
     }
 
     /** 1.2.10: one of your other tamed critters (the tab "Mijn andere vadsjes"); naam is empty when it has no name of its own. */
-    public record Vadsje(UUID id, Component naam, String soort, Component plek, String plekSoort) {
+    public record Vadsje(UUID id, Component naam, String soort, Component plek, String plekSoort, CompoundTag looks) {
+        /** Without looks (most maatjes). */
+        public Vadsje(UUID id, Component naam, String soort, Component plek, String plekSoort) {
+            this(id, naam, soort, plek, plekSoort, new CompoundTag());
+        }
+
     }
 
     private static List<Guh> guhs = List.of();
@@ -125,7 +130,7 @@ public final class MijnGuhsCache {
             CompoundTag t = vadsjesList.getCompoundOrEmpty(i);
             try {
                 andere.add(new Vadsje(UUID.fromString(t.getStringOr("Id", "")), nl.juiced.guhs.taal.Tekst.get(t, "Naam"), t.getStringOr("Soort", ""),
-                        tekst(t.getStringOr("Plek", ""), reg), t.getStringOr("PlekSoort", "")));
+                        tekst(t.getStringOr("Plek", ""), reg), t.getStringOr("PlekSoort", ""), t.getCompoundOrEmpty("Looks")));
             } catch (RuntimeException e) {
                 com.mojang.logging.LogUtils.getLogger().warn("Mijn andere vadsjes: skipped one", e);
             }

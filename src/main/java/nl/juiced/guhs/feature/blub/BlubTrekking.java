@@ -15,13 +15,16 @@ import net.minecraft.util.RandomSource;
  *       (sigma {@value #METER_SIGMA}), cut off at 0 and 100;</li>
  *   <li>{@link Soort}: blauw 50%, weide 22%, schildje 15%, ravijn 9%, zwam 4%;</li>
  *   <li>tint: 0 = the normal colour (60%), 1 and 2 = a pastel one (20% each);</li>
- *   <li>grootte: 85-115% (a bell around 100%).</li>
+ *   <li>grootte: whole percents 75..125 (a bell around 100, sigma {@value #GROOTTE_SIGMA}; 75 and 125 are rare, no title).</li>
  * </ul>
  * A babyblubje gets every number somewhere between its parents' and the soort and tint of one of them ({@link #erf}).
  */
 public final class BlubTrekking {
     public static final int METER_MIDDEN = 35, METER_SIGMA = 18;
-    public static final float GROOTTE_MIN = 0.85f, GROOTTE_MAX = 1.15f;
+    public static final float GROOTTE_MIN = 0.75f, GROOTTE_MAX = 1.25f;
+    /** The size in whole percents (1.8.0, round 2 of the finish: 75..125, sigma 8.5). */
+    public static final int GROOTTE_MIN_PROCENT = 75, GROOTTE_MAX_PROCENT = 125;
+    public static final double GROOTTE_SIGMA = 8.5;
 
     /** The kinds, as in Minecraft Dungeons II (the order is saved: append only). */
     public enum Soort {
@@ -81,7 +84,22 @@ public final class BlubTrekking {
     }
 
     public static float grootte(RandomSource random) {
-        return Mth.clamp(1f + (float) random.nextGaussian() * 0.08f, GROOTTE_MIN, GROOTTE_MAX);
+        return uitProcent((int) Math.round(100 + random.nextGaussian() * GROOTTE_SIGMA));
+    }
+
+    /** A size as whole percents, clamped to 75..125 (older Blubs saved a float like 1.0734: that becomes 107). */
+    public static int procent(float grootte) {
+        return Mth.clamp(Math.round(grootte * 100f), GROOTTE_MIN_PROCENT, GROOTTE_MAX_PROCENT);
+    }
+
+    /** Whole percents (clamped) to the scale factor. */
+    public static float uitProcent(int procent) {
+        return Mth.clamp(procent, GROOTTE_MIN_PROCENT, GROOTTE_MAX_PROCENT) / 100f;
+    }
+
+    /** Rounds any size to a whole percent in 75..125. */
+    public static float rond(float grootte) {
+        return uitProcent(procent(grootte));
     }
 
     public static Waarden trek(RandomSource random) {
@@ -100,12 +118,12 @@ public final class BlubTrekking {
         return new Waarden(meter(random), soort, tint(random), grootte(random));
     }
 
-    /** A babyblubje: meter and grootte somewhere between the parents' (both ends included), soort and tint of one of them. */
+    /** A babyblubje: meter and grootte (whole percents) somewhere between the parents' (both ends included), soort and tint of one of them. */
     public static Waarden erf(Waarden a, Waarden b, RandomSource random) {
         int lo = Math.min(a.meter(), b.meter()), hi = Math.max(a.meter(), b.meter());
         int meter = lo + random.nextInt(hi - lo + 1);
-        float glo = Math.min(a.grootte(), b.grootte()), ghi = Math.max(a.grootte(), b.grootte());
-        float grootte = glo + random.nextFloat() * (ghi - glo);
+        int glo = Math.min(procent(a.grootte()), procent(b.grootte())), ghi = Math.max(procent(a.grootte()), procent(b.grootte()));
+        float grootte = uitProcent(glo + random.nextInt(ghi - glo + 1));
         Soort soort = random.nextBoolean() ? a.soort() : b.soort();
         int tint = random.nextBoolean() ? a.tint() : b.tint();
         return new Waarden(meter, soort, tint, grootte);
