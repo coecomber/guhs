@@ -156,10 +156,98 @@ public final class SnoesVerhaal {
         return zoek(p, uuid(p, "Snoes")) instanceof GuhNpcEntity n ? n : null;
     }
 
-    /** Bubbels in the dream (null: none, or not loaded). */
+    /**
+     * Bubbels in the dream (null: none, or not loaded). By his uuid, or else (put down from the head or out of the pockets he
+     * comes back with a new uuid) by his tag and owner in the dream.
+     */
     @Nullable
     public static BlubGuhEntity gids(ServerPlayer p) {
-        return zoek(p, uuid(p, "Gids")) instanceof BlubGuhEntity b ? b : null;
+        if (zoek(p, uuid(p, "Gids")) instanceof BlubGuhEntity b) {
+            return b;
+        }
+        ServerLevel droom = p.level().getServer().getLevel(DromenFeature.DIM);
+        for (ServerLevel level : droom == null || droom == p.level() ? List.of((ServerLevel) p.level()) : List.of(droom, (ServerLevel) p.level())) {
+            for (BlubGuhEntity b : level.getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(BlubGuhEntity.class),
+                    b -> b.isAlive() && b.entityTags().contains(TAG_GIDS) && b.isOwnedBy(p))) {
+                data(p).putString("Gids", b.getUUID().toString());
+                return b;
+            }
+        }
+        return null;
+    }
+
+    /** Whether a saved creature (the head's or a pick-up item's NBT) is a dream guide Bubbels. */
+    static boolean isGids(CompoundTag t) {
+        net.minecraft.nbt.ListTag l = t.getListOrEmpty("Tags");
+        for (int i = 0; i < l.size(); i++) {
+            if (TAG_GIDS.equals(l.getStringOr(i, ""))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Bubbels carried by this player: on their head, or picked up in their pockets. */
+    public static boolean draagtGids(ServerPlayer p) {
+        if (nl.juiced.guhs.feature.piep.Schouder.heeft(p) && isGids(p.getPersistentData().getCompoundOrEmpty(nl.juiced.guhs.feature.piep.Schouder.KEY))) {
+            return true;
+        }
+        var inv = p.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            var data = inv.getItem(i).get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
+            if (data != null && isGids(data.copyTag())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The carried Bubbels when leaving the dream: before the finale he stays in the dream (gone from the head and the pockets);
+     * after it (gewoon = true) he simply is the player's own Blub from now on (his guide tag goes off). Returns whether one was carried.
+     */
+    static boolean gedragenGids(ServerPlayer p, boolean gewoon) {
+        boolean was = false;
+        CompoundTag pd = p.getPersistentData();
+        if (nl.juiced.guhs.feature.piep.Schouder.heeft(p) && isGids(pd.getCompoundOrEmpty(nl.juiced.guhs.feature.piep.Schouder.KEY))) {
+            was = true;
+            if (gewoon) {
+                CompoundTag t = pd.getCompoundOrEmpty(nl.juiced.guhs.feature.piep.Schouder.KEY).copy();
+                zonderGidsTag(t);
+                pd.put(nl.juiced.guhs.feature.piep.Schouder.KEY, t);
+            } else {
+                pd.remove(nl.juiced.guhs.feature.piep.Schouder.KEY);
+            }
+            nl.juiced.guhs.feature.piep.Schouder.sync(p);
+        }
+        var inv = p.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            var stack = inv.getItem(i);
+            var data = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
+            if (data != null && isGids(data.copyTag())) {
+                was = true;
+                if (gewoon) {
+                    CompoundTag t = data.copyTag();
+                    zonderGidsTag(t);
+                    stack.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.of(t));
+                } else {
+                    inv.setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
+                }
+            }
+        }
+        return was;
+    }
+
+    private static void zonderGidsTag(CompoundTag t) {
+        net.minecraft.nbt.ListTag l = t.getListOrEmpty("Tags");
+        net.minecraft.nbt.ListTag nieuw = new net.minecraft.nbt.ListTag();
+        for (int i = 0; i < l.size(); i++) {
+            String s = l.getStringOr(i, "");
+            if (!TAG_GIDS.equals(s)) {
+                nieuw.add(net.minecraft.nbt.StringTag.valueOf(s));
+            }
+        }
+        t.put("Tags", nieuw);
     }
 
     /** Forgets this player's story (DroomVoortgang "reset" comes here too): their Snoes and Bubbels go away. */
@@ -185,7 +273,7 @@ public final class SnoesVerhaal {
             return;
         }
         ServerLevel level = (ServerLevel) event.getLevel();
-        if (!(level.getBlockState(event.getPos()).getBlock() instanceof BedBlock) || fase(p) != Fase.NIETS
+        if (!level.getBlockState(event.getPos()).is(DroomSlapen.DROOMBEDDEN) || fase(p) != Fase.NIETS
                 || !DroomSlapen.bedtijd(level) || !heeftTammeGuh(p)) {
             return;
         }
@@ -303,21 +391,33 @@ public final class SnoesVerhaal {
         level.sendParticles(ParticleTypes.HEART, snoes.getX(), snoes.getY() + 0.7, snoes.getZ(), 4, 0.3, 0.2, 0.3, 0);
     }
 
-    /** Asleep in the bed with Snoes tucked in beside it: off to the dream (the Droomplein). */
-    static void onSpelerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof ServerPlayer p) || !p.isSleeping() || p.getSleepTimer() < DroomSlapen.INSLAAP_TICKS
-                || DroomReis.inDroom(p) || fase(p) != Fase.INGESTOPT) {
-            return;
+    /**
+     * (DroomSlapen.SNOES_BIJ_BED) Snoes as the dream buddy at this bed: tucked in for his first dream, or (dreaming and woken up,
+     * by accident too) still standing there; no tucking in again needed.
+     */
+    @Nullable
+    static Entity snoesBijBed(ServerPlayer p, BlockPos bed) {
+        Fase f = fase(p);
+        if (f != Fase.INGESTOPT && f != Fase.DROOMT) {
+            return null;
         }
         GuhNpcEntity snoes = snoesThuis(p);
+        return snoes != null && snoes.level() == p.level() && snoes.distanceToSqr(Vec3.atCenterOf(bed)) <= BED_BEREIK * BED_BEREIK ? snoes : null;
+    }
+
+    /** (DroomSlapen.DROOM_MET_SNOES) "Dromen" with Snoes: off to the Droomplein (the story goes on where it was). */
+    static boolean droomMetSnoes(ServerPlayer p) {
         BlockPos bed = p.getSleepingPos().orElse(p.blockPosition());
-        if (snoes == null || snoes.level() != p.level() || snoes.distanceToSqr(Vec3.atCenterOf(bed)) > BED_BEREIK * BED_BEREIK) {
-            return;
+        if (snoesBijBed(p, bed) == null) {
+            return false;
         }
+        Fase was = fase(p);
         zetFase(p, Fase.DROOMT);
         if (!DroomReis.naarDroom(p, DroomEilanden.PLEIN)) {
-            zetFase(p, Fase.INGESTOPT);
+            zetFase(p, was);
+            return false;
         }
+        return true;
     }
 
     // =====================================================================================================================
@@ -338,10 +438,14 @@ public final class SnoesVerhaal {
         }
     }
 
-    /** Bubbels comes to the player in the dream (made when needed); the first time with his welcome. */
+    /** Bubbels comes to the player in the dream (made when needed); the first time with his welcome. Null: they carry him. */
+    @Nullable
     public static BlubGuhEntity roepGids(ServerPlayer p) {
         ServerLevel level = (ServerLevel) p.level();
         BlubGuhEntity gids = gids(p);
+        if (gids == null && draagtGids(p)) {
+            return null;                              // (he sits on the player's head or in their pockets: no second Bubbels)
+        }
         if (gids == null || gids.level() != level) {
             if (gids != null) {
                 gids.discard();
@@ -382,7 +486,18 @@ public final class SnoesVerhaal {
     /** Leaving the dream: Bubbels stays behind (gone), or after the finale he comes home as the player's own first Blub. */
     static void gidsWeg(ServerPlayer p) {
         BlubGuhEntity gids = gids(p);
-        if (fase(p) == Fase.KLAAR && !data(p).getBooleanOr("GidsThuis", false)) {
+        boolean naFinale = fase(p) == Fase.KLAAR && !data(p).getBooleanOr("GidsThuis", false);
+        if (gedragenGids(p, naFinale) && naFinale) {
+            // he rode along on the head or in the pockets: that one is the player's own Blub now (no second one)
+            data(p).putBoolean("GidsThuis", true);
+            p.sendSystemMessage(Component.translatable("gui.guhs.snoes.gids.thuis_mee").withStyle(ChatFormatting.LIGHT_PURPLE));
+            if (gids != null) {
+                gids.discard();
+            }
+            data(p).remove("Gids");
+            return;
+        }
+        if (naFinale) {
             ServerLevel thuis = (ServerLevel) p.level();
             BlubGuhEntity mee = maakBubbels(thuis, p);
             if (gids != null) {

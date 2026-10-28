@@ -88,6 +88,17 @@ TEKSTEN = {  # key -> (Dutch, English)
     P + "wekkerguh.grap3": ("Wekkerguh: Wakker worden! De knabbels worden koud!", "Alarm Guh: Wake up! The nibbles are getting cold!"),
     P + "wekkerguh.grap4": ("Wekkerguh: Sorry, ik moet wel. Het staat in mijn functieomschrijving. TRING!",
                             "Alarm Guh: Sorry, I have to. It's in my job description. RING!"),
+    # playtest: the Wekkerguh first asks; the bed asks "gewoon slapen / dromen" when your dream buddy is close by
+    P + "wekkerguh.vraag": ("Tring? Wil je echt al wakker worden, vadsje? Het is hier nog zo knus...",
+                            "Ring? Do you really want to wake up already, vadsje? It's still so cosy here..."),
+    P + "wekkerguh.ja": ("Ja, maak me maar wakker", "Yes, wake me up"),
+    P + "wekkerguh.nee": ("Nee, nog even dromen", "No, a little more dreaming"),
+    P + "wekkerguh.nog_even": ("Wekkerguh zet zichzelf op snooze. Zzz...", "Alarm Guh hits his own snooze button. Zzz..."),
+    P + "bed.vraag": ("%s gaapt en kijkt je slaperig aan. Gaan jullie samen dromen, of wil je gewoon lekker slapen?",
+                      "%s yawns and looks at you sleepily. Will you dream together, or do you just want a good sleep?"),
+    P + "bed.dromen": ("Samen dromen", "Dream together"),
+    P + "bed.slapen": ("Gewoon slapen", "Just sleep"),
+    P + "bed.weg": ("Je droommaatje is net te ver weg... njeg.", "Your dream buddy is just too far away... njeg."),
 }
 for kleur in KATTENHUISJES:
     nl_k = {"roze": "Roze", "wit": "Wit", "lavendel": "Lavendel", "mint": "Mint"}[kleur]
@@ -244,6 +255,8 @@ def blokken(h):
     # tags
     w(f"{D}/tags/block/guh_slaapplekken.json", {"replace": False, "values": ["guhs:doos_knabbels"] + [f"guhs:{d}" for d in DOZEN]
                                                  + [f"guhs:kattenhuisje_{k}" for k in KATTENHUISJES] + ["guhs:huisje_bedje", "guhs:guhnestje"]})
+    # playtest: every bed a player sleeps in counts for dreaming (and for Snoes): beds, the wolkenbed, the guh-slaapzak
+    w(f"{D}/tags/block/droombedden.json", {"replace": False, "values": ["#minecraft:beds", "guhs:wolkenbed", "guhs:guh_slaapzak"]})
     for eiland, items in START.items():
         w(f"{D}/tags/item/droom_start/{eiland}.json", {"replace": False, "values": items})
 

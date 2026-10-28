@@ -523,6 +523,11 @@ public class BlubGuhEntity extends Landdiertje {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
+        if (voer && !isTame() && !BlubSnoes.heeft(sp)) {
+            // in the dream wild Blubs can be seen, but they only become yours after Snoes' story (Bubbels is the exception)
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.snoes_eerst_droom").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.SUCCESS;
+        }
         if (voer) {
             return voer(sp, stack);
         }
