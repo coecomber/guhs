@@ -159,7 +159,7 @@ public final class DroomBewoners {
         if (level == null || level.players().isEmpty()) {
             return;
         }
-        for (String eiland : DroomEilanden.IDS) {
+        for (String eiland : DroomEilanden.ALLE) {
             zorg(level, eiland, server.getTickCount());
         }
     }

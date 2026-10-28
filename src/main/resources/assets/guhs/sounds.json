@@ -6817,5 +6817,15 @@
       }
     ],
     "subtitle": "subtitles.guhs.dromen.sterrenvisje"
+  },
+  "dromen.muziek.vlieg": {
+    "sounds": [
+      {
+        "name": "guhs:dromen/muziek_vlieg/placeholder_1_muziek",
+        "stream": true,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.dromen.muziek.vlieg"
   }
 }

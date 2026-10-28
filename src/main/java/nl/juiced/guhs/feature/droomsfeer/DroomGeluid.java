@@ -19,6 +19,7 @@ public enum DroomGeluid {
     // the music of the islands (DroomsfeerClient picks the one of the island you are closest to)
     MUZIEK_PLEIN("muziek.plein", 1f, 0f), MUZIEK_LIEDJES("muziek.liedjes", 1f, 0f), MUZIEK_STERREN("muziek.sterren", 1f, 0f),
     MUZIEK_HERINNERING("muziek.herinnering", 1f, 0f), MUZIEK_BADJE("muziek.badje", 1f, 0f), MUZIEK_MOLENTJE("muziek.molentje", 1f, 0f),
+    MUZIEK_VLIEG("muziek.vlieg", 1f, 0f),
     // the dream NPCs talking (DroomNpc.reactie, the Badmeester, the sterrenvisje's ambient)
     SNOES_PRAAT("snoes_praat", 0.7f, 0.08f), SNOES_GEEUW("snoes_geeuw", 0.7f, 0.05f), SNOES_BLIJ("snoes_blij", 0.8f, 0.08f),
     ZANDGUH("zandguh", 0.8f, 0.08f), WEKKERGUH("wekkerguh", 0.8f, 0.08f), ROMMELGUH("rommelguh", 0.8f, 0.08f),
@@ -46,7 +47,7 @@ public enum DroomGeluid {
         return event;
     }
 
-    /** The music of an island (DroomEilanden ids: plein, liedjes, sterren, herinnering, badje, molentje). */
+    /** The music of an island (DroomEilanden ids: plein, liedjes, sterren, herinnering, badje, molentje, vlieg). */
     public static DroomGeluid muziek(String eiland) {
         try {
             return valueOf("MUZIEK_" + eiland.toUpperCase(Locale.ROOT));

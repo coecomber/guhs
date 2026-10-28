@@ -186,6 +186,9 @@ FTB_SECTIES = [
     ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras"]),
      ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
     ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras", "dr_droomwinkel"]),
+     ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
+    ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras",
+                                                            "dr_vlieg_diploma"]),
     ("dr_snoes", "De droom van Snoes", "item:guhs:roze_guh_koek",
      ["dr_snoes_proloog"] + [f"dr_snoes_{s}" for s in STUKJES] + ["dr_snoes_finale"]),
     ("dr_weide", "De Zingende Weide", "item:guhs:blubguh_item", ["dr_weide", "dr_weide_brood", "dr_weide_dirigent",
@@ -235,6 +238,10 @@ def ftb(fq):
     q("dr_weer_droom", "Droomweer", "Stuiter op het Sterrenkussenveld helemaal naar boven, naar de grote ster. Het &ddroomkistje&r "
       "daar geeft je de eerste keer het &dweerpotje: droomweer&r: Guhdromenland voor thuis!", "guhs:weerpotje_droom",
       [item("guhs:weerpotje_droom")], xp=150)
+    # (1.8.0 uitbreiding: de Vliegdroom, up on a Rookguh from the plein)
+    q("dr_vlieg_diploma", "Vlieg-diploma", "Op het Droomplein staat een &dRookguh&r bij zijn steigertje: hij brengt je naar de "
+      "&dVliegdroom&r, hoog boven het plein. Stap daar in de stal op een Rookguh en vlieg door alle tien de &bwolkjesringen&r. "
+      "Je eerste hele parcours: het &6Vlieg-diploma&r!", "guhs:vlieg_diploma", [item("guhs:vlieg_diploma")], xp=150)
     # --- sleeping well ----------------------------------------------------------------------------------------------------
     # (1.8.0 U2 slaapkleding: sleepy guh clothes from the droomwinkeltje, and the player's droompyjama)
     q("dr_slaapkleding", "Lekker slaperig aangekleed", "Koop in het &ddroomwinkeltje&r van de Zandguh op het Droomplein een stukje "
