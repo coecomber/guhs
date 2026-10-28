@@ -41,7 +41,7 @@
   "gui.guhs.weer.weertje.bloesem.uitleg": "Blossom petals blow by. Smells like the Bloesemmeertje.",
   "item.guhs.weerpotje_pluisjes": "Weather Jar: Fluff Snow",
   "item.guhs.weerpotje_pluisjes.lore": "Pink fluff swirls inside. Soft!",
-  "gui.guhs.weer.weertje.pluisjes.bron": "chests in the Old Wool Mill and the Cloud Meadow's cloud chests",
+  "gui.guhs.weer.weertje.pluisjes.bron": "chests in the Old Wool Mill, the Cloud Meadow's cloud chests and the little chest in the Cloud Herder's hut",
   "item.guhs.weerpotje_bellen": "Weather Jar: Bubble Shower",
   "item.guhs.weerpotje_bellen.lore": "A jar full of soap bubbles. Don't shake!",
   "gui.guhs.weer.weertje.bellen.bron": "chests in the Guh Bubble and in Bikini Bottom",
@@ -50,7 +50,7 @@
   "gui.guhs.weer.weertje.knabbel.bron": "the treasure chest of a Cheese Nibble Nest, or win the Nibble Games",
   "item.guhs.weerpotje_regenboog": "Weather Jar: Rainbow Weather",
   "item.guhs.weerpotje_regenboog.lore": "A bit of rainbow with a little shower.",
-  "gui.guhs.weer.weertje.regenboog.bron": "the Travel Agency's souvenir 'Rainbow in a Jar', or a gold medal on the Guh Circuit",
+  "gui.guhs.weer.weertje.regenboog.bron": "the little chest at the end of the Rainbow Bridge, the Travel Agency's souvenir 'Rainbow in a Jar', or a gold medal on the Guh Circuit",
   "item.guhs.weerpotje_hartjes": "Weather Jar: Heart Rain",
   "item.guhs.weerpotje_hartjes.lore": "Hearts! The jar is warm when you hold it.",
   "gui.guhs.weer.weertje.hartjes.bron": "chests at a Guh Picnic and a Surprise Party",
@@ -59,8 +59,8 @@
   "gui.guhs.weer.weertje.sterren.bron": "the Guh Observatory, the Star Cave, or connect a constellation with the telescope",
   "item.guhs.weerpotje_knusmist": "Weather Jar: Cosy Fog",
   "item.guhs.weerpotje_knusmist.lore": "Pink fog. Sniff it and you get sleepy.",
-  "gui.guhs.weer.weertje.knusmist.bron": "chests in the Cuddle Dormitory",
+  "gui.guhs.weer.weertje.knusmist.bron": "chests in the Cuddle Dormitory and the little chest in the Cuddle Bath",
   "item.guhs.weerpotje_bloesem": "Weather Jar: Blossom Breeze",
   "item.guhs.weerpotje_bloesem.lore": "Blossom petals that never stop blowing.",
-  "gui.guhs.weer.weertje.bloesem.bron": "the chest on the Bloesemmeertje's picnic island"
+  "gui.guhs.weer.weertje.bloesem.bron": "the chest on the Bloesemmeertje's picnic island and the little chest in the Klaterdal tea house"
 }
