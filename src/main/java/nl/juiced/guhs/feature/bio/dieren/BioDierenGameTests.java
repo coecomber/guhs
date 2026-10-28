@@ -359,7 +359,9 @@ public class BioDierenGameTests {
         helper.assertTrue(GuhDex.ENTRIES.containsAll(nieuw) && GuhDex.EXTRA.containsAll(nieuw) && nieuw.stream().noneMatch(GuhDex.TELLEND::contains),
                 "in the Guhdex as bonus pages (they do not count for a full Guhdex)");
         helper.assertTrue(GuhDex.TAMEABLE.contains(GuhVariant.BLOESEMGUH) && GuhDex.TAMEABLE.contains(GuhVariant.TANUKIGUH)
-                && GuhDex.MILESTONES.get(GuhDex.MILESTONES.size() - 1).tamed() == GuhDex.TAMEABLE.size() - 5,   // (+ the Hertguhtje; 1.6.2: + the Beverguh; 1.7.0: + the Grotguh, a tameable bonus page)
+                && GuhDex.MILESTONES.get(GuhDex.MILESTONES.size() - 1).tamed()
+                        == GuhDex.TAMEABLE.size() - GuhDex.TAMEABLE.stream().filter(GuhDex.EXTRA::contains).count()
+                && GuhDex.TAMEABLE.stream().filter(GuhDex.EXTRA::contains).count() >= 5,   // (tameable bonus pages: Bloesemguh, Tanukiguh, Hertguhtje, Beverguh, Grotguh; 1.8.0: + the four oerguhs)
                 "tameable, but the crown does not ask for them");
         helper.assertTrue(GuhDex.isCreaturePage(GuhVariant.KOI) && GuhDex.isCreaturePage(GuhVariant.WOLKENSCHAAPJE), "creature pages");
         helper.assertTrue(!WereldlevenFeature.KNUFFEL_IDS.contains("bloesemguh") && !WereldlevenFeature.KNUFFEL_IDS.contains("tanukiguh"), "no plush: the knuffelkast stays what it was");
