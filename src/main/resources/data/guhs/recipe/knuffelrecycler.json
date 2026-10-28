@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ISI",
+    "CDC",
+    "IKI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:shears",
+    "C": "minecraft:chest",
+    "D": "guhs:guh_wire",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:knuffelrecycler",
+    "count": 1
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IZI",
+    "VDV",
+    "SKS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "Z": "minecraft:stonecutter",
+    "V": "#c:dyes",
+    "D": "guhs:guh_wire",
+    "S": "#minecraft:stone_crafting_materials",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:bouwblokken_fabriek",
+    "count": 1
+  }
+}

@@ -367,4 +367,32 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
+  "quest.475548A8AACBBEF7.title": "Whirring Spinner",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "Build a &dSpinning Machine&r and spin &ffluff&r into wool: 2 fluff is 1 white wool. Fluff comes from Cloud Lambs (shearing) or the Plushie Recycler.",
+  ],
+  "quest.4755487539D5A8EA.title": "Splash in the Dye Bath",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Put wool and dye in the &dDye Bath&r: it dyes everything the game can dye, glass, clay and cuddle blocks too.",
+  ],
+  "quest.475548070DEA1A7F.title": "Shearing Stable",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Keep tame &dCloud Lambs&r around a &dShearing Stable&r: it shears them by itself. Tame them with fluffgrass or cloud candy floss and breed them with cloud candy floss!",
+  ],
+  "quest.475548F127CB5DD5.title": "Nothing Is Wasted",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Put old plushies, guh clothes, wool or cushions into the &dPlushie Recycler&r: fluff comes out.",
+  ],
+  "quest.4755488802E43B45.title": "Building Blocks in Bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Put an &dexample&r in the &dBuilding Block Factory&r: it makes stairs, slabs, walls, smooth and coloured blocks. Link a Bank Guh (Bank Key) or a chest (sneak + click, then the chest).",
+  ],
+  "quest.47554809CF8DAD01.title": "All the Colours of the Rainbow",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "Grind flowers in the &dColour Mill&r: 2 to 3 dye per flower. Let a guh do the chore &dPicking Flowers&r for an endless supply!",
+  ],
+  "quest.4755483CF22A99C0.title": "Rainbow Press",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "Press fluff and &6cheese sauce&r into any colour in the &dRainbow Press&r. Pick the colour with sneak + click, or put down an example dye.",
+  ],
 }

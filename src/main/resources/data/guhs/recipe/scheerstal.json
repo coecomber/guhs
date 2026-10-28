@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PHP",
+    "FSF",
+    "PDP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "H": "minecraft:hay_block",
+    "F": "#minecraft:wooden_fences",
+    "S": "minecraft:shears",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:scheerstal",
+    "count": 1
+  }
+}

@@ -367,4 +367,32 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
   ],
+  "quest.475548A8AACBBEF7.title": "Snorrende spinmachine",
+  "quest.475548A8AACBBEF7.quest_desc": [
+    "Bouw een &dSpinmachine&r en spin &fpluis&r tot wol: 2 pluis is 1 witte wol. Pluis krijg je van Wolkenschaapjes (scheren) of uit de Knuffelrecycler.",
+  ],
+  "quest.4755487539D5A8EA.title": "Plons in het verfbad",
+  "quest.4755487539D5A8EA.quest_desc": [
+    "Leg wol en kleurstof in het &dVerfbad&r: het verft alles wat het spel kan verven, ook glas, klei en knuffelblokken.",
+  ],
+  "quest.475548070DEA1A7F.title": "Scheerstal",
+  "quest.475548070DEA1A7F.quest_desc": [
+    "Zet tamme &dWolkenschaapjes&r rond een &dScheerstal&r: hij scheert ze vanzelf. Tem ze met pluisgras of wolkensuikerspin en kweek ze met wolkensuikerspin!",
+  ],
+  "quest.475548F127CB5DD5.title": "Niks gaat verloren",
+  "quest.475548F127CB5DD5.quest_desc": [
+    "Stop oude knuffels, guhkleding, wol of kussens in de &dKnuffelrecycler&r: er komt pluis uit.",
+  ],
+  "quest.4755488802E43B45.title": "Bouwblokken in bulk",
+  "quest.4755488802E43B45.quest_desc": [
+    "Leg een &dvoorbeeld&r in de &dBouwblokken-fabriek&r: hij maakt trappen, platen, muurtjes, gladde en gekleurde blokken. Koppel een Bank Guh (Banksleutel) of een kist (sneak + klik, dan de kist).",
+  ],
+  "quest.47554809CF8DAD01.title": "Alle kleuren van de regenboog",
+  "quest.47554809CF8DAD01.quest_desc": [
+    "Maal bloemetjes in de &dKleurmolen&r: 2 tot 3 kleurstof per bloem. Laat een guh het klusje &dBloemetjes plukken&r doen voor een eindeloze voorraad!",
+  ],
+  "quest.4755483CF22A99C0.title": "Regenboogpers",
+  "quest.4755483CF22A99C0.quest_desc": [
+    "Pers pluis met &6kaassaus&r tot elke kleur in de &dRegenboogpers&r. Kies de kleur met sneak + klik, of leg een voorbeeld-kleurstof neer.",
+  ],
 }

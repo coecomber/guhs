@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GPG",
+    "EDE",
+    "IKI"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "P": "minecraft:piston",
+    "E": "guhs:kaas_saus_bucket",
+    "D": "guhs:guh_wire",
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:kleurmolen"
+  },
+  "result": {
+    "id": "guhs:regenboogpers",
+    "count": 1
+  }
+}

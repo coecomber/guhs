@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 51,
+  guhs_chapter_version: 52,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -127,13 +127,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "47554888861B007B",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_fabriek.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 27.568749999999998,
+      y: 31.531249999999996,
       hover: [
         "De Werktuigguh krabt achter zijn oortjes.",
         "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
@@ -2802,6 +2814,232 @@
       x: 16.0,
       y: 24.45,
       shape: "rsquare",
+    },
+    {
+      id: "475548A8AACBBEF7",
+      icon: {
+        id: "guhs:spinmachine",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_spin",
+          id: "4755481FD9A5622B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D834F5AE46",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F68C518838",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755487539D5A8EA",
+      icon: {
+        id: "guhs:verfbad",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_verf",
+          id: "475548F162D5DD6D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484A3469EA3D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755480544300547",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548070DEA1A7F",
+      icon: {
+        id: "guhs:scheerstal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_scheerstal",
+          id: "475548A27936C5C3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B4F1B5CB98",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548695B1BB8C5",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548F127CB5DD5",
+      icon: {
+        id: "guhs:knuffelrecycler",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_recycler",
+          id: "47554886020433B0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DCAC0F06C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755486B94484A4C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755488802E43B45",
+      icon: {
+        id: "guhs:bouwblokken_fabriek",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_bouwblokken",
+          id: "475548DA4C8DB0C9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554869ADB781D1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548CFAF9625DA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 28.412499999999998,
+      shape: "gear",
+    },
+    {
+      id: "47554809CF8DAD01",
+      icon: {
+        id: "guhs:kleurmolen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_kleurmolen",
+          id: "475548D4C10AB97D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C5597044F8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554843ED1383F0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755483CF22A99C0",
+      icon: {
+        id: "guhs:regenboogpers",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fabriek_regenboogpers",
+          id: "475548B503832D72",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484995861711",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755488353C348FE",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 28.412499999999998,
+      shape: "gear",
     },
   ],
 }

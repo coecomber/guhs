@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "WDW",
+    "SKS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:water_bucket",
+    "D": "guhs:guh_wire",
+    "S": "#minecraft:stone_crafting_materials",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:verfbad",
+    "count": 1
+  }
+}

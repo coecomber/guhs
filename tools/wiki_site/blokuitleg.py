@@ -2209,3 +2209,55 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+# <fabriek> (1.8.0 vadskracht, tools/features/fabriek.py: de Fabriekshal)
+UITLEG["spinmachine"] = dict(
+    nl="Spint pluis tot witte wol: 2 pluis (of wolkenpluis) is 1 wol. Hij heeft vadskracht nodig. Rechtsklik voor het scherm, "
+       "of laat een knabbelbuis het pluis brengen en de wol ophalen.",
+    en="Spins fluff into white wool: 2 fluff (or cloud fluff) is 1 wool. It needs vadskracht. Right-click for the screen, "
+       "or let a nibble pipe bring the fluff and take the wool.")
+UITLEG["verfbad"] = dict(
+    nl="Leg bovenin wol (of iets anders dat je kunt verven: glas, klei, knuffelblokken...) en onderin kleurstof. Het bad "
+       "verft het blok zoals het spel het zou verven: wol 1 per kleurstof, glas en klei 8 per kleurstof. Heeft vadskracht nodig.",
+    en="Put wool (or anything else you can dye: glass, clay, cuddle blocks...) in the top slot and dye in the bottom one. The "
+       "bath dyes the block the way the game would: wool 1 per dye, glass and clay 8 per dye. Needs vadskracht.")
+UITLEG["knuffelrecycler"] = dict(
+    nl="Versnippert wat niemand meer gebruikt tot pluis: wol (2), tapijt (1), knuffels (4), guhkleding (3) en kussens (3). "
+       "Heeft vadskracht nodig.",
+    en="Shreds what nobody uses any more into fluff: wool (2), carpet (1), plushies (4), guh clothes (3) and cushions (3). "
+       "Needs vadskracht.")
+UITLEG["scheerstal"] = dict(
+    nl="Een stalletje met een scheermachine. Houd tamme Wolkenschaapjes binnen 6 blokken (zet er een hekje omheen): elke "
+       "5 seconden scheert hij een pluizig schaapje en bewaart het wolkenpluis in zijn 9 vakjes. Heeft vadskracht nodig.",
+    en="A little stable with a shearing machine. Keep tame Cloud Lambs within 6 blocks (put a fence around them): every "
+       "5 seconds it shears a fluffy lamb and keeps the cloud fluff in its 9 slots. Needs vadskracht.")
+UITLEG["bouwblokken_fabriek"] = dict(
+    nl="Een slimme steenzaag die ook verft. Leg het blok dat je wilt in het middelste vakje (het voorbeeld, dat blijft liggen). "
+       "Hij maakt het van wat hij heeft: het basisvakje, kleurstof, de gekoppelde Bank Guh, de gekoppelde kist en kisten die "
+       "ernaast staan. Hij kent elke weg van het ene blok naar het andere: steenzaag, oven (gladde blokken), trappen, platen, "
+       "muurtjes, bakstenen en verven.\n"
+       "\n"
+       "- Klik met een Banksleutel op de fabriek: hij koppelt die bank (ook ver weg). Wat hij maakt, gaat de bank in.\n"
+       "- Sneak + lege hand op de fabriek, dan klik je een kist (binnen 16 blokken): die kist is gekoppeld.\n"
+       "- Twee keer sneak-klikken op de fabriek: alle koppelingen los.",
+    en="A smart stonecutter that paints too. Put the block you want in the middle slot (the example, it stays there). It "
+       "makes it from what it has: the base slot, dye, the linked Bank Guh, the linked chest and chests right next to it. It "
+       "knows every way from one block to another: stonecutter, furnace (smooth blocks), stairs, slabs, walls, bricks and dyeing.\n"
+       "\n"
+       "- Click the factory with a Bank Key: it links that bank (far away too). What it makes goes into the bank.\n"
+       "- Sneak + empty hand on the factory, then click a chest (within 16 blocks): that chest is linked.\n"
+       "- Sneak-click the factory twice: all links forgotten.")
+UITLEG["kleurmolen"] = dict(
+    nl="Maalt bloemetjes tot kleurstof, met bonus: wat de bloem normaal geeft plus 1 of 2. Alle 16 kleuren kunnen: "
+       "maanbloemetje geeft zwart, kaasriet groen, guhbloemetje limoen, knabbelkoorbloem cyaan en cacaobonen bruin. Met een "
+       "Banksleutel erop gaat de kleurstof meteen de bank in. Laat een guh het klusje Bloemetjes plukken doen!",
+    en="Grinds flowers into dye, with a bonus: what the flower normally gives plus 1 or 2. All 16 colours are possible: "
+       "moonflower gives black, cheese reed green, guh flower lime, nibble choir flower cyan and cocoa beans brown. With a "
+       "Bank Key on it the dye goes straight into the bank. Let a guh do the chore Picking Flowers!")
+UITLEG["regenboogpers"] = dict(
+    nl="Perst pluis en kaassaus tot elke kleur: 1 pluis + 100 mB kaassaus = 2 kleurstof. Kaassaus komt uit een emmer in het "
+       "emmervakje of uit een Sausvat, sauspomp of sausbuis ernaast. De kleur kies je met sneak + lege hand (de volgende "
+       "kleur), of leg een kleurstof in het voorbeeldvakje. Heeft veel vadskracht nodig.",
+    en="Presses fluff and cheese sauce into any colour: 1 fluff + 100 mB cheese sauce = 2 dye. Cheese sauce comes from a "
+       "bucket in the bucket slot or from a Sauce Vat, sauce pump or sauce pipe next to it. Pick the colour with sneak + empty "
+       "hand (the next colour), or put a dye in the example slot. Needs a lot of vadskracht.")
+# </fabriek>

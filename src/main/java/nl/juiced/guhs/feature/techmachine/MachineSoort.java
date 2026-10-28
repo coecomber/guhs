@@ -21,7 +21,22 @@ public enum MachineSoort {
     /** The Bouwtekening, nine slots of supplies (in), three of what it made (out). */
     KNUTSELMACHINE(13),
     /** The saplings (in). */
-    PLANTAGEBAK(1);
+    PLANTAGEBAK(1),
+    // 1.8.0 (vadskracht, de Fabriekshal: feature/fabriek)
+    /** Pluis (in), wool (out). */
+    SPINMACHINE(2),
+    /** Wool or another block to dye (in), the dye (in), the dyed blocks (out). */
+    VERFBAD(3),
+    /** What is to be shredded (in), the pluis (out). */
+    KNUFFELRECYCLER(2),
+    /** Nine slots of pluis (out). */
+    SCHEERSTAL(9),
+    /** The basis block (in), a dye (in), the example of what to make (in, one), nine slots of what it made (out). */
+    BOUWBLOKKEN_FABRIEK(12),
+    /** Flowers (in), dye (out). */
+    KLEURMOLEN(2),
+    /** Pluis (in), a kaassaus bucket (in), the example dye (in, one), the dye (out), the empty buckets (out). */
+    REGENBOOGPERS(5);
 
     public final int vakken;
 
@@ -40,6 +55,12 @@ public enum MachineSoort {
             case VADSMOLEN -> vak == 0 ? 53 : 107;
             case KNUTSELMACHINE -> vak == 0 ? 17 : vak <= 9 ? 53 + ((vak - 1) % 3) * 18 : 143;
             case PLANTAGEBAK -> 80;
+            case SPINMACHINE, KNUFFELRECYCLER -> vak == 0 ? 53 : 107;
+            case VERFBAD -> vak <= 1 ? 44 : 116;
+            case SCHEERSTAL -> 62 + (vak % 3) * 18;
+            case BOUWBLOKKEN_FABRIEK -> vak <= 1 ? 17 : vak == 2 ? 53 : 107 + ((vak - 3) % 3) * 18;
+            case KLEURMOLEN -> vak == 0 ? 53 : 107;
+            case REGENBOOGPERS -> vak == 2 ? 17 : vak <= 1 ? 44 : 116;
         };
     }
 
@@ -50,6 +71,12 @@ public enum MachineSoort {
             case VADSMOLEN -> 35;
             case KNUTSELMACHINE -> vak == 0 ? 35 : vak <= 9 ? 17 + ((vak - 1) / 3) * 18 : 17 + (vak - 10) * 18;
             case PLANTAGEBAK -> 35;
+            case SPINMACHINE, KNUFFELRECYCLER -> 35;
+            case VERFBAD -> vak == 0 ? 26 : vak == 1 ? 44 : 35;
+            case SCHEERSTAL -> 17 + (vak / 3) * 18;
+            case BOUWBLOKKEN_FABRIEK -> vak == 0 ? 17 : vak == 1 ? 53 : vak == 2 ? 35 : 17 + ((vak - 3) / 3) * 18;
+            case KLEURMOLEN -> 35;
+            case REGENBOOGPERS -> vak == 2 ? 35 : vak == 0 || vak == 3 ? 26 : 44;
         };
     }
 
@@ -60,6 +87,12 @@ public enum MachineSoort {
             case NEERZETTER, PLANTAGEBAK -> true;
             case VADSMOLEN -> vak == 0;
             case KNUTSELMACHINE -> vak <= 9;
+            case SPINMACHINE, KNUFFELRECYCLER -> vak == 0;
+            case VERFBAD -> vak <= 1;
+            case SCHEERSTAL -> false;
+            case BOUWBLOKKEN_FABRIEK -> vak <= 2;
+            case KLEURMOLEN -> vak == 0;
+            case REGENBOOGPERS -> vak <= 2;
         };
     }
 
@@ -70,6 +103,12 @@ public enum MachineSoort {
             case NEERZETTER, PLANTAGEBAK -> false;
             case VADSMOLEN -> vak == 1;
             case KNUTSELMACHINE -> vak >= 10;
+            case SPINMACHINE, KNUFFELRECYCLER -> vak == 1;
+            case VERFBAD -> vak == 2;
+            case SCHEERSTAL -> true;
+            case BOUWBLOKKEN_FABRIEK -> vak >= 3;
+            case KLEURMOLEN -> vak == 1;
+            case REGENBOOGPERS -> vak >= 3;
         };
     }
 
@@ -78,6 +117,8 @@ public enum MachineSoort {
         return switch (this) {
             case VADSMOLEN -> 77;
             case KNUTSELMACHINE -> 113;
+            case SPINMACHINE, KNUFFELRECYCLER, VERFBAD -> 77;
+            case BOUWBLOKKEN_FABRIEK, KLEURMOLEN, REGENBOOGPERS -> 77;
             default -> -1;
         };
     }
