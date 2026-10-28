@@ -132,7 +132,11 @@ public class VallendeSter extends Entity implements ItemSupplier {
         if (isRemoved() || !(level() instanceof ServerLevel level)) {
             return false;
         }
-        ItemStack zand = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), level.getRandom().nextInt(4) == 0 ? 2 : 1);
+        int n = level.getRandom().nextInt(4) == 0 ? 2 : 1;
+        if (nl.juiced.guhs.feature.slaapkleding.Droompyjama.draagtSet(p) && level.getRandom().nextBoolean()) {
+            n++;                                           // (the droompyjama's set bonus)
+        }
+        ItemStack zand = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), n);
         if (!p.getInventory().add(zand)) {
             p.drop(zand, false);
         }

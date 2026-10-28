@@ -53,11 +53,16 @@ public final class DroomsfeerClient {
 
     /** {hold, clear} in milliseconds per kind: fully covered for {@code hold}, then clearing over {@code clear}. */
     private static int[] duur(Soort soort) {
-        return switch (soort) {
+        int[] d = switch (soort) {
             case INSLAPEN -> new int[]{2200, 1800};
             case WAKKER -> new int[]{1600, 1600};
             case ZWEEF -> new int[]{250, 700};
         };
+        if (soort != Soort.ZWEEF && nl.juiced.guhs.feature.slaapkleding.Droompyjama.draagtSet(Minecraft.getInstance().player)) {
+            float f = nl.juiced.guhs.feature.slaapkleding.Droompyjama.FADE_FACTOR;   // (the droompyjama's set bonus)
+            d = new int[]{(int) (d[0] * f), (int) (d[1] * f)};
+        }
+        return d;
     }
 
     private static int kleur(Soort soort) {

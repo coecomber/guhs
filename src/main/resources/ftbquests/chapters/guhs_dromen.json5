@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 49,
+  guhs_chapter_version: 50,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -85,7 +85,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 12.70625,
+      y: 14.20625,
       hover: [
         "Komt na: Guh! (Guhs \\& basis)",
       ],
@@ -97,7 +97,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 12.70625,
+      y: 14.20625,
       hover: [
         "Komt na: Guh! (Guhs \\& basis)",
       ],
@@ -652,6 +652,74 @@
       y: 10.525,
     },
     {
+      id: "475548656F3828E6",
+      icon: {
+        id: "guhs:slaapmasker",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:slaapmasker",
+          },
+          id: "475548FD62798E47",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554868F6590182",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F0D6AD9E98",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 10.525,
+    },
+    {
+      id: "47554859B38EC590",
+      icon: {
+        id: "guhs:droompyjama_jasje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:droompyjama_jasje",
+          },
+          id: "475548423445DB39",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548516262C0FF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481ACE79EC3B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+    },
+    {
       id: "475548D53271A68D",
       icon: {
         id: "guhs:droomkussen",
@@ -818,7 +886,7 @@
         },
       ],
       x: 0.0,
-      y: 14.4875,
+      y: 15.9875,
       shape: "circle",
     },
     {
@@ -851,7 +919,7 @@
         },
       ],
       x: 1.5,
-      y: 14.4875,
+      y: 15.9875,
     },
     {
       id: "4755485ACF95347D",
@@ -883,7 +951,7 @@
         },
       ],
       x: 3.0,
-      y: 14.4875,
+      y: 15.9875,
     },
     {
       id: "475548F3EF5FF035",
@@ -915,7 +983,7 @@
         },
       ],
       x: 4.5,
-      y: 14.4875,
+      y: 15.9875,
     },
     {
       id: "47554852AFFDA1C4",
@@ -947,7 +1015,7 @@
         },
       ],
       x: 6.0,
-      y: 14.4875,
+      y: 15.9875,
     },
     {
       id: "475548C7DE216EF7",
@@ -979,7 +1047,7 @@
         },
       ],
       x: 7.5,
-      y: 14.4875,
+      y: 15.9875,
     },
     {
       id: "47554856B807A963",
@@ -1011,7 +1079,7 @@
         },
       ],
       x: 9.0,
-      y: 14.4875,
+      y: 15.9875,
       shape: "hexagon",
     },
     {
@@ -1043,7 +1111,7 @@
         },
       ],
       x: 11.5,
-      y: 14.4875,
+      y: 15.9875,
       shape: "circle",
     },
     {
@@ -1078,7 +1146,7 @@
         },
       ],
       x: 13.0,
-      y: 14.4875,
+      y: 15.9875,
     },
   ],
 }

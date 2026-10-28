@@ -181,7 +181,8 @@ FTB_SECTIES = [
                                                           "dr_blub_meterkaart_rij", "dr_blub_meterkaart_goud"]),
     ("dr_weer", "De Weer vadser", "item:guhs:weer_vadser", ["dr_weer_vadser", "dr_weer_bellen", "dr_weer_regenboog", "dr_weer_droom"]),
     ("dr_slaap", "Slaap lekker, guh", "item:guhs:muziekdoosje",
-     ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
+     ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal",
+      "dr_slaapkleding", "dr_droompyjama"]),
     ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras"]),
     ("dr_snoes", "De droom van Snoes", "item:guhs:roze_guh_koek",
      ["dr_snoes_proloog"] + [f"dr_snoes_{s}" for s in STUKJES] + ["dr_snoes_finale"]),
@@ -232,6 +233,12 @@ def ftb(fq):
       "daar geeft je de eerste keer het &dweerpotje: droomweer&r: Guhdromenland voor thuis!", "guhs:weerpotje_droom",
       [item("guhs:weerpotje_droom")], xp=150)
     # --- sleeping well ----------------------------------------------------------------------------------------------------
+    # (1.8.0 U2 slaapkleding: sleepy guh clothes from the droomwinkeltje, and the player's droompyjama)
+    q("dr_slaapkleding", "Lekker slaperig aangekleed", "Koop in het &ddroomwinkeltje&r van de Zandguh op het Droomplein een stukje "
+      "slaapkleding voor je guh, bijvoorbeeld een &dslaapmasker&r. Maak het op (rechtsklik) en trek het aan in de kledingkast.",
+      "guhs:slaapmasker", [item("guhs:slaapmasker")], xp=100)
+    q("dr_droompyjama", "Droompyjama", "Maak een &ddroompyjama&r van wol, droomzand en maanbloemetjes. Met de hele set aan droom "
+      "je net iets fijner!", "guhs:droompyjama_jasje", [item("guhs:droompyjama_jasje")], xp=100)
     q("dr_doos", "Een guh kiest altijd de doos", "Maak een &6doos met knabbels&r. 's Avonds stop je er je guh in (rechtsklik), en 's "
       "nachts kruipen guhs er zelf in.", "guhs:doos_knabbels", [item("guhs:doos_knabbels")], xp=50)
     q("dr_kattenhuisje", "Kattenhuisje", "Een &dkattenhuisje&r in roze, wit, lavendel of mint. Heel mooi. (De doos wint toch.)",

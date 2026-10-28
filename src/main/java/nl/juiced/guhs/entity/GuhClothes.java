@@ -611,6 +611,21 @@ public enum GuhClothes {
     HANDDOEK_TULBAND(Slot.HEAD, "outfit_theemutsje"),
     // </structuren2>
     // 1.7.0 released: the order above is frozen (saved by number). New pieces only go below this line.
+    // 1.8.0 Guhdromenland (feature/slaapkleding, tools/features/slaapkleding.py): sleepy clothes on existing bones, our own textures
+    // <slaapkleding>
+    /** A lavender sleep mask with embroidered closed guh eyes and little stars (the racebril bones). */
+    SLAAPMASKER(Slot.EYES, "outfit_racebril"),
+    /** A long nightie with little moons and a lace hem (the suit bones). */
+    NACHTJAPONNETJE(Slot.BODY, "outfit_suit"),
+    /** A night-blue sleeping cap with a moon and a hanging star for a pompom (the slaapmutsje bones). */
+    MAANMUTSJE(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Two fluffy little clouds as ear warmers (the ear warmer bones). */
+    OORWOLKJES(Slot.OREN, "outfit_oren_warmer"),
+    /** Slippers shaped like a Blub: light blue with the three stripes, little flat ears on top (low shell + flap). */
+    BLUB_SLOFFEN(Slot.FEET, "outfit_voet_laag", "outfit_voet_flap"),
+    /** A plush Blub riding on the back (the backpack bones). */
+    KNUFFELTJE(Slot.BACK, "outfit_backpack"),
+    // </slaapkleding>
     ;
 
     /**

@@ -245,7 +245,7 @@ public final class DroomSlapen {
     /** The talking screen's sleutel of the bed question ("gewoon slapen" or "dromen"). */
     static final String SLEUTEL = "dromen_bed";
     /** After how many sleeping ticks the bed question comes (before the night is over: the night skips at 100). */
-    static final int VRAAG_TICKS = 12;
+    public static final int VRAAG_TICKS = 12;
     /** Blocks a player sleeps in that count as a bed for dreaming (and for Snoes): beds, the wolkenbed, the guh-slaapzak. */
     public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> DROOMBEDDEN =
             net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, nl.juiced.guhs.Guhs.id("droombedden"));
@@ -266,7 +266,7 @@ public final class DroomSlapen {
 
     /** Lying in bed with a dream buddy close by: a question, gewoon slapen or dromen (playtest: never straight into the dream). */
     private static void onSpelerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof ServerPlayer p) || !p.isSleeping() || p.getSleepTimer() != VRAAG_TICKS || DroomReis.inDroom(p)) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || !p.isSleeping() || p.getSleepTimer() != (nl.juiced.guhs.feature.slaapkleding.Droompyjama.draagtSet(p) ? nl.juiced.guhs.feature.slaapkleding.Droompyjama.VRAAG_TICKS : VRAAG_TICKS) || DroomReis.inDroom(p)) {
             return;
         }
         BlockPos bed = p.getSleepingPos().orElse(p.blockPosition());
