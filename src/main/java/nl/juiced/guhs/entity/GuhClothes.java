@@ -626,6 +626,13 @@ public enum GuhClothes {
     /** A plush Blub riding on the back (the backpack bones). */
     KNUFFELTJE(Slot.BACK, "outfit_backpack"),
     // </slaapkleding>
+    // 1.8.0 Vadskracht (feature/raket, tools/features/raket.py): the crew of the Kaasraket, on existing bones, our own textures
+    // <raket>
+    /** A white space suit with a cheese patch and a little pink guh flag on the chest (the suit bones). */
+    ASTRONAUTENPAKJE(Slot.BODY, "outfit_suit"),
+    /** A round white space helmet with a see-through visor (the circuit helmet bones). */
+    ASTRONAUTENHELM(Slot.HEAD, "outfit_circuit_helm", "outfit_circuit_helm_vizier"),
+    // </raket>
     ;
 
     /**

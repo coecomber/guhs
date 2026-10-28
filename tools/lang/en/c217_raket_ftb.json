@@ -1,0 +1,17 @@
+{
+  "ftb.guhs_techniek.q.raket_platform.title": "A place to launch",
+  "ftb.guhs_techniek.q.raket_platform.desc": "Make a &dLaunch Pad&r (iron blocks, knuffelsteen and a nibble battery) and put it somewhere open: the rocket gets big!",
+  "ftb.guhs_techniek.q.raket_romp.title": "The hull",
+  "ftb.guhs_techniek.q.raket_romp.desc": "Click the pad with &d64 knuffelsteen&r, &d24 iron&r and &d16 glass&r (in portions is fine).",
+  "ftb.guhs_techniek.q.raket_motor.title": "The engine",
+  "ftb.guhs_techniek.q.raket_motor.desc": "Two &dnibble batteries&r, a &dGuh Oven&r, &d4 iron blocks&r and &d16 redstone&r. Vroom!",
+  "ftb.guhs_techniek.q.raket_brandstof.title": "The fuel",
+  "ftb.guhs_techniek.q.raket_brandstof.desc": "&d24 blocks of cheese nibbles&r and &d4 buckets of cheese sauce&r. Rockets run on cheese, everybody knows that.",
+  "ftb.guhs_techniek.q.raket_bemanning.title": "The crew",
+  "ftb.guhs_techniek.q.raket_bemanning.desc": "Dress three of your guhs in an &dastronaut suit&r (wool and glass), take them to the pad and click it.",
+  "ftb.guhs_techniek.q.raket_gelanceerd.title": "Liftoff!",
+  "ftb.guhs_techniek.q.raket_gelanceerd.desc": "Click the pad: countdown, engines on, and off goes the rocket!",
+  "ftb.guhs_techniek.q.kaasmaan_vlag.title": "One small step",
+  "ftb.guhs_techniek.q.kaasmaan_vlag.desc": "Plant a &dlittle moon flag&r on the Cheese Moon. Chip &dcheese moon crystals&r in the craters and swap them with &dAstronaut Kaasje&r for souvenirs.",
+  "ftb.guhs_techniek.section.raket": "The Cheese Rocket"
+}

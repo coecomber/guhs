@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IKI",
+    "KBK",
+    "IKI"
+  ],
+  "key": {
+    "I": "minecraft:iron_block",
+    "K": "guhs:knuffelsteen",
+    "B": "guhs:knabbelbatterij"
+  },
+  "result": {
+    "id": "guhs:lanceerplatform",
+    "count": 1
+  }
+}

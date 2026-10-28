@@ -1,0 +1,26 @@
+{
+  "type": "guhs:kaasmaan",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:kaasmaan",
+      "lakes": false,
+      "features": false,
+      "structure_overrides": [],
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "guhs:kaaskorst",
+          "height": 50
+        },
+        {
+          "block": "guhs:gatenkaas",
+          "height": 4
+        }
+      ]
+    }
+  }
+}

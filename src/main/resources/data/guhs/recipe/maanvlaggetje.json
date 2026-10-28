@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SP",
+    "S ",
+    "S "
+  ],
+  "key": {
+    "S": "minecraft:iron_ingot",
+    "P": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:maanvlaggetje",
+    "count": 1
+  }
+}

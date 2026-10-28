@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WGW"
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "G": "minecraft:light_blue_stained_glass_pane"
+  },
+  "result": {
+    "id": "guhs:astronautenhelm",
+    "count": 1
+  }
+}

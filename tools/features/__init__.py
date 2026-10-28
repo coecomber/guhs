@@ -164,6 +164,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsbasis']
             # 1.8.0 V3-V5: the Fossiel-broedmachine and the oerguhs (append only)
             'fossiel']
+            # 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan (append only)
+            'raket']
 
 
 def modules():
