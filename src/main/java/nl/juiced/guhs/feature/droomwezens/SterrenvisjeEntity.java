@@ -156,6 +156,17 @@ public class SterrenvisjeEntity extends AbstractSchoolingFish implements GeoEnti
 
     // --- sounds -------------------------------------------------------------------------------------------------------------
 
+    /** (droomsfeer) a tiny twinkly plink now and then: its own sound event, inspiration/Dromen audio/sterrenvisje */
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return nl.juiced.guhs.feature.droomsfeer.DroomGeluid.STERRENVISJE.get();
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return nl.juiced.guhs.feature.droomsfeer.DroomGeluid.STERRENVISJE.volume;
+    }
+
     @Override
     protected SoundEvent getFlopSound() {
         return SoundEvents.TROPICAL_FISH_FLOP;

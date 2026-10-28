@@ -284,6 +284,7 @@ def dimensie(h):
             "minecraft:visual/cloud_height": 64.33,
             "minecraft:visual/fog_color": "#e9b4e0",
             "minecraft:visual/sky_color": "#8e6cc8",
+            "neoforge:custom_skybox": "guhs:guhdromenland",   # (droomsfeer: client DroomLucht, moon + stars + falling stars)
         },
         "has_skylight": True,
         "has_ceiling": False,

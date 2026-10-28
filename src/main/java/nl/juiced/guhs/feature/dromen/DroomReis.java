@@ -10,9 +10,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -20,8 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,7 +30,7 @@ import nl.juiced.guhs.storage.Nbt;
  * Into the dream and back (ontwerp ronde 3):
  * <ul>
  *   <li>{@link #naarDroom}: remembers exactly where you lay (your home: dimension, spot, look), builds the islands when
- *       needed, and puts you on the island of the dream with a soft fade (a moment of blindness and a title). You get a
+ *       needed, and puts you on the island of the dream with a soft fade (droomsfeer: DroomsfeerFeature.fade). You get a
  *       droomkussen when you have none.</li>
  *   <li>{@link #wakker}: back to your home spot, the guh you tucked in wakes up with a yawn next to you, and what you
  *       gave it comes back. Ways to wake: the droomkussen, the Wekkerguh, and dying in a dream (no loss, see DroomRegels).</li>
@@ -92,10 +87,8 @@ public final class DroomReis {
             p.stopSleepInBed(true, true);
         }
         DroomEilanden.zorg(droom);
-        p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0, false, false, false));
+        nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.fade(p, nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.Soort.INSLAPEN, eiland);   // (droomsfeer: a soft fade instead of blindness and a title)
         zetOp(p, droom, eiland, DroomEilanden.opzet(eiland).aankomst());
-        titel(p, Component.translatable("gui.guhs.dromen.titel").withStyle(ChatFormatting.LIGHT_PURPLE),
-                Component.translatable("gui.guhs.dromen.eiland." + eiland).withStyle(ChatFormatting.WHITE));
         p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 0.7f);
         if (!heeftKussen(p)) {
             Minigames.give(p, new ItemStack(DromenFeature.DROOMKUSSEN.get()));
@@ -127,11 +120,10 @@ public final class DroomReis {
         DroomEilanden.zorg(level, eiland);
         level.sendParticles(ParticleTypes.BUBBLE_POP, p.getX(), p.getY() + 1, p.getZ(), 30, 0.6, 0.8, 0.6, 0.05);
         level.playSound(null, p.blockPosition(), SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, SoundSource.PLAYERS, 1f, 1.2f);
-        p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20, 0, false, false, false));
+        nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.fade(p, nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.Soort.ZWEEF, eiland);
         zetOp(p, level, eiland, DroomEilanden.opzet(eiland).aankomst());
         level.sendParticles(ParticleTypes.BUBBLE_POP, p.getX(), p.getY() + 1, p.getZ(), 30, 0.6, 0.8, 0.6, 0.05);
         level.playSound(null, p.blockPosition(), SoundEvents.BUBBLE_POP, SoundSource.PLAYERS, 1f, 1.1f);
-        p.sendOverlayMessage(Component.translatable("gui.guhs.dromen.eiland." + eiland).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** Ticks since this player arrived somewhere in the dream (steigers wait a moment after an arrival). */
@@ -162,15 +154,13 @@ public final class DroomReis {
             return false;
         }
         TeleportTransition tr = thuis(p);
-        p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 30, 0, false, false, false));
+        nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.fade(p, nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.Soort.WAKKER, "");
         p.teleport(tr);
         p.setDeltaMovement(Vec3.ZERO);
         p.resetFallDistance();
         DroomRegels.weg(p);
         DroomSlapen.wekGuh(p, true);
         geefMeeTerug(p);
-        titel(p, Component.translatable("gui.guhs.dromen.wakker.titel").withStyle(ChatFormatting.GOLD),
-                Component.translatable("gui.guhs.dromen.wakker.sub").withStyle(ChatFormatting.WHITE));
         p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 0.6f, 1.6f);
         return true;
     }
@@ -227,11 +217,5 @@ public final class DroomReis {
 
     private static boolean heeftKussen(ServerPlayer p) {
         return p.getInventory().contains(new ItemStack(DromenFeature.DROOMKUSSEN.get()));
-    }
-
-    static void titel(ServerPlayer p, Component titel, Component sub) {
-        p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 50, 20));
-        p.connection.send(new ClientboundSetSubtitleTextPacket(sub));
-        p.connection.send(new ClientboundSetTitleTextPacket(titel));
     }
 }

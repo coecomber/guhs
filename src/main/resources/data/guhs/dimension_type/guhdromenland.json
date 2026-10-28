@@ -24,7 +24,8 @@
     "minecraft:visual/cloud_color": "#ccffd2ee",
     "minecraft:visual/cloud_height": 64.33,
     "minecraft:visual/fog_color": "#e9b4e0",
-    "minecraft:visual/sky_color": "#8e6cc8"
+    "minecraft:visual/sky_color": "#8e6cc8",
+    "neoforge:custom_skybox": "guhs:guhdromenland"
   },
   "has_skylight": true,
   "has_ceiling": false,
