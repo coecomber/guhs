@@ -1,0 +1,108 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voor": "guhs:block/slaapzorg/nachtkastje_voor",
+    "zij": "guhs:block/slaapzorg/nachtkastje_zij",
+    "top": "guhs:block/slaapzorg/nachtkastje_top",
+    "kap": "guhs:block/slaapzorg/nachtkastje_kap_aan",
+    "particle": "guhs:block/slaapzorg/nachtkastje_voor"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        13,
+        7
+      ],
+      "to": [
+        9,
+        14,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "north": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        14,
+        5
+      ],
+      "to": [
+        11,
+        16,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap"
+        },
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        }
+      }
+    }
+  ]
+}

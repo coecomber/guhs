@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W",
+    "S",
+    "W"
+  ],
+  "key": {
+    "W": "minecraft:light_blue_wool",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "guhs:krabpaal_blauw",
+    "count": 1
+  }
+}

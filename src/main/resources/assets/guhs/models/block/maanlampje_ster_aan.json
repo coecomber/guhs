@@ -1,0 +1,62 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voet": "guhs:block/slaapzorg/maanlampje_voet",
+    "vorm": "guhs:block/slaapzorg/maanlampje_ster_aan",
+    "particle": "guhs:block/slaapzorg/maanlampje_voet"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        6.5
+      ],
+      "to": [
+        11,
+        1,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        1,
+        7.5
+      ],
+      "to": [
+        12,
+        10,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vorm"
+        },
+        "south": {
+          "texture": "#vorm"
+        }
+      }
+    }
+  ]
+}

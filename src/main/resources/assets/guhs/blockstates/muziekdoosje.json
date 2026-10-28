@@ -1,0 +1,199 @@
+{
+  "variants": {
+    "facing=north,speelt=0": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=0": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=0": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=0": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=1": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=1": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=1": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=1": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=2": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=2": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=2": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=2": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=3": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=3": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=3": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=3": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=4": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=4": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=4": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=4": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=5": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=5": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=5": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=5": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=6": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=6": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=6": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=6": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=7": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=7": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=7": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=7": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=8": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=8": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=8": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=8": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=9": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=9": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=9": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=9": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=10": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=10": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=10": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=10": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=11": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=11": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=11": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=11": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    },
+    "facing=north,speelt=12": {
+      "model": "guhs:block/muziekdoosje"
+    },
+    "facing=east,speelt=12": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 90
+    },
+    "facing=south,speelt=12": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 180
+    },
+    "facing=west,speelt=12": {
+      "model": "guhs:block/muziekdoosje",
+      "y": 270
+    }
+  }
+}

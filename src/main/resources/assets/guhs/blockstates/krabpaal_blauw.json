@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/krabpaal_blauw"
+    },
+    "facing=east": {
+      "model": "guhs:block/krabpaal_blauw",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/krabpaal_blauw",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/krabpaal_blauw",
+      "y": 270
+    }
+  }
+}

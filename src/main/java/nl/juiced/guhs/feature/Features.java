@@ -164,6 +164,7 @@ public final class Features {
         nl.juiced.guhs.feature.weer.WeerFeature.register(modBus);   // 1.8.0: the Weer vadser (weather zones, guh-weertjes)
         nl.juiced.guhs.feature.droomblokken.DroomblokkenFeature.register(modBus);   // 1.8.0 (Guhdromenland): droomzand and the dream blocks
         nl.juiced.guhs.feature.dromen.DromenFeature.register(modBus);   // 1.8.0: Guhdromenland (the dream dimension, tucking in, the islands)
+        nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.register(modBus);   // 1.8.0 (Guhdromenland B): slaapzorg, sleepy guhs, sleeping spots, lullaby, breakfast in bed
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -418,6 +419,7 @@ public final class Features {
         nl.juiced.guhs.feature.weer.WeerFeature.creative(output);   // 1.8.0: the Weer vadser and the weerpotjes
         nl.juiced.guhs.feature.droomblokken.DroomblokkenFeature.creative(output);   // 1.8.0: droomzand and the dream blocks
         nl.juiced.guhs.feature.dromen.DromenFeature.creative(output);   // 1.8.0: doos met knabbels, kattenhuisjes, droomkussen
+        nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.creative(output);   // 1.8.0: the slaapkamer-set, maannachtlampjes, krabpalen
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

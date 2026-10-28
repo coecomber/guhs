@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/slaapmasker_kapstok"
+    },
+    "facing=east": {
+      "model": "guhs:block/slaapmasker_kapstok",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/slaapmasker_kapstok",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/slaapmasker_kapstok",
+      "y": 270
+    }
+  }
+}

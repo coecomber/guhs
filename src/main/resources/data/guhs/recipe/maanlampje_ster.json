@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "X",
+    "G",
+    "P"
+  ],
+  "key": {
+    "X": "minecraft:gold_nugget",
+    "G": "minecraft:glowstone_dust",
+    "P": "minecraft:cherry_planks"
+  },
+  "result": {
+    "id": "guhs:maanlampje_ster",
+    "count": 1
+  }
+}

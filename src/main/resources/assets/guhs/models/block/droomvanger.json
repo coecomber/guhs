@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "dv": "guhs:block/slaapzorg/droomvanger",
+    "particle": "guhs:block/slaapzorg/droomvanger"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        15.5
+      ],
+      "to": [
+        15,
+        16,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dv"
+        },
+        "south": {
+          "texture": "#dv"
+        }
+      }
+    }
+  ]
+}

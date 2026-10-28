@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GNG",
+    "PPP"
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "N": "minecraft:note_block",
+    "P": "minecraft:cherry_planks"
+  },
+  "result": {
+    "id": "guhs:muziekdoosje",
+    "count": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "X",
+    "G",
+    "P"
+  ],
+  "key": {
+    "X": "minecraft:pink_dye",
+    "G": "minecraft:glowstone_dust",
+    "P": "minecraft:cherry_planks"
+  },
+  "result": {
+    "id": "guhs:maanlampje_guh",
+    "count": 1
+  }
+}
