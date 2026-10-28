@@ -903,6 +903,24 @@ UITLEG = {
            "- Only to islands you have been to before (Dream Post only delivers to known addresses).\n"
            "- At home it does nothing: it only gets junk mail.",
         meer=[]),
+    "droombrievenbus_wolkje": dict(
+        nl="Het brievenbusje 'Mijn droomwolkje' op het Droomplein, naast de aankomstplek. Na het verhaal van Snoes heb je in "
+           "Guhdromenland je eigen droomwolkje.\n"
+           "\n"
+           "- Klik erop in een droom: Droompost brengt je naar je eigen wolkje (de eerste keer staat er een droomhuisje met een "
+           "nestje en een maanlampje).\n"
+           "- Op je eigen wolkje mag je wel bouwen en slopen; je vriendjes ook, als je ze uitnodigt met /droomwolkje vriend <naam>.\n"
+           "- Op bezoek bij iemand anders: /droomwolkje bezoek <naam>. Kijken mag, bouwen en kistjes openen niet.\n"
+           "- Terug naar het plein: stap op de steiger met de grote zeepbel. Val je eraf, dan brengt een Blub-bubbel je terug.",
+        en="The 'My dream cloud' mailbox on the Dream Square, next to the arrival spot. After Snoes' story you have your own "
+           "dream cloud in Guh Dreamland.\n"
+           "\n"
+           "- Click it in a dream: Dream Post takes you to your own cloud (the first time a little dream house with a nest and "
+           "a moon lamp stands there).\n"
+           "- On your own cloud you may build and break; your friends too, when you invite them with /droomwolkje vriend <name>.\n"
+           "- Visit someone else: /droomwolkje bezoek <name>. Looking is fine, building and opening chests is not.\n"
+           "- Back to the square: step on the jetty with the big bubble. Fall off, and a Blub bubble puts you back.",
+        meer=[]),
     "droombrievenbus_herinnering": dict(
         nl="Een brievenbusje bij het Droomposthuisje op het Droomplein, in Guhdromenland. Klik erop in een droom en "
            "Droompost bezorgt je met een grote zeepbel op het Herinneringseiland.\n"
