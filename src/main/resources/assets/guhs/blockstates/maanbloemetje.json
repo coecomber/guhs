@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "open=true": {
+      "model": "guhs:block/maanbloemetje_open"
+    },
+    "open=false": {
+      "model": "guhs:block/maanbloemetje_dicht"
+    }
+  }
+}

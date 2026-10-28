@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/slaapliedjesgras_top",
+    "side": "guhs:block/slaapliedjesgras_zij",
+    "bottom": "guhs:block/pluiswolblok"
+  }
+}

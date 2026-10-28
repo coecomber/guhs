@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:grass_block",
+    "minecraft:grass_block",
+    "minecraft:grass_block",
+    "minecraft:grass_block",
+    "guhs:droomzand"
+  ],
+  "result": {
+    "id": "guhs:slaapliedjesgras",
+    "count": 4
+  }
+}

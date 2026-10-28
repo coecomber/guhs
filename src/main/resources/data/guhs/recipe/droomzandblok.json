@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ZZZ",
+    "ZZZ",
+    "ZZZ"
+  ],
+  "key": {
+    "Z": "guhs:droomzand"
+  },
+  "result": {
+    "id": "guhs:droomzandblok",
+    "count": 1
+  }
+}

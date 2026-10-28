@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GZG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "Z": "guhs:droomzand"
+  },
+  "result": {
+    "id": "guhs:zeepbelglas",
+    "count": 8
+  }
+}

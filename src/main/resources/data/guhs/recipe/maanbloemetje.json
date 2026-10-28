@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#minecraft:small_flowers",
+    "guhs:droomzand"
+  ],
+  "result": {
+    "id": "guhs:maanbloemetje",
+    "count": 2
+  }
+}

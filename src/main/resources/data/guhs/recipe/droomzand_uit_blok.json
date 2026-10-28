@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:droomzandblok"
+  ],
+  "result": {
+    "id": "guhs:droomzand",
+    "count": 9
+  }
+}

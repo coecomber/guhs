@@ -31281,5 +31281,17 @@
   "gui.guhs.huisje.overzicht.klus.blub_bad.geen_badje": "Geen Blub-bubbelbadje in de buurt",
   "gui.guhs.dagboek.eerste.klusjes_blub_bad": "Bad klaargezet",
   "gui.guhs.dagboek.eerste.klusjes_blub_bad.tekst": "Schuim, schuim, schuim! De guhs gingen erin. Ze roken naar bubbels.",
-  "gui.guhs.wistjedat.klusjes.blub_bad": "Wist je dat er bij %s een bubbelbad klaarstaat? Ik heb het zelf geschuimd!"
+  "gui.guhs.wistjedat.klusjes.blub_bad": "Wist je dat er bij %s een bubbelbad klaarstaat? Ik heb het zelf geschuimd!",
+  "item.guhs.droomzand": "Droomzand",
+  "item.guhs.droomzand.lore": "Glinstert als een slaperig sterretje. De Zandguh zegt: niet in je ogen wrijven, vads!",
+  "block.guhs.zeepbelglas": "Zeepbelglas",
+  "block.guhs.zeepbelglas.lore": "Doorzichtig, met alle kleuren van een zeepbel. Niet prikken, njeg!",
+  "block.guhs.droomzandblok": "Droomzandblok",
+  "block.guhs.droomzandblok.lore": "Negen droomzandjes in één blok. De glittertjes dwarrelen omhoog, want ze willen terug naar de sterren.",
+  "block.guhs.slaapliedjesgras": "Slaapliedjesgras",
+  "block.guhs.slaapliedjesgras.lore": "Neuriet zachtjes als je eroverheen loopt. Op je tenen? Dan slaapt het verder.",
+  "block.guhs.maanbloemetje": "Maanbloemetje",
+  "block.guhs.maanbloemetje.lore": "Gaat alleen 's nachts open en gloeit dan zachtjes. Overdag doet het een dutje, net als een vadsige guh.",
+  "block.guhs.droomzee": "Droomzee",
+  "block.guhs.droomzee.lore": "De zachte zee onder de droomeilandjes. Je zakt er heel langzaam doorheen, als door een wolkje."
 }
