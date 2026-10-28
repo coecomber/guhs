@@ -904,7 +904,7 @@ SECTIONS = {
             module=("guhpixel_guhkade", "guhpixel_kantoor", "guhpixel_bioscoop"), upstream="intro"),
         sec("px_reisbureau", "Reisbureau De Vadsvakantie", "guh:mint", module="guhpixel_reisbureau", upstream="intro"),
         sec("px_parkour", "Guh-parkour", "guh:choco", module="guhpixel_parkour", upstream="intro"),
-        sec("px_gezel", "Gezelschapshoek", "guh:sky", module="guhpixel_gezel", upstream="intro"),
+        sec("px_gezel", "Gezelschapshoek", "guh:pluisguh", module="guhpixel_gezel", upstream="intro"),
     ],
 }
 COLUMNS = {"guhs_onderwater": 1, "guhs_maag": 1, "guhs_guheinde": 1,
