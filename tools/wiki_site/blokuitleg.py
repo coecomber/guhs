@@ -2209,3 +2209,27 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+
+# <koepel>
+UITLEG['mega_oven'] = dict(
+    nl='Een grote bakkerij van 3 bij 2 bij 2 op vadskracht.\n\n- Klik met een lege hand: het volgende bakprogramma (roze broodjes, knabbelkoekjes, guh-taarten, cupcakes, broden).\n- Ingrediënten gaan erin met de hand of met een buis; de baksels gaan er met een buis uit, of sluip + lege hand.\n- Hij bakt meer per ingrediënt dan een werkbank en heeft geen melk nodig.',
+    en='A big bakery of 3 by 2 by 2 on vadskracht.\n\n- Click with an empty hand: the next programme (pink buns, nibble cookies, guh cakes, cupcakes, breads).\n- Ingredients go in by hand or by pipe; the baking comes out by pipe, or sneak + empty hand.\n- It bakes more per ingredient than a crafting table and needs no milk.',
+    meer=[])
+UITLEG['knabbel_weerstation'] = dict(
+    nl='Een weertoren die de Weer vadsers in de buurt groter maakt.\n\n- Voer hem kaasknabbels of knabbelblokken; hij eet één knabbel per 30 seconden.\n- Zolang hij vadskracht en knabbels heeft, maakt elke Weer vadser tot 16 blokken bij hem vandaan zijn weertje over 150 blokken.',
+    en='A weather tower that makes the Weather Vadsers nearby bigger.\n\n- Feed it cheese nibbles or nibble blocks; it eats one nibble per 30 seconds.\n- As long as it has vadskracht and nibbles, every Weather Vadser up to 16 blocks from it makes its weather over 150 blocks.',
+    meer=[])
+UITLEG['sterrenkoepel'] = dict(
+    nl='Het Vadsigheids-monument: hij groeit nooit, hij gaat stralen.\n\n- Klik met kaasknabbels of knabbelblokken: alles uit je hand gaat erin.\n- Bij elk niveau licht een nieuw guh-sterrenbeeld op (12 in totaal) en is iedereen online even uitgerust.\n- Lege hand: de stand en de grootste gevers.\n- De sterren stralen alleen op vadskracht.',
+    en='The Vadsiness Monument: it never grows, it shines.\n\n- Click with cheese nibbles or nibble blocks: everything in your hand goes in.\n- Every level lights up a new guh constellation (12 in all) and everybody online feels rested for a while.\n- Empty hand: the standing and the biggest givers.\n- The stars only shine on vadskracht.',
+    meer=[])
+UITLEG['draaimolen'] = dict(
+    nl='Een draaimolen voor je guhs.\n\n- Klik met een kaasknabbel: dat is een kaartje voor een rit van 30 seconden.\n- Tamme guhs tot 8 blokken ver rijden mee en worden blij: dan doen ze hun klusjes beter en lopen ze harder in een Guhrad.\n- Jij wordt er gezellig van.',
+    en='A merry-go-round for your guhs.\n\n- Click with a cheese nibble: that is a ticket for a ride of 30 seconds.\n- Tame guhs up to 8 blocks away ride along and get happy: then they do their chores better and run faster in a Guh Wheel.\n- It makes you feel cosy.',
+    meer=[])
+UITLEG['wolkenvanger'] = dict(
+    nl='Een schotel die wolkjes tot pluis condenseert.\n\n- Werkt alleen onder de open lucht.\n- Hoe hoger, hoe sneller: op zeeniveau elke 30 seconden een pluisje, vanaf hoogte 192 elke 6 seconden.\n- Een kist of buis eronder krijgt het pluis meteen; anders: klik met een lege hand.',
+    en='A dish that condenses little clouds into fluff.\n\n- Only works under the open sky.\n- The higher, the faster: at sea level a bit of fluff every 30 seconds, from height 192 every 6 seconds.\n- A chest or pipe under it gets the fluff at once; otherwise: click with an empty hand.',
+    meer=[])
+# </koepel>

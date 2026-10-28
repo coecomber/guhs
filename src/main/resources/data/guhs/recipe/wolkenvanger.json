@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    " I ",
+    "IDI"
+  ],
+  "key": {
+    "C": "guhs:wolkenblok_wit",
+    "I": "minecraft:iron_ingot",
+    "D": "minecraft:daylight_detector"
+  },
+  "result": {
+    "id": "guhs:wolkenvanger",
+    "count": 1
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GSG",
+    "KAK"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "guhs:sterrenplafond",
+    "A": "minecraft:amethyst_block",
+    "K": "guhs:block_of_kaasknabbels"
+  },
+  "result": {
+    "id": "guhs:sterrenkoepel",
+    "count": 1
+  }
+}

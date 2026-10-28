@@ -52,6 +52,11 @@
     "guhs:bouwkeet",
     "guhs:vadslamp",
     "guhs:vadsschakelaar",
-    "guhs:weer_vadser"
+    "guhs:weer_vadser",
+    "guhs:mega_oven",
+    "guhs:knabbel_weerstation",
+    "guhs:sterrenkoepel",
+    "guhs:draaimolen",
+    "guhs:wolkenvanger"
   ]
 }

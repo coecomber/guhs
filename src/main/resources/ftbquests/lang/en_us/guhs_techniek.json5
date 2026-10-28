@@ -367,4 +367,24 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
+  "quest.475548A1F7B4CAB5.title": "Baking in Bulk",
+  "quest.475548A1F7B4CAB5.quest_desc": [
+    "Build a &6Mega Oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+  ],
+  "quest.475548344C093E6F.title": "Weather for the Whole Base",
+  "quest.475548344C093E6F.quest_desc": [
+    "Put a &bNibble Weather Station&r next to your Weather Vadser and feed it nibbles: then the weather covers your whole base.",
+  ],
+  "quest.4755481D33D17AEA.title": "A Sky Full of Guhs",
+  "quest.4755481D33D17AEA.quest_desc": [
+    "Build the &dStar Dome&r and feed it nibbles until the first guh constellation lights up.",
+  ],
+  "quest.4755482DD09880EA.title": "A Fair for Guhs",
+  "quest.4755482DD09880EA.quest_desc": [
+    "Build a &dMerry-Go-Round&r and buy a ticket (a cheese nibble): your guhs ride along and get happy.",
+  ],
+  "quest.475548C601C9DF81.title": "Catching Clouds",
+  "quest.475548C601C9DF81.quest_desc": [
+    "Put a &bCloud Catcher&r on the roof: the higher, the more fluff.",
+  ],
 }

@@ -27,12 +27,13 @@ public final class WeerPayloads {
     private WeerPayloads() {
     }
 
-    /** Server to client: every zone of the dimension (centres as BlockPos longs, weathers as ordinals). */
-    public record Zones(List<Long> plekken, List<Integer> weertjes) implements CustomPacketPayload {
+    /** Server to client: every zone of the dimension (centres as BlockPos longs, weathers as ordinals, radii in blocks). */
+    public record Zones(List<Long> plekken, List<Integer> weertjes, List<Integer> stralen) implements CustomPacketPayload {
         public static final Type<Zones> TYPE = new Type<>(Guhs.id("weer_zones"));
         public static final StreamCodec<FriendlyByteBuf, Zones> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list(256)), Zones::plekken,
-                ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(256)), Zones::weertjes, Zones::new);
+                ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(256)), Zones::weertjes,
+                ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(256)), Zones::stralen, Zones::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

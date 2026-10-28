@@ -367,4 +367,24 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
   ],
+  "quest.475548A1F7B4CAB5.title": "Bakken in bulk",
+  "quest.475548A1F7B4CAB5.quest_desc": [
+    "Bake a &6Mega-oven&r: a whole guh bakery of 3 by 2 by 2 on vadskracht. Click with an empty hand to choose what it bakes.",
+  ],
+  "quest.475548344C093E6F.title": "Weer voor de hele basis",
+  "quest.475548344C093E6F.quest_desc": [
+    "Zet een &bKnabbel-weerstation&r naast je Weer vadser en voer hem knabbels: het weertje geldt dan voor je hele basis.",
+  ],
+  "quest.4755481D33D17AEA.title": "Een sterrenhemel van guhs",
+  "quest.4755481D33D17AEA.quest_desc": [
+    "Bouw de &dSterrenkoepel&r en voer hem knabbels tot het eerste guh-sterrenbeeld oplicht.",
+  ],
+  "quest.4755482DD09880EA.title": "Kermis voor guhs",
+  "quest.4755482DD09880EA.quest_desc": [
+    "Bouw een &dDraaimolen&r en koop een kaartje (een kaasknabbel): je guhs rijden mee en worden blij.",
+  ],
+  "quest.475548C601C9DF81.title": "Wolken vangen",
+  "quest.475548C601C9DF81.quest_desc": [
+    "Zet een &bWolkenvanger&r op het dak: hoe hoger, hoe meer pluis.",
+  ],
 }
