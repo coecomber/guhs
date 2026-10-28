@@ -2294,3 +2294,33 @@ UITLEG['wolkenantenne_1'] = dict(
 UITLEG['wolkenantenne_2'] = UITLEG['wolkenantenne_1']
 UITLEG['wolkenantenne_3'] = UITLEG['wolkenantenne_1']
 # </vadsbasis>
+UITLEG["fossiel_broedmachine"] = dict(
+    nl="Broedt uit een fossiel een ei uit, onder een glazen stolp. Na een hele Minecraft-dag kruipt er een baby-oerguh uit: "
+       "een Mammoet-guh, T-Guh, Pteroguh of Oer-stokstaartje-guh, net welk fossiel je erin stopte. Hij is meteen van jou.
+"
+       "
+"
+       "- Rechtsklik met een fossiel: het fossiel gaat onder de stolp (één tegelijk).
+"
+       "- Rechtsklik met kaasknabbels: hij heeft er 16 per ei nodig.
+"
+       "- Rechtsklik met lege hand: zie hoe ver het ei is.
+"
+       "- Hij broedt alleen met 20 vadskracht; zonder vadskracht staat het ei stil (het gaat niet terug).
+"
+       "- Trechters en buizen kunnen er ook fossielen en kaasknabbels in stoppen.",
+    en="Hatches an egg from a fossil, under a glass bell. After a whole Minecraft day a baby ancient guh crawls out: a "
+       "Mammoth Guh, T-Guh, Pteroguh or Ancient Meerkat Guh, depending on the fossil you put in. It is yours right away.
+"
+       "
+"
+       "- Right-click with a fossil: the fossil goes under the bell (one at a time).
+"
+       "- Right-click with cheese nibbles: it needs 16 per egg.
+"
+       "- Right-click with an empty hand: see how far the egg is.
+"
+       "- It only hatches with 20 vadskracht; without vadskracht the egg pauses (it does not go back).
+"
+       "- Hoppers and pipes can put fossils and cheese nibbles in too.",
+    meer=["systemen/vadskracht"])

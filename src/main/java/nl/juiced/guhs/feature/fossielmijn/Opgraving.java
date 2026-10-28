@@ -248,6 +248,9 @@ public final class Opgraving {
             return new ItemStack(BarbecuetherFeature.VERKOOLD_GUHBOT.get());
         } else if (worp < 92) {
             return new ItemStack(FossielmijnFeature.ZOUTKRISTAL.get());
+        } else if (worp < 95) {   // 1.8.0: now and then a fossil for the Fossiel-broedmachine
+            var soorten = nl.juiced.guhs.feature.fossiel.OerSoort.values();
+            return new ItemStack(nl.juiced.guhs.feature.fossiel.FossielFeature.FOSSIELEN.get(soorten[random.nextInt(soorten.length)]).get());
         }
         return new ItemStack(Items.GOLD_NUGGET, 1 + random.nextInt(3));
     }

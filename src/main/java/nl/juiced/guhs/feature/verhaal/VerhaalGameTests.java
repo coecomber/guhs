@@ -503,6 +503,7 @@ public class VerhaalGameTests {
                         GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
                         GuhVariant.BEVERGUH,   // 1.6.2 (Beverbeek)
                         GuhVariant.GROTGUH,   // 1.7.0 (Onder de Wol: the caves)
+                        GuhVariant.MAMMOETGUH, GuhVariant.TGUH, GuhVariant.PTEROGUH, GuhVariant.STOKSTAARTJEGUH,   // 1.8.0 (the oerguhs)
                         GuhVariant.KNABBELKOI,   // <park-a> 1.4.2 (park plekjes)
                         GuhVariant.DUIFGUHTJE,   // 1.4.2 (park-plekjes b)
                         GuhVariant.ENDER_MIKA, GuhVariant.KAASMIJT, GuhVariant.SCHUILGUH, GuhVariant.KRUIMELKWAL, GuhVariant.LEEGTEWALVISGUH,   // einde2

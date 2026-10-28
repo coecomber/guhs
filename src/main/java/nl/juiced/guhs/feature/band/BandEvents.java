@@ -187,6 +187,7 @@ public final class BandEvents {
         Band.geefHartjes(guh, player, Reden.KNUFFELEN.standaard(), Reden.KNUFFELEN);
         Band.moment(guh, player, Moment.GEKNUFFELD, "");
         nl.juiced.guhs.quest.GuhAdvancements.grant(player, "band_geknuffeld");
+        nl.juiced.guhs.feature.fossiel.OerGuhs.geknuffeld(guh, player);   // 1.8.0: a Mammoet-guh sheds a little wool
         return true;
     }
 

@@ -470,6 +470,7 @@ public final class Band {
     public static float klusSnelheid(Mob guh) {
         float f = isBlij(guh) ? 1.5f : 1.0f;
         // 1.8.0: a guh a Blub sang to sleep (Slaapliedjeszanger) is uitgerust: its chores go a bit quicker
+        f *= nl.juiced.guhs.feature.fossiel.OerGuhs.klusFactor(guh);   // 1.8.0: a Mammoet-guh's chores go twice as fast
         return guh.hasEffect(nl.juiced.guhs.feature.kamperen.KamperenFeature.UITGERUST) ? f * 1.15f : f;
     }
 }

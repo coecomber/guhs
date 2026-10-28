@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GBG",
+    "IKI"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "B": "minecraft:bone_block",
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:fossiel_broedmachine",
+    "count": 1
+  }
+}
