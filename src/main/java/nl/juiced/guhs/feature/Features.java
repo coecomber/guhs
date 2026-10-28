@@ -166,6 +166,7 @@ public final class Features {
         nl.juiced.guhs.feature.dromen.DromenFeature.register(modBus);   // 1.8.0: Guhdromenland (the dream dimension, tucking in, the islands)
         nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.register(modBus);   // 1.8.0 (Guhdromenland B): slaapzorg, sleepy guhs, sleeping spots, lullaby, breakfast in bed
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.register(modBus);   // 1.8.0: the dream NPCs, the sterrenvisje, the glas met een restje
+        nl.juiced.guhs.feature.dromen.liedjes.BlubKoortje.register();   // 1.8.0 Guhdromenland: the Slaapliedjesheuvels' Blub-koortje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
