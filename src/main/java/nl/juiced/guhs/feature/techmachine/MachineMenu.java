@@ -77,12 +77,12 @@ public class MachineMenu extends AbstractContainerMenu {
         @Override
         public int getMaxStackSize(ItemStack stack) {
             // (a Bouwtekening slot holds one drawing)
-            return soort == MachineSoort.KNUTSELMACHINE && vak == 0 ? 1 : super.getMaxStackSize(stack);
+            return soort == MachineSoort.KNUTSELMACHINE && vak == 0 || (soort == MachineSoort.BOUWBLOKKEN_FABRIEK || soort == MachineSoort.REGENBOOGPERS) && vak == 2 ? 1 : super.getMaxStackSize(stack);
         }
 
         @Override
         public int getMaxStackSize() {
-            return soort == MachineSoort.KNUTSELMACHINE && vak == 0 ? 1 : super.getMaxStackSize();
+            return soort == MachineSoort.KNUTSELMACHINE && vak == 0 || (soort == MachineSoort.BOUWBLOKKEN_FABRIEK || soort == MachineSoort.REGENBOOGPERS) && vak == 2 ? 1 : super.getMaxStackSize();
         }
     }
 

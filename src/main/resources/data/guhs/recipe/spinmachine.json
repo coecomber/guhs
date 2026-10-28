@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IWI",
+    "SDS",
+    "PKP"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "W": "#minecraft:wool",
+    "S": "minecraft:string",
+    "D": "guhs:guh_wire",
+    "P": "#minecraft:planks",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:spinmachine",
+    "count": 1
+  }
+}

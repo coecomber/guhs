@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -38,6 +39,7 @@ import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -50,6 +52,10 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.IShearable;
 import nl.juiced.guhs.feature.bio.Bio;
 import nl.juiced.guhs.feature.boerderij.BoerderijFeature;
+import nl.juiced.guhs.feature.piep.PiepDierItem;
+import nl.juiced.guhs.feature.piep.PiepInstelling;
+import nl.juiced.guhs.feature.piep.PiepMaatje;
+import nl.juiced.guhs.feature.piep.PiepMenu;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.world.WildeDieren;
 import com.geckolib.animatable.GeoEntity;
@@ -71,11 +77,22 @@ import com.geckolib.util.GeckoLibUtil;
  *   <li><b>Keeping one</b>, like the animals of the Guhboerderij: it follows knabbelvoer, and the first bite (or a lead)
  *       makes it yours: it stays for good ({@link #houd}). A wild one a spawner brought comes and goes. Two of yours with
  *       knabbelvoer get a lammetje, in a herd of at most {@link DierenRegels#SCHAAPJE_MAX_KUDDE}.</li>
+ *   <li>1.8.0 (vadskracht, de Wolfabriek): a kept wolkenschaapje is a real maatje ({@link PiepMaatje}): its keeper is its
+ *       owner, the empty hand pets it and opens its little menu (Rondvadsen + "Pluisknuffel"), sneak + empty hand picks it up
+ *       ({@code guhs:wolkenschaapje_item}), it moves into a Guhhuisje and shows in "Mijn andere vadsjes". It also likes pluisgras
+ *       and wolkensuikerspin (lure, keep, and two kept ones with wolkensuikerspin get a lammetje). It sometimes floats around
+ *       De Zingende Weide too.</li>
  * </ul>
  */
-public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearable {
+public class WolkenschaapjeEntity extends TamableAnimal implements GeoEntity, IShearable, PiepMaatje {
     private static final EntityDataAccessor<Boolean> DATA_GESCHOREN = SynchedEntityData.defineId(WolkenschaapjeEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_GEHOUDEN = SynchedEntityData.defineId(WolkenschaapjeEntity.class, EntityDataSerializers.BOOLEAN);
+    /** 1.8.0: the menu settings that are off (PiepInstelling bits; saved as "PiepUit"). */
+    private static final EntityDataAccessor<Integer> DATA_UIT = SynchedEntityData.defineId(WolkenschaapjeEntity.class, EntityDataSerializers.INT);
+    /** 1.8.0: seconds between two Pluisknuffels (the menu's big button). */
+    public static final int KNUFFEL_RUST = 60;
+    /** 1.8.0: the item a picked-up wolkenschaapje becomes (set by FabriekFeature, which registers it). */
+    public static java.util.function.Supplier<? extends Item> OPPAK_ITEM = () -> net.minecraft.world.item.Items.WHITE_WOOL;
     /** The fluff is back this many ticks after shearing (five minutes). */
     public static final int PLUIS_TERUG = 20 * 60 * 5;
     /** It never falls faster than this (blocks per tick): a cloud drifts down. */
@@ -86,8 +103,9 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private int pluisTerug;
+    private long knuffelKlaar;
 
-    public WolkenschaapjeEntity(EntityType<? extends Animal> type, Level level) {
+    public WolkenschaapjeEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
     }
 
@@ -109,11 +127,17 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         }
         boolean grond = isGrond(level, pos.below()) && level.getBlockState(pos).getCollisionShape(level, pos).isEmpty() && level.getFluidState(pos).isEmpty();
         boolean licht = level.getRawBrightness(pos, 0) > 8;
-        boolean inBiome = level.getBiome(pos).is(Bio.WOLKENWEIDE);
+        boolean inBiome = level.getBiome(pos).is(Bio.WOLKENWEIDE)
+                || level.getBiome(pos).is(ZINGENDE_WEIDE) && random.nextInt(ZINGENDE_WEIDE_KANS) == 0;   // 1.8.0: now and then in the weide
         int wild = grond && licht && inBiome ? level.getEntitiesOfClass(WolkenschaapjeEntity.class,
                 new AABB(pos).inflate(DierenRegels.SCHAAPJE_TEL_STRAAL), s -> !s.isGehouden()).size() : 0;
         return DierenRegels.schaapjeMag(reden, grond, licht, inBiome, wild);
     }
+
+    /** 1.8.0: De Zingende Weide, where a wolkenschaapje floats by now and then (1 in {@link #ZINGENDE_WEIDE_KANS} spawn tries). */
+    public static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome> ZINGENDE_WEIDE = net.minecraft.resources.ResourceKey.create(
+            net.minecraft.core.registries.Registries.BIOME, nl.juiced.guhs.Guhs.id("zingende_weide"));
+    public static final int ZINGENDE_WEIDE_KANS = 4;
 
     // --- state ------------------------------------------------------------------------------------------------------------
 
@@ -122,6 +146,7 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         super.defineSynchedData(builder);
         builder.define(DATA_GESCHOREN, false);
         builder.define(DATA_GEHOUDEN, false);
+        builder.define(DATA_UIT, 0);
     }
 
     public boolean isGeschoren() {
@@ -149,6 +174,7 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         tag.putBoolean("Geschoren", isGeschoren());
         tag.putInt("PluisTerug", pluisTerug);
         tag.putBoolean("Gehouden", isGehouden());
+        tag.putInt("PiepUit", uitVlaggen());
     }
 
     @Override
@@ -157,6 +183,7 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         entityData.set(DATA_GESCHOREN, tag.getBooleanOr("Geschoren", false));
         pluisTerug = tag.getIntOr("PluisTerug", 0);
         entityData.set(DATA_GEHOUDEN, tag.getBooleanOr("Gehouden", false));
+        setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }
 
     // --- keeping it -------------------------------------------------------------------------------------------------------
@@ -171,6 +198,9 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         }
         entityData.set(DATA_GEHOUDEN, true);
         setPersistenceRequired();
+        if (speler != null && !isTame()) {
+            tame(speler);                                   // 1.8.0: its keeper is its owner (menu, picking up, huisje)
+        }
         removeTag(WildeDieren.KOM_EN_GA);
         if (level() instanceof ServerLevel level) {
             level.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 5, 0.35, 0.2, 0.35, 0.0);
@@ -185,6 +215,26 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND && isGehouden() && !isBaby()) {
+            if (level().isClientSide()) {
+                return InteractionResult.SUCCESS;
+            }
+            ServerPlayer sp = (ServerPlayer) player;
+            if (!isTame()) {
+                tame(sp);                                   // (kept before 1.8.0: whoever clicks it first now is its owner)
+            }
+            if (isOwnedBy(player)) {
+                if (player.isSecondaryUseActive()) {
+                    PiepDierItem.pakOp(this, sp);           // sneak + empty hand: picked up
+                } else {
+                    ((ServerLevel) level()).sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
+                    triggerAnim("actie", "blij");
+                    playSound(DierenSlice.SCHAAPJE_BLEH.get(), 0.6f, getVoicePitch());
+                    PiepMenu.open(sp, this);                // empty hand: petted, and its menu
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
         if (isFood(stack) && player instanceof ServerPlayer sp && !isGehouden()) {
             houd(sp);
             if (isBaby() || !canFallInLove()) {
@@ -200,7 +250,13 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(BoerderijFeature.KNABBELVOER.get());
+        return stack.is(BoerderijFeature.KNABBELVOER.get()) || isLekkers(stack);
+    }
+
+    /** 1.8.0: pluisgras and wolkensuikerspin (lure, keep, and two kept ones get a lammetje with them). */
+    public static boolean isLekkers(ItemStack stack) {
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return nl.juiced.guhs.Guhs.MODID.equals(id.getNamespace()) && (id.getPath().equals("pluisgras") || id.getPath().equals("wolkensuikerspin"));
     }
 
     @Override
@@ -220,6 +276,10 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
         super.finalizeSpawnChildFromBreeding(level, partner, kind);
         if (kind instanceof WolkenschaapjeEntity lammetje) {
             lammetje.houd(null);   // (its parents were fed by a player: they are kept, and so is their lammetje)
+            if (getOwnerReference() != null) {
+                lammetje.setOwnerReference(getOwnerReference());   // 1.8.0: and it belongs to the same keeper
+                lammetje.setTame(true, true);
+            }
         }
     }
 
@@ -256,7 +316,13 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.3));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.3) {
+            @Override
+            public boolean canUse() {
+                return !isTame() && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(1, new PiepMaatje.BlijfGoal(this));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.15, this::isFood, false));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1));
@@ -336,6 +402,74 @@ public class WolkenschaapjeEntity extends Animal implements GeoEntity, IShearabl
     @Override
     public int getAmbientSoundInterval() {
         return 240;
+    }
+
+    // --- 1.8.0: a maatje (PiepMaatje) -------------------------------------------------------------------------------------
+
+    @Override
+    public TamableAnimal dier() {
+        return this;
+    }
+
+    @Override
+    public String soort() {
+        return "wolkenschaapje";
+    }
+
+    @Override
+    public List<PiepInstelling> instellingen() {
+        return List.of(PiepInstelling.RONDVADSEN);
+    }
+
+    @Override
+    public Item oppakItem() {
+        return OPPAK_ITEM.get();
+    }
+
+    @Override
+    public int uitVlaggen() {
+        return entityData.get(DATA_UIT);
+    }
+
+    @Override
+    public void setUitVlaggen(int vlaggen) {
+        entityData.set(DATA_UIT, vlaggen);
+    }
+
+    @Override
+    public boolean isBezig() {
+        return false;
+    }
+
+    @Override
+    public net.minecraft.sounds.SoundEvent oppakGeluid() {
+        return DierenSlice.SCHAAPJE_BLEH.get();
+    }
+
+    /** The big button "Pluisknuffel": you sink into its fluff: a moment of Slow Falling, like a cloud (once a minute). */
+    @Override
+    public void speciaal(ServerPlayer player) {
+        if (rustSeconden() > 0) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.wolkenschaapje.knuffel_rust", rustSeconden()).withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        knuffelKlaar = level().getGameTime() + KNUFFEL_RUST * 20L;
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 20 * 20, 0, false, true));
+        triggerAnim("actie", "blij");
+        ((ServerLevel) level()).sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 1, player.getZ(), 14, 0.4, 0.5, 0.4, 0.02);
+        playSound(DierenSlice.SCHAAPJE_PLUIS.get(), 0.8f, 1.2f);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.wolkenschaapje.knuffel", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
+    @Override
+    public int rustSeconden() {
+        long over = knuffelKlaar - level().getGameTime();
+        return over > 0 ? (int) ((over + 19) / 20) : 0;
+    }
+
+    @Override
+    public boolean wantsToAttack(net.minecraft.world.entity.LivingEntity target, net.minecraft.world.entity.LivingEntity owner) {
+        return false;
     }
 
     // --- GeckoLib ---------------------------------------------------------------------------------------------------------

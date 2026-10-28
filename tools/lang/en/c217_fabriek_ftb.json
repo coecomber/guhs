@@ -1,0 +1,17 @@
+{
+  "ftb.guhs_techniek.section.fabriek": "The Factory Hall: wool, colour and building blocks",
+  "ftb.guhs_techniek.q.fabriek_spin.title": "Whirring Spinner",
+  "ftb.guhs_techniek.q.fabriek_spin.desc": "Build a &dSpinning Machine&r and spin &ffluff&r into wool: 2 fluff is 1 white wool. Fluff comes from Cloud Lambs (shearing) or the Plushie Recycler.",
+  "ftb.guhs_techniek.q.fabriek_verf.title": "Splash in the Dye Bath",
+  "ftb.guhs_techniek.q.fabriek_verf.desc": "Put wool and dye in the &dDye Bath&r: it dyes everything the game can dye, glass, clay and cuddle blocks too.",
+  "ftb.guhs_techniek.q.fabriek_scheerstal.title": "Shearing Stable",
+  "ftb.guhs_techniek.q.fabriek_scheerstal.desc": "Keep tame &dCloud Lambs&r around a &dShearing Stable&r: it shears them by itself. Tame them with fluffgrass or cloud candy floss and breed them with cloud candy floss!",
+  "ftb.guhs_techniek.q.fabriek_recycler.title": "Nothing Is Wasted",
+  "ftb.guhs_techniek.q.fabriek_recycler.desc": "Put old plushies, guh clothes, wool or cushions into the &dPlushie Recycler&r: fluff comes out.",
+  "ftb.guhs_techniek.q.fabriek_bouwblokken.title": "Building Blocks in Bulk",
+  "ftb.guhs_techniek.q.fabriek_bouwblokken.desc": "Put an &dexample&r in the &dBuilding Block Factory&r: it makes stairs, slabs, walls, smooth and coloured blocks. Link a Bank Guh (Bank Key) or a chest (sneak + click, then the chest).",
+  "ftb.guhs_techniek.q.fabriek_kleurmolen.title": "All the Colours of the Rainbow",
+  "ftb.guhs_techniek.q.fabriek_kleurmolen.desc": "Grind flowers in the &dColour Mill&r: 2 to 3 dye per flower. Let a guh do the chore &dPicking Flowers&r for an endless supply!",
+  "ftb.guhs_techniek.q.fabriek_regenboogpers.title": "Rainbow Press",
+  "ftb.guhs_techniek.q.fabriek_regenboogpers.desc": "Press fluff and &6cheese sauce&r into any colour in the &dRainbow Press&r. Pick the colour with sneak + click, or put down an example dye."
+}

@@ -192,6 +192,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwolkje.DroomwolkjeFeature.register(modBus);   // 1.8.0 (uitbreiding): the own droomwolkje and the droomgasten
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.register(modBus);   // 1.8.0 (vadskracht): the hamsterbuis network
         nl.juiced.guhs.feature.centrale.CentraleFeature.register(modBus);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale + export bij guh-villagers
+        nl.juiced.guhs.feature.fabriek.FabriekFeature.register(modBus);   // 1.8.0 (vadskracht): de Fabriekshal (wol, bouwblokken, kleurstof)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -473,6 +474,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwolkje.DroomwolkjeFeature.creative(output);   // 1.8.0: the "Mijn droomwolkje" brievenbusje
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.creative(output);   // 1.8.0: Hamsterknooppunt + hamsterbuis station
         nl.juiced.guhs.feature.centrale.CentraleFeature.creative(output);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale
+        nl.juiced.guhs.feature.fabriek.FabriekFeature.creative(output);   // 1.8.0 (vadskracht): de Fabriekshal
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

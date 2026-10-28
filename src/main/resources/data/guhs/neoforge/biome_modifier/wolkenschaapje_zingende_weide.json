@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:zingende_weide"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:wolkenschaapje",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}
