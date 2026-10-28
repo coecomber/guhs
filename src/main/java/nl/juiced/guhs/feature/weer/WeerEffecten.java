@@ -23,6 +23,13 @@ import nl.juiced.guhs.feature.blub.BlubGuhEntity;
 import nl.juiced.guhs.feature.emotes.EmotesFeature;
 import nl.juiced.guhs.feature.knuffelbad.KnuffelbadFeature;
 import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.feature.emotes.Emote;
+import nl.juiced.guhs.feature.emotes.GuhEmotes;
+import nl.juiced.guhs.feature.slaapzorg.Slapen;
+import nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature;
+import nl.juiced.guhs.feature.sterrenveld.VallendeSter;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 /**
  * 1.8.0: the little bit of behaviour of the guh-weertjes (server; what you see falling is the client's: WeerClient). Once a
@@ -35,11 +42,14 @@ import nl.juiced.guhs.registry.ModItems;
  *   <li>regenboogweer: guhs and Blubs jump in the puddles;</li>
  *   <li>hartjesregen: tamed guhs and Blubs give hearts much more often;</li>
  *   <li>knusmist: guhs get sleepy (zzz);</li>
- *   <li>onweer: now and then a harmless lightning flash (visual only: no fire, no damage).</li>
+ *   <li>onweer: now and then a harmless lightning flash (visual only: no fire, no damage);</li>
+ *   <li>droomweer: as in Guhdromenland: players float (soft slow falling and a little higher jump, no particles; it wears off
+ *       outside the zone), a few catchable dream stars fall (at most {@link #DROOM_STERREN} per zone), and the guhs yawn more
+ *       and fall asleep sooner.</li>
  * </ul>
  */
 public final class WeerEffecten {
-    public static final int BEREIK = 24, KNABBEL_TICKS = 600, KNABBEL_MAX = 3;
+    public static final int BEREIK = 24, KNABBEL_TICKS = 600, KNABBEL_MAX = 3, DROOM_STERREN = 3;
     /** Per dimension and zone centre: the game time of the last knabbel. */
     private static final Map<Long, Long> LAATSTE_KNABBEL = new HashMap<>();
 
@@ -116,7 +126,39 @@ public final class WeerEffecten {
                     flits(level, zone, p, r);
                 }
             }
+            case DROOM -> droom(level, zone, p, box, r);
             default -> {
+            }
+        }
+    }
+
+    /** The droomweer around one player (once a second). */
+    private static void droom(ServerLevel level, WeerZones.Zone zone, ServerPlayer p, AABB box, RandomSource r) {
+        // floaty: a few seconds at a time, refreshed while you stay in the zone (so it wears off soon after you leave)
+        p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 50, 0, true, false, true));
+        p.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 50, 0, true, false, true));
+        // a few catchable dream stars
+        if (r.nextInt(4) == 0) {
+            AABB zoneBox = new AABB(zone.midden()).inflate(WeerZones.STRAAL, 64, WeerZones.STRAAL);
+            if (level.getEntities(SterrenveldFeature.VALLENDE_STER.get(), zoneBox, e -> true).size() < DROOM_STERREN) {
+                double x = p.getX() + (r.nextDouble() * 2 - 1) * 14, z = p.getZ() + (r.nextDouble() * 2 - 1) * 14;
+                if (zone.binnen(x, z)) {
+                    int grond = level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(x), (int) Math.floor(z));
+                    VallendeSter.nieuw(level, new Vec3(x, Math.max(grond, p.getY()) + 18 + r.nextInt(8), z));
+                }
+            }
+        }
+        // sleepy guhs: more yawns, and now and then one nods off (after its yawn)
+        for (GuhEntity guh : level.getEntitiesOfClass(GuhEntity.class, box, g -> zone.binnen(g.getX(), g.getZ()))) {
+            if (Slapen.slaapt(guh) || guh.isPassenger()) {
+                continue;
+            }
+            int k = r.nextInt(60);
+            if (k < 2) {
+                guh.emotes.start(Emote.GAPEN, false, GuhEmotes.Source.SELF);
+            } else if (k == 2) {
+                guh.emotes.start(Emote.GAPEN, false, GuhEmotes.Source.SELF);
+                Slapen.slaapStraksIn(guh, 50);
             }
         }
     }

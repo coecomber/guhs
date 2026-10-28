@@ -414,6 +414,40 @@
       y: 6.5625,
     },
     {
+      id: "475548EFD3D45CBE",
+      icon: {
+        id: "guhs:weerpotje_droom",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:weerpotje_droom",
+          },
+          id: "475548BD1E365535",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484F7FB920DD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755484DA5786609",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
       id: "475548828F687C5B",
       icon: {
         id: "guhs:doos_knabbels",

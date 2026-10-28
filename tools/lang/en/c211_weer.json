@@ -39,6 +39,8 @@
   "gui.guhs.weer.weertje.knusmist.uitleg": "A soft pink fog. Everything gets cosy and the guhs get sleepy.",
   "gui.guhs.weer.weertje.bloesem": "Blossom Breeze",
   "gui.guhs.weer.weertje.bloesem.uitleg": "Blossom petals blow by. Smells like the Bloesemmeertje.",
+  "gui.guhs.weer.weertje.droom": "Dream Weather",
+  "gui.guhs.weer.weertje.droom.uitleg": "A piece of Guh Dreamland: the dream sky with the sleepy moon, falling stars to catch, floating and dream music. The guhs get sleepy.",
   "item.guhs.weerpotje_pluisjes": "Weather Jar: Fluff Snow",
   "item.guhs.weerpotje_pluisjes.lore": "Pink fluff swirls inside. Soft!",
   "gui.guhs.weer.weertje.pluisjes.bron": "chests in the Old Wool Mill, the Cloud Meadow's cloud chests and the little chest in the Cloud Herder's hut",
@@ -62,5 +64,8 @@
   "gui.guhs.weer.weertje.knusmist.bron": "chests in the Cuddle Dormitory and the little chest in the Cuddle Bath",
   "item.guhs.weerpotje_bloesem": "Weather Jar: Blossom Breeze",
   "item.guhs.weerpotje_bloesem.lore": "Blossom petals that never stop blowing.",
-  "gui.guhs.weer.weertje.bloesem.bron": "the chest on the Bloesemmeertje's picnic island and the little chest in the Klaterdal tea house"
+  "gui.guhs.weer.weertje.bloesem.bron": "the chest on the Bloesemmeertje's picnic island and the little chest in the Klaterdal tea house",
+  "item.guhs.weerpotje_droom": "Weather Jar: Dream Weather",
+  "item.guhs.weerpotje_droom.lore": "A bit of dream sky with a sleepy little moon. Shh!",
+  "gui.guhs.weer.weertje.droom.bron": "the dream chest at the top of the Star Cushion Field, in Guh Dreamland"
 }

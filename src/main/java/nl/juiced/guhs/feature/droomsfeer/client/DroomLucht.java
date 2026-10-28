@@ -35,6 +35,9 @@ import org.joml.Vector4f;
  *   <li>now and then a falling star with a glittery tail (about every 8 seconds, at a random spot; the same for everyone).</li>
  * </ol>
  * Textures: tools/features/droomsfeer.py.
+ * <p>
+ * The Weer vadser's droomweer draws the same sky over the normal one, faded in at the edge of its zone: {@link #teken} with an
+ * alpha below 1 (feature/droomweer).
  */
 public class DroomLucht implements CustomSkyboxRenderer {
     private static final Identifier LUCHT = Guhs.id("textures/environment/droom_lucht.png");
@@ -47,31 +50,38 @@ public class DroomLucht implements CustomSkyboxRenderer {
     private static final int VAL_ELKE = 160, VAL_DUUR = 26;
 
     @Nullable
-    private GpuBuffer sterren;
-    private int sterIndices;
+    private static GpuBuffer sterren;
+    private static int sterIndices;
 
     @Override
     public boolean renderSky(LevelRenderState level, SkyRenderState sky, Matrix4fc modelView, Runnable setupFog) {
         float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-        float t = level.gameTime + partialTick;
-        kleur(modelView);
+        teken(level.gameTime + partialTick, modelView, 1f);
+        return true;
+    }
+
+    /** The whole dream sky; {@code alpha} below 1 lays it softly over the sky that is already there (the droomweer). */
+    public static void teken(float t, Matrix4fc modelView, float alpha) {
+        if (alpha <= 0.001f) {
+            return;
+        }
+        kleur(modelView, alpha);
         if (sterren == null) {
             bouwSterren();
         }
         if (sterren != null) {
-            float adem = 0.85f + 0.15f * Mth.sin(t * 0.012f);
+            float adem = (0.85f + 0.15f * Mth.sin(t * 0.012f)) * alpha;
             SkyDraw.draw("Droom stars", SkyDraw.COLOURED_STARS, sterren, VertexFormat.Mode.QUADS, sterIndices, null,
-                    new Vector4f(adem, adem, adem, 1f), modelView);
+                    new Vector4f(adem, adem, adem, alpha), modelView);
         }
-        maan(t, modelView);
-        vallendeSter(t, modelView);
-        return true;
+        maan(t, modelView, alpha);
+        vallendeSter(t, modelView, alpha);
     }
 
     // ---------------------------------------------------------------------------------------------------- the colour
 
     /** The gradient box: four walls with the texture from top (v 0) to bottom (v 1), a lid and a floor. */
-    private static void kleur(Matrix4fc modelView) {
+    private static void kleur(Matrix4fc modelView, float alpha) {
         BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
         float r = 100f;
         float[][] hoeken = {{-r, -r}, {r, -r}, {r, r}, {-r, r}};
@@ -82,7 +92,7 @@ public class DroomLucht implements CustomSkyboxRenderer {
         }
         dubbel(b, new float[][]{{-r, r, -r, 0f, 0.002f}, {r, r, -r, 1f, 0.002f}, {r, r, r, 1f, 0.004f}, {-r, r, r, 0f, 0.004f}});
         dubbel(b, new float[][]{{-r, -r, -r, 0f, 0.996f}, {r, -r, -r, 1f, 0.996f}, {r, -r, r, 1f, 0.998f}, {-r, -r, r, 0f, 0.998f}});
-        SkyDraw.drawNow("Droom sky colour", RenderPipelines.END_SKY, b.buildOrThrow(), SkyDraw.texture(LUCHT), SkyDraw.white(1f), modelView);
+        SkyDraw.drawNow("Droom sky colour", RenderPipelines.END_SKY, b.buildOrThrow(), SkyDraw.texture(LUCHT), SkyDraw.white(alpha), modelView);
     }
 
     /** A quad in both windings (seen from inside, whichever way the pipeline culls). */
@@ -131,7 +141,7 @@ public class DroomLucht implements CustomSkyboxRenderer {
 
     private static final int[] STER_KLEUR = {0xFFFFFFFF, 0xFFFFE3F4, 0xFFE6DAFF, 0xFFFFF4C8, 0xFFD8F4FF};
 
-    private void bouwSterren() {
+    private static void bouwSterren() {
         RandomSource random = RandomSource.create(20261028L);
         int aantal = 460;
         try (ByteBufferBuilder bytes = new ByteBufferBuilder(aantal * 8 * DefaultVertexFormat.POSITION_COLOR.getVertexSize())) {
@@ -153,7 +163,7 @@ public class DroomLucht implements CustomSkyboxRenderer {
 
     // ---------------------------------------------------------------------------------------------------- the moon
 
-    private static void maan(float t, Matrix4fc modelView) {
+    private static void maan(float t, Matrix4fc modelView, float alpha) {
         Plek plek = Plek.van(MAAN_AZ, MAAN_HOOG);
         // the halo: a soft fan from a warm glow to nothing, breathing slowly
         float adem = 0.9f + 0.1f * Mth.sin(t * 0.008f);
@@ -167,7 +177,7 @@ public class DroomLucht implements CustomSkyboxRenderer {
             Vector3f q0 = plek.punt((float) Math.cos(a0) * r1, (float) Math.sin(a0) * r1), q1 = plek.punt((float) Math.cos(a1) * r1, (float) Math.sin(a1) * r1);
             quad(h, p0, q0, q1, p1, binnen, weg, weg, binnen);
         }
-        SkyDraw.drawNow("Droom moon halo", SkyDraw.COLOURED_STARS, h.buildOrThrow(), null, SkyDraw.white(1f), modelView);
+        SkyDraw.drawNow("Droom moon halo", SkyDraw.COLOURED_STARS, h.buildOrThrow(), null, new Vector4f(alpha, alpha, alpha, alpha), modelView);
         // the moon itself: one textured quad (a little bob, as if it is breathing in its sleep)
         float bob = Mth.sin(t * 0.01f) * 0.4f;
         BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -179,12 +189,12 @@ public class DroomLucht implements CustomSkyboxRenderer {
                 b.addVertex(p[i].x, p[i].y, p[i].z).setUv(uv[i][0], uv[i][1]);
             }
         }
-        SkyDraw.drawNow("Droom moon", SkyDraw.CELESTIAL_TRANSLUCENT, b.buildOrThrow(), SkyDraw.texture(MAAN), SkyDraw.white(1f), modelView);
+        SkyDraw.drawNow("Droom moon", SkyDraw.CELESTIAL_TRANSLUCENT, b.buildOrThrow(), SkyDraw.texture(MAAN), SkyDraw.white(alpha), modelView);
     }
 
     // ---------------------------------------------------------------------------------------------------- falling stars
 
-    private static void vallendeSter(float t, Matrix4fc modelView) {
+    private static void vallendeSter(float t, Matrix4fc modelView, float alpha) {
         long slot = (long) Math.floor(t / VAL_ELKE);
         float in = t - slot * VAL_ELKE;
         if (in > VAL_DUUR) {
@@ -213,6 +223,6 @@ public class DroomLucht implements CustomSkyboxRenderer {
         // the bright little head
         Plek kop = Plek.van(kopAz, kopHoog);
         ster(b, kop, 0f, 0f, 0.6f, ARGB.colorFromFloat(vervaag, 1f, 1f, 0.92f));
-        SkyDraw.drawNow("Droom falling star", SkyDraw.COLOURED_STARS, b.buildOrThrow(), null, SkyDraw.white(1f), modelView);
+        SkyDraw.drawNow("Droom falling star", SkyDraw.COLOURED_STARS, b.buildOrThrow(), null, new Vector4f(alpha, alpha, alpha, alpha), modelView);
     }
 }

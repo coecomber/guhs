@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 /**
  * 1.8.0: the weathers of the Weer vadser ({@link WeerVadserBlock}). {@link #NORMAAL} is "off" (the world's own weather);
- * zon, regen and onweer are always there; the eight guh-weertjes are unlocked per player with a weerpotje
+ * zon, regen and onweer are always there; the nine guh-weertjes are unlocked per player with a weerpotje
  * ({@link WeerPotjeItem}, {@link WeerUnlocks}). {@code regent}: it rains in the zone (puddles: {@link WeerZones#regentOp}).
  */
 public enum Weertje {
@@ -19,7 +19,9 @@ public enum Weertje {
     HARTJES("hartjes", false, false, 0xFFFF7AA8),
     STERREN("sterren", false, false, 0xFF4E4A9A),
     KNUSMIST("knusmist", false, false, 0xFFE8C6DA),
-    BLOESEM("bloesem", false, false, 0xFFFFB0C8);
+    BLOESEM("bloesem", false, false, 0xFFFFB0C8),
+    /** 1.8.0 playtest 2: the dream weather (Guhdromenland's sky, falling stars, floaty, dream music, sleepy guhs). */
+    DROOM("droom", false, false, 0xFF9A7BD8);
 
     private final String id;
     /** Always available (no weerpotje needed). */

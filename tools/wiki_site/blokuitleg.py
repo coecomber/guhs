@@ -958,24 +958,42 @@ UITLEG = {
            "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.\n"
            "\n"
            "- Rechtsklik: kies een weertje. Zon, regen (in koude streken sneeuw) en onweer kan altijd.\n"
-           "- De guh-weertjes (pluisjessneeuw, bellenbui, knabbelbuitje, regenboogweer, hartjesregen, sterrenregen, knusmist "
-           "en bloesemwind) maak je eerst los met een weerpotje. Het menu zegt waar je dat potje vindt.\n"
+           "- De guh-weertjes (pluisjessneeuw, bellenbui, knabbelbuitje, regenboogweer, hartjesregen, sterrenregen, knusmist, "
+           "bloesemwind en droomweer) maak je eerst los met een weerpotje. Het menu zegt waar je dat potje vindt.\n"
            "- Rechtsklik met een weerpotje: meteen ontgrendeld. Met het souvenir 'Regenboogje in een potje': het "
            "regenboogweer, en het souvenir houd je.\n"
            "- Weerpotjes liggen soms in kistjes: ook in de Wolkenhoeder-hut (pluisjes), aan het eind van de Regenboogbrug "
            "(regenboog), in het Knuffelbad (knusmist) en in het theehuisje van het Klaterdal (bloesem).\n"
-           "- Bij bloesemwind wapperen de oortjes van guhs in de zone mee.",
+           "- Bij bloesemwind wapperen de oortjes van guhs in de zone mee.\n"
+           "- Droomweer: de lucht van Guhdromenland met de slaperige maan, vallende sterretjes om te vangen (droomzand!), "
+           "zweven, droommuziek en slaperige guhs. Het potje zit in het droomkistje bovenaan het Sterrenkussenveld.",
         en="Makes its own weather, up to 60 blocks around. Outside that the normal weather stays. It needs 20 vadskracht "
            "while it makes any weather but normal; without vadskracht the weather goes back to normal by itself.\n"
            "\n"
            "- Right-click: pick a weather. Sun, rain (snow in cold places) and thunderstorm are always there.\n"
-           "- The guh weathers (fluff snow, bubble shower, nibble drizzle, rainbow weather, heart rain, star shower, cosy fog "
-           "and blossom breeze) need a weather jar first. The menu tells you where to find it.\n"
+           "- The guh weathers (fluff snow, bubble shower, nibble drizzle, rainbow weather, heart rain, star shower, cosy fog, "
+           "blossom breeze and dream weather) need a weather jar first. The menu tells you where to find it.\n"
            "- Right-click with a weather jar: unlocked at once. With the souvenir 'Rainbow in a Jar': the rainbow weather, "
            "and you keep the souvenir.\n"
            "- Weather jars sometimes hide in little chests: also in the Cloud Herder's hut (fluff), at the end of the Rainbow "
            "Bridge (rainbow), in the Cuddle Bath (cosy fog) and in the Klaterdal tea house (blossom).\n"
-           "- In a blossom breeze the guhs' ears flutter along."),
+           "- In a blossom breeze the guhs' ears flutter along.\n"
+           "- Dream weather: Guh Dreamland's sky with the sleepy moon, falling stars to catch (dream sand!), floating, dream "
+           "music and sleepy guhs. Its jar is in the dream chest at the top of the Star Cushion Field."),
+    "droomkistje": dict(
+        nl="Een lavendel kistje met sterretjes en een maansluitinkje, bovenaan het Sterrenkussenveld in Guhdromenland, bij de "
+           "grote ster. Stuiter er helemaal naartoe!\n"
+           "\n"
+           "- Rechtsklik: één keer per Minecraft-dag mag je erin kijken. De eerste keer zit er het weerpotje Droomweer in.\n"
+           "- Daarna: droomzand en een kleinigheidje (een sterlampje, een stuiterkussen of maanbloemetjes).\n"
+           "- Al geweest vandaag? 'Kom morgen terug, vadsje!'",
+        en="A lavender chest with little stars and a moon clasp, at the top of the Star Cushion Field in Guh Dreamland, by the "
+           "big star. Bounce all the way up!\n"
+           "\n"
+           "- Right-click: you may peek inside once per Minecraft day. The first time it holds the weather jar Dream Weather.\n"
+           "- After that: dream sand and a little something (a star lamp, a bounce cushion or moon flowers).\n"
+           "- Been there today? 'Come back tomorrow, vadsje!'",
+        meer=[]),
     "muziekdoosje": dict(
         nl="Een speeldoosje met een guhtje erop dat rondjes danst. Het speelt het slaapliedje van de Blub-guhs.\n" "\n" "- Rechtsklik: het liedje speelt (ongeveer 24 seconden). Alle guhs tot 8 blokken in de rondte gapen en vallen een voor een in slaap.\n" "- 's Avonds en 's nachts slapen ze tot de ochtend, overdag doen ze een dutje van een minuut.\n" "- Een tamme guh blijft niet liggen als jij ver wegloopt: dan loopt hij je achterna.\n" "- Zolang het liedje speelt, begint het niet nog een keer.",
         en="A little music box with a guh on top that twirls round. It plays the Blub-guhs' lullaby.\n" "\n" "- Right-click: the song plays (about 24 seconds). Every guh up to 8 blocks around yawns and falls asleep, one by one.\n" "- In the evening and at night they sleep until the morning, by day they take a nap of a minute.\n" "- A tame guh doesn't stay asleep when you walk far away: it follows you.\n" "- While the song plays, it doesn't start again."),

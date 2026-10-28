@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/droomkistje_zij",
+    "voor": "guhs:block/droomkistje_voor",
+    "zij": "guhs:block/droomkistje_zij",
+    "deksel": "guhs:block/droomkistje_deksel"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            15,
+            16
+          ],
+          "texture": "#voor"
+        },
+        "south": {
+          "uv": [
+            1,
+            2,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            1,
+            2,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            1,
+            2,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#deksel"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#zij"
+        }
+      }
+    }
+  ]
+}
