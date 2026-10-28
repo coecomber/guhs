@@ -169,6 +169,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.register(modBus);   // 1.8.0: the dream NPCs, the sterrenvisje, the glas met een restje
         nl.juiced.guhs.feature.droomplein.DroompleinFeature.register(modBus);   // 1.8.0 (Guhdromenland E): the Droomplein (post, fountain, Wekkerguh look)
         nl.juiced.guhs.feature.herinnering.HerinneringFeature.register();   // 1.8.0: the Herinneringseiland (its herinneringsbelletjes and retro films)
+        nl.juiced.guhs.feature.dromen.liedjes.BlubKoortje.register();   // 1.8.0 Guhdromenland: the Slaapliedjesheuvels' Blub-koortje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
