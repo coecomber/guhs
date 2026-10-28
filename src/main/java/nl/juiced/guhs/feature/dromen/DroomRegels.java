@@ -65,6 +65,18 @@ public final class DroomRegels {
         return !DroomReis.inDroom(p) || p.getAbilities().instabuild;
     }
 
+    /** 1.8.0 (droomwolkje): may this player change this block in the dream anyway (their own droomwolkje)? */
+    public static java.util.function.BiPredicate<Player, BlockPos> MAG_HIER = (p, pos) -> false;
+    /** 1.8.0 (droomwolkje): the spot a dreamer stands on that is no island (e.g. "wolkje:<uuid>"), or null. */
+    public static java.util.function.Function<ServerPlayer, String> PLEK = p -> null;
+    /** 1.8.0 (droomwolkje): the Blub bubble for a spot of {@link #PLEK}; true when it put the player back itself. */
+    public static java.util.function.BiPredicate<ServerPlayer, String> TERUG = (p, plek) -> false;
+
+    /** May this player change this block? ({@link #magBouwen(Player)}, or a spot of their own in the dream.) */
+    public static boolean magBouwen(Player p, BlockPos pos) {
+        return magBouwen(p) || MAG_HIER.test(p, pos);
+    }
+
     private static void nee(Player p) {
         if (p instanceof ServerPlayer sp) {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.dromen.regels.niet_bouwen").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -72,21 +84,21 @@ public final class DroomRegels {
     }
 
     private static void onBreak(BreakBlockEvent event) {
-        if (!magBouwen(event.getPlayer())) {
+        if (!magBouwen(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
             nee(event.getPlayer());
         }
     }
 
     private static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (event.getEntity() instanceof Player p && !magBouwen(p)) {
+        if (event.getEntity() instanceof Player p && !magBouwen(p, event.getPos())) {
             event.setCanceled(true);
             nee(p);
         }
     }
 
     private static void onItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getItemStack().getItem() instanceof BucketItem && !magBouwen(event.getEntity())) {
+        if (event.getItemStack().getItem() instanceof BucketItem && !magBouwen(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
             nee(event.getEntity());
         }
@@ -119,8 +131,11 @@ public final class DroomRegels {
         if (p.getY() < DroomEilanden.BUBBEL_Y && !p.isSpectator()) {
             bubbel(p);
         } else if (p.onGround()) {
-            DroomReis.data(p).putString("Laatste", DroomEilanden.dichtstbij(p.position()));
-            steiger(p);
+            String plek = PLEK.apply(p);
+            DroomReis.data(p).putString("Laatste", plek != null ? plek : DroomEilanden.dichtstbij(p.position()));
+            if (plek == null) {
+                steiger(p);
+            }
         }
     }
 
@@ -128,6 +143,12 @@ public final class DroomRegels {
     static void bubbel(ServerPlayer p) {
         ServerLevel level = (ServerLevel) p.level();
         String eiland = DroomReis.data(p).getStringOr("Laatste", DroomEilanden.PLEIN);
+        if (!DroomEilanden.IDS.contains(eiland) && TERUG.test(p, eiland)) {
+            return;
+        }
+        if (!DroomEilanden.IDS.contains(eiland)) {
+            eiland = DroomEilanden.PLEIN;
+        }
         level.sendParticles(ParticleTypes.BUBBLE, p.getX(), p.getY() + 1, p.getZ(), 40, 0.6, 0.8, 0.6, 0.1);
         level.playSound(null, p.blockPosition(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.PLAYERS, 1f, 1.4f);
         DroomEilanden.zorg(level, eiland);

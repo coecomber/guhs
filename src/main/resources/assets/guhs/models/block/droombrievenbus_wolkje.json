@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/droombrievenbus_plein",
+  "textures": {
+    "bus": "guhs:block/droombrievenbus_wolkje",
+    "particle": "guhs:block/droombrievenbus_wolkje"
+  }
+}

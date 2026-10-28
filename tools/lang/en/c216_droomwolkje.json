@@ -1,0 +1,22 @@
+{
+  "block.guhs.droombrievenbus_wolkje": "Mailbox: My Dream Cloud",
+  "block.guhs.droombrievenbus_wolkje.lore": "Stands on the Dream Square. Click it in a dream: Dream Post takes you to your own dream cloud. Sneak-click: how to let friends build along.",
+  "gui.guhs.dromen.eiland.wolkje": "My dream cloud",
+  "gui.guhs.droomwolkje.nog_niet": "Your dream cloud isn't ready yet... help Snoes fall asleep first, njeg!",
+  "gui.guhs.droomwolkje.geen_wolkje": "They have no dream cloud yet. Not dreamed vads enough!",
+  "gui.guhs.droomwolkje.bezoeker": "You're visiting. Looking is fine, building isn't. Wipe your paws!",
+  "gui.guhs.droomwolkje.niet_van_jou": "Not yours, vadsje! When visiting you only look.",
+  "gui.guhs.droomwolkje.bus.uitleg": "Your dream cloud is yours: build whatever you like! Let friends build along: /droomwolkje vriend <name> (remove: /droomwolkje weg <name>, the list: /droomwolkje vrienden). Visit someone: /droomwolkje bezoek <name>. Back to the square: the jetty with the big bubble.",
+  "gui.guhs.droomwolkje.vriend.erbij": "%s may now build along on your dream cloud. Vads together!",
+  "gui.guhs.droomwolkje.vriend.weg": "%s no longer builds along on your dream cloud.",
+  "gui.guhs.droomwolkje.vriend.melding": "%1$s invited you to build along on their dream cloud! (/droomwolkje bezoek %1$s)",
+  "gui.guhs.droomwolkje.vriend.zelf": "Yourself? You may already do anything on your own cloud, njeg.",
+  "gui.guhs.droomwolkje.vrienden.geen": "Nobody builds along on your dream cloud yet.",
+  "gui.guhs.droomwolkje.vrienden.lijst": "Building along on your dream cloud: %s",
+  "gui.guhs.droomwolkje.bezoek.droom": "Visiting happens in a dream. Have a good sleep first!",
+  "gui.guhs.droomwolkje.gast.naam": "%s (dream guest)",
+  "gui.guhs.droomwolkje.gast.knuffel.jij": "You gave %s a hug. Now it dreams even sweeter!",
+  "gui.guhs.droomwolkje.gast.knabbel.jij": "You gave %s a nibble. Munch munch, in its sleep!",
+  "gui.guhs.droomwolkje.gast.bericht.knuffel": "%s gave %s a hug in Guh Dreamland 💤",
+  "gui.guhs.droomwolkje.gast.bericht.knabbel": "%s gave %s a nibble in Guh Dreamland 💤"
+}
