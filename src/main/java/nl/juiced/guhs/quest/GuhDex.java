@@ -79,7 +79,10 @@ public final class GuhDex {
             GuhVariant.APPA_GUH, GuhVariant.MOMO_GUH, GuhVariant.SPONSGUH, GuhVariant.GERRIT,
             // (einde2 phase B: the creatures of the Geestenwereld; most are only met in the story)
             GuhVariant.KOH, GuhVariant.HEI_BAI_GUH, GuhVariant.FANG, GuhVariant.GEEST_KOI, GuhVariant.LIBELKONIJNGUH, GuhVariant.LANTAARNGEEST,
-            GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH);
+            GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH,
+            // 1.8.0 Guhdromenland: the Blub-guh, the sterrenvisje and the dream characters (mostly met in the dream or behind Snoes' story)
+            GuhVariant.BLUBGUH, GuhVariant.STERRENVISJE, GuhVariant.SNOES, GuhVariant.ZANDGUH, GuhVariant.WEKKERGUH, GuhVariant.ROMMELGUH,
+            GuhVariant.DROOM_OMAGUH, GuhVariant.KUSSENGEVECHT_GUH, GuhVariant.BUBBELBADGUH);
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 
@@ -304,6 +307,7 @@ public final class GuhDex {
         nl.juiced.guhs.feature.band.BandPayloads.sync(player);      // (2.10: the Mijn guhs tab)
         nl.juiced.guhs.feature.gids.VerhalenPayloads.sync(player);  // (the Verhalen tab: every questline's step)
         nl.juiced.guhs.feature.titels.TitelsPayloads.sync(player);  // (1.2.6: the Titels tab)
+        nl.juiced.guhs.feature.dexdromen.BlubMeterkaart.sync(player);   // (1.8.0: the Blub-meterkaart on the Blub-guh page)
         nl.juiced.guhs.network.ModNetworking.sendTo(player, MaagPayloads.GuhDexData.of(GuhWorldData.get(player.level().getServer()).player(player.getUUID())));
     }
 

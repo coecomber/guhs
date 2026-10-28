@@ -552,7 +552,7 @@ public class E2KernGameTests {
         }
         helper.assertTrue(GuhVariant.KORSTGUH.ordinal() == GuhVariant.PINGUH.ordinal() + 1 && GuhVariant.KOORGUH.ordinal() == GuhVariant.REISGUH.ordinal() - 1,
                 "the six guhs sit between PINGUH and REISGUH");
-        helper.assertTrue(GuhVariant.values()[GuhVariant.values().length - 1] == GuhVariant.GERRIT, "the creature pages come last");
+        helper.assertTrue(GuhVariant.values()[GuhVariant.BLUBGUH.ordinal() - 1] == GuhVariant.GERRIT, "the creature pages come last (before the 1.8.0 pages)");
         // "wie de titel al had houdt hem": a full Guhdex but for the six biome guhs at the first login with einde2 is remembered
         ServerPlayer oud = speler(helper), nieuw = speler(helper);
         try {
