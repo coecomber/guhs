@@ -741,8 +741,30 @@ def remove_tijdelijke_blub_spawn(h):
         os.remove(p)
 
 
+def badguh_textuur(h):
+    """Badmeester Bubbels wears Badmeester Bubbel's model (WeideClient); his own skin is that texture in Bubbelsap colours:
+    the swim cap, buoy and suit hue-shifted from red to bubbly lavender-blue, the pink guh fur left alone."""
+    import colorsys
+    bron = Image.open(f"{h.A}/textures/entity/npc_badmeesterguh.png").convert("RGBA")
+    uit = bron.copy()
+    px = uit.load()
+    for y in range(uit.height):
+        for x in range(uit.width):
+            r, g, b, a = px[x, y]
+            if a == 0:
+                continue
+            hh, ss, vv = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            # strong reds/oranges (the kit) -> bubbelsap lavender-blue; the soft pink fur (low saturation) stays
+            if ss > 0.45 and (hh < 0.09 or hh > 0.93):
+                hh, ss, vv = 0.62, min(0.55, ss * 0.8), min(1.0, vv * 1.08)
+                r, g, b = (int(c * 255) for c in colorsys.hsv_to_rgb(hh, ss, vv))
+                px[x, y] = (r, g, b, a)
+    uit.save(f"{h.A}/textures/entity/npc_bubbelbadguh.png")
+
+
 def build(h):
     textures(h)
+    badguh_textuur(h)
     blocks_and_items(h)
     loot_recipes_tags(h)
     worldgen(h)

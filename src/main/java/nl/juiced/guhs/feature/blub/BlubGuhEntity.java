@@ -440,9 +440,14 @@ public class BlubGuhEntity extends Landdiertje {
         return 0;
     }
 
+    /**
+     * Wild Blubs stay, like vanilla animals (fix 1.8.0 playtest): they mostly spawn once, with the chunk, and a creature
+     * that despawns when you walk away hardly ever comes back (the creature cap is full of guhs), so the Zingende Weide was
+     * empty by the time you got there.
+     */
     @Override
     public boolean removeWhenFarAway(double distance) {
-        return !isTame() && !hasCustomName() && !isPersistenceRequired();
+        return false;
     }
 
     // --- babyblubjes -------------------------------------------------------------------------------------------------------------

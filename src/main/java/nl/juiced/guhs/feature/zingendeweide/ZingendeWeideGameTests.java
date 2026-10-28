@@ -157,6 +157,32 @@ public class ZingendeWeideGameTests {
         });
     }
 
+    /** Fix (1.8.0 playtest): you were stuck in bubbelsap. Walking forward in it now really moves you, and you can swim up. */
+    @GuhTest(template = "empty", batch = "zingendeweide", timeoutTicks = 100)
+    public static void weideBubbelsapBeweegt(GameTestHelper helper) {
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 5; z++) {
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.GLASS);
+                for (int y = 2; y < 4; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), x == 0 || z == 0 || x == 8 || z == 4 ? Blocks.GLASS.defaultBlockState()
+                            : ZingendeWeideFeature.BUBBELSAP_BLOK.get().defaultBlockState());
+                }
+            }
+        }
+        Pig pig = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
+        pig.setNoAi(true);
+        double x0 = pig.getX(), y0 = pig.getY();
+        for (int i = 0; i < 20; i++) {
+            pig.setYRot(-90f);   // facing +x
+            pig.travel(new net.minecraft.world.phys.Vec3(0, 0, 1));
+        }
+        helper.assertTrue(pig.getX() - x0 > 0.3, "walking in bubbelsap moves you (moved " + (pig.getX() - x0) + ")");
+        pig.setDeltaMovement(0, 0.3, 0);
+        pig.travel(net.minecraft.world.phys.Vec3.ZERO);
+        helper.assertTrue(pig.getY() > y0, "and you can go up in it");
+        helper.succeed();
+    }
+
     @GuhTest(template = "empty", batch = "zingendeweide", timeoutTicks = 100)
     public static void weideVormen(GameTestHelper helper) {
         var level = helper.getLevel();
