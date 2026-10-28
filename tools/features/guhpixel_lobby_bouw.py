@@ -23,7 +23,7 @@ import os
 import random
 import re
 
-VERSIE = 3
+VERSIE = 4                       # 4 = 1.8.0: the Gezelschapshoek (three anchors in the south-east)
 NAME = "guhpixel/lobby"
 W, H = 97, 56                    # (H may grow to 96)
 MIN = (-48, 68, -48)             # world position of the template's min corner
@@ -36,6 +36,8 @@ ANKERS = {
     "SPEL_VADSNITE": (-8, 100, -24, 0), "SPEL_AMONG": (0, 100, -26, 0), "SPEL_GUHMON": (8, 100, -24, 0), "SPEL_BZG": (16, 100, -21, 0),
     "SPEL_RESERVE": (24, 100, -16, 0), "BORD_AMONG": (4, 100, -29, 0), "WINKEL": (-28, 100, 6, -90), "BORD_STATS": (-10, 100, 14, 180),
     "BORD_ONLINE": (10, 100, 14, 180), "PARKOUR_START": (28, 100, 6, -90), "UITGANG": (0, 100, 28, 0),
+    # 1.8.0 the Gezelschapshoek (feature/guhpixel/gezel): Kussengevecht, Wie is het, Guh op een rij; they look north-west
+    "SPEL_KUSSEN": (14, 100, 22, 135), "SPEL_WIEISHET": (20, 100, 16, 135), "SPEL_OPEENRIJ": (26, 100, 24, 135),
 }
 PORTAAL = [(x, y, 30) for x in (-1, 0, 1) for y in (100, 101, 102)]
 LUCHT = (None, "minecraft:air")
@@ -579,6 +581,25 @@ def versiering(h, b):
 
 
 # =====================================================================================================================
+# 1.8.0 the Gezelschapshoek: three game anchors in the south-east, each with a standing sign and two cushions behind it
+# =====================================================================================================================
+GEZEL = {"SPEL_KUSSEN": ("pink", ["~ Kussengevecht ~", "Wie blijft er", "op het bed?", "Zachte val!"]),
+         "SPEL_WIEISHET": ("light_blue", ["~ Wie is het ~", "Raad de guh", "van de ander.", "Draagt hij een hoed?"]),
+         "SPEL_OPEENRIJ": ("yellow", ["~ Guh op een rij ~", "Vier guhs op", "een rij wint.", "Of vier Blubs."])}
+
+
+def gezelhoek(h, b):
+    """Behind every Gezelschapshoek anchor (south-east of it: the NPC looks north-west) a sign in the game's colour and two
+    cushions to sit on while you watch."""
+    for naam, (kleur, regels) in GEZEL.items():
+        ax, ay, az, _ = ANKERS[naam]
+        b.zet(ax + 3, 100, az + 3, f"{kleur}_wool")
+        staand_bord(h, b, ax + 3, 101, az + 3, 6, regels, gloei=True)
+        for dx, dz in ((4, 1), (1, 4)):
+            b.zet(ax + dx, 100, az + dz, f"{kleur}_carpet")
+
+
+# =====================================================================================================================
 def maak(h):
     """Builds the whole lobby and returns the Structure (not saved)."""
     s = h.Structure((W, H, W))
@@ -593,6 +614,7 @@ def maak(h):
     uitgang(h, b)
     borden(h, b)
     versiering(h, b)
+    gezelhoek(h, b)
     # the free space of every pad, once more (walls and roads may not creep in)
     for naam, (ax, ay, az, _) in ANKERS.items():
         for dx in range(-2, 3):

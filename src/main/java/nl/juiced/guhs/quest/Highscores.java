@@ -139,8 +139,11 @@ public final class Highscores {
             // </minigames1>
             // <minigames2> 1.7.0 Onder de Wol: Karretjes-wissels (carts sorted) and the Kegelgrot (bowling score), per level
             points("karretjes_makkelijk", "ertsbonnetje"), points("karretjes_medium", "ertsbonnetje"), points("karretjes_lastig", "ertsbonnetje"),
-            points("kegelen_makkelijk", "kegelknoop"), points("kegelen_medium", "kegelknoop"), points("kegelen_lastig", "kegelknoop"));
+            points("kegelen_makkelijk", "kegelknoop"), points("kegelen_medium", "kegelknoop"), points("kegelen_lastig", "kegelknoop"),
             // </minigames2>
+            // <guhpixelspel> 1.8.0 the Gezelschapshoek of Guhpixel (feature/guhpixel/gezel): Kussengevecht points, board game wins
+            points("kussengevecht", "kussengevecht_kussen"), points("wieishet", "wieishet_kaartje"), points("opeenrij", "opeenrij_schijfje"));
+            // </guhpixelspel>
 
     /** A 2.9 row with points ("N pt", higher is better; board = id, icon = the game's coin). */
     private static Game points(String id, String coin) {

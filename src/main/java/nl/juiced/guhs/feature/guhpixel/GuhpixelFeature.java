@@ -112,6 +112,7 @@ public final class GuhpixelFeature {
         BioscoopSlice.register(modBus);
         ReisbureauSlice.register(modBus);
         ParkourSlice.register(modBus);
+        nl.juiced.guhs.feature.guhpixel.gezel.GezelSlice.register(modBus);   // 1.8.0 the Gezelschapshoek
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -125,6 +126,7 @@ public final class GuhpixelFeature {
         BioscoopSlice.payloads(registrar);
         ReisbureauSlice.payloads(registrar);
         ParkourSlice.payloads(registrar);
+        nl.juiced.guhs.feature.guhpixel.gezel.GezelSlice.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -139,6 +141,7 @@ public final class GuhpixelFeature {
         BioscoopSlice.creative(output);
         ReisbureauSlice.creative(output);
         ParkourSlice.creative(output);
+        nl.juiced.guhs.feature.guhpixel.gezel.GezelSlice.creative(output);
     }
 
     private GuhpixelFeature() {

@@ -153,6 +153,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'droomweer',
             # 1.8.0 uitbreiding: de Dirigent in de Koorkom (append only)
             'dirigent']
+            'droomweer',
+            # 1.8.0: the Gezelschapshoek of Guhpixel (Kussengevecht, Wie is het, Guh op een rij; append only)
+            'guhpixel_gezel']
 
 
 def modules():

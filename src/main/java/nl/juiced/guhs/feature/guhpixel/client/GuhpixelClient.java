@@ -76,6 +76,7 @@ public final class GuhpixelClient {
         BioscoopClient.init(modBus);
         ReisbureauClient.init(modBus);
         ParkourClient.init(modBus);
+        nl.juiced.guhs.feature.guhpixel.gezel.client.GezelClient.init(modBus);   // 1.8.0 the Gezelschapshoek
     }
 
     /** The saldo the server told last (screens of the slices may show it). */

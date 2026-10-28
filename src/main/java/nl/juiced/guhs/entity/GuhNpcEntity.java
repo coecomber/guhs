@@ -309,6 +309,13 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         /** 1.8.0 De Zingende Weide (feature/zingendeweide): Badmeester Bubbels of the bath hut at the Bubbelsap-poeltjes. */
         BUBBELBADGUH(1.0f),
         // </zingendeweide>
+        // <guhpixelspel>
+        /** 1.8.0 Guhpixel Gezelschapshoek (feature/guhpixel/gezel): the Kussenbaas (Kussengevecht), the Spelletjesguh (Wie is
+         * het) and the Rijtjesguh (Guh op een rij), on the lobby anchors SPEL_KUSSEN, SPEL_WIEISHET and SPEL_OPEENRIJ. */
+        KUSSENBAAS_GUH(1.0f),
+        WIEISHET_GUH(1.0f),
+        OPEENRIJ_GUH(1.0f),
+        // </guhpixelspel>
         ;
 
         public final float scale;
