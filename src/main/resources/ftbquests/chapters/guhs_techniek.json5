@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 51,
+  guhs_chapter_version: 52,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -127,13 +127,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "475548C3DD171680",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_centrale.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 27.568749999999998,
+      y: 31.531249999999996,
       hover: [
         "De Werktuigguh krabt achter zijn oortjes.",
         "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
@@ -2802,6 +2814,70 @@
       x: 16.0,
       y: 24.45,
       shape: "rsquare",
+    },
+    {
+      id: "475548B6445198F6",
+      icon: {
+        id: "guhs:mega_knuffelcentrale",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tech_bronnen_mega_knuffelcentrale",
+          id: "475548FB2A2BE931",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487C3876D670",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548C36DC7A1AF",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755485077753D1B",
+      icon: {
+        id: "minecraft:emerald",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/centrale_export",
+          id: "4755487DA0B28859",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E9C224B085",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:droomzand",
+          },
+          count: 4,
+        },
+        {
+          id: "4755487A96F11956",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 28.412499999999998,
     },
   ],
 }

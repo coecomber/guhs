@@ -32311,5 +32311,21 @@
   "sign.guhs.lobby.guh_op_een_rij": "~ Guh op een rij ~",
   "sign.guhs.lobby.vier_guhs_op": "Vier guhs op",
   "sign.guhs.lobby.een_rij_wint": "een rij wint.",
-  "sign.guhs.lobby.of_vier_blubs": "Of vier Blubs."
+  "sign.guhs.lobby.of_vier_blubs": "Of vier Blubs.",
+  "block.guhs.mega_knuffelcentrale": "Mega-knuffelcentrale",
+  "block.guhs.mega_knuffelcentrale.lore": "Een reuzenkussen van 5 bij 3 waar 16 tamme guhs samen knuffelen: 22 vadskracht per guh, tot 352 in totaal. Wel goed verzorgen: knabbels, roze broodjes of kaasknabbelblokken, en elke dag één wol voor verse dekentjes. Eén per net.",
+  "block.guhs.mega_knuffelcentrale_deel": "Mega-knuffelcentrale",
+  "gui.guhs.vadskracht.soort.mega_knuffelcentrale": "Mega-knuffelcentrales",
+  "gui.guhs.vadskracht.soort.mega_knuffelcentrale.enkel": "Mega-knuffelcentrale",
+  "gui.guhs.centrale.leeg": "Nog geen guh op het reuzenkussen: tamme guhs binnen %s blokken komen vanzelf",
+  "gui.guhs.centrale.guhs": "%s/%s guhs liggen te knuffelen, njeg!",
+  "gui.guhs.centrale.honger": "Honger! Zonder voer knuffelen ze maar voor %s procent",
+  "gui.guhs.centrale.dekens_oud": "De dekentjes zijn niet meer vers: %s procent. Eén wol per dag, vads!",
+  "gui.guhs.centrale.tevreden": "Tevreden guhs! Voer: %s, wol: %s",
+  "gui.guhs.centrale.status": "%s/%s guhs, verzorging %s procent, voer %s, wol %s",
+  "gui.guhs.centrale.vol": "Het bakje zit vol, njeg",
+  "advancements.guhs.techniek.tech_bronnen_mega_knuffelcentrale.title": "Zestien knuffels",
+  "advancements.guhs.techniek.tech_bronnen_mega_knuffelcentrale.description": "Laat guhs knuffelen op een Mega-knuffelcentrale",
+  "advancements.guhs.techniek.centrale_export.title": "Export-vads",
+  "advancements.guhs.techniek.centrale_export.description": "Verkoop bulk aan een guh-villager voor iets zeldzaams"
 }

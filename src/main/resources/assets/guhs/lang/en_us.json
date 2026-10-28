@@ -32311,5 +32311,21 @@
   "sign.guhs.lobby.guh_op_een_rij": "~ Guh in a row ~",
   "sign.guhs.lobby.vier_guhs_op": "Four guhs in",
   "sign.guhs.lobby.een_rij_wint": "a row win.",
-  "sign.guhs.lobby.of_vier_blubs": "Or four Blubs."
+  "sign.guhs.lobby.of_vier_blubs": "Or four Blubs.",
+  "block.guhs.mega_knuffelcentrale": "Mega Cuddle Plant",
+  "block.guhs.mega_knuffelcentrale.lore": "A giant 5 by 3 cushion where 16 tamed guhs cuddle together: 22 vadskracht per guh, up to 352 in all. Do look after them: knabbels, pink buns or blocks of kaasknabbels, and one wool a day for fresh blankets. One per net.",
+  "block.guhs.mega_knuffelcentrale_deel": "Mega Cuddle Plant",
+  "gui.guhs.vadskracht.soort.mega_knuffelcentrale": "Mega Cuddle Plants",
+  "gui.guhs.vadskracht.soort.mega_knuffelcentrale.enkel": "Mega Cuddle Plant",
+  "gui.guhs.centrale.leeg": "No guh on the giant cushion yet: tamed guhs within %s blocks come by themselves",
+  "gui.guhs.centrale.guhs": "%s/%s guhs are cuddling, njeg!",
+  "gui.guhs.centrale.honger": "Hungry! Without food they only cuddle at %s percent",
+  "gui.guhs.centrale.dekens_oud": "The blankets are not fresh any more: %s percent. One wool a day, vads!",
+  "gui.guhs.centrale.tevreden": "Happy guhs! Food: %s, wool: %s",
+  "gui.guhs.centrale.status": "%s/%s guhs, care %s percent, food %s, wool %s",
+  "gui.guhs.centrale.vol": "The compartment is full, njeg",
+  "advancements.guhs.techniek.tech_bronnen_mega_knuffelcentrale.title": "Sixteen cuddles",
+  "advancements.guhs.techniek.tech_bronnen_mega_knuffelcentrale.description": "Let guhs cuddle on a Mega Cuddle Plant",
+  "advancements.guhs.techniek.centrale_export.title": "Export vads",
+  "advancements.guhs.techniek.centrale_export.description": "Sell bulk to a guh villager for something rare"
 }

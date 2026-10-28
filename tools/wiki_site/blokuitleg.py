@@ -2209,3 +2209,10 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+# <centrale>
+UITLEG['mega_knuffelcentrale'] = dict(
+    nl="Het reuzenkussen van de Mega-knuffelcentrale (5 bij 3). Tamme guhs binnen 8 blokken komen vanzelf liggen, tot 16. Elke guh geeft 22 vadskracht.\n\n- Klik met kaasknabbels, roze broodjes of kaasknabbelblokken: voer. Elke knuffelende guh eet om de 120 seconden een portie. Zonder voer knuffelen ze maar voor 25 procent.\n- Klik met wol: verse dekentjes. Eén wol per dag; oude dekentjes geven 75 procent.\n- Buizen en trechters mogen voer en wol erin doen.\n- Eén per vadskracht-net. Lege hand: hoe gaat het met de guhs?",
+    en="The giant cushion of the Mega Cuddle Plant (5 by 3). Tamed guhs within 8 blocks come and lie down by themselves, up to 16. Every guh gives 22 vadskracht.\n\n- Click with kaasknabbels, pink buns or blocks of kaasknabbels: food. Every cuddling guh eats a portion every 120 seconds. Without food they only cuddle at 25 percent.\n- Click with wool: fresh blankets. One wool a day; old blankets give 75 percent.\n- Pipes and hoppers may put food and wool in.\n- One per vadskracht net. Empty hand: how are the guhs doing?",
+    meer=[])
+# </centrale>

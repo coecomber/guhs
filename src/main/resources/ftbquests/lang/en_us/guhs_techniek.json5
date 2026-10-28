@@ -367,4 +367,12 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
+  "quest.475548B6445198F6.title": "Sixteen cuddles",
+  "quest.475548B6445198F6.quest_desc": [
+    "The &dMega Cuddle Plant&r is a giant 5 by 3 cushion. Up to &d16 tamed guhs&r come and cuddle on it by themselves, and every guh gives &b22 vadskracht&r: 352 together! Do look after them: &6food&r (kaasknabbels, pink buns or blocks of kaasknabbels) and &6one wool&r a day for fresh blankets. One per net.",
+  ],
+  "quest.4755485077753D1B.title": "Export vads",
+  "quest.4755485077753D1B.quest_desc": [
+    "The &dguh villagers&r (Vadsmonteur, Miner, Crystal Cutter and Magic Guh) buy &6bulk&r from your factories every day: blocks of kaasknabbels, knuffelsteen, coloured wool and baked goods. They pay with rare things: clothes, plushies, weather jars, dream sand and even fossils. New orders every day!",
+  ],
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KBK",
+    "WGW",
+    "KBK"
+  ],
+  "key": {
+    "K": "guhs:knuffelgenerator",
+    "B": "guhs:knabbelbatterij",
+    "W": "guhs:pluiswolblok",
+    "G": "guhs:gloeister"
+  },
+  "result": {
+    "id": "guhs:mega_knuffelcentrale",
+    "count": 1
+  }
+}
