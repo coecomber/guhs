@@ -1,0 +1,18 @@
+{
+  "type": "guhs:guhdromenland",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:guhdromenland",
+      "layers": [
+        {
+          "block": "guhs:droomzee_tijdelijk",
+          "height": 1
+        }
+      ],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

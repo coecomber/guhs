@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P P",
+    "PKP"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:doos_knabbels",
+    "count": 1
+  }
+}

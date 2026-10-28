@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:knuffel_normal",
+    "guhs:knuffel_mint",
+    "guhs:knuffel_choco",
+    "guhs:knuffel_snow",
+    "guhs:knuffel_rainbow",
+    "guhs:knuffel_wolk",
+    "guhs:knuffel_ghost",
+    "guhs:knuffel_golden",
+    "guhs:knuffel_mager",
+    "guhs:pluiswolblok",
+    "guhs:white_kussen",
+    "guhs:orange_kussen",
+    "guhs:magenta_kussen",
+    "guhs:light_blue_kussen",
+    "guhs:yellow_kussen",
+    "guhs:lime_kussen",
+    "guhs:pink_kussen",
+    "guhs:gray_kussen",
+    "guhs:light_gray_kussen",
+    "guhs:cyan_kussen",
+    "guhs:purple_kussen",
+    "guhs:blue_kussen",
+    "guhs:brown_kussen",
+    "guhs:green_kussen",
+    "guhs:red_kussen",
+    "guhs:black_kussen"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "WKW",
+    "PPP"
+  ],
+  "key": {
+    "W": "minecraft:purple_wool",
+    "K": "guhs:kaas_knabbels",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:kattenhuisje_lavendel",
+    "count": 1
+  }
+}

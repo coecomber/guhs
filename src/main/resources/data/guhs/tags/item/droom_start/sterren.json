@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:sterrenlantaarn",
+    "guhs:sterrenkoekje",
+    "guhs:knuffel_starry",
+    {
+      "id": "guhs:sterlampje",
+      "required": false
+    }
+  ]
+}

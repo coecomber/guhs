@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:pink_kussen",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "guhs:droomkussen",
+    "count": 1
+  }
+}

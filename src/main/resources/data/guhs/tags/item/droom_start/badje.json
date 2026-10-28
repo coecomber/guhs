@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:knuffelbad_badeendje",
+    {
+      "id": "guhs:zeepje",
+      "required": false
+    }
+  ]
+}

@@ -792,24 +792,44 @@ UITLEG = {
            "works where you may build yourself.",
         meer=["systemen/bezorgguhtje"]),
     "blub_badje": dict(
-        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!
-"
-           "
-"
-           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.
-"
-           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.
-"
+        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!\n"
+           "\n"
+           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.\n"
+           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.\n"
            "- Het schuim is na een paar minuten weg; dan schuimt de Blub het weer op.",
-        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!
-"
-           "
-"
-           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.
-"
-           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.
-"
+        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!\n"
+           "\n"
+           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.\n"
+           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
+    "doos_knabbels": dict(
+        nl="Een kartonnen doos met kaasknabbels erin. Een guh kiest altijd de doos (ook als je een prachtig kattenhuisje "
+           "hebt gebouwd).\n"
+           "\n"
+           "- 's Avonds of 's nachts: rechtsklik op de doos met een tamme guh van jou in de buurt. Hij kruipt erin en valt in "
+           "slaap: ingestopt!\n"
+           "- Wat je in je hand hebt geef je mee (je krijgt het terug als je wakker wordt). Dat bepaalt waar jullie van "
+           "dromen: een knuffel, een sterrenlantaarn, een roze guh koek, een badeendje, een lampion...\n"
+           "- Ga daarna zelf slapen in een bed vlakbij: je wordt wakker in Guhdromenland.\n"
+           "- Sluip + rechtsklik: je guh weer uitstoppen.",
+        en="A cardboard box with cheese nibbles in it. A guh always picks the box (even when you built a beautiful cat "
+           "house).\n"
+           "\n"
+           "- In the evening or at night: right-click the box with a tame guh of yours nearby. It climbs in and falls asleep: "
+           "tucked in!\n"
+           "- What you hold goes along (you get it back when you wake up). It decides what you dream of: a plush, a star "
+           "lantern, a pink guh cake, a rubber duck, a lantern...\n"
+           "- Then go to sleep in a bed close by yourself: you wake up in Guh Dreamland.\n"
+           "- Sneak + right-click: untuck your guh.",
+        meer=[]),
+    "kattenhuisje_roze": dict(
+        nl="Een kattenhuisje met een rond deurtje en guh-oortjes op het dak. Je kunt er je guh in instoppen, net als in de "
+           "doos met knabbels: 's avonds rechtsklikken met een tamme guh in de buurt, en dan zelf gaan slapen in een bed "
+           "vlakbij. Er zijn ook witte, lavendel en mint kattenhuisjes.",
+        en="A cat house with a round little door and guh ears on the roof. You can tuck your guh in here, just like in the "
+           "box of nibbles: right-click in the evening with a tame guh nearby, then go to sleep in a bed close by. There "
+           "are white, lavender and mint cat houses too.",
+        meer=[]),
     "weer_vadser": dict(
         nl="Maakt zijn eigen weertje, tot 60 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
            "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.\n"
