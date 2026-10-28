@@ -612,7 +612,7 @@ SPAWN_EGGS = {
     "knabbelvlindertje_spawn_egg": (0xFCD656, 0xC4A8F0), "glimguhtje_spawn_egg": (0xFAE2EC, 0xD8F070),
     "lieveheersbeestje_spawn_egg": (0xDE2834, 0x1E1822), "ijscoguh_spawn_egg": (0xFFF4F8, 0xF08CB8),
     # no item any more (the quest guh egg was removed long ago), but its model is still generated: give it the guh's colours
-    "quest_guh_spawn_egg": (0xF7CCDA, 0x78C4EB), "blubguh_spawn_egg": (0x8AC9F7, 0xF2A6C8),
+    "quest_guh_spawn_egg": (0xF7CCDA, 0x78C4EB), "blubguh_spawn_egg": (0x8AC9F7, 0xF2A6C8), "sterrenvisje_spawn_egg": (0xFFE278, 0xC4A6FF),
 }
 
 _JAR = None

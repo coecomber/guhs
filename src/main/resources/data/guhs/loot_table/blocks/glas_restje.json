@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "guhs:glas_restje",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "add": false,
+              "count": 2.0,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:glas_restje",
+                  "properties": {
+                    "glazen": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "add": false,
+              "count": 3.0,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:glas_restje",
+                  "properties": {
+                    "glazen": "3"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

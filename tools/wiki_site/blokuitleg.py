@@ -792,23 +792,15 @@ UITLEG = {
            "works where you may build yourself.",
         meer=["systemen/bezorgguhtje"]),
     "blub_badje": dict(
-        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!
-"
-           "
-"
-           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.
-"
-           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.
-"
+        nl="Een klein roze badje met pootjes. Een Blub-guh in de buurt hupt er af en toe zelf in om te badderen: bubbels!\n"
+           "\n"
+           "- Woont er een Blub met het klusje Bubbelbadmeester in een guhhuisje vlakbij, dan zet hij het badje klaar met schuim.\n"
+           "- Met schuim gaan tamme guhs er af en toe in. Ze worden er fris en blij van: een poosje vaker hartjes en blije dansjes.\n"
            "- Het schuim is na een paar minuten weg; dan schuimt de Blub het weer op.",
-        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!
-"
-           "
-"
-           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.
-"
-           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.
-"
+        en="A little pink tub on feet. A Blub-guh nearby hops in by itself now and then for a splash: bubbles!\n"
+           "\n"
+           "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.\n"
+           "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
     "weer_vadser": dict(
         nl="Maakt zijn eigen weertje, tot 60 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
@@ -827,6 +819,17 @@ UITLEG = {
            "and blossom breeze) need a weather jar first. The menu tells you where to find it.\n"
            "- Right-click with a weather jar: unlocked at once. With the souvenir 'Rainbow in a Jar': the rainbow weather, "
            "and you keep the souvenir."),
+    "glas_restje": dict(
+        nl="Een glas met een restje sap, cola, limonade, melk of thee: het handelsmerk van de Rommelguh. Welk drankje erin zit "
+           "is een verrassing.\n"
+           "\n"
+           "- Rechtsklik met nog een glas: er komt een glas bij (tot 3).\n"
+           "- Rechtsklik met een lege hand: een slokje. Er blijft natuurlijk altijd een restje over.",
+        en="A glass with a little bit of juice, cola, lemonade, milk or tea left: the Rommelguh's trademark. Which drink is in "
+           "it is a surprise.\n"
+           "\n"
+           "- Right-click with another glass: one more glass (up to 3).\n"
+           "- Right-click with an empty hand: a sip. Of course there's always a little bit left."),
     "hapluikje": dict(
         nl="Een luikje met een bekje dat alles wat je erin stopt meteen in je Bankguh legt, hoe ver die ook weg staat.\n"
            "\n"

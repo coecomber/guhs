@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "G G",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "guhs:glas_restje",
+    "count": 3
+  }
+}

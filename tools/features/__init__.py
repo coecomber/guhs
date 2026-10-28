@@ -127,7 +127,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # that writes them: guh_village (make_structures + beroepen), kaasmijn, boerderij, spiesburcht, bestaand, paleizen; append only)
             'vadskracht_oud',
             # 1.8.0 Guhdromenland (test build): the Blub-guh (append only)
-            'blub']
+            'blub',
+            # 1.8.0 Guhdromenland: the dream NPCs, the Sterrenvisje and the glas met een restje (append only)
+            'droomwezens']
 
 
 def modules():
