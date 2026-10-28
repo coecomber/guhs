@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "FNF",
+    "KSK"
+  ],
+  "key": {
+    "P": "minecraft:pink_wool",
+    "F": "minecraft:oak_fence",
+    "N": "minecraft:note_block",
+    "K": "guhs:kaas_knabbels",
+    "S": "minecraft:smooth_stone_slab"
+  },
+  "result": {
+    "id": "guhs:draaimolen",
+    "count": 1
+  }
+}

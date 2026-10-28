@@ -689,6 +689,11 @@
     "guhs:koorkom_podium",
     "guhs:hamsterknooppunt",
     "guhs:hamsterbuis_station",
-    "guhs:kaaskas"
+    "guhs:kaaskas",
+    "guhs:mega_oven",
+    "guhs:knabbel_weerstation",
+    "guhs:sterrenkoepel",
+    "guhs:draaimolen",
+    "guhs:wolkenvanger"
   ]
 }

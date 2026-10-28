@@ -1,0 +1,220 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voor": "guhs:block/knabbel_weerstation_voor_slaapt",
+    "zij": "guhs:block/knabbel_weerstation_zij",
+    "boven": "guhs:block/knabbel_weerstation_boven",
+    "particle": "guhs:block/knabbel_weerstation_zij",
+    "deur": "guhs:block/mega_oven_deur",
+    "hemel": "guhs:block/sterrenkoepel_hemel",
+    "dak": "guhs:block/draaimolen_dak",
+    "wolk": "guhs:block/koepel_wolk",
+    "guh": "guhs:block/koepel_guhkopje"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        20,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#voor"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        20,
+        6
+      ],
+      "to": [
+        10,
+        28,
+        10
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        28,
+        2
+      ],
+      "to": [
+        14,
+        32,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#wolk"
+        }
+      }
+    }
+  ]
+}

@@ -70,7 +70,7 @@ public final class WeerClient {
 
     public static void init(IEventBus modBus) {
         modBus.addListener(WeerClient::deeltjes);
-        WeerPayloads.zonesOntvanger = p -> WeerZones.Client.zet(p.plekken(), p.weertjes());
+        WeerPayloads.zonesOntvanger = p -> WeerZones.Client.zet(p.plekken(), p.weertjes(), p.stralen());
         WeerPayloads.menuOpener = p -> Minecraft.getInstance().setScreen(new WeerScherm(p));
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tick());
         NeoForge.EVENT_BUS.addListener(WeerClient::onFog);

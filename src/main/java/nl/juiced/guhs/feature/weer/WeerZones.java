@@ -32,21 +32,31 @@ public final class WeerZones {
     /** A zone that is not renewed this many ticks is gone. */
     public static final int VERVAL = 40;
 
-    /** One zone: its centre, its weather, and until when it holds (game time; Long.MAX_VALUE: a test zone). */
-    public record Zone(BlockPos midden, Weertje weertje, long tot) {
+    /**
+     * What radius a running Weer vadser at this spot gets (default {@link #STRAAL}). 1.8.0 (vadskracht): other features widen
+     * it by wrapping this hook (the Knabbel-weerstation of feature/koepel: a whole base).
+     */
+    public static java.util.function.ToIntBiFunction<ServerLevel, BlockPos> STRAAL_VOOR = (level, pos) -> STRAAL;
+
+    /** One zone: its centre, its weather, until when it holds (game time; Long.MAX_VALUE: a test zone) and its radius. */
+    public record Zone(BlockPos midden, Weertje weertje, long tot, int straal) {
+        public Zone(BlockPos midden, Weertje weertje, long tot) {
+            this(midden, weertje, tot, STRAAL);
+        }
+
         public boolean binnen(double x, double z) {
             double dx = x - (midden.getX() + 0.5), dz = z - (midden.getZ() + 0.5);
-            return dx * dx + dz * dz <= (double) STRAAL * STRAAL;
+            return dx * dx + dz * dz <= (double) straal * straal;
         }
 
         /** 1 deep inside, easing to 0 at the edge. */
         public float gewicht(double x, double z) {
             double dx = x - (midden.getX() + 0.5), dz = z - (midden.getZ() + 0.5);
             double d = Math.sqrt(dx * dx + dz * dz);
-            if (d >= STRAAL) {
+            if (d >= straal) {
                 return 0f;
             }
-            return (float) Math.min(1.0, (STRAAL - d) / RAND);
+            return (float) Math.min(1.0, (straal - d) / RAND);
         }
     }
 
@@ -63,7 +73,8 @@ public final class WeerZones {
 
     /** A running Weer vadser at pos keeps its zone (called every tick it works). */
     public static synchronized void houdVast(ServerLevel level, BlockPos pos, Weertje w) {
-        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(), new Zone(pos.immutable(), w, level.getGameTime() + VERVAL));
+        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(),
+                new Zone(pos.immutable(), w, level.getGameTime() + VERVAL, Math.max(1, STRAAL_VOOR.applyAsInt(level, pos))));
     }
 
     /** A test zone (no block, no vadskracht) at pos until {@link #wisTest}. */
@@ -124,18 +135,20 @@ public final class WeerZones {
         }
         StringBuilder sb = new StringBuilder();
         m.values().stream().sorted((a, b) -> Long.compare(a.midden().asLong(), b.midden().asLong()))
-                .forEach(z -> sb.append(z.midden().asLong()).append(':').append(z.weertje().ordinal()).append(';'));
+                .forEach(z -> sb.append(z.midden().asLong()).append(':').append(z.weertje().ordinal()).append(':').append(z.straal()).append(';'));
         return sb.toString();
     }
 
     private static synchronized WeerPayloads.Zones payload(ServerLevel level) {
         List<Long> plekken = new ArrayList<>();
         List<Integer> weertjes = new ArrayList<>();
+        List<Integer> stralen = new ArrayList<>();
         for (Zone z : zones(level)) {
             plekken.add(z.midden().asLong());
             weertjes.add(z.weertje().ordinal());
+            stralen.add(z.straal());
         }
-        return new WeerPayloads.Zones(plekken, weertjes);
+        return new WeerPayloads.Zones(plekken, weertjes, stralen);
     }
 
     /** (Tests) forgets everything. */
@@ -194,10 +207,11 @@ public final class WeerZones {
     public static final class Client {
         static final List<Zone> ZONES = new CopyOnWriteArrayList<>();
 
-        public static void zet(List<Long> plekken, List<Integer> weertjes) {
+        public static void zet(List<Long> plekken, List<Integer> weertjes, List<Integer> stralen) {
             List<Zone> nieuw = new ArrayList<>();
             for (int i = 0; i < plekken.size() && i < weertjes.size(); i++) {
-                nieuw.add(new Zone(BlockPos.of(plekken.get(i)), Weertje.byIndex(weertjes.get(i)), Long.MAX_VALUE));
+                nieuw.add(new Zone(BlockPos.of(plekken.get(i)), Weertje.byIndex(weertjes.get(i)), Long.MAX_VALUE,
+                        i < stralen.size() ? stralen.get(i) : STRAAL));
             }
             ZONES.clear();
             ZONES.addAll(nieuw);

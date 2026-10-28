@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SKS",
+    "OBO",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:smooth_stone",
+    "K": "guhs:block_of_kaasknabbels",
+    "O": "guhs:guh_oven",
+    "B": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "guhs:mega_oven",
+    "count": 1
+  }
+}

@@ -182,6 +182,7 @@ public final class Features {
         nl.juiced.guhs.feature.kaaskas.KaaskasFeature.register(modBus);   // 1.8.0 vadskracht: de Kaaskas, het pluisbolletje, de Guh-sorteerband
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.register(modBus);   // 1.8.0 (U2): sleepy guh clothes + the droompyjama   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
+        nl.juiced.guhs.feature.koepel.KoepelFeature.register(modBus);   // 1.8.0 (vadskracht): de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger)
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.register(modBus);   // 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein
         nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.register(modBus);   // 1.8.0 uitbreiding: de Vliegdroom (Rookguhs, wolkjesringen-parcours)
@@ -459,6 +460,7 @@ public final class Features {
         nl.juiced.guhs.feature.kaaskas.KaaskasFeature.creative(output);   // 1.8.0 vadskracht: Kaaskas + sorteerband
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.creative(output);   // 1.8.0: sleepy clothes + droompyjama   // 1.8.0: the droomkistje
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);   // 1.8.0: the droomkistje
+        nl.juiced.guhs.feature.koepel.KoepelFeature.creative(output);   // 1.8.0: de Koepel
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.creative(output);   // 1.8.0: the droomkraampje
         nl.juiced.guhs.feature.dirigent.DirigentFeature.creative(output);   // 1.8.0: the dirigeerstokjes
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.creative(output);   // 1.8.0 uitbreiding: the Vlieg-diploma
