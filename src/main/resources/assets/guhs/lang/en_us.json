@@ -31906,5 +31906,17 @@
   "gui.guhs.droomspul.postguh.0": "Mail for you? Njeg... only a dream. I deliver those for free.",
   "gui.guhs.droomspul.postguh.1": "One mailbox per island. But only to islands you've been to, otherwise I don't know your address!",
   "gui.guhs.droomspul.postguh.2": "Stamps? Here you pay with yawns. I've had three already today.",
-  "gui.guhs.droomspul.postguh.3": "Yesterday I delivered a hug. It was a bit squashed, but still very sweet."
+  "gui.guhs.droomspul.postguh.3": "Yesterday I delivered a hug. It was a bit squashed, but still very sweet.",
+  "gui.guhs.weer.weertje.droom": "Dream Weather",
+  "gui.guhs.weer.weertje.droom.uitleg": "A piece of Guh Dreamland: the dream sky with the sleepy moon, falling stars to catch, floating and dream music. The guhs get sleepy.",
+  "item.guhs.weerpotje_droom": "Weather Jar: Dream Weather",
+  "item.guhs.weerpotje_droom.lore": "A bit of dream sky with a sleepy little moon. Shh!",
+  "gui.guhs.weer.weertje.droom.bron": "the dream chest at the top of the Star Cushion Field, in Guh Dreamland",
+  "block.guhs.droomkistje": "Dream Chest",
+  "block.guhs.droomkistje.lore": "Stands at the top of the Star Cushion Field, by the big star. You may peek inside once a day!",
+  "gui.guhs.droomweer.kistje.morgen": "Come back tomorrow, vadsje! The chest is taking a nap.",
+  "gui.guhs.droomweer.kistje.eerste": "The dream chest held a weather jar: Dream Weather! Open it and your Weather Vadser can dream. VAHOEG!",
+  "gui.guhs.droomweer.kistje.eerste.titel": "Dream Weather!",
+  "gui.guhs.droomweer.kistje.eerste.sub": "A piece of Guh Dreamland, for at home",
+  "gui.guhs.droomweer.kistje.cadeau": "The dream chest gave you dream sand and %s. See you tomorrow, vadsje!"
 }

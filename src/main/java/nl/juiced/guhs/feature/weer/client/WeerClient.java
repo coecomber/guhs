@@ -106,6 +106,11 @@ public final class WeerClient {
         });
     }
 
+    /** How much droomweer there is at the camera (0..1, eased at the zone's edge): feature/droomweer draws its sky with it. */
+    public static float droomSterkte() {
+        return weertje == Weertje.DROOM ? sterkte : 0f;
+    }
+
     private static void deeltjes(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(WeerFeature.PLUISJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new WeerDeeltje(level, x, y, z, dx, dy, dz, sprites, WeerDeeltje.Soort.PLUISJE));
@@ -236,6 +241,7 @@ public final class WeerClient {
                     nieuweSter(c, r);
                 }
             }
+            case DROOM -> val(level, c, r, WeerFeature.STER.get(), 0.5f * s);   // a few twinkles drifting down
             default -> {
             }
         }

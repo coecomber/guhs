@@ -31906,5 +31906,17 @@
   "gui.guhs.droomspul.postguh.0": "Post voor jou? Njeg... alleen een droom. Die bezorg ik wel gratis.",
   "gui.guhs.droomspul.postguh.1": "Een busje per eiland. Maar alleen naar eilanden waar je al was, anders weet ik je adres niet!",
   "gui.guhs.droomspul.postguh.2": "Postzegels? Hier betaal je met gaapjes. Ik heb er al drie gehad vandaag.",
-  "gui.guhs.droomspul.postguh.3": "Gisteren bezorgde ik een knuffel. Hij was een beetje platgedrukt, maar nog heel lief."
+  "gui.guhs.droomspul.postguh.3": "Gisteren bezorgde ik een knuffel. Hij was een beetje platgedrukt, maar nog heel lief.",
+  "gui.guhs.weer.weertje.droom": "Droomweer",
+  "gui.guhs.weer.weertje.droom.uitleg": "Een stukje Guhdromenland: de droomlucht met de slaperige maan, vallende sterretjes om te vangen, zweven en droommuziek. De guhs worden er slaperig van.",
+  "item.guhs.weerpotje_droom": "Weerpotje: Droomweer",
+  "item.guhs.weerpotje_droom.lore": "Een stukje droomlucht met een slaperig maantje. Sst!",
+  "gui.guhs.weer.weertje.droom.bron": "het droomkistje bovenaan het Sterrenkussenveld, in Guhdromenland",
+  "block.guhs.droomkistje": "Droomkistje",
+  "block.guhs.droomkistje.lore": "Staat bovenaan het Sterrenkussenveld, bij de grote ster. Eén keer per dag mag je erin kijken!",
+  "gui.guhs.droomweer.kistje.morgen": "Kom morgen terug, vadsje! Het kistje doet een dutje.",
+  "gui.guhs.droomweer.kistje.eerste": "In het droomkistje zat een weerpotje: Droomweer! Maak het open en je Weer vadser kan dromen. VAHOEG!",
+  "gui.guhs.droomweer.kistje.eerste.titel": "Droomweer!",
+  "gui.guhs.droomweer.kistje.eerste.sub": "Een stukje Guhdromenland, voor thuis",
+  "gui.guhs.droomweer.kistje.cadeau": "Het droomkistje gaf je droomzand en %s. Tot morgen, vadsje!"
 }

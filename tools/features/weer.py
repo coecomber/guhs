@@ -38,6 +38,7 @@ WEERTJES = {
     "sterren": ("Sterrenregen", "Star Shower"),
     "knusmist": ("Knusmist", "Cosy Fog"),
     "bloesem": ("Bloesemwind", "Blossom Breeze"),
+    "droom": ("Droomweer", "Dream Weather"),       # 1.8.0 playtest 2: from the droomkistje (Java: feature/droomweer)
 }
 ALTIJD = {"normaal": ("Normaal", "Normal"), "zon": ("Zon", "Sun"), "regen": ("Regen", "Rain"), "onweer": ("Onweer", "Thunderstorm")}
 
@@ -55,6 +56,7 @@ BRONNEN = {
     "regenboog": ["guhs:chests/weer/regenboogbrug"],
     "knabbel": ["guhs:chests/kaasknabbel_nest_schat"],
     "bloesem": ["guhs:chests/picknickeilandje", "guhs:chests/weer/dal_theehuisje"],
+    "droom": [],      # no chest: the droomkistje at the top of the Sterrenkussenveld (once, Java)
 }
 
 # what each weertje's potje holds (the colours of its jar's contents)
@@ -67,6 +69,7 @@ INHOUD = {
     "sterren": [(64, 60, 140), (255, 236, 140), (120, 110, 200)],
     "knusmist": [(240, 214, 228), (252, 236, 244), (220, 190, 210)],
     "bloesem": [(255, 176, 200), (255, 222, 232), (130, 196, 120)],
+    "droom": [(74, 52, 130), (238, 150, 196), (255, 236, 170), (255, 255, 255)],
 }
 
 DEELTJES = {"weer_pluisje": [f"guhs:pluisje_{i}" for i in range(4)], "weer_zeepbel": [f"guhs:zeepbelletje_{i}" for i in range(3)],
@@ -112,6 +115,10 @@ UITLEG = {
     "sterren": ("'s Nachts vallen er sterretjes met een glitterstaart. Doe een wens!", "At night stars fall with glittering tails. Make a wish!"),
     "knusmist": ("Een zachte roze mist. Alles wordt knus en de guhs worden slaperig.", "A soft pink fog. Everything gets cosy and the guhs get sleepy."),
     "bloesem": ("Bloesemblaadjes waaien voorbij. Ruikt naar het Bloesemmeertje.", "Blossom petals blow by. Smells like the Bloesemmeertje."),
+    "droom": ("Een stukje Guhdromenland: de droomlucht met de slaperige maan, vallende sterretjes om te vangen, zweven en "
+              "droommuziek. De guhs worden er slaperig van.",
+              "A piece of Guh Dreamland: the dream sky with the sleepy moon, falling stars to catch, floating and dream music. "
+              "The guhs get sleepy."),
 }
 BRON_TEKST = {
     "pluisjes": ("kisten in de Oude wolspinnerij, de wolkenkisten van de Wolkenweide en het kistje in de Wolkenhoeder-hut",
@@ -126,6 +133,7 @@ BRON_TEKST = {
     "knusmist": ("kisten in de Knuffelslaapzaal en het kistje in het Knuffelbad", "chests in the Cuddle Dormitory and the little chest in the Cuddle Bath"),
     "bloesem": ("de kist op het picknickeilandje van het Bloesemmeertje en het kistje in het theehuisje van het Klaterdal",
                 "the chest on the Bloesemmeertje's picnic island and the little chest in the Klaterdal tea house"),
+    "droom": ("het droomkistje bovenaan het Sterrenkussenveld, in Guhdromenland", "the dream chest at the top of the Star Cushion Field, in Guh Dreamland"),
 }
 LORE = {
     "pluisjes": ("Er dwarrelen roze pluisjes in. Zacht!", "Pink fluff swirls inside. Soft!"),
@@ -136,6 +144,7 @@ LORE = {
     "sterren": ("Een stukje nachtlucht met vallende sterretjes.", "A bit of night sky with falling stars."),
     "knusmist": ("Roze mist. Als je eraan ruikt word je slaperig.", "Pink fog. Sniff it and you get sleepy."),
     "bloesem": ("Bloesemblaadjes die nooit ophouden met waaien.", "Blossom petals that never stop blowing."),
+    "droom": ("Een stukje droomlucht met een slaperig maantje. Sst!", "A bit of dream sky with a sleepy little moon. Shh!"),
 }
 
 for _id, (_nl, _en) in {**ALTIJD, **WEERTJES}.items():
@@ -201,6 +210,12 @@ def potje(weertje):
             d.point([(x, y), (x + 1, y)], fill=kl[0] + (255,))
             d.point((x, y + 1), fill=kl[1] + (255,))
         d.point([(4, 14), (11, 14)], fill=kl[2] + (255,))
+    elif weertje == "droom":
+        d.rectangle([4, 6, 11, 14], fill=kl[0] + (255,))
+        d.rectangle([4, 12, 11, 14], fill=kl[1] + (255,))           # the pink horizon
+        d.point([(5, 7), (10, 8), (6, 10), (9, 11)], fill=kl[3] + (255,))
+        d.ellipse([7, 7, 10, 10], fill=kl[2] + (255,))              # the sleepy moon
+        d.point([(8, 8), (9, 8)], fill=kl[0] + (255,))
     elif weertje == "knusmist":
         d.rectangle([4, 7, 11, 14], fill=kl[0] + (230,))
         d.line([4, 9, 11, 9], fill=kl[1] + (255,))
@@ -225,6 +240,8 @@ def build(h):
     for naam, tex in DEELTJES.items():
         w(f"{A}/particles/{naam}.json", {"textures": tex})
     for wid, kisten in BRONNEN.items():
+        if not kisten:
+            continue
         w(f"{D}/loot_table/weer/potje_{wid}.json", {"type": "minecraft:chest", "pools": [{
             "rolls": 1, "bonus_rolls": 0, "conditions": [{"condition": "minecraft:random_chance", "chance": KANS}],
             "entries": [{"type": "minecraft:item", "name": f"guhs:weerpotje_{wid}"}]}]})

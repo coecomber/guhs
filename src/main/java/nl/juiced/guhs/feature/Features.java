@@ -177,6 +177,7 @@ public final class Features {
         nl.juiced.guhs.feature.dexdromen.DexDromenFeature.register(modBus);   // 1.8.0: the Guhdex pages of Guhdromenland + the Blub-meterkaart
         nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.register(modBus);   // 1.8.0: the dream's feel (island music, NPC voices)
         nl.juiced.guhs.feature.droomspul.DroomspulFeature.register(modBus);   // 1.8.0 (Guhdromenland): more boxes, the tuck-in items, the islanders
+        nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -440,6 +441,7 @@ public final class Features {
         nl.juiced.guhs.feature.molentje.MolentjeFeature.creative(output);   // 1.8.0: molentandwieltje, blaaskussentje, molenwieken
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.creative(output);   // 1.8.0: De Zingende Weide's blocks
         nl.juiced.guhs.feature.droomspul.DroomspulFeature.creative(output);   // 1.8.0: verhuis-/schoenen-/pizzadoos, zeepje, sterlampje, fotootje
+        nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);   // 1.8.0: the droomkistje
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

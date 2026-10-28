@@ -1,0 +1,9 @@
+{
+  "block.guhs.droomkistje": "Dream Chest",
+  "block.guhs.droomkistje.lore": "Stands at the top of the Star Cushion Field, by the big star. You may peek inside once a day!",
+  "gui.guhs.droomweer.kistje.morgen": "Come back tomorrow, vadsje! The chest is taking a nap.",
+  "gui.guhs.droomweer.kistje.eerste": "The dream chest held a weather jar: Dream Weather! Open it and your Weather Vadser can dream. VAHOEG!",
+  "gui.guhs.droomweer.kistje.eerste.titel": "Dream Weather!",
+  "gui.guhs.droomweer.kistje.eerste.sub": "A piece of Guh Dreamland, for at home",
+  "gui.guhs.droomweer.kistje.cadeau": "The dream chest gave you dream sand and %s. See you tomorrow, vadsje!"
+}

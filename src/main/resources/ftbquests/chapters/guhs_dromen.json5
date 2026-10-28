@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 47,
+  guhs_chapter_version: 48,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -411,6 +411,40 @@
         },
       ],
       x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548EFD3D45CBE",
+      icon: {
+        id: "guhs:weerpotje_droom",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:weerpotje_droom",
+          },
+          id: "475548BD1E365535",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484F7FB920DD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755484DA5786609",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 16.0,
       y: 6.5625,
     },
     {
