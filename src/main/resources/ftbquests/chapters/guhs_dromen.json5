@@ -857,6 +857,38 @@
       y: 10.525,
     },
     {
+      id: "475548B9AA4C5665",
+      icon: {
+        id: "guhs:droomzand",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/droomwinkel_gekocht",
+          id: "4755489D57C17D6D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D8D1A49643",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C18CE3FB26",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 10.525,
+    },
+    {
       id: "475548021EB6ACF9",
       icon: {
         id: "guhs:doos_knabbels",

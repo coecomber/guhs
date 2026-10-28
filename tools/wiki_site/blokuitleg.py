@@ -980,6 +980,20 @@ UITLEG = {
            "- In a blossom breeze the guhs' ears flutter along.\n"
            "- Dream weather: Guh Dreamland's sky with the sleepy moon, falling stars to catch (dream sand!), floating, dream "
            "music and sleepy guhs. Its jar is in the dream chest at the top of the Star Cushion Field."),
+    "droomkraampje": dict(
+        nl="Het kraampje van de Zandguh op het Droomplein in Guhdromenland: het droomwinkeltje. Je betaalt met droomzand.\n"
+           "\n"
+           "- Rechtsklik op het kraampje (of op de Zandguh erachter): het winkeltje gaat open.\n"
+           "- Er liggen slaapkleding voor guhs, een droompyjama voor jou, Blub-kleding, droommeubels, bedden, knuffels en "
+           "(duur, om in te halen) weerpotjes.\n"
+           "- Een droomzandblok telt voor 9 droomzand; wisselgeld krijg je terug.",
+        en="The Sandguh's stall on the Dream Square in Guh Dreamland: the dream shop. You pay with dream sand.\n"
+           "\n"
+           "- Right-click the stall (or the Sandguh behind it): the shop opens.\n"
+           "- It sells sleepwear for guhs, dream pyjamas for you, Blub clothes, dream furniture, beds, plushies and (dear, to "
+           "catch up) weather jars.\n"
+           "- A dream sand block counts as 9 dream sand; you get your change back.",
+        meer=[]),
     "droomkistje": dict(
         nl="Een lavendel kistje met sterretjes en een maansluitinkje, bovenaan het Sterrenkussenveld in Guhdromenland, bij de "
            "grote ster. Stuiter er helemaal naartoe!\n"

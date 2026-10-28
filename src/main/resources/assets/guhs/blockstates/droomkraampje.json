@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/droomkraampje"
+    },
+    "facing=east": {
+      "model": "guhs:block/droomkraampje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/droomkraampje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/droomkraampje",
+      "y": 270
+    }
+  }
+}

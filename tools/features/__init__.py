@@ -147,6 +147,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'droomweer',
             # 1.8.0 U2: sleepy guh clothes and the player's droompyjama (append only)
             'slaapkleding']
+            'droomweer',
+            # 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein (append only)
+            'droomwinkel']
 
 
 def modules():

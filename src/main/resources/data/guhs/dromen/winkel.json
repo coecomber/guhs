@@ -1,0 +1,298 @@
+[
+  {
+    "id": "slaapmasker",
+    "groep": "kleding",
+    "item": "guhs:slaapmasker",
+    "prijs": 12
+  },
+  {
+    "id": "nachtjaponnetje",
+    "groep": "kleding",
+    "item": "guhs:nachtjaponnetje",
+    "prijs": 20
+  },
+  {
+    "id": "maanmutsje",
+    "groep": "kleding",
+    "item": "guhs:maanmutsje",
+    "prijs": 18
+  },
+  {
+    "id": "oorwolkjes",
+    "groep": "kleding",
+    "item": "guhs:oorwolkjes",
+    "prijs": 14
+  },
+  {
+    "id": "blub_sloffen",
+    "groep": "kleding",
+    "item": "guhs:blub_sloffen",
+    "prijs": 16
+  },
+  {
+    "id": "droompyjama_muts",
+    "groep": "pyjama",
+    "item": "guhs:droompyjama_muts",
+    "prijs": 18
+  },
+  {
+    "id": "droompyjama_jasje",
+    "groep": "pyjama",
+    "item": "guhs:droompyjama_jasje",
+    "prijs": 26
+  },
+  {
+    "id": "droompyjama_broek",
+    "groep": "pyjama",
+    "item": "guhs:droompyjama_broek",
+    "prijs": 22
+  },
+  {
+    "id": "droompyjama_sloffen",
+    "groep": "pyjama",
+    "item": "guhs:droompyjama_sloffen",
+    "prijs": 16
+  },
+  {
+    "id": "blubkleding_slaapmutsje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_slaapmutsje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_sjaaltje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_sjaaltje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_sterrenkroontje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_sterrenkroontje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_bubbelhelm",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_bubbelhelm",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_pyjamaatje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_pyjamaatje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_slaapmaskertje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_slaapmaskertje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_bloemenkransje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_bloemenkransje",
+    "prijs": 8
+  },
+  {
+    "id": "blubkleding_brilletje",
+    "groep": "blubkleding",
+    "item": "guhs:blubkleding_brilletje",
+    "prijs": 8
+  },
+  {
+    "id": "maanlampje_maan",
+    "groep": "meubels",
+    "item": "guhs:maanlampje_maan",
+    "prijs": 3
+  },
+  {
+    "id": "maanlampje_ster",
+    "groep": "meubels",
+    "item": "guhs:maanlampje_ster",
+    "prijs": 3
+  },
+  {
+    "id": "maanlampje_wolkje",
+    "groep": "meubels",
+    "item": "guhs:maanlampje_wolkje",
+    "prijs": 3
+  },
+  {
+    "id": "maanlampje_guh",
+    "groep": "meubels",
+    "item": "guhs:maanlampje_guh",
+    "prijs": 4
+  },
+  {
+    "id": "nachtkastje",
+    "groep": "meubels",
+    "item": "guhs:nachtkastje",
+    "prijs": 4
+  },
+  {
+    "id": "droomvanger",
+    "groep": "meubels",
+    "item": "guhs:droomvanger",
+    "prijs": 5
+  },
+  {
+    "id": "mobiel",
+    "groep": "meubels",
+    "item": "guhs:mobiel",
+    "prijs": 6
+  },
+  {
+    "id": "muziekdoosje",
+    "groep": "meubels",
+    "item": "guhs:muziekdoosje",
+    "prijs": 6
+  },
+  {
+    "id": "slaapmasker_kapstok",
+    "groep": "meubels",
+    "item": "guhs:slaapmasker_kapstok",
+    "prijs": 4
+  },
+  {
+    "id": "krabpaal",
+    "groep": "meubels",
+    "item": "guhs:krabpaal",
+    "prijs": 4
+  },
+  {
+    "id": "krabpaal_blauw",
+    "groep": "meubels",
+    "item": "guhs:krabpaal_blauw",
+    "prijs": 4
+  },
+  {
+    "id": "doos_knabbels",
+    "groep": "meubels",
+    "item": "guhs:doos_knabbels",
+    "prijs": 2
+  },
+  {
+    "id": "verhuisdoos",
+    "groep": "meubels",
+    "item": "guhs:verhuisdoos",
+    "prijs": 3
+  },
+  {
+    "id": "schoenendoos",
+    "groep": "meubels",
+    "item": "guhs:schoenendoos",
+    "prijs": 3
+  },
+  {
+    "id": "pizzadoos",
+    "groep": "meubels",
+    "item": "guhs:pizzadoos",
+    "prijs": 3
+  },
+  {
+    "id": "kattenhuisje_roze",
+    "groep": "meubels",
+    "item": "guhs:kattenhuisje_roze",
+    "prijs": 5
+  },
+  {
+    "id": "kattenhuisje_wit",
+    "groep": "meubels",
+    "item": "guhs:kattenhuisje_wit",
+    "prijs": 5
+  },
+  {
+    "id": "kattenhuisje_lavendel",
+    "groep": "meubels",
+    "item": "guhs:kattenhuisje_lavendel",
+    "prijs": 5
+  },
+  {
+    "id": "kattenhuisje_mint",
+    "groep": "meubels",
+    "item": "guhs:kattenhuisje_mint",
+    "prijs": 5
+  },
+  {
+    "id": "knuffel_starry",
+    "groep": "knuffels",
+    "item": "guhs:knuffel_starry",
+    "prijs": 16
+  },
+  {
+    "id": "knuffel_wolk",
+    "groep": "knuffels",
+    "item": "guhs:knuffel_wolk",
+    "prijs": 14
+  },
+  {
+    "id": "knuffel_pluisguh",
+    "groep": "knuffels",
+    "item": "guhs:knuffel_pluisguh",
+    "prijs": 14
+  },
+  {
+    "id": "knuffel_rainbow",
+    "groep": "knuffels",
+    "item": "guhs:knuffel_rainbow",
+    "prijs": 20
+  },
+  {
+    "id": "weerpotje_pluisjes",
+    "groep": "weer",
+    "item": "guhs:weerpotje_pluisjes",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_bellen",
+    "groep": "weer",
+    "item": "guhs:weerpotje_bellen",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_sterren",
+    "groep": "weer",
+    "item": "guhs:weerpotje_sterren",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_knusmist",
+    "groep": "weer",
+    "item": "guhs:weerpotje_knusmist",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_hartjes",
+    "groep": "weer",
+    "item": "guhs:weerpotje_hartjes",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_regenboog",
+    "groep": "weer",
+    "item": "guhs:weerpotje_regenboog",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_knabbel",
+    "groep": "weer",
+    "item": "guhs:weerpotje_knabbel",
+    "prijs": 40,
+    "max": 1
+  },
+  {
+    "id": "weerpotje_bloesem",
+    "groep": "weer",
+    "item": "guhs:weerpotje_bloesem",
+    "prijs": 40,
+    "max": 1
+  }
+]

@@ -184,6 +184,8 @@ FTB_SECTIES = [
      ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal",
       "dr_slaapkleding", "dr_droompyjama"]),
     ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras"]),
+     ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
+    ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras", "dr_droomwinkel"]),
     ("dr_snoes", "De droom van Snoes", "item:guhs:roze_guh_koek",
      ["dr_snoes_proloog"] + [f"dr_snoes_{s}" for s in STUKJES] + ["dr_snoes_finale"]),
     ("dr_weide", "De Zingende Weide", "item:guhs:blubguh_item", ["dr_weide", "dr_weide_brood"]),
@@ -261,6 +263,10 @@ def ftb(fq):
       [item("guhs:zeepbelglas", 8)], xp=50)
     q("dr_slaapliedjesgras", "Neuriënd gras", "&dSlaapliedjesgras&r neuriet zachtjes als je eroverheen loopt.", "guhs:slaapliedjesgras",
       [item("guhs:slaapliedjesgras", 4)], xp=50)
+    # (1.8.0 expansion: the Zandguh's droomwinkeltje on the Droomplein)
+    q("dr_droomwinkel", "Klant van de Zandguh", "Op het &dDroomplein&r staat het kraampje van de Zandguh. Betaal met &edroomzand&r: "
+      "slaapkleding, Blub-kleding, droommeubels, bedden en knuffels. Een gaap krijg je gratis.", "guhs:droomzand",
+      [adv("droomwinkel_gekocht")], xp=100)
     # --- Snoes' dream -----------------------------------------------------------------------------------------------------
     q("dr_snoes_proloog", "Wie zit er bij je bed?", "Heb je een tamme guh? Klik dan 's avonds op je bed. Er zit iemand naast... "
       "Praat met hem, stop hem in, en ga zelf slapen.", "guhs:doos_knabbels", [adv("snoes_proloog")], shape="circle", xp=100)

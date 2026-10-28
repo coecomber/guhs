@@ -181,6 +181,8 @@ public final class Features {
         nl.juiced.guhs.feature.rozegraan.RozegraanFeature.register(modBus);   // 1.8.0: roze graan (zaadjes, crop, broodje, koekje, hooibaal)
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.register(modBus);   // 1.8.0 (U2): sleepy guh clothes + the droompyjama   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
+        nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
+        nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.register(modBus);   // 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -303,6 +305,7 @@ public final class Features {
         nl.juiced.guhs.feature.dexdromen.DexDromenFeature.payloads(registrar);   // 1.8.0: the Blub-meterkaart (Guhdex)
         nl.juiced.guhs.feature.weer.WeerFeature.payloads(registrar);   // 1.8.0: the Weer vadser's zones and menu
         nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.payloads(registrar);   // 1.8.0: the soft dream fade
+        nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.payloads(registrar);   // 1.8.0: the droomwinkeltje's screen and buys
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.payloads(registrar);   // 1.8.0 playtest: Snoes' story HUD
     }
 
@@ -449,6 +452,8 @@ public final class Features {
         nl.juiced.guhs.feature.rozegraan.RozegraanFeature.creative(output);   // 1.8.0: roze graan
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.creative(output);   // 1.8.0: sleepy clothes + droompyjama   // 1.8.0: the droomkistje
+        nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);   // 1.8.0: the droomkistje
+        nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.creative(output);   // 1.8.0: the droomkraampje
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
