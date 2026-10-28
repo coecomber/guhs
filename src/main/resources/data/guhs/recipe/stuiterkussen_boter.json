@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:knuffelblok_boter",
+    "minecraft:slime_ball"
+  ],
+  "result": {
+    "id": "guhs:stuiterkussen_boter",
+    "count": 1
+  }
+}

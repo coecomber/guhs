@@ -1,0 +1,27 @@
+{
+  "versie": 1,
+  "template": "guhs:dromen/eiland_sterren",
+  "midden": [
+    52,
+    22,
+    52
+  ],
+  "aankomst": {
+    "plek": [
+      0.5,
+      1,
+      22.5
+    ],
+    "yaw": 180
+  },
+  "steiger": [
+    0.5,
+    1,
+    38.5
+  ],
+  "ster": [
+    1.5,
+    41.5,
+    -2.0
+  ]
+}

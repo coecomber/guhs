@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:knuffelblok_aqua",
+    "minecraft:slime_ball"
+  ],
+  "result": {
+    "id": "guhs:stuiterkussen_aqua",
+    "count": 1
+  }
+}
