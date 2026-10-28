@@ -57,11 +57,17 @@ public class BlubGameTests {
         int n = 6000;
         long som = 0;
         int[] soorten = new int[BlubTrekking.Soort.values().length];
-        int normaal = 0, laag = 0, hoog = 0;
+        int normaal = 0, laag = 0, hoog = 0, rond100 = 0, randje = 0;
+        long somGroot = 0;
         for (int i = 0; i < n; i++) {
             BlubTrekking.Waarden w = BlubTrekking.trek(r);
             helper.assertTrue(w.meter() >= 0 && w.meter() <= 100, "meter 0..100");
-            helper.assertTrue(w.grootte() >= BlubTrekking.GROOTTE_MIN && w.grootte() <= BlubTrekking.GROOTTE_MAX, "size 85..115%");
+            int procent = Math.round(w.grootte() * 100);
+            helper.assertTrue(procent >= 75 && procent <= 125, "size 75..125%");
+            helper.assertTrue(Math.abs(w.grootte() * 100 - procent) < 0.001f, "size in whole percents, got " + w.grootte());
+            somGroot += procent;
+            rond100 += Math.abs(procent - 100) <= 8 ? 1 : 0;
+            randje += procent <= 78 || procent >= 122 ? 1 : 0;
             helper.assertTrue(w.tint() >= 0 && w.tint() <= 2, "tint 0..2");
             som += w.meter();
             soorten[w.soort().ordinal()]++;
@@ -70,6 +76,9 @@ public class BlubGameTests {
             hoog += w.meter() > 80 ? 1 : 0;
         }
         double gem = som / (double) n;
+        double gemGroot = somGroot / (double) n;
+        helper.assertTrue(gemGroot > 99 && gemGroot < 101, "the size is a bell around 100%, got " + gemGroot);
+        helper.assertTrue(rond100 > n * 0.6 && randje < n * 0.02, "75 and 125 are rare: " + randje + " near the ends, " + rond100 + " near 100");
         helper.assertTrue(gem > 33 && gem < 37, "the meter is a bell around 35, got " + gem);
         helper.assertTrue(laag > hoog, "more Blub than guh: " + laag + " low vs " + hoog + " high");
         for (BlubTrekking.Soort s : BlubTrekking.Soort.values()) {
@@ -85,19 +94,23 @@ public class BlubGameTests {
     @GuhTest(template = TUIN, batch = "blub")
     public static void blubBabyTussenOuders(GameTestHelper helper) {
         RandomSource r = RandomSource.create(42L);
-        BlubTrekking.Waarden a = new BlubTrekking.Waarden(12, BlubTrekking.Soort.WEIDE, 1, 0.9f);
-        BlubTrekking.Waarden b = new BlubTrekking.Waarden(70, BlubTrekking.Soort.ZWAM, 2, 1.1f);
+        BlubTrekking.Waarden a = new BlubTrekking.Waarden(12, BlubTrekking.Soort.WEIDE, 1, 0.80f);
+        BlubTrekking.Waarden b = new BlubTrekking.Waarden(70, BlubTrekking.Soort.ZWAM, 2, 1.20f);
         boolean metA = false, metB = false;
         for (int i = 0; i < 400; i++) {
             BlubTrekking.Waarden k = BlubTrekking.erf(a, b, r);
             helper.assertTrue(k.meter() >= 12 && k.meter() <= 70, "meter between the parents");
-            helper.assertTrue(k.grootte() >= 0.9f && k.grootte() <= 1.1f, "size between the parents");
+            int procent = Math.round(k.grootte() * 100);
+            helper.assertTrue(procent >= 80 && procent <= 120 && Math.abs(k.grootte() * 100 - procent) < 0.001f, "size between the parents, whole percents");
             helper.assertTrue(k.soort() == a.soort() || k.soort() == b.soort(), "soort of a parent");
             helper.assertTrue(k.tint() == a.tint() || k.tint() == b.tint(), "tint of a parent");
             metA |= k.soort() == a.soort();
             metB |= k.soort() == b.soort();
         }
         helper.assertTrue(metA && metB, "both parents' soort happen");
+        // an old Blub (before the finish) saved a float size: it is rounded to whole percents and clamped to 75..125
+        helper.assertTrue(BlubTrekking.procent(1.0734f) == 107 && BlubTrekking.procent(0.5f) == 75 && BlubTrekking.procent(1.9f) == 125
+                && Math.abs(BlubTrekking.rond(0.8649f) - 0.86f) < 0.0001f, "old float sizes are rounded and clamped");
         // a real pair: the baby is the owner's, a baby, between its parents
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
         BlubGuhEntity ma = blub(helper, new BlockPos(6, 2, 6), a);

@@ -62,6 +62,19 @@ public interface PiepMaatje {
         return 1f;
     }
 
+    /**
+     * 1.8.0: a little of its look for the Guhdex tab "Mijn andere vadsjes" (kept in its band record): the Blub-guh sends its
+     * strikje here ("Strik": the colour, "StrikNaam": its name key). Empty for most maatjes.
+     */
+    default net.minecraft.nbt.CompoundTag rijLook() {
+        return new net.minecraft.nbt.CompoundTag();
+    }
+
+    /** 1.8.0: it sits on top of your head instead of on your left shoulder (the Blub-guh). Same Schouder data, other place. */
+    default boolean opHoofd() {
+        return false;
+    }
+
     default boolean aan(PiepInstelling instelling) {
         TamableAnimal dier = dier();
         if (instelling == PiepInstelling.RONDVADSEN) {

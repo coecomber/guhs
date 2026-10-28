@@ -10,7 +10,7 @@ het zo aan). Zonder die vlag zijn wilde Blubs onzichtbaar en niet aan te klikken
 | Commando | Wat |
 |---|---|
 | `/guhs blub snoes aan` / `uit` | Jouw vlag "Snoes geholpen" (wilde Blubs zien en temmen) |
-| `/guhs blub spawn <meter> [soort] [tint] [grootte] [baby]` | Eén Blub-guh voor je neus. soort = blauw / weide / schild / ravijn / zwam, tint 0-2, grootte 0.85-1.15, baby true/false. Bijv. `/guhs blub spawn 100 zwam 1 1.1 false` |
+| `/guhs blub spawn <meter> [soort] [tint] [grootte] [baby]` | Eén Blub-guh voor je neus. soort = blauw / weide / schild / ravijn / zwam, tint 0-2, grootte in hele procenten 75-125, baby true/false. Bijv. `/guhs blub spawn 100 zwam 1 110 false` |
 | `/guhs blub raster` | Het m06-raster: 5 soorten × meter 0 / 25 / 50 / 75 / 100 (tam, zittend: altijd zichtbaar) |
 | `/guhs blub groepje [aantal]` | Random wilde Blubs met de echte spawn-trekking (standaard 12) |
 | `/guhs blub tam` | Alle Blub-guhs binnen 16 blokken worden van jou |
@@ -28,7 +28,7 @@ van de Guhmension (groepjes van 2-4; `/locate biome guhs:wolkenweide`).
 - **Menu**: naam, Volgen, Rondvadsen, **Kledingkast** (strikjes in 16 kleuren of niets; ook te zien op de Blub),
   **Trucjes** (zitten, rondje, dood spelen, hoge sprong, hupsen, slaapliedje, verstoppertje, squish, oortjes blij/verlegen/nieuwsgierig),
   Op je schouder (eraf: sluip + rechtsklik op een blok), Oppakken.
-- **Grootte**: een volwassen Blub is nu 80% van het vorige model (de 85-115%-grootte en baby's komen daarbovenop).
+- **Grootte**: een volwassen Blub is nu 80% van het vorige model (de grootte 75-125%, in hele procenten met een klokvorm rond 100, en baby's komen daarbovenop).
 - **Babyblubjes**: geef twee tamme Blubs een kaasknabbel.
 - **Geluiden**: elke actie heeft nu een eigen geluid (placeholders). Zie `C:\Users\Juiced\Documents\MineScapeStory\inspiration\Blub audio\LEESMIJ.md`.
 - **Uit zichzelf**: oortjes-emoties, tikkertje en knabbel delen met guhs, 's nachts slapen bij een guh of in een guhnestje,

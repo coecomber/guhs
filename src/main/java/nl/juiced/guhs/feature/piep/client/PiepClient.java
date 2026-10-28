@@ -159,6 +159,8 @@ public final class PiepClient {
     private static final Map<Integer, net.minecraft.world.entity.Entity> SCHOUDER_MUISJES = new ConcurrentHashMap<>();
     /** Where the muisje sits: this far to the player's left, this high (the top of the shoulder). */
     public static final float SCHOUDER_OPZIJ = 0.36f, SCHOUDER_HOOGTE = 1.41f, SCHOUDER_BUKKEN = 0.22f;
+    /** 1.8.0: where a head-sitter (the Blub-guh) sits: on top of the head (a bit back), lower when sneaking. */
+    public static final float HOOFD_HOOGTE = 1.86f, HOOFD_BUKKEN = 0.3f, HOOFD_VOOR = -0.04f;
 
     /**
      * Draws a muisje on the left shoulder of every player that carries one (see Schouder), after the player itself: in world
@@ -183,9 +185,11 @@ public final class PiepClient {
         float pt = event.getPartialTick();
         float yaw = net.minecraft.util.Mth.rotLerp(pt, player.yBodyRotO, player.yBodyRot);
         float schaal = 0.9f;
+        boolean hoofd = false;
         if (muis instanceof nl.juiced.guhs.feature.piep.PiepMaatje maatje) {
             maatje.opSchouder(true);
             schaal *= maatje.schouderSchaal();
+            hoofd = maatje.opHoofd();
         }
         muis.tickCount = player.tickCount;
         float kijk = net.minecraft.util.Mth.rotLerp(pt, player.yHeadRotO, player.yHeadRot);   // (it looks where you look)
@@ -201,7 +205,13 @@ public final class PiepClient {
         double rad = Math.toRadians(yaw);
         PoseStack pose = event.getPoseStack();
         pose.pushPose();
-        pose.translate(Math.cos(rad) * SCHOUDER_OPZIJ, SCHOUDER_HOOGTE - (player.isCrouching() ? SCHOUDER_BUKKEN : 0f), Math.sin(rad) * SCHOUDER_OPZIJ);
+        if (hoofd) {
+            // 1.8.0 (Blub-guh): on top of the head, a little hat that turns with your head
+            double kijkRad = Math.toRadians(kijk + 90f);
+            pose.translate(Math.cos(kijkRad) * HOOFD_VOOR, HOOFD_HOOGTE - (player.isCrouching() ? HOOFD_BUKKEN : 0f), Math.sin(kijkRad) * HOOFD_VOOR);
+        } else {
+            pose.translate(Math.cos(rad) * SCHOUDER_OPZIJ, SCHOUDER_HOOGTE - (player.isCrouching() ? SCHOUDER_BUKKEN : 0f), Math.sin(rad) * SCHOUDER_OPZIJ);
+        }
         pose.scale(schaal, schaal, schaal);
         dispatcher.submit(state, Minecraft.getInstance().gameRenderer.getGameRenderState().levelRenderState.cameraRenderState, 0, 0, 0, pose,
                 event.getSubmitNodeCollector());

@@ -153,6 +153,9 @@ public final class MijnGuhs {
             t.putString("Soort", r.soort);
             t.putString("Plek", json(GuhVolger.tekst(r.plek), registries));
             t.putString("PlekSoort", r.plek.soort().id());
+            if (!r.looks.isEmpty()) {
+                t.put("Looks", r.looks.copy());   // 1.8.0: e.g. the Blub-guh's strikje
+            }
             out.add(t);
         }
         return out;

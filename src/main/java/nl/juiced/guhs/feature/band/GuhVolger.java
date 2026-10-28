@@ -86,6 +86,12 @@ public final class GuhVolger {
                 r.naam = naam;
                 data.setDirty();
             }
+            // 1.8.0: a bit of its look (the Blub-guh's strikje) for the row in "Mijn andere vadsjes"
+            CompoundTag look = ((PiepMaatje) guhOfMaatje).rijLook();
+            if (r != null && !r.looks.equals(look)) {
+                r.looks = look;
+                data.setDirty();
+            }
         }
     }
 

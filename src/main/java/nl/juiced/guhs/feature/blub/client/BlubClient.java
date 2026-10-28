@@ -71,6 +71,7 @@ public final class BlubClient {
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(BlubFeature.BLUBGUH.get(), BlubRenderer::new);
+        event.registerBlockEntityRenderer(BlubFeature.KNUFFEL_BE.get(), BlubKnuffelRenderer::new);
     }
 
     private static void openMenu(BlubMenu.MenuOpen p) {

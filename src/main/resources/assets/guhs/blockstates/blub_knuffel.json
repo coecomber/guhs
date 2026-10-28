@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/blub_knuffel"
+    },
+    "facing=east": {
+      "model": "guhs:block/blub_knuffel"
+    },
+    "facing=south": {
+      "model": "guhs:block/blub_knuffel"
+    },
+    "facing=west": {
+      "model": "guhs:block/blub_knuffel"
+    }
+  }
+}

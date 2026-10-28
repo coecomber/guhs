@@ -152,6 +152,11 @@ public class BlubGuhEntity extends Landdiertje {
         return a == null ? 1f : (float) a.getBaseValue();
     }
 
+    /** The size in whole percents (75..125). */
+    public int grootteProcent() {
+        return BlubTrekking.procent(grootte());
+    }
+
     public BlubTrekking.Waarden waarden() {
         return new BlubTrekking.Waarden(meter(), blubSoort(), tint(), grootte());
     }
@@ -163,7 +168,7 @@ public class BlubGuhEntity extends Landdiertje {
         entityData.set(DATA_TINT, Mth.clamp(w.tint(), 0, 2));
         var a = getAttribute(Attributes.SCALE);
         if (a != null) {
-            a.setBaseValue(Mth.clamp(w.grootte(), BlubTrekking.GROOTTE_MIN, BlubTrekking.GROOTTE_MAX));
+            a.setBaseValue(BlubTrekking.rond(w.grootte()));   // whole percents 75..125 (old floats are rounded here)
         }
         getrokken = true;
         refreshDimensions();
@@ -191,6 +196,27 @@ public class BlubGuhEntity extends Landdiertje {
         StringBuilder b = new StringBuilder();
         m.forEach((k, v) -> b.append(b.isEmpty() ? "" : ";").append(k).append('=').append(v));
         entityData.set(DATA_KLEDING, b.toString());
+    }
+
+    /** 1.8.0: what a Blub-knuffel keeps of this Blub (its dice, its clothes, its name): see knuffel.BlubKnuffelBlockEntity. */
+    public net.minecraft.nbt.CompoundTag knuffelData() {
+        net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+        t.putInt("Meter", meter());
+        t.putString("BlubSoort", blubSoort().id());
+        t.putInt("Tint", tint());
+        t.putInt("Grootte", grootteProcent());
+        t.putString("Kleding", entityData.get(DATA_KLEDING));
+        if (hasCustomName()) {
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", getCustomName());
+        }
+        return t;
+    }
+
+    /** Looks like this knuffel's Blub (the client copy a Blub-knuffel draws). */
+    public void laadKnuffel(net.minecraft.nbt.CompoundTag t) {
+        zetWaarden(new BlubTrekking.Waarden(t.getIntOr("Meter", BlubTrekking.METER_MIDDEN), BlubTrekking.Soort.van(t.getStringOr("BlubSoort", "")),
+                t.getIntOr("Tint", 0), BlubTrekking.uitProcent(t.getIntOr("Grootte", 100))));
+        entityData.set(DATA_KLEDING, t.getStringOr("Kleding", ""));
     }
 
     /** Dresses it (stuk null: takes the piece of this place off). */
@@ -348,6 +374,24 @@ public class BlubGuhEntity extends Landdiertje {
         return 0.8f;
     }
 
+    /** Its strikje for the Guhdex tab "Mijn andere vadsjes": the colour and the name of the piece. */
+    @Override
+    public net.minecraft.nbt.CompoundTag rijLook() {
+        net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+        BlubKleding.Stuk s = draagt(BlubKleding.Plek.STRIK);
+        if (s != null) {
+            t.putInt("Strik", s.kleur());
+            nl.juiced.guhs.taal.Tekst.put(t, "StrikNaam", s.naam());
+        }
+        return t;
+    }
+
+    /** 1.8.0: a Blub sits on top of your head (like a little hat), not on your shoulder. */
+    @Override
+    public boolean opHoofd() {
+        return true;
+    }
+
     @Override
     public boolean isBezig() {
         return verstopt() || hupsenOver > 0;
@@ -497,7 +541,7 @@ public class BlubGuhEntity extends Landdiertje {
         if (player != null) {
             aaien(player);
         } else if (level() instanceof ServerLevel sl) {
-            sl.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
+            deeltjes(sl, ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
         }
         triggerAnim("actie", "squish");
         BlubGeluid.SQUISH.speel(this);
@@ -637,7 +681,7 @@ public class BlubGuhEntity extends Landdiertje {
         BlubGeluid.KNUFFEL_GUH.speel(this);
         if (level() instanceof ServerLevel sl) {
             double mx = (getX() + g.getX()) / 2, mz = (getZ() + g.getZ()) / 2;
-            sl.sendParticles(ParticleTypes.HEART, mx, getY() + Math.max(getBbHeight(), g.getBbHeight()) + 0.2, mz, 6, 0.4, 0.2, 0.4, 0);
+            deeltjes(sl, ParticleTypes.HEART, mx, getY() + Math.max(getBbHeight(), g.getBbHeight()) + 0.2, mz, 6, 0.4, 0.2, 0.4, 0);
         }
     }
 
@@ -793,7 +837,7 @@ public class BlubGuhEntity extends Landdiertje {
         emotie(RECHTOP, 100);
         BlubGeluid.GEVONDEN.speel(this);
         if (level() instanceof ServerLevel sl) {
-            sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 1.6, getZ(), 24, 1.6, 0.6, 1.6, 0.02);
+            deeltjes(sl, ParticleTypes.HEART, getX(), getY() + 1.6, getZ(), 24, 1.6, 0.6, 1.6, 0.02);
         }
         player.sendOverlayMessage(Component.translatable("gui.guhs.blubguh.verstop.gevonden", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
@@ -828,18 +872,18 @@ public class BlubGuhEntity extends Landdiertje {
             if (sl.getGameTime() >= volgendSlaapGeluid) {
                 volgendSlaapGeluid = sl.getGameTime() + 70 + random.nextInt(31);   // (every 3.5-5 s one of its sleep sounds)
                 BlubGeluid.SLAPEN.speel(this);
-                sl.sendParticles(nl.juiced.guhs.feature.bio.bouwwolk2.BouwWolk2Slice.ZZZ.get(), getX(), getY() + getBbHeight() + 0.2, getZ(),
+                deeltjes(sl, nl.juiced.guhs.feature.bio.bouwwolk2.BouwWolk2Slice.ZZZ.get(), getX(), getY() + getBbHeight() + 0.2, getZ(),
                         0, random.nextInt(3), 0.02, 0, 1);
             }
             if (tickCount % 120 == 60) {                               // a little dream cloud
-                sl.sendParticles(ParticleTypes.WHITE_SMOKE, getX() + 0.3, getY() + getBbHeight() + 0.5, getZ(), 4, 0.12, 0.05, 0.12, 0);
+                deeltjes(sl, ParticleTypes.WHITE_SMOKE, getX() + 0.3, getY() + getBbHeight() + 0.5, getZ(), 4, 0.12, 0.05, 0.12, 0);
             }
         }
         // the slaapliedje
         if (liedje > 0) {
             liedje--;
             if (liedje % 15 == 0) {                                    // (notes over the whole song)
-                sl.sendParticles(ParticleTypes.NOTE, getX(), getY() + getBbHeight() + 0.3, getZ(), 0, random.nextFloat(), 0, 0, 1);
+                deeltjes(sl, ParticleTypes.NOTE, getX(), getY() + getBbHeight() + 0.3, getZ(), 0, random.nextFloat(), 0, 0, 1);
             }
             if (liedje % 100 == 50) {                                  // (the guhs around get sleepier while it sings)
                 for (GuhEntity guh : sl.getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(10))) {
@@ -865,7 +909,7 @@ public class BlubGuhEntity extends Landdiertje {
             juichOp = 0;
             for (GuhEntity guh : sl.getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(8))) {
                 guh.emotes.start(Emote.HARTJES, false, GuhEmotes.Source.SELF);
-                sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 4, 0.3, 0.2, 0.3, 0);
+                deeltjes(sl, ParticleTypes.HAPPY_VILLAGER, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 4, 0.3, 0.2, 0.3, 0);
             }
         }
         // verstoppertje: time's up
@@ -882,13 +926,13 @@ public class BlubGuhEntity extends Landdiertje {
         if (nu >= volgendeBel) {
             volgendeBel = nu + (isInWater() ? 60 : 300 + random.nextInt(400));
             if (isInWater()) {
-                sl.sendParticles(ParticleTypes.BUBBLE, getX(), getY() + 0.3, getZ(), 8, 0.25, 0.2, 0.25, 0.05);
+                deeltjes(sl, ParticleTypes.BUBBLE, getX(), getY() + 0.3, getZ(), 8, 0.25, 0.2, 0.25, 0.05);
                 if (isTame() && getOwner() instanceof ServerPlayer owner && owner.isUnderWater() && owner.distanceToSqr(this) < 36) {
                     owner.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 0, true, true, true));
                 }
             } else if (!slaapt()) {
                 Vec3 voor = Vec3.directionFromRotation(0, getYRot()).scale(0.5);
-                sl.sendParticles(ParticleTypes.BUBBLE_POP, getX() + voor.x, getY() + getBbHeight() * 0.5, getZ() + voor.z, 6, 0.15, 0.15, 0.15, 0.02);
+                deeltjes(sl, ParticleTypes.BUBBLE_POP, getX() + voor.x, getY() + getBbHeight() * 0.5, getZ() + voor.z, 6, 0.15, 0.15, 0.15, 0.02);
                 BlubGeluid.BELLEN.speel(this);
             }
         }
@@ -897,12 +941,12 @@ public class BlubGuhEntity extends Landdiertje {
             volgendePlas = nu + 40 + random.nextInt(60);
             setDeltaMovement(getDeltaMovement().add(0, 0.42, 0));
             needsSync = true;
-            sl.sendParticles(ParticleTypes.SPLASH, getX(), getY() + 0.05, getZ(), 14, 0.3, 0.05, 0.3, 0.1);
+            deeltjes(sl, ParticleTypes.SPLASH, getX(), getY() + 0.05, getZ(), 14, 0.3, 0.05, 0.3, 0.1);
             BlubGeluid.PLAS.speel(this);
             if (random.nextInt(3) == 0) {
                 triggerAnim("actie", "uitschudden");
                 BlubGeluid.UITSCHUDDEN.speel(this);
-                sl.sendParticles(ParticleTypes.FALLING_WATER, getX(), getY() + getBbHeight() * 0.7, getZ(), 10, 0.3, 0.2, 0.3, 0);
+                deeltjes(sl, ParticleTypes.FALLING_WATER, getX(), getY() + getBbHeight() * 0.7, getZ(), 10, 0.3, 0.2, 0.3, 0);
             }
         }
         // guhs nearby are happy to see it
@@ -910,7 +954,7 @@ public class BlubGuhEntity extends Landdiertje {
             volgendeBlij = nu + 200 + random.nextInt(200);
             for (GuhEntity guh : sl.getEntitiesOfClass(GuhEntity.class, getBoundingBox().inflate(5))) {
                 if (random.nextInt(3) == 0) {
-                    sl.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 1, 0.2, 0.1, 0.2, 0);
+                    deeltjes(sl, ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 1, 0.2, 0.1, 0.2, 0);
                 }
             }
         }
@@ -934,7 +978,7 @@ public class BlubGuhEntity extends Landdiertje {
         // a Pure Blub and a Volle Guh glitter a little
         if (titel() != null && nu >= volgendeGlinster) {
             volgendeGlinster = nu + 30 + random.nextInt(30);
-            sl.sendParticles(ParticleTypes.END_ROD, getX(), getY() + getBbHeight() * 0.8, getZ(), 1, 0.25, 0.2, 0.25, 0.005);
+            deeltjes(sl, ParticleTypes.END_ROD, getX(), getY() + getBbHeight() * 0.8, getZ(), 1, 0.25, 0.2, 0.25, 0.005);
             if (random.nextInt(3) == 0) {
                 BlubGeluid.GLINSTER.speel(this);
             }
@@ -1088,7 +1132,7 @@ public class BlubGuhEntity extends Landdiertje {
                     getikt = true;
                     BlubGeluid.TIKKERTJE.speel(BlubGuhEntity.this);
                     if (level() instanceof ServerLevel sl) {
-                        sl.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 2, 0.2, 0.1, 0.2, 0);
+                        deeltjes(sl, ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 2, 0.2, 0.1, 0.2, 0);
                     }
                     Vec3 weg = position().subtract(guh.position()).normalize().scale(6).add(position());
                     getNavigation().moveTo(weg.x, weg.y, weg.z, 1.45);
@@ -1152,8 +1196,8 @@ public class BlubGuhEntity extends Landdiertje {
                 deelEffect();
                 guh.emotes.start(Emote.SMAKKEN, false, GuhEmotes.Source.SELF);
                 if (level() instanceof ServerLevel sl) {
-                    sl.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 1, 0.1, 0.1, 0.1, 0);
-                    sl.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), 1, 0.1, 0.1, 0.1, 0);
+                    deeltjes(sl, ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 1, 0.1, 0.1, 0.1, 0);
+                    deeltjes(sl, ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), 1, 0.1, 0.1, 0.1, 0);
                 }
                 ticks = 999;
             } else if (ticks % 15 == 0) {
@@ -1243,7 +1287,7 @@ public class BlubGuhEntity extends Landdiertje {
                             getDisplayName(), hupsenGedaan, hupsRecord).withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
                 if (level() instanceof ServerLevel sl) {
-                    sl.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), record ? 8 : 3, 0.4, 0.2, 0.4, 0);
+                    deeltjes(sl, ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), record ? 8 : 3, 0.4, 0.2, 0.4, 0);
                 }
             }
         }
@@ -1285,6 +1329,45 @@ public class BlubGuhEntity extends Landdiertje {
         return BlubGeluid.WEG.get();
     }
 
+    // --- who may hear and see a wild Blub (only who helped Snoes; tamed ones and the dream: everyone) ------------------------------
+
+    /** Everyone may see and hear it: a tamed Blub, or any Blub in the dream. A wild one elsewhere: only who helped Snoes. */
+    public boolean voorIedereen() {
+        return isTame() || BlubSnoes.inDroom(level());
+    }
+
+    /** Its sounds (squeaks, steps, the lullaby...): a wild one only for the players who may see it (the others hear nothing). */
+    @Override
+    public void playSound(SoundEvent sound, float volume, float pitch) {
+        if (isSilent() || !(level() instanceof ServerLevel sl) || voorIedereen()) {
+            super.playSound(sound, volume, pitch);
+            return;
+        }
+        net.minecraft.core.Holder<SoundEvent> holder = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
+        double bereik = Math.max(16.0, 16.0 * volume);
+        long seed = sl.getRandom().nextLong();
+        for (ServerPlayer p : sl.players()) {
+            if (BlubSnoes.heeft(p) && p.distanceToSqr(this) < bereik * bereik) {
+                p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(holder, getSoundSource(), getX(), getY(), getZ(),
+                        volume, pitch, seed));
+            }
+        }
+    }
+
+    /** sendParticles, but a wild Blub's only to the players who may see it. */
+    <T extends net.minecraft.core.particles.ParticleOptions> void deeltjes(ServerLevel sl, T soort, double x, double y, double z, int n,
+                                                                          double dx, double dy, double dz, double snelheid) {
+        if (voorIedereen()) {
+            sl.sendParticles(soort, x, y, z, n, dx, dy, dz, snelheid);
+            return;
+        }
+        for (ServerPlayer p : sl.players()) {
+            if (BlubSnoes.heeft(p)) {
+                sl.sendParticles(p, soort, false, false, x, y, z, n, dx, dy, dz, snelheid);
+            }
+        }
+    }
+
     @Override
     protected void playStepSound(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
         BlubGeluid.HUPPELEN.speel(this);
@@ -1296,7 +1379,7 @@ public class BlubGuhEntity extends Landdiertje {
         triggerAnim("actie", "eet");
         BlubGeluid.ETEN.speel(this);
         if (level() instanceof ServerLevel sl && !stack.isEmpty()) {
-            sl.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, stack.copyWithCount(1).getItem()),
+            deeltjes(sl, new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, stack.copyWithCount(1).getItem()),
                     getX(), getY() + getBbHeight() * 0.6, getZ(), 6, 0.12, 0.05, 0.12, 0.03);
         }
     }
@@ -1306,7 +1389,7 @@ public class BlubGuhEntity extends Landdiertje {
         triggerAnim("actie", "eet");
         BlubGeluid.DELEN.speel(this);
         if (level() instanceof ServerLevel sl) {
-            sl.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get()),
+            deeltjes(sl, new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get()),
                     getX(), getY() + getBbHeight() * 0.6, getZ(), 6, 0.12, 0.05, 0.12, 0.03);
         }
     }
@@ -1315,7 +1398,7 @@ public class BlubGuhEntity extends Landdiertje {
     @Override
     public void aaien(ServerPlayer player) {
         ServerLevel level = (ServerLevel) level();
-        level.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
+        deeltjes(level, ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.1, getZ(), 2, 0.2, 0.1, 0.2, 0);
         if (!isBezig()) {
             triggerAnim("actie", "blij");
         }

@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -23,7 +22,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 /**
  * 1.8.0 test build, op commands for the Blub-guh (permission level 2; Brigadier merges them into the /guhs tree):
  * <ul>
- *   <li>{@code /guhs blub spawn <meter> <soort> [tint] [grootte] [baby]}: one in front of you;</li>
+ *   <li>{@code /guhs blub spawn <meter> <soort> [tint] [grootte 75-125] [baby]}: one in front of you;</li>
  *   <li>{@code /guhs blub raster}: the m06 grid in front of you (5 soorten x meter 0/25/50/75/100);</li>
  *   <li>{@code /guhs blub groepje [aantal]}: random Blubs with the real spawn dice (default 12);</li>
  *   <li>{@code /guhs blub tam}: every Blub-guh within 16 blocks becomes yours;</li>
@@ -39,23 +38,23 @@ public final class BlubCommando {
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("blub").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("spawn")
                         .then(Commands.argument("meter", IntegerArgumentType.integer(0, 100))
-                                .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"), "blauw", 0, 1f, false))
+                                .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"), "blauw", 0, 100, false))
                                 .then(Commands.argument("soort", StringArgumentType.word())
                                         .suggests((c, b) -> SharedSuggestionProvider.suggest(
                                                 java.util.Arrays.stream(BlubTrekking.Soort.values()).map(BlubTrekking.Soort::id), b))
                                         .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"),
-                                                StringArgumentType.getString(c, "soort"), 0, 1f, false))
+                                                StringArgumentType.getString(c, "soort"), 0, 100, false))
                                         .then(Commands.argument("tint", IntegerArgumentType.integer(0, 2))
                                                 .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"),
-                                                        StringArgumentType.getString(c, "soort"), IntegerArgumentType.getInteger(c, "tint"), 1f, false))
-                                                .then(Commands.argument("grootte", FloatArgumentType.floatArg(BlubTrekking.GROOTTE_MIN, BlubTrekking.GROOTTE_MAX))
+                                                        StringArgumentType.getString(c, "soort"), IntegerArgumentType.getInteger(c, "tint"), 100, false))
+                                                .then(Commands.argument("grootte", IntegerArgumentType.integer(BlubTrekking.GROOTTE_MIN_PROCENT, BlubTrekking.GROOTTE_MAX_PROCENT))
                                                         .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"),
                                                                 StringArgumentType.getString(c, "soort"), IntegerArgumentType.getInteger(c, "tint"),
-                                                                FloatArgumentType.getFloat(c, "grootte"), false))
+                                                                IntegerArgumentType.getInteger(c, "grootte"), false))
                                                         .then(Commands.argument("baby", BoolArgumentType.bool())
                                                                 .executes(c -> spawn(c.getSource(), IntegerArgumentType.getInteger(c, "meter"),
                                                                         StringArgumentType.getString(c, "soort"), IntegerArgumentType.getInteger(c, "tint"),
-                                                                        FloatArgumentType.getFloat(c, "grootte"), BoolArgumentType.getBool(c, "baby")))))))))
+                                                                        IntegerArgumentType.getInteger(c, "grootte"), BoolArgumentType.getBool(c, "baby")))))))))
                 .then(Commands.literal("raster").executes(c -> raster(c.getSource())))
                 .then(Commands.literal("groepje").executes(c -> groepje(c.getSource(), 12))
                         .then(Commands.argument("aantal", IntegerArgumentType.integer(1, 64))
@@ -89,11 +88,12 @@ public final class BlubCommando {
         return p.position().add(kijk.scale(afstand)).add(rechts.scale(opzij));
     }
 
-    private static int spawn(CommandSourceStack source, int meter, String soort, int tint, float grootte, boolean baby) throws CommandSyntaxException {
+    /** grootte in whole percents (75..125). */
+    private static int spawn(CommandSourceStack source, int meter, String soort, int tint, int grootte, boolean baby) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
         BlubTrekking.Soort s = BlubTrekking.Soort.van(soort);
-        maak(p.level(), voor(p, 3, 0), p.getYRot() + 180, new BlubTrekking.Waarden(meter, s, tint, grootte), baby);
-        source.sendSuccess(() -> Component.translatable("commands.guhs.blub.spawn", meter, s.id(), tint, String.format(java.util.Locale.ROOT, "%.2f", grootte)), false);
+        maak(p.level(), voor(p, 3, 0), p.getYRot() + 180, new BlubTrekking.Waarden(meter, s, tint, BlubTrekking.uitProcent(grootte)), baby);
+        source.sendSuccess(() -> Component.translatable("commands.guhs.blub.spawn", meter, s.id(), tint, grootte + "%"), false);
         return 1;
     }
 
@@ -162,7 +162,7 @@ public final class BlubCommando {
             return 0;
         }
         source.sendSuccess(() -> Component.translatable("commands.guhs.blub.info", b.getDisplayName(), BlubTrekking.metertje(b.meter()), b.meter(),
-                b.blubSoort().id(), b.tint(), String.format(java.util.Locale.ROOT, "%.2f", b.grootte()), b.isBaby() ? "baby" : "groot",
+                b.blubSoort().id(), b.tint(), b.grootteProcent() + "%", b.isBaby() ? "baby" : "groot",
                 b.isTame() ? "tam" : "wild", b.draagt(BlubKleding.Plek.STRIK) == null ? "-" : b.draagt(BlubKleding.Plek.STRIK).id()), false);
         return b.meter();
     }

@@ -74,9 +74,9 @@ TEKSTEN = {
     "item.guhs.blubguh_spawn_egg": ("Blub-guh-spawnei", "Blub-guh Spawn Egg"),
     "gui.guhs.landdiertjes.getemd.blubguh": ("%s is nu jouw Blub-guh! Squish!", "%s is your Blub-guh now! Squish!"),
     "gui.guhs.piep.menu.sub.blubguh": ("Een zachte Blub-guh", "A soft Blub-guh"),
-    "gui.guhs.piep.menu.speciaal.blubguh": ("Op je schouder!", "On your shoulder!"),
-    "gui.guhs.piep.menu.speciaal.blubguh.tooltip": ("Hij hupt op je schouder. Sluip + rechtsklik op een blok: eraf.",
-                                                    "It hops onto your shoulder. Sneak + right-click a block: off it hops."),
+    "gui.guhs.piep.menu.speciaal.blubguh": ("Op je hoofd!", "On your head!"),
+    "gui.guhs.piep.menu.speciaal.blubguh.tooltip": ("Hij hupt op je hoofd, als een zacht hoedje. Sluip + rechtsklik op een blok: eraf.",
+                                                    "It hops onto your head, like a soft little hat. Sneak + right-click a block: off it hops."),
     "gui.guhs.piep.opgepakt.blubguh": ("Je hebt %s opgepakt. Hij is zo zacht!", "You picked up %s. So squishy!"),
     "gui.guhs.piep.neergezet.blubguh": ("%s hupt weer rond. Blub!", "%s hops about again. Blub!"),
     "gui.guhs.guhdex.info.blubguh": ("Een zachte Blub uit een droom, met een beetje guh erin. Hoeveel guh? Dat zegt zijn Blub-Guh-Meter!",
@@ -84,6 +84,29 @@ TEKSTEN = {
     # the menu
     "gui.guhs.blubguh.menu.meter": ("Blub %s Guh %s%%", "Blub %s Guh %s%%"),
     "gui.guhs.blubguh.menu.soort": ("%s, %s, %s%% groot", "%s, %s, %s%% big"),
+    "gui.guhs.blubguh.menu.meter_label": ("Guh-ified meter", "Guh-ified meter"),
+    "gui.guhs.blubguh.menu.meter_eind": ("Blub ▶ Guh", "Blub ▶ Guh"),
+    "gui.guhs.blubguh.menu.meter_uitleg": ("Hoe guhsig is deze Blub? Op 0% is het een echte Blub, op 100% bijna een guh (met ronde guh-oortjes!). "
+                                            "De meter staat vast vanaf zijn geboorte en verandert nooit meer, ook niet als je hem heel veel knuffelt. "
+                                            "Babyblubjes krijgen iets tussen hun ouders in. Precies 0 (Pure Blub) en precies 100 (Volle Guh) zijn heel zeldzaam. Njeg!",
+                                            "How guh is this Blub? At 0% it is a real Blub, at 100% almost a guh (with round guh ears!). "
+                                            "The meter is set at birth and never changes, not even if you cuddle it a whole lot. "
+                                            "Baby blubs get something in between their parents. Exactly 0 (Pure Blub) and exactly 100 (Full Guh) are very rare. Njeg!"),
+    "gui.guhs.blubguh.menu.grootte_label": ("Grootte", "Size"),
+    "gui.guhs.blubguh.menu.grootte_eind": ("75% – 125%", "75% – 125%"),
+    "gui.guhs.blubguh.menu.soort_tint": ("%s, %s", "%s, %s"),
+    # 1.8.0 afronding: the Blub-knuffel
+    "gui.guhs.blubguh.menu.knuffel": ("Knuffel laten maken", "Have a plush made"),
+    "gui.guhs.blubguh.menu.knuffel.tooltip": ("Een zachte knuffel van precies deze Blub: zelfde soort, tint, meter en strikje. Kost 1 wol.",
+                                              "A soft plush of exactly this Blub: same kind, tint, meter and bow. Costs 1 wool."),
+    "gui.guhs.blubguh.knuffel.gemaakt": ("Een knuffel van %s! Hij lijkt precies. Squish!", "A plush of %s! It looks just like it. Squish!"),
+    "gui.guhs.blubguh.knuffel.geen_wol": ("Je hebt 1 wol nodig voor een knuffel. Njeg, geen wol, geen knuffel.",
+                                          "You need 1 wool for a plush. Njeg, no wool, no plush."),
+    "block.guhs.blub_knuffel": ("Blub-knuffel", "Blub Plush"),
+    "item.guhs.blub_knuffel.leeg": ("Een gewone blauwe Blub-knuffel. Laat er een maken van je eigen Blub: in zijn menu!",
+                                    "A plain blue Blub plush. Have one made of your own Blub: in its menu!"),
+    "item.guhs.blub_knuffel.van": ("Knuffel van %s", "Plush of %s"),
+    "item.guhs.blub_knuffel.grootte": ("Grootte %s%%", "Size %s%%"),
     "gui.guhs.blubguh.menu.baby": ("Babyblubje!", "Baby blub!"),
     "gui.guhs.blubguh.menu.titel.puur": ("Een Pure Blub! Helemaal zonder guh. Zeldzaam!", "A Pure Blub! No guh at all. Rare!"),
     "gui.guhs.blubguh.menu.titel.vol": ("Een Volle Guh! Bijna een echte guh. Zeldzaam!", "A Full Guh! Almost a real guh. Rare!"),
@@ -102,11 +125,11 @@ TEKSTEN = {
                                      "This Blub doesn't know you yet... help Snoes fall asleep first, njeg!"),
     "commands.guhs.blub.snoes.aan": ("Snoes is geholpen: je ziet nu wilde Blubs (en kunt ze temmen).", "Snoes was helped: you see wild Blubs now (and can tame them)."),
     "commands.guhs.blub.snoes.uit": ("Snoes is nog niet geholpen: wilde Blubs zijn weer onzichtbaar voor je.", "Snoes not helped yet: wild Blubs are invisible to you again."),
-    "gui.guhs.blubguh.menu.schouder": ("Op je schouder", "On your shoulder"),
-    "gui.guhs.blubguh.menu.schouder.tooltip": ("Hij hupt op je schouder. Sluip + rechtsklik op een blok: eraf.",
-                                               "It hops onto your shoulder. Sneak + right-click a block: off it hops."),
+    "gui.guhs.blubguh.menu.schouder": ("Op je hoofd", "On your head"),
+    "gui.guhs.blubguh.menu.schouder.tooltip": ("Hij hupt op je hoofd, als een zacht hoedje. Sluip + rechtsklik op een blok: eraf.",
+                                               "It hops onto your head, like a soft little hat. Sneak + right-click a block: off it hops."),
     # messages
-    "gui.guhs.blubguh.op_schouder": ("%s zit op je schouder. Squish!", "%s sits on your shoulder. Squish!"),
+    "gui.guhs.blubguh.op_schouder": ("%s zit op je hoofd. Squish! Wat een hoedje.", "%s sits on your head. Squish! What a hat."),
     "gui.guhs.blubguh.liedje": ("%s piept een slaapliedje... piep, piep, pieeep...", "%s squeaks a lullaby... squeak, squeak, squeeeak..."),
     "gui.guhs.blubguh.liedje.klaar": ("Sst... %s guhs zijn heel slaperig geworden. Njeg.", "Shh... %s guhs got very sleepy. Njeg."),
     "gui.guhs.blubguh.verstop.start": ("%s verstopt zich! Tel tot tien... en zoek hem binnen een minuut!",
@@ -192,12 +215,38 @@ def icoon():
     return img
 
 
+def knuffel_icoon():
+    """The Blub-knuffel's item: the Blub icon with a little pink heart (it's a plush)."""
+    img = icoon()
+    d = ImageDraw.Draw(img)
+    hart = (242, 120, 170)
+    for x, y in ((12, 0), (14, 0), (11, 1), (12, 1), (13, 1), (14, 1), (15, 1), (12, 2), (13, 2), (14, 2), (13, 3)):
+        d.point((x, y), fill=hart)
+    return img
+
+
+def knuffel(h):
+    """1.8.0 afronding: the Blub-knuffel block (drawn by its block entity: no model of its own, only the particle), its item
+    (the icon with a heart), its loot (the Blub on it comes back: custom_data copied from the block entity)."""
+    A, D, w = h.A, h.D, h.w
+    h.save(knuffel_icoon(), "item", "blub_knuffel.png")
+    h.item_model("blub_knuffel")
+    w(f"{A}/models/block/blub_knuffel.json", {"textures": {"particle": "guhs:item/blub_knuffel"}})
+    w(f"{A}/blockstates/blub_knuffel.json", {"variants": {f"facing={f}": {"model": "guhs:block/blub_knuffel"}
+                                                          for f in ("north", "east", "south", "west")}})
+    w(f"{D}/loot_table/blocks/blub_knuffel.json", {"type": "minecraft:block", "pools": [{
+        "rolls": 1, "bonus_rolls": 0, "conditions": [{"condition": "minecraft:survives_explosion"}],
+        "entries": [{"type": "minecraft:item", "name": "guhs:blub_knuffel", "functions": [
+            {"function": "minecraft:copy_components", "source": "block_entity", "include": ["minecraft:custom_data"]}]}]}]})
+
+
 def build(h):
     A, D, w = h.A, h.D, h.w
     modellen.build(h)
     klusjes.build(h)
     h.save(icoon(), "item", "blubguh_item.png")
     h.item_model("blubguh_item")
+    knuffel(h)
     w(f"{A}/models/item/blubguh_spawn_egg.json", {"parent": "minecraft:item/template_spawn_egg"})
     w(f"{D}/loot_table/entities/blubguh.json", {"type": "minecraft:entity", "pools": []})
     for name, (biomes, spawners) in SPAWNS.items():
@@ -293,7 +342,7 @@ def _mc26():
             break
     mc26.SPAWN_EGGS = {"blubguh_spawn_egg": mc26.SPAWN_EGGS["blubguh_spawn_egg"]}
     mc26.spawn_eggs()
-    for n in ["blubguh_item", "blubguh_spawn_egg"] + klusjes.ITEMS:
+    for n in ["blubguh_item", "blubguh_spawn_egg", "blub_knuffel"] + klusjes.ITEMS:
         with open(os.path.join(mc26.A, "items", n + ".json"), "w", encoding="utf-8", newline="\n") as f:
             json.dump({"model": {"type": "minecraft:model", "model": f"guhs:item/{n}"}}, f, indent=2)
             f.write("\n")
