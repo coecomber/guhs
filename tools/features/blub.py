@@ -19,10 +19,12 @@ from PIL import Image, ImageDraw
 try:
     from features import blub_modellen as modellen
     from features import blub_klusjes as klusjes
+    from features import blub_kleding as kleding
 except ImportError:                                   # (run as a script from the project root)
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     from features import blub_modellen as modellen
     from features import blub_klusjes as klusjes
+    from features import blub_kleding as kleding
 
 BONES = {}
 CLOTHES = []
@@ -117,7 +119,8 @@ TEKSTEN = {
     "gui.guhs.blubguh.trucjes.titel": ("Trucjes van %s", "Tricks of %s"),
     "gui.guhs.blubguh.truc.doe": ("Doe!", "Go!"),
     "gui.guhs.blubguh.kast.titel": ("Kledingkast van %s", "Wardrobe of %s"),
-    "gui.guhs.blubguh.kast.uitleg": ("Klik om aan te trekken. Alle strikjes zijn gratis!", "Click to put it on. Every bow is free!"),
+    "gui.guhs.blubguh.kast.uitleg": ("Klik om aan te trekken. Strikjes zijn gratis, de rest maak je los met Blub-kleding!",
+                                     "Click to put it on. Bows are free, the rest you unlock with Blub clothing!"),
     "gui.guhs.blubguh.kast.aan": ("Draagt nu: %s", "Wearing: %s"),
     "gui.guhs.blubguh.kast.plek.strik": ("Strikje", "Bow"),
     "gui.guhs.blubguh.kast.strik": ("%s strikje", "%s bow"),
@@ -169,6 +172,7 @@ except ImportError:
 for _a in _audio.ACTIES:
     TEKSTEN[f"subtitles.guhs.blubguh.{_a.id}"] = (_a.ondertitel_nl, _a.ondertitel_en)
 TEKSTEN.update(klusjes.TEKSTEN)
+TEKSTEN.update(kleding.TEKSTEN)
 
 
 def zichtbaar(soort, meter):
@@ -183,6 +187,7 @@ def zichtbaar(soort, meter):
          "ravijn_spriet_l": soort == "ravijn" and stap < 6, "ravijn_spriet_r": soort == "ravijn" and stap < 6,
          "ravijn_vin_l": soort == "ravijn", "ravijn_vin_r": soort == "ravijn",
          "zwam_gewei": soort == "zwam", "strik": False}
+    z.update({"kl_" + k: False for k in modellen.KLEDING})          # (the Blub-kleding: their own pass)
     return z
 
 
@@ -246,6 +251,7 @@ def build(h):
     A, D, w = h.A, h.D, h.w
     modellen.build(h)
     klusjes.build(h)
+    kleding.build(h)
     h.save(icoon(), "item", "blubguh_item.png")
     h.item_model("blubguh_item")
     knuffel(h)
@@ -344,7 +350,7 @@ def _mc26():
             break
     mc26.SPAWN_EGGS = {"blubguh_spawn_egg": mc26.SPAWN_EGGS["blubguh_spawn_egg"]}
     mc26.spawn_eggs()
-    for n in ["blubguh_item", "blubguh_spawn_egg", "blub_knuffel"] + klusjes.ITEMS:
+    for n in ["blubguh_item", "blubguh_spawn_egg", "blub_knuffel"] + klusjes.ITEMS + kleding.ITEMS:
         with open(os.path.join(mc26.A, "items", n + ".json"), "w", encoding="utf-8", newline="\n") as f:
             json.dump({"model": {"type": "minecraft:model", "model": f"guhs:item/{n}"}}, f, indent=2)
             f.write("\n")

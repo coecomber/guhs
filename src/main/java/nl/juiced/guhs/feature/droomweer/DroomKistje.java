@@ -38,7 +38,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  *   <li>Each player may open it once per Minecraft day ({@link Band#dag}; saved per player in
  *       {@code GuhQuests.saved(player)}).</li>
  *   <li>The very first time: the weerpotje "Droomweer" ({@link WeerUnlocks#potjeEenmalig}), with a little party.</li>
- *   <li>After that: droomzand and a little something (a sterlampje, a stuiterkussen or maanbloemetjes).</li>
+ *   <li>After that: droomzand and a little something (a sterlampje, a stuiterkussen, maanbloemetjes or a piece of Blub-kleding).</li>
  *   <li>Not yet tomorrow: "Kom morgen terug, vadsje!".</li>
  * </ul>
  * The kistje itself is put next to the big star by {@link DroomweerFeature} (never in the island's template, so the
@@ -97,7 +97,9 @@ public final class DroomKistje {
     /** Every day after the first: droomzand and a little something. */
     private static void cadeautje(ServerPlayer p, RandomSource r) {
         Minigames.give(p, new ItemStack(DroomblokkenFeature.DROOMZAND.get(), 2 + r.nextInt(3)));
-        ItemStack extra = switch (r.nextInt(3)) {
+        ItemStack extra = switch (r.nextInt(4)) {
+            case 3 -> new ItemStack(nl.juiced.guhs.feature.blub.BlubFeature.KLEDING_ITEMS.get(
+                    nl.juiced.guhs.feature.blub.BlubKleding.KLEDING.get(r.nextInt(nl.juiced.guhs.feature.blub.BlubKleding.KLEDING.size()))).get());
             case 0 -> new ItemStack(DroomspulFeature.STERLAMPJE.get());
             case 1 -> new ItemStack(SterrenveldFeature.STUITERKUSSENS.get(r.nextInt(SterrenveldFeature.STUITERKUSSENS.size())).get());
             default -> new ItemStack(DroomblokkenFeature.MAANBLOEMETJE.get(), 1 + r.nextInt(2));

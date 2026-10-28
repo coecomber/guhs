@@ -183,6 +183,9 @@ public final class AndereVadsjesTab {
             if (v.looks().contains("StrikNaam")) {
                 out.add(nl.juiced.guhs.taal.Tekst.get(v.looks(), "StrikNaam").copy().withStyle(ChatFormatting.DARK_PURPLE));
             }
+            for (int i = 0; v.looks().contains("Kleding" + i); i++) {      // (1.8.0: a Blub's other Blub-kleding)
+                out.add(nl.juiced.guhs.taal.Tekst.get(v.looks(), "Kleding" + i).copy().withStyle(ChatFormatting.DARK_PURPLE));
+            }
             for (net.minecraft.network.chat.FormattedText r : font.getSplitter().splitLines(v.plek(), 200, net.minecraft.network.chat.Style.EMPTY)) {
                 out.add(Component.literal(r.getString()).withStyle(ChatFormatting.GRAY));
             }

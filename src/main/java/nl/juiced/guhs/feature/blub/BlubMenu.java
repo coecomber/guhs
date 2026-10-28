@@ -55,7 +55,7 @@ public final class BlubMenu {
         if (blub.level() instanceof ServerLevel level) {
             level.sendParticles(ParticleTypes.HEART, blub.getX(), blub.getY() + blub.getBbHeight() + 0.15, blub.getZ(), 1, 0.15, 0.05, 0.15, 0);
         }
-        ModNetworking.sendTo(player, new MenuOpen(blub.getId(), blub.hupsRecord()));
+        ModNetworking.sendTo(player, new MenuOpen(blub.getId(), blub.hupsRecord(), BlubKledingUnlocks.ids(player)));
     }
 
     /** A button (after the checks). Returns whether something happened. */
@@ -101,7 +101,7 @@ public final class BlubMenu {
                 BlubKleding.Plek plek = BlubKleding.Plek.values()[Math.floorMod(waarde, BlubKleding.Plek.values().length)];
                 boolean uit = tekst == null || tekst.isEmpty();
                 BlubKleding.Stuk stuk = uit ? null : BlubKleding.stuk(tekst);
-                if (!uit && (stuk == null || stuk.plek() != plek || !BlubKleding.mag(blub, stuk))) {
+                if (!uit && (stuk == null || stuk.plek() != plek || !BlubKleding.mag(player, stuk))) {
                     return false;
                 }
                 blub.kleed(plek, stuk);
@@ -143,10 +143,12 @@ public final class BlubMenu {
     // --- payloads ----------------------------------------------------------------------------------------------------------------
 
     /** Server to client: open the menu of this Blub-guh (with its hupsen record). */
-    public record MenuOpen(int blub, int record) implements CustomPacketPayload {
+    /** Opens the menu; {@code kleding}: the Blub-kleding this player has unlocked (for the Kledingkast). */
+    public record MenuOpen(int blub, int record, java.util.List<String> kleding) implements CustomPacketPayload {
         public static final Type<MenuOpen> TYPE = new Type<>(Guhs.id("blub_menu"));
         public static final StreamCodec<FriendlyByteBuf, MenuOpen> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, MenuOpen::blub, ByteBufCodecs.VAR_INT, MenuOpen::record, MenuOpen::new);
+                ByteBufCodecs.VAR_INT, MenuOpen::blub, ByteBufCodecs.VAR_INT, MenuOpen::record,
+                ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list(64)), MenuOpen::kleding, MenuOpen::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
@@ -154,6 +156,8 @@ public final class BlubMenu {
         }
 
         public static void handle(MenuOpen p, IPayloadContext context) {
+            BlubKleding.Client.ONTGRENDELD.clear();
+            BlubKleding.Client.ONTGRENDELD.addAll(p.kleding());
             menuOpener.accept(p);
         }
     }
