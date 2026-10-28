@@ -137,7 +137,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0: the dream's feel (sky, fade, island music, NPC voices; append only)
             'droomsfeer',
             # 1.8.0 Guhdromenland: more boxes, the tuck-in items, the islanders' lists (reads the island templates; append only)
-            'droomspul']
+            'droomspul',
+            # 1.8.0: the Guhvilla (20 residents, its model and roof, the hall inside with the new beds; after huisje; append only)
+            'guhvilla']
 
 
 def modules():

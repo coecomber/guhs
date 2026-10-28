@@ -26,6 +26,9 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 public final class HuisjeKoepel {
     /** "dimension|controller pos" of the huisjes whose dome is on. */
     private static final Set<String> AAN = ConcurrentHashMap.newKeySet();
+    /** 1.8.0: the range of each huisje as its screen last said (the slider), and a short preview while the slider moves. */
+    private static final java.util.Map<String, Integer> BEREIK = new ConcurrentHashMap<>();
+    private static final java.util.Map<String, Long> VOORPROEF = new ConcurrentHashMap<>();
     private static final int RINGEN = 12, SEGMENTEN = 48;
 
     private HuisjeKoepel() {
@@ -48,21 +51,36 @@ public final class HuisjeKoepel {
         }
     }
 
+    /** 1.8.0: the range the dome shows for this huisje (its screen tells; before that the old 16). */
+    public static void bereik(BlockPos pos, int blokken) {
+        BEREIK.put(sleutel(pos), blokken);
+    }
+
+    /** 1.8.0: shows the dome for a few seconds (while the range slider moves), even when "laat klus-area zien" is off. */
+    public static void voorproef(BlockPos pos) {
+        Minecraft mc = Minecraft.getInstance();
+        VOORPROEF.put(sleutel(pos), mc.level == null ? 0L : mc.level.getGameTime() + 60);
+    }
+
     /** 1.1.0: listens to the AfterTranslucentBlocks stage (was Stage.AFTER_TRANSLUCENT_BLOCKS); same immediate drawing. */
     static void teken(RenderLevelStageEvent.AfterTranslucentBlocks event) {
-        if (AAN.isEmpty()) {
-            return;
-        }
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
             return;
         }
+        long nu = mc.level.getGameTime();
+        VOORPROEF.values().removeIf(t -> t < nu);
+        if (AAN.isEmpty() && VOORPROEF.isEmpty()) {
+            return;
+        }
+        Set<String> tonen = new java.util.HashSet<>(AAN);
+        tonen.addAll(VOORPROEF.keySet());
         String dim = mc.level.dimension().identifier() + "|";
         Vec3 cam = event.getLevelRenderState().cameraRenderState.pos;
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
         PoseStack pose = event.getPoseStack();
         boolean iets = false;
-        for (String k : AAN) {
+        for (String k : tonen) {
             if (!k.startsWith(dim)) {
                 continue;
             }
@@ -77,7 +95,7 @@ public final class HuisjeKoepel {
             }
             pose.pushPose();
             pose.translate(m.x - cam.x, m.y - cam.y + 0.02, m.z - cam.z);
-            koepel(pose.last().pose(), buffers.getBuffer(RenderTypes.debugQuads()), Huisjes.BEREIK, mc.level.getGameTime() + mc.getDeltaTracker().getGameTimeDeltaPartialTick(false));
+            koepel(pose.last().pose(), buffers.getBuffer(RenderTypes.debugQuads()), BEREIK.getOrDefault(k, Huisjes.BEREIK), mc.level.getGameTime() + mc.getDeltaTracker().getGameTimeDeltaPartialTick(false));
             pose.popPose();
             iets = true;
         }

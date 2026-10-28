@@ -29,7 +29,7 @@ import net.minecraft.world.level.ScheduledTickAccess;
 public class HuisjeDeelBlock extends Block {
     public static final MapCodec<HuisjeDeelBlock> CODEC = simpleCodec(HuisjeDeelBlock::new);
     public static final IntegerProperty DX = IntegerProperty.create("dx", 0, 6);
-    public static final IntegerProperty DY = IntegerProperty.create("dy", 0, 3);
+    public static final IntegerProperty DY = IntegerProperty.create("dy", 0, 4);   // (1.8.0: 4 for the Guhvilla, five blocks tall)
     public static final IntegerProperty DZ = IntegerProperty.create("dz", 0, 6);
 
     public HuisjeDeelBlock(Properties properties) {

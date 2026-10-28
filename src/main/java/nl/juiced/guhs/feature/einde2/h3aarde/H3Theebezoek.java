@@ -64,7 +64,7 @@ public final class H3Theebezoek {
     /** The owner of the guhhuisje whose area holds this spot, when they are online in this level (null: none). */
     @Nullable
     static ServerPlayer eigenaar(ServerLevel level, BlockPos set) {
-        for (Huisje h : Huisjes.rond(level, set, Huisjes.BEREIK + 2)) {
+        for (Huisje h : Huisjes.rond(level, set, Huisjes.MAX_BEREIK + 2)) {
             if (h.inGebied(set) && level.getPlayerByUUID(h.eigenaar()) instanceof ServerPlayer p && p.level() == level) {
                 return p;
             }

@@ -31938,5 +31938,11 @@
   "block.guhs.badkuipbed": "Bathtub Bed",
   "block.guhs.badkuipbed.lore": "An old bathtub full of foam, with blankets of bubbles. The Schillys keep their corner wet.",
   "block.guhs.knuffelnest": "Cuddle Nest",
-  "block.guhs.knuffelnest.lore": "The big round nest for eight guhs, with little ears on its rim. All in a circle, heads towards the nibble bowl."
+  "block.guhs.knuffelnest.lore": "The big round nest for eight guhs, with little ears on its rim. All in a circle, heads towards the nibble bowl.",
+  "block.guhs.guhhuisje_villa": "Guh Villa",
+  "block.guhs.guhhuisje_villa.lore": "Two floors, a little balcony, a crown on the roof and room for twenty vadsjes. Villa Vadsvorst!",
+  "gui.guhs.huisje.bereik": "Chore area: %s blocks",
+  "gui.guhs.huisje.bereik.tooltip": "How far your residents wander, do chores and play: %1$s by default, from %2$s to %3$s blocks. Slide and watch the blue dome. Bigger isn't always vadsier, njeg!",
+  "advancements.guhs.lieve_vadsjes.huisje_villa.title": "Villa Vadsvorst",
+  "advancements.guhs.lieve_vadsjes.huisje_villa.description": "Build a Guh Villa: two floors, a crown and room for twenty vadsjes"
 }

@@ -128,7 +128,7 @@ public class HuisjeGameTests {
     @GuhTest(template = TUIN, batch = BATCH)
     public static void huisjePlekkenDrieVijfAcht(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(12, 1, 12));
-        for (HuisjeMaat maat : HuisjeMaat.values()) {
+        for (HuisjeMaat maat : List.of(HuisjeMaat.KLEIN, HuisjeMaat.MEDIUM, HuisjeMaat.GROOT)) {   // (1.8.0: the villa has its own test)
             Huisje h = bouw(helper, new BlockPos(3 + maat.ordinal() * 7, 1, 3), maat, p);
             helper.assertTrue(h.maat().plekken() == List.of(3, 5, 8).get(maat.ordinal()), "capacity of " + maat);
             // a muisje first, then guhs until it is full

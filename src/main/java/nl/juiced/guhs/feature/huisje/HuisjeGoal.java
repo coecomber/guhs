@@ -282,7 +282,7 @@ public class HuisjeGoal extends Goal {
             }
         }
         if (mob.getRandom().nextInt(6) == 0) {
-            KlusTaak t = Speelgoed.willekeurig(level, mob, h.pos(), Huisjes.BEREIK);
+            KlusTaak t = Speelgoed.willekeurig(level, mob, h.pos(), h.bereik());
             if (t != null) {
                 start(t);
                 return true;

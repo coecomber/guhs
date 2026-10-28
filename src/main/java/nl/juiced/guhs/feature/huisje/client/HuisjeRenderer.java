@@ -45,6 +45,10 @@ public class HuisjeRenderer implements BlockEntityRenderer<HuisjeBlockEntity, Hu
         }
     }
 
+    /** 1.8.0: the Guhvilla is five blocks tall: its roof (the big ears, the crown, the chimney tops) is a second model,
+     *  drawn 32 model pixels higher (a block model can't reach past 32). */
+    private static final StandaloneModelKey<BlockStateModelPart> VILLA_DAK = new StandaloneModelKey<>(() -> "guhs:block/guhhuisje_villa_dak_model");
+
     public static StandaloneModelKey<BlockStateModelPart> model(HuisjeMaat maat) {
         return MODELLEN.get(maat);
     }
@@ -54,6 +58,7 @@ public class HuisjeRenderer implements BlockEntityRenderer<HuisjeBlockEntity, Hu
         for (HuisjeMaat maat : HuisjeMaat.values()) {
             event.register(model(maat), SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/guhhuisje_" + maat.id() + "_model")));
         }
+        event.register(VILLA_DAK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/guhhuisje_villa_dak_model")));
     }
 
     public static class State extends BlockEntityRenderState {
@@ -98,6 +103,11 @@ public class HuisjeRenderer implements BlockEntityRenderer<HuisjeBlockEntity, Hu
         pose.translate(-0.5, 0, -0.5);
         collector.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(Minecraft.getInstance().getModelManager().getStandaloneModel(model(maat))),
                 BlockModelRenderState.EMPTY_TINTS, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        if (maat == HuisjeMaat.VILLA) {
+            pose.translate(0, 2, 0);   // (32 model pixels up: the roof)
+            collector.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(Minecraft.getInstance().getModelManager().getStandaloneModel(VILLA_DAK)),
+                    BlockModelRenderState.EMPTY_TINTS, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        }
         pose.popPose();
     }
 
@@ -108,6 +118,6 @@ public class HuisjeRenderer implements BlockEntityRenderer<HuisjeBlockEntity, Hu
 
     @Override
     public AABB getRenderBoundingBox(HuisjeBlockEntity be) {
-        return new AABB(be.getBlockPos()).inflate(4, 0, 4).expandTowards(0, 5, 0);
+        return new AABB(be.getBlockPos()).inflate(4, 0, 4).expandTowards(0, 7, 0);
     }
 }

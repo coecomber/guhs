@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_band",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 47,
+  guhs_chapter_version: 50,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_band.png",
@@ -571,6 +571,39 @@
       shape: "gear",
     },
     {
+      id: "47554864E795F2CD",
+      icon: {
+        id: "guhs:guhhuisje_villa",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:lieve_vadsjes/huisje_villa",
+          id: "475548202308E864",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548039C38CB8A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548109E559B2A",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
       id: "4755488586A60868",
       icon: {
         id: "guhs:guhhuisje_medium",
@@ -599,7 +632,7 @@
           xp: 150,
         },
       ],
-      x: 20.5,
+      x: 19.0,
       y: 8.0625,
     },
     {
@@ -633,7 +666,7 @@
           xp: 50,
         },
       ],
-      x: 19.0,
+      x: 17.5,
       y: 8.0625,
     },
     {

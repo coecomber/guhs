@@ -31938,5 +31938,11 @@
   "block.guhs.badkuipbed": "Badkuip-bed",
   "block.guhs.badkuipbed.lore": "Een oude badkuip vol schuim, met dekentjes van belletjes. De Schilly's houden het hoekje nat.",
   "block.guhs.knuffelnest": "Knuffelnest",
-  "block.guhs.knuffelnest.lore": "Het grote ronde nest voor acht guhs, met oortjes aan de rand. Samen in een kringetje, kopjes naar het knabbelschaaltje."
+  "block.guhs.knuffelnest.lore": "Het grote ronde nest voor acht guhs, met oortjes aan de rand. Samen in een kringetje, kopjes naar het knabbelschaaltje.",
+  "block.guhs.guhhuisje_villa": "Guhvilla",
+  "block.guhs.guhhuisje_villa.lore": "Twee verdiepingen, een balkonnetje, een kroontje op het dak en plek voor twintig vadsjes. Villa Vadsvorst!",
+  "gui.guhs.huisje.bereik": "Klus-area: %s blokken",
+  "gui.guhs.huisje.bereik.tooltip": "Hoe ver je bewoners rondlopen, klusjes doen en spelen: standaard %1$s, van %2$s tot %3$s blokken. Schuif en kijk naar de blauwe koepel. Groter is niet altijd vadsiger, njeg!",
+  "advancements.guhs.lieve_vadsjes.huisje_villa.title": "Villa Vadsvorst",
+  "advancements.guhs.lieve_vadsjes.huisje_villa.description": "Bouw een Guhvilla: twee verdiepingen, een kroontje en plek voor twintig vadsjes"
 }

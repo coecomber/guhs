@@ -552,6 +552,12 @@ def ftb(fq):
     q("huisje_groot", "Villa Vahoeg", "Het grootste &dGuhhuisje&r: plek voor acht vadsige bewoners, met een schoorsteentje en een strik op het "
       "oor. Er is een guhkristal voor nodig (en het bouwboekje van de Timmerguh).", "guhs:guhhuisje_groot", [adv("guhs:lieve_vadsjes/huisje_groot")],
       rewards=(("guhs:gefrituurde_kaasknabbels", 4),), shape="gear", xp=300)
+    q("huisje_villa", "Villa Vadsvorst", "De allergrootste: de &dGuhvilla&r! Twee verdiepingen, een balkonnetje, een kroontje op het dak en plek voor "
+      "&dtwintig&r bewoners. Ze lopen verder rond dan bij de andere huisjes, en binnen slapen ze in de nieuwe bedden: twee Knuffelnesten, "
+      "stapelbedjes, de Guh-hoofd-bank, een mandje, luciferdoosjes en een schelpbedje. Maak hem van een groot huisje, twee guhkristallen, "
+      "een Knuffelnest, kaasknabbelblokken en het bouwboekje van de Timmerguh. Tip: met de schuifregelaar in het huisje-scherm maak je het "
+      "klus-gebied groter of kleiner.", "guhs:guhhuisje_villa", [adv("guhs:lieve_vadsjes/huisje_villa")],
+      rewards=(("guhs:gefrituurde_kaasknabbels", 8),), shape="gear", xp=500)
     q("huisje_vol", "Vol is vol, njeg!", "Laat een Guhhuisje helemaal vol wonen. Zoveel lieve vadsjes onder een dak!",
       "guhs:guhhuisje_medium", [adv("guhs:lieve_vadsjes/huisje_vol")], rewards=(("guhs:kaas_knabbels", 16),), xp=150)
     # 1.2.0: the Wilde-guhweerder (its own module; its quest belongs next to the huisje quests)

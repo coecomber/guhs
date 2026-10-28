@@ -45,7 +45,7 @@ public final class HuisjePayloads {
 
     /** (Append only: sent by ordinal.) 1.3.2 BINNEN: the button "Naar binnen", for the owner and for visitors. */
     /** (1.5.2: ALLE_KLUSSEN = every chore of every resident on/off at once, {@code aan}) */
-    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN, BINNEN, ALLE_KLUSSEN }
+    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN, BINNEN, ALLE_KLUSSEN, /** 1.8.0: the range slider (entity = blocks). */ BEREIK }
 
     /** Client: the door fade of going in or out (set by client.HuisjeClient). */
     public static volatile Consumer<BinnenFx> fade = p -> {
@@ -157,6 +157,11 @@ public final class HuisjePayloads {
         t.putString("Maat", h.maat().id());
         nl.juiced.guhs.taal.Tekst.put(t, "Naam", h.naamTekst());   // (1.2.0: Components, read with Tekst on the client)
         t.putInt("Plekken", h.maat().plekken());
+        // 1.8.0: the range of the home base and how far the slider goes
+        t.putInt("Bereik", h.bereik());
+        t.putInt("BereikMin", h.maat().minBereik());
+        t.putInt("BereikMax", h.maat().maxBereik());
+        t.putInt("BereikStandaard", h.maat().standaardBereik());
         // 3.0: whose it is, and whether the viewer may change it (timmerguh greys the buttons for the others)
         t.store("Eigenaar", UUIDUtil.CODEC, h.eigenaar());
         t.putString("EigenaarNaam", h.eigenaarNaam());
@@ -289,6 +294,10 @@ public final class HuisjePayloads {
             }
             case BINNEN -> {
                 // (handled above)
+            }
+            case BEREIK -> {
+                h.zetBereik(p.entity());
+                Huisjes.nieuwThuis(level, h);
             }
             case KLUS -> {
                 try {
