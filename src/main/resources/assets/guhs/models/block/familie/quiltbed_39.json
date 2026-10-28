@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "schelp": "guhs:block/bedden/fam/schelp",
+    "particle": "guhs:block/bedden/fam/schelp"
+  },
+  "elements": [
+    {
+      "from": [
+        15.229,
+        0,
+        8.867
+      ],
+      "to": [
+        16,
+        1.735,
+        10.41
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    }
+  ]
+}

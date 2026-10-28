@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "gezicht": "guhs:block/bedden/fam/gezicht",
+    "kffb6cc": "guhs:block/bedden/fam/kffb6cc",
+    "particle": "guhs:block/bedden/fam/gezicht"
+  },
+  "elements": [
+    {
+      "from": [
+        1.765,
+        0,
+        0.0
+      ],
+      "to": [
+        16,
+        1.824,
+        2.206
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffb6cc"
+        },
+        "up": {
+          "texture": "#kffb6cc"
+        },
+        "north": {
+          "texture": "#kffb6cc"
+        },
+        "west": {
+          "texture": "#kffb6cc"
+        },
+        "east": {
+          "texture": "#kffb6cc"
+        },
+        "south": {
+          "texture": "#gezicht",
+          "uv": [
+            0.0,
+            0.0,
+            2.978,
+            1.072
+          ]
+        }
+      }
+    }
+  ]
+}

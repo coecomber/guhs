@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "schelp": "guhs:block/bedden/fam/schelp",
+    "k786ec8": "guhs:block/bedden/fam/k786ec8",
+    "ster": "guhs:block/bedden/fam/ster",
+    "particle": "guhs:block/bedden/fam/schelp"
+  },
+  "elements": [
+    {
+      "from": [
+        10.18,
+        0,
+        6.108
+      ],
+      "to": [
+        16,
+        0.854,
+        14.705
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    },
+    {
+      "from": [
+        11.085,
+        0.854,
+        5.656
+      ],
+      "to": [
+        16,
+        5.944,
+        6.561
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schelp"
+        },
+        "up": {
+          "texture": "#schelp"
+        },
+        "north": {
+          "texture": "#schelp"
+        },
+        "south": {
+          "texture": "#schelp"
+        },
+        "west": {
+          "texture": "#schelp"
+        },
+        "east": {
+          "texture": "#schelp"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.08,
+        14.705
+      ],
+      "to": [
+        16,
+        1.985,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k786ec8"
+        },
+        "up": {
+          "texture": "#k786ec8"
+        },
+        "north": {
+          "texture": "#k786ec8"
+        },
+        "south": {
+          "texture": "#k786ec8"
+        },
+        "west": {
+          "texture": "#k786ec8"
+        },
+        "east": {
+          "texture": "#k786ec8"
+        }
+      }
+    },
+    {
+      "from": [
+        7.239,
+        13.975,
+        0.339
+      ],
+      "to": [
+        10.859,
+        16,
+        0.566
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ster"
+        },
+        "up": {
+          "texture": "#ster"
+        },
+        "north": {
+          "texture": "#ster"
+        },
+        "south": {
+          "texture": "#ster"
+        },
+        "west": {
+          "texture": "#ster"
+        },
+        "east": {
+          "texture": "#ster"
+        }
+      }
+    }
+  ]
+}

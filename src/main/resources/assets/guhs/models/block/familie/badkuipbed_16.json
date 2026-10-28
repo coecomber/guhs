@@ -1,0 +1,201 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "schuim": "guhs:block/bedden/fam/schuim",
+    "particle": "guhs:block/bedden/fam/schuim"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        9.6
+      ],
+      "to": [
+        1.2,
+        2.0,
+        14.933
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        6.267,
+        0,
+        7.733
+      ],
+      "to": [
+        10.533,
+        0.933,
+        12.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        10.667,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2.0,
+        5.333
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        4.8
+      ],
+      "to": [
+        1.6,
+        2.0,
+        10.133
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        6.667,
+        0,
+        2.933
+      ],
+      "to": [
+        10.933,
+        0.933,
+        7.2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        11.067,
+        0,
+        7.2
+      ],
+      "to": [
+        16,
+        2.0,
+        12.533
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "K",
+    "R"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "K": "guhs:kaas_knabbels",
+    "R": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "guhs:luciferdoosje",
+    "count": 1
+  }
+}

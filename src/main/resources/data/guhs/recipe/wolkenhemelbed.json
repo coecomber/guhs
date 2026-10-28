@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "T T",
+    "WWW"
+  ],
+  "key": {
+    "C": "guhs:wolkenblok_wit",
+    "T": "minecraft:stick",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "guhs:wolkenhemelbed",
+    "count": 1
+  }
+}

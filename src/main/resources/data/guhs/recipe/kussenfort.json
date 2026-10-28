@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "F F",
+    "KKK",
+    "KKK"
+  ],
+  "key": {
+    "F": "minecraft:stick",
+    "K": "guhs:pink_kussen"
+  },
+  "result": {
+    "id": "guhs:kussenfort",
+    "count": 1
+  }
+}

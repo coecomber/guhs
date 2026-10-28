@@ -1,0 +1,364 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kfafaff": "guhs:block/bedden/fam/kfafaff",
+    "water": "guhs:block/bedden/fam/water",
+    "kfff4fa": "guhs:block/bedden/fam/kfff4fa",
+    "schuim": "guhs:block/bedden/fam/schuim",
+    "particle": "guhs:block/bedden/fam/kfafaff"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        4.0,
+        14.0
+      ],
+      "to": [
+        16,
+        16,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfafaff"
+        },
+        "up": {
+          "texture": "#kfafaff"
+        },
+        "north": {
+          "texture": "#kfafaff"
+        },
+        "south": {
+          "texture": "#kfafaff"
+        },
+        "west": {
+          "texture": "#kfafaff"
+        },
+        "east": {
+          "texture": "#kfafaff"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        4.0,
+        0
+      ],
+      "to": [
+        16,
+        6.0,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfafaff"
+        },
+        "up": {
+          "texture": "#kfafaff"
+        },
+        "north": {
+          "texture": "#kfafaff"
+        },
+        "south": {
+          "texture": "#kfafaff"
+        },
+        "west": {
+          "texture": "#kfafaff"
+        },
+        "east": {
+          "texture": "#kfafaff"
+        }
+      }
+    },
+    {
+      "from": [
+        15.333,
+        6.0,
+        0
+      ],
+      "to": [
+        16,
+        10.0,
+        14.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#water"
+        },
+        "up": {
+          "texture": "#water"
+        },
+        "north": {
+          "texture": "#water"
+        },
+        "south": {
+          "texture": "#water"
+        },
+        "west": {
+          "texture": "#water"
+        },
+        "east": {
+          "texture": "#water"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6.0,
+        0
+      ],
+      "to": [
+        15.333,
+        9.333,
+        14.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfff4fa"
+        },
+        "up": {
+          "texture": "#kfff4fa"
+        },
+        "north": {
+          "texture": "#kfff4fa"
+        },
+        "south": {
+          "texture": "#kfff4fa"
+        },
+        "west": {
+          "texture": "#kfff4fa"
+        },
+        "east": {
+          "texture": "#kfff4fa"
+        }
+      }
+    },
+    {
+      "from": [
+        0.667,
+        12.667,
+        5.867
+      ],
+      "to": [
+        3.867,
+        15.867,
+        9.067
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        5.067,
+        12.667,
+        10.133
+      ],
+      "to": [
+        9.333,
+        16,
+        14.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        9.467,
+        12.667,
+        2.4
+      ],
+      "to": [
+        14.8,
+        16,
+        7.733
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12.667,
+        7.2
+      ],
+      "to": [
+        0.4,
+        16,
+        12.533
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        1.067,
+        12.667,
+        1.067
+      ],
+      "to": [
+        4.267,
+        15.867,
+        4.267
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        5.467,
+        12.667,
+        5.333
+      ],
+      "to": [
+        9.733,
+        16,
+        9.6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    },
+    {
+      "from": [
+        9.867,
+        12.667,
+        9.6
+      ],
+      "to": [
+        15.2,
+        16,
+        14.933
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schuim"
+        },
+        "up": {
+          "texture": "#schuim"
+        },
+        "north": {
+          "texture": "#schuim"
+        },
+        "south": {
+          "texture": "#schuim"
+        },
+        "west": {
+          "texture": "#schuim"
+        },
+        "east": {
+          "texture": "#schuim"
+        }
+      }
+    }
+  ]
+}

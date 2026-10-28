@@ -2121,3 +2121,21 @@ UITLEG["weidekristal_cyaan"] = UITLEG["weidekristal_lila"] = UITLEG["weidekrista
     nl="Een pastel weidekristal uit De Zingende Weide: doorschijnend, het geeft een beetje licht en tingelt zachtjes als je "
        "eroverheen loopt.",
     en="A pastel meadow crystal from the Singing Meadow: see-through, it gives a little light and chimes softly when you walk on it.")
+# <bedden> (1.8.0, tools/features/bedden.py: rewritten on every run)
+UITLEG['droombed'] = dict(nl='Een echt bed: slapen, je spawnpunt zetten en de nacht overslaan, net als een gewoon bed. Ligt er een ingestopte guh of Snoes vlakbij, dan kun je ook samen gaan dromen.', en='A real bed: sleep, set your spawn point and skip the night, just like a normal bed. With a tucked-in guh or Snoes close by you can go dreaming together too.')
+UITLEG['guh_blub_mandje'] = dict(nl="Een slaapplekje voor een guh én een Blub. 's Nachts zoekt een guh het mandje vanzelf op; een Blub in de buurt kruipt er dan knuffelend bij. Je kunt er ook een guh in instoppen om te gaan dromen.", en='A sleeping spot for a guh and a Blub. At night a guh finds the basket by itself; a Blub nearby then cuddles up with it. You can also tuck a guh in here to go dreaming.')
+UITLEG['stapelbedje'] = dict(nl="Twee slaapplekjes boven elkaar: 's nachts slaapt er onder en boven een guh. De bovenste klautert via het laddertje naar boven.", en='Two sleeping spots on top of each other: at night a guh sleeps below and one on top. The top one climbs up the little ladder.')
+UITLEG['luciferdoosje'] = dict(nl="'s Nachts kruipt een pieppiepmuisje in de buurt erin om te slapen (zzz). Overdag is het weer gewoon een doosje.", en="At night a squeaky mouse nearby crawls in to sleep (zzz). By day it's just a little box again.")
+UITLEG['schelpbedje'] = dict(nl="'s Nachts komen Schilly en Poepschilly erin slapen (zzz). Leg het in de buurt van hun strandje.", en='At night Schilly and Poepschilly come to sleep in it (zzz). Put it near their beach.')
+UITLEG['guh_hoofdbank'] = dict(nl="Een familiebed van meerdere blokken: je zet het in een keer neer (het ligt van je af, het hoofdeinde aan de verre kant) en wie een stukje breekt, breekt het hele bed. Elk vakje is voor een eigen diertje: guh, Blub, pieppiepmuisje of Schilly (in een schelpje of een nat hoekje). 's Nachts gaan tamme diertjes in de buurt vanzelf naar hun vakje en slapen ze samen. Het is geen bed voor jezelf.", en='A family bed of several blocks: you place it in one go (it lies away from you, the head end on the far side) and breaking one piece breaks the whole bed. Every nook is for its own critter: guh, Blub, squeaky mouse or Schilly (in a shell or a wet corner). At night tame critters nearby go to their nook by themselves and sleep together. It is not a bed for you.')
+UITLEG['knuffelnest'] = dict(nl="Het grote ronde nest voor acht guhs (4 bij 4 blokken). 's Nachts komen tot acht tamme guhs uit de buurt erin slapen, in een kringetje met hun kopjes naar het knabbelschaaltje. Je zet het in een keer neer; wie een stukje breekt, breekt het hele nest.", en='The big round nest for eight guhs (4 by 4 blocks). At night up to eight tame guhs from around sleep in it, in a circle with their heads towards the nibble bowl. You place it in one go; breaking one piece breaks the whole nest.')
+UITLEG['guh_hoofdbed'] = UITLEG['droombed']
+UITLEG['blub_bed'] = UITLEG['droombed']
+UITLEG['wolkenhemelbed'] = UITLEG['droombed']
+UITLEG['slaaptreintje'] = UITLEG['guh_hoofdbank']
+UITLEG['kussenfort'] = UITLEG['guh_hoofdbank']
+UITLEG['droomschuitje'] = UITLEG['guh_hoofdbank']
+UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
+UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
+UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
+# </bedden>

@@ -1,0 +1,206 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kfaece0": "guhs:block/bedden/fam/kfaece0",
+    "kffd6e6": "guhs:block/bedden/fam/kffd6e6",
+    "kc8e2ff": "guhs:block/bedden/fam/kc8e2ff",
+    "kffc4d8": "guhs:block/bedden/fam/kffc4d8",
+    "kffaac8": "guhs:block/bedden/fam/kffaac8",
+    "k96c8fa": "guhs:block/bedden/fam/k96c8fa",
+    "particle": "guhs:block/bedden/fam/kfaece0"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        0
+      ],
+      "to": [
+        16,
+        6.618,
+        15.618
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfaece0"
+        },
+        "up": {
+          "texture": "#kfaece0"
+        },
+        "north": {
+          "texture": "#kfaece0"
+        },
+        "south": {
+          "texture": "#kfaece0"
+        },
+        "west": {
+          "texture": "#kfaece0"
+        },
+        "east": {
+          "texture": "#kfaece0"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        6.618,
+        0
+      ],
+      "to": [
+        4.0,
+        9.118,
+        14.882
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffd6e6"
+        },
+        "up": {
+          "texture": "#kffd6e6"
+        },
+        "north": {
+          "texture": "#kffd6e6"
+        },
+        "south": {
+          "texture": "#kffd6e6"
+        },
+        "west": {
+          "texture": "#kffd6e6"
+        },
+        "east": {
+          "texture": "#kffd6e6"
+        }
+      }
+    },
+    {
+      "from": [
+        5.765,
+        6.618,
+        0
+      ],
+      "to": [
+        16,
+        9.118,
+        14.882
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kc8e2ff"
+        },
+        "up": {
+          "texture": "#kc8e2ff"
+        },
+        "north": {
+          "texture": "#kc8e2ff"
+        },
+        "south": {
+          "texture": "#kc8e2ff"
+        },
+        "west": {
+          "texture": "#kc8e2ff"
+        },
+        "east": {
+          "texture": "#kc8e2ff"
+        }
+      }
+    },
+    {
+      "from": [
+        4.147,
+        6.618,
+        0
+      ],
+      "to": [
+        5.618,
+        13.971,
+        15.618
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffc4d8"
+        },
+        "up": {
+          "texture": "#kffc4d8"
+        },
+        "north": {
+          "texture": "#kffc4d8"
+        },
+        "south": {
+          "texture": "#kffc4d8"
+        },
+        "west": {
+          "texture": "#kffc4d8"
+        },
+        "east": {
+          "texture": "#kffc4d8"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        13.971,
+        3.118
+      ],
+      "to": [
+        3.118,
+        15.147,
+        14.147
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffaac8"
+        },
+        "up": {
+          "texture": "#kffaac8"
+        },
+        "north": {
+          "texture": "#kffaac8"
+        },
+        "south": {
+          "texture": "#kffaac8"
+        },
+        "west": {
+          "texture": "#kffaac8"
+        },
+        "east": {
+          "texture": "#kffaac8"
+        }
+      }
+    },
+    {
+      "from": [
+        6.647,
+        13.235,
+        6.059
+      ],
+      "to": [
+        16,
+        14.412,
+        14.147
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k96c8fa"
+        },
+        "up": {
+          "texture": "#k96c8fa"
+        },
+        "north": {
+          "texture": "#k96c8fa"
+        },
+        "south": {
+          "texture": "#k96c8fa"
+        },
+        "west": {
+          "texture": "#k96c8fa"
+        },
+        "east": {
+          "texture": "#k96c8fa"
+        }
+      }
+    }
+  ]
+}

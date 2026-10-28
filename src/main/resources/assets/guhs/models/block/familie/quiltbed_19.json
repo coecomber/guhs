@@ -1,0 +1,74 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kfffaf4": "guhs:block/bedden/fam/kfffaf4",
+    "ruit_ffeca0_fff6d2": "guhs:block/bedden/fam/ruit_ffeca0_fff6d2",
+    "particle": "guhs:block/bedden/fam/kfffaf4"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        3.855,
+        0
+      ],
+      "to": [
+        16,
+        8.482,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfffaf4"
+        },
+        "up": {
+          "texture": "#kfffaf4"
+        },
+        "north": {
+          "texture": "#kfffaf4"
+        },
+        "south": {
+          "texture": "#kfffaf4"
+        },
+        "west": {
+          "texture": "#kfffaf4"
+        },
+        "east": {
+          "texture": "#kfffaf4"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8.636,
+        0
+      ],
+      "to": [
+        16,
+        9.253,
+        14.458
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        },
+        "up": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        },
+        "north": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        },
+        "south": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        },
+        "west": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        },
+        "east": {
+          "texture": "#ruit_ffeca0_fff6d2"
+        }
+      }
+    }
+  ]
+}

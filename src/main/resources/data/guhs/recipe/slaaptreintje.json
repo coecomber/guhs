@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "RMR",
+    "III"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "R": "minecraft:red_dye",
+    "M": "minecraft:minecart",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "guhs:slaaptreintje",
+    "count": 1
+  }
+}

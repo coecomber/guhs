@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KWK",
+    "W W",
+    "KWK"
+  ],
+  "key": {
+    "K": "guhs:pink_kussen",
+    "W": "minecraft:pink_wool"
+  },
+  "result": {
+    "id": "guhs:knuffelnest",
+    "count": 1
+  }
+}

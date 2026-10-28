@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "Q Q",
+    "QWQ",
+    "G G"
+  ],
+  "key": {
+    "Q": "minecraft:quartz_block",
+    "W": "minecraft:water_bucket",
+    "G": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "guhs:badkuipbed",
+    "count": 1
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kfffaf4": "guhs:block/bedden/fam/kfffaf4",
+    "kd6b082": "guhs:block/bedden/fam/kd6b082",
+    "ruit_ffbad2_ffdce8": "guhs:block/bedden/fam/ruit_ffbad2_ffdce8",
+    "kffffff": "guhs:block/bedden/fam/kffffff",
+    "particle": "guhs:block/bedden/fam/kfffaf4"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        3.855,
+        2.313
+      ],
+      "to": [
+        16,
+        8.482,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kfffaf4"
+        },
+        "up": {
+          "texture": "#kfffaf4"
+        },
+        "north": {
+          "texture": "#kfffaf4"
+        },
+        "south": {
+          "texture": "#kfffaf4"
+        },
+        "west": {
+          "texture": "#kfffaf4"
+        },
+        "east": {
+          "texture": "#kfffaf4"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3.855,
+        0.0
+      ],
+      "to": [
+        16,
+        16,
+        2.313
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kd6b082"
+        },
+        "up": {
+          "texture": "#kd6b082"
+        },
+        "north": {
+          "texture": "#kd6b082"
+        },
+        "south": {
+          "texture": "#kd6b082"
+        },
+        "west": {
+          "texture": "#kd6b082"
+        },
+        "east": {
+          "texture": "#kd6b082"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8.636,
+        3.855
+      ],
+      "to": [
+        16,
+        9.253,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        },
+        "up": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        },
+        "north": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        },
+        "south": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        },
+        "west": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        },
+        "east": {
+          "texture": "#ruit_ffbad2_ffdce8"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        9.253,
+        5.398
+      ],
+      "to": [
+        5.59,
+        12.337,
+        11.566
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kffffff"
+        },
+        "up": {
+          "texture": "#kffffff"
+        },
+        "north": {
+          "texture": "#kffffff"
+        },
+        "south": {
+          "texture": "#kffffff"
+        },
+        "west": {
+          "texture": "#kffffff"
+        },
+        "east": {
+          "texture": "#kffffff"
+        }
+      }
+    }
+  ]
+}
