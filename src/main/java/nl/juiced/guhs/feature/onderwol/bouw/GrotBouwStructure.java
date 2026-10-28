@@ -12,10 +12,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
@@ -82,6 +85,10 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
     public static final int VERTICAAL = 16;
     /** How much the ground under an entrance hut may differ (blocks). */
     public static final int HUT_VLAK = 3;
+    /** 1.8.0: the entrance huts come this much less often than their kans (not for a {@link Ingang#verplicht} hut). */
+    public static final float HUT_FACTOR = 0.5f;
+    /** 1.8.0: no entrance hut where its ground lies in one of these biomes (the lakes, rivers and seas: tools/features/ingang_hut.py). */
+    public static final TagKey<Biome> GEEN_HUT = TagKey.create(Registries.BIOME, Guhs.id("onderwol/geen_ingang_hut"));
 
     public record Zaal(int rand, int boven, float ruw, boolean alle) {
         public static final Codec<Zaal> CODEC = RecordCodecBuilder.create(i -> i.group(
@@ -248,7 +255,9 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
             y = laag + random.nextInt(hoog - laag + 1);
         }
         final int vloerY = y;
-        boolean hutGewenst = ingang.isPresent() && random.nextFloat() < ingang.get().kans();
+        // (1.8.0: half as often as the kans in the json, except where the hut is the building: same random draw, so the
+        // buildings themselves keep their spots)
+        boolean hutGewenst = ingang.isPresent() && random.nextFloat() < ingang.get().kans() * (ingang.get().verplicht() ? 1.0f : HUT_FACTOR);
         int pogingen = hutGewenst ? ingang.get().pogingen() : 1;
         Optional<GenerationStub> zonderHut = Optional.empty();
         for (int k = 0; k < pogingen; k++) {
@@ -350,11 +359,12 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
         }
         int x = onder.pos().getX(), z = onder.pos().getZ();
         int h = ZoekHoogte.hoogte(context.chunkGenerator(), context.randomState(), context.heightAccessor(), x, z);
-        if (h <= context.chunkGenerator().getSeaLevel() + 1) {
+        if (h <= context.chunkGenerator().getSeaLevel() + 1 || nat(context, x, h, z)) {
             return false;   // (in or at the water)
         }
         for (int[] d : new int[][]{{-4, -4}, {4, -4}, {-4, 4}, {4, 4}}) {
-            if (Math.abs(ZoekHoogte.hoogte(context.chunkGenerator(), context.randomState(), context.heightAccessor(), x + d[0], z + d[1]) - h) > HUT_VLAK) {
+            int hd = ZoekHoogte.hoogte(context.chunkGenerator(), context.randomState(), context.heightAccessor(), x + d[0], z + d[1]);
+            if (Math.abs(hd - h) > HUT_VLAK || nat(context, x + d[0], hd, z + d[1])) {
                 return false;
             }
         }
@@ -380,6 +390,16 @@ public class GrotBouwStructure extends Structure implements BouwRuimte.Ruimte {
         }
         builder.addPiece(new GrotSchachtPiece(x, z, onder.pos().getY(), boven.pos().getY(), hutOnder - 1, richting));
         return true;
+    }
+
+    /**
+     * 1.8.0: is the ground at (x, y, z) wet? The Guhmension's sea level is 0 and its lakes, rivers and ditches are filled in
+     * at worldgen step "lakes", after the structures chose their spots: the biome there tells it ({@link #GEEN_HUT}).
+     */
+    static boolean nat(GenerationContext context, int x, int y, int z) {
+        Holder<Biome> b = context.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y),
+                QuartPos.fromBlock(z), context.randomState().sampler());
+        return b.is(GEEN_HUT);
     }
 
     @Override
