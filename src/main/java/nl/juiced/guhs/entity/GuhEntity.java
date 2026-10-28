@@ -330,8 +330,23 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                     }
                 }
             }
+            // 1.8.0: the spawn spot was checked with the default hitbox; make sure the real (random) size fits too
+            GuhSpawnRuimte.pasIn(level, this, true);
         }
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+    }
+
+    /** 1.8.0: how long after spawning or loading a guh stuck in a wall is freed instead of hurt (10 s). */
+    static final int VRIJ_TICKS = 200;
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        // the safety net: a guh found in a wall in its first seconds (big size, structure, a chunk loaded around it) gets out
+        if (source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL) && this.tickCount < VRIJ_TICKS) {
+            GuhSpawnRuimte.bevrijd(level, this);
+            return false;
+        }
+        return super.hurtServer(level, source, amount);
     }
 
     /**
