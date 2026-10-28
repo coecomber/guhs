@@ -19,7 +19,7 @@ import make_structures as ms                                   # noqa: E402
 
 KLEUREN = ["boter", "vanille", "roze", "hemelsblauw", "lavendel", "perzik", "aqua", "wolkje"]
 STER_LOOKS = ["droomsterretje", "droomsterretje_gloed", "droomsterretje_vaag"]
-VERSIE = 1
+VERSIE = 2   # 2 = playtest fixes: opstapkussen at the first pillow, no kussengevecht-guh inside a pillow
 
 TEKSTEN = {
     "entity.guhs.droomsterretje": ("Vallend sterretje", "Falling little star"),
@@ -259,6 +259,13 @@ def bouw_eiland():
             for t in (0.35, 0.65):
                 S.set(px + (round(x) - px) * t, py + 2 + (top - py) * t, pz + (round(z) - pz) * t, "zeepbel", keep=True)
     S.bord(spiraal[0][0] + 6, T + 1, spiraal[0][2] + 2, "south", ["spiraal1", "spiraal2", "spiraal3", "spiraal4"])
+    # (playtest fix) an opstapkussen on the ground next to the first pillow: the first pillow's top was 3-4 blocks up, out of
+    # reach in survival; a low bouncy pad bounces you (about 5 blocks) up onto it
+    ox, oz = spiraal[0][0] + 7, spiraal[0][2] - 2
+    for x in range(ox - 1, ox + 2):
+        for z in range(oz - 1, oz + 2):
+            S.set(x, T + 1, z, "stuiterkussen_roze")
+    S.set(ox + 2, T + 1, oz + 1, "knuffelsteen_gezicht", {"facing": "east", "stemming": "1"})
 
     # --- de grote ster van Snoes, boven de spiraal (goud + glowstone, guhgezichtje voor en achter)
     SX, SY, SZ = SPX + 1, spiraal[-1][1] + 7, SPZ - 1
@@ -307,7 +314,7 @@ def bouw_eiland():
         x, z = KX + 7.6 * math.cos(math.radians(a)), KZ + 7.6 * math.sin(math.radians(a))
         if a % 90 != 0 and binnen(x, z):
             S.set(x, T + 1, z, "guh_hekje_roze", keep=True)
-    for (ox, oz, yaw) in ((-2.5, 0, 270.0), (2.5, 0, 90.0), (0, -2.5, 0.0), (0, 2.5, 180.0)):
+    for (ox, oz, yaw) in ((-2.5, 0, 270.0), (1.0, 0, 90.0), (0, -2.5, 0.0), (0, 2.5, 180.0)):   # (playtest fix: the east one stood in the first pillow)
         S.entity(KX + ox + 0.5, T + 1, KZ + oz + 0.5,
                  {"id": "guhs:guh_npc", "Kind": "kussengevecht_guh", "PersistenceRequired": ms.Byte(1),
                   "Rotation": ms.floats(yaw, 0.0)})

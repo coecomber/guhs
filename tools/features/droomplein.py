@@ -22,7 +22,7 @@ import zipfile
 
 BUSSEN = ["sterren", "molentje", "badje", "herinnering", "liedjes", "plein"]       # = DroompleinFeature.BUSSEN
 HOEK = {"sterren": 0, "molentje": 72, "badje": 144, "herinnering": 216, "liedjes": 288}   # = DroomEilanden.HOEK
-VERSIE = 1                       # plein.json "versie": raise it when the template changes (a live world stamps it again)
+VERSIE = 2                       # 2 = playtest fix: ground in front of the Droomposthuisje; plein.json "versie": raise it when the template changes (a live world stamps it again)
 TEMPLATE = "dromen/eiland_plein"
 C, T = 42, 30                    # r01_droomplein.py: the plein's centre (x, z) and the height of its top
 STEIGER_K = 31                   # how far along each cloud path its steiger spot lies (the path runs from 25 to 33)
@@ -197,6 +197,33 @@ def scene():
     return ns["S"]
 
 
+def _speeltest_fix(S):
+    """Playtest fixes (testbuild 2) on top of the approved render: the Droomposthuisje stood half beyond the island's rim,
+    so its door hung above nothing and the letterboxes in front of it floated. A patch of ground in front of the house
+    (level with the plein, so the door is a plain walk in), the house floor resting on a fluffy underside, and no rim
+    fence inside the house or on the new patch."""
+    hx1, hx2, hz1, hz2 = 21, 31, 15, 22                  # the house (r01_droomplein.py)
+    for x in range(hx1 - 2, hx2 + 4):
+        for z in range(hz1 - 1, hz2 + 6):
+            for y in (T + 1, T + 2):
+                if "hekje" in str(S.get(x, y, z)):
+                    S.air(x, y, z, x, y, z)
+    for x in range(hx1 - 2, hx2 + 4):                     # the ground patch in front of the house (z hz2+1 .. hz2+5)
+        for z in range(hz2 + 1, hz2 + 6):
+            if S.is_air(x, T, z):
+                S.set(x, T, z, "knuffelgras")
+            for y in range(T - 3, T):
+                if S.is_air(x, y, z):
+                    S.set(x, y, z, "pluiswolblok")
+    for x in range(hx1 - 1, hx2 + 2):                     # a fluffy underside below the house floor
+        for z in range(hz1 - 1, hz2 + 2):
+            diep = 4 - max(0, max(hx1 - x, x - hx2, hz1 - z, z - hz2))
+            for y in range(T - diep, T):
+                if S.is_air(x, y, z):
+                    S.set(x, y, z, "pluiswolblok")
+    S.air(26, T + 1, hz2 + 1, 26, T + 2, hz2 + 1)       # the door step stays free
+
+
 def _rel(x, z):
     return [round(x - C, 2), 1, round(z - C, 2)]
 
@@ -208,6 +235,7 @@ def plein(h):
     if S is None:
         print("droomplein: dromen-ontwerp not found, the committed template stays")
         return
+    _speeltest_fix(S)
     X, Y, Z = S.v.shape
     st = ms.Structure((X, Y, Z))
     vervangen, weg = {}, set()
