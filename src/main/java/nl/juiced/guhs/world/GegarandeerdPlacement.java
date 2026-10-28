@@ -389,6 +389,11 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
     /** The newest registered world of this state (or else: of this seed) that has this placement. */
     @Nullable
     private Wereld wereld(@Nullable ChunkGeneratorStructureState state, long seed) {
+        if (state != null && set(state) == null) {
+            // this world can't have the set (e.g. a biome-bound place in a world without its biome): no spot, not the spot of
+            // another world with the same seed (the fallback below answered with a test world's twin, depending on test order)
+            return null;
+        }
         synchronized (WERELDEN) {
             for (int k = WERELDEN.size() - 1; k >= 0; k--) {
                 Wereld w = WERELDEN.get(k);

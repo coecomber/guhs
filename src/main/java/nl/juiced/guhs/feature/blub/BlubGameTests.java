@@ -257,6 +257,10 @@ public class BlubGameTests {
             helper.assertFalse(b.isBezig(), "done hopping");
             helper.assertTrue(b.hupsRecord() >= 6, "a hop record");
             helper.assertFalse(b.isBezig(), "free again before verstoppertje");
+            // (in 240 ticks it may have wandered off, out of the menu's reach: the menu then refuses, which is not what this
+            // checks; and its random tricks of its own may still be playing; so: back next to the player, nothing going on)
+            b.getNavigation().stop();
+            b.snapTo(p.getX() + 1, p.getY(), p.getZ() + 1);
             boolean gedaan = BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.VERSTOPPERTJE.ordinal(), "");
             helper.assertTrue(gedaan && b.verstopt(), "verstoppertje: hidden (" + gedaan + ", " + b.verstopt() + ")");
             b.mobInteract(p, InteractionHand.MAIN_HAND);

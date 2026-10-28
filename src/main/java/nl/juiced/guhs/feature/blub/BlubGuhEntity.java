@@ -830,7 +830,32 @@ public class BlubGuhEntity extends Landdiertje {
                 return p;                                                  // out of sight: a real hiding place
             }
         }
+        if (beste == null) {
+            beste = naasteVerstopPlek(player);   // (60 random columns can all miss in a small garden: then the nearest free spot)
+        }
         return beste;
+    }
+
+    /** The nearest spot (ring by ring) it can stand on and walk to, at least 4 blocks from the player; null: none at all. */
+    @Nullable
+    private BlockPos naasteVerstopPlek(ServerPlayer player) {
+        BlockPos midden = blockPosition();
+        for (int r = 1; r <= VERSTOP_BEREIK; r++) {
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    for (int dy = 3; dy >= -3; dy--) {
+                        BlockPos p = midden.offset(dx, dy, dz);
+                        if (kanStaan(p) && p.distSqr(player.blockPosition()) >= 16 && getNavigation().createPath(p, 0) != null) {
+                            return p;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private boolean kanStaan(BlockPos p) {
