@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -47,7 +49,40 @@ public final class Bubbelsap {
                 .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
                 .lightLevel(4)
                 .density(1000)
-                .viscosity(1200));
+                .viscosity(1200)) {
+            @Override
+            public boolean move(LivingEntity entity, Vec3 input, double gravity) {
+                return zwem(this, entity, input, gravity);
+            }
+        };
+    }
+
+    /**
+     * Moving through bubbelsap. On 26.1 NeoForge a modded fluid whose FluidType doesn't move the entity itself gets no movement
+     * at all (LivingEntity.travelInFluid only handles water and lava): you were stuck. This is water's swimming, a bit
+     * floatier (less gravity, a softer drag), so wading and swimming feel bubbly and you can always climb out.
+     */
+    static boolean zwem(FluidType type, LivingEntity entity, Vec3 input, double gravity) {
+        double y0 = entity.getY();
+        boolean falling = entity.getDeltaMovement().y <= 0.0;
+        float snelheid = entity.isSprinting() ? 0.9F : 0.85F;
+        float kracht = 0.03F;
+        if (!entity.onGround()) {
+            kracht *= 0.8F;
+        }
+        entity.moveRelative(kracht, input);
+        entity.move(MoverType.SELF, entity.getDeltaMovement());
+        Vec3 v = entity.getDeltaMovement();
+        if (entity.horizontalCollision && entity.onClimbable()) {
+            v = new Vec3(v.x, 0.2, v.z);
+        }
+        entity.setDeltaMovement(v.multiply(snelheid, 0.82F, snelheid));
+        entity.setDeltaMovement(entity.getFluidFallingAdjustedMovement(gravity * 0.6, falling, entity.getDeltaMovement()));
+        Vec3 w = entity.getDeltaMovement();
+        if (entity.horizontalCollision && entity.isFree(w.x, w.y + 0.6F - entity.getY() + y0, w.z)) {
+            entity.setDeltaMovement(w.x, 0.3F, w.z);
+        }
+        return true;
     }
 
     static BaseFlowingFluid.Properties properties() {
