@@ -140,7 +140,8 @@ def ftb(fq):
       f"tot {g('DISCO_MAX_GUHS')} guhs komen dansen en elk geeft {g('DISCO_PER_GUH')} vadskracht. Elke plaat heeft een eigen lichtshow.",
       "guhs:disco_dynamo", [adv("tech_bronnen_disco")], deps=["tech_quests_knuffel"])
     q("tech_quests_hoeveel", "Hoeveel mag eraan?",
-      f"Per opstelling tellen hooguit &e{maxen['guhrad']}&r Guhraden, &e{maxen['knuffelgenerator']}&r Knuffelgeneratoren en "
+      f"Per opstelling tellen de eerste &e{g('GUHRAD_VOL')}&r Guhraden helemaal mee (elk rad daarna &e{g('GUHRAD_AFNAME_PROCENT')}%&r van het "
+      f"vorige, tot &e{maxen['guhrad']}&r), &e{maxen['knuffelgenerator']}&r Knuffelgeneratoren en "
       f"&e{maxen['disco_dynamo']}&r Disco-dynamo's mee (later ook {maxen['blubkacheltje']} Blubkacheltjes en {maxen['gloeisterkern']} "
       "Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat "
       "het rad zweven. Meer nodig? Bouw een tweede opstelling.",

@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/sausbuis",
+    "buis": "guhs:block/sausbuis",
+    "knoop": "guhs:block/sausslang_knoop"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        12,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#knoop"
+        },
+        "south": {
+          "texture": "#knoop"
+        },
+        "east": {
+          "texture": "#knoop"
+        },
+        "west": {
+          "texture": "#knoop"
+        },
+        "up": {
+          "texture": "#knoop"
+        },
+        "down": {
+          "texture": "#knoop"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        5,
+        5
+      ],
+      "to": [
+        4,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#buis"
+        },
+        "south": {
+          "texture": "#buis"
+        },
+        "east": {
+          "texture": "#buis"
+        },
+        "west": {
+          "texture": "#buis"
+        },
+        "up": {
+          "texture": "#buis"
+        },
+        "down": {
+          "texture": "#buis"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        5,
+        5
+      ],
+      "to": [
+        16,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#buis"
+        },
+        "south": {
+          "texture": "#buis"
+        },
+        "east": {
+          "texture": "#buis"
+        },
+        "west": {
+          "texture": "#buis"
+        },
+        "up": {
+          "texture": "#buis"
+        },
+        "down": {
+          "texture": "#buis"
+        }
+      }
+    }
+  ]
+}

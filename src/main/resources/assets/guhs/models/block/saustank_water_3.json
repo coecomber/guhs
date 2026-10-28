@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/sausvat_water_3",
+  "textures": {
+    "hoepel": "guhs:block/techsaus_staal",
+    "boven": "guhs:block/techsaus_staal"
+  }
+}

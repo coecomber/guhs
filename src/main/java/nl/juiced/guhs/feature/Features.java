@@ -110,6 +110,7 @@ public final class Features {
         nl.juiced.guhs.feature.techbuis.TechbuisFeature.register(modBus);
         nl.juiced.guhs.feature.techmachine.TechmachineFeature.register(modBus);
         nl.juiced.guhs.feature.techsaus.TechsausFeature.register(modBus);
+        nl.juiced.guhs.feature.vadsbasis.VadsbasisFeature.register(modBus);
         nl.juiced.guhs.feature.techbezorg.TechbezorgFeature.register(modBus);
         nl.juiced.guhs.feature.techklus.TechklusFeature.register(modBus);
         nl.juiced.guhs.feature.techquest.TechquestFeature.register(modBus);
@@ -398,6 +399,7 @@ public final class Features {
         nl.juiced.guhs.feature.techbuis.TechbuisFeature.creative(output);
         nl.juiced.guhs.feature.techmachine.TechmachineFeature.creative(output);
         nl.juiced.guhs.feature.techsaus.TechsausFeature.creative(output);
+        nl.juiced.guhs.feature.vadsbasis.VadsbasisFeature.creative(output);
         nl.juiced.guhs.feature.techbezorg.TechbezorgFeature.creative(output);
         nl.juiced.guhs.feature.techklus.TechklusFeature.creative(output);
         nl.juiced.guhs.feature.techquest.TechquestFeature.creative(output);

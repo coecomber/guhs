@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/sausvat_frituursaus_4",
+  "textures": {
+    "hoepel": "guhs:block/techsaus_staal",
+    "boven": "guhs:block/techsaus_staal"
+  }
+}

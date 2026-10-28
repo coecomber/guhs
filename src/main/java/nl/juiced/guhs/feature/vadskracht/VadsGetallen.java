@@ -13,6 +13,21 @@ public final class VadsGetallen {
     public static final int SENSOR = 1, VADSLAMP = 1, HAPLUIKJE = 2, BUISFILTER = 2, OPZUIGER = 3, STEPSTATION = 4, GUH_OVEN = 5, MOLEN = 5,
             NEERZETTER = 5, POMP = 6, PLANTAGEBAK = 6, OOGSTER = 8, BROUWKETEL = 8, FRITUUR = 8, KNABBELAAR = 10, KNUTSELMACHINE = 10;
 
+    /**
+     * 1.8.0 (vadskracht): afnemende opbrengst of the Guhraden in one net. The strongest {@link #GUHRAD_VOL} count in full;
+     * every next one counts for {@link #GUHRAD_AFNAME_PROCENT}% of the one before (75, 56, 42, 32... %), so a net of Guhraden
+     * never gives much more than about seven of them; beyond {@link BronSoort#GUHRAD}'s max they count for nothing at all.
+     * (Before 1.8.0: hooguit 4 per net, a fifth counted for nothing.)
+     */
+    public static final int GUHRAD_VOL = 4, GUHRAD_AFNAME_PROCENT = 75;
+    /** 1.8.0: the Knabbelketel (feature/vadsbasis): a middle source that burns kaasknabbels. */
+    public static final int KNABBELKETEL = 80;
+    /** Knabbelketel: ticks one knabbel burns (6 s: 600 an hour), a block counts as nine, the bakje holds this many per slot. */
+    public static final int KETEL_KNABBEL_TIKKEN = 120, KETEL_BLOK = 9, KETEL_BAKJE = 64;
+    public static final int KETEL_KNABBELS_PER_UUR = 72_000 / KETEL_KNABBEL_TIKKEN;
+    /** 1.8.0: the Knuffelsteen-generator (feature/techsaus, KnuffelsteenGeneratorBlockEntity). */
+    public static final int KNUFFELSTEEN_GENERATOR = 4;
+
     /** The most blocks (Guhdraad + machine blocks) in one net; a bigger net stands still ({@link VadsNet.Status#TE_GROOT}). */
     public static final int MAX_NET = 8192;
     /** A net is evaluated once per this many ticks (and one tick after something changed). */

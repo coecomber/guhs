@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/sausbuis",
+    "buis": "guhs:block/sausbuis",
+    "knoop": "guhs:block/sausslang_knoop"
+  },
+  "elements": [
+    {
+      "from": [
+        12,
+        5,
+        5
+      ],
+      "to": [
+        16,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#buis"
+        },
+        "south": {
+          "texture": "#buis"
+        },
+        "east": {
+          "texture": "#buis"
+        },
+        "west": {
+          "texture": "#buis"
+        },
+        "up": {
+          "texture": "#buis"
+        },
+        "down": {
+          "texture": "#buis"
+        }
+      }
+    }
+  ]
+}

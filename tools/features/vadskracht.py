@@ -71,7 +71,7 @@ def getal(naam):
 
 
 # kinds of BronSoort whose names another module writes (einde2 tier 5: features/einde2_trap5_machines.py, after this one)
-ELDERS = {"enderguhrad", "komeetkern"}
+ELDERS = {"enderguhrad", "komeetkern", "knabbelketel"}   # (knabbelketel: features/vadsbasis.py, 1.8.0)
 
 
 def bron_max():

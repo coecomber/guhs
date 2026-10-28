@@ -25,7 +25,8 @@ WIKI = {
          "rent helemaal niet (hij zweeft en laat het rad vanzelf draaien), de 626-guh telt dubbel, Sam-guh sjouwt het rad rond met "
          "rugzak en al en Guhshi fladdertrappelt. Zij geven "
          + " of ".join(str(n) for n in sorted({k for k, _ in v.GUHRAD_VARIANTEN.values()} | {b for _, b in v.GUHRAD_VARIANTEN.values()}))
-         + f" vadskracht. Er tellen hooguit {_max['guhrad']} Guhraden per opstelling."),
+         + f" vadskracht. De eerste {_g('GUHRAD_VOL')} Guhraden per opstelling tellen helemaal mee; elk rad daarna levert "
+         f"{_g('GUHRAD_AFNAME_PROCENT')}% van het vorige, tot {_max['guhrad']} raderen. Meer nodig? Bouw een tweede opstelling."),
         ("systemen/vadskrachtbronnen", "Een blij guhtje rent harder",
          "Of een guh blij is wordt bekeken op het moment dat je hem in het rad zet, en dat blijft zo zolang hij rent. Een guh die "
          f"net op een Knuffelgenerator lag is nog {t.getal('BLIJ_NA_KNUFFEL') // 20} tellen blij: pak hem op van het kussen en zet "

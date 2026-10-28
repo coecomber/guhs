@@ -972,8 +972,12 @@ UITLEG = {
            "are white, lavender and mint cat houses too.",
         meer=[]),
     "weer_vadser": dict(
-        nl="Maakt zijn eigen weertje, tot 60 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
+        nl="Maakt zijn eigen weertje, 10 blokken in de rondte. Daarbuiten blijft het gewone weer. Hij heeft 20 vadskracht "
            "nodig zolang er een ander weertje dan normaal aanstaat; zonder vadskracht wordt het weer vanzelf weer normaal.\n"
+           "\n"
+           "- Groter maken: zet een Wolkenantenne op of naast hem, of rechtsklik hem met de antenne. Antenne I, II en III maken "
+           "de straal 20, 35 en 60 blokken en kosten 30, 45 en 70 vadskracht. Eerst I, dan II, dan III. Breek je de Weer vadser, "
+           "dan krijg je de antennes terug.\n"
            "\n"
            "- Rechtsklik: kies een weertje. Zon, regen (in koude streken sneeuw) en onweer kan altijd.\n"
            "- De guh-weertjes (pluisjessneeuw, bellenbui, knabbelbuitje, regenboogweer, hartjesregen, sterrenregen, knusmist, "
@@ -985,8 +989,12 @@ UITLEG = {
            "- Bij bloesemwind wapperen de oortjes van guhs in de zone mee.\n"
            "- Droomweer: de lucht van Guhdromenland met de slaperige maan, vallende sterretjes om te vangen (droomzand!), "
            "zweven, droommuziek en slaperige guhs. Het potje zit in het droomkistje bovenaan het Sterrenkussenveld.",
-        en="Makes its own weather, up to 60 blocks around. Outside that the normal weather stays. It needs 20 vadskracht "
+        en="Makes its own weather, 10 blocks around. Outside that the normal weather stays. It needs 20 vadskracht "
            "while it makes any weather but normal; without vadskracht the weather goes back to normal by itself.\n"
+           "\n"
+           "- Bigger: put a Cloud Antenna on top of it or next to it, or right-click it with the antenna. Antenna I, II and III "
+           "make the radius 20, 35 and 60 blocks and cost 30, 45 and 70 vadskracht. First I, then II, then III. Break the "
+           "Weather Vadser and you get the antennas back.\n"
            "\n"
            "- Right-click: pick a weather. Sun, rain (snow in cold places) and thunderstorm are always there.\n"
            "- The guh weathers (fluff snow, bubble shower, nibble drizzle, rainbow weather, heart rain, star shower, cosy fog, "
@@ -2209,3 +2217,43 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+# <vadsbasis> 1.8.0 vadskracht (tools/features/vadsbasis.py)
+UITLEG['knabbelketel'] = dict(
+    nl="Een ketel met een guh-snoet die kaasknabbels stookt en daarmee 80 vadskracht geeft. Rechtsklik met kaasknabbels of een "
+       "blok kaasknabbels (dat brandt negen keer zo lang), of laat een Knabbelbuis of trechter het bakje vullen. Eén knabbel "
+       "brandt 6 tellen: een ketel die de hele tijd stookt eet zo'n 600 knabbels per uur. Met een lege hand lees je hoeveel er "
+       "nog in het bakje ligt. Hooguit 4 ketels tellen per opstelling.",
+    en="A boiler with a guh face that burns cheese nibbles and gives 80 chonk power. Right-click with cheese nibbles or a block "
+       "of cheese nibbles (that burns nine times as long), or let a Nibble Tube or a hopper fill its tray. One nibble burns 6 "
+       "seconds: a boiler that burns all the time eats about 600 nibbles an hour. With an empty hand you read how many are left "
+       "in the tray. At most 4 boilers count per setup.")
+UITLEG['knuffelsteen_generator'] = dict(
+    nl="Kaassaus en water komen samen en er rolt knuffelsteen uit, op 4 vadskracht: een steen per tel (20 stenen per emmer kaassaus). Kaassaus komt door een "
+       "Sausslang of Sausbuis, of giet een emmer erin. Staat er een waterbron naast, dan is het water gratis. De stenen gaan vanzelf "
+       "in een kist, de Bank Guh of een Knabbelbuis ernaast; anders blijven ze in de machine tot je ze pakt.",
+    en="Cheese sauce and water meet and out rolls cuddlestone, on 4 chonk power: a stone a second (20 stones per bucket of cheese sauce). Cheese sauce comes through a "
+       "Sauce Hose or Sauce Pipe, or pour a bucket in. With a water source next to it the water is free. The stones go into a chest, "
+       "the Bank Guh or a Nibble Tube next to it by themselves; otherwise they stay in the machine until you take them.")
+UITLEG['saustank'] = dict(
+    nl="Een groot Sausvat met stalen hoepels voor 64 emmers van één saus: kaassaus, kaasfrituursaus, water of melk. Giet er een "
+       "emmer in of tap er een uit; pompen vullen hem en machines slurpen eruit via een Sausslang of Sausbuis. Door het raampje "
+       "zie je hoe vol hij zit. Pak je hem op, dan gaat de saus mee.",
+    en="A big Sauce Vat with steel hoops for 64 buckets of one sauce: cheese sauce, cheese frying sauce, water or milk. Pour a "
+       "bucket in or tap one out; pumps fill it and machines slurp from it through a Sauce Hose or Sauce Pipe. Through the little "
+       "window you see how full it is. Pick it up and the sauce comes along.")
+UITLEG['sausbuis'] = dict(
+    nl="Een dikke koperen buis voor saus over lange afstanden. Hij sluit vanzelf aan op pompen, vaten, tanks, slangen en "
+       "sausmachines, net als een Sausslang, maar telt maar voor een zestiende slang: tot 4096 buizen aan één stuk.",
+    en="A thick copper pipe for sauce over long distances. It joins pumps, vats, tanks, hoses and sauce machines by itself, just "
+       "like a Sauce Hose, but counts as only a sixteenth of a hose: up to 4096 pipes in one line.")
+UITLEG['wolkenantenne_1'] = dict(
+    nl="Maakt de Weer vadser groter. Zet hem op of naast een Weer vadser, of rechtsklik de Weer vadser ermee (dan gaat hij erin). "
+       "Antenne I: straal 20 blokken voor 30 vadskracht. Antenne II: 35 blokken voor 45. Antenne III: 60 blokken voor 70. Eerst I, "
+       "dan II, dan III.",
+    en="Makes the Weather Vadser bigger. Put it on top of or next to a Weather Vadser, or right-click the Weather Vadser with it "
+       "(then it goes inside). Antenna I: radius 20 blocks for 30 chonk power. Antenna II: 35 blocks for 45. Antenna III: 60 blocks "
+       "for 70. First I, then II, then III.")
+UITLEG['wolkenantenne_2'] = UITLEG['wolkenantenne_1']
+UITLEG['wolkenantenne_3'] = UITLEG['wolkenantenne_1']
+# </vadsbasis>

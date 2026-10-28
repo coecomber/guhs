@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "WIW",
+    " I "
+  ],
+  "key": {
+    "R": "minecraft:lightning_rod",
+    "W": "minecraft:white_wool",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "guhs:wolkenantenne_1",
+    "count": 1
+  }
+}

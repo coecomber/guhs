@@ -58,6 +58,12 @@ public class WeerVadserBlock extends MachineBlock {
             }
             return InteractionResult.SUCCESS;
         }
+        if (stack.getItem() instanceof net.minecraft.world.item.BlockItem bi && bi.getBlock() instanceof WolkenantenneBlock antenne) {
+            if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof WeerVadserBlockEntity be) {
+                be.antenneErin(sp, antenne.niveau, stack);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (isRegenboogje(stack)) {
             if (player instanceof ServerPlayer sp) {
                 WeerUnlocks.ontgrendel(sp, Weertje.REGENBOOG);     // (the souvenir stays: it is a decoration too)

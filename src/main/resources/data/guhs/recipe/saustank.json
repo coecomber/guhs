@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IVI",
+    "V V",
+    "IVI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "V": "guhs:sausvat"
+  },
+  "result": {
+    "id": "guhs:saustank",
+    "count": 1
+  }
+}

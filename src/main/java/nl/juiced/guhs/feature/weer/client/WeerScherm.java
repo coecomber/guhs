@@ -78,8 +78,8 @@ public class WeerScherm extends Screen {
         Component titel = Component.literal("☁ ").append(Component.translatable("block.guhs.weer_vadser")).append(" ☁");
         g.text(font, titel.getString(), left + (W - font.width(titel)) / 2, top + 8, KLEUR_TITEL, false);
         Component sub = gekozen == Weertje.NORMAAL ? Component.translatable("gui.guhs.weer.scherm.uit")
-                : open.kracht() ? Component.translatable("gui.guhs.weer.scherm.aan", Component.translatable(gekozen.key()), WeerZones.STRAAL)
-                : Component.translatable("gui.guhs.weer.scherm.slaapt", WeerFeature.KRACHT);
+                : open.kracht() ? Component.translatable("gui.guhs.weer.scherm.aan", Component.translatable(gekozen.key()), open.straal())
+                : Component.translatable("gui.guhs.weer.scherm.slaapt", open.kosten());
         g.text(font, font.plainSubstrByWidth(sub.getString(), W - 16), left + 8, top + 24, KLEUR_SUB, false);
         // a coloured line under every button: its weather's colour
         Weertje[] alle = Weertje.values();

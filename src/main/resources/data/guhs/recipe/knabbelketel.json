@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IKI",
+    "IFI",
+    "BDB"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:block_of_kaasknabbels",
+    "F": "minecraft:blast_furnace",
+    "B": "minecraft:bricks",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:knabbelketel",
+    "count": 1
+  }
+}

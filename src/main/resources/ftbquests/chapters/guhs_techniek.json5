@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 51,
+  guhs_chapter_version: 52,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -127,13 +127,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "47554868C95105D1",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_vadsbasis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 27.568749999999998,
+      y: 31.531249999999996,
       hover: [
         "De Werktuigguh krabt achter zijn oortjes.",
         "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
@@ -2802,6 +2814,177 @@
       x: 16.0,
       y: 24.45,
       shape: "rsquare",
+    },
+    {
+      id: "47554857D4132B52",
+      icon: {
+        id: "guhs:knabbelketel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelketel",
+          },
+          id: "475548AFA1B412E1",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554892A99541BC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548038D63BD60",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "47554897538BBDF6",
+      icon: {
+        id: "guhs:knuffelsteen_generator",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knuffelsteen_generator",
+          },
+          id: "47554817B6C68DF2",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480FAA16FF8B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482C089A635D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548FE7360CF21",
+      icon: {
+        id: "guhs:saustank",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:saustank",
+          },
+          id: "475548235CF5A1F5",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DABBEDCC87",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548996169C5B3",
+          type: "xp",
+          xp: 30,
+        },
+      ],
+      x: 3.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755484DD06F433F",
+      icon: {
+        id: "guhs:sausbuis",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:sausbuis",
+          },
+          count: 16,
+          id: "475548DCF5A6F126",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C5036141D8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554896BE6A2F5A",
+          type: "xp",
+          xp: 30,
+        },
+      ],
+      x: 4.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548338C23DDC9",
+      icon: {
+        id: "guhs:wolkenantenne_1",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:wolkenantenne_1",
+          },
+          id: "475548DBCF759802",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488685310E17",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D5BEC1D299",
+          type: "xp",
+          xp: 30,
+        },
+      ],
+      x: 6.0,
+      y: 28.412499999999998,
     },
   ],
 }

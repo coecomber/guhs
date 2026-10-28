@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GWG",
+    "WAW",
+    "GDG"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "W": "minecraft:white_wool",
+    "A": "guhs:wolkenantenne_1",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:wolkenantenne_2",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "SSS",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "guhs:sausslang"
+  },
+  "result": {
+    "id": "guhs:sausbuis",
+    "count": 8
+  }
+}

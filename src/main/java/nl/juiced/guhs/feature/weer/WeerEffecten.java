@@ -139,7 +139,7 @@ public final class WeerEffecten {
         p.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 50, 0, true, false, true));
         // a few catchable dream stars
         if (r.nextInt(4) == 0) {
-            AABB zoneBox = new AABB(zone.midden()).inflate(WeerZones.STRAAL, 64, WeerZones.STRAAL);
+            AABB zoneBox = new AABB(zone.midden()).inflate(zone.straal(), 64, zone.straal());
             if (level.getEntities(SterrenveldFeature.VALLENDE_STER.get(), zoneBox, e -> true).size() < DROOM_STERREN) {
                 double x = p.getX() + (r.nextDouble() * 2 - 1) * 14, z = p.getZ() + (r.nextDouble() * 2 - 1) * 14;
                 if (zone.binnen(x, z)) {

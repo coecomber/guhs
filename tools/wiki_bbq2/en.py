@@ -243,8 +243,9 @@ TEKST = {
         "uses."),
     ("systemen/vadskracht", "Niet te veel van hetzelfde"): (
         "Not too many of the same",
-        "Per setup at most 4 Guh Wheels, 2 Cuddle Generators, 2 Disco Dynamos, 4 Blub Stoves and 1 Glowstar Core count. Put down more "
-        "and the extras do nothing ('doesn't count'). The strongest count first."),
+        "Per setup at most 16 Guh Wheels, 2 Cuddle Generators, 2 Disco Dynamos, 4 Blub Stoves, 1 Glowstar Core and 4 Nibble Boilers "
+        "count. Put down more and the extras do nothing ('doesn't count'). The strongest count first. Guh Wheels get lazy after 4: every "
+        "wheel after that gives 75% of the one before. Look at a wheel and you read how chonky the setup still is."),
     ("systemen/vadskracht", "De snoet van een machine"): (
         "A machine's snoot",
         "Every guh machine has a snoot. When it sleeps, it has no chonk power. When it looks happy, it has chonk power. When it looks "
@@ -259,7 +260,8 @@ TEKST = {
         "A tamed guh in a Guh Wheel gives 10 chonk power, a happy guhling 15. A guh never gets tired and does not need to eat. The guhs "
         "from the stories each do it their own way: Baltoguh runs harder than anyone, Guhtwo does not run at all (he floats and lets the "
         "wheel turn by itself), the 626 guh counts double, Sam-guh lugs the wheel around backpack and all, and Guhshi flutter-kicks. They "
-        "give 20 or 25 chonk power. At most 4 Guh Wheels count per setup."),
+        "give 20 or 25 chonk power. The first 4 Guh Wheels per setup count in full; every wheel after that gives 75% of the one "
+        "before, up to 16 wheels. Need more? Build a second setup."),
     ("systemen/vadskrachtbronnen", "Een blij guhtje rent harder"): (
         "A happy guhling runs harder",
         "Whether a guh is happy is looked at the moment you put it in the wheel, and it stays that way as long as it runs. A guh that "

@@ -52,8 +52,13 @@ public final class WeerFeature {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, Guhs.MODID);
 
-    /** What a Weer vadser asks while it makes a weather (tools/features/weer.py: KRACHT). */
+    /** What a Weer vadser asks while it makes a weather (tools/features/weer.py: KRACHT): without a Wolkenantenne. */
     public static final int KRACHT = 20;
+    /**
+     * 1.8.0 (vadskracht): what it asks per Wolkenantenne level (0 = none, 1..3 = Wolkenantenne I..III); the radius that goes
+     * with it: {@link WeerZones#STRALEN} (10 / 20 / 35 / 60). tools/features/vadsbasis.py reads these.
+     */
+    public static final int[] KRACHTEN = {KRACHT, 30, 45, 70};
 
     /**
      * TODO 1.8.0 (Guhdromenland): the dream sources of the weerpotjes, still to be hooked in once the dream islands exist
@@ -75,10 +80,36 @@ public final class WeerFeature {
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             tooltip.accept(Component.translatable("block.guhs.weer_vadser.lore").withStyle(ChatFormatting.GRAY));
             tooltip.accept(Component.translatable("block.guhs.weer_vadser.lore.kracht", KRACHT).withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.accept(Component.translatable("block.guhs.weer_vadser.lore.straal", WeerZones.straal(0), WeerZones.straal(3)).withStyle(ChatFormatting.DARK_AQUA));
         }
     }, () -> new Item.Properties().useBlockDescriptionPrefix());
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WeerVadserBlockEntity>> WEER_VADSER_BE = BLOCK_ENTITIES.register(
             "weer_vadser", () -> new BlockEntityType<>(WeerVadserBlockEntity::new, WEER_VADSER.get()));
+
+    /** 1.8.0 (vadskracht): the Wolkenantennes I, II and III (guhs:wolkenantenne_1.._3). */
+    public static final java.util.List<DeferredBlock<WolkenantenneBlock>> ANTENNES = new java.util.ArrayList<>();
+    public static final java.util.List<DeferredItem<BlockItem>> ANTENNE_ITEMS = new java.util.ArrayList<>();
+
+    static {
+        for (int i = 1; i <= 3; i++) {
+            int niveau = i;
+            DeferredBlock<WolkenantenneBlock> blok = BLOCKS.registerBlock("wolkenantenne_" + niveau, p -> new WolkenantenneBlock(niveau, p),
+                    () -> BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).mapColor(MapColor.SNOW).strength(2f, 6f).noOcclusion());
+            ANTENNES.add(blok);
+            ANTENNE_ITEMS.add(ITEMS.registerItem("wolkenantenne_" + niveau, p -> new BlockItem(blok.get(), p) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+                    tooltip.accept(Component.translatable("block.guhs.wolkenantenne.lore", WeerZones.straal(niveau), KRACHTEN[niveau]).withStyle(ChatFormatting.GRAY));
+                    tooltip.accept(Component.translatable("block.guhs.wolkenantenne.lore.hoe").withStyle(ChatFormatting.DARK_AQUA));
+                }
+            }, () -> new Item.Properties().useBlockDescriptionPrefix()));
+        }
+    }
+
+    /** The Wolkenantenne level of this block (1..3), or 0. */
+    public static int antenneNiveau(net.minecraft.world.level.block.state.BlockState state) {
+        return state.getBlock() instanceof WolkenantenneBlock a ? a.niveau : 0;
+    }
 
     /** One weerpotje per guh-weertje (guhs:weerpotje_&lt;id&gt;). */
     public static final Map<Weertje, DeferredItem<WeerPotjeItem>> POTJES = new EnumMap<>(Weertje.class);
@@ -140,6 +171,9 @@ public final class WeerFeature {
 
     public static void creative(Consumer<ItemStack> output) {
         output.accept(new ItemStack(WEER_VADSER_ITEM.get()));
+        for (DeferredItem<BlockItem> a : ANTENNE_ITEMS) {
+            output.accept(new ItemStack(a.get()));
+        }
         for (DeferredItem<WeerPotjeItem> p : POTJES.values()) {
             output.accept(new ItemStack(p.get()));
         }

@@ -17,7 +17,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import nl.juiced.guhs.network.ModNetworking;
 
 /**
- * 1.8.0: where the Weer vadsers make their weather. A zone is a circle of {@link #STRAAL} blocks around a Weer vadser (or a
+ * 1.8.0: where the Weer vadsers make their weather. A zone is a circle around a Weer vadser of 10 blocks, 20 / 35 / 60 with
+ * its Wolkenantenne ({@link #STRALEN}; a test zone {@link #STRAAL}) (or a
  * test zone of {@code /guhs weer zone}); outside every zone the world keeps its own weather. A running Weer vadser renews
  * its zone every tick it works ({@link #houdVast}); a zone that is not renewed for {@link #VERVAL} ticks is gone (the block
  * was broken, lost its vadskracht, or its chunk unloaded). The clients get the zones of their dimension
@@ -27,26 +28,63 @@ import nl.juiced.guhs.network.ModNetworking;
  * zones first, then the world's own weather). Both work on both sides (the client uses its synced copy).
  */
 public final class WeerZones {
-    /** The radius of a zone (blocks, horizontally), and the soft edge inside it where the weather eases out. */
+    /**
+     * 1.8.0 (vadskracht): the radius of a zone (blocks, horizontally) per level of Wolkenantenne: 10 without one, then 20 / 35
+     * / 60 with Wolkenantenne I / II / III. {@link #STRAAL} is the biggest (what code that looks around must cover).
+     */
+    public static final int[] STRALEN = {10, 20, 35, 60};
     public static final int STRAAL = 60, RAND = 8;
+
+    /** The soft edge inside a zone of this radius where the weather eases out (8 for the biggest, at least 2). */
+    public static int rand(int straal) {
+        return Math.max(2, Math.round(straal * RAND / (float) STRAAL));
+    }
+
+    /** The radius that goes with this antenna level (0..3). */
+    public static int straal(int niveau) {
+        return STRALEN[Math.max(0, Math.min(STRALEN.length - 1, niveau))];
+    }
+
+    /**
+     * The Wolkenantenne level of a weather block at pos: the antennas that went in ({@code ingebouwd}) or a Wolkenantenne
+     * on top of it or right next to it, the highest wins.
+     */
+    public static int antenneNiveau(net.minecraft.world.level.Level level, BlockPos pos, int ingebouwd) {
+        int niveau = ingebouwd;
+        if (level != null) {
+            niveau = Math.max(niveau, WeerFeature.antenneNiveau(level.getBlockState(pos.above())));
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                niveau = Math.max(niveau, WeerFeature.antenneNiveau(level.getBlockState(pos.relative(d))));
+            }
+        }
+        return niveau;
+    }
+
+    /**
+     * THE one place that says how far a weather block at pos reaches: 10 blocks, or more with Wolkenantennes
+     * ({@link #antenneNiveau}). (Other radius hooks, such as a weather station's own radius, belong here too: the biggest wins.)
+     */
+    public static int straalVan(net.minecraft.world.level.Level level, BlockPos pos, int ingebouwd) {
+        return straal(antenneNiveau(level, pos, ingebouwd));
+    }
     /** A zone that is not renewed this many ticks is gone. */
     public static final int VERVAL = 40;
 
     /** One zone: its centre, its weather, and until when it holds (game time; Long.MAX_VALUE: a test zone). */
-    public record Zone(BlockPos midden, Weertje weertje, long tot) {
+    public record Zone(BlockPos midden, Weertje weertje, long tot, int straal) {
         public boolean binnen(double x, double z) {
             double dx = x - (midden.getX() + 0.5), dz = z - (midden.getZ() + 0.5);
-            return dx * dx + dz * dz <= (double) STRAAL * STRAAL;
+            return dx * dx + dz * dz <= (double) straal * straal;
         }
 
         /** 1 deep inside, easing to 0 at the edge. */
         public float gewicht(double x, double z) {
             double dx = x - (midden.getX() + 0.5), dz = z - (midden.getZ() + 0.5);
             double d = Math.sqrt(dx * dx + dz * dz);
-            if (d >= STRAAL) {
+            if (d >= straal) {
                 return 0f;
             }
-            return (float) Math.min(1.0, (STRAAL - d) / RAND);
+            return (float) Math.min(1.0, (straal - d) / rand(straal));
         }
     }
 
@@ -62,13 +100,18 @@ public final class WeerZones {
     // =====================================================================================================================
 
     /** A running Weer vadser at pos keeps its zone (called every tick it works). */
-    public static synchronized void houdVast(ServerLevel level, BlockPos pos, Weertje w) {
-        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(), new Zone(pos.immutable(), w, level.getGameTime() + VERVAL));
+    public static synchronized void houdVast(ServerLevel level, BlockPos pos, Weertje w, int straal) {
+        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(), new Zone(pos.immutable(), w, level.getGameTime() + VERVAL, straal));
     }
 
     /** A test zone (no block, no vadskracht) at pos until {@link #wisTest}. */
     public static synchronized void testZone(ServerLevel level, BlockPos pos, Weertje w) {
-        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(), new Zone(pos.immutable(), w, Long.MAX_VALUE));
+        testZone(level, pos, w, STRAAL);
+    }
+
+    /** A test zone of this radius. */
+    public static synchronized void testZone(ServerLevel level, BlockPos pos, Weertje w, int straal) {
+        ZONES.computeIfAbsent(level.dimension(), k -> new HashMap<>()).put(pos.immutable(), new Zone(pos.immutable(), w, Long.MAX_VALUE, straal));
     }
 
     /** Removes the zone of a Weer vadser at pos at once (it was switched to "normaal" or broken). */
@@ -124,18 +167,19 @@ public final class WeerZones {
         }
         StringBuilder sb = new StringBuilder();
         m.values().stream().sorted((a, b) -> Long.compare(a.midden().asLong(), b.midden().asLong()))
-                .forEach(z -> sb.append(z.midden().asLong()).append(':').append(z.weertje().ordinal()).append(';'));
+                .forEach(z -> sb.append(z.midden().asLong()).append(':').append(z.weertje().ordinal()).append(':').append(z.straal()).append(';'));
         return sb.toString();
     }
 
     private static synchronized WeerPayloads.Zones payload(ServerLevel level) {
         List<Long> plekken = new ArrayList<>();
-        List<Integer> weertjes = new ArrayList<>();
+        List<Integer> weertjes = new ArrayList<>(), stralen = new ArrayList<>();
         for (Zone z : zones(level)) {
             plekken.add(z.midden().asLong());
             weertjes.add(z.weertje().ordinal());
+            stralen.add(z.straal());
         }
-        return new WeerPayloads.Zones(plekken, weertjes);
+        return new WeerPayloads.Zones(plekken, weertjes, stralen);
     }
 
     /** (Tests) forgets everything. */
@@ -194,10 +238,11 @@ public final class WeerZones {
     public static final class Client {
         static final List<Zone> ZONES = new CopyOnWriteArrayList<>();
 
-        public static void zet(List<Long> plekken, List<Integer> weertjes) {
+        public static void zet(List<Long> plekken, List<Integer> weertjes, List<Integer> stralen) {
             List<Zone> nieuw = new ArrayList<>();
             for (int i = 0; i < plekken.size() && i < weertjes.size(); i++) {
-                nieuw.add(new Zone(BlockPos.of(plekken.get(i)), Weertje.byIndex(weertjes.get(i)), Long.MAX_VALUE));
+                int straal = i < stralen.size() ? stralen.get(i) : STRAAL;
+                nieuw.add(new Zone(BlockPos.of(plekken.get(i)), Weertje.byIndex(weertjes.get(i)), Long.MAX_VALUE, straal));
             }
             ZONES.clear();
             ZONES.addAll(nieuw);

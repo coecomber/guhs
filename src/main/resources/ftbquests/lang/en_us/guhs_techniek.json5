@@ -61,7 +61,7 @@
   ],
   "quest.47554848DC20455B.title": "How Much Can You Hook Up?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per setup, at most &e4&r Guh Wheels, &e2&r Cuddle Generators and &e2&r Disco Dynamos count (later also 4 Blub Stoves and 1 Glowstar Core). Whatever you hook up beyond that sleeps, and you can read that off. Story guhs are stronger: Baltoguh runs faster, Guhtwo makes the wheel float. Need more? Build a second setup.",
+    "Per setup, the first &e4&r Guh Wheels count in full (every wheel after that &e75%&r of the one before, up to &e16&r), at most &e2&r Cuddle Generators and &e2&r Disco Dynamos count (later also 4 Blub Stoves and 1 Glowstar Core). Whatever you hook up beyond that sleeps, and you can read that off. Story guhs are stronger: Baltoguh runs faster, Guhtwo makes the wheel float. Need more? Build a second setup.",
   ],
   "quest.475548420F21E4DE.title": "The Old Guh Wheel Power Plant",
   "quest.475548420F21E4DE.quest_desc": [
@@ -366,5 +366,25 @@
   "quest.475548A95CB45E8A.title": "Peacebringer",
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
+  ],
+  "quest.47554857D4132B52.title": "Cheese in the boiler",
+  "quest.47554857D4132B52.quest_desc": [
+    "The &6Nibble Boiler&r burns cheese nibbles for &d80 chonk power&r. A block of cheese nibbles burns nine times as long. Hungry, though: hundreds of nibbles an hour. Time for a nibble farm!",
+  ],
+  "quest.47554897538BBDF6.title": "Soft stone",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Cheese sauce + water = &dcuddlestone&r. Put the &6Cuddlestone Generator&r next to a water source, give it cheese sauce through a hose and chonk power, and put a chest next to it.",
+  ],
+  "quest.475548FE7360CF21.title": "A pool of sauce",
+  "quest.475548FE7360CF21.quest_desc": [
+    "The &6Big Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is.",
+  ],
+  "quest.4755484DD06F433F.title": "Pipes all the way",
+  "quest.4755484DD06F433F.quest_desc": [
+    "A &6Sauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
+  ],
+  "quest.475548338C23DDC9.title": "Weather all around",
+  "quest.475548338C23DDC9.quest_desc": [
+    "A Weather Vadser only reaches 10 blocks. Put a &bCloud Antenna&r on it: I, II and III make the radius 20, 35 and 60. Every step costs more chonk power.",
   ],
 }

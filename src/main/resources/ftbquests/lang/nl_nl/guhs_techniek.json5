@@ -61,7 +61,7 @@
   ],
   "quest.47554848DC20455B.title": "Hoeveel mag eraan?",
   "quest.47554848DC20455B.quest_desc": [
-    "Per opstelling tellen hooguit &e4&r Guhraden, &e2&r Knuffelgeneratoren en &e2&r Disco-dynamo's mee (later ook 4 Blubkacheltjes en 1 Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat het rad zweven. Meer nodig? Bouw een tweede opstelling.",
+    "Per opstelling tellen de eerste &e4&r Guhraden helemaal mee (elk rad daarna &e75%&r van het vorige, tot &e16&r), &e2&r Knuffelgeneratoren en &e2&r Disco-dynamo's mee (later ook 4 Blubkacheltjes en 1 Gloeisterkern). Wat je er meer aan hangt, slaapt, en dat lees je af. Verhaalguhs zijn sterker: de Baltoguh rent harder, Guhtwo laat het rad zweven. Meer nodig? Bouw een tweede opstelling.",
   ],
   "quest.475548420F21E4DE.title": "De Oude Guhrad-centrale",
   "quest.475548420F21E4DE.quest_desc": [
@@ -366,5 +366,25 @@
   "quest.475548A95CB45E8A.title": "Vredesbrenger",
   "quest.475548A95CB45E8A.quest_desc": [
     "Kies de titel &6Vredesbrenger&r in je Guhdex. Wie had gedacht dat een fabriek zoveel blije oortjes kon maken?",
+  ],
+  "quest.47554857D4132B52.title": "Kaas in de ketel",
+  "quest.47554857D4132B52.quest_desc": [
+    "De &6Knabbelketel&r stookt kaasknabbels voor &d80 vadskracht&r. Een blok kaasknabbels brandt negen keer zo lang. Wel een veelvraat: honderden knabbels per uur. Tijd voor een knabbelboerderij!",
+  ],
+  "quest.47554897538BBDF6.title": "Zachte steen",
+  "quest.47554897538BBDF6.quest_desc": [
+    "Kaassaus + water = &dknuffelsteen&r. Zet de &6Knuffelsteen-generator&r naast een waterbron, geef hem kaassaus via een slang en vadskracht, en zet er een kist naast.",
+  ],
+  "quest.475548FE7360CF21.title": "Een zwembad saus",
+  "quest.475548FE7360CF21.quest_desc": [
+    "De &6Grote saustank&r bewaart 64 emmers. De meter op zijn buik laat zien hoe vol hij zit.",
+  ],
+  "quest.4755484DD06F433F.title": "Buizen tot de horizon",
+  "quest.4755484DD06F433F.quest_desc": [
+    "Een &6Sausbuis&r brengt saus ver weg: hij telt maar voor een zestiende slang.",
+  ],
+  "quest.475548338C23DDC9.title": "Weer in de wijde omtrek",
+  "quest.475548338C23DDC9.quest_desc": [
+    "Een Weer vadser reikt maar 10 blokken. Zet er een &bWolkenantenne&r op: I, II en III maken de straal 20, 35 en 60. Elke stap kost meer vadskracht.",
   ],
 }
