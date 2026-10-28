@@ -802,6 +802,30 @@ UITLEG = {
            "- If a Blub with the chore Bubble bath master lives in a guhhuisje nearby, it gets the bath ready with foam.\n"
            "- With foam, tame guhs get in now and then. They feel fresh and happy: hearts and happy little dances for a while.\n"
            "- The foam is gone after a few minutes; then the Blub foams it up again."),
+    "stuiterkussen_boter": dict(
+        nl="Een reuzenkussen waar je hoog vanaf stuitert, zoals de kussenspiraal op het Sterrenkussenveld (er zijn 8 kleuren).
+"
+           "
+"
+           "- Spring of loop erop: boing, ongeveer vijf blokken de lucht in. Ook als je zweeft in de droom.
+"
+           "- Sluip om er gewoon op te blijven staan.
+"
+           "- Vallen erop doet nooit pijn.
+"
+           "- Craften: een knuffelblok in die kleur + een slijmbal.",
+        en="A giant pillow you bounce high off, like the pillow spiral on the Star Pillow Field (there are 8 colours).
+"
+           "
+"
+           "- Jump or walk onto it: boing, about five blocks into the air. Even while floating in the dream.
+"
+           "- Sneak to just stand on it.
+"
+           "- Falling onto it never hurts.
+"
+           "- Crafting: a knuffelblok of that colour + a slime ball.",
+        meer=[]),
     "doos_knabbels": dict(
         nl="Een kartonnen doos met kaasknabbels erin. Een guh kiest altijd de doos (ook als je een prachtig kattenhuisje "
            "hebt gebouwd).\n"
