@@ -2209,3 +2209,8 @@ UITLEG['boomhut_stapelbed'] = UITLEG['guh_hoofdbank']
 UITLEG['quiltbed'] = UITLEG['guh_hoofdbank']
 UITLEG['badkuipbed'] = UITLEG['guh_hoofdbank']
 # </bedden>
+
+# <kaaskas> 1.8.0 vadskracht: de Kaaskas en de Guh-sorteerband (tools/features/kaaskas.py)
+UITLEG['kaaskas'] = dict(nl='De kern van een glazen kas. Zet hem tussen je gewassen en geef hem vadskracht (12) en kaassaus (emmer of Sausslang).\n\n- Elke ruim een seconde krijgt een groeiend gewas in de kas een duwtje, voor een beetje saus.\n- Kaasknabbelplantjes, pluisbolletjes, roze graan, tarwe: elk gewas telt.\n- Plukken doe je zelf, met een Oogster of met een guh met het klusje Kassier.', en='The heart of a glass greenhouse. Put it among your crops and give it vadskracht (12) and kaassaus (bucket or Sauce Hose).\n\n- Every second or so a growing crop in the greenhouse gets a push, for a bit of sauce.\n- Nibble plants, fluffballs, pink grain, wheat: every crop counts.\n- Picking is up to you, an Oogster or a guh with the chore Greenhouse keeper.', meer=[])
+UITLEG['sorteerband'] = dict(nl='Een lage band die je achter elkaar legt. Wat erop ligt rijdt mee in de richting van de pijltjes.\n\n- Aan het eind (geen band meer ervoor) blijft het liggen.\n- Een guh met het klusje Sorteerder pakt het op en stopt het in de kist waar al zoiets in ligt.', en='A low belt you lay in a row. What lies on it rides along in the direction of the arrows.\n\n- At the end (no belt in front) it stays.\n- A guh with the chore Sorter picks it up and puts it in the chest that already holds that kind.', meer=[])
+# </kaaskas>

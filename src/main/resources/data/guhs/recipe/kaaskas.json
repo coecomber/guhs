@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GKG",
+    "IBI"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "K": "guhs:kaas_knabbels",
+    "I": "minecraft:iron_ingot",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "id": "guhs:kaaskas",
+    "count": 1
+  }
+}

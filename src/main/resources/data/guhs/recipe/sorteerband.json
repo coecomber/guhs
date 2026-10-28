@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "IRI"
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "guhs:sorteerband",
+    "count": 6
+  }
+}
