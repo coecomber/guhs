@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 49,
+  guhs_chapter_version: 50,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -786,6 +786,40 @@
         },
       ],
       x: 16.0,
+      y: 10.525,
+    },
+    {
+      id: "475548858710DF68",
+      icon: {
+        id: "guhs:vlieg_diploma",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vlieg_diploma",
+          },
+          id: "475548C311FB4BDC",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554840C2B283F9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B77A44CB7A",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 17.5,
       y: 10.525,
     },
     {

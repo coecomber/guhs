@@ -30,7 +30,7 @@ public final class DroomCommando {
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("droom").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("ga").executes(c -> ga(c.getSource(), DroomEilanden.PLEIN))
                         .then(Commands.argument("eiland", StringArgumentType.word())
-                                .suggests((c, b) -> SharedSuggestionProvider.suggest(DroomEilanden.IDS, b))
+                                .suggests((c, b) -> SharedSuggestionProvider.suggest(DroomEilanden.ALLE, b))
                                 .executes(c -> ga(c.getSource(), StringArgumentType.getString(c, "eiland")))))
                 .then(Commands.literal("wakker").executes(c -> wakker(c.getSource())))
                 .then(Commands.literal("voortgang").executes(c -> toon(c.getSource()))
@@ -48,8 +48,8 @@ public final class DroomCommando {
 
     private static int ga(CommandSourceStack source, String eiland) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
-        if (!DroomEilanden.IDS.contains(eiland)) {
-            source.sendFailure(Component.literal("Onbekend eiland: " + eiland + " (" + String.join(", ", DroomEilanden.IDS) + ")"));
+        if (!DroomEilanden.ALLE.contains(eiland)) {
+            source.sendFailure(Component.literal("Onbekend eiland: " + eiland + " (" + String.join(", ", DroomEilanden.ALLE) + ")"));
             return 0;
         }
         if (DroomReis.inDroom(p)) {

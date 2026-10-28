@@ -65,8 +65,16 @@ public final class DroomEilanden {
 
     public static final String PLEIN = "plein", LIEDJES = "liedjes", STERREN = "sterren", HERINNERING = "herinnering", BADJE = "badje",
             MOLENTJE = "molentje";
-    /** Every island, the plein first. */
+    /** 1.8.0 uitbreiding: the Vliegdroom, high above the plein (you only get there on a Rookguh: feature/vliegdroom). */
+    public static final String VLIEG = "vlieg";
+    /** Every island on the ring, the plein first (the steigers, the brievenbusjes, the creatures falling back). */
     public static final List<String> IDS = List.of(PLEIN, STERREN, MOLENTJE, BADJE, HERINNERING, LIEDJES);
+    /** Every island that is built: the ring and the islands that hang somewhere else ({@link #VAST}). */
+    public static final List<String> ALLE = List.of(PLEIN, STERREN, MOLENTJE, BADJE, HERINNERING, LIEDJES, VLIEG);
+    /** Islands with a fixed centre spot of their own instead of a place on the ring. */
+    public static final Map<String, BlockPos> VAST = Map.of(VLIEG, new BlockPos(0, 200, 0));
+    /** Above this height you are at the Vliegdroom (it hangs right above the plein). */
+    public static final int VLIEG_VANAF = 150;
     /** Compass angle of each island from the plein (degrees, north = 0, clockwise). */
     public static final Map<String, Integer> HOEK = Map.of(STERREN, 0, MOLENTJE, 72, BADJE, 144, HERINNERING, 216, LIEDJES, 288);
     /** The height of every island's centre spot, and how far the islands lie from the plein. */
@@ -100,6 +108,10 @@ public final class DroomEilanden {
 
     /** The world block of an island's centre spot. */
     public static BlockPos midden(String id) {
+        BlockPos vast = VAST.get(id);
+        if (vast != null) {
+            return vast;
+        }
         Integer hoek = HOEK.get(id);
         if (hoek == null) {
             return new BlockPos(0, Y, 0);
@@ -116,6 +128,9 @@ public final class DroomEilanden {
 
     /** The island closest to this spot (horizontally). */
     public static String dichtstbij(Vec3 pos) {
+        if (pos.y >= VLIEG_VANAF) {
+            return VLIEG;
+        }
         String beste = PLEIN;
         double d = Double.MAX_VALUE;
         for (String id : IDS) {
@@ -252,7 +267,7 @@ public final class DroomEilanden {
 
     /** Makes sure every island stands in its newest version (placeholders where no template is shipped yet). */
     public static void zorg(ServerLevel level) {
-        for (String id : IDS) {
+        for (String id : ALLE) {
             zorg(level, id);
         }
     }

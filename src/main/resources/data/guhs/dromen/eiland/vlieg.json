@@ -1,0 +1,22 @@
+{
+  "versie": 1,
+  "template": "guhs:dromen/eiland_vlieg",
+  "midden": [
+    50,
+    34,
+    50
+  ],
+  "aankomst": {
+    "plek": [
+      0.5,
+      1.0,
+      13.5
+    ],
+    "yaw": 180.0
+  },
+  "steiger": [
+    6.5,
+    1.0,
+    17.5
+  ]
+}

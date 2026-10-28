@@ -51,6 +51,8 @@ ACTIES = [
           "Steeds opnieuw, met 1 tot 20 seconden stilte ertussen.", "geen", [("g:hemel/muziek", 1.06, 1)]),
     Actie("muziek.molentje", "muziek/molentje", MUZIEK_WANNEER.format(naam="het Maanmolentje", waar="het Maanmolentje"),
           "Steeds opnieuw, met 1 tot 20 seconden stilte ertussen.", "geen", [("g:hemel/muziek", 0.8, 1)]),
+    Actie("muziek.vlieg", "muziek/vlieg", MUZIEK_WANNEER.format(naam="de Vliegdroom", waar="de Vliegdroom (hoog boven het plein)"),
+          "Steeds opnieuw, met 1 tot 20 seconden stilte ertussen.", "geen", [("g:hemel/muziek", 1.25, 1)]),
     Actie("snoes_praat", "snoes_praat", "Als je met Snoes praat (verfomfaaid, voor zijn verhaal af is).", "Bij elke klik (2 van de 3 keer; de andere keer gaapt hij).",
           "+-0,08", [("g:guh_ambient{n}", 0.8, 2)]),
     Actie("snoes_geeuw", "snoes_geeuw", "Snoes gaapt als je met hem praat.", "1 van de 3 klikken.", "+-0,05", [("g:guh_ambient{n}", 0.6, 1)]),
@@ -121,9 +123,11 @@ def _schrijf(pad, x, rate):
             f.write(x[i:i + 4096])
 
 
-def placeholders():
-    """Renders the current placeholder sounds into the folders (as they sound in the game)."""
+def placeholders(ids=None):
+    """Renders the current placeholder sounds into the folders (as they sound in the game); ids: only these folders."""
     for a in ACTIES:
+        if ids and a.id not in ids:
+            continue
         map_ = os.path.join(BASE, *a.map.split("/"))
         os.makedirs(map_, exist_ok=True)
         n = 0
@@ -156,14 +160,17 @@ def _doel(a):
     return os.path.join(SOUND_DIR, a.id.replace(".", "_"))
 
 
-def importeer():
-    """The folders -> assets/guhs/sounds/dromen/<id>/<naam>.ogg (mono, trimmed, normalised, normal pitch) + sounds.json."""
+def importeer(ids=None):
+    """The folders -> assets/guhs/sounds/dromen/<id>/<naam>.ogg (mono, trimmed, normalised, normal pitch) + sounds.json.
+    ids: only these folders (the others stay as they are in the mod; sounds.json is made for all)."""
     import shutil
     sys.path.insert(0, os.path.join(ROOT, "tools"))
     from import_sound import trim_silence
     import numpy as np
     totaal = 0
     for a in ACTIES:
+        if ids and a.id not in ids:
+            continue
         doel = _doel(a)
         if os.path.isdir(doel):
             shutil.rmtree(doel)
@@ -251,8 +258,9 @@ def leesmij():
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--placeholders", action="store_true", help="render the placeholder sounds into the folders first (once)")
+    ap.add_argument("--ids", nargs="*", help="only these folders (e.g. muziek.vlieg); the others are left alone")
     args = ap.parse_args()
     if args.placeholders:
-        placeholders()
-    importeer()
+        placeholders(args.ids)
+    importeer(args.ids)
     leesmij()

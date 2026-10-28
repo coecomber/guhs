@@ -13,10 +13,11 @@ import os
 import sys
 
 sys.path.insert(0, "tools")
+sys.path.insert(0, os.path.join("tools", "features"))
 import hekjes as nbt  # noqa: E402  (the byte-exact NBT reader)
 
 D = os.path.join("src", "main", "resources", "data", "guhs")
-EILANDEN = ("plein", "liedjes", "sterren", "badje", "molentje")
+EILANDEN = ("plein", "liedjes", "sterren", "badje", "molentje", "vlieg")
 LUCHT = ("minecraft:air", "minecraft:cave_air", "minecraft:light")
 # blocks you walk through (no collision) or that count as "nothing there" for standing room
 DOOR = ("minecraft:air", "minecraft:cave_air", "minecraft:light", "minecraft:water", "minecraft:short_grass", "minecraft:tall_grass",
@@ -241,6 +242,15 @@ def wandel(eid, t, js):
         uit.append(("in het grote bad -> aankomst", kuip, [a]))
         if "snoes" in b:
             uit.append(("aankomst -> Snoes", a, [ab(b["snoes"])]))
+    if eid == "vlieg":
+        pl = json.load(open(os.path.join(D, "dromen", "vlieg_plekken.json"), encoding="utf-8"))
+        uit.append(("aankomst -> elke Rookguh in de stal", a, [ab([s[0], 1, s[2]]) for s in pl["stal"]]))
+        uit.append(("aankomst -> de Rookguh naar beneden", a, [ab([pl["terug"][0], 1, pl["terug"][2]])]))
+        top = max(t.blok)  # (unused)
+        import vliegdroom as vd                                    # the stair's foot and the view on top
+        _, plek = vd.ontwerp()
+        uit.append(("aankomst -> de voet van de wenteltrap", a, [ab(plek["trap_begin"])]))
+        uit.append(("aankomst -> het uitzicht op de hoogste wolk", a, [ab(plek["uitzicht"])]))
     if eid == "sterren":
         uit.append(("aankomst -> het opstapkussen", a, [(46, my + 2, 56)]))   # dromen_sterren.py: next to the first pillow
     return uit

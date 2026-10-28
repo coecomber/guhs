@@ -182,7 +182,8 @@ FTB_SECTIES = [
     ("dr_weer", "De Weer vadser", "item:guhs:weer_vadser", ["dr_weer_vadser", "dr_weer_bellen", "dr_weer_regenboog", "dr_weer_droom"]),
     ("dr_slaap", "Slaap lekker, guh", "item:guhs:muziekdoosje",
      ["dr_doos", "dr_kattenhuisje", "dr_muziekdoosje", "dr_mobiel", "dr_maanlampje", "dr_krabpaal"]),
-    ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras"]),
+    ("dr_droom", "Guhdromenland", "item:guhs:droomkussen", ["dr_droomland", "dr_droomzand", "dr_zeepbelglas", "dr_slaapliedjesgras",
+                                                            "dr_vlieg_diploma"]),
     ("dr_snoes", "De droom van Snoes", "item:guhs:roze_guh_koek",
      ["dr_snoes_proloog"] + [f"dr_snoes_{s}" for s in STUKJES] + ["dr_snoes_finale"]),
     ("dr_weide", "De Zingende Weide", "item:guhs:blubguh_item", ["dr_weide", "dr_weide_brood"]),
@@ -231,6 +232,10 @@ def ftb(fq):
     q("dr_weer_droom", "Droomweer", "Stuiter op het Sterrenkussenveld helemaal naar boven, naar de grote ster. Het &ddroomkistje&r "
       "daar geeft je de eerste keer het &dweerpotje: droomweer&r: Guhdromenland voor thuis!", "guhs:weerpotje_droom",
       [item("guhs:weerpotje_droom")], xp=150)
+    # (1.8.0 uitbreiding: de Vliegdroom, up on a Rookguh from the plein)
+    q("dr_vlieg_diploma", "Vlieg-diploma", "Op het Droomplein staat een &dRookguh&r bij zijn steigertje: hij brengt je naar de "
+      "&dVliegdroom&r, hoog boven het plein. Stap daar in de stal op een Rookguh en vlieg door alle tien de &bwolkjesringen&r. "
+      "Je eerste hele parcours: het &6Vlieg-diploma&r!", "guhs:vlieg_diploma", [item("guhs:vlieg_diploma")], xp=150)
     # --- sleeping well ----------------------------------------------------------------------------------------------------
     q("dr_doos", "Een guh kiest altijd de doos", "Maak een &6doos met knabbels&r. 's Avonds stop je er je guh in (rechtsklik), en 's "
       "nachts kruipen guhs er zelf in.", "guhs:doos_knabbels", [item("guhs:doos_knabbels")], xp=50)
