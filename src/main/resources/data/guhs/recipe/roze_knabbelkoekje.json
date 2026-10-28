@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:roze_graan",
+    "guhs:roze_graan",
+    "guhs:kaas_knabbels"
+  ],
+  "result": {
+    "id": "guhs:roze_knabbelkoekje",
+    "count": 4
+  }
+}

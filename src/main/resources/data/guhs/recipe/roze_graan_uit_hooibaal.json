@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:roze_hooibaal"
+  ],
+  "result": {
+    "id": "guhs:roze_graan",
+    "count": 9
+  }
+}

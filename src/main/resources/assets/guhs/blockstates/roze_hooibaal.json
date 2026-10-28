@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/roze_hooibaal"
+    },
+    "axis=x": {
+      "model": "guhs:block/roze_hooibaal_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "guhs:block/roze_hooibaal_horizontal",
+      "x": 90
+    }
+  }
+}

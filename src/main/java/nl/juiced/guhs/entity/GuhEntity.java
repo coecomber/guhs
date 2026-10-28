@@ -271,7 +271,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new DeliverNoteGoal(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(3, new PersonalityGoals.EatDroppedSnacks(this));
-        this.goalSelector.addGoal(4, new TemptGoal(this, 1.15, stack -> stack.is(ModItems.KAAS_KNABBELS.get()), false) {
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.15, stack -> stack.is(ModItems.KAAS_KNABBELS.get()) || nl.juiced.guhs.feature.rozegraan.RozegraanFeature.isBroodje(stack), false) {
             @Override
             public boolean canUse() {
                 return !isOrderedToSit() && mayWander() && super.canUse(); // a sitting (or staying) guh stays put, snacks or not
@@ -752,7 +752,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(ModItems.KAAS_KNABBELS.get());
+        return stack.is(ModItems.KAAS_KNABBELS.get()) || nl.juiced.guhs.feature.rozegraan.RozegraanFeature.isBroodje(stack);   // 1.8.0: roze broodje
     }
 
     /**
@@ -764,7 +764,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         if (stack.isEmpty()) {
             return false;
         }
-        if (stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get())
+        if (stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) || nl.juiced.guhs.feature.rozegraan.RozegraanFeature.isBroodje(stack)
                 || stack.is(nl.juiced.guhs.feature.band.BandFeature.SNACKS)   // 2.10: feeding a snack (hearts)
                 || stack.is(Items.LEAD) || stack.is(Items.NAME_TAG) || (stack.is(Items.SADDLE) && !isSaddled())) {
             return true;
