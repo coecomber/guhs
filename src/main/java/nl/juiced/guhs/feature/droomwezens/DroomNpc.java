@@ -55,6 +55,18 @@ public final class DroomNpc {
         VERHAAL.put(kind, praat);
     }
 
+    /** Tests only: takes all story talk away (and gives it back with {@link #zetTerug}), so the jokes can be checked alone. */
+    static Map<Kind, Praat> haalWeg() {
+        Map<Kind, Praat> oud = new java.util.HashMap<>(VERHAAL);
+        VERHAAL.clear();
+        return oud;
+    }
+
+    static void zetTerug(Map<Kind, Praat> oud) {
+        VERHAAL.clear();
+        VERHAAL.putAll(oud);
+    }
+
     /** The id the test command and the jokes use ("snoes", "zandguh", ...). */
     public static Kind van(String naam) {
         for (Kind k : KINDS) {
