@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voor": "guhs:block/kattenhuisje_lavendel_voor",
+    "zij": "guhs:block/kattenhuisje_lavendel_zij",
+    "dak": "guhs:block/kattenhuisje_lavendel_dak",
+    "oor": "guhs:block/kattenhuisje_lavendel_oor",
+    "particle": "guhs:block/kattenhuisje_lavendel_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        12,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#dak"
+        },
+        "down": {
+          "texture": "#dak"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dak"
+        },
+        "south": {
+          "texture": "#dak"
+        },
+        "east": {
+          "texture": "#dak"
+        },
+        "west": {
+          "texture": "#dak"
+        },
+        "up": {
+          "texture": "#dak"
+        },
+        "down": {
+          "texture": "#dak"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14,
+        6
+      ],
+      "to": [
+        5,
+        17,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        },
+        "south": {
+          "texture": "#oor"
+        },
+        "east": {
+          "texture": "#oor"
+        },
+        "west": {
+          "texture": "#oor"
+        },
+        "up": {
+          "texture": "#oor"
+        },
+        "down": {
+          "texture": "#oor"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        14,
+        6
+      ],
+      "to": [
+        14,
+        17,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor"
+        },
+        "south": {
+          "texture": "#oor"
+        },
+        "east": {
+          "texture": "#oor"
+        },
+        "west": {
+          "texture": "#oor"
+        },
+        "up": {
+          "texture": "#oor"
+        },
+        "down": {
+          "texture": "#oor"
+        }
+      }
+    }
+  ]
+}

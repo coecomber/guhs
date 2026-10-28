@@ -47,15 +47,15 @@ public final class BlubSnoes {
 
     /**
      * May this player see (and click) this Blub? Tamed Blubs (of anyone): always. Wild ones: once you helped Snoes.
-     * TODO(Guhdromenland): in the dream dimension every Blub is always visible ({@link #inDroom}).
+     * In the dream dimension every Blub is always visible ({@link #inDroom}).
      */
     public static boolean zichtbaar(BlubGuhEntity blub, Player player) {
         return blub.isTame() || inDroom(blub.level()) || heeft(player);
     }
 
-    /** TODO(Guhdromenland): true in the dream dimension (it doesn't exist yet). */
+    /** True in the dream dimension Guhdromenland: there every Blub is always visible. */
     public static boolean inDroom(Level level) {
-        return false;
+        return nl.juiced.guhs.feature.dromen.DromenFeature.isDroom(level);
     }
 
     /** The local player's flag on the client (set by the payload; nothing client-only in here, so the entity may read it). */
