@@ -15,12 +15,12 @@ import nl.juiced.guhs.feature.dromen.DromenFeature;
 
 /**
  * 1.8.0 Guhdromenland, the Herinneringseiland (dromen-ontwerp/BOUWPLAN_180.md part E; design ontwerp-guhs180-dromen.md,
- * chapter 3 of Snoes' story): the Guh-familiedag as Snoes saw it from the bushes. The island itself is a template of part A's
- * framework (data/guhs/structure/dromen/eiland_herinnering.nbt + data/guhs/dromen/eiland/herinnering.json, both from
- * tools/features/herinnering.py); this class adds:
+ * chapter 3 of Snoes' story; revamped after the playtest of test build 2): three little memories of Snoes, from long before he
+ * had a place. The island itself is a template of part A's framework (data/guhs/structure/dromen/eiland_herinnering.nbt +
+ * data/guhs/dromen/eiland/herinnering.json, both from tools/features/herinnering.py); this class adds:
  * <ul>
- *   <li>{@link HerinneringBellen}: the five herinneringsbelletjes, each with its retro film ({@link HerinneringScenes});</li>
- *   <li>the people of the memory (guh_npc with the tag {@value #TAG}): clicking them only gives a memory line.</li>
+ *   <li>{@link HerinneringBellen}: the three herinneringsbelletjes, each with its retro film ({@link HerinneringScenes});</li>
+ *   <li>the little memory-Snoeses (guh_npc with the tag {@value #TAG}): clicking them only gives a memory line.</li>
  * </ul>
  */
 public final class HerinneringFeature {
@@ -73,8 +73,7 @@ public final class HerinneringFeature {
             return false;
         }
         if (speler instanceof ServerPlayer sp) {
-            String key = npc.getKind() == GuhNpcEntity.Kind.SNOES ? "gui.guhs.herinnering.persoon_snoes" : "gui.guhs.herinnering.persoon";
-            sp.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.herinnering.persoon_snoes").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
         }
         return true;
     }

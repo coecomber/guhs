@@ -23,13 +23,13 @@ import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 
 /**
- * The herinneringsbelletjes of the Herinneringseiland: five big hollow zeepbelglas balls, one above each scene of the
- * Guh-familiedag. Touch one (walk up to it) or click it and its retro film plays ({@link HerinneringScenes}); a film you
- * saw before only plays again on a click. The last bubble (Snoes in the bushes) opens once the other four were seen;
- * watching it gives Snoes' piece "de herinnering" ({@link DroomVoortgang.Stukje#HERINNERING}) while the story still runs.
+ * The herinneringsbelletjes of the Herinneringseiland: three big hollow zeepbelglas balls, one next to each little memory
+ * of Snoes. Touch one (walk up to it) or click it and its retro film plays ({@link HerinneringScenes}); a film you saw before
+ * only plays again on a click. The last bubble (the stars) opens once the other two were seen; watching it gives Snoes' piece
+ * "de herinnering" ({@link DroomVoortgang.Stukje#HERINNERING}) while the story still runs.
  * <p>
  * The positions are those of tools/features/herinnering.py BELLEN, relative to the island's centre spot (template
- * (50, 28, 50)); keep both in sync.
+ * (38, 22, 38)); keep both in sync.
  */
 public final class HerinneringBellen {
     /** A bubble: its centre block and the scene's anchor block (both relative to the island's centre spot). */
@@ -44,14 +44,13 @@ public final class HerinneringBellen {
         }
     }
 
-    /** In the order they are told; the last one is Snoes'. */
+    /** In the order they are told; the last one (the stars) opens after the others. */
     public static final List<Bel> BELLEN = List.of(
-            new Bel("quiz", new BlockPos(25, 4, 3), 2.4, HerinneringScenes.QUIZ, new BlockPos(18, 1, 10)),
-            new Bel("prik", new BlockPos(-25, 4, 9), 2.4, HerinneringScenes.PRIK, new BlockPos(-17, 1, 14)),
-            new Bel("koeken", new BlockPos(-6, 4, -8), 2.4, HerinneringScenes.KOEKEN, new BlockPos(0, 1, 0)),
-            new Bel("oma", new BlockPos(12, 4, -17), 2.4, HerinneringScenes.OMA, new BlockPos(19, 1, -11)),
-            new Bel("snoes", new BlockPos(-14, 4, 24), 2.4, HerinneringScenes.SNOES, new BlockPos(-5, 1, 23)));
-    public static final Bel SNOES = BELLEN.get(BELLEN.size() - 1);
+            new Bel("knabbel", new BlockPos(-16, 4, -2), 2.4, HerinneringScenes.KNABBEL, new BlockPos(-11, 1, 2)),
+            new Bel("blub", new BlockPos(9, 4, 10), 2.4, HerinneringScenes.BLUB, new BlockPos(2, 1, 14)),
+            new Bel("sterren", new BlockPos(-12, 4, -5), 2.4, HerinneringScenes.STERREN, new BlockPos(-7, 4, -11)));
+    /** The last bubble (the stars): it opens after the others and gives the piece. */
+    public static final Bel LAATSTE = BELLEN.get(BELLEN.size() - 1);
     /** How close (beyond the bubble's radius) a player's middle must come to touch it, and a clicked block to belong to it. */
     public static final double AANRAAK = 1.3, KLIK = 0.9;
 
@@ -76,20 +75,20 @@ public final class HerinneringBellen {
         return Cutscenes.gezien(p, b.scene().id());
     }
 
-    /** How many of the first four films this player has seen. */
-    public static int gezienVoorSnoes(ServerPlayer p) {
+    /** How many of the films before the last one this player has seen. */
+    public static int gezienVoorLaatste(ServerPlayer p) {
         int n = 0;
         for (Bel b : BELLEN) {
-            if (b != SNOES && gezien(p, b)) {
+            if (b != LAATSTE && gezien(p, b)) {
                 n++;
             }
         }
         return n;
     }
 
-    /** Is this bubble open for this player? (Snoes' opens after the other four.) */
+    /** Is this bubble open for this player? (The last one opens after the others.) */
     public static boolean open(ServerPlayer p, Bel b) {
-        return b != SNOES || gezienVoorSnoes(p) >= BELLEN.size() - 1;
+        return b != LAATSTE || gezienVoorLaatste(p) >= BELLEN.size() - 1;
     }
 
     /** Server, every half second for a dreaming player near the island: walking up to a bubble. */
@@ -136,11 +135,11 @@ public final class HerinneringBellen {
         Cutscenes.speel(p, b.scene(), b.ankerInWereld(), Rotation.NONE, speler -> na(speler, b));
     }
 
-    /** After a film: how far you are, and Snoes' piece after his own. */
+    /** After a film: how far you are, and Snoes' piece after the last one. */
     static void na(ServerPlayer p, Bel b) {
-        int gezien = gezienVoorSnoes(p) + (gezien(p, SNOES) ? 1 : 0);
+        int gezien = gezienVoorLaatste(p) + (gezien(p, LAATSTE) ? 1 : 0);
         p.sendOverlayMessage(Component.translatable("gui.guhs.herinnering.voortgang", gezien).withStyle(ChatFormatting.LIGHT_PURPLE));
-        if (b == SNOES) {
+        if (b == LAATSTE) {
             stukje(p);
         }
     }

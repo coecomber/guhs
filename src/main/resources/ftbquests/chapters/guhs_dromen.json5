@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_dromen",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 47,
+  guhs_chapter_version: 48,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_dromen.png",
@@ -854,7 +854,7 @@
     {
       id: "475548F3EF5FF035",
       icon: {
-        id: "guhs:roze_guh_koek",
+        id: "guhs:kaas_knabbels",
       },
       tasks: [
         {
