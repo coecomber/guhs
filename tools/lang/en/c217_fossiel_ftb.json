@@ -1,0 +1,17 @@
+{
+  "ftb.guhs_techniek.section.fossiel": "Fossils and ancient guhs",
+  "ftb.guhs_techniek.q.fossiel_gevonden.title": "A fossil!",
+  "ftb.guhs_techniek.q.fossiel_gevonden.desc": "Deep in old fossil places there are sometimes &6fossils&r: in the chests of the &dFossil Dig&r and the &dfossil mine&r of the Barbecuether, at the &dgiant guh fossil&r, in the &dabandoned guh mine&r and at the &dcave paintings&r under the wool. The dig's daily find is sometimes a fossil too. Find one!",
+  "ftb.guhs_techniek.q.fossiel_broedmachine.title": "The Fossil Hatchery",
+  "ftb.guhs_techniek.q.fossiel_broedmachine.desc": "Make a &6Fossil Hatchery&r. Put a fossil and &616 cheese nibbles&r in and give it &d20 vadskracht&r: under the glass bell the egg turns round.",
+  "ftb.guhs_techniek.q.fossiel_uitgebroed.title": "Crack!",
+  "ftb.guhs_techniek.q.fossiel_uitgebroed.desc": "After a whole Minecraft day of hatching a baby ancient guh crawls out of the egg. It is yours right away!",
+  "ftb.guhs_techniek.q.fossiel_mammoet.title": "Mammoth Guh",
+  "ftb.guhs_techniek.q.fossiel_mammoet.desc": "Hatch a &6Mammoth Guh&r. In a guh house it does its chores twice as fast, and cuddling gives wool.",
+  "ftb.guhs_techniek.q.fossiel_tguh.title": "T-Guh",
+  "ftb.guhs_techniek.q.fossiel_tguh.desc": "Hatch a &6T-Guh&r. Give it the &dWatch&r chore: it spots monsters coming from very far away.",
+  "ftb.guhs_techniek.q.fossiel_pteroguh.title": "Pteroguh",
+  "ftb.guhs_techniek.q.fossiel_pteroguh.desc": "Hatch a &6Pteroguh&r. When it lives in a guh house it flies the goods to chests far around the house.",
+  "ftb.guhs_techniek.q.fossiel_stokstaartje.title": "Ancient Meerkat Guh",
+  "ftb.guhs_techniek.q.fossiel_stokstaartje.desc": "Hatch an &6Ancient Meerkat Guh&r. Take it along: it stands up and points out rare guhs nearby."
+}

@@ -367,4 +367,32 @@
   "quest.475548A95CB45E8A.quest_desc": [
     "Pick the title &6Peacebringer&r in your Guhdex. Who'd have thought a factory could make so many happy little ears?",
   ],
+  "quest.4755482B7D2B8727.title": "A fossil!",
+  "quest.4755482B7D2B8727.quest_desc": [
+    "Deep in old fossil places there are sometimes &6fossils&r: in the chests of the &dFossil Dig&r and the &dfossil mine&r of the Barbecuether, at the &dgiant guh fossil&r, in the &dabandoned guh mine&r and at the &dcave paintings&r under the wool. The dig's daily find is sometimes a fossil too. Find one!",
+  ],
+  "quest.47554824583EC9A0.title": "The Fossil Hatchery",
+  "quest.47554824583EC9A0.quest_desc": [
+    "Make a &6Fossil Hatchery&r. Put a fossil and &616 cheese nibbles&r in and give it &d20 vadskracht&r: under the glass bell the egg turns round.",
+  ],
+  "quest.4755486826FB3AE3.title": "Crack!",
+  "quest.4755486826FB3AE3.quest_desc": [
+    "After a whole Minecraft day of hatching a baby ancient guh crawls out of the egg. It is yours right away!",
+  ],
+  "quest.47554819DD50745F.title": "Mammoth Guh",
+  "quest.47554819DD50745F.quest_desc": [
+    "Hatch a &6Mammoth Guh&r. In a guh house it does its chores twice as fast, and cuddling gives wool.",
+  ],
+  "quest.4755487AF029E682.title": "T-Guh",
+  "quest.4755487AF029E682.quest_desc": [
+    "Hatch a &6T-Guh&r. Give it the &dWatch&r chore: it spots monsters coming from very far away.",
+  ],
+  "quest.475548D5A97A13A7.title": "Pteroguh",
+  "quest.475548D5A97A13A7.quest_desc": [
+    "Hatch a &6Pteroguh&r. When it lives in a guh house it flies the goods to chests far around the house.",
+  ],
+  "quest.475548787889088A.title": "Ancient Meerkat Guh",
+  "quest.475548787889088A.quest_desc": [
+    "Hatch an &6Ancient Meerkat Guh&r. Take it along: it stands up and points out rare guhs nearby.",
+  ],
 }

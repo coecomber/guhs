@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "table": "guhs:fossiel/mammoet__reuzenguh_fossiel",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "guhs:chests/onderwol/reuzenguh_fossiel"
+    }
+  ]
+}

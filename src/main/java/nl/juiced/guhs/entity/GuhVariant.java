@@ -66,6 +66,18 @@ public enum GuhVariant {
      * the caves of the Guhmension (feature/onderwol/wezens/OnderWolWezens); a fur colour only, no bones of its own. */
     GROTGUH(0),
     // </onderwol>
+    // <oerguhs>
+    // 1.8.0 (vadskracht): the four oerguhs, hatched from a fossil in the Fossiel-broedmachine (feature/fossiel); never wild.
+    // Real tameable variants, bonus Guhdex pages, no plush. Here (before the Pluisguh) like the Beverguh and the Grotguh.
+    /** De Mammoet-guh: woolly brown with a little trunk and two tusks; heavy chores go twice as fast, wool when cuddled. */
+    MAMMOETGUH(0, "oer_mammoet"),
+    /** De T-Guh: green with tiny arms and a long tail; the best watcher (the Waken chore notices threats much further out). */
+    TGUH(0, "oer_tguh"),
+    /** De Pteroguh: teal with wings and a crest; delivers its chores' finds to chests much further from the huisje. */
+    PTEROGUH(0, "oer_ptero"),
+    /** Het Oer-stokstaartje-guh: sandy fur and dark eye patches; stands upright like a meerkat and spots rare guhs nearby. */
+    STOKSTAARTJEGUH(0),
+    // </oerguhs>
     /** De Pluisguh (2.8): extra fluffy and pink, with a fluffy tuft and cheek fluff. Only born in the Knuffeldal (knuffeldal feature). */
     PLUISGUH(0, "pluis"),
     /** De Pinguh (2.9): klassiek or keizer look, belly-slides on ice. Only born in the Guhpolder (elftocht slice: guhpolder feature). */
@@ -206,7 +218,12 @@ public enum GuhVariant {
 
     /** No plush in the knuffelkast (biomes3: the biome guhs; 1.4.2: the park's Hertguhtje; einde2: the outer-island guhs), so a complete knuffelkast stays what it was. */
     public boolean geenKnuffel() {
-        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh() || this == BEVERGUH || this == GROTGUH;
+        return isBioGuh() || this == HERTGUHTJE || isBuitenGuh() || this == BEVERGUH || this == GROTGUH || isOerGuh();
+    }
+
+    /** 1.8.0: one of the four oerguhs of the Fossiel-broedmachine (feature/fossiel). */
+    public boolean isOerGuh() {
+        return this == MAMMOETGUH || this == TGUH || this == PTEROGUH || this == STOKSTAARTJEGUH;
     }
 
     /** einde2: one of the six guhs of the Guheinde's outer islands (KORSTGUH .. KOORGUH): real tameable variants, each bound to its biome. */
@@ -250,7 +267,8 @@ public enum GuhVariant {
             "bloesem", "tanuki",   // biomes3
             "hert",   // 1.4.2 (park)
             "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh",   // einde2
-            "bever");   // 1.6.2 (Beverbeek)
+            "bever",   // 1.6.2 (Beverbeek)
+            "oer_");   // 1.8.0 (the oerguhs of the Fossiel-broedmachine)
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

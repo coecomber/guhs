@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 51,
+  guhs_chapter_version: 52,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -127,13 +127,25 @@
       ],
     },
     {
+      height: 1.5625,
+      id: "475548A0893C965F",
+      image: "guhs:textures/ftbquests/guhs_techniek/kop_fossiel.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guhrad (Guhs \\& basis)",
+      ],
+    },
+    {
       height: 3.4375,
       id: "475548FFB3611B71",
       image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 27.568749999999998,
+      y: 31.531249999999996,
       hover: [
         "De Werktuigguh krabt achter zijn oortjes.",
         "\"Er bestaat nog een plek, nog dieper dan het &5Guheinde&r.",
@@ -2802,6 +2814,231 @@
       x: 16.0,
       y: 24.45,
       shape: "rsquare",
+    },
+    {
+      id: "4755482B7D2B8727",
+      icon: {
+        id: "guhs:fossiel_mammoet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_gevonden",
+          id: "4755481EF1722269",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548528F98F84C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554832CA70D723",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "47554824583EC9A0",
+      icon: {
+        id: "guhs:fossiel_broedmachine",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_broedmachine",
+          id: "475548B94F79BCBA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488479BD1EE4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755488BAD27BDF8",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755486826FB3AE3",
+      icon: {
+        id: "minecraft:sniffer_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_uitgebroed",
+          id: "47554845B56DC486",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DD8FB78291",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548C251515D1F",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 3.0,
+      y: 28.412499999999998,
+      shape: "gear",
+    },
+    {
+      id: "47554819DD50745F",
+      icon: {
+        id: "guhs:fossiel_mammoet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_mammoet",
+          id: "4755488DBABBE9D0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D69BAB0AA8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755487274A7518A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755487AF029E682",
+      icon: {
+        id: "guhs:fossiel_tguh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_tguh",
+          id: "475548BFD5CA6973",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554879791E95E3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548C248F334EB",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548D5A97A13A7",
+      icon: {
+        id: "guhs:fossiel_pteroguh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_pteroguh",
+          id: "475548270EE1149C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A9FE460FF2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548125DEEE1A6",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548787889088A",
+      icon: {
+        id: "guhs:fossiel_stokstaartje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_stokstaartje",
+          id: "4755484C051AA318",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BEAA2129AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755486C69EBD4B2",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 28.412499999999998,
     },
   ],
 }

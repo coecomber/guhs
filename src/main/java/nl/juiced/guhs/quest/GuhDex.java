@@ -34,6 +34,7 @@ public final class GuhDex {
             GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH,   // biomes3
             GuhVariant.BEVERGUH,   // 1.6.2 (Beverbeek)
             GuhVariant.GROTGUH,   // 1.7.0 (Onder de Wol: the caves of the Guhmension)
+            GuhVariant.MAMMOETGUH, GuhVariant.TGUH, GuhVariant.PTEROGUH, GuhVariant.STOKSTAARTJEGUH,   // 1.8.0 (the Fossiel-broedmachine)
             GuhVariant.HERTGUHTJE,   // 1.4.2 (park)
             // 2.8 (Knuffeldal)
             GuhVariant.PLUISGUH, GuhVariant.PINGUH, GuhVariant.BURGEMEESTERGUH, GuhVariant.KRUIMEL_MIKA, GuhVariant.BAKKERGUH, GuhVariant.JUF_KNUFFEL,
@@ -70,6 +71,7 @@ public final class GuhDex {
             GuhVariant.HERTGUHTJE,   // 1.4.2: only in Het Knabbelpark (new chunks too)
             GuhVariant.BEVERGUH,   // 1.6.2: only in the Beverbeek (rare, new chunks only)
             GuhVariant.GROTGUH,   // 1.7.0: only in the caves of the Guhmension (new chunks only)
+            GuhVariant.MAMMOETGUH, GuhVariant.TGUH, GuhVariant.PTEROGUH, GuhVariant.STOKSTAARTJEGUH,   // 1.8.0: only from a fossil
             GuhVariant.KNABBELKOI,   // <park-a> 1.4.2: only in the japanse tuin of a Knabbelpark
             GuhVariant.DUIFGUHTJE,   // 1.4.2 park-plekjes b: only at Oma-guh's plekje of Het Knabbelpark
             // (einde2: every creature page of the outer islands is a bonus page: only the six tameable biome guhs count for

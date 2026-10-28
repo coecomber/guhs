@@ -62,6 +62,7 @@ public final class Voorraad {
         List<BlockPos> blokken = h.blokken();
         BlockPos deur = h.deur();
         List<BlockPos> uit = new ArrayList<>();
+        int m = nl.juiced.guhs.feature.fossiel.OerGuhs.kistMarge(level, h, 4);   // 1.8.0: a Pteroguh resident flies its finds further
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE,
                 maxZ = Integer.MIN_VALUE;
         for (BlockPos b : blokken) {
@@ -72,8 +73,8 @@ public final class Voorraad {
             maxY = Math.max(maxY, b.getY());
             maxZ = Math.max(maxZ, b.getZ());
         }
-        for (int cx = (minX - 4) >> 4; cx <= (maxX + 4) >> 4; cx++) {
-            for (int cz = (minZ - 4) >> 4; cz <= (maxZ + 4) >> 4; cz++) {
+        for (int cx = (minX - m) >> 4; cx <= (maxX + m) >> 4; cx++) {
+            for (int cz = (minZ - m) >> 4; cz <= (maxZ + m) >> 4; cz++) {
                 if (!level.hasChunk(cx, cz)) {
                     continue;
                 }
@@ -81,8 +82,8 @@ public final class Voorraad {
                     BlockPos p = be.getBlockPos();
                     if (be instanceof BankGuhBlockEntity || be instanceof HuisjeBlockEntity || be instanceof MolentjeBlockEntity || isMachine(be)
                             || blokken.contains(p)
-                            || p.getX() < minX - 4 || p.getX() > maxX + 4 || p.getY() < minY - 4 || p.getY() > maxY + 4
-                            || p.getZ() < minZ - 4 || p.getZ() > maxZ + 4
+                            || p.getX() < minX - m || p.getX() > maxX + m || p.getY() < minY - m || p.getY() > maxY + m
+                            || p.getZ() < minZ - m || p.getZ() > maxZ + m
                             || Voorraad.handler(level, p) == null) {
                         continue;
                     }

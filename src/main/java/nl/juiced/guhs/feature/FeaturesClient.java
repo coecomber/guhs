@@ -148,6 +148,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.snoesverhaal.client.SnoesHudLaag.init(modBus);   // 1.8.0 playtest: Snoes' story in the top left corner
         nl.juiced.guhs.feature.effecttips.client.EffectTips.init(modBus);   // 1.8.0: hover an effect in the inventory: what it does
         nl.juiced.guhs.feature.droomweer.client.DroomweerClient.init(modBus);   // 1.8.0: the droomweer's sky and music
+        nl.juiced.guhs.feature.fossiel.client.FossielClient.init(modBus);   // 1.8.0: the turning egg, the meerkat pose, the Pteroguh's wings
         nl.juiced.guhs.feature.droomwinkel.client.DroomWinkelClient.init(modBus);   // 1.8.0: the droomwinkeltje's screen
         nl.juiced.guhs.feature.vliegdroom.client.VliegdroomClient.init(modBus);   // 1.8.0 uitbreiding: the dream Rookguh
     }

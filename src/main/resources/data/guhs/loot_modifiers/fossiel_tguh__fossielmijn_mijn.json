@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "table": "guhs:fossiel/tguh__fossielmijn_mijn",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "guhs:chests/fossielmijn_mijn"
+    }
+  ]
+}
