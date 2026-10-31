@@ -167,7 +167,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan (append only)
             'raket',
             # 1.8.0 vadskracht: de Fabriekshal (wol, bouwblokken, kleurstof; append only)
-            'fabriek']
+            'fabriek',
+            # 1.8.1: Botsguhs + Spookguhhuis (append only)
+            'kermisritten2']
 
 
 def modules():

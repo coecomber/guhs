@@ -190,6 +190,7 @@ public final class Features {
         nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.register(modBus);   // 1.8.0 uitbreiding: de Vliegdroom (Rookguhs, wolkjesringen-parcours)
         nl.juiced.guhs.feature.droomwolkje.DroomwolkjeFeature.register(modBus);   // 1.8.0 (uitbreiding): the own droomwolkje and the droomgasten
+        nl.juiced.guhs.feature.kermisritten2.Ritten2Feature.register(modBus);   // 1.8.1: Botsguhs + Spookguhhuis
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.register(modBus);   // 1.8.0 (vadskracht): the hamsterbuis network
         nl.juiced.guhs.feature.centrale.CentraleFeature.register(modBus);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale + export bij guh-villagers
         nl.juiced.guhs.feature.fabriek.FabriekFeature.register(modBus);   // 1.8.0 (vadskracht): de Fabriekshal (wol, bouwblokken, kleurstof)
@@ -464,6 +465,7 @@ public final class Features {
         nl.juiced.guhs.feature.rozegraan.RozegraanFeature.creative(output);   // 1.8.0: roze graan
         nl.juiced.guhs.feature.kaaskas.KaaskasFeature.creative(output);   // 1.8.0 vadskracht: Kaaskas + sorteerband
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.creative(output);   // 1.8.0: sleepy clothes + droompyjama   // 1.8.0: the droomkistje
+        nl.juiced.guhs.feature.kermisritten2.Ritten2Feature.creative(output);   // 1.8.1: the two ride anchors
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.creative(output);   // 1.8.0: the droomkistje
         nl.juiced.guhs.feature.koepel.KoepelFeature.creative(output);   // 1.8.0: de Koepel
         nl.juiced.guhs.feature.fossiel.FossielFeature.creative(output);   // 1.8.0: de Fossiel-broedmachine and the fossils
