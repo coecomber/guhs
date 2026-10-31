@@ -1350,3 +1350,9 @@ from . import en_dromen180 as _dromen180  # noqa: E402
 
 PAGINA.update(_dromen180.PAGINA)
 TEKST.update(_dromen180.TEKST)
+
+# 1.8.1 De Maagwand: tools/wiki_bbq2/en_guhs181.py (the Dutch: tools/features/guhs181_wiki.py)
+from . import en_guhs181 as _guhs181  # noqa: E402
+
+PAGINA.update(_guhs181.PAGINA)
+TEKST.update(_guhs181.TEKST)

@@ -16,11 +16,6 @@ import nl.juiced.guhs.registry.ModItems;
 /** 1.8.1: the maagwand: the table, the BOERP (nothing lost), training food, and the bonuses that can be seen on the server. */
 public class MaagwandGameTests {
     private static final String BATCH = "maagwand", KAMER = "vadskracht_test_kamer";
-    /** Food of 1.8.1 made by other branches: the table may name them before they exist. */
-    private static final java.util.Set<String> NIEUW = java.util.Set.of("patatje_kaassaus", "patatje_vads", "patatje_oorlog",
-            "patatje_guhspeciaal", "dubbel_gefrituurde_kaasknabbels", "driedubbel_gefrituurde_kaasknabbels", "kaaskroket",
-            "frikandel_guhspeciaal", "bitterguhllen", "kaassoufflguh", "vetste_hap");
-
     @SuppressWarnings("removal")
     private static ServerPlayer speler(GameTestHelper helper) {
         ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
@@ -40,7 +35,7 @@ public class MaagwandGameTests {
         for (Maagwand.Stap s : Maagwand.STAPPEN) {
             for (var lijst : java.util.List.of(s.trainvoer(), s.opent())) {
                 for (String id : lijst) {
-                    helper.assertTrue(Maagwand.item(id).isPresent() || NIEUW.contains(id), "unknown food in the maagwand table: " + id);
+                    helper.assertTrue(Maagwand.item(id).isPresent(), "unknown food in the maagwand table: " + id);
                 }
             }
         }

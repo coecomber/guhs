@@ -169,17 +169,17 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 vadskracht: de Fabriekshal (wol, bouwblokken, kleurstof; append only)
             'fabriek',
             # 1.8.1: de maagwand (append only)
-            'maagwand']
+            'maagwand',
             # 1.8.1: de frituurlijn (append only)
             'frituur',
             # 1.8.1: De Guhsnackbar (append only)
-            'snackbar']
+            'snackbar',
             # 1.8.1: the stalls of the bigger guh kermis (append only)
-            'kermiskraam']
+            'kermiskraam',
             # 1.8.1: the turning kermis rides (append only)
-            'kermisritten']
+            'kermisritten',
             # 1.8.1: Botsguhs + Spookguhhuis (append only)
-            'kermisritten2']
+            'kermisritten2',
             # 1.8.1: de kermis-uitbouw (the template; Java: feature/kermisuitbouw; append only)
             'kermisuitbouw']
 

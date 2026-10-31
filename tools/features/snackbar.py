@@ -143,6 +143,7 @@ def kompas(h):
         n = f"snackbarkompas_{i:02d}"
         h.save(img, "item", n + ".png")
         h.w(f"{h.A}/models/item/{n}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/{n}"}})
+    h.w(f"{h.A}/models/item/snackbarkompas.json", {"parent": "minecraft:item/generated", "textures": {"layer0": "guhs:item/snackbarkompas_16"}})
 
 
 def loot(h):

@@ -2436,3 +2436,11 @@ UITLEG['kermisrit_twister'] = dict(
     en='The heart of the Guh Twister: the block is hidden under the ride.\n\n- Click a car or the ticket post to get on.\n- After 8 seconds you spin for 40 seconds.\n- You get off at the gate and receive a kermisbon.',
     meer=[])
 # </kermisritten>
+UITLEG['kermisrit_botsguhs'] = dict(
+    nl="De vloer van de Botsguhs op de Guhkermis. Rechtsklik op een botsauto en rijd met W/S en A/D. Na een rit van 45 seconden krijg je kermisbonnen voor je botsingen.",
+    en="The floor of the Botsguhs on the Guh Kermis. Right-click a bumper car and drive with W/S and A/D. After a ride of 45 seconds you get kermis tickets for your bumps.",
+    meer=[])
+UITLEG['kermisrit_spookhuis'] = dict(
+    nl="Het station van het Spookguhhuis op de Guhkermis. Rechtsklik op een karretje voor een lief griezelige rit langs zes spookjes. Na afloop krijg je een kermisbon.",
+    en="The station of the Spookguhhuis on the Guh Kermis. Right-click a cart for a sweetly scary ride past six little ghosts. Afterwards you get a kermis ticket.",
+    meer=[])

@@ -186,6 +186,9 @@ public final class Kermis {
         if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().getItem() instanceof nl.juiced.guhs.item.SledItem) {
             return;
         }
+        if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof nl.juiced.guhs.feature.kermiskraam.KermisKraamBlock) {
+            return;                                                 // 1.8.1: a stall opens with knabbels in your hand too
+        }
         if (denied(event.getEntity(), event.getPos())
                 || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? net.minecraft.core.Direction.UP : event.getFace()))) {
             event.setUseItem(net.minecraft.util.TriState.FALSE);

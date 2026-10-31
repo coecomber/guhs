@@ -187,7 +187,7 @@ def bestanden():
         g, tex = auto(bd, kleur)
         uit[f"{A}/textures/entity/{MAP}/botsguh{'' if i == 0 else '_%d' % i}.png"] = tex
     uit[f"{A}/geckolib/models/entity/{MAP}/botsguh.geo.json"] = g
-    leeg = {"format_version": "1.8.0", "animations": {}}
+    leeg = {"format_version": "1.8.0", "animations": {"animation.rust": {"loop": True, "animation_length": 1.0, "bones": {}}}}   # (GeckoLib 5 refuses an empty file)
     uit[f"{A}/geckolib/animations/entity/{MAP}/botsguh.animation.json"] = leeg
     g, tex = kar(bd)
     uit[f"{A}/geckolib/models/entity/{MAP}/spookkar.geo.json"] = g

@@ -3,6 +3,30 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.8.1 — De Maagwand — Minecraft 26.1.2
+
+Good guh food now has to be earned by your stomach, and the Guh Kermis finally got big.
+
+### The stomach wall
+
+- **Five layers:** Milk Tummy, Nibble Stomach, Fryer Stomach, Sauce-Tough Stomach and Indestructible Vads Stomach. Everyone starts on the first layer.
+- **Too vadsy?** You burp and keep the item. The message tells you exactly what to eat first.
+- **Training food:** 100, 64, 48 and 32 portions, with two or three kinds that count per layer. Every layer opens new food and gives a small bonus.
+- **The Guh Tongue:** a living strip left of your inventory with swimming guh cells. Hover over it for your counter, your training food and everything still locked.
+
+### The frying line
+
+- **More from the pan:** double and triple fried cheese nibbles and Patatje Kaassaus.
+- **Snack recipes:** cheese croquette, Frikandel Guhspeciaal, bitterguhllen, kaassoufflguh, three more portions of fries and De Vetste Hap.
+- **The Guhsnackbar:** the rare building De Patatzak, with the Snackbar Guh, who sells snacks and teaches recipes. Find it with the Snackbar Compass from the vadstemmer.
+
+### The Guh Kermis
+
+- **Every kermis grows by itself** when its Kermis-guh is loaded, and existing kermissen get the extension too. The ground around them is reshaped for it.
+- **Rides:** Knabbelbooster, Swing Carousel, Ferris Wheel, Guhtwister, Bumper Guhs and the Spookguhhuis. Riding is free and earns kermis tickets.
+- **Food stalls:** churros (15 Kaas Knabbels, or 18 with Guhtella), cotton candy, poffertjes and oliebollen.
+- **Game stalls:** Guhtjes vissen, Blikkengooien and Knabbelschieten.
+
 ## 1.8.0 — Dromen & Vadskracht — Minecraft 26.1.2
 
 The sleep update. Guhs get tired, yawn and crawl into a box of nibbles at night, and when you sleep next to them you wake up somewhere else entirely. Plus a second big theme: vadskracht, with a whole new floor of machines and a roof full of endgame projects. New land only grows in new chunks; nothing is reset.

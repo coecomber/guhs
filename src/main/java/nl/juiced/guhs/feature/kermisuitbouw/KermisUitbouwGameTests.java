@@ -1,6 +1,8 @@
 package nl.juiced.guhs.feature.kermisuitbouw;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -10,14 +12,17 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
+import nl.juiced.guhs.feature.kermisritten.KermisritBlockEntity;
+import nl.juiced.guhs.feature.kermisritten.KermisritSoort;
+import nl.juiced.guhs.feature.kermisritten2.SpookhuisBlockEntity;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.quest.Kermis;
 
 /**
  * The stamp of the kermis extension: far from the other tests, on a flat world with the kermis floor 21 blocks above the ground
- * (a valley as deep as the one at kermis C), a hill above the floor, and turned like kermis C. The rides and stalls may not
- * exist in this tree: their anchors are then simply air.
+ * (a valley as deep as the one at kermis C), a hill above the floor, and turned like kermis C. The rides and stalls stand on it for real.
  */
 public class KermisUitbouwGameTests {
     /** The stalls in the kermis frame: x, z of the block, and the step to its back (away from FACING). */
@@ -120,6 +125,8 @@ public class KermisUitbouwGameTests {
             }
         }
 
+        ankers(helper, level, plek, draai);
+
         BlockPos bewaar = l(plek, 15, 2, 87);
         helper.assertTrue(level.getBlockEntity(bewaar) instanceof ChestBlockEntity c && c.countItem(Items.DIAMOND) == 5, "the player's things are saved");
 
@@ -128,6 +135,54 @@ public class KermisUitbouwGameTests {
         helper.assertTrue(Kermis.protectedAt(level, l(plek, -44, 41, 25)), "and where the Booster's arm turns");
         helper.assertTrue(!Kermis.protectedAt(level, l(plek, 200, 3, 60)), "not further");
         helper.succeed();
+    }
+
+    /** The real rides and stalls on the stamp: the right block, turned with the kermis, with room to use them. */
+    private static void ankers(GameTestHelper helper, ServerLevel level, KermisUitbouw.Plek plek, Rotation draai) {
+        Object[][] ritten = {{"booster", -21, 21, Direction.SOUTH}, {"zweefmolen", 61, 44, Direction.SOUTH}, {"reuzenrad", -6, 74, Direction.SOUTH},
+                {"twister", 66, 77, Direction.NORTH}, {"botsguhs", 40, 71, Direction.NORTH}, {"spookhuis", -20, 57, Direction.EAST}};
+        for (Object[] r : ritten) {
+            BlockPos p = l(plek, (int) r[1], 1, (int) r[2]);
+            anker(helper, level, p, "kermisrit_" + r[0], draai.rotate((Direction) r[3]));
+            if (level.getBlockEntity(p) instanceof KermisritBlockEntity rit) {
+                vrij(helper, level, BlockPos.containing(rit.wereldPlek(-1, 0)), r[0] + " ticket post");
+                vrij(helper, level, BlockPos.containing(rit.uitstapPlek()), r[0] + " way out");
+                KermisritSoort soort = rit.soort();
+                for (int i = 0; i < soort.stoelen; i++) {
+                    for (int t = 0; t <= soort.profiel.duur(); t += 7) {
+                        BlockPos stoel = BlockPos.containing(rit.wereldPlek(i, t));
+                        helper.assertTrue(level.getBlockState(stoel).getCollisionShape(level, stoel).isEmpty(),
+                                r[0] + " seat " + i + " runs into " + level.getBlockState(stoel) + " at " + stoel.toShortString() + " t " + t);
+                    }
+                }
+            }
+            if (level.getBlockEntity(p) instanceof SpookhuisBlockEntity spook) {
+                nl.juiced.guhs.feature.safari.rit.Pad pad = spook.pad();
+                for (double d = 0; d < pad.lengte(); d += 0.5) {
+                    vrij(helper, level, BlockPos.containing(pad.op(d)), "the ghost track");
+                }
+            }
+        }
+        String[] kramen = {"churros", "suikerspin", "poffertjes", "oliebollen", "blikken", "schieten", "vissen"};
+        Direction[] kant = {Direction.EAST, Direction.EAST, Direction.SOUTH, Direction.SOUTH, Direction.WEST, Direction.WEST, Direction.EAST};
+        for (int i = 0; i < kramen.length; i++) {
+            BlockPos p = l(plek, KRAMEN[i][0], 2, KRAMEN[i][1]);
+            anker(helper, level, p, "kermiskraam_" + kramen[i], draai.rotate(kant[i]));
+            helper.assertTrue(level.getBlockState(p.relative(draai.rotate(kant[i]).getOpposite())).isAir(), "the stall guh stands behind " + kramen[i]);
+            helper.assertTrue(level.getBlockState(p.relative(draai.rotate(kant[i]))).isAir(), "customers reach " + kramen[i]);
+        }
+    }
+
+    private static void anker(GameTestHelper helper, ServerLevel level, BlockPos p, String id, Direction facing) {
+        BlockState s = level.getBlockState(p);
+        helper.assertTrue(s.is(BuiltInRegistries.BLOCK.getValue(nl.juiced.guhs.Guhs.id(id))), id + " at " + p.toShortString() + " is " + s);
+        helper.assertTrue(s.getValue(BlockStateProperties.HORIZONTAL_FACING) == facing, id + " faces " + facing + ", not " + s);
+        helper.assertTrue(level.getBlockEntity(p) != null, id + " has its block entity");
+    }
+
+    private static void vrij(GameTestHelper helper, ServerLevel level, BlockPos p, String wat) {
+        helper.assertTrue(level.getBlockState(p).getCollisionShape(level, p).isEmpty() && level.getBlockState(p.above()).getCollisionShape(level, p.above()).isEmpty(),
+                wat + ": no room at " + p.toShortString() + ", " + level.getBlockState(p));
     }
 
     /** A spot of the kermis frame in the world. */
