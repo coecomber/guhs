@@ -222,6 +222,18 @@
         "Komt na: Het superkompas (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "47554811E2A08095",
+      image: "guhs:textures/ftbquests/guhs_knuffeldal/kop_extra_snackbar.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 48.481249999999996,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 7,
   progression_mode: "flexible",
@@ -4781,6 +4793,71 @@
       ],
       x: 16.0,
       y: 44.8,
+    },
+    {
+      id: "475548ECD0A48126",
+      icon: {
+        id: "guhs:snackbarkompas",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:snackbarkompas",
+          },
+          id: "4755486C4AE99CE3",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488BA0971546",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548CB3A151F2E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 50.262499999999996,
+    },
+    {
+      id: "4755487D0D6CE345",
+      icon: {
+        id: "guhs:patatje_kaassaus",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:snackbar",
+          id: "475548A01D5C3448",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FE549CCF1B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B61BB73E4F",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 50.262499999999996,
     },
   ],
 }

@@ -45,7 +45,7 @@ public class GuhCompassItem extends Item {
     /** The castle is so rare that its compass looks much further. */
     private static final int CASTLE_RADIUS_CHUNKS = 600;
     /** Structures that are so rare (or fussy about where they go) that the compass looks as far as for the castle. */
-    private static final java.util.Set<String> FAR = java.util.Set.of("guh_kasteel", "onderwater", "knuffeldal_stadje");
+    private static final java.util.Set<String> FAR = java.util.Set.of("guh_kasteel", "onderwater", "knuffeldal_stadje", "snackbar");
     /** Bumped when the search changes, so compasses in old worlds look again straight away. */
     private static final int SEARCH_VERSION = 5;
 

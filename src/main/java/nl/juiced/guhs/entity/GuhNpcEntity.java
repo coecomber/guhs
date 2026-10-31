@@ -248,6 +248,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         MOKMIKA(0.9f),
         GUHKINDJE(0.6f),
         // </park-b>
+        // <snackbar>
+        /** 1.8.1: the Snackbar-guh behind the counter of De Guhsnackbar (feature/snackbar). */
+        SNACKBARGUH(1.0f),
+        // </snackbar>
         // <safari-lobby>
         /** 1.6.0 Op Safari! (feature/safari/lobby): the lobby's guhs in ranger/work uniform and the eight zone experts. */
         SAFARI_HOOFDRANGER(1.05f),

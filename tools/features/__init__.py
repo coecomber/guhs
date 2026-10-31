@@ -169,7 +169,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.0 vadskracht: de Fabriekshal (wol, bouwblokken, kleurstof; append only)
             'fabriek',
             # 1.8.1: de frituurlijn (append only)
-            'frituur']
+            'frituur',
+            # 1.8.1: De Guhsnackbar (append only)
+            'snackbar']
 
 
 def modules():

@@ -1,0 +1,1984 @@
+{
+  "variants": {
+    "facing=south,tegel=0": {
+      "model": "guhs:block/snackbar_bord_0"
+    },
+    "facing=west,tegel=0": {
+      "model": "guhs:block/snackbar_bord_0",
+      "y": 90
+    },
+    "facing=north,tegel=0": {
+      "model": "guhs:block/snackbar_bord_0",
+      "y": 180
+    },
+    "facing=east,tegel=0": {
+      "model": "guhs:block/snackbar_bord_0",
+      "y": 270
+    },
+    "facing=south,tegel=1": {
+      "model": "guhs:block/snackbar_bord_1"
+    },
+    "facing=west,tegel=1": {
+      "model": "guhs:block/snackbar_bord_1",
+      "y": 90
+    },
+    "facing=north,tegel=1": {
+      "model": "guhs:block/snackbar_bord_1",
+      "y": 180
+    },
+    "facing=east,tegel=1": {
+      "model": "guhs:block/snackbar_bord_1",
+      "y": 270
+    },
+    "facing=south,tegel=2": {
+      "model": "guhs:block/snackbar_bord_2"
+    },
+    "facing=west,tegel=2": {
+      "model": "guhs:block/snackbar_bord_2",
+      "y": 90
+    },
+    "facing=north,tegel=2": {
+      "model": "guhs:block/snackbar_bord_2",
+      "y": 180
+    },
+    "facing=east,tegel=2": {
+      "model": "guhs:block/snackbar_bord_2",
+      "y": 270
+    },
+    "facing=south,tegel=3": {
+      "model": "guhs:block/snackbar_bord_3"
+    },
+    "facing=west,tegel=3": {
+      "model": "guhs:block/snackbar_bord_3",
+      "y": 90
+    },
+    "facing=north,tegel=3": {
+      "model": "guhs:block/snackbar_bord_3",
+      "y": 180
+    },
+    "facing=east,tegel=3": {
+      "model": "guhs:block/snackbar_bord_3",
+      "y": 270
+    },
+    "facing=south,tegel=4": {
+      "model": "guhs:block/snackbar_bord_4"
+    },
+    "facing=west,tegel=4": {
+      "model": "guhs:block/snackbar_bord_4",
+      "y": 90
+    },
+    "facing=north,tegel=4": {
+      "model": "guhs:block/snackbar_bord_4",
+      "y": 180
+    },
+    "facing=east,tegel=4": {
+      "model": "guhs:block/snackbar_bord_4",
+      "y": 270
+    },
+    "facing=south,tegel=5": {
+      "model": "guhs:block/snackbar_bord_5"
+    },
+    "facing=west,tegel=5": {
+      "model": "guhs:block/snackbar_bord_5",
+      "y": 90
+    },
+    "facing=north,tegel=5": {
+      "model": "guhs:block/snackbar_bord_5",
+      "y": 180
+    },
+    "facing=east,tegel=5": {
+      "model": "guhs:block/snackbar_bord_5",
+      "y": 270
+    },
+    "facing=south,tegel=6": {
+      "model": "guhs:block/snackbar_bord_6"
+    },
+    "facing=west,tegel=6": {
+      "model": "guhs:block/snackbar_bord_6",
+      "y": 90
+    },
+    "facing=north,tegel=6": {
+      "model": "guhs:block/snackbar_bord_6",
+      "y": 180
+    },
+    "facing=east,tegel=6": {
+      "model": "guhs:block/snackbar_bord_6",
+      "y": 270
+    },
+    "facing=south,tegel=7": {
+      "model": "guhs:block/snackbar_bord_7"
+    },
+    "facing=west,tegel=7": {
+      "model": "guhs:block/snackbar_bord_7",
+      "y": 90
+    },
+    "facing=north,tegel=7": {
+      "model": "guhs:block/snackbar_bord_7",
+      "y": 180
+    },
+    "facing=east,tegel=7": {
+      "model": "guhs:block/snackbar_bord_7",
+      "y": 270
+    },
+    "facing=south,tegel=8": {
+      "model": "guhs:block/snackbar_bord_8"
+    },
+    "facing=west,tegel=8": {
+      "model": "guhs:block/snackbar_bord_8",
+      "y": 90
+    },
+    "facing=north,tegel=8": {
+      "model": "guhs:block/snackbar_bord_8",
+      "y": 180
+    },
+    "facing=east,tegel=8": {
+      "model": "guhs:block/snackbar_bord_8",
+      "y": 270
+    },
+    "facing=south,tegel=9": {
+      "model": "guhs:block/snackbar_bord_9"
+    },
+    "facing=west,tegel=9": {
+      "model": "guhs:block/snackbar_bord_9",
+      "y": 90
+    },
+    "facing=north,tegel=9": {
+      "model": "guhs:block/snackbar_bord_9",
+      "y": 180
+    },
+    "facing=east,tegel=9": {
+      "model": "guhs:block/snackbar_bord_9",
+      "y": 270
+    },
+    "facing=south,tegel=10": {
+      "model": "guhs:block/snackbar_bord_10"
+    },
+    "facing=west,tegel=10": {
+      "model": "guhs:block/snackbar_bord_10",
+      "y": 90
+    },
+    "facing=north,tegel=10": {
+      "model": "guhs:block/snackbar_bord_10",
+      "y": 180
+    },
+    "facing=east,tegel=10": {
+      "model": "guhs:block/snackbar_bord_10",
+      "y": 270
+    },
+    "facing=south,tegel=11": {
+      "model": "guhs:block/snackbar_bord_11"
+    },
+    "facing=west,tegel=11": {
+      "model": "guhs:block/snackbar_bord_11",
+      "y": 90
+    },
+    "facing=north,tegel=11": {
+      "model": "guhs:block/snackbar_bord_11",
+      "y": 180
+    },
+    "facing=east,tegel=11": {
+      "model": "guhs:block/snackbar_bord_11",
+      "y": 270
+    },
+    "facing=south,tegel=12": {
+      "model": "guhs:block/snackbar_bord_12"
+    },
+    "facing=west,tegel=12": {
+      "model": "guhs:block/snackbar_bord_12",
+      "y": 90
+    },
+    "facing=north,tegel=12": {
+      "model": "guhs:block/snackbar_bord_12",
+      "y": 180
+    },
+    "facing=east,tegel=12": {
+      "model": "guhs:block/snackbar_bord_12",
+      "y": 270
+    },
+    "facing=south,tegel=13": {
+      "model": "guhs:block/snackbar_bord_13"
+    },
+    "facing=west,tegel=13": {
+      "model": "guhs:block/snackbar_bord_13",
+      "y": 90
+    },
+    "facing=north,tegel=13": {
+      "model": "guhs:block/snackbar_bord_13",
+      "y": 180
+    },
+    "facing=east,tegel=13": {
+      "model": "guhs:block/snackbar_bord_13",
+      "y": 270
+    },
+    "facing=south,tegel=14": {
+      "model": "guhs:block/snackbar_bord_14"
+    },
+    "facing=west,tegel=14": {
+      "model": "guhs:block/snackbar_bord_14",
+      "y": 90
+    },
+    "facing=north,tegel=14": {
+      "model": "guhs:block/snackbar_bord_14",
+      "y": 180
+    },
+    "facing=east,tegel=14": {
+      "model": "guhs:block/snackbar_bord_14",
+      "y": 270
+    },
+    "facing=south,tegel=15": {
+      "model": "guhs:block/snackbar_bord_15"
+    },
+    "facing=west,tegel=15": {
+      "model": "guhs:block/snackbar_bord_15",
+      "y": 90
+    },
+    "facing=north,tegel=15": {
+      "model": "guhs:block/snackbar_bord_15",
+      "y": 180
+    },
+    "facing=east,tegel=15": {
+      "model": "guhs:block/snackbar_bord_15",
+      "y": 270
+    },
+    "facing=south,tegel=16": {
+      "model": "guhs:block/snackbar_bord_16"
+    },
+    "facing=west,tegel=16": {
+      "model": "guhs:block/snackbar_bord_16",
+      "y": 90
+    },
+    "facing=north,tegel=16": {
+      "model": "guhs:block/snackbar_bord_16",
+      "y": 180
+    },
+    "facing=east,tegel=16": {
+      "model": "guhs:block/snackbar_bord_16",
+      "y": 270
+    },
+    "facing=south,tegel=17": {
+      "model": "guhs:block/snackbar_bord_17"
+    },
+    "facing=west,tegel=17": {
+      "model": "guhs:block/snackbar_bord_17",
+      "y": 90
+    },
+    "facing=north,tegel=17": {
+      "model": "guhs:block/snackbar_bord_17",
+      "y": 180
+    },
+    "facing=east,tegel=17": {
+      "model": "guhs:block/snackbar_bord_17",
+      "y": 270
+    },
+    "facing=south,tegel=18": {
+      "model": "guhs:block/snackbar_bord_18"
+    },
+    "facing=west,tegel=18": {
+      "model": "guhs:block/snackbar_bord_18",
+      "y": 90
+    },
+    "facing=north,tegel=18": {
+      "model": "guhs:block/snackbar_bord_18",
+      "y": 180
+    },
+    "facing=east,tegel=18": {
+      "model": "guhs:block/snackbar_bord_18",
+      "y": 270
+    },
+    "facing=south,tegel=19": {
+      "model": "guhs:block/snackbar_bord_19"
+    },
+    "facing=west,tegel=19": {
+      "model": "guhs:block/snackbar_bord_19",
+      "y": 90
+    },
+    "facing=north,tegel=19": {
+      "model": "guhs:block/snackbar_bord_19",
+      "y": 180
+    },
+    "facing=east,tegel=19": {
+      "model": "guhs:block/snackbar_bord_19",
+      "y": 270
+    },
+    "facing=south,tegel=20": {
+      "model": "guhs:block/snackbar_bord_20"
+    },
+    "facing=west,tegel=20": {
+      "model": "guhs:block/snackbar_bord_20",
+      "y": 90
+    },
+    "facing=north,tegel=20": {
+      "model": "guhs:block/snackbar_bord_20",
+      "y": 180
+    },
+    "facing=east,tegel=20": {
+      "model": "guhs:block/snackbar_bord_20",
+      "y": 270
+    },
+    "facing=south,tegel=21": {
+      "model": "guhs:block/snackbar_bord_21"
+    },
+    "facing=west,tegel=21": {
+      "model": "guhs:block/snackbar_bord_21",
+      "y": 90
+    },
+    "facing=north,tegel=21": {
+      "model": "guhs:block/snackbar_bord_21",
+      "y": 180
+    },
+    "facing=east,tegel=21": {
+      "model": "guhs:block/snackbar_bord_21",
+      "y": 270
+    },
+    "facing=south,tegel=22": {
+      "model": "guhs:block/snackbar_bord_22"
+    },
+    "facing=west,tegel=22": {
+      "model": "guhs:block/snackbar_bord_22",
+      "y": 90
+    },
+    "facing=north,tegel=22": {
+      "model": "guhs:block/snackbar_bord_22",
+      "y": 180
+    },
+    "facing=east,tegel=22": {
+      "model": "guhs:block/snackbar_bord_22",
+      "y": 270
+    },
+    "facing=south,tegel=23": {
+      "model": "guhs:block/snackbar_bord_23"
+    },
+    "facing=west,tegel=23": {
+      "model": "guhs:block/snackbar_bord_23",
+      "y": 90
+    },
+    "facing=north,tegel=23": {
+      "model": "guhs:block/snackbar_bord_23",
+      "y": 180
+    },
+    "facing=east,tegel=23": {
+      "model": "guhs:block/snackbar_bord_23",
+      "y": 270
+    },
+    "facing=south,tegel=24": {
+      "model": "guhs:block/snackbar_bord_24"
+    },
+    "facing=west,tegel=24": {
+      "model": "guhs:block/snackbar_bord_24",
+      "y": 90
+    },
+    "facing=north,tegel=24": {
+      "model": "guhs:block/snackbar_bord_24",
+      "y": 180
+    },
+    "facing=east,tegel=24": {
+      "model": "guhs:block/snackbar_bord_24",
+      "y": 270
+    },
+    "facing=south,tegel=25": {
+      "model": "guhs:block/snackbar_bord_25"
+    },
+    "facing=west,tegel=25": {
+      "model": "guhs:block/snackbar_bord_25",
+      "y": 90
+    },
+    "facing=north,tegel=25": {
+      "model": "guhs:block/snackbar_bord_25",
+      "y": 180
+    },
+    "facing=east,tegel=25": {
+      "model": "guhs:block/snackbar_bord_25",
+      "y": 270
+    },
+    "facing=south,tegel=26": {
+      "model": "guhs:block/snackbar_bord_26"
+    },
+    "facing=west,tegel=26": {
+      "model": "guhs:block/snackbar_bord_26",
+      "y": 90
+    },
+    "facing=north,tegel=26": {
+      "model": "guhs:block/snackbar_bord_26",
+      "y": 180
+    },
+    "facing=east,tegel=26": {
+      "model": "guhs:block/snackbar_bord_26",
+      "y": 270
+    },
+    "facing=south,tegel=27": {
+      "model": "guhs:block/snackbar_bord_27"
+    },
+    "facing=west,tegel=27": {
+      "model": "guhs:block/snackbar_bord_27",
+      "y": 90
+    },
+    "facing=north,tegel=27": {
+      "model": "guhs:block/snackbar_bord_27",
+      "y": 180
+    },
+    "facing=east,tegel=27": {
+      "model": "guhs:block/snackbar_bord_27",
+      "y": 270
+    },
+    "facing=south,tegel=28": {
+      "model": "guhs:block/snackbar_bord_28"
+    },
+    "facing=west,tegel=28": {
+      "model": "guhs:block/snackbar_bord_28",
+      "y": 90
+    },
+    "facing=north,tegel=28": {
+      "model": "guhs:block/snackbar_bord_28",
+      "y": 180
+    },
+    "facing=east,tegel=28": {
+      "model": "guhs:block/snackbar_bord_28",
+      "y": 270
+    },
+    "facing=south,tegel=29": {
+      "model": "guhs:block/snackbar_bord_29"
+    },
+    "facing=west,tegel=29": {
+      "model": "guhs:block/snackbar_bord_29",
+      "y": 90
+    },
+    "facing=north,tegel=29": {
+      "model": "guhs:block/snackbar_bord_29",
+      "y": 180
+    },
+    "facing=east,tegel=29": {
+      "model": "guhs:block/snackbar_bord_29",
+      "y": 270
+    },
+    "facing=south,tegel=30": {
+      "model": "guhs:block/snackbar_bord_30"
+    },
+    "facing=west,tegel=30": {
+      "model": "guhs:block/snackbar_bord_30",
+      "y": 90
+    },
+    "facing=north,tegel=30": {
+      "model": "guhs:block/snackbar_bord_30",
+      "y": 180
+    },
+    "facing=east,tegel=30": {
+      "model": "guhs:block/snackbar_bord_30",
+      "y": 270
+    },
+    "facing=south,tegel=31": {
+      "model": "guhs:block/snackbar_bord_31"
+    },
+    "facing=west,tegel=31": {
+      "model": "guhs:block/snackbar_bord_31",
+      "y": 90
+    },
+    "facing=north,tegel=31": {
+      "model": "guhs:block/snackbar_bord_31",
+      "y": 180
+    },
+    "facing=east,tegel=31": {
+      "model": "guhs:block/snackbar_bord_31",
+      "y": 270
+    },
+    "facing=south,tegel=32": {
+      "model": "guhs:block/snackbar_bord_32"
+    },
+    "facing=west,tegel=32": {
+      "model": "guhs:block/snackbar_bord_32",
+      "y": 90
+    },
+    "facing=north,tegel=32": {
+      "model": "guhs:block/snackbar_bord_32",
+      "y": 180
+    },
+    "facing=east,tegel=32": {
+      "model": "guhs:block/snackbar_bord_32",
+      "y": 270
+    },
+    "facing=south,tegel=33": {
+      "model": "guhs:block/snackbar_bord_33"
+    },
+    "facing=west,tegel=33": {
+      "model": "guhs:block/snackbar_bord_33",
+      "y": 90
+    },
+    "facing=north,tegel=33": {
+      "model": "guhs:block/snackbar_bord_33",
+      "y": 180
+    },
+    "facing=east,tegel=33": {
+      "model": "guhs:block/snackbar_bord_33",
+      "y": 270
+    },
+    "facing=south,tegel=34": {
+      "model": "guhs:block/snackbar_bord_34"
+    },
+    "facing=west,tegel=34": {
+      "model": "guhs:block/snackbar_bord_34",
+      "y": 90
+    },
+    "facing=north,tegel=34": {
+      "model": "guhs:block/snackbar_bord_34",
+      "y": 180
+    },
+    "facing=east,tegel=34": {
+      "model": "guhs:block/snackbar_bord_34",
+      "y": 270
+    },
+    "facing=south,tegel=35": {
+      "model": "guhs:block/snackbar_bord_35"
+    },
+    "facing=west,tegel=35": {
+      "model": "guhs:block/snackbar_bord_35",
+      "y": 90
+    },
+    "facing=north,tegel=35": {
+      "model": "guhs:block/snackbar_bord_35",
+      "y": 180
+    },
+    "facing=east,tegel=35": {
+      "model": "guhs:block/snackbar_bord_35",
+      "y": 270
+    },
+    "facing=south,tegel=36": {
+      "model": "guhs:block/snackbar_bord_36"
+    },
+    "facing=west,tegel=36": {
+      "model": "guhs:block/snackbar_bord_36",
+      "y": 90
+    },
+    "facing=north,tegel=36": {
+      "model": "guhs:block/snackbar_bord_36",
+      "y": 180
+    },
+    "facing=east,tegel=36": {
+      "model": "guhs:block/snackbar_bord_36",
+      "y": 270
+    },
+    "facing=south,tegel=37": {
+      "model": "guhs:block/snackbar_bord_37"
+    },
+    "facing=west,tegel=37": {
+      "model": "guhs:block/snackbar_bord_37",
+      "y": 90
+    },
+    "facing=north,tegel=37": {
+      "model": "guhs:block/snackbar_bord_37",
+      "y": 180
+    },
+    "facing=east,tegel=37": {
+      "model": "guhs:block/snackbar_bord_37",
+      "y": 270
+    },
+    "facing=south,tegel=38": {
+      "model": "guhs:block/snackbar_bord_38"
+    },
+    "facing=west,tegel=38": {
+      "model": "guhs:block/snackbar_bord_38",
+      "y": 90
+    },
+    "facing=north,tegel=38": {
+      "model": "guhs:block/snackbar_bord_38",
+      "y": 180
+    },
+    "facing=east,tegel=38": {
+      "model": "guhs:block/snackbar_bord_38",
+      "y": 270
+    },
+    "facing=south,tegel=39": {
+      "model": "guhs:block/snackbar_bord_39"
+    },
+    "facing=west,tegel=39": {
+      "model": "guhs:block/snackbar_bord_39",
+      "y": 90
+    },
+    "facing=north,tegel=39": {
+      "model": "guhs:block/snackbar_bord_39",
+      "y": 180
+    },
+    "facing=east,tegel=39": {
+      "model": "guhs:block/snackbar_bord_39",
+      "y": 270
+    },
+    "facing=south,tegel=40": {
+      "model": "guhs:block/snackbar_bord_40"
+    },
+    "facing=west,tegel=40": {
+      "model": "guhs:block/snackbar_bord_40",
+      "y": 90
+    },
+    "facing=north,tegel=40": {
+      "model": "guhs:block/snackbar_bord_40",
+      "y": 180
+    },
+    "facing=east,tegel=40": {
+      "model": "guhs:block/snackbar_bord_40",
+      "y": 270
+    },
+    "facing=south,tegel=41": {
+      "model": "guhs:block/snackbar_bord_41"
+    },
+    "facing=west,tegel=41": {
+      "model": "guhs:block/snackbar_bord_41",
+      "y": 90
+    },
+    "facing=north,tegel=41": {
+      "model": "guhs:block/snackbar_bord_41",
+      "y": 180
+    },
+    "facing=east,tegel=41": {
+      "model": "guhs:block/snackbar_bord_41",
+      "y": 270
+    },
+    "facing=south,tegel=42": {
+      "model": "guhs:block/snackbar_bord_42"
+    },
+    "facing=west,tegel=42": {
+      "model": "guhs:block/snackbar_bord_42",
+      "y": 90
+    },
+    "facing=north,tegel=42": {
+      "model": "guhs:block/snackbar_bord_42",
+      "y": 180
+    },
+    "facing=east,tegel=42": {
+      "model": "guhs:block/snackbar_bord_42",
+      "y": 270
+    },
+    "facing=south,tegel=43": {
+      "model": "guhs:block/snackbar_bord_43"
+    },
+    "facing=west,tegel=43": {
+      "model": "guhs:block/snackbar_bord_43",
+      "y": 90
+    },
+    "facing=north,tegel=43": {
+      "model": "guhs:block/snackbar_bord_43",
+      "y": 180
+    },
+    "facing=east,tegel=43": {
+      "model": "guhs:block/snackbar_bord_43",
+      "y": 270
+    },
+    "facing=south,tegel=44": {
+      "model": "guhs:block/snackbar_bord_44"
+    },
+    "facing=west,tegel=44": {
+      "model": "guhs:block/snackbar_bord_44",
+      "y": 90
+    },
+    "facing=north,tegel=44": {
+      "model": "guhs:block/snackbar_bord_44",
+      "y": 180
+    },
+    "facing=east,tegel=44": {
+      "model": "guhs:block/snackbar_bord_44",
+      "y": 270
+    },
+    "facing=south,tegel=45": {
+      "model": "guhs:block/snackbar_bord_45"
+    },
+    "facing=west,tegel=45": {
+      "model": "guhs:block/snackbar_bord_45",
+      "y": 90
+    },
+    "facing=north,tegel=45": {
+      "model": "guhs:block/snackbar_bord_45",
+      "y": 180
+    },
+    "facing=east,tegel=45": {
+      "model": "guhs:block/snackbar_bord_45",
+      "y": 270
+    },
+    "facing=south,tegel=46": {
+      "model": "guhs:block/snackbar_bord_46"
+    },
+    "facing=west,tegel=46": {
+      "model": "guhs:block/snackbar_bord_46",
+      "y": 90
+    },
+    "facing=north,tegel=46": {
+      "model": "guhs:block/snackbar_bord_46",
+      "y": 180
+    },
+    "facing=east,tegel=46": {
+      "model": "guhs:block/snackbar_bord_46",
+      "y": 270
+    },
+    "facing=south,tegel=47": {
+      "model": "guhs:block/snackbar_bord_47"
+    },
+    "facing=west,tegel=47": {
+      "model": "guhs:block/snackbar_bord_47",
+      "y": 90
+    },
+    "facing=north,tegel=47": {
+      "model": "guhs:block/snackbar_bord_47",
+      "y": 180
+    },
+    "facing=east,tegel=47": {
+      "model": "guhs:block/snackbar_bord_47",
+      "y": 270
+    },
+    "facing=south,tegel=48": {
+      "model": "guhs:block/snackbar_bord_48"
+    },
+    "facing=west,tegel=48": {
+      "model": "guhs:block/snackbar_bord_48",
+      "y": 90
+    },
+    "facing=north,tegel=48": {
+      "model": "guhs:block/snackbar_bord_48",
+      "y": 180
+    },
+    "facing=east,tegel=48": {
+      "model": "guhs:block/snackbar_bord_48",
+      "y": 270
+    },
+    "facing=south,tegel=49": {
+      "model": "guhs:block/snackbar_bord_49"
+    },
+    "facing=west,tegel=49": {
+      "model": "guhs:block/snackbar_bord_49",
+      "y": 90
+    },
+    "facing=north,tegel=49": {
+      "model": "guhs:block/snackbar_bord_49",
+      "y": 180
+    },
+    "facing=east,tegel=49": {
+      "model": "guhs:block/snackbar_bord_49",
+      "y": 270
+    },
+    "facing=south,tegel=50": {
+      "model": "guhs:block/snackbar_bord_50"
+    },
+    "facing=west,tegel=50": {
+      "model": "guhs:block/snackbar_bord_50",
+      "y": 90
+    },
+    "facing=north,tegel=50": {
+      "model": "guhs:block/snackbar_bord_50",
+      "y": 180
+    },
+    "facing=east,tegel=50": {
+      "model": "guhs:block/snackbar_bord_50",
+      "y": 270
+    },
+    "facing=south,tegel=51": {
+      "model": "guhs:block/snackbar_bord_51"
+    },
+    "facing=west,tegel=51": {
+      "model": "guhs:block/snackbar_bord_51",
+      "y": 90
+    },
+    "facing=north,tegel=51": {
+      "model": "guhs:block/snackbar_bord_51",
+      "y": 180
+    },
+    "facing=east,tegel=51": {
+      "model": "guhs:block/snackbar_bord_51",
+      "y": 270
+    },
+    "facing=south,tegel=52": {
+      "model": "guhs:block/snackbar_bord_52"
+    },
+    "facing=west,tegel=52": {
+      "model": "guhs:block/snackbar_bord_52",
+      "y": 90
+    },
+    "facing=north,tegel=52": {
+      "model": "guhs:block/snackbar_bord_52",
+      "y": 180
+    },
+    "facing=east,tegel=52": {
+      "model": "guhs:block/snackbar_bord_52",
+      "y": 270
+    },
+    "facing=south,tegel=53": {
+      "model": "guhs:block/snackbar_bord_53"
+    },
+    "facing=west,tegel=53": {
+      "model": "guhs:block/snackbar_bord_53",
+      "y": 90
+    },
+    "facing=north,tegel=53": {
+      "model": "guhs:block/snackbar_bord_53",
+      "y": 180
+    },
+    "facing=east,tegel=53": {
+      "model": "guhs:block/snackbar_bord_53",
+      "y": 270
+    },
+    "facing=south,tegel=54": {
+      "model": "guhs:block/snackbar_bord_54"
+    },
+    "facing=west,tegel=54": {
+      "model": "guhs:block/snackbar_bord_54",
+      "y": 90
+    },
+    "facing=north,tegel=54": {
+      "model": "guhs:block/snackbar_bord_54",
+      "y": 180
+    },
+    "facing=east,tegel=54": {
+      "model": "guhs:block/snackbar_bord_54",
+      "y": 270
+    },
+    "facing=south,tegel=55": {
+      "model": "guhs:block/snackbar_bord_55"
+    },
+    "facing=west,tegel=55": {
+      "model": "guhs:block/snackbar_bord_55",
+      "y": 90
+    },
+    "facing=north,tegel=55": {
+      "model": "guhs:block/snackbar_bord_55",
+      "y": 180
+    },
+    "facing=east,tegel=55": {
+      "model": "guhs:block/snackbar_bord_55",
+      "y": 270
+    },
+    "facing=south,tegel=56": {
+      "model": "guhs:block/snackbar_bord_56"
+    },
+    "facing=west,tegel=56": {
+      "model": "guhs:block/snackbar_bord_56",
+      "y": 90
+    },
+    "facing=north,tegel=56": {
+      "model": "guhs:block/snackbar_bord_56",
+      "y": 180
+    },
+    "facing=east,tegel=56": {
+      "model": "guhs:block/snackbar_bord_56",
+      "y": 270
+    },
+    "facing=south,tegel=57": {
+      "model": "guhs:block/snackbar_bord_57"
+    },
+    "facing=west,tegel=57": {
+      "model": "guhs:block/snackbar_bord_57",
+      "y": 90
+    },
+    "facing=north,tegel=57": {
+      "model": "guhs:block/snackbar_bord_57",
+      "y": 180
+    },
+    "facing=east,tegel=57": {
+      "model": "guhs:block/snackbar_bord_57",
+      "y": 270
+    },
+    "facing=south,tegel=58": {
+      "model": "guhs:block/snackbar_bord_58"
+    },
+    "facing=west,tegel=58": {
+      "model": "guhs:block/snackbar_bord_58",
+      "y": 90
+    },
+    "facing=north,tegel=58": {
+      "model": "guhs:block/snackbar_bord_58",
+      "y": 180
+    },
+    "facing=east,tegel=58": {
+      "model": "guhs:block/snackbar_bord_58",
+      "y": 270
+    },
+    "facing=south,tegel=59": {
+      "model": "guhs:block/snackbar_bord_59"
+    },
+    "facing=west,tegel=59": {
+      "model": "guhs:block/snackbar_bord_59",
+      "y": 90
+    },
+    "facing=north,tegel=59": {
+      "model": "guhs:block/snackbar_bord_59",
+      "y": 180
+    },
+    "facing=east,tegel=59": {
+      "model": "guhs:block/snackbar_bord_59",
+      "y": 270
+    },
+    "facing=south,tegel=60": {
+      "model": "guhs:block/snackbar_bord_60"
+    },
+    "facing=west,tegel=60": {
+      "model": "guhs:block/snackbar_bord_60",
+      "y": 90
+    },
+    "facing=north,tegel=60": {
+      "model": "guhs:block/snackbar_bord_60",
+      "y": 180
+    },
+    "facing=east,tegel=60": {
+      "model": "guhs:block/snackbar_bord_60",
+      "y": 270
+    },
+    "facing=south,tegel=61": {
+      "model": "guhs:block/snackbar_bord_61"
+    },
+    "facing=west,tegel=61": {
+      "model": "guhs:block/snackbar_bord_61",
+      "y": 90
+    },
+    "facing=north,tegel=61": {
+      "model": "guhs:block/snackbar_bord_61",
+      "y": 180
+    },
+    "facing=east,tegel=61": {
+      "model": "guhs:block/snackbar_bord_61",
+      "y": 270
+    },
+    "facing=south,tegel=62": {
+      "model": "guhs:block/snackbar_bord_62"
+    },
+    "facing=west,tegel=62": {
+      "model": "guhs:block/snackbar_bord_62",
+      "y": 90
+    },
+    "facing=north,tegel=62": {
+      "model": "guhs:block/snackbar_bord_62",
+      "y": 180
+    },
+    "facing=east,tegel=62": {
+      "model": "guhs:block/snackbar_bord_62",
+      "y": 270
+    },
+    "facing=south,tegel=63": {
+      "model": "guhs:block/snackbar_bord_63"
+    },
+    "facing=west,tegel=63": {
+      "model": "guhs:block/snackbar_bord_63",
+      "y": 90
+    },
+    "facing=north,tegel=63": {
+      "model": "guhs:block/snackbar_bord_63",
+      "y": 180
+    },
+    "facing=east,tegel=63": {
+      "model": "guhs:block/snackbar_bord_63",
+      "y": 270
+    },
+    "facing=south,tegel=64": {
+      "model": "guhs:block/snackbar_bord_64"
+    },
+    "facing=west,tegel=64": {
+      "model": "guhs:block/snackbar_bord_64",
+      "y": 90
+    },
+    "facing=north,tegel=64": {
+      "model": "guhs:block/snackbar_bord_64",
+      "y": 180
+    },
+    "facing=east,tegel=64": {
+      "model": "guhs:block/snackbar_bord_64",
+      "y": 270
+    },
+    "facing=south,tegel=65": {
+      "model": "guhs:block/snackbar_bord_65"
+    },
+    "facing=west,tegel=65": {
+      "model": "guhs:block/snackbar_bord_65",
+      "y": 90
+    },
+    "facing=north,tegel=65": {
+      "model": "guhs:block/snackbar_bord_65",
+      "y": 180
+    },
+    "facing=east,tegel=65": {
+      "model": "guhs:block/snackbar_bord_65",
+      "y": 270
+    },
+    "facing=south,tegel=66": {
+      "model": "guhs:block/snackbar_bord_66"
+    },
+    "facing=west,tegel=66": {
+      "model": "guhs:block/snackbar_bord_66",
+      "y": 90
+    },
+    "facing=north,tegel=66": {
+      "model": "guhs:block/snackbar_bord_66",
+      "y": 180
+    },
+    "facing=east,tegel=66": {
+      "model": "guhs:block/snackbar_bord_66",
+      "y": 270
+    },
+    "facing=south,tegel=67": {
+      "model": "guhs:block/snackbar_bord_67"
+    },
+    "facing=west,tegel=67": {
+      "model": "guhs:block/snackbar_bord_67",
+      "y": 90
+    },
+    "facing=north,tegel=67": {
+      "model": "guhs:block/snackbar_bord_67",
+      "y": 180
+    },
+    "facing=east,tegel=67": {
+      "model": "guhs:block/snackbar_bord_67",
+      "y": 270
+    },
+    "facing=south,tegel=68": {
+      "model": "guhs:block/snackbar_bord_68"
+    },
+    "facing=west,tegel=68": {
+      "model": "guhs:block/snackbar_bord_68",
+      "y": 90
+    },
+    "facing=north,tegel=68": {
+      "model": "guhs:block/snackbar_bord_68",
+      "y": 180
+    },
+    "facing=east,tegel=68": {
+      "model": "guhs:block/snackbar_bord_68",
+      "y": 270
+    },
+    "facing=south,tegel=69": {
+      "model": "guhs:block/snackbar_bord_69"
+    },
+    "facing=west,tegel=69": {
+      "model": "guhs:block/snackbar_bord_69",
+      "y": 90
+    },
+    "facing=north,tegel=69": {
+      "model": "guhs:block/snackbar_bord_69",
+      "y": 180
+    },
+    "facing=east,tegel=69": {
+      "model": "guhs:block/snackbar_bord_69",
+      "y": 270
+    },
+    "facing=south,tegel=70": {
+      "model": "guhs:block/snackbar_bord_70"
+    },
+    "facing=west,tegel=70": {
+      "model": "guhs:block/snackbar_bord_70",
+      "y": 90
+    },
+    "facing=north,tegel=70": {
+      "model": "guhs:block/snackbar_bord_70",
+      "y": 180
+    },
+    "facing=east,tegel=70": {
+      "model": "guhs:block/snackbar_bord_70",
+      "y": 270
+    },
+    "facing=south,tegel=71": {
+      "model": "guhs:block/snackbar_bord_71"
+    },
+    "facing=west,tegel=71": {
+      "model": "guhs:block/snackbar_bord_71",
+      "y": 90
+    },
+    "facing=north,tegel=71": {
+      "model": "guhs:block/snackbar_bord_71",
+      "y": 180
+    },
+    "facing=east,tegel=71": {
+      "model": "guhs:block/snackbar_bord_71",
+      "y": 270
+    },
+    "facing=south,tegel=72": {
+      "model": "guhs:block/snackbar_bord_72"
+    },
+    "facing=west,tegel=72": {
+      "model": "guhs:block/snackbar_bord_72",
+      "y": 90
+    },
+    "facing=north,tegel=72": {
+      "model": "guhs:block/snackbar_bord_72",
+      "y": 180
+    },
+    "facing=east,tegel=72": {
+      "model": "guhs:block/snackbar_bord_72",
+      "y": 270
+    },
+    "facing=south,tegel=73": {
+      "model": "guhs:block/snackbar_bord_73"
+    },
+    "facing=west,tegel=73": {
+      "model": "guhs:block/snackbar_bord_73",
+      "y": 90
+    },
+    "facing=north,tegel=73": {
+      "model": "guhs:block/snackbar_bord_73",
+      "y": 180
+    },
+    "facing=east,tegel=73": {
+      "model": "guhs:block/snackbar_bord_73",
+      "y": 270
+    },
+    "facing=south,tegel=74": {
+      "model": "guhs:block/snackbar_bord_74"
+    },
+    "facing=west,tegel=74": {
+      "model": "guhs:block/snackbar_bord_74",
+      "y": 90
+    },
+    "facing=north,tegel=74": {
+      "model": "guhs:block/snackbar_bord_74",
+      "y": 180
+    },
+    "facing=east,tegel=74": {
+      "model": "guhs:block/snackbar_bord_74",
+      "y": 270
+    },
+    "facing=south,tegel=75": {
+      "model": "guhs:block/snackbar_bord_75"
+    },
+    "facing=west,tegel=75": {
+      "model": "guhs:block/snackbar_bord_75",
+      "y": 90
+    },
+    "facing=north,tegel=75": {
+      "model": "guhs:block/snackbar_bord_75",
+      "y": 180
+    },
+    "facing=east,tegel=75": {
+      "model": "guhs:block/snackbar_bord_75",
+      "y": 270
+    },
+    "facing=south,tegel=76": {
+      "model": "guhs:block/snackbar_bord_76"
+    },
+    "facing=west,tegel=76": {
+      "model": "guhs:block/snackbar_bord_76",
+      "y": 90
+    },
+    "facing=north,tegel=76": {
+      "model": "guhs:block/snackbar_bord_76",
+      "y": 180
+    },
+    "facing=east,tegel=76": {
+      "model": "guhs:block/snackbar_bord_76",
+      "y": 270
+    },
+    "facing=south,tegel=77": {
+      "model": "guhs:block/snackbar_bord_77"
+    },
+    "facing=west,tegel=77": {
+      "model": "guhs:block/snackbar_bord_77",
+      "y": 90
+    },
+    "facing=north,tegel=77": {
+      "model": "guhs:block/snackbar_bord_77",
+      "y": 180
+    },
+    "facing=east,tegel=77": {
+      "model": "guhs:block/snackbar_bord_77",
+      "y": 270
+    },
+    "facing=south,tegel=78": {
+      "model": "guhs:block/snackbar_bord_78"
+    },
+    "facing=west,tegel=78": {
+      "model": "guhs:block/snackbar_bord_78",
+      "y": 90
+    },
+    "facing=north,tegel=78": {
+      "model": "guhs:block/snackbar_bord_78",
+      "y": 180
+    },
+    "facing=east,tegel=78": {
+      "model": "guhs:block/snackbar_bord_78",
+      "y": 270
+    },
+    "facing=south,tegel=79": {
+      "model": "guhs:block/snackbar_bord_79"
+    },
+    "facing=west,tegel=79": {
+      "model": "guhs:block/snackbar_bord_79",
+      "y": 90
+    },
+    "facing=north,tegel=79": {
+      "model": "guhs:block/snackbar_bord_79",
+      "y": 180
+    },
+    "facing=east,tegel=79": {
+      "model": "guhs:block/snackbar_bord_79",
+      "y": 270
+    },
+    "facing=south,tegel=80": {
+      "model": "guhs:block/snackbar_bord_80"
+    },
+    "facing=west,tegel=80": {
+      "model": "guhs:block/snackbar_bord_80",
+      "y": 90
+    },
+    "facing=north,tegel=80": {
+      "model": "guhs:block/snackbar_bord_80",
+      "y": 180
+    },
+    "facing=east,tegel=80": {
+      "model": "guhs:block/snackbar_bord_80",
+      "y": 270
+    },
+    "facing=south,tegel=81": {
+      "model": "guhs:block/snackbar_bord_81"
+    },
+    "facing=west,tegel=81": {
+      "model": "guhs:block/snackbar_bord_81",
+      "y": 90
+    },
+    "facing=north,tegel=81": {
+      "model": "guhs:block/snackbar_bord_81",
+      "y": 180
+    },
+    "facing=east,tegel=81": {
+      "model": "guhs:block/snackbar_bord_81",
+      "y": 270
+    },
+    "facing=south,tegel=82": {
+      "model": "guhs:block/snackbar_bord_82"
+    },
+    "facing=west,tegel=82": {
+      "model": "guhs:block/snackbar_bord_82",
+      "y": 90
+    },
+    "facing=north,tegel=82": {
+      "model": "guhs:block/snackbar_bord_82",
+      "y": 180
+    },
+    "facing=east,tegel=82": {
+      "model": "guhs:block/snackbar_bord_82",
+      "y": 270
+    },
+    "facing=south,tegel=83": {
+      "model": "guhs:block/snackbar_bord_83"
+    },
+    "facing=west,tegel=83": {
+      "model": "guhs:block/snackbar_bord_83",
+      "y": 90
+    },
+    "facing=north,tegel=83": {
+      "model": "guhs:block/snackbar_bord_83",
+      "y": 180
+    },
+    "facing=east,tegel=83": {
+      "model": "guhs:block/snackbar_bord_83",
+      "y": 270
+    },
+    "facing=south,tegel=84": {
+      "model": "guhs:block/snackbar_bord_84"
+    },
+    "facing=west,tegel=84": {
+      "model": "guhs:block/snackbar_bord_84",
+      "y": 90
+    },
+    "facing=north,tegel=84": {
+      "model": "guhs:block/snackbar_bord_84",
+      "y": 180
+    },
+    "facing=east,tegel=84": {
+      "model": "guhs:block/snackbar_bord_84",
+      "y": 270
+    },
+    "facing=south,tegel=85": {
+      "model": "guhs:block/snackbar_bord_85"
+    },
+    "facing=west,tegel=85": {
+      "model": "guhs:block/snackbar_bord_85",
+      "y": 90
+    },
+    "facing=north,tegel=85": {
+      "model": "guhs:block/snackbar_bord_85",
+      "y": 180
+    },
+    "facing=east,tegel=85": {
+      "model": "guhs:block/snackbar_bord_85",
+      "y": 270
+    },
+    "facing=south,tegel=86": {
+      "model": "guhs:block/snackbar_bord_86"
+    },
+    "facing=west,tegel=86": {
+      "model": "guhs:block/snackbar_bord_86",
+      "y": 90
+    },
+    "facing=north,tegel=86": {
+      "model": "guhs:block/snackbar_bord_86",
+      "y": 180
+    },
+    "facing=east,tegel=86": {
+      "model": "guhs:block/snackbar_bord_86",
+      "y": 270
+    },
+    "facing=south,tegel=87": {
+      "model": "guhs:block/snackbar_bord_87"
+    },
+    "facing=west,tegel=87": {
+      "model": "guhs:block/snackbar_bord_87",
+      "y": 90
+    },
+    "facing=north,tegel=87": {
+      "model": "guhs:block/snackbar_bord_87",
+      "y": 180
+    },
+    "facing=east,tegel=87": {
+      "model": "guhs:block/snackbar_bord_87",
+      "y": 270
+    },
+    "facing=south,tegel=88": {
+      "model": "guhs:block/snackbar_bord_88"
+    },
+    "facing=west,tegel=88": {
+      "model": "guhs:block/snackbar_bord_88",
+      "y": 90
+    },
+    "facing=north,tegel=88": {
+      "model": "guhs:block/snackbar_bord_88",
+      "y": 180
+    },
+    "facing=east,tegel=88": {
+      "model": "guhs:block/snackbar_bord_88",
+      "y": 270
+    },
+    "facing=south,tegel=89": {
+      "model": "guhs:block/snackbar_bord_89"
+    },
+    "facing=west,tegel=89": {
+      "model": "guhs:block/snackbar_bord_89",
+      "y": 90
+    },
+    "facing=north,tegel=89": {
+      "model": "guhs:block/snackbar_bord_89",
+      "y": 180
+    },
+    "facing=east,tegel=89": {
+      "model": "guhs:block/snackbar_bord_89",
+      "y": 270
+    },
+    "facing=south,tegel=90": {
+      "model": "guhs:block/snackbar_bord_90"
+    },
+    "facing=west,tegel=90": {
+      "model": "guhs:block/snackbar_bord_90",
+      "y": 90
+    },
+    "facing=north,tegel=90": {
+      "model": "guhs:block/snackbar_bord_90",
+      "y": 180
+    },
+    "facing=east,tegel=90": {
+      "model": "guhs:block/snackbar_bord_90",
+      "y": 270
+    },
+    "facing=south,tegel=91": {
+      "model": "guhs:block/snackbar_bord_91"
+    },
+    "facing=west,tegel=91": {
+      "model": "guhs:block/snackbar_bord_91",
+      "y": 90
+    },
+    "facing=north,tegel=91": {
+      "model": "guhs:block/snackbar_bord_91",
+      "y": 180
+    },
+    "facing=east,tegel=91": {
+      "model": "guhs:block/snackbar_bord_91",
+      "y": 270
+    },
+    "facing=south,tegel=92": {
+      "model": "guhs:block/snackbar_bord_92"
+    },
+    "facing=west,tegel=92": {
+      "model": "guhs:block/snackbar_bord_92",
+      "y": 90
+    },
+    "facing=north,tegel=92": {
+      "model": "guhs:block/snackbar_bord_92",
+      "y": 180
+    },
+    "facing=east,tegel=92": {
+      "model": "guhs:block/snackbar_bord_92",
+      "y": 270
+    },
+    "facing=south,tegel=93": {
+      "model": "guhs:block/snackbar_bord_93"
+    },
+    "facing=west,tegel=93": {
+      "model": "guhs:block/snackbar_bord_93",
+      "y": 90
+    },
+    "facing=north,tegel=93": {
+      "model": "guhs:block/snackbar_bord_93",
+      "y": 180
+    },
+    "facing=east,tegel=93": {
+      "model": "guhs:block/snackbar_bord_93",
+      "y": 270
+    },
+    "facing=south,tegel=94": {
+      "model": "guhs:block/snackbar_bord_94"
+    },
+    "facing=west,tegel=94": {
+      "model": "guhs:block/snackbar_bord_94",
+      "y": 90
+    },
+    "facing=north,tegel=94": {
+      "model": "guhs:block/snackbar_bord_94",
+      "y": 180
+    },
+    "facing=east,tegel=94": {
+      "model": "guhs:block/snackbar_bord_94",
+      "y": 270
+    },
+    "facing=south,tegel=95": {
+      "model": "guhs:block/snackbar_bord_95"
+    },
+    "facing=west,tegel=95": {
+      "model": "guhs:block/snackbar_bord_95",
+      "y": 90
+    },
+    "facing=north,tegel=95": {
+      "model": "guhs:block/snackbar_bord_95",
+      "y": 180
+    },
+    "facing=east,tegel=95": {
+      "model": "guhs:block/snackbar_bord_95",
+      "y": 270
+    },
+    "facing=south,tegel=96": {
+      "model": "guhs:block/snackbar_bord_96"
+    },
+    "facing=west,tegel=96": {
+      "model": "guhs:block/snackbar_bord_96",
+      "y": 90
+    },
+    "facing=north,tegel=96": {
+      "model": "guhs:block/snackbar_bord_96",
+      "y": 180
+    },
+    "facing=east,tegel=96": {
+      "model": "guhs:block/snackbar_bord_96",
+      "y": 270
+    },
+    "facing=south,tegel=97": {
+      "model": "guhs:block/snackbar_bord_97"
+    },
+    "facing=west,tegel=97": {
+      "model": "guhs:block/snackbar_bord_97",
+      "y": 90
+    },
+    "facing=north,tegel=97": {
+      "model": "guhs:block/snackbar_bord_97",
+      "y": 180
+    },
+    "facing=east,tegel=97": {
+      "model": "guhs:block/snackbar_bord_97",
+      "y": 270
+    },
+    "facing=south,tegel=98": {
+      "model": "guhs:block/snackbar_bord_98"
+    },
+    "facing=west,tegel=98": {
+      "model": "guhs:block/snackbar_bord_98",
+      "y": 90
+    },
+    "facing=north,tegel=98": {
+      "model": "guhs:block/snackbar_bord_98",
+      "y": 180
+    },
+    "facing=east,tegel=98": {
+      "model": "guhs:block/snackbar_bord_98",
+      "y": 270
+    },
+    "facing=south,tegel=99": {
+      "model": "guhs:block/snackbar_bord_99"
+    },
+    "facing=west,tegel=99": {
+      "model": "guhs:block/snackbar_bord_99",
+      "y": 90
+    },
+    "facing=north,tegel=99": {
+      "model": "guhs:block/snackbar_bord_99",
+      "y": 180
+    },
+    "facing=east,tegel=99": {
+      "model": "guhs:block/snackbar_bord_99",
+      "y": 270
+    },
+    "facing=south,tegel=100": {
+      "model": "guhs:block/snackbar_bord_100"
+    },
+    "facing=west,tegel=100": {
+      "model": "guhs:block/snackbar_bord_100",
+      "y": 90
+    },
+    "facing=north,tegel=100": {
+      "model": "guhs:block/snackbar_bord_100",
+      "y": 180
+    },
+    "facing=east,tegel=100": {
+      "model": "guhs:block/snackbar_bord_100",
+      "y": 270
+    },
+    "facing=south,tegel=101": {
+      "model": "guhs:block/snackbar_bord_101"
+    },
+    "facing=west,tegel=101": {
+      "model": "guhs:block/snackbar_bord_101",
+      "y": 90
+    },
+    "facing=north,tegel=101": {
+      "model": "guhs:block/snackbar_bord_101",
+      "y": 180
+    },
+    "facing=east,tegel=101": {
+      "model": "guhs:block/snackbar_bord_101",
+      "y": 270
+    },
+    "facing=south,tegel=102": {
+      "model": "guhs:block/snackbar_bord_102"
+    },
+    "facing=west,tegel=102": {
+      "model": "guhs:block/snackbar_bord_102",
+      "y": 90
+    },
+    "facing=north,tegel=102": {
+      "model": "guhs:block/snackbar_bord_102",
+      "y": 180
+    },
+    "facing=east,tegel=102": {
+      "model": "guhs:block/snackbar_bord_102",
+      "y": 270
+    },
+    "facing=south,tegel=103": {
+      "model": "guhs:block/snackbar_bord_103"
+    },
+    "facing=west,tegel=103": {
+      "model": "guhs:block/snackbar_bord_103",
+      "y": 90
+    },
+    "facing=north,tegel=103": {
+      "model": "guhs:block/snackbar_bord_103",
+      "y": 180
+    },
+    "facing=east,tegel=103": {
+      "model": "guhs:block/snackbar_bord_103",
+      "y": 270
+    },
+    "facing=south,tegel=104": {
+      "model": "guhs:block/snackbar_bord_104"
+    },
+    "facing=west,tegel=104": {
+      "model": "guhs:block/snackbar_bord_104",
+      "y": 90
+    },
+    "facing=north,tegel=104": {
+      "model": "guhs:block/snackbar_bord_104",
+      "y": 180
+    },
+    "facing=east,tegel=104": {
+      "model": "guhs:block/snackbar_bord_104",
+      "y": 270
+    },
+    "facing=south,tegel=105": {
+      "model": "guhs:block/snackbar_bord_105"
+    },
+    "facing=west,tegel=105": {
+      "model": "guhs:block/snackbar_bord_105",
+      "y": 90
+    },
+    "facing=north,tegel=105": {
+      "model": "guhs:block/snackbar_bord_105",
+      "y": 180
+    },
+    "facing=east,tegel=105": {
+      "model": "guhs:block/snackbar_bord_105",
+      "y": 270
+    },
+    "facing=south,tegel=106": {
+      "model": "guhs:block/snackbar_bord_106"
+    },
+    "facing=west,tegel=106": {
+      "model": "guhs:block/snackbar_bord_106",
+      "y": 90
+    },
+    "facing=north,tegel=106": {
+      "model": "guhs:block/snackbar_bord_106",
+      "y": 180
+    },
+    "facing=east,tegel=106": {
+      "model": "guhs:block/snackbar_bord_106",
+      "y": 270
+    },
+    "facing=south,tegel=107": {
+      "model": "guhs:block/snackbar_bord_107"
+    },
+    "facing=west,tegel=107": {
+      "model": "guhs:block/snackbar_bord_107",
+      "y": 90
+    },
+    "facing=north,tegel=107": {
+      "model": "guhs:block/snackbar_bord_107",
+      "y": 180
+    },
+    "facing=east,tegel=107": {
+      "model": "guhs:block/snackbar_bord_107",
+      "y": 270
+    },
+    "facing=south,tegel=108": {
+      "model": "guhs:block/snackbar_bord_108"
+    },
+    "facing=west,tegel=108": {
+      "model": "guhs:block/snackbar_bord_108",
+      "y": 90
+    },
+    "facing=north,tegel=108": {
+      "model": "guhs:block/snackbar_bord_108",
+      "y": 180
+    },
+    "facing=east,tegel=108": {
+      "model": "guhs:block/snackbar_bord_108",
+      "y": 270
+    },
+    "facing=south,tegel=109": {
+      "model": "guhs:block/snackbar_bord_109"
+    },
+    "facing=west,tegel=109": {
+      "model": "guhs:block/snackbar_bord_109",
+      "y": 90
+    },
+    "facing=north,tegel=109": {
+      "model": "guhs:block/snackbar_bord_109",
+      "y": 180
+    },
+    "facing=east,tegel=109": {
+      "model": "guhs:block/snackbar_bord_109",
+      "y": 270
+    },
+    "facing=south,tegel=110": {
+      "model": "guhs:block/snackbar_bord_110"
+    },
+    "facing=west,tegel=110": {
+      "model": "guhs:block/snackbar_bord_110",
+      "y": 90
+    },
+    "facing=north,tegel=110": {
+      "model": "guhs:block/snackbar_bord_110",
+      "y": 180
+    },
+    "facing=east,tegel=110": {
+      "model": "guhs:block/snackbar_bord_110",
+      "y": 270
+    },
+    "facing=south,tegel=111": {
+      "model": "guhs:block/snackbar_bord_111"
+    },
+    "facing=west,tegel=111": {
+      "model": "guhs:block/snackbar_bord_111",
+      "y": 90
+    },
+    "facing=north,tegel=111": {
+      "model": "guhs:block/snackbar_bord_111",
+      "y": 180
+    },
+    "facing=east,tegel=111": {
+      "model": "guhs:block/snackbar_bord_111",
+      "y": 270
+    },
+    "facing=south,tegel=112": {
+      "model": "guhs:block/snackbar_bord_112"
+    },
+    "facing=west,tegel=112": {
+      "model": "guhs:block/snackbar_bord_112",
+      "y": 90
+    },
+    "facing=north,tegel=112": {
+      "model": "guhs:block/snackbar_bord_112",
+      "y": 180
+    },
+    "facing=east,tegel=112": {
+      "model": "guhs:block/snackbar_bord_112",
+      "y": 270
+    },
+    "facing=south,tegel=113": {
+      "model": "guhs:block/snackbar_bord_113"
+    },
+    "facing=west,tegel=113": {
+      "model": "guhs:block/snackbar_bord_113",
+      "y": 90
+    },
+    "facing=north,tegel=113": {
+      "model": "guhs:block/snackbar_bord_113",
+      "y": 180
+    },
+    "facing=east,tegel=113": {
+      "model": "guhs:block/snackbar_bord_113",
+      "y": 270
+    },
+    "facing=south,tegel=114": {
+      "model": "guhs:block/snackbar_bord_114"
+    },
+    "facing=west,tegel=114": {
+      "model": "guhs:block/snackbar_bord_114",
+      "y": 90
+    },
+    "facing=north,tegel=114": {
+      "model": "guhs:block/snackbar_bord_114",
+      "y": 180
+    },
+    "facing=east,tegel=114": {
+      "model": "guhs:block/snackbar_bord_114",
+      "y": 270
+    },
+    "facing=south,tegel=115": {
+      "model": "guhs:block/snackbar_bord_115"
+    },
+    "facing=west,tegel=115": {
+      "model": "guhs:block/snackbar_bord_115",
+      "y": 90
+    },
+    "facing=north,tegel=115": {
+      "model": "guhs:block/snackbar_bord_115",
+      "y": 180
+    },
+    "facing=east,tegel=115": {
+      "model": "guhs:block/snackbar_bord_115",
+      "y": 270
+    },
+    "facing=south,tegel=116": {
+      "model": "guhs:block/snackbar_bord_116"
+    },
+    "facing=west,tegel=116": {
+      "model": "guhs:block/snackbar_bord_116",
+      "y": 90
+    },
+    "facing=north,tegel=116": {
+      "model": "guhs:block/snackbar_bord_116",
+      "y": 180
+    },
+    "facing=east,tegel=116": {
+      "model": "guhs:block/snackbar_bord_116",
+      "y": 270
+    },
+    "facing=south,tegel=117": {
+      "model": "guhs:block/snackbar_bord_117"
+    },
+    "facing=west,tegel=117": {
+      "model": "guhs:block/snackbar_bord_117",
+      "y": 90
+    },
+    "facing=north,tegel=117": {
+      "model": "guhs:block/snackbar_bord_117",
+      "y": 180
+    },
+    "facing=east,tegel=117": {
+      "model": "guhs:block/snackbar_bord_117",
+      "y": 270
+    },
+    "facing=south,tegel=118": {
+      "model": "guhs:block/snackbar_bord_118"
+    },
+    "facing=west,tegel=118": {
+      "model": "guhs:block/snackbar_bord_118",
+      "y": 90
+    },
+    "facing=north,tegel=118": {
+      "model": "guhs:block/snackbar_bord_118",
+      "y": 180
+    },
+    "facing=east,tegel=118": {
+      "model": "guhs:block/snackbar_bord_118",
+      "y": 270
+    },
+    "facing=south,tegel=119": {
+      "model": "guhs:block/snackbar_bord_119"
+    },
+    "facing=west,tegel=119": {
+      "model": "guhs:block/snackbar_bord_119",
+      "y": 90
+    },
+    "facing=north,tegel=119": {
+      "model": "guhs:block/snackbar_bord_119",
+      "y": 180
+    },
+    "facing=east,tegel=119": {
+      "model": "guhs:block/snackbar_bord_119",
+      "y": 270
+    },
+    "facing=south,tegel=120": {
+      "model": "guhs:block/snackbar_bord_120"
+    },
+    "facing=west,tegel=120": {
+      "model": "guhs:block/snackbar_bord_120",
+      "y": 90
+    },
+    "facing=north,tegel=120": {
+      "model": "guhs:block/snackbar_bord_120",
+      "y": 180
+    },
+    "facing=east,tegel=120": {
+      "model": "guhs:block/snackbar_bord_120",
+      "y": 270
+    },
+    "facing=south,tegel=121": {
+      "model": "guhs:block/snackbar_bord_121"
+    },
+    "facing=west,tegel=121": {
+      "model": "guhs:block/snackbar_bord_121",
+      "y": 90
+    },
+    "facing=north,tegel=121": {
+      "model": "guhs:block/snackbar_bord_121",
+      "y": 180
+    },
+    "facing=east,tegel=121": {
+      "model": "guhs:block/snackbar_bord_121",
+      "y": 270
+    },
+    "facing=south,tegel=122": {
+      "model": "guhs:block/snackbar_bord_122"
+    },
+    "facing=west,tegel=122": {
+      "model": "guhs:block/snackbar_bord_122",
+      "y": 90
+    },
+    "facing=north,tegel=122": {
+      "model": "guhs:block/snackbar_bord_122",
+      "y": 180
+    },
+    "facing=east,tegel=122": {
+      "model": "guhs:block/snackbar_bord_122",
+      "y": 270
+    },
+    "facing=south,tegel=123": {
+      "model": "guhs:block/snackbar_bord_123"
+    },
+    "facing=west,tegel=123": {
+      "model": "guhs:block/snackbar_bord_123",
+      "y": 90
+    },
+    "facing=north,tegel=123": {
+      "model": "guhs:block/snackbar_bord_123",
+      "y": 180
+    },
+    "facing=east,tegel=123": {
+      "model": "guhs:block/snackbar_bord_123",
+      "y": 270
+    },
+    "facing=south,tegel=124": {
+      "model": "guhs:block/snackbar_bord_124"
+    },
+    "facing=west,tegel=124": {
+      "model": "guhs:block/snackbar_bord_124",
+      "y": 90
+    },
+    "facing=north,tegel=124": {
+      "model": "guhs:block/snackbar_bord_124",
+      "y": 180
+    },
+    "facing=east,tegel=124": {
+      "model": "guhs:block/snackbar_bord_124",
+      "y": 270
+    },
+    "facing=south,tegel=125": {
+      "model": "guhs:block/snackbar_bord_125"
+    },
+    "facing=west,tegel=125": {
+      "model": "guhs:block/snackbar_bord_125",
+      "y": 90
+    },
+    "facing=north,tegel=125": {
+      "model": "guhs:block/snackbar_bord_125",
+      "y": 180
+    },
+    "facing=east,tegel=125": {
+      "model": "guhs:block/snackbar_bord_125",
+      "y": 270
+    },
+    "facing=south,tegel=126": {
+      "model": "guhs:block/snackbar_bord_126"
+    },
+    "facing=west,tegel=126": {
+      "model": "guhs:block/snackbar_bord_126",
+      "y": 90
+    },
+    "facing=north,tegel=126": {
+      "model": "guhs:block/snackbar_bord_126",
+      "y": 180
+    },
+    "facing=east,tegel=126": {
+      "model": "guhs:block/snackbar_bord_126",
+      "y": 270
+    },
+    "facing=south,tegel=127": {
+      "model": "guhs:block/snackbar_bord_127"
+    },
+    "facing=west,tegel=127": {
+      "model": "guhs:block/snackbar_bord_127",
+      "y": 90
+    },
+    "facing=north,tegel=127": {
+      "model": "guhs:block/snackbar_bord_127",
+      "y": 180
+    },
+    "facing=east,tegel=127": {
+      "model": "guhs:block/snackbar_bord_127",
+      "y": 270
+    },
+    "facing=south,tegel=128": {
+      "model": "guhs:block/snackbar_bord_128"
+    },
+    "facing=west,tegel=128": {
+      "model": "guhs:block/snackbar_bord_128",
+      "y": 90
+    },
+    "facing=north,tegel=128": {
+      "model": "guhs:block/snackbar_bord_128",
+      "y": 180
+    },
+    "facing=east,tegel=128": {
+      "model": "guhs:block/snackbar_bord_128",
+      "y": 270
+    },
+    "facing=south,tegel=129": {
+      "model": "guhs:block/snackbar_bord_129"
+    },
+    "facing=west,tegel=129": {
+      "model": "guhs:block/snackbar_bord_129",
+      "y": 90
+    },
+    "facing=north,tegel=129": {
+      "model": "guhs:block/snackbar_bord_129",
+      "y": 180
+    },
+    "facing=east,tegel=129": {
+      "model": "guhs:block/snackbar_bord_129",
+      "y": 270
+    },
+    "facing=south,tegel=130": {
+      "model": "guhs:block/snackbar_bord_130"
+    },
+    "facing=west,tegel=130": {
+      "model": "guhs:block/snackbar_bord_130",
+      "y": 90
+    },
+    "facing=north,tegel=130": {
+      "model": "guhs:block/snackbar_bord_130",
+      "y": 180
+    },
+    "facing=east,tegel=130": {
+      "model": "guhs:block/snackbar_bord_130",
+      "y": 270
+    },
+    "facing=south,tegel=131": {
+      "model": "guhs:block/snackbar_bord_131"
+    },
+    "facing=west,tegel=131": {
+      "model": "guhs:block/snackbar_bord_131",
+      "y": 90
+    },
+    "facing=north,tegel=131": {
+      "model": "guhs:block/snackbar_bord_131",
+      "y": 180
+    },
+    "facing=east,tegel=131": {
+      "model": "guhs:block/snackbar_bord_131",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "textures": {
+    "t": "guhs:block/snackbar_bord_snackbar",
+    "particle": "guhs:block/snackbar_bord_snackbar"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            3.2,
+            0.0,
+            4.8,
+            8.0
+          ],
+          "texture": "#t"
+        },
+        "north": {
+          "uv": [
+            3.2,
+            0.0,
+            4.8,
+            8.0
+          ],
+          "texture": "#t"
+        }
+      }
+    }
+  ]
+}
