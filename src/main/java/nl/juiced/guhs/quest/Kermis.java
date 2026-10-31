@@ -130,6 +130,9 @@ public final class Kermis {
                 return true;
             }
         }
+        if (nl.juiced.guhs.feature.kermisuitbouw.KermisUitbouwData.van(server).beschermd(pos)) {
+            return true;                                            // 1.8.1: the extension
+        }
         Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(GuhCompassItem.GUH_KERMIS);
         return structure != null && server.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
@@ -211,6 +214,7 @@ public final class Kermis {
         Area area = area(level, npc.blockPosition());
         if (area != null) {
             look(npc, level, area);
+            nl.juiced.guhs.feature.kermisuitbouw.KermisUitbouw.kijk(level, area);   // 1.8.1: the extension, also of old kermissen
         }
     }
 

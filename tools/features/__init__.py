@@ -180,6 +180,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'kermisritten']
             # 1.8.1: Botsguhs + Spookguhhuis (append only)
             'kermisritten2']
+            # 1.8.1: de kermis-uitbouw (the template; Java: feature/kermisuitbouw; append only)
+            'kermisuitbouw']
 
 
 def modules():
