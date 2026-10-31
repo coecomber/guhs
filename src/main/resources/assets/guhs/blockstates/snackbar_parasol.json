@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "geel=false": {
+      "model": "guhs:block/snackbar_parasol_roze"
+    },
+    "geel=true": {
+      "model": "guhs:block/snackbar_parasol_geel"
+    }
+  }
+}

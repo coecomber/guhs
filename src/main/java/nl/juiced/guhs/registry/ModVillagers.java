@@ -127,7 +127,8 @@ public final class ModVillagers {
             add(t, 1, buy(ModItems.KAAS_KNABBELS.get(), 16, 1, 16, 2), sell(ModItems.GUH_SPAWN_EGG.get(), 1, 8, 6, 5));
             add(t, 2, sell(Items.SADDLE, 1, 6, 6, 10), buy(ModBlocks.BLOCK_OF_KAASKNABBELS.get(), 2, 1, 12, 10),
                     sell(ModItems.HEILIGDOM_KOMPAS.get(), 1, 12, 3, 10), // to Moeder Vadsig
-                    sell(ModItems.SUPERKOMPAS.get(), 1, 10, 3, 10)); // finds any guh structure you choose
+                    sell(ModItems.SUPERKOMPAS.get(), 1, 10, 3, 10), // finds any guh structure you choose
+                    sell(nl.juiced.guhs.feature.snackbar.SnackbarFeature.KOMPAS.get(), 1, 8, 3, 10)); // 1.8.1: to De Guhsnackbar
             add(t, 3, sell(ModItems.IRON_GUH_ARMOR.get(), 1, 12, 3, 15), sell(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 4, 3, 12, 10));
             add(t, 4, sell(ModItems.DIAMOND_GUH_ARMOR.get(), 1, 28, 3, 20), sell(ModItems.GUH_SPAWN_EGG.get(), 3, 20, 4, 20));
             add(t, 5, sell(ModItems.NETHERITE_GUH_ARMOR.get(), 1, 48, 2, 30));
