@@ -147,6 +147,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.droomsfeer.client.DroomsfeerClient.init(modBus);   // 1.8.0: the dream sky (moon, stars), the fade, the island music
         nl.juiced.guhs.feature.snoesverhaal.client.SnoesHudLaag.init(modBus);   // 1.8.0 playtest: Snoes' story in the top left corner
         nl.juiced.guhs.feature.effecttips.client.EffectTips.init(modBus);   // 1.8.0: hover an effect in the inventory: what it does
+        nl.juiced.guhs.feature.maagwand.client.MaagwandClient.init(modBus);   // 1.8.1: the Guhtong next to the inventory
         nl.juiced.guhs.feature.droomweer.client.DroomweerClient.init(modBus);   // 1.8.0: the droomweer's sky and music
         nl.juiced.guhs.feature.fossiel.client.FossielClient.init(modBus);   // 1.8.0: the turning egg, the meerkat pose, the Pteroguh's wings
         nl.juiced.guhs.feature.droomwinkel.client.DroomWinkelClient.init(modBus);   // 1.8.0: the droomwinkeltje's screen

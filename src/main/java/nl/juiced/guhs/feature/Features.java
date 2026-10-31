@@ -183,6 +183,7 @@ public final class Features {
         nl.juiced.guhs.feature.kaaskas.KaaskasFeature.register(modBus);   // 1.8.0 vadskracht: de Kaaskas, het pluisbolletje, de Guh-sorteerband
         nl.juiced.guhs.feature.slaapkleding.SlaapkledingFeature.register(modBus);   // 1.8.0 (U2): sleepy guh clothes + the droompyjama   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
         nl.juiced.guhs.feature.droomweer.DroomweerFeature.register(modBus);   // 1.8.0 (playtest 2): the droomweer's droomkistje on the Sterrenkussenveld
+        nl.juiced.guhs.feature.maagwand.MaagwandFeature.register(modBus);   // 1.8.1: the maagwand (food soft locked behind stomach layers)
         nl.juiced.guhs.feature.koepel.KoepelFeature.register(modBus);   // 1.8.0 (vadskracht): de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger)
         nl.juiced.guhs.feature.fossiel.FossielFeature.register(modBus);   // 1.8.0 (vadskracht): de Fossiel-broedmachine and the oerguhs
         nl.juiced.guhs.feature.raket.RaketFeature.register(modBus);   // 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan
@@ -196,6 +197,7 @@ public final class Features {
     }
 
     public static void payloads(PayloadRegistrar registrar) {
+        nl.juiced.guhs.feature.maagwand.MaagwandFeature.payloads(registrar);
         nl.juiced.guhs.feature.beauty.BeautyFeature.payloads(registrar);
         nl.juiced.guhs.feature.race.RaceFeature.payloads(registrar);
         nl.juiced.guhs.feature.meppen.MeppenFeature.payloads(registrar);

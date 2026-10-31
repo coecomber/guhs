@@ -122,6 +122,9 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
             }
             level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.6f, 1.3f);
         } else {
+            if (!nl.juiced.guhs.feature.maagwand.MaagwandFeature.blokEten(sp, new ItemStack(PiepFeature.ROZE_GUH_KOEK_ITEM.get()))) {
+                return InteractionResult.CONSUME;     // 1.8.1: BOERP, the koek stays on the tray
+            }
             player.getFoodData().eat(PiepFeature.KOEK_ETEN.nutrition(), PiepFeature.KOEK_ETEN.saturation());
             gegeten(sp);
             level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.8f, 1.1f);

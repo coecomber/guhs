@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_maag",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 54,
+  guhs_chapter_version: 55,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_maag.png",
@@ -52,6 +52,18 @@
       y: 8.74375,
       hover: [
         "Komt na: NJEG... HAP!",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548A1EB50DEB3",
+      image: "guhs:textures/ftbquests/guhs_maag/kop_extra_maagwand.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 12.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
       ],
     },
   ],
@@ -432,6 +444,134 @@
         "47554880B493F6FB",
       ],
       progression_mode: "linear",
+    },
+    {
+      id: "4755488EDE0040A8",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/maagwand_laag2",
+          id: "47554810F8C3912A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FECF12BD7A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554876DE24733C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 14.4875,
+    },
+    {
+      id: "475548B203273FBF",
+      icon: {
+        id: "guhs:gefrituurde_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/maagwand_laag3",
+          id: "4755482AE518D80D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554876A5078D2D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548AB57A5D244",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 1.5,
+      y: 14.4875,
+    },
+    {
+      id: "475548C7298C0CB7",
+      icon: {
+        id: "guhs:gegrilde_kaasknabbelsate",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/maagwand_laag4",
+          id: "47554851E5161C20",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A57DF139E7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A27C5D8492",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 3.0,
+      y: 14.4875,
+    },
+    {
+      id: "475548604AECEB61",
+      icon: {
+        id: "guhs:perfecte_knabbel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/maagwand_laag5",
+          id: "475548B5B9D3127C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ACDE1A4008",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548376C7C50B8",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 4.5,
+      y: 14.4875,
     },
   ],
 }
