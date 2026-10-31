@@ -330,6 +330,18 @@
         "Komt na: Het superkompas (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548E15FF7F973",
+      image: "guhs:textures/ftbquests/guhs_minigames/kop_extra_kermiskraam.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 61.33124999999999,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 2,
   progression_mode: "flexible",
@@ -5804,6 +5816,104 @@
       x: 0.0,
       y: 63.11249999999999,
       shape: "circle",
+    },
+    {
+      id: "475548442BA1F739",
+      icon: {
+        id: "guhs:churros",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:churros",
+          },
+          id: "475548E8DC843406",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488B62F2BA7E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554800421D1376",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 11.5,
+      y: 63.11249999999999,
+    },
+    {
+      id: "4755481B46012F83",
+      icon: {
+        id: "guhs:kermisbon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kermiskraam_gespeeld",
+          id: "4755485B1032D2BC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489971D401BA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554899ED01D22F",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 13.0,
+      y: 63.11249999999999,
+    },
+    {
+      id: "47554849F3B968BA",
+      icon: {
+        id: "guhs:kermisbon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/kermiskraam_alle_perfect",
+          id: "4755485266318779",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B78FC772F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554863D07CBEA9",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 14.5,
+      y: 63.11249999999999,
     },
   ],
 }

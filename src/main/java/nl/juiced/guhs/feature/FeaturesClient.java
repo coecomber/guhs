@@ -150,6 +150,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.maagwand.client.MaagwandClient.init(modBus);   // 1.8.1: the Guhtong next to the inventory
         nl.juiced.guhs.feature.droomweer.client.DroomweerClient.init(modBus);   // 1.8.0: the droomweer's sky and music
         nl.juiced.guhs.feature.fossiel.client.FossielClient.init(modBus);   // 1.8.0: the turning egg, the meerkat pose, the Pteroguh's wings
+        nl.juiced.guhs.feature.kermiskraam.client.KraamClient.init();   // 1.8.1: the game stalls
         nl.juiced.guhs.feature.droomwinkel.client.DroomWinkelClient.init(modBus);   // 1.8.0: the droomwinkeltje's screen
         nl.juiced.guhs.feature.vliegdroom.client.VliegdroomClient.init(modBus);   // 1.8.0 uitbreiding: the dream Rookguh
         nl.juiced.guhs.feature.hamsterbuis.client.HamsterbuisClient.init(modBus);   // 1.8.0: the hamsterbuis station's screen

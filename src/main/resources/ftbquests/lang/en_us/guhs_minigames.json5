@@ -695,4 +695,16 @@
   "quest.475548A0D6C0CCF8.quest_desc": [
     "Too many guhs to take along? Build a &dNibble Portal&r (4 blocks of kaasknabbels, 4 kaasknabbels and a pink dye). Right-click it: your guhs at home on the left, &dthe Eternal Nibble Fields&r on the right. Send them into retirement or bring them back. Not dead, mind you: in the Nibble Fields they nibble, nap and float around as sweet little ghost guhs with a halo. Go and visit them with the button &dTo the Nibble Fields&r!",
   ],
+  "quest.475548442BA1F739.title": "Linguhs beware",
+  "quest.475548442BA1F739.quest_desc": [
+    "Buy a portion of &6churros&r at the Churros Stall on the &dGuh Kermis&r: 15 Kaas Knabbels, or 18 with Guhtella.",
+  ],
+  "quest.4755481B46012F83.title": "Stall Vads",
+  "quest.4755481B46012F83.quest_desc": [
+    "Play a game at &6Guhtje Fishing&r, &6Tin Toss&r or &6Nibble Shooting&r. Play well = kermisbonnen!",
+  ],
+  "quest.47554849F3B968BA.title": "Kermis King",
+  "quest.47554849F3B968BA.quest_desc": [
+    "Get the top score at all three game stalls.",
+  ],
 }

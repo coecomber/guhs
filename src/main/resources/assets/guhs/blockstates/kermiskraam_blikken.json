@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kermiskraam_blikken"
+    },
+    "facing=east": {
+      "model": "guhs:block/kermiskraam_blikken",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/kermiskraam_blikken",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/kermiskraam_blikken",
+      "y": 270
+    }
+  }
+}

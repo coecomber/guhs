@@ -1,0 +1,75 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/kermiskraam_zijkant",
+    "zijkant": "guhs:block/kermiskraam_zijkant",
+    "blad": "guhs:block/kermiskraam_blad",
+    "voor": "guhs:block/kermiskraam_schieten_voor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        1
+      ],
+      "to": [
+        16,
+        10,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zijkant"
+        },
+        "east": {
+          "texture": "#zijkant"
+        },
+        "west": {
+          "texture": "#zijkant"
+        },
+        "up": {
+          "texture": "#blad"
+        },
+        "down": {
+          "texture": "#blad"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zijkant"
+        },
+        "south": {
+          "texture": "#zijkant"
+        },
+        "east": {
+          "texture": "#zijkant"
+        },
+        "west": {
+          "texture": "#zijkant"
+        },
+        "up": {
+          "texture": "#blad"
+        },
+        "down": {
+          "texture": "#blad"
+        }
+      }
+    }
+  ]
+}

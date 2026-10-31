@@ -1006,6 +1006,34 @@ UITLEG = {
            "- In a blossom breeze the guhs' ears flutter along.\n"
            "- Dream weather: Guh Dreamland's sky with the sleepy moon, falling stars to catch (dream sand!), floating, dream "
            "music and sleepy guhs. Its jar is in the dream chest at the top of the Star Cushion Field."),
+    "kermiskraam_churros": dict(
+        nl="Een eetkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh: de winkel gaat open. Churros: 15 Kaas Knabbels, of 18 met Guhtella.",
+        en="A food stall on the Guh Kermis. Right-click the counter or the stall guh: the shop opens. Churros: 15 Kaas Knabbels, or 18 with Guhtella.",
+        meer=[]),
+    "kermiskraam_suikerspin": dict(
+        nl="Een eetkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh: de winkel gaat open. Suikerspin: 8 Kaas Knabbels.",
+        en="A food stall on the Guh Kermis. Right-click the counter or the stall guh: the shop opens. Candy floss: 8 Kaas Knabbels.",
+        meer=[]),
+    "kermiskraam_poffertjes": dict(
+        nl="Een eetkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh: de winkel gaat open. Poffertjes: 10 Kaas Knabbels.",
+        en="A food stall on the Guh Kermis. Right-click the counter or the stall guh: the shop opens. Poffertjes: 10 Kaas Knabbels.",
+        meer=[]),
+    "kermiskraam_oliebollen": dict(
+        nl="Een eetkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh: de winkel gaat open. Oliebollen: 12 Kaas Knabbels.",
+        en="A food stall on the Guh Kermis. Right-click the counter or the stall guh: the shop opens. Oliebollen: 12 Kaas Knabbels.",
+        meer=[]),
+    "kermiskraam_vissen": dict(
+        nl="Een spelkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh om te spelen. Klik als een guhtje onder de haak drijft; je hebt 3 worpen. De helft van de topscore geeft 1 kermisbon, de topscore 2. Daarna 45 seconden wachten.",
+        en="A game stall on the Guh Kermis. Right-click the counter or the stall guh to play. Click when a guhtje floats under the hook; you get 3 casts. Half of the top score gives 1 kermisbon, the top score 2. Then wait 45 seconds.",
+        meer=[]),
+    "kermiskraam_blikken": dict(
+        nl="Een spelkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh om te spelen. Klik als het streepje in het groen staat; je hebt 3 worpen voor 6 blikken. De helft van de topscore geeft 1 kermisbon, de topscore 2. Daarna 45 seconden wachten.",
+        en="A game stall on the Guh Kermis. Right-click the counter or the stall guh to play. Click when the marker is in the green; you get 3 throws for 6 tins. Half of the top score gives 1 kermisbon, the top score 2. Then wait 45 seconds.",
+        meer=[]),
+    "kermiskraam_schieten": dict(
+        nl="Een spelkraampje op de Guhkermis. Rechtsklik op de toonbank of de kraam-guh om te spelen. Klik op de 10 knabbels voor ze weg zijn. De helft van de topscore geeft 1 kermisbon, de topscore 2. Daarna 45 seconden wachten.",
+        en="A game stall on the Guh Kermis. Right-click the counter or the stall guh to play. Click the 10 nibbles before they are gone. Half of the top score gives 1 kermisbon, the top score 2. Then wait 45 seconds.",
+        meer=[]),
     "droomkraampje": dict(
         nl="Het kraampje van de Zandguh op het Droomplein in Guhdromenland: het droomwinkeltje. Je betaalt met droomzand.\n"
            "\n"
