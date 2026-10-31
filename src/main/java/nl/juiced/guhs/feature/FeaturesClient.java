@@ -36,6 +36,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.tuintjes.client.TuintjesClient.init(modBus);
         nl.juiced.guhs.feature.sterrenwacht.client.SterrenwachtClient.init(modBus);
         nl.juiced.guhs.feature.ballon.client.BallonClient.init(modBus);
+        nl.juiced.guhs.feature.kermisritten.client.KermisrittenClient.init(modBus);   // 1.8.1
         nl.juiced.guhs.feature.kamperen.client.KamperenClient.init(modBus);
         nl.juiced.guhs.feature.knuffelbad.client.KnuffelbadClient.init(modBus);
         nl.juiced.guhs.feature.wereldleven.client.WereldlevenClient.init(modBus);

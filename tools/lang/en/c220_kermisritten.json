@@ -1,0 +1,21 @@
+{
+  "gui.guhs.kermisrit.loket": "%s: click to get on",
+  "gui.guhs.kermisrit.instappen": "All aboard! The %1$s starts in %2$s seconds. VAHOEG!",
+  "gui.guhs.kermisrit.bezig": "Njeg, the ride is running! Wait until it stops.",
+  "gui.guhs.kermisrit.vol": "Completely full! Next ride, then.",
+  "gui.guhs.kermisrit.blijf_zitten": "Njeg! Stay seated until the ride stops.",
+  "gui.guhs.kermisrit.klaar": "WHEEEE! What a ride! +1 kermisbon",
+  "entity.guhs.kermisrit_stoel": "Fair Seat",
+  "block.guhs.kermisrit_booster": "Nibble Booster",
+  "block.guhs.kermisrit_zweefmolen": "Swing Carousel",
+  "block.guhs.kermisrit_reuzenrad": "Ferris Wheel",
+  "block.guhs.kermisrit_twister": "Guh Twister",
+  "advancements.guhs.guhmension.kermisrit_booster.title": "I Can See My House!",
+  "advancements.guhs.guhmension.kermisrit_booster.description": "Ride the Nibble Booster at the Guh Fair",
+  "advancements.guhs.guhmension.kermisrit_zweefmolen.title": "Floating Like a Guh",
+  "advancements.guhs.guhmension.kermisrit_zweefmolen.description": "Ride the Swing Carousel at the Guh Fair",
+  "advancements.guhs.guhmension.kermisrit_reuzenrad.title": "A View Full of Vads",
+  "advancements.guhs.guhmension.kermisrit_reuzenrad.description": "Ride the Ferris Wheel at the Guh Fair",
+  "advancements.guhs.guhmension.kermisrit_twister.title": "Dizzy Guh",
+  "advancements.guhs.guhmension.kermisrit_twister.description": "Ride the Guh Twister at the Guh Fair"
+}

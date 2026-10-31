@@ -186,6 +186,7 @@ public final class Features {
         nl.juiced.guhs.feature.koepel.KoepelFeature.register(modBus);   // 1.8.0 (vadskracht): de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger)
         nl.juiced.guhs.feature.fossiel.FossielFeature.register(modBus);   // 1.8.0 (vadskracht): de Fossiel-broedmachine and the oerguhs
         nl.juiced.guhs.feature.raket.RaketFeature.register(modBus);   // 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan
+        nl.juiced.guhs.feature.kermisritten.KermisrittenFeature.register(modBus);   // 1.8.1: the turning kermis rides
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.register(modBus);   // 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein
         nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.register(modBus);   // 1.8.0 uitbreiding: de Vliegdroom (Rookguhs, wolkjesringen-parcours)
@@ -468,6 +469,7 @@ public final class Features {
         nl.juiced.guhs.feature.koepel.KoepelFeature.creative(output);   // 1.8.0: de Koepel
         nl.juiced.guhs.feature.fossiel.FossielFeature.creative(output);   // 1.8.0: de Fossiel-broedmachine and the fossils
         nl.juiced.guhs.feature.raket.RaketFeature.creative(output);   // 1.8.0 Vadskracht: the Kaasraket
+        nl.juiced.guhs.feature.kermisritten.KermisrittenFeature.creative(output);   // 1.8.1: the turning kermis rides
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.creative(output);   // 1.8.0: the droomkraampje
         nl.juiced.guhs.feature.dirigent.DirigentFeature.creative(output);   // 1.8.0: the dirigeerstokjes
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.creative(output);   // 1.8.0 uitbreiding: the Vlieg-diploma

@@ -2385,3 +2385,23 @@ UITLEG['wolkenvanger'] = dict(
     en='A dish that condenses little clouds into fluff.\n\n- Only works under the open sky.\n- The higher, the faster: at sea level a bit of fluff every 30 seconds, from height 192 every 6 seconds.\n- A chest or pipe under it gets the fluff at once; otherwise: click with an empty hand.',
     meer=[])
 # </koepel>
+
+
+# <kermisritten>
+UITLEG['kermisrit_booster'] = dict(
+    nl='Het hart van de Knabbelbooster: het blok zit verstopt onder de attractie.\n\n- Klik op het kaartjespaaltje om in te stappen.\n- Na 8 seconden gaat de rit los: 40 seconden over de kop.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Nibble Booster: the block is hidden under the ride.\n\n- Click the ticket post to get on.\n- After 8 seconds the ride starts: 40 seconds head over heels.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_zweefmolen'] = dict(
+    nl='Het hart van de Zweefmolen: het blok zit verstopt onder de attractie.\n\n- Klik op een stoeltje of het kaartjespaaltje om in te stappen.\n- Na 8 seconden zweef je 35 seconden in het rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Swing Carousel: the block is hidden under the ride.\n\n- Click a seat or the ticket post to get on.\n- After 8 seconds you float around for 35 seconds.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_reuzenrad'] = dict(
+    nl='Het hart van het Reuzenrad: het blok zit verstopt onder de attractie.\n\n- Klik op het kaartjespaaltje om in te stappen.\n- Na 8 seconden draait het rad een minuut lang rustig rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Ferris Wheel: the block is hidden under the ride.\n\n- Click the ticket post to get on.\n- After 8 seconds the wheel turns calmly for a minute.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_twister'] = dict(
+    nl='Het hart van de Guhtwister: het blok zit verstopt onder de attractie.\n\n- Klik op een karretje of het kaartjespaaltje om in te stappen.\n- Na 8 seconden tol je 40 seconden rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Guh Twister: the block is hidden under the ride.\n\n- Click a car or the ticket post to get on.\n- After 8 seconds you spin for 40 seconds.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+# </kermisritten>
