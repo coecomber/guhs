@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kermisrit_spookhuis"
+    },
+    "facing=east": {
+      "model": "guhs:block/kermisrit_spookhuis"
+    },
+    "facing=south": {
+      "model": "guhs:block/kermisrit_spookhuis"
+    },
+    "facing=west": {
+      "model": "guhs:block/kermisrit_spookhuis"
+    }
+  }
+}

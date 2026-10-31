@@ -154,6 +154,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.kermiskraam.client.KraamClient.init();   // 1.8.1: the game stalls
         nl.juiced.guhs.feature.droomwinkel.client.DroomWinkelClient.init(modBus);   // 1.8.0: the droomwinkeltje's screen
         nl.juiced.guhs.feature.vliegdroom.client.VliegdroomClient.init(modBus);   // 1.8.0 uitbreiding: the dream Rookguh
+        nl.juiced.guhs.feature.kermisritten2.client.Ritten2Client.init(modBus);   // 1.8.1: Botsguhs + Spookguhhuis
         nl.juiced.guhs.feature.hamsterbuis.client.HamsterbuisClient.init(modBus);   // 1.8.0: the hamsterbuis station's screen
     }
 
