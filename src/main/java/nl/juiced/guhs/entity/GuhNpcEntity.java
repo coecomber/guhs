@@ -554,6 +554,9 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     /** The kermis outfit, for kermisbonnen (one per lap of the coaster); never sold out. */
     @Override
     public net.minecraft.world.item.trading.MerchantOffers getOffers() {
+        if (offers == null) {
+            offers = nl.juiced.guhs.feature.kermiskraam.KermisKraam.offers(this);   // 1.8.1: a kermis stall guh
+        }
         nl.juiced.guhs.feature.NpcRole role = nl.juiced.guhs.feature.Features.role(getKind());
         if (offers == null && role != null) {
             offers = role.offers(this);

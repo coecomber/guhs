@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kermiskraam_churros"
+    },
+    "facing=east": {
+      "model": "guhs:block/kermiskraam_churros",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/kermiskraam_churros",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/kermiskraam_churros",
+      "y": 270
+    }
+  }
+}

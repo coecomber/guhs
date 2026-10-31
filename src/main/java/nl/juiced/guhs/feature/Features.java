@@ -186,6 +186,7 @@ public final class Features {
         nl.juiced.guhs.feature.koepel.KoepelFeature.register(modBus);   // 1.8.0 (vadskracht): de Koepel (mega-oven, weerstation, sterrenkoepel, draaimolen, wolkenvanger)
         nl.juiced.guhs.feature.fossiel.FossielFeature.register(modBus);   // 1.8.0 (vadskracht): de Fossiel-broedmachine and the oerguhs
         nl.juiced.guhs.feature.raket.RaketFeature.register(modBus);   // 1.8.0 Vadskracht: the Kaasraket and the Kaasmaan
+        nl.juiced.guhs.feature.kermiskraam.KermisKraamFeature.register(modBus);   // 1.8.1: the kermis stalls
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.register(modBus);   // 1.8.0 (expansion): the Zandguh's droomwinkeltje on the Droomplein
         nl.juiced.guhs.feature.dirigent.DirigentFeature.register(modBus);   // 1.8.0 (uitbreiding): de Dirigent in de Koorkom
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.register(modBus);   // 1.8.0 uitbreiding: de Vliegdroom (Rookguhs, wolkjesringen-parcours)
@@ -315,6 +316,7 @@ public final class Features {
         nl.juiced.guhs.feature.dexdromen.DexDromenFeature.payloads(registrar);   // 1.8.0: the Blub-meterkaart (Guhdex)
         nl.juiced.guhs.feature.weer.WeerFeature.payloads(registrar);   // 1.8.0: the Weer vadser's zones and menu
         nl.juiced.guhs.feature.droomsfeer.DroomsfeerFeature.payloads(registrar);   // 1.8.0: the soft dream fade
+        nl.juiced.guhs.feature.kermiskraam.KermisKraamFeature.payloads(registrar);   // 1.8.1: the game stalls
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.payloads(registrar);   // 1.8.0: the droomwinkeltje's screen and buys
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.payloads(registrar);   // 1.8.0 playtest: Snoes' story HUD
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.payloads(registrar);   // 1.8.0: the hamsterbuis station's screen
@@ -468,6 +470,7 @@ public final class Features {
         nl.juiced.guhs.feature.koepel.KoepelFeature.creative(output);   // 1.8.0: de Koepel
         nl.juiced.guhs.feature.fossiel.FossielFeature.creative(output);   // 1.8.0: de Fossiel-broedmachine and the fossils
         nl.juiced.guhs.feature.raket.RaketFeature.creative(output);   // 1.8.0 Vadskracht: the Kaasraket
+        nl.juiced.guhs.feature.kermiskraam.KermisKraamFeature.creative(output);   // 1.8.1: the kermis stalls and their food
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.creative(output);   // 1.8.0: the droomkraampje
         nl.juiced.guhs.feature.dirigent.DirigentFeature.creative(output);   // 1.8.0: the dirigeerstokjes
         nl.juiced.guhs.feature.vliegdroom.VliegdroomFeature.creative(output);   // 1.8.0 uitbreiding: the Vlieg-diploma
