@@ -176,6 +176,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'snackbar']
             # 1.8.1: the stalls of the bigger guh kermis (append only)
             'kermiskraam']
+            # 1.8.1: the turning kermis rides (append only)
+            'kermisritten']
 
 
 def modules():

@@ -2416,3 +2416,23 @@ UITLEG['wolkenvanger'] = dict(
 # <frituur> (1.8.1, tools/features/frituur.py: rewritten on every run)
 UITLEG['frying_pan'] = dict(nl="Rechtsklik met Mika's vet om de pan te vullen en met een lege hand om te zien hoeveel vet er nog in zit. Rechtsklik met iets lekkers om het te frituren: kaasknabbels worden gefrituurde kaasknabbels, en die kunnen nog twee keer de pan in (dubbel en driedubbel). Een guhvis wordt gebakken en een aardappel wordt Patatje Kaassaus.\n\nVan de Snackbar-guh leer je meer: kaasbrok wordt kaaskroket, karbonade frikandel, rundvlees bitterguhllen en brood kaassoufflguh. Een gepofte aardappel, een giftige aardappel en een Patatje Kaassaus geven de andere patatjes. Met 16 driedubbel gefrituurde kaasknabbels, 4 kaaskroketten en 4 frikandellen maak je De Vetste Hap.", en="Right-click with Mika's grease to fill the pan, and with an empty hand to see how much is left. Right-click with something tasty to fry it: cheese nibbles become fried cheese nibbles, and those can go in twice more (double and triple). A guhfish gets fried and a potato becomes Fries with Cheese Sauce.\n\nThe Snackbar Guh teaches you more: a chunk of cheese becomes a croquette, a porkchop a frikandel, beef bitterguhllen and bread a soufflguh. A baked potato, a poisonous potato and Fries with Cheese Sauce give the other fries. With 16 triple fried nibbles, 4 croquettes and 4 frikandels you make The Chonkiest Bite.")
 # </frituur>
+
+
+# <kermisritten>
+UITLEG['kermisrit_booster'] = dict(
+    nl='Het hart van de Knabbelbooster: het blok zit verstopt onder de attractie.\n\n- Klik op het kaartjespaaltje om in te stappen.\n- Na 8 seconden gaat de rit los: 40 seconden over de kop.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Nibble Booster: the block is hidden under the ride.\n\n- Click the ticket post to get on.\n- After 8 seconds the ride starts: 40 seconds head over heels.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_zweefmolen'] = dict(
+    nl='Het hart van de Zweefmolen: het blok zit verstopt onder de attractie.\n\n- Klik op een stoeltje of het kaartjespaaltje om in te stappen.\n- Na 8 seconden zweef je 35 seconden in het rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Swing Carousel: the block is hidden under the ride.\n\n- Click a seat or the ticket post to get on.\n- After 8 seconds you float around for 35 seconds.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_reuzenrad'] = dict(
+    nl='Het hart van het Reuzenrad: het blok zit verstopt onder de attractie.\n\n- Klik op het kaartjespaaltje om in te stappen.\n- Na 8 seconden draait het rad een minuut lang rustig rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Ferris Wheel: the block is hidden under the ride.\n\n- Click the ticket post to get on.\n- After 8 seconds the wheel turns calmly for a minute.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+UITLEG['kermisrit_twister'] = dict(
+    nl='Het hart van de Guhtwister: het blok zit verstopt onder de attractie.\n\n- Klik op een karretje of het kaartjespaaltje om in te stappen.\n- Na 8 seconden tol je 40 seconden rond.\n- Je stapt bij de poort uit en krijgt een kermisbon.',
+    en='The heart of the Guh Twister: the block is hidden under the ride.\n\n- Click a car or the ticket post to get on.\n- After 8 seconds you spin for 40 seconds.\n- You get off at the gate and receive a kermisbon.',
+    meer=[])
+# </kermisritten>

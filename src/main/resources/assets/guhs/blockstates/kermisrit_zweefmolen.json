@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kermisrit_zweefmolen"
+    },
+    "facing=east": {
+      "model": "guhs:block/kermisrit_zweefmolen"
+    },
+    "facing=south": {
+      "model": "guhs:block/kermisrit_zweefmolen"
+    },
+    "facing=west": {
+      "model": "guhs:block/kermisrit_zweefmolen"
+    }
+  }
+}

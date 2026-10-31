@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kermisrit_twister"
+    },
+    "facing=east": {
+      "model": "guhs:block/kermisrit_twister"
+    },
+    "facing=south": {
+      "model": "guhs:block/kermisrit_twister"
+    },
+    "facing=west": {
+      "model": "guhs:block/kermisrit_twister"
+    }
+  }
+}
