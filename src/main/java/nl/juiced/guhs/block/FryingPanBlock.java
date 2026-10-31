@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -31,11 +32,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.block.entity.FryingPanBlockEntity;
+import nl.juiced.guhs.feature.frituur.FrituurRecepten;
+import nl.juiced.guhs.feature.frituur.SnackRecepten;
 import nl.juiced.guhs.registry.ModItems;
 
 /**
  * Guh frying pan. Right-click with Mika's vet to add fat (+64 fries, up to {@link #MAX_CHARGES}),
- * right-click with kaas knabbels to fry them into gefrituurde kaasknabbels. Empty hand shows how much fat is left.
+ * right-click with something from {@link FrituurRecepten} to fry it (kaas knabbels become gefrituurde kaasknabbels and so on;
+ * the snack recipes must be learned first). Empty hand shows how much fat is left.
  */
 public class FryingPanBlock extends BaseEntityBlock {
     public static final MapCodec<FryingPanBlock> CODEC = simpleCodec(FryingPanBlock::new);
@@ -97,8 +101,8 @@ public class FryingPanBlock extends BaseEntityBlock {
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         boolean vet = stack.is(ModItems.MIKA_VET.get());
-        boolean knabbels = stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GUH_VIS.get());
-        if (!vet && !knabbels) {
+        FrituurRecepten.Recept recept = FrituurRecepten.vind(stack);
+        if (!vet && recept == null) {
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof FryingPanBlockEntity pan)) {
@@ -114,19 +118,26 @@ public class FryingPanBlock extends BaseEntityBlock {
             pan.setCharges(pan.getCharges() + CHARGES_PER_VET);
             level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 1f, 0.8f);
         } else {
+            if (recept.leren() && !(player instanceof ServerPlayer sp && SnackRecepten.kent(sp, recept.id()))) {
+                player.sendOverlayMessage(Component.translatable("block.guhs.frying_pan.recept_onbekend", new ItemStack(recept.uit().get()).getHoverName()));
+                return InteractionResult.CONSUME;
+            }
             if (pan.getCharges() <= 0) {
                 player.sendOverlayMessage(Component.translatable("block.guhs.frying_pan.no_fat"));
                 return InteractionResult.CONSUME;
             }
-            int fried = Math.min(stack.getCount(), pan.getCharges());
-            // kaas knabbels -> fried kaas knabbels, guh fish -> fried guh fish
-            net.minecraft.world.item.Item result = stack.is(ModItems.GUH_VIS.get()) ? ModItems.GEBAKKEN_GUH_VIS.get()
-                    : ModItems.GEFRITUURDE_KAASKNABBELS.get();
-            if (!player.getAbilities().instabuild) {
-                stack.shrink(fried);
+            if (recept == FrituurRecepten.VETSTE_HAP) {
+                if (!FrituurRecepten.maakVetsteHap(player, stack, pan)) {
+                    return InteractionResult.CONSUME;
+                }
+            } else {
+                int fried = Math.min(stack.getCount(), pan.getCharges());
+                if (!player.getAbilities().instabuild) {
+                    stack.shrink(fried);
+                }
+                pan.setCharges(pan.getCharges() - fried);
+                player.getInventory().placeItemBackInInventory(new ItemStack(recept.uit().get(), fried));
             }
-            pan.setCharges(pan.getCharges() - fried);
-            player.getInventory().placeItemBackInInventory(new ItemStack(result, fried));
             level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 0.6f, 1.6f);
             if (level instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, 8, 0.25, 0.05, 0.25, 0.01);

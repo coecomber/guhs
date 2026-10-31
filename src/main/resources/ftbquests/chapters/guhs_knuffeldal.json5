@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_knuffeldal",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 54,
+  guhs_chapter_version: 55,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_knuffeldal.png",
@@ -205,6 +205,18 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
+      y: 43.01875,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755485BB3801A2F",
+      image: "guhs:textures/ftbquests/guhs_knuffeldal/kop_extra_frituur.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
       y: 43.01875,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
@@ -4633,6 +4645,142 @@
       x: 7.5,
       y: 46.3,
       shape: "gear",
+    },
+    {
+      id: "475548045A1BF3F5",
+      icon: {
+        id: "guhs:driedubbel_gefrituurde_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:driedubbel_gefrituurde_kaasknabbels",
+          },
+          id: "47554874D8F15C05",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481E0CE24329",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554842421E8666",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 44.8,
+    },
+    {
+      id: "47554895F5AF43F7",
+      icon: {
+        id: "guhs:patatje_kaassaus",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:patatje_kaassaus",
+          },
+          id: "47554836EDB72FBF",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D5C5C2203",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548974B1EFD2C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 44.8,
+    },
+    {
+      id: "475548F164E8BE0E",
+      icon: {
+        id: "guhs:kaaskroket",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaaskroket",
+          },
+          id: "475548D659A073E7",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554851197C0C62",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548E0B81762BE",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 14.5,
+      y: 44.8,
+    },
+    {
+      id: "475548254CE0C14A",
+      icon: {
+        id: "guhs:vetste_hap",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vetste_hap",
+          },
+          id: "4755483A340BC2D9",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C106116DE0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mika_vet",
+          },
+          count: 4,
+        },
+        {
+          id: "475548AF42D960AE",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 16.0,
+      y: 44.8,
     },
   ],
 }
