@@ -114,7 +114,7 @@ public class KermisrittenGameTests {
     }
 
     /** Controller gone: its seats go, without a trace. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 4000)   // (the forced chunks load slower than the test server ticks)
     public static void blokWegRuimtStoelenOp(GameTestHelper helper) {
         KermisritBlockEntity rit = zet(helper, KermisritSoort.ZWEEFMOLEN, Direction.SOUTH);
         ServerLevel level = helper.getLevel();
