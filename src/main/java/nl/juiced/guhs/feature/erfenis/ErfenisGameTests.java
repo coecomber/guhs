@@ -46,7 +46,7 @@ public class ErfenisGameTests {
         Gebouw sh = b.stadhuis();
         helper.assertTrue(b.verbeter(sh.id, T0, -1) == null, "the stadhuis upgrade starts");
         helper.assertTrue(b.bouwspul == 10_000 - GebouwType.STADHUIS.kosten(2), "it cost Bouwspul");
-        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanVerbeteren(b.op(24, 32).id).key()), "the builder is busy");
+        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanVerbeteren(sh.id).key()), "the builder is busy (one job at a time)");
         helper.assertTrue(b.afronden(T0 + 1000) == null && sh.level == 1, "not done too early");
         long eind = T0 + GebouwType.STADHUIS.tijdSec(2) * 1000L;
         helper.assertTrue(b.afronden(eind) == sh && sh.level == 2 && b.bouw == null, "done at its time: level 2");
