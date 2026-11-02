@@ -183,7 +183,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.8.1: de kermis-uitbouw (the template; Java: feature/kermisuitbouw; append only)
             'kermisuitbouw',
             # 1.9 POC: De Erfenis (the plots dimension + texts; Java: feature/erfenis; append only)
-            'erfenis']
+            'erfenis',
+            # 1.9 POC: De Erfenis, de wereldkaart (texts only; Java: feature/erfenis/kaart; append only)
+            'erfenis_kaart']
 
 
 def modules():
