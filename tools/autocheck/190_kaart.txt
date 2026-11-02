@@ -1,0 +1,32 @@
+# 1.9 POC, De Erfenis: de wereldkaart (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_kaart.txt
+# Window 1280x720 at gui scale 2 = 640x360 gui pixels: the map is x 0..468, the side list x 468..640.
+# Shots: the map at start (hover on your own village in the middle), zoomed in (names), a village chosen from the
+# Ranglijst (panel with Bezoeken / Bovenaanzicht / Aanvallen), the Nieuws tab.
+
+section setup
+/gamemode creative
+wait 20
+
+section kaart
+/guhs erfenis kaart npc groei 25
+wait 10
+/guhs erfenis kaart
+wait 60
+mouse 234 180
+wait 10
+shot 190_kaart_start gui
+scroll 234 180 1
+wait 40
+mouse 20 300
+shot 190_kaart_zoom gui
+click 560 36
+wait 60
+shot 190_kaart_gekozen gui
+click 594 15
+wait 10
+shot 190_kaart_nieuws gui
+scroll 234 180 -1
+scroll 234 180 -1
+wait 40
+shot 190_kaart_ver gui
