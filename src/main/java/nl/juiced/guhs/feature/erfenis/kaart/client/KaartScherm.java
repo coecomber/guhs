@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import nl.juiced.guhs.feature.erfenis.client.MinimapStil;
 import nl.juiced.guhs.feature.erfenis.kaart.KaartDorp;
 import nl.juiced.guhs.feature.erfenis.kaart.KaartNieuws;
 import nl.juiced.guhs.feature.erfenis.kaart.KaartPayloads;
@@ -154,6 +155,7 @@ public final class KaartScherm extends Screen {
 
     @Override
     protected void init() {
+        MinimapStil.uit();   // (the JourneyMap minimap draws behind every screen, see MinimapStil)
         int mw = kaartW();
         Button rang = Button.builder(Component.translatable("erfenis.kaart.ranglijst"), b -> {
             tab = 0;
@@ -249,6 +251,7 @@ public final class KaartScherm extends Screen {
 
     @Override
     public void removed() {
+        MinimapStil.terug();
         if (land != null) {
             land.sluit();
             land = null;

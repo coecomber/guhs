@@ -337,7 +337,7 @@ public final class OverzichtScherm extends Screen {
             double top = Overzicht.grondY() + hoogte(geb.type, Math.max(geb.level, 0)) + 1.2;
             if (b.inAanbouw(geb)) {
                 double[] p = Overzicht.projecteer(new Vec3(cx, top + 0.6, cz), width, height);
-                if (p != null && p[1] > 40) {
+                if (p != null && p[1] > 66) {   // (not under the top bar and its button row)
                     String t = Teken.tijd(b.bouw.eind() - nu);
                     int w = Math.max(44, font.width(t) + 24), x = (int) p[0] - w / 2, y = (int) p[1] - 9;
                     Teken.chip(g, x, y, x + w, y + 17);
@@ -350,7 +350,7 @@ public final class OverzichtScherm extends Screen {
                 double v = geb.voorraadOp(nu);
                 if (v >= 1) {
                     double[] p = Overzicht.projecteer(new Vec3(cx, top, cz), width, height);
-                    if (p != null && p[1] > 40) {
+                    if (p != null && p[1] > 66) {   // (not under the top bar and its button row)
                         boolean vol = v >= GebouwType.molenOpslag(geb.level);
                         String t = Integer.toString((int) v);
                         int w = font.width(t) + 24, x = (int) p[0] - w / 2, y = (int) p[1] - 10;

@@ -737,7 +737,9 @@ public final class AutoCheck {
                     int b = a.length > 3 ? Integer.parseInt(a[3]) : 0;
                     var ev = new net.minecraft.client.input.MouseButtonEvent(x, y, new net.minecraft.client.input.MouseButtonInfo(b, 0));
                     mc2.screen.mouseClicked(ev, false);
-                    mc2.screen.mouseReleased(ev);
+                    if (mc2.screen != null) {   // (the click may have closed the screen)
+                        mc2.screen.mouseReleased(ev);
+                    }
                     return true;
                 };
             case "drag":

@@ -76,6 +76,7 @@ public final class Overzicht {
             oudeHud = mc.options.hideGui;
             oudeType = mc.options.getCameraType();
             mc.options.hideGui = true;
+            MinimapStil.uit();
             mc.options.setCameraType(CameraType.FIRST_PERSON);
             actief = true;
             laatste = System.nanoTime();
@@ -92,6 +93,7 @@ public final class Overzicht {
         actief = false;
         Minecraft mc = Minecraft.getInstance();
         mc.options.hideGui = oudeHud;
+        MinimapStil.terug();
         mc.options.setCameraType(oudeType);
         if (mc.player != null) {
             mc.setCameraEntity(mc.player);
