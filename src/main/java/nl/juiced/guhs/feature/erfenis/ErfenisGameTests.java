@@ -135,4 +135,28 @@ public class ErfenisGameTests {
         helper.assertTrue(level.getBlockState(o.offset(sh.x + 1, 1, sh.z)).is(Blocks.GOLD_BLOCK), "level 4 gold at the new spot");
         helper.succeed();
     }
+
+    /** Phase 2: an NPC base in a GIVEN cell; the player spiral skips it; growing replaces the buildings in place. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void npcBaseOpEigenCel(GameTestHelper helper) {
+        ErfenisData d = new ErfenisData();
+        UUID dorp = UUID.randomUUID();
+        java.util.List<Base.Plan> klein = java.util.List.of(new Base.Plan(GebouwType.STADHUIS, 1, 30, 30, 0), new Base.Plan(GebouwType.MOLEN, 1, 10, 10, 0));
+        Base n = d.npcBase(dorp, "Testdorp", 1, 0, klein, T0);
+        helper.assertTrue(n != null && n.npc && n.cx == 1 && n.cz == 0 && n.gebouwen.size() == 2, "the NPC base stands in its own cell");
+        helper.assertTrue(n.bouwspul <= n.opslag(), "its Bouwspul fits its storage");
+        Base a = d.vanSpeler(UUID.randomUUID(), "A", T0), b = d.vanSpeler(UUID.randomUUID(), "B", T0);
+        helper.assertTrue(a.cx == 0 && a.cz == 0, "the first player gets (0,0)");
+        helper.assertFalse(b.cx == 1 && b.cz == 0, "the second player skips the NPC cell");
+        helper.assertTrue(d.npcBase(UUID.randomUUID(), "Indringer", 0, 0, klein, T0) == null, "a taken cell is refused");
+        helper.assertTrue(d.npcBase(a.id, "Kaper", 0, 0, klein, T0) == null, "a player's base is never replaced");
+        n.moetStempelen = false;
+        java.util.List<Base.Plan> groot = new java.util.ArrayList<>(klein);
+        groot.add(new Base.Plan(GebouwType.BOOMPJE, 1, 40, 40, 0));
+        groot.add(new Base.Plan(GebouwType.MOLEN, 1, 31, 31, 0));   // (overlaps the stadhuis: skipped)
+        Base n2 = d.npcBase(dorp, "Testdorp", 1, 0, groot, T0 + 5);
+        helper.assertTrue(n2 == n && n.gebouwen.size() == 3 && n.moetStempelen, "the same object, new buildings, stamp again");
+        helper.assertTrue(d.bezetteCellen().contains(Plot.sleutel(1, 0)) && d.bezetteCellen().size() == 3, "three cells taken");
+        helper.succeed();
+    }
 }

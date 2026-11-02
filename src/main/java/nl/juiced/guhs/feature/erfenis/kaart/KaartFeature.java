@@ -13,15 +13,14 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
  *   within the base rules), {@link NpcNamen} (guh names)</li>
  *   <li>server: {@link KaartServer}; network: {@link KaartPayloads}; commands: {@link KaartCommando} (/guhs erfenis kaart)</li>
  *   <li>client: client/KaartClient (key M "Wereldkaart"), client/KaartScherm (the map), client/KaartLand (the pastel land)</li>
- *   <li>THE SEAM to the core: {@link KaartBron} in {@link #BRON} (stand-alone: {@link KaartBronStandaard})</li>
+ *   <li>THE SEAM to the core: {@link KaartBron} in {@link #BRON} = {@link KaartBronErfenis} (players = the core's non-NPC
+ *   bases, visit = Erfenis.gaNaar + the read-only overview, every NPC village = a real NPC base in its own cell)</li>
  * </ul>
- * MERGE with feature/erfenis (branch 190-erfenis-poc): set {@link #BRON} to a bron on ErfenisData/Erfenis (players = its
- * non-NPC bases, visit = Erfenis.gaNaar + the read-only overview, npcVeranderd = make/update the NPC base in the village's
- * cell from its plan). Resources: tools/features/erfenis_kaart.py.
+ * Resources: tools/features/erfenis_kaart.py.
  */
 public final class KaartFeature {
-    /** The source of the real bases (swap at merge). */
-    public static KaartBron BRON = new KaartBronStandaard();
+    /** The source of the real bases. */
+    public static KaartBron BRON = new KaartBronErfenis();
 
     private KaartFeature() {
     }
@@ -29,7 +28,10 @@ public final class KaartFeature {
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener(KaartCommando::register);
         NeoForge.EVENT_BUS.addListener(KaartServer::tick);
-        NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> KaartServer.herstart());
+        NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
+            KaartServer.herstart();
+            KaartBronErfenis.zorgNpcBases(e.getServer());   // (a world from before the merge: its NPC villages get their bases)
+        });
     }
 
     public static void payloads(PayloadRegistrar registrar) {

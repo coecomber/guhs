@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.erfenis.Gebouw;
 import nl.juiced.guhs.feature.erfenis.GebouwType;
 import nl.juiced.guhs.feature.erfenis.Plot;
 import nl.juiced.guhs.feature.erfenis.Vormen;
+import nl.juiced.guhs.feature.erfenis.kaart.client.KaartClient;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -392,6 +393,23 @@ public final class OverzichtScherm extends Screen {
             sluitAlles();
             ErfenisClient.stuur(ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.TERUG));
         }, null));
+        // the world map (its "Terug" button opens this overview again), and for a visitor the way home
+        Component kaartKnop = Component.translatable("erfenis.ui.wereldkaart");
+        int kx = 14 + w1 + w2, w3 = font.width(kaartKnop) + 12;
+        Teken.knop(g, font, kaartKnop, kx, by, kx + w3, by + 14, mx, my, true, 0xFF7FA8D8);
+        klikken.add(new Klik(kx, by, kx + w3, by + 14, () -> {
+            sluitAlles();
+            KaartClient.open(() -> ErfenisClient.stuur(ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.OPEN)));
+        }, null));
+        if (!eigen()) {
+            Component naarEigen = Component.translatable("erfenis.ui.naar_eigen");
+            int ex = kx + w3 + 4, w4 = font.width(naarEigen) + 12;
+            Teken.knop(g, font, naarEigen, ex, by, ex + w4, by + 14, mx, my, true, Teken.GROEN_DONKER);
+            klikken.add(new Klik(ex, by, ex + w4, by + 14, () -> {
+                sluitAlles();
+                ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.GA, ErfenisPayloads.Actie.GA_EN_OPEN));
+            }, null));
+        }
         // right: the chips
         int x = width - 6;
         // the builder

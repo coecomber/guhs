@@ -79,10 +79,35 @@ public class KaartGameTests {
         }
         KaartLeven.nieuweDorpen(a, 3, Set.of(), 99_000L);
         a.snel = true;
-        a.spelers.put(java.util.UUID.randomUUID(), new KaartData.SpelerCel("Testguh", 0, 0));
         KaartData b = KaartData.load(a.save());
         helper.assertTrue(a.save().equals(b.save()), "load(save) gives the same data");
         helper.assertTrue(b.npcs().size() == a.npcs().size() && b.groeiTeller == a.groeiTeller && b.snel, "counts and switches kept");
+        helper.succeed();
+    }
+
+    /** The map's copy of the building numbers matches the core, and every seeded plan becomes the same real base. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void zelfdeRegelsAlsDeKern(GameTestHelper helper) {
+        for (KaartGebouwType k : KaartGebouwType.values()) {
+            nl.juiced.guhs.feature.erfenis.GebouwType t = nl.juiced.guhs.feature.erfenis.GebouwType.van(k.id);
+            helper.assertTrue(t != null, k.id + " exists in the core");
+            helper.assertTrue(t.maat == k.maat && t.topLevel() == k.topLevel(), k.id + ": same size and top level");
+            for (int th = 1; th <= KaartGebouwType.MAX_STADHUIS; th++) {
+                // (the stadhuis's own max level means nothing in either: it may always go up to its top level)
+                helper.assertTrue(t.maxAantal(th) == k.maxAantal(th) && (k == KaartGebouwType.STADHUIS || t.maxLevel(th) == k.maxLevel(th)),
+                        k.id + ": same limits at stadhuis " + th);
+            }
+            for (int l = 0; l <= k.topLevel(); l++) {
+                helper.assertTrue(t.knus(l) == k.knus(l), k.id + ": same Knusheid at level " + l);
+            }
+        }
+        KaartData a = data(777L);
+        KaartLeven.zaai(a, 40, Set.of(), 0L);
+        for (NpcDorp d : a.npcs()) {
+            nl.juiced.guhs.feature.erfenis.Base b = nl.juiced.guhs.feature.erfenis.Base.npc(d.id, d.naam, d.cx, d.cz, KaartBronErfenis.plan(d), 0, 0L);
+            helper.assertTrue(b.gebouwen.size() == d.plan.size(), d.naam + ": every building of the plan made it into the base");
+            helper.assertTrue(b.stadhuisLevel() == d.stadhuisLevel() && b.knusheid() == d.punten(), d.naam + ": same level and points");
+        }
         helper.succeed();
     }
 }

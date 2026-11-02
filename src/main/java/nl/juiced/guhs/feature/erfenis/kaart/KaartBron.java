@@ -1,6 +1,8 @@
 package nl.juiced.guhs.feature.erfenis.kaart;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -11,13 +13,8 @@ import net.minecraft.server.level.ServerPlayer;
 /**
  * De Erfenis, wereldkaart: THE SEAM to the core (feature/erfenis: Base, ErfenisData, Erfenis, Plot). The map only talks to
  * real bases through this interface; {@link KaartFeature#BRON} holds the one in use.
- * <ul>
- *   <li>Stand-alone (this branch): {@link KaartBronStandaard}: players get a cell of their own on the map, a visit only works
- *   once a dimension {@code guhs:erfenis} exists.</li>
- *   <li>MERGE: a {@code KaartBronErfenis} that reads {@code ErfenisData.alleBases()} (players = {@code !b.npc}), teleports with
- *   {@code Erfenis.gaNaar(p, base)}, opens the read-only overview, and turns every new/grown {@link NpcDorp} into a real base
- *   ({@code Base.npc(id, naam, cx, cz, List<Base.Plan>, bouwspul, nu)} in ITS cell). See the class comment of KaartFeature.</li>
- * </ul>
+ * The one in use is {@link KaartBronErfenis}: players = the core's non-NPC bases, a visit = {@code Erfenis.gaNaar} (+ the
+ * read-only overview), and every new/grown {@link NpcDorp} becomes a real NPC base in ITS cell.
  */
 public interface KaartBron {
     /** The real players' bases (no NPC villages: those come from {@link KaartData}). */
@@ -34,7 +31,16 @@ public interface KaartBron {
      */
     boolean bezoek(ServerPlayer p, UUID dorp, @Nullable NpcDorp npc, boolean bovenaanzicht);
 
-    /** An NPC village was founded or grew: make or update the real base behind it (stand-alone: nothing). */
+    /** An NPC village was founded or grew: make or update the real base behind it. */
     default void npcVeranderd(MinecraftServer server, NpcDorp dorp) {
+    }
+
+    /** Every cell that is taken by a real base (new NPC villages stay off these). Default: the players' cells. */
+    default Set<Long> bezetteCellen(MinecraftServer server) {
+        Set<Long> s = new HashSet<>();
+        for (KaartDorp d : spelerDorpen(server, System.currentTimeMillis())) {
+            s.add(KaartData.sleutel(d.cx(), d.cz()));
+        }
+        return s;
     }
 }

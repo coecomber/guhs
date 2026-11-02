@@ -12,7 +12,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -26,14 +25,9 @@ import nl.juiced.guhs.storage.GuhSavedData;
  * ({@code data/guhs/erfenis_kaart.dat}). The villages are made by {@link KaartLeven} from {@link #seed} (from the world
  * seed: the same world gets the same map) and then saved, so they are stable across restarts.
  * <p>
- * Also (only for the stand-alone branch, see {@link KaartBronStandaard}): the cells handed out to real players while the
- * core's ErfenisData is not wired yet ({@link #spelers}).
+ * The real players' bases are not here: they live in the core's ErfenisData (see {@link KaartBronErfenis}).
  */
 public final class KaartData extends SavedData {
-    /** A real player's cell in the stand-alone fallback (the core's ErfenisData replaces this at merge). */
-    public record SpelerCel(String naam, int cx, int cz) {
-    }
-
     public static final int MAX_NIEUWS = 40;
     static final SavedDataType<KaartData> TYPE = GuhSavedData.tagType("erfenis_kaart", KaartData::new, KaartData::load, KaartData::save);
 
@@ -45,8 +39,6 @@ public final class KaartData extends SavedData {
     public int groeiTeller;
     /** Dev: grow every few seconds instead of every few minutes. */
     public boolean snel;
-    final Map<UUID, SpelerCel> spelers = new LinkedHashMap<>();
-    int volgendeSpiraal;
 
     public static KaartData get(MinecraftServer server) {
         KaartData d = GuhSavedData.get(server.overworld(), TYPE, "guhs_erfenis_kaart");
@@ -105,7 +97,6 @@ public final class KaartData extends SavedData {
         d.gezaaid = t.getBooleanOr("Gezaaid", false);
         d.groeiTeller = t.getIntOr("GroeiTeller", 0);
         d.snel = t.getBooleanOr("Snel", false);
-        d.volgendeSpiraal = t.getIntOr("VolgendeSpiraal", 0);
         for (Tag e : t.getListOrEmpty("Npcs")) {
             if (e instanceof CompoundTag c) {
                 NpcDorp n = NpcDorp.load(c);
@@ -119,12 +110,6 @@ public final class KaartData extends SavedData {
                 d.nieuws.add(KaartNieuws.load(c));
             }
         }
-        for (Tag e : t.getListOrEmpty("Spelers")) {
-            if (e instanceof CompoundTag c) {
-                c.read("Id", UUIDUtil.CODEC).ifPresent(id -> d.spelers.put(id, new SpelerCel(c.getStringOr("Naam", "?"), c.getIntOr("Cx", 0),
-                        c.getIntOr("Cz", 0))));
-            }
-        }
         return d;
     }
 
@@ -134,7 +119,6 @@ public final class KaartData extends SavedData {
         t.putBoolean("Gezaaid", gezaaid);
         t.putInt("GroeiTeller", groeiTeller);
         t.putBoolean("Snel", snel);
-        t.putInt("VolgendeSpiraal", volgendeSpiraal);
         ListTag l = new ListTag();
         for (NpcDorp n : npcs.values()) {
             l.add(n.save());
@@ -145,16 +129,6 @@ public final class KaartData extends SavedData {
             nl.add(n.save());
         }
         t.put("Nieuws", nl);
-        ListTag sl = new ListTag();
-        for (Map.Entry<UUID, SpelerCel> e : spelers.entrySet()) {
-            CompoundTag c = new CompoundTag();
-            c.store("Id", UUIDUtil.CODEC, e.getKey());
-            c.putString("Naam", e.getValue().naam());
-            c.putInt("Cx", e.getValue().cx());
-            c.putInt("Cz", e.getValue().cz());
-            sl.add(c);
-        }
-        t.put("Spelers", sl);
         return t;
     }
 }

@@ -51,8 +51,10 @@ final class ErfenisCommando {
                 .then(Commands.literal("bouwspul").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("n", IntegerArgumentType.integer(0, 1_000_000)).executes(c -> {
                             Base b = eigen(c.getSource());
-                            b.bouwspul = IntegerArgumentType.getInteger(c, "n");
-                            return klaar(c.getSource(), b, Component.translatable("erfenis.cmd.bouwspul", b.bouwspul, b.opslag()));
+                            int n = IntegerArgumentType.getInteger(c, "n");
+                            b.bouwspul = Math.min(n, b.opslag());   // never above the storage (the top bar would show 400/200)
+                            return klaar(c.getSource(), b, Component.translatable(n > b.opslag() ? "erfenis.cmd.bouwspul_vol" : "erfenis.cmd.bouwspul",
+                                    b.bouwspul, b.opslag()));
                         })))
                 .then(Commands.literal("snel").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("aan").executes(c -> snel(c.getSource(), true)))
@@ -87,7 +89,7 @@ final class ErfenisCommando {
 
     private static int ga(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
-        Base b = ErfenisData.get(source.getServer()).vanSpeler(p.getUUID(), p.getGameProfile().name(), System.currentTimeMillis());
+        Base b = Erfenis.eigenBase(p);
         if (!Erfenis.gaNaar(p, b)) {
             source.sendFailure(Component.translatable("erfenis.cmd.geen_dim"));
             return 0;
@@ -96,8 +98,7 @@ final class ErfenisCommando {
     }
 
     private static Base eigen(CommandSourceStack source) throws CommandSyntaxException {
-        ServerPlayer p = source.getPlayerOrException();
-        return ErfenisData.get(source.getServer()).vanSpeler(p.getUUID(), p.getGameProfile().name(), System.currentTimeMillis());
+        return Erfenis.eigenBase(source.getPlayerOrException());
     }
 
     private static int klaar(CommandSourceStack source, Base b, Component tekst) {

@@ -23,6 +23,7 @@ TEKSTEN = {
     K + "nieuws.leeg": "Nog geen nieuws. Iedereen ligt te snurken.",
     K + "punten_uitleg": "Punten = Knusheid",
     K + "naar_mijn_dorp": "Naar mijn dorp",
+    K + "terug": "Terug naar bovenaanzicht",
     K + "zoom_in": "Inzoomen (of scrollen)",
     K + "zoom_uit": "Uitzoomen (of scrollen)",
     K + "jouw_erfenis": "Jouw erfenis",
@@ -61,9 +62,6 @@ TEKSTEN = {
     K + "tijd.dag": "%s dagen geleden",
     # server messages
     K + "weg": "Dat dorpje staat niet (meer) op de kaart. Njeg?",
-    K + "geen_dim": "De Erfenis-dimensie is er in deze testversie nog niet, njeg! De kaart werkt wel al.",
-    K + "bezocht": "Woesj! Je bent op bezoek. Kijken mag, aankomen niet.",
-    K + "bovenaanzicht_later": "Woesj! Je bent op bezoek. Het bovenaanzicht van andermans dorp komt zo, vads.",
     K + "cmd.nieuw": "%s nieuwe NPC-dorpjes gesticht (nu %s).",
     K + "cmd.groei": "%s keer laten groeien: %s dorpjes veranderd.",
     K + "cmd.snel_aan": "NPC-dorpjes groeien nu snel (elke 15 seconden).",
@@ -80,6 +78,8 @@ TEKSTEN = {
     K + "gebouw.muur.de": "de muur",
     K + "gebouw.boompje.de": "het boompje",
     # the news
+    K + "nieuws.speler_erfenis": "%s heeft een erfenis gekregen! Welkom op de kaart, njeg!",
+    K + "nieuws.speler_stadhuis": "De erfenis van %s heeft nu stadhuis-level %s! Vahoeg!",
     K + "nieuws.gesticht": "%s heeft een nieuw dorpje gesticht: %s. Welkom op de kaart, njeg!",
     K + "nieuws.stadhuis": "%s is gegroeid naar stadhuis-level %s! Vahoeg!",
     K + "nieuws.nieuw.molen": "%s heeft een nieuwe Bouwspulmolen in %s. Hij draait al vads.",

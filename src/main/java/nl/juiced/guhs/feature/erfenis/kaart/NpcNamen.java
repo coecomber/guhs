@@ -52,6 +52,11 @@ public final class NpcNamen {
         return PALET[r.nextInt(PALET.length)];
     }
 
+    /** A soft colour of its own for every real player's base (from the palette, by uuid). */
+    public static int spelerKleur(java.util.UUID id) {
+        return PALET[Math.floorMod(id.hashCode(), PALET.length)];
+    }
+
     static final int[] PALET = {0xFFF58BB0, 0xFFF7A35C, 0xFFEAD35A, 0xFF8FD16A, 0xFF5EC9B3, 0xFF6FB6F0, 0xFF9C8CF0, 0xFFD58CF0,
             0xFFF07A7A, 0xFFB5895E, 0xFF7FD6E8, 0xFFFFB3C7};
 }

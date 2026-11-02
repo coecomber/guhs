@@ -1,0 +1,66 @@
+# 1.9 POC, De Erfenis: core + wereldkaart together (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_erfenis_samen.txt
+# 1280x720 at gui scale 2 = 640x360 gui pixels. Overview top-left buttons (y 40..54): Sluiten | Terug naar de wereld |
+# Wereldkaart (x ~182..254) | for a visitor: Terug naar mijn erfenis (x ~258..393).
+# Flow: own overview (no HUD/minimap, Bouwspul clamped), Wereldkaart button, an NPC village from the Ranglijst -> Bezoeken,
+# then its Bovenaanzicht (read only), Terug naar mijn erfenis, and the map's Terug button back to the overview.
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section eigen
+/guhs erfenis
+wait 80
+waitrender 300
+/guhs erfenis snel aan
+/guhs erfenis bouwspul 400
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+shot samen_01_eigen_overzicht gui
+
+section kaart
+click 218 47
+wait 80
+mouse 234 180
+wait 10
+shot samen_02_kaart_vanuit_overzicht gui
+widgets
+click 560 36
+wait 60
+shot samen_03_kaart_npc_gekozen gui
+press Bezoeken
+wait 100
+waitrender 300
+shot samen_04_npc_aankomst
+
+section npc_bovenaanzicht
+gui keep
+/guhs erfenis kaart
+wait 60
+click 560 36
+wait 40
+press Bovenaanzicht
+wait 120
+waitrender 300
+shot samen_05_npc_bovenaanzicht gui
+
+section terug
+click 325 47
+wait 120
+waitrender 300
+shot samen_06_terug_eigen gui
+click 218 47
+wait 80
+press Terug naar bovenaanzicht
+wait 60
+waitrender 200
+shot samen_07_kaart_terug_overzicht gui
+gui close
+/guhs erfenis kaart npc groei 3
+/guhs erfenis info
+quit

@@ -1,7 +1,10 @@
 package nl.juiced.guhs.feature.erfenis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +29,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import nl.juiced.guhs.feature.erfenis.kaart.KaartData;
+import nl.juiced.guhs.feature.erfenis.kaart.KaartNieuws;
 
 /**
  * De Erfenis (POC), the server side: going there and back, the actions of the overview, the builder's clock, the
@@ -139,6 +144,19 @@ public final class Erfenis {
         p.resetFallDistance();
     }
 
+    /** This player's own base (made on first use in the next free cell; then the world map's news says so). */
+    public static Base eigenBase(ServerPlayer p) {
+        MinecraftServer server = p.level().getServer();
+        ErfenisData data = ErfenisData.get(server);
+        boolean nieuw = data.van(p.getUUID()) == null;
+        long nu = System.currentTimeMillis();
+        Base b = data.vanSpeler(p.getUUID(), p.getGameProfile().name(), nu);
+        if (nieuw) {
+            KaartData.get(server).meld(new KaartNieuws("erfenis.kaart.nieuws.speler_erfenis", List.of(b.naam), nu));
+        }
+        return b;
+    }
+
     static boolean eigen(ServerPlayer p, Base b) {
         return !b.npc && p.getUUID().equals(b.eigenaar);
     }
@@ -157,6 +175,9 @@ public final class Erfenis {
         Gebouw g = b.afronden(data.snel ? Math.max(nu, b.bouw.eind()) : nu);
         data.setDirty();
         if (g != null) {
+            if (!b.npc && g.type == GebouwType.STADHUIS) {
+                KaartData.get(server).meld(new KaartNieuws("erfenis.kaart.nieuws.speler_stadhuis", List.of(b.naam, Integer.toString(g.level)), nu));
+            }
             if (bezocht(server, b)) {
                 stempelGebouw(server, b, g);
             } else {
@@ -174,6 +195,18 @@ public final class Erfenis {
     /** Every second: finished builds, and bases somebody walked onto that are behind. */
     static void tick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();
+        if (!openStraks.isEmpty()) {
+            for (var it = openStraks.entrySet().iterator(); it.hasNext();) {
+                var e = it.next();
+                if (server.getTickCount() >= e.getValue()) {
+                    it.remove();
+                    ServerPlayer p = server.getPlayerList().getPlayer(e.getKey());
+                    if (p != null && in(p)) {
+                        openOverzicht(p);
+                    }
+                }
+            }
+        }
         if (server.getTickCount() % 20 != 7 || level(server) == null) {
             return;
         }
@@ -229,6 +262,14 @@ public final class Erfenis {
         actie(p, ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.OPEN));
     }
 
+    /** Players whose overview opens in a moment (after a teleport: the client first has to arrive), with the server tick. */
+    private static final Map<UUID, Integer> openStraks = new HashMap<>();
+
+    /** {@link #openOverzicht} in about a second (use right after {@link #gaNaar} into the dimension). */
+    public static void openOverzichtStraks(ServerPlayer p) {
+        openStraks.put(p.getUUID(), p.level().getServer().getTickCount() + 25);
+    }
+
     /** Sends this base to the player (open = the overview opens; read-only unless the player owns it). */
     public static void sync(ServerPlayer p, Base b, boolean open) {
         PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(b.save(), System.currentTimeMillis(), eigen(p, b), open,
@@ -267,7 +308,10 @@ public final class Erfenis {
                 return;
             }
             case ErfenisPayloads.Actie.GA -> {
-                gaNaar(p, data.vanSpeler(p.getUUID(), p.getGameProfile().name(), System.currentTimeMillis()));
+                gaNaar(p, eigenBase(p));
+                if (a.id() == ErfenisPayloads.Actie.GA_EN_OPEN) {
+                    openOverzichtStraks(p);
+                }
                 return;
             }
             case ErfenisPayloads.Actie.TERUG -> {

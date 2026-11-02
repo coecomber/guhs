@@ -100,6 +100,8 @@ public final class ErfenisPayloads {
     /** What the client wants. {@code soort}: one of the constants below; the other fields as that soort needs them. */
     public record Actie(int soort, int id, int x, int z, int x2, int z2, int rot, String gebouw) implements CustomPacketPayload {
         public static final int OPEN = 0, PLAATS = 1, LIJN = 2, VERPLAATS = 3, DRAAI = 4, VERBETER = 5, OPHALEN = 6, GA = 7, TERUG = 8;
+        /** {@link #GA} with this as {@code id}: and open the own overview once there ("Terug naar mijn erfenis"). */
+        public static final int GA_EN_OPEN = 1;
         public static final Type<Actie> TYPE = new Type<>(Guhs.id("erfenis_actie"));
         public static final StreamCodec<FriendlyByteBuf, Actie> STREAM_CODEC = StreamCodec.ofMember(Actie::write, Actie::new);
 

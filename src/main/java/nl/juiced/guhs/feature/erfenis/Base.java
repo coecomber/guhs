@@ -147,19 +147,33 @@ public final class Base {
      */
     public static Base npc(UUID id, String naam, int cx, int cz, List<Plan> plan, int bouwspul, long nu) {
         Base b = new Base(id, null, naam, true, cx, cz);
+        b.vervangPlan(plan, nu);
+        b.bouwspul = Math.max(0, Math.min(bouwspul, b.opslag()));
+        return b;
+    }
+
+    /**
+     * (phase 2) Replaces every building by this list IN PLACE (same object, id, cell and name): an NPC village that grew.
+     * The same rules as {@link #npc(UUID, String, int, int, List, int, long)}; no build in progress afterwards, Bouwspul
+     * clamped to the new storage, and the plot is stamped again on the next visit (or now, see ErfenisData#veranderd).
+     */
+    public void vervangPlan(List<Plan> plan, long nu) {
+        gebouwen.clear();
+        volgendeId = 1;
+        bouw = null;
         for (Plan p : plan) {
-            if (p.type() == GebouwType.STADHUIS && b.stadhuis() != null) {
+            if (p.type() == GebouwType.STADHUIS && stadhuis() != null) {
                 continue;
             }
-            if (b.vrij(p.x(), p.z(), p.type().maat, -1)) {
-                b.nieuwGebouw(p.type(), Math.max(1, Math.min(p.type().topLevel(), p.level())), p.x(), p.z(), p.rot(), nu);
+            if (vrij(p.x(), p.z(), p.type().maat, -1)) {
+                nieuwGebouw(p.type(), Math.max(1, Math.min(p.type().topLevel(), p.level())), p.x(), p.z(), p.rot(), nu);
             }
         }
-        if (b.stadhuis() == null && b.vrij(30, 30, GebouwType.STADHUIS.maat, -1)) {
-            b.nieuwGebouw(GebouwType.STADHUIS, 1, 30, 30, 0, nu);
+        if (stadhuis() == null && vrij(30, 30, GebouwType.STADHUIS.maat, -1)) {
+            nieuwGebouw(GebouwType.STADHUIS, 1, 30, 30, 0, nu);
         }
-        b.bouwspul = Math.max(0, bouwspul);
-        return b;
+        bouwspul = Math.max(0, Math.min(bouwspul, opslag()));
+        moetStempelen = true;
     }
 
     private Gebouw nieuwGebouw(GebouwType type, int level, int x, int z, int rot, long nu) {

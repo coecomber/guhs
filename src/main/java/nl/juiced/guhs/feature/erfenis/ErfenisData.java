@@ -94,6 +94,37 @@ public final class ErfenisData extends SavedData {
         return b;
     }
 
+    /**
+     * Phase 2 (the world map): the NPC village with this id in THIS cell (the map picks its own cells and ids), made, or, when
+     * it exists already, given this building list in place ({@link Base#vervangPlan}). Null (nothing changed): the cell
+     * belongs to another base, or the id is a player's base / an NPC base in another cell. Call {@link #veranderd} after.
+     */
+    @Nullable
+    public Base npcBase(UUID id, String naam, int cx, int cz, java.util.List<Base.Plan> plan, long nu) {
+        Base b = bases.get(id);
+        if (b == null) {
+            if (cellen.containsKey(Plot.sleutel(cx, cz))) {
+                return null;
+            }
+            b = Base.npc(id, naam, cx, cz, plan, 0, nu);
+            b.bouwspul = b.opslag() / 2;
+            voegToe(b);
+            return b;
+        }
+        if (!b.npc || b.cx != cx || b.cz != cz) {
+            return null;
+        }
+        b.naam = naam;
+        b.vervangPlan(plan, nu);
+        setDirty();
+        return b;
+    }
+
+    /** Every cell a base stands on (the world map keeps its new NPC villages off these; the player spiral skips them too). */
+    public java.util.Set<Long> bezetteCellen() {
+        return Collections.unmodifiableSet(cellen.keySet());
+    }
+
     /** Phase 2: a changed NPC base (it grew): mark it for stamping on the next visit, or stamp now if somebody is there. */
     public void veranderd(MinecraftServer server, Base b) {
         b.moetStempelen = true;

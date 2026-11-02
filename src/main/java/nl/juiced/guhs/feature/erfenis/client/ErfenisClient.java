@@ -11,11 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
@@ -67,6 +69,13 @@ public final class ErfenisClient {
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeCameraAngles event) -> Overzicht.hoeken(event));
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeFov event) -> Overzicht.fov(event));
         NeoForge.EVENT_BUS.addListener((RenderLevelStageEvent.AfterTranslucentBlocks event) -> OverzichtWereld.teken(event));
+        // The whole HUD goes while the overview is open. hideGui (see Overzicht.start) only hides the vanilla layers: other mods'
+        // HUDs (the JourneyMap minimap in the dev client) draw from RenderGuiEvent.Pre, and cancelling that skips them all.
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (RenderGuiEvent.Pre event) -> {
+            if (Overzicht.actief()) {
+                event.setCanceled(true);
+            }
+        });
         NeoForge.EVENT_BUS.addListener((RenderHandEvent event) -> {
             if (Overzicht.actief()) {
                 event.setCanceled(true);

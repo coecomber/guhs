@@ -33110,9 +33110,6 @@
   "erfenis.kaart.tijd.uur": "%s uur geleden",
   "erfenis.kaart.tijd.dag": "%s dagen geleden",
   "erfenis.kaart.weg": "Dat dorpje staat niet (meer) op de kaart. Njeg?",
-  "erfenis.kaart.geen_dim": "De Erfenis-dimensie is er in deze testversie nog niet, njeg! De kaart werkt wel al.",
-  "erfenis.kaart.bezocht": "Woesj! Je bent op bezoek. Kijken mag, aankomen niet.",
-  "erfenis.kaart.bovenaanzicht_later": "Woesj! Je bent op bezoek. Het bovenaanzicht van andermans dorp komt zo, vads.",
   "erfenis.kaart.cmd.nieuw": "%s nieuwe NPC-dorpjes gesticht (nu %s).",
   "erfenis.kaart.cmd.groei": "%s keer laten groeien: %s dorpjes veranderd.",
   "erfenis.kaart.cmd.snel_aan": "NPC-dorpjes groeien nu snel (elke 15 seconden).",
@@ -33144,5 +33141,12 @@
   "erfenis.kaart.nieuws.gezellig.6": "%s zwaait naar alle buren vanuit %s.",
   "erfenis.kaart.nieuws.gezellig.7": "In %2$s regent het knabbels. %1$s heeft een paraplu omgekeerd.",
   "erfenis.kaart.nieuws.gezellig.8": "%s heeft in %s een nieuw liedje verzonnen. Het gaat over kaas.",
-  "erfenis.kaart.nieuws.gezellig.9": "%s telt alle boompjes van %s. Er zijn er precies genoeg."
+  "erfenis.kaart.nieuws.gezellig.9": "%s telt alle boompjes van %s. Er zijn er precies genoeg.",
+  "erfenis.cmd.bouwspul_vol": "Bouwspul: %s. Meer past er niet in je opslag (%s): bouw een schuurtje of een hoger stadhuis.",
+  "erfenis.ui.wereldkaart": "Wereldkaart",
+  "erfenis.ui.naar_eigen": "Terug naar mijn erfenis",
+  "erfenis.kaart.terug": "Terug naar bovenaanzicht",
+  "erfenis.kaart.nieuws.speler_erfenis": "%s heeft een erfenis gekregen! Welkom op de kaart, njeg!",
+  "erfenis.kaart.nieuws.speler_stadhuis": "De erfenis van %s heeft nu stadhuis-level %s! Vahoeg!",
+  "biome.guhs.erfenis": "De Erfenis"
 }

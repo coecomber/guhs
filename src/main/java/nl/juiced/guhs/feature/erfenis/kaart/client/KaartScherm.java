@@ -65,8 +65,13 @@ public final class KaartScherm extends Screen {
     private double sleepAfstand;
     private int ververs;
 
-    public KaartScherm() {
+    /** Where the "Terug" button goes (the overview this map was opened from), or null: no such button. */
+    @Nullable
+    private final Runnable terug;
+
+    public KaartScherm(@Nullable Runnable terug) {
         super(Component.translatable("erfenis.kaart.titel"));
+        this.terug = terug;
     }
 
     // =====================================================================================================================
@@ -171,6 +176,12 @@ public final class KaartScherm extends Screen {
         }).bounds(mw + 8, height - 25, SIDE - 16, 18).build();
         thuis.active = eigen() != null;
         addRenderableWidget(thuis);
+        if (terug != null) {
+            addRenderableWidget(Button.builder(Component.translatable("erfenis.kaart.terug"), b -> {
+                onClose();
+                terug.run();
+            }).bounds(mw + 8, height - 47, SIDE - 16, 18).build());
+        }
         addRenderableWidget(Button.builder(Component.literal("+"), b -> zoomRond(1, mw / 2f, height / 2f)).bounds(mw - 26, 8, 18, 18)
                 .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.zoom_in"))).build());
         addRenderableWidget(Button.builder(Component.literal("-"), b -> zoomRond(-1, mw / 2f, height / 2f)).bounds(mw - 26, 28, 18, 18)
@@ -441,7 +452,7 @@ public final class KaartScherm extends Screen {
     }
 
     private int lijstOnder() {
-        return height - 42;
+        return height - (terug != null ? 64 : 42);
     }
 
     private void ranglijst(GuiGraphicsExtractor g, int mouseX, int mouseY) {

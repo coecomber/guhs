@@ -37,12 +37,9 @@ public final class KaartServer {
         return data;
     }
 
+    /** The cells taken by real bases (players, and any NPC base of the core that is not on the map). */
     static Set<Long> spelerCellen(MinecraftServer server) {
-        Set<Long> s = new HashSet<>();
-        for (KaartDorp d : KaartFeature.BRON.spelerDorpen(server, System.currentTimeMillis())) {
-            s.add(KaartData.sleutel(d.cx(), d.cz()));
-        }
-        return s;
+        return new HashSet<>(KaartFeature.BRON.bezetteCellen(server));
     }
 
     /** Every village on the map: the real players' bases and the NPC villages. */
