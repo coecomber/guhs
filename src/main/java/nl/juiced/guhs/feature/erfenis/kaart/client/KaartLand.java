@@ -122,6 +122,12 @@ final class KaartLand {
             float t = Math.max(0, Math.min(1, v / (DREMPEL - 0.06f)));
             int c = mix(DIEP, 0xFFBEDCF6, t * t);
             c = mix(c, 0xFFB6A8EC, Math.max(0, ruis.fbm(fx / 5f + 40, fy / 5f) - 0.45f) * 0.9f);   // lilac drifts
+            // towards the edge of the texture the water fades into the plain sea around it (no seam when zoomed out)
+            int rand = Math.min(Math.min(x, texW() - 1 - x), Math.min(y, texH() - 1 - y));
+            c = mix(DIEP, c, Math.min(1f, rand / (3f * px)));
+            if (rand < 3 * px) {
+                return c;
+            }
             if (t < 0.7f && (hash & 1023) < 6) {
                 c = mix(c, 0xFFFFFFFF, 0.55f);   // a glint on the water
             } else if (((int) (fy * 3 + Math.sin(fx * 1.7) * 1.2) & 7) == 0 && (hash & 3) == 0 && t > 0.25f) {

@@ -11,6 +11,7 @@ wait 20
 section kaart
 /guhs erfenis kaart npc groei 25
 wait 10
+gui keep
 /guhs erfenis kaart
 wait 60
 mouse 234 180
@@ -30,3 +31,4 @@ scroll 234 180 -1
 scroll 234 180 -1
 wait 40
 shot 190_kaart_ver gui
+gui close

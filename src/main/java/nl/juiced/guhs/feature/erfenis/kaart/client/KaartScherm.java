@@ -32,7 +32,7 @@ import nl.juiced.guhs.feature.erfenis.kaart.KaartPayloads;
  */
 public final class KaartScherm extends Screen {
     private static final float[] ZOOMS = {7f, 14f, 26f};
-    private static final int SIDE = 172, PANEL_W = 222, PANEL_H = 96, LIJST_Y = 30, RIJ = 12;
+    private static final int SIDE = 172, PANEL_W = 252, PANEL_H = 96, LIJST_Y = 30, RIJ = 12;
     /** Marker colours: your own village, other real players, NPC villages. */
     static final int EIGEN = 0xFFFFD54A, SPELER = 0xFF5FAEF0, NPC = 0xFFF29BB8;
     private static final int INKT = 0xFF4A3A55, GRIJS = 0xFF8A7A90, PAPIER = 0xF2FFF6EC, ROZE = 0xFFF2A9C4;
@@ -178,7 +178,7 @@ public final class KaartScherm extends Screen {
 
         KaartDorp d = dorp(gekozen);
         if (d != null) {
-            int px = 8, py = height - PANEL_H - 8, by = py + PANEL_H - 24, bw = 68;
+            int px = 8, py = height - PANEL_H - 8, by = py + PANEL_H - 24, bw = 78;
             boolean eigen = isEigen(d);
             addRenderableWidget(Button.builder(Component.translatable(eigen ? "erfenis.kaart.naar_huis" : "erfenis.kaart.bezoeken"),
                     b -> actie(KaartPayloads.Actie.BEZOEK, d)).bounds(px + 6, by, bw, 18)
@@ -328,15 +328,31 @@ public final class KaartScherm extends Screen {
             }
             DorpIcoon.teken(g, d, Math.round(sx), Math.round(sy), zoom, soortKleur(d), isEigen(d), d.id().equals(gekozen), d == hover, tijd);
         }
-        for (KaartDorp d : volgorde) {
+        // names: the important ones first (own, chosen, hovered, players, then by level); a label that would overlap one
+        // already placed is left out (hover shows it anyway)
+        List<KaartDorp> namen = new ArrayList<>(kaart.dorpen());
+        namen.sort(Comparator.comparingInt((KaartDorp d) -> isEigen(d) || d.id().equals(gekozen) || d == hover ? 0 : d.npc() ? 2 : 1)
+                .thenComparing(Comparator.comparingInt(KaartDorp::stadhuisLevel).reversed()));
+        List<int[]> geplaatst = new ArrayList<>();
+        for (KaartDorp d : namen) {
             float sx = mx + (d.cx() + 0.5f - camX) * zoom, sy = my + (d.cz() + 0.5f - camZ) * zoom;
             if (sx < -60 || sy < -20 || sx > mw + 60 || sy > height + 20) {
                 continue;
             }
-            boolean toon = isEigen(d) || d.id().equals(gekozen) || d == hover || zoom >= 20
-                    || (zoom >= 10 && (!d.npc() || d.stadhuisLevel() >= 4));
-            if (toon) {
-                naamLabel(g, d, Math.round(sx), Math.round(sy + DorpIcoon.halveHoogte(d, zoom) + 3));
+            boolean moet = isEigen(d) || d.id().equals(gekozen) || d == hover;
+            boolean toon = moet || zoom >= 20 || (zoom >= 10 && (!d.npc() || d.stadhuisLevel() >= 4));
+            if (!toon) {
+                continue;
+            }
+            int x = Math.round(sx), y = Math.round(sy + DorpIcoon.halveHoogte(d, zoom) + 3), w = font.width(labelTekst(d)) / 2 + 4;
+            int[] r = {x - w, y - 2, x + w, y + 10};
+            boolean vrij = true;
+            for (int[] o : geplaatst) {
+                vrij &= r[2] <= o[0] || r[0] >= o[2] || r[3] <= o[1] || r[1] >= o[3];
+            }
+            if (vrij || moet) {
+                geplaatst.add(r);
+                naamLabel(g, d, x, y);
             }
         }
         g.disableScissor();
@@ -344,11 +360,16 @@ public final class KaartScherm extends Screen {
         legenda(g, mw);
     }
 
-    private void naamLabel(GuiGraphicsExtractor g, KaartDorp d, int x, int y) {
+    private Component labelTekst(KaartDorp d) {
         MutableComponent t = naam(d).copy();
         if (zoom >= 20) {
             t.append(Component.literal(" " + d.stadhuisLevel()).withStyle(ChatFormatting.YELLOW));
         }
+        return t;
+    }
+
+    private void naamLabel(GuiGraphicsExtractor g, KaartDorp d, int x, int y) {
+        Component t = labelTekst(d);
         int w = font.width(t);
         g.fill(x - w / 2 - 3, y - 2, x + w / 2 + 3, y + 9, 0xA0403050);
         g.fill(x - w / 2 - 3, y + 9, x + w / 2 + 3, y + 10, soortKleur(d));
@@ -420,7 +441,7 @@ public final class KaartScherm extends Screen {
     }
 
     private int lijstOnder() {
-        return height - 30;
+        return height - 42;
     }
 
     private void ranglijst(GuiGraphicsExtractor g, int mouseX, int mouseY) {
