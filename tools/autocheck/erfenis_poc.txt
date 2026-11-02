@@ -1,6 +1,6 @@
 # De Erfenis POC (190-erfenis-poc): arrive on the own plot, open the overview, select the stadhuis, the shop's ghost, an NPC village.
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/erfenis_poc.txt
-# (1280x720, GUI scale auto = 3: the screen is 427 x 240 GUI pixels; the camera starts above the middle of the plot)
+# (1280x720, GUI scale auto = 2: the screen is 640 x 360 GUI pixels; the camera starts above the middle of the plot)
 
 section setup
 /gamemode creative
@@ -22,20 +22,20 @@ gui keep
 wait 40
 waitrender 200
 shot erfenis_overzicht gui
-click 213 118
+click 320 180
 wait 10
 shot erfenis_stadhuis_gekozen gui
-click 248 205
+click 354 327
 wait 5
-mouse 300 90
+mouse 420 140
 wait 10
 shot erfenis_spook_muur gui
-drag 280 80 340 80
+drag 400 120 470 120
 wait 30
 shot erfenis_muurlijn gui
-click 100 205
+click 216 327
 wait 5
-mouse 120 100
+mouse 200 150
 wait 10
 shot erfenis_spook_molen gui
 widgets

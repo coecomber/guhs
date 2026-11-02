@@ -162,8 +162,10 @@ public final class OverzichtScherm extends Screen {
     // the world under the mouse
     // =====================================================================================================================
 
+    private static final java.util.Map<Integer, Integer> HOOGTES = new java.util.HashMap<>();
+
     private static int hoogte(GebouwType t, int level) {
-        return Vormen.hoogte(t, level, false);
+        return HOOGTES.computeIfAbsent(t.ordinal() * 64 + Math.max(0, level), k -> Vormen.hoogte(t, level, false));
     }
 
     private void kijkOnderMuis(double mx, double my) {
@@ -315,7 +317,7 @@ public final class OverzichtScherm extends Screen {
                 return;
             }
         }
-        if (modus == Modus.KIJKEN && hoverGebouw != null) {
+        if (modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw.id != geselecteerd) {
             Gebouw h = hoverGebouw;
             g.setComponentTooltipForNextFrame(font, List.of(naam(h).copy().withStyle(ChatFormatting.BOLD),
                     h.level == 0 ? Component.translatable("erfenis.ui.in_aanbouw") : Component.translatable("erfenis.ui.level", h.level)), mx, my);
@@ -334,7 +336,7 @@ public final class OverzichtScherm extends Screen {
             double top = Overzicht.grondY() + hoogte(geb.type, Math.max(geb.level, 0)) + 1.2;
             if (b.inAanbouw(geb)) {
                 double[] p = Overzicht.projecteer(new Vec3(cx, top + 0.6, cz), width, height);
-                if (p != null) {
+                if (p != null && p[1] > 40) {
                     String t = Teken.tijd(b.bouw.eind() - nu);
                     int w = Math.max(44, font.width(t) + 24), x = (int) p[0] - w / 2, y = (int) p[1] - 9;
                     Teken.chip(g, x, y, x + w, y + 17);
@@ -347,7 +349,7 @@ public final class OverzichtScherm extends Screen {
                 double v = geb.voorraadOp(nu);
                 if (v >= 1) {
                     double[] p = Overzicht.projecteer(new Vec3(cx, top, cz), width, height);
-                    if (p != null) {
+                    if (p != null && p[1] > 40) {
                         boolean vol = v >= GebouwType.molenOpslag(geb.level);
                         String t = Integer.toString((int) v);
                         int w = font.width(t) + 24, x = (int) p[0] - w / 2, y = (int) p[1] - 10;
@@ -568,15 +570,20 @@ public final class OverzichtScherm extends Screen {
             int rand = gekozen ? Teken.GOUD : op ? Teken.ROZE_DONKER : Teken.ROZE;
             Teken.rond(g, x, y, x + SHOP_W, y + SHOP_H, rand, 3);
             Teken.rond(g, x + 1, y + 1, x + SHOP_W - 1, y + SHOP_H - 1, f == null ? (op ? 0xFFFFFFFF : 0xFFFFF0F5) : 0xFFEDE3E8, 3);
-            g.item(t.icoon(), x + (SHOP_W - 16) / 2, y + 3);
+            g.item(t.icoon(), x + 4, y + 3);
             if (f != null) {
-                g.fill(x + (SHOP_W - 16) / 2, y + 3, x + (SHOP_W + 16) / 2, y + 19, 0x80EDE3E8);   // (greyed icon)
+                g.fill(x + 4, y + 3, x + 20, y + 19, 0x80EDE3E8);   // (greyed icon)
             }
             String telling = b.aantal(t) + "/" + t.maxAantal(th);
-            g.text(font, telling, x + SHOP_W - 3 - font.width(telling), y + 3, Teken.ZACHT, false);
+            g.text(font, telling, x + SHOP_W - 4 - font.width(telling), y + 7, Teken.ZACHT, false);
             Component nm = Component.translatable(t.naamKey());
-            String naamTekst = font.plainSubstrByWidth(nm.getString(), SHOP_W - 4);
-            g.text(font, naamTekst, x + (SHOP_W - font.width(naamTekst)) / 2, y + 21, f == null ? Teken.DONKER : Teken.ZACHT, false);
+            int nw = font.width(nm);
+            float schaal = nw > SHOP_W - 6 ? (SHOP_W - 6) / (float) nw : 1f;   // (long names: a bit smaller, never cut)
+            g.pose().pushMatrix();
+            g.pose().translate(x + SHOP_W / 2f - nw * schaal / 2f, y + 22 + (1 - schaal) * 4);
+            g.pose().scale(schaal, schaal);
+            g.text(font, nm, 0, 0, f == null ? Teken.DONKER : Teken.ZACHT, false);
+            g.pose().popMatrix();
             // the cost (or the lock)
             String regel;
             int kleur;

@@ -68,7 +68,7 @@ public final class Overzicht {
         if (!zelfde) {
             doelX = x = plot.getX() + Plot.MAAT / 2.0;
             doelZ = z = plot.getZ() + Plot.MAAT / 2.0;
-            doelAfstand = afstand = 58;
+            doelAfstand = afstand = 40;
             doelYaw = yaw = 180f;
         }
         if (!actief) {
