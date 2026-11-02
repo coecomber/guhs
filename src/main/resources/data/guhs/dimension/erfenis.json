@@ -1,0 +1,13 @@
+{
+  "type": "guhs:erfenis",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:erfenis",
+      "layers": [],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}
