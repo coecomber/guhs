@@ -200,6 +200,7 @@ public final class Features {
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.register(modBus);   // 1.8.0 (vadskracht): the hamsterbuis network
         nl.juiced.guhs.feature.centrale.CentraleFeature.register(modBus);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale + export bij guh-villagers
         nl.juiced.guhs.feature.fabriek.FabriekFeature.register(modBus);   // 1.8.0 (vadskracht): de Fabriekshal (wol, bouwblokken, kleurstof)
+        nl.juiced.guhs.feature.erfenis.ErfenisFeature.register(modBus);   // 1.9 POC: De Erfenis (own base, overview, plots dimension)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -327,6 +328,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwinkel.DroomWinkelFeature.payloads(registrar);   // 1.8.0: the droomwinkeltje's screen and buys
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.payloads(registrar);   // 1.8.0 playtest: Snoes' story HUD
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.payloads(registrar);   // 1.8.0: the hamsterbuis station's screen
+        nl.juiced.guhs.feature.erfenis.ErfenisFeature.payloads(registrar);   // 1.9 POC: De Erfenis
     }
 
     public static void creative(Consumer<ItemStack> output) {
