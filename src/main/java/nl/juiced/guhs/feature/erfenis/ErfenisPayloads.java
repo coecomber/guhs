@@ -125,7 +125,9 @@ public final class ErfenisPayloads {
     public record Actie(int soort, int id, int x, int z, int x2, int z2, int rot, String tekst) implements CustomPacketPayload {
         public static final int OPEN = 0, PLAATS = 1, VERPLAATS = 3, DRAAI = 4, VERBETER = 5, OPHALEN = 6, GA = 7, TERUG = 8,
                 OPRUIMEN = 9, KAVEL = 10, VERF = 11, KIES = 12, KLEUR = 13, SELECTIE = 14, NAAR_HUIS = 15, LOKET = 16, BUREAU = 17,
-                MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20;
+                MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20, DECO = 21;
+        /** {@link #DECO} in {@code x2}: place {@code tekst} at (x, z, rot), or put the piece on tile (x, z) away. */
+        public static final int DECO_PLAATS = 0, DECO_WEG = 1;
         /** {@link #PENSION} sub-actions in {@code x}: the lists, send a guh, bring one home, which building it helps ({@code id}). */
         public static final int PENSION_OPEN = 0, PENSION_STUUR = 1, PENSION_HAAL = 2, PENSION_HELPT = 3;
         /** {@link #GA} with this as {@code id}: and open the own overview once there ("Terug naar mijn erfenis"). */

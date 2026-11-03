@@ -1,0 +1,69 @@
+# Testen: Guhs 1.9 "Een opknapper!" (branch `190-opknapper`)
+
+Alles in één: de brief van de makelaar, het Erfhekje en de Leverkist, je eigen dorp (33 gebouwen, 10 levels, de echte
+vormen uit de renders), de makelaarstour tot Hoeve 2, decoschuurtje, bestellingen en karretjes van de buurdorpjes, de
+wereldkaart, Handje helpen en het hele Sherlock-verhaal.
+
+## Starten
+
+- Dev-client: `gradlew runClient` vanuit `guhs_opk/w-int` (nieuwe wereld, cheats aan).
+- Speel in **survival** als je de echte weg wilt zien: zonder gekochte erfenis zeggen de toets en `/guhs erfenis`
+  "Je hebt nog geen erfenis". In creative mag je altijd (dev-gemak).
+
+## De hele reis (zo speel je hem)
+
+1. **Brief**: na 30 min speeltijd (vanaf je eerste Guhmension-bezoek) komt de Postguh. Snel: `/guhs erfenis brief`
+   (Postguh nu) of `/guhs erfenis brief klok 29`. Lees de brief, **Kopen voor 1 kaasknabbel** → Erfhekje + Leverkist.
+2. **Hekje en kist**: zet het Erfhekje en de Leverkist neer (de kist is van wie hem neerzet). Loop door het hekje.
+3. **Aankomst**: je staat in je krakkemikkige dorp. Makelaar Guhrrit staat naast je en begint de **makelaarstour**:
+   plukje opruimen → gratis Kippenhok → eerste bewoner → eerste bestelling → Hoeve 2 → hij gaat op vakantie (borstbeeld en
+   brievenbus in je decoschuurtje). Klik op hem om de huidige stap nog eens te horen.
+4. **Bovenaanzicht** (toets, of `/guhs erfenis bovenaanzicht`): winkel onderin, gebouwpanelen, belletjes om op te halen,
+   links Opslag / Naar huis / Alles ophalen / **Deco** / Loket / Logés.
+5. **Deco**: knop **Deco (n)** → Neerzetten (spookje volgt je muis, R draait, klik zet neer) of Opbergen. Vondsten,
+   bestel-bedankjes, Burenhulp en Sherlock-beloningen komen hier. Een gebouw op een decostuk zet het stuk terug in het schuurtje.
+6. **Bestellingen**: paneel van het Marktplein → **Bestellingen**, of rechtsklik op het Marktplein in je dorp, of de
+   wereldkaart (toets M / `/guhs erfenis kaart`) → een buurdorpje → Bestellingen.
+7. **Sherlock**: zodra je een Detectivebureau bouwt trekt Sherlock in. Ligt er een zaak klaar, dan zweeft er een
+   **vergrootglas-wolkje** boven het bureau in het bovenaanzicht (klik = Speurboekje). Rechtsklik op het bureau in je dorp
+   werkt ook.
+8. **Naar huis**: venster Naar huis → kies goed + aantal → het komt in je Leverkist in de hoofdwereld (vlaggetje omhoog).
+   Glasscherven mogen nu ook mee (thuis smelten tot glas). Het Leverkist-plafond per uur geldt.
+9. **Terug**: knop Terug in het bovenaanzicht of `/guhs erfenis terug` → je staat voor het hekje dat je gebruikte.
+
+## Handige dev-commando's (op)
+
+| Commando | Wat |
+|---|---|
+| `/guhs erfenis demo` | kant-en-klaar dorp (Hoeve 6, ~25 gebouwen) |
+| `/guhs erfenis snel aan` / `tijd <min>` | alle klussen meteen klaar / tijd laten verstrijken |
+| `/guhs erfenis hoeve <n>`, `geef <goed\|guhlden\|alles> <n>` | Hoeve-level, spullen |
+| `/guhs erfenis opruimen alles\|<n>`, `kavels <n>` | land openmaken |
+| `/guhs erfenis doe plaats <type> <x> <z> [rot]` | bouwen zoals een klik (ook `verbeter <type>`, `ophalen <type>`, `allesophalen`, `opruimen <plukje>`, `deco <id> <x> <z> [rot]`, `naarhuis <goed> <n>`, `bureau`, `markt`) |
+| `/guhs erfenis ui venster deco` | het decoschuurtje openen in het bovenaanzicht |
+| `/guhs erfenis brief [status\|reset\|klok <min>]` | de makelaarsbrief |
+| `/guhs erfenis leverpost [n]`, `dorpszender`, `decobon` | koppeling-testjes |
+| `/guhs erfenis kaart`, `kaart bestellingen`, `kaart bestel snel aan\|vul`, `kaart npc groei` | kaart en bestellingen |
+| `/guhs erfenis sherlock moment <id>`, `zaak <id>`, `vind`, `volgende`, `bureau`, `rechtbank` | Sherlock |
+| `/guhs erfenis vorm <id> <level> <palet> <rot>`, `vorm alle <level> <palet>`, `vorm decoalle` | alle vormen bekijken |
+
+## Wat zeker het proberen waard is
+
+- Survival zonder brief: toets/commando weigeren netjes. Dan de brief kopen en door het hekje.
+- De makelaarstour van begin tot Hoeve 2 (met `snel aan` gaat het vlot).
+- Een plukje opruimen: bij het 1e-3e plukje vind je het roestige sleuteltje (Sherlock-proloog in de chat).
+- Deco neerzetten, draaien, opbergen; een gebouw er bovenop zetten (stuk gaat terug naar het schuurtje).
+- Bestelling leveren: Guhlden erbij, telt voor de Hoeve-doelen, soms een decostuk.
+- Detectivebureau bouwen → wolkje → Speurboekje → zaak 1.
+- Stammen/wol/glasscherven naar huis en kijken of de Leverkist ze krijgt.
+- Met een tweede speler (LAN): elkaars dorp op de kaart, Handje helpen (versnelt de klus die het eerst klaar is, max 25%,
+  of als er niks gebouwd wordt een stukje productie).
+
+## Bekende gaten
+
+- Geen decowinkel (kopen van deco, paden en hekjes trekken): alleen gekregen stukken staan in het schuurtje.
+- De wereldkaart (toets M) is ook vóór het kopen te openen.
+- Sherlock-getuigen en scènes staan naast de speler, niet bij het bureau; vlaggen als `opas_kelder`, `bureau_eindlook`,
+  `oma_bestelling`, `recept_theetaartje` worden bewaard maar doen nog niks.
+- De ansichtkaartjes van de makelaar op vakantie komen alleen via de vaste plukjes, niet per post.
+- Zie ook `NOTITIES_INTEGRATIE.md` en de slice-notities (`NOTITIES_*.md`).

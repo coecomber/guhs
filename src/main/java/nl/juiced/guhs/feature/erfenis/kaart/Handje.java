@@ -25,7 +25,7 @@ public final class Handje {
     public static final int MINUTEN = 15, BELOOND_PER_DAG = 5, EERSTE_STUK = 10, ELKE = 25;
     public static final int BOUW = 0, BESTELLING = 1;
     /** The burenstukken in order: the first at 10 stamps, then one every 25 (the last one repeats). */
-    static final String[] BURENSTUKKEN = {"burenhulp_bloempot", "burenhulp_bankje", "burenhulp_vlaggetjes"};
+    public static final String[] BURENSTUKKEN = {"burenhulp_bloempot", "burenhulp_bankje", "burenhulp_vlaggetjes"};
 
     private Handje() {
     }

@@ -45,7 +45,7 @@ import org.lwjgl.glfw.GLFW;
  * Read-only (somebody else's base): no shop and no buttons, only looking. The server checks everything again.
  */
 public final class OverzichtScherm extends Screen {
-    private enum Modus { KIJKEN, PLAATSEN, VERPLAATSEN }
+    private enum Modus { KIJKEN, PLAATSEN, VERPLAATSEN, DECO }
 
     private record Toast(Component tekst, boolean goed, long tot) {
     }
@@ -124,6 +124,19 @@ public final class OverzichtScherm extends Screen {
         return venster;
     }
 
+    /** Deco from the decoschuurtje: a ghost follows the mouse; click places it, R turns, right click stops. */
+    void decoStart(String id) {
+        venster = null;
+        modus = Modus.DECO;
+        decoId = id;
+        decoRot = 0;
+        kies(-1, -1, -1);
+    }
+
+    @Nullable
+    private String decoId;
+    private int decoRot;
+
     void verplaatsStart(int id) {
         modus = Modus.VERPLAATSEN;
         verplaatsId = id;
@@ -155,6 +168,7 @@ public final class OverzichtScherm extends Screen {
             case "kavel" -> kies(-1, -1, Integer.parseInt(arg));
             case "tab" -> tab = GebouwType.Familie.valueOf(arg.toUpperCase(java.util.Locale.ROOT));
             case "verven" -> paneel.verven = true;
+            case "deco" -> decoStart(arg);
             case "dicht" -> venster = null;
             case "camera" -> {
                 String[] d = arg.split(",");
@@ -165,6 +179,7 @@ public final class OverzichtScherm extends Screen {
                     case "opslag" -> open(new Vensters.Opslag());
                     case "naarhuis" -> open(new Vensters.NaarHuis());
                     case "loket" -> open(new Vensters.Loket());
+                    case "deco" -> open(new Vensters.Deco());
                     case "bouwkeet" -> {
                         for (Gebouw g : b.gebouwen) {
                             if (g.type == GebouwType.BOUWBLOKKENWERKPLAATS) {
@@ -354,6 +369,11 @@ public final class OverzichtScherm extends Screen {
             int x = voetX(w), z = voetZ(h);
             l.add(spook(o, x, z, w, h, plaatsType.hoogte(1), b.kanPlaatsen(plaatsType, x, z, plaatsRot) == null));
         }
+        if (modus == Modus.DECO && decoId != null && hoverX > -100) {
+            int[] m = Base.decoMaat(decoId, decoRot);
+            int x = voetX(m[0]), z = voetZ(m[1]);
+            l.add(spook(o, x, z, m[0], m[1], 2, b.kanDeco(decoId, x, z, decoRot) == null));
+        }
         if (modus == Modus.VERPLAATSEN) {
             Gebouw g = b.gebouw(verplaatsId);
             if (g != null) {
@@ -458,7 +478,10 @@ public final class OverzichtScherm extends Screen {
         }
     }
 
-    /** Above the world: job timers (buildings and plukjes) and the collect bubbles. */
+    private static final net.minecraft.world.item.ItemStack VERGROOTGLAS =
+            new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.VERGROOTGLAS.get());
+
+    /** Above the world: job timers (buildings and plukjes), Sherlock's case bubble and the collect bubbles. */
     private void zwevers(Ui ui, Base b, long nu) {
         BlockPos o = ErfenisClient.oorsprong();
         for (Base.Bouw bouw : b.bouwen) {
@@ -488,6 +511,23 @@ public final class OverzichtScherm extends Screen {
             }
         }
         for (Gebouw geb : b.gebouwen) {
+            if (b.zaakKlaar && geb.type == GebouwType.DETECTIVEBUREAU && geb.level > 0) {   // Sherlock: a case is waiting
+                double[] p = Overzicht.projecteer(new Vec3(o.getX() + geb.x + geb.b() / 2.0, Overzicht.grondY() + geb.type.hoogte(geb.level) + 0.8,
+                        o.getZ() + geb.z + geb.d() / 2.0), width, height);
+                if (p != null && p[1] > 66) {
+                    int x = (int) p[0] - 11, y = (int) p[1] - 10;
+                    boolean op = ui.op(x, y, x + 22, y + 20);
+                    Teken.rond(ui.g, x, y + 1, x + 22, y + 19, 0x50501830, 4);
+                    Teken.rond(ui.g, x, y, x + 22, y + 18, Teken.GOUD, 4);
+                    Teken.rond(ui.g, x + 1, y + 1, x + 21, y + 17, op && eigen() ? Teken.WIT : Teken.CREME_VOL, 3);
+                    ui.g.fill(x + 9, y + 18, x + 13, y + 20, Teken.GOUD);
+                    ui.item(VERGROOTGLAS, x + 3, y + 1);
+                    int id = geb.id;
+                    ui.klik(x, y, x + 22, y + 20, eigen() ? () -> ErfenisClient.stuur(Actie.op(Actie.BUREAU, id)) : null,
+                            List.of(Component.translatable("erfenis.ui.zaak_klaar").withStyle(ChatFormatting.BOLD),
+                                    Component.translatable("erfenis.ui.zaak_klaar_uitleg").withColor(Teken.ZACHT)));
+                }
+            }
             if (!geb.type.maakt() || geb.level <= 0 || geb.klaar() < 1) {
                 continue;
             }
@@ -624,6 +664,15 @@ public final class OverzichtScherm extends Screen {
         ui.knop(Component.translatable("erfenis.ui.alles_ophalen"), x0, y, x1, y + 14, klaar > 0, Teken.GOUD,
                 () -> ErfenisClient.stuur(Actie.simpel(Actie.OPHALEN_ALLES)), List.of(Component.translatable("erfenis.ui.alles_ophalen_tip", klaar)));
         y += 17;
+        if (!b.decoOpslag.isEmpty() || !b.deco.isEmpty()) {
+            int n = 0;
+            for (int v : b.decoOpslag.values()) {
+                n += v;
+            }
+            ui.knop(Component.translatable("erfenis.ui.deco_knop", n), x0, y, x1, y + 14, true, 0xFF9FC98A, () -> open(new Vensters.Deco()),
+                    List.of(Component.translatable("erfenis.ui.deco_tip")));
+            y += 17;
+        }
         if (b.besteLevel(GebouwType.LOKET) > 0) {
             ui.knop(Component.translatable("erfenis.ui.loket"), x0, y, x1, y + 14, true, 0xFFC8A060, () -> open(new Vensters.Loket()), null);
             y += 17;
@@ -789,6 +838,7 @@ public final class OverzichtScherm extends Screen {
         String key = switch (modus) {
             case PLAATSEN -> "erfenis.ui.hulp_plaats";
             case VERPLAATSEN -> "erfenis.ui.hulp_verplaats";
+            case DECO -> "erfenis.ui.hulp_deco";
             default -> "erfenis.ui.hulp";
         };
         Component t = Component.translatable(key);
@@ -849,6 +899,10 @@ public final class OverzichtScherm extends Screen {
         }
         if (k == GLFW.GLFW_KEY_R && modus == Modus.PLAATSEN) {
             plaatsRot = (plaatsRot + 1) & 3;
+            return true;
+        }
+        if (k == GLFW.GLFW_KEY_R && modus == Modus.DECO) {
+            decoRot = (decoRot + 1) & 3;
             return true;
         }
         if (ErfenisClient.TOETS.matches(event)) {
@@ -968,6 +1022,21 @@ public final class OverzichtScherm extends Screen {
                 }
             }
             case VERPLAATSEN -> verplaats(b);
+            case DECO -> {
+                if (decoId != null && hoverOpPlot) {
+                    int[] m = Base.decoMaat(decoId, decoRot);
+                    int x = voetX(m[0]), z = voetZ(m[1]);
+                    Base.Fout f = b.kanDeco(decoId, x, z, decoRot);
+                    if (f != null) {
+                        toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
+                    } else {
+                        ErfenisClient.stuur(new Actie(Actie.DECO, 0, x, z, Actie.DECO_PLAATS, 0, decoRot, decoId));
+                        if (b.decoOpslag.getOrDefault(decoId, 0) <= 1) {
+                            modus = Modus.KIJKEN;
+                        }
+                    }
+                }
+            }
         }
         return true;
     }

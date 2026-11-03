@@ -401,4 +401,31 @@ public class ErfenisGameTests {
         helper.assertTrue(iets, "the vadsmast's footprint has blocks");
         helper.succeed();
     }
+
+    /**
+     * Integration 1.9: every deco id another slice hands out (orders, the star, Burenhulp, Sherlock, finds) is a vormen deco
+     * shape; a piece from the decoschuurtje can be placed (Knusheid goes up), not twice on one tile, and a building placed over
+     * it sends it back into the schuurtje.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void integratieDeco(GameTestHelper helper) {
+        Set<String> vormen = new HashSet<>(nl.juiced.guhs.feature.erfenis.vorm.GebouwVormen.decoIds());
+        List<String> ids = new java.util.ArrayList<>(List.of("mika_schrik", "knabbelbessenstruik", "de_eerste_knabbel", "kaassausfonteintje",
+                "mammoetje_van_heg", "weerhaan", "strooguh", "melkkar", "knabbeltrommel", "trekguh", "kaartjesbord"));
+        ids.addAll(List.of(nl.juiced.guhs.feature.erfenis.kaart.Handje.BURENSTUKKEN));
+        ids.addAll(nl.juiced.guhs.feature.erfenis.sherlock.Zaken.DECO);
+        for (String id : ids) {
+            helper.assertTrue(vormen.contains(ErfenisDeco.vorm(id)), "deco " + id + " has a vormen shape");
+        }
+        Base b = ruim();
+        b.decoOpslag.put("hartjesnest", 1);
+        int knus = b.knusheid();
+        helper.assertTrue(b.plaatsDeco("hartjesnest", 30, 30, 0) == null && b.decoOpslag.isEmpty() && b.knusheid() == knus + 10,
+                "placed: out of the schuurtje, +10 Knusheid");
+        b.decoOpslag.put("uilenhuisje", 1);
+        helper.assertTrue(b.plaatsDeco("uilenhuisje", 31, 31, 0) != null, "not on top of another piece");
+        helper.assertTrue(b.plaats(GebouwType.KIPPENHOK, 28, 28, 0, T0, 0) == null && b.deco.isEmpty()
+                && b.decoOpslag.getOrDefault("hartjesnest", 0) == 1, "a building over it: the piece goes back into the schuurtje");
+        helper.succeed();
+    }
 }

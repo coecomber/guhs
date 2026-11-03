@@ -115,10 +115,14 @@ public final class Base {
     public boolean kippenhokGratis = true;
     /** The owner arrived here at least once ("aangekomen" moment); the Knusheid last announced ("knusheid:<n>" moment). */
     public boolean aangekomen;
+    /** The makelaar's tutorial (Makelaarstour): 0 not started, 1..5 the steps, 6 done (he went on holiday). */
+    public int tutorial;
     public int knusGemeld;
     public long bijgewerkt;
     /** The blocks in the world are behind: stamp on the next visit. */
     public boolean moetStempelen = true;
+    /** (client only) Sherlock has a case waiting: the magnifier bubble above the Detectivebureau. */
+    public transient boolean zaakKlaar;
 
     // transient: what happened during the last catch-up, for the server to act on (never saved or synced)
     public final transient List<String> momenten = new ArrayList<>();
@@ -288,10 +292,6 @@ public final class Base {
         return s == null ? 1 : Math.max(1, s.level);
     }
 
-    /** (POC name, the world map) = {@link #hoeveLevel()}. */
-    public int stadhuisLevel() {
-        return hoeveLevel();
-    }
 
     /** The palettes unlocked: 1 .. the tier the Hoeve reached (T1 = H1-2 ... T5 = H9-10). */
     public int maxPalet() {
@@ -553,6 +553,83 @@ public final class Base {
             }
         }
         return k + paadjes / 10 + knusDeco;
+    }
+
+    // =====================================================================================================================
+    // deco from the decoschuurtje (finds, orders, Burenhulp, Sherlock): placed straight away, free to put away again
+    // =====================================================================================================================
+
+    /** {breedte, diepte} of a placed or new deco piece after turning. */
+    public static int[] decoMaat(String id, int rot) {
+        int[] m = GebouwVormen.decoMaat(id);
+        return (rot & 1) == 0 ? new int[] {m[0], m[1]} : new int[] {m[1], m[0]};
+    }
+
+    /** The placed deco piece on this tile, or null. */
+    @Nullable
+    public Deco decoOp(int tx, int tz) {
+        for (Deco d : deco) {
+            int[] m = decoMaat(d.id(), d.rot());
+            if (tx >= d.x() && tx < d.x() + m[0] && tz >= d.z() && tz < d.z() + m[1]) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public Fout kanDeco(String id, int x, int z, int rot) {
+        if (decoOpslag.getOrDefault(id, 0) <= 0) {
+            return new Fout("erfenis.fout.deco_op");
+        }
+        int[] m = decoMaat(id, rot);
+        if (m[0] <= 0) {
+            return new Fout("erfenis.fout.weg");
+        }
+        Fout f = plekFout(x, z, m[0], m[1], -1);
+        if (f != null) {
+            return f;
+        }
+        for (int dx = 0; dx < m[0]; dx++) {
+            for (int dz = 0; dz < m[1]; dz++) {
+                if (decoOp(x + dx, z + dz) != null) {
+                    return new Fout("erfenis.fout.overlap");
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Places a piece from the decoschuurtje. */
+    @Nullable
+    public Fout plaatsDeco(String id, int x, int z, int rot) {
+        Fout f = kanDeco(id, x, z, rot);
+        if (f != null) {
+            return f;
+        }
+        decoOpslag.merge(id, -1, Integer::sum);
+        decoOpslag.remove(id, 0);
+        deco.add(new Deco(id, x, z, rot & 3));
+        Knusheid.zet(this, ErfenisDeco.knusheid(deco));
+        return null;
+    }
+
+    /** Puts a placed piece back into the decoschuurtje. */
+    public void bergDecoOp(Deco d) {
+        if (deco.remove(d)) {
+            decoOpslag.merge(d.id(), 1, Integer::sum);
+            Knusheid.zet(this, ErfenisDeco.knusheid(deco));
+        }
+    }
+
+    /** A building comes to stand here: the deco under it goes back into the decoschuurtje (never lost). */
+    void decoWijkt(int x, int z, int w, int h) {
+        for (Deco d : List.copyOf(deco)) {
+            int[] m = decoMaat(d.id(), d.rot());
+            if (d.x() < x + w && d.x() + m[0] > x && d.z() < z + h && d.z() + m[1] > z) {
+                bergDecoOp(d);
+            }
+        }
     }
 
     /** Is a footprint of w x h at (x, z) on open land and free (ignoring building {@code negeer})? */
@@ -830,6 +907,7 @@ public final class Base {
             kippenhokGratis = false;
         }
         Gebouw g = nieuwGebouw(type, 0, x, z, rot & 3, nu);
+        decoWijkt(x, z, g.b(), g.d());
         if (type == GebouwType.BOUWBLOKKENWERKPLAATS) {
             g.selectie.add(Bouwkeet.STANDAARD);
         }
@@ -846,6 +924,7 @@ public final class Base {
         Gebouw g = gebouw(id);
         g.x = x;
         g.z = z;
+        decoWijkt(x, z, g.b(), g.d());
         return null;
     }
 
@@ -857,6 +936,7 @@ public final class Base {
         }
         Gebouw g = gebouw(id);
         g.rot = (g.rot + 1) & 3;
+        decoWijkt(g.x, g.z, g.b(), g.d());
         return null;
     }
 
@@ -1231,7 +1311,7 @@ public final class Base {
         if (r.nextInt(100) < (ring == 1 ? 10 : ring == 2 ? 15 : 20)) {
             String[] keus = DECO_VONDST[ring - 1];
             String d = keus[r.nextInt(keus.length)];
-            decoOpslag.merge(d, 1, Integer::sum);
+            decoOpslag.merge(ErfenisDeco.vorm(d), 1, Integer::sum);
             vondst("deco_" + d);
             bijzonder = true;
         }
@@ -1294,6 +1374,7 @@ public final class Base {
         t.putInt("Vk", vk);
         t.putBoolean("KippenhokGratis", kippenhokGratis);
         t.putBoolean("Aangekomen", aangekomen);
+        t.putInt("Tutorial", tutorial);
         t.putInt("KnusGemeld", knusGemeld);
         t.putLong("Bijgewerkt", bijgewerkt);
         t.putLong("LeverBijgewerkt", leverBijgewerkt);
@@ -1393,6 +1474,7 @@ public final class Base {
         }
         Base b = new Base(id, t.read("Eigenaar", UUIDUtil.CODEC).orElse(null), t.getStringOr("Naam", "?"), t.getBooleanOr("Npc", false),
                 t.getIntOr("Cx", 0), t.getIntOr("Cz", 0));
+        b.zaakKlaar = t.getBooleanOr("ZaakKlaar", false);
         b.volgendeId = t.getIntOr("VolgendeId", 1);
         b.guhlden = t.getIntOr("Guhlden", 0);
         b.moetStempelen = t.getBooleanOr("MoetStempelen", true);
@@ -1404,6 +1486,7 @@ public final class Base {
         b.vk = t.getIntOr("Vk", 0);
         b.kippenhokGratis = t.getBooleanOr("KippenhokGratis", true);
         b.aangekomen = t.getBooleanOr("Aangekomen", false);
+        b.tutorial = t.getIntOr("Tutorial", 0);
         b.knusGemeld = t.getIntOr("KnusGemeld", 0);
         b.bijgewerkt = t.getLongOr("Bijgewerkt", 0L);
         b.leverBijgewerkt = t.getLongOr("LeverBijgewerkt", 0L);

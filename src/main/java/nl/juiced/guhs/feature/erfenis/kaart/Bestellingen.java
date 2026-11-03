@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import nl.juiced.guhs.feature.erfenis.ErfenisDeco;
 import nl.juiced.guhs.feature.erfenis.ErfenisEconomie;
-import nl.juiced.guhs.feature.erfenis.ErfenisMomenten;
 import nl.juiced.guhs.network.ModNetworking;
 
 /**
@@ -531,7 +530,7 @@ public final class Bestellingen {
             p.sendSystemMessage(Component.translatable("erfenis.kaart.bestel.cadeau", naam, Component.translatable("erfenis.kaart.deco." + deco)));
         }
         p.level().playSound(null, p.blockPosition(), SoundEvents.VILLAGER_CELEBRATE, SoundSource.PLAYERS, 0.8f, 1.3f);
-        ErfenisMomenten.melding(server, id, "bestelling_geleverd:" + s.geleverd);
+        ErfenisEconomie.bestellingGeleverd(server, id);   // kern counts (Hoeve goals) and fires bestelling_geleverd:<totaal>
         stuur(p, false);
     }
 

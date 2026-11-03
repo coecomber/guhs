@@ -13,10 +13,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import nl.juiced.guhs.feature.erfenis.vorm.GebouwVormen;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -152,6 +154,14 @@ public final class Erfenis {
     }
 
     /** This player's own base (made on first use in the next free cell; then the world map's news says so). */
+    /**
+     * May this player go to their own erfenis (overview key, /guhs erfenis)? Only after buying it with the makelaar's letter
+     * ({@code koppeling.Makelaarsbrief}); creative players always (dev). A player who already stands in the dimension may.
+     */
+    public static boolean magErfenis(ServerPlayer p) {
+        return p.isCreative() || in(p) || nl.juiced.guhs.feature.erfenis.koppeling.Makelaarsbrief.gekocht(p.level().getServer(), p.getUUID());
+    }
+
     public static Base eigenBase(ServerPlayer p) {
         MinecraftServer server = p.level().getServer();
         ErfenisData data = ErfenisData.get(server);
@@ -400,7 +410,11 @@ public final class Erfenis {
 
     /** Sends this base to the player (open = the overview opens; read-only unless the player owns it). */
     public static void sync(ServerPlayer p, Base b, boolean open) {
-        PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(b.save(true), System.currentTimeMillis(), eigen(p, b), open,
+        CompoundTag t = b.save(true);
+        if (!b.npc && b.eigenaar != null) {   // Sherlock: a case waits in the letterbox (the magnifier bubble above the bureau)
+            t.putBoolean("ZaakKlaar", nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.zaakKlaar(p.level().getServer(), b.eigenaar));
+        }
+        PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(t, System.currentTimeMillis(), eigen(p, b), open,
                 ErfenisData.get(p.level().getServer()).snel));
     }
 
@@ -430,12 +444,18 @@ public final class Erfenis {
                     sync(p, b, true);
                 } else if (in(p)) {
                     melding(p, "erfenis.fout.geen_plot", false);
+                } else if (!magErfenis(p)) {
+                    melding(p, "erfenis.cmd.nog_geen_erfenis", false);
                 } else {
                     PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Vraag());
                 }
                 return;
             }
             case ErfenisPayloads.Actie.GA -> {
+                if (!magErfenis(p)) {
+                    melding(p, "erfenis.cmd.nog_geen_erfenis", false);
+                    return;
+                }
                 gaNaar(p, eigenBase(p));
                 if (a.id() == ErfenisPayloads.Actie.GA_EN_OPEN) {
                     openOverzichtStraks(p);
@@ -618,6 +638,29 @@ public final class Erfenis {
                 nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.openBureau(p);
                 return null;
             }
+            case ErfenisPayloads.Actie.DECO -> {
+                if (a.x2() == ErfenisPayloads.Actie.DECO_WEG) {
+                    Base.Deco d = b.decoOp(a.x(), a.z());
+                    if (d == null) {
+                        return new Base.Fout("erfenis.fout.weg");
+                    }
+                    b.bergDecoOp(d);
+                    int[] m = Base.decoMaat(d.id(), d.rot());
+                    if (level != null && bezocht(server, b) && !b.moetStempelen) {
+                        Stempel.wis(level, o, b, d.x(), d.z(), m[0], m[1]);
+                    }
+                    melding(p, "erfenis.ok.deco_weg", true, "erfenis.deco." + d.id());
+                    return null;
+                }
+                Base.Fout f = b.plaatsDeco(a.tekst(), a.x(), a.z(), a.rot());
+                if (f == null) {
+                    if (level != null && bezocht(server, b) && !b.moetStempelen) {
+                        GebouwVormen.stempelDeco(level, a.tekst(), o.offset(a.x(), 0, a.z()), a.rot() & 3);
+                    }
+                    geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME);
+                }
+                return f;
+            }
             case ErfenisPayloads.Actie.MARKT -> {
                 Gebouw g = b.gebouw(a.id());
                 if (g == null || g.type != GebouwType.MARKTPLEIN || g.level <= 0) {
@@ -681,8 +724,26 @@ public final class Erfenis {
                 over -= neem;
             }
         }
-        LeverkistPost.verstuur(server, b.eigenaar, spul);
-        melding(p, "erfenis.ok.naar_huis", true, Integer.toString(n), g.naamKey());
+        // the Leverkist's own ceiling (koppeling, balans 9.4) has the last word: what may not go yet stays in the village
+        nl.juiced.guhs.feature.erfenis.koppeling.LeverkistPlafond.Beperkt mag =
+                nl.juiced.guhs.feature.erfenis.koppeling.LeverkistPlafond.beperk(server, b.eigenaar, spul, nu);
+        int terug = 0;
+        for (ItemStack st : mag.blijft()) {
+            terug += st.getCount();
+        }
+        if (terug > 0) {
+            b.verander(g, terug);
+            if (g.capPerUur > 0) {
+                b.leverTegoed.merge(g, (double) terug, Double::sum);
+            }
+        }
+        if (n - terug <= 0) {
+            return new Base.Fout("erfenis.fout.leverkist_cap", "0", Integer.toString(Math.max(g.capPerUur,
+                    nl.juiced.guhs.feature.erfenis.koppeling.LeverkistPlafond.PER_UUR.getOrDefault(
+                            nl.juiced.guhs.feature.erfenis.koppeling.LeverkistPlafond.soort(spul.get(0)), 0))));
+        }
+        LeverkistPost.verstuur(server, b.eigenaar, mag.mee());
+        melding(p, "erfenis.ok.naar_huis", true, Integer.toString(n - terug), g.naamKey());
         geluid(p, SoundEvents.BUNDLE_INSERT);
         return null;
     }
@@ -758,8 +819,24 @@ public final class Erfenis {
     }
 
     static void opKlikBlok(PlayerInteractEvent.RightClickBlock event) {
-        if (in(event.getEntity())) {
-            event.setCanceled(true);
+        if (!in(event.getEntity())) {
+            return;
+        }
+        event.setCanceled(true);
+        // in the own village: the Detectivebureau opens Sherlock's Speurboekje, the Marktplein the orders
+        if (event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p
+                && !(event.getItemStack().getItem() instanceof nl.juiced.guhs.feature.erfenis.sherlock.Vergrootglas)) {
+            Base b = onder(p);
+            if (b == null || !eigen(p, b)) {
+                return;
+            }
+            BlockPos o = Plot.oorsprong(b.cx, b.cz);
+            Gebouw g = b.op(event.getPos().getX() - o.getX(), event.getPos().getZ() - o.getZ());
+            if (g != null && g.level > 0 && g.type == GebouwType.DETECTIVEBUREAU) {
+                nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.openBureau(p);
+            } else if (g != null && g.level > 0 && g.type == GebouwType.MARKTPLEIN) {
+                nl.juiced.guhs.feature.erfenis.kaart.Bestellingen.open(p);
+            }
         }
     }
 

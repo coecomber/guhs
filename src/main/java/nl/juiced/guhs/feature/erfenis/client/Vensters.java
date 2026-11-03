@@ -125,7 +125,7 @@ final class Vensters {
             }
             int yy = top + ((i + kol - 1) / kol) * 20 + 6;
             yy = lijst(ui, x0, yy, x1, Component.translatable("erfenis.ui.bouwblokken"), b.bouwblokSoorten);
-            yy = lijst(ui, x0, yy, x1, Component.translatable("erfenis.ui.decoschuurtje"), b.decoOpslag);
+            yy = lijst(ui, x0, yy, x1, Component.translatable("erfenis.ui.decoschuurtje"), deco(b.decoOpslag));
             Map<String, Integer> vondsten = new LinkedHashMap<>();
             for (String v : b.vondsten) {
                 vondsten.merge(v, 1, Integer::sum);
@@ -160,9 +160,79 @@ final class Vensters {
             return y + 5;
         }
 
+        /** The decoschuurtje holds vormen deco ids: keyed as "deco_<id>" so {@link #sleutel} names them erfenis.deco.<id>. */
+        private static Map<String, Integer> deco(Map<String, Integer> m) {
+            Map<String, Integer> r = new LinkedHashMap<>();
+            m.forEach((k, v) -> r.put("deco_" + k, v));
+            return r;
+        }
+
         private static String sleutel(String id) {
             return id.startsWith("deco_") || !id.contains("_") && !id.startsWith("ansicht") ? "erfenis.deco." + id.replace("deco_", "")
                     : "erfenis.vondst." + id;
+        }
+    }
+
+    // =====================================================================================================================
+    // the decoschuurtje: place a piece (ghost in the overview), or put a placed one away
+    // =====================================================================================================================
+
+    static final class Deco extends Venster {
+        @Override
+        int breed() {
+            return 300;
+        }
+
+        @Override
+        int hoog() {
+            return 240;
+        }
+
+        @Override
+        Component titel() {
+            return Component.translatable("erfenis.venster.deco");
+        }
+
+        @Override
+        void inhoud(Ui ui, Base b, int x0, int y0, int x1, int y1, long nu) {
+            ui.g.enableScissor(x0, y0, x1, y1);
+            int y = y0 - scroll;
+            ui.tekst(Component.translatable("erfenis.ui.deco_opslag").withStyle(ChatFormatting.BOLD), x0, y, Teken.DONKER);
+            y += 12;
+            if (b.decoOpslag.isEmpty()) {
+                ui.tekst(Component.translatable("erfenis.ui.deco_leeg"), x0, y, Teken.ZACHT);
+                y += 12;
+            }
+            for (Map.Entry<String, Integer> e : b.decoOpslag.entrySet()) {
+                String id = e.getKey();
+                int[] m = Base.decoMaat(id, 0);
+                ui.tekst(Component.translatable("erfenis.deco." + id).append(" x" + e.getValue()).append(Component.literal("  " + m[0] + "x" + m[1])
+                        .withColor(Teken.ZACHT)), x0, y + 3, Teken.TEKST);
+                if (y >= y0 - 2 && y + 14 <= y1 + 2) {
+                    ui.knop(Component.translatable("erfenis.ui.deco_plaats"), x1 - 64, y, x1, y + 14, true, Teken.GROEN_DONKER, () -> {
+                        OverzichtScherm s = OverzichtScherm.huidig();
+                        if (s != null) {
+                            s.decoStart(id);
+                        }
+                    }, null);
+                }
+                y += 17;
+            }
+            y += 6;
+            if (!b.deco.isEmpty()) {
+                ui.tekst(Component.translatable("erfenis.ui.deco_staat").withStyle(ChatFormatting.BOLD), x0, y, Teken.DONKER);
+                y += 12;
+                for (Base.Deco d : b.deco) {
+                    ui.tekst(Component.translatable("erfenis.deco." + d.id()), x0, y + 3, Teken.TEKST);
+                    if (y >= y0 - 2 && y + 14 <= y1 + 2) {
+                        ui.knop(Component.translatable("erfenis.ui.deco_weg"), x1 - 64, y, x1, y + 14, true, Teken.ROZE_DONKER,
+                                () -> ErfenisClient.stuur(new Actie(Actie.DECO, 0, d.x(), d.z(), Actie.DECO_WEG, 0, 0, "")), null);
+                    }
+                    y += 17;
+                }
+            }
+            ui.g.disableScissor();
+            scroll = Math.max(0, Math.min(scroll, y + scroll - y1));
         }
     }
 

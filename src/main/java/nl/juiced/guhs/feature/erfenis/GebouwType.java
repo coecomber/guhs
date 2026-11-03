@@ -70,8 +70,6 @@ public enum GebouwType {
     }
 
     public static final int MAX_HOEVE = 10;
-    /** POC name of the Hoeve level ceiling (kept for the world map, which still says stadhuis). */
-    public static final int MAX_STADHUIS = MAX_HOEVE;
 
     public final String id;
     public final int breedte, diepte;
@@ -204,7 +202,7 @@ public enum GebouwType {
                 return t;
             }
         }
-        // (POC names: the world map's NPC plans still use them until the kaart slice is merged)
+        // (POC names: a base saved by the 1.9 proof of concept loads with its Hoeve and storage shed)
         return switch (id) {
             case "stadhuis" -> HOEVE;
             case "schuurtje" -> OPSLAGSCHUUR;

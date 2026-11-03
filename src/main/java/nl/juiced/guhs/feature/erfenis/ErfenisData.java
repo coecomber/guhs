@@ -72,7 +72,7 @@ public final class ErfenisData extends SavedData {
     public Base vanSpeler(UUID speler, String naam, long nu) {
         Base b = bases.get(speler);
         if (b == null) {
-            int[] c = vrijeCel();
+            int[] c = nl.juiced.guhs.feature.erfenis.kaart.KaartLeven.spelerPlek(cellen.keySet());   // >= 3 cells from every base
             b = Base.nieuw(speler, naam, c[0], c[1], nu);
             voegToe(b);
         } else if (!b.naam.equals(naam)) {
@@ -86,14 +86,6 @@ public final class ErfenisData extends SavedData {
     public Base maakNpcBase(String naam, int stadhuisLevel, long seed, long nu) {
         int[] c = vrijeCel();
         Base b = Base.npc(new UUID(seed ^ 0x6775686572666E73L, ((long) c[0] << 32) ^ c[1]), naam, c[0], c[1], stadhuisLevel, seed, nu);
-        voegToe(b);
-        return b;
-    }
-
-    /** Phase 2: an NPC village from a building list (see {@link Base#npc(UUID, String, int, int, java.util.List, int, long)}) in the next free cell. */
-    public Base maakNpcBase(String naam, java.util.List<Base.Plan> plan, int guhlden, long nu) {
-        int[] c = vrijeCel();
-        Base b = Base.npc(UUID.randomUUID(), naam, c[0], c[1], plan, guhlden, nu);
         voegToe(b);
         return b;
     }
@@ -137,6 +129,18 @@ public final class ErfenisData extends SavedData {
             Erfenis.stempel(server, b);
             Erfenis.syncKijkers(server, b);
         }
+    }
+
+    /** Removes an NPC base (the map dropped the village); a player's base is never removed. Its blocks stay where they are. */
+    public boolean verwijder(UUID id) {
+        Base b = bases.get(id);
+        if (b == null || !b.npc) {
+            return false;
+        }
+        bases.remove(id);
+        cellen.remove(Plot.sleutel(b.cx, b.cz));
+        setDirty();
+        return true;
     }
 
     private void voegToe(Base b) {

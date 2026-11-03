@@ -144,6 +144,8 @@ final class ErfenisCommando {
                 .executes(c -> ui(c.getSource(), StringArgumentType.getString(c, "wat"), ""))
                 .then(Commands.argument("arg", StringArgumentType.greedyString())
                         .executes(c -> ui(c.getSource(), StringArgumentType.getString(c, "wat"), StringArgumentType.getString(c, "arg"))))));
+        e.then(dev("doe").then(Commands.argument("wat", StringArgumentType.greedyString())
+                .executes(c -> doe(c.getSource(), StringArgumentType.getString(c, "wat")))));
         e.then(dev("reset").executes(c -> {
             Base b = eigen(c.getSource());
             b.vulStart(System.currentTimeMillis());
@@ -179,6 +181,10 @@ final class ErfenisCommando {
 
     private static int ga(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
+        if (!Erfenis.magErfenis(p)) {
+            source.sendFailure(Component.translatable("erfenis.cmd.nog_geen_erfenis"));
+            return 0;
+        }
         Base b = Erfenis.eigenBase(p);
         if (!Erfenis.gaNaar(p, b)) {
             source.sendFailure(Component.translatable("erfenis.cmd.geen_dim"));
@@ -282,7 +288,7 @@ final class ErfenisCommando {
             b.geefGoed((Goed) kv[0], (Integer) kv[1]);
         }
         b.vondsten.add("roestig_sleuteltje");
-        b.decoOpslag.put("weerhaan", 1);
+        b.decoOpslag.put("roestige_weerhaan", 1);
         b.bijgewerkt = nu - 90 * 60_000L;
         Erfenis.bijwerken(source.getServer(), b, false);
         restempel(source.getServer(), b);
@@ -300,6 +306,50 @@ final class ErfenisCommando {
             return 1;
         }
         Erfenis.melding(p, "erfenis.dev.ui", true, wat, arg);
+        return 1;
+    }
+
+    /**
+     * Dev (AutoCheck): does what a click in the own overview does, through the same server path ({@link Erfenis#actie}):
+     * {@code plaats <type> <x> <z> [rot]}, {@code verbeter <type>}, {@code ophalen <type>}, {@code allesophalen},
+     * {@code opruimen <plukje>}, {@code deco <id> <x> <z> [rot]}, {@code naarhuis <goed> <n>}, {@code bureau}, {@code markt}. A type means its first building.
+     */
+    private static int doe(CommandSourceStack source, String wat) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        Base b = Erfenis.onder(p);
+        String[] a = wat.trim().split(" +");
+        if (b == null || a.length == 0) {
+            source.sendFailure(Component.literal("Sta op je eigen erfenis."));
+            return 0;
+        }
+        java.util.function.IntFunction<String> arg = i -> i < a.length ? a[i] : "0";
+        java.util.function.Function<String, Integer> eerste = id -> {
+            for (Gebouw g : b.gebouwen) {
+                if (g.type.id.equals(id)) {
+                    return g.id;
+                }
+            }
+            return -1;
+        };
+        ErfenisPayloads.Actie act = switch (a[0]) {
+            case "plaats" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.PLAATS, 0, Integer.parseInt(arg.apply(2)), Integer.parseInt(arg.apply(3)),
+                    0, 0, Integer.parseInt(arg.apply(4)), arg.apply(1));
+            case "verbeter" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.VERBETER, eerste.apply(arg.apply(1)));
+            case "ophalen" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.OPHALEN, eerste.apply(arg.apply(1)));
+            case "allesophalen" -> ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.OPHALEN_ALLES);
+            case "opruimen" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.OPRUIMEN, 0, Integer.parseInt(arg.apply(1)), 0, 0, 0, 0, "");
+            case "deco" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, Integer.parseInt(arg.apply(2)), Integer.parseInt(arg.apply(3)),
+                    ErfenisPayloads.Actie.DECO_PLAATS, 0, Integer.parseInt(arg.apply(4)), arg.apply(1));
+            case "naarhuis" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.NAAR_HUIS, 0, Integer.parseInt(arg.apply(2)), 0, 0, 0, 0, arg.apply(1));
+            case "bureau" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.BUREAU, eerste.apply("detectivebureau"));
+            case "markt" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.MARKT, eerste.apply("marktplein"));
+            default -> null;
+        };
+        if (act == null) {
+            source.sendFailure(Component.literal("Onbekend: " + a[0]));
+            return 0;
+        }
+        Erfenis.actie(p, act);
         return 1;
     }
 

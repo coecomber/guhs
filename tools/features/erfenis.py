@@ -71,10 +71,6 @@ TEKSTEN = {
     "key.guhs.erfenis": "Bovenaanzicht (Erfenis)",
     "biome.guhs.erfenis": "De Erfenis",
     # ---- the buildings (POC names kept for the world map's NPC news until the kaart merge)
-    G + "gebouw.stadhuis": "Hoeve",
-    G + "gebouw.schuurtje": "Opslagschuur",
-    G + "gebouw.muur": "Muurtje",
-    G + "gebouw.boompje": "Bloesemboompje",
     G + "gebouw.hoeve": "De Hoeve",
     G + "gebouw.hoeve.uitleg": "Het hart van je opknapper. Van krakkemikkig schuurtje (bouwkundig rapport: vads) tot grote knuffelhoeve met torentje. Bewaart je Guhlden en bepaalt hoe ver alles mag.",
     G + "gebouw.opslagschuur": "Opslagschuur",
@@ -319,6 +315,28 @@ TEKSTEN = {
     G + "cmd.niet_in": "Je bent niet in De Erfenis.",
     G + "cmd.geen_base": "%s heeft nog geen erfenis.",
     G + "cmd.geen_dim": "De Erfenis-dimensie bestaat niet op deze server.",
+    G + "cmd.nog_geen_erfenis": "Je hebt nog geen erfenis, njeg. Speel lekker in de Guhmension: de Postguh komt vanzelf met een brief van de makelaar!",
+    G + "ui.zaak_klaar": "Sherlock heeft een nieuwe zaak!",
+    G + "tut.chat": "Makelaar Guhrrit: %s",
+    G + "tut.welkom": "Daar ben je! Makelaar Guhrrit, aangenaam. Bouwkundig rapport: vads. Emotioneel rapport: heel vads. Maar met jou erbij komt het helemaal goed, njeg!",
+    G + "tut.1": "Eerst wat ruimte maken. Open het bovenaanzicht en klik op een overwoekerd plukje naast het open midden: Opruimen! Wie weet wat je vindt...",
+    G + "tut.2": "Kijk eens, open grond! Bouw nu een Kippenhok (tabje Dieren). Het eerste is gratis, van opa's zolder. Vahoeg!",
+    G + "tut.3": "Wat een mooi hokje. Nu nog iemand die de eitjes raapt: bewoners trekken vanzelf in als er plek is. Een Guhhutje geeft meer plek.",
+    G + "tut.4": "Je eerste bewoner! De buurdorpjes hebben al karretjes gestuurd. Open de wereldkaart (of later het Marktplein) en lever een bestelling.",
+    G + "tut.5": "Geleverd en betaald, dat is pas buren. Nu de Hoeve naar level 2: kijk in het paneel van de Hoeve wat er nog nodig is.",
+    G + "tut.6": "Hoeve level 2! Mijn werk zit erop: ik ga op vakantie, njeg. Mijn borstbeeld en een brievenbus staan in je decoschuurtje. Ik stuur je kaartjes!",
+    G + "fout.deco_op": "Dat stuk staat niet meer in je decoschuurtje.",
+    G + "ok.deco_weg": "%s staat weer veilig in je decoschuurtje.",
+    G + "ui.hulp_deco": "Klik: deco neerzetten · R: draaien · rechtsklik: stoppen",
+    G + "ui.deco_knop": "Deco (%s)",
+    G + "ui.deco_tip": "Je decoschuurtje: vondsten, bedankjes en beloningen neerzetten of weer opbergen. Elk stuk maakt je dorp knusser!",
+    G + "venster.deco": "Decoschuurtje",
+    G + "ui.deco_opslag": "In het schuurtje",
+    G + "ui.deco_leeg": "Leeg! Ruim plukjes op, lever bestellingen en los zaken op, njeg.",
+    G + "ui.deco_plaats": "Neerzetten",
+    G + "ui.deco_staat": "Staat in je dorp",
+    G + "ui.deco_weg": "Opbergen",
+    G + "ui.zaak_klaar_uitleg": "Klik: naar het Detectivebureau (het Speurboekje).",
     G + "cmd.geef": "+%s %s (Guhlden %s/%s, opslag %s/%s).",
     G + "cmd.hoeve": "Je Hoeve is nu level %s.",
     G + "cmd.tijd": "Er gingen %s minuten voorbij in je dorp (productie, bouwers en bewoners lopen bij).",
@@ -482,11 +500,27 @@ TEKSTEN = {
 }
 
 
+def _deco_namen():
+    """erfenis.deco.<id> for every deco piece of the vormen catalogue (its Dutch name from the exporter's index.json)."""
+    p = os.path.join("src", "main", "resources", "data", "guhs", "erfenis", "vormen", "index.json")
+    if not os.path.exists(p):
+        return {}
+    with open(p, encoding="utf-8") as f:
+        deco = json.load(f).get("deco", {})
+    return {G + "deco." + k: v["naam"] for k, v in deco.items()}
+
+
+def alle_teksten():
+    t = dict(_deco_namen())
+    t.update(TEKSTEN)
+    return t
+
+
 def build(h):
     h.w(f"{h.D}/dimension_type/erfenis.json", DIM_TYPE)
     h.w(f"{h.D}/dimension/erfenis.json", DIM)
     h.w(f"{h.D}/worldgen/biome/erfenis.json", BIOME)
-    for k, nl in TEKSTEN.items():
+    for k, nl in alle_teksten().items():
         h.lang(k, nl, nl)
 
 
@@ -507,9 +541,9 @@ def _direct():
         p = os.path.join(a, "assets", "guhs", "lang", f"{taal}.json")
         with open(p, encoding="utf-8") as f:
             data = json.load(f)
-        data.update(TEKSTEN)
+        data.update(alle_teksten())
         _schrijf(p, data)
-    print(f"erfenis: dimension + {len(TEKSTEN)} texts")
+    print(f"erfenis: dimension + {len(alle_teksten())} texts")
 
 
 if __name__ == "__main__":

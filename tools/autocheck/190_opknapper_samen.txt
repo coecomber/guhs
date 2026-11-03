@@ -1,0 +1,202 @@
+# Guhs 1.9 "Een opknapper!": the whole journey in one go, all five slices together (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_opknapper_samen.txt
+# 1280x720 at gui scale 2 = 640x360 gui pixels. A fresh world, a fresh player (survival, so the purchase gate counts):
+# no erfenis yet -> the Postguh brings the letter (dev clock) -> buy -> Erfhekje + Leverkist -> through the hekje ->
+# the village (vormen shapes) -> overview -> build / collect / clear / upgrade (same server path as clicks: /guhs erfenis doe)
+# -> deco from the schuurtje -> demo village -> Marktplein orders -> map with neighbours and carts -> Sherlock's bubble and
+# bureau -> send home -> back through the hekje -> the Leverkist has post.
+
+section setup
+guhstaal nl
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision infinite 0 true
+/effect give @s minecraft:resistance infinite 4 true
+/effect give @s minecraft:saturation infinite 4 true
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2980 139 2980 3020 139 3020 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode survival
+/clear @s
+wait 20
+
+section nog geen erfenis
+clearchat
+/guhs erfenis
+wait 20
+shot samen_01_nog_geen_erfenis gui
+
+section de brief
+/guhs erfenis brief reset
+/tp @s 2996.5 140 3004.5 180 0
+look 180 10
+wait 10
+/guhs erfenis brief
+wait 6
+shot samen_02_postguh gui
+wait 110
+clearchat
+/give @s guhs:kaas_knabbels 3
+/item replace entity @s weapon.mainhand with guhs:makelaarsbrief
+wait 5
+useitem 2
+wait 20
+shot samen_03_brief gui
+widgets
+press Kopen voor 1 kaasknabbel
+wait 20
+shot samen_04_gekocht gui
+gui close
+
+section hekje en leverkist neerzetten
+/item replace entity @s weapon.mainhand with minecraft:air
+/setblock 2996 140 3000 guhs:erfhekje[facing=south,half=lower]
+/setblock 2996 141 3000 guhs:erfhekje[facing=south,half=upper]
+/setblock 2999 140 3001 guhs:leverkist[facing=south,post=false]
+/tp @s 2998.5 140 3003.5 180 20
+wait 10
+use 2999 140 3001
+wait 20
+gui close
+camera 2998.5 141.8 3005.5 180 15
+wait 20
+waitrender 200
+shot samen_05_hekje_en_kist
+unlock
+
+section door het hekje
+/tp @s 2996.5 140 3002.5 180 0
+wait 10
+use 2996 140 3000
+wait 100
+waitrender 300
+shot samen_06_aankomst
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+shot samen_07_overzicht_start gui
+
+section bouwen ophalen opruimen
+/guhs erfenis snel aan
+/guhs erfenis doe plaats kippenhok 53 41 0
+wait 40
+/guhs erfenis doe opruimen 20
+wait 20
+/guhs erfenis doe opruimen 21
+wait 20
+/guhs erfenis doe opruimen 22
+wait 40
+/guhs erfenis tijd 120
+wait 20
+/guhs erfenis ui kies kippenhok
+wait 40
+waitrender 200
+shot samen_08_kippenhok_mandje gui
+/guhs erfenis doe ophalen kippenhok
+wait 20
+/guhs erfenis hoeve 3
+/guhs erfenis geef plank 120
+/guhs erfenis geef guhlden 2000
+wait 20
+/guhs erfenis doe verbeter kippenhok
+wait 40
+/guhs erfenis ui kies kippenhok
+wait 40
+waitrender 200
+shot samen_09_kippenhok_verbeterd gui
+/guhs erfenis ui venster opslag
+wait 20
+shot samen_10_opslag_vondsten gui
+/guhs erfenis ui venster deco
+wait 20
+shot samen_11_decoschuurtje gui
+/guhs erfenis ui dicht
+
+section deco neerzetten
+/guhs erfenis doe deco roestige_weerhaan 44 55 0
+/guhs erfenis doe deco kaartjesbord 46 55 0
+wait 40
+/guhs erfenis ui camera 47,52,30
+wait 40
+waitrender 200
+shot samen_12_deco_staat gui
+gui close
+
+section demodorp markt
+/guhs erfenis demo
+wait 60
+waitrender 300
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+/guhs erfenis ui camera 52,52,70
+wait 40
+shot samen_13_demodorp gui
+gui close
+/guhs erfenis kaart bestel snel aan
+/guhs erfenis kaart bestel vul
+wait 20
+gui keep
+/guhs erfenis doe markt
+wait 40
+shot samen_14_bestellingen gui
+widgets
+gui close
+
+section kaart
+gui keep
+/guhs erfenis kaart
+wait 80
+mouse 20 300
+shot samen_15_kaart gui
+gui close
+
+section sherlock
+/guhs erfenis sherlock moment gebouw_gebouwd:detectivebureau
+wait 60
+shot samen_16_sherlock_welkom gui
+gui close
+wait 20
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+/guhs erfenis ui kies detectivebureau
+wait 40
+waitrender 200
+shot samen_17_bureau_wolkje gui
+gui close
+gui keep
+/guhs erfenis doe bureau
+wait 30
+shot samen_18_speurboekje gui
+gui close
+
+section naar huis
+clearchat
+/guhs erfenis geef stam 64
+/guhs erfenis geef wol 32
+/guhs erfenis doe naarhuis stam 40
+/guhs erfenis doe naarhuis wol 32
+wait 20
+shot samen_19_naar_huis_chat gui
+/guhs erfenis terug
+wait 80
+waitrender 300
+camera 2998.5 141.8 3005.5 180 15
+wait 40
+waitrender 200
+shot samen_20_terug_kist_vlag
+unlock
+/tp @s 2998.5 140 3003.5 180 20
+wait 10
+use 2999 140 3001
+wait 20
+shot samen_21_leverkist_post gui
+gui close
+quit
