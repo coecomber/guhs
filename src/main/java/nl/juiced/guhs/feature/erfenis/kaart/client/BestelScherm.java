@@ -203,11 +203,16 @@ public final class BestelScherm extends Screen {
         g.fill(x0 + 1, y0 + 1, x1 - 1, y1 - 1, ster ? 0xFFFFF8E0 : CREME);
         g.fill(x0 + 1, y0 + 1, x1 - 1, y0 + 15, ster ? GOUD : kleur | 0xFF000000);
         g.fill(x0 + 1, y0 + 15, x1 - 1, y0 + 16, 0x40000000);
-        String naam = font.plainSubstrByWidth(c.getStringOr("DorpNaam", "?"), x1 - x0 - 50);
-        g.text(font, Component.literal(naam).withStyle(ChatFormatting.BOLD), x0 + 5, y0 + 4, 0xFFFFFFFF, true);
+        String naam = c.getStringOr("DorpNaam", "?");
         Component tag = ster ? Component.translatable("erfenis.kaart.bestel.ster")
                 : Component.translatable("erfenis.kaart.bestel.relatie." + (c.getIntOr("Relatie", 0) + 1));
-        g.text(font, tag, x1 - 5 - font.width(tag), y0 + 4, 0xFFFFFFFF, true);
+        int tw = font.width(tag);
+        String kop = naam;   // (bold text is wider: shorten until the bold name fits next to the tag)
+        while (kop.length() > 1 && font.width(Component.literal(kop).withStyle(ChatFormatting.BOLD)) > x1 - x0 - tw - 16) {
+            kop = naam.substring(0, kop.endsWith("..") ? kop.length() - 3 : kop.length() - 1) + "..";
+        }
+        g.text(font, Component.literal(kop).withStyle(ChatFormatting.BOLD), x0 + 5, y0 + 4, 0xFFFFFFFF, true);
+        g.text(font, tag, x1 - 5 - tw, y0 + 4, 0xFFFFFFFF, true);
         int y = y0 + 20, breed = x1 - x0 - 10;
         if (fase == Bestelling.WACHT) {
             g.text(font, Component.translatable("erfenis.kaart.bestel.rust"), x0 + 5, y, ZACHT, false);
@@ -230,7 +235,7 @@ public final class BestelScherm extends Screen {
         // the wish
         MutableComponent wens = wens(c);
         List<FormattedCharSequence> regels = font.split(wens, breed);
-        for (int i = 0; i < Math.min(3, regels.size()); i++) {
+        for (int i = 0; i < Math.min(4, regels.size()); i++) {
             g.text(font, regels.get(i), x0 + 5, y, INKT, false);
             y += 10;
         }

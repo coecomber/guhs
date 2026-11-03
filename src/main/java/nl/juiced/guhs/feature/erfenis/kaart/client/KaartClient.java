@@ -48,7 +48,7 @@ public final class KaartClient {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof KaartScherm s) {
                 s.update(kaart);
-            } else if (kaart.open() && !(mc.screen instanceof BestelScherm)) {
+            } else if (kaart.open()) {
                 KaartScherm s = new KaartScherm(null);
                 mc.setScreen(s);
                 s.update(kaart);

@@ -92,11 +92,11 @@ Branch `190-opk-kaart`. Alles in `feature/erfenis/kaart/**` + `tools/features/er
   diens dorp kiezen -> "Handje helpen".
 - Gametests: `gradlew runGameTestServer -Pgt=erfenis_kaart` (7 tests). AutoCheck: `tools/autocheck/190_opk_kaart.txt`.
 
-## PAUZE 2 (2026-11-03 ~14:25): waar ik ben
-- Compileert. Gametests `-Pgt=KaartGameTests,ErfenisGameTests`: alle 14 groen (14:21).
-- T4/T5-betaling is gerepareerd: een bestelling kiest alleen goederen die per stuk genoeg waard zijn
-  (`Bestelling.duur`, min = waarde / (maxN x 1,5)), dus geen honderden planken meer bij T4/T5.
-- Nog te doen: AutoCheck `tools/autocheck/190_opk_kaart.txt` draaien (UITGESTELD: de gebruiker wil nu geen client) en de
-  screenshots bekijken (kaart met karretjes en badges, bestelscherm leeg/vol, paneel van een buur), daarna de layout
-  bijwerken waar nodig en de definitieve commit maken.
-- Test `zelfdeRegelsAlsDeKern` is al weg (de kern heeft de POC-nummers veranderd); de lead lijnt dat uit bij de merge.
+## Status (af, 2026-11-03)
+- Compileert. Gametests `-Pgt=KaartGameTests,ErfenisGameTests`: alle 14 groen.
+- T4/T5-betaling gerepareerd: een bestelling kiest alleen goederen die per stuk genoeg waard zijn (`Bestelling.duur`).
+- AutoCheck `tools/autocheck/190_opk_kaart.txt` gedraaid (9 shots, 0 problemen) en bekeken: kaart met 3 buren op afstand,
+  stippelweggetjes, rijdende en geparkeerde karretjes, badges en de ster; bestelscherm leeg/vol/na leveren; paneel van een
+  buur met "Bestellingen". Opgelost na de shots: kaart ging niet open vanaf het bestelscherm, de kop van een kaartje
+  overlapte (vette naam), de sterwens werd afgekapt, de weggetjes waren te flauw.
+- Test `zelfdeRegelsAlsDeKern` is weg (de kern heeft de POC-nummers veranderd); de lead lijnt dat uit bij de merge.

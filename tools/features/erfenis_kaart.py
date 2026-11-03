@@ -98,7 +98,7 @@ TEKSTEN = {
     K + "bestel.leeg": "Nog geen buurdorpjes met bestellingen. Even geduld, ze zijn onderweg!",
     K + "bestel.sluiten": "Sluiten",
     K + "bestel.naar_kaart": "Terug naar de kaart",
-    K + "bestel.ster": "★ Sterbestelling",
+    K + "bestel.ster": "★ Ster",
     K + "bestel.relatie.0": "kleiner dorpje",
     K + "bestel.relatie.1": "even groot",
     K + "bestel.relatie.2": "groter dorp",

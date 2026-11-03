@@ -481,7 +481,7 @@ public final class KaartScherm extends Screen {
         for (UUID b : buren) {
             KaartDorp d = dorp(b);
             if (d != null) {
-                KarIcoon.weg(g, ex, ey, mx + (d.cx() + 0.5f - camX) * zoom, my + (d.cz() + 0.5f - camZ) * zoom, 0x90A06A4A);
+                KarIcoon.weg(g, ex, ey, mx + (d.cx() + 0.5f - camX) * zoom, my + (d.cz() + 0.5f - camZ) * zoom, 0xE0B07A50);
             }
         }
         int geparkeerd = 0;

@@ -79,8 +79,8 @@ final class KarIcoon {
     /** A dotted road from (x0, y0) to (x1, y1). */
     static void weg(GuiGraphicsExtractor g, float x0, float y0, float x1, float y1, int kleur) {
         float dx = x1 - x0, dy = y1 - y0, len = (float) Math.sqrt(dx * dx + dy * dy);
-        int stappen = (int) (len / 5);
-        for (int i = 1; i < stappen; i++) {
+        int stappen = (int) (len / 4);
+        for (int i = 2; i < stappen - 1; i++) {
             if (i % 2 == 0) {
                 continue;
             }
