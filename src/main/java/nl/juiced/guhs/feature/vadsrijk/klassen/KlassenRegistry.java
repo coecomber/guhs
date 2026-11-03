@@ -125,6 +125,28 @@ public final class KlassenRegistry {
             KlasseBalie.boom(p);
             return 1;
         })));
+        // (dev/autocheck: fire a skill or a basic shot without keys, a fresh class weapon in the hand)
+        k.then(dev("skill").then(Commands.argument("slot", IntegerArgumentType.integer(0, 3))
+                .executes(c -> nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.gebruik(c.getSource().getPlayerOrException(),
+                        IntegerArgumentType.getInteger(c, "slot")) ? 1 : 0)));
+        k.then(dev("schiet").executes(c -> {
+            Basisaanval.verzoek(c.getSource().getPlayerOrException());
+            return 1;
+        }));
+        k.then(dev("wapen").then(Commands.argument("type", StringArgumentType.word())
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes.alle().stream()
+                        .filter(t -> t.slot() == nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.WAPEN).map(t -> t.id()), b))
+                .executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    var bt = nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes.van(StringArgumentType.getString(c, "type"));
+                    if (bt == null) {
+                        return 0;
+                    }
+                    var u = nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.rol(bt, Math.max(1, Spelers.level(p)),
+                            nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid.ZELDZAAM, p.getRandom());
+                    p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.stack(u));
+                    return 1;
+                })));
         k.then(dev("reset").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             SpelerData d = Spelers.data(p);
