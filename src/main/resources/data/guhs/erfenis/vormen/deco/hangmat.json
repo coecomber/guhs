@@ -1,0 +1,1 @@
+{"w":3,"d":1,"ymin":0,"ymax":4,"pal":["minecraft:air","minecraft:grass_block[snowy=false]","minecraft:dark_oak_fence","minecraft:pink_carpet","guhs:lampion_roze[hanging=false]"],"rle":[1,3,2,1,0,1,2,2,3,1,2,2,0,1,2,1,4,1,0,1,4,1],"wezens":[{"x":1.5,"y":0.1,"z":0.5,"yaw":120,"t":"guh","skin":"guh","sit":true}],"id":"hangmat"}

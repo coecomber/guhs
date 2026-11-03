@@ -1,0 +1,118 @@
+# 1.9 opknapper (vormen-slice): stamped buildings vs the renders in renders-erfenis/.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/erfenis_vormen.txt
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s night_vision infinite 0 true
+wait 40
+
+section hoeve_L1_p0
+/tp @s 0 200 0 0 0
+/guhs erfenis vorm hoeve 1 0 0
+wait 20
+/setblock 24 214 24 minecraft:barrier
+/tp @s 24 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L1_p0
+
+section hoeve_L5_p0
+/tp @s 40 200 0 0 0
+/guhs erfenis vorm hoeve 5 0 0
+wait 20
+/setblock 64 214 24 minecraft:barrier
+/tp @s 64 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L5_p0
+
+section hoeve_L10_p0
+/tp @s 80 200 0 0 0
+/guhs erfenis vorm hoeve 10 0 0
+wait 20
+/setblock 104 214 24 minecraft:barrier
+/tp @s 104 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L10_p0
+
+section kippenhok_L6_p0
+/tp @s 120 200 0 0 0
+/guhs erfenis vorm kippenhok 6 0 0
+wait 20
+/setblock 144 214 24 minecraft:barrier
+/tp @s 144 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_kippenhok_L6_p0
+
+section molen_L6_p0
+/tp @s 160 200 0 0 0
+/guhs erfenis vorm molen 6 0 0
+wait 20
+/setblock 184 214 24 minecraft:barrier
+/tp @s 184 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_molen_L6_p0
+
+section dorpscafe_L10_p0
+/tp @s 200 200 0 0 0
+/guhs erfenis vorm dorpscafe 10 0 0
+wait 20
+/setblock 224 214 24 minecraft:barrier
+/tp @s 224 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_dorpscafe_L10_p0
+
+section mammoetwei_L3_p0
+/tp @s 240 200 0 0 0
+/guhs erfenis vorm mammoetwei 3 0 0
+wait 20
+/setblock 264 214 24 minecraft:barrier
+/tp @s 264 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_mammoetwei_L3_p0
+
+section bosje_L9_p0
+/tp @s 280 200 0 0 0
+/guhs erfenis vorm bosje 9 0 0
+wait 20
+/setblock 304 214 24 minecraft:barrier
+/tp @s 304 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_bosje_L9_p0
+
+section hoeve_L10_p3
+/tp @s 320 200 0 0 0
+/guhs erfenis vorm hoeve 10 3 0
+wait 20
+/setblock 344 214 24 minecraft:barrier
+/tp @s 344 215 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L10_p3
+
+section deco
+/tp @s 400 200 0 0 0
+/guhs erfenis vorm decoalle
+/setblock 422 209 26 minecraft:barrier
+/tp @s 422 210 26 135 35
+wait 40
+waitrender 200
+shot vorm_deco
+
+section plukje
+/tp @s 480 200 0 0 0
+/guhs erfenis vorm plukje 1
+/setblock 494 205 14 minecraft:barrier
+/tp @s 494 206 14 135 35
+wait 30
+waitrender 200
+shot vorm_plukje1
