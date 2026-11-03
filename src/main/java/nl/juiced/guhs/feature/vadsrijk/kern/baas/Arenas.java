@@ -1,0 +1,208 @@
+package nl.juiced.guhs.feature.vadsrijk.kern.baas;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.phys.AABB;
+import nl.juiced.guhs.feature.vadsrijk.kern.Getallen;
+import nl.juiced.guhs.feature.vadsrijk.kern.KernPayloads;
+import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
+import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
+
+/**
+ * The boss arenas: spawning, the intro when you walk in, HP scaling, the boss bar for everyone inside, the respawn board
+ * ("terug over 0:42"). Register an arena with a factory; kern ticks it every 5 ticks while its centre chunk is loaded.
+ */
+public final class Arenas {
+    private static final class Toestand {
+        final Arena arena;
+        final Function<ServerLevel, VadsrijkBaas> maker;
+        @Nullable
+        UUID baas;
+        long respawnOp = -1;
+        @Nullable
+        Display.TextDisplay bord;
+        final Set<UUID> binnen = new HashSet<>();
+
+        Toestand(Arena a, Function<ServerLevel, VadsrijkBaas> maker) {
+            this.arena = a;
+            this.maker = maker;
+        }
+    }
+
+    private static final Map<String, Toestand> ALLE = new LinkedHashMap<>();
+
+    private Arenas() {
+    }
+
+    public static synchronized void registreer(Arena a, Function<ServerLevel, VadsrijkBaas> maker) {
+        ALLE.put(a.id(), new Toestand(a, maker));
+    }
+
+    @Nullable
+    public static Arena van(String id) {
+        Toestand t = ALLE.get(id);
+        return t == null ? null : t.arena;
+    }
+
+    /** The arena this position is in, or null. */
+    @Nullable
+    public static Arena op(double x, double y, double z) {
+        for (Toestand t : ALLE.values()) {
+            if (t.arena.binnen(x, y, z)) {
+                return t.arena;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static VadsrijkBaas baas(ServerLevel sl, String arenaId) {
+        Toestand t = ALLE.get(arenaId);
+        return t == null ? null : zoek(sl, t);
+    }
+
+    static void verslagen(Arena a) {
+        Toestand t = ALLE.get(a.id());
+        if (t != null && t.baas != null) {
+            t.baas = null;
+            t.respawnOp = -2;   // set on the next tick (we may not have the level here)
+        }
+    }
+
+    /** Dev: the boss of this arena away and back right now (full HP, phase 1). */
+    public static boolean reset(MinecraftServer server, String id) {
+        Toestand t = ALLE.get(id);
+        ServerLevel sl = Vadsrijk.level(server);
+        if (t == null || sl == null) {
+            return false;
+        }
+        VadsrijkBaas b = zoek(sl, t);
+        if (b != null) {
+            b.discard();
+        }
+        t.baas = null;
+        t.respawnOp = 0;
+        t.binnen.clear();
+        return true;
+    }
+
+    public static List<String> ids() {
+        return new ArrayList<>(ALLE.keySet());
+    }
+
+    @Nullable
+    private static VadsrijkBaas zoek(ServerLevel sl, Toestand t) {
+        if (t.baas != null && sl.getEntity(t.baas) instanceof VadsrijkBaas b && !b.isRemoved() && !b.geplofd()) {
+            return b;
+        }
+        BlockPos c = t.arena.centrum();
+        int r = t.arena.straal() + 8;
+        for (VadsrijkBaas b : sl.getEntitiesOfClass(VadsrijkBaas.class, new AABB(c).inflate(r, 24, r), x -> t.arena.id().equals(x.arenaId) && !x.geplofd())) {
+            t.baas = b.getUUID();
+            b.zetArena(t.arena);
+            return b;
+        }
+        return null;
+    }
+
+    public static void tick(MinecraftServer server) {
+        ServerLevel sl = Vadsrijk.level(server);
+        if (sl == null) {
+            return;
+        }
+        long nu = sl.getGameTime();
+        for (Toestand t : ALLE.values()) {
+            Arena a = t.arena;
+            if (!sl.isLoaded(a.centrum())) {
+                t.bord = null;
+                continue;
+            }
+            VadsrijkBaas b = zoek(sl, t);
+            if (t.respawnOp == -2) {
+                t.respawnOp = nu + a.respawnSeconden() * 20L;
+            }
+            if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
+                b = t.maker.apply(sl);
+                if (b != null) {
+                    b.zetArena(a);
+                    b.snapTo(a.centrum().getX() + 0.5, a.centrum().getY(), a.centrum().getZ() + 0.5, 180, 0);
+                    sl.addFreshEntity(b);
+                    t.baas = b.getUUID();
+                    t.respawnOp = -1;
+                    t.binnen.clear();
+                }
+            }
+            // players inside: intro for newcomers, HP scaling, boss bar
+            List<ServerPlayer> binnen = new ArrayList<>();
+            for (ServerPlayer p : sl.players()) {
+                if (!p.isSpectator() && a.binnen(p.getX(), p.getY(), p.getZ())) {
+                    binnen.add(p);
+                }
+            }
+            Set<UUID> nuBinnen = new HashSet<>();
+            for (ServerPlayer p : binnen) {
+                nuBinnen.add(p.getUUID());
+                if (b != null && !t.binnen.contains(p.getUUID())) {
+                    boolean eerste = Spelers.data(p).gezien.add("baas:" + a.id());
+                    b.intro(p, eerste);
+                }
+                if (b != null) {
+                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(b.getId(), Component.translatable(b.titelKey()), b.fase(), (float) b.vads(), (float) b.maxVads()));
+                }
+            }
+            for (UUID weg : t.binnen) {
+                if (!nuBinnen.contains(weg) && sl.getEntity(weg) instanceof ServerPlayer p) {
+                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+                }
+            }
+            if (b == null) {
+                for (ServerPlayer p : binnen) {
+                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+                }
+            }
+            t.binnen.clear();
+            t.binnen.addAll(nuBinnen);
+            if (b != null) {
+                b.schaal(binnen.size());
+            }
+            bord(sl, t, b, nu);
+        }
+    }
+
+    private static void bord(ServerLevel sl, Toestand t, @Nullable VadsrijkBaas b, long nu) {
+        if (nu % 20 != 0) {
+            return;
+        }
+        Component naam = Component.translatable(t.arena.titelKey()).withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
+        Component regel;
+        if (b != null) {
+            regel = Component.translatable("vadsrijk.kern.arena.wakker").withStyle(ChatFormatting.GOLD);
+        } else {
+            long s = Math.max(0, (t.respawnOp - nu) / 20);
+            regel = Component.translatable("vadsrijk.kern.arena.terug", String.format("%d:%02d", s / 60, s % 60)).withStyle(ChatFormatting.LIGHT_PURPLE);
+        }
+        Component tekst = Component.empty().append(naam).append("\n").append(regel);
+        if (t.bord == null || t.bord.isRemoved()) {
+            BlockPos p = t.arena.bord();
+            t.bord = Getallen.hologram(sl, p.getX() + 0.5, p.getY() + 1.6, p.getZ() + 0.5, tekst);
+        } else {
+            Getallen.zetTekst(t.bord, tekst);
+        }
+    }
+}

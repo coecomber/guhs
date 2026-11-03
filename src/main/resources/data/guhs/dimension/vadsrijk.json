@@ -1,0 +1,13 @@
+{
+  "type": "guhs:vadsrijk",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:vadsrijk",
+      "layers": [],
+      "lakes": false,
+      "features": true,
+      "structure_overrides": []
+    }
+  }
+}

@@ -1,0 +1,77 @@
+package nl.juiced.guhs.feature.vadsrijk.kern.loot;
+
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry;
+import nl.juiced.guhs.feature.vadsrijk.kern.Stats;
+
+/** Rolling gear, and what a rolled piece gives. */
+public final class Rollen {
+    /** Economie hook: the extra stats of the stars on a piece (default: none). */
+    public static Function<Uitrusting, Stats> STER_BONUS = u -> new Stats();
+    /** Economie hook: weapon damage factor of the stars (default +5 % per star). */
+    public static Function<Uitrusting, Double> STER_SCHADE = u -> 1 + 0.05 * u.sterren();
+
+    private Rollen() {
+    }
+
+    public static Uitrusting rol(BasisType t, int level, Zeldzaamheid z, RandomSource r) {
+        int n = z.minBonus + (z.maxBonus > z.minBonus ? r.nextInt(z.maxBonus - z.minBonus + 1) : 0);
+        return new Uitrusting(t.id(), z, level, Bonussen.rol(n, level, z, r), t.element(), t.flavours() <= 0 ? 0 : r.nextInt(t.flavours()), 0,
+                false, false, r.nextLong());
+    }
+
+    /** The stats a piece gives (nothing when verpluisd). */
+    public static Stats stats(Uitrusting u) {
+        Stats s = new Stats();
+        BasisType t = u.basisType();
+        if (t == null || u.verpluisd()) {
+            return s;
+        }
+        s.plus(t.statsOp(u.level()).maal(u.zeldzaamheid().factor));
+        for (Bonus b : u.bonussen()) {
+            s.plus(b.stat(), b.waarde());
+        }
+        s.plus(STER_BONUS.apply(u));
+        return s;
+    }
+
+    /** A weapon's base damage per hit (0 for armour; verpluisd: 1). */
+    public static double wapenSchade(Uitrusting u) {
+        BasisType t = u.basisType();
+        if (t == null || t.slot() != Slot.WAPEN) {
+            return 0;
+        }
+        if (u.verpluisd()) {
+            return 1;
+        }
+        return t.schadeOp(u.level()) * u.zeldzaamheid().factor * STER_SCHADE.apply(u);
+    }
+
+    /** The item stack for this roll (empty when the base type's item is unknown). */
+    public static ItemStack stack(Uitrusting u) {
+        BasisType t = u.basisType();
+        if (t == null) {
+            return ItemStack.EMPTY;
+        }
+        Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(t.itemId()));
+        if (item == null || item == net.minecraft.world.item.Items.AIR) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack s = new ItemStack(item);
+        s.set(KernRegistry.UITRUSTING.get(), u);
+        return s;
+    }
+
+    @Nullable
+    public static Uitrusting van(ItemStack s) {
+        return s.isEmpty() ? null : s.get(KernRegistry.UITRUSTING.get());
+    }
+}
