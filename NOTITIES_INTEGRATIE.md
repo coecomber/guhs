@@ -106,12 +106,17 @@ Vadsrijk problems (fixed `vr_npc_zwamhoedje` -> `minecraft:block/red_mushroom`).
   - Pre-existing, not Vadsrijk: droombed, bliksemsmidse_onweerswolkje, guhmon_badgedoos models; FTB "Missing entity icon" errors.
 
 ## Known issues / open
-- NPC guhs count as Guhdex discoveries ("Nieuw in je Guhdex: Guh") because they are real guhs.
-- The wereld POI `tempeltje` lies inside the plinth (dev tp lands in a dark hollow).
-- Jewellery exists (kern) but is in no loot table yet.
+- (fixed) NPC guhs (RijkGuh) no longer count as Guhdex discoveries.
+- (fixed) POI `tempeltje` = (-52,94,1065) on the plinth (kamp_wereld.py + WereldPlekken + POI_VADSRIJK.md).
+- Jewellery: kern tables + every wezens elite table + the 3 economie boss tables (weight 1).
 - The `kern:proefarena` text in TESTEN_VADSRIJK.md (kern's old guide) is outdated; TESTEN_VADSRIJK_ZONE1.md is the one guide.
 - Balance untested against the real mobs; music hooks without audio.
 
 ## Resume point
 Integration DONE (head: see `git log -1`). All 6 slices merged + aligned. Next: the user's dev-client test with
 TESTEN_VADSRIJK_ZONE1.md; then CHANGELOG/version/wiki publish steps of a release (not done here; no push).
+
+## Final pass
+- Gametests on the final tree, `-Pgt=VadsrijkKern,VadsrijkWezens,VadsrijkBazen,VadsrijkKlassen,VadsrijkEconomie,VadsrijkNpc,VadsrijkWereld`:
+  **30/30 passed** (the Opperzwam test's ceiling block moved into the real dome range).
+- run/: old worlds moved to `run/_oude_saves` (saves list is empty: the user makes a new world); options/config kept.

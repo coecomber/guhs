@@ -263,7 +263,7 @@ public final class WereldPlekken {
             Map.entry("stal.deur", new BlockPos(-143, 64, -4)),
             Map.entry("stal.wei", new BlockPos(-146, 64, 25)),
             Map.entry("steiger_eind", new BlockPos(151, 87, 1015)),
-            Map.entry("tempeltje", new BlockPos(-52, 92, 1065)),
+            Map.entry("tempeltje", new BlockPos(-52, 94, 1065)),
             Map.entry("terugportaal_haven", new BlockPos(111, 65, 474)),
             Map.entry("terugportaal_kamp", new BlockPos(0, 65, 1155)),
             Map.entry("terugportaal_zwamzoet", new BlockPos(-43, 64, 30)),

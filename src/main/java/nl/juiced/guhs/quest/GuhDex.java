@@ -247,7 +247,8 @@ public final class GuhDex {
                 }
             }
         }
-        for (GuhEntity guh : player.level().getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(SEE_RANGE))) {
+        for (GuhEntity guh : player.level().getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(SEE_RANGE),
+                g -> !(g instanceof nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh))) {   // (1.10.0: Vadsrijk NPC guhs are no Guhdex finds)
             GuhVariant v = guh.getVariant();
             if (ENTRIES.contains(v)) {
                 GuhAdvancements.grant(player, "seen_" + v.id());

@@ -169,7 +169,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `ordetent` | 0, 87, 991 |
-| `tempeltje` | -52, 92, 1065 |
+| `tempeltje` | -52, 94, 1065 |
 | `training` | 62, 87, 981 |
 | `vijver` | 54, 87, 1069 |
 | `vuurtoren_top` | -84, 125, 937 |

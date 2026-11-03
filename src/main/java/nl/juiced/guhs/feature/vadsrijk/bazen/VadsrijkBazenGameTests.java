@@ -115,7 +115,7 @@ public class VadsrijkBazenGameTests {
         o.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
         o.stelIn(19, Element.NATUUR, false, Set.of());
         sl.addFreshEntity(o);
-        BlockPos plafond = at.above(14);
+        BlockPos plafond = at.above(BazenPlekken.OZ_PLAFOND_ONDER + 1);   // (inside the real dome range, integration)
         helper.runAfterDelay(2, () -> {
             sl.setBlock(plafond, Blocks.STONE.defaultBlockState(), 3);
             double max = o.maxVads();

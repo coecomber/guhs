@@ -73,7 +73,7 @@ public final class NpcPlekken {
         NPC.put("rekruteerder", w("aankomst", 1, 4));   // (on the south jetty, where you arrive)
         NPC.put("kapitein", w("luchtschip_kapitein"));
         NPC.put("kok", w("kampvuur_kamp", 4, 4));
-        NPC.put("priesteres", w("tempeltje", 0, 0).above(2));   // (on the plinth in front of the klasse-tempeltje)
+        NPC.put("priesteres", w("tempeltje"));   // (on the plinth in front of the klasse-tempeltje)
         NPC.put("trainer_ridder", w("training", -5, -4));
         NPC.put("trainer_jager", w("training", 5, -4));
         NPC.put("trainer_magier", w("training", 0, 6));

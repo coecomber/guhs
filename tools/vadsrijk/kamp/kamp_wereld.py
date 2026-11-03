@@ -67,7 +67,7 @@ def main(uit):
     poi["ordetent"] = w(*(KP.ORDETENT[0], KP.VLOER + 1, KP.ORDETENT[1]))
     poi["training"] = w(KP.TRAINING[0], KP.VLOER + 1, KP.TRAINING[1])
     tx, tz = KP.TEMPEL
-    poi["tempeltje"] = w(tx, I.h(tx, tz) + 1, tz)
+    poi["tempeltje"] = w(tx, I.h(tx, tz) + 3, tz)   # (integration: stand ON the plinth, not in its hollow)
     vx, vz = KP.VIJVER
     poi["vijver"] = w(vx, KP.VLOER + 1, vz)
     # sea: drop the scene's own water + sea floor (the global sea goes there); keep the dock posts

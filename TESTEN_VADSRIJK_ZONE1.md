@@ -145,9 +145,7 @@ druipslijm, kristalklodder, knaag, glimzwam, tempelridder, sporenpriester.
 - Geen Guhdex-pagina's voor de wezens (het bestiarium staat in de questlog, tab Wezens).
 - Balans is een eerste gok (HP, schade, prijzen, sterkansen, xp-curve).
 - Curios/Accessories-vakken gaan mee in de inventariswissel, maar zijn niet getest met de echte mods.
-- Sieraden vallen nog nergens als buit (alleen via `/guhs vadsrijk loot`).
-- NPC-guhs in het Vadsrijk tellen mee als "Nieuw in je Guhdex: Guh / Gouden Guh" (ze zijn echte guhs met kleding).
+- Sieraden (roze ring, knuffelketting, pluisoorbel) zijn zeldzame buit van elites en bazen.
 - De blauwe stipjes in de lucht zijn de sporen-sfeer (vanilla "warped spore"); misschien wat veel.
 - Grotten van de wereld zijn "uitgehold": buiten de gangen zitten afgesloten, pikdonkere luchtbellen. NPC's zoeken nu alleen een
   verlichte vloer als hun plek niet precies klopt; zie je toch ergens een NPC of wezen in het donker in de rots: meld de plek.
-- De dev-plek `tempeltje` zet je ín de sokkel van het klasse-tempeltje (de POI ligt te laag); loop gewoon naar buiten/omhoog.
