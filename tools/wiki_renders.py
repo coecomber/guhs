@@ -11,6 +11,7 @@ import collections
 import json
 import math
 import os
+import re
 import sys
 import zipfile
 from functools import lru_cache
@@ -21,6 +22,20 @@ from PIL import Image
 ASSETS = os.path.join("src", "main", "resources", "assets", "guhs")
 VANILLA_JAR = os.path.join("build", "moddev", "artifacts", "neoforge-21.1.251-client-extra-aka-minecraft-resources.jar")
 _jar = zipfile.ZipFile(VANILLA_JAR) if os.path.exists(VANILLA_JAR) else None
+
+
+def _variant_bones():
+    """The guh model's variant/outfit bone prefixes, read from GuhVariant.VARIANT_BONES (hidden on a normal guh in the
+    game). Read from the mod's source so the wiki can't drift: a hand-kept copy here missed hert, bever and the 1.8.0
+    oerguhs (oer_), so the plain guh on the wiki and guhs.nl got antlers, beaver teeth, wings, tusks and a trunk."""
+    src = open(os.path.join("src", "main", "java", "nl", "juiced", "guhs", "entity", "GuhVariant.java"), encoding="utf-8").read()
+    m = re.search(r"VARIANT_BONES\s*=\s*List\.of\((.*?)\);", src, re.S)
+    prefixes = tuple(re.findall(r'"([^"]+)"', re.sub(r"//[^\n]*", "", m.group(1))))
+    assert "outfit_" in prefixes and "oer_" in prefixes, prefixes
+    return prefixes
+
+
+VARIANT_BONES = _variant_bones()
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -161,7 +176,7 @@ def geo_quads(geo_path, tex_ref, hide=(), show_only_variant_bones=(), lift=None)
     for bone in geo["bones"]:
         if bone["name"] in hide:
             continue
-        if bone["name"].startswith(("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh", "balto", "mewtwo", "stitch", "samguh", "guhshi", "bloesem", "tanuki", "korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh")) and not bone["name"].startswith(tuple(show_only_variant_bones) or ("-none-",)):
+        if bone["name"].startswith(VARIANT_BONES) and not bone["name"].startswith(tuple(show_only_variant_bones) or ("-none-",)):
             continue
         shift = [v / 16 for v in lift[1]] if lift and under(bone["name"], lift[0]) else [0, 0, 0]
         M, t = transform(bone["name"])
