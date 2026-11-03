@@ -140,12 +140,10 @@ Hij is tijdelijk zoals de hele cast: is er niemand binnen 40 blokken, dan gaat h
    Alleen kijken: `/guhs erfenis sherlock rechtbank`. De hele cast op een rij: `/guhs erfenis sherlock cast`.
 5. AutoCheck: `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_sherlock.txt`.
 
-## STAND BIJ PAUZE 2 (WIP-commit "WIP 190-opk: pauze 2")
-- `compileJava` is groen. `runGameTestServer -Pgt=SherlockGameTests` is **groen** ("All 7 required tests passed").
-- De SNOES-fout in UpstreamSamenGameTests bestond al (niet van deze slice).
-- Nog te doen (headless): `-Pgt=TaalsleutelsGameTests,TitelsGameTests` opnieuw draaien. Die run is twee keer
-  afgebroken (eerst door de client-stop, daarna door de pauze), dus de uitslag is nog onbekend.
-- Nog te doen (client, pas als de gebruiker weer een client toestaat): AutoCheck
-  `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_sherlock.txt` (cast op een rij, Speurboekje,
-  speurbord met draadjes + tooltip, Speurboekje na oplossen, rechtbank), de screenshots bekijken, looks bijstellen.
-- Daarna: definitieve commit.
+## Stand: KLAAR
+- `compileJava` groen; `-Pgt=SherlockGameTests` groen (6 eigen tests); `-Pgt=TaalsleutelsGameTests,TitelsGameTests` groen.
+- AutoCheck `tools/autocheck/190_sherlock.txt` gedraaid en bekeken (cast, Speurboekje, speurbord + tooltip, boekje na
+  oplossen, rechtbank). Na de eerste ronde aangepast: vachtkleur per personage (Sherlock karamel, Vadson blauwgrijs,
+  Guhrrit mint, op vakantie roze verbrand, Oehoe bruin, de rechter roze met een lila pruik), Morris een vlinderdas (zijn
+  lange das leek een tong), de rechter zit hoger (was half verstopt achter zijn bank), de prologregel past op de linkerbladzijde.
+- Bekende, niet-mijne fout: `upstreamsamenkindsvoorguhpixel` (SNOES heeft geen Guhdex-pagina) bestond al.

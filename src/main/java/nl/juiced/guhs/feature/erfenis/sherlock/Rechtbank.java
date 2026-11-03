@@ -258,6 +258,7 @@ public final class Rechtbank {
         for (int x = -3; x <= 3; x++) {
             for (int z = -10; z <= -8; z++) {
                 zet(level, a, x, 0, z, Blocks.SPRUCE_PLANKS.defaultBlockState());
+                zet(level, a, x, 1, z, Blocks.SPRUCE_PLANKS.defaultBlockState());
             }
             zet(level, a, x, 0, -7, Blocks.DARK_OAK_PLANKS.defaultBlockState());
             zet(level, a, x, 1, -7, Blocks.DARK_OAK_PLANKS.defaultBlockState());

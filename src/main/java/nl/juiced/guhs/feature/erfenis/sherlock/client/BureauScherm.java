@@ -120,7 +120,9 @@ public final class BureauScherm extends Screen {
         // the prologue line
         int y = pt + 24;
         boolean sleutel = staat.getBooleanOr("Sleuteltje", false);
-        g.text(font, Component.translatable(sleutel ? "sherlock.ui.proloog.ja" : "sherlock.ui.proloog.nee"), pl + 8, y, sleutel ? 0xFF8A6A2A : GRIJS, false);
+        Component proloog = Component.translatable(sleutel ? "sherlock.ui.proloog.ja" : "sherlock.ui.proloog.nee");
+        int pw = mid - pl - 20;
+        schaalTekst(g, proloog, pl + 8 + Math.min(pw, font.width(proloog)) / 2, y, pw, sleutel ? 0xFF8A6A2A : GRIJS);
         y += 14;
         for (int i = 0; i < zaken.size(); i++) {
             CompoundTag z = zaken.get(i);

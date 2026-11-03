@@ -15,7 +15,7 @@ import nl.juiced.guhs.feature.verhaal.Cutscene;
  */
 public final class SherlockScenes {
     // where everybody stands in the courtroom (relative to the anchor, see Rechtbank)
-    static final Vec3 RECHTER = new Vec3(0.5, 1, -8.5), MORRIS = new Vec3(4.5, 0, -2.5), PIM = new Vec3(6.5, 0, -2.5),
+    static final Vec3 RECHTER = new Vec3(0.5, 2, -8.5), MORRIS = new Vec3(4.5, 0, -2.5), PIM = new Vec3(6.5, 0, -2.5),
             SPELER = new Vec3(-4.5, 0, -2.5), SHERLOCK = new Vec3(-6.5, 0, -2.5), VADSON = new Vec3(-2.5, 0, -2.5),
             OEHOE = new Vec3(-3.5, 0, 2.2), GUHRRIT = new Vec3(3.5, 0, 2.2), OMA = new Vec3(-5.5, 0, 2.2);
 
@@ -56,7 +56,7 @@ public final class SherlockScenes {
                 .geluid(5, () -> SoundEvents.ANVIL_LAND, 0.5f, 1.6f)
                 .deeltjes(6, ParticleTypes.CRIT, SPELER.add(0, 1.6, -0.6), 25, 0.4)
                 .zeg(60, "speler", "bewijs", 70)
-                .cameraKnip(130, new Vec3(0.5, 2.6, -5.0), RECHTER.add(0, 1.0, 0))
+                .cameraKnip(130, new Vec3(0.5, 3.3, -5.0), RECHTER.add(0, 1.0, 0))
                 .zeg(135, "rechter", "toegewezen", 60)
                 .geluid(140, () -> SoundEvents.NOTE_BLOCK_BELL.value(), 1f, 0.8f)
                 .cameraKnip(200, new Vec3(3.6, 1.6, -5.6), MORRIS.add(0, 0.8, 0))
@@ -66,7 +66,7 @@ public final class SherlockScenes {
             return b.registreer();
         }
         // the verdict and Morris' sweet ending
-        return b.cameraKnip(270, new Vec3(0.5, 2.6, -5.0), RECHTER.add(0, 1.0, 0))
+        return b.cameraKnip(270, new Vec3(0.5, 3.3, -5.0), RECHTER.add(0, 1.0, 0))
                 .zeg(275, "rechter", "uitspraak", 80)
                 .geluid(330, () -> SoundEvents.GENERIC_EAT.value(), 1f, 1.1f)
                 .zeg(335, "rechter", "hapje", 40)

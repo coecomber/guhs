@@ -545,6 +545,8 @@ def _maak(h, kind, basis, tex, kleur, bones, paint, seed, na=None):
     src = Image.open(os.path.join(h.TEX, "entity", tex)).convert("RGBA")
     img = h.recolour(src, hue=kleur[0], sat=kleur[1], val=kleur[2], only=h.pinkish).convert("RGBA")
     a = np.asarray(img).copy()
+    if len(kleur) > 3:
+        _tint(a, kleur[3])
     rng = np.random.default_rng(seed)
     for naam, (colour, var, pattern) in paint.items():
         if colour == "vacht":
@@ -553,6 +555,14 @@ def _maak(h, kind, basis, tex, kleur, bones, paint, seed, na=None):
     if na:
         na(a)
     h.save(Image.fromarray(a), "entity", f"npc_{kind}.png")
+
+
+def _tint(a, rgb):
+    """The white fur of the sitting guh gets the character's own colour (light, low-saturation pixels only)."""
+    c = a[..., :3].astype(np.int32)
+    licht = (a[..., 3] > 0) & (c.min(axis=2) > 165) & (c.max(axis=2) - c.min(axis=2) < 45)
+    t = np.array(rgb, np.int32)
+    a[..., :3][licht] = np.clip(c[licht] * t // 255, 0, 255).astype(np.uint8)
 
 
 def _vacht(a):
@@ -592,11 +602,11 @@ def _oog(block):
 
 
 def _krul(block):
-    block[..., :3] = (246, 244, 236)
+    block[..., :3] = (236, 232, 246)
     for yy in range(0, 32, 6):
         for xx in range(32):
             if (xx + yy // 2) % 8 < 2:
-                block[yy:yy + 2, xx, :3] = (214, 210, 200)
+                block[yy:yy + 2, xx, :3] = (178, 170, 200)
 
 
 def _bloemetjes(block):
@@ -633,7 +643,7 @@ def modellen(h):
     B = [0, 10, -4]
     # Sherlock Guh: caramel; a brown checked deerstalker (both peaks, ear flaps tied with a bow on top), sleepy eyelids, a
     # bubble pipe with a pink rim and two bubbles, a checked Inverness cape over his shoulders
-    _maak(h, "sherlock_guh", "guh_sitting.geo.json", "guh_sitting.png", (0.075, 0.42, 1.0), {
+    _maak(h, "sherlock_guh", "guh_sitting.geo.json", "guh_sitting.png", (0.075, 0.42, 1.0, (246, 214, 172)), {
         "sh_pet": ("head", H, [([-6.2, 24.4, -6.4], [12.4, 3.4, 12.0], "pet", 0), ([-5.0, 27.8, -5.2], [10.0, 0.8, 9.6], "pet", 0),
                               ([-4.2, 24.3, -9.4], [8.4, 0.6, 3.1], "pet_d", 0), ([-4.2, 24.3, 5.5], [8.4, 0.6, 2.8], "pet_d", 0),
                               ([-6.9, 25.0, -2.0], [0.8, 2.6, 3.6], "pet_d", 0), ([6.1, 25.0, -2.0], [0.8, 2.6, 3.6], "pet_d", 0),
@@ -650,7 +660,7 @@ def modellen(h):
         "pijp": ((112, 70, 40), 6, None), "pijp_rand": ((244, 150, 180), 4, None), "bel": ((196, 236, 255), 4, None),
         "cape": ((150, 112, 76), 6, _ruit((132, 96, 62), (164, 126, 88), 6))}, 190101)
     # Dokter Vadson: soft blue-grey; a bowler hat with a pink band, a moustache, a bow tie and the red Speurboekje in his paws
-    _maak(h, "dokter_vadson", "guh_sitting.geo.json", "guh_sitting.png", (0.58, 0.22, 0.98), {
+    _maak(h, "dokter_vadson", "guh_sitting.geo.json", "guh_sitting.png", (0.58, 0.22, 0.98, (206, 218, 238)), {
         "va_hoed": ("head", H, [([-6.0, 24.4, -6.6], [12.0, 0.6, 12.6], "hoed", 0), ([-4.4, 25.0, -5.0], [8.8, 3.4, 9.4], "hoed", 0),
                                ([-4.5, 25.0, -5.1], [9.0, 0.8, 9.6], "band", 0), ([-3.8, 28.4, -4.4], [7.6, 0.6, 8.0], "hoed", 0)]),
         "va_snor": ("head", H, [([-3.0, 17.9, -7.45], [6.0, 1.0, 0.6], "snor", 0), ([-3.8, 17.3, -7.45], [1.2, 1.2, 0.6], "snor", 0),
@@ -666,14 +676,14 @@ def modellen(h):
         "gu_bord": ("body", B, [([-7.0, 4.8, -7.8], [3.8, 5.0, 0.6], "bord", 0), ([-6.6, 5.2, -7.95], [3.0, 4.0, 0.2], "papier", 0),
                                ([-5.8, 9.6, -7.95], [1.4, 0.7, 0.7], "clip", 0)]),
     }
-    _maak(h, "makelaar_guhrrit", "guh_sitting.geo.json", "guh_sitting.png", (0.36, 0.30, 1.0), dict(guhrrit_jas, **{
+    _maak(h, "makelaar_guhrrit", "guh_sitting.geo.json", "guh_sitting.png", (0.36, 0.30, 1.0, (204, 238, 216)), dict(guhrrit_jas, **{
         "gu_bril": ("head", H, [([-4.8, 25.0, -6.6], [9.6, 0.9, 1.0], "bril", 0)]),
         "gu_kuif": ("head", H, [([-3.0, 25.6, -5.4], [6.0, 1.2, 4.0], "kuif", 0)]),
     }), {"das": ((214, 60, 84), 6, _streep((150, 30, 54), 8, 2)), "colbert": ((62, 82, 136), 6, None), "bord": ((156, 112, 70), 6, None),
          "papier": ((252, 250, 244), 3, _streep((150, 160, 190), 6, 1)), "clip": ((200, 204, 214), 4, None), "bril": ((30, 28, 36), 3, None),
          "kuif": ((92, 150, 120), 6, None)}, 190103)
     # ... back from holiday: sunburnt, a flowery shirt instead of the jacket, a sombrero and his sunglasses on
-    _maak(h, "guhrrit_vakantie", "guh_sitting.geo.json", "guh_sitting.png", (0.98, 0.62, 1.04), {
+    _maak(h, "guhrrit_vakantie", "guh_sitting.geo.json", "guh_sitting.png", (0.98, 0.62, 1.04, (255, 196, 184)), {
         "gu_hemd": ("body", B, [([-4.6, 2.4, -4.75], [9.2, 9.2, 0.4], "hemd", 0)]),
         "gu_sombrero": ("head", H, [([-11.0, 24.6, -11.0], [22.0, 0.6, 22.0], "sombrero", 0), ([-4.4, 25.2, -4.6], [8.8, 4.4, 8.8], "sombrero", 0),
                                    ([-4.5, 25.2, -4.7], [9.0, 1.0, 9.0], "sombrero_band", 0), ([-3.4, 29.6, -3.6], [6.8, 1.0, 6.8], "sombrero", 0)]),
@@ -683,7 +693,7 @@ def modellen(h):
         "zonnebril": ((24, 22, 30), 3, None), "bord": ((156, 112, 70), 6, None), "papier": ((252, 250, 244), 3, None),
         "clip": ((200, 204, 214), 4, None)}, 190104)
     # Oehoe: a cuddly brown owl; big yellow eyes, a beak, a cream chest with chevrons, feather tufts and little wings
-    _maak(h, "oehoe", "guh_sitting.geo.json", "guh_sitting.png", (0.075, 0.40, 0.72), {
+    _maak(h, "oehoe", "guh_sitting.geo.json", "guh_sitting.png", (0.075, 0.40, 0.72, (186, 146, 110)), {
         "oe_ogen": ("head", H, [([-6.8, 19.4, -7.35], [5.0, 5.0, 0.35], "oog", 0), ([1.8, 19.4, -7.35], [5.0, 5.0, 0.35], "oog", 0)]),
         "oe_snavel": ("head", H, [([-0.9, 16.8, -8.0], [1.8, 2.4, 1.0], "snavel", 0)]),
         "oe_pluim": ("head", H, [([-6.4, 24.2, -1.4], [2.2, 3.2, 1.4], "pluim", 0), ([4.2, 24.2, -1.4], [2.2, 3.2, 1.4], "pluim", 0)]),
@@ -692,13 +702,13 @@ def modellen(h):
     }, {"oog": ((250, 200, 60), 2, _oog), "snavel": ((240, 160, 60), 6, None), "pluim": ((110, 76, 46), 8, None),
         "borst": ((242, 226, 196), 6, _streep((196, 160, 120), 6, 1)), "vleugel": ((112, 80, 52), 8, _streep((92, 64, 40), 6, 2))}, 190105)
     # Edelachtbare Knabbelhamer: a huge white curly wig, a black robe with a white jabot, a kaasknabbel as his gavel
-    _maak(h, "knabbelhamer", "guh_sitting.geo.json", "guh_sitting.png", (0.92, 0.30, 1.0), {
+    _maak(h, "knabbelhamer", "guh_sitting.geo.json", "guh_sitting.png", (0.92, 0.30, 1.0, (250, 214, 226)), {
         "kh_pruik": ("head", H, [([-7.2, 24.2, -6.8], [14.4, 2.8, 12.6], "pruik", 0), ([-9.6, 14.6, -4.4], [2.8, 10.4, 7.4], "pruik", 0),
                                 ([6.8, 14.6, -4.4], [2.8, 10.4, 7.4], "pruik", 0), ([-7.2, 13.6, 4.2], [14.4, 11.0, 2.6], "pruik", 0),
                                 ([-9.8, 12.6, -4.0], [3.0, 2.2, 6.6], "pruik", 0), ([6.8, 12.6, -4.0], [3.0, 2.2, 6.6], "pruik", 0)]),
         "kh_toga": ("body", B, [([-4.7, 1.8, -4.85], [9.4, 10.4, 0.4], "toga", 0), ([-1.7, 8.2, -5.15], [3.4, 3.4, 0.4], "jabot", 0)]),
         "kh_hamer": ("body", B, [([-7.4, 5.6, -7.2], [0.8, 6.4, 0.8], "steel", 0), ([-9.0, 11.6, -8.1], [4.0, 2.4, 2.4], "knabbel", 0)]),
-    }, {"pruik": ((246, 244, 236), 4, _krul), "toga": ((36, 32, 40), 4, None), "jabot": ((252, 252, 250), 3, _streep((226, 226, 232), 5, 1)),
+    }, {"pruik": ((236, 232, 246), 4, _krul), "toga": ((36, 32, 40), 4, None), "jabot": ((252, 252, 250), 3, _streep((226, 226, 232), 5, 1)),
         "steel": ((150, 104, 60), 6, None), "knabbel": ((238, 150, 50), 8, _knabbel)}, 190106)
 
     # the Mikas
@@ -707,9 +717,9 @@ def modellen(h):
             # Morris-Mika: a shiny grey suit, slicked hair, a dark red tie, a briefcase by his paw
             ("morris_mika", (0.62, 0.08, 0.88), {
                 "mo_kuif": ("head", [0, 5, -2], [([-4.0, 13.6, -9.4], [8.0, 1.6, 6.4], "haar", 0), ([-4.4, 13.0, -10.2], [8.8, 1.0, 2.0], "haar", 0)]),
-                "mo_das": ("head", [0, 5, -2], [([-1.0, 2.4, -12.6], [2.0, 1.2, 0.6], "das", 0), ([-0.7, 0.2, -12.6], [1.4, 2.4, 0.6], "das", 0)]),
+                "mo_das": ("head", [0, 5, -2], [([-2.6, 0.2, -12.5], [2.0, 1.6, 0.6], "das", 0), ([0.6, 0.2, -12.5], [2.0, 1.6, 0.6], "das", 0), ([-0.6, 0.5, -12.7], [1.2, 1.0, 0.6], "knoop", 0)]),
                 "mo_koffer": ("root", [0, 0, 0], [([7.0, 0.0, -14.8], [5.4, 3.8, 1.8], "koffer", 0), ([8.7, 3.8, -14.2], [2.0, 0.6, 0.5], "greep", 0)]),
-            }, {"haar": ((70, 72, 82), 4, _streep((110, 112, 124), 4, 1)), "das": ((150, 36, 54), 5, None),
+            }, {"haar": ((70, 72, 82), 4, _streep((110, 112, 124), 4, 1)), "das": ((46, 48, 66), 4, None), "knoop": ((90, 94, 120), 3, None),
                 "koffer": ((112, 76, 46), 6, _streep((90, 60, 36), 10, 1)), "greep": ((200, 200, 210), 3, None)}, 190107),
             # Pim: a soft green intern with a STAGIAIR badge, a pink bow on his ear and a little sprout on his head
             ("pim_mika", (0.30, 0.32, 1.0), {
