@@ -35,6 +35,25 @@ public interface KaartBron {
     default void npcVeranderd(MinecraftServer server, NpcDorp dorp) {
     }
 
+    /** A (POC) NPC village left the map: remove the base behind it (never a player's base). */
+    default void npcWeg(MinecraftServer server, NpcDorp dorp) {
+    }
+
+    /** The Hoeve level of a real player's base (1 when unknown). */
+    default int hoeveLevel(MinecraftServer server, UUID speler) {
+        for (KaartDorp d : spelerDorpen(server, System.currentTimeMillis())) {
+            if (d.id().equals(speler)) {
+                return d.hoeve();
+            }
+        }
+        return 1;
+    }
+
+    /** The level of the player's Marktplein (0: none yet), for the number of order carts. */
+    default int marktpleinLevel(MinecraftServer server, UUID speler) {
+        return 0;
+    }
+
     /** Every cell that is taken by a real base (new NPC villages stay off these). Default: the players' cells. */
     default Set<Long> bezetteCellen(MinecraftServer server) {
         Set<Long> s = new HashSet<>();

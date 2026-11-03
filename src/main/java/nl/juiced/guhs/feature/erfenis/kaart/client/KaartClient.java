@@ -43,6 +43,7 @@ public final class KaartClient {
                 event.setCanceled(true);
             }
         });
+        KaartPayloads.BESTEL_KLANT = BestelScherm::ontvang;
         KaartPayloads.KLANT = kaart -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof KaartScherm s) {

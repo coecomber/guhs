@@ -1,0 +1,59 @@
+# 1.9 "Een opknapper!", kaart slice: NPC neighbours by the 1.9 rule, order carts on the map, the orders screen (AutoCheck,
+# dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_opk_kaart.txt
+# 1280x720 at gui scale 2 = 640x360 gui pixels: the map is x 0..468, the side list x 468..640.
+# Flow: map (your village + 3 neighbours, roads, parked carts, badges) -> zoomed in -> orders screen (nothing in storage)
+# -> /bestel vul -> orders screen (green, Leveren) -> Leveren + Weigeren -> map with carts driving home -> a neighbour's panel.
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section kaart
+/guhs erfenis kaart bestel snel aan
+gui keep
+/guhs erfenis kaart
+wait 80
+mouse 20 300
+shot opk_kaart_01_buren gui
+scroll 234 180 1
+wait 40
+shot opk_kaart_02_zoom gui
+widgets
+
+section bestellingen
+/guhs erfenis kaart bestellingen
+wait 60
+shot opk_kaart_03_bestellingen_leeg gui
+widgets
+/guhs erfenis kaart bestel vul
+/guhs erfenis kaart bestellingen
+wait 60
+shot opk_kaart_04_bestellingen_vol gui
+press Leveren
+wait 30
+press Weigeren
+wait 40
+shot opk_kaart_05_na_leveren gui
+
+section karren
+/guhs erfenis kaart
+wait 60
+scroll 234 180 1
+wait 40
+mouse 20 300
+shot opk_kaart_06_karren_rijden gui
+click 560 36
+wait 40
+shot opk_kaart_07_paneel gui
+click 560 48
+wait 40
+shot opk_kaart_08_paneel2 gui
+wait 260
+/guhs erfenis kaart
+wait 60
+shot opk_kaart_09_later gui
+gui close
+quit

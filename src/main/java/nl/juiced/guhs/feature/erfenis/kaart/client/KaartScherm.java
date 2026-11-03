@@ -29,7 +29,9 @@ import nl.juiced.guhs.feature.erfenis.kaart.KaartPayloads;
  * De Wereldkaart (Grepolis / Tribal Wars style): a pastel sea with land islets, every base a little icon that grows with
  * its stadhuis level (hutje, huisje, dorpje, torendorp, kasteel). Drag to pan, scroll to zoom (3 levels; names appear when
  * zoomed in), hover for a tooltip, click for a panel (Bezoeken / Bovenaanzicht / Aanvallen-komt-later). On the right the
- * Ranglijst (by Knusheid) and the Nieuws of the NPC villages. Refreshes itself every 5 seconds while open.
+ * Ranglijst (by Knusheid) and the Nieuws of the NPC villages.
+ * 1.9: the viewer's order carts drive over the map (KarIcoon), neighbours show badges (open orders, the star), and the
+ * panel has Bestellingen (own / neighbours) or Handje helpen (real players) instead of the old grey Aanvallen. Refreshes itself every 5 seconds while open.
  */
 public final class KaartScherm extends Screen {
     private static final float[] ZOOMS = {7f, 14f, 26f};
@@ -44,6 +46,14 @@ public final class KaartScherm extends Screen {
     private KaartLand land;
     private long klokVerschil;
     private List<KaartDorp> ranglijst = List.of();
+    /** The viewer's order carts on the map, neighbours, and the real villages they helped today (from the payload's extra). */
+    private record Kar(UUID dorp, int fase, long start, long eind, boolean ster) {
+    }
+    private List<Kar> karren = List.of();
+    private java.util.Set<UUID> buren = java.util.Set.of(), geholpen = java.util.Set.of();
+    private int hulpOver;
+    /** The panel shows the two "Handje helpen" choices. */
+    private boolean hulpKeuze;
 
     private float camX, camZ, zoom = ZOOMS[1];
     private int zoomIdx = 1;
@@ -85,6 +95,7 @@ public final class KaartScherm extends Screen {
         List<KaartDorp> r = new ArrayList<>(k.dorpen());
         r.sort(Comparator.comparingInt(KaartDorp::punten).reversed().thenComparing(KaartDorp::naam));
         ranglijst = r;
+        leesExtra(k.extra());
         long sleutel = KaartLand.sleutel(k.seed(), k.dorpen());
         if (land == null || land.sleutel != sleutel) {
             if (land != null) {
@@ -102,6 +113,49 @@ public final class KaartScherm extends Screen {
             gekozen = null;
         }
         rebuildWidgets();
+    }
+
+    private void leesExtra(net.minecraft.nbt.CompoundTag t) {
+        List<Kar> l = new ArrayList<>();
+        for (net.minecraft.nbt.Tag e : t.getListOrEmpty("Karren")) {
+            if (e instanceof net.minecraft.nbt.CompoundTag c) {
+                c.read("Dorp", net.minecraft.core.UUIDUtil.CODEC).ifPresent(d -> l.add(new Kar(d, c.getIntOr("Fase", 0),
+                        c.getLongOr("Start", 0L), c.getLongOr("Eind", 0L), c.getBooleanOr("Ster", false))));
+            }
+        }
+        karren = l;
+        buren = ids(t, "Buren");
+        geholpen = ids(t, "Geholpen");
+        hulpOver = t.getIntOr("HulpOver", 0);
+    }
+
+    private static java.util.Set<UUID> ids(net.minecraft.nbt.CompoundTag t, String sleutel) {
+        java.util.Set<UUID> s = new java.util.HashSet<>();
+        for (net.minecraft.nbt.Tag e : t.getListOrEmpty(sleutel)) {
+            if (e instanceof net.minecraft.nbt.CompoundTag c) {
+                c.read("Id", net.minecraft.core.UUIDUtil.CODEC).ifPresent(s::add);
+            }
+        }
+        return s;
+    }
+
+    /** Open orders (parked carts) of this neighbour. */
+    private int open(UUID dorp) {
+        int n = 0;
+        for (Kar k : karren) {
+            n += k.fase() == 1 && k.dorp().equals(dorp) ? 1 : 0;
+        }
+        return n;
+    }
+
+    /** Whether today's star order comes from (or waits for) this neighbour. */
+    private boolean ster(UUID dorp) {
+        for (Kar k : karren) {
+            if (k.ster() && k.fase() != 2 && k.dorp().equals(dorp)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
@@ -138,7 +192,7 @@ public final class KaartScherm extends Screen {
     }
 
     private static Component grootte(int level) {
-        return Component.translatable("erfenis.kaart.grootte." + Math.max(1, Math.min(5, level)));
+        return Component.translatable("erfenis.kaart.grootte." + (Math.max(1, Math.min(10, level)) + 1) / 2);
     }
 
     private int rang(KaartDorp d) {
@@ -193,16 +247,42 @@ public final class KaartScherm extends Screen {
         if (d != null) {
             int px = 8, py = height - PANEL_H - 8, by = py + PANEL_H - 24, bw = 78;
             boolean eigen = isEigen(d);
-            addRenderableWidget(Button.builder(Component.translatable(eigen ? "erfenis.kaart.naar_huis" : "erfenis.kaart.bezoeken"),
-                    b -> actie(KaartPayloads.Actie.BEZOEK, d)).bounds(px + 6, by, bw, 18)
-                    .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.bezoeken.uitleg"))).build());
-            addRenderableWidget(Button.builder(Component.translatable("erfenis.kaart.bovenaanzicht"),
-                    b -> actie(KaartPayloads.Actie.BOVENAANZICHT, d)).bounds(px + 6 + bw + 3, by, bw, 18)
-                    .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.bovenaanzicht.uitleg"))).build());
-            Button aanval = Button.builder(Component.translatable("erfenis.kaart.aanvallen"), b -> {
-            }).bounds(px + 6 + 2 * (bw + 3), by, bw, 18).tooltip(Tooltip.create(Component.translatable("erfenis.kaart.aanvallen.later"))).build();
-            aanval.active = false;
-            addRenderableWidget(aanval);
+            if (hulpKeuze && !d.npc() && !eigen) {
+                // "Handje helpen": the two choices
+                addRenderableWidget(Button.builder(Component.translatable("erfenis.kaart.hulp.bouw"), b -> hulp(KaartPayloads.Actie.HULP_BOUW, d))
+                        .bounds(px + 6, by, 104, 18).tooltip(Tooltip.create(Component.translatable("erfenis.kaart.hulp.bouw.uitleg"))).build());
+                addRenderableWidget(Button.builder(Component.translatable("erfenis.kaart.hulp.bestelling"),
+                        b -> hulp(KaartPayloads.Actie.HULP_BESTELLING, d)).bounds(px + 6 + 107, by, 90, 18)
+                        .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.hulp.bestelling.uitleg"))).build());
+                addRenderableWidget(Button.builder(Component.literal("<"), b -> {
+                    hulpKeuze = false;
+                    rebuildWidgets();
+                }).bounds(px + 6 + 200, by, 40, 18).build());
+            } else {
+                addRenderableWidget(Button.builder(Component.translatable(eigen ? "erfenis.kaart.naar_huis" : "erfenis.kaart.bezoeken"),
+                        b -> actie(KaartPayloads.Actie.BEZOEK, d)).bounds(px + 6, by, bw, 18)
+                        .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.bezoeken.uitleg"))).build());
+                addRenderableWidget(Button.builder(Component.translatable("erfenis.kaart.bovenaanzicht"),
+                        b -> actie(KaartPayloads.Actie.BOVENAANZICHT, d)).bounds(px + 6 + bw + 3, by, bw, 18)
+                        .tooltip(Tooltip.create(Component.translatable("erfenis.kaart.bovenaanzicht.uitleg"))).build());
+                if (eigen || d.npc()) {
+                    boolean buur = eigen || buren.contains(d.id());
+                    Button best = Button.builder(Component.translatable("erfenis.kaart.bestellingen"), b -> bestellingen())
+                            .bounds(px + 6 + 2 * (bw + 3), by, bw, 18).tooltip(Tooltip.create(Component.translatable(buur
+                                    ? "erfenis.kaart.bestellingen.uitleg" : "erfenis.kaart.bestellingen.geen_buur"))).build();
+                    best.active = buur;
+                    addRenderableWidget(best);
+                } else {
+                    boolean mag = !geholpen.contains(d.id());
+                    Button hulp = Button.builder(Component.translatable("erfenis.kaart.handje"), b -> {
+                        hulpKeuze = true;
+                        rebuildWidgets();
+                    }).bounds(px + 6 + 2 * (bw + 3), by, bw, 18).tooltip(Tooltip.create(Component.translatable(mag
+                            ? "erfenis.kaart.handje.uitleg" : "erfenis.kaart.handje.al", hulpOver))).build();
+                    hulp.active = mag;
+                    addRenderableWidget(hulp);
+                }
+            }
             addRenderableWidget(Button.builder(Component.literal("x"), b -> kies(null)).bounds(px + PANEL_W - 15, py + 3, 12, 12).build());
         }
     }
@@ -212,10 +292,24 @@ public final class KaartScherm extends Screen {
         onClose();
     }
 
+    /** Helping stays on the map (the server answers in chat and sends the map again). */
+    private void hulp(int soort, KaartDorp d) {
+        ClientPacketDistributor.sendToServer(new KaartPayloads.Actie(soort, d.id()));
+        hulpKeuze = false;
+        rebuildWidgets();
+    }
+
+    /** The orders screen, with a "Terug naar de kaart" button that opens this map again. */
+    private void bestellingen() {
+        Runnable kaartTerug = terug;
+        BestelScherm.open(() -> KaartClient.open(kaartTerug));
+    }
+
     private void kies(@Nullable KaartDorp d) {
         UUID nieuw = d == null ? null : d.id();
         if (nieuw == null ? gekozen != null : !nieuw.equals(gekozen)) {
             gekozen = nieuw;
+            hulpKeuze = false;
             rebuildWidgets();
         }
     }
@@ -342,11 +436,12 @@ public final class KaartScherm extends Screen {
             }
             DorpIcoon.teken(g, d, Math.round(sx), Math.round(sy), zoom, soortKleur(d), isEigen(d), d.id().equals(gekozen), d == hover, tijd);
         }
+        karren(g, mx, my, mw, tijd);
         // names: the important ones first (own, chosen, hovered, players, then by level); a label that would overlap one
         // already placed is left out (hover shows it anyway)
         List<KaartDorp> namen = new ArrayList<>(kaart.dorpen());
         namen.sort(Comparator.comparingInt((KaartDorp d) -> isEigen(d) || d.id().equals(gekozen) || d == hover ? 0 : d.npc() ? 2 : 1)
-                .thenComparing(Comparator.comparingInt(KaartDorp::stadhuisLevel).reversed()));
+                .thenComparing(Comparator.comparingInt(KaartDorp::hoeve).reversed()));
         List<int[]> geplaatst = new ArrayList<>();
         for (KaartDorp d : namen) {
             float sx = mx + (d.cx() + 0.5f - camX) * zoom, sy = my + (d.cz() + 0.5f - camZ) * zoom;
@@ -354,7 +449,7 @@ public final class KaartScherm extends Screen {
                 continue;
             }
             boolean moet = isEigen(d) || d.id().equals(gekozen) || d == hover;
-            boolean toon = moet || zoom >= 20 || (zoom >= 10 && (!d.npc() || d.stadhuisLevel() >= 4));
+            boolean toon = moet || zoom >= 20 || (zoom >= 10 && (!d.npc() || d.hoeve() >= 7 || buren.contains(d.id())));
             if (!toon) {
                 continue;
             }
@@ -374,10 +469,65 @@ public final class KaartScherm extends Screen {
         legenda(g, mw);
     }
 
+    /** The order carts: roads to the neighbours, carts driving there and back, carts parked at home, badges. */
+    private void karren(GuiGraphicsExtractor g, float mx, float my, int mw, long tijd) {
+        KaartDorp eigen = eigen();
+        if (eigen == null) {
+            return;
+        }
+        long nu = tijd + klokVerschil;
+        float ex = mx + (eigen.cx() + 0.5f - camX) * zoom, ey = my + (eigen.cz() + 0.5f - camZ) * zoom;
+        int u = zoom < 20 ? 1 : 2;
+        for (UUID b : buren) {
+            KaartDorp d = dorp(b);
+            if (d != null) {
+                KarIcoon.weg(g, ex, ey, mx + (d.cx() + 0.5f - camX) * zoom, my + (d.cz() + 0.5f - camZ) * zoom, 0xE0B07A50);
+            }
+        }
+        int geparkeerd = 0;
+        for (Kar k : karren) {
+            KaartDorp d = dorp(k.dorp());
+            if (d == null) {
+                continue;
+            }
+            float dx = mx + (d.cx() + 0.5f - camX) * zoom, dy = my + (d.cz() + 0.5f - camZ) * zoom;
+            if (k.fase() == 1) {   // parked at your Marktplein: a little row under your village
+                int px = Math.round(ex - 13 * u + geparkeerd % 4 * 9 * u);
+                int py = Math.round(ey + DorpIcoon.halveHoogte(eigen, zoom) + 6 * u + geparkeerd / 4 * 7 * u + (zoom >= 10 ? 10 : 0));
+                KarIcoon.teken(g, px, py, u, k.ster(), false, false, tijd);
+                geparkeerd++;
+                continue;
+            }
+            float t = k.eind() <= k.start() ? 1 : Math.max(0, Math.min(1, (nu - k.start()) / (float) (k.eind() - k.start())));
+            boolean heen = k.fase() == 0;
+            float x0 = heen ? dx : ex, y0 = heen ? dy : ey, x1 = heen ? ex : dx, y1 = heen ? ey : dy;
+            float x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t;
+            if (x > -20 && y > -20 && x < mw + 20 && y < height + 20) {
+                KarIcoon.teken(g, Math.round(x), Math.round(y), u, k.ster(), x1 < x0, true, tijd);
+            }
+        }
+        // badges on the neighbours: open orders, the star
+        for (UUID b : buren) {
+            KaartDorp d = dorp(b);
+            if (d == null) {
+                continue;
+            }
+            int sx = Math.round(mx + (d.cx() + 0.5f - camX) * zoom), sy = Math.round(my + (d.cz() + 0.5f - camZ) * zoom);
+            int r = DorpIcoon.halveHoogte(d, zoom);
+            int n = open(b);
+            if (n > 0) {
+                KarIcoon.getalBadge(g, font, sx + r + 3, sy - r - 2, n);
+            }
+            if (ster(b)) {
+                KarIcoon.sterBadge(g, sx - r - 4, sy - r - 3, zoom >= 20 ? 2 : 1, tijd);
+            }
+        }
+    }
+
     private Component labelTekst(KaartDorp d) {
         MutableComponent t = naam(d).copy();
         if (zoom >= 20) {
-            t.append(Component.literal(" " + d.stadhuisLevel()).withStyle(ChatFormatting.YELLOW));
+            t.append(Component.literal(" " + d.hoeve()).withStyle(ChatFormatting.YELLOW));
         }
         return t;
     }
@@ -559,11 +709,17 @@ public final class KaartScherm extends Screen {
                 : d.npc() ? Component.translatable("erfenis.kaart.soort.npc", d.eigenaar())
                 : Component.translatable("erfenis.kaart.soort.speler", d.eigenaar());
         g.text(font, wie, x + 8, y + 22, d.npc() ? GRIJS : 0xFF2F6FAF, false);
-        g.text(font, Component.translatable("erfenis.kaart.paneel.level", d.stadhuisLevel(), grootte(d.stadhuisLevel()), d.punten()),
+        g.text(font, Component.translatable("erfenis.kaart.paneel.level", d.hoeve(), grootte(d.hoeve()), d.punten()),
                 x + 8, y + 34, INKT, false);
         g.text(font, Component.translatable("erfenis.kaart.paneel.rang", rang(d), ranglijst.size(), d.cx(), d.cz()), x + 8, y + 46, GRIJS,
                 false);
-        if (d.nieuw()) {
+        if (buren.contains(d.id())) {
+            g.text(font, Component.translatable(ster(d.id()) ? "erfenis.kaart.paneel.buur_ster" : "erfenis.kaart.paneel.buur", open(d.id())),
+                    x + 8, y + 58, 0xFFB0507A, false);
+        } else if (!d.npc() && !isEigen(d)) {
+            g.text(font, Component.translatable(hulpKeuze ? "erfenis.kaart.paneel.hulp_kies" : "erfenis.kaart.paneel.hulp", hulpOver),
+                    x + 8, y + 58, 0xFF2F8F5F, false);
+        } else if (d.nieuw()) {
             g.text(font, Component.translatable("erfenis.kaart.paneel.nieuw"), x + 8, y + 58, 0xFFC07A10, false);
         }
     }
@@ -572,10 +728,13 @@ public final class KaartScherm extends Screen {
         List<Component> l = new ArrayList<>();
         l.add(naam(d).copy().withColor(soortKleur(d) == SPELER ? 0x8FCBFF : soortKleur(d) == EIGEN ? 0xFFE27A : 0xFFC4D6));
         l.add(Component.translatable("erfenis.kaart.tip.eigenaar", d.npc() ? d.eigenaar() : d.eigenaar()).withStyle(ChatFormatting.GRAY));
-        l.add(Component.translatable("erfenis.kaart.tip.level", d.stadhuisLevel(), grootte(d.stadhuisLevel())));
+        l.add(Component.translatable("erfenis.kaart.tip.level", d.hoeve(), grootte(d.hoeve())));
         l.add(Component.translatable("erfenis.kaart.tip.punten", d.punten(), rang(d)));
         l.add(Component.translatable(isEigen(d) ? "erfenis.kaart.tip.eigen" : d.npc() ? "erfenis.kaart.tip.npc" : "erfenis.kaart.tip.speler")
                 .withStyle(d.npc() ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.AQUA));
+        if (buren.contains(d.id())) {
+            l.add(Component.translatable("erfenis.kaart.tip.buur", open(d.id())).withStyle(ChatFormatting.GOLD));
+        }
         if (d.nieuw()) {
             l.add(Component.translatable("erfenis.kaart.paneel.nieuw").withStyle(ChatFormatting.GOLD));
         }

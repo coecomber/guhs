@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -22,6 +23,7 @@ import nl.juiced.guhs.Guhs;
  */
 public final class KaartPayloads {
     public static volatile Consumer<Kaart> KLANT;
+    public static volatile Consumer<BestelLijst> BESTEL_KLANT;
 
     private KaartPayloads() {
     }
@@ -30,6 +32,8 @@ public final class KaartPayloads {
         registrar.playToServer(Vraag.TYPE, Vraag.STREAM_CODEC, Vraag::handle);
         registrar.playToServer(Actie.TYPE, Actie.STREAM_CODEC, Actie::handle);
         registrar.playToClient(Kaart.TYPE, Kaart.STREAM_CODEC, Kaart::handle);
+        registrar.playToServer(BestelActie.TYPE, BestelActie.STREAM_CODEC, BestelActie::handle);
+        registrar.playToClient(BestelLijst.TYPE, BestelLijst.STREAM_CODEC, BestelLijst::handle);
     }
 
     /** "Show me the map" ({@code open}: open the screen; false: just a refresh while it is open). */
@@ -52,9 +56,12 @@ public final class KaartPayloads {
         }
     }
 
-    /** Visit a village ({@link #BEZOEK}) or visit and look from above ({@link #BOVENAANZICHT}). */
+    /**
+     * Visit a village ({@link #BEZOEK}), visit and look from above ({@link #BOVENAANZICHT}), open the orders
+     * ({@link #BESTELLINGEN}), or help a real player's village ({@link #HULP_BOUW} / {@link #HULP_BESTELLING}).
+     */
     public record Actie(int soort, UUID dorp) implements CustomPacketPayload {
-        public static final int BEZOEK = 0, BOVENAANZICHT = 1;
+        public static final int BEZOEK = 0, BOVENAANZICHT = 1, BESTELLINGEN = 2, HULP_BOUW = 3, HULP_BESTELLING = 4;
         public static final Type<Actie> TYPE = new Type<>(Guhs.id("erfenis_kaart_actie"));
         public static final StreamCodec<FriendlyByteBuf, Actie> STREAM_CODEC = StreamCodec.ofMember((a, b) -> {
             b.writeVarInt(a.soort);
@@ -77,10 +84,11 @@ public final class KaartPayloads {
 
     /**
      * The whole map: the world's map seed (the land shapes), the viewer's own village (or null), whether to open the screen,
-     * the server's clock (news ages), every village and the news (newest first).
+     * the server's clock (news ages), every village, the news (newest first) and the viewer's extras (their order carts,
+     * neighbours, whom they helped today; see Bestellingen#kaartExtra).
      */
-    public record Kaart(long seed, @Nullable UUID eigen, boolean open, long serverNu, List<KaartDorp> dorpen, List<KaartNieuws> nieuws)
-            implements CustomPacketPayload {
+    public record Kaart(long seed, @Nullable UUID eigen, boolean open, long serverNu, List<KaartDorp> dorpen, List<KaartNieuws> nieuws,
+            CompoundTag extra) implements CustomPacketPayload {
         public static final Type<Kaart> TYPE = new Type<>(Guhs.id("erfenis_kaart"));
         public static final StreamCodec<FriendlyByteBuf, Kaart> STREAM_CODEC = StreamCodec.ofMember(Kaart::write, Kaart::read);
 
@@ -100,6 +108,7 @@ public final class KaartPayloads {
             for (KaartNieuws n : nieuws) {
                 n.write(buf);
             }
+            buf.writeNbt(extra);
         }
 
         private static Kaart read(FriendlyByteBuf buf) {
@@ -117,7 +126,8 @@ public final class KaartPayloads {
             for (int i = 0; i < m; i++) {
                 l.add(KaartNieuws.read(buf));
             }
-            return new Kaart(seed, eigen, open, nu, d, l);
+            CompoundTag extra = buf.readNbt();
+            return new Kaart(seed, eigen, open, nu, d, l, extra == null ? new CompoundTag() : extra);
         }
 
         @Override
@@ -129,6 +139,58 @@ public final class KaartPayloads {
             Consumer<Kaart> klant = KLANT;
             if (klant != null) {
                 context.enqueueWork(() -> klant.accept(k));
+            }
+        }
+    }
+
+    /** The orders screen: deliver ({@link #LEVER}) or refuse ({@link #WEIGER}) the cart in {@code slot} (-1 = star), or {@link #VERVERS}. */
+    public record BestelActie(int soort, int slot) implements CustomPacketPayload {
+        public static final int LEVER = 0, WEIGER = 1, VERVERS = 2, OPEN = 3;
+        public static final Type<BestelActie> TYPE = new Type<>(Guhs.id("erfenis_bestel_actie"));
+        public static final StreamCodec<FriendlyByteBuf, BestelActie> STREAM_CODEC = StreamCodec.ofMember((a, b) -> {
+            b.writeVarInt(a.soort);
+            b.writeVarInt(a.slot);
+        }, b -> new BestelActie(b.readVarInt(), b.readVarInt()));
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        static void handle(BestelActie a, IPayloadContext context) {
+            context.enqueueWork(() -> {
+                if (context.player() instanceof ServerPlayer p) {
+                    switch (a.soort) {
+                        case LEVER -> Bestellingen.lever(p, a.slot);
+                        case WEIGER -> Bestellingen.weiger(p, a.slot);
+                        case OPEN -> Bestellingen.stuur(p, true);
+                        default -> Bestellingen.stuur(p, false);
+                    }
+                }
+            });
+        }
+    }
+
+    /** The orders screen's data (see Bestellingen#lijst); {@code open}: open the screen (false: refresh it when open). */
+    public record BestelLijst(CompoundTag data, boolean open) implements CustomPacketPayload {
+        public static final Type<BestelLijst> TYPE = new Type<>(Guhs.id("erfenis_bestel_lijst"));
+        public static final StreamCodec<FriendlyByteBuf, BestelLijst> STREAM_CODEC = StreamCodec.ofMember((l, b) -> {
+            b.writeNbt(l.data);
+            b.writeBoolean(l.open);
+        }, b -> {
+            CompoundTag t = b.readNbt();
+            return new BestelLijst(t == null ? new CompoundTag() : t, b.readBoolean());
+        });
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        static void handle(BestelLijst l, IPayloadContext context) {
+            Consumer<BestelLijst> klant = BESTEL_KLANT;
+            if (klant != null) {
+                context.enqueueWork(() -> klant.accept(l));
             }
         }
     }

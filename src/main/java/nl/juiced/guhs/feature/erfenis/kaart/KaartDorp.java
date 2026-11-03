@@ -7,9 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 /**
  * One village as the world map shows it (the compact network form): a real player's base or an NPC village.
  * {@code id} = the base id (a player's uuid, or the NPC village's id); {@code cx, cz} = its plot cell = its map position;
- * {@code punten} = Knusheid; {@code kleur} = flag colour (opaque ARGB); {@code nieuw} = founded or grew a short while ago.
+ * {@code hoeve} = Hoeve level (1..10); {@code punten} = Knusheid; {@code kleur} = flag colour (opaque ARGB); {@code nieuw} = founded or grew a short while ago.
  */
-public record KaartDorp(UUID id, String naam, String eigenaar, boolean npc, int cx, int cz, int stadhuisLevel, int punten, int kleur,
+public record KaartDorp(UUID id, String naam, String eigenaar, boolean npc, int cx, int cz, int hoeve, int punten, int kleur,
         boolean nieuw) {
     void write(FriendlyByteBuf buf) {
         buf.writeUUID(id);
@@ -18,7 +18,7 @@ public record KaartDorp(UUID id, String naam, String eigenaar, boolean npc, int 
         buf.writeBoolean(npc);
         buf.writeVarInt(cx);
         buf.writeVarInt(cz);
-        buf.writeByte(stadhuisLevel);
+        buf.writeByte(hoeve);
         buf.writeVarInt(punten);
         buf.writeInt(kleur);
         buf.writeBoolean(nieuw);
