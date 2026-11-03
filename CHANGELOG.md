@@ -3,6 +3,47 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.0 — Een opknapper! — Minecraft 26.1.2
+
+You've got mail! Makelaar Guhrrit has a bargain for you: an overgrown little farm of your own, building report: *vads*, asking price: one cheese nibble. Fix it up into a cosy guh village. Nothing is reset; your world stays as it is.
+
+### The letter and the gate
+
+- **The makelaar's letter:** about half an hour of play after your first visit to the Guhmension, the Postguh brings a thick envelope. Buy the fixer-upper for **one cheese nibble**.
+- **Erfhekje:** the little gate to your inheritance. Put it in your base and walk through it (or right-click it) to go to your plot; going back puts you in front of the gate you used. An extra gate also costs one cheese nibble.
+- **Leverkist:** a mailbox treasure chest for your base. Your first one comes with the farm; its little flag goes up when there is post inside, and hoppers and pipes can empty it.
+- **Your own village dimension:** every player gets a plot of their own in a quiet, sunny place without weather or monsters. Clear the overgrown patches and open up more land as you go.
+
+### Your village
+
+- **33 buildings with up to 10 levels each** (the Mammoetwei has 3): the Hoeve, chicken coops, sheepfolds, the duck pond, the mill, the bakery, the cheese dairy, the weaving mill, the sawmill, the glassworks, the village café, the bandstand, the guest house and many more. Builders in the Timmerschuur do the work, from one up to three.
+- **Production in real time, also while you're away,** with half-products and two-step chains: logs, clay, sand and glass shards go into workshops, residents move into Guhhutjes and work in your buildings.
+- **Five palettes:** wood & straw, brick & pink roofs, half-timbering & cuddly details, vads & gold, and pastel crystal & fairy lights. Repaint a building (or the whole village) for free.
+- **The overview (O):** look down on your whole village to place, move and rotate buildings, upgrade them, paint them, and see timers above every job.
+- **Deco shop, paths and fences:** paths and fences drawn tile by tile (corners and crossings fit by themselves), benches, flowers, lights, fountains, statues and farm pieces, an eraser and a deco shed for what you put away.
+- **Knusheid:** the cosier your village, the higher your Knusheid, with milestones and three titles.
+- **Postcards:** after the makelaar's tour he goes on holiday and sends postcards for your Kaartjesbord.
+
+### Neighbours and orders
+
+- **The world map (M):** the villages of other players and plenty of neighbour villages that grow by themselves.
+- **Orders:** the neighbours place orders, you deliver them with your little carts and earn Guhlden, and sometimes a thank-you deco piece.
+- **Handje helpen:** give a friend's village a hand; it speeds up their job that finishes first.
+
+### Sending things home
+
+- **Naar huis sturen:** send what your village makes to your Leverkist: wool, logs, clay, sand, glass shards (smelt them into glass), finished Bouwkeet blocks and even cheese nibbles. It arrives as soon as the chest is loaded, also when you're not there.
+- **Fair caps:** building materials have a limit per hour (saved up for up to 8 hours); what doesn't fit waits for the next delivery.
+- **Dorpszender:** a Vadszender with a village upgrade that beams vadskracht from your net to the Vadsmast in your village, for the top workshops and the Mammoetwei.
+
+### Er klopt iets niet...
+
+- **Sherlock Guh:** why did that land cost only one nibble? Build a Detectivebureau and a familiar sleuth turns up with the loyal Dokter Vadson. Collect clues in the Speurboekje and solve the cases yourself; solving them brings real rewards for your village.
+
+### Quests
+
+- **New FTB chapter "Een opknapper!"** (after Guhdromenland), with quests that tick themselves off as your village grows. Nothing is locked.
+
 ## 1.8.1 — De Maagwand — Minecraft 26.1.2
 
 Good guh food now has to be earned by your stomach, and the Guh Kermis finally got big.

@@ -95,4 +95,3 @@ Kant-en-klaar in één keer: **`/guhs erfenis demo`** (Hoeve 6, ~25 gebouwen; je
 - De wiki/Discord/pack zijn nog niet bijgewerkt (pas bij de release).
 - In de volledige gametest-suite falen 6 tests die ook op main 1.8.1 al rood zijn (kussengevecht-gids, weide_roze_gras-
   schaar, wereldBescherming, techquestGebouw, SNOES-Guhdex); niks van de opknapper.
-- Meer achtergrond: `NOTITIES_INTEGRATIE.md`, `NOTITIES_DECO.md`, `NOTITIES_AFWERKING.md`, `NOTITIES_FTB.md` en de andere `NOTITIES_*.md`.

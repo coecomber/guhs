@@ -1356,3 +1356,9 @@ from . import en_guhs181 as _guhs181  # noqa: E402
 
 PAGINA.update(_guhs181.PAGINA)
 TEKST.update(_guhs181.TEKST)
+
+# 1.9.0 Een opknapper!: tools/wiki_bbq2/en_guhs190.py (the Dutch: tools/features/guhs190_wiki.py)
+from . import en_guhs190 as _guhs190  # noqa: E402
+
+PAGINA.update(_guhs190.PAGINA)
+TEKST.update(_guhs190.TEKST)
