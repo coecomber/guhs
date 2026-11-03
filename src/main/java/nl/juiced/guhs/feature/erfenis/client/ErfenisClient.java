@@ -49,6 +49,9 @@ public final class ErfenisClient {
     private ErfenisClient() {
     }
 
+    @javax.annotation.Nullable
+    private static net.minecraft.client.gui.screens.Screen wachtendVerhaal;
+
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterKeyMappingsEvent event) -> event.register(TOETS));
         ErfenisPayloads.syncOntvanger = ErfenisClient::opSync;
@@ -69,6 +72,20 @@ public final class ErfenisClient {
             }
             if (Overzicht.actief() && !(mc.screen instanceof OverzichtScherm) && mc.screen == null) {
                 Overzicht.stop();   // (the screen went away some other way)
+            }
+            if (wachtendVerhaal != null && mc.screen == null && mc.player != null) {   // the overview closed: now the story
+                net.minecraft.client.gui.screens.Screen v = wachtendVerhaal;
+                wachtendVerhaal = null;
+                mc.setScreen(v);
+            }
+        });
+        // A story talk (Sherlock's prologue, Guhrrit...) that arrives while the overview is open waits until it is closed,
+        // instead of throwing the player out of the overview in the middle of building.
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ScreenEvent.Opening event) -> {
+            if (event.getCurrentScreen() instanceof OverzichtScherm
+                    && event.getNewScreen() instanceof nl.juiced.guhs.feature.knuffeldal.client.PraatScherm) {
+                wachtendVerhaal = event.getNewScreen();
+                event.setCanceled(true);
             }
         });
         NeoForge.EVENT_BUS.addListener((RenderFrameEvent.Pre event) -> {

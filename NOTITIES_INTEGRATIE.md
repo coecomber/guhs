@@ -43,16 +43,29 @@ De vijf slices (kern, vormen, koppeling, sherlock, kaart) samen tot één spel. 
 - **Gametest** `ErfenisGameTests.integratieDeco`: alle deco-ids van alle slices hebben een vorm; neerzetten/Knusheid/overlap;
   gebouw erover → terug in het schuurtje.
 
+- **Verhaal over het bovenaanzicht**: een praatscherm (Sherlocks proloog, Guhrrit...) dat binnenkomt terwijl het
+  bovenaanzicht open is, wacht tot je het sluit (`ErfenisClient`, `ScreenEvent.Opening` op `PraatScherm`), i.p.v. je eruit
+  te gooien midden in het bouwen. De makelaarstour praat alleen bij aankomst in het praatscherm; latere stappen als chatregel
+  (klik op Guhrrit = de stap nog eens). Guhrrit verschijnt 4,5 blok voor je, iets opzij.
+
 ## Stand
 
 - compileJava groen.
-- Gametests Erfenis/Vormen/Koppeling/Sherlock/Kaart (+ Taalsleutels): zie het rapport/commit; volledige run: zie onder.
-- **AutoCheck NIET gedraaid** (gebruikersregel tijdens het werk: geen gameclient). Het script staat klaar:
-  `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_opknapper_samen.txt` (survival-poort → brief → kopen →
-  hekje + Leverkist → aankomst → bovenaanzicht → bouwen/opruimen/ophalen/verbeteren → opslag/decoschuurtje → deco
-  neerzetten → demodorp → bestellingen → kaart → Sherlock-welkom, wolkje, Speurboekje → naar huis → terug → Leverkist).
-  Nog doen: draaien en alle 21 shots bekijken (vooral: Deco-venster/-knop layout, het wolkje, Guhrrits praatscherm bij aankomst).
-
+- Gametests Erfenis/Vormen/Koppeling/Sherlock/Kaart + Taalsleutels: **43/43 groen** (incl. nieuwe `integratieDeco`).
+- Volledige `runGameTestServer` (2310 tests): **7 verplichte rood, geen ervan in erfenis-code**: `gidsminigamesrijen` +
+  `gidstekstenbestaan` (kussengevecht), `vadsschaarIsEenSchaar...` (weide_roze_gras), `wereldBescherming` (test verwacht 2
+  blokken rand, 1.7.2-hotfix maakte het 1), `ftbquestsChapterInstalls...`, `techquestGebouw`, en de bekende
+  `upstreamsamenkindsvoorguhpixel` (SNOES). De branch raakt die code niet (diff t.o.v. main = feature/erfenis + 1 regel in
+  gedeelde registraties), dus vrijwel zeker al rood op main; niet nagejaagd. 9 optionele (dimensie bestaat niet op de testserver).
+- **AutoCheck** `tools/autocheck/190_opknapper_samen.txt` 4x gedraaid, laatste ronde volledig (21 shots) en bekeken:
+  poort zonder brief (melding in het rapport), Postguh, brief + kopen, hekje + Leverkist, aankomst met Guhrrit, bovenaanzicht
+  met echte vormen (Hoeve L1 krakkemikkig, plukjes), kippenhok gebouwd + mandje, verbeterd naar L2 (Hoeve 3), Decoschuurtje-
+  venster (Kaartjesbord, Borstbeeld, Brievenbus), deco neergezet, demodorp, bestelscherm, wereldkaart met 3 buren op afstand,
+  Sherlock-welkom in de chat, vergrootglas-wolkje boven het bureau, Speurboekje, naar huis, terug voor het hekje, Leverkist
+  met vlaggetje omhoog. Gerepareerd na het kijken: praatschermen gooiden je uit het bovenaanzicht; Guhrrit stond vlak voor je neus.
+- Kleine dingen gezien, niet gerepareerd: na `/guhs erfenis demo` staat de speler soms ín een gebouw (demo stempelt over de
+  aankomstplek; alleen dev); het bestelscherm zegt "Al 0 bestellingen geleverd" (telt de kaart-eigen teller, de demo zet alleen
+  kern's teller); `use` op de Leverkist opende in de AutoCheck het kistscherm niet (vlaggetje = post is er wel).
 ## Nog open
 
 - Decowinkel / paden en hekjes trekken (deco.md "Winkel") bestaat niet; alleen gekregen stukken.

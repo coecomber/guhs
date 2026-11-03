@@ -25,9 +25,11 @@ wait 80
 wait 20
 
 section nog geen erfenis
+/tp @s 2996.5 140 3004.5 180 0
+wait 20
 clearchat
 /guhs erfenis
-wait 20
+wait 10
 shot samen_01_nog_geen_erfenis gui
 
 section de brief
@@ -193,6 +195,7 @@ wait 40
 waitrender 200
 shot samen_20_terug_kist_vlag
 unlock
+/item replace entity @s weapon.mainhand with minecraft:air
 /tp @s 2998.5 140 3003.5 180 20
 wait 10
 use 2999 140 3001

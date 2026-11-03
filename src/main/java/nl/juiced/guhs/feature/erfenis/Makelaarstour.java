@@ -78,7 +78,9 @@ public final class Makelaarstour {
         if (Erfenis.in(p) && Erfenis.onder(p) == b) {
             g = Guhrrit.verschijn((ServerLevel) p.level(), voor(p), p.getYRot() + 180f, nieuw == KLAAR);
         }
-        zeg(p, b, g);
+        // only the arrival talks in the Praat screen; every later step comes from a click in the overview, and a Praat screen
+        // would close the overview: then he just stands there (click = the step again) and the step comes as a chat line
+        zeg(p, b, nieuw == 1 ? g : null);
     }
 
     /** The current step: in the talking screen when he stands there, else as a chat line. */
@@ -94,7 +96,7 @@ public final class Makelaarstour {
 
     private static BlockPos voor(ServerPlayer p) {
         net.minecraft.world.phys.Vec3 kijk = p.getLookAngle();
-        return BlockPos.containing(p.getX() + kijk.x * 2.5, p.getY(), p.getZ() + kijk.z * 2.5);
+        return BlockPos.containing(p.getX() + kijk.x * 4.5 + kijk.z * 1.5, p.getY(), p.getZ() + kijk.z * 4.5 - kijk.x * 1.5);
     }
 
     private static int getal(String m) {
