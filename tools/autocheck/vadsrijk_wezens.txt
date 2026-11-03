@@ -1,0 +1,77 @@
+# Het Vadsrijk wezens (110-vr-wezens): every zone-1 creature in a row in the proeftuin (grey "ontvadst" look + guh faces),
+# an elite, the plof, the Kampklodder, Vahoegnir's flyover, and the item models.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_wezens.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section binnen
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+/guhs vadsrijk wezens opruimen
+/tp @s 3120 66 3170
+wait 20
+/summon guhs:vr_mob_klodder 3108 66 3180
+/summon guhs:vr_mob_kloddertje 3111 66 3180
+/summon guhs:vr_mob_bubbelklodder 3114 66 3180
+/summon guhs:vr_mob_stuiterklodder 3117 66 3180
+/summon guhs:vr_mob_moederklodder 3121 66 3180
+/summon guhs:vr_mob_druipslijm 3125 66 3180
+/summon guhs:vr_mob_kristalklodder 3128 66 3180
+/summon guhs:vr_mob_knaag 3131 66 3180
+wait 30
+/tp @s 3120 67 3172
+look 0 15
+wait 20
+shot vr_wezens_slijm gui
+/guhs vadsrijk wezens opruimen
+/summon guhs:vr_mob_hoedjesbol 3108 66 3180
+/summon guhs:vr_mob_sporenpuffer 3111 66 3180
+/summon guhs:vr_mob_zwamwachter 3114 66 3180
+/summon guhs:vr_mob_glimzwam 3117 66 3180
+/summon guhs:vr_mob_tempelridder 3121 66 3180
+/summon guhs:vr_mob_sporenpriester 3125 66 3180
+/summon guhs:vr_mob_mosgeest 3129 66 3180
+wait 30
+shot vr_wezens_zwam gui
+/tp @s 3120 67 3176
+wait 10
+shot vr_wezens_zwam_dichtbij
+
+section elite_en_plof
+/guhs vadsrijk wezens opruimen
+/tp @s 3120 67 3172
+look 0 15
+/guhs vadsrijk wezens affix klodder gloeiend 4
+/guhs vadsrijk wezens affix hoedjesbol schildend 8
+wait 40
+shot vr_wezens_elite gui
+/kill @e[type=guhs:vr_mob_klodder]
+wait 6
+shot vr_wezens_plof gui
+
+section kampklodder
+/guhs vadsrijk wezens opruimen
+/summon guhs:vr_mob_kampklodder 3120 66 3182
+wait 40
+shot vr_kampklodder
+
+section draak
+/tp @s 3100 66 3120
+/guhs vadsrijk wezens overvlucht
+look 0 -20
+wait 70
+shot vr_draak_1
+wait 25
+shot vr_draak_2
+wait 25
+shot vr_draak_3
+wait 30
+shot vr_draak_4
+
+section items
+modelcheck
+quit
