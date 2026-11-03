@@ -223,6 +223,9 @@ final class Vensters {
                 ui.tekst(Component.translatable("erfenis.ui.deco_staat").withStyle(ChatFormatting.BOLD), x0, y, Teken.DONKER);
                 y += 12;
                 for (Base.Deco d : b.deco) {
+                    if (nl.juiced.guhs.feature.erfenis.DecoWinkel.isHek(d.id())) {   // (hekjes: with the gum in the decowinkel)
+                        continue;
+                    }
                     ui.tekst(Component.translatable("erfenis.deco." + d.id()), x0, y + 3, Teken.TEKST);
                     if (y >= y0 - 2 && y + 14 <= y1 + 2) {
                         ui.knop(Component.translatable("erfenis.ui.deco_weg"), x1 - 64, y, x1, y + 14, true, Teken.ROZE_DONKER,
@@ -231,6 +234,26 @@ final class Vensters {
                     y += 17;
                 }
             }
+            if (!b.padVoorraad.isEmpty()) {   // deco slice: erased path tiles, drawn again for free
+                y += 6;
+                ui.tekst(Component.translatable("erfenis.decowinkel.pad_voorraad").withStyle(ChatFormatting.BOLD), x0, y, Teken.DONKER);
+                y += 12;
+                for (Map.Entry<String, Integer> e : b.padVoorraad.entrySet()) {
+                    ui.tekst(Component.translatable("erfenis.pad." + e.getKey()).append(" x" + e.getValue()), x0, y + 3, Teken.TEKST);
+                    y += 13;
+                }
+            }
+            y += 6;
+            if (y >= y0 - 2 && y + 14 <= y1 + 2) {
+                ui.knop(Component.translatable("erfenis.decowinkel.naar_winkel"), x0, y, x0 + 120, y + 14, true, Teken.GROEN_DONKER, () -> {
+                    OverzichtScherm.decoTab = true;
+                    OverzichtScherm s = OverzichtScherm.huidig();
+                    if (s != null) {
+                        s.sluitVenster();
+                    }
+                }, null);
+            }
+            y += 17;
             ui.g.disableScissor();
             scroll = Math.max(0, Math.min(scroll, y + scroll - y1));
         }

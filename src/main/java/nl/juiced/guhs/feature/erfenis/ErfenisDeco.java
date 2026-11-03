@@ -48,18 +48,28 @@ public final class ErfenisDeco {
     private ErfenisDeco() {
     }
 
-    /** The Knusheid of all placed deco (hekjes: 1 per 5). */
+    /** Hekjes that count 1 per 4 (deco.md: the Knuffelhaag and the vadshekje); the other hekjes count 1 per 5. */
+    private static final java.util.Set<String> HEK_PER_4 = java.util.Set.of("knuffelhaag", "vadshekje");
+
+    /** The Knusheid of all placed deco (hekjes: 1 per 5, Knuffelhaag and vadshekje 1 per 4). */
     public static int knusheid(List<Base.Deco> deco) {
-        int k = 0, hekjes = 0;
+        int k = 0, hekjes = 0, hekjes4 = 0;
         for (Base.Deco d : deco) {
             Integer v = KNUS.get(d.id());
             if (v != null) {
                 k += v;
+            } else if (HEK_PER_4.contains(d.id())) {
+                hekjes4++;
             } else {
                 hekjes++;
             }
         }
-        return k + hekjes / 5;
+        return k + hekjes / 5 + hekjes4 / 4;
+    }
+
+    /** The Knusheid of one piece (hekjes: 0, they count per 5 / per 4 together). */
+    public static int knusheid(String id) {
+        return KNUS.getOrDefault(vorm(id), 0);
     }
 
     /** The vormen deco id for a slice's deco id (unknown ids stay as they are). */

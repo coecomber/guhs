@@ -47,12 +47,41 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 | `/guhs erfenis sherlock moment <id>`, `zaak <id>`, `vind`, `volgende`, `bureau`, `rechtbank` | Sherlock |
 | `/guhs erfenis vorm <id> <level> <palet> <rot>`, `vorm alle <level> <palet>`, `vorm decoalle` | alle vormen bekijken |
 
+## Deco, paden en hekjes (decowinkel)
+
+- **Decowinkel**: in de winkelbalk onderin het laatste tabje **Deco** (of klik op het Knusheid-chipje bovenin). Rijtje
+  categorieën: Paden, Hekjes, Bloemen, Zitjes, Licht, Water, Beelden, Boerderij, Bijzonder. Per kaartje prijs, slotje + "H5"
+  als het pas op een hoger Hoeve-level komt, en een groen "x2" als er al stuks in je schuurtje/voorraad liggen.
+- **Een stukje kopen**: klik op het kaartje → spookje aan je muis (R draait) → klik op het gras = betalen en neerzetten
+  (het spookje blijft, dus je kunt er meer neerzetten; rechtermuis/Esc stopt). Ligt er al eentje in je schuurtje, dan
+  pakt hij eerst die (gratis). **Shift-klik** op het kaartje = kopen voor in je decoschuurtje.
+- **Decobon**: heb je bonnen ingeleverd (`/guhs erfenis decobon` geeft er een), dan staat rechts in de categorierij
+  "Decobon: n". Aanzetten → je volgende stukje (geen pad/hekje) kost een bon in plaats van Guhlden.
+- **Paden en hekjes trekken**: klik op een pad- of hekjeskaartje en **sleep** over het gras. Spookjes: groen = nieuw,
+  goud = gratis uit je voorraad, rood = kan niet / geld op, wit = ligt er al. Naast de muis: aantal tegels en de prijs.
+  Hoekjes, T-splitsingen en kruisingen gaan vanzelf (ook tussen twee soorten pad). Een ander pad eroverheen wisselt het om.
+  Hekjes sluiten vanzelf op elkaar aan. Een hekje mag niet midden op een pad (dan struikelt iedereen).
+- **Gum** (rechts in de rij bij Paden/Hekjes): sleep over paden en hekjes om ze weg te halen. Paden gaan in je
+  voorraad (staat in het decoschuurtje-venster), hekjes in je schuurtje; later gratis opnieuw trekken. Nooit geld terug.
+- **Deco kiezen**: klik op een neergezet stukje → paneel rechts met Verplaatsen / Draaien / Opbergen. Een gekozen stukje
+  kun je ook gewoon **slepen**. Opbergen = terug in het schuurtje.
+- **Gebouw erover**: een gebouw (of decostuk) neerzetten/verplaatsen/draaien over paden of deco: deco terug in het
+  schuurtje, pad-tegels in je voorraad, de paden ernaast krijgen hun nieuwe hoekjes.
+- **Knusheid**: chipje bovenin (tooltip: gebouwen / paden / deco en de volgende mijlpaal). Paden 1 per 10 tegels, hekjes 1 per
+  5 (Knuffelhaag en vadshekje 1 per 4). Mijlpalen 50, 100, 250, 500, 1.000, 1.500, 2.000, 2.500, 5.000 geven één keer een
+  vrolijk berichtje; titels **Knusse Guh** (250), **Knusvads** (1.000), **Knusser Bestaat Niet** (2.500) in je Guhdex.
+  Opbergen haalt je titel nooit weg (hoogste stand telt).
+- Snel testen: `/guhs erfenis demo`, dan in het bovenaanzicht het Deco-tabje. Dev: `/guhs erfenis doe lijn <soort> x0 z0 x1 z1`
+  (trekt een lijn), `doe koop <id> [x z rot]`, `doe gum x,z;x,z`, `doe decodraai x z`, `doe decoverplaats x z nx nz [rot]`.
+  AutoCheck: `tools/autocheck/190_deco.txt`.
+
 ## Wat zeker het proberen waard is
 
 - Survival zonder brief: toets/commando weigeren netjes. Dan de brief kopen en door het hekje.
 - De makelaarstour van begin tot Hoeve 2 (met `snel aan` gaat het vlot).
 - Een plukje opruimen: bij het 1e-3e plukje vind je het roestige sleuteltje (Sherlock-proloog in de chat).
 - Deco neerzetten, draaien, opbergen; een gebouw er bovenop zetten (stuk gaat terug naar het schuurtje).
+- Een tuintje met de decowinkel: een paadje met een bocht en een kruising slepen, een hekje eromheen, bankje + fontein erin.
 - Bestelling leveren: Guhlden erbij, telt voor de Hoeve-doelen, soms een decostuk.
 - Detectivebureau bouwen → wolkje → Speurboekje → zaak 1.
 - Stammen/wol/glasscherven naar huis en kijken of de Leverkist ze krijgt.
@@ -61,7 +90,6 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 
 ## Bekende gaten
 
-- Geen decowinkel (kopen van deco, paden en hekjes trekken): alleen gekregen stukken staan in het schuurtje.
 - De wereldkaart (toets M) is ook vóór het kopen te openen.
 - Sherlock-getuigen en scènes staan naast de speler, niet bij het bureau; vlaggen als `opas_kelder`, `bureau_eindlook`,
   `oma_bestelling`, `recept_theetaartje` worden bewaard maar doen nog niks.

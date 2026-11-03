@@ -1,0 +1,147 @@
+# Guhs 1.9 "Een opknapper!", deco slice: the decowinkel, drawing paths and hekjes per tile (corners, crossings), the gum,
+# placing / selecting / moving deco and a decorated village (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_deco.txt
+# 1280x720 at gui scale 2 = 640x360 gui pixels. Creative (no letter needed). The demo village (Hoeve 6) has free ground in the
+# strip z 52-53 (x 40-75) and the block x 60-75, z 51-65; that is where the paths and the garden go.
+# Shop geometry with the Deco tab open: panel x 58..582, y 300; cards from x 64 every 56 px at y 318 (34 high).
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/effect give @s minecraft:night_vision infinite 0 true
+wait 40
+
+section demo
+/guhs erfenis
+wait 80
+waitrender 300
+/guhs erfenis demo
+wait 60
+waitrender 300
+/guhs erfenis geef guhlden 9000
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+/guhs erfenis ui camera 60,56,52
+wait 30
+
+section winkel
+/guhs erfenis ui decowinkel paden
+wait 20
+mouse 300 200
+shot deco_01_winkel_paden gui
+/guhs erfenis ui decowinkel bloemen
+wait 10
+mouse 260 335
+wait 10
+shot deco_02_winkel_bloemen_tip gui
+/guhs erfenis ui decowinkel hekjes
+wait 10
+mouse 300 200
+shot deco_03_winkel_hekjes gui
+
+section trekken met de muis
+# a real click on the first Paden card (zandpaadje), then a real drag over the screen
+/guhs erfenis ui decowinkel paden
+wait 10
+click 90 335
+wait 10
+/guhs erfenis ui camera 60,56,40
+wait 30
+drag 250 150 400 220
+wait 30
+waitrender 100
+mouse 400 220
+shot deco_04_getrokken_met_muis gui
+
+section spook van een streek
+/guhs erfenis ui trek klinkguhpad
+/guhs erfenis ui streek 52,52;53,52;54,52;55,52;56,52;57,52;58,52;59,52;60,52;61,52;62,52;62,53;62,54;62,55;62,56;62,57;62,58;62,59;62,60
+wait 10
+mouse 330 120
+shot deco_05_streek_spook gui
+/guhs erfenis ui trek klinkguhpad
+
+section paden en hekjes trekken
+/guhs erfenis doe lijn klinkguhpad 40 52 75 52
+/guhs erfenis doe lijn klinkguhpad 62 40 62 65
+/guhs erfenis doe lijn zandpaadje 75 53 75 65
+/guhs erfenis doe lijn knarspad 70 53 70 60
+/guhs erfenis doe lijn guhhekje_roze 65 55 69 55
+/guhs erfenis doe lijn guhhekje_roze 71 55 74 55
+/guhs erfenis doe lijn guhhekje_roze 65 55 65 64
+/guhs erfenis doe lijn guhhekje_roze 74 55 74 64
+/guhs erfenis doe lijn guhhekje_roze 65 64 74 64
+wait 20
+
+section deco kopen en neerzetten
+/guhs erfenis doe koop spuitguhfontein 69 61 0
+/guhs erfenis doe koop bloembakje 66 57 0
+/guhs erfenis doe koop bloembakje 73 57 0
+/guhs erfenis doe koop lantaarntje 68 57 0
+/guhs erfenis doe koop lantaarntje 72 57 0
+/guhs erfenis doe koop guhbankje_roze 66 59 0
+/guhs erfenis doe koop tulpguhsperkje 66 62 0
+/guhs erfenis doe koop kaasbloemenperk 72 62 0
+/guhs erfenis doe koop guhbloesempje 72 59 0
+/guhs erfenis doe koop picknicktafel 64 50 0
+/guhs erfenis doe koop schommelbank 71 50 0
+/guhs erfenis doe koop guhlantaarnpaal 55 51 0
+/guhs erfenis doe koop guhlantaarnpaal 59 51 0
+/guhs erfenis doe koop hooiguh 61 51 0
+/guhs erfenis doe koop zonnebloemrij 63 56 0
+/guhs erfenis doe koop kaboeter
+/guhs erfenis doe deco roestige_weerhaan 60 54 0
+wait 40
+waitrender 200
+/guhs erfenis ui decowinkel zitjes
+/guhs erfenis ui camera 64,57,34
+wait 40
+waitrender 200
+mouse 600 20
+shot deco_06_kruising_en_hoekjes gui
+/guhs erfenis ui camera 69,59,22
+wait 40
+waitrender 200
+shot deco_07_tuin_dichtbij gui
+
+section kiezen verplaatsen draaien
+/guhs erfenis ui decokies 69,61
+wait 20
+shot deco_08_fontein_gekozen gui
+/guhs erfenis doe decodraai 66 59
+/guhs erfenis doe decoverplaats 66 57 67 57 0
+wait 20
+/guhs erfenis ui koop guhbankje_hout
+/guhs erfenis ui hover 68,59
+wait 10
+shot deco_09_koop_spook gui
+gui close
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+
+section gum en schuurtje
+/guhs erfenis doe gum 70,56;70,57;70,58
+wait 20
+/guhs erfenis ui camera 64,57,34
+/guhs erfenis ui venster deco
+wait 20
+shot deco_10_schuurtje_voorraad gui
+/guhs erfenis ui dicht
+/guhs erfenis ui trek gum
+/guhs erfenis ui streek 62,53;62,54;62,55;70,53;70,54
+wait 10
+mouse 330 120
+shot deco_11_gum_spook gui
+
+section knusheid
+/guhs erfenis ui gebouwwinkel
+wait 5
+mouse 497 16
+wait 10
+shot deco_12_knusheid_tip gui
+gui close
+quit

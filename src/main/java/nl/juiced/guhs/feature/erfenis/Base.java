@@ -102,7 +102,13 @@ public final class Base {
     /** The path layer: per tile 0 (none) or 1 + an index into {@link #padSoorten}. */
     public byte[] paden = new byte[Plot.MAAT * Plot.MAAT];
     public final List<String> padSoorten = new ArrayList<>();
+    /** Erased path tiles per kind, drawn again for free first (deco slice: nothing is ever sold back). */
+    public final Map<String, Integer> padVoorraad = new LinkedHashMap<>();
     public int knusDeco;
+    /** The highest Knusheid ever reached (titles and milestones; putting deco away never takes a title back). */
+    public int knusRecord;
+    /** (client only) Decobonnen waiting in the village (koppeling's Dorpsbeloningen), for the decowinkel. */
+    public transient int decobonnen;
     /** Main-world items handed in at the Loket (item id -> count). */
     public final Map<String, Integer> loket = new LinkedHashMap<>();
     /** The Leverkist allowance per good (balans 9.4: cap per hour, saves up to 8 hours) and when it was last counted. */
@@ -170,7 +176,9 @@ public final class Base {
         deco.clear();
         paden = new byte[Plot.MAAT * Plot.MAAT];
         padSoorten.clear();
+        padVoorraad.clear();
         knusDeco = 0;
+        knusRecord = 0;
         loket.clear();
         leverTegoed.clear();
         for (Goed g : Goed.values()) {
@@ -582,6 +590,12 @@ public final class Base {
         if (decoOpslag.getOrDefault(id, 0) <= 0) {
             return new Fout("erfenis.fout.deco_op");
         }
+        return decoPlekFout(id, x, z, rot, null);
+    }
+
+    /** May piece {@code id} stand at (x, z, rot), ignoring the placed piece {@code negeer} (moving it)? Paths under it are fine (taken up). */
+    @Nullable
+    public Fout decoPlekFout(String id, int x, int z, int rot, @Nullable Deco negeer) {
         int[] m = decoMaat(id, rot);
         if (m[0] <= 0) {
             return new Fout("erfenis.fout.weg");
@@ -592,11 +606,28 @@ public final class Base {
         }
         for (int dx = 0; dx < m[0]; dx++) {
             for (int dz = 0; dz < m[1]; dz++) {
-                if (decoOp(x + dx, z + dz) != null) {
+                Deco d = decoOp(x + dx, z + dz);
+                if (d != null && d != negeer) {
                     return new Fout("erfenis.fout.overlap");
                 }
             }
         }
+        return null;
+    }
+
+    /** Moves (and turns) a placed piece; the path tiles under its new spot go into the stock. */
+    @Nullable
+    public Fout verplaatsDeco(Deco d, int x, int z, int rot) {
+        if (!deco.contains(d)) {
+            return new Fout("erfenis.fout.weg");
+        }
+        Fout f = decoPlekFout(d.id(), x, z, rot, d);
+        if (f != null) {
+            return f;
+        }
+        deco.set(deco.indexOf(d), new Deco(d.id(), x, z, rot & 3));
+        int[] m = decoMaat(d.id(), rot);
+        Paden.wijk(this, x, z, m[0], m[1]);
         return null;
     }
 
@@ -610,6 +641,8 @@ public final class Base {
         decoOpslag.merge(id, -1, Integer::sum);
         decoOpslag.remove(id, 0);
         deco.add(new Deco(id, x, z, rot & 3));
+        int[] m = decoMaat(id, rot);
+        Paden.wijk(this, x, z, m[0], m[1]);
         Knusheid.zet(this, ErfenisDeco.knusheid(deco));
         return null;
     }
@@ -622,8 +655,9 @@ public final class Base {
         }
     }
 
-    /** A building comes to stand here: the deco under it goes back into the decoschuurtje (never lost). */
+    /** A building comes to stand here: the deco under it goes back into the decoschuurtje, the path tiles into the stock (never lost). */
     void decoWijkt(int x, int z, int w, int h) {
+        Paden.wijk(this, x, z, w, h);
         for (Deco d : List.copyOf(deco)) {
             int[] m = decoMaat(d.id(), d.rot());
             if (d.x() < x + w && d.x() + m[0] > x && d.z() < z + h && d.z() + m[1] > z) {
@@ -1371,6 +1405,7 @@ public final class Base {
         t.putInt("Bestellingen", bestellingen);
         t.putInt("Kavels", kavels);
         t.putInt("KnusDeco", knusDeco);
+        t.putInt("KnusRecord", knusRecord);
         t.putInt("Vk", vk);
         t.putBoolean("KippenhokGratis", kippenhokGratis);
         t.putBoolean("Aangekomen", aangekomen);
@@ -1404,6 +1439,7 @@ public final class Base {
         t.put("Goederen", gt);
         t.put("BouwblokSoorten", telling(bouwblokSoorten));
         t.put("DecoOpslag", telling(decoOpslag));
+        t.put("PadVoorraad", telling(padVoorraad));
         t.put("Loket", telling(loket));
         CompoundTag lt = new CompoundTag();
         leverTegoed.forEach((g, v) -> lt.putDouble(g.id, v));
@@ -1483,6 +1519,8 @@ public final class Base {
         b.bestellingen = t.getIntOr("Bestellingen", 0);
         b.kavels = t.getIntOr("Kavels", 0);
         b.knusDeco = t.getIntOr("KnusDeco", 0);
+        b.knusRecord = t.getIntOr("KnusRecord", 0);
+        b.decobonnen = t.getIntOr("Decobonnen", 0);
         b.vk = t.getIntOr("Vk", 0);
         b.kippenhokGratis = t.getBooleanOr("KippenhokGratis", true);
         b.aangekomen = t.getBooleanOr("Aangekomen", false);
@@ -1518,6 +1556,7 @@ public final class Base {
         }
         leesTelling(t.getCompoundOrEmpty("BouwblokSoorten"), b.bouwblokSoorten);
         leesTelling(t.getCompoundOrEmpty("DecoOpslag"), b.decoOpslag);
+        leesTelling(t.getCompoundOrEmpty("PadVoorraad"), b.padVoorraad);
         leesTelling(t.getCompoundOrEmpty("Loket"), b.loket);
         CompoundTag lt = t.getCompoundOrEmpty("LeverTegoed");
         for (String k : lt.keySet()) {

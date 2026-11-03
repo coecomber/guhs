@@ -128,6 +128,14 @@ public final class ErfenisPayloads {
                 MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20, DECO = 21;
         /** {@link #DECO} in {@code x2}: place {@code tekst} at (x, z, rot), or put the piece on tile (x, z) away. */
         public static final int DECO_PLAATS = 0, DECO_WEG = 1;
+        /**
+         * Deco slice, {@link #DECO} in {@code x2}: KOOP buys {@code tekst} (flags in {@code id}: {@link #KOOP_PLAATS} = and place
+         * it at (x, z, rot), {@link #KOOP_BON} = with a Decobon); TREK draws {@code tekst} = "soort:x,z;x,z;..."; GUM erases
+         * {@code tekst} = "x,z;..."; VERPLAATS moves the piece on tile (x, z) to ({@code id}, {@code z2}) turned {@code rot};
+         * DRAAI turns the piece on tile (x, z) a quarter.
+         */
+        public static final int DECO_KOOP = 2, DECO_TREK = 3, DECO_GUM = 4, DECO_VERPLAATS = 5, DECO_DRAAI = 6;
+        public static final int KOOP_PLAATS = 1, KOOP_BON = 2;
         /** {@link #PENSION} sub-actions in {@code x}: the lists, send a guh, bring one home, which building it helps ({@code id}). */
         public static final int PENSION_OPEN = 0, PENSION_STUUR = 1, PENSION_HAAL = 2, PENSION_HELPT = 3;
         /** {@link #GA} with this as {@code id}: and open the own overview once there ("Terug naar mijn erfenis"). */

@@ -313,6 +313,7 @@ final class ErfenisCommando {
      * Dev (AutoCheck): does what a click in the own overview does, through the same server path ({@link Erfenis#actie}):
      * {@code plaats <type> <x> <z> [rot]}, {@code verbeter <type>}, {@code ophalen <type>}, {@code allesophalen},
      * {@code opruimen <plukje>}, {@code deco <id> <x> <z> [rot]}, {@code naarhuis <goed> <n>}, {@code bureau}, {@code markt}. A type means its first building.
+     * Deco slice: {@code koop}, {@code bon}, {@code trek}, {@code lijn}, {@code gum}, {@code decoweg}, {@code decodraai}, {@code decoverplaats}.
      */
     private static int doe(CommandSourceStack source, String wat) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
@@ -340,6 +341,28 @@ final class ErfenisCommando {
             case "opruimen" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.OPRUIMEN, 0, Integer.parseInt(arg.apply(1)), 0, 0, 0, 0, "");
             case "deco" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, Integer.parseInt(arg.apply(2)), Integer.parseInt(arg.apply(3)),
                     ErfenisPayloads.Actie.DECO_PLAATS, 0, Integer.parseInt(arg.apply(4)), arg.apply(1));
+            // deco slice: koop <id> [x z rot] (with x: buy and place), bon <id> x z [rot], trek <soort> x,z;x,z..., lijn <soort> x0 z0 x1 z1,
+            // gum x,z;..., decoweg x z, decodraai x z, decoverplaats x z nx nz [rot]
+            case "koop", "bon" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, (a.length > 2 ? ErfenisPayloads.Actie.KOOP_PLAATS : 0)
+                    | ("bon".equals(a[0]) ? ErfenisPayloads.Actie.KOOP_BON : 0), Integer.parseInt(arg.apply(2)), Integer.parseInt(arg.apply(3)),
+                    ErfenisPayloads.Actie.DECO_KOOP, 0, Integer.parseInt(arg.apply(4)), arg.apply(1));
+            case "trek" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, 0, 0, ErfenisPayloads.Actie.DECO_TREK, 0, 0,
+                    arg.apply(1) + ":" + arg.apply(2));
+            case "lijn" -> {
+                int x0 = Integer.parseInt(arg.apply(2)), z0 = Integer.parseInt(arg.apply(3));
+                java.util.List<int[]> l = new java.util.ArrayList<>();
+                l.add(new int[] {x0, z0});
+                l.addAll(Paden.stap(x0, z0, Integer.parseInt(arg.apply(4)), Integer.parseInt(arg.apply(5))));
+                yield new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, 0, 0, ErfenisPayloads.Actie.DECO_TREK, 0, 0,
+                        arg.apply(1) + ":" + Paden.codeer(l));
+            }
+            case "gum" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, 0, 0, ErfenisPayloads.Actie.DECO_GUM, 0, 0, arg.apply(1));
+            case "decoweg" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, Integer.parseInt(arg.apply(1)), Integer.parseInt(arg.apply(2)),
+                    ErfenisPayloads.Actie.DECO_WEG, 0, 0, "");
+            case "decodraai" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, 0, Integer.parseInt(arg.apply(1)), Integer.parseInt(arg.apply(2)),
+                    ErfenisPayloads.Actie.DECO_DRAAI, 0, 0, "");
+            case "decoverplaats" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.DECO, Integer.parseInt(arg.apply(3)), Integer.parseInt(arg.apply(1)),
+                    Integer.parseInt(arg.apply(2)), ErfenisPayloads.Actie.DECO_VERPLAATS, Integer.parseInt(arg.apply(4)), Integer.parseInt(arg.apply(5)), "");
             case "naarhuis" -> new ErfenisPayloads.Actie(ErfenisPayloads.Actie.NAAR_HUIS, 0, Integer.parseInt(arg.apply(2)), 0, 0, 0, 0, arg.apply(1));
             case "bureau" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.BUREAU, eerste.apply("detectivebureau"));
             case "markt" -> ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.MARKT, eerste.apply("marktplein"));
