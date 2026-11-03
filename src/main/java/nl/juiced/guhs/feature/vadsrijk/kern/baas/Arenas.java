@@ -35,6 +35,8 @@ public final class Arenas {
         @Nullable
         UUID baas;
         long respawnOp = -1;
+        /** respawnOp read from {@link ArenaData} yet (once per server start)? */
+        boolean geladen;
         @Nullable
         Display.TextDisplay bord;
         final Set<UUID> binnen = new HashSet<>();
@@ -98,6 +100,8 @@ public final class Arenas {
         }
         t.baas = null;
         t.respawnOp = 0;
+        t.geladen = true;
+        ArenaData.get(server).zet(id, -1);
         t.binnen.clear();
         return true;
     }
@@ -133,9 +137,17 @@ public final class Arenas {
                 t.bord = null;
                 continue;
             }
+            ArenaData data = ArenaData.get(server);
+            if (!t.geladen) {
+                t.geladen = true;
+                if (t.respawnOp != -2) {
+                    t.respawnOp = data.respawnOp(a.id());
+                }
+            }
             VadsrijkBaas b = zoek(sl, t);
             if (t.respawnOp == -2) {
                 t.respawnOp = nu + a.respawnSeconden() * 20L;
+                data.zet(a.id(), t.respawnOp);
             }
             if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
                 b = t.maker.apply(sl);
@@ -145,6 +157,7 @@ public final class Arenas {
                     sl.addFreshEntity(b);
                     t.baas = b.getUUID();
                     t.respawnOp = -1;
+                    data.zet(a.id(), -1);
                     t.binnen.clear();
                 }
             }
@@ -163,7 +176,8 @@ public final class Arenas {
                     b.intro(p, eerste);
                 }
                 if (b != null) {
-                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(b.getId(), Component.translatable(b.titelKey()), b.fase(), (float) b.vads(), (float) b.maxVads()));
+                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(b.getId(), Component.translatable(b.titelKey()), b.fase(), (float) b.vads(), (float) b.maxVads(),
+                            b.muziek() == null ? "" : b.muziek().toString()));
                 }
             }
             for (UUID weg : t.binnen) {

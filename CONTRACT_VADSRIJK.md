@@ -187,3 +187,12 @@ damage pipeline, fainting + campfires, xp/levels, loot rolls/items/tooltips/drop
 arenas + chests + telegraphs, party, commands, the Knuffelridder, the Grauwe Klodderreus, the map feature + proeftuin.
 Still being filled in by kern after this commit (same signatures): the client HUD (`kern.client.RijkHud`), the scene/title player
 (`kern.client.SceneSpeler`), gametests. Slice registry/client classes and `tools/features/vadsrijk_<slice>.py` are empty stubs.
+
+## 13. Kern follow-up (after 00e93584a)
+- Arena respawn timers persist (`kern.baas.ArenaData`).
+- Accessory slots (Curios / Accessories) join the inventory swap through `kern.compat.ExtraVakken` (reflection; add a `Bron` for
+  another mod).
+- Nameplates are drawn client-side from synced data (`VadsrijkMob#plaatje()`, RenderNameTagEvent): don't set custom names for
+  HP bars; a custom name only replaces the name part.
+- Boss music hook: override `VadsrijkBaas#muziek()` (default `guhs:vr.kern.muziek.baas`, registered, no asset yet); it plays
+  only if the sound exists in sounds.json.

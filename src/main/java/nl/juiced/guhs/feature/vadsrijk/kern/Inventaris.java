@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken;
 
 /**
  * Het Vadsrijk: "eigen kist per wereld" (ronde 2). Inside the dimension the player has their Vadsrijk inventory; their normal
@@ -29,7 +30,9 @@ import net.minecraft.world.item.ItemStack;
  * Kern calls {@link #naarRijk} / {@link #naarThuis} from its reconciler only (every dimension change, login and every second).
  */
 public final class Inventaris {
-    public static final String WERELD = "vr_wereld", RIJK = "rijk", THUIS = "thuis";
+    public static final String WERELD = "vr_wereld", RIJK = "rijk", THUIS = "thuis", EXTRA = "vr_extra", EXTRA_I = "vr_extra_i";
+    /** The slot number accessory items get in their tag (outside the vanilla inventory: they go back by EXTRA + EXTRA_I). */
+    static final int EXTRA_SLOT = 250;   // (the codec stores Slot as an unsigned byte)
 
     private Inventaris() {
     }
@@ -84,6 +87,28 @@ public final class Inventaris {
             }
             // (a stack that cannot be written stays where it is: carried into the other world rather than lost)
         }
+        // accessory slots of Curios / Accessories (soft compat): same rule, marked with their source and index
+        for (ExtraVakken.Bron bron : ExtraVakken.ALLE) {
+            List<ExtraVakken.Vak> vakken = bron.vakken(p);
+            for (int i = 0; i < vakken.size(); i++) {
+                ExtraVakken.Vak v = vakken.get(i);
+                ItemStack s = v.get();
+                if (s == null || s.isEmpty()) {
+                    continue;
+                }
+                Optional<Tag> t = ItemStackWithSlot.CODEC.encodeStart(ops, new ItemStackWithSlot(EXTRA_SLOT, s.copy())).result();
+                if (t.isPresent() && t.get() instanceof CompoundTag c) {
+                    c.putString(EXTRA, bron.id());
+                    c.putInt(EXTRA_I, i);
+                    try {
+                        v.set(ItemStack.EMPTY);
+                        opslag.add(c);
+                    } catch (RuntimeException e) {
+                        // (the slot refused: the item stays equipped, nothing is duplicated)
+                    }
+                }
+            }
+        }
         List<CompoundTag> terug = new ArrayList<>(uitHaal);
         uitHaal.clear();
         laad(p, d, terug, nieuweWereld);
@@ -100,10 +125,33 @@ public final class Inventaris {
         Inventory inv = p.getInventory();
         RegistryOps<Tag> ops = ops(p);
         List<ItemStack> later = new ArrayList<>();
+        java.util.Map<String, List<ExtraVakken.Vak>> extra = new java.util.HashMap<>();
         for (CompoundTag t : tags) {
             Optional<ItemStackWithSlot> s = ItemStackWithSlot.CODEC.parse(ops, t).result();
             if (s.isEmpty() || s.get().stack().isEmpty()) {
                 d.gevonden.add(merk(t, wereld));
+                continue;
+            }
+            String bronId = t.getStringOr(EXTRA, "");
+            if (!bronId.isEmpty()) {
+                ExtraVakken.Bron bron = ExtraVakken.van(bronId);
+                List<ExtraVakken.Vak> vakken = bron == null ? List.of() : extra.computeIfAbsent(bronId, k -> bron.vakken(p));
+                int i = t.getIntOr(EXTRA_I, -1);
+                boolean gezet = false;
+                if (i >= 0 && i < vakken.size()) {
+                    try {
+                        ItemStack nu = vakken.get(i).get();
+                        if (nu == null || nu.isEmpty()) {
+                            vakken.get(i).set(s.get().stack());
+                            gezet = true;
+                        }
+                    } catch (RuntimeException e) {
+                        gezet = false;
+                    }
+                }
+                if (!gezet) {
+                    later.add(s.get().stack());
+                }
                 continue;
             }
             int slot = s.get().slot();

@@ -123,8 +123,12 @@ public final class KernPayloads {
         }
     }
 
-    /** The big boss bar: entityId -1 = hide. */
-    public record BaasBalk(int entityId, Component naam, int fase, float vads, float max) implements CustomPacketPayload {
+    /** The big boss bar: entityId -1 = hide. muziek = the boss music's sound id ("" = none; only played if the client has the sound). */
+    public record BaasBalk(int entityId, Component naam, int fase, float vads, float max, String muziek) implements CustomPacketPayload {
+        public BaasBalk(int entityId, Component naam, int fase, float vads, float max) {
+            this(entityId, naam, fase, vads, max, "");
+        }
+
         public static final Type<BaasBalk> TYPE = new Type<>(Guhs.id("vr_kern_baas"));
         public static final StreamCodec<RegistryFriendlyByteBuf, BaasBalk> STREAM_CODEC = StreamCodec.ofMember((t, b) -> {
             b.writeVarInt(t.entityId + 1);
@@ -132,7 +136,9 @@ public final class KernPayloads {
             b.writeVarInt(t.fase);
             b.writeFloat(t.vads);
             b.writeFloat(t.max);
-        }, b -> new BaasBalk(b.readVarInt() - 1, ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b), b.readVarInt(), b.readFloat(), b.readFloat()));
+            b.writeUtf(t.muziek);
+        }, b -> new BaasBalk(b.readVarInt() - 1, ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b), b.readVarInt(), b.readFloat(), b.readFloat(),
+                b.readUtf()));
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

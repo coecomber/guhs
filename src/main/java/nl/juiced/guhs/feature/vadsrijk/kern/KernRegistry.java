@@ -54,6 +54,10 @@ public final class KernRegistry {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Guhs.MODID);
+    public static final DeferredRegister<net.minecraft.sounds.SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
+    /** Boss music hook: no sound asset yet (sounds.json has no entry, so the client plays nothing until one is added). */
+    public static final DeferredHolder<net.minecraft.sounds.SoundEvent, net.minecraft.sounds.SoundEvent> MUZIEK_BAAS = SOUNDS.register("vr.kern.muziek.baas",
+            () -> net.minecraft.sounds.SoundEvent.createVariableRangeEvent(nl.juiced.guhs.feature.vadsrijk.kern.baas.KernMuziek.BAAS));
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<SpelerData>> SPELER = ATTACHMENTS.register("vr_speler",
             () -> AttachmentType.serializable(SpelerData::new).copyOnDeath().build());
@@ -105,6 +109,7 @@ public final class KernRegistry {
         BLOCK_ENTITIES.register(modBus);
         ENTITIES.register(modBus);
         FEATURES.register(modBus);
+        SOUNDS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent e) -> {
             e.put(PROEFKLODDER.get(), VadsrijkMob.basisAttributen().build());
             e.put(PROEFKLODDERTJE.get(), VadsrijkMob.basisAttributen().build());
@@ -112,6 +117,7 @@ public final class KernRegistry {
                     .add(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE, 40).build());
         });
         inhoud();
+        nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.init();
         KernEvents.register();
     }
 

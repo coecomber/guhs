@@ -61,6 +61,15 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     protected void signatuur() {
     }
 
+    /**
+     * The boss music (optional hook): a sound event id the client loops while the boss bar shows, only if a sound with that id
+     * exists in the resources (none yet: kern registers {@code guhs:vr.kern.muziek.baas} without an asset). Null = no music.
+     */
+    @Nullable
+    public net.minecraft.resources.Identifier muziek() {
+        return KernMuziek.BAAS;
+    }
+
     public int fase() {
         return fase;
     }

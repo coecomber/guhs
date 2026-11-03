@@ -66,6 +66,7 @@ public abstract class VadsrijkMob extends Monster {
     private static final EntityDataAccessor<Boolean> ONTVADST = SynchedEntityData.defineId(VadsrijkMob.class, EntityDataSerializers.BOOLEAN);
     /** -1 = alive; otherwise ticks since the plof (synced so the client can tint it pink). */
     private static final EntityDataAccessor<Integer> PLOF = SynchedEntityData.defineId(VadsrijkMob.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> ELITE = SynchedEntityData.defineId(VadsrijkMob.class, EntityDataSerializers.BOOLEAN);
 
     protected final Set<Affix> affixen = EnumSet.noneOf(Affix.class);
     protected boolean elite;
@@ -115,6 +116,7 @@ public abstract class VadsrijkMob extends Monster {
         b.define(ELEMENT, Element.WATER.ordinal());
         b.define(ONTVADST, true);
         b.define(PLOF, -1);
+        b.define(ELITE, false);
     }
 
     @Override
@@ -133,6 +135,7 @@ public abstract class VadsrijkMob extends Monster {
         this.entityData.set(LEVEL, Math.max(1, level));
         this.entityData.set(ELEMENT, (element == null ? standaardElement() : element).ordinal());
         this.elite = elite;
+        this.entityData.set(ELITE, elite);
         this.affixen.clear();
         this.affixen.addAll(affixen);
         double max = basisVads(level) * (elite ? 2.5 : 1);
@@ -163,7 +166,7 @@ public abstract class VadsrijkMob extends Monster {
     }
 
     public boolean elite() {
-        return elite;
+        return entityData.get(ELITE);
     }
 
     public Set<Affix> affixen() {
@@ -364,17 +367,23 @@ public abstract class VadsrijkMob extends Monster {
         return geplofd() || Statussen.heeft(this, Status.VERDOOFD);
     }
 
-    /** The nameplate: element letter, name, level and a coloured bar. */
+    /**
+     * The nameplate is drawn by the client ({@code kern.client.KernClient}, through NeoForge's RenderNameTagEvent) from the
+     * synced values, so a rename or a name tag never breaks it (a custom name replaces only the name part). Nothing to do on
+     * the server; kept so callers don't need to change.
+     */
     public void naamplaatje() {
-        if (level().isClientSide()) {
-            return;
-        }
+    }
+
+    /** The nameplate text: [element letter] (Elite) name Lv n and a coloured HP bar (or a heart after the plof). */
+    public Component plaatje() {
         Element e = element();
         MutableComponent n = Component.literal("[" + e.letter + "] ").withStyle(e.kleur);
-        if (elite) {
+        if (elite()) {
             n.append(Component.translatable("vadsrijk.kern.elite").withStyle(ChatFormatting.GOLD)).append(" ");
         }
-        n.append(getType().getDescription().copy().withStyle(geplofd() ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE));
+        Component naam = hasCustomName() ? getCustomName() : getType().getDescription();
+        n.append(naam.copy().withStyle(geplofd() ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE));
         n.append(Component.literal(" Lv" + mobLevel()).withStyle(ChatFormatting.YELLOW));
         if (geplofd()) {
             n.append(Component.literal(" ♥").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -383,8 +392,7 @@ public abstract class VadsrijkMob extends Monster {
             n.append(Component.literal(" " + "▌".repeat(vol)).withStyle(vol > 5 ? ChatFormatting.GREEN : vol > 2 ? ChatFormatting.GOLD : ChatFormatting.RED));
             n.append(Component.literal("▌".repeat(balk - vol)).withStyle(ChatFormatting.DARK_GRAY));
         }
-        setCustomName(n);
-        setCustomNameVisible(true);
+        return n;
     }
 
     @Override

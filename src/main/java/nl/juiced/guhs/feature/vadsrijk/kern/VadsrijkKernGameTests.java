@@ -198,4 +198,55 @@ public class VadsrijkKernGameTests {
         helper.assertTrue(Spelers.level(p) == 5 && Spelers.vads(p) == Spelers.maxVads(p), "level 5, full Vads");
         helper.succeed();
     }
+
+    /** Accessory slots (Curios/Accessories soft compat) go through the same swap: tested with a fake source of 3 slots. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void accessoireVakkenWisselMee(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        net.minecraft.world.SimpleContainer nep = new net.minecraft.world.SimpleContainer(3);
+        nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.Bron bron = new nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.Bron() {
+            @Override
+            public String id() {
+                return "test_accessoires";
+            }
+
+            @Override
+            public List<nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.Vak> vakken(ServerPlayer sp) {
+                List<nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.Vak> l = new ArrayList<>();
+                for (int i = 0; i < nep.getContainerSize(); i++) {
+                    int slot = i;
+                    l.add(new nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.Vak() {
+                        @Override
+                        public ItemStack get() {
+                            return nep.getItem(slot);
+                        }
+
+                        @Override
+                        public void set(ItemStack st) {
+                            nep.setItem(slot, st);
+                        }
+                    });
+                }
+                return l;
+            }
+        };
+        nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.ALLE.add(bron);
+        try {
+            nep.setItem(1, new ItemStack(Items.TOTEM_OF_UNDYING));
+            nep.setItem(2, new ItemStack(Items.ELYTRA));
+            Inventaris.naarRijk(p);
+            helper.assertTrue(nep.isEmpty(), "accessories are put away inside");
+            nep.setItem(1, new ItemStack(Items.FEATHER));   // (something put in the slot inside: it must not be lost either)
+            Inventaris.naarThuis(p);
+            helper.assertTrue(nep.getItem(1).is(Items.TOTEM_OF_UNDYING) && nep.getItem(2).is(Items.ELYTRA), "accessories back in their own slots");
+            Inventaris.naarRijk(p);
+            helper.assertTrue(nep.getItem(1).is(Items.FEATHER) && nep.getItem(2).isEmpty(), "the inside accessory comes back inside");
+            Inventaris.naarThuis(p);
+            helper.assertTrue(nep.getItem(1).is(Items.TOTEM_OF_UNDYING), "and home again");
+        } finally {
+            nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.ALLE.remove(bron);
+            Spelers.data(p).rijkInventaris.clear();
+        }
+        helper.succeed();
+    }
 }

@@ -68,7 +68,10 @@ public final class RijkHud {
             hud = h;
             hudTijd = klok;
         };
-        KernPayloads.baasOntvanger = b -> baas = b.entityId() < 0 ? null : b;
+        KernPayloads.baasOntvanger = b -> {
+            baas = b.entityId() < 0 ? null : b;
+            BaasMuziek.zet(baas == null ? "" : b.muziek());
+        };
         KernPayloads.partyOntvanger = p -> {
             party = p.leden();
             partyTijd = klok;
@@ -86,7 +89,7 @@ public final class RijkHud {
             e.registerAboveAll(Guhs.id("vr_titel"), RijkHud::tekenTitel);
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, (RenderGuiLayerEvent.Pre e) -> {
-            if (binnen() && (VERBORGEN.contains(e.getName()) || (SceneSpeler.actief() && !e.getName().equals(Guhs.id("vr_titel"))))) {
+            if (binnen() && (VERBORGEN.contains(e.getName()) || "appleskin".equals(e.getName().getNamespace()) || (SceneSpeler.actief() && !e.getName().equals(Guhs.id("vr_titel"))))) {
                 e.setCanceled(true);
             }
         });
@@ -95,8 +98,9 @@ public final class RijkHud {
             if (titelWacht > 0 && --titelWacht == 0) {
                 titelStart = klok;
             }
-            if (!binnen()) {
+            if (!binnen() && baas != null) {
                 baas = null;
+                BaasMuziek.zet("");
             }
         });
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> {

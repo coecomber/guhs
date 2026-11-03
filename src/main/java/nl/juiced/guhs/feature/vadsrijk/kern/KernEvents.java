@@ -180,6 +180,7 @@ final class KernEvents {
                 p.setHealth(p.getMaxHealth());
             }
             p.getFoodData().setFoodLevel(20);
+            p.getFoodData().setSaturation(0);   // (no hunger here: also keeps AppleSkin's saturation rings off the HUD)
             p.setAirSupply(p.getMaxAirSupply());
             if (t % 20 == 0) {
                 SpelerData d = Spelers.data(p);

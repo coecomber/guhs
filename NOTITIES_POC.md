@@ -9,7 +9,24 @@ Werkboom: `guhs_vadsrijk/w-poc`, branch `110-vadsrijk-poc` (vanaf v1.9.0). Contr
    - wat werkt: de dimensie met de proeftuin, de HUD, lootstralen + tip, naamplaatjes, de baas-intro (camera + titelkaart), de baasbalk en het respawn-bord;
    - gevonden en opgelost: een flat generator met alleen lucht slaat de biome-features over (void), dus er staat nu 1 laag bedrock;
    - de tipkaart staat nu linksboven (rechtsboven zit de minimap).
-4. Bekend, niet opgelost: rechts in de energiebalk tekent iets anders 3 gele ringetjes (geen vanilla-laag, want die zijn allemaal verborgen; waarschijnlijk een mod- of Guhs-HUD). Even in de dev-client bekijken.
+4. Kern-opvolging (na het rapport):
+   - **Arena-respawntimers worden bewaard** in `ArenaData` (`data/guhs/vadsrijk_arenas.dat`, absolute speltijd per arena). Een herstart haalt een net verslagen baas dus niet meteen terug. Partijen worden nog steeds niet bewaard.
+   - **Curios/Accessories:** soft compat via reflectie (`kern/compat/ExtraVakken`), zonder harde dependency.
+     - Curios gaat via `CuriosApi.getCuriosInventory(..).getEquippedCurios()` (getSlots/getStackInSlot/setStackInSlot).
+     - Accessories gaat via `AccessoriesCapability.get(..).getContainers()` (de accessories- en cosmetic-containers).
+     - Die vakken gaan mee in dezelfde wissel: tag met `vr_extra` + index, terug naar hetzelfde vak, anders de inventaris, anders `gevonden`.
+     - Als de API er niet uitziet zoals verwacht: de vakken worden NIET gewisseld (gear blijft aan) en er komt een waarschuwing in de serverlog. Ze worden dan niet geblokkeerd, want blokkeren kan zonder API ook niet.
+     - Getest met een nepbron (gametest). Met de echte mods is het NIET getest (ze zitten niet in de dev-run). Eerst op de ATM-testserver proberen.
+   - **Naamplaatje** wordt nu op de client gebouwd via NeoForge's `RenderNameTagEvent.CanRender` (binnen 32 blokken), uit gesyncte waarden (Vads, max, level, element, elite, plof).
+     - Een custom name of nametag vervangt alleen het naamdeel.
+     - De server zet geen custom name meer.
+   - **De 3 gele ringetjes** waren de verzadiging-overlay van **AppleSkin** (dev-only `localRuntime`, maar ook in ATM).
+     - Verzadiging staat in de dimensie op 0.
+     - Alle lagen in de namespace `appleskin` worden binnen verborgen.
+   - **Baasmuziek-hook:** sound event `guhs:vr.kern.muziek.baas` is geregistreerd, zonder asset en zonder sounds.json-entry.
+     - `VadsrijkBaas.muziek()` geeft de id; de baasbalk stuurt hem mee.
+     - De client loopt hem (en pauzeert de gewone muziek) alleen als de sound bestaat.
+     - Asset toevoegen = sounds.json-entry + ogg; meer is niet nodig.
 
 ## Technische keuzes
 - **MC 26.1.2 / NeoForge 26.1.2.112** (niet 1.21.1): `Identifier`, `ValueInput/ValueOutput`, `GuiGraphicsExtractor`, render states.
@@ -51,9 +68,7 @@ Werkboom: `guhs_vadsrijk/w-poc`, branch `110-vadsrijk-poc` (vanaf v1.9.0). Contr
   - Buitkist voor iedereen met meer dan 5 % bijdrage (gemiddelde van de aandelen schade, heal en tanken).
 
 ## Risico's voor de volledige bouw
-- **Curios/Accessories-slots** (in ATM) zitten NIET in de wissel: die gear blijft gewoon aan. Daarvoor is een compat-laag nodig, of die slots moeten in de dimensie geblokkeerd worden.
+- **Curios/Accessories:** soft compat bestaat (zie hierboven), maar is niet getest met de echte mods.
 - **Andere mods die items geven of afpakken** tijdens de wissel (bijv. graven, backpacks) kunnen botsen. Graven zou niet mogen voorkomen, want doodgaan wordt geannuleerd.
 - **HUD:** de vanilla-lagen worden alleen in de dimensie verborgen. HUD-mods (AppleSkin, JourneyMap, minimap) tekenen eigen lagen en kunnen overlappen met de skillslots rechts van de hotbar.
-- **De naamplaatjes** gebruiken de custom name. Een mod die mobs hernoemt (of een nametag) overschrijft ze.
 - **Partijen** worden niet bewaard (een herstart betekent: geen party).
-- **De arena-status** (respawn-tijd) wordt niet bewaard. Na een herstart spawnt de baas meteen.

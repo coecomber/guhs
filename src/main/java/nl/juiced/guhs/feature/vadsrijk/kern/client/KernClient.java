@@ -73,6 +73,17 @@ public final class KernClient {
                 }
             }
         });
+        // The nameplates of Vadsrijk mobs: built here from the synced values (a rename only changes the name part)
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.RenderNameTagEvent.CanRender e) -> {
+            if (e.getEntity() instanceof nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob m) {
+                Minecraft mc = Minecraft.getInstance();
+                boolean dichtbij = mc.player != null && mc.player.distanceToSqr(m) < 32 * 32;
+                e.setCanRender(dichtbij ? net.minecraft.util.TriState.TRUE : net.minecraft.util.TriState.FALSE);
+                if (dichtbij) {
+                    e.setContent(m.plaatje());
+                }
+            }
+        });
         RijkHud.init(modBus);
         SceneSpeler.init();
     }

@@ -168,6 +168,15 @@ public class Klodderreus extends VadsrijkBaas {
                         doet = Doet.MIKT;
                         timer = fase() >= 2 ? 22 : 30;
                         landing = new Vec3(t.getX(), Math.floor(t.getY()), t.getZ());
+                        if (arena != null) {   // he stays in his arena: aim at the edge when you stand outside
+                            Vec3 m = midden();
+                            Vec3 d = landing.subtract(m).multiply(1, 0, 1);
+                            double max = arena.straal() - 3;
+                            if (d.length() > max) {
+                                landing = m.add(d.normalize().scale(max)).add(0, 0, 0);
+                                landing = new Vec3(landing.x, m.y, landing.z);
+                            }
+                        }
                         Telegraaf.cirkel(sl, landing, 3.5, timer + 16, Telegraaf.ROOD);
                         sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.6f);
                     }
