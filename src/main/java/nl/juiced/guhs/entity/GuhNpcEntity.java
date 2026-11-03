@@ -320,6 +320,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         WIEISHET_GUH(1.0f),
         OPEENRIJ_GUH(1.0f),
         // </guhpixelspel>
+        // <sherlock>
+        /** 1.9 De Erfenis (feature/erfenis/sherlock): the cast of the Sherlock story; GUHRRIT_VAKANTIE = the makelaar back from holiday. */
+        SHERLOCK_GUH(1.0f), DOKTER_VADSON(1.0f), MAKELAAR_GUHRRIT(1.0f), GUHRRIT_VAKANTIE(1.0f), MORRIS_MIKA(1.0f), PIM_MIKA(0.8f),
+        OEHOE(0.85f), KNABBELHAMER(1.1f),
+        // </sherlock>
         ;
 
         public final float scale;

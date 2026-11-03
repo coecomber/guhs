@@ -1,0 +1,68 @@
+# Guhs 1.9 Sherlock (190-opk-sherlock): the cast in a row, the Speurboekje, the speurbord of case 1 with threads, the courtroom.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_sherlock.txt
+# (1280x720, GUI scale auto = 2: the screen is 640 x 360 GUI pixels)
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section cast
+/guhs erfenis
+wait 80
+waitrender 300
+/tp @s ~ ~ ~ 0 10
+wait 10
+/guhs erfenis sherlock cast
+wait 40
+look 0 12
+wait 20
+shot sherlock_cast
+/tp @s ~ ~ ~2 0 5
+wait 20
+shot sherlock_cast_dichtbij
+
+section boekje
+/guhs erfenis sherlock zaak eieren
+wait 20
+gui keep
+/guhs erfenis sherlock bureau
+wait 20
+shot sherlock_boekje gui
+gui close
+
+section bord
+/guhs erfenis sherlock vind
+wait 5
+gui keep
+/guhs erfenis sherlock demo
+wait 20
+shot sherlock_bord gui
+mouse 120 120
+wait 10
+shot sherlock_bord_tooltip gui
+widgets
+gui close
+
+section klaar
+/guhs erfenis sherlock volgende
+wait 20
+gui close
+gui keep
+/guhs erfenis sherlock bureau
+wait 20
+shot sherlock_boekje_na gui
+gui close
+
+section rechtbank
+/guhs erfenis sherlock rechtbank
+wait 80
+waitrender 300
+look 180 8
+wait 20
+shot sherlock_rechtbank
+/tp @s ~ ~4 ~10 180 20
+wait 20
+shot sherlock_rechtbank_zaal
+quit

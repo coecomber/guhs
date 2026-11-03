@@ -8,7 +8,10 @@ import java.util.function.BiConsumer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
-// STUB-kern: minimal stand-in so the koppeling slice compiles (CONTRACT_OPKNAPPER: kern owns ErfenisMomenten). Replace at merge.
+// STUB-kern: the fixed story moments of the village (CONTRACT_OPKNAPPER: brief_gelezen, aangekomen, plukje_opgeruimd:<n>,
+// vondst:<id>, gebouw_gebouwd:<id>, gebouw_level:<id>:<lvl>, hoeve_level:<n>, bestelling_geleverd:<totaal>, bewoners:<totaal>,
+// knusheid:<totaal>). The kern slice owns the real one (it fires them); the sherlock slice listens. This stub only passes a
+// moment on to the listeners when the player is online (the real one may do the same); the lead replaces this file at merge.
 public final class ErfenisMomenten {
     private static final List<BiConsumer<ServerPlayer, String>> LUISTERAARS = new CopyOnWriteArrayList<>();
 
