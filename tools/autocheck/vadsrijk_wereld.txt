@@ -1,0 +1,141 @@
+# Het Vadsrijk wereld (110-vr-wereld): the map tiles generate in the dimension, the set pieces, the sky, scars, doors, airship.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_wereld.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section aankomst
+/guhs vadsrijk
+wait 120
+waitrender 400
+look 0 -5
+wait 10
+shot w_aankomst gui
+
+section kamp
+/guhs vadsrijk wereld plek kampvuur_kamp
+wait 60
+waitrender 300
+look 160 15
+shot w_kamp_plein gui
+/tp @s 30 110 1100
+look 200 25
+wait 60
+waitrender 300
+shot w_kamp_overzicht gui
+
+section stad
+/tp @s 0 120 140
+look 180 10
+wait 80
+waitrender 400
+shot w_stad_skyline gui
+/guhs vadsrijk wereld plek plein
+look 180 -5
+wait 60
+waitrender 300
+shot w_stad_plein gui
+/guhs vadsrijk wereld plek ordetempel_binnen
+wait 60
+waitrender 300
+look 0 0
+shot w_ordetempel_binnen gui
+/tp @s 0 180 -18
+look 180 -10
+wait 40
+waitrender 200
+shot w_knuffeldeur gui
+/guhs vadsrijk wereld deur ordetempel open
+wait 100
+shot w_deur_ceremonie gui
+wait 120
+shot w_deur_open gui
+
+section haven
+/guhs vadsrijk wereld plek luchtschip_haven_bel
+look 270 -10
+wait 80
+waitrender 300
+shot w_haven gui
+/guhs vadsrijk wereld vlieg kamp
+wait 60
+shot w_vlucht gui
+wait 140
+
+section weide
+/tp @s 330 110 150
+look 45 25
+wait 80
+waitrender 300
+shot w_weide gui
+/guhs vadsrijk wereld plek arena_koning_klodder.deur
+look 90 10
+wait 60
+waitrender 200
+shot w_arena gui
+
+section littekens
+/tp @s 150 95 -250
+look 220 30
+wait 80
+waitrender 300
+shot w_litteken_grijs gui
+/guhs vadsrijk wereld littekens heel
+wait 60
+shot w_litteken_heel gui
+/guhs vadsrijk wereld littekens grijs
+
+section tempel
+/guhs vadsrijk wereld plek fossielbrug.van
+look 220 0
+wait 80
+waitrender 300
+shot w_fossielbrug gui
+/tp @s 330 200 -330
+look 180 35
+wait 80
+waitrender 400
+shot w_zwamtempel gui
+/guhs vadsrijk wereld plek zwamtempel_voorhal
+look 180 0
+wait 60
+waitrender 200
+shot w_voorhal gui
+/guhs vadsrijk wereld plek arena_opperzwam.centrum
+look 180 30
+wait 60
+waitrender 200
+shot w_opperzwamzaal gui
+
+section woud_grotten
+/guhs vadsrijk wereld plek lichtstralen.1
+look 90 5
+wait 80
+waitrender 300
+shot w_sporenwoud gui
+/guhs vadsrijk wereld plek grot_knopen.N1
+look 0 0
+wait 60
+waitrender 200
+shot w_grot gui
+/guhs vadsrijk wereld plek kristalkamer
+wait 60
+waitrender 200
+shot w_kristalkamer gui
+
+section uitkijk
+/guhs vadsrijk wereld plek uitkijk_druipspits
+wait 60
+shot w_panorama gui
+wait 120
+
+section nacht
+/time set 18000
+/tp @s 0 140 300
+look 0 -45
+wait 60
+shot w_nachtlucht gui
+quit

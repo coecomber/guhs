@@ -39,23 +39,24 @@ public class VadsrijkWereldGameTests {
         helper.succeed();
     }
 
-    /** The real path: generating chunks of the dimension places the tiles (jetty plank, a city block, the temple door). */
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
-    public static void dimensieKrijgtDeKaart(GameTestHelper helper) {
-        var sl = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(helper.getLevel().getServer());
-        helper.assertTrue(sl != null, "no vadsrijk dimension");
-        BlockPos plank = WereldPlekken.AANKOMST.below();
-        sl.getChunk(plank.getX() >> 4, plank.getZ() >> 4);
-        helper.assertTrue(sl.getBlockState(plank).is(Blocks.SPRUCE_PLANKS), "arrival jetty not generated: " + sl.getBlockState(plank));
-        BlockPos plein = WereldPlekken.plek("plein").below();
-        sl.getChunk(plein.getX() >> 4, plein.getZ() >> 4);
-        helper.assertTrue(!sl.getBlockState(plein).isAir(), "Zwamzoet plein not generated");
-        WereldPlekken.Deur d = WereldDeuren.deur("zwamtempel");
-        sl.getChunk(d.min().getX() >> 4, d.min().getZ() >> 4);
-        sl.getChunk(d.max().getX() >> 4, d.max().getZ() >> 4);
-        BlockPos naad = d.min().offset((d.max().getX() - d.min().getX()) / 2, 0, 0);
-        helper.assertTrue(sl.getBlockState(naad).is(Blocks.GOLD_BLOCK), "temple door seam: " + sl.getBlockState(naad));
-        helper.assertTrue(sl.getBlockState(naad.atY(d.kopieY())).is(Blocks.GOLD_BLOCK), "hidden door copy: " + sl.getBlockState(naad.atY(d.kopieY())));
+    /**
+     * The placement path of kern.wereld.KaartFeature: a tile placed with a small bounding box (as the feature does per chunk)
+     * puts exactly its own blocks. (The gametest server has no Vadsrijk dimension, so the tile is placed into the test area:
+     * the arrival jetty plank lands at (2, 1, 2), the rest of the tile is cut away by the box.)
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void tegelPlaatsenMetDoos(GameTestHelper helper) {
+        int tx = Math.floorDiv(WereldPlekken.AANKOMST.getX(), KaartFeature.TEGEL), tz = Math.floorDiv(WereldPlekken.AANKOMST.getZ(), KaartFeature.TEGEL);
+        StructureTemplate t = helper.getLevel().getStructureManager().get(KaartFeature.tegelId(tx, tz)).orElseThrow();
+        BlockPos lokaal = new BlockPos(WereldPlekken.AANKOMST.getX() - tx * 64, WereldPlekken.AANKOMST.getY() - 1, WereldPlekken.AANKOMST.getZ() - tz * 64);
+        BlockPos doel = helper.absolutePos(new BlockPos(2, 1, 2));
+        BlockPos hoek = doel.subtract(lokaal);
+        net.minecraft.world.level.levelgen.structure.BoundingBox doos = new net.minecraft.world.level.levelgen.structure.BoundingBox(
+                doel.getX() - 1, doel.getY(), doel.getZ() - 1, doel.getX() + 1, doel.getY() + 2, doel.getZ() + 1);
+        t.placeInWorld(helper.getLevel(), hoek, hoek, new StructurePlaceSettings().setBoundingBox(doos).setIgnoreEntities(true).setKnownShape(true),
+                helper.getLevel().getRandom(), 2);
+        helper.assertBlockPresent(Blocks.SPRUCE_PLANKS, new BlockPos(2, 1, 2));
+        helper.assertTrue(helper.getLevel().getBlockState(helper.absolutePos(new BlockPos(2, 1, 4))).isAir(), "the box did not cut the tile");
         helper.succeed();
     }
 

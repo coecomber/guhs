@@ -573,6 +573,18 @@ def fossielbrug(W, K, P):
         if i % 6 == 0:
             for k in range(1, 5):
                 S.set(cx, y - 1 - k, cz, "minecraft:bone_block[axis=y]")
+    # bone steps down to the ground at both ends (the deck lies at the higher bank)
+    for (ex, ez, sx_, sz_) in ((ax - ux * 5, az - uz * 5, -ux, -uz), (bx + ux * 5.5, bz + uz * 5.5, ux, uz)):
+        yy = y
+        k = 0
+        while yy > K.h(int(ex + sx_ * k), int(ez + sz_ * k)) and k < 20:
+            k += 1
+            yy -= 1
+            cx, cz = ex + sx_ * k, ez + sz_ * k
+            for o in np.arange(-2.5, 2.6, 0.5):
+                S.set(cx + px * o, yy, cz + pz * o, "minecraft:bone_block[axis=y]")
+                for d_ in range(1, 4):
+                    S.set(cx + px * o, yy - d_, cz + pz * o, "minecraft:calcite")
     # ribs: arches over the deck every 6 blocks
     for i in range(4, int(L) - 3, 6):
         cx, cz = ax + ux * i, az + uz * i
