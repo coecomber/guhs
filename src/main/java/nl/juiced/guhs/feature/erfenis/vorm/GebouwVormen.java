@@ -38,6 +38,12 @@ public final class GebouwVormen {
     public static final int WIS_HOOGTE = 40;
     /** Block changes per tick before the rest waits for the next tick. */
     static final int PER_TICK = 12_000;
+    /**
+     * The single switch for the optional overhang layer (the renders' roof edges, ears, shutters and molen sails that stick
+     * out past the footprint, up to 4 blocks for the sails). Off for now (the contract: only the footprint changes). When on,
+     * a stamp also places those blocks, but only into air, never over anything else; {@link #wis} does not take them away.
+     */
+    public static volatile boolean OVERHANG = false;
     private static final int VLAG = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
     private static final Deque<Klus> RIJ = new ArrayDeque<>();
     private static volatile Map<String, int[]> index;
@@ -358,6 +364,19 @@ public final class GebouwVormen {
                 fase = 1;
             }
             if (fase == 1) {
+                if (OVERHANG && v != null) {
+                    int[] oh = v.overhang;
+                    for (int i = 0; i + 3 < oh.length; i += 4) {
+                        BlockPos p = o.offset(Draai.x(oh[i], oh[i + 2], v.w, v.d, rot), oh[i + 1], Draai.z(oh[i], oh[i + 2], v.w, v.d, rot));
+                        if (lvl.getBlockState(p).isAir()) {
+                            BlockState s = Draai.state(st[oh[i + 3]], rot);
+                            zet(lvl, p, s);
+                            if (verbindt(s)) {
+                                verbind.add(p);
+                            }
+                        }
+                    }
+                }
                 for (BlockPos p : verbind) {
                     BlockState s = lvl.getBlockState(p);
                     zet(lvl, p, Block.updateFromNeighbourShapes(s, lvl, p));

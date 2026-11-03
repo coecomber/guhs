@@ -42,6 +42,9 @@ final class VormBestand {
     /** Palette index per cell, order y (ymin..ymax), z, x. */
     final short[] vol;
     final List<Wezen> wezens;
+    /** Optional layer: blocks the renders draw just outside the footprint (roof edges, ears, shutters, molen sails), as
+     *  x, y, z, palette index quadruples in local coordinates (x/z may be negative or past w/d). See GebouwVormen.OVERHANG. */
+    final int[] overhang;
     private final BlockState[][] perPalet = new BlockState[6][];
 
     /** A creature marker: t = entity soort ("knabbelkippetje", "npc", "guh" ...), position in local block units. */
@@ -78,6 +81,11 @@ final class VormBestand {
             }
         }
         wezens = List.copyOf(lijst);
+        JsonArray oh = o.getAsJsonArray("overhang");
+        overhang = new int[oh == null ? 0 : oh.size()];
+        for (int i = 0; i < overhang.length; i++) {
+            overhang[i] = oh.get(i).getAsInt();
+        }
     }
 
     private static String str(JsonObject o, String k) {

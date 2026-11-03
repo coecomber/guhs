@@ -61,6 +61,13 @@ public final class VormenFeature {
                             GebouwVormen.stempelDeco(c.getSource().getLevel(), id, hoek(c.getSource()), IntegerArgumentType.getInteger(c, "rot"));
                             return klaar(c.getSource(), "Deco " + id + " neergezet.");
                         }))))
+                .then(Commands.literal("overhang").then(Commands.literal("aan").executes(c -> {
+                    GebouwVormen.OVERHANG = true;
+                    return klaar(c.getSource(), "Overhang aan: dakranden en molenwieken steken weer uit (alleen in lucht).");
+                })).then(Commands.literal("uit").executes(c -> {
+                    GebouwVormen.OVERHANG = false;
+                    return klaar(c.getSource(), "Overhang uit: alles blijft binnen het perceel.");
+                })))
                 .then(Commands.literal("decoalle").executes(VormenFeature::decoAlle))
                 .then(Commands.literal("pad").then(Commands.argument("soort", StringArgumentType.word())
                         .suggests((c, b) -> SharedSuggestionProvider.suggest(GebouwVormen.padSoorten(), b)).executes(VormenFeature::pad)))

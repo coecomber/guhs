@@ -32,7 +32,11 @@ Branch `190-opk-vormen`. Alles van deze slice: `feature/erfenis/vorm/**`, `data/
   x 5 paletten x 4 rotaties echt gestempeld: niets buiten de footprint verandert, wezens binnen, wissen laat gras en geen wezens.
 
 ## Keuzes waar de documenten niets zeiden
-- **Overhang weggeknipt.** De render-daken steken 1 blok buiten het perceel (dakranden, oortjes, luikjes) en de molenwieken tot
+- **Overhang als optionele laag (uit).** Dakranden/oortjes/luikjes/molenwieken buiten de footprint staan apart in elk
+  vormbestand (`overhang`: x,y,z,paletindex). Eén schakelaar: `GebouwVormen.OVERHANG` (standaard `false`; dev:
+  `/guhs erfenis vorm overhang aan|uit`). Aan = die blokken komen er ook, maar alleen in lucht; `wis` haalt ze niet weg.
+  Gametest `overhangLaag` dekt beide standen.
+- **Overhang weggeknipt (standaard).** De render-daken steken 1 blok buiten het perceel (dakranden, oortjes, luikjes) en de molenwieken tot
   4 blokken. Het contract wil "precies de footprint", dus alles buiten de footprint (boven de grond) valt weg: daken eindigen
   gelijk met de perceelrand en de molenwieken zijn op 7 breed afgeknipt. Wil de lead overhang (bv. 1 blok, alleen in lucht),
   dan kan de exporter die apart meegeven.
@@ -75,14 +79,10 @@ Niets: deze slice roept geen API's van andere slices aan. Kern vervangt de POC-`
 - AutoCheck: `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/erfenis_vormen.txt`.
 - Gametests: `gradlew runGameTestServer -Pgt=VormenGameTests`.
 
-## PAUZE (2026-11-03, op verzoek van de gebruiker)
-Waar ik ben:
-- Klaar en gecommit: exporter + alle vormen/deco/plukjes/paden in resources, GebouwVormen/DecoWezens/Draai/VormBestand,
-  dev-commando, gametests `VormenGameTests`: groen (3/3 geslaagd; 6460 echte stempels in 3,7 s, geen onbekende blokken).
-- AutoCheck `tools/autocheck/erfenis_vormen.txt`: run 1 was zwart (camera zat onder de grond: de autocheck-wereld is niet
-  superflat), het script is aangepast (alles op y=200 in de lucht + nachtzicht) en run 2 is net klaar (BUILD SUCCESSFUL), maar
-  de screenshots in `run/screenshots/autocheck/vorm_*.png` heb ik nog NIET bekeken.
-Wat er nog moet:
-1. De screenshots van run 2 bekijken en vergelijken met `renders-erfenis/<naam>_L<n>.png`; verschillen met de renders oplossen
-   (exporter of draaien/verbinden), daarna opnieuw exporteren + gametests (`-Pgt=VormenGameTests`).
-2. Daarna het eindrapport aan de lead (overhang-keuze noemen: daken/molenwieken afgeknipt op de footprint).
+
+## Status (eind)
+- Gametests `VormenGameTests`: 3/3 groen (6460 echte stempels in ~4 s, overhang-schakelaar, alle blokken/wezens bekend).
+- **Nog te doen: AutoCheck-screenshots** (uitgesteld: gebruikersregel "geen gameclient starten"). Script klaar:
+  `tools/autocheck/erfenis_vormen.txt` (alles op y=200 met een barrier onder de camera; ronde 1 was zwart = onder de grond,
+  ronde 2 viel de speler van de camera-plek). Daarna vergelijken met `renders-erfenis/hoeve_L01/L05/L10`, `kippenhok_L6`,
+  `molen_L6`, `dorpscafe_L10`, `mammoetwei_L10` (= ons L3), `bosje_L9` + hoeve L10 in palet T3 gedraaid, deco en plukje 1.

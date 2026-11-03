@@ -130,6 +130,35 @@ public class VormenGameTests {
         });
     }
 
+    /** The optional overhang layer: off = nothing outside; on = the molen's sails stick out, but never over a block. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void overhangLaag(GameTestHelper helper) {
+        ServerLevel lvl = helper.getLevel();
+        BlockPos o = helper.absolutePos(new BlockPos(8, 40, 8));
+        VormBestand v = GebouwVormen.vorm("molen", 10);
+        helper.assertTrue(v.overhang.length > 0, "the molen L10 has an overhang layer (its sails)");
+        BlockPos buiten = o.offset(v.overhang[0], v.overhang[1], v.overhang[2]);
+        BlockPos bezet = o.offset(v.overhang[4], v.overhang[5], v.overhang[6]);
+        lvl.setBlock(bezet, Blocks.RED_WOOL.defaultBlockState(), 2);
+        boolean was = GebouwVormen.OVERHANG;
+        try {
+            GebouwVormen.OVERHANG = false;
+            GebouwVormen.stempel(lvl, "molen", 10, 4, o, 0);
+            GebouwVormen.klaarNu();
+            helper.assertTrue(lvl.getBlockState(buiten).isAir(), "switch off: nothing outside the footprint");
+            GebouwVormen.OVERHANG = true;
+            GebouwVormen.stempel(lvl, "molen", 10, 4, o, 0);
+            GebouwVormen.klaarNu();
+            helper.assertTrue(!lvl.getBlockState(buiten).isAir(), "switch on: the sail sticks out");
+            helper.assertTrue(lvl.getBlockState(bezet).is(Blocks.RED_WOOL), "switch on: never over an existing block");
+        } finally {
+            GebouwVormen.OVERHANG = was;
+        }
+        GebouwVormen.wis(lvl, o, 7, 7);
+        GebouwVormen.klaarNu();
+        helper.succeed();
+    }
+
     /** A ring of blocks just around a footprint, y 0..3. */
     private static void ring(ServerLevel lvl, BlockPos o, int bx, int bz, BlockState s) {
         for (int x = -1; x <= bx; x++) {
