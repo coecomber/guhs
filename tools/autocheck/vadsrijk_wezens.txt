@@ -10,6 +10,10 @@ wait 40
 section binnen
 /guhs vadsrijk proeftuin
 wait 100
+# (the proeftuin may still be void here: an own grass platform for the line-up and the dragon watch spot)
+/fill 3095 64 3160 3145 64 3195 minecraft:grass_block
+/fill 3090 64 3110 3110 64 3130 minecraft:grass_block
+/tp @s 3120 66 3170
 waitrender 300
 /guhs vadsrijk wezens opruimen
 /tp @s 3120 66 3170

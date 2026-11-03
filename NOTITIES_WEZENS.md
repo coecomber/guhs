@@ -70,3 +70,11 @@ far circles automatically: wereld/kern decide when (design: "af en toe").
 
 ## Resume point
 All done and committed; head = see `git log -1`. Remaining only if wanted: tuning after the user's dev-client look.
+
+## Test results (2026-11-03)
+- `compileJava` OK; gametests `-Pgt=VadsrijkWezens`: all 4 pass (+ kern's required one: "All 5 required tests passed").
+- One AutoCheck client run (`tools/autocheck/vadsrijk_wezens.txt`): no crash, no errors for any wezens model/texture/item
+  (modelcheck: only 4 pre-existing non-wezens problems: bliksemsmidse_onweerswolkje, droombed, guhmon_badgedoos). All 17 entities
+  summoned fine. BUT the proeftuin was still void in that run, so the player and mobs fell out of the world and the screenshots
+  show only sky: no visual check of the models yet. The script now lays its own grass platform first (not re-run: one client
+  run per slice). FTB's "Missing entity icon settings" errors are the same for every guhs entity (harmless).
