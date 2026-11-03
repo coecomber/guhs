@@ -187,6 +187,12 @@ def ordetempel_binnen(S, info):
             S.set(x, yv + 23, z, "minecraft:shroomlight")
             S.set(x, yv + 22, z, "minecraft:iron_chain[axis=y]")
             S.set(x, yv + 21, z, "minecraft:lantern[hanging=true,waterlogged=false]")
+    for x in range(hx1 + 3, hx2 - 1, 6):           # glowing floor tiles + wall lights at eye height
+        for z in range(hz1 + 3, hz2 - 1, 6):
+            S.set(x, yv - 1, z, "minecraft:pearlescent_froglight[axis=y]")
+    for z in range(hz1 + 2, hz2 - 1, 4):
+        S.set(hx1 + 1, yv + 3, z, "minecraft:shroomlight")
+        S.set(hx2 - 1, yv + 3, z, "minecraft:shroomlight")
     for z in range(hz1 + 1, hz2 + 1):
         for x in (cx - 1, cx, cx + 1):
             S.set(x, yv - 1, z, "minecraft:pink_carpet" if False else "pastelbaksteen_framboos")
@@ -222,7 +228,7 @@ def main(uit):
     POI["questbord"] = w(px - 7, G + 1, pz - pr + 3)
     S.set(px - 14, G + 1, pz + 8, "minecraft:campfire[facing=north,lit=false,signal_fire=false,waterlogged=false]")
     POI["kampvuur_zwamzoet"] = w(px - 14, G + 1, pz + 8)
-    POI["plein"] = w(px, G + 1, pz)
+    POI["plein"] = w(px, G + 1, pz + 9)
     POI["guhpoort"] = w(px, G + 1, 210)
     # Mika clue 1: black fluff under the west ring stall
     S.set(100, G + 1, 178, "minecraft:black_carpet")

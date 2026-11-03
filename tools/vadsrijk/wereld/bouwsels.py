@@ -98,6 +98,13 @@ def zwamtempel(W, K, P):
         for z in range(z1 + 3, z2 - 1, 5):
             S.set(x1 + 1, TY + h - 2, z, LANT)
             S.set(x2 - 1, TY + h - 2, z, LANT)
+        # light: glowing tiles in the floor (a 6-grid) and lanterns at eye height along the walls
+        for x in range(x1 + 3, x2 - 1, 6):
+            for z in range(z1 + 3, z2 - 1, 6):
+                S.set(x, TP, z, "minecraft:pearlescent_froglight[axis=y]")
+        for z in range(z1 + 2, z2 - 1, 4):
+            S.set(x1 + 1, TY + 3, z, "minecraft:shroomlight")
+            S.set(x2 - 1, TY + 3, z, "minecraft:shroomlight")
 
     def poort(z, breed=5, hoog=4):
         x0 = 330 - breed // 2
@@ -220,6 +227,12 @@ def zwamtempel(W, K, P):
         x, z = hc[0] + 20 * math.cos(a), hc[1] + 20 * math.sin(a)
         S.fill(int(x), TY, int(z), int(x), TY + 22, int(z), "pastelbaksteen_roze_muur")
         S.set(int(x), TY + 23, int(z), "minecraft:shroomlight")
+        for yy in (TY + 5, TY + 12):
+            S.set(int(x), yy, int(z), "minecraft:shroomlight")
+    for k in range(24):     # glowing rings in the floor
+        a = k * math.pi / 12
+        for rr in (11.5, 20.5):
+            S.set(hc[0] + rr * math.cos(a), TP, hc[1] + rr * math.sin(a), "minecraft:pearlescent_froglight[axis=y]")
     spots = [[hc[0] - 13, TY, hc[1] + 13], [hc[0] + 13, TY, hc[1] + 13], [hc[0] - 13, TY, hc[1] - 13], [hc[0] + 13, TY, hc[1] - 13]]
     S.fill(hc[0] - 6, TY, hc[1] - 22, hc[0] + 6, TY + 3, hc[1] - 20, "minecraft:mycelium[snowy=false]")
     P["arena_opperzwam"] = dict(centrum=[hc[0], TY, hc[1]], straal=22, deur=[330, TY, -470], bord=[334, TY, -469],
@@ -834,8 +847,8 @@ def grotten(W, K, P):
             continue
         if boven and r < 0.07:
             S.set(x, y, z, "minecraft:pointed_dripstone[thickness=tip,vertical_direction=down,waterlogged=false]")
-        elif boven and r < 0.09:
-            S.set(x, y + 1, z, "minecraft:shroomlight")
+        elif boven and r < 0.13:
+            S.set(x, y + 1, z, "minecraft:shroomlight" if r < 0.11 else "minecraft:ochre_froglight[axis=y]")
         elif onder and r < 0.03:
             S.set(x, y, z, "glimpaddenstoel")
         elif onder and r < 0.05:
@@ -1102,7 +1115,59 @@ def bouw_alles(W, K, kamp_d):
     randwolken(W, K, P)
     terugportalen(W, K, P)
     decoratie(W, K, P)
+    npc_wensen(W, K, P, kamp_d)
     return {"wereld": P}
+
+
+def hoogste(W, K, x, z, kamp_d=None, tot=250):
+    """The highest solid block in this column (stamps + terrain): stand y - 1."""
+    for y in range(tot, 0, -1):
+        i = W.blok_op(x, y, z)
+        if i > 1:
+            naam = W.palet.lijst[i]
+            if not any(t in naam for t in ("grass", "flower", "tulip", "allium", "petals", "fern", "carpet", "lantern", "guhbloem",
+                                            "guhoortjes", "daisy", "cornflower", "bluet", "mushroom[", "litteken_plant", "leaves")):
+                return y
+    return max(K.h(x, z), 0)
+
+
+def npc_wensen(W, K, P, kamp_d):
+    """POI_VERZOEKEN (npc): the 10 lost knuffels, the quest decorations, Mopje's cave spot."""
+    knuffels = ["knuffel_normal", "knuffel_mint", "knuffel_starry", "knuffel_pinguh", "knuffel_wolk", "knuffel_choco",
+                "knuffel_rainbow", "knuffel_snow", "knuffel_glitter", "knuffel_teckel"]
+    spots = [(-68, 952), (30, 1040), (-36, 33), (70, -70), (116, 466), (300, 250), (470, 185), (-400, -100), (-300, -226), (326, -374)]
+    for i, ((x, z), k) in enumerate(zip(spots, knuffels)):
+        y = hoogste(W, K, x, z) + 1
+        W.punten.set(x, y, z, "guhs:" + k)
+        P[f"knuffel_{i + 1}"] = [x, y, z]
+    # Dobber's lost hat near the lighthouse: a straw hat on the grass
+    x, z = -60, 955
+    y = hoogste(W, K, x, z) + 1
+    W.punten.set(x, y, z, "minecraft:hay_block[axis=y]")
+    for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        W.punten.set(x + dx, y, z + dz, "minecraft:yellow_carpet")
+    W.punten.set(x, y + 1, z, "minecraft:red_carpet")
+    P["quest_dobber_hoed"] = [x, y + 1, z]
+    # Muzikant Mo's picnic spot with the tuba (gold + note block) in the SW Sporenwoud
+    x, z = -470, 330
+    y = hoogste(W, K, x, z) + 1
+    for dx in range(-2, 3):
+        for dz in range(-2, 2):
+            W.punten.set(x + dx, y, z + dz, "minecraft:red_carpet" if (dx + dz) % 2 else "minecraft:white_carpet")
+    W.punten.set(x + 3, y, z, "minecraft:note_block[instrument=harp,note=0,powered=false]")
+    W.punten.set(x + 3, y + 1, z, "minecraft:gold_block")
+    W.punten.set(x + 4, y, z, "minecraft:gold_block")
+    W.punten.set(x + 3, y + 2, z, "minecraft:lightning_rod[facing=up,powered=false]")
+    P["quest_tuba"] = [x + 3, y, z]
+    # the Hoedhupperwei: a meadow with little mushroom deco
+    rng = random.Random(52)
+    for _ in range(40):
+        x, z = 520 + rng.randint(-14, 14), 300 + rng.randint(-14, 14)
+        y = hoogste(W, K, x, z) + 1
+        W.punten.set(x, y, z, rng.choice(["minecraft:red_mushroom", "minecraft:brown_mushroom", "glimpaddenstoel", "schimmelpaddenstoel"]))
+    P["hoedhupperwei"] = [520, hoogste(W, K, 520, 300) + 1, 300]
+    # Mijnwerker Mopje in cave 2 (the Druipgrotten node N2, floor ~y 41)
+    P["npc_mopje"] = P["grot_knopen"]["N2"]
 
 
 def poortje(S, cx, y, z, breed=5, hoog=6, as_="x"):

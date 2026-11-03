@@ -108,7 +108,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ordetempel_altaar` | 0, 177, -47 |
 | `ordetempel_binnen` | 0, 177, -44 |
 | `ordetempel_zijdeur` | 14, 177, -44 |
-| `plein` | 0, 64, 50 |
+| `plein` | 0, 64, 59 |
 | `questbord` | -7, 64, 31 |
 
 ## Zwamzoet buildings (deur = stand outside the door, binnen = interior centre, doos = bounding box)
@@ -248,16 +248,30 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `hendelkamer.hints.3` | 326, 157, -446 |
 | `hendelkamer.hints.4` | 322, 157, -446 |
 | `hendelkamer.plaat` | 330, 152, -444 |
+| `hoedhupperwei` | 520, 73, 300 |
+| `knuffel_1` | -68, 89, 952 |
+| `knuffel_10` | 326, 150, -374 |
+| `knuffel_2` | 30, 86, 1040 |
+| `knuffel_3` | -36, 64, 33 |
+| `knuffel_4` | 70, 64, -70 |
+| `knuffel_5` | 116, 65, 466 |
+| `knuffel_6` | 300, 69, 250 |
+| `knuffel_7` | 470, 75, 185 |
+| `knuffel_8` | -400, 72, -100 |
+| `knuffel_9` | -300, 87, -226 |
 | `lichtzwamkamer.centrum` | 330, 152, -415 |
 | `lichtzwamkamer.lichtzwammen.1` | 322, 152, -421 |
 | `lichtzwamkamer.lichtzwammen.2` | 326, 152, -424 |
 | `lichtzwamkamer.lichtzwammen.3` | 330, 152, -425 |
 | `lichtzwamkamer.lichtzwammen.4` | 334, 152, -424 |
 | `lichtzwamkamer.lichtzwammen.5` | 338, 152, -421 |
+| `npc_mopje` | -400, 41, -380 |
 | `poorten.1` | 328, 152, -405 |
 | `poorten.2` | 328, 152, -426 |
 | `poorten.3` | 328, 152, -447 |
 | `poorten.4` | 328, 152, -474 |
+| `quest_dobber_hoed` | -60, 87, 955 |
+| `quest_tuba` | -467, 68, 330 |
 | `ridderzaal.centrum` | 330, 152, -460 |
 | `ridderzaal.spawns.1` | 320, 152, -469 |
 | `ridderzaal.spawns.2` | 330, 152, -471 |
